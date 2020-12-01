@@ -2,90 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A22492C9671
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 05:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3022C9680
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 05:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728283AbgLAEYD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Nov 2020 23:24:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728222AbgLAEYD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Nov 2020 23:24:03 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3E2C0617A7
-        for <linux-usb@vger.kernel.org>; Mon, 30 Nov 2020 20:22:48 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id n62so851307ybf.19
-        for <linux-usb@vger.kernel.org>; Mon, 30 Nov 2020 20:22:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=nruMNWNcZEmjcKrORKjvDrxT0A/8sh/ZqXFGa7woZ+A=;
-        b=UMXU8w2cUY0sT47QLX4rKblaiuaWMGkD5mdqrs1sB8lQ9OFaFFcvwaFABiRHvZdAJ0
-         Djo2X+h1dd516KdL29sTzsTfOeqAdr4O1+jABIUCaMcjEPHIODUD78xxnLUhVBgrjiZw
-         RW1hYeMREXpX30FB3DP/5vRwPfIhrY4dxpJbBMgZVUvOXKp6InKgdetHbN6aHavldJae
-         K4ADF154w6iKSeRhegIAhyxeDlJKvwwX9AWv2GjHFltK28GBDpoAC0ExgkylgQXs7FCW
-         n+TqD7WGWISpuQe6S3u9Paky/LpjM/CaTLp3wJquZX26syVf/is2cr/6p5nho+epKUpS
-         Nh8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=nruMNWNcZEmjcKrORKjvDrxT0A/8sh/ZqXFGa7woZ+A=;
-        b=U/jq0lJjngQqBXi56Dbd024IXbmx3Dd8yrUca1mqi4fkG+Nr5G9XRsFqm30ZO5gOeS
-         C1u5IUlACJTV8JQ3v8ppbqHPgVUHBKklWTG5QrV3VwGeZ+Gy5twnnDkYgYM6Ftfi4OPE
-         0ZBOQ8YE7EpcYB/BcjdCzNx8DQW07nw8txEmEAQnJdtpSB4lt2GGPeiKI1u4Pt0TvDGC
-         Beh4mXqLu/6mP6c3GE5kIEpg+Ne5EhFGoSgSKtCWe8xl5KQ+GFlTMVec4DwwEDSUDwcK
-         0690Kji6EDL9nXTwEIKw9XOlHJIZKsHWFLyFikPBNiRC52atJCxbynMrQgjnTeT1IIHY
-         dsmA==
-X-Gm-Message-State: AOAM531m5/pDt31HecvIWdlcDxqP/mqoZK+wl24fNp4/JI2OnBdGEnvl
-        kDlOD5My8o0NaMOIRS9A2pdVbrD1yfE=
-X-Google-Smtp-Source: ABdhPJxg3vHAoPRrWpoNVu9EQE38PNG4trmiTCausd4xox8b0mN9zlPwUuVwTFrHlfajZKjQXgtZ7hepIQI=
-Sender: "badhri via sendgmr" <badhri@badhri.mtv.corp.google.com>
-X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:f292:1cff:fee0:66cf])
- (user=badhri job=sendgmr) by 2002:a25:830e:: with SMTP id s14mr925680ybk.213.1606796568112;
- Mon, 30 Nov 2020 20:22:48 -0800 (PST)
-Date:   Mon, 30 Nov 2020 20:22:37 -0800
-In-Reply-To: <20201201042237.414235-1-badhri@google.com>
-Message-Id: <20201201042237.414235-4-badhri@google.com>
-Mime-Version: 1.0
-References: <20201201042237.414235-1-badhri@google.com>
-X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
-Subject: [PATCH v1 4/4] usb: typec: wcove: Update wcove_pd_transmit to include
- negoitated rev
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>
+        id S1728340AbgLAE2N convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 30 Nov 2020 23:28:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33912 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727897AbgLAE2N (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 30 Nov 2020 23:28:13 -0500
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 203419] Logitech Group USB audio stopped working in 5.1-rc6
+Date:   Tue, 01 Dec 2020 04:27:31 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: petenewcomb@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-203419-208809-SoiZCmEcbI@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-203419-208809@https.bugzilla.kernel.org/>
+References: <bug-203419-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-pd_transmit callback now passes down negotiated_rev to set retry
-count accordingly if needed.
+https://bugzilla.kernel.org/show_bug.cgi?id=203419
 
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
- drivers/usb/typec/tcpm/wcove.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Peter Newcomb (petenewcomb@gmail.com) changed:
 
-diff --git a/drivers/usb/typec/tcpm/wcove.c b/drivers/usb/typec/tcpm/wcove.c
-index 9b745f432c91..79ae63950050 100644
---- a/drivers/usb/typec/tcpm/wcove.c
-+++ b/drivers/usb/typec/tcpm/wcove.c
-@@ -356,7 +356,8 @@ static int wcove_set_pd_rx(struct tcpc_dev *tcpc, bool on)
- 
- static int wcove_pd_transmit(struct tcpc_dev *tcpc,
- 			     enum tcpm_transmit_type type,
--			     const struct pd_message *msg)
-+			     const struct pd_message *msg,
-+			     unsigned int negotiated_rev)
- {
- 	struct wcove_typec *wcove = tcpc_to_wcove(tcpc);
- 	unsigned int info = 0;
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |petenewcomb@gmail.com
+
+--- Comment #50 from Peter Newcomb (petenewcomb@gmail.com) ---
+I ran into this issue and found that my Logitech Group audio device shows up
+with id 0x0857, not 0x0882.  I added the following patch and now it's working
+again:
+
+diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+index fbc93d8dda5e..0f3d74ec3860 100644
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -775,6 +775,7 @@
+ #define USB_DEVICE_ID_LOGITECH_WII_WHEEL       0xc29c
+ #define USB_DEVICE_ID_LOGITECH_ELITE_KBD       0xc30a
+ #define USB_DEVICE_ID_LOGITECH_GROUP_AUDIO     0x0882
++#define USB_DEVICE_ID_LOGITECH_GROUP_AUDIO_2   0x0857
+ #define USB_DEVICE_ID_S510_RECEIVER    0xc50c
+ #define USB_DEVICE_ID_S510_RECEIVER_2  0xc517
+ #define USB_DEVICE_ID_LOGITECH_CORDLESS_DESKTOP_LX500  0xc512
+diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
+index 8a739ec50cc0..8a21a4e9db5a 100644
+--- a/drivers/hid/hid-quirks.c
++++ b/drivers/hid/hid-quirks.c
+@@ -183,6 +183,7 @@ static const struct hid_device_id hid_quirks[] = {
+        { HID_USB_DEVICE(USB_VENDOR_ID_WISEGROUP,
+USB_DEVICE_ID_QUAD_USB_JOYPAD), HID_QUIRK_NOGET | HID_QUIRK_MULTI_INPUT },
+        { HID_USB_DEVICE(USB_VENDOR_ID_XIN_MO,
+USB_DEVICE_ID_XIN_MO_DUAL_ARCADE), HID_QUIRK_MULTI_INPUT },
+        { HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH,
+USB_DEVICE_ID_LOGITECH_GROUP_AUDIO), HID_QUIRK_NOGET },
++       { HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH,
+USB_DEVICE_ID_LOGITECH_GROUP_AUDIO_2), HID_QUIRK_NOGET },
+
+        { 0 }
+ };
+
 -- 
-2.29.2.454.gaff20da3a2-goog
-
+You are receiving this mail because:
+You are watching the assignee of the bug.
