@@ -2,93 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5182C99CA
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 09:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D032C99EE
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 09:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727077AbgLAIq2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Dec 2020 03:46:28 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:45895 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726041AbgLAIq1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 03:46:27 -0500
-Received: by mail-lf1-f67.google.com with SMTP id z21so2486770lfe.12;
-        Tue, 01 Dec 2020 00:46:10 -0800 (PST)
+        id S1728948AbgLAItL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Dec 2020 03:49:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727058AbgLAItL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 03:49:11 -0500
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9530CC0613CF;
+        Tue,  1 Dec 2020 00:48:30 -0800 (PST)
+Received: by mail-lj1-x242.google.com with SMTP id t22so1631123ljk.0;
+        Tue, 01 Dec 2020 00:48:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jwVJjrYf4EoWNF76bT56Jg1fGwktaIknwNyVbZNutqw=;
+        b=HaiUwxLt5+T+f1NTruadDqbIVPhFVqULfYguIx1bQ97AjHJThL8pLuOihN/dPt4YMT
+         6sodWnZ2zOQtaYanlnp3CoNYB8F8kFSfiKO5ZiaNKslWdztFum4pKTBW34DlqubIXR/H
+         /we/2VHRVjrEJ342lYx4yyC8E4DNZMXCYwUEyBVxT33X51UfFcoN1MbJECGF5RdVQ/Tk
+         gqOAfAt2rgg0vYWiQ/btho/110knlP77x/Sf+tLUMkYCA16m2nhrmZHrP7NT/xG9TrdA
+         UWtbbC0jbADNTLORGtd0qvlfiMiNX0LaWeC8T1dAuU27xc+nstKVO6wXT+Jn48UDO69p
+         6ilg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Kx5VQRPsE23X8BsQ1MAGZtQ/+4VWIP6o0cNUR+vHfLU=;
-        b=OLD9lzMwee6+PTPsDR4jI3uE8XQwEumzet4D4mxomcBAdZbctVVZJ2piWvAcfs9tx/
-         NFGW4r4zAItP+A+ndjBF4tFvE7EjtUAhDQ7q0cDabpdQ4j2l4Wb6D0E6Jw7P1C+gxGLu
-         SiWJ+WkIxDRB4rDuMFkLPtJo8ApZnuVldcj7UCn1bMCx6qaYW+w/oKscsTpFXeVgAx+X
-         KlSpLg6iOOjY/cZaHjo4Axr+55K8cMtJm3LUUy4V+pcrrNuKKktUi14J54RpR6eCnhAT
-         ec2N6oqihz9K8vM4XW+v23xRD8DVw7FF5nhTloMVcCzKK6umzgl+Fwewr5PJ+nuC5Gcb
-         w2pA==
-X-Gm-Message-State: AOAM532rNonwVQJWF4PGRQcDmD9cqKjXjGAzNjyvqb6OMrjrpf0pyDiZ
-        e3oP1EEyIUCCBNS98XiKLL4=
-X-Google-Smtp-Source: ABdhPJzzgeTdY9lRHfHKsNi/eKdCmDH5mnNsSBJ+2KGs1prOGoJi5FtVW8FGqbqbixB41KvbWgxHeA==
-X-Received: by 2002:a19:983:: with SMTP id 125mr725555lfj.36.1606812345097;
-        Tue, 01 Dec 2020 00:45:45 -0800 (PST)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id g130sm126061lfd.227.2020.12.01.00.45.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Dec 2020 00:45:44 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kk1Ib-0003Fu-3a; Tue, 01 Dec 2020 09:46:13 +0100
-Date:   Tue, 1 Dec 2020 09:46:13 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Mychaela N . Falconia" <falcon@freecalypso.org>,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] tty: add port flag to suppress ready signalling on
- open
-Message-ID: <X8YC1UGSfaarKMcV@localhost>
-References: <20201130153742.9163-1-johan@kernel.org>
- <20201130153742.9163-2-johan@kernel.org>
- <ffec9dbe-a238-4411-acdb-41bd33719288@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jwVJjrYf4EoWNF76bT56Jg1fGwktaIknwNyVbZNutqw=;
+        b=X/EDk19MvP3JBq1HiWCGPFUUIt6W7UVjaLfUfSA609XNrDaMMDw/OydCUwXPgJwth/
+         0KMe07HL1PmiWWcNGQcsF5W6fWYqPdFnXPYdjbKxGAh/cdeqEeXoBXVNM7/YsZCtjbdz
+         diW/sIb+6YpglDn7IH4dcWneg7ZZZYn/FDH2ry/FEkT4sUOHw48/lY9AAX1pksdX3js1
+         hsbnliZH/VhfcsW+jadMAX+acVEEf/LHN3btzemnS7GmXR/oRc+X/ZovzofPSeBZlHSA
+         YaWLGMtYG3VOxuIXZZutan2X+hXA2j7iDGYdBIOsOxrSxwwWNxYvDV37OdmFpCr+sWcT
+         CNWA==
+X-Gm-Message-State: AOAM530PjuYprUGqg3g2UfN1rjhmlhfFCk9TyTikrAQX5tiS8s2l/PPP
+        N9cdklCsgPMlC1RVvQv8B6n2YxKAS+n+/kFngQMdBcxfgs7Utg==
+X-Google-Smtp-Source: ABdhPJypa/vi3ZkUTSCLWl6B7ybinXq71oQyq4tahZaKghY6IJrRSSxA6gpJTNF8lMYOAmryhItYJOScJNvcqaSZDSs=
+X-Received: by 2002:a2e:a202:: with SMTP id h2mr849114ljm.346.1606812509148;
+ Tue, 01 Dec 2020 00:48:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ffec9dbe-a238-4411-acdb-41bd33719288@kernel.org>
+References: <20201127140559.381351-1-gregkh@linuxfoundation.org> <20201127140559.381351-2-gregkh@linuxfoundation.org>
+In-Reply-To: <20201127140559.381351-2-gregkh@linuxfoundation.org>
+From:   Peter Chen <hzpeterchen@gmail.com>
+Date:   Tue, 1 Dec 2020 16:48:17 +0800
+Message-ID: <CAL411-poRr1Mz5O6_9H8c9GmjF1UQN+2x9-EASfv7CcPzHvCVQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] USB: gadget: f_rndis: fix bitrate for SuperSpeed
+ and above
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, peter.chen@nxp.com, willmcvicker@google.com,
+        USB list <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>, EJ Hsu <ejh@nvidia.com>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 01, 2020 at 06:49:07AM +0100, Jiri Slaby wrote:
-> On 30. 11. 20, 16:37, Johan Hovold wrote:
-> > --- a/include/linux/tty.h
-> > +++ b/include/linux/tty.h
-> > @@ -683,6 +684,19 @@ static inline void tty_port_set_kopened(struct tty_port *port, bool val)
-> >   		clear_bit(TTY_PORT_KOPENED, &port->iflags);
-> >   }
-> >   
-> > +static inline bool tty_port_nordy(struct tty_port *port)
-> 
-> port can be const here.
+>
+> From: Will McVicker <willmcvicker@google.com>
+>
 
-Sure, but see below.
+Reviewed-by: Peter Chen <peter.chen@nxp.com>
 
-> > +{
-> > +	return test_bit(TTY_PORT_NORDY, &port->iflags);
-> > +}
-> > +
-> > +static inline void tty_port_set_nordy(struct tty_port *port, bool val)
-> > +{
-> > +	if (val)
-> > +		set_bit(TTY_PORT_NORDY, &port->iflags);
-> > +	else
-> > +		clear_bit(TTY_PORT_NORDY, &port->iflags);
-> 
-> We have assign_bit() for these cases these days.
-
-Right, but for both your comments this follows the pattern used by the
-other port-flag helpers.
-
-I can add a preparatory patch updating the current helpers, but I don't
-think this needs to be a blocker.
-
-Johan
+Peter
+> Align the SuperSpeed Plus bitrate for f_rndis to match f_ncm's ncm_bitrate
+> defined by commit 1650113888fe ("usb: gadget: f_ncm: add SuperSpeed descriptors
+> for CDC NCM").
+>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: EJ Hsu <ejh@nvidia.com>
+> Cc: Peter Chen <peter.chen@nxp.com>
+> Cc: stable <stable@vger.kernel.org>
+> Signed-off-by: Will McVicker <willmcvicker@google.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/usb/gadget/function/f_rndis.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/gadget/function/f_rndis.c b/drivers/usb/gadget/function/f_rndis.c
+> index 9534c8ab62a8..0739b05a0ef7 100644
+> --- a/drivers/usb/gadget/function/f_rndis.c
+> +++ b/drivers/usb/gadget/function/f_rndis.c
+> @@ -87,8 +87,10 @@ static inline struct f_rndis *func_to_rndis(struct usb_function *f)
+>  /* peak (theoretical) bulk transfer rate in bits-per-second */
+>  static unsigned int bitrate(struct usb_gadget *g)
+>  {
+> +       if (gadget_is_superspeed(g) && g->speed >= USB_SPEED_SUPER_PLUS)
+> +               return 4250000000U;
+>         if (gadget_is_superspeed(g) && g->speed == USB_SPEED_SUPER)
+> -               return 13 * 1024 * 8 * 1000 * 8;
+> +               return 3750000000U;
+>         else if (gadget_is_dualspeed(g) && g->speed == USB_SPEED_HIGH)
+>                 return 13 * 512 * 8 * 1000 * 8;
+>         else
+> --
+> 2.29.2
+>
