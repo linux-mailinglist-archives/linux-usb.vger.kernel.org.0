@@ -2,93 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6A02C9F16
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 11:25:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 606622C9FDA
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 11:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729786AbgLAKYk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Dec 2020 05:24:40 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:33744 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726688AbgLAKYk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 05:24:40 -0500
-Received: by mail-lj1-f195.google.com with SMTP id t22so2059144ljk.0;
-        Tue, 01 Dec 2020 02:24:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=JWonEAgpgF7EYqcl/vsME9uiualwG4Qmy0o/voi1XaU=;
-        b=b358XQ6RM5cQ4ps1WA/zshCenTT0PIiv8Fd2GaA6OvPaG0r3J9IfLZpzlAzHSs8rZz
-         +EmhMZTFBNw7adIpBwuhOnAFAJESPcrzBnpyma5fNbrKAlbG6VbfgzmO90brAKxlmipp
-         hCOX7yahbtdr8wDfMl3H20Og32klz1NklaKRzigb+D7pUV/aS/Cu8BjfvoFNkE+oQKgD
-         ZvdxPAKnPlMvr+PITcyASzN13c1sgqPHDY84QqXZao/TibhwZZ5V5AGylg7Rxjfyc5eJ
-         yH2ZAcGEli9E2Wf+OeTYRkU+ZVZ0vKVQQH1Gp/jct5AreaO+N1z2XhkafDzFPZnWl2NE
-         QXhg==
-X-Gm-Message-State: AOAM530dqE2hiXmsxlmAZ5cI1Pgb6BdBmZ8xwjGDEhPh8lij9C0wMq2Q
-        gGeoOc2raTFtw4fNd2V98HU=
-X-Google-Smtp-Source: ABdhPJw6hvNc5I4lTvG7mAIFJFx1bmHcYwID4AI3YQSF0IqGtt6gEZoAjfsec6wSJVwX4jlqO+UW8g==
-X-Received: by 2002:a2e:b701:: with SMTP id j1mr942305ljo.242.1606818237965;
-        Tue, 01 Dec 2020 02:23:57 -0800 (PST)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id x134sm153503lff.161.2020.12.01.02.23.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Dec 2020 02:23:57 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kk2pf-0006xr-1p; Tue, 01 Dec 2020 11:24:27 +0100
-Date:   Tue, 1 Dec 2020 11:24:27 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        Sebastian Sjoholm <sebastian.sjoholm@gmail.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: fix Quectel BG96 matching
-Message-ID: <X8YZ23FSBpuFupui@localhost>
-References: <20201201100318.37843-1-bjorn@mork.no>
- <X8YYdVk7LQ+VcpPf@localhost>
- <87tut5bzd5.fsf@miraculix.mork.no>
+        id S1729824AbgLAKdr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Dec 2020 05:33:47 -0500
+Received: from mga09.intel.com ([134.134.136.24]:40453 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726134AbgLAKdr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Dec 2020 05:33:47 -0500
+IronPort-SDR: svWi1n0YeJw8g9xW6g561C0tDdaYtVMR2ygNYjD547UnwkbYX2YXMQ/kBQ1iAnr02rUEXZLKSS
+ nSbQcHHYn4kg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9821"; a="172963547"
+X-IronPort-AV: E=Sophos;i="5.78,384,1599548400"; 
+   d="scan'208";a="172963547"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 02:32:01 -0800
+IronPort-SDR: T/rXxtx3qMZyzxQo9aQcTNzrrtAyXDYW+T1LjXV+lwq9+eLxagowcqUzXTMazJ5AIVVtOCOI9R
+ +0gBCU4Zreqg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,384,1599548400"; 
+   d="scan'208";a="434617560"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 01 Dec 2020 02:31:58 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 01 Dec 2020 12:31:57 +0200
+Date:   Tue, 1 Dec 2020 12:31:57 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/4] usb: typec: tcpm: Pass down negotiated rev to
+ update retry count
+Message-ID: <20201201103157.GA3191259@kuha.fi.intel.com>
+References: <20201201042237.414235-1-badhri@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87tut5bzd5.fsf@miraculix.mork.no>
+In-Reply-To: <20201201042237.414235-1-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 01, 2020 at 11:21:42AM +0100, Bjørn Mork wrote:
-> Johan Hovold <johan@kernel.org> writes:
+On Mon, Nov 30, 2020 at 08:22:34PM -0800, Badhri Jagan Sridharan wrote:
+> nRetryCount was updated from 3 to 2 between PD2.0 and PD3.0 spec.
+> nRetryCount in "Table 6-34 Counter parameters" of the PD 2.0
+> spec is set to 3, whereas, nRetryCount in "Table 6-59 Counter
+> parameters" is set to 2.
 > 
-> > On Tue, Dec 01, 2020 at 11:03:18AM +0100, Bjørn Mork wrote:
-> >> This is a partial revert of commit 2bb70f0a4b23 ("USB: serial:
-> >> option: support dynamic Quectel USB compositions")
-> >> 
-> >> The Quectel BG96 is different from most other modern Quectel modems,
-> >> having serial functions with 3 endpoints using ff/ff/ff and ff/fe/ff
-> >> class/subclass/protocol. Including it in the change to accommodate
-> >> dynamic function mapping was incorrect.
-> >> 
-> >> Revert to interface number matching for the BG96, assuming static
-> >> layout of the RMNET function on interface 4. This restores support
-> >> for the serial functions on interfaces 2 and 3.
-> >> 
-> >> Full lsusb output for the BG96:
-> >
-> >> Cc: Sebastian Sjoholm <sebastian.sjoholm@gmail.com>
-> >> Cc: linux-stable@vger.kernel.org
-> >> Fixes: 2bb70f0a4b23 ("USB: serial: option: support dynamic Quectel USB compositions")
-> >> Signed-off-by: Bjørn Mork <bjorn@mork.no>
-> >
-> > Thanks, Bjørn. Now applied.
+> Pass down negotiated rev in pd_transmit so that low level chip
+> drivers can update the retry count accordingly before attempting
+> packet transmission.
 > 
-> Thanks. But I see that I managed to type the stable address wrong.
-> Sorry.  Hope you can get that fixed somehow.
+> This helps in passing "TEST.PD.PORT.ALL.02" of the
+> "Power Delivery Merged" test suite which was initially failing
+> with "The UUT did not retransmit the message nReryCount times"
+> 
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 2 +-
+>  include/linux/usb/tcpm.h      | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 3bbc1f10af49..c73bc3a8356a 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -667,7 +667,7 @@ static int tcpm_pd_transmit(struct tcpm_port *port,
+>  		tcpm_log(port, "PD TX, type: %#x", type);
+>  
+>  	reinit_completion(&port->tx_complete);
+> -	ret = port->tcpc->pd_transmit(port->tcpc, type, msg);
+> +	ret = port->tcpc->pd_transmit(port->tcpc, type, msg, port->negotiated_rev);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+> index e68aaa12886f..efaedd7e8a18 100644
+> --- a/include/linux/usb/tcpm.h
+> +++ b/include/linux/usb/tcpm.h
+> @@ -121,7 +121,7 @@ struct tcpc_dev {
+>  			      enum typec_cc_status cc);
+>  	int (*try_role)(struct tcpc_dev *dev, int role);
+>  	int (*pd_transmit)(struct tcpc_dev *dev, enum tcpm_transmit_type type,
+> -			   const struct pd_message *msg);
+> +			   const struct pd_message *msg, unsigned int negotiated_rev);
+>  	int (*set_bist_data)(struct tcpc_dev *dev, bool on);
+>  	int (*enable_frs)(struct tcpc_dev *dev, bool enable);
+>  	void (*frs_sourcing_vbus)(struct tcpc_dev *dev);
 
-Yeah, I noticed when replying. Now fixed up.
+I think this will break bisectability. You need to change the users of
+that at in the same commit.
 
-> Patch for checkpatch next, I guess...
+thanks,
 
-Heh, a potentially useful addition for a change. ;)
-
-Johan
+-- 
+heikki
