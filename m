@@ -2,230 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D8D2CA3D2
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 14:28:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58BB82CA44A
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 14:50:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728608AbgLAN2d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Dec 2020 08:28:33 -0500
-Received: from gproxy5-pub.mail.unifiedlayer.com ([67.222.38.55]:33473 "EHLO
-        gproxy5-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725977AbgLAN2d (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 08:28:33 -0500
-Received: from cmgw11.unifiedlayer.com (unknown [10.9.0.11])
-        by gproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id B6B5B14053D
-        for <linux-usb@vger.kernel.org>; Tue,  1 Dec 2020 06:27:50 -0700 (MST)
-Received: from bh-25.webhostbox.net ([208.91.199.152])
-        by cmsmtp with ESMTP
-        id k5h8kmdz3dCH5k5h8kqxal; Tue, 01 Dec 2020 06:27:50 -0700
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.3 cv=MYVCRa3f c=1 sm=1 tr=0
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
- a=zTNgK-yGK50A:10:nop_rcvd_month_year
- a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=1XWaLZrsAAAA:8
- a=UxyB6CtYh_KT3jgNamkA:9 a=CjuIK1q_8ugA:10:nop_charset_2
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=gs8O5DPC1kaSyT11h66Ne9sdXYv+9pEsxRosfLlpD1s=; b=r0qQ6yblnGh+GzDR/PtmUquVr4
-        EyF/NEJ0H4ursol8NfchcbIvqLC0RykgvTMSKLzUaRHEJo1WN92mDbbFWGGVL5w2wOY/usyGfvOyr
-        ImHQ3Aj3SbOWnrUaR1/IfgQhG7Ymlol0qD+IX7v69yPkfyvj24nmJMMF3UAFfjwkQlkDe+qHaQbNp
-        SATj0S5Beqv8YRNka2n5pU7xGShMcB3XDpOZ2uDhiVTCZ9EAejj8FJ5OcLvbmMKz3XHj0sPiuj0Vs
-        6Aoqq4iRgjdq4vys4vosj3bLlXuCPIVnG5xKJKBjOlwoihMCST1ngZdtnf1UaS8y9WEzWjNS0nodT
-        cbE7ltBQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:59970 helo=localhost)
-        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
-        (envelope-from <linux@roeck-us.net>)
-        id 1kk5h7-000Bvg-Rp; Tue, 01 Dec 2020 13:27:49 +0000
-Date:   Tue, 1 Dec 2020 05:27:49 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] usb: typec: tcpci: Add support to report vSafe0V
-Message-ID: <20201201132749.GD232197@roeck-us.net>
-References: <20201201013246.32034-1-badhri@google.com>
- <20201201013246.32034-2-badhri@google.com>
+        id S2391169AbgLANtR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Dec 2020 08:49:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388093AbgLANtR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 08:49:17 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A2CC0613CF;
+        Tue,  1 Dec 2020 05:48:31 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id l11so1186787plt.1;
+        Tue, 01 Dec 2020 05:48:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=plSlSB8BWAYE/ztLDhWMxwjFWQWCkUimRFhmgFEUAfQ=;
+        b=E3NyYGrdb0vHrL3gi/aN2z92fLeGyfn7i4T//KGcw+q76IES9ImWUlStjN4531WIqL
+         nk2e5Qr4i+8oxK9XkyrCmgZngdMglLw5IusO20TVFr3QtDEgKM0IjFBfCn1hPWt1SxiF
+         zlF2CtnlStwfHRKVjhmjT2Zo2F4Di2imgfApYSLPtpMb24nVjWv4mJ1rBORMFlqg0FrY
+         Y4ZMuOGWTbGBOFVJyuhgIJNNTRKnDzfzC2x1vLUx2e/vIopLaVasNqX/SXFPEuRghmjH
+         n3TBXbeQN7hBfDLXXTasaUvM731htT2YtWRIok/c6FPrYvYC0TDJkRAtdiH8PAUQvcda
+         YPkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=plSlSB8BWAYE/ztLDhWMxwjFWQWCkUimRFhmgFEUAfQ=;
+        b=m2UeyDZglD3fRjZGzdM2e3y6SDRxipRHJSwQAc7Xb3eR8oALETW8C1jMwHsip78gto
+         5NpBRtc/vA1ftZyl70URZf0WAsKjA6lp6jG7UxpUgZl2hu3+uQGPaAiXVBBBwGQj4Rfe
+         DcrJ+OLlrfjx9rxlYTfaSSTAwS2W+HvDIqYFlSOOiWDgTMjfGI7qbwbPXCMz4e/f9dPX
+         7NU10Krc3H0ccuHiQKdBQgYEx0L6NCnPqt0jjRabF5TQbp3P250dk+pLwmzI7nlZJrvx
+         xGUFqaFf5/4lOPhqj+myH9p+KntoHoATCj92Hsq9yr7LMUaqMpI1rFvlnTb2P3T0PRrA
+         ke+A==
+X-Gm-Message-State: AOAM530p2Qrgdi7MNYKwCcTfcbuLyR7Tczp+2QLOsWliqDTe+6H5VqCf
+        bEYJv1xhKPoQYC5FWiaIAd1ucjtaTRZ5mlBuPpI=
+X-Google-Smtp-Source: ABdhPJzkmW2Ov0TQgQn9vqGgt5zEseWGIXG1eQtc/CftuHj7IMouXix0R9fvXlc52UlTXSvDsI1NC0HJbKI8036ARAQ=
+X-Received: by 2002:a17:90a:34cb:: with SMTP id m11mr2729806pjf.181.1606830510564;
+ Tue, 01 Dec 2020 05:48:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201201013246.32034-2-badhri@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1kk5h7-000Bvg-Rp
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:59970
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 26
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+References: <20201130153742.9163-1-johan@kernel.org> <20201130153742.9163-3-johan@kernel.org>
+ <CAHp75VdedN5iaGFpfiPFz6G=Ey3axgaZbKYtt95HEwwjWoWbmQ@mail.gmail.com>
+ <X8X9B1jYujUIWXaK@localhost> <CAHp75VfQud=QxwZyhYRU9mtNvrudj0tS6LOuutfJDVdv=-ptXw@mail.gmail.com>
+ <X8Yjc0+Q7fM0nZP+@localhost> <CAHp75VdMcYj0H-HZcmyWFU5ROLwSy=8Pan7JABZxGimqXE35WQ@mail.gmail.com>
+ <X8ZDfvuRbxqsKZMh@localhost>
+In-Reply-To: <X8ZDfvuRbxqsKZMh@localhost>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 1 Dec 2020 15:49:19 +0200
+Message-ID: <CAHp75Vct+J7=BaUdzBktQvKvThCuC-HmyRP2s4LRJvgsE2A2UA@mail.gmail.com>
+Subject: Re: [PATCH 2/5] serial: core: add sysfs attribute to suppress ready
+ signalling on open
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Mychaela N . Falconia" <falcon@freecalypso.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 30, 2020 at 05:32:45PM -0800, Badhri Jagan Sridharan wrote:
-> This change adds vbus_vsafe0v which when set, makes TCPM
-> query for VSAFE0V by assigning the tcpc.is_vbus_vsafe0v callback.
-> Also enables ALERT.ExtendedStatus which is triggered when
-> status of EXTENDED_STATUS.vSafe0V changes.
-> EXTENDED_STATUS.vSafe0V is set when vbus is at vSafe0V and
-> cleared otherwise.
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
->  drivers/usb/typec/tcpm/tcpci.c | 55 ++++++++++++++++++++++++++--------
->  drivers/usb/typec/tcpm/tcpci.h |  6 ++++
->  2 files changed, 49 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index 12d983a75510..e281b8bee4db 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -402,6 +402,19 @@ static int tcpci_get_vbus(struct tcpc_dev *tcpc)
->  	return !!(reg & TCPC_POWER_STATUS_VBUS_PRES);
->  }
->  
-> +static int tcpci_is_vbus_vsafe0v(struct tcpc_dev *tcpc)
-> +{
-> +	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-> +	unsigned int reg;
-> +	int ret;
-> +
-> +	ret = regmap_read(tcpci->regmap, TCPC_EXTENDED_STATUS, &reg);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return !!(reg & TCPC_EXTENDED_STATUS_VSAFE0V);
-> +}
-> +
->  static int tcpci_set_vbus(struct tcpc_dev *tcpc, bool source, bool sink)
->  {
->  	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-> @@ -554,12 +567,22 @@ static int tcpci_init(struct tcpc_dev *tcpc)
->  		TCPC_ALERT_RX_HARD_RST | TCPC_ALERT_CC_STATUS;
->  	if (tcpci->controls_vbus)
->  		reg |= TCPC_ALERT_POWER_STATUS;
-> +	/* Enable VSAFE0V status interrupt when detecting VSAFE0V is supported */
-> +	if (tcpci->data->vbus_vsafe0v) {
-> +		reg |= TCPC_ALERT_EXTENDED_STATUS;
-> +		ret = regmap_write(tcpci->regmap, TCPC_EXTENDED_STATUS_MASK,
-> +				   TCPC_EXTENDED_STATUS_VSAFE0V);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
->  	return tcpci_write16(tcpci, TCPC_ALERT_MASK, reg);
->  }
->  
->  irqreturn_t tcpci_irq(struct tcpci *tcpci)
->  {
->  	u16 status;
-> +	int ret;
-> +	unsigned int raw;
->  
->  	tcpci_read16(tcpci, TCPC_ALERT, &status);
->  
-> @@ -575,18 +598,17 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
->  		tcpm_cc_change(tcpci->port);
->  
->  	if (status & TCPC_ALERT_POWER_STATUS) {
-> -		unsigned int reg;
-> -
-> -		regmap_read(tcpci->regmap, TCPC_POWER_STATUS_MASK, &reg);
-> -
-> -		/*
-> -		 * If power status mask has been reset, then the TCPC
-> -		 * has reset.
-> -		 */
-> -		if (reg == 0xff)
-> -			tcpm_tcpc_reset(tcpci->port);
-> -		else
-> -			tcpm_vbus_change(tcpci->port);
-> +		ret = regmap_read(tcpci->regmap, TCPC_POWER_STATUS_MASK, &raw);
-> +		if (ret >= 0) {
-> +			/*
-> +			 * If power status mask has been reset, then the TCPC
-> +			 * has reset.
-> +			 */
-> +			if (raw == 0xff)
-> +				tcpm_tcpc_reset(tcpci->port);
-> +			else
-> +				tcpm_vbus_change(tcpci->port);
-> +		}
+On Tue, Dec 1, 2020 at 3:21 PM Johan Hovold <johan@kernel.org> wrote:
+> On Tue, Dec 01, 2020 at 01:19:30PM +0200, Andy Shevchenko wrote:
+> > On Tue, Dec 1, 2020 at 1:04 PM Johan Hovold <johan@kernel.org> wrote:
 
-This change seems unrelated to this patch. Besides that, are you sure that
-ignoring an error from regmap_read() is sensible here ?
+...
 
-Overall, it may make sense to improve error handling in this driver, but I think
-it should be done in a separate patch.
+> > > 0x01 is 1 and is generally treated as boolean true as you know.
+> >
+> > Depends how you interpret this. kstrtobool() uses one character (and
+> > in some cases two) of the input. Everything else is garbage.
+> > Should we interpret garbage?
+>
+> No, ideally we should reject the input.
 
->  	}
->  
->  	if (status & TCPC_ALERT_RX_STATUS) {
-> @@ -622,6 +644,12 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
->  		tcpm_pd_receive(tcpci->port, &msg);
->  	}
->  
-> +	if (status & TCPC_ALERT_EXTENDED_STATUS) {
-> +		ret = regmap_read(tcpci->regmap, TCPC_EXTENDED_STATUS, &raw);
-> +		if (ret >= 0 && (raw & TCPC_EXTENDED_STATUS_VSAFE0V))
-> +			tcpm_vbus_change(tcpci->port);
-> +	}
-> +
->  	if (status & TCPC_ALERT_RX_HARD_RST)
->  		tcpm_pd_hard_reset(tcpci->port);
->  
-> @@ -699,6 +727,9 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
->  			tcpci_set_auto_vbus_discharge_threshold;
->  	}
->  
-> +	if (tcpci->data->vbus_vsafe0v)
-> +		tcpci->tcpc.is_vbus_vsafe0v = tcpci_is_vbus_vsafe0v;
-> +
->  	err = tcpci_parse_config(tcpci);
->  	if (err < 0)
->  		return ERR_PTR(err);
-> diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
-> index 3fe313655f0c..116a69c85e38 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.h
-> +++ b/drivers/usb/typec/tcpm/tcpci.h
-> @@ -49,6 +49,9 @@
->  #define TCPC_TCPC_CTRL_ORIENTATION	BIT(0)
->  #define TCPC_TCPC_CTRL_BIST_TM		BIT(1)
->  
-> +#define TCPC_EXTENDED_STATUS		0x20
-> +#define TCPC_EXTENDED_STATUS_VSAFE0V	BIT(0)
-> +
->  #define TCPC_ROLE_CTRL			0x1a
->  #define TCPC_ROLE_CTRL_DRP		BIT(6)
->  #define TCPC_ROLE_CTRL_RP_VAL_SHIFT	4
-> @@ -155,11 +158,14 @@ struct tcpci;
->   *		is sourcing vbus.
->   * @auto_discharge_disconnect:
->   *		Optional; Enables TCPC to autonously discharge vbus on disconnect.
-> + * @vbus_vsafe0v:
-> + *		optional; Set when TCPC can detect whether vbus is at VSAFE0V.
->   */
->  struct tcpci_data {
->  	struct regmap *regmap;
->  	unsigned char TX_BUF_BYTE_x_hidden:1;
->  	unsigned char auto_discharge_disconnect:1;
-> +	unsigned char vbus_vsafe0v:1;
->  
->  	int (*init)(struct tcpci *tcpci, struct tcpci_data *data);
->  	int (*set_vconn)(struct tcpci *tcpci, struct tcpci_data *data,
-> -- 
-> 2.29.2.454.gaff20da3a2-goog
-> 
+We can do it by the way in kstrtobool() and see if anybody complains
+(I believe the world is saner than relying on 0x01 for false and 123
+for true.
+
+...
+
+> > > So why should a sysfs-interface accept it as valid input and treat it as
+> > > false? That's just bad design.
+> >
+> > I can agree with this.
+>
+> Looks like part of the problem are commits like 4cc7ecb7f2a6 ("param:
+> convert some "on"/"off" users to strtobool") which destroyed perfectly
+> well-defined interfaces.
+
+Oh, but the strtobool() in ABI was before that, for instance
+ % git grep -n -p -w strtobool v3.14
+shows a few dozens of users and some of them looks like ABI.
+
+...
+
+> > Somehow cifs uses kstrtobool() in conjunction with the wider ranges. Nobody
+> > complained so far. But maybe they had it from day 1.
+>
+> Wow, that's pretty nasty.
+
+I have checked, the wider range fits one character. So, basically they
+had this kind of interface from day 1.
+
+...
+
+> > So, we have two issues here: kstrtobool() doesn't report an error of
+> > input when it has garbage, the user may rely on garbage to be
+> > discarded.
+>
+> Right, parsing is too allowing and there are too many ways to say
+> true/false.
+>
+> The power-management attributes use 0 and 1 for boolean like I do here,
+> and I'd prefer to stick to that until we have deprecated the current
+> kstrtobool.
+
+Okay!
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
