@@ -2,81 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 632542CA652
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 15:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B62612CA678
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 16:02:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403926AbgLAOvf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Dec 2020 09:51:35 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:42841 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2389038AbgLAOve (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 09:51:34 -0500
-Received: (qmail 1007173 invoked by uid 1000); 1 Dec 2020 09:50:53 -0500
-Date:   Tue, 1 Dec 2020 09:50:53 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Hillf Danton <hdanton@sina.com>,
-        syzbot <syzbot+dbec6695a6565a9c6bc0@syzkaller.appspotmail.com>,
-        eli.billauer@gmail.com, gustavoars@kernel.org,
-        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tiwai@suse.de
-Subject: Re: WARNING in port100_send_frame_async/usb_submit_urb
-Message-ID: <20201201145053.GA1005384@rowland.harvard.edu>
-References: <000000000000bab70f05b563a6cc@google.com>
- <20201201094702.1762-1-hdanton@sina.com>
- <X8YT6sbhhGwQ06nw@kroah.com>
+        id S2389849AbgLAPB6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Dec 2020 10:01:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33780 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389514AbgLAPB5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Dec 2020 10:01:57 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1706B20691;
+        Tue,  1 Dec 2020 15:01:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606834876;
+        bh=3peWW0gzDhg53QWR3p3MrFZHy1Ev+0muOybHCDu66+M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iDxgfnOHBZ8uTuNVOT9OzBbVIENBVQ7TsJSeopKt02no5szsFtc1cUGdMw7e1+vyu
+         iUqE9c9GwL+09dsmObIRlLlLh62maQ/9pGE9lTSLcbB3Q1eABzW2GzksR8XqTPMjG1
+         6VqlXY1DUFNEh5oNoGkWZ9J+HsT2KXH42fxylQnc=
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94)
+        (envelope-from <maz@kernel.org>)
+        id 1kk79T-00F4zg-ID; Tue, 01 Dec 2020 15:01:14 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <X8YT6sbhhGwQ06nw@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 01 Dec 2020 15:01:11 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: ftdi_sio: Helpful error on GPIO attempt
+In-Reply-To: <20201201141048.1461042-1-linus.walleij@linaro.org>
+References: <20201201141048.1461042-1-linus.walleij@linaro.org>
+User-Agent: Roundcube Webmail/1.4.9
+Message-ID: <43d788c69a0f4fe3caf578b98ae72395@kernel.org>
+X-Sender: maz@kernel.org
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: linus.walleij@linaro.org, johan@kernel.org, linux-usb@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 01, 2020 at 10:59:06AM +0100, Greg KH wrote:
-> On Tue, Dec 01, 2020 at 05:47:02PM +0800, Hillf Danton wrote:
-> > On Tue, 01 Dec 2020 01:21:27 -0800
-> > > syzbot found the following issue on:
-> > > 
-> > > HEAD commit:    c84e1efa Merge tag 'asm-generic-fixes-5.10-2' of git://git..
-> > > git tree:       upstream
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=14a98565500000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=7be70951fca93701
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=dbec6695a6565a9c6bc0
-> > > compiler:       clang version 11.0.0 (https://github.com/llvm/llvm-project.git ca2dcbd030eadbf0aa9b660efe864ff08af6e18b)
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17c607f1500000
-> > > 
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+dbec6695a6565a9c6bc0@syzkaller.appspotmail.com
-> > > 
-> > > usb 1-1: string descriptor 0 read error: -32
-> > > ------------[ cut here ]------------
-> > > URB 000000005c26bc1e submitted while active
+Hi Linus,
 
-> > Clear urb before putting it in use.
-> > 
-> > --- a/drivers/nfc/port100.c
-> > +++ b/drivers/nfc/port100.c
-> > @@ -1525,7 +1525,7 @@ static int port100_probe(struct usb_inte
-> >  	}
-> >  
-> >  	dev->in_urb = usb_alloc_urb(0, GFP_KERNEL);
-> > -	dev->out_urb = usb_alloc_urb(0, GFP_KERNEL);
-> > +	dev->out_urb = usb_alloc_urb(0, GFP_KERNEL | __GFP_ZERO);
-> >  
-> >  	if (!dev->in_urb || !dev->out_urb) {
-> >  		nfc_err(&interface->dev, "Could not allocate USB URBs\n");
+On 2020-12-01 14:10, Linus Walleij wrote:
+> The FTDI adapters present all potentially available GPIO
+> lines to userspace, and they are often also visibly
+> available on things like breakout boards. These are
+> appetizing targets for random GPIO tinkering such as
+> bit-banging or other industrial control over USB.
 > 
-> How does this solve a warning in the USB core about a string descriptor
-> error?
+> When a user attempts to use one of the GPIO lines, they
+> can get the opaque error -ENODEV, because the flashed
+> configuration says that the line is not in GPIO mode
+> but another alternative function.
+> 
+> We had one user run into this, debug and finally fix the
+> problem using ftx-prog.
 
-Greg, you misread the bug report.  The problem wasn't the string 
-descriptor read error; it was URB submitted while active.
+Well, you gave me 2/3 of the solution ;-). How about adding
+a pointer to this tool? [1]
 
-More to the point, adding __GFP_ZERO to the usb_alloc_urb call won't fix 
-anything, because usb_alloc_urb calls usb_init_urb, which already does a 
-memset.
+> 
+> Give the user some more helpful dmesg text and a pointer
+> to ftx-prog when the error occurs.
+> 
+> Reported-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  drivers/usb/serial/ftdi_sio.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/serial/ftdi_sio.c 
+> b/drivers/usb/serial/ftdi_sio.c
+> index e0f4c3d9649c..405fec78f2fc 100644
+> --- a/drivers/usb/serial/ftdi_sio.c
+> +++ b/drivers/usb/serial/ftdi_sio.c
+> @@ -1841,8 +1841,11 @@ static int ftdi_gpio_request(struct gpio_chip
+> *gc, unsigned int offset)
+>  	struct ftdi_private *priv = usb_get_serial_port_data(port);
+>  	int result;
+> 
+> -	if (priv->gpio_altfunc & BIT(offset))
+> +	if (priv->gpio_altfunc & BIT(offset)) {
+> +		dev_err(&port->dev, "FTDI firmware says line is not in GPIO 
+> mode\n");
+> +		dev_err(&port->dev, "if you really know what you're doing the flash
+> can be reconfigured using ftx-prog\n");
+>  		return -ENODEV;
+> +	}
+> 
+>  	mutex_lock(&priv->gpio_lock);
+>  	if (!priv->gpio_used) {
 
-Alan Stern
+It occurs to me that since the driver already knows which of the CBUS
+pins are unusable, we should maybe find a way to expose the line as
+"reserved", one way or another? Generic tools such as gpioinfo would
+(or should?) be able to display the status of the pin to the user.
+
+enum gpio_v2_line_flag doesn't have a "reserved" flag, so maybe
+GPIO_V2_LINE_FLAG_USED is an adequate way to mark the line as
+being unavailable for userspace?
+
+Thanks,
+
+         M.
+
+[1] https://github.com/richardeoin/ftx-prog
+-- 
+Jazz is not dead. It just smells funny...
