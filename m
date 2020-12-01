@@ -2,117 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 738E32CA5DD
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 15:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 046862CA614
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 15:47:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391393AbgLAOih (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Dec 2020 09:38:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47392 "EHLO
+        id S2403871AbgLAOpV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Dec 2020 09:45:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388116AbgLAOig (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 09:38:36 -0500
+        with ESMTP id S2387462AbgLAOpT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 09:45:19 -0500
 Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EC1C0613CF
-        for <linux-usb@vger.kernel.org>; Tue,  1 Dec 2020 06:37:50 -0800 (PST)
-Received: by mail-lj1-x241.google.com with SMTP id s9so3231271ljo.11
-        for <linux-usb@vger.kernel.org>; Tue, 01 Dec 2020 06:37:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C484C0613CF;
+        Tue,  1 Dec 2020 06:44:33 -0800 (PST)
+Received: by mail-lj1-x241.google.com with SMTP id y7so3288440lji.8;
+        Tue, 01 Dec 2020 06:44:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=U5JqANZHI6IE63msBOtqjTP9Lnlr40urg8p0rQpF1os=;
-        b=nUmBR6Rhr6RwUm/ExCSsIEelcOzUu2enLaU+tVqRNw1b+hIMOq/A0syBqJtsjqD+3g
-         Kd1BAoJb5/eLkNWsJqmg22QoTwO6YToOWFgeeiNYGFlpkWRk+98Nf645tUA3/MNJgt1c
-         abVbnUZjsTExWTHKhFugK/cEwEUNb5zLcDV0TtyPh6BA70LFaeUbMf4sUvyztf37CMAZ
-         BpKBUUViwXZ9dKUDl7iOXPANg5+qlBpGAHFKrOxnnIRtyyPj4Y/BxSdIhsD4crpG30sW
-         TfBkcBwOYxIfxbAEtL/mGIq1GFVn6xtsN6I+qAA+WDGagBAEEBYyaN26mHWrHWx8l2sW
-         yUBg==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=y9EUIaQ8GAN124ZcC2ubYB5qyTvd2qS6h+7s4S3ERhc=;
+        b=tllgianMmrwuVpg6r3EmSTbKQSrPwzHyLcVAGFGi8/j+Pv2v6Gawoxml6JypW3e/Fu
+         uMD0+CCTqDUo+pboGZDab1cgowlL44vTGDNNLVM87U+vO9qW04DMZQ5er5jwhoSwo+C2
+         oDGz0FNJVfUs4T4OhzqtNobs6ut7R+2vCjVg8XmISnlQwEvbL5+UbB7Ge/dl49yB1TDK
+         LYr25AZKa89UDlsmo2lD+gB7fYf6oEybJdqrCla7h3Sbvu7NLCHdyfDEaEBGwRbk0p3k
+         4dHDlgZcvIAPJ7Rwh3E87FaAedb6Zaw4q8ebIT4+AAar4b0q2P++jCQn5/vGXhYLTolq
+         mhEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U5JqANZHI6IE63msBOtqjTP9Lnlr40urg8p0rQpF1os=;
-        b=cEypDoZGKQMXL2esuZoZzygJ+68XOsIoD/C3ODZT5yTYt5CXpFLspieLU05qBygt5A
-         Ke/HcCSUaX9fnNyqNBBEmfHkD9x7R689i8iBvWxH4biluvG5COM0d6gHgShskA8jk5nG
-         hpLonfxAcpS3/dJ1/HU/eCg/NlT2aj/QCtVArZRO6elmdW81+xlrTTu/rxMonn9I6T+v
-         cgmy+inE6mmOw8a2KG0vSFyGg5VokRNpjiohXeefEa0E4OaaSO3qFHJR4o8oWQOaJIFR
-         IUFwOY0YVkcj/JVQJWpz/GLRdEsglsiAN/8QHkQdtfU96xVM7uH0OazSzZTPd+ManycK
-         xBPQ==
-X-Gm-Message-State: AOAM531WZVVGf1JIFLfRAwZv5jvjhNDo7c+n6abiJudzvEvAogvlmqav
-        9zFeVFu2w/O0C6nQ1Xb5PVnklm22NawP2vVEgAoeYw==
-X-Google-Smtp-Source: ABdhPJwI3mG+5vEbQWTkRy2ZlcHAebtOPhoj2FgTlzifmIeWuXJt4guAi8I8k1kqlc9IN+GThnSimPG/riS27TdNJnY=
-X-Received: by 2002:a05:651c:111:: with SMTP id a17mr1447882ljb.286.1606833469260;
- Tue, 01 Dec 2020 06:37:49 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=y9EUIaQ8GAN124ZcC2ubYB5qyTvd2qS6h+7s4S3ERhc=;
+        b=pjaS6bnJCoTQHoR49nAedYDB+HWZNNiuOz3xhQSWQITsNKQ0EMw0zc10upNEoZ1smX
+         Vlv0yAy0ADokwHRjbiN4Nw95aiELAz1B3Sr1EuBtYi9lHVzG1tbNVQb22IT2+kBwOFrF
+         wpPOjwjoS3soLt+TIbkmYRY6L+0TN5L5b0ZmOTh2mlNT+aYp6QVPQghsqlktSDHu9p+j
+         10YIzTsz3UDvvq+HykGFk9TqIXmy5zFQt8W9sNh1sBirWEmqaTdJlT3UNzlrLqSX29r4
+         MDigxKmtzuI+pLy6vjo0C82mcz5hehOQgamvOvR0jIuiMQMT1mp5XDZMRrDnBjjb00Fn
+         9ZmA==
+X-Gm-Message-State: AOAM532uixEYChSTPpJSmFkHf4/KPEvhmt1WU0xctGEVYL6YfwJdJSkp
+        +Fxy4w/5vjPuQu/aM1YOxwBr2gHOzmo=
+X-Google-Smtp-Source: ABdhPJx2qDWHfrVca/Vv8M2UHUKK2ubeA/h9klMOPlTpcfO8LtF0Sa0uJ6QnKT2b0Nx9rH1QAeJ6mg==
+X-Received: by 2002:a2e:9c51:: with SMTP id t17mr1411950ljj.302.1606833871765;
+        Tue, 01 Dec 2020 06:44:31 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-53.dynamic.spd-mgts.ru. [109.252.192.53])
+        by smtp.googlemail.com with ESMTPSA id c14sm224862lfp.7.2020.12.01.06.44.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Dec 2020 06:44:30 -0800 (PST)
+Subject: Re: [PATCH v1 00/30] Introduce core voltage scaling for NVIDIA
+ Tegra20/30 SoCs
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-mmc@vger.kernel.org, devel@driverdev.osuosl.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
+References: <20201104234427.26477-1-digetx@gmail.com>
+ <160683107675.35139.13466076210885462180.b4-ty@kernel.org>
+ <858e4183-5064-084f-9b80-870e118c3edc@gmail.com>
+ <20201201143420.GD5239@sirena.org.uk>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <2349ba09-95bf-1e2f-68ae-deea36805628@gmail.com>
+Date:   Tue, 1 Dec 2020 17:44:29 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-References: <20201122170822.21715-1-mani@kernel.org> <20201122170822.21715-3-mani@kernel.org>
-In-Reply-To: <20201122170822.21715-3-mani@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 1 Dec 2020 15:37:38 +0100
-Message-ID: <CACRpkdbY-aZB1BAD=JkZAHA+OQvpH12AD3tLAp6Nf1hwr74s9A@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] usb: serial: xr_serial: Add gpiochip support
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        patong.mxl@gmail.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        angelo.dureghello@timesys.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201201143420.GD5239@sirena.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Nov 22, 2020 at 6:08 PM Manivannan Sadhasivam <mani@kernel.org> wrote:
+01.12.2020 17:34, Mark Brown пишет:
+> On Tue, Dec 01, 2020 at 05:17:20PM +0300, Dmitry Osipenko wrote:
+>> 01.12.2020 16:57, Mark Brown пишет:
+> 
+>>> [1/1] regulator: Allow skipping disabled regulators in regulator_check_consumers()
+>>>       (no commit info)
+> 
+>> Could you please hold on this patch? It won't be needed in a v2, which
+>> will use power domains.
+> 
+>> Also, I'm not sure whether the "sound" tree is suitable for any of the
+>> patches in this series.
+> 
+> It didn't actually get applied (note the "no commit info") - it looks
+> like b4's matching code got confused and decided to generate mails for
+> anything that I've ever downloaded and not posted.
+> 
 
-> Add gpiochip support for Maxlinear/Exar USB to serial converter
-> for controlling the available gpios.
->
-> Inspired from cp210x usb to serial converter driver.
->
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: linux-gpio@vger.kernel.org
-> Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
-
-This looks good to me overall, provided that it plays well with the
-serial port.
-
-One minor notice:
-
-> +enum gpio_pins {
-> +       GPIO_RI = 0,
-> +       GPIO_CD,
-> +       GPIO_DSR,
-> +       GPIO_DTR,
-> +       GPIO_CTS,
-> +       GPIO_RTS,
-> +       GPIO_MAX,
-> +};
-
-You know the names of the pins...
-
-> +       port_priv->gc.ngpio = 6;
-> +       port_priv->gc.label = "xr_gpios";
-> +       port_priv->gc.request = xr_gpio_request;
-> +       port_priv->gc.free = xr_gpio_free;
-> +       port_priv->gc.get_direction = xr_gpio_direction_get;
-> +       port_priv->gc.direction_input = xr_gpio_direction_input;
-> +       port_priv->gc.direction_output = xr_gpio_direction_output;
-> +       port_priv->gc.get = xr_gpio_get;
-> +       port_priv->gc.set = xr_gpio_set;
-> +       port_priv->gc.owner = THIS_MODULE;
-> +       port_priv->gc.parent = &port->dev;
-> +       port_priv->gc.base = -1;
-> +       port_priv->gc.can_sleep = true;
-
-So assign port_priv->gc.names here as well with an array
-of strings with the names ("RI", "CD", ... etc).
-This makes it look really nice in userspace if you do
-e.g. "lsgpio".
-
-With that:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+Alright, thank you for the clarification.
