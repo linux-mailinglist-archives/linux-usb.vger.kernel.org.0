@@ -2,202 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99ACF2CB089
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 23:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 163A72CB124
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Dec 2020 00:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726609AbgLAW4K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Dec 2020 17:56:10 -0500
-Received: from mga07.intel.com ([134.134.136.100]:47695 "EHLO mga07.intel.com"
+        id S1727355AbgLAXzR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Dec 2020 18:55:17 -0500
+Received: from mga09.intel.com ([134.134.136.24]:54936 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725955AbgLAW4K (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Dec 2020 17:56:10 -0500
-IronPort-SDR: eMQeD4t/Jk32RioF8ioNuDJG91PWiMH81+aJfcKAJakKF9L1NDW0MacsXudLuu8NvmSFN9xp1M
- wLphkvo6077Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9822"; a="237049596"
+        id S1726997AbgLAXzQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Dec 2020 18:55:16 -0500
+IronPort-SDR: 3yRJl/yukdz47jeFYovgDRwIHQYdC1iRuFrPwUsbBK9OaSAgaKL4JjbsFFi3WV1Cb24ThN8E9T
+ Ox5yh8khGgnA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9822"; a="173086264"
 X-IronPort-AV: E=Sophos;i="5.78,385,1599548400"; 
-   d="scan'208";a="237049596"
+   d="scan'208";a="173086264"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 14:55:27 -0800
-IronPort-SDR: lATKgK9CJ9ACrKURG842XEhHL6+ycmHvsPGGLz1BFImjPV8OEWlwa36UVVrnEAJGgspxLrdhQ8
- 0YElryqfawdw==
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 15:53:34 -0800
+IronPort-SDR: xDYy4XtWbE/FC0Kf9OSOJB/nMeVUrPD5hYMqL1j4sBv5Yvzc1iBQF8vPHR7A5Gvp005Pad2ldf
+ hZo34P75SwRA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.78,385,1599548400"; 
-   d="scan'208";a="330203026"
-Received: from lkp-server01.sh.intel.com (HELO cb91f3174bdd) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 01 Dec 2020 14:55:25 -0800
-Received: from kbuild by cb91f3174bdd with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kkEYO-0000AZ-Vt; Tue, 01 Dec 2020 22:55:24 +0000
-Date:   Wed, 02 Dec 2020 06:55:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [balbi-usb:testing/next] BUILD SUCCESS
- 1080ed2a6cc53a07afdb1cd3f3968e808b714bbb
-Message-ID: <5fc6c9da.z2DFiQcnHxojqXci%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="345662441"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga002.jf.intel.com with ESMTP; 01 Dec 2020 15:53:33 -0800
+Subject: Re: [PATCH] usb: host: xhci: wait USB2 port enter suspend for bus
+ suspend
+To:     Jun Li <jun.li@nxp.com>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Peter Chen <peter.chen@nxp.com>
+References: <1604402250-16434-1-git-send-email-jun.li@nxp.com>
+ <VE1PR04MB6528A9C9B77B4F2A9CFF9C0D89F40@VE1PR04MB6528.eurprd04.prod.outlook.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <9b8d9be1-a6e4-e861-1d91-a62a97ac3add@linux.intel.com>
+Date:   Wed, 2 Dec 2020 01:55:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <VE1PR04MB6528A9C9B77B4F2A9CFF9C0D89F40@VE1PR04MB6528.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git  testing/next
-branch HEAD: 1080ed2a6cc53a07afdb1cd3f3968e808b714bbb  arm64: dts: rockchip: enable rk3328-rock64 usb3 nodes
+Hi
 
-elapsed time: 722m
+On 1.12.2020 8.12, Jun Li wrote:
+> Hi,
+> 
+>> -----Original Message-----
+>> From: Jun Li <jun.li@nxp.com>
+>> Sent: Tuesday, November 3, 2020 7:23 PM
+>> To: mathias.nyman@intel.com
+>> Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org; Peter Chen
+>> <peter.chen@nxp.com>
+>> Subject: [PATCH] usb: host: xhci: wait USB2 port enter suspend for bus suspend
+>>
+>> If the connected USB2 device wakeup is not enabled/supported, the link state
+>> may still be U0 when do xhci bus suspend, after we suspend ports in U0, we
+>> need give time to device to enter suspend before do further suspend operations
+>> (e.g. system suspend), otherwise we may enter system suspend with link state
+>> at U0.
 
-configs tested: 138
-configs skipped: 2
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+What side-effects have you observed if bus suspend returns while a port is still
+transitioning to U3?
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                            xcep_defconfig
-sh                   sh7770_generic_defconfig
-powerpc                     mpc83xx_defconfig
-mips                      pistachio_defconfig
-xtensa                       common_defconfig
-arc                        nsimosci_defconfig
-openrisc                         alldefconfig
-sh                               j2_defconfig
-mips                       capcella_defconfig
-arm                           viper_defconfig
-c6x                        evmc6474_defconfig
-c6x                        evmc6457_defconfig
-mips                           ip27_defconfig
-sh                        sh7763rdp_defconfig
-arm                       multi_v4t_defconfig
-powerpc                 xes_mpc85xx_defconfig
-arc                 nsimosci_hs_smp_defconfig
-powerpc                     sequoia_defconfig
-arm                      pxa255-idp_defconfig
-arm                          ep93xx_defconfig
-arm                          lpd270_defconfig
-mips                           gcw0_defconfig
-xtensa                         virt_defconfig
-c6x                        evmc6678_defconfig
-sh                             shx3_defconfig
-nios2                         3c120_defconfig
-powerpc                        warp_defconfig
-mips                        vocore2_defconfig
-sparc                               defconfig
-arm                          pcm027_defconfig
-ia64                        generic_defconfig
-sh                        dreamcast_defconfig
-arm                            mps2_defconfig
-mips                  cavium_octeon_defconfig
-arm                             mxs_defconfig
-mips                           rs90_defconfig
-arm                         palmz72_defconfig
-powerpc                 mpc85xx_cds_defconfig
-sh                           se7722_defconfig
-um                             i386_defconfig
-openrisc                    or1ksim_defconfig
-arm                     davinci_all_defconfig
-powerpc                 mpc834x_itx_defconfig
-powerpc                    mvme5100_defconfig
-sh                        apsh4ad0a_defconfig
-sh                  sh7785lcr_32bit_defconfig
-arm                          imote2_defconfig
-arm                          pxa3xx_defconfig
-powerpc                      cm5200_defconfig
-powerpc                     pseries_defconfig
-mips                            e55_defconfig
-m68k                            q40_defconfig
-powerpc                 linkstation_defconfig
-ia64                          tiger_defconfig
-powerpc                         wii_defconfig
-s390                             alldefconfig
-powerpc                  mpc885_ads_defconfig
-nios2                            alldefconfig
-mips                         tb0219_defconfig
-powerpc                 mpc832x_rdb_defconfig
-mips                           mtx1_defconfig
-powerpc                      pasemi_defconfig
-powerpc                  storcenter_defconfig
-parisc                generic-32bit_defconfig
-mips                    maltaup_xpa_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a004-20201201
-i386                 randconfig-a005-20201201
-i386                 randconfig-a001-20201201
-i386                 randconfig-a002-20201201
-i386                 randconfig-a006-20201201
-i386                 randconfig-a003-20201201
-x86_64               randconfig-a016-20201201
-x86_64               randconfig-a012-20201201
-x86_64               randconfig-a014-20201201
-x86_64               randconfig-a013-20201201
-x86_64               randconfig-a015-20201201
-x86_64               randconfig-a011-20201201
-i386                 randconfig-a014-20201201
-i386                 randconfig-a013-20201201
-i386                 randconfig-a011-20201201
-i386                 randconfig-a015-20201201
-i386                 randconfig-a012-20201201
-i386                 randconfig-a016-20201201
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+I can't recall why we end up with ports in U0 in bus suspend anymore.
+I think that in system suspend the link should be put to U3 already when the usb device is
+suspended, before the bus suspends, even if it doesn't support remote wakeup.
 
-clang tested configs:
-x86_64               randconfig-a004-20201201
-x86_64               randconfig-a006-20201201
-x86_64               randconfig-a001-20201201
-x86_64               randconfig-a002-20201201
-x86_64               randconfig-a005-20201201
-x86_64               randconfig-a003-20201201
+Do you know the reason why the device is in U0 in bus suspend in your case?
+Could that be the real problem that needs to be fixed? 
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>>
+>> Signed-off-by: Li Jun <jun.li@nxp.com>
+>> ---
+>>  drivers/usb/host/xhci-hub.c | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+>> index c799ca5..1e054d0 100644
+>> --- a/drivers/usb/host/xhci-hub.c
+>> +++ b/drivers/usb/host/xhci-hub.c
+>> @@ -1598,6 +1598,7 @@ int xhci_bus_suspend(struct usb_hcd *hcd)
+>>  	struct xhci_hub *rhub;
+>>  	struct xhci_port **ports;
+>>  	u32 portsc_buf[USB_MAXCHILDREN];
+>> +	bool wait_port_enter_u3 = false;
+>>  	bool wake_enabled;
+>>
+>>  	rhub = xhci_get_rhub(hcd);
+>> @@ -1706,12 +1707,17 @@ int xhci_bus_suspend(struct usb_hcd *hcd)
+>>  				xhci_stop_device(xhci, slot_id, 1);
+>>  				spin_lock_irqsave(&xhci->lock, flags);
+>>  			}
+>> +			wait_port_enter_u3 = true;
+
+I don't think "wait_port_enter_u3" is needed. If xhci_bus_suspend() needs 
+to set a port link to U3 it will also set a bit in bus_state->bus_suspended
+
+>>  		}
+>>  		writel(portsc_buf[port_index], ports[port_index]->addr);
+>>  	}
+>>  	hcd->state = HC_STATE_SUSPENDED;
+>>  	bus_state->next_statechange = jiffies + msecs_to_jiffies(10);
+>>  	spin_unlock_irqrestore(&xhci->lock, flags);
+>> +
+>> +	if (wait_port_enter_u3)
+>> +		usleep_range(5000, 10000);
+
+First thought we should poll the register(s) and wait for ports to enter U3,
+but the more common case where a device is suspended and link put to U3 with a 
+USB2 SetPortFeature(PORT_SUSPEND) also just sleeps for 10ms, so doing it
+for this special case should be ok as well. 
+
+if (bus_state->bus_suspended)
+	usleep_range(5000, 10000)
+
+-Mathias
+
