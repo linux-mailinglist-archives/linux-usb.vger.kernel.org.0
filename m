@@ -2,101 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 606622C9FDA
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 11:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C75E2CA04A
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 11:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729824AbgLAKdr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Dec 2020 05:33:47 -0500
-Received: from mga09.intel.com ([134.134.136.24]:40453 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726134AbgLAKdr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Dec 2020 05:33:47 -0500
-IronPort-SDR: svWi1n0YeJw8g9xW6g561C0tDdaYtVMR2ygNYjD547UnwkbYX2YXMQ/kBQ1iAnr02rUEXZLKSS
- nSbQcHHYn4kg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9821"; a="172963547"
-X-IronPort-AV: E=Sophos;i="5.78,384,1599548400"; 
-   d="scan'208";a="172963547"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 02:32:01 -0800
-IronPort-SDR: T/rXxtx3qMZyzxQo9aQcTNzrrtAyXDYW+T1LjXV+lwq9+eLxagowcqUzXTMazJ5AIVVtOCOI9R
- +0gBCU4Zreqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,384,1599548400"; 
-   d="scan'208";a="434617560"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 01 Dec 2020 02:31:58 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 01 Dec 2020 12:31:57 +0200
-Date:   Tue, 1 Dec 2020 12:31:57 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/4] usb: typec: tcpm: Pass down negotiated rev to
- update retry count
-Message-ID: <20201201103157.GA3191259@kuha.fi.intel.com>
-References: <20201201042237.414235-1-badhri@google.com>
+        id S1727012AbgLAKsl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Dec 2020 05:48:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725899AbgLAKsl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 05:48:41 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95F2C0613D2;
+        Tue,  1 Dec 2020 02:48:00 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id p21so618202pjv.0;
+        Tue, 01 Dec 2020 02:48:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dAFYxzGzkBEUMFK3NS6Q6bqv6vlixBH5vwa4XwPAREI=;
+        b=aMgWetRkgiQlzBcnjuqoBLvrtDiSxk3dd7BF7laNfqg0dVZq/Ys9//QA8Y2dR50eoK
+         BjtC/FyBS43nFPuT+zDcSKLy5ierhmZpnciYRZRN08GLpfHfLPfEXXi4pf8tZkV+IJFQ
+         /5DvIVZ+Q5uAqowvcNOlX/PRPd1tbDPGff87umjMa+CmPJMncouOKtfLEkLrqXE8ggfs
+         l5p/yEEyS1M+stze1lNgg9AHJrzHIJMAm5SCLtsn4DtGwWQdHV6lQ1rbosqi1Cuzna3r
+         d5vyK5u7kEFgHKcVYWCwEXB1TPWjIWiQnvCqumUKqC4klCtnYyif3SdGUaCoEsgwZt+w
+         GcOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dAFYxzGzkBEUMFK3NS6Q6bqv6vlixBH5vwa4XwPAREI=;
+        b=WGkiJf3xaMW6o0qKcnoPI83MyO0z7zQSOtOmKbi/53jhKzsmS1QqxH9VnBV1gci7Va
+         t8+3iKaOVHqvdn8NHh+SQOv999aBcPN99cXR59qSlF5nwBYzwV34XBNrRh8JUakO1vc9
+         9DMYXtSOosgSbQvl9A6CBd6BSmtcle0vKKARohku/HxTw6Tu7v4c4ac7o+a+7x6XR26g
+         nlBDb4PKfdEC/kYQ/OqqKyj0gv8ql4Ssf3MX+dOdzMHUZXH4vuagLtMICiFVme4GJCtc
+         L4KwmFfbKT1FBYjHitmRokmdBYzgEiz6GnBafOTADtdHEL7dVVYGxR57HsxxnS/5RgUa
+         Ma4g==
+X-Gm-Message-State: AOAM531WQe5+YbpK2w0AhaKDBzfkBsclOrMI9BMfCiqZtElpIB2Zcdh2
+        Q3YYnSFXqEX+ntb/adtFrfTg0KY7TcuRfczUlOC5kkcY6Lk=
+X-Google-Smtp-Source: ABdhPJybJttySzBcB8mUcCOhXY2iYo1MWFQ+O19jtlDiSo1oBka3wDfRWYJ98cDB/pPAriIxy6F+McyC4OGLXUQEyI4=
+X-Received: by 2002:a17:902:ac93:b029:d8:d2c5:e5b1 with SMTP id
+ h19-20020a170902ac93b02900d8d2c5e5b1mr2237976plr.17.1606819680128; Tue, 01
+ Dec 2020 02:48:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201201042237.414235-1-badhri@google.com>
+References: <20201130153742.9163-1-johan@kernel.org> <CA+uuBqYmzJMiY75LrA_uKb_uL2=7oQTrzCFksb2ehT0XMXxrbw@mail.gmail.com>
+In-Reply-To: <CA+uuBqYmzJMiY75LrA_uKb_uL2=7oQTrzCFksb2ehT0XMXxrbw@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 1 Dec 2020 12:48:48 +0200
+Message-ID: <CAHp75Vczx=qjNed-8nwm6iSq5sxUKE2mXzPSd70zUxumZ5sANQ@mail.gmail.com>
+Subject: Re: [PATCH 0/5] tty: add flag to suppress ready signalling on open
+To:     Mychaela Falconia <mychaela.falconia@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Mychaela N . Falconia" <falcon@freecalypso.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 30, 2020 at 08:22:34PM -0800, Badhri Jagan Sridharan wrote:
-> nRetryCount was updated from 3 to 2 between PD2.0 and PD3.0 spec.
-> nRetryCount in "Table 6-34 Counter parameters" of the PD 2.0
-> spec is set to 3, whereas, nRetryCount in "Table 6-59 Counter
-> parameters" is set to 2.
-> 
-> Pass down negotiated rev in pd_transmit so that low level chip
-> drivers can update the retry count accordingly before attempting
-> packet transmission.
-> 
-> This helps in passing "TEST.PD.PORT.ALL.02" of the
-> "Power Delivery Merged" test suite which was initially failing
-> with "The UUT did not retransmit the message nReryCount times"
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 2 +-
->  include/linux/usb/tcpm.h      | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 3bbc1f10af49..c73bc3a8356a 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -667,7 +667,7 @@ static int tcpm_pd_transmit(struct tcpm_port *port,
->  		tcpm_log(port, "PD TX, type: %#x", type);
->  
->  	reinit_completion(&port->tx_complete);
-> -	ret = port->tcpc->pd_transmit(port->tcpc, type, msg);
-> +	ret = port->tcpc->pd_transmit(port->tcpc, type, msg, port->negotiated_rev);
->  	if (ret < 0)
->  		return ret;
->  
-> diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
-> index e68aaa12886f..efaedd7e8a18 100644
-> --- a/include/linux/usb/tcpm.h
-> +++ b/include/linux/usb/tcpm.h
-> @@ -121,7 +121,7 @@ struct tcpc_dev {
->  			      enum typec_cc_status cc);
->  	int (*try_role)(struct tcpc_dev *dev, int role);
->  	int (*pd_transmit)(struct tcpc_dev *dev, enum tcpm_transmit_type type,
-> -			   const struct pd_message *msg);
-> +			   const struct pd_message *msg, unsigned int negotiated_rev);
->  	int (*set_bist_data)(struct tcpc_dev *dev, bool on);
->  	int (*enable_frs)(struct tcpc_dev *dev, bool enable);
->  	void (*frs_sourcing_vbus)(struct tcpc_dev *dev);
+On Mon, Nov 30, 2020 at 11:25 PM Mychaela Falconia
+<mychaela.falconia@gmail.com> wrote:
 
-I think this will break bisectability. You need to change the users of
-that at in the same commit.
+...
 
-thanks,
+> Johan's patch comments say that the new flag can also be brought out
+> to termios in the future, similarly to HUPCL, but I question the
+> usefulness of doing so, as it is a chicken and egg problem: one needs
+> to open the tty device in order to do termios ioctls on it, and if
+> that initial open triggers DTR/RTS hardware actions, then the end user
+> is still screwed.  If Johan or someone else can see a potential use
+> case for manipulating this new flag via termios (as opposed to sysfs
+> or USB-ID-based driver quirks), perhaps you could elaborate on it?
+
+Thanks for the very detailed description of what you are working on.
+Unfortunately I have no thoughts about alternative solutions.
+
+> Andy Shevchenko wrote:
+>
+> > > Add a nordy sysfs attribute to suppress raising the modem-control lines
+> > > on open to signal DTE readiness.
+> >
+> > Why not call it nomctrl ?
+>
+> I have no opinion one way or another as to what the new sysfs attribute
+> should be called - my use case won't involve this sysfs mechanism at
+> all, instead I care much more about the path where the tty port flag
+> gets set via a driver quirk upon seeing my custom USB ID. :)
+
+Then why do we bother with sysfs right now? It's an ABI and Johan is
+completely aware and knows that once it's in the kernel it is close to
+being carved in stone.
+I would vote to remove sysfs from now and see if we really need it in
+the future.
 
 -- 
-heikki
+With Best Regards,
+Andy Shevchenko
