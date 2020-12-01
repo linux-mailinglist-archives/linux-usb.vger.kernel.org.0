@@ -2,103 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 604F72CA08C
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 11:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC23C2CA0AB
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Dec 2020 12:00:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727375AbgLAKzr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Dec 2020 05:55:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725899AbgLAKzq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 05:55:46 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF0DC0613CF;
-        Tue,  1 Dec 2020 02:55:06 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id e5so1004195pjt.0;
-        Tue, 01 Dec 2020 02:55:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i38OjRaT5QGFCtCwwPd1SCJNsYfsg7NYH5qbGP41LaE=;
-        b=gy1yls4AWND+ZkAKtaYVfm0KX7T5I3KQtm6rPo9I/pWU1SURLBXEYxK3Nx5Ztn1FJC
-         9MJpl/v45pAguKyhOaGHf49WG0M7bJDHumrMOi6Xy2dL/VSVLO+NDlncCUuWB3dY2l0A
-         aa5xWDVv/BRObEup7FHT0KUoXmoTuXPNsmZrWWSQXF5+2lJEORMBOzt8YldBXXBhUAq6
-         QKXd7ub6+ZUN/svp8aE0/9bKLHxyW1SacjW9g5JIjvFsuj8DmW0nLLPdvndN6mhscNOd
-         MZ1he+FW2xHgAmZSV4jqdAW+/nysDOjfJJwVaKdaN3W6C7NbtztLnus7brBXrsnbIaS0
-         nxvA==
+        id S1730349AbgLAK6Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Dec 2020 05:58:16 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:40074 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725899AbgLAK6P (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 05:58:15 -0500
+Received: by mail-lf1-f66.google.com with SMTP id u19so3260996lfr.7;
+        Tue, 01 Dec 2020 02:57:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i38OjRaT5QGFCtCwwPd1SCJNsYfsg7NYH5qbGP41LaE=;
-        b=QN2hl3JrqMTpZYa3ZOH4QMx7GBeOR3MTeIxJJ09lmUz7zM+y5PM0igNtBQKmfxL21c
-         uPr37t+kIF8DwocOklGmvxRqfv3O1hjo/rsMlsMMuZTq7muC8F6EnZuKMN0vuxAeXLxz
-         WMRTbQT+s1kkhdIcLuYVR2KlWTJk9b+fj20iTp9fDlzr9SkxKXCemh/a9RcO22KOTejw
-         xs+7AkCmyVL+HFmFEV43kvE4umjrSB3IXOYJQWVY9kBW7y2htgh+bCZ/E37UijSlguwD
-         9+TDJnGDY87BeNxspuA6xY1Fjmxbjx52Vnu7gjKpcwv9gznyyI7DfYUazA+UsMFlVFuV
-         1Z+A==
-X-Gm-Message-State: AOAM533xJ3vnKifKGcG4OlhuRyM8j3AKuuO4RqMBqRipW0K+2+9T/SQI
-        FjPCcV7ENAH6BSA2P07NndIu6PtAnryvojpba1o=
-X-Google-Smtp-Source: ABdhPJzPqmVEtEfeNfnNHED2wtu5NFar6uX+4pBneqsIFHYxmVj9mNmtNEcMOQyDrr1cQzLPNvaEvqZGxstIY8DXJmo=
-X-Received: by 2002:a17:90a:34cb:: with SMTP id m11mr2065322pjf.181.1606820106113;
- Tue, 01 Dec 2020 02:55:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20201130153742.9163-1-johan@kernel.org> <20201130153742.9163-3-johan@kernel.org>
- <CAHp75VdedN5iaGFpfiPFz6G=Ey3axgaZbKYtt95HEwwjWoWbmQ@mail.gmail.com> <X8X9B1jYujUIWXaK@localhost>
-In-Reply-To: <X8X9B1jYujUIWXaK@localhost>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 1 Dec 2020 12:55:54 +0200
-Message-ID: <CAHp75VfQud=QxwZyhYRU9mtNvrudj0tS6LOuutfJDVdv=-ptXw@mail.gmail.com>
-Subject: Re: [PATCH 2/5] serial: core: add sysfs attribute to suppress ready
- signalling on open
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=du7uqxSFDOlCM/d6eepPiXeCZVMNky/Lr2KTn2WudY4=;
+        b=IAMqSIRAh7QvKLiHcCM6q3RQMpXFiN4V/ttF5moY/5uworb0A5WAvsnygJp5dfhIgK
+         dQXFbg4hBvr0in0dF9t8y11r97p1ZwvG1AanKEoau7ztDdIvFYoZfPNeX+VsDsw5Tfay
+         +lOa4wcsJ5lMNsdoRZFyoz0/Rw3VTxOyvpYaIzhBfai16Sn7lhOpsYgaZl4fOx/1Haxl
+         rsXwTXwHhQxbpSL6z4kUE/vGyi9+H3Nzo3e6nmKociBgUyQ9dI90mlSzlRWW+dEi1+kj
+         I+YYKPvxPycX9TdFx/4jEMe5HzbVe9hoIJcbIm00HnQaGZ6HBrko2j9CwRT1XOO6xoui
+         T0Sg==
+X-Gm-Message-State: AOAM530IqG7WwPEkpuirPiIkn3eJvkxN/F7kpGz6LVLwqrE7pOgoOARV
+        iM3mQylFhThRrO+R5kVy1Q4=
+X-Google-Smtp-Source: ABdhPJwT47z4c6gcp5xcXM7WhIzVaegIW/1/ElHuQiuhC816et9p1/qKqS2CNVExVnI3Cp4rAU4cpA==
+X-Received: by 2002:ac2:4c9a:: with SMTP id d26mr932274lfl.427.1606820253539;
+        Tue, 01 Dec 2020 02:57:33 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id a22sm165777lfl.11.2020.12.01.02.57.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Dec 2020 02:57:32 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kk3M9-0007Iw-Tz; Tue, 01 Dec 2020 11:58:02 +0100
+Date:   Tue, 1 Dec 2020 11:58:01 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Mychaela Falconia <mychaela.falconia@gmail.com>,
+        Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
         "Mychaela N . Falconia" <falcon@freecalypso.org>,
         "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
         USB <linux-usb@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 0/5] tty: add flag to suppress ready signalling on open
+Message-ID: <X8YhuQeBtMrbh42W@localhost>
+References: <20201130153742.9163-1-johan@kernel.org>
+ <CA+uuBqYmzJMiY75LrA_uKb_uL2=7oQTrzCFksb2ehT0XMXxrbw@mail.gmail.com>
+ <CAHp75Vczx=qjNed-8nwm6iSq5sxUKE2mXzPSd70zUxumZ5sANQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vczx=qjNed-8nwm6iSq5sxUKE2mXzPSd70zUxumZ5sANQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 1, 2020 at 10:20 AM Johan Hovold <johan@kernel.org> wrote:
-> On Mon, Nov 30, 2020 at 08:27:54PM +0200, Andy Shevchenko wrote:
-> > On Mon, Nov 30, 2020 at 5:42 PM Johan Hovold <johan@kernel.org> wrote:
+On Tue, Dec 01, 2020 at 12:48:48PM +0200, Andy Shevchenko wrote:
+> On Mon, Nov 30, 2020 at 11:25 PM Mychaela Falconia
+> <mychaela.falconia@gmail.com> wrote:
 
-> > > +       ret = kstrtouint(buf, 0, &val);
-> > > +       if (ret)
-> > > +               return ret;
+> > > Why not call it nomctrl ?
 > >
-> > > +       if (val > 1)
-> > > +               return -EINVAL;
-> >
-> > Can't we utilise kstrtobool() instead?
->
-> I chose not to as kstrtobool() results in a horrid interface. To many
-> options to do the same thing and you end up with confusing things like
-> "0x01" being accepted but treated as false (as only the first character
-> is considered).
+> > I have no opinion one way or another as to what the new sysfs attribute
+> > should be called - my use case won't involve this sysfs mechanism at
+> > all, instead I care much more about the path where the tty port flag
+> > gets set via a driver quirk upon seeing my custom USB ID. :)
+> 
+> Then why do we bother with sysfs right now? It's an ABI and Johan is
+> completely aware and knows that once it's in the kernel it is close to
+> being carved in stone.
+> I would vote to remove sysfs from now and see if we really need it in
+> the future.
 
-And this is perfectly fine. 0x01 is not boolean.
+Eh, because this is generally useful and has come up in the past. I'm
+not interested in adding quirks for odd devices that want non-standard
+behaviour that we need to maintain indefinitely; that's precisely why I
+proposed a general interface that can be use with any serial port.
 
-> Not sure how that ever made it into sysfs code...
->
-> The attribute is read back as "0" or "1" and those are precisely the
-> values that can be written back (well, modulo radix).
-
-So, how does it affect the kstrtobool() interface?
-You read back 0 and 1 and they are pretty much accepted by it.
-
-> It's not relevant in this case, but tight control over the inputs also
-> allows for extending the range later.
-
-And kstrtobool() does it. So I don't see any difference except a few
-less lines of code and actually *stricter* rules than kstrtouint()
-has.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Johan
