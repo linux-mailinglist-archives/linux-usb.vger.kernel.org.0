@@ -2,68 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27AD72CBBA3
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Dec 2020 12:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A19C52CBBBC
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Dec 2020 12:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726120AbgLBLjK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Dec 2020 06:39:10 -0500
-Received: from mx2.suse.de ([195.135.220.15]:58750 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726091AbgLBLjK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 2 Dec 2020 06:39:10 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1606909104; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1GqSivLmdbAiQt1qsV0GqxPEcUo5BouV73hU5fYo14I=;
-        b=RwU3d2s4MiYaHqmqTgYCCy3jOofyTM+HdQYiJBBd8ZrDLJxlEGszAzfKRxxKE5qnbljyDe
-        Shv6UNnHrRHUpvdYpO6gpGPqQVTY1sMbCUUkNX0oByG579/g16cfiPWJJ/sgNJBv5LgWbJ
-        f7XftIq412cBRWABJjsLvn3/jmafnTQ=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 2EC11AB63;
-        Wed,  2 Dec 2020 11:38:24 +0000 (UTC)
-Message-ID: <612be9a9cd6ffdb9492781e174859c7b4e694a86.camel@suse.com>
-Subject: Re: Issues with LaCie USB3 drive and UAS
-From:   Oliver Neukum <oneukum@suse.com>
-To:     "David C. Partridge" <david.partridge@perdrix.co.uk>,
-        linux-usb@vger.kernel.org
-Date:   Wed, 02 Dec 2020 12:38:19 +0100
-In-Reply-To: <000001d6c89c$086812e0$193838a0$@perdrix.co.uk>
-References: <004f01d6b5bd$d4f08ff0$7ed1afd0$@perdrix.co.uk>
-                                      <eceedea7ca5d950eb8ea4d186a6b01a04d0a804f.camel@suse.com>
-                                       <001601d6b67d$e97a1e30$bc6e5a90$@perdrix.co.uk>
-                                 <aebf92944c1ecb256d21108ce092165a0fd904db.camel@suse.com>
-                               <001b01d6b68a$79937fa0$6cba7ee0$@perdrix.co.uk>
-                                 <007901d6b6ab$f0f66230$d2e32690$@perdrix.co.uk>
-                         <43abe2af0352f17f93e2453a86e2ed47b9913b6a.camel@suse.com>
-                       <000f01d6c326$1eea3f50$5cbebdf0$@perdrix.co.uk>
-                 <d478123862a7e94898aaa771c21cc8cb0a3819fc.camel@suse.com>
-                 <008101d6c3d7$2427ee70$6c77cb50$@perdrix.co.uk>
-         <11ea70180f52b4965a451b3970891e0f547c777b.camel@suse.com>
-         <000001d6c89c$086812e0$193838a0$@perdrix.co.uk>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S1726841AbgLBLkb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Dec 2020 06:40:31 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:44535 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726130AbgLBLkb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Dec 2020 06:40:31 -0500
+Received: by mail-lj1-f196.google.com with SMTP id s9so3164518ljo.11;
+        Wed, 02 Dec 2020 03:40:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GXBq8+fXGiepnC5zHNH6qlr+czrZ3uLyy0ohWtOyg1I=;
+        b=gkCK17WvC4UcblgAWLMeXGkrmImsTUJV2rgf3yHAbQBndkKhrykH4l0BhiNzZOULde
+         Jq1gKeWFfwD/zkM8WxO7sb7pH2hs4hdF7RbZS8J0J10rDppJv52Dh2y/w8patyulapou
+         GddHc/uA84FsaINN/hWTSp0zHqnklmiryhsLpHf2yQMSOesovyZS4FJ9fLAZrnasmZvl
+         vFblPHURlA1PubMrWd6QTJCTosiK2ce+AynUCbKlqoE5bp4HnoILzfIJ3YYt9rJZcMru
+         LearzvuHuJCc1EWL7M2M4uxJ9elnCh/71SfvPE7MgexlLDkYqXBIl4UG5EqLngHpeZT4
+         6N0w==
+X-Gm-Message-State: AOAM530tpk3+CFCzWqmw5yVFsPbQFkDpsvl3YRGQ0pu3YrDcKr+jEdNm
+        PwqplWYJbRYYxh+JY8D2oo14zoM/S0m5rA==
+X-Google-Smtp-Source: ABdhPJy2t3xX2Rtq9FJfKsAY8Eo6EMBOPARqfLMGnWr2/EuzEHjXYB8EJxT7wa6D6IdcvLbZojERvQ==
+X-Received: by 2002:a05:651c:321:: with SMTP id b1mr957464ljp.387.1606909188051;
+        Wed, 02 Dec 2020 03:39:48 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id r1sm398356ljg.20.2020.12.02.03.39.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Dec 2020 03:39:47 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@xi.terra>)
+        id 1kkQUc-00072k-Go; Wed, 02 Dec 2020 12:40:18 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        "Mychaela N . Falconia" <falcon@freecalypso.org>,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: [PATCH v2 0/7] tty: add flag to suppress ready signalling on open
+Date:   Wed,  2 Dec 2020 12:39:35 +0100
+Message-Id: <20201202113942.27024-1-johan@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Mittwoch, den 02.12.2020, 11:12 +0000 schrieb David C. Partridge:
+This series adds a new NORDY port flag to suppress raising the
+modem-control lines on open to signal DTE readiness.
 
-Hi,
+This can be used to implement a NORDY termios control flag to complement
+HUPCL, which controls lowering of the modem-control lines on final
+close.
+
+Initially drivers can export the flag through sysfs, which also allows
+control over the lines on first open. Such an interface is implemented
+for serial core and USB serial.
+
+The motivation for this is to allow for applications where the DTR and
+RTS lines are used for non-standard purposes (e.g. generating power-on
+and reset pulses) to open the port without undesirable side effects.
+
+The final patches enables this flag by default for such a USB serial
+device.
+
+Other examples include HAM-radio devices where DTR and RTS is used for
+push-to-talk and continuous-wave control and various Arduino boards
+which are reset on open unless a jumper is physically removed.
+
+Greg, are you ok we me taking this through my tree? I'm planning on some
+follow ups to the ftdi driver and the tty/serial changes are fairly
+self-contained.
+
+Also let me know if you prefer to hold this off for 5.12. The change is
+minimal, self-contained and low-risk, but it is a new interface and late
+in the release cycle as Andy pointed out.
+
+Johan
 
 
-> A helpful person on the Ubuntu forums sent me a patched usb-storage.ko that was built using your patch file.
+Changes in v2
+ - use assign_bit() in port-flag accessors (Jiri)
+ - use const parameters in port-flag accessors (Jiri)
+ - use kstrtobool() in attribute store (Andy, Greg)
+ - fix "used" typo in commit messages (Andy)
+ - use bool constant with port-flag accessor in ftdi quirk (Jiri)
+ - add Mychaela's Reviewed-by tag to patch 3/7
+ - mention a few more example applications in the cover letter
 
-that is nice to hear, sorry but I am no good with Ubuntu stuff.
-However, the problem is that you need uas.ko.
+v1
+ - https://lore.kernel.org/r/20201130153742.9163-1-johan@kernel.org
 
-The log is showing a curious failure. Did you disconnect the device?
 
-	Regards
-		Oliver
+Johan Hovold (5):
+  tty: use assign_bit() in port-flag accessors
+  tty: use const parameters in port-flag accessors
+  tty: add port flag to suppress ready signalling on open
+  serial: core: add sysfs attribute to suppress ready signalling on open
+  USB: serial: add sysfs attribute to suppress ready signalling on open
 
+Mychaela N. Falconia (2):
+  USB: serial: ftdi_sio: pass port to quirk port_probe functions
+  USB: serial: ftdi_sio: add support for FreeCalypso DUART28C adapter
+
+ Documentation/ABI/testing/sysfs-tty |  7 ++++
+ drivers/tty/serial/serial_core.c    | 26 ++++++++++++++
+ drivers/tty/tty_port.c              |  2 +-
+ drivers/usb/serial/bus.c            | 35 +++++++++++++++++--
+ drivers/usb/serial/ftdi_sio.c       | 42 ++++++++++++++++++-----
+ drivers/usb/serial/ftdi_sio_ids.h   |  1 +
+ include/linux/tty.h                 | 53 +++++++++++++----------------
+ 7 files changed, 125 insertions(+), 41 deletions(-)
+
+-- 
+2.26.2
 
