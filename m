@@ -2,73 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D30522CC49F
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Dec 2020 19:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 185B82CC4C7
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Dec 2020 19:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389267AbgLBSJd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Dec 2020 13:09:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48702 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389249AbgLBSJa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Dec 2020 13:09:30 -0500
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0680C061A54;
-        Wed,  2 Dec 2020 10:07:59 -0800 (PST)
-Received: by mail-vs1-xe44.google.com with SMTP id 128so1417149vsw.10;
-        Wed, 02 Dec 2020 10:07:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=pK0yJ+C90ne66IyKxcSzqFDurNlO0mJMG/RO4XxWw0Y=;
-        b=TvNT14OrcPuwvmdbS+bnJGjR5W9zvIXsCVpkLUDLf/cWk0FnXOPEKdJ3u0A8t2DRdr
-         KkqHjznZPolIsYGgxGDhnJHLtfD06pDxH9vcvhZxdhJOFkvi6VyuNiog3W/DAlBV9gXk
-         uOJF7wa7EMFVsKw/TCr4dGc+MYDwCSGq8wQ1fhif4O8QPcb39GriVbv/LRfIEHO8J/Em
-         ptMCrPkvHp4mycvLrt1z0GW8gTRA7Kk+2JazzVBpF0mEciVXemRXb1A0Aw69YSRyoIxs
-         LstQh99YiutzySnVdQLdEw/iheqk//sI2CMmQCcIPRvCtE1frdBTpEKKLxXVh5yCp7SY
-         s5IA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=pK0yJ+C90ne66IyKxcSzqFDurNlO0mJMG/RO4XxWw0Y=;
-        b=EzEjX+EecgOFMeGBxQQc+9/9J4tdRyY2mrFtLlCzwUG3OwwhRov5u1bY7YV+8oRuOG
-         MHZIC/wqvLck0d/bbSzZpKiwKsuqhJly4WQoIVkOLBUUjVBznmfxj8U8DvqndZY0GY+D
-         cdnkUBrzWMhwaM8nbK0eVhERxcsnpZYXY18wnNabR8EzZ8wszRyaZ+ECAR/EQNhvYGj2
-         JxuazFVtNTDyBVCNaP95O+nxEVluKCClX2MC6inTlvWGd/Qpj0wX5gn+JXjfkdbyvkVh
-         UEMlv43LrZzfHeQjWQhz4JdYL1Mu7VYVC7SDg5gsjwH1j3k/LA3p8PSsu2zYGVR3nKnq
-         CPqg==
-X-Gm-Message-State: AOAM532f6O4uwWDo012Zka36An43JJ5jswNJ0z0wJDAE+LxFazFw6at2
-        6NiZbGvYK77ADDTMJYJI6eef7eOTjaNObnEr+Y8=
-X-Google-Smtp-Source: ABdhPJyWQYHuGNBUG9LA2eJTjQu2rFFwTk0chIB6hIBOXvu31uqgmQRvsh4rt8v6Ym+FX4X9dLLRJ0j5AdTWtifRcZQ=
-X-Received: by 2002:a67:f601:: with SMTP id k1mr2764150vso.46.1606932479046;
- Wed, 02 Dec 2020 10:07:59 -0800 (PST)
+        id S2387836AbgLBSOD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Dec 2020 13:14:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58610 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387739AbgLBSOC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 2 Dec 2020 13:14:02 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 58BBB206D5;
+        Wed,  2 Dec 2020 18:13:21 +0000 (UTC)
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94)
+        (envelope-from <maz@kernel.org>)
+        id 1kkWcx-00FQIv-7M; Wed, 02 Dec 2020 18:13:19 +0000
 MIME-Version: 1.0
-Received: by 2002:ab0:6ecb:0:0:0:0:0 with HTTP; Wed, 2 Dec 2020 10:07:58 -0800 (PST)
-In-Reply-To: <20201202113942.27024-1-johan@kernel.org>
-References: <20201202113942.27024-1-johan@kernel.org>
-From:   Mychaela Falconia <mychaela.falconia@gmail.com>
-Date:   Wed, 2 Dec 2020 10:07:58 -0800
-Message-ID: <CA+uuBqZ-EnsOU-UiufXo+oxmrgM3=2eu9C_50tpBHLKjcfxdgg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/7] tty: add flag to suppress ready signalling on open
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Mychaela N . Falconia" <falcon@freecalypso.org>,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 02 Dec 2020 18:13:19 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: ftdi_sio: Helpful error on GPIO attempt
+In-Reply-To: <43d788c69a0f4fe3caf578b98ae72395@kernel.org>
+References: <20201201141048.1461042-1-linus.walleij@linaro.org>
+ <43d788c69a0f4fe3caf578b98ae72395@kernel.org>
+User-Agent: Roundcube Webmail/1.4.9
+Message-ID: <76a8c528f98df0797c79d870bb6587a4@kernel.org>
+X-Sender: maz@kernel.org
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: linus.walleij@linaro.org, johan@kernel.org, linux-usb@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12/2/20, Johan Hovold <johan@kernel.org> wrote:
-> Also let me know if you prefer to hold this off for 5.12. The change is
-> minimal, self-contained and low-risk, but it is a new interface and late
-> in the release cycle as Andy pointed out.
+On 2020-12-01 15:01, Marc Zyngier wrote:
+> Hi Linus,
+> 
+> On 2020-12-01 14:10, Linus Walleij wrote:
+>> The FTDI adapters present all potentially available GPIO
+>> lines to userspace, and they are often also visibly
+>> available on things like breakout boards. These are
+>> appetizing targets for random GPIO tinkering such as
+>> bit-banging or other industrial control over USB.
+>> 
+>> When a user attempts to use one of the GPIO lines, they
+>> can get the opaque error -ENODEV, because the flashed
+>> configuration says that the line is not in GPIO mode
+>> but another alternative function.
+>> 
+>> We had one user run into this, debug and finally fix the
+>> problem using ftx-prog.
+> 
+> Well, you gave me 2/3 of the solution ;-). How about adding
+> a pointer to this tool? [1]
+> 
+>> 
+>> Give the user some more helpful dmesg text and a pointer
+>> to ftx-prog when the error occurs.
+>> 
+>> Reported-by: Marc Zyngier <maz@kernel.org>
+>> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+>> ---
+>>  drivers/usb/serial/ftdi_sio.c | 5 ++++-
+>>  1 file changed, 4 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/drivers/usb/serial/ftdi_sio.c 
+>> b/drivers/usb/serial/ftdi_sio.c
+>> index e0f4c3d9649c..405fec78f2fc 100644
+>> --- a/drivers/usb/serial/ftdi_sio.c
+>> +++ b/drivers/usb/serial/ftdi_sio.c
+>> @@ -1841,8 +1841,11 @@ static int ftdi_gpio_request(struct gpio_chip
+>> *gc, unsigned int offset)
+>>  	struct ftdi_private *priv = usb_get_serial_port_data(port);
+>>  	int result;
+>> 
+>> -	if (priv->gpio_altfunc & BIT(offset))
+>> +	if (priv->gpio_altfunc & BIT(offset)) {
+>> +		dev_err(&port->dev, "FTDI firmware says line is not in GPIO 
+>> mode\n");
+>> +		dev_err(&port->dev, "if you really know what you're doing the flash
+>> can be reconfigured using ftx-prog\n");
+>>  		return -ENODEV;
+>> +	}
+>> 
+>>  	mutex_lock(&priv->gpio_lock);
+>>  	if (!priv->gpio_used) {
+> 
+> It occurs to me that since the driver already knows which of the CBUS
+> pins are unusable, we should maybe find a way to expose the line as
+> "reserved", one way or another? Generic tools such as gpioinfo would
+> (or should?) be able to display the status of the pin to the user.
+> 
+> enum gpio_v2_line_flag doesn't have a "reserved" flag, so maybe
+> GPIO_V2_LINE_FLAG_USED is an adequate way to mark the line as
+> being unavailable for userspace?
 
-Hold off for 5.12? Did you perhaps mean 5.11? I understand how this
-change may be too late for 5.10, but surely it can go into 5.11 merge
-window, why hold off for 5.12?
+And to clarify what I mean, here's a patchlet that does the trick.
 
-M~
+maz@tiger-roach:~$ sudo gpioinfo gpiochip3
+gpiochip3 - 4 lines:
+	line   0:      unnamed       unused  output  active-high
+	line   1:      "AltFunc"     kernel  input   active-high [used]
+	line   2:      "AltFunc"     kernel  input   active-high [used]
+	line   3:      "AltFunc"     kernel  input   active-high [used]
+
+It at least make clear that you can't grab the GPIO. Of course, you
+don't get the message that you just added...
+
+Thoughts?
+
+         M.
+
+diff --git a/drivers/usb/serial/ftdi_sio.c 
+b/drivers/usb/serial/ftdi_sio.c
+index e0f4c3d9649c..00da3f42139f 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -44,6 +44,8 @@
+  #include "ftdi_sio.h"
+  #include "ftdi_sio_ids.h"
+
++#include "../../gpio/gpiolib.h"
++
+  #define DRIVER_AUTHOR "Greg Kroah-Hartman <greg@kroah.com>, Bill Ryder 
+<bryder@sgi.com>, Kuba Ober <kuba@mareimbrium.org>, Andreas Mohr, Johan 
+Hovold <jhovold@gmail.com>"
+  #define DRIVER_DESC "USB FTDI Serial Converters Driver"
+
+@@ -2143,11 +2145,13 @@ static int ftdi_gpio_init_ftx(struct 
+usb_serial_port *port)
+  	return result;
+  }
+
++static const char *altfunc = "AltFunc";
++
+  static int ftdi_gpio_init(struct usb_serial_port *port)
+  {
+  	struct ftdi_private *priv = usb_get_serial_port_data(port);
+  	struct usb_serial *serial = port->serial;
+-	int result;
++	int result, i;
+
+  	switch (priv->chip_type) {
+  	case FT232H:
+@@ -2183,10 +2187,23 @@ static int ftdi_gpio_init(struct usb_serial_port 
+*port)
+  	priv->gc.can_sleep = true;
+
+  	result = gpiochip_add_data(&priv->gc, port);
+-	if (!result)
+-		priv->gpio_registered = true;
++	if (result)
++		return result;
+
+-	return result;
++	priv->gpio_registered = true;
++
++	for (i = 0; i < priv->gc.ngpio; i++) {
++		struct gpio_desc *desc;
++
++		if (!(priv->gpio_altfunc & BIT(i)))
++			continue;
++
++		desc = gpiochip_get_desc(&priv->gc, i);
++		desc->flags |= BIT(FLAG_REQUESTED);
++		desc->name = altfunc;
++	}
++
++	return 0;
+  }
+
+  static void ftdi_gpio_remove(struct usb_serial_port *port)
+
+-- 
+Jazz is not dead. It just smells funny...
