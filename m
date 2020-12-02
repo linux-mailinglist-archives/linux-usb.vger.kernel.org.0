@@ -2,167 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA942CC28F
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Dec 2020 17:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C334D2CC368
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Dec 2020 18:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728613AbgLBQhv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Dec 2020 11:37:51 -0500
-Received: from mail-il1-f200.google.com ([209.85.166.200]:43583 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726760AbgLBQhv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Dec 2020 11:37:51 -0500
-Received: by mail-il1-f200.google.com with SMTP id l8so1908336ilf.10
-        for <linux-usb@vger.kernel.org>; Wed, 02 Dec 2020 08:37:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=MEXca2PcgGHG4zH8HYiKkHgm2u8C0G/vikFcBTxnEUM=;
-        b=uV0GLofhFH7Y1/D2Ay2qFv8it+iWXuvBFm4p7X4VRmwGjDQdX5COxVMBMU5t357lvz
-         yBSP2kO59GHL8fk3UvyIUIx/ufPAptMPHYsUBLr4oLurDw/6+ufXnVgUKp0cIlRSslt7
-         P9gdP16X6h4t4tYqdbkD6d6NdSBOZy5GH/ygBCJCtcds6gFMl3y48Vy+essAsN0umS+O
-         PDVefpfUmBx4y3Zf7lnD3N6Qs4vaTn1XMp3/JNgYUfOKF16NFb3by5F/nW14tIdokA55
-         60TyRVH/KvJMdZu0+5nSQLPld+8Da/nOXrUptfnOkAMF/Wk5EpaFoG4fqpX2kfqCbWnJ
-         JLNw==
-X-Gm-Message-State: AOAM532j78f8IfXAu1W1eVCFpUrKWAJbzKFlqrZZSeIUoBjesLJNOYZs
-        9+hKs/knDm6MZ8Ijxa0JffaUUEClAkRyyVrMGdcsdx8EQsXS
-X-Google-Smtp-Source: ABdhPJzlsMRm3Ew2hy840r413wVMgvV0DY0YDWuF1QgzVe8jI8XWoSJeKJwd8tkAVSorjH9pDRnWyGsc/BFELgwt4tYQsTa3IU2R
+        id S1730811AbgLBRUq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Dec 2020 12:20:46 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:58719 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2387667AbgLBRUq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Dec 2020 12:20:46 -0500
+Received: (qmail 1060128 invoked by uid 1000); 2 Dec 2020 12:20:04 -0500
+Date:   Wed, 2 Dec 2020 12:20:04 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     syzbot <syzbot+44e64397bd81d5e84cba@syzkaller.appspotmail.com>,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Subject: [PATCH v2] media: gspca: Fix memory leak in probe
+Message-ID: <20201202172004.GB1057740@rowland.harvard.edu>
+References: <20201123215345.GA721643@rowland.harvard.edu>
+ <0000000000004b629f05b4cd7124@google.com>
+ <20201123222428.GB721643@rowland.harvard.edu>
+ <c2cf1a80-ec47-69ac-c3e2-1b0e32447ef2@xs4all.nl>
+ <20201124160026.GA749809@rowland.harvard.edu>
+ <eb89a572-3022-39a9-989c-f2f80cc69edf@xs4all.nl>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2ac4:: with SMTP id m4mr2644571iov.97.1606927029504;
- Wed, 02 Dec 2020 08:37:09 -0800 (PST)
-Date:   Wed, 02 Dec 2020 08:37:09 -0800
-In-Reply-To: <20201202162200.GA1057740@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c60d6405b57dda88@google.com>
-Subject: Re: memory leak in hub_event
-From:   syzbot <syzbot+44e64397bd81d5e84cba@syzkaller.appspotmail.com>
-To:     hverkuil@xs4all.nl, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eb89a572-3022-39a9-989c-f2f80cc69edf@xs4all.nl>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+The gspca driver leaks memory when a probe fails.  gspca_dev_probe2()
+calls v4l2_device_register(), which takes a reference to the
+underlying device node (in this case, a USB interface).  But the
+failure pathway neglects to call v4l2_device_unregister(), the routine
+responsible for dropping this reference.  Consequently the memory for
+the USB interface and its device never gets released.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-memory leak in rxrpc_lookup_local
+This patch adds the missing function call.
 
-BUG: memory leak
-unreferenced object 0xffff88810ae30400 (size 256):
-  comm "syz-executor.2", pid 8878, jiffies 4294943959 (age 433.730s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 0a 00 00 00 00 40 75 17 81 88 ff ff  .........@u.....
-  backtrace:
-    [<00000000d78976b4>] kmalloc include/linux/slab.h:552 [inline]
-    [<00000000d78976b4>] kzalloc include/linux/slab.h:664 [inline]
-    [<00000000d78976b4>] rxrpc_alloc_local net/rxrpc/local_object.c:79 [inline]
-    [<00000000d78976b4>] rxrpc_lookup_local+0x1c1/0x760 net/rxrpc/local_object.c:244
-    [<000000000f4771f3>] rxrpc_bind+0x174/0x240 net/rxrpc/af_rxrpc.c:149
-    [<00000000a1ca3956>] afs_open_socket+0xdb/0x200 fs/afs/rxrpc.c:64
-    [<000000000b4e3083>] afs_net_init+0x2b4/0x340 fs/afs/main.c:126
-    [<0000000057174e11>] ops_init+0x4e/0x190 net/core/net_namespace.c:152
-    [<000000001ef2d4d2>] setup_net+0xdb/0x2d0 net/core/net_namespace.c:342
-    [<000000000c0943a9>] copy_net_ns+0x14b/0x320 net/core/net_namespace.c:483
-    [<000000000134587c>] create_new_namespaces+0x199/0x4e0 kernel/nsproxy.c:110
-    [<00000000ab7ab634>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:231
-    [<000000000a7b8a55>] ksys_unshare+0x2fe/0x5c0 kernel/fork.c:2949
-    [<000000007378cba1>] __do_sys_unshare kernel/fork.c:3017 [inline]
-    [<000000007378cba1>] __se_sys_unshare kernel/fork.c:3015 [inline]
-    [<000000007378cba1>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3015
-    [<000000002e47b3c4>] do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
-    [<00000000daddea42>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Reported-and-tested-by: syzbot+44e64397bd81d5e84cba@syzkaller.appspotmail.com
+CC: <stable@vger.kernel.org>
 
-BUG: memory leak
-unreferenced object 0xffff888117639d00 (size 256):
-  comm "syz-executor.0", pid 8872, jiffies 4294943961 (age 433.710s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 0a 00 00 00 00 40 7a 17 81 88 ff ff  .........@z.....
-  backtrace:
-    [<00000000d78976b4>] kmalloc include/linux/slab.h:552 [inline]
-    [<00000000d78976b4>] kzalloc include/linux/slab.h:664 [inline]
-    [<00000000d78976b4>] rxrpc_alloc_local net/rxrpc/local_object.c:79 [inline]
-    [<00000000d78976b4>] rxrpc_lookup_local+0x1c1/0x760 net/rxrpc/local_object.c:244
-    [<000000000f4771f3>] rxrpc_bind+0x174/0x240 net/rxrpc/af_rxrpc.c:149
-    [<00000000a1ca3956>] afs_open_socket+0xdb/0x200 fs/afs/rxrpc.c:64
-    [<000000000b4e3083>] afs_net_init+0x2b4/0x340 fs/afs/main.c:126
-    [<0000000057174e11>] ops_init+0x4e/0x190 net/core/net_namespace.c:152
-    [<000000001ef2d4d2>] setup_net+0xdb/0x2d0 net/core/net_namespace.c:342
-    [<000000000c0943a9>] copy_net_ns+0x14b/0x320 net/core/net_namespace.c:483
-    [<000000000134587c>] create_new_namespaces+0x199/0x4e0 kernel/nsproxy.c:110
-    [<00000000ab7ab634>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:231
-    [<000000000a7b8a55>] ksys_unshare+0x2fe/0x5c0 kernel/fork.c:2949
-    [<000000007378cba1>] __do_sys_unshare kernel/fork.c:3017 [inline]
-    [<000000007378cba1>] __se_sys_unshare kernel/fork.c:3015 [inline]
-    [<000000007378cba1>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3015
-    [<000000002e47b3c4>] do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
-    [<00000000daddea42>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+---
 
-BUG: memory leak
-unreferenced object 0xffff888117a9cb00 (size 256):
-  comm "syz-executor.7", pid 8882, jiffies 4294943964 (age 433.680s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 0a 00 00 00 00 80 8b 17 81 88 ff ff  ................
-  backtrace:
-    [<00000000d78976b4>] kmalloc include/linux/slab.h:552 [inline]
-    [<00000000d78976b4>] kzalloc include/linux/slab.h:664 [inline]
-    [<00000000d78976b4>] rxrpc_alloc_local net/rxrpc/local_object.c:79 [inline]
-    [<00000000d78976b4>] rxrpc_lookup_local+0x1c1/0x760 net/rxrpc/local_object.c:244
-    [<000000000f4771f3>] rxrpc_bind+0x174/0x240 net/rxrpc/af_rxrpc.c:149
-    [<00000000a1ca3956>] afs_open_socket+0xdb/0x200 fs/afs/rxrpc.c:64
-    [<000000000b4e3083>] afs_net_init+0x2b4/0x340 fs/afs/main.c:126
-    [<0000000057174e11>] ops_init+0x4e/0x190 net/core/net_namespace.c:152
-    [<000000001ef2d4d2>] setup_net+0xdb/0x2d0 net/core/net_namespace.c:342
-    [<000000000c0943a9>] copy_net_ns+0x14b/0x320 net/core/net_namespace.c:483
-    [<000000000134587c>] create_new_namespaces+0x199/0x4e0 kernel/nsproxy.c:110
-    [<00000000ab7ab634>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:231
-    [<000000000a7b8a55>] ksys_unshare+0x2fe/0x5c0 kernel/fork.c:2949
-    [<000000007378cba1>] __do_sys_unshare kernel/fork.c:3017 [inline]
-    [<000000007378cba1>] __se_sys_unshare kernel/fork.c:3015 [inline]
-    [<000000007378cba1>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3015
-    [<000000002e47b3c4>] do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
-    [<00000000daddea42>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-BUG: memory leak
-unreferenced object 0xffff88810c9b9700 (size 256):
-  comm "syz-executor.5", pid 8881, jiffies 4294943965 (age 433.670s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 0a 00 00 00 00 c0 b4 0c 81 88 ff ff  ................
-  backtrace:
-    [<00000000d78976b4>] kmalloc include/linux/slab.h:552 [inline]
-    [<00000000d78976b4>] kzalloc include/linux/slab.h:664 [inline]
-    [<00000000d78976b4>] rxrpc_alloc_local net/rxrpc/local_object.c:79 [inline]
-    [<00000000d78976b4>] rxrpc_lookup_local+0x1c1/0x760 net/rxrpc/local_object.c:244
-    [<000000000f4771f3>] rxrpc_bind+0x174/0x240 net/rxrpc/af_rxrpc.c:149
-    [<00000000a1ca3956>] afs_open_socket+0xdb/0x200 fs/afs/rxrpc.c:64
-    [<000000000b4e3083>] afs_net_init+0x2b4/0x340 fs/afs/main.c:126
-    [<0000000057174e11>] ops_init+0x4e/0x190 net/core/net_namespace.c:152
-    [<000000001ef2d4d2>] setup_net+0xdb/0x2d0 net/core/net_namespace.c:342
-    [<000000000c0943a9>] copy_net_ns+0x14b/0x320 net/core/net_namespace.c:483
-    [<000000000134587c>] create_new_namespaces+0x199/0x4e0 kernel/nsproxy.c:110
-    [<00000000ab7ab634>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:231
-    [<000000000a7b8a55>] ksys_unshare+0x2fe/0x5c0 kernel/fork.c:2949
-    [<000000007378cba1>] __do_sys_unshare kernel/fork.c:3017 [inline]
-    [<000000007378cba1>] __se_sys_unshare kernel/fork.c:3015 [inline]
-    [<000000007378cba1>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3015
-    [<000000002e47b3c4>] do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
-    [<00000000daddea42>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+v2: Replace v4l2_device_disconnect() call with v4l2_device_unregister().
 
 
+[as1949b]
 
-Tested on:
 
-commit:         4d02da97 Merge tag 'net-5.10-rc5' of git://git.kernel.org/..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=16754c55500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9e70f46496e4daad
-dashboard link: https://syzkaller.appspot.com/bug?extid=44e64397bd81d5e84cba
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12ca5c73500000
+ drivers/media/usb/gspca/gspca.c |    1 +
+ 1 file changed, 1 insertion(+)
 
+Index: usb-devel/drivers/media/usb/gspca/gspca.c
+===================================================================
+--- usb-devel.orig/drivers/media/usb/gspca/gspca.c
++++ usb-devel/drivers/media/usb/gspca/gspca.c
+@@ -1575,6 +1575,7 @@ out:
+ 		input_unregister_device(gspca_dev->input_dev);
+ #endif
+ 	v4l2_ctrl_handler_free(gspca_dev->vdev.ctrl_handler);
++	v4l2_device_unregister(&gspca_dev->v4l2_dev);
+ 	kfree(gspca_dev->usb_buf);
+ 	kfree(gspca_dev);
+ 	return ret;
