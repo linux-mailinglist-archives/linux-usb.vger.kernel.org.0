@@ -2,157 +2,216 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 703452CB2D5
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Dec 2020 03:32:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A382CB2FC
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Dec 2020 03:58:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726370AbgLBCaa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Dec 2020 21:30:30 -0500
-Received: from mail-eopbgr130084.outbound.protection.outlook.com ([40.107.13.84]:36256
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727099AbgLBCaa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Dec 2020 21:30:30 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y893s0PyivPaYNtMHeDvEU8tjVesAgfKAc/fOSF/Kp+hLvxq+oHQGSBiL81WoKhNZgU1aPM8vTFMs6OnyjnOvZkwcwUsRjG6jKCDCw94Ex+FLgySPGIK1pHAX4SqnnsnlbNDFATDsHR0TNogkTE+dyHaUpiEGDF+01YJOnOZlH617xAUAkx/tgng6tr6JJ0qmfGMEZOdur0ba+kWVP97DDAWoQiKzC7jhgmHVoGC1ZD/VJeoqEG6BR8nghflLGQxDHd0UNIH2nkZ6AGmvVp4DBjTFA8PjPPdGWcJd+gCB5ZLTmR+PpEmLIkZJm+MTflKltuJVTYuq2DaqaU0/s7Bxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I3kh7lGtJXTwo7ybaw38k6+cmrm0pegcKrmRlYL89DE=;
- b=Pb5BrmjyZFnIADx8pC0zPnY7v7yjPzKS3JI2jakujDFqsLtcm+2F/QpgELgTEn2UGh+dafpsyBDy/sLqIVVYTwcBrbVqXszV75M3qlC4F6RtZuN/BGNvO2WJlL8kqEZH/PZ/ZCOV8AF5kUt++RPLu8bHTqOUZxJQEv79ezVW6LDakr/77/3bNhW8Raz7Vw4bAgo3VU6cbBfarRRK2pHPGppIIXvcz9RAt370DT8ISOoLPtcpLEEUH5FrP18tr2TONrYToVmnpiOSSIpUeSESPl8HYhUKZZ33LMiF6FDImMWlZ1Xnv6+vh47h7e4/kN4+Jcc9UGHFVO5EDtbwTmG3Ew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I3kh7lGtJXTwo7ybaw38k6+cmrm0pegcKrmRlYL89DE=;
- b=A4rwJ2iSPLUBgz8S9CqMZVR9P0FB3Joio/PWjjJbUL0TvhcA/cQ58PR/t/d+RHm1erfSJe98lD09glpfD6aks1zr4pEXOUTg4suYE+26hoycwq9MzbZJqJYiBaXr2IukTuRtbb+8bKIXWg8KxC7yU+CyCyhyM0EBUUMgZCWd5xA=
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
- by VI1PR04MB6191.eurprd04.prod.outlook.com (2603:10a6:803:f8::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Wed, 2 Dec
- 2020 02:29:37 +0000
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::b035:d158:c99c:57c6]) by VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::b035:d158:c99c:57c6%7]) with mapi id 15.20.3611.032; Wed, 2 Dec 2020
- 02:29:37 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "balbi@kernel.org" <balbi@kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH] usb: dwc3: gadget: fix delayed status missing for clear
- EP halt
-Thread-Topic: [PATCH] usb: dwc3: gadget: fix delayed status missing for clear
- EP halt
-Thread-Index: AQHWx7PLOvMNNuK4pUO3s8ukQgQrPqnid4mAgACeqEA=
-Date:   Wed, 2 Dec 2020 02:29:37 +0000
-Message-ID: <VE1PR04MB65281BB0DE22D75D3C1F60A289F30@VE1PR04MB6528.eurprd04.prod.outlook.com>
-References: <1606807357-12574-1-git-send-email-jun.li@nxp.com>
- <e077da14-0741-9374-9ac0-6670a65cb719@synopsys.com>
-In-Reply-To: <e077da14-0741-9374-9ac0-6670a65cb719@synopsys.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: synopsys.com; dkim=none (message not signed)
- header.d=none;synopsys.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 564d7533-9a7f-420f-05e0-08d8966a1d2c
-x-ms-traffictypediagnostic: VI1PR04MB6191:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB61913ADF5482720FFFFEFCB889F30@VI1PR04MB6191.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YUSunieQFpLe7i/tGA5Y8c92iwHzf36HmJjAJXDKlvSNEZckp2X6eWyZEz66bJbhsP+Bo1HhAE/GZ0nJEwU1bkri6TSgyU6xcazMxwrsLq/DnROA4gRXzx6XNOWHWwq0vjQw8U9zTE4IgAo9Xu5gvdtoGEivgMtlLDe1N9cSk5qM7iY2RZWM1hsoFRVH6sX3Oce4jsnhOfBhb4EfG+XJlJxVIVTSv8WWsbLThnKGSfO7lbFPQXDBzATg+ACJpvi0OMdNWonewUkiqe7xFQAGaifzGkF2Dv+d83gZzzShrUQlFaNVmMoUln+kalhLjHdtp1r6lExUIKK1OLcF86P20j9eAPzoHAq31Sow09En5kwfnJ3z6HhiRe1VQVMOLat3TjRX0sAWOdTnZBifjKqdkQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(39860400002)(396003)(346002)(136003)(376002)(8936002)(6506007)(45080400002)(478600001)(966005)(186003)(4326008)(316002)(26005)(8676002)(54906003)(44832011)(110136005)(86362001)(55016002)(2906002)(5660300002)(9686003)(33656002)(66476007)(52536014)(66446008)(76116006)(66946007)(64756008)(53546011)(83380400001)(7696005)(71200400001)(66556008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?YUNQeXFodzBOK2ExaERocmE4WkpKR3FFdkpCNTdVTmhnelNWSDRzZEhTa3dF?=
- =?utf-8?B?d0lLUyt6NGhuVjVkT3g1TUs0THZqT3FVTnpYc1pJWHVKVWUxN1hCZXAwZUNY?=
- =?utf-8?B?Szd0a1dFQStJWlFzYzRLcGREM1h2cVBocjZUVTZEeWNQaGRzVklBVEJuSGlY?=
- =?utf-8?B?RHJ1Z1gxVzRhR1RIQmcycTlmQndXWStLMEJzTDlJWEM4YWhCRkJRbGM4TGxZ?=
- =?utf-8?B?cUREUjZtUXRtRnlLM2RoZEFJTWlMQU1YRVBGamwwcFBKakppbG5JT20xVG1P?=
- =?utf-8?B?RjJUY1FGbVYzNDM0NlhyTzhsOVZMd212ZTYxQllHaFBxNDZpU1N6QlZYZld2?=
- =?utf-8?B?VC92Qmt6dit3WHZkeENySHNxN29yOVVyZUwwbGtJenNDNytvbzN6VW9zZXpn?=
- =?utf-8?B?eFZQLzl0d0pyOEpkakhDV1YxMnJDeHg3WVlqOTJsM2Z0SGtIdngrblZ3RGdv?=
- =?utf-8?B?dEhsSVJlclNMNUU0QmFGQXIzcFFOSThLUitqMGY0OEdvcU5mWWZXYWpjUFFr?=
- =?utf-8?B?Z05iNGFZek1WbEJsR1dJMk1XcGIxRVZoL1FWdE02STR0TXBjb1ZEWklQV0xj?=
- =?utf-8?B?MjlCTVJQUkl5SEhPNHZiZlNMREtueXZaRFROdHZGYUcvT0FOc2FRN2VRVW1G?=
- =?utf-8?B?Ny8xM2taaHV6TzZSazdMOHJoY01LQWlReWpBRklqbmdZam5kUXJmSFRXeXo0?=
- =?utf-8?B?WFpIcHo1RHFoaWxBSHB6MHE0emJzcGRXOGE5K1JadmhobDZoOWxnMHZ4TDZX?=
- =?utf-8?B?TU5PTEt5VEJIVzNhejlZOEh0U0h3TDBRcVF1OVNyUGtjd1RwSndnQVkrd3Qr?=
- =?utf-8?B?K2E5ZzJIeUVHZjZ2RG1xeTJCajNIT0FvbllPb1g2UStBZG5HVUFSekNHZDAz?=
- =?utf-8?B?ckZzYXBkRml1N2RXdWt3cU5qRFdEWURibUwzYkxKV0VGVUx2UDArWWxpeEMx?=
- =?utf-8?B?U3E0VVF4WWg3TjRZMG8zakM3U2JRWGtjMmdnRCszVmhGYUpHZjkvcGxKakY1?=
- =?utf-8?B?Y2VORlQ1TkhuUjN5NUpoRktXLzZmWnN2OEExMUVqM1prSjIzS25kdnZFY1JO?=
- =?utf-8?B?NXh2V2FnTGRsckFnZnV2UldLZ3MxbFVyV0RmdHpEVUNsa1gvWGVFeWxhVzQ4?=
- =?utf-8?B?OFlJTkpiV3dPQmVGRDJPbUhxMktVRVJtdk42L0xSdlpRM3J2ZVROT2pWZUQv?=
- =?utf-8?B?eXNqOU1aUmhMWW1pZjJIdkFSU3F3RlhUSlpkOEQ2NXlVZXk0K1pnQys0TGdK?=
- =?utf-8?B?WElaVHpQMjg5RTJYbE43b3EwbkVvUGZqeXQxS3BqZ1RqU2NTZXY2RkpvTUJX?=
- =?utf-8?Q?0mwcy24s/ysSU=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727963AbgLBC4d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Dec 2020 21:56:33 -0500
+Received: from a2.mail.mailgun.net ([198.61.254.61]:15410 "EHLO
+        a2.mail.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727746AbgLBC4c (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Dec 2020 21:56:32 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1606877772; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=E0hWXaFCBMy4dUWssM34EP0Ge9+sL3sdeZsbZNYq+zo=; b=XBYmRe3RfRoka0mrdwb7kF5/OylBfRNczzjSIhraCGe6/z9wlVKMO4Sn69v+3nOT60irw0Tf
+ +8IX/WKUHjTZjqHm70mJK/ZTDXmprNRuS9t/XijjwPZESE+sCK+x22HUBApMhAgGnPFXrQ55
+ 9dPLDhANdzXXthfxnv3nQo4P9E0=
+X-Mailgun-Sending-Ip: 198.61.254.61
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
+ 5fc70231f4482b01c4b59d29 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 02 Dec 2020 02:55:45
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id EAC0DC43463; Wed,  2 Dec 2020 02:55:44 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 65B4EC433ED;
+        Wed,  2 Dec 2020 02:55:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 65B4EC433ED
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
+Date:   Tue, 1 Dec 2020 18:55:38 -0800
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: f_fs: Use local copy of descriptors for
+ userspace copy
+Message-ID: <20201202025538.GA20623@jackp-linux.qualcomm.com>
+References: <20201130203453.28154-1-jackp@codeaurora.org>
+ <20201201084245.GC11393@b29397-desktop>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6528.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 564d7533-9a7f-420f-05e0-08d8966a1d2c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2020 02:29:37.2749
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ixkfqjrIlfXeiz7Y1bnKRYP0twg2iCTI9J9Ws/sohCj5QGq6GWq6I0HsbjcCsWAT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6191
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201201084245.GC11393@b29397-desktop>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogVGhpbmggTmd1eWVuIDxU
-aGluaC5OZ3V5ZW5Ac3lub3BzeXMuY29tPg0KPiBTZW50OiBXZWRuZXNkYXksIERlY2VtYmVyIDIs
-IDIwMjAgMTowMCBBTQ0KPiBUbzogSnVuIExpIDxqdW4ubGlAbnhwLmNvbT47IGJhbGJpQGtlcm5l
-bC5vcmcNCj4gQ2M6IGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnOyBUaGluaCBOZ3V5ZW4gPFRo
-aW5oLk5ndXllbkBzeW5vcHN5cy5jb20+Ow0KPiBsaW51eC11c2JAdmdlci5rZXJuZWwub3JnOyBk
-bC1saW51eC1pbXggPGxpbnV4LWlteEBueHAuY29tPg0KPiBTdWJqZWN0OiBSZTogW1BBVENIXSB1
-c2I6IGR3YzM6IGdhZGdldDogZml4IGRlbGF5ZWQgc3RhdHVzIG1pc3NpbmcgZm9yIGNsZWFyDQo+
-IEVQIGhhbHQNCj4gDQo+IEhpLA0KPiANCj4gTGkgSnVuIHdyb3RlOg0KPiA+IFdpdGggc2V2ZXJh
-bCBpbXByb3ZlbWVudHMgb24gaGFuZGxpbmcgb2YgQ2xlYXJGZWF0dXJlKGhhbHQpLCB0aGVyZSBp
-cw0KPiA+IG9uZSBjYXNlIG9mIGRlbGF5ZWQgc3RhdHVzIG1pc3Npbmc6IGlmIHRoZSB4ZmVybm90
-cmVhZHkgZXZlbnQgY29tZXMNCj4gPiBhZnRlciBlbmQgdHJhbnNmZXIgYW5kIGNsZWFyIGVwIHN0
-YWxsIGNvbW1hbmQgY29tcGxldGlvbiwgd2UgY2FuIG5vdA0KPiA+IHNlbmQgdGhlIGRlbGF5ZWQg
-c3RhdHVzIGluIGR3YzNfZXAwX3NlbmRfZGVsYXllZF9zdGF0dXMoKSBhcyB0aGUNCj4gPiBlcDBz
-dGF0dXMgaXMgbm90IHJlYWR5LCB0aGVuIGluIHhmZXJub3RyZWFkeSBldmVudCB3ZSBzdGlsbCBj
-YW4gbm90DQo+ID4gc2VuZCBzdGF0dXMgYmVjYXVzZSBkZWxheWVkX3N0YXR1cyBpcyBzdGlsbCBz
-ZXQuDQo+ID4NCj4gPiBDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZw0KPiA+IEZpeGVzOiBkOTdj
-NzhhMTkwOGUgKCJ1c2I6IGR3YzM6IGdhZGdldDogRU5EX1RSQU5TRkVSIGJlZm9yZQ0KPiA+IENM
-RUFSX1NUQUxMIGNvbW1hbmQiKQ0KPiA+IFNpZ25lZC1vZmYtYnk6IExpIEp1biA8anVuLmxpQG54
-cC5jb20+DQo+ID4gLS0tDQo+ID4gIGRyaXZlcnMvdXNiL2R3YzMvZXAwLmMgfCA4ICsrKysrKyst
-DQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4g
-Pg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9kd2MzL2VwMC5jIGIvZHJpdmVycy91c2Iv
-ZHdjMy9lcDAuYyBpbmRleA0KPiA+IDdiZTM5MDMuLjk1ODBlOWYgMTAwNjQ0DQo+ID4gLS0tIGEv
-ZHJpdmVycy91c2IvZHdjMy9lcDAuYw0KPiA+ICsrKyBiL2RyaXZlcnMvdXNiL2R3YzMvZXAwLmMN
-Cj4gPiBAQCAtMTA1OCwxMCArMTA1OCwxNiBAQCB2b2lkIGR3YzNfZXAwX3NlbmRfZGVsYXllZF9z
-dGF0dXMoc3RydWN0IGR3YzMNCj4gPiAqZHdjKSAgew0KPiA+ICAJdW5zaWduZWQgaW50IGRpcmVj
-dGlvbiA9ICFkd2MtPmVwMF9leHBlY3RfaW47DQo+ID4NCj4gPiArCS8qDQo+ID4gKwkgKiBJZiB3
-ZSBhcmUgcmVhZHkgdG8gc2VuZCBkZWxheWVkIHN0YXR1cw0KPiA+ICsJICogYnV0IHdhaXQgc3Rh
-dHVzIHBoYXJzZSwgd2UgY2FuIGNsZWFyDQo+ID4gKwkgKiBkZWxheWVkX3N0YXR1cyBmbGFnIHRv
-IGxldCBFUDAgWGZlck5vdFJlYWR5DQo+ID4gKwkgKiBoYW5kbGUgaXQgYXMgYSBub3JtYWwgc3Rh
-dHVzIHNlbmRpbmcuDQo+ID4gKwkgKi8NCj4gPiArCWR3Yy0+ZGVsYXllZF9zdGF0dXMgPSBmYWxz
-ZTsNCj4gPiAgCWlmIChkd2MtPmVwMHN0YXRlICE9IEVQMF9TVEFUVVNfUEhBU0UpDQo+ID4gIAkJ
-cmV0dXJuOw0KPiA+DQo+ID4gLQlkd2MtPmRlbGF5ZWRfc3RhdHVzID0gZmFsc2U7DQo+ID4gIAlf
-X2R3YzNfZXAwX2RvX2NvbnRyb2xfc3RhdHVzKGR3YywgZHdjLT5lcHNbZGlyZWN0aW9uXSk7ICB9
-DQo+ID4NCj4gDQo+IFRoaXMgZml4IGlzIGFscmVhZHkgdXBzdHJlYW1lZDoNCj4gZmEyN2UyZjZj
-NWU2ICgidXNiOiBkd2MzOiBlcDA6IEZpeCBkZWxheSBzdGF0dXMgaGFuZGxpbmciKQ0KPiANCj4g
-aHR0cHM6Ly9ldXIwMS5zYWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWh0dHBz
-JTNBJTJGJTJGZ2l0LmsNCj4gZXJuZWwub3JnJTJGcHViJTJGc2NtJTJGbGludXglMkZrZXJuZWwl
-MkZnaXQlMkZ0b3J2YWxkcyUyRmxpbnV4LmdpdCUyRmMNCj4gb21taXQlMkYlM0ZpZCUzRGZhMjdl
-MmY2YzVlNjc0ZjNmMTIyNWY5Y2E3YTc4MjFmYWFmMzkzYmImYW1wO2RhdGE9MDQlN0MNCj4gMDEl
-N0NqdW4ubGklNDBueHAuY29tJTdDYjRmNzBmNWVlZGNjNDY3ZTBlZTcwOGQ4OTYxYTlmNzQlN0M2
-ODZlYTFkM2JjMmINCj4gNGM2ZmE5MmNkOTljNWMzMDE2MzUlN0MwJTdDMCU3QzYzNzQyNDM4ODQw
-NDc1NTg3MyU3Q1Vua25vd24lN0NUV0ZwYkdac2INCj4gM2Q4ZXlKV0lqb2lNQzR3TGpBd01EQWlM
-Q0pRSWpvaVYybHVNeklpTENKQlRpSTZJazFoYVd3aUxDSlhWQ0k2TW4wJTNEJTcNCj4gQzEwMDAm
-YW1wO3NkYXRhPTZscE9qJTJGV1V2TGMlMkZuRVlhT29MallxNkpMRXFkaG1KU21jWHBzVDglMkJ1
-MFElM0QmYW0NCj4gcDtyZXNlcnZlZD0wDQoNCkFoLCBJIG1pc3NlZCB0aGF0LCBzbyBpZ25vcmUg
-bXkgcGF0Y2guDQoNClRoYW5rcw0KTGkgSnVuDQo+IA0KPiBUaGFua3MsDQo+IFRoaW5oDQo=
+(removed Vamsi as he has moved on from USB and his email address is
+bouncing)
+
+Hi Peter,
+
+On Tue, Dec 01, 2020 at 08:43:14AM +0000, Peter Chen wrote:
+> On 20-11-30 12:34:53, Jack Pham wrote:
+> > From: Vamsi Krishna Samavedam <vskrishn@codeaurora.org>
+> > 
+> > The function may be unbound causing the ffs_ep and its descriptors
+> > to be freed while userspace is in the middle of an ioctl requesting
+> > the same descriptors. Avoid dangling pointer reference by first
+> > making a local copy of desctiptors before releasing the spinlock.
+> > 
+> > Fixes: c559a3534109 ("usb: gadget: f_fs: add ioctl returning ep descriptor")
+> > Signed-off-by: Vamsi Krishna Samavedam <vskrishn@codeaurora.org>
+> > Signed-off-by: Jack Pham <jackp@codeaurora.org>
+> > ---
+> >  drivers/usb/gadget/function/f_fs.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> > index 046f770a76da..c727cb5de871 100644
+> > --- a/drivers/usb/gadget/function/f_fs.c
+> > +++ b/drivers/usb/gadget/function/f_fs.c
+> > @@ -1324,7 +1324,7 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code,
+> >  	case FUNCTIONFS_ENDPOINT_DESC:
+> >  	{
+> >  		int desc_idx;
+> > -		struct usb_endpoint_descriptor *desc;
+> > +		struct usb_endpoint_descriptor desc1, *desc;
+> >  
+> >  		switch (epfile->ffs->gadget->speed) {
+> >  		case USB_SPEED_SUPER:
+> > @@ -1336,10 +1336,12 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code,
+> >  		default:
+> >  			desc_idx = 0;
+> >  		}
+> > +
+> >  		desc = epfile->ep->descs[desc_idx];
+> > +		memcpy(&desc1, desc, desc->bLength);
+> >  
+> >  		spin_unlock_irq(&epfile->ffs->eps_lock);
+> > -		ret = copy_to_user((void __user *)value, desc, desc->bLength);
+> > +		ret = copy_to_user((void __user *)value, &desc1, desc1.bLength);
+> >  		if (ret)
+> >  			ret = -EFAULT;
+> >  		return ret;
+> > -- 
+> 
+> Do you have any backtrace to show the problems? I see ffs->ref will be
+> increased at .open, and the .unbind should not free memory if ffs->ref
+> is still two.
+
+kfree(func->eps) is getting called directly from ffs_func_unbind()
+which can happen when configfs.c does purge_configs_funcs().
+ffs_func_unbind() does not check for ffs->refs count here, so it looks
+like it can proceed to free it as soon as it releases the eps_lock,
+while the ioctl happens in parallel and then accesses the now stale
+pointer after acquiring & releasing the same eps_lock.
+
+But I think I see what you're getting at--would you suggest that we
+avoid freeing func->eps and tie its lifetime to ffs->refs? I agree in
+principle but it also looks a bit tricky as there seem to be several
+reference counters being used in this driver [ffs->refs (refcount_t);
+ffs->opened (atomic_t); ffs_opts->refcnt (unsigned)] that I have a
+little trouble figuring out which one to use. Appreciate any pointers
+if you have any.
+
+Here is a quite old backtrace from an internal bug report which was on
+our downstream 4.14 kernel, but I think the issue can still happen on
+current mainline. Also I believe we saw this with ADB but the current
+AOSP version of ADB no longer uses the FUNCTIONFS_ENDPOINT_DESC ioctl()
+so it may not happen with this function. However there are other Android
+functions that use FFS (MTP, Fastboot) which still do use this ioctl so
+I believe it still has the potential to occur if ffs_func_unbind() races
+with ffs_epfile_ioctl().
+
+init: processing action (sys.usb.config=none && sys.usb.configfs=1) from (/vendor/etc/init/hw/init.msm.usb.configfs.rc:30)
+android_work: sent uevent USB_STATE=DISCONNECTED
+Unable to handle kernel paging request at virtual address ffffffefa007fa57
+Mem abort info:
+  Exception class = DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 7
+Data abort info:
+  ISV = 0, ISS = 0x00000007
+  CM = 0, WnR = 0
+swapper pgtable: 4k pages, 39-bit VAs, pgd = ffffff956e787000
+[ffffffefa007fa57] *pgd=00000001bd6e1003, *pud=00000001bd6e1003, *pmd=00000001bd5e0003, *pte=00e800016007f712
+Internal error: Oops: 96000007 [#1] PREEMPT SMP
+init: Command 'rm /config/usb_gadget/g1/configs/b.1/f1' action=sys.usb.config=none && sys.usb.configfs=1 (/vendor/etc/init/hw/init.msm.usb.configfs.rc:31) took 77ms and succeeded
+init: processing action (sys.usb.config=none && sys.usb.configfs=1) from (/init.usb.configfs.rc:1)
+init: Command 'write /config/usb_gadget/g1/UDC none' action=sys.usb.config=none && sys.usb.configfs=1 (/init.usb.configfs.rc:2) took 0ms and failed: Unable to write to file '/config/usb_gadget/g1/UDC': Unable to write file contents: No such device
+Modules linked in: wlan(O) machine_dlkm(O) wcd934x_dlkm(O) mbhc_dlkm(O) wcd9360_dlkm(O) swr_ctrl_dlkm(O) wcd9xxx_dlkm(O) wsa881x_dlkm(O) wcd_core_dlkm(O) stub_dlkm(O) wcd_spi_dlkm(O) hdmi_dlkm(O) swr_dlkm(O) pinctrl_wcd_dlkm(O) usf_dlkm(O) native_dlkm(O) platform_dlkm(O) q6_dlkm(O) adsp_loader_dlkm(O) apr_dlkm(O) q6_notifier_dlkm(O) q6_pdr_dlkm(O) wglink_dlkm(O) msm_11ad_proxy
+CPU: 6 PID: 13186 Comm: ->transport Tainted: G S      W  O    4.14.83+ #1
+Hardware name: Qualcomm Technologies, Inc. SM8150 V2 PM8150 QRD DVT (DT)
+task: ffffffef8f491200 task.stack: ffffff800d298000
+pc : ffs_epfile_ioctl+0x1c4/0x364
+lr : ffs_epfile_ioctl+0x1c4/0x364
+sp : ffffff800d29bd40 pstate : 80400145
+x29: ffffff800d29bdc0 x28: ffffffef8f491200 
+x27: ffffff956cb01000 x26: 000000000000001d 
+x25: ffffffefa007f8b0 x24: ffffffef499698f0 
+x23: ffffffefd448c280 x22: ffffffefae6df940 
+x21: ffffffefa007fa57 x20: 00000079a8101318 
+x19: ffffffef49969958 x18: 00000895b16f2301 
+x17: ffffffeffcf624f8 x16: 0000000000004e20 
+x15: 0000000000000001 x14: ffffffeffcf61af8 
+x13: 0000000000000008 x12: 00000002dfc5023a 
+x11: 00000002dfc5023a x10: 0000000000000015 
+x9 : 0000000000000000 x8 : 0000000000000008 
+x7 : 6320383030303030 x6 : ffffffeff16037b8 
+x5 : ffffffef9bc0a380 x4 : 0000000001312d00 
+x3 : ffffff800d29bb18 x2 : ffffff956ba8ebd0 
+x1 : ffffff956caf1f4c x0 : ffffff956caf1f4c 
+
+PC: 0xffffff956c38a818:
+a818  f9402308 910043e1 9103a100 97de046c 17ffffc2 f9402300 f8448408 b9404908
+a838  71000d1f 1a9f17e9 7100151f 321f03e8 9a890108 8b080f28 f9400915 941db318
+a858  394002b3 320003e2 aa1503e0 aa1303e1 97e32f88 90005d80 52801061 9134bc00
+a878  97e2556a d5384108 aa1403ea f9402109 ab13014a 9a8983e9 da9f314a fa09015f
+
+LR: 0xffffff956c38a818:
+a818  f9402308 910043e1 9103a100 97de046c 17ffffc2 f9402300 f8448408 b9404908
+a838  71000d1f 1a9f17e9 7100151f 321f03e8 9a890108 8b080f28 f9400915 941db318
+a858  394002b3 320003e2 aa1503e0 aa1303e1 97e32f88 90005d80 52801061 9134bc00
+a878  97e2556a d5384108 aa1403ea f9402109 ab13014a 9a8983e9 da9f314a fa09015f
+
+SP: 0xffffff800d29bd00:
+bd00  6c38a858 ffffff95 80400145 00000000 0d29bd30 ffffff80 6caf7504 ffffff95
+bd20  ffffffff 0000007f 49969958 ffffffef 0d29bdc0 ffffff80 6c38a858 ffffff95
+bd40  00000003 00000000 6baea5a0 ffffff95 00000001 00000000 0d29bdd0 ffffff80
+bd60  dd4ad288 ffffffef 94706900 cd6f8d01 8f491200 ffffffef 94706900 cd6f8d01
+
+Process ->transport (pid: 13186, stack limit = 0xffffff800d298000)
+Call trace:
+ ffs_epfile_ioctl+0x1c4/0x364
+ vfs_ioctl+0x3c/0x5c
+ do_vfs_ioctl+0x670/0x928
+ SyS_ioctl+0x90/0x9c
+ el0_svc_naked+0x34/0x38
+Code: 9a890108 8b080f28 f9400915 941db318 (394002b3) 
+---[ end trace 198e86364be2f515 ]---
+Kernel panic - not syncing: Fatal exception
+SMP: stopping secondary CPUs
+ 
+Thanks,
+Jack
+-- 
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
