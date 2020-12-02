@@ -2,186 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 185B82CC4C7
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Dec 2020 19:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD6D2CC7E0
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Dec 2020 21:35:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387836AbgLBSOD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Dec 2020 13:14:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58610 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387739AbgLBSOC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 2 Dec 2020 13:14:02 -0500
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 58BBB206D5;
-        Wed,  2 Dec 2020 18:13:21 +0000 (UTC)
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94)
-        (envelope-from <maz@kernel.org>)
-        id 1kkWcx-00FQIv-7M; Wed, 02 Dec 2020 18:13:19 +0000
+        id S1729483AbgLBUdR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Dec 2020 15:33:17 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:54965 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728781AbgLBUdP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Dec 2020 15:33:15 -0500
+Received: (qmail 1067955 invoked by uid 1000); 2 Dec 2020 15:32:34 -0500
+Date:   Wed, 2 Dec 2020 15:32:34 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+641bd6ff9b25e6d3aad1@syzkaller.appspotmail.com>
+Cc:     andriy.shevchenko@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mathias.nyman@linux.intel.com, syzkaller-bugs@googlegroups.com
+Subject: Re: memory leak in usb_set_configuration
+Message-ID: <20201202203234.GC1062758@rowland.harvard.edu>
+References: <000000000000cd6be705b3d525d5@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 02 Dec 2020 18:13:19 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: ftdi_sio: Helpful error on GPIO attempt
-In-Reply-To: <43d788c69a0f4fe3caf578b98ae72395@kernel.org>
-References: <20201201141048.1461042-1-linus.walleij@linaro.org>
- <43d788c69a0f4fe3caf578b98ae72395@kernel.org>
-User-Agent: Roundcube Webmail/1.4.9
-Message-ID: <76a8c528f98df0797c79d870bb6587a4@kernel.org>
-X-Sender: maz@kernel.org
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: linus.walleij@linaro.org, johan@kernel.org, linux-usb@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000cd6be705b3d525d5@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020-12-01 15:01, Marc Zyngier wrote:
-> Hi Linus,
+On Wed, Nov 11, 2020 at 05:55:27AM -0800, syzbot wrote:
+> Hello,
 > 
-> On 2020-12-01 14:10, Linus Walleij wrote:
->> The FTDI adapters present all potentially available GPIO
->> lines to userspace, and they are often also visibly
->> available on things like breakout boards. These are
->> appetizing targets for random GPIO tinkering such as
->> bit-banging or other industrial control over USB.
->> 
->> When a user attempts to use one of the GPIO lines, they
->> can get the opaque error -ENODEV, because the flashed
->> configuration says that the line is not in GPIO mode
->> but another alternative function.
->> 
->> We had one user run into this, debug and finally fix the
->> problem using ftx-prog.
+> syzbot found the following issue on:
 > 
-> Well, you gave me 2/3 of the solution ;-). How about adding
-> a pointer to this tool? [1]
+> HEAD commit:    407ab579 Merge tag 'for-linus' of git://git.kernel.org/pub..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=16d84062500000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f13716fa0212fd
+> dashboard link: https://syzkaller.appspot.com/bug?extid=641bd6ff9b25e6d3aad1
+> compiler:       gcc (GCC) 10.1.0-syz 20200507
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=102c2094500000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16a8dfa8500000
 > 
->> 
->> Give the user some more helpful dmesg text and a pointer
->> to ftx-prog when the error occurs.
->> 
->> Reported-by: Marc Zyngier <maz@kernel.org>
->> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
->> ---
->>  drivers/usb/serial/ftdi_sio.c | 5 ++++-
->>  1 file changed, 4 insertions(+), 1 deletion(-)
->> 
->> diff --git a/drivers/usb/serial/ftdi_sio.c 
->> b/drivers/usb/serial/ftdi_sio.c
->> index e0f4c3d9649c..405fec78f2fc 100644
->> --- a/drivers/usb/serial/ftdi_sio.c
->> +++ b/drivers/usb/serial/ftdi_sio.c
->> @@ -1841,8 +1841,11 @@ static int ftdi_gpio_request(struct gpio_chip
->> *gc, unsigned int offset)
->>  	struct ftdi_private *priv = usb_get_serial_port_data(port);
->>  	int result;
->> 
->> -	if (priv->gpio_altfunc & BIT(offset))
->> +	if (priv->gpio_altfunc & BIT(offset)) {
->> +		dev_err(&port->dev, "FTDI firmware says line is not in GPIO 
->> mode\n");
->> +		dev_err(&port->dev, "if you really know what you're doing the flash
->> can be reconfigured using ftx-prog\n");
->>  		return -ENODEV;
->> +	}
->> 
->>  	mutex_lock(&priv->gpio_lock);
->>  	if (!priv->gpio_used) {
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+641bd6ff9b25e6d3aad1@syzkaller.appspotmail.com
 > 
-> It occurs to me that since the driver already knows which of the CBUS
-> pins are unusable, we should maybe find a way to expose the line as
-> "reserved", one way or another? Generic tools such as gpioinfo would
-> (or should?) be able to display the status of the pin to the user.
-> 
-> enum gpio_v2_line_flag doesn't have a "reserved" flag, so maybe
-> GPIO_V2_LINE_FLAG_USED is an adequate way to mark the line as
-> being unavailable for userspace?
+> BUG: memory leak
+> unreferenced object 0xffff88810ed7cc00 (size 1024):
+>   comm "kworker/0:3", pid 4907, jiffies 4294954595 (age 14.630s)
+>   hex dump (first 32 bytes):
+>     48 92 b6 11 81 88 ff ff 48 92 b6 11 81 88 ff ff  H.......H.......
+>     01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<00000000acb2212d>] kmalloc include/linux/slab.h:552 [inline]
+>     [<00000000acb2212d>] kzalloc include/linux/slab.h:664 [inline]
+>     [<00000000acb2212d>] usb_set_configuration+0x18c/0xb90 drivers/usb/core/message.c:1987
+>     [<00000000398ef244>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
+>     [<00000000c8516fd1>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
+>     [<00000000eb555eca>] really_probe+0x159/0x480 drivers/base/dd.c:554
+>     [<0000000082b68944>] driver_probe_device+0x84/0x100 drivers/base/dd.c:738
+>     [<000000000485fb4d>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:844
+>     [<00000000a0e84ad1>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
+>     [<0000000017598cdd>] __device_attach+0x122/0x250 drivers/base/dd.c:912
+>     [<00000000201e5839>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
+>     [<00000000ec5f56bf>] device_add+0x5ac/0xc30 drivers/base/core.c:2936
+>     [<0000000049b5ad41>] usb_new_device.cold+0x166/0x578 drivers/usb/core/hub.c:2554
+>     [<0000000030bc00f0>] hub_port_connect drivers/usb/core/hub.c:5222 [inline]
+>     [<0000000030bc00f0>] hub_port_connect_change drivers/usb/core/hub.c:5362 [inline]
+>     [<0000000030bc00f0>] port_event drivers/usb/core/hub.c:5508 [inline]
+>     [<0000000030bc00f0>] hub_event+0x144a/0x20d0 drivers/usb/core/hub.c:5590
+>     [<00000000e89e69ae>] process_one_work+0x27d/0x590 kernel/workqueue.c:2272
+>     [<0000000063d76c23>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2418
+>     [<00000000a311ec69>] kthread+0x178/0x1b0 kernel/kthread.c:292
+>     [<00000000690c42fe>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
 
-And to clarify what I mean, here's a patchlet that does the trick.
+#syz dup: memory leak in hub_event
 
-maz@tiger-roach:~$ sudo gpioinfo gpiochip3
-gpiochip3 - 4 lines:
-	line   0:      unnamed       unused  output  active-high
-	line   1:      "AltFunc"     kernel  input   active-high [used]
-	line   2:      "AltFunc"     kernel  input   active-high [used]
-	line   3:      "AltFunc"     kernel  input   active-high [used]
-
-It at least make clear that you can't grab the GPIO. Of course, you
-don't get the message that you just added...
-
-Thoughts?
-
-         M.
-
-diff --git a/drivers/usb/serial/ftdi_sio.c 
-b/drivers/usb/serial/ftdi_sio.c
-index e0f4c3d9649c..00da3f42139f 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -44,6 +44,8 @@
-  #include "ftdi_sio.h"
-  #include "ftdi_sio_ids.h"
-
-+#include "../../gpio/gpiolib.h"
-+
-  #define DRIVER_AUTHOR "Greg Kroah-Hartman <greg@kroah.com>, Bill Ryder 
-<bryder@sgi.com>, Kuba Ober <kuba@mareimbrium.org>, Andreas Mohr, Johan 
-Hovold <jhovold@gmail.com>"
-  #define DRIVER_DESC "USB FTDI Serial Converters Driver"
-
-@@ -2143,11 +2145,13 @@ static int ftdi_gpio_init_ftx(struct 
-usb_serial_port *port)
-  	return result;
-  }
-
-+static const char *altfunc = "AltFunc";
-+
-  static int ftdi_gpio_init(struct usb_serial_port *port)
-  {
-  	struct ftdi_private *priv = usb_get_serial_port_data(port);
-  	struct usb_serial *serial = port->serial;
--	int result;
-+	int result, i;
-
-  	switch (priv->chip_type) {
-  	case FT232H:
-@@ -2183,10 +2187,23 @@ static int ftdi_gpio_init(struct usb_serial_port 
-*port)
-  	priv->gc.can_sleep = true;
-
-  	result = gpiochip_add_data(&priv->gc, port);
--	if (!result)
--		priv->gpio_registered = true;
-+	if (result)
-+		return result;
-
--	return result;
-+	priv->gpio_registered = true;
-+
-+	for (i = 0; i < priv->gc.ngpio; i++) {
-+		struct gpio_desc *desc;
-+
-+		if (!(priv->gpio_altfunc & BIT(i)))
-+			continue;
-+
-+		desc = gpiochip_get_desc(&priv->gc, i);
-+		desc->flags |= BIT(FLAG_REQUESTED);
-+		desc->name = altfunc;
-+	}
-+
-+	return 0;
-  }
-
-  static void ftdi_gpio_remove(struct usb_serial_port *port)
-
--- 
-Jazz is not dead. It just smells funny...
+Alan Stern
