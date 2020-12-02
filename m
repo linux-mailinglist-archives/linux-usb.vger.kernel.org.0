@@ -2,80 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD6D2CC7E0
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Dec 2020 21:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6DCA2CC8CE
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Dec 2020 22:21:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729483AbgLBUdR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Dec 2020 15:33:17 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:54965 "HELO
+        id S1729375AbgLBVUO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Dec 2020 16:20:14 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:50883 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728781AbgLBUdP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Dec 2020 15:33:15 -0500
-Received: (qmail 1067955 invoked by uid 1000); 2 Dec 2020 15:32:34 -0500
-Date:   Wed, 2 Dec 2020 15:32:34 -0500
+        with SMTP id S1729366AbgLBVUN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Dec 2020 16:20:13 -0500
+Received: (qmail 1069741 invoked by uid 1000); 2 Dec 2020 16:19:32 -0500
+Date:   Wed, 2 Dec 2020 16:19:32 -0500
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+641bd6ff9b25e6d3aad1@syzkaller.appspotmail.com>
-Cc:     andriy.shevchenko@linux.intel.com, gregkh@linuxfoundation.org,
+To:     syzbot <syzbot+dbec6695a6565a9c6bc0@syzkaller.appspotmail.com>,
+        Thierry Escande <thierry.escande@collabora.com>
+Cc:     eli.billauer@gmail.com, gregkh@linuxfoundation.org,
+        gustavoars@kernel.org, ingrassia@epigenesys.com,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mathias.nyman@linux.intel.com, syzkaller-bugs@googlegroups.com
-Subject: Re: memory leak in usb_set_configuration
-Message-ID: <20201202203234.GC1062758@rowland.harvard.edu>
-References: <000000000000cd6be705b3d525d5@google.com>
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tiwai@suse.de
+Subject: Re: WARNING in port100_send_frame_async/usb_submit_urb
+Message-ID: <20201202211932.GD1062758@rowland.harvard.edu>
+References: <000000000000bab70f05b563a6cc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000000000000cd6be705b3d525d5@google.com>
+In-Reply-To: <000000000000bab70f05b563a6cc@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 05:55:27AM -0800, syzbot wrote:
+On Tue, Dec 01, 2020 at 01:21:27AM -0800, syzbot wrote:
 > Hello,
 > 
 > syzbot found the following issue on:
 > 
-> HEAD commit:    407ab579 Merge tag 'for-linus' of git://git.kernel.org/pub..
+> HEAD commit:    c84e1efa Merge tag 'asm-generic-fixes-5.10-2' of git://git..
 > git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=16d84062500000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f13716fa0212fd
-> dashboard link: https://syzkaller.appspot.com/bug?extid=641bd6ff9b25e6d3aad1
-> compiler:       gcc (GCC) 10.1.0-syz 20200507
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=102c2094500000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16a8dfa8500000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14a98565500000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=7be70951fca93701
+> dashboard link: https://syzkaller.appspot.com/bug?extid=dbec6695a6565a9c6bc0
+> compiler:       clang version 11.0.0 (https://github.com/llvm/llvm-project.git ca2dcbd030eadbf0aa9b660efe864ff08af6e18b)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17c607f1500000
 > 
 > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+641bd6ff9b25e6d3aad1@syzkaller.appspotmail.com
+> Reported-by: syzbot+dbec6695a6565a9c6bc0@syzkaller.appspotmail.com
 > 
-> BUG: memory leak
-> unreferenced object 0xffff88810ed7cc00 (size 1024):
->   comm "kworker/0:3", pid 4907, jiffies 4294954595 (age 14.630s)
->   hex dump (first 32 bytes):
->     48 92 b6 11 81 88 ff ff 48 92 b6 11 81 88 ff ff  H.......H.......
->     01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<00000000acb2212d>] kmalloc include/linux/slab.h:552 [inline]
->     [<00000000acb2212d>] kzalloc include/linux/slab.h:664 [inline]
->     [<00000000acb2212d>] usb_set_configuration+0x18c/0xb90 drivers/usb/core/message.c:1987
->     [<00000000398ef244>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
->     [<00000000c8516fd1>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
->     [<00000000eb555eca>] really_probe+0x159/0x480 drivers/base/dd.c:554
->     [<0000000082b68944>] driver_probe_device+0x84/0x100 drivers/base/dd.c:738
->     [<000000000485fb4d>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:844
->     [<00000000a0e84ad1>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
->     [<0000000017598cdd>] __device_attach+0x122/0x250 drivers/base/dd.c:912
->     [<00000000201e5839>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
->     [<00000000ec5f56bf>] device_add+0x5ac/0xc30 drivers/base/core.c:2936
->     [<0000000049b5ad41>] usb_new_device.cold+0x166/0x578 drivers/usb/core/hub.c:2554
->     [<0000000030bc00f0>] hub_port_connect drivers/usb/core/hub.c:5222 [inline]
->     [<0000000030bc00f0>] hub_port_connect_change drivers/usb/core/hub.c:5362 [inline]
->     [<0000000030bc00f0>] port_event drivers/usb/core/hub.c:5508 [inline]
->     [<0000000030bc00f0>] hub_event+0x144a/0x20d0 drivers/usb/core/hub.c:5590
->     [<00000000e89e69ae>] process_one_work+0x27d/0x590 kernel/workqueue.c:2272
->     [<0000000063d76c23>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2418
->     [<00000000a311ec69>] kthread+0x178/0x1b0 kernel/kthread.c:292
->     [<00000000690c42fe>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+> usb 1-1: string descriptor 0 read error: -32
+> ------------[ cut here ]------------
+> URB 000000005c26bc1e submitted while active
+> WARNING: CPU: 0 PID: 5 at drivers/usb/core/urb.c:378 usb_submit_urb+0xf57/0x1510 drivers/usb/core/urb.c:378
+> Modules linked in:
+> CPU: 0 PID: 5 Comm: kworker/0:0 Not tainted 5.10.0-rc5-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Workqueue: usb_hub_wq hub_event
+> RIP: 0010:usb_submit_urb+0xf57/0x1510 drivers/usb/core/urb.c:378
+> Code: 5c 41 5d 41 5e 41 5f 5d e9 76 5b ff ff e8 f1 e8 04 fc c6 05 25 0e 8b 07 01 48 c7 c7 a0 b7 5b 8a 4c 89 e6 31 c0 e8 89 07 d5 fb <0f> 0b e9 20 f1 ff ff e8 cd e8 04 fc eb 05 e8 c6 e8 04 fc bb a6 ff
+> RSP: 0018:ffffc90000ca6ec8 EFLAGS: 00010246
+> RAX: cf72e284cb303700 RBX: ffff888021723708 RCX: ffff888011108000
+> RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+> RBP: 0000000000000cc0 R08: ffffffff815d29f2 R09: ffffed1017383ffc
+> R10: ffffed1017383ffc R11: 0000000000000000 R12: ffff888021723700
+> R13: dffffc0000000000 R14: ffff888012cfa458 R15: 1ffff1100259f489
+> FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 000056157313d160 CR3: 000000001e22c000 CR4: 00000000001506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  port100_send_frame_async+0x1ea/0x390 drivers/nfc/port100.c:780
+>  port100_send_cmd_async+0x6c7/0x950 drivers/nfc/port100.c:876
+>  port100_send_cmd_sync drivers/nfc/port100.c:916 [inline]
+>  port100_set_command_type drivers/nfc/port100.c:987 [inline]
+>  port100_probe+0xd4f/0x1600 drivers/nfc/port100.c:1567
 
-#syz dup: memory leak in hub_event
+I don't understand this driver very well.  It looks like the problem 
+stems from the fact that port100_send_frame_async() submits two URBs, 
+but port100_send_cmd_sync() only waits for one of them to complete.  The 
+other URB may then still be active when the driver tries to reuse it.
+
+Maybe someone who's more familiar with the port100 driver can fix the 
+problem.
 
 Alan Stern
