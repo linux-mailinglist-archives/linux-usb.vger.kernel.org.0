@@ -2,43 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7C62CD8BD
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 15:16:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5CB2CD8D8
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 15:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730887AbgLCONv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Dec 2020 09:13:51 -0500
-Received: from mout.kundenserver.de ([212.227.17.24]:48463 "EHLO
+        id S2389068AbgLCOTL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Dec 2020 09:19:11 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:42687 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726318AbgLCONu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Dec 2020 09:13:50 -0500
+        with ESMTP id S1730943AbgLCOTL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Dec 2020 09:19:11 -0500
 Received: from orion.localdomain ([95.118.71.13]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MBDvU-1kt3L02W7C-00Ckxa; Thu, 03 Dec 2020 15:11:16 +0100
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MkpjD-1kJzeW1171-00mMlA; Thu, 03 Dec 2020 15:16:35 +0100
 From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
         usb-storage@lists.one-eyed-alien.net
-Subject: [PATCH] drivers: usb: storage: prefer pr_*() macros over bare printk()
-Date:   Thu,  3 Dec 2020 15:11:15 +0100
-Message-Id: <20201203141115.27460-1-info@metux.net>
+Subject: [PATCH v2] drivers: usb: storage: prefer pr_*() macros over bare printk()
+Date:   Thu,  3 Dec 2020 15:16:34 +0100
+Message-Id: <20201203141634.28850-1-info@metux.net>
 X-Mailer: git-send-email 2.11.0
-X-Provags-ID: V03:K1:CshpX7hZEewVcaFB8kcooUP1ZHO0PPNEYfdAveGlqlWiHRjsd8L
- Y7OGyOKqjyXHAFaPdeRJ4qTRI+GFJDqW45gwX50pBYrwZnL7AXD+40fn1rTXSRJjsX3dI61
- ULqs5bDcz1NLcMrkTqG5okvsg8hpZFzTAZO8uqplA6KTv/2RGwBi+khEPPIJmm7z9DwYG69
- ktz+8/cI3k0+pCPniXhYw==
+X-Provags-ID: V03:K1:0IyzrSuvDJ28ReRID7/NC+13Le5/zAHShoe9Gkgsblo6jV8cwAH
+ tBFIdnuRIyRAwNoESHedkxxxLEzn2x3c402jVwpou+Q5ihhCtknYuJYeqyWdKW8ESXju7aa
+ SkNoXh3MNe2LZHduIQfZ7j83IUbmDsfvOrDChbVzgTcgPhStMW3CmjjU009V+fIHW80kwOj
+ GM5R3gAH7fgug0NQSv2zQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vRNhfSVrySI=:bdtI/6JUDpCUBwWju7l8q0
- MkZE0NAbLCLkdoBSPQuJZwC8OYzXBZpeYx3faVBRdpT83DDiyNffq+QYdjpUtd/nNQiJ3FQAu
- 0nNkLoLBmvwFMtvFJ0ntmTV+ugxUBEojDbFZ93Soxdw7lW6ZNf4pk2vkeXWaK7bkFdyn2+RwG
- sNP2g2D1W1vbp90hZxQBo408L96vHdakrv1Sbu21bl2JE8NIpxqpBMTeDmWP5MOL44U4XJZNp
- h3kJQS8RivpxXgkL7Hemh6RYVuJiHuNRXuX+SqgbplVLRcuYXaleWDNKy5Hctn8VExujCUj5c
- MU8y2VPEepOWuxHLs51+M5y0s/l8/zSgRIcoRu9KM1ecIM9iWDVaLnpFADfOnbO6PaTnGjWEl
- j7yCAgsddi3kZCijfvE2I4d+cclMm8K4z+hDN5viySqfY2XMk3OqcDSOdFc7X
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YFCmvjg2gBo=:L1zbnf8nGQC32hQRUI17EH
+ gufYq5NdVWuw3oMnMR2VwLCNcN0iuJr/kX6LnhcgrWFMIFAkVJ9Mna4lzAnbcKPmY3T2ayr51
+ 05NfkZU40MCEube9mm1ejS3VTsGYm7Ohnk4p6cCF9OSk4X9dGbZIdRU8BBOIRclISihIXys1i
+ nCLI+dtF3hBFYg5iDl/iCzdxnLCq+X8WAyo/CgElL4C0joRYbf49RBlURtMyp/3sWNemcjUps
+ O1xqDUwCRqBYsgBlJwMKW4cD2bqIfBjq/e8Ac4Hb9PVyE5ksFWU8MLWIIfOSqfp7uKSWpLDBc
+ PeGjAVWYEJVLyhKT3TYKULgkWxm2T/1Di+LSkSaGqlMhzbPOOSi0Oz0EaRcYeKTkxzHZtAp/O
+ 53LOoeFiDrdQl5mXVJ+ig6zmD32xBEZ14S1tESQZEXybjsx0C8bEyh1scoMVw
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 pr_*() printing helpers are preferred over using bare printk().
+
+changes v2: fixed ugly typo
 
 Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
 ---
@@ -50,7 +52,7 @@ Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
  5 files changed, 43 insertions(+), 55 deletions(-)
 
 diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
-index 20b857e97e60..4453238da87e 100644
+index 20b857e97e60..5806f1bee471 100644
 --- a/drivers/usb/storage/alauda.c
 +++ b/drivers/usb/storage/alauda.c
 @@ -622,9 +622,8 @@ static int alauda_read_map(struct us_data *us, unsigned int zone)
@@ -102,7 +104,7 @@ index 20b857e97e60..4453238da87e 100644
  	if (!new_pba) {
 -		printk(KERN_WARNING
 -		       "alauda_write_lba: Out of unused blocks\n");
-+		pr_arn("alauda_write_lba: Out of unused blocks\n");
++		pr_warn("alauda_write_lba: Out of unused blocks\n");
  		return USB_STOR_TRANSPORT_ERROR;
  	}
  
