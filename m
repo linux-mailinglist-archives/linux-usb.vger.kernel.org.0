@@ -2,109 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0B42CD6A0
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 14:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2EC92CD6B0
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 14:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388008AbgLCNXX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Dec 2020 08:23:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:53379 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727322AbgLCNXX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Dec 2020 08:23:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607001717;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xr6ubetRcdw3MknkwI3+tg6m/AwRRq+QdjB3wYZxUt8=;
-        b=JEjFX2xF4yCXRxTuV9kFRJZhHXIufbaRtHbxRU+FWLMjaU9eDt/OPK2sLZm++3kIJQUq6a
-        bfdBGf7vdp33TkqQ7mcdtlzO//+1w+pveT2ZkZsF3IKCgZmaXDJnjtcRUDAKeAqnk3GVfv
-        tPQsX2O7GU9p6cDpylXvssqXpUzfQts=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-119-ivUdRog-NqWVMt9wROXWjg-1; Thu, 03 Dec 2020 08:21:53 -0500
-X-MC-Unique: ivUdRog-NqWVMt9wROXWjg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C4FDC100F350;
-        Thu,  3 Dec 2020 13:21:51 +0000 (UTC)
-Received: from gondolin (ovpn-113-106.ams2.redhat.com [10.36.113.106])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F17035C1BD;
-        Thu,  3 Dec 2020 13:21:42 +0000 (UTC)
-Date:   Thu, 3 Dec 2020 14:21:40 +0100
-From:   Cornelia Huck <cohuck@redhat.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        kvm@vger.kernel.org, linux-usb@vger.kernel.org,
-        Peng Hao <peng.hao2@zte.com.cn>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v1 1/5] driver core: platform: Introduce
- platform_get_mem_or_io_resource()
-Message-ID: <20201203142140.73a0c5e6.cohuck@redhat.com>
-In-Reply-To: <20201027175806.20305-1-andriy.shevchenko@linux.intel.com>
-References: <20201027175806.20305-1-andriy.shevchenko@linux.intel.com>
-Organization: Red Hat GmbH
+        id S1730696AbgLCN0X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Dec 2020 08:26:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43262 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730533AbgLCN0X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Dec 2020 08:26:23 -0500
+Date:   Thu, 3 Dec 2020 14:26:49 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1607001942;
+        bh=zTg0LRTp2jk/sIarx18z8q2py24tLNT7rye1Bm9xA3Q=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oX4Q1PTJ0gW+smYtC0ojk9WJJh3RiMRdU/g9hf3FYfJlDZIIaeed2u+JkxEdJZFwb
+         /GoeYCVMSRhNDk6XX2L8RYcV2jyLQV2rIhups/uapAuFnRtJ0LeNg/JWvy2/gSspAv
+         Qz5Rt7CsT1QPs1a5TTeTRMHxrp1I2vyOPGpGCd38=
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ertza Warraich <ertza.afzal@gmail.com>
+Cc:     balbi@kernel.org, dave.jing.tian@gmail.com, kt0755@gmail.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: NULL pointer dereference bug
+Message-ID: <X8jnmfppPk5Wii6p@kroah.com>
+References: <CAD+hOztkbvSfugYDWSw9UpmBM0vTcmHp=7kfJmYZF6CdC+eZXQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD+hOztkbvSfugYDWSw9UpmBM0vTcmHp=7kfJmYZF6CdC+eZXQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 27 Oct 2020 19:58:02 +0200
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+On Wed, Dec 02, 2020 at 07:56:08PM -0500, Ertza Warraich wrote:
+> We report a null ptr deref bug (in linux-5.8.13) found by FuzzUSB (a
+> modified version of syzkaller).
 
-> There are at least few existing users of the proposed API which
-> retrieves either MEM or IO resource from platform device.
-> 
-> Make it common to utilize in the existing and new users.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Eric Auger <eric.auger@redhat.com>
-> Cc: Alex Williamson <alex.williamson@redhat.com>
-> Cc: Cornelia Huck <cohuck@redhat.com>
-> Cc: kvm@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Cc: Peng Hao <peng.hao2@zte.com.cn>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> ---
->  include/linux/platform_device.h | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
-> index 77a2aada106d..eb8d74744e29 100644
-> --- a/include/linux/platform_device.h
-> +++ b/include/linux/platform_device.h
-> @@ -52,6 +52,19 @@ extern struct device platform_bus;
->  
->  extern struct resource *platform_get_resource(struct platform_device *,
->  					      unsigned int, unsigned int);
-> +static inline
-> +struct resource *platform_get_mem_or_io_resource(struct platform_device *pdev,
+5.8.y is end-of-life, you should test 5.9.y at the oldest.
 
-Minor nit: If I would want to break up the long line, I'd use
+Anyway, without a reproducer or a patch for this, it's not going to
+probably go very far :(
 
-static inline struct resource *
-platform_get_mem_or_io_resource(...)
+thanks,
 
-> +						 unsigned int num)
-> +{
-> +	struct resource *res;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, num);
-> +	if (res)
-> +		return res;
-> +
-> +	return platform_get_resource(pdev, IORESOURCE_IO, num);
-> +}
-> +
->  extern struct device *
->  platform_find_device_by_driver(struct device *start,
->  			       const struct device_driver *drv);
-
-Reviewed-by: Cornelia Huck <cohuck@redhat.com>
-
+greg k-h
