@@ -2,117 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3092CCD0C
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 04:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 413CB2CCD41
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 04:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729608AbgLCDKN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Dec 2020 22:10:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
+        id S1729753AbgLCDTy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Dec 2020 22:19:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726160AbgLCDKM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Dec 2020 22:10:12 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92333C061A4F
-        for <linux-usb@vger.kernel.org>; Wed,  2 Dec 2020 19:09:32 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id z12so316041pjn.1
-        for <linux-usb@vger.kernel.org>; Wed, 02 Dec 2020 19:09:32 -0800 (PST)
+        with ESMTP id S1727550AbgLCDTy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Dec 2020 22:19:54 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8A7C061A4D
+        for <linux-usb@vger.kernel.org>; Wed,  2 Dec 2020 19:19:13 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id c4so534277pgb.0
+        for <linux-usb@vger.kernel.org>; Wed, 02 Dec 2020 19:19:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3HPjMiZ7r2vmNOesKbXHx10R/RkIYQVQPBYwT6NlQG0=;
-        b=HYvUEoGI49+MPUkaFo90T8oSv8t7B1B2PHAwPzjXWy8nnUV00Ioup69H2B2Vnt4yaG
-         EUON+5/nB36QJdMsrhFNnr47nFjhPBpBrrsEtK7Q3Nw6Uenez408SBlRqp5lrChHC4Ot
-         n6yjmD0hXKg0UzAfOetXQoVKoJ3Pl/DBY68hY=
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=aVI0c4MQz9foni25ng7Y69WIZ6p+uDOXMFX4qOhpuAk=;
+        b=NkIn+mcN47DbJuzIZJhgN3zy20b//ayDYIx0oyuIu3zBT6nac8suDDKbYAarCdyf0H
+         1xFhkmpTVt2l+TnGSXI/WMoF0/bjT1wN/3beiAsyE3zke5+XYD1ofDA2G2JQprAX0Iqc
+         7vjQnIiEyl1y1pHwUbEoMpfB10adu4kLIBtaejt337VPKwthcQfRdPzA1EaKgWMAxdws
+         OANpPljB4DaUsgDh6r7rYFUdkAtD59z0qJcaNsvmbuCryUabecl/GWeomDB8RjkvUDDR
+         Q8ti84ucd4GCGrbZ7/YxyaD6q5ZjpUUsJXCzmlB/09TeLXC9JXVbIm5Y0ZrxdV2V4YIk
+         Kbug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3HPjMiZ7r2vmNOesKbXHx10R/RkIYQVQPBYwT6NlQG0=;
-        b=EJrYHEDPwdoe1GB2RK590lakLV+m66wLhzs11tdbl6632R++wjDkFsXWZeCov6n477
-         0Xc/TfssZi25warMF8U2QNKY6YUTY0M7hyI5t0MNnHfLChEC+UohaK7idH6Okm/vpOIZ
-         K/elcOI3I2chV7yZQELPXcDR7GXWW7igMiT8COH4XUjFrDDj82FcO3jOcht2bfXG9uiS
-         W1s+Zf2t1KI/znNbXqxyhPx3JB84BmnRPRP518LsCvoYApDICuMWcrWlgKbGpixUUl1p
-         IEExucArp2K1Yd6j+ajX8Wln3MW1QrG3BEr5xpBK+QG2SjyJWs80zJSrVklONdQ1/bWg
-         U2Sw==
-X-Gm-Message-State: AOAM532Qp8nbtAlV6jmcz1omdY5XVyYETjOtaNyYN3SaNjXd2r8utlHd
-        q7X4fmXYYlwev05nHSW0TMc0mOR1KtoBxQ==
-X-Google-Smtp-Source: ABdhPJzs72jPCb9LAJ1dMuGsiqN51JYGYYwg3t/CRgNmlP43eFWmRBSPNyHjGxY6tO1qMFv17oK6RA==
-X-Received: by 2002:a17:90a:9f98:: with SMTP id o24mr1032229pjp.207.1606964971450;
-        Wed, 02 Dec 2020 19:09:31 -0800 (PST)
-Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
-        by smtp.gmail.com with ESMTPSA id 14sm437080pfz.54.2020.12.02.19.09.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Dec 2020 19:09:30 -0800 (PST)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        heikki.krogerus@linux.intel.com
-Cc:     bleung@chromium.org, Prashant Malani <pmalani@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] usb: typec: Add bus type for plug alt modes
-Date:   Wed,  2 Dec 2020 19:08:47 -0800
-Message-Id: <20201203030846.51669-1-pmalani@chromium.org>
-X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=aVI0c4MQz9foni25ng7Y69WIZ6p+uDOXMFX4qOhpuAk=;
+        b=U988Pv7kZqCYqS9YW2Uf1OAVXr/3sS3FkNbFh82abJufAT6kO/PuaGHRmQ/LyewOKB
+         RrEIrHpVfcSct2YXfjUvVOKbQlpxMMCSLOi52tpRneHRzfQNbbzPd/unzF/PBAM3H786
+         hhBc595dc4ZXakGWnjJOCh3eterSyRq+b3RIMIShzJY34MsMAU8b8ix5y8+0WO/9itfp
+         fCPlain19L0H/B0TXmmnl6DFxKPYvL2KJdwpux2TN+/mfaL5RjcPS5gQeM0gxMzzaWip
+         VgSStafysvG6u8xB94W806r0KFK3clhYPmfS7gQq3o9VNUArOyG3PUF4LUzDG0VFAUOn
+         ayMw==
+X-Gm-Message-State: AOAM532Gh9EevuqZaL+O+12taHakhboZxo0uSi9Lb2S9ve+QduCqAdYv
+        sx1jX+GsHdKX0pmlkddt8EgICKMiQYM=
+X-Google-Smtp-Source: ABdhPJyCB+n+29Ka48OvL7Dlkk6mk0yvvRNkd4HPOkHoIfQddlG0SnGo96HmGHmyQtG3VIOsmZGDoF0Rimg=
+Sender: "badhri via sendgmr" <badhri@badhri.mtv.corp.google.com>
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:f292:1cff:fee0:66cf])
+ (user=badhri job=sendgmr) by 2002:a17:90a:460a:: with SMTP id
+ w10mr500462pjg.1.1606965552918; Wed, 02 Dec 2020 19:19:12 -0800 (PST)
+Date:   Wed,  2 Dec 2020 19:19:08 -0800
+Message-Id: <20201203031908.1491542-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
+Subject: [PATCH v1] usb: typec: tcpm: Clear send_discover in tcpm_check_send_discover
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the Type C bus for plug alternate modes which are being
-registered via the Type C connector class. This ensures that udev events
-get generated when plug alternate modes are registered (and not just for
-partner/port alternate modes), even though the Type C bus doesn't link
-plug alternate mode devices to alternate mode drivers.
+tcpm_check_send_discover does not clear the send_discover flag
+when any of the following conditions are not met.
+1. data_role is TYPEC_HOST
+2. link is pd_capable
 
-Update the Type C bus documentation to mention that there
-are alternate mode devices for plugs as well.
+Discovery indentity would anyways not be attempted during
+the current session anymore when the above conditions are not
+met. Hence clear the send_discover flag here to prevent
+tcpm_enable_frs_work from rescheduling indefinetly.
 
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 ---
- Documentation/driver-api/usb/typec_bus.rst | 6 +++---
- drivers/usb/typec/class.c                  | 8 ++++++--
- 2 files changed, 9 insertions(+), 5 deletions(-)
+ drivers/usb/typec/tcpm/tcpm.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/driver-api/usb/typec_bus.rst b/Documentation/driver-api/usb/typec_bus.rst
-index 21c890ae17e5..7874d2f37d9f 100644
---- a/Documentation/driver-api/usb/typec_bus.rst
-+++ b/Documentation/driver-api/usb/typec_bus.rst
-@@ -15,9 +15,9 @@ modes by using the SVID and the mode number.
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 3bbc1f10af49..012135ade7b1 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -3035,10 +3035,9 @@ static inline enum tcpm_state unattached_state(struct tcpm_port *port)
+ static void tcpm_check_send_discover(struct tcpm_port *port)
+ {
+ 	if (port->data_role == TYPEC_HOST && port->send_discover &&
+-	    port->pd_capable) {
++	    port->pd_capable)
+ 		tcpm_send_vdm(port, USB_SID_PD, CMD_DISCOVER_IDENT, NULL, 0);
+-		port->send_discover = false;
+-	}
++	port->send_discover = false;
+ }
  
- :ref:`USB Type-C Connector Class <typec>` provides a device for every alternate
- mode a port supports, and separate device for every alternate mode the partner
--supports. The drivers for the alternate modes are bound to the partner alternate
--mode devices, and the port alternate mode devices must be handled by the port
--drivers.
-+or cable plug supports. The drivers for the alternate modes are bound to the
-+partner alternate mode devices, and the port alternate mode devices must be
-+handled by the port drivers.
- 
- When a new partner alternate mode device is registered, it is linked to the
- alternate mode device of the port that the partner is attached to, that has
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 35eec707cb51..74061a699f16 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -478,8 +478,12 @@ typec_register_altmode(struct device *parent,
- 	if (!is_port)
- 		typec_altmode_set_partner(alt);
- 
--	/* The partners are bind to drivers */
--	if (is_typec_partner(parent))
-+	/*
-+	 * The partners are bind to drivers.
-+	 * Also set the bus field for plug alt modes so that the udev event occurs on device
-+	 * registration.
-+	 */
-+	if (is_typec_partner(parent) || is_typec_plug(parent))
- 		alt->adev.dev.bus = &typec_bus;
- 
- 	ret = device_register(&alt->adev.dev);
+ static void tcpm_swap_complete(struct tcpm_port *port, int result)
 -- 
-2.29.2.454.gaff20da3a2-goog
+2.29.2.576.ga3fc446d84-goog
 
