@@ -2,47 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EC92CD6B0
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 14:26:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 411B32CD7D1
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 14:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730696AbgLCN0X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Dec 2020 08:26:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43262 "EHLO mail.kernel.org"
+        id S2436505AbgLCNaO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Dec 2020 08:30:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47780 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730533AbgLCN0X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Dec 2020 08:26:23 -0500
-Date:   Thu, 3 Dec 2020 14:26:49 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1607001942;
-        bh=zTg0LRTp2jk/sIarx18z8q2py24tLNT7rye1Bm9xA3Q=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oX4Q1PTJ0gW+smYtC0ojk9WJJh3RiMRdU/g9hf3FYfJlDZIIaeed2u+JkxEdJZFwb
-         /GoeYCVMSRhNDk6XX2L8RYcV2jyLQV2rIhups/uapAuFnRtJ0LeNg/JWvy2/gSspAv
-         Qz5Rt7CsT1QPs1a5TTeTRMHxrp1I2vyOPGpGCd38=
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ertza Warraich <ertza.afzal@gmail.com>
-Cc:     balbi@kernel.org, dave.jing.tian@gmail.com, kt0755@gmail.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: NULL pointer dereference bug
-Message-ID: <X8jnmfppPk5Wii6p@kroah.com>
-References: <CAD+hOztkbvSfugYDWSw9UpmBM0vTcmHp=7kfJmYZF6CdC+eZXQ@mail.gmail.com>
+        id S2436491AbgLCNaO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Dec 2020 08:30:14 -0500
+From:   Sasha Levin <sashal@kernel.org>
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Yves-Alexis Perez <corsac@corsac.net>,
+        Matti Vuorela <matti.vuorela@bitfactor.fi>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.9 16/39] usbnet: ipheth: fix connectivity with iOS 14
+Date:   Thu,  3 Dec 2020 08:28:10 -0500
+Message-Id: <20201203132834.930999-16-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201203132834.930999-1-sashal@kernel.org>
+References: <20201203132834.930999-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD+hOztkbvSfugYDWSw9UpmBM0vTcmHp=7kfJmYZF6CdC+eZXQ@mail.gmail.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 02, 2020 at 07:56:08PM -0500, Ertza Warraich wrote:
-> We report a null ptr deref bug (in linux-5.8.13) found by FuzzUSB (a
-> modified version of syzkaller).
+From: Yves-Alexis Perez <corsac@corsac.net>
 
-5.8.y is end-of-life, you should test 5.9.y at the oldest.
+[ Upstream commit f33d9e2b48a34e1558b67a473a1fc1d6e793f93c ]
 
-Anyway, without a reproducer or a patch for this, it's not going to
-probably go very far :(
+Starting with iOS 14 released in September 2020, connectivity using the
+personal hotspot USB tethering function of iOS devices is broken.
 
-thanks,
+Communication between the host and the device (for example ICMP traffic
+or DNS resolution using the DNS service running in the device itself)
+works fine, but communication to endpoints further away doesn't work.
 
-greg k-h
+Investigation on the matter shows that no UDP and ICMP traffic from the
+tethered host is reaching the Internet at all. For TCP traffic there are
+exchanges between tethered host and server but packets are modified in
+transit leading to impossible communication.
+
+After some trials Matti Vuorela discovered that reducing the URB buffer
+size by two bytes restored the previous behavior. While a better
+solution might exist to fix the issue, since the protocol is not
+publicly documented and considering the small size of the fix, let's do
+that.
+
+Tested-by: Matti Vuorela <matti.vuorela@bitfactor.fi>
+Signed-off-by: Yves-Alexis Perez <corsac@corsac.net>
+Link: https://lore.kernel.org/linux-usb/CAAn0qaXmysJ9vx3ZEMkViv_B19ju-_ExN8Yn_uSefxpjS6g4Lw@mail.gmail.com/
+Link: https://github.com/libimobiledevice/libimobiledevice/issues/1038
+Link: https://lore.kernel.org/r/20201119172439.94988-1-corsac@corsac.net
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/ipheth.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
+index b09b45382faf5..207e59e74935a 100644
+--- a/drivers/net/usb/ipheth.c
++++ b/drivers/net/usb/ipheth.c
+@@ -59,7 +59,7 @@
+ #define IPHETH_USBINTF_SUBCLASS 253
+ #define IPHETH_USBINTF_PROTO    1
+ 
+-#define IPHETH_BUF_SIZE         1516
++#define IPHETH_BUF_SIZE         1514
+ #define IPHETH_IP_ALIGN		2	/* padding at front of URB */
+ #define IPHETH_TX_TIMEOUT       (5 * HZ)
+ 
+-- 
+2.27.0
+
