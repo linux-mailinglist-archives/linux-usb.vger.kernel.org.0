@@ -2,111 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0C12CCE23
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 05:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4122B2CD17E
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 09:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727795AbgLCE6E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Dec 2020 23:58:04 -0500
-Received: from mail-io1-f70.google.com ([209.85.166.70]:33870 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726075AbgLCE6D (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Dec 2020 23:58:03 -0500
-Received: by mail-io1-f70.google.com with SMTP id r16so561583ioa.1
-        for <linux-usb@vger.kernel.org>; Wed, 02 Dec 2020 20:57:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=SAx9PhfeVrYqyaYNcf2KDgEtd7YkNHPWgeaoXP3xg7g=;
-        b=lqDq4WeafAis3z6XgNC9rAde8LwgnEXwW/Nqg07PFT+XtEy9oEQ0gmJfOZqqFyQWtV
-         hq4oFTiyUGoJPP+qMp5gjjl6gZxceBM0+Uj0DwpHtfehVkaUOEK3Y2MeGR/m0z0pv9Sv
-         2AdqINqpbuTJv0MP+ZvAb/D+2ivnC8JttSzGyRWYDo8iYr8Q7b56NsI14URN7KcDxPyY
-         ZINMGBSRsyvd/wSWXHeI9ZIDQvhPZABIC29KmjoUKXMmDvLZJuo9GxKy8FJcFKIQXWk7
-         PwDP5MEZ3/nXoDkR9GoGrItMsw7BHeM0UtDGPsBhFjfZUnoWm+3Pza6G2ORZGC3IVmA8
-         9V1A==
-X-Gm-Message-State: AOAM5321IGl3e9AjRzGl3+B0VZ8OJkx1nnkIwnKH2d1JEJxmvHXUTdXA
-        zafVzg35VUtiJgwKS/Om6L/BUeCqw9JyQu7VN3qQAF7P3dMM
-X-Google-Smtp-Source: ABdhPJwP4pRRB626bjZtdMxRJmKWOuEe9/Q2JoyrOyxIhtBtvjYvgylyyfZSm3G8atEnSmGruJ/XF/OgM0A51uNne7HIIwvYXuUy
+        id S2388387AbgLCImM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Dec 2020 03:42:12 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:56076 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388270AbgLCImL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Dec 2020 03:42:11 -0500
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B38Z8Tt104377;
+        Thu, 3 Dec 2020 08:41:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=z4UsB695l8jGpTz1SJLTMgskpbp4iNCiOUXV4l4A9SE=;
+ b=FTWY2h+qUr3ngB7ULbzVv9y7qm8yynxK17+3Dk6w+RQmcwRHYB/vJ2MGA7A3ly+hcad+
+ L6EMqKrKFNusGoXejsV7vQZ9ZGWLD8+QLS22uclWIYfVzB61khkiGbRGJh8YDRmqlk6d
+ 3I6GSXwUo40AkU7FUQaoQca7TQfSupMPygp8CPC1RRp13ggBZzKaqfmdX3Tq6d9cgglv
+ c1z1nbDGlQ6siZL9UsBrjjjVDUPNy+qE/5KNlbdR2U9kxbzXZAiduZtGunycr9hm8F5v
+ y5Ob7x3XD05yRJo3JpJHfViQa6HPDbI1BBLh2iF1OcpRe+0ceBpR23nOxrFxgM7pNTCi RQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2130.oracle.com with ESMTP id 353c2b4nks-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 03 Dec 2020 08:41:22 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B38eM4K133029;
+        Thu, 3 Dec 2020 08:41:21 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 3540avpwd6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 03 Dec 2020 08:41:21 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B38fKKk020872;
+        Thu, 3 Dec 2020 08:41:20 GMT
+Received: from mwanda (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 03 Dec 2020 00:41:19 -0800
+Date:   Thu, 3 Dec 2020 11:41:13 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH 1/2] usb: mtu3: fix memory corruption in mtu3_debugfs_regset()
+Message-ID: <X8ikqc4Mo2/0G72j@mwanda>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:c2a:: with SMTP id q10mr1535959ilg.92.1606971436309;
- Wed, 02 Dec 2020 20:57:16 -0800 (PST)
-Date:   Wed, 02 Dec 2020 20:57:16 -0800
-In-Reply-To: <000000000000f6530105b48b2816@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a023c905b588314b@google.com>
-Subject: Re: WARNING in cm109_input_ev/usb_submit_urb
-From:   syzbot <syzbot+150f793ac5bc18eee150@syzkaller.appspotmail.com>
-To:     dmitry.torokhov@gmail.com, eli.billauer@gmail.com,
-        gregkh@linuxfoundation.org, gustavoars@kernel.org,
-        ingrassia@epigenesys.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
-        vulab@iscas.ac.cn
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9823 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
+ phishscore=0 mlxscore=0 adultscore=0 malwarescore=0 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012030053
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9823 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 lowpriorityscore=0
+ clxscore=1011 bulkscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
+ spamscore=0 adultscore=0 mlxscore=0 priorityscore=1501 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012030052
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+This code is using the wrong sizeof() so it does not allocate enough
+memory.  It allocates 32 bytes but 72 are required.  That will lead to
+memory corruption.
 
-HEAD commit:    3bb61aa6 Merge tag 'arm64-fixes' of git://git.kernel.org/p..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10837e9d500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c3904d1cc0af152
-dashboard link: https://syzkaller.appspot.com/bug?extid=150f793ac5bc18eee150
-compiler:       clang version 11.0.0 (https://github.com/llvm/llvm-project.git ca2dcbd030eadbf0aa9b660efe864ff08af6e18b)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12b9c19d500000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14c422e3500000
+Fixes: ae07809255d3 ("usb: mtu3: add debugfs interface files")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/usb/mtu3/mtu3_debugfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+150f793ac5bc18eee150@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-URB 00000000fa7e6a0b submitted while active
-WARNING: CPU: 0 PID: 8462 at drivers/usb/core/urb.c:378 usb_submit_urb+0xf57/0x1510 drivers/usb/core/urb.c:378
-Modules linked in:
-CPU: 0 PID: 8462 Comm: syz-executor064 Not tainted 5.10.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:usb_submit_urb+0xf57/0x1510 drivers/usb/core/urb.c:378
-Code: 5c 41 5d 41 5e 41 5f 5d e9 76 5b ff ff e8 c1 e9 04 fc c6 05 45 10 8b 07 01 48 c7 c7 a0 b6 5b 8a 4c 89 e6 31 c0 e8 69 08 d5 fb <0f> 0b e9 20 f1 ff ff e8 9d e9 04 fc eb 05 e8 96 e9 04 fc bb a6 ff
-RSP: 0018:ffffc90000ecf6d8 EFLAGS: 00010046
-RAX: ed1497fd940bbe00 RBX: ffff8880113d2108 RCX: ffff88801b269a40
-RDX: 0000000000000000 RSI: 0000000080000002 RDI: 0000000000000000
-RBP: 0000000000000a20 R08: ffffffff815d29e2 R09: ffffed1017383ffc
-R10: ffffed1017383ffc R11: 0000000000000000 R12: ffff8880113d2100
-R13: dffffc0000000000 R14: dffffc0000000000 R15: ffff88801d001850
-FS:  00000000013ac880(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000558946f0cf78 CR3: 0000000011c70000 CR4: 00000000001506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- cm109_submit_buzz_toggle drivers/input/misc/cm109.c:351 [inline]
- cm109_toggle_buzzer_async drivers/input/misc/cm109.c:487 [inline]
- cm109_input_ev+0x1dc/0x3a0 drivers/input/misc/cm109.c:621
- input_handle_event+0x895/0x1510 drivers/input/input.c:376
- input_inject_event+0x1e8/0x280 drivers/input/input.c:471
- kd_sound_helper+0xfc/0x200 drivers/tty/vt/keyboard.c:242
- input_handler_for_each_handle+0xc8/0x160 drivers/input/input.c:2356
- kd_mksound+0x6c/0x140 drivers/tty/vt/keyboard.c:266
- do_con_trol drivers/tty/vt/vt.c:2152 [inline]
- do_con_write+0x3325/0xdee0 drivers/tty/vt/vt.c:2911
- con_write+0x20/0x40 drivers/tty/vt/vt.c:3255
- process_output_block drivers/tty/n_tty.c:595 [inline]
- n_tty_write+0xcc2/0x1160 drivers/tty/n_tty.c:2333
- do_tty_write drivers/tty/tty_io.c:962 [inline]
- tty_write+0x585/0x8f0 drivers/tty/tty_io.c:1046
- vfs_write+0x220/0xab0 fs/read_write.c:603
- ksys_write+0x11b/0x220 fs/read_write.c:658
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x444839
-Code: e8 bc af 02 00 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 9b d7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007ffeb806aaf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00000000004002e0 RCX: 0000000000444839
-RDX: 0000000000001006 RSI: 00000000200002c0 RDI: 0000000000000005
-RBP: 00000000006d0018 R08: 00000000004002e0 R09: 00000000004002e0
-R10: 000000000000000d R11: 0000000000000246 R12: 0000000000402460
-R13: 00000000004024f0 R14: 0000000000000000 R15: 0000000000000000
+diff --git a/drivers/usb/mtu3/mtu3_debugfs.c b/drivers/usb/mtu3/mtu3_debugfs.c
+index fdeade6254ae..7537bfd651af 100644
+--- a/drivers/usb/mtu3/mtu3_debugfs.c
++++ b/drivers/usb/mtu3/mtu3_debugfs.c
+@@ -127,7 +127,7 @@ static void mtu3_debugfs_regset(struct mtu3 *mtu, void __iomem *base,
+ 	struct debugfs_regset32 *regset;
+ 	struct mtu3_regset *mregs;
+ 
+-	mregs = devm_kzalloc(mtu->dev, sizeof(*regset), GFP_KERNEL);
++	mregs = devm_kzalloc(mtu->dev, sizeof(*mregs), GFP_KERNEL);
+ 	if (!mregs)
+ 		return;
+ 
+-- 
+2.29.2
 
