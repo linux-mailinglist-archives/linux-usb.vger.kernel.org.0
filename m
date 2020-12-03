@@ -2,68 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94CB12CD98D
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 15:47:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8C32CD9D8
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 16:08:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726860AbgLCOrh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 3 Dec 2020 09:47:37 -0500
-Received: from avasout07.plus.net ([84.93.230.235]:45355 "EHLO
-        avasout07.plus.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725903AbgLCOrg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Dec 2020 09:47:36 -0500
-Received: from APOLLO ([212.159.61.44])
-        by smtp with ESMTPA
-        id kpsdkWRrzoEd7kpsfkrG9Q; Thu, 03 Dec 2020 14:46:50 +0000
-X-Clacks-Overhead: "GNU Terry Pratchett"
-X-CM-Score: 0.00
-X-CNFS-Analysis: v=2.3 cv=Kp/WJVeN c=1 sm=1 tr=0
- a=AGp1duJPimIJhwGXxSk9fg==:117 a=AGp1duJPimIJhwGXxSk9fg==:17
- a=IkcTkHD0fZMA:10 a=iox4zFpeAAAA:8 a=VwQbUJbxAAAA:8 a=e8f0TG_ZU_75g7eUk7wA:9
- a=QEXdDO2ut3YA:10 a=WzC6qhA0u3u7Ye7llzcV:22 a=AjGcO6oz07-iQ99wixmX:22
-X-AUTH: perdrix52@:2500
-From:   "David C. Partridge" <david.partridge@perdrix.co.uk>
-To:     "'Oliver Neukum'" <oneukum@suse.com>, <linux-usb@vger.kernel.org>
-References: <004f01d6b5bd$d4f08ff0$7ed1afd0$@perdrix.co.uk>                                           <eceedea7ca5d950eb8ea4d186a6b01a04d0a804f.camel@suse.com>                                        <001601d6b67d$e97a1e30$bc6e5a90$@perdrix.co.uk>                                   <aebf92944c1ecb256d21108ce092165a0fd904db.camel@suse.com>                                     <001b01d6b68a$79937fa0$6cba7ee0$@perdrix.co.uk>                                   <007901d6b6ab$f0f66230$d2e32690$@perdrix.co.uk>                                 <43abe2af0352f17f93e2453a86e2ed47b9913b6a.camel@suse.com>                             <000f01d6c326$1eea3f50$5cbebdf0$@perdrix.co.uk>                   <d478123862a7e94898aaa771c21cc8cb0a3819fc.camel@suse.com>                       <008101d6c3d7$2427ee70$6c77cb50$@perdrix.co.uk>                 <11ea70180f52b4965a451b3970891e0f547c777b.camel@suse.com>               <000001d6c89c$086812e0$193838a0$@perdrix.co.uk>         <612be9a9cd6ffdb9492781e174859c7b4e694a86.camel@suse.com>       <000301d6c919$af7a94e0$0e6fbea0$@perdrix
-        .co.uk> <f5b4e5fccec5521059c78d4f4345c339dce707d5.camel@suse.com>
-In-Reply-To: <f5b4e5fccec5521059c78d4f4345c339dce707d5.camel@suse.com>
-Subject: RE: Issues with LaCie USB3 drive and UAS
-Date:   Thu, 3 Dec 2020 14:46:47 -0000
-Message-ID: <000f01d6c983$22199910$664ccb30$@perdrix.co.uk>
+        id S1728955AbgLCPIQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Dec 2020 10:08:16 -0500
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:55113 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727107AbgLCPIP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Dec 2020 10:08:15 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7A6BE5C0184;
+        Thu,  3 Dec 2020 10:07:08 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Thu, 03 Dec 2020 10:07:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=qjmrN0EMSMkCmVySFWGLotHkKSP
+        KAsJveSwCM7F6yRc=; b=ReF171xAodVbvadX9n4Zy788Arxmf0LddxLFy9FHigt
+        Zc0ADz6952zMEaY0NOyEiGF6HydQb+RxYUWijQr6NGMjIb2rYbEhYtaOWoNnmQBw
+        pDwq/sXmW/MSdY8ceaFlakvBmmdf+rGEJj8eORzDehyxUauzMT4MHKwaovwdtQpq
+        eCy3QmZlcGJ/n+N5nT5Qu97CsNH/nJsOYIYwmr8gvDKlREpej+7VCp5JbK411CUZ
+        MzSpm6OE0pP98V07HJFRfJ4qKk8EbVaGd2cN/q5fz07uCrssnVf+px4ZgC0fV+ZO
+        fId1GUrrv8NKnuIPwoZFaszoXkpL3D9+IL/8zZp1DVQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=qjmrN0
+        EMSMkCmVySFWGLotHkKSPKAsJveSwCM7F6yRc=; b=m7knTswj5Z0E/lvAOxkSO+
+        7SF30E0R9QOweFPVnCS4valu/zcSkhFwUuaMiJbSOs+ZJ5EU5ZgEXC16a1Pg3H+J
+        Td5EU+bGsrvniBA86GTML8duFW5oK9LuFv+sTGUi9b60QHhdBo6+RbhJ4/GMxPR2
+        837JLHVvJbwbQNnpyKYqhKj1JLJXJvo+uAG4J0PAlBUD4BEbQkdfDQgufsj+JXHx
+        LmxPrBTsaQOCy22FWwHSacon1Ul9QEnkAbrEYIT/apD6bdPVE5jXDEpnvFGeYqsE
+        ec1pXEiBggK2R19/QZ61a9NtW94eBIzskUwa3/aNYJwcm4kiIEFjmSrqZhvbVsyw
+        ==
+X-ME-Sender: <xms:HP_IX9sxE4cTgNexyNZCe0hmN2up4m-cjr9G-8PNxhY3zh64bENELw>
+    <xme:HP_IX2Z9UAo7-E4Aby0Ojgl_nHuokak4ijsWN2JYyYVdxTr7t_2EKPLFcs3DgB14R
+    rgDLqs7mRIdhA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudeiiedgjeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggujgesthdtre
+    dttddtvdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheq
+    necuggftrfgrthhtvghrnhepveeuheejgfffgfeivddukedvkedtleelleeghfeljeeiue
+    eggeevueduudekvdetnecukfhppeekfedrkeeirdejgedrieegnecuvehluhhsthgvrhfu
+    ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtoh
+    hm
+X-ME-Proxy: <xmx:HP_IX9r9G2RfcPyR6PI5bx9aX39nPFEsU-D2VwPMgnelvzee8KuJtQ>
+    <xmx:HP_IX7_en5jd2FPgztq6jEFBmcFTIuXYOT0mGRl1_Eglc1DZD_Vgtw>
+    <xmx:HP_IX896RKcUMEQJVWA367wpLEoFyi2JK92x7JypymNcqGClhTJeeA>
+    <xmx:HP_IX8dfLNrkCTzeXJYuCU7KYQ3zTcuuIcLWvvskGIcBnZgBmxkAfA>
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id EB4F224005D;
+        Thu,  3 Dec 2020 10:07:07 -0500 (EST)
+Date:   Thu, 3 Dec 2020 16:08:16 +0100
+From:   Greg KH <greg@kroah.com>
+To:     "Enrico Weigelt, metux IT consult" <info@metux.net>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] drivers: usb: core: prefer pr_*() macros over bare
+ printk()
+Message-ID: <X8j/YHJwhpOs9hPC@kroah.com>
+References: <20201203142132.30334-1-info@metux.net>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Mailer: Microsoft Outlook 14.0
-Thread-Index: AQEj7PcoQVookx4f1d3/LPoLd4O7AAH2dKS3AXO3T8ACPDV8AQK5Jqf9AfTPe88CoAnckwML8I43Acv3vzcCAy63SAJfP5HDAb+vYkUBebTJRAHZtB/YAWHG95SqZgsT0A==
-Content-Language: en-gb
-X-CMAE-Envelope: MS4wfCZP1Cjla9iflNMNRzKlNZQXibWBcKke5R3YyKo3igJ6vbiIfiOYZQWPh34OlAZY+1HrVJuLIoybJlwfLQhOLNQXjvRDcQv+As4moA2IrkkFU5wCK3xs
- jQWHqKh3pDtUEiYD8jHz8UUPk1CfSojCj4PzzmPsIW57PkPAhstShEgCLA77rVsJgQfr0o6YF7s3Rw==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201203142132.30334-1-info@metux.net>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> upon further reading, could you repeat the test with an additional SINGLE_LUN quirk?
+On Thu, Dec 03, 2020 at 03:21:32PM +0100, Enrico Weigelt, metux IT consult wrote:
+> pr_*() printing helpers are preferred over using bare printk().
 
-Happy to do that if you can confirm what the blacklist-uas.conf should look like to achieve that?
+Sure, but that's not what you are doing here in this patch :(
 
-Should it read: options usb-storage quirks=059f:105f:ks
+Please fix up and resend.
 
-David
------Original Message-----
-From: Oliver Neukum [mailto:oneukum@suse.com] 
-Sent: 03 December 2020 14:07
-To: David C. Partridge; linux-usb@vger.kernel.org
-Subject: Re: Issues with LaCie USB3 drive and UAS
-
-Am Donnerstag, den 03.12.2020, 02:11 +0000 schrieb David C. Partridge:
-> Now with uas.ko	and usb-storage.ko 
-
-Hi,
-
-upon further reading, could you repeat the test with an additional
-SINGLE_LUN quirk?
-
-	Regards
-		Oliver
-
-
+greg k-h
