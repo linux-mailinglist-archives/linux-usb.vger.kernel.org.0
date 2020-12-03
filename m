@@ -2,284 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 886672CDDE8
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 19:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D242CE158
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 23:09:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726206AbgLCSmH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Dec 2020 13:42:07 -0500
-Received: from mx0a-000eb902.pphosted.com ([205.220.165.212]:41918 "EHLO
-        mx0a-000eb902.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726012AbgLCSmH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Dec 2020 13:42:07 -0500
-Received: from pps.filterd (m0220294.ppops.net [127.0.0.1])
-        by mx0a-000eb902.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0B3IYPKJ029051;
-        Thu, 3 Dec 2020 12:41:21 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garmin.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pps1;
- bh=2va6tgwT3yobqZ3Z9tC9dFUqebWcx03GzM3N9a1tpgI=;
- b=Q8IOCZhkEcoey4z7RewzdGYenV+NX4btWA6+YtbKOewlr3T41+GYO1HQxNM703o4ca1n
- i0oO8ct4BQqAxpNeT9cEdFvvUswUngWRXnVRVYT+mk5qwY6U9GoIpVpz2XQzykJz6XCc
- 82h0zxyOtskJQxP/JrQP4WGsg+ZgPALzWECsWUnjfpH9aolzsiEda8xNL7ZrNRVUtc09
- YF6qmJ4kOofSuzFuWYjoA581GtBLHKtPvoipghYeuEb4K8l+2ckQ65/LpmqQdw6Zd/2m
- 1VhBJrwB6bS4SXxJ6xDe79C493mbTnSZHwcyS1JJRG/dTCUmryl0R/W5S42IcGIGOOPk rQ== 
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2170.outbound.protection.outlook.com [104.47.56.170])
-        by mx0a-000eb902.pphosted.com with ESMTP id 355wc8337c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Dec 2020 12:41:21 -0600
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XBhPqH58CJiPESWTfrTtTaiMDHhimlRzIl+mlqVdqRLZ+L1iqYODizJ3DCtPZPu3LdIA8hlmbD1oEvTxpUSAe2GSfDS4WXEM8aN+o1SlGS2mJ3p5o2m4XsZpXZJmF5q2scEsNQTTR+zkwLA6PKr8UF5o+pLTEdmRxXoNNKpEpNLtZwPR0y/RUVQAselSPd/vyHuh5RojCV2rh4Bx2UGETdi/M44lfepTT9aKFtsv66ScP0N/a0cbDbPAKH6EMCkp4IlYiAjXPC5uLDq9sOaRQ3uub2TDixFCpbjLuKW4LcaZ41Eey6sj4H/f62rG0qxy1rgm4EfUB5HhJvG9P3UAJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2va6tgwT3yobqZ3Z9tC9dFUqebWcx03GzM3N9a1tpgI=;
- b=cioDKK0T1UChbswE6RWH8qfHk7jiIB2mTVy1PzWGx/L5cbj0TrEqO51FU4erSzQWNRJJl6StoolStJnXMEubTfWKZ5JvpTrxF/Vw3B+tD/pPQ0j/FCHE2tUK0M1//eLwARR8Xhf/WB01Sqz1Vr1Wzlic9e0/ZA1/LjyVPrmZJcP8n5fRChUdHs18gaMrQ+zosnYtnb70bEZRRdxqQHrOMQbRvvT456hnAcRBosa19WGEXh2GqVY8yxCz4AWBsCGFMF1GTmbzwSDcD+fhz50IxJR0xbs7e3CwiMyaEaycxIdrqAfoC9kkGA6cX7ebJrYdIOcIsCzuVH9yZQQ/SYfn6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 204.77.163.244) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=garmin.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=garmin.com; dkim=none (message not signed); arc=none
+        id S1728185AbgLCWIt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Dec 2020 17:08:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727832AbgLCWIt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Dec 2020 17:08:49 -0500
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A87C061A4F
+        for <linux-usb@vger.kernel.org>; Thu,  3 Dec 2020 14:08:09 -0800 (PST)
+Received: by mail-lj1-x242.google.com with SMTP id z1so4302657ljn.4
+        for <linux-usb@vger.kernel.org>; Thu, 03 Dec 2020 14:08:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=garmin.onmicrosoft.com; s=selector1-garmin-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2va6tgwT3yobqZ3Z9tC9dFUqebWcx03GzM3N9a1tpgI=;
- b=pNe2q2YzEB7J3b7Itewz5SuVuR7hrxDYVesiUGrCLhWcilL3pvVKfabSQw1tOJULpa8RDSA8iVw7vsKts+cLnSFhwHEm/AGSiV0pmfCYwVfh9zFM4jClZ1KW/0xYEOvPl6HgZkOpUGLNUtLbgUEmlKRD2SAWZCA1Nouaf7B2vfPOHtXEW+9gPrFFJwHwNmsoiVjzAxBzHrjZEgXXE4RrXXyLgjNTRehplyYByQGDRny+7jcwAIJNpROh6IXp9Zcr4ScYE4lmLivSkhewBBRSMdnY5Wqcxk32x4OFhdqodtZZNK3tmmbwHXO8J7yDFmDVbveGORIN7uT8TQmcODSTeA==
-Received: from DM6PR14CA0041.namprd14.prod.outlook.com (2603:10b6:5:18f::18)
- by BYAPR04MB4918.namprd04.prod.outlook.com (2603:10b6:a03:4a::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.17; Thu, 3 Dec
- 2020 18:41:19 +0000
-Received: from DM6NAM10FT034.eop-nam10.prod.protection.outlook.com
- (2603:10b6:5:18f:cafe::24) by DM6PR14CA0041.outlook.office365.com
- (2603:10b6:5:18f::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.17 via Frontend
- Transport; Thu, 3 Dec 2020 18:41:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 204.77.163.244)
- smtp.mailfrom=garmin.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=pass action=none header.from=garmin.com;
-Received-SPF: Pass (protection.outlook.com: domain of garmin.com designates
- 204.77.163.244 as permitted sender) receiver=protection.outlook.com;
- client-ip=204.77.163.244; helo=edgetransport.garmin.com;
-Received: from edgetransport.garmin.com (204.77.163.244) by
- DM6NAM10FT034.mail.protection.outlook.com (10.13.153.116) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3632.20 via Frontend Transport; Thu, 3 Dec 2020 18:41:18 +0000
-Received: from OLAWPA-EXMB9.ad.garmin.com (10.5.144.19) by
- olawpa-edge3.garmin.com (10.60.4.226) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2106.2; Thu, 3 Dec 2020 12:41:18 -0600
-Received: from OLAWPA-EXMB8.ad.garmin.com (10.5.144.18) by
- OLAWPA-EXMB9.ad.garmin.com (10.5.144.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2106.2; Thu, 3 Dec 2020 12:41:18 -0600
-Received: from OLAWPA-EXMB8.ad.garmin.com ([fe80::acc8:480a:b46f:6ce3]) by
- OLAWPA-EXMB8.ad.garmin.com ([fe80::acc8:480a:b46f:6ce3%23]) with mapi id
- 15.01.2106.004; Thu, 3 Dec 2020 12:41:18 -0600
-From:   "Neuenschwander, Bowe" <Bowe.Neuenschwander@garmin.com>
-To:     Peter Chen <peter.chen@nxp.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: USB Gadget EEM Suspend/Resume
-Thread-Topic: USB Gadget EEM Suspend/Resume
-Thread-Index: AQHWvG1JL2Kd5y1bZE+t7tgpTs7zZanLi/CAgADydl+AC6Q3gIANqW0j
-Date:   Thu, 3 Dec 2020 18:41:17 +0000
-Message-ID: <f67e27987f164142ab954b924810b84d@garmin.com>
-References: <09f87aed186f4c8cb56aee1d2409ae65@garmin.com>
- <20201117013849.GA5967@b29397-desktop>
- <bb22f96493394335909c5e85b09b0e9e@garmin.com>,<20201125015313.GE9929@b29397-desktop>
-In-Reply-To: <20201125015313.GE9929@b29397-desktop>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.50.4.7]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=a7s5kDETjEtByYcGIMsH73vkZWulbPgxwCZwDY/ndKg=;
+        b=LzSelFB6/EIYYnHfdfXZjLKZ4FnbI+UJNxI0ckO3uhuuRXje3T4dQs0Tfdzta19VFw
+         vBQrKRXbBU4a7QOQ3jB36pHt/vkG42ITViyKk0OL4xSrRuKowNtEYK+Knj2jBHkCuIIP
+         q8Kaimq6+XGbRwb/Aoo9BV/iC5TTKK22YuvD+ury3tApVvPK2q8rRuAZphrnEWd41DWb
+         nrDu33oTJmbYV2FcZmyF8CTtmFh3b7V5B/aK2Xm/ZqnVDiEyf03Nwm1tS3CKWOLFDlN6
+         lo/CPIlirUyFycNcsewO8n/yDQjnbyDzkp2r2G5CkhB2AgH278ohjTRUZ0h1jlsiIDvl
+         TQrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=a7s5kDETjEtByYcGIMsH73vkZWulbPgxwCZwDY/ndKg=;
+        b=au8waZaf246ILZNFTN9Z4Xcl3lhaI0BPuJ1w9Adp9mJ6K0Ub/WxUmJb1nysnEUHFfS
+         zCrNRPR2ls5IgYOjxK/hK/XEVA1pjN5vlZbLJ2UcJ0VYc9mX4T3POq6I+XTzWcV0jgTc
+         x+ADxB9v/KY5LEUDgsSt2IswPr7Lir+xNWQLJmljpeBlDzP6OnwdG2SAnv7DGTn1azGP
+         AQrIM1OUblMl559/8na55iZd1jxncJsOOxi6jNwpyFTyU3iXBimxRgeeH++KtHopUv5T
+         XZu5IHBaoe+Pvo7f7fqbOt4J+NNxY3nIQB+NKQPBoZ0uO1h6EvxZwyi2N5vGd+p1XIvV
+         w6aw==
+X-Gm-Message-State: AOAM531nRwGgNZOF6br+MMgeqjO0VwT7G6sc7oApQmshnZfC/dxpCPA7
+        1IAt3epA1OSo0CoQSOTAm3dgdr4hXKYvdMfKV9Q=
+X-Google-Smtp-Source: ABdhPJxwO+WilgbXk4b8TOWUmJTMvMu4ro1ixVQtT8ZJjnGMJnbl4zE/WvJK4HSkmKyISi2M/wycIpo/3k9MAG2EwYQ=
+X-Received: by 2002:a2e:9848:: with SMTP id e8mr2190782ljj.353.1607033287545;
+ Thu, 03 Dec 2020 14:08:07 -0800 (PST)
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f1fea7d3-10a3-47d1-da50-08d897bb0626
-X-MS-TrafficTypeDiagnostic: BYAPR04MB4918:
-X-Microsoft-Antispam-PRVS: <BYAPR04MB4918DF71F4877BAA0EA972329CF20@BYAPR04MB4918.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WqVImjVWAv5ntKa3T0Nmpv0rXu39SiyMvh+2I1hrm/ugDlJHON9PVTKMPJ6rY4NOOyJ4v5sXR+QN7VEBIe5U6Lf/xrbKymEKprGWd+r1NevozMsAMoaWy4yoakMffhTAjwndxtaVy1RVg6QjD69YAHwT6JBsyiw+KORTOBvv5Ij6DVsf45LMzlAuVfHIX2vD2eiHl6Utt0Aurp9jfU8gge4BPqmTWau7sjqp6iAQ+8NNHb9cUmbUxb5Qk+j+CMAecwEFe1/AgJQzKu5Q63MBWsg8aKTknxS6398WVyM6wnLwB3UusptKGuQ5wcO1FwF/GjGdzCV5+y8jFZlVO0SE81ejwtG9ypSMIFagcAzx90V/1xsxJerbM11K3wnire4s6zWPAAgWWItBJNLSLu8B8g==
-X-Forefront-Antispam-Report: CIP:204.77.163.244;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:edgetransport.garmin.com;PTR:extedge.garmin.com;CAT:NONE;SFS:(346002)(39860400002)(376002)(136003)(396003)(46966005)(36756003)(8676002)(336012)(5660300002)(316002)(478600001)(426003)(2616005)(15650500001)(7696005)(24736004)(53546011)(83380400001)(4326008)(2906002)(70206006)(70586007)(86362001)(26005)(356005)(8936002)(7636003)(82310400003)(82740400003)(108616005)(186003)(47076004)(6916009);DIR:OUT;SFP:1102;
-X-OriginatorOrg: garmin.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2020 18:41:18.9763
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1fea7d3-10a3-47d1-da50-08d897bb0626
-X-MS-Exchange-CrossTenant-Id: 38d0d425-ba52-4c0a-a03e-2a65c8e82e2d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38d0d425-ba52-4c0a-a03e-2a65c8e82e2d;Ip=[204.77.163.244];Helo=[edgetransport.garmin.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM10FT034.eop-nam10.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB4918
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-12-03_11:2020-12-03,2020-12-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- adultscore=0 lowpriorityscore=0 priorityscore=1501 malwarescore=0
- bulkscore=0 mlxlogscore=999 suspectscore=0 spamscore=0 clxscore=1015
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012030109
+References: <1604794711-8661-1-git-send-email-ruslan.bilovol@gmail.com>
+ <20201111092941.GJ14896@b29397-desktop> <CAB=otbSAGhDYxim9_fsyH4pZCLqgq+bxNJfv5hXqgQRVngVaig@mail.gmail.com>
+ <CAMS2kBF5Gvhnf7AzdeSFeVeWBLhtHM_hHfTvMLTN-3Jkh=BwHw@mail.gmail.com>
+ <CAB=otbTK0j03HjiLS-tqqaBTuavaFEJs49hpKPj2Df8e1_WN+A@mail.gmail.com>
+ <CAMS2kBEnUDi5jKiNu5ZKihyucCikfoGor4n7=e+xX=7WU_rrog@mail.gmail.com>
+ <CAB=otbRrLjeTjhBGtMqpeWeYZB9v62SDjSWzRk8uGQE3Ld8T2A@mail.gmail.com>
+ <CAMS2kBGRrozHQj9wfLmcQMSCb8On+5HcSF=8PsUJAtqXz2QG1w@mail.gmail.com>
+ <CAMS2kBGcDu-02dboEwxygMDE1r1c9Q3Lzrw6TcsoKEMvOzLmDQ@mail.gmail.com> <20201203100912.GA2881@b29397-desktop>
+In-Reply-To: <20201203100912.GA2881@b29397-desktop>
+From:   Glenn Schmottlach <gschmottlach@gmail.com>
+Date:   Thu, 3 Dec 2020 17:07:56 -0500
+Message-ID: <CAMS2kBFzCHQXUzvRSuYywsD0rjwbtVY49SiDQ9cQDKHM+0daJQ@mail.gmail.com>
+Subject: Re: [PATCH 0/3] UAC2 Gadget: feedback endpoint support
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I gave that a try and it works in general; but unfortunately, it is not qui=
-ck
-enough.  Even if our daemon is re-niced to be high priority, the problemati=
-c
-process still consumes the CPU and causes problems before it is able to tak=
-e
-down the interface.
+On Thu, Dec 3, 2020 at 5:09 AM Peter Chen <peter.chen@nxp.com> wrote:
+>
+> On 20-12-02 17:04:47, Glenn Schmottlach wrote:
+> > On Tue, Dec 1, 2020 at 4:43 PM Glenn Schmottlach <gschmottlach@gmail.com> wrote:
+> > > Hi Ruslan -
+> > >
+> > > Thanks for the feedback but unfortunately I've experienced mixed
+> > > results with the gadget UAC2 driver on both Windows/Linux. Let me
+> > > describe my environment. My host platform is either a Linux Ubuntu
+> > > 18.04 or Windows 10 laptop while the target environment is a
+> > > BeagleBone Black (Linux beaglebone 5.4.74-g9574bba32a #1 PREEMPT). I'm
+> > > testing two different scenarios:
+> > >
+> > > Scenario #1:
+> > > BeagleBone Black (BBB) runs speaker-test generating a single channel
+> > > (S32_LE) audio stream containing a 1KHz tone with a 48K sample rate,
+> > > e.g.
+> > >
+> > > > speaker-test -D hw:1,0 -r 48000 -c 1 -f 1000 -F S32_LE -t sine
+> > >
+> > > The host laptop is running Audacity and recording the tone over the
+> > > UAC2 adapter. On the Linux host the capture is correct and the tone is
+> > > bit-perfect. On the Windows 10 the capture contains numerous missing
+> > > samples which translates into a lot of audible pops and clicks.
+> > >
+> > > Scenario #2:
+> > > The Linux/Windows host plays a single channel, 48K, S32_LE 1K sine
+> > > tone to the target using either Audacity (on Windows) or 'aplay' (on
+> > > Linux), e.g.
+> > >
+> > > > aplay -D hw:4,0 -c 1  -r 48000 -t wav  tone_1k.wav  (Linux)
+> > >
+> > > On the BBB target I use 'arecord' to record the tone to a RAM disk and
+> > > then copy the recorded file back to the host where I can verify the
+> > > quality of the recording. In both instances (e.g. using either Windows
+> > > or Linux for playback) the recording on the target results in a
+> > > captured file with missing samples and audible pops/clicks. In this
+> > > scenario the UAC2 gadget is configured with c_sync == asynchronous. I
+> > > wouldn't expect things to improve with c_sync == adaptive since you
+> > > mentioned in your patch that it always reports back the nominal
+> > > frequency to the host from the feedback endpoint.
+> > >
+> > > Do you have any suggestions that might explain (the above) behavior.
+> > > Can you describe your test environment in more detail so that I can
+> > > perhaps re-create it? What Linux target are you using with your tests?
+> > > You mentioned you tested an 8x8 playback/capture scenario. Can you
+> > > provide any details of how you performed this test and the method you
+> > > used to confirm the audio quality for the capture/playback?
+> > >
+> > > Thanks for any insights you might be able to offer . . .
+> > >
+> > > Glenn
+> >
+> > Hi Ruslan -
+> >
+> > This is a follow-up from my post yesterday. I recompiled my kernel
+> > *WITHOUT* your UAC2 patches and repeated Scenario #2 where the Linux
+> > PC plays a single channel tone to the BeagleBone Black where it's
+> > recorded with 'arecord'. Yesterday, I recorded garbled audio on the
+> > target but today, without any UAC2 kernel patches, the recorded audio
+> > on the target is glitch-free and appears to be bit-perfect.
+> >
+> > This experiment leads me to believe your patches may be inadvertently
+> > corrupting the data-path. Have you been able to repeat my experiment
+> > and either confirm or refute my findings? I am interested to learn
+> > more how you tested your patches and whether it's something I can
+> > recreate here.
+> >
+> > Assuming we can sort out this data corruption issue, what are your
+> > thoughts on how the Linux target device can properly provide the
+> > Windows feedback endpoint with real frequency updates rather than the
+> > constant nominal frequency. If I understood your patch notes correctly
+> > it seems this is an outstanding issue that requires additional
+> > attention. I'm a bit of a noob when it comes to how this might be
+> > addressed.
+> >
+> > Thanks for your continued insights and support . . .
+> >
+> > Glenn
+>
+> Hi Glenn & Ruslan,
+>
+> Do you know why WIN10 can't recognized UAC2 device if I configure the
+> sample rate as 48000HZ? Configuring sample rate as 44100HZ, the playback
+> function would work well at my platforms (chipidea IP), no glitch is
+> heard. At WIN10, I use Windows Media Player, at board side I use command:
+>
+> arecord -f cd -t wav -D hw:4,0 | aplay -f cd -Dplughw:3,0 &
+>
+> From the USB Bus analyzer:
+>
+> Feedback EP is scheduled every 1ms, there are nine 176-byte packets and one
+> 180-byte packet among 10ms transfers.
+>
+> --
+>
+> Thanks,
+> Peter Chen
 
-Therefore, we are planning to move forward with the original patch for our
-local kernel, and will not submit it upstream.  I am open to other suggesti=
-ons
-if anybody has them; but at this point, I'm not convinced this is something
-wrong or lacking in kernel like I originally thought might be the case.
+Hi Peter -
+
+I have not experienced the issue you are reporting. My configuration
+uses a 48Khz sample rate exclusively and Windows 10 appears to
+recognize the UAC2 device properly with all of Ruslan's patches. I
+have not done any serious testing at the 44.1KHz rate so I don't
+recall if that is recognized correctly on my Windows 10 box.
+
+It looks like you've established a UAC2 loopback on your target board.
+How are you verifying the captured audio on the Window 10 PC? I didn't
+realize Windows Media Player allows you to both playback and capture
+from the same (UAC2) device simultaneously.
 
 Thanks,
--Bowe
 
-
-
-From: Peter Chen <peter.chen@nxp.com>
-Sent: Tuesday, November 24, 2020 7:53 PM
-To: Neuenschwander, Bowe
-Cc: linux-usb@vger.kernel.org
-Subject: Re: USB Gadget EEM Suspend/Resume
-
-CAUTION - EXTERNAL EMAIL: Do not click any links or open any attachments un=
-less you trust the sender and know the content is safe.
-
-
-On 20-11-17 18:30:34, Neuenschwander, Bowe wrote:
-> Thanks for your quick reply.  I think your ping test/example tells me qui=
-te a
-> bit about the expected behavior.  I do have concerns though on what this =
-would
-> do to TCP connections.  Could that cause quite a bit of packet build up a=
-s
-> the connection attempts to re-transmit packets that were not ACKed (but s=
-till
-> sitting in the queue)?  In the case that the suspend is long (say 10-60 m=
-in),
-> it seems this could cause quite a lot of packet build up, though I assume=
- its
-> TX queue will fill up pretty quickly and send will start returning failur=
-e).
->
-> The issue we are seeing is when USB is physically disconnected, the suspe=
-nd
-> hooks are called, but the disconnect hooks are not.  The device side of t=
-he
-> USB link (the one configured with Gadget EEM) is externally powered and h=
-as
-> a hub as well.  The host is disconnected from the hub, but the link betwe=
-en
-> the hub and Gadget EEM remains intact, so the Gadget EEM processor does n=
-ot
-> see VUSB go low.  See below for a crude diagram (monospaced font needed):
->      ____________________________
->     |           Device           |
->     |  ________       ________   |        ________
->     | |        |     |        |  |       |        |
->     | |  USB   |     |  USB   |  |       |  USB   |
->     | | Gadget |-----|  HUB   |--|---X---|  Host  |
->     | |  EEM   |     |        |  |       |        |
->     | |________|     |________|  |       |________|
->     |                            |
->     |____________________________|
->
-> Therefore, it stays in that suspend state until USB is reconnected, at wh=
-ich
-> point the disconnect hook gets called and the connection is reset and set=
- back
-> up.  See below for dmesg (note that the USB Gadget EEM interface is vis0)=
-:
->
-> USB Disconnected:
->     [ 4047.888922] g_ether gadget: suspend
->     [ 4048.442846] vis0: stop stats: rx/tx 13079/13406, errs 0/0
->     [ 4048.442967] vis0: host still using in/out endpoints
->
-> USB Reconnected:
->     [ 4054.891454] g_ether gadget: reset config
->     [ 4054.891487] g_ether gadget: eem deactivated
->     [ 4054.891500] vis0: gether_disconnect
->     [ 4054.897743] g_ether gadget: suspend
->     [ 4055.273258] g_ether gadget: suspend
->     [ 4055.662466] g_ether gadget: high-speed config #1: CDC Ethernet (EE=
-M)
->     [ 4055.668899] g_ether gadget: reset eem
->     [ 4055.668912] vis0: gether_disconnect
->     [ 4055.668924] g_ether gadget: init eem
->     [ 4055.668934] g_ether gadget: activate eem
->     [ 4055.668974] vis0: qlen 10
->     [ 4055.674126] g_ether gadget: reset eem
->     [ 4055.674161] vis0: gether_disconnect
->     [ 4055.674219] g_ether gadget: init eem
->     [ 4055.674230] g_ether gadget: activate eem
->     [ 4055.674267] vis0: qlen 10
->     [ 4055.847697] vis0: eth_open
->     [ 4055.847729] vis0: eth_start
->
-> The problem we have is when it goes into that suspend state, that interfa=
-ce
-> remains up but cannot actually send/receive.  There is a process (for whi=
-ch
-> we do not have source code available) that starts consuming a large porti=
-on
-> of the CPU (according to top/htop), which in turn causes other issues.  W=
-e
-> have have a little daemon to detect when USB gets disconnected and bring =
-down
-> that interface (ifdown), and we have tried adjusting the offending proces=
-s's
-> nice value, but these do not fix the issue (they help, but do not elminat=
-e
-> it).  The only fix we have found so far to eliminate this issue is someth=
-ing
-> similar to the patch I previously sent; but again, I have questions of if=
- it
-> is acceptable handling for USB suspend.
-
-Since suspend is one of USB bus state, the USB host may suspend the
-device at some situations, it seems it is your HUB's issue that does not
-disconnect its downstream ports that the host disconnects it.
-
-Could your daemon poll suspend state for gadget through
-/sys/class/udc/<YOUR UDC NAME>/state and bring down the interface?
-You need below change at kernel for that.
-
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.=
-c
-index c6d455f2bb92..bf11488de93b 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -2330,6 +2330,7 @@ void composite_suspend(struct usb_gadget *gadget)
-
-        usb_gadget_set_selfpowered(gadget);
-        usb_gadget_vbus_draw(gadget, 2);
-+       usb_gadget_set_state(gadget, USB_STATE_SUSPENDED);
- }
-
- void composite_resume(struct usb_gadget *gadget)
-
---
-
-Thanks,
-Peter Chen
-
-
-________________________________
-
-CONFIDENTIALITY NOTICE: This email and any attachments are for the sole use=
- of the intended recipient(s) and contain information that may be Garmin co=
-nfidential and/or Garmin legally privileged. If you have received this emai=
-l in error, please notify the sender by reply email and delete the message.=
- Any disclosure, copying, distribution or use of this communication (includ=
-ing attachments) by someone other than the intended recipient is prohibited=
-. Thank you.
+Glenn
