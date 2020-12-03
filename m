@@ -2,210 +2,511 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB8052CD336
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 11:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9072CD578
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 13:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388067AbgLCKKb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Dec 2020 05:10:31 -0500
-Received: from mail-eopbgr60062.outbound.protection.outlook.com ([40.107.6.62]:6982
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        id S1730406AbgLCMZV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Dec 2020 07:25:21 -0500
+Received: from mail-vi1eur05on2072.outbound.protection.outlook.com ([40.107.21.72]:3033
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387611AbgLCKKa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Dec 2020 05:10:30 -0500
+        id S1726798AbgLCMZU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Dec 2020 07:25:20 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lO5HCc3HEZE+gtcJFVzqBx4FhpyvSzBvkKS5dOKmtPFFCkz0rg5nZPsw1LyRx2w10oBbsjXXuMQgAl+laNYqQBPDgKrPBwQpIwa7WXnonIYnCOmz1Rh/uqjGT8ifGDlVb0CrrKT659fns+u2ltj71gc+5lMFuWTD/kDCTUB1QDjjm/8Ilg6wh3lVkBjhClt6IhbCuajyelU4m93uOrAGxIQPZCaKjXNWq/hjA2Lt4cCEFOgdi458NPhTQqZ3cXbpffCOaNlxL3pw/5CTdsza1gvBc75CVpJwTdUqquPzuP2yFfOR+JhpidGy5cqnXRPW39NBCOanFkJPU7qsz6Wz6Q==
+ b=GTsRGzvGJycC5J4YsS1szwIm/rRUejg2pr1yqtPyJwDeWYP/rx5xc8RtHT1sEvG0y0hFUOOjgyoe7G7XHpR1OgiT3ejOPbWRFMiwExQMuhsyeHgyq4TdydqSGcw/00nkgLhNWeF3VpchR+URHUpC5gt99RCdGfmLWLROwIg7gQUL3hkvm1WiD2gTtubRGR56M2wwmg4O1xE8UULJLQ5y1tVhiD7XsNiFrUFwWlfedXRYS7Xb2jc+X7xOXER/rIXmoqfXs91BCOzrmQWZcO4SESQnZBBrhAwOFV1etJNAIqjt1Fbi6gZWOO2Tv5EkMSFVIQ+YCGZVaATDGYd3eCgAsg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PoqZwFs9u3QRqAP+1ryZ1hWgc87ZKLE4g3GyZNiqYAA=;
- b=Fj61wNrhpwVpyHzfxM9KarzJTZivJkhCzHATqV/+sAEV4a4Rjf1Nbm+d7VkRqVm1cnu2vBr5LC+Fj4K0R44ncfP0gR8iRzqaZaxonOlqIi4+7Vv2nyWxDC5ZnuuX2x5wHORi+/O3yn5d6Gkt+4uCxmFd9WC+YqYVPLER0SEfUWZw7GaTlGEatlPYsllb4W0ak75Crg0PcNAUYs7oQw7AL/5EnQAA1DhVX8+2dIlIuKw0T0lG+QvWeBD8kox7LAzoJYQULt/tXmOUwub0MaZPtsXKh4SI7gwFLNJV542iBZAyZn/blrMJsrKeuUBELvDJqhTKQybZK+CQkHhyyGGlIw==
+ bh=OWAAxhJ4PPqYq2p52YwJoCg2wtz8zyIDw3QuNFZ3BXs=;
+ b=WfVH9JcZcIBoGkfofYgMoQLdAEEva600zuQ3N+79QOtUhffQNJi+yqqaldKQRzAFwCwma6BJRVdyfFEhk1rGqSLmPIizv2ZUlKAQRTbfehO39LK3GrFtf7msAjtIpz1DS9FY9wSLc5R5q1dleYJKHreYeqI/tpTLCichJNisUouYB+XNPzhckFF+pb1eylb+t0SfnF6OgtxUplAD2eZY+pdNhptRD0R4L7ZUCNPIHFc171EsPNnYDPVEmmbv397+sAXO8RIkmPp7WpgR9/Y8mdWWHFFO78hooLxSLbX+xSIAV3EbpWFOsD6m56G/2+Pq3bs960WTGTQsu2BvNBMi6Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PoqZwFs9u3QRqAP+1ryZ1hWgc87ZKLE4g3GyZNiqYAA=;
- b=IBmKBaJS29giwY/0FRDSTjd2o8CrU7xiH6EduyMq9/u+w5aY0676HvPRKYTWs2AFWE4Fgq/9uEnDYIIPqu4HOC1oX/uXL0MSfrU2ZlIj9FZGfVlMNKxgq/6zKA2nJPe77haOFmkX1cLOpjntS4TKMAyuhlWCvHbygLA4A+6hh6Q=
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
- by DB7PR04MB4234.eurprd04.prod.outlook.com (2603:10a6:5:19::12) with
+ bh=OWAAxhJ4PPqYq2p52YwJoCg2wtz8zyIDw3QuNFZ3BXs=;
+ b=lGZYif1+KrUy+lIBOC8mctudjgZ7onwFOz1WacapLQFMMmLh8o8IUBeW/M3P7iTreZiRo3pSkrmXeiEhoRFwjHMgvYn48i3KO3f4fCtjPdyLH/XqTIrsc4BpNjyU9naYOi1TTktXmNO/8bGQ67C00sTd/8Olv17yUKm0FmBs8PI=
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
+ by VI1PR04MB6189.eurprd04.prod.outlook.com (2603:10a6:803:fd::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.17; Thu, 3 Dec
- 2020 10:09:42 +0000
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3632.021; Thu, 3 Dec 2020
- 10:09:42 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Glenn Schmottlach <gschmottlach@gmail.com>
-CC:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 0/3] UAC2 Gadget: feedback endpoint support
-Thread-Topic: [PATCH 0/3] UAC2 Gadget: feedback endpoint support
-Thread-Index: AQHWtWS1eBj0g+rqvUaS5l3jJzoDC6nCr5OAgAJ6iICAARA/AIAObLIAgASwk4CABPlXgIAEml8AgAGYLYCAAMpmAA==
-Date:   Thu, 3 Dec 2020 10:09:42 +0000
-Message-ID: <20201203100912.GA2881@b29397-desktop>
-References: <1604794711-8661-1-git-send-email-ruslan.bilovol@gmail.com>
- <20201111092941.GJ14896@b29397-desktop>
- <CAB=otbSAGhDYxim9_fsyH4pZCLqgq+bxNJfv5hXqgQRVngVaig@mail.gmail.com>
- <CAMS2kBF5Gvhnf7AzdeSFeVeWBLhtHM_hHfTvMLTN-3Jkh=BwHw@mail.gmail.com>
- <CAB=otbTK0j03HjiLS-tqqaBTuavaFEJs49hpKPj2Df8e1_WN+A@mail.gmail.com>
- <CAMS2kBEnUDi5jKiNu5ZKihyucCikfoGor4n7=e+xX=7WU_rrog@mail.gmail.com>
- <CAB=otbRrLjeTjhBGtMqpeWeYZB9v62SDjSWzRk8uGQE3Ld8T2A@mail.gmail.com>
- <CAMS2kBGRrozHQj9wfLmcQMSCb8On+5HcSF=8PsUJAtqXz2QG1w@mail.gmail.com>
- <CAMS2kBGcDu-02dboEwxygMDE1r1c9Q3Lzrw6TcsoKEMvOzLmDQ@mail.gmail.com>
-In-Reply-To: <CAMS2kBGcDu-02dboEwxygMDE1r1c9Q3Lzrw6TcsoKEMvOzLmDQ@mail.gmail.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.19; Thu, 3 Dec
+ 2020 12:24:27 +0000
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::b035:d158:c99c:57c6]) by VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::b035:d158:c99c:57c6%7]) with mapi id 15.20.3632.021; Thu, 3 Dec 2020
+ 12:24:27 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "prabhakar.mahadev-lad.rj@bp.renesas.com" 
+        <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "laurent.pinchart+renesas@ideasonboard.com" 
+        <laurent.pinchart+renesas@ideasonboard.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>, Peter Chen <peter.chen@nxp.com>
+Subject: RE: [PATCH v6 1/6] dt-bindings: usb: add documentation for typec
+ switch simple driver
+Thread-Topic: [PATCH v6 1/6] dt-bindings: usb: add documentation for typec
+ switch simple driver
+Thread-Index: AQHWwaIqJhI1eaFUiU25NknzEOhLJKnhQXgAgABEyBCAA86dUA==
+Date:   Thu, 3 Dec 2020 12:24:27 +0000
+Message-ID: <VE1PR04MB65284E6A67F8ED5AF98A2D4F89F20@VE1PR04MB6528.eurprd04.prod.outlook.com>
+References: <1606140096-1382-1-git-send-email-jun.li@nxp.com>
+ <20201130214716.GA3040203@robh.at.kernel.org>
+ <VE1PR04MB6528AAEEBDF31EF8F7A2D9EE89F40@VE1PR04MB6528.eurprd04.prod.outlook.com>
+In-Reply-To: <VE1PR04MB6528AAEEBDF31EF8F7A2D9EE89F40@VE1PR04MB6528.eurprd04.prod.outlook.com>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-user-agent: Mutt/1.9.4 (2018-02-28)
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.71]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 429d4f08-d4bf-4c40-58df-08d897738d6e
-x-ms-traffictypediagnostic: DB7PR04MB4234:
-x-microsoft-antispam-prvs: <DB7PR04MB423420FC955A975B09FA253F8BF20@DB7PR04MB4234.eurprd04.prod.outlook.com>
+x-ms-office365-filtering-correlation-id: 4a26fd33-1765-49eb-1579-08d89786609b
+x-ms-traffictypediagnostic: VI1PR04MB6189:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB61890B4D58921EEA903A2F3A89F20@VI1PR04MB6189.eurprd04.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:10000;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bLwwzsciQQNLcuw8y0FI99WDdhnlkVfm0m1YXEKxu4/vuZy6vv/gtfAimuaUm5ixaZ2gG5mKG1t2vm3xM3Cn3m62ptmpRxOyxcs38mOJXzoIQ2ORBeUnXj5flUBfankAi3KIbAVlXDiNY/QYpXdYfdue1pIgm78O5MG+jhsfddPnUqZsXjur1py2rdIafsr4AvrpnxOSMxwYGKrKy6QwDe8NyDu/bcqbkcHpWiDBPwYrFDumSdEIR9G5TCJBRds1gQfuS+AfcTCQ2oOs3JsXVpCbDwUjyJi9QnTP/7qSlN8OVkB8l2V9sntq0hMKjHxFxZ33mVE2lUfAs9MOw2G3kQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(396003)(136003)(366004)(376002)(346002)(39860400002)(8676002)(44832011)(26005)(5660300002)(54906003)(478600001)(83380400001)(66446008)(66556008)(64756008)(66946007)(66476007)(316002)(33716001)(1076003)(86362001)(91956017)(2906002)(76116006)(6506007)(71200400001)(33656002)(4326008)(53546011)(6512007)(6486002)(186003)(6916009)(8936002)(9686003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?LBo40j1ixjJPcNTcOxbVrPnqm222TaAwybYHnCJBGTpBe4mo1ZqJs3TmTBGg?=
- =?us-ascii?Q?Nz+LqFbt7i/P0ho+LR1GRVm1KlNr5ZIpuAVJX/srPbymsb9hXe4S4w99s124?=
- =?us-ascii?Q?2KK3WQRTNqhZtEwIHNZi4iN4CzJE4PMywgmVmHL0ni9uLgOxqzlsbDxN+CJ8?=
- =?us-ascii?Q?eQbvX/76Ui+OJ4jZvV5NEHJR0G6H8NZnA+xHmV4uudMwKUoHaI6CCeCQZOiI?=
- =?us-ascii?Q?Dxnd6H1T6iMK4q/DxHYWCRhwCeLmho4FYa6y/rDA8RIODpmwtbKS+kb09kE7?=
- =?us-ascii?Q?UpZ6xmTDiLtairXtYzyyFtgv3Be4r2M2ypE7RF4KEO7UfcuPyANRIOh2stDe?=
- =?us-ascii?Q?nexskutODMEcnMxuuvnTbVKwJWPYjYD6PFmMjISZLz25FWJw1YFwUGwQLxjQ?=
- =?us-ascii?Q?7SIK87N5V03SozlciS4iMBFh8mQt4wcbPU8ED2vw2q+dVNF898AXAIVm6w6h?=
- =?us-ascii?Q?JDzNKPbj0xm34QKtLd6bd2RU1/9aEpHHBigOfbT1/c5NaZ7wh5DPi5Nm7wXK?=
- =?us-ascii?Q?Hp/pHVb2PuZcIue0vrl3jtzvfGImxMgKSOwxiR0qRcZqGXi0AZh4VlJxNpjW?=
- =?us-ascii?Q?XqSJmXRir/td3GZWKVRemPccvAL6wHcHzKpglKAcZEwNzEYOQ5HLNt1lq/TD?=
- =?us-ascii?Q?0lJxRb0gmCR3wZ+sfJh0jipc/y4qNb7Rp/lHmDgqEQxOfujG0bfrJWlzQ7yg?=
- =?us-ascii?Q?8hbOjQ4IFjOZpAKULbRHG3d52HD6w3pjOln0P+o8r3s9M0vWEAqhwIAx99bC?=
- =?us-ascii?Q?JEijWVOGkLg2fT2b09EdY+D1EPgPyI5CgtkDy0Z+/0vdTAwmulZ7tZwmRP9R?=
- =?us-ascii?Q?PVeJHSiuzKvgRRNA+J0J9V6dKp++M10zuh3IVbAwrcINUPdmlImmaSl7wJqk?=
- =?us-ascii?Q?2RkvYKomfs7ZPsZqVMgHwvQohaxm+6OgKhmQmWFqoHx/zSviPP7YU35aExMT?=
- =?us-ascii?Q?3VsscTwVm6tU6V5Y5tkhdgF6znaiZsZsOTSNlZmLIrw+8yx0BAlvfwx3HtIz?=
- =?us-ascii?Q?5yqy?=
-x-ms-exchange-transport-forked: True
+x-microsoft-antispam-message-info: N80fKVEWxVNE+FZRib7q+KyUmdeX9kQxSL7XHWtmhrz+RQvEDiN53Qp2jr4Ei6pay2fRsebn1Viu1oBHW8ZDnS7f9xHS2ZRBpNwJemCu2+trymym6V39wQ56Lg84oQRKdygOtoinsnJDk9vHFSjYBqHINGdbVIDo9yx0Z60B1NAlhVK4nNLHtVZFeyZ+Rye17haHCUZKOvBT4j+eN+EXEagLWRm9ui4QLB/IswEcFq5wZ23Eh5M57t/H39uuOnGEqK1PmHGjGT3IQ2m8RSFm2CtHaxRFhPWlz3fzY9kIKm+5E3aN7cOwBcEWqCXlIfnjRS713Zj3R3I5onyu7MYq9GilYxkAzS2DRdkoFF04p91p+LoBoEGeGCUNB4uBuC5HErVhHM7rR0lazhyzdKuB5g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(136003)(366004)(396003)(39850400004)(4326008)(2906002)(8936002)(5660300002)(64756008)(966005)(66446008)(7696005)(66556008)(76116006)(54906003)(478600001)(83380400001)(66476007)(66946007)(86362001)(45080400002)(316002)(9686003)(8676002)(53546011)(52536014)(55016002)(6506007)(6916009)(7416002)(44832011)(71200400001)(26005)(30864003)(186003)(33656002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?Eco0C9QzaasvkwfonAt2z2jvaSo1cLWprGLyjLG/liRYArsVoT4tMQSrcyKP?=
+ =?us-ascii?Q?QObDRqABkzbwyfJUFNXjo4CnGkmD08w3b8OrtF6GsO/r1GnbGVpl95K6rf6w?=
+ =?us-ascii?Q?U/w0G0J9VQWmwMY7ORj2DOakJe+qIPUXPrWZYY0+HCg96dbgGxja6g0rdinX?=
+ =?us-ascii?Q?1G42KKHz/EugS5xeOvvd+J5t+cZcCTVAmdPNQsSk4/h6IGBnAaBGJPIPkSO4?=
+ =?us-ascii?Q?9IlZcbtQb03+3D8c1SUQz6UvXGb5sjy5dQPhLNDxIlaa3dC8J/+OvAgno/p+?=
+ =?us-ascii?Q?crkyJqvNUHF9uA6Ubo1mkTR+TOs6hQYaR0W3jtKJe5Zyyl+D3sxjpoXdv7We?=
+ =?us-ascii?Q?geJt59AXWQUHMeR2W0paq466TOEsgaWOnJ3GGBslU4Ogg/IXIRg9YIjgr00G?=
+ =?us-ascii?Q?6Lxnq84t+Sp0IeX5h3GzKksfJttZEMUP/hQj0KWGvSZOPCPbL7/fo2sKlO63?=
+ =?us-ascii?Q?IJTIh0/ALcZ7b7ppYX045bv0N06ekSH9qDPT57aqBsH9O68dt4VWDULlu9jO?=
+ =?us-ascii?Q?MqlRj+3LIRkf476LOOxucDGnCDxfAKCDGzpm1b3F2SclXl0j70SWUWUmh3Eg?=
+ =?us-ascii?Q?uM9Vcp3Ab5qzRx62dOZH7unnLdUhIS2tJztp1XKjoVzr5SewXefbsfjijQSC?=
+ =?us-ascii?Q?4qZo2/j4dB+xICRQZbJLbxUQOtZO8siX5UO7rH/rYTYqrNHHjwaXyG9sCrzB?=
+ =?us-ascii?Q?/MWemncMFlSAJX8ghmiInQ4qWlPyxLHLbasq7kWHIJaVgmJCrIMAqg4ygk/Q?=
+ =?us-ascii?Q?o4HyK+dcsh4UeshOPKy7IDBgf3ePMUHTU07TpAECUPGxjQK9aWW5vPxMMgvX?=
+ =?us-ascii?Q?nxkGROSssqjSmHc0o7t2BkImcNHjGu+5z/MFyw1YJz/i9HbNMo1CgKRIDr6a?=
+ =?us-ascii?Q?mUTfLQsqLboptFF5rd8BRFJxxnSgQOel2sRPiKMH/y+6wX3eaGrJRioWd6zC?=
+ =?us-ascii?Q?tUbNE+Ap7WumLdJ4c5k+sRdDKDRXh4jr4vkVhdKkVI8=3D?=
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <8F382CC9F9FB824DAE578A95CB7C9962@eurprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 429d4f08-d4bf-4c40-58df-08d897738d6e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Dec 2020 10:09:42.1851
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6528.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a26fd33-1765-49eb-1579-08d89786609b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Dec 2020 12:24:27.3704
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CX9RakjUV+SklG4y5lXD9oDg0zfTI3tejE2NqzTPjJfekr7WUwVSPusJWQT+yAkkhBIiKVlMYY/DuHFWHa9jtQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4234
+X-MS-Exchange-CrossTenant-userprincipalname: j49jw7TkRpCoWe9cxBK/UfJJ1H9gMXWFq/VUD9GEJvNju48if1sm1EBDGkidDXBu
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6189
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-12-02 17:04:47, Glenn Schmottlach wrote:
-> On Tue, Dec 1, 2020 at 4:43 PM Glenn Schmottlach <gschmottlach@gmail.com>=
- wrote:
-> > Hi Ruslan -
-> >
-> > Thanks for the feedback but unfortunately I've experienced mixed
-> > results with the gadget UAC2 driver on both Windows/Linux. Let me
-> > describe my environment. My host platform is either a Linux Ubuntu
-> > 18.04 or Windows 10 laptop while the target environment is a
-> > BeagleBone Black (Linux beaglebone 5.4.74-g9574bba32a #1 PREEMPT). I'm
-> > testing two different scenarios:
-> >
-> > Scenario #1:
-> > BeagleBone Black (BBB) runs speaker-test generating a single channel
-> > (S32_LE) audio stream containing a 1KHz tone with a 48K sample rate,
-> > e.g.
-> >
-> > > speaker-test -D hw:1,0 -r 48000 -c 1 -f 1000 -F S32_LE -t sine
-> >
-> > The host laptop is running Audacity and recording the tone over the
-> > UAC2 adapter. On the Linux host the capture is correct and the tone is
-> > bit-perfect. On the Windows 10 the capture contains numerous missing
-> > samples which translates into a lot of audible pops and clicks.
-> >
-> > Scenario #2:
-> > The Linux/Windows host plays a single channel, 48K, S32_LE 1K sine
-> > tone to the target using either Audacity (on Windows) or 'aplay' (on
-> > Linux), e.g.
-> >
-> > > aplay -D hw:4,0 -c 1  -r 48000 -t wav  tone_1k.wav  (Linux)
-> >
-> > On the BBB target I use 'arecord' to record the tone to a RAM disk and
-> > then copy the recorded file back to the host where I can verify the
-> > quality of the recording. In both instances (e.g. using either Windows
-> > or Linux for playback) the recording on the target results in a
-> > captured file with missing samples and audible pops/clicks. In this
-> > scenario the UAC2 gadget is configured with c_sync =3D=3D asynchronous.=
- I
-> > wouldn't expect things to improve with c_sync =3D=3D adaptive since you
-> > mentioned in your patch that it always reports back the nominal
-> > frequency to the host from the feedback endpoint.
-> >
-> > Do you have any suggestions that might explain (the above) behavior.
-> > Can you describe your test environment in more detail so that I can
-> > perhaps re-create it? What Linux target are you using with your tests?
-> > You mentioned you tested an 8x8 playback/capture scenario. Can you
-> > provide any details of how you performed this test and the method you
-> > used to confirm the audio quality for the capture/playback?
-> >
-> > Thanks for any insights you might be able to offer . . .
-> >
-> > Glenn
+Hi Rob
+
+> -----Original Message-----
+> From: Jun Li
+> Sent: Tuesday, December 1, 2020 11:13 AM
+> To: Rob Herring <robh@kernel.org>
+> Cc: heikki.krogerus@linux.intel.com; rafael@kernel.org;
+> gregkh@linuxfoundation.org; andriy.shevchenko@linux.intel.com;
+> hdegoede@redhat.com; lee.jones@linaro.org;
+> mika.westerberg@linux.intel.com; dmitry.torokhov@gmail.com;
+> prabhakar.mahadev-lad.rj@bp.renesas.com;
+> laurent.pinchart+renesas@ideasonboard.com; linux-usb@vger.kernel.org;
+> devicetree@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>; Peter Chen
+> <peter.chen@nxp.com>
+> Subject: RE: [PATCH v6 1/6] dt-bindings: usb: add documentation for typec
+> switch simple driver
 >=20
-> Hi Ruslan -
 >=20
-> This is a follow-up from my post yesterday. I recompiled my kernel
-> *WITHOUT* your UAC2 patches and repeated Scenario #2 where the Linux
-> PC plays a single channel tone to the BeagleBone Black where it's
-> recorded with 'arecord'. Yesterday, I recorded garbled audio on the
-> target but today, without any UAC2 kernel patches, the recorded audio
-> on the target is glitch-free and appears to be bit-perfect.
 >=20
-> This experiment leads me to believe your patches may be inadvertently
-> corrupting the data-path. Have you been able to repeat my experiment
-> and either confirm or refute my findings? I am interested to learn
-> more how you tested your patches and whether it's something I can
-> recreate here.
+> > -----Original Message-----
+> > From: Rob Herring <robh@kernel.org>
+> > Sent: Tuesday, December 1, 2020 5:47 AM
+> > To: Jun Li <jun.li@nxp.com>
+> > Cc: heikki.krogerus@linux.intel.com; rafael@kernel.org;
+> > gregkh@linuxfoundation.org; andriy.shevchenko@linux.intel.com;
+> > hdegoede@redhat.com; lee.jones@linaro.org;
+> > mika.westerberg@linux.intel.com; dmitry.torokhov@gmail.com;
+> > prabhakar.mahadev-lad.rj@bp.renesas.com;
+> > laurent.pinchart+renesas@ideasonboard.com; linux-usb@vger.kernel.org;
+> > devicetree@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>; Peter
+> > Chen <peter.chen@nxp.com>
+> > Subject: Re: [PATCH v6 1/6] dt-bindings: usb: add documentation for
+> > typec switch simple driver
+> >
+> > On Mon, Nov 23, 2020 at 10:01:31PM +0800, Li Jun wrote:
+> > > Some platforms need a simple driver to do some controls according to
+> > > typec orientation, this can be extended to be a generic driver with
+> > > compatible with "typec-orientation-switch".
+> > >
+> > > Signed-off-by: Li Jun <jun.li@nxp.com>
+> > > ---
+> > > changes for v6:
+> > > - Use general mux bindings for typec switch, one typec switch
+> > >   may have 1 or 2 GPIOs for channel selection, if 1 GPIO, only
+> > >   can be used to select cc1 or cc2; if 2 GPIOs, the second GPIO
+> > >   can be used to deselect both channels or keep normal operations.
+> > > - Add one more connection to usb controller.
+> > >
+> > > No changes for v5.
+> > >
+> > > changes on v4:
+> > > - Use compatible instead of bool property for switch matching.
+> > > - Change switch GPIO to be switch simple.
+> > > - Change the active channel selection GPIO to be optional.
+> > >
+> > > previous discussion:
+> > >
+> >
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fpatch
+> > >
+> >
+> work.ozlabs.org%2Fpatch%2F1054342%2F&amp;data=3D04%7C01%7Cjun.li%40nxp.c
+> > >
+> >
+> om%7C4436142512ac45fef86f08d8957983c2%7C686ea1d3bc2b4c6fa92cd99c5c3016
+> > >
+> >
+> 35%7C0%7C1%7C637423696442152522%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLj
+> > >
+> >
+> AwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=3D
+> > > JCV9OtFkfLv4bH2LIxfnk0lVIO6j830%2F%2Bx2OMOi%2Fs6o%3D&amp;reserved=3D0
+> > >
+> > >  .../bindings/usb/typec-switch-simple.yaml          | 122
+> > +++++++++++++++++++++
+> > >  1 file changed, 122 insertions(+)
+> > >
+> > > diff --git
+> > > a/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml
+> > > b/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml
+> > > new file mode 100644
+> > > index 0000000..030ade5
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/usb/typec-switch-simple.yaml
+> > > @@ -0,0 +1,122 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
+> > > +---
+> > > +$id:
+> > >
+> >
+> +https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fdevi
+> > >
+> >
+> +cetree.org%2Fschemas%2Fusb%2Ftypec-switch-simple.yaml%23&amp;data=3D04%
+> > >
+> >
+> +7C01%7Cjun.li%40nxp.com%7C4436142512ac45fef86f08d8957983c2%7C686ea1d3
+> > >
+> >
+> +bc2b4c6fa92cd99c5c301635%7C0%7C1%7C637423696442152522%7CUnknown%7CTWF
+> > >
+> >
+> +pbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6
+> > >
+> >
+> +Mn0%3D%7C3000&amp;sdata=3DvSLcoGYWCgwpsi4LWbKo2VTyCVgN%2BA7zjHfE8QCS4rg
+> > > +%3D&amp;reserved=3D0
+> > > +$schema:
+> > >
+> >
+> +https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fdevi
+> > >
+> >
+> +cetree.org%2Fmeta-schemas%2Fcore.yaml%23&amp;data=3D04%7C01%7Cjun.li%40
+> > >
+> >
+> +nxp.com%7C4436142512ac45fef86f08d8957983c2%7C686ea1d3bc2b4c6fa92cd99c
+> > >
+> >
+> +5c301635%7C0%7C1%7C637423696442152522%7CUnknown%7CTWFpbGZsb3d8eyJWIjo
+> > >
+> >
+> +iMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&am
+> > >
+> >
+> +p;sdata=3D0fd3wjAtKwLCQAY3NG2Be4qNA9FiFhtO0HIZmCK7AQs%3D&amp;reserved=3D=
+0
+> > > +
+> > > +title: Typec Orientation Switch Simple Solution Bindings
+> > > +
+> > > +maintainers:
+> > > +  - Li Jun <jun.li@nxp.com>
+> > > +
+> > > +description: |-
+> > > +  USB SuperSpeed (SS) lanes routing to which side of typec
+> > > +connector is
+> > > +  decided by orientation, this maybe achieved by some simple
+> > > +control like
+> > > +  GPIO toggle.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: typec-orientation-switch
+> > > +
+> > > +  '#mux-control-cells':
+> > > +    const: 0
+> >
+> > Who is the mux-control consumer?
 >=20
-> Assuming we can sort out this data corruption issue, what are your
-> thoughts on how the Linux target device can properly provide the
-> Windows feedback endpoint with real frequency updates rather than the
-> constant nominal frequency. If I understood your patch notes correctly
-> it seems this is an outstanding issue that requires additional
-> attention. I'm a bit of a noob when it comes to how this might be
-> addressed.
+> Typec(controller)
 >=20
-> Thanks for your continued insights and support . . .
+>        ptn5110: tcpc@50 {
+>                 compatible =3D "nxp,ptn5110";
+>                 pinctrl-names =3D "default";
+>                 pinctrl-0 =3D <&pinctrl_typec>;
+>                 reg =3D <0x50>;
+>                 interrupt-parent =3D <&gpio4>;
+>                 interrupts =3D <19 8>;
+>                 mux-controls =3D <&typec_switch>;
+>                 mux-control-names =3D "mux-typec-switch";
 >=20
-> Glenn
+>                 usb_con: connector {
+>                         compatible =3D "usb-c-connector";
+>                         ... ...
+>                         ports {
+>                                 #address-cells =3D <1>;
+>                                 #size-cells =3D <0>;
+>=20
+>                                 port@1 {
+>                                         reg =3D <1>;
+>                                         typec_con_ss: endpoint {
+>                                                 remote-endpoint =3D
+> <&usb3_orien_sel>;
+>                                         };
+>                                 };
+>                         };
+>                 };
+>         };
+>=20
+> >
+> > > +
+> > > +  switch-gpios:
+> > > +    description: |
+> > > +      GPIO specifiers to select the target channel of mux.
+> > > +      The first GPIO is for cc1 and cc2 selection, the GPIO flag use
+> > > +      GPIO_ACTIVE_HIGH if GPIO physical state high is for cc1; or us=
+e
+> > > +      GPIO_ACTIVE_LOW if GPIO physical state low is for cc1.
+> > > +      The second gpio is to deselect any channles by places all chan=
+nels
+> > > +      in high-impedance state to reduce current consumption, the
+> > > + gpio
+> > flag
+> > > +      use GPIO_ACTIVE_HIGH if GPIO physical state high is for
+> > > +      high-impedance state (so low for normal operations); or Use
+> > > +      GPIO_ACTIVE_LOW if GPIO physical state low is for high-impedan=
+ce
+> > > +      state(so high for normal operations).
+> > > +    minItems: 1
+> > > +    maxItems: 2
+> > > +
+> > > +  idle-state:
+> > > +    description: -|
+> > > +      For TYPEC_ORIENTATION_NONE by deselect both channels if suppor=
+ted.
+> > > +    const: 2
+> > > +
+> > > +  # Standard properties described in  #
+> > > + Documentation/devicetree/bindings/mux/mux-controller.txt
+> > > +
+> > > +  port:
+> > > +    type: object
+> > > +    additionalProperties: false
+> > > +    description: -|
+> > > +      Connection to the remote endpoint using OF graph bindings that
+> model
+> > > +      SS data bus to typec connector.
+> > > +
+> > > +    properties:
+> > > +      '#address-cells':
+> > > +        const: 1
+> > > +
+> > > +      '#size-cells':
+> > > +        const: 0
+> > > +
+> > > +      endpoint@0:
+> > > +        type: object
+> > > +        description: Endpoint connected to typec connector.
+> > > +        additionalProperties: false
+> > > +
+> > > +        properties:
+> > > +          reg:
+> > > +            const: 0
+> > > +          remote-endpoint: true
+> > > +
+> > > +        required:
+> > > +          - remote-endpoint
+> > > +
+> > > +      endpoint@1:
+> > > +        type: object
+> > > +        description: Endpoint connected to usb controller.
+> > > +        additionalProperties: false
+> > > +
+> > > +        properties:
+> > > +          reg:
+> > > +            const: 1
+> > > +          remote-endpoint: true
+> > > +
+> > > +        required:
+> > > +          - remote-endpoint
+> > > +
+> > > +    required:
+> > > +      - endpoint@0
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - port
+> > > +
+> > > +additionalProperties: false
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    #include <dt-bindings/gpio/gpio.h>
+> > > +    typec_switch: mux-controller {
+> > > +        compatible =3D "typec-orientation-switch";
+> > > +        #mux-control-cells =3D <0>;
+> > > +        pinctrl-names =3D "default";
+> > > +        pinctrl-0 =3D <&pinctrl_ss_sel>;
+> > > +        switch-gpios =3D <&gpio3 15 GPIO_ACTIVE_HIGH>,
+> > > +                       <&gpio2 20 GPIO_ACTIVE_HIGH>;
+> > > +        idle-state =3D <2>;
+> > > +
+> > > +        port {
+> > > +                #address-cells =3D <1>;
+> > > +                #size-cells =3D <0>;
+> > > +
+> > > +                usb3_orien_sel: endpoint@0 {
+> > > +                        reg =3D <0>;
+> > > +                        remote-endpoint =3D <&typec_con_ss>;
+> > > +                };
+> > > +
+> > > +                usb3_con_data: endpoint@1 {
+> > > +                        reg =3D <1>;
+> > > +                        remote-endpoint =3D <&dwc3_0>;
+> > > +                };
+> > > +        };
+> >
+> > This still seems unnecessarily complicated. What I had in mind is just
+> > something like this:
+> >
+> > mux: mux-controller {
+> >   compatible =3D "gpio-mux";
+> >   #mux-control-cells =3D <0>;
+> >   mux-gpios =3D <&gpio3 15 GPIO_ACTIVE_HIGH>,
+> >               <&gpio2 20 GPIO_ACTIVE_HIGH>;
+> >   idle-state =3D <2>;
+> > };
+> >
+> > connector {
+> >   compatible =3D "usb-c-connector";
+> >   mux-controls =3D <&mux>;
+> >   ...
+> > };
+> >
+> > Then you aren't re-implementing the gpio-mux driver.
+> >
+> > This should work for *any* mux implementation as long as the mux
+> > states always have the same meanings from the perspective of the connec=
+tor.
+> >
+> > Of course, I have little visibility into the possible h/w
+> > implementations for Type-C and maybe this isn't sufficient. So input
+> > from Type-C experts would be helpful.
 
-Hi Glenn & Ruslan,
+More thinking of this, I have a proposal like this:
 
-Do you know why WIN10 can't recognized UAC2 device if I configure the
-sample rate as 48000HZ? Configuring sample rate as 44100HZ, the playback
-function would work well at my platforms (chipidea IP), no glitch is
-heard. At WIN10, I use Windows Media Player, at board side I use command:=20
+ 34         mux: mux-controller {
+ 33                 compatible =3D "gpio-mux";
+ 32                 #mux-control-cells =3D <0>;
+ 29                 switch-gpios =3D <&gpio4 20 GPIO_ACTIVE_LOW>,
+ 28                                 <&gpio2 20 GPIO_ACTIVE_HIGH>;
+ 27                 idle-state =3D <2>;
+ 26         };
+ 25
 
-arecord -f cd -t wav -D hw:4,0 | aplay -f cd -Dplughw:3,0 &
+Then I don't need re-implement the gpio-mux driver.
 
-From the USB Bus analyzer:
+ 24         typec_switch {
+ 23                 compatible =3D "typec-orientation-switch";
+ 22                 mux-controls =3D <&mux>;
+ 21                 mux-control-names =3D "mux-typec-switch";
+ 20
+ 19                 port {
+ 18                         usb3_data_ss: endpoint@0 {
+ 17                                 remote-endpoint =3D <&typec_con_ss>;
+ 16                         };
+ 15                 };
+ 14         };
 
-Feedback EP is scheduled every 1ms, there are nine 176-byte packets and one
-180-byte packet among 10ms transfers.
+The simple typec switch driver as the consumer of mux-control,
+and also as the provider of typec_switch to typec class, this
+can be extended to use other mux solutions.
 
---=20
+ 31                 usb_con: connector {
+ 30                         compatible =3D "usb-c-connector";
+ 29                         label =3D "USB-C";
+ 20                         ... ...
+ 19                         ports {
+ 18                                 #address-cells =3D <1>;
+ 17                                 #size-cells =3D <0>;
+ 16
+ 15                                 port@1 {
+ 14                                         reg =3D <1>;
+ 13                                         typec_con_ss: endpoint {
+ 12                                                 remote-endpoint =3D <&u=
+sb3_data_ss>;
+ 11                                         };
+ 10                                 };
+  9                         };
+  8                 };
 
-Thanks,
-Peter Chen=
+Then existing typec mux interface can be kept, is this making sense
+to you?
+
+Thanks
+Li Jun
+
+>=20
+> From h/w point view, this can work if only consider my(GPIO) case.
+> But I still need register a typec switch in provider side to make it unde=
+r
+> the unified typec switch interface:
+>=20
+>   7 struct typec_switch {
+>   6         struct device dev;
+>   5         typec_switch_set_fn_t set;
+>   4         struct mux_control *mux_ctrl;
+>   3 };
+>=20
+> typec_switch->dev.parent =3D mux_chip->dev;
+>=20
+> So either I put the typec switch creation in exiting mux-gpio driver; or
+> I create a new typec switch driver with gpio mux code duplication.
+>=20
+> If I go directly with mux control w/o(out of) typec_switch, then I don't
+> need any driver change as you expect, but I guess this is not preferred,
+> @Heikki, any comments?
+>=20
+> Thanks
+> Li Jun
+>=20
+> >
+> > Rob
