@@ -2,112 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A53432CDA08
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 16:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 983522CDAF8
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Dec 2020 17:17:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727430AbgLCPVf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Dec 2020 10:21:35 -0500
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:42279 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726344AbgLCPVe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Dec 2020 10:21:34 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 67EF15C0078;
-        Thu,  3 Dec 2020 10:20:28 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 03 Dec 2020 10:20:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=eRauayqR7l9HdVQ2N0t8YYvQDNA
-        34Xqn4lVsuCMTxQg=; b=K80qDKiFuTzD2XY7tAh1XeR+HfgHBKbTML5YQmaiqYX
-        Onaae3RVk1SgVeozAnUoX6koWjPwcM7mDjREhA0aDPb9A9iXfDVpO5akUrPqvFc7
-        KhSFx8Tg6lusmdRCDRoWNlpw3kCSGBRvo5L5Juzj5drEgz1TYCz+n34cw4pauNKn
-        /7ZZwb7n/VNGs6rq+ZlrdO5x3UXxIAO2DpbnSgNlWlJXFKDd1d2358cAP6TJGCkv
-        IUW0/y5nvlBT1ZDr8g8i3/NuxMcgoo2nM4lWI/XoVxHuKYB0+M7CFgDB2nlEwcuG
-        zYaTM2hPbHQnrQQMcOoSnrOFMvlAAJjYjx7MA5fzBag==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=eRauay
-        qR7l9HdVQ2N0t8YYvQDNA34Xqn4lVsuCMTxQg=; b=rE/V9r3hxfyUPapwGq3DWn
-        Y5chobRDzVyiDrYVPIkLye5znvqT+tiWIXe3EzzxlM+pFjQ+wxhQoyxAGGAfZviZ
-        uHm0tpG5KbSF5be7UT8rv0Hj7kh8y62BodJb9oSfq/nnf5i2sWocdbDCAmFptU3b
-        he1vALc0y23Yb7uV5VGVkMG6+w6+4Gfcr3PMpnKIvz0mAWOKDRY3v/O9diYGJpbw
-        jiHO+yMp0P+cc/fDhTe3lroMiXDfI2t9OSQ38Z3pym04r92N/qNMVx5wo9LWHqg+
-        7MGTcqad54EGpMNxeCxo4Gqgj0G3bNDjYH0trhTAlgPMqSltjanXJWsPfpP34+tg
-        ==
-X-ME-Sender: <xms:OwLJX5AWVUl5fu449ONwUxUfEdTcYUHr1utHnoifX4OCtITHZfrcFA>
-    <xme:OwLJX3gXNqCGz76bH0bZC0V-E164F7U2BFguMuDUXVPs_tgKNdCx3gu723kY-veWX
-    dfiqOBB-Glz6A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudeiiedgjeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggujgesthdtre
-    dttddtvdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheq
-    necuggftrfgrthhtvghrnhepveeuheejgfffgfeivddukedvkedtleelleeghfeljeeiue
-    eggeevueduudekvdetnecukfhppeekfedrkeeirdejgedrieegnecuvehluhhsthgvrhfu
-    ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtoh
-    hm
-X-ME-Proxy: <xmx:OwLJX0kmHnpIaZ267cEQRyW25E7cz0sCXm2vaCWtVo6U7NbqHPk3Jg>
-    <xmx:OwLJXzxPa_Ozv4xkPXey2Cl5LwYG-7WiZPDntMrbEGD5c-XbOsXEXA>
-    <xmx:OwLJX-RodF0n1KVZpxPbV111ppp19IqjPjQ0o4vWyxAR9nwLDyWq3w>
-    <xmx:PALJX5cu5toWUo1i9oRnEqSHUJIZ7FJx8SuL70VFGkueK6VG4l0RDA>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 8B671240057;
-        Thu,  3 Dec 2020 10:20:27 -0500 (EST)
-Date:   Thu, 3 Dec 2020 16:21:36 +0100
-From:   Greg KH <greg@kroah.com>
-To:     "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     linux-kernel@vger.kernel.org, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH v2] drivers: usb: storage: prefer pr_*() macros over bare
- printk()
-Message-ID: <X8kCgO+2hAgkUqL8@kroah.com>
-References: <20201203141634.28850-1-info@metux.net>
+        id S2389331AbgLCQQo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Dec 2020 11:16:44 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:50793 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2389329AbgLCQQo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Dec 2020 11:16:44 -0500
+Received: (qmail 1100270 invoked by uid 1000); 3 Dec 2020 11:16:02 -0500
+Date:   Thu, 3 Dec 2020 11:16:02 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "David C. Partridge" <david.partridge@perdrix.co.uk>
+Cc:     'Oliver Neukum' <oneukum@suse.com>, linux-usb@vger.kernel.org
+Subject: Re: Issues with LaCie USB3 drive and UAS
+Message-ID: <20201203161602.GA1098189@rowland.harvard.edu>
+References: <43abe2af0352f17f93e2453a86e2ed47b9913b6a.camel@suse.com>
+ <000f01d6c326$1eea3f50$5cbebdf0$@perdrix.co.uk>
+ <d478123862a7e94898aaa771c21cc8cb0a3819fc.camel@suse.com>
+ <008101d6c3d7$2427ee70$6c77cb50$@perdrix.co.uk>
+ <11ea70180f52b4965a451b3970891e0f547c777b.camel@suse.com>
+ <000001d6c89c$086812e0$193838a0$@perdrix.co.uk>
+ <612be9a9cd6ffdb9492781e174859c7b4e694a86.camel@suse.com>
+ <000301d6c919$af7a94e0$0e6fbea0$@perdrix.co.uk>
+ <f5b4e5fccec5521059c78d4f4345c339dce707d5.camel@suse.com>
+ <000f01d6c983$22199910$664ccb30$@perdrix.co.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201203141634.28850-1-info@metux.net>
+In-Reply-To: <000f01d6c983$22199910$664ccb30$@perdrix.co.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 03:16:34PM +0100, Enrico Weigelt, metux IT consult wrote:
-> pr_*() printing helpers are preferred over using bare printk().
+On Thu, Dec 03, 2020 at 02:46:47PM -0000, David C. Partridge wrote:
+> > upon further reading, could you repeat the test with an additional SINGLE_LUN quirk?
 > 
-> changes v2: fixed ugly typo
-
-Don't put that in the changelog, it goes below the --- line, as is
-documented.
-
-
-
+> Happy to do that if you can confirm what the blacklist-uas.conf should look like to achieve that?
 > 
-> Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
-> ---
->  drivers/usb/storage/alauda.c     | 23 ++++++++------------
->  drivers/usb/storage/ene_ub6250.c | 20 ++++++++---------
->  drivers/usb/storage/freecom.c    |  2 +-
->  drivers/usb/storage/sddr09.c     | 46 +++++++++++++++++-----------------------
->  drivers/usb/storage/sddr55.c     |  7 +++---
->  5 files changed, 43 insertions(+), 55 deletions(-)
+> Should it read: options usb-storage quirks=059f:105f:ks
 > 
-> diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
-> index 20b857e97e60..5806f1bee471 100644
-> --- a/drivers/usb/storage/alauda.c
-> +++ b/drivers/usb/storage/alauda.c
-> @@ -622,9 +622,8 @@ static int alauda_read_map(struct us_data *us, unsigned int zone)
->  
->  		/* check even parity */
->  		if (parity[data[6] ^ data[7]]) {
-> -			printk(KERN_WARNING
-> -			       "alauda_read_map: Bad parity in LBA for block %d"
-> -			       " (%02X %02X)\n", i, data[6], data[7]);
-> +			pr_warn("alauda_read_map: Bad parity in LBA for block %d"
-> +				" (%02X %02X)\n", i, data[6], data[7]);
+> David
+> -----Original Message-----
+> From: Oliver Neukum [mailto:oneukum@suse.com] 
+> Sent: 03 December 2020 14:07
+> To: David C. Partridge; linux-usb@vger.kernel.org
+> Subject: Re: Issues with LaCie USB3 drive and UAS
+> 
+> Am Donnerstag, den 03.12.2020, 02:11 +0000 schrieb David C. Partridge:
+> > Now with uas.ko	and usb-storage.ko 
+> 
+> Hi,
+> 
+> upon further reading, could you repeat the test with an additional
+> SINGLE_LUN quirk?
+> 
+> 	Regards
+> 		Oliver
 
-Please use dev_warn() and friends instead.  This is a driver, it has a
-device, it should never use "raw" printk, or pr_* calls.
+By the way, we do have an 'f' quirk for US_FL_NO_REPORT_OPCODES.  You 
+could try that one rather than 's'.
 
-thanks,
-
-greg k-h
+Alan Stern
