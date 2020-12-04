@@ -2,60 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 353812CF2A3
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 18:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB56D2CF2AE
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 18:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388516AbgLDRFr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Dec 2020 12:05:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
+        id S2388529AbgLDRGI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Dec 2020 12:06:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388510AbgLDRFq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Dec 2020 12:05:46 -0500
+        with ESMTP id S1731083AbgLDRGI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Dec 2020 12:06:08 -0500
 Received: from latitanza.investici.org (latitanza.investici.org [IPv6:2001:888:2000:56::19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1612C08E85E;
-        Fri,  4 Dec 2020 09:04:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D077AC061A4F
+        for <linux-usb@vger.kernel.org>; Fri,  4 Dec 2020 09:05:27 -0800 (PST)
 Received: from mx3.investici.org (unknown [127.0.0.1])
-        by latitanza.investici.org (Postfix) with ESMTP id 4CnfF12X1nz8shk;
-        Fri,  4 Dec 2020 17:04:05 +0000 (UTC)
+        by latitanza.investici.org (Postfix) with ESMTP id 4CnfFl70CTz8sj5;
+        Fri,  4 Dec 2020 17:04:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=privacyrequired.com;
-        s=stigmate; t=1607101445;
-        bh=CNSPo3rU73iLufUhzAAlkyJdrqDxV3HykhrbciRVVqg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=CAj2903IlbaunC80bM+z7sehEdvvySRvMXF2B7QVSeGl9c1o2+R49o1Johhg6BSQ4
-         Q4EMyEP3bIuGgoqirMK1uT98XPrJ1OTptjksAJf1V5Duw6RhXyRn+MKAiMRbwunKkr
-         vE228J0uaZtyVw5ECCzsQr3hgtGk8lvECyg5M/Pg=
-Received: from [82.94.249.234] (mx3.investici.org [82.94.249.234]) (Authenticated sender: laniel_francis@privacyrequired.com) by localhost (Postfix) with ESMTPSA id 4CnfDy1SRgz8sfb;
-        Fri,  4 Dec 2020 17:04:02 +0000 (UTC)
+        s=stigmate; t=1607101483;
+        bh=3TDaxIk3qaz2HcMErSZKF6ZFVsiVELk5Alr3JxrBrw8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=C04cefqXlKXobHFRfE8VmBbY+UyYIv881PE7UmyrCMfLJ7vMWyEsYeba75zKznWzJ
+         GzwRX5nXxd1A++oVQMxoakccosirYT3cv5AVEqlbf706Rq9yfYo8PfXCrFLBsAwkRf
+         ZgbVFEBRRwObAtqUZLZ1rhR03BJ3tmD+k4N8NggQ=
+Received: from [82.94.249.234] (mx3.investici.org [82.94.249.234]) (Authenticated sender: laniel_francis@privacyrequired.com) by localhost (Postfix) with ESMTPSA id 4CnfFl2NvVz8sj2;
+        Fri,  4 Dec 2020 17:04:43 +0000 (UTC)
 From:   laniel_francis@privacyrequired.com
-To:     Russell King <linux@armlinux.org.uk>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
-        Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jessica Yu <jeyu@kernel.org>
+To:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Francis Laniel <laniel_francis@privacyrequired.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-efi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [RFC PATCH v1 00/12] Replace strstarts() by str_has_prefix()
-Date:   Fri,  4 Dec 2020 18:03:06 +0100
-Message-Id: <20201204170319.20383-1-laniel_francis@privacyrequired.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v1 11/12] musb: Replace strstarts() by str_has_prefix().
+Date:   Fri,  4 Dec 2020 18:03:17 +0100
+Message-Id: <20201204170319.20383-12-laniel_francis@privacyrequired.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20201204170319.20383-1-laniel_francis@privacyrequired.com>
+References: <20201204170319.20383-1-laniel_francis@privacyrequired.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -64,83 +45,83 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Francis Laniel <laniel_francis@privacyrequired.com>
 
-Hi.
+The two functions indicates if a string begins with a given prefix.
+The only difference is that strstarts() returns a bool while str_has_prefix()
+returns the length of the prefix if the string begins with it or 0 otherwise.
 
+Signed-off-by: Francis Laniel <laniel_francis@privacyrequired.com>
+---
+ drivers/usb/musb/musb_cppi41.c  |  4 ++--
+ drivers/usb/musb/musb_debugfs.c | 20 ++++++++++----------
+ 2 files changed, 12 insertions(+), 12 deletions(-)
 
-First, I hope you are fine and the same for your relatives.
-
-In this patch set, I replaced all calls to strstarts() by calls to
-str_has_prefix().
-Indeed, the kernel has two functions to test if a string begins with an other:
-1. strstarts() which returns a bool, so 1 if the string begins with the prefix,
-0 otherwise.
-2. str_has_prefix() which returns the length of the prefix or 0.
-
-str_has_prefix() was introduced later than strstarts(), in commit 495d714ad140
-which also stated that str_has_prefix() should replace strstarts().
-This is what this patch set does.
-
-Concerning the patches, the modifications cover different areas of the kernel.
-I compiled all of them and they compile smoothly.
-Unfortunately, I did not test all of them, so here are the status of the patches
-regarding test:
-1. Tested with qemu-system-arm using insmod.
-2. I do not have access to a bcm47xx MIPS CPU an qemu-system-mips does not
-emulate this board.
-3. Tested with qemu-system-x86_64 calling
-crypto_alloc_skcipher("essiv(authenc(hmac(sha256),cbc(aes)),sha256)", 0, 0)
-through LKDTM.
-4. Tested with qemu-system-x86_64 using crypsetup.
-5. I do not have access to a renesas board and I lack some context to test it
-with qemu-system-arm.
-6. I do not have access to an OMAP board and I lack some context to test it with
-qemu-system-arm.
-7. I did not find how to boot from the EFI_STUB with qemu. If you know how to
-do, I would be happy to try running this code.
-8. I ran qemu-system-x86_64 with a floppy disk attached but impossible to go
-through this module code...
-9. I do not have access to a bcm63xx MIPS CPU an qemu-system-mips does not
-emulate this board.
-10. Tested with qemu-system-x86_64 using insmod.
-11. I do not have access to an AM335x or DA8xx platforms and I lack some context
-to test it with qemu-system-arm.
-
-If you see a way to improve the patches or if I did something wrong with the
-mail do not hesitate to ask.
-
-
-Best regards.
-
-Francis Laniel (12):
-  arm: Replace strstarts() by str_has_prefix().
-  mips: Replace strstarts() by str_has_prefix().
-  crypto: Replace strstarts() by str_has_prefix().
-  device-mapper: Replace strstarts() by str_has_prefix().
-  renesas: Replace strstarts() by str_has_prefix().
-  omap: Replace strstarts() by str_has_prefix().
-  efi: Replace strstarts() by str_has_prefix().
-  ide: Replace strstarts() by str_has_prefix().
-  mips: Replace strstarts() by str_has_prefix().
-  module: Replace strstarts() by str_has_prefix().
-  musb: Replace strstarts() by str_has_prefix().
-  string.h: Remove strstarts().
-
- arch/arm/kernel/module.c                      | 12 +++++------
- arch/mips/bcm47xx/board.c                     |  4 ++--
- arch/mips/bcm63xx/boards/board_bcm963xx.c     |  2 +-
- crypto/essiv.c                                |  2 +-
- .../firmware/efi/libstub/efi-stub-helper.c    |  2 +-
- drivers/firmware/efi/libstub/gop.c            | 10 +++++-----
- drivers/gpu/drm/omapdrm/dss/base.c            |  2 +-
- drivers/gpu/drm/rcar-du/rcar_du_crtc.c        |  2 +-
- drivers/ide/ide-floppy.c                      |  4 ++--
- drivers/md/dm-crypt.c                         |  4 ++--
- drivers/usb/musb/musb_cppi41.c                |  4 ++--
- drivers/usb/musb/musb_debugfs.c               | 20 +++++++++----------
- include/linux/string.h                        | 10 ----------
- kernel/module.c                               |  6 +++---
- 14 files changed, 37 insertions(+), 47 deletions(-)
-
+diff --git a/drivers/usb/musb/musb_cppi41.c b/drivers/usb/musb/musb_cppi41.c
+index 7fbb8a307145..a6d22c0957c5 100644
+--- a/drivers/usb/musb/musb_cppi41.c
++++ b/drivers/usb/musb/musb_cppi41.c
+@@ -686,9 +686,9 @@ static int cppi41_dma_controller_start(struct cppi41_dma_controller *controller)
+ 		ret = of_property_read_string_index(np, "dma-names", i, &str);
+ 		if (ret)
+ 			goto err;
+-		if (strstarts(str, "tx"))
++		if (str_has_prefix(str, "tx"))
+ 			is_tx = 1;
+-		else if (strstarts(str, "rx"))
++		else if (str_has_prefix(str, "rx"))
+ 			is_tx = 0;
+ 		else {
+ 			dev_err(dev, "Wrong dmatype %s\n", str);
+diff --git a/drivers/usb/musb/musb_debugfs.c b/drivers/usb/musb/musb_debugfs.c
+index 30a89aa8a3e7..47fc32bc6507 100644
+--- a/drivers/usb/musb/musb_debugfs.c
++++ b/drivers/usb/musb/musb_debugfs.c
+@@ -181,36 +181,36 @@ static ssize_t musb_test_mode_write(struct file *file,
+ 		goto ret;
+ 	}
+ 
+-	if (strstarts(buf, "force host full-speed"))
++	if (str_has_prefix(buf, "force host full-speed"))
+ 		test = MUSB_TEST_FORCE_HOST | MUSB_TEST_FORCE_FS;
+ 
+-	else if (strstarts(buf, "force host high-speed"))
++	else if (str_has_prefix(buf, "force host high-speed"))
+ 		test = MUSB_TEST_FORCE_HOST | MUSB_TEST_FORCE_HS;
+ 
+-	else if (strstarts(buf, "force host"))
++	else if (str_has_prefix(buf, "force host"))
+ 		test = MUSB_TEST_FORCE_HOST;
+ 
+-	else if (strstarts(buf, "fifo access"))
++	else if (str_has_prefix(buf, "fifo access"))
+ 		test = MUSB_TEST_FIFO_ACCESS;
+ 
+-	else if (strstarts(buf, "force full-speed"))
++	else if (str_has_prefix(buf, "force full-speed"))
+ 		test = MUSB_TEST_FORCE_FS;
+ 
+-	else if (strstarts(buf, "force high-speed"))
++	else if (str_has_prefix(buf, "force high-speed"))
+ 		test = MUSB_TEST_FORCE_HS;
+ 
+-	else if (strstarts(buf, "test packet")) {
++	else if (str_has_prefix(buf, "test packet")) {
+ 		test = MUSB_TEST_PACKET;
+ 		musb_load_testpacket(musb);
+ 	}
+ 
+-	else if (strstarts(buf, "test K"))
++	else if (str_has_prefix(buf, "test K"))
+ 		test = MUSB_TEST_K;
+ 
+-	else if (strstarts(buf, "test J"))
++	else if (str_has_prefix(buf, "test J"))
+ 		test = MUSB_TEST_J;
+ 
+-	else if (strstarts(buf, "test SE0 NAK"))
++	else if (str_has_prefix(buf, "test SE0 NAK"))
+ 		test = MUSB_TEST_SE0_NAK;
+ 
+ 	musb_writeb(musb->mregs, MUSB_TESTMODE, test);
 -- 
 2.20.1
 
