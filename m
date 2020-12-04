@@ -2,107 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 777962CECBA
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 12:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C82E2CECD9
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 12:16:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729854AbgLDLGs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Dec 2020 06:06:48 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:39530 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726999AbgLDLGs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Dec 2020 06:06:48 -0500
-Received: by mail-lj1-f194.google.com with SMTP id o24so6138090ljj.6;
-        Fri, 04 Dec 2020 03:06:32 -0800 (PST)
+        id S1729325AbgLDLO7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Dec 2020 06:14:59 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:41866 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728018AbgLDLO7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Dec 2020 06:14:59 -0500
+Received: by mail-lf1-f65.google.com with SMTP id r24so7114973lfm.8
+        for <linux-usb@vger.kernel.org>; Fri, 04 Dec 2020 03:14:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PTgn8cGmjx6KO+ClxPA7F//3s9QN/o87+O7mKbif/hE=;
-        b=bXRDHmiusUjmj2GYCr8VKd6z2IKXhaEwtLeHf+x7JpN+IONztVMTRry2j5s4mbI1Cn
-         7KPI7GaM/AJGzzRe/y2PRLx5CqR7+8aQWM71zXzDsnyjgCFeyJcMfguOiIZ5X28LCW4Z
-         h+6f/fWWc6/rYAA8WDhE3VzodicWl4sb9pH656+tPF+VazLjMnkuScFhDQiX2okMmYyF
-         hu7lHxv7nR7Nx0OG4M+akY8g2OzD1U61gpSr1n7ed0s97gMYNFSez88SJLmT44YpRlLs
-         i4O7YF4iCiQmYBtIE9/qDNV/p7Z/Y8zYgr00Tf6VlAlNqmZb1PoycU9RQ+yO5KIVWFh9
-         H2DQ==
-X-Gm-Message-State: AOAM531RHVkDgebj339ZT09km+lNd6JqmMq3NECRnXRdCEzPaMUx1fDT
-        /7/t1eUtkSyXx5nze+r885z5X4cGbaKjsQ==
-X-Google-Smtp-Source: ABdhPJzkDZIa9NHDh0PaimLY9LZb3jr3gqzGj3lStPMm8fWQGhU+V9h5q9xuW2cGy6yrKtQAgRfhTQ==
-X-Received: by 2002:a2e:2416:: with SMTP id k22mr3188160ljk.201.1607079966137;
-        Fri, 04 Dec 2020 03:06:06 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=b8h0a1wBM7kods/PLLfUGVT30t9au4Cw1gE/Cx1FTaE=;
+        b=JrRdcauOCrELjVOeeuEZDQSqQdS89/LxiErzebaTsY17iawRnGYRroEp+xwVuNNpYr
+         7mUaQUjG4VW4ExF2E6U8h/ZvVMDzLy1BNtNnwDKSm1X6wPqi5YgE4TVk/SxtqA3mTPzm
+         /O7EwKuzBmmKJVzWT6hj9UlVLCPycscM3hPOdoSIKMFyeM8n8PCyRJZFZlBEr2n8wG1H
+         HaEqp2jzuADuCdF0ZLlaLJxJIptoTi67jrgyDJb5eDsu+8F446bE3XNZ7qv6WsKH141r
+         ni4HCg6hYKp3V59SZYtnMMpjSQin1NO44rvsY0RoJxVdvB7dNk/XCqs1Ep3O6xReucrv
+         OxjQ==
+X-Gm-Message-State: AOAM5318rqVk56360hO36lzX/YiHiNppiHOdbSznT2uxmpCYYlghiKmP
+        OK8ZmJJJG4vj3YjqZCQSopHeJxXjh89lYQ==
+X-Google-Smtp-Source: ABdhPJwEZxvc02zGXsuA6/qmyB+tC7hg1rIPziPR9H7h6XBp9J2JK93/bk3KVS9/aN/pwAg6Q2YMvw==
+X-Received: by 2002:a19:c301:: with SMTP id t1mr2780887lff.105.1607080451539;
+        Fri, 04 Dec 2020 03:14:11 -0800 (PST)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id t6sm1544388lfc.231.2020.12.04.03.06.05
+        by smtp.gmail.com with ESMTPSA id b18sm1582177ljp.124.2020.12.04.03.14.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Dec 2020 03:06:05 -0800 (PST)
+        Fri, 04 Dec 2020 03:14:10 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1kl8v8-00056c-Ma; Fri, 04 Dec 2020 12:06:39 +0100
-Date:   Fri, 4 Dec 2020 12:06:38 +0100
+        id 1kl92y-0006sb-QS; Fri, 04 Dec 2020 12:14:44 +0100
+Date:   Fri, 4 Dec 2020 12:14:44 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Himadri Pandya <himadrispandya@gmail.com>,
-        Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: kl5kusb105: fix memleak on open
-Message-ID: <X8oYPir8HfGEoTzB@localhost>
-References: <20201204085519.20230-1-johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB-serial fixes for 5.10-rc7
+Message-ID: <X8oaJPqNvhGB/2Sd@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20201204085519.20230-1-johan@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 04, 2020 at 09:55:19AM +0100, Johan Hovold wrote:
-> Fix memory leak of control-message transfer buffer on successful open().
-> 
-> Fixes: 6774d5f53271 ("USB: serial: kl5kusb105: fix open error path")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
-> 
-> While reviewing Himadri's control-message series I noticed we have a
-> related bug in klsi_105_open() that needs fixing.
-> 
-> 
->  drivers/usb/serial/kl5kusb105.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/serial/kl5kusb105.c b/drivers/usb/serial/kl5kusb105.c
-> index 5ee48b0650c4..5f6b82ebccc5 100644
-> --- a/drivers/usb/serial/kl5kusb105.c
-> +++ b/drivers/usb/serial/kl5kusb105.c
-> @@ -276,12 +276,12 @@ static int  klsi_105_open(struct tty_struct *tty, struct usb_serial_port *port)
->  	priv->cfg.unknown2 = cfg->unknown2;
->  	spin_unlock_irqrestore(&priv->lock, flags);
->  
-> +	kfree(cfg);
-> +
->  	/* READ_ON and urb submission */
->  	rc = usb_serial_generic_open(tty, port);
-> -	if (rc) {
-> -		retval = rc;
-> -		goto err_free_cfg;
-> -	}
-> +	if (rc)
-> +		return rc;
->  
->  	rc = usb_control_msg(port->serial->dev,
->  			     usb_sndctrlpipe(port->serial->dev, 0),
-> @@ -324,8 +324,6 @@ static int  klsi_105_open(struct tty_struct *tty, struct usb_serial_port *port)
->  			     KLSI_TIMEOUT);
->  err_generic_close:
->  	usb_serial_generic_close(port);
-> -err_free_cfg:
-> -	kfree(cfg);
->  
->  	return retval;
->  }
+The following changes since commit 09162bc32c880a791c6c0668ce0745cf7958f576:
 
-I've applied this one now so that I can include it in my pull-request
-for -rc7.
+  Linux 5.10-rc4 (2020-11-15 16:44:31 -0800)
 
-Greg, just let me know if you think I should hold this one off for 5.11
-instead.
+are available in the Git repository at:
 
-Johan
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.10-rc7
+
+for you to fetch changes up to 3f203f057edfcf6bd02c6b942799262bfcf31f73:
+
+  USB: serial: kl5kusb105: fix memleak on open (2020-12-04 12:02:57 +0100)
+
+----------------------------------------------------------------
+USB-serial fixes for 5.10-rc7
+
+Here's a fix for a regression in the option driver which has been
+backported to the stable trees and fix for a small memory leak on open
+in the kl5kusb105 driver.
+
+Included are also various new device ids.
+
+All but the memleak fix has been in linux-next and with no reported
+issues.
+
+----------------------------------------------------------------
+Bjørn Mork (1):
+      USB: serial: option: fix Quectel BG96 matching
+
+Giacinto Cifelli (1):
+      USB: serial: option: add support for Thales Cinterion EXS82
+
+Jan-Niklas Burfeind (1):
+      USB: serial: ch341: add new Product ID for CH341A
+
+Johan Hovold (2):
+      USB: serial: ch341: sort device-id entries
+      USB: serial: kl5kusb105: fix memleak on open
+
+Vincent Palatin (1):
+      USB: serial: option: add Fibocom NL668 variants
+
+ drivers/usb/serial/ch341.c      |  5 +++--
+ drivers/usb/serial/kl5kusb105.c | 10 ++++------
+ drivers/usb/serial/option.c     | 10 ++++++----
+ 3 files changed, 13 insertions(+), 12 deletions(-)
