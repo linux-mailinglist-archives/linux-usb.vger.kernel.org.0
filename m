@@ -2,96 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C82E2CECD9
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 12:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F422CED02
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 12:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729325AbgLDLO7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Dec 2020 06:14:59 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:41866 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728018AbgLDLO7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Dec 2020 06:14:59 -0500
-Received: by mail-lf1-f65.google.com with SMTP id r24so7114973lfm.8
-        for <linux-usb@vger.kernel.org>; Fri, 04 Dec 2020 03:14:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=b8h0a1wBM7kods/PLLfUGVT30t9au4Cw1gE/Cx1FTaE=;
-        b=JrRdcauOCrELjVOeeuEZDQSqQdS89/LxiErzebaTsY17iawRnGYRroEp+xwVuNNpYr
-         7mUaQUjG4VW4ExF2E6U8h/ZvVMDzLy1BNtNnwDKSm1X6wPqi5YgE4TVk/SxtqA3mTPzm
-         /O7EwKuzBmmKJVzWT6hj9UlVLCPycscM3hPOdoSIKMFyeM8n8PCyRJZFZlBEr2n8wG1H
-         HaEqp2jzuADuCdF0ZLlaLJxJIptoTi67jrgyDJb5eDsu+8F446bE3XNZ7qv6WsKH141r
-         ni4HCg6hYKp3V59SZYtnMMpjSQin1NO44rvsY0RoJxVdvB7dNk/XCqs1Ep3O6xReucrv
-         OxjQ==
-X-Gm-Message-State: AOAM5318rqVk56360hO36lzX/YiHiNppiHOdbSznT2uxmpCYYlghiKmP
-        OK8ZmJJJG4vj3YjqZCQSopHeJxXjh89lYQ==
-X-Google-Smtp-Source: ABdhPJwEZxvc02zGXsuA6/qmyB+tC7hg1rIPziPR9H7h6XBp9J2JK93/bk3KVS9/aN/pwAg6Q2YMvw==
-X-Received: by 2002:a19:c301:: with SMTP id t1mr2780887lff.105.1607080451539;
-        Fri, 04 Dec 2020 03:14:11 -0800 (PST)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id b18sm1582177ljp.124.2020.12.04.03.14.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Dec 2020 03:14:10 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kl92y-0006sb-QS; Fri, 04 Dec 2020 12:14:44 +0100
-Date:   Fri, 4 Dec 2020 12:14:44 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB-serial fixes for 5.10-rc7
-Message-ID: <X8oaJPqNvhGB/2Sd@localhost>
+        id S1729989AbgLDLZD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Dec 2020 06:25:03 -0500
+Received: from mga09.intel.com ([134.134.136.24]:21992 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725999AbgLDLZD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 4 Dec 2020 06:25:03 -0500
+IronPort-SDR: bpwbxSIbTvituL4H7G5isqh4UQ3YaX9L1K7sXlHpzBhD7XErGcCgG1MbxgvNo+JWU2tsvnpRZR
+ /FquEPV67MrQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9824"; a="173518019"
+X-IronPort-AV: E=Sophos;i="5.78,392,1599548400"; 
+   d="scan'208";a="173518019"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2020 03:23:22 -0800
+IronPort-SDR: v9bNW00gKieqeSryPmnm9xh9U8RkPJlGVFX0+Bcr3vFvqs1pO94h3YNcnk+6L4nNouK7wnhjxo
+ vlrTstwbSS+A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,392,1599548400"; 
+   d="scan'208";a="435784644"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 04 Dec 2020 03:23:19 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 04 Dec 2020 13:23:18 +0200
+Date:   Fri, 4 Dec 2020 13:23:18 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH 0/2] Remove one more platform_device_add_properties() call
+Message-ID: <20201204112318.GA4013126@kuha.fi.intel.com>
+References: <20201123153148.52647-1-heikki.krogerus@linux.intel.com>
+ <CAJZ5v0jAaz2zELkJoKjHtxyfuKEi=ORuCCad-F0yp6KephieGg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0jAaz2zELkJoKjHtxyfuKEi=ORuCCad-F0yp6KephieGg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 09162bc32c880a791c6c0668ce0745cf7958f576:
+Hi Felipe,
 
-  Linux 5.10-rc4 (2020-11-15 16:44:31 -0800)
+On Mon, Nov 23, 2020 at 06:06:31PM +0100, Rafael J. Wysocki wrote:
+> On Mon, Nov 23, 2020 at 4:32 PM Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
+> >
+> > Hi,
+> >
+> > I originally introduced these as part of my series where I was
+> > proposing PM ops for software nodes [1], but since that still needs
+> > work, I'm sending these two separately.
+> >
+> > So basically I'm only modifying dwc3-pci.c so it registers a software
+> > node directly at this point. That will remove one more user of
+> > platform_device_add_properties().
+> >
+> > [1] https://lore.kernel.org/lkml/20201029105941.63410-1-heikki.krogerus@linux.intel.com/
+> >
+> > thanks,
+> >
+> > Heikki Krogerus (2):
+> >   software node: Introduce device_add_software_node()
+> >   usb: dwc3: pci: Register a software node for the dwc3 platform device
+> >
+> >  drivers/base/swnode.c       | 69 ++++++++++++++++++++++++++++++++-----
+> >  drivers/usb/dwc3/dwc3-pci.c | 61 +++++++++++++++++++-------------
+> >  include/linux/property.h    |  3 ++
+> >  3 files changed, 100 insertions(+), 33 deletions(-)
+> >
+> > --
+> 
+> These look good to me.
+> 
+> If you want me to take them, though, I need an ACK from the dwc3 side.
 
-are available in the Git repository at:
+Is this OK?
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.10-rc7
+thanks,
 
-for you to fetch changes up to 3f203f057edfcf6bd02c6b942799262bfcf31f73:
-
-  USB: serial: kl5kusb105: fix memleak on open (2020-12-04 12:02:57 +0100)
-
-----------------------------------------------------------------
-USB-serial fixes for 5.10-rc7
-
-Here's a fix for a regression in the option driver which has been
-backported to the stable trees and fix for a small memory leak on open
-in the kl5kusb105 driver.
-
-Included are also various new device ids.
-
-All but the memleak fix has been in linux-next and with no reported
-issues.
-
-----------------------------------------------------------------
-Bjørn Mork (1):
-      USB: serial: option: fix Quectel BG96 matching
-
-Giacinto Cifelli (1):
-      USB: serial: option: add support for Thales Cinterion EXS82
-
-Jan-Niklas Burfeind (1):
-      USB: serial: ch341: add new Product ID for CH341A
-
-Johan Hovold (2):
-      USB: serial: ch341: sort device-id entries
-      USB: serial: kl5kusb105: fix memleak on open
-
-Vincent Palatin (1):
-      USB: serial: option: add Fibocom NL668 variants
-
- drivers/usb/serial/ch341.c      |  5 +++--
- drivers/usb/serial/kl5kusb105.c | 10 ++++------
- drivers/usb/serial/option.c     | 10 ++++++----
- 3 files changed, 13 insertions(+), 12 deletions(-)
+-- 
+heikki
