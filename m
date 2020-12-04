@@ -2,88 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA4E2CEFE1
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 15:42:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FE22CEFE6
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 15:42:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728066AbgLDOks (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Dec 2020 09:40:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729521AbgLDOkr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Dec 2020 09:40:47 -0500
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D3EC061A51
-        for <linux-usb@vger.kernel.org>; Fri,  4 Dec 2020 06:40:07 -0800 (PST)
-Received: by mail-oi1-x241.google.com with SMTP id s75so3271248oih.1
-        for <linux-usb@vger.kernel.org>; Fri, 04 Dec 2020 06:40:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pdoHrzd3dQ6nDKhIuf9c80i4AedVCEsjXDh9pEQefuE=;
-        b=VOBlQqh2iGZDKnoXzzi1FmZYqXmyW1Orcc6nqBYmrj9eeyU8UyPD8fsXr4iJuvZ0t2
-         KKDfBx4Ebv8CR6FyBfNzI6x+ZAvBn8pcXHX/J4ElDh2IF+OMMTMDRDPCW9bpK3w/Iz/D
-         xVOiqNSi3eE6sIJD1mhLEJMDneKJQr4HFl79CngKs/cLhTWb9HFE6weJwiRg/cGiaexy
-         ie/5Te8MDrCl6u5KVoAb0QBxE5sbG10bElfjMCf0E1TuI4HdEg7CgYLH5PW3sWBhrOSL
-         Dt9ri0qCDShfdnjJEzDL8c19BD6E6QT1N5Mh0HojzCVvYi3fd/c08OgFpVb1FF1pPX7u
-         lZag==
+        id S1730001AbgLDOlq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Dec 2020 09:41:46 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:42009 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726605AbgLDOlp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Dec 2020 09:41:45 -0500
+Received: by mail-lf1-f68.google.com with SMTP id u18so7915276lfd.9;
+        Fri, 04 Dec 2020 06:41:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pdoHrzd3dQ6nDKhIuf9c80i4AedVCEsjXDh9pEQefuE=;
-        b=nDN3I/gJ+38z0xyJ49NFtXTKa+UItiZJx/S24pgDMzU1LFxwZBZ0HhoKA7Zr3jg4fu
-         ZjEVSQoSuv7MyojTBtpgYdbhK7NQFwCrBAbSLDnHGs9JjAQPSAvDwcwPaawz2lGMKBCH
-         0CyhbJCnHXLfplODAzmR/MpumVwp2TThlbwQXxi8zVLZKOKwrCaN33hgoLuLF5jMDv+y
-         Yp6c1qtICggG/JnZEVeZs9XfcEgQ75G6w5jk73sQCwayHnbffLJ3tNB/pWAmzqHmWRgm
-         ts51SMEy2NlVkMSmPQNPvY2IknMF+6e/HwEkV2ygk88jMJhiSs637vnaA6AWn/wXIk49
-         7X3Q==
-X-Gm-Message-State: AOAM5317K+PbpEJCissA7EwRhLpOnRkN/1Rksb35NMy+QIRfmEFjr+KO
-        qVFq8dyksJC49ZmpV280G0Frej3u2gxnq6iJYzl3nvJZ/SCbbg==
-X-Google-Smtp-Source: ABdhPJxQ628UzKLXhrJScu5dRK36Xd+PJ+tOdTOFrwVPqNWoNq05mxI8RGlgaquNTSKT9+j3K9e5yAdSdxzMsX/J/Fk=
-X-Received: by 2002:aca:dec2:: with SMTP id v185mr3475960oig.6.1607092806536;
- Fri, 04 Dec 2020 06:40:06 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ln9r0T1F2OcwQjbj1D1NhN77qdiGK2MbPyg3XcSXKac=;
+        b=fF4tvRS2FqZq+G+VANKlvuGuPy051H8/5Ejs8H+bvGf4d8b0NuRvuYRhGrKV1y1C7m
+         QBDxySMeN2N1oQdY8uOO25IoPqnVG3xKlyBNpOgxZrjFQWA1dFsARM5tnTiufbTJOCvS
+         8W92BecuKyyBuEdmjlHf0WMkSG1b2NCwVNsF0jp4gABj+F4jr63dsAMo85jfj4dLKOEj
+         GIJRqHBABUvOyr2pydwoin47vcNat6bpp67r+W0Pj74YRZ0n2cOJ44Ex6SxDM37HMnir
+         r0u7DMceRNUnQnhu5zGuaooUvR/TdnEt0X7frn6kEtWHAzoh1tfdpZu3ZCa4SKuyz4Ve
+         yXRw==
+X-Gm-Message-State: AOAM532dziSZuHalD9IZbtn7/DlytH8+Nms2aXHIMEiLK/AWpa8Yc8jA
+        3uPiN/pwGWFYUv1aQCw2PC9xQAW0NP0wyg==
+X-Google-Smtp-Source: ABdhPJxTwGN3a80WQjzN5utWFowJQyCZfOUEgGPCmcO1RAWk2xkMbjXumn7+vBubJCXvlTcVgPO3jg==
+X-Received: by 2002:a19:ac07:: with SMTP id g7mr3469715lfc.125.1607092857473;
+        Fri, 04 Dec 2020 06:40:57 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id m13sm1739396lfb.14.2020.12.04.06.40.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Dec 2020 06:40:56 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1klCH4-0005LJ-TA; Fri, 04 Dec 2020 15:41:30 +0100
+Date:   Fri, 4 Dec 2020 15:41:30 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 05/15] usb: misc: emi26: update to use
+ usb_control_msg_send()
+Message-ID: <X8pKmmdvO0cIQXnL@localhost>
+References: <20201130011819.2576481-1-anant.thazhemadam@gmail.com>
+ <20201130012847.2579463-1-anant.thazhemadam@gmail.com>
 MIME-Version: 1.0
-References: <1604794711-8661-1-git-send-email-ruslan.bilovol@gmail.com>
- <20201111092941.GJ14896@b29397-desktop> <CAB=otbSAGhDYxim9_fsyH4pZCLqgq+bxNJfv5hXqgQRVngVaig@mail.gmail.com>
- <CAMS2kBF5Gvhnf7AzdeSFeVeWBLhtHM_hHfTvMLTN-3Jkh=BwHw@mail.gmail.com>
- <CAB=otbTK0j03HjiLS-tqqaBTuavaFEJs49hpKPj2Df8e1_WN+A@mail.gmail.com>
- <1jblfk8di1.fsf@starbuckisacylon.baylibre.com> <8bf995b1-7b95-4c79-fbe8-275f29716c0e@ivitera.com>
-In-Reply-To: <8bf995b1-7b95-4c79-fbe8-275f29716c0e@ivitera.com>
-From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Date:   Fri, 4 Dec 2020 16:39:54 +0200
-Message-ID: <CAB=otbS0RdXyLEHrkHXWZN+S-CKwdBONifrH11hiAf-3SL9cSQ@mail.gmail.com>
-Subject: Re: [PATCH 0/3] UAC2 Gadget: feedback endpoint support
-To:     Pavel Hofman <pavel.hofman@ivitera.com>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Glenn Schmottlach <gschmottlach@gmail.com>,
-        Peter Chen <peter.chen@nxp.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201130012847.2579463-1-anant.thazhemadam@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 26, 2020 at 3:44 PM Pavel Hofman <pavel.hofman@ivitera.com> wrote:
->
-> Dne 26. 11. 20 v 14:16 Jerome Brunet napsal(a):
-> >
-> >> Maximum data rates that I used were (AFAIR) 8 channel 192kHz/32bit,
-> >> but there is another issue with high data rate if someone uses so many
-> >> channels, very high sampling frequency or sample size that data can't
-> >> fit into allowed (by USB spec) max packet size of endpoint. In this case
-> >> need to decrease bInterval of endpoint.
->
-> Should anyone test the patches with RPi4 dwc2 as the gadget, please note
-> the recently accepted patch
-> https://patchwork.kernel.org/project/linux-usb/patch/e9e7d070-593c-122f-3a5c-2435bb147ab2@ivitera.com/
-> which allows using full 1024 bytes maxpacketsize on EP OUT. It is not an
-> enumeration issue, but the old (= existing) RX FIFO size drops data with
-> packet sizes above 960 bytes.
+On Mon, Nov 30, 2020 at 06:58:47AM +0530, Anant Thazhemadam wrote:
+> The newer usb_control_msg_{send|recv}() API are an improvement on the
+> existing usb_control_msg() as it ensures that a short read/write is treated
+> as an error,
 
-Thanks for bringing this to our attention. Does it affect RPi 3 as well?
-I'm going to test feedback feature on this board
+Short writes have always been treated as an error. The new send helper
+only changes the return value from the transfer size to 0.
 
-Regards,
-Ruslan
+And this driver never reads.
+
+Try to describe the motivation for changing this driver which is to
+avoid the explicit kmemdup().
+
+> data can be used off the stack, and raw usb pipes need not be
+> created in the calling functions.
+> For this reason, the instance of usb_control_msg() has been replaced with
+> usb_control_msg_send() appropriately.
+> 
+> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+> ---
+>  drivers/usb/misc/emi26.c | 31 ++++++++-----------------------
+>  1 file changed, 8 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/emi26.c b/drivers/usb/misc/emi26.c
+> index 24d841850e05..1dd024507f40 100644
+> --- a/drivers/usb/misc/emi26.c
+> +++ b/drivers/usb/misc/emi26.c
+> @@ -27,7 +27,7 @@
+>  #define INTERNAL_RAM(address)   (address <= MAX_INTERNAL_ADDRESS)
+>  
+>  static int emi26_writememory( struct usb_device *dev, int address,
+> -			      const unsigned char *data, int length,
+> +			      const void *data, int length,
+
+Why is this needed?
+
+>  			      __u8 bRequest);
+>  static int emi26_set_reset(struct usb_device *dev, unsigned char reset_bit);
+>  static int emi26_load_firmware (struct usb_device *dev);
+> @@ -35,22 +35,12 @@ static int emi26_probe(struct usb_interface *intf, const struct usb_device_id *i
+>  static void emi26_disconnect(struct usb_interface *intf);
+>  
+>  /* thanks to drivers/usb/serial/keyspan_pda.c code */
+> -static int emi26_writememory (struct usb_device *dev, int address,
+> -			      const unsigned char *data, int length,
+> +static int emi26_writememory(struct usb_device *dev, int address,
+> +			      const void *data, int length,
+>  			      __u8 request)
+>  {
+> -	int result;
+> -	unsigned char *buffer =  kmemdup(data, length, GFP_KERNEL);
+> -
+> -	if (!buffer) {
+> -		dev_err(&dev->dev, "kmalloc(%d) failed.\n", length);
+> -		return -ENOMEM;
+> -	}
+> -	/* Note: usb_control_msg returns negative value on error or length of the
+> -	 * 		 data that was written! */
+> -	result = usb_control_msg (dev, usb_sndctrlpipe(dev, 0), request, 0x40, address, 0, buffer, length, 300);
+> -	kfree (buffer);
+> -	return result;
+> +	return usb_control_msg_send(dev, 0, request, 0x40, address, 0,
+> +				    data, length, 300, GFP_KERNEL);
+
+So you're changing the return value on success from length to 0 here.
+Did you make sure that all callers can handle that?
+
+>  }
+>  
+>  /* thanks to drivers/usb/serial/keyspan_pda.c code */
+> @@ -77,11 +67,7 @@ static int emi26_load_firmware (struct usb_device *dev)
+>  	int err = -ENOMEM;
+>  	int i;
+>  	__u32 addr;	/* Address to write */
+> -	__u8 *buf;
+> -
+> -	buf = kmalloc(FW_LOAD_SIZE, GFP_KERNEL);
+> -	if (!buf)
+> -		goto wraperr;
+> +	__u8 buf[FW_LOAD_SIZE];
+
+As the build bots reported, you must not put large structures like this
+on the stack.
+
+>  
+>  	err = request_ihex_firmware(&loader_fw, "emi26/loader.fw", &dev->dev);
+>  	if (err)
+> @@ -133,11 +119,11 @@ static int emi26_load_firmware (struct usb_device *dev)
+>  
+>  		/* intel hex records are terminated with type 0 element */
+>  		while (rec && (i + be16_to_cpu(rec->len) < FW_LOAD_SIZE)) {
+> -			memcpy(buf + i, rec->data, be16_to_cpu(rec->len));
+> +			memcpy(&buf[i], rec->data, be16_to_cpu(rec->len));
+>  			i += be16_to_cpu(rec->len);
+>  			rec = ihex_next_binrec(rec);
+>  		}
+> -		err = emi26_writememory(dev, addr, buf, i, ANCHOR_LOAD_FPGA);
+> +		err = emi26_writememory(dev, addr, &buf, i, ANCHOR_LOAD_FPGA);
+>  		if (err < 0)
+>  			goto wraperr;
+>  	} while (rec);
+> @@ -211,7 +197,6 @@ static int emi26_load_firmware (struct usb_device *dev)
+>  	release_firmware(bitstream_fw);
+>  	release_firmware(firmware_fw);
+>  
+> -	kfree(buf);
+>  	return err;
+>  }
+
+Looks good otherwise.
+
+Johan
