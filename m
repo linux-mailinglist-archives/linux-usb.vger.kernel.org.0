@@ -2,97 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E70A22CF3F6
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 19:23:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B6C2CF3F3
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 19:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730167AbgLDSXo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Dec 2020 13:23:44 -0500
-Received: from mail.oakviewlaw.com ([184.105.149.4]:36436 "EHLO
-        mail.oakviewlaw.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726276AbgLDSXn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Dec 2020 13:23:43 -0500
-X-Greylist: delayed 560 seconds by postgrey-1.27 at vger.kernel.org; Fri, 04 Dec 2020 13:23:43 EST
-Received: from localhost (localhost [127.0.0.1])
-        by mail.oakviewlaw.com (Postfix) with ESMTP id 22B1B4FB77A;
-        Fri,  4 Dec 2020 18:13:23 +0000 (UTC)
-Received: from mail.oakviewlaw.com ([127.0.0.1])
-        by localhost (mail.oakviewlaw.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id QThKpeWE_2As; Fri,  4 Dec 2020 18:13:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.oakviewlaw.com (Postfix) with ESMTP id AEF0E4FB6DC;
-        Fri,  4 Dec 2020 18:13:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.oakviewlaw.com AEF0E4FB6DC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oakviewlaw.com;
-        s=selector; t=1607105602;
-        bh=O4faEs1u5TKKd2DgIzfqFIrp/N/6fhS+j4xcsYavjXw=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=fl5pvVBOGiOTXsRtBDjf9EbaLoiqA+o07pK6FWJrrdq6a07Ude4kbyj/xK3qLgnxM
-         BKlYLQ+DD8PQnEJAzruhA/EXFNWgQUrFIf+9UibZ7fFdVywBT1q8eLCY8ohCwKsNWC
-         ChRfpRWbZmc0hW2l1zR3TH0+H3wfCIaAo4F2mKDnX5WPrTJ447zi1aYwZvVNwcPFeJ
-         B3uw9BtQwFgT/OBs3zFb1AOt/0mbSQjTxW73QJywE6UG1/laR/INUatKeqbvDlfSNm
-         IE15N2z0zPkDEEnAZO/WuJumYA+j+aUK7RajUgUFLOTtk7Na545vxYECNdroJbx18l
-         Jklr+oFmHuBTg==
-X-Virus-Scanned: amavisd-new at oakviewlaw.com
-Received: from mail.oakviewlaw.com ([127.0.0.1])
-        by localhost (mail.oakviewlaw.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id DkJWENCuXQT4; Fri,  4 Dec 2020 18:13:22 +0000 (UTC)
-Received: from [192.168.1.195] (unknown [91.187.51.3])
-        by mail.oakviewlaw.com (Postfix) with ESMTPSA id E6E4D4FB8AE;
-        Fri,  4 Dec 2020 18:13:11 +0000 (UTC)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1726447AbgLDSWf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Dec 2020 13:22:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729615AbgLDSWc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Dec 2020 13:22:32 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C85AC061A51
+        for <linux-usb@vger.kernel.org>; Fri,  4 Dec 2020 10:21:52 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id d18so6799762edt.7
+        for <linux-usb@vger.kernel.org>; Fri, 04 Dec 2020 10:21:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=ZRVh9nEjQvUMIF508xcL3n/raN8xu3HvHHn5B7tzkG0=;
+        b=EL5y9hBpj6GRCi8l2vMDH/FJOG7I547GwjN3OeZBqD9nmmw0IxEmOsLiaNfedZBxuH
+         uo9dBI345APAYZYJLOY4NQd1d0GfZzxIMQv0ZKIbg8aj4tm5Ea8h2h93Pgs1qSxhgK43
+         pnL56vHL4OqCk4budJq7WliGWde5V/7JnsLAfd9CH5hxrMUpfTYppRgzIWEcKA1fArrp
+         x9CwcP9mn+vU+lJGNWLh3JAQikVmuQ+WDocQOfOwmAcHpQ6aG3oZ/9MUjroSge+kQmQd
+         xD6rw8KRt3YvK4AEQ/i0Q1JedpG8SBPITyje4+hhxHAaIKXdCCMTn7RHEbFI51JviXbf
+         g9NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=ZRVh9nEjQvUMIF508xcL3n/raN8xu3HvHHn5B7tzkG0=;
+        b=N/CO2OZ2dBx4x+pI30Ph1bmTUFpV0TgjOqJ1woi2rGHyBzA3yqnkoUf6cCuvT/KNVk
+         didPshCBxtOtFmBlw7WitQvA6bSUMtT5JwCX0A5AsDW9lTHTrZiF56+WF+/WPoyWT08x
+         gZS5rfYMl+I5eHO3OUALGpqutZ8GsaPZ4QXo24QJhrcizGPG4Qs5lcl6B32c0wjIvPAK
+         V2sT9wi3a62FwquXi7tfWKxXyrBTJE3yukjGFAjX5n0aKNY7MWR3hSh8Yr5+W1ujaPfz
+         0pkSQisTZtlPdpQ0rD9ZR/8LtUe66UatLLh8GjwFaRam97UVjUPb1BEXyHaJIMKyjrty
+         NgSA==
+X-Gm-Message-State: AOAM5338HCunDqjLTnjUrKXf58NpBgrOMdqJdK4dCtVya1/ozVHJ3jML
+        bUJflabrK2/6XbnKU5lGIEJhRScDBoGWf6ni+jgcDA==
+X-Google-Smtp-Source: ABdhPJxhhWwBPD60dOctXmgKnIbCBK7ZM990qyfx3XJkIdxJ4AWmvXsllEsnGRPblHC7nDFEIFiU8tWNG27BjMCSIdo=
+X-Received: by 2002:aa7:da8f:: with SMTP id q15mr8747868eds.239.1607106110881;
+ Fri, 04 Dec 2020 10:21:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: NEDBANK
-To:     Recipients <zimbra@oakviewlaw.com>
-From:   "Mr. Casmir Nkulu" <zimbra@oakviewlaw.com>
-Date:   Fri, 04 Dec 2020 10:13:03 -0800
-Reply-To: serty@webmail.co.za
-Message-Id: <20201204181311.E6E4D4FB8AE@mail.oakviewlaw.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 4 Dec 2020 23:51:39 +0530
+Message-ID: <CA+G9fYuJF-L+qHJ3ufqD+M2w20LgeqMC0rhqv7oZagOA7iJMDg@mail.gmail.com>
+Subject: BUG: KCSAN: data-race in mutex_spin_on_owner+0xef/0x1b0
+To:     open list <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org, lkft-triage@lists.linaro.org,
+        rcu@vger.kernel.org, kasan-dev <kasan-dev@googlegroups.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marco Elver <elver@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <treding@nvidia.com>,
+        mathias.nyman@linux.intel.com, Qian Cai <cai@lca.pw>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Attention: Esteemed Customer
+LKFT started testing KCSAN enabled kernel from the linux next tree.
+Here we have found BUG: KCSAN: data-race in mutex_spin_on_owner
+and several more KCSAN BUGs.
 
-Note that the NED-BANK of RSA  have received the authority by United State =
-of  America Federal Reserve  Bank  in conjunction with the International Mo=
-netary Fund (IMF) and the  World Bank to finally release all pending Lotter=
-y winning payments, Contracts payments, Inheritance/ATM funds and Loan paym=
-ents.
+This report is from an x86_64 machine clang-11 linux next 20201201.
+Since we are running for the first time we do not call this regression.
 
-Most importantly, we have received banking antennary as stated below for th=
-e transfer of your funds, as such we urgently request that you reconfirm wi=
-th us if you have given such mandate or not, failure to receive immediate r=
-esponse from you within the next seven workings days we shall believe that =
-such mandate was issued by you, to that effect we shall then commence with =
-the transfer of the fund into the bank details below.
+[    4.745161] usbcore: registered new interface driver cdc_ether
+[    4.751281] ==================================================================
+[    4.756653] usbcore: registered new interface driver net1080
+[    4.752139] BUG: KCSAN: data-race in mutex_spin_on_owner+0xef/0x1b0
+[    4.752139]
+[    4.752139] race at unknown origin, with read to 0xffff90a80098b034
+of 4 bytes by task 252 on cpu 1:
+[    4.769781] usbcore: registered new interface driver cdc_subset
+[    4.752139]  mutex_spin_on_owner+0xef/0x1b0
+[    4.752139]  __mutex_lock+0x69d/0x820
+[    4.752139]  __mutex_lock_slowpath+0x13/0x20
+[    4.781657] usbcore: registered new interface driver zaurus
+[    4.752139]  mutex_lock+0x9d/0xb0
+[    4.752139]  ata_eh_acquire+0x2e/0x80
+[    4.752139]  ata_msleep+0x91/0xa0
+[    4.792317] usbcore: registered new interface driver cdc_ncm
+[    4.752139]  sata_link_debounce+0x1ad/0x2f0
+[    4.752139]  sata_link_resume+0x32f/0x4a0
+[    4.752139]  sata_link_hardreset+0x456/0x640
+[    4.802369] usbcore: registered new interface driver r8153_ecm
+[    4.752139]  ahci_do_hardreset+0x177/0x230
+[    4.752139]  ahci_hardreset+0x23/0x40
+[    4.752139]  ata_eh_reset+0x91e/0x1bb0
+[    4.810641] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+[    4.810482]  ata_eh_recover+0x79b/0x2bd0
+[    4.810482]  sata_pmp_error_handler+0x7d1/0x1340
+[    4.810482]  ahci_error_handler+0x7c/0xc0
+[    4.819247] ehci-pci: EHCI PCI platform driver
+[    4.810482]  ata_scsi_port_error_handler+0x708/0xd30
+[    4.810482]  ata_scsi_error+0x128/0x160
+[    4.826321] ohci_hcd: USB 1.1 'Open' Host Controller (OHCI) Driver
+[    4.810482]  scsi_error_handler+0x26d/0x700
+[    4.810482]  kthread+0x20b/0x220
+[    4.836069] ohci-pci: OHCI PCI platform driver
+[    4.810482]  ret_from_fork+0x22/0x30
+[    4.810482]
+[    4.844397] uhci_hcd: USB Universal Host Controller Interface driver
+[    4.810482] Reported by Kernel Concurrency Sanitizer on:
+[    4.810482] CPU: 1 PID: 252 Comm: scsi_eh_1 Not tainted
+5.10.0-rc6-next-20201201 #2
+[    4.810482] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.2 05/23/2018
+[    4.855343] xhci_hcd 0000:00:14.0: xHCI Host Controller
+[    4.810482] ==================================================================
 
+metadata:
+    git_repo: https://gitlab.com/aroxell/lkft-linux-next
+    target_arch: x86
+    toolchain: clang-11
+    git_describe: next-20201201
+    kernel_version: 5.10.0-rc6
+    download_url: https://builds.tuxbuild.com/1l8eiWgGMi6W4aDobjAAlOleFVl/
 
-Bank Name: HSBC SINGAPORE
-Bank
-Address: Blk 131 Jurong East Street 13,
+full test log link,
+https://lkft.validation.linaro.org/scheduler/job/2002643#L831
 
-Account N=B0: 486 4761 10
-
-Account name: Mr. Jurong Koui
-
-Swift Code: HSBCSGS2XXX
-
-Beneficiary: Mr. Jurong Koui
-
-Address: 131 Jurong Gateway Road
-
-Singapore 600131
-
-
-
-Regards,
-
-Mr Casmir Nkulu
-
-Head Foreign payment Department
-
-NED- Bank RSA
-
-#135 Rivonia roads, Sandown, Johannesburg South Africa
+-- 
+Linaro LKFT
+https://lkft.linaro.org
