@@ -2,261 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D40A2CECB0
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 12:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 777962CECBA
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 12:07:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388045AbgLDLDy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Dec 2020 06:03:54 -0500
-Received: from tpserv.tps-expert.ru ([92.50.149.54]:59020 "EHLO
-        tpserv.tps-expert.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387969AbgLDLDy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Dec 2020 06:03:54 -0500
-X-Greylist: delayed 457 seconds by postgrey-1.27 at vger.kernel.org; Fri, 04 Dec 2020 06:03:54 EST
-Received: from localhost (localhost [127.0.0.1])
-        by tpserv.tps-expert.ru (Postfix) with ESMTP id 010C28A01D9
-        for <linux-usb@vger.kernel.org>; Fri,  4 Dec 2020 15:55:34 +0500 (+05)
-X-Virus-Scanned: Debian amavisd-new at tps-expert.ru
-Received: from tpserv.tps-expert.ru ([127.0.0.1])
-        by localhost (tpserv.tps-expert.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id x8y0I3xpMVHw for <linux-usb@vger.kernel.org>;
-        Fri,  4 Dec 2020 15:55:33 +0500 (+05)
-Received: by tpserv.tps-expert.ru (Postfix, from userid 1001)
-        id B51C78A0579; Fri,  4 Dec 2020 15:55:33 +0500 (+05)
-Received: from [127.0.0.1] (DENISW [192.168.0.5])
-        (Authenticated sender: denisw@tps-expert.ru)
-        by tpserv.tps-expert.ru (Postfix) with ESMTPA id 731038A01D9
-        for <linux-usb@vger.kernel.org>; Fri,  4 Dec 2020 15:55:33 +0500 (+05)
-To:     linux-usb@vger.kernel.org
-From:   =?UTF-8?B?0JTQtdC90LjRgQ==?= <denisw@tps-expert.ru>
-Subject: usbhid kernel driver bug?
-Message-ID: <cc67eeca-6d74-4e27-85db-11843c7f70db@tps-expert.ru>
-Date:   Fri, 4 Dec 2020 15:55:38 +0500
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        id S1729854AbgLDLGs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Dec 2020 06:06:48 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:39530 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726999AbgLDLGs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Dec 2020 06:06:48 -0500
+Received: by mail-lj1-f194.google.com with SMTP id o24so6138090ljj.6;
+        Fri, 04 Dec 2020 03:06:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PTgn8cGmjx6KO+ClxPA7F//3s9QN/o87+O7mKbif/hE=;
+        b=bXRDHmiusUjmj2GYCr8VKd6z2IKXhaEwtLeHf+x7JpN+IONztVMTRry2j5s4mbI1Cn
+         7KPI7GaM/AJGzzRe/y2PRLx5CqR7+8aQWM71zXzDsnyjgCFeyJcMfguOiIZ5X28LCW4Z
+         h+6f/fWWc6/rYAA8WDhE3VzodicWl4sb9pH656+tPF+VazLjMnkuScFhDQiX2okMmYyF
+         hu7lHxv7nR7Nx0OG4M+akY8g2OzD1U61gpSr1n7ed0s97gMYNFSez88SJLmT44YpRlLs
+         i4O7YF4iCiQmYBtIE9/qDNV/p7Z/Y8zYgr00Tf6VlAlNqmZb1PoycU9RQ+yO5KIVWFh9
+         H2DQ==
+X-Gm-Message-State: AOAM531RHVkDgebj339ZT09km+lNd6JqmMq3NECRnXRdCEzPaMUx1fDT
+        /7/t1eUtkSyXx5nze+r885z5X4cGbaKjsQ==
+X-Google-Smtp-Source: ABdhPJzkDZIa9NHDh0PaimLY9LZb3jr3gqzGj3lStPMm8fWQGhU+V9h5q9xuW2cGy6yrKtQAgRfhTQ==
+X-Received: by 2002:a2e:2416:: with SMTP id k22mr3188160ljk.201.1607079966137;
+        Fri, 04 Dec 2020 03:06:06 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id t6sm1544388lfc.231.2020.12.04.03.06.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Dec 2020 03:06:05 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kl8v8-00056c-Ma; Fri, 04 Dec 2020 12:06:39 +0100
+Date:   Fri, 4 Dec 2020 12:06:38 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Himadri Pandya <himadrispandya@gmail.com>,
+        Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: kl5kusb105: fix memleak on open
+Message-ID: <X8oYPir8HfGEoTzB@localhost>
+References: <20201204085519.20230-1-johan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: ru
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201204085519.20230-1-johan@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-My UPS wokrs uncorrectly. it appears and disappears in system after a 
-few seconds. help me
+On Fri, Dec 04, 2020 at 09:55:19AM +0100, Johan Hovold wrote:
+> Fix memory leak of control-message transfer buffer on successful open().
+> 
+> Fixes: 6774d5f53271 ("USB: serial: kl5kusb105: fix open error path")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
+> 
+> While reviewing Himadri's control-message series I noticed we have a
+> related bug in klsi_105_open() that needs fixing.
+> 
+> 
+>  drivers/usb/serial/kl5kusb105.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/kl5kusb105.c b/drivers/usb/serial/kl5kusb105.c
+> index 5ee48b0650c4..5f6b82ebccc5 100644
+> --- a/drivers/usb/serial/kl5kusb105.c
+> +++ b/drivers/usb/serial/kl5kusb105.c
+> @@ -276,12 +276,12 @@ static int  klsi_105_open(struct tty_struct *tty, struct usb_serial_port *port)
+>  	priv->cfg.unknown2 = cfg->unknown2;
+>  	spin_unlock_irqrestore(&priv->lock, flags);
+>  
+> +	kfree(cfg);
+> +
+>  	/* READ_ON and urb submission */
+>  	rc = usb_serial_generic_open(tty, port);
+> -	if (rc) {
+> -		retval = rc;
+> -		goto err_free_cfg;
+> -	}
+> +	if (rc)
+> +		return rc;
+>  
+>  	rc = usb_control_msg(port->serial->dev,
+>  			     usb_sndctrlpipe(port->serial->dev, 0),
+> @@ -324,8 +324,6 @@ static int  klsi_105_open(struct tty_struct *tty, struct usb_serial_port *port)
+>  			     KLSI_TIMEOUT);
+>  err_generic_close:
+>  	usb_serial_generic_close(port);
+> -err_free_cfg:
+> -	kfree(cfg);
+>  
+>  	return retval;
+>  }
 
-Ubuntu 20.04
-5.4.0-56-generic
+I've applied this one now so that I can include it in my pull-request
+for -rc7.
 
-[ 2925.730918] usb 1-1.2: new low-speed USB device number 74 using ehci-pci
-[ 2925.848395] usb 1-1.2: New USB device found, idVendor=0d9f, 
-idProduct=0004, bcdDevice= 0.02
-[ 2925.848402] usb 1-1.2: New USB device strings: Mfr=3, Product=1, 
-SerialNumber=2
-[ 2925.848405] usb 1-1.2: Product: HID UPS Battery
-[ 2925.848409] usb 1-1.2: Manufacturer: POWERCOM Co.,LTD
-[ 2925.848411] usb 1-1.2: SerialNumber: 004-0D9F-000
-[ 2925.894211] hid-generic 0003:0D9F:0004.01C3: hiddev0,hidraw2: USB HID 
-v1.00 Device [POWERCOM Co.,LTD HID UPS Battery] on 
-usb-0000:00:1a.0-1.2/input0
-[ 2929.604764] usb 1-1.2: USB disconnect, device number 74
-[ 2932.131003] usb 1-1.2: new low-speed USB device number 75 using ehci-pci
-[ 2932.248646] usb 1-1.2: New USB device found, idVendor=0d9f, 
-idProduct=0004, bcdDevice= 0.02
-[ 2932.248653] usb 1-1.2: New USB device strings: Mfr=3, Product=1, 
-SerialNumber=2
-[ 2932.248656] usb 1-1.2: Product: HID UPS Battery
-[ 2932.248659] usb 1-1.2: Manufacturer: POWERCOM Co.,LTD
-[ 2932.248662] usb 1-1.2: SerialNumber: 004-0D9F-000
-[ 2932.296611] hid-generic 0003:0D9F:0004.01C4: hiddev0,hidraw2: USB HID 
-v1.00 Device [POWERCOM Co.,LTD HID UPS Battery] on 
-usb-0000:00:1a.0-1.2/input0
-[ 2936.004771] usb 1-1.2: USB disconnect, device number 75
-[ 2938.531147] usb 1-1.2: new low-speed USB device number 76 using ehci-pci
-[ 2938.648654] usb 1-1.2: New USB device found, idVendor=0d9f, 
-idProduct=0004, bcdDevice= 0.02
-[ 2938.648661] usb 1-1.2: New USB device strings: Mfr=3, Product=1, 
-SerialNumber=2
-[ 2938.648665] usb 1-1.2: Product: HID UPS Battery
-[ 2938.648668] usb 1-1.2: Manufacturer: POWERCOM Co.,LTD
-[ 2938.648670] usb 1-1.2: SerialNumber: 004-0D9F-000
-[ 2938.695146] hid-generic 0003:0D9F:0004.01C5: hiddev0,hidraw2: USB HID 
-v1.00 Device [POWERCOM Co.,LTD HID UPS Battery] on 
-usb-0000:00:1a.0-1.2/input0
-[ 2942.404770] usb 1-1.2: USB disconnect, device number 76
-[ 2945.187271] usb 1-1.2: new low-speed USB device number 77 using ehci-pci
-[ 2945.304664] usb 1-1.2: New USB device found, idVendor=0d9f, 
-idProduct=0004, bcdDevice= 0.02
-[ 2945.304670] usb 1-1.2: New USB device strings: Mfr=3, Product=1, 
-SerialNumber=2
-[ 2945.304674] usb 1-1.2: Product: HID UPS Battery
-[ 2945.304677] usb 1-1.2: Manufacturer: POWERCOM Co.,LTD
-[ 2945.304680] usb 1-1.2: SerialNumber: 004-0D9F-000
-[ 2945.349977] hid-generic 0003:0D9F:0004.01C6: hiddev0,hidraw2: USB HID 
-v1.00 Device [POWERCOM Co.,LTD HID UPS Battery] on 
-usb-0000:00:1a.0-1.2/input0
-[ 2949.060775] usb 1-1.2: USB disconnect, device number 77
-[ 2951.843390] usb 1-1.2: new low-speed USB device number 78 using ehci-pci
-[ 2951.960420] usb 1-1.2: New USB device found, idVendor=0d9f, 
-idProduct=0004, bcdDevice= 0.02
-[ 2951.960427] usb 1-1.2: New USB device strings: Mfr=3, Product=1, 
-SerialNumber=2
-[ 2951.960430] usb 1-1.2: Product: HID UPS Battery
-[ 2951.960433] usb 1-1.2: Manufacturer: POWERCOM Co.,LTD
-[ 2951.960436] usb 1-1.2: SerialNumber: 004-0D9F-000
-[ 2952.006860] hid-generic 0003:0D9F:0004.01C7: hiddev0,hidraw2: USB HID 
-v1.00 Device [POWERCOM Co.,LTD HID UPS Battery] on 
-usb-0000:00:1a.0-1.2/input0
-[ 2955.716788] usb 1-1.2: USB disconnect, device number 78
-[ 2958.499506] usb 1-1.2: new low-speed USB device number 79 using ehci-pci
-[ 2958.616917] usb 1-1.2: New USB device found, idVendor=0d9f, 
-idProduct=0004, bcdDevice= 0.02
-[ 2958.616924] usb 1-1.2: New USB device strings: Mfr=3, Product=1, 
-SerialNumber=2
-[ 2958.616927] usb 1-1.2: Product: HID UPS Battery
-[ 2958.616930] usb 1-1.2: Manufacturer: POWERCOM Co.,LTD
-[ 2958.616933] usb 1-1.2: SerialNumber: 004-0D9F-000
-[ 2958.666897] hid-generic 0003:0D9F:0004.01C8: hiddev0,hidraw2: USB HID 
-v1.00 Device [POWERCOM Co.,LTD HID UPS Battery] on 
-usb-0000:00:1a.0-1.2/input0
-[ 2962.372449] usb 1-1.2: USB disconnect, device number 79
+Greg, just let me know if you think I should hold this one off for 5.11
+instead.
 
-
-looking at device '/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.2':
-     KERNEL=="1-1.2"
-     SUBSYSTEM=="usb"
-     DRIVER=="usb"
-     ATTR{configuration}==""
-     ATTR{idProduct}=="0004"
-     ATTR{speed}=="1.5"
-     ATTR{maxchild}=="0"
-     ATTR{idVendor}=="0d9f"
-     ATTR{urbnum}=="13"
-     ATTR{bConfigurationValue}=="1"
-     ATTR{bMaxPower}=="100mA"
-     ATTR{authorized}=="1"
-     ATTR{bMaxPacketSize0}=="8"
-     ATTR{version}==" 1.10"
-     ATTR{manufacturer}=="POWERCOM Co.,LTD"
-     ATTR{product}=="HID UPS Battery"
-     ATTR{serial}=="004-0D9F-000"
-     ATTR{bmAttributes}=="a0"
-     ATTR{rx_lanes}=="1"
-     ATTR{devnum}=="41"
-     ATTR{quirks}=="0x0"
-     ATTR{bNumConfigurations}=="1"
-     ATTR{tx_lanes}=="1"
-     ATTR{avoid_reset_quirk}=="0"
-     ATTR{bcdDevice}=="0002"
-     ATTR{devpath}=="1.2"
-     ATTR{ltm_capable}=="no"
-     ATTR{bNumInterfaces}==" 1"
-     ATTR{bDeviceSubClass}=="00"
-     ATTR{bDeviceClass}=="00"
-     ATTR{bDeviceProtocol}=="00"
-     ATTR{busnum}=="1"
-     ATTR{removable}=="removable"
-
-   looking at parent device '/devices/pci0000:00/0000:00:1a.0/usb1/1-1':
-     KERNELS=="1-1"
-     SUBSYSTEMS=="usb"
-     DRIVERS=="usb"
-     ATTRS{bmAttributes}=="e0"
-     ATTRS{tx_lanes}=="1"
-     ATTRS{idVendor}=="8087"
-     ATTRS{authorized}=="1"
-     ATTRS{removable}=="fixed"
-     ATTRS{quirks}=="0x0"
-     ATTRS{urbnum}=="14622"
-     ATTRS{configuration}==""
-     ATTRS{bMaxPacketSize0}=="64"
-     ATTRS{bConfigurationValue}=="1"
-     ATTRS{bcdDevice}=="0005"
-     ATTRS{maxchild}=="4"
-     ATTRS{devpath}=="1"
-     ATTRS{version}==" 2.00"
-     ATTRS{ltm_capable}=="no"
-     ATTRS{bMaxPower}=="0mA"
-     ATTRS{devnum}=="2"
-     ATTRS{speed}=="480"
-     ATTRS{bDeviceClass}=="09"
-     ATTRS{avoid_reset_quirk}=="0"
-     ATTRS{bDeviceSubClass}=="00"
-     ATTRS{rx_lanes}=="1"
-     ATTRS{busnum}=="1"
-     ATTRS{bNumInterfaces}==" 1"
-     ATTRS{idProduct}=="8008"
-     ATTRS{bNumConfigurations}=="1"
-     ATTRS{bDeviceProtocol}=="01"
-
-   looking at parent device '/devices/pci0000:00/0000:00:1a.0/usb1':
-     KERNELS=="usb1"
-     SUBSYSTEMS=="usb"
-     DRIVERS=="usb"
-     ATTRS{interface_authorized_default}=="1"
-     ATTRS{rx_lanes}=="1"
-     ATTRS{bmAttributes}=="e0"
-     ATTRS{tx_lanes}=="1"
-     ATTRS{serial}=="0000:00:1a.0"
-     ATTRS{bConfigurationValue}=="1"
-     ATTRS{bNumConfigurations}=="1"
-     ATTRS{bMaxPacketSize0}=="64"
-     ATTRS{bDeviceSubClass}=="00"
-     ATTRS{authorized}=="1"
-     ATTRS{maxchild}=="2"
-     ATTRS{bDeviceProtocol}=="00"
-     ATTRS{bcdDevice}=="0504"
-     ATTRS{idProduct}=="0002"
-     ATTRS{bDeviceClass}=="09"
-     ATTRS{bMaxPower}=="0mA"
-     ATTRS{ltm_capable}=="no"
-     ATTRS{product}=="EHCI Host Controller"
-     ATTRS{manufacturer}=="Linux 5.4.0-56-generic ehci_hcd"
-     ATTRS{quirks}=="0x0"
-     ATTRS{bNumInterfaces}==" 1"
-     ATTRS{avoid_reset_quirk}=="0"
-     ATTRS{devpath}=="0"
-     ATTRS{busnum}=="1"
-     ATTRS{speed}=="480"
-     ATTRS{removable}=="unknown"
-     ATTRS{idVendor}=="1d6b"
-     ATTRS{urbnum}=="24"
-     ATTRS{configuration}==""
-     ATTRS{authorized_default}=="1"
-     ATTRS{devnum}=="1"
-     ATTRS{version}==" 2.00"
-
-   looking at parent device '/devices/pci0000:00/0000:00:1a.0':
-     KERNELS=="0000:00:1a.0"
-     SUBSYSTEMS=="pci"
-     DRIVERS=="ehci-pci"
-     ATTRS{subsystem_vendor}=="0x1043"
-     ATTRS{consistent_dma_mask_bits}=="32"
-     ATTRS{dma_mask_bits}=="32"
-     ATTRS{class}=="0x0c0320"
-     ATTRS{driver_override}=="(null)"
-     ATTRS{uframe_periodic_max}=="100"
-     ATTRS{local_cpus}=="f"
-     ATTRS{msi_bus}=="1"
-     ATTRS{companion}==""
-     ATTRS{irq}=="20"
-     ATTRS{vendor}=="0x8086"
-     ATTRS{enable}=="1"
-     ATTRS{d3cold_allowed}=="1"
-     ATTRS{ari_enabled}=="0"
-     ATTRS{subsystem_device}=="0x8534"
-     ATTRS{numa_node}=="-1"
-     ATTRS{local_cpulist}=="0-3"
-     ATTRS{revision}=="0x05"
-     ATTRS{device}=="0x8c2d"
-     ATTRS{broken_parity_status}=="0"
-
-   looking at parent device '/devices/pci0000:00':
-     KERNELS=="pci0000:00"
-     SUBSYSTEMS==""
-     DRIVERS==""
-
-
-
-On older ubuntu this hardware works fine
-
-
+Johan
