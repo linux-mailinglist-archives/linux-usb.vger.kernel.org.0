@@ -2,71 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBF22CE9A0
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 09:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3C92CEA12
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 09:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729064AbgLDIb1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Dec 2020 03:31:27 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:42683 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727783AbgLDIb0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Dec 2020 03:31:26 -0500
-Received: by mail-lj1-f193.google.com with SMTP id f18so5622278ljg.9
-        for <linux-usb@vger.kernel.org>; Fri, 04 Dec 2020 00:31:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=5cPF/6zbncaQd1WjFYzcWr65VyxStJ3XiUmMpu6dyf4=;
-        b=UNrALye49Bn5eyifZ1cUFQMPDJGTxepnWrQN72r5VLwXQTCtV0f91Wl3WyiI/n1EkD
-         mBRH/upZLsufboPztlFHBg90p46JtPo9KLDROXZCHL0IZoobLk+EXWIg+PzsNKL+cajp
-         XU5B+2+xxfKbGJx+D6krwTw5gbOo1pJGqVLOWueVEcN+BKwPaCDc+NsSKjs/nPgTl1ML
-         lzaHCaaOh7OTe8sQMAZU3/JGck/UY9YFGaR+0dYbbiRbgjZHWHaPwGlh/VF97XZLTNp3
-         /B/qjza/d1qMlQDxNFL4wZ2hgqTmiBCpnAc6X7J+mmpAx/Tg2+RrDyBfu03osGuBrp5x
-         EnoQ==
-X-Gm-Message-State: AOAM531SlzN0r6wKeN+sIzBqHRkgHNIWIjMCAng0NhMZav6v23RWCV2c
-        YvUL+pXin3l9jYq4x0+Vf90=
-X-Google-Smtp-Source: ABdhPJzD21zOwvZgEfHyN2S+U87Y6AuKrY1hRLe8FPh5OEpUR38rb2jPPA4XdinPhJY8yjC4+0qDIg==
-X-Received: by 2002:a05:651c:1391:: with SMTP id k17mr3093902ljb.277.1607070644840;
-        Fri, 04 Dec 2020 00:30:44 -0800 (PST)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id v7sm1450095lfd.235.2020.12.04.00.30.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Dec 2020 00:30:44 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kl6Un-0001Y8-No; Fri, 04 Dec 2020 09:31:17 +0100
-Date:   Fri, 4 Dec 2020 09:31:17 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Ensar Karabudak <ensar@sixfab.com>
-Cc:     linux-usb@vger.kernel.org, johan@kernel.org, bjorn@mork.no
-Subject: Re: [Bug Report] ttyUSB not detected after upgrade to 5.4.66+
-Message-ID: <X8nz1f45yqBotP/i@localhost>
-References: <CAB-YqyOub41nfq3AdF=j9Mww95YGMuv_ZFPHTY21-xPNNsu3MA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAB-YqyOub41nfq3AdF=j9Mww95YGMuv_ZFPHTY21-xPNNsu3MA@mail.gmail.com>
+        id S1728811AbgLDIoc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Dec 2020 03:44:32 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:33710 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727056AbgLDIoc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 4 Dec 2020 03:44:32 -0500
+X-Greylist: delayed 397 seconds by postgrey-1.27 at vger.kernel.org; Fri, 04 Dec 2020 03:44:21 EST
+Received: from localhost.localdomain (unknown [124.16.141.242])
+        by APP-01 (Coremail) with SMTP id qwCowAC3v1cg9clf1czZAA--.26586S2;
+        Fri, 04 Dec 2020 16:36:49 +0800 (CST)
+From:   Xu Wang <vulab@iscas.ac.cn>
+To:     hminas@synopsys.com, gregkh@linuxfoundation.org,
+        p.zabel@pengutronix.de, lgirdwood@gmail.com, broonie@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc2: Remove redundant null check before clk_prepare_enable/clk_disable_unprepare
+Date:   Fri,  4 Dec 2020 08:36:44 +0000
+Message-Id: <20201204083644.2704-1-vulab@iscas.ac.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: qwCowAC3v1cg9clf1czZAA--.26586S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZFy8CFyfJF4DuFW8uF4UArb_yoWDtwc_W3
+        W8WrsrJF15ZwsFyr9Fk34DAr9FgF1vvF4xXF1IvrW3ta43WrWUZryjvrZxZ3yDX3yjyF9r
+        Cr4UGrWxCr43ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbFkYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z2
+        80aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAK
+        zVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx
+        8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s02
+        6xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_Jr
+        I_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v2
+        6r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj4
+        0_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWU
+        JVW8JbIYCTnIWIevJa73UjIFyTuYvjxUc9mRUUUUU
+X-Originating-IP: [124.16.141.242]
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiCggAA1z4jMgD1gAAs0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 04, 2020 at 01:07:24AM +0300, Ensar Karabudak wrote:
-> Hi,
-> I have mentioned it here before:
-> https://github.com/raspberrypi/linux/issues/3964
-> 
-> I’ve run into an issue with the Quectel BG96 module. I do not have anything
-> on ttyUSB3 and 2.
-> It appears as though some changes in 5.4.66 have affected how USB2-USB3 is
-> treated?
+Because clk_prepare_enable() and clk_disable_unprepare() already checked
+NULL clock parameter, so the additional checks are unnecessary, just
+remove them.
 
-Thanks for the detailed report. Björn has already submitted a fix which
-will be backported to the stable trees soonish. You can find it here if
-you want to give it a try:
+Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
+---
+ drivers/usb/dwc2/platform.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-linus&id=c98fff7332dbd6e028969f8c2bda3d7bc7a024d8
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index 5f18acac7406..ba2b491c7f82 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -143,11 +143,9 @@ static int __dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (hsotg->clk) {
+-		ret = clk_prepare_enable(hsotg->clk);
+-		if (ret)
+-			return ret;
+-	}
++	ret = clk_prepare_enable(hsotg->clk);
++	if (ret)
++		return ret;
+ 
+ 	if (hsotg->uphy) {
+ 		ret = usb_phy_init(hsotg->uphy);
+@@ -195,8 +193,7 @@ static int __dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (hsotg->clk)
+-		clk_disable_unprepare(hsotg->clk);
++	clk_disable_unprepare(hsotg->clk);
+ 
+ 	return 0;
+ }
+-- 
+2.17.1
 
-Johan
