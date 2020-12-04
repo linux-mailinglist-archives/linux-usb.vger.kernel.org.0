@@ -2,83 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D12B2CE859
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 08:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEBF22CE9A0
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 09:31:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727952AbgLDG7j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Dec 2020 01:59:39 -0500
-Received: from mail-ej1-f66.google.com ([209.85.218.66]:42086 "EHLO
-        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbgLDG7i (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Dec 2020 01:59:38 -0500
-Received: by mail-ej1-f66.google.com with SMTP id d17so7134660ejy.9;
-        Thu, 03 Dec 2020 22:59:22 -0800 (PST)
+        id S1729064AbgLDIb1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Dec 2020 03:31:27 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:42683 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727783AbgLDIb0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Dec 2020 03:31:26 -0500
+Received: by mail-lj1-f193.google.com with SMTP id f18so5622278ljg.9
+        for <linux-usb@vger.kernel.org>; Fri, 04 Dec 2020 00:31:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=e50yAptPk4qvH2DjIDkzdRdD/+Aa+SiLK2zM+mJlFWA=;
-        b=eC5k0J95DjW8FrZJhU3Z+5kXbR/eCy0IEYRe2JqcboV8SotoZ/2TOKp59zWAExaaEH
-         5Dbu3Ixe5HIHnQMFqE0cnQ9PciUFqkEFNA4MtWmt1GGL+BM0HKb/RksQgMxwlNYWS/iZ
-         i1COKAnuGUocvAxCtZMAJVAcjJ6iJFhRi2aWinh2AiuVEFHWe+1/QwRC5wqeuybKwrWz
-         vmlIf0He6BYEsJP4A4USmwrHbHyCPKZVin5CdRR4xQyA4IFi6vBPFQFoHc6qzUYiWIG7
-         jhZHdxLLk7ChHA8tdaG2EQ4KLQkJXu7T0Dy9QlangXMBHIhO7URP4qiq2XboSpZNSro2
-         qg/A==
-X-Gm-Message-State: AOAM533KuKBKMrUsVWgbHO0O6Snm1tu6drmTREAh2n4LrQ5zPeymmppf
-        LD/KLUfAFTIXxgtNiZvaSTaisfZ6h7UNgQ==
-X-Google-Smtp-Source: ABdhPJy5MEfKbVUJFTnh1vKqmxmxnnoKlgi6kcqIAd4ISej8g/3EJ6ptUx8ssAV5yi5x1hhhmvLh+Q==
-X-Received: by 2002:a17:906:d72:: with SMTP id s18mr5900964ejh.110.1607065136221;
-        Thu, 03 Dec 2020 22:58:56 -0800 (PST)
-Received: from ?IPv6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id x20sm2418231ejv.66.2020.12.03.22.58.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Dec 2020 22:58:55 -0800 (PST)
-Subject: Re: [PATCH 0/5] tty: add flag to suppress ready signalling on open
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Mychaela Falconia <mychaela.falconia@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Mychaela N . Falconia" <falcon@freecalypso.org>,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20201130153742.9163-1-johan@kernel.org>
- <CA+uuBqYmzJMiY75LrA_uKb_uL2=7oQTrzCFksb2ehT0XMXxrbw@mail.gmail.com>
- <c8f3e485-54c6-99c7-4888-6eef2e174bf6@kernel.org>
- <X8d/Ac5Z4bT/W7ZA@localhost>
-From:   Jiri Slaby <jirislaby@kernel.org>
-Message-ID: <a58e3a7b-58bb-0430-2344-8e8155758e45@kernel.org>
-Date:   Fri, 4 Dec 2020 07:58:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=5cPF/6zbncaQd1WjFYzcWr65VyxStJ3XiUmMpu6dyf4=;
+        b=UNrALye49Bn5eyifZ1cUFQMPDJGTxepnWrQN72r5VLwXQTCtV0f91Wl3WyiI/n1EkD
+         mBRH/upZLsufboPztlFHBg90p46JtPo9KLDROXZCHL0IZoobLk+EXWIg+PzsNKL+cajp
+         XU5B+2+xxfKbGJx+D6krwTw5gbOo1pJGqVLOWueVEcN+BKwPaCDc+NsSKjs/nPgTl1ML
+         lzaHCaaOh7OTe8sQMAZU3/JGck/UY9YFGaR+0dYbbiRbgjZHWHaPwGlh/VF97XZLTNp3
+         /B/qjza/d1qMlQDxNFL4wZ2hgqTmiBCpnAc6X7J+mmpAx/Tg2+RrDyBfu03osGuBrp5x
+         EnoQ==
+X-Gm-Message-State: AOAM531SlzN0r6wKeN+sIzBqHRkgHNIWIjMCAng0NhMZav6v23RWCV2c
+        YvUL+pXin3l9jYq4x0+Vf90=
+X-Google-Smtp-Source: ABdhPJzD21zOwvZgEfHyN2S+U87Y6AuKrY1hRLe8FPh5OEpUR38rb2jPPA4XdinPhJY8yjC4+0qDIg==
+X-Received: by 2002:a05:651c:1391:: with SMTP id k17mr3093902ljb.277.1607070644840;
+        Fri, 04 Dec 2020 00:30:44 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id v7sm1450095lfd.235.2020.12.04.00.30.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Dec 2020 00:30:44 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kl6Un-0001Y8-No; Fri, 04 Dec 2020 09:31:17 +0100
+Date:   Fri, 4 Dec 2020 09:31:17 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Ensar Karabudak <ensar@sixfab.com>
+Cc:     linux-usb@vger.kernel.org, johan@kernel.org, bjorn@mork.no
+Subject: Re: [Bug Report] ttyUSB not detected after upgrade to 5.4.66+
+Message-ID: <X8nz1f45yqBotP/i@localhost>
+References: <CAB-YqyOub41nfq3AdF=j9Mww95YGMuv_ZFPHTY21-xPNNsu3MA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <X8d/Ac5Z4bT/W7ZA@localhost>
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAB-YqyOub41nfq3AdF=j9Mww95YGMuv_ZFPHTY21-xPNNsu3MA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 02. 12. 20, 12:48, Johan Hovold wrote:
->>> but I question the
->>> usefulness of doing so, as it is a chicken and egg problem: one needs
->>> to open the tty device in order to do termios ioctls on it, and if
->>> that initial open triggers DTR/RTS hardware actions, then the end user
->>> is still screwed.  If Johan or someone else can see a potential use
->>> case for manipulating this new flag via termios (as opposed to sysfs
->>> or USB-ID-based driver quirks), perhaps you could elaborate on it?
->>
->> We would need to (ab)use another open flag (e.g. O_DIRECT). I am not
->> biased to either of solutions.
+On Fri, Dec 04, 2020 at 01:07:24AM +0300, Ensar Karabudak wrote:
+> Hi,
+> I have mentioned it here before:
+> https://github.com/raspberrypi/linux/issues/3964
 > 
-> Forgot to mention that using open-flags would prevent using standard
-> utilities like cat, echo and terminal programs. So for that reason a
-> termios and/or sysfs interface is also preferred.
+> I’ve run into an issue with the Quectel BG96 module. I do not have anything
+> on ttyUSB3 and 2.
+> It appears as though some changes in 5.4.66 have affected how USB2-USB3 is
+> treated?
 
-Nope, I meant it differently. You set it up once using the special open 
-flag. Like with setserial, one sets I/O port, irqs etc. and then uses 
-standard tools as the port is already set up (marked as NORDY in this case).
+Thanks for the detailed report. Björn has already submitted a fix which
+will be backported to the stable trees soonish. You can find it here if
+you want to give it a try:
 
-thanks,
--- 
-js
+	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-linus&id=c98fff7332dbd6e028969f8c2bda3d7bc7a024d8
+
+Johan
