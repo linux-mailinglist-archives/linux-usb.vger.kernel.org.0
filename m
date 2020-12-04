@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31CF32CEA32
+	by mail.lfdr.de (Postfix) with ESMTP id A96A32CEA33
 	for <lists+linux-usb@lfdr.de>; Fri,  4 Dec 2020 09:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729279AbgLDIvp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Dec 2020 03:51:45 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:45630 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729008AbgLDIvp (ORCPT
+        id S2387488AbgLDIvq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Dec 2020 03:51:46 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:45538 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729244AbgLDIvp (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Dec 2020 03:51:45 -0500
-Received: by mail-lf1-f66.google.com with SMTP id z21so6596411lfe.12
-        for <linux-usb@vger.kernel.org>; Fri, 04 Dec 2020 00:51:28 -0800 (PST)
+Received: by mail-lj1-f195.google.com with SMTP id q8so5667956ljc.12
+        for <linux-usb@vger.kernel.org>; Fri, 04 Dec 2020 00:51:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5qJZ64/W3SUdCuIAZlZyN5JHcoiEj8SDtkdhTPrWGzY=;
-        b=kvwFJnj2gKTr75t+fK8sg9TAA+k1HV1APjK7c+ngx7HcdUwHaliGzMRGxXFuK+abSn
-         4XTgU2k+RqcPNOuitZxVXhZm4w82PbSIarxxc8w+NDJHOcM5HWuekqriEMfb/10Nkc7X
-         45Irjsf1Ql33x4kzpEV99qj09uaqxrkFPYQexzIGyVEeSGfDWXwsRASNYGcaqYfokcF1
-         BI0yW/PKbW2qHOq5PRDClO2h3Y0vhDOJgouA9e5SzBEK+lDiMkbjUdnBq60x2/iANYn5
-         P+1twV4Qeo0lsG67THVHCLXZpOIBhzNpV22mAJVJkXkOgM9pDIFTZncZXmW7uPgN++fF
-         5uiA==
-X-Gm-Message-State: AOAM530U32qu7QvpVB1gwbpyE0+u1ledmqFNmhXUDH3Sx3DcM616dxq8
-        VxJEhkkppjf8p4eihQcOVCs=
-X-Google-Smtp-Source: ABdhPJz3G5I2tjIJdJwd35OMNvx9F6DrlbxTzTR8ywANvidQGQ9YmWGETwFniHZoqugk5o6qXgUu2g==
-X-Received: by 2002:a19:857:: with SMTP id 84mr3043215lfi.235.1607071863000;
+        bh=bDXKraCZj9tEhUlYVZ7C8KxSuCwnY1NGnGNnV9ou2jU=;
+        b=uoAvXOEMPKmesM9Gt6RqQHIurWGB/1PivDBOE+9cPdDhGpTgYHFzGSCsk0FF2kVFjy
+         3a7TcX7EjDSuIbaVr/oD3+DsT5SJffS3A3F3lXFxAYsRJYCNmJ7NHt91H1ofTx7N6PVA
+         OC99gqLX9n2ilwwICekVA7IEVlEm3xaZOaXQizHk9sGp4qourkHzBKyQqxfQG4J7Y+sk
+         msfdYKBplfAkpfabJukLstU2snIPPKu4nGds8GYpAk4vsWSyDAE7CXagFHmPVZjkjAVV
+         ZHceXuxuI+R7DfL5n9klnbK28B0iVdMRkqwFsDtXcO0s+qZz7qPndrBJqObdwpc1t3Kl
+         eqsA==
+X-Gm-Message-State: AOAM531e7rK74aBeTsRcuvW7yX2Yn/IwJUrE6dc0WBJ1g+7dPmzenfM/
+        EaWbKva0CzeCUqcDbPtis9w=
+X-Google-Smtp-Source: ABdhPJwzw3IGQwgxlpjLYzIMc8vDQ8iHWYIZl/jYhcmZ2DzwOOlnqlso2Gx9T37Uw4Gc8hMgJemSMw==
+X-Received: by 2002:a2e:9a88:: with SMTP id p8mr2976289lji.266.1607071863625;
         Fri, 04 Dec 2020 00:51:03 -0800 (PST)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id o81sm1432484lff.279.2020.12.04.00.51.01
+        by smtp.gmail.com with ESMTPSA id d18sm1444758ljo.49.2020.12.04.00.51.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 04 Dec 2020 00:51:01 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
         (envelope-from <johan@xi.terra>)
-        id 1kl6oR-0005ES-47; Fri, 04 Dec 2020 09:51:35 +0100
+        id 1kl6oR-0005EX-6y; Fri, 04 Dec 2020 09:51:35 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org,
         Himadri Pandya <himadrispandya@gmail.com>,
         Johan Hovold <johan@kernel.org>
-Subject: [PATCH 2/3] USB: core: drop short-transfer check from usb_control_msg_send()
-Date:   Fri,  4 Dec 2020 09:51:09 +0100
-Message-Id: <20201204085110.20055-3-johan@kernel.org>
+Subject: [PATCH 3/3] USB: core: return -EREMOTEIO on short usb_control_msg_recv()
+Date:   Fri,  4 Dec 2020 09:51:10 +0100
+Message-Id: <20201204085110.20055-4-johan@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20201204085110.20055-1-johan@kernel.org>
 References: <20201204085110.20055-1-johan@kernel.org>
@@ -53,30 +53,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A failure to send a complete control message is always an error so
-there's no need to check for short transfers in usb_control_msg_send().
+Return -EREMOTEIO instead of -EINVAL on short control transfers when
+using the new usb_control_msg_recv() helper.
+
+EINVAL is used to report invalid arguments (e.g. to the helper) and
+should not be used for unrelated errors.
+
+Many driver currently return -EIO on short control transfers but since
+host-controller drivers already use -EREMOTEIO for short transfers
+whenever the URB_SHORT_NOT_OK flag is set, let's use that here as well.
+
+This also allows usb_control_msg_recv() to eventually use
+URB_SHORT_NOT_OK without changing the return value again.
 
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/usb/core/message.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/usb/core/message.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-index a04b01247117..b08de9571f7a 100644
+index b08de9571f7a..30e9e680c74c 100644
 --- a/drivers/usb/core/message.c
 +++ b/drivers/usb/core/message.c
-@@ -216,9 +216,8 @@ int usb_control_msg_send(struct usb_device *dev, __u8 endpoint, __u8 request,
+@@ -286,7 +286,7 @@ int usb_control_msg_recv(struct usb_device *dev, __u8 endpoint, __u8 request,
+ 		memcpy(driver_data, data, size);
+ 		ret = 0;
+ 	} else {
+-		ret = -EINVAL;
++		ret = -EREMOTEIO;
+ 	}
  
- 	if (ret < 0)
- 		return ret;
--	if (ret == size)
--		return 0;
--	return -EINVAL;
-+
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(usb_control_msg_send);
- 
+ exit:
 -- 
 2.26.2
 
