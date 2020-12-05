@@ -2,15 +2,15 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E102CFCA4
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Dec 2020 19:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1242CFDB8
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Dec 2020 19:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727629AbgLEQ7p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Dec 2020 11:59:45 -0500
-Received: from mx.baikalchip.ru ([94.125.187.42]:53198 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726225AbgLEQzw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Dec 2020 11:55:52 -0500
+        id S1727892AbgLESnI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Dec 2020 13:43:08 -0500
+Received: from ns2.baikalelectronics.ru ([94.125.187.42]:53190 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727088AbgLEQzv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Dec 2020 11:55:51 -0500
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Mathias Nyman <mathias.nyman@intel.com>,
         Felipe Balbi <balbi@kernel.org>,
@@ -35,10 +35,11 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-snps-arc@lists.infradead.org>, <linux-mips@vger.kernel.org>,
         <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 01/19] dt-bindings: usb: usb-hcd: Detach generic USB controller properties
-Date:   Sat, 5 Dec 2020 18:24:08 +0300
-Message-ID: <20201205152427.29537-2-Sergey.Semin@baikalelectronics.ru>
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v5 04/19] dt-bindings: usb: Add "ulpi/serial/hsic" PHY types
+Date:   Sat, 5 Dec 2020 18:24:11 +0300
+Message-ID: <20201205152427.29537-5-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20201205152427.29537-1-Sergey.Semin@baikalelectronics.ru>
 References: <20201205152427.29537-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -49,96 +50,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There can be three distinctive types of the USB controllers: USB hosts,
-USB peripherals/gadgets and USB OTG, which can switch from one role to
-another. In order to have that hierarchy handled in the DT binding files,
-we need to collect common properties in a common DT schema and specific
-properties in dedicated schemas. Seeing the usb-hcd.yaml DT schema is
-dedicated for the USB host controllers only, let's move some common
-properties from there into the usb.yaml schema. So the later would be
-available to evaluate all currently supported types of the USB
-controllers.
-
-While at it add an explicit "additionalProperties: true" into the
-usb-hcd.yaml as setting the additionalProperties/unevaluateProperties
-properties is going to be get mandatory soon.
+Aside from the UTMI+ there are also ULPI, Serial and HSIC PHY types
+that can be specified in the phy_type HCD property. Add them to the
+enumeration of the acceptable values.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Reviewed-by: Rob Herring <robh@kernel.org>
 
 ---
+
+Changelog v2:
+- Grammar fix: "s/PHY types can be/PHY types that can be"
+- Drop quotes from around the string constants.
 
 Changelog v4:
-- This is a new patch created as a result of the comment left
-  by Chunfeng Yun in v3
-
-Changelog v5:
-- Discard duplicated additionalProperties property definition.
+- Move the new PHY types definitions into the usb.yaml schema where the
+  phy_type property is now defined.
 ---
- .../devicetree/bindings/usb/usb-hcd.yaml      | 14 ++-------
- .../devicetree/bindings/usb/usb.yaml          | 29 +++++++++++++++++++
- 2 files changed, 31 insertions(+), 12 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/usb/usb.yaml
+ Documentation/devicetree/bindings/usb/usb.yaml | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/usb-hcd.yaml b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-index b545b087b342..81f3ad1419d8 100644
---- a/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-+++ b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-@@ -9,18 +9,8 @@ title: Generic USB Host Controller Device Tree Bindings
- maintainers:
-   - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
- 
--properties:
--  $nodename:
--    pattern: "^usb(@.*)?"
--
--  phys:
--    $ref: /schemas/types.yaml#/definitions/phandle-array
--    description:
--      List of all the USB PHYs on this HCD
--
--  phy-names:
--    description:
--      Name specifier for the USB PHY
-+allOf:
-+  - $ref: usb.yaml#
- 
- additionalProperties: true
- 
 diff --git a/Documentation/devicetree/bindings/usb/usb.yaml b/Documentation/devicetree/bindings/usb/usb.yaml
-new file mode 100644
-index 000000000000..941ad59fbac5
---- /dev/null
+index 991c02725e2b..6dc4821e63c3 100644
+--- a/Documentation/devicetree/bindings/usb/usb.yaml
 +++ b/Documentation/devicetree/bindings/usb/usb.yaml
-@@ -0,0 +1,29 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/usb.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Generic USB Controller Device Tree Bindings
-+
-+maintainers:
-+  - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-+
-+select: false
-+
-+properties:
-+  $nodename:
-+    pattern: "^usb(@.*)?"
-+
-+  phys:
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    description:
-+      List of all the USB PHYs on this HCD
-+
-+  phy-names:
-+    description:
-+      Name specifier for the USB PHY
-+
-+additionalProperties: true
-+
-+...
+@@ -27,11 +27,13 @@ properties:
+   phy_type:
+     description:
+       Tells USB controllers that we want to configure the core to support a
+-      UTMI+ PHY with an 8- or 16-bit interface if UTMI+ is selected. In case
+-      this isn't passed via DT, USB controllers should default to HW
+-      capability.
++      UTMI+ PHY with an 8- or 16-bit interface if UTMI+ is selected, UTMI+ low
++      pin interface if ULPI is specified, Serial core/PHY interconnect if
++      serial is specified and High-Speed Inter-Chip feature if HSIC is
++      selected. In case this isn't passed via DT, USB controllers should
++      default to HW capability.
+     $ref: /schemas/types.yaml#/definitions/string
+-    enum: [utmi, utmi_wide]
++    enum: [utmi, utmi_wide, ulpi, serial, hsic]
+ 
+   maximum-speed:
+    description:
 -- 
 2.29.2
 
