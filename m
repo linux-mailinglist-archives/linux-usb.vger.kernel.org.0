@@ -2,69 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B242CFA9A
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Dec 2020 09:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63ECB2CFB25
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Dec 2020 12:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729010AbgLEIZF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Dec 2020 03:25:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50702 "EHLO mail.kernel.org"
+        id S1729512AbgLEL2N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Dec 2020 06:28:13 -0500
+Received: from honk.sigxcpu.org ([24.134.29.49]:57090 "EHLO honk.sigxcpu.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727967AbgLEIXu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 5 Dec 2020 03:23:50 -0500
-Date:   Sat, 5 Dec 2020 09:23:06 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1607156590;
-        bh=jj96Kcw+xXfcVwQbBF31tiFa7EGTlH/VyMukbQ2TMaY=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1dgDBKOGb79bfGHXuCQiXheR07tYnIPb0e4AS0b2kZF/DSEG3AOBsA8UKFuo3zHlc
-         O3Z7WKHWpck70ASSHP4Uys0NxuH5OxeixsYJ9L6xEZ4ODrakyraVcoQ3hY1Ie0nWhF
-         Xd3ILezKQERxl1dQ0xcrtWMMgpdr0Ihqq/nkkP1I=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Alan Stern <stern@rowland.harvard.edu>, kernel@pengutronix.de,
-        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] ARM: sa11111: make sa1111 bus's remove callback return
- void
-Message-ID: <X8tDamO7UviczH3n@kroah.com>
-References: <20201126114724.2028511-1-u.kleine-koenig@pengutronix.de>
- <X8pOiU2a6BjfFuov@kroah.com>
- <20201204200927.p354eli7uqr776sp@pengutronix.de>
+        id S1729325AbgLEL1M (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 5 Dec 2020 06:27:12 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by honk.sigxcpu.org (Postfix) with ESMTP id 91FE6FB05;
+        Sat,  5 Dec 2020 12:13:28 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
+Received: from honk.sigxcpu.org ([127.0.0.1])
+        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Sb6WI9UUhkql; Sat,  5 Dec 2020 12:13:27 +0100 (CET)
+Received: by bogon.sigxcpu.org (Postfix, from userid 1000)
+        id 6CBCB4070F; Sat,  5 Dec 2020 12:13:26 +0100 (CET)
+From:   =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH v5 1/2] usb: typec: tps6598x: Select USB_ROLE_SWITCH and REGMAP_I2C
+Date:   Sat,  5 Dec 2020 12:13:25 +0100
+Message-Id: <6d11417c42d82caf66e08af160397959eb7d0d60.1607166657.git.agx@sigxcpu.org>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <cover.1607166657.git.agx@sigxcpu.org>
+References: <cover.1607166657.git.agx@sigxcpu.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201204200927.p354eli7uqr776sp@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 04, 2020 at 09:09:27PM +0100, Uwe Kleine-König wrote:
-> Hey Greg,
-> 
-> On Fri, Dec 04, 2020 at 03:58:17PM +0100, Greg Kroah-Hartman wrote:
-> > On Thu, Nov 26, 2020 at 12:47:24PM +0100, Uwe Kleine-König wrote:
-> > > The driver core ignores the return value of struct device_driver::remove
-> > > because there is only little that can be done. To simplify the quest to
-> > > make this function return void, let struct sa1111_driver::remove return
-> > > void, too. All users already unconditionally return 0, this commit makes
-> > > it obvious that returning an error code is a bad idea and ensures future
-> > > users behave accordingly.
-> > > 
-> > > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> > 
-> > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> Thanks, can I interpret this also as an Ack to take the change affecting
-> drivers/usb via Russell's tree?
+This is more in line with what tcpm does and will be needed
+to avoid recursive dependency like
 
-Sorry, yes, that is what I was implying here, I should have been more
-specific.
+ > drivers/power/supply/Kconfig:2:error: recursive dependency detected!
+   drivers/power/supply/Kconfig:2: symbol POWER_SUPPLY is selected by TYPEC_TPS6598X
+   drivers/usb/typec/Kconfig:64: symbol TYPEC_TPS6598X depends on REGMAP_I2C
+   drivers/base/regmap/Kconfig:19: symbol REGMAP_I2C is selected by CHARGER_ADP5061
+   drivers/power/supply/Kconfig:93: symbol CHARGER_ADP5061 depends on POWER_SUPPLY
+   For a resolution refer to Documentation/kbuild/kconfig-language.rst
+   subsection "Kconfig recursive dependency limitations"
 
-thanks,
+when selecting POWER_SUPPLY.
 
-greg k-h
+Signed-off-by: Guido GÃ¼nther <agx@sigxcpu.org>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+---
+ drivers/usb/typec/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
+index 6c5908a37ee8..772b07e9f188 100644
+--- a/drivers/usb/typec/Kconfig
++++ b/drivers/usb/typec/Kconfig
+@@ -64,8 +64,8 @@ config TYPEC_HD3SS3220
+ config TYPEC_TPS6598X
+ 	tristate "TI TPS6598x USB Power Delivery controller driver"
+ 	depends on I2C
+-	depends on REGMAP_I2C
+-	depends on USB_ROLE_SWITCH || !USB_ROLE_SWITCH
++	select REGMAP_I2C
++	select USB_ROLE_SWITCH
+ 	help
+ 	  Say Y or M here if your system has TI TPS65982 or TPS65983 USB Power
+ 	  Delivery controller.
+-- 
+2.29.2
+
