@@ -2,62 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F662CFD03
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Dec 2020 19:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E102CFCA4
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Dec 2020 19:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729373AbgLEST2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Dec 2020 13:19:28 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:57943 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728238AbgLESCy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Dec 2020 13:02:54 -0500
-Received: (qmail 1179704 invoked by uid 1000); 5 Dec 2020 10:15:11 -0500
-Date:   Sat, 5 Dec 2020 10:15:11 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Minh =?iso-8859-1?B?Qvlp?= Quang <minhquangbui99@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+        id S1727629AbgLEQ7p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Dec 2020 11:59:45 -0500
+Received: from mx.baikalchip.ru ([94.125.187.42]:53198 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726225AbgLEQzw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Dec 2020 11:55:52 -0500
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Jules Irenge <jbi.octave@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: dummy-hcd: Fix uninitialized array use in init()
-Message-ID: <20201205151511.GA1179536@rowland.harvard.edu>
-References: <1607063090-3426-1-git-send-email-minhquangbui99@gmail.com>
- <20201204161249.GA1141609@rowland.harvard.edu>
- <CACtPs=Gg3C0KxdFnETHujAyis4hhKnCdV4_ZWqprHkXCXahFvw@mail.gmail.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-snps-arc@lists.infradead.org>, <linux-mips@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 01/19] dt-bindings: usb: usb-hcd: Detach generic USB controller properties
+Date:   Sat, 5 Dec 2020 18:24:08 +0300
+Message-ID: <20201205152427.29537-2-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20201205152427.29537-1-Sergey.Semin@baikalelectronics.ru>
+References: <20201205152427.29537-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACtPs=Gg3C0KxdFnETHujAyis4hhKnCdV4_ZWqprHkXCXahFvw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Dec 05, 2020 at 07:47:01PM +0700, Minh Bùi Quang wrote:
-> Vào Th 6, 4 thg 12, 2020 vào lúc 23:12 Alan Stern
-> <stern@rowland.harvard.edu> đã viết:
-> > Does this initialization end up using less memory than an explicit
-> > memset() call?
-> 
-> You mean speed?
+There can be three distinctive types of the USB controllers: USB hosts,
+USB peripherals/gadgets and USB OTG, which can switch from one role to
+another. In order to have that hierarchy handled in the DT binding files,
+we need to collect common properties in a common DT schema and specific
+properties in dedicated schemas. Seeing the usb-hcd.yaml DT schema is
+dedicated for the USB host controllers only, let's move some common
+properties from there into the usb.yaml schema. So the later would be
+available to evaluate all currently supported types of the USB
+controllers.
 
-No, I mean memory space.
+While at it add an explicit "additionalProperties: true" into the
+usb-hcd.yaml as setting the additionalProperties/unevaluateProperties
+properties is going to be get mandatory soon.
 
-A memset call requires a certain amount of instruction space (to push 
-the arguments and make the call) but no static data space.  
-Initialization requires some instruction space (to copy the data) and 
-static data space as well (to hold the data that is to be copied).
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Alan Stern
+---
 
-> In my opinion, there is no difference in speed between 2 ways.
-> When I compile this array initialization using gcc 5.4.0,  this
-> initialization becomes
-> mov instructions when MAX_NUM_UDC=2 and becomes rep stos when
-> MAX_NUM_UDC=32. I think it makes no difference when comparing with memset()
-> 
-> Thanks,
-> Quang Minh
+Changelog v4:
+- This is a new patch created as a result of the comment left
+  by Chunfeng Yun in v3
+
+Changelog v5:
+- Discard duplicated additionalProperties property definition.
+---
+ .../devicetree/bindings/usb/usb-hcd.yaml      | 14 ++-------
+ .../devicetree/bindings/usb/usb.yaml          | 29 +++++++++++++++++++
+ 2 files changed, 31 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/usb.yaml
+
+diff --git a/Documentation/devicetree/bindings/usb/usb-hcd.yaml b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+index b545b087b342..81f3ad1419d8 100644
+--- a/Documentation/devicetree/bindings/usb/usb-hcd.yaml
++++ b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+@@ -9,18 +9,8 @@ title: Generic USB Host Controller Device Tree Bindings
+ maintainers:
+   - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ 
+-properties:
+-  $nodename:
+-    pattern: "^usb(@.*)?"
+-
+-  phys:
+-    $ref: /schemas/types.yaml#/definitions/phandle-array
+-    description:
+-      List of all the USB PHYs on this HCD
+-
+-  phy-names:
+-    description:
+-      Name specifier for the USB PHY
++allOf:
++  - $ref: usb.yaml#
+ 
+ additionalProperties: true
+ 
+diff --git a/Documentation/devicetree/bindings/usb/usb.yaml b/Documentation/devicetree/bindings/usb/usb.yaml
+new file mode 100644
+index 000000000000..941ad59fbac5
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/usb.yaml
+@@ -0,0 +1,29 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/usb.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Generic USB Controller Device Tree Bindings
++
++maintainers:
++  - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
++
++select: false
++
++properties:
++  $nodename:
++    pattern: "^usb(@.*)?"
++
++  phys:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description:
++      List of all the USB PHYs on this HCD
++
++  phy-names:
++    description:
++      Name specifier for the USB PHY
++
++additionalProperties: true
++
++...
+-- 
+2.29.2
+
