@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF652CF925
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Dec 2020 04:12:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2DAE2CF93C
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Dec 2020 04:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728100AbgLEDM2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Dec 2020 22:12:28 -0500
-Received: from mga06.intel.com ([134.134.136.31]:4559 "EHLO mga06.intel.com"
+        id S1726242AbgLED4f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Dec 2020 22:56:35 -0500
+Received: from mga05.intel.com ([192.55.52.43]:59312 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725967AbgLEDM2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 4 Dec 2020 22:12:28 -0500
-IronPort-SDR: zvHAJw6TF5x7unwcyFBz+BeI1lFOtsZQRl7giMgT47MystOdiMqdFOXS7qSTZlUZgLUak8eYZ+
- Eer8v8RXVN8Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9825"; a="235086787"
+        id S1725969AbgLED4f (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 4 Dec 2020 22:56:35 -0500
+IronPort-SDR: I+yyPDiNHkfBFZtljNSxQPWCHOxr87AAP91EjXynTND/KZTkWNi+KLKGUyjG8hYys2ByVZz8kn
+ lN4LRbbkrKQQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9825"; a="258197507"
 X-IronPort-AV: E=Sophos;i="5.78,394,1599548400"; 
-   d="scan'208";a="235086787"
+   d="scan'208";a="258197507"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2020 19:11:47 -0800
-IronPort-SDR: jeSFiH1b+uRM5m4nsxOHi7Chxdkvzth/xJpSZVSYQZ0NVTm/fv49BaloDXPsJL7nmJ6GdYBNNk
- 3Jfhvv7FEmjw==
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2020 19:55:54 -0800
+IronPort-SDR: iWDjk2Wt/C39ynEekd5P3dLk5l+F2/vZya9r4dCDXhk9myMAHMn+uiJlvqjzNufZgWzeCrHU7u
+ LHitp5yC343Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.78,394,1599548400"; 
-   d="scan'208";a="551193656"
+   d="scan'208";a="362387746"
 Received: from lkp-server01.sh.intel.com (HELO 47754f1311fc) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 04 Dec 2020 19:11:45 -0800
+  by orsmga008.jf.intel.com with ESMTP; 04 Dec 2020 19:55:53 -0800
 Received: from kbuild by 47754f1311fc with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1klNz6-00003q-ND; Sat, 05 Dec 2020 03:11:44 +0000
-Date:   Sat, 05 Dec 2020 11:11:41 +0800
+        id 1klOfo-00005C-VS; Sat, 05 Dec 2020 03:55:52 +0000
+Date:   Sat, 05 Dec 2020 11:55:24 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- a4b98a7512f18534ce33a7e98e49115af59ffa00
-Message-ID: <5fcafa6d.wWiA3FtQguBwHhCT%lkp@intel.com>
+Subject: [usb:usb-testing] BUILD SUCCESS
+ e3541d5de544da54a1770e9c82c55f2a6f6b3b67
+Message-ID: <5fcb04ac./BUpgUAw+/WA4Z9E%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -45,13 +45,13 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
-branch HEAD: a4b98a7512f18534ce33a7e98e49115af59ffa00  usb: gadget: f_fs: Use local copy of descriptors for userspace copy
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: e3541d5de544da54a1770e9c82c55f2a6f6b3b67  usb: mtu3: mtu3_debug: remove an unused struct member
 
-elapsed time: 722m
+elapsed time: 724m
 
-configs tested: 111
-configs skipped: 3
+configs tested: 130
+configs skipped: 2
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -62,27 +62,45 @@ arm64                            allyesconfig
 arm64                               defconfig
 arm                              allyesconfig
 arm                              allmodconfig
-m68k                          amiga_defconfig
-sh                          r7785rp_defconfig
-sh                         microdev_defconfig
-m68k                       m5275evb_defconfig
-nios2                            allyesconfig
-parisc                generic-64bit_defconfig
-powerpc                     sbc8548_defconfig
-powerpc                     skiroot_defconfig
-sh                          lboxre2_defconfig
+nios2                            alldefconfig
+arc                        vdk_hs38_defconfig
+powerpc                      cm5200_defconfig
+arm                          tango4_defconfig
+mips                 decstation_r4k_defconfig
+powerpc                     tqm8555_defconfig
+s390                                defconfig
+sh                           se7721_defconfig
+arm                        shmobile_defconfig
+um                           x86_64_defconfig
+ia64                          tiger_defconfig
+arm                         mv78xx0_defconfig
+ia64                            zx1_defconfig
+arm                         lpc18xx_defconfig
+powerpc                     tqm5200_defconfig
+sh                            titan_defconfig
+mips                         tb0226_defconfig
 powerpc                      ep88xc_defconfig
 arm                         bcm2835_defconfig
 powerpc                      acadia_defconfig
 arm                         assabet_defconfig
+powerpc                     skiroot_defconfig
+arc                     haps_hs_smp_defconfig
+arm                       netwinder_defconfig
+arm                          iop32x_defconfig
+ia64                             allyesconfig
+arm                          collie_defconfig
+mips                         cobalt_defconfig
 powerpc                   motionpro_defconfig
 mips                           jazz_defconfig
 powerpc                        cell_defconfig
 ia64                             alldefconfig
-powerpc                     tqm5200_defconfig
-arc                         haps_hs_defconfig
-arm                           spitz_defconfig
-arm                          exynos_defconfig
+nds32                               defconfig
+arm                       aspeed_g4_defconfig
+arm                         hackkit_defconfig
+sparc                       sparc64_defconfig
+powerpc                         wii_defconfig
+arm                       versatile_defconfig
+arc                     nsimosci_hs_defconfig
 arm                          pxa3xx_defconfig
 openrisc                         alldefconfig
 powerpc                      mgcoge_defconfig
@@ -93,9 +111,18 @@ arm                        trizeps4_defconfig
 arm                        spear3xx_defconfig
 powerpc                    amigaone_defconfig
 powerpc               mpc834x_itxgp_defconfig
+sparc                               defconfig
+powerpc                 mpc8272_ads_defconfig
+sh                             espt_defconfig
+arm                         vf610m4_defconfig
+arm                        multi_v5_defconfig
+arm                         nhk8815_defconfig
+m68k                        m5307c3_defconfig
+arm                      tct_hammer_defconfig
+m68k                       bvme6000_defconfig
+arm                        keystone_defconfig
 ia64                             allmodconfig
 ia64                                defconfig
-ia64                             allyesconfig
 m68k                             allmodconfig
 m68k                                defconfig
 m68k                             allyesconfig
@@ -103,7 +130,7 @@ nios2                               defconfig
 arc                              allyesconfig
 nds32                             allnoconfig
 c6x                              allyesconfig
-nds32                               defconfig
+nios2                            allyesconfig
 csky                                defconfig
 alpha                               defconfig
 alpha                            allyesconfig
@@ -114,10 +141,8 @@ xtensa                           allyesconfig
 parisc                              defconfig
 s390                             allyesconfig
 parisc                           allyesconfig
-s390                                defconfig
 i386                             allyesconfig
 sparc                            allyesconfig
-sparc                               defconfig
 i386                               tinyconfig
 i386                                defconfig
 mips                             allyesconfig
@@ -158,12 +183,6 @@ x86_64                                  kexec
 x86_64                           allyesconfig
 
 clang tested configs:
-x86_64               randconfig-a004-20201205
-x86_64               randconfig-a006-20201205
-x86_64               randconfig-a002-20201205
-x86_64               randconfig-a001-20201205
-x86_64               randconfig-a005-20201205
-x86_64               randconfig-a003-20201205
 x86_64               randconfig-a016-20201204
 x86_64               randconfig-a012-20201204
 x86_64               randconfig-a014-20201204
