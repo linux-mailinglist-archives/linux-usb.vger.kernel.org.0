@@ -2,80 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0542CFA92
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Dec 2020 09:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B242CFA9A
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Dec 2020 09:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729044AbgLEIS2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Dec 2020 03:18:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49742 "EHLO mail.kernel.org"
+        id S1729010AbgLEIZF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Dec 2020 03:25:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50702 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728978AbgLEIRf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 5 Dec 2020 03:17:35 -0500
-Date:   Sat, 5 Dec 2020 13:39:41 +0530
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607155785;
-        bh=Sf1YRnbImSd7hCd/MVpu0h/SeRbvcgUw5D13UFupUfY=;
+        id S1727967AbgLEIXu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 5 Dec 2020 03:23:50 -0500
+Date:   Sat, 5 Dec 2020 09:23:06 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1607156590;
+        bh=jj96Kcw+xXfcVwQbBF31tiFa7EGTlH/VyMukbQ2TMaY=;
         h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vQAwG/I9uiCnAdeQScfLRocyscNpR3JypwXmHmRBl6cl0KLXAuNJxF14mzYZtIRU0
-         p3I+wHPtGKN8l+7cLONgqaSxeo/IHTkidd4B7gZblMAeoaYTc9i8HNSR4kVK2ODFQe
-         KvEpmYe0wqtQ9mSMxW+eQbFonQs88R3sSUceSwyBoDww6hGt1t/PkZCYqwrmy7Bhgs
-         oUyKAcy2GYvKPUIYKtSdgY51e4bhPqLtrlXuMv/9WijzbC8VYPt8Y6xfF6HWghO2Qm
-         YkMPI6a5OO/QD7sq/OVQ9d1ruasRH7G13Krq3X+iNywyxtZ4fBGw6JF+crr7TS98+F
-         /wa3Mahsu10cA==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        kishon@ti.com, linux-clk@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        yanfei.li@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, paul@crapouillou.net
-Subject: Re: [PATCH v9 0/3] Use the generic PHY framework for Ingenic USB PHY.
-Message-ID: <20201205080941.GX8403@vkoul-mobl>
-References: <20201116141906.11758-1-zhouyanjie@wanyeetech.com>
+        b=1dgDBKOGb79bfGHXuCQiXheR07tYnIPb0e4AS0b2kZF/DSEG3AOBsA8UKFuo3zHlc
+         O3Z7WKHWpck70ASSHP4Uys0NxuH5OxeixsYJ9L6xEZ4ODrakyraVcoQ3hY1Ie0nWhF
+         Xd3ILezKQERxl1dQ0xcrtWMMgpdr0Ihqq/nkkP1I=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Alan Stern <stern@rowland.harvard.edu>, kernel@pengutronix.de,
+        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] ARM: sa11111: make sa1111 bus's remove callback return
+ void
+Message-ID: <X8tDamO7UviczH3n@kroah.com>
+References: <20201126114724.2028511-1-u.kleine-koenig@pengutronix.de>
+ <X8pOiU2a6BjfFuov@kroah.com>
+ <20201204200927.p354eli7uqr776sp@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201116141906.11758-1-zhouyanjie@wanyeetech.com>
+In-Reply-To: <20201204200927.p354eli7uqr776sp@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 16-11-20, 22:19, å‘¨ç°æ° (Zhou Yanjie) wrote:
-> v3->v4:
-> Only add new generic-PHY driver, without removing the old one. Because the
-> jz4740-musb driver is not ready to use the generic PHY framework. When the
-> jz4740-musb driver is modified to use the generic PHY framework, the old
-> jz4770-phy driver can be "retired".
+On Fri, Dec 04, 2020 at 09:09:27PM +0100, Uwe Kleine-König wrote:
+> Hey Greg,
 > 
-> v4->v5:
-> 1.Add an extra blank line between "devm_of_phy_provider_register" and "return".
-> 2.Remove unnecessary "phy_set_drvdata".
-> 3.Add Paul Cercueil's Reviewed-by.
+> On Fri, Dec 04, 2020 at 03:58:17PM +0100, Greg Kroah-Hartman wrote:
+> > On Thu, Nov 26, 2020 at 12:47:24PM +0100, Uwe Kleine-König wrote:
+> > > The driver core ignores the return value of struct device_driver::remove
+> > > because there is only little that can be done. To simplify the quest to
+> > > make this function return void, let struct sa1111_driver::remove return
+> > > void, too. All users already unconditionally return 0, this commit makes
+> > > it obvious that returning an error code is a bad idea and ensures future
+> > > users behave accordingly.
+> > > 
+> > > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> > 
+> > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > 
-> v5->v6:
-> 1.Revert the removal of "phy_set_drvdata" in v5, removing "phy_set_drvdata" will
->   cause a kernel panic on CI20.
->   Reported-by: H. Nikolaus Schaller <hns@goldelico.com>
-> 2.Rewrite the macro definitions, replace the original code with "FIELD_PREP()"
->   and "u32p_replace_bits()" according to Vinod Koul's suggestion.
-> 
-> v6->v7:
-> 1.Remove the stray tab character.
-> 2.Remove unnecessary "platform_set_drvdata".
-> 3.Remove the "dev" field in priv structure, and use &phy->dev instead.
-> 
-> v7->v8:
-> Add support for Ingenic JZ4775 SoC and X2000 SoC.
-> 
-> v8->v9:
-> Correct the path errors in "ingenic,phy-usb.yaml" and "ingenic,cgu.yaml".
+> Thanks, can I interpret this also as an Ack to take the change affecting
+> drivers/usb via Russell's tree?
 
-Applied, thanks
+Sorry, yes, that is what I was implying here, I should have been more
+specific.
 
--- 
-~Vinod
+thanks,
+
+greg k-h
