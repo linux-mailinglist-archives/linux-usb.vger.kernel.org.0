@@ -2,15 +2,15 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AC22CFCF8
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Dec 2020 19:51:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CC02CFCEB
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Dec 2020 19:51:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729240AbgLEST1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Dec 2020 13:19:27 -0500
-Received: from ns2.chip.baikal.ru ([94.125.187.42]:53283 "EHLO
+        id S1729103AbgLEST0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Dec 2020 13:19:26 -0500
+Received: from ns2.baikalelectronics.ru ([94.125.187.42]:53282 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727827AbgLERqo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Dec 2020 12:46:44 -0500
+        by vger.kernel.org with ESMTP id S1727569AbgLERoE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Dec 2020 12:44:04 -0500
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Mathias Nyman <mathias.nyman@intel.com>,
         Felipe Balbi <balbi@kernel.org>,
@@ -39,9 +39,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Rob Herring <robh@kernel.org>,
         <linux-amlogic@lists.infradead.org>
-Subject: [PATCH v5 15/19] dt-bindings: usb: meson-g12a-usb: Fix FL-adj property value
-Date:   Sat, 5 Dec 2020 18:24:22 +0300
-Message-ID: <20201205152427.29537-16-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v5 16/19] dt-bindings: usb: meson-g12a-usb: Validate DWC2/DWC3 sub-nodes
+Date:   Sat, 5 Dec 2020 18:24:23 +0300
+Message-ID: <20201205152427.29537-17-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20201205152427.29537-1-Sergey.Semin@baikalelectronics.ru>
 References: <20201205152427.29537-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -52,38 +52,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-An empty snps,quirk-frame-length-adjustment won't cause any change
-performed by the driver. Moreover the DT schema validation will fail,
-since it expects the property being assigned with some value. So set
-fix the example by setting a valid FL-adj value in accordance with
-Neil Armstrong comment.
+Amlogic G12A USB DT sub-nodes are supposed to be compatible with the
+generic DWC USB2 and USB3 devices. Since now we've got DT schemas for
+both of the later IP cores let's make sure that the Amlogic G12A USB
+DT nodes are fully evaluated including the DWC sub-nodes.
 
-Link: https://lore.kernel.org/linux-usb/20201010224121.12672-16-Sergey.Semin@baikalelectronics.ru/
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
 Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
 ---
 
-Note the same problem is in the DT source file
-arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi .
+Changelog v2:
+- Use "oneOf: [dwc2.yaml#, snps,dwc3.yaml#]" instead of the bulky "if:
+  properties: compatibe: ..." statement.
 ---
- .../devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml    | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml  | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-index c0058332b967..1eda16dd4ee0 100644
+index 1eda16dd4ee0..e349fa5de606 100644
 --- a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
 +++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-@@ -229,6 +229,6 @@ examples:
-               interrupts = <30>;
-               dr_mode = "host";
-               snps,dis_u2_susphy_quirk;
--              snps,quirk-frame-length-adjustment;
-+              snps,quirk-frame-length-adjustment = <0x20>;
-           };
-     };
+@@ -79,7 +79,9 @@ properties:
+ 
+ patternProperties:
+   "^usb@[0-9a-f]+$":
+-    type: object
++    oneOf:
++      - $ref: dwc2.yaml#
++      - $ref: snps,dwc3.yaml#
+ 
+ additionalProperties: false
+ 
 -- 
 2.29.2
 
