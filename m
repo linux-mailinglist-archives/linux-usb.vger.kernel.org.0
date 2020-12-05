@@ -2,79 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B03A2CFB87
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Dec 2020 15:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 594752CFBA0
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Dec 2020 15:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726685AbgLEORo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Dec 2020 09:17:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726366AbgLEM6x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Dec 2020 07:58:53 -0500
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB28DC09424E;
-        Sat,  5 Dec 2020 04:47:11 -0800 (PST)
-Received: by mail-io1-xd42.google.com with SMTP id z5so8649901iob.11;
-        Sat, 05 Dec 2020 04:47:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/XpRQ3Q0ad+Q2MHPv+UdGhls3f1Aa2YKOEanYedPdIk=;
-        b=egBmuZj9si4XcjX7hbuUrl90XqzQXy6ONSDPwnubdJFkNY/KxL8tQlLFtE6yQh+Q1z
-         kiRIqpGw27Inc3+YPNWvfKxzE95d/O4RJ5dP/9jwZS4NLBZRXKZW82aAM2LjuwIoWzl+
-         uojW88o+rW24I544Gc6FgQXpFYf+XUSkWQKoXJRkFqefa5wN8J5CbNP9UItPiRXRCKtd
-         LSiQ2OQN+T8V048oM7Y+eirAixi7/mXhQSCuUcb73tPmdhD8ll+vEokBfvVdgbDtf3hv
-         2Afswj2FDWL+iavY7+76Rj5Q5FcwRbt5fsXkw98m6vnmfWQ/vem9MofoRcIyJpM5NFX5
-         Vr6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/XpRQ3Q0ad+Q2MHPv+UdGhls3f1Aa2YKOEanYedPdIk=;
-        b=uTIEiPgoTduBd4KvVi3A96LNRe05CftafIZsepJMKsWbL+BhJ2aJKqphYIbf/0vFu8
-         yi3W3KOb5eNaeaW0ZQzdFOhA5tN0785IMYFTV45m0L0lEfctOg5lz/71OZEnxIYSBo9r
-         4e+6Z8TmTSdU1Bba97gDR3zw8eKtp/nlDehuDwHq5RRpIAtn3Q2CWOGGRwGdPV/88PL0
-         QoLX476WVaptp9qgLGq8AqpuJxcVyukfrZA1QxXSjvlrpGmMksiF7rYeLKT84gpM4SLg
-         a9O39rqgqLxjvN1GxmMVkMoaLD6X9B7OBSHKOEodNXJN2jtO17EJcZBFzxw0tXHgUQoZ
-         b33g==
-X-Gm-Message-State: AOAM531p5UOdtS+hHejavH6zaN22NH202LPN115vsgpKnd30SS/jiQE/
-        67pWFEb11THwp7JMcbowf1LgdLkirDMZsL72MAk=
-X-Google-Smtp-Source: ABdhPJybJZKeM2jBJZXvPwqinwg7SiIw9A482TPoAQbPUhShWdncpaKiViV/Yh0v1/8UU1YtvF3IUVI8LrUW6/uPJL0=
-X-Received: by 2002:a5d:8e06:: with SMTP id e6mr10819023iod.27.1607172431223;
- Sat, 05 Dec 2020 04:47:11 -0800 (PST)
-MIME-Version: 1.0
-References: <1607063090-3426-1-git-send-email-minhquangbui99@gmail.com> <20201204161249.GA1141609@rowland.harvard.edu>
-In-Reply-To: <20201204161249.GA1141609@rowland.harvard.edu>
-From:   =?UTF-8?Q?Minh_B=C3=B9i_Quang?= <minhquangbui99@gmail.com>
-Date:   Sat, 5 Dec 2020 19:47:01 +0700
-Message-ID: <CACtPs=Gg3C0KxdFnETHujAyis4hhKnCdV4_ZWqprHkXCXahFvw@mail.gmail.com>
-Subject: Re: [PATCH] USB: dummy-hcd: Fix uninitialized array use in init()
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+        id S1726731AbgLEO45 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Dec 2020 09:56:57 -0500
+Received: from honk.sigxcpu.org ([24.134.29.49]:32940 "EHLO honk.sigxcpu.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726249AbgLEOvY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 5 Dec 2020 09:51:24 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by honk.sigxcpu.org (Postfix) with ESMTP id C7B8FFB04;
+        Sat,  5 Dec 2020 12:13:29 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
+Received: from honk.sigxcpu.org ([127.0.0.1])
+        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ZAMH5zkM__qE; Sat,  5 Dec 2020 12:13:28 +0100 (CET)
+Received: by bogon.sigxcpu.org (Postfix, from userid 1000)
+        id 59BB14068E; Sat,  5 Dec 2020 12:13:26 +0100 (CET)
+From:   =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Jules Irenge <jbi.octave@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH v5 0/2] usb: typec: tps6598x: Export some power supply properties
+Date:   Sat,  5 Dec 2020 12:13:24 +0100
+Message-Id: <cover.1607166657.git.agx@sigxcpu.org>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-V=C3=A0o Th 6, 4 thg 12, 2020 va=CC=80o lu=CC=81c 23:12 Alan Stern
-<stern@rowland.harvard.edu> =C4=91=C3=A3 vi=E1=BA=BFt:
-> Does this initialization end up using less memory than an explicit
-> memset() call?
+This allows downstream supplies and userspace to detect whether external power
+is supplied.
 
-You mean speed? In my opinion, there is no difference in speed between 2 wa=
-ys.
-When I compile this array initialization using gcc 5.4.0,  this
-initialization becomes
-mov instructions when MAX_NUM_UDC=3D2 and becomes rep stos when
-MAX_NUM_UDC=3D32. I think it makes no difference when comparing with memset=
-()
+The Librem 5 has the tp65982 in front of bq25980 charge controller.  Since that
+is capable of sinking and sourcing power the online property helps to decide
+what to do. It also makes upower happy.
 
-Thanks,
-Quang Minh
+There will be follow up patches providing more properties but these need some
+more time to cook and i wanted to check if this is the right way to go?
+
+changes from v4
+  - As per review comments from Andy Shevchenko
+    https://lore.kernel.org/linux-usb/CAHp75Vfws_WMDxxpCpB1zSgbWucYx7-qeev6=mKE+znXSSPWSA@mail.gmail.com/T/#mb90b0f7dc49c4929590fa7fa0df53631b47a9285
+    - Use devm_kasprintf()
+  - Add reviewed by from Andy Shevchenko, thanks!
+    https://lore.kernel.org/linux-usb/CAHp75Vfws_WMDxxpCpB1zSgbWucYx7-qeev6=mKE+znXSSPWSA@mail.gmail.com/
+
+changes from v3
+  - As per review comments from Andy Shevchenko
+    https://lore.kernel.org/linux-usb/CAHp75VeLZtm85Y=3QMkPGb332wn05-zr-_mrrwXvnqLhazR1Gg@mail.gmail.com/
+    - Use positive conditionals
+  - Add reviewed by from Heikki Krogerus
+    https://lore.kernel.org/linux-usb/20201130102720.GA2911464@kuha.fi.intel.com/T/#u
+    https://lore.kernel.org/linux-usb/20201130102942.GB2911464@kuha.fi.intel.com/T/#u
+  - Fix typc vs typec typo in commit message
+
+changes from v2
+  - As per kernel test robot
+    https://lore.kernel.org/linux-usb/202011271005.zJVawX74-lkp@intel.com/
+    - Flip USB_ROLE_SWITCH and REGMAP_I2C from 'depends on' to 'select'
+      This matches tcpm and avoids a config symbol recursion which went
+      unnoticed on my arm64 build but trips up x86_64.
+
+changes from v1
+  - As per review comments from Heikki Krogerus
+    https://lore.kernel.org/linux-usb/20201126123552.GP1008337@kuha.fi.intel.com/
+    - select POWER_SUPPLY
+    - use POWER_SUPPLY_USB_TYPE_PD when a PD contract got negotiated
+
+Guido Günther (2):
+  usb: typec: tps6598x: Select USB_ROLE_SWITCH and REGMAP_I2C
+  usb: typec: tps6598x: Export some power supply properties
+
+ drivers/usb/typec/Kconfig    |   5 +-
+ drivers/usb/typec/tps6598x.c | 103 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 106 insertions(+), 2 deletions(-)
+
+-- 
+2.29.2
+
