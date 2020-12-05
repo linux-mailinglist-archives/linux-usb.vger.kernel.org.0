@@ -2,220 +2,352 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 444F92CF9D3
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Dec 2020 06:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C361F2CFA47
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Dec 2020 08:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728568AbgLEFoh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Dec 2020 00:44:37 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:55930 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728524AbgLEFoh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Dec 2020 00:44:37 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0B55goS2128842;
-        Fri, 4 Dec 2020 23:42:50 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1607146970;
-        bh=RaUGeA1gwPaJRn/Q7SztrlbrsY1X1SD32B6gKpX1juo=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=kmilGrdGxB2UiOthrhPp/9Wsz7XNLlWG3SfO9lzIEPJC8PYwiKSqzUKCsAfXPhzMH
-         Zqg1A3PPN/KFp7ISaV7s7SYT6OIPZQ68ulFn590syw2aMqwLkt6zqyqXpO2t409tUD
-         U7EZPD6ZM8DOCq5lRx4xQOJGZOjFhmuOQteMDuBo=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0B55goNj028714
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 4 Dec 2020 23:42:50 -0600
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 4 Dec
- 2020 23:42:49 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 4 Dec 2020 23:42:49 -0600
-Received: from [10.250.232.169] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0B55gjji071782;
-        Fri, 4 Dec 2020 23:42:46 -0600
-Subject: RE: [PATCH v4 00/10] Introduced new Cadence USBSSP DRD Driver.
-To:     Peter Chen <peter.chen@nxp.com>,
-        Pawel Laszczak <pawell@cadence.com>,
-        "rogerq@ti.com" <rogerq@ti.com>, "nsekhar@ti.com" <nsekhar@ti.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "colin.king@canonical.com" <colin.king@canonical.com>,
-        "kurahul@cadence.com" <kurahul@cadence.com>
-References: <20201202132548.10736-1-pawell@cadence.com>
- <DBBPR04MB7979860970F8C89C648209EB8BF10@DBBPR04MB7979.eurprd04.prod.outlook.com>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-Message-ID: <f65eb2d5-7afb-788f-3ada-8fb529a0cfba@ti.com>
-Date:   Sat, 5 Dec 2020 11:12:44 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728414AbgLEHh0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Dec 2020 02:37:26 -0500
+Received: from mx2.suse.de ([195.135.220.15]:48636 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726031AbgLEHhZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 5 Dec 2020 02:37:25 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 6F450AB63;
+        Sat,  5 Dec 2020 07:36:43 +0000 (UTC)
+Date:   Fri, 4 Dec 2020 23:11:32 -0800
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org
+Subject: Re: [RFC PATCH] usb: hcd: complete URBs in threaded-IRQ context
+ instead of tasklet
+Message-ID: <20201205071132.noumprob5kgkrvyy@linux-p48b.lan>
+References: <20180216170450.yl5owfphuvltstnt@breakpoint.cc>
+ <20180227143934.2aa847ac@vento.lan>
+ <20180308095739.okdn7ghvlpy4oiy5@linutronix.de>
+ <20180416140103.33s2xarrxxeecttk@linutronix.de>
+ <20201204062257.GA13304@linux-p48b.lan>
 MIME-Version: 1.0
-In-Reply-To: <DBBPR04MB7979860970F8C89C648209EB8BF10@DBBPR04MB7979.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20201204062257.GA13304@linux-p48b.lan>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-On 04/12/20 6:49 am, Peter Chen wrote:
->  
->> This patch introduce new Cadence USBSS DRD driver to linux kernel.
->>
->> The Cadence USBSS DRD Controller is a highly configurable IP Core which can
->> be instantiated as Dual-Role Device (DRD), Peripheral Only and Host Only
->> (XHCI)configurations.
->>
->> The current driver has been validated with FPGA burned. We have support for
->> PCIe bus, which is used on FPGA prototyping.
->>
->> The host side of USBSS-DRD controller is compliance with XHCI specification, so
->> it works with standard XHCI Linux driver.
->>
->> The device side of USBSS DRD controller is compliant with XHCI.
->> The architecture for device side is almost the same as for host side, and most
->> of the XHCI specification can be used to understand how this controller
->> operates.
->>
->> This controller and driver support Full Speed, Hight Speed, Supper Speed and
->> Supper Speed Plus USB protocol.
->>
->> The prefix cdnsp used in driver has chosen by analogy to cdn3 driver.
->> The last letter of this acronym means PLUS. The formal name of controller is
->> USBSSP but it's to generic so I've decided to use CDNSP.
->>
->> The patch 1: adds support for DRD CDNSP.
->> The patch 2: separates common code that can be reusable by cdnsp driver.
->> The patch 3: moves reusable code to separate module.
->> The patch 4: changes prefixes in reusable code from cdns3 to common cdns.
->> The patch 5: adopts gadget_dev pointer in cdns structure to make possible
->>              use it in both drivers.
->> The patches 6-8: add the main part of driver and has been intentionally
->>              split into 3 part. In my opinion such division should not
->>              affect understanding and reviewing the driver, and cause that
->>              main patch (7/8) is little smaller. Patch 6 introduces main
->>              header file for driver, 7 is the main part that implements all
->>              functionality of driver and 8 introduces tracepoints.
->> The patch 9: Adds cdns3 prefixes to files related with USBSS driver.
->> the patch 10: Adds USBSSP DRD IP driver entry to MAINTAINERS file.
->>
-> 
-> Hi Roger & Sekhar,
-> 
-> Would you please test this patch set and see if it works well at TI platforms?
-> 
+On Thu, 03 Dec 2020, Bueso wrote:
 
-Tested this patch series on TI SOC J7200. All given below tests were
-performed and they passed,
-
-Host mode:
- - Connected a mass storage device (USB flash stick) and performed read
-       and write tests
- - Connected mouse and keyboard to check enumeration
-
-Device mode:
- - Tested g_mass_storage module by performing read and write
- - Tested g_ether module by the pinging host and device from either sides
-
-OTG:
- - Switching between host and device mode based on the device connected.
-
-
-Tested-by: Aswath Govindraju <a-govindraju@ti.com>
-
-Thanks,
-Aswath
-
-> Peter
-> 
->> Changlog from v3:
->> - added 'T' to MAINTAINERS file for CDNSP entry
->> - updated common code with latest cdns3 fixes
+>On Mon, 16 Apr 2018, Sebastian Andrzej Siewior wrote:
+>
+>>On 2018-03-08 10:57:39 [+0100], To Mauro Carvalho Chehab wrote:
+>>>On 2018-02-27 14:39:34 [-0300], Mauro Carvalho Chehab wrote:
+>>>> Hi Sebastian,
+>>>Hi Mauro,
+>>>
+>>>> Sorry for taking some time to test it, has been busy those days...
+>>>:)
+>>>
+>>>> Anyway, I tested it today. Didn't work. It keep losing data.
+>>>
+>>>Okay, this was unexpected. What I learned from the thread is that you
+>>>use the dwc2 controller and once upgrade to a kernel which completes the
+>>>URBs in BH context then you starting losing data from your DVB-s USB
+>>>device. And it was assumed that this is because BH/ksoftirq is getting
+>>>"paused" if it is running for too long. If that is the case then a
+>>>revert of "let us complete the URB in BH context" should get it working
+>>>again. Is that so?
 >>
->> Changlog from v2:
->> - removed not used pdev parameter from cdnsp_read/wite_64 functions
->> - fixed incorrect value assigned to CDNSP_ENDPOINTS_NUM (32 -> 31)
->> - replaced some constant value with CDNSP_ENDPOINTS_NUM macro
->> - replaced 'true' with '1' in bits description in cdnsp-gadget.h file
->> - fixed some typos
->> - some other less important changes suggested by Peter Chen
->>
->> Changlog from v1:
->> - updated common code to latest cdns3 driver
->> - moved cdnsp driver files to cdns3 as sugested by Peter Chan
->> - removed duplicate code from cdnsp_ep0_set_config function
->> - added cdns3 prefixes to file related with USBSS driver
->> - updated MAINTAINERS file
->> - fixed issue with U1
->> - fixed issue with L1
->> - some less improtant changes sugested by Chunfeng Yun
->> ---
->>
->> Pawel Laszczak (10):
->>   usb: cdns3: Add support for DRD CDNSP
->>   usb: cdns3: Split core.c into cdns3-plat and core.c file
->>   usb: cdns3: Moves reusable code to separate module
->>   usb: cdns3: Refactoring names in reusable code
->>   usb: cdns3: Changed type of gadget_dev in cdns structure
->>   usb: cdnsp: Device side header file for CDNSP driver
->>   usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver
->>   usb: cdnsp: Add tracepoints for CDNSP driver
->>   usb: cdns3: Change file names for cdns3 driver.
->>   MAINTAINERS: add Cadence USBSSP DRD IP driver entry
->>
->>  MAINTAINERS                                   |    9 +
->>  drivers/usb/Makefile                          |    2 +
->>  drivers/usb/cdns3/Kconfig                     |   61 +-
->>  drivers/usb/cdns3/Makefile                    |   30 +-
->>  drivers/usb/cdns3/{debug.h => cdns3-debug.h}  |    0
->>  drivers/usb/cdns3/{ep0.c => cdns3-ep0.c}      |    4 +-
->>  .../usb/cdns3/{gadget.c => cdns3-gadget.c}    |   28 +-
->>  .../usb/cdns3/{gadget.h => cdns3-gadget.h}    |    0
->>  drivers/usb/cdns3/cdns3-imx.c                 |    2 +-
->>  drivers/usb/cdns3/cdns3-plat.c                |  315 +++
->>  drivers/usb/cdns3/{trace.c => cdns3-trace.c}  |    2 +-
->>  drivers/usb/cdns3/{trace.h => cdns3-trace.h}  |    6 +-
->>  drivers/usb/cdns3/cdnsp-debug.h               |  583 ++++
->>  drivers/usb/cdns3/cdnsp-ep0.c                 |  495 ++++
->>  drivers/usb/cdns3/cdnsp-gadget.c              | 2017 ++++++++++++++
->>  drivers/usb/cdns3/cdnsp-gadget.h              | 1600 +++++++++++
->>  drivers/usb/cdns3/cdnsp-mem.c                 | 1325 +++++++++
->>  drivers/usb/cdns3/cdnsp-pci.c                 |  255 ++
->>  drivers/usb/cdns3/cdnsp-ring.c                | 2439
->> +++++++++++++++++
->>  drivers/usb/cdns3/cdnsp-trace.c               |   12 +
->>  drivers/usb/cdns3/cdnsp-trace.h               |  840 ++++++
->>  drivers/usb/cdns3/core.c                      |  455 +--
->>  drivers/usb/cdns3/core.h                      |   54 +-
->>  drivers/usb/cdns3/drd.c                       |  222 +-
->>  drivers/usb/cdns3/drd.h                       |   94 +-
->>  drivers/usb/cdns3/gadget-export.h             |   22 +-
->>  drivers/usb/cdns3/host-export.h               |   13 +-
->>  drivers/usb/cdns3/host.c                      |   22 +-
->>  28 files changed, 10400 insertions(+), 507 deletions(-)  rename
->> drivers/usb/cdns3/{debug.h => cdns3-debug.h} (100%)  rename
->> drivers/usb/cdns3/{ep0.c => cdns3-ep0.c} (99%)  rename
->> drivers/usb/cdns3/{gadget.c => cdns3-gadget.c} (99%)  rename
->> drivers/usb/cdns3/{gadget.h => cdns3-gadget.h} (100%)  create mode 100644
->> drivers/usb/cdns3/cdns3-plat.c  rename drivers/usb/cdns3/{trace.c =>
->> cdns3-trace.c} (89%)  rename drivers/usb/cdns3/{trace.h => cdns3-trace.h}
->> (99%)  create mode 100644 drivers/usb/cdns3/cdnsp-debug.h  create mode
->> 100644 drivers/usb/cdns3/cdnsp-ep0.c  create mode 100644
->> drivers/usb/cdns3/cdnsp-gadget.c  create mode 100644
->> drivers/usb/cdns3/cdnsp-gadget.h  create mode 100644
->> drivers/usb/cdns3/cdnsp-mem.c  create mode 100644
->> drivers/usb/cdns3/cdnsp-pci.c  create mode 100644
->> drivers/usb/cdns3/cdnsp-ring.c  create mode 100644
->> drivers/usb/cdns3/cdnsp-trace.c  create mode 100644
->> drivers/usb/cdns3/cdnsp-trace.h
->>
->> --
->> 2.17.1
-> 
+>>ping
+>
+>I ran into this while looking at getting rid of tasklets in drivers/usb.
+>
+>Mauro, were you ever able to try reverting 8add17cf8e4 like Sebastian suggested?
+>If not would you mind trying the below, please? Considering this thread is from
+>over two years ago, it's a rebase of Sebastian's patch to complete urbs in process
+>context + the dwc2 changes not to use defer urb into bh.
 
+Hmm Mauro's email bounced, updating with a valid address.
+
+>
+>Thanks,
+>Davidlohr
+>
+>----8<---------------------------------------------------------------------------
+>diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+>index 60886a7464c3..4952a8fc1719 100644
+>--- a/drivers/usb/core/hcd.c
+>+++ b/drivers/usb/core/hcd.c
+>@@ -1665,33 +1665,76 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
+>	usb_put_urb(urb);
+>}
+>
+>-static void usb_giveback_urb_bh(struct tasklet_struct *t)
+>+static void usb_hcd_rh_gb_urb(struct work_struct *work)
+>{
+>-	struct giveback_urb_bh *bh = from_tasklet(bh, t, bh);
+>-	struct list_head local_list;
+>+	struct giveback_urb *bh;
+>+	struct list_head urb_list;
+>+
+>+	bh = container_of(work, struct giveback_urb, rh_compl);
+>
+>	spin_lock_irq(&bh->lock);
+>-	bh->running = true;
+>- restart:
+>-	list_replace_init(&bh->head, &local_list);
+>+	list_replace_init(&bh->rh_head, &urb_list);
+>	spin_unlock_irq(&bh->lock);
+>
+>-	while (!list_empty(&local_list)) {
+>+	while (!list_empty(&urb_list)) {
+>		struct urb *urb;
+>
+>-		urb = list_entry(local_list.next, struct urb, urb_list);
+>+		urb = list_first_entry(&urb_list, struct urb, urb_list);
+>		list_del_init(&urb->urb_list);
+>-		bh->completing_ep = urb->ep;
+>		__usb_hcd_giveback_urb(urb);
+>-		bh->completing_ep = NULL;
+>+	}
+>+}
+>+
+>+#define URB_PRIO_HIGH	0
+>+#define URB_PRIO_LOW	1
+>+
+>+static irqreturn_t usb_hcd_gb_urb(int irq, void *__hcd)
+>+{
+>+	struct usb_hcd *hcd = __hcd;
+>+	struct giveback_urb *bh = &hcd->gb_urb;
+>+	struct list_head urb_list[2];
+>+	int i;
+>+
+>+	INIT_LIST_HEAD(&urb_list[URB_PRIO_HIGH]);
+>+	INIT_LIST_HEAD(&urb_list[URB_PRIO_LOW]);
+>+
+>+	spin_lock_irq(&bh->lock);
+>+ restart:
+>+	list_splice_tail_init(&bh->prio_hi_head, &urb_list[URB_PRIO_HIGH]);
+>+	list_splice_tail_init(&bh->prio_lo_head, &urb_list[URB_PRIO_LOW]);
+>+	spin_unlock_irq(&bh->lock);
+>+
+>+	for (i = 0; i < ARRAY_SIZE(urb_list); i++) {
+>+		while (!list_empty(&urb_list[i])) {
+>+			struct urb *urb;
+>+
+>+			urb = list_first_entry(&urb_list[i],
+>+					       struct urb, urb_list);
+>+			list_del_init(&urb->urb_list);
+>+			if (i == URB_PRIO_HIGH)
+>+				bh->completing_ep = urb->ep;
+>+
+>+			__usb_hcd_giveback_urb(urb);
+>+
+>+			if (i == URB_PRIO_HIGH)
+>+				bh->completing_ep = NULL;
+>+
+>+			if (i == URB_PRIO_LOW &&
+>+			    !list_empty_careful(&urb_list[URB_PRIO_HIGH])) {
+>+				spin_lock_irq(&bh->lock);
+>+				goto restart;
+>+			}
+>+		}
+>	}
+>
+>	/* check if there are new URBs to giveback */
+>	spin_lock_irq(&bh->lock);
+>-	if (!list_empty(&bh->head))
+>+	if (!list_empty(&bh->prio_hi_head) ||
+>+	    !list_empty(&bh->prio_lo_head))
+>		goto restart;
+>-	bh->running = false;
+>	spin_unlock_irq(&bh->lock);
+>+
+>+	return IRQ_HANDLED;
+>}
+>
+>/**
+>@@ -1717,37 +1760,34 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
+> */
+>void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
+>{
+>-	struct giveback_urb_bh *bh;
+>-	bool running, high_prio_bh;
+>+	struct giveback_urb	*bh = &hcd->gb_urb;
+>+	struct list_head	*lh;
+>
+>	/* pass status to tasklet via unlinked */
+>	if (likely(!urb->unlinked))
+>		urb->unlinked = status;
+>
+>-	if (!hcd_giveback_urb_in_bh(hcd) && !is_root_hub(urb->dev)) {
+>-		__usb_hcd_giveback_urb(urb);
+>+	if (is_root_hub(urb->dev)) {
+>+		spin_lock(&bh->lock);
+>+		list_add_tail(&urb->urb_list, &bh->rh_head);
+>+		spin_unlock(&bh->lock);
+>+		queue_work(system_highpri_wq, &bh->rh_compl);
+>		return;
+>	}
+>
+>-	if (usb_pipeisoc(urb->pipe) || usb_pipeint(urb->pipe)) {
+>-		bh = &hcd->high_prio_bh;
+>-		high_prio_bh = true;
+>-	} else {
+>-		bh = &hcd->low_prio_bh;
+>-		high_prio_bh = false;
+>+	if (!hcd_giveback_urb_in_bh(hcd)) {
+>+		__usb_hcd_giveback_urb(urb);
+>+		return;
+>	}
+>
+>+	if (usb_pipeisoc(urb->pipe) || usb_pipeint(urb->pipe))
+>+		lh = &bh->prio_hi_head;
+>+	else
+>+		lh = &bh->prio_lo_head;
+>+
+>	spin_lock(&bh->lock);
+>-	list_add_tail(&urb->urb_list, &bh->head);
+>-	running = bh->running;
+>+	list_add_tail(&urb->urb_list, lh);
+>	spin_unlock(&bh->lock);
+>-
+>-	if (running)
+>-		;
+>-	else if (high_prio_bh)
+>-		tasklet_hi_schedule(&bh->bh);
+>-	else
+>-		tasklet_schedule(&bh->bh);
+>}
+>EXPORT_SYMBOL_GPL(usb_hcd_giveback_urb);
+>
+>@@ -2334,8 +2374,17 @@ irqreturn_t usb_hcd_irq (int irq, void *__hcd)
+>		rc = IRQ_NONE;
+>	else if (hcd->driver->irq(hcd) == IRQ_NONE)
+>		rc = IRQ_NONE;
+>-	else
+>-		rc = IRQ_HANDLED;
+>+	else {
+>+		struct giveback_urb	*bh = &hcd->gb_urb;
+>+
+>+		spin_lock(&bh->lock);
+>+		if (!list_empty(&bh->prio_hi_head) ||
+>+		    !list_empty(&bh->prio_lo_head))
+>+			rc = IRQ_WAKE_THREAD;
+>+		else
+>+			rc = IRQ_HANDLED;
+>+		spin_unlock(&bh->lock);
+>+	}
+>
+>	return rc;
+>}
+>@@ -2410,12 +2459,12 @@ EXPORT_SYMBOL_GPL (usb_hc_died);
+>
+>/*-------------------------------------------------------------------------*/
+>
+>-static void init_giveback_urb_bh(struct giveback_urb_bh *bh)
+>+static void init_giveback_urb(struct giveback_urb *bh)
+>{
+>-
+>-	spin_lock_init(&bh->lock);
+>-	INIT_LIST_HEAD(&bh->head);
+>-	tasklet_setup(&bh->bh, usb_giveback_urb_bh);
+>+	INIT_LIST_HEAD(&bh->prio_lo_head);
+>+	INIT_LIST_HEAD(&bh->prio_hi_head);
+>+	INIT_LIST_HEAD(&bh->rh_head);
+>+	INIT_WORK(&bh->rh_compl, usb_hcd_rh_gb_urb);
+>}
+>
+>struct usb_hcd *__usb_create_hcd(const struct hc_driver *driver,
+>@@ -2593,8 +2642,9 @@ static int usb_hcd_request_irqs(struct usb_hcd *hcd,
+>
+>		snprintf(hcd->irq_descr, sizeof(hcd->irq_descr), "%s:usb%d",
+>				hcd->driver->description, hcd->self.busnum);
+>-		retval = request_irq(irqnum, &usb_hcd_irq, irqflags,
+>-				hcd->irq_descr, hcd);
+>+		retval = request_threaded_irq(irqnum, &usb_hcd_irq,
+>+					      usb_hcd_gb_urb, irqflags,
+>+					      hcd->irq_descr, hcd);
+>		if (retval != 0) {
+>			dev_err(hcd->self.controller,
+>					"request interrupt %d failed\n",
+>@@ -2783,9 +2833,7 @@ int usb_add_hcd(struct usb_hcd *hcd,
+>			&& device_can_wakeup(&hcd->self.root_hub->dev))
+>		dev_dbg(hcd->self.controller, "supports USB remote wakeup\n");
+>
+>-	/* initialize tasklets */
+>-	init_giveback_urb_bh(&hcd->high_prio_bh);
+>-	init_giveback_urb_bh(&hcd->low_prio_bh);
+>+	init_giveback_urb(&hcd->gb_urb);
+>
+>	/* enable irqs just before we start the controller,
+>	 * if the BIOS provides legacy PCI irqs.
+>diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+>index e9ac215b9663..fa6a0e7eb899 100644
+>--- a/drivers/usb/dwc2/hcd.c
+>+++ b/drivers/usb/dwc2/hcd.c
+>@@ -4162,7 +4162,9 @@ void dwc2_host_complete(struct dwc2_hsotg *hsotg, struct dwc2_qtd *qtd,
+>	kfree(qtd->urb);
+>	qtd->urb = NULL;
+>
+>+	spin_unlock(&hsotg->lock);
+>	usb_hcd_giveback_urb(dwc2_hsotg_to_hcd(hsotg), urb, status);
+>+	spin_lock(&hsotg->lock);
+>}
+>
+>/*
+>@@ -4902,7 +4904,7 @@ static struct hc_driver dwc2_hc_driver = {
+>	.hcd_priv_size = sizeof(struct wrapper_priv_data),
+>
+>	.irq = _dwc2_hcd_irq,
+>-	.flags = HCD_MEMORY | HCD_USB2 | HCD_BH,
+>+	.flags = HCD_MEMORY | HCD_USB2,
+>
+>	.start = _dwc2_hcd_start,
+>	.stop = _dwc2_hcd_stop,
+>diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+>index 96281cd50ff6..15a55aaa0e9c 100644
+>--- a/include/linux/usb/hcd.h
+>+++ b/include/linux/usb/hcd.h
+>@@ -64,11 +64,12 @@
+>
+>/*-------------------------------------------------------------------------*/
+>
+>-struct giveback_urb_bh {
+>-	bool running;
+>+struct giveback_urb {
+>	spinlock_t lock;
+>-	struct list_head  head;
+>-	struct tasklet_struct bh;
+>+	struct list_head	prio_lo_head;
+>+	struct list_head	prio_hi_head;
+>+	struct list_head	rh_head;
+>+	struct work_struct	rh_compl;
+>	struct usb_host_endpoint *completing_ep;
+>};
+>
+>@@ -179,8 +180,7 @@ struct usb_hcd {
+>	resource_size_t		rsrc_len;	/* memory/io resource length */
+>	unsigned		power_budget;	/* in mA, 0 = no limit */
+>
+>-	struct giveback_urb_bh  high_prio_bh;
+>-	struct giveback_urb_bh  low_prio_bh;
+>+	struct giveback_urb     gb_urb;
+>
+>	/* bandwidth_mutex should be taken before adding or removing
+>	 * any new bus bandwidth constraints:
+>@@ -420,7 +420,7 @@ static inline int hcd_giveback_urb_in_bh(struct usb_hcd *hcd)
+>static inline bool hcd_periodic_completion_in_progress(struct usb_hcd *hcd,
+>		struct usb_host_endpoint *ep)
+>{
+>-	return hcd->high_prio_bh.completing_ep == ep;
+>+	return hcd->gb_urb.completing_ep == ep;
+>}
+>
+>static inline bool hcd_uses_dma(struct usb_hcd *hcd)
