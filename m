@@ -2,127 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01AEC2D05EA
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Dec 2020 17:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3C92D0702
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Dec 2020 20:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726602AbgLFQ0R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Dec 2020 11:26:17 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:52611 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726318AbgLFQ0R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Dec 2020 11:26:17 -0500
-Received: (qmail 1213533 invoked by uid 1000); 6 Dec 2020 11:25:36 -0500
-Date:   Sun, 6 Dec 2020 11:25:36 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        Himadri Pandya <himadrispandya@gmail.com>
-Subject: Re: [PATCH 1/3] USB: core: drop pipe-type check from new
- control-message helpers
-Message-ID: <20201206162536.GB1212872@rowland.harvard.edu>
-References: <20201204085110.20055-1-johan@kernel.org>
- <20201204085110.20055-2-johan@kernel.org>
- <X8pSSqQenF8sytJg@kroah.com>
- <X8paua9wKFSb+DPz@localhost>
- <X8y+eFcjuZdk9cRe@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <X8y+eFcjuZdk9cRe@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727874AbgLFTxX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Dec 2020 14:53:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56636 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727511AbgLFTxW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 6 Dec 2020 14:53:22 -0500
+Subject: Re: [GIT PULL] USB driver fixes for 5.10-rc7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607284362;
+        bh=c1wQs0ZHGLAdFs7aPyKMs1P7BVv28pppnPmp75fbIPY=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=XpL/NcR40sq8MaFZwzK2indT5wPSEMNDUi9efR+Bs3DcxoMmEP/ZoQ+7+RtbgI48j
+         nPriIQro4DOnKh/uhruGeFOAagfe24XuoSoCLnikokKpRk5uDKsblzQHOQXN5IqeFW
+         llzYP/tIn41YdtG0BtR0A4yHoW1GwIAz26kM43FrTCBBeFI8OZt7aQtSjiY52zgFBe
+         i+1yPltj3TvOD/7aKJbdAlGp5hfMDcy0YsGE9wBnbMzoOC365ZQULpuU46lIE6VoHP
+         uOhDGzT/0jZhInOQ4eGX8m09SWqknO/Jzcq+hn6ZL+cSve6L23TiVzNHMBthTEnkdU
+         9uI7+a/kjxbZA==
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <X8zsMIpNKLSkS6ya@kroah.com>
+References: <X8zsMIpNKLSkS6ya@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <X8zsMIpNKLSkS6ya@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.10-rc7
+X-PR-Tracked-Commit-Id: a4b98a7512f18534ce33a7e98e49115af59ffa00
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f5226f1d20c4113922dbe7742c416f06700c1ea9
+Message-Id: <160728436219.18476.17954925267120277756.pr-tracker-bot@kernel.org>
+Date:   Sun, 06 Dec 2020 19:52:42 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Dec 06, 2020 at 12:20:24PM +0100, Greg Kroah-Hartman wrote:
-> On Fri, Dec 04, 2020 at 04:50:17PM +0100, Johan Hovold wrote:
-> > On Fri, Dec 04, 2020 at 04:14:18PM +0100, Greg Kroah-Hartman wrote:
-> > > On Fri, Dec 04, 2020 at 09:51:08AM +0100, Johan Hovold wrote:
-> > > > The new control-message helpers include a pipe-type check which is
-> > > > almost completely redundant.
-> > > > 
-> > > > Control messages are generally sent to the default pipe which always
-> > > > exists and is of the correct type since its endpoint representation is
-> > > > created by USB core as part of enumeration for all devices.
-> > > > 
-> > > > There is currently only one instance of a driver in the tree which use
-> > > > a control endpoint other than endpoint 0 (and it does not use the new
-> > > > helpers).
-> > > > 
-> > > > Drivers should be testing for the existence of their resources at probe
-> > > > rather than at runtime, but to catch drivers failing to do so USB core
-> > > > already does a sanity check on URB submission and triggers a WARN().
-> > > > Having the same sanity check done in the helper only suppresses the
-> > > > warning without allowing us to find and fix the drivers.
-> > > 
-> > > The issue is "bad" devices.  syzbot fuzzed the USB sound drivers with
-> > > stuff like this and found a bunch of problems, which is where this check
-> > > originally came from.  While it is nice to "warn" people, that keeps
-> > > moving forward and then the driver tries to submit an urb for this
-> > > endpoint and things blow up.  Or throw more warnings, I can't remember.
-> > 
-> > Nothing blows up, it's just a reminder to fix the driver which I don't
-> > think we should suppress.
-> > 
-> > I looked at the sound driver changes for this a while back it has the
-> > same "problem" in that it uses a too big hammer for something that's not
-> > an issue.
-> 
-> Then what about the syzbot issues found?  They didn't seem to be
-> "caught" by any usb core changes, which is why they were added to the
-> sound driver.
-> 
-> Or am I mis-remembering this?
+The pull request you sent on Sun, 6 Dec 2020 15:35:28 +0100:
 
-There _were_ some core changes made in response to syzbot reports.  For 
-example, ac854131d984 ("USB: core: Fix misleading driver bug report") -- 
-although I don't remember whether this bug report involved the sound 
-driver -- and was also your own commit fcc2cc1f3561 ("USB: move 
-snd_usb_pipe_sanity_check into the USB core").
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.10-rc7
 
-> > The sanity check in sound was only "needed" in cases where drivers where
-> > issuing synchronous requests for endpoints other than ep0 and the
-> > drivers never verified the type of the endpoint before submitting
-> > thereby hitting the WARN() in usb_submit_urb().
-> 
-> Ok, but we still have to check for that somewhere, right?
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f5226f1d20c4113922dbe7742c416f06700c1ea9
 
-Johan's point is that all the various bug reports and earlier fixes to 
-the sound driver (and others) involved URBs that were for endpoints 
-_other_ than ep0.  The things he wants to change are all messages sent 
-to ep0.  The checks for other endpoints will remain intact.
+Thank you!
 
-> > That has never been an issue for ep0 since it is created by USB core and
-> > by definition is of control type (i.e. regardless of the device
-> > descriptors).
-> > 
-> > By silently refusing to submit, we even risk breaking drivers which can
-> > use either an interrupt or bulk endpoint depending on the firmware (we
-> > have a few drivers supporting such devices already).
-> 
-> I don't understand this, sorry.
-> 
-> > > So I'd like to keep this check here if at all possible, to ensure we
-> > > don't have to fix those "bugs" again, it's not hurting anything here, is
-> > > it?
-> > 
-> > But for this function which creates a control pipe it will by definition
-> > never be an issue unless it is used with a control endpoint other than
-> > ep0. And there are basically no such devices/drivers around; there is
-> > only a single such usb_control_msg() in the entire kernel tree. (I can
-> > add sanity check to its probe function.)
-> > 
-> > So specifically there's nothing for syzbot to trigger here, and having
-> > the check in place for control transfers and ep0 is more confusing than
-> > helpful.
-> 
-> My worry is that we will trigger the issues found by syzbot again, if
-> this is removed.  If that check is also somewhere else, that's fine to
-> remove these, but I'm confused as to if that is the case here or not.
-
-The existing checks in usbcore will still be there.  If an error crops 
-up, we will catch it.  But it's always okay to call usb_control_msg() 
-for an ep0 pipe rather than usb_control_msg_{send|recv} -- we _know_ 
-that the extra checks will never fail when an URB is addressed to ep0.
-
-Alan Stern
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
