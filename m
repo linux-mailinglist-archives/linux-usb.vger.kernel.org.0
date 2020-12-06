@@ -2,113 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D96A82D0352
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Dec 2020 12:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7B02D0486
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Dec 2020 12:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727330AbgLFLYx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Dec 2020 06:24:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726904AbgLFLYx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Dec 2020 06:24:53 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653F4C0613D1;
-        Sun,  6 Dec 2020 03:24:13 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id n7so6521637pgg.2;
-        Sun, 06 Dec 2020 03:24:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=CdYoKLzu3dd766pS5qgLizC926YGw0zOhejthN2TSxI=;
-        b=HBOkEN15GsbIeJd5qYcyivRHL9gxhB70wVoXHe0axffUak+gz37Td+4vt9XuGjsqQU
-         SS8j217GqrHkGNdgNQLWMneCtqcqGHe1usD7cfYF72as85gsN+x1quFag1WoA3Wl376F
-         9KhLhG7AFpM6iFe3W/jDl7cR03Wu3vy7iPZMfkE0haUQWgqCWfHhqNca1fH1UoS7M/vr
-         4VMIxAesWGm5xDnVUM1Lkf+B0SfcwFhucUacZLfamQMmxzxna4uC3Cf2GPSR5MU3HK8z
-         211xr4IxSbunDx8EWuSx5Le3h1XLNJG0Y7rHO3ZcUkA+/dtJxMSgyz8cUKMGwgxZEXGj
-         ib/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=CdYoKLzu3dd766pS5qgLizC926YGw0zOhejthN2TSxI=;
-        b=ZDQnjFZq2L9xgTObnHqXriyId96MS8IMydWjli8AXzhlIe/5yeDvqknpDJxKNDohBA
-         ngUB8UC6RC1qUb5bMjb4VDXV3VmjRLxUtFUr0Rzbk5BdgFCiz/kdPZDNafvS9nRKBBHE
-         xuEoml2Eq79sjfNiVDRvlPIum2fMKa72Ata6IUPBEr//+drknzIW6YWhV3a8etGNfpgB
-         yOI7Kw54Y0gjbcKsN0igiWowKPrmhFlw/4dxORWhHaB270NQujQpl9u4/WfnxSyzEq7z
-         r049zwkvj3UwozHNCbPDEw5UdIHWRhXRiNBd6wYYler1hAabI+5b4MgUf1aZlYLa/vUs
-         Kp7Q==
-X-Gm-Message-State: AOAM530WeqPcTM5ac1++wLLLZFu6tfjCTh/haiV/ZVZQ0CbBj8Ohan6L
-        DxliIu1gDnldraHq0QUXnc8=
-X-Google-Smtp-Source: ABdhPJyO61YIFIJKckpnG4X+V1+eQjLR+Z9SgIihRXnNvx1XvLbGwoQN+UTXOLlghJI+9QXMe+ZA4A==
-X-Received: by 2002:a05:6a00:848:b029:197:e659:e236 with SMTP id q8-20020a056a000848b0290197e659e236mr11728461pfk.74.1607253852896;
-        Sun, 06 Dec 2020 03:24:12 -0800 (PST)
-Received: from minh ([113.162.156.187])
-        by smtp.gmail.com with ESMTPSA id z188sm10936552pfb.121.2020.12.06.03.24.09
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 06 Dec 2020 03:24:12 -0800 (PST)
-Date:   Sun, 6 Dec 2020 18:24:05 +0700
-From:   Bui Quang Minh <minhquangbui99@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Jules Irenge <jbi.octave@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: dummy-hcd: Fix uninitialized array use in init()
-Message-ID: <20201206112405.GB3006@minh>
-References: <1607063090-3426-1-git-send-email-minhquangbui99@gmail.com>
- <20201204161249.GA1141609@rowland.harvard.edu>
- <CACtPs=Gg3C0KxdFnETHujAyis4hhKnCdV4_ZWqprHkXCXahFvw@mail.gmail.com>
- <20201205151511.GA1179536@rowland.harvard.edu>
+        id S1728692AbgLFLqV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Dec 2020 06:46:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46780 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729639AbgLFLqU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 6 Dec 2020 06:46:20 -0500
+Date:   Sun, 6 Dec 2020 12:20:24 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1607255139;
+        bh=GPR/4dXW9A6pb950Xpiqt8Rrho+FS30Nf22SLi0DlFQ=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=raaHT0qOOomQAqG2PNoV3Hgtd17z8octVnQ3XpY512MtrFba9yYg2cQHxbsx3I5DK
+         4Gg77T8uyIcftWoE5ALmCbxITqOoyY/1J72iS8InhTuMt1/1LcDB86edrseL84TR5m
+         w0vcaUyBHniZPBvtLHWNYXXLcDOauRO50InsRt2w=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org,
+        Himadri Pandya <himadrispandya@gmail.com>
+Subject: Re: [PATCH 1/3] USB: core: drop pipe-type check from new
+ control-message helpers
+Message-ID: <X8y+eFcjuZdk9cRe@kroah.com>
+References: <20201204085110.20055-1-johan@kernel.org>
+ <20201204085110.20055-2-johan@kernel.org>
+ <X8pSSqQenF8sytJg@kroah.com>
+ <X8paua9wKFSb+DPz@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201205151511.GA1179536@rowland.harvard.edu>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <X8paua9wKFSb+DPz@localhost>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Dec 05, 2020 at 10:15:11AM -0500, Alan Stern wrote:
-> On Sat, Dec 05, 2020 at 07:47:01PM +0700, Minh Bùi Quang wrote:
-> > Vào Th 6, 4 thg 12, 2020 vào lúc 23:12 Alan Stern
-> > <stern@rowland.harvard.edu> đã viết:
-> > > Does this initialization end up using less memory than an explicit
-> > > memset() call?
+On Fri, Dec 04, 2020 at 04:50:17PM +0100, Johan Hovold wrote:
+> On Fri, Dec 04, 2020 at 04:14:18PM +0100, Greg Kroah-Hartman wrote:
+> > On Fri, Dec 04, 2020 at 09:51:08AM +0100, Johan Hovold wrote:
+> > > The new control-message helpers include a pipe-type check which is
+> > > almost completely redundant.
+> > > 
+> > > Control messages are generally sent to the default pipe which always
+> > > exists and is of the correct type since its endpoint representation is
+> > > created by USB core as part of enumeration for all devices.
+> > > 
+> > > There is currently only one instance of a driver in the tree which use
+> > > a control endpoint other than endpoint 0 (and it does not use the new
+> > > helpers).
+> > > 
+> > > Drivers should be testing for the existence of their resources at probe
+> > > rather than at runtime, but to catch drivers failing to do so USB core
+> > > already does a sanity check on URB submission and triggers a WARN().
+> > > Having the same sanity check done in the helper only suppresses the
+> > > warning without allowing us to find and fix the drivers.
 > > 
-> > You mean speed?
+> > The issue is "bad" devices.  syzbot fuzzed the USB sound drivers with
+> > stuff like this and found a bunch of problems, which is where this check
+> > originally came from.  While it is nice to "warn" people, that keeps
+> > moving forward and then the driver tries to submit an urb for this
+> > endpoint and things blow up.  Or throw more warnings, I can't remember.
 > 
-> No, I mean memory space.
+> Nothing blows up, it's just a reminder to fix the driver which I don't
+> think we should suppress.
 > 
-> A memset call requires a certain amount of instruction space (to push 
-> the arguments and make the call) but no static data space.  
-> Initialization requires some instruction space (to copy the data) and 
-> static data space as well (to hold the data that is to be copied).
+> I looked at the sound driver changes for this a while back it has the
+> same "problem" in that it uses a too big hammer for something that's not
+> an issue.
+
+Then what about the syzbot issues found?  They didn't seem to be
+"caught" by any usb core changes, which is why they were added to the
+sound driver.
+
+Or am I mis-remembering this?
+
+> The sanity check in sound was only "needed" in cases where drivers where
+> issuing synchronous requests for endpoints other than ep0 and the
+> drivers never verified the type of the endpoint before submitting
+> thereby hitting the WARN() in usb_submit_urb().
+
+Ok, but we still have to check for that somewhere, right?
+
+> That has never been an issue for ep0 since it is created by USB core and
+> by definition is of control type (i.e. regardless of the device
+> descriptors).
 > 
-> Alan Stern
+> By silently refusing to submit, we even risk breaking drivers which can
+> use either an interrupt or bulk endpoint depending on the firmware (we
+> have a few drivers supporting such devices already).
+
+I don't understand this, sorry.
+
+> > So I'd like to keep this check here if at all possible, to ensure we
+> > don't have to fix those "bugs" again, it's not hurting anything here, is
+> > it?
 > 
+> But for this function which creates a control pipe it will by definition
+> never be an issue unless it is used with a control endpoint other than
+> ep0. And there are basically no such devices/drivers around; there is
+> only a single such usb_control_msg() in the entire kernel tree. (I can
+> add sanity check to its probe function.)
+> 
+> So specifically there's nothing for syzbot to trigger here, and having
+> the check in place for control transfers and ep0 is more confusing than
+> helpful.
 
-Thank you for your clarification, I didn't think about it before.
+My worry is that we will trigger the issues found by syzbot again, if
+this is removed.  If that check is also somewhere else, that's fine to
+remove these, but I'm confused as to if that is the case here or not.
 
-As I check when compiling the code, with MAX_NUM_UDC=32 the initialization
-becomes
+thanks,
 
-        xor    eax,eax
-        mov    ecx,0x40
-        rep stos DWORD PTR es:[rdi],eax
-
-With MAX_NUM_UDC=2, the initialization becomes
-
-        mov    QWORD PTR [rbp-0x30],0x0
-        mov    QWORD PTR [rbp-0x28],0x0
-
-As I see, initialization does not require additional static data space.
-Am I right?
-
-Thanks,
-Quang Minh 
+greg k-h
