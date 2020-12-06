@@ -2,116 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7B02D0486
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Dec 2020 12:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 059F42D0583
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Dec 2020 15:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728692AbgLFLqV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Dec 2020 06:46:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46780 "EHLO mail.kernel.org"
+        id S1726762AbgLFOfD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Dec 2020 09:35:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44178 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729639AbgLFLqU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 6 Dec 2020 06:46:20 -0500
-Date:   Sun, 6 Dec 2020 12:20:24 +0100
+        id S1726203AbgLFOfD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 6 Dec 2020 09:35:03 -0500
+Date:   Sun, 6 Dec 2020 15:35:28 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1607255139;
-        bh=GPR/4dXW9A6pb950Xpiqt8Rrho+FS30Nf22SLi0DlFQ=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=raaHT0qOOomQAqG2PNoV3Hgtd17z8octVnQ3XpY512MtrFba9yYg2cQHxbsx3I5DK
-         4Gg77T8uyIcftWoE5ALmCbxITqOoyY/1J72iS8InhTuMt1/1LcDB86edrseL84TR5m
-         w0vcaUyBHniZPBvtLHWNYXXLcDOauRO50InsRt2w=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org,
-        Himadri Pandya <himadrispandya@gmail.com>
-Subject: Re: [PATCH 1/3] USB: core: drop pipe-type check from new
- control-message helpers
-Message-ID: <X8y+eFcjuZdk9cRe@kroah.com>
-References: <20201204085110.20055-1-johan@kernel.org>
- <20201204085110.20055-2-johan@kernel.org>
- <X8pSSqQenF8sytJg@kroah.com>
- <X8paua9wKFSb+DPz@localhost>
+        s=korg; t=1607265256;
+        bh=K6Irs/gF8HG6nqADqyNd2Oa959DrEAgrcnR5z5p3yLs=;
+        h=From:To:Cc:Subject:From;
+        b=F60MB53XlO/DGY1s1g9hLAhVSZ1JejjPhN5GgJhD1Qsu83xqEfF9rugrV4ZNa7ehu
+         wCAT9S1ap8h3iX5e2Ac/gwrCqyXp+A/kXNYG4ZnRIEmgSK2OPr1dOnjgyFWzyBmWde
+         0AX9p2aaqLGPQAwATZDTPEXMXZ1af2BnDLnBd1n8=
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 5.10-rc7
+Message-ID: <X8zsMIpNKLSkS6ya@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <X8paua9wKFSb+DPz@localhost>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 04, 2020 at 04:50:17PM +0100, Johan Hovold wrote:
-> On Fri, Dec 04, 2020 at 04:14:18PM +0100, Greg Kroah-Hartman wrote:
-> > On Fri, Dec 04, 2020 at 09:51:08AM +0100, Johan Hovold wrote:
-> > > The new control-message helpers include a pipe-type check which is
-> > > almost completely redundant.
-> > > 
-> > > Control messages are generally sent to the default pipe which always
-> > > exists and is of the correct type since its endpoint representation is
-> > > created by USB core as part of enumeration for all devices.
-> > > 
-> > > There is currently only one instance of a driver in the tree which use
-> > > a control endpoint other than endpoint 0 (and it does not use the new
-> > > helpers).
-> > > 
-> > > Drivers should be testing for the existence of their resources at probe
-> > > rather than at runtime, but to catch drivers failing to do so USB core
-> > > already does a sanity check on URB submission and triggers a WARN().
-> > > Having the same sanity check done in the helper only suppresses the
-> > > warning without allowing us to find and fix the drivers.
-> > 
-> > The issue is "bad" devices.  syzbot fuzzed the USB sound drivers with
-> > stuff like this and found a bunch of problems, which is where this check
-> > originally came from.  While it is nice to "warn" people, that keeps
-> > moving forward and then the driver tries to submit an urb for this
-> > endpoint and things blow up.  Or throw more warnings, I can't remember.
-> 
-> Nothing blows up, it's just a reminder to fix the driver which I don't
-> think we should suppress.
-> 
-> I looked at the sound driver changes for this a while back it has the
-> same "problem" in that it uses a too big hammer for something that's not
-> an issue.
+The following changes since commit b65054597872ce3aefbc6a666385eabdf9e288da:
 
-Then what about the syzbot issues found?  They didn't seem to be
-"caught" by any usb core changes, which is why they were added to the
-sound driver.
+  Linux 5.10-rc6 (2020-11-29 15:50:50 -0800)
 
-Or am I mis-remembering this?
+are available in the Git repository at:
 
-> The sanity check in sound was only "needed" in cases where drivers where
-> issuing synchronous requests for endpoints other than ep0 and the
-> drivers never verified the type of the endpoint before submitting
-> thereby hitting the WARN() in usb_submit_urb().
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.10-rc7
 
-Ok, but we still have to check for that somewhere, right?
+for you to fetch changes up to a4b98a7512f18534ce33a7e98e49115af59ffa00:
 
-> That has never been an issue for ep0 since it is created by USB core and
-> by definition is of control type (i.e. regardless of the device
-> descriptors).
-> 
-> By silently refusing to submit, we even risk breaking drivers which can
-> use either an interrupt or bulk endpoint depending on the firmware (we
-> have a few drivers supporting such devices already).
+  usb: gadget: f_fs: Use local copy of descriptors for userspace copy (2020-12-04 16:09:10 +0100)
 
-I don't understand this, sorry.
+----------------------------------------------------------------
+USB fixes for 5.10-rc7
 
-> > So I'd like to keep this check here if at all possible, to ensure we
-> > don't have to fix those "bugs" again, it's not hurting anything here, is
-> > it?
-> 
-> But for this function which creates a control pipe it will by definition
-> never be an issue unless it is used with a control endpoint other than
-> ep0. And there are basically no such devices/drivers around; there is
-> only a single such usb_control_msg() in the entire kernel tree. (I can
-> add sanity check to its probe function.)
-> 
-> So specifically there's nothing for syzbot to trigger here, and having
-> the check in place for control transfers and ep0 is more confusing than
-> helpful.
+Here are some small USB fixes for 5.10-rc7 that resolve a number of
+reported issues, and add some new device ids.
 
-My worry is that we will trigger the issues found by syzbot again, if
-this is removed.  If that check is also somewhere else, that's fine to
-remove these, but I'm confused as to if that is the case here or not.
+Nothing major here, but these solve some problems that people were
+having with the 5.10-rc tree:
+	- reverts for USB storage dma settings that broke working
+	  devices
+	- thunderbolt use-after-free fix
+	- cdns3 driver fixes
+	- gadget driver userspace copy fix
+	- new device ids
 
-thanks,
+All of these except for the reverts have been in linux-next with no
+reported issues.  The reverts are "clean" and were tested by Hans, as
+well as passing the 0-day tests.
 
-greg k-h
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Bjørn Mork (1):
+      USB: serial: option: fix Quectel BG96 matching
+
+Giacinto Cifelli (1):
+      USB: serial: option: add support for Thales Cinterion EXS82
+
+Greg Kroah-Hartman (6):
+      Merge tag 'usb-fixes-v5.10-rc6' of git://git.kernel.org/.../peter.chen/usb into usb-linus
+      Merge tag 'thunderbolt-for-v5.10-rc7' of git://git.kernel.org/.../westeri/thunderbolt into usb-linus
+      Merge tag 'usb-serial-5.10-rc7' of https://git.kernel.org/.../johan/usb-serial into usb-linus
+      Revert "uas: bump hw_max_sectors to 2048 blocks for SS or faster drives"
+      Revert "uas: fix sdev->host->dma_dev"
+      Revert "usb-storage: fix sdev->host->dma_dev"
+
+Jan-Niklas Burfeind (1):
+      USB: serial: ch341: add new Product ID for CH341A
+
+Johan Hovold (2):
+      USB: serial: ch341: sort device-id entries
+      USB: serial: kl5kusb105: fix memleak on open
+
+Linus Walleij (1):
+      usb: ohci-omap: Fix descriptor conversion
+
+Mika Westerberg (1):
+      thunderbolt: Fix use-after-free in remove_unplugged_switch()
+
+Peter Chen (2):
+      usb: cdns3: gadget: clear trb->length as zero after preparing every trb
+      usb: cdns3: core: fix goto label for error path
+
+Roger Quadros (1):
+      usb: cdns3: Fix hardware based role switch
+
+Vamsi Krishna Samavedam (1):
+      usb: gadget: f_fs: Use local copy of descriptors for userspace copy
+
+Vincent Palatin (1):
+      USB: serial: option: add Fibocom NL668 variants
+
+ arch/arm/mach-omap1/board-osk.c    |  2 +-
+ drivers/thunderbolt/icm.c          | 10 +++++++---
+ drivers/usb/cdns3/core.c           | 29 ++++++++++++++++-------------
+ drivers/usb/cdns3/gadget.c         |  1 +
+ drivers/usb/gadget/function/f_fs.c |  6 ++++--
+ drivers/usb/host/ohci-omap.c       |  4 ++--
+ drivers/usb/serial/ch341.c         |  5 +++--
+ drivers/usb/serial/kl5kusb105.c    | 10 ++++------
+ drivers/usb/serial/option.c        | 10 ++++++----
+ drivers/usb/storage/scsiglue.c     |  2 +-
+ drivers/usb/storage/uas.c          | 19 ++++++-------------
+ drivers/usb/storage/usb.c          |  5 ++---
+ 12 files changed, 53 insertions(+), 50 deletions(-)
