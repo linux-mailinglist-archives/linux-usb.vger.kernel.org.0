@@ -2,252 +2,234 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FC5A2D092B
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Dec 2020 03:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B256F2D0B2F
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Dec 2020 08:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727393AbgLGC01 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Dec 2020 21:26:27 -0500
-Received: from mail-eopbgr60050.outbound.protection.outlook.com ([40.107.6.50]:18756
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726400AbgLGC00 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 6 Dec 2020 21:26:26 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n7yGdQkAWnWCfR9pNR4FfNfOy7qLkuBn4J4nUHDvvdBu3On6qtZJ/BaSk5zmL/7iqaV/OPeWBEKMs87DemkhfQ5T+BDwRS092cFE43wdiSpHBA2Asz+RitCDSZ1gc3tS8JpCNdd1x/oggjxzadK8BIVWGZmP8TQXz5HukhJId0byHAiUFGjU/dqXoxKDRyqBr5+ewp7hRTzzCO22IhPNJypvHFrhRDXp8du0Eg9pmbmOt2YCeRkp9MNQhiuH2tlBoJ1qACzeJeR/CSbmTofQgvXXJ3+qdyWU8M+dQmu/lX4nEB/3UPf/OA84Z5NWcLGFL0bFh70XHie9ijuTgJGwuQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zse4pKhjkyELOfk3Xe8LBznsfz33nMlKql3TXH41z9g=;
- b=JCEpQGdyFMwTb9K4i5RP6TA/+NAwWHJE/P75ihbevmugWr+0AmsIX2SFl0sDLQSf/33KzAGfi8njNoVLHDYE7x3Y6O8nvfZTRUSxIz0l5ykvGtsWl00deVgqoN6IcBCNz6lIoQIW6l1unU7h66P4KZEw3at7gudmY5EfsmY2SQQHSIwoI6X8bAsX838pyQ3YuN6OManycosYSXstjIqwzCbVMIxwflzZl3KxgB9NE3krfOywpnT4mWO25g9xkxMq+jGtxpLMR5d6slaTHhbQbdUV56xargX1cax639UQQfw144ReikEMD4eq30vnk/CCV/DKNZHnKTU43+IkVKo4HA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zse4pKhjkyELOfk3Xe8LBznsfz33nMlKql3TXH41z9g=;
- b=Y+jPdAXUqoXVTktxtKBxj8tghcYAr+hKpv/BqF4Slx2xyO23KnaG6pAiMkszIEoi0OD7V7l+StVgm9ouUIBiNc+wS0XfW02lGceZcU07d8fG2Frga2Ra+sGK8DpDpflF4eXufp2Vvl1b4/AeBNq7exH/4Gs/UlQ12cH36oaMNEo=
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
- by DB6PR0402MB2760.eurprd04.prod.outlook.com (2603:10a6:4:a1::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.18; Mon, 7 Dec
- 2020 02:25:37 +0000
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3632.023; Mon, 7 Dec 2020
- 02:25:37 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Bin Liu <b-liu@ti.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
+        id S1726074AbgLGHi0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Dec 2020 02:38:26 -0500
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:51343 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725972AbgLGHiZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Dec 2020 02:38:25 -0500
+X-UUID: b9a984965f2f4c34976637101e9bfb52-20201207
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=snAHE106/hjF33jpWEXGMfG7MfPrCdexgpD0tr8W/SQ=;
+        b=N89lX4uKpkCde/RAjmb5pJQu9qJK3gheQGJvTJmwVnWEgULErDq9lpxW7zIGwRV6NF+TB8JLE9FOwaRodBOXSdZPMu+3qpqlYv5rBWo/S42WpYZIm6cruw3vLIeaMVCQMWTrAnTpro6CO/1n9xYOr7VhTbcNU4Pv7YgqzDN5uYA=;
+X-UUID: b9a984965f2f4c34976637101e9bfb52-20201207
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1657905914; Mon, 07 Dec 2020 15:37:31 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS32N1.mediatek.inc
+ (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 7 Dec
+ 2020 15:37:28 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 7 Dec 2020 15:37:27 +0800
+Message-ID: <1607326648.18575.1.camel@mhfsdcap03>
+Subject: Re: [PATCH v5 02/19] dt-bindings: usb: Convert generic USB
+ properties to DT schemas
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+CC:     Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
+        Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>
-Subject: RE: [PATCH 04/15] usb: misc: ehset: update to use the
- usb_control_msg_{send|recv}() API
-Thread-Topic: [PATCH 04/15] usb: misc: ehset: update to use the
- usb_control_msg_{send|recv}() API
-Thread-Index: AQHWxmmqKlq4UxeHFEKSHj1443IfHKnq83OA
-Date:   Mon, 7 Dec 2020 02:25:37 +0000
-Message-ID: <DBBPR04MB7979E6ADD92EA2E8B840B7B48BCE0@DBBPR04MB7979.eurprd04.prod.outlook.com>
-References: <20201129160612.1908074-1-anant.thazhemadam@gmail.com>
- <20201129160612.1908074-5-anant.thazhemadam@gmail.com>
-In-Reply-To: <20201129160612.1908074-5-anant.thazhemadam@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [180.164.155.184]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 1c71ff6b-0600-49bb-78e5-08d89a576233
-x-ms-traffictypediagnostic: DB6PR0402MB2760:
-x-microsoft-antispam-prvs: <DB6PR0402MB276015A4A34724872C07085C8BCE0@DB6PR0402MB2760.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ziaNYl8MwenZFQNOhY5Wp/NYqMvcXCMyfQtStOJiBGwAzrYudLeTSCUR+cCqTc89BY7181GWAnWkHs6EWVV3xOEL1vW7R4domjXhDXUgPTxkbJS7acGS4KtJ/ROJVBIwa9+HdmnYY/UI8y5a36pROQ8/4MdUpTWLjDciBcqR8NqiaNrn+EBor8w2n4FOkTMh/g4HGIcAVtbh69F62a7jgIF78vWVim9ox03CiHWDncC6Cxq8ldg2CG9PirCf3Clfpzn/AgYBXzmJzm1iMzk9kmqqbArw8KD5F1mtVty3H7CAnZtzodG5vVmx0P0OFf0heaOFqTF/ESlq1uHBlutwSw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(366004)(136003)(346002)(396003)(376002)(76116006)(478600001)(8676002)(4326008)(110136005)(55016002)(5660300002)(44832011)(316002)(83380400001)(54906003)(7696005)(33656002)(6506007)(66446008)(52536014)(2906002)(186003)(66946007)(66556008)(26005)(15650500001)(8936002)(86362001)(71200400001)(9686003)(66476007)(64756008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?3e8bci1IV8Vi+2jOwEFn5zrt3UmSsFapwB0L9T7inKMs5vzH82wu7miQ0vlv?=
- =?us-ascii?Q?ZcDmPpY6N7kU+i9m9BEkyrky60hjYYhaWPqupJGMWYY6iXbKz7u15gG3XZJB?=
- =?us-ascii?Q?KPuJwxS/eHWmEPDUFVeMq1zwFkLl+clC/ye7az1r59ykshN29T1nd8SJhM/a?=
- =?us-ascii?Q?Lsu5E/bOjIGJpxHFyGmvN/3boKIvYTEkrC6A8QLP4mv0sRsymLGwhuRsivV/?=
- =?us-ascii?Q?bLuJLXuU623Hh0EItsNti2VnVWXkN/q3zz51+BaUD6azg6HvbxOYv+heE0SQ?=
- =?us-ascii?Q?mXQ8on3G7q93IUxYZQnltGeJf1ISOCl7QfYwcMSL/ED1F1sZK5bK2gRRrFL0?=
- =?us-ascii?Q?Pj/KMosSO5g9ASp3aEUWTKCAb9Z5X9DqiVbdbedlil/DSgKaPHkSi1nkremy?=
- =?us-ascii?Q?IKMF2PN9nisJRknPpeQ9tKRIhQdrsaryfSRc2fGYusX2WOSJZZWxqMUUB8td?=
- =?us-ascii?Q?+8USP2kzBWc4rBUhQNj1HcSlXPobf4oHXgiRfQZL8zxTXSqt4hFSyDoNVD2G?=
- =?us-ascii?Q?OjtEl4nFPkaM9Cep3uk7uo6ueGKH3v1CyTgtOCzhQKSfgMmz2xPCK4/+jhsP?=
- =?us-ascii?Q?tzz/lX5m0t3Wy+NM4bXmuCelDH1Fq8SAwh6dkez4RbN3d7f03FEDdS+DRvlF?=
- =?us-ascii?Q?Q41moFYMVmg6hfIpIhI8cS8Drd7O3tw6H8G3GdlAK7nJjJi2Z0bXFlgqV7bT?=
- =?us-ascii?Q?JiaL/7yRjbv2pGeJfopXDPqsjYBDolT1G9wE9d9jo2j9GODp00h13c5y2Z3z?=
- =?us-ascii?Q?fo7SZoqhYCFm7adDwlq097GJKys6ifrTLKhvfy3KktrY6cX3qflgd4kw6MUN?=
- =?us-ascii?Q?HJM96UuHskPV+JrHj1oVgjs/2z60ruVvUn7SmDXATLUFS1/Xk4TMDh8of98a?=
- =?us-ascii?Q?S/95kA087SO26P2SaPWYc77TryNQpK8gf5VEhkUOUYAyjpmoZ7gnQaSI45K/?=
- =?us-ascii?Q?QRPqVzdfokQk7BW2oIZ+z8GSzC2wB4cVl6dcO8HpAzI=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        <linux-snps-arc@lists.infradead.org>, <linux-mips@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+Date:   Mon, 7 Dec 2020 15:37:28 +0800
+In-Reply-To: <20201205152427.29537-3-Sergey.Semin@baikalelectronics.ru>
+References: <20201205152427.29537-1-Sergey.Semin@baikalelectronics.ru>
+         <20201205152427.29537-3-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c71ff6b-0600-49bb-78e5-08d89a576233
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Dec 2020 02:25:37.1943
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fLb4Ratk3MubXpNx3u0wGjtCgRXnS53FpjENsB7rmerlzaTnvt/UaCkNjxK0HxjlZkPtB1EYcXOWuTdTG+E3bQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0402MB2760
+X-TM-SNTS-SMTP: 3B289835ADF57348A25DA89E25AF73D6C01E6B8DFB1D51B22FB40FCB875FB5BF2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=20
->=20
-> The newer usb_control_msg_{send|recv}() API are an improvement on the
-> existing usb_control_msg() as it ensures that a short read/write is treat=
-ed as
-> an error, data can be used off the stack, and raw usb pipes need not be c=
-reated
-> in the calling functions.
-> For this reason, instances of usb_control_msg() have been replaced with
-> usb_control_msg_{recv|send}() appropriately.
->=20
-> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
-
-Reviewed-by: Peter Chen <peter.chen@nxp.com>
-
-Peter
-
-> ---
->  drivers/usb/misc/ehset.c | 70 ++++++++++++++++++----------------------
->  1 file changed, 31 insertions(+), 39 deletions(-)
->=20
-> diff --git a/drivers/usb/misc/ehset.c b/drivers/usb/misc/ehset.c index
-> 2752e1f4f4d0..068f4fae2965 100644
-> --- a/drivers/usb/misc/ehset.c
-> +++ b/drivers/usb/misc/ehset.c
-> @@ -30,48 +30,42 @@ static int ehset_probe(struct usb_interface *intf,
->=20
->  	switch (test_pid) {
->  	case TEST_SE0_NAK_PID:
-> -		ret =3D usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev, 0),
-> -					USB_REQ_SET_FEATURE, USB_RT_PORT,
-> -					USB_PORT_FEAT_TEST,
-> -					(USB_TEST_SE0_NAK << 8) | portnum,
-> -					NULL, 0, 1000);
-> +		ret =3D usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
-> +					   USB_RT_PORT, USB_PORT_FEAT_TEST,
-> +					   (USB_TEST_SE0_NAK << 8) | portnum,
-> +					   NULL, 0, 1000, GFP_KERNEL);
->  		break;
->  	case TEST_J_PID:
-> -		ret =3D usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev, 0),
-> -					USB_REQ_SET_FEATURE, USB_RT_PORT,
-> -					USB_PORT_FEAT_TEST,
-> -					(USB_TEST_J << 8) | portnum,
-> -					NULL, 0, 1000);
-> +		ret =3D usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
-> +					   USB_RT_PORT, USB_PORT_FEAT_TEST,
-> +					   (USB_TEST_J << 8) | portnum, NULL, 0,
-> +					   1000, GFP_KERNEL);
->  		break;
->  	case TEST_K_PID:
-> -		ret =3D usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev, 0),
-> -					USB_REQ_SET_FEATURE, USB_RT_PORT,
-> -					USB_PORT_FEAT_TEST,
-> -					(USB_TEST_K << 8) | portnum,
-> -					NULL, 0, 1000);
-> +		ret =3D usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
-> +					   USB_RT_PORT, USB_PORT_FEAT_TEST,
-> +					   (USB_TEST_K << 8) | portnum, NULL, 0,
-> +					   1000, GFP_KERNEL);
->  		break;
->  	case TEST_PACKET_PID:
-> -		ret =3D usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev, 0),
-> -					USB_REQ_SET_FEATURE, USB_RT_PORT,
-> -					USB_PORT_FEAT_TEST,
-> -					(USB_TEST_PACKET << 8) | portnum,
-> -					NULL, 0, 1000);
-> +		ret =3D usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
-> +					   USB_RT_PORT, USB_PORT_FEAT_TEST,
-> +					   (USB_TEST_PACKET << 8) | portnum,
-> +					   NULL, 0, 1000, GFP_KERNEL);
->  		break;
->  	case TEST_HS_HOST_PORT_SUSPEND_RESUME:
->  		/* Test: wait for 15secs -> suspend -> 15secs delay -> resume */
->  		msleep(15 * 1000);
-> -		ret =3D usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev, 0),
-> -					USB_REQ_SET_FEATURE, USB_RT_PORT,
-> -					USB_PORT_FEAT_SUSPEND, portnum,
-> -					NULL, 0, 1000);
-> +		ret =3D usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
-> +					   USB_RT_PORT, USB_PORT_FEAT_SUSPEND,
-> +					   portnum, NULL, 0, 1000, GFP_KERNEL);
->  		if (ret < 0)
->  			break;
->=20
->  		msleep(15 * 1000);
-> -		ret =3D usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev, 0),
-> -					USB_REQ_CLEAR_FEATURE, USB_RT_PORT,
-> -					USB_PORT_FEAT_SUSPEND, portnum,
-> -					NULL, 0, 1000);
-> +		ret =3D usb_control_msg_send(hub_udev, 0,
-> USB_REQ_CLEAR_FEATURE,
-> +					   USB_RT_PORT, USB_PORT_FEAT_SUSPEND,
-> +					   portnum, NULL, 0, 1000, GFP_KERNEL);
->  		break;
->  	case TEST_SINGLE_STEP_GET_DEV_DESC:
->  		/* Test: wait for 15secs -> GetDescriptor request */ @@ -80,11
-> +74,10 @@ static int ehset_probe(struct usb_interface *intf,
->  		if (!buf)
->  			return -ENOMEM;
->=20
-> -		ret =3D usb_control_msg(dev, usb_rcvctrlpipe(dev, 0),
-> -					USB_REQ_GET_DESCRIPTOR, USB_DIR_IN,
-> -					USB_DT_DEVICE << 8, 0,
-> -					buf, USB_DT_DEVICE_SIZE,
-> -					USB_CTRL_GET_TIMEOUT);
-> +		ret =3D usb_control_msg_recv(dev, 0, USB_REQ_GET_DESCRIPTOR,
-> +					   USB_DIR_IN, USB_DT_DEVICE << 8, 0,
-> +					   buf, USB_DT_DEVICE_SIZE,
-> +					   USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
->  		kfree(buf);
->  		break;
->  	case TEST_SINGLE_STEP_SET_FEATURE:
-> @@ -100,11 +93,10 @@ static int ehset_probe(struct usb_interface *intf,
->  			break;
->  		}
->=20
-> -		ret =3D usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev, 0),
-> -					USB_REQ_SET_FEATURE, USB_RT_PORT,
-> -					USB_PORT_FEAT_TEST,
-> -					(6 << 8) | portnum,
-> -					NULL, 0, 60 * 1000);
-> +		ret =3D usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
-> +					   USB_RT_PORT, USB_PORT_FEAT_TEST,
-> +					   (6 << 8) | portnum, NULL, 0,
-> +					   60 * 1000, GFP_KERNEL);
->=20
->  		break;
->  	default:
-> @@ -112,7 +104,7 @@ static int ehset_probe(struct usb_interface *intf,
->  			__func__, test_pid);
->  	}
->=20
-> -	return (ret < 0) ? ret : 0;
-> +	return ret;
->  }
->=20
->  static void ehset_disconnect(struct usb_interface *intf)
-> --
-> 2.25.1
+T24gU2F0LCAyMDIwLTEyLTA1IGF0IDE4OjI0ICswMzAwLCBTZXJnZSBTZW1pbiB3cm90ZToNCj4g
+VGhlIGdlbmVyaWMgVVNCIHByb3BlcnRpZXMgaGF2ZSBiZWVuIGRlc2NyaWJlZCBpbiB0aGUgbGVn
+YWN5IGJpbmRpbmdzDQo+IHRleHQgZmlsZTogRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
+bmdzL3VzYi9nZW5lcmljLnR4dCAuIExldCdzDQo+IGNvbnZlcnQgaXRzIGNvbnRlbnQgaW50byB0
+aGUgZ2VuZXJpYyBVU0IsIFVTQiBIQ0QgYW5kIFVTQiBEUkQgRFQNCj4gc2NoZW1hcy4gU28gdGhl
+IEdlbmVyaWMgVVNCIHNjaGVtYSB3aWxsIGJlIGFwcGxpY2FibGUgdG8gYWxsIFVTQg0KPiBjb250
+cm9sbGVycywgVVNCIEhDRCAtIGZvciB0aGUgZ2VuZXJpYyBVU0IgSG9zdCBjb250cm9sbGVycyBh
+bmQgdGhlIFVTQg0KPiBEUkQgLSBmb3IgdGhlIFVTQiBEdWFsLXJvbGUgY29udHJvbGxlcnMuDQo+
+IA0KPiBOb3RlIHRoZSBVU0IgRFJEIHNjaGVtYSBpcyBzdXBwb3NlZCB0byB3b3JrIGluIGNvbmp1
+bmN0aW9uIHdpdGgNCj4gdGhlIFVTQiBwZXJpcGhlcmFsL2dhZGdldCBhbmQgVVNCIGhvc3QgY29u
+dHJvbGxlcnMgRFQgc2NoZW1hcy4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFNlcmdlIFNlbWluIDxT
+ZXJnZXkuU2VtaW5AYmFpa2FsZWxlY3Ryb25pY3MucnU+DQo+IFJldmlld2VkLWJ5OiBSb2IgSGVy
+cmluZyA8cm9iaEBrZXJuZWwub3JnPg0KPiANCj4gLS0tDQo+IA0KPiBDaGFuZ2Vsb2cgdjI6DQo+
+IC0gRGlzY2FyZCAnfCcgaW4gYWxsIHRoZSBuZXcgcHJvcGVydGllcywgc2luY2Ugd2UgZG9uJ3Qg
+bmVlZCB0byBwcmVzZXJ2ZQ0KPiAgIHRoZSB0ZXh0IGZvcm1hdHRpbmcuDQo+IC0gQ29udmVydCBh
+YmJyZXZpYXRlZCBmb3JtIG9mIHRoZSAibWF4aW11bS1zcGVlZCIgZW51bSByZXN0cmljdGlvbiBp
+bnRvDQo+ICAgdGhlIG11bHRpLWxpbmVkIHZlcnNpb24gb2YgdGhlIGxpc3QuDQo+IC0gRHJvcCBx
+dW90ZXMgZnJvbSBhcm91bmQgdGhlIHN0cmluZyBjb25zdGFudHMuDQo+IA0KPiBDaGFuZ2Vsb2cg
+djQ6DQo+IC0gUmVkaXN0cmlidXRlIHRoZSBwcm9wZXJ0aWVzIGJldHdlZW4gZ2VuZXJpYyBvbmVz
+LCBVU0IgSENELXNwZWNpZmljIGFuZA0KPiAgIFVTQiBEUkQtc3BlY2lmaWMuDQo+IC0gRGlzY2Fy
+ZCB0aGUgUm9iJ2VzIFJldmlld2VkLWJ5IHRhZy4gUGxlYXNlIHJldmlldyB0aGUgcGF0Y2ggb25l
+IG1vcmUgdGltZS4NCj4gLS0tDQo+ICAuLi4vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvZ2VuZXJp
+Yy50eHQgICAgICAgfCA1NyAtLS0tLS0tLS0tLS0tLQ0KPiAgLi4uL2RldmljZXRyZWUvYmluZGlu
+Z3MvdXNiL3VzYi1kcmQueWFtbCAgICAgIHwgNzcgKysrKysrKysrKysrKysrKysrKw0KPiAgLi4u
+L2RldmljZXRyZWUvYmluZGluZ3MvdXNiL3VzYi1oY2QueWFtbCAgICAgIHwgIDUgKysNCj4gIC4u
+Li9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi91c2IueWFtbCAgICAgICAgICB8IDIyICsrKysrKw0K
+PiAgNCBmaWxlcyBjaGFuZ2VkLCAxMDQgaW5zZXJ0aW9ucygrKSwgNTcgZGVsZXRpb25zKC0pDQo+
+ICBkZWxldGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Vz
+Yi9nZW5lcmljLnR4dA0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNl
+dHJlZS9iaW5kaW5ncy91c2IvdXNiLWRyZC55YW1sDQo+IA0KPiBkaWZmIC0tZ2l0IGEvRG9jdW1l
+bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9nZW5lcmljLnR4dCBiL0RvY3VtZW50YXRp
+b24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvZ2VuZXJpYy50eHQNCj4gZGVsZXRlZCBmaWxlIG1v
+ZGUgMTAwNjQ0DQo+IGluZGV4IGJhNDcyZTdhZWZjOS4uMDAwMDAwMDAwMDAwDQo+IC0tLSBhL0Rv
+Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvZ2VuZXJpYy50eHQNCj4gKysrIC9k
+ZXYvbnVsbA0KPiBAQCAtMSw1NyArMCwwIEBADQo+IC1HZW5lcmljIFVTQiBQcm9wZXJ0aWVzDQo+
+IC0NCj4gLU9wdGlvbmFsIHByb3BlcnRpZXM6DQo+IC0gLSBtYXhpbXVtLXNwZWVkOiB0ZWxscyBV
+U0IgY29udHJvbGxlcnMgd2Ugd2FudCB0byB3b3JrIHVwIHRvIGEgY2VydGFpbg0KPiAtCQkJc3Bl
+ZWQuIFZhbGlkIGFyZ3VtZW50cyBhcmUgInN1cGVyLXNwZWVkLXBsdXMiLA0KPiAtCQkJInN1cGVy
+LXNwZWVkIiwgImhpZ2gtc3BlZWQiLCAiZnVsbC1zcGVlZCIgYW5kDQo+IC0JCQkibG93LXNwZWVk
+Ii4gSW4gY2FzZSB0aGlzIGlzbid0IHBhc3NlZCB2aWEgRFQsIFVTQg0KPiAtCQkJY29udHJvbGxl
+cnMgc2hvdWxkIGRlZmF1bHQgdG8gdGhlaXIgbWF4aW11bSBIVw0KPiAtCQkJY2FwYWJpbGl0eS4N
+Cj4gLSAtIGRyX21vZGU6IHRlbGxzIER1YWwtUm9sZSBVU0IgY29udHJvbGxlcnMgdGhhdCB3ZSB3
+YW50IHRvIHdvcmsgb24gYQ0KPiAtCQkJcGFydGljdWxhciBtb2RlLiBWYWxpZCBhcmd1bWVudHMg
+YXJlICJob3N0IiwNCj4gLQkJCSJwZXJpcGhlcmFsIiBhbmQgIm90ZyIuIEluIGNhc2UgdGhpcyBh
+dHRyaWJ1dGUgaXNuJ3QNCj4gLQkJCXBhc3NlZCB2aWEgRFQsIFVTQiBEUkQgY29udHJvbGxlcnMg
+c2hvdWxkIGRlZmF1bHQgdG8NCj4gLQkJCU9URy4NCj4gLSAtIHBoeV90eXBlOiB0ZWxscyBVU0Ig
+Y29udHJvbGxlcnMgdGhhdCB3ZSB3YW50IHRvIGNvbmZpZ3VyZSB0aGUgY29yZSB0byBzdXBwb3J0
+DQo+IC0JCQlhIFVUTUkrIFBIWSB3aXRoIGFuIDgtIG9yIDE2LWJpdCBpbnRlcmZhY2UgaWYgVVRN
+SSsgaXMNCj4gLQkJCXNlbGVjdGVkLiBWYWxpZCBhcmd1bWVudHMgYXJlICJ1dG1pIiBhbmQgInV0
+bWlfd2lkZSIuDQo+IC0JCQlJbiBjYXNlIHRoaXMgaXNuJ3QgcGFzc2VkIHZpYSBEVCwgVVNCIGNv
+bnRyb2xsZXJzIHNob3VsZA0KPiAtCQkJZGVmYXVsdCB0byBIVyBjYXBhYmlsaXR5Lg0KPiAtIC0g
+b3RnLXJldjogdGVsbHMgdXNiIGRyaXZlciB0aGUgcmVsZWFzZSBudW1iZXIgb2YgdGhlIE9URyBh
+bmQgRUggc3VwcGxlbWVudA0KPiAtCQkJd2l0aCB3aGljaCB0aGUgZGV2aWNlIGFuZCBpdHMgZGVz
+Y3JpcHRvcnMgYXJlIGNvbXBsaWFudCwNCj4gLQkJCWluIGJpbmFyeS1jb2RlZCBkZWNpbWFsIChp
+LmUuIDIuMCBpcyAwMjAwSCkuIFRoaXMNCj4gLQkJCXByb3BlcnR5IGlzIHVzZWQgaWYgYW55IHJl
+YWwgT1RHIGZlYXR1cmVzKEhOUC9TUlAvQURQKQ0KPiAtCQkJaXMgZW5hYmxlZCwgaWYgQURQIGlz
+IHJlcXVpcmVkLCBvdGctcmV2IHNob3VsZCBiZQ0KPiAtCQkJMHgwMjAwIG9yIGFib3ZlLg0KPiAt
+IC0gY29tcGFuaW9uOiBwaGFuZGxlIG9mIGEgY29tcGFuaW9uDQo+IC0gLSBobnAtZGlzYWJsZTog
+dGVsbHMgT1RHIGNvbnRyb2xsZXJzIHdlIHdhbnQgdG8gZGlzYWJsZSBPVEcgSE5QLCBub3JtYWxs
+eSBITlANCj4gLQkJCWlzIHRoZSBiYXNpYyBmdW5jdGlvbiBvZiByZWFsIE9URyBleGNlcHQgeW91
+IHdhbnQgaXQNCj4gLQkJCXRvIGJlIGEgc3JwLWNhcGFibGUgb25seSBCIGRldmljZS4NCj4gLSAt
+IHNycC1kaXNhYmxlOiB0ZWxscyBPVEcgY29udHJvbGxlcnMgd2Ugd2FudCB0byBkaXNhYmxlIE9U
+RyBTUlAsIFNSUCBpcw0KPiAtCQkJb3B0aW9uYWwgZm9yIE9URyBkZXZpY2UuDQo+IC0gLSBhZHAt
+ZGlzYWJsZTogdGVsbHMgT1RHIGNvbnRyb2xsZXJzIHdlIHdhbnQgdG8gZGlzYWJsZSBPVEcgQURQ
+LCBBRFAgaXMNCj4gLQkJCW9wdGlvbmFsIGZvciBPVEcgZGV2aWNlLg0KPiAtIC0gdXNiLXJvbGUt
+c3dpdGNoOiBib29sZWFuLCBpbmRpY2F0ZXMgdGhhdCB0aGUgZGV2aWNlIGlzIGNhcGFibGUgb2Yg
+YXNzaWduaW5nDQo+IC0JCQl0aGUgVVNCIGRhdGEgcm9sZSAoVVNCIGhvc3Qgb3IgVVNCIGRldmlj
+ZSkgZm9yIGEgZ2l2ZW4NCj4gLQkJCVVTQiBjb25uZWN0b3IsIHN1Y2ggYXMgVHlwZS1DLCBUeXBl
+LUIobWljcm8pLg0KPiAtCQkJc2VlIGNvbm5lY3Rvci91c2ItY29ubmVjdG9yLnlhbWwuDQo+IC0g
+LSByb2xlLXN3aXRjaC1kZWZhdWx0LW1vZGU6IGluZGljYXRpbmcgaWYgdXNiLXJvbGUtc3dpdGNo
+IGlzIGVuYWJsZWQsIHRoZQ0KPiAtCQkJZGV2aWNlIGRlZmF1bHQgb3BlcmF0aW9uIG1vZGUgb2Yg
+Y29udHJvbGxlciB3aGlsZSB1c2INCj4gLQkJCXJvbGUgaXMgVVNCX1JPTEVfTk9ORS4gVmFsaWQg
+YXJndW1lbnRzIGFyZSAiaG9zdCIgYW5kDQo+IC0JCQkicGVyaXBoZXJhbCIuIERlZmF1bHRzIHRv
+ICJwZXJpcGhlcmFsIiBpZiBub3QNCj4gLQkJCXNwZWNpZmllZC4NCj4gLQ0KPiAtDQo+IC1UaGlz
+IGlzIGFuIGF0dHJpYnV0ZSB0byBhIFVTQiBjb250cm9sbGVyIHN1Y2ggYXM6DQo+IC0NCj4gLWR3
+YzNANGEwMzAwMDAgew0KPiAtCWNvbXBhdGlibGUgPSAic3lub3BzeXMsZHdjMyI7DQo+IC0JcmVn
+ID0gPDB4NGEwMzAwMDAgMHhjZmZmPjsNCj4gLQlpbnRlcnJ1cHRzID0gPDAgOTIgND4NCj4gLQl1
+c2ItcGh5ID0gPCZ1c2IyX3BoeT4sIDwmdXNiMyxwaHk+Ow0KPiAtCW1heGltdW0tc3BlZWQgPSAi
+c3VwZXItc3BlZWQiOw0KPiAtCWRyX21vZGUgPSAib3RnIjsNCj4gLQlwaHlfdHlwZSA9ICJ1dG1p
+X3dpZGUiOw0KPiAtCW90Zy1yZXYgPSA8MHgwMjAwPjsNCj4gLQlhZHAtZGlzYWJsZTsNCj4gLX07
+DQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL3Vz
+Yi1kcmQueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNiLWRy
+ZC55YW1sDQo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+IGluZGV4IDAwMDAwMDAwMDAwMC4uZjNh
+NjRjNDZkY2QwDQo+IC0tLSAvZGV2L251bGwNCj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0
+cmVlL2JpbmRpbmdzL3VzYi91c2ItZHJkLnlhbWwNCj4gQEAgLTAsMCArMSw3NyBAQA0KPiArIyBT
+UERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMA0KPiArJVlBTUwgMS4yDQo+ICstLS0NCj4g
+KyRpZDogaHR0cDovL2RldmljZXRyZWUub3JnL3NjaGVtYXMvdXNiL3VzYi1kcmQueWFtbCMNCj4g
+KyRzY2hlbWE6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9tZXRhLXNjaGVtYXMvY29yZS55YW1sIw0K
+PiArDQo+ICt0aXRsZTogR2VuZXJpYyBVU0IgT1RHIENvbnRyb2xsZXIgRGV2aWNlIFRyZWUgQmlu
+ZGluZ3MNCj4gKw0KPiArbWFpbnRhaW5lcnM6DQo+ICsgIC0gR3JlZyBLcm9haC1IYXJ0bWFuIDxn
+cmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz4NCj4gKw0KPiArcHJvcGVydGllczoNCj4gKyAgb3Rn
+LXJldjoNCj4gKyAgICBkZXNjcmlwdGlvbjoNCj4gKyAgICAgIFRlbGxzIHVzYiBkcml2ZXIgdGhl
+IHJlbGVhc2UgbnVtYmVyIG9mIHRoZSBPVEcgYW5kIEVIIHN1cHBsZW1lbnQgd2l0aA0KPiArICAg
+ICAgd2hpY2ggdGhlIGRldmljZSBhbmQgaXRzIGRlc2NyaXB0b3JzIGFyZSBjb21wbGlhbnQsIGlu
+IGJpbmFyeS1jb2RlZA0KPiArICAgICAgZGVjaW1hbCAoaS5lLiAyLjAgaXMgMDIwMEgpLiBUaGlz
+IHByb3BlcnR5IGlzIHVzZWQgaWYgYW55IHJlYWwgT1RHDQo+ICsgICAgICBmZWF0dXJlcyAoSE5Q
+L1NSUC9BRFApIGlzIGVuYWJsZWQuIElmIEFEUCBpcyByZXF1aXJlZCwgb3RnLXJldiBzaG91bGQg
+YmUNCj4gKyAgICAgIDB4MDIwMCBvciBhYm92ZS4NCj4gKyAgICAkcmVmOiAvc2NoZW1hcy90eXBl
+cy55YW1sIy9kZWZpbml0aW9ucy91aW50MzINCj4gKw0KPiArICBkcl9tb2RlOg0KPiArICAgIGRl
+c2NyaXB0aW9uOg0KPiArICAgICAgVGVsbHMgRHVhbC1Sb2xlIFVTQiBjb250cm9sbGVycyB0aGF0
+IHdlIHdhbnQgdG8gd29yayBvbiBhIHBhcnRpY3VsYXINCj4gKyAgICAgIG1vZGUuIEluIGNhc2Ug
+dGhpcyBhdHRyaWJ1dGUgaXNuJ3QgcGFzc2VkIHZpYSBEVCwgVVNCIERSRCBjb250cm9sbGVycw0K
+PiArICAgICAgc2hvdWxkIGRlZmF1bHQgdG8gT1RHLg0KPiArICAgICRyZWY6IC9zY2hlbWFzL3R5
+cGVzLnlhbWwjL2RlZmluaXRpb25zL3N0cmluZw0KPiArICAgIGVudW06IFtob3N0LCBwZXJpcGhl
+cmFsLCBvdGddDQo+ICsNCj4gKyAgaG5wLWRpc2FibGU6DQo+ICsgICAgZGVzY3JpcHRpb246DQo+
+ICsgICAgICBUZWxscyBPVEcgY29udHJvbGxlcnMgd2Ugd2FudCB0byBkaXNhYmxlIE9URyBITlAu
+IE5vcm1hbGx5IEhOUCBpcyB0aGUNCj4gKyAgICAgIGJhc2ljIGZ1bmN0aW9uIG9mIHJlYWwgT1RH
+IGV4Y2VwdCB5b3Ugd2FudCBpdCB0byBiZSBhIHNycC1jYXBhYmxlIG9ubHkgQg0KPiArICAgICAg
+ZGV2aWNlLg0KPiArICAgIHR5cGU6IGJvb2xlYW4NCj4gKw0KPiArICBzcnAtZGlzYWJsZToNCj4g
+KyAgICBkZXNjcmlwdGlvbjoNCj4gKyAgICAgIFRlbGxzIE9URyBjb250cm9sbGVycyB3ZSB3YW50
+IHRvIGRpc2FibGUgT1RHIFNSUC4gU1JQIGlzIG9wdGlvbmFsIGZvciBPVEcNCj4gKyAgICAgIGRl
+dmljZS4NCj4gKyAgICB0eXBlOiBib29sZWFuDQo+ICsNCj4gKyAgYWRwLWRpc2FibGU6DQo+ICsg
+ICAgZGVzY3JpcHRpb246DQo+ICsgICAgICBUZWxscyBPVEcgY29udHJvbGxlcnMgd2Ugd2FudCB0
+byBkaXNhYmxlIE9URyBBRFAuIEFEUCBpcyBvcHRpb25hbCBmb3IgT1RHDQo+ICsgICAgICBkZXZp
+Y2UuDQo+ICsgICAgdHlwZTogYm9vbGVhbg0KPiArDQo+ICsgIHVzYi1yb2xlLXN3aXRjaDoNCj4g
+KyAgICBkZXNjcmlwdGlvbjoNCj4gKyAgICAgIEluZGljYXRlcyB0aGF0IHRoZSBkZXZpY2UgaXMg
+Y2FwYWJsZSBvZiBhc3NpZ25pbmcgdGhlIFVTQiBkYXRhIHJvbGUNCj4gKyAgICAgIChVU0IgaG9z
+dCBvciBVU0IgZGV2aWNlKSBmb3IgYSBnaXZlbiBVU0IgY29ubmVjdG9yLCBzdWNoIGFzIFR5cGUt
+QywNCj4gKyAgICAgIFR5cGUtQihtaWNybykuIFNlZSBjb25uZWN0b3IvdXNiLWNvbm5lY3Rvci55
+YW1sLg0KPiArDQo+ICsgIHJvbGUtc3dpdGNoLWRlZmF1bHQtbW9kZToNCj4gKyAgICBkZXNjcmlw
+dGlvbjoNCj4gKyAgICAgIEluZGljYXRlcyBpZiB1c2Itcm9sZS1zd2l0Y2ggaXMgZW5hYmxlZCwg
+dGhlIGRldmljZSBkZWZhdWx0IG9wZXJhdGlvbg0KPiArICAgICAgbW9kZSBvZiBjb250cm9sbGVy
+IHdoaWxlIHVzYiByb2xlIGlzIFVTQl9ST0xFX05PTkUuDQo+ICsgICAgJHJlZjogL3NjaGVtYXMv
+dHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvc3RyaW5nDQo+ICsgICAgZW51bTogW2hvc3QsIHBlcmlw
+aGVyYWxdDQo+ICsgICAgZGVmYXVsdDogcGVyaXBoZXJhbA0KPiArDQo+ICthZGRpdGlvbmFsUHJv
+cGVydGllczogdHJ1ZQ0KPiArDQo+ICtleGFtcGxlczoNCj4gKyAgLSB8DQo+ICsgICAgdXNiQDRh
+MDMwMDAwIHsNCj4gKyAgICAgICAgY29tcGF0aWJsZSA9ICJzbnBzLGR3YzMiOw0KPiArICAgICAg
+ICByZWcgPSA8MHg0YTAzMDAwMCAweGNmZmY+Ow0KPiArICAgICAgICBpbnRlcnJ1cHRzID0gPDAg
+OTIgND47DQo+ICsgICAgICAgIHVzYi1waHkgPSA8JnVzYjJfcGh5PiwgPCZ1c2IzX3BoeT47DQo+
+ICsgICAgICAgIG1heGltdW0tc3BlZWQgPSAic3VwZXItc3BlZWQiOw0KPiArICAgICAgICBkcl9t
+b2RlID0gIm90ZyI7DQo+ICsgICAgICAgIHBoeV90eXBlID0gInV0bWlfd2lkZSI7DQo+ICsgICAg
+ICAgIG90Zy1yZXYgPSA8MHgwMjAwPjsNCj4gKyAgICAgICAgYWRwLWRpc2FibGU7DQo+ICsgICAg
+fTsNCj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2Iv
+dXNiLWhjZC55YW1sIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi91c2It
+aGNkLnlhbWwNCj4gaW5kZXggODFmM2FkMTQxOWQ4Li41MmNjODRjNDAwYzAgMTAwNjQ0DQo+IC0t
+LSBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNiLWhjZC55YW1sDQo+
+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNiLWhjZC55YW1s
+DQo+IEBAIC0xMiw2ICsxMiwxMSBAQCBtYWludGFpbmVyczoNCj4gIGFsbE9mOg0KPiAgICAtICRy
+ZWY6IHVzYi55YW1sIw0KPiAgDQo+ICtwcm9wZXJ0aWVzOg0KPiArICBjb21wYW5pb246DQo+ICsg
+ICAgZGVzY3JpcHRpb246IFBoYW5kbGUgb2YgYSBjb21wYW5pb24gZGV2aWNlDQo+ICsgICAgJHJl
+ZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvcGhhbmRsZQ0KPiArDQo+ICBhZGRp
+dGlvbmFsUHJvcGVydGllczogdHJ1ZQ0KPiAgDQo+ICBleGFtcGxlczoNCj4gZGlmZiAtLWdpdCBh
+L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNiLnlhbWwgYi9Eb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL3VzYi55YW1sDQo+IGluZGV4IDk0MWFkNTlm
+YmFjNS4uOTkxYzAyNzI1ZTJiIDEwMDY0NA0KPiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRy
+ZWUvYmluZGluZ3MvdXNiL3VzYi55YW1sDQo+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJl
+ZS9iaW5kaW5ncy91c2IvdXNiLnlhbWwNCj4gQEAgLTI0LDYgKzI0LDI4IEBAIHByb3BlcnRpZXM6
+DQo+ICAgICAgZGVzY3JpcHRpb246DQo+ICAgICAgICBOYW1lIHNwZWNpZmllciBmb3IgdGhlIFVT
+QiBQSFkNCj4gIA0KPiArICBwaHlfdHlwZToNCj4gKyAgICBkZXNjcmlwdGlvbjoNCj4gKyAgICAg
+IFRlbGxzIFVTQiBjb250cm9sbGVycyB0aGF0IHdlIHdhbnQgdG8gY29uZmlndXJlIHRoZSBjb3Jl
+IHRvIHN1cHBvcnQgYQ0KPiArICAgICAgVVRNSSsgUEhZIHdpdGggYW4gOC0gb3IgMTYtYml0IGlu
+dGVyZmFjZSBpZiBVVE1JKyBpcyBzZWxlY3RlZC4gSW4gY2FzZQ0KPiArICAgICAgdGhpcyBpc24n
+dCBwYXNzZWQgdmlhIERULCBVU0IgY29udHJvbGxlcnMgc2hvdWxkIGRlZmF1bHQgdG8gSFcNCj4g
+KyAgICAgIGNhcGFiaWxpdHkuDQo+ICsgICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVm
+aW5pdGlvbnMvc3RyaW5nDQo+ICsgICAgZW51bTogW3V0bWksIHV0bWlfd2lkZV0NCj4gKw0KPiAr
+ICBtYXhpbXVtLXNwZWVkOg0KPiArICAgZGVzY3JpcHRpb246DQppbmRlbnQ6IHR3byBibGFuayBz
+cGFjZSwgbGlrZSB2NA0KDQo+ICsgICAgIFRlbGxzIFVTQiBjb250cm9sbGVycyB3ZSB3YW50IHRv
+IHdvcmsgdXAgdG8gYSBjZXJ0YWluIHNwZWVkLiBJbiBjYXNlIHRoaXMNCj4gKyAgICAgaXNuJ3Qg
+cGFzc2VkIHZpYSBEVCwgVVNCIGNvbnRyb2xsZXJzIHNob3VsZCBkZWZhdWx0IHRvIHRoZWlyIG1h
+eGltdW0gSFcNCj4gKyAgICAgY2FwYWJpbGl0eS4NCj4gKyAgICRyZWY6IC9zY2hlbWFzL3R5cGVz
+LnlhbWwjL2RlZmluaXRpb25zL3N0cmluZw0KPiArICAgZW51bToNCj4gKyAgICAgLSBsb3ctc3Bl
+ZWQNCj4gKyAgICAgLSBmdWxsLXNwZWVkDQo+ICsgICAgIC0gaGlnaC1zcGVlZA0KPiArICAgICAt
+IHN1cGVyLXNwZWVkDQo+ICsgICAgIC0gc3VwZXItc3BlZWQtcGx1cw0KPiArDQo+ICBhZGRpdGlv
+bmFsUHJvcGVydGllczogdHJ1ZQ0KPiAgDQo+ICAuLi4NCg0K
 
