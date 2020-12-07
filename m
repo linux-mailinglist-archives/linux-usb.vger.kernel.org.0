@@ -2,139 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D232D1512
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Dec 2020 16:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 691012D154C
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Dec 2020 16:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726534AbgLGPtW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Dec 2020 10:49:22 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:44653 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725887AbgLGPtW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Dec 2020 10:49:22 -0500
-Received: by mail-lf1-f65.google.com with SMTP id d20so18734009lfe.11;
-        Mon, 07 Dec 2020 07:48:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0NeitWUE72bOazPk0RWGIGCfwRRdfTRIc3aJljkPw7Q=;
-        b=IWkuV1ANcrtpi60NRnqzicDl8O/fjOQAVGIQ1uC4HA00Zq2+JTCzDheD5Ic2UkYQJX
-         KOisSPFQypi5OtlARSd0IYNC6Z+KCWCutGX78Fm6Q6m6N8LJhGZjuGCpW0vn3qVQ+pcX
-         ZBUEycX5up+NozEZFGy1WcmyxdW8dDvhLMZf9x8Ly4oigFr0wgS5ABNQdwFSi1oErjc5
-         VabodiEVZJGCBMh73EVQb1roXwSKiK7/S7aLAIImLkl2OFIdqbVcHkWDlducXolZoqGJ
-         D0aIrSkf4uqWsnSybq1Wwv97dLCn/Kw3F8Atk5e/sOTHmYpO4snVST5zDBlucWNzdCL4
-         dZfQ==
-X-Gm-Message-State: AOAM5311f6WXv0n565zvWBVyrWntfpo3Nh3NTYfoGA/dEwCLbJZILwSI
-        tv8JVo0O3nV5yKZp5Rg/jiU=
-X-Google-Smtp-Source: ABdhPJw6teg8d3600aqcwAl3vaNViL+OPA1OTluqrSndPwY8rRZZoslAB2OaQcL2R8tFPxD6rsv7Pw==
-X-Received: by 2002:ac2:46e1:: with SMTP id q1mr9264724lfo.212.1607356113675;
-        Mon, 07 Dec 2020 07:48:33 -0800 (PST)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id t9sm198271lff.45.2020.12.07.07.48.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Dec 2020 07:48:32 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kmIlA-0003J3-1U; Mon, 07 Dec 2020 16:49:08 +0100
-Date:   Mon, 7 Dec 2020 16:49:08 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        id S1726508AbgLGP5g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Dec 2020 10:57:36 -0500
+Received: from gproxy8-pub.mail.unifiedlayer.com ([67.222.33.93]:45247 "EHLO
+        gproxy8-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726167AbgLGP5f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Dec 2020 10:57:35 -0500
+Received: from CMGW (unknown [10.9.0.13])
+        by gproxy8.mail.unifiedlayer.com (Postfix) with ESMTP id D8A921AB055
+        for <linux-usb@vger.kernel.org>; Mon,  7 Dec 2020 08:56:54 -0700 (MST)
+Received: from bh-25.webhostbox.net ([208.91.199.152])
+        by cmsmtp with ESMTP
+        id mIsgksYLPi1lMmIsgkpjQQ; Mon, 07 Dec 2020 08:56:54 -0700
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.2 cv=KcKiiUQD c=1 sm=1 tr=0
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10 a=zTNgK-yGK50A:10
+ a=evQFzbml-YQA:10 a=1XWaLZrsAAAA:8 a=_jlGtV7tAAAA:8 a=kboxpPNCMEio7Cws6XEA:9
+ a=CjuIK1q_8ugA:10 a=nlm17XC03S6CtCLSeiRr:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=/LiRXLk4I8kRm3j2jsuObOqLcMlnFPGFRm4WYa24Hok=; b=EIH4AJIwcCLyDeXKdZDFVnrmva
+        FHGx+qD2cH/XtYe8dMmeTCB75lwKFYYYLTKhwvgF/rol55ITrA2QAm6s2q42Sb07DUO6MlO8qztM+
+        x7fNTi47luwYqyAGZXg4yaAbjrFJkhvJUIYCg+dN7rVm5WpJcZeWbaDV/ifRE9T6ftK9ydPvXR6qb
+        yPs1gW178ZUyvPw07M5Dm3xwP3mXOb1mT4nuvvNA07KRw2cCRiJjIh9zKiaiUDcgv+V97Q22y48De
+        qVHzkBk49O1alHCAxPiQd3l7WWlJuKJP901v1Uyq2heZNF+nhDwhX5D1U9HPrUyqdBy5zyAG30lKW
+        oBuPVOcA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:59902 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <linux@roeck-us.net>)
+        id 1kmIsf-002tzq-VD; Mon, 07 Dec 2020 15:56:54 +0000
+Date:   Mon, 7 Dec 2020 07:56:53 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel-team@android.com
-Subject: Re: [PATCH 0/4] USB: ftdio_sio: GPIO validity fixes
-Message-ID: <X85O9GoDcbiDp97j@localhost>
-References: <20201204164739.781812-1-maz@kernel.org>
- <X841xwCChUEqi5Ad@localhost>
- <73d57fe9fefe50955771846ea52004fb@kernel.org>
- <X85FVc07Hc7LQQU8@localhost>
- <d5fa2065009d5854b4c719003ebcb255@kernel.org>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: tcpm: Clear send_discover in
+ tcpm_check_send_discover
+Message-ID: <20201207155653.GE43600@roeck-us.net>
+References: <20201203031908.1491542-1-badhri@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d5fa2065009d5854b4c719003ebcb255@kernel.org>
+In-Reply-To: <20201203031908.1491542-1-badhri@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1kmIsf-002tzq-VD
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:59902
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 51
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 07, 2020 at 03:34:23PM +0000, Marc Zyngier wrote:
-> On 2020-12-07 15:08, Johan Hovold wrote:
-> > On Mon, Dec 07, 2020 at 02:41:03PM +0000, Marc Zyngier wrote:
-> >> On 2020-12-07 14:01, Johan Hovold wrote:
-> >> > On Fri, Dec 04, 2020 at 04:47:35PM +0000, Marc Zyngier wrote:
-> >> >> Having recently tried to use the CBUS GPIOs that come thanks to the
-> >> >> ftdio_sio driver, it occurred to me that the driver has a couple of
-> >> >> usability issues:
-> >> >>
-> >> >> - it advertises potential GPIOs that are reserved to other uses (LED
-> >> >>   control, or something else)
-> >> >
-> >> > Consider the alternative, that the gpio offsets (for CBUS0, CBUS1,
-> >> > CBUS2
-> >> > or CBUS4) varies depending on how the pins have been muxed. Hardly very
-> >> > user friendly.
-> >> 
-> >> That's not what I suggest. If you want fixed GPIO offsets, fine by me.
-> >> But telling the user "these are GPIOs you can use", and then
-> >> "on second though, you can't" is not exactly consistent.
-> > 
-> > It's really no different from any other gpio chip which registers all
-> > its lines, including those which may have been muxed for other 
-> > purposes.
+On Wed, Dec 02, 2020 at 07:19:08PM -0800, Badhri Jagan Sridharan wrote:
+> tcpm_check_send_discover does not clear the send_discover flag
+> when any of the following conditions are not met.
+> 1. data_role is TYPEC_HOST
+> 2. link is pd_capable
 > 
-> If they claim that their lines are available, and then refuse to
-> let the user play with it, that's just a bug willing to be fixed.
-
-My point was that this is how *all* gpio drivers work, and that muxing
-is somewhat orthogonal to the gpio controller implementation.
-
-Not sure how you would even "fix" that since muxing can often be changed
-at runtime while the number of lines is typically a hardware feature
-(which we report to the user). The resource is still there but it may
-not be available for use.
-
-> >> >> - it returns an odd error (-ENODEV), instead of the expected -EINVAL
-> >> >>   when a line is unavailable, leading to a difficult diagnostic
-> >> >
-> >> > Hmm, maybe. Several gpio driver return -ENODEV when trying to request
-> >> > reserved pins. Even gpiolib returns -ENODEV when a pins is not yet
-> >> > available due to probe deferal.
-> >> 
-> >> -ENODEV really means "no GPIOchip" in this context. The fact that
-> >> other drivers return -ENODEV for reserved pins looks like a bug to me.
-> > 
-> > No, the chip is there. The -ENODEV is what you get when requesting the
-> > line, because the line isn't available.
+> Discovery indentity would anyways not be attempted during
+> the current session anymore when the above conditions are not
+> met. Hence clear the send_discover flag here to prevent
+> tcpm_enable_frs_work from rescheduling indefinetly.
 > 
-> I still believe that ENODEV is the wrong error. The device is there,
-> but the request is invalid because the line is used by something else.
-> EINVAL, EBUSY, ENXIO would all be (sort of) OK.
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
-Fair enough.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-> >> > -EBUSY could also be an alternative, but that's used to indicate that a
-> >> > line is already in use as a gpio.
-> >> 
-> >> Or something else. Which is exactly the case, as it's been allocated
-> >> to another function.
-> > 
-> > Right, there are invalid requests (e.g. requesting line five of a four
-> > line chip), lines that are already in use, and lines not available due
-> > to muxing.
-> > 
-> > And then there's the question of whether to use the same or distinct
-> > errnos for these. I believe using distinct errnos provides more
-> > feedback, but we can certainly pick another errno for this if it's
-> > really that confusing.
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> Fundamentally, I don't think the backend driver should be in charge
-> of the error reporting. That should be the char device's job. Leaving it
-> to the individual drivers is a sure way to have an inconsistent API.
-
-I agree, and your valid-mask approach takes care of the static mux-
-configuration case nicely.
-
-Johan
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 3bbc1f10af49..012135ade7b1 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -3035,10 +3035,9 @@ static inline enum tcpm_state unattached_state(struct tcpm_port *port)
+>  static void tcpm_check_send_discover(struct tcpm_port *port)
+>  {
+>  	if (port->data_role == TYPEC_HOST && port->send_discover &&
+> -	    port->pd_capable) {
+> +	    port->pd_capable)
+>  		tcpm_send_vdm(port, USB_SID_PD, CMD_DISCOVER_IDENT, NULL, 0);
+> -		port->send_discover = false;
+> -	}
+> +	port->send_discover = false;
+>  }
+>  
+>  static void tcpm_swap_complete(struct tcpm_port *port, int result)
+> -- 
+> 2.29.2.576.ga3fc446d84-goog
+> 
