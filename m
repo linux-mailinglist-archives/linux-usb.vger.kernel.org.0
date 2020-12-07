@@ -2,99 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6913F2D16DF
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Dec 2020 17:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 084352D1BE0
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Dec 2020 22:19:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727235AbgLGQx4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Dec 2020 11:53:56 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:46715 "EHLO
+        id S1727169AbgLGVQg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Dec 2020 16:16:36 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:35882 "EHLO
         mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725832AbgLGQxz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Dec 2020 11:53:55 -0500
-Received: by mail-ot1-f66.google.com with SMTP id w3so12438030otp.13;
-        Mon, 07 Dec 2020 08:53:39 -0800 (PST)
+        with ESMTP id S1726089AbgLGVQf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Dec 2020 16:16:35 -0500
+Received: by mail-ot1-f66.google.com with SMTP id y24so13931857otk.3;
+        Mon, 07 Dec 2020 13:16:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=7U3Yhw/pl02ZoaOBu+HcEPYWSZaSb6JEpp9JpxVMzwM=;
-        b=fYfC4KqeFvhbX4miWrNPXO1fjzpj68LjNr10zgjfNUTNkyoOFkRbx4/cUZqISa+5FI
-         RpWNSWv5hACzZ1VKxjpBtHsMZtZX8ycboKWqzcmIQhv/mfUMTl8KEqXgBqS5eWDxE3OY
-         ikPliu/Sdugf7Z+hASEdawo3fv/m51ZWI6m2dfkdVfiXDYj5m+xKxeofWvIyRPjAgEWm
-         7Rav9TZpqv/0xfYq7U6GEaFIxlihsZiMuJ5Apl9myc6qkmKAriHIY5qcEkkVDw3jGjYQ
-         5ya9d5haitxEDfa3vmk+GUItoHqMN9CXvCU8VYaZ3/1EFXs68vcRH6KXkQ13xbm9C068
-         q2FA==
-X-Gm-Message-State: AOAM533WTcLMQ0gFseLZD69nAnt2W+MYCR+Y+c+IFZFpwQjU+RQUAM3d
-        tJPxBzJvjhVNF7kbX49HaQ==
-X-Google-Smtp-Source: ABdhPJy7Q0USqnNLm3yD6fipjmEKQhCRZjQyZNGy1bziDJf63sFl8UXBj77WW4CCsAJh3BBAvF6/3A==
-X-Received: by 2002:a9d:6b88:: with SMTP id b8mr13781346otq.60.1607359994430;
-        Mon, 07 Dec 2020 08:53:14 -0800 (PST)
+        bh=rSAFkhpNJQAuz9y5dju0W7uXjODyDSx6iiAnGJorzFE=;
+        b=LabFy7kUaJOrTWpn/CBHBFDaeDjB4dsNcUXA8Qcf1E4f/qFJ/Ai6GA2hazlu+uZytJ
+         GHMswHc7dj6B3XmIWCehObD7ldrgL2/GJDBuEIsgSYGAMnAX/VsH/+aZbZfJDW2BQySb
+         TOQ9ZMpv/NVJdNi8T1IwoDe/6iXUK3zJ8pwW+InL085rp81rS9MfmHhu9jmHPu6eHP7f
+         oMze/1BkFrN80ebN/S+X/h7zKt9MsV/rfUwNFiHp3GsWkxkC49R+9/FUi1DuX8PV5iUw
+         yqefHQZku8SAcjCGtXHC/CoSjY5V44Qhjhb7XRJzeOl4owq9nPi7OLPWNgR2yoOEu0f/
+         bZGA==
+X-Gm-Message-State: AOAM530i1PHfomfi4j+KqYQzIzTz2pHPOPEbJZt7r+z6RZd7gVukMqhq
+        7sVIIAyXfJtne2WH7gbdwA==
+X-Google-Smtp-Source: ABdhPJxQpESfvNGlJAqwTMytNEER2nkmsXBzu8vhDgGPWF4PCnXOQyEU6ub0eGzupCQoCYrmNFRMlQ==
+X-Received: by 2002:a05:6830:128a:: with SMTP id z10mr14708659otp.3.1607375754577;
+        Mon, 07 Dec 2020 13:15:54 -0800 (PST)
 Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id t5sm2754514oth.16.2020.12.07.08.53.12
+        by smtp.gmail.com with ESMTPSA id b28sm2878493oob.22.2020.12.07.13.15.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Dec 2020 08:53:13 -0800 (PST)
-Received: (nullmailer pid 425824 invoked by uid 1000);
-        Mon, 07 Dec 2020 16:53:12 -0000
-Date:   Mon, 7 Dec 2020 10:53:12 -0600
+        Mon, 07 Dec 2020 13:15:53 -0800 (PST)
+Received: (nullmailer pid 838684 invoked by uid 1000);
+        Mon, 07 Dec 2020 21:15:52 -0000
+Date:   Mon, 7 Dec 2020 15:15:52 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        linux-snps-arc@lists.infradead.org,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        linux-usb@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Andy Gross <agross@kernel.org>, Roger Quadros <rogerq@ti.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-mips@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-kernel@vger.kernel.org,
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v5 19/19] dt-bindings: usb: intel, keembay-dwc3: Validate
- DWC3 sub-node
-Message-ID: <20201207165312.GA425775@robh.at.kernel.org>
-References: <20201205152427.29537-1-Sergey.Semin@baikalelectronics.ru>
- <20201205152427.29537-20-Sergey.Semin@baikalelectronics.ru>
+        dri-devel@lists.freedesktop.org, Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Min Guo <min.guo@mediatek.com>, devicetree@vger.kernel.org,
+        David Airlie <airlied@linux.ie>, linux-usb@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3 03/11] dt-bindings: phy: convert phy-mtk-xsphy.txt to
+ YAML schema
+Message-ID: <20201207211552.GA838655@robh.at.kernel.org>
+References: <20201118082126.42701-1-chunfeng.yun@mediatek.com>
+ <20201118082126.42701-3-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201205152427.29537-20-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20201118082126.42701-3-chunfeng.yun@mediatek.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 05 Dec 2020 18:24:26 +0300, Serge Semin wrote:
-> Intel Keem Bay DWC3 compatible DT nodes are supposed to have a DWC USB3
-> compatible sub-node to describe a fully functioning USB interface. Let's
-> use the available DWC USB3 DT schema to validate the Qualcomm DWC3
-> sub-nodes.
+On Wed, 18 Nov 2020 16:21:18 +0800, Chunfeng Yun wrote:
+> Convert phy-mtk-xsphy.txt to YAML schema mediatek,xsphy.yaml
 > 
-> Note since the generic DWC USB3 DT node is supposed to be named as generic
-> USB HCD ("^usb(@.*)?") one we have to accordingly fix the sub-nodes name
-> regexp and fix the DT node example.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 > ---
+> v3:
+>   1. remove type for property with standard unit suffix suggested by Rob
+>   2. remove '|' for descritpion
+>   3. fix yamllint warning
 > 
-> Changelog v5:
-> - This is a new patch created for the new Intel Keem Bay bindings file,
->   which has been added just recently.
+> v2:
+>   1. modify description and compatible definition suggested by Rob
 > ---
->  .../devicetree/bindings/usb/intel,keembay-dwc3.yaml      | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
+>  .../bindings/phy/mediatek,xsphy.yaml          | 199 ++++++++++++++++++
+>  .../devicetree/bindings/phy/phy-mtk-xsphy.txt | 109 ----------
+>  2 files changed, 199 insertions(+), 109 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/phy/mediatek,xsphy.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/phy/phy-mtk-xsphy.txt
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
