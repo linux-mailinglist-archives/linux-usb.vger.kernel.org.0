@@ -2,158 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B612D0E4E
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Dec 2020 11:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6692D0E78
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Dec 2020 11:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726286AbgLGKmL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Dec 2020 05:42:11 -0500
-Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:62554 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725794AbgLGKmK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Dec 2020 05:42:10 -0500
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0B7AbJxp007280;
-        Mon, 7 Dec 2020 02:41:08 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=proofpoint;
- bh=tg944ps/D8C40bDmjRj+9ncqwV3GhxVVe8KoYOQN3eQ=;
- b=iG2KCOwF6t5XZhomJBtU7pkwS71TuVESnK5w6s8eUCYVukHDTof71rTusGr46CeM9i/R
- faXDkj74DNZCaL5LGAegZVzK97mFz9YISFbsH/lguZI3VrRz/x6V4zdfQJsLUCAwDQ4g
- SBO8wMHXdBKDlXf7kKt8B1DBXPKNrkjb35gutpANnscIp+sq5cC9p8ZjCvQ6Jx62Ug4K
- +Omixhjh8mQLnpX4ILbd36zvQ9QYdQ3UPGoAaDKsEgPds4nMuz97GsB4d47JrxfnqXnw
- cgAPf8uZDtxViPhFs0mlVf8GJ+xlpM/FoyWsnTU6OKe32cngl3Cij8X5+eyUBR2OyePe Fw== 
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2175.outbound.protection.outlook.com [104.47.58.175])
-        by mx0a-0014ca01.pphosted.com with ESMTP id 3587n2m7yv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Dec 2020 02:41:08 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P7WjVaHl6Z1Q3AQ7bhblXQi2sKo0ZchJbY6NshvJwJ68cVJF0+Ol8Z9/cDK9Fb6IK+IKajT0Mw2gK4SpAEHnPnffM9W2IcodGEdq2uUxLUsSmQsJxw8sP0PL19b0LL6S2ls92zEjSIjeq5TdHIBBXtqpD95LgYGSYhAJJL1FLVwqkV3wc/BNcupk3wQG85ztHwZHcIVI6qJ6eBAFrgmb38qakUFt0WakT70Pvp0V0VGeX/bD+oJo/1oNKIAI1TxcMSgQGdb8HPE8O88yVd0WuMU9U+QIAsGhLRoK+5hxz9TONxYtbi3zQhdoZcAQK5afDpdLejNhSbzDfqin0dXJXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tg944ps/D8C40bDmjRj+9ncqwV3GhxVVe8KoYOQN3eQ=;
- b=QfHkcoafv+MlhKYp9iv63vNaOQGTmC0HDQJ0Ee0cjU3GipmXuXAaOlagz2AYlCtz0ZiG9y81St/Djbw4PHWICPsRPWyIQjriW2NUsIVcn+mRAiXvoxKzldrI6twT/X0diYio1alKxYQToo1BBfadz7CyqMbytpNAA5uBfKMvQ52WNXBrnb7Il2bPsWznvNAhflUDpB1ZLIys6eIsC84atsEVXmKwfnxgHzpUAlJcc5PtGAG8WAlC2b48snnRSelSyZfJJfyqOY+tXoXcLS7x3RQJHyMRoAVThU6Safxzwlgx9Z1fIlWKTjsb8W9o/FtDGl0gEBxs2TaR+5ONGzTREQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 158.140.1.148) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tg944ps/D8C40bDmjRj+9ncqwV3GhxVVe8KoYOQN3eQ=;
- b=0dnHHNqQOLu/MhCWSxpdKWfmQhcMrhSIT5wriXxgiDN56jSSBNiCIsaiOSqikLhvnoegb33nuPkZSZtDtLYoq9PKtX/DD75SGZuZas6B9Gz3PCZTByvuJvF8uWlsvYgbeeO4lo7XpQWBjmoEeuMm/RyletqDt5qAMngic7ZIfzU=
-Received: from DM3PR03CA0006.namprd03.prod.outlook.com (2603:10b6:0:50::16) by
- SN6PR07MB4238.namprd07.prod.outlook.com (2603:10b6:805:60::23) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3632.17; Mon, 7 Dec 2020 10:41:05 +0000
-Received: from DM6NAM12FT016.eop-nam12.prod.protection.outlook.com
- (2603:10b6:0:50:cafe::a4) by DM3PR03CA0006.outlook.office365.com
- (2603:10b6:0:50::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.17 via Frontend
- Transport; Mon, 7 Dec 2020 10:41:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.148)
- smtp.mailfrom=cadence.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=pass action=none
- header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 158.140.1.148 as permitted sender) receiver=protection.outlook.com;
- client-ip=158.140.1.148; helo=sjmaillnx2.cadence.com;
-Received: from sjmaillnx2.cadence.com (158.140.1.148) by
- DM6NAM12FT016.mail.protection.outlook.com (10.13.178.217) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3654.10 via Frontend Transport; Mon, 7 Dec 2020 10:41:05 +0000
-Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
-        by sjmaillnx2.cadence.com (8.14.4/8.14.4) with ESMTP id 0B7AeuTB007278
-        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
-        Mon, 7 Dec 2020 02:41:04 -0800
-X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
-Received: from maileu3.global.cadence.com (10.160.88.99) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1367.3; Mon, 7 Dec 2020 11:40:57 +0100
-Received: from vleu-orange.cadence.com (10.160.88.83) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1367.3 via Frontend Transport; Mon, 7 Dec 2020 11:40:57 +0100
-Received: from vleu-orange.cadence.com (localhost.localdomain [127.0.0.1])
-        by vleu-orange.cadence.com (8.14.4/8.14.4) with ESMTP id 0B7Aevij006460;
-        Mon, 7 Dec 2020 11:40:57 +0100
-Received: (from pawell@localhost)
-        by vleu-orange.cadence.com (8.14.4/8.14.4/Submit) id 0B7AevYo006459;
-        Mon, 7 Dec 2020 11:40:57 +0100
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     <peter.chen@nxp.com>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <balbi@kernel.org>,
-        <colin.king@canonical.com>, <rogerq@ti.com>, <kurahul@cadence.com>,
-        <nsekhar@ti.com>, <a-govindraju@ti.com>,
-        Pawel Laszczak <pawell@cadence.com>
-Subject: [PATCH v5 10/10] MAINTAINERS: add Cadence USBSSP DRD IP driver entry
-Date:   Mon, 7 Dec 2020 11:32:27 +0100
-Message-ID: <20201207103227.606-11-pawell@cadence.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20201207103227.606-1-pawell@cadence.com>
-References: <20201207103227.606-1-pawell@cadence.com>
+        id S1726110AbgLGKyM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 7 Dec 2020 05:54:12 -0500
+Received: from avasout02.plus.net ([212.159.14.17]:54641 "EHLO
+        avasout02.plus.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725842AbgLGKyL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Dec 2020 05:54:11 -0500
+Received: from APOLLO ([212.159.61.44])
+        by smtp with ESMTPA
+        id mE8xkEgBl0K1OmE8ykuirc; Mon, 07 Dec 2020 10:53:24 +0000
+X-Clacks-Overhead: "GNU Terry Pratchett"
+X-CM-Score: 0.00
+X-CNFS-Analysis: v=2.3 cv=QaP9QvTv c=1 sm=1 tr=0
+ a=AGp1duJPimIJhwGXxSk9fg==:117 a=AGp1duJPimIJhwGXxSk9fg==:17
+ a=IkcTkHD0fZMA:10 a=YtiR03RJH2t6E5nAUL8A:9 a=QEXdDO2ut3YA:10
+X-AUTH: perdrix52@:2500
+From:   "David C. Partridge" <david.partridge@perdrix.co.uk>
+To:     "'Oliver Neukum'" <oneukum@suse.com>, <linux-usb@vger.kernel.org>
+References: <004f01d6b5bd$d4f08ff0$7ed1afd0$@perdrix.co.uk>                                              <eceedea7ca5d950eb8ea4d186a6b01a04d0a804f.camel@suse.com>                                               <001601d6b67d$e97a1e30$bc6e5a90$@perdrix.co.uk>                                         <aebf92944c1ecb256d21108ce092165a0fd904db.camel@suse.com>                                       <001b01d6b68a$79937fa0$6cba7ee0$@perdrix.co.uk>                                         <007901d6b6ab$f0f66230$d2e32690$@perdrix.co.uk>                                 <43abe2af0352f17f93e2453a86e2ed47b9913b6a.camel@suse.com>                               <000f01d6c326$1eea3f50$5cbebdf0$@perdrix.co.uk>                         <d478123862a7e94898aaa771c21cc8cb0a3819fc.camel@suse.com>                         <008101d6c3d7$2427ee70$6c77cb50$@perdrix.co.uk>                 <11ea70180f52b4965a451b3970891e0f547c777b.camel@suse.com>                 <000001d6c89c$086812e0$193838a0$@perdrix.co.uk>         <612be9a9cd6ffd
+                b9492781e174859c7b4e694a86.camel@suse.com>         <000301d6c919$af7a94e0$0e6fbea0$@perdrix.co.uk> <918e298941f820a7cc3310c95dc211cca7596dba.camel@suse.com> <000e01d6c980$d9a75f70$8cf61e50$@perdrix.co.uk>
+In-Reply-To: <000e01d6c980$d9a75f70$8cf61e50$@perdrix.co.uk>
+Subject: RE: Issues with LaCie USB3 drive and UAS
+Date:   Mon, 7 Dec 2020 10:53:23 -0000
+Message-ID: <005601d6cc87$2fa608f0$8ef21ad0$@perdrix.co.uk>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-OrganizationHeadersPreserved: maileu3.global.cadence.com
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3a8a694a-ce1c-4e81-f7ae-08d89a9c9969
-X-MS-TrafficTypeDiagnostic: SN6PR07MB4238:
-X-Microsoft-Antispam-PRVS: <SN6PR07MB42386357A443160157896A4CDDCE0@SN6PR07MB4238.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:386;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QKqDIEFhuqUy6j4+XQsMkEd5t34lwreTVd3sZQqhc55ZaU94j3CNj8eMk8wfh1T2UUnB2zokGoeJNVZKis48CKNeLks4PhFLitoOTfPpJ3f10ZTUbn1Nx3NcLPEqlCrW88gJF8taP93YJ5hvmZSAXLwPq76YKMobCsFPyf13kzLHM+xZ+SoDJ3inz+gxvUL0I9FcwCKCoIf2QfnxwJv6sTurVLpdu7WT6Gjs6+dbQZvcmBsoAQdZq38fBpxQwGblygfnQVmQqVTm3Roy5d5JQLJETbocxs4oTfi8On+8HlrAVRTSLluvF9dgwPOjynAB8NXPXOcQcgci/ZQhmvxNI6AaU96bsG78+ktpfiPLIuE42JXj/gusW85woxC5KW2xAPXczdG0SCPc4YFKB1c1RHESMOYemk9pkNpGeoIuluQjYT5RhbfP3MyA410QQSZryme0jzetdRpziPxorux73Q==
-X-Forefront-Antispam-Report: CIP:158.140.1.148;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx2.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(4636009)(346002)(396003)(136003)(39860400002)(376002)(36092001)(46966005)(54906003)(34020700004)(8936002)(82310400003)(2616005)(7636003)(336012)(8676002)(42186006)(316002)(36906005)(426003)(26005)(478600001)(186003)(47076004)(82740400003)(1076003)(4744005)(356005)(6916009)(5660300002)(2906002)(70206006)(107886003)(86362001)(36756003)(6666004)(70586007)(4326008);DIR:OUT;SFP:1101;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2020 10:41:05.1360
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a8a694a-ce1c-4e81-f7ae-08d89a9c9969
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.148];Helo=[sjmaillnx2.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM12FT016.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR07MB4238
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2020-12-07_09:2020-12-04,2020-12-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 mlxscore=0
- clxscore=1015 phishscore=0 mlxlogscore=567 priorityscore=1501
- suspectscore=1 impostorscore=0 malwarescore=0 adultscore=0 spamscore=0
- lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2012070068
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: Microsoft Outlook 14.0
+Content-Language: en-gb
+Thread-Index: AQEj7PcoQVookx4f1d3/LPoLd4O7AAH2dKS3AXO3T8ACPDV8AQK5Jqf9AfTPe88CoAnckwML8I43Acv3vzcCAy63SAJfP5HDAb+vYkUBE57rhQHZtB/YAwjv7Y4DEjptYqpJe4rw
+X-CMAE-Envelope: MS4wfOWnFd6spcUghtMJJQMnukAy6GbF/DBTN7kJ6+pKYtC7MHZ2vk+q+cvnurFV1CTpuR7x2wo6pUkcIjyQ925wmkwkl7mFJhFCmF0xpkssC2DoPVPDxHQT
+ 8l0TGtelVPo6V4VcsJlAWQcPcHtRzK0KakZXdtcrjWB/hGTc28rTN8SLxUinmqLgqYpnU8iZBM4d3w==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Patch adds entry for USBSSP (CDNSP) driver into MAINTARNERS file.
+Using options usb-storage quirks=059f:105f:ks
 
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
----
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Dec 07 10:40:40 charon kernel: usb 2-1: new SuperSpeed Gen 1 USB device number 2 using xhci_hcd
+Dec 07 10:40:40 charon kernel: usb 2-1: New USB device found, idVendor=059f, idProduct=105f, bcdDevice= 0.01
+Dec 07 10:40:40 charon kernel: usb 2-1: New USB device strings: Mfr=2, Product=3, SerialNumber=1
+Dec 07 10:40:40 charon kernel: usb 2-1: Product: 2Big Quadra USB3
+Dec 07 10:40:40 charon kernel: usb 2-1: Manufacturer: LaCie
+Dec 07 10:40:40 charon kernel: usb 2-1: SerialNumber: 00000000250e9e711084
+Dec 07 10:40:40 charon mtp-probe[2790]: checking bus 2, device 2: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-1"
+Dec 07 10:40:40 charon mtp-probe[2790]: bus: 2, device: 2 was not an MTP device
+Dec 07 10:40:40 charon kernel: usb_storage: loading out-of-tree module taints kernel.
+Dec 07 10:40:40 charon kernel: usb_storage: module verification failed: signature and/or required key missing - tainting kernel
+Dec 07 10:40:40 charon kernel: usbcore: registered new interface driver usb-storage
+Dec 07 10:40:40 charon kernel: scsi host5: uas
+Dec 07 10:40:40 charon kernel: usbcore: registered new interface driver uas
+Dec 07 10:40:40 charon kernel: scsi 5:0:0:0: Direct-Access     LaCie    2Big Quadra v3   051E PQ: 0 ANSI: 6
+Dec 07 10:40:40 charon kernel: sd 5:0:0:0: Attached scsi generic sg3 type 0
+Dec 07 10:40:40 charon mtp-probe[2799]: checking bus 2, device 2: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-1"
+Dec 07 10:40:40 charon mtp-probe[2799]: bus: 2, device: 2 was not an MTP device
+Dec 07 10:40:40 charon kernel: sd 5:0:0:0: [sdc] 7814025564 512-byte logical blocks: (4.00 TB/3.64 TiB)
+Dec 07 10:40:40 charon kernel: sd 5:0:0:0: [sdc] Write Protect is off
+Dec 07 10:40:40 charon kernel: sd 5:0:0:0: [sdc] Mode Sense: 43 00 00 00
+Dec 07 10:40:40 charon kernel: sd 5:0:0:0: [sdc] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+Dec 07 10:40:57 charon kernel: usb 2-1: USB disconnect, device number 2
+Dec 07 10:40:57 charon kernel: sd 5:0:0:0: [sdc] Optimal transfer size 33553920 bytes
+Dec 07 10:40:57 charon kernel: sd 5:0:0:0: [sdc] Read Capacity(16) failed: Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK
+Dec 07 10:40:57 charon kernel: sd 5:0:0:0: [sdc] Sense not available.
+Dec 07 10:40:58 charon kernel: sd 5:0:0:0: [sdc] Read Capacity(10) failed: Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK
+Dec 07 10:40:58 charon kernel: sd 5:0:0:0: [sdc] Sense not available.
+Dec 07 10:40:58 charon kernel: sd 5:0:0:0: [sdc] 0 512-byte logical blocks: (0 B/0 B)
+Dec 07 10:40:58 charon kernel: sd 5:0:0:0: [sdc] Attached SCSI disk
+Dec 07 10:40:58 charon kernel: usb 2-1: new SuperSpeed Gen 1 USB device number 3 using xhci_hcd
+Dec 07 10:40:58 charon kernel: usb 2-1: New USB device found, idVendor=059f, idProduct=105f, bcdDevice= 0.01
+Dec 07 10:40:58 charon kernel: usb 2-1: New USB device strings: Mfr=2, Product=3, SerialNumber=1
+Dec 07 10:40:58 charon kernel: usb 2-1: Product: 2Big Quadra USB3
+Dec 07 10:40:58 charon kernel: usb 2-1: Manufacturer: LaCie
+Dec 07 10:40:58 charon kernel: usb 2-1: SerialNumber: 00000000250e9e711084
+Dec 07 10:40:58 charon kernel: scsi host5: uas
+Dec 07 10:40:58 charon kernel: scsi 5:0:0:0: Direct-Access     LaCie    2Big Quadra v3   051E PQ: 0 ANSI: 6
+Dec 07 10:40:58 charon kernel: scsi 5:0:0:0: Attached scsi generic sg3 type 0
+Dec 07 10:40:58 charon kernel: sd 5:0:0:0: [sdc] 7814025564 512-byte logical blocks: (4.00 TB/3.64 TiB)
+Dec 07 10:40:58 charon kernel: sd 5:0:0:0: [sdc] Write Protect is off
+Dec 07 10:40:58 charon kernel: sd 5:0:0:0: [sdc] Mode Sense: 43 00 00 00
+Dec 07 10:40:58 charon kernel: sd 5:0:0:0: [sdc] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+Dec 07 10:40:59 charon mtp-probe[2858]: checking bus 2, device 3: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-1"
+Dec 07 10:40:59 charon mtp-probe[2858]: bus: 2, device: 3 was not an MTP device
+Dec 07 10:40:59 charon mtp-probe[2861]: checking bus 2, device 3: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-1"
+Dec 07 10:40:59 charon mtp-probe[2861]: bus: 2, device: 3 was not an MTP device
+Dec 07 10:41:29 charon kernel: sd 5:0:0:0: tag#6 uas_eh_abort_handler 0 uas-tag 1 inflight: IN 
+Dec 07 10:41:29 charon kernel: sd 5:0:0:0: tag#6 CDB: Report supported operation codes a3 0c 01 12 00 00 00 00 02 00 00 00
+Dec 07 10:41:29 charon kernel: scsi host5: uas_eh_device_reset_handler start
+Dec 07 10:41:29 charon kernel: usb 2-1: reset SuperSpeed Gen 1 USB device number 3 using xhci_hcd
+Dec 07 10:41:29 charon kernel: scsi host5: uas_eh_device_reset_handler success
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 213b92ffe891..255390789176 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3859,6 +3859,15 @@ S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git
- F:	Documentation/devicetree/bindings/usb/cdns,usb3.yaml
- F:	drivers/usb/cdns3/
-+X:	drivers/usb/cdns3/cdnsp*
-+
-+CADENCE USBSSP DRD IP DRIVER
-+M:	Pawel Laszczak <pawell@cadence.com>
-+L:	linux-usb@vger.kernel.org
-+S:	Maintained
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git
-+F:	drivers/usb/cdns3/
-+X:	drivers/usb/cdns3/cdns3*
- 
- CADET FM/AM RADIO RECEIVER DRIVER
- M:	Hans Verkuil <hverkuil@xs4all.nl>
--- 
-2.17.1
+David
+
 
