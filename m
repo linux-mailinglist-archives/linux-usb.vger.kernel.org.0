@@ -2,223 +2,258 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D702A2D2758
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 10:20:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE0C2D278C
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 10:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728680AbgLHJTJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 04:19:09 -0500
-Received: from mailgw02.mediatek.com ([1.203.163.81]:63400 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728221AbgLHJTD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 04:19:03 -0500
-X-UUID: 2e9427e0c3504a069dcd29969b39450a-20201208
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=fhDUR1ARdF5A2orTNplDGDgK1ZoomQ3fxJxgBy+nZbs=;
-        b=Sv2CzmQv4J8vn5f02S9phiR/geo9wsIZXbtw6GqhlzzYlVhonQ2lE21ThRW7IiENJlOe0n2VBwS5a8tCLCLkItTt5EW8kz4AZ4slTcIFVibzD5igirKVdk79qQPtHL6/LDY6DtA4imFthSpeVP7nRD/OcxMlztUzA5z0a0nC4qY=;
-X-UUID: 2e9427e0c3504a069dcd29969b39450a-20201208
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2114896536; Tue, 08 Dec 2020 17:18:12 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 8 Dec
- 2020 17:18:12 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 8 Dec 2020 17:18:10 +0800
-Message-ID: <1607419090.23328.16.camel@mhfsdcap03>
-Subject: Re: [PATCH v3 10/11] dt-bindings: usb: convert mediatek,mtu3.txt to
- YAML schema
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        id S1728920AbgLHJ0Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Dec 2020 04:26:24 -0500
+Received: from mga11.intel.com ([192.55.52.93]:59846 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728511AbgLHJ0X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Dec 2020 04:26:23 -0500
+IronPort-SDR: kgRkFtgOo6x1NJV9LUn3RVToU4xqgTJjO05zvtPFnwADgRiPkQEe0mOBgDFZZpQbZokQrSA3G2
+ BrXzf8gwAAYA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9828"; a="170351747"
+X-IronPort-AV: E=Sophos;i="5.78,402,1599548400"; 
+   d="scan'208";a="170351747"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2020 01:24:29 -0800
+IronPort-SDR: uaW/YdrqTF01VzKq1Ffve0iKeNoMXlHGtHywDgwcYDiV6GomU7DlVVOIiCJcQU0TRiuEPqvv/A
+ Z529exm7TSTw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,402,1599548400"; 
+   d="scan'208";a="437316014"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 08 Dec 2020 01:24:27 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 08 Dec 2020 11:24:25 +0200
+Date:   Tue, 8 Dec 2020 11:24:25 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        "Min Guo" <min.guo@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>
-Date:   Tue, 8 Dec 2020 17:18:10 +0800
-In-Reply-To: <20201207213011.GA852738@robh.at.kernel.org>
-References: <20201118082126.42701-1-chunfeng.yun@mediatek.com>
-         <20201118082126.42701-10-chunfeng.yun@mediatek.com>
-         <20201207213011.GA852738@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] usb: typec: tcpm: Introduce vsafe0v for vbus
+Message-ID: <20201208092425.GA680328@kuha.fi.intel.com>
+References: <20201202040840.663578-1-badhri@google.com>
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 3EC3C4B1F5114EBCDF3B939624A00DF28DDA96014533368ADAD0D44DC7F45D8C2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201202040840.663578-1-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gTW9uLCAyMDIwLTEyLTA3IGF0IDE1OjMwIC0wNjAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4g
-T24gV2VkLCBOb3YgMTgsIDIwMjAgYXQgMDQ6MjE6MjVQTSArMDgwMCwgQ2h1bmZlbmcgWXVuIHdy
-b3RlOg0KPiA+IENvbnZlcnQgbWVkaWF0ZWssbXR1My50eHQgdG8gWUFNTCBzY2hlbWEgbWVkaWF0
-ZWssbXR1My55YW1sDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxjaHVu
-ZmVuZy55dW5AbWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+IHYzOg0KPiA+ICAgMS4gZml4IHlh
-bWxsaW50IHdhcm5pbmcNCj4gPiAgIDIuIHJlbW92ZSBwaW5jdHJsKiBwcm9wZXJ0aWVzDQo+ID4g
-ICAzLiByZW1vdmUgdW5uZWNlc3NhcnkgJ3wnDQo+ID4gICA0LiBkcm9wIHVudXNlZCBsYWJlbHMg
-aW4gZXhhbXBsZQ0KPiA+IA0KPiA+IHYyOiBuZXcgcGF0Y2gNCj4gPiAtLS0NCj4gPiAgLi4uL2Rl
-dmljZXRyZWUvYmluZGluZ3MvdXNiL21lZGlhdGVrLG10dTMudHh0IHwgMTA4IC0tLS0tLS0tLQ0K
-PiA+ICAuLi4vYmluZGluZ3MvdXNiL21lZGlhdGVrLG10dTMueWFtbCAgICAgICAgICAgfCAyMTgg
-KysrKysrKysrKysrKysrKysrDQo+ID4gIDIgZmlsZXMgY2hhbmdlZCwgMjE4IGluc2VydGlvbnMo
-KyksIDEwOCBkZWxldGlvbnMoLSkNCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRp
-b24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvbWVkaWF0ZWssbXR1My50eHQNCj4gPiAgY3JlYXRl
-IG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvbWVkaWF0
-ZWssbXR1My55YW1sDQo+ID4gDQpbLi4uXQ0KPiA+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9u
-L2RldmljZXRyZWUvYmluZGluZ3MvdXNiL21lZGlhdGVrLG10dTMueWFtbCBiL0RvY3VtZW50YXRp
-b24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvbWVkaWF0ZWssbXR1My55YW1sDQo+ID4gbmV3IGZp
-bGUgbW9kZSAxMDA2NDQNCj4gPiBpbmRleCAwMDAwMDAwMDAwMDAuLjI5MGU5N2EwNmYyYQ0KPiA+
-IC0tLSAvZGV2L251bGwNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
-Z3MvdXNiL21lZGlhdGVrLG10dTMueWFtbA0KPiA+IEBAIC0wLDAgKzEsMjE4IEBADQo+ID4gKyMg
-U1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4wLW9ubHkgT1IgQlNELTItQ2xhdXNlKQ0K
-PiA+ICsjIENvcHlyaWdodCAoYykgMjAyMCBNZWRpYVRlaw0KPiA+ICslWUFNTCAxLjINCj4gPiAr
-LS0tDQo+ID4gKyRpZDogaHR0cDovL2RldmljZXRyZWUub3JnL3NjaGVtYXMvdXNiL21lZGlhdGVr
-LG10dTMueWFtbCMNCj4gPiArJHNjaGVtYTogaHR0cDovL2RldmljZXRyZWUub3JnL21ldGEtc2No
-ZW1hcy9jb3JlLnlhbWwjDQo+ID4gKw0KPiA+ICt0aXRsZTogTWVkaWFUZWsgVVNCMyBEUkQgQ29u
-dHJvbGxlciBEZXZpY2UgVHJlZSBCaW5kaW5ncw0KPiA+ICsNCj4gPiArbWFpbnRhaW5lcnM6DQo+
-ID4gKyAgLSBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRlay5jb20+DQo+ID4gKw0K
-PiA+ICtkZXNjcmlwdGlvbjogfA0KPiA+ICsgIFRoZSBEUkQgY29udHJvbGxlciBoYXMgYSBnbHVl
-IGxheWVyIElQUEMgKElQIFBvcnQgQ29udHJvbCksIGFuZCBpdHMgaG9zdCBpcw0KPiA+ICsgIGJh
-c2VkIG9uIHhIQ0kuDQo+ID4gKw0KPiA+ICtwcm9wZXJ0aWVzOg0KPiA+ICsgIGNvbXBhdGlibGU6
-DQo+ID4gKyAgICBpdGVtczoNCj4gPiArICAgICAgLSBlbnVtOg0KPiA+ICsgICAgICAgICAgLSBt
-ZWRpYXRlayxtdDI3MTItbXR1Mw0KPiA+ICsgICAgICAgICAgLSBtZWRpYXRlayxtdDgxNzMtbXR1
-Mw0KPiA+ICsgICAgICAgICAgLSBtZWRpYXRlayxtdDgxODMtbXR1Mw0KPiA+ICsgICAgICAtIGNv
-bnN0OiBtZWRpYXRlayxtdHUzDQo+ID4gKw0KPiA+ICsgIHJlZzoNCj4gPiArICAgIGl0ZW1zOg0K
-PiA+ICsgICAgICAtIGRlc2NyaXB0aW9uOiB0aGUgcmVnaXN0ZXJzIG9mIGRldmljZSBNQUMNCj4g
-PiArICAgICAgLSBkZXNjcmlwdGlvbjogdGhlIHJlZ2lzdGVycyBvZiBJUCBQb3J0IENvbnRyb2wN
-Cj4gPiArDQo+ID4gKyAgcmVnLW5hbWVzOg0KPiA+ICsgICAgaXRlbXM6DQo+ID4gKyAgICAgIC0g
-Y29uc3Q6IG1hYw0KPiA+ICsgICAgICAtIGNvbnN0OiBpcHBjDQo+ID4gKw0KPiA+ICsgIGludGVy
-cnVwdHM6DQo+ID4gKyAgICBtYXhJdGVtczogMQ0KPiA+ICsNCj4gPiArICBwb3dlci1kb21haW5z
-Og0KPiA+ICsgICAgZGVzY3JpcHRpb246IEEgcGhhbmRsZSB0byBVU0IgcG93ZXIgZG9tYWluIG5v
-ZGUgdG8gY29udHJvbCBVU0IncyBNVENNT1MNCj4gPiArICAgIG1heEl0ZW1zOiAxDQo+ID4gKw0K
-PiA+ICsgIGNsb2NrczoNCj4gPiArICAgIG1pbkl0ZW1zOiAxDQo+ID4gKyAgICBtYXhJdGVtczog
-NA0KPiA+ICsgICAgaXRlbXM6DQo+ID4gKyAgICAgIC0gZGVzY3JpcHRpb246IENvbnRyb2xsZXIg
-Y2xvY2sgdXNlZCBieSBub3JtYWwgbW9kZQ0KPiA+ICsgICAgICAtIGRlc2NyaXB0aW9uOiBSZWZl
-cmVuY2UgY2xvY2sgdXNlZCBieSBsb3cgcG93ZXIgbW9kZSBldGMNCj4gPiArICAgICAgLSBkZXNj
-cmlwdGlvbjogTWN1IGJ1cyBjbG9jayBmb3IgcmVnaXN0ZXIgYWNjZXNzDQo+ID4gKyAgICAgIC0g
-ZGVzY3JpcHRpb246IERNQSBidXMgY2xvY2sgZm9yIGRhdGEgdHJhbnNmZXINCj4gPiArDQo+ID4g
-KyAgY2xvY2stbmFtZXM6DQo+ID4gKyAgICBtaW5JdGVtczogMQ0KPiA+ICsgICAgbWF4SXRlbXM6
-IDQNCj4gPiArICAgIGl0ZW1zOg0KPiA+ICsgICAgICAtIGNvbnN0OiBzeXNfY2sgICMgcmVxdWly
-ZWQsIHRoZSBmb2xsb3dpbmcgb25lcyBhcmUgb3B0aW9uYWwNCj4gPiArICAgICAgLSBjb25zdDog
-cmVmX2NrDQo+ID4gKyAgICAgIC0gY29uc3Q6IG1jdV9jaw0KPiA+ICsgICAgICAtIGNvbnN0OiBk
-bWFfY2sNCj4gPiArDQo+ID4gKyAgcGh5czoNCj4gPiArICAgICRyZWY6IC9zY2hlbWFzL3R5cGVz
-LnlhbWwjL2RlZmluaXRpb25zL3BoYW5kbGUtYXJyYXkNCj4gDQo+IERyb3AuIE5lZWQgdG8gc2F5
-IGhvdyBtYW55IGVudHJpZXMgYW5kIHdoYXQgZWFjaCBvbmUgaXMgaWYgbW9yZSB0aGFuIDEuDQpP
-aw0KDQo+IA0KPiA+ICsgICAgZGVzY3JpcHRpb246IExpc3Qgb2YgYWxsIHRoZSBVU0IgUEhZcyB1
-c2VkDQo+ID4gKw0KPiA+ICsgIHZ1c2IzMy1zdXBwbHk6DQo+ID4gKyAgICBkZXNjcmlwdGlvbjog
-UmVndWxhdG9yIG9mIFVTQiBBVkREMy4zdg0KPiA+ICsNCj4gPiArICB2YnVzLXN1cHBseToNCj4g
-PiArICAgICRyZWY6IC9jb25uZWN0b3IvdXNiLWNvbm5lY3Rvci55YW1sIw0KPiANCj4gTm9wZS4N
-CldpbGwgcmVtb3ZlIGl0DQo+IA0KPiA+ICsgICAgZGVwcmVjYXRlZDogdHJ1ZQ0KPiA+ICsgICAg
-ZGVzY3JpcHRpb246IHwNCj4gPiArICAgICAgUmVndWxhdG9yIG9mIFVTQiBWQlVTNXYsIG5lZWRl
-ZCB3aGVuIHN1cHBvcnRzIGR1YWwtcm9sZSBtb2RlLg0KPiA+ICsgICAgICBQYXJ0aWN1bGFybHks
-IGlmIHVzZSBhbiBvdXRwdXQgR1BJTyB0byBjb250cm9sIGEgVkJVUyByZWd1bGF0b3IsIHNob3Vs
-ZA0KPiA+ICsgICAgICBtb2RlbCBpdCBhcyBhIHJlZ3VsYXRvci4gU2VlIGJpbmRpbmdzL3JlZ3Vs
-YXRvci9maXhlZC1yZWd1bGF0b3IueWFtbA0KPiA+ICsgICAgICBJdCdzIGNvbnNpZGVyZWQgdmFs
-aWQgZm9yIGNvbXBhdGliaWxpdHkgcmVhc29ucywgbm90IGFsbG93ZWQgZm9yDQo+ID4gKyAgICAg
-IG5ldyBiaW5kaW5ncywgYW5kIHB1dCBpbnRvIGEgdXNiLWNvbm5lY3RvciBub2RlLg0KPiA+ICsN
-Cj4gPiArICBkcl9tb2RlOg0KPiA+ICsgICAgZGVzY3JpcHRpb246IFNlZSB1c2IvZ2VuZXJpYy50
-eHQNCj4gPiArICAgIGVudW06IFtob3N0LCBwZXJpcGhlcmFsLCBvdGddDQo+ID4gKyAgICBkZWZh
-dWx0OiBvdGcNCj4gPiArDQo+ID4gKyAgbWF4aW11bS1zcGVlZDoNCj4gPiArICAgIGRlc2NyaXB0
-aW9uOiBTZWUgdXNiL2dlbmVyaWMudHh0DQo+ID4gKyAgICBlbnVtOiBbc3VwZXItc3BlZWQtcGx1
-cywgc3VwZXItc3BlZWQsIGhpZ2gtc3BlZWQsIGZ1bGwtc3BlZWRdDQo+ID4gKw0KPiA+ICsgICIj
-YWRkcmVzcy1jZWxscyI6DQo+ID4gKyAgICBlbnVtOiBbMSwgMl0NCj4gPiArDQo+ID4gKyAgIiNz
-aXplLWNlbGxzIjoNCj4gPiArICAgIGVudW06IFsxLCAyXQ0KPiA+ICsNCj4gPiArICByYW5nZXM6
-IHRydWUNCj4gPiArDQo+ID4gKyAgZXh0Y29uOg0KPiA+ICsgICAgZGVwcmVjYXRlZDogdHJ1ZQ0K
-PiA+ICsgICAgZGVzY3JpcHRpb246IHwNCj4gPiArICAgICAgUGhhbmRsZSB0byB0aGUgZXh0Y29u
-IGRldmljZSBkZXRlY3RpbmcgdGhlIElERElHL1ZCVVMgc3RhdGUsIG5lZWRlDQo+ID4gKyAgICAg
-IHdoZW4gc3VwcG9ydHMgZHVhbC1yb2xlIG1vZGUuDQo+ID4gKyAgICAgIEl0J3MgY29uc2lkZXJl
-ZCB2YWxpZCBmb3IgY29tcGF0aWJpbGl0eSByZWFzb25zLCBub3QgYWxsb3dlZCBmb3INCj4gPiAr
-ICAgICAgbmV3IGJpbmRpbmdzLCBhbmQgdXNlICJ1c2Itcm9sZS1zd2l0Y2giIHByb3BlcnR5IGlu
-c3RlYWQuDQo+ID4gKw0KPiA+ICsgIHVzYi1yb2xlLXN3aXRjaDoNCj4gPiArICAgICRyZWY6IC9z
-Y2hlbWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL2ZsYWcNCj4gPiArICAgIGRlc2NyaXB0aW9u
-OiBTdXBwb3J0IHJvbGUgc3dpdGNoLiBTZWUgdXNiL2dlbmVyaWMudHh0DQo+ID4gKyAgICB0eXBl
-OiBib29sZWFuDQo+ID4gKw0KPiA+ICsgIGNvbm5lY3RvcjoNCj4gPiArICAgICRyZWY6IC9jb25u
-ZWN0b3IvdXNiLWNvbm5lY3Rvci55YW1sIw0KPiA+ICsgICAgZGVzY3JpcHRpb246DQo+ID4gKyAg
-ICAgIENvbm5lY3RvciBmb3IgZHVhbCByb2xlIHN3aXRjaCwgZXNwZWNpYWxseSBmb3IgImdwaW8t
-dXNiLWItY29ubmVjdG9yIg0KPiA+ICsgICAgdHlwZTogb2JqZWN0DQo+ID4gKw0KPiA+ICsgIHBv
-cnQ6DQo+ID4gKyAgICBkZXNjcmlwdGlvbjoNCj4gPiArICAgICAgQW55IGNvbm5lY3RvciB0byB0
-aGUgZGF0YSBidXMgb2YgdGhpcyBjb250cm9sbGVyIHNob3VsZCBiZSBtb2RlbGxlZA0KPiA+ICsg
-ICAgICB1c2luZyB0aGUgT0YgZ3JhcGggYmluZGluZ3Mgc3BlY2lmaWVkLCBpZiB0aGUgInVzYi1y
-b2xlLXN3aXRjaCINCj4gPiArICAgICAgcHJvcGVydHkgaXMgdXNlZC4gU2VlIGdyYXBoLnR4dA0K
-PiA+ICsgICAgdHlwZTogb2JqZWN0DQo+IA0KPiBQbGVhc2UgaW5jbHVkZSBwb3J0IGFuZCBjb25u
-ZWN0b3IgaW4gdGhlIGV4YW1wbGUuDQpPaywgdGhhbmtzDQoNCj4gDQo+ID4gKw0KPiA+ICsgIGVu
-YWJsZS1tYW51YWwtZHJkOg0KPiA+ICsgICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVm
-aW5pdGlvbnMvZmxhZw0KPiA+ICsgICAgZGVzY3JpcHRpb246DQo+ID4gKyAgICAgIHN1cHBvcnRz
-IG1hbnVhbCBkdWFsLXJvbGUgc3dpdGNoIHZpYSBkZWJ1Z2ZzOyB1c3VhbGx5IHVzZWQgd2hlbg0K
-PiA+ICsgICAgICByZWNlcHRhY2xlIGlzIFRZUEUtQSBhbmQgYWxzbyB3YW50cyB0byBzdXBwb3J0
-IGR1YWwtcm9sZSBtb2RlLg0KPiA+ICsgICAgdHlwZTogYm9vbGVhbg0KPiA+ICsNCj4gPiArICB3
-YWtldXAtc291cmNlOg0KPiA+ICsgICAgZGVzY3JpcHRpb246IGVuYWJsZSBVU0IgcmVtb3RlIHdh
-a2V1cCwgc2VlIHBvd2VyL3dha2V1cC1zb3VyY2UudHh0DQo+ID4gKyAgICB0eXBlOiBib29sZWFu
-DQo+ID4gKw0KPiA+ICsgIG1lZGlhdGVrLHN5c2Nvbi13YWtldXA6DQo+ID4gKyAgICAkcmVmOiAv
-c2NoZW1hcy90eXBlcy55YW1sIy9kZWZpbml0aW9ucy9waGFuZGxlLWFycmF5DQo+ID4gKyAgICBt
-YXhJdGVtczogMQ0KPiA+ICsgICAgZGVzY3JpcHRpb246IHwNCj4gPiArICAgICAgQSBwaGFuZGxl
-IHRvIHN5c2NvbiB1c2VkIHRvIGFjY2VzcyB0aGUgcmVnaXN0ZXIgb2YgdGhlIFVTQiB3YWtldXAg
-Z2x1ZQ0KPiA+ICsgICAgICBsYXllciBiZXR3ZWVuIHhIQ0kgYW5kIFNQTSwgdGhlIGZpZWxkIHNo
-b3VsZCBhbHdheXMgYmUgMyBjZWxscyBsb25nLg0KPiA+ICsNCj4gPiArICAgICAgaXRlbXM6DQo+
-ID4gKyAgICAgICAgLSBkZXNjcmlwdGlvbjoNCj4gPiArICAgICAgICAgICAgVGhlIGZpcnN0IGNl
-bGwgcmVwcmVzZW50cyBhIHBoYW5kbGUgdG8gc3lzY29uDQo+ID4gKyAgICAgICAgLSBkZXNjcmlw
-dGlvbjoNCj4gPiArICAgICAgICAgICAgVGhlIHNlY29uZCBjZWxsIHJlcHJlc2VudHMgdGhlIHJl
-Z2lzdGVyIGJhc2UgYWRkcmVzcyBvZiB0aGUgZ2x1ZQ0KPiA+ICsgICAgICAgICAgICBsYXllciBp
-biBzeXNjb24NCj4gPiArICAgICAgICAtIGRlc2NyaXB0aW9uOg0KPiA+ICsgICAgICAgICAgICBU
-aGUgdGhpcmQgY2VsbCByZXByZXNlbnRzIHRoZSBoYXJkd2FyZSB2ZXJzaW9uIG9mIHRoZSBnbHVl
-IGxheWVyLA0KPiA+ICsgICAgICAgICAgICAxIGlzIHVzZWQgYnkgbXQ4MTczIGV0YywgMiBpcyB1
-c2VkIGJ5IG10MjcxMiBldGMNCj4gPiArICAgICAgICAgIGVudW06IFsxLCAyXQ0KPiA+ICsNCj4g
-PiArICBtZWRpYXRlayx1M3AtZGlzLW1zazoNCj4gPiArICAgICRyZWY6IC9zY2hlbWFzL3R5cGVz
-LnlhbWwjL2RlZmluaXRpb25zL3VpbnQzMg0KPiA+ICsgICAgZGVzY3JpcHRpb246IFRoZSBtYXNr
-IHRvIGRpc2FibGUgdTNwb3J0cywgYml0MCBmb3IgdTNwb3J0MCwNCj4gPiArICAgICAgYml0MSBm
-b3IgdTNwb3J0MSwgLi4uIGV0Yw0KPiA+ICsNCj4gPiArIyBSZXF1aXJlZCBjaGlsZCBub2RlIHdo
-ZW4gc3VwcG9ydCBkdWFsLXJvbGUNCj4gPiArcGF0dGVyblByb3BlcnRpZXM6DQo+ID4gKyAgIl51
-c2JAWzAtOWEtZl0rJCI6DQo+ID4gKyAgICB0eXBlOiBvYmplY3QNCj4gPiArICAgICRyZWY6IC91
-c2IvbWVkaWF0ZWssbXRrLXhoY2kueWFtbCMNCj4gPiArICAgIGRlc2NyaXB0aW9uOg0KPiA+ICsg
-ICAgICBUaGUgeGhjaSBzaG91bGQgYmUgYWRkZWQgYXMgc3Vibm9kZSB0byBtdHUzIGFzIHNob3du
-IGluIHRoZSBmb2xsb3dpbmcNCj4gPiArICAgICAgZXhhbXBsZSBpZiB0aGUgaG9zdCBtb2RlIGlz
-IGVuYWJsZWQuDQo+ID4gKw0KPiA+ICtkZXBlbmRlbmNpZXM6DQo+ID4gKyAgY29ubmVjdG9yOiBb
-ICd1c2Itcm9sZS1zd2l0Y2gnIF0NCj4gPiArICBwb3J0OiBbICd1c2Itcm9sZS1zd2l0Y2gnIF0N
-Cj4gPiArICB3YWtldXAtc291cmNlOiBbICdtZWRpYXRlayxzeXNjb24td2FrZXVwJyBdDQo+ID4g
-Kw0KPiA+ICtyZXF1aXJlZDoNCj4gPiArICAtIGNvbXBhdGlibGUNCj4gPiArICAtIHJlZw0KPiA+
-ICsgIC0gcmVnLW5hbWVzDQo+ID4gKyAgLSBpbnRlcnJ1cHRzDQo+ID4gKyAgLSBjbG9ja3MNCj4g
-PiArICAtIGNsb2NrLW5hbWVzDQo+ID4gKyAgLSBwaHlzDQo+ID4gKw0KPiA+ICthZGRpdGlvbmFs
-UHJvcGVydGllczogZmFsc2UNCj4gPiArDQo+ID4gK2V4YW1wbGVzOg0KPiA+ICsgIC0gfA0KPiA+
-ICsgICAgI2luY2x1ZGUgPGR0LWJpbmRpbmdzL2Nsb2NrL210ODE3My1jbGsuaD4NCj4gPiArICAg
-ICNpbmNsdWRlIDxkdC1iaW5kaW5ncy9pbnRlcnJ1cHQtY29udHJvbGxlci9hcm0tZ2ljLmg+DQo+
-ID4gKyAgICAjaW5jbHVkZSA8ZHQtYmluZGluZ3MvaW50ZXJydXB0LWNvbnRyb2xsZXIvaXJxLmg+
-DQo+ID4gKyAgICAjaW5jbHVkZSA8ZHQtYmluZGluZ3MvcGh5L3BoeS5oPg0KPiA+ICsgICAgI2lu
-Y2x1ZGUgPGR0LWJpbmRpbmdzL3Bvd2VyL210ODE3My1wb3dlci5oPg0KPiA+ICsNCj4gPiArICAg
-IHVzYkAxMTI3MTAwMCB7DQo+ID4gKyAgICAgICAgY29tcGF0aWJsZSA9ICJtZWRpYXRlayxtdDgx
-NzMtbXR1MyIsICJtZWRpYXRlayxtdHUzIjsNCj4gPiArICAgICAgICByZWcgPSA8MHgxMTI3MTAw
-MCAweDMwMDA+LCA8MHgxMTI4MDcwMCAweDAxMDA+Ow0KPiA+ICsgICAgICAgIHJlZy1uYW1lcyA9
-ICJtYWMiLCAiaXBwYyI7DQo+ID4gKyAgICAgICAgaW50ZXJydXB0cyA9IDxHSUNfU1BJIDY0IElS
-UV9UWVBFX0xFVkVMX0xPVz47DQo+ID4gKyAgICAgICAgcGh5cyA9IDwmcGh5X3BvcnQwIFBIWV9U
-WVBFX1VTQjM+LCA8JnBoeV9wb3J0MSBQSFlfVFlQRV9VU0IyPjsNCj4gPiArICAgICAgICBwb3dl
-ci1kb21haW5zID0gPCZzY3BzeXMgTVQ4MTczX1BPV0VSX0RPTUFJTl9VU0I+Ow0KPiA+ICsgICAg
-ICAgIGNsb2NrcyA9IDwmdG9wY2tnZW4gQ0xLX1RPUF9VU0IzMF9TRUw+Ow0KPiA+ICsgICAgICAg
-IGNsb2NrLW5hbWVzID0gInN5c19jayI7DQo+ID4gKyAgICAgICAgdnVzYjMzLXN1cHBseSA9IDwm
-bXQ2Mzk3X3Z1c2JfcmVnPjsNCj4gPiArICAgICAgICB2YnVzLXN1cHBseSA9IDwmdXNiX3AwX3Zi
-dXM+Ow0KPiA+ICsgICAgICAgIGV4dGNvbiA9IDwmZXh0Y29uX3VzYj47DQo+ID4gKyAgICAgICAg
-ZHJfbW9kZSA9ICJvdGciOw0KPiA+ICsgICAgICAgIHdha2V1cC1zb3VyY2U7DQo+ID4gKyAgICAg
-ICAgbWVkaWF0ZWssc3lzY29uLXdha2V1cCA9IDwmcGVyaWNmZyAweDQwMCAxPjsNCj4gPiArICAg
-ICAgICAjYWRkcmVzcy1jZWxscyA9IDwxPjsNCj4gPiArICAgICAgICAjc2l6ZS1jZWxscyA9IDwx
-PjsNCj4gPiArICAgICAgICByYW5nZXM7DQo+ID4gKw0KPiA+ICsgICAgICAgIHhoY2k6IHVzYkAx
-MTI3MDAwMCB7DQo+ID4gKyAgICAgICAgICAgIGNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ4MTcz
-LXhoY2kiLCAibWVkaWF0ZWssbXRrLXhoY2kiOw0KPiA+ICsgICAgICAgICAgICByZWcgPSA8MHgx
-MTI3MDAwMCAweDEwMDA+Ow0KPiA+ICsgICAgICAgICAgICByZWctbmFtZXMgPSAibWFjIjsNCj4g
-PiArICAgICAgICAgICAgaW50ZXJydXB0cyA9IDxHSUNfU1BJIDExNSBJUlFfVFlQRV9MRVZFTF9M
-T1c+Ow0KPiA+ICsgICAgICAgICAgICBwb3dlci1kb21haW5zID0gPCZzY3BzeXMgTVQ4MTczX1BP
-V0VSX0RPTUFJTl9VU0I+Ow0KPiA+ICsgICAgICAgICAgICBjbG9ja3MgPSA8JnRvcGNrZ2VuIENM
-S19UT1BfVVNCMzBfU0VMPiwgPCZjbGsyNm0+Ow0KPiA+ICsgICAgICAgICAgICBjbG9jay1uYW1l
-cyA9ICJzeXNfY2siLCAicmVmX2NrIjsNCj4gPiArICAgICAgICAgICAgdnVzYjMzLXN1cHBseSA9
-IDwmbXQ2Mzk3X3Z1c2JfcmVnPjsNCj4gPiArICAgICAgICB9Ow0KPiANCj4gUGxlYXNlIGFkZCAN
-Cj4gPiArICAgIH07DQo+ID4gKy4uLg0KPiA+IC0tIA0KPiA+IDIuMTguMA0KPiA+IA0KDQo=
+On Tue, Dec 01, 2020 at 08:08:38PM -0800, Badhri Jagan Sridharan wrote:
+> TCPM at present lacks the notion of VSAFE0V. There
+> are three vbus threshold levels that are critical to track:
+> a. vSafe5V         - VBUS “5 volts” as defined by the USB
+>                      PD specification.
+> b. vSinkDisconnect - Threshold used for transition from
+>                      Attached.SNK to Unattached.SNK.
+> c. vSafe0V         - VBUS “0 volts” as defined by the USB
+>                      PD specification.
+> 
+> Tracking vSafe0V is crucial for entry into Try.SNK and
+> Attached.SRC and turning vbus back on by the source in
+> response to hard reset.
+> 
+> >From "4.5.2.2.8.2 Exiting from AttachWait.SRC State" section
+> in the Type-C spec:
+> 
+> "The port shall transition to Attached.SRC when VBUS is at
+> vSafe0V and the SRC.Rd state is detected on exactly one of
+> the CC1 or CC2 pins for at least tCCDebounce."
+> 
+> "A DRP that strongly prefers the Sink role may optionally
+> transition to Try.SNK instead of Attached.SRC when VBUS
+> is at vSafe0V and the SRC.Rd state is detected on exactly
+> one of the CC1 or CC2 pins for at least tCCDebounce."
+> 
+> >From "7.1.5 Response to Hard Resets" section in the PD spec:
+> 
+> "After establishing the vSafe0V voltage condition on VBUS,
+> the Source Shall wait tSrcRecover before re-applying VCONN
+> and restoring VBUS to vSafe5V."
+> 
+> vbus_present in the TCPM code tracks vSafe5V(vbus_present is true)
+> and vSinkDisconnect(vbus_present is false).
+> 
+> This change adds is_vbus_vsafe0v callback which when set makes
+> TCPM query for vSafe0V voltage level when needed.
+> 
+> Since not all TCPC controllers might have the capability
+> to report vSafe0V, TCPM assumes that vSafe0V is same as
+> vSinkDisconnect when is_vbus_vsafe0v callback is not set.
+> This allows TCPM to continue to support controllers which don't
+> have the support for reporting vSafe0V.
+> 
+> Introducing vSafe0V helps fix the failure reported at
+> "Step 15. CVS verifies PUT remains in AttachWait.SRC for 500ms"
+> of "TD 4.7.2 Try. SNK DRP Connect DRP Test" of
+> "Universal Serial Bus Type-C (USB Type-C) Functional Test
+> Specification Chapters 4 and 5". Here the compliance tester
+> intentionally maintains vbus at greater than vSafe0V and expects
+> the Product under test to stay in AttachWait.SRC till vbus drops
+> to vSafe0V.
+> 
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
+Guenter really should check these, but FWIW:
+
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+> Changes since v1:
+> - Changed return type to bool instead of int for
+>   is_vbus_vsafe0v as suggested by Guenter and updated
+>   the documentation.
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 63 +++++++++++++++++++++++++++++------
+>  include/linux/usb/tcpm.h      |  7 ++++
+>  2 files changed, 59 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 3bbc1f10af49..4cd6e0196f94 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -258,7 +258,19 @@ struct tcpm_port {
+>  	bool attached;
+>  	bool connected;
+>  	enum typec_port_type port_type;
+> +
+> +	/*
+> +	 * Set to true when vbus is greater than VSAFE5V min.
+> +	 * Set to false when vbus falls below vSinkDisconnect max threshold.
+> +	 */
+>  	bool vbus_present;
+> +
+> +	/*
+> +	 * Set to true when vbus is less than VSAFE0V max.
+> +	 * Set to false when vbus is greater than VSAFE0V max.
+> +	 */
+> +	bool vbus_vsafe0v;
+> +
+>  	bool vbus_never_low;
+>  	bool vbus_source;
+>  	bool vbus_charge;
+> @@ -3094,7 +3106,7 @@ static void run_state_machine(struct tcpm_port *port)
+>  		else if (tcpm_port_is_audio(port))
+>  			tcpm_set_state(port, AUDIO_ACC_ATTACHED,
+>  				       PD_T_CC_DEBOUNCE);
+> -		else if (tcpm_port_is_source(port))
+> +		else if (tcpm_port_is_source(port) && port->vbus_vsafe0v)
+>  			tcpm_set_state(port,
+>  				       tcpm_try_snk(port) ? SNK_TRY
+>  							  : SRC_ATTACHED,
+> @@ -4097,6 +4109,12 @@ static void _tcpm_pd_vbus_on(struct tcpm_port *port)
+>  {
+>  	tcpm_log_force(port, "VBUS on");
+>  	port->vbus_present = true;
+> +	/*
+> +	 * When vbus_present is true i.e. Voltage at VBUS is greater than VSAFE5V implicitly
+> +	 * states that vbus is not at VSAFE0V, hence clear the vbus_vsafe0v flag here.
+> +	 */
+> +	port->vbus_vsafe0v = false;
+> +
+>  	switch (port->state) {
+>  	case SNK_TRANSITION_SINK_VBUS:
+>  		port->explicit_contract = true;
+> @@ -4186,16 +4204,8 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
+>  	case SNK_HARD_RESET_SINK_OFF:
+>  		tcpm_set_state(port, SNK_HARD_RESET_WAIT_VBUS, 0);
+>  		break;
+> -	case SRC_HARD_RESET_VBUS_OFF:
+> -		/*
+> -		 * After establishing the vSafe0V voltage condition on VBUS, the Source Shall wait
+> -		 * tSrcRecover before re-applying VCONN and restoring VBUS to vSafe5V.
+> -		 */
+> -		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
+> -		break;
+>  	case HARD_RESET_SEND:
+>  		break;
+> -
+>  	case SNK_TRY:
+>  		/* Do nothing, waiting for timeout */
+>  		break;
+> @@ -4266,6 +4276,28 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
+>  	}
+>  }
+>  
+> +static void _tcpm_pd_vbus_vsafe0v(struct tcpm_port *port)
+> +{
+> +	tcpm_log_force(port, "VBUS VSAFE0V");
+> +	port->vbus_vsafe0v = true;
+> +	switch (port->state) {
+> +	case SRC_HARD_RESET_VBUS_OFF:
+> +		/*
+> +		 * After establishing the vSafe0V voltage condition on VBUS, the Source Shall wait
+> +		 * tSrcRecover before re-applying VCONN and restoring VBUS to vSafe5V.
+> +		 */
+> +		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
+> +		break;
+> +	case SRC_ATTACH_WAIT:
+> +		if (tcpm_port_is_source(port))
+> +			tcpm_set_state(port, tcpm_try_snk(port) ? SNK_TRY : SRC_ATTACHED,
+> +				       PD_T_CC_DEBOUNCE);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +}
+> +
+>  static void _tcpm_pd_hard_reset(struct tcpm_port *port)
+>  {
+>  	tcpm_log_force(port, "Received hard reset");
+> @@ -4301,10 +4333,19 @@ static void tcpm_pd_event_handler(struct kthread_work *work)
+>  			bool vbus;
+>  
+>  			vbus = port->tcpc->get_vbus(port->tcpc);
+> -			if (vbus)
+> +			if (vbus) {
+>  				_tcpm_pd_vbus_on(port);
+> -			else
+> +			} else {
+>  				_tcpm_pd_vbus_off(port);
+> +				/*
+> +				 * When TCPC does not support detecting vsafe0v voltage level,
+> +				 * treat vbus absent as vsafe0v. Else invoke is_vbus_vsafe0v
+> +				 * to see if vbus has discharge to VSAFE0V.
+> +				 */
+> +				if (!port->tcpc->is_vbus_vsafe0v ||
+> +				    port->tcpc->is_vbus_vsafe0v(port->tcpc))
+> +					_tcpm_pd_vbus_vsafe0v(port);
+> +			}
+>  		}
+>  		if (events & TCPM_CC_EVENT) {
+>  			enum typec_cc_status cc1, cc2;
+> diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+> index e68aaa12886f..3e39874cfac4 100644
+> --- a/include/linux/usb/tcpm.h
+> +++ b/include/linux/usb/tcpm.h
+> @@ -98,6 +98,12 @@ enum tcpm_transmit_type {
+>   *		will be turned on. requested_vbus_voltage is set to 0 when vbus
+>   *		is going to disappear knowingly i.e. during PR_SWAP and
+>   *		HARD_RESET etc.
+> + * @is_vbus_vsafe0v:
+> + *		Optional; TCPCI spec based TCPC implementations are expected to
+> + *		detect VSAFE0V voltage level at vbus. When detection of VSAFE0V
+> + *		is supported by TCPC, set this callback for TCPM to query
+> + *		whether vbus is at VSAFE0V when needed.
+> + *		Returns true when vbus is at VSAFE0V, false otherwise.
+>   */
+>  struct tcpc_dev {
+>  	struct fwnode_handle *fwnode;
+> @@ -128,6 +134,7 @@ struct tcpc_dev {
+>  	int (*enable_auto_vbus_discharge)(struct tcpc_dev *dev, bool enable);
+>  	int (*set_auto_vbus_discharge_threshold)(struct tcpc_dev *dev, enum typec_pwr_opmode mode,
+>  						 bool pps_active, u32 requested_vbus_voltage);
+> +	bool (*is_vbus_vsafe0v)(struct tcpc_dev *dev);
+>  };
+>  
+>  struct tcpm_port;
+> -- 
+> 2.29.2.576.ga3fc446d84-goog
+
+-- 
+heikki
