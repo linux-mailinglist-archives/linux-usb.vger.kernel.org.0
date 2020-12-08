@@ -2,148 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B2C2D2074
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 03:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 636C62D215F
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 04:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727678AbgLHCBX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Dec 2020 21:01:23 -0500
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:51429 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725877AbgLHCBX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Dec 2020 21:01:23 -0500
-X-UUID: 8a664c262b164f2bb78d63554f53e19a-20201208
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=AnfMsxCsqIaWPXAofU2Qh3nt/yEpA1Nncyh3grmr2Hs=;
-        b=a2h/GOb3tMmj4tVWWW0Z8TUR3FBZ3HuPCXErjJgQio5LqJUJMEZR1tVd2u1BuMDPlmDLv2O+NDJZ8PcqVt24FAPKEqv1uNg6UFJa56TTUYvo2315Fqbm9h8UgU9F6hHw+HODvloC9Xj/ab+g8IgGqFF1/2dzNy25Nb0tHM+TMbc=;
-X-UUID: 8a664c262b164f2bb78d63554f53e19a-20201208
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1168966895; Tue, 08 Dec 2020 10:00:35 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31DR.mediatek.inc
- (172.27.6.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 8 Dec
- 2020 10:00:23 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 8 Dec 2020 10:00:26 +0800
-Message-ID: <1607392825.23328.5.camel@mhfsdcap03>
-Subject: Re: [PATCH v3 07/11] dt-bindings: phy: convert MIP DSI PHY binding
- to YAML schema
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        "Min Guo" <min.guo@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>
-Date:   Tue, 8 Dec 2020 10:00:25 +0800
-In-Reply-To: <20201207211920.GA841059@robh.at.kernel.org>
-References: <20201118082126.42701-1-chunfeng.yun@mediatek.com>
-         <20201118082126.42701-7-chunfeng.yun@mediatek.com>
-         <20201207211920.GA841059@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726491AbgLHDSA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Dec 2020 22:18:00 -0500
+Received: from mga14.intel.com ([192.55.52.115]:29032 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726026AbgLHDR7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Dec 2020 22:17:59 -0500
+IronPort-SDR: i4S+mrHEnjYlfS+m3rhOXIY6k217VpuDsw0LPKHOhNcZB1WgtshuTCzPaqzSkahofrchlQk9y7
+ i6j2rsHiXPbA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9828"; a="173056603"
+X-IronPort-AV: E=Sophos;i="5.78,401,1599548400"; 
+   d="scan'208";a="173056603"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2020 19:17:18 -0800
+IronPort-SDR: cqCaJLlmbiC5TixUkJ/kwJ2YcbFQik7IZlFpg+Mth8L8n44Wsr9MfKorWQu0E+23f1BfZGe3jP
+ tB0/jtLqBMZg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,401,1599548400"; 
+   d="scan'208";a="318260510"
+Received: from lkp-server01.sh.intel.com (HELO 6c6df46aa5de) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 07 Dec 2020 19:17:17 -0800
+Received: from kbuild by 6c6df46aa5de with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kmTV6-00003w-EU; Tue, 08 Dec 2020 03:17:16 +0000
+Date:   Tue, 08 Dec 2020 11:17:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 08a02f954b0def3ada8ed6d4b2c7bcb67e885e9c
+Message-ID: <5fcef035.M/NJSq02/SqadfJ2%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: BA25879DABC571C822341F4AC2ABA120CA9AACE0D97F7DEA60AC1AC6A1D432792000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gTW9uLCAyMDIwLTEyLTA3IGF0IDE1OjE5IC0wNjAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4g
-T24gV2VkLCBOb3YgMTgsIDIwMjAgYXQgMDQ6MjE6MjJQTSArMDgwMCwgQ2h1bmZlbmcgWXVuIHdy
-b3RlOg0KPiA+IENvbnZlcnQgTUlQSSBEU0kgUEhZIGJpbmRpbmcgdG8gWUFNTCBzY2hlbWEgbWVk
-aWF0ZWssZHNpLXBoeS55YW1sDQo+ID4gDQo+ID4gQ2M6IENodW4tS3VhbmcgSHUgPGNodW5rdWFu
-Zy5odUBrZXJuZWwub3JnPg0KPiA+IFNpZ25lZC1vZmYtYnk6IENodW5mZW5nIFl1biA8Y2h1bmZl
-bmcueXVuQG1lZGlhdGVrLmNvbT4NCj4gPiAtLS0NCj4gPiB2MzogbmV3IHBhdGNoDQo+ID4gLS0t
-DQo+ID4gIC4uLi9kaXNwbGF5L21lZGlhdGVrL21lZGlhdGVrLGRzaS50eHQgICAgICAgICB8IDE4
-ICstLS0NCj4gPiAgLi4uL2JpbmRpbmdzL3BoeS9tZWRpYXRlayxkc2ktcGh5LnlhbWwgICAgICAg
-IHwgODMgKysrKysrKysrKysrKysrKysrKw0KPiA+ICAyIGZpbGVzIGNoYW5nZWQsIDg0IGluc2Vy
-dGlvbnMoKyksIDE3IGRlbGV0aW9ucygtKQ0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1l
-bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3BoeS9tZWRpYXRlayxkc2ktcGh5LnlhbWwNCj4g
-PiANCj4gPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2Rp
-c3BsYXkvbWVkaWF0ZWsvbWVkaWF0ZWssZHNpLnR4dCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJl
-ZS9iaW5kaW5ncy9kaXNwbGF5L21lZGlhdGVrL21lZGlhdGVrLGRzaS50eHQNCj4gPiBpbmRleCBm
-MDZmMjRkNDA1YTUuLjgyMzhhODY2ODZiZSAxMDA2NDQNCj4gPiAtLS0gYS9Eb2N1bWVudGF0aW9u
-L2RldmljZXRyZWUvYmluZGluZ3MvZGlzcGxheS9tZWRpYXRlay9tZWRpYXRlayxkc2kudHh0DQo+
-ID4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2Rpc3BsYXkvbWVkaWF0
-ZWsvbWVkaWF0ZWssZHNpLnR4dA0KPiA+IEBAIC0yMiwyMyArMjIsNyBAQCBSZXF1aXJlZCBwcm9w
-ZXJ0aWVzOg0KPiA+ICBNSVBJIFRYIENvbmZpZ3VyYXRpb24gTW9kdWxlDQo+ID4gID09PT09PT09
-PT09PT09PT09PT09PT09PT09PT0NCj4gPiAgDQo+ID4gLVRoZSBNSVBJIFRYIGNvbmZpZ3VyYXRp
-b24gbW9kdWxlIGNvbnRyb2xzIHRoZSBNSVBJIEQtUEhZLg0KPiA+IC0NCj4gPiAtUmVxdWlyZWQg
-cHJvcGVydGllczoNCj4gPiAtLSBjb21wYXRpYmxlOiAibWVkaWF0ZWssPGNoaXA+LW1pcGktdHgi
-DQo+ID4gLS0gdGhlIHN1cHBvcnRlZCBjaGlwcyBhcmUgbXQyNzAxLCA3NjIzLCBtdDgxNzMgYW5k
-IG10ODE4My4NCj4gPiAtLSByZWc6IFBoeXNpY2FsIGJhc2UgYWRkcmVzcyBhbmQgbGVuZ3RoIG9m
-IHRoZSBjb250cm9sbGVyJ3MgcmVnaXN0ZXJzDQo+ID4gLS0gY2xvY2tzOiBQTEwgcmVmZXJlbmNl
-IGNsb2NrDQo+ID4gLS0gY2xvY2stb3V0cHV0LW5hbWVzOiBuYW1lIG9mIHRoZSBvdXRwdXQgY2xv
-Y2sgbGluZSB0byB0aGUgRFNJIGVuY29kZXINCj4gPiAtLSAjY2xvY2stY2VsbHM6IG11c3QgYmUg
-PDA+Ow0KPiA+IC0tICNwaHktY2VsbHM6IG11c3QgYmUgPDA+Lg0KPiA+IC0NCj4gPiAtT3B0aW9u
-YWwgcHJvcGVydGllczoNCj4gPiAtLSBkcml2ZS1zdHJlbmd0aC1taWNyb2FtcDogYWRqdXN0IGRy
-aXZpbmcgY3VycmVudCwgc2hvdWxkIGJlIDMwMDAgfiA2MDAwLiBBbmQNCj4gPiAtCQkJCQkJICAg
-dGhlIHN0ZXAgaXMgMjAwLg0KPiA+IC0tIG52bWVtLWNlbGxzOiBBIHBoYW5kbGUgdG8gdGhlIGNh
-bGlicmF0aW9uIGRhdGEgcHJvdmlkZWQgYnkgYSBudm1lbSBkZXZpY2UuIElmDQo+ID4gLSAgICAg
-ICAgICAgICAgIHVuc3BlY2lmaWVkIGRlZmF1bHQgdmFsdWVzIHNoYWxsIGJlIHVzZWQuDQo+ID4g
-LS0gbnZtZW0tY2VsbC1uYW1lczogU2hvdWxkIGJlICJjYWxpYnJhdGlvbi1kYXRhIg0KPiA+ICtT
-ZWUgcGh5L21lZGlhdGVrLGRzaS1waHkueWFtbA0KPiA+ICANCj4gPiAgRXhhbXBsZToNCj4gPiAg
-DQo+ID4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9waHkv
-bWVkaWF0ZWssZHNpLXBoeS55YW1sIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
-L3BoeS9tZWRpYXRlayxkc2ktcGh5LnlhbWwNCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiA+
-IGluZGV4IDAwMDAwMDAwMDAwMC4uODdmOGRmMjUxYWIwDQo+ID4gLS0tIC9kZXYvbnVsbA0KPiA+
-ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9waHkvbWVkaWF0ZWssZHNp
-LXBoeS55YW1sDQo+ID4gQEAgLTAsMCArMSw4MyBAQA0KPiA+ICsjIFNQRFgtTGljZW5zZS1JZGVu
-dGlmaWVyOiAoR1BMLTIuMC1vbmx5IE9SIEJTRC0yLUNsYXVzZSkNCj4gPiArIyBDb3B5cmlnaHQg
-KGMpIDIwMjAgTWVkaWFUZWsNCj4gPiArJVlBTUwgMS4yDQo+ID4gKy0tLQ0KPiA+ICskaWQ6IGh0
-dHA6Ly9kZXZpY2V0cmVlLm9yZy9zY2hlbWFzL3BoeS9tZWRpYXRlayxkc2ktcGh5LnlhbWwjDQo+
-ID4gKyRzY2hlbWE6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9tZXRhLXNjaGVtYXMvY29yZS55YW1s
-Iw0KPiA+ICsNCj4gPiArdGl0bGU6IE1lZGlhVGVrIE1JUEkgRGlzcGxheSBTZXJpYWwgSW50ZXJm
-YWNlIChEU0kpIFBIWSBiaW5kaW5nDQo+ID4gKw0KPiA+ICttYWludGFpbmVyczoNCj4gPiArICAt
-IENodW4tS3VhbmcgSHUgPGNodW5rdWFuZy5odUBrZXJuZWwub3JnPg0KPiA+ICsgIC0gQ2h1bmZl
-bmcgWXVuIDxjaHVuZmVuZy55dW5AbWVkaWF0ZWsuY29tPg0KPiA+ICsNCj4gPiArZGVzY3JpcHRp
-b246IFRoZSBNSVBJIERTSSBQSFkgc3VwcG9ydHMgdXAgdG8gNC1sYW5lIG91dHB1dC4NCj4gPiAr
-DQo+ID4gK3Byb3BlcnRpZXM6DQo+ID4gKyAgJG5vZGVuYW1lOg0KPiA+ICsgICAgcGF0dGVybjog
-Il5kc2ktcGh5QFswLTlhLWZdKyQiDQo+ID4gKw0KPiA+ICsgIGNvbXBhdGlibGU6DQo+ID4gKyAg
-ICBlbnVtOg0KPiA+ICsgICAgICAtIG1lZGlhdGVrLG10MjcwMS1taXBpLXR4DQo+ID4gKyAgICAg
-IC0gbWVkaWF0ZWssbXQ3NjIzLW1pcGktdHgNCj4gPiArICAgICAgLSBtZWRpYXRlayxtdDgxNzMt
-bWlwaS10eA0KPiA+ICsNCj4gPiArICByZWc6DQo+ID4gKyAgICBtYXhJdGVtczogMQ0KPiA+ICsN
-Cj4gPiArICBjbG9ja3M6DQo+ID4gKyAgICBpdGVtczoNCj4gPiArICAgICAgLSBkZXNjcmlwdGlv
-bjogUExMIHJlZmVyZW5jZSBjbG9jaw0KPiA+ICsNCj4gPiArICBjbG9jay1vdXRwdXQtbmFtZXM6
-DQo+ID4gKyAgICBtYXhJdGVtczogMQ0KPiA+ICsNCj4gPiArICAiI3BoeS1jZWxscyI6DQo+ID4g
-KyAgICBjb25zdDogMA0KPiA+ICsNCj4gPiArICAiI2Nsb2NrLWNlbGxzIjoNCj4gPiArICAgIGNv
-bnN0OiAwDQo+ID4gKw0KPiA+ICsgIG52bWVtLWNlbGxzOg0KPiA+ICsgICAgbWF4SXRlbXM6IDEN
-Cj4gPiArICAgIGRlc2NyaXB0aW9uOiBBIHBoYW5kbGUgdG8gdGhlIGNhbGlicmF0aW9uIGRhdGEg
-cHJvdmlkZWQgYnkgYSBudm1lbSBkZXZpY2UsDQo+ID4gKyAgICAgIGlmIHVuc3BlY2lmaWVkLCBk
-ZWZhdWx0IHZhbHVlcyBzaGFsbCBiZSB1c2VkLg0KPiA+ICsNCj4gPiArICBudm1lbS1jZWxsLW5h
-bWVzOg0KPiA+ICsgICAgaXRlbXM6DQo+ID4gKyAgICAgIC0gY29uc3Q6IGNhbGlicmF0aW9uLWRh
-dGENCj4gPiArDQo+ID4gKyAgZHJpdmUtc3RyZW5ndGgtbWljcm9hbXA6DQo+ID4gKyAgICBkZXNj
-cmlwdGlvbjogYWRqdXN0IGRyaXZpbmcgY3VycmVudCwgdGhlIHN0ZXAgaXMgMjAwLg0KPiANCj4g
-bXVsdGlwbGVPZjogMjAwDQpHb3QgaXQuDQo+IA0KPiA+ICsgICAgJHJlZjogL3NjaGVtYXMvdHlw
-ZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDMyDQo+IA0KPiBDYW4gZHJvcC4gU3RhbmRhcmQgdW5p
-dCBzdWZmaXhlcyBoYXZlIGEgdHlwZSBhbHJlYWR5Lg0KT2ssIHRoYW5rcyBhIGxvdA0KDQo+IA0K
-PiA+ICsgICAgbWluaW11bTogMjAwMA0KPiA+ICsgICAgbWF4aW11bTogNjAwMA0KPiA+ICsgICAg
-ZGVmYXVsdDogNDYwMA0KPiA+ICsNCj4gPiArcmVxdWlyZWQ6DQo+ID4gKyAgLSBjb21wYXRpYmxl
-DQo+ID4gKyAgLSByZWcNCj4gPiArICAtIGNsb2Nrcw0KPiA+ICsgIC0gY2xvY2stb3V0cHV0LW5h
-bWVzDQo+ID4gKyAgLSAiI3BoeS1jZWxscyINCj4gPiArICAtICIjY2xvY2stY2VsbHMiDQo+ID4g
-Kw0KPiA+ICthZGRpdGlvbmFsUHJvcGVydGllczogZmFsc2UNCj4gPiArDQo+ID4gK2V4YW1wbGVz
-Og0KPiA+ICsgIC0gfA0KPiA+ICsgICAgI2luY2x1ZGUgPGR0LWJpbmRpbmdzL2Nsb2NrL210ODE3
-My1jbGsuaD4NCj4gPiArICAgIGRzaS1waHlAMTAyMTUwMDAgew0KPiA+ICsgICAgICAgIGNvbXBh
-dGlibGUgPSAibWVkaWF0ZWssbXQ4MTczLW1pcGktdHgiOw0KPiA+ICsgICAgICAgIHJlZyA9IDww
-eDEwMjE1MDAwIDB4MTAwMD47DQo+ID4gKyAgICAgICAgY2xvY2tzID0gPCZjbGsyNm0+Ow0KPiA+
-ICsgICAgICAgIGNsb2NrLW91dHB1dC1uYW1lcyA9ICJtaXBpX3R4MF9wbGwiOw0KPiA+ICsgICAg
-ICAgIGRyaXZlLXN0cmVuZ3RoLW1pY3JvYW1wID0gPDQwMDA+Ow0KPiA+ICsgICAgICAgIG52bWVt
-LWNlbGxzPSA8Jm1pcGlfdHhfY2FsaWJyYXRpb24+Ow0KPiA+ICsgICAgICAgIG52bWVtLWNlbGwt
-bmFtZXMgPSAiY2FsaWJyYXRpb24tZGF0YSI7DQo+ID4gKyAgICAgICAgI2Nsb2NrLWNlbGxzID0g
-PDA+Ow0KPiA+ICsgICAgICAgICNwaHktY2VsbHMgPSA8MD47DQo+ID4gKyAgICB9Ow0KPiA+ICsN
-Cj4gPiArLi4uDQo+ID4gLS0gDQo+ID4gMi4xOC4wDQo+ID4gDQoNCg==
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: 08a02f954b0def3ada8ed6d4b2c7bcb67e885e9c  USB: add RESET_RESUME quirk for Snapscan 1212
 
+i386-tinyconfig vmlinux size:
+
++-------+------------------------------+-------------------------------------------+
+| DELTA |            SYMBOL            |                  COMMIT                   |
++-------+------------------------------+-------------------------------------------+
+| +1820 | TOTAL                        | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
+|  +105 | TOTAL                        | 93837812a5dc Merge 5.10-rc7 into usb-next |
+| +1751 | TEXT                         | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
+|  +104 | TEXT                         | 93837812a5dc Merge 5.10-rc7 into usb-next |
+|   +68 | BSS                          | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
+|  +774 | seq_read_iter()              | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
+|  +255 | __add_to_page_cache_locked() | 93837812a5dc Merge 5.10-rc7 into usb-next |
+|  +250 | __invalidate_mapping_pages() | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
+|  +225 | intel_pmu_drain_pebs_icl()   | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
+|  +224 | intel_pmu_drain_pebs_nhm()   | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
+|  +201 | intel_pmu_drain_pebs_core()  | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
+|  +117 | init.text                    | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
+|  +103 | collect_syscall()            | 93837812a5dc Merge 5.10-rc7 into usb-next |
+|   +68 | dummy_iregs                  | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
+|   +66 | perf_event_aux_event()       | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
+|   +66 | perf_log_throttle()          | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
+|   -69 | __sb_start_write()           | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
+|   -78 | __ptrace_may_access()        | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
+|  -250 | __invalidate_mapping_pages() | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
+|  -255 | __add_to_page_cache_locked() | 93837812a5dc Merge 5.10-rc7 into usb-next |
+|  -356 | __intel_pmu_pebs_event()     | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
+|  -470 | seq_read()                   | 3650b228f83a..08a02f954b0d (ALL COMMITS)  |
++-------+------------------------------+-------------------------------------------+
+
+elapsed time: 724m
+
+configs tested: 121
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allmodconfig
+arm                              allyesconfig
+powerpc                      walnut_defconfig
+arm                         palmz72_defconfig
+arm                          simpad_defconfig
+m68k                             alldefconfig
+m68k                       m5249evb_defconfig
+sh                             shx3_defconfig
+powerpc                     tqm8560_defconfig
+mips                        bcm63xx_defconfig
+arc                          axs103_defconfig
+mips                malta_qemu_32r6_defconfig
+powerpc                      arches_defconfig
+um                             i386_defconfig
+arm                   milbeaut_m10v_defconfig
+m68k                       bvme6000_defconfig
+nios2                               defconfig
+nds32                               defconfig
+powerpc                     tqm8555_defconfig
+powerpc                  mpc885_ads_defconfig
+mips                           ip28_defconfig
+powerpc                     pq2fads_defconfig
+powerpc                 mpc832x_rdb_defconfig
+c6x                         dsk6455_defconfig
+m68k                        m5272c3_defconfig
+arm                     eseries_pxa_defconfig
+arm                          pcm027_defconfig
+powerpc                      makalu_defconfig
+sh                          rsk7201_defconfig
+arm                  colibri_pxa300_defconfig
+powerpc                     powernv_defconfig
+m68k                        mvme16x_defconfig
+arm                           tegra_defconfig
+powerpc                     tqm8540_defconfig
+sh                                  defconfig
+powerpc                      pasemi_defconfig
+arc                         haps_hs_defconfig
+arm                        multi_v5_defconfig
+mips                           ci20_defconfig
+arm                       omap2plus_defconfig
+arm                         lpc18xx_defconfig
+sh                          sdk7780_defconfig
+m68k                       m5275evb_defconfig
+mips                         tb0287_defconfig
+arm                           omap1_defconfig
+um                            kunit_defconfig
+h8300                       h8s-sim_defconfig
+mips                      bmips_stb_defconfig
+powerpc                        icon_defconfig
+mips                   sb1250_swarm_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a005-20201207
+i386                 randconfig-a004-20201207
+i386                 randconfig-a001-20201207
+i386                 randconfig-a002-20201207
+i386                 randconfig-a006-20201207
+i386                 randconfig-a003-20201207
+x86_64               randconfig-a016-20201207
+x86_64               randconfig-a012-20201207
+x86_64               randconfig-a014-20201207
+x86_64               randconfig-a013-20201207
+x86_64               randconfig-a015-20201207
+x86_64               randconfig-a011-20201207
+i386                 randconfig-a014-20201207
+i386                 randconfig-a013-20201207
+i386                 randconfig-a011-20201207
+i386                 randconfig-a015-20201207
+i386                 randconfig-a012-20201207
+i386                 randconfig-a016-20201207
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a004-20201207
+x86_64               randconfig-a006-20201207
+x86_64               randconfig-a002-20201207
+x86_64               randconfig-a001-20201207
+x86_64               randconfig-a005-20201207
+x86_64               randconfig-a003-20201207
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
