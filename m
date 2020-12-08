@@ -2,63 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1BD2D2F6B
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 17:26:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A52D62D2FA9
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 17:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729948AbgLHQYo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 11:24:44 -0500
-Received: from mail-il1-f199.google.com ([209.85.166.199]:41944 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726703AbgLHQYn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 11:24:43 -0500
-Received: by mail-il1-f199.google.com with SMTP id f19so16323050ilk.8
-        for <linux-usb@vger.kernel.org>; Tue, 08 Dec 2020 08:24:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=HSyExJl7cd4xIkyp8toEOPl4ozCtm+NQv2BdcFpoEZc=;
-        b=HOUFuToEEzDgJK+SYv0P3b62tvyLLn8x3EnW1FYKY3y8RjOcJNWc5yJx0Xvwcb5ff8
-         AWLh9W3K1aAtU9jglOTUZtLQFN11lc4dANc86WCSXSOMFfDV9UIF5JHNQIJJcoFaHAr5
-         CtQMGVBjiRAdS9nQSbd0OeYXhyLMWClw0wE6ylyD8FpasE28xD512KVesfG5aN/bBUqS
-         /C1EmHpW1pjI/KUVVh6UfhFYgoG05RGNdGoUBdJmsLtyYdl+peMzSJHFhUcL7+HkLfSE
-         avkZX6NJ6Ffk8EyHzC6Viskz3H700cHmx3KZS7u8lfNbaHdVYSjQXAfvlLUaIaRVbXYE
-         qnvQ==
-X-Gm-Message-State: AOAM533qdp9JIQ/Kqu9M0b76TuWxKja2/i5ARilXmzdtoS/tAH9ReyOG
-        kuQnKKmRqkZcT6tG7eN/000LM5NYaOoqNVn6QXi1wWVyHx5D
-X-Google-Smtp-Source: ABdhPJxHYoyiUqUwwYS9+jZI0SJfT9+SzZyPXCYnkfWgYNGZwBVj7ggFtyKt4Au1zc2qCeZTaib8l2L8pQvOMKodUzTGs2Vl/kQM
+        id S1730514AbgLHQ2E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Dec 2020 11:28:04 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:46925 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1730183AbgLHQ2D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 11:28:03 -0500
+Received: (qmail 1301225 invoked by uid 1000); 8 Dec 2020 11:27:22 -0500
+Date:   Tue, 8 Dec 2020 11:27:22 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "David C. Partridge" <david.partridge@perdrix.co.uk>
+Cc:     'Oliver Neukum' <oneukum@suse.com>, linux-usb@vger.kernel.org
+Subject: Re: Issues with LaCie USB3 drive and UAS
+Message-ID: <20201208162722.GC1298255@rowland.harvard.edu>
+References: <d478123862a7e94898aaa771c21cc8cb0a3819fc.camel@suse.com>
+ <008101d6c3d7$2427ee70$6c77cb50$@perdrix.co.uk>
+ <11ea70180f52b4965a451b3970891e0f547c777b.camel@suse.com>
+ <000001d6c89c$086812e0$193838a0$@perdrix.co.uk>
+ <000301d6c919$af7a94e0$0e6fbea0$@perdrix.co.uk>
+ <918e298941f820a7cc3310c95dc211cca7596dba.camel@suse.com>
+ <000e01d6c980$d9a75f70$8cf61e50$@perdrix.co.uk>
+ <005601d6cc87$2fa608f0$8ef21ad0$@perdrix.co.uk>
+ <36ac7a79c4b24f9f68b3543d18a51ec9af0a4933.camel@suse.com>
+ <000701d6cd7c$236ec8b0$6a4c5a10$@perdrix.co.uk>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2b01:: with SMTP id p1mr17378546iov.156.1607444642985;
- Tue, 08 Dec 2020 08:24:02 -0800 (PST)
-Date:   Tue, 08 Dec 2020 08:24:02 -0800
-In-Reply-To: <20201208160703.GB1298255@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f0fb0d05b5f65e64@google.com>
-Subject: Re: general protection fault in tower_disconnect
-From:   syzbot <syzbot+9be25235b7a69b24d117@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        legousb-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, starblue@users.sourceforge.net,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000701d6cd7c$236ec8b0$6a4c5a10$@perdrix.co.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Tue, Dec 08, 2020 at 04:06:49PM -0000, David C. Partridge wrote:
+> >> 2-1: USB disconnect, device number 2
+> 
+> >Again, did you plug the cable or did the device spontaneously disconnect?
+> 
+> That was a spontaneous disconnect.
+> 
+> > In this case, could you retry with
+> > usb-storage quirks=059f:105f:kf
+> 
+> Sure! The results are in general a lot more promising (apart from the first line) - plus I was able to read/write files without problems:
+> 
+> Dec 08 15:47:48 charon kernel: usb usb2-port6: config error
+> Dec 08 15:47:49 charon kernel: usb 1-6: new high-speed USB device number 4 using xhci_hcd
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+This is puzzling.  The device connected at SuperSpeed in the previous 
+tests.  Clearly this is related to the warning in the preceding line 
+(the port failed to configure its link partner).
 
-Reported-and-tested-by: syzbot+9be25235b7a69b24d117@syzkaller.appspotmail.com
+What could have happened?  A problem in the cable?
 
-Tested on:
+The usb-storage quirk setting would not have affected this.
 
-commit:         08a02f95 USB: add RESET_RESUME quirk for Snapscan 1212
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d24ee9ecd7ce968e
-dashboard link: https://syzkaller.appspot.com/bug?extid=9be25235b7a69b24d117
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1406a80f500000
-
-Note: testing is done by a robot and is best-effort only.
+Alan Stern
