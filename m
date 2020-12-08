@@ -2,424 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C4F2D2EC3
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 16:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2812D2F08
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 17:06:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730132AbgLHPy5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 10:54:57 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:54616 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729846AbgLHPy5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 10:54:57 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2320BDD;
-        Tue,  8 Dec 2020 16:54:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1607442854;
-        bh=2wSB8O5zUgCIQWkapYaxFspc1mBFwMYFfabVRDPm1t0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WfKn4IZeFo1Y/MHn2sLSge6lxkPK86xhuM1Q+Cdv7q6vuRom5xv7BapdOdF6BIjP4
-         NGZim3dov53o8MOvg6Z4no3/XlygBCr5P/P0FWjN6Sylg5GYZAP+v1CUpJvaKVc0Ct
-         z5Jmmy2sEhmIvsfdWWvzTdx6JcpqZ82c2lbltZ2U=
-Date:   Tue, 8 Dec 2020 17:54:11 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     linux-kernel@vger.kernel.org, balbi@kernel.org, leoyang.li@nxp.com,
-        linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] drivers: usb: gadget: prefer pr_*() functions over raw
- printk()
-Message-ID: <X8+howyVRiTR9gv/@pendragon.ideasonboard.com>
-References: <20201208144403.22097-1-info@metux.net>
+        id S1730332AbgLHQFH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Dec 2020 11:05:07 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:44535 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1730068AbgLHQFH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 11:05:07 -0500
+Received: (qmail 1300062 invoked by uid 1000); 8 Dec 2020 11:04:25 -0500
+Date:   Tue, 8 Dec 2020 11:04:25 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+9be25235b7a69b24d117@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        legousb-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, starblue@users.sourceforge.net,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: general protection fault in tower_disconnect
+Message-ID: <20201208160425.GA1298255@rowland.harvard.edu>
+References: <0000000000008c4f0f05b5f29682@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201208144403.22097-1-info@metux.net>
+In-Reply-To: <0000000000008c4f0f05b5f29682@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Enrico,
-
-Thank you for the patch.
-
-On Tue, Dec 08, 2020 at 03:44:03PM +0100, Enrico Weigelt, metux IT consult wrote:
-> Reduce a bit logging boilerplate by using the preferred pr_*()
-> macros instead of raw printk().
+On Tue, Dec 08, 2020 at 03:53:16AM -0800, syzbot wrote:
+> Hello,
 > 
-> Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
-> ---
->  drivers/usb/gadget/function/uvc.h       |  2 +-
->  drivers/usb/gadget/udc/atmel_usba_udc.c |  2 +-
->  drivers/usb/gadget/udc/fsl_udc_core.c   |  4 +--
->  drivers/usb/gadget/udc/fsl_usb2_udc.h   |  4 +--
->  drivers/usb/gadget/udc/fusb300_udc.c    | 64 ++++++++++++++++-----------------
->  drivers/usb/gadget/udc/goku_udc.c       |  2 +-
->  drivers/usb/gadget/udc/r8a66597-udc.h   |  2 +-
->  7 files changed, 40 insertions(+), 40 deletions(-)
+> syzbot found the following issue on:
 > 
-> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-> index 23ee25383c1f..d546eb7c348c 100644
-> --- a/drivers/usb/gadget/function/uvc.h
-> +++ b/drivers/usb/gadget/function/uvc.h
-> @@ -49,7 +49,7 @@ extern unsigned int uvc_gadget_trace_param;
->  #define uvc_trace(flag, msg...) \
->  	do { \
->  		if (uvc_gadget_trace_param & flag) \
-> -			printk(KERN_DEBUG "uvcvideo: " msg); \
-> +			pr_debug("uvcvideo: " msg); \
->  	} while (0)
->  
->  #define uvcg_dbg(f, fmt, args...) \
-> diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.c b/drivers/usb/gadget/udc/atmel_usba_udc.c
-> index 2b893bceea45..4834fafb3f70 100644
-> --- a/drivers/usb/gadget/udc/atmel_usba_udc.c
-> +++ b/drivers/usb/gadget/udc/atmel_usba_udc.c
-> @@ -1573,7 +1573,7 @@ static void usba_control_irq(struct usba_udc *udc, struct usba_ep *ep)
->  		 * generate or receive a reply right away. */
->  		usba_ep_writel(ep, CLR_STA, USBA_RX_SETUP);
->  
-> -		/* printk(KERN_DEBUG "setup: %d: %02x.%02x\n",
-> +		/* pr_debug("setup: %d: %02x.%02x\n",
->  			ep->state, crq.crq.bRequestType,
->  			crq.crq.bRequest); */
+> HEAD commit:    08a02f95 USB: add RESET_RESUME quirk for Snapscan 1212
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1435927b500000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=d24ee9ecd7ce968e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9be25235b7a69b24d117
+> compiler:       gcc (GCC) 10.1.0-syz 20200507
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15145f07500000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16b99413500000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+9be25235b7a69b24d117@syzkaller.appspotmail.com
+> 
+> usb 1-1: USB disconnect, device number 2
+> general protection fault, probably for non-canonical address 0xdffffc0000000013: 0000 [#1] SMP KASAN
+> KASAN: null-ptr-deref in range [0x0000000000000098-0x000000000000009f]
+> CPU: 0 PID: 7 Comm: kworker/0:1 Not tainted 5.10.0-rc7-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Workqueue: usb_hub_wq hub_event
+> RIP: 0010:tower_disconnect+0x53/0x360 drivers/usb/misc/legousbtower.c:848
+> Code: 03 80 3c 02 00 0f 85 15 03 00 00 48 8b ab a8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bd 98 00 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 06 0f 8e 7b 02 00 00 48 c7 c6 40 07 bb 87 48
+> RSP: 0018:ffffc9000007f7c0 EFLAGS: 00010202
+> RAX: dffffc0000000000 RBX: ffff888117ec0000 RCX: ffffffff8381f807
+> RDX: 0000000000000013 RSI: ffffffff83bab792 RDI: 0000000000000098
+> RBP: 0000000000000000 R08: 0000000000000001 R09: ffffffff898cc4ef
+> R10: 0000000000000002 R11: 0000000000000000 R12: ffff888117ec0090
+> R13: ffff888117ec0078 R14: ffff888117ec0030 R15: ffff888117ec0098
+> FS:  0000000000000000(0000) GS:ffff8881f6a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f557af47550 CR3: 00000001090f3000 CR4: 00000000001506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:458
+>  __device_release_driver+0x3bd/0x6f0 drivers/base/dd.c:1154
+>  device_release_driver_internal drivers/base/dd.c:1185 [inline]
+>  device_release_driver+0x26/0x40 drivers/base/dd.c:1208
+>  bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+>  device_del+0x502/0xec0 drivers/base/core.c:3115
+>  usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1413
+>  usb_disconnect.cold+0x27d/0x780 drivers/usb/core/hub.c:2218
+>  hub_port_connect drivers/usb/core/hub.c:5074 [inline]
+>  hub_port_connect_change drivers/usb/core/hub.c:5363 [inline]
+>  port_event drivers/usb/core/hub.c:5509 [inline]
+>  hub_event+0x1c8a/0x42d0 drivers/usb/core/hub.c:5591
+>  process_one_work+0x933/0x1520 kernel/workqueue.c:2272
+>  worker_thread+0x64c/0x1120 kernel/workqueue.c:2418
+>  kthread+0x38c/0x460 kernel/kthread.c:292
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+> Modules linked in:
+> ---[ end trace 5aeb1d199be5d5f2 ]---
+> RIP: 0010:tower_disconnect+0x53/0x360 drivers/usb/misc/legousbtower.c:848
+> Code: 03 80 3c 02 00 0f 85 15 03 00 00 48 8b ab a8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bd 98 00 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 06 0f 8e 7b 02 00 00 48 c7 c6 40 07 bb 87 48
+> RSP: 0018:ffffc9000007f7c0 EFLAGS: 00010202
+> RAX: dffffc0000000000 RBX: ffff888117ec0000 RCX: ffffffff8381f807
+> RDX: 0000000000000013 RSI: ffffffff83bab792 RDI: 0000000000000098
+> RBP: 0000000000000000 R08: 0000000000000001 R09: ffffffff898cc4ef
+> R10: 0000000000000002 R11: 0000000000000000 R12: ffff888117ec0090
+> R13: ffff888117ec0078 R14: ffff888117ec0030 R15: ffff888117ec0098
+> FS:  0000000000000000(0000) GS:ffff8881f6a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f557af47550 CR3: 00000001090f3000 CR4: 00000000001506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-I wonder if this shouldn't be dropped instead, commented-out code isn't
-very useful.
+This is a simple thinko.
 
->  
-> diff --git a/drivers/usb/gadget/udc/fsl_udc_core.c b/drivers/usb/gadget/udc/fsl_udc_core.c
-> index ad6ff9c4188e..cab4def04f9f 100644
-> --- a/drivers/usb/gadget/udc/fsl_udc_core.c
-> +++ b/drivers/usb/gadget/udc/fsl_udc_core.c
-> @@ -1474,7 +1474,7 @@ __acquires(udc->lock)
->  			mdelay(10);
->  			tmp = fsl_readl(&dr_regs->portsc1) | (ptc << 16);
->  			fsl_writel(tmp, &dr_regs->portsc1);
-> -			printk(KERN_INFO "udc: switch to test mode %d.\n", ptc);
-> +			pr_info("udc: switch to test mode %d.\n", ptc);
->  		}
->  
->  		return;
-> @@ -1952,7 +1952,7 @@ static int fsl_udc_start(struct usb_gadget *g,
->  	if (!IS_ERR_OR_NULL(udc_controller->transceiver)) {
->  		/* Suspend the controller until OTG enable it */
->  		udc_controller->stopped = 1;
-> -		printk(KERN_INFO "Suspend udc for OTG auto detect\n");
-> +		pr_info("Suspend udc for OTG auto detect\n");
->  
->  		/* connect to bus through transceiver */
->  		if (!IS_ERR_OR_NULL(udc_controller->transceiver)) {
-> diff --git a/drivers/usb/gadget/udc/fsl_usb2_udc.h b/drivers/usb/gadget/udc/fsl_usb2_udc.h
-> index 4ba651ae9048..b180bf14dd0c 100644
-> --- a/drivers/usb/gadget/udc/fsl_usb2_udc.h
-> +++ b/drivers/usb/gadget/udc/fsl_usb2_udc.h
-> @@ -509,7 +509,7 @@ struct fsl_udc {
->  /*-------------------------------------------------------------------------*/
->  
->  #ifdef DEBUG
-> -#define DBG(fmt, args...) 	printk(KERN_DEBUG "[%s]  " fmt "\n", \
-> +#define DBG(fmt, args...) 	pr_debug("[%s]  " fmt "\n", \
->  				__func__, ## args)
->  #else
->  #define DBG(fmt, args...)	do{}while(0)
-> @@ -535,7 +535,7 @@ static void dump_msg(const char *label, const u8 * buf, unsigned int length)
->  			p += 3;
->  		}
->  		*p = 0;
-> -		printk(KERN_DEBUG "%6x: %s\n", start, line);
-> +		pr_debug("%6x: %s\n", start, line);
->  		buf += num;
->  		start += num;
->  		length -= num;
-> diff --git a/drivers/usb/gadget/udc/fusb300_udc.c b/drivers/usb/gadget/udc/fusb300_udc.c
-> index 9af8b415f303..c4e7e4b8e46f 100644
-> --- a/drivers/usb/gadget/udc/fusb300_udc.c
-> +++ b/drivers/usb/gadget/udc/fusb300_udc.c
-> @@ -352,24 +352,24 @@ static void fusb300_wrcxf(struct fusb300_ep *ep,
->  		for (i = length >> 2; i > 0; i--) {
->  			data = *tmp | *(tmp + 1) << 8 | *(tmp + 2) << 16 |
->  				*(tmp + 3) << 24;
-> -			printk(KERN_DEBUG "    0x%x\n", data);
-> +			pr_debug("    0x%x\n", data);
->  			iowrite32(data, fusb300->reg + FUSB300_OFFSET_CXPORT);
->  			tmp = tmp + 4;
->  		}
->  		switch (length % 4) {
->  		case 1:
->  			data = *tmp;
-> -			printk(KERN_DEBUG "    0x%x\n", data);
-> +			pr_debug("    0x%x\n", data);
->  			iowrite32(data, fusb300->reg + FUSB300_OFFSET_CXPORT);
->  			break;
->  		case 2:
->  			data = *tmp | *(tmp + 1) << 8;
-> -			printk(KERN_DEBUG "    0x%x\n", data);
-> +			pr_debug("    0x%x\n", data);
->  			iowrite32(data, fusb300->reg + FUSB300_OFFSET_CXPORT);
->  			break;
->  		case 3:
->  			data = *tmp | *(tmp + 1) << 8 | *(tmp + 2) << 16;
-> -			printk(KERN_DEBUG "    0x%x\n", data);
-> +			pr_debug("    0x%x\n", data);
->  			iowrite32(data, fusb300->reg + FUSB300_OFFSET_CXPORT);
->  			break;
->  		default:
-> @@ -390,7 +390,7 @@ static void fusb300_clear_epnstall(struct fusb300 *fusb300, u8 ep)
->  	u32 reg = ioread32(fusb300->reg + FUSB300_OFFSET_EPSET0(ep));
->  
->  	if (reg & FUSB300_EPSET0_STL) {
-> -		printk(KERN_DEBUG "EP%d stall... Clear!!\n", ep);
-> +		pr_debug("EP%d stall... Clear!!\n", ep);
->  		reg |= FUSB300_EPSET0_STL_CLR;
->  		iowrite32(reg, fusb300->reg + FUSB300_OFFSET_EPSET0(ep));
->  	}
-> @@ -402,7 +402,7 @@ static void ep0_queue(struct fusb300_ep *ep, struct fusb300_request *req)
->  		if (req->req.length) {
->  			fusb300_wrcxf(ep, req);
->  		} else
-> -			printk(KERN_DEBUG "%s : req->req.length = 0x%x\n",
-> +			pr_debug("%s : req->req.length = 0x%x\n",
->  				__func__, req->req.length);
->  		if ((req->req.length == req->req.actual) ||
->  		    (req->req.actual < ep->ep.maxpacket))
-> @@ -565,7 +565,7 @@ static void fusb300_rdcxf(struct fusb300 *fusb300,
->  
->  	for (i = (length >> 2); i > 0; i--) {
->  		data = ioread32(fusb300->reg + FUSB300_OFFSET_CXPORT);
-> -		printk(KERN_DEBUG "    0x%x\n", data);
-> +		pr_debug("    0x%x\n", data);
->  		*tmp = data & 0xFF;
->  		*(tmp + 1) = (data >> 8) & 0xFF;
->  		*(tmp + 2) = (data >> 16) & 0xFF;
-> @@ -576,18 +576,18 @@ static void fusb300_rdcxf(struct fusb300 *fusb300,
->  	switch (length % 4) {
->  	case 1:
->  		data = ioread32(fusb300->reg + FUSB300_OFFSET_CXPORT);
-> -		printk(KERN_DEBUG "    0x%x\n", data);
-> +		pr_debug("    0x%x\n", data);
->  		*tmp = data & 0xFF;
->  		break;
->  	case 2:
->  		data = ioread32(fusb300->reg + FUSB300_OFFSET_CXPORT);
-> -		printk(KERN_DEBUG "    0x%x\n", data);
-> +		pr_debug("    0x%x\n", data);
->  		*tmp = data & 0xFF;
->  		*(tmp + 1) = (data >> 8) & 0xFF;
->  		break;
->  	case 3:
->  		data = ioread32(fusb300->reg + FUSB300_OFFSET_CXPORT);
-> -		printk(KERN_DEBUG "    0x%x\n", data);
-> +		pr_debug("    0x%x\n", data);
->  		*tmp = data & 0xFF;
->  		*(tmp + 1) = (data >> 8) & 0xFF;
->  		*(tmp + 2) = (data >> 16) & 0xFF;
-> @@ -610,7 +610,7 @@ static void fusb300_rdfifo(struct fusb300_ep *ep,
->  	req->req.actual += length;
->  
->  	if (req->req.actual > req->req.length)
-> -		printk(KERN_DEBUG "req->req.actual > req->req.length\n");
-> +		pr_debug("req->req.actual > req->req.length\n");
->  
->  	for (i = (length >> 2); i > 0; i--) {
->  		data = ioread32(fusb300->reg +
-> @@ -649,7 +649,7 @@ static void fusb300_rdfifo(struct fusb300_ep *ep,
->  		reg = ioread32(fusb300->reg + FUSB300_OFFSET_IGR1);
->  		reg &= FUSB300_IGR1_SYNF0_EMPTY_INT;
->  		if (i)
-> -			printk(KERN_INFO "sync fifo is not empty!\n");
-> +			pr_info("sync fifo is not empty!\n");
->  		i++;
->  	} while (!reg);
->  }
-> @@ -677,7 +677,7 @@ static u8 fusb300_get_cxstall(struct fusb300 *fusb300)
->  static void request_error(struct fusb300 *fusb300)
->  {
->  	fusb300_set_cxstall(fusb300);
-> -	printk(KERN_DEBUG "request error!!\n");
-> +	pr_debug("request error!!\n");
->  }
->  
->  static void get_status(struct fusb300 *fusb300, struct usb_ctrlrequest *ctrl)
-> @@ -999,7 +999,7 @@ static void check_device_mode(struct fusb300 *fusb300)
->  		fusb300->gadget.speed = USB_SPEED_UNKNOWN;
->  		break;
->  	}
-> -	printk(KERN_INFO "dev_mode = %d\n", (reg & FUSB300_GCR_DEVEN_MSK));
-> +	pr_info("dev_mode = %d\n", (reg & FUSB300_GCR_DEVEN_MSK));
->  }
->  
->  
-> @@ -1076,14 +1076,14 @@ static irqreturn_t fusb300_irq(int irq, void *_fusb300)
->  	if (int_grp1 & FUSB300_IGR1_WARM_RST_INT) {
->  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
->  				  FUSB300_IGR1_WARM_RST_INT);
-> -		printk(KERN_INFO"fusb300_warmreset\n");
-> +		pr_info("fusb300_warmreset\n");
->  		fusb300_reset();
->  	}
->  
->  	if (int_grp1 & FUSB300_IGR1_HOT_RST_INT) {
->  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
->  				  FUSB300_IGR1_HOT_RST_INT);
-> -		printk(KERN_INFO"fusb300_hotreset\n");
-> +		pr_info("fusb300_hotreset\n");
->  		fusb300_reset();
->  	}
->  
-> @@ -1097,13 +1097,13 @@ static irqreturn_t fusb300_irq(int irq, void *_fusb300)
->  	if (int_grp1 & FUSB300_IGR1_CX_COMABT_INT) {
->  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
->  				  FUSB300_IGR1_CX_COMABT_INT);
-> -		printk(KERN_INFO"fusb300_ep0abt\n");
-> +		pr_info("fusb300_ep0abt\n");
->  	}
->  
->  	if (int_grp1 & FUSB300_IGR1_VBUS_CHG_INT) {
->  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
->  				  FUSB300_IGR1_VBUS_CHG_INT);
-> -		printk(KERN_INFO"fusb300_vbus_change\n");
-> +		pr_info("fusb300_vbus_change\n");
->  	}
->  
->  	if (int_grp1 & FUSB300_IGR1_U3_EXIT_FAIL_INT) {
-> @@ -1134,25 +1134,25 @@ static irqreturn_t fusb300_irq(int irq, void *_fusb300)
->  	if (int_grp1 & FUSB300_IGR1_U3_EXIT_INT) {
->  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
->  				  FUSB300_IGR1_U3_EXIT_INT);
-> -		printk(KERN_INFO "FUSB300_IGR1_U3_EXIT_INT\n");
-> +		pr_info("FUSB300_IGR1_U3_EXIT_INT\n");
->  	}
->  
->  	if (int_grp1 & FUSB300_IGR1_U2_EXIT_INT) {
->  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
->  				  FUSB300_IGR1_U2_EXIT_INT);
-> -		printk(KERN_INFO "FUSB300_IGR1_U2_EXIT_INT\n");
-> +		pr_info("FUSB300_IGR1_U2_EXIT_INT\n");
->  	}
->  
->  	if (int_grp1 & FUSB300_IGR1_U1_EXIT_INT) {
->  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
->  				  FUSB300_IGR1_U1_EXIT_INT);
-> -		printk(KERN_INFO "FUSB300_IGR1_U1_EXIT_INT\n");
-> +		pr_info("FUSB300_IGR1_U1_EXIT_INT\n");
->  	}
->  
->  	if (int_grp1 & FUSB300_IGR1_U3_ENTRY_INT) {
->  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
->  				  FUSB300_IGR1_U3_ENTRY_INT);
-> -		printk(KERN_INFO "FUSB300_IGR1_U3_ENTRY_INT\n");
-> +		pr_info("FUSB300_IGR1_U3_ENTRY_INT\n");
->  		fusb300_enable_bit(fusb300, FUSB300_OFFSET_SSCR1,
->  				   FUSB300_SSCR1_GO_U3_DONE);
->  	}
-> @@ -1160,31 +1160,31 @@ static irqreturn_t fusb300_irq(int irq, void *_fusb300)
->  	if (int_grp1 & FUSB300_IGR1_U2_ENTRY_INT) {
->  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
->  				  FUSB300_IGR1_U2_ENTRY_INT);
-> -		printk(KERN_INFO "FUSB300_IGR1_U2_ENTRY_INT\n");
-> +		pr_info("FUSB300_IGR1_U2_ENTRY_INT\n");
->  	}
->  
->  	if (int_grp1 & FUSB300_IGR1_U1_ENTRY_INT) {
->  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
->  				  FUSB300_IGR1_U1_ENTRY_INT);
-> -		printk(KERN_INFO "FUSB300_IGR1_U1_ENTRY_INT\n");
-> +		pr_info("FUSB300_IGR1_U1_ENTRY_INT\n");
->  	}
->  
->  	if (int_grp1 & FUSB300_IGR1_RESM_INT) {
->  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
->  				  FUSB300_IGR1_RESM_INT);
-> -		printk(KERN_INFO "fusb300_resume\n");
-> +		pr_info("fusb300_resume\n");
->  	}
->  
->  	if (int_grp1 & FUSB300_IGR1_SUSP_INT) {
->  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
->  				  FUSB300_IGR1_SUSP_INT);
-> -		printk(KERN_INFO "fusb300_suspend\n");
-> +		pr_info("fusb300_suspend\n");
->  	}
->  
->  	if (int_grp1 & FUSB300_IGR1_HS_LPM_INT) {
->  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
->  				  FUSB300_IGR1_HS_LPM_INT);
-> -		printk(KERN_INFO "fusb300_HS_LPM_INT\n");
-> +		pr_info("fusb300_HS_LPM_INT\n");
->  	}
->  
->  	if (int_grp1 & FUSB300_IGR1_DEV_MODE_CHG_INT) {
-> @@ -1195,11 +1195,11 @@ static irqreturn_t fusb300_irq(int irq, void *_fusb300)
->  
->  	if (int_grp1 & FUSB300_IGR1_CX_COMFAIL_INT) {
->  		fusb300_set_cxstall(fusb300);
-> -		printk(KERN_INFO "fusb300_ep0fail\n");
-> +		pr_info("fusb300_ep0fail\n");
->  	}
->  
->  	if (int_grp1 & FUSB300_IGR1_CX_SETUP_INT) {
-> -		printk(KERN_INFO "fusb300_ep0setup\n");
-> +		pr_info("fusb300_ep0setup\n");
->  		if (setup_packet(fusb300, &ctrl)) {
->  			spin_unlock(&fusb300->lock);
->  			if (fusb300->driver->setup(&fusb300->gadget, &ctrl) < 0)
-> @@ -1209,16 +1209,16 @@ static irqreturn_t fusb300_irq(int irq, void *_fusb300)
->  	}
->  
->  	if (int_grp1 & FUSB300_IGR1_CX_CMDEND_INT)
-> -		printk(KERN_INFO "fusb300_cmdend\n");
-> +		pr_info("fusb300_cmdend\n");
->  
->  
->  	if (int_grp1 & FUSB300_IGR1_CX_OUT_INT) {
-> -		printk(KERN_INFO "fusb300_cxout\n");
-> +		pr_info("fusb300_cxout\n");
->  		fusb300_ep0out(fusb300);
->  	}
->  
->  	if (int_grp1 & FUSB300_IGR1_CX_IN_INT) {
-> -		printk(KERN_INFO "fusb300_cxin\n");
-> +		pr_info("fusb300_cxin\n");
->  		fusb300_ep0in(fusb300);
->  	}
->  
-> diff --git a/drivers/usb/gadget/udc/goku_udc.c b/drivers/usb/gadget/udc/goku_udc.c
-> index 3e1267d38774..4f225552861a 100644
-> --- a/drivers/usb/gadget/udc/goku_udc.c
-> +++ b/drivers/usb/gadget/udc/goku_udc.c
-> @@ -1748,7 +1748,7 @@ static int goku_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	int			retval;
->  
->  	if (!pdev->irq) {
-> -		printk(KERN_ERR "Check PCI %s IRQ setup!\n", pci_name(pdev));
-> +		pr_err("Check PCI %s IRQ setup!\n", pci_name(pdev));
+Alan Stern
 
-When a pointer to a struct device is available, dev_err() would be much
-better. That's however out of scope for this patch, but it would be nice
-to address it. This would become
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing 08a02f95
 
-		dev_err(&pdev->dev, "Check IRQ setup!\n");
+Index: usb-devel/drivers/usb/misc/legousbtower.c
+===================================================================
+--- usb-devel.orig/drivers/usb/misc/legousbtower.c
++++ usb-devel/drivers/usb/misc/legousbtower.c
+@@ -797,7 +797,7 @@ static int tower_probe(struct usb_interf
+ 				      &get_version_reply,
+ 				      sizeof(get_version_reply),
+ 				      1000, GFP_KERNEL);
+-	if (!result) {
++	if (result) {
+ 		dev_err(idev, "get version request failed: %d\n", result);
+ 		retval = result;
+ 		goto error;
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
->  		retval = -ENODEV;
->  		goto err;
->  	}
-> diff --git a/drivers/usb/gadget/udc/r8a66597-udc.h b/drivers/usb/gadget/udc/r8a66597-udc.h
-> index 9a115caba661..fa4d62c32ea1 100644
-> --- a/drivers/usb/gadget/udc/r8a66597-udc.h
-> +++ b/drivers/usb/gadget/udc/r8a66597-udc.h
-> @@ -247,7 +247,7 @@ static inline u16 get_xtal_from_pdata(struct r8a66597_platdata *pdata)
->  		clock = XTAL48;
->  		break;
->  	default:
-> -		printk(KERN_ERR "r8a66597: platdata clock is wrong.\n");
-> +		pr_err("r8a66597: platdata clock is wrong.\n");
->  		break;
->  	}
->  
-
--- 
-Regards,
-
-Laurent Pinchart
