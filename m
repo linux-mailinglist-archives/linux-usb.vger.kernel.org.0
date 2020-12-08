@@ -2,115 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 669BC2D29AD
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 12:21:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 726782D2A05
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 12:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728974AbgLHLVN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 06:21:13 -0500
-Received: from mga07.intel.com ([134.134.136.100]:30635 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726226AbgLHLVN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Dec 2020 06:21:13 -0500
-IronPort-SDR: dqbDZLJSOQm3M8d/au7G8IEfPbAC/wlP6MkDY9amjfLFyD5O5JYnXtUh9s51hHGNid8/dYbVVU
- lLUEx/t6MPrg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9828"; a="237976278"
-X-IronPort-AV: E=Sophos;i="5.78,402,1599548400"; 
-   d="scan'208";a="237976278"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2020 03:19:27 -0800
-IronPort-SDR: PxjWPJuPrT3boNzdXZ+9iVgAFRyA1lVlPA8ypy6gkNZdHSVqINjcHHDMZvwM42NwFvFSgUroEV
- 3Cmd00Kdtr+w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,402,1599548400"; 
-   d="scan'208";a="347858542"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga002.jf.intel.com with ESMTP; 08 Dec 2020 03:19:25 -0800
-Subject: Re: [PATCH 4/5] xhci-pci: Allow host runtime PM as default for Intel
- Maple Ridge xHCI
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-References: <20201208092912.1773650-1-mathias.nyman@linux.intel.com>
- <20201208092912.1773650-5-mathias.nyman@linux.intel.com>
- <X89JxxWX25kiUsdk@kroah.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <b93a64e0-bd83-2bf8-9bb3-7e7045c5f26f@linux.intel.com>
-Date:   Tue, 8 Dec 2020 13:21:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1729216AbgLHLx5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Dec 2020 06:53:57 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:48850 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729133AbgLHLx5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 06:53:57 -0500
+Received: by mail-io1-f71.google.com with SMTP id 191so14194394iob.15
+        for <linux-usb@vger.kernel.org>; Tue, 08 Dec 2020 03:53:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=5lIivfIegrOSwEr6lH8WZABgvU+Z1wH05JIi4bOtavM=;
+        b=D1+uIMQ5ExrFC7ytpYTNGCYaeQi0/vs7iQ5UWL76A4XW1bDBuF/HS/G5h1g99Pl3WL
+         oSTkdTAprNMvhFC4QnVVcysySlaBbVyPd+GoI6XZKIYbmf+bdcxXRFPZ7WzBgWdhE42C
+         xwXHnLvzYvcl7sjRRbweKn7PRbWoSUYmHM9rnIbRHkoKCIHi10ImaHMe36mZd00jZlJs
+         httvaapbOvOlp885j7ciLc8bFjM9pOVdQKNQQ33i1bSrQqLAHFUM49I9vtorAHcARy3m
+         Y5cabiq+bHt7NHdOriVqQuaic86XNNEp31RjW9QW3jSXZ60MgmCvmVP5weDlRv5IHbMi
+         hGfQ==
+X-Gm-Message-State: AOAM5305EaJtLSM44GTmm4L7wqNL7yMfPb1spDJ7vvfinNK6m+FK2F1i
+        /b4tTEjA9iAKp7f2/bIgNTIxx0xZdBdp8lbbfuDj1mrjwlLo
+X-Google-Smtp-Source: ABdhPJxHNbgZIU2Vh7UiPHS5oMJTw0UHCaSW5jJh4mCgIbTxaoIicxGAwcK70UvhNshe8AU3AZ+zr7iIeL4g5q3sANZcDO5EzuF2
 MIME-Version: 1.0
-In-Reply-To: <X89JxxWX25kiUsdk@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a5e:9612:: with SMTP id a18mr2370150ioq.13.1607428396041;
+ Tue, 08 Dec 2020 03:53:16 -0800 (PST)
+Date:   Tue, 08 Dec 2020 03:53:16 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008c4f0f05b5f29682@google.com>
+Subject: general protection fault in tower_disconnect
+From:   syzbot <syzbot+9be25235b7a69b24d117@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        legousb-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, starblue@users.sourceforge.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8.12.2020 11.39, Greg KH wrote:
-> On Tue, Dec 08, 2020 at 11:29:11AM +0200, Mathias Nyman wrote:
->> From: Mika Westerberg <mika.westerberg@linux.intel.com>
->>
->> Intel Maple Ridge is successor of Titan Ridge Thunderbolt controller. As
->> Titan Ridge this one also includes xHCI host controller. In order to
->> safe energy we should put it to low power state by default when idle.
->> For this reason allow host runtime PM for Maple Ridge.
->>
->> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
->> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->> ---
->>  drivers/usb/host/xhci-pci.c | 4 +++-
->>  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> Should this be backported to stable kernels too?
+Hello,
 
-I guess that wouldn't hurt. 
-Hardware is fresh but distros probably base their releases on older stable kernels.
-This would enable xhci runtime pm as default on those as well
+syzbot found the following issue on:
 
-Thanks
-Mathias
+HEAD commit:    08a02f95 USB: add RESET_RESUME quirk for Snapscan 1212
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=1435927b500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d24ee9ecd7ce968e
+dashboard link: https://syzkaller.appspot.com/bug?extid=9be25235b7a69b24d117
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15145f07500000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16b99413500000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9be25235b7a69b24d117@syzkaller.appspotmail.com
+
+usb 1-1: USB disconnect, device number 2
+general protection fault, probably for non-canonical address 0xdffffc0000000013: 0000 [#1] SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000098-0x000000000000009f]
+CPU: 0 PID: 7 Comm: kworker/0:1 Not tainted 5.10.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:tower_disconnect+0x53/0x360 drivers/usb/misc/legousbtower.c:848
+Code: 03 80 3c 02 00 0f 85 15 03 00 00 48 8b ab a8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bd 98 00 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 06 0f 8e 7b 02 00 00 48 c7 c6 40 07 bb 87 48
+RSP: 0018:ffffc9000007f7c0 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffff888117ec0000 RCX: ffffffff8381f807
+RDX: 0000000000000013 RSI: ffffffff83bab792 RDI: 0000000000000098
+RBP: 0000000000000000 R08: 0000000000000001 R09: ffffffff898cc4ef
+R10: 0000000000000002 R11: 0000000000000000 R12: ffff888117ec0090
+R13: ffff888117ec0078 R14: ffff888117ec0030 R15: ffff888117ec0098
+FS:  0000000000000000(0000) GS:ffff8881f6a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f557af47550 CR3: 00000001090f3000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:458
+ __device_release_driver+0x3bd/0x6f0 drivers/base/dd.c:1154
+ device_release_driver_internal drivers/base/dd.c:1185 [inline]
+ device_release_driver+0x26/0x40 drivers/base/dd.c:1208
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+ device_del+0x502/0xec0 drivers/base/core.c:3115
+ usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1413
+ usb_disconnect.cold+0x27d/0x780 drivers/usb/core/hub.c:2218
+ hub_port_connect drivers/usb/core/hub.c:5074 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5363 [inline]
+ port_event drivers/usb/core/hub.c:5509 [inline]
+ hub_event+0x1c8a/0x42d0 drivers/usb/core/hub.c:5591
+ process_one_work+0x933/0x1520 kernel/workqueue.c:2272
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2418
+ kthread+0x38c/0x460 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+Modules linked in:
+---[ end trace 5aeb1d199be5d5f2 ]---
+RIP: 0010:tower_disconnect+0x53/0x360 drivers/usb/misc/legousbtower.c:848
+Code: 03 80 3c 02 00 0f 85 15 03 00 00 48 8b ab a8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bd 98 00 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 06 0f 8e 7b 02 00 00 48 c7 c6 40 07 bb 87 48
+RSP: 0018:ffffc9000007f7c0 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffff888117ec0000 RCX: ffffffff8381f807
+RDX: 0000000000000013 RSI: ffffffff83bab792 RDI: 0000000000000098
+RBP: 0000000000000000 R08: 0000000000000001 R09: ffffffff898cc4ef
+R10: 0000000000000002 R11: 0000000000000000 R12: ffff888117ec0090
+R13: ffff888117ec0078 R14: ffff888117ec0030 R15: ffff888117ec0098
+FS:  0000000000000000(0000) GS:ffff8881f6a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f557af47550 CR3: 00000001090f3000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
