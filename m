@@ -2,43 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 726782D2A05
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 12:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 566872D2A6C
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 13:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729216AbgLHLx5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 06:53:57 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:48850 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729133AbgLHLx5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 06:53:57 -0500
-Received: by mail-io1-f71.google.com with SMTP id 191so14194394iob.15
-        for <linux-usb@vger.kernel.org>; Tue, 08 Dec 2020 03:53:41 -0800 (PST)
+        id S1728653AbgLHMNw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Dec 2020 07:13:52 -0500
+Received: from mail-io1-f70.google.com ([209.85.166.70]:33504 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728560AbgLHMNw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 07:13:52 -0500
+Received: by mail-io1-f70.google.com with SMTP id t23so12952027ioh.0
+        for <linux-usb@vger.kernel.org>; Tue, 08 Dec 2020 04:13:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=5lIivfIegrOSwEr6lH8WZABgvU+Z1wH05JIi4bOtavM=;
-        b=D1+uIMQ5ExrFC7ytpYTNGCYaeQi0/vs7iQ5UWL76A4XW1bDBuF/HS/G5h1g99Pl3WL
-         oSTkdTAprNMvhFC4QnVVcysySlaBbVyPd+GoI6XZKIYbmf+bdcxXRFPZ7WzBgWdhE42C
-         xwXHnLvzYvcl7sjRRbweKn7PRbWoSUYmHM9rnIbRHkoKCIHi10ImaHMe36mZd00jZlJs
-         httvaapbOvOlp885j7ciLc8bFjM9pOVdQKNQQ33i1bSrQqLAHFUM49I9vtorAHcARy3m
-         Y5cabiq+bHt7NHdOriVqQuaic86XNNEp31RjW9QW3jSXZ60MgmCvmVP5weDlRv5IHbMi
-         hGfQ==
-X-Gm-Message-State: AOAM5305EaJtLSM44GTmm4L7wqNL7yMfPb1spDJ7vvfinNK6m+FK2F1i
-        /b4tTEjA9iAKp7f2/bIgNTIxx0xZdBdp8lbbfuDj1mrjwlLo
-X-Google-Smtp-Source: ABdhPJxHNbgZIU2Vh7UiPHS5oMJTw0UHCaSW5jJh4mCgIbTxaoIicxGAwcK70UvhNshe8AU3AZ+zr7iIeL4g5q3sANZcDO5EzuF2
+        bh=sIr2487dPP01PGWAGnpnCKoFqEKwcrRNII54jM9x7Vo=;
+        b=oIza9+R0yEYcXoqHuBYFUrxmFkbS2MIw0OSk/IQqT+PkB66brMNFvbcY7gQX0Rd9Tt
+         A+SRpF1pIAPkwUoG0HYlx7ZwnUwBrqXi20Q0obwy+EnRkUQ6ZSdyL0j0Kzr33xpaW4PT
+         AouDPds3sYxiX+2ne1x19iXTKobfAxbtP5KQbjw9I43IeE1+L2jI/ERZiYwK6O461RlB
+         x885hJfpJnJpkia5uBba3mog9eDzkx+Ylb2DxUe/FpteK0VEbECKOPGe5MocrfWu+CGS
+         9kOdR1w1Hw+wwwF2maDRh+KP1s9Iq62CEhhUSPjZur4fhn5fNlEe93yNmijJBIsd74PQ
+         ojTg==
+X-Gm-Message-State: AOAM531narj/SiSEwezVqNIObNoygU/Dm1Xa/AdUSrxhYccwdp9ezl7c
+        xzeFdxY21YLN2ZUg5JPV/vpLb3wJi441EoqwlOUHvHaHoJZN
+X-Google-Smtp-Source: ABdhPJzQ2sFxvi5gFhKu9t/hT7O5AB3ZxOq2aTRzfBapXieBJ7KJ9ziCrnh8yClmV5kM5K9Qi8xqU11QUwht+toUxIFgc0oqetYN
 MIME-Version: 1.0
-X-Received: by 2002:a5e:9612:: with SMTP id a18mr2370150ioq.13.1607428396041;
- Tue, 08 Dec 2020 03:53:16 -0800 (PST)
-Date:   Tue, 08 Dec 2020 03:53:16 -0800
+X-Received: by 2002:a92:1906:: with SMTP id 6mr26171612ilz.138.1607429591500;
+ Tue, 08 Dec 2020 04:13:11 -0800 (PST)
+Date:   Tue, 08 Dec 2020 04:13:11 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008c4f0f05b5f29682@google.com>
-Subject: general protection fault in tower_disconnect
-From:   syzbot <syzbot+9be25235b7a69b24d117@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        legousb-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, starblue@users.sourceforge.net,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <000000000000cd8dcd05b5f2dd90@google.com>
+Subject: KMSAN: uninit-value in smsc95xx_wait_eeprom (2)
+From:   syzbot <syzbot+94b1393490c2c70b781b@syzkaller.appspotmail.com>
+To:     UNGLinuxDriver@microchip.com, davem@davemloft.net,
+        glider@google.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        steve.glendinning@shawell.net, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -48,69 +48,71 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    08a02f95 USB: add RESET_RESUME quirk for Snapscan 1212
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1435927b500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d24ee9ecd7ce968e
-dashboard link: https://syzkaller.appspot.com/bug?extid=9be25235b7a69b24d117
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15145f07500000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16b99413500000
+HEAD commit:    73d62e81 kmsan: random: prevent boot-time reports in _mix_..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=178d246b500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=eef728deea880383
+dashboard link: https://syzkaller.appspot.com/bug?extid=94b1393490c2c70b781b
+compiler:       clang version 11.0.0 (https://github.com/llvm/llvm-project.git ca2dcbd030eadbf0aa9b660efe864ff08af6e18b)
+
+Unfortunately, I don't have any reproducer for this issue yet.
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9be25235b7a69b24d117@syzkaller.appspotmail.com
+Reported-by: syzbot+94b1393490c2c70b781b@syzkaller.appspotmail.com
 
-usb 1-1: USB disconnect, device number 2
-general protection fault, probably for non-canonical address 0xdffffc0000000013: 0000 [#1] SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000098-0x000000000000009f]
-CPU: 0 PID: 7 Comm: kworker/0:1 Not tainted 5.10.0-rc7-syzkaller #0
+=====================================================
+BUG: KMSAN: uninit-value in smsc95xx_wait_eeprom+0x223/0x3e0 drivers/net/usb/smsc95xx.c:303
+CPU: 1 PID: 28836 Comm: kworker/1:1 Not tainted 5.10.0-rc4-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
 Workqueue: usb_hub_wq hub_event
-RIP: 0010:tower_disconnect+0x53/0x360 drivers/usb/misc/legousbtower.c:848
-Code: 03 80 3c 02 00 0f 85 15 03 00 00 48 8b ab a8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bd 98 00 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 06 0f 8e 7b 02 00 00 48 c7 c6 40 07 bb 87 48
-RSP: 0018:ffffc9000007f7c0 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: ffff888117ec0000 RCX: ffffffff8381f807
-RDX: 0000000000000013 RSI: ffffffff83bab792 RDI: 0000000000000098
-RBP: 0000000000000000 R08: 0000000000000001 R09: ffffffff898cc4ef
-R10: 0000000000000002 R11: 0000000000000000 R12: ffff888117ec0090
-R13: ffff888117ec0078 R14: ffff888117ec0030 R15: ffff888117ec0098
-FS:  0000000000000000(0000) GS:ffff8881f6a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f557af47550 CR3: 00000001090f3000 CR4: 00000000001506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
- usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:458
- __device_release_driver+0x3bd/0x6f0 drivers/base/dd.c:1154
- device_release_driver_internal drivers/base/dd.c:1185 [inline]
- device_release_driver+0x26/0x40 drivers/base/dd.c:1208
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
- device_del+0x502/0xec0 drivers/base/core.c:3115
- usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1413
- usb_disconnect.cold+0x27d/0x780 drivers/usb/core/hub.c:2218
- hub_port_connect drivers/usb/core/hub.c:5074 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5363 [inline]
- port_event drivers/usb/core/hub.c:5509 [inline]
- hub_event+0x1c8a/0x42d0 drivers/usb/core/hub.c:5591
- process_one_work+0x933/0x1520 kernel/workqueue.c:2272
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2418
- kthread+0x38c/0x460 kernel/kthread.c:292
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x21c/0x280 lib/dump_stack.c:118
+ kmsan_report+0xf7/0x1e0 mm/kmsan/kmsan_report.c:118
+ __msan_warning+0x5f/0xa0 mm/kmsan/kmsan_instr.c:197
+ smsc95xx_wait_eeprom+0x223/0x3e0 drivers/net/usb/smsc95xx.c:303
+ smsc95xx_read_eeprom+0x46d/0xa10 drivers/net/usb/smsc95xx.c:360
+ smsc95xx_init_mac_address drivers/net/usb/smsc95xx.c:769 [inline]
+ smsc95xx_bind+0x811/0x1d30 drivers/net/usb/smsc95xx.c:1090
+ usbnet_probe+0x1169/0x3e90 drivers/net/usb/usbnet.c:1712
+ usb_probe_interface+0xfcc/0x1520 drivers/usb/core/driver.c:396
+ really_probe+0xebd/0x2420 drivers/base/dd.c:558
+ driver_probe_device+0x293/0x390 drivers/base/dd.c:738
+ __device_attach_driver+0x63f/0x830 drivers/base/dd.c:844
+ bus_for_each_drv+0x2ca/0x3f0 drivers/base/bus.c:431
+ __device_attach+0x538/0x860 drivers/base/dd.c:912
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:959
+ bus_probe_device+0x177/0x3d0 drivers/base/bus.c:491
+ device_add+0x399e/0x3f20 drivers/base/core.c:2936
+ usb_set_configuration+0x39cf/0x4010 drivers/usb/core/message.c:2159
+ usb_generic_driver_probe+0x138/0x300 drivers/usb/core/generic.c:238
+ usb_probe_device+0x317/0x570 drivers/usb/core/driver.c:293
+ really_probe+0xebd/0x2420 drivers/base/dd.c:558
+ driver_probe_device+0x293/0x390 drivers/base/dd.c:738
+ __device_attach_driver+0x63f/0x830 drivers/base/dd.c:844
+ bus_for_each_drv+0x2ca/0x3f0 drivers/base/bus.c:431
+ __device_attach+0x538/0x860 drivers/base/dd.c:912
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:959
+ bus_probe_device+0x177/0x3d0 drivers/base/bus.c:491
+ device_add+0x399e/0x3f20 drivers/base/core.c:2936
+ usb_new_device+0x1bd6/0x2a30 drivers/usb/core/hub.c:2554
+ hub_port_connect drivers/usb/core/hub.c:5222 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5362 [inline]
+ port_event drivers/usb/core/hub.c:5508 [inline]
+ hub_event+0x5bc9/0x8890 drivers/usb/core/hub.c:5590
+ process_one_work+0x121c/0x1fc0 kernel/workqueue.c:2272
+ worker_thread+0x10cc/0x2740 kernel/workqueue.c:2418
+ kthread+0x51c/0x560 kernel/kthread.c:292
  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
-Modules linked in:
----[ end trace 5aeb1d199be5d5f2 ]---
-RIP: 0010:tower_disconnect+0x53/0x360 drivers/usb/misc/legousbtower.c:848
-Code: 03 80 3c 02 00 0f 85 15 03 00 00 48 8b ab a8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bd 98 00 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 06 0f 8e 7b 02 00 00 48 c7 c6 40 07 bb 87 48
-RSP: 0018:ffffc9000007f7c0 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: ffff888117ec0000 RCX: ffffffff8381f807
-RDX: 0000000000000013 RSI: ffffffff83bab792 RDI: 0000000000000098
-RBP: 0000000000000000 R08: 0000000000000001 R09: ffffffff898cc4ef
-R10: 0000000000000002 R11: 0000000000000000 R12: ffff888117ec0090
-R13: ffff888117ec0078 R14: ffff888117ec0030 R15: ffff888117ec0098
-FS:  0000000000000000(0000) GS:ffff8881f6a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f557af47550 CR3: 00000001090f3000 CR4: 00000000001506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+Local variable ----buf.i.i@smsc95xx_wait_eeprom created at:
+ __smsc95xx_read_reg drivers/net/usb/smsc95xx.c:77 [inline]
+ smsc95xx_read_reg drivers/net/usb/smsc95xx.c:141 [inline]
+ smsc95xx_wait_eeprom+0x9d/0x3e0 drivers/net/usb/smsc95xx.c:297
+ __smsc95xx_read_reg drivers/net/usb/smsc95xx.c:77 [inline]
+ smsc95xx_read_reg drivers/net/usb/smsc95xx.c:141 [inline]
+ smsc95xx_wait_eeprom+0x9d/0x3e0 drivers/net/usb/smsc95xx.c:297
+=====================================================
 
 
 ---
@@ -120,5 +122,3 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
