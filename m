@@ -2,159 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4D32D3029
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 17:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D342A2D30F1
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 18:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730571AbgLHQsf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 11:48:35 -0500
-Received: from avasout01.plus.net ([84.93.230.227]:38460 "EHLO
-        avasout01.plus.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730400AbgLHQsf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 11:48:35 -0500
-Received: from APOLLO ([212.159.61.44])
-        by smtp with ESMTPA
-        id mg9QkyrWHn8O7mg9RkcPPO; Tue, 08 Dec 2020 16:47:48 +0000
-X-Clacks-Overhead: "GNU Terry Pratchett"
-X-CM-Score: 0.00
-X-CNFS-Analysis: v=2.3 cv=Ld6nFgXi c=1 sm=1 tr=0
- a=AGp1duJPimIJhwGXxSk9fg==:117 a=AGp1duJPimIJhwGXxSk9fg==:17
- a=kj9zAlcOel0A:10 a=P1kZ4gAsAAAA:8 a=iox4zFpeAAAA:8 a=VwQbUJbxAAAA:8
- a=xZedZrcBONH4fSA2ZlIA:9 a=TmKCA33D4M_Q8TJU:21 a=fMauB7r55Ujl-SJb:21
- a=CjuIK1q_8ugA:10 a=fn9vMg-Z9CMH7MoVPInU:22 a=WzC6qhA0u3u7Ye7llzcV:22
- a=AjGcO6oz07-iQ99wixmX:22
-X-AUTH: perdrix52@:2500
-From:   "David C. Partridge" <david.partridge@perdrix.co.uk>
-To:     "'Alan Stern'" <stern@rowland.harvard.edu>
-Cc:     "'Oliver Neukum'" <oneukum@suse.com>, <linux-usb@vger.kernel.org>
-References: <d478123862a7e94898aaa771c21cc8cb0a3819fc.camel@suse.com> <008101d6c3d7$2427ee70$6c77cb50$@perdrix.co.uk> <11ea70180f52b4965a451b3970891e0f547c777b.camel@suse.com> <000001d6c89c$086812e0$193838a0$@perdrix.co.uk> <000301d6c919$af7a94e0$0e6fbea0$@perdrix.co.uk> <918e298941f820a7cc3310c95dc211cca7596dba.camel@suse.com> <000e01d6c980$d9a75f70$8cf61e50$@perdrix.co.uk> <005601d6cc87$2fa608f0$8ef21ad0$@perdrix.co.uk> <36ac7a79c4b24f9f68b3543d18a51ec9af0a4933.camel@suse.com> <000701d6cd7c$236ec8b0$6a4c5a10$@perdrix.co.uk> <20201208162722.GC1298255@rowland.harvard.edu>
-In-Reply-To: <20201208162722.GC1298255@rowland.harvard.edu>
-Subject: RE: Issues with LaCie USB3 drive and UAS
-Date:   Tue, 8 Dec 2020 16:47:44 -0000
-Message-ID: <000801d6cd81$dc303370$94909a50$@perdrix.co.uk>
+        id S1730642AbgLHRZZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Dec 2020 12:25:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730448AbgLHRZY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 12:25:24 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B000CC061793
+        for <linux-usb@vger.kernel.org>; Tue,  8 Dec 2020 09:24:44 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id n14so17607367iom.10
+        for <linux-usb@vger.kernel.org>; Tue, 08 Dec 2020 09:24:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VpStC0N1e6piRKYEdRBX6jEDzyHXKXfxuiBfsoSPSyE=;
+        b=Cef7lcsrbXVmRHSRdSXAMM8FaCfqlh81hy7zvFXRthhVE2rOkyfUKtcv2UhVIVF61A
+         wKqUN/PBlkW7d1ALnMgowQcPGk8L1AFz9JVdhyqQTcMN5+JSptBsXd2dY2IAsix2cnhJ
+         NfL4mj9D9J+sEZtPbnjrm6fFjc8kYb/R77H2IZ7AayhRwMIQ95tmdwyjQWN2LmiH+KYm
+         /B1n3Gmul786HxxL/SL0p1SyT8+KrX158Qq0Wdjmyhuk6EOUP+zBevIuF6Pgf5UTvPe4
+         998NOoA7MYoaIR9qLToc/BL6gFOxqBWI4S82jW1Xlb0hbw/2jgLG11AOaih8IPp02xdJ
+         tKcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VpStC0N1e6piRKYEdRBX6jEDzyHXKXfxuiBfsoSPSyE=;
+        b=tVNEJdA5dDOEve43aSY+k6DsGJ3hsoglmCc1PSZMkylBFZusYWy1CBlK3G9fM7Zknd
+         4DKLBlyb7D/egVB69S6tuaLL4XLbfAWYbJjvZZJlk3gvxXk5/2GW+3I/8ez7u1ropT59
+         1n5JfXF+52ytNuyWO+Zgr347HrqVyacNpxS/pFT3010wUCWGbvbD4FQrOtx7VJ8sy0uX
+         hw8Cl30g1CgO+dZ3cLVWHIYxNb4AzTS41OrQDYTI8X4o+HjOtKvgwdVjzB+Ghp1IpsVh
+         5TmAhAm4+7/KUTketYvlPedgIVbkfoqIN8VTH6Pm7xeBNfnv0J5Hu0umfYp6TfCMMX9/
+         nhQw==
+X-Gm-Message-State: AOAM533cNbTcDwGkuyxZA6g1KKWSiL80xujsV9T1Bu587T1wsmvDW4po
+        9km6rZIBglYOEViuYODCYAIQzQ==
+X-Google-Smtp-Source: ABdhPJypdhovVczqnBwFmHp0Hi7JoAtlv8TbKqZ5feeSsl3RHjfSSIDwFuKPupkPiPMb7t17ptDCCQ==
+X-Received: by 2002:a02:b011:: with SMTP id p17mr24759483jah.114.1607448283555;
+        Tue, 08 Dec 2020 09:24:43 -0800 (PST)
+Received: from google.com ([2601:285:8380:9270::33b4])
+        by smtp.gmail.com with ESMTPSA id a15sm3516260ilh.10.2020.12.08.09.24.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Dec 2020 09:24:42 -0800 (PST)
+Date:   Tue, 8 Dec 2020 10:24:40 -0700
+From:   Ross Zwisler <zwisler@google.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "kernel@collabora.com" <kernel@collabora.com>
+Subject: Re: xhci problem -> general protection fault
+Message-ID: <X8+22DeNDn1A7X+N@google.com>
+References: <20200925210517.GA4487@google.com>
+ <7e38c533-6ea1-63a6-fc92-2ecef7ee1f84@linux.intel.com>
+ <20201001164352.GA13249@google.com>
+ <69f8cbc3-0ae7-cfb2-2fdd-556ada77381f@linux.intel.com>
+ <20201012215348.GA3324220@google.com>
+ <ad976018-31ec-3b1e-464c-363a08538ef5@linux.intel.com>
+ <CAGRrVHwC=3qs00CTzPkrVPzXBnpcxfjRCKjgaYK9Hjt0GRfObg@mail.gmail.com>
+ <ee24e656-f898-6b0b-ea91-9875390abb72@linux.intel.com>
+ <CAGRrVHwgxtPF89niHV3N58SaDb7q5jWde_g7-yVxGPcKhemsaw@mail.gmail.com>
+ <b6eba37b-c78b-fc99-5aca-f9e5856e80ac@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQHL9783AnoUJt6hZ/5IYeyCKGuS3gIDLrdIAl8/kcMBv69iRQHZtB/YAwjv7Y4DEjptYgIeJf4hAY/YFQcCuJVWHQFFQ+HNqVT7W6A=
-Content-Language: en-gb
-X-CMAE-Envelope: MS4wfKil0UX2p51R5BPZKFqVjHSf+z/bZcy8uuS2D9j8oov+gopxAU7h2jOb2eyyzCFok7q+Qtlh5LPmnP5M+zJ4KpZ0wf3WBUzFuFTXSq16FQyxMASWFfaM
- 5HZtEBu0kpl5Z0Xmpq3myF29kuyR0WCfaACX5IqZxdsWRCj+tOFjkdltBW38siFriXofD8P5nlN2Ew==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b6eba37b-c78b-fc99-5aca-f9e5856e80ac@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->This is puzzling.  The device connected at SuperSpeed in the previous
-tests.  Clearly this is related to the warning in the preceding line (the
-port failed to configure its link partner).
-
->What could have happened?  A problem in the cable?
-
-Previous test was using a 3m long cable.
-
-Tried again with a 1m cable:
-
-Dec 08 16:38:30 charon kernel: usb 2-1: new SuperSpeed Gen 1 USB device
-number 2 using xhci_hcd
-Dec 08 16:38:30 charon kernel: usb 2-1: New USB device found, idVendor=059f,
-idProduct=105f, bcdDevice= 0.01
-Dec 08 16:38:30 charon kernel: usb 2-1: New USB device strings: Mfr=2,
-Product=3, SerialNumber=1
-Dec 08 16:38:30 charon kernel: usb 2-1: Product: 2Big Quadra USB3
-Dec 08 16:38:30 charon kernel: usb 2-1: Manufacturer: LaCie
-Dec 08 16:38:30 charon kernel: usb 2-1: SerialNumber: 00000000250e9e711084
-Dec 08 16:38:30 charon kernel: scsi host5: uas
-Dec 08 16:38:30 charon kernel: scsi 5:0:0:0: Direct-Access     LaCie    2Big
-Quadra v3   051E PQ: 0 ANSI: 6
-Dec 08 16:38:30 charon kernel: scsi 5:0:0:0: Attached scsi generic sg3 type
-0
-Dec 08 16:38:30 charon mtp-probe[15990]: checking bus 2, device 2:
-"/sys/devices/pci0000:00/0000:00:14.0/usb2/2-1"
-Dec 08 16:38:30 charon mtp-probe[15990]: bus: 2, device: 2 was not an MTP
-device
-Dec 08 16:38:30 charon mtp-probe[15993]: checking bus 2, device 2:
-"/sys/devices/pci0000:00/0000:00:14.0/usb2/2-1"
-Dec 08 16:38:30 charon mtp-probe[15993]: bus: 2, device: 2 was not an MTP
-device
-Dec 08 16:38:30 charon kernel: sd 5:0:0:0: [sdc] 7814025564 512-byte logical
-blocks: (4.00 TB/3.64 TiB)
-Dec 08 16:38:30 charon kernel: sd 5:0:0:0: [sdc] Write Protect is off
-Dec 08 16:38:30 charon kernel: sd 5:0:0:0: [sdc] Mode Sense: 43 00 00 00
-Dec 08 16:38:30 charon kernel: sd 5:0:0:0: [sdc] Write cache: enabled, read
-cache: enabled, doesn't support DPO or FUA
-Dec 08 16:38:30 charon kernel: sd 5:0:0:0: [sdc] Optimal transfer size
-33553920 bytes
-Dec 08 16:38:30 charon kernel:  sdc: sdc1 sdc2
-Dec 08 16:38:30 charon kernel: sd 5:0:0:0: [sdc] Attached SCSI disk
-Dec 08 16:38:31 charon sshd[15980]: Accepted password for amonra from
-192.168.129.64 port 59740 ssh2
-Dec 08 16:38:31 charon sshd[15980]: pam_unix(sshd:session): session opened
-for user amonra by (uid=0)
-Dec 08 16:38:31 charon systemd-logind[773]: New session 19 of user amonra.
-Dec 08 16:38:31 charon systemd[1]: Started Session 19 of user amonra.
-Dec 08 16:38:32 charon /usr/sbin/x2gocleansessions[899]:
-amonra-50-1607445512_stDLXQt_dp32: state file for this session does not
-exist: /tmp>
-Dec 08 16:38:34 charon /usr/bin/x2gostartagent[16250]: successfully started
-X2Go Agent session with ID amonra-50-1607445512_stDLXQt_dp32
-Dec 08 16:38:41 charon /usr/bin/x2goruncommand[16445]: launching session
-with Xsession-x2go mechanism, using STARTUP="startlxqt"
-Dec 08 16:38:41 charon /usr/bin/x2goruncommand[16446]: dbus wrapper
-available as /usr/bin/dbus-run-session
-Dec 08 16:38:41 charon /usr/bin/x2gomountdirs[16312]: successfully mounted
-amonra@127.0.0.1:42471/cygdrive/C/Users/amonra/X2GO~1/S-BA8C~1/sp>
-Dec 08 16:38:42 charon polkitd(authority=local)[760]: Registered
-Authentication Agent for unix-session:19 (system bus name :1.148 [/usr/bin/>
-Dec 08 16:38:42 charon NetworkManager[730]: <info>  [1607445522.3927]
-agent-manager: agent[c5fafd67353e3850,:1.150/org.freedesktop.nm-applet>
-Dec 08 16:38:49 charon polkitd(authority=local)[760]: Operator of
-unix-session:19 successfully authenticated as unix-user:amonra to gain ONE>
-Dec 08 16:38:49 charon kernel: [EXFAT] trying to mount...
-Dec 08 16:38:49 charon kernel: [EXFAT] mounted successfully
-Dec 08 16:38:49 charon systemd[1]: Finished Clean the /media/amonra/4TB
-mount point.
-Dec 08 16:38:49 charon udisksd[775]: Mounted /dev/sdc2 at /media/amonra/4TB
-on behalf of uid 1000
-
-I then tried again using the 3m long cable and got the same error as before
-and connected at high-speed not SuperSpeed
-
-Should I expect problems with a 3m long cable or does this say the 3m long
-cable is faulty? 
-
-David
-
------Original Message-----
-From: Alan Stern <stern@rowland.harvard.edu> 
-Sent: 08 December 2020 16:27
-To: David C. Partridge <david.partridge@perdrix.co.uk>
-Cc: 'Oliver Neukum' <oneukum@suse.com>; linux-usb@vger.kernel.org
-Subject: Re: Issues with LaCie USB3 drive and UAS
-
-On Tue, Dec 08, 2020 at 04:06:49PM -0000, David C. Partridge wrote:
-> >> 2-1: USB disconnect, device number 2
+On Fri, Dec 04, 2020 at 08:07:30PM +0200, Mathias Nyman wrote:
+<>
+> Ok, thanks.
 > 
-> >Again, did you plug the cable or did the device spontaneously disconnect?
+> Then the rootcause remains unknown.
+> For some reason the endpoint context dequeue pointer field contains zero
+> instead of the new dequeue pointer.
+> The (output) endpoint context is supposed to be written only by the controller.
 > 
-> That was a spontaneous disconnect.
+> Time to change strategy and start to detect and treat the symptoms instead.
 > 
-> > In this case, could you retry with
-> > usb-storage quirks=059f:105f:kf
+> I wrote a patch that detects the 0-dequeue pointer and issues a
+> new Set TR Deq pointer command. Hopefully that works.
+> patch added to same branch, can you try it out?
 > 
-> Sure! The results are in general a lot more promising (apart from the
-first line) - plus I was able to read/write files without problems:
+> 3f6326766abc xhci: retry setting new dequeue if xHC hardware failed to update it
 > 
-> Dec 08 15:47:48 charon kernel: usb usb2-port6: config error Dec 08 
-> 15:47:49 charon kernel: usb 1-6: new high-speed USB device number 4 
-> using xhci_hcd
+> I didn't set a retry limit yet so if it doesn't work it might retry forever.
 
-This is puzzling.  The device connected at SuperSpeed in the previous tests.
-Clearly this is related to the warning in the preceding line (the port
-failed to configure its link partner).
+Here are some logs when running with that commit:
 
-What could have happened?  A problem in the cable?
+https://gist.github.com/rzwisler/17923c9dedf2b914254eadd1cd294a4c
 
-The usb-storage quirk setting would not have affected this.
+I think we only consistently get the clean failure case with the dequeue
+pointer being 0 if CONFIG_INTEL_IOMMU_DEFAULT_ON=y.
 
-Alan Stern
+If that option is set to 'n', we get the same failure where the xHCI
+controller totally dies (log "CONFIG_INTEL_IOMMU_DEFAULT_ON=n" in the gist).
 
+With CONFIG_INTEL_IOMMU_DEFAULT_ON=y we do seem to live through multiple
+errors, but as soon as I try to use the device normally afterwards it seems to
+spin forever with these messages:
+
+xhci_hcd 0000:00:14.0: Looking for event-dma 00000000fff0a330 trb-start 00000000f8884000 trb-end 0000000000000000 seg-start 00000000f8884000 seg-end 00000000f8884ff0
+
+Are you able to reproduce this with Andrzej's bulk-cancel script?  I think you
+probably just need a device which accepts bulk transfer commands?  In my most
+recent reproductions my servo hardware wasn't even attached to a device, so I
+don't really think it's doing anything except sitting there and receiving
+BULK_IN commands.   I'm doing this to two devices simultaneously.
