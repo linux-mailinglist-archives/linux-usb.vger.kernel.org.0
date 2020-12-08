@@ -2,154 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D52852D2941
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 11:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 669BC2D29AD
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 12:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727815AbgLHKwR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 05:52:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726993AbgLHKwQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 05:52:16 -0500
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982A4C061793
-        for <linux-usb@vger.kernel.org>; Tue,  8 Dec 2020 02:51:36 -0800 (PST)
-Received: by mail-pl1-x642.google.com with SMTP id v3so6770026plz.13
-        for <linux-usb@vger.kernel.org>; Tue, 08 Dec 2020 02:51:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=UlHl24p6fxuDH25Kk5N+Q2ViFc59+5OvDmyHBv2e2/g=;
-        b=S4L7bRhELufh7rFjZSQ9Ykm05G8DuuUWBbHEwVQx78mI6D3YycV9jiASCfnUL5dJUA
-         Mvjg7+eq3MBZfAX7DB8fPZKSBpquu31fuBrvhtH4rNiIc+xuYcZY/uU40O8gnvLSWvLn
-         9N6dQDjEvsyzEptoCewN/jB+U+ybi8nIBMrYEtw7Wv5ZSOb6K4UpQkPczCmIKLuLHljE
-         WtRXyBnDWhAUfH9P7pCC192GA1Pit6e89oX253CQGK5f8fR7MoQ7zVLWHVA/dpB9evy1
-         lw5kfndmUbkPYJitcwQOU192rr+dPFEcCt3ABtRkvGnSzLv7R3AyN5zjFuQEmB57+nZ9
-         1nKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=UlHl24p6fxuDH25Kk5N+Q2ViFc59+5OvDmyHBv2e2/g=;
-        b=SWXwx8gYZeVQrEMVLTtFCUO58yYdyYD/nvi9897bZbUj2aoYaDTbcOcrEt7d1QmWy/
-         K/7bqnUkNlSCLNsY3cFsZaVDLbeDPBIrMXBm4WDbIiSrpfLsArAXUEWGRkDh35rbjzAv
-         PJBSPaqkWAxawqRFKjTrSZmhGXeezClTCJoTS1zeleBAhzC3bHxs9vZlwSwuJgBpugYc
-         nB5hO6BKFgmWFrjCKPA6D8VlqyzUAT53ARGk2Qdng6m+VhVIjaMEyqczYdDym7eEKvb+
-         o0UdPTRx7WDqwY+ZqLI0Tdnabhrlaw2d0tqIyDMkb14BOEG0Hvp+pbcVvL/t/79W+3cq
-         aeNw==
-X-Gm-Message-State: AOAM531T4I2pYkQEUBmg8YT2yzjQXFPP+jKxHxFMCkzvXkDCdwWRssME
-        EgtwefwrGB9O+JHlqalmFlTe
-X-Google-Smtp-Source: ABdhPJwWnOEFpxM8yNXKrdGZb6OIYwABnP3bfJiKeY6qltwyXuz6q1V9KKMw6/PY3wkahT/AWyHBEA==
-X-Received: by 2002:a17:902:44e:b029:da:b944:b798 with SMTP id 72-20020a170902044eb02900dab944b798mr20871276ple.6.1607424695981;
-        Tue, 08 Dec 2020 02:51:35 -0800 (PST)
-Received: from work ([103.59.133.81])
-        by smtp.gmail.com with ESMTPSA id b17sm17205192pfi.61.2020.12.08.02.51.32
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 08 Dec 2020 02:51:35 -0800 (PST)
-Date:   Tue, 8 Dec 2020 16:21:28 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     johan@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patong.mxl@gmail.com, linus.walleij@linaro.org,
-        mchehab+huawei@kernel.org, angelo.dureghello@timesys.com
-Subject: Re: [PATCH v5 0/3] Add support for MaxLinear/Exar USB to serial
- converters
-Message-ID: <20201208105128.GA9925@work>
-References: <20201122170822.21715-1-mani@kernel.org>
+        id S1728974AbgLHLVN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Dec 2020 06:21:13 -0500
+Received: from mga07.intel.com ([134.134.136.100]:30635 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726226AbgLHLVN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Dec 2020 06:21:13 -0500
+IronPort-SDR: dqbDZLJSOQm3M8d/au7G8IEfPbAC/wlP6MkDY9amjfLFyD5O5JYnXtUh9s51hHGNid8/dYbVVU
+ lLUEx/t6MPrg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9828"; a="237976278"
+X-IronPort-AV: E=Sophos;i="5.78,402,1599548400"; 
+   d="scan'208";a="237976278"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2020 03:19:27 -0800
+IronPort-SDR: PxjWPJuPrT3boNzdXZ+9iVgAFRyA1lVlPA8ypy6gkNZdHSVqINjcHHDMZvwM42NwFvFSgUroEV
+ 3Cmd00Kdtr+w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,402,1599548400"; 
+   d="scan'208";a="347858542"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga002.jf.intel.com with ESMTP; 08 Dec 2020 03:19:25 -0800
+Subject: Re: [PATCH 4/5] xhci-pci: Allow host runtime PM as default for Intel
+ Maple Ridge xHCI
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+References: <20201208092912.1773650-1-mathias.nyman@linux.intel.com>
+ <20201208092912.1773650-5-mathias.nyman@linux.intel.com>
+ <X89JxxWX25kiUsdk@kroah.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ mQINBFMB0ccBEADd+nZnZrFDsIjQtclVz6OsqFOQ6k0nQdveiDNeBuwyFYykkBpaGekoHZ6f
+ lH4ogPZzQ+pzoJEMlRGXc881BIggKMCMH86fYJGfZKWdfpg9O6mqSxyEuvBHKe9eZCBKPvoC
+ L2iwygtO8TcXXSCynvXSeZrOwqAlwnxWNRm4J2ikDck5S5R+Qie0ZLJIfaId1hELofWfuhy+
+ tOK0plFR0HgVVp8O7zWYT2ewNcgAzQrRbzidA3LNRfkL7jrzyAxDapuejuK8TMrFQT/wW53e
+ uegnXcRJaibJD84RUJt+mJrn5BvZ0MYfyDSc1yHVO+aZcpNr+71yZBQVgVEI/AuEQ0+p9wpt
+ O9Wt4zO2KT/R5lq2lSz1MYMJrtfFRKkqC6PsDSB4lGSgl91XbibK5poxrIouVO2g9Jabg04T
+ MIPpVUlPme3mkYHLZUsboemRQp5/pxV4HTFR0xNBCmsidBICHOYAepCzNmfLhfo1EW2Uf+t4
+ L8IowAaoURKdgcR2ydUXjhACVEA/Ldtp3ftF4hTQ46Qhba/p4MUFtDAQ5yeA5vQVuspiwsqB
+ BoL/298+V119JzM998d70Z1clqTc8fiGMXyVnFv92QKShDKyXpiisQn2rrJVWeXEIVoldh6+
+ J8M3vTwzetnvIKpoQdSFJ2qxOdQ8iYRtz36WYl7hhT3/hwkHuQARAQABtCdNYXRoaWFzIE55
+ bWFuIDxtYXRoaWFzLm55bWFuQGdtYWlsLmNvbT6JAjsEEwECACUCGwMGCwkIBwMCBhUIAgkK
+ CwQWAgMBAh4BAheABQJTAeo1AhkBAAoJEFiDn/uYk8VJOdIP/jhA+RpIZ7rdUHFIYkHEKzHw
+ tkwrJczGA5TyLgQaI8YTCTPSvdNHU9Rj19mkjhUO/9MKvwfoT2RFYqhkrtk0K92STDaBNXTL
+ JIi4IHBqjXOyJ/dPADU0xiRVtCHWkBgjEgR7Wihr7McSdVpgupsaXhbZjXXgtR/N7PE0Wltz
+ hAL2GAnMuIeJyXhIdIMLb+uyoydPCzKdH6znfu6Ox76XfGWBCqLBbvqPXvk4oH03jcdt+8UG
+ 2nfSeti/To9ANRZIlSKGjddCGMa3xzjtTx9ryf1Xr0MnY5PeyNLexpgHp93sc1BKxKKtYaT0
+ lR6p0QEKeaZ70623oB7Sa2Ts4IytqUVxkQKRkJVWeQiPJ/dZYTK5uo15GaVwufuF8VTwnMkC
+ 4l5X+NUYNAH1U1bpRtlT40aoLEUhWKAyVdowxW4yGCP3nL5E69tZQQgsag+OnxBa6f88j63u
+ wxmOJGNXcwCerkCb+wUPwJzChSifFYmuV5l89LKHgSbv0WHSN9OLkuhJO+I9fsCNvro1Y7dT
+ U/yq4aSVzjaqPT3yrnQkzVDxrYT54FLWO1ssFKAOlcfeWzqrT9QNcHIzHMQYf5c03Kyq3yMI
+ Xi91hkw2uc/GuA2CZ8dUD3BZhUT1dm0igE9NViE1M7F5lHQONEr7MOCg1hcrkngY62V6vh0f
+ RcDeV0ISwlZWuQINBFMB0ccBEACXKmWvojkaG+kh/yipMmqZTrCozsLeGitxJzo5hq9ev31N
+ 2XpPGx4AGhpccbco63SygpVN2bOd0W62fJJoxGohtf/g0uVtRSuK43OTstoBPqyY/35+VnAV
+ oA5cnfvtdx5kQPIL6LRcxmYKgN4/3+A7ejIxbOrjWFmbWCC+SgX6mzHHBrV0OMki8R+NnrNa
+ NkUmMmosi7jBSKdoi9VqDqgQTJF/GftvmaZHqgmVJDWNrCv7UiorhesfIWPt1O/AIk9luxlE
+ dHwkx5zkWa9CGYvV6LfP9BznendEoO3qYZ9IcUlW727Le80Q1oh69QnHoI8pODDBBTJvEq1h
+ bOWcPm/DsNmDD8Rwr/msRmRyIoxjasFi5WkM/K/pzujICKeUcNGNsDsEDJC5TCmRO/TlvCvm
+ 0X+vdfEJRZV6Z+QFBflK1asUz9QHFre5csG8MyVZkwTR9yUiKi3KiqQdaEu+LuDD2CGF5t68
+ xEl66Y6mwfyiISkkm3ETA4E8rVZP1rZQBBm83c5kJEDvs0A4zrhKIPTcI1smK+TWbyVyrZ/a
+ mGYDrZzpF2N8DfuNSqOQkLHIOL3vuOyx3HPzS05lY3p+IIVmnPOEdZhMsNDIGmVorFyRWa4K
+ uYjBP/W3E5p9e6TvDSDzqhLoY1RHfAIadM3I8kEx5wqco67VIgbIHHB9DbRcxQARAQABiQIf
+ BBgBAgAJBQJTAdHHAhsMAAoJEFiDn/uYk8VJb7AQAK56tgX8V1Wa6RmZDmZ8dmBC7W8nsMRz
+ PcKWiDSMIvTJT5bygMy1lf7gbHXm7fqezRtSfXAXr/OJqSA8LB2LWfThLyuuCvrdNsQNrI+3
+ D+hjHJjhW/4185y3EdmwwHcelixPg0X9EF+lHCltV/w29Pv3PiGDkoKxJrnOpnU6jrwiBebz
+ eAYBfpSEvrCm4CR4hf+T6MdCs64UzZnNt0nxL8mLCCAGmq1iks9M4bZk+LG36QjCKGh8PDXz
+ 9OsnJmCggptClgjTa7pO6040OW76pcVrP2rZrkjo/Ld/gvSc7yMO/m9sIYxLIsR2NDxMNpmE
+ q/H7WO+2bRG0vMmsndxpEYS4WnuhKutoTA/goBEhtHu1fg5KC+WYXp9wZyTfeNPrL0L8F3N1
+ BCEYefp2JSZ/a355X6r2ROGSRgIIeYjAiSMgGAZMPEVsdvKsYw6BH17hDRzltNyIj5S0dIhb
+ Gjynb3sXforM/GVbr4mnuxTdLXQYlj2EJ4O4f0tkLlADT7podzKSlSuZsLi2D+ohKxtP3U/r
+ 42i8PBnX2oAV0UIkYk7Oel/3hr0+BP666SnTls9RJuoXc7R5XQVsomqXID6GmjwFQR5Wh/RE
+ IJtkiDAsk37cfZ9d1kZ2gCQryTV9lmflSOB6AFZkOLuEVSC5qW8M/s6IGDfYXN12YJaZPptJ fiD/
+Message-ID: <b93a64e0-bd83-2bf8-9bb3-7e7045c5f26f@linux.intel.com>
+Date:   Tue, 8 Dec 2020 13:21:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201122170822.21715-1-mani@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <X89JxxWX25kiUsdk@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Nov 22, 2020 at 10:38:19PM +0530, Manivannan Sadhasivam wrote:
-> From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+On 8.12.2020 11.39, Greg KH wrote:
+> On Tue, Dec 08, 2020 at 11:29:11AM +0200, Mathias Nyman wrote:
+>> From: Mika Westerberg <mika.westerberg@linux.intel.com>
+>>
+>> Intel Maple Ridge is successor of Titan Ridge Thunderbolt controller. As
+>> Titan Ridge this one also includes xHCI host controller. In order to
+>> safe energy we should put it to low power state by default when idle.
+>> For this reason allow host runtime PM for Maple Ridge.
+>>
+>> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>> ---
+>>  drivers/usb/host/xhci-pci.c | 4 +++-
+>>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> Hello,
-> 
-> This series adds support for MaxLinear/Exar USB to serial converters.
-> This driver only supports XR21V141X series but it can easily be extended
-> to other series in future.
-> 
-> This driver is inspired from the initial one submitted by Patong Yang:
-> https://lore.kernel.org/linux-usb/20180404070634.nhspvmxcjwfgjkcv@advantechmxl-desktop
-> 
-> While the initial driver was a custom tty USB driver exposing whole
-> new serial interface ttyXRUSBn, this version is completely based on USB
-> serial core thus exposing the interfaces as ttyUSBn. This will avoid
-> the overhead of exposing a new USB serial interface which the userspace
-> tools are unaware of.
-> 
-> This series has been tested with Hikey970 board hosting XR21V141X chip.
-> 
-> NOTE: I've removed all reviews and tested-by tags as the code has gone
-> through substantial rework. Greg, Linus, Mauro please consider reviewing
-> again.
-> 
+> Should this be backported to stable kernels too?
 
-Any chance to get this series into v5.11?
+I guess that wouldn't hurt. 
+Hardware is fresh but distros probably base their releases on older stable kernels.
+This would enable xhci runtime pm as default on those as well
 
-Thanks,
-Mani
+Thanks
+Mathias
 
-> Thanks,
-> Mani
-> 
-> Changes in v5:
-> 
-> * Incorporated review comments from Johan. Noticeable ones are:
->   - Made serial and gpiolib support exclusive and used mutex to avoid
->     race. The gpio requests from gpiolib will be rejected when serial
->     port is in use.
->   - The driver only binds to data interface but claims both control and
->     data interface.
->   - Handled B0 request
->   - Removed all reviews as the code has gone through substantial rework.
-> 
-> Changes in v4:
-> 
-> * Multiple improvements based on Johan's review. Noticeable ones are:
->   - Now the driver claims both control and data interfaces but only registers
->     tty device for data interface.
->   - GPIO pin status is now shared between the console and gpiolib
->     implementations. This is done to avoid changing the lines spuriously.
->   - A separate port_open flag is added to reject GPIO requests while the tty
->     port is open.
->   - Removed padding PID to gpio device.
-> * Added Greg and Mauro's review and tested tags.
-> * Included a patch from Mauro to avoid the CDC-ACM driver to claim this device
->   when this driver is built.
-> 
-> Changes in v3:
-> 
-> * Dropped the check for PID and also the reg_width property.
-> 
-> Changes in v2:
-> 
-> * Dropped the code related to handling variable register size. It's all u8 now.
-> * Dropped the header file and moved the contents to driver itself.
-> * Added Linus's reviewed-by tag for gpiochip patch.
-> * Added PID to gpiochip label
-> * Dropped gpiochip for interface 0
-> 
-> Manivannan Sadhasivam (2):
->   usb: serial: Add MaxLinear/Exar USB to Serial driver
->   usb: serial: xr_serial: Add gpiochip support
-> 
-> Mauro Carvalho Chehab (1):
->   usb: cdc-acm: Ignore Exar XR21V141X when serial driver is built
-> 
->  drivers/usb/class/cdc-acm.c    |   6 +
->  drivers/usb/serial/Kconfig     |   9 +
->  drivers/usb/serial/Makefile    |   1 +
->  drivers/usb/serial/xr_serial.c | 854 +++++++++++++++++++++++++++++++++
->  4 files changed, 870 insertions(+)
->  create mode 100644 drivers/usb/serial/xr_serial.c
-> 
-> -- 
-> 2.25.1
-> 
+
