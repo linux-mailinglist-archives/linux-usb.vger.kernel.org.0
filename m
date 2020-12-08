@@ -2,124 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE432D2B7C
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 13:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDC62D2C8F
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 15:05:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728497AbgLHMxk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 07:53:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37452 "EHLO mail.kernel.org"
+        id S1729717AbgLHOEx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Dec 2020 09:04:53 -0500
+Received: from mx2.suse.de ([195.135.220.15]:36986 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725881AbgLHMxk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Dec 2020 07:53:40 -0500
-Date:   Tue, 8 Dec 2020 18:22:50 +0530
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607431979;
-        bh=oNMSmNezk0/IPDTVM+CthNykiMyH1a+B7oR1jQ/A5qk=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nS3TeL8gHhizbF2IkCQroAS2g3NbunEH1wdGO1pQPI5YADTlJtYo+CrjiBgldISkb
-         2s4VDbA2ivrhORxVZor+wTrCWG/R0iWEn6VamVq+gOm9qCa6Ibq8e1Aiw2Cu7D3sEF
-         LnxEH88hFnjTZQLEUkTE4G9PhRtwQKzagYYW3FKQHKl0OHSZh+Bn+YrBn7wTKjPmVp
-         jSkyhr+c8YFrw7zmOb7FtQy7GNvUv4pVL4N8VtyGWzEvZiZkUFMEHtJULmDazQuvED
-         O/w4jJB7q2pivp25AiJIi/WX76fUJtU0fNzHXkqvsObxLTdogKi0Q1N3FeTVWn09B4
-         Nye3xN+U91oqA==
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        patong.mxl@gmail.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Angelo Dureghello <angelo.dureghello@timesys.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Subject: Re: [PATCH v5 2/3] usb: serial: xr_serial: Add gpiochip support
-Message-ID: <20201208125250.GB9925@work>
-References: <20201122170822.21715-1-mani@kernel.org>
- <20201122170822.21715-3-mani@kernel.org>
- <CACRpkdbY-aZB1BAD=JkZAHA+OQvpH12AD3tLAp6Nf1hwr74s9A@mail.gmail.com>
- <X8ZmfbQp7/BGgxec@localhost>
- <CACRpkdZJdxqxUEQaKUHctHRSQAUpYZJtuxonwVd_ZFAsLBbKrA@mail.gmail.com>
- <X89OOUOG0x0SSxXA@localhost>
- <CACRpkdavm7GG8HdV1xk0W_b1EzUmvF0kKAGnp0u6t42NAWa9iA@mail.gmail.com>
+        id S1729642AbgLHOEx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Dec 2020 09:04:53 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1607436247; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yI47PZ1BEWcH55gtJy8OJsv582/U5jdzzDC3vPDZf90=;
+        b=dAvsDWLvzY/hRWj7FhlSIZMbDXYI5ec3sPQ7Xyp3Vedc2oXBJrm9hj/hUASUgHEwT9BkCj
+        zz0upVO62jcbR3g6t0vBH4OqCcwnsqvWZ5P9m1ksNGgDd85hLl+PKDcbg+hvKQbkzZus64
+        faI5MpPiq5yijNsbhPE6hqgJBsIxoow=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 013FBACC3;
+        Tue,  8 Dec 2020 14:04:07 +0000 (UTC)
+Message-ID: <36ac7a79c4b24f9f68b3543d18a51ec9af0a4933.camel@suse.com>
+Subject: Re: Issues with LaCie USB3 drive and UAS
+From:   Oliver Neukum <oneukum@suse.com>
+To:     "David C. Partridge" <david.partridge@perdrix.co.uk>,
+        linux-usb@vger.kernel.org
+Date:   Tue, 08 Dec 2020 15:03:51 +0100
+In-Reply-To: <005601d6cc87$2fa608f0$8ef21ad0$@perdrix.co.uk>
+References: <004f01d6b5bd$d4f08ff0$7ed1afd0$@perdrix.co.uk>
+                                                      <eceedea7ca5d950eb8ea4d186a6b01a04d0a804f.camel@suse.com>
+                                                       <001601d6b67d$e97a1e30$bc6e5a90$@perdrix.co.uk>
+                                                 <aebf92944c1ecb256d21108ce092165a0fd904db.camel@suse.com>
+                                               <001b01d6b68a$79937fa0$6cba7ee0$@perdrix.co.uk>
+                                                 <007901d6b6ab$f0f66230$d2e32690$@perdrix.co.uk>
+                                         <43abe2af0352f17f93e2453a86e2ed47b9913b6a.camel@suse.com>
+                                       <000f01d6c326$1eea3f50$5cbebdf0$@perdrix.co.uk>
+                                 <d478123862a7e94898aaa771c21cc8cb0a3819fc.camel@suse.com>
+                                 <008101d6c3d7$2427ee70$6c77cb50$@perdrix.co.uk>
+                         <11ea70180f52b4965a451b3970891e0f547c777b.camel@suse.com>
+                         <000001d6c89c$086812e0$193838a0$@perdrix.co.uk>
+                 < 612be9a9cd6ffd b9492781e174859c7b4e694a86.camel@suse.com>
+                 <000301d6c919$af7a94e0$0e6fbea0$@perdrix.co.uk>
+         <918e298941f820a7cc3310c95dc211cca7596dba.camel@suse.com>
+         <000e01d6c980$d9a75f70$8cf61e50$@perdrix.co.uk>
+         <005601d6cc87$2fa608f0$8ef21ad0$@perdrix.co.uk>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACRpkdavm7GG8HdV1xk0W_b1EzUmvF0kKAGnp0u6t42NAWa9iA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 08, 2020 at 01:41:52PM +0100, Linus Walleij wrote:
-> On Tue, Dec 8, 2020 at 10:57 AM Johan Hovold <johan@kernel.org> wrote:
-> > [Me]
+Am Montag, den 07.12.2020, 10:53 +0000 schrieb David C. Partridge:
+> Using options usb-storage quirks=059f:105f:ks
 > 
-> > > A better approach might be to create an array of names
-> > > prepended with something device-unique like the USB
-> > > bus topology? Or do we need a helper to help naming the
-> > > GPIOs? What would be helpful here?
-> > >
-> > > name = kasprintf(GFP_KERNEL, "%s-NAME", topology_str);
-> >
-> > Well we started discussing this back when we only had the sysfs
-> > interface which suffered from the same problem. I thought the chardev
-> > interface was supposed to get rid of the assumption of a flat name
-> > space? Perhaps in v3 of the ABI. ;P
-> 
-> It's "mostly true" that the line names are unique per-chip actually,
-> because people don't like the nasty warning message. I wonder
-> if anything would really break if I go in and make a patch to
-> enforce it, since all drivers passing ->names in the gpiochip
-> are in the kernel we can check them all.
-> 
-> If the names are unique-per-chip, we can add a restriction like this
-> with the requirement:
-> 
-> depends on !GPIO_SYSFS
-> 
+> Dec 07 10:40:40 charon kernel: usb 2-1: new SuperSpeed Gen 1 USB device number 2 using xhci_hcd
+> Dec 07 10:40:40 charon kernel: usb 2-1: New USB device found, idVendor=059f, idProduct=105f, bcdDevice= 0.01
+> Dec 07 10:40:40 charon kernel: usb 2-1: New USB device strings: Mfr=2, Product=3, SerialNumber=1
+> Dec 07 10:40:40 charon kernel: usb 2-1: Product: 2Big Quadra USB3
+> Dec 07 10:40:40 charon kernel: usb 2-1: Manufacturer: LaCie
+> Dec 07 10:40:40 charon kernel: usb 2-1: SerialNumber: 00000000250e9e711084
+> Dec 07 10:40:40 charon mtp-probe[2790]: checking bus 2, device 2: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-1"
+> Dec 07 10:40:40 charon mtp-probe[2790]: bus: 2, device: 2 was not an MTP device
+> Dec 07 10:40:40 charon kernel: usb_storage: loading out-of-tree module taints kernel.
+> Dec 07 10:40:40 charon kernel: usb_storage: module verification failed: signature and/or required key missing - tainting kernel
+> Dec 07 10:40:40 charon kernel: usbcore: registered new interface driver usb-storage
+> Dec 07 10:40:40 charon kernel: scsi host5: uas
+> Dec 07 10:40:40 charon kernel: usbcore: registered new interface driver uas
+> Dec 07 10:40:40 charon kernel: scsi 5:0:0:0: Direct-Access     LaCie    2Big Quadra v3   051E PQ: 0 ANSI: 6
+> Dec 07 10:40:40 charon kernel: sd 5:0:0:0: Attached scsi generic sg3 type 0
+> Dec 07 10:40:40 charon mtp-probe[2799]: checking bus 2, device 2: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-1"
+> Dec 07 10:40:40 charon mtp-probe[2799]: bus: 2, device: 2 was not an MTP device
+> Dec 07 10:40:40 charon kernel: sd 5:0:0:0: [sdc] 7814025564 512-byte logical blocks: (4.00 TB/3.64 TiB)
+> Dec 07 10:40:40 charon kernel: sd 5:0:0:0: [sdc] Write Protect is off
+> Dec 07 10:40:40 charon kernel: sd 5:0:0:0: [sdc] Mode Sense: 43 00 00 00
+> Dec 07 10:40:40 charon kernel: sd 5:0:0:0: [sdc] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+> Dec 07 10:40:57 charon kernel: usb 2-1: USB disconnect, device number 2
 
-This sounds reasonable to me.
+Again, did you plug the cable or did the device spontaneously
+disconnect?
 
-> so it can't even be compiled in if someone is using the sysfs.
-> 
-> That should solve the situation where people are (ab)using
-> the sysfs and getting name collisions as a result.
-> 
-> Then it should be fine for any driver to provide a names array
-> provided all the names are unique on that gpiochip.
-> 
-> I doubt it would break anything, but let's see what Geert says.
-> He has some special usecases in the gpio-aggregator driver
-> which will incidentally look for just linenames when
-> aggregating gpios, but I feel it is a bit thick for it to work
-> with multiple hot-pluggable GPIO chips as well, I don't think
-> that is its usecase. (We all want to be perfect but...)
-> 
-> > But what about any other non-pluggable
-> > IC, which provides a few named GPIO lines and of which there could be
-> > more than one in a system?
-> 
-> I think if there are such, and the lines are unique per-chip
-> we should make the drivers depend on !GPIO_SYSFS.
-> 
-> > The topology is already encoded in sysfs and it seems backwards to have
-> > each and every gpio driver reconstruct it.
-> 
-> I agree.
-> 
-> I think if this driver already has unique line-names per-gpiochip
-> we could actually make it depend on !GPIO_SYSFS and
-> just add the names.
-> 
+> Dec 07 10:40:57 charon kernel: sd 5:0:0:0: [sdc] Optimal transfer size 33553920 bytes
+> Dec 07 10:40:57 charon kernel: sd 5:0:0:0: [sdc] Read Capacity(16) failed: Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK
+> Dec 07 10:40:57 charon kernel: sd 5:0:0:0: [sdc] Sense not available.
+> Dec 07 10:40:58 charon kernel: sd 5:0:0:0: [sdc] Read Capacity(10) failed: Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK
+> Dec 07 10:40:58 charon kernel: sd 5:0:0:0: [sdc] Sense not available.
+> Dec 07 10:40:58 charon kernel: sd 5:0:0:0: [sdc] 0 512-byte logical blocks: (0 B/0 B)
+> Dec 07 10:40:58 charon kernel: sd 5:0:0:0: [sdc] Attached SCSI disk
 
-Sure thing.
+To be expected in that case.
 
-Johan, if you are okay with this I can resubmit incorporating Linus's
-suggestion.
+> Dec 07 10:40:58 charon kernel: usb 2-1: new SuperSpeed Gen 1 USB device number 3 using xhci_hcd
+> Dec 07 10:40:58 charon kernel: usb 2-1: New USB device found, idVendor=059f, idProduct=105f, bcdDevice= 0.01
+> Dec 07 10:40:58 charon kernel: usb 2-1: New USB device strings: Mfr=2, Product=3, SerialNumber=1
+> Dec 07 10:40:58 charon kernel: usb 2-1: Product: 2Big Quadra USB3
+> Dec 07 10:40:58 charon kernel: usb 2-1: Manufacturer: LaCie
+> Dec 07 10:40:58 charon kernel: usb 2-1: SerialNumber: 00000000250e9e711084
+> Dec 07 10:40:58 charon kernel: scsi host5: uas
+> Dec 07 10:40:58 charon kernel: scsi 5:0:0:0: Direct-Access     LaCie    2Big Quadra v3   051E PQ: 0 ANSI: 6
+> Dec 07 10:40:58 charon kernel: scsi 5:0:0:0: Attached scsi generic sg3 type 0
+> Dec 07 10:40:58 charon kernel: sd 5:0:0:0: [sdc] 7814025564 512-byte logical blocks: (4.00 TB/3.64 TiB)
+> Dec 07 10:40:58 charon kernel: sd 5:0:0:0: [sdc] Write Protect is off
+> Dec 07 10:40:58 charon kernel: sd 5:0:0:0: [sdc] Mode Sense: 43 00 00 00
+> Dec 07 10:40:58 charon kernel: sd 5:0:0:0: [sdc] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+> Dec 07 10:40:59 charon mtp-probe[2858]: checking bus 2, device 3: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-1"
+> Dec 07 10:40:59 charon mtp-probe[2858]: bus: 2, device: 3 was not an MTP device
+> Dec 07 10:40:59 charon mtp-probe[2861]: checking bus 2, device 3: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-1"
+> Dec 07 10:40:59 charon mtp-probe[2861]: bus: 2, device: 3 was not an MTP device
+> Dec 07 10:41:29 charon kernel: sd 5:0:0:0: tag#6 uas_eh_abort_handler 0 uas-tag 1 inflight: IN 
+> Dec 07 10:41:29 charon kernel: sd 5:0:0:0: tag#6 CDB: Report supported operation codes a3 0c 01 12 00 00 00 00 02 00 00 00
 
-Thanks,
-Mani
+OK, the SCSI layer is not reacting as desired.
 
-> Yours,
-> Linus Walleij
+> Dec 07 10:41:29 charon kernel: scsi host5: uas_eh_device_reset_handler start
+> Dec 07 10:41:29 charon kernel: usb 2-1: reset SuperSpeed Gen 1 USB device number 3 using xhci_hcd
+> Dec 07 10:41:29 charon kernel: scsi host5: uas_eh_device_reset_handler success
+
+In this case, could you retry with
+usb-storage quirks=059f:105f:kf
+?
+
+	Regards
+		Oliver
+
+
