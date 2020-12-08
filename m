@@ -2,80 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD4B2D27AF
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 10:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7585B2D27A6
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 10:31:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728848AbgLHJbL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 04:31:11 -0500
-Received: from mga06.intel.com ([134.134.136.31]:9885 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727745AbgLHJbK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Dec 2020 04:31:10 -0500
-IronPort-SDR: ParJaAwdKAH4TQOijb1YOiGowubC6P9+zAgYbHgjPDzJNg2hYB2FVmfaPYr7ztIcLYGWKaCa1u
- l9G4YqC2JXGg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9828"; a="235460694"
-X-IronPort-AV: E=Sophos;i="5.78,402,1599548400"; 
-   d="scan'208";a="235460694"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2020 01:28:07 -0800
-IronPort-SDR: LPAtSp8n01TZ0SQxsUNIICc9+Z+1evzMwfxRR7PtH5KdJhlb64yQX/X8/R2f1FQZ2KzJetFY6v
- GA+dLTQ8Cukg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,402,1599548400"; 
-   d="scan'208";a="552165913"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by orsmga005.jf.intel.com with ESMTP; 08 Dec 2020 01:28:05 -0800
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>, Li Jun <jun.li@nxp.com>,
-        stable@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 5/5] xhci: Give USB2 ports time to enter U3 in bus suspend
-Date:   Tue,  8 Dec 2020 11:29:12 +0200
-Message-Id: <20201208092912.1773650-6-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201208092912.1773650-1-mathias.nyman@linux.intel.com>
-References: <20201208092912.1773650-1-mathias.nyman@linux.intel.com>
+        id S1728921AbgLHJaQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Dec 2020 04:30:16 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:40768 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727845AbgLHJaQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 04:30:16 -0500
+Received: by mail-lj1-f193.google.com with SMTP id x23so11314467lji.7;
+        Tue, 08 Dec 2020 01:29:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Bl1BpzFHK81haaQNi3dHDZIBtyotDgiUUbLCQGH6GfI=;
+        b=SQBhODFnNvXBiJfUCF9Uwf1e+3Lk9eLuJRYWOODP2VPL4hre93105NtZmTq6F4aFHf
+         gomzq23ms1ACmm+OrwURakYdLdtnPilbRjNxT75vfUVau7nmT8yOIFW6YwKMco0dCSpl
+         /X/2nTrYymYfjzzcYh159xUeA4T+KiM247MZSkgfTCu6C4p3shXqpjOKpbVuE29zV/X1
+         zWu/balRE2gpUMSddvqwKbTPDZjPizbmCXptFGusM1WmCxfbc3uc4Yl1e8o2QST32/qE
+         REyv9x8iVZVuw7bbkCHgtWvsoal4IrXKaZvX/aV4mrX7JV4pdfCRXgcgtcH46mbWAfbT
+         DMpw==
+X-Gm-Message-State: AOAM532V78+ywnX4O/bESjXHBZXGODNsrIbXJAfzwQwt/yFEgWfNZFVE
+        kEJtmGqDBbOAO3hwLjhjyc6ahzoB4qh2/g==
+X-Google-Smtp-Source: ABdhPJzHrVV9YWmfaaFMMWTV5pgu/BNkM/0NoXuaq4HsnWzuDQU6v34rrJi6vLLFiflu1MxTNKokfA==
+X-Received: by 2002:a2e:9990:: with SMTP id w16mr10427297lji.111.1607419767923;
+        Tue, 08 Dec 2020 01:29:27 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id e10sm3172455lfn.115.2020.12.08.01.29.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Dec 2020 01:29:27 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kmZJs-0002TL-Vz; Tue, 08 Dec 2020 10:30:05 +0100
+Date:   Tue, 8 Dec 2020 10:30:04 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Mychaela Falconia <mychaela.falconia@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Mychaela N . Falconia" <falcon@freecalypso.org>,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] tty: add flag to suppress ready signalling on open
+Message-ID: <X89HnHOUy9519yhU@localhost>
+References: <20201130153742.9163-1-johan@kernel.org>
+ <CA+uuBqYmzJMiY75LrA_uKb_uL2=7oQTrzCFksb2ehT0XMXxrbw@mail.gmail.com>
+ <c8f3e485-54c6-99c7-4888-6eef2e174bf6@kernel.org>
+ <X8d/Ac5Z4bT/W7ZA@localhost>
+ <a58e3a7b-58bb-0430-2344-8e8155758e45@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a58e3a7b-58bb-0430-2344-8e8155758e45@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Li Jun <jun.li@nxp.com>
+On Fri, Dec 04, 2020 at 07:58:53AM +0100, Jiri Slaby wrote:
+> On 02. 12. 20, 12:48, Johan Hovold wrote:
+> >>> but I question the
+> >>> usefulness of doing so, as it is a chicken and egg problem: one needs
+> >>> to open the tty device in order to do termios ioctls on it, and if
+> >>> that initial open triggers DTR/RTS hardware actions, then the end user
+> >>> is still screwed.  If Johan or someone else can see a potential use
+> >>> case for manipulating this new flag via termios (as opposed to sysfs
+> >>> or USB-ID-based driver quirks), perhaps you could elaborate on it?
+> >>
+> >> We would need to (ab)use another open flag (e.g. O_DIRECT). I am not
+> >> biased to either of solutions.
+> > 
+> > Forgot to mention that using open-flags would prevent using standard
+> > utilities like cat, echo and terminal programs. So for that reason a
+> > termios and/or sysfs interface is also preferred.
+> 
+> Nope, I meant it differently. You set it up once using the special open 
+> flag. Like with setserial, one sets I/O port, irqs etc. and then uses 
+> standard tools as the port is already set up (marked as NORDY in this
+> case).
 
-If a USB2 device wakeup is not enabled/supported the link state may
-still be in U0 in xhci_bus_suspend(), where it's then manually put
-to suspended U3 state.
+Ok, but leaving the open flag abuse aside, that would still require a
+custom tool to do the setup.
 
-Just as with selective suspend the device needs time to enter U3
-suspend before continuing with further suspend operations
-(e.g. system suspend), otherwise we may enter system suspend with link
-state in U0.
+There are also no other examples of such an interface with a "sticky"
+open flag affecting later opens. But you probably meant that the open
+flag only affects the current open, and then the termios flag is used
+to make the setting stick. 
 
-[commit message rewording -Mathias]
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Li Jun <jun.li@nxp.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-hub.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Note that having a udev rule handle this at boot using a sysfs interface
+does not require any custom tools at all.
 
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index c799ca5361d4..74c497fd3476 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -1712,6 +1712,10 @@ int xhci_bus_suspend(struct usb_hcd *hcd)
- 	hcd->state = HC_STATE_SUSPENDED;
- 	bus_state->next_statechange = jiffies + msecs_to_jiffies(10);
- 	spin_unlock_irqrestore(&xhci->lock, flags);
-+
-+	if (bus_state->bus_suspended)
-+		usleep_range(5000, 10000);
-+
- 	return 0;
- }
- 
--- 
-2.25.1
+And in theory nothing prevents extending/abusing POSIX with such an open
+behaviour later.
 
+Johan
