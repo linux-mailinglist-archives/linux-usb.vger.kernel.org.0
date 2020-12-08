@@ -2,79 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 422282D27C3
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 10:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CECFC2D27DC
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 10:40:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728699AbgLHJfB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 04:35:01 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:47375 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727482AbgLHJfA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 04:35:00 -0500
-Received: from orion.localdomain ([95.117.39.192]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MDhQt-1ktUBK0RVv-00AoTj; Tue, 08 Dec 2020 10:32:09 +0100
-From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     duncan.sands@free.fr, accessrunner-general@lists.sourceforge.net,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 3/3] drivers: usb: atm: use pr_err() and pr_warn() instead of raw printk()
-Date:   Tue,  8 Dec 2020 10:32:06 +0100
-Message-Id: <20201208093206.24780-3-info@metux.net>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20201208093206.24780-1-info@metux.net>
-References: <20201208093206.24780-1-info@metux.net>
-X-Provags-ID: V03:K1:MmyerTd2PpR2Z6zqetbr9VnuqB7jfj2Aq2+ftbj5b6kC3eQIVeu
- 7d26a0rA1zLDCHdQ3SGbT88WgDRZvu8MNw8D4CNpu7T7B0LEdbP4z/dbCBXTy1fLT/gxSOv
- O3f5+OHRIJVEf4NZvbICGJA+BJmlBZ+tYbYWBxSX8BZE6DEyrQNV6xF7kEIkV0stP9uD4rt
- zzybvbZ4M8ZnlzmZjSZPg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:GAEp16o9VWk=:EfpMJ1HqMj/DZqe+yxrE/+
- 6I72SeZLrLcSS0oY4uzrv452BWQiEGw7ozIebcsKaQ0Dq23ryGUEC4wSrKrogFDbkMWrXaf2f
- VeFqQlHZ3JsTMaRk9mdS26f4F6fCNNXOIt91NzvNWOJr2ftnK+mgasM4qLeVdS3vNKjL0zPdT
- V5g65FpTxJT4W9dKv51TrtmZrGIxC1+xnwsjvG+tV2sIgV7+mHXIjnUi9S6T/dGar1VeHQQs2
- n5BdpKBHADOLf5Wti2eKjka4wf6ONmAJdVSdYxyHiQUtgMv/73pbqcci9ohTeIa7pIeeSfb7r
- cztuk9qGu0Aq6+Pr1vctxKmZ41gBHk4rAOPFFkL7iREvkbPIp5d0gAopnEBJapw/lxz3WzG76
- 1ycO45OeG94LrOKz2MEr5zpWD/ZTzpGmc/oA2VhSkOGaLBd5AVa92PW3YPaA5
+        id S1728812AbgLHJjZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Dec 2020 04:39:25 -0500
+Received: from mga01.intel.com ([192.55.52.88]:3517 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727831AbgLHJjY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Dec 2020 04:39:24 -0500
+IronPort-SDR: RJGCzVcAxNlQricLjz/DfdP+9ItWBjQ4wrobbJRprvRGrx6Laaip7Yanyb3ViB2JHe6VI87AF7
+ xvzf09HF7KOw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9828"; a="192145328"
+X-IronPort-AV: E=Sophos;i="5.78,402,1599548400"; 
+   d="scan'208";a="192145328"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2020 01:37:37 -0800
+IronPort-SDR: ZLLqWybu4KNlwT0nEra2KW9AAi9SfnFfqpqzXJdn+3aobKyzkNBm4nS7myaqwoGh6IiPV0zit4
+ L+35aKnD+L+Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,402,1599548400"; 
+   d="scan'208";a="437320455"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 08 Dec 2020 01:37:35 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 08 Dec 2020 11:37:34 +0200
+Date:   Tue, 8 Dec 2020 11:37:34 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        bleung@chromium.org, Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: typec: Add bus type for plug alt modes
+Message-ID: <20201208093734.GD680328@kuha.fi.intel.com>
+References: <20201203030846.51669-1-pmalani@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201203030846.51669-1-pmalani@chromium.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since we have the nice helpers pr_err() and pr_warn(), use them instead
-of raw printk().
+On Wed, Dec 02, 2020 at 07:08:47PM -0800, Prashant Malani wrote:
+> Add the Type C bus for plug alternate modes which are being
+> registered via the Type C connector class. This ensures that udev events
+> get generated when plug alternate modes are registered (and not just for
+> partner/port alternate modes), even though the Type C bus doesn't link
+> plug alternate mode devices to alternate mode drivers.
 
-Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
----
- drivers/usb/atm/usbatm.c  | 2 +-
- drivers/usb/atm/xusbatm.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I still don't understand how is the uevent related to the bus? If you
+check the device_add() function, on line 2917, kobject_uevent() is
+called unconditionally. The device does not need a bus for that event
+to be generated.
 
-diff --git a/drivers/usb/atm/usbatm.c b/drivers/usb/atm/usbatm.c
-index 56fe30d247da..1c90aa273a41 100644
---- a/drivers/usb/atm/usbatm.c
-+++ b/drivers/usb/atm/usbatm.c
-@@ -1278,7 +1278,7 @@ EXPORT_SYMBOL_GPL(usbatm_usb_disconnect);
- static int __init usbatm_usb_init(void)
- {
- 	if (sizeof(struct usbatm_control) > sizeof_field(struct sk_buff, cb)) {
--		printk(KERN_ERR "%s unusable with this kernel!\n", usbatm_driver_name);
-+		pr_err("%s unusable with this kernel!\n", usbatm_driver_name);
- 		return -EIO;
- 	}
- 
-diff --git a/drivers/usb/atm/xusbatm.c b/drivers/usb/atm/xusbatm.c
-index ffc9810070a3..0befbf63d1cc 100644
---- a/drivers/usb/atm/xusbatm.c
-+++ b/drivers/usb/atm/xusbatm.c
-@@ -179,7 +179,7 @@ static int __init xusbatm_init(void)
- 	    num_vendor != num_product ||
- 	    num_vendor != num_rx_endpoint ||
- 	    num_vendor != num_tx_endpoint) {
--		printk(KERN_WARNING "xusbatm: malformed module parameters\n");
-+		pr_warn("xusbatm: malformed module parameters\n");
- 		return -EINVAL;
- 	}
- 
+Also, I don't understand how are the cable plug alt modes now
+prevented from being bind to the alt mode drivers?
+
+> Update the Type C bus documentation to mention that there
+> are alternate mode devices for plugs as well.
+> 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+>  Documentation/driver-api/usb/typec_bus.rst | 6 +++---
+>  drivers/usb/typec/class.c                  | 8 ++++++--
+>  2 files changed, 9 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/driver-api/usb/typec_bus.rst b/Documentation/driver-api/usb/typec_bus.rst
+> index 21c890ae17e5..7874d2f37d9f 100644
+> --- a/Documentation/driver-api/usb/typec_bus.rst
+> +++ b/Documentation/driver-api/usb/typec_bus.rst
+> @@ -15,9 +15,9 @@ modes by using the SVID and the mode number.
+>  
+>  :ref:`USB Type-C Connector Class <typec>` provides a device for every alternate
+>  mode a port supports, and separate device for every alternate mode the partner
+> -supports. The drivers for the alternate modes are bound to the partner alternate
+> -mode devices, and the port alternate mode devices must be handled by the port
+> -drivers.
+> +or cable plug supports. The drivers for the alternate modes are bound to the
+> +partner alternate mode devices, and the port alternate mode devices must be
+> +handled by the port drivers.
+>  
+>  When a new partner alternate mode device is registered, it is linked to the
+>  alternate mode device of the port that the partner is attached to, that has
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 35eec707cb51..74061a699f16 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -478,8 +478,12 @@ typec_register_altmode(struct device *parent,
+>  	if (!is_port)
+>  		typec_altmode_set_partner(alt);
+>  
+> -	/* The partners are bind to drivers */
+> -	if (is_typec_partner(parent))
+> +	/*
+> +	 * The partners are bind to drivers.
+> +	 * Also set the bus field for plug alt modes so that the udev event occurs on device
+> +	 * registration.
+> +	 */
+> +	if (is_typec_partner(parent) || is_typec_plug(parent))
+>  		alt->adev.dev.bus = &typec_bus;
+>  
+>  	ret = device_register(&alt->adev.dev);
+> -- 
+> 2.29.2.454.gaff20da3a2-goog
+
+thanks,
+
 -- 
-2.11.0
-
+heikki
