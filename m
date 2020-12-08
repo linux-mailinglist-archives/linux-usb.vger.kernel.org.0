@@ -2,111 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D772D2798
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 10:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5242C2D2799
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 10:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727788AbgLHJ2S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 04:28:18 -0500
-Received: from mga04.intel.com ([192.55.52.120]:11601 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727381AbgLHJ2S (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Dec 2020 04:28:18 -0500
-IronPort-SDR: jP113QkBnPA0stwIn1xF8LHx5vWxeYgH/OE8lqaHO7fQqbLtytiVm3d7FCTCGDr5ojdz6SidRh
- qcdwhiy5e/uw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9828"; a="171289223"
-X-IronPort-AV: E=Sophos;i="5.78,402,1599548400"; 
-   d="scan'208";a="171289223"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2020 01:26:26 -0800
-IronPort-SDR: zhhVIlCGklv/r/1kXZJIjPwWWQHgD3GUAwUjxitSg6FiPOePtmPR8Ctl+HX7Rzq6ldXdw/Y7u/
- I5O6XFdfvjCg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,402,1599548400"; 
-   d="scan'208";a="437316612"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 08 Dec 2020 01:26:24 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 08 Dec 2020 11:26:23 +0200
-Date:   Tue, 8 Dec 2020 11:26:23 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] usb: typec: tcpci_maxim: Enable VSAFE0V signalling
-Message-ID: <20201208092623.GC680328@kuha.fi.intel.com>
-References: <20201202040840.663578-1-badhri@google.com>
- <20201202040840.663578-3-badhri@google.com>
+        id S1728860AbgLHJ2d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Dec 2020 04:28:33 -0500
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:45217 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728362AbgLHJ2d (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Dec 2020 04:28:33 -0500
+Received: from [192.168.0.3] (unknown [95.90.244.73])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 5BF0F20647B78;
+        Tue,  8 Dec 2020 10:27:51 +0100 (CET)
+Subject: Re: usb usb1-port10: disabled by hub (EMI?), re-enabling...
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Mario Limonciello <mario.limonciello@dell.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        USB list <linux-usb@vger.kernel.org>
+References: <c8408e58-8bc3-dbe7-2a99-1b1f0d3eae21@molgen.mpg.de>
+ <X89ABDFgyjpQPeRq@kroah.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+Message-ID: <8c5d6edd-d41b-0d86-e0ea-d1a1689625de@molgen.mpg.de>
+Date:   Tue, 8 Dec 2020 10:27:50 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201202040840.663578-3-badhri@google.com>
+In-Reply-To: <X89ABDFgyjpQPeRq@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 01, 2020 at 08:08:40PM -0800, Badhri Jagan Sridharan wrote:
-> Unmask EXTENDED_STATUS_MASK.vSafe0V, ALERT.Extended_Status
-> and set vbus_vsafe0v to enable VSAFE0V signalling.
+Dear Greg, dear Mario,
+
+
+Am 08.12.20 um 09:57 schrieb Greg KH:
+> On Tue, Dec 08, 2020 at 09:18:08AM +0100, Paul Menzel wrote:
+
+>> On a Dell Precision 3540/0M14W7, BIOS 1.9.1 07/06/2020
+>>
+>>      $ lspci -nn | grep -i usb
+>>      00:14.0 USB controller [0c03]: Intel Corporation Cannon Point-LP USB 3.1
+>> xHCI Controller [8086:9ded] (rev 30)
+>>      3a:00.0 USB controller [0c03]: Intel Corporation JHL6340 Thunderbolt 3
+>> USB 3.1 Controller (C step) [Alpine Ridge 2C 2016] [8086:15db] (rev 02)
+>>
+>> at each boot Linux 5.6 to 5.9 logs the error below.
+>>
+>>      [   95.528190] usb usb1-port10: disabled by hub (EMI?), re-enabling...
+>>
+>> Everything seems to be fine, so I wonder, why this is level error. Is it a
+>> hardware error?
 > 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> Yes, it is a hardware issue.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Thank you for the confirmation. Mario, do you know if this issues is 
+known to the Dell hardware team?
 
-> ---
-> Changes since v1:
-> - Setting auto_discharge_disconnect to true instead of 1 as
->   suggested by Guenter.
-> ---
->  drivers/usb/typec/tcpm/tcpci_maxim.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> index c1797239bf08..319266329b42 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> @@ -112,11 +112,18 @@ static void max_tcpci_init_regs(struct max_tcpci_chip *chip)
->  		return;
->  	}
->  
-> +	/* Enable VSAFE0V detection */
-> +	ret = max_tcpci_write8(chip, TCPC_EXTENDED_STATUS_MASK, TCPC_EXTENDED_STATUS_VSAFE0V);
-> +	if (ret < 0) {
-> +		dev_err(chip->dev, "Unable to unmask TCPC_EXTENDED_STATUS_VSAFE0V ret:%d\n", ret);
-> +		return;
-> +	}
-> +
->  	alert_mask = TCPC_ALERT_TX_SUCCESS | TCPC_ALERT_TX_DISCARDED | TCPC_ALERT_TX_FAILED |
->  		TCPC_ALERT_RX_HARD_RST | TCPC_ALERT_RX_STATUS | TCPC_ALERT_CC_STATUS |
->  		TCPC_ALERT_VBUS_DISCNCT | TCPC_ALERT_RX_BUF_OVF | TCPC_ALERT_POWER_STATUS |
->  		/* Enable Extended alert for detecting Fast Role Swap Signal */
-> -		TCPC_ALERT_EXTND;
-> +		TCPC_ALERT_EXTND | TCPC_ALERT_EXTENDED_STATUS;
->  
->  	ret = max_tcpci_write16(chip, TCPC_ALERT_MASK, alert_mask);
->  	if (ret < 0) {
-> @@ -315,6 +322,12 @@ static irqreturn_t _max_tcpci_irq(struct max_tcpci_chip *chip, u16 status)
->  		}
->  	}
->  
-> +	if (status & TCPC_ALERT_EXTENDED_STATUS) {
-> +		ret = max_tcpci_read8(chip, TCPC_EXTENDED_STATUS, (u8 *)&reg_status);
-> +		if (ret >= 0 && (reg_status & TCPC_EXTENDED_STATUS_VSAFE0V))
-> +			tcpm_vbus_change(chip->port);
-> +	}
-> +
->  	if (status & TCPC_ALERT_RX_STATUS)
->  		process_rx(chip, status);
->  
-> @@ -442,6 +455,7 @@ static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id
->  	chip->data.init = tcpci_init;
->  	chip->data.frs_sourcing_vbus = max_tcpci_frs_sourcing_vbus;
->  	chip->data.auto_discharge_disconnect = true;
-> +	chip->data.vbus_vsafe0v = true;
->  
->  	max_tcpci_init_regs(chip);
->  	chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
-> -- 
-> 2.29.2.576.ga3fc446d84-goog
 
--- 
-heikki
+Kind regards,
+
+Paul
