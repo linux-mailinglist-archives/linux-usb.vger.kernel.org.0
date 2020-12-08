@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CCF2D2F0C
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 17:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 448B02D2F09
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 17:06:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730356AbgLHQFP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 11:05:15 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:40013 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730339AbgLHQFO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 11:05:14 -0500
-Received: by mail-io1-f71.google.com with SMTP id l18so4065208iok.7
-        for <linux-usb@vger.kernel.org>; Tue, 08 Dec 2020 08:04:52 -0800 (PST)
+        id S1730336AbgLHQFJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Dec 2020 11:05:09 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:51557 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730066AbgLHQFI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 11:05:08 -0500
+Received: by mail-il1-f197.google.com with SMTP id z9so16246086ile.18
+        for <linux-usb@vger.kernel.org>; Tue, 08 Dec 2020 08:04:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
          :from:to:cc;
-        bh=hpv3KpgmoGcPwhMUS1qClauW4ZVADBQBTB64O2CLwR4=;
-        b=nUp+kz5fQ8AE/fbrqQskuX8pajxJqvYZRC+lq0x3hWKEexBqknNg0YYwI3lTlr5Og0
-         s2kis8h2ikNkehps8K9wtM8Ml77BzYpYLEGRDnxNpZ5gYcuwfRsFGK1aWabMXiv9Mem+
-         jqddoaTUqcK3/yoY85+TRDu9RVbbuOG9r1Mairuql6cXdGeZVZ/k55djfhR9a9E4+lGX
-         XOcLvyhwBcWyxEszQ1UBiWhMzKabgWoAOFOFcalxMJtM43/TclhLOciGyWWCu5sfYGO1
-         K38WdSI5iHm2hP17XFNkmOy8P/GXVBZsoJeceZKaXiOsypTqQjgXmGaMBUECYUzxhzhB
-         itqA==
-X-Gm-Message-State: AOAM532k5NiTiP/QvFxoKJYkazdcBXQsMVUb1u9MaduZyKEAX0UrFgqV
-        ljJshrY54SlGCsOLW9AihWmRDXVL4ymeA9sZnRi/6RPfzURB
-X-Google-Smtp-Source: ABdhPJxIGVVsKJL/d5PRR20afDIr8XtYWWU72tQIziAZzpTGYJm0Fp5YA4Zy8Ze/FdzNzHEb6E3CdYhJpubtEzHDbKXmyUhRLSD/
+        bh=JSyWoWyBEFIPX2b1ZTI+QDTg+k85MwyzaBHUirvFa+4=;
+        b=qhE8zx5hVuDBikA9pVpeboMjGlEqwlGnUIpM8XCdA5E8ntL/QaPBhT5s55rRtffQVJ
+         qvfDt+kTm0jBiLUeE7DJP/6wOw6RCJbAlVR1JIBlEK9pfa02ZE+mMGUYY5Xx7EbQX0sA
+         RO7Z99qVfvWshKn9ivCMXotI05HmWiTlY/1aa6xpX6SS1Nfx8olMVTFYa3mLntlTZei4
+         e9Q8WNLEGC5U/cBtH/1mBV03Sjn67CUO10wq0ic7/VXCDa4+d5JWuEGw0SjnVSaHXDjd
+         INrZ1WD3/a2f/FT8YgkOby0ycribQOvO6oOvG4W5D96G6CQTmQl9b2bCP4loeH/P7mkX
+         BBaA==
+X-Gm-Message-State: AOAM5310nKSPXMMa4q2XXWOKaU2VUVVn3TwjHWOYrtGr9UNbSmFiK8cY
+        BIDuPFBZmHs6BHc7IEN/Y6VaMMYPfH4OscN5aL+7KhlwzMcN
+X-Google-Smtp-Source: ABdhPJzDWsnwO7MsPjoVC+BbCyQXOJg057+CSMvkBaOba4jVO/pQejUY3pAwlZ7mY7R/WoYvVxh0GYdyWfjyPUXS8zMIN1tr1CGs
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1003:: with SMTP id n3mr13962774ilj.189.1607443467522;
+X-Received: by 2002:a92:d34c:: with SMTP id a12mr13210746ilh.188.1607443467716;
  Tue, 08 Dec 2020 08:04:27 -0800 (PST)
 Date:   Tue, 08 Dec 2020 08:04:27 -0800
 In-Reply-To: <20201208160425.GA1298255@rowland.harvard.edu>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e0d6f805b5f61882@google.com>
+Message-ID: <000000000000e3cf4905b5f618e1@google.com>
 Subject: Re: Re: general protection fault in tower_disconnect
 From:   syzbot <syzbot+9be25235b7a69b24d117@syzkaller.appspotmail.com>
 To:     Alan Stern <stern@rowland.harvard.edu>
@@ -139,7 +139,3 @@ want 2 args (repo, branch), got 3
 >  		retval = result;
 >  		goto error;
 >
-> -- 
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/20201208160425.GA1298255%40rowland.harvard.edu.
