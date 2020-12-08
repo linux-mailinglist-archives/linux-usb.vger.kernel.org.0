@@ -2,114 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D342A2D30F1
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 18:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9A32D316E
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Dec 2020 18:46:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730642AbgLHRZZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 12:25:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730448AbgLHRZY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 12:25:24 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B000CC061793
-        for <linux-usb@vger.kernel.org>; Tue,  8 Dec 2020 09:24:44 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id n14so17607367iom.10
-        for <linux-usb@vger.kernel.org>; Tue, 08 Dec 2020 09:24:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VpStC0N1e6piRKYEdRBX6jEDzyHXKXfxuiBfsoSPSyE=;
-        b=Cef7lcsrbXVmRHSRdSXAMM8FaCfqlh81hy7zvFXRthhVE2rOkyfUKtcv2UhVIVF61A
-         wKqUN/PBlkW7d1ALnMgowQcPGk8L1AFz9JVdhyqQTcMN5+JSptBsXd2dY2IAsix2cnhJ
-         NfL4mj9D9J+sEZtPbnjrm6fFjc8kYb/R77H2IZ7AayhRwMIQ95tmdwyjQWN2LmiH+KYm
-         /B1n3Gmul786HxxL/SL0p1SyT8+KrX158Qq0Wdjmyhuk6EOUP+zBevIuF6Pgf5UTvPe4
-         998NOoA7MYoaIR9qLToc/BL6gFOxqBWI4S82jW1Xlb0hbw/2jgLG11AOaih8IPp02xdJ
-         tKcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VpStC0N1e6piRKYEdRBX6jEDzyHXKXfxuiBfsoSPSyE=;
-        b=tVNEJdA5dDOEve43aSY+k6DsGJ3hsoglmCc1PSZMkylBFZusYWy1CBlK3G9fM7Zknd
-         4DKLBlyb7D/egVB69S6tuaLL4XLbfAWYbJjvZZJlk3gvxXk5/2GW+3I/8ez7u1ropT59
-         1n5JfXF+52ytNuyWO+Zgr347HrqVyacNpxS/pFT3010wUCWGbvbD4FQrOtx7VJ8sy0uX
-         hw8Cl30g1CgO+dZ3cLVWHIYxNb4AzTS41OrQDYTI8X4o+HjOtKvgwdVjzB+Ghp1IpsVh
-         5TmAhAm4+7/KUTketYvlPedgIVbkfoqIN8VTH6Pm7xeBNfnv0J5Hu0umfYp6TfCMMX9/
-         nhQw==
-X-Gm-Message-State: AOAM533cNbTcDwGkuyxZA6g1KKWSiL80xujsV9T1Bu587T1wsmvDW4po
-        9km6rZIBglYOEViuYODCYAIQzQ==
-X-Google-Smtp-Source: ABdhPJypdhovVczqnBwFmHp0Hi7JoAtlv8TbKqZ5feeSsl3RHjfSSIDwFuKPupkPiPMb7t17ptDCCQ==
-X-Received: by 2002:a02:b011:: with SMTP id p17mr24759483jah.114.1607448283555;
-        Tue, 08 Dec 2020 09:24:43 -0800 (PST)
-Received: from google.com ([2601:285:8380:9270::33b4])
-        by smtp.gmail.com with ESMTPSA id a15sm3516260ilh.10.2020.12.08.09.24.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Dec 2020 09:24:42 -0800 (PST)
-Date:   Tue, 8 Dec 2020 10:24:40 -0700
-From:   Ross Zwisler <zwisler@google.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "kernel@collabora.com" <kernel@collabora.com>
-Subject: Re: xhci problem -> general protection fault
-Message-ID: <X8+22DeNDn1A7X+N@google.com>
-References: <20200925210517.GA4487@google.com>
- <7e38c533-6ea1-63a6-fc92-2ecef7ee1f84@linux.intel.com>
- <20201001164352.GA13249@google.com>
- <69f8cbc3-0ae7-cfb2-2fdd-556ada77381f@linux.intel.com>
- <20201012215348.GA3324220@google.com>
- <ad976018-31ec-3b1e-464c-363a08538ef5@linux.intel.com>
- <CAGRrVHwC=3qs00CTzPkrVPzXBnpcxfjRCKjgaYK9Hjt0GRfObg@mail.gmail.com>
- <ee24e656-f898-6b0b-ea91-9875390abb72@linux.intel.com>
- <CAGRrVHwgxtPF89niHV3N58SaDb7q5jWde_g7-yVxGPcKhemsaw@mail.gmail.com>
- <b6eba37b-c78b-fc99-5aca-f9e5856e80ac@linux.intel.com>
+        id S1730203AbgLHRp5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Dec 2020 12:45:57 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:38571 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727998AbgLHRp4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 12:45:56 -0500
+Received: (qmail 1304838 invoked by uid 1000); 8 Dec 2020 12:45:15 -0500
+Date:   Tue, 8 Dec 2020 12:45:15 -0500
+From:   'Alan Stern' <stern@rowland.harvard.edu>
+To:     "David C. Partridge" <david.partridge@perdrix.co.uk>
+Cc:     'Oliver Neukum' <oneukum@suse.com>, linux-usb@vger.kernel.org
+Subject: Re: Issues with LaCie USB3 drive and UAS
+Message-ID: <20201208174515.GG1298255@rowland.harvard.edu>
+References: <11ea70180f52b4965a451b3970891e0f547c777b.camel@suse.com>
+ <000001d6c89c$086812e0$193838a0$@perdrix.co.uk>
+ <000301d6c919$af7a94e0$0e6fbea0$@perdrix.co.uk>
+ <918e298941f820a7cc3310c95dc211cca7596dba.camel@suse.com>
+ <000e01d6c980$d9a75f70$8cf61e50$@perdrix.co.uk>
+ <005601d6cc87$2fa608f0$8ef21ad0$@perdrix.co.uk>
+ <36ac7a79c4b24f9f68b3543d18a51ec9af0a4933.camel@suse.com>
+ <000701d6cd7c$236ec8b0$6a4c5a10$@perdrix.co.uk>
+ <20201208162722.GC1298255@rowland.harvard.edu>
+ <000801d6cd81$dc303370$94909a50$@perdrix.co.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b6eba37b-c78b-fc99-5aca-f9e5856e80ac@linux.intel.com>
+In-Reply-To: <000801d6cd81$dc303370$94909a50$@perdrix.co.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 04, 2020 at 08:07:30PM +0200, Mathias Nyman wrote:
-<>
-> Ok, thanks.
+On Tue, Dec 08, 2020 at 04:47:44PM -0000, David C. Partridge wrote:
+> >This is puzzling.  The device connected at SuperSpeed in the previous
+> tests.  Clearly this is related to the warning in the preceding line (the
+> port failed to configure its link partner).
 > 
-> Then the rootcause remains unknown.
-> For some reason the endpoint context dequeue pointer field contains zero
-> instead of the new dequeue pointer.
-> The (output) endpoint context is supposed to be written only by the controller.
+> >What could have happened?  A problem in the cable?
 > 
-> Time to change strategy and start to detect and treat the symptoms instead.
+> Previous test was using a 3m long cable.
 > 
-> I wrote a patch that detects the 0-dequeue pointer and issues a
-> new Set TR Deq pointer command. Hopefully that works.
-> patch added to same branch, can you try it out?
+> Tried again with a 1m cable:
 > 
-> 3f6326766abc xhci: retry setting new dequeue if xHC hardware failed to update it
+> Dec 08 16:38:30 charon kernel: usb 2-1: new SuperSpeed Gen 1 USB device
+> number 2 using xhci_hcd
+...
+
+So it worked.
+
+> I then tried again using the 3m long cable and got the same error as before
+> and connected at high-speed not SuperSpeed
 > 
-> I didn't set a retry limit yet so if it doesn't work it might retry forever.
+> Should I expect problems with a 3m long cable or does this say the 3m long
+> cable is faulty? 
 
-Here are some logs when running with that commit:
+IT depends on the thickness (gauge) of the wires inside the cable.  
+There's a table (11-3) in the USB-3.1 spec that lists maximum cable 
+length for a variety of gauges.
 
-https://gist.github.com/rzwisler/17923c9dedf2b914254eadd1cd294a4c
+For AWG 28 the maximum cable length is 0.8 meters.  For AWG 20 the 
+maximum length is 5.3 meters.  Your cable is likely to be somewhere in 
+that range, but I don't know where.
 
-I think we only consistently get the clean failure case with the dequeue
-pointer being 0 if CONFIG_INTEL_IOMMU_DEFAULT_ON=y.
+On the bright side, it looks like you have found the answer to all the 
+problems.  :-)
 
-If that option is set to 'n', we get the same failure where the xHCI
-controller totally dies (log "CONFIG_INTEL_IOMMU_DEFAULT_ON=n" in the gist).
-
-With CONFIG_INTEL_IOMMU_DEFAULT_ON=y we do seem to live through multiple
-errors, but as soon as I try to use the device normally afterwards it seems to
-spin forever with these messages:
-
-xhci_hcd 0000:00:14.0: Looking for event-dma 00000000fff0a330 trb-start 00000000f8884000 trb-end 0000000000000000 seg-start 00000000f8884000 seg-end 00000000f8884ff0
-
-Are you able to reproduce this with Andrzej's bulk-cancel script?  I think you
-probably just need a device which accepts bulk transfer commands?  In my most
-recent reproductions my servo hardware wasn't even attached to a device, so I
-don't really think it's doing anything except sitting there and receiving
-BULK_IN commands.   I'm doing this to two devices simultaneously.
+Alan Stern
