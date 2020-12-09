@@ -2,102 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EED102D4C0E
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 21:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C7B2D4C90
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 22:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730285AbgLIUii (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 15:38:38 -0500
-Received: from mga12.intel.com ([192.55.52.136]:6795 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725816AbgLIUii (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Dec 2020 15:38:38 -0500
-IronPort-SDR: a+Jme+p862qPOl7JVqSs0pzwHZ7sW/IHasyBUnKcVfsVFuXNSluBUgAhplUBPeVvq8SU1mAvJX
- oneV2Qyz8JgA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="153384185"
-X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
-   d="scan'208";a="153384185"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 12:36:45 -0800
-IronPort-SDR: V22kb8zRx4wB7Y4newVE1FGMV1uxDJAqp7RQW/L2IH4CzDzryLaXpHdEPE3B+vMoLt8N8EbSLI
- MffEP0iSOWDA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
-   d="scan'208";a="348497562"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 09 Dec 2020 12:36:44 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 927DF1F1; Wed,  9 Dec 2020 22:36:43 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v2 3/5] usb: host: sl811: Switch to use platform_get_mem_or_io()
-Date:   Wed,  9 Dec 2020 22:36:40 +0200
-Message-Id: <20201209203642.27648-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201209203642.27648-1-andriy.shevchenko@linux.intel.com>
-References: <20201209203642.27648-1-andriy.shevchenko@linux.intel.com>
+        id S1727208AbgLIVNK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 16:13:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725765AbgLIVNK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 16:13:10 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F65C0613CF;
+        Wed,  9 Dec 2020 13:12:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=gS0VLE/3Ng4U2SxkbHkG9CNtkXAr3yvJos8iwhaz6f8=; b=khzpdumaWG5wnv6HYv+lMM/TUG
+        F/Sy61OYE7cV/UH83JYY4h/phIO5J7+BpJnUJBV/y5DUEyCAMEOoN8aNA4UsFnJROv85KEqNpgW2P
+        f8ky3rBC+uUjAdk6J0igI4j/EkIVjP/H7dRpujvbzaR8HwMWS82QOpRg8kzNK7jIKO+3xZMhco6NV
+        2Oe0FB/R492jpNxWZG0xuWC/4/9cYxjnGdwPMAH+c4Iim/yvTcOObczjUiiRUA9RtVSVbEweMEI29
+        Cvbx/IUreAkEQxNrDhjGPJ6L6n5LOsrqop+Yd5xosPZ98N5TBkvigXIugA6kUa5HPvjr2wlpvYqRr
+        aasBbY5Q==;
+Received: from [2601:1c0:6280:3f0::1494]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kn6l5-0001xS-Ha; Wed, 09 Dec 2020 21:12:24 +0000
+Subject: Re: [PATCH] usb: cdns3: Fixed kernel test robot warning
+To:     Souptick Joarder <jrdr.linux@gmail.com>, pawell@cadence.com,
+        peter.chen@nxp.com, rogerq@ti.com, a-govindraju@ti.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1607544952-4891-1-git-send-email-jrdr.linux@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <ae8cd88c-ea5d-a045-c6cd-2579a55f88d2@infradead.org>
+Date:   Wed, 9 Dec 2020 13:12:19 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
+In-Reply-To: <1607544952-4891-1-git-send-email-jrdr.linux@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Switch to use new platform_get_mem_or_io() instead of home grown analogue.
-Note, the code has been moved upper in the function to allow farther cleanups,
-such as resource sanity check.
+On 12/9/20 12:15 PM, Souptick Joarder wrote:
+> Kernel test robot throws below warning ->
+> 
+> In file included from drivers/usb/cdns3/core.c:23:
+>>> drivers/usb/cdns3/host-export.h:27:51: warning: 'struct usb_hcd'
+>>> declared inside parameter list will not be visible outside of this
+>>> definition or declaration
+>       27 | static inline int xhci_cdns3_suspend_quirk(struct usb_hcd
+> *hcd)
+>          |                                                   ^~~~~~~
+> 
+> This patch will silence it.
 
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: no changes
- drivers/usb/host/sl811-hcd.c | 20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
+Really?  Didn't silence it for me when I tested this patch.
 
-diff --git a/drivers/usb/host/sl811-hcd.c b/drivers/usb/host/sl811-hcd.c
-index adaf4063690a..115ced0d93e1 100644
---- a/drivers/usb/host/sl811-hcd.c
-+++ b/drivers/usb/host/sl811-hcd.c
-@@ -1614,12 +1614,18 @@ sl811h_probe(struct platform_device *dev)
- 	void __iomem		*addr_reg;
- 	void __iomem		*data_reg;
- 	int			retval;
--	u8			tmp, ioaddr = 0;
-+	u8			tmp, ioaddr;
- 	unsigned long		irqflags;
- 
- 	if (usb_disabled())
- 		return -ENODEV;
- 
-+	/* the chip may be wired for either kind of addressing */
-+	addr = platform_get_mem_or_io(dev, 0);
-+	data = platform_get_mem_or_io(dev, 1);
-+	if (!addr || !data || resource_type(addr) != resource_type(data))
-+		return -ENODEV;
-+
- 	/* basic sanity checks first.  board-specific init logic should
- 	 * have initialized these three resources and probably board
- 	 * specific platform_data.  we don't probe for IRQs, and do only
-@@ -1632,16 +1638,8 @@ sl811h_probe(struct platform_device *dev)
- 	irq = ires->start;
- 	irqflags = ires->flags & IRQF_TRIGGER_MASK;
- 
--	/* the chip may be wired for either kind of addressing */
--	addr = platform_get_resource(dev, IORESOURCE_MEM, 0);
--	data = platform_get_resource(dev, IORESOURCE_MEM, 1);
--	retval = -EBUSY;
--	if (!addr || !data) {
--		addr = platform_get_resource(dev, IORESOURCE_IO, 0);
--		data = platform_get_resource(dev, IORESOURCE_IO, 1);
--		if (!addr || !data)
--			return -ENODEV;
--		ioaddr = 1;
-+	ioaddr = resource_type(addr) == IORESOURCE_IO;
-+	if (ioaddr) {
- 		/*
- 		 * NOTE: 64-bit resource->start is getting truncated
- 		 * to avoid compiler warning, assuming that ->start
+Also, please see
+
+https://lore.kernel.org/linux-usb/DBBPR04MB7979502194410BB1AE96DF038BCC0@DBBPR04MB7979.eurprd04.prod.outlook.com/T/#m7f73fdd57c0f1577fb610dcaf28646b53fa7dc26
+
+(what a strange URL)
+
+I now get these 2 warnings:
+
+In file included from ../drivers/usb/cdns3/core.c:23:0:
+../drivers/usb/cdns3/host-export.h:27:44: warning: ‘struct usb_hcd’ declared inside parameter list will not be visible outside of this definition or declaration
+ static int xhci_cdns3_suspend_quirk(struct usb_hcd *hcd)
+                                            ^~~~~~~
+  CC [M]  drivers/usb/gadget/function/uvc_queue.o
+../drivers/usb/cdns3/host-export.h:27:12: warning: ‘xhci_cdns3_suspend_quirk’ defined but not used [-Wunused-function]
+ static int xhci_cdns3_suspend_quirk(struct usb_hcd *hcd)
+            ^~~~~~~~~~~~~~~~~~~~~~~~
+
+
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Souptick Joarder <jrdr.linux@gmail.com>
+> ---
+>  drivers/usb/cdns3/host-export.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/cdns3/host-export.h b/drivers/usb/cdns3/host-export.h
+> index fb8541b..c1259af 100644
+> --- a/drivers/usb/cdns3/host-export.h
+> +++ b/drivers/usb/cdns3/host-export.h
+> @@ -24,7 +24,7 @@ static inline int cdns_host_init(struct cdns *cdns)
+>  }
+>  
+>  static inline void cdns_host_exit(struct cdns *cdns) { }
+> -static inline int xhci_cdns3_suspend_quirk(struct usb_hcd *hcd)
+> +static int xhci_cdns3_suspend_quirk(struct usb_hcd *hcd)
+>  {
+>  	return 0;
+>  }
+> 
+
+
 -- 
-2.29.2
-
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
