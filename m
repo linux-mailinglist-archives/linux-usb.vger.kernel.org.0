@@ -2,128 +2,231 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 562862D3E17
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 10:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9CC52D3E45
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 10:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728675AbgLIJDx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 04:03:53 -0500
-Received: from mail-il1-f199.google.com ([209.85.166.199]:35839 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728629AbgLIJDw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 04:03:52 -0500
-Received: by mail-il1-f199.google.com with SMTP id l11so770237ilq.2
-        for <linux-usb@vger.kernel.org>; Wed, 09 Dec 2020 01:03:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=pCg9ztFovQSMSdHHqXzDsgJzAHlx4/5H0ssw+mDzOcM=;
-        b=JA2cNQz1KtP7xuZMpMjGPmr7uVMx5fV1fIKCfCx7NEfp7PVXpsnuDh6wNc55SXV6xs
-         3gp5ewRpGi+mpQP5tOz7nGovSa5RrrduwrJ+kj3dLvRUqiR5rOGngUM4m6Xx3zC3eYhj
-         ggVobk++yFO1sEJDguVkX4UIxt8xWGvGXNtxrHwuoCMEjqa7HUuukDuvw6xXkcxYGO6+
-         4afmDh0QgCCcxdY6+QppwjBIhvVFM7ZK+1rPODrR4aP0Imw51v2DLXU6pxf0S5erNKVi
-         LSRzmFdXVWeNptA0aqyjgIHEFbs+1RNXoQL353PLPlM9B+o2jGISGsRRsbD0Azhy8MeV
-         2Skw==
-X-Gm-Message-State: AOAM531nePKDIq8J6WSJkV+JK8db7d9XtF5PJ7a9rd4zEA/Eb9vKVSY6
-        cR7bgjWlfIxP8IivpVoMSWTZ3jQDFcSHVMoX5pd9+01p4u+C
-X-Google-Smtp-Source: ABdhPJyLvpOsROcoK5EDCWBWV0mBhklN7V2CXAzU92Btl9jwqKU9+Ht0vkdSKshvgTS8ZLkhHz8WbeGWxGEtqjXROXowso+PQlTF
+        id S1728630AbgLIJLz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 04:11:55 -0500
+Received: from mga04.intel.com ([192.55.52.120]:17379 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728457AbgLIJLz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Dec 2020 04:11:55 -0500
+IronPort-SDR: hlz47SQC2UAROH+eSgIxkQpQX9xrDsefFHCRPnAfJKvTdauKiBYmXeyG5f+3hnS2t23056i2rQ
+ H1gfu3qV4FEw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9829"; a="171473172"
+X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
+   d="scan'208";a="171473172"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 01:11:05 -0800
+IronPort-SDR: Xf2yjU4ybEnfhfJKFPd81gQAoQI4DQhINVFkjqOjvwdRRTJXlqwqirpRTFnHS58d0eUw4kvJv0
+ y++x8KNo9QAQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
+   d="scan'208";a="348252443"
+Received: from lkp-server01.sh.intel.com (HELO 2bbb63443648) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 09 Dec 2020 01:11:04 -0800
+Received: from kbuild by 2bbb63443648 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kmvV1-0000BW-Iw; Wed, 09 Dec 2020 09:11:03 +0000
+Date:   Wed, 09 Dec 2020 17:10:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ b175d273d4e4100b66e68f0675fef7a3c07a7957
+Message-ID: <5fd09490.oh1QAjBpOQiZ5qWT%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-Received: by 2002:a5e:9906:: with SMTP id t6mr1514061ioj.183.1607504591672;
- Wed, 09 Dec 2020 01:03:11 -0800 (PST)
-Date:   Wed, 09 Dec 2020 01:03:11 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002959f405b604541c@google.com>
-Subject: KMSAN: uninit-value in smsc75xx_read_eeprom (2)
-From:   syzbot <syzbot+341170ccba949fac01a2@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, glider@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, steve.glendinning@shawell.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: b175d273d4e4100b66e68f0675fef7a3c07a7957  USB: legotower: fix logical error in recent commit
 
-syzbot found the following issue on:
+i386-tinyconfig vmlinux size:
 
-HEAD commit:    73d62e81 kmsan: random: prevent boot-time reports in _mix_..
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=1256cc13500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=eef728deea880383
-dashboard link: https://syzkaller.appspot.com/bug?extid=341170ccba949fac01a2
-compiler:       clang version 11.0.0 (https://github.com/llvm/llvm-project.git ca2dcbd030eadbf0aa9b660efe864ff08af6e18b)
++-------+------------------------------+-------------------------------------------+
+| DELTA |            SYMBOL            |                  COMMIT                   |
++-------+------------------------------+-------------------------------------------+
+| +1821 | TOTAL                        | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
+|  +105 | TOTAL                        | 93837812a5dc Merge 5.10-rc7 into usb-next |
+| +1751 | TEXT                         | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
+|  +104 | TEXT                         | 93837812a5dc Merge 5.10-rc7 into usb-next |
+|   +68 | BSS                          | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
+|  +774 | seq_read_iter()              | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
+|  +255 | __add_to_page_cache_locked() | 93837812a5dc Merge 5.10-rc7 into usb-next |
+|  +250 | __invalidate_mapping_pages() | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
+|  +225 | intel_pmu_drain_pebs_icl()   | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
+|  +224 | intel_pmu_drain_pebs_nhm()   | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
+|  +201 | intel_pmu_drain_pebs_core()  | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
+|  +117 | init.text                    | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
+|  +103 | collect_syscall()            | 93837812a5dc Merge 5.10-rc7 into usb-next |
+|   +68 | dummy_iregs                  | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
+|   +66 | perf_event_aux_event()       | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
+|   +66 | perf_log_throttle()          | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
+|   -69 | __sb_start_write()           | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
+|   -78 | __ptrace_may_access()        | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
+|  -250 | __invalidate_mapping_pages() | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
+|  -255 | __add_to_page_cache_locked() | 93837812a5dc Merge 5.10-rc7 into usb-next |
+|  -356 | __intel_pmu_pebs_event()     | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
+|  -470 | seq_read()                   | 3650b228f83a..b175d273d4e4 (ALL COMMITS)  |
++-------+------------------------------+-------------------------------------------+
 
-Unfortunately, I don't have any reproducer for this issue yet.
+elapsed time: 724m
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+341170ccba949fac01a2@syzkaller.appspotmail.com
+configs tested: 140
+configs skipped: 2
 
-cdc_ether: probe of 5-1:1.0 failed with error -22
-smsc75xx v1.0.0
-=====================================================
-BUG: KMSAN: uninit-value in smsc75xx_eeprom_confirm_not_busy drivers/net/usb/smsc75xx.c:333 [inline]
-BUG: KMSAN: uninit-value in smsc75xx_read_eeprom+0x266/0xa10 drivers/net/usb/smsc75xx.c:352
-CPU: 1 PID: 8502 Comm: kworker/1:0 Not tainted 5.10.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x21c/0x280 lib/dump_stack.c:118
- kmsan_report+0xf7/0x1e0 mm/kmsan/kmsan_report.c:118
- __msan_warning+0x5f/0xa0 mm/kmsan/kmsan_instr.c:197
- smsc75xx_eeprom_confirm_not_busy drivers/net/usb/smsc75xx.c:333 [inline]
- smsc75xx_read_eeprom+0x266/0xa10 drivers/net/usb/smsc75xx.c:352
- smsc75xx_init_mac_address drivers/net/usb/smsc75xx.c:771 [inline]
- smsc75xx_bind+0xc71/0x13f0 drivers/net/usb/smsc75xx.c:1489
- usbnet_probe+0x1169/0x3e90 drivers/net/usb/usbnet.c:1712
- usb_probe_interface+0xfcc/0x1520 drivers/usb/core/driver.c:396
- really_probe+0xebd/0x2420 drivers/base/dd.c:558
- driver_probe_device+0x293/0x390 drivers/base/dd.c:738
- __device_attach_driver+0x63f/0x830 drivers/base/dd.c:844
- bus_for_each_drv+0x2ca/0x3f0 drivers/base/bus.c:431
- __device_attach+0x538/0x860 drivers/base/dd.c:912
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:959
- bus_probe_device+0x177/0x3d0 drivers/base/bus.c:491
- device_add+0x399e/0x3f20 drivers/base/core.c:2936
- usb_set_configuration+0x39cf/0x4010 drivers/usb/core/message.c:2159
- usb_generic_driver_probe+0x138/0x300 drivers/usb/core/generic.c:238
- usb_probe_device+0x317/0x570 drivers/usb/core/driver.c:293
- really_probe+0xebd/0x2420 drivers/base/dd.c:558
- driver_probe_device+0x293/0x390 drivers/base/dd.c:738
- __device_attach_driver+0x63f/0x830 drivers/base/dd.c:844
- bus_for_each_drv+0x2ca/0x3f0 drivers/base/bus.c:431
- __device_attach+0x538/0x860 drivers/base/dd.c:912
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:959
- bus_probe_device+0x177/0x3d0 drivers/base/bus.c:491
- device_add+0x399e/0x3f20 drivers/base/core.c:2936
- usb_new_device+0x1bd6/0x2a30 drivers/usb/core/hub.c:2554
- hub_port_connect drivers/usb/core/hub.c:5222 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5362 [inline]
- port_event drivers/usb/core/hub.c:5508 [inline]
- hub_event+0x5bc9/0x8890 drivers/usb/core/hub.c:5590
- process_one_work+0x121c/0x1fc0 kernel/workqueue.c:2272
- worker_thread+0x10cc/0x2740 kernel/workqueue.c:2418
- kthread+0x51c/0x560 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Local variable ----buf.i.i92@smsc75xx_read_eeprom created at:
- __smsc75xx_read_reg drivers/net/usb/smsc75xx.c:322 [inline]
- smsc75xx_read_reg drivers/net/usb/smsc75xx.c:147 [inline]
- smsc75xx_eeprom_confirm_not_busy drivers/net/usb/smsc75xx.c:327 [inline]
- smsc75xx_read_eeprom+0x124/0xa10 drivers/net/usb/smsc75xx.c:352
- __smsc75xx_read_reg drivers/net/usb/smsc75xx.c:322 [inline]
- smsc75xx_read_reg drivers/net/usb/smsc75xx.c:147 [inline]
- smsc75xx_eeprom_confirm_not_busy drivers/net/usb/smsc75xx.c:327 [inline]
- smsc75xx_read_eeprom+0x124/0xa10 drivers/net/usb/smsc75xx.c:352
-=====================================================
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                       maple_defconfig
+arm                             rpc_defconfig
+parisc                generic-32bit_defconfig
+arm                   milbeaut_m10v_defconfig
+powerpc                        warp_defconfig
+sh                          lboxre2_defconfig
+powerpc64                           defconfig
+powerpc                     pseries_defconfig
+powerpc                 canyonlands_defconfig
+powerpc                 mpc834x_mds_defconfig
+powerpc                         ps3_defconfig
+arm                            qcom_defconfig
+sh                             espt_defconfig
+sh                            shmin_defconfig
+arm                         orion5x_defconfig
+sh                         apsh4a3a_defconfig
+x86_64                           alldefconfig
+powerpc                         wii_defconfig
+powerpc                     mpc83xx_defconfig
+sh                          rsk7264_defconfig
+arc                     haps_hs_smp_defconfig
+sh                           se7724_defconfig
+powerpc                     ep8248e_defconfig
+arm                         assabet_defconfig
+mips                     cu1830-neo_defconfig
+sh                           se7751_defconfig
+arm                            lart_defconfig
+powerpc                mpc7448_hpc2_defconfig
+sh                   rts7751r2dplus_defconfig
+sh                           se7721_defconfig
+mips                      bmips_stb_defconfig
+arm                          ep93xx_defconfig
+riscv                               defconfig
+mips                  decstation_64_defconfig
+m68k                        mvme16x_defconfig
+arc                         haps_hs_defconfig
+c6x                         dsk6455_defconfig
+c6x                        evmc6472_defconfig
+mips                       lemote2f_defconfig
+ia64                             allmodconfig
+arm                       omap2plus_defconfig
+m68k                       m5475evb_defconfig
+arm                             mxs_defconfig
+powerpc                   currituck_defconfig
+powerpc                      mgcoge_defconfig
+arc                            hsdk_defconfig
+xtensa                              defconfig
+powerpc                      pmac32_defconfig
+arm                            mmp2_defconfig
+powerpc                       holly_defconfig
+arm                           h5000_defconfig
+sh                            migor_defconfig
+mips                        bcm63xx_defconfig
+mips                         rt305x_defconfig
+powerpc                     tqm8541_defconfig
+c6x                        evmc6678_defconfig
+powerpc                     tqm5200_defconfig
+powerpc                      acadia_defconfig
+arc                        nsimosci_defconfig
+arm                           omap1_defconfig
+h8300                               defconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a004-20201208
+i386                 randconfig-a005-20201208
+i386                 randconfig-a001-20201208
+i386                 randconfig-a002-20201208
+i386                 randconfig-a006-20201208
+i386                 randconfig-a003-20201208
+x86_64               randconfig-a004-20201208
+x86_64               randconfig-a006-20201208
+x86_64               randconfig-a005-20201208
+x86_64               randconfig-a001-20201208
+x86_64               randconfig-a002-20201208
+x86_64               randconfig-a003-20201208
+i386                 randconfig-a013-20201208
+i386                 randconfig-a014-20201208
+i386                 randconfig-a011-20201208
+i386                 randconfig-a015-20201208
+i386                 randconfig-a012-20201208
+i386                 randconfig-a016-20201208
+i386                 randconfig-a013-20201209
+i386                 randconfig-a014-20201209
+i386                 randconfig-a011-20201209
+i386                 randconfig-a015-20201209
+i386                 randconfig-a012-20201209
+i386                 randconfig-a016-20201209
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
+clang tested configs:
+x86_64               randconfig-a016-20201208
+x86_64               randconfig-a012-20201208
+x86_64               randconfig-a013-20201208
+x86_64               randconfig-a014-20201208
+x86_64               randconfig-a015-20201208
+x86_64               randconfig-a011-20201208
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
