@@ -2,136 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DAB02D4560
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 16:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80FD62D4573
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 16:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730101AbgLIP17 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 10:27:59 -0500
-Received: from mx2.suse.de ([195.135.220.15]:56712 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730099AbgLIP1w (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Dec 2020 10:27:52 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1607527625; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=GQOwtC0R7U4k+3MmZZ1vEYIjkImsQ5c4iedd9jQDtKA=;
-        b=huC4/33nRvtu82eF6/eNqQopGPHAFTs6PE+aK7hLyCK2sU2koCljHJ/mmPjKbuDcRUADQJ
-        ZqSAzSQTpqfzCvCclWxGpOA9BZMeZG4JOXB6LdTnI//QeDtu4WyT+/co4yxhS6cIGUVrN2
-        Nv9jYoRh+RDAhvOSqGF/lvcMPuAyVpI=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 72BFDAD60;
-        Wed,  9 Dec 2020 15:27:05 +0000 (UTC)
-From:   Oliver Neukum <oneukum@suse.com>
-To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        david.partridge@perdrix.co.uk
-Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [PATCHv2] USB: UAS: introduce a quirk to set no_write_same
-Date:   Wed,  9 Dec 2020 16:26:39 +0100
-Message-Id: <20201209152639.9195-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.26.2
+        id S1730421AbgLIPbS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 10:31:18 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:41441 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726555AbgLIPbS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 10:31:18 -0500
+Received: by mail-lj1-f195.google.com with SMTP id f11so2838309ljm.8;
+        Wed, 09 Dec 2020 07:31:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TGmJfop0poAU5I2zMh4LF9CytL92M/ZbRIts/6La8S8=;
+        b=O+hro+BhSrULCa0sGCaEacrQbXV4ZoPAUHSb0wg+FM5ZsonOiBZGmDdt8+y8f2pLSO
+         EqACZRogA8xsa9QGBPxRu0An79VRAmXhExcWlYkFcOxDhIzeGpHEILxYmJDBv7NRMmPZ
+         WNBzbIdE9cO2OdL+oE904GUMk7mmlcxYxiNkP/noKHhallQ7lwYglXmVcmhzQcakuZ54
+         0TUawDxAqYCexxl+TlTM7nRD3FHFnOPJHHP08vom7UziPaxTPOJo3ClkBUtzC7sP4UnD
+         sM6R0bB5PZSZp/YxLSJgcrohHGyRDyl1Y3kR0GwalxSScpXlaK6vH1ThMTj0UOXAbcSt
+         Q3zA==
+X-Gm-Message-State: AOAM530MVrEty4fO+1c9lgBHECBZlmimYcD7flSOtckTY7dk5QUUOlY7
+        0baIfWomZiyOOfCf27+TqwE=
+X-Google-Smtp-Source: ABdhPJzvCEsXNgtdPAfi+q1QYxF873m6Him6AopB6fOxqG4qytxYpPRsRFLTa2231EvbJuGH7UnXWg==
+X-Received: by 2002:a2e:88d6:: with SMTP id a22mr1323029ljk.150.1607527835523;
+        Wed, 09 Dec 2020 07:30:35 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id b5sm206311lfg.13.2020.12.09.07.30.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Dec 2020 07:30:34 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kn1Qy-0005YD-7s; Wed, 09 Dec 2020 16:31:16 +0100
+Date:   Wed, 9 Dec 2020 16:31:16 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Johan Hovold <johan@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        patong.mxl@gmail.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Angelo Dureghello <angelo.dureghello@timesys.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH v5 2/3] usb: serial: xr_serial: Add gpiochip support
+Message-ID: <X9DtxFgrkFIUIzyv@localhost>
+References: <20201122170822.21715-1-mani@kernel.org>
+ <20201122170822.21715-3-mani@kernel.org>
+ <CACRpkdbY-aZB1BAD=JkZAHA+OQvpH12AD3tLAp6Nf1hwr74s9A@mail.gmail.com>
+ <X8ZmfbQp7/BGgxec@localhost>
+ <CACRpkdZJdxqxUEQaKUHctHRSQAUpYZJtuxonwVd_ZFAsLBbKrA@mail.gmail.com>
+ <X89OOUOG0x0SSxXA@localhost>
+ <CACRpkdavm7GG8HdV1xk0W_b1EzUmvF0kKAGnp0u6t42NAWa9iA@mail.gmail.com>
+ <20201208125250.GB9925@work>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201208125250.GB9925@work>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-UAS does not share the pessimistic assumption storage
-is making that devices cannot deal with WRITE_SAME.
-A few devices supported by UAS, are reported to not
-deal well with WRITE_SAME. Those need a quirk.
+On Tue, Dec 08, 2020 at 06:22:50PM +0530, Manivannan Sadhasivam wrote:
+> On Tue, Dec 08, 2020 at 01:41:52PM +0100, Linus Walleij wrote:
+> > On Tue, Dec 8, 2020 at 10:57 AM Johan Hovold <johan@kernel.org> wrote:
 
-Add it to the device that needs it.
+> > I think if this driver already has unique line-names per-gpiochip
+> > we could actually make it depend on !GPIO_SYSFS and
+> > just add the names.
+> 
+> Sure thing.
+> 
+> Johan, if you are okay with this I can resubmit incorporating Linus's
+> suggestion.
 
-v2: added Documentation
+Let's wait a bit with adding the names.
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Reported-by: David C. Partridge <david.partridge@perdrix.co.uk>
----
- Documentation/admin-guide/kernel-parameters.txt | 1 +
- drivers/usb/storage/uas.c                       | 3 +++
- drivers/usb/storage/unusual_uas.h               | 7 +++++--
- drivers/usb/storage/usb.c                       | 3 +++
- include/linux/usb_usual.h                       | 2 ++
- 5 files changed, 14 insertions(+), 2 deletions(-)
+That can possibly be done as a follow-up too even if removing GPIO_SYSFS
+support later is not ideal in case that's the path chosen (we'd have a
+similar problem with the existing USB-serial GPIO implementations though).
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 44fde25bb221..f6a1513dfb76 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5663,6 +5663,7 @@
- 					device);
- 				j = NO_REPORT_LUNS (don't use report luns
- 					command, uas only);
-+				k = NO_SAME (do not use WRITE_SAME, uas only)
- 				l = NOT_LOCKABLE (don't try to lock and
- 					unlock ejectable media, not on uas);
- 				m = MAX_SECTORS_64 (don't transfer more
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index 56422c4b4ff3..bef89c6bd1d7 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -868,6 +868,9 @@ static int uas_slave_configure(struct scsi_device *sdev)
- 	if (devinfo->flags & US_FL_NO_READ_CAPACITY_16)
- 		sdev->no_read_capacity_16 = 1;
- 
-+	/* Some disks cannot handle WRITE_SAME */
-+	if (devinfo->flags & US_FL_NO_SAME)
-+		sdev->no_write_same = 1;
- 	/*
- 	 * Some disks return the total number of blocks in response
- 	 * to READ CAPACITY rather than the highest block number.
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index 711ab240058c..870e9cf3d5dc 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -35,12 +35,15 @@ UNUSUAL_DEV(0x054c, 0x087d, 0x0000, 0x9999,
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_NO_REPORT_OPCODES),
- 
--/* Reported-by: Julian Groß <julian.g@posteo.de> */
-+/*
-+ *  Initially Reported-by: Julian Groß <julian.g@posteo.de>
-+ *  Further reports David C. Partridge <david.partridge@perdrix.co.uk>
-+ */
- UNUSUAL_DEV(0x059f, 0x105f, 0x0000, 0x9999,
- 		"LaCie",
- 		"2Big Quadra USB3",
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
--		US_FL_NO_REPORT_OPCODES),
-+		US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
- 
- /*
-  * Apricorn USB3 dongle sometimes returns "USBSUSBSUSBS" in response to SCSI
-diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
-index 94a64729dc27..90aa9c12ffac 100644
---- a/drivers/usb/storage/usb.c
-+++ b/drivers/usb/storage/usb.c
-@@ -541,6 +541,9 @@ void usb_stor_adjust_quirks(struct usb_device *udev, unsigned long *fflags)
- 		case 'j':
- 			f |= US_FL_NO_REPORT_LUNS;
- 			break;
-+		case 'k':
-+			f |= US_FL_NO_SAME;
-+			break;
- 		case 'l':
- 			f |= US_FL_NOT_LOCKABLE;
- 			break;
-diff --git a/include/linux/usb_usual.h b/include/linux/usb_usual.h
-index 4a19ac3f24d0..6b03fdd69d27 100644
---- a/include/linux/usb_usual.h
-+++ b/include/linux/usb_usual.h
-@@ -84,6 +84,8 @@
- 		/* Cannot handle REPORT_LUNS */			\
- 	US_FLAG(ALWAYS_SYNC, 0x20000000)			\
- 		/* lies about caching, so always sync */	\
-+	US_FLAG(NO_SAME, 0x40000000)				\
-+		/* Cannot handle WRITE_SAME */			\
- 
- #define US_FLAG(name, value)	US_FL_##name = value ,
- enum { US_DO_ALL_FLAGS };
--- 
-2.26.2
-
+Johan
