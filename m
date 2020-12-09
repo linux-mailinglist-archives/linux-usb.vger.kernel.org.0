@@ -2,96 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CDE2D3E87
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 10:23:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 894DD2D3E93
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 10:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728950AbgLIJVd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 04:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
+        id S1729097AbgLIJX2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 04:23:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728488AbgLIJVb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 04:21:31 -0500
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230A2C061793
-        for <linux-usb@vger.kernel.org>; Wed,  9 Dec 2020 01:20:51 -0800 (PST)
-Received: by mail-lj1-x241.google.com with SMTP id x23so1419571lji.7
-        for <linux-usb@vger.kernel.org>; Wed, 09 Dec 2020 01:20:51 -0800 (PST)
+        with ESMTP id S1729092AbgLIJX2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 04:23:28 -0500
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BEEC0617A7
+        for <linux-usb@vger.kernel.org>; Wed,  9 Dec 2020 01:22:29 -0800 (PST)
+Received: by mail-wm1-x342.google.com with SMTP id y23so882137wmi.1
+        for <linux-usb@vger.kernel.org>; Wed, 09 Dec 2020 01:22:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1mr09ffXdVmc89p6dDRlCyEcatrToejix5SUivzuIsk=;
-        b=axTtZsMbIWlnygCChz8g7xt2gAeXugayM40N/ag0rKiUwvn83qmt+qsPuXls5upxmu
-         3qBtic4iapQFl7fhO8ICfG2eGCtKBz8ZuR86zE6Jf/O19m3X/NESm2UaHFr8vQm6lz99
-         nL2LFqsJLJNwlcLW/Ortk8aJT1fe+N62rIvQTdl3VCZGaAxxg0ZDsahdwDz8Bv4rbrIB
-         tVoAav+6gJBEI42Rc1iJJF/AAAVXsMVDLYp1BvT+XqF08AGxMa5Qhe/mgIkAI/6pz2I2
-         6z4CyvrbVeScRKYO1wkUxKCDJo7dnZFQWkW/jlez9ychli6QTYEM8SrA26t9VNupVheq
-         oGiA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Mx+SSux44r2ybzN5uouGLt8Nyz1sei2BYkCtNp5/Q1U=;
+        b=BrjxDVk7vGKmI9PkGvFwQ3GU2hA8fRK99GdYe9yoQ15TohZrTt4oqHD6OJjC7O2Y29
+         Chb5nVLxZZJ763fumMNZyor5i0DCuYNiOyFihpca10BMIb1ohsXsz09u0P1vg/3Y4wru
+         /HosQ+j/nJKg+Kb+VfMQ6iRzO9Ksrxt4boRjpyTNIDUxJxpoaP7HSd/o8wqF6tKHpXWD
+         E9/XDzI1UQLDSZoCAoiupyT5JBoQJV5od2iZrHzUHJs78vFF3R+ebTCCmlvtW6+qeIJY
+         pc8bEy4zn9Rx1qyn/Mz6/xDVOGssQXFa05U5P1JqV/VRBQNo6n94KA9rzgGhjXo1uV4o
+         a5jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1mr09ffXdVmc89p6dDRlCyEcatrToejix5SUivzuIsk=;
-        b=ENsdNotRrdu2sxvl1dRM6CzkRBzhI4Z9zj1SCmUt6mLCnUdi0GhHigJcr0RvEpWxdK
-         gFRIduGCHZe5HMMCqxbZys0i8YrDGDn4YNdHuZw/9ukUe5elxFGehMVyjfj8HfBCSxl7
-         L6K5i/fPFjuzuqUriJ0Umybp9sYNB93wcO4bD8Voe93AVJHcfPTgQtnVOmJKB+/kTH0q
-         Lle+9K+vnC7Ox0vi09rxSi8GsAPy6cTKqEOgCmf/twJizffDNnEu4aEKrNiZ5Y/jrnGA
-         ClWcLTVyxYlbOJCcZTVUtI9lX9xLrGfruXxHKZnnLau20rwcW1fOXypd8qUBB4PJInUX
-         FWgQ==
-X-Gm-Message-State: AOAM530juHCEO6dZE76hUbNGqzzNx6T/bM02PPUPsW5Oovf+q5z0EASo
-        Hav+jIaxswKXIET9NlocTE1HYpaemAVyekyD4T2cmg==
-X-Google-Smtp-Source: ABdhPJyzvFZ5i/+cIo/v7GMXy5y7QF210K4A/VhM09QlXGBziof1oFuyBn/PxeMLTnvBvuKpDbiZHch59dU8k5OOBXk=
-X-Received: by 2002:a05:651c:29c:: with SMTP id b28mr697854ljo.368.1607505649530;
- Wed, 09 Dec 2020 01:20:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20201204164739.781812-1-maz@kernel.org> <X841xwCChUEqi5Ad@localhost>
- <73d57fe9fefe50955771846ea52004fb@kernel.org> <X85FVc07Hc7LQQU8@localhost>
- <d5fa2065009d5854b4c719003ebcb255@kernel.org> <X85O9GoDcbiDp97j@localhost>
-In-Reply-To: <X85O9GoDcbiDp97j@localhost>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 9 Dec 2020 10:20:38 +0100
-Message-ID: <CACRpkdZ06vWY+mqR7bYd_WcEM6+N6v5GgTAYhr0p0KkNLa3Qnw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] USB: ftdio_sio: GPIO validity fixes
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Mx+SSux44r2ybzN5uouGLt8Nyz1sei2BYkCtNp5/Q1U=;
+        b=HkmPaCPW/fmAZGb6/I0/BzV92EW7yjOTC3fZw0+8tEbYIPDmsX+tMzXYXUKp+r5bYe
+         IxW+zVC8qdcP1Hk8BSOKFohoir3G8u+Q+VTDSs2BTRrheRu0L2dh0v5At905rGONYlMD
+         PMxF2ktZ4+dpABgbWRB68CLRrfL8cxIteCdii7lznQMm7wyrsiIEBHc41IJia1h75tLF
+         JqwfVZwgWHRdVouUo1P+i8PpJ05o4vMvf7bQ20AY4FqMsN9ZKRPPlKyn4H8bVrwoaWs1
+         lcYRzNX3+w9ySFjK5ZrY4maRaSxjjAANaRhmfJlTHVYs+a/lX0u2DrJBVzBK/WGxTq/A
+         cJSw==
+X-Gm-Message-State: AOAM530UwnqyXP9Nw7EFzUBdv3GMa4Z69VnyrBrYGB7H0YSu7Vxx/H4K
+        jBOQqVcvCCx86CFeShZdZxmGIg==
+X-Google-Smtp-Source: ABdhPJxTlBVIxgjkiki4YjzApRPAYuKQcRCroZoMD5M27K7cz8VwDwS82eqt/XFzqMY5viPlsgQuUQ==
+X-Received: by 2002:a1c:40c:: with SMTP id 12mr1687015wme.40.1607505748074;
+        Wed, 09 Dec 2020 01:22:28 -0800 (PST)
+Received: from dell ([91.110.221.209])
+        by smtp.gmail.com with ESMTPSA id z8sm2247120wmg.17.2020.12.09.01.22.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Dec 2020 01:22:27 -0800 (PST)
+Date:   Wed, 9 Dec 2020 09:22:24 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Ion Badulescu <ionut@badula.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Adam Radford <aradford@gmail.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+        Jiri Slaby <jirislaby@kernel.org>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-ide@vger.kernel.org, dmaengine@vger.kernel.org,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        linux-parisc@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        linux-serial@vger.kernel.org,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] PCI: Remove pci_try_set_mwi
+Message-ID: <20201209092224.GU4801@dell>
+References: <4d535d35-6c8c-2bd8-812b-2b53194ce0ec@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4d535d35-6c8c-2bd8-812b-2b53194ce0ec@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 7, 2020 at 4:48 PM Johan Hovold <johan@kernel.org> wrote:
-> On Mon, Dec 07, 2020 at 03:34:23PM +0000, Marc Zyngier wrote:
+On Wed, 09 Dec 2020, Heiner Kallweit wrote:
 
-> > If they claim that their lines are available, and then refuse to
-> > let the user play with it, that's just a bug willing to be fixed.
->
-> My point was that this is how *all* gpio drivers work, and that muxing
-> is somewhat orthogonal to the gpio controller implementation.
+> pci_set_mwi() and pci_try_set_mwi() do exactly the same, just that the
+> former one is declared as __must_check. However also some callers of
+> pci_set_mwi() have a comment that it's an optional feature. I don't
+> think there's much sense in this separation and the use of
+> __must_check. Therefore remove pci_try_set_mwi() and remove the
+> __must_check attribute from pci_set_mwi().
+> I don't expect either function to be used in new code anyway.
+> 
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
+> patch applies on top of pci/misc for v5.11
+> ---
+>  Documentation/PCI/pci.rst                     |  5 +----
+>  drivers/ata/pata_cs5530.c                     |  2 +-
+>  drivers/ata/sata_mv.c                         |  2 +-
+>  drivers/dma/dw/pci.c                          |  2 +-
+>  drivers/dma/hsu/pci.c                         |  2 +-
+>  drivers/ide/cs5530.c                          |  2 +-
 
-This is true. It's because it is orthogonal that the separate subsystem
-for pin control including pin muxing exists.
+>  drivers/mfd/intel-lpss-pci.c                  |  2 +-
 
-Should I be really overly picky, the drivers that can mux lines like
-this should be implementing the pin control mux driver side as
-well just to make Linux aware of this. But if the muxing cannot
-be changed by the kernel (albeit with special tools) then it would
-be pretty overengineered for this case. Things would be much
-easier if this wasn't some flashing configuration but more of a
-runtime thing (which is kind of the implicit assumption in pin
-control land).
+Acked-by: Lee Jones <lee.jones@linaro.org>
 
-We don't really have many drivers that are "muxable by
-(intrusive) flashing" as opposed to "muxable by setting some
-bits" so in that way these FTDI drivers and siblings are special.
+>  drivers/net/ethernet/adaptec/starfire.c       |  2 +-
+>  drivers/net/ethernet/alacritech/slicoss.c     |  2 +-
+>  drivers/net/ethernet/dec/tulip/tulip_core.c   |  5 +----
+>  drivers/net/ethernet/sun/cassini.c            |  4 ++--
+>  drivers/net/wireless/intersil/p54/p54pci.c    |  2 +-
+>  .../intersil/prism54/islpci_hotplug.c         |  3 +--
+>  .../wireless/realtek/rtl818x/rtl8180/dev.c    |  2 +-
+>  drivers/pci/pci.c                             | 19 -------------------
+>  drivers/scsi/3w-9xxx.c                        |  4 ++--
+>  drivers/scsi/3w-sas.c                         |  4 ++--
+>  drivers/scsi/csiostor/csio_init.c             |  2 +-
+>  drivers/scsi/lpfc/lpfc_init.c                 |  2 +-
+>  drivers/scsi/qla2xxx/qla_init.c               |  8 ++++----
+>  drivers/scsi/qla2xxx/qla_mr.c                 |  2 +-
+>  drivers/tty/serial/8250/8250_lpss.c           |  2 +-
+>  drivers/usb/chipidea/ci_hdrc_pci.c            |  2 +-
+>  drivers/usb/gadget/udc/amd5536udc_pci.c       |  2 +-
+>  drivers/usb/gadget/udc/net2280.c              |  2 +-
+>  drivers/usb/gadget/udc/pch_udc.c              |  2 +-
+>  include/linux/pci.h                           |  5 ++---
+>  27 files changed, 33 insertions(+), 60 deletions(-)
 
-So this needs some special considerations to become user
-friendly I think.
-
-Yours,
-Linus Walleij
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
