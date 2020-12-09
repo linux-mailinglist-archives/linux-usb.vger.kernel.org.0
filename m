@@ -2,278 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 573D92D4E54
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 23:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 614C02D4E6A
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 00:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388236AbgLIWu1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 17:50:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
+        id S1727136AbgLIXAW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 18:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726707AbgLIWu1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 17:50:27 -0500
-Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE13CC0613CF;
-        Wed,  9 Dec 2020 14:49:46 -0800 (PST)
-Received: by mail-vk1-xa43.google.com with SMTP id v3so756214vkb.1;
-        Wed, 09 Dec 2020 14:49:46 -0800 (PST)
+        with ESMTP id S1725914AbgLIXAW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 18:00:22 -0500
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D305DC0613CF
+        for <linux-usb@vger.kernel.org>; Wed,  9 Dec 2020 14:59:41 -0800 (PST)
+Received: by mail-qk1-x741.google.com with SMTP id w79so3078770qkb.5
+        for <linux-usb@vger.kernel.org>; Wed, 09 Dec 2020 14:59:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Nw2F3TO4qXLlOXNaIL05f3p7ZwjgZpZstEv6cH6me40=;
-        b=l6So5OZR3DS1yrWLDtAT9aiF0EyoP57jfijafTFmfVcePIzDGm+PJFKnhuq1B0R5E3
-         m+lV3cls8REGE14Mact9jIzEuV1FSkVvubXPEBlbCMNXwc8nFgqxihfPGyWfOHj6Qc6H
-         0d3qR9894FAMryIR+asfZOVI9/niSPZsMWTbiBtp8P+TTHrY90GYTrjJ6wUX6v2qdSPZ
-         wfV1+0wTtaIBuRKAQjqi3DFSdTSXznt/FJMPDSohgOQB86g/VGyt3uABpCnw5Otpo0O+
-         bMU2daOK6SwzrrVKOsc+2J5DkVQ7jks/c5Xp4jMjGVLNjJ2V70eaScNB0f3SB45BeW7x
-         87aA==
+        bh=qGVpH46Y7Ns607Ym8+8VlXliCHyKOwhz1ihyoKRqkgA=;
+        b=JAf4R4DdRjm0G9P817PRtU4y28lwz4LVe/ebp1hiuMjKGYGdC3D4dk9e6uaGKIDhfr
+         kX5MP3muxV7N6NUoicnNC8n83neusTxe8kW+n+qdE9ZHzVGaKmWo7pJ3bzBZ9tkqznA8
+         rFj2Ou7Np6prwsc7wNFUDF0hJ19W9xS8EHg34=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Nw2F3TO4qXLlOXNaIL05f3p7ZwjgZpZstEv6cH6me40=;
-        b=M/m6zl1+4KgMnd3KTi+isZiVJs5/2whdna9K6CRGUutdhf0f7BuHuOfeexzUd+GoH1
-         8Rvgh4sflQPO/sLFFWN76ZLKnXX0BLnX3r+iy2hLX+zDTClptdv8+7+1cZKDYAeAQHAs
-         W7vGNEcmm1MFKZXAn4STeXMUeYF4OJTJ9HQKnu8KQlxzmzXBJ3lNcvmLNtO6hfA64EzM
-         RgZ6DuBCiYzieNW6+P43q/IiAd15yMLTvH2oDWqRmaoRpK0gxlEnVz/EXE18onDSdUu2
-         e/I58tBP+8cFFfTG5huXYWp4SyvWuFs3hGaNWmmK+2g1MMdRCG20en78rjKHcBU3UqAL
-         7+hA==
-X-Gm-Message-State: AOAM532mGWlRud8UdnoOQJT8VoKJB2MJorz+Uptn8FJQx1A8xfP7rGXO
-        ftacptLoI6reuLzTwjZlFb7WiJ5RbFI5y46kR2LJAGPX
-X-Google-Smtp-Source: ABdhPJy7qj8LlQfBBdpuED+rWEN9W86H5FwWOgnFzvgJ99/Dbm9hqPlCuXS8Ozj6dufVIXCrzRUHpech6tyFsBuHi7c=
-X-Received: by 2002:a1f:36d4:: with SMTP id d203mr5006670vka.22.1607554185954;
- Wed, 09 Dec 2020 14:49:45 -0800 (PST)
+        bh=qGVpH46Y7Ns607Ym8+8VlXliCHyKOwhz1ihyoKRqkgA=;
+        b=jalz1zcLgE/uw8TtU4p/oqJwtJwUlrhf1jBnNZq0XG737z6nuNcDuq6aszUg/Cr7EQ
+         nq3iH0m8HclRai1qnsS521TKJWEzLmuC8z4wXT+rDLbe3A/UpKqSQqp+dtpIiCGjZB0/
+         YrzCFY4iJ6yyGpaJH+n9LwiL6PDcs9MbX5E4VjDP27jtdQeunXs5aQS5lGkpwV9iEN8w
+         C6WZcn2phWxZWP5C4V6A3GtHau3M+TizylnPvyT/XD1NEr5B79SyaWkhK1DKXmNv1aLQ
+         VdPR3OPqsepWqKK/1LI+0Rwu/2KErDstV9AJKdZbHdQ6LsWEJRptfcQaNAUmkhzVkWSy
+         5O+g==
+X-Gm-Message-State: AOAM532N1vZYpRZbY/LRD+ZOPXWhJF0usMdiriGFUn99MHHfcMx180RQ
+        QbTVm1Q3NpqydW7JcORh4hHKT1K0o/w0qyRdfzvBO/85SGs=
+X-Google-Smtp-Source: ABdhPJyHxwWBajJb9vFDUnfaQR80KHMaN9kN3HFayyO1ax2QQlpRCsQji50AaT2tljlbbtpt6swwpryLzj6puHoyrW8=
+X-Received: by 2002:a37:744:: with SMTP id 65mr5224292qkh.71.1607554781012;
+ Wed, 09 Dec 2020 14:59:41 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:ab0:6ecb:0:0:0:0:0 with HTTP; Wed, 9 Dec 2020 14:49:45 -0800 (PST)
-In-Reply-To: <X9Dficb8sQGRut+S@kroah.com>
-References: <20201202113942.27024-1-johan@kernel.org> <X9Dficb8sQGRut+S@kroah.com>
-From:   Mychaela Falconia <mychaela.falconia@gmail.com>
-Date:   Wed, 9 Dec 2020 14:49:45 -0800
-Message-ID: <CA+uuBqYTzXCHGY8QnP+OQ5nRNAbqx2rMNzLM7OKLM1_4AzzinQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/7] tty: add flag to suppress ready signalling on open
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Johan Hovold <johan@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
-        "Mychaela N . Falconia" <falcon@freecalypso.org>,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20201203030846.51669-1-pmalani@chromium.org> <20201208093734.GD680328@kuha.fi.intel.com>
+ <CACeCKaehg=HTuQNLtQaJZWvTnOFYM9b1BWfM+WX_ebiZ-_i8JQ@mail.gmail.com>
+ <20201209161356.GI680328@kuha.fi.intel.com> <CACeCKacdcGi_6VW7F9agN+bgRH7gAXLDxK7DngE=fPkYT-CWNQ@mail.gmail.com>
+ <20201209171524.GK680328@kuha.fi.intel.com>
+In-Reply-To: <20201209171524.GK680328@kuha.fi.intel.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Wed, 9 Dec 2020 14:59:29 -0800
+Message-ID: <CACeCKafc6A-O09LrTsYgBTbmwVV0y-tEevj_Ci188WmT=hkjxg@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: Add bus type for plug alt modes
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benson Leung <bleung@chromium.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greg K-H wrote:
+Hi Heikki,
 
-> I think we need more review for the rest of the series.  This does
-> change the way serial ports work in a non-traditional way (i.e. using
-> sysfs instead of terminal settings).
+On Wed, Dec 9, 2020 at 9:15 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Hi Prashant,
+>
+> On Wed, Dec 09, 2020 at 08:22:52AM -0800, Prashant Malani wrote:
+> > Hi Heikki,
+> >
+> > On Wed, Dec 9, 2020 at 8:14 AM Heikki Krogerus
+> > <heikki.krogerus@linux.intel.com> wrote:
+> > >
+> > > On Tue, Dec 08, 2020 at 03:45:19PM -0800, Prashant Malani wrote:
+> > > > Hi Heikki,
+> > > >
+> > > > Thanks a lot for looking at the patch.
+> > > >
+> > > > On Tue, Dec 8, 2020 at 1:37 AM Heikki Krogerus <heikki.krogerus@linux.intel.com> wrote:
+> > > > >
+> > > > > On Wed, Dec 02, 2020 at 07:08:47PM -0800, Prashant Malani wrote:
+> > > > > > Add the Type C bus for plug alternate modes which are being
+> > > > > > registered via the Type C connector class. This ensures that udev events
+> > > > > > get generated when plug alternate modes are registered (and not just for
+> > > > > > partner/port alternate modes), even though the Type C bus doesn't link
+> > > > > > plug alternate mode devices to alternate mode drivers.
+> > > > >
+> > > > > I still don't understand how is the uevent related to the bus? If you
+> > > > > check the device_add() function, on line 2917, kobject_uevent() is
+> > > > > called unconditionally. The device does not need a bus for that event
+> > > > > to be generated.
+> > > >
+> > > > My initial thought process was to see what is the difference in the adev device
+> > > > initialization between partner altmode and plug altmode (the only difference I saw in
+> > > > typec_register_altmode() was regarding the bus field).
+> > > >
+> > > > Yes, kobject_uevent() is called unconditionally, but it's return value isn't checked,
+> > > > so we don't know if it succeeded or not.
+> > > >
+> > > > In the case of cable plug altmode, I see it fail with the following error[1]:
+> > > >
+> > > > [  114.431409] kobject: 'port1-plug0.0' (000000004ad42956): kobject_uevent_env: filter function caused the event to drop!
+> > > >
+> > > > I think the filter function which is called is this one: drivers/base/core.c: dev_uevent_filter() [2]
+> > > >
+> > > > static int dev_uevent_filter(struct kset *kset, struct kobject *kobj)
+> > > > {
+> > > >       struct kobj_type *ktype = get_ktype(kobj);
+> > > >
+> > > >       if (ktype == &device_ktype) {
+> > > >               struct device *dev = kobj_to_dev(kobj);
+> > > >               if (dev->bus)
+> > > >                       return 1;
+> > > >               if (dev->class)
+> > > >                       return 1;
+> > > >       }
+> > > >       return 0;
+> > > > }
+> > > >
+> > > > So, both the "if (dev->bus)" and "if (dev->class)" checks are failing here. In the case of partner alt modes, bus is set by the class.c code
+> > > > so this check likely returns 1 in that case.
+> > >
+> > > OK. I understand the issue now. So I would say that the proper
+> > > solution to this problem is to link the alt modes with the class
+> > > instead of the bus. That is much smaller change IMO.
+> >
+> > Got it. Just to confirm that I understand correctly, do you mean:
+> > 1. Only cable plug alt modes should be linked with the class instead of the bus.
+> >
+> > <or>
+> >
+> > 2. All alt modes (cable plug, partner, port) should be linked with the
+> > class instead of the bus
+> >
+> > My initial interpretation is 1.) since the bus linkage would be
+> > necessary to match alt mode drivers to partner alt mode devices.
+> > But, my understanding of the bus code is limited so I could be wrong;
+> > could you kindly clarify?
+>
+> We don't need to care about the bus here. A device can be part of a
+> bus and a class at the same time. I don't think there is any reason to
+> limit the class to only plug alt modes, so let's just assign it to all
+> of them.
 
-But the problem is that the current status quo is fundamentally broken
-for those hardware devices in which DTR and/or RTS have been repurposed
-for something other than modem and flow control.  Right now whenever a
-"cold" (never previously opened) serial port is opened for the first
-time, that open action immediately and unstoppably asserts both DTR
-and RTS hardware outputs, without giving userspace any opportunity to
-say "no, please don't do it".  Yes, this behaviour is codified in a
-bunch of standards that ultimately trace back to 1970s Original UNIX,
-but just because it is a standard does not make it right - this
-Unix/POSIX/Linux "standard" serial port behaviour is a bug, not a
-feature.
+I had actually tried this earlier, but here we run into errors.
+If we always set the class, then "partner" altmode device creation
+fails ("port" altmode creation will likely also fail, but I haven't
+verified that)
 
-All operating systems are fundamentally middlemen between applications
-and hardware.  If custom application A is specifically written to work
-with custom hardware H, it is the operating system's job to allow A to
-operate on H without unreasonable interference, NOT to tell A and H
-that they should change their hw and/or app design to fit a given OS
-worldview.
+The issue is that if we set both "class" and "bus", the device_add()
+[1] code tries to create the "subsystem" symlink in the altmode
+device's sysfs entry twice.
 
-Furthermore, hardware engineers who design custom gadgets have a
-natural right to reduce hardware cost by employing designs that are
-simple and elegant in hw terms - they should NOT be forced to make hw
-designs more complicated, more expensive, or less convenient for end
-users in order to please an OS.  To put it another way, OSes and OS
-maintainers need to see themselves as working for end users and their
-hardware and applications, not the other way around.
+The first creation is in the call to device_add_class_symlinks()[2]
+which creates a "subsystem" file [3]. Note that if "class" is not set,
+this code doesn't execute.
+Next is the call to bus_add_device() [4] which again tries to create
+the "subsystem" symlink [5] and fails since it already exists; this
+leads to failure.
 
-Here is my situation: I needed a little hardware adapter that goes
-from USB to one UART with full modem and flow control signals (8-wire
-UART), one more UART with only data leads and no modem or flow control
-(2-wire UART), and two non-serial control signals that would allow a
-connected host computer to simulate PWON and RESET pushbutton presses.
-The simplest and most elegant hardware solution was to use an FT2232x
-chip from FTDI (either FT2232D or FT2232H, I chose the D version
-because I didn't need USB high speed), wire up one channel for the
-8-wire UART, wire up the other channel for the 2-wire UART, and then
-repurpose the otherwise unused Channel B RTS & DTR outputs to drive
-PWON and RESET pushbutton signals via an open drain buffer IC.
+There are 2 solutions I can see:
+1. Only set class for cable plug alt modes (which won't have a bus
+set). This will avoid the double "subsystem" sysfs file creation.
+2. Change the bus_add_device() code to:
+    a. use the _nowarn() option of the symlink create function which
+prevents the warn stack traces on -EEXIST error, and
+    b. check for -EEXIST return value and don't fail if so.
 
-The entire hardware solution for driving my PWON and RESET signals
-consists of a single buffer IC that measures 1.00x1.45 mm - an epitome
-of hardware simplicity and elegance, I would argue.  If my target OS
-was Windows, I wouldn't be having all these problems: under Windows
-when you open a "cold" serial port (USB-serial converter just plugged
-in, not previously opened) for the first time, that first-open action
-does NOT jerk DTR or RTS modem control signals, instead they are left
-alone - and the application program can then control and configure how
-they should function subsequently.  But Linux is being a bad boy: when
-the serial port is opened, DTR and RTS are immediately asserted, and
-there is no way to prevent it other than by applying a local patch to
-the kernel on your system.
+2.) Sounds good to me, but I'm not sure if it's alright to continue if
+a "subsystem" symlink already exists.
 
-I realize that changing the default first-open behaviour to leave DTR
-and RTS alone instead of asserting them would not be acceptable.
-There are lots of devices that require DTR and/or RTS to be asserted
-for serial communication to work, and because the standard (however
-poorly thought through) behaviour has always been to auto-assert these
-signals on open, most standard serial applications rely on this
-automatic assertion - almost no one does an explicit TIOCMBIS of DTR
-and RTS after open.
+If 2.) is OK with you, I will upload a patch to implement it and make
+a series with that patch and this one.
 
-Thinking as a hardware engineer, to me the most natural solution to
-this Linux problem is to use a custom USB ID upon which a driver quirk
-is then conditionalized.  All major USB-serial chips feature either a
-built-in EEPROM or OTP configuration memory, or a provision for
-connecting a board-level EEPROM.  One of the parameters set in this
-hardware config EEPROM is the USB VID:PID which the USB-serial chip
-will present itself as.  Furthermore, most USB-serial chip vendors (at
-least FTDI and Silabs for sure) allow their customers (designers of
-custom hw containing their chips) to obtain a custom PID out of that
-chip vendor's USB VID, making it very very easy for custom USB-serial
-boards to have custom USB IDs.
+Best regards,
 
-So I program the EEPROM on my custom DUART28 board with the custom USB
-ID which FTDI officially allocated to me (thus this ID code absolutely
-uniquely identifies my specific hardware and no other), and I prepare
-a patch for the ftdi_sio driver which I thought would be
-non-controversial: adding support for my new FT2232D-based device by
-adding its custom USB ID to the ID code table, along with a quirk that
-suppresses automatic assertion of DTR & RTS on open for the Channel B
-ttyUSB device.  I thought my patch would be non-controversial: it is
-simply adding support for a new hardware device which was not
-previously supported by Linux at all, same as if I were adding an
-entirely new driver, and has ZERO impact on any other hardware, any
-other applications, any other users, any other anything - just support
-for a new hw device with a special quirk and nothing more.
+-Prashant
 
-But Johan objects to simply merging my ftdi_sio driver patch by itself
-because it is not a general solution, because it covers only one
-specific hw device.  Johan proposed a more generalized solution that
-would still satisfy me and the end users of my hardware because in the
-end it still includes recognition of my custom USB ID, setting the
-needed quirk flag upon seeing this ID - but now Johan's generalized
-patch series is not acceptable either?  So what gives?
-
-At the end of the day we have a situation where the creators of
-Original UNIX have made a design mistake back in the 1970s, and this
-design mistake persists to this day in all current Unix-style OSes
-including Linux.  The design mistake in question is unconditionally
-asserting DTR and RTS upon the first open of a previously cold serial
-port.  This behaviour is harmless for most devices in which DTR and
-RTS retain their standard RS-232 functions, but it is a killer for
-those hw devices in which either or both signals have been repurposed
-for something very different, some other function that does not
-tolerate unwanted signal assertion.
-
-Unix/POSIX/Linux OSes are at fault here, I argue, NOT hardware
-engineers who build gadgets in which these signals are repurposed.
-The physical hardware behaviour of a classic old-fashioned RS-232 DTE
-port is that when the hardware powers up, the output voltage on DTR
-and RTS lines goes from zero to -12 V, indicating negated state - it
-never goes toward +12 V corresponding to asserted state, until and
-unless software takes action to raise those signals.  Same deal with
-modern USB-serial chips: when USB VBUS power is applied, DTR and RTS
-outputs immediately go CMOS high (still corresponding to negated
-state), or they remain tristated until enumeration, in which case
-pull-up resistors solve the problem - but they *never* go into the
-state of actively driving CMOS low (overriding pull-up resistors)
-until and unless software sends the necessary USB control pipe
-command.
-
-Hardware engineers have every right to design gadgets that take
-actions upon asserted DTR/RTS (CMOS low or RS-232 +12V), actions that
-should not occur when not explicitly requested, and we the hardware
-engineers feel justified in this stance because the state of CMOS low
-or RS-232 +12V on DTR and RTS control lines never occurs in the
-hardware on its own, this state only occurs upon software command -
-thus we the hardware engineers have the right to ask OS maintainers to
-provide a way to NOT send that software command until and unless the
-user's application explicitly requests it.
-
-If this design flaw had been noticed back in the 1970s and addressed
-in some way, we wouldn't be having this discussion.  But here we are
-almost a half-century later, and the problem is still unresolved.  So
-how do we solve this problem now, after having ignored it for 45 y?
-Simply changing the default action upon first open of a previously
-cold serial port to not automatically assert DTR & RTS won't work:
-plenty of devices (classic modems etc) require DTR and/or RTS to be
-asserted for communication to work, and plenty of applications rely on
-automatic assertion of these signals on the first open of a previously
-cold serial port.  Adding configurable termios flags etc won't help
-either: one needs to open a port in order to do ioctls on it, and if
-that first open still raises DTR & RTS, then users of custom hw are
-still screwed.
-
-Thus we need some out-of-band mechanism.  There are only 3
-possibilities:
-
-1) Reusing/abusing some open flag like O_DIRECT, perhaps only for the
-very first open, and then setting a termios or setserial flag to
-change behaviour on subsequent opens;
-
-2) A sysfs attribute like in Johan's proposed patch series;
-
-3) ID-code-specific quirks in USB-serial chip drivers.
-
-At this point an important question needs to be asked.  Johan mentioned
-that the issue I am dealing with (needing some way to suppress unwanted
-auto-assertion of DTR/RTS) has come up in the past in the context of
-ham radio devices.  Does Johan or anyone else know what their physical
-form factor and serial interface was/is?  Was it true old-fashioned
-RS-232 such that the device could be connected to "any" serial port,
-or was it a custom USB-interfaced board with an integrated USB-serial
-chip?
-
-If every non-standard serial port device currently in existence that
-does not tolerate automatic assertion of DTR/RTS and requires the
-changes we discussing takes the physical form of a custom circuit
-board with a USB connector and a built-in USB-serial chip, with all
-UART signals staying in the CMOS (or more likely LVCMOS) logic voltage
-level domain without ever becoming old-fashioned RS-232, then the
-whole argument about supporting "any" serial port becomes moot.  In
-this case the simplest and least invasive solution is to assign custom
-USB IDs to all such non-standard devices by way of their respective
-EEPROMs, and support these custom USB ID devices with driver quirks -
-no need for sysfs, no need for O_DIRECT, no need to touch any kernel
-code at all outside of individual USB-serial chip drivers.
-
-But if there exist some custom hw devices out there that are in the
-same predicament as my DUART28 adapter, but are different in that they
-are classic old-fashioned RS-232 rather than integrated USB-serial,
-with no place to assign a custom USB ID, *then* we need a non-USB-ID-
-dependent solution such as Johan's sysfs attribute or O_DIRECT.
-
-> So I want to get a bunch of people
-> to agree that this is ok to do things this way now before taking this
-> new user-visible api.
-
-So where and how are we going to find that bunch of people?  What
-happens if no one gives a damn one way or another?  Neither I nor Johan
-are proposing any change whatsoever to any existing behaviour or any
-existing interfaces - simply providing a new option, such that if you
-don't care about it and don't set it, absolutely nothing changes and
-nothing is impacted in any way whatsoever.
-
-If the concern is with the new sysfs interface or the proposed O_DIRECT
-alternative, how about deferring those while allowing specific USB ID
-support to go in first?  Right now there already exists at least one
-piece of hardware actively supported by its manufacturer (my gadget)
-that has a custom USB ID and requires the quirk - what is wrong with
-adding support for this existing specific hw?  How about merging
-Johan's patch that defines the NORDY flag in tty_port, merging the
-ftdi_sio driver patch setting this flag for my custom USB ID, allowing
-other hardware engineers in the same boat to submit similar quirk
-patches for their affected custom hw with custom USB IDs, while
-deferring the sysfs patches until there is a more pressing need for
-quirky devices that have no custom USB IDs?
-
-Sincerely,
-Mychaela
+[1]: https://elixir.bootlin.com/linux/v5.10-rc7/source/drivers/base/core.c#L2884
+[2]: https://elixir.bootlin.com/linux/v5.10-rc7/source/drivers/base/core.c#L2955
+[3]: https://elixir.bootlin.com/linux/v5.10-rc7/source/drivers/base/core.c#L2722
+[4]: https://elixir.bootlin.com/linux/v5.10-rc7/source/drivers/base/core.c#L2961
+[5]: https://elixir.bootlin.com/linux/v5.10-rc7/source/drivers/base/bus.c#L471
