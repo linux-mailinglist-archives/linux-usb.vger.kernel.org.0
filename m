@@ -2,128 +2,286 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A83902D4076
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 11:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C622D4077
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 11:59:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730297AbgLIK7Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 05:59:25 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:48132 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730299AbgLIK7S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 05:59:18 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B9AtLuJ186493;
-        Wed, 9 Dec 2020 10:58:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=VBnui0KuexPbRNCI2rw85UA2jumdEKtxwcjAMYb+9aM=;
- b=NqILz/Txkjtov/9TSIsh9pLIeHHm8imj2b/x2egSS5++74v5vR+kExXyT3TdyjWl5wna
- kezZ811JWLkeCfFBXXynFzQnc31wbwsnuK81L+GdVqHwdE18XfDWyTPP4i6EnyfOdg10
- TJ0QkvTL4Cz7sUUkWuA4PwjtV2Eh5TOPXDAbATrN+dGLnf2ZDOc5OYmLGv3aadoUh0YZ
- Mfa8gjpj3IJuWzPj0Jrlil8B6LZqhrxiS88ETdQK0BYZas5kGMtTChz51r6NO/tVi+3V
- fc3BhoojP4hHNwUqGxzoAsC31sYhQ6tljj5InpVoJ0cgjna1dFIbIsrktJmdAnjdZvyE 5g== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2130.oracle.com with ESMTP id 357yqbymyn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 09 Dec 2020 10:58:36 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B9Asfr6157362;
-        Wed, 9 Dec 2020 10:58:35 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 358kyuf9um-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Dec 2020 10:58:35 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B9AwXaA032463;
-        Wed, 9 Dec 2020 10:58:34 GMT
-Received: from mwanda (/102.36.221.92)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 09 Dec 2020 02:58:33 -0800
-Date:   Wed, 9 Dec 2020 13:58:26 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     pawell@cadence.com
-Cc:     linux-usb@vger.kernel.org
-Subject: [bug report] usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD
- Driver
-Message-ID: <X9Ct0tXbtETTy+dq@mwanda>
+        id S1730282AbgLIK67 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 05:58:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726885AbgLIK66 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 05:58:58 -0500
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEE7C0613CF;
+        Wed,  9 Dec 2020 02:58:18 -0800 (PST)
+Received: by mail-pj1-x1043.google.com with SMTP id lb18so669508pjb.5;
+        Wed, 09 Dec 2020 02:58:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xCjb4FnXIRrp7l79EOU0U/feX8csTUC9oavV8Czx9F4=;
+        b=ErnJYh4cG8Ig4aTzcMUhimYD9LWUibSHKruLOgcjPO1uL4zBMxQ248ix3uKyPqLK3B
+         XYdmhiuBn32lJZ0kxKfymnSrWDyxyLCSxuk58VdHpko9L9mDCSZ1pjeFOnh488Zp+YVw
+         j8GgAibfytQPdMIptABjiCy6tga08rKYP6ZEGJYLwKT/qYZI9yieLNzAaw6o/6holQtp
+         y2LI9tOpvTJdaVt7GcsvFd16vQgLgFNUlTIYdjtrD65vRvJoMU5AT1mLkzY3sy1XZbvG
+         vGZpZs9Cr8mtKOgWgfsWqxqaC01eUpRc3NDHEcWHlXN1asRIN+/kpGqFJ0QyCcWx9Mv2
+         RMag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xCjb4FnXIRrp7l79EOU0U/feX8csTUC9oavV8Czx9F4=;
+        b=Gnf07zNt49H2ChjcbqsxAo9yWVex1K+KFLbjcVXBMb1RxzsZ2oEa3GrQ5FF6T35JkQ
+         4V2vqxQ2K3NfTOmjLR1ZqrGcI7NfwdlP8xaMdo8xkC79RPSmIGIrWvCzr0h5+5QerJ2H
+         YDG0Fs2+UuJAWITgL4ebr+Sc5PvAC7UiqCbUmzb5OSgyjIlxOsAiJteJLVjEhOw12f8u
+         0yoD1ywUuGQI/ryIXWW9o2U3+rsqBXtBVAI5XpusVyd7jXp1QYSoHgjEMlXfx9x/0tnc
+         jWj0F8ZzXp+ESTY7Yh6oo1/ZX5O5U9cBxYFmCyfyqW0eXrPiUPhUX+BLnOhNOIIhMOC1
+         CQBg==
+X-Gm-Message-State: AOAM532kyou3UO6RYfRSS5yggYRE987tk/VQwUJ8hyorbyZzp1ADxspc
+        oA9yyku7xXra49P4iPGUZY16wN1VjME3MrG/1Ik=
+X-Google-Smtp-Source: ABdhPJx8Osk6gOc8Z4ZAGTvbA66X3lSIWvUsn0Zy5q3lfIPt27f4S82ZJ0SgTTApYHWQYNs9Zf+gIo5v91HuO4EzVpQ=
+X-Received: by 2002:a17:90b:a17:: with SMTP id gg23mr1713984pjb.129.1607511497899;
+ Wed, 09 Dec 2020 02:58:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 mlxscore=0
- malwarescore=0 suspectscore=3 mlxlogscore=999 bulkscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012090076
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9829 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 mlxlogscore=999
- clxscore=1015 malwarescore=0 bulkscore=0 phishscore=0 adultscore=0
- spamscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012090076
+References: <4d535d35-6c8c-2bd8-812b-2b53194ce0ec@gmail.com>
+In-Reply-To: <4d535d35-6c8c-2bd8-812b-2b53194ce0ec@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 9 Dec 2020 12:59:06 +0200
+Message-ID: <CAHp75VfBtRS=BA83Q4U9hJ14bO4wW_o44CKs=DBOtWnzqTXO3w@mail.gmail.com>
+Subject: Re: [PATCH] PCI: Remove pci_try_set_mwi
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ion Badulescu <ionut@badula.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Adam Radford <aradford@gmail.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Linux Documentation List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-ide@vger.kernel.org, dmaengine <dmaengine@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        linux-parisc@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Pawel Laszczak,
+On Wed, Dec 9, 2020 at 10:35 AM Heiner Kallweit <hkallweit1@gmail.com> wrote:
+> pci_set_mwi() and pci_try_set_mwi() do exactly the same, just that the
+> former one is declared as __must_check. However also some callers of
 
-The patch d40a169aab24: "usb: cdnsp: cdns3 Add main part of Cadence
-USBSSP DRD Driver" from Dec 7, 2020, leads to the following static
-checker warning:
+However also -> However
 
-	drivers/usb/cdns3/cdnsp-mem.c:1229 cdnsp_mem_init()
-	warn: use 'flags' here instead of GFP_XXX?
+> pci_set_mwi() have a comment that it's an optional feature. I don't
+> think there's much sense in this separation and the use of
+> __must_check. Therefore remove pci_try_set_mwi() and remove the
+> __must_check attribute from pci_set_mwi().
 
-drivers/usb/cdns3/cdnsp-mem.c
-  1206  int cdnsp_mem_init(struct cdnsp_device *pdev, gfp_t flags)
-                                                      ^^^^^^^^^^^
 
-  1207  {
-  1208          struct device *dev = pdev->dev;
-  1209          int ret = -ENOMEM;
-  1210          unsigned int val;
-  1211          dma_addr_t dma;
-  1212          u32 page_size;
-  1213          u64 val_64;
-  1214  
-  1215          /*
-  1216           * Use 4K pages, since that's common and the minimum the
-  1217           * controller supports
-  1218           */
-  1219          page_size = 1 << 12;
-  1220  
-  1221          val = readl(&pdev->op_regs->config_reg);
-  1222          val |= ((val & ~MAX_DEVS) | CDNSP_DEV_MAX_SLOTS) | CONFIG_U3E;
-  1223          writel(val, &pdev->op_regs->config_reg);
-  1224  
-  1225          /*
-  1226           * Doorbell array must be physically contiguous
-  1227           * and 64-byte (cache line) aligned.
-  1228           */
-  1229          pdev->dcbaa = dma_alloc_coherent(dev, sizeof(*pdev->dcbaa),
-  1230                                           &dma, GFP_KERNEL);
+> I don't expect either function to be used in new code anyway.
 
-There is only one caller for cdnsp_mem_init() and flags is GFP_KERNEL.
-It's better to just remove the argument because it's not useful.
+You probably want to elaborate here that the feature is specific to
+PCI and isn't present on PCIe.
 
-  1231          if (!pdev->dcbaa)
-  1232                  return -ENOMEM;
-  1233  
-  1234          memset(pdev->dcbaa, 0, sizeof(*pdev->dcbaa));
-  1235          pdev->dcbaa->dma = dma;
-  1236  
-  1237          cdnsp_write_64(dma, &pdev->op_regs->dcbaa_ptr);
-  1238  
-  1239          /*
-  1240           * Initialize the ring segment pool.  The ring must be a contiguous
-  1241           * structure comprised of TRBs. The TRBs must be 16 byte aligned,
-  1242           * however, the command ring segment needs 64-byte aligned segments
-  1243           * and our use of dma addresses in the trb_address_map radix tree needs
-  1244           * TRB_SEGMENT_SIZE alignment, so driver pick the greater alignment
-  1245           * need.
-  1246           */
-  1247          pdev->segment_pool = dma_pool_create("CDNSP ring segments", dev,
-  1248                                               TRB_SEGMENT_SIZE, TRB_SEGMENT_SIZE,
-  1249                                               page_size);
+Besides that one comment below.
+After addressing, have my
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+for the files left in this message.
 
-regards,
-dan carpenter
+...
+
+>  drivers/dma/dw/pci.c                          |  2 +-
+>  drivers/dma/hsu/pci.c                         |  2 +-
+
+>  drivers/mfd/intel-lpss-pci.c                  |  2 +-
+
+>  drivers/pci/pci.c                             | 19 -------------------
+
+>  drivers/tty/serial/8250/8250_lpss.c           |  2 +-
+>  drivers/usb/chipidea/ci_hdrc_pci.c            |  2 +-
+
+>  drivers/usb/gadget/udc/pch_udc.c              |  2 +-
+>  include/linux/pci.h                           |  5 ++---
+
+> diff --git a/Documentation/PCI/pci.rst b/Documentation/PCI/pci.rst
+> index 814b40f83..120362cc9 100644
+> --- a/Documentation/PCI/pci.rst
+> +++ b/Documentation/PCI/pci.rst
+> @@ -226,10 +226,7 @@ If the PCI device can use the PCI Memory-Write-Invalidate transaction,
+>  call pci_set_mwi().  This enables the PCI_COMMAND bit for Mem-Wr-Inval
+>  and also ensures that the cache line size register is set correctly.
+>  Check the return value of pci_set_mwi() as not all architectures
+> -or chip-sets may support Memory-Write-Invalidate.  Alternatively,
+> -if Mem-Wr-Inval would be nice to have but is not required, call
+> -pci_try_set_mwi() to have the system do its best effort at enabling
+> -Mem-Wr-Inval.
+> +or chip-sets may support Memory-Write-Invalidate.
+
+...
+
+> diff --git a/drivers/dma/dw/pci.c b/drivers/dma/dw/pci.c
+> index 1142aa6f8..1c20b7485 100644
+> --- a/drivers/dma/dw/pci.c
+> +++ b/drivers/dma/dw/pci.c
+> @@ -30,7 +30,7 @@ static int dw_pci_probe(struct pci_dev *pdev, const struct pci_device_id *pid)
+>         }
+>
+>         pci_set_master(pdev);
+> -       pci_try_set_mwi(pdev);
+> +       pci_set_mwi(pdev);
+>
+>         ret = pci_set_dma_mask(pdev, DMA_BIT_MASK(32));
+>         if (ret)
+> diff --git a/drivers/dma/hsu/pci.c b/drivers/dma/hsu/pci.c
+> index 07cc7320a..420dd3706 100644
+> --- a/drivers/dma/hsu/pci.c
+> +++ b/drivers/dma/hsu/pci.c
+> @@ -73,7 +73,7 @@ static int hsu_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>         }
+>
+>         pci_set_master(pdev);
+> -       pci_try_set_mwi(pdev);
+> +       pci_set_mwi(pdev);
+>
+>         ret = pci_set_dma_mask(pdev, DMA_BIT_MASK(32));
+>         if (ret)
+
+...
+
+> diff --git a/drivers/mfd/intel-lpss-pci.c b/drivers/mfd/intel-lpss-pci.c
+> index 2d7c588ef..a0c3be750 100644
+> --- a/drivers/mfd/intel-lpss-pci.c
+> +++ b/drivers/mfd/intel-lpss-pci.c
+> @@ -39,7 +39,7 @@ static int intel_lpss_pci_probe(struct pci_dev *pdev,
+>
+>         /* Probably it is enough to set this for iDMA capable devices only */
+>         pci_set_master(pdev);
+> -       pci_try_set_mwi(pdev);
+> +       pci_set_mwi(pdev);
+>
+>         ret = intel_lpss_probe(&pdev->dev, info);
+>         if (ret)
+
+...
+
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 9a5500287..f0ab432d2 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -4389,25 +4389,6 @@ int pcim_set_mwi(struct pci_dev *dev)
+>  }
+>  EXPORT_SYMBOL(pcim_set_mwi);
+>
+> -/**
+> - * pci_try_set_mwi - enables memory-write-invalidate PCI transaction
+> - * @dev: the PCI device for which MWI is enabled
+> - *
+> - * Enables the Memory-Write-Invalidate transaction in %PCI_COMMAND.
+> - * Callers are not required to check the return value.
+> - *
+> - * RETURNS: An appropriate -ERRNO error value on error, or zero for success.
+> - */
+> -int pci_try_set_mwi(struct pci_dev *dev)
+> -{
+
+> -#ifdef PCI_DISABLE_MWI
+> -       return 0;
+> -#else
+> -       return pci_set_mwi(dev);
+> -#endif
+
+This seems still valid case for PowerPC and SH.
+
+> -}
+> -EXPORT_SYMBOL(pci_try_set_mwi);
+
+...
+
+> diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
+> index 4dee8a9e0..8acc1e5c9 100644
+> --- a/drivers/tty/serial/8250/8250_lpss.c
+> +++ b/drivers/tty/serial/8250/8250_lpss.c
+> @@ -193,7 +193,7 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
+>         if (ret)
+>                 return;
+>
+> -       pci_try_set_mwi(pdev);
+> +       pci_set_mwi(pdev);
+>
+>         /* Special DMA address for UART */
+>         dma->rx_dma_addr = 0xfffff000;
+> diff --git a/drivers/usb/chipidea/ci_hdrc_pci.c b/drivers/usb/chipidea/ci_hdrc_pci.c
+> index d63479e1a..d412fa910 100644
+> --- a/drivers/usb/chipidea/ci_hdrc_pci.c
+> +++ b/drivers/usb/chipidea/ci_hdrc_pci.c
+> @@ -78,7 +78,7 @@ static int ci_hdrc_pci_probe(struct pci_dev *pdev,
+>         }
+>
+>         pci_set_master(pdev);
+> -       pci_try_set_mwi(pdev);
+> +       pci_set_mwi(pdev);
+>
+>         /* register a nop PHY */
+>         ci->phy = usb_phy_generic_register();
+
+...
+
+> diff --git a/drivers/usb/gadget/udc/pch_udc.c b/drivers/usb/gadget/udc/pch_udc.c
+> index a3c1fc924..4a0484a0c 100644
+> --- a/drivers/usb/gadget/udc/pch_udc.c
+> +++ b/drivers/usb/gadget/udc/pch_udc.c
+> @@ -3100,7 +3100,7 @@ static int pch_udc_probe(struct pci_dev *pdev,
+>         }
+>
+>         pci_set_master(pdev);
+> -       pci_try_set_mwi(pdev);
+> +       pci_set_mwi(pdev);
+>
+>         /* device struct setup */
+>         spin_lock_init(&dev->lock);
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index de75f6a4d..c590f616d 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -1191,9 +1191,8 @@ void pci_clear_master(struct pci_dev *dev);
+>
+>  int pci_set_pcie_reset_state(struct pci_dev *dev, enum pcie_reset_state state);
+>  int pci_set_cacheline_size(struct pci_dev *dev);
+> -int __must_check pci_set_mwi(struct pci_dev *dev);
+> -int __must_check pcim_set_mwi(struct pci_dev *dev);
+> -int pci_try_set_mwi(struct pci_dev *dev);
+> +int pci_set_mwi(struct pci_dev *dev);
+> +int pcim_set_mwi(struct pci_dev *dev);
+>  void pci_clear_mwi(struct pci_dev *dev);
+>  void pci_intx(struct pci_dev *dev, int enable);
+>  bool pci_check_and_mask_intx(struct pci_dev *dev);
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
