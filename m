@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D9B2D4226
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 13:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A10002D4292
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 14:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731521AbgLIMbA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 07:31:00 -0500
-Received: from mga12.intel.com ([192.55.52.136]:61073 "EHLO mga12.intel.com"
+        id S1731931AbgLINCC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 08:02:02 -0500
+Received: from mga03.intel.com ([134.134.136.65]:7404 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730948AbgLIMbA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Dec 2020 07:31:00 -0500
-IronPort-SDR: UffI36C+muP8f6QrRPFDl63TYLFwTWjB0Io25sAcEAdqYoy/aIqhAA6lEgYGlWhKizhAKeaH2C
- pv/LWjZ2jTbA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9829"; a="153303982"
+        id S1731861AbgLINCC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Dec 2020 08:02:02 -0500
+IronPort-SDR: 7y9couZvV2gnz8DLv4JJ/uNCRXdfk1ivj2sW8Vw1Wt+6GliS+yyZr+hPJj/Jg36TPyfbkPP/qp
+ AOTRubLpA4Tg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9829"; a="174189960"
 X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
-   d="gz'50?scan'50,208,50";a="153303982"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 04:30:18 -0800
-IronPort-SDR: uxEYywoQd4EIXhkPis808seHW7J/xYQWV8TryczNitLIl8/lxEHm8KJF15oRY8pP4zwpIlufZr
- ShyugN3niH4A==
+   d="gz'50?scan'50,208,50";a="174189960"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 05:01:20 -0800
+IronPort-SDR: pXaCvPMooB97vnJHqZK9EGk9uH8QLMdYaxIdw5uu7LDQUNMBfDVp/HC3UOt2Ss0/fpSGgzj4vA
+ V7Xtpwefv5uQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
-   d="gz'50?scan'50,208,50";a="364114350"
+   d="gz'50?scan'50,208,50";a="318274307"
 Received: from lkp-server01.sh.intel.com (HELO 2bbb63443648) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 09 Dec 2020 04:30:15 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 09 Dec 2020 05:01:17 -0800
 Received: from kbuild by 2bbb63443648 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1kmybn-0000H1-0Z; Wed, 09 Dec 2020 12:30:15 +0000
-Date:   Wed, 9 Dec 2020 20:29:28 +0800
+        id 1kmz5o-0000HS-Cx; Wed, 09 Dec 2020 13:01:16 +0000
+Date:   Wed, 9 Dec 2020 21:01:04 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Pawel Laszczak <pawell@cadence.com>
 Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
         Peter Chen <peter.chen@nxp.com>
-Subject: [peter.chen-usb:for-usb-next 17/30] drivers/usb/cdns3/drd.c:44:38:
- sparse: sparse: incorrect type in assignment (different base types)
-Message-ID: <202012092026.3mGZfoW7-lkp@intel.com>
+Subject: [peter.chen-usb:for-usb-next 20/30] drivers/usb/cdns3/drd.c:382:32:
+ sparse: sparse: incorrect type in assignment (different address spaces)
+Message-ID: <202012092100.m9vAjS6C-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="y0ulUmNC+osPPQO6"
+Content-Type: multipart/mixed; boundary="fUYQa+Pmc3FrFX/N"
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -45,13 +45,13 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---y0ulUmNC+osPPQO6
+--fUYQa+Pmc3FrFX/N
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git for-usb-next
 head:   94e0623337a6d52721e3a842cbfe7196e9f34144
-commit: 21f969177b7ea36687b93c8e17b75cfc906c1e68 [17/30] usb: cdns3: Add support for DRD CDNSP
+commit: e89eb2bc2ed451edebf7767490416987e9f06d99 [20/30] usb: cdns3: Refactoring names in reusable code
 config: parisc-randconfig-s031-20201209 (attached as .config)
 compiler: hppa-linux-gcc (GCC) 9.3.0
 reproduce:
@@ -59,10 +59,10 @@ reproduce:
         chmod +x ~/bin/make.cross
         # apt-get install sparse
         # sparse version: v0.6.3-179-ga00755aa-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git/commit/?id=21f969177b7ea36687b93c8e17b75cfc906c1e68
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git/commit/?id=e89eb2bc2ed451edebf7767490416987e9f06d99
         git remote add peter.chen-usb https://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git
         git fetch --no-tags peter.chen-usb for-usb-next
-        git checkout 21f969177b7ea36687b93c8e17b75cfc906c1e68
+        git checkout e89eb2bc2ed451edebf7767490416987e9f06d99
         # save the attached .config to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' ARCH=parisc 
 
@@ -71,69 +71,69 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 
 "sparse warnings: (new ones prefixed by >>)"
->> drivers/usb/cdns3/drd.c:44:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [noderef] [usertype] __iomem *override_reg @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:42:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [noderef] [usertype] __iomem *override_reg @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:42:38: sparse:     expected unsigned int [noderef] [usertype] __iomem *override_reg
+   drivers/usb/cdns3/drd.c:42:38: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:44:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [noderef] [usertype] __iomem *override_reg @@     got restricted __le32 * @@
    drivers/usb/cdns3/drd.c:44:38: sparse:     expected unsigned int [noderef] [usertype] __iomem *override_reg
    drivers/usb/cdns3/drd.c:44:38: sparse:     got restricted __le32 *
    drivers/usb/cdns3/drd.c:46:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [noderef] [usertype] __iomem *override_reg @@     got restricted __le32 * @@
    drivers/usb/cdns3/drd.c:46:38: sparse:     expected unsigned int [noderef] [usertype] __iomem *override_reg
    drivers/usb/cdns3/drd.c:46:38: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:48:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [noderef] [usertype] __iomem *override_reg @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:48:38: sparse:     expected unsigned int [noderef] [usertype] __iomem *override_reg
-   drivers/usb/cdns3/drd.c:48:38: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:67:50: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:67:50: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:65:50: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:65:50: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:65:50: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:67:50: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:67:50: sparse:     expected void volatile [noderef] __iomem *addr
    drivers/usb/cdns3/drd.c:67:50: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:69:50: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:69:50: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:69:50: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:92:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:92:25: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:92:25: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:102:30: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:102:30: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:102:30: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:135:24: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:135:24: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:135:24: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:145:48: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:145:48: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:145:48: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:161:21: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:161:21: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:161:21: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:169:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:169:15: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:169:15: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:169:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:169:15: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:169:15: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:189:21: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:189:21: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:189:21: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:192:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:192:9: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:192:9: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:192:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:192:9: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:192:9: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:211:47: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:211:47: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:211:47: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:220:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:220:15: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:220:15: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:220:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:220:15: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:220:15: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:246:21: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:246:21: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:246:21: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:248:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:248:9: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:248:9: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:248:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/usb/cdns3/drd.c:248:9: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/usb/cdns3/drd.c:248:9: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:90:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:90:25: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:90:25: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:100:30: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:100:30: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:100:30: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:133:24: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:133:24: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:133:24: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:143:48: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:143:48: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:143:48: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:159:21: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:159:21: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:159:21: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:167:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:167:15: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:167:15: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:167:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:167:15: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:167:15: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:187:21: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:187:21: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:187:21: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:190:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:190:9: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:190:9: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:190:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:190:9: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:190:9: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:209:47: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:209:47: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:209:47: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:218:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:218:15: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:218:15: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:218:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:218:15: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:218:15: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:245:21: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:245:21: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:245:21: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:247:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:247:9: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:247:9: sparse:     got restricted __le32 *
+   drivers/usb/cdns3/drd.c:247:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
+   drivers/usb/cdns3/drd.c:247:9: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/usb/cdns3/drd.c:247:9: sparse:     got restricted __le32 *
    drivers/usb/cdns3/drd.c:266:25: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
    drivers/usb/cdns3/drd.c:266:25: sparse:     expected void volatile [noderef] __iomem *addr
    drivers/usb/cdns3/drd.c:266:25: sparse:     got restricted __le32 *
@@ -149,8 +149,8 @@ Reported-by: kernel test robot <lkp@intel.com>
    drivers/usb/cdns3/drd.c:378:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
    drivers/usb/cdns3/drd.c:378:25: sparse:     expected void const volatile [noderef] __iomem *addr
    drivers/usb/cdns3/drd.c:378:25: sparse:     got restricted __le32 *
-   drivers/usb/cdns3/drd.c:382:32: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct cdns3_otg_common_regs *otg_regs @@     got void [noderef] __iomem *[assigned] regs @@
-   drivers/usb/cdns3/drd.c:382:32: sparse:     expected struct cdns3_otg_common_regs *otg_regs
+>> drivers/usb/cdns3/drd.c:382:32: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct cdns_otg_common_regs *otg_regs @@     got void [noderef] __iomem *[assigned] regs @@
+   drivers/usb/cdns3/drd.c:382:32: sparse:     expected struct cdns_otg_common_regs *otg_regs
    drivers/usb/cdns3/drd.c:382:32: sparse:     got void [noderef] __iomem *[assigned] regs
    drivers/usb/cdns3/drd.c:385:32: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
    drivers/usb/cdns3/drd.c:385:32: sparse:     expected void volatile [noderef] __iomem *addr
@@ -161,10 +161,10 @@ Reported-by: kernel test robot <lkp@intel.com>
    drivers/usb/cdns3/drd.c:390:35: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct cdns3_otg_regs *otg_v1_regs @@     got void [noderef] __iomem *[assigned] regs @@
    drivers/usb/cdns3/drd.c:390:35: sparse:     expected struct cdns3_otg_regs *otg_v1_regs
    drivers/usb/cdns3/drd.c:390:35: sparse:     got void [noderef] __iomem *[assigned] regs
->> drivers/usb/cdns3/drd.c:391:38: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct cdnsp_otg_regs *otg_cdnsp_regs @@     got void [noderef] __iomem *[assigned] regs @@
+   drivers/usb/cdns3/drd.c:391:38: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct cdnsp_otg_regs *otg_cdnsp_regs @@     got void [noderef] __iomem *[assigned] regs @@
    drivers/usb/cdns3/drd.c:391:38: sparse:     expected struct cdnsp_otg_regs *otg_cdnsp_regs
    drivers/usb/cdns3/drd.c:391:38: sparse:     got void [noderef] __iomem *[assigned] regs
->> drivers/usb/cdns3/drd.c:395:41: sparse: sparse: restricted __le32 degrades to integer
+   drivers/usb/cdns3/drd.c:395:41: sparse: sparse: restricted __le32 degrades to integer
    drivers/usb/cdns3/drd.c:402:40: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
    drivers/usb/cdns3/drd.c:402:40: sparse:     expected void volatile [noderef] __iomem *addr
    drivers/usb/cdns3/drd.c:402:40: sparse:     got restricted __le32 *
@@ -181,85 +181,117 @@ Reported-by: kernel test robot <lkp@intel.com>
    drivers/usb/cdns3/drd.c:440:28: sparse:     expected void const volatile [noderef] __iomem *addr
    drivers/usb/cdns3/drd.c:440:28: sparse:     got restricted __le32 *
 
-vim +44 drivers/usb/cdns3/drd.c
+vim +382 drivers/usb/cdns3/drd.c
 
-    22	
-    23	/**
-    24	 * cdns3_set_mode - change mode of OTG Core
-    25	 * @cdns: pointer to context structure
-    26	 * @mode: selected mode from cdns_role
-    27	 *
-    28	 * Returns 0 on success otherwise negative errno
-    29	 */
-    30	static int cdns3_set_mode(struct cdns3 *cdns, enum usb_dr_mode mode)
-    31	{
-    32		u32 __iomem *override_reg;
-    33		u32 reg;
-    34	
-    35		switch (mode) {
-    36		case USB_DR_MODE_PERIPHERAL:
-    37			break;
-    38		case USB_DR_MODE_HOST:
-    39			break;
-    40		case USB_DR_MODE_OTG:
-    41			dev_dbg(cdns->dev, "Set controller to OTG mode\n");
-    42	
-    43			if (cdns->version == CDNSP_CONTROLLER_V2)
-  > 44				override_reg = &cdns->otg_cdnsp_regs->override;
-    45			else if (cdns->version == CDNS3_CONTROLLER_V1)
-    46				override_reg = &cdns->otg_v1_regs->override;
-    47			else
-    48				override_reg = &cdns->otg_v0_regs->ctrl1;
-    49	
-    50			reg = readl(override_reg);
-    51	
-    52			if (cdns->version != CDNS3_CONTROLLER_V0)
-    53				reg |= OVERRIDE_IDPULLUP;
-    54			else
-    55				reg |= OVERRIDE_IDPULLUP_V0;
-    56	
-    57			writel(reg, override_reg);
-    58	
-    59			if (cdns->version == CDNS3_CONTROLLER_V1) {
-    60				/*
-    61				 * Enable work around feature built into the
-    62				 * controller to address issue with RX Sensitivity
-    63				 * est (EL_17) for USB2 PHY. The issue only occures
-    64				 * for 0x0002450D controller version.
-    65				 */
-    66				if (cdns->phyrst_a_enable) {
-    67					reg = readl(&cdns->otg_v1_regs->phyrst_cfg);
-    68					reg |= PHYRST_CFG_PHYRST_A_ENABLE;
-    69					writel(reg, &cdns->otg_v1_regs->phyrst_cfg);
-    70				}
-    71			}
-    72	
-    73			/*
-    74			 * Hardware specification says: "ID_VALUE must be valid within
-    75			 * 50ms after idpullup is set to '1" so driver must wait
-    76			 * 50ms before reading this pin.
-    77			 */
-    78			usleep_range(50000, 60000);
-    79			break;
-    80		default:
-    81			dev_err(cdns->dev, "Unsupported mode of operation %d\n", mode);
-    82			return -EINVAL;
-    83		}
-    84	
-    85		return 0;
-    86	}
-    87	
+7733f6c32e36ff Pawel Laszczak 2019-08-26  357  
+e89eb2bc2ed451 Pawel Laszczak 2020-12-07  358  int cdns_drd_init(struct cdns *cdns)
+7733f6c32e36ff Pawel Laszczak 2019-08-26  359  {
+7733f6c32e36ff Pawel Laszczak 2019-08-26  360  	void __iomem *regs;
+7733f6c32e36ff Pawel Laszczak 2019-08-26  361  	u32 state;
+27afe166127521 Pawel Laszczak 2020-07-13  362  	int ret;
+7733f6c32e36ff Pawel Laszczak 2019-08-26  363  
+7733f6c32e36ff Pawel Laszczak 2019-08-26  364  	regs = devm_ioremap_resource(cdns->dev, &cdns->otg_res);
+7733f6c32e36ff Pawel Laszczak 2019-08-26  365  	if (IS_ERR(regs))
+7733f6c32e36ff Pawel Laszczak 2019-08-26  366  		return PTR_ERR(regs);
+7733f6c32e36ff Pawel Laszczak 2019-08-26  367  
+7733f6c32e36ff Pawel Laszczak 2019-08-26  368  	/* Detection of DRD version. Controller has been released
+21f969177b7ea3 Pawel Laszczak 2020-12-07  369  	 * in three versions. All are very similar and are software compatible,
+21f969177b7ea3 Pawel Laszczak 2020-12-07  370  	 * but they have same changes in register maps.
+21f969177b7ea3 Pawel Laszczak 2020-12-07  371  	 * The first register in oldest version is command register and it's
+21f969177b7ea3 Pawel Laszczak 2020-12-07  372  	 * read only. Driver should read 0 from it. On the other hand, in v1
+21f969177b7ea3 Pawel Laszczak 2020-12-07  373  	 * and v2 the first register contains device ID number which is not
+21f969177b7ea3 Pawel Laszczak 2020-12-07  374  	 * set to 0. Driver uses this fact to detect the proper version of
+7733f6c32e36ff Pawel Laszczak 2019-08-26  375  	 * controller.
+7733f6c32e36ff Pawel Laszczak 2019-08-26  376  	 */
+7733f6c32e36ff Pawel Laszczak 2019-08-26  377  	cdns->otg_v0_regs = regs;
+7733f6c32e36ff Pawel Laszczak 2019-08-26  378  	if (!readl(&cdns->otg_v0_regs->cmd)) {
+7733f6c32e36ff Pawel Laszczak 2019-08-26  379  		cdns->version  = CDNS3_CONTROLLER_V0;
+7733f6c32e36ff Pawel Laszczak 2019-08-26  380  		cdns->otg_v1_regs = NULL;
+21f969177b7ea3 Pawel Laszczak 2020-12-07  381  		cdns->otg_cdnsp_regs = NULL;
+7733f6c32e36ff Pawel Laszczak 2019-08-26 @382  		cdns->otg_regs = regs;
+e89eb2bc2ed451 Pawel Laszczak 2020-12-07  383  		cdns->otg_irq_regs = (struct cdns_otg_irq_regs *)
+21f969177b7ea3 Pawel Laszczak 2020-12-07  384  				     &cdns->otg_v0_regs->ien;
+7733f6c32e36ff Pawel Laszczak 2019-08-26  385  		writel(1, &cdns->otg_v0_regs->simulate);
+eed6ed6e7085b8 Peter Chen     2020-03-31  386  		dev_dbg(cdns->dev, "DRD version v0 (%08x)\n",
+7733f6c32e36ff Pawel Laszczak 2019-08-26  387  			 readl(&cdns->otg_v0_regs->version));
+7733f6c32e36ff Pawel Laszczak 2019-08-26  388  	} else {
+7733f6c32e36ff Pawel Laszczak 2019-08-26  389  		cdns->otg_v0_regs = NULL;
+7733f6c32e36ff Pawel Laszczak 2019-08-26  390  		cdns->otg_v1_regs = regs;
+21f969177b7ea3 Pawel Laszczak 2020-12-07  391  		cdns->otg_cdnsp_regs = regs;
+21f969177b7ea3 Pawel Laszczak 2020-12-07  392  
+7733f6c32e36ff Pawel Laszczak 2019-08-26  393  		cdns->otg_regs = (void *)&cdns->otg_v1_regs->cmd;
+21f969177b7ea3 Pawel Laszczak 2020-12-07  394  
+21f969177b7ea3 Pawel Laszczak 2020-12-07  395  		if (cdns->otg_cdnsp_regs->did == OTG_CDNSP_DID) {
+e89eb2bc2ed451 Pawel Laszczak 2020-12-07  396  			cdns->otg_irq_regs = (struct cdns_otg_irq_regs *)
+21f969177b7ea3 Pawel Laszczak 2020-12-07  397  					      &cdns->otg_cdnsp_regs->ien;
+21f969177b7ea3 Pawel Laszczak 2020-12-07  398  			cdns->version  = CDNSP_CONTROLLER_V2;
+21f969177b7ea3 Pawel Laszczak 2020-12-07  399  		} else {
+e89eb2bc2ed451 Pawel Laszczak 2020-12-07  400  			cdns->otg_irq_regs = (struct cdns_otg_irq_regs *)
+21f969177b7ea3 Pawel Laszczak 2020-12-07  401  					      &cdns->otg_v1_regs->ien;
+7733f6c32e36ff Pawel Laszczak 2019-08-26  402  			writel(1, &cdns->otg_v1_regs->simulate);
+21f969177b7ea3 Pawel Laszczak 2020-12-07  403  			cdns->version  = CDNS3_CONTROLLER_V1;
+21f969177b7ea3 Pawel Laszczak 2020-12-07  404  		}
+21f969177b7ea3 Pawel Laszczak 2020-12-07  405  
+eed6ed6e7085b8 Peter Chen     2020-03-31  406  		dev_dbg(cdns->dev, "DRD version v1 (ID: %08x, rev: %08x)\n",
+7733f6c32e36ff Pawel Laszczak 2019-08-26  407  			 readl(&cdns->otg_v1_regs->did),
+7733f6c32e36ff Pawel Laszczak 2019-08-26  408  			 readl(&cdns->otg_v1_regs->rid));
+7733f6c32e36ff Pawel Laszczak 2019-08-26  409  	}
+7733f6c32e36ff Pawel Laszczak 2019-08-26  410  
+7733f6c32e36ff Pawel Laszczak 2019-08-26  411  	state = OTGSTS_STRAP(readl(&cdns->otg_regs->sts));
+7733f6c32e36ff Pawel Laszczak 2019-08-26  412  
+7733f6c32e36ff Pawel Laszczak 2019-08-26  413  	/* Update dr_mode according to STRAP configuration. */
+7733f6c32e36ff Pawel Laszczak 2019-08-26  414  	cdns->dr_mode = USB_DR_MODE_OTG;
+21f969177b7ea3 Pawel Laszczak 2020-12-07  415  
+21f969177b7ea3 Pawel Laszczak 2020-12-07  416  	if ((cdns->version == CDNSP_CONTROLLER_V2 &&
+21f969177b7ea3 Pawel Laszczak 2020-12-07  417  	     state == OTGSTS_CDNSP_STRAP_HOST) ||
+21f969177b7ea3 Pawel Laszczak 2020-12-07  418  	    (cdns->version != CDNSP_CONTROLLER_V2 &&
+21f969177b7ea3 Pawel Laszczak 2020-12-07  419  	     state == OTGSTS_STRAP_HOST)) {
+7733f6c32e36ff Pawel Laszczak 2019-08-26  420  		dev_dbg(cdns->dev, "Controller strapped to HOST\n");
+7733f6c32e36ff Pawel Laszczak 2019-08-26  421  		cdns->dr_mode = USB_DR_MODE_HOST;
+21f969177b7ea3 Pawel Laszczak 2020-12-07  422  	} else if ((cdns->version == CDNSP_CONTROLLER_V2 &&
+21f969177b7ea3 Pawel Laszczak 2020-12-07  423  		    state == OTGSTS_CDNSP_STRAP_GADGET) ||
+21f969177b7ea3 Pawel Laszczak 2020-12-07  424  		   (cdns->version != CDNSP_CONTROLLER_V2 &&
+21f969177b7ea3 Pawel Laszczak 2020-12-07  425  		    state == OTGSTS_STRAP_GADGET)) {
+7733f6c32e36ff Pawel Laszczak 2019-08-26  426  		dev_dbg(cdns->dev, "Controller strapped to PERIPHERAL\n");
+7733f6c32e36ff Pawel Laszczak 2019-08-26  427  		cdns->dr_mode = USB_DR_MODE_PERIPHERAL;
+7733f6c32e36ff Pawel Laszczak 2019-08-26  428  	}
+7733f6c32e36ff Pawel Laszczak 2019-08-26  429  
+7733f6c32e36ff Pawel Laszczak 2019-08-26  430  	ret = devm_request_threaded_irq(cdns->dev, cdns->otg_irq,
+e89eb2bc2ed451 Pawel Laszczak 2020-12-07  431  					cdns_drd_irq,
+e89eb2bc2ed451 Pawel Laszczak 2020-12-07  432  					cdns_drd_thread_irq,
+7733f6c32e36ff Pawel Laszczak 2019-08-26  433  					IRQF_SHARED,
+7733f6c32e36ff Pawel Laszczak 2019-08-26  434  					dev_name(cdns->dev), cdns);
+7733f6c32e36ff Pawel Laszczak 2019-08-26  435  	if (ret) {
+7733f6c32e36ff Pawel Laszczak 2019-08-26  436  		dev_err(cdns->dev, "couldn't get otg_irq\n");
+7733f6c32e36ff Pawel Laszczak 2019-08-26  437  		return ret;
+7733f6c32e36ff Pawel Laszczak 2019-08-26  438  	}
+7733f6c32e36ff Pawel Laszczak 2019-08-26  439  
+7733f6c32e36ff Pawel Laszczak 2019-08-26  440  	state = readl(&cdns->otg_regs->sts);
+ecf4f823fb7050 Pawel Laszczak 2020-07-13  441  	if (OTGSTS_OTG_NRDY(state)) {
+7733f6c32e36ff Pawel Laszczak 2019-08-26  442  		dev_err(cdns->dev, "Cadence USB3 OTG device not ready\n");
+7733f6c32e36ff Pawel Laszczak 2019-08-26  443  		return -ENODEV;
+7733f6c32e36ff Pawel Laszczak 2019-08-26  444  	}
+7733f6c32e36ff Pawel Laszczak 2019-08-26  445  
+27afe166127521 Pawel Laszczak 2020-07-13  446  	return 0;
+7733f6c32e36ff Pawel Laszczak 2019-08-26  447  }
+7733f6c32e36ff Pawel Laszczak 2019-08-26  448  
+
+:::::: The code at line 382 was first introduced by commit
+:::::: 7733f6c32e36ff9d7adadf40001039bf219b1cbe usb: cdns3: Add Cadence USB3 DRD Driver
+
+:::::: TO: Pawel Laszczak <pawell@cadence.com>
+:::::: CC: Felipe Balbi <felipe.balbi@linux.intel.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---y0ulUmNC+osPPQO6
+--fUYQa+Pmc3FrFX/N
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICHrB0F8AAy5jb25maWcAlDxbc+M2r+/9FZ72pZ35tvU9zpzJA0VRNteSqBUpW8mLxk28
+H4sICJnG0F8AAy5jb25maWcAlDxbc+M2r+/9FZ72pZ35tvU9zpzJA0VRNteSqBUpW8mLxk28
 28yXTTJ20tP++wNSN1KCnD2d2W4CgCAIgriR2l9++mVE3t9evh/eHu8PT0//jr4dn4+nw9vx
 YfT18en4PyNfjGKhRszn6ncgDh+f3//54/Vwejzfjxa/T8a/jz+d7pej7fH0fHwa0Zfnr4/f
 3oHB48vzT7/8REUc8HVBabFjqeQiLhTL1c3Pf72+Hj49aV6fvt3fj35dU/rb6Pr32e/jn60x
@@ -545,199 +577,199 @@ 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
-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
+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
 
---y0ulUmNC+osPPQO6--
+--fUYQa+Pmc3FrFX/N--
