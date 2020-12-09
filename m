@@ -2,152 +2,508 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 228292D3719
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 00:47:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8932D3869
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 02:51:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730326AbgLHXqI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 18:46:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730312AbgLHXqH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 18:46:07 -0500
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4368CC0613D6
-        for <linux-usb@vger.kernel.org>; Tue,  8 Dec 2020 15:45:21 -0800 (PST)
-Received: by mail-pf1-x444.google.com with SMTP id c12so175736pfo.10
-        for <linux-usb@vger.kernel.org>; Tue, 08 Dec 2020 15:45:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yOCVuAKud10PIJTv8iPXgZJtUqb9EqW2D73UVatsILw=;
-        b=C4+PcK+/ORS0a1Oi66iXuWdF7Y2wtYlDIWlmqI0PZ13LoKh1blc3FfywDyGJoB6dZB
-         BRbNxBDjq1k292vaxBzqvRan3cstZFCKHtKw088dn3QRHhBaCcIx9afmRcBkuoCAXhdL
-         PzYwO5BkDS6swOkFgzQpl/8OCqRxpBK6zXpOU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yOCVuAKud10PIJTv8iPXgZJtUqb9EqW2D73UVatsILw=;
-        b=h846gA7q0KxQUDcLLXZSzTB3FkwNF3/PLVhxlG6VnvTNWw/szpsmi7G+RK5VuSMWyx
-         LC+Pe8tLc6xX2nQhIv08/i2b+6x+SnsHwYE5lGjaoImRO6A4Pbtvagf1plNHbQ4HtO5k
-         aprWcm4ZHsQ0Ps5h4+h15fw1PxbxxRHIi1O8GqLJecVuG1zb0clwCyya/eNRbxBpD1YS
-         YLvHa5/spJMYMjOyRpL3DWG7nIalAOzZp0gz3hGAp4E20I43UtMKnes9Y2Z93rP8/P7/
-         py62Fs0P3tR7Z5UPQDoVciihj0eAHKGdM9aV/CC1WdQDx1o4FCWi0a9NWIAt1H9RLoEo
-         lVHA==
-X-Gm-Message-State: AOAM531iGpP8OKnw1d6NFqf4GgdVGsk4KJjnERQfg0g9tt973suGk/8O
-        QczoOvC8qYXbylQyM3242TXjxA==
-X-Google-Smtp-Source: ABdhPJyvPcCiKEX7ONzVKFWom43k5I7abeSnOkUhBj4DSzT25k5f2V4W40gIC5h6VbUPiGiqfeD7Rw==
-X-Received: by 2002:a63:5a52:: with SMTP id k18mr400053pgm.407.1607471120842;
-        Tue, 08 Dec 2020 15:45:20 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
-        by smtp.gmail.com with ESMTPSA id u12sm280658pfn.88.2020.12.08.15.45.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Dec 2020 15:45:20 -0800 (PST)
-Date:   Tue, 8 Dec 2020 15:45:19 -0800
-From:   Prashant Malani <pmalani@chromium.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benson Leung <bleung@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: typec: Add bus type for plug alt modes
-Message-ID: <CACeCKaehg=HTuQNLtQaJZWvTnOFYM9b1BWfM+WX_ebiZ-_i8JQ@mail.gmail.com>
-References: <20201203030846.51669-1-pmalani@chromium.org>
- <20201208093734.GD680328@kuha.fi.intel.com>
+        id S1725816AbgLIBtA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Dec 2020 20:49:00 -0500
+Received: from mail-eopbgr150045.outbound.protection.outlook.com ([40.107.15.45]:10279
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725283AbgLIBtA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Dec 2020 20:49:00 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lCQvMee49DBPJg/VCuazOMaWJuomnoqc+Ee6/ySE/2Oj0pEuwmG+gB1bV+9EHKjUY+iJAABSxqTrRXObOpF8WQOycdqTVrVSsYyVGfTYD9wmI15mi1u1gcJmhjakN7Ru7BE77lqPoepRH+dDJK6hxMC6kiwUNqU9xyIvvEexehURAufMqZb9EtGM7Mh1RNMxSuUiMeybOYBkYKLuhS3lya21fm8aRezWbRTjPhbreq2LWOzFL/2i3E9iJl84IY4WTasp7GCQJHXvymchKdw50RooUJrISynEa0mbxxIjyWGkN1wnvFiZstRnmchFAIE7ei/HFa0lM6qqAxNmAx8tUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pFfpRAB/9e1bSBgLaaFr73M+YEn/SOXhRhU3qiTcYcM=;
+ b=EJi8/W8m4dPJtNfom0KzcBggKWt+JxiFknwRQRUCK/x42kSFeMnIqtCZkQzbYqpAM9Q7YJ5Oj4sjiuCnG5QeUa+Wq9rJulwGApJT08t5pl4iY4bx39evyCsbOZZJKub/OMo5VpZPa/9xDgYPAq+VF69+4ol1YLJbqx0Ql2bLJfVHcndr0GIra/h+oZnr1SttZLBgwPwHf82ePZ9Aobn0zStCFV74fFPvAzEMKq5stdRuCW9xqeeZbo5pbkfYfg+u3TZl/MJyc4791wRzqySiz8jNey2bFpGJWeAYwQHLifSkQ1N2mqs6NBshq5+TzchebRGtIc+oLrZ9SWpiib1m1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pFfpRAB/9e1bSBgLaaFr73M+YEn/SOXhRhU3qiTcYcM=;
+ b=BwcFcqyiBcHljFz0kL0JK0qdbodDseBaQzKIF3rt3mPDb8pQJjE4RSLzEnsgpK1hraGNKTUc9TGFf8T0Ce4B2hKX7rgPNzxBnlolqZ/5jo518NvIE94YHQd3DvUKF9CJuCx/ZUW74lYf7HjejZvgrV4VWbf2xkuWLlLZcOO3h28=
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
+ by DB8PR04MB7178.eurprd04.prod.outlook.com (2603:10a6:10:12e::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.17; Wed, 9 Dec
+ 2020 01:48:10 +0000
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3632.023; Wed, 9 Dec 2020
+ 01:48:10 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     "Enrico Weigelt, metux IT consult" <info@metux.net>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "balbi@kernel.org" <balbi@kernel.org>, Leo Li <leoyang.li@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH] drivers: usb: gadget: prefer pr_*() functions over raw
+ printk()
+Thread-Topic: [PATCH] drivers: usb: gadget: prefer pr_*() functions over raw
+ printk()
+Thread-Index: AQHWzXD+d7Z0zfq3eUmbS2B/2ZpcmKnt/6wA
+Date:   Wed, 9 Dec 2020 01:48:10 +0000
+Message-ID: <20201209014740.GA995@b29397-desktop>
+References: <20201208144403.22097-1-info@metux.net>
+In-Reply-To: <20201208144403.22097-1-info@metux.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mutt/1.9.4 (2018-02-28)
+authentication-results: metux.net; dkim=none (message not signed)
+ header.d=none;metux.net; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 5982ce73-75dd-49b0-dfd3-08d89be47b97
+x-ms-traffictypediagnostic: DB8PR04MB7178:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB8PR04MB717882FCD70B9D8BA8562B108BCC0@DB8PR04MB7178.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2276;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +hYl9K0YNFo4+mgFzu11dNP//EoPVAVeY9ulcASAPuA3iD0z+tj1/4MkF7N2/Sa1wUHAM0qU64qf4EnrpV84+7+C7EH8NX8Uc5Lei8erwIUH+y+1l1kbayR2UcbK3WTcEjho3PnaxBISytJ7b311y0zCTt23tUAnKfSSALPPXw7ZDwQ2b7bDcs4pIETcMpMew7iB2TvP0IPOWifbkC21FAk7lwfLq6acxyyjkbfk+rKt0AwFkhXyjEt7MKNEtsS+Q3FxvjjZ9b+Ppo/DiDS0UXMzFxGccGPCEN9djDUwXxPFGOEaOXkaz52mVAVXC4uQ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(366004)(346002)(376002)(136003)(54906003)(33716001)(9686003)(76116006)(2906002)(6512007)(33656002)(53546011)(8676002)(64756008)(508600001)(44832011)(30864003)(6486002)(4326008)(8936002)(91956017)(5660300002)(83380400001)(66556008)(71200400001)(26005)(66446008)(186003)(6506007)(86362001)(66476007)(1076003)(6916009)(66946007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?dyhi/TqBVY2fZ8c8vVJwNR1OYVpeMBWJ+0eoOUG2n5mUp4xRZIz7AaWT1vqO?=
+ =?us-ascii?Q?UVRmV0QlQZ/LmkMLRTg9qNjhpbEnZSLEd0tEPQpFX2dXWHn67YpY0KF0Lm8x?=
+ =?us-ascii?Q?VFOHyGAz592sK8W9D4dRhj20xyj8NfMMa/vhrymNudZ1QWB0wSl816qxsyPm?=
+ =?us-ascii?Q?5uV+kZPYgSnySTR/X/Llbpt4UAXamnd6zFBf4tAbmvXcJ5HX1CqKEwHZwMXS?=
+ =?us-ascii?Q?EImHk5I7+S/H3qBM0lrJQNDXpVeoNxA31wJfCRUuey38XgSQCCirjM+tAU08?=
+ =?us-ascii?Q?+V+VngnZeOW0BFPZ72rD6DXrtDrDEsJFu67lVii9GxTMAfWIF/XZK/izD30D?=
+ =?us-ascii?Q?ixKrx8Qxy+K1LSNU9Mhse05nM3l/Yd5XYVInTmpT2o9rVnoVKhWnl/4je7UE?=
+ =?us-ascii?Q?Ahv7M4mgU2ApZ22YVhm1+kT9VK1YCNExILZYruFBHXmxLbpSSVGLTZinxHte?=
+ =?us-ascii?Q?4NW6S8LnN9B17sOgb8M+YYs7SyUI6/qTQHxnUMPALCUKoPCiNl61MiH6v8Cp?=
+ =?us-ascii?Q?nMaf38Y16yoOU0I734zqNASW00I8eGNDArAJlWWLoatOhTDayDI+qo0kPhL6?=
+ =?us-ascii?Q?c8n9oUbi+tEGd88pqutUQbNkEvPLOQ/buitCpOjT1+1nORdJKmoHjzycpL2C?=
+ =?us-ascii?Q?3uSOCJa7a5h7u3cjJwNMe7L4Wgj0WYlXLV+iMNfkEfSga/T9kQbfHA0auOai?=
+ =?us-ascii?Q?a+9nqjAFKCvqNGvfPiG0EqCLgleI5xwZcigxnYgIfstqUaGCCP0LkkCNZ0Jq?=
+ =?us-ascii?Q?IbS0XRkt4Ev+X1eAIAs9M9JjnFSK67Ro2mNv46oUHiAq/0nAwsYYqPDbOE16?=
+ =?us-ascii?Q?zgTousYDH033Gq57bLJdj9c17emFKFU7S9Y6dJf3HpzLwM4elBfAP1OUgrPw?=
+ =?us-ascii?Q?BbAgVNas8L5geTiB+HPc4CdAT3/pt4qt/RgDRZXGmccjKPJxNdw/KD9hmo65?=
+ =?us-ascii?Q?KO33SVpKKH4jds3P0ofJ4U+UmhVbhhUCImehfFk0k8buzXGwx/YKWXBDkssR?=
+ =?us-ascii?Q?4wVL?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <A771545CB75891428A6DB7958560E31C@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201208093734.GD680328@kuha.fi.intel.com>
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5982ce73-75dd-49b0-dfd3-08d89be47b97
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2020 01:48:10.0558
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LTqq0+vBa/UieVX0N7ok2jTT7li+G2JYjCgaN7z+GX/U8QIxXmQzqArVjijHI8h7cng8IramJPvPZxEIRvR6WA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7178
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+On 20-12-08 15:44:03, Enrico Weigelt, metux IT consult wrote:
+> Reduce a bit logging boilerplate by using the preferred pr_*()
+> macros instead of raw printk().
 
-Thanks a lot for looking at the patch.
+It is the device driver code, it is better to use dev_info/dev_dbg.
 
-On Tue, Dec 8, 2020 at 1:37 AM Heikki Krogerus <heikki.krogerus@linux.intel.com> wrote:
->
-> On Wed, Dec 02, 2020 at 07:08:47PM -0800, Prashant Malani wrote:
-> > Add the Type C bus for plug alternate modes which are being
-> > registered via the Type C connector class. This ensures that udev events
-> > get generated when plug alternate modes are registered (and not just for
-> > partner/port alternate modes), even though the Type C bus doesn't link
-> > plug alternate mode devices to alternate mode drivers.
->
-> I still don't understand how is the uevent related to the bus? If you
-> check the device_add() function, on line 2917, kobject_uevent() is
-> called unconditionally. The device does not need a bus for that event
-> to be generated.
+Peter
+>=20
+> Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
+> ---
+>  drivers/usb/gadget/function/uvc.h       |  2 +-
+>  drivers/usb/gadget/udc/atmel_usba_udc.c |  2 +-
+>  drivers/usb/gadget/udc/fsl_udc_core.c   |  4 +--
+>  drivers/usb/gadget/udc/fsl_usb2_udc.h   |  4 +--
+>  drivers/usb/gadget/udc/fusb300_udc.c    | 64 ++++++++++++++++-----------=
+------
+>  drivers/usb/gadget/udc/goku_udc.c       |  2 +-
+>  drivers/usb/gadget/udc/r8a66597-udc.h   |  2 +-
+>  7 files changed, 40 insertions(+), 40 deletions(-)
+>=20
+> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/funct=
+ion/uvc.h
+> index 23ee25383c1f..d546eb7c348c 100644
+> --- a/drivers/usb/gadget/function/uvc.h
+> +++ b/drivers/usb/gadget/function/uvc.h
+> @@ -49,7 +49,7 @@ extern unsigned int uvc_gadget_trace_param;
+>  #define uvc_trace(flag, msg...) \
+>  	do { \
+>  		if (uvc_gadget_trace_param & flag) \
+> -			printk(KERN_DEBUG "uvcvideo: " msg); \
+> +			pr_debug("uvcvideo: " msg); \
+>  	} while (0)
+> =20
+>  #define uvcg_dbg(f, fmt, args...) \
+> diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.c b/drivers/usb/gadget=
+/udc/atmel_usba_udc.c
+> index 2b893bceea45..4834fafb3f70 100644
+> --- a/drivers/usb/gadget/udc/atmel_usba_udc.c
+> +++ b/drivers/usb/gadget/udc/atmel_usba_udc.c
+> @@ -1573,7 +1573,7 @@ static void usba_control_irq(struct usba_udc *udc, =
+struct usba_ep *ep)
+>  		 * generate or receive a reply right away. */
+>  		usba_ep_writel(ep, CLR_STA, USBA_RX_SETUP);
+> =20
+> -		/* printk(KERN_DEBUG "setup: %d: %02x.%02x\n",
+> +		/* pr_debug("setup: %d: %02x.%02x\n",
+>  			ep->state, crq.crq.bRequestType,
+>  			crq.crq.bRequest); */
+> =20
+> diff --git a/drivers/usb/gadget/udc/fsl_udc_core.c b/drivers/usb/gadget/u=
+dc/fsl_udc_core.c
+> index ad6ff9c4188e..cab4def04f9f 100644
+> --- a/drivers/usb/gadget/udc/fsl_udc_core.c
+> +++ b/drivers/usb/gadget/udc/fsl_udc_core.c
+> @@ -1474,7 +1474,7 @@ __acquires(udc->lock)
+>  			mdelay(10);
+>  			tmp =3D fsl_readl(&dr_regs->portsc1) | (ptc << 16);
+>  			fsl_writel(tmp, &dr_regs->portsc1);
+> -			printk(KERN_INFO "udc: switch to test mode %d.\n", ptc);
+> +			pr_info("udc: switch to test mode %d.\n", ptc);
+>  		}
+> =20
+>  		return;
+> @@ -1952,7 +1952,7 @@ static int fsl_udc_start(struct usb_gadget *g,
+>  	if (!IS_ERR_OR_NULL(udc_controller->transceiver)) {
+>  		/* Suspend the controller until OTG enable it */
+>  		udc_controller->stopped =3D 1;
+> -		printk(KERN_INFO "Suspend udc for OTG auto detect\n");
+> +		pr_info("Suspend udc for OTG auto detect\n");
+> =20
+>  		/* connect to bus through transceiver */
+>  		if (!IS_ERR_OR_NULL(udc_controller->transceiver)) {
+> diff --git a/drivers/usb/gadget/udc/fsl_usb2_udc.h b/drivers/usb/gadget/u=
+dc/fsl_usb2_udc.h
+> index 4ba651ae9048..b180bf14dd0c 100644
+> --- a/drivers/usb/gadget/udc/fsl_usb2_udc.h
+> +++ b/drivers/usb/gadget/udc/fsl_usb2_udc.h
+> @@ -509,7 +509,7 @@ struct fsl_udc {
+>  /*----------------------------------------------------------------------=
+---*/
+> =20
+>  #ifdef DEBUG
+> -#define DBG(fmt, args...) 	printk(KERN_DEBUG "[%s]  " fmt "\n", \
+> +#define DBG(fmt, args...) 	pr_debug("[%s]  " fmt "\n", \
+>  				__func__, ## args)
+>  #else
+>  #define DBG(fmt, args...)	do{}while(0)
+> @@ -535,7 +535,7 @@ static void dump_msg(const char *label, const u8 * bu=
+f, unsigned int length)
+>  			p +=3D 3;
+>  		}
+>  		*p =3D 0;
+> -		printk(KERN_DEBUG "%6x: %s\n", start, line);
+> +		pr_debug("%6x: %s\n", start, line);
+>  		buf +=3D num;
+>  		start +=3D num;
+>  		length -=3D num;
+> diff --git a/drivers/usb/gadget/udc/fusb300_udc.c b/drivers/usb/gadget/ud=
+c/fusb300_udc.c
+> index 9af8b415f303..c4e7e4b8e46f 100644
+> --- a/drivers/usb/gadget/udc/fusb300_udc.c
+> +++ b/drivers/usb/gadget/udc/fusb300_udc.c
+> @@ -352,24 +352,24 @@ static void fusb300_wrcxf(struct fusb300_ep *ep,
+>  		for (i =3D length >> 2; i > 0; i--) {
+>  			data =3D *tmp | *(tmp + 1) << 8 | *(tmp + 2) << 16 |
+>  				*(tmp + 3) << 24;
+> -			printk(KERN_DEBUG "    0x%x\n", data);
+> +			pr_debug("    0x%x\n", data);
+>  			iowrite32(data, fusb300->reg + FUSB300_OFFSET_CXPORT);
+>  			tmp =3D tmp + 4;
+>  		}
+>  		switch (length % 4) {
+>  		case 1:
+>  			data =3D *tmp;
+> -			printk(KERN_DEBUG "    0x%x\n", data);
+> +			pr_debug("    0x%x\n", data);
+>  			iowrite32(data, fusb300->reg + FUSB300_OFFSET_CXPORT);
+>  			break;
+>  		case 2:
+>  			data =3D *tmp | *(tmp + 1) << 8;
+> -			printk(KERN_DEBUG "    0x%x\n", data);
+> +			pr_debug("    0x%x\n", data);
+>  			iowrite32(data, fusb300->reg + FUSB300_OFFSET_CXPORT);
+>  			break;
+>  		case 3:
+>  			data =3D *tmp | *(tmp + 1) << 8 | *(tmp + 2) << 16;
+> -			printk(KERN_DEBUG "    0x%x\n", data);
+> +			pr_debug("    0x%x\n", data);
+>  			iowrite32(data, fusb300->reg + FUSB300_OFFSET_CXPORT);
+>  			break;
+>  		default:
+> @@ -390,7 +390,7 @@ static void fusb300_clear_epnstall(struct fusb300 *fu=
+sb300, u8 ep)
+>  	u32 reg =3D ioread32(fusb300->reg + FUSB300_OFFSET_EPSET0(ep));
+> =20
+>  	if (reg & FUSB300_EPSET0_STL) {
+> -		printk(KERN_DEBUG "EP%d stall... Clear!!\n", ep);
+> +		pr_debug("EP%d stall... Clear!!\n", ep);
+>  		reg |=3D FUSB300_EPSET0_STL_CLR;
+>  		iowrite32(reg, fusb300->reg + FUSB300_OFFSET_EPSET0(ep));
+>  	}
+> @@ -402,7 +402,7 @@ static void ep0_queue(struct fusb300_ep *ep, struct f=
+usb300_request *req)
+>  		if (req->req.length) {
+>  			fusb300_wrcxf(ep, req);
+>  		} else
+> -			printk(KERN_DEBUG "%s : req->req.length =3D 0x%x\n",
+> +			pr_debug("%s : req->req.length =3D 0x%x\n",
+>  				__func__, req->req.length);
+>  		if ((req->req.length =3D=3D req->req.actual) ||
+>  		    (req->req.actual < ep->ep.maxpacket))
+> @@ -565,7 +565,7 @@ static void fusb300_rdcxf(struct fusb300 *fusb300,
+> =20
+>  	for (i =3D (length >> 2); i > 0; i--) {
+>  		data =3D ioread32(fusb300->reg + FUSB300_OFFSET_CXPORT);
+> -		printk(KERN_DEBUG "    0x%x\n", data);
+> +		pr_debug("    0x%x\n", data);
+>  		*tmp =3D data & 0xFF;
+>  		*(tmp + 1) =3D (data >> 8) & 0xFF;
+>  		*(tmp + 2) =3D (data >> 16) & 0xFF;
+> @@ -576,18 +576,18 @@ static void fusb300_rdcxf(struct fusb300 *fusb300,
+>  	switch (length % 4) {
+>  	case 1:
+>  		data =3D ioread32(fusb300->reg + FUSB300_OFFSET_CXPORT);
+> -		printk(KERN_DEBUG "    0x%x\n", data);
+> +		pr_debug("    0x%x\n", data);
+>  		*tmp =3D data & 0xFF;
+>  		break;
+>  	case 2:
+>  		data =3D ioread32(fusb300->reg + FUSB300_OFFSET_CXPORT);
+> -		printk(KERN_DEBUG "    0x%x\n", data);
+> +		pr_debug("    0x%x\n", data);
+>  		*tmp =3D data & 0xFF;
+>  		*(tmp + 1) =3D (data >> 8) & 0xFF;
+>  		break;
+>  	case 3:
+>  		data =3D ioread32(fusb300->reg + FUSB300_OFFSET_CXPORT);
+> -		printk(KERN_DEBUG "    0x%x\n", data);
+> +		pr_debug("    0x%x\n", data);
+>  		*tmp =3D data & 0xFF;
+>  		*(tmp + 1) =3D (data >> 8) & 0xFF;
+>  		*(tmp + 2) =3D (data >> 16) & 0xFF;
+> @@ -610,7 +610,7 @@ static void fusb300_rdfifo(struct fusb300_ep *ep,
+>  	req->req.actual +=3D length;
+> =20
+>  	if (req->req.actual > req->req.length)
+> -		printk(KERN_DEBUG "req->req.actual > req->req.length\n");
+> +		pr_debug("req->req.actual > req->req.length\n");
+> =20
+>  	for (i =3D (length >> 2); i > 0; i--) {
+>  		data =3D ioread32(fusb300->reg +
+> @@ -649,7 +649,7 @@ static void fusb300_rdfifo(struct fusb300_ep *ep,
+>  		reg =3D ioread32(fusb300->reg + FUSB300_OFFSET_IGR1);
+>  		reg &=3D FUSB300_IGR1_SYNF0_EMPTY_INT;
+>  		if (i)
+> -			printk(KERN_INFO "sync fifo is not empty!\n");
+> +			pr_info("sync fifo is not empty!\n");
+>  		i++;
+>  	} while (!reg);
+>  }
+> @@ -677,7 +677,7 @@ static u8 fusb300_get_cxstall(struct fusb300 *fusb300=
+)
+>  static void request_error(struct fusb300 *fusb300)
+>  {
+>  	fusb300_set_cxstall(fusb300);
+> -	printk(KERN_DEBUG "request error!!\n");
+> +	pr_debug("request error!!\n");
+>  }
+> =20
+>  static void get_status(struct fusb300 *fusb300, struct usb_ctrlrequest *=
+ctrl)
+> @@ -999,7 +999,7 @@ static void check_device_mode(struct fusb300 *fusb300=
+)
+>  		fusb300->gadget.speed =3D USB_SPEED_UNKNOWN;
+>  		break;
+>  	}
+> -	printk(KERN_INFO "dev_mode =3D %d\n", (reg & FUSB300_GCR_DEVEN_MSK));
+> +	pr_info("dev_mode =3D %d\n", (reg & FUSB300_GCR_DEVEN_MSK));
+>  }
+> =20
+> =20
+> @@ -1076,14 +1076,14 @@ static irqreturn_t fusb300_irq(int irq, void *_fu=
+sb300)
+>  	if (int_grp1 & FUSB300_IGR1_WARM_RST_INT) {
+>  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
+>  				  FUSB300_IGR1_WARM_RST_INT);
+> -		printk(KERN_INFO"fusb300_warmreset\n");
+> +		pr_info("fusb300_warmreset\n");
+>  		fusb300_reset();
+>  	}
+> =20
+>  	if (int_grp1 & FUSB300_IGR1_HOT_RST_INT) {
+>  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
+>  				  FUSB300_IGR1_HOT_RST_INT);
+> -		printk(KERN_INFO"fusb300_hotreset\n");
+> +		pr_info("fusb300_hotreset\n");
+>  		fusb300_reset();
+>  	}
+> =20
+> @@ -1097,13 +1097,13 @@ static irqreturn_t fusb300_irq(int irq, void *_fu=
+sb300)
+>  	if (int_grp1 & FUSB300_IGR1_CX_COMABT_INT) {
+>  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
+>  				  FUSB300_IGR1_CX_COMABT_INT);
+> -		printk(KERN_INFO"fusb300_ep0abt\n");
+> +		pr_info("fusb300_ep0abt\n");
+>  	}
+> =20
+>  	if (int_grp1 & FUSB300_IGR1_VBUS_CHG_INT) {
+>  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
+>  				  FUSB300_IGR1_VBUS_CHG_INT);
+> -		printk(KERN_INFO"fusb300_vbus_change\n");
+> +		pr_info("fusb300_vbus_change\n");
+>  	}
+> =20
+>  	if (int_grp1 & FUSB300_IGR1_U3_EXIT_FAIL_INT) {
+> @@ -1134,25 +1134,25 @@ static irqreturn_t fusb300_irq(int irq, void *_fu=
+sb300)
+>  	if (int_grp1 & FUSB300_IGR1_U3_EXIT_INT) {
+>  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
+>  				  FUSB300_IGR1_U3_EXIT_INT);
+> -		printk(KERN_INFO "FUSB300_IGR1_U3_EXIT_INT\n");
+> +		pr_info("FUSB300_IGR1_U3_EXIT_INT\n");
+>  	}
+> =20
+>  	if (int_grp1 & FUSB300_IGR1_U2_EXIT_INT) {
+>  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
+>  				  FUSB300_IGR1_U2_EXIT_INT);
+> -		printk(KERN_INFO "FUSB300_IGR1_U2_EXIT_INT\n");
+> +		pr_info("FUSB300_IGR1_U2_EXIT_INT\n");
+>  	}
+> =20
+>  	if (int_grp1 & FUSB300_IGR1_U1_EXIT_INT) {
+>  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
+>  				  FUSB300_IGR1_U1_EXIT_INT);
+> -		printk(KERN_INFO "FUSB300_IGR1_U1_EXIT_INT\n");
+> +		pr_info("FUSB300_IGR1_U1_EXIT_INT\n");
+>  	}
+> =20
+>  	if (int_grp1 & FUSB300_IGR1_U3_ENTRY_INT) {
+>  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
+>  				  FUSB300_IGR1_U3_ENTRY_INT);
+> -		printk(KERN_INFO "FUSB300_IGR1_U3_ENTRY_INT\n");
+> +		pr_info("FUSB300_IGR1_U3_ENTRY_INT\n");
+>  		fusb300_enable_bit(fusb300, FUSB300_OFFSET_SSCR1,
+>  				   FUSB300_SSCR1_GO_U3_DONE);
+>  	}
+> @@ -1160,31 +1160,31 @@ static irqreturn_t fusb300_irq(int irq, void *_fu=
+sb300)
+>  	if (int_grp1 & FUSB300_IGR1_U2_ENTRY_INT) {
+>  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
+>  				  FUSB300_IGR1_U2_ENTRY_INT);
+> -		printk(KERN_INFO "FUSB300_IGR1_U2_ENTRY_INT\n");
+> +		pr_info("FUSB300_IGR1_U2_ENTRY_INT\n");
+>  	}
+> =20
+>  	if (int_grp1 & FUSB300_IGR1_U1_ENTRY_INT) {
+>  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
+>  				  FUSB300_IGR1_U1_ENTRY_INT);
+> -		printk(KERN_INFO "FUSB300_IGR1_U1_ENTRY_INT\n");
+> +		pr_info("FUSB300_IGR1_U1_ENTRY_INT\n");
+>  	}
+> =20
+>  	if (int_grp1 & FUSB300_IGR1_RESM_INT) {
+>  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
+>  				  FUSB300_IGR1_RESM_INT);
+> -		printk(KERN_INFO "fusb300_resume\n");
+> +		pr_info("fusb300_resume\n");
+>  	}
+> =20
+>  	if (int_grp1 & FUSB300_IGR1_SUSP_INT) {
+>  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
+>  				  FUSB300_IGR1_SUSP_INT);
+> -		printk(KERN_INFO "fusb300_suspend\n");
+> +		pr_info("fusb300_suspend\n");
+>  	}
+> =20
+>  	if (int_grp1 & FUSB300_IGR1_HS_LPM_INT) {
+>  		fusb300_clear_int(fusb300, FUSB300_OFFSET_IGR1,
+>  				  FUSB300_IGR1_HS_LPM_INT);
+> -		printk(KERN_INFO "fusb300_HS_LPM_INT\n");
+> +		pr_info("fusb300_HS_LPM_INT\n");
+>  	}
+> =20
+>  	if (int_grp1 & FUSB300_IGR1_DEV_MODE_CHG_INT) {
+> @@ -1195,11 +1195,11 @@ static irqreturn_t fusb300_irq(int irq, void *_fu=
+sb300)
+> =20
+>  	if (int_grp1 & FUSB300_IGR1_CX_COMFAIL_INT) {
+>  		fusb300_set_cxstall(fusb300);
+> -		printk(KERN_INFO "fusb300_ep0fail\n");
+> +		pr_info("fusb300_ep0fail\n");
+>  	}
+> =20
+>  	if (int_grp1 & FUSB300_IGR1_CX_SETUP_INT) {
+> -		printk(KERN_INFO "fusb300_ep0setup\n");
+> +		pr_info("fusb300_ep0setup\n");
+>  		if (setup_packet(fusb300, &ctrl)) {
+>  			spin_unlock(&fusb300->lock);
+>  			if (fusb300->driver->setup(&fusb300->gadget, &ctrl) < 0)
+> @@ -1209,16 +1209,16 @@ static irqreturn_t fusb300_irq(int irq, void *_fu=
+sb300)
+>  	}
+> =20
+>  	if (int_grp1 & FUSB300_IGR1_CX_CMDEND_INT)
+> -		printk(KERN_INFO "fusb300_cmdend\n");
+> +		pr_info("fusb300_cmdend\n");
+> =20
+> =20
+>  	if (int_grp1 & FUSB300_IGR1_CX_OUT_INT) {
+> -		printk(KERN_INFO "fusb300_cxout\n");
+> +		pr_info("fusb300_cxout\n");
+>  		fusb300_ep0out(fusb300);
+>  	}
+> =20
+>  	if (int_grp1 & FUSB300_IGR1_CX_IN_INT) {
+> -		printk(KERN_INFO "fusb300_cxin\n");
+> +		pr_info("fusb300_cxin\n");
+>  		fusb300_ep0in(fusb300);
+>  	}
+> =20
+> diff --git a/drivers/usb/gadget/udc/goku_udc.c b/drivers/usb/gadget/udc/g=
+oku_udc.c
+> index 3e1267d38774..4f225552861a 100644
+> --- a/drivers/usb/gadget/udc/goku_udc.c
+> +++ b/drivers/usb/gadget/udc/goku_udc.c
+> @@ -1748,7 +1748,7 @@ static int goku_probe(struct pci_dev *pdev, const s=
+truct pci_device_id *id)
+>  	int			retval;
+> =20
+>  	if (!pdev->irq) {
+> -		printk(KERN_ERR "Check PCI %s IRQ setup!\n", pci_name(pdev));
+> +		pr_err("Check PCI %s IRQ setup!\n", pci_name(pdev));
+>  		retval =3D -ENODEV;
+>  		goto err;
+>  	}
+> diff --git a/drivers/usb/gadget/udc/r8a66597-udc.h b/drivers/usb/gadget/u=
+dc/r8a66597-udc.h
+> index 9a115caba661..fa4d62c32ea1 100644
+> --- a/drivers/usb/gadget/udc/r8a66597-udc.h
+> +++ b/drivers/usb/gadget/udc/r8a66597-udc.h
+> @@ -247,7 +247,7 @@ static inline u16 get_xtal_from_pdata(struct r8a66597=
+_platdata *pdata)
+>  		clock =3D XTAL48;
+>  		break;
+>  	default:
+> -		printk(KERN_ERR "r8a66597: platdata clock is wrong.\n");
+> +		pr_err("r8a66597: platdata clock is wrong.\n");
+>  		break;
+>  	}
+> =20
+> --=20
+> 2.11.0
+>=20
 
-My initial thought process was to see what is the difference in the adev device
-initialization between partner altmode and plug altmode (the only difference I saw in
-typec_register_altmode() was regarding the bus field).
-
-Yes, kobject_uevent() is called unconditionally, but it's return value isn't checked,
-so we don't know if it succeeded or not.
-
-In the case of cable plug altmode, I see it fail with the following error[1]:
-
-[  114.431409] kobject: 'port1-plug0.0' (000000004ad42956): kobject_uevent_env: filter function caused the event to drop!
-
-I think the filter function which is called is this one: drivers/base/core.c: dev_uevent_filter() [2]
-
-static int dev_uevent_filter(struct kset *kset, struct kobject *kobj)
-{
-	struct kobj_type *ktype = get_ktype(kobj);
-
-	if (ktype == &device_ktype) {
-		struct device *dev = kobj_to_dev(kobj);
-		if (dev->bus)
-			return 1;
-		if (dev->class)
-			return 1;
-	}
-	return 0;
-}
-
-So, both the "if (dev->bus)" and "if (dev->class)" checks are failing here. In the case of partner alt modes, bus is set by the class.c code
-so this check likely returns 1 in that case.
-
-In case the provided fix is not right or acceptable, an alternative I can think of is:
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index c13779ea3200..ecb4c7546aae 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -517,6 +517,9 @@ typec_register_altmode(struct device *parent,
-        if (is_typec_partner(parent))
-                alt->adev.dev.bus = &typec_bus;
- 
-+       if (is_typec_plug(parent))
-+               alt->adev.dev.class = typec_class;
-+
-        ret = device_register(&alt->adev.dev);
-        if (ret) {
-                dev_err(parent, "failed to register alternate mode (%d)\n",
-
-This too ensures that the filter function returns a 1.
-
-Kindly LMK which way (if any) would you prefer.
-
->
-> Also, I don't understand how are the cable plug alt modes now
-> prevented from being bind to the alt mode drivers?
-
-Sorry about this; I am unable to test this out. I just based the observation on the line in Documentation/driver-api/usb/typec_bus.rst
-(Cable Plug Alternate Modes) : "The alternate mode drivers are not bound to cable plug alternate mode devices,
-only to the partner alternate mode devices" . I don't completely understand the bus.c code yet, so assumed that the code
-there checked for the partner type during bind attempts.
-
-Of course, based on what the eventual solution is, this statement may no longer be required and I can remove it from the commit message <or>
-I can amend the Documentation to specify that cable plug alt modes can bind to alt mode drivers.
+--=20
 
 Thanks,
-
--Prashant
-
-[1] https://elixir.bootlin.com/linux/v5.10-rc7/source/lib/kobject_uevent.c#L516
-[2] https://elixir.bootlin.com/linux/v5.10-rc7/source/drivers/base/core.c#L1840
+Peter Chen=
