@@ -2,135 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2669B2D46A9
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 17:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3118A2D46B8
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 17:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730043AbgLIQXo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 11:23:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
+        id S1731919AbgLIQ0k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 11:26:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728397AbgLIQXo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 11:23:44 -0500
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D51AC0613CF
-        for <linux-usb@vger.kernel.org>; Wed,  9 Dec 2020 08:23:04 -0800 (PST)
-Received: by mail-qk1-x742.google.com with SMTP id z11so1739731qkj.7
-        for <linux-usb@vger.kernel.org>; Wed, 09 Dec 2020 08:23:04 -0800 (PST)
+        with ESMTP id S1729938AbgLIQ00 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 11:26:26 -0500
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C201C06179C
+        for <linux-usb@vger.kernel.org>; Wed,  9 Dec 2020 08:25:45 -0800 (PST)
+Received: by mail-lf1-x142.google.com with SMTP id o17so986161lfg.4
+        for <linux-usb@vger.kernel.org>; Wed, 09 Dec 2020 08:25:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uCi6vrOk+0dK3uRrPhD3eDKr6DKQAm8fgeutNqh1hhc=;
-        b=Yx2qDiuW5kA47vFukEUCo/5S8+R4PRBF89Of94p7BHWxls3kOX5wQY8qS/R4oOQMRa
-         6B0e1DM4WCHmrQ/Z/Su/PM7AubNl+V9yIiEUeqah8LP4v21OL7XJVI4UrfW0ZQrU5Lxn
-         zbTKV5nyhiJ249bOI69cI2EcqaI9jzzj2BbcU=
+        bh=0xBrb97lTo75kGlgbY3m4XgGoTI/1jjRhlZu6u72rgk=;
+        b=sDY9A2yMs122aEwsLRiAxNJUtdIrEVy+tAylzLcqgQaLuQgU/13aH4FcCdVRF72Jlj
+         LJA7Cg1tkp04n8g6ckBSaSu8dClDZS51O9wMdZR95qKqxdFjS0zeyQ32gK7SFeivKv1l
+         fQq+d+qR9qMZG3/dy8/V5wi8n7koeX96Aj/no3Ia7FmwUUuz1ElPhUTW9RYM5RPzOZiR
+         2HqlpVHvlMEmmq/BBkVh8BppZTUEWYqEATUK7bngOERX58IbWU9Ma82eT+QH0QZfTtOh
+         GE5Y6UII6VLYGWmuvwZNzo/gbjskQCe/VW+ilicVTjCSt5I1qVyySwWiDo/fYmXF69SG
+         u3iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uCi6vrOk+0dK3uRrPhD3eDKr6DKQAm8fgeutNqh1hhc=;
-        b=EmnnKCOW1WW+u8bdp21q90v7r7G2ihB1UgBH54xEwXz6PXCSo/4RN9bncdVdh+9JxJ
-         f4kE7wA/BZq63poBAo+kc/q67iOgJjhLv8VjIbuf2Vd1mdvwOo/A1QZPoTmLvXZEdd+S
-         33Hrc9cV0NFDsbimrfs1m/1p4U/jWDj3GveOuO8PWOdESDzwOManCk8RYhJeN7Kpf5pv
-         GaVqAYwusbfCoiobkHp39m9WLCQ1xoO5AVzmgSTSuW1odwBDHqPCW6cyt6OY7Qv47c3v
-         ZrpX8NL6hfpZ0vK0P9Ulw43uVt/mZ14X2Tqag8GPzkvqMviGVnmn/JGL/p8CfrS6tuw3
-         o3yw==
-X-Gm-Message-State: AOAM531uFceOr8XD9J+owOaTMk54BKyz6kVNgX2ZXsWu43p6NLHQzdqi
-        st8NlqpHyqlUEeknGbEzUJm3+JqzprnS0Q/HlJLQr0rAkEc=
-X-Google-Smtp-Source: ABdhPJy4ikAHHQ7c1iKgQEwtJ6vDo6LJtrL4AgnoSRi7GTCUJUTtzAIyBXpCuNR+jKddk6+jjC6lchi4B9RuWqbUnio=
-X-Received: by 2002:a37:4145:: with SMTP id o66mr1059144qka.4.1607530983476;
- Wed, 09 Dec 2020 08:23:03 -0800 (PST)
+        bh=0xBrb97lTo75kGlgbY3m4XgGoTI/1jjRhlZu6u72rgk=;
+        b=RzBCWHG+e2P6PzdRRkPn85XMogQ1B8pA7bMk3Fbkc4hk3SHV4VMdwbCD+FbyXc8VEk
+         U46Jj7rgZfdMlE5c/H9I45GXy9v5jgz97A1Cvz6ilI71qkhPZEH5sHSw05rci7SF7xAW
+         dMwZKk0qmpwVNwj6zcwdg98Bvz2IjQ2naa1obyV5FtNHImfeMfIOcQWOZUKVXCcJoaGa
+         6qidcRC6aVOV9ScFnI/uQ31FDl0ymoSWZVgacU90wlmAa5erKMXFj3tZR1Ynr0gNvnVi
+         EuOaaClwL6ST1qsnUg0EMPZ2e7ZVaSzt1TqUx9G7yaOewnlstrGUQ6uBSA8AKVPdbM+P
+         Fjgg==
+X-Gm-Message-State: AOAM531FMgJHPRLn3IYguzGiRwdER7FDU33HqDv4iP7yeS6/ULEzJ7Lw
+        cQyKTLD5VeFd0PnzzgiVgB4etEygVSlGwHKpnPlyaw==
+X-Google-Smtp-Source: ABdhPJyxNPa05kQBjmuwAnqODtgRKeoAKxynoWMj82Ul7NTn1ySYz/7hhIr7hEH0i6mj5ZwJrr98/n4mwkbSGi63eg4=
+X-Received: by 2002:a19:8384:: with SMTP id f126mr1133455lfd.649.1607531143780;
+ Wed, 09 Dec 2020 08:25:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20201203030846.51669-1-pmalani@chromium.org> <20201208093734.GD680328@kuha.fi.intel.com>
- <CACeCKaehg=HTuQNLtQaJZWvTnOFYM9b1BWfM+WX_ebiZ-_i8JQ@mail.gmail.com> <20201209161356.GI680328@kuha.fi.intel.com>
-In-Reply-To: <20201209161356.GI680328@kuha.fi.intel.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Wed, 9 Dec 2020 08:22:52 -0800
-Message-ID: <CACeCKacdcGi_6VW7F9agN+bgRH7gAXLDxK7DngE=fPkYT-CWNQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: Add bus type for plug alt modes
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benson Leung <bleung@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+References: <20201122170822.21715-1-mani@kernel.org> <20201122170822.21715-3-mani@kernel.org>
+ <CACRpkdbY-aZB1BAD=JkZAHA+OQvpH12AD3tLAp6Nf1hwr74s9A@mail.gmail.com>
+ <X8ZmfbQp7/BGgxec@localhost> <CACRpkdZJdxqxUEQaKUHctHRSQAUpYZJtuxonwVd_ZFAsLBbKrA@mail.gmail.com>
+ <X89OOUOG0x0SSxXA@localhost> <CACRpkdavm7GG8HdV1xk0W_b1EzUmvF0kKAGnp0u6t42NAWa9iA@mail.gmail.com>
+ <X9DsWahl6UDwZwBn@localhost>
+In-Reply-To: <X9DsWahl6UDwZwBn@localhost>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 9 Dec 2020 17:25:32 +0100
+Message-ID: <CACRpkdYm-j9QcK8hgNrC33KruWE17Q0F4+T=UanE7PCEZEtu6w@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] usb: serial: xr_serial: Add gpiochip support
+To:     Johan Hovold <johan@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        patong.mxl@gmail.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Angelo Dureghello <angelo.dureghello@timesys.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+On Wed, Dec 9, 2020 at 4:24 PM Johan Hovold <johan@kernel.org> wrote:
+> On Tue, Dec 08, 2020 at 01:41:52PM +0100, Linus Walleij wrote:
 
-On Wed, Dec 9, 2020 at 8:14 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
+> > depends on !GPIO_SYSFS
+> >
+> > so it can't even be compiled in if someone is using the sysfs.
+> >
+> > That should solve the situation where people are (ab)using
+> > the sysfs and getting name collisions as a result.
 >
-> On Tue, Dec 08, 2020 at 03:45:19PM -0800, Prashant Malani wrote:
-> > Hi Heikki,
-> >
-> > Thanks a lot for looking at the patch.
-> >
-> > On Tue, Dec 8, 2020 at 1:37 AM Heikki Krogerus <heikki.krogerus@linux.intel.com> wrote:
-> > >
-> > > On Wed, Dec 02, 2020 at 07:08:47PM -0800, Prashant Malani wrote:
-> > > > Add the Type C bus for plug alternate modes which are being
-> > > > registered via the Type C connector class. This ensures that udev events
-> > > > get generated when plug alternate modes are registered (and not just for
-> > > > partner/port alternate modes), even though the Type C bus doesn't link
-> > > > plug alternate mode devices to alternate mode drivers.
-> > >
-> > > I still don't understand how is the uevent related to the bus? If you
-> > > check the device_add() function, on line 2917, kobject_uevent() is
-> > > called unconditionally. The device does not need a bus for that event
-> > > to be generated.
-> >
-> > My initial thought process was to see what is the difference in the adev device
-> > initialization between partner altmode and plug altmode (the only difference I saw in
-> > typec_register_altmode() was regarding the bus field).
-> >
-> > Yes, kobject_uevent() is called unconditionally, but it's return value isn't checked,
-> > so we don't know if it succeeded or not.
-> >
-> > In the case of cable plug altmode, I see it fail with the following error[1]:
-> >
-> > [  114.431409] kobject: 'port1-plug0.0' (000000004ad42956): kobject_uevent_env: filter function caused the event to drop!
-> >
-> > I think the filter function which is called is this one: drivers/base/core.c: dev_uevent_filter() [2]
-> >
-> > static int dev_uevent_filter(struct kset *kset, struct kobject *kobj)
-> > {
-> >       struct kobj_type *ktype = get_ktype(kobj);
-> >
-> >       if (ktype == &device_ktype) {
-> >               struct device *dev = kobj_to_dev(kobj);
-> >               if (dev->bus)
-> >                       return 1;
-> >               if (dev->class)
-> >                       return 1;
-> >       }
-> >       return 0;
-> > }
-> >
-> > So, both the "if (dev->bus)" and "if (dev->class)" checks are failing here. In the case of partner alt modes, bus is set by the class.c code
-> > so this check likely returns 1 in that case.
+> Would it possible to set a flag to suppress just the sysfs entry
+> renaming instead?
+
+Hm you mean that when a GPIO is "exported" in sysfs
+it should not get a symbolic name from the names but instead
+just the number?
+
+I bet someone has written their scripts to take advantage of
+the symbolic names so I suspect the task becomes bigger
+like suppress the sysfs entry renaming if and only if there is
+a namespace collision.
+
+But I think we can do that, doesn't seem too hard?
+
+I just hacked up this:
+https://lore.kernel.org/linux-gpio/20201209161821.92931-1-linus.walleij@linaro.org/T/#u
+
+> Despite its flaws the sysfs interface is still very convenient and I'd
+> prefer not to disable it just because of the line names.
+
+Would these conveniences be identical to those listed
+in my recent TODO entry?
+https://lore.kernel.org/linux-gpio/20201204083533.65830-1-linus.walleij@linaro.org/
+
+There are several other issues with the sysfs, so making it conflict
+with other drivers is almost  plus in the direction of discouragement
+from the GPIO submaintainer point of view, but I do see that
+people like it for the reasons in the TODO. :/
+
+I am strongly encouraging any developer with a few spare cycles
+on their hands to go and implement the debugfs facility because
+we can make it so much better than the sysfs, easier and
+more convenient for testing etc.
+
+> > Then it should be fine for any driver to provide a names array
+> > provided all the names are unique on that gpiochip.
 >
-> OK. I understand the issue now. So I would say that the proper
-> solution to this problem is to link the alt modes with the class
-> instead of the bus. That is much smaller change IMO.
+> So it sounds like there's nothing preventing per-chip-unique names in
+> the rest of gpiolib and the new chardev interface then? Are the
+> user-space libraries able to cope with it, etc?
 
-Got it. Just to confirm that I understand correctly, do you mean:
-1. Only cable plug alt modes should be linked with the class instead of the bus.
+Yes the documentation refers to libgpiod a very well maintained
+library:
+https://www.kernel.org/doc/html/latest/driver-api/gpio/using-gpio.html
+https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/
 
-<or>
+Then there are the the example tools included with the kernel
+that provide a second implementation for the same interfaces
+using just the C standard library:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/gpio
 
-2. All alt modes (cable plug, partner, port) should be linked with the
-class instead of the bus
+I usually use the tools myself.
 
-My initial interpretation is 1.) since the bus linkage would be
-necessary to match alt mode drivers to partner alt mode devices.
-But, my understanding of the bus code is limited so I could be wrong;
-could you kindly clarify?
-
-Thanks,
-
--Prashant
+Yours,
+Linus Walleij
