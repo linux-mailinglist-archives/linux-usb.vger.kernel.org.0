@@ -2,79 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2102D40BF
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 12:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9272D40C5
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 12:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730484AbgLILMg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 06:12:36 -0500
-Received: from mx2.suse.de ([195.135.220.15]:34126 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726526AbgLILMf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Dec 2020 06:12:35 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1607512309; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=m3C0yP7Fd2Fvj0zf5Av0GGiQV+FVjCvgQXoaJnwRtlo=;
-        b=DwmFLGiCjQroZ5CWxI2F/h/dZhBpSor+eSRa+QemINdOYC2VPic/0KFw8QJ1TaAER7vKuZ
-        /n3KZQCNDRr8bebFrDzm0evJ8vXppA5T+HvPaZJipbX7MwkhqwDGgMggDnKqSSlLnS8yx7
-        5oA++8MOES6P6VwfpQJ2IVg0/K+rOY8=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id B2333ADCD;
-        Wed,  9 Dec 2020 11:11:49 +0000 (UTC)
-Message-ID: <30fecc08789d7ac759fc7aa87eaafedf803ec0d1.camel@suse.com>
-Subject: Re: Issues with LaCie USB3 drive and UAS
-From:   Oliver Neukum <oneukum@suse.com>
-To:     "David C. Partridge" <david.partridge@perdrix.co.uk>,
-        'Alan Stern' <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org
-Date:   Wed, 09 Dec 2020 12:11:31 +0100
-In-Reply-To: <003e01d6cd9c$d8777cf0$896676d0$@perdrix.co.uk>
-References: <11ea70180f52b4965a451b3970891e0f547c777b.camel@suse.com>
-         <000001d6c89c$086812e0$193838a0$@perdrix.co.uk>
-         <000301d6c919$af7a94e0$0e6fbea0$@perdrix.co.uk>
-         <918e298941f820a7cc3310c95dc211cca7596dba.camel@suse.com>
-         <000e01d6c980$d9a75f70$8cf61e50$@perdrix.co.uk>
-         <005601d6cc87$2fa608f0$8ef21ad0$@perdrix.co.uk>
-         <36ac7a79c4b24f9f68b3543d18a51ec9af0a4933.camel@suse.com>
-         <000701d6cd7c$236ec8b0$6a4c5a10$@perdrix.co.uk>
-         <20201208162722.GC1298255@rowland.harvard.edu>
-         <000801d6cd81$dc303370$94909a50$@perdrix.co.uk>
-         <20201208174515.GG1298255@rowland.harvard.edu>
-         <003e01d6cd9c$d8777cf0$896676d0$@perdrix.co.uk>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S1730514AbgLILOR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 06:14:17 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:38621 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729887AbgLILOR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 06:14:17 -0500
+Received: from [192.168.1.155] ([77.2.91.93]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MLA6m-1kVyjB0KSg-00IGWK; Wed, 09 Dec 2020 12:11:39 +0100
+Subject: Re: [PATCH] drivers: usb: gadget: prefer pr_*() functions over raw
+ printk()
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>
+Cc:     linux-kernel@vger.kernel.org, balbi@kernel.org, leoyang.li@nxp.com,
+        linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <20201208144403.22097-1-info@metux.net>
+ <X8+howyVRiTR9gv/@pendragon.ideasonboard.com>
+From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
+Message-ID: <9aaa06ad-0bd8-486d-b16b-66927d57cf96@metux.net>
+Date:   Wed, 9 Dec 2020 12:11:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <X8+howyVRiTR9gv/@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: tl
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:TS1+oAY6AdC0UtwhrAetL+tFGsmfL2VfyybwOSaT75VKnrTnQRP
+ +IsskL1kzQM9VxvORn/3q+2HI+37v7ZwZzAgdFcCtYyGKF2H12RAOoHm/AnxwZEfQfdTnAG
+ riDnR9h5WKx005G0EBL3tnCOrA3A2kDwZoFjNwOeV9e+JMvdFNOPusk61sFmC0Blv/Vh2PP
+ j1H0hZddMV8nXVQWrrzyw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:RM211oNVR54=:1XiRZHVIi19YQnFsm7XyvZ
+ J8yJn8EPVUS+l4KRvyFYjOoysMsMTUUSmR5ly4TkYSj+HKFlWvFnACtU+qrg1mjdUGfg04CLB
+ vXaZgfvNFwFK7lEroaK2e0YkqQEIrWOv6vHQXfQXtwo0VdInG3xO279w3eyt/T4UQZTUciKpK
+ uCkQxlDMxYW8HrGoQqsNUip379n87iTHxVkuDsEnz0Q1x370MzRfUncMlfmDIbF/0jmFrEubV
+ GMzOnzXenmF97iQKeIwVX9b4haZmsVLtVXWoytsoEtuACmBn0J+XbqWOlT4i8lLDszXGmH+h1
+ 75P9mNi7z7FRFtGp38Pb+hkNFskuQrtfJM3KOn4w0fFcvpFLS3x5Eo+D8TqRTR4hmLIeNPuz7
+ t4lz6Lmk/RWJUE4JHACJUKzmb4ZibNft2dnWOOH3V6uhFP6KkIhPurHBQFa/q
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 08.12.2020, 20:00 +0000 schrieb David C. Partridge:
+On 08.12.20 16:54, Laurent Pinchart wrote:
 
 Hi,
 
-> I'll chase up the supplier over the cable.
+>> diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.c b/drivers/usb/gadget/udc/atmel_usba_udc.c
+>> index 2b893bceea45..4834fafb3f70 100644
+>> --- a/drivers/usb/gadget/udc/atmel_usba_udc.c
+>> +++ b/drivers/usb/gadget/udc/atmel_usba_udc.c
+>> @@ -1573,7 +1573,7 @@ static void usba_control_irq(struct usba_udc *udc, struct usba_ep *ep)
+>>  		 * generate or receive a reply right away. */
+>>  		usba_ep_writel(ep, CLR_STA, USBA_RX_SETUP);
+>>  
+>> -		/* printk(KERN_DEBUG "setup: %d: %02x.%02x\n",
+>> +		/* pr_debug("setup: %d: %02x.%02x\n",
+>>  			ep->state, crq.crq.bRequestType,
+>>  			crq.crq.bRequest); */
+> 
+> I wonder if this shouldn't be dropped instead, commented-out code isn't
+> very useful.
 
-What we have often seen is that cables go right to the edge of what is
-allowed and so do devices and - lo and behold - the combination does
-not work.
+Indeed. Shall I send a separate patch for that ?
 
-> Would I be right to assume that this LaCie device (and other Seagate USB
-> devices) will the added to the database of quirks? So that when Oliver's fix
-> goes "mainstream" no-one will need to add options for modprobe?
+> When a pointer to a struct device is available, dev_err() would be much
+> better. That's however out of scope for this patch, but it would be nice
+> to address it. This would become
+> 
+> 		dev_err(&pdev->dev, "Check IRQ setup!\n");
+> 
 
-Yes. I have submitted it.
-
-> Hmm I wonder how long it will take the Ubuntu Kernel to catch up with
-> Olivers patch?
-
-Greg usually applies such patches to the stable tree. Weeks to a few 
-months or so I'd say. I cannot comment on Ubuntu's update policies.
-
-	Regards
-		Oliver
+You're right. I didn't check for that yet. I'll do it in a separate
+patch.
 
 
+--mtx
+
+-- 
+---
+Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
+werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
+GPG/PGP-Schlüssel zu.
+---
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
