@@ -2,76 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0981A2D3EC6
+	by mail.lfdr.de (Postfix) with ESMTP id 76F4C2D3EC7
 	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 10:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729276AbgLIJ3W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 04:29:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729261AbgLIJ3S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 04:29:18 -0500
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92932C061794
-        for <linux-usb@vger.kernel.org>; Wed,  9 Dec 2020 01:28:37 -0800 (PST)
-Received: by mail-lf1-x141.google.com with SMTP id m19so2191749lfb.1
-        for <linux-usb@vger.kernel.org>; Wed, 09 Dec 2020 01:28:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nPBiqiG0+OPNjKKwNHWnGemZ1swbMpEOyi2mDu7HemI=;
-        b=us9RvDd6QQubaexTYMj32UCvXmezTaru7m/gt8qIEVQnCUShV040sO5qvAWwELFzv6
-         2CsjSx1G23bt27kfSrgY00FjXeAl+c0EVSzZtmY90iVC2c/QYfjknMq0RhYpQ392MJUe
-         p1eQsiIqPB565pSwPjtPQbYD/L/FayJtSZ2lQYv5gpMwqMIwq8ZNE6eA74h6NMcR8EXG
-         Qh8hd4KJkLh2N1xUDqBwGgI6nfXQmaBoUsjeVGeBac5cuIRXxUEi7BLZQYz8LDYJ/drP
-         BaeyUtU9KvDLVcqzxFFcNZcaQMmmnO23l8SuWB3ixRpLcg7qRI+WQ9zuVDtaWIVyCsJ4
-         ZsxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nPBiqiG0+OPNjKKwNHWnGemZ1swbMpEOyi2mDu7HemI=;
-        b=XmWfzB5zHLXPHrKweML9EsHNM8fp5ZHy8NCan967p0qB9SefregZ+kH9vvRBiCD+Ft
-         9ci0Oko5WqF1F2Z8INtySnwZMZKvdldENs8KCQ8QlKmQWUanxNIP9l1nt6+4CeA+WiOP
-         L4GXmXlryUQlp1pXHwRLGimK3/hP5RQxLoUnLcBCZnC1fXSI/CkabClfb1x72WBqQ/x2
-         Y5D5RmwqT+3L7F1T6WmoK51w0o54QC1BhWqQb7t96lZdxIl3Wfx8G6HF6ZiKDBlyeUpX
-         sAfvvZKv3ujA0UdQXQNw9v82AS3S+koKTZoo+l8Z3ULrvqMFjeNmwX1sNm2TKw3bI/k4
-         IL4A==
-X-Gm-Message-State: AOAM530mz+ielOw3GVESrw4W+7Bo09nYRL8XROYrUv75K9IKUdNbpouj
-        oGEBnpOH8speBU1mlqkdjVrlKRHkNSIgKznzb+8NPg==
-X-Google-Smtp-Source: ABdhPJwhwlHBlbTQF1U3MZGgVD7bKekQd7ucodES1SBhT33AOLWm0peJOvE9+cvnFgO2Ro4ID5f1bVil/4Qtp/Egw+U=
-X-Received: by 2002:a19:7d84:: with SMTP id y126mr711294lfc.586.1607506116141;
- Wed, 09 Dec 2020 01:28:36 -0800 (PST)
+        id S1729279AbgLIJ3j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 04:29:39 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:9140 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727273AbgLIJ3j (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 04:29:39 -0500
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CrWtw3ZdRz15YWk;
+        Wed,  9 Dec 2020 17:28:24 +0800 (CST)
+Received: from ubuntu.network (10.175.138.68) by
+ DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
+ 14.3.487.0; Wed, 9 Dec 2020 17:28:48 +0800
+From:   Zheng Yongjun <zhengyongjun3@huawei.com>
+To:     <johan@kernel.org>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Zheng Yongjun <zhengyongjun3@huawei.com>
+Subject: [PATCH -next] usb: serial: simplify the ark3116_write_reg()
+Date:   Wed, 9 Dec 2020 17:29:17 +0800
+Message-ID: <20201209092917.20681-1-zhengyongjun3@huawei.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-References: <20201204164739.781812-1-maz@kernel.org> <20201204164739.781812-3-maz@kernel.org>
-In-Reply-To: <20201204164739.781812-3-maz@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 9 Dec 2020 10:28:25 +0100
-Message-ID: <CACRpkdbJUa9G_OtwM9YnNB84wUfT7hLpw8c=RQxdjaUvRST4dg@mail.gmail.com>
-Subject: Re: [PATCH 2/4] USB: serial: ftdi_sio: Report the valid GPIO lines to gpiolib
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-usb <linux-usb@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.138.68]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 4, 2020 at 5:47 PM Marc Zyngier <maz@kernel.org> wrote:
+Simplify the return expression.
 
-> Since it is pretty common for only some of the CBUS lines to be
-> valid as GPIO lines, let's report such validity to the rest of
-> the kernel.
->
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+---
+ drivers/usb/serial/ark3116.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+diff --git a/drivers/usb/serial/ark3116.c b/drivers/usb/serial/ark3116.c
+index 71a9206ea1e2..0f9fa0e7c50e 100644
+--- a/drivers/usb/serial/ark3116.c
++++ b/drivers/usb/serial/ark3116.c
+@@ -77,16 +77,11 @@ struct ark3116_private {
+ static int ark3116_write_reg(struct usb_serial *serial,
+ 			     unsigned reg, __u8 val)
+ {
+-	int result;
+ 	 /* 0xfe 0x40 are magic values taken from original driver */
+-	result = usb_control_msg(serial->dev,
+-				 usb_sndctrlpipe(serial->dev, 0),
+-				 0xfe, 0x40, val, reg,
+-				 NULL, 0, ARK_TIMEOUT);
+-	if (result)
+-		return result;
+-
+-	return 0;
++	return usb_control_msg(serial->dev,
++			       usb_sndctrlpipe(serial->dev, 0),
++			       0xfe, 0x40, val, reg,
++			       NULL, 0, ARK_TIMEOUT);
+ }
+ 
+ static int ark3116_read_reg(struct usb_serial *serial,
+-- 
+2.22.0
 
-Yours,
-Linus Walleij
