@@ -2,88 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D872D411A
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 12:31:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B062D41A5
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 13:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730747AbgLIL2q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 06:28:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36742 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730640AbgLIL2o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 06:28:44 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01258C0613D6;
-        Wed,  9 Dec 2020 03:28:03 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D186CDD;
-        Wed,  9 Dec 2020 12:28:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1607513281;
-        bh=iMZ/MdwMrQyEtzHeeza99WrLdvvODJuHJmMrkn9wFBY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rcqx1vmQkSxAxr1meC2h6m69JtY+gzxFVKAwzEcriT5hcq5ap+jOr0+6K48Qq3QKK
-         CoTDTWaUQAlgrEAgVKkdTPakKidrBD6WUzE6DJjzU+Aj9PY4AsLgC/lV3tegsHQowb
-         E4vFthJgZdBIHcivhQg/w3raZpO4NwN+tVbbooHI=
-Date:   Wed, 9 Dec 2020 13:27:56 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     linux-kernel@vger.kernel.org, balbi@kernel.org, leoyang.li@nxp.com,
-        linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] drivers: usb: gadget: prefer pr_*() functions over raw
- printk()
-Message-ID: <X9C0vOLZOnLZoPR8@pendragon.ideasonboard.com>
-References: <20201208144403.22097-1-info@metux.net>
- <X8+howyVRiTR9gv/@pendragon.ideasonboard.com>
- <9aaa06ad-0bd8-486d-b16b-66927d57cf96@metux.net>
+        id S1730982AbgLIMDC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 07:03:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58016 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730926AbgLIMDC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Dec 2020 07:03:02 -0500
+Date:   Wed, 9 Dec 2020 13:03:38 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1607515341;
+        bh=ZGo5w3thNNcQk47GqfzkS+XzK5FfFoSaa8dqjlfPttw=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tJs6DMEzPyrW6JCpOV8/vN+mxtkaos5xUb507tZ8uiAg+yf0OtSw8iTNb7r73r4Q+
+         kxvt+Ck5CjW2MnnpjNKoNSEG0WAX9nCUUcIol26uw4hq8tAcT6nNSnIs7KCZmXcR+3
+         jFW/Q9p4jv7ELqF0GfOAbGDF/qZQEjiG7OaiPbzQ=
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     linux-usb@vger.kernel.org, david.partridge@perdrix.co.uk
+Subject: Re: [PATCH] USB: UAS: introduce a quirk to set no_write_same
+Message-ID: <X9C9Gt5chKLAE1Vq@kroah.com>
+References: <20201209110734.30831-1-oneukum@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <9aaa06ad-0bd8-486d-b16b-66927d57cf96@metux.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201209110734.30831-1-oneukum@suse.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Enrico,
-
-On Wed, Dec 09, 2020 at 12:11:36PM +0100, Enrico Weigelt, metux IT consult wrote:
-> On 08.12.20 16:54, Laurent Pinchart wrote:
-> >> diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.c b/drivers/usb/gadget/udc/atmel_usba_udc.c
-> >> index 2b893bceea45..4834fafb3f70 100644
-> >> --- a/drivers/usb/gadget/udc/atmel_usba_udc.c
-> >> +++ b/drivers/usb/gadget/udc/atmel_usba_udc.c
-> >> @@ -1573,7 +1573,7 @@ static void usba_control_irq(struct usba_udc *udc, struct usba_ep *ep)
-> >>  		 * generate or receive a reply right away. */
-> >>  		usba_ep_writel(ep, CLR_STA, USBA_RX_SETUP);
-> >>  
-> >> -		/* printk(KERN_DEBUG "setup: %d: %02x.%02x\n",
-> >> +		/* pr_debug("setup: %d: %02x.%02x\n",
-> >>  			ep->state, crq.crq.bRequestType,
-> >>  			crq.crq.bRequest); */
-> > 
-> > I wonder if this shouldn't be dropped instead, commented-out code isn't
-> > very useful.
+On Wed, Dec 09, 2020 at 12:07:34PM +0100, Oliver Neukum wrote:
+> UAS does not share the pessimistic assumption storage
+> is making that devices cannot deal with WRITE_SAME.
+> A few devices supported by UAS, are reported to not
+> deal well with WRITE_SAME. Those need a quirk.
 > 
-> Indeed. Shall I send a separate patch for that ?
-
-Yes, that would make sense.
-
-> > When a pointer to a struct device is available, dev_err() would be much
-> > better. That's however out of scope for this patch, but it would be nice
-> > to address it. This would become
-> > 
-> > 		dev_err(&pdev->dev, "Check IRQ setup!\n");
-> > 
+> Add it to the device that needs it.
 > 
-> You're right. I didn't check for that yet. I'll do it in a separate
-> patch.
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> Reported-by: David C. Partridge <david.partridge@perdrix.co.uk>
+> ---
+>  drivers/usb/storage/uas.c         | 3 +++
+>  drivers/usb/storage/unusual_uas.h | 7 +++++--
+>  drivers/usb/storage/usb.c         | 3 +++
+>  include/linux/usb_usual.h         | 2 ++
+>  4 files changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+> index 56422c4b4ff3..bef89c6bd1d7 100644
+> --- a/drivers/usb/storage/uas.c
+> +++ b/drivers/usb/storage/uas.c
+> @@ -868,6 +868,9 @@ static int uas_slave_configure(struct scsi_device *sdev)
+>  	if (devinfo->flags & US_FL_NO_READ_CAPACITY_16)
+>  		sdev->no_read_capacity_16 = 1;
+>  
+> +	/* Some disks cannot handle WRITE_SAME */
+> +	if (devinfo->flags & US_FL_NO_SAME)
+> +		sdev->no_write_same = 1;
+>  	/*
+>  	 * Some disks return the total number of blocks in response
+>  	 * to READ CAPACITY rather than the highest block number.
+> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+> index 711ab240058c..870e9cf3d5dc 100644
+> --- a/drivers/usb/storage/unusual_uas.h
+> +++ b/drivers/usb/storage/unusual_uas.h
+> @@ -35,12 +35,15 @@ UNUSUAL_DEV(0x054c, 0x087d, 0x0000, 0x9999,
+>  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>  		US_FL_NO_REPORT_OPCODES),
+>  
+> -/* Reported-by: Julian Groﬂ <julian.g@posteo.de> */
+> +/*
+> + *  Initially Reported-by: Julian Groﬂ <julian.g@posteo.de>
+> + *  Further reports David C. Partridge <david.partridge@perdrix.co.uk>
+> + */
+>  UNUSUAL_DEV(0x059f, 0x105f, 0x0000, 0x9999,
+>  		"LaCie",
+>  		"2Big Quadra USB3",
+>  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> -		US_FL_NO_REPORT_OPCODES),
+> +		US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
+>  
+>  /*
+>   * Apricorn USB3 dongle sometimes returns "USBSUSBSUSBS" in response to SCSI
+> diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
+> index 94a64729dc27..90aa9c12ffac 100644
+> --- a/drivers/usb/storage/usb.c
+> +++ b/drivers/usb/storage/usb.c
+> @@ -541,6 +541,9 @@ void usb_stor_adjust_quirks(struct usb_device *udev, unsigned long *fflags)
+>  		case 'j':
+>  			f |= US_FL_NO_REPORT_LUNS;
+>  			break;
+> +		case 'k':
+> +			f |= US_FL_NO_SAME;
+> +			break;
 
-As most of the files touched by this patch are device drivers, dev_*()
-functions should be used instead of pr_*() where possible. I'd recommend
-a first patch that converts to dev_*(), and then a second patch that
-converts the remaining printk()s, if any, to pr_*() in the contexts
-where no struct device is available or can easily be made available.
+Shouldn't this new flag be documented somewhere?
 
--- 
-Regards,
+thanks,
 
-Laurent Pinchart
+greg k-h
