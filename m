@@ -2,134 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BBE2D47B0
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 18:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 434D92D4826
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 18:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731689AbgLIRRO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 12:17:14 -0500
-Received: from mga09.intel.com ([134.134.136.24]:45059 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730313AbgLIRRO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Dec 2020 12:17:14 -0500
-IronPort-SDR: y/vqRmtrvoIxDU4GVtZ49tl6G2vEtbc5hXXmB/C1UAF75/W/wL0muqkbHZL2Kn+RYNV2lPrONe
- 0PY2u5wCRR6g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9829"; a="174257010"
-X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
-   d="scan'208";a="174257010"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 09:15:27 -0800
-IronPort-SDR: q7zIyuVIcEnae6mwQz9ohdlc4C19lujeNhJs+YXiBQyEnlH3Mg7MhKBmBnN2SRf4rxqh+ALpvr
- s48AF+/Vr5TQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
-   d="scan'208";a="437868841"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 09 Dec 2020 09:15:24 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 09 Dec 2020 19:15:24 +0200
-Date:   Wed, 9 Dec 2020 19:15:24 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
+        id S1732883AbgLIRkE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 12:40:04 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:43798 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732053AbgLIRjz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 12:39:55 -0500
+Received: by mail-lj1-f196.google.com with SMTP id e7so3342892ljg.10;
+        Wed, 09 Dec 2020 09:39:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9tCyXmRdOVu83/SxOcTCL8+7o8DKdkiBQxL+CfYSglk=;
+        b=j9WWYuZJTWuPAzvlfaif2Np+2NAeCotFnpT83IUirczamMdRYYyNis6yK+h2ySU0Mn
+         2BcXJ+1u2BxwFwyo5te1O2Mb6GXxRHH9Kp5zHIUH3xJbXojxjdfypT5zNOaxwueRnLCr
+         Ak6o3gVb/qxdYPL+9IAJ4uiXk/Fgwn0kzwQ/2ahYF0aRKHfi5zGJTi5gAhZYqGaFfouX
+         B+I/fuA2/24KR9FZ0mxemSJikxdQKpcWmGSnmMEIfFlqJ6Y2pqN3+RL5v/7LSIwOzPyD
+         TvyMUGEseVAjD296t3sVyBGI85S1AjqT+4eoZBDTU2oxhsFgWAJ0yd90MsUWGxKdGJdi
+         icYA==
+X-Gm-Message-State: AOAM531Q62/6vXz+2O/BdQyZO9GX7ViBjRQbNFAac3wn/kUayjRcNc8C
+        15/94jzw8t2szk1qN7Z2PI/Dqsc+ZsAxVw==
+X-Google-Smtp-Source: ABdhPJwUDZpuCISqa5/rL5hBv/nBydb/m4yCJKe5M9hh3ugp/0pyiudVeoWvwWhJqGC2kkvYXj79ng==
+X-Received: by 2002:a2e:240f:: with SMTP id k15mr1500955ljk.506.1607535552842;
+        Wed, 09 Dec 2020 09:39:12 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id 141sm238224lfd.98.2020.12.09.09.39.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Dec 2020 09:39:12 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kn3RR-0006YS-3I; Wed, 09 Dec 2020 18:39:53 +0100
+Date:   Wed, 9 Dec 2020 18:39:53 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Johan Hovold <johan@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benson Leung <bleung@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: typec: Add bus type for plug alt modes
-Message-ID: <20201209171524.GK680328@kuha.fi.intel.com>
-References: <20201203030846.51669-1-pmalani@chromium.org>
- <20201208093734.GD680328@kuha.fi.intel.com>
- <CACeCKaehg=HTuQNLtQaJZWvTnOFYM9b1BWfM+WX_ebiZ-_i8JQ@mail.gmail.com>
- <20201209161356.GI680328@kuha.fi.intel.com>
- <CACeCKacdcGi_6VW7F9agN+bgRH7gAXLDxK7DngE=fPkYT-CWNQ@mail.gmail.com>
+        kernel-team@android.com
+Subject: Re: [PATCH 3/4] USB: serial: ftdi_sio: Log the CBUS GPIO validity
+Message-ID: <X9EL6SwjutCHTPO+@localhost>
+References: <20201204164739.781812-1-maz@kernel.org>
+ <20201204164739.781812-4-maz@kernel.org>
+ <X848LXNv3GRmmSXA@localhost>
+ <02b461244a33d5eb0620cfaa13c2b03e@kernel.org>
+ <X85IC5NvcWikXfZY@localhost>
+ <CACRpkda+JJ9ZMmwPcA_Rc0tgqKQw+VTgfVyp8PsZG55VM82uzg@mail.gmail.com>
+ <X9ED9k5gxIlQ0YJ/@localhost>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACeCKacdcGi_6VW7F9agN+bgRH7gAXLDxK7DngE=fPkYT-CWNQ@mail.gmail.com>
+In-Reply-To: <X9ED9k5gxIlQ0YJ/@localhost>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Prashant,
+On Wed, Dec 09, 2020 at 06:05:58PM +0100, Johan Hovold wrote:
+> On Wed, Dec 09, 2020 at 10:35:53AM +0100, Linus Walleij wrote:
 
-On Wed, Dec 09, 2020 at 08:22:52AM -0800, Prashant Malani wrote:
-> Hi Heikki,
+> > It sounds like we agree that this patch sans prints is acceptable.
+> > 
+> > It makes things better so let's go with that.
 > 
-> On Wed, Dec 9, 2020 at 8:14 AM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > On Tue, Dec 08, 2020 at 03:45:19PM -0800, Prashant Malani wrote:
-> > > Hi Heikki,
-> > >
-> > > Thanks a lot for looking at the patch.
-> > >
-> > > On Tue, Dec 8, 2020 at 1:37 AM Heikki Krogerus <heikki.krogerus@linux.intel.com> wrote:
-> > > >
-> > > > On Wed, Dec 02, 2020 at 07:08:47PM -0800, Prashant Malani wrote:
-> > > > > Add the Type C bus for plug alternate modes which are being
-> > > > > registered via the Type C connector class. This ensures that udev events
-> > > > > get generated when plug alternate modes are registered (and not just for
-> > > > > partner/port alternate modes), even though the Type C bus doesn't link
-> > > > > plug alternate mode devices to alternate mode drivers.
-> > > >
-> > > > I still don't understand how is the uevent related to the bus? If you
-> > > > check the device_add() function, on line 2917, kobject_uevent() is
-> > > > called unconditionally. The device does not need a bus for that event
-> > > > to be generated.
-> > >
-> > > My initial thought process was to see what is the difference in the adev device
-> > > initialization between partner altmode and plug altmode (the only difference I saw in
-> > > typec_register_altmode() was regarding the bus field).
-> > >
-> > > Yes, kobject_uevent() is called unconditionally, but it's return value isn't checked,
-> > > so we don't know if it succeeded or not.
-> > >
-> > > In the case of cable plug altmode, I see it fail with the following error[1]:
-> > >
-> > > [  114.431409] kobject: 'port1-plug0.0' (000000004ad42956): kobject_uevent_env: filter function caused the event to drop!
-> > >
-> > > I think the filter function which is called is this one: drivers/base/core.c: dev_uevent_filter() [2]
-> > >
-> > > static int dev_uevent_filter(struct kset *kset, struct kobject *kobj)
-> > > {
-> > >       struct kobj_type *ktype = get_ktype(kobj);
-> > >
-> > >       if (ktype == &device_ktype) {
-> > >               struct device *dev = kobj_to_dev(kobj);
-> > >               if (dev->bus)
-> > >                       return 1;
-> > >               if (dev->class)
-> > >                       return 1;
-> > >       }
-> > >       return 0;
-> > > }
-> > >
-> > > So, both the "if (dev->bus)" and "if (dev->class)" checks are failing here. In the case of partner alt modes, bus is set by the class.c code
-> > > so this check likely returns 1 in that case.
-> >
-> > OK. I understand the issue now. So I would say that the proper
-> > solution to this problem is to link the alt modes with the class
-> > instead of the bus. That is much smaller change IMO.
+> Sounds good.
 > 
-> Got it. Just to confirm that I understand correctly, do you mean:
-> 1. Only cable plug alt modes should be linked with the class instead of the bus.
+> I'm about to apply patches 2, 3 and 4 with some smaller changes like
+> demoting the printk messages to KERN_DEBUG and dropping the ftx-progs
+> warning.
+>
+> > The problem for the user is that the line looks to be
+> > "used by the kernel" (true in some sense) but they have no
+> > idea what to do about it and that the ftx-prog will solve
+> > their hacking problem.
 > 
-> <or>
+> Right, it's not ideal, but the datasheets for these devices clearly
+> states that the configuration of the CBUS pins is done in EEPROM and the
+> vendor provides some tool to do that. Then there's a bunch of open
+> source implementations for the same including ftx-progs (which can only
+> be used for a subset of these devices).
 > 
-> 2. All alt modes (cable plug, partner, port) should be linked with the
-> class instead of the bus
+> I'd be fine with a dev_err() on the first request that fails saying that
+> the CBUS pin is not configured for GPIO use (perhaps even on every
+> request if its not something that a non-root user can trigger). But we
+> cannot have both that and have the line marked in-use through the
+> chardev interface currently.
 > 
-> My initial interpretation is 1.) since the bus linkage would be
-> necessary to match alt mode drivers to partner alt mode devices.
-> But, my understanding of the bus code is limited so I could be wrong;
-> could you kindly clarify?
+> I'm admittedly a bit torn on which is preferable.
 
-We don't need to care about the bus here. A device can be part of a
-bus and a class at the same time. I don't think there is any reason to
-limit the class to only plug alt modes, so let's just assign it to all
-of them.
+I've applied the patches now. Having this reported through the chardev
+interface must be better than having to match up a failed request with
+something in the system log.
 
-thanks,
-
--- 
-heikki
+Johan
