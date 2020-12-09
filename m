@@ -2,59 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B222D3EAD
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 10:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0981A2D3EC6
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 10:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729210AbgLIJZy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 04:25:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
+        id S1729276AbgLIJ3W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 04:29:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727273AbgLIJZy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 04:25:54 -0500
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789F1C0613D6
-        for <linux-usb@vger.kernel.org>; Wed,  9 Dec 2020 01:25:13 -0800 (PST)
-Received: by mail-lj1-x243.google.com with SMTP id a1so1464082ljq.3
-        for <linux-usb@vger.kernel.org>; Wed, 09 Dec 2020 01:25:13 -0800 (PST)
+        with ESMTP id S1729261AbgLIJ3S (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 04:29:18 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92932C061794
+        for <linux-usb@vger.kernel.org>; Wed,  9 Dec 2020 01:28:37 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id m19so2191749lfb.1
+        for <linux-usb@vger.kernel.org>; Wed, 09 Dec 2020 01:28:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=cYe73lfxXwG2IaSLFmhdyJ4xOtphHHnm36rAnzqmiOo=;
-        b=jt2hDRgS1ZGHz9+htM37Vtc/8gKqxO5FaBCUdCXPTon1+bm4Z1ZBXMFoOIU5mRiIiV
-         cMNqUt9dYhIRLayDICE8ee1srKMkmhM1bbzuQE0cdAJMJd93nMtPpXFVyEuFCRxw5ddy
-         3PxF0C2ThjnO+2Z5J0w4J422RxHmhjlzZAwKvzdV931t0o9BybZKbapI3i1cia44L5HO
-         rY/jZQwcIP8Xc4S/IomEZdDxcdeOQPQwRC3LeKLquRV/E1YMNj6QwJihhLfhztVST0sp
-         EfrndnjMdlLyTCM/KsLO730oVIpaj/pjMU9coRmjTrizeQOykNM1terH42IA65cMwYsA
-         HVwQ==
+        bh=nPBiqiG0+OPNjKKwNHWnGemZ1swbMpEOyi2mDu7HemI=;
+        b=us9RvDd6QQubaexTYMj32UCvXmezTaru7m/gt8qIEVQnCUShV040sO5qvAWwELFzv6
+         2CsjSx1G23bt27kfSrgY00FjXeAl+c0EVSzZtmY90iVC2c/QYfjknMq0RhYpQ392MJUe
+         p1eQsiIqPB565pSwPjtPQbYD/L/FayJtSZ2lQYv5gpMwqMIwq8ZNE6eA74h6NMcR8EXG
+         Qh8hd4KJkLh2N1xUDqBwGgI6nfXQmaBoUsjeVGeBac5cuIRXxUEi7BLZQYz8LDYJ/drP
+         BaeyUtU9KvDLVcqzxFFcNZcaQMmmnO23l8SuWB3ixRpLcg7qRI+WQ9zuVDtaWIVyCsJ4
+         ZsxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=cYe73lfxXwG2IaSLFmhdyJ4xOtphHHnm36rAnzqmiOo=;
-        b=hZfpUhK6jlr51azoaI/03gH6d3r40Zvo8szsHTqEy2rv/VceBRS6C46Ml48ysTM0Fi
-         XjSKtHDVn4MF53ayBQ4fPE9ZguiW+1Zf7fkVmoe0Ae+YoTjuLtVLaxp2dHUHfsRQxY0/
-         J5kjLWsecI+AGk7IwNMfkTNeGbsexkObvp8VfOIqWu1QRjXCPL3X94wRmZV7ovZZoCX3
-         f/tHiVikebXqnCZPFaKzjyqakN+LnQl0MRcG1zS/UlR4UDXMj5BNWl8qv3hKJv5dSUMF
-         GVpTUZbyAiztT2sotsI2aVm2M1sCSBijMPaCsdx3dxRaJVGLrEmLWGmAMt/B9TKecFCX
-         UW+Q==
-X-Gm-Message-State: AOAM532VJcU9/QCPIRwBEpI+cO/NhMvm+KUr5hquwR4SxNdEy0dlWUDv
-        JoDiFKn51D7NMVQnIEvBCxa5gp01tLuL/1McAHDJDQ==
-X-Google-Smtp-Source: ABdhPJxyIsnewKjo4ALm9vwM1lKCSFgLErkUx6KRJXVrplD7lgYlsKlPeaqyagO2ZpoaXjHaZ/p5virECuxHrVyx21I=
-X-Received: by 2002:a05:651c:29c:: with SMTP id b28mr703944ljo.368.1607505911969;
- Wed, 09 Dec 2020 01:25:11 -0800 (PST)
+        bh=nPBiqiG0+OPNjKKwNHWnGemZ1swbMpEOyi2mDu7HemI=;
+        b=XmWfzB5zHLXPHrKweML9EsHNM8fp5ZHy8NCan967p0qB9SefregZ+kH9vvRBiCD+Ft
+         9ci0Oko5WqF1F2Z8INtySnwZMZKvdldENs8KCQ8QlKmQWUanxNIP9l1nt6+4CeA+WiOP
+         L4GXmXlryUQlp1pXHwRLGimK3/hP5RQxLoUnLcBCZnC1fXSI/CkabClfb1x72WBqQ/x2
+         Y5D5RmwqT+3L7F1T6WmoK51w0o54QC1BhWqQb7t96lZdxIl3Wfx8G6HF6ZiKDBlyeUpX
+         sAfvvZKv3ujA0UdQXQNw9v82AS3S+koKTZoo+l8Z3ULrvqMFjeNmwX1sNm2TKw3bI/k4
+         IL4A==
+X-Gm-Message-State: AOAM530mz+ielOw3GVESrw4W+7Bo09nYRL8XROYrUv75K9IKUdNbpouj
+        oGEBnpOH8speBU1mlqkdjVrlKRHkNSIgKznzb+8NPg==
+X-Google-Smtp-Source: ABdhPJwhwlHBlbTQF1U3MZGgVD7bKekQd7ucodES1SBhT33AOLWm0peJOvE9+cvnFgO2Ro4ID5f1bVil/4Qtp/Egw+U=
+X-Received: by 2002:a19:7d84:: with SMTP id y126mr711294lfc.586.1607506116141;
+ Wed, 09 Dec 2020 01:28:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20201204164739.781812-1-maz@kernel.org> <20201204164739.781812-2-maz@kernel.org>
-In-Reply-To: <20201204164739.781812-2-maz@kernel.org>
+References: <20201204164739.781812-1-maz@kernel.org> <20201204164739.781812-3-maz@kernel.org>
+In-Reply-To: <20201204164739.781812-3-maz@kernel.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 9 Dec 2020 10:25:01 +0100
-Message-ID: <CACRpkdb6AH6RGDenAXTofwTRvZcJp1cg6gXxC26MuXL7EPDtwg@mail.gmail.com>
-Subject: Re: [PATCH 1/4] gpiolib: cdev: Flag invalid GPIOs as used
-To:     Marc Zyngier <maz@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Wed, 9 Dec 2020 10:28:25 +0100
+Message-ID: <CACRpkdbJUa9G_OtwM9YnNB84wUfT7hLpw8c=RQxdjaUvRST4dg@mail.gmail.com>
+Subject: Re: [PATCH 2/4] USB: serial: ftdi_sio: Report the valid GPIO lines to gpiolib
+To:     Marc Zyngier <maz@kernel.org>
 Cc:     linux-usb <linux-usb@vger.kernel.org>,
         "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         kernel-team@android.com
@@ -65,28 +65,13 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 On Fri, Dec 4, 2020 at 5:47 PM Marc Zyngier <maz@kernel.org> wrote:
 
-> When reporting the state of a GPIO to userspace, we never check
-> for the actual validity of the line, meaning we report invalid
-> lines as being usable. A subsequent request will fail though,
-> which is an inconsistent behaviour from a userspace perspective.
->
-> Instead, let's check for the validity of the line and report it
-> as used if it is invalid. This allows a tool such as gpioinfo
-> to report something sensible:
->
-> gpiochip3 - 4 lines:
->         line   0:      unnamed       unused   input  active-high
->         line   1:      unnamed       kernel   input  active-high [used]
->         line   2:      unnamed       kernel   input  active-high [used]
->         line   3:      unnamed       unused   input  active-high
->
-> In this example, lines 1 and 2 are invalid, and cannot be used by
-> userspace.
+> Since it is pretty common for only some of the CBUS lines to be
+> valid as GPIO lines, let's report such validity to the rest of
+> the kernel.
 >
 > Signed-off-by: Marc Zyngier <maz@kernel.org>
 
-This makes sense, so patch applied (unless Bartosz tells me
-otherwise, then I'll pull it out again).
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
 Linus Walleij
