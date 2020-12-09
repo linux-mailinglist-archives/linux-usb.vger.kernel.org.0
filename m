@@ -2,102 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B82A2D45A7
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 16:45:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F6A2D45C5
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 16:50:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730058AbgLIPmc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 10:42:32 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:39344 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726431AbgLIPmX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 10:42:23 -0500
-Received: by mail-lf1-f67.google.com with SMTP id a12so3699769lfl.6;
-        Wed, 09 Dec 2020 07:42:06 -0800 (PST)
+        id S1727069AbgLIPtw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 10:49:52 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:40884 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726119AbgLIPtw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 10:49:52 -0500
+Received: by mail-il1-f197.google.com with SMTP id b18so1665417ilr.7
+        for <linux-usb@vger.kernel.org>; Wed, 09 Dec 2020 07:49:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xHtJdl5wRPnIFMBx2cuWtaxIr4kDVs8SuLeP7y0WSmY=;
-        b=DLW3pn/5TdXySKs2PgdPIVarz/4hvE9vvRUBkhMLSp3HD3m/i16tAv0aPyZSO216Gk
-         oZ6gWEgEceuQjnW8EYUiajCJyWWbqHTd2zZgE/69fvcvrQPhAJ0KDhTuuhHSxjLHg0Yd
-         EZ0DqgQ5GcJzUECr0a3AhJp5/0W0x9GAi8XHYACNtMhNjQQ/ghEw1c1FE9oZT7vLaETX
-         PxEj54Mm2jfTmxJZPGMGI6jSArHN1d+tdodSPaF0SlEPa6qGry4gaoaZUPsnO0ejDs7J
-         NFcrMSsnpY9VhPgMCwcFfC3GBr1ph7MUVOXIpo8qJlwj2py8KLZPq9NuVl2ctExCOx2g
-         voDA==
-X-Gm-Message-State: AOAM531NBhFqU0RmvifMOKPtFyROvE/3b5wszkPp7xahCSZpJmd2vMRg
-        Cf/rKuNEHhpOeKCXbXI/X3Y=
-X-Google-Smtp-Source: ABdhPJw9ljZ7MRhYTQbmC7vjfq9B+Ozu4VAas+KoVlY+wzQhnTq7ZPUTzns8ekRUWpKUG+89P88iuw==
-X-Received: by 2002:a19:8c0f:: with SMTP id o15mr1261240lfd.126.1607528501264;
-        Wed, 09 Dec 2020 07:41:41 -0800 (PST)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id x20sm208612lfq.86.2020.12.09.07.41.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Dec 2020 07:41:40 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kn1bh-0005bT-5o; Wed, 09 Dec 2020 16:42:21 +0100
-Date:   Wed, 9 Dec 2020 16:42:21 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Johan Hovold <johan@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel-team@android.com
-Subject: Re: [PATCH 0/4] USB: ftdio_sio: GPIO validity fixes
-Message-ID: <X9DwXS2xaiOs033B@localhost>
-References: <20201204164739.781812-1-maz@kernel.org>
- <X841xwCChUEqi5Ad@localhost>
- <73d57fe9fefe50955771846ea52004fb@kernel.org>
- <X85FVc07Hc7LQQU8@localhost>
- <d5fa2065009d5854b4c719003ebcb255@kernel.org>
- <X85O9GoDcbiDp97j@localhost>
- <CACRpkdZ06vWY+mqR7bYd_WcEM6+N6v5GgTAYhr0p0KkNLa3Qnw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=yeGmm0MG4HbaGBkCEsUlCG6OY5l6+vaGEd6w4DBQHNw=;
+        b=MXVal+MR75SALnXmcAMevMAJlioCGnEediH1sDM4z9yX5N+wQjPXh5RspMXofOXWaM
+         Io2PE7RvsupTjH19NspndVFfON7dw5AXzxzbnoR11l4MX7mJFscbMBv6UFM6p9MzxWI9
+         bM+zcm9eMhGbqQU5mj358Bn8Eyqh4jXAl3X9TIvxno5CTIFj0jcRfgVG/fLIzFZYawWk
+         pjzwY6ZhSct30UStMBR2fTlzmwuCoPpuJyf57yTf8VBmtLWq4mWe/DN6JZfCjxYuLDeR
+         vKOechnLm3+k0kTQJRLI1/cuNR1Ytf4qRfQUp97dZdngtxyeQRZ5noLbzyCbz38p59Jr
+         SVjA==
+X-Gm-Message-State: AOAM532hPPScEkHBi0s7v3tEYkNATMmmO5zjH7dHUDxLCGhcmRYkxWnq
+        lHs8jJ6aUK3zRFje/AQVRjx2WkvEIYiwiDNeKmZqONFMs55Y
+X-Google-Smtp-Source: ABdhPJwg9I+mcg1YDkCZsYwVQlfQO7HdRJG0Q1KyIJutqIWYltfuwWGQEo+XNuAIl2CuVhN4yacwB2lde2u4YdYVy8OhXA7wJVEp
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACRpkdZ06vWY+mqR7bYd_WcEM6+N6v5GgTAYhr0p0KkNLa3Qnw@mail.gmail.com>
+X-Received: by 2002:a92:d11:: with SMTP id 17mr3821470iln.84.1607528951520;
+ Wed, 09 Dec 2020 07:49:11 -0800 (PST)
+Date:   Wed, 09 Dec 2020 07:49:11 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001f22d305b60a00a4@google.com>
+Subject: KASAN: use-after-free Write in rtl_fw_do_work (2)
+From:   syzbot <syzbot+65be4277f3c489293939@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, davem@davemloft.net, kuba@kernel.org,
+        kvalo@codeaurora.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, pkshih@realtek.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 09, 2020 at 10:20:38AM +0100, Linus Walleij wrote:
-> On Mon, Dec 7, 2020 at 4:48 PM Johan Hovold <johan@kernel.org> wrote:
-> > On Mon, Dec 07, 2020 at 03:34:23PM +0000, Marc Zyngier wrote:
-> 
-> > > If they claim that their lines are available, and then refuse to
-> > > let the user play with it, that's just a bug willing to be fixed.
-> >
-> > My point was that this is how *all* gpio drivers work, and that muxing
-> > is somewhat orthogonal to the gpio controller implementation.
-> 
-> This is true. It's because it is orthogonal that the separate subsystem
-> for pin control including pin muxing exists.
-> 
-> Should I be really overly picky, the drivers that can mux lines like
-> this should be implementing the pin control mux driver side as
-> well just to make Linux aware of this. But if the muxing cannot
-> be changed by the kernel (albeit with special tools) then it would
-> be pretty overengineered for this case. Things would be much
-> easier if this wasn't some flashing configuration but more of a
-> runtime thing (which is kind of the implicit assumption in pin
-> control land).
+Hello,
 
-We'd still have problem of how to configure these hot-pluggable devices
-at runtime, so it's not necessarily easier.
+syzbot found the following issue on:
 
-If I remember correctly the xr_serial driver under review is doing
-something like muxing at runtime, but by simply having whichever
-interface (tty or gpio) that claims the resource first implicitly set
-the mux configuration. I have to revisit that.
+HEAD commit:    b175d273 USB: legotower: fix logical error in recent commit
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=12ee7c87500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d24ee9ecd7ce968e
+dashboard link: https://syzkaller.appspot.com/bug?extid=65be4277f3c489293939
+compiler:       gcc (GCC) 10.1.0-syz 20200507
 
-> We don't really have many drivers that are "muxable by
-> (intrusive) flashing" as opposed to "muxable by setting some
-> bits" so in that way these FTDI drivers and siblings are special.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Yeah, but the gpio-reserved-range (valid-mask) feature which Marc used
-comes close here.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+65be4277f3c489293939@syzkaller.appspotmail.com
 
-Johan
+usb 5-1: Direct firmware load for rtlwifi/rtl8192cufw.bin failed with error -2
+rtlwifi: Loading alternative firmware rtlwifi/rtl8192cufw.bin
+rtlwifi: Selected firmware is not available
+==================================================================
+BUG: KASAN: use-after-free in rtl_fw_do_work.cold+0x68/0x6a drivers/net/wireless/realtek/rtlwifi/core.c:93
+Write of size 4 at addr ffff8881454cff50 by task kworker/0:6/7379
+
+CPU: 0 PID: 7379 Comm: kworker/0:6 Not tainted 5.10.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events request_firmware_work_func
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x107/0x163 lib/dump_stack.c:118
+ print_address_description.constprop.0.cold+0xae/0x4c8 mm/kasan/report.c:385
+ __kasan_report mm/kasan/report.c:545 [inline]
+ kasan_report.cold+0x1f/0x37 mm/kasan/report.c:562
+ rtl_fw_do_work.cold+0x68/0x6a drivers/net/wireless/realtek/rtlwifi/core.c:93
+ request_firmware_work_func+0x12c/0x230 drivers/base/firmware_loader/main.c:1079
+ process_one_work+0x933/0x1520 kernel/workqueue.c:2272
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2418
+ kthread+0x38c/0x460 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+The buggy address belongs to the page:
+page:00000000f54435b3 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1454cf
+flags: 0x200000000000000()
+raw: 0200000000000000 0000000000000000 ffffea00051533c8 0000000000000000
+raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff8881454cfe00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8881454cfe80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>ffff8881454cff00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                                                 ^
+ ffff8881454cff80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8881454d0000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
