@@ -2,81 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC342D399D
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 05:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AD62D3C5E
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 08:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727293AbgLIE0G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 23:26:06 -0500
-Received: from mga07.intel.com ([134.134.136.100]:28282 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726303AbgLIE0G (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Dec 2020 23:26:06 -0500
-IronPort-SDR: 5HMtwnCeTs3PMImwkPLSFHkCdkC5y487jQ7iuv073RoRFMp0eN5SxBO9HBFAGd7bFv0iOT2syI
- JaI3Sj7SQopQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9829"; a="238120609"
-X-IronPort-AV: E=Sophos;i="5.78,404,1599548400"; 
-   d="scan'208";a="238120609"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2020 20:25:25 -0800
-IronPort-SDR: OYGOrM8MZACGb/CPyOYwUUAMZB+Meksxt4SzcO5bVcjOhgXmhUBaKFiiXPNwMVt7nRxexFXVVk
- bwUnGaD89PNg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,404,1599548400"; 
-   d="scan'208";a="376205757"
-Received: from uhpatel-desk4.jf.intel.com ([10.23.15.15])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Dec 2020 20:25:25 -0800
-From:   Utkarsh Patel <utkarsh.h.patel@intel.com>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     heikki.krogerus@linux.intel.com, pmalani@chromium.org,
-        enric.balletbo@collabora.com, rajmohan.mani@intel.com,
-        azhar.shaikh@intel.com, Utkarsh Patel <utkarsh.h.patel@intel.com>
-Subject: [PATCH v4 1/1] usb: typec: intel_pmc_mux: Configure cable generation value for USB4
-Date:   Tue,  8 Dec 2020 20:24:08 -0800
-Message-Id: <20201209042408.23079-2-utkarsh.h.patel@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201209042408.23079-1-utkarsh.h.patel@intel.com>
-References: <20201209042408.23079-1-utkarsh.h.patel@intel.com>
+        id S1728038AbgLIHeg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 02:34:36 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:45533 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728166AbgLIHdw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 02:33:52 -0500
+Received: by mail-io1-f69.google.com with SMTP id x7so610092ion.12
+        for <linux-usb@vger.kernel.org>; Tue, 08 Dec 2020 23:33:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=TUPvM5pjFJfI93K9gjTTWctfpryn4JBZxUDK8PvIsO0=;
+        b=OjKqj4nOQxcSu7AM2EUhJMoQDPrVfJ2wtOwz3W+4iMAYZ82+jotaKwLJp5Au7AFzey
+         dUPqIIw6Q1QCUx9GeXJQxu6fIITcANU26cwK2jzpmMQm/dGFdU34mC4H6gU+g+4f//au
+         ZS1Kwo8dygUcblNCeWPZfNDDOqhby/K2qXa9BoaN++IQdIKrPnQQP1xJeO7n/bvJ/szd
+         qhS91/Ie+GcG2taH7Q+1jNaqH5ZlNkKt+4H9T8/rl5vz9yiD8E0ZwpBRxyNJkDY8wfpY
+         hd930G9X/NEpaMpi4eFxfogBO/G6L2nEiupyu8Vt2j2KJexSu0wQJ2MdZrIt4ammiEY9
+         1hKQ==
+X-Gm-Message-State: AOAM532wiSY2R5O1ptnzc/N2POiSSXzKt3NiB+Xj7YuzMn4c693uyp9o
+        vyNnC8ZUUuvQRwfvIVVi2ijEv9EDwtp9jjwUsFaI8TEOAYeC
+X-Google-Smtp-Source: ABdhPJwE9NVSuQ/nGiAUa58CMZD95IFRGhRzRaHIVh6FL34U2djGPAtG0oFSmbh4t9ksrqwTWS8B+vSh/a1UUbxiCXppk6yLd7Bk
+MIME-Version: 1.0
+X-Received: by 2002:a92:8502:: with SMTP id f2mr1087693ilh.1.1607499191697;
+ Tue, 08 Dec 2020 23:33:11 -0800 (PST)
+Date:   Tue, 08 Dec 2020 23:33:11 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004c471e05b60312f9@google.com>
+Subject: UBSAN: shift-out-of-bounds in option_probe
+From:   syzbot <syzbot+8881b478dad0a7971f79@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, johan@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-USB4 specification chapter 3 indicates that cable data rates have to be
-rounded for USB4 device to operate as USB4.
-With that configure cable generation value to use rounded data rates for
-USB4.
+Hello,
 
-Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
+syzbot found the following issue on:
+
+HEAD commit:    15ac8fdb Add linux-next specific files for 20201207
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=17dc6adf500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3696b8138207d24d
+dashboard link: https://syzkaller.appspot.com/bug?extid=8881b478dad0a7971f79
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e89613500000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17993623500000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8881b478dad0a7971f79@syzkaller.appspotmail.com
+
+usb 1-1: config 0 interface 109 has no altsetting 0
+usb 1-1: New USB device found, idVendor=12d1, idProduct=02cb, bcdDevice= 1.fb
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+================================================================================
+UBSAN: shift-out-of-bounds in drivers/usb/serial/option.c:2120:21
+shift exponent 109 is too large for 64-bit type 'long unsigned int'
+CPU: 0 PID: 3169 Comm: kworker/0:3 Not tainted 5.10.0-rc6-next-20201207-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ __dump_stack lib/dump_stack.c:79 [inline]
+ dump_stack+0x107/0x163 lib/dump_stack.c:120
+ ubsan_epilogue+0xb/0x5a lib/ubsan.c:148
+ __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x181 lib/ubsan.c:395
+ option_probe.cold+0x1a/0x1f drivers/usb/serial/option.c:2120
+ usb_serial_probe+0x32d/0xef0 drivers/usb/serial/usb-serial.c:905
+ usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
+ really_probe+0x2b1/0xe40 drivers/base/dd.c:554
+ driver_probe_device+0x285/0x3f0 drivers/base/dd.c:738
+ __device_attach_driver+0x216/0x2d0 drivers/base/dd.c:844
+
+
 ---
-Changes in v4:
-- Removed usage of tbt_mode_vdo since data rates should always be rounded
-  in the case of USB4.
-- Updated commit message to reflect the change.
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Changes in v3:
-- Moved TBT_CABLE_ROUNDED_SUPPORT assignment to the same line.
-
-Changes in v2:
-- No change.
----
- drivers/usb/typec/mux/intel_pmc_mux.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-index e58ae8a7fefb..cf37a59ce130 100644
---- a/drivers/usb/typec/mux/intel_pmc_mux.c
-+++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-@@ -327,6 +327,11 @@ pmc_usb_mux_usb4(struct pmc_usb_port *port, struct typec_mux_state *state)
- 		fallthrough;
- 	default:
- 		req.mode_data |= PMC_USB_ALTMODE_ACTIVE_CABLE;
-+
-+		/* Configure data rate to rounded in the case of Active TBT3
-+		 * and USB4 cables.
-+		 */
-+		req.mode_data |= PMC_USB_ALTMODE_TBT_GEN(1);
- 		break;
- 	}
- 
--- 
-2.17.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
