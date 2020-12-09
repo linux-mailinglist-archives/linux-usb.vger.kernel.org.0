@@ -2,68 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E7E2D3920
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 04:10:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 652A72D399B
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 05:28:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726995AbgLIDJ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 22:09:29 -0500
-Received: from mail-m971.mail.163.com ([123.126.97.1]:33926 "EHLO
-        mail-m971.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726435AbgLIDJ3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Dec 2020 22:09:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=QFtydwgfyRi+IX9p2r
-        TxhYZn0Y8ll8fBQpyozTWD1dA=; b=DXpVAXhZdZPgSiKujHkPWaniYwJXbVTWrx
-        VLFYgL7+Sk/v3oU0M26Ni9W9CbdchOzcmMWaN0IUawLCMSTB7W/rK7cSUvYKBMvY
-        ZYXONony2QvWVXXLj8U6b/GhZBHUMCoQFuE1wIOBsY3fABJOjDfURqKHF8fSfmcq
-        9irMe8Kg4=
-Received: from localhost.localdomain (unknown [202.112.113.212])
-        by smtp1 (Coremail) with SMTP id GdxpCgBnrDZoP9Bff9VtAQ--.234S4;
-        Wed, 09 Dec 2020 11:07:24 +0800 (CST)
-From:   Xiaohui Zhang <ruc_zhangxiaohui@163.com>
-To:     Xiaohui Zhang <ruc_zhangxiaohui@163.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] tcpm: Fix possible buffer overflows in tcpm_queue_vdm
-Date:   Wed,  9 Dec 2020 11:07:16 +0800
-Message-Id: <20201209030716.3764-1-ruc_zhangxiaohui@163.com>
+        id S1726987AbgLIEZ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Dec 2020 23:25:56 -0500
+Received: from mga05.intel.com ([192.55.52.43]:46202 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726303AbgLIEZ4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Dec 2020 23:25:56 -0500
+IronPort-SDR: hIRMB28bGSF/40ceza1UZNQ8r/P1MnLpyf6TYdblIZkqJuMxbW6JJ5zV9lEgo7glXycAwJSb3/
+ UAbOVCfFl2Pw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9829"; a="258725300"
+X-IronPort-AV: E=Sophos;i="5.78,404,1599548400"; 
+   d="scan'208";a="258725300"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2020 20:25:15 -0800
+IronPort-SDR: yIG/H2Ov61hebtY62L0PKVYih8ymVYJnO8k4m58Ou5011xwutPTNEdPa0lc6Su5MOzxyjbJ5xV
+ CpWrwVg7BsSQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,404,1599548400"; 
+   d="scan'208";a="376205731"
+Received: from uhpatel-desk4.jf.intel.com ([10.23.15.15])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Dec 2020 20:25:15 -0800
+From:   Utkarsh Patel <utkarsh.h.patel@intel.com>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     heikki.krogerus@linux.intel.com, pmalani@chromium.org,
+        enric.balletbo@collabora.com, rajmohan.mani@intel.com,
+        azhar.shaikh@intel.com, Utkarsh Patel <utkarsh.h.patel@intel.com>
+Subject: [PATCH v4 0/1] Thunderbolt3/USB4 cable rounded and active cable plug link training support
+Date:   Tue,  8 Dec 2020 20:24:07 -0800
+Message-Id: <20201209042408.23079-1-utkarsh.h.patel@intel.com>
 X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: GdxpCgBnrDZoP9Bff9VtAQ--.234S4
-X-Coremail-Antispam: 1Uf129KBjvdXoW7XFW5ZF45uF15tr4rtrW3trb_yoWftFb_uw
-        1v93WFvrW8uFWxJrn8G3W3Zw1Ykw48WF1kWFn2qa1fArWjvwnFgr1vqr4xXryYgFnFqF93
-        XryDAr1Ykw4xGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUYFAJUUUUU==
-X-Originating-IP: [202.112.113.212]
-X-CM-SenderInfo: puxfs6pkdqw5xldrx3rl6rljoofrz/1tbipQz1MFUMbEFd7AAAsp
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Zhang Xiaohui <ruc_zhangxiaohui@163.com>
+This patch series adds the support for Thunderbolt3/USB4 rounded and
+non-rounded frequencies cables and fixes the active cable plug link
+training support
 
-tcpm_queue_vdm() calls memcpy() without checking the destination
-size may trigger a buffer overflower.
+Changes in v4:
+- Removed patches 1/4, 2/4 and 4/4 as the implementation of tbt_mode_vdo
+  from Enter_USB message is not needed.
+- With that there are no changes in active cable plug link training 
+  support.
+- Previous version can be found here: 
+  https://www.spinics.net/lists/linux-usb/msg204914.html
+* Patch 1: "usb: typec: intel_pmc_mux: Configure cable generation value
+  for USB4"
+  - Removed usage of tbt_mode_vdo since data rates should always be rounded
+    in the case of USB4.
+  - Updated commit message to reflect the change.
 
-Signed-off-by: Zhang Xiaohui <ruc_zhangxiaohui@163.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v3:
+- First four patches of this series have been queued by Greg to usb-testing
+  branch. https://www.spinics.net/lists/linux-usb/msg204880.html
+- Changed commit message and description in header file in patch 1/4.
+- Added a check for Cable's TBT support in patch 2/4
+- Moved TBT_CABLE_ROUNDED_SUPPORT assignment to same line in patch 3/4.
+- Rebased and added Reviewed-by tag in patch 4/4.
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 55535c4f6..fcd331f33 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -1045,7 +1045,7 @@ static void tcpm_queue_vdm(struct tcpm_port *port, const u32 header,
- 
- 	port->vdo_count = cnt + 1;
- 	port->vdo_data[0] = header;
--	memcpy(&port->vdo_data[1], data, sizeof(u32) * cnt);
-+	memcpy(&port->vdo_data[1], data, min_t(int, sizeof(u32) * cnt, VDO_MAX_SIZE - 1));
- 	/* Set ready, vdm state machine will actually send */
- 	port->vdm_retries = 0;
- 	port->vdm_state = VDM_STATE_READY;
+Changes in v2:
+- Removed the fixes tag as there is no functional implication from patches
+  1/8, 2/8 and 4/8.
+
+
+Utkarsh Patel (1):
+  usb: typec: intel_pmc_mux: Configure cable generation value for USB4
+
+ drivers/usb/typec/mux/intel_pmc_mux.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
 -- 
 2.17.1
 
