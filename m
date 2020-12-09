@@ -2,150 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 894DD2D3E93
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 10:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0EF2D3EA2
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 10:28:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729097AbgLIJX2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 04:23:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729092AbgLIJX2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 04:23:28 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BEEC0617A7
-        for <linux-usb@vger.kernel.org>; Wed,  9 Dec 2020 01:22:29 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id y23so882137wmi.1
-        for <linux-usb@vger.kernel.org>; Wed, 09 Dec 2020 01:22:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Mx+SSux44r2ybzN5uouGLt8Nyz1sei2BYkCtNp5/Q1U=;
-        b=BrjxDVk7vGKmI9PkGvFwQ3GU2hA8fRK99GdYe9yoQ15TohZrTt4oqHD6OJjC7O2Y29
-         Chb5nVLxZZJ763fumMNZyor5i0DCuYNiOyFihpca10BMIb1ohsXsz09u0P1vg/3Y4wru
-         /HosQ+j/nJKg+Kb+VfMQ6iRzO9Ksrxt4boRjpyTNIDUxJxpoaP7HSd/o8wqF6tKHpXWD
-         E9/XDzI1UQLDSZoCAoiupyT5JBoQJV5od2iZrHzUHJs78vFF3R+ebTCCmlvtW6+qeIJY
-         pc8bEy4zn9Rx1qyn/Mz6/xDVOGssQXFa05U5P1JqV/VRBQNo6n94KA9rzgGhjXo1uV4o
-         a5jg==
+        id S1728984AbgLIJYk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 04:24:40 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:34393 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728921AbgLIJYk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 04:24:40 -0500
+Received: by mail-lj1-f196.google.com with SMTP id y16so1467259ljk.1;
+        Wed, 09 Dec 2020 01:24:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Mx+SSux44r2ybzN5uouGLt8Nyz1sei2BYkCtNp5/Q1U=;
-        b=HkmPaCPW/fmAZGb6/I0/BzV92EW7yjOTC3fZw0+8tEbYIPDmsX+tMzXYXUKp+r5bYe
-         IxW+zVC8qdcP1Hk8BSOKFohoir3G8u+Q+VTDSs2BTRrheRu0L2dh0v5At905rGONYlMD
-         PMxF2ktZ4+dpABgbWRB68CLRrfL8cxIteCdii7lznQMm7wyrsiIEBHc41IJia1h75tLF
-         JqwfVZwgWHRdVouUo1P+i8PpJ05o4vMvf7bQ20AY4FqMsN9ZKRPPlKyn4H8bVrwoaWs1
-         lcYRzNX3+w9ySFjK5ZrY4maRaSxjjAANaRhmfJlTHVYs+a/lX0u2DrJBVzBK/WGxTq/A
-         cJSw==
-X-Gm-Message-State: AOAM530UwnqyXP9Nw7EFzUBdv3GMa4Z69VnyrBrYGB7H0YSu7Vxx/H4K
-        jBOQqVcvCCx86CFeShZdZxmGIg==
-X-Google-Smtp-Source: ABdhPJxTlBVIxgjkiki4YjzApRPAYuKQcRCroZoMD5M27K7cz8VwDwS82eqt/XFzqMY5viPlsgQuUQ==
-X-Received: by 2002:a1c:40c:: with SMTP id 12mr1687015wme.40.1607505748074;
-        Wed, 09 Dec 2020 01:22:28 -0800 (PST)
-Received: from dell ([91.110.221.209])
-        by smtp.gmail.com with ESMTPSA id z8sm2247120wmg.17.2020.12.09.01.22.26
+         :mime-version:content-disposition:in-reply-to;
+        bh=8VSXjX30nb95ylXg0DHjuSrt5F+lxLssDOMiUFiRthM=;
+        b=ktq1dO8jTyyXPs9cxg3NYPOp4Y+U5XA3gSJMle84cS/+Yz57D9aCH9LMoUuUD8+vx7
+         fL9lHKd/wzc7/h1qT6ItDtB5h60zXv+IkDBwMsGMzjMD4wa/tgpnST8iVvPftf2clnO4
+         evXTKVPn/uW1EkGuMJ9kaMldi/hxJt6dCXNXkoZHq7d9to8Gzmp8vsK6PCFb4OenfgWA
+         wdqoAmGeqdmLamRLHthDtc+zffasLb5AY9TM2tZf9/68gQ/mhdT/riM1hgTGy9jFknrO
+         OzYJ0E/SUk1GWDDRT+MWvNFESHLv4MHSCFaPk97bnnxXM8aN3c0l3zZrA2i+mhSC4ZMH
+         2nHg==
+X-Gm-Message-State: AOAM532J3uMC8gpSCu+HDPvsioBPfuv91cEc12izHIZJxQPkkH8jxOKn
+        kMmfTcifzH78ZT5l8YOBMirugSkckZTUdg==
+X-Google-Smtp-Source: ABdhPJzQXUCJL4iz+RheE62r4Bw2gHqbsScJaBTtQ5DIiyNT+X4ywrUYxEFiRv/rTct+8TpS4Owpyw==
+X-Received: by 2002:a2e:b4da:: with SMTP id r26mr679324ljm.486.1607505837962;
+        Wed, 09 Dec 2020 01:23:57 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id i15sm107954lfc.128.2020.12.09.01.23.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Dec 2020 01:22:27 -0800 (PST)
-Date:   Wed, 9 Dec 2020 09:22:24 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Ion Badulescu <ionut@badula.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Adam Radford <aradford@gmail.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-ide@vger.kernel.org, dmaengine@vger.kernel.org,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        linux-parisc@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        linux-serial@vger.kernel.org,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] PCI: Remove pci_try_set_mwi
-Message-ID: <20201209092224.GU4801@dell>
-References: <4d535d35-6c8c-2bd8-812b-2b53194ce0ec@gmail.com>
+        Wed, 09 Dec 2020 01:23:57 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kmvi9-0006uR-6d; Wed, 09 Dec 2020 10:24:37 +0100
+Date:   Wed, 9 Dec 2020 10:24:37 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     syzbot <syzbot+8881b478dad0a7971f79@syzkaller.appspotmail.com>
+Cc:     gregkh@linuxfoundation.org, johan@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: UBSAN: shift-out-of-bounds in option_probe
+Message-ID: <X9CX1X6o5ufiIBtO@localhost>
+References: <0000000000004c471e05b60312f9@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4d535d35-6c8c-2bd8-812b-2b53194ce0ec@gmail.com>
+In-Reply-To: <0000000000004c471e05b60312f9@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 09 Dec 2020, Heiner Kallweit wrote:
-
-> pci_set_mwi() and pci_try_set_mwi() do exactly the same, just that the
-> former one is declared as __must_check. However also some callers of
-> pci_set_mwi() have a comment that it's an optional feature. I don't
-> think there's much sense in this separation and the use of
-> __must_check. Therefore remove pci_try_set_mwi() and remove the
-> __must_check attribute from pci_set_mwi().
-> I don't expect either function to be used in new code anyway.
+On Tue, Dec 08, 2020 at 11:33:11PM -0800, syzbot wrote:
+> Hello,
 > 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
-> patch applies on top of pci/misc for v5.11
-> ---
->  Documentation/PCI/pci.rst                     |  5 +----
->  drivers/ata/pata_cs5530.c                     |  2 +-
->  drivers/ata/sata_mv.c                         |  2 +-
->  drivers/dma/dw/pci.c                          |  2 +-
->  drivers/dma/hsu/pci.c                         |  2 +-
->  drivers/ide/cs5530.c                          |  2 +-
+> syzbot found the following issue on:
+> 
+> HEAD commit:    15ac8fdb Add linux-next specific files for 20201207
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=17dc6adf500000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3696b8138207d24d
+> dashboard link: https://syzkaller.appspot.com/bug?extid=8881b478dad0a7971f79
+> compiler:       gcc (GCC) 10.1.0-syz 20200507
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e89613500000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17993623500000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+8881b478dad0a7971f79@syzkaller.appspotmail.com
+> 
+> usb 1-1: config 0 interface 109 has no altsetting 0
+> usb 1-1: New USB device found, idVendor=12d1, idProduct=02cb, bcdDevice= 1.fb
+> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> usb 1-1: config 0 descriptor??
+> ================================================================================
+> UBSAN: shift-out-of-bounds in drivers/usb/serial/option.c:2120:21
+> shift exponent 109 is too large for 64-bit type 'long unsigned int'
 
->  drivers/mfd/intel-lpss-pci.c                  |  2 +-
+Ok, we need to add a sanity check against large interface numbers before
+the device-flag tests. I'll cook something up.
 
-Acked-by: Lee Jones <lee.jones@linaro.org>
-
->  drivers/net/ethernet/adaptec/starfire.c       |  2 +-
->  drivers/net/ethernet/alacritech/slicoss.c     |  2 +-
->  drivers/net/ethernet/dec/tulip/tulip_core.c   |  5 +----
->  drivers/net/ethernet/sun/cassini.c            |  4 ++--
->  drivers/net/wireless/intersil/p54/p54pci.c    |  2 +-
->  .../intersil/prism54/islpci_hotplug.c         |  3 +--
->  .../wireless/realtek/rtl818x/rtl8180/dev.c    |  2 +-
->  drivers/pci/pci.c                             | 19 -------------------
->  drivers/scsi/3w-9xxx.c                        |  4 ++--
->  drivers/scsi/3w-sas.c                         |  4 ++--
->  drivers/scsi/csiostor/csio_init.c             |  2 +-
->  drivers/scsi/lpfc/lpfc_init.c                 |  2 +-
->  drivers/scsi/qla2xxx/qla_init.c               |  8 ++++----
->  drivers/scsi/qla2xxx/qla_mr.c                 |  2 +-
->  drivers/tty/serial/8250/8250_lpss.c           |  2 +-
->  drivers/usb/chipidea/ci_hdrc_pci.c            |  2 +-
->  drivers/usb/gadget/udc/amd5536udc_pci.c       |  2 +-
->  drivers/usb/gadget/udc/net2280.c              |  2 +-
->  drivers/usb/gadget/udc/pch_udc.c              |  2 +-
->  include/linux/pci.h                           |  5 ++---
->  27 files changed, 33 insertions(+), 60 deletions(-)
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Johan
