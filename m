@@ -2,132 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7222D38E9
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 03:44:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3BE2D3913
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Dec 2020 04:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726866AbgLICll (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Dec 2020 21:41:41 -0500
-Received: from mail-am6eur05on2084.outbound.protection.outlook.com ([40.107.22.84]:57189
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        id S1726953AbgLIDBR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Dec 2020 22:01:17 -0500
+Received: from mail-eopbgr770088.outbound.protection.outlook.com ([40.107.77.88]:19183
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726604AbgLICll (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Dec 2020 21:41:41 -0500
+        id S1726931AbgLIDBR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Dec 2020 22:01:17 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ogj3q/uWY654PnN0uxOcO4z812dd5NIgO3tvcpdeX5BBuA078xHrq3gYxn0FFmA8tTlZZQDGIRlMtL3bNRQjbNIvZgI8X4GhZKQoIC+X1o990lU3EDCge7xctBjWWK4DeNm7ebtn0bNwImU94VxoPPi8DkLRfAm9xl4Dx9cUzw3I9MzKovp7WROgZ/Pijh5CCR4NgAn3fLKO1UDAAx2N6m2y0caHrIWuxSeVlB4z/WhlZcSBBRSeqysI2xuwH2jTxB8l74XB6j0+M5B6Dh7jGjmj1TjnwdOf2ApRDkfzKysXOSj6p6KSQOUtC+/OMhTLFGC/l/su9kQJ2OnRLuNSRA==
+ b=BBq7hYkOvuWwx7XsvGberdleANMfo0JCe/EUmj3nOaAs5J6jy2aQuC0WnxhbK/5HS95QgtLfoMKyfxtZt0Dk+XUmG1UNfqkaKReieKSnkN7tlLr6gClIyXOr7mvQucqcgmHGHElwOdYQUjecVH+cMzbJMzFVSBah/z3o3LesupDkBnXOXUeFPP6Vb+9VXqNsllrjJwK731LB6qc5tlBZdi+zdOGO65qISi5jiPYP117IXQcNMmZwUUtkRjQ5AV7xyAsHtUdPrUwDU/AIgghNU6IsE6qm8o1nZosF/sB2fOJjgiLZVvDMHhXqkybtcRQU+8TCe6uRlQSHRww2juvYuQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qyh03ONJFBKb5jU6sGtuVoDkTCGIF0fwsHKcFZIj5nQ=;
- b=kgmSGMLiVZwPexrFc4DWLR1rsL+37vQMf/YL1ICGB8z1M603O6uqTEsynknwN6qPCTEVSbdE1cQez4GAcSNp7K7PK/fMHXYjk8QNmPiON7lW/02z9fW8iQ/2zGfZLGHll3fvQ4ISEq+4FTLDfVL1LSsUFi3neYhLuUBWEM3Qdw/fGqyBGhdKewDTeEhIL9syV7xOdJXLnitED3FXiqo4IqAXQK1toC8mP4hMTZpP5lVGe2S2rVtbzNV8NJjgB7esQcQSKDKM+6W06rVEv24cYS6S5tH8RN74s3v9N8aEBgLG40yKbkexz5rYWjwRIWDlN7u9WTDgXNcSAcwLOzZkPw==
+ bh=TwpLxBCJcAHYnEDVJXmm16qsqenV2g3ZfCTT/i+jWAA=;
+ b=Z4TdnLIeZ827kFD2AVxdWBeyiFGpQkh5dQzTsEU0hDaPvXh9M5nmCjq8qKIJlgA6NYtBTFzQWm5L/fu3cIoSK1IAd2ldR7XDF9dlbli9TuGsumtUt5L6suJLSLlkgu268Ssg7NN4LjO5IaTyH5jxujKlIStQoSTc98u4P/FOk/RaUoOzWXYGaN3flfAtk8nyD7JgphPdveJyyLbT9zl5Qq34dmkvcfplO8JLY2IQunYWm4L78xjP+XeI+hWaUPx3ws/fTTqem4Y0pfLmCM4EdcMkhYdZiF5YXZiY5hCyaPKjmFddZpQultJE5uvk3IQhigKblR88CFWhmFV5cJGIRg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=windriversystems.onmicrosoft.com;
+ s=selector2-windriversystems-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qyh03ONJFBKb5jU6sGtuVoDkTCGIF0fwsHKcFZIj5nQ=;
- b=rpxwtruvsCPrszUM/yOGDLnbrUkw0q+PK1mXvvaQeaKc02fCMDDmZSBWkhdVjLZLCKEXJmt2uQ5O9xne74TsYrDvN7GuK1cAoBcxZpdsUqfSitYosm/HLHyN3SAGEi/Vt2GEm2gq0nE0ibr17XHqOkcAjjNKM8TqOgbTOC5yKfU=
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
- by DB6PR0402MB2758.eurprd04.prod.outlook.com (2603:10a6:4:96::7) with
+ bh=TwpLxBCJcAHYnEDVJXmm16qsqenV2g3ZfCTT/i+jWAA=;
+ b=jpYIfXkdcA7c+nRnxK99sRMgP9MDuBAGyAl8ZdpjcBOFhP/bNA98Wbfbwbx4JEHdLD87Duj9hhezafZ9XFfDIc4uOo4FL4XciLLfYoJUGZDtLMUajvtxq2Y9JVEqfGFjIsvso919sZrLYdUbTo7a9NNftKXJ1SPlrCfdl3uNlL0=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=windriver.com;
+Received: from BYAPR11MB2632.namprd11.prod.outlook.com (2603:10b6:a02:c4::17)
+ by SJ0PR11MB5168.namprd11.prod.outlook.com (2603:10b6:a03:2dc::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.19; Wed, 9 Dec
- 2020 02:40:58 +0000
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3632.023; Wed, 9 Dec 2020
- 02:40:58 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Pawel Laszczak <pawell@cadence.com>, Roger Quadros <rogerq@ti.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: RE: [PATCH -next] usb: cdns3: fix warning when USB_CDNS_HOST is not
- set
-Thread-Topic: [PATCH -next] usb: cdns3: fix warning when USB_CDNS_HOST is not
- set
-Thread-Index: AQHWzZwkj0GjYM34DkSt3eQw8FfQQKnuDiHA
-Date:   Wed, 9 Dec 2020 02:40:58 +0000
-Message-ID: <DBBPR04MB7979502194410BB1AE96DF038BCC0@DBBPR04MB7979.eurprd04.prod.outlook.com>
-References: <20201208195547.30076-1-rdunlap@infradead.org>
-In-Reply-To: <20201208195547.30076-1-rdunlap@infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: infradead.org; dkim=none (message not signed)
- header.d=none;infradead.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [180.164.155.184]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: e4e00b5f-ec70-4b60-f42e-08d89bebdbf2
-x-ms-traffictypediagnostic: DB6PR0402MB2758:
-x-microsoft-antispam-prvs: <DB6PR0402MB2758ABD4FE1AAF7ED219EC6A8BCC0@DB6PR0402MB2758.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:345;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: R+YPcAnOe6+wbjvJZYkrVqBGiejDYw+xPE3bQqKrm9dcqsVPgDX1pLr+Y2bCnwvTV2IuZoy/lssTJLcgn+IXXqxWCqiLo0BUb7KNi2Eha5IwuqPq70zzAbnuOBQnZg5ZO8/90yLtRo62HCjEWIUKizUe3NLp5B1vf+DiEMMfHGiigz+pRuY2cVMjYqVhRlD8samYzhte0MBs5i5af005qHp2I0xJcmB/aKLUUqIyiKFDVk6z0iX2SYhX7OprKEbdcXPlAPE3wqbv7HRAyQETRb5YXQcC2GtQqmcDl0a0YbvuVc0ylCxcSvFoHJiuqsVDhkisl/xqpsPjVk07EO+QqQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(346002)(136003)(376002)(2906002)(4326008)(8676002)(26005)(83380400001)(33656002)(508600001)(71200400001)(44832011)(9686003)(6506007)(86362001)(55016002)(7696005)(54906003)(110136005)(186003)(4744005)(8936002)(66446008)(64756008)(76116006)(66946007)(66476007)(66556008)(52536014)(5660300002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?YzJDMGQzSEZBWk1kYW1CZHdTa0h0RTA3SE1scDBTeERGOGhrNGJLajlQTFpu?=
- =?utf-8?B?bGEzNjd0aE1KRWZobVNYWTNwVTNQYnRZRENMb1JRa2wwbTJwMUVzeUFFbERP?=
- =?utf-8?B?SlR5NWVmUGh5SzFxdHQxQUFOcUVnNy83NHhUajNkeE53cHFNYlZuY1phMkRF?=
- =?utf-8?B?RUV1SWx0b29HUGl2bGhrOVFvc2FudHlrUjRiTGJiM29nQlZlcmRWa0c5VmRT?=
- =?utf-8?B?NXBDV29ybS8zOFVEUGxEZzZYeFRzeWpQYVBvYXZQRXk5YTJKY0UwNkVJMjJz?=
- =?utf-8?B?biszMDNiSlpwOExPbFVvY3NKN2taL0c2Ukc3RlZ6MUt4akRKM3JhRTIyMTJX?=
- =?utf-8?B?eXlzMTZPV3dLK3pscHpxWnpMejM1RUdWYkoxY1ZXUU9ZQWRZTHBhZmdQeVhT?=
- =?utf-8?B?eVh6Nm0ydmd4WjYrUVlaYm5qQnc5OXBoZU8xMndTQmR6Z1RYa1dHRWE4M3c0?=
- =?utf-8?B?aUlzTVdncHdCL010UlR2emFuMXRxSkNOeGQ5ZlMxQnJuUFFOejNGQzZBWTZi?=
- =?utf-8?B?b1NRTHRQb3l4aVNwSE1wVnpOa1U0Qm5yaXczMjQvb3g5YjA1RDVRYm5JUGRR?=
- =?utf-8?B?SmV1Nlk1UHlOQnV4SVlyZGVUKzk3NFpJY0M2S1BqS0ZrMDJSaHYxME81QkEw?=
- =?utf-8?B?dUdVTWhqdFAzNThXU2ZoMWNYZWwrL1VReWRWbU4vWmZRZE5xdzNVVkNLNGc3?=
- =?utf-8?B?VFRmM1RmVkk1MytzaDA2dGpiTG8xR3lEMDJsODlIQUhsZzdVOHRrTHBXVWQ3?=
- =?utf-8?B?T3hjM094YmdIVkM2YVoxRkRsVlRZK2twcHRWblhoZGFMU2tlaGJFRFlNdnk0?=
- =?utf-8?B?SldjUzhmeXdNcHh5QzJkeVFrbnRTamVHN1dEWHZSK2szblBZbVdFdE5qQzF4?=
- =?utf-8?B?a29pN0JZd0lBMjdUa2hqazNFWlpuc1NSNE4weHF2Uy9ad0MyUWh0YlIrWm00?=
- =?utf-8?B?L3JaTFllY2ZTUjNvOEFsSTBaYTRUTlU5RDAwYzh6RGJvRnZzME9NSGI3OU40?=
- =?utf-8?B?UE5oZTl3YnpLdWhVSzRNUWdObFp6TnRQYXV3dE1DV0dNR1hEY0RyUUN4SklI?=
- =?utf-8?B?V2U2Y0RGcWZPTjNteVRRajREcmN1Ykd1eVdLa3BJMHRUV2lPUXBRS3dRRWt2?=
- =?utf-8?B?M05PTzN2eXhITXFBanBuekZ5ZXF6ZS9qN3Vkb3ZsN3Y5WmYvbHBDdk1PYnlL?=
- =?utf-8?B?TWpwRzBCYUdSd3NHUGF5SFhqd0tCTnFJZzlRd051bWN6WXVnVEc2a0ZXUlBU?=
- =?utf-8?B?aG5OZlArdlJQY0pUaDNvU21wa1RyUWEzblBEWElRUXc4OFBxanF2MkRXSHdB?=
- =?utf-8?Q?0A6hdaBxpiBIg=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.13; Wed, 9 Dec
+ 2020 03:00:33 +0000
+Received: from BYAPR11MB2632.namprd11.prod.outlook.com
+ ([fe80::94a4:4e15:ab64:5006]) by BYAPR11MB2632.namprd11.prod.outlook.com
+ ([fe80::94a4:4e15:ab64:5006%5]) with mapi id 15.20.3632.021; Wed, 9 Dec 2020
+ 03:00:33 +0000
+From:   qiang.zhang@windriver.com
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org
+Subject: [PATCH] usb: gadget: function: printer: Fix a memory leak for interface descriptor
+Date:   Wed,  9 Dec 2020 11:00:18 +0800
+Message-Id: <20201209030018.6001-1-qiang.zhang@windriver.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-Originating-IP: [60.247.85.82]
+X-ClientProxiedBy: HKAPR03CA0011.apcprd03.prod.outlook.com
+ (2603:1096:203:c8::16) To BYAPR11MB2632.namprd11.prod.outlook.com
+ (2603:10b6:a02:c4::17)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from pek-qzhang2-d1.wrs.com (60.247.85.82) by HKAPR03CA0011.apcprd03.prod.outlook.com (2603:1096:203:c8::16) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.8 via Frontend Transport; Wed, 9 Dec 2020 03:00:31 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5111f33e-a01e-49d2-b163-08d89bee989b
+X-MS-TrafficTypeDiagnostic: SJ0PR11MB5168:
+X-Microsoft-Antispam-PRVS: <SJ0PR11MB5168B7CCDDE80A82250AA77DFFCC0@SJ0PR11MB5168.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rdllHvRuCklW68tenpbJP2Cuak1DG1IiqUAt2Bk2qBsLeKmLoBDBjs33jrtKQRBnsXo8EfSE9XznR6tA6ycb1fUtvEr8L/EZ1n6H1X2UafAWLnpXegE7S0rwPMeTjkJDVeDjXxuqEvVNrjRhaxKcS92cjhj01GGyuqt7WoWCgh3tBwMtR6yef3N0Dc41cBcptspiI1mpyJqgNT5pxKTUp1F7Yk1bcmZicuIAb9iqnSosfssveVMuwcJvFba1bwUuT9XYavne9xlTvPZFFU0TLFqfpvdlkPUIwMVEezcHEnzKI4YI3uXvU+mG9iFWp/t+OaJY7X75OU8mQL+N2ZBMiQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB2632.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(136003)(376002)(346002)(52116002)(6666004)(956004)(2616005)(508600001)(2906002)(86362001)(4326008)(66476007)(66556008)(66946007)(36756003)(6486002)(6506007)(16526019)(186003)(26005)(8936002)(9686003)(6512007)(8676002)(1076003)(5660300002)(4744005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?x2bRkX0HeHq0n2IvjM5CBq/3n64ZBXkW3zRO/NOpmSnzujj78+GKIxwB1GJO?=
+ =?us-ascii?Q?Cd0DsPOpXUOeO+t70b6oGe6Ls2rgMOfT1D9pxPWkU6NR2XI5fikFl6gx/2qT?=
+ =?us-ascii?Q?dPV+zcXG7lCIIaRMsze5FbzWN2vtk+c49Wztl+AKUpCoMJ1aKR//jafKcShB?=
+ =?us-ascii?Q?8L6SLOZhEOdhRGvOKJGXpr1gQNb1mH+yfYSwr/P1dM0/29e/XhLazW/YdVrA?=
+ =?us-ascii?Q?demYak0dhFgNbjQp3VbfSQPzOEyRD/YL6eSVo5rM+b0ywiHz3w6coNeW1MKx?=
+ =?us-ascii?Q?bXYNtW6loeUQ6Jb8uHOh0tK4re+I3gg/QpGOVA7OBhahWIZOsFQEoxhJEi+V?=
+ =?us-ascii?Q?bltUwqDkXwQ/Y8qwji/LxyYRXmMfNbxbVkslSAJoPTwB3KM5a5a/7ZPoMOU2?=
+ =?us-ascii?Q?2NF8BtCuOessiCQYm4yuYmeJr8ovI5uq/SqMQSi7uRasaUtITPyKU/H88+BY?=
+ =?us-ascii?Q?V9/XokRcY8z/bpxGE5cRgRw7zaxf2Xc8Eecyl30lIJz/MaLjRImwyHCuJj2A?=
+ =?us-ascii?Q?c7HqqqkPNCO0hyv7ijRzxxACLsdKMwvzxkw9cS5TfxQ81cRK0MJFeNsV0HmU?=
+ =?us-ascii?Q?tIk95/7Te1OWrnRxGPOJlCLRBR+vAxbeoQSyIRGjhmT08WFTaGYW9ohtAZoi?=
+ =?us-ascii?Q?KptvA5RxYmzirBxJmypDwgzISIaoraYujTJ1eh1IuKzKx2ZG1vUQmqPXEVCq?=
+ =?us-ascii?Q?7M1FnMX/2PQZjPez3fzObBvuJX7YcaFh4GlN3D4AmY/SOiV/mc/tYQZlhJ+H?=
+ =?us-ascii?Q?lY4iECEcccfNWKNfZM9JdKushqZcHaxOxglROyB0jAJFSg5iyYJ+/06g7JD9?=
+ =?us-ascii?Q?heXQMTEAHcS3JnKowGEYwsFWUXMj/b37Us3taGiZJ9Y63jmCN2RH5ylb6+DP?=
+ =?us-ascii?Q?z96Xc705jnKnrq/nx0s6f0ff0Rnv1mEB6j70BCJF+gACgBPdi5VQMNC4LbS0?=
+ =?us-ascii?Q?78G7WtAfS7QxiWgH7gf/Pv+zR1Esyk+sHlaTa5+Pr4E=3D?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB2632.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4e00b5f-ec70-4b60-f42e-08d89bebdbf2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2020 02:40:58.2169
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2020 03:00:33.6358
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: urfP3g4y9M5dapX+BkPYhU+24sSfD9tQjlsm/wfG717t5PeYaGZ0yV4SOOzjsHj4RmWwUmX4Q5yffEY7XNEjNA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0402MB2758
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5111f33e-a01e-49d2-b163-08d89bee989b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: C++lI5uDMuqzbv1B/LUiDGt+W55chAm9aXXFM7+pWloTaoVYj0eOi56JjsMaexuyLvWUFwN8vUMtbzbmWNjr/xwZfXK0dWhMw5M9PKeMc2U=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5168
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-IA0KPiBJbiBmaWxlIGluY2x1ZGVkIGZyb20gLi4vZHJpdmVycy91c2IvY2RuczMvY29yZS5jOjIz
-OjA6DQo+IC4uL2RyaXZlcnMvdXNiL2NkbnMzL2hvc3QtZXhwb3J0Lmg6Mjc6NTE6IHdhcm5pbmc6
-IOKAmHN0cnVjdCB1c2JfaGNk4oCZIGRlY2xhcmVkDQo+IGluc2lkZSBwYXJhbWV0ZXIgbGlzdCB3
-aWxsIG5vdCBiZSB2aXNpYmxlIG91dHNpZGUgb2YgdGhpcyBkZWZpbml0aW9uIG9yIGRlY2xhcmF0
-aW9uDQo+IHN0YXRpYyBpbmxpbmUgaW50IHhoY2lfY2RuczNfc3VzcGVuZF9xdWlyayhzdHJ1Y3Qg
-dXNiX2hjZCAqaGNkKQ0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICBefn5+fn5+DQo+IA0KDQpBcHBsaWVkIGJvdGgsIHRoYW5rcy4NCg0KUGV0ZXIN
-Cg0KPiBTaWduZWQtb2ZmLWJ5OiBSYW5keSBEdW5sYXAgPHJkdW5sYXBAaW5mcmFkZWFkLm9yZz4N
-Cj4gQ2M6IFBldGVyIENoZW4gPHBldGVyLmNoZW5AbnhwLmNvbT4NCj4gQ2M6IFBhd2VsIExhc3pj
-emFrIDxwYXdlbGxAY2FkZW5jZS5jb20+DQo+IENjOiBSb2dlciBRdWFkcm9zIDxyb2dlcnFAdGku
-Y29tPg0KPiBDYzogbGludXgtdXNiQHZnZXIua2VybmVsLm9yZw0KPiBDYzogR3JlZyBLcm9haC1I
-YXJ0bWFuIDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz4NCj4gLS0tDQo+ICBkcml2ZXJzL3Vz
-Yi9jZG5zMy9ob3N0LWV4cG9ydC5oIHwgICAgNCArKy0tDQo+ICAxIGZpbGUgY2hhbmdlZCwgMiBp
-bnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KPiANCj4gLS0tIGxpbnV4LW5leHQtMjAyMDEy
-MDgub3JpZy9kcml2ZXJzL3VzYi9jZG5zMy9ob3N0LWV4cG9ydC5oDQo+ICsrKyBsaW51eC1uZXh0
-LTIwMjAxMjA4L2RyaXZlcnMvdXNiL2NkbnMzL2hvc3QtZXhwb3J0LmgNCj4gQEAgLTksMTAgKzks
-MTAgQEANCj4gICNpZm5kZWYgX19MSU5VWF9DRE5TM19IT1NUX0VYUE9SVA0KPiAgI2RlZmluZSBf
-X0xJTlVYX0NETlMzX0hPU1RfRVhQT1JUDQo+IA0KPiAtI2lmIElTX0VOQUJMRUQoQ09ORklHX1VT
-Ql9DRE5TX0hPU1QpDQo+IC0NCj4gIHN0cnVjdCB1c2JfaGNkOw0KPiANCj4gKyNpZiBJU19FTkFC
-TEVEKENPTkZJR19VU0JfQ0ROU19IT1NUKQ0KPiArDQo+ICBpbnQgY2Ruc19ob3N0X2luaXQoc3Ry
-dWN0IGNkbnMgKmNkbnMpOw0KPiAgaW50IHhoY2lfY2RuczNfc3VzcGVuZF9xdWlyayhzdHJ1Y3Qg
-dXNiX2hjZCAqaGNkKTsNCj4gDQo=
+From: Zqiang <qiang.zhang@windriver.com>
+
+When printer driver be load, the printer_func_bind function be called, in
+this function, the interface descriptor be allocated memory, if after that,
+the error occurred, the interface descriptor memory need to be free.
+
+Signed-off-by: Zqiang <qiang.zhang@windriver.com>
+---
+ drivers/usb/gadget/function/f_printer.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
+index 64a4112068fc..2f1eb2e81d30 100644
+--- a/drivers/usb/gadget/function/f_printer.c
++++ b/drivers/usb/gadget/function/f_printer.c
+@@ -1162,6 +1162,7 @@ static int printer_func_bind(struct usb_configuration *c,
+ 		printer_req_free(dev->in_ep, req);
+ 	}
+ 
++	usb_free_all_descriptors(f);
+ 	return ret;
+ 
+ }
+-- 
+2.17.1
+
