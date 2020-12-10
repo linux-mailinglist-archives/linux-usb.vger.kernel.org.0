@@ -2,99 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D0F2D514E
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 04:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A10622D52C3
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 05:26:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729464AbgLJDZe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 22:25:34 -0500
-Received: from mail-oo1-f66.google.com ([209.85.161.66]:36312 "EHLO
-        mail-oo1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729002AbgLJDZb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 22:25:31 -0500
-Received: by mail-oo1-f66.google.com with SMTP id j8so958347oon.3;
-        Wed, 09 Dec 2020 19:25:15 -0800 (PST)
+        id S1729009AbgLJEYO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 23:24:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52302 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726645AbgLJEYO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 23:24:14 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F40AC0613CF;
+        Wed,  9 Dec 2020 20:23:34 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id 4so2128241plk.5;
+        Wed, 09 Dec 2020 20:23:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XNHPz0YAoN0UuSkSu06R7wbjCuX1P69SVLGZfK7SmBw=;
+        b=dqHBs+bUn+swPA3aSuJh+fZuzU4Az3QVxSN3e1DFUPjKsC9YkIYEwO5lW0zWW7px1P
+         SpqbeNHxU8VmQkYBNQjbJNdMWTbS9ngCdesEetAdOyaOFQstf2ZcDk/vxy64DkuRV77O
+         CY5DB1kFynjtmePeI8yiHlDMx9/iJnENYYvCc1+9R6xyclmjb11NDHF6J3wtwmxObAil
+         lqunI0hsiyEA5jTH6BSsyohsI0H/XCk3JLUGjlgjnkxbGKkTri5a4B0Km3xOc3RCVew1
+         6ifuWrBDMOsJTJVsT8YG4+rozqF7rje0woVilvH20GG3UuXL+tzx8WtJZJwM+d8coMuL
+         GmEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=SGHystu8KEcuTA0RNExv/VnJoWPktKLvdV3bpnziI/o=;
-        b=fD0RQJop7KquIVS6OTt4/Y/vF4VBO2sOE5+TuF4qWHh/9huRsOsM1Bjb5YI63Fzj9B
-         A95sGEu1XiHzqZfoW5XgrsJnmWz+XlM3CeFGolcQFR1Pkxgq1w2BGNuYVCMfy+Hy5K+2
-         ehzAbYwn+Sojxv+JVXtZOpLs/2NmsPuW6POFOWFo/EiBF5G899yjMs7Ff1zYvH8rPm1b
-         EXplGoz9wgU/O4NJfRBqbB2Ly+MYpH0Ue+92M7WlBGLEAO+2CDjHKEazGyJe7a3G6JPp
-         3f9qWOxo3hyfikVq622rl1SPpeklmKA46zmzq/PgBZswX3d2EW5Y0LE+viheDyJxWCAF
-         KUdQ==
-X-Gm-Message-State: AOAM530WViBjaImgG3wMurajsSsIXcpgEwXN4mBuUvSNPq1uQ3c7lUJn
-        Wz0jeLV6mIbseP/skQbEYA==
-X-Google-Smtp-Source: ABdhPJxVr0iv7i61NhYxL1VKmCWErqvhvd6h7QtNaiu4n9B+aJ0EfyOf4EsAk/DaMrnShrdMqign7w==
-X-Received: by 2002:a4a:6b4d:: with SMTP id h13mr4541165oof.67.1607570690575;
-        Wed, 09 Dec 2020 19:24:50 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id q18sm749828ood.35.2020.12.09.19.24.48
+        bh=XNHPz0YAoN0UuSkSu06R7wbjCuX1P69SVLGZfK7SmBw=;
+        b=ozCZr7Lu9AA046gWyGT6U+APa2Jcl1FRPfsdc5JJkc8Z9cjwItDyV3TA80Sq5Qu4zf
+         RKMOCMpT6U0YKuQcuc7+cKJRSuiQ1DW4tRtevdIc6WJTWOfarEDojw8AJCtWaUJFpJRl
+         OIHCEl+Y1Im8oWfXrQO4sYo+syAlv2Qj2mjosqWVqm2AS0gYKeN1Q2Ku+lS3/7XzOI+R
+         cdcpvjACRS1mmN4GF2GI4yZUBcGuIhX9i4IvnNI2shzbtcgmWqvQlIygkCV3FBlTvq8M
+         FrbTgqVZ7yVz58oICc4pra8XlgT5k0WNC9+MxGZI9gPTli9D8O809WBhy2i/jVUueoe2
+         Hkkg==
+X-Gm-Message-State: AOAM533qWUiGWzDrTR1vxx5GqXS2R5DZBYSCIg9QkuxovzsmmUrE4ouc
+        gSz/FsxuHoed3j7rryVjVDMjYxXMwKk=
+X-Google-Smtp-Source: ABdhPJy+DAc7efiMhm1rt0hmJdImDLdOU1fhoQkPtkkWBYjQIrU0KffJfmkgVq4a00z1MkMfOgshCw==
+X-Received: by 2002:a17:902:6ac8:b029:da:d645:ab58 with SMTP id i8-20020a1709026ac8b02900dad645ab58mr5118182plt.25.1607574213457;
+        Wed, 09 Dec 2020 20:23:33 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:a6ae:11ff:fe11:fcc3])
+        by smtp.gmail.com with ESMTPSA id x1sm4568799pfj.95.2020.12.09.20.23.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Dec 2020 19:24:49 -0800 (PST)
-Received: (nullmailer pid 1591441 invoked by uid 1000);
-        Thu, 10 Dec 2020 03:24:48 -0000
-Date:   Wed, 9 Dec 2020 21:24:48 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     linux-snps-arc@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-mips@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Gross <agross@kernel.org>, Roger Quadros <rogerq@ti.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-usb@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        devicetree@vger.kernel.org,
-        Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v5 12/19] dt-bindings: usb: dwc3: Add synopsys, dwc3
- compatible string
-Message-ID: <20201210032448.GA1591395@robh.at.kernel.org>
-References: <20201205152427.29537-1-Sergey.Semin@baikalelectronics.ru>
- <20201205152427.29537-13-Sergey.Semin@baikalelectronics.ru>
+        Wed, 09 Dec 2020 20:23:32 -0800 (PST)
+Date:   Wed, 9 Dec 2020 20:23:29 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     syzbot <syzbot+150f793ac5bc18eee150@syzkaller.appspotmail.com>
+Cc:     eli.billauer@gmail.com, gregkh@linuxfoundation.org,
+        gustavoars@kernel.org, ingrassia@epigenesys.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com, vulab@iscas.ac.cn
+Subject: Re: WARNING in cm109_input_ev/usb_submit_urb
+Message-ID: <X9GiwQsABTa/zC/t@google.com>
+References: <000000000000f6530105b48b2816@google.com>
+ <000000000000a023c905b588314b@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201205152427.29537-13-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <000000000000a023c905b588314b@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 05 Dec 2020 18:24:19 +0300, Serge Semin wrote:
-> The DWC USB3 driver and some DTS files like Exynos 5250, Keystone k2e, etc
-> expects the DWC USB3 DT node to have the compatible string with the
-> "synopsys" vendor prefix. Let's add the corresponding compatible string to
-> the controller DT schema, but mark it as deprecated seeing the Synopsys,
-> Inc. is presented with just "snps" vendor prefix.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> Changelog v2:
-> - Drop quotes from around the compat string constant.
-> 
-> Changelog v4:
-> - Get the patch back, since we can't discard the deprecated prefix from the
->   driver.
-> ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-
-Reviewed-by: Rob Herring <robh@kernel.org>
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git f6d088b4efe9636b0c5144e8ef36d785214e62cd
