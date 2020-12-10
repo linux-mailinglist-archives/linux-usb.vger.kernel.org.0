@@ -2,171 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 234032D5CD7
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 15:05:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3B12D5ED4
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 16:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389829AbgLJOEB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Dec 2020 09:04:01 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:36641 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728591AbgLJODw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 09:03:52 -0500
-Received: by mail-il1-f197.google.com with SMTP id r3so4482169ila.3
-        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 06:03:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=dCHnS+IGmE05QjPXrUbbLAFiydDVaiZOQybW0UvsNF8=;
-        b=XAygBxuxk2mx1H0kbWTyh7SxUsmkTmfB9SEZmLSiQ01QoK7rJPPyAHriUHkmlhjqFt
-         uKqdpjLa+p/8CAZVPuqd2J1ODD7t/fXJif24rZbG6ZikFWTqFd/h0IyNSpbT8WaWoxof
-         Q7N039tAP9hk5aKmjbRRpaCN/gwgUuLfEMd7SwVtW0SiNXb91eRpqhc4MnuWkKa0AYYZ
-         yBLDfcl4voyMQWQvTmLukmVbA3N3iB6HlSbDaVSSLKuD78Cda0DsSsZHxtXFWKMG/De3
-         36yd2htzKbar3z8APbPtu+KgbXMkL/R64yIrXe/MtE+8o/gJV7oUZSZexRk3k61uXiI0
-         PVvw==
-X-Gm-Message-State: AOAM533MaafQM7ytIrD9oPWiXP46kF1ZsnWHCjpTL6hXxEHg7xBZ9iGX
-        ze/CM+JiFb2ZBTnvzObqQtJIKOzk1QAqOz6cm7pPqs+E2kjL
-X-Google-Smtp-Source: ABdhPJzNhswceQ5PwLWQ9ylc/ytFQpeq987bYUGnEeJ6q1oS7R5eKN3G8ahRRjFS9lFelXt+dL91xjXPU/7vxgtm3PWnXeJNVVeU
+        id S1729076AbgLJPAd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Dec 2020 10:00:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33258 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729816AbgLJPA3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Dec 2020 10:00:29 -0500
+Date:   Thu, 10 Dec 2020 16:01:03 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1607612389;
+        bh=PIj9FhhUvvSZu0xzJxHT6c/gR8kNiKhw5BAjOPiDy8c=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c+urhOw5zVITPob6166OQJDTbM4feF7LQoaKdyvkUWUWZQNxyqYQoal6EfsM1Y3Vk
+         g9c7dlsKnjViwFRVSOcz/v2eMBjKQK+CeRDrZRBOPrM69254Ttwc3xnnQBpMJ6qfrX
+         eElBMZ4Lbu2D6X5hPC77z/EHK3wboN659P5hKjU4=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Cc:     min.guo@mediatek.com, Bin Liu <b-liu@ti.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        chunfeng.yun@mediatek.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3] usb: musb: remove unused variable 'devctl'
+Message-ID: <X9I4L3E9EJlcPMEu@kroah.com>
+References: <20201124084955.30270-1-min.guo@mediatek.com>
+ <c2f3f643-8514-5c4a-dd52-7abc8a6dc501@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2110:: with SMTP id x16mr7176336iox.127.1607608991438;
- Thu, 10 Dec 2020 06:03:11 -0800 (PST)
-Date:   Thu, 10 Dec 2020 06:03:11 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000df5ecf05b61ca23b@google.com>
-Subject: possible deadlock in zd_chip_disable_rxtx
-From:   syzbot <syzbot+0ec3d1a6cf1fbe79c153@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, davem@davemloft.net, dsd@gentoo.org,
-        kuba@kernel.org, kune@deine-taler.de, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c2f3f643-8514-5c4a-dd52-7abc8a6dc501@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Tue, Nov 24, 2020 at 12:13:42PM +0300, Sergei Shtylyov wrote:
+> Hello!
+> 
+> On 24.11.2020 11:49, min.guo@mediatek.com wrote:
+> 
+> > From: Min Guo <min.guo@mediatek.com>
+> > 
+> > Remove unused 'devctl' variable to fix compile warnings:
+> > 
+> >      drivers/usb/musb/musbhsdma.c: In function 'dma_controller_irq':
+> >      drivers/usb/musb/musbhsdma.c:324:8: warning: variable 'devctl' set
+> >      but not used [-Wunused-but-set-variable]
+> > 
+> > Signed-off-by: Min Guo <min.guo@mediatek.com>
+> > ---
+> > changes in v3
+> > suggested by Greg Kroah-Hartman:
+> > Add a comment.
+> > 
+> > changes in v2
+> > suggested by Alan Stern:
+> > Add void before musb_read to indicate that the register MUSB_DEVCTL
+> > was intended to be read and discarded.
+> > ---
+> >   drivers/usb/musb/musbhsdma.c | 8 +++++---
+> >   1 file changed, 5 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/usb/musb/musbhsdma.c b/drivers/usb/musb/musbhsdma.c
+> > index 0aacfc8be5a1..2a345b4ad015 100644
+> > --- a/drivers/usb/musb/musbhsdma.c
+> > +++ b/drivers/usb/musb/musbhsdma.c
+> [...]
+> > @@ -336,7 +334,11 @@ irqreturn_t dma_controller_irq(int irq, void *private_data)
+> >   						< musb_channel->len) ?
+> >   					"=> reconfig 0" : "=> complete");
+> > -				devctl = musb_readb(mbase, MUSB_DEVCTL);
+> > +				/*
+> > +				 * Some hardware may need to read the
+> > +				 * MUSB_DEVCTL register once to take effect.
+> > +				 */
+> > +				(void)musb_readb(mbase, MUSB_DEVCTL);
+> 
+>    Hm, forcibly reading DevCtl in the DMA driver... sounds quite
+> nonsensically. Lemme take a look...
 
-syzbot found the following issue on:
+What happened to your look?
 
-HEAD commit:    8010622c USB: UAS: introduce a quirk to set no_write_same
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=131e6adf500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d24ee9ecd7ce968e
-dashboard link: https://syzkaller.appspot.com/bug?extid=0ec3d1a6cf1fbe79c153
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13d7246b500000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=172c240f500000
+thanks,
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0ec3d1a6cf1fbe79c153@syzkaller.appspotmail.com
-
-usb 1-1: reset high-speed USB device number 2 using dummy_hcd
-usb 1-1: device descriptor read/64, error -71
-usb 1-1: Using ep0 maxpacket: 32
-usb 1-1: unable to get BOS descriptor or descriptor too short
-zd1211rw 1-1:5.118: phy1
-zd1211rw 1-1:5.114: error ioread32(CR_REG1): -11
-============================================
-WARNING: possible recursive locking detected
-5.10.0-rc7-syzkaller #0 Not tainted
---------------------------------------------
-kworker/1:2/2618 is trying to acquire lock:
-ffff888102cbdd10 (&chip->mutex){+.+.}-{3:3}, at: zd_chip_disable_rxtx+0x1c/0x40 drivers/net/wireless/zydas/zd1211rw/zd_chip.c:1465
-
-but task is already holding lock:
-ffff888101d9dd10 (&chip->mutex){+.+.}-{3:3}, at: pre_reset+0x217/0x290 drivers/net/wireless/zydas/zd1211rw/zd_usb.c:1504
-
-other info that might help us debug this:
- Possible unsafe locking scenario:
-
-       CPU0
-       ----
-  lock(&chip->mutex);
-  lock(&chip->mutex);
-
- *** DEADLOCK ***
-
- May be due to missing lock nesting notation
-
-6 locks held by kworker/1:2/2618:
- #0: ffff888103bff538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888103bff538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic64_set include/asm-generic/atomic-instrumented.h:856 [inline]
- #0: ffff888103bff538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/asm-generic/atomic-long.h:41 [inline]
- #0: ffff888103bff538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:616 [inline]
- #0: ffff888103bff538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:643 [inline]
- #0: ffff888103bff538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x821/0x1520 kernel/workqueue.c:2243
- #1: ffffc900001c7da8 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x854/0x1520 kernel/workqueue.c:2247
- #2: ffff88810802a218 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:731 [inline]
- #2: ffff88810802a218 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c5/0x42d0 drivers/usb/core/hub.c:5537
- #3: ffff8881013cd218 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:731 [inline]
- #3: ffff8881013cd218 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:887
- #4: ffff88810ed8c1a8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:731 [inline]
- #4: ffff88810ed8c1a8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:887
- #5: ffff888101d9dd10 (&chip->mutex){+.+.}-{3:3}, at: pre_reset+0x217/0x290 drivers/net/wireless/zydas/zd1211rw/zd_usb.c:1504
-
-stack backtrace:
-CPU: 1 PID: 2618 Comm: kworker/1:2 Not tainted 5.10.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x107/0x163 lib/dump_stack.c:118
- print_deadlock_bug kernel/locking/lockdep.c:2761 [inline]
- check_deadlock kernel/locking/lockdep.c:2804 [inline]
- validate_chain kernel/locking/lockdep.c:3595 [inline]
- __lock_acquire.cold+0x15e/0x3b0 kernel/locking/lockdep.c:4832
- lock_acquire kernel/locking/lockdep.c:5437 [inline]
- lock_acquire+0x288/0x700 kernel/locking/lockdep.c:5402
- __mutex_lock_common kernel/locking/mutex.c:956 [inline]
- __mutex_lock+0x134/0x10a0 kernel/locking/mutex.c:1103
- zd_chip_disable_rxtx+0x1c/0x40 drivers/net/wireless/zydas/zd1211rw/zd_chip.c:1465
- zd_op_stop+0x60/0x190 drivers/net/wireless/zydas/zd1211rw/zd_mac.c:343
- zd_usb_stop drivers/net/wireless/zydas/zd1211rw/zd_usb.c:1479 [inline]
- pre_reset+0x19d/0x290 drivers/net/wireless/zydas/zd1211rw/zd_usb.c:1502
- usb_reset_device+0x379/0x9a0 drivers/usb/core/hub.c:5959
- probe+0x10f/0x590 drivers/net/wireless/zydas/zd1211rw/zd_usb.c:1371
- usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
- really_probe+0x291/0xde0 drivers/base/dd.c:554
- driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
- __device_attach+0x228/0x4a0 drivers/base/dd.c:912
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0xbb2/0x1ce0 drivers/base/core.c:2936
- usb_set_configuration+0x113c/0x1910 drivers/usb/core/message.c:2164
- usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
- usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
- really_probe+0x291/0xde0 drivers/base/dd.c:554
- driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
- __device_attach+0x228/0x4a0 drivers/base/dd.c:912
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0xbb2/0x1ce0 drivers/base/core.c:2936
- usb_new_device.cold+0x71d/0xfe9 drivers/usb/core/hub.c:2555
- hub_port_connect drivers/usb/core/hub.c:5223 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5363 [inline]
- port_event drivers/usb/core/hub.c:5509 [inline]
- hub_event+0x2348/0x42d0 drivers/usb/core/hub.c:5591
- process_one_work+0x933/0x1520 kernel/workqueue.c:2272
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2418
- kthread+0x38c/0x460 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
-zd1211rw 1-1:5.118: error ioread32(CR_REG1): -11
-usb 1-1: reset high-speed USB device number 2 using dummy_hcd
-usb 1-1: Using ep0 maxpacket: 32
-usb 1-1: unable to get BOS descriptor or descriptor too short
-ieee80211 phy2: Selected rate control algorithm 'minstrel_ht'
-zd1211rw 1-1:5.57: phy2
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+greg k-h
