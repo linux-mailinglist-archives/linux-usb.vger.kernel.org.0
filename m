@@ -2,121 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD4F2D63EF
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 18:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E67142D65B4
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 19:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392894AbgLJRqo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Dec 2020 12:46:44 -0500
-Received: from gproxy7-pub.mail.unifiedlayer.com ([70.40.196.235]:57153 "EHLO
-        gproxy7-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2392872AbgLJRqa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 12:46:30 -0500
-Received: from cmgw10.unifiedlayer.com (unknown [10.9.0.10])
-        by gproxy7.mail.unifiedlayer.com (Postfix) with ESMTP id 0D1DF215D21
-        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 10:45:50 -0700 (MST)
-Received: from bh-25.webhostbox.net ([208.91.199.152])
-        by cmsmtp with ESMTP
-        id nQ0jk2rtVDlydnQ0jkoc7t; Thu, 10 Dec 2020 10:45:49 -0700
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.3 cv=A9VCwZeG c=1 sm=1 tr=0
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
- a=zTNgK-yGK50A:10:nop_rcvd_month_year
- a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=1XWaLZrsAAAA:8
- a=_jlGtV7tAAAA:8 a=QyXUC8HyAAAA:8 a=ag1SF4gXAAAA:8 a=h6dpbDeaCvH9cfnFbJwA:9
- a=CjuIK1q_8ugA:10:nop_charset_2 a=nlm17XC03S6CtCLSeiRr:22
- a=Yupwre4RP9_Eg_Bd0iYG:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=mSi37/KpQzHqxnLEaea2i61ySgFWJyTbS2I2jXpx2RM=; b=dyB7ImVu+uo/rGuqR0DETKUOZ9
-        sJ5HGIBXYbcJfkiGfWBDDnKtrlzKyLaawoVcKUKDEl6pPdwwez6COUrz+8QOCAawseoihM7GSyocD
-        kNYcSAq7RxZnn4ZI0B1S5fOGn6xacsJNzvXuGMbYG3sRUoD7U323sttv0TjgbXY3WHyqWN37Ct+qm
-        AVTEYQkYsasYMmwr6fW1CKz/Ets6aDz0VIDSSy9gp4UAMco27EL66V3Hb0LRfyGKgeqZNQORhd68G
-        CNjQWcceOSJxUNBrQDJxk4jZ/8mYSG7SUsM7hgoEJzgyLxQ5mxeYbv8mRxoKcpeE+VtDY5M5i+O/i
-        Wyrk8f0w==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:60464 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <linux@roeck-us.net>)
-        id 1knQ0j-001TFC-5D; Thu, 10 Dec 2020 17:45:49 +0000
-Date:   Thu, 10 Dec 2020 09:45:48 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Kyle Tso <kyletso@google.com>,
-        Will McVicker <willmcvicker@google.com>
+        id S2393272AbgLJS6Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Dec 2020 13:58:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393266AbgLJS6H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 13:58:07 -0500
+Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F01BC0613CF
+        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 10:57:25 -0800 (PST)
+Received: by mail-vk1-xa41.google.com with SMTP id w190so1471872vkg.13
+        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 10:57:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=89ETQBahwfQbokMIPaPBbY34+Gcb1bOyU5ZoPKDVcLY=;
+        b=MttlDK1+8tbWkGyYEQUVRuwpKxeMMntNkgsLXLbOcY+cdy+6ftnGwV9DuuDfP92w1m
+         W2xThlhrF9jI0resoHnnvlQvfEOewwuXYcEYKD3Ig7aUENL+j4x5l/WkOo+tDi1Ym1xL
+         f3l37CxypmgAyMMALCHmSz5YZMXYUA/hjwrNGXys3FJdAVidAJaB7NXAQJW20Q0lI+x6
+         E4AcUytF1V7IImwstqZrX19JL8KESW37HGFylqMn7K44e4T7iaguzWxjqJwe+XNaBt2S
+         WU7gDRexrqIts8sTb841cdCF4YGIoItGFacqB5W2WO1A4xUIeCvlbAZetBMnM+QGYcr4
+         QMHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=89ETQBahwfQbokMIPaPBbY34+Gcb1bOyU5ZoPKDVcLY=;
+        b=YID537XeSxIwxiZG8OEZvMjGk1f+W5tTs2gj3QA4vwH21EJkogQs3EqMgiqxeWoE89
+         9VNGprtTGrTe4UnQpD9pxWvNm2j+nmtZJ92ocktroPeRqQRaVLU+xZnHhAfKFZZ1R98l
+         6uF8+n9Ij43+MPORcj24mYyDkUsMmL7b6g+VMGXw3w/2vBu9CZ1fzr60qEyelMO8ugrw
+         GmOXJNp/lkzpoN0ZBAHsYKE1HID3ZaLTofg7gk6rfXeOaWpXOG88nc9bOIaVbHQSVJVp
+         fiQea3jtcAg5k91PuCVAOcfUkGXmhzRNN2gbVHVmIFWxSRHpzkDS3I8PMBXAJLRfBTWd
+         8TAA==
+X-Gm-Message-State: AOAM533K6L1prfDoSgZRxs5nRSGNCXBTsO1Uyql34shqFf6wrLVfaCs1
+        wCDLvBJhTF+8htrdg7KfmziM0G0MFA7NdTdF5Vy6Ow==
+X-Google-Smtp-Source: ABdhPJxyg/RRfgpJFHX+2N5KdkecP634kvYKPLS9rvWdmoEMyKhfZBfFjzAhCxAbOlAFErwUbk1ZD0ve9Ldb+V69IQw=
+X-Received: by 2002:a1f:aed2:: with SMTP id x201mr10850305vke.22.1607626644059;
+ Thu, 10 Dec 2020 10:57:24 -0800 (PST)
+MIME-Version: 1.0
+References: <20201210160521.3417426-1-gregkh@linuxfoundation.org>
+ <20201210160521.3417426-6-gregkh@linuxfoundation.org> <20201210174548.GF107395@roeck-us.net>
+In-Reply-To: <20201210174548.GF107395@roeck-us.net>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Thu, 10 Dec 2020 10:56:48 -0800
+Message-ID: <CAPTae5JBj1PgZw7=00ZPuT8OZP7=SNSAcPBtaiQ_LyxZm7UhNw@mail.gmail.com>
 Subject: Re: [PATCH 5/5] USB: typec: tcpci: Add Bleed discharge to
  POWER_CONTROL definition
-Message-ID: <20201210174548.GF107395@roeck-us.net>
-References: <20201210160521.3417426-1-gregkh@linuxfoundation.org>
- <20201210160521.3417426-6-gregkh@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201210160521.3417426-6-gregkh@linuxfoundation.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1knQ0j-001TFC-5D
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:60464
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 34
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        USB <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kyle Tso <kyletso@google.com>,
+        Will McVicker <willmcvicker@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 05:05:21PM +0100, Greg Kroah-Hartman wrote:
-> From: Badhri Jagan Sridharan <badhri@google.com>
-> 
-> "Table 4-19. POWER_CONTROL Register Definition" from tcpci spec
-> defines BIT(3) as the control bit for bleed discharge.
-> 
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Kyle Tso <kyletso@google.com>
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> Signed-off-by: Will McVicker <willmcvicker@google.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Hi Guenter,
 
-Just wondering - is that going to be used in a follow-up commit ?
+Yes I will send a follow up patch to update tcpci_maxim.c.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Thanks,
+Badhri
 
-Guenter
 
-> ---
->  drivers/usb/typec/tcpm/tcpci.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
-> index 116a69c85e38..c3c7d07d9b4e 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.h
-> +++ b/drivers/usb/typec/tcpm/tcpci.h
-> @@ -72,6 +72,7 @@
->  
->  #define TCPC_POWER_CTRL			0x1c
->  #define TCPC_POWER_CTRL_VCONN_ENABLE	BIT(0)
-> +#define TCPC_POWER_CTRL_BLEED_DISCHARGE	BIT(3)
->  #define TCPC_POWER_CTRL_AUTO_DISCHARGE	BIT(4)
->  #define TCPC_FAST_ROLE_SWAP_EN		BIT(7)
->  
-> -- 
-> 2.29.2
-> 
+On Thu, Dec 10, 2020 at 9:45 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Thu, Dec 10, 2020 at 05:05:21PM +0100, Greg Kroah-Hartman wrote:
+> > From: Badhri Jagan Sridharan <badhri@google.com>
+> >
+> > "Table 4-19. POWER_CONTROL Register Definition" from tcpci spec
+> > defines BIT(3) as the control bit for bleed discharge.
+> >
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Cc: Kyle Tso <kyletso@google.com>
+> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> > Signed-off-by: Will McVicker <willmcvicker@google.com>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>
+> Just wondering - is that going to be used in a follow-up commit ?
+>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>
+> Guenter
+>
+> > ---
+> >  drivers/usb/typec/tcpm/tcpci.h | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
+> > index 116a69c85e38..c3c7d07d9b4e 100644
+> > --- a/drivers/usb/typec/tcpm/tcpci.h
+> > +++ b/drivers/usb/typec/tcpm/tcpci.h
+> > @@ -72,6 +72,7 @@
+> >
+> >  #define TCPC_POWER_CTRL                      0x1c
+> >  #define TCPC_POWER_CTRL_VCONN_ENABLE BIT(0)
+> > +#define TCPC_POWER_CTRL_BLEED_DISCHARGE      BIT(3)
+> >  #define TCPC_POWER_CTRL_AUTO_DISCHARGE       BIT(4)
+> >  #define TCPC_FAST_ROLE_SWAP_EN               BIT(7)
+> >
+> > --
+> > 2.29.2
+> >
