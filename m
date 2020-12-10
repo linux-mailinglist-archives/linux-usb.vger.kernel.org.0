@@ -2,14 +2,14 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C97122D5665
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 10:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5DD2D5650
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 10:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732154AbgLJJN4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Dec 2020 04:13:56 -0500
-Received: from mx.chip.baikal.ru ([94.125.187.42]:36708 "EHLO
+        id S2388577AbgLJJMX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Dec 2020 04:12:23 -0500
+Received: from ns2.baikalelectronics.ru ([94.125.187.42]:36726 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728215AbgLJJMS (ORCPT
+        by vger.kernel.org with ESMTP id S1731905AbgLJJMS (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 04:12:18 -0500
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Mathias Nyman <mathias.nyman@intel.com>,
@@ -17,7 +17,9 @@ To:     Mathias Nyman <mathias.nyman@intel.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
@@ -26,8 +28,6 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Manu Gautam <mgautam@codeaurora.org>,
         Roger Quadros <rogerq@ti.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
@@ -36,11 +36,10 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         <linux-snps-arc@lists.infradead.org>, <linux-mips@vger.kernel.org>,
         <linuxppc-dev@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 08/19] dt-bindings: usb: xhci: Add Broadcom STB v2 compatible device
-Date:   Thu, 10 Dec 2020 12:09:32 +0300
-Message-ID: <20201210090944.16283-9-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v6 09/19] dt-bindings: usb: renesas-xhci: Refer to the usb-xhci.yaml file
+Date:   Thu, 10 Dec 2020 12:09:33 +0300
+Message-ID: <20201210090944.16283-10-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20201210090944.16283-1-Sergey.Semin@baikalelectronics.ru>
 References: <20201210090944.16283-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -51,32 +50,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-For some reason the "brcm,xhci-brcm-v2" compatible string has been missing
-in the original bindings file. Add it to the Generic xHCI Controllers DT
-schema since the controller driver expects it to be supported.
+With minor peculiarities (like uploading some vendor-specific firmware)
+these are just Generic xHCI controllers fully compatible with its
+properties. Make sure the Renesas USB xHCI DT nodes are also validated
+against the Generic xHCI DT schema.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- Documentation/devicetree/bindings/usb/generic-xhci.yaml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/generic-xhci.yaml b/Documentation/devicetree/bindings/usb/generic-xhci.yaml
-index 1ea1d49a8175..23d73df96ea3 100644
---- a/Documentation/devicetree/bindings/usb/generic-xhci.yaml
-+++ b/Documentation/devicetree/bindings/usb/generic-xhci.yaml
-@@ -26,7 +26,9 @@ properties:
-               - marvell,armada-8k-xhci
-           - const: generic-xhci
-       - description: Broadcom STB SoCs with xHCI
--        const: brcm,bcm7445-xhci
-+        enum:
-+          - brcm,xhci-brcm-v2
-+          - brcm,bcm7445-xhci
-       - description: Generic xHCI device
-         const: xhci-platform
-         deprecated: true
+diff --git a/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml b/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
+index 0f078bd0a3e5..7e5ed196b52c 100644
+--- a/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
++++ b/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
+@@ -11,7 +11,7 @@ maintainers:
+   - Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+ 
+ allOf:
+-  - $ref: "usb-hcd.yaml"
++  - $ref: "usb-xhci.yaml"
+ 
+ properties:
+   compatible:
+@@ -69,7 +69,7 @@ required:
+   - power-domains
+   - resets
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
 -- 
 2.29.2
 
