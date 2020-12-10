@@ -2,90 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3B12D5ED4
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 16:01:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 734EF2D5F34
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 16:13:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729076AbgLJPAd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Dec 2020 10:00:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33258 "EHLO mail.kernel.org"
+        id S1732328AbgLJPMV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Dec 2020 10:12:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38348 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729816AbgLJPA3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Dec 2020 10:00:29 -0500
-Date:   Thu, 10 Dec 2020 16:01:03 +0100
+        id S2389313AbgLJPMO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Dec 2020 10:12:14 -0500
+Date:   Thu, 10 Dec 2020 16:12:47 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1607612389;
-        bh=PIj9FhhUvvSZu0xzJxHT6c/gR8kNiKhw5BAjOPiDy8c=;
+        s=korg; t=1607613093;
+        bh=8LnWVA9tBVBdECrQ3EZYa9gCyEM1NCSqT1EEqJu33xI=;
         h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c+urhOw5zVITPob6166OQJDTbM4feF7LQoaKdyvkUWUWZQNxyqYQoal6EfsM1Y3Vk
-         g9c7dlsKnjViwFRVSOcz/v2eMBjKQK+CeRDrZRBOPrM69254Ttwc3xnnQBpMJ6qfrX
-         eElBMZ4Lbu2D6X5hPC77z/EHK3wboN659P5hKjU4=
+        b=tzznl9VwtMU11kfBVsYPiq/XCWLCkOt7wdNqvWMDAV2GjBIB6aLQSxFw5lteXzToP
+         B4axthHsWP2XHwen8+en5RX6qzTalFAV61H72WIQyJdAQdfMF0L16SUSqixNJY2IeH
+         RvZ0aEq+D0rEoZLQE1MexoTHS6VBQFughLDFFkuA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     min.guo@mediatek.com, Bin Liu <b-liu@ti.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        chunfeng.yun@mediatek.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v3] usb: musb: remove unused variable 'devctl'
-Message-ID: <X9I4L3E9EJlcPMEu@kroah.com>
-References: <20201124084955.30270-1-min.guo@mediatek.com>
- <c2f3f643-8514-5c4a-dd52-7abc8a6dc501@gmail.com>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     Jack Pham <jackp@codeaurora.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "willmcvicker@google.com" <willmcvicker@google.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "taehyun.cho" <taehyun.cho@samsung.com>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH v2 4/5] USB: gadget: f_fs: add SuperSpeed Plus support
+Message-ID: <X9I672Sq/zj8cpzY@kroah.com>
+References: <20201127140559.381351-1-gregkh@linuxfoundation.org>
+ <20201127140559.381351-5-gregkh@linuxfoundation.org>
+ <20201130091259.GB31406@jackp-linux.qualcomm.com>
+ <20201201023149.GA11393@b29397-desktop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c2f3f643-8514-5c4a-dd52-7abc8a6dc501@gmail.com>
+In-Reply-To: <20201201023149.GA11393@b29397-desktop>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 24, 2020 at 12:13:42PM +0300, Sergei Shtylyov wrote:
-> Hello!
+On Tue, Dec 01, 2020 at 02:32:18AM +0000, Peter Chen wrote:
+> On 20-11-30 01:13:00, Jack Pham wrote:
+> > On Fri, Nov 27, 2020 at 03:05:58PM +0100, Greg Kroah-Hartman wrote:
+> > > From: "taehyun.cho" <taehyun.cho@samsung.com>
+> > > 
+> > > Setup the descriptors for SuperSpeed Plus for f_fs. This allows the
+> > > gadget to work properly without crashing at SuperSpeed rates.
+> > > 
+> > > Cc: Felipe Balbi <balbi@kernel.org>
+> > > Cc: stable <stable@vger.kernel.org>
+> > > Signed-off-by: taehyun.cho <taehyun.cho@samsung.com>
+> > > Signed-off-by: Will McVicker <willmcvicker@google.com>
+> > > Reviewed-by: Peter Chen <peter.chen@nxp.com>
+> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > ---
+> > >  drivers/usb/gadget/function/f_fs.c | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > > 
+> > > diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> > > index 046f770a76da..a34a7c96a1ab 100644
+> > > --- a/drivers/usb/gadget/function/f_fs.c
+> > > +++ b/drivers/usb/gadget/function/f_fs.c
+> > > @@ -1327,6 +1327,7 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code,
+> > >  		struct usb_endpoint_descriptor *desc;
+> > >  
+> > >  		switch (epfile->ffs->gadget->speed) {
+> > > +		case USB_SPEED_SUPER_PLUS:
+> > >  		case USB_SPEED_SUPER:
+> > >  			desc_idx = 2;
+> > >  			break;
+> > > @@ -3222,6 +3223,10 @@ static int _ffs_func_bind(struct usb_configuration *c,
+> > >  	func->function.os_desc_n =
+> > >  		c->cdev->use_os_string ? ffs->interfaces_count : 0;
+> > >  
+> > > +	if (likely(super)) {
+> > > +		func->function.ssp_descriptors =
+> > > +			usb_copy_descriptors(func->function.ss_descriptors);
+> > > +	}
+> > >  	/* And we're done */
+> > >  	ffs_event_add(ffs, FUNCTIONFS_BIND);
+> > >  	return 0;
+> > > -- 
+> > 
+> > Hi Greg,
+> > 
+> > FWIW I had sent a very similar patch[1] a while back (twice in fact)
+> > but got no response about it. Looks like Taehyun's patch already went
+> > through Google for this, I assume it must be working on their Android
+> > kernels so I've no problem with you or Felipe taking this instead.
+> > 
+> > Only one difference with my patch though is mine additionally clears the
+> > func->function.ssp_descriptors member to NULL upon ffs_func_unbind() as
+> > otherwise it could lead to a dangling reference in case the function is
+> > re-bound and userspace does not issue SS descriptors the next time.
+> > Realistically I don't think that's possible, except maybe when fuzzing?
+> > 
 > 
-> On 24.11.2020 11:49, min.guo@mediatek.com wrote:
-> 
-> > From: Min Guo <min.guo@mediatek.com>
-> > 
-> > Remove unused 'devctl' variable to fix compile warnings:
-> > 
-> >      drivers/usb/musb/musbhsdma.c: In function 'dma_controller_irq':
-> >      drivers/usb/musb/musbhsdma.c:324:8: warning: variable 'devctl' set
-> >      but not used [-Wunused-but-set-variable]
-> > 
-> > Signed-off-by: Min Guo <min.guo@mediatek.com>
-> > ---
-> > changes in v3
-> > suggested by Greg Kroah-Hartman:
-> > Add a comment.
-> > 
-> > changes in v2
-> > suggested by Alan Stern:
-> > Add void before musb_read to indicate that the register MUSB_DEVCTL
-> > was intended to be read and discarded.
-> > ---
-> >   drivers/usb/musb/musbhsdma.c | 8 +++++---
-> >   1 file changed, 5 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/usb/musb/musbhsdma.c b/drivers/usb/musb/musbhsdma.c
-> > index 0aacfc8be5a1..2a345b4ad015 100644
-> > --- a/drivers/usb/musb/musbhsdma.c
-> > +++ b/drivers/usb/musb/musbhsdma.c
-> [...]
-> > @@ -336,7 +334,11 @@ irqreturn_t dma_controller_irq(int irq, void *private_data)
-> >   						< musb_channel->len) ?
-> >   					"=> reconfig 0" : "=> complete");
-> > -				devctl = musb_readb(mbase, MUSB_DEVCTL);
-> > +				/*
-> > +				 * Some hardware may need to read the
-> > +				 * MUSB_DEVCTL register once to take effect.
-> > +				 */
-> > +				(void)musb_readb(mbase, MUSB_DEVCTL);
-> 
->    Hm, forcibly reading DevCtl in the DMA driver... sounds quite
-> nonsensically. Lemme take a look...
+> Yours is better, since there is no judgement for
+> func->function.ssp_descriptors at __ffs_func_bind_do_descs, without
+> clearing its value can't cause problem.
 
-What happened to your look?
-
-thanks,
+Ok, I've taken the older patch instead, thanks!
 
 greg k-h
