@@ -2,162 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57EE42D6621
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 20:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EBA62D6684
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 20:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393329AbgLJTMI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Dec 2020 14:12:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393317AbgLJTLp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 14:11:45 -0500
-Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9460C061793
-        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 11:11:04 -0800 (PST)
-Received: by mail-vs1-xe41.google.com with SMTP id x4so3446258vsp.7
-        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 11:11:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PSuDOGmQG6f3wX+35DW8ozqca1MRVBAGEu0JKzO/rWo=;
-        b=vlx65VSsqr1vs1yKD+xps0gOngTsHYXR3wg0PnZ9Cys3zdMWq5IcTAR/3dwyN0n4nP
-         zu5JSzj4UzESNahyLzsbCN4lxESUAX7/4EIPuhAGTD50pJs7ojEW81Ik+90Q6EsN/V3k
-         gZM2XxRmjtwyHCDOqT3FTDg7cBVIPL6V33fNnX79slISXK/NxlRrK2VeVyYPgA99uIG7
-         MNTLB1jRRmvbsC8LCAVMjKKkZoEAYKMyUOYCte/tPD7gpsqHJRNsn5Obz5DvyL1+TbMp
-         m5J6IJN/YWZGd8IVL8JZ4MkZXvo0S74HcfoqOJbU4k5rcAGjajh8bzsTNhjuLNpDutja
-         oq5Q==
+        id S2390469AbgLJTcH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Dec 2020 14:32:07 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:55699 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390231AbgLJO3x (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 09:29:53 -0500
+Received: by mail-il1-f200.google.com with SMTP id w10so4524722ila.22
+        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 06:29:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PSuDOGmQG6f3wX+35DW8ozqca1MRVBAGEu0JKzO/rWo=;
-        b=asxBdvQnlVhy5sJ3832gIRx2eWQeEPNh9f9MucWWxSFZC6dqQoq5DRGYb0eNxEOpw7
-         FPBUKr1m8CusTlgELrkCw7qFt//r1aTklJs1XwLO94sKDHHfR7vGZLr78gCbWZ4nYQee
-         8kVMt79M+6Pdm7TMGcOcgzUoltLx19YN/5WqOhVANKXrytUOHMSousVWDx/lSBWkN5ar
-         zKvcOEjVP69wXr4unWeWXFOcbpc23VvJSawYUFZvCIZDc2MDSQ38qg3nHk9AVQXp3E0W
-         kkPwnT8n57rLTvZHXXw/XumCD48YQBe0PJN4kTTjA5uyuTJqyTKqjROhcuwdusByY8TR
-         w9iw==
-X-Gm-Message-State: AOAM533kBTb7zsmi5s2+1mNWB06/0Cytf7ujHYwUJz5LWLxXa4lKZu3n
-        BX8WxCFIe+hl56mSTxH3H/kkvx7c9UkTjZ5uaQZD5A==
-X-Google-Smtp-Source: ABdhPJxZ5mg/prWG1u/QfCa0H4LhRt17sbOIPuNXgLo3zysTo4TYUpTWCHmKRIn9XrfG1H1lP4AEbIMpbJpSFQeaYRY=
-X-Received: by 2002:a67:b07:: with SMTP id 7mr9970482vsl.16.1607627463756;
- Thu, 10 Dec 2020 11:11:03 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=oLeHKVV0ChX4sKICE3cLVEmUP4AP2CVq6ON5n87Fsyo=;
+        b=i/JmfDDY5w//ptmqBLXQ/ymN5YJ1c55UomNd6cXapsMpHm6M/xQUcyMuvT5Dce3Iqf
+         5tWDP/bhoab4CdjG5Wz4bBkyTt3aOfdI2IQYY4VlGf6EpcZMhk3RW3hzz/HeNO3ffoVO
+         T29F2/tu3S9VYsCRCc7ID/2ORJ35FSt0Qjz7pV7xOCe0IfY+Toev79HTHaoTJziEs8eC
+         FZp0fbKcZ0C/QJl/8q3Qfzhy+XQXI2f+yDmVbYcpOZF8xhg0ZOrhdy2ysXPK9FslXAfZ
+         3vby4dNZGVcs5shgV4UfwtGvW8Xdqj+JFVrjAjA+LH46BAFGTKyCpe8YU2wWc8Je8yQh
+         jJPw==
+X-Gm-Message-State: AOAM532Wm+5KGQJRvLRBUocaZrXFyWTmwbRYqe9moFrGeaTPBn/hbleL
+        c5bq5wE0R77KuvfN+mdHXlb5IzP+t3J2tD5GWovelqgekAJb
+X-Google-Smtp-Source: ABdhPJy8+qBqHbQq5UwX0GnBwUzPEBkXmcIytguHfFEjM/rnkgEnu2uFKDtZQ5CO9eA8/BbNQX+xI9/W9yCf62/LuKwWy3L/Ujib
 MIME-Version: 1.0
-References: <20201210160521.3417426-1-gregkh@linuxfoundation.org>
- <20201210160521.3417426-2-gregkh@linuxfoundation.org> <20201210174236.GB107395@roeck-us.net>
-In-Reply-To: <20201210174236.GB107395@roeck-us.net>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Thu, 10 Dec 2020 11:10:27 -0800
-Message-ID: <CAPTae5+uHw7dHbhUze2WU_6mM8BPnF=rz6euZBZqv40=zyczhQ@mail.gmail.com>
-Subject: Re: [PATCH 1/5] USB: typec: tcpm: Prevent log overflow by removing
- old entries
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kyle Tso <kyletso@google.com>,
-        Will McVicker <willmcvicker@google.com>
+X-Received: by 2002:a92:d58a:: with SMTP id a10mr9312308iln.99.1607610552307;
+ Thu, 10 Dec 2020 06:29:12 -0800 (PST)
+Date:   Thu, 10 Dec 2020 06:29:12 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e858c005b61cffb1@google.com>
+Subject: KASAN: null-ptr-deref Read in ida_free
+From:   syzbot <syzbot+930c00d27e58b0d77fb9@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, laurent.pinchart@ideasonboard.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        sakari.ailus@linux.intel.com, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Guenter,
+Hello,
 
-While I agree with what you are saying, since the logbuffer does not
-have the intelligence to drop older entries where no issues were seen,
-logbuffer gets full pretty quickly with good instances and there is no
-space left to log the bad instance. Should wrapping this in a config
-option be a better way to go about this  ? When the config optioin is
-set, old entries will be dropped.
-Please let me know, I can update the patch and resend.
+syzbot found the following issue on:
 
-Thanks,
-Badhri
+HEAD commit:    8010622c USB: UAS: introduce a quirk to set no_write_same
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=16dbc923500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d24ee9ecd7ce968e
+dashboard link: https://syzkaller.appspot.com/bug?extid=930c00d27e58b0d77fb9
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+930c00d27e58b0d77fb9@syzkaller.appspotmail.com
+
+input: TeVii S662 as /devices/platform/dummy_hcd.3/usb4/4-1/rc/rc0/input610
+dvb-usb: schedule remote query interval to 250 msecs.
+dw2102: su3000_power_ctrl: 0, initialized 1
+dvb-usb: TeVii S662 successfully initialized and connected.
+usb 4-1: USB disconnect, device number 114
+==================================================================
+BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
+BUG: KASAN: null-ptr-deref in test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
+BUG: KASAN: null-ptr-deref in ida_free+0x186/0x2b0 lib/idr.c:510
+Read of size 8 at addr 0000000000000018 by task kworker/1:0/4637
+
+CPU: 1 PID: 4637 Comm: kworker/1:0 Not tainted 5.10.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x107/0x163 lib/dump_stack.c:118
+ __kasan_report mm/kasan/report.c:549 [inline]
+ kasan_report.cold+0x5/0x37 mm/kasan/report.c:562
+ check_memory_region_inline mm/kasan/generic.c:186 [inline]
+ check_memory_region+0x13d/0x180 mm/kasan/generic.c:192
+ instrument_atomic_read include/linux/instrumented.h:71 [inline]
+ test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
+ ida_free+0x186/0x2b0 lib/idr.c:510
+ __media_device_unregister_entity+0x70/0x300 drivers/media/mc/mc-device.c:586
+ media_device_unregister_entity+0x49/0x70 drivers/media/mc/mc-device.c:689
+ dvb_media_device_free+0x1d5/0x620 drivers/media/dvb-core/dvbdev.c:226
+ dvb_remove_device.part.0+0x9c/0x260 drivers/media/dvb-core/dvbdev.c:561
+ dvb_remove_device drivers/media/dvb-core/dvbdev.c:554 [inline]
+ dvb_unregister_device+0x1b/0x60 drivers/media/dvb-core/dvbdev.c:583
+ dvb_dmxdev_release+0x1a0/0x640 drivers/media/dvb-core/dmxdev.c:1459
+ dvb_usb_adapter_dvb_exit+0x93/0x230 drivers/media/usb/dvb-usb/dvb-usb-dvb.c:224
+ dvb_usb_adapter_exit drivers/media/usb/dvb-usb/dvb-usb-init.c:114 [inline]
+ dvb_usb_exit.isra.0+0xb4/0x310 drivers/media/usb/dvb-usb/dvb-usb-init.c:129
+ dvb_usb_device_exit+0x111/0x1a0 drivers/media/usb/dvb-usb/dvb-usb-init.c:306
+ usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:458
+ __device_release_driver+0x3bd/0x6f0 drivers/base/dd.c:1154
+ device_release_driver_internal drivers/base/dd.c:1185 [inline]
+ device_release_driver+0x26/0x40 drivers/base/dd.c:1208
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+ device_del+0x502/0xec0 drivers/base/core.c:3115
+ usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1413
+ usb_disconnect.cold+0x27d/0x780 drivers/usb/core/hub.c:2218
+ hub_port_connect drivers/usb/core/hub.c:5074 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5363 [inline]
+ port_event drivers/usb/core/hub.c:5509 [inline]
+ hub_event+0x1c8a/0x42d0 drivers/usb/core/hub.c:5591
+ process_one_work+0x933/0x1520 kernel/workqueue.c:2272
+ process_scheduled_works kernel/workqueue.c:2334 [inline]
+ worker_thread+0x82b/0x1120 kernel/workqueue.c:2420
+ kthread+0x38c/0x460 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+==================================================================
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-On Thu, Dec 10, 2020 at 9:53 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Thu, Dec 10, 2020 at 05:05:17PM +0100, Greg Kroah-Hartman wrote:
-> > From: Badhri Jagan Sridharan <badhri@google.com>
-> >
-> > TCPM logs overflow once the logbuffer is full. Clear old entries and
-> > allow logging the newer ones as the newer would be more relevant to the
-> > issue being debugged.
-> >
-> > Also, do not reset the logbuffer tail as end users might take back to
-> > back bugreports which would result in an empty buffer.
-> >
->
-> Historically, the reason for not doing this was that, once a problem occurs,
-> the log would fill up quickly (typically with reconnect attempts), and the
-> actual reason for the problem would be overwritten. Maybe that reasoning
-> no longer applies; I just wanted to point out that there _was_ a reason for
-> not clearing old log entries.
->
-> Guenter
->
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Cc: Kyle Tso <kyletso@google.com>
-> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > Signed-off-by: Will McVicker <willmcvicker@google.com>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >  drivers/usb/typec/tcpm/tcpm.c | 16 +++-------------
-> >  1 file changed, 3 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> > index cedc6cf82d61..0ceeab50ed64 100644
-> > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > @@ -470,12 +470,6 @@ static bool tcpm_port_is_disconnected(struct tcpm_port *port)
-> >
-> >  #ifdef CONFIG_DEBUG_FS
-> >
-> > -static bool tcpm_log_full(struct tcpm_port *port)
-> > -{
-> > -     return port->logbuffer_tail ==
-> > -             (port->logbuffer_head + 1) % LOG_BUFFER_ENTRIES;
-> > -}
-> > -
-> >  __printf(2, 0)
-> >  static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
-> >  {
-> > @@ -495,11 +489,6 @@ static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
-> >
-> >       vsnprintf(tmpbuffer, sizeof(tmpbuffer), fmt, args);
-> >
-> > -     if (tcpm_log_full(port)) {
-> > -             port->logbuffer_head = max(port->logbuffer_head - 1, 0);
-> > -             strcpy(tmpbuffer, "overflow");
-> > -     }
-> > -
-> >       if (port->logbuffer_head < 0 ||
-> >           port->logbuffer_head >= LOG_BUFFER_ENTRIES) {
-> >               dev_warn(port->dev,
-> > @@ -519,6 +508,9 @@ static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
-> >                 (unsigned long)ts_nsec, rem_nsec / 1000,
-> >                 tmpbuffer);
-> >       port->logbuffer_head = (port->logbuffer_head + 1) % LOG_BUFFER_ENTRIES;
-> > +     if (port->logbuffer_head == port->logbuffer_tail)
-> > +             port->logbuffer_tail =
-> > +                     (port->logbuffer_tail + 1) % LOG_BUFFER_ENTRIES;
-> >
-> >  abort:
-> >       mutex_unlock(&port->logbuffer_lock);
-> > @@ -622,8 +614,6 @@ static int tcpm_debug_show(struct seq_file *s, void *v)
-> >               seq_printf(s, "%s\n", port->logbuffer[tail]);
-> >               tail = (tail + 1) % LOG_BUFFER_ENTRIES;
-> >       }
-> > -     if (!seq_has_overflowed(s))
-> > -             port->logbuffer_tail = tail;
-> >       mutex_unlock(&port->logbuffer_lock);
-> >
-> >       return 0;
-> > --
-> > 2.29.2
-> >
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
