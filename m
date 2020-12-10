@@ -2,26 +2,26 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8D02D61CF
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 17:30:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0522D61C9
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 17:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389430AbgLJQ3Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Dec 2020 11:29:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34586 "EHLO mail.kernel.org"
+        id S1732232AbgLJQFf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Dec 2020 11:05:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33846 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388492AbgLJQFd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Dec 2020 11:05:33 -0500
+        id S2389079AbgLJQFP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Dec 2020 11:05:15 -0500
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     heikki.krogerus@linux.intel.com, linux@roeck-us.net
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>,
         Kyle Tso <kyletso@google.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
         Will McVicker <willmcvicker@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 1/5] USB: typec: tcpm: Prevent log overflow by removing old entries
-Date:   Thu, 10 Dec 2020 17:05:17 +0100
-Message-Id: <20201210160521.3417426-2-gregkh@linuxfoundation.org>
+Subject: [PATCH 3/5] USB: typec: tcpm: Fix PR_SWAP error handling
+Date:   Thu, 10 Dec 2020 17:05:19 +0100
+Message-Id: <20201210160521.3417426-4-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201210160521.3417426-1-gregkh@linuxfoundation.org>
 References: <20201210160521.3417426-1-gregkh@linuxfoundation.org>
@@ -31,73 +31,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Badhri Jagan Sridharan <badhri@google.com>
+From: Kyle Tso <kyletso@google.com>
 
-TCPM logs overflow once the logbuffer is full. Clear old entries and
-allow logging the newer ones as the newer would be more relevant to the
-issue being debugged.
-
-Also, do not reset the logbuffer tail as end users might take back to
-back bugreports which would result in an empty buffer.
+PD rev3.0 8.3.3.16.3.6 PE_PRS_SRC_SNK_Wait_Source_on State
+The Policy Enging Shall transition to the ErrorRecovery state when the
+PSSourceOnTimer times out ...
 
 Cc: Guenter Roeck <linux@roeck-us.net>
 Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Kyle Tso <kyletso@google.com>
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+Cc: Badhri Jagan Sridharan <badhri@google.com>
+Signed-off-by: Kyle Tso <kyletso@google.com>
 Signed-off-by: Will McVicker <willmcvicker@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/typec/tcpm/tcpm.c | 16 +++-------------
- 1 file changed, 3 insertions(+), 13 deletions(-)
+ drivers/usb/typec/tcpm/tcpm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index cedc6cf82d61..0ceeab50ed64 100644
+index 0efda59bb104..d51c45961893 100644
 --- a/drivers/usb/typec/tcpm/tcpm.c
 +++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -470,12 +470,6 @@ static bool tcpm_port_is_disconnected(struct tcpm_port *port)
- 
- #ifdef CONFIG_DEBUG_FS
- 
--static bool tcpm_log_full(struct tcpm_port *port)
--{
--	return port->logbuffer_tail ==
--		(port->logbuffer_head + 1) % LOG_BUFFER_ENTRIES;
--}
--
- __printf(2, 0)
- static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
- {
-@@ -495,11 +489,6 @@ static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
- 
- 	vsnprintf(tmpbuffer, sizeof(tmpbuffer), fmt, args);
- 
--	if (tcpm_log_full(port)) {
--		port->logbuffer_head = max(port->logbuffer_head - 1, 0);
--		strcpy(tmpbuffer, "overflow");
--	}
--
- 	if (port->logbuffer_head < 0 ||
- 	    port->logbuffer_head >= LOG_BUFFER_ENTRIES) {
- 		dev_warn(port->dev,
-@@ -519,6 +508,9 @@ static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
- 		  (unsigned long)ts_nsec, rem_nsec / 1000,
- 		  tmpbuffer);
- 	port->logbuffer_head = (port->logbuffer_head + 1) % LOG_BUFFER_ENTRIES;
-+	if (port->logbuffer_head == port->logbuffer_tail)
-+		port->logbuffer_tail =
-+			(port->logbuffer_tail + 1) % LOG_BUFFER_ENTRIES;
- 
- abort:
- 	mutex_unlock(&port->logbuffer_lock);
-@@ -622,8 +614,6 @@ static int tcpm_debug_show(struct seq_file *s, void *v)
- 		seq_printf(s, "%s\n", port->logbuffer[tail]);
- 		tail = (tail + 1) % LOG_BUFFER_ENTRIES;
- 	}
--	if (!seq_has_overflowed(s))
--		port->logbuffer_tail = tail;
- 	mutex_unlock(&port->logbuffer_lock);
- 
- 	return 0;
+@@ -3728,7 +3728,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 			tcpm_set_state(port, ERROR_RECOVERY, 0);
+ 			break;
+ 		}
+-		tcpm_set_state_cond(port, SNK_UNATTACHED, PD_T_PS_SOURCE_ON);
++		tcpm_set_state(port, ERROR_RECOVERY, PD_T_PS_SOURCE_ON);
+ 		break;
+ 	case PR_SWAP_SRC_SNK_SINK_ON:
+ 		/* Set the vbus disconnect threshold for implicit contract */
 -- 
 2.29.2
 
