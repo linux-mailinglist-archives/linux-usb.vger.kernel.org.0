@@ -2,133 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8332D5C2A
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 14:44:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 234032D5CD7
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 15:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389334AbgLJNnR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Dec 2020 08:43:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45234 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732601AbgLJNnR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Dec 2020 08:43:17 -0500
-From:   Peter Chen <peter.chen@kernel.org>
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     pawell@cadence.com, rogerq@ti.com, robh+dt@kernel.org,
-        frowand.list@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, a-govindraju@ti.com,
-        frank.li@nxp.com, devicetree@vger.kernel.org,
-        Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH 2/2] usb: cdns3: imx: assign platform_data_length for auxdata structure
-Date:   Thu, 10 Dec 2020 21:42:15 +0800
-Message-Id: <20201210134215.20424-2-peter.chen@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201210134215.20424-1-peter.chen@kernel.org>
-References: <20201210134215.20424-1-peter.chen@kernel.org>
+        id S2389829AbgLJOEB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Dec 2020 09:04:01 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:36641 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728591AbgLJODw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 09:03:52 -0500
+Received: by mail-il1-f197.google.com with SMTP id r3so4482169ila.3
+        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 06:03:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=dCHnS+IGmE05QjPXrUbbLAFiydDVaiZOQybW0UvsNF8=;
+        b=XAygBxuxk2mx1H0kbWTyh7SxUsmkTmfB9SEZmLSiQ01QoK7rJPPyAHriUHkmlhjqFt
+         uKqdpjLa+p/8CAZVPuqd2J1ODD7t/fXJif24rZbG6ZikFWTqFd/h0IyNSpbT8WaWoxof
+         Q7N039tAP9hk5aKmjbRRpaCN/gwgUuLfEMd7SwVtW0SiNXb91eRpqhc4MnuWkKa0AYYZ
+         yBLDfcl4voyMQWQvTmLukmVbA3N3iB6HlSbDaVSSLKuD78Cda0DsSsZHxtXFWKMG/De3
+         36yd2htzKbar3z8APbPtu+KgbXMkL/R64yIrXe/MtE+8o/gJV7oUZSZexRk3k61uXiI0
+         PVvw==
+X-Gm-Message-State: AOAM533MaafQM7ytIrD9oPWiXP46kF1ZsnWHCjpTL6hXxEHg7xBZ9iGX
+        ze/CM+JiFb2ZBTnvzObqQtJIKOzk1QAqOz6cm7pPqs+E2kjL
+X-Google-Smtp-Source: ABdhPJzNhswceQ5PwLWQ9ylc/ytFQpeq987bYUGnEeJ6q1oS7R5eKN3G8ahRRjFS9lFelXt+dL91xjXPU/7vxgtm3PWnXeJNVVeU
+MIME-Version: 1.0
+X-Received: by 2002:a05:6602:2110:: with SMTP id x16mr7176336iox.127.1607608991438;
+ Thu, 10 Dec 2020 06:03:11 -0800 (PST)
+Date:   Thu, 10 Dec 2020 06:03:11 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000df5ecf05b61ca23b@google.com>
+Subject: possible deadlock in zd_chip_disable_rxtx
+From:   syzbot <syzbot+0ec3d1a6cf1fbe79c153@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, davem@davemloft.net, dsd@gentoo.org,
+        kuba@kernel.org, kune@deine-taler.de, kvalo@codeaurora.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Peter Chen <peter.chen@nxp.com>
+Hello,
 
-In this case, the OF code will call platform_device_add_data to
-allocate platform_data using kmalloc, and avoid kfree issue when
-unload module. It fixed below oops:
+syzbot found the following issue on:
 
-log1:
-[  333.501593] Unable to handle kernel paging request at virtual address 000000000004ae48
-[  333.509558] Mem abort info:
-[  333.512369]   ESR = 0x96000006
-[  333.515476]   EC = 0x25: DABT (current EL), IL = 32 bits
-[  333.520847]   SET = 0, FnV = 0
-[  333.523986]   EA = 0, S1PTW = 0
-[  333.527193] Data abort info:
-[  333.530124]   ISV = 0, ISS = 0x00000006
-[  333.534004]   CM = 0, WnR = 0
-[  333.536988] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000885d73000
-[  333.543497] [000000000004ae48] pgd=0000000000000000, p4d=0000000000000000
-[  333.550354] Internal error: Oops: 96000006 [#1] PREEMPT SMP
-[  333.555936] Modules linked in: fsl_jr_uio caam_jr caamkeyblob_desc caamhash_desc caamalg_desc crypto_engine rng_core authenc libdes crct10dif_
-ce mxc_jpeg_encdec phy_mxs_usb phy_cadence_salvo imx8_media_dev(C) caam error [last unloaded: cdns3]
-[  333.577484] CPU: 3 PID: 168 Comm: kworker/3:38 Tainted: G         C        5.10.0-rc4-04454-gd479340c061 #30
-[  333.587313] Hardware name: Freescale i.MX8QXP MEK (DT)
-[  333.592471] Workqueue: rcu_gp srcu_invoke_callbacks
-[  333.597359] pstate: a0000005 (NzCv daif -PAN -UAO -TCO BTYPE=--)
-[  333.603373] pc : kfree+0x78/0x3a0
-[  333.606690] lr : platform_device_release+0x28/0x58
-[  333.611481] sp : ffff8000135bbc20
-[  333.614800] x29: ffff8000135bbc20 x28: ffff800012146000
-[  333.620125] x27: ffff00083fa06470 x26: ffff800010108cb0
-[  333.625442] x25: 0080000000000000 x24: ffff80001240f000
-[  333.630767] x23: ffff0008012ef000 x22: ffff800010875478
-[  333.636093] x21: ffff8000092b90c8 x20: ffff000804bf1b00
-[  333.641418] x19: 000000000004ae40 x18: 0000000000000000
-[  333.646735] x17: 0000000000000000 x16: 0000000000000000
-[  333.652052] x15: 0000000000000000 x14: 0000000000000000
-[  333.657368] x13: 0000000000000002 x12: 0000000000000000
-[  333.662685] x11: 0000000000000040 x10: 0000000000000a00
-[  333.668000] x9 : ffff800010875478 x8 : fefefefefefefeff
-[  333.673319] x7 : 0000000000000018 x6 : ffff00080101006c
-[  333.678644] x5 : ffff00083fa5c300 x4 : 0000000000000000
-[  333.683969] x3 : 0000000000000002 x2 : 0000000000000000
-[  333.689286] x1 : 0000000000000030 x0 : fffffdffffe00000
-[  333.694605] Call trace:
-[  333.697059]  kfree+0x78/0x3a0
-[  333.700027]  platform_device_release+0x28/0x58
-[  333.704476]  device_release+0x38/0x90
-[  333.708144]  kobject_put+0x78/0x208
-[  333.711633]  __device_link_free_srcu+0x50/0x78
-[  333.716082]  srcu_invoke_callbacks+0xf4/0x168
-[  333.720445]  process_one_work+0x1c8/0x480
-[  333.724460]  worker_thread+0x50/0x420
-[  333.728124]  kthread+0x148/0x168
-[  333.731355]  ret_from_fork+0x10/0x18
-[  333.734940] Code: b26babe0 d34cfe73 f2dfbfe0 8b131813 (f9400660)
-[  333.741049] ---[ end trace 9a41d9fcbc0885e6 ]---
-[  333.745671] Kernel panic - not syncing: Oops: Fatal exception in interrupt
-[  333.752551] SMP: stopping secondary CPUs
-[  333.756485] Kernel Offset: disabled
-[  333.759979] CPU features: 0x0240002,20002008
-[  333.764251] Memory Limit: none
+HEAD commit:    8010622c USB: UAS: introduce a quirk to set no_write_same
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=131e6adf500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d24ee9ecd7ce968e
+dashboard link: https://syzkaller.appspot.com/bug?extid=0ec3d1a6cf1fbe79c153
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13d7246b500000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=172c240f500000
 
-log2:
-[  160.400179]  kfree+0x78/0x3a0
-[  160.403147]  platform_device_release+0x28/0x58
-[  160.407595]  device_release+0x38/0x90
-[  160.411264]  kobject_put+0x78/0x208
-[  160.414753]  klist_children_put+0x1c/0x28
-[  160.418766]  klist_next+0xac/0x128
-[  160.422172]  device_for_each_child+0x4c/0xa8
-[  160.426453]  cdns_imx_remove+0x2c/0x40 [cdns3_imx]
-[  160.431251]  platform_drv_remove+0x30/0x50
-[  160.435353]  device_release_driver_internal+0x114/0x1e8
-[  160.440580]  driver_detach+0x54/0xe0
-[  160.444163]  bus_remove_driver+0x60/0xd8
-[  160.448087]  driver_unregister+0x34/0x60
-[  160.452013]  platform_driver_unregister+0x18/0x20
-[  160.456726]  cdns_imx_driver_exit+0x14/0x478 [cdns3_imx]
-[  160.462042]  __arm64_sys_delete_module+0x180/0x258
-[  160.466837]  el0_svc_common.constprop.0+0x70/0x168
-[  160.471631]  do_el0_svc+0x28/0x88
-[  160.474950]  el0_sync_handler+0x158/0x160
-[  160.478961]  el0_sync+0x140/0x180
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0ec3d1a6cf1fbe79c153@syzkaller.appspotmail.com
 
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
+usb 1-1: reset high-speed USB device number 2 using dummy_hcd
+usb 1-1: device descriptor read/64, error -71
+usb 1-1: Using ep0 maxpacket: 32
+usb 1-1: unable to get BOS descriptor or descriptor too short
+zd1211rw 1-1:5.118: phy1
+zd1211rw 1-1:5.114: error ioread32(CR_REG1): -11
+============================================
+WARNING: possible recursive locking detected
+5.10.0-rc7-syzkaller #0 Not tainted
+--------------------------------------------
+kworker/1:2/2618 is trying to acquire lock:
+ffff888102cbdd10 (&chip->mutex){+.+.}-{3:3}, at: zd_chip_disable_rxtx+0x1c/0x40 drivers/net/wireless/zydas/zd1211rw/zd_chip.c:1465
+
+but task is already holding lock:
+ffff888101d9dd10 (&chip->mutex){+.+.}-{3:3}, at: pre_reset+0x217/0x290 drivers/net/wireless/zydas/zd1211rw/zd_usb.c:1504
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&chip->mutex);
+  lock(&chip->mutex);
+
+ *** DEADLOCK ***
+
+ May be due to missing lock nesting notation
+
+6 locks held by kworker/1:2/2618:
+ #0: ffff888103bff538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888103bff538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic64_set include/asm-generic/atomic-instrumented.h:856 [inline]
+ #0: ffff888103bff538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/asm-generic/atomic-long.h:41 [inline]
+ #0: ffff888103bff538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:616 [inline]
+ #0: ffff888103bff538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:643 [inline]
+ #0: ffff888103bff538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x821/0x1520 kernel/workqueue.c:2243
+ #1: ffffc900001c7da8 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x854/0x1520 kernel/workqueue.c:2247
+ #2: ffff88810802a218 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:731 [inline]
+ #2: ffff88810802a218 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c5/0x42d0 drivers/usb/core/hub.c:5537
+ #3: ffff8881013cd218 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:731 [inline]
+ #3: ffff8881013cd218 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:887
+ #4: ffff88810ed8c1a8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:731 [inline]
+ #4: ffff88810ed8c1a8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:887
+ #5: ffff888101d9dd10 (&chip->mutex){+.+.}-{3:3}, at: pre_reset+0x217/0x290 drivers/net/wireless/zydas/zd1211rw/zd_usb.c:1504
+
+stack backtrace:
+CPU: 1 PID: 2618 Comm: kworker/1:2 Not tainted 5.10.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x107/0x163 lib/dump_stack.c:118
+ print_deadlock_bug kernel/locking/lockdep.c:2761 [inline]
+ check_deadlock kernel/locking/lockdep.c:2804 [inline]
+ validate_chain kernel/locking/lockdep.c:3595 [inline]
+ __lock_acquire.cold+0x15e/0x3b0 kernel/locking/lockdep.c:4832
+ lock_acquire kernel/locking/lockdep.c:5437 [inline]
+ lock_acquire+0x288/0x700 kernel/locking/lockdep.c:5402
+ __mutex_lock_common kernel/locking/mutex.c:956 [inline]
+ __mutex_lock+0x134/0x10a0 kernel/locking/mutex.c:1103
+ zd_chip_disable_rxtx+0x1c/0x40 drivers/net/wireless/zydas/zd1211rw/zd_chip.c:1465
+ zd_op_stop+0x60/0x190 drivers/net/wireless/zydas/zd1211rw/zd_mac.c:343
+ zd_usb_stop drivers/net/wireless/zydas/zd1211rw/zd_usb.c:1479 [inline]
+ pre_reset+0x19d/0x290 drivers/net/wireless/zydas/zd1211rw/zd_usb.c:1502
+ usb_reset_device+0x379/0x9a0 drivers/usb/core/hub.c:5959
+ probe+0x10f/0x590 drivers/net/wireless/zydas/zd1211rw/zd_usb.c:1371
+ usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
+ really_probe+0x291/0xde0 drivers/base/dd.c:554
+ driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:912
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0xbb2/0x1ce0 drivers/base/core.c:2936
+ usb_set_configuration+0x113c/0x1910 drivers/usb/core/message.c:2164
+ usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
+ really_probe+0x291/0xde0 drivers/base/dd.c:554
+ driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:912
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0xbb2/0x1ce0 drivers/base/core.c:2936
+ usb_new_device.cold+0x71d/0xfe9 drivers/usb/core/hub.c:2555
+ hub_port_connect drivers/usb/core/hub.c:5223 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5363 [inline]
+ port_event drivers/usb/core/hub.c:5509 [inline]
+ hub_event+0x2348/0x42d0 drivers/usb/core/hub.c:5591
+ process_one_work+0x933/0x1520 kernel/workqueue.c:2272
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2418
+ kthread+0x38c/0x460 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+zd1211rw 1-1:5.118: error ioread32(CR_REG1): -11
+usb 1-1: reset high-speed USB device number 2 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 32
+usb 1-1: unable to get BOS descriptor or descriptor too short
+ieee80211 phy2: Selected rate control algorithm 'minstrel_ht'
+zd1211rw 1-1:5.57: phy2
+
+
 ---
- drivers/usb/cdns3/cdns3-imx.c | 1 +
- 1 file changed, 1 insertion(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/usb/cdns3/cdns3-imx.c b/drivers/usb/cdns3/cdns3-imx.c
-index f03562c76a50..67c9b789d3b2 100644
---- a/drivers/usb/cdns3/cdns3-imx.c
-+++ b/drivers/usb/cdns3/cdns3-imx.c
-@@ -158,6 +158,7 @@ static const struct of_dev_auxdata cdns_imx_auxdata[] = {
- 	{
- 		.compatible = "cdns,usb3",
- 		.platform_data = &cdns_imx_pdata,
-+		.platform_data_length = sizeof(cdns_imx_pdata),
- 	},
- 	{},
- };
--- 
-2.17.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
