@@ -2,100 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B340B2D5898
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 11:51:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 338CC2D58BA
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 11:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388872AbgLJKuY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Dec 2020 05:50:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53928 "EHLO mail.kernel.org"
+        id S2389290AbgLJK6Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Dec 2020 05:58:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56606 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388672AbgLJKuS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Dec 2020 05:50:18 -0500
-Date:   Thu, 10 Dec 2020 11:50:51 +0100
+        id S2389287AbgLJK6Q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Dec 2020 05:58:16 -0500
+Date:   Thu, 10 Dec 2020 11:58:45 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1607597377;
-        bh=siFkzcs/Nx7BP++MFJmAbPA49/Mj4oy8rewdCS7WRkU=;
+        s=korg; t=1607597855;
+        bh=+yNy2/EhKij1FrxrK/M173AdxIP7Qw+piOTeN0Owbwk=;
         h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c20H3mVKPwdfDqZ+dtE4KoykwYNf9ltBuic1oNtTai6oUVk8qRLCb4gUYyoCfF8bQ
-         Nrrdr6sJUqVC+Vr712NzyY7bvM2qLG7Nm7KnxG2E1x65LRyWuu0kKwWxF+LdTUBYhv
-         UrfrO94DYiy/m5oc89LQOkJNQ8KOUCnoloEvMxGA=
+        b=YqWT9A8V1/rwqj8dU+bFqO3kPDEHGzBagQ50kyDtSZqSbkS6KE1WRE95VtxK6gnbD
+         JqzjKXl1JUblAc7BspaphdDpa9W7IHVld5x+e/tAF2M1DFri3qOVhfbGs/KH5nGKHp
+         VBwkyzBcX2PHgiRtRNv9qddao6RrODx2jEPgFmGw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Maarten Brock <m.brock@vanmierlo.com>
-Cc:     Mychaela Falconia <mychaela.falconia@gmail.com>,
-        Johan Hovold <johan@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Mychaela N . Falconia" <falcon@freecalypso.org>,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/7] tty: add flag to suppress ready signalling on open
-Message-ID: <X9H9i98E1Gro+mDP@kroah.com>
-References: <20201202113942.27024-1-johan@kernel.org>
- <X9Dficb8sQGRut+S@kroah.com>
- <CA+uuBqYTzXCHGY8QnP+OQ5nRNAbqx2rMNzLM7OKLM1_4AzzinQ@mail.gmail.com>
- <6b81cca21561305b55ba8f019b78da28@vanmierlo.com>
+To:     Ikjoon Jang <ikjn@chromium.org>
+Cc:     linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
+        Zhanyong Wang <zhanyong.wang@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] usb: xhci-mtk: fix unreleased bandwidth data
+Message-ID: <X9H/ZVpHf2Owd6rj@kroah.com>
+References: <20201210104747.3416781-1-ikjn@chromium.org>
+ <20201210184700.v2.3.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6b81cca21561305b55ba8f019b78da28@vanmierlo.com>
+In-Reply-To: <20201210184700.v2.3.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 11:41:24AM +0100, Maarten Brock wrote:
-> Hello Mychaela,
+On Thu, Dec 10, 2020 at 06:47:47PM +0800, Ikjoon Jang wrote:
+> xhci-mtk has hooks on add_endpoint() and drop_endpoint() from xhci
+> to handle its own sw bandwidth managements and stores bandwidth data
+> into internal table every time add_endpoint() is called,
+> so when bandwidth allocation fails at one endpoint, all earlier
+> allocation from the same interface could still remain at the table.
 > 
-> On 2020-12-09 23:49, Mychaela Falconia wrote:
-> > Greg K-H wrote:
-> > 
-> > > I think we need more review for the rest of the series.  This does
-> > > change the way serial ports work in a non-traditional way (i.e. using
-> > > sysfs instead of terminal settings).
-> > 
-> > But the problem is that the current status quo is fundamentally broken
-> > for those hardware devices in which DTR and/or RTS have been repurposed
-> > for something other than modem and flow control.  Right now whenever a
-> > "cold" (never previously opened) serial port is opened for the first
-> > time, that open action immediately and unstoppably asserts both DTR
-> > and RTS hardware outputs, without giving userspace any opportunity to
-> > say "no, please don't do it".  Yes, this behaviour is codified in a
-> > bunch of standards that ultimately trace back to 1970s Original UNIX,
-> > but just because it is a standard does not make it right - this
-> > Unix/POSIX/Linux "standard" serial port behaviour is a bug, not a
-> > feature.
+> This patch adds two more hooks from check_bandwidth() and
+> reset_bandwidth(), and make mtk-xhci to releases all failed endpoints
+> from reset_bandwidth().
 > 
-> I agree. And an application not configuring the required handshakes, but
-> still relying on them is an equal bug.
-> 
-> > But if there exist some custom hw devices out there that are in the
-> > same predicament as my DUART28 adapter, but are different in that they
-> > are classic old-fashioned RS-232 rather than integrated USB-serial,
-> > with no place to assign a custom USB ID, *then* we need a non-USB-ID-
-> > dependent solution such as Johan's sysfs attribute or O_DIRECT.
-> 
-> Any device with a classic old-fashioned RS-232 has probably already
-> solved this in another way or is accepted as not working on Linux.
-> 
-> And then there is also the device tree (overlay?) through which a quirk
-> like this can be communicated to the kernel driver. Not sure if this
-> could help for a plug-and-play device like on USB.
-> 
-> > > So I want to get a bunch of people
-> > > to agree that this is ok to do things this way now before taking this
-> > > new user-visible api.
-> 
-> Personally, I would prefer the VID:PID to enforce the quirk and an
-> O_DIRECT (or other) flag used on open() as general backup plan. To
-> me a sysfs solution seems illogical.
+> Fixes: 0cbd4b34cda9 ("xhci: mediatek: support MTK xHCI host controller")
+> Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
 
-The "problem" of a vid:pid is that for usb-serial devices, that only
-describes the device that does the conversion itself, NOT the serial
-device the converter is plugged into that cares about these types of
-line-wiggling.
+Shouldn't this be the first patch in the series?  You don't want a fix
+to be dependent on code style changes, otherwise it is really really
+hard to backport it to older kernels that might need this fix, right?
 
-Just like you would not want to classify all devices that met the PCI
-serial class signature for this type of thing either, there is nothing
-special about USB here other than it happens to be a common transport
-for these signals these days.
+Can you re-order these patches please?
 
 thanks,
 
