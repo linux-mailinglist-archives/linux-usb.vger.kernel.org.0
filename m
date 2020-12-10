@@ -2,123 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBA62D6684
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 20:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8B12D68C1
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 21:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390469AbgLJTcH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Dec 2020 14:32:07 -0500
-Received: from mail-il1-f200.google.com ([209.85.166.200]:55699 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390231AbgLJO3x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 09:29:53 -0500
-Received: by mail-il1-f200.google.com with SMTP id w10so4524722ila.22
-        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 06:29:37 -0800 (PST)
+        id S2393466AbgLJUdL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Dec 2020 15:33:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60910 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393769AbgLJUcz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 15:32:55 -0500
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D17C0613D6
+        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 12:32:15 -0800 (PST)
+Received: by mail-lj1-x242.google.com with SMTP id f11so8217161ljm.8
+        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 12:32:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JXo/6yTnw0lOEukdPOuRfdTJttQHVNIkXPnDWTx3kM0=;
+        b=HGsT2Yjjbr3Pxl7MzGsWp0SS0cjFS+GQryFOo6Lk1X5kNAeR2vY2iVaCfOTeZzijOG
+         l5CJ9g6YXwnlNlHjwxs+3n9sMi/xOub+CeiNGC5spwOY5u/qfB99lwDLiASZ1e0OyKsO
+         fW8878uS4rE3xZsP/SztjL2q9Po55Tvu4ycUKsHoN7L0IvHuEGXlWLyPNK2kPvQBmD0w
+         Hnc+cJePa4FoyzPRxMnD9Cd9ko1VLbkKB3i3Y6VJADx29zXZPTzRcVmDtlNET+OtkdR5
+         6jBWeqoSOXWl4aJixDS9oF9c5+f/YWPMiI0zaqAYxpFjGJWkzzNFqCDzMy9tubCDPikj
+         l66A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=oLeHKVV0ChX4sKICE3cLVEmUP4AP2CVq6ON5n87Fsyo=;
-        b=i/JmfDDY5w//ptmqBLXQ/ymN5YJ1c55UomNd6cXapsMpHm6M/xQUcyMuvT5Dce3Iqf
-         5tWDP/bhoab4CdjG5Wz4bBkyTt3aOfdI2IQYY4VlGf6EpcZMhk3RW3hzz/HeNO3ffoVO
-         T29F2/tu3S9VYsCRCc7ID/2ORJ35FSt0Qjz7pV7xOCe0IfY+Toev79HTHaoTJziEs8eC
-         FZp0fbKcZ0C/QJl/8q3Qfzhy+XQXI2f+yDmVbYcpOZF8xhg0ZOrhdy2ysXPK9FslXAfZ
-         3vby4dNZGVcs5shgV4UfwtGvW8Xdqj+JFVrjAjA+LH46BAFGTKyCpe8YU2wWc8Je8yQh
-         jJPw==
-X-Gm-Message-State: AOAM532Wm+5KGQJRvLRBUocaZrXFyWTmwbRYqe9moFrGeaTPBn/hbleL
-        c5bq5wE0R77KuvfN+mdHXlb5IzP+t3J2tD5GWovelqgekAJb
-X-Google-Smtp-Source: ABdhPJy8+qBqHbQq5UwX0GnBwUzPEBkXmcIytguHfFEjM/rnkgEnu2uFKDtZQ5CO9eA8/BbNQX+xI9/W9yCf62/LuKwWy3L/Ujib
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JXo/6yTnw0lOEukdPOuRfdTJttQHVNIkXPnDWTx3kM0=;
+        b=j3eyPbNAlJfDv7Q0w0j/RR9XF1FJVdYSXPvYkoO+G7zL74q9MawXgX/e/9i5az8RU5
+         g6vGyvuBlr5lObBviJRmqtCCy8XS2G2JC/7egtV5yR7OwM6CCEX8eaN546w8C+uFM/9f
+         gV5QVD96Ha/4/Ugw+HAF7jtzcS6Qu7P9Lj09QY02oRu1NbIxRLoZy+W+RdZ4rNvF/D9F
+         0xdNcTLAgKaerDVSmShmW84UuJCCytN8oCEjGdr3WHkuuLRiDOsisKbI4aheWSqdUokz
+         8fSgB5+gP2alWmztFNSZQXPr1+N8AX+wTl51Y2ibwHToK7tIhGS7eaZsxIcOuaPBxYV0
+         H9Ug==
+X-Gm-Message-State: AOAM532ftWJfF/0k2U13SVmGIvkhPbaGuFHw/UItDG6vaQe+s7JZgQOZ
+        ll8K72Tsd7MyKE84H6yfNCleFanThcpY5yX4
+X-Google-Smtp-Source: ABdhPJwftCg+aMmbLa5OTXlhY7xSWcgK4L9HnLiOYnFNtFo2GlluWUqTS3bC3zH8Vw/NaqK2pvjHdw==
+X-Received: by 2002:a2e:93cd:: with SMTP id p13mr3573414ljh.205.1607632333596;
+        Thu, 10 Dec 2020 12:32:13 -0800 (PST)
+Received: from localhost ([31.134.121.151])
+        by smtp.gmail.com with ESMTPSA id n10sm721868ljg.139.2020.12.10.12.32.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Dec 2020 12:32:13 -0800 (PST)
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH 2/2] usb: dwc3: drd: Avoid error when extcon is missing
+Date:   Thu, 10 Dec 2020 22:33:18 +0200
+Message-Id: <20201210203318.6914-1-semen.protsenko@linaro.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-X-Received: by 2002:a92:d58a:: with SMTP id a10mr9312308iln.99.1607610552307;
- Thu, 10 Dec 2020 06:29:12 -0800 (PST)
-Date:   Thu, 10 Dec 2020 06:29:12 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e858c005b61cffb1@google.com>
-Subject: KASAN: null-ptr-deref Read in ida_free
-From:   syzbot <syzbot+930c00d27e58b0d77fb9@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, laurent.pinchart@ideasonboard.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+If "port" node is missing in PHY controller node, dwc3_get_extcon()
+isn't able to find extcon device. This is perfectly fine in case when
+"usb-role-switch" or OTG is used, but next misleading error message is
+printed in that case, from of_graph_get_remote_node():
 
-syzbot found the following issue on:
+    OF: graph: no port node found in /phy@1234abcd
 
-HEAD commit:    8010622c USB: UAS: introduce a quirk to set no_write_same
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=16dbc923500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d24ee9ecd7ce968e
-dashboard link: https://syzkaller.appspot.com/bug?extid=930c00d27e58b0d77fb9
-compiler:       gcc (GCC) 10.1.0-syz 20200507
+Avoid printing that message by checking if port node exists in PHY node
+before calling of_graph_get_remote_node().
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+930c00d27e58b0d77fb9@syzkaller.appspotmail.com
-
-input: TeVii S662 as /devices/platform/dummy_hcd.3/usb4/4-1/rc/rc0/input610
-dvb-usb: schedule remote query interval to 250 msecs.
-dw2102: su3000_power_ctrl: 0, initialized 1
-dvb-usb: TeVii S662 successfully initialized and connected.
-usb 4-1: USB disconnect, device number 114
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
-BUG: KASAN: null-ptr-deref in test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
-BUG: KASAN: null-ptr-deref in ida_free+0x186/0x2b0 lib/idr.c:510
-Read of size 8 at addr 0000000000000018 by task kworker/1:0/4637
-
-CPU: 1 PID: 4637 Comm: kworker/1:0 Not tainted 5.10.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x107/0x163 lib/dump_stack.c:118
- __kasan_report mm/kasan/report.c:549 [inline]
- kasan_report.cold+0x5/0x37 mm/kasan/report.c:562
- check_memory_region_inline mm/kasan/generic.c:186 [inline]
- check_memory_region+0x13d/0x180 mm/kasan/generic.c:192
- instrument_atomic_read include/linux/instrumented.h:71 [inline]
- test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
- ida_free+0x186/0x2b0 lib/idr.c:510
- __media_device_unregister_entity+0x70/0x300 drivers/media/mc/mc-device.c:586
- media_device_unregister_entity+0x49/0x70 drivers/media/mc/mc-device.c:689
- dvb_media_device_free+0x1d5/0x620 drivers/media/dvb-core/dvbdev.c:226
- dvb_remove_device.part.0+0x9c/0x260 drivers/media/dvb-core/dvbdev.c:561
- dvb_remove_device drivers/media/dvb-core/dvbdev.c:554 [inline]
- dvb_unregister_device+0x1b/0x60 drivers/media/dvb-core/dvbdev.c:583
- dvb_dmxdev_release+0x1a0/0x640 drivers/media/dvb-core/dmxdev.c:1459
- dvb_usb_adapter_dvb_exit+0x93/0x230 drivers/media/usb/dvb-usb/dvb-usb-dvb.c:224
- dvb_usb_adapter_exit drivers/media/usb/dvb-usb/dvb-usb-init.c:114 [inline]
- dvb_usb_exit.isra.0+0xb4/0x310 drivers/media/usb/dvb-usb/dvb-usb-init.c:129
- dvb_usb_device_exit+0x111/0x1a0 drivers/media/usb/dvb-usb/dvb-usb-init.c:306
- usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:458
- __device_release_driver+0x3bd/0x6f0 drivers/base/dd.c:1154
- device_release_driver_internal drivers/base/dd.c:1185 [inline]
- device_release_driver+0x26/0x40 drivers/base/dd.c:1208
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
- device_del+0x502/0xec0 drivers/base/core.c:3115
- usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1413
- usb_disconnect.cold+0x27d/0x780 drivers/usb/core/hub.c:2218
- hub_port_connect drivers/usb/core/hub.c:5074 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5363 [inline]
- port_event drivers/usb/core/hub.c:5509 [inline]
- hub_event+0x1c8a/0x42d0 drivers/usb/core/hub.c:5591
- process_one_work+0x933/0x1520 kernel/workqueue.c:2272
- process_scheduled_works kernel/workqueue.c:2334 [inline]
- worker_thread+0x82b/0x1120 kernel/workqueue.c:2420
- kthread+0x38c/0x460 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
-==================================================================
-
-
+Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/usb/dwc3/drd.c | 25 ++++++++++++++++---------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index 3e1c1aacf002..eaf389d3f3c5 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -441,8 +441,8 @@ static int dwc3_drd_notifier(struct notifier_block *nb,
+ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+ {
+ 	struct device *dev = dwc->dev;
+-	struct device_node *np_phy, *np_conn;
+-	struct extcon_dev *edev;
++	struct device_node *np_phy;
++	struct extcon_dev *edev = NULL;
+ 	const char *name;
+ 
+ 	if (device_property_read_bool(dev, "extcon"))
+@@ -462,15 +462,22 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+ 		return edev;
+ 	}
+ 
++	/*
++	 * Try to get extcon device from USB PHY controller's "port" node.
++	 * Check if it has the "port" node first, to avoid printing the error
++	 * message from underlying code, as it's a valid case: extcon device
++	 * (and "port" node) may be missing in case of "usb-role-switch" or OTG
++	 * mode.
++	 */
+ 	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
+-	np_conn = of_graph_get_remote_node(np_phy, -1, -1);
++	if (of_graph_is_present(np_phy)) {
++		struct device_node *np_conn;
+ 
+-	if (np_conn)
+-		edev = extcon_find_edev_by_node(np_conn);
+-	else
+-		edev = NULL;
+-
+-	of_node_put(np_conn);
++		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
++		if (np_conn)
++			edev = extcon_find_edev_by_node(np_conn);
++		of_node_put(np_conn);
++	}
+ 	of_node_put(np_phy);
+ 
+ 	return edev;
+-- 
+2.27.0
+
