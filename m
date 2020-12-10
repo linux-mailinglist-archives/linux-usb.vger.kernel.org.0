@@ -2,69 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A10622D52C3
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 05:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC672D52D3
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 05:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729009AbgLJEYO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Dec 2020 23:24:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52302 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726645AbgLJEYO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 23:24:14 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F40AC0613CF;
-        Wed,  9 Dec 2020 20:23:34 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id 4so2128241plk.5;
-        Wed, 09 Dec 2020 20:23:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XNHPz0YAoN0UuSkSu06R7wbjCuX1P69SVLGZfK7SmBw=;
-        b=dqHBs+bUn+swPA3aSuJh+fZuzU4Az3QVxSN3e1DFUPjKsC9YkIYEwO5lW0zWW7px1P
-         SpqbeNHxU8VmQkYBNQjbJNdMWTbS9ngCdesEetAdOyaOFQstf2ZcDk/vxy64DkuRV77O
-         CY5DB1kFynjtmePeI8yiHlDMx9/iJnENYYvCc1+9R6xyclmjb11NDHF6J3wtwmxObAil
-         lqunI0hsiyEA5jTH6BSsyohsI0H/XCk3JLUGjlgjnkxbGKkTri5a4B0Km3xOc3RCVew1
-         6ifuWrBDMOsJTJVsT8YG4+rozqF7rje0woVilvH20GG3UuXL+tzx8WtJZJwM+d8coMuL
-         GmEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XNHPz0YAoN0UuSkSu06R7wbjCuX1P69SVLGZfK7SmBw=;
-        b=ozCZr7Lu9AA046gWyGT6U+APa2Jcl1FRPfsdc5JJkc8Z9cjwItDyV3TA80Sq5Qu4zf
-         RKMOCMpT6U0YKuQcuc7+cKJRSuiQ1DW4tRtevdIc6WJTWOfarEDojw8AJCtWaUJFpJRl
-         OIHCEl+Y1Im8oWfXrQO4sYo+syAlv2Qj2mjosqWVqm2AS0gYKeN1Q2Ku+lS3/7XzOI+R
-         cdcpvjACRS1mmN4GF2GI4yZUBcGuIhX9i4IvnNI2shzbtcgmWqvQlIygkCV3FBlTvq8M
-         FrbTgqVZ7yVz58oICc4pra8XlgT5k0WNC9+MxGZI9gPTli9D8O809WBhy2i/jVUueoe2
-         Hkkg==
-X-Gm-Message-State: AOAM533qWUiGWzDrTR1vxx5GqXS2R5DZBYSCIg9QkuxovzsmmUrE4ouc
-        gSz/FsxuHoed3j7rryVjVDMjYxXMwKk=
-X-Google-Smtp-Source: ABdhPJy+DAc7efiMhm1rt0hmJdImDLdOU1fhoQkPtkkWBYjQIrU0KffJfmkgVq4a00z1MkMfOgshCw==
-X-Received: by 2002:a17:902:6ac8:b029:da:d645:ab58 with SMTP id i8-20020a1709026ac8b02900dad645ab58mr5118182plt.25.1607574213457;
-        Wed, 09 Dec 2020 20:23:33 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id x1sm4568799pfj.95.2020.12.09.20.23.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Dec 2020 20:23:32 -0800 (PST)
-Date:   Wed, 9 Dec 2020 20:23:29 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     syzbot <syzbot+150f793ac5bc18eee150@syzkaller.appspotmail.com>
-Cc:     eli.billauer@gmail.com, gregkh@linuxfoundation.org,
-        gustavoars@kernel.org, ingrassia@epigenesys.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com, vulab@iscas.ac.cn
-Subject: Re: WARNING in cm109_input_ev/usb_submit_urb
-Message-ID: <X9GiwQsABTa/zC/t@google.com>
-References: <000000000000f6530105b48b2816@google.com>
- <000000000000a023c905b588314b@google.com>
+        id S1730424AbgLJEbF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Dec 2020 23:31:05 -0500
+Received: from slot0.kiandlow.ga ([23.254.224.243]:35849 "EHLO
+        slot0.kiandlow.ga" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728455AbgLJEbF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Dec 2020 23:31:05 -0500
+X-Greylist: delayed 849 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Dec 2020 23:31:05 EST
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=kiandlow.ga;
+ h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=info@kiandlow.ga;
+ bh=SveZaLGmp3AQiwTTRGD6S/ERs7I=;
+ b=lBatEe8mdw4reU4J26hs4DSSF0KAyoP/ZQncQ27ojxA1G3VOn0OQLxfK9lhkP0JcUJilNySOmvvN
+   TbExLshUMmxtRVTa6bJPUHyhDY4KjJ66pIF4lEITfet0u1k+XmvQ/p+wZjyDV6tkaKH/FsqjTesE
+   W2waZYiSvTgeQB0D+BSPL4NYjcD0CF5P6mqVF/gtG1c1tDWoXk8Ugu7ykTUSU3N+HZsKk91Rm8RC
+   CT5w5Te2EWvVwS4GYqmEMj/t/b+0KsNlXrjP4cGRKJRVR4k9+3VBjQboArBs0EExYDxRI+y/3Aiw
+   nUIMxXfnngNdq8+KnI5oGGcYUOnGvD979dO/2g==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=kiandlow.ga;
+ b=kVsx6nWiLGbcKIXQkCOXCccE8n4PiswQsvb+Se3hYntL+8SUNeyKoO2ky4tfc2fZITnf+nedX3u4
+   mb6ggoJsDWrVG8cYVwFEk/yWuAaSSGMjBd6wCHoMQBwj33fUytk20XKUAyIIrnZeDdagME945IN4
+   z2DKNDlueMwATDIY11Ili7c747yHRnJHxdrHNECHvfHPo7twY8QAPsr51l+Do92+H/cgPknufQjg
+   uZ/B18Yj6S/RecTnHJJTnbe6zEn4Vyz/gbWJDKmQJ3lR/FPc3a5To4VNrGC/9yvFdgtm5aXD+DX3
+   gN+1uPBcncsxZHex8kaGx3tilyD+iCFvHiITMQ==;
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000a023c905b588314b@google.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: New Inquiry
+To:     Recipients <info@kiandlow.ga>
+From:   "Evangeline Mulay" <info@kiandlow.ga>
+Date:   Wed, 09 Dec 2020 20:14:43 -0800
+Reply-To: Sales <sales-rej888-trading1@mail.ua>
+Message-ID: <0.0.0.35F.1D6CEAAFCE13298.0@slot0.kiandlow.ga>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git f6d088b4efe9636b0c5144e8ef36d785214e62cd
+Hello,
+
+
+
+I am Ms. evangeline mulay from Rej888 Int'l Trading Inc.I am the Commercial=
+ Manager. , We are interested in buying your products and we sincerely hope=
+ to establish a long-term business relation with your esteemed company.
+
+
+Please kindly send me your latest catalog. Also, inform me about the Minimu=
+m Order Quantity, Delivery time or FOB, and payment terms
+warranty.
+
+ =
+
+Your early reply is highly appreciated.
+
+
+
+
+contact person :Ms. evangeline mulay
+Commercial Manager of Rej888 Int'l Trading Inc.
+10th st.
+mabalacat
+pampanga
+Zip Code:2010
+Philippines
