@@ -2,187 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5177B2D55DF
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 09:56:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4722D55DD
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 09:56:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388251AbgLJIxK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Dec 2020 03:53:10 -0500
-Received: from mail-eopbgr40069.outbound.protection.outlook.com ([40.107.4.69]:18870
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388255AbgLJIxG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Dec 2020 03:53:06 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eP9in2/ZD2G9iliIq3P76wx+5E5QDHnoBoA6nmiibNqeARHIYlQPKiv/T69VZJJjZKsXqO8+iWmX6TaLKIb/ao1H6SYz0q/Y6Wx+tU8+LtQsIf6+W1+i3cYHZX3S8uR1XXMvlCgsN46LnnBTzb2Zn0b9CSR5qSjewVRkrPMHi3XQw0kdhaShS8EG2H92Uav9EZ90KAj2y9xz0YIMKnmUBxdRPcJQBhF0Grz4L0SY1qfucbBrUDqz5bJ5hMV+iZTGQEftsITPQ1pQK1FJpMKD6NSLOmuc/tYfrqrdXDhhiVJPQqvxi47/QVLEF3heyUHU9hoeu+30Ga7+OfJLTXQjOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k3diIQ7OXgsD0qHTdIuJcPmUaeGVV8QJrCCfA0QZeuw=;
- b=IBXjjmslsYmtlgHWU7H8WMqHep6RZQzpp65RyP/ADvgihZhFLZE3bxUOn8BJ0GMFSzphXkJtwTzQOfZW+9E6MgK29xcG20wNlSOOqgT2CS8Kpk3774iJ9FLZl/VwRGvsnpBGYmEW+AHrKD4RQE7jtqDfxTujhYTM7c3/AB2iq+Isem7vI3jO8R+i1SHZJX4Z4L9btnbcpCvZKhChYkEZLA8Q3TiY+5TMI2chfih6PIHpJW5ZHwFSxjmAqKkOBbAl+/wwUj3KcwuWn8PvAT4EWOnJdpkZmvRAnJRODSXrncy8ro+miyRuN5lnyuLqGJ+1IED4mpQGQlMdQxs3rPfpFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k3diIQ7OXgsD0qHTdIuJcPmUaeGVV8QJrCCfA0QZeuw=;
- b=MfgUYIkHBr2yKxF6o7IYwIaus2oa3bX8pSdpJYBrUmLZbB7XYKwo2bgj3zpUPEaLsIQvoD0cWB26pvFrn+uQEeRZ8YC5bk5E3r030iZ8fxrLMqNAWBVaxrRlmZON0h36h7sJu1Qg2wSxTumMbdwvroE+Ag+DtkxW9CmFHakZRyg=
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
- by DB6PR0401MB2373.eurprd04.prod.outlook.com (2603:10a6:4:4b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.15; Thu, 10 Dec
- 2020 08:52:17 +0000
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3632.023; Thu, 10 Dec 2020
- 08:52:17 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Pawel Laszczak <pawell@cadence.com>
-CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: linux-next: Tree for Dec 9 (usb/cdns3)
-Thread-Topic: linux-next: Tree for Dec 9 (usb/cdns3)
-Thread-Index: AQHWzo/azlCvSJB/Aky2bACp1E8uPqnwBkKA
-Date:   Thu, 10 Dec 2020 08:52:17 +0000
-Message-ID: <20201210085147.GB2388@b29397-desktop>
-References: <20201209214447.3bfdeb87@canb.auug.org.au>
- <7e4ff29c-9fa8-219c-a17d-e9be9a2a92ab@infradead.org>
-In-Reply-To: <7e4ff29c-9fa8-219c-a17d-e9be9a2a92ab@infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mutt/1.9.4 (2018-02-28)
-authentication-results: infradead.org; dkim=none (message not signed)
- header.d=none;infradead.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 01418c52-f242-4178-930b-08d89ce8e5e6
-x-ms-traffictypediagnostic: DB6PR0401MB2373:
-x-microsoft-antispam-prvs: <DB6PR0401MB2373542A4038910E4F21389F8BCB0@DB6PR0401MB2373.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NHj1bjzY7bu17sh4zGYR9rO5H+r27z1eceVHrXsnauGKg7ZQuEvn1Ty4GRo0FHp/+471jNg6LIOWqbqlgKvWUuXF1Ua8VkZ2bf+c3UNMLv6HX+BixDHDITip4alVKicsjaQaWFHMQf4K0+yG2YY+Lr8Aid5crIj4FxtlVrZj/BotBb5RxZd50l+kERujqdBlqCDkUb5RhOT+9i8hGEAbYMUocnMDr0hZEEyOhBgFACZMceTKwEhtlon8J31KAEmyyNEilZIqmZvdt5G0koPZssLTUfCaV0sgiyhVdRrfQka2JsvZtMpA4XyxcYRlkugGETvUjQJKmvvGjdcNVDLxvg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(136003)(39860400002)(376002)(396003)(366004)(346002)(33656002)(86362001)(478600001)(6486002)(110136005)(54906003)(5660300002)(316002)(26005)(9686003)(6512007)(186003)(83380400001)(64756008)(91956017)(76116006)(33716001)(8676002)(66476007)(66556008)(66946007)(8936002)(2906002)(66446008)(1076003)(4326008)(44832011)(71200400001)(6506007)(53546011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?MAg0AWawjYYH9hiXQXkxODGuwGa9KKYTMTnD3MXW1FLAVOWO3yuQI2Pa8YYM?=
- =?us-ascii?Q?ZTSEQBHtReEZmEu0K5bOnoiZwreG5afW9LCfxpG5XqGrTl9duw+q0gJvoaqQ?=
- =?us-ascii?Q?F0XLrmHicbyHRR3EacPcl0TiD6WP//6UyZnBKl/8jyub9rJfHxsqYN7kEGRR?=
- =?us-ascii?Q?xmjtBqTk2NpmRq99XKi1yDl13sV9+mKBycr+1aLgFFSlgjVi4LYr+q5dtGbt?=
- =?us-ascii?Q?PPTGPMGfaGUsJGECiKuV2IoBMH/jsXlhSgokQZ0urqbYQymbELGTCC/jzVvw?=
- =?us-ascii?Q?WBGjgLrBjAqmmMc5aXja3jICYgt/4ZJknR2YSbsLqFqleY9zZAXZBD1rNF7O?=
- =?us-ascii?Q?rByjsluPFF5wfLALxIf+pvXQI8K8slG0MYYWQrOXY+4vp11E23Z0SjpyFnsC?=
- =?us-ascii?Q?tVUHMQkkjTS+RajRJFpoDObIH4qxPt+5hEHZMJUN25Yf3Y7UQ1r3cbB4n7IX?=
- =?us-ascii?Q?DCRjQAVLqlQPBk8y13zL/AhY3pJPk/ieziBAVuDdQB2+CavpaaNJEf3o2pm+?=
- =?us-ascii?Q?zawJsd8VH4Bz1PqbigiDRwlEtu/FxBFvCj6h6QYTmK7lTQxH5pZPyZP0aCxx?=
- =?us-ascii?Q?3bQuZjQA2ofm0PKsDlxCQDqyDhY7qNHT9UMXylH4bzkxhuI2vgLcnxdwx7D/?=
- =?us-ascii?Q?uneKUpo6O8FxsqJwCDXPjh0fhJwpksZyLT3c2eFraOYzy5F8Oiy1IVnBrLOP?=
- =?us-ascii?Q?WcGFnqhOCwqJ9Db9VCyZuLJtO8rP+83++mcPgldsD9dnSkDOXJjNJJpStPxx?=
- =?us-ascii?Q?MNFY96OWkMFV0hMzkO7cXsrVX9Xz7fwkcmaJ4Zi1foO3laGMobHvQkvOqKRz?=
- =?us-ascii?Q?jKihFSlOlz0cAm2e1PaarqWQs+f0zjFRmvqtHyHpngFo/y91dSTkWbtwn3kf?=
- =?us-ascii?Q?bBO8QNwGg4uxqfANlK2yPL5qL+rpHdTdBcFEoAOdgJmukAcyNHBDxMp/e8fO?=
- =?us-ascii?Q?TxiK5Uc/BblQdtcHC44zDABhHpzgiGZbQfc1J9ErQ72Ai0j0Y8qAF324DkSK?=
- =?us-ascii?Q?cBiT?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <9C7F5C2A6B36F540B5A9B226245087D8@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S2388533AbgLJIzl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Dec 2020 03:55:41 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:41777 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388471AbgLJIxr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 03:53:47 -0500
+Received: by mail-lf1-f67.google.com with SMTP id r24so7065578lfm.8;
+        Thu, 10 Dec 2020 00:53:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bOy3TnVkZfD/QJ6W6TH3cGOKY7t0Nb1QFNap39CXdx8=;
+        b=tEQ6gqGcO8POrI5aGd15cYHeke6OIfxSsARKgN2PWus3DD76ugWcwk5iP4kS4e9L4a
+         4GihTfeHUjkWfFDJAjLbXZMIFVJCCFHsoOCpDEp9saMQpiyvyAvjDa8yPKxn9VusB3Vt
+         KVYwYxmhIbkE9bUYxETMrVjAzuy6ueGAGys3uEIfWwGA0oe85hlxOSZVza1PwUz7q1xF
+         TGz13r0gC2IFxyKXObUugQ4wXy7V8d9dapEJ90v1Z5AkkY0fVgbTl/tAS3z7ap6S9cTW
+         tO6ViahR4ipsKqd2DLBeQejU/Q3yCW8za7cuP/cqlhuu3Dd1xjfoaXlRd0+mKym3yMwl
+         1dZw==
+X-Gm-Message-State: AOAM531U0KC8ew3AKE/ezR+NorzuroTH0ix76DDx+PcEC4uZkbDMawld
+        nwBqCQeLEHT4UieZFB1rtMwOdPHm8cvpXA==
+X-Google-Smtp-Source: ABdhPJwOk/2gC90gugGCGIxW7Gp9pcvUXF8bZEHIG/K5ILxkbIMPEdC7vX7u8feZ1iAQMVTOGuzbKw==
+X-Received: by 2002:ac2:42cf:: with SMTP id n15mr2161158lfl.461.1607590385182;
+        Thu, 10 Dec 2020 00:53:05 -0800 (PST)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id v25sm444803lfg.88.2020.12.10.00.53.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Dec 2020 00:53:04 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1knHhp-00083Q-1k; Thu, 10 Dec 2020 09:53:45 +0100
+Date:   Thu, 10 Dec 2020 09:53:45 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        patong.mxl@gmail.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Angelo Dureghello <angelo.dureghello@timesys.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH v5 2/3] usb: serial: xr_serial: Add gpiochip support
+Message-ID: <X9HiGaIzk4UaZG7i@localhost>
+References: <20201122170822.21715-1-mani@kernel.org>
+ <20201122170822.21715-3-mani@kernel.org>
+ <CACRpkdbY-aZB1BAD=JkZAHA+OQvpH12AD3tLAp6Nf1hwr74s9A@mail.gmail.com>
+ <X8ZmfbQp7/BGgxec@localhost>
+ <CACRpkdZJdxqxUEQaKUHctHRSQAUpYZJtuxonwVd_ZFAsLBbKrA@mail.gmail.com>
+ <X89OOUOG0x0SSxXA@localhost>
+ <CACRpkdavm7GG8HdV1xk0W_b1EzUmvF0kKAGnp0u6t42NAWa9iA@mail.gmail.com>
+ <X9DsWahl6UDwZwBn@localhost>
+ <CACRpkdYm-j9QcK8hgNrC33KruWE17Q0F4+T=UanE7PCEZEtu6w@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 01418c52-f242-4178-930b-08d89ce8e5e6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Dec 2020 08:52:17.5747
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JB5Z7IEFSmHbwDFUPJEiXdnNlIC/VWoSnSnPUBcv+ahRmNM9xWInaxpiQCVgFAP2/87OY0JPKISYTNUqsCM4BA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0401MB2373
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACRpkdYm-j9QcK8hgNrC33KruWE17Q0F4+T=UanE7PCEZEtu6w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-12-09 16:58:16, Randy Dunlap wrote:
-> On 12/9/20 2:44 AM, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > Changes since 20201208:
-> >=20
->=20
-> (I don't know what to do about this one -- seeking help.)
+On Wed, Dec 09, 2020 at 05:25:32PM +0100, Linus Walleij wrote:
+> On Wed, Dec 9, 2020 at 4:24 PM Johan Hovold <johan@kernel.org> wrote:
+> > On Tue, Dec 08, 2020 at 01:41:52PM +0100, Linus Walleij wrote:
+> 
+> > > depends on !GPIO_SYSFS
+> > >
+> > > so it can't even be compiled in if someone is using the sysfs.
+> > >
+> > > That should solve the situation where people are (ab)using
+> > > the sysfs and getting name collisions as a result.
+> >
+> > Would it possible to set a flag to suppress just the sysfs entry
+> > renaming instead?
+> 
+> Hm you mean that when a GPIO is "exported" in sysfs
+> it should not get a symbolic name from the names but instead
+> just the number?
 
-Add Pawel.
+Right.
 
-Hi Pawel,
+> I bet someone has written their scripts to take advantage of
+> the symbolic names so I suspect the task becomes bigger
+> like suppress the sysfs entry renaming if and only if there is
+> a namespace collision.
+> 
+> But I think we can do that, doesn't seem too hard?
+> 
+> I just hacked up this:
+> https://lore.kernel.org/linux-gpio/20201209161821.92931-1-linus.walleij@linaro.org/T/#u
 
-Add old cdns3 logic, when the CONFIG_USB=3Dm
-If CONFIG_USB_CDNS3 is M, the host will be built as module
-If CONFIG_USB_CDNS3 is build-in, the host will not built due to
-USB=3Dm, so USB!=3D USB_CDNS3 at below dependency.
+I just replied to that thread, but to summarize, you can't rely on
+having the sysfs code detect collisions since that will trigger a bunch
+of nasty warnings and backtraces. We also don't want the sysfs interface
+for a specific USB device to depend on probe order (only the first one
+plugged in gets to use the line names). And adding line names now could
+in fact be what breaks currently working scripts.
 
-config USB_CDNS3_HOST
-	bool "Cadence USB3 host controller"
-	depends on USB=3Dy || USB=3DUSB_CDNS3
+> > Despite its flaws the sysfs interface is still very convenient and I'd
+> > prefer not to disable it just because of the line names.
+> 
+> Would these conveniences be identical to those listed
+> in my recent TODO entry?
+> https://lore.kernel.org/linux-gpio/20201204083533.65830-1-linus.walleij@linaro.org/
 
-So, it has no such issue.
+Indeed.
 
-But after adding CDNSSP support, the configuration relationship is
-much complicated, both CDNS3 and CDNSSP could choose host file,
-would you have a check for this issue?
+> There are several other issues with the sysfs, so making it conflict
+> with other drivers is almost  plus in the direction of discouragement
+> from the GPIO submaintainer point of view, but I do see that
+> people like it for the reasons in the TODO. :/
+> 
+> I am strongly encouraging any developer with a few spare cycles
+> on their hands to go and implement the debugfs facility because
+> we can make it so much better than the sysfs, easier and
+> more convenient for testing etc.
 
-Peter
+Don't you run the risk of having people enable debugfs in production
+systems now just so they can use the old-style interface?
 
->=20
->=20
-> on x86_64:
->=20
-> ld: drivers/usb/cdns3/host.o: in function `xhci_cdns3_suspend_quirk':
-> host.c:(.text+0x9): undefined reference to `usb_hcd_is_primary_hcd'
->=20
-> This reference to 'usb_hdc_is_primary_hcd' is from hcd_to_xhci(),
-> which is being built as a loadable module:
->=20
-> int xhci_cdns3_suspend_quirk(struct usb_hcd *hcd)
-> {
-> 	struct xhci_hcd	*xhci =3D hcd_to_xhci(hcd);
->=20
->=20
->=20
->=20
-> CONFIG_USB_GADGET=3Dy
-> CONFIG_USB_SUPPORT=3Dy
-> CONFIG_USB_COMMON=3Dy
-> # CONFIG_USB_CONN_GPIO is not set
-> CONFIG_USB_ARCH_HAS_HCD=3Dy
-> CONFIG_USB=3Dm
->=20
-> CONFIG_USB_CDNS_SUPPORT=3Dy
-> CONFIG_USB_CDNS_HOST=3Dy
-> CONFIG_USB_CDNS3=3Dm
-> CONFIG_USB_CDNS3_GADGET=3Dy
-> CONFIG_USB_CDNS3_HOST=3Dy
->=20
-> Problem is mostly that CONFIG_USB=3Dm and CONFIG_USB_GADGET=3Dy.
->=20
->=20
-> Full randconfig file is attached.
->=20
->=20
-> thanks.
-> --=20
-> ~Randy
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Side note: if you skip the "export" part of the interface, how would you
+indicate that a line is already in use or not available (e.g.
+gpio-range-reserved)?
 
+> > > Then it should be fine for any driver to provide a names array
+> > > provided all the names are unique on that gpiochip.
+> >
+> > So it sounds like there's nothing preventing per-chip-unique names in
+> > the rest of gpiolib and the new chardev interface then? Are the
+> > user-space libraries able to cope with it, etc?
+> 
+> Yes the documentation refers to libgpiod a very well maintained
+> library:
+> https://www.kernel.org/doc/html/latest/driver-api/gpio/using-gpio.html
+> https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/
 
+Just did a super quick check and it seems libgpiod still assumes a flat
+name space. For example, gpiod_chip_find_line() returns only the first
+line found that matches a name. Shouldn't be impossible to extend, but
+just want to make sure this flat namespace assumption hasn't been to
+heavily relied upon.
 
---=20
-
-Thanks,
-Peter Chen=
+Johan
