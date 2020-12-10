@@ -2,15 +2,15 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B64782D5C24
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 14:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8332D5C2A
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 14:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389293AbgLJNnO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Dec 2020 08:43:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45172 "EHLO mail.kernel.org"
+        id S2389334AbgLJNnR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Dec 2020 08:43:17 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45234 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732601AbgLJNnO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Dec 2020 08:43:14 -0500
+        id S1732601AbgLJNnR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Dec 2020 08:43:17 -0500
 From:   Peter Chen <peter.chen@kernel.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     pawell@cadence.com, rogerq@ti.com, robh+dt@kernel.org,
@@ -18,32 +18,21 @@ To:     pawell@cadence.com, rogerq@ti.com, robh+dt@kernel.org,
 Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, a-govindraju@ti.com,
         frank.li@nxp.com, devicetree@vger.kernel.org,
         Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH 1/2] of: platform: introduce platform data length for auxdata
-Date:   Thu, 10 Dec 2020 21:42:14 +0800
-Message-Id: <20201210134215.20424-1-peter.chen@kernel.org>
+Subject: [PATCH 2/2] usb: cdns3: imx: assign platform_data_length for auxdata structure
+Date:   Thu, 10 Dec 2020 21:42:15 +0800
+Message-Id: <20201210134215.20424-2-peter.chen@kernel.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201210134215.20424-1-peter.chen@kernel.org>
+References: <20201210134215.20424-1-peter.chen@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Peter Chen <peter.chen@nxp.com>
 
-When a platform device is released, it frees the device platform_data
-memory region using kfree, if the memory is not allocated by kmalloc,
-it may run into trouble. See the below comments from kfree API.
-
-	 * Don't free memory not originally allocated by kmalloc()
-	 * or you will run into trouble.
-
-For the device which is created dynamically using of_platform_populate,
-if the platform_data is existed at of_dev_auxdata structure, the OF code
-simply assigns the platform_data pointer to newly created device, but
-not using platform_device_add_data to allocate one. For most of platform
-data region at device driver, which may not be allocated by kmalloc, they
-are at global data region or at stack region at some situations.
-
-It fixed below oops during module unload process at imx8qxp mek platform
-for Cadence USB3 driver.
+In this case, the OF code will call platform_device_add_data to
+allocate platform_data using kmalloc, and avoid kfree issue when
+unload module. It fixed below oops:
 
 log1:
 [  333.501593] Unable to handle kernel paging request at virtual address 000000000004ae48
@@ -125,126 +114,21 @@ log2:
 
 Signed-off-by: Peter Chen <peter.chen@nxp.com>
 ---
- drivers/of/platform.c       | 29 +++++++++++++++++++++--------
- include/linux/of_platform.h |  8 ++++++--
- 2 files changed, 27 insertions(+), 10 deletions(-)
+ drivers/usb/cdns3/cdns3-imx.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-index b557a0fcd4ba..4afb775779f3 100644
---- a/drivers/of/platform.c
-+++ b/drivers/of/platform.c
-@@ -157,7 +157,8 @@ EXPORT_SYMBOL(of_device_alloc);
-  * of_platform_device_create_pdata - Alloc, initialize and register an of_device
-  * @np: pointer to node to create device for
-  * @bus_id: name to assign device
-- * @platform_data: pointer to populate platform_data pointer with
-+ * @platform_data: platform_data pointer from device driver
-+ * @platform_data_length: the length of platform_data
-  * @parent: Linux device model parent device.
-  *
-  * Returns pointer to created platform device, or NULL if a device was not
-@@ -167,6 +168,7 @@ static struct platform_device *of_platform_device_create_pdata(
- 					struct device_node *np,
- 					const char *bus_id,
- 					void *platform_data,
-+					int platform_data_length,
- 					struct device *parent)
- {
- 	struct platform_device *dev;
-@@ -183,16 +185,22 @@ static struct platform_device *of_platform_device_create_pdata(
- 	if (!dev->dev.dma_mask)
- 		dev->dev.dma_mask = &dev->dev.coherent_dma_mask;
- 	dev->dev.bus = &platform_bus_type;
--	dev->dev.platform_data = platform_data;
-+	if (platform_data_length) {
-+		if (platform_device_add_data(dev, platform_data, platform_data_length))
-+			goto err_put_device;
-+	} else {
-+		dev->dev.platform_data = platform_data;
-+	}
-+
- 	of_msi_configure(&dev->dev, dev->dev.of_node);
- 
--	if (of_device_add(dev) != 0) {
--		platform_device_put(dev);
--		goto err_clear_flag;
--	}
-+	if (of_device_add(dev) != 0)
-+		goto err_put_device;
- 
- 	return dev;
- 
-+err_put_device:
-+	platform_device_put(dev);
- err_clear_flag:
- 	of_node_clear_flag(np, OF_POPULATED);
- 	return NULL;
-@@ -211,7 +219,7 @@ struct platform_device *of_platform_device_create(struct device_node *np,
- 					    const char *bus_id,
- 					    struct device *parent)
- {
--	return of_platform_device_create_pdata(np, bus_id, NULL, parent);
-+	return of_platform_device_create_pdata(np, bus_id, NULL, 0, parent);
- }
- EXPORT_SYMBOL(of_platform_device_create);
- 
-@@ -353,6 +361,7 @@ static int of_platform_bus_create(struct device_node *bus,
- 	struct platform_device *dev;
- 	const char *bus_id = NULL;
- 	void *platform_data = NULL;
-+	int platform_data_length = 0;
- 	int rc = 0;
- 
- 	/* Make sure it has a compatible property */
-@@ -378,6 +387,9 @@ static int of_platform_bus_create(struct device_node *bus,
- 	if (auxdata) {
- 		bus_id = auxdata->name;
- 		platform_data = auxdata->platform_data;
-+		platform_data_length = auxdata->platform_data_length;
-+		if (platform_data && !platform_data_length)
-+			pr_warn("Make sure platform_data is allocated by kmalloc\n");
- 	}
- 
- 	if (of_device_is_compatible(bus, "arm,primecell")) {
-@@ -389,7 +401,8 @@ static int of_platform_bus_create(struct device_node *bus,
- 		return 0;
- 	}
- 
--	dev = of_platform_device_create_pdata(bus, bus_id, platform_data, parent);
-+	dev = of_platform_device_create_pdata(bus, bus_id, platform_data,
-+					platform_data_length, parent);
- 	if (!dev || !of_match_node(matches, bus))
- 		return 0;
- 
-diff --git a/include/linux/of_platform.h b/include/linux/of_platform.h
-index 84a966623e78..c3b02236b110 100644
---- a/include/linux/of_platform.h
-+++ b/include/linux/of_platform.h
-@@ -18,11 +18,14 @@
-  * @phys_addr: Start address of registers to match against node
-  * @name: Name to assign for matching nodes
-  * @platform_data: platform_data to assign for matching nodes
-+ * @platform_data_length: the length of platform data
-  *
-  * This lookup table allows the caller of of_platform_populate() to override
-  * the names of devices when creating devices from the device tree.  The table
-- * should be terminated with an empty entry.  It also allows the platform_data
-- * pointer to be set.
-+ * should be terminated with an empty entry. The platform_data_length should be
-+ * given if the platform_data is existed and is not allocated by kmalloc, it
-+ * could avoid potential kfree issue when the platform_data is freed by
-+ * platform_device_release.
-  *
-  * The reason for this functionality is that some Linux infrastructure uses
-  * the device name to look up a specific device, but the Linux-specific names
-@@ -39,6 +42,7 @@ struct of_dev_auxdata {
- 	resource_size_t phys_addr;
- 	char *name;
- 	void *platform_data;
-+	int platform_data_length;
+diff --git a/drivers/usb/cdns3/cdns3-imx.c b/drivers/usb/cdns3/cdns3-imx.c
+index f03562c76a50..67c9b789d3b2 100644
+--- a/drivers/usb/cdns3/cdns3-imx.c
++++ b/drivers/usb/cdns3/cdns3-imx.c
+@@ -158,6 +158,7 @@ static const struct of_dev_auxdata cdns_imx_auxdata[] = {
+ 	{
+ 		.compatible = "cdns,usb3",
+ 		.platform_data = &cdns_imx_pdata,
++		.platform_data_length = sizeof(cdns_imx_pdata),
+ 	},
+ 	{},
  };
- 
- /* Macro to simplify populating a lookup table */
 -- 
 2.17.1
 
