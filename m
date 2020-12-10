@@ -2,120 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB4E2D63C3
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 18:40:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9E52D63DF
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 18:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392840AbgLJRgK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Dec 2020 12:36:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392832AbgLJRgD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 12:36:03 -0500
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5997DC061793
-        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 09:35:23 -0800 (PST)
-Received: by mail-wm1-x341.google.com with SMTP id e25so6165453wme.0
-        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 09:35:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=3OOtstF0oi5Pj3WzkLhAlF1kOotO4HUwZrv4mEkOcmo=;
-        b=xXdMrXB67v5iPn3t4QpIjOgfd0dw29zJu80kxy5UApfv54VaGek06iQq6xi97NjVI6
-         k0/UVkzqokkl27JFCGZ0n2FWPtOf+ZNuVm3iw/w+zsbxi4GaB6qQbF8O3i79Hb6a0bNC
-         mlLDtf4o0iLI7B4FuyVmYKeu5WrQm3gNRF1a0IB8KkJts+MLZbi4PYzrliQYm3yBOeUS
-         k1+9098CJumH6wwGAr49YhRKpEa04RyvH8xiKeZnwuo1P9Q82hZrF/0yqV/jvX0wOjSf
-         Hj83mbr2ydtlTm4gXkHZmp7irrssK6GtcROU0JDvmEHvbPl97sx1RWhl65dReJkhOk2Y
-         d/Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=3OOtstF0oi5Pj3WzkLhAlF1kOotO4HUwZrv4mEkOcmo=;
-        b=qZJ/Fp9MACKTPjpvoleAfOvwHwhCsVtL6tbRkGsOsOsEmSMp2q9VKw8rfHcOutWCV5
-         STgU9J/h1WsT/fbUFQac5aCQdx72rpL+E6LyTNvRKxLx6l0u2d//2KbjnzE1vSVxxC5m
-         GAiKFfztwvOH+aGpWSPjFrI6mHsG1eij8iZSno7fMwUkddksvhsUQSEdVPu2EFYAYxkn
-         jNpviFrpWzRZSlrr3QDxZQJE+Ub6Dm/tjfk0iSFy5pWSMlPyDYGHctqGg3d7MOh9DW2T
-         j81rCVpl7DBzYFplc4jddIKpDOYX2b2im6MVDQuAIQpxo+VFb/kFSeLotHbxnOVU1gRg
-         TdXQ==
-X-Gm-Message-State: AOAM532P72E5kQM17+psHbyDPJ+/ZyrrTy3ZPNYFnxlN7qyxRH2Td6eV
-        JZIdpFXnbsJThp8cHQVO7FydDQ==
-X-Google-Smtp-Source: ABdhPJxg2Z1jDKGv7Agg09j/xGG65aYo0VOQopc5QtI3X7SwMN+hdglx/8BTCGE8Sjgpz2I/OiqxFA==
-X-Received: by 2002:a1c:a785:: with SMTP id q127mr5215807wme.25.1607621722139;
-        Thu, 10 Dec 2020 09:35:22 -0800 (PST)
-Received: from ?IPv6:2001:861:3a84:7260:5514:1343:4704:99a? ([2001:861:3a84:7260:5514:1343:4704:99a])
-        by smtp.gmail.com with ESMTPSA id o83sm10647057wme.21.2020.12.10.09.35.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Dec 2020 09:35:21 -0800 (PST)
-Subject: Re: [PATCH v2 2/3] usb: dwc3: meson-g12a: fix shared reset control
- use
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>, linux-usb@vger.kernel.org,
+        id S1729195AbgLJRnf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Dec 2020 12:43:35 -0500
+Received: from gproxy8-pub.mail.unifiedlayer.com ([67.222.33.93]:59738 "EHLO
+        gproxy8-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2392703AbgLJRn0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 12:43:26 -0500
+Received: from cmgw11.unifiedlayer.com (unknown [10.9.0.11])
+        by gproxy8.mail.unifiedlayer.com (Postfix) with ESMTP id 8E1A01AB056
+        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 10:42:38 -0700 (MST)
+Received: from bh-25.webhostbox.net ([208.91.199.152])
+        by cmsmtp with ESMTP
+        id nPxekyQssdCH5nPxek1Oht; Thu, 10 Dec 2020 10:42:38 -0700
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.3 cv=G5cy7es5 c=1 sm=1 tr=0
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
+ a=zTNgK-yGK50A:10:nop_rcvd_month_year
+ a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=1XWaLZrsAAAA:8
+ a=_jlGtV7tAAAA:8 a=QyXUC8HyAAAA:8 a=ag1SF4gXAAAA:8 a=D6N0on24dROpF_i51M8A:9
+ a=CjuIK1q_8ugA:10:nop_charset_2 a=nlm17XC03S6CtCLSeiRr:22
+ a=Yupwre4RP9_Eg_Bd0iYG:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=5YmuPWHMOh1EdgGQP6M1KGAXCwcz4J5xaPKG0AP1b4k=; b=gXzub4Ll2eI0H9XXwQ0eH3zg+4
+        zskkV1eXoJ+IlcBbXI5u9ZZ8RGiVtB2Jh28Sq9Vfa6qa3n4LLmB9rugZNgGwEOlQ6nEXYekSZ34Fz
+        U+2VAPvPJW0WSSZF43O4TTsAHuxzOnmAPzTDg3wF9tmLUc8UARwgBenP87iRXaXWB53WStp9JL/y5
+        mmK1VaMCHi1vJVnYVpf+Gso9G69/OfdfPd/uKwQBi2T27nZ6WPGc4Oiyd5uQ9Gwx90UROSa1FShCd
+        cwzMQdrjErw73SPylExhcXnHsUBTKL2smWj6BaMuRwoVewpNb4ZgvURU+rK26evDFwmLQvbZ1UTVk
+        ptZHEUEw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:60448 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <linux@roeck-us.net>)
+        id 1knPxd-001SBJ-Mk; Thu, 10 Dec 2020 17:42:37 +0000
+Date:   Thu, 10 Dec 2020 09:42:36 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-amlogic@lists.infradead.org,
-        Jerome Brunet <jbrunet@baylibre.com>
-References: <20201201190100.17831-1-aouledameur@baylibre.com>
- <20201201190100.17831-3-aouledameur@baylibre.com>
- <CAFBinCCovB9e1_AwXv0Jcn3p69LN5KAdzttfZcY+=_TEZTCn6Q@mail.gmail.com>
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Message-ID: <d4a6d417-1cc2-e1eb-e7b5-6707f8602db3@baylibre.com>
-Date:   Thu, 10 Dec 2020 18:35:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Kyle Tso <kyletso@google.com>,
+        Will McVicker <willmcvicker@google.com>
+Subject: Re: [PATCH 1/5] USB: typec: tcpm: Prevent log overflow by removing
+ old entries
+Message-ID: <20201210174236.GB107395@roeck-us.net>
+References: <20201210160521.3417426-1-gregkh@linuxfoundation.org>
+ <20201210160521.3417426-2-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <CAFBinCCovB9e1_AwXv0Jcn3p69LN5KAdzttfZcY+=_TEZTCn6Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201210160521.3417426-2-gregkh@linuxfoundation.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1knPxd-001SBJ-Mk
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:60448
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 5
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Martin
+On Thu, Dec 10, 2020 at 05:05:17PM +0100, Greg Kroah-Hartman wrote:
+> From: Badhri Jagan Sridharan <badhri@google.com>
+> 
+> TCPM logs overflow once the logbuffer is full. Clear old entries and
+> allow logging the newer ones as the newer would be more relevant to the
+> issue being debugged.
+> 
+> Also, do not reset the logbuffer tail as end users might take back to
+> back bugreports which would result in an empty buffer.
+> 
 
+Historically, the reason for not doing this was that, once a problem occurs,
+the log would fill up quickly (typically with reconnect attempts), and the
+actual reason for the problem would be overwritten. Maybe that reasoning
+no longer applies; I just wanted to point out that there _was_ a reason for
+not clearing old log entries.
 
-On 05/12/2020 22:42, Martin Blumenstingl wrote:
+Guenter
 
->    
-> Hello Amjad,
->
-> On Tue, Dec 1, 2020 at 8:01 PM Amjad Ouled-Ameur
-> <aouledameur@baylibre.com> wrote:
->    
->> reset_control_(de)assert() calls are called on a shared reset line when
->> reset_control_reset has been used. This is not allowed by the reset
->> framework.
->>
->> Use reset_control_rearm() call in suspend() and remove() as a way to state
->> that the resource is no longer used, hence the shared reset line
->> may be triggered again by other devices. Use reset_control_rearm() also in
->> case probe fails after reset() has been called.
->>
->> reset_control_rearm() keeps use of triggered_count sane in the reset
->> framework, use of reset_control_reset() on shared reset line should be
->> balanced with reset_control_rearm().
->    
-> I think this should be updated after [0] is applied
-> The goto from that patch needs to use err_rearm from this patch.
->
->
-> Best regards,
-> Martin
->
->
-> [0] https://patchwork.kernel.org/project/linux-usb/patch/20201111095256.10477-1-zhengzengkai@huawei.com/
-
-Thank you Martin for reviewing this patchset.
-
-I have reviewed the patch you mentioned, and I think as well that
-we should use 'err_rearm' instead of 'err_disable_clks' to
-cleanup things properly in case setup_regmaps fails.
-
-
-Best,
-
-Amjad
-
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: Kyle Tso <kyletso@google.com>
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> Signed-off-by: Will McVicker <willmcvicker@google.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 16 +++-------------
+>  1 file changed, 3 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index cedc6cf82d61..0ceeab50ed64 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -470,12 +470,6 @@ static bool tcpm_port_is_disconnected(struct tcpm_port *port)
+>  
+>  #ifdef CONFIG_DEBUG_FS
+>  
+> -static bool tcpm_log_full(struct tcpm_port *port)
+> -{
+> -	return port->logbuffer_tail ==
+> -		(port->logbuffer_head + 1) % LOG_BUFFER_ENTRIES;
+> -}
+> -
+>  __printf(2, 0)
+>  static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
+>  {
+> @@ -495,11 +489,6 @@ static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
+>  
+>  	vsnprintf(tmpbuffer, sizeof(tmpbuffer), fmt, args);
+>  
+> -	if (tcpm_log_full(port)) {
+> -		port->logbuffer_head = max(port->logbuffer_head - 1, 0);
+> -		strcpy(tmpbuffer, "overflow");
+> -	}
+> -
+>  	if (port->logbuffer_head < 0 ||
+>  	    port->logbuffer_head >= LOG_BUFFER_ENTRIES) {
+>  		dev_warn(port->dev,
+> @@ -519,6 +508,9 @@ static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
+>  		  (unsigned long)ts_nsec, rem_nsec / 1000,
+>  		  tmpbuffer);
+>  	port->logbuffer_head = (port->logbuffer_head + 1) % LOG_BUFFER_ENTRIES;
+> +	if (port->logbuffer_head == port->logbuffer_tail)
+> +		port->logbuffer_tail =
+> +			(port->logbuffer_tail + 1) % LOG_BUFFER_ENTRIES;
+>  
+>  abort:
+>  	mutex_unlock(&port->logbuffer_lock);
+> @@ -622,8 +614,6 @@ static int tcpm_debug_show(struct seq_file *s, void *v)
+>  		seq_printf(s, "%s\n", port->logbuffer[tail]);
+>  		tail = (tail + 1) % LOG_BUFFER_ENTRIES;
+>  	}
+> -	if (!seq_has_overflowed(s))
+> -		port->logbuffer_tail = tail;
+>  	mutex_unlock(&port->logbuffer_lock);
+>  
+>  	return 0;
+> -- 
+> 2.29.2
+> 
