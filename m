@@ -2,161 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3B12D5B19
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 14:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE072D5B20
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 14:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388544AbgLJNAY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Dec 2020 08:00:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732802AbgLJNAY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 08:00:24 -0500
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DF0C0613D6
-        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 04:59:44 -0800 (PST)
-Received: by mail-ot1-x342.google.com with SMTP id q25so4719469otn.10
-        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 04:59:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QyjoTz7y/nlrxbR2fk5DJPSiI8VeNp7IabT2BpnlUCk=;
-        b=Hf1jNqK14i1tVxCxxXAwJzaoMHY6ydoPeEB87rlcoGA0nvXV+zGvuWvIPYs6WNg0ys
-         XxsnRnQP3c4gfMgtClOOGffnXLAN/DVpCFHmftmza7aAaQ+AGj4abXiQJIfnpYHWoL+Q
-         shznXuzdpQys7fpudwgJ1Jn4tK62FpBlA4fI8KiU/9AygJqGt7wnHKDmyq+Mqf2l0aOV
-         3u4p78VU0eVzVJ5od9Y84TGoIyIEEwlvGjzuaEy5Cf/hbXP5olwYp1khqDQR0EUosZA7
-         UrLuQy3PyPJXBlC4ylKjmfwSllGrMvF+SKhRpitnn3O1FXJCIneawXdsPkwUq7Qd6Sgo
-         /IFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QyjoTz7y/nlrxbR2fk5DJPSiI8VeNp7IabT2BpnlUCk=;
-        b=gUX7EMfH/yeVc1LsG1sJfl0kX5hERE8VmwT3e/Or4hAIGwkDe6Fk2mYVNq2L9oCzTE
-         KFziaqAh12scWMtRjQiUsnx8IRjmyYs4X6FgNSPJZmv6PPTaAqdWyjILCCpw2jjOgVu8
-         t15KqgmzTiTeUKmeK5MG/KUnyHmtT1EPfDiWVXQ0Mj9AaON9lJ+B97u2af7E7rDWj6w3
-         3xkoNKxLNaKhaD8GYmvuXouFOWWdR9FX75mGfM4/mc7YaBz5zqc0f/PzvUffd8hZGdmR
-         mBvW8Ys4Zd0cJGO7+GyPcH0I0lWybECWuWW5/JuuAJHi5jn4E/zMWRFM33sv4yLvpZY+
-         af6A==
-X-Gm-Message-State: AOAM530QUETMrh4vhy7ufJQFkNlzmkT582WEzKKYZ7Z8AFvC6cRXke0l
-        pRD9fCftjNa+MUIdb7uBC3PChBbvL08qJTkQia/0/wjBifFO+CKI
-X-Google-Smtp-Source: ABdhPJy9oQsPuMibYpQQ13bG/rSxTY13WoA1DDaibjDQPGDWgqwjvgM7lc7sTG4rhUPyxQZ81E52t0BytLK0GK+vfp0=
-X-Received: by 2002:a05:6830:1d7b:: with SMTP id l27mr5777138oti.197.1607605183390;
- Thu, 10 Dec 2020 04:59:43 -0800 (PST)
+        id S2388787AbgLJNA4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Dec 2020 08:00:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50642 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387551AbgLJNA4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Dec 2020 08:00:56 -0500
+Date:   Thu, 10 Dec 2020 14:01:30 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1607605215;
+        bh=rTo9eetkSdm+KSFjwedHWy4XZCWRCFqMFGM9FGLKmrE=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QnEyvwhkTC5cFbHjDbQDzFgWHNOL1OvdSIvNrK9YuQoXll0d3hsOpaK33Po70dhu8
+         TZAME3F6ZZEIQEPC6cWn/DzVA8o2expRaTTVCDsjY18ts6Bv1+GESpKpEfC12Vijk5
+         5wASxs3EHqWXPrGW3BsilrJWIDXx/zWZ8ka4M8nI=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Maarten Brock <m.brock@vanmierlo.com>
+Cc:     Mychaela Falconia <mychaela.falconia@gmail.com>,
+        Johan Hovold <johan@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Mychaela N . Falconia" <falcon@freecalypso.org>,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] tty: add flag to suppress ready signalling on open
+Message-ID: <X9IcKoofq+2iGZn7@kroah.com>
+References: <20201202113942.27024-1-johan@kernel.org>
+ <X9Dficb8sQGRut+S@kroah.com>
+ <CA+uuBqYTzXCHGY8QnP+OQ5nRNAbqx2rMNzLM7OKLM1_4AzzinQ@mail.gmail.com>
+ <6b81cca21561305b55ba8f019b78da28@vanmierlo.com>
+ <X9H9i98E1Gro+mDP@kroah.com>
+ <3fc3097ce1d35ce1e45fa5a3c7173666@vanmierlo.com>
 MIME-Version: 1.0
-References: <1604794711-8661-1-git-send-email-ruslan.bilovol@gmail.com>
- <20201111092941.GJ14896@b29397-desktop> <CAB=otbSAGhDYxim9_fsyH4pZCLqgq+bxNJfv5hXqgQRVngVaig@mail.gmail.com>
- <CAMS2kBF5Gvhnf7AzdeSFeVeWBLhtHM_hHfTvMLTN-3Jkh=BwHw@mail.gmail.com>
- <CAB=otbTK0j03HjiLS-tqqaBTuavaFEJs49hpKPj2Df8e1_WN+A@mail.gmail.com>
- <CAMS2kBEnUDi5jKiNu5ZKihyucCikfoGor4n7=e+xX=7WU_rrog@mail.gmail.com>
- <CAB=otbRrLjeTjhBGtMqpeWeYZB9v62SDjSWzRk8uGQE3Ld8T2A@mail.gmail.com>
- <CAMS2kBGRrozHQj9wfLmcQMSCb8On+5HcSF=8PsUJAtqXz2QG1w@mail.gmail.com>
- <CAMS2kBGcDu-02dboEwxygMDE1r1c9Q3Lzrw6TcsoKEMvOzLmDQ@mail.gmail.com> <20201203100912.GA2881@b29397-desktop>
-In-Reply-To: <20201203100912.GA2881@b29397-desktop>
-From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Date:   Thu, 10 Dec 2020 14:59:24 +0200
-Message-ID: <CAB=otbSHvP3CXUFK_iAjgsDoWPeKxLjumUnELMf1jiAw6ZCY0g@mail.gmail.com>
-Subject: Re: [PATCH 0/3] UAC2 Gadget: feedback endpoint support
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Glenn Schmottlach <gschmottlach@gmail.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3fc3097ce1d35ce1e45fa5a3c7173666@vanmierlo.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 3, 2020 at 12:09 PM Peter Chen <peter.chen@nxp.com> wrote:
->
-> On 20-12-02 17:04:47, Glenn Schmottlach wrote:
-> > On Tue, Dec 1, 2020 at 4:43 PM Glenn Schmottlach <gschmottlach@gmail.com> wrote:
-> > > Hi Ruslan -
-> > >
-> > > Thanks for the feedback but unfortunately I've experienced mixed
-> > > results with the gadget UAC2 driver on both Windows/Linux. Let me
-> > > describe my environment. My host platform is either a Linux Ubuntu
-> > > 18.04 or Windows 10 laptop while the target environment is a
-> > > BeagleBone Black (Linux beaglebone 5.4.74-g9574bba32a #1 PREEMPT). I'm
-> > > testing two different scenarios:
-> > >
-> > > Scenario #1:
-> > > BeagleBone Black (BBB) runs speaker-test generating a single channel
-> > > (S32_LE) audio stream containing a 1KHz tone with a 48K sample rate,
-> > > e.g.
-> > >
-> > > > speaker-test -D hw:1,0 -r 48000 -c 1 -f 1000 -F S32_LE -t sine
-> > >
-> > > The host laptop is running Audacity and recording the tone over the
-> > > UAC2 adapter. On the Linux host the capture is correct and the tone is
-> > > bit-perfect. On the Windows 10 the capture contains numerous missing
-> > > samples which translates into a lot of audible pops and clicks.
-> > >
-> > > Scenario #2:
-> > > The Linux/Windows host plays a single channel, 48K, S32_LE 1K sine
-> > > tone to the target using either Audacity (on Windows) or 'aplay' (on
-> > > Linux), e.g.
-> > >
-> > > > aplay -D hw:4,0 -c 1  -r 48000 -t wav  tone_1k.wav  (Linux)
-> > >
-> > > On the BBB target I use 'arecord' to record the tone to a RAM disk and
-> > > then copy the recorded file back to the host where I can verify the
-> > > quality of the recording. In both instances (e.g. using either Windows
-> > > or Linux for playback) the recording on the target results in a
-> > > captured file with missing samples and audible pops/clicks. In this
-> > > scenario the UAC2 gadget is configured with c_sync == asynchronous. I
-> > > wouldn't expect things to improve with c_sync == adaptive since you
-> > > mentioned in your patch that it always reports back the nominal
-> > > frequency to the host from the feedback endpoint.
-> > >
-> > > Do you have any suggestions that might explain (the above) behavior.
-> > > Can you describe your test environment in more detail so that I can
-> > > perhaps re-create it? What Linux target are you using with your tests?
-> > > You mentioned you tested an 8x8 playback/capture scenario. Can you
-> > > provide any details of how you performed this test and the method you
-> > > used to confirm the audio quality for the capture/playback?
-> > >
-> > > Thanks for any insights you might be able to offer . . .
-> > >
-> > > Glenn
-> >
-> > Hi Ruslan -
-> >
-> > This is a follow-up from my post yesterday. I recompiled my kernel
-> > *WITHOUT* your UAC2 patches and repeated Scenario #2 where the Linux
-> > PC plays a single channel tone to the BeagleBone Black where it's
-> > recorded with 'arecord'. Yesterday, I recorded garbled audio on the
-> > target but today, without any UAC2 kernel patches, the recorded audio
-> > on the target is glitch-free and appears to be bit-perfect.
-> >
-> > This experiment leads me to believe your patches may be inadvertently
-> > corrupting the data-path. Have you been able to repeat my experiment
-> > and either confirm or refute my findings? I am interested to learn
-> > more how you tested your patches and whether it's something I can
-> > recreate here.
-> >
-> > Assuming we can sort out this data corruption issue, what are your
-> > thoughts on how the Linux target device can properly provide the
-> > Windows feedback endpoint with real frequency updates rather than the
-> > constant nominal frequency. If I understood your patch notes correctly
-> > it seems this is an outstanding issue that requires additional
-> > attention. I'm a bit of a noob when it comes to how this might be
-> > addressed.
-> >
-> > Thanks for your continued insights and support . . .
-> >
-> > Glenn
->
-> Hi Glenn & Ruslan,
->
-> Do you know why WIN10 can't recognized UAC2 device if I configure the
-> sample rate as 48000HZ? Configuring sample rate as 44100HZ, the playback
-> function would work well at my platforms (chipidea IP), no glitch is
-> heard. At WIN10, I use Windows Media Player, at board side I use command:
+On Thu, Dec 10, 2020 at 01:05:15PM +0100, Maarten Brock wrote:
+> On 2020-12-10 11:50, Greg Kroah-Hartman wrote:
+> > On Thu, Dec 10, 2020 at 11:41:24AM +0100, Maarten Brock wrote:
+> > > Hello Mychaela,
+> > > 
+> > > On 2020-12-09 23:49, Mychaela Falconia wrote:
+> > > > Greg K-H wrote:
+> > > >
+> > > > > I think we need more review for the rest of the series.  This does
+> > > > > change the way serial ports work in a non-traditional way (i.e. using
+> > > > > sysfs instead of terminal settings).
+> > > >
+> > > > But the problem is that the current status quo is fundamentally broken
+> > > > for those hardware devices in which DTR and/or RTS have been repurposed
+> > > > for something other than modem and flow control.  Right now whenever a
+> > > > "cold" (never previously opened) serial port is opened for the first
+> > > > time, that open action immediately and unstoppably asserts both DTR
+> > > > and RTS hardware outputs, without giving userspace any opportunity to
+> > > > say "no, please don't do it".  Yes, this behaviour is codified in a
+> > > > bunch of standards that ultimately trace back to 1970s Original UNIX,
+> > > > but just because it is a standard does not make it right - this
+> > > > Unix/POSIX/Linux "standard" serial port behaviour is a bug, not a
+> > > > feature.
+> > > 
+> > > I agree. And an application not configuring the required handshakes,
+> > > but
+> > > still relying on them is an equal bug.
+> > > 
+> > > > But if there exist some custom hw devices out there that are in the
+> > > > same predicament as my DUART28 adapter, but are different in that they
+> > > > are classic old-fashioned RS-232 rather than integrated USB-serial,
+> > > > with no place to assign a custom USB ID, *then* we need a non-USB-ID-
+> > > > dependent solution such as Johan's sysfs attribute or O_DIRECT.
+> > > 
+> > > Any device with a classic old-fashioned RS-232 has probably already
+> > > solved this in another way or is accepted as not working on Linux.
+> > > 
+> > > And then there is also the device tree (overlay?) through which a
+> > > quirk
+> > > like this can be communicated to the kernel driver. Not sure if this
+> > > could help for a plug-and-play device like on USB.
+> > > 
+> > > > > So I want to get a bunch of people
+> > > > > to agree that this is ok to do things this way now before taking this
+> > > > > new user-visible api.
+> > > 
+> > > Personally, I would prefer the VID:PID to enforce the quirk and an
+> > > O_DIRECT (or other) flag used on open() as general backup plan. To
+> > > me a sysfs solution seems illogical.
+> > 
+> > The "problem" of a vid:pid is that for usb-serial devices, that only
+> > describes the device that does the conversion itself, NOT the serial
+> > device the converter is plugged into that cares about these types of
+> > line-wiggling.
+> > 
+> > Just like you would not want to classify all devices that met the PCI
+> > serial class signature for this type of thing either, there is nothing
+> > special about USB here other than it happens to be a common transport
+> > for these signals these days.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> 
+> This is true for a generic USB-UART board or cable, but not for a
+> dedicated PCB where both the USB-UART chip and the special connection
+> are implemented and which has a dedicated VID:PID different from any
+> generic one. In this case the VID:PID describes the whole board.
 
-That's known issue, Windows is more strict with UAC2 descriptors, try to apply
-my patch "usb: gadget: f_uac2: always increase endpoint max_packet_size
-by one audio slot" that I shared in this email:
-https://www.spinics.net/lists/linux-usb/msg205077.html
+Companies/devices lie about vid:pid all the time, wait until your
+specific vid:pid is repurposed for some other device and then what
+happens?  :)
 
-Thanks,
-Ruslan
+> If the line-wiggling requirement is created behind some sort of
+> connector (real RS-232 DB9/DB25 or CMOS pin header or whatever)
+> then the problem is the same as for an 8250 on any other bus. For
+> this situation I would prefer the O_DIRECT flag on open().
+
+O_DIRECT is an interesting hack, has anyone seen if it violates the
+posix rules for us to use it on a character device like this?
+
+thanks,
+
+greg k-h
