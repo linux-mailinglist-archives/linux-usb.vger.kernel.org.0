@@ -2,68 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D439C2D6938
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 21:58:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E29392D695D
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Dec 2020 22:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393860AbgLJU5I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Dec 2020 15:57:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36380 "EHLO
+        id S1726878AbgLJVFS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Dec 2020 16:05:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390160AbgLJU4z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 15:56:55 -0500
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FCCBC061793
-        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 12:56:15 -0800 (PST)
-Received: by mail-qk1-x741.google.com with SMTP id h4so1456408qkk.4
-        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 12:56:15 -0800 (PST)
+        with ESMTP id S2393901AbgLJVFE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 16:05:04 -0500
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F73C0613D3
+        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 13:04:24 -0800 (PST)
+Received: by mail-qv1-xf43.google.com with SMTP id s6so3160361qvn.6
+        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 13:04:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=2pQY5/oc++7Ys7PmnH7tWtOBFzCDoT4AkhPKs3hCv1Q=;
-        b=iprpcK0vIk+92C4f6GYrv4VBLcE2LwdGqkLRomGbU0AAjZ29AtP//uKIDVrox4laZd
-         UXznKfHtQ41iINtnq0MqxqFmWSGZncY1QT74mmV2JxuYKeYOANerXEvev+xa6thEervZ
-         jtm99OfiKs577Brpd5QTNgy28uqIHHuF19WrvxzottAmM30Kzw6qJE3OnCDvemdw8Xvt
-         dMTDIV/8Bk7elijvZQJfzpRPzPhRi8oBm4WB781HWjHu7XFN9mGBhkmj/C3Hs3sEhk3J
-         6ChgaMum0iTzZ5OTUnTBmAWv6yAgQEBKiLKqeGy9ApxgH3UKGQ16kGsJyEKVAG9v87LL
-         /xlA==
+        bh=+TdAAkNRO/B56LWcrONmAFwV8VTWBOaoDBj2G5sEWP4=;
+        b=WmyqDqVep7G6nHBYOAIy5BHeauz9VkY+TGEJePvFR4TYsZY8w53dDT+cXSwJS2SUKt
+         Pazbi5yyHMbi8Ci0DsRZUXY8yJuLNIiCUMi+dCfEe5GWTdRk9oUjhT17rhxc/T6Gqwav
+         lbkl9z+zrlqbqC5LxWtYwstM5AwVfcEE6e66x0ZimcABfmX0JGs8od/5EN3qIl5B+RIq
+         vkoZW8y1t/s6yezyw3N1XJGFLLN6jyNyQYYgb3Gkn48/mj/ZE4/QrmI5op5l2Z0oclxM
+         V8uhHu7URw2CN7SFk+2SCS7ie2pXKuX1Rcr6HlxSxCr4Z2AxCLSt6s2mkkWgrzed7T3L
+         OYzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=2pQY5/oc++7Ys7PmnH7tWtOBFzCDoT4AkhPKs3hCv1Q=;
-        b=nOjHSdT9owF/RwY6uVi5/uEs+qtdc8OwtiFKdRC50rYiQr5G1tSJaxOX6JnhuqqhWA
-         32eczV+LdSG4oZ4Doo/goJ7HNqP0+XWjtPACdXhlWTQBWvCcHvi9ucUKx/W9uHS25tf+
-         UQ/uAlHsgfLUuY7OoHF4vGt2h+NAb2XTg1hnyhEyEu2ZJv4AUPqR5ujwn+zwjn7NIK5n
-         ol0i+t27tC7ZDJUleONuKLxG1EG47FerN705FMAKtOmAfxpQnzPIeBjWupwUgm3Hk+C4
-         Z/rhv9VvMBsiZIAoKb1E0u2XKc5+81zy0Ge83tedSKQdgtjuWVaK1d1twP+ROrZI2xUa
-         vmxg==
-X-Gm-Message-State: AOAM531lPlFFH8SFdgAcA3Vt5Ua9ran9jLc4sriS76NIoVVGxumU/4Aa
-        so5dIKFX3JHlf/zKuGawSo4=
-X-Google-Smtp-Source: ABdhPJxFNoGvE3nXHw/08NAjGEcUN5rFI+sQ8IFWqJSOt4FMcYIzYnJ8+sxoqUutPUeVsgq+vls1cA==
-X-Received: by 2002:a37:38f:: with SMTP id 137mr7016193qkd.436.1607633774396;
-        Thu, 10 Dec 2020 12:56:14 -0800 (PST)
+        bh=+TdAAkNRO/B56LWcrONmAFwV8VTWBOaoDBj2G5sEWP4=;
+        b=VZjJrL/h6YsHKX2vh5ssUUxfkLiIar46rxHdeSZtOKx/Iq8vOpPHZA4J6nP+UGdYrA
+         1oSC32gzTwYuQXZc/lxVCOxKiep7OmydP1P7h0NfC3IgSyBdhRvKhbaatABra6KppkR9
+         E5MwZMoXhcReta0vzNb6WKSGZf3xp/+CqIwvxnFdDbbhSWJ7z9xiETdOErkkHR58v0tx
+         bWpl3+NApjAiUB/OzLtLdUCY8iRjkGhxpRinQn9pOK7a8xUnlhMJmuqobyPYhfFiTbV1
+         UiD3Ab1knaGDVF/rhsnbEfxPD2H088ppzG4T1wNmSi0cCUYrKB0tsFbfFrX0ji1jL/9x
+         KZug==
+X-Gm-Message-State: AOAM533jW/rlnAVHRXtde0Ifw8gg84C9URfwYlBTDjLVVLNR7+C/Ukgu
+        /sq3ujsr2pLjH64NnIWMhdc=
+X-Google-Smtp-Source: ABdhPJx95+rFhIun7EMdXLdXjrL8V1Fu3tan//qavxhqmwsjZy5I0C8upmEl1ewZ/daay1YZQ5ewsA==
+X-Received: by 2002:a0c:e90a:: with SMTP id a10mr3948523qvo.38.1607634263871;
+        Thu, 10 Dec 2020 13:04:23 -0800 (PST)
 Received: from localhost.localdomain ([2804:14c:482:a80:6086:6f67:ecaf:b184])
-        by smtp.gmail.com with ESMTPSA id p75sm4651687qka.72.2020.12.10.12.56.12
+        by smtp.gmail.com with ESMTPSA id 9sm4719693qke.123.2020.12.10.13.04.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Dec 2020 12:56:13 -0800 (PST)
+        Thu, 10 Dec 2020 13:04:23 -0800 (PST)
 From:   Fabio Estevam <festevam@gmail.com>
 To:     balbi@kernel.org
 Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
         peter.chen@nxp.com, Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH] usb: gadget: fsl_mxc_udc: Remove the driver
-Date:   Thu, 10 Dec 2020 17:55:38 -0300
-Message-Id: <20201210205538.15025-1-festevam@gmail.com>
+Subject: [PATCH v2] usb: gadget: fsl_mxc_udc: Remove the driver
+Date:   Thu, 10 Dec 2020 18:04:13 -0300
+Message-Id: <20201210210413.15262-1-festevam@gmail.com>
 X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 Since 5.10-rc1 i.MX is a devicetree-only platform, and this driver
-was only unsed by the old non-DT i.MX devices.
+was only used by the old non-DT i.MX devices.
 
 Remove the driver as it has no users left.
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
+Changes since v1:
+- Fixed typo in commit log: "used"
+
  drivers/usb/gadget/udc/Kconfig       |   2 +-
  drivers/usb/gadget/udc/Makefile      |   1 -
  drivers/usb/gadget/udc/fsl_mxc_udc.c | 122 ---------------------------
