@@ -2,59 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 107C82D702F
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 07:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 083D02D7048
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 07:39:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395498AbgLKG2i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Dec 2020 01:28:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
+        id S2391336AbgLKGhi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Dec 2020 01:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2395491AbgLKG21 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Dec 2020 01:28:27 -0500
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3321AC0613CF
-        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 22:27:47 -0800 (PST)
-Received: by mail-pl1-x641.google.com with SMTP id bj5so4097902plb.4
-        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 22:27:47 -0800 (PST)
+        with ESMTP id S2391539AbgLKGh0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Dec 2020 01:37:26 -0500
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E35C0613D3
+        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 22:36:46 -0800 (PST)
+Received: by mail-pl1-x642.google.com with SMTP id t18so4122085plo.0
+        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 22:36:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+NZCqNrXpIQOHB+clR8WgE5i45yw+bOFU7a6qyf9U0g=;
-        b=Yj8ERgL7ftmm8JcEBoewVHYgPQQHMrBW7T9cqPbsOUJqWlStcwMOoWjOCDBpo/gH2b
-         MNnMTibwIfcFnNGUH1IT66nG6hveH887dJ43icRzCcrqSHs+fmX2ORvCQcdaJWzVCNlM
-         yOleujohBJZUz/3XayBixb1wwaOeMS3xu7ZaQ=
+        bh=J9Gkfw6PqMYjMiqAsCdoTdxmVJeKL3b8kE1ybX0wQp8=;
+        b=WIyjZRThPyIcByjD1VjOn8yzB/aMzxMJnGFYKBhQUxHL/8D99o1+TixNQQzj97PI2l
+         Oblyp0AWTkMt/E7msPxQhosmku8buexCrgtuWx2B1epKLnou7e3T2QboFcEldqVJgvoL
+         5rcIzR7SGYwuoKzqr5+ki7K/3DAxIn0tB6nLQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+NZCqNrXpIQOHB+clR8WgE5i45yw+bOFU7a6qyf9U0g=;
-        b=IX0trvFQBslCFAWLhU9O8xMmyFSN8hXU7Z/a205+D/JObaX0OvJA6J2CX8AjVgkWKk
-         q49MO8SP0LCt+vmLHUvfK2hbbvBcE5Nn8NDBtNint/mdhSSMFrf6bc6pH9Tx+qE/WXLT
-         oPcsS8/67WPEjBGIMbmioUuy1fHhkUczy9WSQa3cwtsBW8ni38fTIyOWrtP3FR5Giv6N
-         9c6Q2u5fZ/Bys/Db8amA1w7ENFnb3NIUfsQrr5yPd6f3DjhizeTTxP9MpUpflyU7pO1+
-         rtwumwvfdznIExqNSeXwk4/ZUfGS5FnLyqzdapN2fimBIDRNYAocLWX1LElmf8FlkEe4
-         7ZlQ==
-X-Gm-Message-State: AOAM532w2vZVAaVMo8bLqG75A4whOuFdpOovQddDpp624Hv/jHXMqxpk
-        Uv9iAMx1/YKeW1i/GIW6ijHybPHSjaSK/EQw+iLi5w==
-X-Google-Smtp-Source: ABdhPJw9a6EUufsiEyEhuZXX3ZGfuxO+oyyeGpF2rgFDPWlkOqpOTbp+QOOQKOzUTUbZHQMB5Q518KWuPZaf2zD/J8o=
-X-Received: by 2002:a17:902:a502:b029:da:f580:bc35 with SMTP id
- s2-20020a170902a502b02900daf580bc35mr9802625plq.60.1607668066723; Thu, 10 Dec
- 2020 22:27:46 -0800 (PST)
+        bh=J9Gkfw6PqMYjMiqAsCdoTdxmVJeKL3b8kE1ybX0wQp8=;
+        b=FCRQkJVrWduebJ694MjZ1MfYM3TyptfeNFVarMYqoo9p3qpAV6RWl3KMbUsW5CfrRo
+         OHrn+uN0eV1mW4dfWAAGRbxvOJbpCA1kFQ2ttDt/zESDMTpahduPzj5UfmnDhAmV0zyu
+         eI2XEIqyKRbBK3FoVV9UNS6eh/Hd7VSKUho/REZ6vwoy4AVS1byVIGIiQEWOH2fux8hE
+         x01pulyXb1Dx2q+jf7aAGMeMp08syKg/kv6RYl8ryzmW6QpgFKcWezp+oePBW+tPDAm2
+         72KVSw3SRQwe30En+4PI+Gs5PI3/9rQz3RHA+ZFWs/bpjJ8BcKvIwa5JZeXDObijmTaI
+         rYng==
+X-Gm-Message-State: AOAM531/VTFevXL0Qy/n8/b+5MUe08c9FGLSw8Q3HTcBK46AVTrAv4wj
+        1VAwj+IdCzM/zqSl81aNodoe2MuKZCRstNMQY5ZDFw==
+X-Google-Smtp-Source: ABdhPJwDkFoCYggY1gxt7bDTcWLRlh1MKnrt/rA2AHX4t0ASRNBzxtBE4WdNwcsyoyiZN/ZDRw+9M6uyYvI/XuRdFF4=
+X-Received: by 2002:a17:90a:902:: with SMTP id n2mr11676752pjn.126.1607668605729;
+ Thu, 10 Dec 2020 22:36:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20201210104747.3416781-1-ikjn@chromium.org> <20201210184700.v2.3.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
- <X9H/ZVpHf2Owd6rj@kroah.com>
-In-Reply-To: <X9H/ZVpHf2Owd6rj@kroah.com>
+References: <20201210104747.3416781-1-ikjn@chromium.org> <1607651584.23328.20.camel@mhfsdcap03>
+In-Reply-To: <1607651584.23328.20.camel@mhfsdcap03>
 From:   Ikjoon Jang <ikjn@chromium.org>
-Date:   Fri, 11 Dec 2020 14:27:35 +0800
-Message-ID: <CAATdQgCZjzoiiReoL-0X5VgWXcEzPsg5B_=SBFFD7dp1Gmvgog@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] usb: xhci-mtk: fix unreleased bandwidth data
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date:   Fri, 11 Dec 2020 14:36:34 +0800
+Message-ID: <CAATdQgBZn3oehw_20D3yMmDA8G61oMHVax8LqJ-hPQv+9kJGLQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Release allocated periodic bandwidth data from reset_bandwidth()
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
 Cc:     "moderated list:ARM/Mediatek SoC support" 
         <linux-mediatek@lists.infradead.org>, linux-usb@vger.kernel.org,
         Zhanyong Wang <zhanyong.wang@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Tianping Fang <tianping.fang@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mathias Nyman <mathias.nyman@intel.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         "moderated list:ARM/Mediatek SoC support" 
@@ -65,42 +63,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 6:57 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Fri, Dec 11, 2020 at 9:53 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
 >
-> On Thu, Dec 10, 2020 at 06:47:47PM +0800, Ikjoon Jang wrote:
-> > xhci-mtk has hooks on add_endpoint() and drop_endpoint() from xhci
-> > to handle its own sw bandwidth managements and stores bandwidth data
-> > into internal table every time add_endpoint() is called,
-> > so when bandwidth allocation fails at one endpoint, all earlier
-> > allocation from the same interface could still remain at the table.
+> On Thu, 2020-12-10 at 18:47 +0800, Ikjoon Jang wrote:
+> > xhci-mtk releases allocated TT bandwidth data only when whole
+> > endpoints of a device are dropped as there're only {add|drop}_endpoint()
+> > hooks are defined. This patchset adds more hooks and releases all
+> > bandwidth data from reset_bandwidth() path, not drop_endpoint().
 > >
-> > This patch adds two more hooks from check_bandwidth() and
-> > reset_bandwidth(), and make mtk-xhci to releases all failed endpoints
-> > from reset_bandwidth().
 > >
-> > Fixes: 0cbd4b34cda9 ("xhci: mediatek: support MTK xHCI host controller")
-> > Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+> > Changes in v2:
+> > - fix a 0-day warning from unused variable
+> > - split one big patch into three patches
+> > - bugfix in hw flags
+> >
+> > Ikjoon Jang (3):
+> >   usb: xhci-mtk: code cleanups in getting bandwidth table
+> >   usb: xhci-mtk: delay association of tt and ep
+> >   usb: xhci-mtk: fix unreleased bandwidth data
+> >
+> >  drivers/usb/host/xhci-mtk-sch.c | 180 ++++++++++++++++++++------------
+> >  drivers/usb/host/xhci-mtk.h     |  13 +++
+> >  drivers/usb/host/xhci.c         |   9 ++
+> >  3 files changed, 133 insertions(+), 69 deletions(-)
+> Thanks for your patch, I'll test it and check it with our DE
+
+Thanks, I will upload v3.
+But I don't expect any logic changes from v2.
+Can you please give me feedback on v2 if you find anything?
+
 >
-> Shouldn't this be the first patch in the series?  You don't want a fix
-> to be dependent on code style changes, otherwise it is really really
-> hard to backport it to older kernels that might need this fix, right?
-
-yes, you're right.
-
-This patchset also requires
-"4b0f7a77fb3c usb: xhci-mtk: supports bandwidth scheduling with multi-TT",
-which doesn't have a Fixes tag.
-
-I think I can change Fixes to point to that commit (4b0f7a77fb3c),
-as this unreleased bandwidth data is much more impactful to
-TT bandwidth.
-
-Thanks!
-
+> >
 >
-> Can you re-order these patches please?
->
-> thanks,
->
-> greg k-h
