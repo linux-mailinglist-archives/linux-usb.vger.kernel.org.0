@@ -2,90 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B002D746B
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 12:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 045572D754A
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 13:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394370AbgLKK7o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Dec 2020 05:59:44 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:51320 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394352AbgLKK7e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Dec 2020 05:59:34 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BBAnfPf039698;
-        Fri, 11 Dec 2020 10:58:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=b1OY5PqTr/emO7HQsLQeX8/MoLpIXvEnOGnJQUZOMW8=;
- b=S+0yv9x23wPkCdifZ6lZJf0jNZWGm7ieBIjvmpk1w3rv+DBY4gsdvsC2Kh3agYIzdcVS
- 4SWgjWpej8p/PEfd6JgU/2OW7/Suh8+uuz+T1hUxkqUltMgZ/G66qpY1c5e7y+IGa2kp
- G22PfFlq9YnA/swxKtADSgQQA68ICFeM7R1UrKYiGyKm8KooX3tGUooY5FYFrmfjZttz
- vNsUMfcNIvmgkRPab1HGugPD46OsipaoQn4soh0smrzg/yyequBjwHtJVIW7dVVa2WID
- jUYRXR84TsEjr4B5d1i2ZzEqVvOnNekKlpHn/eiTU9ABOzdxnH6ZfqTnCfQeO0bIRGIp LQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2130.oracle.com with ESMTP id 357yqca5uk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 11 Dec 2020 10:58:47 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BBAufIi174579;
-        Fri, 11 Dec 2020 10:58:46 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 358m43adxd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Dec 2020 10:58:46 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0BBAwio7015536;
-        Fri, 11 Dec 2020 10:58:45 GMT
-Received: from kadam (/102.36.221.92)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 11 Dec 2020 02:58:44 -0800
-Date:   Fri, 11 Dec 2020 13:58:37 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     peter.chen@nxp.com, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org, kurahul@cadence.com
-Subject: Re: [PATCH] usb: cdnsp: fix error handling in cdnsp_mem_init()
-Message-ID: <20201211105837.GT2789@kadam>
-References: <20201211095053.1948-1-pawell@cadence.com>
+        id S2390341AbgLKMG7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Dec 2020 07:06:59 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:57538 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729717AbgLKMGc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Dec 2020 07:06:32 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0BBC4sEE031693;
+        Fri, 11 Dec 2020 06:04:54 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1607688294;
+        bh=Tu59/3Cv9BBH4Oz+YHX6+4aqIBoWj0gUR86vdaBThG0=;
+        h=Subject:CC:References:From:Date:In-Reply-To;
+        b=pQQTe8/9P79ImNwSWY8bwsYjm4sipUW8iJ/sWpK5M9ADk0fdkkfPoRQz69+iHWVTG
+         GJsd9jvzJptbSuNCxAN/Yw3d6VFu1O4tlnvalFbJYuDipLXQJnyZyvVqSBGhE0TnfX
+         tZ5BWAAI/9tkxtWF8rU6f5dlL3Q1j2o/RdiG/3vw=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0BBC4sle110761
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 11 Dec 2020 06:04:54 -0600
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 11
+ Dec 2020 06:00:44 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Fri, 11 Dec 2020 06:00:44 -0600
+Received: from [10.250.232.169] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0BBC0fj9060784;
+        Fri, 11 Dec 2020 06:00:41 -0600
+Subject: Re: [PATCH v4] dt-bindings: usb: Add new compatible string for AM64
+ SoC
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Roger Quadros <rogerq@ti.com>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20201211060429.20027-1-a-govindraju@ti.com>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+Message-ID: <062c861a-b35e-06cd-2bda-a2d3f5034290@ti.com>
+Date:   Fri, 11 Dec 2020 17:30:40 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201211095053.1948-1-pawell@cadence.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9831 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 adultscore=0
- bulkscore=0 phishscore=0 suspectscore=2 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012110069
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9831 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 mlxlogscore=999
- clxscore=1011 malwarescore=0 bulkscore=0 phishscore=0 adultscore=0
- spamscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012110068
+In-Reply-To: <20201211060429.20027-1-a-govindraju@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 11, 2020 at 10:50:53AM +0100, Pawel Laszczak wrote:
-> This function uses "One Function Cleans up Everything" style and that's
-> basically impossible to do correctly. It's cleaner to write it with
-> "clean up the most recent allocation".
+Hi,
+On 11/12/20 11:34 am, Aswath Govindraju wrote:
+> Add compatible string in j721e-usb binding file as the same USB subsystem
+> is present in AM64.
 > 
-> Patch fixes two isues:
-> 1. If pdev->dcbaa = dma_alloc_coherent() fails then that leads to a NULL
->    dereference inside the cdnsp_free_priv_device() function.
-> 2. if cdnsp_alloc_priv_device() fails that leads to a double free because
->    we free pdev->out_ctx.bytes in several places.
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> ---
 > 
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Tested-by: Pawel Laszczak <pawell@cadence.com>
+> Changes since v3:
+> - used enum instead of anyOf.
+> 
+> Changes since v2:
+> - added changes done over the versions.
+> 
+> Changes since v1:
+> - replaced the '\t' at the beginning of the lines with spaces as it was
+>   causing the dt_binding_check to fail.
+> 
+>  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> index 388245b91a55..1a5c7bbb40d1 100644
+> --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> @@ -11,8 +11,9 @@ maintainers:
+>  
+>  properties:
+>    compatible:
+> -    items:
+> -      - const: ti,j721e-usb
+> +    enum:
+> +      - ti,j721e-usb
+> +      - ti,am64-usb
+> 
 
-Thanks so much!
+I am trying to use the compatible strings in the following manner
 
-regards,
-dan carpenter
+```
+compatible = "ti,am64-usb", "ti,j721e-usb";
+
+```
+If I use above patch I am getting an error while doing a dtbs check.
+
+```
+/home/gsaswath/src/ti-linux-kernel/arch/arm64/boot/dts/ti/k3-am642-evm.dt.yaml:
+cdns-usb@f900000: compatible: Additional items are not allowed
+('ti,j721e-usb' was unexpected)
+	From schema:
+/home/gsaswath/src/ti-linux-kernel/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+/home/gsaswath/src/ti-linux-kernel/arch/arm64/boot/dts/ti/k3-am642-evm.dt.yaml:
+cdns-usb@f900000: compatible: ['ti,am64-usb', 'ti,j721e-usb'] is too long
+	From schema:
+/home/gsaswath/src/ti-linux-kernel/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+
+```
+
+
+I have looked around for examples but I am unable to find a similar
+case. I tried using anyOf in the following manner
+
+```
+compatible:
+     anyOf:
+        - const: ti,am64-usb
+        - const: ti,j721e-usb
+```
+
+But I am getting an error
+
+```
+/home/gsaswath/src/ti-linux-kernel/Documentation/devicetree/bindings/usb/ti,j721e-usb.example.dt.yaml:
+cdns_usb@4104000: compatible: 'anyOf' conditional failed, one must be fixed:
+	Additional items are not allowed ('ti,j721e-usb' was unexpected)
+	['ti,am64-usb', 'ti,j721e-usb'] is too long
+	'ti,j721e-usb' was expected
+```
+
+Doesn't anyof mean that the compatible strings can be used in any
+combination ??
+
+Thanks,
+Aswath
+
+>    reg:
+>      description: module registers
+> 
 
