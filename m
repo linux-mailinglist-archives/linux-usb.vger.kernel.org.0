@@ -2,79 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A212D71CE
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 09:35:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CCD2D71DA
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 09:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733303AbgLKIcf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Dec 2020 03:32:35 -0500
-Received: from mga03.intel.com ([134.134.136.65]:38041 "EHLO mga03.intel.com"
+        id S2405539AbgLKIfM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Dec 2020 03:35:12 -0500
+Received: from mga18.intel.com ([134.134.136.126]:51781 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728423AbgLKIb7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 11 Dec 2020 03:31:59 -0500
-IronPort-SDR: lIdgQnJfSbpQzP1/JtTAhX/4jzgerDrg3cLh36y8y/+hqewv6LHRL97uijPQcpffYMIF0mrRI4
- 1VQdW/NXV2fA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9831"; a="174512474"
+        id S2404032AbgLKIfG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 11 Dec 2020 03:35:06 -0500
+IronPort-SDR: EHSe+FZHmLUjP8GSvTKne53i/yx7961yx1IYeEwNVsfJdsNRIYvUuvTbMpSTevVg1Cv3FOT3hc
+ d2amAz+BatEw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9831"; a="162155225"
 X-IronPort-AV: E=Sophos;i="5.78,410,1599548400"; 
-   d="scan'208";a="174512474"
+   d="scan'208";a="162155225"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2020 00:30:13 -0800
-IronPort-SDR: G5RwN+FFiBea78Y2IEu5sILRHZkIKbkvln2oXvkSH3AuD+pm6ieaEvEgMgPCgnM19yFhj1jJSZ
- YCLsL+EvbUuQ==
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2020 00:33:18 -0800
+IronPort-SDR: azO873SVSmNgTMKSAOmIanDhqmBW66vL+2M1QiwJqXjIoQxv2UQ/Ouu+RbAJ19QBHTGoKOoRgm
+ GsUhCkNP3rMg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.78,410,1599548400"; 
-   d="scan'208";a="440613917"
+   d="scan'208";a="440614488"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 11 Dec 2020 00:30:10 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 11 Dec 2020 10:30:10 +0200
-Date:   Fri, 11 Dec 2020 10:30:10 +0200
+  by fmsmga001.fm.intel.com with SMTP; 11 Dec 2020 00:33:15 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 11 Dec 2020 10:33:15 +0200
+Date:   Fri, 11 Dec 2020 10:33:15 +0200
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Badhri Jagan Sridharan <badhri@google.com>
-Cc:     linux@roeck-us.net, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>,
-        Will McVicker <willmcvicker@google.com>
-Subject: Re: [PATCH 0/5] USB: typec: various patches
-Message-ID: <20201211083010.GD1594451@kuha.fi.intel.com>
-References: <20201210160521.3417426-1-gregkh@linuxfoundation.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        bleung@chromium.org, open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] usb: typec: Add class for plug alt mode device
+Message-ID: <20201211083315.GE1594451@kuha.fi.intel.com>
+References: <20201210211653.879044-1-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201210160521.3417426-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20201210211653.879044-1-pmalani@chromium.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 05:05:16PM +0100, Greg Kroah-Hartman wrote:
-> In digging through a large set of proposed typec patches for the Android
-> common kernel, I've picked out 5 "easy" patches that should all go
-> upstream (they all should go upstream, just will take a while to clean
-> them up it seems...)
-
-Cool. Is there already support for the new Enter_USB message? Badhri,
-maybe you know more about this, if somebody is working on that or not?
-
-FWIW, for all except the first patch 1/5:
-
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> Badhri Jagan Sridharan (2):
->   USB: typec: tcpm: Prevent log overflow by removing old entries
->   USB: typec: tcpci: Add Bleed discharge to POWER_CONTROL definition
+On Thu, Dec 10, 2020 at 01:16:54PM -0800, Prashant Malani wrote:
+> Add the Type C class for plug alternate mode devices which are being
+> registered by the Type C connector class. This ensures that udev events
+> get generated when the plug alt modes are registered.
 > 
-> Kyle Tso (2):
->   USB: typec: tcpm: Fix PR_SWAP error handling
->   USB: typec: tcpm: Add a 30ms room for tPSSourceOn in PR_SWAP
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
 > 
-> pumahsu (1):
->   USB: typec: tcpm: Hard Reset after not receiving a Request
+> Changes in v2:
+> - Changed code to set the class member instead of bus.
+> - Removed the alteration to typec_bus.rst since it's not longer
+>   required.
+> - Updated the commit message and subject to reflect the change in code.
 > 
->  drivers/usb/typec/tcpm/tcpci.h |  1 +
->  drivers/usb/typec/tcpm/tcpm.c  | 30 +++++++++++++++---------------
->  include/linux/usb/pd.h         |  1 +
->  3 files changed, 17 insertions(+), 15 deletions(-)
+> v1: https://lore.kernel.org/linux-usb/20201203030846.51669-1-pmalani@chromium.org/
 > 
+>  drivers/usb/typec/class.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 35eec707cb51..29d05b45cc9d 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -482,6 +482,10 @@ typec_register_altmode(struct device *parent,
+>  	if (is_typec_partner(parent))
+>  		alt->adev.dev.bus = &typec_bus;
+>  
+> +	/* Plug alt modes need a class to generate udev events. */
+> +	if (is_typec_plug(parent))
+> +		alt->adev.dev.class = typec_class;
+> +
+>  	ret = device_register(&alt->adev.dev);
+>  	if (ret) {
+>  		dev_err(parent, "failed to register alternate mode (%d)\n",
 > -- 
-> 2.29.2
+> 2.29.2.576.ga3fc446d84-goog
 
 thanks,
 
