@@ -2,114 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FA8D2D7213
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 09:46:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70FCE2D722A
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 09:48:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437077AbgLKIpR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Dec 2020 03:45:17 -0500
-Received: from mga02.intel.com ([134.134.136.20]:62644 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437082AbgLKIpG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 11 Dec 2020 03:45:06 -0500
-IronPort-SDR: M9mKBsFJojaXv7/dWkFtmzzmzGG3Sp3sEO2+W3RSmv702udVQR8tzVy9ak++Qsxd+4XRkVKiYX
- kJgCZYLjc5GA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9831"; a="161451223"
-X-IronPort-AV: E=Sophos;i="5.78,410,1599548400"; 
-   d="scan'208";a="161451223"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2020 00:43:15 -0800
-IronPort-SDR: NZWOoAWh8L8FANn9o6CzLYmtpSgJl5ks86uX4joqPN/B3wgis9y1xmOkqUfdNrMq7Pb07kH/I4
- P3eS6x9mn4gA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,410,1599548400"; 
-   d="scan'208";a="440617236"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 11 Dec 2020 00:43:13 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 11 Dec 2020 10:43:12 +0200
-Date:   Fri, 11 Dec 2020 10:43:12 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] usb: typec: tcpm: Update vbus_vsafe0v on init
-Message-ID: <20201211084312.GG1594451@kuha.fi.intel.com>
-References: <20201211071911.2205197-1-badhri@google.com>
+        id S2437065AbgLKIr5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Dec 2020 03:47:57 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:42287 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392611AbgLKIrj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Dec 2020 03:47:39 -0500
+Received: by mail-ed1-f67.google.com with SMTP id v22so8486828edt.9;
+        Fri, 11 Dec 2020 00:47:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=V3miwBN5IwwSL9GTcKFlkJLkNfHwlmPFsY5VZw1t92s=;
+        b=Fb4A/HWVy2YO3sJ33ygvYz11XRoNjfJvGGxr88EM8/+2h637JdBrfw7CC6WCchqKoU
+         GYWniTb3TvM+HLCq/AQNU69Dn5ANM+dTo/rAnleBEuK2XPrB78POP6qQx76MkVPDjY3q
+         eqO7s4tp3twfveEUoycT2JFl4bg9nDZMEPaVzn8G48RS6eLv87si+nfQAgRQ9vAbTSmY
+         LQ2OHycCiWJrBLCp/sXN5L4LkhKaCzUAubxFpLmYXTI9PoggTbNvgsyjE1FuYqNatw2D
+         DWjRi7EAKTGsnGOyt9lf36xL+216E8d1/bItgHZMoT0Gl5mt625PMTY5PsP4tQWeYIur
+         cw/A==
+X-Gm-Message-State: AOAM533hCrdhZizqa86yUVDLNcl3W7qHw7RW8eb6entwasW+NMSowSeZ
+        x00iqEEz6fbEsM3WiNlOVZp3UMa1qHPC6g==
+X-Google-Smtp-Source: ABdhPJwKcj4KtAa8BCcQFRGDJwiq6iFsPCqd888uzqaoZtJxArMJYyBeGjZpcIjyrnpmUFuq7TIH+w==
+X-Received: by 2002:aa7:cb49:: with SMTP id w9mr11045398edt.357.1607676417217;
+        Fri, 11 Dec 2020 00:46:57 -0800 (PST)
+Received: from ?IPv6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id b14sm1336275edu.3.2020.12.11.00.46.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Dec 2020 00:46:56 -0800 (PST)
+Subject: Re: [PATCH v2 0/7] tty: add flag to suppress ready signalling on open
+To:     Mychaela Falconia <mychaela.falconia@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Maarten Brock <m.brock@vanmierlo.com>,
+        Johan Hovold <johan@kernel.org>,
+        "Mychaela N . Falconia" <falcon@freecalypso.org>,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20201202113942.27024-1-johan@kernel.org>
+ <X9Dficb8sQGRut+S@kroah.com>
+ <CA+uuBqYTzXCHGY8QnP+OQ5nRNAbqx2rMNzLM7OKLM1_4AzzinQ@mail.gmail.com>
+ <6b81cca21561305b55ba8f019b78da28@vanmierlo.com> <X9H9i98E1Gro+mDP@kroah.com>
+ <3fc3097ce1d35ce1e45fa5a3c7173666@vanmierlo.com> <X9IcKoofq+2iGZn7@kroah.com>
+ <CA+uuBqaNcKadyLRyufm+6HUHXcs7o0rtgw84BrHc7Jq9PauV8Q@mail.gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Message-ID: <54f40116-9a11-8daa-d3cd-5557cc60a4ef@kernel.org>
+Date:   Fri, 11 Dec 2020 09:46:54 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201211071911.2205197-1-badhri@google.com>
+In-Reply-To: <CA+uuBqaNcKadyLRyufm+6HUHXcs7o0rtgw84BrHc7Jq9PauV8Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 11:19:11PM -0800, Badhri Jagan Sridharan wrote:
-> During init, vbus_vsafe0v does not get updated till the first
-> connect as a sink. This causes TCPM to be stuck in SRC_ATTACH_WAIT
-> state while booting with a sink (For instance: a headset) connected.
+On 10. 12. 20, 19:59, Mychaela Falconia wrote:
+>> O_DIRECT is an interesting hack, has anyone seen if it violates the
+>> posix rules for us to use it on a character device like this?
 > 
-> [    1.429168] Start toggling
-> [    1.439907] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
-> [    1.445242] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
-> [   53.358528] CC1: 0 -> 0, CC2: 0 -> 2 [state TOGGLING, polarity 0, connected]
-> [   53.358564] state change TOGGLING -> SRC_ATTACH_WAIT [rev1 NONE_AMS]
+> According to open(2) Linux man page, O_DIRECT does not come from POSIX
+> at all, instead it is specific to Linux, FreeBSD and SGI IRIX.  Thus
+> it seems like there aren't any POSIX rules to be violated here.
 > 
-> Fix this by updating vbus_vsafe0v based on vbus_present status
-> on boot.
+> If we go with O_DIRECT, what semantics are we going to implement?
+> There are 3 possibilities that come to mind most readily:
 > 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-
-One nitpick bellow, but it's so minor that you can ignore it if you
-like. FWIW:
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
+> 1) O_DIRECT applies only to the open call in which this flag is set,
+> and suppresses DTR/RTS assertion on that open.  If someone needs to do
+> multiple opens with DTR/RTS suppression being required every time,
+> then they need to include O_DIRECT every time.
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index cedc6cf82d61..58a6302c549f 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4794,6 +4794,24 @@ static void tcpm_init(struct tcpm_port *port)
->  	if (port->vbus_present)
->  		port->vbus_never_low = true;
->  
-> +	/*
-> +	 * 1. When vbus_present is true, voltage on VBUS is already at VSAFE5V.
-> +	 * So implicitly vbus_vsafe0v = false.
-> +	 *
-> +	 * 2. When vbus_present is false and TCPC does NOT support querying
-> +	 * vsafe0v status, then, it's best to assume vbus is at VSAFE0V i.e.
-> +	 * vbus_vsafe0v is true.
-> +	 *
-> +	 * 3. When vbus_present is false and TCPC does support querying vsafe0v,
-> +	 * then, query tcpc for vsafe0v status.
-> +	 */
-> +	if (port->vbus_present)
-> +		port->vbus_vsafe0v = false;
-> +	else if (!port->tcpc->is_vbus_vsafe0v)
-> +		port->vbus_vsafe0v = true;
-> +	else
-> +		port->vbus_vsafe0v = port->tcpc->is_vbus_vsafe0v(port->tcpc);
+> 2) O_DIRECT applies not only immediately, but also sets a latched flag
+> whereby all subsequent opens continue to suppress auto-assertion
+> without requiring O_DIRECT every time.  This approach by itself runs
+> counter to the generic Unix way of doing things, but it may be OK if
+> there is also some ioctl to explicitly set or clear the latched flag.
+> 
+> 3) O_DIRECT applies only to the open call in which it is set, no
+> built-in latching, but there is also some ioctl to control a flag
+> enabling or disabling DTR/RTS auto-assertion on subsequent opens.
 
-Couldn't that be the other way around?
-
-        ...
-	else if (port->tcpc->is_vbus_vsafe0v)
-		port->vbus_vsafe0v = port->tcpc->is_vbus_vsafe0v(port->tcpc);
-	else
-		port->vbus_vsafe0v = true;
-        ...
-
->  	tcpm_set_state(port, tcpm_default_state(port), 0);
->  
->  	if (port->tcpc->get_cc(port->tcpc, &cc1, &cc2) == 0)
-> -- 
-> 2.29.2.576.ga3fc446d84-goog
+3) -- to allow standard tools to work on the device after the quirk is 
+set up once.
 
 thanks,
-
 -- 
-heikki
+js
