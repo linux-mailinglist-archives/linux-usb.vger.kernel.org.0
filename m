@@ -2,61 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 064832D78EA
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 16:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6772D78F3
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 16:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437739AbgLKPPY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Dec 2020 10:15:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
+        id S2437750AbgLKPQZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Dec 2020 10:16:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437738AbgLKPOy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Dec 2020 10:14:54 -0500
-Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64CFC0613CF;
-        Fri, 11 Dec 2020 07:14:13 -0800 (PST)
-Received: by mail-oo1-xc42.google.com with SMTP id h10so2200486ooi.10;
-        Fri, 11 Dec 2020 07:14:13 -0800 (PST)
+        with ESMTP id S2437751AbgLKPQJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Dec 2020 10:16:09 -0500
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6B2C0613D6;
+        Fri, 11 Dec 2020 07:15:29 -0800 (PST)
+Received: by mail-ot1-x341.google.com with SMTP id y24so8488304otk.3;
+        Fri, 11 Dec 2020 07:15:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=2MS75XuO2n8ZC0XE33ILQfM4neu02PG1B8RqMHSVhJA=;
-        b=HorjZl3nVPfFEtRraH2QSPj6+tFuQzjmHX5ZdH1hrhCxMS1bekQ/MQb64l7CtyezZW
-         oJ3zAvu8snz/j151dvHBPKaX6PjObCssD4PuI1usUtXWh6OYmkaw90SM+c4295Gj4TTA
-         y68IyiHiqXfaO2ig6fHxd7f7XYRYZuFat3x13VSnGko+XCbdM7ce6vFjanhJXbKFwY7+
-         IRLdjqBOizNgnhBnSVp2dQsKqLJVw+R20X4NpBl6iABB/S2c6QlVOPdFvtHMFbx/7dFE
-         fLVP3ga0h6r1DdXxQDYEEPanGo4OZZce2ZP5GQ5g2hRK+bFoBl2yXI9vuJQf5NSBffMS
-         kjEg==
+        bh=PmFoVM8cdLbSBeKjDeNu7C1NGjYnOTeXmcapFMRETFU=;
+        b=ROjm2yH8V3TnerV2hvwxybdYK1Rtp6sX245vf4ySuRGwUnTo39PhcNkyjAJ1ie2r/t
+         AQRtYHqOUNZ2UD7S3F5x9mlIOBTIGuwS/yaFb3pMqujoZsT4t6tWYQrPFdT9Q0zpT2NA
+         YPDCm0B9gALed9FmSyZzJHmbmcM96Gjs+eo0ryc//OyxAfqXzjiEFrFVlDiAtXjCAXvK
+         Rk/I8jYJessf1nK2FT0s4d9vs45WD/F0zpZSIw7rxC6b86kfz/wMWtyhhGa3vMLIA1Ul
+         6K7L8r6NbLwjdzwSmUzQwkQCPV8IG/iMRzLCEz7C5TKC4SMJRFbCJclLJM4XuLcxmJP4
+         cFfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=2MS75XuO2n8ZC0XE33ILQfM4neu02PG1B8RqMHSVhJA=;
-        b=FySh4DbdvjsNgS2Xa19D5KMGozApUleY59FPfeFPh5HjRQXGRsZlGPWmCMjtF8jVcN
-         0+tVjDIHZFNYuRVLIJ+YLVQGfMl/TlLwiKI7qV7fkfGsmK5Jqnr73D6thKLN9Sx6iudw
-         pgYyoE2UCo5xS/ivft5eNjIQK7QL70xyjkyPgbg9khHoQ01WYZVrwXr6QM0BYzCyVtq7
-         QfUaM+oOh3QKZQAu+UPhqqtxPqT+xuN7MAiktaHAUU1InaI5IEyU8DDTtj/cmYpQh6Jd
-         R9XtOiZ2LgwYff8J+BfBKWSfmmqinvLfs0DMXjZiDId+ACEkWql2NJcLGWmmhcQJfc/Q
-         4LVA==
-X-Gm-Message-State: AOAM532hi/fBVnbJAxWuQwiZBYHGa+PLgzq/KnvYfRxIv2A6MeoDauV1
-        AJDrCUSvaW5eVIKTDHdRA6ZCiMURKXg=
-X-Google-Smtp-Source: ABdhPJzahAgXV1STWvNBkQn9pF2bnpDx9wD4FvBkjZ1x1gTA8xwDv/s+az6I8aOdBCSmy0ioTTAKFQ==
-X-Received: by 2002:a4a:bc8d:: with SMTP id m13mr10517612oop.63.1607699652738;
-        Fri, 11 Dec 2020 07:14:12 -0800 (PST)
+        bh=PmFoVM8cdLbSBeKjDeNu7C1NGjYnOTeXmcapFMRETFU=;
+        b=UrngeeK4JDVpNZGDU4VDfxxfWl9pzh/sapDtuErhabeoRcMvqTmUHvpLONcfiChH+m
+         cjlUMydzeVOWbM5K3Y+xAkZ5rSv1BsheTQ6/a0GRkTz1Kle0M95LkKfUsb+F7favIU4B
+         wl9QgJ+YA0pJ4U8xW9VK55QEj87TdRDHHLV0s+pNy8tNwNDjRdcV95/4USe+brdHDvRI
+         UOeH4CNLgPahI0Yt0kSozZVNkeadDC73judbmymqS/k0JXl085g4nObkgBMWYskvR2ip
+         H0XiLPlf9E39QEBpp07d/+lLRYKgFHMoNOk3XBk3FsEOLac0K3UA9wKn0tQq3MPmSF+u
+         9JeA==
+X-Gm-Message-State: AOAM532TVkD/cZip+jGXEdNwleAiNu4OOiaf5skIFPnvzuzmP4EOSnjB
+        IWEex5wW+4fNdfxdzB9B91mmnQhO9J4=
+X-Google-Smtp-Source: ABdhPJw2C3hqf9IOeurFGo+oLjfVctMCcxnry8BBftT4/6Uvpjfu0pBXXcLZnLWIyMtJAd7A9Zf/nQ==
+X-Received: by 2002:a9d:208a:: with SMTP id x10mr8471257ota.260.1607699728438;
+        Fri, 11 Dec 2020 07:15:28 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g5sm1875808otq.43.2020.12.11.07.14.11
+        by smtp.gmail.com with ESMTPSA id a15sm1848684oii.50.2020.12.11.07.15.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Dec 2020 07:14:11 -0800 (PST)
+        Fri, 11 Dec 2020 07:15:28 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] usb: typec: tcpci: Enable bleed discharge when auto
- discharge is enabled
+Subject: Re: [PATCH v1] usb: typec: tcpm: Update vbus_vsafe0v on init
 To:     Badhri Jagan Sridharan <badhri@google.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20201211071145.2199997-1-badhri@google.com>
+References: <20201211071911.2205197-1-badhri@google.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -101,12 +100,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <6ebf3e71-37e5-ece3-8946-5b8e5a62b4bf@roeck-us.net>
-Date:   Fri, 11 Dec 2020 07:14:10 -0800
+Message-ID: <f6196a7e-0953-d458-a7d7-75e30446b407@roeck-us.net>
+Date:   Fri, 11 Dec 2020 07:15:26 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201211071145.2199997-1-badhri@google.com>
+In-Reply-To: <20201211071911.2205197-1-badhri@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -114,31 +113,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12/10/20 11:11 PM, Badhri Jagan Sridharan wrote:
-> Auto discharge circuits kick in only when vbus decays and reaches
-> VBUS_SINK_DISCONNECT_THRESHOLD threshold. Enable bleed discharge to
-> discharge vbus to VBUS_SINK_DISCONNECT_THRESHOLD upon disconnect.
+On 12/10/20 11:19 PM, Badhri Jagan Sridharan wrote:
+> During init, vbus_vsafe0v does not get updated till the first
+> connect as a sink. This causes TCPM to be stuck in SRC_ATTACH_WAIT
+> state while booting with a sink (For instance: a headset) connected.
+> 
+> [    1.429168] Start toggling
+> [    1.439907] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> [    1.445242] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> [   53.358528] CC1: 0 -> 0, CC2: 0 -> 2 [state TOGGLING, polarity 0, connected]
+> [   53.358564] state change TOGGLING -> SRC_ATTACH_WAIT [rev1 NONE_AMS]
+> 
+> Fix this by updating vbus_vsafe0v based on vbus_present status
+> on boot.
 > 
 > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/usb/typec/tcpm/tcpci.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  drivers/usb/typec/tcpm/tcpm.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index af5524338a63..f676abab044b 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -725,6 +725,8 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
->  		tcpci->tcpc.enable_auto_vbus_discharge = tcpci_enable_auto_vbus_discharge;
->  		tcpci->tcpc.set_auto_vbus_discharge_threshold =
->  			tcpci_set_auto_vbus_discharge_threshold;
-> +		regmap_update_bits(tcpci->regmap, TCPC_POWER_CTRL, TCPC_POWER_CTRL_BLEED_DISCHARGE,
-> +				   TCPC_POWER_CTRL_BLEED_DISCHARGE);
->  	}
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index cedc6cf82d61..58a6302c549f 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4794,6 +4794,24 @@ static void tcpm_init(struct tcpm_port *port)
+>  	if (port->vbus_present)
+>  		port->vbus_never_low = true;
 >  
->  	if (tcpci->data->vbus_vsafe0v)
+> +	/*
+> +	 * 1. When vbus_present is true, voltage on VBUS is already at VSAFE5V.
+> +	 * So implicitly vbus_vsafe0v = false.
+> +	 *
+> +	 * 2. When vbus_present is false and TCPC does NOT support querying
+> +	 * vsafe0v status, then, it's best to assume vbus is at VSAFE0V i.e.
+> +	 * vbus_vsafe0v is true.
+> +	 *
+> +	 * 3. When vbus_present is false and TCPC does support querying vsafe0v,
+> +	 * then, query tcpc for vsafe0v status.
+> +	 */
+> +	if (port->vbus_present)
+> +		port->vbus_vsafe0v = false;
+> +	else if (!port->tcpc->is_vbus_vsafe0v)
+> +		port->vbus_vsafe0v = true;
+> +	else
+> +		port->vbus_vsafe0v = port->tcpc->is_vbus_vsafe0v(port->tcpc);
+> +
+>  	tcpm_set_state(port, tcpm_default_state(port), 0);
+>  
+>  	if (port->tcpc->get_cc(port->tcpc, &cc1, &cc2) == 0)
 > 
 
