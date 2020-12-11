@@ -2,59 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D382D78D7
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 16:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8847C2D78DD
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 16:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437696AbgLKPLM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Dec 2020 10:11:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51112 "EHLO
+        id S2404185AbgLKPNu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Dec 2020 10:13:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392465AbgLKPKw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Dec 2020 10:10:52 -0500
+        with ESMTP id S2392751AbgLKPNW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Dec 2020 10:13:22 -0500
 Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F48C0613D6;
-        Fri, 11 Dec 2020 07:10:11 -0800 (PST)
-Received: by mail-oi1-x244.google.com with SMTP id d27so10145973oic.0;
-        Fri, 11 Dec 2020 07:10:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9FDC0613CF;
+        Fri, 11 Dec 2020 07:12:42 -0800 (PST)
+Received: by mail-oi1-x244.google.com with SMTP id s75so10165611oih.1;
+        Fri, 11 Dec 2020 07:12:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:autocrypt:message-id:date
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=iHJ0+YT0ZuQ160ES/8XaQZHgGFmJugTj3JOGwfxYxeI=;
-        b=IoeSM4U//Vi8gEVmA4snGnIRPGevd7qR4wlmy8q573iQUCXMzQnl4fpmkvksYDsmx8
-         YkYZVJV1VYFw/bYF5eI11R+b2yuExfejwMRd+Ao/5y3MvF0aUYjU2NfsP10heqRJzaIT
-         TWwe8KLH1e6FBmAST6ZMHb/Mpj17cB3NFFfVmFbz/7mVVVyE8755osW4AerSRkY9xR1B
-         txSTYUXWvlZ9byqAuNv6tiSjY3YZMw/yFrrudbNiyad6n+c18/gR3pSczVyAif247UAh
-         1o0H791198IxRrPvWJpyqoSc715JsjI9kAm03WbC/Kc/yu0E8+Vs5o7BH+HYtuO1i3oR
-         m4Mg==
+        bh=s3h0dLytB1IDZ/ht7+weWbdt57gQOut6q6WDYmaaLv0=;
+        b=E4gfO7L4+OhLkz6Rnbhq6LER0jHIrx8jOk3SqPhamN4jMQAGBx2ducH+NXHaqR94U8
+         EPaqUtHqfTtHjKjKWjBhCTHCFw7c771gmC64tUVZq0pdAq8pUTszAz+uXqd6CfNRMUZV
+         jFOkicHOkrIR1oIQpnhxAJpwVYAY00uf2SXwDu/UPf65gURzMhIHghDkzaojMaaBLMMH
+         mDk/yr14hYXh2VXqniowARmlv5l0NXFEp3Xm/OyVflWJBoiyvcXnShzhNG2TdoP3dUq8
+         I+ifaIFjRAB+PjaA4SBwxE5IrzaEha2LT9sSrFKlfNO2fMWuolO+uTVOps9eouiyZSYS
+         1Yzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=iHJ0+YT0ZuQ160ES/8XaQZHgGFmJugTj3JOGwfxYxeI=;
-        b=NUcNK4LYidrDQ7RdHX9naHh4tLJBBrhaQeB7o7Ig+ySiFt0GoqJ1dh1CSvmdPPKPPF
-         Gv8PcF3N/VLhzzDwNki2b34A2+SYuYoCHf9XP/VU0qdKTo3s4lowN/Cg1Bfex6TBAQgT
-         6gFB5UkKCzYfIbRSdl4z1N0VhnRlP1ZAzOe9fWPCCIKQQUWd2d512VspZtqtZ8DHD5bS
-         2MvvQ2K2lGa5JRjZxL7mOTbplh9tmO4FaxbvaymXjidLQLkbHfch5xik+cNvJ+98DpXy
-         5tz/NrcFgmVVJDARDN5XGpRO7znoxI/jCTcKjncBjjWeMwJGH6L5Camzla4lRYdzAq/u
-         L57g==
-X-Gm-Message-State: AOAM533jUsSGy39HwsIAuDody3ETmYWWAk/ZS4dhjpvwHpDrzBDApHYo
-        +4vbKSfdnqIjeHfcmM0HRpmxaNHqc50=
-X-Google-Smtp-Source: ABdhPJx3lJ6W3CCkCCHuj+uqjN25kfyWg+IPpRzPDIs4ehhqOwuhkVAar7jFVv5rDYsfhvvjHEKmyg==
-X-Received: by 2002:aca:d6c5:: with SMTP id n188mr9460336oig.131.1607699410542;
-        Fri, 11 Dec 2020 07:10:10 -0800 (PST)
+        bh=s3h0dLytB1IDZ/ht7+weWbdt57gQOut6q6WDYmaaLv0=;
+        b=dJZbV9Jac+fJ0hYuCVfpnXKBQgSaiKiKKGaiFz6h3ST75v556luRTBJaGTY/8DyNkC
+         ROCYpyzDSUWCKYgP/TvMh51l7orADHTPrEBng8jR/TERHi6QSBi7HwP3ivjS8EbfHwGM
+         kbwkCqircwWvI7xfoJcDKzdE2NUUU7yG8Ssf7hHkSpbhPDszGq+fgtL9Lna+M55BxaxL
+         NCrhFbANvCZ8+8GWPMPNIFlSg/K99VbbTBmo1f04nxiP0NquMmJ5TAfVH46goLodPdXq
+         AyDEdXdTiq0wJqpAj8qfziBze04wVLOvHjkiAFtSczJ2pwwyVz7BP6OsBISilRpS3PL5
+         sqsg==
+X-Gm-Message-State: AOAM531h7SX9hEx1hOfaO6pbYvVi/6XOjzHduR2rEkTEvPzu/KM7evwL
+        ek//hRFf/zp0qm/djGCTyC5jp2kfd2M=
+X-Google-Smtp-Source: ABdhPJzoxYTpnNI6Rd/RVnNHEf7xucs63UT7z6bdcq0WptEEI+8VFRKKj8HK6KURE45i4pUPefawTw==
+X-Received: by 2002:aca:f44f:: with SMTP id s76mr7428046oih.120.1607699561767;
+        Fri, 11 Dec 2020 07:12:41 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 5sm717432ota.62.2020.12.11.07.10.07
+        by smtp.gmail.com with ESMTPSA id s23sm1876986otr.59.2020.12.11.07.12.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Dec 2020 07:10:08 -0800 (PST)
+        Fri, 11 Dec 2020 07:12:41 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH -next] usb: typec: tcpm: convert comma to semicolon
-To:     Zheng Yongjun <zhengyongjun3@huawei.com>,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+Subject: Re: [PATCH 1/1] tcpm: Fix possible buffer overflows in tcpm_queue_vdm
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Xiaohui Zhang <ruc_zhangxiaohui@163.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20201211085553.2982-1-zhengyongjun3@huawei.com>
+References: <20201209030716.3764-1-ruc_zhangxiaohui@163.com>
+ <20201211100939.GJ1594451@kuha.fi.intel.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -99,12 +101,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <134feafc-7ba8-0786-4e1b-86549f352b14@roeck-us.net>
-Date:   Fri, 11 Dec 2020 07:10:06 -0800
+Message-ID: <71be94d7-24f0-46d7-ba74-e61572007721@roeck-us.net>
+Date:   Fri, 11 Dec 2020 07:12:39 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201211085553.2982-1-zhengyongjun3@huawei.com>
+In-Reply-To: <20201211100939.GJ1594451@kuha.fi.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -112,41 +114,50 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12/11/20 12:55 AM, Zheng Yongjun wrote:
-> Replace a comma between expression statements by a semicolon.
+On 12/11/20 2:09 AM, Heikki Krogerus wrote:
+> Hi,
 > 
-> Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+> On Wed, Dec 09, 2020 at 11:07:16AM +0800, Xiaohui Zhang wrote:
+>> From: Zhang Xiaohui <ruc_zhangxiaohui@163.com>
+>>
+>> tcpm_queue_vdm() calls memcpy() without checking the destination
+>> size may trigger a buffer overflower.
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index a6fae1f86505..4451507d600c 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -5024,14 +5024,14 @@ static int devm_tcpm_psy_register(struct tcpm_port *port)
->  	snprintf(psy_name, psy_name_len, "%s%s", tcpm_psy_name_prefix,
->  		 port_dev_name);
->  	port->psy_desc.name = psy_name;
-> -	port->psy_desc.type = POWER_SUPPLY_TYPE_USB,
-> +	port->psy_desc.type = POWER_SUPPLY_TYPE_USB;
->  	port->psy_desc.usb_types = tcpm_psy_usb_types;
->  	port->psy_desc.num_usb_types = ARRAY_SIZE(tcpm_psy_usb_types);
-> -	port->psy_desc.properties = tcpm_psy_props,
-> -	port->psy_desc.num_properties = ARRAY_SIZE(tcpm_psy_props),
-> -	port->psy_desc.get_property = tcpm_psy_get_prop,
-> -	port->psy_desc.set_property = tcpm_psy_set_prop,
-> -	port->psy_desc.property_is_writeable = tcpm_psy_prop_writeable,
-> +	port->psy_desc.properties = tcpm_psy_props;
-> +	port->psy_desc.num_properties = ARRAY_SIZE(tcpm_psy_props);
-> +	port->psy_desc.get_property = tcpm_psy_get_prop;
-> +	port->psy_desc.set_property = tcpm_psy_set_prop;
-> +	port->psy_desc.property_is_writeable = tcpm_psy_prop_writeable;
->  
->  	port->usb_type = POWER_SUPPLY_USB_TYPE_C;
->  
+> Thanks for the patch, but I didn't actually see any place where that
+> could happen. I think the idea is that the callers make sure the count
+> does not exceed VDO_MAX_SIZE before calling the function.
+> 
+
+Yes, when I wrote the code I made sure that this is the case.
+If that is no longer true, we have various other problems because
+the count is assumed to be in range pretty much everywhere.
+
+Guenter
+
+>> Signed-off-by: Zhang Xiaohui <ruc_zhangxiaohui@163.com>
+>> ---
+>>  drivers/usb/typec/tcpm/tcpm.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+>> index 55535c4f6..fcd331f33 100644
+>> --- a/drivers/usb/typec/tcpm/tcpm.c
+>> +++ b/drivers/usb/typec/tcpm/tcpm.c
+>> @@ -1045,7 +1045,7 @@ static void tcpm_queue_vdm(struct tcpm_port *port, const u32 header,
+>>  
+>>  	port->vdo_count = cnt + 1;
+> 
+> That should have been fixed as well, no?
+> 
+>>  	port->vdo_data[0] = header;
+>> -	memcpy(&port->vdo_data[1], data, sizeof(u32) * cnt);
+>> +	memcpy(&port->vdo_data[1], data, min_t(int, sizeof(u32) * cnt, VDO_MAX_SIZE - 1));
+>>  	/* Set ready, vdm state machine will actually send */
+>>  	port->vdm_retries = 0;
+>>  	port->vdm_state = VDM_STATE_READY;
+> 
+> Unless I'm missing something, I don't think this patch is needed.
+> 
+> thanks,
 > 
 
