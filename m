@@ -2,137 +2,205 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D272D6B1F
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 00:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 246632D6C3D
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 01:28:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404366AbgLJWb3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Dec 2020 17:31:29 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:38481 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405138AbgLJW1W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 17:27:22 -0500
-Received: by mail-pf1-f193.google.com with SMTP id d2so5514720pfq.5
-        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 14:27:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yHl87IgAwVQoYoagthZ9K6a/Dr4/brkjWA6ojIJaWFU=;
-        b=DC2SJndkmcxWqxcWX8gv6J4dMLFjJnRPQfIfVCfoUYpMTEHl04QyifHIy9Vh9RNPPk
-         82v3vP0Fkwdy1V8Zm/Xp3LrgX99BWgA/9aWaiYHuYeLNSGDMm5u9VmAlTQflJORTPZXD
-         UmEdezQsYjtlOknlXbAboERncpvnccSoJqxjcCfyh9mv4B4UWB7fDM3d5tD4p/OWUNV8
-         wkfuqFmA9gBFpSV0qSa2TAR4i7nN//pbL1qrzKTsWz5g2kM1UI3yRceDzTpBUssRgTCd
-         XnkkBqbs4ZOeB4yZ6FAiE2NyG5uaNrihLkMg8mcicVXMoTFJTSYOfFQKHKFD9FLJYhLx
-         T5PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=yHl87IgAwVQoYoagthZ9K6a/Dr4/brkjWA6ojIJaWFU=;
-        b=Z1IqGAWAfM5D8z19JBAYX3KAZRNqp0V9a6+TeYQxslQtSyyi5xuoaHOtl+/4SqWVw7
-         FbZ8uIhz6zMj+/bfC53/RILLzp4rF+tKbxO0PAibLM62sg23608Azaor08h88fvV8cec
-         M7jpFZs0JAcLp4hZFs8R845pMqaHz/rSADBCw8iT5qEAH6y3TbeAJqXPmGl/IXegzr1y
-         Jv9OA7SLMVhh5z2TEIqe2uPRo7gqRCfj2otBiZSOeAto4aVBuMH7LlTaytHnFZ48UUol
-         TfnA+X/jww0UjF9fwmF2jc+fioFFsrg/aRIjtDxrtATtEo/Ab32BqZSQO1WT/ugQf5x/
-         6vxw==
-X-Gm-Message-State: AOAM532z9gtpOGc6HAwQDODiRZYZ5Rd+8jCL4VHRh9U7qZbM6ZzxVj7a
-        P1grCef2LwETOolT7Dem3vFfTcMyTsN5ew==
-X-Google-Smtp-Source: ABdhPJwWfg7WCFYjszwuiAYhvdg+Tvt+4qdj4VsNug6NwHXasrEYU0Vi0j1HB6R+csgzNxt5bJPigw==
-X-Received: by 2002:a63:6442:: with SMTP id y63mr8550827pgb.35.1607636879347;
-        Thu, 10 Dec 2020 13:47:59 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:f693:9fff:fef4:fc72])
-        by smtp.gmail.com with ESMTPSA id o123sm490866pfd.197.2020.12.10.13.47.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Dec 2020 13:47:58 -0800 (PST)
-Sender: Benson Leung <bleung@google.com>
-Date:   Thu, 10 Dec 2020 13:47:53 -0800
-From:   Benson Leung <bleung@chromium.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        heikki.krogerus@linux.intel.com, bleung@chromium.org,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: typec: Add class for plug alt mode device
-Message-ID: <X9KXiaM4wYKkxJw5@google.com>
-References: <20201210211653.879044-1-pmalani@chromium.org>
+        id S2389406AbgLKACA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Dec 2020 19:02:00 -0500
+Received: from gproxy4-pub.mail.unifiedlayer.com ([69.89.23.142]:55579 "EHLO
+        gproxy4-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389091AbgLKAB7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 19:01:59 -0500
+Received: from cmgw14.unifiedlayer.com (unknown [10.9.0.14])
+        by gproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id 4C23F17B800
+        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 17:01:18 -0700 (MST)
+Received: from bh-25.webhostbox.net ([208.91.199.152])
+        by cmsmtp with ESMTP
+        id nVs5kn82NwNNlnVs6kxr2f; Thu, 10 Dec 2020 17:01:18 -0700
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.3 cv=A7FCwZeG c=1 sm=1 tr=0
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
+ a=zTNgK-yGK50A:10:nop_rcvd_month_year
+ a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=_jlGtV7tAAAA:8
+ a=1XWaLZrsAAAA:8 a=QyXUC8HyAAAA:8 a=ag1SF4gXAAAA:8 a=pDWBtCd9S4YHm_LgQy8A:9
+ a=CjuIK1q_8ugA:10:nop_charset_2 a=nlm17XC03S6CtCLSeiRr:22
+ a=Yupwre4RP9_Eg_Bd0iYG:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=6PZqv9kXxqkh21QOSUOt0pmwHWZLBZjcs5nnXqLVDO8=; b=thv0znhCXhvB4SUO2XbAnC6Yev
+        0G/JbUknE6Y9K/UqQ0DZ6gj7mgyVeo50wqkpfZwelKQbDWt0eSNRUHbw7SW/5S9sqojSBpWGJhI9h
+        euAae/DLcx/cA/hVjhCecOKyF0HsFiJFAtYiGty4hqEG4OUCkHQhcpAIx69IvQCmfp3sshsyBiPgC
+        4NvFVt8TVHplZoL36KjgI7EC4TWJtcY6SALnQgM33jDypU8xKqBaUSaUeJ2bShjb6GRqUMqgdtGOK
+        kSlVRp5kxb8iAlJnMlUFpu3+ZFrxz9DKCe3FHap6xcZt5tnnTyxXr3anVNOOKRkc6ZXmJL+6pz1XM
+        TIVPpqxQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:34692 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <linux@roeck-us.net>)
+        id 1knVs5-004DDF-DO; Fri, 11 Dec 2020 00:01:17 +0000
+Date:   Thu, 10 Dec 2020 16:01:16 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        USB <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kyle Tso <kyletso@google.com>,
+        Will McVicker <willmcvicker@google.com>
+Subject: Re: [PATCH 1/5] USB: typec: tcpm: Prevent log overflow by removing
+ old entries
+Message-ID: <20201211000116.GF259082@roeck-us.net>
+References: <20201210160521.3417426-1-gregkh@linuxfoundation.org>
+ <20201210160521.3417426-2-gregkh@linuxfoundation.org>
+ <20201210174236.GB107395@roeck-us.net>
+ <CAPTae5+uHw7dHbhUze2WU_6mM8BPnF=rz6euZBZqv40=zyczhQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RU8k2+weiVsy+tlv"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201210211653.879044-1-pmalani@chromium.org>
+In-Reply-To: <CAPTae5+uHw7dHbhUze2WU_6mM8BPnF=rz6euZBZqv40=zyczhQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1knVs5-004DDF-DO
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:34692
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 4
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, Dec 10, 2020 at 11:10:27AM -0800, Badhri Jagan Sridharan wrote:
+> Hi Guenter,
+> 
+> While I agree with what you are saying, since the logbuffer does not
+> have the intelligence to drop older entries where no issues were seen,
+> logbuffer gets full pretty quickly with good instances and there is no
+> space left to log the bad instance. Should wrapping this in a config
 
---RU8k2+weiVsy+tlv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+For my use case, it was typically sufficient to clear the log buffer
+by reading it if needed. However, as I said, my original reason may no
+longer apply. After all, the code is much more stable than it used to be,
+and maybe the endless conection attempts after an initial error are no
+longer seen. At this point I don't really have a strong opinion either way.
 
-Hi Prashant,
+> option be a better way to go about this  ? When the config optioin is
+> set, old entries will be dropped.
 
-On Thu, Dec 10, 2020 at 01:16:54PM -0800, Prashant Malani wrote:
-> Add the Type C class for plug alternate mode devices which are being
-> registered by the Type C connector class. This ensures that udev events
-> get generated when the plug alt modes are registered.
->=20
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+A config option (assuming you mean Kconfig) seems bad. Maybe we could
+have a writeable debugfs file which defines the approach to use (not
+sure if that would be acceptable, though).
 
-Reviewed-by: Benson Leung <bleung@chromium.org>
+Note that I also considered changing logging to tracing, but that has
+the disadvantage that it needs to be explicitly activated and doesn't
+provide any kind of history in the "normal" case. On a higher level,
+it would be nice to have a logging option like the one implemented here
+in the infrastucture. But that is really a completely different issue.
 
+Thanks,
+Guenter
 
-> ---
->=20
-> Changes in v2:
-> - Changed code to set the class member instead of bus.
-> - Removed the alteration to typec_bus.rst since it's not longer
->   required.
-> - Updated the commit message and subject to reflect the change in code.
->=20
-> v1: https://lore.kernel.org/linux-usb/20201203030846.51669-1-pmalani@chro=
-mium.org/
->=20
->  drivers/usb/typec/class.c | 4 ++++
->  1 file changed, 4 insertions(+)
->=20
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 35eec707cb51..29d05b45cc9d 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -482,6 +482,10 @@ typec_register_altmode(struct device *parent,
->  	if (is_typec_partner(parent))
->  		alt->adev.dev.bus =3D &typec_bus;
-> =20
-> +	/* Plug alt modes need a class to generate udev events. */
-> +	if (is_typec_plug(parent))
-> +		alt->adev.dev.class =3D typec_class;
-> +
->  	ret =3D device_register(&alt->adev.dev);
->  	if (ret) {
->  		dev_err(parent, "failed to register alternate mode (%d)\n",
-> --=20
-> 2.29.2.576.ga3fc446d84-goog
->=20
-
---=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
-
---RU8k2+weiVsy+tlv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCX9KXiQAKCRBzbaomhzOw
-wqZCAQCi/xKD0wLN6g2DzIVBSg0o0Hc2CW2jHeWGQnQsba37ZQEAzgLtAoXD/h4M
-ClPZa6GNUKvK/rMXG0niMxQagt6o2QA=
-=Qzf0
------END PGP SIGNATURE-----
-
---RU8k2+weiVsy+tlv--
+> Please let me know, I can update the patch and resend.
+> 
+> Thanks,
+> Badhri
+> 
+> 
+> 
+> On Thu, Dec 10, 2020 at 9:53 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > On Thu, Dec 10, 2020 at 05:05:17PM +0100, Greg Kroah-Hartman wrote:
+> > > From: Badhri Jagan Sridharan <badhri@google.com>
+> > >
+> > > TCPM logs overflow once the logbuffer is full. Clear old entries and
+> > > allow logging the newer ones as the newer would be more relevant to the
+> > > issue being debugged.
+> > >
+> > > Also, do not reset the logbuffer tail as end users might take back to
+> > > back bugreports which would result in an empty buffer.
+> > >
+> >
+> > Historically, the reason for not doing this was that, once a problem occurs,
+> > the log would fill up quickly (typically with reconnect attempts), and the
+> > actual reason for the problem would be overwritten. Maybe that reasoning
+> > no longer applies; I just wanted to point out that there _was_ a reason for
+> > not clearing old log entries.
+> >
+> > Guenter
+> >
+> > > Cc: Guenter Roeck <linux@roeck-us.net>
+> > > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > Cc: Kyle Tso <kyletso@google.com>
+> > > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> > > Signed-off-by: Will McVicker <willmcvicker@google.com>
+> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > ---
+> > >  drivers/usb/typec/tcpm/tcpm.c | 16 +++-------------
+> > >  1 file changed, 3 insertions(+), 13 deletions(-)
+> > >
+> > > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > > index cedc6cf82d61..0ceeab50ed64 100644
+> > > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > > @@ -470,12 +470,6 @@ static bool tcpm_port_is_disconnected(struct tcpm_port *port)
+> > >
+> > >  #ifdef CONFIG_DEBUG_FS
+> > >
+> > > -static bool tcpm_log_full(struct tcpm_port *port)
+> > > -{
+> > > -     return port->logbuffer_tail ==
+> > > -             (port->logbuffer_head + 1) % LOG_BUFFER_ENTRIES;
+> > > -}
+> > > -
+> > >  __printf(2, 0)
+> > >  static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
+> > >  {
+> > > @@ -495,11 +489,6 @@ static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
+> > >
+> > >       vsnprintf(tmpbuffer, sizeof(tmpbuffer), fmt, args);
+> > >
+> > > -     if (tcpm_log_full(port)) {
+> > > -             port->logbuffer_head = max(port->logbuffer_head - 1, 0);
+> > > -             strcpy(tmpbuffer, "overflow");
+> > > -     }
+> > > -
+> > >       if (port->logbuffer_head < 0 ||
+> > >           port->logbuffer_head >= LOG_BUFFER_ENTRIES) {
+> > >               dev_warn(port->dev,
+> > > @@ -519,6 +508,9 @@ static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
+> > >                 (unsigned long)ts_nsec, rem_nsec / 1000,
+> > >                 tmpbuffer);
+> > >       port->logbuffer_head = (port->logbuffer_head + 1) % LOG_BUFFER_ENTRIES;
+> > > +     if (port->logbuffer_head == port->logbuffer_tail)
+> > > +             port->logbuffer_tail =
+> > > +                     (port->logbuffer_tail + 1) % LOG_BUFFER_ENTRIES;
+> > >
+> > >  abort:
+> > >       mutex_unlock(&port->logbuffer_lock);
+> > > @@ -622,8 +614,6 @@ static int tcpm_debug_show(struct seq_file *s, void *v)
+> > >               seq_printf(s, "%s\n", port->logbuffer[tail]);
+> > >               tail = (tail + 1) % LOG_BUFFER_ENTRIES;
+> > >       }
+> > > -     if (!seq_has_overflowed(s))
+> > > -             port->logbuffer_tail = tail;
+> > >       mutex_unlock(&port->logbuffer_lock);
+> > >
+> > >       return 0;
+> > > --
+> > > 2.29.2
+> > >
