@@ -2,29 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B7D2D725A
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 09:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB872D7261
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 09:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437199AbgLKIy6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Dec 2020 03:54:58 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:9164 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437143AbgLKIyt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Dec 2020 03:54:49 -0500
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Csl1m5K8cz15bBF;
-        Fri, 11 Dec 2020 16:53:32 +0800 (CST)
+        id S2437211AbgLKIz6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Dec 2020 03:55:58 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:9871 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437204AbgLKIzh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Dec 2020 03:55:37 -0500
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4Csl2f2XsZz7CWl;
+        Fri, 11 Dec 2020 16:54:18 +0800 (CST)
 Received: from ubuntu.network (10.175.138.68) by
- DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 11 Dec 2020 16:53:59 +0800
+ DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
+ 14.3.487.0; Fri, 11 Dec 2020 16:54:43 +0800
 From:   Zheng Yongjun <zhengyongjun3@huawei.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+To:     <heikki.krogerus@linux.intel.com>, <linux-usb@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-CC:     Zheng Yongjun <zhengyongjun3@huawei.com>
-Subject: [PATCH -next] usb: phy: convert comma to semicolon
-Date:   Fri, 11 Dec 2020 16:54:28 +0800
-Message-ID: <20201211085428.2871-1-zhengyongjun3@huawei.com>
+CC:     <gregkh@linuxfoundation.org>,
+        Zheng Yongjun <zhengyongjun3@huawei.com>
+Subject: [PATCH -next] usb: ucsi: convert comma to semicolon
+Date:   Fri, 11 Dec 2020 16:55:10 +0800
+Message-ID: <20201211085510.2928-1-zhengyongjun3@huawei.com>
 X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -39,32 +39,28 @@ Replace a comma between expression statements by a semicolon.
 
 Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
 ---
- drivers/usb/phy/phy-isp1301-omap.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/usb/typec/ucsi/psy.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/phy/phy-isp1301-omap.c b/drivers/usb/phy/phy-isp1301-omap.c
-index 4a6462c92ef2..6f4f74e6ba51 100644
---- a/drivers/usb/phy/phy-isp1301-omap.c
-+++ b/drivers/usb/phy/phy-isp1301-omap.c
-@@ -1566,13 +1566,13 @@ isp1301_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
+diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
+index 571a51e16234..56bf56517f75 100644
+--- a/drivers/usb/typec/ucsi/psy.c
++++ b/drivers/usb/typec/ucsi/psy.c
+@@ -220,11 +220,11 @@ int ucsi_register_port_psy(struct ucsi_connector *con)
+ 		return -ENOMEM;
  
- 	isp->phy.dev = &i2c->dev;
- 	isp->phy.label = DRIVER_NAME;
--	isp->phy.set_power = isp1301_set_power,
-+	isp->phy.set_power = isp1301_set_power;
+ 	con->psy_desc.name = psy_name;
+-	con->psy_desc.type = POWER_SUPPLY_TYPE_USB,
++	con->psy_desc.type = POWER_SUPPLY_TYPE_USB;
+ 	con->psy_desc.usb_types = ucsi_psy_usb_types;
+ 	con->psy_desc.num_usb_types = ARRAY_SIZE(ucsi_psy_usb_types);
+-	con->psy_desc.properties = ucsi_psy_props,
+-	con->psy_desc.num_properties = ARRAY_SIZE(ucsi_psy_props),
++	con->psy_desc.properties = ucsi_psy_props;
++	con->psy_desc.num_properties = ARRAY_SIZE(ucsi_psy_props);
+ 	con->psy_desc.get_property = ucsi_psy_get_prop;
  
- 	isp->phy.otg->usb_phy = &isp->phy;
--	isp->phy.otg->set_host = isp1301_set_host,
--	isp->phy.otg->set_peripheral = isp1301_set_peripheral,
--	isp->phy.otg->start_srp = isp1301_start_srp,
--	isp->phy.otg->start_hnp = isp1301_start_hnp,
-+	isp->phy.otg->set_host = isp1301_set_host;
-+	isp->phy.otg->set_peripheral = isp1301_set_peripheral;
-+	isp->phy.otg->start_srp = isp1301_start_srp;
-+	isp->phy.otg->start_hnp = isp1301_start_hnp;
- 
- 	enable_vbus_draw(isp, 0);
- 	power_down(isp);
+ 	con->psy = power_supply_register(dev, &con->psy_desc, &psy_cfg);
 -- 
 2.22.0
 
