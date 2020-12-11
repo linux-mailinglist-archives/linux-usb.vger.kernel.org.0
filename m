@@ -2,276 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 610E72D6CC0
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 01:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D13192D6DC7
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 02:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388886AbgLKAs4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Dec 2020 19:48:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389339AbgLKAsc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 19:48:32 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C25DC061793
-        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 16:47:52 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id c12so5842548pfo.10
-        for <linux-usb@vger.kernel.org>; Thu, 10 Dec 2020 16:47:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qtlZ0DEPLlgnakZuegRLLP1pu6eYE/7+9AbraWd6Nl4=;
-        b=DV0aRUCL7xoEuNHuX09WvmYZV82z8THJlzxFil5QBevlOpCiike574SS8SEzmsjdii
-         C/YvxmeCmQ6m4TNLQVJp6E1gCWFXNvrHhuE5GjK37WPZESjVUbqj1YdDtt7dGmyGM7H6
-         +eqxHo29ONRuSxlM6byLmlS2rCWIRjYO9b8hE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qtlZ0DEPLlgnakZuegRLLP1pu6eYE/7+9AbraWd6Nl4=;
-        b=IcdZ+ekQzoXrB2xQQDjU2oPdOcE64Zd3hf7nC8xL5TkoKy9CEDBiOKQb7q+VYQWkta
-         1uFGj7cbaXau+l5sYokWT1fKZ0l2U4NsHaKgCSbZQzsVceWni/DOJDczFBtTYqKrKMMN
-         LRlBi9ka95ogEXH86C2eAOLyJRP3MBbnRYRGpGPQirRN1ak3H/9cRbHrS29aGmTWpzYH
-         vCXl3bFKD0mYzp1sFZpB0PWqO1rsPTcTKov5Cn51JBhVPMT6gcsWrUygGPgDtDonWLxf
-         0+U6Qb/I4p2OK3fcsQtI9/tDAXKcsS8VYzp6hcL7R0TpaNSYI3vGocIbPHjOJa8qH4Of
-         IxYA==
-X-Gm-Message-State: AOAM532MMg9FLjpTRr7xJehrZxRlCh/TckZb2F5QoteHzAp+raCjpI9M
-        vJlzq0skPN7/T7hGjIfB0u/HVQ==
-X-Google-Smtp-Source: ABdhPJwy06NJ82y1R0JkNr4/7Xd2sMhx6dprma8t7JLUDcd27jZCARpXlKy63Wmpq5GpneprnuZY9g==
-X-Received: by 2002:a65:5547:: with SMTP id t7mr9104969pgr.50.1607647671565;
-        Thu, 10 Dec 2020 16:47:51 -0800 (PST)
-Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
-        by smtp.gmail.com with ESMTPSA id w2sm7882452pfj.110.2020.12.10.16.47.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Dec 2020 16:47:51 -0800 (PST)
-Date:   Thu, 10 Dec 2020 16:47:49 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S2391078AbgLKByg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Dec 2020 20:54:36 -0500
+Received: from mailgw02.mediatek.com ([1.203.163.81]:30392 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730515AbgLKByD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Dec 2020 20:54:03 -0500
+X-UUID: e3d1f9c4893f47eab852db5f242f546c-20201211
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=qiCfZEZ3utNxxmHWGfGh34+yKs77RY7j+UgNQieD2iM=;
+        b=C6kBJzdyuQ5mcA5+UBqctflTBQ30R1u/oPDcbVJiD5Rvosef2AyL6A1H7CdFhOwXneZKS1/rkL7QoLxK34X3hwf/Ka1l/ay+zVtROxr9H0xrnHQ0Xens9TGb9yZclM8XTrn+BEOyYnrnQHMbFAvkjDvMmshaEYi4Cdsxqq/DUto=;
+X-UUID: e3d1f9c4893f47eab852db5f242f546c-20201211
+Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1771501145; Fri, 11 Dec 2020 09:53:06 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 11 Dec
+ 2020 09:53:03 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 11 Dec 2020 09:53:03 +0800
+Message-ID: <1607651584.23328.20.camel@mhfsdcap03>
+Subject: Re: [PATCH v2 0/3] Release allocated periodic bandwidth data from
+ reset_bandwidth()
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Ikjoon Jang <ikjn@chromium.org>
+CC:     <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        "Zhanyong Wang" <zhanyong.wang@mediatek.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>
-Subject: Re: [PATCH v4 3/5] usb: dwc3: qcom: Configure wakeup interrupts and
- set genpd active wakeup flag
-Message-ID: <X9LBtQd60Aa+bfI1@google.com>
-References: <1603831083-2025-1-git-send-email-sanm@codeaurora.org>
- <1603831083-2025-4-git-send-email-sanm@codeaurora.org>
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Fri, 11 Dec 2020 09:53:04 +0800
+In-Reply-To: <20201210104747.3416781-1-ikjn@chromium.org>
+References: <20201210104747.3416781-1-ikjn@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1603831083-2025-4-git-send-email-sanm@codeaurora.org>
+X-TM-SNTS-SMTP: BAE8BD74BBC1CF0448432855EAE02B439FBC9EF825838CBF95CE85B076B729932000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 28, 2020 at 02:08:01AM +0530, Sandeep Maheswaram wrote:
-> Configure interrupts based on hs_phy_mode to avoid triggering of
-> interrupts during system suspend and suspends successfully.
-> Set genpd active wakeup flag for usb gdsc if wakeup capable devices
-> are connected so that wake up happens without reenumeration.
-> Add helper functions to enable,disable wake irqs.
-> 
-> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 82 ++++++++++++++++++++++++++++----------------
->  1 file changed, 52 insertions(+), 30 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index c703d55..c93f7bb 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -17,9 +17,11 @@
->  #include <linux/of_platform.h>
->  #include <linux/platform_device.h>
->  #include <linux/phy/phy.h>
-> +#include <linux/pm_domain.h>
->  #include <linux/usb/of.h>
->  #include <linux/reset.h>
->  #include <linux/iopoll.h>
-> +#include <linux/usb/hcd.h>
->  
->  #include "core.h"
->  
-> @@ -291,60 +293,75 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
->  	icc_put(qcom->icc_path_apps);
->  }
->  
-> -static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
-> +static void dwc3_qcom_enable_wakeup_irq(int wake_irq)
+T24gVGh1LCAyMDIwLTEyLTEwIGF0IDE4OjQ3ICswODAwLCBJa2pvb24gSmFuZyB3cm90ZToNCj4g
+eGhjaS1tdGsgcmVsZWFzZXMgYWxsb2NhdGVkIFRUIGJhbmR3aWR0aCBkYXRhIG9ubHkgd2hlbiB3
+aG9sZQ0KPiBlbmRwb2ludHMgb2YgYSBkZXZpY2UgYXJlIGRyb3BwZWQgYXMgdGhlcmUncmUgb25s
+eSB7YWRkfGRyb3B9X2VuZHBvaW50KCkNCj4gaG9va3MgYXJlIGRlZmluZWQuIFRoaXMgcGF0Y2hz
+ZXQgYWRkcyBtb3JlIGhvb2tzIGFuZCByZWxlYXNlcyBhbGwNCj4gYmFuZHdpZHRoIGRhdGEgZnJv
+bSByZXNldF9iYW5kd2lkdGgoKSBwYXRoLCBub3QgZHJvcF9lbmRwb2ludCgpLg0KPiANCj4gDQo+
+IENoYW5nZXMgaW4gdjI6DQo+IC0gZml4IGEgMC1kYXkgd2FybmluZyBmcm9tIHVudXNlZCB2YXJp
+YWJsZQ0KPiAtIHNwbGl0IG9uZSBiaWcgcGF0Y2ggaW50byB0aHJlZSBwYXRjaGVzDQo+IC0gYnVn
+Zml4IGluIGh3IGZsYWdzDQo+IA0KPiBJa2pvb24gSmFuZyAoMyk6DQo+ICAgdXNiOiB4aGNpLW10
+azogY29kZSBjbGVhbnVwcyBpbiBnZXR0aW5nIGJhbmR3aWR0aCB0YWJsZQ0KPiAgIHVzYjogeGhj
+aS1tdGs6IGRlbGF5IGFzc29jaWF0aW9uIG9mIHR0IGFuZCBlcA0KPiAgIHVzYjogeGhjaS1tdGs6
+IGZpeCB1bnJlbGVhc2VkIGJhbmR3aWR0aCBkYXRhDQo+IA0KPiAgZHJpdmVycy91c2IvaG9zdC94
+aGNpLW10ay1zY2guYyB8IDE4MCArKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLQ0KPiAg
+ZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay5oICAgICB8ICAxMyArKysNCj4gIGRyaXZlcnMvdXNi
+L2hvc3QveGhjaS5jICAgICAgICAgfCAgIDkgKysNCj4gIDMgZmlsZXMgY2hhbmdlZCwgMTMzIGlu
+c2VydGlvbnMoKyksIDY5IGRlbGV0aW9ucygtKQ0KVGhhbmtzIGZvciB5b3VyIHBhdGNoLCBJJ2xs
+IHRlc3QgaXQgYW5kIGNoZWNrIGl0IHdpdGggb3VyIERFDQoNCj4gDQoNCg==
 
-super-nit: from the name of the function it's evident that this is a
-wakeup irq, you could omit the 'wake_' prefix.
-
->  {
-> -	if (qcom->hs_phy_irq) {
-> -		disable_irq_wake(qcom->hs_phy_irq);
-> -		disable_irq_nosync(qcom->hs_phy_irq);
-> +	if (wake_irq) {
-> +		enable_irq(wake_irq);
-> +		enable_irq_wake(wake_irq);
->  	}
-
-nit: the following would be a more common structure:
-
-	if (!wake_irq)
-		return;
-
-	enable_irq(wake_irq);
-	enable_irq_wake(wake_irq);
-
-> +}
->  
-> -	if (qcom->dp_hs_phy_irq) {
-> -		disable_irq_wake(qcom->dp_hs_phy_irq);
-> -		disable_irq_nosync(qcom->dp_hs_phy_irq);
-> +static void dwc3_qcom_disable_wakeup_irq(int wake_irq)
-
-same as above
-
-> +{
-> +	if (wake_irq) {
-> +		disable_irq_wake(wake_irq);
-> +		disable_irq_nosync(wake_irq);
->  	}
-
-same as above
-
-> +}
->  
-> -	if (qcom->dm_hs_phy_irq) {
-> -		disable_irq_wake(qcom->dm_hs_phy_irq);
-> -		disable_irq_nosync(qcom->dm_hs_phy_irq);
-> -	}
-> +static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
-> +{
-> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-> +
-> +	dwc3_qcom_disable_wakeup_irq(qcom->hs_phy_irq);
->  
-> -	if (qcom->ss_phy_irq) {
-> -		disable_irq_wake(qcom->ss_phy_irq);
-> -		disable_irq_nosync(qcom->ss_phy_irq);
-> +	if (dwc->hs_phy_mode & PHY_MODE_USB_HOST_LS)
-> +		dwc3_qcom_disable_wakeup_irq(qcom->dp_hs_phy_irq);
-> +	else if (dwc->hs_phy_mode & PHY_MODE_USB_HOST_HS)
-> +		dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
-> +	else {
-> +		dwc3_qcom_disable_wakeup_irq(qcom->dp_hs_phy_irq);
-> +		dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
->  	}
-
-The following would be clearer IMO:
-
-	if (dwc->hs_phy_mode & (PHY_MODE_USB_HOST_LS | PHY_MODE_USB_HOST_SS))
-		dwc3_qcom_disable_wakeup_irq(qcom->dp_hs_phy_irq);
-    	if (dwc->hs_phy_mode & (PHY_MODE_USB_HOST_HS | PHY_MODE_USB_HOST_SS))
-		dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
-
-> +
-> +	dwc3_qcom_disable_wakeup_irq(qcom->ss_phy_irq);
-
-Why isn't this conditional on 'dwc->hs_phy_mode & PHY_MODE_USB_HOST_SS'?
-
->  }
->  
->  static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
->  {
-> -	if (qcom->hs_phy_irq) {
-> -		enable_irq(qcom->hs_phy_irq);
-> -		enable_irq_wake(qcom->hs_phy_irq);
-> -	}
-> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
->  
-> -	if (qcom->dp_hs_phy_irq) {
-> -		enable_irq(qcom->dp_hs_phy_irq);
-> -		enable_irq_wake(qcom->dp_hs_phy_irq);
-> -	}
-> +	dwc3_qcom_enable_wakeup_irq(qcom->hs_phy_irq);
->  
-> -	if (qcom->dm_hs_phy_irq) {
-> -		enable_irq(qcom->dm_hs_phy_irq);
-> -		enable_irq_wake(qcom->dm_hs_phy_irq);
-> +	if (dwc->hs_phy_mode & PHY_MODE_USB_HOST_LS)
-> +		dwc3_qcom_enable_wakeup_irq(qcom->dp_hs_phy_irq);
-> +	else if (dwc->hs_phy_mode & PHY_MODE_USB_HOST_HS)
-> +		dwc3_qcom_enable_wakeup_irq(qcom->dm_hs_phy_irq);
-> +	else {
-> +		dwc3_qcom_enable_wakeup_irq(qcom->dp_hs_phy_irq);
-> +		dwc3_qcom_enable_wakeup_irq(qcom->dm_hs_phy_irq);
->  	}
->  
-> -	if (qcom->ss_phy_irq) {
-> -		enable_irq(qcom->ss_phy_irq);
-> -		enable_irq_wake(qcom->ss_phy_irq);
-> -	}
-> +	dwc3_qcom_enable_wakeup_irq(qcom->ss_phy_irq);
-
-same comments as for dwc3_qcom_disable_interrupts()
-
->  }
->  
->  static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
->  {
->  	u32 val;
->  	int i, ret;
-> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-> +	struct usb_hcd  *hcd;
-
-nit: remove one blank
-
-> +	struct generic_pm_domain *genpd = pd_to_genpd(qcom->dev->pm_domain);
->  
->  	if (qcom->is_suspended)
->  		return 0;
->  
-> +	if (dwc->xhci) {
-> +		hcd = platform_get_drvdata(dwc->xhci);
-> +		if (usb_wakeup_enabled_descendants(hcd->self.root_hub))
-> +			genpd->flags |= GENPD_FLAG_ACTIVE_WAKEUP;
-
-Shouldn't this only be done when wakeup is enabled?
-
-> +	}
-> +
->  	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
->  	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
->  		dev_err(qcom->dev, "HS-PHY not in L2\n");
-> @@ -366,10 +383,15 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
->  {
->  	int ret;
->  	int i;
-> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-> +	struct generic_pm_domain *genpd = pd_to_genpd(qcom->dev->pm_domain);
->  
->  	if (!qcom->is_suspended)
->  		return 0;
->  
-> +	if (dwc->xhci)
-> +		genpd->flags &= ~GENPD_FLAG_ACTIVE_WAKEUP;
-
-Could also depend on wakeup being enabled, but less important.
-
-> +
->  	dwc3_qcom_disable_interrupts(qcom);
->  
->  	for (i = 0; i < qcom->num_clocks; i++) {
-> @@ -764,7 +786,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto interconnect_exit;
->  
-> -	device_init_wakeup(&pdev->dev, 1);
-> +	device_init_wakeup(&pdev->dev, of_property_read_bool(np, "wakeup-source"));
->  	qcom->is_suspended = false;
->  	pm_runtime_set_active(dev);
->  	pm_runtime_enable(dev);
-> -- 
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-> of Code Aurora Forum, hosted by The Linux Foundation
-> 
