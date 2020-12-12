@@ -2,155 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F65D2D8259
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Dec 2020 23:52:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E2B2D8336
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Dec 2020 01:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407025AbgLKWt1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Dec 2020 17:49:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60364 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394011AbgLKWtT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 11 Dec 2020 17:49:19 -0500
-X-Gm-Message-State: AOAM5313Hs3LDR3j5REIZ+4NC3zAsehRiuOC+DdrzIFEyNrZCwNm4uoP
-        5tngIEUWy52Jt9j6UGbGB5cLqsey+TH8qfUwqg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607726919;
-        bh=9kZNymVdIQdokRAKswxv73AN4tdhSwyYcUymBCQ55Ic=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hfxGOydcbMt0JjYq6ERbodgzYugBbj5r6D8hPDOOyYvDnnQPOGwQXYqduJbwHc1Rt
-         8Eh4MdG8RgJwHYa1stna5N/rHLQE+bN32BJK6ic1Pu86SB9Jkz/K7qSz8kht1pLKMc
-         r2bm6vIJyIDi6IspadzII6gUbYNrpQKyVoHmdpcmcZtYJVbp6oSTWXDPA3gsE+wXbg
-         wLIXS5s9VJ3OltUs04v6uzu9XjbwNlR4umrcJMhSI3PI1On/t1o66Yypqx11KYwYQT
-         2JPV1Z/4bATMscD9WUVU95VkXJzEjhlPe07PuEvh9J1WHCL+T68QSjQMcf11oDa8sT
-         sNyaC7aTJAMmA==
-X-Google-Smtp-Source: ABdhPJwK8ZorGU0TFVJZH5c/4e3AauDieEoMVL2guTtxGD4PK2qnMlMawIC4UeCIoBz67Lan/AhY/UipOcj6bzR90cw=
-X-Received: by 2002:a17:906:c20f:: with SMTP id d15mr12958728ejz.341.1607726917615;
- Fri, 11 Dec 2020 14:48:37 -0800 (PST)
+        id S2387999AbgLLAEn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Dec 2020 19:04:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391635AbgLLAEZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Dec 2020 19:04:25 -0500
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01715C061793
+        for <linux-usb@vger.kernel.org>; Fri, 11 Dec 2020 16:03:44 -0800 (PST)
+Received: by mail-lf1-x142.google.com with SMTP id h19so15673727lfc.12
+        for <linux-usb@vger.kernel.org>; Fri, 11 Dec 2020 16:03:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SfxY10PKBlgSw6/Fq87LV1LDFIW7NSQj7nViKjsG+no=;
+        b=Wv11Q6mHv1gO+UaNIbL3zUo9qxZ+sUkHbR3bPMfJXBP7hbTgQJTAEuD7NrSlyu5iSs
+         GZY1MvMu2QY+1vgHEbL861U/AW0MFtcrwrOHtO4nQCZsil9oq4+HwCAMi/NszMkxMXcs
+         ds5ydgWlDwUByKmBJHOLU77zHHsuw/a7lcOdiMC2bVLJETcemZlkqkrQWC2BWBZupm5O
+         Ue+0Yhb6R/g69gA0RI1FZdiQU9o4+4dZ9aLzJLwqSUtMbO2GDNouFSMO1ZXgWm0a7wqg
+         w8WCrN9NuJEg+zwXtoHzuXzhY2Q/8zobMukCOIfDB1fFkLkQvxoFPsZCgnjNzr+tEXJU
+         VaxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SfxY10PKBlgSw6/Fq87LV1LDFIW7NSQj7nViKjsG+no=;
+        b=YefEUHQk5DqGVO+m4ftS/3CkoHecTDZMhTpoX/EZxWtxcP7/7wFK+UnDiHwOQWqoxt
+         XBkiKtS1QmSK5dJMtjxvLTnV0eiows5Dow8/Q0b/aIKB0jL6M4epUWwIJNTsTMnCff6C
+         BXVI49Ob8TQ3C2ac5ayTNml1UZrlBb32Hx898iDjDFrS3AnqokBkO6I/ex7OW60Q8cV9
+         +iXBwEukn9CGGHAyl8nfvTralDgDs8hnp/Sq3thRZAZSQOKIalFo28buPer1GZqrLzpF
+         WrsQvZWHWYvlN+6RJ5bdkTZmPux6eeNjhYvR9lVFFyxJsxyIYPYujsrKmQNAZuk0wJxQ
+         78ng==
+X-Gm-Message-State: AOAM531akyjA2v7hvaFpFLsp8l5U7cnVW1rqaCmXYqk8EfW8ka0J5uoV
+        yAFE77fZCo8EErDd91HVaNRrWd05mjL3VcwxHhSHGg==
+X-Google-Smtp-Source: ABdhPJx3IAmrcEpXXMHnifRqVgVvTeCANVyRGmMptZidgvCOnkz50UFCvqUVtOhvhNSlPjj6hHub2Zi1irgcEhjEmys=
+X-Received: by 2002:a2e:3503:: with SMTP id z3mr5506252ljz.74.1607731423405;
+ Fri, 11 Dec 2020 16:03:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20201211060429.20027-1-a-govindraju@ti.com> <062c861a-b35e-06cd-2bda-a2d3f5034290@ti.com>
-In-Reply-To: <062c861a-b35e-06cd-2bda-a2d3f5034290@ti.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 11 Dec 2020 16:48:25 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJoq20v7wj0x9Nzp2dFeeEunEmschF+VTXMtPdLwg1izA@mail.gmail.com>
-Message-ID: <CAL_JsqJoq20v7wj0x9Nzp2dFeeEunEmschF+VTXMtPdLwg1izA@mail.gmail.com>
-Subject: Re: [PATCH v4] dt-bindings: usb: Add new compatible string for AM64 SoC
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Roger Quadros <rogerq@ti.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20201122170822.21715-1-mani@kernel.org> <20201122170822.21715-3-mani@kernel.org>
+ <CACRpkdbY-aZB1BAD=JkZAHA+OQvpH12AD3tLAp6Nf1hwr74s9A@mail.gmail.com>
+ <X8ZmfbQp7/BGgxec@localhost> <CACRpkdZJdxqxUEQaKUHctHRSQAUpYZJtuxonwVd_ZFAsLBbKrA@mail.gmail.com>
+ <X89OOUOG0x0SSxXA@localhost> <CACRpkdavm7GG8HdV1xk0W_b1EzUmvF0kKAGnp0u6t42NAWa9iA@mail.gmail.com>
+ <X9DsWahl6UDwZwBn@localhost> <CACRpkdYm-j9QcK8hgNrC33KruWE17Q0F4+T=UanE7PCEZEtu6w@mail.gmail.com>
+ <X9HiGaIzk4UaZG7i@localhost>
+In-Reply-To: <X9HiGaIzk4UaZG7i@localhost>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 12 Dec 2020 01:03:32 +0100
+Message-ID: <CACRpkdZ6MUzRe9m=NrqA_5orhZXDtWj+qoFMHX7v6Zjsx-rVGg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] usb: serial: xr_serial: Add gpiochip support
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        patong.mxl@gmail.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Angelo Dureghello <angelo.dureghello@timesys.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 11, 2020 at 6:04 AM Aswath Govindraju <a-govindraju@ti.com> wrote:
->
-> Hi,
-> On 11/12/20 11:34 am, Aswath Govindraju wrote:
-> > Add compatible string in j721e-usb binding file as the same USB subsystem
-> > is present in AM64.
-> >
-> > Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> > ---
-> >
-> > Changes since v3:
-> > - used enum instead of anyOf.
-> >
-> > Changes since v2:
-> > - added changes done over the versions.
-> >
-> > Changes since v1:
-> > - replaced the '\t' at the beginning of the lines with spaces as it was
-> >   causing the dt_binding_check to fail.
-> >
-> >  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> > index 388245b91a55..1a5c7bbb40d1 100644
-> > --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> > @@ -11,8 +11,9 @@ maintainers:
-> >
-> >  properties:
-> >    compatible:
-> > -    items:
-> > -      - const: ti,j721e-usb
-> > +    enum:
-> > +      - ti,j721e-usb
-> > +      - ti,am64-usb
-> >
->
-> I am trying to use the compatible strings in the following manner
->
-> ```
-> compatible = "ti,am64-usb", "ti,j721e-usb";
->
-> ```
-> If I use above patch I am getting an error while doing a dtbs check.
->
-> ```
-> /home/gsaswath/src/ti-linux-kernel/arch/arm64/boot/dts/ti/k3-am642-evm.dt.yaml:
-> cdns-usb@f900000: compatible: Additional items are not allowed
-> ('ti,j721e-usb' was unexpected)
->         From schema:
-> /home/gsaswath/src/ti-linux-kernel/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> /home/gsaswath/src/ti-linux-kernel/arch/arm64/boot/dts/ti/k3-am642-evm.dt.yaml:
-> cdns-usb@f900000: compatible: ['ti,am64-usb', 'ti,j721e-usb'] is too long
->         From schema:
-> /home/gsaswath/src/ti-linux-kernel/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
->
-> ```
->
->
-> I have looked around for examples but I am unable to find a similar
-> case. I tried using anyOf in the following manner
+On Thu, Dec 10, 2020 at 9:53 AM Johan Hovold <johan@kernel.org> wrote:
+> On Wed, Dec 09, 2020 at 05:25:32PM +0100, Linus Walleij wrote:
 
-You didn't look hard enough. There are lots.
+> I just replied to that thread, but to summarize, you can't rely on
+> having the sysfs code detect collisions since that will trigger a bunch
+> of nasty warnings and backtraces. We also don't want the sysfs interface
+> for a specific USB device to depend on probe order (only the first one
+> plugged in gets to use the line names). And adding line names now could
+> in fact be what breaks currently working scripts.
 
-> ```
-> compatible:
->      anyOf:
->         - const: ti,am64-usb
->         - const: ti,j721e-usb
+Yes the sysfs ABI is very volatile and easy to break.
 
-This is really no different than a single 'enum' with the 2 values.
-'anyOf' means one or more in the list are true, but more than 1 is
-impossible here.
+As pointed out in the other reply, sysfs base GPIO number is all
+wibbly-wobbly on anything hot-pluggable so in a way I feel it
+is the right thing to disallow sysfs altogether on hotpluggable
+devices.
 
-If you have different possible lengths of values, then you need
-'oneOf' for each case and then 'items' when you have a value with
-multiple entries:
+> > I am strongly encouraging any developer with a few spare cycles
+> > on their hands to go and implement the debugfs facility because
+> > we can make it so much better than the sysfs, easier and
+> > more convenient for testing etc.
+>
+> Don't you run the risk of having people enable debugfs in production
+> systems now just so they can use the old-style interface?
 
-oneOf:
-  - const: ti,j721e-usb
-  - items:
-      - const: ti,am64-usb
-      - const: ti,j721e-usb
+That risk always exist of course. For this and many other reasons.
+I just have to trust developers to understand that debugfs is named
+debugfs for a reason.
 
-> ```
->
-> But I am getting an error
->
-> ```
-> /home/gsaswath/src/ti-linux-kernel/Documentation/devicetree/bindings/usb/ti,j721e-usb.example.dt.yaml:
-> cdns_usb@4104000: compatible: 'anyOf' conditional failed, one must be fixed:
->         Additional items are not allowed ('ti,j721e-usb' was unexpected)
->         ['ti,am64-usb', 'ti,j721e-usb'] is too long
->         'ti,j721e-usb' was expected
-> ```
->
-> Doesn't anyof mean that the compatible strings can be used in any
-> combination ??
->
-> Thanks,
-> Aswath
->
-> >    reg:
-> >      description: module registers
-> >
->
+> Side note: if you skip the "export" part of the interface, how would you
+> indicate that a line is already in use or not available (e.g.
+> gpio-range-reserved)?
+
+The idea is that if you poke around there you know what you're
+doing or ready to face the consequences.
+
+I am thinking if people want to toggle LEDs and switches from
+debugfs for testing and hacking they'd be alright with corrupting
+the SPI interface if they make mistakes.
+
+The chardev ABI is the only thing which we really designed with
+some users, multiple users, compatibility and security in mind,
+yet we had to revamp it once from scratch...
+
+> Just did a super quick check and it seems libgpiod still assumes a flat
+> name space. For example, gpiod_chip_find_line() returns only the first
+> line found that matches a name. Shouldn't be impossible to extend, but
+> just want to make sure this flat namespace assumption hasn't been to
+> heavily relied upon.
+
+The unique way to identify a GPIO is gpiochip instance (with
+topology from sysfs) and then a line number on that chip.
+This is done e.g. in the example tool
+tools/gpio/gpio-hammer.c
+
+As you can see the tool doesn't use these line names.
+
+The line names are really like symbolic links or something.
+But they are indeed in a flat namespace so we should try to
+at least make them unique if it turns out people love to use
+these.
+
+As it is now system designers mostly use device tree to assign
+line names and they try to make these unique because they don't
+like the nasty warnings from gpiolib.
+
+If I google for the phrase "Detected name collision for GPIO name"
+I just find the code, our discussions and some USB serial devices
+warning about this so far.
+
+Maybe we should just make a patch to disallow it?
+
+Yours,
+Linus Walleij
