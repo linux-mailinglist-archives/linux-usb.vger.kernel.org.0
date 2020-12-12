@@ -2,215 +2,220 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E072D8432
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Dec 2020 05:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DA42D8581
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Dec 2020 10:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438049AbgLLEBp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Dec 2020 23:01:45 -0500
-Received: from mga03.intel.com ([134.134.136.65]:55893 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725812AbgLLEB3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 11 Dec 2020 23:01:29 -0500
-IronPort-SDR: /P16rtuHlRq+MhQXPXjuQgCtZ6I3kTm9YOh55ffjFWnfSqD+Cu0XACK/LuToKHCmJHJXBSdOgB
- FeLDL4Trxing==
-X-IronPort-AV: E=McAfee;i="6000,8403,9832"; a="174638851"
-X-IronPort-AV: E=Sophos;i="5.78,413,1599548400"; 
-   d="scan'208";a="174638851"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2020 20:00:48 -0800
-IronPort-SDR: wZRJl4LU9j7G0Zp8MZumEV4jR8CGFdTuPbwJzkjvbcGNXDh8aK/VGwSwoOo4nRlq5ShOd9pO9V
- sM13idwS7SmQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,413,1599548400"; 
-   d="scan'208";a="334526331"
-Received: from lkp-server01.sh.intel.com (HELO ecc0cebe68d1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 11 Dec 2020 20:00:47 -0800
-Received: from kbuild by ecc0cebe68d1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1knw5O-0001DW-Ep; Sat, 12 Dec 2020 04:00:46 +0000
-Date:   Sat, 12 Dec 2020 12:00:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- a256e24021bf7ceedd29fe65eb45c7adfffffad2
-Message-ID: <5fd44054.JNIAyMjtzcO+W/p2%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S2438470AbgLLJ6d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 12 Dec 2020 04:58:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388376AbgLLJyn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Dec 2020 04:54:43 -0500
+Received: from mail-il1-x146.google.com (mail-il1-x146.google.com [IPv6:2607:f8b0:4864:20::146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB77C0619D5
+        for <linux-usb@vger.kernel.org>; Sat, 12 Dec 2020 01:34:21 -0800 (PST)
+Received: by mail-il1-x146.google.com with SMTP id m14so9142039ila.16
+        for <linux-usb@vger.kernel.org>; Sat, 12 Dec 2020 01:34:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=mVCvsvjilIEUCYb64Taz8MA771Z+xRzYLk2/ruWIw4U=;
+        b=OcRTFI/1CIUEMJXQhaoiwC1/YWTWIJBJtOocTz5O+2SVccliOg3LkyhzAOz20wusVj
+         ox4GeeXzPCkJ1Tpm/DLNgzklZANJ+gOcvCyjLfvT5ykm7qWsopskVoGLfHyaS3qKK99/
+         wInukBoUWiipnjedVjw0AWAJXaAeubzQsATZHxc1ADuI2/iKToACUxpSPL8CjiBTE7PR
+         7AUrIK+fQkJ909Cw28gqV9lIZamYUqDCHwLEmMvqM8BlcrbauxSJP0fMYDL1xZIrLchU
+         WdXnjevET/03/EFfG44n8XZEbJaNV4sO2zONP8wGHXF2vb0Fx7Oo5GAWYc5agDuzTsSk
+         M1EQ==
+X-Gm-Message-State: AOAM530ItvePZEjq9DqqEXVeBvaf4yhn5KSwK6htFYe4DDQd8q0+EUQC
+        CtDUYfp7HbQFkpR5F5yDQSiJjcrFTxqsJ9g82hVDmZbrIFYL
+X-Google-Smtp-Source: ABdhPJzp99wGmZYNcdaiMXlFfMlfFuG5EwK9ZN91IlDbz5OlMylrKOOtzwt7OCB6EvNaOVTsbulRXD76YWKOMOhqK1dXFF5s857S
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6e02:128c:: with SMTP id y12mr21476112ilq.179.1607758990678;
+ Fri, 11 Dec 2020 23:43:10 -0800 (PST)
+Date:   Fri, 11 Dec 2020 23:43:10 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000086229005b63f8fc1@google.com>
+Subject: KMSAN: kernel-usb-infoleak in usbnet_write_cmd (2)
+From:   syzbot <syzbot+11567dab5754ad6ee82a@syzkaller.appspotmail.com>
+To:     andriy.shevchenko@linux.intel.com, glider@google.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: a256e24021bf7ceedd29fe65eb45c7adfffffad2  usb: phy: convert comma to semicolon
+Hello,
 
-elapsed time: 721m
+syzbot found the following issue on:
 
-configs tested: 153
-configs skipped: 2
+HEAD commit:    73d62e81 kmsan: random: prevent boot-time reports in _mix_..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=13ff7703500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=eef728deea880383
+dashboard link: https://syzkaller.appspot.com/bug?extid=11567dab5754ad6ee82a
+compiler:       clang version 11.0.0 (https://github.com/llvm/llvm-project.git ca2dcbd030eadbf0aa9b660efe864ff08af6e18b)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                 linkstation_defconfig
-sh                         apsh4a3a_defconfig
-arm                           omap1_defconfig
-powerpc                     mpc512x_defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-openrisc                            defconfig
-arm                            pleb_defconfig
-ia64                             allyesconfig
-arm                          collie_defconfig
-arm                           sunxi_defconfig
-parisc                generic-32bit_defconfig
-m68k                       m5275evb_defconfig
-arm                          exynos_defconfig
-sh                           se7343_defconfig
-arm                      integrator_defconfig
-arm                            qcom_defconfig
-sh                          rsk7264_defconfig
-mips                     cu1000-neo_defconfig
-powerpc                        cell_defconfig
-arm                      jornada720_defconfig
-powerpc                     tqm8541_defconfig
-sh                          landisk_defconfig
-powerpc                       holly_defconfig
-powerpc                 mpc832x_rdb_defconfig
-parisc                              defconfig
-xtensa                    smp_lx200_defconfig
-arm                        mvebu_v7_defconfig
-sh                             shx3_defconfig
-arm                          gemini_defconfig
-sh                          rsk7269_defconfig
-sh                        apsh4ad0a_defconfig
-m68k                        m5272c3_defconfig
-mips                   sb1250_swarm_defconfig
-arm                         socfpga_defconfig
-arm                          moxart_defconfig
-arm                         s3c6400_defconfig
-arm                       aspeed_g4_defconfig
-arc                         haps_hs_defconfig
-powerpc                        warp_defconfig
-parisc                           alldefconfig
-powerpc                    klondike_defconfig
-mips                      loongson3_defconfig
-arm                       spear13xx_defconfig
-arm                        trizeps4_defconfig
-nios2                         10m50_defconfig
-parisc                generic-64bit_defconfig
-arm                        mvebu_v5_defconfig
-powerpc                      bamboo_defconfig
-riscv                               defconfig
-powerpc                     ppa8548_defconfig
-sh                             sh03_defconfig
-powerpc                      chrp32_defconfig
-mips                           gcw0_defconfig
-m68k                       bvme6000_defconfig
-powerpc                   currituck_defconfig
-powerpc                 mpc8560_ads_defconfig
-arm                         assabet_defconfig
-nds32                               defconfig
-ia64                                defconfig
-powerpc                  mpc885_ads_defconfig
-mips                           xway_defconfig
-powerpc                      cm5200_defconfig
-arm                      footbridge_defconfig
-mips                      pistachio_defconfig
-mips                      maltaaprp_defconfig
-arm                        keystone_defconfig
-ia64                            zx1_defconfig
-m68k                          multi_defconfig
-sh                          lboxre2_defconfig
-xtensa                         virt_defconfig
-xtensa                generic_kc705_defconfig
-sparc                            allyesconfig
-powerpc                          g5_defconfig
-powerpc                      pasemi_defconfig
-sh                           se7619_defconfig
-arm                         mv78xx0_defconfig
-sh                  sh7785lcr_32bit_defconfig
-arm                          simpad_defconfig
-xtensa                           allyesconfig
-ia64                             allmodconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-i386                 randconfig-a004-20201209
-i386                 randconfig-a005-20201209
-i386                 randconfig-a001-20201209
-i386                 randconfig-a002-20201209
-i386                 randconfig-a006-20201209
-i386                 randconfig-a003-20201209
-x86_64               randconfig-a016-20201209
-x86_64               randconfig-a012-20201209
-x86_64               randconfig-a013-20201209
-x86_64               randconfig-a014-20201209
-x86_64               randconfig-a015-20201209
-x86_64               randconfig-a011-20201209
-i386                 randconfig-a013-20201209
-i386                 randconfig-a014-20201209
-i386                 randconfig-a011-20201209
-i386                 randconfig-a015-20201209
-i386                 randconfig-a012-20201209
-i386                 randconfig-a016-20201209
-i386                 randconfig-a014-20201211
-i386                 randconfig-a013-20201211
-i386                 randconfig-a012-20201211
-i386                 randconfig-a011-20201211
-i386                 randconfig-a016-20201211
-i386                 randconfig-a015-20201211
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+11567dab5754ad6ee82a@syzkaller.appspotmail.com
 
-clang tested configs:
-x86_64               randconfig-a004-20201209
-x86_64               randconfig-a006-20201209
-x86_64               randconfig-a005-20201209
-x86_64               randconfig-a001-20201209
-x86_64               randconfig-a002-20201209
-x86_64               randconfig-a003-20201209
+smsc75xx 5-1:1.0 (unnamed net_device) (uninitialized): Error reading E2P_CMD
+=====================================================
+BUG: KMSAN: kernel-usb-infoleak in kmsan_handle_urb+0x28/0x40 mm/kmsan/kmsan_hooks.c:303
+CPU: 1 PID: 17 Comm: kworker/1:0 Not tainted 5.10.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x21c/0x280 lib/dump_stack.c:118
+ kmsan_report+0xf7/0x1e0 mm/kmsan/kmsan_report.c:118
+ kmsan_internal_check_memory+0x484/0x520 mm/kmsan/kmsan.c:437
+ kmsan_handle_urb+0x28/0x40 mm/kmsan/kmsan_hooks.c:303
+ usb_submit_urb+0x87f/0x2530 drivers/usb/core/urb.c:421
+ usb_start_wait_urb+0x155/0x4c0 drivers/usb/core/message.c:58
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x495/0x7d0 drivers/usb/core/message.c:153
+ __usbnet_write_cmd drivers/net/usb/usbnet.c:2010 [inline]
+ usbnet_write_cmd+0x3d3/0x480 drivers/net/usb/usbnet.c:2048
+ __smsc75xx_write_reg drivers/net/usb/smsc75xx.c:122 [inline]
+ smsc75xx_write_reg drivers/net/usb/smsc75xx.c:153 [inline]
+ smsc75xx_reset+0x389/0x8030 drivers/net/usb/smsc75xx.c:1065
+ smsc75xx_bind+0xf5a/0x13f0 drivers/net/usb/smsc75xx.c:1492
+ usbnet_probe+0x1169/0x3e90 drivers/net/usb/usbnet.c:1712
+ usb_probe_interface+0xfcc/0x1520 drivers/usb/core/driver.c:396
+ really_probe+0xebd/0x2420 drivers/base/dd.c:558
+ driver_probe_device+0x293/0x390 drivers/base/dd.c:738
+ __device_attach_driver+0x63f/0x830 drivers/base/dd.c:844
+ bus_for_each_drv+0x2ca/0x3f0 drivers/base/bus.c:431
+ __device_attach+0x538/0x860 drivers/base/dd.c:912
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:959
+ bus_probe_device+0x177/0x3d0 drivers/base/bus.c:491
+ device_add+0x399e/0x3f20 drivers/base/core.c:2936
+ usb_set_configuration+0x39cf/0x4010 drivers/usb/core/message.c:2159
+ usb_generic_driver_probe+0x138/0x300 drivers/usb/core/generic.c:238
+ usb_probe_device+0x317/0x570 drivers/usb/core/driver.c:293
+ really_probe+0xebd/0x2420 drivers/base/dd.c:558
+ driver_probe_device+0x293/0x390 drivers/base/dd.c:738
+ __device_attach_driver+0x63f/0x830 drivers/base/dd.c:844
+ bus_for_each_drv+0x2ca/0x3f0 drivers/base/bus.c:431
+ __device_attach+0x538/0x860 drivers/base/dd.c:912
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:959
+ bus_probe_device+0x177/0x3d0 drivers/base/bus.c:491
+ device_add+0x399e/0x3f20 drivers/base/core.c:2936
+ usb_new_device+0x1bd6/0x2a30 drivers/usb/core/hub.c:2554
+ hub_port_connect drivers/usb/core/hub.c:5222 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5362 [inline]
+ port_event drivers/usb/core/hub.c:5508 [inline]
+ hub_event+0x5bc9/0x8890 drivers/usb/core/hub.c:5590
+ process_one_work+0x121c/0x1fc0 kernel/workqueue.c:2272
+ worker_thread+0x10cc/0x2740 kernel/workqueue.c:2418
+ kthread+0x51c/0x560 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+Uninit was stored to memory at:
+ kmsan_save_stack_with_flags mm/kmsan/kmsan.c:121 [inline]
+ kmsan_internal_chain_origin+0xad/0x130 mm/kmsan/kmsan.c:289
+ kmsan_memcpy_memmove_metadata+0x25e/0x2d0 mm/kmsan/kmsan.c:226
+ kmsan_memcpy_metadata+0xb/0x10 mm/kmsan/kmsan.c:246
+ __msan_memcpy+0x46/0x60 mm/kmsan/kmsan_instr.c:110
+ kmemdup+0x107/0x140 mm/util.c:130
+ __usbnet_write_cmd drivers/net/usb/usbnet.c:1999 [inline]
+ usbnet_write_cmd+0x1a0/0x480 drivers/net/usb/usbnet.c:2048
+ __smsc75xx_write_reg drivers/net/usb/smsc75xx.c:122 [inline]
+ smsc75xx_write_reg drivers/net/usb/smsc75xx.c:153 [inline]
+ smsc75xx_reset+0x389/0x8030 drivers/net/usb/smsc75xx.c:1065
+ smsc75xx_bind+0xf5a/0x13f0 drivers/net/usb/smsc75xx.c:1492
+ usbnet_probe+0x1169/0x3e90 drivers/net/usb/usbnet.c:1712
+ usb_probe_interface+0xfcc/0x1520 drivers/usb/core/driver.c:396
+ really_probe+0xebd/0x2420 drivers/base/dd.c:558
+ driver_probe_device+0x293/0x390 drivers/base/dd.c:738
+ __device_attach_driver+0x63f/0x830 drivers/base/dd.c:844
+ bus_for_each_drv+0x2ca/0x3f0 drivers/base/bus.c:431
+ __device_attach+0x538/0x860 drivers/base/dd.c:912
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:959
+ bus_probe_device+0x177/0x3d0 drivers/base/bus.c:491
+ device_add+0x399e/0x3f20 drivers/base/core.c:2936
+ usb_set_configuration+0x39cf/0x4010 drivers/usb/core/message.c:2159
+ usb_generic_driver_probe+0x138/0x300 drivers/usb/core/generic.c:238
+ usb_probe_device+0x317/0x570 drivers/usb/core/driver.c:293
+ really_probe+0xebd/0x2420 drivers/base/dd.c:558
+ driver_probe_device+0x293/0x390 drivers/base/dd.c:738
+ __device_attach_driver+0x63f/0x830 drivers/base/dd.c:844
+ bus_for_each_drv+0x2ca/0x3f0 drivers/base/bus.c:431
+ __device_attach+0x538/0x860 drivers/base/dd.c:912
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:959
+ bus_probe_device+0x177/0x3d0 drivers/base/bus.c:491
+ device_add+0x399e/0x3f20 drivers/base/core.c:2936
+ usb_new_device+0x1bd6/0x2a30 drivers/usb/core/hub.c:2554
+ hub_port_connect drivers/usb/core/hub.c:5222 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5362 [inline]
+ port_event drivers/usb/core/hub.c:5508 [inline]
+ hub_event+0x5bc9/0x8890 drivers/usb/core/hub.c:5590
+ process_one_work+0x121c/0x1fc0 kernel/workqueue.c:2272
+ worker_thread+0x10cc/0x2740 kernel/workqueue.c:2418
+ kthread+0x51c/0x560 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+Uninit was stored to memory at:
+ kmsan_save_stack_with_flags mm/kmsan/kmsan.c:121 [inline]
+ kmsan_internal_chain_origin+0xad/0x130 mm/kmsan/kmsan.c:289
+ __msan_chain_origin+0x57/0xa0 mm/kmsan/kmsan_instr.c:147
+ __smsc75xx_write_reg drivers/net/usb/smsc75xx.c:119 [inline]
+ smsc75xx_write_reg drivers/net/usb/smsc75xx.c:153 [inline]
+ smsc75xx_reset+0x18fa/0x8030 drivers/net/usb/smsc75xx.c:1065
+ smsc75xx_bind+0xf5a/0x13f0 drivers/net/usb/smsc75xx.c:1492
+ usbnet_probe+0x1169/0x3e90 drivers/net/usb/usbnet.c:1712
+ usb_probe_interface+0xfcc/0x1520 drivers/usb/core/driver.c:396
+ really_probe+0xebd/0x2420 drivers/base/dd.c:558
+ driver_probe_device+0x293/0x390 drivers/base/dd.c:738
+ __device_attach_driver+0x63f/0x830 drivers/base/dd.c:844
+ bus_for_each_drv+0x2ca/0x3f0 drivers/base/bus.c:431
+ __device_attach+0x538/0x860 drivers/base/dd.c:912
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:959
+ bus_probe_device+0x177/0x3d0 drivers/base/bus.c:491
+ device_add+0x399e/0x3f20 drivers/base/core.c:2936
+ usb_set_configuration+0x39cf/0x4010 drivers/usb/core/message.c:2159
+ usb_generic_driver_probe+0x138/0x300 drivers/usb/core/generic.c:238
+ usb_probe_device+0x317/0x570 drivers/usb/core/driver.c:293
+ really_probe+0xebd/0x2420 drivers/base/dd.c:558
+ driver_probe_device+0x293/0x390 drivers/base/dd.c:738
+ __device_attach_driver+0x63f/0x830 drivers/base/dd.c:844
+ bus_for_each_drv+0x2ca/0x3f0 drivers/base/bus.c:431
+ __device_attach+0x538/0x860 drivers/base/dd.c:912
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:959
+ bus_probe_device+0x177/0x3d0 drivers/base/bus.c:491
+ device_add+0x399e/0x3f20 drivers/base/core.c:2936
+ usb_new_device+0x1bd6/0x2a30 drivers/usb/core/hub.c:2554
+ hub_port_connect drivers/usb/core/hub.c:5222 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5362 [inline]
+ port_event drivers/usb/core/hub.c:5508 [inline]
+ hub_event+0x5bc9/0x8890 drivers/usb/core/hub.c:5590
+ process_one_work+0x121c/0x1fc0 kernel/workqueue.c:2272
+ worker_thread+0x10cc/0x2740 kernel/workqueue.c:2418
+ kthread+0x51c/0x560 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+Local variable ----buf.i.i@smsc75xx_reset created at:
+ __smsc75xx_read_reg drivers/net/usb/smsc75xx.c:976 [inline]
+ smsc75xx_read_reg drivers/net/usb/smsc75xx.c:147 [inline]
+ smsc75xx_reset+0x23a/0x8030 drivers/net/usb/smsc75xx.c:1057
+ __smsc75xx_read_reg drivers/net/usb/smsc75xx.c:976 [inline]
+ smsc75xx_read_reg drivers/net/usb/smsc75xx.c:147 [inline]
+ smsc75xx_reset+0x23a/0x8030 drivers/net/usb/smsc75xx.c:1057
+
+Bytes 0-3 of 4 are uninitialized
+Memory access of size 4 starts at ffff8880a7403e28
+=====================================================
+
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
