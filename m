@@ -2,92 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2EE62D9553
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 10:34:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A5A72D9589
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 10:55:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731542AbgLNJcF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Dec 2020 04:32:05 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:37915 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730023AbgLNJcC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Dec 2020 04:32:02 -0500
-Received: by mail-lf1-f66.google.com with SMTP id w13so28423939lfd.5;
-        Mon, 14 Dec 2020 01:31:45 -0800 (PST)
+        id S2394073AbgLNJwX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Dec 2020 04:52:23 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:43631 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729420AbgLNJwI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Dec 2020 04:52:08 -0500
+Received: by mail-lf1-f65.google.com with SMTP id 23so28564244lfg.10;
+        Mon, 14 Dec 2020 01:51:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=iEQOa1KyD8rRBQoesPEdwYar8HlmHpIMiNq3+DeVMcg=;
-        b=jF93oqSx/QnQu8k7xce0IThC5TzX5hcKnuUQi1Ct4Z4cWmb7Nb1DTCpG8uMCAYDe8r
-         NNx6V7/XBs58Q41IVLsh5NKvqyJXwltCoUVLo6ELvXJSMFNvP+MvSklz+HitMkdCyDZZ
-         T+1ScAMu3cuxCyo86R84ltTrUw1GrKNp9rR4N5W6e3JYD1o7ffHhuafbLwT0nLMGHT6t
-         yI6l4D5/+8rEHn8aO4WyjzCeSm3X6x+R7M8skQPEzcHYFexiY74I5xfPHy8YtEc638SI
-         DX6ClxjbY8J+JJkASSIWozvwOf7td1p6GVA0bVzBHNDJsa+Xgr2QYHsLy6E+kquOiAqL
-         KG1A==
-X-Gm-Message-State: AOAM531yxpxKDNz5h6cGsGS4zJVjCtnP3yAv7NGcaUMCXF4FDP0gw/3G
-        6BXfklFPUf7BLPmbZn0LEyE=
-X-Google-Smtp-Source: ABdhPJwOQnT9fbmW4xE+ehve1pKCvrchgtgamhzLGlhSGTHXpGbNWkXLPlwK38YrO1V7Xs+CJ9z63g==
-X-Received: by 2002:a2e:7c12:: with SMTP id x18mr4285319ljc.324.1607938280113;
-        Mon, 14 Dec 2020 01:31:20 -0800 (PST)
+        bh=QnDcQ7rxUSNwGS7SdG0HXOOQZgY9HLv3HqYaDL5CwSc=;
+        b=Ev69QJj562NFzIyJgfx5FStogcpPbcV/Ju14kVI8YL0NWLBZ7RdXXmgGtjfbuJ2jCQ
+         ug9z33hf/eOP0yho0qRvrkHOzgZQCt/mLU+vLO1Nz6oNRW7dYJ8giaObiWAp0RAkykoh
+         bdh0uoT/lt/Hj1mpUlwMh6I9XdcCe661p2phUz7KJRuDCXLh+bh1DW5DcULwOR8zIzD/
+         Jv/Lg4Civ5P0do4cfZ21tLrHB0SDRjyQ25/24yukuEbFjHfsLCB9s4oDtJOlNaWztVgg
+         7s+3SPrNzhz91fE9zXb7xgA7adBoW5qs/sZrUsi56Z0daOiFTFAA993yGufQ1ScqZexh
+         kyxw==
+X-Gm-Message-State: AOAM531jRG0thQGA1EuOi3zhc42sFRNkh2VOBnfO4dFsWBcawQ+rsQmt
+        sQStMbLedji2839tb9lJ/Rk=
+X-Google-Smtp-Source: ABdhPJzmunBEAK4rehVzpxVgZN4efDu7ndRhmayYHmSfv5ApZHv37rR+Q+dhjV/jxXZ9WBfvJgb/3g==
+X-Received: by 2002:a2e:a54f:: with SMTP id e15mr10358156ljn.461.1607939486417;
+        Mon, 14 Dec 2020 01:51:26 -0800 (PST)
 Received: from xi.terra (c-b3cbe455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.203.179])
-        by smtp.gmail.com with ESMTPSA id l19sm781887ljj.87.2020.12.14.01.31.19
+        by smtp.gmail.com with ESMTPSA id v14sm2069808lfe.270.2020.12.14.01.51.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Dec 2020 01:31:19 -0800 (PST)
+        Mon, 14 Dec 2020 01:51:25 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1kokCJ-0006ac-3U; Mon, 14 Dec 2020 10:31:15 +0100
-Date:   Mon, 14 Dec 2020 10:31:15 +0100
+        id 1kokVl-0006gj-Hz; Mon, 14 Dec 2020 10:51:21 +0100
+Date:   Mon, 14 Dec 2020 10:51:21 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        patong.mxl@gmail.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Angelo Dureghello <angelo.dureghello@timesys.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Subject: Re: [PATCH v5 2/3] usb: serial: xr_serial: Add gpiochip support
-Message-ID: <X9cw443vY2RPlSMO@localhost>
-References: <X8ZmfbQp7/BGgxec@localhost>
- <CACRpkdZJdxqxUEQaKUHctHRSQAUpYZJtuxonwVd_ZFAsLBbKrA@mail.gmail.com>
- <X89OOUOG0x0SSxXA@localhost>
- <CACRpkdavm7GG8HdV1xk0W_b1EzUmvF0kKAGnp0u6t42NAWa9iA@mail.gmail.com>
- <X9DsWahl6UDwZwBn@localhost>
- <CACRpkdYm-j9QcK8hgNrC33KruWE17Q0F4+T=UanE7PCEZEtu6w@mail.gmail.com>
- <X9HiGaIzk4UaZG7i@localhost>
- <CACRpkdZ6MUzRe9m=NrqA_5orhZXDtWj+qoFMHX7v6Zjsx-rVGg@mail.gmail.com>
- <X9cpQO3IV4IgX1dh@localhost>
- <CACRpkdaGWpk=hB6osfXDqx_aSx0aYDyqJRNtY3Gr8z4bLPxZcQ@mail.gmail.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patong.mxl@gmail.com, linus.walleij@linaro.org,
+        mchehab+huawei@kernel.org, angelo.dureghello@timesys.com
+Subject: Re: [PATCH v5 0/3] Add support for MaxLinear/Exar USB to serial
+ converters
+Message-ID: <X9c1mUk7r2O7A8+U@localhost>
+References: <20201122170822.21715-1-mani@kernel.org>
+ <20201208105128.GA9925@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACRpkdaGWpk=hB6osfXDqx_aSx0aYDyqJRNtY3Gr8z4bLPxZcQ@mail.gmail.com>
+In-Reply-To: <20201208105128.GA9925@work>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 14, 2020 at 10:19:07AM +0100, Linus Walleij wrote:
-> On Mon, Dec 14, 2020 at 9:58 AM Johan Hovold <johan@kernel.org> wrote:
-> > On Sat, Dec 12, 2020 at 01:03:32AM +0100, Linus Walleij wrote:
+On Tue, Dec 08, 2020 at 04:21:28PM +0530, Manivannan Sadhasivam wrote:
+> On Sun, Nov 22, 2020 at 10:38:19PM +0530, Manivannan Sadhasivam wrote:
+> > From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > 
+> > Hello,
+> > 
+> > This series adds support for MaxLinear/Exar USB to serial converters.
+> > This driver only supports XR21V141X series but it can easily be extended
+> > to other series in future.
+> > 
+> > This driver is inspired from the initial one submitted by Patong Yang:
+> > https://lore.kernel.org/linux-usb/20180404070634.nhspvmxcjwfgjkcv@advantechmxl-desktop
+> > 
+> > While the initial driver was a custom tty USB driver exposing whole
+> > new serial interface ttyXRUSBn, this version is completely based on USB
+> > serial core thus exposing the interfaces as ttyUSBn. This will avoid
+> > the overhead of exposing a new USB serial interface which the userspace
+> > tools are unaware of.
+> > 
+> > This series has been tested with Hikey970 board hosting XR21V141X chip.
+> > 
+> > NOTE: I've removed all reviews and tested-by tags as the code has gone
+> > through substantial rework. Greg, Linus, Mauro please consider reviewing
+> > again.
+> > 
 > 
-> > > If I google for the phrase "Detected name collision for GPIO name"
-> > > I just find the code, our discussions and some USB serial devices
-> > > warning about this so far.
-> > >
-> > > Maybe we should just make a patch to disallow it?
-> >
-> > That would make it impossible to provide name lines on hotpluggable
-> > controllers, which would be nice to support.
-> 
-> I merged a patch for this now, let's tighten this loose end up.
-> 
-> Also: thanks for poking me about this, I should have looked into
-> this ages ago :/ focus you know...
+> Any chance to get this series into v5.11?
 
-Yeah, tell me about it. :/
+No, sorry, reviewing this one again will be at the top of my list after
+the merge window opens. Hopefully we'll have reached some conclusions
+regarding the line names by then too.
 
 Johan
