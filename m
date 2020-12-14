@@ -2,94 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E4E42D9D76
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 18:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFA82DA144
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 21:16:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730421AbgLNRS5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Dec 2020 12:18:57 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:44905 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728061AbgLNRS4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Dec 2020 12:18:56 -0500
-Received: (qmail 158648 invoked by uid 1000); 14 Dec 2020 12:18:15 -0500
-Date:   Mon, 14 Dec 2020 12:18:15 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Alberto Sentieri <22t@tripolho.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: kernel locks due to USB I/O
-Message-ID: <20201214171815.GA153671@rowland.harvard.edu>
-References: <20201111155130.GB237113@rowland.harvard.edu>
- <9687fac9-94de-50a3-f88e-b7e05d660aba@tripolho.com>
- <20201116170625.GC436089@rowland.harvard.edu>
- <1e58c6f4-c651-b45a-b0fc-7bee40fe61cb@tripolho.com>
- <20201119172250.GC576844@rowland.harvard.edu>
- <0125b936-46b9-0fb8-3fe2-63d1563a1e17@tripolho.com>
- <20201119200147.GB582614@rowland.harvard.edu>
- <4f8f545e-4846-45e0-b8f8-5c73876b150a@tripolho.com>
- <20201119225144.GA590990@rowland.harvard.edu>
- <3df90f9d-0af2-2aaa-9853-966f99e961a4@tripolho.com>
+        id S2502889AbgLNUPN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Dec 2020 15:15:13 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:39672 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2503094AbgLNUMo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Dec 2020 15:12:44 -0500
+Received: by mail-il1-f198.google.com with SMTP id f2so14539117ils.6
+        for <linux-usb@vger.kernel.org>; Mon, 14 Dec 2020 12:12:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=qwOdLt+7OtBCq8ntrHqjxb5zguAuKgGyZJXiIAiKLL8=;
+        b=PzNpdSibYZbqiNIyo3yIKUc9dMap+DmS3XDdAY0LJc9ALeWjFbyxOu+9mAutZApjO1
+         Q+RekFa56HDwgUr4prnjBFv5w+U+15WYEc9pI0gsoFkOTKczETgtVMnWJUEJW/pjUHNB
+         VMv5/yA2CJEjZFUOhTOgvCpCxf0frdH8aH7dlUHRelkQE2F4Q0pARdmc98EV2CmGStEU
+         KLhtko4CbvMGZyYxjCYKQZeEma/qPb5XhQuKwD61WzwYnkiPZN66s8pg3jEgD9E4Kfaf
+         Y9xtY3LeS2SuyYBr90/GfF4bR2r0auM930GNpDZjmzyWtIU12ZMHmmrzaQZ1aw5DtM8o
+         c2fw==
+X-Gm-Message-State: AOAM531run2Gc3KlcyDqRIY6YXTZ0b3xBU7jXlzuC4qIxu/245GgY1kX
+        qlY4IwGRxqoHUTNQ6sJIrfqYFEwbkBtAKQ0N9+/tTEEpIv6F
+X-Google-Smtp-Source: ABdhPJxGk6qAN5y8QjwxmUH3VlUQvFFxBo49Eb4LJWyrkVn0YnMAjOK56iPxkABY0ATpU1RkoIaq5zvsHOalHb71CYGDQ0WV6ub+
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3df90f9d-0af2-2aaa-9853-966f99e961a4@tripolho.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a92:9a58:: with SMTP id t85mr38019496ili.172.1607976723542;
+ Mon, 14 Dec 2020 12:12:03 -0800 (PST)
+Date:   Mon, 14 Dec 2020 12:12:03 -0800
+In-Reply-To: <X9eB5ZZMq6q5j4eW@localhost>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000069fb4f05b6724198@google.com>
+Subject: Re: WARNING in yurex_write/usb_submit_urb
+From:   syzbot <syzbot+e87ebe0f7913f71f2ea5@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        johan@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 14, 2020 at 09:43:25AM -0500, Alberto Sentieri wrote:
-> Alan,
-> 
-> I was finally able to assemble (on my desk) a similar environment which can
-> reproduce the problem. It is locking with only 18 USB devices, which are
-> being accessed in higher frequency than on the regular application (once
-> every 3 seconds instead of once every 15 seconds). I was able to reproduce
-> locks with kernel version 5.9.8, which I compiled myself.
-> 
-> Now a brief description of what I did.
-> 
-> Each access I referred to on the first paragraph was composed of 3 64-byte
-> USB interrupt packets, which are: a request the computer sends, a response
-> the device sends back, and a confirmation that the computer send to finish
-> the cycle, which would be repeated in about 3 seconds.
-> 
-> The computer motherboard I am using has a UART (apparently a 16550) and I
-> could enable a serial console using: console=tty1 console=ttyS0,115200. I
-> also would like to point out that ipv6.disable=1 is the other kernel
-> argument I am using. The serial console was working properly and all its
-> output was being captured by another computer during the locks. My lab
-> machine has the same USB expansion card model being used at the production
-> environment and that was the one being used during the experiments. Though
-> my lab machine has some extra PCI USB cards installed, they were not being
-> using during the locks.
-> 
-> I did the experiment just a few times during the weekend, after receiving
-> the last parts I needed on Saturday.
-> 
-> So, with kernel 5.4.0-53-generic, which is one of the kernels released with
-> Ubuntu, the locked happened in just a couple of minutes. I tried that twice.
-> With kernel 5.9.8, the lock took more time to happen. Initially I though it
-> would not happen, because I'd observed the machine running for about 15
-> minutes and everything seemed normal. However after a couple of hours I
-> found the machine locked. I also would like to point out that I’ve been
-> using this machine for more than 6 months and that it had never locked on
-> me, so that excludes any hardware problem.
-> 
-> Unfortunately on the 3 times it locked (2 with 5.4.0 and one with 5.9.8)
-> nothing was printed on the serial console.
-> 
-> I will be working on this during the day and I will try to enable some of
-> the debugging tools you suggested in your previous emails.
-> 
-> Any comment on this will be highly appreciated.
+Hello,
 
-We'll have to wait and see what the tests and debugging tools reveal.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-As for the comment about the hardware being reliable -- in fact, you 
-can't be certain of this.  It may be that your test is stressing the 
-hardware in a way that it never experienced during the prior six 
-months.
+Reported-and-tested-by: syzbot+e87ebe0f7913f71f2ea5@syzkaller.appspotmail.com
 
-Alan Stern
+Tested on:
+
+commit:         a256e240 usb: phy: convert comma to semicolon
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4536e7f93c2bc8e9
+dashboard link: https://syzkaller.appspot.com/bug?extid=e87ebe0f7913f71f2ea5
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=11a9f703500000
+
+Note: testing is done by a robot and is best-effort only.
