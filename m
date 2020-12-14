@@ -2,74 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E11E2D968C
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 11:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF672D96A3
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 11:52:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725785AbgLNKqa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Dec 2020 05:46:30 -0500
-Received: from mout.web.de ([212.227.17.12]:49489 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730488AbgLNKqQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 14 Dec 2020 05:46:16 -0500
-X-Greylist: delayed 478 seconds by postgrey-1.27 at vger.kernel.org; Mon, 14 Dec 2020 05:46:15 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1607942656;
-        bh=ZCDLYKqX84fBZGHqv0rz100An2gd6NC0cIMKY1QUNBc=;
-        h=X-UI-Sender-Class:To:From:Subject:Date;
-        b=hjXxd3sX+EveIHOd92L7QcSXtlTXCO3GcAA8CU0lCmJ3HWszN10K+cOPLeOnWDj61
-         mbDZIEgOkbXE+aAFkAcbK1wqgAk+oaS0vYxKZJXojhN1ljwc13zdzLqz8H+g7WsToX
-         2JVwOC54zm1+XvPYpi698hdK4zhhx+rmK+TVyUYY=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from jupiter.fritz.box ([78.94.222.115]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1Mtgyj-1jyKBZ1HZP-00uvUP for
- <linux-usb@vger.kernel.org>; Mon, 14 Dec 2020 11:36:18 +0100
-To:     linux-usb@vger.kernel.org
-From:   Joachim Schwender <joachim.schwender@web.de>
-Subject: kernel 5.9.14 USB scanner detection fails
-Message-ID: <4028b5c8-3f4b-4266-423b-a7c9652e653d@web.de>
-Date:   Mon, 14 Dec 2020 11:36:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S1727632AbgLNKvr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Dec 2020 05:51:47 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:45035 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726237AbgLNKvr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Dec 2020 05:51:47 -0500
+Received: by mail-lf1-f68.google.com with SMTP id m25so28965401lfc.11;
+        Mon, 14 Dec 2020 02:51:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SWhRX/NAZKOA9RtVoo0gk8MZ4dLnq8xQ/S9pdibaYEk=;
+        b=gy+bbSQm1srTUlSiW0bUZ3ELb6/QYReNjf66JcFXP2/ckmacnhQiVvUFQUns5SlUe9
+         4D8d8qePgW8p3r6VDaE5yvKFImBsTcx3ZWUDj3jl2g+8BB6gun9B92IeFy1gknnaHHtN
+         rYJouUhJ8ezoSuqN7HURjlkE3V7t1lZx8r7eRhp+oFkJh/0iUZntzVg8vxbJSPDLwnhI
+         i6lbzrFsMKQ8jZxea3hthFVKMQjGItqb6jzXf9SEBa3Ab/TWaFUhoNfk65os27PSBdL8
+         TDecA0r1Qj2r6rvvgaINVP10+1M+2UWFmDObJ8GuFWIccBSEhjiR9HNgqgKA0cLzbAB+
+         KTvQ==
+X-Gm-Message-State: AOAM531ViIndBzM9tz/5qTB+OF03NG56RKS5vQywgttIzFDqmNtF3F4P
+        CKrXy9jzwBx78d2Saw+1PqclpLjvm4ZcEQ==
+X-Google-Smtp-Source: ABdhPJymF8WJboilYFyBUUptp8FxMj8aIncNP75EjAKJMVbZZpYOJqxhUdTVDXGh4l6NGCuHFeDPNg==
+X-Received: by 2002:a2e:9ace:: with SMTP id p14mr4685863ljj.439.1607943064652;
+        Mon, 14 Dec 2020 02:51:04 -0800 (PST)
+Received: from xi.terra (c-b3cbe455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.203.179])
+        by smtp.gmail.com with ESMTPSA id p24sm1845434lfh.70.2020.12.14.02.51.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Dec 2020 02:51:03 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kolRT-0007RK-OH; Mon, 14 Dec 2020 11:50:59 +0100
+Date:   Mon, 14 Dec 2020 11:50:59 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        syzbot+e87ebe0f7913f71f2ea5@syzkaller.appspotmail.com,
+        stable <stable@vger.kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: yurex: fix control-URB timeout handling
+Message-ID: <X9dDkwlOTFeo9eZ6@localhost>
+References: <000000000000e2186705b65e671f@google.com>
+ <20201214104444.28386-1-johan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:aLUgG9SMGhXCdHEWkANiiey3TfSmPEwiTDGAd/JVllwk2Z2jXM2
- e55oGR83qyBcZPO/IIFCcN/HuS+MRBsMTP6xlD5Zl4dzZFbqc2Op2Sgj+3+aIBJSVNypv0j
- FKrhODfI9nifaTYa4yvJdSIq6cO6HEh50/tPs9rUJGdXn/KsF8xFgY0Cai84tMmMDeZ6Zsr
- 9Av4S4/VjDVTd56IOr4QQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:dmI/OhFOLTw=:NcOfw+Zs5CzzlAuHW37y5R
- BPyLG9R3hhlGadJK0+6HNbqflaSxyjq+HSEiQaU9GZwsN+49awqVAGIWsZuZWJeP583cpCKgr
- VcA/9hJIjd5EfpyqB3L5YrUmoiAj/32Yslp0+xxTAsExIyRw3ahnLYAvuQpPOOF9f36xyqmdS
- FHrFAtofc6VZ2Y9g2/mJDmE0zK4fuz/OitSPRQcFwHu4gghURr0BTWOUfNwKM9Ac2LUmiOdtq
- 1K3aj4uhDCW0h1Z8Ms8Zh8hyN8dYs41H74x9iemCHV7yHhVcAx1CBYszqCeg+IsNtDUxX5VBU
- xdnHjPdUVbpmMEY2UWJ5T/HkRIDcgd6nXb16+ji4jn1CApaSqxIpIeQT50j7ydXuCd4u+fj/V
- gFsGxZwyMzFCJzkO7+TblYLKjGWXYH9+p7ae9escr9bRPT4J0/OXqOdOb8fqDh+sMwOmLlGJB
- FlIE9PRkI1uVfEmbG3m/o2G5jlSoHCEDCUuvZniONqDhu4U7W7u648AfljLsXErCWSNX3jJUU
- SdDe9IkGeSHd2ZccsN5PLsvTDxa//Ho+8lORz7uK1iNKtVSInSHuBK0f2dHgtYV2Fa/VyKksb
- GHoWLW8wLdksDGOK+/F50tbL2X3MKLoiv+iVzr6kTpkFBS5WeJlGnC9ESKVZzlFExJGfPcQ1r
- bohM2ZBCqZY8G50CcKR6IJdxmTg+vz3LWDCJAKC1P+2E9vSm+PN69f4DMoqLOiBxclWrHZl+W
- 4DmmrNK5y6jxm/hfJEEJW43idDNcAlRQ5koxhBnOkXntsR7BadLDYG61TApLFbDLAQcLsb3h3
- SmVMmDJCMzws3Bb3WjRQKNh/ydY7jJd3Fp9+/UoTtm7DmFRGl9HR0m2wjFnZT/uW0mda9HIo6
- nJ3aGQ0zEP1/s5n0Dxgw==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201214104444.28386-1-johan@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-lsusb lists my scanner:
-Bus 001 Device 002: ID 04a9:190f Canon, Inc. CanoScan LiDE 220
+On Mon, Dec 14, 2020 at 11:44:44AM +0100, Johan Hovold wrote:
+> Make sure to always cancel the control URB in write() so that it can be
+> reused after a timeout or spurious CMD_ACK.
+> 
+> Currently any further write requests after a timeout would fail after
+> triggering a WARN() in usb_submit_urb() when attempting to submit the
+> already active URB.
+> 
+> Reported-by: syzbot+e87ebe0f7913f71f2ea5@syzkaller.appspotmail.com
+> Fixes: 6bc235a2e24a ("USB: add driver for Meywa-Denki & Kayac YUREX")
+> Cc: stable <stable@vger.kernel.org>     # 2.6.37
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
 
+Forgot linux-usb...
 
-kernel 4.9.14:
-sane-find-scanner   or scanimage -L  does not detect the scanner.
-lsusb still shows the above line.
+Let's try this too:
 
-kernel 4.9.12:
-with the same .config compiled worked as expected, scanner is detected
-and works.
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
 
-
-=2D-
-Joachim Schwender
-
+>  drivers/usb/misc/yurex.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/misc/yurex.c b/drivers/usb/misc/yurex.c
+> index 73ebfa6e9715..c640f98d20c5 100644
+> --- a/drivers/usb/misc/yurex.c
+> +++ b/drivers/usb/misc/yurex.c
+> @@ -496,6 +496,9 @@ static ssize_t yurex_write(struct file *file, const char __user *user_buffer,
+>  		timeout = schedule_timeout(YUREX_WRITE_TIMEOUT);
+>  	finish_wait(&dev->waitq, &wait);
+>  
+> +	/* make sure URB is idle after timeout or (spurious) CMD_ACK */
+> +	usb_kill_urb(dev->cntl_urb);
+> +
+>  	mutex_unlock(&dev->io_mutex);
+>  
+>  	if (retval < 0) {
