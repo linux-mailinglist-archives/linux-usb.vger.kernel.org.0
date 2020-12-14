@@ -2,90 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5A72D9589
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 10:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E11E2D968C
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 11:47:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394073AbgLNJwX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Dec 2020 04:52:23 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:43631 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729420AbgLNJwI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Dec 2020 04:52:08 -0500
-Received: by mail-lf1-f65.google.com with SMTP id 23so28564244lfg.10;
-        Mon, 14 Dec 2020 01:51:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QnDcQ7rxUSNwGS7SdG0HXOOQZgY9HLv3HqYaDL5CwSc=;
-        b=Ev69QJj562NFzIyJgfx5FStogcpPbcV/Ju14kVI8YL0NWLBZ7RdXXmgGtjfbuJ2jCQ
-         ug9z33hf/eOP0yho0qRvrkHOzgZQCt/mLU+vLO1Nz6oNRW7dYJ8giaObiWAp0RAkykoh
-         bdh0uoT/lt/Hj1mpUlwMh6I9XdcCe661p2phUz7KJRuDCXLh+bh1DW5DcULwOR8zIzD/
-         Jv/Lg4Civ5P0do4cfZ21tLrHB0SDRjyQ25/24yukuEbFjHfsLCB9s4oDtJOlNaWztVgg
-         7s+3SPrNzhz91fE9zXb7xgA7adBoW5qs/sZrUsi56Z0daOiFTFAA993yGufQ1ScqZexh
-         kyxw==
-X-Gm-Message-State: AOAM531jRG0thQGA1EuOi3zhc42sFRNkh2VOBnfO4dFsWBcawQ+rsQmt
-        sQStMbLedji2839tb9lJ/Rk=
-X-Google-Smtp-Source: ABdhPJzmunBEAK4rehVzpxVgZN4efDu7ndRhmayYHmSfv5ApZHv37rR+Q+dhjV/jxXZ9WBfvJgb/3g==
-X-Received: by 2002:a2e:a54f:: with SMTP id e15mr10358156ljn.461.1607939486417;
-        Mon, 14 Dec 2020 01:51:26 -0800 (PST)
-Received: from xi.terra (c-b3cbe455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.203.179])
-        by smtp.gmail.com with ESMTPSA id v14sm2069808lfe.270.2020.12.14.01.51.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Dec 2020 01:51:25 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kokVl-0006gj-Hz; Mon, 14 Dec 2020 10:51:21 +0100
-Date:   Mon, 14 Dec 2020 10:51:21 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patong.mxl@gmail.com, linus.walleij@linaro.org,
-        mchehab+huawei@kernel.org, angelo.dureghello@timesys.com
-Subject: Re: [PATCH v5 0/3] Add support for MaxLinear/Exar USB to serial
- converters
-Message-ID: <X9c1mUk7r2O7A8+U@localhost>
-References: <20201122170822.21715-1-mani@kernel.org>
- <20201208105128.GA9925@work>
+        id S1725785AbgLNKqa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Dec 2020 05:46:30 -0500
+Received: from mout.web.de ([212.227.17.12]:49489 "EHLO mout.web.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730488AbgLNKqQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 14 Dec 2020 05:46:16 -0500
+X-Greylist: delayed 478 seconds by postgrey-1.27 at vger.kernel.org; Mon, 14 Dec 2020 05:46:15 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1607942656;
+        bh=ZCDLYKqX84fBZGHqv0rz100An2gd6NC0cIMKY1QUNBc=;
+        h=X-UI-Sender-Class:To:From:Subject:Date;
+        b=hjXxd3sX+EveIHOd92L7QcSXtlTXCO3GcAA8CU0lCmJ3HWszN10K+cOPLeOnWDj61
+         mbDZIEgOkbXE+aAFkAcbK1wqgAk+oaS0vYxKZJXojhN1ljwc13zdzLqz8H+g7WsToX
+         2JVwOC54zm1+XvPYpi698hdK4zhhx+rmK+TVyUYY=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from jupiter.fritz.box ([78.94.222.115]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1Mtgyj-1jyKBZ1HZP-00uvUP for
+ <linux-usb@vger.kernel.org>; Mon, 14 Dec 2020 11:36:18 +0100
+To:     linux-usb@vger.kernel.org
+From:   Joachim Schwender <joachim.schwender@web.de>
+Subject: kernel 5.9.14 USB scanner detection fails
+Message-ID: <4028b5c8-3f4b-4266-423b-a7c9652e653d@web.de>
+Date:   Mon, 14 Dec 2020 11:36:17 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201208105128.GA9925@work>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:aLUgG9SMGhXCdHEWkANiiey3TfSmPEwiTDGAd/JVllwk2Z2jXM2
+ e55oGR83qyBcZPO/IIFCcN/HuS+MRBsMTP6xlD5Zl4dzZFbqc2Op2Sgj+3+aIBJSVNypv0j
+ FKrhODfI9nifaTYa4yvJdSIq6cO6HEh50/tPs9rUJGdXn/KsF8xFgY0Cai84tMmMDeZ6Zsr
+ 9Av4S4/VjDVTd56IOr4QQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dmI/OhFOLTw=:NcOfw+Zs5CzzlAuHW37y5R
+ BPyLG9R3hhlGadJK0+6HNbqflaSxyjq+HSEiQaU9GZwsN+49awqVAGIWsZuZWJeP583cpCKgr
+ VcA/9hJIjd5EfpyqB3L5YrUmoiAj/32Yslp0+xxTAsExIyRw3ahnLYAvuQpPOOF9f36xyqmdS
+ FHrFAtofc6VZ2Y9g2/mJDmE0zK4fuz/OitSPRQcFwHu4gghURr0BTWOUfNwKM9Ac2LUmiOdtq
+ 1K3aj4uhDCW0h1Z8Ms8Zh8hyN8dYs41H74x9iemCHV7yHhVcAx1CBYszqCeg+IsNtDUxX5VBU
+ xdnHjPdUVbpmMEY2UWJ5T/HkRIDcgd6nXb16+ji4jn1CApaSqxIpIeQT50j7ydXuCd4u+fj/V
+ gFsGxZwyMzFCJzkO7+TblYLKjGWXYH9+p7ae9escr9bRPT4J0/OXqOdOb8fqDh+sMwOmLlGJB
+ FlIE9PRkI1uVfEmbG3m/o2G5jlSoHCEDCUuvZniONqDhu4U7W7u648AfljLsXErCWSNX3jJUU
+ SdDe9IkGeSHd2ZccsN5PLsvTDxa//Ho+8lORz7uK1iNKtVSInSHuBK0f2dHgtYV2Fa/VyKksb
+ GHoWLW8wLdksDGOK+/F50tbL2X3MKLoiv+iVzr6kTpkFBS5WeJlGnC9ESKVZzlFExJGfPcQ1r
+ bohM2ZBCqZY8G50CcKR6IJdxmTg+vz3LWDCJAKC1P+2E9vSm+PN69f4DMoqLOiBxclWrHZl+W
+ 4DmmrNK5y6jxm/hfJEEJW43idDNcAlRQ5koxhBnOkXntsR7BadLDYG61TApLFbDLAQcLsb3h3
+ SmVMmDJCMzws3Bb3WjRQKNh/ydY7jJd3Fp9+/UoTtm7DmFRGl9HR0m2wjFnZT/uW0mda9HIo6
+ nJ3aGQ0zEP1/s5n0Dxgw==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 08, 2020 at 04:21:28PM +0530, Manivannan Sadhasivam wrote:
-> On Sun, Nov 22, 2020 at 10:38:19PM +0530, Manivannan Sadhasivam wrote:
-> > From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > 
-> > Hello,
-> > 
-> > This series adds support for MaxLinear/Exar USB to serial converters.
-> > This driver only supports XR21V141X series but it can easily be extended
-> > to other series in future.
-> > 
-> > This driver is inspired from the initial one submitted by Patong Yang:
-> > https://lore.kernel.org/linux-usb/20180404070634.nhspvmxcjwfgjkcv@advantechmxl-desktop
-> > 
-> > While the initial driver was a custom tty USB driver exposing whole
-> > new serial interface ttyXRUSBn, this version is completely based on USB
-> > serial core thus exposing the interfaces as ttyUSBn. This will avoid
-> > the overhead of exposing a new USB serial interface which the userspace
-> > tools are unaware of.
-> > 
-> > This series has been tested with Hikey970 board hosting XR21V141X chip.
-> > 
-> > NOTE: I've removed all reviews and tested-by tags as the code has gone
-> > through substantial rework. Greg, Linus, Mauro please consider reviewing
-> > again.
-> > 
-> 
-> Any chance to get this series into v5.11?
+lsusb lists my scanner:
+Bus 001 Device 002: ID 04a9:190f Canon, Inc. CanoScan LiDE 220
 
-No, sorry, reviewing this one again will be at the top of my list after
-the merge window opens. Hopefully we'll have reached some conclusions
-regarding the line names by then too.
 
-Johan
+kernel 4.9.14:
+sane-find-scanner   or scanimage -L  does not detect the scanner.
+lsusb still shows the above line.
+
+kernel 4.9.12:
+with the same .config compiled worked as expected, scanner is detected
+and works.
+
+
+=2D-
+Joachim Schwender
+
