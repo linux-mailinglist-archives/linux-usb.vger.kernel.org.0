@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E07942D9289
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 06:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 503582D944A
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 09:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732397AbgLNFRi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Dec 2020 00:17:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
+        id S2439426AbgLNIkx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Dec 2020 03:40:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731836AbgLNFRi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Dec 2020 00:17:38 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5C6C0613D3
-        for <linux-usb@vger.kernel.org>; Sun, 13 Dec 2020 21:16:57 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id x126so2512105pfc.7
-        for <linux-usb@vger.kernel.org>; Sun, 13 Dec 2020 21:16:57 -0800 (PST)
+        with ESMTP id S2439414AbgLNIkx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Dec 2020 03:40:53 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F00C0613CF
+        for <linux-usb@vger.kernel.org>; Mon, 14 Dec 2020 00:40:17 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id t8so11633666pfg.8
+        for <linux-usb@vger.kernel.org>; Mon, 14 Dec 2020 00:40:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=N1Nel5Scj6DHsRcstdI0CADTOeJRVxq0W6PfMKurToI=;
-        b=d3T/MAP9G2zaws1f/uZ/O5za8PmycfvFhIq66HQJQ6shQhbOBg3qUWb2mFfZMHfn0e
-         DVwgWH6A1rgwEM3ANg9TkzhVUT6NgL+q3D7/d6YOxrhmZKNl6XadrYkYLXQkfksqj4s1
-         ZG4VUEFRN8a3VpK3ErzXooIKf+hUT/wiILDp8=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=UJDTefHsdcJyvOhY81AQdb/UxL3AvZFQ4NimqKN0Ur8=;
+        b=aT4moFJVSxq0ufLAmXzLxnCv4F7DY+lFzYe2RiIDGDJxpCb689fge0aTlhGeG2PaPm
+         6IUKDQ3/u6+0cG1omWb+migFuhsxWrwEPDI7iX86QuhUzztFprse0iNApR+kC+NuM7vz
+         an+wNWUNbeDy4aA1iRWqENVF9B7iWBsRaoQHc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=N1Nel5Scj6DHsRcstdI0CADTOeJRVxq0W6PfMKurToI=;
-        b=iZQcmWuNguBCp/y9JIT1KBAD7V3AgaCrO0BS8HEYM+zmCalnTNMICx/3uXjdUmqT+u
-         jQlWjU6EblFv7nmJQxUHLlG4U1nK/Kqr1zPYFlB+T05O9ug9vei5OYsrLiI+AmYvf9zx
-         INPC+N3e0Ee5QrLu1DG/aGlLyvUgjYPwIxIX3reTiZa/+pEleOu42l2tjBOTSCke2GN4
-         +Fe5na41cQJyzq8QxmKe0kkrgLpqLWOHviXu0HO0VdC3szeslbhF03vTvwuQEd7dJxmX
-         uvgah4J/NLb7KzTUn00Uc6/g2QjOHUq0ekOnjr51XHDhq13gSWi3FHKs0ieuXfCuNoXf
-         8h6g==
-X-Gm-Message-State: AOAM5312yKs0zz75PtDQfJ6hGrKoFTPCADEQOYQ6pdYEp9ELGJ3ttUBq
-        2kUXmKtSB3XdPz00j44YjcdcYeIddd551A==
-X-Google-Smtp-Source: ABdhPJy1CSWhNTkNbc4BjMo2+fs9Xwc9HusvXlkOzgp5pU4/JKZHdOuA0W66NOpmAAf12a2w/JpcbQ==
-X-Received: by 2002:a62:8b:0:b029:19d:a1b3:e78 with SMTP id 133-20020a62008b0000b029019da1b30e78mr22106304pfa.25.1607923016991;
-        Sun, 13 Dec 2020 21:16:56 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=UJDTefHsdcJyvOhY81AQdb/UxL3AvZFQ4NimqKN0Ur8=;
+        b=ul6aLBmEqmZ69ghtftWi8+UeJQVtpMrSZHPqMabMRmJm0FEufKvoFDVnPFpmrNuibu
+         Ewhpz44hTIUx+CoVYJxjek+Mf92Jktl8kNEmTtK6VkFUfLwEHu+Wo9yabLhhVq71XZzD
+         rHqCRBvdgwyGnEU+C6gD31b4/BV+VcKMmAHcdED/S8AdgCARAt8gL0f/MAxUWQugaNex
+         ez2RW84HmOnnK8ILSj8KhsFh0JwW2cw7z4X3+U4jdVfidpKzjWlkBeEDnA7sHlV3dwG1
+         lR3FlLZe1NPKvAz7oZKSxZh1GGod4LJs/H41zT0e7mnubyCw6Y5hGv+gMCAtt86PeCVw
+         eeeg==
+X-Gm-Message-State: AOAM531HwTn2m0G8Aw6uVnDHOsMSo7TN9Ezj6QeqfgUxOlqUnda6HLQ4
+        q1qeykrV0fOIrZZSGFZ09ZXS3l1wn8PU4Q==
+X-Google-Smtp-Source: ABdhPJwxOU7UoYIL86+Fif17IFTMdRxXM2DzLDZIHdEhpW0vnSaLMGel11VHcGnAt1gMr+WLHYWjOA==
+X-Received: by 2002:a62:7907:0:b029:19d:cf5d:20ae with SMTP id u7-20020a6279070000b029019dcf5d20aemr23197280pfc.2.1607935216910;
+        Mon, 14 Dec 2020 00:40:16 -0800 (PST)
 Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:b:f693:9fff:fef4:a8fc])
-        by smtp.gmail.com with ESMTPSA id n127sm18611747pfd.143.2020.12.13.21.16.54
+        by smtp.gmail.com with ESMTPSA id i7sm358684pfc.50.2020.12.14.00.40.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Dec 2020 21:16:56 -0800 (PST)
+        Mon, 14 Dec 2020 00:40:16 -0800 (PST)
 From:   Ikjoon Jang <ikjn@chromium.org>
 To:     linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org
 Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
@@ -54,10 +54,12 @@ Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Mathias Nyman <mathias.nyman@intel.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] usb: xhci-mtk: fix unreleased bandwidth data
-Date:   Mon, 14 Dec 2020 13:16:50 +0800
-Message-Id: <20201214131640.v3.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
+Subject: [PATCH v4] usb: xhci-mtk: fix unreleased bandwidth data
+Date:   Mon, 14 Dec 2020 16:39:53 +0800
+Message-Id: <20201214163945.v4.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
 X-Mailer: git-send-email 2.29.2.684.gfbc64c5ab5-goog
+In-Reply-To: <20201214131640.v3.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
+References: <20201214131640.v3.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -79,8 +81,12 @@ Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
 
 ---
 
+Changes in v4:
+- bugfix in v3, check_bandwidth() returns an uninitialized
+  value when no endpoints were newly added.
+
 Changes in v3:
-- drop unrelated code cleanups in v2
+- drop unrelated code cleanups
 - change Fixes tag to keep dependency
 
 Changes in v2:
@@ -88,13 +94,13 @@ Changes in v2:
 - split one big patch into three patches
 - fix wrong offset in mediatek hw flags
 
- drivers/usb/host/xhci-mtk-sch.c | 121 ++++++++++++++++++++++----------
+ drivers/usb/host/xhci-mtk-sch.c | 124 ++++++++++++++++++++++----------
  drivers/usb/host/xhci-mtk.h     |  13 ++++
  drivers/usb/host/xhci.c         |   9 +++
- 3 files changed, 106 insertions(+), 37 deletions(-)
+ 3 files changed, 109 insertions(+), 37 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
-index 45c54d56ecbd..72c493758c3f 100644
+index 45c54d56ecbd..95d20de9fd1f 100644
 --- a/drivers/usb/host/xhci-mtk-sch.c
 +++ b/drivers/usb/host/xhci-mtk-sch.c
 @@ -200,6 +200,7 @@ static struct mu3h_sch_ep_info *create_sch_ep(struct usb_device *udev,
@@ -200,7 +206,7 @@ index 45c54d56ecbd..72c493758c3f 100644
  	int bw_index;
  
  	xhci = hcd_to_xhci(hcd);
-@@ -694,17 +687,71 @@ void xhci_mtk_drop_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
+@@ -694,17 +687,74 @@ void xhci_mtk_drop_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
  	bw_index = get_bw_index(xhci, udev, ep);
  	sch_bw = &sch_array[bw_index];
  
@@ -231,6 +237,9 @@ index 45c54d56ecbd..72c493758c3f 100644
 +	int bw_index, ret;
 +
 +	dev_dbg(&udev->dev, "%s\n", __func__);
++
++	if (list_empty(&mtk->bw_ep_list_new))
++		return 0;
 +
 +	list_for_each_entry(sch_ep, &mtk->bw_ep_list_new, endpoint) {
 +		bw_index = get_bw_index(xhci, udev, sch_ep->ep);
