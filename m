@@ -2,55 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E58C62D9738
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 12:16:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 713452D975A
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 12:30:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407568AbgLNLQE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Dec 2020 06:16:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57610 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405890AbgLNLP1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 14 Dec 2020 06:15:27 -0500
-Date:   Mon, 14 Dec 2020 12:15:52 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1607944487;
-        bh=HDoCs0i40as9FdOu20ZMj7f7mZdTXpbQA5ft49WMWKs=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lsu/33aRzvKhPTEEgA8qED3W/dmOtb3ISebxgMQvYkFP6Sy6v21tcVdfDW+5hGzb4
-         KQKL6qB9RvAHrN0CHhnWvcddRRpLIU0rueK0G9fC5xJTK18fMvzoaXFKH990OxEy73
-         zWPrBYmmNNlEjezpoIgdYFCsIonk5YO7iHD3DA2c=
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Joachim Schwender <joachim.schwender@web.de>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: kernel 5.9.14 USB scanner detection fails
-Message-ID: <X9dJaI+WkVby/2ZN@kroah.com>
-References: <4028b5c8-3f4b-4266-423b-a7c9652e653d@web.de>
+        id S2407467AbgLNL2C convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 14 Dec 2020 06:28:02 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:36595 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2394804AbgLNL2B (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Dec 2020 06:28:01 -0500
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-188-DWJ8HiZYMiWHqblbGK4I2A-1; Mon, 14 Dec 2020 11:26:21 +0000
+X-MC-Unique: DWJ8HiZYMiWHqblbGK4I2A-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Mon, 14 Dec 2020 11:26:22 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Mon, 14 Dec 2020 11:26:22 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Pawel Laszczak' <pawell@cadence.com>,
+        "peter.chen@nxp.com" <peter.chen@nxp.com>
+CC:     "rogerq@ti.com" <rogerq@ti.com>,
+        "a-govindraju@ti.com" <a-govindraju@ti.com>,
+        "nsekhar@ti.com" <nsekhar@ti.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kurahul@cadence.com" <kurahul@cadence.com>
+Subject: RE: [PATCH] usb: cdns3: Fixes for sparse warnings
+Thread-Topic: [PATCH] usb: cdns3: Fixes for sparse warnings
+Thread-Index: AQHW0glE/oEkG/UXeU6lduWcFnIHxKn2cwTQ
+Date:   Mon, 14 Dec 2020 11:26:22 +0000
+Message-ID: <d232a54761a7473692976188aba0a5f6@AcuMS.aculab.com>
+References: <20201214110433.19461-1-pawell@cadence.com>
+In-Reply-To: <20201214110433.19461-1-pawell@cadence.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4028b5c8-3f4b-4266-423b-a7c9652e653d@web.de>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 14, 2020 at 11:36:17AM +0100, Joachim Schwender wrote:
-> lsusb lists my scanner:
-> Bus 001 Device 002: ID 04a9:190f Canon, Inc. CanoScan LiDE 220
+From: Pawel Laszczak
+> Sent: 14 December 2020 11:05
 > 
+> Patch fixes the following warnings:
+...
+> cdns3-ep0.c:367: sparse: warning: restricted __le16 degrades to integer
+...
+> diff --git a/drivers/usb/cdns3/cdns3-ep0.c b/drivers/usb/cdns3/cdns3-ep0.c
+> index b0390fe9a396..9a17802275d5 100644
+> --- a/drivers/usb/cdns3/cdns3-ep0.c
+> +++ b/drivers/usb/cdns3/cdns3-ep0.c
+> @@ -364,7 +364,7 @@ static int cdns3_ep0_feature_handle_endpoint(struct cdns3_device *priv_dev,
+>  	if (le16_to_cpu(ctrl->wValue) != USB_ENDPOINT_HALT)
+>  		return -EINVAL;
 > 
-> kernel 4.9.14:
-> sane-find-scanner   or scanimage -L  does not detect the scanner.
-> lsusb still shows the above line.
-> 
-> kernel 4.9.12:
-> with the same .config compiled worked as expected, scanner is detected
-> and works.
+> -	if (!(ctrl->wIndex & ~USB_DIR_IN))
+> +	if (!(le16_to_cpu(ctrl->wIndex) & ~USB_DIR_IN))
+>  		return 0;
 
-"4.9" or "5.9"?
+It's generally best to byteswap the constant.
 
-And can you run 'git bisect' between the two kernel releases to find the
-offending commit that causes the problem?
+	David
 
-thanks,
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-greg k-h
