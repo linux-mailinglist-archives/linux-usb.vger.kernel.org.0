@@ -2,82 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E77E12D9209
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 04:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEAAC2D9248
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 05:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407087AbgLNDZl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Dec 2020 22:25:41 -0500
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:46949 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726250AbgLNDZl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Dec 2020 22:25:41 -0500
-X-UUID: d4d0fec30fa24fbea20613282609cbc8-20201214
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=uqUvCWtf27nxQjiM4iTofVBTFdxaqp7ppKL1RHS9HJg=;
-        b=sZ7luNVi9AgApQz6VeKP+6QIA1mlhCnjI77dPESKaJyF4hfM2XWC+qed864iIfD3JP1UPW1CJa0092Q8otamFsCzr4FuvOqZ3onJvsIOyW9ygfNnh0gjKiFOFiE9kOM+6tnddlW17EOnm0LigjGIaZy12UH3iFDPqoFL518VVwM=;
-X-UUID: d4d0fec30fa24fbea20613282609cbc8-20201214
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 614733171; Mon, 14 Dec 2020 11:24:55 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N2.mediatek.inc
- (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 14 Dec
- 2020 11:24:49 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 14 Dec 2020 11:24:49 +0800
-Message-ID: <1607916289.23328.21.camel@mhfsdcap03>
-Subject: Re: [PATCH v2 0/3] Release allocated periodic bandwidth data from
- reset_bandwidth()
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Ikjoon Jang <ikjn@chromium.org>
-CC:     "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        "Zhanyong Wang" <zhanyong.wang@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Mon, 14 Dec 2020 11:24:49 +0800
-In-Reply-To: <CAATdQgBZn3oehw_20D3yMmDA8G61oMHVax8LqJ-hPQv+9kJGLQ@mail.gmail.com>
-References: <20201210104747.3416781-1-ikjn@chromium.org>
-         <1607651584.23328.20.camel@mhfsdcap03>
-         <CAATdQgBZn3oehw_20D3yMmDA8G61oMHVax8LqJ-hPQv+9kJGLQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S2438598AbgLNEaw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Dec 2020 23:30:52 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:37121 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727309AbgLNEav (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Dec 2020 23:30:51 -0500
+Received: by mail-il1-f197.google.com with SMTP id g10so11333130ile.4
+        for <linux-usb@vger.kernel.org>; Sun, 13 Dec 2020 20:30:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=EyD6Xv8yPnw7Cjs0n0W7ffYeZrQMhBdBo2hV0DWduyU=;
+        b=kA2tXFr6IoBumwITXgqi75VsB1L2gW72UHqHM08XHc5QYR0WMeJRpGIDIKlfJquQaz
+         89S3X5C8sxFLRQtIZwQcaDut7uCsdoB1ku4yB16MeeIjdwyo/9670Hoc7ATuVhBWdnU2
+         ozTu6i1fl0pZimjsbUPCXZdsHmOlWKEZSQwiv092t5EyUzMgnNBXyO0NkP+I04CUAKF0
+         rzVCJ0p7jOhFQLqfH0kDRShDfJgbi8XbpLhLqeiYS/3IQSVwXN63klTmd40jRJRykmll
+         GME5ME/dfzEdvO5pWBqxy1iruS4L63dXhWg2VDhBdGLimZY6RKHiloqgUlp+0gsbP15D
+         FSdQ==
+X-Gm-Message-State: AOAM531HQ0PLYxw60vMum1USDn9FuEvq6KcjaNMJ8Db6oIbJjFAcA7uz
+        f3QWxY64cMYTRCS67/mdPwC04MHLPucBcNsXg/bJv4oM00U8
+X-Google-Smtp-Source: ABdhPJyesbPFPvzVPrqNA5vKUwZ8MPUpJMdiIIXET/pC2sHiNwQEajk+jEUTpNqY8ayX6qWyxzaJkFQSYwjBWXLPxybcPTpnNAvl
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 5F4A39B486DF1B1350015DA44A42F81388C6B305FFFE3CD87B6116D59E3937AD2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-Received: by 2002:a6b:b8d6:: with SMTP id i205mr29780200iof.135.1607920210664;
+ Sun, 13 Dec 2020 20:30:10 -0800 (PST)
+Date:   Sun, 13 Dec 2020 20:30:10 -0800
+In-Reply-To: <0000000000007f73da05b64bfe7c@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fbe5aa05b6651891@google.com>
+Subject: Re: WARNING in yurex_write/usb_submit_urb
+From:   syzbot <syzbot+e87ebe0f7913f71f2ea5@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        gustavoars@kernel.org, hdanton@sina.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
+        vulab@iscas.ac.cn
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gRnJpLCAyMDIwLTEyLTExIGF0IDE0OjM2ICswODAwLCBJa2pvb24gSmFuZyB3cm90ZToNCj4g
-T24gRnJpLCBEZWMgMTEsIDIwMjAgYXQgOTo1MyBBTSBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1
-bkBtZWRpYXRlay5jb20+IHdyb3RlOg0KPiA+DQo+ID4gT24gVGh1LCAyMDIwLTEyLTEwIGF0IDE4
-OjQ3ICswODAwLCBJa2pvb24gSmFuZyB3cm90ZToNCj4gPiA+IHhoY2ktbXRrIHJlbGVhc2VzIGFs
-bG9jYXRlZCBUVCBiYW5kd2lkdGggZGF0YSBvbmx5IHdoZW4gd2hvbGUNCj4gPiA+IGVuZHBvaW50
-cyBvZiBhIGRldmljZSBhcmUgZHJvcHBlZCBhcyB0aGVyZSdyZSBvbmx5IHthZGR8ZHJvcH1fZW5k
-cG9pbnQoKQ0KPiA+ID4gaG9va3MgYXJlIGRlZmluZWQuIFRoaXMgcGF0Y2hzZXQgYWRkcyBtb3Jl
-IGhvb2tzIGFuZCByZWxlYXNlcyBhbGwNCj4gPiA+IGJhbmR3aWR0aCBkYXRhIGZyb20gcmVzZXRf
-YmFuZHdpZHRoKCkgcGF0aCwgbm90IGRyb3BfZW5kcG9pbnQoKS4NCj4gPiA+DQo+ID4gPg0KPiA+
-ID4gQ2hhbmdlcyBpbiB2MjoNCj4gPiA+IC0gZml4IGEgMC1kYXkgd2FybmluZyBmcm9tIHVudXNl
-ZCB2YXJpYWJsZQ0KPiA+ID4gLSBzcGxpdCBvbmUgYmlnIHBhdGNoIGludG8gdGhyZWUgcGF0Y2hl
-cw0KPiA+ID4gLSBidWdmaXggaW4gaHcgZmxhZ3MNCj4gPiA+DQo+ID4gPiBJa2pvb24gSmFuZyAo
-Myk6DQo+ID4gPiAgIHVzYjogeGhjaS1tdGs6IGNvZGUgY2xlYW51cHMgaW4gZ2V0dGluZyBiYW5k
-d2lkdGggdGFibGUNCj4gPiA+ICAgdXNiOiB4aGNpLW10azogZGVsYXkgYXNzb2NpYXRpb24gb2Yg
-dHQgYW5kIGVwDQo+ID4gPiAgIHVzYjogeGhjaS1tdGs6IGZpeCB1bnJlbGVhc2VkIGJhbmR3aWR0
-aCBkYXRhDQo+ID4gPg0KPiA+ID4gIGRyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGstc2NoLmMgfCAx
-ODAgKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLS0NCj4gPiA+ICBkcml2ZXJzL3VzYi9o
-b3N0L3hoY2ktbXRrLmggICAgIHwgIDEzICsrKw0KPiA+ID4gIGRyaXZlcnMvdXNiL2hvc3QveGhj
-aS5jICAgICAgICAgfCAgIDkgKysNCj4gPiA+ICAzIGZpbGVzIGNoYW5nZWQsIDEzMyBpbnNlcnRp
-b25zKCspLCA2OSBkZWxldGlvbnMoLSkNCj4gPiBUaGFua3MgZm9yIHlvdXIgcGF0Y2gsIEknbGwg
-dGVzdCBpdCBhbmQgY2hlY2sgaXQgd2l0aCBvdXIgREUNCj4gDQo+IFRoYW5rcywgSSB3aWxsIHVw
-bG9hZCB2My4NCj4gQnV0IEkgZG9uJ3QgZXhwZWN0IGFueSBsb2dpYyBjaGFuZ2VzIGZyb20gdjIu
-DQo+IENhbiB5b3UgcGxlYXNlIGdpdmUgbWUgZmVlZGJhY2sgb24gdjIgaWYgeW91IGZpbmQgYW55
-dGhpbmc/DQpPaw0KDQo+IA0KPiA+DQo+ID4gPg0KPiA+DQoNCg==
+syzbot has found a reproducer for the following issue on:
+
+HEAD commit:    6bff9bb8 Merge tag 'scsi-fixes' of git://git.kernel.org/pu..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=10937c5b500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3416bb960d5c705d
+dashboard link: https://syzkaller.appspot.com/bug?extid=e87ebe0f7913f71f2ea5
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1583cf17500000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11825413500000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e87ebe0f7913f71f2ea5@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+URB 0000000091a49304 submitted while active
+WARNING: CPU: 0 PID: 8533 at drivers/usb/core/urb.c:378 usb_submit_urb+0x1228/0x14e0 drivers/usb/core/urb.c:378
+Modules linked in:
+CPU: 0 PID: 8533 Comm: syz-executor014 Not tainted 5.10.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:usb_submit_urb+0x1228/0x14e0 drivers/usb/core/urb.c:378
+Code: 89 de e8 eb c8 3b fc 84 db 0f 85 da f4 ff ff e8 ce d0 3b fc 4c 89 fe 48 c7 c7 40 58 e1 89 c6 05 62 6d a4 07 01 e8 74 4f 78 03 <0f> 0b e9 b8 f4 ff ff c7 44 24 14 01 00 00 00 e9 6f f5 ff ff 41 bd
+RSP: 0018:ffffc9000187fcb8 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888015e73480 RSI: ffffffff8158c835 RDI: fffff5200030ff89
+RBP: 1ffff9200030ffa9 R08: 0000000000000001 R09: ffff8880b9e30627
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff888017a40c00
+R13: 00000000fffffff0 R14: ffff888017a40ce8 R15: ffff888011521a00
+FS:  00000000025f8880(0000) GS:ffff8880b9e00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fe0726b3000 CR3: 000000001c29c000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ yurex_write+0x3f4/0x840 drivers/usb/misc/yurex.c:493
+ vfs_write+0x28e/0xa30 fs/read_write.c:603
+ ksys_write+0x12d/0x250 fs/read_write.c:658
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x445809
+Code: e8 8c e8 ff ff 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 6b cc fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007ffe3d547598 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 0000000000445809
+RDX: 0000000000000001 RSI: 0000000020000740 RDI: 0000000000000004
+RBP: 000000000000edca R08: 000000000000000f R09: 00000000004002e0
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000402900
+R13: 0000000000402990 R14: 0000000000000000 R15: 0000000000000000
 
