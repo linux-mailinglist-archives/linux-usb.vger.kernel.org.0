@@ -2,63 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFA82DA144
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 21:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9AB2DA160
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 21:23:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502889AbgLNUPN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Dec 2020 15:15:13 -0500
-Received: from mail-il1-f198.google.com ([209.85.166.198]:39672 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2503094AbgLNUMo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Dec 2020 15:12:44 -0500
-Received: by mail-il1-f198.google.com with SMTP id f2so14539117ils.6
-        for <linux-usb@vger.kernel.org>; Mon, 14 Dec 2020 12:12:29 -0800 (PST)
+        id S2503169AbgLNUVy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Dec 2020 15:21:54 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:41691 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2503119AbgLNUVr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Dec 2020 15:21:47 -0500
+Received: by mail-oi1-f196.google.com with SMTP id 15so20656570oix.8;
+        Mon, 14 Dec 2020 12:21:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=qwOdLt+7OtBCq8ntrHqjxb5zguAuKgGyZJXiIAiKLL8=;
-        b=PzNpdSibYZbqiNIyo3yIKUc9dMap+DmS3XDdAY0LJc9ALeWjFbyxOu+9mAutZApjO1
-         Q+RekFa56HDwgUr4prnjBFv5w+U+15WYEc9pI0gsoFkOTKczETgtVMnWJUEJW/pjUHNB
-         VMv5/yA2CJEjZFUOhTOgvCpCxf0frdH8aH7dlUHRelkQE2F4Q0pARdmc98EV2CmGStEU
-         KLhtko4CbvMGZyYxjCYKQZeEma/qPb5XhQuKwD61WzwYnkiPZN66s8pg3jEgD9E4Kfaf
-         Y9xtY3LeS2SuyYBr90/GfF4bR2r0auM930GNpDZjmzyWtIU12ZMHmmrzaQZ1aw5DtM8o
-         c2fw==
-X-Gm-Message-State: AOAM531run2Gc3KlcyDqRIY6YXTZ0b3xBU7jXlzuC4qIxu/245GgY1kX
-        qlY4IwGRxqoHUTNQ6sJIrfqYFEwbkBtAKQ0N9+/tTEEpIv6F
-X-Google-Smtp-Source: ABdhPJxGk6qAN5y8QjwxmUH3VlUQvFFxBo49Eb4LJWyrkVn0YnMAjOK56iPxkABY0ATpU1RkoIaq5zvsHOalHb71CYGDQ0WV6ub+
-MIME-Version: 1.0
-X-Received: by 2002:a92:9a58:: with SMTP id t85mr38019496ili.172.1607976723542;
- Mon, 14 Dec 2020 12:12:03 -0800 (PST)
-Date:   Mon, 14 Dec 2020 12:12:03 -0800
-In-Reply-To: <X9eB5ZZMq6q5j4eW@localhost>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000069fb4f05b6724198@google.com>
-Subject: Re: WARNING in yurex_write/usb_submit_urb
-From:   syzbot <syzbot+e87ebe0f7913f71f2ea5@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        johan@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=/QPcy0Axl+o8hy8WDOYUxwEWrmNTJySrAH30GVfVQZo=;
+        b=UY0elicZwjr45LkempZyyZG91SVV6hBGuFki49Fe3db/LFQOAqS1BguNAVU1irfK2U
+         RmFK0lfKGh5x+C5p7rjl2zfnrVHD/kZID9FYi3EAV/bT6Et9iUoxedPodRIRhtqqDKWK
+         StnlnhWnmuDj1Rja22bPIDP6vg4+nZ0DLqdMZMHt+8OS08Jg1w+rKh6gKO//CcZXIjs/
+         Zh73rdQUAm/Rc4ZKqEaYx/0USHXJaNKtf10ZjRgWDKcWl057TuVuCEsTG3Ep50vcHq1x
+         4+8jYOmhf3fDl/GVS2D6rTQeOointoWMHm4FsljBLTa2qz/CINeSqb2YJWql/ez4B9DH
+         y8Yw==
+X-Gm-Message-State: AOAM532yuXs5HOCxc6YzxjMfFT9sct2wdRrfCqFfRBVp23w0lSmsrD+M
+        P0wPQhUxKEXsO/Vnca44cnnoZeKHSA==
+X-Google-Smtp-Source: ABdhPJzXP+picASEtdv4d/QCN9WiqqLRWg5l+ar6sBgJ0RG54qJ2b81kyPQnL8HO14hVdaWOW918WA==
+X-Received: by 2002:aca:3192:: with SMTP id x140mr19614880oix.172.1607977266237;
+        Mon, 14 Dec 2020 12:21:06 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id v38sm1286470ott.52.2020.12.14.12.21.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Dec 2020 12:21:05 -0800 (PST)
+Received: (nullmailer pid 2333154 invoked by uid 1000);
+        Mon, 14 Dec 2020 20:21:04 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Sekhar Nori <nsekhar@ti.com>, linux-usb@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roger Quadros <rogerq@ti.com>
+In-Reply-To: <20201214140109.21955-1-a-govindraju@ti.com>
+References: <20201214140109.21955-1-a-govindraju@ti.com>
+Subject: Re: [PATCH v5] dt-bindings: usb: Add new compatible string for AM64 SoC
+Date:   Mon, 14 Dec 2020 14:21:04 -0600
+Message-Id: <1607977264.104039.2333153.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Mon, 14 Dec 2020 19:31:09 +0530, Aswath Govindraju wrote:
+> Add compatible string in j721e-usb binding file as the same USB subsystem
+> is present in AM64.
+> 
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> ---
+> 
+> Changes since v4:
+>  - used oneOf instead of enum, as the schema has to convey that the strings
+>    ti,j721e-usb and ti,am64-usb can be used combined or seperately in the
+>    DT nodes.
+> 
+> Changes since v3:
+>  - used enum instead of anyOf.
+> 
+> Changes since v2:
+>  - added changes done over the versions.
+> 
+> Changes since v1:
+>  - replaced the '\t' at the beginning of the lines with spaces as it was
+>   causing the dt_binding_check to fail.
+> 
+>  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Reported-and-tested-by: syzbot+e87ebe0f7913f71f2ea5@syzkaller.appspotmail.com
+yamllint warnings/errors:
 
-Tested on:
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml: properties:compatible:oneOf:2:items: 'anyOf' conditional failed, one must be fixed:
+	['ti,j721e-usb', 'ti,am64-usb'] is not of type 'object', 'boolean'
+	'ti,j721e-usb' is not of type 'object', 'boolean'
+	'ti,am64-usb' is not of type 'object', 'boolean'
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml: ignoring, error in schema: properties: compatible: oneOf: 2: items
+warning: no schema found in file: ./Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
 
-commit:         a256e240 usb: phy: convert comma to semicolon
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4536e7f93c2bc8e9
-dashboard link: https://syzkaller.appspot.com/bug?extid=e87ebe0f7913f71f2ea5
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=11a9f703500000
+See https://patchwork.ozlabs.org/patch/1415942
 
-Note: testing is done by a robot and is best-effort only.
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
