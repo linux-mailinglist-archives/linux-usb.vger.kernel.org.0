@@ -2,220 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C3F2D99EA
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 15:29:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DDC2D9A4E
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Dec 2020 15:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440130AbgLNOWV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Dec 2020 09:22:21 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:40714 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2440119AbgLNOWM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Dec 2020 09:22:12 -0500
-Received: by mail-lf1-f68.google.com with SMTP id m12so30496477lfo.7;
-        Mon, 14 Dec 2020 06:21:50 -0800 (PST)
+        id S1731228AbgLNOs4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Dec 2020 09:48:56 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:48465 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408241AbgLNOso (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Dec 2020 09:48:44 -0500
+Received: by mail-il1-f199.google.com with SMTP id f4so10909484ilu.15
+        for <linux-usb@vger.kernel.org>; Mon, 14 Dec 2020 06:48:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fJtEz9al1uekwzcPG8nGzE64cbHCld0XYyqWqe90Sj8=;
-        b=VAogBM1Wcke/UI57k6teA+Ugday+UmK4/7aRi95cVkZuN6VEInyrmc8qipRq7LNMv1
-         P9d5dJco7uG9zUx+mwFLCbbmcpli4Z2WVPANybpVCGZ/YwTDimRFKrLgHXIiHZMzEwR2
-         q31EaVv7bxIh2kiRPGosml4Z69jsxg4EMxOclxT6KgPuyPcTTv439ovqd0gRovQzuwiC
-         IVUNp6YrRjezIpeBT18uiiYPdNShOpb5gGJ+sOd46/Wcgn3aGeTQepYQW0Fsc6o5CcTl
-         XpFaOw8YRuGiQoSsfLmGuqYWwj/zdksu9eWOQoGbBiwgFRngkr72qf7p6oz7BbhTiloP
-         TFdQ==
-X-Gm-Message-State: AOAM5327jGxZ2V6hipuVKNNDRnswKU7Y8Cr1oT8li2izl1BOuRcyhyJr
-        aG5SKgV6KMJf8WAxQ3/0ceU=
-X-Google-Smtp-Source: ABdhPJyizGMF7Fl3fVc2BrHPefV1R72r0AiHS/aa5AkNXWQTcDan1/S8tttH4g1+j4u4oTZ38enSnw==
-X-Received: by 2002:a19:c882:: with SMTP id y124mr7548810lff.640.1607955684770;
-        Mon, 14 Dec 2020 06:21:24 -0800 (PST)
-Received: from xi.terra (c-b3cbe455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.203.179])
-        by smtp.gmail.com with ESMTPSA id n23sm1843588lji.36.2020.12.14.06.21.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Dec 2020 06:21:23 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kooj1-0007pb-K6; Mon, 14 Dec 2020 15:21:19 +0100
-Date:   Mon, 14 Dec 2020 15:21:19 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Mychaela Falconia <mychaela.falconia@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maarten Brock <m.brock@vanmierlo.com>,
-        Johan Hovold <johan@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Mychaela N . Falconia" <falcon@freecalypso.org>,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/7] tty: add flag to suppress ready signalling on open
-Message-ID: <X9d039qPr/LO/2R/@localhost>
-References: <20201202113942.27024-1-johan@kernel.org>
- <X9Dficb8sQGRut+S@kroah.com>
- <CA+uuBqYTzXCHGY8QnP+OQ5nRNAbqx2rMNzLM7OKLM1_4AzzinQ@mail.gmail.com>
- <6b81cca21561305b55ba8f019b78da28@vanmierlo.com>
- <X9H9i98E1Gro+mDP@kroah.com>
- <3fc3097ce1d35ce1e45fa5a3c7173666@vanmierlo.com>
- <X9IcKoofq+2iGZn7@kroah.com>
- <CA+uuBqaNcKadyLRyufm+6HUHXcs7o0rtgw84BrHc7Jq9PauV8Q@mail.gmail.com>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=iQ6osCsvX+pY/vfkv46SyLKYoeGekDUy36uAE1KOgCg=;
+        b=F8cQnzhwsLgD7v73qmqcX0eMVdnpT/Pr6k/xtSJfJDc5Uz40EN/OCGbsr6OgU5vtmO
+         nO3fZdsKZOerks4ZDs2bqy9JKFj53BOGrH3kebZL4UzTxjgR00F31AoAzH08dqEAhmn/
+         OW6cKOLS29lL0ulfElg08z+zjvo724ZsYgzWrQYFRIJvWC7tza5M0p8sAl1IH0ds75CV
+         r+Bx2MIZxyWBUQlzmIU/hswoaXvpMZGovFByHwo7HDUNdpVK/BUgsGGCDv9tC0AquOwa
+         115KOsGZ6IfnmH/P+sPGrYj227y+qUi4Igsp39Fdf88Is+rIvC7b7W4M0oR1/hfhipPi
+         29xA==
+X-Gm-Message-State: AOAM532ahi825UrtVKIM6s+/hDQdpykhW9esTdEgFd9b/zVgAi3vHq83
+        6WOQi6hN+Zy0eEvILJtpCWV8VOn6eHJ6FzGvUC2CghOkefpG
+X-Google-Smtp-Source: ABdhPJz28Thz98ZstaRTtBcqoDH1wBs/0lpdWE4sqhgOspe3Gbbh81ljfM/ufnBNe/VaLL39+qX70TVdWDE+mtKr9roulJUOiqCb
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+uuBqaNcKadyLRyufm+6HUHXcs7o0rtgw84BrHc7Jq9PauV8Q@mail.gmail.com>
+X-Received: by 2002:a02:b02:: with SMTP id 2mr33587692jad.15.1607957283301;
+ Mon, 14 Dec 2020 06:48:03 -0800 (PST)
+Date:   Mon, 14 Dec 2020 06:48:03 -0800
+In-Reply-To: <X9dDkwlOTFeo9eZ6@localhost>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000af6ec005b66dbaa2@google.com>
+Subject: Re: WARNING in yurex_write/usb_submit_urb
+From:   syzbot <syzbot+e87ebe0f7913f71f2ea5@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        johan@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 10:59:41AM -0800, Mychaela Falconia wrote:
+Hello,
 
-> Maarten Brock wrote:
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in yurex_write/usb_submit_urb
 
-> > Personally, I would prefer the VID:PID to enforce the quirk and an
-> > O_DIRECT (or other) flag used on open() as general backup plan. To
-> > me a sysfs solution seems illogical.
-> 
-> A sysfs solution could work as a sort of poor man's substitute for a
-> VID:PID-driven quirk: instead of a driver quirk in the kernel, there
-> is a udev rule that detects a particular USB-serial device (perhaps
-> based on textual manuf/product strings as opposed to VID:PID) and sets
-> the needed sysfs flag.  But then if we are talking about a special
-> USB device as opposed to generic serial as in RS-232 etc, then I argue
-> for a driver quirk: if the device has a custom VID:PID, a patch to the
-> driver is needed in any case just to recognize that custom ID, so why
-> not support the custom hw device properly by setting the quirk bit
-> right there and then?  Seen in this light, the sysfs approach indeed
-> makes little sense.
-> 
-> OTOH, if we are talking about RS-232 or similarly interfaced devices
-> which the user plugs into any random serial port (PC native, or a
-> random off-the-shelf USB-serial cable), then there is really nothing
-> that a udev rule can key onto, it is just a user plugging in some
-> serial device and then running custom userspace apps on it.  In this
-> case asking the user to 'echo' something from the shell into /sys/blah
-> prior to running her userspace app seems illogical indeed, and asking
-> userspace app programmers to implement an equivalent sysfs write
-> internally is equally awkward.  For this non-custom-USB-ID scenario I
-> thus agree that the O_DIRECT approach would be better - in this case
-> the userspace app programmer simply needs to add this one flag to
-> their open call, a trivial one line change.
+------------[ cut here ]------------
+URB 00000000d1c13d63 submitted while active
+WARNING: CPU: 1 PID: 12383 at drivers/usb/core/urb.c:378 usb_submit_urb+0x1228/0x14e0 drivers/usb/core/urb.c:378
+Modules linked in:
+CPU: 1 PID: 12383 Comm: syz-executor.2 Not tainted 5.10.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:usb_submit_urb+0x1228/0x14e0 drivers/usb/core/urb.c:378
+Code: 89 de e8 1b cd 3b fc 84 db 0f 85 da f4 ff ff e8 fe d4 3b fc 4c 89 fe 48 c7 c7 20 59 e1 89 c6 05 14 8c a4 07 01 e8 a4 b3 78 03 <0f> 0b e9 b8 f4 ff ff c7 44 24 14 01 00 00 00 e9 6f f5 ff ff 41 bd
+RSP: 0018:ffffc90001c9fcb8 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888020788000 RSI: ffffffff8158c835 RDI: fffff52000393f89
+RBP: 1ffff92000393fa9 R08: 0000000000000001 R09: ffff8880b9f30627
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff8880276ea400
+R13: 00000000fffffff0 R14: ffff8880276ea4e8 R15: ffff888012dca100
+FS:  00007fad9e6f7700(0000) GS:ffff8880b9f00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005587bf0f4160 CR3: 00000000252a1000 CR4: 00000000001506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ yurex_write+0x3f4/0x840 drivers/usb/misc/yurex.c:494
+ vfs_write+0x28e/0xa30 fs/read_write.c:603
+ ksys_write+0x12d/0x250 fs/read_write.c:658
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x45e159
+Code: 0d b4 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 db b3 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007fad9e6f6c68 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 000000000045e159
+RDX: 0000000000000001 RSI: 0000000020000740 RDI: 0000000000000004
+RBP: 000000000119bfc0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 000000000119bf8c
+R13: 00007ffc9fc101ef R14: 00007fad9e6f79c0 R15: 000000000119bf8c
 
-My reasons for proposing the NORDY sysfs interface *and* termios flag
-are as follows:
 
- - The change should be minimal, but still support non-standard use of
-   the modem control signals.
+Tested on:
 
- - The interface should be compatible with using standard tools (e.g.
-   echo and cat).
+commit:         a256e240 usb: phy: convert comma to semicolon
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=17357137500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4536e7f93c2bc8e9
+dashboard link: https://syzkaller.appspot.com/bug?extid=e87ebe0f7913f71f2ea5
+compiler:       gcc (GCC) 10.1.0-syz 20200507
 
- - We control all other aspects of this (e.g. HUPCL) using termios and
-   should continue to do so.
-
- - We cannot change the default behaviour so this NORDY flag needs to be
-   disabled by default (i.e. hence the negation).
-
- - You cannot generally rely on the state of these lines before opening
-   the port at least once, but for applications where this is possible
-   and where even toggling them once is undesirable we *can* provide
-   some out-of-band mechanism to change the default state of the NORDY
-   flag (but we could also ignore this use case, keeping the status
-   quo).
-
- - This could be an interface to control just the initial state of this
-   flag after probe() or it can be used in parallel with the termios
-   interface. The latter is what is implemented here.
-
- - As a bonus, using sysfs for this allows this feature to be used also
-   before NORDY support has been added to the c libraries.
-
- - A sysfs interface also integrates well with udev and allows custom
-   hardware that depend on this to be setup up once at boot regardless
-   of whether an RS-232 or USB-serial interface is used.
-
-Note that one of the BSDs recently added a termios flag with the same
-semantics as the proposed NORDY which seems to suggest that this is
-interface is indeed a natural one.
-
-Side note: Also the Windows API has a setting for the state of these
-lines *after* open (i.e. similar to a termios flag), and there are
-reports of Windows users not expecting the lines to be raised on first
-open (and behaviour changing between OS releases). For FTDI devices
-there appears to be some driver-specific out-of-band mechanism in the
-system properties for setting the default behaviour. Perhaps there's
-also some general mechanism, I have no idea, I've never used this API.
-But at least it doesn't seem to be as simple as Mychaela suggested
-earlier, that Win32 got this right, for example, by never raising the
-lines on open (by default).
-
-> Greg K-H wrote:
-> 
-> > Companies/devices lie about vid:pid all the time,
-> 
-> Wait, are you accusing *me* of lying?  PID range 0x7150 through 0x7157
-> out of FTDI's VID 0x0403 has been officially allocated by FTDI (please
-> feel free to confirm with FTDI, no need to take my word blindly) to
-> Falconia Partners LLC, which is *my* company - Falconia is my last
-> name.  Therefore, any accusation of lying in connection with any
-> VID:PID in this range, including DUART28C VID:PID of 0x0403:0x7152, is
-> an accusation of lying against me personally, which I take very
-> seriously.
-
-Just chill, and then re-read what Greg wrote.
-
-> > wait until your
-> > specific vid:pid is repurposed for some other device and then what
-> > happens?  :)
-
-> > O_DIRECT is an interesting hack, has anyone seen if it violates the
-> > posix rules for us to use it on a character device like this?
-> 
-> According to open(2) Linux man page, O_DIRECT does not come from POSIX
-> at all, instead it is specific to Linux, FreeBSD and SGI IRIX.  Thus
-> it seems like there aren't any POSIX rules to be violated here.
-
-No, but we'd still be repurposing a flag which is used for something
-entirely different.
-
-> If we go with O_DIRECT, what semantics are we going to implement?
-> There are 3 possibilities that come to mind most readily:
-> 
-> 1) O_DIRECT applies only to the open call in which this flag is set,
-> and suppresses DTR/RTS assertion on that open.  If someone needs to do
-> multiple opens with DTR/RTS suppression being required every time,
-> then they need to include O_DIRECT every time.
-
-This precludes using standard tools like echo/cat and terminal programs.
-
-> 2) O_DIRECT applies not only immediately, but also sets a latched flag
-> whereby all subsequent opens continue to suppress auto-assertion
-> without requiring O_DIRECT every time.  This approach by itself runs
-> counter to the generic Unix way of doing things, but it may be OK if
-> there is also some ioctl to explicitly set or clear the latched flag.
-
-Yeah, this is the worst option; you cannot even disable this feature
-unless you provide an ioctl interface as well.
- 
-> 3) O_DIRECT applies only to the open call in which it is set, no
-> built-in latching, but there is also some ioctl to control a flag
-> enabling or disabling DTR/RTS auto-assertion on subsequent opens.
-
-This would be my choice *if* we go this route.
-
-> My vote would be to implement 1 first, for reasons of utmost
-> simplicity, both interface and implementation, and then possibly
-> implement 3 at some later time if and when someone actually needs that
-> extra bit of complexity.
-
-Option 1 is not generic enough, and essentially only allows for your
-very specific use case (and not, for example, to suppress reset on open
-when using various embedded boards with terminal programs/echo/cat).
-
-> A strong argument can be made that if someone repurposed DTR and/or
-> RTS signals on a serial port for some very different non-standard
-> purpose, then they will almost certainly be writing their own custom
-> userspace sw to talk to that serial port, as opposed to using standard
-> existing userspace sw, hence asking them to include a non-standard
-> flag on every open of their serial port shouldn't be too burdensome.
-
-Not true, consider the various Arduino tinkerers, they may not even have
-designed the reset circuit themselves.
-
-Johan
