@@ -2,264 +2,191 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 591A32DAA55
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Dec 2020 10:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9482F2DAA7E
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Dec 2020 10:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728439AbgLOJnt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Dec 2020 04:43:49 -0500
-Received: from mga03.intel.com ([134.134.136.65]:33092 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728274AbgLOJns (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 15 Dec 2020 04:43:48 -0500
-IronPort-SDR: wAfYFWDhJZNemo318IBP9lZhqHDXCCzryiHOcIKaMriswibz7Mn1gFVbibf5bO3fLki8jy/vY0
- l2wjk7JYcAug==
-X-IronPort-AV: E=McAfee;i="6000,8403,9835"; a="174961846"
-X-IronPort-AV: E=Sophos;i="5.78,420,1599548400"; 
-   d="scan'208";a="174961846"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2020 01:43:06 -0800
-IronPort-SDR: mTHtB6rWBVWNkZrA0YykfSPuXbJ+B3VEC0skdBj1aqS2B9weKZgDOLKkthRL4cTRsjNSIW+UDQ
- +KMlgxFqo0BQ==
-X-IronPort-AV: E=Sophos;i="5.78,420,1599548400"; 
-   d="scan'208";a="336752969"
-Received: from shao2-debian.sh.intel.com (HELO [10.239.13.117]) ([10.239.13.117])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2020 01:43:02 -0800
-Subject: Re: [kbuild-all] Re: [PATCH] usb: cdns3: Adds missing __iomem markers
-To:     Peter Chen <peter.chen@nxp.com>, kernel test robot <lkp@intel.com>
-Cc:     Pawel Laszczak <pawell@cadence.com>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "rogerq@ti.com" <rogerq@ti.com>,
-        "a-govindraju@ti.com" <a-govindraju@ti.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kurahul@cadence.com" <kurahul@cadence.com>
-References: <20201214125043.29710-1-pawell@cadence.com>
- <202012142359.ZshcbBoP-lkp@intel.com> <20201215055812.GA18223@b29397-desktop>
-From:   Rong Chen <rong.a.chen@intel.com>
-Message-ID: <9bdcfed8-a48a-075b-0a1e-9a00c817824a@intel.com>
-Date:   Tue, 15 Dec 2020 17:42:21 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20201215055812.GA18223@b29397-desktop>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        id S1728201AbgLOJ65 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Dec 2020 04:58:57 -0500
+Received: from mail-eopbgr40049.outbound.protection.outlook.com ([40.107.4.49]:58343
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727850AbgLOJ6o (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Dec 2020 04:58:44 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=m59yWu8Wc6BvFeqntmDrJqxrZxLEZ09rT4bGYUGyYIZWP2J72W/M7llvlNMEXrmJSezmFbwPLO2hN9um9hpVtx5jhqGimiHojrP+ZfVJhm/IZwXTe1MQ50dOnY5ENzVm9TBQmi1RJIADVUCwjBVKTmfS6kYGoPNYn9ThW8NK1yncjkVw81qTBU35iv0ab2YQYzkLzGCUNkVx4V57+Khfz+OI34jIOuerTeDYCz9pbDLmn2W6pUThMTWnmQlVp5Dasr9PxNArO5HqxUT6W6hGYWfsnAO+VKMYYE/WqeJG/yXzn1KznMI/ogESg+dsQoFHJxLkpr1NLgLsHcVeyL6Q/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wPPJGJVKJsj5Gktromrwk/axBGDVcKDrX+aEuHVtAYU=;
+ b=Uh45snwq3OKwEjPOXSw3r2w1fLW5fvei5CiXqZj/JL6v4FTFcPsJeN2x5vg1qswhV41C6gXgfLwq6HuCIhItQbzNrkFcBFkLD3jfWpfLV4+ShkJjlQIMG46fLycEr3GoK3FYUzrJYyqN7pJr5B9e6c07rOd90siXcHHr9oBXfexZceprvdu0J2TNUluE3amYjZUYqduCAws9bniahMSEnBJRsVtuiDlagXMbxyw/cK/t8snT1pYmwKxlsjt1XxOe1N+TSmkyt1M6eiD1GMBgy7TMAcNAtgUh1EjqgW869n1qoBjgRW9zKj/lbeCxIlkC/NRMND65N1AIccnUnBHF5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wPPJGJVKJsj5Gktromrwk/axBGDVcKDrX+aEuHVtAYU=;
+ b=Mm69QCg1IP6gPra/Zk4BOcaGSh3aULHaCA9uqFNEzcFaLf+rRwiNRMVaN9NJNjbhfcrSFuod6lGjuj2qCT0EEVg6jy+WNEnIU1WukqI97cf/Xti0vco1IZskD8MKQZTLJyRRsD79+QFYNCjOFGhWJHf+n1rillP5ZJ3X68645J8=
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
+ by DB7PR04MB5084.eurprd04.prod.outlook.com (2603:10a6:10:1c::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.12; Tue, 15 Dec
+ 2020 09:57:53 +0000
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3654.026; Tue, 15 Dec 2020
+ 09:57:53 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Jun Li <lijun.kernel@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: port power is on again after turning off by user space
+Thread-Topic: port power is on again after turning off by user space
+Thread-Index: AdbSkrHAwwTe1v1pTzSTgGOOVcOG/gADLuWAAABrJAAACaqS0A==
+Date:   Tue, 15 Dec 2020 09:57:53 +0000
+Message-ID: <DBBPR04MB79790C8D243173467AE94D4E8BC60@DBBPR04MB7979.eurprd04.prod.outlook.com>
+References: <DBBPR04MB79793525394F70DE397E24038BC60@DBBPR04MB7979.eurprd04.prod.outlook.com>
+ <CAKgpwJXMFSHxi7vE5cOxkYPTnY74oB-SKf3FikerCzFDLYqcbw@mail.gmail.com>
+ <20201215051402.GC2142@b29397-desktop>
+In-Reply-To: <20201215051402.GC2142@b29397-desktop>
+Accept-Language: en-US
 Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [180.164.155.184]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 3388c650-88ee-41c2-545b-08d8a0dfe3e2
+x-ms-traffictypediagnostic: DB7PR04MB5084:
+x-microsoft-antispam-prvs: <DB7PR04MB5084FD94010F965F548D37818BC60@DB7PR04MB5084.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: wqNTP52QHH63ZWEz9y7lZWZUkcWPhaH5jFRntTj/cfcv+u00naTuPilQcQQ2DF9naO6CXu0fbsZUxMUDfRUax2RUKzC405E2c5kM2Icg/mSp+Kkb3Uonu8TVqrsQkUDtr/lbPymLSiAnuAgqvOp7MDbHvo1Alcie7OddQVvceuv/cG8jQbijcsPFHTsqQ/UE/UsKMRx/O0YC+3GrlcZoVpoYnwIZdKz42y6Bl5+c6VB6rJygYb0OJu7nt/551DLwiEhpq1EpaYyBWqrX+HtOGJ22peXimBZKOEpzzyJdgDIQ+PClLyJOD/RYNC2Bn7dV1dyKYtqZoHWLPE7TD0DvtrRdJYrGGSCi6vL0J30AVgdyP9c/k75R7W+3OyXe+gGuSAbdhd6xsUXWOXS5l7VPMIBCLHdkZaFyS4uZM1rrr+j+LASTbeuAEPV+zWy2snwG811peVCvpwOkFHjhcQl2j67P7mZNHN7T1IxnaGA4tcE=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39850400004)(346002)(136003)(366004)(396003)(376002)(83380400001)(45080400002)(9686003)(4326008)(2906002)(66946007)(44832011)(64756008)(7696005)(66446008)(66556008)(966005)(478600001)(8936002)(71200400001)(66476007)(83080400002)(26005)(316002)(76116006)(52536014)(8676002)(6506007)(55016002)(86362001)(186003)(110136005)(5660300002)(33656002)(493534005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?YStGd3kzUFUzcXY1YTMzN3RXTUR3ckdXL2xyU1Y5Vkd4NW1CQmRvcCthTWEx?=
+ =?utf-8?B?TmxGQUFpK0dNcWxhbHdHbkQyTUdkQ01Oc1dZTHFSTnJ6bVhxa0R4Yy8vRmt1?=
+ =?utf-8?B?Y29hMHhuV1V6UnNiYVphNU1ISUZhVVlUdStFUFlGN1pCMmJJWVV4ejdqTFMz?=
+ =?utf-8?B?RGk3dkl4WURob1lhQWEvK1pzY2tGZmJXWm42YWo5Y3BHUjE5TTIySk1CV0tM?=
+ =?utf-8?B?K2ZEVGk5Y29ha1FrWnE0ZkpTMlREVWhUWUwxc1IzNWZsNklKb1FYWVYwLy9U?=
+ =?utf-8?B?ZXhrV0ovbEkvbjMvREkxWFRCNndDeExRV21sQzcrb3IrZENXRldESFhCWjVt?=
+ =?utf-8?B?aXE3QkVxYzZnbUgxQmROSFNPNFBISW1OUytzL1NVWXR6Si9JV2FMMnNNVkpH?=
+ =?utf-8?B?cG1kU0hmVGcrbWFDWWhFUDdnQzgyY3pNTDdMRkovdWI5TGRRR084N3oxKzd3?=
+ =?utf-8?B?SVAzSVJYWG5ieDJaUUwrN1VzN0ZzOHQzdWxmRytSVklGK1RxcEdUdHFHS1dp?=
+ =?utf-8?B?eG9WeUE4RFdXb05WTEVsNngxUWhSZDJVWXM4VTRuV3BVc0FUcmpMODQxL3hs?=
+ =?utf-8?B?MzRBNjV2M01lQmtLQWdpMGhFaTVuMmVZOHJCaVZBUDZ4bkpaMDZYUVMvVWo3?=
+ =?utf-8?B?czh1NUttTU5DbjdPYjlYMkNjeFpqK0lSV1NNR2JlTk1LbXE4ZVlDc2dTYWJ1?=
+ =?utf-8?B?TlppbDNvVnlLUVpic0R1UlJScmhCL0RTMnZlSUFuQUVza3BiOGFFMVdqWEF5?=
+ =?utf-8?B?WFFqbmhPdXBQWEtPdlpyYWJzNG91endBN2tpQkk4U2pzU3ZuS0MwSXQ5S2dt?=
+ =?utf-8?B?eGduUnBsbEdDWWJ2NkJzYWtwc1BiK3ZvTUVCRkJEaHJpbTFZcUwwRVVxQkov?=
+ =?utf-8?B?WndEd1ZHSG9KYjRRNC9sOUtDWnNmR25kRHJVd2pWMXBzYmlIeHROK3NzN1BB?=
+ =?utf-8?B?VUdZWmw3ZXR2dGdLNnQ3MmY5S3BUV0RsNEpadThiR2dzV1dnMVhFMDlsY3BB?=
+ =?utf-8?B?TW1HcWlXb3YrQldKQllCME0vTThsQ1JFVmhJbUUxeUlyR05PWG5yWEtEZEVk?=
+ =?utf-8?B?RmtnKzJScmlWNGNNNTFTWG5yOHZVeFlQK0lqTjhGeXZ5bTJqTFdNeFhKZTVB?=
+ =?utf-8?B?RzdBVTBIRnB5T0VhMk5kQ01ONnNPSDBTM3l6bnE0L2Q1VlpZUkhOZGpBTkN0?=
+ =?utf-8?B?MnRVcjBHK242eTlZbXo2eURicENsQmFmelo3Uk1jOVV0UEJmUzdiRFJMOFJj?=
+ =?utf-8?B?OWJwSTVHUmRIWTJicklwaWJXYmp5SUJzdkNtMXF5ajJCS0VEYTc4djFXdmxB?=
+ =?utf-8?Q?XTVEoEUHyJI/4qeKw1NPgm46LZcHGRqi/q?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3388c650-88ee-41c2-545b-08d8a0dfe3e2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2020 09:57:53.3500
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: n22xz5r4+uDPGs08Q3kx5sv/AgFyos9wRkaDH1HHqrcg2K2koJaNMUUVmchYjtGIt1GRxiCZ0xkOh3+JnJERnw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5084
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 12/15/20 1:58 PM, Peter Chen wrote:
-> On 20-12-14 23:35:56, kernel test robot wrote:
->> Hi Pawel,
->>
->> I love your patch! Perhaps something to improve:
->>
->> [auto build test WARNING on next-20201211]
->> [cannot apply to peter.chen-usb/ci-for-usb-next v5.10 v5.10-rc7 v5.10-rc6 v5.10]
-> Sorry, I changed the branch name to reflect the branch does not only queue
-> chipidea USB patches.
->
-> next branch: for-usb-next
-> fixes branch: for-usb-fixes
->
-> Peter
-
-Hi Peter,
-
-Thanks for the feedback, we'll update it on the CI system.
-
-Best Regards,
-Rong Chen
-
->
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit-scm.com%2Fdocs%2Fgit-format-patch&amp;data=04%7C01%7Cpeter.chen%40nxp.com%7C6ce79474794448ae12b008d8a045f9ce%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637435572341553421%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=Cy3huYNzWiJ57OKmzmaleCT14gcFr8RyYDnqTfZWNG4%3D&amp;reserved=0]
->>
->> url:    https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2F0day-ci%2Flinux%2Fcommits%2FPawel-Laszczak%2Fusb-cdns3-Adds-missing-__iomem-markers%2F20201214-205353&amp;data=04%7C01%7Cpeter.chen%40nxp.com%7C6ce79474794448ae12b008d8a045f9ce%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637435572341553421%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=x5XoDUUskeGteTFaPjgS24Hrbb712XqMqaIkqwXWu14%3D&amp;reserved=0
->> base:    3cc2bd440f2171f093b3a8480a4b54d8c270ed38
->> config: riscv-allmodconfig (attached as .config)
->> compiler: riscv64-linux-gcc (GCC) 9.3.0
->> reproduce (this is a W=1 build):
->>          wget https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fintel%2Flkp-tests%2Fmaster%2Fsbin%2Fmake.cross&amp;data=04%7C01%7Cpeter.chen%40nxp.com%7C6ce79474794448ae12b008d8a045f9ce%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637435572341553421%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=jAavg0T3itnjkbHXADvePHHgtYeqiVTBt%2BoatHT0VHU%3D&amp;reserved=0 -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2F0day-ci%2Flinux%2Fcommit%2F315bfcf1e0604de6ecfc1856cf5820876390f16c&amp;data=04%7C01%7Cpeter.chen%40nxp.com%7C6ce79474794448ae12b008d8a045f9ce%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637435572341553421%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=SQ75IXxfld6HMRIFkZ%2F8Z4YqxnFP%2F%2BZ%2BsYZIycNeO%2FA%3D&amp;reserved=0
->>          git remote add linux-review https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2F0day-ci%2Flinux&amp;data=04%7C01%7Cpeter.chen%40nxp.com%7C6ce79474794448ae12b008d8a045f9ce%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637435572341553421%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=ZVS4723WbEO03hbsLXJ%2B%2FmB5EZElulY7lAsMEMatiko%3D&amp;reserved=0
->>          git fetch --no-tags linux-review Pawel-Laszczak/usb-cdns3-Adds-missing-__iomem-markers/20201214-205353
->>          git checkout 315bfcf1e0604de6ecfc1856cf5820876390f16c
->>          # save the attached .config to linux build tree
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=riscv
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All warnings (new ones prefixed by >>):
->>
->>     In file included from arch/riscv/include/asm/io.h:23,
->>                      from include/linux/io.h:13,
->>                      from include/linux/irq.h:20,
->>                      from include/asm-generic/hardirq.h:17,
->>                      from ./arch/riscv/include/generated/asm/hardirq.h:1,
->>                      from include/linux/hardirq.h:10,
->>                      from include/linux/interrupt.h:11,
->>                      from drivers/usb/cdns3/drd.c:13:
->>     drivers/usb/cdns3/drd.c: In function 'cdns_otg_disable_irq':
->>     drivers/usb/cdns3/drd.c:159:31: error: dereferencing pointer to incomplete type 'struct cdns_otg_irq_reg'
->>       159 |  writel(0, &cdns->otg_irq_regs->ien);
->>           |                               ^~
->>     arch/riscv/include/asm/mmio.h:93:76: note: in definition of macro 'writel_cpu'
->>        93 | #define writel_cpu(v, c) ((void)__raw_writel((__force u32)cpu_to_le32(v), (c)))
->>           |                                                                            ^
->>     drivers/usb/cdns3/drd.c:159:2: note: in expansion of macro 'writel'
->>       159 |  writel(0, &cdns->otg_irq_regs->ien);
->>           |  ^~~~~~
->>     drivers/usb/cdns3/drd.c: In function 'cdns_drd_init':
->>     drivers/usb/cdns3/drd.c:409:22: error: assignment to 'struct cdns_otg_irq_reg *' from incompatible pointer type 'struct cdns_otg_irq_regs *' [-Werror=incompatible-pointer-types]
->>       409 |   cdns->otg_irq_regs = (struct cdns_otg_irq_regs __iomem  *)
->>           |                      ^
->>     In file included from include/linux/byteorder/little_endian.h:5,
->>                      from arch/riscv/include/uapi/asm/byteorder.h:10,
->>                      from include/asm-generic/bitops/le.h:6,
->>                      from arch/riscv/include/asm/bitops.h:202,
->>                      from include/linux/bitops.h:32,
->>                      from include/linux/kernel.h:11,
->>                      from drivers/usb/cdns3/drd.c:12:
->>>> drivers/usb/cdns3/drd.c:421:33: warning: passing argument 1 of '__raw_readl' makes pointer from integer without a cast [-Wint-conversion]
->>       421 |   if (readl(cdns->otg_cdnsp_regs->did) == OTG_CDNSP_DID) {
->>           |             ~~~~~~~~~~~~~~~~~~~~^~~~~
->>           |                                 |
->>           |                                 __le32 {aka unsigned int}
->>     include/uapi/linux/byteorder/little_endian.h:34:51: note: in definition of macro '__le32_to_cpu'
->>        34 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
->>           |                                                   ^
->>     arch/riscv/include/asm/mmio.h:140:47: note: in expansion of macro 'readl_cpu'
->>       140 | #define readl(c) ({ u32 __v; __io_br(); __v = readl_cpu(c); __io_ar(__v); __v; })
->>           |                                               ^~~~~~~~~
->>     drivers/usb/cdns3/drd.c:421:7: note: in expansion of macro 'readl'
->>       421 |   if (readl(cdns->otg_cdnsp_regs->did) == OTG_CDNSP_DID) {
->>           |       ^~~~~
->>     In file included from arch/riscv/include/asm/io.h:23,
->>                      from include/linux/io.h:13,
->>                      from include/linux/irq.h:20,
->>                      from include/asm-generic/hardirq.h:17,
->>                      from ./arch/riscv/include/generated/asm/hardirq.h:1,
->>                      from include/linux/hardirq.h:10,
->>                      from include/linux/interrupt.h:11,
->>                      from drivers/usb/cdns3/drd.c:13:
->>     arch/riscv/include/asm/mmio.h:63:60: note: expected 'const volatile void *' but argument is of type '__le32' {aka 'unsigned int'}
->>        63 | static inline u32 __raw_readl(const volatile void __iomem *addr)
->>           |                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
->>     drivers/usb/cdns3/drd.c:422:23: error: assignment to 'struct cdns_otg_irq_reg *' from incompatible pointer type 'struct cdns_otg_irq_regs *' [-Werror=incompatible-pointer-types]
->>       422 |    cdns->otg_irq_regs = (struct cdns_otg_irq_regs __iomem *)
->>           |                       ^
->>     drivers/usb/cdns3/drd.c:426:23: error: assignment to 'struct cdns_otg_irq_reg *' from incompatible pointer type 'struct cdns_otg_irq_regs *' [-Werror=incompatible-pointer-types]
->>       426 |    cdns->otg_irq_regs = (struct cdns_otg_irq_regs __iomem *)
->>           |                       ^
->>     cc1: some warnings being treated as errors
->>
->> vim +/__raw_readl +421 drivers/usb/cdns3/drd.c
->>
->>     383	
->>     384	int cdns_drd_init(struct cdns *cdns)
->>     385	{
->>     386		void __iomem *regs;
->>     387		u32 state;
->>     388		int ret;
->>     389	
->>     390		regs = devm_ioremap_resource(cdns->dev, &cdns->otg_res);
->>     391		if (IS_ERR(regs))
->>     392			return PTR_ERR(regs);
->>     393	
->>     394		/* Detection of DRD version. Controller has been released
->>     395		 * in three versions. All are very similar and are software compatible,
->>     396		 * but they have same changes in register maps.
->>     397		 * The first register in oldest version is command register and it's
->>     398		 * read only. Driver should read 0 from it. On the other hand, in v1
->>     399		 * and v2 the first register contains device ID number which is not
->>     400		 * set to 0. Driver uses this fact to detect the proper version of
->>     401		 * controller.
->>     402		 */
->>     403		cdns->otg_v0_regs = regs;
->>     404		if (!readl(&cdns->otg_v0_regs->cmd)) {
->>     405			cdns->version  = CDNS3_CONTROLLER_V0;
->>     406			cdns->otg_v1_regs = NULL;
->>     407			cdns->otg_cdnsp_regs = NULL;
->>     408			cdns->otg_regs = regs;
->>     409			cdns->otg_irq_regs = (struct cdns_otg_irq_regs __iomem  *)
->>     410					     &cdns->otg_v0_regs->ien;
->>     411			writel(1, &cdns->otg_v0_regs->simulate);
->>     412			dev_dbg(cdns->dev, "DRD version v0 (%08x)\n",
->>     413				 readl(&cdns->otg_v0_regs->version));
->>     414		} else {
->>     415			cdns->otg_v0_regs = NULL;
->>     416			cdns->otg_v1_regs = regs;
->>     417			cdns->otg_cdnsp_regs = regs;
->>     418	
->>     419			cdns->otg_regs = (void __iomem *)&cdns->otg_v1_regs->cmd;
->>     420	
->>   > 421			if (readl(cdns->otg_cdnsp_regs->did) == OTG_CDNSP_DID) {
->>     422				cdns->otg_irq_regs = (struct cdns_otg_irq_regs __iomem *)
->>     423						      &cdns->otg_cdnsp_regs->ien;
->>     424				cdns->version  = CDNSP_CONTROLLER_V2;
->>     425			} else {
->>     426				cdns->otg_irq_regs = (struct cdns_otg_irq_regs __iomem *)
->>     427						      &cdns->otg_v1_regs->ien;
->>     428				writel(1, &cdns->otg_v1_regs->simulate);
->>     429				cdns->version  = CDNS3_CONTROLLER_V1;
->>     430			}
->>     431	
->>     432			dev_dbg(cdns->dev, "DRD version v1 (ID: %08x, rev: %08x)\n",
->>     433				 readl(&cdns->otg_v1_regs->did),
->>     434				 readl(&cdns->otg_v1_regs->rid));
->>     435		}
->>     436	
->>     437		state = OTGSTS_STRAP(readl(&cdns->otg_regs->sts));
->>     438	
->>     439		/* Update dr_mode according to STRAP configuration. */
->>     440		cdns->dr_mode = USB_DR_MODE_OTG;
->>     441	
->>     442		if ((cdns->version == CDNSP_CONTROLLER_V2 &&
->>     443		     state == OTGSTS_CDNSP_STRAP_HOST) ||
->>     444		    (cdns->version != CDNSP_CONTROLLER_V2 &&
->>     445		     state == OTGSTS_STRAP_HOST)) {
->>     446			dev_dbg(cdns->dev, "Controller strapped to HOST\n");
->>     447			cdns->dr_mode = USB_DR_MODE_HOST;
->>     448		} else if ((cdns->version == CDNSP_CONTROLLER_V2 &&
->>     449			    state == OTGSTS_CDNSP_STRAP_GADGET) ||
->>     450			   (cdns->version != CDNSP_CONTROLLER_V2 &&
->>     451			    state == OTGSTS_STRAP_GADGET)) {
->>     452			dev_dbg(cdns->dev, "Controller strapped to PERIPHERAL\n");
->>     453			cdns->dr_mode = USB_DR_MODE_PERIPHERAL;
->>     454		}
->>     455	
->>     456		ret = devm_request_threaded_irq(cdns->dev, cdns->otg_irq,
->>     457						cdns_drd_irq,
->>     458						cdns_drd_thread_irq,
->>     459						IRQF_SHARED,
->>     460						dev_name(cdns->dev), cdns);
->>     461		if (ret) {
->>     462			dev_err(cdns->dev, "couldn't get otg_irq\n");
->>     463			return ret;
->>     464		}
->>     465	
->>     466		state = readl(&cdns->otg_regs->sts);
->>     467		if (OTGSTS_OTG_NRDY(state)) {
->>     468			dev_err(cdns->dev, "Cadence USB3 OTG device not ready\n");
->>     469			return -ENODEV;
->>     470		}
->>     471	
->>     472		return 0;
->>     473	}
->>     474	
->>
->> ---
->> 0-DAY CI Kernel Test Service, Intel Corporation
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flists.01.org%2Fhyperkitty%2Flist%2Fkbuild-all%40lists.01.org&amp;data=04%7C01%7Cpeter.chen%40nxp.com%7C6ce79474794448ae12b008d8a045f9ce%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637435572341553421%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=v9fQGKZKobtIysXu43lCekV%2FoXCc2EZZXIxoTtQpSdw%3D&amp;reserved=0
->
->
-
+IA0KPiA+ID4gSGkgQWxhbiwNCj4gPiA+DQo+ID4gPiBJIHVzZSBvbmUgSFVCIHBvd2VyIGNvbnRy
+b2wgYXBwbGljYXRpb24NCj4gPiA+DQo+IChodHRwczovL2V1cjAxLnNhZmVsaW5rcy5wcm90ZWN0
+aW9uLm91dGxvb2suY29tLz91cmw9aHR0cHMlM0ElMkYlMkZnaXRodWIuDQo+IGNvbSUyRm12cCUy
+RnVodWJjdGwmYW1wO2RhdGE9MDQlN0MwMSU3Q3BldGVyLmNoZW4lNDBueHAuY29tJTdDDQo+IDcz
+NmVjZTE5YmM3YTQzMGM5OGI4MDhkOGEwYjY5NzVjJTdDNjg2ZWExZDNiYzJiNGM2ZmE5MmNkOTlj
+NWMzMDE2DQo+IDM1JTdDMCU3QzAlN0M2Mzc0MzYwNTMzNjIxNTEwMjIlN0NVbmtub3duJTdDVFdG
+cGJHWnNiM2Q4ZXlKDQo+IFdJam9pTUM0d0xqQXdNREFpTENKUUlqb2lWMmx1TXpJaUxDSkJUaUk2
+SWsxaGFXd2lMQ0pYVkNJNk1uMCUzRCU3DQo+IEMxMDAwJmFtcDtzZGF0YT1scHRmMVhPNXllYjZs
+UWJBRmxLVXJaJTJCRVg1QVRYUVJmdEd3bTI2V293RkElDQo+IDNEJmFtcDtyZXNlcnZlZD0wKSB0
+byBpbnZlc3RpZ2F0ZSBwb3dlciBzd2l0Y2hhYmxlIEhVQiwgYW5kIGZpbmQgdGhlIGtlcm5lbA0K
+PiB0dXJucyBwb3J0IHBvd2VyIG9uIGFnYWluIGF0IGRyaXZlcnMvdXNiL2NvcmUvaHViLmMsIGFm
+dGVyIHBvcnQgcG93ZXIgaXMgdHVybmVkDQo+IG9mZiBieSB1c2VyIHNwYWNlLg0KPiA+ID4NCj4g
+PiA+IDUxMjIgICAgICAgICAgICAgICAgIGlmIChodWJfaXNfcG9ydF9wb3dlcl9zd2l0Y2hhYmxl
+KGh1YikNCj4gPiA+IDUxMjMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAmJiAhcG9y
+dF9pc19wb3dlcl9vbihodWIsDQo+IHBvcnRzdGF0dXMpDQo+ID4gPiA1MTI0ICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgJiYgIXBvcnRfZGV2LT5wb3J0X293bmVyKQ0KPiA+ID4gNTEy
+NSAgICAgICAgICAgICAgICAgICAgICAgICBzZXRfcG9ydF9mZWF0dXJlKGhkZXYsIHBvcnQxLA0K
+PiBVU0JfUE9SVF9GRUFUX1BPV0VSKTsNCj4gPiA+DQo+ID4gPiBUaGUgbWFpbiBzZXF1ZW5jZSBm
+b3IgdGVzdGluZyB0dXJuIHBvcnQgcG93ZXIgb2ZmIGxpa2UgYmVsb3c6DQo+ID4gPg0KPiA+ID4g
+LSB1aHViY3RsIHNlbmRzIGNvbW1hbmQgdG8gdHVybiBzcGVjaWZjIHBvcnQgKGVnLCAyLTEuNCkg
+cG93ZXIgb2ZmLg0KPiA+ID4gLSBkZXZpbyBhdCBrZXJuZWwgZ2V0cyB0aGF0IGNvbW1hbmQsIGFu
+ZCBzZW5kIHRvIGh1Yi4NCj4gPiA+IC0gcG9ydCBwb3dlciBpcyBvZmYsIHRoZSBodWJfZXZlbnQg
+aXMgdHJpZ2dlcmVkIGR1ZSB0byBwb3J0IHN0YXR1cyBpcyBjaGFuZ2VkLg0KPiA+ID4gLSB1c2Jf
+ZGlzY29ubmVjdCBpcyBjYWxsZWQsIGJ1dCBwb3J0IHBvd2VyIGlzIG9uIGFnYWluIGJ5IGtlcm5l
+bCBhdCBmdW5jdGlvbg0KPiBodWJfcG9ydF9jb25uZWN0Lg0KPiA+ID4NCj4gPiA+IEkgY2FuJ3Qg
+ZmluZCB0aGUgY29kZSBoaXN0b3J5IHdoeSB0aGUgcG9ydCBwb3dlciBuZWVkcyB0byB0dXJuIG9u
+IGFmdGVyDQo+IGRldmljZSBpcyBkaXNjb25uZWN0ZWQsIGRvIHlvdSBrbm93IHdoeT8NCj4gPiA+
+IEFueSBzdWdndWVzdGlvbnMgdG8gZml4IGl0PyBUaGFua3MuDQo+ID4NCj4gPiBTZWVtcyBpbiB0
+aGlzIGNhc2UgdGhlIHBvcnQgbmVlZCBjbGFpbWVkIGJ5IHVzZXIgYXBwLCBJIGFtIHNlZWluZyB0
+aGlzDQo+ID4gY29tbWl0DQo+ID4NCj4gPiBjb21taXQgZmJhZWNmZjA2YTdkYjRkZWZhODk5YTY2
+NGZlMjc1OGU1MTYxYjM5ZA0KPiA+IEF1dGhvcjogRGVlcGFrIERhcyA8ZGVlcGFrZGFzLmxpbnV4
+QGdtYWlsLmNvbT4NCj4gPiBEYXRlOiAgIFdlZCBKYW4gMjEgMjM6Mzk6NTggMjAxNSArMDUzMA0K
+PiA+DQo+ID4gICAgIHVzYjogY29yZTogaHViOiBtb2RpZnkgaHViIHJlc2V0IGxvZ2ljIGluIGh1
+YiBkcml2ZXINCj4gPg0KPiA+ICAgICBDdXJyZW50bHkgaWYgcG9ydCBwb3dlciBpcyB0dXJuZWQg
+b2ZmIGJ5IHVzZXIgb24gaHViIHBvcnQNCj4gPiAgICAgdXNpbmcgVVNCREVWRlMgdGhlbiBwb3J0
+IHBvd2VyIGlzIHR1cm5lZCBiYWNrIE9ODQo+ID4gICAgIGJ5IGh1YiBkcml2ZXIuDQo+ID4gICAg
+IFRoaXMgY29tbWl0IG1vZGlmaWVzIGh1YiByZXNldCBsb2dpYyBpbiBodWJfcG9ydF9jb25uZWN0
+KCkgdG8gcHJldmVudA0KPiA+ICAgICBodWIgZHJpdmVyIGZyb20gdHVybmluZyBiYWNrIHRoZSBw
+b3J0IHBvd2VyIE9OIGlmIHBvcnQgaXMgbm90IG93bmVkDQo+ID4gICAgIGJ5IGtlcm5lbC4NCj4g
+Pg0KPiA+ICAgICBTaWduZWQtb2ZmLWJ5OiBEZWVwYWsgRGFzIDxkZWVwYWtkYXMubGludXhAZ21h
+aWwuY29tPg0KPiA+ICAgICBBY2tlZC1ieTogQWxhbiBTdGVybiA8c3Rlcm5Acm93bGFuZC5oYXJ2
+YXJkLmVkdT4NCj4gPiAgICAgU2lnbmVkLW9mZi1ieTogR3JlZyBLcm9haC1IYXJ0bWFuIDxncmVn
+a2hAbGludXhmb3VuZGF0aW9uLm9yZz4NCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3Vz
+Yi9jb3JlL2h1Yi5jIGIvZHJpdmVycy91c2IvY29yZS9odWIuYyBpbmRleA0KPiA+IGI0YmZhM2Eu
+LjNlOWM0ZDQgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvY29yZS9odWIuYw0KPiA+ICsr
+KyBiL2RyaXZlcnMvdXNiL2NvcmUvaHViLmMNCj4gPiBAQCAtNDY1NSw5ICs0NjU1LDEzIEBAIHN0
+YXRpYyB2b2lkIGh1Yl9wb3J0X2Nvbm5lY3Qoc3RydWN0IHVzYl9odWINCj4gPiAqaHViLCBpbnQg
+cG9ydDEsIHUxNiBwb3J0c3RhdHVzLA0KPiA+ICAgICAgICAgaWYgKCEocG9ydHN0YXR1cyAmIFVT
+Ql9QT1JUX1NUQVRfQ09OTkVDVElPTikgfHwNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICB0
+ZXN0X2JpdChwb3J0MSwgaHViLT5yZW1vdmVkX2JpdHMpKSB7DQo+ID4NCj4gPiAtICAgICAgICAg
+ICAgICAgLyogbWF5YmUgc3dpdGNoIHBvd2VyIGJhY2sgb24gKGUuZy4gcm9vdCBodWIgd2FzIHJl
+c2V0KQ0KPiAqLw0KPiA+ICsgICAgICAgICAgICAgICAvKg0KPiA+ICsgICAgICAgICAgICAgICAg
+KiBtYXliZSBzd2l0Y2ggcG93ZXIgYmFjayBvbiAoZS5nLiByb290IGh1YiB3YXMgcmVzZXQpDQo+
+ID4gKyAgICAgICAgICAgICAgICAqIGJ1dCBvbmx5IGlmIHRoZSBwb3J0IGlzbid0IG93bmVkIGJ5
+IHNvbWVvbmUgZWxzZS4NCj4gPiArICAgICAgICAgICAgICAgICovDQo+ID4gICAgICAgICAgICAg
+ICAgIGlmIChodWJfaXNfcG9ydF9wb3dlcl9zd2l0Y2hhYmxlKGh1YikNCj4gPiAtICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICYmICFwb3J0X2lzX3Bvd2VyX29uKGh1YiwNCj4gcG9ydHN0
+YXR1cykpDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAmJiAhcG9ydF9pc19w
+b3dlcl9vbihodWIsDQo+IHBvcnRzdGF0dXMpDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAmJiAhcG9ydF9kZXYtPnBvcnRfb3duZXIpDQo+ID4gICAgICAgICAgICAgICAgICAg
+ICAgICAgc2V0X3BvcnRfZmVhdHVyZShoZGV2LCBwb3J0MSwNCj4gPiBVU0JfUE9SVF9GRUFUX1BP
+V0VSKTsNCj4gPg0KPiA+ICAgICAgICAgICAgICAgICBpZiAocG9ydHN0YXR1cyAmIFVTQl9QT1JU
+X1NUQVRfRU5BQkxFKQ0KPiA+DQo+IA0KPiBZZXMsIEkgc2F3IHRoaXMgY29tbWl0LiBCdXQgdGhl
+IHBvcnQgaXMgb3duZWQgYnkga2VybmVsLCB0aGUgZGV2aWNlIG9uIHRoZSBwb3J0DQo+IGNvdWxk
+IGJlIGVudW1lcmF0ZWQgYnkga2VybmVsLCBqdXN0IHRoZSBwb3dlciBvbiB0aGUgcG9ydCBjb3Vs
+ZCBiZSBjaGFuZ2VkIGJ5DQo+IHVzZXIgc3BhY2UuDQo+IA0KDQpJIGZpbmQgdGhpcyBpc3N1ZSBo
+YXMgZGlzY3Vzc2VkIHRoZXJlLCBidXQgSSBjYW4ndCBvcGVuIHRoZSBVUkw6IGh0dHBzOi8vYml0
+Lmx5LzJKemN6aloNCkJlbG93IHRoZSBkZXNjcmlwdGlvbiBmcm9tOiBodHRwczovL2dpdGh1Yi5j
+b20vbXZwL3VodWJjdGwuDQpUaGVpciB3b3JrYXJvdW5kcyBhcmUgbm90IGdvb2QuDQoNClBvd2Vy
+IGNvbWVzIGJhY2sgb24gYWZ0ZXIgZmV3IHNlY29uZHMgb24gTGludXgNCg0KU29tZSBkZXZpY2Ug
+ZHJpdmVycyBpbiBrZXJuZWwgYXJlIHN1cnByaXNlZCBieSBVU0IgZGV2aWNlDQpiZWluZyB0dXJu
+ZWQgb2ZmIGFuZCBhdXRvbWF0aWNhbGx5IHRyeSB0byBwb3dlciBpdCBiYWNrIG9uLg0KDQpZb3Ug
+Y2FuIHVzZSBvcHRpb24gLXIgTiB3aGVyZSBOIGlzIHNvbWUgbnVtYmVyIGZyb20gMTAgdG8gMTAw
+MA0KdG8gZml4IHRoaXMgLSB1aHViY3RsIHdpbGwgdHJ5IHRvIHR1cm4gcG93ZXIgb2ZmIG1hbnkg
+dGltZXMgaW4gcXVpY2sNCnN1Y2Nlc3Npb24sIGFuZCBpdCBzaG91bGQgc3VwcHJlc3MgdGhhdC4g
+VGhpcyBtYXkgYmUgZXZlbnR1YWxseSBmaXhlZA0KaW4ga2VybmVsLCBzZWUgbW9yZSBkaXNjdXNz
+aW9uIGhlcmUuDQoNCkRpc2FibGluZyBVU0IgYXV0aG9yaXphdGlvbiBmb3IgZGV2aWNlIGluIHF1
+ZXN0aW9uIGJlZm9yZQ0KdHVybmluZyBwb3dlciBvZmYgd2l0aCB1aHViY3RsIHNob3VsZCBoZWxw
+Og0KDQplY2hvIDAgPiBzdWRvIHRlZSAvc3lzL2J1cy91c2IvZGV2aWNlcy8ke2xvY2F0aW9ufS4k
+e3BvcnR9L2F1dGhvcml6ZWQNCklmIHlvdXIgZGV2aWNlIGlzIFVTQiBtYXNzIHN0b3JhZ2UsIGlu
+dm9raW5nIHVkaXNrc2N0bCBiZWZvcmUgY2FsbGluZyB1aHViY3RsDQpzaG91bGQgaGVscCB0b286
+DQoNCnN1ZG8gdWRpc2tzY3RsIHBvd2VyLW9mZiAtLWJsb2NrLWRldmljZSAvZGV2L2Rpc2svLi4u
+YA0Kc3VkbyB1aHViY3RsIC1hIG9mZiAuLi4NCiANClBldGVyDQo=
