@@ -2,162 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C55982DB0A5
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Dec 2020 16:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0272DB0AA
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Dec 2020 16:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730456AbgLOP4f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Dec 2020 10:56:35 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:41909 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1730417AbgLOP4Z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Dec 2020 10:56:25 -0500
-Received: (qmail 197069 invoked by uid 1000); 15 Dec 2020 10:55:42 -0500
-Date:   Tue, 15 Dec 2020 10:55:41 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Jun Li <lijun.kernel@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: port power is on again after turning off by user space
-Message-ID: <20201215155541.GA195633@rowland.harvard.edu>
-References: <DBBPR04MB79793525394F70DE397E24038BC60@DBBPR04MB7979.eurprd04.prod.outlook.com>
- <CAKgpwJXMFSHxi7vE5cOxkYPTnY74oB-SKf3FikerCzFDLYqcbw@mail.gmail.com>
- <20201215051402.GC2142@b29397-desktop>
- <DBBPR04MB79790C8D243173467AE94D4E8BC60@DBBPR04MB7979.eurprd04.prod.outlook.com>
+        id S1730716AbgLOP6F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Dec 2020 10:58:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730707AbgLOP54 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Dec 2020 10:57:56 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E288CC06179C
+        for <linux-usb@vger.kernel.org>; Tue, 15 Dec 2020 07:57:15 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id 91so20350745wrj.7
+        for <linux-usb@vger.kernel.org>; Tue, 15 Dec 2020 07:57:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DRJcfsrTjn/sTGt/O0JShReXD6f4V3EhoIS3OQlpvdA=;
+        b=FLqMfbT4gqQW3tUeKMhsQ9AHP5poLjnC5DcCNnswTasS4kmUPTpBd9fqi/KJfzkfVR
+         p3tgA4pUuxWhpdQofe+fhmr5OtcivHRpdAE+44/WL+qrUaW8+6KbtMt2aVU75bnIHAfk
+         lvKX0OGypV1V306rVkIUULpmf8bK9QYVNUZKI/8DMS64fzLIJCuVdH3Ub8GBmI2FTtYT
+         vvWUr6mTjEkIQ1ub0OqFHKUuQ1n65rHywfA5hkieGeopJfJBX1emIcWYGwPA9YI/DmzC
+         NT71J83hum/lQHID2lcZIaXo59lvGvAJ8TuuXh1XAGZuurlLxsIXXXlt7iAgxbasY3EX
+         PM+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DRJcfsrTjn/sTGt/O0JShReXD6f4V3EhoIS3OQlpvdA=;
+        b=m1giWggKqGo67Rf8s+AzUR/cmFwK2LJGERCu6zAfgu5rc88fpQZ1pGgw84fnATCM9r
+         UIViE8se2FRdod4744tVVAc7K6tLJYS/0l5Ukkpg33dnDcmukj1MQ12kXhvzqdobiZqg
+         cRTbBU9T7aUuyC2AQGykmTrXiMhDS2d618nma2NoKdhHZ0064CXn/1KEMX+K4hVHEhex
+         NZT+hqwJpFLaqZ0JhvPQI1hH/icRlRuRhlw/P/iRL7RYdIQjGpJA2bIGYGPKtavU/fFl
+         MuKjsRloCVosKEvmx0GL0FyOhiDLldyPP1t9hgTY4H3sy8aFhMBknGPs0FJa/rI4vOUy
+         WVPQ==
+X-Gm-Message-State: AOAM533Yhg7oZ/0EKF1CbZG9VgSKhGKkHdRi0WzU60YOImlg/I13H4AY
+        v1aVNc1B0WEkE2swufFZfXA=
+X-Google-Smtp-Source: ABdhPJyl8x9O4CG4eXMjv2vV3RSceRjiQPwkDv/4ecj7R2CMc8FHfNH6LrOFULbF2v4Jy/2iOw4WHQ==
+X-Received: by 2002:adf:f6cc:: with SMTP id y12mr7073401wrp.35.1608047834646;
+        Tue, 15 Dec 2020 07:57:14 -0800 (PST)
+Received: from egonzo.toto.net.toto.net ([88.123.121.14])
+        by smtp.gmail.com with ESMTPSA id c10sm38792018wrb.92.2020.12.15.07.57.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Dec 2020 07:57:13 -0800 (PST)
+From:   Dave Penkler <dpenkler@gmail.com>
+To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc:     guido.kiener@rohde-schwarz.com, john.harvey@non.keysight.com,
+        jian-wei_wu@keysight.com, gabe.jones@ni.com, dpenkler@gmail.com
+Subject: [PATCH 0/4] USB: usbtmc: Fix stale status byte ioctl
+Date:   Tue, 15 Dec 2020 16:56:17 +0100
+Message-Id: <20201215155621.9592-1-dpenkler@gmail.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DBBPR04MB79790C8D243173467AE94D4E8BC60@DBBPR04MB7979.eurprd04.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 15, 2020 at 09:57:53AM +0000, Peter Chen wrote:
->  
-> > > > Hi Alan,
-> > > >
-> > > > I use one HUB power control application
-> > > >
-> > (https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.
-> > com%2Fmvp%2Fuhubctl&amp;data=04%7C01%7Cpeter.chen%40nxp.com%7C
-> > 736ece19bc7a430c98b808d8a0b6975c%7C686ea1d3bc2b4c6fa92cd99c5c3016
-> > 35%7C0%7C0%7C637436053362151022%7CUnknown%7CTWFpbGZsb3d8eyJ
-> > WIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7
-> > C1000&amp;sdata=lptf1XO5yeb6lQbAFlKUrZ%2BEX5ATXQRftGwm26WowFA%
-> > 3D&amp;reserved=0) to investigate power switchable HUB, and find the kernel
-> > turns port power on again at drivers/usb/core/hub.c, after port power is turned
-> > off by user space.
-> > > >
-> > > > 5122                 if (hub_is_port_power_switchable(hub)
-> > > > 5123                                 && !port_is_power_on(hub,
-> > portstatus)
-> > > > 5124                                 && !port_dev->port_owner)
-> > > > 5125                         set_port_feature(hdev, port1,
-> > USB_PORT_FEAT_POWER);
-> > > >
-> > > > The main sequence for testing turn port power off like below:
-> > > >
-> > > > - uhubctl sends command to turn specifc port (eg, 2-1.4) power off.
-> > > > - devio at kernel gets that command, and send to hub.
-> > > > - port power is off, the hub_event is triggered due to port status is changed.
-> > > > - usb_disconnect is called, but port power is on again by kernel at function
-> > hub_port_connect.
-> > > >
-> > > > I can't find the code history why the port power needs to turn on after
-> > device is disconnected, do you know why?
-> > > > Any sugguestions to fix it? Thanks.
-> > >
-> > > Seems in this case the port need claimed by user app, I am seeing this
-> > > commit
-> > >
-> > > commit fbaecff06a7db4defa899a664fe2758e5161b39d
-> > > Author: Deepak Das <deepakdas.linux@gmail.com>
-> > > Date:   Wed Jan 21 23:39:58 2015 +0530
-> > >
-> > >     usb: core: hub: modify hub reset logic in hub driver
-> > >
-> > >     Currently if port power is turned off by user on hub port
-> > >     using USBDEVFS then port power is turned back ON
-> > >     by hub driver.
-> > >     This commit modifies hub reset logic in hub_port_connect() to prevent
-> > >     hub driver from turning back the port power ON if port is not owned
-> > >     by kernel.
-> > >
-> > >     Signed-off-by: Deepak Das <deepakdas.linux@gmail.com>
-> > >     Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> > >     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > >
-> > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c index
-> > > b4bfa3a..3e9c4d4 100644
-> > > --- a/drivers/usb/core/hub.c
-> > > +++ b/drivers/usb/core/hub.c
-> > > @@ -4655,9 +4655,13 @@ static void hub_port_connect(struct usb_hub
-> > > *hub, int port1, u16 portstatus,
-> > >         if (!(portstatus & USB_PORT_STAT_CONNECTION) ||
-> > >                         test_bit(port1, hub->removed_bits)) {
-> > >
-> > > -               /* maybe switch power back on (e.g. root hub was reset)
-> > */
-> > > +               /*
-> > > +                * maybe switch power back on (e.g. root hub was reset)
-> > > +                * but only if the port isn't owned by someone else.
-> > > +                */
-> > >                 if (hub_is_port_power_switchable(hub)
-> > > -                               && !port_is_power_on(hub,
-> > portstatus))
-> > > +                               && !port_is_power_on(hub,
-> > portstatus)
-> > > +                               && !port_dev->port_owner)
-> > >                         set_port_feature(hdev, port1,
-> > > USB_PORT_FEAT_POWER);
-> > >
-> > >                 if (portstatus & USB_PORT_STAT_ENABLE)
-> > >
-> > 
-> > Yes, I saw this commit. But the port is owned by kernel, the device on the port
-> > could be enumerated by kernel, just the power on the port could be changed by
-> > user space.
+The ioctl USBTMC488_IOCTL_READ_STB either returns a cached status byte
+(STB) sent by the device due to a service request (SRQ) condition or
+the STB obtained from a query to the device with a READ_STATUS_BYTE
+control message.
 
-You've got the general idea.
+When the query is interrupted by an SRQ message on the interrupt pipe,
+the ioctl still returns the requested STB while the STB of the
+out-of-band SRQ message is cached for the next call of this
+ioctl. However the cached SRQ STB represents a state that was previous
+to the last returned STB.  Furthermore the cached SRQ STB can be
+stale and not reflect the current state of the device.
 
-Normally ports are owned by the hub driver.  If one of them loses power 
-for some reason (for example, the user turns it off), the hub driver 
-will turn the power back on.  This is because the hub driver wants 
-ports to be powered at all times unless they are in runtime suspend.
+This set of patches separates out the behaviour into 3 ioctls:
 
-The way to prevent the hub driver from managing the port power is to 
-claim the port for the user, by issuing the USBDEVFS_CLAIM_PORT ioctl.  
-Also, when that is done, the kernel wno't try to manage a device 
-attached to the port -- that is, the kernel won't automatically install 
-a configuration for a new device and it won't try to probe drivers for 
-the device's interfaces if the user installs a config.
+[PATCH 1]
+USBTMC488_IOCTL_READ_STB always reads the STB from the device and if the
+associated file descriptor has the srq_asserted bit set it ors in the
+RQS bit to the returned STB and clears the srq_asserted bit conformant
+to subclass USB488 devices.
 
-> I find this issue has discussed there, but I can't open the URL: https://bit.ly/2JzczjZ
-> Below the description from: https://github.com/mvp/uhubctl.
-> Their workarounds are not good.
-> 
-> Power comes back on after few seconds on Linux
-> 
-> Some device drivers in kernel are surprised by USB device
-> being turned off and automatically try to power it back on.
-> 
-> You can use option -r N where N is some number from 10 to 1000
-> to fix this - uhubctl will try to turn power off many times in quick
-> succession, and it should suppress that. This may be eventually fixed
-> in kernel, see more discussion here.
-> 
-> Disabling USB authorization for device in question before
-> turning power off with uhubctl should help:
-> 
-> echo 0 > sudo tee /sys/bus/usb/devices/${location}.${port}/authorized
-> If your device is USB mass storage, invoking udisksctl before calling uhubctl
-> should help too:
-> 
-> sudo udisksctl power-off --block-device /dev/disk/...`
-> sudo uhubctl -a off ...
+[PATCH 2]
+USBTMC_IOCTL_GET_STB reads the status byte (STB) from the device and
+returns the STB unmodified to the application. The srq_asserted bit is
+not taken into account and not changed.
 
-Yes, this certainly indicates that they don't understand the real 
-problem or the appropriate solution.  You could file a bug report for 
-the github project to tell them.
+[PATCH 3]
+USBTMC_IOCTL_GET_SRQ_STB only returns the status byte (STB) that was
+originally sent by the device due to a service request (SRQ) condition.
 
-Alan Stern
+This ioctl checks the srq_asserted bit of the associated file
+descriptor. If set, the srq_asserted bit is reset and the cached
+STB with original SRQ information is returned. Otherwise the ioctl
+returns the error code ENOMSG.
+
+The latter 2 ioctls are useful to support non USBTMC-488 compliant
+devices. Time sensitive applications can read the cached STB without
+incurring the cost of an urb transaction over the bus.
+
+[PATCH 4]
+Increase the API version number
+
+Dave Penkler (4):
+  USB: usbtmc: Fix reading stale status byte
+  USB: usbtmc: Add USBTMC_IOCTL_GET_STB
+  USB: usbtmc: Add separate USBTMC_IOCTL_GET_SRQ_STB
+  USB: usbtmc: Bump USBTMC_API_VERSION value
+
+ drivers/usb/class/usbtmc.c   | 85 ++++++++++++++++++++++++++----------
+ include/uapi/linux/usb/tmc.h |  3 ++
+ 2 files changed, 66 insertions(+), 22 deletions(-)
+
+-- 
+2.29.2
+
