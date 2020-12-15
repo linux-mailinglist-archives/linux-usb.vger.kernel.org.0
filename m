@@ -2,110 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A332DAEA5
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Dec 2020 15:12:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C55982DB0A5
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Dec 2020 16:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728910AbgLOOJZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Dec 2020 09:09:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726861AbgLOOJN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Dec 2020 09:09:13 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7F8C06179C
-        for <linux-usb@vger.kernel.org>; Tue, 15 Dec 2020 06:08:32 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id v29so15284254pgk.12
-        for <linux-usb@vger.kernel.org>; Tue, 15 Dec 2020 06:08:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UXP/yhOW54OxUPCaKQTwSdM8hA0xiTwzdIp/RAARgOk=;
-        b=sVeEouWwtVMGU4TMvuHzskNDquHq7/vzt0XJ/Yu+j8IUfuclj6x5PFEo+9ohwGfmCr
-         hz9LBVeDcJRINDcgaPOPCvE2vatr+COFpg4O50V3cL6TP6rebx0kLFrYS2ZLlGCKiPtY
-         DZyWxIB+sMoP0+TacKBBd0qLkbYk1hvEbrzznwpPpKy83RAmlj5TUPB8xJYVSw4DYEGC
-         h8wrgwMxqRqcKslRry75pwwSFli3pP3/oE6/fO8qAtJ8y9FJLXqnqBQTzr3MCQG5RFZD
-         ua52XIC8RQxKry30ToIrn/rZJV+Mw/T9Nv4DoJvFUNcoIUW4vh+C8/bGa8I2J4KBlVfu
-         WF3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UXP/yhOW54OxUPCaKQTwSdM8hA0xiTwzdIp/RAARgOk=;
-        b=luL8fO4Rb0bH76cOriInDp0KZq5+UZ89TsRU98JUwHAC9Qym+Whfuc6Q9DwwiL2xyZ
-         kx9wT4i9UvMN+OzMoheM+STXMTEOW+tlUReaywxtSnozX9HRtBrF/spDZQ9m3SsiWBl1
-         lVv5mFmNkgbfI7wrf08eyb4Pc3XsmGZtYI8bm/1hBeigqyTMjqaBV9fK/vr46zKhqkn6
-         1OXkQ/S1/gLWnqF8mnPOk+CiJF/Qg5EuHm/wVyc5RqWlP1cKHWqELDli/vXpt3U+sv8a
-         akExBMyB7VfnHDrvGUzL47up6Ma6hecECreO87/Ozc1bLHueluxFOD0+F3VPsNOngrPD
-         1n/Q==
-X-Gm-Message-State: AOAM5331bzsycyj1+/e2nLf9RzT59GhgPNAQubSkUuEIlwHueP1lNxyK
-        0+JvVLlWf1L+4EzGjIX3YP4BQJUXO6CNFadhqGU7qg==
-X-Google-Smtp-Source: ABdhPJxoL7C6qilFV7beONl+ZdVTIU8HmH7/4XMT5rkMY+IKck7dbKj0qy7e/51skojZaAK8j2io0oWHB/vzEWucRcE=
-X-Received: by 2002:a62:3205:0:b029:197:f692:6a8b with SMTP id
- y5-20020a6232050000b0290197f6926a8bmr28471199pfy.2.1608041312046; Tue, 15 Dec
- 2020 06:08:32 -0800 (PST)
+        id S1730456AbgLOP4f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Dec 2020 10:56:35 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:41909 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1730417AbgLOP4Z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Dec 2020 10:56:25 -0500
+Received: (qmail 197069 invoked by uid 1000); 15 Dec 2020 10:55:42 -0500
+Date:   Tue, 15 Dec 2020 10:55:41 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     Jun Li <lijun.kernel@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: port power is on again after turning off by user space
+Message-ID: <20201215155541.GA195633@rowland.harvard.edu>
+References: <DBBPR04MB79793525394F70DE397E24038BC60@DBBPR04MB7979.eurprd04.prod.outlook.com>
+ <CAKgpwJXMFSHxi7vE5cOxkYPTnY74oB-SKf3FikerCzFDLYqcbw@mail.gmail.com>
+ <20201215051402.GC2142@b29397-desktop>
+ <DBBPR04MB79790C8D243173467AE94D4E8BC60@DBBPR04MB7979.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-References: <X9dDkwlOTFeo9eZ6@localhost> <000000000000af6ec005b66dbaa2@google.com>
- <X9d+dZq/IA+tiw5v@localhost> <CAAeHK+xLiLjGMJLuWpyPHMO=zD6k33s5VYSBDMMbTkAEauF3dA@mail.gmail.com>
- <X9eB5ZZMq6q5j4eW@localhost>
-In-Reply-To: <X9eB5ZZMq6q5j4eW@localhost>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 15 Dec 2020 15:08:20 +0100
-Message-ID: <CAAeHK+zLXqHSxr+e_WRVaYWtnLU8u_8Y=uHGmGfQHLYXqKmTYA@mail.gmail.com>
-Subject: Re: WARNING in yurex_write/usb_submit_urb
-To:     Johan Hovold <johan@kernel.org>
-Cc:     syzbot <syzbot+e87ebe0f7913f71f2ea5@syzkaller.appspotmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DBBPR04MB79790C8D243173467AE94D4E8BC60@DBBPR04MB7979.eurprd04.prod.outlook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 14, 2020 at 4:16 PM Johan Hovold <johan@kernel.org> wrote:
->
-> On Mon, Dec 14, 2020 at 04:06:49PM +0100, Andrey Konovalov wrote:
-> > On Mon, Dec 14, 2020 at 4:02 PM Johan Hovold <johan@kernel.org> wrote:
-> > >
-> > > On Mon, Dec 14, 2020 at 06:48:03AM -0800, syzbot wrote:
-> > > > Hello,
+On Tue, Dec 15, 2020 at 09:57:53AM +0000, Peter Chen wrote:
+>  
+> > > > Hi Alan,
 > > > >
-> > > > syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> > > > WARNING in yurex_write/usb_submit_urb
+> > > > I use one HUB power control application
+> > > >
+> > (https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.
+> > com%2Fmvp%2Fuhubctl&amp;data=04%7C01%7Cpeter.chen%40nxp.com%7C
+> > 736ece19bc7a430c98b808d8a0b6975c%7C686ea1d3bc2b4c6fa92cd99c5c3016
+> > 35%7C0%7C0%7C637436053362151022%7CUnknown%7CTWFpbGZsb3d8eyJ
+> > WIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7
+> > C1000&amp;sdata=lptf1XO5yeb6lQbAFlKUrZ%2BEX5ATXQRftGwm26WowFA%
+> > 3D&amp;reserved=0) to investigate power switchable HUB, and find the kernel
+> > turns port power on again at drivers/usb/core/hub.c, after port power is turned
+> > off by user space.
+> > > >
+> > > > 5122                 if (hub_is_port_power_switchable(hub)
+> > > > 5123                                 && !port_is_power_on(hub,
+> > portstatus)
+> > > > 5124                                 && !port_dev->port_owner)
+> > > > 5125                         set_port_feature(hdev, port1,
+> > USB_PORT_FEAT_POWER);
+> > > >
+> > > > The main sequence for testing turn port power off like below:
+> > > >
+> > > > - uhubctl sends command to turn specifc port (eg, 2-1.4) power off.
+> > > > - devio at kernel gets that command, and send to hub.
+> > > > - port power is off, the hub_event is triggered due to port status is changed.
+> > > > - usb_disconnect is called, but port power is on again by kernel at function
+> > hub_port_connect.
+> > > >
+> > > > I can't find the code history why the port power needs to turn on after
+> > device is disconnected, do you know why?
+> > > > Any sugguestions to fix it? Thanks.
 > > >
-> > > It appears syzbot never tested the patch from the thread. Probably using
-> > > it's mail interface incorrectly, I don't know and I don't have time to
-> > > investigate. The patch itself is correct.
-> >
-> > Hi Johan,
-> >
-> > I wasn't CCed on the testing request, so I can't say what exactly was wrong.
->
-> Here's the patch and the "syz test" command in a reply:
->
->         https://lore.kernel.org/r/20201214104444.28386-1-johan@kernel.org
->
-> Probably needs to go in the same mail, right?
+> > > Seems in this case the port need claimed by user app, I am seeing this
+> > > commit
+> > >
+> > > commit fbaecff06a7db4defa899a664fe2758e5161b39d
+> > > Author: Deepak Das <deepakdas.linux@gmail.com>
+> > > Date:   Wed Jan 21 23:39:58 2015 +0530
+> > >
+> > >     usb: core: hub: modify hub reset logic in hub driver
+> > >
+> > >     Currently if port power is turned off by user on hub port
+> > >     using USBDEVFS then port power is turned back ON
+> > >     by hub driver.
+> > >     This commit modifies hub reset logic in hub_port_connect() to prevent
+> > >     hub driver from turning back the port power ON if port is not owned
+> > >     by kernel.
+> > >
+> > >     Signed-off-by: Deepak Das <deepakdas.linux@gmail.com>
+> > >     Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> > >     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > >
+> > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c index
+> > > b4bfa3a..3e9c4d4 100644
+> > > --- a/drivers/usb/core/hub.c
+> > > +++ b/drivers/usb/core/hub.c
+> > > @@ -4655,9 +4655,13 @@ static void hub_port_connect(struct usb_hub
+> > > *hub, int port1, u16 portstatus,
+> > >         if (!(portstatus & USB_PORT_STAT_CONNECTION) ||
+> > >                         test_bit(port1, hub->removed_bits)) {
+> > >
+> > > -               /* maybe switch power back on (e.g. root hub was reset)
+> > */
+> > > +               /*
+> > > +                * maybe switch power back on (e.g. root hub was reset)
+> > > +                * but only if the port isn't owned by someone else.
+> > > +                */
+> > >                 if (hub_is_port_power_switchable(hub)
+> > > -                               && !port_is_power_on(hub,
+> > portstatus))
+> > > +                               && !port_is_power_on(hub,
+> > portstatus)
+> > > +                               && !port_dev->port_owner)
+> > >                         set_port_feature(hdev, port1,
+> > > USB_PORT_FEAT_POWER);
+> > >
+> > >                 if (portstatus & USB_PORT_STAT_ENABLE)
+> > >
+> > 
+> > Yes, I saw this commit. But the port is owned by kernel, the device on the port
+> > could be enumerated by kernel, just the power on the port could be changed by
+> > user space.
 
-Yes, both the syz test command and the patch must be in the same
-email, which is sent as a response to the initial report.
+You've got the general idea.
 
-> How about including the command needed to test a patch in the syzbot
-> report mail to assist the casual user of its interfaces? I had to browse
-> the web page you link to and still got it wrong apparently.
+Normally ports are owned by the hub driver.  If one of them loses power 
+for some reason (for example, the user turns it off), the hub driver 
+will turn the power back on.  This is because the hub driver wants 
+ports to be powered at all times unless they are in runtime suspend.
 
-I think it's deliberately not included to not overload the report
-email with too many details.
+The way to prevent the hub driver from managing the port power is to 
+claim the port for the user, by issuing the USBDEVFS_CLAIM_PORT ioctl.  
+Also, when that is done, the kernel wno't try to manage a device 
+attached to the port -- that is, the kernel won't automatically install 
+a configuration for a new device and it won't try to probe drivers for 
+the device's interfaces if the user installs a config.
 
-> > Could you send me the patch you were trying to test?
->
-> Does this work better:
->
-> #syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> I find this issue has discussed there, but I can't open the URL: https://bit.ly/2JzczjZ
+> Below the description from: https://github.com/mvp/uhubctl.
+> Their workarounds are not good.
+> 
+> Power comes back on after few seconds on Linux
+> 
+> Some device drivers in kernel are surprised by USB device
+> being turned off and automatically try to power it back on.
+> 
+> You can use option -r N where N is some number from 10 to 1000
+> to fix this - uhubctl will try to turn power off many times in quick
+> succession, and it should suppress that. This may be eventually fixed
+> in kernel, see more discussion here.
+> 
+> Disabling USB authorization for device in question before
+> turning power off with uhubctl should help:
+> 
+> echo 0 > sudo tee /sys/bus/usb/devices/${location}.${port}/authorized
+> If your device is USB mass storage, invoking udisksctl before calling uhubctl
+> should help too:
+> 
+> sudo udisksctl power-off --block-device /dev/disk/...`
+> sudo uhubctl -a off ...
 
-This worked :)
+Yes, this certainly indicates that they don't understand the real 
+problem or the appropriate solution.  You could file a bug report for 
+the github project to tell them.
 
-Thanks!
+Alan Stern
