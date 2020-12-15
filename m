@@ -2,87 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A432DB38C
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Dec 2020 19:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F742DB481
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Dec 2020 20:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731358AbgLOST1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Dec 2020 13:19:27 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:37118 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728004AbgLOSTZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Dec 2020 13:19:25 -0500
-Received: by mail-ot1-f65.google.com with SMTP id o11so20312081ote.4;
-        Tue, 15 Dec 2020 10:19:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9Za31ObBsxdpTjFd/k1MSNzpI1hhAUb59NU7Vy2qyuM=;
-        b=a5vQQGLXbCnytr5LxR9v3+ttlYM0jmUmZpKzqbjBhWa2Z4LOFxJS1+38/1BBCWveE7
-         mEtMIEMHGe4ttyn2f5cQgOqs5kZ8Vy83n6iS4Xb8goAbRtCwIQfZjEbhxnpsBSqsxOZt
-         uMcWX/HikzxBL0fS6kb42MXKWHCCmqZS/Hr/kGAa4lrPCgXbygidzkY1tDlepODfQIhJ
-         ub2nvmqNTmIIARWC+5emwNPy7opTMSON19zoRtgZD5gcx+GzVj4B8tDJ/sNaAH/AHZAn
-         YJiXeTX7d3fUrJeN99NEarcjMGUevLSzuqK1bSf4MMFJJEjmV7fpHbIecMp/MDKgbMGZ
-         tlMw==
-X-Gm-Message-State: AOAM532e0FLtCWcV4bRoAKozUVXBJSnnQB8utNno6vEcQbFL5Cehn+m1
-        dk0Of8NIUYO2gi6qDtNIGg==
-X-Google-Smtp-Source: ABdhPJyLnlu8EMNR937aY6Yy1rLtfQbCSpj6kIaoagnNiNo1wWWkxaDaJLNyRG2qdJYuwXvPzf4ZRQ==
-X-Received: by 2002:a05:6830:12cf:: with SMTP id a15mr24521499otq.217.1608056324303;
-        Tue, 15 Dec 2020 10:18:44 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id n13sm587583otk.58.2020.12.15.10.18.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Dec 2020 10:18:43 -0800 (PST)
-Received: (nullmailer pid 4147585 invoked by uid 1000);
-        Tue, 15 Dec 2020 18:18:42 -0000
-Date:   Tue, 15 Dec 2020 12:18:42 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Roger Quadros <rogerq@ti.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v6] dt-bindings: usb: Add new compatible string for AM64
- SoC
-Message-ID: <20201215181842.GA4147555@robh.at.kernel.org>
-References: <20201215042549.7956-1-a-govindraju@ti.com>
+        id S1726882AbgLOTch (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Dec 2020 14:32:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725821AbgLOTcg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Dec 2020 14:32:36 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892F8C0617A6
+        for <linux-usb@vger.kernel.org>; Tue, 15 Dec 2020 11:31:56 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1kpG39-0005rH-7o; Tue, 15 Dec 2020 20:31:55 +0100
+Received: from mgr by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1kpG37-0003Mz-SC; Tue, 15 Dec 2020 20:31:53 +0100
+From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+To:     linux-usb@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, mathias.nyman@intel.com
+Subject: [PATCH] xhci: fix U1/U2 handling for hardware with XHCI_INTEL_HOST quirk set
+Date:   Tue, 15 Dec 2020 20:31:47 +0100
+Message-Id: <20201215193147.11738-1-m.grzeschik@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201215042549.7956-1-a-govindraju@ti.com>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 15 Dec 2020 09:55:49 +0530, Aswath Govindraju wrote:
-> Add compatible string in j721e-usb binding file as the same USB subsystem
-> is present in AM64.
-> 
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> ---
-> 
-> Changes since v5:
->  - Added const as the type for objects in items.
-> 
-> Changes since v4:
->  - used oneOf instead of enum, as the schema has to convey that the strings
->    ti,j721e-usb and ti,am64-usb can be used combined or seperately in the
->    DT nodes.
-> 
-> Changes since v3:
->  - used enum instead of anyOf.
-> 
-> Changes since v2:
->  - added changes done over the versions.
-> 
-> Changes since v1:
->  - replaced the '\t' at the beginning of the lines with spaces as it was
->   causing the dt_binding_check to fail.
-> 
->  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
+The commit 0472bf06c6fd ("xhci: Prevent U1/U2 link pm states if exit
+latency is too long") was constraining the xhci code not to allow U1/U2
+sleep states if the latency to wake up from the U-states reached the
+service interval of an periodic endpoint. This fix was not taking into
+account that in case the quirk XHCI_INTEL_HOST is set, the wakeup time
+will be calculated and configured differently.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+It checks for u1_params.mel/u2_params.mel as a limit. But the code could
+decide to write another MEL into the hardware. This leads to broken
+cases where not enough bandwidth is available for other devices:
+
+usb 1-2: can't set config #1, error -28
+
+This patch is fixing that case by checking for timeout_ns after the
+wakeup time was calculated depending on the quirks.
+
+Fixes: 0472bf06c6fd ("xhci: Prevent U1/U2 link pm states if exit latency is too long")
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+---
+ drivers/usb/host/xhci.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index f4cedcaee14b3..0385ef9cb628b 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -4640,19 +4640,19 @@ static u16 xhci_calculate_u1_timeout(struct xhci_hcd *xhci,
+ {
+ 	unsigned long long timeout_ns;
+ 
++	if (xhci->quirks & XHCI_INTEL_HOST)
++		timeout_ns = xhci_calculate_intel_u1_timeout(udev, desc);
++	else
++		timeout_ns = udev->u1_params.sel;
++
+ 	/* Prevent U1 if service interval is shorter than U1 exit latency */
+ 	if (usb_endpoint_xfer_int(desc) || usb_endpoint_xfer_isoc(desc)) {
+-		if (xhci_service_interval_to_ns(desc) <= udev->u1_params.mel) {
++		if (xhci_service_interval_to_ns(desc) <= timeout_ns) {
+ 			dev_dbg(&udev->dev, "Disable U1, ESIT shorter than exit latency\n");
+ 			return USB3_LPM_DISABLED;
+ 		}
+ 	}
+ 
+-	if (xhci->quirks & XHCI_INTEL_HOST)
+-		timeout_ns = xhci_calculate_intel_u1_timeout(udev, desc);
+-	else
+-		timeout_ns = udev->u1_params.sel;
+-
+ 	/* The U1 timeout is encoded in 1us intervals.
+ 	 * Don't return a timeout of zero, because that's USB3_LPM_DISABLED.
+ 	 */
+@@ -4704,19 +4704,19 @@ static u16 xhci_calculate_u2_timeout(struct xhci_hcd *xhci,
+ {
+ 	unsigned long long timeout_ns;
+ 
++	if (xhci->quirks & XHCI_INTEL_HOST)
++		timeout_ns = xhci_calculate_intel_u2_timeout(udev, desc);
++	else
++		timeout_ns = udev->u2_params.sel;
++
+ 	/* Prevent U2 if service interval is shorter than U2 exit latency */
+ 	if (usb_endpoint_xfer_int(desc) || usb_endpoint_xfer_isoc(desc)) {
+-		if (xhci_service_interval_to_ns(desc) <= udev->u2_params.mel) {
++		if (xhci_service_interval_to_ns(desc) <= timeout_ns) {
+ 			dev_dbg(&udev->dev, "Disable U2, ESIT shorter than exit latency\n");
+ 			return USB3_LPM_DISABLED;
+ 		}
+ 	}
+ 
+-	if (xhci->quirks & XHCI_INTEL_HOST)
+-		timeout_ns = xhci_calculate_intel_u2_timeout(udev, desc);
+-	else
+-		timeout_ns = udev->u2_params.sel;
+-
+ 	/* The U2 timeout is encoded in 256us intervals */
+ 	timeout_ns = DIV_ROUND_UP_ULL(timeout_ns, 256 * 1000);
+ 	/* If the necessary timeout value is bigger than what we can set in the
+-- 
+2.29.2
+
