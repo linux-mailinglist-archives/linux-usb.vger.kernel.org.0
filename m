@@ -2,58 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BAA2DAD86
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Dec 2020 13:54:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BED9B2DADE9
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Dec 2020 14:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729312AbgLOMxo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Dec 2020 07:53:44 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:33434 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728737AbgLOMxi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Dec 2020 07:53:38 -0500
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1kp9p0-00061Q-QI; Tue, 15 Dec 2020 12:52:54 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] HID: fix spelling mistake in Kconfig "Uninterruptable" -> "Uninterruptible"
-Date:   Tue, 15 Dec 2020 12:52:54 +0000
-Message-Id: <20201215125254.200436-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.29.2
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        id S1727114AbgLONVE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Dec 2020 08:21:04 -0500
+Received: from mga03.intel.com ([134.134.136.65]:21857 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726431AbgLONVD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Dec 2020 08:21:03 -0500
+IronPort-SDR: PQrBzB5z7mlpB+e/YBxznJFyZ3krR+/9Aj01hmEXoJTOUXX4bHpx6Hf76/gPNi6XEmi9Zj63BJ
+ MIjDFg3glqHA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9835"; a="174983530"
+X-IronPort-AV: E=Sophos;i="5.78,421,1599548400"; 
+   d="scan'208";a="174983530"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2020 05:20:20 -0800
+IronPort-SDR: dBtNgZkVJFbGNgvyaqbW9BHLS7xzgSLyrRvZT9PTD25l132ycU4QQLAFqmxkhgOSPtEFYRedUr
+ qGHUfjMKw0GA==
+X-IronPort-AV: E=Sophos;i="5.78,421,1599548400"; 
+   d="scan'208";a="368214715"
+Received: from chenyu-office.sh.intel.com ([10.239.158.173])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2020 05:20:16 -0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Muchowski, MaciejX" <maciejx.muchowski@intel.com>,
+        "Paczynski, Lukasz" <lukasz.paczynski@intel.com>,
+        Chen Yu <yu.c.chen@intel.com>
+Subject: [PATCH] xhci: Introduce max wait timeout in xhci_handshake()
+Date:   Tue, 15 Dec 2020 21:22:40 +0800
+Message-Id: <20201215132240.4094-1-yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+The time to finish a xhci_handshake() is platform specific
+and sometimes during suspend resume test the followng
+errors were encountered:
+[53455.418330] ACPI: Waking up from system sleep state S4
+[66838.490856] xhci_hcd 0000:00:14.0: xHCI dying, ignoring interrupt.
+               Shouldn't IRQs be disabled?
+After changing the poll time granularity from 1 usec to 20 usec in
+xhci_handshake() this issue was not reproduced. While tuning on the
+poll time granularity might be painful on different platforms, it is
+applicable to introduce a module parameter to allow the xhci driver to wait
+for at max 16 ms.
 
-There is a spelling mistake in the Kconfig help text. Fix it.
-
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Reported-by: "Muchowski, MaciejX" <maciejx.muchowski@intel.com>
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
 ---
- drivers/hid/usbhid/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/host/xhci.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hid/usbhid/Kconfig b/drivers/hid/usbhid/Kconfig
-index dcf3a235870f..7c2032f7f44d 100644
---- a/drivers/hid/usbhid/Kconfig
-+++ b/drivers/hid/usbhid/Kconfig
-@@ -38,7 +38,7 @@ config USB_HIDDEV
- 	help
- 	  Say Y here if you want to support HID devices (from the USB
- 	  specification standpoint) that aren't strictly user interface
--	  devices, like monitor controls and Uninterruptable Power Supplies.
-+	  devices, like monitor controls and Uninterruptible Power Supplies.
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index d4a8d0efbbc4..b8be9f3cc987 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -38,6 +38,10 @@ static unsigned long long quirks;
+ module_param(quirks, ullong, S_IRUGO);
+ MODULE_PARM_DESC(quirks, "Bit flags for quirks to be enabled as default");
  
- 	  This module supports these devices separately using a separate
- 	  event interface on /dev/usb/hiddevX (char 180:96 to 180:111).
++static int wait_handshake;
++module_param(wait_handshake, int, 0644);
++MODULE_PARM_DESC(wait_handshake, "Force wait for completion of handshake");
++
+ static bool td_on_ring(struct xhci_td *td, struct xhci_ring *ring)
+ {
+ 	struct xhci_segment *seg = ring->first_seg;
+@@ -74,7 +78,7 @@ int xhci_handshake(void __iomem *ptr, u32 mask, u32 done, int usec)
+ 	ret = readl_poll_timeout_atomic(ptr, result,
+ 					(result & mask) == done ||
+ 					result == U32_MAX,
+-					1, usec);
++					1, wait_handshake ? XHCI_MAX_HALT_USEC : usec);
+ 	if (result == U32_MAX)		/* card removed */
+ 		return -ENODEV;
+ 
 -- 
-2.29.2
+2.17.1
 
