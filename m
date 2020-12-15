@@ -2,191 +2,512 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9482F2DAA7E
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Dec 2020 10:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DEAF2DAAB2
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Dec 2020 11:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728201AbgLOJ65 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Dec 2020 04:58:57 -0500
-Received: from mail-eopbgr40049.outbound.protection.outlook.com ([40.107.4.49]:58343
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727850AbgLOJ6o (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 15 Dec 2020 04:58:44 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m59yWu8Wc6BvFeqntmDrJqxrZxLEZ09rT4bGYUGyYIZWP2J72W/M7llvlNMEXrmJSezmFbwPLO2hN9um9hpVtx5jhqGimiHojrP+ZfVJhm/IZwXTe1MQ50dOnY5ENzVm9TBQmi1RJIADVUCwjBVKTmfS6kYGoPNYn9ThW8NK1yncjkVw81qTBU35iv0ab2YQYzkLzGCUNkVx4V57+Khfz+OI34jIOuerTeDYCz9pbDLmn2W6pUThMTWnmQlVp5Dasr9PxNArO5HqxUT6W6hGYWfsnAO+VKMYYE/WqeJG/yXzn1KznMI/ogESg+dsQoFHJxLkpr1NLgLsHcVeyL6Q/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wPPJGJVKJsj5Gktromrwk/axBGDVcKDrX+aEuHVtAYU=;
- b=Uh45snwq3OKwEjPOXSw3r2w1fLW5fvei5CiXqZj/JL6v4FTFcPsJeN2x5vg1qswhV41C6gXgfLwq6HuCIhItQbzNrkFcBFkLD3jfWpfLV4+ShkJjlQIMG46fLycEr3GoK3FYUzrJYyqN7pJr5B9e6c07rOd90siXcHHr9oBXfexZceprvdu0J2TNUluE3amYjZUYqduCAws9bniahMSEnBJRsVtuiDlagXMbxyw/cK/t8snT1pYmwKxlsjt1XxOe1N+TSmkyt1M6eiD1GMBgy7TMAcNAtgUh1EjqgW869n1qoBjgRW9zKj/lbeCxIlkC/NRMND65N1AIccnUnBHF5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wPPJGJVKJsj5Gktromrwk/axBGDVcKDrX+aEuHVtAYU=;
- b=Mm69QCg1IP6gPra/Zk4BOcaGSh3aULHaCA9uqFNEzcFaLf+rRwiNRMVaN9NJNjbhfcrSFuod6lGjuj2qCT0EEVg6jy+WNEnIU1WukqI97cf/Xti0vco1IZskD8MKQZTLJyRRsD79+QFYNCjOFGhWJHf+n1rillP5ZJ3X68645J8=
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
- by DB7PR04MB5084.eurprd04.prod.outlook.com (2603:10a6:10:1c::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.12; Tue, 15 Dec
- 2020 09:57:53 +0000
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3654.026; Tue, 15 Dec 2020
- 09:57:53 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Jun Li <lijun.kernel@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: port power is on again after turning off by user space
-Thread-Topic: port power is on again after turning off by user space
-Thread-Index: AdbSkrHAwwTe1v1pTzSTgGOOVcOG/gADLuWAAABrJAAACaqS0A==
-Date:   Tue, 15 Dec 2020 09:57:53 +0000
-Message-ID: <DBBPR04MB79790C8D243173467AE94D4E8BC60@DBBPR04MB7979.eurprd04.prod.outlook.com>
-References: <DBBPR04MB79793525394F70DE397E24038BC60@DBBPR04MB7979.eurprd04.prod.outlook.com>
- <CAKgpwJXMFSHxi7vE5cOxkYPTnY74oB-SKf3FikerCzFDLYqcbw@mail.gmail.com>
- <20201215051402.GC2142@b29397-desktop>
-In-Reply-To: <20201215051402.GC2142@b29397-desktop>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [180.164.155.184]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 3388c650-88ee-41c2-545b-08d8a0dfe3e2
-x-ms-traffictypediagnostic: DB7PR04MB5084:
-x-microsoft-antispam-prvs: <DB7PR04MB5084FD94010F965F548D37818BC60@DB7PR04MB5084.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wqNTP52QHH63ZWEz9y7lZWZUkcWPhaH5jFRntTj/cfcv+u00naTuPilQcQQ2DF9naO6CXu0fbsZUxMUDfRUax2RUKzC405E2c5kM2Icg/mSp+Kkb3Uonu8TVqrsQkUDtr/lbPymLSiAnuAgqvOp7MDbHvo1Alcie7OddQVvceuv/cG8jQbijcsPFHTsqQ/UE/UsKMRx/O0YC+3GrlcZoVpoYnwIZdKz42y6Bl5+c6VB6rJygYb0OJu7nt/551DLwiEhpq1EpaYyBWqrX+HtOGJ22peXimBZKOEpzzyJdgDIQ+PClLyJOD/RYNC2Bn7dV1dyKYtqZoHWLPE7TD0DvtrRdJYrGGSCi6vL0J30AVgdyP9c/k75R7W+3OyXe+gGuSAbdhd6xsUXWOXS5l7VPMIBCLHdkZaFyS4uZM1rrr+j+LASTbeuAEPV+zWy2snwG811peVCvpwOkFHjhcQl2j67P7mZNHN7T1IxnaGA4tcE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39850400004)(346002)(136003)(366004)(396003)(376002)(83380400001)(45080400002)(9686003)(4326008)(2906002)(66946007)(44832011)(64756008)(7696005)(66446008)(66556008)(966005)(478600001)(8936002)(71200400001)(66476007)(83080400002)(26005)(316002)(76116006)(52536014)(8676002)(6506007)(55016002)(86362001)(186003)(110136005)(5660300002)(33656002)(493534005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?YStGd3kzUFUzcXY1YTMzN3RXTUR3ckdXL2xyU1Y5Vkd4NW1CQmRvcCthTWEx?=
- =?utf-8?B?TmxGQUFpK0dNcWxhbHdHbkQyTUdkQ01Oc1dZTHFSTnJ6bVhxa0R4Yy8vRmt1?=
- =?utf-8?B?Y29hMHhuV1V6UnNiYVphNU1ISUZhVVlUdStFUFlGN1pCMmJJWVV4ejdqTFMz?=
- =?utf-8?B?RGk3dkl4WURob1lhQWEvK1pzY2tGZmJXWm42YWo5Y3BHUjE5TTIySk1CV0tM?=
- =?utf-8?B?K2ZEVGk5Y29ha1FrWnE0ZkpTMlREVWhUWUwxc1IzNWZsNklKb1FYWVYwLy9U?=
- =?utf-8?B?ZXhrV0ovbEkvbjMvREkxWFRCNndDeExRV21sQzcrb3IrZENXRldESFhCWjVt?=
- =?utf-8?B?aXE3QkVxYzZnbUgxQmROSFNPNFBISW1OUytzL1NVWXR6Si9JV2FMMnNNVkpH?=
- =?utf-8?B?cG1kU0hmVGcrbWFDWWhFUDdnQzgyY3pNTDdMRkovdWI5TGRRR084N3oxKzd3?=
- =?utf-8?B?SVAzSVJYWG5ieDJaUUwrN1VzN0ZzOHQzdWxmRytSVklGK1RxcEdUdHFHS1dp?=
- =?utf-8?B?eG9WeUE4RFdXb05WTEVsNngxUWhSZDJVWXM4VTRuV3BVc0FUcmpMODQxL3hs?=
- =?utf-8?B?MzRBNjV2M01lQmtLQWdpMGhFaTVuMmVZOHJCaVZBUDZ4bkpaMDZYUVMvVWo3?=
- =?utf-8?B?czh1NUttTU5DbjdPYjlYMkNjeFpqK0lSV1NNR2JlTk1LbXE4ZVlDc2dTYWJ1?=
- =?utf-8?B?TlppbDNvVnlLUVpic0R1UlJScmhCL0RTMnZlSUFuQUVza3BiOGFFMVdqWEF5?=
- =?utf-8?B?WFFqbmhPdXBQWEtPdlpyYWJzNG91endBN2tpQkk4U2pzU3ZuS0MwSXQ5S2dt?=
- =?utf-8?B?eGduUnBsbEdDWWJ2NkJzYWtwc1BiK3ZvTUVCRkJEaHJpbTFZcUwwRVVxQkov?=
- =?utf-8?B?WndEd1ZHSG9KYjRRNC9sOUtDWnNmR25kRHJVd2pWMXBzYmlIeHROK3NzN1BB?=
- =?utf-8?B?VUdZWmw3ZXR2dGdLNnQ3MmY5S3BUV0RsNEpadThiR2dzV1dnMVhFMDlsY3BB?=
- =?utf-8?B?TW1HcWlXb3YrQldKQllCME0vTThsQ1JFVmhJbUUxeUlyR05PWG5yWEtEZEVk?=
- =?utf-8?B?RmtnKzJScmlWNGNNNTFTWG5yOHZVeFlQK0lqTjhGeXZ5bTJqTFdNeFhKZTVB?=
- =?utf-8?B?RzdBVTBIRnB5T0VhMk5kQ01ONnNPSDBTM3l6bnE0L2Q1VlpZUkhOZGpBTkN0?=
- =?utf-8?B?MnRVcjBHK242eTlZbXo2eURicENsQmFmelo3Uk1jOVV0UEJmUzdiRFJMOFJj?=
- =?utf-8?B?OWJwSTVHUmRIWTJicklwaWJXYmp5SUJzdkNtMXF5ajJCS0VEYTc4djFXdmxB?=
- =?utf-8?Q?XTVEoEUHyJI/4qeKw1NPgm46LZcHGRqi/q?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727018AbgLOKQj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Dec 2020 05:16:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39604 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726852AbgLOKQj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Dec 2020 05:16:39 -0500
+Date:   Tue, 15 Dec 2020 11:17:00 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1608027357;
+        bh=2miM2pQ31OPfk1UwcZA/rQi1fJ61IA238xULLgQCiPc=;
+        h=From:To:Cc:Subject:From;
+        b=KVbInHTq8wA5MU+vfU39USbkOcGEbx3ZPK0FQ19OHRhhPj0ydA8DWXQu36ygR4xlX
+         Ryg7YxILcu0dORTjxTdQsKHlksV+tcoFRc4OBFlBQfw02ATY51dD+GBiU+KFLhljGW
+         aM7nfOD2VWYxzvJjlCbvEI3xGANERUqOuX9NUDqo=
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB / Thunderbolt driver changes for 5.11-rc1
+Message-ID: <X9iNHGpdcl3cAlo4@kroah.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3388c650-88ee-41c2-545b-08d8a0dfe3e2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2020 09:57:53.3500
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: n22xz5r4+uDPGs08Q3kx5sv/AgFyos9wRkaDH1HHqrcg2K2koJaNMUUVmchYjtGIt1GRxiCZ0xkOh3+JnJERnw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5084
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-IA0KPiA+ID4gSGkgQWxhbiwNCj4gPiA+DQo+ID4gPiBJIHVzZSBvbmUgSFVCIHBvd2VyIGNvbnRy
-b2wgYXBwbGljYXRpb24NCj4gPiA+DQo+IChodHRwczovL2V1cjAxLnNhZmVsaW5rcy5wcm90ZWN0
-aW9uLm91dGxvb2suY29tLz91cmw9aHR0cHMlM0ElMkYlMkZnaXRodWIuDQo+IGNvbSUyRm12cCUy
-RnVodWJjdGwmYW1wO2RhdGE9MDQlN0MwMSU3Q3BldGVyLmNoZW4lNDBueHAuY29tJTdDDQo+IDcz
-NmVjZTE5YmM3YTQzMGM5OGI4MDhkOGEwYjY5NzVjJTdDNjg2ZWExZDNiYzJiNGM2ZmE5MmNkOTlj
-NWMzMDE2DQo+IDM1JTdDMCU3QzAlN0M2Mzc0MzYwNTMzNjIxNTEwMjIlN0NVbmtub3duJTdDVFdG
-cGJHWnNiM2Q4ZXlKDQo+IFdJam9pTUM0d0xqQXdNREFpTENKUUlqb2lWMmx1TXpJaUxDSkJUaUk2
-SWsxaGFXd2lMQ0pYVkNJNk1uMCUzRCU3DQo+IEMxMDAwJmFtcDtzZGF0YT1scHRmMVhPNXllYjZs
-UWJBRmxLVXJaJTJCRVg1QVRYUVJmdEd3bTI2V293RkElDQo+IDNEJmFtcDtyZXNlcnZlZD0wKSB0
-byBpbnZlc3RpZ2F0ZSBwb3dlciBzd2l0Y2hhYmxlIEhVQiwgYW5kIGZpbmQgdGhlIGtlcm5lbA0K
-PiB0dXJucyBwb3J0IHBvd2VyIG9uIGFnYWluIGF0IGRyaXZlcnMvdXNiL2NvcmUvaHViLmMsIGFm
-dGVyIHBvcnQgcG93ZXIgaXMgdHVybmVkDQo+IG9mZiBieSB1c2VyIHNwYWNlLg0KPiA+ID4NCj4g
-PiA+IDUxMjIgICAgICAgICAgICAgICAgIGlmIChodWJfaXNfcG9ydF9wb3dlcl9zd2l0Y2hhYmxl
-KGh1YikNCj4gPiA+IDUxMjMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAmJiAhcG9y
-dF9pc19wb3dlcl9vbihodWIsDQo+IHBvcnRzdGF0dXMpDQo+ID4gPiA1MTI0ICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgJiYgIXBvcnRfZGV2LT5wb3J0X293bmVyKQ0KPiA+ID4gNTEy
-NSAgICAgICAgICAgICAgICAgICAgICAgICBzZXRfcG9ydF9mZWF0dXJlKGhkZXYsIHBvcnQxLA0K
-PiBVU0JfUE9SVF9GRUFUX1BPV0VSKTsNCj4gPiA+DQo+ID4gPiBUaGUgbWFpbiBzZXF1ZW5jZSBm
-b3IgdGVzdGluZyB0dXJuIHBvcnQgcG93ZXIgb2ZmIGxpa2UgYmVsb3c6DQo+ID4gPg0KPiA+ID4g
-LSB1aHViY3RsIHNlbmRzIGNvbW1hbmQgdG8gdHVybiBzcGVjaWZjIHBvcnQgKGVnLCAyLTEuNCkg
-cG93ZXIgb2ZmLg0KPiA+ID4gLSBkZXZpbyBhdCBrZXJuZWwgZ2V0cyB0aGF0IGNvbW1hbmQsIGFu
-ZCBzZW5kIHRvIGh1Yi4NCj4gPiA+IC0gcG9ydCBwb3dlciBpcyBvZmYsIHRoZSBodWJfZXZlbnQg
-aXMgdHJpZ2dlcmVkIGR1ZSB0byBwb3J0IHN0YXR1cyBpcyBjaGFuZ2VkLg0KPiA+ID4gLSB1c2Jf
-ZGlzY29ubmVjdCBpcyBjYWxsZWQsIGJ1dCBwb3J0IHBvd2VyIGlzIG9uIGFnYWluIGJ5IGtlcm5l
-bCBhdCBmdW5jdGlvbg0KPiBodWJfcG9ydF9jb25uZWN0Lg0KPiA+ID4NCj4gPiA+IEkgY2FuJ3Qg
-ZmluZCB0aGUgY29kZSBoaXN0b3J5IHdoeSB0aGUgcG9ydCBwb3dlciBuZWVkcyB0byB0dXJuIG9u
-IGFmdGVyDQo+IGRldmljZSBpcyBkaXNjb25uZWN0ZWQsIGRvIHlvdSBrbm93IHdoeT8NCj4gPiA+
-IEFueSBzdWdndWVzdGlvbnMgdG8gZml4IGl0PyBUaGFua3MuDQo+ID4NCj4gPiBTZWVtcyBpbiB0
-aGlzIGNhc2UgdGhlIHBvcnQgbmVlZCBjbGFpbWVkIGJ5IHVzZXIgYXBwLCBJIGFtIHNlZWluZyB0
-aGlzDQo+ID4gY29tbWl0DQo+ID4NCj4gPiBjb21taXQgZmJhZWNmZjA2YTdkYjRkZWZhODk5YTY2
-NGZlMjc1OGU1MTYxYjM5ZA0KPiA+IEF1dGhvcjogRGVlcGFrIERhcyA8ZGVlcGFrZGFzLmxpbnV4
-QGdtYWlsLmNvbT4NCj4gPiBEYXRlOiAgIFdlZCBKYW4gMjEgMjM6Mzk6NTggMjAxNSArMDUzMA0K
-PiA+DQo+ID4gICAgIHVzYjogY29yZTogaHViOiBtb2RpZnkgaHViIHJlc2V0IGxvZ2ljIGluIGh1
-YiBkcml2ZXINCj4gPg0KPiA+ICAgICBDdXJyZW50bHkgaWYgcG9ydCBwb3dlciBpcyB0dXJuZWQg
-b2ZmIGJ5IHVzZXIgb24gaHViIHBvcnQNCj4gPiAgICAgdXNpbmcgVVNCREVWRlMgdGhlbiBwb3J0
-IHBvd2VyIGlzIHR1cm5lZCBiYWNrIE9ODQo+ID4gICAgIGJ5IGh1YiBkcml2ZXIuDQo+ID4gICAg
-IFRoaXMgY29tbWl0IG1vZGlmaWVzIGh1YiByZXNldCBsb2dpYyBpbiBodWJfcG9ydF9jb25uZWN0
-KCkgdG8gcHJldmVudA0KPiA+ICAgICBodWIgZHJpdmVyIGZyb20gdHVybmluZyBiYWNrIHRoZSBw
-b3J0IHBvd2VyIE9OIGlmIHBvcnQgaXMgbm90IG93bmVkDQo+ID4gICAgIGJ5IGtlcm5lbC4NCj4g
-Pg0KPiA+ICAgICBTaWduZWQtb2ZmLWJ5OiBEZWVwYWsgRGFzIDxkZWVwYWtkYXMubGludXhAZ21h
-aWwuY29tPg0KPiA+ICAgICBBY2tlZC1ieTogQWxhbiBTdGVybiA8c3Rlcm5Acm93bGFuZC5oYXJ2
-YXJkLmVkdT4NCj4gPiAgICAgU2lnbmVkLW9mZi1ieTogR3JlZyBLcm9haC1IYXJ0bWFuIDxncmVn
-a2hAbGludXhmb3VuZGF0aW9uLm9yZz4NCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3Vz
-Yi9jb3JlL2h1Yi5jIGIvZHJpdmVycy91c2IvY29yZS9odWIuYyBpbmRleA0KPiA+IGI0YmZhM2Eu
-LjNlOWM0ZDQgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvY29yZS9odWIuYw0KPiA+ICsr
-KyBiL2RyaXZlcnMvdXNiL2NvcmUvaHViLmMNCj4gPiBAQCAtNDY1NSw5ICs0NjU1LDEzIEBAIHN0
-YXRpYyB2b2lkIGh1Yl9wb3J0X2Nvbm5lY3Qoc3RydWN0IHVzYl9odWINCj4gPiAqaHViLCBpbnQg
-cG9ydDEsIHUxNiBwb3J0c3RhdHVzLA0KPiA+ICAgICAgICAgaWYgKCEocG9ydHN0YXR1cyAmIFVT
-Ql9QT1JUX1NUQVRfQ09OTkVDVElPTikgfHwNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICB0
-ZXN0X2JpdChwb3J0MSwgaHViLT5yZW1vdmVkX2JpdHMpKSB7DQo+ID4NCj4gPiAtICAgICAgICAg
-ICAgICAgLyogbWF5YmUgc3dpdGNoIHBvd2VyIGJhY2sgb24gKGUuZy4gcm9vdCBodWIgd2FzIHJl
-c2V0KQ0KPiAqLw0KPiA+ICsgICAgICAgICAgICAgICAvKg0KPiA+ICsgICAgICAgICAgICAgICAg
-KiBtYXliZSBzd2l0Y2ggcG93ZXIgYmFjayBvbiAoZS5nLiByb290IGh1YiB3YXMgcmVzZXQpDQo+
-ID4gKyAgICAgICAgICAgICAgICAqIGJ1dCBvbmx5IGlmIHRoZSBwb3J0IGlzbid0IG93bmVkIGJ5
-IHNvbWVvbmUgZWxzZS4NCj4gPiArICAgICAgICAgICAgICAgICovDQo+ID4gICAgICAgICAgICAg
-ICAgIGlmIChodWJfaXNfcG9ydF9wb3dlcl9zd2l0Y2hhYmxlKGh1YikNCj4gPiAtICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICYmICFwb3J0X2lzX3Bvd2VyX29uKGh1YiwNCj4gcG9ydHN0
-YXR1cykpDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAmJiAhcG9ydF9pc19w
-b3dlcl9vbihodWIsDQo+IHBvcnRzdGF0dXMpDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAmJiAhcG9ydF9kZXYtPnBvcnRfb3duZXIpDQo+ID4gICAgICAgICAgICAgICAgICAg
-ICAgICAgc2V0X3BvcnRfZmVhdHVyZShoZGV2LCBwb3J0MSwNCj4gPiBVU0JfUE9SVF9GRUFUX1BP
-V0VSKTsNCj4gPg0KPiA+ICAgICAgICAgICAgICAgICBpZiAocG9ydHN0YXR1cyAmIFVTQl9QT1JU
-X1NUQVRfRU5BQkxFKQ0KPiA+DQo+IA0KPiBZZXMsIEkgc2F3IHRoaXMgY29tbWl0LiBCdXQgdGhl
-IHBvcnQgaXMgb3duZWQgYnkga2VybmVsLCB0aGUgZGV2aWNlIG9uIHRoZSBwb3J0DQo+IGNvdWxk
-IGJlIGVudW1lcmF0ZWQgYnkga2VybmVsLCBqdXN0IHRoZSBwb3dlciBvbiB0aGUgcG9ydCBjb3Vs
-ZCBiZSBjaGFuZ2VkIGJ5DQo+IHVzZXIgc3BhY2UuDQo+IA0KDQpJIGZpbmQgdGhpcyBpc3N1ZSBo
-YXMgZGlzY3Vzc2VkIHRoZXJlLCBidXQgSSBjYW4ndCBvcGVuIHRoZSBVUkw6IGh0dHBzOi8vYml0
-Lmx5LzJKemN6aloNCkJlbG93IHRoZSBkZXNjcmlwdGlvbiBmcm9tOiBodHRwczovL2dpdGh1Yi5j
-b20vbXZwL3VodWJjdGwuDQpUaGVpciB3b3JrYXJvdW5kcyBhcmUgbm90IGdvb2QuDQoNClBvd2Vy
-IGNvbWVzIGJhY2sgb24gYWZ0ZXIgZmV3IHNlY29uZHMgb24gTGludXgNCg0KU29tZSBkZXZpY2Ug
-ZHJpdmVycyBpbiBrZXJuZWwgYXJlIHN1cnByaXNlZCBieSBVU0IgZGV2aWNlDQpiZWluZyB0dXJu
-ZWQgb2ZmIGFuZCBhdXRvbWF0aWNhbGx5IHRyeSB0byBwb3dlciBpdCBiYWNrIG9uLg0KDQpZb3Ug
-Y2FuIHVzZSBvcHRpb24gLXIgTiB3aGVyZSBOIGlzIHNvbWUgbnVtYmVyIGZyb20gMTAgdG8gMTAw
-MA0KdG8gZml4IHRoaXMgLSB1aHViY3RsIHdpbGwgdHJ5IHRvIHR1cm4gcG93ZXIgb2ZmIG1hbnkg
-dGltZXMgaW4gcXVpY2sNCnN1Y2Nlc3Npb24sIGFuZCBpdCBzaG91bGQgc3VwcHJlc3MgdGhhdC4g
-VGhpcyBtYXkgYmUgZXZlbnR1YWxseSBmaXhlZA0KaW4ga2VybmVsLCBzZWUgbW9yZSBkaXNjdXNz
-aW9uIGhlcmUuDQoNCkRpc2FibGluZyBVU0IgYXV0aG9yaXphdGlvbiBmb3IgZGV2aWNlIGluIHF1
-ZXN0aW9uIGJlZm9yZQ0KdHVybmluZyBwb3dlciBvZmYgd2l0aCB1aHViY3RsIHNob3VsZCBoZWxw
-Og0KDQplY2hvIDAgPiBzdWRvIHRlZSAvc3lzL2J1cy91c2IvZGV2aWNlcy8ke2xvY2F0aW9ufS4k
-e3BvcnR9L2F1dGhvcml6ZWQNCklmIHlvdXIgZGV2aWNlIGlzIFVTQiBtYXNzIHN0b3JhZ2UsIGlu
-dm9raW5nIHVkaXNrc2N0bCBiZWZvcmUgY2FsbGluZyB1aHViY3RsDQpzaG91bGQgaGVscCB0b286
-DQoNCnN1ZG8gdWRpc2tzY3RsIHBvd2VyLW9mZiAtLWJsb2NrLWRldmljZSAvZGV2L2Rpc2svLi4u
-YA0Kc3VkbyB1aHViY3RsIC1hIG9mZiAuLi4NCiANClBldGVyDQo=
+The following changes since commit 0477e92881850d44910a7e94fc2c46f96faa131f:
+
+  Linux 5.10-rc7 (2020-12-06 14:25:12 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.11-rc1
+
+for you to fetch changes up to a256e24021bf7ceedd29fe65eb45c7adfffffad2:
+
+  usb: phy: convert comma to semicolon (2020-12-11 16:51:20 +0100)
+
+----------------------------------------------------------------
+USB / Thunderbolt patches for 5.11-rc1
+
+Here is the big USB and thunderbolt pull request for 5.11-rc1.
+
+Nothing major in here, just the grind of constant development to support
+new hardware and fix old issues:
+  - thunderbolt updates for new USB4 hardware
+  - cdns3 major driver updates
+  - lots of typec updates and additions as more hardware is available
+  - usb serial driver updates and fixes
+  - other tiny USB driver updates
+
+All have been in linux-next with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Ahmed S. Darwish (7):
+      USB: serial: digi_acceleport: remove in_interrupt() usage
+      usb: hosts: Remove in_interrupt() from comments
+      usb: gadget: udc: Remove in_interrupt()/in_irq() from comments
+      usb: core: Replace in_interrupt() in comments
+      usb: gadget: pxa27x_udc: Replace in_interrupt() usage in comments
+      usbip: Remove in_interrupt() check
+      usb: xhci: Remove in_interrupt() checks
+
+Al Cooper (2):
+      dt-bindings: Add support for Broadcom USB pin map driver
+      usb: Add driver to allow any GPIO to be used for 7211 USB signals
+
+Alan Stern (1):
+      USB: legotower: fix logical error in recent commit
+
+Andrey Konovalov (1):
+      kcov, usb: only collect coverage from __usb_hcd_giveback_urb in softirq
+
+Aswath Govindraju (1):
+      MAINTAINERS: Add myself as a reviewer for CADENCE USB3 DRD IP DRIVER
+
+Badhri Jagan Sridharan (21):
+      dt-bindings: connector: Add property to set initial current cap for FRS
+      usb: typec: tcpm: Refactor logic for new-source-frs-typec-current
+      usb: typec: tcpm: frs sourcing vbus callback
+      usb: typec: tcpci: frs sourcing vbus callback
+      usb: typec: tcpci_maxim: Fix vbus stuck on upon diconnecting sink
+      usb: typec: tcpm: Implement enabling Auto Discharge disconnect support
+      usb: typec: tcpci: Implement Auto discharge disconnect callbacks
+      usb: typec: tcpci_maxim: Enable auto discharge disconnect
+      usb: typec: tcpci_maxim: Fix uninitialized return variable
+      dt-bindings: usb: Maxim type-c controller device tree binding document
+      usb: typec: tcpci_maxim: Fix the compatible string
+      usb: typec: tcpm: Disregard vbus off while in PR_SWAP_SNK_SRC_SOURCE_ON
+      usb: typec: tcpm: Stay in SNK_TRY_WAIT_DEBOUNCE_CHECK_VBUS till Rp is seen
+      usb: typec: tcpm: Pass down negotiated rev to update retry count
+      usb: typec: tcpm: Clear send_discover in tcpm_check_send_discover
+      usb: typec: tcpm: Introduce vsafe0v for vbus
+      usb: typec: tcpci: Add support to report vSafe0V
+      usb: typec: tcpci_maxim: Enable VSAFE0V signalling
+      USB: typec: tcpci: Add Bleed discharge to POWER_CONTROL definition
+      usb: typec: tcpci: Enable bleed discharge when auto discharge is enabled
+      usb: typec: tcpm: Update vbus_vsafe0v on init
+
+Benjamin Berg (2):
+      usb: typec: ucsi: acpi: Always decode connector change information
+      usb: typec: ucsi: Work around PPM losing change information
+
+Bui Quang Minh (1):
+      USB: dummy-hcd: Fix uninitialized array use in init()
+
+Colin Ian King (1):
+      usb: phy: Fix spelling mistake in Kconfig help text
+
+Dan Carpenter (4):
+      usb: misc: brcmstb-usb-pinmap: Fix an IS_ERR() vs NULL check
+      USB: apple-mfi-fastcharge: Fix use after free in probe
+      usb: mtu3: mtu3_debug: remove an unused struct member
+      usb: mtu3: fix memory corruption in mtu3_debugfs_regset()
+
+Davidlohr Bueso (1):
+      USB: serial: mos7720: defer state restore to a workqueue
+
+Enrico Weigelt, metux IT consult (3):
+      drivers: usb: atm: reduce noise
+      drivers: usb: atm: use atm_info() instead of atm_printk(KERN_INFO ...
+      drivers: usb: atm: use pr_err() and pr_warn() instead of raw printk()
+
+Fabio Estevam (5):
+      usb: host: imx21-hcd: Remove the driver
+      usb: host: ehci-mxc: Remove the driver
+      usb: chipidea: ci_hdrc_imx: Pass DISABLE_DEVICE_STREAMING flag to imx6ul
+      usb: chipidea: usbmisc_imx: Use of_device_get_match_data()
+      usb: chipidea: ci_hdrc_imx: Use of_device_get_match_data()
+
+Greg Kroah-Hartman (10):
+      USB: host: isp1362: delete isp1362_show_regs()
+      Merge 5.10-rc2 into usb-next
+      Merge 5.10-rc3 into usb-next
+      Merge 5.10-rc4 into here.
+      Merge 5.10-rc6 into usb-next
+      Merge 5.10-rc7 into usb-next
+      Merge tag 'thunderbolt-for-v5.11-rc1' of git://git.kernel.org/.../westeri/thunderbolt into usb-next
+      Merge tag 'usb-v5.11-rc1' of git://git.kernel.org/.../peter.chen/usb into usb-next
+      USB: gadget: f_fs: remove likely/unlikely
+      Merge tag 'usb-serial-5.11-rc1' of https://git.kernel.org/.../johan/usb-serial into usb-next
+
+Guido Günther (2):
+      usb: typec: tps6598x: Select USB_ROLE_SWITCH and REGMAP_I2C
+      usb: typec: tps6598x: Export some power supply properties
+
+Gustavo A. R. Silva (1):
+      usb: Fix fall-through warnings for Clang
+
+Hans de Goede (1):
+      xhci-pci: Allow host runtime PM as default for Intel Alpine Ridge LP
+
+Heikki Krogerus (2):
+      usb: pd: DFP product types
+      usb: typec: Add type sysfs attribute file for partners
+
+Isaac Hazan (4):
+      thunderbolt: Add link_speed and link_width to XDomain
+      thunderbolt: Add functions for enabling and disabling lane bonding on XDomain
+      thunderbolt: Add DMA traffic test driver
+      MAINTAINERS: Add Isaac as maintainer of Thunderbolt DMA traffic test driver
+
+Jack Pham (1):
+      usb: gadget: f_fs: Re-use SS descriptors for SuperSpeedPlus
+
+Johan Hovold (27):
+      USB: serial: keyspan_pda: fix dropped unthrottle interrupts
+      USB: serial: keyspan_pda: fix write deadlock
+      USB: serial: keyspan_pda: fix stalled writes
+      USB: serial: keyspan_pda: fix write-wakeup use-after-free
+      USB: serial: keyspan_pda: fix tx-unthrottle use-after-free
+      USB: serial: keyspan_pda: fix write unthrottling
+      USB: serial: keyspan_pda: refactor write-room handling
+      USB: serial: keyspan_pda: fix write implementation
+      USB: serial: keyspan_pda: increase transmitter threshold
+      USB: serial: keyspan_pda: add write-fifo support
+      USB: serial: keyspan_pda: clean up xircom/entrega support
+      USB: serial: keyspan_pda: clean up comments and whitespace
+      USB: serial: keyspan_pda: use BIT() macro
+      USB: serial: keyspan_pda: drop redundant usb-serial pointer
+      USB: serial: digi_acceleport: fix write-wakeup deadlocks
+      USB: serial: remove write wait queue
+      USB: serial: mos7720: fix parallel-port state restore
+      USB: serial: cp210x: return early on unchanged termios
+      USB: serial: cp210x: clean up line-control handling
+      USB: serial: cp210x: set terminal settings on open
+      USB: serial: cp210x: drop flow-control debugging
+      USB: serial: cp210x: refactor flow-control handling
+      USB: serial: cp210x: clean up dtr_rts()
+      USB: core: drop short-transfer check from usb_control_msg_send()
+      USB: core: return -EREMOTEIO on short usb_control_msg_recv()
+      USB: core: drop pipe-type check from new control-message helpers
+      USB: serial: option: add interface-number sanity check to flag handling
+
+Kyle Tso (2):
+      USB: typec: tcpm: Fix PR_SWAP error handling
+      USB: typec: tcpm: Add a 30ms room for tPSSourceOn in PR_SWAP
+
+Li Jun (1):
+      xhci: Give USB2 ports time to enter U3 in bus suspend
+
+Linus Walleij (1):
+      usb: isp1301-omap: Convert to use GPIO descriptors
+
+Lucas Tanure (1):
+      USB: apple-mfi-fastcharge: Fix kfree after failed kzalloc
+
+Lukas Bulwahn (1):
+      USB: storage: avoid use of uninitialized values in error path
+
+Marc Zyngier (3):
+      USB: serial: ftdi_sio: report the valid GPIO lines to gpiolib
+      USB: serial: ftdi_sio: drop GPIO line checking dead code
+      USB: serial: ftdi_sio: log the CBUS GPIO validity
+
+Mika Westerberg (19):
+      thunderbolt: Do not clear USB4 router protocol adapter IFC and ISE bits
+      thunderbolt: Find XDomain by route instead of UUID
+      thunderbolt: Create XDomain devices for loops back to the host
+      thunderbolt: Create debugfs directory automatically for services
+      thunderbolt: Make it possible to allocate one directional DMA tunnel
+      thunderbolt: Add support for end-to-end flow control
+      thunderbolt: Move max_boot_acl field to correct place in struct icm
+      thunderbolt: Log which connection manager implementation is used
+      thunderbolt: Log adapter numbers in decimal in path activation/deactivation
+      thunderbolt: Keep the parent runtime resumed for a while on device disconnect
+      thunderbolt: Return -ENOTCONN when ERR_CONN is received
+      thunderbolt: Perform USB4 router NVM upgrade in two phases
+      thunderbolt: Pass metadata directly to usb4_switch_op()
+      thunderbolt: Pass TX and RX data directly to usb4_switch_op()
+      thunderbolt: Add connection manager specific hooks for USB4 router operations
+      thunderbolt: Move constants for USB4 router operations to tb_regs.h
+      thunderbolt: Add USB4 router operation proxy for firmware connection manager
+      thunderbolt: Add support for Intel Maple Ridge
+      xhci-pci: Allow host runtime PM as default for Intel Maple Ridge xHCI
+
+Nick Desaulniers (1):
+      usb: fix a few cases of -Wfallthrough
+
+Oliver Neukum (2):
+      USB: add RESET_RESUME quirk for Snapscan 1212
+      USB: UAS: introduce a quirk to set no_write_same
+
+Pawel Laszczak (2):
+      usb: cdns3: Add static to cdns3_gadget_exit function
+      usb: cdns3: Rids of duplicate error message
+
+Peter Chen (8):
+      usb: cdns3: host: add .suspend_quirk for xhci-plat.c
+      usb: cdns3: host: add xhci_plat_priv quirk XHCI_SKIP_PHY_INIT
+      usb: cdns3: host: disable BEI support
+      usb: cdns3: add quirk for enable runtime pm by default
+      usb: cdns3: imx: enable runtime pm by default
+      doc: dt-binding: cdns,usb3: add wakeup-irq
+      usb: chipidea: add tracepoint support for udc
+      usb: chipidea: trace: fix the endian issue
+
+Prashant Malani (7):
+      usb: pd: Add captive Type C cable type
+      usb: typec: Add number of altmodes partner attr
+      usb: typec: Add plug num_altmodes sysfs attr
+      usb: typec: Fix num_altmodes kernel-doc error
+      usb: typec: Consolidate sysfs ABI documentation
+      usb: typec: Expose Product Type VDOs via sysfs
+      usb: typec: Add class for plug alt mode device
+
+Rikard Falkeborn (3):
+      USB: core: Constify static attribute_group structs
+      usb: typec: Constify static attribute_group structs
+      usb: common: ulpi: Constify static attribute_group struct
+
+Roger Quadros (1):
+      usb: cdns3: fix NULL pointer dereference on no platform data
+
+Sebastian Andrzej Siewior (1):
+      usb: hcd.h: Remove RUN_CONTEXT
+
+Sudip Mukherjee (1):
+      usb: host: ehci-sched: add comment about find_tt() not returning error
+
+Tejas Joglekar (2):
+      usb: xhci: Set quirk for XHCI_SG_TRB_CACHE_SIZE_QUIRK
+      usb: xhci: Use temporary buffer to consolidate SG
+
+Thomas Gleixner (3):
+      USB: sisusbvga: Make console support depend on BROKEN
+      usb: atm: Replace in_interrupt() usage in comment
+      USB: host: ehci-pmcmsp: Cleanup usb_hcd_msp_remove()
+
+Tom Rix (5):
+      USB: serial: iuu_phoenix: remove unneeded break
+      usb: misc: iowarrior: remove unneeded break
+      usb: storage: freecom: remove unneeded break
+      usb: host: xhci-mem: remove unneeded break
+      USB: host: u123-hcd: remove trailing semicolon in macro definition
+
+Utkarsh Patel (6):
+      usb: typec: Correct the bit values for the Thunderbolt rounded/non-rounded cable support
+      platform/chrome: cros_ec_typec: Correct the Thunderbolt rounded/non-rounded cable support
+      usb: typec: intel_pmc_mux: Configure Thunderbolt cable generation bits
+      usb: typec: Remove one bit support for the Thunderbolt rounded/non-rounded cable
+      usb: typec: intel_pmc_mux: Use correct response message bits
+      usb: typec: intel_pmc_mux: Configure cable generation value for USB4
+
+Will McVicker (2):
+      USB: gadget: f_rndis: fix bitrate for SuperSpeed and above
+      USB: gadget: f_midi: setup SuperSpeed Plus descriptors
+
+Xu Wang (1):
+      usb: fotg210-hcd: remove casting dma_alloc_coherent
+
+Yang Yingliang (1):
+      usb/max3421: fix return error code in max3421_probe()
+
+Zhang Qilong (2):
+      usb: ehci-omap: Fix PM disable depth umbalance in ehci_hcd_omap_probe
+      usb: oxu210hp-hcd: Fix memory leak in oxu_create
+
+Zheng Yongjun (3):
+      usb: typec: tcpm: convert comma to semicolon
+      usb: ucsi: convert comma to semicolon
+      usb: phy: convert comma to semicolon
+
+Zou Wei (1):
+      usb: misc: brcmstb-usb-pinmap: Make sync_all_pins static
+
+pumahsu (1):
+      USB: typec: tcpm: Hard Reset after not receiving a Request
+
+taehyun.cho (1):
+      USB: gadget: f_acm: add support for SuperSpeed Plus
+
+ Documentation/ABI/testing/sysfs-bus-thunderbolt    |   28 +
+ Documentation/ABI/testing/sysfs-class-typec        |  142 +-
+ Documentation/admin-guide/kernel-parameters.txt    |    1 +
+ .../bindings/connector/usb-connector.yaml          |   19 +
+ .../devicetree/bindings/usb/brcm,usb-pinmap.yaml   |   70 +
+ .../devicetree/bindings/usb/cdns,usb3.yaml         |    5 +
+ .../devicetree/bindings/usb/maxim,max33359.yaml    |   75 +
+ MAINTAINERS                                        |   15 +
+ arch/arm/configs/badge4_defconfig                  |    1 -
+ arch/arm/configs/corgi_defconfig                   |    1 -
+ arch/arm/configs/pxa_defconfig                     |    1 -
+ arch/arm/configs/spitz_defconfig                   |    1 -
+ arch/arm/mach-omap1/board-h2.c                     |   22 +-
+ arch/mips/configs/mtx1_defconfig                   |    1 -
+ arch/mips/configs/rm200_defconfig                  |    1 -
+ arch/powerpc/configs/g5_defconfig                  |    1 -
+ arch/powerpc/configs/ppc6xx_defconfig              |    1 -
+ drivers/net/thunderbolt.c                          |    2 +-
+ drivers/platform/chrome/cros_ec_typec.c            |    3 +-
+ drivers/thunderbolt/Kconfig                        |   13 +
+ drivers/thunderbolt/Makefile                       |    3 +
+ drivers/thunderbolt/ctl.c                          |    7 +-
+ drivers/thunderbolt/debugfs.c                      |   24 +
+ drivers/thunderbolt/dma_test.c                     |  736 ++++++++
+ drivers/thunderbolt/icm.c                          |  240 ++-
+ drivers/thunderbolt/nhi.c                          |   36 +-
+ drivers/thunderbolt/nhi.h                          |    1 +
+ drivers/thunderbolt/path.c                         |   17 +-
+ drivers/thunderbolt/switch.c                       |   53 +-
+ drivers/thunderbolt/tb.c                           |    2 +
+ drivers/thunderbolt/tb.h                           |   22 +
+ drivers/thunderbolt/tb_msgs.h                      |   28 +
+ drivers/thunderbolt/tb_regs.h                      |   14 +
+ drivers/thunderbolt/tunnel.c                       |   50 +-
+ drivers/thunderbolt/usb4.c                         |  269 +--
+ drivers/thunderbolt/xdomain.c                      |  148 +-
+ drivers/usb/Makefile                               |    1 -
+ drivers/usb/atm/cxacru.c                           |    9 +-
+ drivers/usb/atm/usbatm.c                           |    4 +-
+ drivers/usb/atm/xusbatm.c                          |    2 +-
+ drivers/usb/cdns3/cdns3-imx.c                      |    2 +-
+ drivers/usb/cdns3/core.c                           |   15 +-
+ drivers/usb/cdns3/core.h                           |    4 +
+ drivers/usb/cdns3/gadget-export.h                  |    3 -
+ drivers/usb/cdns3/gadget.c                         |    2 +-
+ drivers/usb/cdns3/host-export.h                    |    6 +
+ drivers/usb/cdns3/host.c                           |   60 +-
+ drivers/usb/chipidea/Makefile                      |    5 +-
+ drivers/usb/chipidea/ci_hdrc_imx.c                 |   10 +-
+ drivers/usb/chipidea/trace.c                       |   23 +
+ drivers/usb/chipidea/trace.h                       |   92 +
+ drivers/usb/chipidea/udc.c                         |   10 +-
+ drivers/usb/chipidea/usbmisc_imx.c                 |    7 +-
+ drivers/usb/common/ulpi.c                          |    2 +-
+ drivers/usb/core/buffer.c                          |    6 +-
+ drivers/usb/core/config.c                          |    1 +
+ drivers/usb/core/endpoint.c                        |    2 +-
+ drivers/usb/core/hcd-pci.c                         |    6 +-
+ drivers/usb/core/hcd.c                             |   37 +-
+ drivers/usb/core/hub.c                             |    3 +-
+ drivers/usb/core/message.c                         |   47 +-
+ drivers/usb/core/port.c                            |    4 +-
+ drivers/usb/core/quirks.c                          |    3 +
+ drivers/usb/core/sysfs.c                           |   14 +-
+ drivers/usb/core/usb.c                             |    4 +-
+ drivers/usb/gadget/function/f_acm.c                |    2 +-
+ drivers/usb/gadget/function/f_fs.c                 |  184 +-
+ drivers/usb/gadget/function/f_loopback.c           |    2 +-
+ drivers/usb/gadget/function/f_midi.c               |    6 +
+ drivers/usb/gadget/function/f_rndis.c              |    4 +-
+ drivers/usb/gadget/function/f_sourcesink.c         |    1 +
+ drivers/usb/gadget/udc/core.c                      |    2 -
+ drivers/usb/gadget/udc/dummy_hcd.c                 |   10 +-
+ drivers/usb/gadget/udc/pxa27x_udc.c                |   19 +-
+ drivers/usb/host/Kconfig                           |   17 -
+ drivers/usb/host/Makefile                          |    2 -
+ drivers/usb/host/ehci-fsl.c                        |    9 +-
+ drivers/usb/host/ehci-hcd.c                        |    2 +-
+ drivers/usb/host/ehci-mxc.c                        |  213 ---
+ drivers/usb/host/ehci-omap.c                       |    1 +
+ drivers/usb/host/ehci-pmcmsp.c                     |   15 +-
+ drivers/usb/host/ehci-sched.c                      |   12 +
+ drivers/usb/host/fotg210-hcd.c                     |    4 +-
+ drivers/usb/host/imx21-dbg.c                       |  439 -----
+ drivers/usb/host/imx21-hcd.c                       | 1933 --------------------
+ drivers/usb/host/imx21-hcd.h                       |  431 -----
+ drivers/usb/host/isp116x-hcd.c                     |    1 +
+ drivers/usb/host/isp1362.h                         |   54 -
+ drivers/usb/host/max3421-hcd.c                     |    4 +-
+ drivers/usb/host/ohci-at91.c                       |   11 +-
+ drivers/usb/host/ohci-hcd.c                        |    2 +-
+ drivers/usb/host/ohci-hub.c                        |    1 +
+ drivers/usb/host/ohci-omap.c                       |    9 +-
+ drivers/usb/host/ohci-pxa27x.c                     |   11 +-
+ drivers/usb/host/ohci-s3c2410.c                    |   12 +-
+ drivers/usb/host/oxu210hp-hcd.c                    |    5 +-
+ drivers/usb/host/u132-hcd.c                        |    6 +-
+ drivers/usb/host/xhci-hub.c                        |    4 +
+ drivers/usb/host/xhci-mem.c                        |    3 +-
+ drivers/usb/host/xhci-pci.c                        |    6 +-
+ drivers/usb/host/xhci-plat.c                       |    3 +
+ drivers/usb/host/xhci-ring.c                       |    4 +-
+ drivers/usb/host/xhci.c                            |  135 +-
+ drivers/usb/host/xhci.h                            |    5 +
+ drivers/usb/misc/Kconfig                           |    9 +
+ drivers/usb/misc/Makefile                          |    1 +
+ drivers/usb/misc/apple-mfi-fastcharge.c            |   13 +-
+ drivers/usb/misc/brcmstb-usb-pinmap.c              |  351 ++++
+ drivers/usb/misc/iowarrior.c                       |    3 -
+ drivers/usb/misc/legousbtower.c                    |    2 +-
+ drivers/usb/misc/sisusbvga/Kconfig                 |    2 +-
+ drivers/usb/misc/yurex.c                           |    1 +
+ drivers/usb/mtu3/mtu3_debug.h                      |    1 -
+ drivers/usb/mtu3/mtu3_debugfs.c                    |    2 +-
+ drivers/usb/musb/tusb6010.c                        |    1 +
+ drivers/usb/phy/Kconfig                            |    2 +-
+ drivers/usb/phy/phy-isp1301-omap.c                 |   31 +-
+ drivers/usb/serial/Kconfig                         |   19 +-
+ drivers/usb/serial/Makefile                        |    1 -
+ drivers/usb/serial/cp210x.c                        |  499 ++---
+ drivers/usb/serial/digi_acceleport.c               |   62 +-
+ drivers/usb/serial/ftdi_sio.c                      |   23 +-
+ drivers/usb/serial/iuu_phoenix.c                   |    2 -
+ drivers/usb/serial/keyspan_pda.c                   |  548 +++---
+ drivers/usb/serial/mos7720.c                       |  236 +--
+ drivers/usb/serial/option.c                        |   23 +-
+ drivers/usb/storage/ene_ub6250.c                   |    1 +
+ drivers/usb/storage/freecom.c                      |    1 -
+ drivers/usb/storage/transport.c                    |    9 +-
+ drivers/usb/storage/uas.c                          |    4 +
+ drivers/usb/storage/unusual_uas.h                  |    7 +-
+ drivers/usb/storage/usb.c                          |    3 +
+ drivers/usb/typec/Kconfig                          |    5 +-
+ drivers/usb/typec/class.c                          |  298 ++-
+ drivers/usb/typec/mux/intel_pmc_mux.c              |   17 +-
+ drivers/usb/typec/tcpm/fusb302.c                   |   16 +-
+ drivers/usb/typec/tcpm/tcpci.c                     |  123 +-
+ drivers/usb/typec/tcpm/tcpci.h                     |   25 +-
+ drivers/usb/typec/tcpm/tcpci_maxim.c               |   51 +-
+ drivers/usb/typec/tcpm/tcpm.c                      |  227 ++-
+ drivers/usb/typec/tcpm/wcove.c                     |    3 +-
+ drivers/usb/typec/tps6598x.c                       |  103 ++
+ drivers/usb/typec/ucsi/psy.c                       |    6 +-
+ drivers/usb/typec/ucsi/ucsi.c                      |  125 +-
+ drivers/usb/typec/ucsi/ucsi.h                      |    2 +
+ drivers/usb/typec/ucsi/ucsi_acpi.c                 |    5 +-
+ drivers/usb/usbip/usbip_common.c                   |    5 -
+ include/dt-bindings/usb/pd.h                       |    8 +
+ include/linux/platform_data/usb-ehci-mxc.h         |   14 -
+ include/linux/thunderbolt.h                        |   18 +-
+ include/linux/usb/hcd.h                            |    4 -
+ include/linux/usb/pd.h                             |    2 +
+ include/linux/usb/pd_vdo.h                         |   19 +-
+ include/linux/usb/serial.h                         |    2 -
+ include/linux/usb/tcpm.h                           |   28 +-
+ include/linux/usb/typec.h                          |    2 +
+ include/linux/usb/typec_tbt.h                      |    6 +-
+ include/linux/usb_usual.h                          |    2 +
+ 158 files changed, 4292 insertions(+), 4702 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+ create mode 100644 drivers/thunderbolt/dma_test.c
+ create mode 100644 drivers/usb/chipidea/trace.c
+ create mode 100644 drivers/usb/chipidea/trace.h
+ delete mode 100644 drivers/usb/host/ehci-mxc.c
+ delete mode 100644 drivers/usb/host/imx21-dbg.c
+ delete mode 100644 drivers/usb/host/imx21-hcd.c
+ delete mode 100644 drivers/usb/host/imx21-hcd.h
+ create mode 100644 drivers/usb/misc/brcmstb-usb-pinmap.c
+ delete mode 100644 include/linux/platform_data/usb-ehci-mxc.h
