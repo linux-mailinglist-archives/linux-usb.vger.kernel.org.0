@@ -2,116 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8382DC394
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Dec 2020 16:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D139E2DC3D0
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Dec 2020 17:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726632AbgLPP5S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Dec 2020 10:57:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726588AbgLPP5S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Dec 2020 10:57:18 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D167C061794;
-        Wed, 16 Dec 2020 07:56:37 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id l11so49604188lfg.0;
-        Wed, 16 Dec 2020 07:56:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=yoktSe981NvO3RbAGrUEN7qVxybkq9Wcngmx06+9aBA=;
-        b=PTgvMn42UTcDBQm7ahYNmVzs9k9QRcghlDcoA5Kk5TYWgOZGutm1d0vtQTzOztAGIs
-         ouOwdIgTq7om+9WJCKLVz4l3rEQk6Ue4agD1nrb+2WiyrQchuvnPcPfzxJ3BLy9sq9tE
-         mglaT9J8+wMZ6FG3aOH2ZmTUYAIvr7jIcB3E8Gtkr1z4AfkmljrlpUpO1/1TQp/Pu2Is
-         FcyN89kXLPSc+bcXECltUrBcZYVette1zM+JqjSSilD9rSOWT/r8KqZDz5IoGOzJdyh+
-         ek1tTgxSsBCMd2gV3h9RnzOtlHAljAW1Xp7J5PvPMESlJ1SyymI5oFq/X9Q7V0f0JggC
-         R2dA==
+        id S1726262AbgLPQOv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Dec 2020 11:14:51 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:55108 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725287AbgLPQOu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Dec 2020 11:14:50 -0500
+Received: by mail-il1-f200.google.com with SMTP id z8so28212244ilq.21
+        for <linux-usb@vger.kernel.org>; Wed, 16 Dec 2020 08:14:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yoktSe981NvO3RbAGrUEN7qVxybkq9Wcngmx06+9aBA=;
-        b=kziCKxdnRAF8LCAbSqg0ZbWWB2kcWeHnwDj+7FjRRCBH/gUCkr3DjECeUEiw20Wrwf
-         SotEjRp4twRHXjbgdV5Xo0QOdPf4UR4YmEtoyTm3Yxeh2BUEaEfD0mI5qOPk8W2GWgAr
-         YrkAMhRkWFHqdL3Q9ozxT7cpQDDf1SAxfPfzu8Quzv/uG6kJFs/1wPzPVfS0ani74L0V
-         2pKC55vtX6KhKulflVBdr4DesNk3mFzy8JNMcPTusN71NvcPKbzrqfxfTl1hcSo/4B7t
-         8/pvq5n8ZxLykcguIpe6Zq3GZl0ORgfrVRi4sjAhOxcJKQzSWN41Y4ZKi2zEdgX6KY0f
-         Dp5w==
-X-Gm-Message-State: AOAM531XlEyIS7CYH6AkQu1/tRY/cOVyEq0Q1vGd0/9930mdXQFzY3xG
-        LHVk2uUHyvJYySui7YfuUuRDhQWZPV0=
-X-Google-Smtp-Source: ABdhPJyshd/5Aq/Tgd1HhV7XZ6/MQ76m+g/o0fPfo2xfOG+y/GrCxbzPaLKoqPhdns/ozYgDz7C5cQ==
-X-Received: by 2002:a19:3f57:: with SMTP id m84mr6831013lfa.486.1608134192377;
-        Wed, 16 Dec 2020 07:56:32 -0800 (PST)
-Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.googlemail.com with ESMTPSA id t15sm267413lfl.33.2020.12.16.07.56.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Dec 2020 07:56:31 -0800 (PST)
-Subject: Re: [PATCH v1 5/8] usb: chipidea: tegra: Support host mode
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Felipe Balbi <balbi@kernel.org>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20201215202113.30394-1-digetx@gmail.com>
- <20201215202113.30394-6-digetx@gmail.com>
- <20201216060732.GB5595@b29397-desktop>
- <bb617167-e6a4-221e-5e3b-c9d7a1b50c87@gmail.com>
- <DBBPR04MB79794F5CC440279AF94A48448BC50@DBBPR04MB7979.eurprd04.prod.outlook.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <e4a63b73-5fc9-33da-abd5-771b2f3813f6@gmail.com>
-Date:   Wed, 16 Dec 2020 18:56:30 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=fqGqftTLTf6YHW3fpTIQwGEtnv8ndYKXLlm8NHrjXJE=;
+        b=FHLRSyt5N6LxloXu1nDa5QDkK2QhGVYQuHEugqxuFHc9yoytG338lFSiUwHAyTtgWL
+         1Q2bCvJqqkvznuRnykv5sqGXvhiTsolHOkKF07hNYF6p4i4kF6GsCKjjAZRAdc6YrelW
+         jIfmV0s85vE9GslhIoR/KnyCOZI4Lwn4tcqLjKgUc2nqHTkM4bMCoXokmNp7Ta9SZJ1f
+         ViFakaIQFTb6lxskgTFsP95HHRzsk1dcmexQMH6tYET5znfFEevjmrJBfMfj7SlNfj8n
+         PU0g68ZkZULurNqXKLXObeJhTtWlCl3Jy2z+btA4yfPyERwE+2LYiTBtzBzKVXv/LuxP
+         Z+cw==
+X-Gm-Message-State: AOAM5312hhML7ty/EixXlBsb09EdtDQUi6k4Zc+DlC1cDozsmfDewi/d
+        prNoOioHbKr/iZ3PINs+rdKR/7mEwz9ghfTnqmZ6GfS6m2DC
+X-Google-Smtp-Source: ABdhPJzlLn6SB3Z0XBVp4Gy7TfFgiSySYYJELjJ/W2BybVsCGusEDyBVA11ZXrEgUGG/GEj2wda7jdrlkenEwqFxcevpZ6tEBq9v
 MIME-Version: 1.0
-In-Reply-To: <DBBPR04MB79794F5CC440279AF94A48448BC50@DBBPR04MB7979.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a6b:fd03:: with SMTP id c3mr42757557ioi.64.1608135249913;
+ Wed, 16 Dec 2020 08:14:09 -0800 (PST)
+Date:   Wed, 16 Dec 2020 08:14:09 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000526d3505b6972a80@google.com>
+Subject: UBSAN: shift-out-of-bounds in mceusb_dev_printdata
+From:   syzbot <syzbot+6d31bf169a8265204b8d@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, sean@mess.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-16.12.2020 12:32, Peter Chen пишет:
->> ...
->>>> +static int tegra_usb_internal_port_reset(struct ehci_hcd *ehci,
->>>> +					 u32 __iomem *portsc_reg,
->>>> +					 unsigned long *flags)
->>>> +{
->>>> +	u32 saved_usbintr, temp;
->>>> +	unsigned int i, tries;
->>>> +	int retval = 0;
->>>> +
->>>> +	saved_usbintr = ehci_readl(ehci, &ehci->regs->intr_enable);
->>>> +	/* disable USB interrupt */
->>>> +	ehci_writel(ehci, 0, &ehci->regs->intr_enable);
->>>> +	spin_unlock_irqrestore(&ehci->lock, *flags);
->>>> +
->>>> +	/*
->>>> +	 * Here we have to do Port Reset at most twice for
->>>> +	 * Port Enable bit to be set.
->>>> +	 */
->>>> +	for (i = 0; i < 2; i++) {
->>>> +		temp = ehci_readl(ehci, portsc_reg);
->>>> +		temp |= PORT_RESET;
->>>> +		ehci_writel(ehci, temp, portsc_reg);
->>>> +		mdelay(10);
->>> Needs accurate delay? How about usleep_range?
->> To be hones I don't know for sure whether hub_control() could be used from
->> interrupt context.  This mdelay is borrowed from the older ehci-tegra driver.
->>
->> Are you suggesting that it should be safe to sleep here?
->>
-> I see msleep is called at tegra_ehci_hub_control at ehci-tegra.c.
-> .hub_control is not called at interrupt context.
-> 
+Hello,
 
-Alright, I'll change to use msleep() in v2, thanks.
+syzbot found the following issue on:
+
+HEAD commit:    5e60366d Merge tag 'fallthrough-fixes-clang-5.11-rc1' of g..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=11b1a46b500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5cea7506b7139727
+dashboard link: https://syzkaller.appspot.com/bug?extid=6d31bf169a8265204b8d
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13727b7f500000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1565f123500000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6d31bf169a8265204b8d@syzkaller.appspotmail.com
+
+================================================================================
+UBSAN: shift-out-of-bounds in drivers/media/rc/mceusb.c:704:13
+shift exponent 230 is too large for 32-bit type 'unsigned int'
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.10.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:79 [inline]
+ dump_stack+0x107/0x163 lib/dump_stack.c:120
+ ubsan_epilogue+0xb/0x5a lib/ubsan.c:148
+ __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x181 lib/ubsan.c:395
+ mceusb_dev_printdata.cold+0x19/0x1e drivers/media/rc/mceusb.c:704
+ mceusb_process_ir_data drivers/media/rc/mceusb.c:1275 [inline]
+ mceusb_dev_recv+0x3cb/0x1990 drivers/media/rc/mceusb.c:1376
+ __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1657
+ usb_hcd_giveback_urb+0x38c/0x430 drivers/usb/core/hcd.c:1728
+ dummy_timer+0x11f4/0x32a0 drivers/usb/gadget/udc/dummy_hcd.c:1971
+ call_timer_fn+0x1a5/0x690 kernel/time/timer.c:1417
+ expire_timers kernel/time/timer.c:1462 [inline]
+ __run_timers.part.0+0x692/0xa50 kernel/time/timer.c:1731
+ __run_timers kernel/time/timer.c:1712 [inline]
+ run_timer_softirq+0x80/0x120 kernel/time/timer.c:1744
+ __do_softirq+0x1b7/0x9c5 kernel/softirq.c:343
+ asm_call_irq_on_stack+0xf/0x20
+ </IRQ>
+ __run_on_irqstack arch/x86/include/asm/irq_stack.h:26 [inline]
+ run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:77 [inline]
+ do_softirq_own_stack+0x80/0xa0 arch/x86/kernel/irq_64.c:77
+ invoke_softirq kernel/softirq.c:226 [inline]
+ __irq_exit_rcu+0x119/0x1b0 kernel/softirq.c:420
+ irq_exit_rcu+0x5/0x10 kernel/softirq.c:432
+ sysvec_apic_timer_interrupt+0x43/0xa0 arch/x86/kernel/apic/apic.c:1096
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:628
+RIP: 0010:native_save_fl arch/x86/include/asm/irqflags.h:29 [inline]
+RIP: 0010:arch_local_save_flags arch/x86/include/asm/irqflags.h:79 [inline]
+RIP: 0010:arch_irqs_disabled arch/x86/include/asm/irqflags.h:169 [inline]
+RIP: 0010:acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
+RIP: 0010:acpi_idle_do_entry+0x1c9/0x250 drivers/acpi/processor_idle.c:516
+Code: 8d 61 7f fb 84 db 75 ac e8 04 5b 7f fb e8 4f 0f 85 fb e9 0c 00 00 00 e8 f5 5a 7f fb 0f 00 2d ce 86 87 00 e8 e9 5a 7f fb fb f4 <9c> 5b 81 e3 00 02 00 00 fa 31 ff 48 89 de e8 c4 62 7f fb 48 85 db
+RSP: 0018:ffffffff87407d60 EFLAGS: 00000293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffffffff87431940 RSI: ffffffff85c0eb77 RDI: ffffffff85c0eb61
+RBP: ffff8881037c3064 R08: 0000000000000001 R09: 0000000000000001
+R10: ffffffff8145fae8 R11: 0000000000000000 R12: 0000000000000001
+R13: ffff8881037c3000 R14: ffff8881037c3064 R15: ffff888105c7d804
+ acpi_idle_enter+0x355/0x4f0 drivers/acpi/processor_idle.c:647
+ cpuidle_enter_state+0x1b1/0xc80 drivers/cpuidle/cpuidle.c:237
+ cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:351
+ call_cpuidle kernel/sched/idle.c:158 [inline]
+ cpuidle_idle_call kernel/sched/idle.c:239 [inline]
+ do_idle+0x3df/0x580 kernel/sched/idle.c:299
+ cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:396
+ start_kernel+0x498/0x4b9 init/main.c:1061
+ secondary_startup_64_no_verify+0xb0/0xbb
+================================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
