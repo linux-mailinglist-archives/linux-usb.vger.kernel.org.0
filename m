@@ -2,70 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 640C32DBFD0
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Dec 2020 12:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F092DC04D
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Dec 2020 13:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725994AbgLPLwT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Dec 2020 06:52:19 -0500
-Received: from mailgw02.mediatek.com ([1.203.163.81]:56129 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725985AbgLPLwT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Dec 2020 06:52:19 -0500
-X-UUID: 4e746c931437497693fca4c02774c325-20201216
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=glQsJ1J/DfuWCVTzMFf5Jfmjvr26uWbwpbrnKCDy90g=;
-        b=nx98TZeH21zS5KD8tj675zKw/Y38oGmoby1HihkSR4JvKc4gziwwf1KxZMyQ7ZNUwusawbEzwWxl9kMbr8I9oURWUA5l7mgbVviZzK5xAbR+y4yTPYunVhMnMZ0pvv1uMGF2XBwYepfUCaiT0gJyqrFSI/NqP9ymL3rZQbcOvoM=;
-X-UUID: 4e746c931437497693fca4c02774c325-20201216
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 323521070; Wed, 16 Dec 2020 19:51:28 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- MTKMBS31DR.mediatek.inc (172.27.6.102) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 16 Dec 2020 19:51:26 +0800
-Received: from mtkslt301.mediatek.inc (10.21.14.114) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Dec 2020 19:51:26 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        id S1726050AbgLPM33 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Dec 2020 07:29:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726038AbgLPM33 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Dec 2020 07:29:29 -0500
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B43EC0617A6
+        for <linux-usb@vger.kernel.org>; Wed, 16 Dec 2020 04:28:49 -0800 (PST)
+Received: by mail-vk1-xa36.google.com with SMTP id t16so5605979vkl.10
+        for <linux-usb@vger.kernel.org>; Wed, 16 Dec 2020 04:28:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c6pRvGHHMJqQbOIzkgWlEFS44+L0AY9CH1Qe7UGJ3u4=;
+        b=odqmNK1hqN0cRlLeW7sn5pdXMShIK5Q/F49grfeu5fecHGIW3d2eANmZhNWdRfbOaG
+         mF3Q2QJPWg+GEjMfy2yYUX2i3c19AhTygkQ+TyEGVuiGA7tVCzscJPfVfaLX16twNC6n
+         +6u1ZvFmWnXBd4PhPlIy3gmzOoGNoq+s81aIY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c6pRvGHHMJqQbOIzkgWlEFS44+L0AY9CH1Qe7UGJ3u4=;
+        b=SitoN+H88F/ltWRCGVeLhhraqwlpSEyVrJVYsliHcff2aHPWo3C7OG6w6Vq7OlX1i+
+         dOiJ/81ulxNGvvL9gDmtS7MXb9aBuyhPR5hIZYPJ7IS1+ESK310a8lIGdR49zaWL5292
+         HRWdUro6nfqFBsx9JFd0+kNyyNNPycgqVP4IYcm6UhNWe9CNEpgDSCfUuumboJKH0pzG
+         Lfs0l8fGiHFMMBcNFKe5GQXEWAx5a909yNZbpM/L+wyapt+pzyCRNvP8/ZVHmT25vk+d
+         dp2eNvHXYMFxiQqVdxAnprGo7g6FAIAzEYXZPZU52Q/2GfWWcT03366GdAMBpfFrE7L0
+         1eXQ==
+X-Gm-Message-State: AOAM5315prLeSQNcWSHaU4PBs5wW07lsPJZ1FhHrDo9wUFjBTvmPEGLB
+        PptVUqG76xIhp4YqayPNNxlFehctXzBb+LeLqklZYg==
+X-Google-Smtp-Source: ABdhPJzlzIMkwB4MfwB+J+NG9epApgDDwgd0osNlLW2n3EV6nng8DOUfvGywX0ToxV0slELC4gu/RwcT3blVqy36deU=
+X-Received: by 2002:a1f:96cd:: with SMTP id y196mr33980353vkd.18.1608121728276;
+ Wed, 16 Dec 2020 04:28:48 -0800 (PST)
+MIME-Version: 1.0
+References: <20201216115125.5886-1-chunfeng.yun@mediatek.com> <20201216115125.5886-2-chunfeng.yun@mediatek.com>
+In-Reply-To: <20201216115125.5886-2-chunfeng.yun@mediatek.com>
+From:   Nicolas Boichat <drinkcat@chromium.org>
+Date:   Wed, 16 Dec 2020 20:28:37 +0800
+Message-ID: <CANMq1KDBmuoBNeizm9+f1yJgqF9oMqU5k26KfZrSdjrPQm_LwA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] usb: xhci-mtk: fix UAS issue by XHCI_BROKEN_STREAMS quirk
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Hsin-Yi Wang <hsinyi@chromium.org>,
+        linux-usb@vger.kernel.org,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
         Ikjoon Jang <ikjn@chromium.org>
-Subject: [PATCH 3/3] arm64: dts: mt8173: add a broken streams quirk property for xHCI node
-Date:   Wed, 16 Dec 2020 19:51:25 +0800
-Message-ID: <20201216115125.5886-3-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20201216115125.5886-1-chunfeng.yun@mediatek.com>
-References: <20201216115125.5886-1-chunfeng.yun@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 43BBB7292D25986C7F85AC6189081C2D98985D0773E9EA9D6DC7BBD3F6AD08012000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-RHVlIHRvIDAuOTYgeEhDSSBvbiBtdDgxNzMgZG9lc24ndCBzdXBwb3J0IGJ1bGsgc3RyZWFtIGJ1
-dCBNYXhQU0FTaXplDQpzYXlzIHN1cHBvcnRpbmcsIGFkZCBhIG5ldyAibWVkaWF0ZWssYnJva2Vu
-X3N0cmVhbXNfcXVpcmsiIHByb3BlcnR5IHRvDQpmaXggaXQuDQoNCkZpeGVzOiA5NGE2MzFkOTFh
-ZDMgKCJ1c2I6IHhoY2ktbXRrOiBjaGVjayBoY2NfcGFyYW1zIGFmdGVyIGFkZGluZyBwcmltYXJ5
-IGhjZCIpDQpTaWduZWQtb2ZmLWJ5OiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRl
-ay5jb20+DQotLS0NCiBhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE3My5kdHNpIHwg
-MSArDQogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspDQoNCmRpZmYgLS1naXQgYS9hcmNo
-L2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE3My5kdHNpIGIvYXJjaC9hcm02NC9ib290L2R0
-cy9tZWRpYXRlay9tdDgxNzMuZHRzaQ0KaW5kZXggZTg4YmJmYzFmYzU1Li5mMzA1ZmIwMzMwMjAg
-MTAwNjQ0DQotLS0gYS9hcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE3My5kdHNpDQor
-KysgYi9hcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE3My5kdHNpDQpAQCAtODg2LDYg
-Kzg4Niw3IEBADQogCQkJCXBvd2VyLWRvbWFpbnMgPSA8JnNjcHN5cyBNVDgxNzNfUE9XRVJfRE9N
-QUlOX1VTQj47DQogCQkJCWNsb2NrcyA9IDwmdG9wY2tnZW4gQ0xLX1RPUF9VU0IzMF9TRUw+LCA8
-JmNsazI2bT47DQogCQkJCWNsb2NrLW5hbWVzID0gInN5c19jayIsICJyZWZfY2siOw0KKwkJCQlt
-ZWRpYXRlayxicm9rZW5fc3RyZWFtc19xdWlyazsNCiAJCQkJc3RhdHVzID0gImRpc2FibGVkIjsN
-CiAJCQl9Ow0KIAkJfTsNCi0tIA0KMi4xOC4wDQo=
+On Wed, Dec 16, 2020 at 7:53 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+>
+> The 0.96 xHCI controller on some platforms does not support
+> bulk stream even HCCPARAMS says supporting, due to MaxPSASize
+> is set a non-zero default value by mistake, here use
+> XHCI_BROKEN_STREAMS quirk to fix it.
+>
+> Fixes: 94a631d91ad3 ("usb: xhci-mtk: check hcc_params after adding primary hcd")
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+>  drivers/usb/host/xhci-mtk.c | 7 ++++++-
+>  drivers/usb/host/xhci-mtk.h | 1 +
+>  2 files changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+> index 8f321f39ab96..08dab974d847 100644
+> --- a/drivers/usb/host/xhci-mtk.c
+> +++ b/drivers/usb/host/xhci-mtk.c
+> @@ -395,6 +395,9 @@ static void xhci_mtk_quirks(struct device *dev, struct xhci_hcd *xhci)
+>         xhci->quirks |= XHCI_SPURIOUS_SUCCESS;
+>         if (mtk->lpm_support)
+>                 xhci->quirks |= XHCI_LPM_SUPPORT;
+> +
+> +       if (mtk->broken_streams)
+> +               xhci->quirks |= XHCI_BROKEN_STREAMS;
+>  }
+>
+>  /* called during probe() after chip reset completes */
+> @@ -460,6 +463,8 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+>                 return ret;
+>
+>         mtk->lpm_support = of_property_read_bool(node, "usb3-lpm-capable");
+> +       mtk->broken_streams =
+> +               of_property_read_bool(node, "mediatek,broken_streams_quirk");
 
+Would it be better to add a data field to struct of_device_id
+mtk_xhci_of_match, and enable this quirk on mediatek,mt8173-xhci only?
+
+(IMHO usb3-lpm-capable detection should also be done in the same way)
+
+Thanks,
+
+>         /* optional property, ignore the error if it does not exist */
+>         of_property_read_u32(node, "mediatek,u3p-dis-msk",
+>                              &mtk->u3p_dis_msk);
+> @@ -546,7 +551,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+>         if (ret)
+>                 goto put_usb3_hcd;
+>
+> -       if (HCC_MAX_PSA(xhci->hcc_params) >= 4)
+> +       if (!mtk->broken_streams && HCC_MAX_PSA(xhci->hcc_params) >= 4)
+>                 xhci->shared_hcd->can_do_streams = 1;
+>
+>         ret = usb_add_hcd(xhci->shared_hcd, irq, IRQF_SHARED);
+> diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
+> index a93cfe817904..86aa4978915e 100644
+> --- a/drivers/usb/host/xhci-mtk.h
+> +++ b/drivers/usb/host/xhci-mtk.h
+> @@ -147,6 +147,7 @@ struct xhci_hcd_mtk {
+>         struct phy **phys;
+>         int num_phys;
+>         bool lpm_support;
+> +       bool broken_streams;
+>         /* usb remote wakeup */
+>         bool uwk_en;
+>         struct regmap *uwk;
+> --
+> 2.18.0
