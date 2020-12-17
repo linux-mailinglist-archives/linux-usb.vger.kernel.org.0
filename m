@@ -2,163 +2,236 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A214A2DCB60
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Dec 2020 04:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D21592DCC6B
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Dec 2020 07:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727794AbgLQDoC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Dec 2020 22:44:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727323AbgLQDoC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Dec 2020 22:44:02 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B174C061794;
-        Wed, 16 Dec 2020 19:43:22 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id v2so645674pfm.9;
-        Wed, 16 Dec 2020 19:43:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tkZdULlUHpCTLPPLnvYRioU35Xl4oRXIiOGWSipJOsk=;
-        b=naJK+sF6BTWwx2gI+Fp66YCAll/8W/IjZ7maOeoXiGnYRhT7yJu0VFGdnprp0DZ06H
-         mM+yGyD9z0lVF9t1mR7k0WZOaCfeWcDuh2cc9UYyAZoeYI/oPIPVXpwjusP63QyVyRSn
-         xjuPwyi7OZxJ4Lq20qCAh+8RBOPcmYnJanST8fZneUCjiaZEPKRdfg2Nkzi4CKmN4mFQ
-         AlamZkC9vNZRlUGMpkhtSenWeJFzVGv9b6GtffaguFjJrOqHW80bBPoue2jOCnkmd1b4
-         9fkc6FycbqaoZLI28ocEaXAon5yvjDusDP+pSMWpGCLzcrP/pZpGnyKALPEyHSsyhnrt
-         EpvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tkZdULlUHpCTLPPLnvYRioU35Xl4oRXIiOGWSipJOsk=;
-        b=Ejfxsv2syMKaLBrTsGPkcFGB0lZnI77qLSpwXDrZ7TUvo7MpvY/79qO3nYRqAHOrsE
-         iQoTwDz3gt715UnWHFAzb52MRW6Ysc8IEdp2U0EKo2GJJNU1VjW5hc+3fxIMrju/bGlY
-         ezXLUk4OeaPQ29hUuVXmNEyV31rawFTJ0WC8kfgnW7vqLNcMm45vHnn3BbRuEe6NE+Gz
-         5Z60Gv1lm0LD6iG2DoEzLLFFGKBiUMOxje8OifSYVn4g05ZKH05O6NIRcI/jAXks57ZG
-         naY54wuOlMITcBquVzQvUAj/TCuhQCrPnYm1lsn3Mvy53LQwm+ZRQo7zwKZxtJoFCPzK
-         TC6g==
-X-Gm-Message-State: AOAM530Y0MCpvVCmkCy+XrWa+HArNk9SLQSnD4d5RYEgaz1gzlsomwpU
-        GmIIoBztHuxTuLrhOj6VaZ9EPEbz5Zef4VQQ1vQ=
-X-Google-Smtp-Source: ABdhPJznguuQh7IRu3aSxMyBje/lCbX2oP9c7FXYlVCM9OjqL/sLyOTWgjUOzEQ2GLBt80IA9/rivRT7iPc7Hb/yiYg=
-X-Received: by 2002:a05:6a00:2384:b029:19a:eed3:7f42 with SMTP id
- f4-20020a056a002384b029019aeed37f42mr35475427pfc.4.1608176601666; Wed, 16 Dec
- 2020 19:43:21 -0800 (PST)
+        id S1725950AbgLQGWA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Dec 2020 01:22:00 -0500
+Received: from m43-15.mailgun.net ([69.72.43.15]:16561 "EHLO
+        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725930AbgLQGV7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Dec 2020 01:21:59 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1608186092; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=WtsbgsNj+Vv2PTvwZ5AMpCvKoyFdEmPial23BEs0c0Y=; b=cNcGdrdCwmD5L7lkxymNKaaIEMNk6+RXRR6WJ90D8Jf37qY5oHfw2koQH1jU3InL5yNk3lIi
+ YBJaTL+rJOT+nF2no1Dh3FniJPhwXtNUOqnxHkfNerO2FRRukeaaiDh9ModTkAujQ6y4XG8z
+ DnV5MiHHRPRdJ/G+935VS6JqpOc=
+X-Mailgun-Sending-Ip: 69.72.43.15
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n08.prod.us-east-1.postgun.com with SMTP id
+ 5fdaf8d37549779c5bc4ecc5 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 17 Dec 2020 06:21:07
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B3F15C433ED; Thu, 17 Dec 2020 06:21:06 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 53759C433CA;
+        Thu, 17 Dec 2020 06:21:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 53759C433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Mayank Rana <mrana@codeaurora.org>,
+        Jack Pham <jackp@codeaurora.org>
+Subject: [PATCH] usb: typec: ucsi: Add support for USB role switch
+Date:   Wed, 16 Dec 2020 22:20:47 -0800
+Message-Id: <20201217062047.13126-1-jackp@codeaurora.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-References: <20201216115125.5886-1-chunfeng.yun@mediatek.com>
- <20201216115125.5886-2-chunfeng.yun@mediatek.com> <CANMq1KDBmuoBNeizm9+f1yJgqF9oMqU5k26KfZrSdjrPQm_LwA@mail.gmail.com>
- <1608171557.23328.53.camel@mhfsdcap03>
-In-Reply-To: <1608171557.23328.53.camel@mhfsdcap03>
-From:   Rosen Penev <rosenp@gmail.com>
-Date:   Wed, 16 Dec 2020 19:43:10 -0800
-Message-ID: <CAKxU2N8q1XjDbWbv5ksqYr7RMEedV7fng7OUccVggsT89Oyf5w@mail.gmail.com>
-Subject: Re: [PATCH 2/3] usb: xhci-mtk: fix UAS issue by XHCI_BROKEN_STREAMS quirk
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Nicolas Boichat <drinkcat@chromium.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 16, 2020 at 6:29 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
->
-> On Wed, 2020-12-16 at 20:28 +0800, Nicolas Boichat wrote:
-> > On Wed, Dec 16, 2020 at 7:53 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
-> > >
-> > > The 0.96 xHCI controller on some platforms does not support
-> > > bulk stream even HCCPARAMS says supporting, due to MaxPSASize
-> > > is set a non-zero default value by mistake, here use
-> > > XHCI_BROKEN_STREAMS quirk to fix it.
-> > >
-> > > Fixes: 94a631d91ad3 ("usb: xhci-mtk: check hcc_params after adding primary hcd")
-> > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > > ---
-> > >  drivers/usb/host/xhci-mtk.c | 7 ++++++-
-> > >  drivers/usb/host/xhci-mtk.h | 1 +
-> > >  2 files changed, 7 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-> > > index 8f321f39ab96..08dab974d847 100644
-> > > --- a/drivers/usb/host/xhci-mtk.c
-> > > +++ b/drivers/usb/host/xhci-mtk.c
-> > > @@ -395,6 +395,9 @@ static void xhci_mtk_quirks(struct device *dev, struct xhci_hcd *xhci)
-> > >         xhci->quirks |= XHCI_SPURIOUS_SUCCESS;
-> > >         if (mtk->lpm_support)
-> > >                 xhci->quirks |= XHCI_LPM_SUPPORT;
-> > > +
-> > > +       if (mtk->broken_streams)
-> > > +               xhci->quirks |= XHCI_BROKEN_STREAMS;
-> > >  }
-> > >
-> > >  /* called during probe() after chip reset completes */
-> > > @@ -460,6 +463,8 @@ static int xhci_mtk_probe(struct platform_device *pdev)
-> > >                 return ret;
-> > >
-> > >         mtk->lpm_support = of_property_read_bool(node, "usb3-lpm-capable");
-> > > +       mtk->broken_streams =
-> > > +               of_property_read_bool(node, "mediatek,broken_streams_quirk");
-> >
-> > Would it be better to add a data field to struct of_device_id
-> > mtk_xhci_of_match, and enable this quirk on mediatek,mt8173-xhci only?
-> This is the common issue for all SoCs (before 2016.06) with 0.96 xHCI
-> when the controller don't support bulk stream. If enable this quirk only
-> for mt8173, then for other SoCs, the compatible need include
-> "mediatek,mt8173-xhci" in dts, this may be not flexible for some cases,
-> e.g. a new SoC has the broken stream as mt8173, but also has another
-> different quirk, the way you suggested will not handle it.
-> And I plan to remove "mediatek,mt8173-xhci" in mtk_xhci_of_match after
-> converting the binding to YMAL.
-I'm guessing this also applies to mt7621?
->
-> >
-> > (IMHO usb3-lpm-capable detection should also be done in the same way)
-> I prefer to provide a property for common issues, and use the way you
-> suggested for the issue only happened at a specific SoC.
->
-> Thank you
->
-> >
-> > Thanks,
-> >
-> > >         /* optional property, ignore the error if it does not exist */
-> > >         of_property_read_u32(node, "mediatek,u3p-dis-msk",
-> > >                              &mtk->u3p_dis_msk);
-> > > @@ -546,7 +551,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
-> > >         if (ret)
-> > >                 goto put_usb3_hcd;
-> > >
-> > > -       if (HCC_MAX_PSA(xhci->hcc_params) >= 4)
-> > > +       if (!mtk->broken_streams && HCC_MAX_PSA(xhci->hcc_params) >= 4)
-> > >                 xhci->shared_hcd->can_do_streams = 1;
-> > >
-> > >         ret = usb_add_hcd(xhci->shared_hcd, irq, IRQF_SHARED);
-> > > diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
-> > > index a93cfe817904..86aa4978915e 100644
-> > > --- a/drivers/usb/host/xhci-mtk.h
-> > > +++ b/drivers/usb/host/xhci-mtk.h
-> > > @@ -147,6 +147,7 @@ struct xhci_hcd_mtk {
-> > >         struct phy **phys;
-> > >         int num_phys;
-> > >         bool lpm_support;
-> > > +       bool broken_streams;
-> > >         /* usb remote wakeup */
-> > >         bool uwk_en;
-> > >         struct regmap *uwk;
-> > > --
-> > > 2.18.0
->
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+From: Mayank Rana <mrana@codeaurora.org>
+
+UCSI already conveys the information about a port's connection
+status, whether it is operating in UFP or DFP mode, and whether the
+partner supports USB data or not. This information can be used to
+notify a dual-role controller to start up its host or peripheral
+mode accordingly. Add optional support for this by querying each
+port's fwnode to look for an associated USB role switch device.
+If present, call usb_role_switch_set() with the determined data
+role upon Connect Change or Connector Partner Change updates.
+
+Signed-off-by: Mayank Rana <mrana@codeaurora.org>
+Signed-off-by: Jack Pham <jackp@codeaurora.org>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 55 +++++++++++++++++++++++++++++++++--
+ drivers/usb/typec/ucsi/ucsi.h |  3 ++
+ 2 files changed, 55 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 51a570d40a42..8d3e3518a506 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -588,6 +588,7 @@ static void ucsi_unregister_partner(struct ucsi_connector *con)
+ 
+ static void ucsi_partner_change(struct ucsi_connector *con)
+ {
++	enum usb_role u_role = USB_ROLE_NONE;
+ 	int ret;
+ 
+ 	if (!con->partner)
+@@ -595,11 +596,14 @@ static void ucsi_partner_change(struct ucsi_connector *con)
+ 
+ 	switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
+ 	case UCSI_CONSTAT_PARTNER_TYPE_UFP:
+-	case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
+ 	case UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP:
++		u_role = USB_ROLE_HOST;
++		fallthrough;
++	case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
+ 		typec_set_data_role(con->port, TYPEC_HOST);
+ 		break;
+ 	case UCSI_CONSTAT_PARTNER_TYPE_DFP:
++		u_role = USB_ROLE_DEVICE;
+ 		typec_set_data_role(con->port, TYPEC_DEVICE);
+ 		break;
+ 	default:
+@@ -610,6 +614,15 @@ static void ucsi_partner_change(struct ucsi_connector *con)
+ 	if (!completion_done(&con->complete))
+ 		complete(&con->complete);
+ 
++	/* Only notify USB controller if partner supports USB data */
++	if (!(UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) & UCSI_CONSTAT_PARTNER_FLAG_USB))
++		u_role = USB_ROLE_NONE;
++
++	ret = usb_role_switch_set_role(con->usb_role_sw, u_role);
++	if (ret)
++		dev_err(con->ucsi->dev, "con:%d: failed to set usb role:%d\n",
++			con->num, u_role);
++
+ 	/* Can't rely on Partner Flags field. Always checking the alt modes. */
+ 	ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_SOP);
+ 	if (ret)
+@@ -626,6 +639,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 						  work);
+ 	struct ucsi *ucsi = con->ucsi;
+ 	enum typec_role role;
++	enum usb_role u_role = USB_ROLE_NONE;
+ 	u64 command;
+ 	int ret;
+ 
+@@ -661,11 +675,14 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 
+ 		switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
+ 		case UCSI_CONSTAT_PARTNER_TYPE_UFP:
+-		case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
+ 		case UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP:
++			u_role = USB_ROLE_HOST;
++			fallthrough;
++		case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
+ 			typec_set_data_role(con->port, TYPEC_HOST);
+ 			break;
+ 		case UCSI_CONSTAT_PARTNER_TYPE_DFP:
++			u_role = USB_ROLE_DEVICE;
+ 			typec_set_data_role(con->port, TYPEC_DEVICE);
+ 			break;
+ 		default:
+@@ -678,6 +695,16 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 			ucsi_unregister_partner(con);
+ 
+ 		ucsi_port_psy_changed(con);
++
++		/* Only notify USB controller if partner supports USB data */
++		if (!(UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) &
++				UCSI_CONSTAT_PARTNER_FLAG_USB))
++			u_role = USB_ROLE_NONE;
++
++		ret = usb_role_switch_set_role(con->usb_role_sw, u_role);
++		if (ret)
++			dev_err(ucsi->dev, "con:%d: failed to set usb role:%d\n",
++				con->num, u_role);
+ 	}
+ 
+ 	if (con->status.change & UCSI_CONSTAT_CAM_CHANGE) {
+@@ -903,6 +930,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ 	struct ucsi_connector *con = &ucsi->connector[index];
+ 	struct typec_capability *cap = &con->typec_cap;
+ 	enum typec_accessory *accessory = cap->accessory;
++	enum usb_role u_role = USB_ROLE_NONE;
+ 	u64 command;
+ 	int ret;
+ 
+@@ -981,11 +1009,14 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ 
+ 	switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
+ 	case UCSI_CONSTAT_PARTNER_TYPE_UFP:
+-	case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
+ 	case UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP:
++		u_role = USB_ROLE_HOST;
++		fallthrough;
++	case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
+ 		typec_set_data_role(con->port, TYPEC_HOST);
+ 		break;
+ 	case UCSI_CONSTAT_PARTNER_TYPE_DFP:
++		u_role = USB_ROLE_DEVICE;
+ 		typec_set_data_role(con->port, TYPEC_DEVICE);
+ 		break;
+ 	default:
+@@ -1001,6 +1032,24 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ 		ucsi_port_psy_changed(con);
+ 	}
+ 
++	con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
++	if (IS_ERR(con->usb_role_sw)) {
++		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
++			con->num);
++		con->usb_role_sw = NULL;
++	}
++
++	/* Only notify USB controller if partner supports USB data */
++	if (!(UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) & UCSI_CONSTAT_PARTNER_FLAG_USB))
++		u_role = USB_ROLE_NONE;
++
++	ret = usb_role_switch_set_role(con->usb_role_sw, u_role);
++	if (ret) {
++		dev_err(ucsi->dev, "con:%d: failed to set usb role:%d\n",
++			con->num, u_role);
++		ret = 0;
++	}
++
+ 	if (con->partner) {
+ 		ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_SOP);
+ 		if (ret) {
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index b7a92f246050..8474342b79a7 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -8,6 +8,7 @@
+ #include <linux/power_supply.h>
+ #include <linux/types.h>
+ #include <linux/usb/typec.h>
++#include <linux/usb/role.h>
+ 
+ /* -------------------------------------------------------------------------- */
+ 
+@@ -329,6 +330,8 @@ struct ucsi_connector {
+ 	u32 rdo;
+ 	u32 src_pdos[UCSI_MAX_PDOS];
+ 	int num_pdos;
++
++	struct usb_role_switch *usb_role_sw;
+ };
+ 
+ int ucsi_send_command(struct ucsi *ucsi, u64 command,
+-- 
+2.24.0
+
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
