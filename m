@@ -2,76 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3FD2DE1AE
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Dec 2020 12:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 970052DE216
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Dec 2020 12:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733213AbgLRK7W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Dec 2020 05:59:22 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:37658 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727021AbgLRK7V (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Dec 2020 05:59:21 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0BIAvexf017453;
-        Fri, 18 Dec 2020 04:57:40 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1608289060;
-        bh=+7qYS0CHkKfduwzX3WlpJ3HdL712B33p+kG13vumqIQ=;
-        h=From:To:CC:Subject:Date;
-        b=wPrcWv4QDQ3ny7sMm5o238KPSittvbVYCkPp72BXyhHH5BgkwRLuzEBE80hBo50Ee
-         shZukmzD4ApKiIDexoJy5P6xkqmke0wKe+e0+5RNTmeVGko0ye4WlOQgHsDLQXTN3g
-         EDmiEwlK8aoUcFrzopqnwT3HHhD/Iq1c9C/3zB5I=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0BIAveQc049989
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 18 Dec 2020 04:57:40 -0600
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 18
- Dec 2020 04:57:40 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 18 Dec 2020 04:57:40 -0600
-Received: from lta0400828a.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0BIAvcRl130470;
-        Fri, 18 Dec 2020 04:57:38 -0600
-From:   Roger Quadros <rogerq@ti.com>
-To:     <peter.chen@nxp.com>
-CC:     <pawell@cadence.com>, <a-govindraju@ti.com>, <nsekhar@ti.com>,
-        <linux-usb@vger.kernel.org>, Roger Quadros <rogerq@ti.com>
-Subject: [PATCH] MAINTAINERS: Update address for Cadence USB3 driver
-Date:   Fri, 18 Dec 2020 12:57:36 +0200
-Message-ID: <20201218105736.17667-1-rogerq@ti.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726182AbgLRLlY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 18 Dec 2020 06:41:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50574 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726103AbgLRLlY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 18 Dec 2020 06:41:24 -0500
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 210767] New: uvcvideo: Webcam (1f3a:100e) stopped working after
+ 8a652a17e3c005dcdae31b6c8fdf14382a29cbbe
+Date:   Fri, 18 Dec 2020 11:40:43 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: doerges@pre-sense.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cc cf_regression
+Message-ID: <bug-210767-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Updates my email address for Cadence USB3 driver.
+https://bugzilla.kernel.org/show_bug.cgi?id=210767
 
-Signed-off-by: Roger Quadros <rogerq@ti.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+            Bug ID: 210767
+           Summary: uvcvideo: Webcam (1f3a:100e) stopped working after
+                    8a652a17e3c005dcdae31b6c8fdf14382a29cbbe
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.10.1-2.g8f3d468
+          Hardware: x86-64
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: doerges@pre-sense.de
+                CC: tiwai@suse.de
+        Regression: Yes
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9d7784a5cb88..3093217442d8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3882,7 +3882,7 @@ F:	drivers/mtd/nand/raw/cadence-nand-controller.c
- CADENCE USB3 DRD IP DRIVER
- M:	Peter Chen <peter.chen@nxp.com>
- M:	Pawel Laszczak <pawell@cadence.com>
--M:	Roger Quadros <rogerq@ti.com>
-+R:	Roger Quadros <rogerq@kernel.org>
- R:	Aswath Govindraju <a-govindraju@ti.com>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
+The device in question is
+
+  Renkforce RF AC4K 300 Action Cam 4K
+
+https://www.conrad.de/de/p/action-cam-renkforce-rf-ac-4k-webcam-4k-wlan-wasserfest-staubgeschuetzt-1577043.html
+
+
+When connected via USB to a PC, it offers two modes:
+ - mass storage
+ - camera
+
+
+When set to webcam mode it identifies as:
+  [34367.545510] uvcvideo: Found UVC 1.00 device Android (1f3a:100e)
+
+
+I tested against 5.10.1-2.g8f3d468.
+
+
+With 8a652a17e3c005dcdae31b6c8fdf14382a29cbbe
+(https://raw.githubusercontent.com/SUSE/kernel-source/openSUSE-15.2/patches.suse/media-uvcvideo-Ensure-all-probed-info-is-returned-to.patch)
+the device stopped working in camera mode, i.e. no more video capture.
+
+
+When reversing the above patch, the device is working as expected.
+
+
+Downstream bug report is at
+https://bugzilla.opensuse.org/show_bug.cgi?id=1180117
+
 -- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You are watching the assignee of the bug.
