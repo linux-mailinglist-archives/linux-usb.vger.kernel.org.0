@@ -2,104 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3382DE3A5
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Dec 2020 15:03:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 871542DE78E
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Dec 2020 17:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbgLRODr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Dec 2020 09:03:47 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:52879 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725995AbgLRODr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Dec 2020 09:03:47 -0500
-Received: from fsav405.sakura.ne.jp (fsav405.sakura.ne.jp [133.242.250.104])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 0BIE34Dp074984;
-        Fri, 18 Dec 2020 23:03:05 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav405.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav405.sakura.ne.jp);
- Fri, 18 Dec 2020 23:03:04 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav405.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 0BIE34iX074981
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 18 Dec 2020 23:03:04 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: KASAN: use-after-free Read in service_outstanding_interrupt
-To:     oneukum@suse.com
-References: <000000000000994d2a05b6b49959@google.com>
-Cc:     syzbot <syzbot+9e04e2df4a32fb661daf@syzkaller.appspotmail.com>,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        andreyknvl@google.com, gregkh@linuxfoundation.org,
-        gustavoars@kernel.org, ingrassia@epigenesys.com,
-        lee.jones@linaro.org
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <7a740f5a-65f9-b1d6-1224-4938d61b74a5@i-love.sakura.ne.jp>
-Date:   Fri, 18 Dec 2020 23:03:02 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1726677AbgLRQno (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Dec 2020 11:43:44 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:15985 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725802AbgLRQno (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Dec 2020 11:43:44 -0500
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5fdcdc170001>; Fri, 18 Dec 2020 08:43:03 -0800
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 18 Dec
+ 2020 16:43:01 +0000
+Received: from jckuo-lt.nvidia.com (172.20.145.6) by mail.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
+ Transport; Fri, 18 Dec 2020 16:42:59 +0000
+From:   JC Kuo <jckuo@nvidia.com>
+To:     <mathias.nyman@linux.intel.com>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <robh@kernel.org>
+CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <nkristam@nvidia.com>, JC Kuo <jckuo@nvidia.com>
+Subject: [PATCH] xhci: tegra: Delay for disabling LFPS detector
+Date:   Sat, 19 Dec 2020 00:42:34 +0800
+Message-ID: <20201218164234.128762-1-jckuo@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <000000000000994d2a05b6b49959@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1608309783; bh=dX1OHAKyCwaFYNdxLad4ue/GK0kWXogxQXR0HulKU8A=;
+        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+         X-NVConfidentiality:Content-Transfer-Encoding:Content-Type;
+        b=pnhE50GJuDbyFXgiSFgnCKLDDmCOBF565ou8kXb7nmqLk0MIR7eZrxoxYQ0ZZJS9B
+         aSKlrvhuWNZh7AvPM26JVLETYFClnefsJldnk+umXTJ5+jylpi8lRWPBwxg7uAR2q8
+         W53036JDr/rId31n0OBiHZtvWraKcdCPLJonGker0VsbGmcnyfof0EdoO3cHxoN6cX
+         nDWmi5ohKdbWwEKac3mtpNfWoU+dJODzJqhHNmnn86L6KkeSTN9tRqXifNtUWKM6fB
+         jlfhsC8KrQjBl2xIcgZkconMTCrvQ/BPWqGHrzom/SgcKzEmOynd0envgubUPwkAAf
+         Q8so9Ae1aF+uA==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello, Oliver.
+Occasionally, we are seeing some SuperSpeed devices resumes right after
+being directed to U3. This commits add 500us delay to ensure LFPS
+detector is disabled before sending ACK to firmware.
 
-I guess that this is caused by not checking WDM_DISCONNECTING/WDM_RESETTING
-before usb_submit_urb(), and below diff seems to avoid use-after-free for
-the C reproducer syzbot has found.
+[   16.099363] tegra-xusb 70090000.usb: entering ELPG
+[   16.104343] tegra-xusb 70090000.usb: 2-1 isn't suspended: 0x0c001203
+[   16.114576] tegra-xusb 70090000.usb: not all ports suspended: -16
+[   16.120789] tegra-xusb 70090000.usb: entering ELPG failed
 
-Since service_outstanding_interrupt() is called from service_interrupt_work()
-without holding desc->rlock, it is possible that kill_urbs() is called by
-wdm_disconnect() when service_outstanding_interrupt() is preempted between
-spin_unlock_irq(&desc->iuspin) and usb_submit_urb(), isn't it?
-Therefore, we also need to make sure that kill_urbs(desc) is called after
-cancel_work_sync(&desc->service_outs_intr) which waits for
-service_interrupt_work() to return completed, don't we?
+Signed-off-by: JC Kuo <jckuo@nvidia.com>
+---
+ drivers/usb/host/xhci-tegra.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-index 02d0cfd23bb2..508b1c3f8b73 100644
---- a/drivers/usb/class/cdc-wdm.c
-+++ b/drivers/usb/class/cdc-wdm.c
-@@ -465,13 +465,23 @@ static int service_outstanding_interrupt(struct wdm_device *desc)
- 	if (!desc->resp_count || !--desc->resp_count)
- 		goto out;
- 
-+	if (test_bit(WDM_DISCONNECTING, &desc->flags)) {
-+		rv = -ENODEV;
-+		goto out;
-+	}
-+	if (test_bit(WDM_RESETTING, &desc->flags)) {
-+		rv = -EIO;
-+		goto out;
-+	}
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index 934be1686352..20cdc11f7dc6 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -623,6 +623,12 @@ static void tegra_xusb_mbox_handle(struct tegra_xusb *=
+tegra,
+ 								     enable);
+ 			if (err < 0)
+ 				break;
 +
- 	set_bit(WDM_RESPONDING, &desc->flags);
- 	spin_unlock_irq(&desc->iuspin);
- 	rv = usb_submit_urb(desc->response, GFP_KERNEL);
- 	spin_lock_irq(&desc->iuspin);
- 	if (rv) {
--		dev_err(&desc->intf->dev,
--			"usb_submit_urb failed with result %d\n", rv);
-+		if (!test_bit(WDM_DISCONNECTING, &desc->flags))
-+			dev_err(&desc->intf->dev,
-+				"usb_submit_urb failed with result %d\n", rv);
- 
- 		/* make sure the next notification trigger a submit */
- 		clear_bit(WDM_RESPONDING, &desc->flags);
-@@ -1027,9 +1037,9 @@ static void wdm_disconnect(struct usb_interface *intf)
- 	wake_up_all(&desc->wait);
- 	mutex_lock(&desc->rlock);
- 	mutex_lock(&desc->wlock);
--	kill_urbs(desc);
- 	cancel_work_sync(&desc->rxwork);
- 	cancel_work_sync(&desc->service_outs_intr);
-+	kill_urbs(desc);
- 	mutex_unlock(&desc->wlock);
- 	mutex_unlock(&desc->rlock);
- 
++			/*
++			 * wait 500us for LFPS detector to be disabled before sending ACK
++			 */
++			if (!enable)
++				usleep_range(500, 1000);
+ 		}
+=20
+ 		if (err < 0) {
+--=20
+2.25.1
 
