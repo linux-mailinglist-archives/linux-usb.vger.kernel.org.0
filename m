@@ -2,15 +2,15 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3852DEF4C
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Dec 2020 14:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B00A2DEF85
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Dec 2020 14:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726989AbgLSNCP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 19 Dec 2020 08:02:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45496 "EHLO mail.kernel.org"
+        id S1729159AbgLSNE5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 19 Dec 2020 08:04:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52354 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727986AbgLSM7G (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 19 Dec 2020 07:59:06 -0500
+        id S1728846AbgLSNEZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 19 Dec 2020 08:04:25 -0500
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     linux-kernel@vger.kernel.org
@@ -18,12 +18,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Thomas Winischhofer <thomas@winischhofer.net>,
         linux-usb@vger.kernel.org
-Subject: [PATCH 5.9 43/49] USB: sisusbvga: Make console support depend on BROKEN
-Date:   Sat, 19 Dec 2020 13:58:47 +0100
-Message-Id: <20201219125346.774463378@linuxfoundation.org>
+Subject: [PATCH 5.4 27/34] USB: sisusbvga: Make console support depend on BROKEN
+Date:   Sat, 19 Dec 2020 14:03:24 +0100
+Message-Id: <20201219125342.729151258@linuxfoundation.org>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201219125344.671832095@linuxfoundation.org>
-References: <20201219125344.671832095@linuxfoundation.org>
+In-Reply-To: <20201219125341.384025953@linuxfoundation.org>
+References: <20201219125341.384025953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -71,7 +71,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 -	depends on VT
 +	depends on VT && BROKEN
  	select FONT_8x16
- 	help
+ 	---help---
  	  Say Y here if you want a VGA text console via the USB dongle or
 
 
