@@ -2,136 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFCD92DF68B
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Dec 2020 19:45:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E9E2DF71B
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Dec 2020 00:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727443AbgLTSox (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Dec 2020 13:44:53 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:53434 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727375AbgLTSox (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Dec 2020 13:44:53 -0500
-Received: by mail-il1-f197.google.com with SMTP id q2so7463014ilt.20
-        for <linux-usb@vger.kernel.org>; Sun, 20 Dec 2020 10:44:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=B+OucNE/e2hD3TvMLPN9TV2Z1nuA/18UyvmHrFjlvgQ=;
-        b=kCqjiQLij2KTKZ2uSoN3MFIULBMMv2u8od9d8WGyOzYm6jtZsdf/gg1pJS5PxhnIdZ
-         ZFQIyNu0JzBzb7JlCZ3tkBea4ROxiBRQdqUBivue/wVzQcsr8ovKePMZctoJNnnEotgy
-         ubyRlcRFpsv0oVhWCIeDS2epdCz/rwiwhHdvB3HHdfkIou7D6PseMHQKDOmmIPmb1Wpa
-         NnGen6O/QnsTYMfPt4Fw3HKBClHnBP1lavb/yYRMWUGUPvQGrewQO/4gu0lbn5vzhDoA
-         BsUjtxKR1KjYviQrIbVn484xMeQ43/E7M7NZNEO6Q3Xfi1232zeCSr7diSxOfJOZaTPQ
-         Izhg==
-X-Gm-Message-State: AOAM533m3Px3jE9/FrRO2RiLy5NuzjR2VqHGDvWwz+/7cCpAijC85P9j
-        7Q4uuQo5sP6puQjiGiTSiQDNxiMT+Sy9h2Z4Y1r1B1yJDLtg
-X-Google-Smtp-Source: ABdhPJwghH2DhSvXi4qjA+Vn895Sg5aSvjfJvqAGLFHEi2VkojMpyiA0YZPidjYpj/eFAlDxXBgaFGVnNExQNJdvIDmDgailoZex
+        id S1728351AbgLTXYb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 20 Dec 2020 18:24:31 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:50189 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726683AbgLTXYa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Dec 2020 18:24:30 -0500
+X-Greylist: delayed 1023 seconds by postgrey-1.27 at vger.kernel.org; Sun, 20 Dec 2020 18:24:30 EST
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1kr7ml-0003Dr-P1; Mon, 21 Dec 2020 00:06:43 +0100
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: Correct ordering of phy_init and phy_power_on
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        linux-usb@vger.kernel.org
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-usb@vger.kernel.org, Jules Maselbas <jmaselbas@kalray.eu>
+Message-ID: <6cd01e79-fdc0-3bd4-32b5-a85142533f8a@pengutronix.de>
+Date:   Mon, 21 Dec 2020 00:06:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-X-Received: by 2002:a6b:4f13:: with SMTP id d19mr11603783iob.121.1608489852027;
- Sun, 20 Dec 2020 10:44:12 -0800 (PST)
-Date:   Sun, 20 Dec 2020 10:44:12 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000414db905b6e9bae8@google.com>
-Subject: KASAN: null-ptr-deref Write in vhci_shutdown_connection
-From:   syzbot <syzbot+a93fba6d384346a761e3@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, shuah@kernel.org,
-        syzkaller-bugs@googlegroups.com, valentina.manea.m@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 Hello,
 
-syzbot found the following issue on:
+I just noticed that USB controller drivers differ in the order in which they
+do phy_init and phy_power_on. For example:
 
-HEAD commit:    5e60366d Merge tag 'fallthrough-fixes-clang-5.11-rc1' of g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13f05613500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=503d0089cd701d6d
-dashboard link: https://syzkaller.appspot.com/bug?extid=a93fba6d384346a761e3
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14d0d8c5500000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1058e41f500000
+__dwc2_lowlevel_hw_enable():
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a93fba6d384346a761e3@syzkaller.appspotmail.com
+	ret = phy_power_on(hsotg->phy);    
+	if (ret == 0)                      
+        	ret = phy_init(hsotg->phy);
 
-vhci_hcd: stop threads
-vhci_hcd: release socket
-vhci_hcd: disconnect device
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
-BUG: KASAN: null-ptr-deref in atomic_fetch_add_relaxed include/asm-generic/atomic-instrumented.h:142 [inline]
-BUG: KASAN: null-ptr-deref in __refcount_add include/linux/refcount.h:193 [inline]
-BUG: KASAN: null-ptr-deref in __refcount_inc include/linux/refcount.h:250 [inline]
-BUG: KASAN: null-ptr-deref in refcount_inc include/linux/refcount.h:267 [inline]
-BUG: KASAN: null-ptr-deref in get_task_struct include/linux/sched/task.h:102 [inline]
-BUG: KASAN: null-ptr-deref in kthread_stop+0x90/0x760 kernel/kthread.c:591
-Write of size 4 at addr 0000000000000024 by task kworker/u4:2/46
+dwc3_core_init():
 
-CPU: 0 PID: 46 Comm: kworker/u4:2 Not tainted 5.10.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usbip_event event_handler
-Call Trace:
- __dump_stack lib/dump_stack.c:79 [inline]
- dump_stack+0x107/0x163 lib/dump_stack.c:120
- __kasan_report mm/kasan/report.c:549 [inline]
- kasan_report.cold+0x5/0x37 mm/kasan/report.c:562
- check_memory_region_inline mm/kasan/generic.c:186 [inline]
- check_memory_region+0x13d/0x180 mm/kasan/generic.c:192
- instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
- atomic_fetch_add_relaxed include/asm-generic/atomic-instrumented.h:142 [inline]
- __refcount_add include/linux/refcount.h:193 [inline]
- __refcount_inc include/linux/refcount.h:250 [inline]
- refcount_inc include/linux/refcount.h:267 [inline]
- get_task_struct include/linux/sched/task.h:102 [inline]
- kthread_stop+0x90/0x760 kernel/kthread.c:591
- vhci_shutdown_connection+0x17f/0x340 drivers/usb/usbip/vhci_hcd.c:1021
- event_handler+0x1f0/0x4f0 drivers/usb/usbip/usbip_event.c:78
- process_one_work+0x98d/0x1630 kernel/workqueue.c:2275
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2421
- kthread+0x3b1/0x4a0 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
-==================================================================
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 46 Comm: kworker/u4:2 Tainted: G    B             5.10.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usbip_event event_handler
-Call Trace:
- __dump_stack lib/dump_stack.c:79 [inline]
- dump_stack+0x107/0x163 lib/dump_stack.c:120
- panic+0x343/0x77f kernel/panic.c:231
- end_report+0x58/0x5e mm/kasan/report.c:106
- __kasan_report mm/kasan/report.c:552 [inline]
- kasan_report.cold+0xd/0x37 mm/kasan/report.c:562
- check_memory_region_inline mm/kasan/generic.c:186 [inline]
- check_memory_region+0x13d/0x180 mm/kasan/generic.c:192
- instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
- atomic_fetch_add_relaxed include/asm-generic/atomic-instrumented.h:142 [inline]
- __refcount_add include/linux/refcount.h:193 [inline]
- __refcount_inc include/linux/refcount.h:250 [inline]
- refcount_inc include/linux/refcount.h:267 [inline]
- get_task_struct include/linux/sched/task.h:102 [inline]
- kthread_stop+0x90/0x760 kernel/kthread.c:591
- vhci_shutdown_connection+0x17f/0x340 drivers/usb/usbip/vhci_hcd.c:1021
- event_handler+0x1f0/0x4f0 drivers/usb/usbip/usbip_event.c:78
- process_one_work+0x98d/0x1630 kernel/workqueue.c:2275
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2421
- kthread+0x3b1/0x4a0 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+	ret = dwc3_core_soft_reset(dwc); // internally does phy_init(dwc->usb2_generic_phy);
+	/* [snip] */
+	ret = phy_power_on(dwc->usb2_generic_phy);
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+My initial assumption has been init -> power_on, but at least the phy-stm32-usbphyc
+(used with dwc2) is written with the assumption that exit -> power_off (and therefore
+power_on -> init). If they are swapped, disabling fails.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+So how was it meant to be?
+
+Cheers,
+Ahmad
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
