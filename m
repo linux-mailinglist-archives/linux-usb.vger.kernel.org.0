@@ -2,104 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 606E52DFF9C
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Dec 2020 19:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6610D2E0033
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Dec 2020 19:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726129AbgLUSWB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Dec 2020 13:22:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51528 "EHLO
+        id S1726867AbgLUSmn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Dec 2020 13:42:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726057AbgLUSWB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Dec 2020 13:22:01 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9833C0613D6;
-        Mon, 21 Dec 2020 10:21:20 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id s26so25880887lfc.8;
-        Mon, 21 Dec 2020 10:21:20 -0800 (PST)
+        with ESMTP id S1726513AbgLUSmn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Dec 2020 13:42:43 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083CDC061257
+        for <linux-usb@vger.kernel.org>; Mon, 21 Dec 2020 10:42:03 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id b2so10583772edm.3
+        for <linux-usb@vger.kernel.org>; Mon, 21 Dec 2020 10:42:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sWyYMYoogTI0qEcPT7ewbmd4Di2kxWT27aivbJmhx28=;
-        b=c8IRniwyiglKPVZFlpYSUzsKnpyYHZUumx0BgM9yzOuWuh/xrwae2gFez/R6GkI4T2
-         Gk2dN+mCH5LKqsnlmg53XF6BKZTCYvssMmXchhIb2I1pWNWhuMMU32wxNZkI56NRLR8n
-         rN185Qyp+QL7SFnNV1zfBvGedZq5jjF0pbxRYx+TCd5bGdr3H9guwM1EdVS7GeiZhDwL
-         vUj2GwTwqAj242pHOCeS3LoVckq0l8MnXm73bPMIWTWsAqlUQTyl9QuQnG0pDMBMX/Op
-         I0m+SX7i/ABxCA1L2er3Kr1vKQvKnFqqiV0tt5ufh/7onCwGkoDn6IMt74Yoc0EFhH54
-         UiFA==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:message-id
+         :date:mime-version;
+        bh=rXMVWWeWP8b0dhdZDjBVMDAbUIoGayZw6YAMx3ukLmI=;
+        b=jWSndN99Bvk3VRauxG8QJEtCFS1GygumnT2A4MGvgxyJ/vPuHTFoYnaEmLY5wHys7a
+         scVDU90qvvJzvi+g1WJdkHSfjQbcDcQBm4fEGlTCoH4KXDMBH3S5j6TSI/c+vvII7+Sd
+         kNqnHPaL0yQznGlVnnd9rNT1I8YjtUsQhAOaf9hzh4GNG/jfE3Y0ToJLp8hA1gpNB6pQ
+         bBLa0fnXz4tpinnusK/33WoMSCnypiz+Px/zdEpPRDMETXLhJD1OI2ykpCi5s09nv/oC
+         YJWPsPkI0+CLdgLk0WVj3xikd9kBCnn6Sa+355Rss5rWSi2+xLDEycMeGYWpBKpovq0s
+         Y4ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sWyYMYoogTI0qEcPT7ewbmd4Di2kxWT27aivbJmhx28=;
-        b=jQ5J9NzILOP2ruarW/u2dJ5duPvTvmKxugyuwH9Xz1I5BM+cKDX7hNTQDxHh38fSyB
-         2la7paFUWki2/nDt8J1ln05Uv6lByeFfnyVORDukI3onWAUU0mGb6zAjKYGGpJK+M8IT
-         A44+WkOMMWGcuPFNepuYjvU8HDp8gmg7SKVPiUucOJYq14AUCVE+zdOy8TtlnHfrMbb1
-         J2nHkBigxJripd1lI2xo9cKpHe6WkHfOMJC8Vuva9iskBJFgRmKNUOV8n8GKPnRDnVG2
-         S1V6rB2RRiA9NWWW22OHntCsu3KEMEmeINyExKQwQ3Fmd4V+wo4qwcZ2w4eNS4yMHfp1
-         RoJw==
-X-Gm-Message-State: AOAM533jgeMPe+brDq2E6YBcJKSOf60RpOJRzZsE5xSalTb1pZRptOC0
-        DmrAXIpOt+CzirK1GS7IUvM6Oi7Ev3mQwbeimWkqJoqbEaI=
-X-Google-Smtp-Source: ABdhPJxU8ZS9Uqf73qEiCIFLa3Wey/Dnx2XDW3bpW4IPhdA/deXrAGBCmmPpxsiN47g/sORvF4vuVoBnwSS1EL7P3wE=
-X-Received: by 2002:a17:906:6c8b:: with SMTP id s11mr15761117ejr.187.1608564530691;
- Mon, 21 Dec 2020 07:28:50 -0800 (PST)
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:message-id:date:mime-version;
+        bh=rXMVWWeWP8b0dhdZDjBVMDAbUIoGayZw6YAMx3ukLmI=;
+        b=oVQlHGSZKi37CauMet0L6siBEzv1/aElEzRxGb7TqICGXdVA7kI1rO3sroXqUEnk0v
+         BjwSCXjvIUbirxRBi46rIQ3n7wHlbpNE3DwQ2NHY7rw/dk7mGmNAfGkRF7tKaQJql/E/
+         zy4h+z7xYaR2uz6saIxv/2AbGVKfgZiAeZvWislym5gb2GBul3pc1suz23MvhCXZG2ZL
+         yEnLFudSgRX9YRb5Rrso0Ho3n/hlZwwycVtHtMXeVEEnVMNd7N8Ga5FODXkjUp7PW76s
+         7aGDCuBbPHJMRMulP+aqQQNPIf8RsvULseV6TWqXL7kySiIYS9EYBnblPdOn4OBQHb31
+         0zHA==
+X-Gm-Message-State: AOAM533+5kpIwsD7j4cZrA4iSD8Ty6IJTBZ/x6MI9tozugc38y7RLhZ+
+        hPhBfC+69obStFI05qCVhmaFBH123x794VLm
+X-Google-Smtp-Source: ABdhPJxW0I7oJBf6vdEdEctjUbKX1vsOxoHqh0i3TGwQXEtiLRnQPQrbV4M8cnTsZup0ja6nafkCXA==
+X-Received: by 2002:aa7:c753:: with SMTP id c19mr16619808eds.358.1608567336537;
+        Mon, 21 Dec 2020 08:15:36 -0800 (PST)
+Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
+        by smtp.gmail.com with ESMTPSA id t16sm2129832eje.109.2020.12.21.08.15.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Dec 2020 08:15:35 -0800 (PST)
+References: <20201029175949.6052-1-jackp@codeaurora.org>
+User-agent: mu4e 1.4.10; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Jack Pham <jackp@codeaurora.org>, Felipe Balbi <balbi@kernel.org>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-usb@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
+        Ferry Toth <fntoth@gmail.com>
+Subject: Re: [PATCH v3] usb: gadget: audio: Free requests only after callback
+In-reply-to: <20201029175949.6052-1-jackp@codeaurora.org>
+Message-ID: <1jczz3b0ew.fsf@starbuckisacylon.baylibre.com>
+Date:   Mon, 21 Dec 2020 17:15:35 +0100
 MIME-Version: 1.0
-References: <20201004162908.3216898-1-martin.blumenstingl@googlemail.com>
- <20201004162908.3216898-4-martin.blumenstingl@googlemail.com>
- <CACRpkdZo-U_cAhbKb4E+d+p+5FenXkGYW0RXxyk4M5uyEPCpzw@mail.gmail.com> <CAFBinCCLubmDvxfabQHx2-ucgAsm1NArMUrtPx-UA2nX5xoFFA@mail.gmail.com>
-In-Reply-To: <CAFBinCCLubmDvxfabQHx2-ucgAsm1NArMUrtPx-UA2nX5xoFFA@mail.gmail.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 21 Dec 2020 16:28:39 +0100
-Message-ID: <CAFBinCAZXJ2=fTQuAUyW1hNeJDHY3_pxo4UhxUaOZC=i1bpFxw@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/3] gpio: ej1x8: Add GPIO driver for Etron Tech Inc. EJ168/EJ188/EJ198
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-usb <linux-usb@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Linus,
 
-On Wed, Oct 7, 2020 at 9:44 PM Martin Blumenstingl
-<martin.blumenstingl@googlemail.com> wrote:
-[...]
-> > As noted on the earlier patches I think this should be folded into the
-> > existing XHCI USB driver in drivers/usb/host/xhci-pci.c or, if that
-> > gets messy, as a separate bolt-on, something like
-> > xhci-pci-gpio.[c|h] in the drivers/usb/host/* directory.
-> > You can use a Kconfig symbol for the GPIO portions or not.
-> OK, I will do that if there are no objections from other developers
-> I am intending to place the relevant code in xhci-pci-etron.c, similar
-> to what we already have with xhci-pci-renesas.c
-I tried this and unfortunately there's a catch.
-the nice thing about having a separate GPIO driver means that the
-xhci-pci driver doesn't need to know about it.
+On Thu 29 Oct 2020 at 18:59, Jack Pham <jackp@codeaurora.org> wrote:
 
-I implemented xhci-pci-etron.c and gave it a Kconfig option.
-xhci-pci is then calling into xhci-pci-etron (through some
-etron_xhci_pci_probe function).
-unfortunately this means that xhci-pci now depends on xhci-pci-etron.
-for xhci-pci-renesas this is fine (I think) because that part of the
-code is needed to get the xHCI controller going
-but for xhci-pci-etron this is a different story: the GPIO controller
-is entirely optional and only used on few devices
+> As per the kernel doc for usb_ep_dequeue(), it states that "this
+> routine is asynchronous, that is, it may return before the completion
+> routine runs". And indeed since v5.0 the dwc3 gadget driver updated
+> its behavior to place dequeued requests on to a cancelled list to be
+> given back later after the endpoint is stopped.
+>
+> The free_ep() was incorrectly assuming that a request was ready to
+> be freed after calling dequeue which results in a use-after-free
+> in dwc3 when it traverses its cancelled list. Fix this by moving
+> the usb_ep_free_request() call to the callback itself in case the
+> ep is disabled.
+>
+> Fixes: eb9fecb9e69b0 ("usb: gadget: f_uac2: split out audio core")
+> Reported-and-tested-by: Ferry Toth <fntoth@gmail.com>
+> Reviewed-and-tested-by: Peter Chen <peter.chen@nxp.com>
 
-my goal is (at some point in the future) to have the GPIO driver in OpenWrt.
-I am not sure if they would accept a patch where xhci-pci would then
-pull in the dependencies for that Etron controller, even though most
-boards don't need it.
+Tested-by: Jerome Brunet <jbrunet@baylibre.com>
 
-Please let me know if you have any idea on how to solve this.
+> Signed-off-by: Jack Pham <jackp@codeaurora.org>
+> ---
+> v3: Fixed incorrect 'req' parameter and added Peter's tag
+>
+> v2: call free_request() in case of ep_dequeue() failure
+>
+>  drivers/usb/gadget/function/u_audio.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+> index e6d32c536781..6e69ccf02c95 100644
+> --- a/drivers/usb/gadget/function/u_audio.c
+> +++ b/drivers/usb/gadget/function/u_audio.c
+> @@ -89,7 +89,12 @@ static void u_audio_iso_complete(struct usb_ep *ep, struct usb_request *req)
+>  	struct snd_uac_chip *uac = prm->uac;
+>  
+>  	/* i/f shutting down */
+> -	if (!prm->ep_enabled || req->status == -ESHUTDOWN)
+> +	if (!prm->ep_enabled) {
+> +		usb_ep_free_request(ep, req);
+> +		return;
+> +	}
+> +
+> +	if (req->status == -ESHUTDOWN)
+>  		return;
+>  
+>  	/*
+> @@ -336,8 +341,9 @@ static inline void free_ep(struct uac_rtd_params *prm, struct usb_ep *ep)
+>  
+>  	for (i = 0; i < params->req_number; i++) {
+>  		if (prm->ureq[i].req) {
+> -			usb_ep_dequeue(ep, prm->ureq[i].req);
+> -			usb_ep_free_request(ep, prm->ureq[i].req);
+> +			if (usb_ep_dequeue(ep, prm->ureq[i].req))
+> +				usb_ep_free_request(ep, prm->ureq[i].req);
+> +			/* else will be freed in u_audio_iso_complete() */
+>  			prm->ureq[i].req = NULL;
+>  		}
+>  	}
 
-
-Best regards,
-Martin
