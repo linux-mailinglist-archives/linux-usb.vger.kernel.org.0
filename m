@@ -2,110 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D112E0853
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Dec 2020 10:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A62D2E0968
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Dec 2020 12:15:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725854AbgLVJxc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Dec 2020 04:53:32 -0500
-Received: from smtprelay0042.hostedemail.com ([216.40.44.42]:45686 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725811AbgLVJxc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Dec 2020 04:53:32 -0500
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay06.hostedemail.com (Postfix) with ESMTP id 1A3B21822186D;
-        Tue, 22 Dec 2020 09:52:51 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:968:973:988:989:1260:1277:1311:1313:1314:1345:1359:1434:1437:1515:1516:1518:1534:1543:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2692:2828:3138:3139:3140:3141:3142:3354:3622:3865:3866:3867:3868:3870:3871:3872:3874:4250:4321:4605:5007:6119:6248:7576:10004:10400:10848:11026:11232:11233:11473:11658:11914:12043:12296:12297:12555:12679:12740:12895:13439:13894:14096:14097:14181:14659:14721:21080:21324:21433:21451:21627:30012:30029:30054:30070:30075:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: straw06_580ca3a2745f
-X-Filterd-Recvd-Size: 3803
-Received: from XPS-9350.home (unknown [47.151.137.21])
-        (Authenticated sender: joe@perches.com)
-        by omf15.hostedemail.com (Postfix) with ESMTPA;
-        Tue, 22 Dec 2020 09:52:50 +0000 (UTC)
-Message-ID: <6ea843411793073040bb8d518fca84f5b66b86aa.camel@perches.com>
-Subject: Re: [PATCH] usb: musb: add printf attribute to log function
-From:   Joe Perches <joe@perches.com>
-To:     Greg KH <gregkh@linuxfoundation.org>, trix@redhat.com
-Cc:     b-liu@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 22 Dec 2020 01:52:48 -0800
-In-Reply-To: <X+Gzvo3vPBFGKAy+@kroah.com>
-References: <20201221162547.3756889-1-trix@redhat.com>
-         <X+Gzvo3vPBFGKAy+@kroah.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
+        id S1726686AbgLVLOu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Dec 2020 06:14:50 -0500
+Received: from mout.gmx.net ([212.227.17.21]:53833 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726533AbgLVLOu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 22 Dec 2020 06:14:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1608635598;
+        bh=yvCoD5UZNeLHKTQMF8r5Di2/G1rK8erQmQP3wtjjuXk=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=HZjDLQ0CWOzGMqd8i1nyK8tRJHUr0onegHCOvaBqozSNYbxKUmWVLZ1Kzot8PDjmK
+         Tnz6LDe1cvFiw225cPAur65qqgEvhspiM6IythROatqiXn7bA9788P0troaLHxh/+C
+         /NgwPZ4ETaC80nB8oQgcWePZITCYMYp9zD7Xik3k=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ingxiaomi.fritz.box ([88.217.180.51]) by mail.gmx.com (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mel3t-1kJ9jP2peP-00aih9 for
+ <linux-usb@vger.kernel.org>; Tue, 22 Dec 2020 12:13:18 +0100
+Date:   Tue, 22 Dec 2020 12:13:17 +0100
+From:   Ingo Rohloff <lundril@gmx.de>
+To:     linux-usb@vger.kernel.org
+Subject: USB Gadget via ConfigFS; define custom String Descriptors
+Message-ID: <20201222121317.008f54a6@ingxiaomi.fritz.box>
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:B5ettG2kJPuRrmP3QVfP0jwPSX1TLIImMBA6kSiHKmNLm/hna9N
+ DhWKWWJ2OGPrXJcXkc8ikWQdf3b4oKUrca4wwq7HqsPKhxZ14kw+a0mC0mrLWmD+x5/5uv/
+ NuskXaEFpSzrpUtPXxDU2XA08cvUkBiEjdz1q5YFhHtmEq3fXQ2q5lglOVvJY7V62dg6Y/o
+ l6g+V1Dopmp01yIjtv82g==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4NWfUP+Dy3k=:j6cRYiX+GUruk9IwK3sTMX
+ soJtzSV0RvWUJsovsDqTneM2y+fJ2SMHgXo67HuSonqKWzorHwxmexj13bfe3k73krZ3sYUgn
+ lkldPnmvqt03mZGHYqe1jJUt1h+ItA24S6MccXyyYGfVkuHbtn4/1oxfXIQ2Rma33gaVU43DH
+ K0KlAP7ze2q6WvEadEESabj1F4m9Z1FeLzv1jfPxjVYZlsrhjPgccyTG1Lix/VxZ/ad5MTPjc
+ +Z+10RzqhX+Px0EcZ2XOQKu3hoIZ7jbmNoWXS+7a3EXfUaaA8CPsAC4GMBikjABHUMqtvbgfw
+ XO9dTjtc0LrDCeH2Pa5gvTaNVCRncXY0nQhsCMCPiU0Z7ZZiTox4g8pQcDpb9bu9eZN+7btR9
+ +Hc2gmrtiGMXHgEU4Ex8pBU/5cj2uQO+X60gYDbiZgvvMafTV29q2z5i7JIWM7jrAnn/AjXin
+ p5gAf3+AJbeshOCQVgZLGMnmbniVurv1rUcCAdr723c5MHi5dAx2xODgEVf0AcRUkvKVDYJqY
+ 8E6yGQGmJJMC5nnZHZsTRXn91RJMio1VUBZWLSMZiKCd32j9SXX7eahtJCWUGytkewzZw2OGv
+ p94XNN/qkBFQKwFvzyzBpH8jvXRBrIZ5xttY0gqz3YKpfnkp76DqpBLxkzQzLKd5dpD8cKWFl
+ HkeXZaX/HC7lc+02cmiPeH4ldw8GuX3SQjQUpU0BYuoGKDcpmnX8cKmRizAS3CVk7nwWrlU8X
+ W0VumNeNUTma+kPEc8bKn3666j4eRcvGTiXr6PWPqJijW3Xxq8VwhT5rgWV5uGGkzJvOZ5lfO
+ zjASBgREimqYM/25+SELP0IA3j+De3rIchhLOr1R4Eil/qzF1QgM2wHBm8FLvKlV8Ps39guXn
+ QkymFhqPvuTRjEzxEDYQ==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2020-12-22 at 09:52 +0100, Greg KH wrote:
-> On Mon, Dec 21, 2020 at 08:25:47AM -0800, trix@redhat.com wrote:
-> > From: Tom Rix <trix@redhat.com>
-> > 
-> > Attributing the function allows the compiler to more thoroughly
-> > check the use of the function with -Wformat and similar flags.
-> > 
-> > Signed-off-by: Tom Rix <trix@redhat.com>
-> > ---
-> >  drivers/usb/musb/musb_debug.h | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/usb/musb/musb_debug.h b/drivers/usb/musb/musb_debug.h
-> > index e5b3506c7b3f..dfc0d02695fa 100644
-> > --- a/drivers/usb/musb/musb_debug.h
-> > +++ b/drivers/usb/musb/musb_debug.h
-> > @@ -17,6 +17,7 @@
-> >  #define INFO(fmt, args...) yprintk(KERN_INFO, fmt, ## args)
-> >  #define ERR(fmt, args...) yprintk(KERN_ERR, fmt, ## args)
-> >  
-> > 
-> > +__printf(2, 3)
-> >  void musb_dbg(struct musb *musb, const char *fmt, ...);
-> 
-> While I understand the need for this, did this find any problems?
-> If not, then it's not worth adding,
+Hello,
 
-I have to disagree with that Greg.  While the driver isn't in active
-development, a trivial mod to make it less likely a defect is introduced
-by any additional code is still a useful addition.
+before trying to implement something I would like to get some opinions
+if what I am thinking of seems to be useful, or if I am on the wrong
+track.
 
-> the driver-specific debugging macros
-> should be removed entirely and just use dev_dbg() and friends instead.
+I am implementing a USB Gadget.
+To configure the gadget I use ConfigFS.
+Now what I would like to do is to configure some device specific
+string descriptors, which have a fixed, custom index.
 
-Read the suggested change I posted in reply.
 
-btw: the musb_dbg function is actually a trace function and not a
-dmesg/logging mechanism.
+Now I know that if you for example create a gadget in configFS
+at directory
+  usb_gadget/g1
 
-drivers/usb/musb/musb_trace.c:void musb_dbg(struct musb *musb, const char *fmt, ...)
-drivers/usb/musb/musb_trace.c-{
-drivers/usb/musb/musb_trace.c-  struct va_format vaf;
-drivers/usb/musb/musb_trace.c-  va_list args;
-drivers/usb/musb/musb_trace.c-
-drivers/usb/musb/musb_trace.c-  va_start(args, fmt);
-drivers/usb/musb/musb_trace.c-  vaf.fmt = fmt;
-drivers/usb/musb/musb_trace.c-  vaf.va = &args;
-drivers/usb/musb/musb_trace.c-
-drivers/usb/musb/musb_trace.c-  trace_musb_log(musb, &vaf);
-drivers/usb/musb/musb_trace.c-
-drivers/usb/musb/musb_trace.c-  va_end(args);
-drivers/usb/musb/musb_trace.c-}
+you will get the following standard device string descriptors:
+  usb_gadget/g1/strings/0x409
+    manufacturer
+    product
+    serialnumber
 
-drivers/usb/musb/musb_trace.h:TRACE_EVENT(musb_log,
-drivers/usb/musb/musb_trace.h-  TP_PROTO(struct musb *musb, struct va_format *vaf),
-drivers/usb/musb/musb_trace.h-  TP_ARGS(musb, vaf),
-drivers/usb/musb/musb_trace.h-  TP_STRUCT__entry(
-drivers/usb/musb/musb_trace.h-          __string(name, dev_name(musb->controller))
-drivers/usb/musb/musb_trace.h-          __dynamic_array(char, msg, MUSB_MSG_MAX)
-drivers/usb/musb/musb_trace.h-  ),
-drivers/usb/musb/musb_trace.h-  TP_fast_assign(
-drivers/usb/musb/musb_trace.h-          __assign_str(name, dev_name(musb->controller));
-drivers/usb/musb/musb_trace.h-          vsnprintf(__get_str(msg), MUSB_MSG_MAX, vaf->fmt, *vaf->va);
-drivers/usb/musb/musb_trace.h-  ),
-drivers/usb/musb/musb_trace.h-  TP_printk("%s: %s", __get_str(name), __get_str(msg))
-drivers/usb/musb/musb_trace.h-);
+You might set the content of these string descriptors by writing to
+these files.
+The indexes of these string descriptors gets auto-assigned as far as I
+understand the Linux source code.
+These indexes are then put into the USB device descriptor, which is how
+a USB host finds out which indexes to use.
 
-Is that trace mechanism useful though?  I think it's somewhat odd.
 
+What I now want to do is to define additional string descriptors, with
+some fixed, custom indexes.
+
+Questions:
+
+* Is this simply not intended by the USB spec ?
+
+* Is there already a way to do that via ConfigFS,
+  which I am not aware of ?
+
+* Does a mechanism to define such custom string descriptors sound
+  useful ? So is it worth the effort to implement it ?
+
+
+Just a super simple proposal how to do that; since I have no experience
+what's best for ConfigFS, please advise if you think there is a better
+way!
+If a user creates a file
+   usb_gadget/g1/strings/0x0409/
+      custom_34
+
+Then this will be accessible as USB device string descriptor,
+with index 0x34. So the two characters after the "_" are interpreted as
+two hex digits, which define the index.
+
+Does this sound like a viable strategy to allow custom string
+descriptors ?
+
+
+Ingo
