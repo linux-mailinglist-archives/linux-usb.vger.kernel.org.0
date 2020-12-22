@@ -2,75 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1C42E07B8
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Dec 2020 10:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DBF2E080E
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Dec 2020 10:25:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725985AbgLVJJJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Dec 2020 04:09:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725964AbgLVJJJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Dec 2020 04:09:09 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8700C0613D6
-        for <linux-usb@vger.kernel.org>; Tue, 22 Dec 2020 01:08:28 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1krdec-0001OJ-Na; Tue, 22 Dec 2020 10:08:26 +0100
-Subject: Re: Correct ordering of phy_init and phy_power_on
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Jules Maselbas <jmaselbas@kalray.eu>
-References: <6cd01e79-fdc0-3bd4-32b5-a85142533f8a@pengutronix.de>
- <014e75a5-ab7b-55be-e554-14ef7550b360@ti.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Message-ID: <d9311d93-76bb-7671-cc3e-04e7c7db2ff8@pengutronix.de>
-Date:   Tue, 22 Dec 2020 10:08:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        id S1725964AbgLVJYL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Dec 2020 04:24:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53146 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725947AbgLVJYK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 22 Dec 2020 04:24:10 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C88DF23103;
+        Tue, 22 Dec 2020 09:23:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608629009;
+        bh=qCqELfT57AvpMFFVLIkE1zpXaxirvic0pVHoJrdiDf0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VXG6q1jDnolpc2Kco5fiYlkd1rYrT7BhErvPLh1wTOdPE3UaR8NT5QnzffHEX5/Y3
+         3Mq4rBK4Q4NVT/7dMsnRGi9seBbVZhH1wlEfWRgffmC/7H3AgoVcUKpRjjWTDELEbU
+         yPmZb+25uO9fYz8uhk1Yx6j/YrkntiJGSx3DNrPY8tBBvV0ayJiTR5BoAQmtjs6n2i
+         CGmxviehaIdo/3+OZC90LSBzdi7XHGPd8sccX5LV9An1akhAlMUJo4CS8PbHZHfP6m
+         XIUF0vPu0AkFve+KcXryLWhkKVFDpG1Wu8JULU3qT6V4ZIUl3OjhTR6nj6mkNdPH3M
+         nbqooLM6dhBPA==
+Received: by pali.im (Postfix)
+        id 7CA6C848; Tue, 22 Dec 2020 10:23:27 +0100 (CET)
+Date:   Tue, 22 Dec 2020 10:23:27 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jun Li <jun.li@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: host: xhci-plat: fix support for XHCI_SKIP_PHY_INIT
+ quirk
+Message-ID: <20201222092327.jq5b7g4bffeccq3o@pali>
+References: <20201221150903.26630-1-pali@kernel.org>
+ <20201222021416.GB4706@b29397-desktop>
 MIME-Version: 1.0
-In-Reply-To: <014e75a5-ab7b-55be-e554-14ef7550b360@ti.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201222021416.GB4706@b29397-desktop>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Kishon,
-
-On 21.12.20 04:15, Kishon Vijay Abraham I wrote:
->> So how was it meant to be?
+On Tuesday 22 December 2020 02:14:45 Peter Chen wrote:
+> On 20-12-21 16:09:03, Pali Rohár wrote:
+> > Currently init_quirk callbacks for xhci platform drivers are called
+> > xhci_plat_setup() function which is called after chip reset completes.
+> > It happens in the middle of the usb_add_hcd() function.
+> > 
+> > But XHCI_SKIP_PHY_INIT quirk is checked in the xhci_plat_probe() function
+> > prior calling usb_add_hcd() function. Therefore this XHCI_SKIP_PHY_INIT
+> > currently does nothing as prior xhci_plat_setup() it is not set.
+> > 
+> > Quirk XHCI_SKIP_PHY_INIT is only setting hcd->skip_phy_initialization value
+> > which really needs to be set prior calling usb_add_hcd() as this function
+> > at its beginning skips PHY init if this member is set.
+> > 
+> > This patch fixes implementation of the XHCI_SKIP_PHY_INIT quirk by calling
+> > init_quirk callbacks (via xhci_priv_init_quirk()) prior checking if
+> > XHCI_SKIP_PHY_INIT is set.
+> > 
+> > Fixes: f768e718911e0 ("usb: host: xhci-plat: add priv quirk for skip PHY initialization")
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > ---
+> >  drivers/usb/host/xhci-plat.c | 14 +++++++-------
+> >  1 file changed, 7 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> > index 4d34f6005381..58704c5b002b 100644
+> > --- a/drivers/usb/host/xhci-plat.c
+> > +++ b/drivers/usb/host/xhci-plat.c
+> > @@ -89,13 +89,6 @@ static void xhci_plat_quirks(struct device *dev, struct xhci_hcd *xhci)
+> >  /* called during probe() after chip reset completes */
+> >  static int xhci_plat_setup(struct usb_hcd *hcd)
+> >  {
+> > -	int ret;
+> > -
+> > -
+> > -	ret = xhci_priv_init_quirk(hcd);
+> > -	if (ret)
+> > -		return ret;
+> > -
+> >  	return xhci_gen_setup(hcd, xhci_plat_quirks);
+> >  }
+> >  
+> > @@ -330,6 +323,13 @@ static int xhci_plat_probe(struct platform_device *pdev)
+> >  
+> >  	hcd->tpl_support = of_usb_host_tpl_support(sysdev->of_node);
+> >  	xhci->shared_hcd->tpl_support = hcd->tpl_support;
+> > +
+> > +	if (priv) {
+> > +		ret = xhci_priv_init_quirk(hcd);
+> > +		if (ret)
+> > +			goto disable_usb_phy;
+> > +	}
+> > +
+> >  	if (priv && (priv->quirks & XHCI_SKIP_PHY_INIT))
+> >  		hcd->skip_phy_initialization = 1;
+> >  
 > 
-> It is intended to be ->init() and then ->power_on(). So ideally it
-> should be the way dwc3 is.
+> Hi Pali,
+> 
+> What's problem you have met? In structure xhci_plat_priv, the quirks are
+> defined at .quirks entry which is got at below code. .init_quirk is the
+> routine if special initializations are needed.
 
-Thanks. Should we do something about the inconsistency?
+Hello!
 
-Amend documentation and maybe print a warning when order is wrong,
-so users are encouraged to fix their drivers?
+I'm talking about .init_quirk. And if XHCI_SKIP_PHY_INIT quirk is set in
+this function then has no effect.
 
-The way it is, you can't properly mix some of the PHY and USB controller drivers.
+I'm working currently on patch for xhci mvebu which conditionally enable
+or disable XHCI_SKIP_PHY_INIT quirk (it is going to fix existing
+regression since v5.1 kernel) and without this patch XHCI_SKIP_PHY_INIT
+quirk from the init_quirk does not work.
 
-Cheers,
-Ahmad
-
+> 	if (pdev->dev.of_node)
+> 		priv_match = of_device_get_match_data(&pdev->dev);
+> 	else
+> 		priv_match = dev_get_platdata(&pdev->dev);
+> 
+> 	if (priv_match) {
+> 		priv = hcd_to_xhci_priv(hcd);
+> 		/* Just copy data for now */
+> 		*priv = *priv_match;
+> 	}
+> -- 
 > 
 > Thanks,
-> Kishon
-> 
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> Peter Chen
