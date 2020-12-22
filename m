@@ -2,143 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 301002E0AB7
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Dec 2020 14:31:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A892E0D5C
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Dec 2020 17:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727489AbgLVNbf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Dec 2020 08:31:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45392 "EHLO mail.kernel.org"
+        id S1727080AbgLVQ1z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Dec 2020 11:27:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59926 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727146AbgLVNbe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 22 Dec 2020 08:31:34 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C7C09229C6;
-        Tue, 22 Dec 2020 13:30:53 +0000 (UTC)
+        id S1726931AbgLVQ1z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 22 Dec 2020 11:27:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C5D5622AAE;
+        Tue, 22 Dec 2020 16:27:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608643853;
-        bh=1WvxvtX20HsPEDDPqNB0howPhU2hqueA4ilWZni7BSQ=;
+        s=k20201202; t=1608654434;
+        bh=TL0OpA64GzFmwToXJLX0r9Oq1tR4MpAMJvZ6vZ0Fdyg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LVEjdkyEec4DNI0h6cFv/S11CfyPsNRZY8nwEUIBdNAn33FLcIT2At9h8WY0eUOkQ
-         GoCFwbvJj9SisZdTbjW5vXtx4tW8MNXjJUmgJAPQgdSAuVwY5Q6s+iRlbh8ik9r/p2
-         iucShZb4Do74KGM3jXBwkyddVKDMRJhv/FkNaaETocGQnmgwzvtdGWlDukUJNujv0H
-         BFruNq9Q6mdwCyD1SuPFYw8K4dyJzzudMMtrgX4icgUfqOJV7fdHMQ1VkDqE9rOSqO
-         rSDiGAH9roSF6OVrdqOglp1CMhL6oqrTHY8jiMG3vbhlhOP3LgjisY0V0z9gt6CEdS
-         X4iUSe+xZP4AQ==
-Received: by pali.im (Postfix)
-        id A2D4B848; Tue, 22 Dec 2020 14:30:51 +0100 (CET)
-Date:   Tue, 22 Dec 2020 14:30:51 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        b=iDgzLpQBBXH9YTfFBKVQJYN6MYAp0jCmF55BRi4QMkWj9bvJlAMGoT5ymjLbEQtzw
+         3tEM/W5nGCHA3+B+VwbF798B2VViU6tS/mjzIV7x4TgTTUMiDOkQq5MI3n7dW9zA5E
+         FSw9Km5td0sUQBbjY85j2Q3PdKmI6mps5XRQCC2ChSGNeeoPAZ528rrHsxGFxTJSNt
+         5g4vgoUpkM5Ac394XVjisDu4ydN3le5yZm44TWYT94ZnALtWvXTqjsMhTMGaD8dqa1
+         Gk5eCeSwlpTHzab3W/rGF8KZK1Pw/MvIBODzv2zvbb43/pVQ+KG76KZIpU6ryF/bZW
+         0vu2GqQzMYCJA==
+Date:   Tue, 22 Dec 2020 21:57:09 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mark Brown <broonie@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jun Li <jun.li@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: host: xhci-plat: fix support for XHCI_SKIP_PHY_INIT
- quirk
-Message-ID: <20201222133051.jfvrgkcdhjnldz3z@pali>
-References: <20201221150903.26630-1-pali@kernel.org>
- <20201222021416.GB4706@b29397-desktop>
- <20201222092327.jq5b7g4bffeccq3o@pali>
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Drop redundant maxItems/items
+Message-ID: <20201222162709.GA120946@vkoul-mobl>
+References: <20201222040645.1323611-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201222092327.jq5b7g4bffeccq3o@pali>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20201222040645.1323611-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tuesday 22 December 2020 10:23:27 Pali Rohár wrote:
-> On Tuesday 22 December 2020 02:14:45 Peter Chen wrote:
-> > On 20-12-21 16:09:03, Pali Rohár wrote:
-> > > Currently init_quirk callbacks for xhci platform drivers are called
-> > > xhci_plat_setup() function which is called after chip reset completes.
-> > > It happens in the middle of the usb_add_hcd() function.
-> > > 
-> > > But XHCI_SKIP_PHY_INIT quirk is checked in the xhci_plat_probe() function
-> > > prior calling usb_add_hcd() function. Therefore this XHCI_SKIP_PHY_INIT
-> > > currently does nothing as prior xhci_plat_setup() it is not set.
-> > > 
-> > > Quirk XHCI_SKIP_PHY_INIT is only setting hcd->skip_phy_initialization value
-> > > which really needs to be set prior calling usb_add_hcd() as this function
-> > > at its beginning skips PHY init if this member is set.
-> > > 
-> > > This patch fixes implementation of the XHCI_SKIP_PHY_INIT quirk by calling
-> > > init_quirk callbacks (via xhci_priv_init_quirk()) prior checking if
-> > > XHCI_SKIP_PHY_INIT is set.
-> > > 
-> > > Fixes: f768e718911e0 ("usb: host: xhci-plat: add priv quirk for skip PHY initialization")
-> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > ---
-> > >  drivers/usb/host/xhci-plat.c | 14 +++++++-------
-> > >  1 file changed, 7 insertions(+), 7 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> > > index 4d34f6005381..58704c5b002b 100644
-> > > --- a/drivers/usb/host/xhci-plat.c
-> > > +++ b/drivers/usb/host/xhci-plat.c
-> > > @@ -89,13 +89,6 @@ static void xhci_plat_quirks(struct device *dev, struct xhci_hcd *xhci)
-> > >  /* called during probe() after chip reset completes */
-> > >  static int xhci_plat_setup(struct usb_hcd *hcd)
-> > >  {
-> > > -	int ret;
-> > > -
-> > > -
-> > > -	ret = xhci_priv_init_quirk(hcd);
-> > > -	if (ret)
-> > > -		return ret;
-> > > -
-> > >  	return xhci_gen_setup(hcd, xhci_plat_quirks);
-> > >  }
-> > >  
-> > > @@ -330,6 +323,13 @@ static int xhci_plat_probe(struct platform_device *pdev)
-> > >  
-> > >  	hcd->tpl_support = of_usb_host_tpl_support(sysdev->of_node);
-> > >  	xhci->shared_hcd->tpl_support = hcd->tpl_support;
-> > > +
-> > > +	if (priv) {
-> > > +		ret = xhci_priv_init_quirk(hcd);
-> > > +		if (ret)
-> > > +			goto disable_usb_phy;
-> > > +	}
-> > > +
-> > >  	if (priv && (priv->quirks & XHCI_SKIP_PHY_INIT))
-> > >  		hcd->skip_phy_initialization = 1;
-> > >  
-> > 
-> > Hi Pali,
-> > 
-> > What's problem you have met? In structure xhci_plat_priv, the quirks are
-> > defined at .quirks entry which is got at below code. .init_quirk is the
-> > routine if special initializations are needed.
+On 21-12-20, 21:06, Rob Herring wrote:
+> 'maxItems' equal to the 'items' list length is redundant. 'maxItems' is
+> preferred for a single entry while greater than 1 should have an 'items'
+> list.
 > 
-> Hello!
-> 
-> I'm talking about .init_quirk. And if XHCI_SKIP_PHY_INIT quirk is set in
-> this function then has no effect.
+> A meta-schema check for this is pending once these existing cases are
+> fixed.
 
-Ok, this patch is not enough, I will send V2.
+> ---
+>  .../devicetree/bindings/display/xlnx/xlnx,zynqmp-dpsub.yaml    | 1 -
+>  Documentation/devicetree/bindings/dma/renesas,rcar-dmac.yaml   | 1 -
 
-> I'm working currently on patch for xhci mvebu which conditionally enable
-> or disable XHCI_SKIP_PHY_INIT quirk (it is going to fix existing
-> regression since v5.1 kernel) and without this patch XHCI_SKIP_PHY_INIT
-> quirk from the init_quirk does not work.
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
-And now I have tested V2 with my mvebu regression fix. I will send it to
-mailing list for review.
-
-> > 	if (pdev->dev.of_node)
-> > 		priv_match = of_device_get_match_data(&pdev->dev);
-> > 	else
-> > 		priv_match = dev_get_platdata(&pdev->dev);
-> > 
-> > 	if (priv_match) {
-> > 		priv = hcd_to_xhci_priv(hcd);
-> > 		/* Just copy data for now */
-> > 		*priv = *priv_match;
-> > 	}
-> > -- 
-> > 
-> > Thanks,
-> > Peter Chen
+-- 
+~Vinod
