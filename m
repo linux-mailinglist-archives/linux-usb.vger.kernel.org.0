@@ -2,137 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE6F2E0462
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Dec 2020 03:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1AE2E053F
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Dec 2020 05:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725848AbgLVCfu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Dec 2020 21:35:50 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:58545 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725783AbgLVCfu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Dec 2020 21:35:50 -0500
-Received: (qmail 456589 invoked by uid 1000); 21 Dec 2020 21:35:09 -0500
-Date:   Mon, 21 Dec 2020 21:35:09 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Jun Li <lijun.kernel@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Frank Li <frank.li@nxp.com>
-Subject: Re: port power is on again after turning off by user space
-Message-ID: <20201222023509.GA456319@rowland.harvard.edu>
-References: <DBBPR04MB79793525394F70DE397E24038BC60@DBBPR04MB7979.eurprd04.prod.outlook.com>
- <CAKgpwJXMFSHxi7vE5cOxkYPTnY74oB-SKf3FikerCzFDLYqcbw@mail.gmail.com>
- <20201215051402.GC2142@b29397-desktop>
- <DBBPR04MB79790C8D243173467AE94D4E8BC60@DBBPR04MB7979.eurprd04.prod.outlook.com>
- <20201215155541.GA195633@rowland.harvard.edu>
- <20201216025549.GA5595@b29397-desktop>
- <20201216155144.GA238371@rowland.harvard.edu>
- <20201221053659.GA26433@b29397-desktop>
- <20201221162551.GB436749@rowland.harvard.edu>
- <20201222020215.GA4706@b29397-desktop>
+        id S1725833AbgLVEH3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Dec 2020 23:07:29 -0500
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:43949 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725785AbgLVEH3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Dec 2020 23:07:29 -0500
+Received: by mail-ot1-f54.google.com with SMTP id q25so10817311otn.10;
+        Mon, 21 Dec 2020 20:07:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q3IkBlOmHE3mDRbIb8lAHBUkpZJ3o80cNN5b/4sEG/I=;
+        b=j9Gg0OUtHoOw0PM6uk5aBZAoKIVgAS+aQ/cg8ESWVxBFUUcJCTksWdSqHAMGBt55fv
+         Vfb6BCyeailaRQuRWQ8D05fc6ZGU9A5Z8oUEejYbnk1qhSS0Hu8RKjGkT1pG0CZZ4dA2
+         6YqoJU23VuXfb3Y+2H/2HGSBhU83OkUXJjXLNLf6JEZKZQ6KXy1qoxb8t03WOq1SCq2k
+         Jb55mcpYVaI5g/IhPXLK+zlOsKL3M6a9QBaPCfzYITXKVwLyXcmPUYsSoSNBfDDEs1wM
+         dsWRThy1+w6lxVOHPECoUZh3vobeM/DOe5E/lK/rlTH2W8Q6Yi6OehcLTQqL5jjyIqyB
+         3eJQ==
+X-Gm-Message-State: AOAM530FcQ/nwrpMoEyDhW5Rr+rcNz/2DxelojGsrWkOqwR9qVv7ODHW
+        7qc7Tq7zPxkvZT/TwSdHYJ26sthN0g==
+X-Google-Smtp-Source: ABdhPJzc2AcXawDMexyhwX9kljUmHJGpp3yp74aSZqBghugGE4ma17w5UwkOCA62mhIs+ne0II6TKw==
+X-Received: by 2002:a05:6830:1189:: with SMTP id u9mr14233531otq.70.1608610007879;
+        Mon, 21 Dec 2020 20:06:47 -0800 (PST)
+Received: from xps15.herring.priv ([64.188.179.253])
+        by smtp.googlemail.com with ESMTPSA id m22sm4261765otr.79.2020.12.21.20.06.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Dec 2020 20:06:47 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Vinod Koul <vkoul@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
+Subject: [PATCH] dt-bindings: Drop redundant maxItems/items
+Date:   Mon, 21 Dec 2020 21:06:45 -0700
+Message-Id: <20201222040645.1323611-1-robh@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201222020215.GA4706@b29397-desktop>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 22, 2020 at 02:02:44AM +0000, Peter Chen wrote:
-> On 20-12-21 11:25:51, Alan Stern wrote:
-> > Okay.  This can be done as follows:
-> > 
-> > while (1) {
-> > - Check Flash Drive is there (eg, cat /proc/partitions)
-> > - Claim port 1 on 1-1
-> > - Turn port 1 at 1-1 off
-> > - Check Flash Drive is gone
-> > - Release port 1 on 1-1
-> > - Turn port 1 at 1-1 on
-> > - Delay for 10 seconds (time for device probing)
-> > }
-> > 
-> > 
-> > > > On the other hand, if the port is managed by the kernel then the kernel 
-> > > > (not the user) should be responsible for deciding whether or not to 
-> > > > turn off the port's power.
-> > > > 
-> > > > If there's some real reason for turning the port power off for an 
-> > > > extended period of time, the user can claim the port and turn off the 
-> > > > power.  Then later on, the user can release the port and turn the power 
-> > > > back on.
-> > > > 
-> > > 
-> > > Yes, I think this is one of the use cases. We want power power control
-> > > at one application (A), but different with our test application(B), it means
-> > > if the user claims the port, and power off using A, then the A will end.
-> > > After the B finished running, A runs again for power on, but at this time,
-> > > the port owner has changed.
-> > 
-> > Yes, that won't work.  If you want to keep the port power turned off 
-> > then you have to keep the usbfs device file open -- which means your 
-> > program A must not end and then restart.
-> > 
-> > (Acutally, I'm not certain about that.  If you claim a port, turn off 
-> > its power, and then release the port, I don't remember whether the hub 
-> > driver will then turn the power back on right away.  It might not.  
-> > But in any case, it isn't good programming to release a port without 
-> > turning its power back on.)
-> > 
-> > Can A be rewritten so that it doesn't end when B is running?
-> > 
-> 
-> Of course. I think the similar use case like below:
-> 
-> Program A (Port power control program)
-> 
-> while (1) {
-> 	- Wait "turn off" command;
-> 	- Claim requested port;
-> 	- Turn off requested port;
-> 	- Wait "turn on" command;
-> 	- Turn on requested port
-> 	- Release requested port;
+'maxItems' equal to the 'items' list length is redundant. 'maxItems' is
+preferred for a single entry while greater than 1 should have an 'items'
+list.
 
-You have to be a little careful about this.  Let's say you turn on the 
-port power.  THen the device will connect and be enumerated.
+A meta-schema check for this is pending once these existing cases are
+fixed.
 
-But if you haven't released the port at this point, the kernel won't 
-select a configuration for the device; it will leave the device in the 
-unconfigured state.  Perhaps the code in usb_hub_release_port() and 
-usb_hub_release_all_ports() needs to be changed; perhaps these routines 
-should select and install a configuration if the child device isn't 
-already configured.
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jassi Brar <jaswinder.singh@linaro.org>
+Cc: dri-devel@lists.freedesktop.org
+Cc: dmaengine@vger.kernel.org
+Cc: alsa-devel@alsa-project.org
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/display/xlnx/xlnx,zynqmp-dpsub.yaml    | 1 -
+ Documentation/devicetree/bindings/dma/renesas,rcar-dmac.yaml   | 1 -
+ Documentation/devicetree/bindings/mailbox/arm,mhu.yaml         | 1 -
+ .../devicetree/bindings/sound/nvidia,tegra30-hda.yaml          | 2 --
+ Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml    | 1 -
+ Documentation/devicetree/bindings/usb/renesas,usbhs.yaml       | 3 ---
+ 6 files changed, 9 deletions(-)
 
-For the time being, the safest approach is to release the port first 
-and then turn on the power.  Of course, that's not ideal either because 
-it would mean changing the power setting for a port you don't own.  But 
-right now that's the best you can do.
+diff --git a/Documentation/devicetree/bindings/display/xlnx/xlnx,zynqmp-dpsub.yaml b/Documentation/devicetree/bindings/display/xlnx/xlnx,zynqmp-dpsub.yaml
+index 7b9d468c3e52..403d57977ee7 100644
+--- a/Documentation/devicetree/bindings/display/xlnx/xlnx,zynqmp-dpsub.yaml
++++ b/Documentation/devicetree/bindings/display/xlnx/xlnx,zynqmp-dpsub.yaml
+@@ -98,7 +98,6 @@ properties:
+     maxItems: 1
+ 
+   dmas:
+-    maxItems: 4
+     items:
+       - description: Video layer, plane 0 (RGB or luma)
+       - description: Video layer, plane 1 (U/V or U)
+diff --git a/Documentation/devicetree/bindings/dma/renesas,rcar-dmac.yaml b/Documentation/devicetree/bindings/dma/renesas,rcar-dmac.yaml
+index b548e4723936..c07eb6f2fc8d 100644
+--- a/Documentation/devicetree/bindings/dma/renesas,rcar-dmac.yaml
++++ b/Documentation/devicetree/bindings/dma/renesas,rcar-dmac.yaml
+@@ -73,7 +73,6 @@ properties:
+     maxItems: 1
+ 
+   clock-names:
+-    maxItems: 1
+     items:
+       - const: fck
+ 
+diff --git a/Documentation/devicetree/bindings/mailbox/arm,mhu.yaml b/Documentation/devicetree/bindings/mailbox/arm,mhu.yaml
+index d43791a2dde7..d07eb00b97c8 100644
+--- a/Documentation/devicetree/bindings/mailbox/arm,mhu.yaml
++++ b/Documentation/devicetree/bindings/mailbox/arm,mhu.yaml
+@@ -61,7 +61,6 @@ properties:
+       - description: low-priority non-secure
+       - description: high-priority non-secure
+       - description: Secure
+-    maxItems: 3
+ 
+   clocks:
+     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra30-hda.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra30-hda.yaml
+index e543a6123792..b55775e21de6 100644
+--- a/Documentation/devicetree/bindings/sound/nvidia,tegra30-hda.yaml
++++ b/Documentation/devicetree/bindings/sound/nvidia,tegra30-hda.yaml
+@@ -44,7 +44,6 @@ properties:
+     maxItems: 3
+ 
+   clock-names:
+-    maxItems: 3
+     items:
+       - const: hda
+       - const: hda2hdmi
+@@ -54,7 +53,6 @@ properties:
+     maxItems: 3
+ 
+   reset-names:
+-    maxItems: 3
+     items:
+       - const: hda
+       - const: hda2hdmi
+diff --git a/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml b/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
+index 0f078bd0a3e5..22603256ddf8 100644
+--- a/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
++++ b/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
+@@ -51,7 +51,6 @@ properties:
+     maxItems: 1
+ 
+   phy-names:
+-    maxItems: 1
+     items:
+       - const: usb
+ 
+diff --git a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+index 737c1f47b7de..54c361d4a7af 100644
+--- a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
++++ b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+@@ -74,11 +74,8 @@ properties:
+ 
+   phys:
+     maxItems: 1
+-    items:
+-      - description: phandle + phy specifier pair.
+ 
+   phy-names:
+-    maxItems: 1
+     items:
+       - const: usb
+ 
+-- 
+2.27.0
 
-> };
-> 
-> Program B actually is a script:
-> 
-> {
-> while [ "$i" -lt 10000 ];
-> do
-> - Check Flash Drive is there (eg, cat /proc/partitions);
-> - Send "turn off" command;
-> - Wait 5 seconds, and check if Flash Drive has gone;
-> - Send "turn on" command;
-> - i=`expr $i + 1`;
-> done
-> terminate program A;
-> };
-> 
-> I need to find communication solution between program A and script B.
-> Or would you have any suggestions to design such kinds of test case?
-
-Normally programs like this would communicate by a pipe or a Unix 
-socket.  One way to make this work is for program B to run A in the 
-background before the "while" loop starts, so that B could control 
-the standard input and output files that A uses.  That's probably the 
-approach I would take.
-
-Alan Stern
