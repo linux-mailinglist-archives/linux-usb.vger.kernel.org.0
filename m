@@ -2,115 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A62D2E0968
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Dec 2020 12:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 301002E0AB7
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Dec 2020 14:31:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726686AbgLVLOu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Dec 2020 06:14:50 -0500
-Received: from mout.gmx.net ([212.227.17.21]:53833 "EHLO mout.gmx.net"
+        id S1727489AbgLVNbf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Dec 2020 08:31:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45392 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726533AbgLVLOu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 22 Dec 2020 06:14:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1608635598;
-        bh=yvCoD5UZNeLHKTQMF8r5Di2/G1rK8erQmQP3wtjjuXk=;
-        h=X-UI-Sender-Class:Date:From:To:Subject;
-        b=HZjDLQ0CWOzGMqd8i1nyK8tRJHUr0onegHCOvaBqozSNYbxKUmWVLZ1Kzot8PDjmK
-         Tnz6LDe1cvFiw225cPAur65qqgEvhspiM6IythROatqiXn7bA9788P0troaLHxh/+C
-         /NgwPZ4ETaC80nB8oQgcWePZITCYMYp9zD7Xik3k=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ingxiaomi.fritz.box ([88.217.180.51]) by mail.gmx.com (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mel3t-1kJ9jP2peP-00aih9 for
- <linux-usb@vger.kernel.org>; Tue, 22 Dec 2020 12:13:18 +0100
-Date:   Tue, 22 Dec 2020 12:13:17 +0100
-From:   Ingo Rohloff <lundril@gmx.de>
-To:     linux-usb@vger.kernel.org
-Subject: USB Gadget via ConfigFS; define custom String Descriptors
-Message-ID: <20201222121317.008f54a6@ingxiaomi.fritz.box>
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1727146AbgLVNbe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 22 Dec 2020 08:31:34 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C7C09229C6;
+        Tue, 22 Dec 2020 13:30:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608643853;
+        bh=1WvxvtX20HsPEDDPqNB0howPhU2hqueA4ilWZni7BSQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LVEjdkyEec4DNI0h6cFv/S11CfyPsNRZY8nwEUIBdNAn33FLcIT2At9h8WY0eUOkQ
+         GoCFwbvJj9SisZdTbjW5vXtx4tW8MNXjJUmgJAPQgdSAuVwY5Q6s+iRlbh8ik9r/p2
+         iucShZb4Do74KGM3jXBwkyddVKDMRJhv/FkNaaETocGQnmgwzvtdGWlDukUJNujv0H
+         BFruNq9Q6mdwCyD1SuPFYw8K4dyJzzudMMtrgX4icgUfqOJV7fdHMQ1VkDqE9rOSqO
+         rSDiGAH9roSF6OVrdqOglp1CMhL6oqrTHY8jiMG3vbhlhOP3LgjisY0V0z9gt6CEdS
+         X4iUSe+xZP4AQ==
+Received: by pali.im (Postfix)
+        id A2D4B848; Tue, 22 Dec 2020 14:30:51 +0100 (CET)
+Date:   Tue, 22 Dec 2020 14:30:51 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jun Li <jun.li@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: host: xhci-plat: fix support for XHCI_SKIP_PHY_INIT
+ quirk
+Message-ID: <20201222133051.jfvrgkcdhjnldz3z@pali>
+References: <20201221150903.26630-1-pali@kernel.org>
+ <20201222021416.GB4706@b29397-desktop>
+ <20201222092327.jq5b7g4bffeccq3o@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:B5ettG2kJPuRrmP3QVfP0jwPSX1TLIImMBA6kSiHKmNLm/hna9N
- DhWKWWJ2OGPrXJcXkc8ikWQdf3b4oKUrca4wwq7HqsPKhxZ14kw+a0mC0mrLWmD+x5/5uv/
- NuskXaEFpSzrpUtPXxDU2XA08cvUkBiEjdz1q5YFhHtmEq3fXQ2q5lglOVvJY7V62dg6Y/o
- l6g+V1Dopmp01yIjtv82g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4NWfUP+Dy3k=:j6cRYiX+GUruk9IwK3sTMX
- soJtzSV0RvWUJsovsDqTneM2y+fJ2SMHgXo67HuSonqKWzorHwxmexj13bfe3k73krZ3sYUgn
- lkldPnmvqt03mZGHYqe1jJUt1h+ItA24S6MccXyyYGfVkuHbtn4/1oxfXIQ2Rma33gaVU43DH
- K0KlAP7ze2q6WvEadEESabj1F4m9Z1FeLzv1jfPxjVYZlsrhjPgccyTG1Lix/VxZ/ad5MTPjc
- +Z+10RzqhX+Px0EcZ2XOQKu3hoIZ7jbmNoWXS+7a3EXfUaaA8CPsAC4GMBikjABHUMqtvbgfw
- XO9dTjtc0LrDCeH2Pa5gvTaNVCRncXY0nQhsCMCPiU0Z7ZZiTox4g8pQcDpb9bu9eZN+7btR9
- +Hc2gmrtiGMXHgEU4Ex8pBU/5cj2uQO+X60gYDbiZgvvMafTV29q2z5i7JIWM7jrAnn/AjXin
- p5gAf3+AJbeshOCQVgZLGMnmbniVurv1rUcCAdr723c5MHi5dAx2xODgEVf0AcRUkvKVDYJqY
- 8E6yGQGmJJMC5nnZHZsTRXn91RJMio1VUBZWLSMZiKCd32j9SXX7eahtJCWUGytkewzZw2OGv
- p94XNN/qkBFQKwFvzyzBpH8jvXRBrIZ5xttY0gqz3YKpfnkp76DqpBLxkzQzLKd5dpD8cKWFl
- HkeXZaX/HC7lc+02cmiPeH4ldw8GuX3SQjQUpU0BYuoGKDcpmnX8cKmRizAS3CVk7nwWrlU8X
- W0VumNeNUTma+kPEc8bKn3666j4eRcvGTiXr6PWPqJijW3Xxq8VwhT5rgWV5uGGkzJvOZ5lfO
- zjASBgREimqYM/25+SELP0IA3j+De3rIchhLOr1R4Eil/qzF1QgM2wHBm8FLvKlV8Ps39guXn
- QkymFhqPvuTRjEzxEDYQ==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201222092327.jq5b7g4bffeccq3o@pali>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Tuesday 22 December 2020 10:23:27 Pali Rohár wrote:
+> On Tuesday 22 December 2020 02:14:45 Peter Chen wrote:
+> > On 20-12-21 16:09:03, Pali Rohár wrote:
+> > > Currently init_quirk callbacks for xhci platform drivers are called
+> > > xhci_plat_setup() function which is called after chip reset completes.
+> > > It happens in the middle of the usb_add_hcd() function.
+> > > 
+> > > But XHCI_SKIP_PHY_INIT quirk is checked in the xhci_plat_probe() function
+> > > prior calling usb_add_hcd() function. Therefore this XHCI_SKIP_PHY_INIT
+> > > currently does nothing as prior xhci_plat_setup() it is not set.
+> > > 
+> > > Quirk XHCI_SKIP_PHY_INIT is only setting hcd->skip_phy_initialization value
+> > > which really needs to be set prior calling usb_add_hcd() as this function
+> > > at its beginning skips PHY init if this member is set.
+> > > 
+> > > This patch fixes implementation of the XHCI_SKIP_PHY_INIT quirk by calling
+> > > init_quirk callbacks (via xhci_priv_init_quirk()) prior checking if
+> > > XHCI_SKIP_PHY_INIT is set.
+> > > 
+> > > Fixes: f768e718911e0 ("usb: host: xhci-plat: add priv quirk for skip PHY initialization")
+> > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > ---
+> > >  drivers/usb/host/xhci-plat.c | 14 +++++++-------
+> > >  1 file changed, 7 insertions(+), 7 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> > > index 4d34f6005381..58704c5b002b 100644
+> > > --- a/drivers/usb/host/xhci-plat.c
+> > > +++ b/drivers/usb/host/xhci-plat.c
+> > > @@ -89,13 +89,6 @@ static void xhci_plat_quirks(struct device *dev, struct xhci_hcd *xhci)
+> > >  /* called during probe() after chip reset completes */
+> > >  static int xhci_plat_setup(struct usb_hcd *hcd)
+> > >  {
+> > > -	int ret;
+> > > -
+> > > -
+> > > -	ret = xhci_priv_init_quirk(hcd);
+> > > -	if (ret)
+> > > -		return ret;
+> > > -
+> > >  	return xhci_gen_setup(hcd, xhci_plat_quirks);
+> > >  }
+> > >  
+> > > @@ -330,6 +323,13 @@ static int xhci_plat_probe(struct platform_device *pdev)
+> > >  
+> > >  	hcd->tpl_support = of_usb_host_tpl_support(sysdev->of_node);
+> > >  	xhci->shared_hcd->tpl_support = hcd->tpl_support;
+> > > +
+> > > +	if (priv) {
+> > > +		ret = xhci_priv_init_quirk(hcd);
+> > > +		if (ret)
+> > > +			goto disable_usb_phy;
+> > > +	}
+> > > +
+> > >  	if (priv && (priv->quirks & XHCI_SKIP_PHY_INIT))
+> > >  		hcd->skip_phy_initialization = 1;
+> > >  
+> > 
+> > Hi Pali,
+> > 
+> > What's problem you have met? In structure xhci_plat_priv, the quirks are
+> > defined at .quirks entry which is got at below code. .init_quirk is the
+> > routine if special initializations are needed.
+> 
+> Hello!
+> 
+> I'm talking about .init_quirk. And if XHCI_SKIP_PHY_INIT quirk is set in
+> this function then has no effect.
 
-before trying to implement something I would like to get some opinions
-if what I am thinking of seems to be useful, or if I am on the wrong
-track.
+Ok, this patch is not enough, I will send V2.
 
-I am implementing a USB Gadget.
-To configure the gadget I use ConfigFS.
-Now what I would like to do is to configure some device specific
-string descriptors, which have a fixed, custom index.
+> I'm working currently on patch for xhci mvebu which conditionally enable
+> or disable XHCI_SKIP_PHY_INIT quirk (it is going to fix existing
+> regression since v5.1 kernel) and without this patch XHCI_SKIP_PHY_INIT
+> quirk from the init_quirk does not work.
 
+And now I have tested V2 with my mvebu regression fix. I will send it to
+mailing list for review.
 
-Now I know that if you for example create a gadget in configFS
-at directory
-  usb_gadget/g1
-
-you will get the following standard device string descriptors:
-  usb_gadget/g1/strings/0x409
-    manufacturer
-    product
-    serialnumber
-
-You might set the content of these string descriptors by writing to
-these files.
-The indexes of these string descriptors gets auto-assigned as far as I
-understand the Linux source code.
-These indexes are then put into the USB device descriptor, which is how
-a USB host finds out which indexes to use.
-
-
-What I now want to do is to define additional string descriptors, with
-some fixed, custom indexes.
-
-Questions:
-
-* Is this simply not intended by the USB spec ?
-
-* Is there already a way to do that via ConfigFS,
-  which I am not aware of ?
-
-* Does a mechanism to define such custom string descriptors sound
-  useful ? So is it worth the effort to implement it ?
-
-
-Just a super simple proposal how to do that; since I have no experience
-what's best for ConfigFS, please advise if you think there is a better
-way!
-If a user creates a file
-   usb_gadget/g1/strings/0x0409/
-      custom_34
-
-Then this will be accessible as USB device string descriptor,
-with index 0x34. So the two characters after the "_" are interpreted as
-two hex digits, which define the index.
-
-Does this sound like a viable strategy to allow custom string
-descriptors ?
-
-
-Ingo
+> > 	if (pdev->dev.of_node)
+> > 		priv_match = of_device_get_match_data(&pdev->dev);
+> > 	else
+> > 		priv_match = dev_get_platdata(&pdev->dev);
+> > 
+> > 	if (priv_match) {
+> > 		priv = hcd_to_xhci_priv(hcd);
+> > 		/* Just copy data for now */
+> > 		*priv = *priv_match;
+> > 	}
+> > -- 
+> > 
+> > Thanks,
+> > Peter Chen
