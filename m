@@ -2,136 +2,287 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70DBF2E080E
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Dec 2020 10:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A24802E082D
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Dec 2020 10:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725964AbgLVJYL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Dec 2020 04:24:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53146 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725947AbgLVJYK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 22 Dec 2020 04:24:10 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C88DF23103;
-        Tue, 22 Dec 2020 09:23:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608629009;
-        bh=qCqELfT57AvpMFFVLIkE1zpXaxirvic0pVHoJrdiDf0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VXG6q1jDnolpc2Kco5fiYlkd1rYrT7BhErvPLh1wTOdPE3UaR8NT5QnzffHEX5/Y3
-         3Mq4rBK4Q4NVT/7dMsnRGi9seBbVZhH1wlEfWRgffmC/7H3AgoVcUKpRjjWTDELEbU
-         yPmZb+25uO9fYz8uhk1Yx6j/YrkntiJGSx3DNrPY8tBBvV0ayJiTR5BoAQmtjs6n2i
-         CGmxviehaIdo/3+OZC90LSBzdi7XHGPd8sccX5LV9An1akhAlMUJo4CS8PbHZHfP6m
-         XIUF0vPu0AkFve+KcXryLWhkKVFDpG1Wu8JULU3qT6V4ZIUl3OjhTR6nj6mkNdPH3M
-         nbqooLM6dhBPA==
-Received: by pali.im (Postfix)
-        id 7CA6C848; Tue, 22 Dec 2020 10:23:27 +0100 (CET)
-Date:   Tue, 22 Dec 2020 10:23:27 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jun Li <jun.li@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: host: xhci-plat: fix support for XHCI_SKIP_PHY_INIT
- quirk
-Message-ID: <20201222092327.jq5b7g4bffeccq3o@pali>
-References: <20201221150903.26630-1-pali@kernel.org>
- <20201222021416.GB4706@b29397-desktop>
+        id S1726187AbgLVJf6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Dec 2020 04:35:58 -0500
+Received: from mailgw02.mediatek.com ([1.203.163.81]:64058 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725882AbgLVJf5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Dec 2020 04:35:57 -0500
+X-UUID: df371734ab3c44b999c85cbc534ca34f-20201222
+X-UUID: df371734ab3c44b999c85cbc534ca34f-20201222
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1067787219; Tue, 22 Dec 2020 17:34:54 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 22 Dec 2020 17:34:52 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 22 Dec 2020 17:34:50 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Ikjoon Jang <ikjn@chromium.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Zhanyong Wang <zhangyong.wang@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Zhanyong Wang <zhanyong.wang@mediatek.com>,
+        Yaqii Wu <yaqii.wu@mediatek.com>
+Subject: [RFC PATCH v3 1/5] usb: xhci-mtk: improve bandwidth scheduling with multi-TT
+Date:   Tue, 22 Dec 2020 17:34:38 +0800
+Message-ID: <1608629682-8535-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201222021416.GB4706@b29397-desktop>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 9F5E60664AA303661E69680B986883877310DF91EE64BD122A745F1CB41CA4E52000:8
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tuesday 22 December 2020 02:14:45 Peter Chen wrote:
-> On 20-12-21 16:09:03, Pali Rohár wrote:
-> > Currently init_quirk callbacks for xhci platform drivers are called
-> > xhci_plat_setup() function which is called after chip reset completes.
-> > It happens in the middle of the usb_add_hcd() function.
-> > 
-> > But XHCI_SKIP_PHY_INIT quirk is checked in the xhci_plat_probe() function
-> > prior calling usb_add_hcd() function. Therefore this XHCI_SKIP_PHY_INIT
-> > currently does nothing as prior xhci_plat_setup() it is not set.
-> > 
-> > Quirk XHCI_SKIP_PHY_INIT is only setting hcd->skip_phy_initialization value
-> > which really needs to be set prior calling usb_add_hcd() as this function
-> > at its beginning skips PHY init if this member is set.
-> > 
-> > This patch fixes implementation of the XHCI_SKIP_PHY_INIT quirk by calling
-> > init_quirk callbacks (via xhci_priv_init_quirk()) prior checking if
-> > XHCI_SKIP_PHY_INIT is set.
-> > 
-> > Fixes: f768e718911e0 ("usb: host: xhci-plat: add priv quirk for skip PHY initialization")
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > ---
-> >  drivers/usb/host/xhci-plat.c | 14 +++++++-------
-> >  1 file changed, 7 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> > index 4d34f6005381..58704c5b002b 100644
-> > --- a/drivers/usb/host/xhci-plat.c
-> > +++ b/drivers/usb/host/xhci-plat.c
-> > @@ -89,13 +89,6 @@ static void xhci_plat_quirks(struct device *dev, struct xhci_hcd *xhci)
-> >  /* called during probe() after chip reset completes */
-> >  static int xhci_plat_setup(struct usb_hcd *hcd)
-> >  {
-> > -	int ret;
-> > -
-> > -
-> > -	ret = xhci_priv_init_quirk(hcd);
-> > -	if (ret)
-> > -		return ret;
-> > -
-> >  	return xhci_gen_setup(hcd, xhci_plat_quirks);
-> >  }
-> >  
-> > @@ -330,6 +323,13 @@ static int xhci_plat_probe(struct platform_device *pdev)
-> >  
-> >  	hcd->tpl_support = of_usb_host_tpl_support(sysdev->of_node);
-> >  	xhci->shared_hcd->tpl_support = hcd->tpl_support;
-> > +
-> > +	if (priv) {
-> > +		ret = xhci_priv_init_quirk(hcd);
-> > +		if (ret)
-> > +			goto disable_usb_phy;
-> > +	}
-> > +
-> >  	if (priv && (priv->quirks & XHCI_SKIP_PHY_INIT))
-> >  		hcd->skip_phy_initialization = 1;
-> >  
-> 
-> Hi Pali,
-> 
-> What's problem you have met? In structure xhci_plat_priv, the quirks are
-> defined at .quirks entry which is got at below code. .init_quirk is the
-> routine if special initializations are needed.
+From: Zhanyong Wang <zhanyong.wang@mediatek.com>
 
-Hello!
+After inserted the usb type-c 3.5mm dongle with headset, dmesg showed:
+usb 1-1.1: new full-speed USB device number 5 using xhci-mtk
+usb 1-1.1: New USB device found, idVendor=05ac, idProduct=110a, bcdDevice=26.11
+usb 1-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-1.1: Product: USB-C to 3.5mm Headphone Jack Adapter
+usb 1-1.1: Manufacturer: Apple, Inc.
+usb 1-1.1: SerialNumber: DWH915501TFJKLTAM
+xhci-mtk 11200000.xhci: Not enough bandwidth!
+usb 1-1.1: can't set config #2, error -28
 
-I'm talking about .init_quirk. And if XHCI_SKIP_PHY_INIT quirk is set in
-this function then has no effect.
+improve low-speed/full-speed INT/ISOC bandwidth scheduling with USB
+muli-TT.
 
-I'm working currently on patch for xhci mvebu which conditionally enable
-or disable XHCI_SKIP_PHY_INIT quirk (it is going to fix existing
-regression since v5.1 kernel) and without this patch XHCI_SKIP_PHY_INIT
-quirk from the init_quirk does not work.
+Signed-off-by: Yaqii Wu <yaqii.wu@mediatek.com>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+v2~v3: no changes
+---
+ drivers/usb/host/xhci-mtk-sch.c | 91 ++++++++++++++++++++++++++++-----
+ drivers/usb/host/xhci-mtk.h     |  8 ++-
+ 2 files changed, 84 insertions(+), 15 deletions(-)
+ mode change 100644 => 100755 drivers/usb/host/xhci-mtk-sch.c
 
-> 	if (pdev->dev.of_node)
-> 		priv_match = of_device_get_match_data(&pdev->dev);
-> 	else
-> 		priv_match = dev_get_platdata(&pdev->dev);
-> 
-> 	if (priv_match) {
-> 		priv = hcd_to_xhci_priv(hcd);
-> 		/* Just copy data for now */
-> 		*priv = *priv_match;
-> 	}
-> -- 
-> 
-> Thanks,
-> Peter Chen
+diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+old mode 100644
+new mode 100755
+index 45c54d56ecbd..94292b9bbc63
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -383,7 +383,9 @@ static int check_sch_tt(struct usb_device *udev,
+ 	u32 fs_budget_start;
+ 	u32 start_ss, last_ss;
+ 	u32 start_cs, last_cs;
+-	int i;
++	u32 num_esit, base;
++	int i, j;
++	u32 tmp;
+ 
+ 	start_ss = offset % 8;
+ 	fs_budget_start = (start_ss + 1) % 8;
+@@ -398,10 +400,13 @@ static int check_sch_tt(struct usb_device *udev,
+ 		if (!(start_ss == 7 || last_ss < 6))
+ 			return -ERANGE;
+ 
+-		for (i = 0; i < sch_ep->cs_count; i++)
+-			if (test_bit(offset + i, tt->split_bit_map))
++		for (i = 0; i < sch_ep->cs_count; i++) {
++			if (test_bit(offset + i, tt->ss_bit_map))
+ 				return -ERANGE;
+ 
++			if (test_bit(offset + i, tt->cs_bit_map))
++				return -ERANGE;
++		}
+ 	} else {
+ 		u32 cs_count = DIV_ROUND_UP(sch_ep->maxpkt, FS_PAYLOAD_MAX);
+ 
+@@ -428,8 +433,10 @@ static int check_sch_tt(struct usb_device *udev,
+ 		if (cs_count > 7)
+ 			cs_count = 7; /* HW limit */
+ 
+-		for (i = 0; i < cs_count + 2; i++) {
+-			if (test_bit(offset + i, tt->split_bit_map))
++		if (test_bit(offset, tt->ss_bit_map))
++			return -ERANGE;
++		for (i = 0; i < cs_count; i++) {
++			if (test_bit(offset + 2 + i, tt->cs_bit_map))
+ 				return -ERANGE;
+ 		}
+ 
+@@ -445,11 +452,22 @@ static int check_sch_tt(struct usb_device *udev,
+ 			sch_ep->num_budget_microframes = sch_ep->esit;
+ 	}
+ 
++	num_esit = XHCI_MTK_MAX_ESIT / sch_ep->esit;
++	for (i = 0; i < num_esit; i++) {
++		base = sch_ep->offset + i * sch_ep->esit;
++		for (j = 0; j < sch_ep->num_budget_microframes; j++) {
++			tmp = tt->fs_bus_bw[base + j]
++			      + sch_ep->bw_cost_per_microframe;
++			if (tmp > FS_PAYLOAD_MAX)
++				return -ERANGE;
++		}
++	}
++
+ 	return 0;
+ }
+ 
+ static void update_sch_tt(struct usb_device *udev,
+-	struct mu3h_sch_ep_info *sch_ep)
++	struct mu3h_sch_ep_info *sch_ep, bool used)
+ {
+ 	struct mu3h_sch_tt *tt = sch_ep->sch_tt;
+ 	u32 base, num_esit;
+@@ -458,11 +476,52 @@ static void update_sch_tt(struct usb_device *udev,
+ 	num_esit = XHCI_MTK_MAX_ESIT / sch_ep->esit;
+ 	for (i = 0; i < num_esit; i++) {
+ 		base = sch_ep->offset + i * sch_ep->esit;
+-		for (j = 0; j < sch_ep->num_budget_microframes; j++)
+-			set_bit(base + j, tt->split_bit_map);
++		for (j = 0; j < sch_ep->num_budget_microframes; j++) {
++			if (used)
++				set_bit(base + j, tt->split_bit_map);
++			else
++				clear_bit(base + j, tt->split_bit_map);
++		}
++
++		if (sch_ep->ep_type == ISOC_OUT_EP) {
++			for (j = 0; j < sch_ep->num_budget_microframes; j++) {
++				if (used) {
++					set_bit(base + j, tt->ss_bit_map);
++					set_bit(base + j, tt->cs_bit_map);
++					tt->fs_bus_bw[base + j] +=
++						sch_ep->bw_cost_per_microframe;
++				} else {
++					clear_bit(base + j, tt->ss_bit_map);
++					clear_bit(base + j, tt->cs_bit_map);
++					tt->fs_bus_bw[base + j] -=
++						sch_ep->bw_cost_per_microframe;
++				}
++			}
++		} else {
++			if (used)
++				set_bit(base, tt->ss_bit_map);
++			else
++				clear_bit(base, tt->ss_bit_map);
++
++			for (j = 0; j < sch_ep->cs_count; j++) {
++				if (used) {
++					set_bit(base + 2 + j, tt->cs_bit_map);
++
++					tt->fs_bus_bw[base + 2 + j] +=
++						sch_ep->bw_cost_per_microframe;
++				} else {
++					clear_bit(base + 2 + j, tt->cs_bit_map);
++					tt->fs_bus_bw[base + 2 + j] -=
++						sch_ep->bw_cost_per_microframe;
++				}
++			}
++		}
+ 	}
+ 
+-	list_add_tail(&sch_ep->tt_endpoint, &tt->ep_list);
++	if (used)
++		list_add_tail(&sch_ep->tt_endpoint, &tt->ep_list);
++	else
++		list_del(&sch_ep->tt_endpoint);
+ }
+ 
+ static int check_sch_bw(struct usb_device *udev,
+@@ -470,6 +529,7 @@ static int check_sch_bw(struct usb_device *udev,
+ {
+ 	u32 offset;
+ 	u32 esit;
++	u32 boundary;
+ 	u32 min_bw;
+ 	u32 min_index;
+ 	u32 worst_bw;
+@@ -487,10 +547,13 @@ static int check_sch_bw(struct usb_device *udev,
+ 	 */
+ 	min_bw = ~0;
+ 	min_index = 0;
++	boundary = esit;
+ 	min_cs_count = sch_ep->cs_count;
+ 	min_num_budget = sch_ep->num_budget_microframes;
+ 	for (offset = 0; offset < esit; offset++) {
+ 		if (is_fs_or_ls(udev->speed)) {
++			if (sch_ep->ep_type != ISOC_OUT_EP)
++				boundary = esit + 1;
+ 			ret = check_sch_tt(udev, sch_ep, offset);
+ 			if (ret)
+ 				continue;
+@@ -498,7 +561,7 @@ static int check_sch_bw(struct usb_device *udev,
+ 				tt_offset_ok = true;
+ 		}
+ 
+-		if ((offset + sch_ep->num_budget_microframes) > sch_ep->esit)
++		if ((offset + sch_ep->num_budget_microframes) > boundary)
+ 			break;
+ 
+ 		worst_bw = get_max_bw(sch_bw, sch_ep, offset);
+@@ -532,7 +595,7 @@ static int check_sch_bw(struct usb_device *udev,
+ 		if (!tt_offset_ok)
+ 			return -ERANGE;
+ 
+-		update_sch_tt(udev, sch_ep);
++		update_sch_tt(udev, sch_ep, 1);
+ 	}
+ 
+ 	/* update bus bandwidth info */
+@@ -696,12 +759,12 @@ void xhci_mtk_drop_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
+ 
+ 	list_for_each_entry(sch_ep, &sch_bw->bw_ep_list, endpoint) {
+ 		if (sch_ep->ep == ep) {
+-			update_bus_bw(sch_bw, sch_ep, 0);
+-			list_del(&sch_ep->endpoint);
+ 			if (is_fs_or_ls(udev->speed)) {
+-				list_del(&sch_ep->tt_endpoint);
++				update_sch_tt(udev, sch_ep, 0);
+ 				drop_tt(udev);
+ 			}
++			update_bus_bw(sch_bw, sch_ep, 0);
++			list_del(&sch_ep->endpoint);
+ 			kfree(sch_ep);
+ 			break;
+ 		}
+diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
+index a93cfe817904..323b281933b9 100644
+--- a/drivers/usb/host/xhci-mtk.h
++++ b/drivers/usb/host/xhci-mtk.h
+@@ -21,12 +21,18 @@
+ 
+ /**
+  * @split_bit_map: used to avoid split microframes overlay
++ * @ss_bit_map: used to avoid start split microframes overlay
++ * @cs_bit_map: used to avoid complete split microframes overlay
++ * @fs_bus_bw: array to keep track of bandwidth already used at full speed
+  * @ep_list: Endpoints using this TT
+  * @usb_tt: usb TT related
+  * @tt_port: TT port number
+  */
+ struct mu3h_sch_tt {
+ 	DECLARE_BITMAP(split_bit_map, XHCI_MTK_MAX_ESIT);
++	DECLARE_BITMAP(ss_bit_map, XHCI_MTK_MAX_ESIT);
++	DECLARE_BITMAP(cs_bit_map, XHCI_MTK_MAX_ESIT + 1);
++	u32 fs_bus_bw[XHCI_MTK_MAX_ESIT];
+ 	struct list_head ep_list;
+ 	struct usb_tt *usb_tt;
+ 	int tt_port;
+@@ -42,7 +48,7 @@ struct mu3h_sch_tt {
+  * two bandwidth domains, one for IN eps and another for OUT eps.
+  */
+ struct mu3h_sch_bw_info {
+-	u32 bus_bw[XHCI_MTK_MAX_ESIT];
++	u32 bus_bw[XHCI_MTK_MAX_ESIT + 1];
+ 	struct list_head bw_ep_list;
+ };
+ 
+-- 
+2.18.0
+
