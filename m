@@ -2,68 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5BB22E1D2E
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Dec 2020 15:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADAB22E1D59
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Dec 2020 15:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728762AbgLWOOt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Dec 2020 09:14:49 -0500
-Received: from szxga06-in.huawei.com ([45.249.212.32]:9476 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728759AbgLWOOt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Dec 2020 09:14:49 -0500
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4D1FYR5HF1zhvSN;
-        Wed, 23 Dec 2020 22:13:31 +0800 (CST)
-Received: from ubuntu.network (10.175.138.68) by
- DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
- 14.3.498.0; Wed, 23 Dec 2020 22:13:56 +0800
-From:   Zheng Yongjun <zhengyongjun3@huawei.com>
-To:     <valentina.manea.m@gmail.com>, <shuah@kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Zheng Yongjun <zhengyongjun3@huawei.com>
-Subject: [PATCH -next] usb: usbip: Use DEFINE_SPINLOCK() for spinlock
-Date:   Wed, 23 Dec 2020 22:14:31 +0800
-Message-ID: <20201223141431.835-1-zhengyongjun3@huawei.com>
-X-Mailer: git-send-email 2.22.0
+        id S1727693AbgLWORY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Dec 2020 09:17:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57698 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725957AbgLWORY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 23 Dec 2020 09:17:24 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 141A523359;
+        Wed, 23 Dec 2020 14:16:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1608733003;
+        bh=owrEor3kFPpcWz42f6D2DYcC2O1V/1IBKOv+/plWEWM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OqWXsvPFbyYQtEz6uZ6Z07IrbDQy3tGS1R8rumkrySlpiJJ9eLqUx3Gz4FVkqEC5L
+         ThoILQYFk3wAvuxrzfN/mFaqcfIOeQS6AgE97E254APAvlqMX6QbKPX0D1ODyT/K8+
+         bqWkJvhM6hZaMapjKE4WyAoLZjyMRW0DLjkeDhdM=
+Date:   Wed, 23 Dec 2020 15:17:54 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Zheng Yongjun <zhengyongjun3@huawei.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] usb: misc: use DEFINE_MUTEX (and mutex_init() had
+ been too late)
+Message-ID: <X+NRkqLJ1Bh/0HDe@kroah.com>
+References: <20201223141044.32235-1-zhengyongjun3@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.138.68]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201223141044.32235-1-zhengyongjun3@huawei.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-spinlock can be initialized automatically with DEFINE_SPINLOCK()
-rather than explicitly calling spin_lock_init().
+On Wed, Dec 23, 2020 at 10:10:44PM +0800, Zheng Yongjun wrote:
+> Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+> ---
+>  drivers/usb/misc/ftdi-elan.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 
-Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
----
- drivers/usb/usbip/stub_main.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+I can not take patches without any changelog text, sorry.
 
-diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
-index c1c0bbc9f8b1..77a5b3f8736a 100644
---- a/drivers/usb/usbip/stub_main.c
-+++ b/drivers/usb/usbip/stub_main.c
-@@ -23,7 +23,7 @@ struct kmem_cache *stub_priv_cache;
-  */
- #define MAX_BUSID 16
- static struct bus_id_priv busid_table[MAX_BUSID];
--static spinlock_t busid_table_lock;
-+static DEFINE_SPINLOCK(busid_table_lock);
- 
- static void init_busid_table(void)
- {
-@@ -35,8 +35,6 @@ static void init_busid_table(void)
- 	 */
- 	memset(busid_table, 0, sizeof(busid_table));
- 
--	spin_lock_init(&busid_table_lock);
--
- 	for (i = 0; i < MAX_BUSID; i++)
- 		spin_lock_init(&busid_table[i].busid_lock);
- }
--- 
-2.22.0
+And try including the driver name in the subject line please.
 
+thanks,
+
+greg k-h
