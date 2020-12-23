@@ -2,171 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED652E1F63
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Dec 2020 17:21:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF992E1F68
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Dec 2020 17:26:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726626AbgLWQT4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Dec 2020 11:19:56 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:33372 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726221AbgLWQTz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Dec 2020 11:19:55 -0500
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BNGAl6k004342;
-        Wed, 23 Dec 2020 08:19:10 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=pfpt0220; bh=UtFK54nPYXtyoXR4vNK1nrrx4WRiz1oTUA2N8EN0JyI=;
- b=EQzftBu0xQWzJFPGr3s2R0BJa8nkSgOLK54nQXqUA4cAKKZy6I9EASjIqKngqW2dInNf
- AEZ/tG5jRXZAMCap1uBqe9FC0zHP6/1zPbEukd2gvsxD5vAQwsBHekjfMHtOIt9rmwhp
- 5YHC3ibMSxoDCopUwGtIyej4HiyLVQE4bt6FaG6PM6Ps7j+XHumGXS7Hl8giUmagcuGG
- sHHfqdhtJNVxTAi55ki9/rlFD+YlSqwaBDo+pQD811nhlph2wJaw2gTKXdL6IoUD277b
- 3g8B6FgMTCWniUPOFJut2qjAAeauSmecYonF26pbgJhrc/qML1o1NtGxbo1EYN0Dc8xS KA== 
-Received: from sc-exch03.marvell.com ([199.233.58.183])
-        by mx0b-0016f401.pphosted.com with ESMTP id 35k0hx6cxq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 23 Dec 2020 08:19:10 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 23 Dec
- 2020 08:19:08 -0800
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 23 Dec
- 2020 08:19:08 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.173)
- by SC-EXCH01.marvell.com (10.93.176.81) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Wed, 23 Dec 2020 08:19:07 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ifc9sIkC5o0AMgiWnQnEy3X2gVS13g2jWNQBwgrSiZtVjKUZs9rmKnfR1z7/k96lqzPjU193Ns4VxOCpzn1uR5jftGqq6jlib2PEhFzqcRJoBQazmZnJOyPXXKgrl1sd9XXGP7h/YGNcXvf8ifN18VtkSvsy1/LtLwDoZVz7eLb2nzpohmvI8NQNEtRlsYCewoffztWPEIeWTjfQLOgYkpuCA6nNKjx88guoAhCQP2qFvfV594N4FfrpkJcbbbIiYGyIr/97jSp4rrE9e42DtecwlecaSvWVDNpwJSgd0X/KyKMuppM0i+9qDggy9BGtagz8cWpom1PpOu4fMQyuCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UtFK54nPYXtyoXR4vNK1nrrx4WRiz1oTUA2N8EN0JyI=;
- b=QlEfHqyg6cfZixOuHDKc9R+MmF5Sog6IzAOet7AiLEwYKug/zztBMHLOh/LGfeGKadd8UrV4bhqBa/fnycS0JRPzS+JmWcpMmV3kWvRI9qySZ/GV5AkEsvrohfShdjBd+vR/Hw2+Oj4EX0az2qjgc9C4SU/nK3ztPeJuwokospmONm0i1L5aJrTfNWKN/AuKpmer3wyo+yBjrO9bGnL7OoED5HwUN7Qmw7YAwONdlU6orEd2nvonUr0O7Fah3YYuF+s5HOxC+NMiczI4iKowNKQcs76LrrOCrJ2dbOXLdwm7hYXaFwSH2SribudCs6AJTbq8NMIokUJhx1Sx383Kgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UtFK54nPYXtyoXR4vNK1nrrx4WRiz1oTUA2N8EN0JyI=;
- b=ARHIVwVuu+pO2eW5oDhj39T0doNbw62WKlVI99+VU9nuzqUgTad+YTSkit+N953SN9gKwXdqHm9RtEPpmmGH2wBa1TlkNffJ+Car0Tz3VFhnf05vIPopb5nBtF9ohTrahonO8QH1RmelbBU2ORHPFrlGYiwGmdN/1EPcJ5ed14c=
-Received: from MN2PR18MB2911.namprd18.prod.outlook.com (2603:10b6:208:a6::18)
- by MN2PR18MB2735.namprd18.prod.outlook.com (2603:10b6:208:a6::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3676.25; Wed, 23 Dec
- 2020 16:19:06 +0000
-Received: from MN2PR18MB2911.namprd18.prod.outlook.com
- ([fe80::807:b565:ca1c:2a55]) by MN2PR18MB2911.namprd18.prod.outlook.com
- ([fe80::807:b565:ca1c:2a55%6]) with mapi id 15.20.3676.033; Wed, 23 Dec 2020
- 16:19:06 +0000
-From:   Yuval Shaia <yshaia@marvell.com>
-To:     "Peter.Chen@nxp.com" <Peter.Chen@nxp.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Yuval Shaia <yshaia@marvell.com>
-Subject: [RESEND] usb: gadget: Question on chipidea UDC driver
-Thread-Topic: [RESEND] usb: gadget: Question on chipidea UDC driver
-Thread-Index: AdbZRz3fRrbW/iqrTKKScjzjEHKrBw==
-Date:   Wed, 23 Dec 2020 16:19:06 +0000
-Message-ID: <MN2PR18MB2911B7D74FD3A16F8AF9BFD8D3DE0@MN2PR18MB2911.namprd18.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: nxp.com; dkim=none (message not signed)
- header.d=none;nxp.com; dmarc=none action=none header.from=marvell.com;
-x-originating-ip: [77.137.119.191]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7c27e3bf-510b-4381-61c9-08d8a75e7883
-x-ms-traffictypediagnostic: MN2PR18MB2735:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MN2PR18MB2735A1476D3A518D7A6190C7D3DE0@MN2PR18MB2735.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7HtxBHqG0PMuDqP/VZDsJi7+JnY+5SdC1bDxf+zajDNMvqT/mOlMiBLj6H+AULkh4fWqEMiRYeyo9oWrROhcVBGIrfi8Tj++o86r3DBHfWCcFdoo0E4ub0ZssMd6+DJg9CJy2O/sk0fTof74Haaqpz35wlZ8W2NBXxSavm5syEBqapAVF2/frIF2lqnh64eVGa2ReycpNHJvvUFjeqeEBREI/wyB0AH2hCXLOTVYxMUVOCNqWYTuYTwX9900478IX1dzMZe6MxfVF4XxSpOwFYg4yXd112GbQWIjPpHgnh8RYTol0jVf1YcNKknvzcIitvRDXQTwtPgZiQYSojTOlK4fIAmwvKjqXUuwfuhM+0s96knwb8ipCzPebNXs/UYtlFZaC8fbvSp7AW9nkm79RA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR18MB2911.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(376002)(136003)(366004)(346002)(39860400002)(2906002)(66476007)(52536014)(66446008)(71200400001)(33656002)(86362001)(9686003)(5660300002)(6506007)(4326008)(6916009)(7696005)(55016002)(478600001)(186003)(107886003)(8936002)(64756008)(316002)(26005)(8676002)(76116006)(66556008)(54906003)(66946007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?MsVVXIeHoMG7fV+9YqNOUh7Xs2MDlCaAjwFMrAYuaEpO7Kibp7DRrxOD6Cms?=
- =?us-ascii?Q?w+sEXjiaA/TAuukT8aAfYk8ZJrLZ6xeOf62TnDPra+r9iT8La0wZstCRiNRE?=
- =?us-ascii?Q?nI8GbD/hlHqlfb1HmcI0qEJ3OEwDrtkhPUtFu7gMvhIRQZKNSB5Za565qocV?=
- =?us-ascii?Q?QbP0lb7LLU3SeQib+nGt/W6LGG+SPvUnx2V2++5UqzTyHk/QwceqW+xayBP5?=
- =?us-ascii?Q?K1vRg9eoOPo3sh5WA/cbJWuYWWGYGa9hpoJhadFji+JmXhOt9x7gSIDFeSI+?=
- =?us-ascii?Q?gYyuHkJGsLRSH+eHMSeRxFdzCUoz2ZoDz9XZiuVEqIZpNRpEp7STm2HlJULJ?=
- =?us-ascii?Q?TjdhtaXOcGTCHeC30RSHU8+by5PIWm4ac9M/Oq398DqGkypWo92w8GgNSYFh?=
- =?us-ascii?Q?lOUb7AhN35Vxquo1PHGkrVbI3JYkfVrhxl8Ut9qrr5RsilPU2skwRcin9A3q?=
- =?us-ascii?Q?s3N+Il2GUTS1T3v6m57/50r1B0JP4H3l7qgN2nl76cyBtQDy7RxgijczNXNx?=
- =?us-ascii?Q?vLCZUVuektIodxiiiM+XAlbIuso1MqEaQbfLB8CtAtVQ0ezuBrRonKtW8kcH?=
- =?us-ascii?Q?AfQU7ULOkp0UlpPpVYt+c1VqCgX2pAdahe9rxnbgl7M1Bc1l816Qf7bkXgPP?=
- =?us-ascii?Q?nt5FiHjJwQffECH2NCN3bKVRU5F4n6LehM+Qs4ZtSQzjVOc+cdb3/DZg99X0?=
- =?us-ascii?Q?LgcB4ntwa6zNefp+pEQYIP411wn0+UWOTp8tPsa8YfosJ4PNcg2/V4C2CFgl?=
- =?us-ascii?Q?ZTfPDPhLZZRIvv83lEekfU/L9Nlhg87K8UkvyUkaTt7q9ymoyb5uW1RwWPAb?=
- =?us-ascii?Q?l6Z4hXF7ltYeLWxxTnCY1Afc527PvW9jPLXIreKWZ2SDRPt1O0U+1ANpvej2?=
- =?us-ascii?Q?9FeZazzK1KuHqCs+Dyg0N3nbe2tGfeWMiCROuCRpb4Q1hNdLNnJywyNR787Z?=
- =?us-ascii?Q?FKnEYfpWKfWy2YFYTP+H6+C/iBcVMDJ6bYwbX+jHMzk=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726350AbgLWQY5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Dec 2020 11:24:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57282 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725785AbgLWQY5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 23 Dec 2020 11:24:57 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B6244222BB;
+        Wed, 23 Dec 2020 16:24:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608740656;
+        bh=BxgtCRLcshuJRlikNm+aCB62jEh25FJudr2hKT0iFBs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=imP8cyt0YqKYSOV+/42mq3DypEZsGPAZSSXLMPEdEPScm4/EY1XPkENi6UWAxfxTc
+         GoD6fxxwpxuU2i8WN5mhv/cR3zTjIbQe8g0leT1obTsd7ZlvqshpPw0vGhZvKpmnr4
+         fNldDZnuWAHR/KBqF3CaoV8bsVPM7y3cQh34cMyenHFQAsfWRBZIP9bJDUQzcge+FJ
+         dvMDuzEIfX66Eci4VQzcm5ssi0GvPIyvFmRT90b+iYJAAm0yl16YEepIGsVPrDa3Ko
+         kqsergld5QbAJnC+9MwBXjEBgEWfot9ZUG7J980DIsjugCkRtH+ZoImBiKcH7HGp0S
+         24vtru5idOIIA==
+Received: by pali.im (Postfix)
+        id 9C4CD7F0; Wed, 23 Dec 2020 17:24:14 +0100 (CET)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Tomasz Maciej Nowak <tmn505@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH] usb: host: xhci: mvebu: make USB 3.0 PHY optional for Armada 3720
+Date:   Wed, 23 Dec 2020 17:24:03 +0100
+Message-Id: <20201223162403.10897-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR18MB2911.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c27e3bf-510b-4381-61c9-08d8a75e7883
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Dec 2020 16:19:06.2456
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /iU712BsMBYpJ4LacKA2DXQrSsxa4dwqPED44qpTzQhsAmfIeqFncioxSJhcWKeLiBv+uW86i18ShgIHKky6xw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB2735
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2020-12-23_07:2020-12-23,2020-12-23 signatures=0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-I'm using a board equipped with ChipIdea UDC and trying to expose storage d=
-evice (for example) out of it.
+Older ATF does not provide SMC call for USB 3.0 phy power on functionality
+and therefore initialization of xhci-hcd is failing when older version of
+ATF is used. In this case phy_power_on() function returns -EOPNOTSUPP.
 
-I load the following modules/drivers:
-	udc-core
-	libcomposite
-	ci_hdrc
-	ci_hdrc_usb
-	usb_f_mass_storage.
+[    3.108467] mvebu-a3700-comphy d0018300.phy: unsupported SMC call, try updating your firmware
+[    3.117250] phy phy-d0018300.phy.0: phy poweron failed --> -95
+[    3.123465] xhci-hcd: probe of d0058000.usb failed with error -95
 
-Next, I used the basic setup via configfs:
-                idVendor =3D 0x1d6b
-                idProduct =3D 0x0001
+This patch calls phy_power_on() in xhci_mvebu_a3700_init_quirk() function
+and in case it returns -EOPNOTSUPP then XHCI_SKIP_PHY_INIT quirk is set to
+instruct xhci-plat to skip PHY initialization.
 
-Created an empty config, function and linked the function to configuration:
-                mkdir configs/c.1
-                mkdir functions/mass_storage.1=20
-                (also created lun0 with dd)=20
-                ln -s functions/mass_storage.1 configs/c.1
+This patch fixes above failure by ignoring 'not supported' error in
+aardvark driver. In this case it is expected that phy is already power on.
 
-Then started the device:
-                echo ci_hdrc.0 > UDC
+It fixes initialization of xhci-hcd on Espressobin boards where is older
+Marvell's Arm Trusted Firmware without SMC call for USB 3.0 phy power.
 
-On device side I can see that the setup from Linux perspective is looking g=
-ood:
-	[    8.360082] Mass Storage Function, version: 2009/09/11=20
-	[    8.360094] LUN: removable file: (no medium)
+This is regression introduced in commit bd3d25b07342 ("arm64: dts: marvell:
+armada-37xx: link USB hosts with their PHYs") where USB 3.0 phy was defined
+and therefore xhci-hcd on Espressobin with older ATF started failing.
 
-However on the  host side I see some errors:
-	[   10.087328] usb 1-1: device descriptor read/64, error -32=20
-	[   10.455328] usb 1-1: device descriptor read/64, error -32=20
-	[   10.695328] usb 1-1: device descriptor read/64, error -32=20
-	[   11.875327] usb 1-1: device not accepting address 4, error -32=20
-	[   12.423327] usb 1-1: device not accepting address 5, error -32=20
-	[   12.429178] usb usb1-port1: unable to enumerate USB device=20
+Fixes: bd3d25b07342 ("arm64: dts: marvell: armada-37xx: link USB hosts with their PHYs")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Cc: <stable@vger.kernel.org> # 5.1+: ea17a0f153af: phy: marvell: comphy: Convert internal SMCC firmware return codes to errno
+Cc: <stable@vger.kernel.org> # 5.1+: f768e718911e: usb: host: xhci-plat: add priv quirk for skip PHY initialization
 
-I added some debug printks to both coreidea/udc.c and coreidea/core.c and c=
-an see that the interatom between the platform driver and the device contro=
-ller is ok (i.e interrupts etc).
+---
 
-git tag 4.14.76.
+When applying this patch, please include additional line
 
-Any idea?
+Cc: <stable@vger.kernel.org> # 5.1+: <COMMIT_ID>: usb: host: xhci-plat: fix support for XHCI_SKIP_PHY_INIT quirk
 
-Thanks a lot in advance for any help.
+with correct COMMIT_ID of mentioned patch which is available in the thread:
+https://lore.kernel.org/lkml/20201221150903.26630-1-pali@kernel.org/T/#u
 
-Yuval
+As mentioned patch is required for change in this patch to work. Above
+mentioned patch is prerequisite for this patch and therefore needs to be
+reviewed and applied prior this patch.
+
+Note that same issue as in this USB 3.0 PHY patch was already resolved and
+applied also for SATA PHY and PCIe PHY on A3720 SOC in following commits:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=45aefe3d2251e4e229d7662052739f96ad1d08d9
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b0c6ae0f8948a2be6bf4e8b4bbab9ca1343289b6
+
+And these commits were also backported to stable kernel versions (where
+were affected commits which broke drivers initialization).
+---
+ drivers/usb/host/xhci-mvebu.c | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/drivers/usb/host/xhci-mvebu.c b/drivers/usb/host/xhci-mvebu.c
+index 60651a50770f..ec4f6d6e44cf 100644
+--- a/drivers/usb/host/xhci-mvebu.c
++++ b/drivers/usb/host/xhci-mvebu.c
+@@ -8,6 +8,7 @@
+ #include <linux/mbus.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
++#include <linux/phy/phy.h>
+ 
+ #include <linux/usb.h>
+ #include <linux/usb/hcd.h>
+@@ -77,9 +78,43 @@ int xhci_mvebu_mbus_init_quirk(struct usb_hcd *hcd)
+ int xhci_mvebu_a3700_init_quirk(struct usb_hcd *hcd)
+ {
+ 	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
++	struct device *dev = hcd->self.controller;
++	struct phy *phy;
++	int ret;
+ 
+ 	/* Without reset on resume, the HC won't work at all */
+ 	xhci->quirks |= XHCI_RESET_ON_RESUME;
+ 
++	/* Old bindings miss the PHY handle */
++	phy = of_phy_get(dev->of_node, "usb3-phy");
++	if (IS_ERR(phy) && PTR_ERR(phy) == -EPROBE_DEFER)
++		return -EPROBE_DEFER;
++	else if (IS_ERR(phy))
++		goto phy_out;
++
++	ret = phy_init(phy);
++	if (ret)
++		goto phy_put;
++
++	ret = phy_set_mode(phy, PHY_MODE_USB_HOST_SS);
++	if (ret)
++		goto phy_exit;
++
++	ret = phy_power_on(phy);
++	if (ret == -EOPNOTSUPP) {
++		/* Skip initializatin of XHCI PHY when it is unsupported by firmware */
++		dev_warn(dev, "PHY unsupported by firmware\n");
++		xhci->quirks |= XHCI_SKIP_PHY_INIT;
++	}
++	if (ret)
++		goto phy_exit;
++
++	phy_power_off(phy);
++phy_exit:
++	phy_exit(phy);
++phy_put:
++	of_phy_put(phy);
++phy_out:
++
+ 	return 0;
+ }
+-- 
+2.20.1
+
