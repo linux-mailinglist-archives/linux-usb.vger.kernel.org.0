@@ -2,67 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD272E1D86
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Dec 2020 15:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A252E1DDD
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Dec 2020 16:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727712AbgLWOmm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Dec 2020 09:42:42 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:9920 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727363AbgLWOmm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Dec 2020 09:42:42 -0500
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4D1G9Q608Sz7K9m;
-        Wed, 23 Dec 2020 22:41:14 +0800 (CST)
-Received: from [10.174.178.154] (10.174.178.154) by smtp.huawei.com
- (10.3.19.207) with Microsoft SMTP Server (TLS) id 14.3.498.0; Wed, 23 Dec
- 2020 22:41:54 +0800
-Subject: Re: [RESEND] usb: dwc3: meson-g12a: disable clk on error handling
- path in probe
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <balbi@kernel.org>, <khilman@baylibre.com>,
-        <narmstrong@baylibre.com>, <jbrunet@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20201215025459.91794-1-zhengzengkai@huawei.com>
- <c069b566-224d-f938-089c-6a69d1ec9d55@huawei.com>
- <X+L7usyEWYXzxQWD@kroah.com>
-From:   Zheng Zengkai <zhengzengkai@huawei.com>
-Message-ID: <7df00fa7-df62-e963-6fb8-5e66fc47383d@huawei.com>
-Date:   Wed, 23 Dec 2020 22:41:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726591AbgLWPZ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Dec 2020 10:25:58 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:41211 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726036AbgLWPZ6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Dec 2020 10:25:58 -0500
+Received: by mail-io1-f69.google.com with SMTP id v21so9597480iol.8
+        for <linux-usb@vger.kernel.org>; Wed, 23 Dec 2020 07:25:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=ccI8XWc2bkBr3nAUmdNVuOgWrLgiP4ffUXMAehqESVc=;
+        b=bkQzrU9DA83ofmPixsawEKVg759CHAOoYdx/J6OziaUW53KjB44mFWp5DodJWpqvDW
+         1jWqftXnxO11SaCu08QmaStPvGOyutxqrhrMTDV+PfvfCjhoNwgoDe+b0JiAj7Se9/wc
+         vXsiR+bwuMDm6wWVKMBScSPyo1zJ3ZsGJT+wFVHX9ovbYZtFHHHhmGDvwggplUyNgHZo
+         secaZkYT6YD/2aYKSrJ7WPpLNHFvzvnGttoClQe2+ctse+aF7SSzRjorHWOB39gXPy23
+         3sXr4jPyYe/TD9fhWwMblTj0xNjSyLHz5jPI3ZSFOhsZVg6fLitEvdPlVwwR8BmW6ItD
+         dyQA==
+X-Gm-Message-State: AOAM5316+haP9R/xOsqvj9xmfUrqTbkd16exTVGUjCXgYjXJ4krnsgJg
+        DsobTBJJs0nD7it6On5rmOfa3XRITkGmIAqnbBshdgfZ6xB0
+X-Google-Smtp-Source: ABdhPJx8vo7Y8yQHtUlIQ7SkyfkLzF0E+/Q5kGXsq5O9xMo9J7lBurcirREzhK+dz6cv/+m3tOhl7tmLnP8Wj5+4rpQPQytNgWbu
 MIME-Version: 1.0
-In-Reply-To: <X+L7usyEWYXzxQWD@kroah.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.154]
-X-CFilter-Loop: Reflected
+X-Received: by 2002:a92:db42:: with SMTP id w2mr25735842ilq.113.1608737117405;
+ Wed, 23 Dec 2020 07:25:17 -0800 (PST)
+Date:   Wed, 23 Dec 2020 07:25:17 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006b86be05b7234cc1@google.com>
+Subject: memory leak in zr364xx_probe
+From:   syzbot <syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org, royale@zerezo.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+Hello,
 
-> On Wed, Dec 23, 2020 at 10:13:03AM +0800, Zheng Zengkai wrote:
->> Hi everyone,
->>
->> Friendly ping:
->>
->> Just want to know why this patch was ignored,
-> Right now it is the merge window and we can't do anything with any
-> patches until 5.11-rc1 is out.  After that happens, I'll work on
-> catching up on older patches like this.
->
-> thanks,
->
-> greg k-h
-> .
+syzbot found the following issue on:
 
-Thank you very much for your reply and information!
+HEAD commit:    3644e2d2 mm/filemap: fix infinite loop in generic_file_buf..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16f80eff500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=37c889fb8b2761af
+dashboard link: https://syzkaller.appspot.com/bug?extid=b4d54814b339b5c6bbd4
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1089df07500000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1671c77f500000
 
-Best Regards,
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com
 
-Zheng Zengkai
+BUG: memory leak
+unreferenced object 0xffffc90000e71000 (size 200704):
+  comm "kworker/0:2", pid 3653, jiffies 4294942426 (age 13.820s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000110a155e>] __vmalloc_node_range+0x3a5/0x410 mm/vmalloc.c:2585
+    [<000000008a1ee970>] __vmalloc_node mm/vmalloc.c:2617 [inline]
+    [<000000008a1ee970>] vmalloc+0x49/0x50 mm/vmalloc.c:2650
+    [<00000000a6a3abfa>] zr364xx_board_init drivers/media/usb/zr364xx/zr364xx.c:1348 [inline]
+    [<00000000a6a3abfa>] zr364xx_probe+0x60b/0x833 drivers/media/usb/zr364xx/zr364xx.c:1509
+    [<0000000014a572f5>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
+    [<00000000f30ee977>] really_probe+0x159/0x480 drivers/base/dd.c:561
+    [<00000000ddb29374>] driver_probe_device+0x84/0x100 drivers/base/dd.c:745
+    [<0000000073c89cb9>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:851
+    [<000000009f56a99c>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
+    [<00000000848d591a>] __device_attach+0x122/0x250 drivers/base/dd.c:919
+    [<00000000168be5bb>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
+    [<00000000464f40a6>] device_add+0x5be/0xc30 drivers/base/core.c:3091
+    [<000000008c75a2b5>] usb_set_configuration+0x9d9/0xb90 drivers/usb/core/message.c:2164
+    [<00000000071d14a5>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
+    [<00000000f325b973>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
+    [<00000000f30ee977>] really_probe+0x159/0x480 drivers/base/dd.c:561
+    [<00000000ddb29374>] driver_probe_device+0x84/0x100 drivers/base/dd.c:745
 
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
