@@ -2,132 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 392372E1359
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Dec 2020 03:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA432E1595
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Dec 2020 03:58:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730631AbgLWCZx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Dec 2020 21:25:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54254 "EHLO mail.kernel.org"
+        id S1731079AbgLWCuK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Dec 2020 21:50:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44882 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730624AbgLWCZw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:25:52 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E6AEF229C5;
-        Wed, 23 Dec 2020 02:25:34 +0000 (UTC)
+        id S1729533AbgLWCuI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:50:08 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DBB332256F;
+        Wed, 23 Dec 2020 02:49:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608690335;
-        bh=qOD3J0qah8tfhOMeHNnIkftANTBwEaXCTYbcvwhJPZc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bou3VYruHW3szheA9nFLvWs8vmBVo4TebgrJErBE6Pw0/+1URcjXzE+nOsL7BOWji
-         MfTrqi3GPlECjwO8Wtjqdcb3czeI8s8+NY2RfUWLwrlQmeszf7z6KqTVIzdI7ADAU0
-         DlM2ABiel9EGKJxafpVPQZYePFnxzsmQpxq+Ymaaf6eGcBQnyz24pQoIJZ9iRVdtj/
-         2JMtudzsfuaUl/scMOCtkk89h4tdAKDlxAKUKo56TuhJH0AL0RTY8jLC9WVAIl1+th
-         j/Z28x1wKFcSrz1xyQNUSDEFUHfJwM/k/nHciipMhdNpAOxZJbRGoTKI3XAA5w1lVQ
-         K66Sh/1rbhWZA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evgeny Novikov <novikov@ispras.ru>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 15/38] media: zr364xx: propagate errors from zr364xx_start_readpipe()
-Date:   Tue, 22 Dec 2020 21:24:53 -0500
-Message-Id: <20201223022516.2794471-15-sashal@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201223022516.2794471-1-sashal@kernel.org>
-References: <20201223022516.2794471-1-sashal@kernel.org>
+        s=k20201202; t=1608691768;
+        bh=eS4fWQh/jaxSMtCZ4b30PYeWYMXX9WVqGZxVxgBaCjA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tqNxEfPhUKCrxH1as8VAfyxu6FNEFS4WWJWysumBmamEe79YCgYp8AcSvhaYmbyW4
+         khuN6WcOcls+mPGylfKkWzPiVkPn1Msh80E5cJv3vjfvomjg4zAEK+c7suR7DxXhPG
+         MlTJvt8Q3nutK+lA5+dxEA5IFavxR6OKtpnQiXW4WjO497CcQ3nE16MAOIfLxLRcVu
+         SBoj051RKD36lQc5v14wmKurFtoK21RooSjNIxKnSyRRJpntWWM8vTOcJqf1c+Eoq4
+         SK5xzYoCG5ocNwhJsLfqNvLbbvn86yOBao20RYGpjHURtP3aXXCWog478xWtjMoX2o
+         WfJkLA9nUdY0A==
+Date:   Tue, 22 Dec 2020 18:49:26 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Roland Dreier <roland@kernel.org>
+Cc:     Oliver Neukum <oliver@neukum.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: cdc_ncm kernel log spam with trendnet 2.5G USB adapter
+Message-ID: <20201222184926.35382198@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20201219222140.4161646-1-roland@kernel.org>
+References: <3a9b2c8c275d56d9c7904cf9b5177047b196173d.camel@neukum.org>
+        <20201219222140.4161646-1-roland@kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Evgeny Novikov <novikov@ispras.ru>
+On Sat, 19 Dec 2020 14:21:40 -0800 Roland Dreier wrote:
+> (Apologies, trying one more time with a better mailer)
+> 
+> Sorry it took so long, but I finally got a chance to test the patches.  They
+> seem to work well, but they only get rid of the downlink / uplink speed spam -
+> I still get the following filling my kernel log with a patched kernel:
+> 
+>   [   29.830383] cdc_ncm 2-2:2.0 enp0s2u2c2: network connection: connected
+>   [   29.894359] cdc_ncm 2-2:2.0 enp0s2u2c2: network connection: connected
+>   [   29.958601] cdc_ncm 2-2:2.0 enp0s2u2c2: network connection: connected
+>   [   30.022473] cdc_ncm 2-2:2.0 enp0s2u2c2: network connection: connected
+>   [   30.086548] cdc_ncm 2-2:2.0 enp0s2u2c2: network connection: connected
+> 
+> with the below patch on top of your 3, then my kernel log is clean.
+> 
+> Please apply your patches plus my patch, and feel free to add
+> 
+> Tested-by: Roland Dreier <roland@kernel.org>
+> 
+> to the other three.
 
-[ Upstream commit af0321a5be3e5647441eb6b79355beaa592df97a ]
+Hi Ronald, thanks for the patch.
 
-zr364xx_start_readpipe() can fail but callers do not care about that.
-This can result in various negative consequences. The patch adds missed
-error handling.
+I'm not sure what the story here is but if this change is expected to
+get into the networking tree we'll need a fresh posting. This sort of
+scissored reply does not get into patchwork.
 
-Found by Linux Driver Verification project (linuxtesting.org).
+> Subject: [PATCH] CDC-NCM: remove "connected" log message
+> 
+> The cdc_ncm driver passes network connection notifications up to
+> usbnet_link_change(), which is the right place for any logging.
+> Remove the netdev_info() duplicating this from the driver itself.
+> 
+> This stops devices such as my "TRENDnet USB 10/100/1G/2.5G LAN"
+> (ID 20f4:e02b) adapter from spamming the kernel log with
+> 
+>     cdc_ncm 2-2:2.0 enp0s2u2c2: network connection: connected
+> 
+> messages every 60 msec or so.
+> 
+> Signed-off-by: Roland Dreier <roland@kernel.org>
+> ---
+>  drivers/net/usb/cdc_ncm.c | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+> index a45fcc44facf..50d3a4e6d445 100644
+> --- a/drivers/net/usb/cdc_ncm.c
+> +++ b/drivers/net/usb/cdc_ncm.c
+> @@ -1850,9 +1850,6 @@ static void cdc_ncm_status(struct usbnet *dev, struct urb *urb)
+>  		 * USB_CDC_NOTIFY_NETWORK_CONNECTION notification shall be
+>  		 * sent by device after USB_CDC_NOTIFY_SPEED_CHANGE.
+>  		 */
+> -		netif_info(dev, link, dev->net,
+> -			   "network connection: %sconnected\n",
+> -			   !!event->wValue ? "" : "dis");
+>  		usbnet_link_change(dev, !!event->wValue, 0);
+>  		break;
+>  
 
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/usb/zr364xx/zr364xx.c | 31 ++++++++++++++++++++++-------
- 1 file changed, 24 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
-index 2d56cccaa4747..505e08ddde2bb 100644
---- a/drivers/media/usb/zr364xx/zr364xx.c
-+++ b/drivers/media/usb/zr364xx/zr364xx.c
-@@ -1359,6 +1359,7 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
- {
- 	struct zr364xx_pipeinfo *pipe = cam->pipe;
- 	unsigned long i;
-+	int err;
- 
- 	DBG("board init: %p\n", cam);
- 	memset(pipe, 0, sizeof(*pipe));
-@@ -1392,9 +1393,8 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
- 
- 	if (i == 0) {
- 		printk(KERN_INFO KBUILD_MODNAME ": out of memory. Aborting\n");
--		kfree(cam->pipe->transfer_buffer);
--		cam->pipe->transfer_buffer = NULL;
--		return -ENOMEM;
-+		err = -ENOMEM;
-+		goto err_free;
- 	} else
- 		cam->buffer.dwFrames = i;
- 
-@@ -1409,9 +1409,17 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
- 	/*** end create system buffers ***/
- 
- 	/* start read pipe */
--	zr364xx_start_readpipe(cam);
-+	err = zr364xx_start_readpipe(cam);
-+	if (err)
-+		goto err_free;
-+
- 	DBG(": board initialized\n");
- 	return 0;
-+
-+err_free:
-+	kfree(cam->pipe->transfer_buffer);
-+	cam->pipe->transfer_buffer = NULL;
-+	return err;
- }
- 
- static int zr364xx_probe(struct usb_interface *intf,
-@@ -1610,10 +1618,19 @@ static int zr364xx_resume(struct usb_interface *intf)
- 	if (!cam->was_streaming)
- 		return 0;
- 
--	zr364xx_start_readpipe(cam);
-+	res = zr364xx_start_readpipe(cam);
-+	if (res)
-+		return res;
-+
- 	res = zr364xx_prepare(cam);
--	if (!res)
--		zr364xx_start_acquire(cam);
-+	if (res)
-+		goto err_prepare;
-+
-+	zr364xx_start_acquire(cam);
-+	return 0;
-+
-+err_prepare:
-+	zr364xx_stop_readpipe(cam);
- 	return res;
- }
- #endif
--- 
-2.27.0
-
+It sounds like you're getting tens of those messages a second, we can
+remove the message but the device is still generating spurious events,
+wasting CPU cycles. Was blocking those events deemed unfeasible? 
