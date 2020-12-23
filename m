@@ -2,132 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD802E16D2
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Dec 2020 04:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0312E16CD
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Dec 2020 04:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728947AbgLWDCu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Dec 2020 22:02:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46290 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727525AbgLWCTe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:19:34 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 48F04225AC;
-        Wed, 23 Dec 2020 02:19:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608689942;
-        bh=UXq0LZfpd6ooODibQK/KgNlqWEtnJY6cHmBeQMYx+2s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=maLFT5pQwEv+bSeu4yCfE9HRLR54QQp29o/fLPZmy+yy/8cnEHJ6QytVyIfSiIya4
-         h+40jjoITTP9sd4dbcZm4yG09aIqDC5NyETR7gUh0iEAdc3kyqJLthu+pz+FDcffwO
-         8yfflI6TWBn6xIAZjnByhHZ8w8toUrlULaOaTESMfGFF6IZuh1ZS+6p50rLJOH44ma
-         prd0twHUhUfIY3efmlVQ4c/g78+uYU54ixWrMfvYzvYj4UYZD1lbCpB6JvQstrlKLk
-         dSeq7BejmGy7fG5ai7n+mjo18E9h06tVzVUkXpaWrAo3paCueL9VjM7fJF3eDkkcJz
-         e0QSh+2hD51xA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evgeny Novikov <novikov@ispras.ru>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 037/130] media: zr364xx: propagate errors from zr364xx_start_readpipe()
-Date:   Tue, 22 Dec 2020 21:16:40 -0500
-Message-Id: <20201223021813.2791612-37-sashal@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201223021813.2791612-1-sashal@kernel.org>
-References: <20201223021813.2791612-1-sashal@kernel.org>
+        id S1731333AbgLWDCW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Dec 2020 22:02:22 -0500
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:35038 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731679AbgLWDCV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Dec 2020 22:02:21 -0500
+Received: by mail-ot1-f48.google.com with SMTP id i6so13905392otr.2;
+        Tue, 22 Dec 2020 19:02:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4u37ms/Si9A3oB8jAQflb1Vh60Vfp1JUY9iDInmV/gY=;
+        b=MXTTvpuN8oOFcT7sj3B+MWTW/q3LvurO6rkB+EWt7zXGcPJA8KkcLnxOsfGfdLsxcv
+         /XTGTG1RY+sirGou6wciGblYKilWB2A+dpKv+CKyssVajUXNpkNXzsFA33nPVKkDjyVu
+         ymcZCc7Rmb42Mtsu/oirY4k2ET5P77TdN4Mq5wpN4BltQ4P8zq4/QWgoJ6Sp7ZPcAe4S
+         UcltJG902k0LOAgzki7kf2o+ZwS5wsxXILtaknmK315FV881qCiheb7cC+xQmBgC6X/Y
+         JPmdphOkcNhAhHZ/IoRwdXsJQ9UIs9/kJ+2arGP+eD67zgA0RrRDQUcCU4P3m+lNEF2r
+         voSw==
+X-Gm-Message-State: AOAM532r7xUYDXT7XkwHITIf9gwdU+Ue8kU3hE/Rz/O+SBtKVEJ8icrg
+        J/sogbAIppHeiQwfil9Q74MTcN8B2A3SEQ45PVkupMabOo4=
+X-Google-Smtp-Source: ABdhPJyTeqgVBJqtPHr0GmZiGICS0iBY56imQUhCmgOeTkrnuiYOiEtoaEw8DB6J60eZ/0/rLjvoeUovyVxMiVX1WR0=
+X-Received: by 2002:a05:6830:578:: with SMTP id f24mr16194360otc.7.1608692500429;
+ Tue, 22 Dec 2020 19:01:40 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <3a9b2c8c275d56d9c7904cf9b5177047b196173d.camel@neukum.org>
+ <20201219222140.4161646-1-roland@kernel.org> <20201222184926.35382198@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20201222184926.35382198@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Roland Dreier <roland@kernel.org>
+Date:   Tue, 22 Dec 2020 19:01:23 -0800
+Message-ID: <CAG4TOxM0BJ4TcVfcqx1E6r-ozgVGrLfFWzgxuqyGtTSiVvNpXQ@mail.gmail.com>
+Subject: Re: cdc_ncm kernel log spam with trendnet 2.5G USB adapter
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Oliver Neukum <oliver@neukum.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Evgeny Novikov <novikov@ispras.ru>
+On Tue, Dec 22, 2020 at 6:49 PM Jakub Kicinski <kuba@kernel.org> wrote:
 
-[ Upstream commit af0321a5be3e5647441eb6b79355beaa592df97a ]
+> I'm not sure what the story here is but if this change is expected to
+> get into the networking tree we'll need a fresh posting. This sort of
+> scissored reply does not get into patchwork.
 
-zr364xx_start_readpipe() can fail but callers do not care about that.
-This can result in various negative consequences. The patch adds missed
-error handling.
+OK, will resend.  Too bad about patchwork, "git am" drops everything
+before scissors lines by default.
 
-Found by Linux Driver Verification project (linuxtesting.org).
+> It sounds like you're getting tens of those messages a second, we can
+> remove the message but the device is still generating spurious events,
+> wasting CPU cycles. Was blocking those events deemed unfeasible?
 
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/usb/zr364xx/zr364xx.c | 31 ++++++++++++++++++++++-------
- 1 file changed, 24 insertions(+), 7 deletions(-)
+I certainly don't know enough about the USB CDC class to know why the
+spurious messages are showing up or whether they could be suppressed
+without a fix in the adapter firmware.  But even ~30 spurious messages
+per second doesn't seem so bad for a multi-gig adapter that might be
+handling 100,000 or more packets per second.
 
-diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
-index 637962825d7a8..32f463f05eacd 100644
---- a/drivers/media/usb/zr364xx/zr364xx.c
-+++ b/drivers/media/usb/zr364xx/zr364xx.c
-@@ -1330,6 +1330,7 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
- {
- 	struct zr364xx_pipeinfo *pipe = cam->pipe;
- 	unsigned long i;
-+	int err;
- 
- 	DBG("board init: %p\n", cam);
- 	memset(pipe, 0, sizeof(*pipe));
-@@ -1362,9 +1363,8 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
- 
- 	if (i == 0) {
- 		printk(KERN_INFO KBUILD_MODNAME ": out of memory. Aborting\n");
--		kfree(cam->pipe->transfer_buffer);
--		cam->pipe->transfer_buffer = NULL;
--		return -ENOMEM;
-+		err = -ENOMEM;
-+		goto err_free;
- 	} else
- 		cam->buffer.dwFrames = i;
- 
-@@ -1379,9 +1379,17 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
- 	/*** end create system buffers ***/
- 
- 	/* start read pipe */
--	zr364xx_start_readpipe(cam);
-+	err = zr364xx_start_readpipe(cam);
-+	if (err)
-+		goto err_free;
-+
- 	DBG(": board initialized\n");
- 	return 0;
-+
-+err_free:
-+	kfree(cam->pipe->transfer_buffer);
-+	cam->pipe->transfer_buffer = NULL;
-+	return err;
- }
- 
- static int zr364xx_probe(struct usb_interface *intf,
-@@ -1578,10 +1586,19 @@ static int zr364xx_resume(struct usb_interface *intf)
- 	if (!cam->was_streaming)
- 		return 0;
- 
--	zr364xx_start_readpipe(cam);
-+	res = zr364xx_start_readpipe(cam);
-+	if (res)
-+		return res;
-+
- 	res = zr364xx_prepare(cam);
--	if (!res)
--		zr364xx_start_acquire(cam);
-+	if (res)
-+		goto err_prepare;
-+
-+	zr364xx_start_acquire(cam);
-+	return 0;
-+
-+err_prepare:
-+	zr364xx_stop_readpipe(cam);
- 	return res;
- }
- #endif
--- 
-2.27.0
-
+ - R.
