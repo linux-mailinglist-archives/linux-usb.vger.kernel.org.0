@@ -2,37 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD012E1294
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Dec 2020 03:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 500572E12A1
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Dec 2020 03:27:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729605AbgLWCWR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Dec 2020 21:22:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51348 "EHLO mail.kernel.org"
+        id S1729824AbgLWCWz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Dec 2020 21:22:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51404 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728508AbgLWCWQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:22:16 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4865822202;
-        Wed, 23 Dec 2020 02:21:35 +0000 (UTC)
+        id S1729811AbgLWCWx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:22:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C0AC422573;
+        Wed, 23 Dec 2020 02:22:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608690096;
-        bh=9g7bzIQtYxXcj+/s7VjZyXPXlYUNaBYUi/WCaRjP1fI=;
+        s=k20201202; t=1608690157;
+        bh=5s9eCR6AG18jWWaNdD4IAvSoLw6UzNuCppY10rtEZIs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BvJFckhKIElXYAs+ETYbKOv1oVM1W/jwa4CUNxbG7/AWAkYw+WUS4hu8xRr0IU7m/
-         4Fm49gj8w1JtN+wY3PRHPDK30sLpoMUJlb/eMBo3OlCuFnwgNKbeIaXwUdteNKkyQm
-         igYvTgI3jQWsXeQG5cqJTJMrngWNjlppgyHeDeo8MAldJNAkDTuHaYPbx6dBIuOhVA
-         lkJI4mpat8xBCZmQeNc+GTUaOSIgLBcYvoBapEAoYawRzXqM8H5oc+/2GEP1z+K+ZD
-         +6lpqnAebx5SFAn4e5IPrwgMGx/9j2jOH+IgdyzVXDQNlCsgk0iyhsKsDaDk8Qke32
-         OzMsMFjTfPu6A==
+        b=IbQB8FCKnewWcV0+p05RBq4J5D0TCSJZ91yd/cdVJ6/uZjiyLrvpOA2VHbSMvjz7S
+         NhB8krhpBLDsiW76DryuWUVysQeplKCOlOPKG2OlQQcw29iTg7M9hv17Ob+fiWmVsQ
+         3verKj1A3AHYbsTKxZuy4BbP6durQ+y18qpA1SBbS0fqG9ZgKuW/C23bdZRzA37hWr
+         8UAPcWQOiRPQp/55gEvL93Yc5mCoGPeWe4O1YBaHkzoskcrPBnYW+QW/pZWM4GfhBc
+         O8eNlxHu7rG3bfrRi1H4pg9R7NIRAazJs67bQVYHUStZlDph5Fc3ueLk2HArbZenkD
+         VqODljnNeO3Kw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evgeny Novikov <novikov@ispras.ru>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 26/87] media: zr364xx: propagate errors from zr364xx_start_readpipe()
-Date:   Tue, 22 Dec 2020 21:20:02 -0500
-Message-Id: <20201223022103.2792705-26-sashal@kernel.org>
+Cc:     Kyle Tso <kyletso@google.com>, Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 76/87] USB: typec: tcpm: Add a 30ms room for tPSSourceOn in PR_SWAP
+Date:   Tue, 22 Dec 2020 21:20:52 -0500
+Message-Id: <20201223022103.2792705-76-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201223022103.2792705-1-sashal@kernel.org>
 References: <20201223022103.2792705-1-sashal@kernel.org>
@@ -44,90 +45,57 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Evgeny Novikov <novikov@ispras.ru>
+From: Kyle Tso <kyletso@google.com>
 
-[ Upstream commit af0321a5be3e5647441eb6b79355beaa592df97a ]
+[ Upstream commit fe79d5de77204dd946cfad76a9bec23354b1a500 ]
 
-zr364xx_start_readpipe() can fail but callers do not care about that.
-This can result in various negative consequences. The patch adds missed
-error handling.
+TCPM state machine needs 20-25ms to enter the ErrorRecovery state after
+tPSSourceOn timer timeouts. Change the timer from max 480ms to 450ms to
+ensure that the timer complies with the Spec. In order to keep the
+flexibility for other usecases using tPSSourceOn, add another timer only
+for PR_SWAP.
 
-Found by Linux Driver Verification project (linuxtesting.org).
-
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Badhri Jagan Sridharan <badhri@google.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Kyle Tso <kyletso@google.com>
+Signed-off-by: Will McVicker <willmcvicker@google.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20201210160521.3417426-5-gregkh@linuxfoundation.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/zr364xx/zr364xx.c | 31 ++++++++++++++++++++++-------
- 1 file changed, 24 insertions(+), 7 deletions(-)
+ drivers/usb/typec/tcpm.c | 2 +-
+ include/linux/usb/pd.h   | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
-index 501030bb2e7d0..ff2d07fa1c6a6 100644
---- a/drivers/media/usb/zr364xx/zr364xx.c
-+++ b/drivers/media/usb/zr364xx/zr364xx.c
-@@ -1349,6 +1349,7 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
- {
- 	struct zr364xx_pipeinfo *pipe = cam->pipe;
- 	unsigned long i;
-+	int err;
- 
- 	DBG("board init: %p\n", cam);
- 	memset(pipe, 0, sizeof(*pipe));
-@@ -1381,9 +1382,8 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
- 
- 	if (i == 0) {
- 		printk(KERN_INFO KBUILD_MODNAME ": out of memory. Aborting\n");
--		kfree(cam->pipe->transfer_buffer);
--		cam->pipe->transfer_buffer = NULL;
--		return -ENOMEM;
-+		err = -ENOMEM;
-+		goto err_free;
- 	} else
- 		cam->buffer.dwFrames = i;
- 
-@@ -1398,9 +1398,17 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
- 	/*** end create system buffers ***/
- 
- 	/* start read pipe */
--	zr364xx_start_readpipe(cam);
-+	err = zr364xx_start_readpipe(cam);
-+	if (err)
-+		goto err_free;
-+
- 	DBG(": board initialized\n");
- 	return 0;
-+
-+err_free:
-+	kfree(cam->pipe->transfer_buffer);
-+	cam->pipe->transfer_buffer = NULL;
-+	return err;
- }
- 
- static int zr364xx_probe(struct usb_interface *intf,
-@@ -1597,10 +1605,19 @@ static int zr364xx_resume(struct usb_interface *intf)
- 	if (!cam->was_streaming)
- 		return 0;
- 
--	zr364xx_start_readpipe(cam);
-+	res = zr364xx_start_readpipe(cam);
-+	if (res)
-+		return res;
-+
- 	res = zr364xx_prepare(cam);
--	if (!res)
--		zr364xx_start_acquire(cam);
-+	if (res)
-+		goto err_prepare;
-+
-+	zr364xx_start_acquire(cam);
-+	return 0;
-+
-+err_prepare:
-+	zr364xx_stop_readpipe(cam);
- 	return res;
- }
- #endif
+diff --git a/drivers/usb/typec/tcpm.c b/drivers/usb/typec/tcpm.c
+index 9c901e3b17472..95e4725eaf3f7 100644
+--- a/drivers/usb/typec/tcpm.c
++++ b/drivers/usb/typec/tcpm.c
+@@ -3455,7 +3455,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 			tcpm_set_state(port, ERROR_RECOVERY, 0);
+ 			break;
+ 		}
+-		tcpm_set_state(port, ERROR_RECOVERY, PD_T_PS_SOURCE_ON);
++		tcpm_set_state(port, ERROR_RECOVERY, PD_T_PS_SOURCE_ON_PRS);
+ 		break;
+ 	case PR_SWAP_SRC_SNK_SINK_ON:
+ 		tcpm_set_state(port, SNK_STARTUP, 0);
+diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
+index bdf4c88d2aa0a..1a29a7351fbed 100644
+--- a/include/linux/usb/pd.h
++++ b/include/linux/usb/pd.h
+@@ -441,6 +441,7 @@ static inline unsigned int rdo_max_power(u32 rdo)
+ #define PD_T_DRP_SRC		30
+ #define PD_T_PS_SOURCE_OFF	920
+ #define PD_T_PS_SOURCE_ON	480
++#define PD_T_PS_SOURCE_ON_PRS	450	/* 390 - 480ms */
+ #define PD_T_PS_HARD_RESET	30
+ #define PD_T_SRC_RECOVER	760
+ #define PD_T_SRC_RECOVER_MAX	1000
 -- 
 2.27.0
 
