@@ -2,155 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF992E1F68
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Dec 2020 17:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 540582E2036
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Dec 2020 18:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726350AbgLWQY5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Dec 2020 11:24:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57282 "EHLO mail.kernel.org"
+        id S1727063AbgLWRzV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Dec 2020 12:55:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60102 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725785AbgLWQY5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 23 Dec 2020 11:24:57 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B6244222BB;
-        Wed, 23 Dec 2020 16:24:16 +0000 (UTC)
+        id S1726396AbgLWRzU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 23 Dec 2020 12:55:20 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CDF56222BB;
+        Wed, 23 Dec 2020 17:54:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608740656;
-        bh=BxgtCRLcshuJRlikNm+aCB62jEh25FJudr2hKT0iFBs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=imP8cyt0YqKYSOV+/42mq3DypEZsGPAZSSXLMPEdEPScm4/EY1XPkENi6UWAxfxTc
-         GoD6fxxwpxuU2i8WN5mhv/cR3zTjIbQe8g0leT1obTsd7ZlvqshpPw0vGhZvKpmnr4
-         fNldDZnuWAHR/KBqF3CaoV8bsVPM7y3cQh34cMyenHFQAsfWRBZIP9bJDUQzcge+FJ
-         dvMDuzEIfX66Eci4VQzcm5ssi0GvPIyvFmRT90b+iYJAAm0yl16YEepIGsVPrDa3Ko
-         kqsergld5QbAJnC+9MwBXjEBgEWfot9ZUG7J980DIsjugCkRtH+ZoImBiKcH7HGp0S
-         24vtru5idOIIA==
-Received: by pali.im (Postfix)
-        id 9C4CD7F0; Wed, 23 Dec 2020 17:24:14 +0100 (CET)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Tomasz Maciej Nowak <tmn505@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH] usb: host: xhci: mvebu: make USB 3.0 PHY optional for Armada 3720
-Date:   Wed, 23 Dec 2020 17:24:03 +0100
-Message-Id: <20201223162403.10897-1-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        s=k20201202; t=1608746080;
+        bh=oPqcaaIT1m4gIwPH079KHo8KUmZzg7kgDIJDYuGMcvY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bGpft4Kpb7t5T4fX8lhByN60ObxwL55nWpJzhHIelAITSWX0bvXmtegxYSTJN4Zxl
+         T4sw2s1rmwoiwLPiUIW7JGyIM7tfyWPnaZisRDvAs56K9bnVV2r258Zllrq3efIw60
+         Xqk7ptA15HCr4vleatHRwHYA+XPQo+P9s0tUyVvqfM28vAKVchNYK9O9jkO7C/YG3J
+         N3N0SD38qtziXLRLBOdDTI40f9Ewmzt3R/AhxsHnnvnilbxQYSPWroVyn6u2P8sFfD
+         AHY6JNQEDjZCOeioDkjceA8EfiEeZB5mmjnxg6UiXX0BLHhkUQ1hp7GaO94jA5tBIo
+         4fWkBpGhcIocg==
+Received: by mail-ej1-f50.google.com with SMTP id qw4so223776ejb.12;
+        Wed, 23 Dec 2020 09:54:39 -0800 (PST)
+X-Gm-Message-State: AOAM533Ut4SxzECyeT7Irb9wI1UpolSpZIkcrMPdrYgXBjbjJfDL0aSh
+        XEYerjstm6eVqVJ00yWnDMjwnOmvxmDlY8/b9g==
+X-Google-Smtp-Source: ABdhPJz3x4J2zw5Y7TPch4DTKXpgAX9t6V701Sxc80NsHgTOESjuz9DoVFaywy8F4VyXHmox/Q09SCSZQsxP2YotFOM=
+X-Received: by 2002:a17:906:4146:: with SMTP id l6mr25366789ejk.341.1608746078387;
+ Wed, 23 Dec 2020 09:54:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20201222040645.1323611-1-robh@kernel.org> <20201222063908.GB3463004@ravnborg.org>
+In-Reply-To: <20201222063908.GB3463004@ravnborg.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 23 Dec 2020 10:54:26 -0700
+X-Gmail-Original-Message-ID: <CAL_JsqJLw_RtLehYDLu_HKCoxDHsx-AdGTWfN0JMJhgNqLeFng@mail.gmail.com>
+Message-ID: <CAL_JsqJLw_RtLehYDLu_HKCoxDHsx-AdGTWfN0JMJhgNqLeFng@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Drop redundant maxItems/items
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     devicetree@vger.kernel.org,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "open list:DMA GENERIC OFFLOAD ENGINE SUBSYSTEM" 
+        <dmaengine@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Older ATF does not provide SMC call for USB 3.0 phy power on functionality
-and therefore initialization of xhci-hcd is failing when older version of
-ATF is used. In this case phy_power_on() function returns -EOPNOTSUPP.
+On Mon, Dec 21, 2020 at 11:39 PM Sam Ravnborg <sam@ravnborg.org> wrote:
+>
+> Hi Rob,
+>
+> On Mon, Dec 21, 2020 at 09:06:45PM -0700, Rob Herring wrote:
+> > 'maxItems' equal to the 'items' list length is redundant. 'maxItems' is
+> > preferred for a single entry while greater than 1 should have an 'items'
+> > list.
+> >
+> > A meta-schema check for this is pending once these existing cases are
+> > fixed.
+> >
+> > Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > Cc: Vinod Koul <vkoul@kernel.org>
+> > Cc: Mark Brown <broonie@kernel.org>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: Jassi Brar <jaswinder.singh@linaro.org>
+> > Cc: dri-devel@lists.freedesktop.org
+> > Cc: dmaengine@vger.kernel.org
+> > Cc: alsa-devel@alsa-project.org
+> > Cc: linux-usb@vger.kernel.org
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+>
+> With one comment below,
+> Acked-by: Sam Ravnborg <sam@ravnborg.org>
+>
+> > ---
+> > diff --git a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+> > index 737c1f47b7de..54c361d4a7af 100644
+> > --- a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+> > @@ -74,11 +74,8 @@ properties:
+> >
+> >    phys:
+> >      maxItems: 1
+> > -    items:
+> > -      - description: phandle + phy specifier pair.
+>
+> The description may help some people, so keeping the
+> description and deleting maxItems would maybe be better.
 
-[    3.108467] mvebu-a3700-comphy d0018300.phy: unsupported SMC call, try updating your firmware
-[    3.117250] phy phy-d0018300.phy.0: phy poweron failed --> -95
-[    3.123465] xhci-hcd: probe of d0058000.usb failed with error -95
+Do we really want to describe 'phys' hundreds of times? No. The
+question I ask on the descriptions is could it be generated instead.
 
-This patch calls phy_power_on() in xhci_mvebu_a3700_init_quirk() function
-and in case it returns -EOPNOTSUPP then XHCI_SKIP_PHY_INIT quirk is set to
-instruct xhci-plat to skip PHY initialization.
-
-This patch fixes above failure by ignoring 'not supported' error in
-aardvark driver. In this case it is expected that phy is already power on.
-
-It fixes initialization of xhci-hcd on Espressobin boards where is older
-Marvell's Arm Trusted Firmware without SMC call for USB 3.0 phy power.
-
-This is regression introduced in commit bd3d25b07342 ("arm64: dts: marvell:
-armada-37xx: link USB hosts with their PHYs") where USB 3.0 phy was defined
-and therefore xhci-hcd on Espressobin with older ATF started failing.
-
-Fixes: bd3d25b07342 ("arm64: dts: marvell: armada-37xx: link USB hosts with their PHYs")
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Cc: <stable@vger.kernel.org> # 5.1+: ea17a0f153af: phy: marvell: comphy: Convert internal SMCC firmware return codes to errno
-Cc: <stable@vger.kernel.org> # 5.1+: f768e718911e: usb: host: xhci-plat: add priv quirk for skip PHY initialization
-
----
-
-When applying this patch, please include additional line
-
-Cc: <stable@vger.kernel.org> # 5.1+: <COMMIT_ID>: usb: host: xhci-plat: fix support for XHCI_SKIP_PHY_INIT quirk
-
-with correct COMMIT_ID of mentioned patch which is available in the thread:
-https://lore.kernel.org/lkml/20201221150903.26630-1-pali@kernel.org/T/#u
-
-As mentioned patch is required for change in this patch to work. Above
-mentioned patch is prerequisite for this patch and therefore needs to be
-reviewed and applied prior this patch.
-
-Note that same issue as in this USB 3.0 PHY patch was already resolved and
-applied also for SATA PHY and PCIe PHY on A3720 SOC in following commits:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=45aefe3d2251e4e229d7662052739f96ad1d08d9
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b0c6ae0f8948a2be6bf4e8b4bbab9ca1343289b6
-
-And these commits were also backported to stable kernel versions (where
-were affected commits which broke drivers initialization).
----
- drivers/usb/host/xhci-mvebu.c | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-mvebu.c b/drivers/usb/host/xhci-mvebu.c
-index 60651a50770f..ec4f6d6e44cf 100644
---- a/drivers/usb/host/xhci-mvebu.c
-+++ b/drivers/usb/host/xhci-mvebu.c
-@@ -8,6 +8,7 @@
- #include <linux/mbus.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <linux/phy/phy.h>
- 
- #include <linux/usb.h>
- #include <linux/usb/hcd.h>
-@@ -77,9 +78,43 @@ int xhci_mvebu_mbus_init_quirk(struct usb_hcd *hcd)
- int xhci_mvebu_a3700_init_quirk(struct usb_hcd *hcd)
- {
- 	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-+	struct device *dev = hcd->self.controller;
-+	struct phy *phy;
-+	int ret;
- 
- 	/* Without reset on resume, the HC won't work at all */
- 	xhci->quirks |= XHCI_RESET_ON_RESUME;
- 
-+	/* Old bindings miss the PHY handle */
-+	phy = of_phy_get(dev->of_node, "usb3-phy");
-+	if (IS_ERR(phy) && PTR_ERR(phy) == -EPROBE_DEFER)
-+		return -EPROBE_DEFER;
-+	else if (IS_ERR(phy))
-+		goto phy_out;
-+
-+	ret = phy_init(phy);
-+	if (ret)
-+		goto phy_put;
-+
-+	ret = phy_set_mode(phy, PHY_MODE_USB_HOST_SS);
-+	if (ret)
-+		goto phy_exit;
-+
-+	ret = phy_power_on(phy);
-+	if (ret == -EOPNOTSUPP) {
-+		/* Skip initializatin of XHCI PHY when it is unsupported by firmware */
-+		dev_warn(dev, "PHY unsupported by firmware\n");
-+		xhci->quirks |= XHCI_SKIP_PHY_INIT;
-+	}
-+	if (ret)
-+		goto phy_exit;
-+
-+	phy_power_off(phy);
-+phy_exit:
-+	phy_exit(phy);
-+phy_put:
-+	of_phy_put(phy);
-+phy_out:
-+
- 	return 0;
- }
--- 
-2.20.1
-
+Rob
