@@ -2,55 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 083FF2E19B7
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Dec 2020 09:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC902E1CFE
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Dec 2020 15:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727898AbgLWIM3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Dec 2020 03:12:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46202 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727050AbgLWIM3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 23 Dec 2020 03:12:29 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B8B03207D0;
-        Wed, 23 Dec 2020 08:11:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1608711102;
-        bh=r04tfWe6BzgW/kVLq7dsu9JKh40VfeDiStZESOyfGiY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zTIAU+9EG80hB23b6L4UsXEUhfnuvBsWojntx70qYFYZMxhJ3izK+ymtEU9UGAo2F
-         ehVZTNIdKwNLodmLXtyhtHgcccNrhrYb3DE1mutCVkov1xxQPn950pF0Cw5YyoV6GB
-         2/GotKG7sQ/5fDcWWhbwz2L0MY3BmXftTBun+vLg=
-Date:   Wed, 23 Dec 2020 09:11:38 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zheng Zengkai <zhengzengkai@huawei.com>
-Cc:     balbi@kernel.org, khilman@baylibre.com, narmstrong@baylibre.com,
-        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND] usb: dwc3: meson-g12a: disable clk on error handling
- path in probe
-Message-ID: <X+L7usyEWYXzxQWD@kroah.com>
-References: <20201215025459.91794-1-zhengzengkai@huawei.com>
- <c069b566-224d-f938-089c-6a69d1ec9d55@huawei.com>
+        id S1728751AbgLWOLA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Dec 2020 09:11:00 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:9912 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728650AbgLWOLA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Dec 2020 09:11:00 -0500
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4D1FSs6nd4z7K9P;
+        Wed, 23 Dec 2020 22:09:33 +0800 (CST)
+Received: from ubuntu.network (10.175.138.68) by
+ DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
+ 14.3.498.0; Wed, 23 Dec 2020 22:10:08 +0800
+From:   Zheng Yongjun <zhengyongjun3@huawei.com>
+To:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Zheng Yongjun <zhengyongjun3@huawei.com>
+Subject: [PATCH -next] usb: misc: use DEFINE_MUTEX (and mutex_init() had been too late)
+Date:   Wed, 23 Dec 2020 22:10:44 +0800
+Message-ID: <20201223141044.32235-1-zhengyongjun3@huawei.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c069b566-224d-f938-089c-6a69d1ec9d55@huawei.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.138.68]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 23, 2020 at 10:13:03AM +0800, Zheng Zengkai wrote:
-> Hi everyone,
-> 
-> Friendly ping:
-> 
-> Just want to know why this patch was ignored,
+Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+---
+ drivers/usb/misc/ftdi-elan.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Right now it is the merge window and we can't do anything with any
-patches until 5.11-rc1 is out.  After that happens, I'll work on
-catching up on older patches like this.
+diff --git a/drivers/usb/misc/ftdi-elan.c b/drivers/usb/misc/ftdi-elan.c
+index 8a3d9c0c8d8b..bfb538f2cac1 100644
+--- a/drivers/usb/misc/ftdi-elan.c
++++ b/drivers/usb/misc/ftdi-elan.c
+@@ -61,7 +61,7 @@ extern struct platform_driver u132_platform_driver;
+  * ftdi_module_lock exists to protect access to global variables
+  *
+  */
+-static struct mutex ftdi_module_lock;
++static DEFINE_MUTEX(ftdi_module_lock);
+ static int ftdi_instances = 0;
+ static struct list_head ftdi_static_list;
+ /*
+@@ -2761,7 +2761,6 @@ static int __init ftdi_elan_init(void)
+ {
+ 	int result;
+ 	pr_info("driver %s\n", ftdi_elan_driver.name);
+-	mutex_init(&ftdi_module_lock);
+ 	INIT_LIST_HEAD(&ftdi_static_list);
+ 	result = usb_register(&ftdi_elan_driver);
+ 	if (result) {
+-- 
+2.22.0
 
-thanks,
-
-greg k-h
