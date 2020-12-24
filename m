@@ -2,139 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D9C2E2538
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Dec 2020 08:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A90A92E2557
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Dec 2020 08:56:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726583AbgLXH1b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Dec 2020 02:27:31 -0500
-Received: from mailgw02.mediatek.com ([1.203.163.81]:11586 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726258AbgLXH1b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Dec 2020 02:27:31 -0500
-X-UUID: dda500f35131466e85b4d15b9edbda0e-20201224
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=sTA9GxzeiTWZ8Bb1AzVPoBBRf2w9jvzoOgYWkMxjLWk=;
-        b=V2m93C+mJ/lNd3Kma1Ao953qg0XQpgYHzo7sEzco8QIUdo4XBSjRucU+4Q6UKU1T2CXaedQlkUs7LjMxZun8AMXOhfnHclupAxOKzuEeegkiYz+9YfmCnib3bR2fWKdOlQCHft5o2499PfbTT/WdYuCjZv8C0WiC3NEK8r2gzdI=;
-X-UUID: dda500f35131466e85b4d15b9edbda0e-20201224
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 268527532; Thu, 24 Dec 2020 15:26:42 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31DR.mediatek.inc
- (172.27.6.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 24 Dec
- 2020 15:26:39 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 24 Dec 2020 15:26:38 +0800
-Message-ID: <1608794799.7499.2.camel@mhfsdcap03>
-Subject: Re: [PATCH v4 01/11] dt-bindings: usb: convert usb-device.txt to
- YAML schema
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Min Guo <min.guo@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Date:   Thu, 24 Dec 2020 15:26:39 +0800
-In-Reply-To: <20201221190937.GA369845@robh.at.kernel.org>
-References: <20201216093012.24406-1-chunfeng.yun@mediatek.com>
-         <20201221190937.GA369845@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1725933AbgLXHyh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Dec 2020 02:54:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51982 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725613AbgLXHyg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 24 Dec 2020 02:54:36 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8BA2222571;
+        Thu, 24 Dec 2020 07:53:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1608796436;
+        bh=JpdEM1KFQ9SN6wPewCJ79XuY6eR+d8OwNoFGLsjFUu0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qp/bvnXpT/PnmnCXsrLeKWcmUDYta8PAaXDNiRdYCgphAPyTpAceVFFAVeVtJatWF
+         Qookzrnw9T40URK8dgNtLZqoKQEevdsjQ2h0/7UtItuh5GsFxQXYQV1HYTjJujMtkP
+         imf7G234fFqee6MGSRfuGUupAuGWau6taCZarQHU=
+Date:   Thu, 24 Dec 2020 08:53:52 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Roland Dreier <roland@kernel.org>
+Cc:     Oliver Neukum <oliver@neukum.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] CDC-NCM: remove "connected" log message
+Message-ID: <X+RJEI+1AR5E0z3z@kroah.com>
+References: <20201222184926.35382198@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20201224032116.2453938-1-roland@kernel.org>
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 74766EA34054B7FEA51C94AAD0ECCBCC07057C7F26AB70431A5FC6B4C07CE5A72000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201224032116.2453938-1-roland@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gTW9uLCAyMDIwLTEyLTIxIGF0IDEyOjA5IC0wNzAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4g
-T24gV2VkLCBEZWMgMTYsIDIwMjAgYXQgMDU6MzA6MDJQTSArMDgwMCwgQ2h1bmZlbmcgWXVuIHdy
-b3RlOg0KPiA+IENvbnZlcnQgdXNiLWRldmljZS50eHQgdG8gWUFNTCBzY2hlbWEgdXNiLWRldmlj
-ZS55YW1sDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVuZy55
-dW5AbWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+IHY0OiBubyBjaGFuZ2VzLCB1cGRhdGUgZGVw
-ZW5kZW50IHNlcmllczoNCj4gPiAgICAgaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wcm9q
-ZWN0L2xpbnV4LXVzYi9saXN0Lz9zZXJpZXM9Mzk5NTYxDQo+ID4gICAgIFt2NiwwMC8xOV0gZHQt
-YmluZGluZ3M6IHVzYjogQWRkIGdlbmVyaWMgVVNCIEhDRCwgeEhDSSwgRFdDIFVTQjMgRFQgc2No
-ZW1hDQpbLi4uXQ0KPiA+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
-ZGluZ3MvdXNiL3VzYi1kZXZpY2UueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5k
-aW5ncy91c2IvdXNiLWRldmljZS55YW1sDQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gPiBp
-bmRleCAwMDAwMDAwMDAwMDAuLmYzMWQ4YTg1ZDNlNg0KPiA+IC0tLSAvZGV2L251bGwNCj4gPiAr
-KysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL3VzYi1kZXZpY2UueWFt
-bA0KPiA+IEBAIC0wLDAgKzEsMTI1IEBADQo+ID4gKyMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6
-IChHUEwtMi4wLW9ubHkgT1IgQlNELTItQ2xhdXNlKQ0KPiA+ICslWUFNTCAxLjINCj4gPiArLS0t
-DQo+ID4gKyRpZDogaHR0cDovL2RldmljZXRyZWUub3JnL3NjaGVtYXMvdXNiL3VzYi1kZXZpY2Uu
-eWFtbCMNCj4gPiArJHNjaGVtYTogaHR0cDovL2RldmljZXRyZWUub3JnL21ldGEtc2NoZW1hcy9j
-b3JlLnlhbWwjDQo+ID4gKw0KPiA+ICt0aXRsZTogVGhlIGRldmljZSB0cmVlIGJpbmRpbmdzIGZv
-ciB0aGUgR2VuZXJpYyBVU0IgRGV2aWNlDQo+ID4gKw0KPiA+ICttYWludGFpbmVyczoNCj4gPiAr
-ICAtIEdyZWcgS3JvYWgtSGFydG1hbiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc+DQo+ID4g
-Kw0KPiA+ICtkZXNjcmlwdGlvbjogfA0KPiA+ICsgIFVzdWFsbHksIHdlIG9ubHkgdXNlIGRldmlj
-ZSB0cmVlIGZvciBoYXJkIHdpcmVkIFVTQiBkZXZpY2UuDQo+ID4gKyAgVGhlIHJlZmVyZW5jZSBi
-aW5kaW5nIGRvYyBpcyBmcm9tOg0KPiA+ICsgIGh0dHA6Ly93d3cuZGV2aWNldHJlZS5vcmcvb3Bl
-bi1maXJtd2FyZS9iaW5kaW5ncy91c2IvdXNiLTFfMC5wcw0KPiA+ICsNCj4gPiArICBGb3VyIHR5
-cGVzIG9mIGRldmljZS10cmVlIG5vZGVzIGFyZSBkZWZpbmVkOiAiaG9zdC1jb250cm9sbGVyIG5v
-ZGVzIg0KPiA+ICsgIHJlcHJlc2VudGluZyBVU0IgaG9zdCBjb250cm9sbGVycywgImRldmljZSBu
-b2RlcyIgcmVwcmVzZW50aW5nIFVTQiBkZXZpY2VzLA0KPiA+ICsgICJpbnRlcmZhY2Ugbm9kZXMi
-IHJlcHJlc2VudGluZyBVU0IgaW50ZXJmYWNlcyBhbmQgImNvbWJpbmVkIG5vZGVzIg0KPiA+ICsg
-IHJlcHJlc2VudGluZyBzaW1wbGUgVVNCIGRldmljZXMuDQo+ID4gKw0KPiA+ICsgIEEgY29tYmlu
-ZWQgbm9kZSBzaGFsbCBiZSB1c2VkIGluc3RlYWQgb2YgYSBkZXZpY2Ugbm9kZSBhbmQgYW4gaW50
-ZXJmYWNlIG5vZGUNCj4gPiArICBmb3IgZGV2aWNlcyBvZiBjbGFzcyAwIG9yIDkgKGh1Yikgd2l0
-aCBhIHNpbmdsZSBjb25maWd1cmF0aW9uIGFuZCBhIHNpbmdsZQ0KPiA+ICsgIGludGVyZmFjZS4N
-Cj4gPiArDQo+ID4gKyAgQSAiaHViIG5vZGUiIGlzIGEgY29tYmluZWQgbm9kZSBvciBhbiBpbnRl
-cmZhY2Ugbm9kZSB0aGF0IHJlcHJlc2VudHMgYSBVU0INCj4gPiArICBodWIuDQo+ID4gKw0KPiA+
-ICtwcm9wZXJ0aWVzOg0KPiA+ICsgIGNvbXBhdGlibGU6DQo+ID4gKyAgICBwYXR0ZXJuOiAiXnVz
-YlswLTlhLWZdKyxbMC05YS1mXSskIg0KPiANCj4gWW91IGNhbiByZWZpbmUgdGhlIGxlbmd0aCBh
-bGxvd2VkIGEgYml0OiBbMC05YS1mXXsxLDR9DQo+IA0KPiBTYW1lIGFwcGxpZXMgZWxzZXdoZXJl
-Lg0KT2sNCj4gDQo+ID4gKyAgICBkZXNjcmlwdGlvbjogRGV2aWNlIG5vZGVzIG9yIGNvbWJpbmVk
-IG5vZGVzLg0KPiA+ICsgICAgICAidXNiVklELFBJRCIsIHdoZXJlIFZJRCBpcyB0aGUgdmVuZG9y
-IGlkIGFuZCBQSUQgdGhlIHByb2R1Y3QgaWQuDQo+ID4gKyAgICAgIFRoZSB0ZXh0dWFsIHJlcHJl
-c2VudGF0aW9uIG9mIFZJRCBhbmQgUElEIHNoYWxsIGJlIGluIGxvd2VyIGNhc2UNCj4gPiArICAg
-ICAgaGV4YWRlY2ltYWwgd2l0aCBsZWFkaW5nIHplcm9lcyBzdXBwcmVzc2VkLiBUaGUgb3RoZXIg
-Y29tcGF0aWJsZQ0KPiA+ICsgICAgICBzdHJpbmdzIGZyb20gdGhlIGFib3ZlIHN0YW5kYXJkIGJp
-bmRpbmcgY291bGQgYWxzbyBiZSB1c2VkLA0KPiA+ICsgICAgICBidXQgYSBkZXZpY2UgYWRoZXJp
-bmcgdG8gdGhpcyBiaW5kaW5nIG1heSBsZWF2ZSBvdXQgYWxsIGV4Y2VwdA0KPiA+ICsgICAgICBm
-b3IgInVzYlZJRCxQSUQiLg0KPiA+ICsNClsuLi5dDQo+ID4gZGlmZiAtLWdpdCBhL0RvY3VtZW50
-YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNiLWhjZC55YW1sIGIvRG9jdW1lbnRhdGlv
-bi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi91c2ItaGNkLnlhbWwNCj4gPiBpbmRleCA5ODgxYWMx
-MDM4MGQuLjVkMGM2YjU1MDBkNiAxMDA3NTUNCj4gPiAtLS0gYS9Eb2N1bWVudGF0aW9uL2Rldmlj
-ZXRyZWUvYmluZGluZ3MvdXNiL3VzYi1oY2QueWFtbA0KPiA+ICsrKyBiL0RvY3VtZW50YXRpb24v
-ZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNiLWhjZC55YW1sDQo+ID4gQEAgLTIzLDYgKzIzLDMy
-IEBAIHByb3BlcnRpZXM6DQo+ID4gICAgICAgIHRhcmdldGVkIGhvc3RzIChub24tUEMgaG9zdHMp
-Lg0KPiA+ICAgICAgdHlwZTogYm9vbGVhbg0KPiA+ICANCj4gPiArICAiI2FkZHJlc3MtY2VsbHMi
-Og0KPiA+ICsgICAgY29uc3Q6IDENCj4gPiArDQo+ID4gKyAgIiNzaXplLWNlbGxzIjoNCj4gPiAr
-ICAgIGNvbnN0OiAwDQo+ID4gKw0KPiA+ICtwYXR0ZXJuUHJvcGVydGllczoNCj4gPiArICAiQFsw
-LTlhLWZdKyQiOg0KPiA+ICsgICAgdHlwZTogb2JqZWN0DQo+ID4gKyAgICBkZXNjcmlwdGlvbjog
-VGhlIGhhcmQgd2lyZWQgVVNCIGRldmljZXMNCj4gPiArDQo+ID4gKyAgICBwcm9wZXJ0aWVzOg0K
-PiA+ICsgICAgICBjb21wYXRpYmxlOg0KPiA+ICsgICAgICAgIHBhdHRlcm46ICJedXNiWzAtOWEt
-Zl0rLFswLTlhLWZdKyQiDQo+ID4gKyAgICAgICAgJHJlZjogL3VzYi91c2ItZGV2aWNlLnlhbWwN
-Cj4gDQo+IFRoaXMgaXMgd3JvbmcuIEl0IHNob3VsZCBiZSB1cCBhIGxldmVsLg0KT2sNCj4gIEFu
-ZCBubyBuZWVkIHRvIGRlZmluZSANCj4gJ2NvbXBhdGlibGUnIG9yICdyZWcnIGhlcmUgYmVjYXVz
-ZSB0aG9zZSBhcmUgZGVmaW5lZCB3aXRoaW4gDQo+IHVzYi1kZXZpY2UueWFtbC4NCndpbGwgZHJv
-cCBpdA0KPiANCj4gPiArICAgICAgICBkZXNjcmlwdGlvbjogdGhlIHN0cmluZyBpcyAndXNiVklE
-LFBJRCcsIHdoZXJlIFZJRCBpcyB0aGUgdmVuZG9yIGlkDQo+ID4gKyAgICAgICAgICBhbmQgUElE
-IGlzIHRoZSBwcm9kdWN0IGlkDQo+ID4gKw0KPiA+ICsgICAgICByZWc6DQo+ID4gKyAgICAgICAg
-JHJlZjogL3VzYi91c2ItZGV2aWNlLnlhbWwNCj4gPiArICAgICAgICBtYXhJdGVtczogMQ0KPiA+
-ICsNCj4gPiArICAgIHJlcXVpcmVkOg0KPiA+ICsgICAgICAtIGNvbXBhdGlibGUNCj4gPiArICAg
-ICAgLSByZWcNCj4gPiArDQo+ID4gIGFkZGl0aW9uYWxQcm9wZXJ0aWVzOiB0cnVlDQo+ID4gIA0K
-PiA+ICBleGFtcGxlczoNCj4gPiBAQCAtMzAsNCArNTYsMTEgQEAgZXhhbXBsZXM6DQo+ID4gICAg
-ICB1c2Igew0KPiA+ICAgICAgICAgIHBoeXMgPSA8JnVzYjJfcGh5MT4sIDwmdXNiM19waHkxPjsN
-Cj4gPiAgICAgICAgICBwaHktbmFtZXMgPSAidXNiIjsNCj4gPiArICAgICAgICAjYWRkcmVzcy1j
-ZWxscyA9IDwxPjsNCj4gPiArICAgICAgICAjc2l6ZS1jZWxscyA9IDwwPjsNCj4gPiArDQo+ID4g
-KyAgICAgICAgaHViQDEgew0KPiA+ICsgICAgICAgICAgICBjb21wYXRpYmxlID0gInVzYjVlMyw2
-MTAiOw0KPiA+ICsgICAgICAgICAgICByZWcgPSA8MT47DQo+ID4gKyAgICAgICAgfTsNCj4gPiAg
-ICAgIH07DQo+ID4gLS0gDQo+ID4gMi4xOC4wDQo+ID4gDQoNCg==
+On Wed, Dec 23, 2020 at 07:21:16PM -0800, Roland Dreier wrote:
+> The cdc_ncm driver passes network connection notifications up to
+> usbnet_link_change(), which is the right place for any logging.
+> Remove the netdev_info() duplicating this from the driver itself.
+> 
+> This stops devices such as my "TRENDnet USB 10/100/1G/2.5G LAN"
+> (ID 20f4:e02b) adapter from spamming the kernel log with
+> 
+>     cdc_ncm 2-2:2.0 enp0s2u2c2: network connection: connected
+> 
+> messages every 60 msec or so.
+> 
+> Signed-off-by: Roland Dreier <roland@kernel.org>
+> ---
+>  drivers/net/usb/cdc_ncm.c | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+> index a45fcc44facf..50d3a4e6d445 100644
+> --- a/drivers/net/usb/cdc_ncm.c
+> +++ b/drivers/net/usb/cdc_ncm.c
+> @@ -1850,9 +1850,6 @@ static void cdc_ncm_status(struct usbnet *dev, struct urb *urb)
+>  		 * USB_CDC_NOTIFY_NETWORK_CONNECTION notification shall be
+>  		 * sent by device after USB_CDC_NOTIFY_SPEED_CHANGE.
+>  		 */
+> -		netif_info(dev, link, dev->net,
+> -			   "network connection: %sconnected\n",
+> -			   !!event->wValue ? "" : "dis");
+>  		usbnet_link_change(dev, !!event->wValue, 0);
+>  		break;
+>  
+> -- 
+> 2.29.2
+> 
 
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
