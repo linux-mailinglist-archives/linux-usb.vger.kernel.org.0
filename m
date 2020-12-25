@@ -2,125 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C633D2E275D
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Dec 2020 14:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7EB2E294B
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Dec 2020 01:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728395AbgLXNa1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Dec 2020 08:30:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48724 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728266AbgLXNa1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 24 Dec 2020 08:30:27 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8E99C22210;
-        Thu, 24 Dec 2020 13:29:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608816586;
-        bh=b+MKS0YXpwXIZAtxx6PxhWkrhKXzG0lI7tMEuHK6RXc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CLNAfzVPcNm9yylAyq7f2p4xuiuWNOLmQl1aWMwbTXOwx8USG4Ezziv4dmh+g2QBr
-         oukyHxwGfj7QGsA31s1RZC3iBN++1Du5Qj7tOyW66OWPaAhRqQ4k1ypNiUVxtbjyuO
-         nF3ryeGnDe2WGp97bY1Iv7KBiLGawgyFy5fbGTHK8b72Wv0tqVPKqhg6FGNKiGUci+
-         Ihi2VSKrIJe0xcHWKRC1Y8J0RDmYgvzYwKSHIuAk0CBw06JhdJZ1dnpHMbOyv3iFCE
-         KFuOJi/gtcn/CPCk66g7LOC164FFYAR7dVgCFx/R7OstkyUyISYy/c4xfCkTI0Vbqy
-         gH9rGmkoUvD0Q==
-Received: by pali.im (Postfix)
-        id 66F2C829; Thu, 24 Dec 2020 14:29:44 +0100 (CET)
-Date:   Thu, 24 Dec 2020 14:29:44 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        id S1728990AbgLYARk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Dec 2020 19:17:40 -0500
+Received: from mail-vi1eur05on2087.outbound.protection.outlook.com ([40.107.21.87]:37152
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728914AbgLYARk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 24 Dec 2020 19:17:40 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GJIzCg6/xVyb4SONpmZ2ywEpTh4ZLRYjaZUg1CNyIt9URlThhUfXV9mkKrI9cpL3cAzfEusFb7+f0GCwMLlj4v2f1+K7321jADB5+9QHBlNZUgbSMuvq3EHu8J12CeDKdee5+l7puS2+aeUqQSXP3o75NxJQwnccal75B4O8ZwhukU5Zyz9PCxm1oRvZ3VNSt7l3q9pSTPbRd++nZeBg25wWADanEb1RK0qt7veox0QvGugrZwYGb1qgAakYXgvREMMVHVFPnwUfyyrYpbdvBPi7+icQkDP8/loUGu3cK+Zdlk4iUlMaIi+jgqZdWNo6fqk2RqsSIuOWHixL1UvGSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BBK48Y1+nqbGEEaSHj6pJCiFEtCwZKKpmjYyGn/ZAlg=;
+ b=NcE6q6IDuwqUFUHIUtydesBYvG0OPjvCjpuFTjIvM8rZY5N2Dd4izDK5GFi1XwoS6Y9eBs9gpAkCTriZVK+BtCJwTGmwhswgjnbnzDuif5MRmWL3Dn4jCxOxgE6PEem6BLnINdikSI7JzI3h5/bedW9TIuxhWqmvnppwXUuSghOFiTwBpXEmtb4g7b9qIL2/km/acwr4YD+80l7r74f9/mheQAyWZd9/z+8XZo2Ie3UXZjrO/xYs+TVzBGTQz0TQTDIUcqt6Xij7H/+yL+orowHptZ70wO6xV16eZn+bRePwn8CGs/GlIIDOClYasM6tMRLPeKNSUFiUaqIMiHVmcg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BBK48Y1+nqbGEEaSHj6pJCiFEtCwZKKpmjYyGn/ZAlg=;
+ b=cqMQ/WUmYhtxvwq80qzl2hxZjd3Dx/Luvf7MN8nVUVFoocSJXTLM/RxJkPe6qZx40yHsv+Cvg1/0V3RahgXKBdeNAkKGvUpZqLUg5zCZoXwxgDLp6g1KtVX8dR+/MOHEUHHlnElJC7OIYt81lHUsHBcFVQjqkxODuXGXYHmCr0E=
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
+ by DB8PR04MB6619.eurprd04.prod.outlook.com (2603:10a6:10:108::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3676.25; Fri, 25 Dec
+ 2020 00:16:48 +0000
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3676.033; Fri, 25 Dec 2020
+ 00:16:48 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     =?utf-8?B?UGFsaSBSb2jDoXI=?= <pali@kernel.org>
+CC:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Gregory CLEMENT <gregory.clement@bootlin.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Tomasz Maciej Nowak <tmn505@gmail.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: host: xhci: mvebu: make USB 3.0 PHY optional for
+Subject: RE: [PATCH] usb: host: xhci: mvebu: make USB 3.0 PHY optional for
  Armada 3720
-Message-ID: <20201224132944.5odphwxtnzhvkeg7@pali>
+Thread-Topic: [PATCH] usb: host: xhci: mvebu: make USB 3.0 PHY optional for
+ Armada 3720
+Thread-Index: AQHW2UgQyk5+oV5VRE2UEkoGEW5gpKoFv+eAgAB1K4CAAAV7IIAAAviAgAABmQCAALSi0A==
+Date:   Fri, 25 Dec 2020 00:16:48 +0000
+Message-ID: <DBBPR04MB7979925F193F7D5AE4454C328BDC0@DBBPR04MB7979.eurprd04.prod.outlook.com>
 References: <20201223162403.10897-1-pali@kernel.org>
  <20201224055425.GA27629@b29397-desktop>
  <20201224125347.z2ka7itpxuvboghq@pali>
  <DBBPR04MB797907A4C3D7666B867AE2F08BDD0@DBBPR04MB7979.eurprd04.prod.outlook.com>
- <20201224132401.7inh5ae7aaqvooxe@pali>
+ <20201224132401.7inh5ae7aaqvooxe@pali> <20201224132944.5odphwxtnzhvkeg7@pali>
+In-Reply-To: <20201224132944.5odphwxtnzhvkeg7@pali>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [92.121.68.129]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 9001fd6e-cbea-4bd6-8fb8-08d8a86a5ed1
+x-ms-traffictypediagnostic: DB8PR04MB6619:
+x-microsoft-antispam-prvs: <DB8PR04MB6619D421E148697765DB19E68BDC0@DB8PR04MB6619.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ygGIqT+f/4esJHzJjVUYAaW5NEuqBXU8ScdHpSVT8XXqWjM/MXEd+GF1qwH8bK6nyD/kDSGjcB6bTk8wzEHaAYzDyfC3kKKSXGII5HsBBf+UVs3mtPygaDzZlx2gFIL30SiHrv5d14hbcQYhrJG5Fb1Fm4Ndk750W50KrYwL+0oWQ8/R2BwDP2bWFR4CTsoweLdyN/noh1In3zP4XMOuxEWpG3su7bMbFyaWigprINb4nmRlvrRIZhthP8axLYxW2sBOHq98xspI5SNK7Y+qYmutfVyAvvmruNXozzYJRJfg7OcgnbnUieYT8O/P+O3TirmHSBssKTg/vjxd4EZxCi4Rbp+2D/RWYsTpfcfYYW5R2A8XYWiSLPdt+8QFMsDir7spWdC6kdOeoLikzTdT3g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(39850400004)(366004)(346002)(136003)(396003)(54906003)(55016002)(66446008)(9686003)(44832011)(6916009)(64756008)(7696005)(186003)(66476007)(6506007)(33656002)(66946007)(478600001)(8936002)(76116006)(86362001)(71200400001)(316002)(5660300002)(4326008)(8676002)(52536014)(2906002)(66556008)(83380400001)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?MEZIM3J4aTlVYWh0NlBsNDQ2ekFoc3czWGF0bVJ1TlRGS3U2SmtlMVlCbjg4?=
+ =?utf-8?B?ZE9BeXF3bjd1cHFhZFE0eHVFVndybk5rMkhwZXlpZy8vOUlQaityR3B4WVM5?=
+ =?utf-8?B?TGUzS01lcmZSeGdQOWNKVXBBd1huQmxTMGtXZ2RkS3g2ZFYzK3ZBS1ZVTkRU?=
+ =?utf-8?B?aWk3RFdSZkEwaVp4WWpZK0FPblB0dTZKczNqVVNlVG5rTlVUMmZXOTUrOEww?=
+ =?utf-8?B?WDY0ZFJnd01YdlRIbEp6WjlSOFhSUjkxSWMxR1dwbUZzQmZ4NXFHSkk5YVZw?=
+ =?utf-8?B?QWd4R0crdU5xR09OSmtkbitYWjNzY2tMRVRBR0p1QmRFZ0ZsN0phMzd0VnpY?=
+ =?utf-8?B?bUJNV3RvOUpyR3cyTDZCR3hwNkhQZTBvMHNLbG1SM3RlYW50cHBNL0l1bDdK?=
+ =?utf-8?B?V2xQL2s1YVBxY3I4RmE2WWdrZHJ1MC9DZTQ2MFpyUkVQejAzT3l1S3NmbGd4?=
+ =?utf-8?B?RUNlNTZhSWNFVFFlcCtrb0c1Q3BKL0Y0ZXQ0NHdTNjV3dTRQWER0d0hQTjRj?=
+ =?utf-8?B?T05TcWt1bjZ3dkVpRGtDS05WWmxqcDViMmtZU1FhdEl5NWNFT3UxcXVXV09a?=
+ =?utf-8?B?YkI3ZG1TQTIrdUhrellhdmJUQU40NnREcGJNWjhzUVo4U1hOaks2MkNkb1lr?=
+ =?utf-8?B?UGtvMzgwUzJYWmxCOG1oeUs2b3NyMS9qUkkzbU1yQXBoTHdHMERyUm80Z2hs?=
+ =?utf-8?B?NFV2WHJFdngrVlhkL0ZqdjNKdmlXVjlLeityZU1mWGlsaXB1Q2ZpaXBkYmcw?=
+ =?utf-8?B?cjlzT01MbHUrNTQ2YWs4Z05QZ1h2OHBaRVZ1RDJ1TzZRcmt1a3dGRno2WE1R?=
+ =?utf-8?B?dnFtU2orRXAzMmVvTG9KZ2x3bmtoaldNWUVwQnNsTmpkTHB4cElyTjcwVS9o?=
+ =?utf-8?B?Z2lXSWp2bSs0ZWNlUmxLQ2tML1ZJTmhrZXMvTG93cEhsRytZNFBUaXhmYjVV?=
+ =?utf-8?B?MDA5WXVTOVBlalJNTG9LUm1CWkIvT2d1dFk1L3pmemFHZktaRjllVHJsU3dV?=
+ =?utf-8?B?czJ6Wk9WaHNoMEg5WWpCYlVZZ0k2bmpqUG5QTWZJYkFSWkZXb0FrNGdsYjlq?=
+ =?utf-8?B?RVRScWhPNkV0QjhhZVdmVkpoMVphQUh0YzdzZGpnbHVZWGM3ZThDcUtYOEg2?=
+ =?utf-8?B?c1ZqZTVhVHBUVUNYVUFmdDVPZTZTRGFpd1ZUVERmVGJxOGJjeXV2dmxSZTly?=
+ =?utf-8?B?NngyU2paSTVmaXJmb1RocmdnUGx3QVZvSE9sSkw3MUVzSklHSWE4Z1NLRnZ5?=
+ =?utf-8?B?a2o1QXIwTnpxWmFjb1M4Z05mUVkyTnNxK2JzaXlsNVAxSFk0eTdJQ1EyWHdV?=
+ =?utf-8?Q?wI9W1verkXbyQ=3D?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201224132401.7inh5ae7aaqvooxe@pali>
-User-Agent: NeoMutt/20180716
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9001fd6e-cbea-4bd6-8fb8-08d8a86a5ed1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Dec 2020 00:16:48.2900
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: P44quayXHVpZ7dgKZmaym16NDplcwN/vVUeWY6Jj4bxama9cuzkOJT92s//YKUl50eNFWN5iO3xY9L6UIKCQQQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6619
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thursday 24 December 2020 14:24:01 Pali Rohár wrote:
-> On Thursday 24 December 2020 13:15:21 Peter Chen wrote:
-> >  
-> > > > > +	/* Old bindings miss the PHY handle */
-> > > > > +	phy = of_phy_get(dev->of_node, "usb3-phy");
-> > > > > +	if (IS_ERR(phy) && PTR_ERR(phy) == -EPROBE_DEFER)
-> > > > > +		return -EPROBE_DEFER;
-> > > >
-> > > > Doesn't need to judge IS_ERR(phy).
-> > > 
-> > > Ok, I can remove it. I used same condition which is already in SATA and PCIe
-> > > phy code.
-> > > 
-> > > > > +	else if (IS_ERR(phy))
-> > > > > +		goto phy_out;
-> > > > > +
-> > > > > +	ret = phy_init(phy);
-> > > > > +	if (ret)
-> > > > > +		goto phy_put;
-> > > > > +
-> > > > > +	ret = phy_set_mode(phy, PHY_MODE_USB_HOST_SS);
-> > > > > +	if (ret)
-> > > > > +		goto phy_exit;
-> > > > > +
-> > > > > +	ret = phy_power_on(phy);
-> > > > > +	if (ret == -EOPNOTSUPP) {
-> > > > > +		/* Skip initializatin of XHCI PHY when it is unsupported by
-> > > firmware */
-> > > > > +		dev_warn(dev, "PHY unsupported by firmware\n");
-> > > > > +		xhci->quirks |= XHCI_SKIP_PHY_INIT;
-> > > > > +	}
-> > > > > +	if (ret)
-> > > > > +		goto phy_exit;
-> > > > > +
-> > > > > +	phy_power_off(phy);
-> > > > > +phy_exit:
-> > > > > +	phy_exit(phy);
-> > > > > +phy_put:
-> > > > > +	of_phy_put(phy);
-> > > > > +phy_out:
-> > > > > +
-> > > >
-> > > > You do power on and off again only want to know if PHY has already
-> > > > powered at ATF, right?
-> > > 
-> > > I need to know if power on/off procedure is supported by ATF. And if not
-> > > (indicated by -EOPNOTSUPP) then I need to ensure that usb hdc code would not
-> > > try to call phy_power_on() as it would cause failure as described in the commit
-> > > message. You can look at those other two commits for PCIe and SATA. Same
-> > > thing is needed for USB.
-> > 
-> > If not supported by ATF, then where to power on and off PHY since no other place calls PHY APIs? Is it always on?
-> 
-> Yes, in this case (when -EOPNOTSUPP is returned) SMC API is not
-> supported by ATF, and PHY is always on.
-
-To make it clear, core/hcd.c function usb_add_hcd() when
-hcd->skip_phy_initialization is false is calling
-usb_phy_roothub_power_on() which calls phy_power_on(). If this call
-fails then error is propagated back to the usb_add_hcd() and this
-function fails too.
-
-But on boards with older ATF (which do not support PHY power on SMC API)
-is phy_power_on() returning error -EOPNOTSUPP and therefore whole USB
-3.0 initialization fails.
-
-This patch is adding init hook to detect if ATF supports PHY power
-on/off functions and in case it does not support it, code sets
-XHCI_SKIP_PHY_INIT flag to instruct xhci-plat code to set
-hcd->skip_phy_initialization flag to instruct core/hcd.c to skip calling
-usb_phy_roothub_power_on() function as it is know that it would fail.
+IA0KPiA+ID4NCj4gPiA+IElmIG5vdCBzdXBwb3J0ZWQgYnkgQVRGLCB0aGVuIHdoZXJlIHRvIHBv
+d2VyIG9uIGFuZCBvZmYgUEhZIHNpbmNlIG5vIG90aGVyDQo+IHBsYWNlIGNhbGxzIFBIWSBBUElz
+PyBJcyBpdCBhbHdheXMgb24/DQo+ID4NCj4gPiBZZXMsIGluIHRoaXMgY2FzZSAod2hlbiAtRU9Q
+Tk9UU1VQUCBpcyByZXR1cm5lZCkgU01DIEFQSSBpcyBub3QNCj4gPiBzdXBwb3J0ZWQgYnkgQVRG
+LCBhbmQgUEhZIGlzIGFsd2F5cyBvbi4NCj4gDQo+IFRvIG1ha2UgaXQgY2xlYXIsIGNvcmUvaGNk
+LmMgZnVuY3Rpb24gdXNiX2FkZF9oY2QoKSB3aGVuDQo+IGhjZC0+c2tpcF9waHlfaW5pdGlhbGl6
+YXRpb24gaXMgZmFsc2UgaXMgY2FsbGluZw0KPiB1c2JfcGh5X3Jvb3RodWJfcG93ZXJfb24oKSB3
+aGljaCBjYWxscyBwaHlfcG93ZXJfb24oKS4gSWYgdGhpcyBjYWxsIGZhaWxzIHRoZW4NCj4gZXJy
+b3IgaXMgcHJvcGFnYXRlZCBiYWNrIHRvIHRoZSB1c2JfYWRkX2hjZCgpIGFuZCB0aGlzIGZ1bmN0
+aW9uIGZhaWxzIHRvby4NCj4gDQo+IEJ1dCBvbiBib2FyZHMgd2l0aCBvbGRlciBBVEYgKHdoaWNo
+IGRvIG5vdCBzdXBwb3J0IFBIWSBwb3dlciBvbiBTTUMgQVBJKSBpcw0KPiBwaHlfcG93ZXJfb24o
+KSByZXR1cm5pbmcgZXJyb3IgLUVPUE5PVFNVUFAgYW5kIHRoZXJlZm9yZSB3aG9sZSBVU0INCj4g
+My4wIGluaXRpYWxpemF0aW9uIGZhaWxzLg0KPiANCj4gVGhpcyBwYXRjaCBpcyBhZGRpbmcgaW5p
+dCBob29rIHRvIGRldGVjdCBpZiBBVEYgc3VwcG9ydHMgUEhZIHBvd2VyIG9uL29mZg0KPiBmdW5j
+dGlvbnMgYW5kIGluIGNhc2UgaXQgZG9lcyBub3Qgc3VwcG9ydCBpdCwgY29kZSBzZXRzIFhIQ0lf
+U0tJUF9QSFlfSU5JVCBmbGFnDQo+IHRvIGluc3RydWN0IHhoY2ktcGxhdCBjb2RlIHRvIHNldA0K
+PiBoY2QtPnNraXBfcGh5X2luaXRpYWxpemF0aW9uIGZsYWcgdG8gaW5zdHJ1Y3QgY29yZS9oY2Qu
+YyB0byBza2lwIGNhbGxpbmcNCj4gdXNiX3BoeV9yb290aHViX3Bvd2VyX29uKCkgZnVuY3Rpb24g
+YXMgaXQgaXMga25vdyB0aGF0IGl0IHdvdWxkIGZhaWwuDQoNClRoYW5rcyBmb3IgY2xhcml0eSwg
+Y2xlYXIgbm93Lg0KDQpQZXRlcg0K
