@@ -2,104 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6DC2E2E47
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Dec 2020 14:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF3C2E2EAB
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Dec 2020 17:56:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726129AbgLZNqh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Dec 2020 08:46:37 -0500
-Received: from mib.mailinblack.com ([137.74.84.110]:48868 "EHLO
-        mib.mailinblack.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725969AbgLZNqg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Dec 2020 08:46:36 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mib.mailinblack.com (Postfix) with ESMTP id A92CE1A0C91
-        for <linux-usb@vger.kernel.org>; Sat, 26 Dec 2020 13:45:54 +0000 (UTC)
-Received: from mib.mailinblack.com (localhost [127.0.0.1])
-        by mib.mailinblack.com
-        with SMTP (Mib Daemon ) id KJ5RBB5Y;
-        Sat, 26 Dec 2020 13:45:54 +0000 (UTC)
-Received: from zimbra2.kalray.eu (zimbra2.kalray.eu [92.103.151.219])
-        by mib.mailinblack.com (Postfix) with ESMTPS id 726091A0C8C;
-        Sat, 26 Dec 2020 13:45:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 48F0A27E037B;
-        Sat, 26 Dec 2020 14:45:54 +0100 (CET)
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id kBewNzRAM07n; Sat, 26 Dec 2020 14:45:53 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 6B06F27E038D;
-        Sat, 26 Dec 2020 14:45:53 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 6B06F27E038D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1608990353;
-        bh=fgOzqQxzU52gKfSAIdzn9Y4OtV2/Ocd6nBnt3Hhg4Bc=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=QCUMrsn4YsWVW5VOtIdio2qmYp+FQjZFROx2pBbK/gqObDZU9eAWUqRhd+jj1uZS6
-         4YcrK0wdoqLGBq6vS921mzarZ2cGpK3ReBItLXVXrNfcNmVeK2Knn/5CTS8xTlsuEo
-         4M8Tm299ZIH8KV7ufamMElJ9tdJWyY8JKRJNqJAw=
-X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 0Fk39_gqKPTl; Sat, 26 Dec 2020 14:45:53 +0100 (CET)
-Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 51BB727E037B;
-        Sat, 26 Dec 2020 14:45:53 +0100 (CET)
-Date:   Sat, 26 Dec 2020 14:45:44 +0100
-From:   Jules Maselbas <jmaselbas@kalray.eu>
-To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-Cc:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1726185AbgLZQxM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Dec 2020 11:53:12 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:46723 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726010AbgLZQxM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Dec 2020 11:53:12 -0500
+Received: (qmail 607118 invoked by uid 1000); 26 Dec 2020 11:52:30 -0500
+Date:   Sat, 26 Dec 2020 11:52:30 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Vincent Pelletier <plr.vincent@gmail.com>
+Cc:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] usb: dwc2: Try usb_get_phy_by_phandle instead of
- usb_get_phy
-Message-ID: <20201226134522.fqpsd2fzlri2rcni@tellis.lin.mbt.kalray.eu>
-References: <20201216165935.9149-1-jmaselbas@kalray.eu>
- <d753fafc-a50a-d19b-d872-78f34dfa01ca@synopsys.com>
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Subject: Re: dwc2 gadget rejecting new AIO transfer when bus is suspended
+Message-ID: <20201226165230.GB606763@rowland.harvard.edu>
+References: <20201224125012.4df1d26c@gmail.com>
+ <ff11cf43-f185-b123-6cb5-f218ef148d89@synopsys.com>
+ <20201226004627.657ba339@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d753fafc-a50a-d19b-d872-78f34dfa01ca@synopsys.com>
-User-Agent: NeoMutt/20171215
+In-Reply-To: <20201226004627.657ba339@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Artur,
-
-On Fri, Dec 25, 2020 at 11:41:04AM +0000, Artur Petrosyan wrote:
-> > @@ -251,7 +251,12 @@ static int dwc2_lowlevel_hw_init(struct dwc2_hsotg *hsotg)
-> >   	}
-> >   
-> >   	if (!hsotg->phy) {
-> > -		hsotg->uphy = devm_usb_get_phy(hsotg->dev, USB_PHY_TYPE_USB2);
-> > +		if (hsotg->dev->of_node)
-> > +			i = of_property_match_string(hsotg->dev->of_node, "phy-names", "usb2-phy");
+On Sat, Dec 26, 2020 at 12:46:27AM +0000, Vincent Pelletier wrote:
+> Hello Artur,
 > 
-> According the device tree you have provided the value of "i" will always 
-> be "0".
-Yes
+> On Fri, 25 Dec 2020 10:56:02 +0000, Artur Petrosyan <Arthur.Petrosyan@synopsys.com> wrote:
+> > According your debug log core enters suspend on receiving an 
+> > GINTSTS_ErlySusp interrupt. It means that the driver goes to L2 state 
+> > (suspend). In suspend mode accepting and processing EP requests can lead 
+> > to unexpected behavior. That is why the driver rejects EP request with 
+> > -EAGAIN.
+> > 
+> > As core may use power saving modes which are initiated by the Suspend 
+> > interrupt, then in any suspend mode whether it is hibernation or partial 
+> > power down the core registers are not available. This is why we avoid to 
+> > get new EP requests.
 
-> > +		if (hsotg->dev->of_node && i >= 0)
-> > +			hsotg->uphy = devm_usb_get_phy_by_phandle(hsotg->dev, "phys", i);
+This seems like a design mistake.  Even though the controller may be in 
+a low-power state, there's no reason the UDC driver can't accept new 
+requests or unlink old ones.  It even ought to be willing to halt 
+endpoints.
+
+None of these actions require the driver to touch the hardware.  The 
+hardware-specific parts of the actions can be carried out when the 
+controller returns to full power.
+
+> This is my understanding from reading the commit history, yes.
 > 
-> Why do you use the value of "i" while in "<&usb_phy0>" you have only one 
-> phy. If you had several phy-names and the value of "i" gets more than 0, 
-> then based on your usb_phy0 "devm_usb_get_phy_by_phandle" function will 
-> return error. So, maybe it would be more correct (based on your device 
-> tree), to use below command
-> hsotg->uphy = devm_usb_get_phy_by_phandle(hsotg->dev, "phys", 0);
-Yes I could use 0 instead of i, but I would like this to work not only
-for my case where the "usb2-phy" phandle comes first.
+> But from userland's point of view this causes a weird situation:
+> - sequence 1:
+>   - userland submits buffer (ex: to receive the next host request)
+>   - UDC is suspended
+>   - UDC is awoken by host initiating a transfer
+>   Result: the AIO completes successfully, the suspension was completely
+>   invisible to userland, and I'm happy.
+> - sequence 2:
+>   - UDC is suspended
+>   - userland submits buffer (ex: to receive the next host request)
+>   Result: the AIO completes with an error, the suspension got in the
+>   way, and I'm confused about what I need to make my code do to
+>   recover: should I change my IO completion codepath so that it
+>   resubmits any EAGAIN completion, hoping to catch the UDC at a time it
+>   is awoken so the AIO finally sticks and everything can sleep until an
+>   actual transfer completion ?
 
-I've tried to follow what's done in phy-core.c, as done by the function
-phy_get. Where it first call "of_property_match_string" and then get the
-phy with the matched index.
+Indeed, the same problem will occur with synchronous (non-AIO) 
+submissions.
 
-I don't see how, in my case, the function "devm_usb_get_phy_by_phandle" can
-be called with i greater than 0, and returning an error.
+> I do not know if it makes sense from a kernel point of view, but would
+> it be possible for the dwc2 module to sit on the AIO requests while the
+> controller is suspended, and submit them when it wakes up rather than
+> failing them immediately and sending them back to userland ?
+> I expect that this code actually knows (without polling) when the
+> controller is awoken.
 
-Best,
-Jules
+The kernel shouldn't have to sit on anything.  The requests should be 
+accepted immediately.
 
+Alan Stern
