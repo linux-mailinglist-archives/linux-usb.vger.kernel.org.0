@@ -2,73 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9832E2E0A
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Dec 2020 12:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6DC2E2E47
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Dec 2020 14:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726048AbgLZLH5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Dec 2020 06:07:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726044AbgLZLH5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Dec 2020 06:07:57 -0500
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F09C061757
-        for <linux-usb@vger.kernel.org>; Sat, 26 Dec 2020 03:07:16 -0800 (PST)
-Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 0BQB70nx011884
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sat, 26 Dec 2020 12:07:00 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1608980821; bh=TokKdPgcg4hHBEpjsA1qaRG+DXLsRIJ8uc8fIRfkAvo=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=S1tX8V0ywaQge65eDYD9hMwHqGahgbQWP/Nk5xeGqdhryNGUtYBGlILRj7sZqQnHf
-         AAWuEIZ8qPnRRPXUbkWeHjy+VSBa4REhBNRJsAqrtvFu75JYSa0kY7QN0r/xFAF4iD
-         MdYZy0wMJ7sbewM7o7A92ZS9DltqH41vUA+QHBPo=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94)
-        (envelope-from <bjorn@mork.no>)
-        id 1kt7PX-000WSQ-WB; Sat, 26 Dec 2020 12:07:00 +0100
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: Reset hanging Huawei USB-2.0 Internet stick
-Organization: m
-References: <CA+icZUWHOZ9GSY7JCkooXP1oJ10_8GzHD--uuAFry_1jYDJOow@mail.gmail.com>
-        <Pine.LNX.4.44L0.1606151149200.1914-100000@iolanthe.rowland.org>
-        <CA+icZUWCnoBp8_Qcsxiua_en35YO7YGuc9aSmaNwNWc_RH8U=Q@mail.gmail.com>
-        <87porhxwtt.fsf@nemi.mork.no>
-        <CA+icZUW3p-QOGwoi9xj1pireghg26Tne34KZrS605soP9FWMpw@mail.gmail.com>
-        <CA+icZUUMhz3EuZpisegMzHPE1js_wE9DXdyvvLLymXN8JoRpFw@mail.gmail.com>
-Date:   Sat, 26 Dec 2020 12:06:59 +0100
-In-Reply-To: <CA+icZUUMhz3EuZpisegMzHPE1js_wE9DXdyvvLLymXN8JoRpFw@mail.gmail.com>
-        (Sedat Dilek's message of "Sat, 26 Dec 2020 11:07:32 +0100")
-Message-ID: <87czyw3jxo.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S1726129AbgLZNqh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Dec 2020 08:46:37 -0500
+Received: from mib.mailinblack.com ([137.74.84.110]:48868 "EHLO
+        mib.mailinblack.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725969AbgLZNqg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Dec 2020 08:46:36 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mib.mailinblack.com (Postfix) with ESMTP id A92CE1A0C91
+        for <linux-usb@vger.kernel.org>; Sat, 26 Dec 2020 13:45:54 +0000 (UTC)
+Received: from mib.mailinblack.com (localhost [127.0.0.1])
+        by mib.mailinblack.com
+        with SMTP (Mib Daemon ) id KJ5RBB5Y;
+        Sat, 26 Dec 2020 13:45:54 +0000 (UTC)
+Received: from zimbra2.kalray.eu (zimbra2.kalray.eu [92.103.151.219])
+        by mib.mailinblack.com (Postfix) with ESMTPS id 726091A0C8C;
+        Sat, 26 Dec 2020 13:45:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 48F0A27E037B;
+        Sat, 26 Dec 2020 14:45:54 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id kBewNzRAM07n; Sat, 26 Dec 2020 14:45:53 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 6B06F27E038D;
+        Sat, 26 Dec 2020 14:45:53 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 6B06F27E038D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1608990353;
+        bh=fgOzqQxzU52gKfSAIdzn9Y4OtV2/Ocd6nBnt3Hhg4Bc=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=QCUMrsn4YsWVW5VOtIdio2qmYp+FQjZFROx2pBbK/gqObDZU9eAWUqRhd+jj1uZS6
+         4YcrK0wdoqLGBq6vS921mzarZ2cGpK3ReBItLXVXrNfcNmVeK2Knn/5CTS8xTlsuEo
+         4M8Tm299ZIH8KV7ufamMElJ9tdJWyY8JKRJNqJAw=
+X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 0Fk39_gqKPTl; Sat, 26 Dec 2020 14:45:53 +0100 (CET)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 51BB727E037B;
+        Sat, 26 Dec 2020 14:45:53 +0100 (CET)
+Date:   Sat, 26 Dec 2020 14:45:44 +0100
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+Cc:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH] usb: dwc2: Try usb_get_phy_by_phandle instead of
+ usb_get_phy
+Message-ID: <20201226134522.fqpsd2fzlri2rcni@tellis.lin.mbt.kalray.eu>
+References: <20201216165935.9149-1-jmaselbas@kalray.eu>
+ <d753fafc-a50a-d19b-d872-78f34dfa01ca@synopsys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.102.4 at canardo
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d753fafc-a50a-d19b-d872-78f34dfa01ca@synopsys.com>
+User-Agent: NeoMutt/20171215
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Sedat Dilek <sedat.dilek@gmail.com> writes:
+Hi Artur,
 
-> Debian/testing ships usbreset binary in usbutils package version
-> 1:013-1 which supports to reset a USB device via VID:PID option.
->
-> # dpkg -S $(which usbreset)
-> usbutils: /usr/bin/usbreset
->
-> # /usr/bin/usbreset 12d1:1436
-> Resetting HUAWEI Mobile ... ok
+On Fri, Dec 25, 2020 at 11:41:04AM +0000, Artur Petrosyan wrote:
+> > @@ -251,7 +251,12 @@ static int dwc2_lowlevel_hw_init(struct dwc2_hsotg *hsotg)
+> >   	}
+> >   
+> >   	if (!hsotg->phy) {
+> > -		hsotg->uphy = devm_usb_get_phy(hsotg->dev, USB_PHY_TYPE_USB2);
+> > +		if (hsotg->dev->of_node)
+> > +			i = of_property_match_string(hsotg->dev->of_node, "phy-names", "usb2-phy");
+> 
+> According the device tree you have provided the value of "i" will always 
+> be "0".
+Yes
 
-Yes, this was merged into usbutils a long time ago:
-https://github.com/gregkh/usbutils/commit/c430d91f772a57083ddf3bcea4421262a=
-76a049b
+> > +		if (hsotg->dev->of_node && i >= 0)
+> > +			hsotg->uphy = devm_usb_get_phy_by_phandle(hsotg->dev, "phys", i);
+> 
+> Why do you use the value of "i" while in "<&usb_phy0>" you have only one 
+> phy. If you had several phy-names and the value of "i" gets more than 0, 
+> then based on your usb_phy0 "devm_usb_get_phy_by_phandle" function will 
+> return error. So, maybe it would be more correct (based on your device 
+> tree), to use below command
+> hsotg->uphy = devm_usb_get_phy_by_phandle(hsotg->dev, "phys", 0);
+Yes I could use 0 instead of i, but I would like this to work not only
+for my case where the "usb2-phy" phandle comes first.
 
+I've tried to follow what's done in phy-core.c, as done by the function
+phy_get. Where it first call "of_property_match_string" and then get the
+phy with the matched index.
 
+I don't see how, in my case, the function "devm_usb_get_phy_by_phandle" can
+be called with i greater than 0, and returning an error.
 
-Bj=C3=B8rn
+Best,
+Jules
+
