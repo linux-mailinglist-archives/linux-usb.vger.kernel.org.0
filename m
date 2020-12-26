@@ -2,90 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF3C2E2EAB
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Dec 2020 17:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 714F42E2F0E
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Dec 2020 21:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726185AbgLZQxM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Dec 2020 11:53:12 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:46723 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726010AbgLZQxM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Dec 2020 11:53:12 -0500
-Received: (qmail 607118 invoked by uid 1000); 26 Dec 2020 11:52:30 -0500
-Date:   Sat, 26 Dec 2020 11:52:30 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Vincent Pelletier <plr.vincent@gmail.com>
-Cc:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: Re: dwc2 gadget rejecting new AIO transfer when bus is suspended
-Message-ID: <20201226165230.GB606763@rowland.harvard.edu>
-References: <20201224125012.4df1d26c@gmail.com>
- <ff11cf43-f185-b123-6cb5-f218ef148d89@synopsys.com>
- <20201226004627.657ba339@gmail.com>
+        id S1725968AbgLZUET (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Dec 2020 15:04:19 -0500
+Received: from cpanel1.relevate.ru ([178.57.216.108]:53215 "EHLO
+        cpanel1.relevate.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725927AbgLZUET (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Dec 2020 15:04:19 -0500
+X-Greylist: delayed 3813 seconds by postgrey-1.27 at vger.kernel.org; Sat, 26 Dec 2020 15:04:17 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=zoocontinent.com; s=default; h=Message-Id:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Reply-To:From:Subject:To:Sender:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=080A9UytD1TQoeIU5TOzohYPF8+Heby9lENAoliEHBY=; b=LXOGCNlbUn7LqaWmcvfyoD3YM/
+        ULUDH4/Uir8Cg6Qi9QkvHqp+qhgcePQrUn9J9q09GL/sFjJqhO6tbIeCrEPGzlY16ijaV+x2ke/6H
+        RF4yUZDi66FTEuUTFp2bay1mJeMP2CLhtUzr1uJAvJZvsv/H9lHMgvTc/cBi1ZX+e4KPO0HcUqQA6
+        jnRpINYPxrwRK9zV6z3SyPHh/JdP4WFVjBF+y98BA5wydo4bHpWKSmFVN7QkI/O9YNNscPOqhq818
+        hiUgBy9H2//vO5t9f5CJL4PjvH9sVP/GDYCk2VPqznbgwG5h2WznJdMprt/Bl0cfd7SwZ48CBjS2L
+        psu4ZhWA==;
+Received: from p8342 by cpanel1.relevate.ru with local (Exim 4.93)
+        (envelope-from <p8342@cpanel1.relevate.ru>)
+        id 1ktEnI-0009cK-OX
+        for linux-usb@vger.kernel.org; Sat, 26 Dec 2020 22:00:00 +0300
+To:     linux-usb@vger.kernel.org
+Subject: =?windows-1251?B?SGkgaG90IGd18yEgSSB3aXNoIPPudSB3b3VsZCDwdWxsIG1lIHRocu51Z2gg4GxsIHRo5SBob2xlcyAgPj4+Pj4+Pj4+Pj4+Pj4gIGh0dHBzOi8vc2xpbWV4MzY1LmNvbS9hZHVsdGRhdGluZ3NleDU3NTkxMyAgIDw8PDw8PDw8PDw8IO7y7/Dg4ujrIOLg7CDx8fvr6vMg7eAg8eDp8iBzaXRlLmNvbQ==?=
+X-PHP-Script: bonishop.ru/index.php full path: /home/p8342/public_html/bonishop.ru/index.php for 156.146.63.77
+From:   #EMAIL_FROM#@cpanel1.relevate.ru
+Reply-To: #EMAIL_FROM#@cpanel1.relevate.ru
+X-EVENT_NAME: REDSIGN_EMAIL_TO_FRIEND
+X-Priority: 3 (Normal)
+Date:   Sat, 26 Dec 2020 22:00:00 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201226004627.657ba339@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MID:  132769.68 (26.12.2020 22:00:00)
+Content-Type: text/plain; charset=windows-1251
+Content-Transfer-Encoding: 8bit
+Message-Id: <E1ktEnI-0009cK-OX@cpanel1.relevate.ru>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel1.relevate.ru
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [1159 991] / [47 12]
+X-AntiAbuse: Sender Address Domain - cpanel1.relevate.ru
+X-Get-Message-Sender-Via: cpanel1.relevate.ru: authenticated_id: p8342/primary_hostname/system user
+X-Authenticated-Sender: cpanel1.relevate.ru: p8342
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Dec 26, 2020 at 12:46:27AM +0000, Vincent Pelletier wrote:
-> Hello Artur,
-> 
-> On Fri, 25 Dec 2020 10:56:02 +0000, Artur Petrosyan <Arthur.Petrosyan@synopsys.com> wrote:
-> > According your debug log core enters suspend on receiving an 
-> > GINTSTS_ErlySusp interrupt. It means that the driver goes to L2 state 
-> > (suspend). In suspend mode accepting and processing EP requests can lead 
-> > to unexpected behavior. That is why the driver rejects EP request with 
-> > -EAGAIN.
-> > 
-> > As core may use power saving modes which are initiated by the Suspend 
-> > interrupt, then in any suspend mode whether it is hibernation or partial 
-> > power down the core registers are not available. This is why we avoid to 
-> > get new EP requests.
+Âàø äðóã Hi hot guó! I wish óîu would ðull me thrîugh àll thå holes  >>>>>>>>>>>>>>  https://slimex365.com/adultdatingsex575913   <<<<<<<<<<< ïåðåäàë âàì ñîîáùåíèå
 
-This seems like a design mistake.  Even though the controller may be in 
-a low-power state, there's no reason the UDC driver can't accept new 
-requests or unlink old ones.  It even ought to be willing to halt 
-endpoints.
+Ñîîáùåíèå îò Hi hot guó! I wish óîu would ðull me thrîugh àll thå holes  >>>>>>>>>>>>>>  https://slimex365.com/adultdatingsex575913   <<<<<<<<<<<:
+Hey hot guó! I wànt óou to ðull må thrîugh all the hîlås  >>>>>>>>>>>>>>  https://qspark.me/B78OFf   <<<<<<<<<<<
 
-None of these actions require the driver to touch the hardware.  The 
-hardware-specific parts of the actions can be carried out when the 
-controller returns to full power.
+Ññûëêà íà ñòðàíèöó - http://bonishop.ru/
 
-> This is my understanding from reading the commit history, yes.
-> 
-> But from userland's point of view this causes a weird situation:
-> - sequence 1:
->   - userland submits buffer (ex: to receive the next host request)
->   - UDC is suspended
->   - UDC is awoken by host initiating a transfer
->   Result: the AIO completes successfully, the suspension was completely
->   invisible to userland, and I'm happy.
-> - sequence 2:
->   - UDC is suspended
->   - userland submits buffer (ex: to receive the next host request)
->   Result: the AIO completes with an error, the suspension got in the
->   way, and I'm confused about what I need to make my code do to
->   recover: should I change my IO completion codepath so that it
->   resubmits any EAGAIN completion, hoping to catch the UDC at a time it
->   is awoken so the AIO finally sticks and everything can sleep until an
->   actual transfer completion ?
+------------------------------------------------------------------------------------------------------
+Ñîîáùåíèå ñãåíåðèðîâàíî àâòîìàòè÷åñêè ñ ñàéòà Ñåòü çîîìàãàçèíîâ ÁÎÍÈÔÀÖÈÉ (bonishop.ru)
 
-Indeed, the same problem will occur with synchronous (non-AIO) 
-submissions.
 
-> I do not know if it makes sense from a kernel point of view, but would
-> it be possible for the dwc2 module to sit on the AIO requests while the
-> controller is suspended, and submit them when it wakes up rather than
-> failing them immediately and sending them back to userland ?
-> I expect that this code actually knows (without polling) when the
-> controller is awoken.
 
-The kernel shouldn't have to sit on anything.  The requests should be 
-accepted immediately.
-
-Alan Stern
