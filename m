@@ -2,131 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 542622E2CC1
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Dec 2020 01:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D792E2DE2
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Dec 2020 11:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726144AbgLZArM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Dec 2020 19:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
+        id S1725972AbgLZJ7D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Dec 2020 04:59:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725961AbgLZArM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Dec 2020 19:47:12 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9934C061757
-        for <linux-usb@vger.kernel.org>; Fri, 25 Dec 2020 16:46:31 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id iq13so2884602pjb.3
-        for <linux-usb@vger.kernel.org>; Fri, 25 Dec 2020 16:46:31 -0800 (PST)
+        with ESMTP id S1725911AbgLZJ7C (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Dec 2020 04:59:02 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E21C061757
+        for <linux-usb@vger.kernel.org>; Sat, 26 Dec 2020 01:58:22 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id z5so5379076iob.11
+        for <linux-usb@vger.kernel.org>; Sat, 26 Dec 2020 01:58:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FFR5sTckgEIc1wHx2QQjmBOJK85hU4naATh9H7iRMKA=;
-        b=mzJzZYJ+VEm/Qw+99Jgtb/aksBWqQsv9IpZPPBEPJ29sUFrRwKw30b9GGhvmDx3DTc
-         Hl88dt3qbu9Fhjo/RX7kV+Hhceml4qStIVbJGjAPAVSWnWnIIr3VINwPKc0zxwvPtsjq
-         KqjTdA/ikY9QsWc0yqaRLnLsdWKoHF44rgXKwi+8qH276G/GIdc1YKk/1mHWUs431zit
-         s3+OCYcHNfwrsUFA3k+68HV5Mq3DBSUJhi21G/0/xlN/UVYsdceJIl5nJlv8PysQVRpV
-         ADfMYhKn9HfddwsAIZwm5KJR6WqFTzK+ogEC2HIulKOOzq2czY9sX5PF7SyNbkez88v9
-         WyIA==
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=o9E2F4A0VTVbbheqKm2e0N4/ec6vyCGIK8aRsF7KuwU=;
+        b=OmseWf9DDD656oREEs9G9lBsrfYr7SzF8pgmg6d4RK/7I7FXSJ+A9X11+7u5OmlDXD
+         /omuXSfN78dTAR3UjXXeplo8EEmsHVrkOqfTFOn7mB5ZHF+I7wA6Mz3Qn7fsuVfcfReK
+         76AZ3JUQkWXDCZGDcFpF/1LBWiQRs+FnM+4UD2W3SwL6biFbZDfEx5elnAlp2h/IEtn+
+         xkUHvwl/UvmPqnnxGKkQ7tt0zsX3BTQgFZ6kIfKZkp4WxfGi9HVf34czyqzZ8f9B22Nd
+         FrHnh/Cwsok1a6Gd41uI3Rkxo+YxjGoz+9CEKImYWe71O7MbKHmFykc6sp4ypkn/BGNy
+         NUDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FFR5sTckgEIc1wHx2QQjmBOJK85hU4naATh9H7iRMKA=;
-        b=FEvp+U4Z94oi8wxNUa9iYcfdcYXNI5gSlw7xa5ldqRTIIacZv6p3V1QZGIppRw5LZJ
-         xSJALR3/3Be6J/6nSSTQ7MpPtCM/b8t/57qJXTJkX2e9+KjuJjNdBS/NJd4DtCEOHKkK
-         G5fbNBLRVdp+QhYtl2WsRga3ACP3Egv65vMn/UyVO8R+98cVJGLa7zqRNy+9ILSFHqCl
-         XDgRo7tAmc9t+kPG+bdpkKWlswK1ZjRnpV+s85CpSGKXdQsNoir+YH5Yv8XL0sTqa33O
-         fDxIu/3mCoAujfCNOCdt27nJznddf7/FC2XYTemNjb6gfJq3HUmfET0Ph3zS7etQoNqi
-         UMYg==
-X-Gm-Message-State: AOAM533bXo3yF1MmLeyfeG1dF0nu9OgBv1MtSHYC1BqPIBhHF+AhThW+
-        IQORsXZ7nXY9Akmn8VZga5/wH5a2xsIRlg==
-X-Google-Smtp-Source: ABdhPJzgKNM4LpJhzVHp4smizZqW8YBDwztwWeJq4awpxASm/fLuqV99gVZy4K+gArv1MMpyF0VfUA==
-X-Received: by 2002:a17:90b:3505:: with SMTP id ls5mr10559427pjb.55.1608943591375;
-        Fri, 25 Dec 2020 16:46:31 -0800 (PST)
-Received: from localhost.lan (p8006072-ipngn42301marunouchi.tokyo.ocn.ne.jp. [180.34.60.72])
-        by smtp.gmail.com with ESMTPSA id p9sm30050178pfq.136.2020.12.25.16.46.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Dec 2020 16:46:30 -0800 (PST)
-Received: from localhost (localhost [IPv6:::1])
-        by localhost.lan (Postfix) with ESMTPSA id 19971901092;
-        Sat, 26 Dec 2020 00:46:28 +0000 (GMT)
-Date:   Sat, 26 Dec 2020 00:46:27 +0000
-From:   Vincent Pelletier <plr.vincent@gmail.com>
-To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: Re: dwc2 gadget rejecting new AIO transfer when bus is suspended
-Message-ID: <20201226004627.657ba339@gmail.com>
-In-Reply-To: <ff11cf43-f185-b123-6cb5-f218ef148d89@synopsys.com>
-References: <20201224125012.4df1d26c@gmail.com>
-        <ff11cf43-f185-b123-6cb5-f218ef148d89@synopsys.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=o9E2F4A0VTVbbheqKm2e0N4/ec6vyCGIK8aRsF7KuwU=;
+        b=QwCzujh5WB/Qo3imwSa5Yk69r/CDdce3Sr1cccA8JxIyUKYER2JXRQkyPHS8mzKl62
+         8vRsT0wd6EBntqQmflBYTqeZlcWGxmOfr0qJWthM2Ks/Veou3jOANVSFjbxCsMrtr4jJ
+         npV6QehzPB/cYoHuzo2kkII/gBynGYLNR4Eb0l5Q40CdHSj4OxRNPLGiCHXniMilGaEf
+         NYSrWjd3f8wQ/d0xbrm3tkJvMfiX3qdX/tf9WV6On7woGq3DQfXiK9PsRfQqjrKUIJuh
+         XX25J9PRzEBVYp7S8GH5pwX8SF+X3lRqbevNn2OYrLsSUYl3kAKxIKVu6Tq5KLtrAqJz
+         pYyw==
+X-Gm-Message-State: AOAM532nY5V2ChE+LOxH+cipDo9sytUUZ2+gv9o99g09Fb/m8R43ts+z
+        9cNZNEFpkzvyj6WDukUlSuA3TrVJopkWZaWVnLCpcKkt2/XRhQ==
+X-Google-Smtp-Source: ABdhPJwoNcEkdvS8iogIP0/RBDQKTeIVYmuAHGdsZCexMO7vMsjvmtRA2ryaK2xkxtEsFvEASUrgHgyXAMkP84+LQoU=
+X-Received: by 2002:a6b:c9cb:: with SMTP id z194mr30047597iof.110.1608976701501;
+ Sat, 26 Dec 2020 01:58:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <CA+icZUWHOZ9GSY7JCkooXP1oJ10_8GzHD--uuAFry_1jYDJOow@mail.gmail.com>
+ <Pine.LNX.4.44L0.1606151149200.1914-100000@iolanthe.rowland.org>
+ <CA+icZUWCnoBp8_Qcsxiua_en35YO7YGuc9aSmaNwNWc_RH8U=Q@mail.gmail.com> <87porhxwtt.fsf@nemi.mork.no>
+In-Reply-To: <87porhxwtt.fsf@nemi.mork.no>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sat, 26 Dec 2020 10:58:10 +0100
+Message-ID: <CA+icZUW3p-QOGwoi9xj1pireghg26Tne34KZrS605soP9FWMpw@mail.gmail.com>
+Subject: Re: Reset hanging Huawei USB-2.0 Internet stick
+To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Artur,
+On Thu, Jun 16, 2016 at 12:17 PM Bj=C3=B8rn Mork <bjorn@mork.no> wrote:
+>
+> Sedat Dilek <sedat.dilek@gmail.com> writes:
+> > On Wed, Jun 15, 2016 at 5:51 PM, Alan Stern <stern@rowland.harvard.edu>=
+ wrote:
+> >
+> >> sudo ./usbreset /dev/bus/usb/001/005
+> >>
+> >> 001 and 005 are the Bus and Device numbers from the lsusb output.
+> >>
+> >
+> > Thanks, Alan.
+> >
+> > I will look and test this (or adapt your) line as soon as I get in
+> > front of my machine.
+> >
+> > I have seen that the corresponding "usb-port" provides a usb3-hub and
+> > a usb2-hub, so I think I have to reset both?
+> > Are those hubs independent?
+> > I will re-check my outputs which I had sent here.
+> >
+> > Can you add an example-line to the "help-text" when invoking usbreset
+> > with no (or wrong) device-filename argument?
+>
+> I noticed a while ago that the OpenWrt guys have made a few useful
+> changes to this utility, including the ability to name the device by
+> VID:PID. This makes it a lot easier to use:
+> http://git.openwrt.org/?p=3Dopenwrt.git;a=3Dblob;f=3Dpackage/utils/usbres=
+et/src/usbreset.c
+>
+> I've been planning to get that diff submitted to usbutils, but haven't
+> gotten around to it yet.  Yes, I move slowly ;)
+>
 
-On Fri, 25 Dec 2020 10:56:02 +0000, Artur Petrosyan <Arthur.Petrosyan@synopsys.com> wrote:
-> According your debug log core enters suspend on receiving an 
-> GINTSTS_ErlySusp interrupt. It means that the driver goes to L2 state 
-> (suspend). In suspend mode accepting and processing EP requests can lead 
-> to unexpected behavior. That is why the driver rejects EP request with 
-> -EAGAIN.
-> 
-> As core may use power saving modes which are initiated by the Suspend 
-> interrupt, then in any suspend mode whether it is hibernation or partial 
-> power down the core registers are not available. This is why we avoid to 
-> get new EP requests.
+Hi Bj=C3=B8rn and Alan,
 
-This is my understanding from reading the commit history, yes.
+I remembered this thread as I still want to reset my Huawei UMTS/3G
+USB Internet stick via CLI.
 
-But from userland's point of view this causes a weird situation:
-- sequence 1:
-  - userland submits buffer (ex: to receive the next host request)
-  - UDC is suspended
-  - UDC is awoken by host initiating a transfer
-  Result: the AIO completes successfully, the suspension was completely
-  invisible to userland, and I'm happy.
-- sequence 2:
-  - UDC is suspended
-  - userland submits buffer (ex: to receive the next host request)
-  Result: the AIO completes with an error, the suspension got in the
-  way, and I'm confused about what I need to make my code do to
-  recover: should I change my IO completion codepath so that it
-  resubmits any EAGAIN completion, hoping to catch the UDC at a time it
-  is awoken so the AIO finally sticks and everything can sleep until an
-  actual transfer completion ?
+Downloaded usbreset.c file from new OpenWrt Git repo (see [1])...
 
-I do not know if it makes sense from a kernel point of view, but would
-it be possible for the dwc2 module to sit on the AIO requests while the
-controller is suspended, and submit them when it wakes up rather than
-failing them immediately and sending them back to userland ?
-I expect that this code actually knows (without polling) when the
-controller is awoken.
+$ wget "https://raw.githubusercontent.com/openwrt/openwrt/master/package/ut=
+ils/usbreset/src/usbreset.c"
 
-> The main question is why on usb bus seen ErlySusp interrupt. Is it 
-> initiated by host? If yes, why?
+...compiled it successfully:
 
-My pre-USB-analyser guess is it would just be the normal USB-idle-to-
-bus-suspend behaviour. Besides device enumeration, the host is not
-accessing the device right after it is plugged in, so there should be
-no reason to keep the bus ticking.
+$ gcc-10 -o usbreset usbreset.c
 
-Unless there is something fundamentally wrong with the suspension
-happening at all, my biggest issue is the poor userland-level usability
-*if* suspension happens, and the race-condition this behaviour creates
-(IO cannot be submitted before the UDC is bound to the gadget, and IO
-cannot be submitted after either if it happens after an external event,
-leaving only a short time window where it works).
+$ sudo lsusb | grep -i huawei
+Bus 001 Device 005: ID 12d1:1436 Huawei Technologies Co., Ltd. Broadband st=
+ick
 
-If I am missing anything there which would allow userland to guarantee
-keeping the UDC awoken so the transfers would stay in-queue, please do
-tell me.
+# LC_ALL=3DC ll /dev/bus/usb/001/005
+crw-rw-r-- 1 root root 189, 4 Dec 26 10:46 /dev/bus/usb/001/005
 
-Regards,
--- 
-Vincent Pelletier
+Via /dev/bus/BBB/DDD it did NOT work...
+
+$ sudo ./usbreset /dev/bus/usb/001/005
+No such device found
+
+...but via VID:PID:
+
+$ sudo ./usbreset 12d1:1436
+Resetting HUAWEI Mobile ... ok
+
+I tested this with the Linux v5.10.2 from Debian/experimental.
+
+Any hints why BBB/DDD does not work here?
+
+Thanks.
+
+Happy Xmas,
+- Sedat -
+
+[1] https://raw.githubusercontent.com/openwrt/openwrt/master/package/utils/=
+usbreset/src/usbreset.c
