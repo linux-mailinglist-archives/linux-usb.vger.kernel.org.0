@@ -2,67 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8922E6BAC
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 00:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D79C2E6BBC
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 00:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730581AbgL1Wzu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Dec 2020 17:55:50 -0500
-Received: from mga05.intel.com ([192.55.52.43]:7113 "EHLO mga05.intel.com"
+        id S1730595AbgL1Wzv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Dec 2020 17:55:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52094 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729361AbgL1UDx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Dec 2020 15:03:53 -0500
-IronPort-SDR: mbyKSObUvD2cZxXtsnfQbPQpQoas7vHTem83PpyamkezLT3NddOjVxThndanQyESLoVF15xjLt
- ju6qWtAUq+bg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9848"; a="261169971"
-X-IronPort-AV: E=Sophos;i="5.78,456,1599548400"; 
-   d="scan'208";a="261169971"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2020 12:02:07 -0800
-IronPort-SDR: nfUHiCb070WzvU8nzZevkzJVy6YgeSU/87xHyXxck+g3DMW5/OTWyXGOPh1j63YVNq5K2NXmkr
- iVW+iXw7aWYQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,456,1599548400"; 
-   d="scan'208";a="418917991"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 28 Dec 2020 12:02:05 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 56AFDDE; Mon, 28 Dec 2020 22:02:04 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1] usb: gadget: u_serial: use %*ph to print small buffer
-Date:   Mon, 28 Dec 2020 22:02:03 +0200
-Message-Id: <20201228200203.58525-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.29.2
+        id S1729515AbgL1VbR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 28 Dec 2020 16:31:17 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EE6FF208D5;
+        Mon, 28 Dec 2020 21:30:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609191037;
+        bh=mBn4kEKq5fTLloy0XBZkBU+UnHh4E+qddzACieSTL5o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dwJFsqIfvpiuVWwDDR5yo9uHaiibQuIrhyfWpZIIE8NBF4EMbcKgW3h1kdvRZAyxZ
+         VKFSISthzvHbGqCKSeGIqbPLPSqP6au7wxnJOQ5M8sqBHW1cWA4Q5pSb3BaYgtbOfj
+         PG4/YYLHZPYscR7sbiF7T4xnnGSve66/0WKFHDNsLNcWT7n6yJTftHYy1vGh10ieSc
+         GrmDMk/8BVMgZneIkGxRjShnjbt1j3EtGDLp2vKTo3GqQZfe7VDINJyW2+FJCQPXlV
+         ncf0wA+6CTVUrzROsqf7zhUVHmFSb6lG1L69zcU4Nf0XWHwz9nO57YTntmPgRfKHud
+         BtVMD0gSOpRFQ==
+Date:   Mon, 28 Dec 2020 13:30:36 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Roland Dreier <roland@kernel.org>
+Cc:     Oliver Neukum <oliver@neukum.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] CDC-NCM: remove "connected" log message
+Message-ID: <20201228133036.3a2e9fb5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <X+RJEI+1AR5E0z3z@kroah.com>
+References: <20201222184926.35382198@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20201224032116.2453938-1-roland@kernel.org>
+        <X+RJEI+1AR5E0z3z@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use %*ph format to print small buffer as hex string.
+On Thu, 24 Dec 2020 08:53:52 +0100 Greg KH wrote:
+> On Wed, Dec 23, 2020 at 07:21:16PM -0800, Roland Dreier wrote:
+> > The cdc_ncm driver passes network connection notifications up to
+> > usbnet_link_change(), which is the right place for any logging.
+> > Remove the netdev_info() duplicating this from the driver itself.
+> > 
+> > This stops devices such as my "TRENDnet USB 10/100/1G/2.5G LAN"
+> > (ID 20f4:e02b) adapter from spamming the kernel log with
+> > 
+> >     cdc_ncm 2-2:2.0 enp0s2u2c2: network connection: connected
+> > 
+> > messages every 60 msec or so.
+> > 
+> > Signed-off-by: Roland Dreier <roland@kernel.org>
+>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/usb/gadget/function/u_serial.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index 2caccbb6e014..768f883f486c 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -258,9 +258,7 @@ __acquires(&port->port_lock)
- 		list_del(&req->list);
- 		req->zero = kfifo_is_empty(&port->port_write_buf);
- 
--		pr_vdebug("ttyGS%d: tx len=%d, 0x%02x 0x%02x 0x%02x ...\n",
--			  port->port_num, len, *((u8 *)req->buf),
--			  *((u8 *)req->buf+1), *((u8 *)req->buf+2));
-+		pr_vdebug("ttyGS%d: tx len=%d, %3ph ...\n", port->port_num, len, req->buf);
- 
- 		/* Drop lock while we call out of driver; completions
- 		 * could be issued while we do so.  Disconnection may
--- 
-2.29.2
-
+Applied to net and queued for LTS, thanks!
