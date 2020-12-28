@@ -2,71 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B8D2E69A5
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Dec 2020 18:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8922E6BAC
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 00:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727768AbgL1RTG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 28 Dec 2020 12:19:06 -0500
-Received: from mail.msweet.org ([173.255.209.91]:54870 "EHLO mail.msweet.org"
+        id S1730581AbgL1Wzu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Dec 2020 17:55:50 -0500
+Received: from mga05.intel.com ([192.55.52.43]:7113 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727660AbgL1RTG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Dec 2020 12:19:06 -0500
-Received: from [10.0.1.64] (host-148-170-144-200.public.eastlink.ca [148.170.144.200])
-        by mail.msweet.org (Postfix) with ESMTPSA id 9EE5E81BF3;
-        Mon, 28 Dec 2020 17:18:25 +0000 (UTC)
-From:   Michael R Sweet <msweet@msweet.org>
-Content-Type: text/plain;
-        charset=us-ascii
-Content-Transfer-Encoding: 8BIT
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.40.0.2.32\))
-Subject: [PATCH] Fix default q_len for usb_f_printer gadget driver
-Message-Id: <9DFB1605-63A5-46DB-A5A4-B59B315D8115@msweet.org>
-Date:   Mon, 28 Dec 2020 12:18:24 -0500
-Cc:     Michael Sweet <msweet@msweet.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-X-Mailer: Apple Mail (2.3654.40.0.2.32)
+        id S1729361AbgL1UDx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 28 Dec 2020 15:03:53 -0500
+IronPort-SDR: mbyKSObUvD2cZxXtsnfQbPQpQoas7vHTem83PpyamkezLT3NddOjVxThndanQyESLoVF15xjLt
+ ju6qWtAUq+bg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9848"; a="261169971"
+X-IronPort-AV: E=Sophos;i="5.78,456,1599548400"; 
+   d="scan'208";a="261169971"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2020 12:02:07 -0800
+IronPort-SDR: nfUHiCb070WzvU8nzZevkzJVy6YgeSU/87xHyXxck+g3DMW5/OTWyXGOPh1j63YVNq5K2NXmkr
+ iVW+iXw7aWYQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,456,1599548400"; 
+   d="scan'208";a="418917991"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 28 Dec 2020 12:02:05 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 56AFDDE; Mon, 28 Dec 2020 22:02:04 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] usb: gadget: u_serial: use %*ph to print small buffer
+Date:   Mon, 28 Dec 2020 22:02:03 +0200
+Message-Id: <20201228200203.58525-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The usb_f_printer gadget driver uses a default q_len value of *0* which prevents
-any IO from occurring.  Moreover, once the driver is instantiated it is
-impossible to change the q_len value.
+Use %*ph format to print small buffer as hex string.
 
-The following patch uses a default q_len value of 10 which matches the legacy
-g_printer gadget driver.  This minimizes the possibility that you end up with a
-non-working printer gadget.  It is still possible to set the q_len to a
-different value using the configfs path of the same name.
-
-Signed-off-by: Michael R Sweet <msweet@msweet.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
-drivers/usb/gadget/function/f_printer.c | 5 +++++
-1 file changed, 5 insertions(+)
+ drivers/usb/gadget/function/u_serial.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-index 9c7ed2539ff7..4f3161005e4f 100644
---- a/drivers/usb/gadget/function/f_printer.c
-+++ b/drivers/usb/gadget/function/f_printer.c
-@@ -50,6 +50,8 @@
-#define GET_PORT_STATUS		1
-#define SOFT_RESET		2
-
-+#define DEFAULT_Q_LEN		10 /* same as legacy g_printer gadget */
-+
-static int major, minors;
-static struct class *usb_gadget_class;
-static DEFINE_IDA(printer_ida);
-@@ -1317,6 +1319,9 @@ static struct usb_function_instance *gprinter_alloc_inst(void)
-	opts->func_inst.free_func_inst = gprinter_free_inst;
-	ret = &opts->func_inst;
-
-+	/* Make sure q_len is initialized, otherwise the bound device can't support read/write! */
-+	opts->q_len = DEFAULT_Q_LEN;
-+
-	mutex_lock(&printer_ida_lock);
-
-	if (ida_is_empty(&printer_ida)) {
+diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
+index 2caccbb6e014..768f883f486c 100644
+--- a/drivers/usb/gadget/function/u_serial.c
++++ b/drivers/usb/gadget/function/u_serial.c
+@@ -258,9 +258,7 @@ __acquires(&port->port_lock)
+ 		list_del(&req->list);
+ 		req->zero = kfifo_is_empty(&port->port_write_buf);
+ 
+-		pr_vdebug("ttyGS%d: tx len=%d, 0x%02x 0x%02x 0x%02x ...\n",
+-			  port->port_num, len, *((u8 *)req->buf),
+-			  *((u8 *)req->buf+1), *((u8 *)req->buf+2));
++		pr_vdebug("ttyGS%d: tx len=%d, %3ph ...\n", port->port_num, len, req->buf);
+ 
+ 		/* Drop lock while we call out of driver; completions
+ 		 * could be issued while we do so.  Disconnection may
 -- 
-2.17.1
+2.29.2
 
