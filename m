@@ -2,107 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 641DF2E3706
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Dec 2020 13:13:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7666D2E3945
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Dec 2020 14:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727639AbgL1MMs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 28 Dec 2020 07:12:48 -0500
-Received: from lists.nic.cz ([217.31.204.67]:52734 "EHLO mail.nic.cz"
+        id S2388148AbgL1NVq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Dec 2020 08:21:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50218 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727234AbgL1MMs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Dec 2020 07:12:48 -0500
-Received: from localhost (unknown [IPv6:2a0e:b107:ae1:0:3e97:eff:fe61:c680])
-        by mail.nic.cz (Postfix) with ESMTPSA id CBC77140A3F;
-        Mon, 28 Dec 2020 13:12:06 +0100 (CET)
-Date:   Mon, 28 Dec 2020 13:11:49 +0100
-From:   Marek Behun <marek.behun@nic.cz>
-To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Tomasz Maciej Nowak <tmn505@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Chen <peter.chen@nxp.com>
-Subject: Re: [PATCH] usb: host: xhci: mvebu: make USB 3.0 PHY optional for
- Armada 3720
-Message-ID: <20201228131149.30907b44@nic.cz>
-In-Reply-To: <20201223162403.10897-1-pali@kernel.org>
-References: <20201223162403.10897-1-pali@kernel.org>
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S2388140AbgL1NVp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 28 Dec 2020 08:21:45 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 21C6E208D5;
+        Mon, 28 Dec 2020 13:21:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1609161664;
+        bh=ZQx4jiJYSqq0ifLV2fS+ihkyAB+CjY19pTM7Afr80S8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=su/9JC9Q9nM7Gl48S7bwWXKHWRQTwMRjIRigA7ZNbORc1uR7awSrKgTRIXaY6UQJ0
+         Ak+Pr+W5nzAkYfNvRZfLfr6heUdo4y6hqW+e7+FStqAjaqzxZVliTeHY0BI9g3KV+v
+         hLUSIjGIcPyx+x9o/q3ZdLhS0K9kPamsPPNkcmVo=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Winischhofer <thomas@winischhofer.net>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 4.19 045/346] USB: sisusbvga: Make console support depend on BROKEN
+Date:   Mon, 28 Dec 2020 13:46:04 +0100
+Message-Id: <20201228124921.968764856@linuxfoundation.org>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201228124919.745526410@linuxfoundation.org>
+References: <20201228124919.745526410@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-100.0 required=5.9 tests=SHORTCIRCUIT,
-        USER_IN_WELCOMELIST,USER_IN_WHITELIST shortcircuit=ham
-        autolearn=disabled version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.nic.cz
-X-Virus-Scanned: clamav-milter 0.102.2 at mail
-X-Virus-Status: Clean
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Pali and Miquel,
+From: Thomas Gleixner <tglx@linutronix.de>
 
-On Wed, 23 Dec 2020 17:24:03 +0100
-Pali Rohár <pali@kernel.org> wrote:
+commit 862ee699fefe1e6d6f2c1518395f0b999b8beb15 upstream.
 
->  int xhci_mvebu_a3700_init_quirk(struct usb_hcd *hcd)
->  {
->  	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-> +	struct device *dev = hcd->self.controller;
-> +	struct phy *phy;
-> +	int ret;
->  
->  	/* Without reset on resume, the HC won't work at all */
->  	xhci->quirks |= XHCI_RESET_ON_RESUME;
->  
-> +	/* Old bindings miss the PHY handle */
-> +	phy = of_phy_get(dev->of_node, "usb3-phy");
-> +	if (IS_ERR(phy) && PTR_ERR(phy) == -EPROBE_DEFER)
-> +		return -EPROBE_DEFER;
-> +	else if (IS_ERR(phy))
-> +		goto phy_out;
-> +
-> +	ret = phy_init(phy);
-> +	if (ret)
-> +		goto phy_put;
-> +
-> +	ret = phy_set_mode(phy, PHY_MODE_USB_HOST_SS);
-> +	if (ret)
-> +		goto phy_exit;
-> +
-> +	ret = phy_power_on(phy);
-> +	if (ret == -EOPNOTSUPP) {
-> +		/* Skip initializatin of XHCI PHY when it is unsupported by firmware */
-> +		dev_warn(dev, "PHY unsupported by firmware\n");
-> +		xhci->quirks |= XHCI_SKIP_PHY_INIT;
-> +	}
-> +	if (ret)
-> +		goto phy_exit;
+The console part of sisusbvga is broken vs. printk(). It uses in_atomic()
+to detect contexts in which it cannot sleep despite the big fat comment in
+preempt.h which says: Do not use in_atomic() in driver code.
 
-I am not sure if this is the correct way to check whether PHY_INIT
-should be skipped.
+in_atomic() does not work on kernels with CONFIG_PREEMPT_COUNT=n which
+means that spin/rw_lock held regions are not detected by it.
 
-Moreover the subsequent phy_power_off:
+There is no way to make this work by handing context information through to
+the driver and this only can be solved once the core printk infrastructure
+supports sleepable console drivers.
 
-> +
-> +	phy_power_off(phy);
+Make it depend on BROKEN for now.
 
-won't power off the PHY, because the corresponding handler in ATF is
-currently empty. 
+Fixes: 1bbb4f2035d9 ("[PATCH] USB: sisusb[vga] update")
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Thomas Winischhofer <thomas@winischhofer.net>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20201019101109.603244207@linutronix.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-I guess the patch needs to be in kernel if users are unwilling to upgrade
-ATF firmware.
+---
+ drivers/usb/misc/sisusbvga/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The SMC calls for Marvell's comphy are designed to be generic for
-several Marvell platforms (the constants are the same and so one), but
-we still have different drivers for them anyway.
+--- a/drivers/usb/misc/sisusbvga/Kconfig
++++ b/drivers/usb/misc/sisusbvga/Kconfig
+@@ -15,7 +15,7 @@ config USB_SISUSBVGA
+ 
+ config USB_SISUSBVGA_CON
+ 	bool "Text console and mode switching support" if USB_SISUSBVGA
+-	depends on VT
++	depends on VT && BROKEN
+ 	select FONT_8x16
+ 	---help---
+ 	  Say Y here if you want a VGA text console via the USB dongle or
 
-Maybe it would be better to just not use the ATF implementation at all,
-and implement the comphy driver for A3720 entirely in kernel...
 
-Miquel, what do you think?
-
-Marek
