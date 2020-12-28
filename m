@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1102E6827
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Dec 2020 17:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C447F2E696D
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Dec 2020 17:50:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730103AbgL1NDB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Dec 2020 08:03:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56742 "EHLO mail.kernel.org"
+        id S1727940AbgL1Mwx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Dec 2020 07:52:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49798 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729540AbgL1NAv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Dec 2020 08:00:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 425B4224D2;
-        Mon, 28 Dec 2020 13:00:35 +0000 (UTC)
+        id S1727802AbgL1Mwx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 28 Dec 2020 07:52:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0FD2C22583;
+        Mon, 28 Dec 2020 12:51:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1609160435;
+        s=korg; t=1609159910;
         bh=ZQx4jiJYSqq0ifLV2fS+ihkyAB+CjY19pTM7Afr80S8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fjHlw31e/tRaNrKd5a0CSoxQqeNxbf7Imhrhz59Rt99irrgWRyJpXXwyVUdqaqvN8
-         fDKLGD+4kIQJ2uT42fBB4V8L0RLckSAE+oiCta/oadBJi6bkDevL18poH7oHeDItUu
-         KGMsG07ryCKT2BOnEwcIaQsS6yO01ijhgrPwAFTs=
+        b=hXM5KtDEGlWkUHKjUuqoNvB2GkzcLJY/FFO9N5C500A/6ATVvuIi1ZCt2u+AkRQZ1
+         lKFWf7R35Fy4TfboK2LEvjNjUqRBHBKl5hXPg4efrJh6wDKFipy/rQ60KA0WSIbtyn
+         REsVWE9be0y8JE6FagQsPA90dtF5vVt1LGBicmN4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Thomas Winischhofer <thomas@winischhofer.net>,
         linux-usb@vger.kernel.org
-Subject: [PATCH 4.9 023/175] USB: sisusbvga: Make console support depend on BROKEN
-Date:   Mon, 28 Dec 2020 13:47:56 +0100
-Message-Id: <20201228124854.378474266@linuxfoundation.org>
+Subject: [PATCH 4.4 018/132] USB: sisusbvga: Make console support depend on BROKEN
+Date:   Mon, 28 Dec 2020 13:48:22 +0100
+Message-Id: <20201228124847.289840307@linuxfoundation.org>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201228124853.216621466@linuxfoundation.org>
-References: <20201228124853.216621466@linuxfoundation.org>
+In-Reply-To: <20201228124846.409999325@linuxfoundation.org>
+References: <20201228124846.409999325@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
