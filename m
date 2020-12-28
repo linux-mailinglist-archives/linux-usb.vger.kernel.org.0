@@ -2,75 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF1F2E4073
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Dec 2020 15:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C302E4100
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Dec 2020 16:01:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502029AbgL1OwK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Dec 2020 09:52:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51092 "EHLO mail.kernel.org"
+        id S2439286AbgL1PB2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Dec 2020 10:01:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54278 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727085AbgL1OwI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Dec 2020 09:52:08 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B4B2A2084D;
-        Mon, 28 Dec 2020 14:51:27 +0000 (UTC)
+        id S2392591AbgL1PBF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 28 Dec 2020 10:01:05 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C2554208D5;
+        Mon, 28 Dec 2020 15:00:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1609167088;
-        bh=odTKooUE1YbyrBjjpDjD4r0zjZEcvPiR1tfvSqIE2UY=;
+        s=korg; t=1609167624;
+        bh=TbqSh3PsttugZzWTBvvrutqtvAnSYnz4ZADL+W5fc8Q=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AUMwak0p6vcVE1k3Gz6DJgbtEKg4wrXpTqFBHcXTndBMiMNhF/lkleEM+pCEezohe
-         nqUKEhtrJXzNXIm/ovexKsqjm2IiHWaIK/6D+LqJ6AACWRxcSMuIdhcjaPe07sFcgi
-         JGgX8wB8yt+rwyiIOFCLmQAtZVWaYnQ9PyY7AVRk=
-Date:   Mon, 28 Dec 2020 15:52:50 +0100
+        b=lI+RFie+AwGXRUGcVCg34DyxSiywWTGmJbCDOPrDP5vUUpiIcQlsA2HCUo0m4U0kO
+         XQBWUcYELkfwLW4h9yePXnT7ad6flrv2/PF3crl10sKdcIXKj9iieS7Hr9sPVDtyNR
+         pai6a9dUmOmfZ6bDFJJhqtvoWVZu/RNN4Qa+GLjI=
+Date:   Mon, 28 Dec 2020 16:01:46 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Nazime Hande Harputluoglu <handeharput@gmail.com>
-Subject: Re: [PATCH v5] kcov, usb: only collect coverage from
- __usb_hcd_giveback_urb in softirq
-Message-ID: <X+nxQo7q2n4dGzoy@kroah.com>
-References: <d7035335fdfe7493067fbf7d677db57807a42d5d.1606175031.git.andreyknvl@google.com>
+To:     Jerome Brunet <jbrunet@baylibre.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] usb: gadget: u_audio: remove struct uac_req
+Message-ID: <X+nzWs3nOrcqu4F2@kroah.com>
+References: <20201221173531.215169-1-jbrunet@baylibre.com>
+ <20201221173531.215169-4-jbrunet@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d7035335fdfe7493067fbf7d677db57807a42d5d.1606175031.git.andreyknvl@google.com>
+In-Reply-To: <20201221173531.215169-4-jbrunet@baylibre.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 24, 2020 at 12:47:25AM +0100, Andrey Konovalov wrote:
-> Currently there's a kcov remote coverage collection section in
-> __usb_hcd_giveback_urb(). Initially that section was added based on the
-> assumption that usb_hcd_giveback_urb() can only be called in interrupt
-> context as indicated by a comment before it. This is what happens when
-> syzkaller is fuzzing the USB stack via the dummy_hcd driver.
+On Mon, Dec 21, 2020 at 06:35:30PM +0100, Jerome Brunet wrote:
+> 'struct uac_req' purpose is to link 'struct usb_request' to the
+> corresponding 'struct uac_rtd_params'. However member req is never
+> used. Using the context of the usb request, we can keep track of the
+> corresponding 'struct uac_rtd_params' just as well, without allocating
+> extra memory.
 > 
-> As it turns out, it's actually valid to call usb_hcd_giveback_urb() in task
-> context, provided that the caller turned off the interrupts; USB/IP does
-> exactly that. This can lead to a nested KCOV remote coverage collection
-> sections both trying to collect coverage in task context. This isn't
-> supported by kcov, and leads to a WARNING.
-> 
-> Change __usb_hcd_giveback_urb() to only call kcov_remote_*() callbacks
-> when it's being executed in a softirq. To avoid calling
-> in_serving_softirq() directly in the driver code, add a couple of new kcov
-> wrappers.
-> 
-> As the result of this change, the coverage from USB/IP related
-> usb_hcd_giveback_urb() calls won't be collected, but the WARNING is fixed.
-> 
-> A potential future improvement would be to support nested remote coverage
-> collection sections, but this patch doesn't address that.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> Acked-by: Marco Elver <elver@google.com>
+> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 > ---
-> 
-> Changes in v5:
-> - Don't call in_serving_softirq() in USB driver code directly, do that
->   via kcov wrappers.
+>  drivers/usb/gadget/function/u_audio.c | 58 ++++++++++++---------------
+>  1 file changed, 26 insertions(+), 32 deletions(-)
 
-Does not apply to 5.11-rc1 :(
+This patch doesn't apply, so I can't apply patches 3 or 4 of this series
+:(
+
+Can you rebase against my usb-testing branch and resend?
+
+thanks,
+
+greg k-h
