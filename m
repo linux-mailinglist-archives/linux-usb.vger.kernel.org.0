@@ -2,51 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4202C2E36C7
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Dec 2020 12:56:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 641DF2E3706
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Dec 2020 13:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726875AbgL1LzM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Dec 2020 06:55:12 -0500
-Received: from mx2.suse.de ([195.135.220.15]:60422 "EHLO mx2.suse.de"
+        id S1727639AbgL1MMs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 28 Dec 2020 07:12:48 -0500
+Received: from lists.nic.cz ([217.31.204.67]:52734 "EHLO mail.nic.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726603AbgL1LzM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Dec 2020 06:55:12 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1609156465; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WG4xhXQYAczlY0vFiOrBXXA0TnTJFStA1UMY67oHyQ0=;
-        b=eHDfIlI5bzYKS1yXhTEsHix18HPkct5wllAFHfNNZIHoInj0VWjFmryTTqbf7L5TxtM4gg
-        7/1chnPmsifRVHJ+oqKGPBIuyLopCZb9hyPM5Ynj9n7hp3i2eNc26cFnzS/sAFCy/dZ+1Q
-        v4JOIu8lw9u/7aAylVEeq1tiYfYOZpc=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 5E57CAB8B;
-        Mon, 28 Dec 2020 11:54:25 +0000 (UTC)
-Message-ID: <f00f7739d0b796a3ba2a36ae462e49a806e17843.camel@suse.com>
-Subject: Re: [PATCH 2/2] cdc-acm: blacklist another IR Droid device
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        id S1727234AbgL1MMs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 28 Dec 2020 07:12:48 -0500
+Received: from localhost (unknown [IPv6:2a0e:b107:ae1:0:3e97:eff:fe61:c680])
+        by mail.nic.cz (Postfix) with ESMTPSA id CBC77140A3F;
+        Mon, 28 Dec 2020 13:12:06 +0100 (CET)
+Date:   Mon, 28 Dec 2020 13:11:49 +0100
+From:   Marek Behun <marek.behun@nic.cz>
+To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     Georgi Bakalski <georgi.bakalski@gmail.com>
-Date:   Mon, 28 Dec 2020 12:53:57 +0100
-In-Reply-To: <20201227134502.4548-2-sean@mess.org>
-References: <20201227134502.4548-1-sean@mess.org>
-         <20201227134502.4548-2-sean@mess.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Tomasz Maciej Nowak <tmn505@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Chen <peter.chen@nxp.com>
+Subject: Re: [PATCH] usb: host: xhci: mvebu: make USB 3.0 PHY optional for
+ Armada 3720
+Message-ID: <20201228131149.30907b44@nic.cz>
+In-Reply-To: <20201223162403.10897-1-pali@kernel.org>
+References: <20201223162403.10897-1-pali@kernel.org>
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-100.0 required=5.9 tests=SHORTCIRCUIT,
+        USER_IN_WELCOMELIST,USER_IN_WHITELIST shortcircuit=ham
+        autolearn=disabled version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.nic.cz
+X-Virus-Scanned: clamav-milter 0.102.2 at mail
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Sonntag, den 27.12.2020, 13:45 +0000 schrieb Sean Young:
-> This device is supported by the IR Toy driver.
-> 
-> Reported-by: Georgi Bakalski <georgi.bakalski@gmail.com>
-> Signed-off-by: Sean Young <sean@mess.org>
-Acked-by: Oliver Neukum <oneukum@suse.com>
+Hi Pali and Miquel,
 
+On Wed, 23 Dec 2020 17:24:03 +0100
+Pali Rohár <pali@kernel.org> wrote:
+
+>  int xhci_mvebu_a3700_init_quirk(struct usb_hcd *hcd)
+>  {
+>  	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+> +	struct device *dev = hcd->self.controller;
+> +	struct phy *phy;
+> +	int ret;
+>  
+>  	/* Without reset on resume, the HC won't work at all */
+>  	xhci->quirks |= XHCI_RESET_ON_RESUME;
+>  
+> +	/* Old bindings miss the PHY handle */
+> +	phy = of_phy_get(dev->of_node, "usb3-phy");
+> +	if (IS_ERR(phy) && PTR_ERR(phy) == -EPROBE_DEFER)
+> +		return -EPROBE_DEFER;
+> +	else if (IS_ERR(phy))
+> +		goto phy_out;
+> +
+> +	ret = phy_init(phy);
+> +	if (ret)
+> +		goto phy_put;
+> +
+> +	ret = phy_set_mode(phy, PHY_MODE_USB_HOST_SS);
+> +	if (ret)
+> +		goto phy_exit;
+> +
+> +	ret = phy_power_on(phy);
+> +	if (ret == -EOPNOTSUPP) {
+> +		/* Skip initializatin of XHCI PHY when it is unsupported by firmware */
+> +		dev_warn(dev, "PHY unsupported by firmware\n");
+> +		xhci->quirks |= XHCI_SKIP_PHY_INIT;
+> +	}
+> +	if (ret)
+> +		goto phy_exit;
+
+I am not sure if this is the correct way to check whether PHY_INIT
+should be skipped.
+
+Moreover the subsequent phy_power_off:
+
+> +
+> +	phy_power_off(phy);
+
+won't power off the PHY, because the corresponding handler in ATF is
+currently empty. 
+
+I guess the patch needs to be in kernel if users are unwilling to upgrade
+ATF firmware.
+
+The SMC calls for Marvell's comphy are designed to be generic for
+several Marvell platforms (the constants are the same and so one), but
+we still have different drivers for them anyway.
+
+Maybe it would be better to just not use the ATF implementation at all,
+and implement the comphy driver for A3720 entirely in kernel...
+
+Miquel, what do you think?
+
+Marek
