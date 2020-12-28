@@ -2,70 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DE32E402F
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Dec 2020 15:49:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF1F2E4073
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Dec 2020 15:53:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408382AbgL1OtE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Dec 2020 09:49:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49854 "EHLO mail.kernel.org"
+        id S2502029AbgL1OwK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Dec 2020 09:52:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51092 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408376AbgL1OtC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Dec 2020 09:49:02 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B7FC32084D;
-        Mon, 28 Dec 2020 14:48:21 +0000 (UTC)
+        id S1727085AbgL1OwI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 28 Dec 2020 09:52:08 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B4B2A2084D;
+        Mon, 28 Dec 2020 14:51:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1609166902;
-        bh=YyQtIlwfRhSKZHfIrP6IibtXLu2q6yJf5CyE02JHRy4=;
+        s=korg; t=1609167088;
+        bh=odTKooUE1YbyrBjjpDjD4r0zjZEcvPiR1tfvSqIE2UY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pNXQ+Jq3F0lx4WbYisQiQVCDx1OcCkRnT7vCqiZE91fWgf5TH0HOfFapr98h9S2q6
-         /Btpcx/SR4yEux5OJjeKZZrzeaEnMcQvo18Xp0zOtK96S4TO9I7uWrhIYYi72plczQ
-         u7vwGgbinx7fs4xNJ10m8ZoZ6oRHX+UqhC+WRf68=
-Date:   Mon, 28 Dec 2020 15:49:44 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dave Penkler <dpenkler@gmail.com>
-Cc:     linux-usb@vger.kernel.org, guido.kiener@rohde-schwarz.com,
-        john.harvey@non.keysight.com, jian-wei_wu@keysight.com,
-        gabe.jones@ni.com
-Subject: Re: [PATCH 4/4] USB: usbtmc: Bump USBTMC_API_VERSION value
-Message-ID: <X+nwiL11nXfAl7xo@kroah.com>
-References: <20201215155621.9592-1-dpenkler@gmail.com>
- <20201215155621.9592-5-dpenkler@gmail.com>
+        b=AUMwak0p6vcVE1k3Gz6DJgbtEKg4wrXpTqFBHcXTndBMiMNhF/lkleEM+pCEezohe
+         nqUKEhtrJXzNXIm/ovexKsqjm2IiHWaIK/6D+LqJ6AACWRxcSMuIdhcjaPe07sFcgi
+         JGgX8wB8yt+rwyiIOFCLmQAtZVWaYnQ9PyY7AVRk=
+Date:   Mon, 28 Dec 2020 15:52:50 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Nazime Hande Harputluoglu <handeharput@gmail.com>
+Subject: Re: [PATCH v5] kcov, usb: only collect coverage from
+ __usb_hcd_giveback_urb in softirq
+Message-ID: <X+nxQo7q2n4dGzoy@kroah.com>
+References: <d7035335fdfe7493067fbf7d677db57807a42d5d.1606175031.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201215155621.9592-5-dpenkler@gmail.com>
+In-Reply-To: <d7035335fdfe7493067fbf7d677db57807a42d5d.1606175031.git.andreyknvl@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 15, 2020 at 04:56:21PM +0100, Dave Penkler wrote:
-> The previous patches in this series have changed the behaviour of the
-> driver and added new calls.
+On Tue, Nov 24, 2020 at 12:47:25AM +0100, Andrey Konovalov wrote:
+> Currently there's a kcov remote coverage collection section in
+> __usb_hcd_giveback_urb(). Initially that section was added based on the
+> assumption that usb_hcd_giveback_urb() can only be called in interrupt
+> context as indicated by a comment before it. This is what happens when
+> syzkaller is fuzzing the USB stack via the dummy_hcd driver.
 > 
-> Signed-off-by: Dave Penkler <dpenkler@gmail.com>
-> Reviewed-by: Guido Kiener <guido.kiener@rohde-schwarz.com>
-> Tested-by: Jian-Wei Wu <jian-wei_wu@keysight.com>
+> As it turns out, it's actually valid to call usb_hcd_giveback_urb() in task
+> context, provided that the caller turned off the interrupts; USB/IP does
+> exactly that. This can lead to a nested KCOV remote coverage collection
+> sections both trying to collect coverage in task context. This isn't
+> supported by kcov, and leads to a WARNING.
+> 
+> Change __usb_hcd_giveback_urb() to only call kcov_remote_*() callbacks
+> when it's being executed in a softirq. To avoid calling
+> in_serving_softirq() directly in the driver code, add a couple of new kcov
+> wrappers.
+> 
+> As the result of this change, the coverage from USB/IP related
+> usb_hcd_giveback_urb() calls won't be collected, but the WARNING is fixed.
+> 
+> A potential future improvement would be to support nested remote coverage
+> collection sections, but this patch doesn't address that.
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> Acked-by: Marco Elver <elver@google.com>
 > ---
->  drivers/usb/class/usbtmc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
-> index d2fcc698c745..74d5a9c5238a 100644
-> --- a/drivers/usb/class/usbtmc.c
-> +++ b/drivers/usb/class/usbtmc.c
-> @@ -25,7 +25,7 @@
->  /* Increment API VERSION when changing tmc.h with new flags or ioctls
->   * or when changing a significant behavior of the driver.
->   */
-> -#define USBTMC_API_VERSION (2)
-> +#define USBTMC_API_VERSION (3)
+> Changes in v5:
+> - Don't call in_serving_softirq() in USB driver code directly, do that
+>   via kcov wrappers.
 
-Why is this needed?  You should be able to detect new calls by just
-doing the ioctl and checking right?
-
-I'll take this for now, but versioning apis is not a good thing to do in
-general.
-
-thanks,
-
-greg k-h
+Does not apply to 5.11-rc1 :(
