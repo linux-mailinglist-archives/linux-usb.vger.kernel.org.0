@@ -2,165 +2,521 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DAE32E6EC4
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 08:32:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9F42E6EC6
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 08:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbgL2Hae (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Dec 2020 02:30:34 -0500
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:58244 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726161AbgL2Had (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Dec 2020 02:30:33 -0500
-Received: from mailhost.synopsys.com (badc-mailhost2.synopsys.com [10.192.0.18])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 07E1940E60;
-        Tue, 29 Dec 2020 07:29:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1609226972; bh=VULagmBG+Za0sQEybEFGJ57A1Winy6GRs6+seTpD00E=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=DE8y6AOOlfPWqAk8EUSX2BijAm5ZP+uCe3AQnQQsv8IHiRz6HyoDRlqtckWvrh/5Z
-         fQ/UvYah5J5XpaGCEeALa2O6E6fxKmqNe5VtgJx9EBjR0wj8iWvV1E6Z+U2GrnuwLD
-         I/fwMZE11NuzT/Wtuge+QiM0L8/jqRuaRyHo2hjnQXG3pU/gwIRBmqa5n+GxYRsNDs
-         BRR4eWMdWjA1i8woB/34+DfSUfHVC1EoNbwxzJMI2VbXuNxPmKOKeFnY1oGM9Ek9J8
-         V5NEcXL7wM+Ngvf24uBcilGD3sszbWTZWZ7igh4RiPSvLV/pPNVSeNyxVU65Q/mnJX
-         tWz6Tga1djrfw==
-Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com [10.4.161.137])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 81B68A0069;
-        Tue, 29 Dec 2020 07:29:31 +0000 (UTC)
-Received: from NAM02-CY1-obe.outbound.protection.outlook.com (mail-cys01nam02lp2056.outbound.protection.outlook.com [104.47.37.56])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id A4CAD8000C;
-        Tue, 29 Dec 2020 07:29:30 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=arturp@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="tgYASSku";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FKKdSsjDOEJO4k4/RkUX//FmQzMfMx9XeUwD4hjhJiNCu48cMHwR/PQVqa7rr/igRbhk1KEHTNnBYTFu2D48A4Ck9tkNkIWyr6PffBjyD8UxpPXmF2FlVpJn5LfnFMNPVPsSE4xgwugmn+tNhxOYFfeWbgkdiTW83yyyhcx3m1+5MhWMhnDaB0L/wuitpHrqf1iDIUNQTC5yh0gCgJXYVL+rc0umkL6Fni7Pl9bRE/3CQfnC8q1YUGAEObhuwxB9/YfztbGQu2yN3rl+v9jKTT7Oyi3RuN1/MihZScUmEpXwUKnyPof9FWnHWUW1+VIme3jRDipjaGL3aCte69vVmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VULagmBG+Za0sQEybEFGJ57A1Winy6GRs6+seTpD00E=;
- b=LMLmI6sWMABEQnJ9MV4FufsgJ3THWF7ldj5vVy2xoJRXU8MsluYCw5thF65mqzIIXUIHt/Lf7TVC4KIn8pQZMDtmHgJ3U0ZmTaBOzs9cv+fnDgMxF4Z1m1ar7IM6F+l1t5jhHnHooDY77V3Msa4THkP0r+tA7vmSQMfAj4soJHtyae1K9DLJN5KAC8F49/wks2CJwNRVD+zcVbyWMgZRQ6vGCpWLF3kUuYV6iW7a+z5m7rPkS90/k7TZEqJuyIsLqx816nDobcVWMc0LRISuHBw3NHSOo9LebjoXZY8wbfzdNlWTUbuq/59q87W8hcDuJ5pYfPraEmZRXT9C38fBJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VULagmBG+Za0sQEybEFGJ57A1Winy6GRs6+seTpD00E=;
- b=tgYASSkuHUUxZDx2azytMpi3KqCYBdSUZNpkd6PWEUDWx9jxrvjzsll9o/lb35jmiuzrjN4N7fpDUyBnzeVEJ6RYUVQ0Qp1BBaT187New0yUuKjjAsMh3DQfLjX3MZvoeJ77XQSrh11DNPBzzrVLivwupDSRN3AzAHflp3u3vCI=
-Received: from MW3PR12MB4428.namprd12.prod.outlook.com (2603:10b6:303:57::15)
- by MWHPR12MB1856.namprd12.prod.outlook.com (2603:10b6:300:108::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3700.31; Tue, 29 Dec
- 2020 07:29:28 +0000
-Received: from MW3PR12MB4428.namprd12.prod.outlook.com
- ([fe80::19f6:62ef:1691:1cdb]) by MW3PR12MB4428.namprd12.prod.outlook.com
- ([fe80::19f6:62ef:1691:1cdb%4]) with mapi id 15.20.3700.031; Tue, 29 Dec 2020
- 07:29:28 +0000
-X-SNPS-Relay: synopsys.com
-From:   Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-To:     Vincent Pelletier <plr.vincent@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: Re: dwc2 gadget rejecting new AIO transfer when bus is suspended
-Thread-Topic: dwc2 gadget rejecting new AIO transfer when bus is suspended
-Thread-Index: AQHW2fN/WrhhRCNlcU+PgXrG5a9vnqoHpSmAgADoBYCAAQ3qAIAAleUAgAODxwA=
-Date:   Tue, 29 Dec 2020 07:29:27 +0000
-Message-ID: <a87cca5e-786c-ca45-a98c-1429680621a6@synopsys.com>
-References: <20201224125012.4df1d26c@gmail.com>
- <ff11cf43-f185-b123-6cb5-f218ef148d89@synopsys.com>
- <20201226004627.657ba339@gmail.com>
- <20201226165230.GB606763@rowland.harvard.edu>
- <20201227014900.2ff91bab@gmail.com>
-In-Reply-To: <20201227014900.2ff91bab@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=synopsys.com;
-x-originating-ip: [176.32.192.179]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e3f94b40-7606-4e2d-a0c7-08d8abcb79ac
-x-ms-traffictypediagnostic: MWHPR12MB1856:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR12MB185670D64CB820B1D1FB4D27A7D80@MWHPR12MB1856.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tCeJIgs9zGKYWPnJfwnkGmDKvhffDV9onPiRZAI+ljO+sGah408ggnfJ1wqxCynPp50U/pjMn2URpd5i3iFJVw03H1l7iGXyYIPdDwybjfCCTZ32HoO8mT2AWpGmZjo17j7vwRuUNDUWJ6XQEkqIpaWkq8J07af+R8h2x1GeZZVdh21L6hrId5aDL89xj+97MiajTx1vKYYLyKwIcBE93rnA3bh/y9AHKd7H/7qYAKn4RNF0Yys2HQUJ3ErplqphvFzrCmmXAexxHr3cqP5pkxRCs28OZvl94TkCpaBDfdWBLnf5AqEQZMDVxzojrjojDLCARs8HmsouiRYnDI1pYf77sxsaYy7NlbfeGktcgIuhCy4BHwD0g/gqUlNPirqm1QetumC/I23h+EWXCtil77au4lOAbPg/p+YZVOUgsyJJZsPIhcullw1lx/RQN2g4
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4428.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(136003)(376002)(39860400002)(366004)(396003)(31686004)(66446008)(36756003)(55236004)(31696002)(4326008)(186003)(76116006)(66476007)(64756008)(5660300002)(15650500001)(26005)(8936002)(2906002)(66946007)(91956017)(66556008)(54906003)(316002)(478600001)(2616005)(71200400001)(6506007)(110136005)(8676002)(6486002)(107886003)(6512007)(53546011)(83380400001)(86362001)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?MDhXMU9NSnkveFhqenEzTytlMFNhenlQejl1K1RPZ25pQXpsMU1XMkw2bURQ?=
- =?utf-8?B?VmtKKzBENE9GdXVJTVNrMFJwa0RkaHY2a3JZMWNnaEQ1SDBhWklFUjNrcnBr?=
- =?utf-8?B?THJKQ3VPek9COVpLQTFhL0hlZjRoY1VmVE5wbkNaZUJJUHNKK0ZIMGFqSWw0?=
- =?utf-8?B?NmxwZklRMU9rem1MdllnWlZPbHJlZ0xsbDlweFBLVFhCSUxKdFRTcDd6U3RC?=
- =?utf-8?B?Q0Qxd3VXU01IWnRDOHJHWUNEakJtV3FYK0ZuKytUNVVDMWZ3U1FUUmlhZVdt?=
- =?utf-8?B?eVRUR2h5VzVGNmhwdnlXTVhIZG1ZZTlmUjRBMWVrNVRMUCttSUgxbmxWbFlJ?=
- =?utf-8?B?MGlnN01iaFV6YnB1R0dlVzlaNDdMd3BXQjZRU0xsZG1lWjV3aTNuNUxETFNz?=
- =?utf-8?B?Qm5IMW1lUjBWT1hnR3owcTNXVDMzVkFtYjB4T1ZDUDZFWlAxc1dwbUZteGp4?=
- =?utf-8?B?QlVSRGVsT2cvWGtkaFZLQzRMRm50TTBkKzd1UmJBeEs0SXV6Q21BUFZJYVRt?=
- =?utf-8?B?QUhiWmlCbkNrbHNxYzVWTFZzWHRLWk9lUXA0SndzTmRQMldLdWhxOXBjUEFD?=
- =?utf-8?B?ekFHSHFYdWhyMGR5cmQvVmgyOVd1WWhOK1dld1VCeTRNempyOU1WT3kxQXFR?=
- =?utf-8?B?bHhyNjhSRUpmM1dTYmtaOUd2dERlb1dRK3Ewa3BURUdKdmhackxMU2dGOExa?=
- =?utf-8?B?NVcySVJ5L0pRbEVuQ1J2dUViNUhBd1E0Yk9HRENBeUxYTXY2RGpmYjFNZnM2?=
- =?utf-8?B?ZXlEUi9uSGtiWDE5S0Z5ZVd0TzcvVXNJYzVDVC8rUGpVRFdwcHN3S0xCTXlX?=
- =?utf-8?B?eGZYNi8wRzUvcDl5THVQcDRoaVUwR04vNXg4cVBMZVFKaWlkYUhlRnZaVzcw?=
- =?utf-8?B?cW1JbE1YRWhtaFEybW1FellUNTJWV1pQRllMbXhrdVRyOHh5VTIyTVJYVTQ2?=
- =?utf-8?B?UjFuMEt2b3ZWUWh0Skt3cGpXcnIyRGs3ZC94Y2lielZZUU4rZ3dVa1o0bldM?=
- =?utf-8?B?SlJCNDNuZHArRXhwZ1NDaHhiNEpVc3Bhb1ZRYitKTkRnSkN3VmJZUTMrRXZG?=
- =?utf-8?B?a3YyaDkxSUJETFlJUHEvRnI5MFdoNEhDTUg1bWVCWUpGclRhU3FwL2RDbjFT?=
- =?utf-8?B?MkhvUk0zOVA3Rzl0K3RtV0lrWmFUOTZGUXlxWFNXeGtzWHg0emUva0FPOUpm?=
- =?utf-8?B?dnFBeXdGOFErZ0FUMUo5TVhxZktYbG9wNUNjUDdvYkZRQ29kN2U5YmVSWUoy?=
- =?utf-8?B?OWVJdGtQenlXdlBiekV5cHdGdW1aK2FKQW4xTUh5QWMvVjVHN0s3eDkvN0dS?=
- =?utf-8?Q?42MGHEkgZ3Ch4=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E8F949B70A612140A3704768570C372B@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1725994AbgL2Hja (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Dec 2020 02:39:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725866AbgL2Hj3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Dec 2020 02:39:29 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50445C0613D6
+        for <linux-usb@vger.kernel.org>; Mon, 28 Dec 2020 23:38:49 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id hk16so1087195pjb.4
+        for <linux-usb@vger.kernel.org>; Mon, 28 Dec 2020 23:38:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zRkg87WbhTyVq1GmNw/QSz94cuJmjPJO6TYNObw6kr4=;
+        b=Gex3e7KyzNCr2lKCECgDhF4S01LHloc7y48I003ouhQ7svkzCSrI4NWAiM9xCiJ4gZ
+         BGOHX7mdS5cI/P4zHHN09QvIZzU+x/aOWbPP/37W3bOiWDEGUETDc78yhs1Qm+sBRuqD
+         0+IsjU/NZFMTY3bO4kt/9j3j4QGBx+yY0OCJQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zRkg87WbhTyVq1GmNw/QSz94cuJmjPJO6TYNObw6kr4=;
+        b=RbQ8Szdo4cfKKz3xGe7cVFLpIu0ZLFrrfWaZ9qWUPtqjKbMUtZ1RnfxXzIh7hP39jr
+         v0JDrVETZljwIhXjlccmJ8W8OCJy8iEZbxXRE3PLIFO276jLmNjz2EzVsnVJITfTIC6V
+         n/gXEzRri3DoIyHTpY+7qhh6uShI7ldhP5MASCzHXOXLT0BjEHB2tO06Hx1wVgYgcGef
+         i79zaKWN7z8hxkZisz7no6tTZnJF3qgdDkncNbmYN0vkKT1asoOP0bmHviJoCbG3sVZ8
+         ID7Kg1TRDRBkGHF4yLXC4Q+AgPs0k25rfYQ1EvLlNd2glJDzmmWINTPQXSAUpv/Q+p+h
+         dO8A==
+X-Gm-Message-State: AOAM533MNu6H5G/8AhNBR6Qfd5B5F8qSgwroDI2r3fKeHgfF7JYdmjav
+        zTAaDxFKE1jmOcnzy0T3B3YX3BufMq8ffHrFGT/JUQ==
+X-Google-Smtp-Source: ABdhPJwUO3J1NZQgc10hogKW+6LyRgLxDEBlh6fCSuzC8OXzEh6Y/DojrQstDhfZFMHMVr+QI9pWj6J4rKUozpOfCg8=
+X-Received: by 2002:a17:90a:902:: with SMTP id n2mr2897636pjn.126.1609227528563;
+ Mon, 28 Dec 2020 23:38:48 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4428.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e3f94b40-7606-4e2d-a0c7-08d8abcb79ac
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Dec 2020 07:29:27.9957
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: KnPSIgW7lU+iEWYo5M6C6s7k4qC8rRmRzXevcowkNmBH/yau92FU2FO9lRteJmp7k/sTBG6eTj7+CR4GQ03PIA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1856
+References: <1608629682-8535-1-git-send-email-chunfeng.yun@mediatek.com> <1608629682-8535-4-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <1608629682-8535-4-git-send-email-chunfeng.yun@mediatek.com>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Tue, 29 Dec 2020 15:38:37 +0800
+Message-ID: <CAATdQgCV+M5J1z6n9HcouOvoX34bofrb6E2e-BBimJTqmHs=gQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 4/5] usb: xhci-mtk: add support runtime pm
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Tianping Fang <tianping.fang@mediatek.com>,
+        Zhanyong Wang <zhangyong.wang@mediatek.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>, linux-usb@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        CK Hu <ck.hu@mediatek.com>,
+        Zhanyong Wang <zhanyong.wang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgVmluY2VudCwNCg0KT24gMTIvMjcvMjAyMCAwNTo0OSwgVmluY2VudCBQZWxsZXRpZXIgd3Jv
-dGU6DQo+IEhlbGxvIEFsYW4sDQo+IA0KPiBPbiBTYXQsIDI2IERlYyAyMDIwIDExOjUyOjMwIC0w
-NTAwLCBBbGFuIFN0ZXJuIDxzdGVybkByb3dsYW5kLmhhcnZhcmQuZWR1PiB3cm90ZToNCj4+IFRo
-ZSBrZXJuZWwgc2hvdWxkbid0IGhhdmUgdG8gc2l0IG9uIGFueXRoaW5nLiAgVGhlIHJlcXVlc3Rz
-IHNob3VsZCBiZQ0KPj4gYWNjZXB0ZWQgaW1tZWRpYXRlbHkuDQo+IA0KPiBJIG11c3QgaGF2ZSB1
-c2VkIHRoaXMgc2VudGVuY2UgaW5jb3JyZWN0bHk6IEkgbWVhbnQgd2hhdCB5b3UgZGVzY3JpYmVk
-LA0KPiB0aGUga2VybmVsIGFjY2VwdGluZyB0aGUgdHJhbnNmZXIgYW5kIHRoZSBtb2R1bGUgc3Vi
-bWl0dGluZyBpdCB0bw0KPiBoYXJkd2FyZSB3aGVuZXZlciBhYmxlLg0KPiANCj4gQWxzbywgc3Ry
-aWN0bHkgc3BlYWtpbmcgKGFuZCB0byBhdm9pZCBjb25mdXNpb24gaWYgSSBmYWlsZWQgZnVydGhl
-ciBhdA0KPiBFbmdsaXNoIGV4cHJlc3Npb24gaW4gbXkgcHJldmlvdXMgZW1haWxzKSBhaW9fc3Vi
-bWl0IGl0c2VsZiBkb2VzDQo+IHN1Y2NlZWQsIHNvIGluIGEgc2Vuc2UgdGhlIGtlcm5lbCBhbHJl
-YWR5IGFjY2VwdHMgdGhlIHRyYW5zZmVyLiBUaGUNCj4gaXNzdWUgaXMgdGhhdCB0aGUgdHJhbnNm
-ZXIgY29tcGxldGlvbiBoYXBwZW5zIGltbWVkaWF0ZWx5IGFmdGVyLCB3aXRoDQo+IHRoaXMgRUFH
-QUlOIHN0YXR1cy4NCg0KUmVmYWN0b3JpbmcgdGhlIGRyaXZlciB0byBhbHdheXMgYWNjZXB0IGFu
-eSBFUCByZXF1ZXN0IGluZGVwZW5kZW50IG9mIA0KdGhlIHN0YXRlIChzdXNwZW5kKSwgcmVxdWly
-ZXMgbG90IG9mIGludmVzdGlnYXRpb24uIFdlIHdpbGwgZGVjaWRlIGFuZCANCmltcGxlbWVudCBs
-YXRlci4NCg0KRm9yIHlvdXIgY2FzZSB3ZSBzdWdnZXN0IHRoZSBmb2xsb3dpbmcgd29ya2Fyb3Vu
-ZCBpbiANCiJkd2MyX2hzb3RnX2VwX3F1ZXVlKCkiIGZ1bmN0aW9uIHRvIGFkZGl0aW9uYWxseSBj
-aGVjayAiaHNvdGctPnBvd2VyX2Rvd24iOg0KDQovKiBQcmV2ZW50IG5ldyByZXF1ZXN0IHN1Ym1p
-c3Npb24gd2hlbiBjb250cm9sbGVyIGlzIHN1c3BlbmRlZCAqLw0KaWYgKGhzLT5seF9zdGF0ZSAh
-PSBEV0MyX0wwICYmIGhzb3RnLT5wb3dlcl9kb3duKSB7DQoJZGV2X2RiZyhocy0+ZGV2LCAiJXM6
-IHN1Ym1pdCByZXF1ZXN0IG9ubHkgaW4gYWN0aXZlIHN0YXRlXG4iLA0KCQlfX2Z1bmNfXyk7DQoJ
-cmV0dXJuIC1FQUdBSU47DQp9DQoNClBsZWFzZSB0ZXN0IGFuZCBsZXQgdXMga25vdyB0aGUgcmVz
-dWx0cy4NCg0KPiANCj4gUmVnYXJkcywNCj4gDQo=
+On Tue, Dec 22, 2020 at 5:35 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+>
+> From: CK Hu <ck.hu@mediatek.com>
+>
+> add support runtime pm feature
+>
+> Signed-off-by: Zhanyong Wang <zhanyong.wang@mediatek.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v3:
+>   1. fix some issues
+>   2. remove attribute files
+>
+> v2: fix error caused by request irq suggested by CK
+> ---
+>  drivers/usb/host/xhci-mtk.c | 285 +++++++++++++++++++++++++++++++++++-
+>  drivers/usb/host/xhci-mtk.h |  14 ++
+>  2 files changed, 294 insertions(+), 5 deletions(-)
+>  mode change 100755 => 100644 drivers/usb/host/xhci-mtk.c
+>
+> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+> old mode 100755
+> new mode 100644
+> index 34bd3de090b1..c07d54acbcb7
+> --- a/drivers/usb/host/xhci-mtk.c
+> +++ b/drivers/usb/host/xhci-mtk.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/mfd/syscon.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/of_irq.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/regmap.h>
+> @@ -77,6 +78,72 @@ enum ssusb_uwk_vers {
+>         SSUSB_UWK_V3,
+>  };
+>
+> +int xhci_mtk_runtime_ready;
+> +
+> +static int xhci_mtk_runtime_resume(struct device *dev);
+> +
+> +static void xhci_mtk_seal_work(struct work_struct *work)
+> +{
+> +       struct xhci_hcd_mtk *mtk =
+> +                       container_of(work, struct xhci_hcd_mtk, seal.work);
+> +       struct usb_hcd *hcd = mtk->hcd;
+> +       struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+> +
+> +       xhci_dbg(xhci, "spm unseals xHCI controller %i\n", mtk->seal_status);
+> +       if (mtk->seal_status == SEAL_SUSPENDED) {
+> +               mtk->seal_status = SEAL_RESUMING;
+> +               pm_runtime_mark_last_busy(mtk->dev);
+> +               pm_runtime_put_sync_autosuspend(mtk->dev);
+
+If I understand correctly, this function is for waking up the device
+but this function calls put() only without get().
+
+> +       } else {
+> +               /*
+> +                * FIXME: Sometimes seal_status will keep it on SEAL_RESUMING staus not to expect
+> +                * since pm_runtime_put_sync_autosuspend doesn't invoke runtime_resume of callback.
+> +                * and to survey why not to invoke runtime_resume callback named
+> +                * xhci_mtk_runtime_resume in time in short feature, Herely provide one solution
+> +                * that make sure seal_status to match h/w state machine,and MTK xHCI clocks
+> +                * on as soon as unseal event received.
+
+I guess actual resuming should be happened only from the 1st interrupt
+(when in SEAL_SUSPENDED)
+and following spurious interrupts can be just ignored.
+
+> +                */
+> +               if (mtk->seal_status == SEAL_RESUMING)
+> +                       xhci_mtk_runtime_resume(mtk->dev);
+
+xhci_mtk_runtime_resume() is defined as a runtime pm callback,
+pm core will call that callback when pm usage counter reaches to zero.
+
+> +               else
+> +                       xhci_warn(xhci,
+> +                               "Ignore seal wakeup source disordered in xHCI controller\n");
+> +       }
+> +}
+> +
+> +static irqreturn_t xhci_mtk_seal_irq(int irq, void *data)
+> +{
+> +       struct xhci_hcd_mtk *mtk = data;
+> +       struct usb_hcd *hcd = mtk->hcd;
+> +       struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+> +
+> +       xhci_dbg(xhci, "seal irq ISR invoked\n");
+> +
+> +       schedule_delayed_work(&mtk->seal, 0);
+> +
+> +       return IRQ_HANDLED;
+> +}
+> +
+> +static void xhci_mtk_seal_wakeup_enable(struct xhci_hcd_mtk *mtk, bool enable)
+> +{
+> +       struct irq_desc *desc;
+> +       struct device *dev = mtk->dev;
+> +
+> +       if (mtk && mtk->seal_irq) {
+> +               desc = irq_to_desc(mtk->seal_irq);
+> +               if (enable) {
+> +                       desc->irq_data.chip->irq_ack(&desc->irq_data);
+> +                       enable_irq(mtk->seal_irq);
+> +                       dev_dbg(dev, "%s: enable_irq %i\n",
+> +                                __func__, mtk->seal_irq);
+> +               } else {
+> +                       disable_irq(mtk->seal_irq);
+> +                       dev_dbg(dev, "%s: disable_irq %i\n",
+> +                                __func__, mtk->seal_irq);
+> +               }
+> +       }
+> +}
+> +
+
+I think this is unnecessary if this driver can check the current state
+and ignore the spurious irqs if spm sometimes triggers the wake-up irqs.
+
+>  static int xhci_mtk_host_enable(struct xhci_hcd_mtk *mtk)
+>  {
+>         struct mu3c_ippc_regs __iomem *ippc = mtk->ippc_regs;
+> @@ -347,7 +414,6 @@ static int usb_wakeup_of_property_parse(struct xhci_hcd_mtk *mtk,
+>                         mtk->uwk_reg_base, mtk->uwk_vers);
+>
+>         return PTR_ERR_OR_ZERO(mtk->uwk);
+> -
+>  }
+>
+>  static void usb_wakeup_set(struct xhci_hcd_mtk *mtk, bool enable)
+> @@ -482,9 +548,11 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+>                 return ret;
+>         }
+>
+> +       pm_runtime_set_active(dev);
+> +       pm_runtime_use_autosuspend(dev);
+> +       pm_runtime_set_autosuspend_delay(dev,
+> +                               CONFIG_USB_AUTOSUSPEND_DELAY * 1000);
+>         pm_runtime_enable(dev);
+> -       pm_runtime_get_sync(dev);
+
+The only one left pm_runtime_get() is removed by here,
+now this driver only calls pm_runtime_put().
+
+> -       device_enable_async_suspend(dev);
+>
+>         ret = xhci_mtk_ldos_enable(mtk);
+>         if (ret)
+> @@ -499,6 +567,14 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+>                 ret = irq;
+>                 goto disable_clk;
+>         }
+> +       dev_dbg(dev, "irq %i\n", irq);
+> +
+> +       mtk->seal_irq = platform_get_irq_optional(pdev, 1);
+> +       if (mtk->seal_irq < 0) {
+> +               ret = mtk->seal_irq;
+> +               goto disable_clk;
+> +       }
+> +       dev_dbg(dev, "seal_irq %i\n", mtk->seal_irq);
+>
+>         hcd = usb_create_hcd(driver, dev, dev_name(dev));
+>         if (!hcd) {
+> @@ -565,6 +641,27 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+>         if (ret)
+>                 goto dealloc_usb2_hcd;
+>
+> +       INIT_DELAYED_WORK(&mtk->seal, xhci_mtk_seal_work);
+> +       snprintf(mtk->seal_descr, sizeof(mtk->seal_descr), "seal%s:usb%d",
+> +                hcd->driver->description, hcd->self.busnum);
+> +       ret = devm_request_irq(dev, mtk->seal_irq, &xhci_mtk_seal_irq,
+> +                         IRQF_TRIGGER_FALLING, mtk->seal_descr, mtk);
+> +       if (ret != 0) {
+> +               dev_err(dev, "seal request interrupt %d failed\n",
+> +                       mtk->seal_irq);
+> +               goto dealloc_usb2_hcd;
+> +       }
+> +       xhci_mtk_seal_wakeup_enable(mtk, false);
+> +
+> +       device_enable_async_suspend(dev);
+> +       xhci_mtk_runtime_ready = 1;
+> +
+> +       pm_runtime_mark_last_busy(dev);
+> +       pm_runtime_put_autosuspend(dev);
+
+I expect the usage count will be -1 by here in probe.
+
+> +
+> +       dev_dbg(dev, "%s: xhci_mtk_runtime_ready %i",
+> +                __func__, xhci_mtk_runtime_ready);
+> +
+>         return 0;
+>
+>  dealloc_usb2_hcd:
+> @@ -587,7 +684,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+>         xhci_mtk_ldos_disable(mtk);
+>
+>  disable_pm:
+> -       pm_runtime_put_sync(dev);
+> +       pm_runtime_put_sync_autosuspend(dev);
+>         pm_runtime_disable(dev);
+>         return ret;
+>  }
+> @@ -602,6 +699,7 @@ static int xhci_mtk_remove(struct platform_device *dev)
+>         pm_runtime_put_noidle(&dev->dev);
+>         pm_runtime_disable(&dev->dev);
+>
+> +       xhci_mtk_runtime_ready = 0;
+>         usb_remove_hcd(shared_hcd);
+>         xhci->shared_hcd = NULL;
+>         device_init_wakeup(&dev->dev, false);
+> @@ -638,6 +736,7 @@ static int __maybe_unused xhci_mtk_suspend(struct device *dev)
+>         xhci_mtk_host_disable(mtk);
+>         xhci_mtk_clks_disable(mtk);
+>         usb_wakeup_set(mtk, true);
+> +
+>         return 0;
+>  }
+>
+> @@ -659,10 +758,185 @@ static int __maybe_unused xhci_mtk_resume(struct device *dev)
+>         return 0;
+>  }
+>
+> +static int __maybe_unused xhci_mtk_bus_status(struct device *dev)
+> +{
+> +       struct xhci_hcd_mtk *mtk = dev_get_drvdata(dev);
+> +       struct usb_hcd *hcd;
+> +       struct xhci_hcd *xhci;
+> +       struct xhci_hub *usb2_rhub;
+> +       struct xhci_hub *usb3_rhub;
+> +       struct xhci_bus_state *bus_state;
+> +       struct xhci_port *port;
+> +       u32     usb2_suspended_ports = -1;
+> +       u32     usb3_suspended_ports = -1;
+> +       u16 status;
+> +       int num_ports;
+> +       int ret = 0;
+> +       int i;
+> +
+> +       if (!mtk->hcd)
+> +               return -ESHUTDOWN;
+> +
+> +       hcd = mtk->hcd;
+> +       xhci = hcd_to_xhci(hcd);
+> +       if ((xhci->xhc_state & XHCI_STATE_REMOVING) ||
+> +                       (xhci->xhc_state & XHCI_STATE_HALTED)) {
+> +               return -ESHUTDOWN;
+> +       }
+
+This is duplicated from xhci_mtk_runtime_suspend()
+
+> +
+> +       usb2_rhub = &xhci->usb2_rhub;
+> +       if (usb2_rhub) {
+> +               bus_state  = &usb2_rhub->bus_state;
+> +               num_ports  = usb2_rhub->num_ports;
+> +               usb2_suspended_ports  = bus_state->suspended_ports;
+> +               usb2_suspended_ports ^= (BIT(num_ports) - 1);
+> +               usb2_suspended_ports &= (BIT(num_ports) - 1);
+> +               for (i = 0; i < num_ports; i++) {
+> +                       if (usb2_suspended_ports & (1UL << i)) {
+> +                               port = usb2_rhub->ports[i];
+> +                               status = readl(port->addr);
+> +
+> +                               xhci_dbg(xhci,
+> +                                         "USB20: portsc[%i]: 0x%04X\n",
+> +                                         i, status);
+> +
+> +                               if (!(status & PORT_CONNECT))
+> +                                       usb2_suspended_ports &= ~(1UL << i);
+> +                       }
+> +               }
+> +
+> +               if (usb2_suspended_ports) {
+> +                       ret = -EBUSY;
+> +                       goto ebusy;
+> +               }
+> +       }
+> +
+> +       usb3_rhub = &xhci->usb3_rhub;
+> +       if (usb3_rhub) {
+> +               bus_state  = &usb3_rhub->bus_state;
+> +               num_ports  = usb3_rhub->num_ports;
+> +               usb3_suspended_ports  = bus_state->suspended_ports;
+> +               usb3_suspended_ports ^= (BIT(num_ports) - 1);
+> +               usb3_suspended_ports &= (BIT(num_ports) - 1);
+> +               for (i = 0; i < num_ports; i++) {
+> +                       if (usb3_suspended_ports & BIT(i)) {
+> +                               port = usb3_rhub->ports[i];
+> +                               status = readl(port->addr);
+> +
+> +                               xhci_dbg(xhci, "USB3: portsc[%i]: 0x%04X\n",
+> +                                         i, status);
+> +
+> +                               if (!(status & PORT_CONNECT))
+> +                                       usb3_suspended_ports &= ~BIT(i);
+> +                       }
+> +               }
+> +
+> +               if (usb3_suspended_ports) {
+> +                       ret = -EBUSY;
+> +                       goto ebusy;
+> +               }
+> +       }
+> +
+> +ebusy:
+> +       xhci_dbg(xhci, "%s: USB2: 0x%08X, USB3: 0x%08X ret: %i\n",
+> +                 __func__, usb2_suspended_ports,
+> +                 usb3_suspended_ports, ret);
+> +
+> +       return ret;
+> +}
+> +
+
+This is basically counting active ports by directly reading portsc register?
+I expect this function never return -EBUSY  if you balance pm usage
+counter well.
+Are there any specific reasons of doing this manually?
+
+> +static int __maybe_unused xhci_mtk_runtime_suspend(struct device *dev)
+> +{
+> +       bool wakeup = device_may_wakeup(dev);
+> +       struct xhci_hcd_mtk  *mtk = dev_get_drvdata(dev);
+> +       struct usb_hcd *hcd;
+> +       struct xhci_hcd *xhci;
+> +       int ret = 0;
+> +
+> +       if (!mtk->hcd)
+> +               return -ESHUTDOWN;
+> +
+> +       hcd = mtk->hcd;
+> +       xhci = hcd_to_xhci(hcd);
+> +       if ((xhci->xhc_state & XHCI_STATE_REMOVING) ||
+> +                       (xhci->xhc_state & XHCI_STATE_HALTED)) {
+> +               return -ESHUTDOWN;
+> +       }
+> +
+> +       mtk->seal_status = SEAL_BUSY;
+> +       ret = xhci_mtk_bus_status(dev);
+> +       if (wakeup && !ret) {
+> +               mtk->seal_status = SEAL_SUSPENDING;
+> +               xhci_mtk_suspend(dev);
+> +               xhci_mtk_seal_wakeup_enable(mtk, true);
+> +               mtk->seal_status = SEAL_SUSPENDED;
+> +               xhci_dbg(xhci, "%s: seals xHCI controller\n", __func__);
+> +       }
+> +
+> +       xhci_dbg(xhci, "%s: seals wakeup = %i, ret = %i!\n",
+> +                 __func__, wakeup, ret);
+> +
+> +       return ret;
+> +}
+> +
+> +static int __maybe_unused xhci_mtk_runtime_resume(struct device *dev)
+> +{
+> +       bool wakeup = device_may_wakeup(dev);
+> +       struct xhci_hcd_mtk  *mtk = dev_get_drvdata(dev);
+> +       struct usb_hcd *hcd;
+> +       struct xhci_hcd *xhci;
+> +
+> +       if (!mtk->hcd)
+> +               return -ESHUTDOWN;
+> +
+> +       hcd = mtk->hcd;
+> +       xhci = hcd_to_xhci(hcd);
+> +       if ((xhci->xhc_state & XHCI_STATE_REMOVING) ||
+> +                       (xhci->xhc_state & XHCI_STATE_HALTED)) {
+> +               return -ESHUTDOWN;
+> +       }
+> +
+> +       /*
+> +        *  list cases by one extra interrupt named seal to process!!!
+> +        *  Who to process these module reinitilization after SPM wakeup
+> +        *  case 1: usb remote wakeup, therefore xHCI need reinitilizate also.
+> +        *  case 2: other-wakeup-source wakeup, therefore, xHCI need reinit
+> +        *  case 3: usb client driver can invoke it in runtime mechanism
+> +        *  case 4: user active
+> +        */
+> +       if (wakeup) {
+> +               xhci_mtk_seal_wakeup_enable(mtk, false);
+> +               xhci_mtk_resume(dev);
+> +               xhci_dbg(xhci, "%s: unseals xHCI controller\n", __func__);
+> +       }
+> +       mtk->seal_status = SEAL_RESUMED;
+> +
+> +       xhci_dbg(xhci, "%s: unseals wakeup = %i\n", __func__, wakeup);
+> +
+> +       return 0;
+> +}
+> +
+> +static int __maybe_unused xhci_mtk_runtime_idle(struct device *dev)
+> +{
+> +       int ret = 0;
+> +
+> +       dev_dbg(dev, "%s: xhci_mtk_runtime_ready %i",
+> +                __func__, xhci_mtk_runtime_ready);
+> +
+> +       if (!xhci_mtk_runtime_ready)
+> +               ret = -EAGAIN;
+> +
+> +       return ret;
+> +}
+> +
+>  static const struct dev_pm_ops xhci_mtk_pm_ops = {
+>         SET_SYSTEM_SLEEP_PM_OPS(xhci_mtk_suspend, xhci_mtk_resume)
+> +       SET_RUNTIME_PM_OPS(xhci_mtk_runtime_suspend,
+> +                          xhci_mtk_runtime_resume,
+> +                          xhci_mtk_runtime_idle)
+>  };
+> -#define DEV_PM_OPS IS_ENABLED(CONFIG_PM) ? &xhci_mtk_pm_ops : NULL
+> +
+> +#define DEV_PM_OPS (IS_ENABLED(CONFIG_PM) ? &xhci_mtk_pm_ops : NULL)
+>
+>  #ifdef CONFIG_OF
+>  static const struct of_device_id mtk_xhci_of_match[] = {
+> @@ -686,6 +960,7 @@ MODULE_ALIAS("platform:xhci-mtk");
+>
+>  static int __init xhci_mtk_init(void)
+>  {
+> +       xhci_mtk_runtime_ready = 0;
+>         xhci_init_driver(&xhci_mtk_hc_driver, &xhci_mtk_overrides);
+>         return platform_driver_register(&mtk_xhci_driver);
+>  }
+> diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
+> index 323b281933b9..103d83ce6a3e 100644
+> --- a/drivers/usb/host/xhci-mtk.h
+> +++ b/drivers/usb/host/xhci-mtk.h
+> @@ -133,6 +133,14 @@ struct mu3c_ippc_regs {
+>         __le32 reserved3[33]; /* 0x80 ~ 0xff */
+>  };
+>
+> +enum xhci_mtk_seal {
+> +       SEAL_BUSY = 0,
+> +       SEAL_SUSPENDING,
+> +       SEAL_SUSPENDED,
+> +       SEAL_RESUMING,
+> +       SEAL_RESUMED
+> +};
+> +
+>  struct xhci_hcd_mtk {
+>         struct device *dev;
+>         struct usb_hcd *hcd;
+> @@ -158,6 +166,12 @@ struct xhci_hcd_mtk {
+>         struct regmap *uwk;
+>         u32 uwk_reg_base;
+>         u32 uwk_vers;
+> +
+> +       /* usb eint wakeup source */
+> +       int seal_irq;
+> +       enum xhci_mtk_seal seal_status;
+> +       struct delayed_work  seal;
+> +       char   seal_descr[32];  /* "seal" + driver + bus # */
+>  };
+>
+>  static inline struct xhci_hcd_mtk *hcd_to_mtk(struct usb_hcd *hcd)
+> --
+> 2.18.0
+>
