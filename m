@@ -2,146 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76EAE2E715E
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 15:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EAE42E7257
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 17:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbgL2O1n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Dec 2020 09:27:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57998 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726144AbgL2O1m (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Dec 2020 09:27:42 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11514C061793;
-        Tue, 29 Dec 2020 06:27:02 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id 23so31089804lfg.10;
-        Tue, 29 Dec 2020 06:27:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LGabMZopnL6SB88PMZzqPHBgHYvrs1f9wbRutggIZ88=;
-        b=iPruUrxV32FzSB+pB0Gu6cH8j/xfMoEROpJoSn1kjwR4J1KhwVqNZMhoRQ6Zga90f/
-         /b/IBlMJP12r3gwAhSisMGw+1E3dik9v7P2A+0gBZ5f6GTcejn9nphmBKmTXcJrlkWtk
-         0lCdEx3zZPp8Q4WfnrVcG7ZWOPN32w0k/FuRo+imBS8hRGgrrYRz1VYM9YWgwFkQW07t
-         OvdsitYlMqW39G8XnrqitBZsNr6surmS0P7XdfSIrj+kIIbR/hj5aen/PEoVCUvX674R
-         JE46CG5m1VDGjMjat/+Sg8HoL5+NSkzwYH4zkZZ90lFNnvWUgG5DWf9xVqR99JlXFjko
-         fe/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=LGabMZopnL6SB88PMZzqPHBgHYvrs1f9wbRutggIZ88=;
-        b=cOVAwL7pPCuM4oZg5B8p24jOa9+k3xVvfybt+Yj7OF6aKOmK9S+zyiV+vJ64LiYz8G
-         0VW53e7vRJ8WImBUlyiVyOW6Cw/BS4iYk7gUPVYb3+g/l48wmDuRHAJK8fXr/7TlCGtm
-         vjqGsxe+kbnTRtyru0oUtrOMBzIEgytedmSIldtTUHzuVyV4jha9D5lNusPA7qTudurD
-         SVYvxzQcdVrI9oxJK1gvv4MWbecSJuN4N5F3+xQpJT/Em20WN4T9LVFi8bEZRUYdp88Y
-         u3h4R6q596uSzl663oGcxTtSkdOR6+bw4Mon83SFy9R0r07KvYZ/dHU87qyS7Ma1sHSr
-         PT/A==
-X-Gm-Message-State: AOAM531aH/om4jtfnzynxCzAD96k98ubglTXnV2/+5drtkL2BDOg3hTS
-        cWFXdjk+5hQl1GqEJWSutgPBpl6Uopw=
-X-Google-Smtp-Source: ABdhPJyBLxO4R6WPCEEj8HasNKL8GPI3plRDByNm9JLuTXWJTXnV9lOG5NfVGPvfFCRLWGi+3YC4ow==
-X-Received: by 2002:a2e:3514:: with SMTP id z20mr23093019ljz.110.1609252020452;
-        Tue, 29 Dec 2020 06:27:00 -0800 (PST)
-Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.googlemail.com with ESMTPSA id q12sm6914777ljc.49.2020.12.29.06.26.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Dec 2020 06:26:59 -0800 (PST)
-Subject: Re: [PATCH v3 0/9] Support Runtime PM and host mode by Tegra ChipIdea
- USB driver
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Felipe Balbi <balbi@kernel.org>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Ion Agorria <ion@agorria.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20201218120246.7759-1-digetx@gmail.com>
- <20201229051615.GA5823@b29397-desktop>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <b2c21687-4cb9-ba0a-a724-3a82ddd8daff@gmail.com>
-Date:   Tue, 29 Dec 2020 17:26:58 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        id S1726260AbgL2QeT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Dec 2020 11:34:19 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:44525 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726156AbgL2QeT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Dec 2020 11:34:19 -0500
+Received: (qmail 695108 invoked by uid 1000); 29 Dec 2020 11:33:37 -0500
+Date:   Tue, 29 Dec 2020 11:33:37 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+5925509f78293baa7331@syzkaller.appspotmail.com>
+Cc:     andreyknvl@gmail.com, andreyknvl@google.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, gustavoars@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: UBSAN: shift-out-of-bounds in dummy_hub_control
+Message-ID: <20201229163337.GA694118@rowland.harvard.edu>
+References: <000000000000cad14c05b74f714c@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20201229051615.GA5823@b29397-desktop>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000cad14c05b74f714c@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-29.12.2020 08:16, Peter Chen пишет:
-> On 20-12-18 15:02:37, Dmitry Osipenko wrote:
->> This series implements Runtime PM support for the Tegra ChipIdea USB driver.
->> It also squashes the older ehci-tegra driver into the ChipIdea driver, hence
->> the RPM is supported by both UDC and host controllers, secondly this opens
->> opportunity for implementing OTG support in the future.
->>
->> Patchset was tested on various Tegra20, Tegra30 and Tegra124 devices.
->> Thanks to Peter Geis, Matt Merhar, Nicolas Chauvet and Ion Agorria for
->> helping with the extensive and productive testing!
->>
->> Changelog:
->>
->> v3: - Replaced "goto" with if-statements as was suggested by Thierry Reding.
->>
->>     - Improved wording of the deprecated Kconfig entry as was suggested
->>       by Alan Stern.
->>
->>     - Added ACKs from Thierry Reding and Alan Stern.
->>
->>     - Added a new minor patch "Specify TX FIFO threshold in UDC SoC info"
->>       just for completeness, since we can now switch OTG to host mode in
->>       the ChipIdea driver. Although, OTG support remains a work-in-progress
->>       for now.
->>
->> v2: - Improved comments in the code as it was suggested by Peter Chen and
->>       Sergei Shtylyov for v1.
->>
->>     - Replaced mdelay() with fsleep() and made ci->hdc to reset to NULL in
->>       a error code path, like it was suggested by Peter Chen.
->>
->>     - Redirected deprecated USB_EHCI_TEGRA Kconfig entry to USB_CHIPIDEA_TEGRA
->>       as was suggested by Alan Stern.
->>
->>     - Improved commit message and added ACK from Thierry Reding to the patch
->>       that removes MODULE_ALIAS.
->>
->>     - Fixed UDC PHY waking up on ASUS TF201 tablet device by utilizing
->>       additional VBUS sensor. This was reported and tested by Ion Agorria.
->>
->>     - Added t-b from Ion Agorria.
->>
->> Dmitry Osipenko (8):
->>   usb: phy: tegra: Add delay after power up
->>   usb: phy: tegra: Support waking up from a low power mode
->>   usb: chipidea: tegra: Remove MODULE_ALIAS
->>   usb: chipidea: tegra: Rename UDC to USB
->>   usb: chipidea: tegra: Support runtime PM
->>   usb: chipidea: tegra: Specify TX FIFO threshold in UDC SoC info
->>   usb: host: ehci-tegra: Remove the driver
->>   ARM: tegra_defconfig: Enable USB_CHIPIDEA_HOST and remove
->>     USB_EHCI_TEGRA
->>
->> Peter Geis (1):
->>   usb: chipidea: tegra: Support host mode
+On Fri, Dec 25, 2020 at 12:05:22PM -0800, syzbot wrote:
+> Hello,
 > 
-> Chipidea related (patch 3-7) are applied, thanks.
+> syzbot found the following issue on:
+> 
+> HEAD commit:    e37b12e4 Merge tag 'for-linus-5.11-ofs1' of git://git.kern..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=17429937500000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=98408202fed1f636
+> dashboard link: https://syzkaller.appspot.com/bug?extid=5925509f78293baa7331
+> compiler:       gcc (GCC) 10.1.0-syz 20200507
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1781fc5b500000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=157cd123500000
+> 
+> The issue was bisected to:
+> 
+> commit 8442b02bf3c6770e0d7e7ea17be36c30e95987b6
+> Author: Andrey Konovalov <andreyknvl@google.com>
+> Date:   Mon Oct 21 14:20:58 2019 +0000
+> 
+>     USB: dummy-hcd: increase max number of devices to 32
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1631d0db500000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=1531d0db500000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1131d0db500000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+5925509f78293baa7331@syzkaller.appspotmail.com
+> Fixes: 8442b02bf3c6 ("USB: dummy-hcd: increase max number of devices to 32")
+> 
+> ================================================================================
+> UBSAN: shift-out-of-bounds in drivers/usb/gadget/udc/dummy_hcd.c:2293:33
+> shift exponent 257 is too large for 32-bit type 'int'
+> CPU: 0 PID: 8526 Comm: syz-executor949 Not tainted 5.10.0-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Call Trace:
+>  __dump_stack lib/dump_stack.c:79 [inline]
+>  dump_stack+0x107/0x163 lib/dump_stack.c:120
+>  ubsan_epilogue+0xb/0x5a lib/ubsan.c:148
+>  __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x181 lib/ubsan.c:395
+>  dummy_hub_control.cold+0x1a/0xbc drivers/usb/gadget/udc/dummy_hcd.c:2293
+>  rh_call_control drivers/usb/core/hcd.c:683 [inline]
+>  rh_urb_enqueue drivers/usb/core/hcd.c:841 [inline]
+>  usb_hcd_submit_urb+0xcaa/0x22d0 drivers/usb/core/hcd.c:1544
+>  usb_submit_urb+0x6e4/0x1560 drivers/usb/core/urb.c:585
+>  usb_start_wait_urb+0x101/0x4c0 drivers/usb/core/message.c:58
+>  usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+>  usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
+>  do_proc_control+0x4cb/0x9c0 drivers/usb/core/devio.c:1165
+>  proc_control drivers/usb/core/devio.c:1191 [inline]
+>  usbdev_do_ioctl drivers/usb/core/devio.c:2535 [inline]
+>  usbdev_ioctl+0x12c1/0x3b20 drivers/usb/core/devio.c:2708
+>  vfs_ioctl fs/ioctl.c:48 [inline]
+>  __do_sys_ioctl fs/ioctl.c:753 [inline]
+>  __se_sys_ioctl fs/ioctl.c:739 [inline]
+>  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:739
+>  do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> RIP: 0033:0x443f29
+> Code: 18 89 d0 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 fb d7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+> RSP: 002b:00007ffc10df4328 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> RAX: ffffffffffffffda RBX: 00000000004002e0 RCX: 0000000000443f29
+> RDX: 0000000020000000 RSI: 00000000c0185500 RDI: 0000000000000003
+> RBP: 00000000006ce018 R08: 0000000000000000 R09: 00000000004002e0
+> R10: 000000000000000f R11: 0000000000000246 R12: 0000000000401bb0
+> R13: 0000000000401c40 R14: 0000000000000000 R15: 0000000000000000
+> ================================================================================
 
-Hello Peter,
+The cause is pretty obvious.  dummy-hcd assumes that requests sent to 
+the root hub are always valid, which isn't always true when they come 
+from userspace.
 
-Thank you for applying the patches.
+Alan Stern
 
-Who will apply the remaining patches?
+#syz test: upstream e37b12e4
 
-The Chipidea patch #6 depends on the PHY changes, otherwise USB will
-suspend and never resume.
+Index: usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/udc/dummy_hcd.c
++++ usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -2114,9 +2114,21 @@ static int dummy_hub_control(
+ 				dum_hcd->port_status &= ~USB_PORT_STAT_POWER;
+ 			set_link_state(dum_hcd);
+ 			break;
+-		default:
++		case USB_PORT_FEAT_ENABLE:
++		case USB_PORT_FEAT_C_ENABLE:
++		case USB_PORT_FEAT_C_SUSPEND:
++			/* Not allowed for USB-3 */
++			if (hcd->speed == HCD_USB3)
++				goto error;
++			fallthrough;
++		case USB_PORT_FEAT_C_CONNECTION:
++		case USB_PORT_FEAT_C_RESET:
+ 			dum_hcd->port_status &= ~(1 << wValue);
+ 			set_link_state(dum_hcd);
++			break;
++		default:
++		/* Disallow INDICATOR and C_OVER_CURRENT */
++			goto error;
+ 		}
+ 		break;
+ 	case GetHubDescriptor:
+@@ -2277,18 +2289,17 @@ static int dummy_hub_control(
+ 			 */
+ 			dum_hcd->re_timeout = jiffies + msecs_to_jiffies(50);
+ 			fallthrough;
++		case USB_PORT_FEAT_C_CONNECTION:
++		case USB_PORT_FEAT_C_RESET:
++		case USB_PORT_FEAT_C_ENABLE:
++		case USB_PORT_FEAT_C_SUSPEND:
++			/* Not allowed for USB-3, and ignored for USB-2 */
++			if (hcd->speed == HCD_USB3)
++				goto error;
++			break;
+ 		default:
+-			if (hcd->speed == HCD_USB3) {
+-				if ((dum_hcd->port_status &
+-				     USB_SS_PORT_STAT_POWER) != 0) {
+-					dum_hcd->port_status |= (1 << wValue);
+-				}
+-			} else
+-				if ((dum_hcd->port_status &
+-				     USB_PORT_STAT_POWER) != 0) {
+-					dum_hcd->port_status |= (1 << wValue);
+-				}
+-			set_link_state(dum_hcd);
++		/* Disallow TEST, INDICATOR, and C_OVER_CURRENT */
++			goto error;
+ 		}
+ 		break;
+ 	case GetPortErrorCount:
