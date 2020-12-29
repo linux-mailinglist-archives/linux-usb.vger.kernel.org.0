@@ -2,102 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A26E92E7262
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 17:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 097A82E727C
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 18:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726156AbgL2Qnz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Dec 2020 11:43:55 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:60555 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726114AbgL2Qnz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Dec 2020 11:43:55 -0500
-Received: (qmail 695442 invoked by uid 1000); 29 Dec 2020 11:43:14 -0500
-Date:   Tue, 29 Dec 2020 11:43:14 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+5925509f78293baa7331@syzkaller.appspotmail.com>
-Cc:     andreyknvl@gmail.com, andreyknvl@google.com, balbi@kernel.org,
+        id S1726300AbgL2RAs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Dec 2020 12:00:48 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:49229 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726114AbgL2RAs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Dec 2020 12:00:48 -0500
+Received: by mail-io1-f71.google.com with SMTP id m19so5953286iow.16
+        for <linux-usb@vger.kernel.org>; Tue, 29 Dec 2020 09:00:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=gwu8pvrcZ4jMJ2+bY0U4Ug2vWoWnObRnoe2v75tlHHI=;
+        b=HAlwa15YeDkuP7vck0eOnoY2v44erOp8/TOLvGpEfofxgHwM5zpfu273RB8sFyDWt2
+         H9s1ULbIkGGWPLeDgnyfm1fwkxCSzkDYzsc2/wZjdcOU6QuR+dxvuvGQ4aQPrElxklWa
+         hwql/1NjaTGxR38eUkpvDKQDcrS5tWDT96QOhvpfEJeeIwrEx5v77Ugts07fFb6D7lHv
+         Lm7AmJUHlUoP0CtaGM6KuFI+LMTbzAZZa5NH1hdQNwXMeXlyGiWs+uS7YOZ5fTkmRzS1
+         4WVD5oMR5W0Q84ZPzJn89UQ3MO+CyX7c0VlXGm54Y9mO8bVZfduyg65i/dE6SzHSydo3
+         JYzw==
+X-Gm-Message-State: AOAM532KILPPoug7+Gg5nK00Ocbl+Lhb6rLzKaRUAZSox/wSosmyug4r
+        PX1SPTU+ytZ83T2yKHBGeUQwafWIeifYdRs4c1ahSHL6D2rg
+X-Google-Smtp-Source: ABdhPJwEXTBtDlLd4WgdRGaMv6E4WLhVB8Me7nDoTnJSNERh+LsAoTJcXjz97hj8krknWHideC4xQKNmeCaevjYEktzqUq1+YH0v
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:152f:: with SMTP id i15mr47744669ilu.104.1609261207467;
+ Tue, 29 Dec 2020 09:00:07 -0800 (PST)
+Date:   Tue, 29 Dec 2020 09:00:07 -0800
+In-Reply-To: <20201229164314.GB694118@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009f3cf405b79d5267@google.com>
+Subject: Re: UBSAN: shift-out-of-bounds in dummy_hub_control
+From:   syzbot <syzbot+5925509f78293baa7331@syzkaller.appspotmail.com>
+To:     andreyknvl@gmail.com, andreyknvl@google.com, balbi@kernel.org,
         gregkh@linuxfoundation.org, gustavoars@kernel.org,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: Re: UBSAN: shift-out-of-bounds in dummy_hub_control
-Message-ID: <20201229164314.GB694118@rowland.harvard.edu>
-References: <20201229163337.GA694118@rowland.harvard.edu>
- <000000000000f7882005b79cf3a6@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000f7882005b79cf3a6@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 29, 2020 at 08:33:39AM -0800, syzbot wrote:
-> > #syz test: upstream e37b12e4
->
-> "upstream" does not look like a valid git repo address.
+Hello,
 
-I thought syzbot had been changed to recognize "upstream" as a valid
-repo name.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Alan Stern
+Reported-and-tested-by: syzbot+5925509f78293baa7331@syzkaller.appspotmail.com
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git e37b12e4
+Tested on:
 
-Index: usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/udc/dummy_hcd.c
-+++ usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
-@@ -2114,9 +2114,21 @@ static int dummy_hub_control(
- 				dum_hcd->port_status &= ~USB_PORT_STAT_POWER;
- 			set_link_state(dum_hcd);
- 			break;
--		default:
-+		case USB_PORT_FEAT_ENABLE:
-+		case USB_PORT_FEAT_C_ENABLE:
-+		case USB_PORT_FEAT_C_SUSPEND:
-+			/* Not allowed for USB-3 */
-+			if (hcd->speed == HCD_USB3)
-+				goto error;
-+			fallthrough;
-+		case USB_PORT_FEAT_C_CONNECTION:
-+		case USB_PORT_FEAT_C_RESET:
- 			dum_hcd->port_status &= ~(1 << wValue);
- 			set_link_state(dum_hcd);
-+			break;
-+		default:
-+		/* Disallow INDICATOR and C_OVER_CURRENT */
-+			goto error;
- 		}
- 		break;
- 	case GetHubDescriptor:
-@@ -2277,18 +2289,17 @@ static int dummy_hub_control(
- 			 */
- 			dum_hcd->re_timeout = jiffies + msecs_to_jiffies(50);
- 			fallthrough;
-+		case USB_PORT_FEAT_C_CONNECTION:
-+		case USB_PORT_FEAT_C_RESET:
-+		case USB_PORT_FEAT_C_ENABLE:
-+		case USB_PORT_FEAT_C_SUSPEND:
-+			/* Not allowed for USB-3, and ignored for USB-2 */
-+			if (hcd->speed == HCD_USB3)
-+				goto error;
-+			break;
- 		default:
--			if (hcd->speed == HCD_USB3) {
--				if ((dum_hcd->port_status &
--				     USB_SS_PORT_STAT_POWER) != 0) {
--					dum_hcd->port_status |= (1 << wValue);
--				}
--			} else
--				if ((dum_hcd->port_status &
--				     USB_PORT_STAT_POWER) != 0) {
--					dum_hcd->port_status |= (1 << wValue);
--				}
--			set_link_state(dum_hcd);
-+		/* Disallow TEST, INDICATOR, and C_OVER_CURRENT */
-+			goto error;
- 		}
- 		break;
- 	case GetPortErrorCount:
+commit:         e37b12e4 Merge tag 'for-linus-5.11-ofs1' of git://git.kern..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=98408202fed1f636
+dashboard link: https://syzkaller.appspot.com/bug?extid=5925509f78293baa7331
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=16f0bc70d00000
 
+Note: testing is done by a robot and is best-effort only.
