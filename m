@@ -2,30 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDACD2E7027
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 12:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 930782E7021
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 12:50:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726632AbgL2LtG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Dec 2020 06:49:06 -0500
-Received: from mail-db8eur05on2086.outbound.protection.outlook.com ([40.107.20.86]:50497
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        id S1726588AbgL2Lst (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Dec 2020 06:48:49 -0500
+Received: from mail-eopbgr70073.outbound.protection.outlook.com ([40.107.7.73]:22087
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726354AbgL2Lsg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 29 Dec 2020 06:48:36 -0500
+        id S1726502AbgL2Lss (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 29 Dec 2020 06:48:48 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ok1k4mWCHUXIVhHcU5ZMQvZCeX1aiU9mL/O2ITjQl50tI+YfHXk7z2XIK79pbb4/4WsGtNVaFamvmUBtetgRXIq3S8JhCQcm+x0VM0W96mDJZvd1XUxxY1S47/0HPALWN2Fa2/dIxzNVfs6CYBi3TmNNLW+h6e8UFlqYSvt/591dhG0i2cKnPGGTAoMsNo5WPrsnxVFSf1P1fGoSdsZZnhjw7QZ2iNOtV4R4hi7rmb80Qooy0MU/r06+uvCjupFtbDc5TuLEuWu+ou7zdMPFKtUWQHIf8GBF1sBnEp62NXgrMcDubXX77t0IQklJuo9tYlOmEgiYB3kNsp9cIFWjig==
+ b=fsdg4KUPbWpLJQ0YU0OhVlaRBg1kQH7HVtSSzyCu+Qqfxb+W51/ceYSR0SPadm4BSpcPVbsqAAE181cVDu6VvHtrPN1xbzSu+XroaKLrW2SMdGxjDFhQuAMR4Ea6Oe2rGZEXvQibLJzk1aL1ctOnV4XTcVulAI0JoPOUg64AGP/y2gLavUy1gaXp+YijZM8ThG1uK1CSFe1nau7t5IbqBKyzIYcTc8NzUSfushz7LF4h3jBb6UFDgMOTz0PLrVOUx1NpUJEPvKLd3aJMZXJ87mo9/1UcVx+bChEcJ7l52wD2nU8Lk02lMxha2mHA39rPsDUo/J/prd58vF0k53hY+A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wxN7nDy6tJZnbK3PjRnVd1h6xDMixzZSHlIYLZJckXo=;
- b=H2ickL7UJfYFYUCK7Z+CLpa2rlzzb8eP5WL6MLUw2JBh1QBlFNPcwITcIuqGDMyMvWutVZrl+dCZa/9ZlNGQyc6jnhZIWLGbjM7rC6SQbocJ3GmIMcOJuc9wjLuyKRHAV31mpHymHHHpXSKy1BAxJz+BWed3Coy0URwz1GQFlDgfMJNJdDvGitYy3/vnTPDEEySHtPMi0ShcWfVCjo0R6IBYfoDlfNgn7NGyaBq+b0y0L7akE9ZsE2ILS/WUeWts+qZsDOhG7QMtE8+pU298G3eLyTd+TW7j/PQcN8a6j2t7z1fT4nbSHul7EwcXuGz6Ro6JJG2QlHty797GPRr8ug==
+ bh=QWMyP96KTLLg4ZSJ/mYsX69PIzF2bgURpvD9dte1CQU=;
+ b=n/Jm6vq2Z4oLSbTi56dguwI/DrT8yv11EHDho0tVuyDGY16gxbRq16alydbXIWhCcfSsIpf4drwiiaUUqHKRHraKx0p3jzX0hecHVZrQTH74Wsnm8y35jITHrwagchTz9BXR17fmJgFU67WRV6Sqb+uNOpdY1gvjz/QB9jm5c4O/etxDO2gsSztlocrjGtSPEE2NrQlwe7y48ynozN41CRRuOT68owUnY4aDmq4tktnVg7DQmLPDvhTLyXr6ys0zn3aosPsb7THdQzzzDbiLnDeSRzoytzivSlQa8zyObYU/Y2SRvy4Z9n0/zVcW1q2r85gKfaDTsXGPb/icoPqKlA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wxN7nDy6tJZnbK3PjRnVd1h6xDMixzZSHlIYLZJckXo=;
- b=dtJ/KXCabQEmkWv+IJV2A+YOmUh8eFrPPctmfA0N3e70eILZUf4hZAP9xN1gIgw4VhdzKYRf6iNTFN8+0Vlv3+5ZnTcWMDCnjgr9Am4ZG3hczmb7fGCSBP9HCL/91p+lIO4oAPHQyfNdYO/3h6OoWRzkJXqAxzoFbChmW1Qvroc=
+ bh=QWMyP96KTLLg4ZSJ/mYsX69PIzF2bgURpvD9dte1CQU=;
+ b=dZNyde7vMmKGRmmUPynScaMIYBWpAh/LhqU24qKk9KwAEWR3LBNSbD4aOw0GxqEEaL0y8MSaG4MOlDN9UTdnIdKHd3fItNskl+TMclT449cgWlFFieo1uj58WPQBIaxX38LYtr9m0bmNuypLXOIxXWb67Crs0ZrkQj8+SYPhUzY=
 Authentication-Results: linuxfoundation.org; dkim=none (message not signed)
  header.d=none;linuxfoundation.org; dmarc=none action=none
  header.from=nxp.com;
@@ -33,11 +33,11 @@ Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
  by VE1PR04MB6653.eurprd04.prod.outlook.com (2603:10a6:803:122::28) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3700.27; Tue, 29 Dec
- 2020 11:47:09 +0000
+ 2020 11:47:14 +0000
 Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
  ([fe80::b035:d158:c99c:57c6]) by VE1PR04MB6528.eurprd04.prod.outlook.com
  ([fe80::b035:d158:c99c:57c6%7]) with mapi id 15.20.3700.031; Tue, 29 Dec 2020
- 11:47:09 +0000
+ 11:47:14 +0000
 From:   Li Jun <jun.li@nxp.com>
 To:     gregkh@linuxfoundation.org, shawnguo@kernel.org, robh+dt@kernel.org
 Cc:     balbi@kernel.org, krzk@kernel.org, s.hauer@pengutronix.de,
@@ -45,9 +45,9 @@ Cc:     balbi@kernel.org, krzk@kernel.org, s.hauer@pengutronix.de,
         linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         devicetree@vger.kernel.org, l.stach@pengutronix.de, jun.li@nxp.com,
         aisheng.dong@nxp.com, peng.fan@nxp.com, peter.chen@nxp.com
-Subject: [PATCH RESEND v5 3/4] arm64: dtsi: imx8mp: add usb nodes
-Date:   Tue, 29 Dec 2020 19:37:45 +0800
-Message-Id: <1609241866-9508-4-git-send-email-jun.li@nxp.com>
+Subject: [PATCH RESEND v5 4/4] arm64: dts: imx8mp-evk: enable usb1 as host mode
+Date:   Tue, 29 Dec 2020 19:37:46 +0800
+Message-Id: <1609241866-9508-5-git-send-email-jun.li@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1609241866-9508-1-git-send-email-jun.li@nxp.com>
 References: <1609241866-9508-1-git-send-email-jun.li@nxp.com>
@@ -58,154 +58,98 @@ X-ClientProxiedBy: SG2PR06CA0173.apcprd06.prod.outlook.com
  (2603:10a6:803:127::18)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (119.31.174.66) by SG2PR06CA0173.apcprd06.prod.outlook.com (2603:1096:1:1e::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3700.27 via Frontend Transport; Tue, 29 Dec 2020 11:47:04 +0000
+Received: from localhost.localdomain (119.31.174.66) by SG2PR06CA0173.apcprd06.prod.outlook.com (2603:1096:1:1e::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3700.27 via Frontend Transport; Tue, 29 Dec 2020 11:47:09 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: fd7dc1ae-ae95-4358-ad1b-08d8abef7975
+X-MS-Office365-Filtering-Correlation-Id: 4cc6a4e7-ffe5-4c40-3d62-08d8abef7c7a
 X-MS-TrafficTypeDiagnostic: VE1PR04MB6653:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VE1PR04MB66533788386E321764E08AE589D80@VE1PR04MB6653.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:849;
+X-Microsoft-Antispam-PRVS: <VE1PR04MB6653880E280E474B328D6B5A89D80@VE1PR04MB6653.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:200;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 63YvHa2SRDghLkMJoRgPTW7TdpY9IBpQYZ9FqzrY/vNrB39CX2qVOyfEEm0thC7XZshrE6F776UzunU2iAYj2ggVSXJc10wyvss9HxJmiZWnv5a0t9fi9H0iSLnTk6+mu1VkS4aKV8uhNfUqHhoTOBj0tu8HFtiDCZtsG0v3cUMRPTYCHGKT8QV97A/+wbiAC1EqcfgXZ45DijLj/fx1qTHICnZ28gIFUsHR7ZWkNcsBNJvIF361KF/j6jr19rlnkq0q1ZUPJLjqfkiSVwe5hNmr2xanPRTdsEiYWujGmfYb8HZmZtjTKY8mI8hrVFSAVnmILT4trFR094VcUwleWb7qj7n4csUb0E+fHaHKbUcGYujvqw3wgcmuaM1JexQdQwMkqGKHZ2+4CLPkPObU0RFlvwoGqpEAOOKczMGXbf3jT+J3CiKIYG1wpMLd8PTFUPI7vSdmchc+7/W3EnO392niAMP8vpKFwl7A9v9iog0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(6506007)(66476007)(4326008)(83380400001)(26005)(8676002)(66946007)(956004)(2616005)(2906002)(69590400010)(5660300002)(66556008)(16526019)(6512007)(498600001)(6666004)(8936002)(7416002)(52116002)(186003)(86362001)(36756003)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?zAEkT38sA5Aj3Xl9NMOEtL7VVwUu5Ogug0j5Fr8G3QRJ2wUV6/00FSqh6igQ?=
- =?us-ascii?Q?+6vnvzXQO+zVdcSsBLp1JmOccqi511G37TKsoTIGbsU0oxLoh6cyVz1+cIGj?=
- =?us-ascii?Q?GqPJzzp8Fgh4VcLzK+EX29dNhiObWkNHrCsPq0q8KSgEgSYj9JpN0nYgPicM?=
- =?us-ascii?Q?NLg+uZOV4MaSBYugYHAd1DO4iNLfRbJpoZPY3631agbf3anyJ1kJwvW7GiCi?=
- =?us-ascii?Q?cRMj2lUeRLQJ3sL0IwMx/IeFjfC+tvsKyMOTgbHSNukv/cuv38lXpfWWowP3?=
- =?us-ascii?Q?3D7H5RCVcU/IRSgUcB/fus+qcNhY6T0K1bLxR6RPkkrIIAd0S9nc4GIGyjxg?=
- =?us-ascii?Q?nRChxY0CXNXs2kEwbKb26EksSDbMNrUr7mdq/4VSvWpK5iuZMU4OFZ1yIQU7?=
- =?us-ascii?Q?aE8PAWi7ORV1+HGrrpw2XA/weJmbgmolwSrgaUXdI/i7JgCApzyNeKZeVhv6?=
- =?us-ascii?Q?1ghjxDmPj/fred9eF+oQ1NhzG2oxx1B1fh/0uezmJmhn+w9giTKraMHgsht6?=
- =?us-ascii?Q?ByHQmPdiq9v5IgkoUOzXHWy3M2AxxqZpYUen5UwRn04KqVQpFYqfN1km6StQ?=
- =?us-ascii?Q?Xu4iWBqgRwKcFK6FwZhNajKs9ZUwup678653MC8+cCqLXYiAuNytSLjb/mbV?=
- =?us-ascii?Q?jazeMrVEBOrt262GYhE2s1frUACxL+vNCY1pKRVCEYJ6T7AgnIhFyuerktNa?=
- =?us-ascii?Q?4iRkeSW5fGFO5ucwJFCpS39cjVHdVcfQc8DtfrPtcV2dbYyCfFu27mwiya6I?=
- =?us-ascii?Q?0nT0JLaMhHJbifJp/LLHA+k49ptbc32wCQs0k+qpVvajniw++ArQAbsxYiif?=
- =?us-ascii?Q?jtdfEzVgX7zz9H/NlmGPhyHM0u9bUunsOI/9qu23JtnbVjhd+DxC3+5fnYCb?=
- =?us-ascii?Q?brSesfGLQ2tO380S5Jp7WmwOUcSBvgvRVoJqDGm34xBHhSyvzkPoYkh9FVFl?=
- =?us-ascii?Q?PSTdrYE3d7dyLzSYJsefOiGxzVd8m9ZBUi6n4xafz3AMGXKqUJNyiFL1SsCc?=
- =?us-ascii?Q?M+yM?=
+X-Microsoft-Antispam-Message-Info: PcgzH8JZhW6uKRPd6RCpbw5tR6f5153IiflhGQHN+eMxrV0BP1GYMMSUjQBehx0aqxKkhJGDisYpCelInpxcTlg7VOalMyaC8bO4rI2aSBf/sCj2xG6B1DuwU+oMk1cdqeRw6cAXJihISqPp4fdfAvs1FVRrLX6QpdmCgas/tX99rBitkKnA+TcQHxw5og5VbZ+5bUMD37+YxGYPuIce0jG1g64hh41Zl5z1MSjGJFDNOkyewAMVUEgBK+Tj36Ztq0FBgWnxI7ntsKVwxnfAaXmzEBuCPnMG/6XS1jub856O14ZIpV9T8dB78AytpCw5LTpbWJ9vaCmwncFFvIqy16gaIUFZgMC6dqjJtmxFtSfCDO+CEkPpf9TKiPx9T/Echb8sXUhUJOGRwc8XfcG+Bpf7hwdiKjrpBKv9c3rVO8lLm67yxoHqVikry63VG4wXfSS4asdO90ojUYSnsFgmPI2Mvi6l2GG9jkV/1lFItmwfqLSPemfh8c9uDOBv1m3sjdDpaZisncfwW1Old+w85w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(6506007)(66476007)(4326008)(83380400001)(26005)(8676002)(66946007)(956004)(2616005)(2906002)(69590400010)(5660300002)(66556008)(16526019)(6512007)(498600001)(6666004)(8936002)(7416002)(52116002)(186003)(86362001)(36756003)(32563001)(414714003)(473944003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?rm1L067JCIr/sD23Y/ST9k3/vqxALoexKIVMWOckkcN+0cCkjj+ItcNu/DeZ?=
+ =?us-ascii?Q?Y2rwnJpCH8nijMJW0EfXTjYAQseBtY+D+18o7smBB0xQXt+S29GhyaUJRb85?=
+ =?us-ascii?Q?yRK8wCAes+F0XuatkTyj04Kb4yRs4FaxCUmU161YC7JywigG0DrUtqNQRLdy?=
+ =?us-ascii?Q?jtwm/6llOky6PlAq8s4f8m3hGPCyaAGWfMBf2W3tmtCGJIG/Ilj/bG9PwSOJ?=
+ =?us-ascii?Q?cALtj85kcJux5HrhkUf0zdVtb1SjGCT9v3l3H1dzk2miVfGuNTHdJRSksfvO?=
+ =?us-ascii?Q?XRInXoA+3mzks484TZ4JFDrXAQ0ldWNRA6S9eaJfgTvVOiW7MP4/gyOhBDEq?=
+ =?us-ascii?Q?0vokj8mjaRqwkckHkEF+tU07qOgCjQ7cok2kimem3Y8mtF9vVxJEShQ1q+6i?=
+ =?us-ascii?Q?8NExJmLiaaSGSwPhER3PY8ieltPXb7mEjzCpnshhvTvFQUILNTNCkDjdN8oz?=
+ =?us-ascii?Q?2vGeHsAMsf2NyyR1+5m+hsQoO8a3ZkmP7vkGEHbnDWogJFhQvWPffagkkHnY?=
+ =?us-ascii?Q?ToWwawDBKriCgB939U3e4ckXjpChF4C3AF7Y38gE0lLfVKCxN+SxVPDfy+Hu?=
+ =?us-ascii?Q?2omWWOFy2+SSE4t9DwFzJRqm9723Aj5pnjkB/znHLwZtIxgv2dNkNfSulHNp?=
+ =?us-ascii?Q?Lg+A1r37SruP3QzpNPfT2zEm5pICBa+7urakT/f17Td6+3VSVl458WaFxyLT?=
+ =?us-ascii?Q?ATuR8bhfmup4/vi6hGAaTwqP4M6mkBkH02o+wQiB/+03QALTt+S0x6J13GoY?=
+ =?us-ascii?Q?nhdNQOzxje0rnFozKiIWYDsGkrmyInV7cstCOTBklWZDtXzQVTGMflYRyC5L?=
+ =?us-ascii?Q?x09yMZGbBhH/qdOK4d7C068lJ2Kqd/3DHh/q1DUQpYiSjNSeYqqvo9cnUgq1?=
+ =?us-ascii?Q?FAFpdHCICrEA7IuWOXF0VtVBXHg/0AutjW+g9gkbpZ0o7yPN6uaLwrr6QAy7?=
+ =?us-ascii?Q?PtTmFPYPzpgug6VxQQ50B1PmjxA8R4KieJrZcvbs+1YckpeTe2rrKPds+oTG?=
+ =?us-ascii?Q?ldfA?=
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6528.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Dec 2020 11:47:09.4454
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Dec 2020 11:47:14.5825
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd7dc1ae-ae95-4358-ad1b-08d8abef7975
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4cc6a4e7-ffe5-4c40-3d62-08d8abef7c7a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HJWm4iPO14RE8GCGVsZQMUtNm6+D+g3jfredli9U1zyVGy2V8nJV8iQhwVWRQqza
+X-MS-Exchange-CrossTenant-UserPrincipalName: vnajqx15cpyQru+TriUa4lH9fDe8GdP37bZGn+bVxx2RxZLD4K6ML3WpyN/tQLG5
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6653
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-imx8mp integrates 2 identical dwc3 based USB3 controllers and
-Synopsys phys, each instance has additional wakeup logic to
-support low power mode, so the glue layer need a node with dwc3
-core sub node.
+Enable usb host port with type-A connector on imx8mp-evk board.
 
 Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 Signed-off-by: Li Jun <jun.li@nxp.com>
 ---
- arch/arm64/boot/dts/freescale/imx8mp.dtsi | 82 +++++++++++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
+ arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-index ecccfbb..22db53f 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-@@ -788,5 +788,87 @@
- 			reg = <0x3d800000 0x400000>;
- 			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
- 		};
-+
-+		usb3_phy0: usb-phy@381f0040 {
-+			compatible = "fsl,imx8mp-usb-phy";
-+			reg = <0x381f0040 0x40>;
-+			clocks = <&clk IMX8MP_CLK_USB_PHY_ROOT>;
-+			clock-names = "phy";
-+			assigned-clocks = <&clk IMX8MP_CLK_USB_PHY_REF>;
-+			assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
-+			#phy-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		usb3_0: usb@32f10100 {
-+			compatible = "fsl,imx8mp-dwc3";
-+			reg = <0x32f10100 0x8>;
-+			clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
-+				 <&clk IMX8MP_CLK_USB_ROOT>;
-+			clock-names = "hsio", "suspend";
-+			interrupts = <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			dma-ranges = <0x40000000 0x40000000 0xc0000000>;
-+			ranges;
-+			status = "disabled";
-+
-+			usb_dwc3_0: dwc3@38100000 {
-+				compatible = "snps,dwc3";
-+				reg = <0x38100000 0x10000>;
-+				clocks = <&clk IMX8MP_CLK_HSIO_AXI>,
-+					 <&clk IMX8MP_CLK_USB_CORE_REF>,
-+					 <&clk IMX8MP_CLK_USB_ROOT>;
-+				clock-names = "bus_early", "ref", "suspend";
-+				assigned-clocks = <&clk IMX8MP_CLK_HSIO_AXI>;
-+				assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_500M>;
-+				assigned-clock-rates = <500000000>;
-+				interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
-+				phys = <&usb3_phy0>, <&usb3_phy0>;
-+				phy-names = "usb2-phy", "usb3-phy";
-+				snps,dis-u2-freeclk-exists-quirk;
-+			};
-+
-+		};
-+
-+		usb3_phy1: usb-phy@382f0040 {
-+			compatible = "fsl,imx8mp-usb-phy";
-+			reg = <0x382f0040 0x40>;
-+			clocks = <&clk IMX8MP_CLK_USB_PHY_ROOT>;
-+			clock-names = "phy";
-+			assigned-clocks = <&clk IMX8MP_CLK_USB_PHY_REF>;
-+			assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
-+			#phy-cells = <0>;
-+		};
-+
-+		usb3_1: usb@32f10108 {
-+			compatible = "fsl,imx8mp-dwc3";
-+			reg = <0x32f10108 0x8>;
-+			clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
-+				 <&clk IMX8MP_CLK_USB_ROOT>;
-+			clock-names = "hsio", "suspend";
-+			interrupts = <GIC_SPI 149 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			dma-ranges = <0x40000000 0x40000000 0xc0000000>;
-+			ranges;
-+			status = "disabled";
-+
-+			usb_dwc3_1: dwc3@38200000 {
-+				compatible = "snps,dwc3";
-+				reg = <0x38200000 0x10000>;
-+				clocks = <&clk IMX8MP_CLK_HSIO_AXI>,
-+					 <&clk IMX8MP_CLK_USB_CORE_REF>,
-+					 <&clk IMX8MP_CLK_USB_ROOT>;
-+				clock-names = "bus_early", "ref", "suspend";
-+				assigned-clocks = <&clk IMX8MP_CLK_HSIO_AXI>;
-+				assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_500M>;
-+				assigned-clock-rates = <500000000>;
-+				interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
-+				phys = <&usb3_phy1>, <&usb3_phy1>;
-+				phy-names = "usb2-phy", "usb3-phy";
-+				snps,dis-u2-freeclk-exists-quirk;
-+			};
-+		};
- 	};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+index b10dce8..7db4273 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+@@ -127,6 +127,21 @@
+ 	status = "okay";
  };
+ 
++&usb3_phy1 {
++	status = "okay";
++};
++
++&usb3_1 {
++	status = "okay";
++};
++
++&usb_dwc3_1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usb1_vbus>;
++	dr_mode = "host";
++	status = "okay";
++};
++
+ &usdhc2 {
+ 	assigned-clocks = <&clk IMX8MP_CLK_USDHC2>;
+ 	assigned-clock-rates = <400000000>;
+@@ -232,6 +247,12 @@
+ 		>;
+ 	};
+ 
++	pinctrl_usb1_vbus: usb1grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_GPIO1_IO14__USB2_OTG_PWR	0x19
++		>;
++	};
++
+ 	pinctrl_usdhc2: usdhc2grp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK	0x190
 -- 
 2.7.4
 
