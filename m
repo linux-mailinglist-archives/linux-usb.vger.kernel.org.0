@@ -2,203 +2,205 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 289A12E6D78
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 04:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E28452E6E1C
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 06:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727739AbgL2DD7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Dec 2020 22:03:59 -0500
-Received: from mga06.intel.com ([134.134.136.31]:21841 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727630AbgL2DD5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Dec 2020 22:03:57 -0500
-IronPort-SDR: KuUXjm0AQ7UbAkQ5DAOWfBzatBBM2C/n4bUmqnRCkI089OQ02YUJcxBQcoBDNCUSO1AoEq4O1i
- R4CQSM4GIsUg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9848"; a="238003718"
-X-IronPort-AV: E=Sophos;i="5.78,456,1599548400"; 
-   d="scan'208";a="238003718"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2020 19:03:15 -0800
-IronPort-SDR: VOFhWCFmMBL1nU3juGCdATwchmpPIm82YEyPfZBvEqDTXTYfn1YVLI3kbCkj+9QCTUxK+5PUZB
- yMvxocMJhQLg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,456,1599548400"; 
-   d="scan'208";a="392958303"
-Received: from lkp-server02.sh.intel.com (HELO 4242b19f17ef) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Dec 2020 19:03:14 -0800
-Received: from kbuild by 4242b19f17ef with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1ku5I0-0003Hj-Un; Tue, 29 Dec 2020 03:03:12 +0000
-Date:   Tue, 29 Dec 2020 11:03:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 32510cf5e554e8f2cecafea8b8cc11daa4afb9e6
-Message-ID: <5fea9c66.wjsJZ7kFXoZjCr/y%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726247AbgL2FRg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Dec 2020 00:17:36 -0500
+Received: from mail-am6eur05on2056.outbound.protection.outlook.com ([40.107.22.56]:33568
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725866AbgL2FRf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 29 Dec 2020 00:17:35 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fbx35AzN8uQKLWX6tGjcV7Kqfx3qVRtoJqKCkOvue2oGuDiGZ7oUZPAWIneNXIKecgfgGHPkDenRS7vYUho2UAkzLARWYefE1zTnT4NaAtFFzvCPDnRxmoAMiQE1YvRxeNEY4/y5DDAqUYNVc4XO8GVCRH3CXwMlAA3fmXfcbpO5KR4a/i2jUdWSfBwTPAo7P/XQc6PElcfVKq30O/ccFa0CVDqaYoPgFi9vx5FLCNE6dHq+osAuxr1nQJSlpTBIgPt5W//7f+kKDDsdsu0V9VgtAn4lNDXBfeVD+FqCFVdTy661kn1noX6dA2M3U4RYywyT8kcXAtWiMsflou3LzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NPnjpOjxLfbAFftLt1zzfyigcfZkvTfHF+x2cZAJCHA=;
+ b=WCIc34HYoGldOaKyBUJqHPWrtmkJ4ZSgnQjFfMU9L9NdsZv4WfmfKsGrRPfHAhlfFEEexrNC6CyjCswgHZoepw/6GNeWTKl+Ar+1186NHDQ0fvZMB0he+kBtItrhhhExFEjXjuKCbejw4Nkgs3g7S1thCnarVj/QIXoeEs6Z5DVtKxE6jYV5gsvRQrGaoSNhEajDv9KhnkNYrK98fknv3iKP7/i5d6oZVeOsuG3qEZOux1BZRDD9Vl2etL9Hp0qbFPpR+H00xXLchEs7nV4K6eVPk940uNp7CI8YbbUsEuVoIjYvr5paib8vaLEfuuPC2kj/HXDBtNgwVZI9pXwCuw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NPnjpOjxLfbAFftLt1zzfyigcfZkvTfHF+x2cZAJCHA=;
+ b=HBBCT/NiCQygCDogGOToJ8ou9kSRmzrjkPEB33FMHDwDlDwzcQ6tDhFz8vhWQE9eTQAEmd1RlMgWJKj+OBk0+OP+Ul7tzZ00SQ9oLSIOGQUVIAWUV6PQrt5dhAINDDt7Ko3kxTLENVWifaGTcU9FLvXxRYFN15DUmv5SKLjhx7w=
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
+ by DB7PR04MB5244.eurprd04.prod.outlook.com (2603:10a6:10:21::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3700.27; Tue, 29 Dec
+ 2020 05:16:45 +0000
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::89de:bd7c:7245:f139]) by DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::89de:bd7c:7245:f139%5]) with mapi id 15.20.3700.031; Tue, 29 Dec 2020
+ 05:16:45 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+CC:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Felipe Balbi <balbi@kernel.org>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Ion Agorria <ion@agorria.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 0/9] Support Runtime PM and host mode by Tegra ChipIdea
+ USB driver
+Thread-Topic: [PATCH v3 0/9] Support Runtime PM and host mode by Tegra
+ ChipIdea USB driver
+Thread-Index: AQHW1TbraK9TsKqDbEm74yxl8uIQhqoNmQiA
+Date:   Tue, 29 Dec 2020 05:16:45 +0000
+Message-ID: <20201229051615.GA5823@b29397-desktop>
+References: <20201218120246.7759-1-digetx@gmail.com>
+In-Reply-To: <20201218120246.7759-1-digetx@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mutt/1.9.4 (2018-02-28)
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: e968d650-7ba8-4e27-e44b-08d8abb8ef78
+x-ms-traffictypediagnostic: DB7PR04MB5244:
+x-microsoft-antispam-prvs: <DB7PR04MB52448D418B534F73B638AB0E8BD80@DB7PR04MB5244.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4502;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: LE0GnTnwfFqjzJCuzvH1Z+mHrNUN1QOkp12yR/fa2l1rAEZ+4jL7Fxh6UKDStj4jAEfBEE1q7mCNlKKiV7wtjVHDIwOHlHy9aogCy/zKLmGzaPyLAk5aX6K9zEmUbU8uW7+UAp6twV9nUv8ZN0Ic+tApjSWPS83K4bdlhbLSXFlepp8Bi3v8ViMvp7x/MwDe7bNMwZRgeqDfoo+76M2i0NssRJlqXMtL7yYWTGxrHrqVoxDNBDjY52CSOTyWwVtHvSSAc8BnqZ6mizSyh4B9kykZr/J0RuEN9Cq0+mOoZm796yQrPO+ca32IKfdP3GCJtTSguZhbj4gFG46bw+mJ5fExOLdjHZ+Wl1tAdp//0E7jty6q2bryGDegqjp6zvIedM4f6cci7tb7+vOxWjuWnQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(366004)(346002)(376002)(136003)(39860400002)(396003)(5660300002)(8936002)(6506007)(9686003)(186003)(6916009)(66476007)(478600001)(1076003)(66446008)(66556008)(66946007)(91956017)(26005)(4326008)(33656002)(64756008)(76116006)(8676002)(7416002)(2906002)(83380400001)(86362001)(6512007)(54906003)(316002)(33716001)(53546011)(71200400001)(44832011)(6486002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?BvlQ/2WylqvWVCerGj69DCesVdHtBUO/HWaLjOrw38vJAZOlj/TmY+Hlf69Z?=
+ =?us-ascii?Q?OHJxk6Sne3JweITK63lSahv6CqRh+1VWVYA5SyOFHlnCjgk1HqVPw5mSKqE7?=
+ =?us-ascii?Q?8kqoqWDAXrjSPHRMPWK+wH9FemvkONig8JvjMx/dUeexDb9EVRsJLQ5Ihm7g?=
+ =?us-ascii?Q?MNg6iHS1MGtch3oTBvAUiWxe+MhEnOsedVUXdYmQUmgdMyMcM/NAuOyNXGJJ?=
+ =?us-ascii?Q?w3lquoQuM3hMPGgcnrDqOuzrH9sxmURL3JTAkIiumcSKCnVbAeGB6PqqurCD?=
+ =?us-ascii?Q?28A26dlWvwc29//c9OvDVWNyN87jOIhvpF+zJw6e39BdG7KQbId5boWGNSc4?=
+ =?us-ascii?Q?jLyaVoZraOzeRdTlUel/gjppf4ZnM4SE5wDh2ocNpC1lR2zyoVV7XLJ3Txnz?=
+ =?us-ascii?Q?JRMMLFpKd1sw6Pjow/5xHS4Ch3J4WENUkh3ZWeUGnyHMrWsYQeOfCZg3vKur?=
+ =?us-ascii?Q?5ZmBDRahQbcZGjR+bPeUUYQHSKbGY0Ak41DEJhXehKhXZLcFVuR6TObSQwCB?=
+ =?us-ascii?Q?4ewW7NB4IT6F70xWWNt5gp5iXXU5Hk5FCB9GS/bwz8CVKWWVCstr5EAzJf81?=
+ =?us-ascii?Q?b1xuc/+Anb+nuOw8Z7F5JLODxtEcGrIa539ZnfAALfIjqNZJgrnk0Xnnydzh?=
+ =?us-ascii?Q?V4u8oueNSS+9fBFxZrtJ/sAvsXJVz8fCErd407sX3Mu2S6bx8kRR1nO4RhPE?=
+ =?us-ascii?Q?MJdH+KQ9lNQJVIHC5dtJOvsGBeWy+wpNCKjAvVukXTTKaVNV/eGZ9Cseg2mA?=
+ =?us-ascii?Q?0LeeCnqnF6Gl/vui1gKg+mx+puUYxKDuGhSHMqdSosljEoCoRYtziSG4hcUK?=
+ =?us-ascii?Q?fH3OZBre+cuIfF54AryDe8yJnGRfZzTGOu2SGPDfdGrva9+wIDpVXXgNOVNw?=
+ =?us-ascii?Q?KAZAh8CrLDngeovK9l4moND9++ckEDSmYqW63TbEz2wbwdggKHgZfCuMJ7ww?=
+ =?us-ascii?Q?mQyUCeoZrrca2EyaQLg0veaZAJfMCID6PVHd9BpJ31YFus00ly6yYc/yoXjv?=
+ =?us-ascii?Q?edKM?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <32935ABF9418A34DB48E6E9CAB9C79BF@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e968d650-7ba8-4e27-e44b-08d8abb8ef78
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Dec 2020 05:16:45.1431
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: AFXm6bTI8vVUu1CNyFy7RV/gWnwSJ/eong1BdZm0ISTp35naSlCrYizro+950G9f6u3JnZxlgifJMPNlm2ElXw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5244
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: 32510cf5e554e8f2cecafea8b8cc11daa4afb9e6  usb: gadget: u_audio: factorize ssize to alsa fmt conversion
+On 20-12-18 15:02:37, Dmitry Osipenko wrote:
+> This series implements Runtime PM support for the Tegra ChipIdea USB driv=
+er.
+> It also squashes the older ehci-tegra driver into the ChipIdea driver, he=
+nce
+> the RPM is supported by both UDC and host controllers, secondly this open=
+s
+> opportunity for implementing OTG support in the future.
+>=20
+> Patchset was tested on various Tegra20, Tegra30 and Tegra124 devices.
+> Thanks to Peter Geis, Matt Merhar, Nicolas Chauvet and Ion Agorria for
+> helping with the extensive and productive testing!
+>=20
+> Changelog:
+>=20
+> v3: - Replaced "goto" with if-statements as was suggested by Thierry Redi=
+ng.
+>=20
+>     - Improved wording of the deprecated Kconfig entry as was suggested
+>       by Alan Stern.
+>=20
+>     - Added ACKs from Thierry Reding and Alan Stern.
+>=20
+>     - Added a new minor patch "Specify TX FIFO threshold in UDC SoC info"
+>       just for completeness, since we can now switch OTG to host mode in
+>       the ChipIdea driver. Although, OTG support remains a work-in-progre=
+ss
+>       for now.
+>=20
+> v2: - Improved comments in the code as it was suggested by Peter Chen and
+>       Sergei Shtylyov for v1.
+>=20
+>     - Replaced mdelay() with fsleep() and made ci->hdc to reset to NULL i=
+n
+>       a error code path, like it was suggested by Peter Chen.
+>=20
+>     - Redirected deprecated USB_EHCI_TEGRA Kconfig entry to USB_CHIPIDEA_=
+TEGRA
+>       as was suggested by Alan Stern.
+>=20
+>     - Improved commit message and added ACK from Thierry Reding to the pa=
+tch
+>       that removes MODULE_ALIAS.
+>=20
+>     - Fixed UDC PHY waking up on ASUS TF201 tablet device by utilizing
+>       additional VBUS sensor. This was reported and tested by Ion Agorria=
+.
+>=20
+>     - Added t-b from Ion Agorria.
+>=20
+> Dmitry Osipenko (8):
+>   usb: phy: tegra: Add delay after power up
+>   usb: phy: tegra: Support waking up from a low power mode
+>   usb: chipidea: tegra: Remove MODULE_ALIAS
+>   usb: chipidea: tegra: Rename UDC to USB
+>   usb: chipidea: tegra: Support runtime PM
+>   usb: chipidea: tegra: Specify TX FIFO threshold in UDC SoC info
+>   usb: host: ehci-tegra: Remove the driver
+>   ARM: tegra_defconfig: Enable USB_CHIPIDEA_HOST and remove
+>     USB_EHCI_TEGRA
+>=20
+> Peter Geis (1):
+>   usb: chipidea: tegra: Support host mode
 
-elapsed time: 722m
+Chipidea related (patch 3-7) are applied, thanks.
 
-configs tested: 141
-configs skipped: 2
+Peter
+>=20
+>  arch/arm/configs/tegra_defconfig     |   3 +-
+>  drivers/usb/chipidea/Kconfig         |   3 +-
+>  drivers/usb/chipidea/ci_hdrc_tegra.c | 344 ++++++++++++---
+>  drivers/usb/chipidea/core.c          |  10 +-
+>  drivers/usb/chipidea/host.c          | 104 ++++-
+>  drivers/usb/host/Kconfig             |  10 +-
+>  drivers/usb/host/Makefile            |   1 -
+>  drivers/usb/host/ehci-tegra.c        | 604 ---------------------------
+>  drivers/usb/phy/phy-tegra-usb.c      | 103 ++++-
+>  include/linux/usb/chipidea.h         |   6 +
+>  include/linux/usb/tegra_usb_phy.h    |   2 +
+>  11 files changed, 518 insertions(+), 672 deletions(-)
+>  delete mode 100644 drivers/usb/host/ehci-tegra.c
+>=20
+> --=20
+> 2.29.2
+>=20
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+--=20
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-riscv                    nommu_k210_defconfig
-powerpc                     rainier_defconfig
-powerpc                        warp_defconfig
-ia64                            zx1_defconfig
-arm                            mps2_defconfig
-powerpc                     tqm8541_defconfig
-sh                           se7722_defconfig
-sh                 kfr2r09-romimage_defconfig
-sh                         ap325rxa_defconfig
-arm                       imx_v6_v7_defconfig
-powerpc                     powernv_defconfig
-arm                     am200epdkit_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-sh                           se7705_defconfig
-sh                      rts7751r2d1_defconfig
-arm                         axm55xx_defconfig
-arm                         socfpga_defconfig
-sparc                               defconfig
-mips                        workpad_defconfig
-nios2                            alldefconfig
-um                           x86_64_defconfig
-sh                           se7724_defconfig
-powerpc                 mpc8313_rdb_defconfig
-mips                         tb0226_defconfig
-h8300                       h8s-sim_defconfig
-sh                               j2_defconfig
-csky                                defconfig
-sparc                       sparc32_defconfig
-powerpc                      pmac32_defconfig
-arm                         at91_dt_defconfig
-sh                           se7751_defconfig
-arm                      footbridge_defconfig
-sh                     magicpanelr2_defconfig
-powerpc                    adder875_defconfig
-arm                           tegra_defconfig
-mips                            gpr_defconfig
-arm                           sunxi_defconfig
-sh                          kfr2r09_defconfig
-powerpc                    socrates_defconfig
-sh                     sh7710voipgw_defconfig
-powerpc                     mpc5200_defconfig
-mips                           xway_defconfig
-powerpc                mpc7448_hpc2_defconfig
-mips                            e55_defconfig
-arm                           h5000_defconfig
-sh                        dreamcast_defconfig
-powerpc                      makalu_defconfig
-powerpc                       ebony_defconfig
-mips                        jmr3927_defconfig
-arm                   milbeaut_m10v_defconfig
-mips                           ci20_defconfig
-powerpc                     kilauea_defconfig
-mips                malta_kvm_guest_defconfig
-arc                     haps_hs_smp_defconfig
-mips                      fuloong2e_defconfig
-mips                  maltasmvp_eva_defconfig
-arm                      jornada720_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a005-20201228
-i386                 randconfig-a002-20201228
-i386                 randconfig-a004-20201228
-i386                 randconfig-a006-20201228
-i386                 randconfig-a003-20201228
-i386                 randconfig-a001-20201228
-i386                 randconfig-a002-20201227
-i386                 randconfig-a005-20201227
-i386                 randconfig-a006-20201227
-i386                 randconfig-a004-20201227
-i386                 randconfig-a003-20201227
-i386                 randconfig-a001-20201227
-x86_64               randconfig-a014-20201228
-x86_64               randconfig-a015-20201228
-x86_64               randconfig-a016-20201228
-x86_64               randconfig-a012-20201228
-x86_64               randconfig-a011-20201228
-x86_64               randconfig-a013-20201228
-i386                 randconfig-a011-20201227
-i386                 randconfig-a016-20201227
-i386                 randconfig-a012-20201227
-i386                 randconfig-a014-20201227
-i386                 randconfig-a015-20201227
-i386                 randconfig-a013-20201227
-i386                 randconfig-a014-20201228
-i386                 randconfig-a012-20201228
-i386                 randconfig-a016-20201228
-i386                 randconfig-a011-20201228
-i386                 randconfig-a015-20201228
-i386                 randconfig-a013-20201228
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a001-20201228
-x86_64               randconfig-a006-20201228
-x86_64               randconfig-a002-20201228
-x86_64               randconfig-a004-20201228
-x86_64               randconfig-a003-20201228
-x86_64               randconfig-a005-20201228
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Peter Chen=
