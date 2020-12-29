@@ -2,205 +2,361 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E28452E6E1C
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 06:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FFF82E6E7B
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 07:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726247AbgL2FRg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Dec 2020 00:17:36 -0500
-Received: from mail-am6eur05on2056.outbound.protection.outlook.com ([40.107.22.56]:33568
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725866AbgL2FRf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 29 Dec 2020 00:17:35 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fbx35AzN8uQKLWX6tGjcV7Kqfx3qVRtoJqKCkOvue2oGuDiGZ7oUZPAWIneNXIKecgfgGHPkDenRS7vYUho2UAkzLARWYefE1zTnT4NaAtFFzvCPDnRxmoAMiQE1YvRxeNEY4/y5DDAqUYNVc4XO8GVCRH3CXwMlAA3fmXfcbpO5KR4a/i2jUdWSfBwTPAo7P/XQc6PElcfVKq30O/ccFa0CVDqaYoPgFi9vx5FLCNE6dHq+osAuxr1nQJSlpTBIgPt5W//7f+kKDDsdsu0V9VgtAn4lNDXBfeVD+FqCFVdTy661kn1noX6dA2M3U4RYywyT8kcXAtWiMsflou3LzQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NPnjpOjxLfbAFftLt1zzfyigcfZkvTfHF+x2cZAJCHA=;
- b=WCIc34HYoGldOaKyBUJqHPWrtmkJ4ZSgnQjFfMU9L9NdsZv4WfmfKsGrRPfHAhlfFEEexrNC6CyjCswgHZoepw/6GNeWTKl+Ar+1186NHDQ0fvZMB0he+kBtItrhhhExFEjXjuKCbejw4Nkgs3g7S1thCnarVj/QIXoeEs6Z5DVtKxE6jYV5gsvRQrGaoSNhEajDv9KhnkNYrK98fknv3iKP7/i5d6oZVeOsuG3qEZOux1BZRDD9Vl2etL9Hp0qbFPpR+H00xXLchEs7nV4K6eVPk940uNp7CI8YbbUsEuVoIjYvr5paib8vaLEfuuPC2kj/HXDBtNgwVZI9pXwCuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NPnjpOjxLfbAFftLt1zzfyigcfZkvTfHF+x2cZAJCHA=;
- b=HBBCT/NiCQygCDogGOToJ8ou9kSRmzrjkPEB33FMHDwDlDwzcQ6tDhFz8vhWQE9eTQAEmd1RlMgWJKj+OBk0+OP+Ul7tzZ00SQ9oLSIOGQUVIAWUV6PQrt5dhAINDDt7Ko3kxTLENVWifaGTcU9FLvXxRYFN15DUmv5SKLjhx7w=
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
- by DB7PR04MB5244.eurprd04.prod.outlook.com (2603:10a6:10:21::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3700.27; Tue, 29 Dec
- 2020 05:16:45 +0000
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::89de:bd7c:7245:f139]) by DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::89de:bd7c:7245:f139%5]) with mapi id 15.20.3700.031; Tue, 29 Dec 2020
- 05:16:45 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-CC:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
+        id S1726351AbgL2GZN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Dec 2020 01:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726281AbgL2GZN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Dec 2020 01:25:13 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4908CC061793
+        for <linux-usb@vger.kernel.org>; Mon, 28 Dec 2020 22:24:33 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id c79so7508462pfc.2
+        for <linux-usb@vger.kernel.org>; Mon, 28 Dec 2020 22:24:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DHWKOfIlULemhi5ysN15tt1vuyV8ns7onsr3JuvhwTg=;
+        b=PKFRX78B2Ve7CFHiQWQtcoea3FAh4uT/ezml7jqKjdWRWTspbGvppeqgj5x0KMY0h0
+         /zGsD2WOqwewlWIVdR8BtpfRjeVogGc/VkJF4A5R8V8hFBf2WIYCRVCD//bQfzbSEQHR
+         n6UozFSLE+K/Ih6gb2GBwe0vNEdhkqDjnONvE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DHWKOfIlULemhi5ysN15tt1vuyV8ns7onsr3JuvhwTg=;
+        b=Ff+ovkZTz2oaI4phuziVzkTEpcmFCpQ11GkRJr9Kb0TYPTvWcnho4uEZCKVPI5K34O
+         fnTXzkJtDekHUOZkrTvZyJ5mnQ8wRigfUfJaBkUZnIEja8kDgcV5W9t6/I+bjgRZLbI0
+         W2dtYRh2v0I1AHiOHbmcQM44xo70GMhD9xGAkBAo4H3I2j2PuRR+17532WXRgXK2sJlu
+         wos5LkMojxvg+G++nt66kf46i3bNSLqrjsZ9lymy37RcN9eroy9yBe+ygjWfYDl84Jpt
+         zF96ZNcg+Cz3EMGZErkMXDE3O+WRx2SXFRCmJMSMNzYd3kCviJSi8mGmXUZzPcN6Gqnb
+         Ph/A==
+X-Gm-Message-State: AOAM533eVCJAEf33Byg2AmDY+yO7Oc+iTe44EsUJeF1p9EqSWnx4J5l+
+        fOClFFEyBoYhkMTta1BKaRKeCw==
+X-Google-Smtp-Source: ABdhPJyj+qHpn8THMMRV5yWEZvzJd/efTszeHfGp7uUJ1X8xwWqxOPv9iYfujhCTmFTs1XLBfC6wdw==
+X-Received: by 2002:a63:3549:: with SMTP id c70mr35444598pga.361.1609223072261;
+        Mon, 28 Dec 2020 22:24:32 -0800 (PST)
+Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:b:f693:9fff:fef4:a8fc])
+        by smtp.gmail.com with ESMTPSA id b72sm37336462pfb.129.2020.12.28.22.24.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Dec 2020 22:24:31 -0800 (PST)
+From:   Ikjoon Jang <ikjn@chromium.org>
+To:     linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Zhanyong Wang <zhanyong.wang@mediatek.com>,
+        Ikjoon Jang <ikjn@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Felipe Balbi <balbi@kernel.org>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Ion Agorria <ion@agorria.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 0/9] Support Runtime PM and host mode by Tegra ChipIdea
- USB driver
-Thread-Topic: [PATCH v3 0/9] Support Runtime PM and host mode by Tegra
- ChipIdea USB driver
-Thread-Index: AQHW1TbraK9TsKqDbEm74yxl8uIQhqoNmQiA
-Date:   Tue, 29 Dec 2020 05:16:45 +0000
-Message-ID: <20201229051615.GA5823@b29397-desktop>
-References: <20201218120246.7759-1-digetx@gmail.com>
-In-Reply-To: <20201218120246.7759-1-digetx@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mutt/1.9.4 (2018-02-28)
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: e968d650-7ba8-4e27-e44b-08d8abb8ef78
-x-ms-traffictypediagnostic: DB7PR04MB5244:
-x-microsoft-antispam-prvs: <DB7PR04MB52448D418B534F73B638AB0E8BD80@DB7PR04MB5244.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4502;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LE0GnTnwfFqjzJCuzvH1Z+mHrNUN1QOkp12yR/fa2l1rAEZ+4jL7Fxh6UKDStj4jAEfBEE1q7mCNlKKiV7wtjVHDIwOHlHy9aogCy/zKLmGzaPyLAk5aX6K9zEmUbU8uW7+UAp6twV9nUv8ZN0Ic+tApjSWPS83K4bdlhbLSXFlepp8Bi3v8ViMvp7x/MwDe7bNMwZRgeqDfoo+76M2i0NssRJlqXMtL7yYWTGxrHrqVoxDNBDjY52CSOTyWwVtHvSSAc8BnqZ6mizSyh4B9kykZr/J0RuEN9Cq0+mOoZm796yQrPO+ca32IKfdP3GCJtTSguZhbj4gFG46bw+mJ5fExOLdjHZ+Wl1tAdp//0E7jty6q2bryGDegqjp6zvIedM4f6cci7tb7+vOxWjuWnQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(366004)(346002)(376002)(136003)(39860400002)(396003)(5660300002)(8936002)(6506007)(9686003)(186003)(6916009)(66476007)(478600001)(1076003)(66446008)(66556008)(66946007)(91956017)(26005)(4326008)(33656002)(64756008)(76116006)(8676002)(7416002)(2906002)(83380400001)(86362001)(6512007)(54906003)(316002)(33716001)(53546011)(71200400001)(44832011)(6486002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?BvlQ/2WylqvWVCerGj69DCesVdHtBUO/HWaLjOrw38vJAZOlj/TmY+Hlf69Z?=
- =?us-ascii?Q?OHJxk6Sne3JweITK63lSahv6CqRh+1VWVYA5SyOFHlnCjgk1HqVPw5mSKqE7?=
- =?us-ascii?Q?8kqoqWDAXrjSPHRMPWK+wH9FemvkONig8JvjMx/dUeexDb9EVRsJLQ5Ihm7g?=
- =?us-ascii?Q?MNg6iHS1MGtch3oTBvAUiWxe+MhEnOsedVUXdYmQUmgdMyMcM/NAuOyNXGJJ?=
- =?us-ascii?Q?w3lquoQuM3hMPGgcnrDqOuzrH9sxmURL3JTAkIiumcSKCnVbAeGB6PqqurCD?=
- =?us-ascii?Q?28A26dlWvwc29//c9OvDVWNyN87jOIhvpF+zJw6e39BdG7KQbId5boWGNSc4?=
- =?us-ascii?Q?jLyaVoZraOzeRdTlUel/gjppf4ZnM4SE5wDh2ocNpC1lR2zyoVV7XLJ3Txnz?=
- =?us-ascii?Q?JRMMLFpKd1sw6Pjow/5xHS4Ch3J4WENUkh3ZWeUGnyHMrWsYQeOfCZg3vKur?=
- =?us-ascii?Q?5ZmBDRahQbcZGjR+bPeUUYQHSKbGY0Ak41DEJhXehKhXZLcFVuR6TObSQwCB?=
- =?us-ascii?Q?4ewW7NB4IT6F70xWWNt5gp5iXXU5Hk5FCB9GS/bwz8CVKWWVCstr5EAzJf81?=
- =?us-ascii?Q?b1xuc/+Anb+nuOw8Z7F5JLODxtEcGrIa539ZnfAALfIjqNZJgrnk0Xnnydzh?=
- =?us-ascii?Q?V4u8oueNSS+9fBFxZrtJ/sAvsXJVz8fCErd407sX3Mu2S6bx8kRR1nO4RhPE?=
- =?us-ascii?Q?MJdH+KQ9lNQJVIHC5dtJOvsGBeWy+wpNCKjAvVukXTTKaVNV/eGZ9Cseg2mA?=
- =?us-ascii?Q?0LeeCnqnF6Gl/vui1gKg+mx+puUYxKDuGhSHMqdSosljEoCoRYtziSG4hcUK?=
- =?us-ascii?Q?fH3OZBre+cuIfF54AryDe8yJnGRfZzTGOu2SGPDfdGrva9+wIDpVXXgNOVNw?=
- =?us-ascii?Q?KAZAh8CrLDngeovK9l4moND9++ckEDSmYqW63TbEz2wbwdggKHgZfCuMJ7ww?=
- =?us-ascii?Q?mQyUCeoZrrca2EyaQLg0veaZAJfMCID6PVHd9BpJ31YFus00ly6yYc/yoXjv?=
- =?us-ascii?Q?edKM?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <32935ABF9418A34DB48E6E9CAB9C79BF@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5] usb: xhci-mtk: fix unreleased bandwidth data
+Date:   Tue, 29 Dec 2020 14:24:27 +0800
+Message-Id: <20201229142406.v5.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
+X-Mailer: git-send-email 2.29.2.729.g45daf8777d-goog
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e968d650-7ba8-4e27-e44b-08d8abb8ef78
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Dec 2020 05:16:45.1431
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AFXm6bTI8vVUu1CNyFy7RV/gWnwSJ/eong1BdZm0ISTp35naSlCrYizro+950G9f6u3JnZxlgifJMPNlm2ElXw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5244
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-12-18 15:02:37, Dmitry Osipenko wrote:
-> This series implements Runtime PM support for the Tegra ChipIdea USB driv=
-er.
-> It also squashes the older ehci-tegra driver into the ChipIdea driver, he=
-nce
-> the RPM is supported by both UDC and host controllers, secondly this open=
-s
-> opportunity for implementing OTG support in the future.
->=20
-> Patchset was tested on various Tegra20, Tegra30 and Tegra124 devices.
-> Thanks to Peter Geis, Matt Merhar, Nicolas Chauvet and Ion Agorria for
-> helping with the extensive and productive testing!
->=20
-> Changelog:
->=20
-> v3: - Replaced "goto" with if-statements as was suggested by Thierry Redi=
-ng.
->=20
->     - Improved wording of the deprecated Kconfig entry as was suggested
->       by Alan Stern.
->=20
->     - Added ACKs from Thierry Reding and Alan Stern.
->=20
->     - Added a new minor patch "Specify TX FIFO threshold in UDC SoC info"
->       just for completeness, since we can now switch OTG to host mode in
->       the ChipIdea driver. Although, OTG support remains a work-in-progre=
-ss
->       for now.
->=20
-> v2: - Improved comments in the code as it was suggested by Peter Chen and
->       Sergei Shtylyov for v1.
->=20
->     - Replaced mdelay() with fsleep() and made ci->hdc to reset to NULL i=
-n
->       a error code path, like it was suggested by Peter Chen.
->=20
->     - Redirected deprecated USB_EHCI_TEGRA Kconfig entry to USB_CHIPIDEA_=
-TEGRA
->       as was suggested by Alan Stern.
->=20
->     - Improved commit message and added ACK from Thierry Reding to the pa=
-tch
->       that removes MODULE_ALIAS.
->=20
->     - Fixed UDC PHY waking up on ASUS TF201 tablet device by utilizing
->       additional VBUS sensor. This was reported and tested by Ion Agorria=
-.
->=20
->     - Added t-b from Ion Agorria.
->=20
-> Dmitry Osipenko (8):
->   usb: phy: tegra: Add delay after power up
->   usb: phy: tegra: Support waking up from a low power mode
->   usb: chipidea: tegra: Remove MODULE_ALIAS
->   usb: chipidea: tegra: Rename UDC to USB
->   usb: chipidea: tegra: Support runtime PM
->   usb: chipidea: tegra: Specify TX FIFO threshold in UDC SoC info
->   usb: host: ehci-tegra: Remove the driver
->   ARM: tegra_defconfig: Enable USB_CHIPIDEA_HOST and remove
->     USB_EHCI_TEGRA
->=20
-> Peter Geis (1):
->   usb: chipidea: tegra: Support host mode
+xhci-mtk has hooks on add_endpoint() and drop_endpoint() from xhci
+to handle its own sw bandwidth managements and stores bandwidth data
+into internal table every time add_endpoint() is called,
+so when bandwidth allocation fails at one endpoint, all earlier
+allocation from the same interface could still remain at the table.
 
-Chipidea related (patch 3-7) are applied, thanks.
+This patch adds two more hooks from check_bandwidth() and
+reset_bandwidth(), and make mtk-xhci to releases all failed endpoints
+from reset_bandwidth().
 
-Peter
->=20
->  arch/arm/configs/tegra_defconfig     |   3 +-
->  drivers/usb/chipidea/Kconfig         |   3 +-
->  drivers/usb/chipidea/ci_hdrc_tegra.c | 344 ++++++++++++---
->  drivers/usb/chipidea/core.c          |  10 +-
->  drivers/usb/chipidea/host.c          | 104 ++++-
->  drivers/usb/host/Kconfig             |  10 +-
->  drivers/usb/host/Makefile            |   1 -
->  drivers/usb/host/ehci-tegra.c        | 604 ---------------------------
->  drivers/usb/phy/phy-tegra-usb.c      | 103 ++++-
->  include/linux/usb/chipidea.h         |   6 +
->  include/linux/usb/tegra_usb_phy.h    |   2 +
->  11 files changed, 518 insertions(+), 672 deletions(-)
->  delete mode 100644 drivers/usb/host/ehci-tegra.c
->=20
-> --=20
-> 2.29.2
->=20
+Fixes: 08e469de87a2 ("usb: xhci-mtk: supports bandwidth scheduling with multi-TT")
+Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
 
---=20
+---
 
-Thanks,
-Peter Chen=
+Changes in v5:
+- Fix a wrong commit id in Fixes tag
+
+Changes in v4:
+- bugfix in v3, check_bandwidth() return uninitialized value
+  when no new endpoints were added.
+- change Fixes tag to keep dependency
+
+Changes in v3:
+- drop unrelated code cleanups
+- change Fixes tag to keep dependency
+
+Changes in v2:
+- fix a 0-day warning from unused variable
+- split one big patch into three patches
+- fix wrong offset in mediatek hw flags
+
+ drivers/usb/host/xhci-mtk-sch.c | 124 ++++++++++++++++++++++----------
+ drivers/usb/host/xhci-mtk.h     |  13 ++++
+ drivers/usb/host/xhci.c         |   9 +++
+ 3 files changed, 109 insertions(+), 37 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+index 45c54d56ecbd..95d20de9fd1f 100644
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -200,6 +200,7 @@ static struct mu3h_sch_ep_info *create_sch_ep(struct usb_device *udev,
+ 
+ 	sch_ep->sch_tt = tt;
+ 	sch_ep->ep = ep;
++	INIT_LIST_HEAD(&sch_ep->tt_endpoint);
+ 
+ 	return sch_ep;
+ }
+@@ -583,6 +584,8 @@ int xhci_mtk_sch_init(struct xhci_hcd_mtk *mtk)
+ 
+ 	mtk->sch_array = sch_array;
+ 
++	INIT_LIST_HEAD(&mtk->bw_ep_list_new);
++
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(xhci_mtk_sch_init);
+@@ -601,19 +604,14 @@ int xhci_mtk_add_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
+ 	struct xhci_ep_ctx *ep_ctx;
+ 	struct xhci_slot_ctx *slot_ctx;
+ 	struct xhci_virt_device *virt_dev;
+-	struct mu3h_sch_bw_info *sch_bw;
+ 	struct mu3h_sch_ep_info *sch_ep;
+-	struct mu3h_sch_bw_info *sch_array;
+ 	unsigned int ep_index;
+-	int bw_index;
+-	int ret = 0;
+ 
+ 	xhci = hcd_to_xhci(hcd);
+ 	virt_dev = xhci->devs[udev->slot_id];
+ 	ep_index = xhci_get_endpoint_index(&ep->desc);
+ 	slot_ctx = xhci_get_slot_ctx(xhci, virt_dev->in_ctx);
+ 	ep_ctx = xhci_get_ep_ctx(xhci, virt_dev->in_ctx, ep_index);
+-	sch_array = mtk->sch_array;
+ 
+ 	xhci_dbg(xhci, "%s() type:%d, speed:%d, mpkt:%d, dir:%d, ep:%p\n",
+ 		__func__, usb_endpoint_type(&ep->desc), udev->speed,
+@@ -632,39 +630,34 @@ int xhci_mtk_add_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
+ 		return 0;
+ 	}
+ 
+-	bw_index = get_bw_index(xhci, udev, ep);
+-	sch_bw = &sch_array[bw_index];
+-
+ 	sch_ep = create_sch_ep(udev, ep, ep_ctx);
+ 	if (IS_ERR_OR_NULL(sch_ep))
+ 		return -ENOMEM;
+ 
+ 	setup_sch_info(udev, ep_ctx, sch_ep);
+ 
+-	ret = check_sch_bw(udev, sch_bw, sch_ep);
+-	if (ret) {
+-		xhci_err(xhci, "Not enough bandwidth!\n");
+-		if (is_fs_or_ls(udev->speed))
+-			drop_tt(udev);
+-
+-		kfree(sch_ep);
+-		return -ENOSPC;
+-	}
++	list_add_tail(&sch_ep->endpoint, &mtk->bw_ep_list_new);
+ 
+-	list_add_tail(&sch_ep->endpoint, &sch_bw->bw_ep_list);
++	return 0;
++}
++EXPORT_SYMBOL_GPL(xhci_mtk_add_ep_quirk);
+ 
+-	ep_ctx->reserved[0] |= cpu_to_le32(EP_BPKTS(sch_ep->pkts)
+-		| EP_BCSCOUNT(sch_ep->cs_count) | EP_BBM(sch_ep->burst_mode));
+-	ep_ctx->reserved[1] |= cpu_to_le32(EP_BOFFSET(sch_ep->offset)
+-		| EP_BREPEAT(sch_ep->repeat));
++static void xhci_mtk_drop_ep(struct xhci_hcd_mtk *mtk, struct usb_device *udev,
++			     struct mu3h_sch_ep_info *sch_ep)
++{
++	struct xhci_hcd *xhci = hcd_to_xhci(mtk->hcd);
++	int bw_index = get_bw_index(xhci, udev, sch_ep->ep);
++	struct mu3h_sch_bw_info *sch_bw = &mtk->sch_array[bw_index];
+ 
+-	xhci_dbg(xhci, " PKTS:%x, CSCOUNT:%x, BM:%x, OFFSET:%x, REPEAT:%x\n",
+-			sch_ep->pkts, sch_ep->cs_count, sch_ep->burst_mode,
+-			sch_ep->offset, sch_ep->repeat);
++	update_bus_bw(sch_bw, sch_ep, 0);
++	list_del(&sch_ep->endpoint);
+ 
+-	return 0;
++	if (sch_ep->sch_tt) {
++		list_del(&sch_ep->tt_endpoint);
++		drop_tt(udev);
++	}
++	kfree(sch_ep);
+ }
+-EXPORT_SYMBOL_GPL(xhci_mtk_add_ep_quirk);
+ 
+ void xhci_mtk_drop_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
+ 		struct usb_host_endpoint *ep)
+@@ -675,7 +668,7 @@ void xhci_mtk_drop_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
+ 	struct xhci_virt_device *virt_dev;
+ 	struct mu3h_sch_bw_info *sch_array;
+ 	struct mu3h_sch_bw_info *sch_bw;
+-	struct mu3h_sch_ep_info *sch_ep;
++	struct mu3h_sch_ep_info *sch_ep, *tmp;
+ 	int bw_index;
+ 
+ 	xhci = hcd_to_xhci(hcd);
+@@ -694,17 +687,74 @@ void xhci_mtk_drop_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
+ 	bw_index = get_bw_index(xhci, udev, ep);
+ 	sch_bw = &sch_array[bw_index];
+ 
+-	list_for_each_entry(sch_ep, &sch_bw->bw_ep_list, endpoint) {
++	list_for_each_entry_safe(sch_ep, tmp, &sch_bw->bw_ep_list, endpoint) {
+ 		if (sch_ep->ep == ep) {
+-			update_bus_bw(sch_bw, sch_ep, 0);
+-			list_del(&sch_ep->endpoint);
+-			if (is_fs_or_ls(udev->speed)) {
+-				list_del(&sch_ep->tt_endpoint);
+-				drop_tt(udev);
+-			}
+-			kfree(sch_ep);
+-			break;
++			xhci_mtk_drop_ep(mtk, udev, sch_ep);
+ 		}
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(xhci_mtk_drop_ep_quirk);
++
++int xhci_mtk_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
++{
++	struct xhci_hcd_mtk *mtk = hcd_to_mtk(hcd);
++	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
++	struct xhci_virt_device *virt_dev = xhci->devs[udev->slot_id];
++	struct mu3h_sch_bw_info *sch_bw;
++	struct mu3h_sch_ep_info *sch_ep, *tmp;
++	int bw_index, ret;
++
++	dev_dbg(&udev->dev, "%s\n", __func__);
++
++	if (list_empty(&mtk->bw_ep_list_new))
++		return 0;
++
++	list_for_each_entry(sch_ep, &mtk->bw_ep_list_new, endpoint) {
++		bw_index = get_bw_index(xhci, udev, sch_ep->ep);
++		sch_bw = &mtk->sch_array[bw_index];
++
++		ret = check_sch_bw(udev, sch_bw, sch_ep);
++		if (ret) {
++			xhci_err(xhci, "Not enough bandwidth!\n");
++			return -ENOSPC;
++		}
++	}
++
++	list_for_each_entry_safe(sch_ep, tmp, &mtk->bw_ep_list_new, endpoint) {
++		struct xhci_ep_ctx *ep_ctx;
++		struct usb_host_endpoint *ep = sch_ep->ep;
++		unsigned int ep_index = xhci_get_endpoint_index(&ep->desc);
++
++		bw_index = get_bw_index(xhci, udev, ep);
++		sch_bw = &mtk->sch_array[bw_index];
++
++		list_move_tail(&sch_ep->endpoint, &sch_bw->bw_ep_list);
++
++		ep_ctx = xhci_get_ep_ctx(xhci, virt_dev->in_ctx, ep_index);
++		ep_ctx->reserved[0] |= cpu_to_le32(EP_BPKTS(sch_ep->pkts)
++			| EP_BCSCOUNT(sch_ep->cs_count)
++			| EP_BBM(sch_ep->burst_mode));
++		ep_ctx->reserved[1] |= cpu_to_le32(EP_BOFFSET(sch_ep->offset)
++			| EP_BREPEAT(sch_ep->repeat));
++
++		xhci_dbg(xhci, " PKTS:%x, CSCOUNT:%x, BM:%x, OFFSET:%x, REPEAT:%x\n",
++			sch_ep->pkts, sch_ep->cs_count, sch_ep->burst_mode,
++			sch_ep->offset, sch_ep->repeat);
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(xhci_mtk_check_bandwidth);
++
++void xhci_mtk_reset_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
++{
++	struct xhci_hcd_mtk *mtk = hcd_to_mtk(hcd);
++	struct mu3h_sch_ep_info *sch_ep, *tmp;
++
++	dev_dbg(&udev->dev, "%s\n", __func__);
++
++	list_for_each_entry_safe(sch_ep, tmp, &mtk->bw_ep_list_new, endpoint) {
++		xhci_mtk_drop_ep(mtk, udev, sch_ep);
++	}
++}
++EXPORT_SYMBOL_GPL(xhci_mtk_reset_bandwidth);
+diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
+index a93cfe817904..577f431c5c93 100644
+--- a/drivers/usb/host/xhci-mtk.h
++++ b/drivers/usb/host/xhci-mtk.h
+@@ -130,6 +130,7 @@ struct mu3c_ippc_regs {
+ struct xhci_hcd_mtk {
+ 	struct device *dev;
+ 	struct usb_hcd *hcd;
++	struct list_head bw_ep_list_new;
+ 	struct mu3h_sch_bw_info *sch_array;
+ 	struct mu3c_ippc_regs __iomem *ippc_regs;
+ 	bool has_ippc;
+@@ -166,6 +167,8 @@ int xhci_mtk_add_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
+ 		struct usb_host_endpoint *ep);
+ void xhci_mtk_drop_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
+ 		struct usb_host_endpoint *ep);
++int xhci_mtk_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev);
++void xhci_mtk_reset_bandwidth(struct usb_hcd *hcd, struct usb_device *udev);
+ 
+ #else
+ static inline int xhci_mtk_add_ep_quirk(struct usb_hcd *hcd,
+@@ -179,6 +182,16 @@ static inline void xhci_mtk_drop_ep_quirk(struct usb_hcd *hcd,
+ {
+ }
+ 
++static inline int xhci_mtk_check_bandwidth(struct usb_hcd *hcd,
++		struct usb_device *udev)
++{
++	return 0;
++}
++
++static inline void xhci_mtk_reset_bandwidth(struct usb_hcd *hcd,
++		struct usb_device *udev)
++{
++}
+ #endif
+ 
+ #endif		/* _XHCI_MTK_H_ */
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index d4a8d0efbbc4..e1fcd3cf723f 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -2882,6 +2882,12 @@ static int xhci_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
+ 	xhci_dbg(xhci, "%s called for udev %p\n", __func__, udev);
+ 	virt_dev = xhci->devs[udev->slot_id];
+ 
++	if (xhci->quirks & XHCI_MTK_HOST) {
++		ret = xhci_mtk_check_bandwidth(hcd, udev);
++		if (ret < 0)
++			return ret;
++	}
++
+ 	command = xhci_alloc_command(xhci, true, GFP_KERNEL);
+ 	if (!command)
+ 		return -ENOMEM;
+@@ -2970,6 +2976,9 @@ static void xhci_reset_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
+ 		return;
+ 	xhci = hcd_to_xhci(hcd);
+ 
++	if (xhci->quirks & XHCI_MTK_HOST)
++		xhci_mtk_reset_bandwidth(hcd, udev);
++
+ 	xhci_dbg(xhci, "%s called for udev %p\n", __func__, udev);
+ 	virt_dev = xhci->devs[udev->slot_id];
+ 	/* Free any rings allocated for added endpoints */
+-- 
+2.29.2.729.g45daf8777d-goog
+
