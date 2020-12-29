@@ -2,62 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CD02E70A5
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 13:32:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3171F2E710B
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 14:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726156AbgL2MbW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Dec 2020 07:31:22 -0500
-Received: from mx2.suse.de ([195.135.220.15]:59116 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725964AbgL2MbW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 29 Dec 2020 07:31:22 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1609245035; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NXIBw1ycePVQvHAbHxwndaG5kIVWvKnE3XER9JANhjw=;
-        b=axio+OHxFd8luTm8ve7TC+4iAHhTxAbMeiWontp9D9gTi1+XOHd0oUY8dO/o4KAddyBgXG
-        i55fXblb1bUjlqwGyGO0gXnB/dVQ3JUBN4My12lVXKVxg00yeN3fbgqkOmzLCiUw0NL0Dt
-        k/pJ2UKuS/6MjcGkUuSuWPJgtWI3r90=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 3D9B6AE66;
-        Tue, 29 Dec 2020 12:30:35 +0000 (UTC)
-Message-ID: <f22ac6bdf5560a4fefc5b931e7451f503fc6cfcb.camel@suse.com>
-Subject: Re: [PATCH] CDC-NCM: remove "connected" log message
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Roland Dreier <roland@kernel.org>, Jakub Kicinski <kuba@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Date:   Tue, 29 Dec 2020 13:30:34 +0100
-In-Reply-To: <CAG4TOxNM8du=xadLeVwNU5Zq=MW7Kj74-1d9ThZ0q2OrXHE5qQ@mail.gmail.com>
-References: <20201222184926.35382198@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-         <20201224032116.2453938-1-roland@kernel.org> <X+RJEI+1AR5E0z3z@kroah.com>
-         <20201228133036.3a2e9fb5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-         <CAG4TOxNM8du=xadLeVwNU5Zq=MW7Kj74-1d9ThZ0q2OrXHE5qQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S1726655AbgL2Nty (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Dec 2020 08:49:54 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:9942 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726492AbgL2Nty (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Dec 2020 08:49:54 -0500
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4D4wjs5V2Tzhyy0;
+        Tue, 29 Dec 2020 21:48:33 +0800 (CST)
+Received: from ubuntu.network (10.175.138.68) by
+ DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
+ 14.3.498.0; Tue, 29 Dec 2020 21:49:02 +0800
+From:   Zheng Yongjun <zhengyongjun3@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Zheng Yongjun <zhengyongjun3@huawei.com>
+Subject: [PATCH net-next] net: usb: Use DEFINE_SPINLOCK() for spinlock
+Date:   Tue, 29 Dec 2020 21:49:27 +0800
+Message-ID: <20201229134927.23251-1-zhengyongjun3@huawei.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.138.68]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 28.12.2020, 23:56 -0800 schrieb Roland Dreier:
-> > Applied to net and queued for LTS, thanks!
-> 
-> Thanks - is Oliver's series of 3 patches that get rid of the other
-> half of the log spam also on the way upstream?
+spinlock can be initialized automatically with DEFINE_SPINLOCK()
+rather than explicitly calling spin_lock_init().
 
-Hi,
+Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+---
+ drivers/net/usb/hso.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-I looked at them again and found that there is a way to get
-the same effect that will make maintenance easier in the long run.
-Could I send them to you later this week for testing?
-
-	Regards
-		Oliver
-
-
+diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
+index 2bb28db89432..ef6dd012b8c4 100644
+--- a/drivers/net/usb/hso.c
++++ b/drivers/net/usb/hso.c
+@@ -370,7 +370,7 @@ static struct usb_driver hso_driver;
+ static struct tty_driver *tty_drv;
+ static struct hso_device *serial_table[HSO_SERIAL_TTY_MINORS];
+ static struct hso_device *network_table[HSO_MAX_NET_DEVICES];
+-static spinlock_t serial_table_lock;
++static DEFINE_SPINLOCK(serial_table_lock);
+ 
+ static const s32 default_port_spec[] = {
+ 	HSO_INTF_MUX | HSO_PORT_NETWORK,
+@@ -3236,7 +3236,6 @@ static int __init hso_init(void)
+ 	pr_info("%s\n", version);
+ 
+ 	/* Initialise the serial table semaphore and table */
+-	spin_lock_init(&serial_table_lock);
+ 	for (i = 0; i < HSO_SERIAL_TTY_MINORS; i++)
+ 		serial_table[i] = NULL;
+ 
+-- 
+2.22.0
 
