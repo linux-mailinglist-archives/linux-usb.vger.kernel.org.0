@@ -2,136 +2,202 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB6D2E6CE5
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 01:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB6C2E6D64
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 03:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730402AbgL2Aya (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Dec 2020 19:54:30 -0500
-Received: from mail-eopbgr60069.outbound.protection.outlook.com ([40.107.6.69]:42991
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730359AbgL2Ay3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Dec 2020 19:54:29 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TN4Xoem/F1aR+KTfvV4VRNBkPpH2xUVP3i0twNSaq5TZ/wd/Z07tlB1VqK9I/lA7mN3pGSsG5qW5Wjl7C/yMQbgv4p/zxHi/7ng2p0BXwqcoKzDRQ4V5dCuE5UxcJ0oE49DFa9r8SkArCzeIMtaU+5NUYMrJVa+aoAmbsSzdFMolgAF1QyWFOvPuJBXSz8Hjc1Dq57RCo+6rWMIfvIdZrMMEgrva/4KT+yr9uoz3DcC9fBxHB54SzSndWU/9BdW6xxhBc4M/KpgMPsMAyilUnlmmkED3tcv2eEGEV0SMjhUU+gdCSaw1PnWo5dcK6m8KeTGw0gbOoL4+hPecuFQJ+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jQzCfrjvPCg/QJSngtKJcDM8kVINjY+kSUkxWd6hPME=;
- b=EuTvcbOAmdUqhMsAapooSCrznY4ri/JdpyZWJOFL8OW4llursJXM55hQnufOrV0G9CgywyvRte5wl8unrpORaqpqYDN/xORSMeTv6Rx1nBWMg+SjRALSbDJG88Nq9kjMQjs1m0lS5EX2+Mfv6uRCCTlI6csfVcy7syuuM0I0rMWEb8hwkLXdru9j6p5W8iYLCnBER52ZT7l3NGD96T2EOiTaYu2HCmmo3CVkhs3yr+Up/2AbQYm9uub8I1l3uf7/CAkI/jdMUiw0awbdnnbZm+WVMJ7Jjd2w/zF70qkEv9PremGhk6HOAO9IE0X0qCL6fLYOL/bzr3xjhaA7AV4Heg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jQzCfrjvPCg/QJSngtKJcDM8kVINjY+kSUkxWd6hPME=;
- b=n3ccoRsn8xPiRqTb7qB+Bf9QgD9mHrnem04kbDXCQF8oBZEf5Lu1/n95R7kwSebAGgYkApKZVq2CkWwbZ8rSBybj1W6ItVU1sT9yUbGGAOnBieTNqjpqXXYEff/OIo2kH58NGdHwJPY3QBdxrGdpa9h2wEJTEGYw5Qv1vwXxpUk=
-Received: from AS8PR04MB7973.eurprd04.prod.outlook.com (2603:10a6:20b:28b::16)
- by AM7PR04MB7143.eurprd04.prod.outlook.com (2603:10a6:20b:112::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3700.27; Tue, 29 Dec
- 2020 00:53:40 +0000
-Received: from AS8PR04MB7973.eurprd04.prod.outlook.com
- ([fe80::a46e:b91d:fdbe:ffd6]) by AS8PR04MB7973.eurprd04.prod.outlook.com
- ([fe80::a46e:b91d:fdbe:ffd6%4]) with mapi id 15.20.3700.031; Tue, 29 Dec 2020
- 00:53:40 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Pawel Laszczak <pawell@cadence.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
-        "kurahul@cadence.com" <kurahul@cadence.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>
-Subject: RE: [PATCH] usb: cdnsp: Fix for undefined reference to
- `usb_hcd_is_primary_hcd'
-Thread-Topic: [PATCH] usb: cdnsp: Fix for undefined reference to
- `usb_hcd_is_primary_hcd'
-Thread-Index: AQHWzxDW8gwYfcxtfEiKgR2Vt2ev/aoMsVEAgACp3bA=
-Date:   Tue, 29 Dec 2020 00:53:40 +0000
-Message-ID: <AS8PR04MB7973C849A446952E02A18E6E8BD80@AS8PR04MB7973.eurprd04.prod.outlook.com>
-References: <20201210162258.10289-1-pawell@cadence.com>
- <X+nu7pD9tVw5iMJB@kroah.com>
-In-Reply-To: <X+nu7pD9tVw5iMJB@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=nxp.com;
-x-originating-ip: [92.121.68.129]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 990c11b8-afc7-43ae-6fe2-08d8ab942eec
-x-ms-traffictypediagnostic: AM7PR04MB7143:
-x-microsoft-antispam-prvs: <AM7PR04MB7143230D9FDB9CCF22303C7C8BD80@AM7PR04MB7143.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BVwwSrYLNKZ11TLZ4XrKJXQftnor3HAHvEcrRBTzJW2WmGAt6pzmanyWJlWsJvciptpqb9HXoH2TxZo5SrXYRQ7sw17MVJLlKXjUhVyPB1iDQlzFsmJnoHAfgqC1RbkACj2wBSbuvemtenPFX89bZpZ1HoJe4zUbYuI0UFyIr01Xj1euA0dBSNb4MrFWt+L4OFO5W/TwZkD5e49RPIUzGDpbIzzNcWZwOIkKeND0ra+vEcomqoBMumtV6frteZyCqwzrg28L11HMc3lijMbvEoAa4I67jJPNjX0w16CXOQ8FY3Owd3n1eTtAQ2fd3PTspSh+w08X9fatLI+2A5im/9FVnfYsp9b5iZB0byDiZYRmqeNeQiVd57Od/5MoZlEEc+nmkr4Gy0DTZ8i5boQvSYwBg8apORlutX54WB2Kxy7v5EliozTCaKC73ric/K3J
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB7973.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(366004)(136003)(396003)(39860400002)(346002)(52536014)(55016002)(8676002)(9686003)(66476007)(66556008)(64756008)(44832011)(26005)(7696005)(110136005)(83380400001)(66446008)(4744005)(4326008)(316002)(66946007)(54906003)(186003)(76116006)(8936002)(33656002)(86362001)(2906002)(5660300002)(6506007)(478600001)(71200400001)(81973001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?+/ctrl7xvWCgTcxGFNUrLt0ZF0MTBHUjzpMorbNM5edKu+0r9sd4RJMhHDar?=
- =?us-ascii?Q?zs/z1L49RSyatnMd0BYlF9xX2LIlabnBJ7au0xiA5jvHtlK5e/g9EKoqpNY/?=
- =?us-ascii?Q?sxBwkqQc0v/f77kG6zFLZxy2s+WExwHIll368YwNXVzxl0h6CgNyPR2BWDq5?=
- =?us-ascii?Q?MnwgOj6svu9y0RuhWonK2rtoSPBYoTpSErVlYsda6A0cb8vTuZyJZ+7DVYoP?=
- =?us-ascii?Q?ok7+iagGPLyu2GZBPy1/AHhKmag4WAnZ4Plmgg7Sb+tRPoDpMSYTBJ+w109g?=
- =?us-ascii?Q?LpAxicvOE9vxB/CHRCOhIrJxI0126xU98eADV+MuDsmA2zSVc25gwm7QJDwH?=
- =?us-ascii?Q?W7+OGFQk74O4GOb83RtVEet2lHKaumzOYJYXKcFJ2WPrARecH5/hklRNn9fb?=
- =?us-ascii?Q?mSOUPOX2OhwMEynY45ppziTWYX4OLpQ3eZ+3hLB5risrwapr6qYQgvuDA0lk?=
- =?us-ascii?Q?hn4TdMQE47nMrIQguxYAh1tl2O8tFG+J1YbavD+HwXCfrgiNeDOelQQV4r7z?=
- =?us-ascii?Q?ddMmL/LNxatF8Bwj/BnPXdnhyahBvkQmSekrV/9OegwE4gC/ujpgydQ1zji0?=
- =?us-ascii?Q?prDus8bYIkw16AAg1LYIk0PGH6c/66bA8ceRtZG+lEvrxnchp3vSH190i+Io?=
- =?us-ascii?Q?pe9R+mvoBzShMww6GfgPYE4Spcwphlp4gbQxRxWdZifuPW4UlHQNThFARnAQ?=
- =?us-ascii?Q?w6TAvOBCcgOgmsdV+miCGdKQa8169pkcpBc+2ErH96qyBuq4Esgh6Q8ZUhg4?=
- =?us-ascii?Q?jLFcJduBQfilW5Xnrw4SsoRbqOCG35DkvG2qUx0MuYRH0mLUMi6ckR2sogZ/?=
- =?us-ascii?Q?rPSeCattTxn7aEyfAumo6yZSrITzhSdwOTAV1cwG4RW41jePgcayS3NrDld1?=
- =?us-ascii?Q?ntI4s+PZGOunKAcvVrdzyNdxTcnIbUN9IAUMMkHzmNEy6+nzlEHnCftZJ9zp?=
- =?us-ascii?Q?V9GFAt2TYct5/7JbcfQGZYd7Y73+bu5c/+zkLRoRwJU=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726302AbgL2C5z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Dec 2020 21:57:55 -0500
+Received: from mga09.intel.com ([134.134.136.24]:27042 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726014AbgL2C5y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 28 Dec 2020 21:57:54 -0500
+IronPort-SDR: 8f4FZ2vJz4ROQVFaJAiZERH1KIQ+4lz6tb2VMEvHS5cjhioSMyfCq5SH6g0U52ZMbLjaS8m+IE
+ wAFGO8JLhAYg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9848"; a="176604621"
+X-IronPort-AV: E=Sophos;i="5.78,456,1599548400"; 
+   d="scan'208";a="176604621"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2020 18:57:13 -0800
+IronPort-SDR: 2kLgzbRabbsjvtRvr3pz2Tqbwx4YbL63zREAAnMfGmPcodWjwDDD6IsQeKXSjnjHA2NDCQhUKw
+ ZXp6db3Vu/XA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,456,1599548400"; 
+   d="scan'208";a="564858851"
+Received: from lkp-server02.sh.intel.com (HELO 4242b19f17ef) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 28 Dec 2020 18:57:12 -0800
+Received: from kbuild by 4242b19f17ef with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1ku5CC-0003HX-4Q; Tue, 29 Dec 2020 02:57:12 +0000
+Date:   Tue, 29 Dec 2020 10:56:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 9389044f27081d6ec77730c36d5bf9a1288bcda2
+Message-ID: <5fea9af0.JK0mWK84AcJVNzo3%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB7973.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 990c11b8-afc7-43ae-6fe2-08d8ab942eec
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Dec 2020 00:53:40.2536
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Gnm04TDBx5tzchN0MeXGIxK3sKA5+oUYkVPr0c549wbvmWH/0OgZES/xTgG/zWfMqg8qMdvlqjUM7KC7PY2kSg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7143
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=20
-> >
-> > Issue occurrd for following kernel configuration:
-> > CONFIG_USB_GADGET=3Dy
-> > CONFIG_USB_SUPPORT=3Dy
-> > CONFIG_USB_COMMON=3Dy
-> > CONFIG_USB_ARCH_HAS_HCD=3Dy
-> > CONFIG_USB=3Dm
-> >
-> > CONFIG_USB_CDNS_SUPPORT=3Dy
-> > CONFIG_USB_CDNS_HOST=3Dy
-> > CONFIG_USB_CDNS3=3Dm
-> > CONFIG_USB_CDNS3_GADGET=3Dy
-> > CONFIG_USB_CDNS3_HOST=3Dy
-> >
-> > Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > ---
-> >  drivers/usb/cdns3/Makefile | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
->=20
-> Doesn't apply to 5.11-rc1 :(
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
+branch HEAD: 9389044f27081d6ec77730c36d5bf9a1288bcda2  usb: gadget: f_uac2: reset wMaxPacketSize
 
-Hi Greg,
+elapsed time: 720m
 
-Cadence USB3 goes to my tree, and the related patches were already at my tr=
-ee.
+configs tested: 140
+configs skipped: 2
 
-Peter
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+riscv                    nommu_k210_defconfig
+powerpc                     rainier_defconfig
+powerpc                        warp_defconfig
+ia64                            zx1_defconfig
+arm                            mps2_defconfig
+m68k                          hp300_defconfig
+powerpc                    ge_imp3a_defconfig
+mips                  maltasmvp_eva_defconfig
+powerpc                    klondike_defconfig
+powerpc                     taishan_defconfig
+powerpc                     tqm8541_defconfig
+sh                           se7722_defconfig
+sh                 kfr2r09-romimage_defconfig
+sh                         ap325rxa_defconfig
+arm                       imx_v6_v7_defconfig
+powerpc                     powernv_defconfig
+arm                     am200epdkit_defconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+mips                        workpad_defconfig
+nios2                            alldefconfig
+um                           x86_64_defconfig
+sh                           se7724_defconfig
+powerpc                 mpc8313_rdb_defconfig
+mips                         tb0226_defconfig
+h8300                       h8s-sim_defconfig
+sh                               j2_defconfig
+csky                                defconfig
+sparc                       sparc32_defconfig
+powerpc                      pmac32_defconfig
+arm                            qcom_defconfig
+arm                         at91_dt_defconfig
+sh                           se7751_defconfig
+arm                      footbridge_defconfig
+sh                     magicpanelr2_defconfig
+powerpc                    adder875_defconfig
+arm                           tegra_defconfig
+mips                            gpr_defconfig
+arm                           sunxi_defconfig
+arm                         socfpga_defconfig
+sh                          kfr2r09_defconfig
+powerpc                    socrates_defconfig
+sh                     sh7710voipgw_defconfig
+arm                           h5000_defconfig
+sh                        dreamcast_defconfig
+powerpc                      makalu_defconfig
+sh                      rts7751r2d1_defconfig
+powerpc                       ebony_defconfig
+mips                        jmr3927_defconfig
+arm                   milbeaut_m10v_defconfig
+mips                           ci20_defconfig
+powerpc                     kilauea_defconfig
+mips                malta_kvm_guest_defconfig
+arc                     haps_hs_smp_defconfig
+mips                      fuloong2e_defconfig
+arm                      jornada720_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a005-20201228
+i386                 randconfig-a002-20201228
+i386                 randconfig-a004-20201228
+i386                 randconfig-a006-20201228
+i386                 randconfig-a003-20201228
+i386                 randconfig-a001-20201228
+i386                 randconfig-a002-20201227
+i386                 randconfig-a005-20201227
+i386                 randconfig-a006-20201227
+i386                 randconfig-a004-20201227
+i386                 randconfig-a003-20201227
+i386                 randconfig-a001-20201227
+x86_64               randconfig-a014-20201228
+x86_64               randconfig-a015-20201228
+x86_64               randconfig-a016-20201228
+x86_64               randconfig-a012-20201228
+x86_64               randconfig-a011-20201228
+x86_64               randconfig-a013-20201228
+i386                 randconfig-a014-20201228
+i386                 randconfig-a012-20201228
+i386                 randconfig-a016-20201228
+i386                 randconfig-a011-20201228
+i386                 randconfig-a015-20201228
+i386                 randconfig-a013-20201228
+i386                 randconfig-a011-20201227
+i386                 randconfig-a016-20201227
+i386                 randconfig-a012-20201227
+i386                 randconfig-a014-20201227
+i386                 randconfig-a015-20201227
+i386                 randconfig-a013-20201227
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a001-20201228
+x86_64               randconfig-a006-20201228
+x86_64               randconfig-a002-20201228
+x86_64               randconfig-a004-20201228
+x86_64               randconfig-a003-20201228
+x86_64               randconfig-a005-20201228
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
