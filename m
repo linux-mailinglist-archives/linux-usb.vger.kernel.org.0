@@ -2,146 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 452ED2E7506
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 23:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3202E7514
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Dec 2020 00:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726203AbgL2Wqa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Dec 2020 17:46:30 -0500
-Received: from so254-31.mailgun.net ([198.61.254.31]:26917 "EHLO
+        id S1726197AbgL2XBr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Dec 2020 18:01:47 -0500
+Received: from so254-31.mailgun.net ([198.61.254.31]:47124 "EHLO
         so254-31.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726156AbgL2Wq3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Dec 2020 17:46:29 -0500
+        with ESMTP id S1726168AbgL2XBq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Dec 2020 18:01:46 -0500
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1609281968; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=5IbfeHxPo2MNMbIyb5TeBPGRD/fLqm5VEUUhEIIRtKc=; b=rKKUa4iw6HLCYjTILaTv9Owqz6wVdgqLb5rxjMe15oDCR0k5An3PAvjl2xQPdJFglexM5e0Q
- /i2bDh0YKNO3I+/YvtO27+0pMZwUn6/lAEzIRftVUq3rpvpg9AIiwuDYMafZy3llJMXxbAlm
- SQ856acKWzmpYJ/o7LrNxqGtmYg=
+ s=smtp; t=1609282888; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=qpAMQSyjBq4xVMemJq1tY6TMHhDkbGd1U4vaPpVEhow=; b=HDnc4f5UlGSfa/wxpsRoaGJAlSXa1W/c5x2vAdC6FsUH3xZ3gZUNECPyYT5c3iyujxuxYS9d
+ JnW8vMT/koD3enQT243Q/V8q8hfn0TLKsCSpbM9lDF/y3qDR4O7QITdZwp0S4W5aj50fXOwt
+ 699t9NK3hlWrgqvLAPzuneIe+u0=
 X-Mailgun-Sending-Ip: 198.61.254.31
 X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
 Received: from smtp.codeaurora.org
  (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
- 5febb1971d5c1fa4277daa88 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 29 Dec 2020 22:45:43
+ smtp-out-n09.prod.us-west-2.postgun.com with SMTP id
+ 5febb51cda47198188ab54fa (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 29 Dec 2020 23:00:44
  GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id BFE20C433ED; Tue, 29 Dec 2020 22:45:42 +0000 (UTC)
+        id E078FC43461; Tue, 29 Dec 2020 23:00:43 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
         URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 6B2B6C433CA;
-        Tue, 29 Dec 2020 22:45:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 6B2B6C433CA
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 94E35C433C6;
+        Tue, 29 Dec 2020 23:00:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 94E35C433C6
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>,
-        Jack Pham <jackp@codeaurora.org>
-Subject: [PATCH v2] usb: gadget: configfs: Preserve function ordering after bind failure
-Date:   Tue, 29 Dec 2020 14:44:43 -0800
-Message-Id: <20201229224443.31623-1-jackp@codeaurora.org>
-X-Mailer: git-send-email 2.24.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH] usb: dwc3: gadget: Restart DWC3 gadget when enabling pullup
+Date:   Tue, 29 Dec 2020 15:00:37 -0800
+Message-Id: <1609282837-21666-1-git-send-email-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+usb_gadget_deactivate/usb_gadget_activate does not execute the UDC start
+operation, which may leave EP0 disabled and event IRQs disabled when
+re-activating the function. Move the enabling/disabling of USB EP0 and
+device event IRQs to be performed in the pullup routine.
 
-When binding the ConfigFS gadget to a UDC, the functions in each
-configuration are added in list order. However, if usb_add_function()
-fails, the failed function is put back on its configuration's
-func_list and purge_configs_funcs() is called to further clean up.
+Fixes: ae7e86108b12 ("usb: dwc3: Stop active transfers before halting the
+controller")
 
-purge_configs_funcs() iterates over the configurations and functions
-in forward order, calling unbind() on each of the previously added
-functions. But after doing so, each function gets moved to the
-tail of the configuration's func_list. This results in reshuffling
-the original order of the functions within a configuration such
-that the failed function now appears first even though it may have
-originally appeared in the middle or even end of the list. At this
-point if the ConfigFS gadget is attempted to re-bind to the UDC,
-the functions will be added in a different order than intended,
-with the only recourse being to remove and relink the functions all
-over again.
-
-An example of this as follows:
-
-ln -s functions/mass_storage.0 configs/c.1
-ln -s functions/ncm.0 configs/c.1
-ln -s functions/ffs.adb configs/c.1	# oops, forgot to start adbd
-echo "<udc device>" > UDC		# fails
-start adbd
-echo "<udc device>" > UDC		# now succeeds, but...
-					# bind order is
-					# "ADB", mass_storage, ncm
-
-[30133.118289] configfs-gadget gadget: adding 'Mass Storage Function'/ffffff810af87200 to config 'c'/ffffff817d6a2520
-[30133.119875] configfs-gadget gadget: adding 'cdc_network'/ffffff80f48d1a00 to config 'c'/ffffff817d6a2520
-[30133.119974] using random self ethernet address
-[30133.120002] using random host ethernet address
-[30133.139604] usb0: HOST MAC 3e:27:46:ba:3e:26
-[30133.140015] usb0: MAC 6e:28:7e:42:66:6a
-[30133.140062] configfs-gadget gadget: adding 'Function FS Gadget'/ffffff80f3868438 to config 'c'/ffffff817d6a2520
-[30133.140081] configfs-gadget gadget: adding 'Function FS Gadget'/ffffff80f3868438 --> -19
-[30133.140098] configfs-gadget gadget: unbind function 'Mass Storage Function'/ffffff810af87200
-[30133.140119] configfs-gadget gadget: unbind function 'cdc_network'/ffffff80f48d1a00
-[30133.173201] configfs-gadget a600000.dwc3: failed to start g1: -19
-[30136.661933] init: starting service 'adbd'...
-[30136.700126] read descriptors
-[30136.700413] read strings
-[30138.574484] configfs-gadget gadget: adding 'Function FS Gadget'/ffffff80f3868438 to config 'c'/ffffff817d6a2520
-[30138.575497] configfs-gadget gadget: adding 'Mass Storage Function'/ffffff810af87200 to config 'c'/ffffff817d6a2520
-[30138.575554] configfs-gadget gadget: adding 'cdc_network'/ffffff80f48d1a00 to config 'c'/ffffff817d6a2520
-[30138.575631] using random self ethernet address
-[30138.575660] using random host ethernet address
-[30138.595338] usb0: HOST MAC 2e:cf:43:cd:ca:c8
-[30138.597160] usb0: MAC 6a:f0:9f:ee:82:a0
-[30138.791490] configfs-gadget gadget: super-speed config #1: c
-
-Fix this by reversing the iteration order of the functions in
-purge_config_funcs() when unbinding them, and adding them back to
-the config's func_list at the head instead of the tail. This
-ensures that we unbind and unwind back to the original list order.
-
-Fixes: 88af8bbe4ef7 ("usb: gadget: the start of the configfs interface")
-Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-Signed-off-by: Jack Pham <jackp@codeaurora.org>
+Tested-by: Michael Tretter <m.tretter@pengutronix.de>
+Reported-by: Michael Tretter <m.tretter@pengutronix.de>
+Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
 ---
-v2: rebase on gregkh's usb-testing
+ drivers/usb/dwc3/gadget.c | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
- drivers/usb/gadget/configfs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index 56051bb97349..3dda1d63f231 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -1248,9 +1248,9 @@ static void purge_configs_funcs(struct gadget_info *gi)
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 5d879b7606d5..922c8b76e534 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1988,6 +1988,7 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
  
- 		cfg = container_of(c, struct config_usb_cfg, c);
+ static void dwc3_gadget_disable_irq(struct dwc3 *dwc);
+ static void __dwc3_gadget_stop(struct dwc3 *dwc);
++static int __dwc3_gadget_start(struct dwc3 *dwc);
  
--		list_for_each_entry_safe(f, tmp, &c->functions, list) {
-+		list_for_each_entry_safe_reverse(f, tmp, &c->functions, list) {
+ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ {
+@@ -2050,6 +2051,8 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 			dwc->ev_buf->lpos = (dwc->ev_buf->lpos + count) %
+ 						dwc->ev_buf->length;
+ 		}
++	} else {
++		__dwc3_gadget_start(dwc);
+ 	}
  
--			list_move_tail(&f->list, &cfg->func_list);
-+			list_move(&f->list, &cfg->func_list);
- 			if (f->unbind) {
- 				dev_dbg(&gi->cdev.gadget->dev,
- 					"unbind function '%s'/%p\n",
+ 	ret = dwc3_gadget_run_stop(dwc, is_on, false);
+@@ -2224,10 +2227,6 @@ static int dwc3_gadget_start(struct usb_gadget *g,
+ 	}
+ 
+ 	dwc->gadget_driver	= driver;
+-
+-	if (pm_runtime_active(dwc->dev))
+-		__dwc3_gadget_start(dwc);
+-
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
+ 	return 0;
+@@ -2253,13 +2252,6 @@ static int dwc3_gadget_stop(struct usb_gadget *g)
+ 	unsigned long		flags;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+-
+-	if (pm_runtime_suspended(dwc->dev))
+-		goto out;
+-
+-	__dwc3_gadget_stop(dwc);
+-
+-out:
+ 	dwc->gadget_driver	= NULL;
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
 -- 
-2.24.0
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
