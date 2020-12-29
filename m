@@ -2,30 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E71C72E700F
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 12:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2E52E7016
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Dec 2020 12:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726014AbgL2Lrs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Dec 2020 06:47:48 -0500
-Received: from mail-db8eur05on2086.outbound.protection.outlook.com ([40.107.20.86]:50497
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        id S1726126AbgL2LsZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Dec 2020 06:48:25 -0500
+Received: from mail-eopbgr70073.outbound.protection.outlook.com ([40.107.7.73]:22087
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725964AbgL2Lrr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 29 Dec 2020 06:47:47 -0500
+        id S1725964AbgL2LsZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 29 Dec 2020 06:48:25 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oK4wVSXD4x2MK9zzQvk2bbTM1UJczOhsAWKQLt5OUl4Xeddb44Bp4Y25ruM3RL6PGhg6eCit1fgj+b1HlkzKiaMtHCWtQHMrt38baHKY5xhYZcAdCrRn8sUd2fJrVSgt8XEUMoTjr4NzJi/6yDugy+5BmlZstbHi24BsQ8Fd5etiSkne5jkEbEt0dz8Ge9lgx/kv+iSbnB5njFFkMWFPFXYEHaemIdkryFQvjTrnuPXD0GUfr74qpA985He4UCg/rPnU3wGQQInBh2rY68gi20+W5EXwuo5CgOXxjxR45i2cPEM/cmOp9KVKCBlAoHgR7VbOU+HnjJOBWAogQsfCiQ==
+ b=ja5QLKdG5k7faoiU9qJNoPxzSoJi9bTXcM9NyO13hOW374CWaCpZqV4zGXRhSkEoQhL5H8ASsrQ7bkCRLRifSCl1ZD4R78VO8HSjgyPIySZfh4FhzupZbBd9U5lZ4h8uoUAQumO2LmNTOWBUE1iWfgF7Ot7VTIzvfPEpTyx+xl/lmVy6baDp/+g6sUlSqn9u5wAPGq8YcWBhgV20bD3KiZpXokwme6noHKDcchR+8JDggJXFLbmPEPFT+zr9hDioKFR+Zihb2ia30I0PyrKpC44xpV2tpKABPU7yhQPkwF4FTacZPv4p94Oj15x8Yl56n1FJ3D2HaFBQwl1stjkKtg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LeZ4mjVsyY9AmprKH9MwhlGSISNfTd611i1v3Jkvqbg=;
- b=IZCBRs1a+sbEP+0PoRWrQE40vKwap9nM/csa/enJcz4FuJuPQNU2cROQR21+glPqOIf1h05Tjq1gk5Qv5wBKOWZwYhOJA+b3rwEihj2mnTZxgnRiHEpjRwLLILySBd4hR4Iz2dJ+BVkIVhm6ehYkTRqT4GDZvJRXU/ICRiO0cA22pRFUcKwppY1ROYtuur6MqXI1pbz4M/xD8dmRGLOqJ6kIcMkt/ubMN65gyXZqkv86Ym2fVW46kEFgsfg5K41ZEwK8zbQD9gxzgN9jhH7GzKtZBrBE2/6mQM98ivVmVeaTrneQz1l7qgxeW8tbeDDVla6e2yhTC++AcHMMIGvsIw==
+ bh=pi5IoNqCVSXu3k+yMSmyz1YTsW4xWzki+R20lI2sZqQ=;
+ b=cGMkaf/LzFTCZteXyTCdpE+cUdpZQJhwGbFLqBZo/UxD5pX2Xh8N/rS69ETclRcwlr+7xnYCFykLNqqADUEvmTq7DvOWymzUnKd/XEIJIWSP/ZU3YYxIQRA8heP9OvVKlo0u2NrEq5Q50FWTDttKHcnsIM9IQNrUMvZzHK90agvcvjl76A9ZPpijhZtiqkZ4UFTZcyMPsFqK7eweJNee5R82IDy2DzSTKxFoWjV9BNmULfjaOGwUqrm6N7neTAOtK0GwpvzjQuLBLGJjJ2o2jCRxgZdk1ixnNRTwBqyZydq9kveo21xfoKRpSdnUuuNGJBZkz6tFXh47JPW2MjeZFQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LeZ4mjVsyY9AmprKH9MwhlGSISNfTd611i1v3Jkvqbg=;
- b=jRPjD68uPpEZrMDX3Z5hLBhMQhQFaXZsAT84KreOBpCAZ629ABhod6OM6rUVXYVR9CZVKaOy7641RvidKwK45Ip1Dy8N7mFth+RTAYZ/XhDcM1Xa+1eyeBg8ZNk6Mpt8ByqWicdbgDZ3iRRFAmwPg2MSQHgTvN0uuIpM9DXVc8Q=
+ bh=pi5IoNqCVSXu3k+yMSmyz1YTsW4xWzki+R20lI2sZqQ=;
+ b=Bi3toXRPWtHPJ+4EXNvLJUHFGFx3ERJbRP7In/PNObdYfvRmb1gvYr41KRru2VlgboSTMpJxuN32D1kf2wNPmOjzJS0F1rr/o+LXwNCL+SuCyBVEzvvQ9+ARKNi1wRtQz9aAgGFVRZ1ugm3DB6VZj2GmcRsO++TMHZbnjlSUo1k=
 Authentication-Results: linuxfoundation.org; dkim=none (message not signed)
  header.d=none;linuxfoundation.org; dmarc=none action=none
  header.from=nxp.com;
@@ -33,11 +33,11 @@ Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
  by VE1PR04MB6653.eurprd04.prod.outlook.com (2603:10a6:803:122::28) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3700.27; Tue, 29 Dec
- 2020 11:46:54 +0000
+ 2020 11:46:59 +0000
 Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
  ([fe80::b035:d158:c99c:57c6]) by VE1PR04MB6528.eurprd04.prod.outlook.com
  ([fe80::b035:d158:c99c:57c6%7]) with mapi id 15.20.3700.031; Tue, 29 Dec 2020
- 11:46:54 +0000
+ 11:46:59 +0000
 From:   Li Jun <jun.li@nxp.com>
 To:     gregkh@linuxfoundation.org, shawnguo@kernel.org, robh+dt@kernel.org
 Cc:     balbi@kernel.org, krzk@kernel.org, s.hauer@pengutronix.de,
@@ -45,10 +45,12 @@ Cc:     balbi@kernel.org, krzk@kernel.org, s.hauer@pengutronix.de,
         linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         devicetree@vger.kernel.org, l.stach@pengutronix.de, jun.li@nxp.com,
         aisheng.dong@nxp.com, peng.fan@nxp.com, peter.chen@nxp.com
-Subject: [PATCH RESEND v5 0/4] add NXP imx8mp usb support
-Date:   Tue, 29 Dec 2020 19:37:42 +0800
-Message-Id: <1609241866-9508-1-git-send-email-jun.li@nxp.com>
+Subject: [PATCH RESEND v5 1/4] dt-bindings: usb: dwc3-imx8mp: add imx8mp dwc3 glue bindings
+Date:   Tue, 29 Dec 2020 19:37:43 +0800
+Message-Id: <1609241866-9508-2-git-send-email-jun.li@nxp.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1609241866-9508-1-git-send-email-jun.li@nxp.com>
+References: <1609241866-9508-1-git-send-email-jun.li@nxp.com>
 Content-Type: text/plain
 X-Originating-IP: [119.31.174.66]
 X-ClientProxiedBy: SG2PR06CA0173.apcprd06.prod.outlook.com
@@ -56,102 +58,175 @@ X-ClientProxiedBy: SG2PR06CA0173.apcprd06.prod.outlook.com
  (2603:10a6:803:127::18)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (119.31.174.66) by SG2PR06CA0173.apcprd06.prod.outlook.com (2603:1096:1:1e::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3700.27 via Frontend Transport; Tue, 29 Dec 2020 11:46:49 +0000
+Received: from localhost.localdomain (119.31.174.66) by SG2PR06CA0173.apcprd06.prod.outlook.com (2603:1096:1:1e::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3700.27 via Frontend Transport; Tue, 29 Dec 2020 11:46:54 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: cce72d13-673f-4829-eec9-08d8abef706d
+X-MS-Office365-Filtering-Correlation-Id: 5ee47d43-f8bb-4665-4431-08d8abef7358
 X-MS-TrafficTypeDiagnostic: VE1PR04MB6653:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VE1PR04MB6653EC6ADD5FE97C6B7DE8B989D80@VE1PR04MB6653.eurprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <VE1PR04MB665326A68ECC5CB559EDFBB089D80@VE1PR04MB6653.eurprd04.prod.outlook.com>
 X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +yEfWQfty2oxLvJTDdiRP6+6XKCaJo9gNjvYaDqljQqfVGHPGmj/WpzPIIrL89atNdgusTJgZ3aiBKBrWHWgeryJ68FVcd4SVF8IINLsRzafuJzgJuIHM9IvXONtKXi/WdZKQ7yXLKkM12QkRA8C6ZjCFdCXHItdr5brjnoRJPXsbDf4o//WsRRacNzgPqZh3t/mpcBO+m5mVn9pMRJs2J0GHLYuB888hKoURZssAttIPlh/kjMC5HNfGWIoBtBvMdqBjEeCv6GPWE7jRe1q94U61mM36ILWPY42hyC6+WinEVgx1CzuK63avniAaRXpjtqVZIUHMjKvPTGC0KFTXeuwOACsLjMeoJdqY/V4g5RrTlCHnIPBzAduPmbBl7UmvcyTHjkYNgHdHhFYC+roW/2JrK+XfzlGffUV9vEZ1Pk3npz8qfc8NyvQDiBXIYJhTANuy7Kd9MvpGvUbkIfPWG1J50XWaxwl8fJczZLAvy1k155waxX3CDRBSPHrzDZjhyPy+7di+oUhSjaiPkla/24NYkjg3EeLQOAGKCYsRAk=
+X-Microsoft-Antispam-Message-Info: PuCChEWFB0vmb0mVAHy5KTqnvs9yf0JVD6jLY7liimyqY9FBwHfM0hOIbUDB/A2lejlhNTSNWigJhG9WYeNoRv0ua09wYcJkwcwI4ftAbR67TBsACEtzlSMu1bflw3yP+BORUsUgXO0XYK42H8i3h25dLRk0P08u5xv/cRat+RwTTuHT2r9LwLl8rn7SeUWSLlDgQV9gKB1Ahmv0DW7/VDfna6/xPdS0dJ1OsDyC90/venCd0bviEd2OKBuKpHz7QT64AfBu5whFQLuNJ1tRX2bxik7VvVftF/FBCeiIbF/PGrdMa0hGv8zIaEeXrywOBWOH8Lw1GmaPFYVM89UI2uZZl3tNQoEsRFZjmi5Cb7XCKEGbo9UaCteUvGjnJKKdKTG93z48V855KsWWETQe7H1zcpcymQDn0IjN8SVTrrBAR226Ct5gJ+CAi7Lt16e+c1298oqGuXBwhhs4bpfxkmdMdAYoKPj8QaH1BklfK5oTZN+sGRUEJAevJ9SJHSERCkWgLVyBxy5XF4rnbV1r7YJJzX6d7GmXurhMW24KCTY=
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(6506007)(66476007)(4326008)(83380400001)(26005)(8676002)(66946007)(956004)(2616005)(2906002)(69590400010)(5660300002)(66556008)(966005)(16526019)(6512007)(498600001)(6666004)(8936002)(7416002)(52116002)(186003)(86362001)(36756003)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?J5Hp1g/S5X/LEabkh6dt1lSBoOGnKKWFB89UmBAfPZJ3r6Ug51R/zBbRfI8z?=
- =?us-ascii?Q?6+vRVtXKnYDNNKewmc9dWvGLxfq14GmvHDiQY1ahYxK7bQ9he7hibrWYmChO?=
- =?us-ascii?Q?ndksRFyi2I6cQdLZ4irL9U60LBOt44dMP7hwzjBR5WHXBrApHXrtYYm9X98h?=
- =?us-ascii?Q?Jg5dcIcphudvGnte58cTdEsp+KSl2cKa/cqlqgT4X5BYBXXOA4YEJ2fdIe4W?=
- =?us-ascii?Q?5uy+/1NpYxiDxn+9pPxGkofnstnWUkPSj5lB2yI2MOB3vtvaT66WuM++dLA+?=
- =?us-ascii?Q?LUClcx4q5+Vq2N0DK26Kqq1xc5OX1LhafYEiL30oRB5KRFnhB0tQW4eYmNb2?=
- =?us-ascii?Q?g7M58OLBKV+EKpR7+RhI7WU2cwXzizeuNQQqRycjXl6/8VqFSQyz5i5NeEDw?=
- =?us-ascii?Q?du7xdY/HaAJ9ayOV2bFqbyfopAJPp2YianNmAfGg/vDPbcq21qLaE/RhG56U?=
- =?us-ascii?Q?YoliPZ9SMV5ZN+RtNsGCjzwMHgYS5e3xmS1oSWYmDFYGRqLGNcAhXIbPD270?=
- =?us-ascii?Q?GSF6twh/UHtexCj3OWHB4tQ65j5HPlATunX6W/kZWXwNQJA2uq5PDmjvtsM/?=
- =?us-ascii?Q?7yoOGB6vwOurQWPLc6N/UD/5ADv2vyNijkbXP3U6yLEa6O4Yc8Ql+P6uBnhR?=
- =?us-ascii?Q?mV7EOHX2TqoPIa+so+uaKJrjHo6rh3DQUGGjdcCjaD22dmwk0JEWUbvaWXk/?=
- =?us-ascii?Q?ldHGEs0MC+wL3H9RCllI3yg43WzMWs+mU5pg325RhhG+UL0CJ2K5CjtWCim7?=
- =?us-ascii?Q?K1KDKp8qU6ZhD6NJUquZ/axZXG6lokcHX+VbjG5Vkjhs11t20k+lht6J7dsd?=
- =?us-ascii?Q?vc/nPIHUk9i3Tj6ma5hKAw7rbXwk7TEDltmwxcsxpov85PgaUaZ3CYQKf/uJ?=
- =?us-ascii?Q?NBRE4ew36hI5f0r/sL4IdzECG4ZGllSvlFUafjPteX5tConZ4tgxBXyhuTdK?=
- =?us-ascii?Q?e/EpGpUScQEzLERuvCtGm5QCI0sx+qTOzYHF2qXmxkqMPlQTPz/zL3W1GW/u?=
- =?us-ascii?Q?kFaX?=
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?JPLVHp5PRkX8gn7ncvnLSvr2pT2lD2KOdWvpykQsbsYI31rFYS/q4Rdxj8f4?=
+ =?us-ascii?Q?H7+i/Fbaz2ULOzRv/GqoA7+uiay1b/NC7LrJZp8AGke99GdNB7c3WIBCCekc?=
+ =?us-ascii?Q?30ZDW8jYTAFn2vufePfKqC0VkUwJtkF8frHOactl6hC3ftL7LoAjQ4hJHp7F?=
+ =?us-ascii?Q?S9tdKya+2Fcj+uWPS1W9ooGv8ksdx7qBLGNbqaNwjDmRjtbnlkHrIBu9M9Ey?=
+ =?us-ascii?Q?/X9meVB6wxMlNCjVV1M6Wo3AfmATelX4pkm4dZ4kLBta+lO/2L+57SD0QHqJ?=
+ =?us-ascii?Q?o3paBGHLN/CLVuCtmY7yoLQ831K6ii0X08qqMBKgvQRn89yGOlHbyeR/FeSm?=
+ =?us-ascii?Q?Iux8ExDdykhqoHaovoPhKNNcoMG8Ec2ybxD5uzdMGfZ1UlFFDKrT5xp1YTVh?=
+ =?us-ascii?Q?I4b3lIsHUUVpyPgRIEtCFZ44mrO4VwbNNSqAB6cQqtbtGkuq8qMwb2QhJsB/?=
+ =?us-ascii?Q?iDDC7UteiV/N0YCMmRJkFAzeaBTm51LiyxVhXy8U+XXYpU0pixc1qa7eb7QE?=
+ =?us-ascii?Q?mhQoYva9q6gkfXjKj8BcFB1N6n5tK/SeJ/kqJUd/ANzQk6Nf2uLORIGgnMxp?=
+ =?us-ascii?Q?cinuuAyh/m7zc7UbnTuh1adLqZKL1A0BB5AVkfwDBvV1cGWmmC6HhdyeFjD6?=
+ =?us-ascii?Q?b6rCOg6py3XSnTzJylS97M49lYR8Htc8+NrlD2L7phuzsgbqXPuOod0ccxbj?=
+ =?us-ascii?Q?2BLTOZAOCc1Npgws+ZHgk5C/0u7OsSbb0RwFz2fSseAwrWR1t1c39HTvjGIb?=
+ =?us-ascii?Q?sDWocxULCNLXvi2Wu5i0mlxr5myBrgcNTJO/mb/YX/ewMliIJ4HUoUM8xdNM?=
+ =?us-ascii?Q?DjT6K/SXJ+U8pimB59J6q0syGqLlnsdfjLXaROoxGbiLIAQ5daTpmGwp0AGL?=
+ =?us-ascii?Q?dG6BEPxG1t7Pz16qiDV727i6Ede2DQhesnhIvK/czJ0ilDG4axY87OJ3o6R2?=
+ =?us-ascii?Q?VJmaj+pmzQ8QxdC4xwpnTQnt4bXVB+XkGvZYYjhdV/x8WzO3btQUAb5S83kv?=
+ =?us-ascii?Q?p4//?=
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6528.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Dec 2020 11:46:54.3022
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Dec 2020 11:46:59.2653
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-Network-Message-Id: cce72d13-673f-4829-eec9-08d8abef706d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5ee47d43-f8bb-4665-4431-08d8abef7358
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HrQ+ly6fUkzy1FtsZvaoJXvXMemeuYI9l6TzjYAzIkw5dEtsgqCM/gCYCblxErAm
+X-MS-Exchange-CrossTenant-UserPrincipalName: m6dR2hgsTEr27tpW4BcAyxA/MbQHm1YVO3kPIjO5bxN2PiP5E9bP49SafENP5MUi
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6653
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-NXP imx8MPlus integrates 2 indentical dwc3 3.30b IP with additional wakeup
-logic to support low power, this wakeup logic has a separated interrupt
-which can generate events with suspend clock(32K); due to SoC integration
-limitation, it only can support 32 bits DMA, so add dma-ranges property,
+NXP imx8mp integrates 2 dwc3 3.30b IP and add some wakeup logic
+to support low power mode, the glue layer is for this wakeup
+functionality, which has a separated interrupt, can support
+wakeup from U3 and connect events for host, and vbus wakeup for
+device.
 
-changes for v5
-- Remove "Items" of compatible in binding doc [1/4]
-- Add Krzysztof's R-b tag for patches [3-4/4].
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Li Jun <jun.li@nxp.com>
+---
+ .../devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml   | 105 +++++++++++++++++++++
+ 1 file changed, 105 insertions(+)
 
-changes for v4:
-- Use dma-ranges property to limit 32bits DMA, so don't need the new
-  property "xhci-64bit-support-disable".
-- Fix binding doc to pass dt_binding_check dtbs_check.
-
-changes for v3:
-- Add dwc3 core related clocks into dwc3 core node, and glue layer driver
-  only handle the clocks(hsio and suspend) for glue block, this is to
-  match real HW.
-- Change to use property "xhci-64bit-support-disable" to disable 64bit DMA
-  as imx8mp USB integration actully can't support it, so remove platform
-  data in v2.
-- Some changes of imx8mp usb driver binding doc to address comments from Rob
-
-Changes for v2:
-- Drop the 2 patches for new property("snps,xhci-dis-64bit-support-quirk")
-  introduction, as suggested, imply by SoC compatible string, this is done
-  by introduce dwc3 core platform data and pass the xhci_plat_priv to
-  xhci-plat for those xhci quirks, so a new patch added:
-  [1/5] usb: dwc3: add platform data to dwc3 core device to pass data.
-  this patch is based on Peter's one patch which is also in review:
-  https://patchwork.kernel.org/patch/11640945/
-- dts change, use the USB power function of TRL logic instead of a always-on
-  regulator to control vbus on/off.
-- Some changes to address Peter's command on patch [2/5].
-
-Li Jun (4):
-  dt-bindings: usb: dwc3-imx8mp: add imx8mp dwc3 glue bindings
-  usb: dwc3: add imx8mp dwc3 glue layer driver
-  arm64: dtsi: imx8mp: add usb nodes
-  arm64: dts: imx8mp-evk: enable usb1 as host mode
-
- .../devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml   | 105 ++++++
- arch/arm64/boot/dts/freescale/imx8mp-evk.dts       |  21 ++
- arch/arm64/boot/dts/freescale/imx8mp.dtsi          |  82 +++++
- drivers/usb/dwc3/Kconfig                           |  10 +
- drivers/usb/dwc3/Makefile                          |   1 +
- drivers/usb/dwc3/dwc3-imx8mp.c                     | 363 +++++++++++++++++++++
- 6 files changed, 582 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
- create mode 100644 drivers/usb/dwc3/dwc3-imx8mp.c
-
+diff --git a/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml b/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
+new file mode 100644
+index 0000000..cb4c6f6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
+@@ -0,0 +1,105 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (c) 2020 NXP
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/fsl,imx8mp-dwc3.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP iMX8MP Soc USB Controller
++
++maintainers:
++  - Li Jun <jun.li@nxp.com>
++
++properties:
++  compatible:
++    const: fsl,imx8mp-dwc3
++
++  reg:
++    maxItems: 1
++    description: Address and length of the register set for the wrapper of
++      dwc3 core on the SOC.
++
++  "#address-cells":
++    enum: [ 1, 2 ]
++
++  "#size-cells":
++    enum: [ 1, 2 ]
++
++  dma-ranges:
++    description:
++      See section 2.3.9 of the DeviceTree Specification.
++
++  ranges: true
++
++  interrupts:
++    maxItems: 1
++    description: The interrupt that is asserted when a wakeup event is
++      received.
++
++  clocks:
++    description:
++      A list of phandle and clock-specifier pairs for the clocks
++      listed in clock-names.
++    items:
++      - description: system hsio root clock.
++      - description: suspend clock, used for usb wakeup logic.
++
++  clock-names:
++    items:
++      - const: hsio
++      - const: suspend
++
++# Required child node:
++
++patternProperties:
++  "^dwc3@[0-9a-f]+$":
++    type: object
++    description:
++      A child node must exist to represent the core DWC3 IP block
++      The content of the node is defined in dwc3.txt.
++
++required:
++  - compatible
++  - reg
++  - "#address-cells"
++  - "#size-cells"
++  - dma-ranges
++  - ranges
++  - clocks
++  - clock-names
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/imx8mp-clock.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    usb3_0: usb@32f10100 {
++      compatible = "fsl,imx8mp-dwc3";
++      reg = <0x32f10100 0x8>;
++      clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
++               <&clk IMX8MP_CLK_USB_ROOT>;
++      clock-names = "hsio", "suspend";
++      interrupts = <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>;
++      #address-cells = <1>;
++      #size-cells = <1>;
++      dma-ranges = <0x40000000 0x40000000 0xc0000000>;
++      ranges;
++
++      dwc3@38100000 {
++        compatible = "snps,dwc3";
++        reg = <0x38100000 0x10000>;
++        clocks = <&clk IMX8MP_CLK_HSIO_AXI>,
++                 <&clk IMX8MP_CLK_USB_CORE_REF>,
++                 <&clk IMX8MP_CLK_USB_ROOT>;
++        clock-names = "bus_early", "ref", "suspend";
++        assigned-clocks = <&clk IMX8MP_CLK_HSIO_AXI>;
++        assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_500M>;
++        assigned-clock-rates = <500000000>;
++        interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
++        phys = <&usb3_phy0>, <&usb3_phy0>;
++        phy-names = "usb2-phy", "usb3-phy";
++        snps,dis-u2-freeclk-exists-quirk;
++      };
++    };
 -- 
 2.7.4
 
