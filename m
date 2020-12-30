@@ -2,39 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A92412E7A47
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Dec 2020 16:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B82F82E7A4A
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Dec 2020 16:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726485AbgL3PZm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Dec 2020 10:25:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
+        id S1726486AbgL3P0d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Dec 2020 10:26:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726290AbgL3PZm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Dec 2020 10:25:42 -0500
+        with ESMTP id S1726391AbgL3P0d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Dec 2020 10:26:33 -0500
 Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0101C06179C
-        for <linux-usb@vger.kernel.org>; Wed, 30 Dec 2020 07:25:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742E2C061799;
+        Wed, 30 Dec 2020 07:25:52 -0800 (PST)
 Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
         (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 0BUFOvqg015205
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 0BUFPjdo017835
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Wed, 30 Dec 2020 16:24:57 +0100
+        Wed, 30 Dec 2020 16:25:46 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1609341897; bh=0mkVcRT/WBsApwR9ehP8HCnBB0tAFL2O53odxxYfGWg=;
+        t=1609341946; bh=nt+Z5djtOLKaeLiTOQrT03jk+NB9rbFS2dBh39MH3uI=;
         h=From:To:Cc:Subject:Date:Message-Id:From;
-        b=hcVerNDpOdDDzJ++sNfjN0mq6ZTDVKSgWqlbC6F3Bq+arwPrrrSShUP1RCy6lmUos
-         Zknn1QN4Dbn+WyArbk0VdaFENvMZDZrNfec6mby2BS93VnqVZiJ1TjTY8+etrteUME
-         228UH5uz9JAbAg0/bJEp6Fubv87d88muYKuzyA00=
+        b=oQU5Ng2xUmqvk6IIxHEdqqUMzl5ZFO3adJZsDXC1He+OkzDJ7p/Wx8taw8HZXVbsn
+         cDhWXdxDcnb48xnBaMq1p679pc42FZgoIFANaCz2swEleAlCp2rolkO/xDQka87+Na
+         ZFPC8fV5bSoI08PdImeg8jvFJ2k0/lw5gJmR4Ve8=
 Received: from bjorn by miraculix.mork.no with local (Exim 4.94)
         (envelope-from <bjorn@miraculix.mork.no>)
-        id 1kudLN-0011ol-3j; Wed, 30 Dec 2020 16:24:57 +0100
+        id 1kudM9-0011po-C2; Wed, 30 Dec 2020 16:25:45 +0100
 From:   =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-To:     netdev@vger.kernel.org
+To:     Johan Hovold <johan@kernel.org>
 Cc:     linux-usb@vger.kernel.org,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-Subject: [PATCH net,stable] net: usb: qmi_wwan: add Quectel EM160R-GL
-Date:   Wed, 30 Dec 2020 16:24:51 +0100
-Message-Id: <20201230152451.245271-1-bjorn@mork.no>
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        stable@vger.kernel.org
+Subject: [PATCH] USB: serial: option: add Quectel EM160R-GL
+Date:   Wed, 30 Dec 2020 16:25:34 +0100
+Message-Id: <20201230152534.245337-1-bjorn@mork.no>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -75,23 +76,25 @@ E: Ad=88(I) Atr=03(Int.) MxPS= 8 Ivl=32ms
 E: Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
 E: Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
 
+Cc: stable@vger.kernel.org
 Signed-off-by: Bjørn Mork <bjorn@mork.no>
 ---
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/serial/option.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index d166c321ee9b..af19513a9f75 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1013,6 +1013,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0125)},	/* Quectel EC25, EC20 R2.0  Mini PCIe */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0306)},	/* Quectel EP06/EG06/EM06 */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
-+	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0620)},	/* Quectel EM160R-GL */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0800)},	/* Quectel RM500Q-GL */
- 
- 	/* 3. Combined interface devices matching on interface number */
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 2c21e34235bb..7c9cd921a738 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1117,6 +1117,8 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM12, 0xff, 0xff, 0xff),
+ 	  .driver_info = RSVD(1) | RSVD(2) | RSVD(3) | RSVD(4) | NUMEP2 },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM12, 0xff, 0, 0) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, 0x0620, 0xff, 0xff, 0x30) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, 0x0620, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x30) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x10),
 -- 
 2.29.2
 
