@@ -2,170 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3972E7DF9
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Dec 2020 05:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E75C72E7E5F
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Dec 2020 07:08:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726333AbgLaEeh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Dec 2020 23:34:37 -0500
-Received: from mga04.intel.com ([192.55.52.120]:33496 "EHLO mga04.intel.com"
+        id S1726329AbgLaGGU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 31 Dec 2020 01:06:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40284 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726037AbgLaEeg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 30 Dec 2020 23:34:36 -0500
-IronPort-SDR: icyvQ3ZvKOV3cNRIrmcdnOYC8SCElKJUcSrUhONTIFZR5O2Z7CQrhbtwf2iOm7v7if3XDdAgAD
- hIrBABpEjxhA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9850"; a="174090212"
-X-IronPort-AV: E=Sophos;i="5.78,463,1599548400"; 
-   d="scan'208";a="174090212"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2020 20:33:56 -0800
-IronPort-SDR: i2jlEiim+mPz0+ZtYAmNvc/pzvpSxt4BCwat/5Hv9wu3B6E80x+A8jKu9HcM8RYYPacOC3Ul3E
- wTzUXZdeMaCg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,463,1599548400"; 
-   d="scan'208";a="348097429"
-Received: from lkp-server02.sh.intel.com (HELO 4242b19f17ef) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Dec 2020 20:33:55 -0800
-Received: from kbuild by 4242b19f17ef with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kupes-0004gr-Cr; Thu, 31 Dec 2020 04:33:54 +0000
-Date:   Thu, 31 Dec 2020 12:33:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- c318840fb2a42ce25febc95c4c19357acf1ae5ca
-Message-ID: <5fed54a4.hxgarp6V2Cf/F2Ig%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726037AbgLaGGU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 31 Dec 2020 01:06:20 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 1F4F022227
+        for <linux-usb@vger.kernel.org>; Thu, 31 Dec 2020 06:05:40 +0000 (UTC)
+Received: by pdx-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 0E1BE81F1E; Thu, 31 Dec 2020 06:05:40 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 209407] skb_over_panic in cdc_mbim_tx_fixup
+Date:   Thu, 31 Dec 2020 06:05:39 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jks@iki.fi
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cf_kernel_version
+Message-ID: <bug-209407-208809-ZFelR26NO6@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-209407-208809@https.bugzilla.kernel.org/>
+References: <bug-209407-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
-branch HEAD: c318840fb2a42ce25febc95c4c19357acf1ae5ca  USB: Gadget: dummy-hcd: Fix shift-out-of-bounds bug
+https://bugzilla.kernel.org/show_bug.cgi?id=209407
 
-elapsed time: 722m
+Jouni Seppänen (jks@iki.fi) changed:
 
-configs tested: 108
-configs skipped: 2
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+     Kernel Version|5.8.12                      |5.9.13
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+--- Comment #1 from Jouni Seppänen (jks@iki.fi) ---
+Still occurs in 5.9.13. The BUG log message is different but the call trace
+still shows cdc_ncm_fill_tx_frame.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-nios2                            alldefconfig
-powerpc                      pcm030_defconfig
-x86_64                              defconfig
-sh                  sh7785lcr_32bit_defconfig
-mips                        bcm63xx_defconfig
-mips                        qi_lb60_defconfig
-arm                         vf610m4_defconfig
-microblaze                          defconfig
-sh                     sh7710voipgw_defconfig
-arm                         s3c6400_defconfig
-mips                           rs90_defconfig
-h8300                    h8300h-sim_defconfig
-sh                             shx3_defconfig
-mips                   sb1250_swarm_defconfig
-m68k                         apollo_defconfig
-sh                          sdk7780_defconfig
-mips                    maltaup_xpa_defconfig
-arm                        cerfcube_defconfig
-mips                      maltaaprp_defconfig
-s390                       zfcpdump_defconfig
-xtensa                    xip_kc705_defconfig
-powerpc                 mpc832x_rdb_defconfig
-sh                        edosk7760_defconfig
-parisc                           allyesconfig
-powerpc                  iss476-smp_defconfig
-mips                     loongson1b_defconfig
-mips                     loongson1c_defconfig
-x86_64                           alldefconfig
-m68k                           sun3_defconfig
-mips                           ip22_defconfig
-powerpc                      ppc44x_defconfig
-powerpc                    sam440ep_defconfig
-arc                     haps_hs_smp_defconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a005-20201230
-x86_64               randconfig-a001-20201230
-x86_64               randconfig-a006-20201230
-x86_64               randconfig-a002-20201230
-x86_64               randconfig-a004-20201230
-x86_64               randconfig-a003-20201230
-i386                 randconfig-a005-20201230
-i386                 randconfig-a006-20201230
-i386                 randconfig-a004-20201230
-i386                 randconfig-a003-20201230
-i386                 randconfig-a002-20201230
-i386                 randconfig-a001-20201230
-i386                 randconfig-a016-20201230
-i386                 randconfig-a014-20201230
-i386                 randconfig-a012-20201230
-i386                 randconfig-a015-20201230
-i386                 randconfig-a011-20201230
-i386                 randconfig-a013-20201230
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+[163049.133074] BUG: unable to handle page fault for address: ffff8d3e47000000
+[163049.140062] #PF: supervisor write access in kernel mode
+[163049.145385] #PF: error_code(0x0003) - permissions violation
+[163049.151052] PGD afa01067 P4D afa01067 PUD 12efff067 PMD 11a27f063 PTE
+80000000c7000161
+[163049.159073] Oops: 0003 [#1] SMP NOPTI
+[163049.162839] CPU: 2 PID: 0 Comm: swapper/2 Kdump: loaded Tainted: G         
+  E     5.9.13 #1
+[163049.171454] Hardware name: PC Engines apu3/apu3, BIOS v4.12.0.2 06/28/2020
+[163049.178437] RIP: 0010:__memset+0x24/0x30
+    ------8<------
+[163049.263988] Call Trace:
+[163049.266552]  <IRQ>
+[163049.268682]  cdc_ncm_fill_tx_frame+0x83a/0x970 [cdc_ncm]
+[163049.274124]  cdc_mbim_tx_fixup+0x1d9/0x240 [cdc_mbim]
+[163049.279301]  usbnet_start_xmit+0x5d/0x720 [usbnet]
 
-clang tested configs:
-x86_64               randconfig-a015-20201230
-x86_64               randconfig-a014-20201230
-x86_64               randconfig-a016-20201230
-x86_64               randconfig-a011-20201230
-x86_64               randconfig-a013-20201230
-x86_64               randconfig-a012-20201230
+-- 
+You may reply to this email to add a comment.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+You are receiving this mail because:
+You are watching the assignee of the bug.
