@@ -2,106 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B70C92E803D
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Dec 2020 14:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 081EF2E81A9
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Dec 2020 19:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726071AbgLaNsw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 31 Dec 2020 08:48:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726080AbgLaNsw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Dec 2020 08:48:52 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB79C061575
-        for <linux-usb@vger.kernel.org>; Thu, 31 Dec 2020 05:48:11 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id d9so17215984iob.6
-        for <linux-usb@vger.kernel.org>; Thu, 31 Dec 2020 05:48:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DkV9Lf6E0lr2zdysE52RUMdfYzKcT2Yxx2vWr/fG4+g=;
-        b=HJcBD31EAGi2EzS15TmcUcrytynNAIuxR57xyrydS9ulF3KXej5npjPk3zv7not59m
-         EN/YyfAQ/o3tNKMe91Mj3mBWjA/hZSsYXiiua5iGkJrCgE2U80vbpPyVEW4HeUqzfYym
-         w159HvC9VPsyKswHKmJb2Rm/bpYCX0ciToBrh6HszanqpWGSq6VCH029sqwVskvTnqDB
-         i6GqcmBoVqay3FGaUJVGtOrqyK5WNAR12rmLmKfBwoFUEMxFn3sVLCJZXUai3Nnl2VXa
-         5fsGmfB6US8S9e9Zh6+XW/htlG+Zxb8yQKK8TTFY9iN9M6YJHqvYBKAjKF382X1tzVJh
-         n+Gg==
+        id S1726302AbgLaSwH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 31 Dec 2020 13:52:07 -0500
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:33432 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726210AbgLaSwH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Dec 2020 13:52:07 -0500
+Received: by mail-ot1-f52.google.com with SMTP id b24so18680286otj.0;
+        Thu, 31 Dec 2020 10:51:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DkV9Lf6E0lr2zdysE52RUMdfYzKcT2Yxx2vWr/fG4+g=;
-        b=LPshqOtCEgvY3QKjzRYVW7lExFZGJdSRHuQUkSHGI1NNV/GHzW8GDRdpidNpmoknMH
-         hF9vBPdkhSgXu+0CXGPfT0DHfcu73+Oag1+ONjwJlF8JC9D5KojJJKjoLJJzweFkghnC
-         KCjhnU4+Oko3DgdRqgHiK8PAUmHjtc+n7gWPnKDocqe545lxGotxUFKwsa3KudJX5Ge4
-         bTfGUc2ejnahJ8dOQ/P6p8JwCAQMfcArLu46tSKn4p6yj2pLYazhJsDqoxN24XAw+yZp
-         ZgbSH96TLcAGjcQak79ZKJmbrCdppTBw9IW7WtvVed2lofO74/AGnZVFZ2JQdklfnHw8
-         Nqyg==
-X-Gm-Message-State: AOAM531ZhgVbwOpdn89kDZw97trszoJivzhrUWRJFYy1mLkBguZjsZa+
-        3ldEC+QP0D1uwqvmuIJXI/SRDULvTXtHSv0hs7LMzw==
-X-Google-Smtp-Source: ABdhPJy8Xd+N4sLXexhCMHdnb/XIt24asDCeLsMzLDOZjhQzVwc29RC5tlmXdBoDESMSAKq/aEw76KwRfyyqGDO3mxc=
-X-Received: by 2002:a5e:c111:: with SMTP id v17mr46607975iol.29.1609422490100;
- Thu, 31 Dec 2020 05:48:10 -0800 (PST)
+        bh=3s0Zd41XA96gD+4GxhcC8fTWK819UxIpZXhCAJrLsmk=;
+        b=lldz/P/yKnXwjlqqCJWe7ZLUOHlS3lMd2xeLRJOUZcKFShcgVZ4u10gIZuieazCd8B
+         kvj4vRr/R7ELrbEDrbBwwnP2lDwL19xBOszsET06GlEWJr3kUM1UKaD5niubS40e0ID/
+         EnrTM0ps1HuiCazRsBSKcZj2sPhsNVpJFfzs2xdo5MNi9vrqmmGLjY2buWe/2Cjt2Cq+
+         gRKrLNBxVGKlsuiEb8rWqywO20qr7HOlSBPlM/ClvtrwBjdOnQ0faz87zU9OArA4T0sA
+         tWs5p2V4W7I+Wa5uhPiXZEoCx7wfzWM2HuMLXwpxpwgE3waHOtapxIIPjb6IpC4pgRvQ
+         S1gQ==
+X-Gm-Message-State: AOAM533F3qhJjN/o2jKCfVidQtzgqxowhT4i3pSr2+K2KcSGlqKUrjHX
+        GakZJm2Hk8S/2rI60psAgkUYoe+BbQurQzChOk4IC9OtK1dkNA==
+X-Google-Smtp-Source: ABdhPJz/FCgr3ulkjceyF5vEllTJ235pnsX5pfw+BtGvGWOKqBnXfgL155EOsrLi83YDQWsO7HF7Uc98YTBBmsfJ2ZE=
+X-Received: by 2002:a05:6830:1bc6:: with SMTP id v6mr43231547ota.135.1609440686313;
+ Thu, 31 Dec 2020 10:51:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20201230124925.19260-1-shawn.guo@linaro.org> <202012302301.ml5wrf97-lkp@intel.com>
-In-Reply-To: <202012302301.ml5wrf97-lkp@intel.com>
-From:   Shawn Guo <shawn.guo@linaro.org>
-Date:   Thu, 31 Dec 2020 21:47:59 +0800
-Message-ID: <CAAQ0ZWT3pV=TNSX9XZCQ1=cgxAGjCOjPch3Xzjgr008Kg6SkAw@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: qcom: add URS Host support for sdm845 ACPI boot
-To:     kernel test robot <lkp@intel.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, kbuild-all@lists.01.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <20201222184926.35382198@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20201224032116.2453938-1-roland@kernel.org> <X+RJEI+1AR5E0z3z@kroah.com>
+ <20201228133036.3a2e9fb5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAG4TOxNM8du=xadLeVwNU5Zq=MW7Kj74-1d9ThZ0q2OrXHE5qQ@mail.gmail.com>
+ <24c6faa2a4f91c721d9a7f14bb7b641b89ae987d.camel@neukum.org>
+ <CAG4TOxOc2OJnzJg9mwd2h+k0mj250S6NdNQmhK7BbHhT4_KdVA@mail.gmail.com> <12f345107c0832a00c43767ac6bb3aeda4241d4e.camel@suse.com>
+In-Reply-To: <12f345107c0832a00c43767ac6bb3aeda4241d4e.camel@suse.com>
+From:   Roland Dreier <roland@kernel.org>
+Date:   Thu, 31 Dec 2020 10:51:09 -0800
+Message-ID: <CAG4TOxOOPgAqUtX14V7k-qPCbOm7+5gaHOqBvgWBYQwJkO6v8g@mail.gmail.com>
+Subject: Re: [PATCH] CDC-NCM: remove "connected" log message
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 31, 2020 at 12:01 AM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Shawn,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on balbi-usb/testing/next]
-> [also build test WARNING on v5.11-rc1 next-20201223]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/0day-ci/linux/commits/Shawn-Guo/usb-dwc3-qcom-add-URS-Host-support-for-sdm845-ACPI-boot/20201230-205430
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git testing/next
-> config: xtensa-allyesconfig (attached as .config)
-> compiler: xtensa-linux-gcc (GCC) 9.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/0day-ci/linux/commit/c3faeb501efb31e035beca1c0fee1cca6ec16392
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Shawn-Guo/usb-dwc3-qcom-add-URS-Host-support-for-sdm845-ACPI-boot/20201230-205430
->         git checkout c3faeb501efb31e035beca1c0fee1cca6ec16392
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=xtensa
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->    drivers/usb/dwc3/dwc3-qcom.c: In function 'dwc3_qcom_create_urs_usb_platdev':
->    drivers/usb/dwc3/dwc3-qcom.c:675:9: error: implicit declaration of function 'acpi_create_platform_device' [-Werror=implicit-function-declaration]
->      675 |  return acpi_create_platform_device(adev, NULL);
->          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >> drivers/usb/dwc3/dwc3-qcom.c:675:9: warning: returning 'int' from a function with return type 'struct platform_device *' makes pointer from integer without a cast [-Wint-conversion]
->      675 |  return acpi_create_platform_device(adev, NULL);
->          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    cc1: some warnings being treated as errors
+I haven't tried these patches yet but they don't look quite right to
+me.  inlining the first 0001 patch:
 
-Just sent out a patch [1] to address the problem in ACPI core.
+ > diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+ > index 1447da1d5729..bcd17f6d6de6 100644
+ > --- a/drivers/net/usb/usbnet.c
+ > +++ b/drivers/net/usb/usbnet.c
+ > @@ -944,7 +944,7 @@ EXPORT_SYMBOL_GPL(usbnet_open);
+ >   * they'll probably want to use this base set.
+ >   */
+ >
+ > -int usbnet_get_link_ksettings(struct net_device *net,
+ > +int usbnet_get_link_ksettings_mdio(struct net_device *net,
+ >                    struct ethtool_link_ksettings *cmd)
+ >  {
+ >      struct usbnet *dev = netdev_priv(net);
+ > @@ -956,6 +956,32 @@ int usbnet_get_link_ksettings(struct net_device *net,
+ >
+ >      return 0;
+ >  }
+ > +EXPORT_SYMBOL_GPL(usbnet_get_link_ksettings_mdio);
 
-Shawn
+why keep and export the old function when it will have no callers?
 
-[1] https://lkml.org/lkml/2020/12/31/60
+ > +int usbnet_get_link_ksettings(struct net_device *net,
+ > +                    struct ethtool_link_ksettings *cmd)
+ > +{
+ > +    struct usbnet *dev = netdev_priv(net);
+ > +
+ > +    /* the assumption that speed is equal on tx and rx
+ > +     * is deeply engrained into the networking layer.
+ > +     * For wireless stuff it is not true.
+ > +     * We assume that rxspeed matters more.
+ > +     */
+ > +    if (dev->rxspeed != SPEED_UNKNOWN)
+ > +        cmd->base.speed = dev->rxspeed / 1000000;
+ > +    else if (dev->txspeed != SPEED_UNKNOWN)
+ > +        cmd->base.speed = dev->txspeed / 1000000;
+ > +    /* if a minidriver does not record speed we try to
+ > +     * fall back on MDIO
+ > +     */
+ > +    else if (!dev->mii.mdio_read)
+ > +        cmd->base.speed = SPEED_UNKNOWN;
+ > +    else
+ > +        mii_ethtool_get_link_ksettings(&dev->mii, cmd);
+ > +
+ > +    return 0;
+
+This is a change in behavior for every driver that doesn't set rxspeed
+/ txspeed - the old get_link function would return EOPNOTSUPP if
+mdio_read isn't implemented, now we give SPEED_UNKNOWN with a
+successful return code.
+
+ > @@ -1661,6 +1687,8 @@ usbnet_probe (struct usb_interface *udev,
+const struct usb_device_id *prod)
+ >      dev->intf = udev;
+ >      dev->driver_info = info;
+ >      dev->driver_name = name;
+ > +    dev->rxspeed = -1; /* unknown or handled by MII */
+ > +    dev->txspeed = -1;
+
+Minor nit: if we're going to test these against SPEED_UNKNOWN above,
+then I think it's clearer to initialize them to that value via the
+same constant.
+
+ > diff --git a/include/linux/usb/usbnet.h b/include/linux/usb/usbnet.h
+ > index 88a7673894d5..f748c758f82a 100644
+ > --- a/include/linux/usb/usbnet.h
+ > +++ b/include/linux/usb/usbnet.h
+ > @@ -267,8 +269,11 @@ extern void usbnet_purge_paused_rxq(struct usbnet *);
+ >
+ >  extern int usbnet_get_link_ksettings(struct net_device *net,
+ >                       struct ethtool_link_ksettings *cmd);
+ > -extern int usbnet_set_link_ksettings(struct net_device *net,
+ > +extern int usbnet_set_link_ksettings_mdio(struct net_device *net,
+ >                       const struct ethtool_link_ksettings *cmd);
+ > +/* Legacy - to be used if you really need an error to be returned */
+ > +extern int usbnet_set_link_ksettings(struct net_device *net,
+ > +                    const struct ethtool_link_ksettings *cmd);
+ >  extern u32 usbnet_get_link(struct net_device *net);
+ >  extern u32 usbnet_get_msglevel(struct net_device *);
+ >  extern void usbnet_set_msglevel(struct net_device *, u32);
+
+I think this was meant to be changing get_link, not set_link.
+
+Also I don't understand the "Legacy" comment.  Is that referring to
+the EOPNOTSUPP change I mentioned above?  If so, wouldn't it be better
+to preserve the legacy behavior rather than changing the behavior of
+every usbnet driver all at once?  Like make a new
+usbnet_get_link_ksettings_nonmdio and update only cdc_ncm to use it?
+
+ - R.
