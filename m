@@ -2,210 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 174792E8952
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Jan 2021 00:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 945742E8B58
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Jan 2021 09:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726846AbhABXTz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Jan 2021 18:19:55 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:51903 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726802AbhABXTy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Jan 2021 18:19:54 -0500
-Received: by mail-io1-f69.google.com with SMTP id h206so9693393iof.18
-        for <linux-usb@vger.kernel.org>; Sat, 02 Jan 2021 15:19:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=DbzTGlujJEXTqmX6SO3/r+HBuT/UsCQpzdiJC1Uw/Y4=;
-        b=qQvzTbBfQC2yTJKWvUMnLvT3uErRZYXi+Efxe+ic0/tjZjJ/Haon+rzIX7JQ32nrIb
-         UADfIxrQYnna6BgoqdPlE+my4m/P3TrbkaACXfMDpQxsB9Y2BV+GA0wVj4+ajS9uUZnm
-         FJhuBk6ynQZVrY8stJAU2cswqupmQT2yIgW6RALDYebdxxmThbQqJBzIZ52sEWlbGGbe
-         YXcgqZmRMxhVFJXk8SL4LOm466A5HYurI/bE/2J00x4D3FVI7b52ZBmwKPRkA3gOyGTJ
-         KcXPzO2ETSrFkjgzM1D1JU2dkWeEt4xXdQf+12kW5UV7cUsUojWanSfU27g04L/pQE5P
-         buOA==
-X-Gm-Message-State: AOAM532SDMDbCexXcAFE/ezqzOnGd7QhW0wCWbpE3WGEEg+h23XN/lir
-        1o+5AFAXlPnwQIO/IeET2BBAl3ndGDz+gPPwn1PXohpXXGLg
-X-Google-Smtp-Source: ABdhPJwsojFW+TNXcQXSa4k8MEkkVt6MfPI00jrYzgwfLxcRc0Wrva2oUl5Ghul0cd8cj6oxtSHRncePfkkCW7V6Pzh49PlJG/ou
+        id S1726210AbhACIUF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 3 Jan 2021 03:20:05 -0500
+Received: from mail-mw2nam10on2046.outbound.protection.outlook.com ([40.107.94.46]:48160
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725829AbhACIUF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 3 Jan 2021 03:20:05 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YiNg5LUeWXW5EZclSt+MKqw9tgY4FRL4kVxxMcLvctm38R/OMkWMKl8mHG/NR6xMUwVC7PObp5a99WrJMob5tIapK6YbhW1WPBqv8xKy9QIg7XjtTPjbR0WaRmJDIsSqAvL8OcnmqjbKlit1qYp9lH1MVzOwI465NJQO0ZE4PvbejtT87EwWkPUuAyADEh+i5Gn1KGtXBacXOa0UDwt77d7E1P1tad+59d5BJCXcZeLUivKbMbEnBURS1Kok1wtk5P2qozidm/5TJvEwWqToXKMknYbkSp8YGcMGK6sZ6hM3j6kt9BFgad3osA9DZEfcqm2CHQvI/ycZ7kDmlwmxtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YSVY1U7rFgfzx7KSaJc+0/aSQ7jeEBD4xxpWGVQygS8=;
+ b=fcGkqGw5OxSzFaXdi80yBBiRvtUiJeOvvrnKAjuIMbpR5dQhmMc8m1QbgJ857XN9IpS2jVxvH8UbHzx4z/kP4KpaTJ5RGWVRlbITohdw8EscHBCdlhEdotRRm/KOLkWRzv5B0svP8Ore9Qp0PwBL/iQJu8zzf15nGSiRSeECK/OLWX3UwrvKkERvEWcgdTC1OBGGnOgjIuIdYweixWrvSRGPyp3eLwhu/qaYSMzYXC+u0asrZfxOGasNOw40dhscJh+tXi4t6rxJGPRA7D54e2lq1BVqgsp87Jb3V9l/ZB2Fsc4VwHYw4vSMNC75LAxOBC6mC+6h6/vUZ0s868yWqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=windriversystems.onmicrosoft.com;
+ s=selector2-windriversystems-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YSVY1U7rFgfzx7KSaJc+0/aSQ7jeEBD4xxpWGVQygS8=;
+ b=qUfyBeHzMI1OcxjVUijBXDYVX3RUGq7IwR14Iv/FAO+N5rKu9WFzAUYFvw1E6rqpGg9wnU8q3oAUnx2iP0OLlXUL8St3nABW1Gt3IludHMVk71RtavJ2ez4JpSbKBp4/QI/0wi0Sq+mstI94PfF3GU5ThXEwns/R8HDo/ouWcn8=
+Authentication-Results: linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=none action=none
+ header.from=windriver.com;
+Received: from BYAPR11MB2632.namprd11.prod.outlook.com (2603:10b6:a02:c4::17)
+ by BYAPR11MB2903.namprd11.prod.outlook.com (2603:10b6:a03:89::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3721.23; Sun, 3 Jan
+ 2021 08:19:15 +0000
+Received: from BYAPR11MB2632.namprd11.prod.outlook.com
+ ([fe80::94a4:4e15:ab64:5006]) by BYAPR11MB2632.namprd11.prod.outlook.com
+ ([fe80::94a4:4e15:ab64:5006%5]) with mapi id 15.20.3700.031; Sun, 3 Jan 2021
+ 08:19:15 +0000
+From:   qiang.zhang@windriver.com
+To:     gregkh@linuxfoundation.org
+Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org
+Subject: [PATCH] USB: add __get_free_pages() in hcd_buffer_alloc function
+Date:   Sun,  3 Jan 2021 16:19:02 +0800
+Message-Id: <20210103081902.2381-1-qiang.zhang@windriver.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-Originating-IP: [60.247.85.82]
+X-ClientProxiedBy: HKAPR03CA0014.apcprd03.prod.outlook.com
+ (2603:1096:203:c8::19) To BYAPR11MB2632.namprd11.prod.outlook.com
+ (2603:10b6:a02:c4::17)
 MIME-Version: 1.0
-X-Received: by 2002:a6b:f90f:: with SMTP id j15mr54554036iog.89.1609629552529;
- Sat, 02 Jan 2021 15:19:12 -0800 (PST)
-Date:   Sat, 02 Jan 2021 15:19:12 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b2d35705b7f31599@google.com>
-Subject: INFO: task hung in virtio_cleanup
-From:   syzbot <syzbot+1db88381b64aaa929ef6@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, herbert@gondor.apana.org.au,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, mpm@selenic.com, mst@redhat.com,
-        rikard.falkeborn@gmail.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from pek-qzhang2-d1.wrs.com (60.247.85.82) by HKAPR03CA0014.apcprd03.prod.outlook.com (2603:1096:203:c8::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.4 via Frontend Transport; Sun, 3 Jan 2021 08:19:13 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 92e0e070-3c74-4e9b-9e91-08d8afc04237
+X-MS-TrafficTypeDiagnostic: BYAPR11MB2903:
+X-Microsoft-Antispam-PRVS: <BYAPR11MB29035B8F9BD568BBACCBB2E0FFD30@BYAPR11MB2903.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2733;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NYhsCNdjVpcEx+6EJBlFqCWs7Oastaa7dS19KNAWZmYzq4Ds0CxqBFU+RecEwpaazk7qu44zhQqZ/h/7pSECmmL3bYm+D2JtwBxyEM3DCwabPG2cfswlUhTY+beHxqvCzu626s6wVSZtkz8TYYZ+CD66lxtPR34KweEHTOTECj2snkup05CI56gYVVLAW92wpKWUlUDRtBtpGq6oGqLsrhCNZRBeixiOqONpJGdS8KGFm8azcdzBbwFXoFL6UjnlIrrBZly1RBTL75zXdt+a/WfKurZaESn7+ElSArYd6vLpNV0poRZOya35NWvAgkI4F/iT4gEhg+EU7QJTsCJy6xdWP82yT2lTS8aQTz2kyH9QviJKzhLHtJuKrHN+zbEDaXCXByuh0/5D9Dg7qlggqA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB2632.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(136003)(376002)(396003)(39830400003)(346002)(83380400001)(956004)(66476007)(2616005)(36756003)(6916009)(16526019)(6486002)(4326008)(186003)(66946007)(5660300002)(316002)(8676002)(66556008)(6512007)(2906002)(86362001)(26005)(6666004)(6506007)(9686003)(478600001)(8936002)(1076003)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?jxfmTVNTGRuRJKG6WNTYlB9SwoE7Wk8+YaFUNkMkKu9JZwsPZDjLYe3XZWc/?=
+ =?us-ascii?Q?5WDFxCc0g1Mo4aTbVkEHw1PRqjvL600izbE0b9wP8+9HYTd7xk9CGV/1VSqW?=
+ =?us-ascii?Q?utymht/sOuphTnNMwnftb+zH8cdTZ90EMWBHFJgDuyg3grvoqdh7d/5KSSWj?=
+ =?us-ascii?Q?9kISTpTpUKbcrs+lQ7kgb3m2Kh56PC0uBTXVc+UpuQRTVBzy/dp82cD5sEhQ?=
+ =?us-ascii?Q?/BX9RmfAc2osmJJlLVMGFBWxQs7QZSksQQ6ASLrqDK6zo5bm7Xr52skA7lon?=
+ =?us-ascii?Q?uSEA9FvIN6vV/ek4qkItAU2F3bcDFQbhhxaLVVtAu5zMv3AOmS0qTH4rRQdm?=
+ =?us-ascii?Q?Favb/t96AnlMxEKQQ7DNyAulunsRtqtdjvr+CPKlwzjVQeistEtR55p8cGjZ?=
+ =?us-ascii?Q?ZCqYxT2t6dDy/O/5j54hAq+NitfLpF74GsX3ek0zPgh3E7t8vRYHEKsMN1Qy?=
+ =?us-ascii?Q?q5lrCVCFzzYRJeUGNZkhzm+qGzyeJ975vBrCGFLdrWdTnYpwjbDjoJBwotUD?=
+ =?us-ascii?Q?8t/J276yM+eFTcz2m3hLiAcFkzXHks4aSVb4GZ9vgAf/weEDndUrdHO5byIP?=
+ =?us-ascii?Q?g8/7J90G9zlGCYNMaPGn5jLWz9N8Jj1Iz7HlXy68iJBAUuAageiomx7PfYO+?=
+ =?us-ascii?Q?Z25zGsY2wq23+1bnUj8sjxA66ncrXzNyOeSQ4+BRKtblNfTf2kSfRuIJUGPG?=
+ =?us-ascii?Q?Sk0IZi6gCgIeqlNszR5Up0sjZUC4AglI2zAHGa8r1pHrYP0DlteCx6WeJjls?=
+ =?us-ascii?Q?fZZwVOek/hDx0vUWxgBIIElF1O8Uwd71Qid10JO0azOmdHhV97pym5AKC2wC?=
+ =?us-ascii?Q?aIQBpvMUFnqjMOuaR+CL054YouEuRSihhrU6dp5IG538Kl7wCF0/j4LAXOZm?=
+ =?us-ascii?Q?N52Ys+d0K+k183YQDUVaekXjydrQyixDPCW2M1xOhHwfQs6nD04hnCWEGpKd?=
+ =?us-ascii?Q?CcqrWU/mo9d3V5G+dKFw8xgAq9mDby0aatHBESLGsq4=3D?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB2632.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2021 08:19:15.1498
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92e0e070-3c74-4e9b-9e91-08d8afc04237
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uq5+DrdKDetytq+XzqZya1NjjqCXpZa3OnUnPq8aS8MZwnNt7HqJVx3j50DpSvBJHt+tqEkFSQ4vqExRHSShq/eKbvzOHJbydFzz9S0DH1U=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB2903
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+From: Zqiang <qiang.zhang@windriver.com>
 
-syzbot found the following issue on:
+When USB hosts just use PIO, allocate memory by slab/slub
+memory manager, if the required memory size is larger than
+one or more page sizes, need allocate memory directly from
+buddy systems.
 
-HEAD commit:    cb4d9b52 usb: dwc3: drd: Improve dwc3_get_extcon() style
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=131bf58f500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=151c953566c301b3
-dashboard link: https://syzkaller.appspot.com/bug?extid=1db88381b64aaa929ef6
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16aad077500000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1647f5ff500000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1db88381b64aaa929ef6@syzkaller.appspotmail.com
-
-INFO: task kworker/1:1:32 blocked for more than 143 seconds.
-      Not tainted 5.11.0-rc1-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/1:1     state:D stack:25200 pid:   32 ppid:     2 flags:0x00004000
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- context_switch kernel/sched/core.c:4313 [inline]
- __schedule+0x8dc/0x1f40 kernel/sched/core.c:5064
- schedule+0xcb/0x270 kernel/sched/core.c:5143
- schedule_timeout+0x1d8/0x250 kernel/time/timer.c:1854
- do_wait_for_common kernel/sched/completion.c:85 [inline]
- __wait_for_common kernel/sched/completion.c:106 [inline]
- wait_for_common kernel/sched/completion.c:117 [inline]
- wait_for_completion+0x168/0x270 kernel/sched/completion.c:138
- virtio_cleanup+0x80/0xa0 drivers/char/hw_random/virtio-rng.c:85
- cleanup_rng drivers/char/hw_random/core.c:81 [inline]
- kref_put include/linux/kref.h:65 [inline]
- drop_current_rng+0xda/0x110 drivers/char/hw_random/core.c:109
- set_current_rng+0x2d3/0x490 drivers/char/hw_random/core.c:96
- hwrng_register+0x3bf/0x600 drivers/char/hw_random/core.c:505
- chaoskey_probe+0x886/0xc50 drivers/usb/misc/chaoskey.c:205
- usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
- really_probe+0x291/0xde0 drivers/base/dd.c:561
- driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:745
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:851
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
- __device_attach+0x228/0x4a0 drivers/base/dd.c:919
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0xbc4/0x1d90 drivers/base/core.c:3091
- usb_set_configuration+0x113c/0x1910 drivers/usb/core/message.c:2164
- usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
- usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
- really_probe+0x291/0xde0 drivers/base/dd.c:561
- driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:745
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:851
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
- __device_attach+0x228/0x4a0 drivers/base/dd.c:919
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0xbc4/0x1d90 drivers/base/core.c:3091
- usb_new_device.cold+0x71d/0xfe9 drivers/usb/core/hub.c:2555
- hub_port_connect drivers/usb/core/hub.c:5223 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5363 [inline]
- port_event drivers/usb/core/hub.c:5509 [inline]
- hub_event+0x2348/0x42d0 drivers/usb/core/hub.c:5591
- process_one_work+0x98d/0x1580 kernel/workqueue.c:2275
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2421
- kthread+0x38c/0x460 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
-
-Showing all locks held in the system:
-6 locks held by kworker/1:1/32:
- #0: ffff888103fd0538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888103fd0538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic64_set include/asm-generic/atomic-instrumented.h:856 [inline]
- #0: ffff888103fd0538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/asm-generic/atomic-long.h:41 [inline]
- #0: ffff888103fd0538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:616 [inline]
- #0: ffff888103fd0538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:643 [inline]
- #0: ffff888103fd0538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x871/0x1580 kernel/workqueue.c:2246
- #1: ffffc900001a7da8 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8a5/0x1580 kernel/workqueue.c:2250
- #2: ffff888108aeb218 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:725 [inline]
- #2: ffff888108aeb218 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c5/0x42d0 drivers/usb/core/hub.c:5537
- #3: ffff8881023fc218 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:725 [inline]
- #3: ffff8881023fc218 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:894
- #4: ffff8881023fd1a8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:725 [inline]
- #4: ffff8881023fd1a8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0 drivers/base/dd.c:894
- #5: ffffffff877ee1c8 (rng_mutex){+.+.}-{3:3}, at: hwrng_register+0x7a/0x600 drivers/char/hw_random/core.c:478
-1 lock held by khungtaskd/1241:
- #0: ffffffff8744c5a0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x269 kernel/locking/lockdep.c:6254
-1 lock held by hwrng/1663:
- #0: ffffffff877ee1c8 (rng_mutex){+.+.}-{3:3}, at: get_current_rng drivers/char/hw_random/core.c:126 [inline]
- #0: ffffffff877ee1c8 (rng_mutex){+.+.}-{3:3}, at: hwrng_fillfn+0x3d/0x2d0 drivers/char/hw_random/core.c:438
-2 locks held by in:imklog/4297:
- #0: ffff888108c64af0 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe9/0x100 fs/file.c:949
- #1: ffffffff8743ea78 (logbuf_lock){....}-{2:2}, at: __debug_check_no_obj_freed lib/debugobjects.c:975 [inline]
- #1: ffffffff8743ea78 (logbuf_lock){....}-{2:2}, at: debug_check_no_obj_freed+0xc7/0x420 lib/debugobjects.c:1018
-
-=============================================
-
-NMI backtrace for cpu 1
-CPU: 1 PID: 1241 Comm: khungtaskd Not tainted 5.11.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:79 [inline]
- dump_stack+0x107/0x163 lib/dump_stack.c:120
- nmi_cpu_backtrace.cold+0x46/0xe0 lib/nmi_backtrace.c:105
- nmi_trigger_cpumask_backtrace+0x1da/0x200 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:209 [inline]
- watchdog+0xd32/0xf70 kernel/hung_task.c:294
- kthread+0x38c/0x460 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
-Sending NMI from CPU 1 to CPUs 0:
-NMI backtrace for cpu 0
-CPU: 0 PID: 2636 Comm: systemd-journal Not tainted 5.11.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:native_irq_disable arch/x86/include/asm/irqflags.h:49 [inline]
-RIP: 0010:arch_local_irq_disable arch/x86/include/asm/irqflags.h:89 [inline]
-RIP: 0010:arch_local_irq_save arch/x86/include/asm/irqflags.h:121 [inline]
-RIP: 0010:lock_release+0x14d/0x6d0 kernel/locking/lockdep.c:5453
-Code: 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 0a 05 00 00 45 8b 8e 1c 09 00 00 45 85 c9 0f 85 74 02 00 00 9c 8f 04 24 <fa> 48 89 da c7 44 24 40 01 00 00 00 83 e3 07 48 b8 00 00 00 00 00
-RSP: 0018:ffffc90000247958 EFLAGS: 00000246
-RAX: 0000000000000007 RBX: ffffffff885e153c RCX: 1ffffffff10bc2a7
-RDX: 0000000000000000 RSI: ffffffff8744c4e0 RDI: ffff88810e573c9c
-RBP: 1ffff92000048f2d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: ffffffff87524300
-R13: ffffffff81d63134 R14: ffff88810e573380 R15: 0000000000000dc0
-FS:  00007fdcf82a68c0(0000) GS:ffff8881f6a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fdcf562d000 CR3: 0000000101da9000 CR4: 00000000001506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- might_alloc include/linux/sched/mm.h:193 [inline]
- slab_pre_alloc_hook mm/slab.h:493 [inline]
- slab_alloc_node mm/slub.c:2817 [inline]
- slab_alloc mm/slub.c:2900 [inline]
- kmem_cache_alloc+0x3b/0x360 mm/slub.c:2905
- kmem_cache_zalloc include/linux/slab.h:672 [inline]
- lsm_file_alloc security/security.c:569 [inline]
- security_file_alloc+0x34/0x170 security/security.c:1457
- __alloc_file+0xd8/0x280 fs/file_table.c:106
- alloc_empty_file+0x6d/0x170 fs/file_table.c:150
- path_openat+0xe3/0x2730 fs/namei.c:3357
- do_filp_open+0x17e/0x3c0 fs/namei.c:3398
- do_sys_openat2+0x16d/0x420 fs/open.c:1172
- do_sys_open fs/open.c:1188 [inline]
- __do_sys_open fs/open.c:1196 [inline]
- __se_sys_open fs/open.c:1192 [inline]
- __x64_sys_open+0x119/0x1c0 fs/open.c:1192
- do_syscall_64+0x2d/0x40 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x7fdcf7836840
-Code: 73 01 c3 48 8b 0d 68 77 20 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d 89 bb 20 00 00 75 10 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 1e f6 ff ff 48 89 04 24
-RSP: 002b:00007ffc45a1fe78 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 00007ffc45a20180 RCX: 00007fdcf7836840
-RDX: 00000000000001a0 RSI: 0000000000080042 RDI: 000055959b084b30
-RBP: 000000000000000d R08: 000000000000ffc0 R09: 00000000ffffffff
-R10: 0000000000000069 R11: 0000000000000246 R12: 00000000ffffffff
-R13: 000055959b077040 R14: 00007ffc45a20140 R15: 000055959b084950
-
-
+Signed-off-by: Zqiang <qiang.zhang@windriver.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/usb/core/buffer.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/usb/core/buffer.c b/drivers/usb/core/buffer.c
+index fbb087b728dc..28e7db9f93d5 100644
+--- a/drivers/usb/core/buffer.c
++++ b/drivers/usb/core/buffer.c
+@@ -131,7 +131,8 @@ void *hcd_buffer_alloc(
+ 	/* some USB hosts just use PIO */
+ 	if (!hcd_uses_dma(hcd)) {
+ 		*dma = ~(dma_addr_t) 0;
+-		return kmalloc(size, mem_flags);
++		return size < PAGE_SIZE ? kmalloc(size, mem_flags)
++					: __get_free_pages(mem_flags, get_order(size));
+ 	}
+ 
+ 	for (i = 0; i < HCD_BUFFER_POOLS; i++) {
+@@ -160,8 +161,8 @@ void hcd_buffer_free(
+ 	}
+ 
+ 	if (!hcd_uses_dma(hcd)) {
+-		kfree(addr);
+-		return;
++		return size < PAGE_SIZE ? kfree(addr)
++					: free_pages(addr, get_order(size));
+ 	}
+ 
+ 	for (i = 0; i < HCD_BUFFER_POOLS; i++) {
+-- 
+2.17.1
+
