@@ -2,74 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA4C2E8E47
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Jan 2021 22:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 713A82E8E8C
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Jan 2021 22:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726246AbhACVFn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 3 Jan 2021 16:05:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725840AbhACVFm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 3 Jan 2021 16:05:42 -0500
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BB1C061573;
-        Sun,  3 Jan 2021 13:05:01 -0800 (PST)
-Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 103L4hgK030212
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sun, 3 Jan 2021 22:04:43 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1609707883; bh=tJ9Si7uwTlF1+m4XAh1P6KDZfGpLXIZq6AArp/iMmMY=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=Rl2CWHYNakjmQtPotlTxNDabtYe/RZV9ne96VqhvcWG+KI1AQTYyjwjQBTnhyWa+f
-         q+E561rOh30bBnwDz7TtCNkOeaz3mL8xREV0KLAZNXDyNgPtaPF2wL5DqeSslq/YfL
-         iYQb7Y9m8/SBsabqzdjOgVVMDl/da7KPW4lu3ZA8=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94)
-        (envelope-from <bjorn@mork.no>)
-        id 1kwAYN-000Ecx-AR; Sun, 03 Jan 2021 22:04:43 +0100
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Jouni =?utf-8?Q?Sepp=C3=A4nen?= <jks@iki.fi>
-Cc:     Oliver Neukum <oliver@neukum.org>, linux-usb@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Enrico Mioso <mrkiko.rs@gmail.com>, netdev@vger.kernel.org,
+        id S1727911AbhACVnJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 3 Jan 2021 16:43:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37668 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727884AbhACVnI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 3 Jan 2021 16:43:08 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 504A42080D;
+        Sun,  3 Jan 2021 21:42:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609710148;
+        bh=0k7+YMlmmuoKnr0VdYaRCOF9Xor5RNVXi4oJ3cdQ/Cg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Zn5AtAEj4yUkE+OtNW55qQNv+2Z/E70A4ckIUMGV+tczzeezEQpfoXqbNztx8CKHE
+         k+D9EWlKadcCLjl5Z2i43eDTs+4rMNnWV6GqUk11pSmML00ULOraVjE5djY2gYDqxa
+         DRoSVolSz7bSGhr5xpY/Yw+9ya8GXd/PsFhWz/c/FmRhAhei8/G1UVAA9O0ZCeY3ur
+         tSplGcaL9IpzHA9iHRsJbvUh2GKi5V+RHJZbLBMEypxZdal7vfIZXgumRxKXuVqg+U
+         pmBT6KaKRyqbro9H+dd2qNZj62uyHKabQCQfOywNgHGKgjPAzRUr1wpBBQo+9iShuf
+         miOAsqbM16HRA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jim Baxter <jim_baxter@mentor.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net,stable] net: cdc_ncm: correct overhead in
- delayed_ndp_size
-Organization: m
-References: <20210103143602.95343-1-jks@iki.fi>
-Date:   Sun, 03 Jan 2021 22:04:43 +0100
-In-Reply-To: <20210103143602.95343-1-jks@iki.fi> ("Jouni =?utf-8?Q?Sepp?=
- =?utf-8?Q?=C3=A4nen=22's?= message
-        of "Sun, 3 Jan 2021 16:36:02 +0200")
-Message-ID: <87ft3henpw.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Subject: [PATCH] usb: gadget: select CONFIG_CRC32
+Date:   Sun,  3 Jan 2021 22:42:17 +0100
+Message-Id: <20210103214224.1996535-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.102.4 at canardo
-X-Virus-Status: Clean
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Jouni Sepp=C3=A4nen <jks@iki.fi> writes:
+From: Arnd Bergmann <arnd@arndb.de>
 
-> +		delayed_ndp_size =3D ctx->max_ndp_size +
-> +			max(ctx->tx_ndp_modulus,
-> +			    ctx->tx_modulus + ctx->tx_remainder) - 1;
+Without crc32 support, this driver fails to link:
 
-You'll probably have to use something like
+arm-linux-gnueabi-ld: drivers/usb/gadget/function/f_eem.o: in function `eem_unwrap':
+f_eem.c:(.text+0x11cc): undefined reference to `crc32_le'
+arm-linux-gnueabi-ld: drivers/usb/gadget/function/f_ncm.o:f_ncm.c:(.text+0x1e40):
+more undefined references to `crc32_le' follow
 
-  max_t(u32, ctx->tx_ndp_modulus, ctx->tx_modulus + ctx->tx_remainder)
-=20=20
-here as the test robot already said.  Sorry for not seeing that earlier.
-Otherwise this looks very good to me. The bug is real and severe, and
-your patch appears to be the proper fix for it.
+Fixes: 6d3865f9d41f ("usb: gadget: NCM: Add transmit multi-frame.")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/usb/gadget/Kconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks a lot for figuring this out and taking the time to fixup this
-rather messy piece of code.
-
-Reviewed-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+diff --git a/drivers/usb/gadget/Kconfig b/drivers/usb/gadget/Kconfig
+index 7e47e6223089..2d152571a7de 100644
+--- a/drivers/usb/gadget/Kconfig
++++ b/drivers/usb/gadget/Kconfig
+@@ -265,6 +265,7 @@ config USB_CONFIGFS_NCM
+ 	depends on NET
+ 	select USB_U_ETHER
+ 	select USB_F_NCM
++	select CRC32
+ 	help
+ 	  NCM is an advanced protocol for Ethernet encapsulation, allows
+ 	  grouping of several ethernet frames into one USB transfer and
+@@ -314,6 +315,7 @@ config USB_CONFIGFS_EEM
+ 	depends on NET
+ 	select USB_U_ETHER
+ 	select USB_F_EEM
++	select CRC32
+ 	help
+ 	  CDC EEM is a newer USB standard that is somewhat simpler than CDC ECM
+ 	  and therefore can be supported by more hardware.  Technically ECM and
+-- 
+2.29.2
 
