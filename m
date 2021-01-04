@@ -2,115 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 825BA2E96CD
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 15:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 914452E9747
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 15:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727117AbhADOI5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Jan 2021 09:08:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
+        id S1726663AbhADO3e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Jan 2021 09:29:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727012AbhADOI5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jan 2021 09:08:57 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F90AC061793
-        for <linux-usb@vger.kernel.org>; Mon,  4 Jan 2021 06:08:16 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id x16so36951913ejj.7
-        for <linux-usb@vger.kernel.org>; Mon, 04 Jan 2021 06:08:16 -0800 (PST)
+        with ESMTP id S1726258AbhADO3d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jan 2021 09:29:33 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331ECC061574
+        for <linux-usb@vger.kernel.org>; Mon,  4 Jan 2021 06:28:53 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id 186so23496374qkj.3
+        for <linux-usb@vger.kernel.org>; Mon, 04 Jan 2021 06:28:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:message-id
-         :date:mime-version;
-        bh=ONDjz5ciY9vROqc+40QcPHXcNj7vnSuJSUB6nVWh938=;
-        b=rI95mT2WrrOPFGLnvIYmdnh/hiOFPpiKvknNVQO+3kAVlmXH+XKbRr40QgJQnL9/MO
-         ZkxOa3TrY3NzVEdiCZfz9T/yAtDg+svkf3cfqMQQDXKCm+5DIr/JXETAWsVxUsIO453U
-         N8ka6bNI1n0Vj/B9t4kWWwRkwxSq0pH9ynmu21FPTJmfyocuxv9EqEy2NbH/FO7Sckct
-         YpbDPJk4VEGv7TCi0gR5l76CjSHsv6+pqiu3l/aOic1bff2ZJrGpG6kUd6RKliHgzzih
-         WhxxHIklIa+TwE4S70fX1FCtnhHquP0YcdWImUbgIAC78iUG2VqYJiFeXmCah0hSlCln
-         b80A==
+        d=0x0f.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Jw8ew9TnyT9X4xDw7u45cftjoE7A08Lbyl8yTyyadtM=;
+        b=SUgLoRYDWSGcUEB9ZeTO3tHGBQFdwwXSBXS5bTE9+gt1MojRLRmbHM1O3MZ2yTCkRQ
+         tO30XWto6Sa15pQvwMcNjfP4mKXHJMjpsy11dS+Cm87AWeaWInCZItfe2ddb8gZgT0Zg
+         LEVXIE+Q+9t4NEFjrv6O017iy7TJInLToKlMc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:message-id:date:mime-version;
-        bh=ONDjz5ciY9vROqc+40QcPHXcNj7vnSuJSUB6nVWh938=;
-        b=U0uLz77jsF7L6dyB2Md7UY5LagwzKATCv2aLGBDV632oLA9PSTx0nIbKbsevMfwyHF
-         7hxTo2J1Q8NcauMqYIlCCR0wTKWvIFlOwnQftxCT6NsjFFN68op926srgesQ4LQcOAzQ
-         y4S/bCl22xNKUEZ5TYdwddlJ81JqkJN1VrFX7otD5nM7YobgociPus1K0pxzgOgbonhy
-         ZLz60oVN2c861UuPjP1BiQEOfEUZ6MP4BuytpiIMGML5IdUn9xAzUSOP4sZeVA2eXbUp
-         QJ8ICmbeyovresk0iuIGvLcYrg4no7+rm1dAcJ1v5J9caN2XIwPLDR75pi5ui/LXX6m8
-         7WwQ==
-X-Gm-Message-State: AOAM533H5/I0cktOVE+3NTOs4f7dUlqI8WyfNwuttOjw0iywTPmvH5n4
-        ky+R2vVjxK8W/926/S8i8+RT5g==
-X-Google-Smtp-Source: ABdhPJwWleW0MXH3U76HBozLO17/P7prx/2nKrQvU/7WOFT18qrcg+F/uNDoWgAaedeAbgYIS7KMAQ==
-X-Received: by 2002:a17:906:ae14:: with SMTP id le20mr68611224ejb.451.1609769295055;
-        Mon, 04 Jan 2021 06:08:15 -0800 (PST)
-Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
-        by smtp.gmail.com with ESMTPSA id u2sm23681997ejb.65.2021.01.04.06.08.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jan 2021 06:08:14 -0800 (PST)
-References: <20201221173531.215169-1-jbrunet@baylibre.com>
- <20201221173531.215169-4-jbrunet@baylibre.com>
- <X+nzWs3nOrcqu4F2@kroah.com>
- <20201229222949.GC31406@jackp-linux.qualcomm.com>
-User-agent: mu4e 1.4.10; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Jack Pham <jackp@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] usb: gadget: u_audio: remove struct uac_req
-In-reply-to: <20201229222949.GC31406@jackp-linux.qualcomm.com>
-Message-ID: <1jr1n0x0aa.fsf@starbuckisacylon.baylibre.com>
-Date:   Mon, 04 Jan 2021 15:08:13 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Jw8ew9TnyT9X4xDw7u45cftjoE7A08Lbyl8yTyyadtM=;
+        b=py6DYiz1ysdxUCbuEGXfHxPPRuJKq9mj8X0ExaXSzGCexH5avEE9pOJoTCUYci4k3F
+         Qa1rwPHE7xRUrggNYKULM4BlcKqNRp1XjvO5dchye69koCSSxHiWRScRFyefmQ7YLZgt
+         lPVqJLt13EVrMRKk13JKKPiwqf2EYFJ6zV4mU+rE2lmMylJgSMhkQtq7+nMLUM3kzQAq
+         XyFXW+ARO6e+0lCmgdyfopBAJJHQBXoBAZx1KnJn25JUpfsFDqAxl+zEHom2mGXnJyf1
+         h9EfbKrgvcyheGuJgacpA/fkYfrkhvaAya8XF0m9lm5J7bPPxI/Nx51yLvDfxn1Z+w2I
+         ksjA==
+X-Gm-Message-State: AOAM532Ky4Li0eshO1XWU3azaNJxWOJ+MiVreBqh1P3oJbqIbcqthisF
+        KSnycpZUtCZnHk87ElMCXTUS5RWg1xXbK5MxGUh13Q==
+X-Google-Smtp-Source: ABdhPJz5NcOpqUdV7J8j9XoG/uLkITBirWvkmAQTZEh3zNF/3HEbUFm8MF1/s6DwC5XMh5V/QbKawCuonO3eQoAOm4k=
+X-Received: by 2002:a37:bd84:: with SMTP id n126mr71633870qkf.54.1609770532326;
+ Mon, 04 Jan 2021 06:28:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20201227031716.1343300-1-daniel@0x0f.com> <X/LuvBdeLVKyZkvO@hovoldconsulting.com>
+In-Reply-To: <X/LuvBdeLVKyZkvO@hovoldconsulting.com>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Mon, 4 Jan 2021 23:29:39 +0900
+Message-ID: <CAFr9PX=xr=xRaT18VN5ELDF=WBO+YqohC4Rvdg-TJNDXr3OqgA@mail.gmail.com>
+Subject: Re: [PATCH] USB: serial: option: add LongSung M5710 module support
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Johan,
 
-On Tue 29 Dec 2020 at 23:30, Jack Pham <jackp@codeaurora.org> wrote:
+On Mon, 4 Jan 2021 at 19:32, Johan Hovold <johan@kernel.org> wrote:
 
-> Hi Greg and Jerome,
->
-> On Mon, Dec 28, 2020 at 04:01:46PM +0100, Greg Kroah-Hartman wrote:
->> On Mon, Dec 21, 2020 at 06:35:30PM +0100, Jerome Brunet wrote:
->> > 'struct uac_req' purpose is to link 'struct usb_request' to the
->> > corresponding 'struct uac_rtd_params'. However member req is never
->> > used. Using the context of the usb request, we can keep track of the
->> > corresponding 'struct uac_rtd_params' just as well, without allocating
->> > extra memory.
->> > 
->> > Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
->> > ---
->> >  drivers/usb/gadget/function/u_audio.c | 58 ++++++++++++---------------
->> >  1 file changed, 26 insertions(+), 32 deletions(-)
->> 
->> This patch doesn't apply, so I can't apply patches 3 or 4 of this series
->> :(
->> 
->> Can you rebase against my usb-testing branch and resend?
->
-> From the cover letter:
->
-> On Mon, Dec 21, 2020 at 06:35:27PM +0100, Jerome Brunet wrote:
->> The series depends on this fix [0] by Jack Pham to apply cleanly
->> 
->> [0]: https://lore.kernel.org/linux-usb/20201029175949.6052-1-jackp@codeaurora.org/
->
-> My patch hadn't been picked up by Felipe, so it's not in your tree
-> either, Greg. Should I just resend it to you first?  Or shall I invite
-> Jerome to just include it in v2 of this series?
+> Also, would you mind posting the "lsusb -v" output for this device for
+> reference?
 
-Indeed. I rebased on usb-testing and the series applies cleanly with
-Jack's changes, as decribed in the cover-letter.
+The lsusb from busybox on this system doesn't support the -v option it seems.
+Here is the output from /sys/kernel/debug/usb/devices:
 
-If it is easier, I'm happy to include Jack's change in the v2, along
-with the fixed PATCH 2 fixed.
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=2df3 ProdID=9d03 Rev= 1.00
+S:  Manufacturer=Marvell
+S:  Product=Mobile Composite Device Bus
+S:  SerialNumber=<snip>
+C:* #Ifs= 5 Cfg#= 1 Atr=c0 MxPwr=500mA
+A:  FirstIf#= 0 IfCount= 2 Cls=e0(wlcon) Sub=01 Prot=03
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
+E:  Ad=87(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0c(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0b(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0a(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Greg, would it be OK with you ?
+I can rebuild my rootfs with the usbutils lsusb tomorrow when I have
+physical access to it again if needed.
 
->
-> Thanks,
-> Jack
+>Do you know what each interface is used for?
 
+The second tty responds to AT commands. The others don't do anything so far.
+The hardware documentation doesn't say much aside that there is a usb interface.
+
+Thanks,
+
+Daniel
