@@ -2,83 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5CE2E990A
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 16:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D89A92E9914
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 16:45:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727466AbhADPmm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Jan 2021 10:42:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60912 "EHLO mail.kernel.org"
+        id S1727720AbhADPog (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Jan 2021 10:44:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33008 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727317AbhADPmm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 Jan 2021 10:42:42 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1727F2245C;
-        Mon,  4 Jan 2021 15:42:00 +0000 (UTC)
+        id S1727676AbhADPog (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 Jan 2021 10:44:36 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 244DC21D93;
+        Mon,  4 Jan 2021 15:43:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1609774921;
-        bh=459PAb+ZiFWawArpxiOVAAx3cZ07LAL8/JM0E0+J64w=;
+        s=korg; t=1609775035;
+        bh=oIOdn1cm925hl6iQ2ChQ9l9kj2qYpDJe0fL6Dgbb3Ck=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=raBLAwgxYAbv6aYmQU2ZKHYCgIGerzyDuKNsrNqW1l4L8IaZHsNUSeRv22eDSra7K
-         BnBTh0lR5pQ6HQKgJx8RNItRzFjl7Dx26CLKepoQNmdyxW1YJ31D95F9v8i3eLKPGt
-         +DZ3SelZwQqJO+lETD3+Cms4YlxDQiQwurOVUBvI=
-Date:   Mon, 4 Jan 2021 16:43:27 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        John Youn <John.Youn@synopsys.com>
-Subject: Re: [RESEND PATCH v6 3/3] usb: dwc3: Pass quirk as platform data
-Message-ID: <X/M3nxyjiIN/R4MC@kroah.com>
-References: <cover.1606149078.git.joglekar@synopsys.com>
- <0b96cb765bb154cf0e83a436e7fed8882f566cf9.1606149078.git.joglekar@synopsys.com>
- <X/LQ5ZWLUCGzC8vz@kroah.com>
- <090742a1-a9a1-b89a-e078-a960b5ca3064@synopsys.com>
+        b=1f0eu/os/MNFRHTy/JJPoEHRRRqTjVqd8k5waO/a3d8VyefOZXuXx1qDzc9HA0SCd
+         qlRlA1pF2NFiqre0fBL9ZbMDVBncEe0mf+8/TyuHEjtEoQiA8fENwO1E1aAz/GKrzA
+         vbjVqZGPeESN0i/yVb61xj/VIal/1mDKTo915Ces=
+Date:   Mon, 4 Jan 2021 16:45:21 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wesley Cheng <wcheng@codeaurora.org>
+Cc:     peter.chen@nxp.com, balbi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 3/3] usb: gadget: configfs: Add a specific configFS reset
+ callback
+Message-ID: <X/M4EaLuiuHstHeX@kroah.com>
+References: <1609283011-21997-1-git-send-email-wcheng@codeaurora.org>
+ <1609283011-21997-4-git-send-email-wcheng@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <090742a1-a9a1-b89a-e078-a960b5ca3064@synopsys.com>
+In-Reply-To: <1609283011-21997-4-git-send-email-wcheng@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 04, 2021 at 09:32:13AM +0000, Tejas Joglekar wrote:
-> Hi Greg,
-> On 1/4/2021 1:55 PM, Greg Kroah-Hartman wrote:
-> > On Mon, Jan 04, 2021 at 01:38:43PM +0530, Tejas Joglekar wrote:
-> >> This commit adds the platform device data to setup
-> >> the XHCI_SG_TRB_CACHE_SIZE_QUIRK quirk. DWC3 hosts
-> >> which are PCI devices does not use OF to create platform device
-> >> but create xhci-plat platform device at runtime. So
-> >> this patch allows parent device to supply the quirk
-> >> through platform data.
-> >>
-> >> Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
-> >> ---
-> >>  drivers/usb/dwc3/host.c | 10 ++++++++++
-> >>  1 file changed, 10 insertions(+)
-> > What changed from previous versions?
+On Tue, Dec 29, 2020 at 03:03:31PM -0800, Wesley Cheng wrote:
+> In order for configFS based USB gadgets to set the proper charge current
+> for bus reset scenarios, expose a separate reset callback to set the
+> current to 100mA based on the USB battery charging specification.
 > 
-> Resent the patch as it was missed for review by Felipe and I saw your mail
+> Reviewed-by: Peter Chen <peter.chen@nxp.com>
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> ---
+>  drivers/usb/gadget/configfs.c | 24 +++++++++++++++++++++++-
+>  1 file changed, 23 insertions(+), 1 deletion(-)
 > 
-> to resend the patch if not reviewed. Other two patches from series are
+> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+> index 56051bb97349..80ca7ff2fb97 100644
+> --- a/drivers/usb/gadget/configfs.c
+> +++ b/drivers/usb/gadget/configfs.c
+> @@ -1481,6 +1481,28 @@ static void configfs_composite_disconnect(struct usb_gadget *gadget)
+>  	spin_unlock_irqrestore(&gi->spinlock, flags);
+>  }
+>  
+> +static void configfs_composite_reset(struct usb_gadget *gadget)
+> +{
+> +	struct usb_composite_dev *cdev;
+> +	struct gadget_info *gi;
+> +	unsigned long flags;
+> +
+> +	cdev = get_gadget_data(gadget);
+> +	if (!cdev)
+> +		return;
+> +
+> +	gi = container_of(cdev, struct gadget_info, cdev);
+> +	spin_lock_irqsave(&gi->spinlock, flags);
+> +	cdev = get_gadget_data(gadget);
+> +	if (!cdev || gi->unbind) {
+> +		spin_unlock_irqrestore(&gi->spinlock, flags);
+> +		return;
+> +	}
+> +
+> +	composite_reset(gadget);
+> +	spin_unlock_irqrestore(&gi->spinlock, flags);
+> +}
+> +
+>  static void configfs_composite_suspend(struct usb_gadget *gadget)
+>  {
+>  	struct usb_composite_dev *cdev;
+> @@ -1530,7 +1552,7 @@ static const struct usb_gadget_driver configfs_driver_template = {
+>  	.unbind         = configfs_composite_unbind,
+>  
+>  	.setup          = configfs_composite_setup,
+> -	.reset          = configfs_composite_disconnect,
+> +	.reset          = configfs_composite_reset,
+>  	.disconnect     = configfs_composite_disconnect,
+>  
+>  	.suspend	= configfs_composite_suspend,
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
 > 
-> picked up by Mathias, this one is remaining for review.
 
-Ah, how was I supposed to guess that?  :)
-
-> >> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> >> index e195176580de..0434bc8cec12 100644
-> >> --- a/drivers/usb/dwc3/host.c
-> >> +++ b/drivers/usb/dwc3/host.c
-> >> @@ -11,6 +11,11 @@
-> >>  #include <linux/platform_device.h>
-> >>  
-> >>  #include "core.h"
-> >> +#include "../host/xhci-plat.h"
-> > That feels really wrong.  Are you sure about that?
-> To use the struct xhci_plat_priv this was included, can you suggest alternative?
-
-If that is the "normal" way to do this with the xhci driver, ok, but I
-would like to get an ack from Mathias for this before taking it.
+So this changes the existing userspace functionality?  What will break
+because of this now unexpected change?
 
 thanks,
 
