@@ -2,65 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9922E98EB
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 16:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42AE82E98F1
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 16:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726189AbhADPeR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 4 Jan 2021 10:34:17 -0500
-Received: from mail.msweet.org ([173.255.209.91]:33124 "EHLO mail.msweet.org"
+        id S1727693AbhADPfn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Jan 2021 10:35:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57906 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725889AbhADPeR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 Jan 2021 10:34:17 -0500
-Received: from [10.0.1.243] (cbl-66-186-76-47.vianet.ca [66.186.76.47])
-        by mail.msweet.org (Postfix) with ESMTPSA id 40DD180B3F;
-        Mon,  4 Jan 2021 15:33:36 +0000 (UTC)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.40.0.2.32\))
-Subject: Re: [PATCH] USB: usblp: fix DMA to stack
-From:   Michael Sweet <msweet@msweet.org>
-In-Reply-To: <X/MwBCt0Z/B1D7vw@hovoldconsulting.com>
-Date:   Mon, 4 Jan 2021 10:33:34 -0500
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pete Zaitcev <zaitcev@redhat.com>, linux-usb@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        stable@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <15AB8EFA-A534-40D8-95D2-7DCE1E46D431@msweet.org>
-References: <20210104145302.2087-1-johan@kernel.org>
- <X/MtNtTd96S39HQL@kroah.com> <X/MwBCt0Z/B1D7vw@hovoldconsulting.com>
-To:     Johan Hovold <johan@kernel.org>
-X-Mailer: Apple Mail (2.3654.40.0.2.32)
+        id S1727679AbhADPfn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 Jan 2021 10:35:43 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A1F532225E;
+        Mon,  4 Jan 2021 15:35:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1609774502;
+        bh=tUlL9yn5ELVhqvInaFRCYNJL3pyZoP9Qh20Bgq4Gcxo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nDqvFLQmBVSzLsCbkDlopNtpXzaRjez82gKxh2/pI3+76tc6yYeB/tOET5qJQMZVt
+         vh5cLduPA842au86oac10hDIPiZz3r84SIj3zO012DNYntDPbgNSpI+KB3UGcFZtr/
+         JUqsKN9gPBYwF/CeFHe88/cCvqhL18FG2IWJ2zzo=
+Date:   Mon, 4 Jan 2021 16:36:28 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jerome Brunet <jbrunet@baylibre.com>
+Cc:     Jack Pham <jackp@codeaurora.org>, Felipe Balbi <balbi@kernel.org>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] usb: gadget: u_audio: remove struct uac_req
+Message-ID: <X/M1/Jq7Bx3xFRuL@kroah.com>
+References: <20201221173531.215169-1-jbrunet@baylibre.com>
+ <20201221173531.215169-4-jbrunet@baylibre.com>
+ <X+nzWs3nOrcqu4F2@kroah.com>
+ <20201229222949.GC31406@jackp-linux.qualcomm.com>
+ <1jr1n0x0aa.fsf@starbuckisacylon.baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1jr1n0x0aa.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Johan/Greg,
-
-Since CUPS uses libusb to communicate with printers these days (well, for over a decade now) so that printing and scanning can coexist, the usblp driver really doesn't get any usage anymore.
-
-
-> On Jan 4, 2021, at 10:11 AM, Johan Hovold <johan@kernel.org> wrote:
+On Mon, Jan 04, 2021 at 03:08:13PM +0100, Jerome Brunet wrote:
 > 
-> On Mon, Jan 04, 2021 at 03:59:02PM +0100, Greg Kroah-Hartman wrote:
->> On Mon, Jan 04, 2021 at 03:53:02PM +0100, Johan Hovold wrote:
->>> Stack-allocated buffers cannot be used for DMA (on all architectures).
->>> 
->>> Replace the HP-channel macro with a helper function that allocates a
->>> dedicated transfer buffer so that it can continue to be used with
->>> arguments from the stack.
+> On Tue 29 Dec 2020 at 23:30, Jack Pham <jackp@codeaurora.org> wrote:
 > 
->> Wow, no one uses this driver anymore it seems, this should have
->> triggered a runtime warning on newer kernels :(
+> > Hi Greg and Jerome,
+> >
+> > On Mon, Dec 28, 2020 at 04:01:46PM +0100, Greg Kroah-Hartman wrote:
+> >> On Mon, Dec 21, 2020 at 06:35:30PM +0100, Jerome Brunet wrote:
+> >> > 'struct uac_req' purpose is to link 'struct usb_request' to the
+> >> > corresponding 'struct uac_rtd_params'. However member req is never
+> >> > used. Using the context of the usb request, we can keep track of the
+> >> > corresponding 'struct uac_rtd_params' just as well, without allocating
+> >> > extra memory.
+> >> > 
+> >> > Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+> >> > ---
+> >> >  drivers/usb/gadget/function/u_audio.c | 58 ++++++++++++---------------
+> >> >  1 file changed, 26 insertions(+), 32 deletions(-)
+> >> 
+> >> This patch doesn't apply, so I can't apply patches 3 or 4 of this series
+> >> :(
+> >> 
+> >> Can you rebase against my usb-testing branch and resend?
+> >
+> > From the cover letter:
+> >
+> > On Mon, Dec 21, 2020 at 06:35:27PM +0100, Jerome Brunet wrote:
+> >> The series depends on this fix [0] by Jack Pham to apply cleanly
+> >> 
+> >> [0]: https://lore.kernel.org/linux-usb/20201029175949.6052-1-jackp@codeaurora.org/
+> >
+> > My patch hadn't been picked up by Felipe, so it's not in your tree
+> > either, Greg. Should I just resend it to you first?  Or shall I invite
+> > Jerome to just include it in v2 of this series?
 > 
-> This helper is only used by the IOCNR_HP_SET_CHANNEL ioctl so perhaps
-> it's just that one which isn't used much.
+> Indeed. I rebased on usb-testing and the series applies cleanly with
+> Jack's changes, as decribed in the cover-letter.
 > 
-> Johan
+> If it is easier, I'm happy to include Jack's change in the v2, along
+> with the fixed PATCH 2 fixed.
 > 
+> Greg, would it be OK with you ?
 
-________________________
-Michael Sweet
-
-
-
+That's fine with me.
