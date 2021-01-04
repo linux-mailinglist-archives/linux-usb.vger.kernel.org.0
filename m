@@ -2,69 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5CA2E91B9
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 09:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D56B2E9247
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 10:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726523AbhADIZy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Jan 2021 03:25:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35764 "EHLO mail.kernel.org"
+        id S1726706AbhADJAw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Jan 2021 04:00:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39652 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726198AbhADIZy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 Jan 2021 03:25:54 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 919A4207B6;
-        Mon,  4 Jan 2021 08:25:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1609748713;
-        bh=V7amTIWrOc9uWPWSkmJ1lXtRvVHV5LT1tw8BcYqoNlM=;
+        id S1726505AbhADJAw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 Jan 2021 04:00:52 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6EC3C207AE;
+        Mon,  4 Jan 2021 09:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609750811;
+        bh=H9/XS7NCMpKpPhTNAtLqzqdQNc3TyLFgsTSqw/tJad4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EDNK8hiQMEeiksgqQLF7f7JXrQC3Lv6k5uHf7HjEX/+irf43o/NROD80hVyIjU8wx
-         y+3u0OKix32OOqLpiln+D2jvuUGhi/KsNAMxdHsmmCWYjGUjopn+oAZbgY250mLk/P
-         x00/mmx34YgFAafzS95AbroKd4DElO4HdG9s6fWw=
-Date:   Mon, 4 Jan 2021 09:25:09 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        John Youn <John.Youn@synopsys.com>
-Subject: Re: [RESEND PATCH v6 3/3] usb: dwc3: Pass quirk as platform data
-Message-ID: <X/LQ5ZWLUCGzC8vz@kroah.com>
-References: <cover.1606149078.git.joglekar@synopsys.com>
- <0b96cb765bb154cf0e83a436e7fed8882f566cf9.1606149078.git.joglekar@synopsys.com>
+        b=lv0RMtqEowcS5BJ4iDjXQVREn0O4LZ6s94WWhlV6KJPh3plf16xlxI24AVHFOWD1g
+         CwQZ7iTlkOpLnH6+pStdtP7TPbVUoaoGnGkOev+VXCJEx1Sae3bSy0h4o4gaek2V7t
+         wy7pQz3N8MvztQPB9wbuZrC8w7VayvDLMIR+35lhgdo6h/Yd3CYjrEVCZudiQreGd0
+         LygDTV9FK/qjt4pEkBOP7pXYWAarq6zBYVPbj9s7xgSXQkX7pZzlGPTtlPcxk9mSaG
+         WYN0PQEoWSQuxTFc8Vmvrg2WRDBzdWFa0z1K17j5jFm+NM1CAFxXSPXQKlHF/wTkYU
+         3YF31DZknheHg==
+Received: from johan by xi with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kwLih-0003ul-C3; Mon, 04 Jan 2021 10:00:08 +0100
+Date:   Mon, 4 Jan 2021 10:00:07 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: add Quectel EM160R-GL
+Message-ID: <X/LZFzKyo4/d9Js0@hovoldconsulting.com>
+References: <20201230152534.245337-1-bjorn@mork.no>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <0b96cb765bb154cf0e83a436e7fed8882f566cf9.1606149078.git.joglekar@synopsys.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201230152534.245337-1-bjorn@mork.no>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 04, 2021 at 01:38:43PM +0530, Tejas Joglekar wrote:
-> This commit adds the platform device data to setup
-> the XHCI_SG_TRB_CACHE_SIZE_QUIRK quirk. DWC3 hosts
-> which are PCI devices does not use OF to create platform device
-> but create xhci-plat platform device at runtime. So
-> this patch allows parent device to supply the quirk
-> through platform data.
-> 
-> Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
+On Wed, Dec 30, 2020 at 04:25:34PM +0100, Bjørn Mork wrote:
+> New modem using ff/ff/30 for QCDM, ff/00/00 for  AT and NMEA,
+> and ff/ff/ff for RMNET/QMI.
+
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Bjørn Mork <bjorn@mork.no>
 > ---
->  drivers/usb/dwc3/host.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-
-What changed from previous versions?
-
+>  drivers/usb/serial/option.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index e195176580de..0434bc8cec12 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -11,6 +11,11 @@
->  #include <linux/platform_device.h>
->  
->  #include "core.h"
-> +#include "../host/xhci-plat.h"
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 2c21e34235bb..7c9cd921a738 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -1117,6 +1117,8 @@ static const struct usb_device_id option_ids[] = {
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM12, 0xff, 0xff, 0xff),
+>  	  .driver_info = RSVD(1) | RSVD(2) | RSVD(3) | RSVD(4) | NUMEP2 },
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM12, 0xff, 0, 0) },
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, 0x0620, 0xff, 0xff, 0x30) },
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, 0x0620, 0xff, 0, 0) },
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x30) },
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0, 0) },
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x10),
 
-That feels really wrong.  Are you sure about that?
+Thanks, Bjørn. Now applied with an added model comment after the first
+entry.
 
-thanks,
-
-greg k-h
+Johan
