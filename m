@@ -2,151 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A89802E9DED
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 20:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5782E9E03
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 20:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726810AbhADTEd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Jan 2021 14:04:33 -0500
-Received: from m43-15.mailgun.net ([69.72.43.15]:29653 "EHLO
-        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726019AbhADTEd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jan 2021 14:04:33 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1609787053; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=QTpavwTCJ+B9YOKn+dKdUJ6I+6zsOo5/3Z8vcqfFijM=; b=rilKWOYZfIiTe8bAg4H343W2Ht06hLboQRAUNoZiEi7rsn90vazk240q5jRVYrOOQ1Ik3/Vq
- FiA5DjrwQrOV1JvZT2n4XH1lHWGApB6nrNeLN9P8z2sDp82G4VMJT36B1EyweZfnpCfoJrg6
- 7IIZFfOGA2loVrS/pz0LF12seL8=
-X-Mailgun-Sending-Ip: 69.72.43.15
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 5ff3668cd3eb3c36b4e0ab11 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 04 Jan 2021 19:03:40
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id ED0DBC433CA; Mon,  4 Jan 2021 19:03:39 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.110.33.65] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A6CCBC433C6;
-        Mon,  4 Jan 2021 19:03:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A6CCBC433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH 3/3] usb: gadget: configfs: Add a specific configFS reset
- callback
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     peter.chen@nxp.com, balbi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <1609283011-21997-1-git-send-email-wcheng@codeaurora.org>
- <1609283011-21997-4-git-send-email-wcheng@codeaurora.org>
- <X/M4EaLuiuHstHeX@kroah.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <81ae4b83-2dd8-e605-4f7b-e7b63f959d8d@codeaurora.org>
-Date:   Mon, 4 Jan 2021 11:03:38 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1727764AbhADTO4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Jan 2021 14:14:56 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:38679 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726021AbhADTOz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jan 2021 14:14:55 -0500
+Received: by mail-ot1-f43.google.com with SMTP id j20so27064479otq.5;
+        Mon, 04 Jan 2021 11:14:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+0EffT5SyTJC0KyGrlbx0ghNmKVpPcPl3Tu10rcGlQ0=;
+        b=k6Atfuoc6OKgmhQcq/rZOkZcb+sg97LhGoqGXHf8z9a2NvvEy4tIIFpQ6O7SyNVcpU
+         T5tiXhLPNA7DCGYA35gzcFbUu5mtOMEgcDh4PFJOqslNxxB06CmWAd4/aOXM5jw1AD+x
+         ucniraxe/zzQuE5fQ+QMoeR8xjUgtAe4V5lM9TyMx13fgboLVRU5KuUBk7V8QpihxERj
+         jw/G4PQ+IIpgMW1f5fkfxRNJfJnQ8uaGlVjoewl2LL+WI5MLuG9aTMKowktzymWouQ9a
+         rV9EvB3KjGrdx2hnjDv47I3hyoIvoZA99m9e1iwlMD65F9MQTc1bHUHxPgjXuHmk47o5
+         9mqA==
+X-Gm-Message-State: AOAM530H9Q0d157yWPlY+kfybvvfZOfqJnHZOqg7lrhy9n8JCVTdNiq9
+        eb4nbfIOSspCxa9LNXG7lcGwdTDKq4XE028pwG1mJepgQXLn8A==
+X-Google-Smtp-Source: ABdhPJxb+NNWo6ZyBMHz/fz11AKZkzmUYcwBf/aRRzh4aRbnh90E4Eh8jmP8adiK/F8LZiV1PQAC6w4/J0+m8bMHSr8=
+X-Received: by 2002:a05:6830:578:: with SMTP id f24mr50683409otc.7.1609787655075;
+ Mon, 04 Jan 2021 11:14:15 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <X/M4EaLuiuHstHeX@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20201222184926.35382198@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20201224032116.2453938-1-roland@kernel.org> <X+RJEI+1AR5E0z3z@kroah.com>
+ <20201228133036.3a2e9fb5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAG4TOxNM8du=xadLeVwNU5Zq=MW7Kj74-1d9ThZ0q2OrXHE5qQ@mail.gmail.com>
+ <24c6faa2a4f91c721d9a7f14bb7b641b89ae987d.camel@neukum.org>
+ <CAG4TOxOc2OJnzJg9mwd2h+k0mj250S6NdNQmhK7BbHhT4_KdVA@mail.gmail.com>
+ <12f345107c0832a00c43767ac6bb3aeda4241d4e.camel@suse.com> <CAG4TOxOOPgAqUtX14V7k-qPCbOm7+5gaHOqBvgWBYQwJkO6v8g@mail.gmail.com>
+ <cebe1c1bf2fcbb6c39fd297e4a4a0ca52642fe18.camel@suse.com>
+In-Reply-To: <cebe1c1bf2fcbb6c39fd297e4a4a0ca52642fe18.camel@suse.com>
+From:   Roland Dreier <roland@kernel.org>
+Date:   Mon, 4 Jan 2021 11:13:56 -0800
+Message-ID: <CAG4TOxM_Mq-Rcdi-pbY-KCMqqS5LmRD=PJszYkAjt7XGm8mc5Q@mail.gmail.com>
+Subject: Re: [PATCH] CDC-NCM: remove "connected" log message
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+> > to preserve the legacy behavior rather than changing the behavior of
+> > every usbnet driver all at once?  Like make a new
+> > usbnet_get_link_ksettings_nonmdio and update only cdc_ncm to use it?
+>
+> Then I would have to touch them all. The problem is that the MDIO
+> stuff really is pretty much a layering violation. It should never
+> have been default. But now it is.
 
+I don't understand this.  Your 0001 patch changes the behavior of
+usbnet_get_link_ksettings() and you have to touch all of the 8 drivers
+that use it if you don't want to change their behavior.  If you keep
+the old usbnet_get_link_ksettings() and add
+usbnet_get_link_ksettings_nonmdio() then you can just update cdc_ncm
+to start with, and then gradually migrate other drivers.  And
+eventually fix the layering violation and get rid of the legacy
+function when the whole transition is done.
 
-On 1/4/2021 7:45 AM, Greg KH wrote:
-> On Tue, Dec 29, 2020 at 03:03:31PM -0800, Wesley Cheng wrote:
->> In order for configFS based USB gadgets to set the proper charge current
->> for bus reset scenarios, expose a separate reset callback to set the
->> current to 100mA based on the USB battery charging specification.
->>
->> Reviewed-by: Peter Chen <peter.chen@nxp.com>
->> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->> ---
->>  drivers/usb/gadget/configfs.c | 24 +++++++++++++++++++++++-
->>  1 file changed, 23 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
->> index 56051bb97349..80ca7ff2fb97 100644
->> --- a/drivers/usb/gadget/configfs.c
->> +++ b/drivers/usb/gadget/configfs.c
->> @@ -1481,6 +1481,28 @@ static void configfs_composite_disconnect(struct usb_gadget *gadget)
->>  	spin_unlock_irqrestore(&gi->spinlock, flags);
->>  }
->>  
->> +static void configfs_composite_reset(struct usb_gadget *gadget)
->> +{
->> +	struct usb_composite_dev *cdev;
->> +	struct gadget_info *gi;
->> +	unsigned long flags;
->> +
->> +	cdev = get_gadget_data(gadget);
->> +	if (!cdev)
->> +		return;
->> +
->> +	gi = container_of(cdev, struct gadget_info, cdev);
->> +	spin_lock_irqsave(&gi->spinlock, flags);
->> +	cdev = get_gadget_data(gadget);
->> +	if (!cdev || gi->unbind) {
->> +		spin_unlock_irqrestore(&gi->spinlock, flags);
->> +		return;
->> +	}
->> +
->> +	composite_reset(gadget);
->> +	spin_unlock_irqrestore(&gi->spinlock, flags);
->> +}
->> +
->>  static void configfs_composite_suspend(struct usb_gadget *gadget)
->>  {
->>  	struct usb_composite_dev *cdev;
->> @@ -1530,7 +1552,7 @@ static const struct usb_gadget_driver configfs_driver_template = {
->>  	.unbind         = configfs_composite_unbind,
->>  
->>  	.setup          = configfs_composite_setup,
->> -	.reset          = configfs_composite_disconnect,
->> +	.reset          = configfs_composite_reset,
->>  	.disconnect     = configfs_composite_disconnect,
->>  
->>  	.suspend	= configfs_composite_suspend,
->> -- 
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> a Linux Foundation Collaborative Project
->>
-> 
-> So this changes the existing userspace functionality?  What will break
-> because of this now unexpected change?
-> 
-> thanks,
-> 
-> greg k-h
-> 
-
-Hi Greg,
-
-Happy new years!  This wouldn't affect the userspace interaction with
-configFS, as this is modifying the reset callback for the UDC core.  The
-reset callback is only executed during usb_gadget_udc_reset(), which is
-specifically run when vendor UDC drivers (i.e. DWC3 gadget) receive a
-USB bus reset interrupt.  This is similar to the composite.c patch,
-because for configFS based gadgets, they do not directly register the
-USB composite ops and have their own routines.
-
-Thanks
-Wesley Cheng
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+ - R.
