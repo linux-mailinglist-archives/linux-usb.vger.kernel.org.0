@@ -2,71 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5782E9E03
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 20:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E35E2E9F9E
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 22:41:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727764AbhADTO4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Jan 2021 14:14:56 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:38679 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726021AbhADTOz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jan 2021 14:14:55 -0500
-Received: by mail-ot1-f43.google.com with SMTP id j20so27064479otq.5;
-        Mon, 04 Jan 2021 11:14:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+0EffT5SyTJC0KyGrlbx0ghNmKVpPcPl3Tu10rcGlQ0=;
-        b=k6Atfuoc6OKgmhQcq/rZOkZcb+sg97LhGoqGXHf8z9a2NvvEy4tIIFpQ6O7SyNVcpU
-         T5tiXhLPNA7DCGYA35gzcFbUu5mtOMEgcDh4PFJOqslNxxB06CmWAd4/aOXM5jw1AD+x
-         ucniraxe/zzQuE5fQ+QMoeR8xjUgtAe4V5lM9TyMx13fgboLVRU5KuUBk7V8QpihxERj
-         jw/G4PQ+IIpgMW1f5fkfxRNJfJnQ8uaGlVjoewl2LL+WI5MLuG9aTMKowktzymWouQ9a
-         rV9EvB3KjGrdx2hnjDv47I3hyoIvoZA99m9e1iwlMD65F9MQTc1bHUHxPgjXuHmk47o5
-         9mqA==
-X-Gm-Message-State: AOAM530H9Q0d157yWPlY+kfybvvfZOfqJnHZOqg7lrhy9n8JCVTdNiq9
-        eb4nbfIOSspCxa9LNXG7lcGwdTDKq4XE028pwG1mJepgQXLn8A==
-X-Google-Smtp-Source: ABdhPJxb+NNWo6ZyBMHz/fz11AKZkzmUYcwBf/aRRzh4aRbnh90E4Eh8jmP8adiK/F8LZiV1PQAC6w4/J0+m8bMHSr8=
-X-Received: by 2002:a05:6830:578:: with SMTP id f24mr50683409otc.7.1609787655075;
- Mon, 04 Jan 2021 11:14:15 -0800 (PST)
+        id S1726323AbhADVku (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Jan 2021 16:40:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41760 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726026AbhADVkt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 Jan 2021 16:40:49 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 3EAD02225E;
+        Mon,  4 Jan 2021 21:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609796408;
+        bh=kYP0Py+yZOetX4hNK50uT3GFIO3VKQ6ShFYTlOPndcE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=BXY8YC7fyaOsbBYhkRiEB9io1mKnFktcuRs8Ke4tJnCTZfkGHfXmRcVHBrld0WAhd
+         h6v2l+Gz1Vcia/JjBFLxynHWRdTNuln1lszroYsf/ASpSJ3l88nfK9tWJ5Ee8+L/JU
+         cbdlnMLlbS3xd/c0JioBD3kfOzbLGTHNcazAAlGFhXx3OEhHCbgO3baxTDDv3zpeZL
+         uVvfCbTdebBTz2td5n04vKxAKLEJDoXD3kXGEt2DbdsxyE7EfHejtLiNibZ4Ku9joz
+         zrLCnRNpXqqQEO1PBg9SZJoeB1jR/nO3klyqh1+YNaJCEpzjN7kU18wfPRBjbylMpj
+         G/oJN3mv8pIdQ==
+Received: from pdx-korg-docbuild-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-1.ci.codeaurora.org (Postfix) with ESMTP id 3217C603F8;
+        Mon,  4 Jan 2021 21:40:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20201222184926.35382198@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20201224032116.2453938-1-roland@kernel.org> <X+RJEI+1AR5E0z3z@kroah.com>
- <20201228133036.3a2e9fb5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <CAG4TOxNM8du=xadLeVwNU5Zq=MW7Kj74-1d9ThZ0q2OrXHE5qQ@mail.gmail.com>
- <24c6faa2a4f91c721d9a7f14bb7b641b89ae987d.camel@neukum.org>
- <CAG4TOxOc2OJnzJg9mwd2h+k0mj250S6NdNQmhK7BbHhT4_KdVA@mail.gmail.com>
- <12f345107c0832a00c43767ac6bb3aeda4241d4e.camel@suse.com> <CAG4TOxOOPgAqUtX14V7k-qPCbOm7+5gaHOqBvgWBYQwJkO6v8g@mail.gmail.com>
- <cebe1c1bf2fcbb6c39fd297e4a4a0ca52642fe18.camel@suse.com>
-In-Reply-To: <cebe1c1bf2fcbb6c39fd297e4a4a0ca52642fe18.camel@suse.com>
-From:   Roland Dreier <roland@kernel.org>
-Date:   Mon, 4 Jan 2021 11:13:56 -0800
-Message-ID: <CAG4TOxM_Mq-Rcdi-pbY-KCMqqS5LmRD=PJszYkAjt7XGm8mc5Q@mail.gmail.com>
-Subject: Re: [PATCH] CDC-NCM: remove "connected" log message
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net,stable] net: usb: qmi_wwan: add Quectel EM160R-GL
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <160979640820.4432.6523410004370550725.git-patchwork-notify@kernel.org>
+Date:   Mon, 04 Jan 2021 21:40:08 +0000
+References: <20201230152451.245271-1-bjorn@mork.no>
+In-Reply-To: <20201230152451.245271-1-bjorn@mork.no>
+To:     =?utf-8?b?QmrDuHJuIE1vcmsgPGJqb3JuQG1vcmsubm8+?=@ci.codeaurora.org
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> > to preserve the legacy behavior rather than changing the behavior of
-> > every usbnet driver all at once?  Like make a new
-> > usbnet_get_link_ksettings_nonmdio and update only cdc_ncm to use it?
->
-> Then I would have to touch them all. The problem is that the MDIO
-> stuff really is pretty much a layering violation. It should never
-> have been default. But now it is.
+Hello:
 
-I don't understand this.  Your 0001 patch changes the behavior of
-usbnet_get_link_ksettings() and you have to touch all of the 8 drivers
-that use it if you don't want to change their behavior.  If you keep
-the old usbnet_get_link_ksettings() and add
-usbnet_get_link_ksettings_nonmdio() then you can just update cdc_ncm
-to start with, and then gradually migrate other drivers.  And
-eventually fix the layering violation and get rid of the legacy
-function when the whole transition is done.
+This patch was applied to netdev/net.git (refs/heads/master):
 
- - R.
+On Wed, 30 Dec 2020 16:24:51 +0100 you wrote:
+> New modem using ff/ff/30 for QCDM, ff/00/00 for  AT and NMEA,
+> and ff/ff/ff for RMNET/QMI.
+> 
+> T: Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 2 Spd=5000 MxCh= 0
+> D: Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs= 1
+> P: Vendor=2c7c ProdID=0620 Rev= 4.09
+> S: Manufacturer=Quectel
+> S: Product=EM160R-GL
+> S: SerialNumber=e31cedc1
+> C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=896mA
+> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
+> E: Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E: Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+> E: Ad=83(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
+> E: Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E: Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+> E: Ad=85(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
+> E: Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E: Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+> E: Ad=87(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
+> E: Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E: Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+> E: Ad=88(I) Atr=03(Int.) MxPS= 8 Ivl=32ms
+> E: Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E: Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,stable] net: usb: qmi_wwan: add Quectel EM160R-GL
+    https://git.kernel.org/netdev/net/c/cfd82dfc9799
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
