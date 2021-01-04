@@ -2,72 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1C62E9C28
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 18:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A89802E9DED
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 20:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727040AbhADRjG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Jan 2021 12:39:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:43794 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726019AbhADRjG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jan 2021 12:39:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1609781860;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YpjLLyzfgvor5Qp4xX0ApNSVlIIuMhLPOTOfFObDdfI=;
-        b=Po8AsPZkkzbOkbkGNwWSdJXtnPKd1KvIjKgjplFUDM42cqAuXFiULCsbcNSsof4FzlykNi
-        HYbT1cDJrokW2WYpmQ2rksX/+StAVSbeUQi8eA+0z4HOZBtgsujPfy/6vpRvHoxQl0Q4Hd
-        QAJAGmyBIDazyuIyu/rVmIxrsYdz+CU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-206-NpA6vye-McOgdM06UMn4QQ-1; Mon, 04 Jan 2021 12:37:38 -0500
-X-MC-Unique: NpA6vye-McOgdM06UMn4QQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1726810AbhADTEd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Jan 2021 14:04:33 -0500
+Received: from m43-15.mailgun.net ([69.72.43.15]:29653 "EHLO
+        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726019AbhADTEd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jan 2021 14:04:33 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1609787053; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=QTpavwTCJ+B9YOKn+dKdUJ6I+6zsOo5/3Z8vcqfFijM=; b=rilKWOYZfIiTe8bAg4H343W2Ht06hLboQRAUNoZiEi7rsn90vazk240q5jRVYrOOQ1Ik3/Vq
+ FiA5DjrwQrOV1JvZT2n4XH1lHWGApB6nrNeLN9P8z2sDp82G4VMJT36B1EyweZfnpCfoJrg6
+ 7IIZFfOGA2loVrS/pz0LF12seL8=
+X-Mailgun-Sending-Ip: 69.72.43.15
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 5ff3668cd3eb3c36b4e0ab11 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 04 Jan 2021 19:03:40
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id ED0DBC433CA; Mon,  4 Jan 2021 19:03:39 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.110.33.65] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 545DE107ACE3;
-        Mon,  4 Jan 2021 17:37:37 +0000 (UTC)
-Received: from suzdal.zaitcev.lan (ovpn-112-202.phx2.redhat.com [10.3.112.202])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C935B60BE5;
-        Mon,  4 Jan 2021 17:37:36 +0000 (UTC)
-Date:   Mon, 4 Jan 2021 11:37:36 -0600
-From:   Pete Zaitcev <zaitcev@redhat.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        stable@vger.kernel.org, zaitcev@redhat.com
-Subject: Re: [PATCH] USB: usblp: fix DMA to stack
-Message-ID: <20210104113736.0af1ce0a@suzdal.zaitcev.lan>
-In-Reply-To: <20210104145302.2087-1-johan@kernel.org>
-References: <20210104145302.2087-1-johan@kernel.org>
-Organization: Red Hat, Inc.
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id A6CCBC433C6;
+        Mon,  4 Jan 2021 19:03:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A6CCBC433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH 3/3] usb: gadget: configfs: Add a specific configFS reset
+ callback
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     peter.chen@nxp.com, balbi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <1609283011-21997-1-git-send-email-wcheng@codeaurora.org>
+ <1609283011-21997-4-git-send-email-wcheng@codeaurora.org>
+ <X/M4EaLuiuHstHeX@kroah.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <81ae4b83-2dd8-e605-4f7b-e7b63f959d8d@codeaurora.org>
+Date:   Mon, 4 Jan 2021 11:03:38 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <X/M4EaLuiuHstHeX@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon,  4 Jan 2021 15:53:02 +0100
-Johan Hovold <johan@kernel.org> wrote:
 
-> +++ b/drivers/usb/class/usblp.c
-> -#define usblp_hp_channel_change_request(usblp, channel, buffer) \
-> -	usblp_ctrl_msg(usblp, USBLP_REQ_HP_CHANNEL_CHANGE_REQUEST, USB_TYPE_VENDOR, USB_DIR_IN, USB_RECIP_INTERFACE, channel, buffer, 1)
-> +static int usblp_hp_channel_change_request(struct usblp *usblp, int channel, u8 *new_channel)
 
-Acked-By: Pete Zaitcev <zaitcev@redhat.com>
+On 1/4/2021 7:45 AM, Greg KH wrote:
+> On Tue, Dec 29, 2020 at 03:03:31PM -0800, Wesley Cheng wrote:
+>> In order for configFS based USB gadgets to set the proper charge current
+>> for bus reset scenarios, expose a separate reset callback to set the
+>> current to 100mA based on the USB battery charging specification.
+>>
+>> Reviewed-by: Peter Chen <peter.chen@nxp.com>
+>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>> ---
+>>  drivers/usb/gadget/configfs.c | 24 +++++++++++++++++++++++-
+>>  1 file changed, 23 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+>> index 56051bb97349..80ca7ff2fb97 100644
+>> --- a/drivers/usb/gadget/configfs.c
+>> +++ b/drivers/usb/gadget/configfs.c
+>> @@ -1481,6 +1481,28 @@ static void configfs_composite_disconnect(struct usb_gadget *gadget)
+>>  	spin_unlock_irqrestore(&gi->spinlock, flags);
+>>  }
+>>  
+>> +static void configfs_composite_reset(struct usb_gadget *gadget)
+>> +{
+>> +	struct usb_composite_dev *cdev;
+>> +	struct gadget_info *gi;
+>> +	unsigned long flags;
+>> +
+>> +	cdev = get_gadget_data(gadget);
+>> +	if (!cdev)
+>> +		return;
+>> +
+>> +	gi = container_of(cdev, struct gadget_info, cdev);
+>> +	spin_lock_irqsave(&gi->spinlock, flags);
+>> +	cdev = get_gadget_data(gadget);
+>> +	if (!cdev || gi->unbind) {
+>> +		spin_unlock_irqrestore(&gi->spinlock, flags);
+>> +		return;
+>> +	}
+>> +
+>> +	composite_reset(gadget);
+>> +	spin_unlock_irqrestore(&gi->spinlock, flags);
+>> +}
+>> +
+>>  static void configfs_composite_suspend(struct usb_gadget *gadget)
+>>  {
+>>  	struct usb_composite_dev *cdev;
+>> @@ -1530,7 +1552,7 @@ static const struct usb_gadget_driver configfs_driver_template = {
+>>  	.unbind         = configfs_composite_unbind,
+>>  
+>>  	.setup          = configfs_composite_setup,
+>> -	.reset          = configfs_composite_disconnect,
+>> +	.reset          = configfs_composite_reset,
+>>  	.disconnect     = configfs_composite_disconnect,
+>>  
+>>  	.suspend	= configfs_composite_suspend,
+>> -- 
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+>>
+> 
+> So this changes the existing userspace functionality?  What will break
+> because of this now unexpected change?
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-I would probably get rid of the buffer pointer and return
-new_channel & 0xFF in case of success. That would kill
-the newChannel too, and there's no need to debage u8 versus
-unsigned char. But this is good enough. A function is better
-than trying to cram the kfree() into the clause of the switch.
+Hi Greg,
 
--- Pete
+Happy new years!  This wouldn't affect the userspace interaction with
+configFS, as this is modifying the reset callback for the UDC core.  The
+reset callback is only executed during usb_gadget_udc_reset(), which is
+specifically run when vendor UDC drivers (i.e. DWC3 gadget) receive a
+USB bus reset interrupt.  This is similar to the composite.c patch,
+because for configFS based gadgets, they do not directly register the
+USB composite ops and have their own routines.
 
+Thanks
+Wesley Cheng
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
