@@ -2,86 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42AE82E98F1
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 16:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5CE2E990A
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 16:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727693AbhADPfn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Jan 2021 10:35:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57906 "EHLO mail.kernel.org"
+        id S1727466AbhADPmm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Jan 2021 10:42:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60912 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727679AbhADPfn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 Jan 2021 10:35:43 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A1F532225E;
-        Mon,  4 Jan 2021 15:35:01 +0000 (UTC)
+        id S1727317AbhADPmm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 Jan 2021 10:42:42 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1727F2245C;
+        Mon,  4 Jan 2021 15:42:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1609774502;
-        bh=tUlL9yn5ELVhqvInaFRCYNJL3pyZoP9Qh20Bgq4Gcxo=;
+        s=korg; t=1609774921;
+        bh=459PAb+ZiFWawArpxiOVAAx3cZ07LAL8/JM0E0+J64w=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nDqvFLQmBVSzLsCbkDlopNtpXzaRjez82gKxh2/pI3+76tc6yYeB/tOET5qJQMZVt
-         vh5cLduPA842au86oac10hDIPiZz3r84SIj3zO012DNYntDPbgNSpI+KB3UGcFZtr/
-         JUqsKN9gPBYwF/CeFHe88/cCvqhL18FG2IWJ2zzo=
-Date:   Mon, 4 Jan 2021 16:36:28 +0100
+        b=raBLAwgxYAbv6aYmQU2ZKHYCgIGerzyDuKNsrNqW1l4L8IaZHsNUSeRv22eDSra7K
+         BnBTh0lR5pQ6HQKgJx8RNItRzFjl7Dx26CLKepoQNmdyxW1YJ31D95F9v8i3eLKPGt
+         +DZ3SelZwQqJO+lETD3+Cms4YlxDQiQwurOVUBvI=
+Date:   Mon, 4 Jan 2021 16:43:27 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jerome Brunet <jbrunet@baylibre.com>
-Cc:     Jack Pham <jackp@codeaurora.org>, Felipe Balbi <balbi@kernel.org>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] usb: gadget: u_audio: remove struct uac_req
-Message-ID: <X/M1/Jq7Bx3xFRuL@kroah.com>
-References: <20201221173531.215169-1-jbrunet@baylibre.com>
- <20201221173531.215169-4-jbrunet@baylibre.com>
- <X+nzWs3nOrcqu4F2@kroah.com>
- <20201229222949.GC31406@jackp-linux.qualcomm.com>
- <1jr1n0x0aa.fsf@starbuckisacylon.baylibre.com>
+To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        John Youn <John.Youn@synopsys.com>
+Subject: Re: [RESEND PATCH v6 3/3] usb: dwc3: Pass quirk as platform data
+Message-ID: <X/M3nxyjiIN/R4MC@kroah.com>
+References: <cover.1606149078.git.joglekar@synopsys.com>
+ <0b96cb765bb154cf0e83a436e7fed8882f566cf9.1606149078.git.joglekar@synopsys.com>
+ <X/LQ5ZWLUCGzC8vz@kroah.com>
+ <090742a1-a9a1-b89a-e078-a960b5ca3064@synopsys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1jr1n0x0aa.fsf@starbuckisacylon.baylibre.com>
+In-Reply-To: <090742a1-a9a1-b89a-e078-a960b5ca3064@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 04, 2021 at 03:08:13PM +0100, Jerome Brunet wrote:
+On Mon, Jan 04, 2021 at 09:32:13AM +0000, Tejas Joglekar wrote:
+> Hi Greg,
+> On 1/4/2021 1:55 PM, Greg Kroah-Hartman wrote:
+> > On Mon, Jan 04, 2021 at 01:38:43PM +0530, Tejas Joglekar wrote:
+> >> This commit adds the platform device data to setup
+> >> the XHCI_SG_TRB_CACHE_SIZE_QUIRK quirk. DWC3 hosts
+> >> which are PCI devices does not use OF to create platform device
+> >> but create xhci-plat platform device at runtime. So
+> >> this patch allows parent device to supply the quirk
+> >> through platform data.
+> >>
+> >> Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
+> >> ---
+> >>  drivers/usb/dwc3/host.c | 10 ++++++++++
+> >>  1 file changed, 10 insertions(+)
+> > What changed from previous versions?
 > 
-> On Tue 29 Dec 2020 at 23:30, Jack Pham <jackp@codeaurora.org> wrote:
+> Resent the patch as it was missed for review by Felipe and I saw your mail
 > 
-> > Hi Greg and Jerome,
-> >
-> > On Mon, Dec 28, 2020 at 04:01:46PM +0100, Greg Kroah-Hartman wrote:
-> >> On Mon, Dec 21, 2020 at 06:35:30PM +0100, Jerome Brunet wrote:
-> >> > 'struct uac_req' purpose is to link 'struct usb_request' to the
-> >> > corresponding 'struct uac_rtd_params'. However member req is never
-> >> > used. Using the context of the usb request, we can keep track of the
-> >> > corresponding 'struct uac_rtd_params' just as well, without allocating
-> >> > extra memory.
-> >> > 
-> >> > Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
-> >> > ---
-> >> >  drivers/usb/gadget/function/u_audio.c | 58 ++++++++++++---------------
-> >> >  1 file changed, 26 insertions(+), 32 deletions(-)
-> >> 
-> >> This patch doesn't apply, so I can't apply patches 3 or 4 of this series
-> >> :(
-> >> 
-> >> Can you rebase against my usb-testing branch and resend?
-> >
-> > From the cover letter:
-> >
-> > On Mon, Dec 21, 2020 at 06:35:27PM +0100, Jerome Brunet wrote:
-> >> The series depends on this fix [0] by Jack Pham to apply cleanly
-> >> 
-> >> [0]: https://lore.kernel.org/linux-usb/20201029175949.6052-1-jackp@codeaurora.org/
-> >
-> > My patch hadn't been picked up by Felipe, so it's not in your tree
-> > either, Greg. Should I just resend it to you first?  Or shall I invite
-> > Jerome to just include it in v2 of this series?
+> to resend the patch if not reviewed. Other two patches from series are
 > 
-> Indeed. I rebased on usb-testing and the series applies cleanly with
-> Jack's changes, as decribed in the cover-letter.
-> 
-> If it is easier, I'm happy to include Jack's change in the v2, along
-> with the fixed PATCH 2 fixed.
-> 
-> Greg, would it be OK with you ?
+> picked up by Mathias, this one is remaining for review.
 
-That's fine with me.
+Ah, how was I supposed to guess that?  :)
+
+> >> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> >> index e195176580de..0434bc8cec12 100644
+> >> --- a/drivers/usb/dwc3/host.c
+> >> +++ b/drivers/usb/dwc3/host.c
+> >> @@ -11,6 +11,11 @@
+> >>  #include <linux/platform_device.h>
+> >>  
+> >>  #include "core.h"
+> >> +#include "../host/xhci-plat.h"
+> > That feels really wrong.  Are you sure about that?
+> To use the struct xhci_plat_priv this was included, can you suggest alternative?
+
+If that is the "normal" way to do this with the xhci driver, ok, but I
+would like to get an ack from Mathias for this before taking it.
+
+thanks,
+
+greg k-h
