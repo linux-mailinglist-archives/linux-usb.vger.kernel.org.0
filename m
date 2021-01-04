@@ -2,103 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D89A92E9914
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 16:45:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3284B2E9927
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Jan 2021 16:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727720AbhADPog (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Jan 2021 10:44:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33008 "EHLO mail.kernel.org"
+        id S1727434AbhADPth (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Jan 2021 10:49:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33850 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727676AbhADPog (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 Jan 2021 10:44:36 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 244DC21D93;
-        Mon,  4 Jan 2021 15:43:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1609775035;
-        bh=oIOdn1cm925hl6iQ2ChQ9l9kj2qYpDJe0fL6Dgbb3Ck=;
+        id S1727407AbhADPth (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 Jan 2021 10:49:37 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8E11020735;
+        Mon,  4 Jan 2021 15:48:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609775336;
+        bh=2UPFSSz01mtLFHkWSgmkhwscDXomVQpB0Wr7wPaP8JQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1f0eu/os/MNFRHTy/JJPoEHRRRqTjVqd8k5waO/a3d8VyefOZXuXx1qDzc9HA0SCd
-         qlRlA1pF2NFiqre0fBL9ZbMDVBncEe0mf+8/TyuHEjtEoQiA8fENwO1E1aAz/GKrzA
-         vbjVqZGPeESN0i/yVb61xj/VIal/1mDKTo915Ces=
-Date:   Mon, 4 Jan 2021 16:45:21 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     peter.chen@nxp.com, balbi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/3] usb: gadget: configfs: Add a specific configFS reset
- callback
-Message-ID: <X/M4EaLuiuHstHeX@kroah.com>
-References: <1609283011-21997-1-git-send-email-wcheng@codeaurora.org>
- <1609283011-21997-4-git-send-email-wcheng@codeaurora.org>
+        b=ttuFyWwnxa+CcJ6bXXG+xlt/jc0S7SfkftB4QHj10I+JSFjV0zwYxtc/PelfeYQUM
+         HcCG/87RGbkI17QjoNE26eg5osSJr+gesl5LMdlbBmGUum3tCEWm8LHtR+iHndEiyW
+         8aSyGq0De/vwh17dW0LRwUZJfSydeBaK5m44gXDsyrl0tVeP3vIXcgDtW3yYCiNEDX
+         JnX3eRydr62yxls8uBtjzOo8zP1GAe27cgPqVwVD9N+PbU/wrV/yjLuLjioOCRuHg6
+         g5rK0kJz7VNUiW3P3FVwLmdS4sRfpN5K9yDdCbA4xxgt6UOHjlBmXV2gI7aH9yGqIV
+         fZUfZ5aFroVHQ==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kwS6H-0002Z5-Qa; Mon, 04 Jan 2021 16:48:53 +0100
+Date:   Mon, 4 Jan 2021 16:48:53 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Michael Sweet <msweet@msweet.org>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pete Zaitcev <zaitcev@redhat.com>, linux-usb@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] USB: usblp: fix DMA to stack
+Message-ID: <X/M45d6Cc3cEurQt@hovoldconsulting.com>
+References: <20210104145302.2087-1-johan@kernel.org>
+ <X/MtNtTd96S39HQL@kroah.com>
+ <X/MwBCt0Z/B1D7vw@hovoldconsulting.com>
+ <15AB8EFA-A534-40D8-95D2-7DCE1E46D431@msweet.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1609283011-21997-4-git-send-email-wcheng@codeaurora.org>
+In-Reply-To: <15AB8EFA-A534-40D8-95D2-7DCE1E46D431@msweet.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 29, 2020 at 03:03:31PM -0800, Wesley Cheng wrote:
-> In order for configFS based USB gadgets to set the proper charge current
-> for bus reset scenarios, expose a separate reset callback to set the
-> current to 100mA based on the USB battery charging specification.
+On Mon, Jan 04, 2021 at 10:33:34AM -0500, Michael Sweet wrote:
+> Johan/Greg,
 > 
-> Reviewed-by: Peter Chen <peter.chen@nxp.com>
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-> ---
->  drivers/usb/gadget/configfs.c | 24 +++++++++++++++++++++++-
->  1 file changed, 23 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-> index 56051bb97349..80ca7ff2fb97 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -1481,6 +1481,28 @@ static void configfs_composite_disconnect(struct usb_gadget *gadget)
->  	spin_unlock_irqrestore(&gi->spinlock, flags);
->  }
->  
-> +static void configfs_composite_reset(struct usb_gadget *gadget)
-> +{
-> +	struct usb_composite_dev *cdev;
-> +	struct gadget_info *gi;
-> +	unsigned long flags;
-> +
-> +	cdev = get_gadget_data(gadget);
-> +	if (!cdev)
-> +		return;
-> +
-> +	gi = container_of(cdev, struct gadget_info, cdev);
-> +	spin_lock_irqsave(&gi->spinlock, flags);
-> +	cdev = get_gadget_data(gadget);
-> +	if (!cdev || gi->unbind) {
-> +		spin_unlock_irqrestore(&gi->spinlock, flags);
-> +		return;
-> +	}
-> +
-> +	composite_reset(gadget);
-> +	spin_unlock_irqrestore(&gi->spinlock, flags);
-> +}
-> +
->  static void configfs_composite_suspend(struct usb_gadget *gadget)
->  {
->  	struct usb_composite_dev *cdev;
-> @@ -1530,7 +1552,7 @@ static const struct usb_gadget_driver configfs_driver_template = {
->  	.unbind         = configfs_composite_unbind,
->  
->  	.setup          = configfs_composite_setup,
-> -	.reset          = configfs_composite_disconnect,
-> +	.reset          = configfs_composite_reset,
->  	.disconnect     = configfs_composite_disconnect,
->  
->  	.suspend	= configfs_composite_suspend,
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
-> 
+> Since CUPS uses libusb to communicate with printers these days (well,
+> for over a decade now) so that printing and scanning can coexist, the
+> usblp driver really doesn't get any usage anymore.
 
-So this changes the existing userspace functionality?  What will break
-because of this now unexpected change?
+Ah, ok. I still seem to be using usblp.ko for my printer with CUPS,
+though.
 
-thanks,
-
-greg k-h
+Johan
