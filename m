@@ -2,151 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A96E52EB143
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 18:21:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D3D2EB196
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 18:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730541AbhAERVc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Jan 2021 12:21:32 -0500
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:35654 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729419AbhAERVc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jan 2021 12:21:32 -0500
-Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id A6EBFC00CB;
-        Tue,  5 Jan 2021 17:20:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1609867231; bh=/RmGyqHcINcHHORLwuv780eZQjviuTTupSgTvUGu42I=;
-        h=Date:From:Subject:To:Cc:From;
-        b=EofC0aypZkC/oMoXIzIsW6Rn4tVxNxKHxUkOvR4y9G6cBLsZhrX9n+Tnk4i6WPmZ/
-         1rr/tdjInOUQif4pMK5M9TRYKTsQaglwAce2nXibTHMK2kodczgwYYkRwS6x6uq7+2
-         tVLk3X53qcF8e8kKFLGPNZgyWKfBbIUxup2BBC1SlXtnI982QxPucmNjqCrblM8WXV
-         GC029ejioBEuVcPuwvYm9XCBxFXKiWrcn00l2j9uORNbqnubv+cEzXc+6trsJ5NydM
-         JuQlX4H3u3kqSOQgyEeGT6uAy8qs4eJtr2vZ71wnX5xNd561NgVl/0EeyASWoslW9D
-         TPR44vPU4lJlQ==
-Received: from te-lab16 (unknown [10.10.52.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id EE116A0096;
-        Tue,  5 Jan 2021 17:20:28 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Tue, 05 Jan 2021 09:20:28 -0800
-Date:   Tue, 05 Jan 2021 09:20:28 -0800
-Message-Id: <3080c0452df14d510d24471ce0f9bb7592cdfd4d.1609866964.git.Thinh.Nguyen@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH] usb: dwc3: gadget: Init only available HW eps
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        "Bryan O'Donoghue" <pure.logic@nexus-software.ie>
-Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org
+        id S1730615AbhAERk5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Jan 2021 12:40:57 -0500
+Received: from mail-io1-f47.google.com ([209.85.166.47]:38559 "EHLO
+        mail-io1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729802AbhAERk4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jan 2021 12:40:56 -0500
+Received: by mail-io1-f47.google.com with SMTP id y5so121844iow.5;
+        Tue, 05 Jan 2021 09:40:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8QCUqXr2bzGc5ddkxZAj8Vxc5oTvsGwo9juSuaK/DNc=;
+        b=dpiv0CpJakEgMYIkHp0lhaNf0d461HGJWH+aCceAtiK06rRDsTcTMmlKY49hvYeBLh
+         7Ty71HBKHYeiO7tR4vDt/nbyfS3So6W770LrQdh92+7tJttY7v6bNEPz9K6DyPt4FMLd
+         PIt1LLKtkEtRi0UIF/SrTqyc8+lLr/NyjHzBXZIkwKKYOWTnsle1FsD/3tdAJzYQHLJ8
+         5Wa4nrxHRmF4wbzaj7iiS8vhXcoFeE1qz694yyOGkLCUx5hT7HoR59vm5/MhqoPl6WyI
+         nwHivuhmthkX8gk5c3+LEXbUBtsKZCYBaNRO66SiQA1AkHaiy4ksJgdTlgLtAmm1z8Vq
+         VM5g==
+X-Gm-Message-State: AOAM5321qcVRq9N6s7VVvE3mTC6HsP7wLE0n3Y4SZ+nWozJ+Mbu4gJm/
+        A2rP/pRkkVNdQnfCttBO7A==
+X-Google-Smtp-Source: ABdhPJxCW42aLPbGC5oVtd7TRg3rkrFk+Qrm1SC6TjLARKSfiB9JNiyQ7YL2gLDjCHBjUScpozxZgA==
+X-Received: by 2002:a02:7692:: with SMTP id z140mr666018jab.21.1609868414264;
+        Tue, 05 Jan 2021 09:40:14 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id y15sm121208ili.65.2021.01.05.09.40.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jan 2021 09:40:13 -0800 (PST)
+Received: (nullmailer pid 426116 invoked by uid 1000);
+        Tue, 05 Jan 2021 17:40:08 -0000
+Date:   Tue, 5 Jan 2021 10:40:08 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Add missing array size constraints
+Message-ID: <20210105174008.GB1875909@robh.at.kernel.org>
+References: <20210104230253.2805217-1-robh@kernel.org>
+ <X/RjziK30y56uZUj@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <X/RjziK30y56uZUj@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Typically FPGA devices are configured with CoreConsultant parameter
-DWC_USB3x_EN_LOG_PHYS_EP_SUPT=0 to reduce gate count and improve timing.
-This means that the number of INs equals to OUTs endpoints. But
-typically non-FPGA devices enable this CoreConsultant parameter to
-support flexible endpoint mapping and potentially may have unequal
-number of INs to OUTs physical endpoints.
+On Tue, Jan 05, 2021 at 02:04:14PM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Jan 04, 2021 at 04:02:53PM -0700, Rob Herring wrote:
+> > DT properties which can have multiple entries need to specify what the
+> > entries are and define how many entries there can be. In the case of
+> > only a single entry, just 'maxItems: 1' is sufficient.
+> > 
+> > Add the missing entry constraints. These were found with a modified
+> > meta-schema. Unfortunately, there are a few cases where the size
+> > constraints are not defined such as common bindings, so the meta-schema
+> > can't be part of the normal checks.
+> > 
+> > Cc: Jens Axboe <axboe@kernel.dk>
+> > Cc: Stephen Boyd <sboyd@kernel.org>
+> > Cc: Thierry Reding <thierry.reding@gmail.com>
+> > Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
+> > Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > Cc: Jonathan Cameron <jic23@kernel.org>
+> > Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Marc Zyngier <maz@kernel.org>
+> > Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > Cc: Chen-Yu Tsai <wens@csie.org>
+> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Sebastian Reichel <sre@kernel.org>
+> > Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> 
+> <snip>
+> 
+> > diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> > index 247ef00381ea..f76b25f7fc7a 100644
+> > --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> > @@ -83,6 +83,7 @@ properties:
+> >        Phandle of a companion.
+> >  
+> >    phys:
+> > +    maxItems: 1
+> >      description: PHY specifier for the USB PHY
+> >  
+> >    phy-names:
+> > diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> > index 2178bcc401bc..8e2bd61f2075 100644
+> > --- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> > @@ -71,6 +71,7 @@ properties:
+> >        Overrides the detected port count
+> >  
+> >    phys:
+> > +    maxItems: 1
+> >      description: PHY specifier for the USB PHY
+> >  
+> >    phy-names:
+> > diff --git a/Documentation/devicetree/bindings/usb/ingenic,musb.yaml b/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
+> > index 678396eeeb78..f506225a4d57 100644
+> > --- a/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
+> > @@ -40,7 +40,7 @@ properties:
+> >        - const: mc
+> >  
+> >    phys:
+> > -    description: PHY specifier for the USB PHY
+> > +    maxItems: 1
+> >  
+> >    usb-role-switch:
+> >      type: boolean
+> 
+> Any reason you dropped the description for this entry, but not the other
+> ones above?
 
-The driver must check how many physical endpoints are available for each
-direction and initialize them properly.
+No, I should have dropped those too. I dropped cases of genericish 
+descriptions on common properties. There's nothing specific to this 
+binding here really.
 
-Cc: stable@vger.kernel.org
-Fixes: 47d3946ea220 ("usb: dwc3: refactor gadget endpoint count calculation")
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
- drivers/usb/dwc3/core.c   |  1 +
- drivers/usb/dwc3/core.h   |  2 ++
- drivers/usb/dwc3/gadget.c | 19 ++++++++++++-------
- 3 files changed, 15 insertions(+), 7 deletions(-)
+> 
+> > diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> > index 388245b91a55..adce36e48bc9 100644
+> > --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> > @@ -15,13 +15,14 @@ properties:
+> >        - const: ti,j721e-usb
+> >  
+> >    reg:
+> > -    description: module registers
+> > +    maxItems: 1
+> >  
+> >    power-domains:
+> >      description:
+> >        PM domain provider node and an args specifier containing
+> >        the USB device id value. See,
+> >        Documentation/devicetree/bindings/soc/ti/sci-pm-domain.txt
+> > +    maxItems: 1
+> >  
+> >    clocks:
+> >      description: Clock phandles to usb2_refclk and lpm_clk
+> 
+> Same here, why remove the description?
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 841daec70b6e..1084aa8623c2 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -529,6 +529,7 @@ static void dwc3_core_num_eps(struct dwc3 *dwc)
- 	struct dwc3_hwparams	*parms = &dwc->hwparams;
- 
- 	dwc->num_eps = DWC3_NUM_EPS(parms);
-+	dwc->num_in_eps = DWC3_NUM_IN_EPS(parms);
- }
- 
- static void dwc3_cache_hwparams(struct dwc3 *dwc)
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 1b241f937d8f..1295dac019f9 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -990,6 +990,7 @@ struct dwc3_scratchpad_array {
-  * @u1sel: parameter from Set SEL request.
-  * @u1pel: parameter from Set SEL request.
-  * @num_eps: number of endpoints
-+ * @num_in_eps: number of IN endpoints
-  * @ep0_next_event: hold the next expected event
-  * @ep0state: state of endpoint zero
-  * @link_state: link state
-@@ -1193,6 +1194,7 @@ struct dwc3 {
- 	u8			speed;
- 
- 	u8			num_eps;
-+	u8			num_in_eps;
- 
- 	struct dwc3_hwparams	hwparams;
- 	struct dentry		*root;
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 25f654b79e48..8a38ee10c00b 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2025,7 +2025,7 @@ static void dwc3_stop_active_transfers(struct dwc3 *dwc)
- {
- 	u32 epnum;
- 
--	for (epnum = 2; epnum < dwc->num_eps; epnum++) {
-+	for (epnum = 2; epnum < DWC3_ENDPOINTS_NUM; epnum++) {
- 		struct dwc3_ep *dep;
- 
- 		dep = dwc->eps[epnum];
-@@ -2628,16 +2628,21 @@ static int dwc3_gadget_init_endpoint(struct dwc3 *dwc, u8 epnum)
- 	return 0;
- }
- 
--static int dwc3_gadget_init_endpoints(struct dwc3 *dwc, u8 total)
-+static int dwc3_gadget_init_endpoints(struct dwc3 *dwc)
- {
--	u8				epnum;
-+	u8				i;
-+	int				ret;
- 
- 	INIT_LIST_HEAD(&dwc->gadget->ep_list);
- 
--	for (epnum = 0; epnum < total; epnum++) {
--		int			ret;
-+	for (i = 0; i < dwc->num_in_eps; i++) {
-+		ret = dwc3_gadget_init_endpoint(dwc, i * 2 + 1);
-+		if (ret)
-+			return ret;
-+	}
- 
--		ret = dwc3_gadget_init_endpoint(dwc, epnum);
-+	for (i = 0; i < dwc->num_eps - dwc->num_in_eps; i++) {
-+		ret = dwc3_gadget_init_endpoint(dwc, i * 2);
- 		if (ret)
- 			return ret;
- 	}
-@@ -3863,7 +3868,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
- 	 * sure we're starting from a well known location.
- 	 */
- 
--	ret = dwc3_gadget_init_endpoints(dwc, dwc->num_eps);
-+	ret = dwc3_gadget_init_endpoints(dwc);
- 	if (ret)
- 		goto err4;
- 
+Really, the question is why keep 'description' on power-domains. Perhaps 
+there's a little value in the reference to sci-pm-domain.txt, so I left 
+it.
 
-base-commit: 96ebc9c871d8a28fb22aa758dd9188a4732df482
--- 
-2.28.0
-
+Rob
