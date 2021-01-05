@@ -2,105 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9E32EB3A3
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 20:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 470462EB3C0
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 20:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731056AbhAETs1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Jan 2021 14:48:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
+        id S1731133AbhAETyb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Jan 2021 14:54:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728573AbhAETs0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jan 2021 14:48:26 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698DEC061796
-        for <linux-usb@vger.kernel.org>; Tue,  5 Jan 2021 11:47:46 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id n25so582448pgb.0
-        for <linux-usb@vger.kernel.org>; Tue, 05 Jan 2021 11:47:46 -0800 (PST)
+        with ESMTP id S1731131AbhAETyb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jan 2021 14:54:31 -0500
+Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1477C061793
+        for <linux-usb@vger.kernel.org>; Tue,  5 Jan 2021 11:53:50 -0800 (PST)
+Received: by mail-wr1-x449.google.com with SMTP id o17so291787wra.8
+        for <linux-usb@vger.kernel.org>; Tue, 05 Jan 2021 11:53:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SYP7m953Sh1/b2c2QWHDIe0Jh5wcwMv/xNkLawK3758=;
-        b=eh1wDbOjV5w7hs1P4onKpIUp9lE3rC9aYw93OThl4XBTbR//RXNgg1ddZHGUSJM+l8
-         j5z6U3q4ZKBwpQCBQXtzZFNt8SFT3XJrsxxOIYVM9kiZ2bgTxgYJFtlm06WRzD2M5fPx
-         unQkftE/IrnlHmk5qC4//Rf4LFireHYdA+aUFhjMTCK6iv05qt/2++Oq+dah0KOPJACU
-         rJBNpSf7hoJ69FbDvgjQXRAJEPxh2TfzU4vf253RiLpb7Jx9RteITtpHQVdc59raQGwN
-         Nhrbqb75pWi5SgDvRkGGnI5B8L/8PzAnOMcqJaUxDYkYKu2X+VVvIq3oIAx5odeCx7ro
-         a+JQ==
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=ToKZZMMFz2dd/gf3h/vSB+5EZJff08Hd9cEbaiMy84Y=;
+        b=CWm5A0APLQGiDEX/cmztnRMrbSiqhmqNLQmIiJ0APCRrgh8oPEfvPm3qT7VkHmQwdo
+         yTuH+GeHC95ca5j7oc/L/LRrH/US/VSZBO/tmmfhNPQkYoV/A5R5kLVqrZxUbaqn3YNg
+         B059PR+md3XhtobFjtGkaFTRh0fVl87wm3IMQHS2rtmr/ouQNgdX8RGAM/osW8xCPTqE
+         gM/3lBPaPvPmwkfh2SNaDI0jfhi92G61vgQeyFfJ86isCPHarV+Cf4dY4eGV0cSDqdle
+         wTKqgCytRkySBjnElA2jamUygG7Vj350ZRqW+AQw8ZyVOe4wyTPpo9Z1vxs/+G6YQn7n
+         uIzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SYP7m953Sh1/b2c2QWHDIe0Jh5wcwMv/xNkLawK3758=;
-        b=fwdc5QSW1mSrag8WeBUtf3x6bbEAYdbsudBGTcNQqLa8TJ/eMHp57vAk9l9SZXM7N6
-         EAqsTUXAHGG6fwzyKgaAZwO2H0giVXs/p5PqlZ0hCzfysyLNw4mMUsWEcF3mdcn2WeF4
-         tary4X4SEnzjYf6UMpy5VNB8uDxK7MNooZ01U89QZEtZdW/xtp+0Ayd+37dxQWd0pe15
-         uspGnU+Bb7YmMMOqyWlgfZraoRJKFQV+bETvCwi1Fy9ScFWoy4huFE5sW+So5GLKvyjs
-         L6usOugeKDjmWvapNOuMJcL+BxZy9ZMxxXq/7JpSjbqVwt+866PoRz0JBwJgIMFHW8gq
-         JLbg==
-X-Gm-Message-State: AOAM533bzCJaa/syFyw5F2k7AeAo3XL5ayvBFrdUSR44Rn0HJXVKbUXg
-        LT9sPLjrb05Is0c53RI9KLg3x+QiTUXcGz8EfWYxOnQQC6U=
-X-Google-Smtp-Source: ABdhPJxhroH34+vSYSarAuRTjMCJ5S8MtNXWuVuKYQlAI+XBfJwbtK0ug3LB+EwIdTaSKXQ6HKiB4gm/5RKVI+n7SKM=
-X-Received: by 2002:a63:4644:: with SMTP id v4mr851869pgk.440.1609876065848;
- Tue, 05 Jan 2021 11:47:45 -0800 (PST)
-MIME-Version: 1.0
-References: <d7035335fdfe7493067fbf7d677db57807a42d5d.1606175031.git.andreyknvl@google.com>
- <X+nxQo7q2n4dGzoy@kroah.com>
-In-Reply-To: <X+nxQo7q2n4dGzoy@kroah.com>
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=ToKZZMMFz2dd/gf3h/vSB+5EZJff08Hd9cEbaiMy84Y=;
+        b=Z38U1FkImYYyYsolR8r9hpB/1n4mMqNwaozgpQAoL6k0drhmmoSM26PEqBgNs+wrjX
+         ablJWmnyVdBMVa22PxMejlevnmXfFsxicgGUhC4AAbJZ0cN8cb+XsCPmCzsTl07Z8vyb
+         +JOAJvnCuIRhpjW/J9KXpIz96xC+sMj6LXS9XxBm4bMSAiliQ+CAAIKGZxgrGR/EZZmr
+         oNenCDIrlOVltfqvh2EKOCrtjgrdbSxlKt/VSU107hqaNvxpJrGzbqzVOIOOpKKaWf0n
+         7/rZWO2HvMtwbrDnetuhkhjw1orxLShvU2o0DLx246vBVtYnqLFpugb7ejVQkOVjveu0
+         CnPw==
+X-Gm-Message-State: AOAM5313lKU/AVibMeLSs+yVlmZhehoQzJ+Brh0IzKAJBN0UEUV+3WBk
+        sTwHdffNngFgxPCa4ofCtcq1ACl0NpHTX2fC
+X-Google-Smtp-Source: ABdhPJxoYl3KGFqdPYJ3I4EGacdjLC4SRz3qt4263BrYNUoQ6K35UXDh04EsS5xi+B9QaOw5AmzVyEP717uA092A
+Sender: "andreyknvl via sendgmr" <andreyknvl@andreyknvl3.muc.corp.google.com>
+X-Received: from andreyknvl3.muc.corp.google.com ([2a00:79e0:15:13:7220:84ff:fe09:7e9d])
+ (user=andreyknvl job=sendgmr) by 2002:adf:f6c9:: with SMTP id
+ y9mr1090609wrp.121.1609876429392; Tue, 05 Jan 2021 11:53:49 -0800 (PST)
+Date:   Tue,  5 Jan 2021 20:53:42 +0100
+Message-Id: <aeb430c5bb90b0ccdf1ec302c70831c1a47b9c45.1609876340.git.andreyknvl@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.29.2.729.g45daf8777d-goog
+Subject: [PATCH] kcov, usb: hide in_serving_softirq checks in __usb_hcd_giveback_urb
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 5 Jan 2021 20:47:35 +0100
-Message-ID: <CAAeHK+xNDvauf-SFoBcUfcPA_6fL_FhP-w2mys+Z-heyd0-VEA@mail.gmail.com>
-Subject: Re: [PATCH v5] kcov, usb: only collect coverage from
- __usb_hcd_giveback_urb in softirq
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Shuah Khan <shuah@kernel.org>,
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>,
         Alexander Potapenko <glider@google.com>,
         Marco Elver <elver@google.com>,
-        Nazime Hande Harputluoglu <handeharput@gmail.com>
+        Andrey Konovalov <andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 28, 2020 at 3:51 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Nov 24, 2020 at 12:47:25AM +0100, Andrey Konovalov wrote:
-> > Currently there's a kcov remote coverage collection section in
-> > __usb_hcd_giveback_urb(). Initially that section was added based on the
-> > assumption that usb_hcd_giveback_urb() can only be called in interrupt
-> > context as indicated by a comment before it. This is what happens when
-> > syzkaller is fuzzing the USB stack via the dummy_hcd driver.
-> >
-> > As it turns out, it's actually valid to call usb_hcd_giveback_urb() in task
-> > context, provided that the caller turned off the interrupts; USB/IP does
-> > exactly that. This can lead to a nested KCOV remote coverage collection
-> > sections both trying to collect coverage in task context. This isn't
-> > supported by kcov, and leads to a WARNING.
-> >
-> > Change __usb_hcd_giveback_urb() to only call kcov_remote_*() callbacks
-> > when it's being executed in a softirq. To avoid calling
-> > in_serving_softirq() directly in the driver code, add a couple of new kcov
-> > wrappers.
-> >
-> > As the result of this change, the coverage from USB/IP related
-> > usb_hcd_giveback_urb() calls won't be collected, but the WARNING is fixed.
-> >
-> > A potential future improvement would be to support nested remote coverage
-> > collection sections, but this patch doesn't address that.
-> >
-> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> > Acked-by: Marco Elver <elver@google.com>
-> > ---
-> >
-> > Changes in v5:
-> > - Don't call in_serving_softirq() in USB driver code directly, do that
-> >   via kcov wrappers.
->
-> Does not apply to 5.11-rc1 :(
+Done opencode in_serving_softirq() checks in in_serving_softirq() to avoid
+cluttering the code, hide them in kcov helpers instead.
 
-Hm, I see version 4 in 5.11-rc1. Let me send a fix up.
+Fixes: aee9ddb1d371 ("kcov, usb: only collect coverage from __usb_hcd_giveback_urb in softirq")
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+---
+ drivers/usb/core/hcd.c |  8 +++-----
+ include/linux/kcov.h   | 21 +++++++++++++++++++++
+ 2 files changed, 24 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 60886a7464c3..ad5a0f405a75 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1649,14 +1649,12 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
+ 	urb->status = status;
+ 	/*
+ 	 * This function can be called in task context inside another remote
+-	 * coverage collection section, but KCOV doesn't support that kind of
++	 * coverage collection section, but kcov doesn't support that kind of
+ 	 * recursion yet. Only collect coverage in softirq context for now.
+ 	 */
+-	if (in_serving_softirq())
+-		kcov_remote_start_usb((u64)urb->dev->bus->busnum);
++	kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum);
+ 	urb->complete(urb);
+-	if (in_serving_softirq())
+-		kcov_remote_stop();
++	kcov_remote_stop_softirq();
+ 
+ 	usb_anchor_resume_wakeups(anchor);
+ 	atomic_dec(&urb->use_count);
+diff --git a/include/linux/kcov.h b/include/linux/kcov.h
+index a10e84707d82..4e3037dc1204 100644
+--- a/include/linux/kcov.h
++++ b/include/linux/kcov.h
+@@ -52,6 +52,25 @@ static inline void kcov_remote_start_usb(u64 id)
+ 	kcov_remote_start(kcov_remote_handle(KCOV_SUBSYSTEM_USB, id));
+ }
+ 
++/*
++ * The softirq flavor of kcov_remote_*() functions is introduced as a temporary
++ * work around for kcov's lack of nested remote coverage sections support in
++ * task context. Adding suport for nested sections is tracked in:
++ * https://bugzilla.kernel.org/show_bug.cgi?id=210337
++ */
++
++static inline void kcov_remote_start_usb_softirq(u64 id)
++{
++	if (in_serving_softirq())
++		kcov_remote_start_usb(id);
++}
++
++static inline void kcov_remote_stop_softirq(void)
++{
++	if (in_serving_softirq())
++		kcov_remote_stop();
++}
++
+ #else
+ 
+ static inline void kcov_task_init(struct task_struct *t) {}
+@@ -66,6 +85,8 @@ static inline u64 kcov_common_handle(void)
+ }
+ static inline void kcov_remote_start_common(u64 id) {}
+ static inline void kcov_remote_start_usb(u64 id) {}
++static inline void kcov_remote_start_usb_softirq(u64 id) {}
++static inline void kcov_remote_stop_softirq(void) {}
+ 
+ #endif /* CONFIG_KCOV */
+ #endif /* _LINUX_KCOV_H */
+-- 
+2.29.2.729.g45daf8777d-goog
+
