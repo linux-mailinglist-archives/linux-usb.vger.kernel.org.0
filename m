@@ -2,47 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D94992EAB2E
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 13:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48DC2EAB54
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 14:00:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728983AbhAEMuV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Jan 2021 07:50:21 -0500
-Received: from mx2.suse.de ([195.135.220.15]:41290 "EHLO mx2.suse.de"
+        id S1729336AbhAEM7h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Jan 2021 07:59:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55886 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728006AbhAEMuV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 Jan 2021 07:50:21 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 487B0AD0B;
-        Tue,  5 Jan 2021 12:49:39 +0000 (UTC)
-Message-ID: <f66f965e30ab44bb3a9a2c0f63383e603011932d.camel@suse.de>
-Subject: Re: [PATCH] usb: uas: Add PNY USB Portable SSD to unusual_uas
-From:   Oliver Neukum <oneukum@suse.de>
+        id S1725932AbhAEM7h (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 Jan 2021 07:59:37 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A6DE720735;
+        Tue,  5 Jan 2021 12:58:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609851536;
+        bh=+S1/asbQWfBvNMsP0z/RcaAM+16JOOlMmv1drViAqO0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=PxAIdKH6kEjKb7oMRaveo5Qj5l8wPlvmtOIb5rpfAmRZf2ztw0ymoiiwQ9vHmaU+K
+         zOS+kFkWANhHLe79LKRMDbPIDUg5ravfNNPUkPzYXxTIn/QnOIhPreuOhqAzSOloDN
+         uS1gSVX+eBLY5KVoooffqc4LMMbC7/28gBfHy0Yp6lTW0+kW9Wf7wwF1Y40ooG3Ayt
+         wTsNy/k6MG6xsQDLKhadzvuKLxyQKHluFJiubP4pRz10iq3iXrdTPviYQ6MYFuRE/C
+         f/Sj1sg1r0JSNmt1AsfTu5MLVpIBFMO+abX/JiDBr5x0qbZ4Sbwxu0/WwYCfj9unix
+         sSr50yEABI5fQ==
+From:   Felipe Balbi <balbi@kernel.org>
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Hans de Goede <hdegoede@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        usb-storage@lists.one-eyed-alien.net
-Cc:     stable@vger.kernel.org, linux-usb@vger.kernel.org
-Date:   Tue, 05 Jan 2021 13:49:35 +0100
-In-Reply-To: <2edc7af892d0913bf06f5b35e49ec463f03d5ed8.1609819418.git.Thinh.Nguyen@synopsys.com>
-References: <2edc7af892d0913bf06f5b35e49ec463f03d5ed8.1609819418.git.Thinh.Nguyen@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: dwc3: gadget: Clear wait flag on dequeue
+In-Reply-To: <b81cd5b5281cfbfdadb002c4bcf5c9be7c017cfd.1609828485.git.Thinh.Nguyen@synopsys.com>
+References: <b81cd5b5281cfbfdadb002c4bcf5c9be7c017cfd.1609828485.git.Thinh.Nguyen@synopsys.com>
+Date:   Tue, 05 Jan 2021 14:58:51 +0200
+Message-ID: <87turvczg4.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 04.01.2021, 20:07 -0800 schrieb Thinh Nguyen:
-> Here's another variant PNY Pro Elite USB 3.1 Gen 2 portable SSD that
-> hangs and doesn't respond to ATA_1x pass-through commands. If it doesn't
-> support these commands, it should respond properly to the host. Add it
-> to the unusual uas list to be able to move forward with other
-> operations.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Acked-by: Oliver Neukum <oneukum@suse.com>
 
+Hi,
+
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+> If an active transfer is dequeued, then the endpoint is freed to start a
+> new transfer. Make sure to clear the endpoint's transfer wait flag for
+> this case.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: e0d19563eb6c ("usb: dwc3: gadget: Wait for transfer completion")
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+>  Changes in v2:
+>  - Only clear the wait flag if the selected request is of an active transfer.
+>    Otherwise, any dequeue will change the endpoint's state even if it's for
+>    some random request.
+>
+>  drivers/usb/dwc3/gadget.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 78cb4db8a6e4..9a00dcaca010 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -1763,6 +1763,8 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+>  			list_for_each_entry_safe(r, t, &dep->started_list, list)
+>  				dwc3_gadget_move_cancelled_request(r);
+>  
+> +			dep->flags &= ~DWC3_EP_WAIT_TRANSFER_COMPLETE;
+
+I'm not sure this is correct. This could create a race condition between
+clearing this bit and getting the transfer complete interrupt. It also
+seems to break the assumptions made by
+dwc3_gadget_endpoint_trbs_complete() (actually its users), specially
+regarding ISOC endpoints.
+
+Have you verified all transfer types with this commit?
+
+-- 
+balbi
