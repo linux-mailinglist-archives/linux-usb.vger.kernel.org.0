@@ -2,120 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A252EA8B8
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 11:31:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0897C2EA939
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 11:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729133AbhAEKaY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Jan 2021 05:30:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:56585 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729128AbhAEKaY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jan 2021 05:30:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1609842537;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        id S1728963AbhAEKw1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Jan 2021 05:52:27 -0500
+Received: from mx2.suse.de ([195.135.220.15]:60328 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728919AbhAEKw1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 Jan 2021 05:52:27 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1609843899; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=H30d+AlR8ieFQgPqpprypshZD37jO8PgTCkCJgLRnb0=;
-        b=Z+M1LLzQNuarqRIC7fJ/R/CZJ8r+f1BiGHdtNnS9OsGEXFwbjQ6X6IjxsGqeQSJL1hGDbv
-        E3fCk2FhRB2sbH2iQjy8BBrvaw5t9RbcJaQPkk3PJVAK/NVoizSBbm7r/8EOW3jeq7pU2W
-        YcQx3fB/uXepP0RxnuL3+rMI1AeJiCs=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-476-GWFzKbrtMBK2CkA9Jik1DA-1; Tue, 05 Jan 2021 05:28:56 -0500
-X-MC-Unique: GWFzKbrtMBK2CkA9Jik1DA-1
-Received: by mail-ed1-f71.google.com with SMTP id i15so13882555edx.9
-        for <linux-usb@vger.kernel.org>; Tue, 05 Jan 2021 02:28:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=H30d+AlR8ieFQgPqpprypshZD37jO8PgTCkCJgLRnb0=;
-        b=BiGtwVohjYR3/Zw2qt4CsrpWhsTGKHkS5nHa8S7FggiWkVP6iKWuhuT6T4GcKQgRxG
-         a4TIlb578P4qH820ExLqkEDZ9AiJOZfL+SQ2IsczyKZsyk9XIdOynmn4KV8+IBkJrmjR
-         QwcQVbDcI9wiXU/rQxxfV7OGJK2GRhogi0Qxg9cFRq5hy38Z4zkapUrNkGAtsgndOZc8
-         GuW0d5RMWscuOVRbX7t4+vx4MpKK68AN4+ctxHEH5K4Sehz4tc0Pz8viRCzTNSXPPJyf
-         9rC3/Rg9nUuRqNoegi/+Ossj7yVcSBT7hN6QYNhrcPjk6W4ZdS3keDKUQRlZmmSbH8cN
-         ifjw==
-X-Gm-Message-State: AOAM531eJFYPMoLwgqwu5F9hKAkyKWdTggh1UefjCdynAxIiHeYSTCdQ
-        0djwz53NJ8IFMAlvXw5vaAhKsmTQ3L2tIAmctQgJSwc+nz1j8jwwNABfywCkguA4qbhJIxRWOSY
-        N9/6hOe4Xic9B6WQOlrEaBm3TTR9/v790pKySUiRq5uhCTQy50wpuFEbM7T4EHR0X/92UosHm
-X-Received: by 2002:a05:6402:404:: with SMTP id q4mr76806670edv.295.1609842535102;
-        Tue, 05 Jan 2021 02:28:55 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzCJTTQIgJsc5JrHCkbND3KztYMvX8DlFCDLt4b/1HEBPbRvYfaH6P9hUf9sKM5fx9Zi/grmA==
-X-Received: by 2002:a05:6402:404:: with SMTP id q4mr76806650edv.295.1609842534887;
-        Tue, 05 Jan 2021 02:28:54 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-37a3-353b-be90-1238.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:37a3:353b:be90:1238])
-        by smtp.gmail.com with ESMTPSA id oq7sm24754910ejb.63.2021.01.05.02.28.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jan 2021 02:28:54 -0800 (PST)
-Subject: Re: [PATCH] usb: uas: Add PNY USB Portable SSD to unusual_uas
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        usb-storage@lists.one-eyed-alien.net
-Cc:     stable@vger.kernel.org, linux-usb@vger.kernel.org
-References: <2edc7af892d0913bf06f5b35e49ec463f03d5ed8.1609819418.git.Thinh.Nguyen@synopsys.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <e0a6cb75-1000-5889-6dfa-dc236d4ed4fa@redhat.com>
-Date:   Tue, 5 Jan 2021 11:28:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        bh=ctvgyyVLZwmab3QcFSKJMVqA4L0pIOmLRRQPugBuOjA=;
+        b=dOi2ZlD73n5Gj8nhG2gCLg7GfoHsZIMlE565LwSspgL27LwmpOxKFHdOMUokOc2uQrQGLH
+        RdnY3l25/m5wlVlveEUJwV7JVBpJzDURvMOQcJDjiELHLWaUQz6JjIliO1FUn6QA/Y7DAW
+        BQJAUcC/RKKsdfsytrTGilDfrGGHUjA=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 90025AD0B;
+        Tue,  5 Jan 2021 10:51:39 +0000 (UTC)
+Message-ID: <d09747d30bdb0a79daf9fa4bd381cc8deeb81d50.camel@suse.com>
+Subject: Re: =?UTF-8?Q?=E5=9B=9E=E5=A4=8D=3A?= KASAN: use-after-free Read in
+ service_outstanding_interrupt
+From:   Oliver Neukum <oneukum@suse.com>
+To:     "Zhang, Qiang" <Qiang.Zhang@windriver.com>,
+        syzbot <syzbot+9e04e2df4a32fb661daf@syzkaller.appspotmail.com>,
+        "andreyknvl@google.com" <andreyknvl@google.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "gustavoars@kernel.org" <gustavoars@kernel.org>,
+        "ingrassia@epigenesys.com" <ingrassia@epigenesys.com>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "penguin-kernel@I-love.SAKURA.ne.jp" 
+        <penguin-kernel@i-love.sakura.ne.jp>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>
+Date:   Tue, 05 Jan 2021 11:51:31 +0100
+In-Reply-To: <BYAPR11MB2632EDC88523D674D9C63E73FFD10@BYAPR11MB2632.namprd11.prod.outlook.com>
+References: <000000000000994d2a05b6b49959@google.com>
+        ,<6a56df508f597d38746878e80e1f159a556d3152.camel@suse.com>
+         <BYAPR11MB2632EDC88523D674D9C63E73FFD10@BYAPR11MB2632.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-In-Reply-To: <2edc7af892d0913bf06f5b35e49ec463f03d5ed8.1609819418.git.Thinh.Nguyen@synopsys.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Am Dienstag, den 05.01.2021, 04:50 +0000 schrieb Zhang, Qiang:
+> 
+> ________________________________________
+> 发件人: Oliver Neukum <oneukum@suse.com>
+> 发送时间: 2021年1月5日 0:28
+> 收件人: syzbot; andreyknvl@google.com; gregkh@linuxfoundation.org; gustavoars@kernel.org; ingrassia@epigenesys.com; lee.jones@linaro.org; linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org; penguin-kernel@I-love.SAKURA.ne.jp; syzkaller-bugs@googlegroups.com
+> 主题: Re: KASAN: use-after-free Read in service_outstanding_interrupt
+> 
+> Am Donnerstag, den 17.12.2020, 19:21 -0800 schrieb syzbot:
+> > syzbot has found a reproducer for the following issue on:
+> > 
+> > HEAD commit:    5e60366d Merge tag 'fallthrough-fixes-clang-5.11-rc1' of g..
+> > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=12c5b623500000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=5cea7506b7139727
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=9e04e2df4a32fb661daf
+> > compiler:       gcc (GCC) 10.1.0-syz 20200507
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=175adf07500000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1672680f500000
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: >syzbot+9e04e2df4a32fb661daf@syzkaller.appspotmail.com
+> > 
+> > #syz test: https://github.com/google/kasan.git  5e60366d
+> > 
+> 
+>  Hello Oliver 
+>  
+>  this use-after-free still exists，It can be seen from calltrace that it is 
+>  usb_device's object  has been released when disconnect,
+>  can add a reference count to usb_device's object to avoid this problem 
+
 Hi,
 
-On 1/5/21 5:07 AM, Thinh Nguyen wrote:
-> Here's another variant PNY Pro Elite USB 3.1 Gen 2 portable SSD that
-> hangs and doesn't respond to ATA_1x pass-through commands. If it doesn't
-> support these commands, it should respond properly to the host. Add it
-> to the unusual uas list to be able to move forward with other
-> operations.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+thanks for your analysis. I think you are correct in your analysis, but
+I am afraid your fix is not correct. The driver is submitting an URB
+to a disconnected device. Your fix would prevent a crash, which is
+definitely good, but we still cannot do that, because the device may
+be owned by another driver or usbfs at that time.
 
-Thanks, patch looks good to me:
+	Regards
+		Oliver
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-> ---
->  drivers/usb/storage/unusual_uas.h | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-> index 870e9cf3d5dc..f9677a5ec31b 100644
-> --- a/drivers/usb/storage/unusual_uas.h
-> +++ b/drivers/usb/storage/unusual_uas.h
-> @@ -90,6 +90,13 @@ UNUSUAL_DEV(0x152d, 0x0578, 0x0000, 0x9999,
->  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->  		US_FL_BROKEN_FUA),
->  
-> +/* Reported-by: Thinh Nguyen <thinhn@synopsys.com> */
-> +UNUSUAL_DEV(0x154b, 0xf00b, 0x0000, 0x9999,
-> +		"PNY",
-> +		"Pro Elite SSD",
-> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> +		US_FL_NO_ATA_1X),
-> +
->  /* Reported-by: Thinh Nguyen <thinhn@synopsys.com> */
->  UNUSUAL_DEV(0x154b, 0xf00d, 0x0000, 0x9999,
->  		"PNY",
-> 
-> base-commit: 5c8fe583cce542aa0b84adc939ce85293de36e5e
-> 
 
