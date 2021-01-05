@@ -2,80 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E76782EAC05
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 14:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B01C2EAC4D
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 14:50:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729659AbhAENgZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Jan 2021 08:36:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
+        id S1730355AbhAENrm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Jan 2021 08:47:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726707AbhAENgY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jan 2021 08:36:24 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6F8C061793
-        for <linux-usb@vger.kernel.org>; Tue,  5 Jan 2021 05:35:44 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id p22so31067955edu.11
-        for <linux-usb@vger.kernel.org>; Tue, 05 Jan 2021 05:35:44 -0800 (PST)
+        with ESMTP id S1728711AbhAENrl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jan 2021 08:47:41 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DB7C06179F
+        for <linux-usb@vger.kernel.org>; Tue,  5 Jan 2021 05:46:59 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id 30so16607407pgr.6
+        for <linux-usb@vger.kernel.org>; Tue, 05 Jan 2021 05:46:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qanCY9ywFg7njDhdnP0AIL5hv0WgQcxttkeThBC4ZG8=;
-        b=YUIfxCHX6Kzcseue3f/xTn3TG+nX9E2d9kHmwL9vW08Vf4ye6Zd9KlmUjSt4HwocKR
-         XahahbuJYjof1X3noCm7wkH3P36MQ+5TQTsvkWhfVYtL5TrAyHyYHlt07EzwVv9EGhKu
-         bJ2iTNXbHvp6j8yqt1mI6JtVeh2rdFamGz6eqcinA0kDYyK+oRPhlltI+dP2lpI7bsJo
-         v9a+t7+UmjL5c5/RNhkQ2TJE5a5gyK/vnb6J9/fQLVyrajCr7wmV/GvZAfsuJ7PKo90o
-         5/Jy4EFGt2kTH0Hryd96mCEu+U8CZaAzdoz/l+51o2cIDz+AQKHAnvRgVgOdMQz4HmKT
-         tnqA==
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=BboSdl56X5tZCa1JC8GMF3OJjVd8bFB4tSitY3B1i3g=;
+        b=I4SYlf3ZoglmtWzpWKqzObH2UCZ74zqUB+IYUD2YR6C+CU+GbM0Lxrq4O2dbetV2eR
+         hC6Ye9eHbzfS/a2v1Gj++CegqMWIU5jLEPCKIc1HMzVuOUk2+KqhIXny9f+J5eGfGYM6
+         ARXzatciOSRZzOhVzyVoHbwyal9SpE5EWm/VuK4s4Px0oH5EP+uic8ZJI7ftxanziWCH
+         TpF5orSjhRtfboOJZ4Et5Ghjqgt2J+Fbpm7+jtcinX32U3qrJjHAUwZ0tgqhMUyyiL4h
+         iCwz7bP5zWlD9A3KcQQL5PLXe3y53vGbuv2oHW7JPy/jEw+w9gkYzMboiXbPSURn5+IQ
+         qZaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qanCY9ywFg7njDhdnP0AIL5hv0WgQcxttkeThBC4ZG8=;
-        b=NUZVrUZv07NJ8Cdfp+iQ8/mhiAGiuvVXT/ElebctJZVpEQBGRkdgZvMxGAcnJI2QOX
-         k5WxIpcNEwAiYskVnjqwJFdLvVoYSQWo2JZAX352gdNKZFE5J4AKs8IPmXn9qyvb6HJc
-         T6qhLk+pa0nU1hQTila28PlMm3I+1bhEMiXwXNKbKZGzFn6atd5uAoYFiQs9PdZeSYCr
-         6sUT6YOyaTeAdwSePm6XdhW1cZm1dqR8XV+j0/tANhKUa8hCUfakWNIV6jcxbTbnuhAk
-         UapOn129I88A0+Se58Pfy04Bh13vl8J2qZuiBqPdyRQ0/0XtgDWhzqKxhuUpGNutkh9n
-         d1zw==
-X-Gm-Message-State: AOAM532XohQkbjrPqFKQQepPn2IHZn3tmM+xuw8IBjVjx0/cdSj2ZeQC
-        5fdi0We19Ycgrw9j1nHS3aCVt5inP3SeIu7YnXs=
-X-Google-Smtp-Source: ABdhPJzYUblTncflIS7nWhnaI4+XvlyJzHDY4YThPXpCcMoaX5WNICoBGxR/Elgq3z4d7MDmU75FtXV4EdtdEQalKU8=
-X-Received: by 2002:a50:b223:: with SMTP id o32mr76650868edd.79.1609853743141;
- Tue, 05 Jan 2021 05:35:43 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=BboSdl56X5tZCa1JC8GMF3OJjVd8bFB4tSitY3B1i3g=;
+        b=RNvYNHfsdWAcHjFwLAJxkB1/Rz8DiP0IeMvuf1F3ETpwYbFptnEYDuLiPNvzLPQmJu
+         IHP3LpAopQqfz97e2qyo/Y0Q4Ug9yiS8iQDeDIw5poXmFw0fSD9ZPrE4Jk+AMhLCQs9T
+         5iCmYIc4Ln4iAtU/z900XumPxesNGAcjJLY41I7EvEGtnI52ti9lM9pab28vDTo8SoI4
+         mCdG23i1TXK/duGxaE4Itg9ZtrBImq/n2BB/+VKTQtlCxCggHb50wlXVWm/ESYOpYJxO
+         qk/H6QPNh+85SIKgDITMQFksbRDGHydJ5q7enhwuN9lG8ngAPrj5nEXYgXXaeqFPWYWA
+         oUBQ==
+X-Gm-Message-State: AOAM530BwtJwxf2psEJjjHfo8zVnqTLZ5xGKY5OEtEpv22XyultxtoWV
+        Kltt4I5+5mwDugxelg4uPcU=
+X-Google-Smtp-Source: ABdhPJyZPtbwhHTwQkBgffoyLpLNzDH7wqmb40ao0E5uzkhOhZTmTVyFs0jP377/ILBU3PZspjP2Sw==
+X-Received: by 2002:a62:78ca:0:b029:19d:ce86:fc22 with SMTP id t193-20020a6278ca0000b029019dce86fc22mr69656843pfc.39.1609854419154;
+        Tue, 05 Jan 2021 05:46:59 -0800 (PST)
+Received: from localhost.lan ([2400:4070:175b:7500::7a7])
+        by smtp.gmail.com with ESMTPSA id s7sm2564508pju.37.2021.01.05.05.46.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jan 2021 05:46:58 -0800 (PST)
+Received: from localhost (localhost [IPv6:::1])
+        by localhost.lan (Postfix) with ESMTPSA id 1C7CF900901;
+        Tue,  5 Jan 2021 13:46:54 +0000 (GMT)
+Date:   Tue, 5 Jan 2021 13:46:53 +0000
+From:   Vincent Pelletier <plr.vincent@gmail.com>
+To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Subject: Re: dwc2 gadget rejecting new AIO transfer when bus is suspended
+Message-ID: <20210105134653.621bed8a@gmail.com>
+In-Reply-To: <a87cca5e-786c-ca45-a98c-1429680621a6@synopsys.com>
+References: <20201224125012.4df1d26c@gmail.com>
+        <ff11cf43-f185-b123-6cb5-f218ef148d89@synopsys.com>
+        <20201226004627.657ba339@gmail.com>
+        <20201226165230.GB606763@rowland.harvard.edu>
+        <20201227014900.2ff91bab@gmail.com>
+        <a87cca5e-786c-ca45-a98c-1429680621a6@synopsys.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20210105092808.15817-1-mika.westerberg@linux.intel.com>
-In-Reply-To: <20210105092808.15817-1-mika.westerberg@linux.intel.com>
-From:   Yehezkel Bernat <yehezkelshb@gmail.com>
-Date:   Tue, 5 Jan 2021 15:35:27 +0200
-Message-ID: <CA+CmpXuMD+OcNNJXHHc9oXUMkOjt8mt-UzrQrpe0mHXSmYvNrw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] thunderbolt: Start lane initialization after sleep
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Christian Kellner <christian@kellner.me>,
-        Mario Limonciello <mario.limonciello@dell.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 5, 2021 at 11:28 AM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> USB4 spec says that for TBT3 compatible device routers the connection
-> manager needs to set SLI (Start Lane Initialization) to get the lanes
-> that were not connected back to functional state after sleep. Same needs
-> to be done if the link was XDomain.
->
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> ---
->  drivers/thunderbolt/lc.c      | 35 +++++++++++++++++++++++++++++++++++
->  drivers/thunderbolt/switch.c  | 27 ++++++++++++++++++++++++++-
->  drivers/thunderbolt/tb.h      |  1 +
->  drivers/thunderbolt/tb_regs.h |  1 +
->  4 files changed, 63 insertions(+), 1 deletion(-)
->
+Hello Artur,
 
-Acked-by: Yehezkel Bernat <YehezkelShB@gmail.com>
+On Tue, 29 Dec 2020 07:29:27 +0000, Artur Petrosyan <Arthur.Petrosyan@synopsys.com> wrote:
+> Refactoring the driver to always accept any EP request independent of 
+> the state (suspend), requires lot of investigation. We will decide and 
+> implement later.
+> 
+> For your case we suggest the following workaround in 
+> "dwc2_hsotg_ep_queue()" function to additionally check "hsotg->power_down":
+
+I did test your change (with a trivial adaptation, see below) on
+5.11.0-rc1 and I can confirm the AIO submission is accepted in my
+use-case, despite a 4-seconds sleep between UDC being bound and AIO
+submission to try to trigger the issue (which it does on an unpatched
+5.10).
+
+The gadget goes on to correctly respond to the host, so this looks good
+to me.
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 0a0d11151cfb8..dc676f3b1d799 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -1387,7 +1387,7 @@ static int dwc2_hsotg_ep_queue(struct usb_ep *ep, struct usb_request *req,
+ 		req->zero, req->short_not_ok);
+ 
+ 	/* Prevent new request submission when controller is suspended */
+-	if (hs->lx_state != DWC2_L0) {
++	if (hs->lx_state != DWC2_L0 && hs->params.power_down) {
+ 		dev_dbg(hs->dev, "%s: submit request only in active state\n",
+ 			__func__);
+ 		return -EAGAIN;
+
+Regards,
+-- 
+Vincent Pelletier
