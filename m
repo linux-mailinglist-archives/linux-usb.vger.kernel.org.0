@@ -2,120 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E50722EADE4
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 16:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 223952EADFF
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 16:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727334AbhAEPDo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Jan 2021 10:03:44 -0500
-Received: from mga02.intel.com ([134.134.136.20]:41911 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726652AbhAEPDn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 Jan 2021 10:03:43 -0500
-IronPort-SDR: hRa12InfB/OTHyqbpKkSYHpo/wLdIcWF7o9yN58YKeeIRCpRGmlsc9Z26p9AV1vleBoKV/pW5Q
- cktqJtW33mhg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9854"; a="164189911"
-X-IronPort-AV: E=Sophos;i="5.78,477,1599548400"; 
-   d="scan'208";a="164189911"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2021 07:01:57 -0800
-IronPort-SDR: Oa0Y0EL8fCWv42Gi3WOGSu1cHtMZ/nzOpsp94cGFZCLuJieQfBEkqTa3YviFOSYGrCD5WCk/T9
- eIdTlmqpfwSQ==
-X-IronPort-AV: E=Sophos;i="5.78,477,1599548400"; 
-   d="scan'208";a="496805998"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2021 07:01:55 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kwnrN-002DB3-Ai; Tue, 05 Jan 2021 17:02:57 +0200
-Date:   Tue, 5 Jan 2021 17:02:57 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     syzbot <syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        royale@zerezo.com, syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: memory leak in zr364xx_probe
-Message-ID: <20210105150257.GP4077@smile.fi.intel.com>
-References: <0000000000006b86be05b7234cc1@google.com>
- <CAAEAJfADBQpyfgBjWtnnF-y0g_jRryrcHQd_J-123KxSrid5=Q@mail.gmail.com>
+        id S1726313AbhAEPPJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Jan 2021 10:15:09 -0500
+Received: from smtp4.unipi.it ([131.114.21.141]:42010 "EHLO smtp.unipi.it"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725813AbhAEPPJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 Jan 2021 10:15:09 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.unipi.it (Postfix) with ESMTP id 75F91810DC
+        for <linux-usb@vger.kernel.org>; Tue,  5 Jan 2021 16:14:27 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at unipi.it
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
+        (Authenticated User)
+        by smtp.unipi.it (Postfix) with ESMTPSA id 5A8D98074B
+        for <linux-usb@vger.kernel.org>; Tue,  5 Jan 2021 16:14:26 +0100 (CET)
+Received: by mail-vs1-f48.google.com with SMTP id b23so76499vsp.9
+        for <linux-usb@vger.kernel.org>; Tue, 05 Jan 2021 07:14:26 -0800 (PST)
+X-Gm-Message-State: AOAM53056R4aW1/QFp4EWiG5/jYVINU+tJW4CD2ss/i8wSRsF6fC7WhJ
+        4yucCboXnciR07awfXmRSkuEf0GqsgMoBxCqrIQ=
+X-Google-Smtp-Source: ABdhPJywEEu94onul462masFFC0JIgTnCnlnOQYHaHeLKpkSRh5lykm7PwJoI5UZ943i39TdYFop08c00GxxkD8wVf4=
+X-Received: by 2002:a67:8949:: with SMTP id l70mr47569270vsd.21.1609859665690;
+ Tue, 05 Jan 2021 07:14:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAEAJfADBQpyfgBjWtnnF-y0g_jRryrcHQd_J-123KxSrid5=Q@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From:   Augusto Ciuffoletti <augusto.ciuffoletti@unipi.it>
+Date:   Tue, 5 Jan 2021 16:14:14 +0100
+X-Gmail-Original-Message-ID: <CAOefePC_PEkra4adLq4Risea3VCtN41jU42_C=5UJ=mYuGfFog@mail.gmail.com>
+Message-ID: <CAOefePC_PEkra4adLq4Risea3VCtN41jU42_C=5UJ=mYuGfFog@mail.gmail.com>
+Subject: Problem with the CH341 driver in Ubuntu 20.04
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 31, 2020 at 05:47:20PM -0300, Ezequiel Garcia wrote:
-> Let's see if this works:
-> 
-> #syz test: https://gitlab.collabora.com/linux/0day.git
-> a1714d224e516b579d09cc1b4c3d85042e42f14c
+I run into this problem trying to program an ESP8266 board, which uses
+the CH341 chip in the programming interface as a USB-to-Serial
+interface. The problem appeared after an upgrade from Ubuntu 19.10 to
+20.04 (that I carried out one week ago).
 
-Thanks for the hint!
+This is the kernel I am using:
 
-> On Wed, 23 Dec 2020 at 12:27, syzbot
-> <syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com> wrote:
-> >
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    3644e2d2 mm/filemap: fix infinite loop in generic_file_buf..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=16f80eff500000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=37c889fb8b2761af
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=b4d54814b339b5c6bbd4
-> > compiler:       gcc (GCC) 10.1.0-syz 20200507
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1089df07500000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1671c77f500000
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com
-> >
-> > BUG: memory leak
-> > unreferenced object 0xffffc90000e71000 (size 200704):
-> >   comm "kworker/0:2", pid 3653, jiffies 4294942426 (age 13.820s)
-> >   hex dump (first 32 bytes):
-> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-> >   backtrace:
-> >     [<00000000110a155e>] __vmalloc_node_range+0x3a5/0x410 mm/vmalloc.c:2585
-> >     [<000000008a1ee970>] __vmalloc_node mm/vmalloc.c:2617 [inline]
-> >     [<000000008a1ee970>] vmalloc+0x49/0x50 mm/vmalloc.c:2650
-> >     [<00000000a6a3abfa>] zr364xx_board_init drivers/media/usb/zr364xx/zr364xx.c:1348 [inline]
-> >     [<00000000a6a3abfa>] zr364xx_probe+0x60b/0x833 drivers/media/usb/zr364xx/zr364xx.c:1509
-> >     [<0000000014a572f5>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
-> >     [<00000000f30ee977>] really_probe+0x159/0x480 drivers/base/dd.c:561
-> >     [<00000000ddb29374>] driver_probe_device+0x84/0x100 drivers/base/dd.c:745
-> >     [<0000000073c89cb9>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:851
-> >     [<000000009f56a99c>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
-> >     [<00000000848d591a>] __device_attach+0x122/0x250 drivers/base/dd.c:919
-> >     [<00000000168be5bb>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
-> >     [<00000000464f40a6>] device_add+0x5be/0xc30 drivers/base/core.c:3091
-> >     [<000000008c75a2b5>] usb_set_configuration+0x9d9/0xb90 drivers/usb/core/message.c:2164
-> >     [<00000000071d14a5>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
-> >     [<00000000f325b973>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
-> >     [<00000000f30ee977>] really_probe+0x159/0x480 drivers/base/dd.c:561
-> >     [<00000000ddb29374>] driver_probe_device+0x84/0x100 drivers/base/dd.c:745
-> >
-> >
-> >
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > syzbot can test patches for this issue, for details see:
-> > https://goo.gl/tpsmEJ#testing-patches
+===
+$ uname -r
+5.4.0-58-generic
+===
 
--- 
-With Best Regards,
-Andy Shevchenko
+When I connect the ESP8266 board (a Wemos D1 mini) to the USB there is
+no activity on the syslog (or dmesg), and the kernel module is not
+loaded. In fact I do not see the /dev/ttyACM0 device in the /dev
+directory and no useful device appears in the Arduino GUI.
 
+I have found the module in the kernel tree but, even forcing the
+installation, nothing happens:
 
+===
+augusto@Legion:~$ ls
+/usr/lib/modules/5.4.0-58-generic/kernel/drivers/usb/serial/ch*
+/usr/lib/modules/5.4.0-58-generic/kernel/drivers/usb/serial/ch341.ko
+augusto@Legion:~$ sudo modprobe ch341
+[sudo] password di augusto:
+augusto@Legion:~$ lsusb
+Bus 002 Device 002: ID 05e3:0626 Genesys Logic, Inc. USB3.1 Hub
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 003: ID 13d3:56a6 IMC Networks Integrated Camera
+Bus 001 Device 005: ID 0cf3:e500 Qualcomm Atheros Communications
+Bus 001 Device 006: ID 046d:c517 Logitech, Inc. LX710 Cordless Desktop Laser
+Bus 001 Device 004: ID 093a:2510 Pixart Imaging, Inc. Optical Mouse
+Bus 001 Device 002: ID 05e3:0610 Genesys Logic, Inc. 4-port hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+augusto@Legion:~$ lsmod | grep ch34
+ch341                  20480  0
+usbserial              53248  1 ch341
+===
+
+Without this module it is impossible to work with a relevant number of
+SBC devices, besides the named Wemos D1 Mini.
+
+Trying to solve the problem I also downloaded and installed the module
+source from https://github.com/juliagoda/CH341SER and compiled on my
+PC, after removing the "secure boot" feature.
+
+Thank you for any help.
+
+Note: I originally posted this question on AskUbuntu
+(https://askubuntu.com/questions/1304116/problem-with-the-ch341-driver-in-ubuntu-20-04),
+but with no answer after 40+ views.
