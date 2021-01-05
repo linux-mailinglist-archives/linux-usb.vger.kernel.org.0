@@ -2,114 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 014A72EA28F
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 02:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C872EA3F6
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 04:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728870AbhAEBD1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Jan 2021 20:03:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728858AbhAEBDU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jan 2021 20:03:20 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F6AC061574
-        for <linux-usb@vger.kernel.org>; Mon,  4 Jan 2021 17:02:40 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id h205so68827334lfd.5
-        for <linux-usb@vger.kernel.org>; Mon, 04 Jan 2021 17:02:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=RV/QcqLHcJ5Ud5XxjtVpeGUML3IomjgQh1qv67NRys0=;
-        b=l+cIY5XibR2biY4KnQi3CZe61Vzpng/EZmlgT9iHFUfl/m6MGYXibDM+qRx32eD5pf
-         +sV+dNk6sp3Kyksau1qTVc0CYUemr6UF2PhUj3xj+NeD1z/dMNQrcdvCPUAA9343ZGC+
-         7OaeY1aIZBvFzDuW9GtSN2ACJmQTiUUb73cFMQyJPRmHdrKn+/5RmCtB2g2gkFG/ORTu
-         qkAh+uJMUHa26c9XciNy3drdeBS7f9+gwvGoeHB6S+/Dp+84nha/9x1NKNG9iaCYWmA6
-         Bc5JuzBbQAjKqOv/KZmkKZdlmhdB6bvGWoWIlx9wRfNBcTWP5uxXU7XiceHpN9cZN62G
-         ecCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=RV/QcqLHcJ5Ud5XxjtVpeGUML3IomjgQh1qv67NRys0=;
-        b=qsVMQ53hQmHyUEbRsG/cV2FDrA4gyS4YccE/zRgIRSX3tBm3DBsvw4cLWEPiEekUI6
-         tyqtOHSuRGFen+mEq7YdfPOoKGa+6EiGg/CNlk0Tmeyrnx/mrKSbCbGvTLH90S69z7Qp
-         mtsA758+R9+/bKGkdGDb7481p079h1ahdje+x0ccSSTaXB+UZA2SFkOUmH55iyAYQZM0
-         LyFxVvSGd/jKtopiRDlGso510/Y218H7VvJsqKTrLR54iMIjdWZ56TEPQLFAQT0U3rYU
-         W6tZ+BKZa9Wt1bqUcOgRLqmX9qDY75rLZmI1B7lmOQ8gbSLjVX6eWtZ9IP8jTBQZHhyw
-         RFtw==
-X-Gm-Message-State: AOAM530SX5XpIt5f7sCj8f47YbmxRE96WJ9NRdvJlgkG1nYzuY6E2zQv
-        Fq3QwmrWwwtEYC3GlwFNxSdXfDlglgQgGUUGH/Pni3464ME=
-X-Google-Smtp-Source: ABdhPJymx680OY5S5SJP3Uug4LVWfFVruggUleKwRcmSp5Ve9+GnVSaLLGxd55egOsHX6BCKzYTnNOGrQuOTH+I/GGI=
-X-Received: by 2002:a05:6512:247:: with SMTP id b7mr30946637lfo.171.1609808558667;
- Mon, 04 Jan 2021 17:02:38 -0800 (PST)
+        id S1726477AbhAEDid (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Jan 2021 22:38:33 -0500
+Received: from mail-eopbgr30071.outbound.protection.outlook.com ([40.107.3.71]:16267
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726168AbhAEDid (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 Jan 2021 22:38:33 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PVowvSuhWuJW/gifpqRJwZE5u4K7+UiI0AsVncoXxoZStFsN+oiSXGcF3LYTbyLZC0LowlpLSPfmLxxQJuLt0HLQ4hpujW7Fq3yOh26rc6+gAMeUGmny6Grd8FVtn6N3bZ6vAzZ/eKJtYbYUJPeC4VD/QlVXFroFN0GsuXMduQp24fZhZkXMtnhbpTP5tyshH6Eou1ksW+p+kavyUD1m7Z2X/92QWC+lp2q3LTBhBO/M2lvkvpimYu8PV15p/Ao/SjHBpXUOoNkEdXaTNHGOX8Eo5tC+BE+Nj3CiP/+dagm4hYegmI1Gd1oUAzUUBaFTONfsTe3ZOC9JHvYmWMl7vQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Dy28laPmgKUr7dfRonczYA+9Qhvls14JinRSiyGa+XA=;
+ b=M599BYDYyou7RLAj2lhH3iM9OpqFxSDWO2Er1ppblrLRJwElRXXkg8Y/TTW0AVGA2lH6Ud0Ov+pg4B4Na+BoPygbOLNfY77Xuxbk/zkQAkz96du5F34jIvIV54YlHX4bA9RtPxmZ5REXfA66EBk/tvQmB0Bkug+j94mYN3Kkc8NG+8EDatTLePuqesvaMX2TIzh5c+tnWHfrrNYjHYWqKmhJ/Rrd0N6BYJGy+EplUKPx7q+jLo3AlaIk4uuNAzo6lZMtHXke+TJ0rfkhms3HTkZWkE3JxiG5I9Nz78x4UZHWSwuFT7+jR8XWd6LvmAXnajaaURxa3OXskGz8knuIIw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Dy28laPmgKUr7dfRonczYA+9Qhvls14JinRSiyGa+XA=;
+ b=F+EWU35DRfRbscLEIIB7epLDn8FYOv1nQ1l1OKo9RRFq0Fhy/7newr9RImv/g/+Yi2KanmowGyIvimHQiIQPPczwpIKFxsTWCEhv2Ic8SnbKVPctpHzIgQ314wjGm6b7JXapHNXFG59t8bDD7d57hZGqmK5eIPXv378X06R8X08=
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
+ by DB6PR0401MB2373.eurprd04.prod.outlook.com (2603:10a6:4:4b::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3721.20; Tue, 5 Jan
+ 2021 03:37:43 +0000
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::89de:bd7c:7245:f139]) by DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::89de:bd7c:7245:f139%5]) with mapi id 15.20.3721.024; Tue, 5 Jan 2021
+ 03:37:43 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Rob Herring <robh+dt@kernel.org>
+CC:     Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@ti.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Frank Li <frank.li@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 1/2] of: platform: introduce platform data length for
+ auxdata
+Thread-Topic: [PATCH 1/2] of: platform: introduce platform data length for
+ auxdata
+Thread-Index: AQHWzvpRc1lpsn9SoEybCA1XxhexYqnwdyeAgACuF4CAJpFhgIAA04OA
+Date:   Tue, 5 Jan 2021 03:37:43 +0000
+Message-ID: <20210105033709.GA15296@b29397-desktop>
+References: <20201210134215.20424-1-peter.chen@kernel.org>
+ <CAL_JsqKxcWjdxVHSSHKKRtshwOXeodjQWCYt6G7asJYjjuoWQQ@mail.gmail.com>
+ <20201211020155.GA490@b29397-desktop>
+ <CAL_JsqKk1KBCnWp40XyLGAPMJP-R-qAdo9FRax+DgrowKhp1=g@mail.gmail.com>
+In-Reply-To: <CAL_JsqKk1KBCnWp40XyLGAPMJP-R-qAdo9FRax+DgrowKhp1=g@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mutt/1.9.4 (2018-02-28)
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 71281746-ceea-409a-e578-08d8b12b430c
+x-ms-traffictypediagnostic: DB6PR0401MB2373:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB6PR0401MB2373A0C27999DA4C2BD8D87A8BD10@DB6PR0401MB2373.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 4dxgp/7JTIFKjCl8wgPWkVJ6oIU9SMYUVBLybuubmmo+IkCLtXjthK1rexbkQm2VgY3BPTzkUXyfdIZrYhPcN2FviveTmtuLX5gE9iqZ1Njv4cpnlOn8NkD01G7QXNsgnZYa+YdyLNjrTsEU3vv/AcxCe4MmzPp91SS3OrJnA4k/wQJMeeIm8Qj/Gnxjv1DYcypruvHL87NFL6qDgAiWarWXrwVoqFBfudyyxCKTb3P4+fxi9Mav9GAFUH2E1IAhZPjAWmyjlsm6S9stsNpNUvJBqm7fygeV8sNCxcvEwzvQCp9qbQxP6cJw0qSl4pZw5E+ZkJsI4nV6YDUNLTJuN8NK5A7pgekQEoU2weK9wunwoQZjquCHy/t3raqdavbPYMd0uPFh+bzDRNzs+d8VsA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(136003)(376002)(396003)(346002)(366004)(39860400002)(33656002)(66446008)(6506007)(1076003)(8676002)(9686003)(26005)(4326008)(6512007)(33716001)(2906002)(86362001)(83380400001)(71200400001)(186003)(6486002)(66556008)(53546011)(478600001)(91956017)(54906003)(64756008)(8936002)(66946007)(66476007)(76116006)(5660300002)(44832011)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?E16nX6rL9Wz7DwyLDbpU67UQYWC6akjd2es2nLvBAv5XYtKBq+l1FUSgAHJ7?=
+ =?us-ascii?Q?1JvqvTcAK6OHnormtKUdnqaPDrrRMWWILA+vUWxSneLZOtGMO47TpTAtyelE?=
+ =?us-ascii?Q?7f4/DOGxA66mKCJyDGjgXOiVQTBYGGtD+fnYyjwbe2rbzHawzIc9i2Xnnwrl?=
+ =?us-ascii?Q?djnmeYbBtZBOH/K4KzxfzLUCxqNgzQiFyalwvfOXB2/g2GAuy6LX/dsQrWmp?=
+ =?us-ascii?Q?gsmEZO/qP3qRlxJ/cm9jsqX1uzVYjoHTfwEdS3twnT2PPzJyDYBc5onQalOI?=
+ =?us-ascii?Q?Sn7HpDNXrxKQ4zZrkCorgbq/7t+xIX+VJy1+2bIcX353jxcrc8J9EizXx263?=
+ =?us-ascii?Q?jAz5Y3h+AU9Dq+DNRaJT4J/UvFl9Gccgfh3+qLiIAiVluj6wj80au8IWXI6K?=
+ =?us-ascii?Q?O9fFtB4OnydHpbF2FJkZEUELc0jZAjDP3TU4VY5ZJCKUtyuYGWXhlh9VwQbu?=
+ =?us-ascii?Q?de1I7XLWtDh/tDpT/fD/QA6nJUykn0KAsyhYmWp0XTuQWA2Bk96dV3t1rmnm?=
+ =?us-ascii?Q?O0PpuJKJuGOc1Acvv0a1z5YNsbxQ7xaG/9iPmq7qsGOzuWJd0+PihiXAPaRa?=
+ =?us-ascii?Q?kh6VgWqvFF2mz2GDFCfnjStuDNv4Q7lIEX5tVHJzJ6ZJi0PE0p0diZiZxjSX?=
+ =?us-ascii?Q?3ooKIs5QnSJV6YL3aklHMyRLlYmYWZfWJ41Rc+cAM4nov4ldVgLKN00Fqqy9?=
+ =?us-ascii?Q?g8zYwZpGjsDf6QOikHaZyMEb+hSgFeYBNwnHmetv0EjRt8T0sOBzDutpjCVp?=
+ =?us-ascii?Q?KwWyfK3YB4Amo7b3XGHiSY2LATmR81inpBZPahQOtWEH88Re6C8Tn3sZe+GB?=
+ =?us-ascii?Q?9AzAYix303pWHv6bJcP4BBqRV6FF0ZaslpLo2Uio7PUwBOLd3LEEOV8o47NS?=
+ =?us-ascii?Q?iSSExT4F5kNTyFlHBTk32Tyj0zt8I7JM70hfOv/PBY/acbJCrQgx7PvbBWk0?=
+ =?us-ascii?Q?WvUC7NFzAfKHvin+69Jn8PNIQwZ5/RWR9KewPg+OCmRyrsu044DtRB2kWy02?=
+ =?us-ascii?Q?9qbG?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <58FCAC45D8D53B48A12FDE3C07907FC0@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-From:   Tomasz Grobelny <tomasz.aleksander.grobelny@gmail.com>
-Date:   Tue, 5 Jan 2021 02:02:16 +0100
-Message-ID: <CAAH9jopk2ngwBDxfmQ8CQsvntW0uUU2e4h3R=drXV2n2y6+Nuw@mail.gmail.com>
-Subject: dwc2 gadget mode different behaviour with different hosts
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 71281746-ceea-409a-e578-08d8b12b430c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jan 2021 03:37:43.8926
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: oY0q5/4df6DCcbdT3Uq5A/1gSv6igJ2EScbsijskaN+ChBiyHj85m1mFWYS9oidkAn86p7uRcakf4qHzIkvahw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0401MB2373
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi all,
+On 21-01-04 08:00:07, Rob Herring wrote:
+> On Thu, Dec 10, 2020 at 7:02 PM Peter Chen <peter.chen@nxp.com> wrote:
+> >
+> > On 20-12-10 09:38:49, Rob Herring wrote:
+> > > On Thu, Dec 10, 2020 at 7:42 AM Peter Chen <peter.chen@kernel.org> wr=
+ote:
+> > > >
+> > > > From: Peter Chen <peter.chen@nxp.com>
+> > > >
+> > > > When a platform device is released, it frees the device platform_da=
+ta
+> > > > memory region using kfree, if the memory is not allocated by kmallo=
+c,
+> > > > it may run into trouble. See the below comments from kfree API.
+> > > >
+> > > >          * Don't free memory not originally allocated by kmalloc()
+> > > >          * or you will run into trouble.
+> > > >
+> > > > For the device which is created dynamically using of_platform_popul=
+ate,
+> > > > if the platform_data is existed at of_dev_auxdata structure, the OF=
+ code
+> > > > simply assigns the platform_data pointer to newly created device, b=
+ut
+> > > > not using platform_device_add_data to allocate one. For most of pla=
+tform
+> > > > data region at device driver, which may not be allocated by kmalloc=
+, they
+> > > > are at global data region or at stack region at some situations.
+> > >
+> > > auxdata is a "temporary" thing for transitioning to DT which I want t=
+o
+> > > remove. So I don't really want to see it expanded nor new users. We'v=
+e
+> > > got about a dozen arm32 platforms and 5 cases under drivers/.
+> > >
+> >
+> > How to handle the below user case:
+> > Parent device creates child device through device tree node (eg, usb/dw=
+c3,
+> > usb/cdns3), there are some platform quirks at parent device(vendor glue
+> > layer) need child device (core IP device) driver to handle. The quirks
+> > are not limited to the hardware quirk, may include the callbacks, softw=
+are
+> > flag (eg: XHCI_DEFAULT_PM_RUNTIME_ALLOW/XHCI_SKIP_PHY_INIT, at
+> > drivers/usb/host/xhci.h)
+>=20
+> The split of these between a platform specific driver and the core IP
+> driver was just wrong to begin with. There should only be 1 driver
+> with common 'library' functions like we do for every other case of
+> common, licensed IP. Perhaps the core driver should stop pretending it
+> is generic and figure out the quirks for itself by looking at the
+> parent node.
+>=20
 
-I am trying to implement Android Open Accessory Protocol which is a
-base for Android Auto Protocol. I am using Odroid N2 working in gadget
-mode and trying to send data to car's headunit.
+Not only hardware quirks, but software quirks and callbacks which are imple=
+mented
+at platform specific driver and are called at core driver.
 
-The problem I am facing now is that for some headunits it works, for
-some it doesn't. It seems there is some difference in what happens
-immediately after the host tries to switch device to accessory mode by
-sending control commands 51, 52 and 53. The initial part in all cases
-(all headunits I have access to) works just fine, but after it
-completes my Odroid gadget should be reinitialized on the USB bus. On
-hosts on which it works (my PC and VW headunit) the device gets new
-address like this:
+--=20
 
-[   33.491312] Mass Storage Function, version: 2009/09/11
-[   33.491322] LUN: removable file: (no medium)
-[   33.504716] file system registered
-[   33.506279] read descriptors
-[   33.506290] read strings
-[   33.510164] dwc2 ff400000.usb: bound driver configfs-gadget
-[   33.678710] dwc2 ff400000.usb: new device is high-speed
-[   33.750089] dwc2 ff400000.usb: new device is high-speed
-[   33.806366] dwc2 ff400000.usb: new address 4
-[   37.899601] ffs_data_put(): freeing
-[   37.899862] unloading
-[   38.942619] file system registered
-[   38.943003] read descriptors
-[   38.943009] read strings
-[   38.946561] dwc2 ff400000.usb: bound driver configfs-gadget
-[   39.310762] dwc2 ff400000.usb: new device is high-speed
-[   39.381890] dwc2 ff400000.usb: new device is high-speed
-[   39.438056] dwc2 ff400000.usb: new address 5
-
-On Fiat's headunit I get the same address for both phases:
-[   33.773387] Mass Storage Function, version: 2009/09/11
-[   33.773397] LUN: removable file: (no medium)
-[   33.784054] file system registered
-[   33.792335] read descriptors
-[   33.792389] read strings
-[   33.796349] dwc2 ff400000.usb: bound driver configfs-gadget
-[   34.023544] dwc2 ff400000.usb: new device is high-speed
-[   34.131592] dwc2 ff400000.usb: new device is high-speed
-[   34.194740] dwc2 ff400000.usb: new address 3
-[   34.353478] ffs_data_put(): freeing
-[   34.353825] unloading
-[   35.392723] file system registered
-[   35.393450] read descriptors
-[   35.393459] read strings
-[   35.403955] dwc2 ff400000.usb: bound driver configfs-gadget
-[   37.119299] dwc2 ff400000.usb: new device is high-speed
-[   37.227341] dwc2 ff400000.usb: new device is high-speed
-[   37.290497] dwc2 ff400000.usb: new address 3
-
-Any idea why this might be the case? Can I somehow enforce that the
-device reintroduces itself on the bus and gets new address? Can I
-somehow debug what happens when my device is connected as gadget (eg.
-see control messages for device/configuration/string descriptors)?
-
-Best regards,
-Tomasz Grobelny
+Thanks,
+Peter Chen=
