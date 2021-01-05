@@ -2,110 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B01C2EAC4D
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 14:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C242EAC63
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 14:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730355AbhAENrm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Jan 2021 08:47:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
+        id S1728972AbhAENyb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Jan 2021 08:54:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728711AbhAENrl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jan 2021 08:47:41 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DB7C06179F
-        for <linux-usb@vger.kernel.org>; Tue,  5 Jan 2021 05:46:59 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id 30so16607407pgr.6
-        for <linux-usb@vger.kernel.org>; Tue, 05 Jan 2021 05:46:59 -0800 (PST)
+        with ESMTP id S1728853AbhAENyb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jan 2021 08:54:31 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8547C061574
+        for <linux-usb@vger.kernel.org>; Tue,  5 Jan 2021 05:53:50 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id ga15so9142502ejb.4
+        for <linux-usb@vger.kernel.org>; Tue, 05 Jan 2021 05:53:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BboSdl56X5tZCa1JC8GMF3OJjVd8bFB4tSitY3B1i3g=;
-        b=I4SYlf3ZoglmtWzpWKqzObH2UCZ74zqUB+IYUD2YR6C+CU+GbM0Lxrq4O2dbetV2eR
-         hC6Ye9eHbzfS/a2v1Gj++CegqMWIU5jLEPCKIc1HMzVuOUk2+KqhIXny9f+J5eGfGYM6
-         ARXzatciOSRZzOhVzyVoHbwyal9SpE5EWm/VuK4s4Px0oH5EP+uic8ZJI7ftxanziWCH
-         TpF5orSjhRtfboOJZ4Et5Ghjqgt2J+Fbpm7+jtcinX32U3qrJjHAUwZ0tgqhMUyyiL4h
-         iCwz7bP5zWlD9A3KcQQL5PLXe3y53vGbuv2oHW7JPy/jEw+w9gkYzMboiXbPSURn5+IQ
-         qZaA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1tEI6EDPcPTbP9hxMbb+gBmR1oX5WU/Ix6NbOGH1n5Q=;
+        b=Jpl9E1MsgVO3a1gOB2ZFdIHrGm24qfQNEPSrg5/239Ia7fKTmhs+V5YzKChOL40rMu
+         IQ1f2mbYU7FMwYKdgjauKjsGoV+7idSbJqTDwzeXpwB5MDj0VrdFyu4KVhIkPsG2sG4g
+         K9VHjp0KlG8OiiiQcNLhWCnf1+XxHa4gYviId9Cg8pF7SFTjpb+fcle3W4f1wnVWVuaG
+         +GYngmERyJrzy5F3aSX5nWlOqkyxrNHLBnYaxznASmJ93k1NoQUmmBpCf+wTIgZvwOv2
+         2nQ/vmE0ZxSwGRfkZJ3ZmzmjP2UUAQTSe7h0HC5j+qO2Q2iYm1p4IgV7OGWkt3hygmof
+         wx4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BboSdl56X5tZCa1JC8GMF3OJjVd8bFB4tSitY3B1i3g=;
-        b=RNvYNHfsdWAcHjFwLAJxkB1/Rz8DiP0IeMvuf1F3ETpwYbFptnEYDuLiPNvzLPQmJu
-         IHP3LpAopQqfz97e2qyo/Y0Q4Ug9yiS8iQDeDIw5poXmFw0fSD9ZPrE4Jk+AMhLCQs9T
-         5iCmYIc4Ln4iAtU/z900XumPxesNGAcjJLY41I7EvEGtnI52ti9lM9pab28vDTo8SoI4
-         mCdG23i1TXK/duGxaE4Itg9ZtrBImq/n2BB/+VKTQtlCxCggHb50wlXVWm/ESYOpYJxO
-         qk/H6QPNh+85SIKgDITMQFksbRDGHydJ5q7enhwuN9lG8ngAPrj5nEXYgXXaeqFPWYWA
-         oUBQ==
-X-Gm-Message-State: AOAM530BwtJwxf2psEJjjHfo8zVnqTLZ5xGKY5OEtEpv22XyultxtoWV
-        Kltt4I5+5mwDugxelg4uPcU=
-X-Google-Smtp-Source: ABdhPJyZPtbwhHTwQkBgffoyLpLNzDH7wqmb40ao0E5uzkhOhZTmTVyFs0jP377/ILBU3PZspjP2Sw==
-X-Received: by 2002:a62:78ca:0:b029:19d:ce86:fc22 with SMTP id t193-20020a6278ca0000b029019dce86fc22mr69656843pfc.39.1609854419154;
-        Tue, 05 Jan 2021 05:46:59 -0800 (PST)
-Received: from localhost.lan ([2400:4070:175b:7500::7a7])
-        by smtp.gmail.com with ESMTPSA id s7sm2564508pju.37.2021.01.05.05.46.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jan 2021 05:46:58 -0800 (PST)
-Received: from localhost (localhost [IPv6:::1])
-        by localhost.lan (Postfix) with ESMTPSA id 1C7CF900901;
-        Tue,  5 Jan 2021 13:46:54 +0000 (GMT)
-Date:   Tue, 5 Jan 2021 13:46:53 +0000
-From:   Vincent Pelletier <plr.vincent@gmail.com>
-To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: Re: dwc2 gadget rejecting new AIO transfer when bus is suspended
-Message-ID: <20210105134653.621bed8a@gmail.com>
-In-Reply-To: <a87cca5e-786c-ca45-a98c-1429680621a6@synopsys.com>
-References: <20201224125012.4df1d26c@gmail.com>
-        <ff11cf43-f185-b123-6cb5-f218ef148d89@synopsys.com>
-        <20201226004627.657ba339@gmail.com>
-        <20201226165230.GB606763@rowland.harvard.edu>
-        <20201227014900.2ff91bab@gmail.com>
-        <a87cca5e-786c-ca45-a98c-1429680621a6@synopsys.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1tEI6EDPcPTbP9hxMbb+gBmR1oX5WU/Ix6NbOGH1n5Q=;
+        b=HRsXBdvm4nfnR890J2j57F9NUbqB8658TJNIfjim/IIaEvYp6Z0x1AdY3wUa2L7olE
+         J+BefAlHbYGomumuR3VaJNomXCtPokcKS8YOvzVcJ7miFY0xpHDFQ5CSXSsWTXPylxJS
+         IHVL6yF0nQATOzRQ8eMmw7bXVyhOGSshJHcqpDqRFxwYWtBPqv+0qrpgbLs+5F4RU3W0
+         hZdcNsJ4YeblKYKj3MmKquqEfg3mJlbYu4v0SkqNMg/t9iZyVjzGMJicqj5uoVKMNCIr
+         Cclv9Ng2tAMXGYFMqxn3hoOLg3Bw6CtMAZ2CrrbUG+ks0DPRUn3GQreM/aFHfJ/kEdEf
+         fnKw==
+X-Gm-Message-State: AOAM531a9JHUyOzAHioGh8FXJfpHywIiG+KOJXGIDZuu/e2l1obL70VJ
+        ++5kNgsAW+r0FTToFa6HO744WA7o8HgJzb29xk4=
+X-Google-Smtp-Source: ABdhPJz57lwDBU/5XRuN21tt+xbrP7H5FYxvKoMp0I4Ko0K5Ap5PYMjJeJBAPf0xF8DJj7Fu/uB9hdpsbzlqHiZwM1Y=
+X-Received: by 2002:a17:906:d93c:: with SMTP id rn28mr70005653ejb.50.1609854829486;
+ Tue, 05 Jan 2021 05:53:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20210105092808.15817-1-mika.westerberg@linux.intel.com> <20210105092808.15817-2-mika.westerberg@linux.intel.com>
+In-Reply-To: <20210105092808.15817-2-mika.westerberg@linux.intel.com>
+From:   Yehezkel Bernat <yehezkelshb@gmail.com>
+Date:   Tue, 5 Jan 2021 15:53:33 +0200
+Message-ID: <CA+CmpXuFcirdh_bp1=MmXr9KHJ2XdoMiBL9ORyntoFcxpJyJYA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] thunderbolt: Add support for de-authorizing devices
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Christian Kellner <christian@kellner.me>,
+        Mario Limonciello <mario.limonciello@dell.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Artur,
+On Tue, Jan 5, 2021 at 11:28 AM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> In some cases it is useful to be able de-authorize devices. For example
+> if user logs out the userspace can have a policy that disconnects PCIe
+> devices until logged in again. This is only possible for software based
+> connection manager as it directly controls the tunnels.
+>
+> For this reason make the authorized attribute accept writing 0 which
+> makes the software connection manager to tear down the corresponding
+> PCIe tunnel. Userspace can check if this is supported by reading a new
+> domain attribute deauthorization, that holds 1 in that case.
 
-On Tue, 29 Dec 2020 07:29:27 +0000, Artur Petrosyan <Arthur.Petrosyan@synopsys.com> wrote:
-> Refactoring the driver to always accept any EP request independent of 
-> the state (suspend), requires lot of investigation. We will decide and 
-> implement later.
-> 
-> For your case we suggest the following workaround in 
-> "dwc2_hsotg_ep_queue()" function to additionally check "hsotg->power_down":
+What a great feature! Thanks for implementing it.
 
-I did test your change (with a trivial adaptation, see below) on
-5.11.0-rc1 and I can confirm the AIO submission is accepted in my
-use-case, despite a 4-seconds sleep between UDC being bound and AIO
-submission to try to trigger the issue (which it does on an unpatched
-5.10).
+BTW, is there any general way to disable the device operations before such a
+disconnection? The user has a way to stop removable disks, for example, but
+maybe other devices need additional precaution from the user (eGPU?).
 
-The gadget goes on to correctly respond to the host, so this looks good
-to me.
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 0a0d11151cfb8..dc676f3b1d799 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -1387,7 +1387,7 @@ static int dwc2_hsotg_ep_queue(struct usb_ep *ep, struct usb_request *req,
- 		req->zero, req->short_not_ok);
- 
- 	/* Prevent new request submission when controller is suspended */
--	if (hs->lx_state != DWC2_L0) {
-+	if (hs->lx_state != DWC2_L0 && hs->params.power_down) {
- 		dev_dbg(hs->dev, "%s: submit request only in active state\n",
- 			__func__);
- 		return -EAGAIN;
+>                 Possible values are supported:
+>
+> -               ==  ===========================================
+> +               ==  ===================================================
+> +               0   The device will be de-authorized (only supported if
+> +                   deauthorization attribute under domain contains 1)
+>                 1   The device will be authorized and connected
+> -               ==  ===========================================
+> +               ==  ===================================================
+>
+>                 When key attribute contains 32 byte hex string the possible
+>                 values are:
 
-Regards,
--- 
-Vincent Pelletier
+As 0 is available for 'secure' security level too, you may want to reflect it in
+the documentation here somehow.
+
+
+> +static int disapprove_switch(struct device *dev, void *data)
+
+Maybe it's better to mark `data` as `__maybe_unused`?
+
+> +{
+> +       struct tb_switch *sw;
+> +
+> +       sw = tb_to_switch(dev);
+> +       if (sw && sw->authorized) {
+> +               int ret;
+> +
+> +               /* First children */
+> +               ret = device_for_each_child_reverse(&sw->dev, NULL, disapprove_switch);
+> +               if (ret)
+> +                       return ret;
+> +
+> +               ret = tb_domain_disapprove_switch(sw->tb, sw);
+> +               if (ret)
+> +                       return ret;
+> +
+> +               sw->authorized = 0;
+> +               kobject_uevent(&sw->dev.kobj, KOBJ_CHANGE);
+> +       }
+> +
+> +       return 0;
+> +}
+> +
