@@ -2,93 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8F22EA80A
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 10:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B401B2EA83A
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Jan 2021 11:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728848AbhAEJuI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Jan 2021 04:50:08 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:18136 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728690AbhAEJt4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jan 2021 04:49:56 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1059ls3e009604;
-        Tue, 5 Jan 2021 10:49:09 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=8VQVjuIjAWhXRhZPWLiv4kmSLHbtYSuNMmvdHOu/vt8=;
- b=dXmPafP5UVX55pY94Oa6bB/lcOsdpyIRAkK7HR4bRhQG4nBRCQP5j6X+pZli/Ls4sbyr
- EXnA5xN7780XRo9c7eD6+RQZSpkdrpn+JySS+yVDRGZ1XCz2fGbyvpLJ/0qvMDyVdZYw
- n4LvlWhsugY/vmivRxfnfEwxqgoX59rZeD5ILWVtPdE9OEbLEfZr+Zor/bLARrGhiI/M
- YUd2oYy8KPC8cU+sAQFD6XBhfh9QOv7o2OCIN/pEsz2W6X+PJXuCmDtDF3W15LW6o/cJ
- /5TYEOn37uMbaAw6pBPEbyffN5syp9qWJ+qFzjVhwpmEtHncrgpDc2qgQKEt3RZhvPdG /Q== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 35teuv07p1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Jan 2021 10:49:09 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0906110002A;
-        Tue,  5 Jan 2021 10:49:09 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EBBF123051B;
-        Tue,  5 Jan 2021 10:49:08 +0100 (CET)
-Received: from localhost (10.75.127.47) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 5 Jan 2021 10:49:08
- +0100
-From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
-To:     Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>
-Subject: [PATCH v2 3/3] usb: dwc2: disable Link Power Management on STM32MP15 HS OTG
-Date:   Tue, 5 Jan 2021 10:48:55 +0100
-Message-ID: <20210105094855.30763-4-amelie.delaunay@foss.st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210105094855.30763-1-amelie.delaunay@foss.st.com>
-References: <20210105094855.30763-1-amelie.delaunay@foss.st.com>
+        id S1727923AbhAEKJa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Jan 2021 05:09:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726171AbhAEKJa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jan 2021 05:09:30 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA0DC061574
+        for <linux-usb@vger.kernel.org>; Tue,  5 Jan 2021 02:08:49 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id j16so30457020edr.0
+        for <linux-usb@vger.kernel.org>; Tue, 05 Jan 2021 02:08:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M/KePTQoaRtWdHE5nsJRdDr2C4EUk1MjmOtz4ng2Mg8=;
+        b=XC4PIfiOTDmrq03e05VQMQ7ktaJRVG6f3kr7xqWvBsfOnaL2W/v+6PuPi3UjM/pvb7
+         5HQyQr2qNNqUquEouFVX+guBt+fmlMYLXgXxgUT1b+ZtVYIFPSQZ9S96220CFAfus+gc
+         iaB1bju9iaIlX0Fc2sGn00D79MxLusVcPPquD+8OD7BFd5gkkqurqTjPIzjKnPFEvNDX
+         RCLXKXoWuXl6vF56tPmqixVMOCe9pPbr8hPz/9eo9x+AY5dvgnU731sAc+ZVnADbDXDk
+         z9UHnp4EvGy0B11R45xb/Vq5PuF003Fy7yu8p1CCcpPuFRjWR0wQXtPrKFPTkgLt1NQG
+         Bnxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M/KePTQoaRtWdHE5nsJRdDr2C4EUk1MjmOtz4ng2Mg8=;
+        b=mVQZyRs5fps8n9Uefhbk3d1O1M0kOv4fWNV9ijd87qb4MGkxIShC+uvuNBoUrOZQNd
+         oez59gL1vXWmoLecceIPOhDKuMB58TcGjerZMYtvmcpuMC2K7SQWudJoyDmE2V+5uq38
+         LZmxxni/i0W01pSYOlsjqgjmLiP4rmt4Ke6r81+lFKJ7qecXUnLmuVYI3C1IWVS0jUk0
+         zWkDyqmPjxH1BMV0VQCd42X9nNmyv2MeHrSZtbV5EKGOSS8GPd3WUzChC0RfIawCqfXd
+         B0a2ty/wNywmfjefMXSjB6Qt51Yfhxf8LNgVQujn4LUxkBTk/nPuTa3MSYjEwSmRxIsz
+         7wjg==
+X-Gm-Message-State: AOAM5317jm89aKUipmSk5FHO8wXh3X0MYzq/Us9iF7iB4eVZXRnVBf9f
+        /D1qgCmfvsoCBY6lp9NTgV+TULfv0J/gm/ES1S0=
+X-Google-Smtp-Source: ABdhPJyjmj1/BoRczSRlgHLJ5jKWVClzZg+GSMr12X5UHjNzL6RKVqi7cTHQQx0Qjjv0Evv2MH3oGSpBpknExBOIhQQ=
+X-Received: by 2002:a50:9354:: with SMTP id n20mr76569629eda.231.1609841328675;
+ Tue, 05 Jan 2021 02:08:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG3NODE3.st.com (10.75.127.9) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2021-01-05_01:2021-01-05,2021-01-05 signatures=0
+References: <20210105091908.15290-1-mika.westerberg@linux.intel.com>
+In-Reply-To: <20210105091908.15290-1-mika.westerberg@linux.intel.com>
+From:   Yehezkel Bernat <yehezkelshb@gmail.com>
+Date:   Tue, 5 Jan 2021 12:08:32 +0200
+Message-ID: <CA+CmpXuV_rEMqoLL=fTQr=Qk-2bZWq2HezhA3m=mY=rE6ow3BQ@mail.gmail.com>
+Subject: Re: [PATCH] thunderbolt: Drop duplicated 0x prefix from format string
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Link Power Management (LPM) on STM32MP15 OTG HS encounters instabilities
-with some Host controllers. OTG core fails to exit L1 state in 200us:
-"dwc2 49000000.usb-otg: Failed to exit L1 sleep state in 200us."
-Then the device is still not enumerated.
+On Tue, Jan 5, 2021 at 11:19 AM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> The tb_dbg() call is using %#x that already adds the 0x prefix so don't
+> duplicate it.
+>
+> Fixes: 9039387e166e ("thunderbolt: Add USB4 router operation proxy for firmware connection manager")
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> ---
+>  drivers/thunderbolt/icm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
+> index 8b7f941a9bb7..b8c4159bc32d 100644
+> --- a/drivers/thunderbolt/icm.c
+> +++ b/drivers/thunderbolt/icm.c
+> @@ -2316,7 +2316,7 @@ static int icm_usb4_switch_nvm_authenticate_status(struct tb_switch *sw,
+>
+>         if (auth && auth->reply.route_hi == sw->config.route_hi &&
+>             auth->reply.route_lo == sw->config.route_lo) {
+> -               tb_dbg(tb, "NVM_AUTH found for %llx flags 0x%#x status %#x\n",
+> +               tb_dbg(tb, "NVM_AUTH found for %llx flags %#x status %#x\n",
+>                        tb_route(sw), auth->reply.hdr.flags, auth->reply.status);
+>                 if (auth->reply.hdr.flags & ICM_FLAGS_ERROR)
+>                         ret = -EIO;
+> --
+> 2.29.2
+>
 
-To avoid this issue, disable Link Power Management on STM32MP15 HS OTG.
-
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Acked-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
----
- drivers/usb/dwc2/params.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index 9e5dd7f3f2f6..92df3d620f7d 100644
---- a/drivers/usb/dwc2/params.c
-+++ b/drivers/usb/dwc2/params.c
-@@ -194,6 +194,10 @@ static void dwc2_set_stm32mp15_hsotg_params(struct dwc2_hsotg *hsotg)
- 	p->host_perio_tx_fifo_size = 256;
- 	p->ahbcfg = GAHBCFG_HBSTLEN_INCR16 << GAHBCFG_HBSTLEN_SHIFT;
- 	p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
-+	p->lpm = false;
-+	p->lpm_clock_gating = false;
-+	p->besl = false;
-+	p->hird_threshold_en = false;
- }
- 
- const struct of_device_id dwc2_of_match_table[] = {
--- 
-2.17.1
-
+Reviewed-by: Yehezkel Bernat <YehezkelShB@gmail.com>
