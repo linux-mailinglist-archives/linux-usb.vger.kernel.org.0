@@ -2,122 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B20F22EBA62
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Jan 2021 08:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0B352EBAC4
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Jan 2021 08:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726216AbhAFHPH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Jan 2021 02:15:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726217AbhAFHPG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jan 2021 02:15:06 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18490C061363
-        for <linux-usb@vger.kernel.org>; Tue,  5 Jan 2021 23:13:40 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id jx16so3701751ejb.10
-        for <linux-usb@vger.kernel.org>; Tue, 05 Jan 2021 23:13:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rT4Dc8swlK31/4OXAMfRD8Dy9QIvv8YpGOiKzBJjVS0=;
-        b=kW/FIQ9UMgiQ4U+TkdADVoEYk5gZPV3uhWmFEaBISm60k6X7HKncaLJMcm7Te12ixW
-         DmozTsbCxinSR4kw60jnPkTRpJcI2yoqWEX3PsYD1Gobe1MgtRCRsAYMvDuT6a2OmRZe
-         JA5aIaNzC2Qz1QI2pjKK7hj+qAEnukuAv07b9W7M8pBoGmUjZmXbHaL5522RR1fvjBcC
-         aUOByaCkN/CFtegf2L0lfAhcsuMiZ+e/Z0kGD0hJrq1CBcozlTfyZi2pX2qyg5tLtp5K
-         qfoj7U94CqKy1yfDXJToNFtVkn5zEBI7/9XBDJd/bwiyCn1gMrTQ4lsyGmJDatnR3P5D
-         m6RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rT4Dc8swlK31/4OXAMfRD8Dy9QIvv8YpGOiKzBJjVS0=;
-        b=LJY+uDAA7/6wWiV56qW8xNgyTJrRpDayVZq3i1/JTrFhkGBWwQ3agyKYxA5aUl1wPA
-         3mCsPHnw+9hQj3tq0uBEMpu5X0CR/qA8yqilRByZSgap/ZiWhoxOim8Ax2FiG2AAqTD1
-         1OLBT4ObRuUDKaF16uhsncV8QZDtSyFfg3z6IC2PJuXUKel5+EQ85hmV7p2wRDl5AEIW
-         Pm3TpjzUaH/SuPzgn6yi5cXhVW+O3pgKoRxn/+VVYgkCAEk44mhRN8QT14svBgYkWsJG
-         CQoS19dwIenoxuzEhmdu55C0SpRX2YqcIjorQZgIH7hf988mFCba1KcuFmz44o/KIjD2
-         G52w==
-X-Gm-Message-State: AOAM532jZUAlAMhsgQg7hMeCbbkUixo49F9bmI8w8oa54Wxh0Qw5K+DL
-        040NbTHIdOQOO/T8ogHmyVWJwzQIRp41Yod0XugSEw==
-X-Google-Smtp-Source: ABdhPJz7NZsjb4UgOGiErAdqwk42sh/yXenAjVlhxnzAVaOFNfM5U6i5Q3E7GI/VvU/IA448wOjGCY/95IeDdC3rxz4=
-X-Received: by 2002:a17:906:8594:: with SMTP id v20mr1986708ejx.470.1609917218321;
- Tue, 05 Jan 2021 23:13:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20210104230253.2805217-1-robh@kernel.org>
-In-Reply-To: <20210104230253.2805217-1-robh@kernel.org>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Wed, 6 Jan 2021 08:13:27 +0100
-Message-ID: <CAMpxmJVFFu6q53-O_iWCyhY3M3up2Hg1TMY_DpmOvED4eN8bJQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Add missing array size constraints
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-devicetree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S1726700AbhAFHv4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Jan 2021 02:51:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34466 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726369AbhAFHvz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 6 Jan 2021 02:51:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0C7562070C;
+        Wed,  6 Jan 2021 07:51:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609919474;
+        bh=mhj1Qo3d0xN+72WQ8KKjT+MhYlUWaRLY8TYHPwrJCkM=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=MKbsZH8pAscitaLRkIfnB1L+bvsqnevgywpg+EDXm/yF/BvmD76Sze6NEuvZeAO5f
+         lhkbEPJhUw+lKlguNfOm44S59oSXd6gnJOFEzVDJVAR6mlykvyS7axBPkESUEoFbcx
+         L/uEF9KBtJz5s/pEHnj0mGMBizPJlPq+cYxNIJav7vaUKsJBskByxsZYgDWUXFtoTe
+         lW7G0e4rtUpqfDxRmbl+KmehfW1wm1FvMRAUeXWDXqb/r/czyXKryV4230ym51sWj9
+         q2ImZJJMmqfY/1MUvj0kz86rFBU2+OyIwX4kCltUmlOfNEaJ/m+mxqUGhX4Rbv5ohh
+         Q9BuuIxqtIMJQ==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-ide@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
-        linux-drm <dri-devel@lists.freedesktop.org>,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        linux-pm <linux-pm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-serial@vger.kernel.org,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        linux-spi@vger.kernel.org, USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-usb@vger.kernel.org,
+        Bryan O'Donoghue <pure.logic@nexus-software.ie>
+Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: gadget: Init only available HW eps
+In-Reply-To: <3080c0452df14d510d24471ce0f9bb7592cdfd4d.1609866964.git.Thinh.Nguyen@synopsys.com>
+References: <3080c0452df14d510d24471ce0f9bb7592cdfd4d.1609866964.git.Thinh.Nguyen@synopsys.com>
+Date:   Wed, 06 Jan 2021 09:51:10 +0200
+Message-ID: <87eeiycxld.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 5, 2021 at 12:03 AM Rob Herring <robh@kernel.org> wrote:
+
+Hi,
+
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+> Typically FPGA devices are configured with CoreConsultant parameter
+> DWC_USB3x_EN_LOG_PHYS_EP_SUPT=0 to reduce gate count and improve timing.
+> This means that the number of INs equals to OUTs endpoints. But
+> typically non-FPGA devices enable this CoreConsultant parameter to
+> support flexible endpoint mapping and potentially may have unequal
+> number of INs to OUTs physical endpoints.
 >
-> DT properties which can have multiple entries need to specify what the
-> entries are and define how many entries there can be. In the case of
-> only a single entry, just 'maxItems: 1' is sufficient.
+> The driver must check how many physical endpoints are available for each
+> direction and initialize them properly.
 >
-> Add the missing entry constraints. These were found with a modified
-> meta-schema. Unfortunately, there are a few cases where the size
-> constraints are not defined such as common bindings, so the meta-schema
-> can't be part of the normal checks.
+> Cc: stable@vger.kernel.org
+> Fixes: 47d3946ea220 ("usb: dwc3: refactor gadget endpoint count calculation")
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+>  drivers/usb/dwc3/core.c   |  1 +
+>  drivers/usb/dwc3/core.h   |  2 ++
+>  drivers/usb/dwc3/gadget.c | 19 ++++++++++++-------
+>  3 files changed, 15 insertions(+), 7 deletions(-)
 >
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 841daec70b6e..1084aa8623c2 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -529,6 +529,7 @@ static void dwc3_core_num_eps(struct dwc3 *dwc)
+>  	struct dwc3_hwparams	*parms = &dwc->hwparams;
+>  
+>  	dwc->num_eps = DWC3_NUM_EPS(parms);
+> +	dwc->num_in_eps = DWC3_NUM_IN_EPS(parms);
+>  }
+>  
+>  static void dwc3_cache_hwparams(struct dwc3 *dwc)
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index 1b241f937d8f..1295dac019f9 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -990,6 +990,7 @@ struct dwc3_scratchpad_array {
+>   * @u1sel: parameter from Set SEL request.
+>   * @u1pel: parameter from Set SEL request.
+>   * @num_eps: number of endpoints
+> + * @num_in_eps: number of IN endpoints
+>   * @ep0_next_event: hold the next expected event
+>   * @ep0state: state of endpoint zero
+>   * @link_state: link state
+> @@ -1193,6 +1194,7 @@ struct dwc3 {
+>  	u8			speed;
+>  
+>  	u8			num_eps;
+> +	u8			num_in_eps;
+>  
+>  	struct dwc3_hwparams	hwparams;
+>  	struct dentry		*root;
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 25f654b79e48..8a38ee10c00b 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -2025,7 +2025,7 @@ static void dwc3_stop_active_transfers(struct dwc3 *dwc)
+>  {
+>  	u32 epnum;
+>  
+> -	for (epnum = 2; epnum < dwc->num_eps; epnum++) {
+> +	for (epnum = 2; epnum < DWC3_ENDPOINTS_NUM; epnum++) {
+>  		struct dwc3_ep *dep;
+>  
+>  		dep = dwc->eps[epnum];
+> @@ -2628,16 +2628,21 @@ static int dwc3_gadget_init_endpoint(struct dwc3 *dwc, u8 epnum)
+>  	return 0;
+>  }
+>  
+> -static int dwc3_gadget_init_endpoints(struct dwc3 *dwc, u8 total)
+> +static int dwc3_gadget_init_endpoints(struct dwc3 *dwc)
+>  {
+> -	u8				epnum;
+> +	u8				i;
+> +	int				ret;
+>  
+>  	INIT_LIST_HEAD(&dwc->gadget->ep_list);
+>  
+> -	for (epnum = 0; epnum < total; epnum++) {
+> -		int			ret;
+> +	for (i = 0; i < dwc->num_in_eps; i++) {
+> +		ret = dwc3_gadget_init_endpoint(dwc, i * 2 + 1);
+> +		if (ret)
+> +			return ret;
+> +	}
+>  
+> -		ret = dwc3_gadget_init_endpoint(dwc, epnum);
+> +	for (i = 0; i < dwc->num_eps - dwc->num_in_eps; i++) {
+> +		ret = dwc3_gadget_init_endpoint(dwc, i * 2);
+>  		if (ret)
+>  			return ret;
+>  	}
+> @@ -3863,7 +3868,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+>  	 * sure we're starting from a well known location.
+>  	 */
+>  
+> -	ret = dwc3_gadget_init_endpoints(dwc, dwc->num_eps);
+> +	ret = dwc3_gadget_init_endpoints(dwc);
+>  	if (ret)
+>  		goto err4;
 
-[snip!]
+heh, looking at original commit, we used to have num_in_eps and
+num_out_eps. In fact, this commit will reintroduce another problem that
+Bryan tried to solve. num_eps - num_in_eps is not necessarily
+num_out_eps.
 
->  .../bindings/gpio/gpio-pca95xx.yaml           |  1 +
+How have you verified this patch? Did you read Bryan's commit log? This
+is likely to reintroduce the problem raised by Bryan.
 
-[snip!]
-
-> diff --git a/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml b/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
-> index f5ee23c2df60..57cdcfd4ff3c 100644
-> --- a/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
-> @@ -81,6 +81,7 @@ properties:
->      const: 2
->
->    reset-gpios:
-> +    maxItems: 1
->      description:
->        GPIO specification for the RESET input. This is an active low signal to
->        the PCA953x.  Not valid for Maxim MAX732x devices.
-
-Acked-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+-- 
+balbi
