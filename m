@@ -2,58 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC4E12EBD1E
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Jan 2021 12:24:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4A82EBD22
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Jan 2021 12:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725836AbhAFLXb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 6 Jan 2021 06:23:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52116 "EHLO mail.kernel.org"
+        id S1726059AbhAFL0J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Jan 2021 06:26:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52388 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725788AbhAFLXa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 6 Jan 2021 06:23:30 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 4538222B37
-        for <linux-usb@vger.kernel.org>; Wed,  6 Jan 2021 11:22:50 +0000 (UTC)
-Received: by pdx-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 3443881F02; Wed,  6 Jan 2021 11:22:50 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 210777] pwc driver doesn't work anymore
-Date:   Wed, 06 Jan 2021 11:22:50 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: harald@a-little-linux-box.at
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-210777-208809-lOTONd6lpZ@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210777-208809@https.bugzilla.kernel.org/>
-References: <bug-210777-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1725905AbhAFL0I (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 6 Jan 2021 06:26:08 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1815C22B37;
+        Wed,  6 Jan 2021 11:25:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609932328;
+        bh=dKDGsUfUFlfnuTfp1bAUM+cB+B1BsbaavEtFCZGIEy8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L2eKcFBg22hLd9qDr4Scn+aHenc2YEWAQEeN4vOmQcP3xP2Th0tEjDgXi9EBSUUec
+         NKj8FQ4YcSMKx4oTARcCGLTOUXQu2hxIj9FbzI+P/gO11bB4WjwUrlmbca3lvkRNko
+         jHMMEbB85a/fO+K40wOvMAt7hV/kh2Vs/XSSRKrt9qnIpn8szs1xaMm7rKNR+2d+td
+         A9GAV2BO/4OIFNkZi2hTxbNMpRhXMzGXl2I9AouxM4KXzzMgQUpdZnB5ZdPzgiTOmd
+         bMTLcT9EhkTSUrsE9yzvBzD9jy9lvl0O3NgyDDsYNVy3hmf0gPTHfzuS0J0wVflYWx
+         sE4JJfoK6FfFg==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kx6wP-00076G-OS; Wed, 06 Jan 2021 12:25:25 +0100
+Date:   Wed, 6 Jan 2021 12:25:25 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Pete Zaitcev <zaitcev@redhat.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] USB: usblp: fix DMA to stack
+Message-ID: <X/WeJfWKtFEebpMC@hovoldconsulting.com>
+References: <20210104145302.2087-1-johan@kernel.org>
+ <20210104113736.0af1ce0a@suzdal.zaitcev.lan>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210104113736.0af1ce0a@suzdal.zaitcev.lan>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=210777
+On Mon, Jan 04, 2021 at 11:37:36AM -0600, Pete Zaitcev wrote:
+> On Mon,  4 Jan 2021 15:53:02 +0100
+> Johan Hovold <johan@kernel.org> wrote:
+> 
+> > +++ b/drivers/usb/class/usblp.c
+> > -#define usblp_hp_channel_change_request(usblp, channel, buffer) \
+> > -	usblp_ctrl_msg(usblp, USBLP_REQ_HP_CHANNEL_CHANGE_REQUEST, USB_TYPE_VENDOR, USB_DIR_IN, USB_RECIP_INTERFACE, channel, buffer, 1)
+> > +static int usblp_hp_channel_change_request(struct usblp *usblp, int channel, u8 *new_channel)
+> 
+> Acked-By: Pete Zaitcev <zaitcev@redhat.com>
+> 
+> I would probably get rid of the buffer pointer and return
+> new_channel & 0xFF in case of success. That would kill
+> the newChannel too, and there's no need to debage u8 versus
+> unsigned char. But this is good enough. A function is better
+> than trying to cram the kfree() into the clause of the switch.
 
---- Comment #4 from Harald Jenny (harald@a-little-linux-box.at) ---
-Patch by Matwey V. Kornilov from the 4th January fixes the problem in the
-correct way, please consider applying it to the 5.10 as well as the 5.11 tree.
+Yeah, I wanted a minimal change suitable for stable and the helper was
+already there to be used for this.
 
--- 
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Johan
