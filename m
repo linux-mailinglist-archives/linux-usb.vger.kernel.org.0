@@ -2,103 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE502EB9CF
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Jan 2021 07:07:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B20F22EBA62
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Jan 2021 08:16:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726206AbhAFGGQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Jan 2021 01:06:16 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:15341 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725861AbhAFGGQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jan 2021 01:06:16 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5ff5532f0000>; Tue, 05 Jan 2021 22:05:35 -0800
-Received: from [10.19.109.31] (172.20.145.6) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 6 Jan
- 2021 06:05:30 +0000
-Subject: Re: [PATCH] xhci: tegra: Delay for disabling LFPS detector
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <mathias.nyman@linux.intel.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <robh@kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <nkristam@nvidia.com>
-References: <20201218164234.128762-1-jckuo@nvidia.com>
- <X9zelLu26bcQd7bs@kroah.com>
-X-Nvconfidentiality: public
-From:   JC Kuo <jckuo@nvidia.com>
-Organization: NVIDIA
-Message-ID: <d508a7f9-da00-99a3-cf87-d1234efb10c9@nvidia.com>
-Date:   Wed, 6 Jan 2021 14:05:28 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726216AbhAFHPH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Jan 2021 02:15:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726217AbhAFHPG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jan 2021 02:15:06 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18490C061363
+        for <linux-usb@vger.kernel.org>; Tue,  5 Jan 2021 23:13:40 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id jx16so3701751ejb.10
+        for <linux-usb@vger.kernel.org>; Tue, 05 Jan 2021 23:13:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rT4Dc8swlK31/4OXAMfRD8Dy9QIvv8YpGOiKzBJjVS0=;
+        b=kW/FIQ9UMgiQ4U+TkdADVoEYk5gZPV3uhWmFEaBISm60k6X7HKncaLJMcm7Te12ixW
+         DmozTsbCxinSR4kw60jnPkTRpJcI2yoqWEX3PsYD1Gobe1MgtRCRsAYMvDuT6a2OmRZe
+         JA5aIaNzC2Qz1QI2pjKK7hj+qAEnukuAv07b9W7M8pBoGmUjZmXbHaL5522RR1fvjBcC
+         aUOByaCkN/CFtegf2L0lfAhcsuMiZ+e/Z0kGD0hJrq1CBcozlTfyZi2pX2qyg5tLtp5K
+         qfoj7U94CqKy1yfDXJToNFtVkn5zEBI7/9XBDJd/bwiyCn1gMrTQ4lsyGmJDatnR3P5D
+         m6RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rT4Dc8swlK31/4OXAMfRD8Dy9QIvv8YpGOiKzBJjVS0=;
+        b=LJY+uDAA7/6wWiV56qW8xNgyTJrRpDayVZq3i1/JTrFhkGBWwQ3agyKYxA5aUl1wPA
+         3mCsPHnw+9hQj3tq0uBEMpu5X0CR/qA8yqilRByZSgap/ZiWhoxOim8Ax2FiG2AAqTD1
+         1OLBT4ObRuUDKaF16uhsncV8QZDtSyFfg3z6IC2PJuXUKel5+EQ85hmV7p2wRDl5AEIW
+         Pm3TpjzUaH/SuPzgn6yi5cXhVW+O3pgKoRxn/+VVYgkCAEk44mhRN8QT14svBgYkWsJG
+         CQoS19dwIenoxuzEhmdu55C0SpRX2YqcIjorQZgIH7hf988mFCba1KcuFmz44o/KIjD2
+         G52w==
+X-Gm-Message-State: AOAM532jZUAlAMhsgQg7hMeCbbkUixo49F9bmI8w8oa54Wxh0Qw5K+DL
+        040NbTHIdOQOO/T8ogHmyVWJwzQIRp41Yod0XugSEw==
+X-Google-Smtp-Source: ABdhPJz7NZsjb4UgOGiErAdqwk42sh/yXenAjVlhxnzAVaOFNfM5U6i5Q3E7GI/VvU/IA448wOjGCY/95IeDdC3rxz4=
+X-Received: by 2002:a17:906:8594:: with SMTP id v20mr1986708ejx.470.1609917218321;
+ Tue, 05 Jan 2021 23:13:38 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <X9zelLu26bcQd7bs@kroah.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.20.145.6]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1609913136; bh=fZXtoHUvqkDYSMdcFakYxvfrLLyKSwtZorDz9eY/riU=;
-        h=Subject:To:CC:References:X-Nvconfidentiality:From:Organization:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
-         Content-Language:Content-Transfer-Encoding:X-Originating-IP:
-         X-ClientProxiedBy;
-        b=E3EDbZ2g3F0icWth7JcHSdl3TkDDzusPFteq40XYlUGUmFpDIIMsAzHygCkzXVsec
-         fMk+OpCtNcrXvzgM0dgP9/Q71KbaVS49cdcdXeYkonhdewQatX6cpPGHy+hfRjHDC0
-         n496A2TeB76GMx4EjGIvAO5djDk3sGeqEfxFuY4wqE7ZbFGccY8gZPA9t+QymzfN0t
-         HB7fpCbXyEGtOdC7V/uP+CcR2zmc4nCKgPejzYsAVSlxnye5u8+eC6u6ch3b85OxRN
-         D3+hWwnd1kj9k6sY2aaRO9urvzB96L1SiU/HQJpIy6WNPPZh0Vz0oQH71rc2nCm62D
-         YQ/8QZ1d5Yu9g==
+References: <20210104230253.2805217-1-robh@kernel.org>
+In-Reply-To: <20210104230253.2805217-1-robh@kernel.org>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Wed, 6 Jan 2021 08:13:27 +0100
+Message-ID: <CAMpxmJVFFu6q53-O_iWCyhY3M3up2Hg1TMY_DpmOvED4eN8bJQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Add missing array size constraints
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        linux-ide@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
+        linux-drm <dri-devel@lists.freedesktop.org>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Input <linux-input@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        linux-mmc@vger.kernel.org, netdev <netdev@vger.kernel.org>,
+        linux-pm <linux-pm@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-serial@vger.kernel.org,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        linux-spi@vger.kernel.org, USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12/19/20 12:53 AM, Greg KH wrote:
-> On Sat, Dec 19, 2020 at 12:42:34AM +0800, JC Kuo wrote:
->> Occasionally, we are seeing some SuperSpeed devices resumes right after
->> being directed to U3. This commits add 500us delay to ensure LFPS
->> detector is disabled before sending ACK to firmware.
->>
->> [   16.099363] tegra-xusb 70090000.usb: entering ELPG
->> [   16.104343] tegra-xusb 70090000.usb: 2-1 isn't suspended: 0x0c001203
->> [   16.114576] tegra-xusb 70090000.usb: not all ports suspended: -16
->> [   16.120789] tegra-xusb 70090000.usb: entering ELPG failed
->>
->> Signed-off-by: JC Kuo <jckuo@nvidia.com>
->> ---
->>  drivers/usb/host/xhci-tegra.c | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
->> index 934be1686352..20cdc11f7dc6 100644
->> --- a/drivers/usb/host/xhci-tegra.c
->> +++ b/drivers/usb/host/xhci-tegra.c
->> @@ -623,6 +623,12 @@ static void tegra_xusb_mbox_handle(struct tegra_xusb *tegra,
->>  								     enable);
->>  			if (err < 0)
->>  				break;
->> +
->> +			/*
->> +			 * wait 500us for LFPS detector to be disabled before sending ACK
->> +			 */
->> +			if (!enable)
->> +				usleep_range(500, 1000);
-> 
-> Where does the magic 500us come from?  How can we "know" this is long
-> enough?
+On Tue, Jan 5, 2021 at 12:03 AM Rob Herring <robh@kernel.org> wrote:
+>
+> DT properties which can have multiple entries need to specify what the
+> entries are and define how many entries there can be. In the case of
+> only a single entry, just 'maxItems: 1' is sufficient.
+>
+> Add the missing entry constraints. These were found with a modified
+> meta-schema. Unfortunately, there are a few cases where the size
+> constraints are not defined such as common bindings, so the meta-schema
+> can't be part of the normal checks.
+>
 
-Hi Greg,
-The register write passes through a few flop stages of 32KHz clock domain. Our
-ASIC designer reviewed RTL and suggests 500us delay. It has also been verified
-thoroughly.
+[snip!]
 
-Thanks,
-JC
+>  .../bindings/gpio/gpio-pca95xx.yaml           |  1 +
 
-> 
-> thanks,
-> 
-> greg k-h
-> 
+[snip!]
+
+> diff --git a/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml b/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
+> index f5ee23c2df60..57cdcfd4ff3c 100644
+> --- a/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
+> +++ b/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
+> @@ -81,6 +81,7 @@ properties:
+>      const: 2
+>
+>    reset-gpios:
+> +    maxItems: 1
+>      description:
+>        GPIO specification for the RESET input. This is an active low signal to
+>        the PCA953x.  Not valid for Maxim MAX732x devices.
+
+Acked-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
