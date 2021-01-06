@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DC8F2EBEE1
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Jan 2021 14:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C61E2EBEE2
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Jan 2021 14:40:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727002AbhAFNi2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Jan 2021 08:38:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48928 "EHLO
+        id S1727019AbhAFNi3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Jan 2021 08:38:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726698AbhAFNi2 (ORCPT
+        with ESMTP id S1726501AbhAFNi2 (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jan 2021 08:38:28 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453C9C06135A
-        for <linux-usb@vger.kernel.org>; Wed,  6 Jan 2021 05:37:09 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id j16so4468188edr.0
-        for <linux-usb@vger.kernel.org>; Wed, 06 Jan 2021 05:37:09 -0800 (PST)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E14DC06135B
+        for <linux-usb@vger.kernel.org>; Wed,  6 Jan 2021 05:37:10 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id ce23so5020215ejb.8
+        for <linux-usb@vger.kernel.org>; Wed, 06 Jan 2021 05:37:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=UTSIWNrCdfFZGrfLRZuDMagz0Cnd73ZK/iAZinL3Hdk=;
-        b=z4y0UhlLkVRbZwM3AYQ8WT/PFQO5q/ewfILqGNVWDDSMNZ3Dr694H0d6AwNfgq+ISL
-         FdSNQMMAd0pT0ZKv3rBEBj9s5p1d/TBNyPHUpQe0Z73m+HSZJAq86rGi4NbhDsMJmlBf
-         xt32C+2TcJPryWI7lUZBIucFO8LIuFBGBQGsRDRpm4I5kF5Z1qFOC1XFeoC/PO5SHU3E
-         6M321HF23UdseRxzEJYX3DeJdDCy44rJgNUdxHrubStKupfWATezQ04igbAJekVSFdy5
-         4kwsTwcjTEWkozYqZZGv4hV3qMn5BMZyqBq8+5kIEKRWq90/NIyqM91iN5MC+ZvFokk/
-         CCbQ==
+        bh=EeqCcTaM9uvJ+oUlpZc6QqWpLGu/QRph3nZs6qZSs40=;
+        b=SYg4zbGWg3hS7QGGgC6xByH65gg9gDp3bagriZ4Qy2fVe4+8PuT8FdnWmdC+11XeQI
+         bBKpAWPMsL+qwm/mLQ2KzrNLRrKWD468oOnpHN17cX0HFGV8JFmwNUIuDW+8pgtV/9BI
+         onh7FoeC7kXzwF9w3MogcxQf+zmhmCEFyVYqG4E/+XNOZ0VtHQz/mQXB0M7jv7/bbZ+Z
+         t+bcaqaBeh/vlFyjSHHfcho/j1La8TWGyjG0jnn0dBQN3OTz407pq+Umk+Zb0YOdElAk
+         VQRCVFWg6+kioOAclDx89+7L/h4in3iLkJpE+lw85MzPMO7oH9BqlRw01yKtnl/gXKl0
+         +V7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=UTSIWNrCdfFZGrfLRZuDMagz0Cnd73ZK/iAZinL3Hdk=;
-        b=t6iy7sfNQYia/8jLcLsrtkgibPQ6Yxemu1o+Ezop9aC76bUYo9mTH2qcQv8AdRIovK
-         nuczzFdfz7OMks5TRNr1TEFusclwMZJ5VOYPTMFto78dXRWVEPPt7RgCj+mRHj+aGOUb
-         3PXqnOr7ANR/dR78pmtQZERbaPAkMBTud8WSN5gVoYW+BPGK0S3hXsNRUntxeSXgZaeV
-         Bs467WxIK2nxDYdMPRj3niUtBS7hFKC5SyKqZoTAMPTXUABvm8Fyqj69PsKuzsy1DL3V
-         76Dokrd6A+MW5asCwcoH7G/tS6kJPd9hiS3ITynplcPMITbUyu9vy4dioG446C6SnDei
-         X3+Q==
-X-Gm-Message-State: AOAM532QexAkjOCkx6M87Bu0G6ahNUzGf0g0B+epoMSGIiUSM1/BdqFp
-        6M+r1kwO6VLFuV704fAo7D0cBA==
-X-Google-Smtp-Source: ABdhPJxTST/UKEVGGXaHxa8sUjQ9TOJ57dlm4hVgN3wyZhrouwJGt0HYUWmDq8U+NVaEhXraKxMb6w==
-X-Received: by 2002:a50:bac4:: with SMTP id x62mr3927427ede.59.1609940228024;
-        Wed, 06 Jan 2021 05:37:08 -0800 (PST)
+        bh=EeqCcTaM9uvJ+oUlpZc6QqWpLGu/QRph3nZs6qZSs40=;
+        b=eP4QbPVLjaErmlv5KmSMxHNZ/400/PkitEfPg2+eMcmytCol84JiLMOjzVcIAOjChr
+         8GI9ZbBXAV/Y/f3DMyEtxOF91uuT4l7s/kEE77RDHNrCmspOHu/FtloZSfkmiwdDD9aa
+         hVdTYH7CkD4SdrsBwsF6+JkNZfTpudAr/TwfPQ1cp1sRZ5t2vhSgF49TvOxwz+Cn3CfR
+         X2Ejo6i2qJKUkurKxIeTNK65WKsFjB2fFd8AXs2s8Ic/1pZtjfhts8JpFiiIiCexbbkK
+         WbNRTQqi0y5glbdriXkR+ngikc1CT7QWwfak8jVKLcy/IjeXJJIWorzvmd7QzuW3uPz2
+         OqoQ==
+X-Gm-Message-State: AOAM532gr1HgWTCisWh4nIrQRwrXRgXPoxFzN4VLDE/hFMO0OgPTJpQ1
+        yIiMnPqNOvYRQbB9rWha1NIm/A==
+X-Google-Smtp-Source: ABdhPJwC9ki5CDdYpvYkHbirBbP2qKR4RcLxWRZRHQSIpcoH71TJ7ccWEfKFjVefbUPsSqgWGpEiEg==
+X-Received: by 2002:a17:906:4d47:: with SMTP id b7mr2798016ejv.420.1609940229125;
+        Wed, 06 Jan 2021 05:37:09 -0800 (PST)
 Received: from localhost.localdomain (82-65-169-74.subs.proxad.net. [82.65.169.74])
-        by smtp.googlemail.com with ESMTPSA id n20sm1259275ejo.83.2021.01.06.05.37.07
+        by smtp.googlemail.com with ESMTPSA id n20sm1259275ejo.83.2021.01.06.05.37.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jan 2021 05:37:07 -0800 (PST)
+        Wed, 06 Jan 2021 05:37:08 -0800 (PST)
 From:   Jerome Brunet <jbrunet@baylibre.com>
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -54,9 +54,9 @@ Cc:     Jerome Brunet <jbrunet@baylibre.com>,
         Ruslan Bilovol <ruslan.bilovol@gmail.com>,
         Jack Pham <jackp@codeaurora.org>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/5] usb: gadget: f_uac2: reset wMaxPacketSize
-Date:   Wed,  6 Jan 2021 14:36:49 +0100
-Message-Id: <20210106133652.512178-3-jbrunet@baylibre.com>
+Subject: [PATCH v2 3/5] usb: gadget: u_audio: factorize ssize to alsa fmt conversion
+Date:   Wed,  6 Jan 2021 14:36:50 +0100
+Message-Id: <20210106133652.512178-4-jbrunet@baylibre.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210106133652.512178-1-jbrunet@baylibre.com>
 References: <20210106133652.512178-1-jbrunet@baylibre.com>
@@ -67,147 +67,80 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-With commit 913e4a90b6f9 ("usb: gadget: f_uac2: finalize wMaxPacketSize according to bandwidth")
-wMaxPacketSize is computed dynamically but the value is never reset.
+Factorize format related code common to the capture and playback path.
 
-Because of this, the actual maximum packet size can only decrease each time
-the audio gadget is instantiated.
-
-Reset the endpoint maximum packet size and mark wMaxPacketSize as dynamic
-to solve the problem.
-
-Fixes: 913e4a90b6f9 ("usb: gadget: f_uac2: finalize wMaxPacketSize according to bandwidth")
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- drivers/usb/gadget/function/f_uac2.c | 69 ++++++++++++++++++++++------
- 1 file changed, 55 insertions(+), 14 deletions(-)
+ drivers/usb/gadget/function/u_audio.c | 43 +++++++++++++--------------
+ 1 file changed, 21 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index 3633df6d7610..5d960b6603b6 100644
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -271,7 +271,7 @@ static struct usb_endpoint_descriptor fs_epout_desc = {
- 
- 	.bEndpointAddress = USB_DIR_OUT,
- 	.bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC,
--	.wMaxPacketSize = cpu_to_le16(1023),
-+	/* .wMaxPacketSize = DYNAMIC */
- 	.bInterval = 1,
- };
- 
-@@ -280,7 +280,7 @@ static struct usb_endpoint_descriptor hs_epout_desc = {
- 	.bDescriptorType = USB_DT_ENDPOINT,
- 
- 	.bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC,
--	.wMaxPacketSize = cpu_to_le16(1024),
-+	/* .wMaxPacketSize = DYNAMIC */
- 	.bInterval = 4,
- };
- 
-@@ -348,7 +348,7 @@ static struct usb_endpoint_descriptor fs_epin_desc = {
- 
- 	.bEndpointAddress = USB_DIR_IN,
- 	.bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC,
--	.wMaxPacketSize = cpu_to_le16(1023),
-+	/* .wMaxPacketSize = DYNAMIC */
- 	.bInterval = 1,
- };
- 
-@@ -357,7 +357,7 @@ static struct usb_endpoint_descriptor hs_epin_desc = {
- 	.bDescriptorType = USB_DT_ENDPOINT,
- 
- 	.bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC,
--	.wMaxPacketSize = cpu_to_le16(1024),
-+	/* .wMaxPacketSize = DYNAMIC */
- 	.bInterval = 4,
- };
- 
-@@ -444,12 +444,28 @@ struct cntrl_range_lay3 {
- 	__le32	dRES;
- } __packed;
- 
--static void set_ep_max_packet_size(const struct f_uac2_opts *uac2_opts,
-+static int set_ep_max_packet_size(const struct f_uac2_opts *uac2_opts,
- 	struct usb_endpoint_descriptor *ep_desc,
--	unsigned int factor, bool is_playback)
-+	enum usb_device_speed speed, bool is_playback)
- {
- 	int chmask, srate, ssize;
--	u16 max_packet_size;
-+	u16 max_size_bw, max_size_ep;
-+	unsigned int factor;
-+
-+	switch (speed) {
-+	case USB_SPEED_FULL:
-+		max_size_ep = 1023;
-+		factor = 1000;
-+		break;
-+
-+	case USB_SPEED_HIGH:
-+		max_size_ep = 1024;
-+		factor = 8000;
-+		break;
-+
-+	default:
-+		return -EINVAL;
-+	}
- 
- 	if (is_playback) {
- 		chmask = uac2_opts->p_chmask;
-@@ -461,10 +477,12 @@ static void set_ep_max_packet_size(const struct f_uac2_opts *uac2_opts,
- 		ssize = uac2_opts->c_ssize;
- 	}
- 
--	max_packet_size = num_channels(chmask) * ssize *
-+	max_size_bw = num_channels(chmask) * ssize *
- 		DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1)));
--	ep_desc->wMaxPacketSize = cpu_to_le16(min_t(u16, max_packet_size,
--				le16_to_cpu(ep_desc->wMaxPacketSize)));
-+	ep_desc->wMaxPacketSize = cpu_to_le16(min_t(u16, max_size_bw,
-+						    max_size_ep));
-+
-+	return 0;
+diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+index 71dd9f16c246..045f237472a7 100644
+--- a/drivers/usb/gadget/function/u_audio.c
++++ b/drivers/usb/gadget/function/u_audio.c
+@@ -244,6 +244,25 @@ static snd_pcm_uframes_t uac_pcm_pointer(struct snd_pcm_substream *substream)
+ 	return bytes_to_frames(substream->runtime, prm->hw_ptr);
  }
  
- /* Use macro to overcome line length limitation */
-@@ -670,10 +688,33 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
- 	}
- 
- 	/* Calculate wMaxPacketSize according to audio bandwidth */
--	set_ep_max_packet_size(uac2_opts, &fs_epin_desc, 1000, true);
--	set_ep_max_packet_size(uac2_opts, &fs_epout_desc, 1000, false);
--	set_ep_max_packet_size(uac2_opts, &hs_epin_desc, 8000, true);
--	set_ep_max_packet_size(uac2_opts, &hs_epout_desc, 8000, false);
-+	ret = set_ep_max_packet_size(uac2_opts, &fs_epin_desc, USB_SPEED_FULL,
-+				     true);
-+	if (ret < 0) {
-+		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
-+		return ret;
++static u64 uac_ssize_to_fmt(int ssize)
++{
++	u64 ret;
++
++	switch (ssize) {
++	case 3:
++		ret = SNDRV_PCM_FMTBIT_S24_3LE;
++		break;
++	case 4:
++		ret = SNDRV_PCM_FMTBIT_S32_LE;
++		break;
++	default:
++		ret = SNDRV_PCM_FMTBIT_S16_LE;
++		break;
 +	}
 +
-+	ret = set_ep_max_packet_size(uac2_opts, &fs_epout_desc, USB_SPEED_FULL,
-+				     false);
-+	if (ret < 0) {
-+		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
-+		return ret;
-+	}
++	return ret;
++}
 +
-+	ret = set_ep_max_packet_size(uac2_opts, &hs_epin_desc, USB_SPEED_HIGH,
-+				     true);
-+	if (ret < 0) {
-+		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
-+		return ret;
-+	}
-+
-+	ret = set_ep_max_packet_size(uac2_opts, &hs_epout_desc, USB_SPEED_HIGH,
-+				     false);
-+	if (ret < 0) {
-+		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
-+		return ret;
-+	}
- 
- 	if (EPOUT_EN(uac2_opts)) {
- 		agdev->out_ep = usb_ep_autoconfig(gadget, &fs_epout_desc);
+ static int uac_pcm_open(struct snd_pcm_substream *substream)
+ {
+ 	struct snd_uac_chip *uac = snd_pcm_substream_chip(substream);
+@@ -269,34 +288,14 @@ static int uac_pcm_open(struct snd_pcm_substream *substream)
+ 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
+ 		spin_lock_init(&uac->p_prm.lock);
+ 		runtime->hw.rate_min = p_srate;
+-		switch (p_ssize) {
+-		case 3:
+-			runtime->hw.formats = SNDRV_PCM_FMTBIT_S24_3LE;
+-			break;
+-		case 4:
+-			runtime->hw.formats = SNDRV_PCM_FMTBIT_S32_LE;
+-			break;
+-		default:
+-			runtime->hw.formats = SNDRV_PCM_FMTBIT_S16_LE;
+-			break;
+-		}
++		runtime->hw.formats = uac_ssize_to_fmt(p_ssize);
+ 		runtime->hw.channels_min = num_channels(p_chmask);
+ 		runtime->hw.period_bytes_min = 2 * uac->p_prm.max_psize
+ 						/ runtime->hw.periods_min;
+ 	} else {
+ 		spin_lock_init(&uac->c_prm.lock);
+ 		runtime->hw.rate_min = c_srate;
+-		switch (c_ssize) {
+-		case 3:
+-			runtime->hw.formats = SNDRV_PCM_FMTBIT_S24_3LE;
+-			break;
+-		case 4:
+-			runtime->hw.formats = SNDRV_PCM_FMTBIT_S32_LE;
+-			break;
+-		default:
+-			runtime->hw.formats = SNDRV_PCM_FMTBIT_S16_LE;
+-			break;
+-		}
++		runtime->hw.formats = uac_ssize_to_fmt(c_ssize);
+ 		runtime->hw.channels_min = num_channels(c_chmask);
+ 		runtime->hw.period_bytes_min = 2 * uac->c_prm.max_psize
+ 						/ runtime->hw.periods_min;
 -- 
 2.29.2
 
