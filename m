@@ -2,62 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A212EB6C3
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Jan 2021 01:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC252EB721
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Jan 2021 01:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726109AbhAFAUT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Jan 2021 19:20:19 -0500
-Received: from mail-ot1-f48.google.com ([209.85.210.48]:44264 "EHLO
-        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725778AbhAFAUT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jan 2021 19:20:19 -0500
-Received: by mail-ot1-f48.google.com with SMTP id r9so1467714otk.11;
-        Tue, 05 Jan 2021 16:20:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NVOiQBqHcBbx3nxlt1ktSopLPLaxynGLrkh6M/dIvoM=;
-        b=e8yzltjeQ1G+dLRMnenc9m0KJZWjZ+8gCnIATJxJSflota7Gqa+ZMvegSLNdyz73ua
-         EJR3dtuXNb/UqhSdhP9VvcM1zBdziuq3S35owsOQLWRfbBXGIXC4CRfE5T5KZ48MCKQO
-         KKMe++uVeu22PT5j4TZ66kl9DtquQ2xJVA2C+4/dTrFZrRFE0NrtOqAvAnLQ9dqiSpJT
-         KNOrE29tlEkO2YDkUKMrGoMs4PCH2l965Tq2HLnY12PztOunK/nqbvikFdkpVMVZsRAp
-         eTE7mpTa7acE5zbSVdxsA6uwEd21pcJHqe40JQ4SlG5Kuwblws0q7Es+TwCmyyHzozli
-         EMXw==
-X-Gm-Message-State: AOAM533AZg5PLmGCDldC4Xnw6/sF25qjUNYGvwoLqq+i8JppfaAw8dfb
-        l8OJWAsgFbvYRLTDSap0ywh8SgTexv5XhZ+vLC4shN6WX2Q=
-X-Google-Smtp-Source: ABdhPJw8ASil+48k24xCFR+xzi/vvqX/8PzbLY6GCJIxxSdzlX4ps1OSrEMGmzHTPO+V2QeRHtCgcC5uiti2X5G8HFA=
-X-Received: by 2002:a05:6830:1bc6:: with SMTP id v6mr1510048ota.135.1609892378594;
- Tue, 05 Jan 2021 16:19:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20201222184926.35382198@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20201224032116.2453938-1-roland@kernel.org> <X+RJEI+1AR5E0z3z@kroah.com>
- <20201228133036.3a2e9fb5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <CAG4TOxNM8du=xadLeVwNU5Zq=MW7Kj74-1d9ThZ0q2OrXHE5qQ@mail.gmail.com>
- <24c6faa2a4f91c721d9a7f14bb7b641b89ae987d.camel@neukum.org>
- <CAG4TOxOc2OJnzJg9mwd2h+k0mj250S6NdNQmhK7BbHhT4_KdVA@mail.gmail.com>
- <12f345107c0832a00c43767ac6bb3aeda4241d4e.camel@suse.com> <CAG4TOxOOPgAqUtX14V7k-qPCbOm7+5gaHOqBvgWBYQwJkO6v8g@mail.gmail.com>
- <cebe1c1bf2fcbb6c39fd297e4a4a0ca52642fe18.camel@suse.com> <CAG4TOxM_Mq-Rcdi-pbY-KCMqqS5LmRD=PJszYkAjt7XGm8mc5Q@mail.gmail.com>
- <de23e12b8714cf97477ff149e6ebf323795f963d.camel@suse.com>
-In-Reply-To: <de23e12b8714cf97477ff149e6ebf323795f963d.camel@suse.com>
-From:   Roland Dreier <roland@kernel.org>
-Date:   Tue, 5 Jan 2021 16:19:22 -0800
-Message-ID: <CAG4TOxN9o1ga9dUHd9hUqMgkA+c_KUSwiYnXD_G2OtOXvB681Q@mail.gmail.com>
-Subject: Re: [PATCH] CDC-NCM: remove "connected" log message
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1726687AbhAFAx2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 5 Jan 2021 19:53:28 -0500
+Received: from shards.monkeyblade.net ([23.128.96.9]:56964 "EHLO
+        mail.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726038AbhAFAx2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jan 2021 19:53:28 -0500
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        by mail.monkeyblade.net (Postfix) with ESMTPSA id A281B4CBCE120;
+        Tue,  5 Jan 2021 16:52:47 -0800 (PST)
+Date:   Tue, 05 Jan 2021 16:52:47 -0800 (PST)
+Message-Id: <20210105.165247.1975563309057158543.davem@davemloft.net>
+To:     jks@iki.fi
+Cc:     bjorn@mork.no, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, lkp@intel.com, mrkiko.rs@gmail.com,
+        netdev@vger.kernel.org, oliver@neukum.org
+Subject: Re: [PATCH net,stable v3] net: cdc_ncm: correct overhead in
+ delayed_ndp_size
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20210105045249.5590-1-jks@iki.fi>
+References: <20210103202309.1201-1-jks@iki.fi>
+        <20210105045249.5590-1-jks@iki.fi>
+X-Mailer: Mew version 6.8 on Emacs 27.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail.monkeyblade.net [0.0.0.0]); Tue, 05 Jan 2021 16:52:48 -0800 (PST)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> now that you put it that way, I get the merit of what you are saying.
-> Very well. I will submit the first set of patches.
->
-> May I add your "Tested-by"?
+From: Jouni Seppänen <jks@iki.fi>
+Date: Tue,  5 Jan 2021 06:52:49 +0200
 
-Yes, absolutely:
+> From: Jouni K. Seppänen <jks@iki.fi>
+> 
+> Aligning to tx_ndp_modulus is not sufficient because the next align
+> call can be cdc_ncm_align_tail, which can add up to ctx->tx_modulus +
+> ctx->tx_remainder - 1 bytes. This used to lead to occasional crashes
+> on a Huawei 909s-120 LTE module as follows:
+> 
+> - the condition marked /* if there is a remaining skb [...] */ is true
+>   so the swaps happen
+> - skb_out is set from ctx->tx_curr_skb
+> - skb_out->len is exactly 0x3f52
+> - ctx->tx_curr_size is 0x4000 and delayed_ndp_size is 0xac
+>   (note that the sum of skb_out->len and delayed_ndp_size is 0x3ffe)
+> - the for loop over n is executed once
+> - the cdc_ncm_align_tail call marked /* align beginning of next frame */
+>   increases skb_out->len to 0x3f56 (the sum is now 0x4002)
+> - the condition marked /* check if we had enough room left [...] */ is
+>   false so we break out of the loop
+> - the condition marked /* If requested, put NDP at end of frame. */ is
+>   true so the NDP is written into skb_out
+> - now skb_out->len is 0x4002, so padding_count is minus two interpreted
+>   as an unsigned number, which is used as the length argument to memset,
+>   leading to a crash with various symptoms but usually including
+> 
+>> Call Trace:
+>>  <IRQ>
+>>  cdc_ncm_fill_tx_frame+0x83a/0x970 [cdc_ncm]
+>>  cdc_mbim_tx_fixup+0x1d9/0x240 [cdc_mbim]
+>>  usbnet_start_xmit+0x5d/0x720 [usbnet]
+> 
+> The cdc_ncm_align_tail call first aligns on a ctx->tx_modulus
+> boundary (adding at most ctx->tx_modulus-1 bytes), then adds
+> ctx->tx_remainder bytes. Alternatively, the next alignment call can
+> occur in cdc_ncm_ndp16 or cdc_ncm_ndp32, in which case at most
+> ctx->tx_ndp_modulus-1 bytes are added.
+> 
+> A similar problem has occurred before, and the code is nontrivial to
+> reason about, so add a guard before the crashing call. By that time it
+> is too late to prevent any memory corruption (we'll have written past
+> the end of the buffer already) but we can at least try to get a warning
+> written into an on-disk log by avoiding the hard crash caused by padding
+> past the buffer with a huge number of zeros.
+> 
+> Signed-off-by: Jouni K. Seppänen <jks@iki.fi>
+> Fixes: 4a0e3e989d66 ("cdc_ncm: Add support for moving NDP to end of NCM frame")
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=209407
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reviewed-by: Bjørn Mork <bjorn@mork.no>
 
-Tested-by: Roland Dreier <roland@kernel.org>
+Applied and queued up for -stable, thanks.
