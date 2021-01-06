@@ -2,201 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 971D12EB689
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Jan 2021 00:51:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 442412EB6C1
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Jan 2021 01:17:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727471AbhAEXuZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 5 Jan 2021 18:50:25 -0500
-Received: from aposti.net ([89.234.176.197]:33650 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726171AbhAEXuW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 Jan 2021 18:50:22 -0500
-Date:   Tue, 05 Jan 2021 23:49:18 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] dt-bindings: Add missing array size constraints
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-usb@vger.kernel.org, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
-        dri-devel@lists.freedesktop.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-ide@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        netdev@vger.kernel.org, linux-clk@vger.kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Marc Zyngier <maz@kernel.org>, linux-riscv@lists.infradead.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>, linux-media@vger.kernel.org,
-        Ohad Ben-Cohen <ohad@wizery.com>, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, Jens Axboe <axboe@kernel.dk>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Cameron <jic23@kernel.org>, s-anna@ti.com
-Message-Id: <6IJHMQ.19OBCF0P9Z4X2@crapouillou.net>
-In-Reply-To: <20210105232729.GA2864340@xps15>
-References: <20210104230253.2805217-1-robh@kernel.org>
-        <20210105232729.GA2864340@xps15>
+        id S1726260AbhAFAQ5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Jan 2021 19:16:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726222AbhAFAQ5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jan 2021 19:16:57 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8A7C061793
+        for <linux-usb@vger.kernel.org>; Tue,  5 Jan 2021 16:16:16 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id d26so840894wrb.12
+        for <linux-usb@vger.kernel.org>; Tue, 05 Jan 2021 16:16:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s9qDKqRXS/pzZqFMpxdsgZwVLxjM4iRHYGg6n80J9BU=;
+        b=DJBm8e3udqvkK+jXPtg9e/ZJDdIkdf4PqcmFz+Yy5tW0ay3cAYL1HnGMIevObGpFYy
+         PMgSos/2lq9Sv92e3lw0D5XyDm6c1oM2PPmeh8ffGczKaWWEPARuMDOwJ54DL2Gqb4eC
+         vG3lxl9bsnYCWRGkL7c1jaF+lbFrikrSWLKFKzbWLAm23pDYN5VHlHViXdJpNVinRb+8
+         pvv5cTV9TK2mO1iP+Vk6cduPhrD0XFwLGTnvvU/bOD2cRyNrXq6cEXeSGIaT5pvPXtRD
+         UIPXriOfSKvx7YHImU+WJY3VQaaHJNDc8gat9nY+9IX37O2nFzm7fTyVYAvzB8D65q6o
+         uMBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s9qDKqRXS/pzZqFMpxdsgZwVLxjM4iRHYGg6n80J9BU=;
+        b=UeHgLLj9WFfvgKI+frE5IW6FcliJZQ70q6I+YkDMpVx5Gof6g2ifEn/Ssq/THD2uUI
+         dih0Cax/wHErnStnA18FJR3frW33EXrfRzqPA8H1lb2jGQ4Zw/F3liSBMOWfyk0FY1R6
+         7FkBR3fbYYG8KgD4h30Bdu20fTeDrjyBCJ4VBCUKSlSV/+dSfiNye17lZ2xebM1LPe1X
+         Ss8Bjjn61o5OaBtz6tfIOmh/bEAfhpR0ml+3lFRS1A/lSPvDsJCDYl6NvMRbuRcSRtBc
+         /l2ah91cPC0nBqT1UmwbKhQWh4kydV3BIw5gxvoAgsjixdXTjHnUZHsUwVN/IhWy7IRN
+         l+KQ==
+X-Gm-Message-State: AOAM532T9YL5l4GwCmRJot6cllCtRJcVl6Mm1mHXLwqXvb8dFqDY47Xg
+        C7tjVO4fUeZnqRJ6RLsiYgRvZK9fYDI=
+X-Google-Smtp-Source: ABdhPJyhnJXHVKI3fbgx+5oEJug4oBvsFLnl9/TafQN5ODlAga3xjkc7OcgkfPjkISrHLb6E3bp9zg==
+X-Received: by 2002:adf:ed49:: with SMTP id u9mr1813039wro.292.1609892175258;
+        Tue, 05 Jan 2021 16:16:15 -0800 (PST)
+Received: from morpheus.roving-it.com.com (f.c.9.1.f.e.c.d.1.e.0.0.2.b.5.5.1.8.6.2.1.1.b.f.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:fb11:2681:55b2:e1:dcef:19cf])
+        by smtp.googlemail.com with ESMTPSA id r13sm855574wrt.10.2021.01.05.16.16.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jan 2021 16:16:14 -0800 (PST)
+From:   Peter Robinson <pbrobinson@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Peter Robinson <pbrobinson@gmail.com>,
+        Ajay Gupta <ajayg@nvidia.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: [PATCH] usb: typec: Fix copy paste error for NVIDIA alt-mode description
+Date:   Wed,  6 Jan 2021 00:16:05 +0000
+Message-Id: <20210106001605.167917-1-pbrobinson@gmail.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+The name of the module for the NVIDIA alt-mode is incorrect as it
+looks to be a copy-paste error from the entry above, update it to
+the correct typec_nvidia module name.
 
-Le mar. 5 janv. 2021 à 16:27, Mathieu Poirier 
-<mathieu.poirier@linaro.org> a écrit :
-> Adding Suman and Paul - guys please have a look.
-> 
-> On Mon, Jan 04, 2021 at 04:02:53PM -0700, Rob Herring wrote:
->>  DT properties which can have multiple entries need to specify what 
->> the
->>  entries are and define how many entries there can be. In the case of
->>  only a single entry, just 'maxItems: 1' is sufficient.
->> 
->>  Add the missing entry constraints. These were found with a modified
->>  meta-schema. Unfortunately, there are a few cases where the size
->>  constraints are not defined such as common bindings, so the 
->> meta-schema
->>  can't be part of the normal checks.
->> 
->>  Cc: Jens Axboe <axboe@kernel.dk>
->>  Cc: Stephen Boyd <sboyd@kernel.org>
->>  Cc: Thierry Reding <thierry.reding@gmail.com>
->>  Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
->>  Cc: Chanwoo Choi <cw00.choi@samsung.com>
->>  Cc: Linus Walleij <linus.walleij@linaro.org>
->>  Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
->>  Cc: Jonathan Cameron <jic23@kernel.org>
->>  Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
->>  Cc: Thomas Gleixner <tglx@linutronix.de>
->>  Cc: Marc Zyngier <maz@kernel.org>
->>  Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
->>  Cc: Chen-Yu Tsai <wens@csie.org>
->>  Cc: Ulf Hansson <ulf.hansson@linaro.org>
->>  Cc: "David S. Miller" <davem@davemloft.net>
->>  Cc: Jakub Kicinski <kuba@kernel.org>
->>  Cc: Sebastian Reichel <sre@kernel.org>
->>  Cc: Ohad Ben-Cohen <ohad@wizery.com>
->>  Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
->>  Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>  Signed-off-by: Rob Herring <robh@kernel.org>
->>  ---
->>  Cc: linux-arm-kernel@lists.infradead.org
->>  Cc: linux-ide@vger.kernel.org
->>  Cc: linux-clk@vger.kernel.org
->>  Cc: dri-devel@lists.freedesktop.org
->>  Cc: linux-gpio@vger.kernel.org
->>  Cc: linux-iio@vger.kernel.org
->>  Cc: linux-input@vger.kernel.org
->>  Cc: linux-media@vger.kernel.org
->>  Cc: linux-mmc@vger.kernel.org
->>  Cc: netdev@vger.kernel.org
->>  Cc: linux-pm@vger.kernel.org
->>  Cc: linux-remoteproc@vger.kernel.org
->>  Cc: linux-riscv@lists.infradead.org
->>  Cc: linux-serial@vger.kernel.org
->>  Cc: alsa-devel@alsa-project.org
->>  Cc: linux-spi@vger.kernel.org
->>  Cc: linux-usb@vger.kernel.org
-> 
->> 
->>  ---
->>   .../socionext,uniphier-system-cache.yaml      |  4 ++--
->>   .../bindings/ata/sata_highbank.yaml           |  1 +
->>   .../bindings/clock/canaan,k210-clk.yaml       |  1 +
->>   .../bindings/display/brcm,bcm2711-hdmi.yaml   |  1 +
->>   .../bindings/display/brcm,bcm2835-hdmi.yaml   |  1 +
->>   .../display/panel/jdi,lt070me05000.yaml       |  1 +
->>   .../display/panel/mantix,mlaf057we51-x.yaml   |  3 ++-
->>   .../display/panel/novatek,nt36672a.yaml       |  1 +
->>   .../devicetree/bindings/dsp/fsl,dsp.yaml      |  2 +-
->>   .../devicetree/bindings/eeprom/at25.yaml      |  3 +--
->>   .../bindings/extcon/extcon-ptn5150.yaml       |  2 ++
->>   .../bindings/gpio/gpio-pca95xx.yaml           |  1 +
->>   .../bindings/iio/adc/adi,ad7768-1.yaml        |  2 ++
->>   .../bindings/iio/adc/aspeed,ast2400-adc.yaml  |  1 +
->>   .../bindings/iio/adc/lltc,ltc2496.yaml        |  2 +-
->>   .../bindings/iio/adc/qcom,spmi-vadc.yaml      |  1 +
->>   .../bindings/iio/adc/st,stm32-adc.yaml        |  2 ++
->>   .../iio/magnetometer/asahi-kasei,ak8975.yaml  |  1 +
->>   .../iio/potentiometer/adi,ad5272.yaml         |  1 +
->>   .../input/touchscreen/elan,elants_i2c.yaml    |  1 +
->>   .../interrupt-controller/fsl,intmux.yaml      |  2 +-
->>   .../interrupt-controller/st,stm32-exti.yaml   |  2 ++
->>   .../allwinner,sun4i-a10-video-engine.yaml     |  1 +
->>   .../devicetree/bindings/media/i2c/imx219.yaml |  1 +
->>   .../memory-controllers/exynos-srom.yaml       |  2 ++
->>   .../bindings/misc/fsl,dpaa2-console.yaml      |  1 +
->>   .../bindings/mmc/mmc-controller.yaml          |  2 ++
->>   .../bindings/net/ti,k3-am654-cpsw-nuss.yaml   |  1 +
->>   .../bindings/net/ti,k3-am654-cpts.yaml        |  1 +
->>   .../phy/allwinner,sun4i-a10-usb-phy.yaml      |  2 ++
->>   .../phy/allwinner,sun50i-a64-usb-phy.yaml     |  2 ++
->>   .../phy/allwinner,sun50i-h6-usb-phy.yaml      |  2 ++
->>   .../phy/allwinner,sun5i-a13-usb-phy.yaml      |  2 ++
->>   .../phy/allwinner,sun6i-a31-usb-phy.yaml      |  2 ++
->>   .../phy/allwinner,sun8i-a23-usb-phy.yaml      |  2 ++
->>   .../phy/allwinner,sun8i-a83t-usb-phy.yaml     |  2 ++
->>   .../phy/allwinner,sun8i-h3-usb-phy.yaml       |  2 ++
->>   .../phy/allwinner,sun8i-r40-usb-phy.yaml      |  2 ++
->>   .../phy/allwinner,sun8i-v3s-usb-phy.yaml      |  2 ++
->>   .../phy/allwinner,sun9i-a80-usb-phy.yaml      | 19 
->> ++++++++-----------
->>   .../phy/socionext,uniphier-ahci-phy.yaml      |  2 +-
->>   .../phy/socionext,uniphier-pcie-phy.yaml      |  2 +-
->>   .../phy/socionext,uniphier-usb3hs-phy.yaml    |  2 +-
->>   .../phy/socionext,uniphier-usb3ss-phy.yaml    |  2 +-
->>   .../bindings/phy/ti,phy-gmii-sel.yaml         |  2 +-
->>   .../pinctrl/aspeed,ast2400-pinctrl.yaml       |  3 +--
->>   .../pinctrl/aspeed,ast2500-pinctrl.yaml       |  4 ++--
->>   .../bindings/power/supply/bq25980.yaml        |  1 +
->>   .../bindings/remoteproc/ingenic,vpu.yaml      |  2 +-
->>   .../remoteproc/ti,omap-remoteproc.yaml        |  3 +++
->>   .../bindings/riscv/sifive-l2-cache.yaml       |  1 +
->>   .../bindings/serial/renesas,hscif.yaml        |  2 ++
->>   .../bindings/serial/renesas,scif.yaml         |  2 ++
->>   .../bindings/serial/renesas,scifa.yaml        |  2 ++
->>   .../bindings/serial/renesas,scifb.yaml        |  2 ++
->>   .../sound/allwinner,sun4i-a10-codec.yaml      |  1 +
->>   .../bindings/sound/google,sc7180-trogdor.yaml |  1 +
->>   .../bindings/sound/samsung,aries-wm8994.yaml  |  3 +++
->>   .../bindings/sound/samsung,midas-audio.yaml   |  2 ++
->>   .../devicetree/bindings/sound/tas2562.yaml    |  2 ++
->>   .../devicetree/bindings/sound/tas2770.yaml    |  2 ++
->>   .../bindings/sound/tlv320adcx140.yaml         |  1 +
->>   .../devicetree/bindings/spi/renesas,rspi.yaml |  2 ++
->>   .../devicetree/bindings/sram/sram.yaml        |  2 ++
->>   .../timer/allwinner,sun4i-a10-timer.yaml      |  2 ++
->>   .../bindings/timer/intel,ixp4xx-timer.yaml    |  2 +-
->>   .../usb/allwinner,sun4i-a10-musb.yaml         |  2 +-
->>   .../bindings/usb/brcm,usb-pinmap.yaml         |  3 +++
->>   .../devicetree/bindings/usb/generic-ehci.yaml |  1 +
->>   .../devicetree/bindings/usb/generic-ohci.yaml |  1 +
->>   .../devicetree/bindings/usb/ingenic,musb.yaml |  2 +-
->>   .../bindings/usb/renesas,usbhs.yaml           |  1 +
->>   .../devicetree/bindings/usb/ti,j721e-usb.yaml |  3 ++-
->>   .../bindings/usb/ti,keystone-dwc3.yaml        |  2 ++
->>   74 files changed, 118 insertions(+), 33 deletions(-)
+Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
+Cc: Ajay Gupta <ajayg@nvidia.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/altmodes/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-For bindings/remoteproc/ingenic,vpu.yaml and 
-devicetree/bindings/usb/ingenic,musb.yaml:
-
-Acked-by: Paul Cercueil <paul@crapouillou.net>
-
-Cheers,
--Paul
-
+diff --git a/drivers/usb/typec/altmodes/Kconfig b/drivers/usb/typec/altmodes/Kconfig
+index 187690fd1a5b..60d375e9c3c7 100644
+--- a/drivers/usb/typec/altmodes/Kconfig
++++ b/drivers/usb/typec/altmodes/Kconfig
+@@ -20,6 +20,6 @@ config TYPEC_NVIDIA_ALTMODE
+ 	  to enable support for VirtualLink devices with NVIDIA GPUs.
+ 
+ 	  To compile this driver as a module, choose M here: the
+-	  module will be called typec_displayport.
++	  module will be called typec_nvidia.
+ 
+ endmenu
+-- 
+2.29.2
 
