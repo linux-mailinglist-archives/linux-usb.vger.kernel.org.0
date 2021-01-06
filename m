@@ -2,96 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B61EE2EBF1C
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Jan 2021 14:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8559D2EC042
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Jan 2021 16:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727556AbhAFNqB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Jan 2021 08:46:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
+        id S1726206AbhAFPSk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Jan 2021 10:18:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727270AbhAFNqA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jan 2021 08:46:00 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A57C06134C;
-        Wed,  6 Jan 2021 05:45:20 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id g20so5167292ejb.1;
-        Wed, 06 Jan 2021 05:45:20 -0800 (PST)
+        with ESMTP id S1726011AbhAFPSj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jan 2021 10:18:39 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398C8C06134D;
+        Wed,  6 Jan 2021 07:17:59 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id g24so4675539edw.9;
+        Wed, 06 Jan 2021 07:17:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FeJdQ/c5c3Yk5ETXkZRfgUT36HQYoNuNNY5hhZyt1Zw=;
-        b=hSC55QP6a+jYHRxCa+TgeWcHTDjcrHo0Y56fHl+KSs4kIqESl4MXCSckZ+YoDGe1N0
-         /ucn8xl1M5eSFXXgKAf04Kdczt/jlyFXX6QL+vDWgU0YMY88lU7ODUlncMy+A0k7Wb6V
-         gVY7Bc4nzPmw/XGlLPm0coTTox5ZeDmqtbdHN8b860ei4H2rqMTSuhrdd0rcInFouw/R
-         cyZPXO5ttKNNn14k60uqEsiwL/JKgt0wSxikJkAXAQY6yzhVxNF5Qz43HSCti7/04Ll0
-         m7cWPj+mnCMh+dijqzjx0K0KRLo/a9/g5MhNQaIIRCFDWqsLT1u/5cNwY0E+1g59Xx54
-         Nf5A==
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s7ucDQgsYb+XUALcOQxMNfW1nWITQF3JeTH0dCH4M34=;
+        b=f7DW9BojkCrHwq32HIzyeXm1FqfVamIKljSnelV+8uptq8fI9iDq+6/XTkMLW35BJ0
+         2E5bMKNYcwRMGPUbPHGDoeda49R9y1NbATAZPKxy3vWDWQCZtnhasMzOnh90borkVEp5
+         Pyq9eM1aF4QsGHymgblggrakODREFyQ3VTY7ljmpTWqT1bmrGBE1eFci1PpRUQaTMbHZ
+         o7RqyFZISQa8+zXkQoaBzOIG7wGs+dY8YGF+AV2P/BmFMOosL2poxE9GGWocmDMZ8NmP
+         Zj3y4SNWMkD+ALX8cyEGP8B1EGbULtPw21rD+252v4GAbzduGC+OXJCZY6mhEi1vYgXc
+         zeeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FeJdQ/c5c3Yk5ETXkZRfgUT36HQYoNuNNY5hhZyt1Zw=;
-        b=BnV2oVCrMlTC89OoErCOxl0yjy4UjswSXm285rp9ZZJp0tUu3RtSL/kX1xX3RYBj3O
-         fUeh/7i8zVNsRxc/6CwSGKxZvMUWmN3+hdxnmh80t7xXUtjwWb015TH+jgAtbDYUzN1h
-         4exVuYeOXbtc3YByCL9w3fVHNxyAqPeTllrOlR8DYymbyEEfsX2US+J6MIKAj95f9JRw
-         uaw/DJ5uy5nQf/ZZ9Hovy4LqPTapmPcP3mDCuoFiBHuNtvaOcwKC+2JaEjqGUE94Vw9A
-         dHXUv5DYjZwRKqXOMw6bOT8ATczRtVmldUu8JVqFdqxRnPWlEfWNMaVQGoKiBdvUWmJj
-         YUZg==
-X-Gm-Message-State: AOAM533YEtyqcBjYWWV7yemnnHvukJcw5NLRk2uw4W+68qivpOG2p7Vs
-        15tyVy1v5z5u/ezyV7FjqGQ=
-X-Google-Smtp-Source: ABdhPJy+1yovqw8J45ec7rwvhTOy5Zsk9UBBbrIpibmzvsCCOp1GbbwivAw4eZio5ckmV8dO4hgrRQ==
-X-Received: by 2002:a17:906:2984:: with SMTP id x4mr2962425eje.239.1609940718823;
-        Wed, 06 Jan 2021 05:45:18 -0800 (PST)
-Received: from skbuf (5-12-227-87.residential.rdsnet.ro. [5.12.227.87])
-        by smtp.gmail.com with ESMTPSA id z26sm1470222edl.71.2021.01.06.05.45.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jan 2021 05:45:18 -0800 (PST)
-Date:   Wed, 6 Jan 2021 15:45:16 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jiri Benc <jbenc@redhat.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Eric Dumazet <edumazet@google.com>,
-        George McCollister <george.mccollister@gmail.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Taehee Yoo <ap420073@gmail.com>,
-        Jiri Pirko <jiri@mellanox.com>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Florian Westphal <fw@strlen.de>, linux-s390@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-parisc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        dev@openvswitch.org
-Subject: Re: [RFC PATCH v2 net-next 00/12] Make .ndo_get_stats64 sleepable
-Message-ID: <20210106134516.jnh2b5p5oww4cghz@skbuf>
-References: <20210105185902.3922928-1-olteanv@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s7ucDQgsYb+XUALcOQxMNfW1nWITQF3JeTH0dCH4M34=;
+        b=fa9cQJ+HH/7/08s4l6cDYG0Zp0qWe1ZP00O7bnLlEZYXR3CXs7nH5AATf2urZkQsXC
+         +k7k+IUkeSrsnlSiH0UwSgYSI6xR8KIoXB0liduiDkeCvdKkkcW6S50qj+D5VVsr1pdK
+         MDaI1Oykbdcqze9HODNAf3Ht6UvuNiQ53BMgy/nCiYW0RwusTUzTVg+pbrcnGPk+UmEc
+         mDAJVE40A7/KFgaQmFF0QkStW7PE0c/9wRayu6vHrI6JQssEwzSIjMtPXD/gtDkhiG+Q
+         0kILbSxYVC+mukJE2oK7ox6wefzMAfWVT9L+l+soiLhgGXEAMbgF5bhU1ir/QwHBYFNp
+         LN/Q==
+X-Gm-Message-State: AOAM532zCuZPtQBdSFzGPPoywy1kmMWOAvz9lhnOCnp9ycesA9qMPxD+
+        f2YOo6sAUAwcfwaUiwj93S2g5VwnNOpCI46XjJRMsKh10KM=
+X-Google-Smtp-Source: ABdhPJwEoX+GE9TNyG6zQHdCSgd0e8rufnX3/nPdrrDVUu8sr3Jc5LcoctiwQrl2Yg7vztRVPUQWxIPjmljgCEJtWFE=
+X-Received: by 2002:a50:d80c:: with SMTP id o12mr4124786edj.338.1609946277927;
+ Wed, 06 Jan 2021 07:17:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210105185902.3922928-1-olteanv@gmail.com>
+References: <20201004162908.3216898-1-martin.blumenstingl@googlemail.com>
+ <20201004162908.3216898-4-martin.blumenstingl@googlemail.com>
+ <CACRpkdZo-U_cAhbKb4E+d+p+5FenXkGYW0RXxyk4M5uyEPCpzw@mail.gmail.com>
+ <CAFBinCCLubmDvxfabQHx2-ucgAsm1NArMUrtPx-UA2nX5xoFFA@mail.gmail.com>
+ <CAFBinCAZXJ2=fTQuAUyW1hNeJDHY3_pxo4UhxUaOZC=i1bpFxw@mail.gmail.com> <CACRpkdbKQaT61w6r9Hx40Qvy+7qyLNm-fx-BpL_wdGcB=tmcqQ@mail.gmail.com>
+In-Reply-To: <CACRpkdbKQaT61w6r9Hx40Qvy+7qyLNm-fx-BpL_wdGcB=tmcqQ@mail.gmail.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Wed, 6 Jan 2021 16:17:47 +0100
+Message-ID: <CAFBinCBCYZ3bzvvn==CFZyVh8E7TiGvW9PnqmK-Qd=y4X2HgNw@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/3] gpio: ej1x8: Add GPIO driver for Etron Tech Inc. EJ168/EJ188/EJ198
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 05, 2021 at 08:58:50PM +0200, Vladimir Oltean wrote:
-> This is marked as Request For Comments for a reason.
+Hi Linus,
 
-If nobody has any objections, I will remove the memory leaks I
-introduced to check if anybody is paying attention, and I will resubmit
-this as a non-RFC series.
+On Tue, Jan 5, 2021 at 11:23 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Mon, Dec 21, 2020 at 4:28 PM Martin Blumenstingl
+> <martin.blumenstingl@googlemail.com> wrote:
+> > On Wed, Oct 7, 2020 at 9:44 PM Martin Blumenstingl
+> > <martin.blumenstingl@googlemail.com> wrote:
+> > [...]
+> > > > As noted on the earlier patches I think this should be folded into the
+> > > > existing XHCI USB driver in drivers/usb/host/xhci-pci.c or, if that
+> > > > gets messy, as a separate bolt-on, something like
+> > > > xhci-pci-gpio.[c|h] in the drivers/usb/host/* directory.
+> > > > You can use a Kconfig symbol for the GPIO portions or not.
+> > > OK, I will do that if there are no objections from other developers
+> > > I am intending to place the relevant code in xhci-pci-etron.c, similar
+> > > to what we already have with xhci-pci-renesas.c
+> >
+> > I tried this and unfortunately there's a catch.
+> > the nice thing about having a separate GPIO driver means that the
+> > xhci-pci driver doesn't need to know about it.
+>
+> Since PCI devices have device-wide power management and things
+> like that I think that is a really dangerous idea.
+>
+> What if the GPIO driver starts poking around in this PCI device
+> when the main driver is also probed and has put the device
+> into sleep state?
+that is asking for trouble, indeed.
+
+[...]
+> > I implemented xhci-pci-etron.c and gave it a Kconfig option.
+> > xhci-pci is then calling into xhci-pci-etron (through some
+> > etron_xhci_pci_probe function).
+>
+> This sounds about right.
+>
+> > unfortunately this means that xhci-pci now depends on xhci-pci-etron.
+> > for xhci-pci-renesas this is fine (I think) because that part of the
+> > code is needed to get the xHCI controller going
+> > but for xhci-pci-etron this is a different story: the GPIO controller
+> > is entirely optional and only used on few devices
+>
+> I might be naive but should it not be the other way around?
+> That xhci-pci-etron is dependent on xhci-pci? I imagine
+> it would be an optional add-on.
+the only way to achieve this that I can think of is to basically have
+xhci-pci-etron implement it's own pci_driver and then call
+xhci_pci_probe, xhci_pci_remove, etc.
+but then it depends on the driver load order if the GPIO controller is exposed
+
+what structure did you have in mind to achieve this?
+
+> > my goal is (at some point in the future) to have the GPIO driver in OpenWrt.
+> > I am not sure if they would accept a patch where xhci-pci would then
+> > pull in the dependencies for that Etron controller, even though most
+> > boards don't need it.
+>
+> Make sure the etron part is an additional module that can be
+> loaded after xhci-pci.
+my approach from above unfortunately would not achieve this
+so if you have an idea how to achieve this (or have any other driver
+in mind that I can use as reference, even if not related to
+GPIO/USB/PCI then please let me know)
+
+> OpenWrt support optional modules to be compiled per-system.
+that I already found out. That's why I think that I need to get the
+driver part "right" and then get the OpenWrt part done in just a few
+lines of their build-system
+
+
+Best regards,
+Martin
