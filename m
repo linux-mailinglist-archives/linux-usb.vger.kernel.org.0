@@ -2,113 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9667F2EC386
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Jan 2021 19:53:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD22F2EC3EF
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Jan 2021 20:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726407AbhAFSxT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Jan 2021 13:53:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726370AbhAFSxS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jan 2021 13:53:18 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEA4C06134D
-        for <linux-usb@vger.kernel.org>; Wed,  6 Jan 2021 10:52:38 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id n4so3661484iow.12
-        for <linux-usb@vger.kernel.org>; Wed, 06 Jan 2021 10:52:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ilweRid2PTP5O1MtxMZGJxR32MfRd37WEMH4upbJL8Q=;
-        b=QDPvLwq9ONOMa8nzneyNS6/i8/lGKi3cYPZgjszX8j0xufcBLPdLIExrL1eadrmnBH
-         rmd6rwg9oIwF0h5L1PGyHHEvipSPep1BsQQ8svvJSbr9RkpZjX9IeVAvVCyqnciWN/5U
-         rTUs6nkimkJY16xvLSJ5eXdzqx0PA/Zu5h3TOmDtxXQfaxzKHrmGUHRs+t7CBA9y2jsA
-         uqw1qohxwUYuogPqutB5DnlWBMZ6vLobVB1DL42m2xWyKKjWzLA30FmDSONpGWvwB+VV
-         E4TPx2xNra3u30b8AY3g1Jw8T28wJnvrTKHuEr2Id5Cj1LKDetJxdsm6WXwGFSK3AhBb
-         EC7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ilweRid2PTP5O1MtxMZGJxR32MfRd37WEMH4upbJL8Q=;
-        b=JQw81/wZDoyy65OzzlfDJ0YZk9TxcfbqbKLjddeP7g4jpMAf6T2yXaW83/O6fr3LUr
-         SWThw38INb9GXpcLEF07su+B6qdu9jLaF4Nvrg1d6+DgwLPa1AHRSuk4+RIA/gGY0sao
-         ZoOeuT+f5G2CKrG/jnoJTdgsLxK6DH4hMbp6qdAR8OZhi+MDg+dwPoctsn2JUwNdbwqn
-         PWH89Atr24UO4GdTeL08qtDoAwqGB+IG1eh/TXlfBr1Js3PrzeL4SqvYHI5SVcdJP1on
-         kfqIY4VfQ2eQpX8K0T0CYRnNEPwTtrGcKoIg9qAfGKk3gH7hXztG+gwWDOtZTbzRCaef
-         4iXA==
-X-Gm-Message-State: AOAM530WMTE8lasoFtm+46bnbWYkiCxalZXUh145JJAMSEW7lLL8MTPI
-        2Cr9DziGr1iOxt0+xPcw28gIgA==
-X-Google-Smtp-Source: ABdhPJzGpCtnVRudeyOGeZ7o9sUrVU3bhvY23g1gCKBPnoUVGxklFUPLOdK8p/wzj/uHmKy4lHfvfQ==
-X-Received: by 2002:a05:6638:bc1:: with SMTP id g1mr4836935jad.27.1609959157557;
-        Wed, 06 Jan 2021 10:52:37 -0800 (PST)
-Received: from google.com ([2601:285:8380:9270::28bc])
-        by smtp.gmail.com with ESMTPSA id d5sm2545273ilf.33.2021.01.06.10.52.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jan 2021 10:52:36 -0800 (PST)
-Date:   Wed, 6 Jan 2021 11:52:34 -0700
-From:   Ross Zwisler <zwisler@google.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "kernel@collabora.com" <kernel@collabora.com>
-Subject: Re: xhci problem -> general protection fault
-Message-ID: <CAGRrVHyJcMCAEHMzRFbaD7ibZZd1oDbYWzmz-j+=1U5esR8gOw@mail.gmail.com>
-References: <20201012215348.GA3324220@google.com>
- <ad976018-31ec-3b1e-464c-363a08538ef5@linux.intel.com>
- <CAGRrVHwC=3qs00CTzPkrVPzXBnpcxfjRCKjgaYK9Hjt0GRfObg@mail.gmail.com>
- <ee24e656-f898-6b0b-ea91-9875390abb72@linux.intel.com>
- <CAGRrVHwgxtPF89niHV3N58SaDb7q5jWde_g7-yVxGPcKhemsaw@mail.gmail.com>
- <b6eba37b-c78b-fc99-5aca-f9e5856e80ac@linux.intel.com>
- <X8+22DeNDn1A7X+N@google.com>
- <068b49cd-4afa-7adb-572b-634b1728744d@linux.intel.com>
- <X9EdVbO08Y8Ohih5@google.com>
- <f75d6e13-d1f7-0282-f93d-be4693e82e29@linux.intel.com>
+        id S1727118AbhAFTcZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Jan 2021 14:32:25 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:50926 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725822AbhAFTcY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jan 2021 14:32:24 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 106JSv4x096316;
+        Wed, 6 Jan 2021 19:31:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=LKX+v411qJTSzQmb+cGxJEJkOBIOhcRhlSFMC+/Hg1k=;
+ b=jqjUbeXc/xNjQSXYN3ogeUGIbB7rFX1hPcU2tEsbE49Cg6NdNxP6ALf1V+PKDwneEemk
+ FdwOcfUmT1DBXWfn1vQ06W/DoKADh8Zm+ebH4P7mpHueLXkgwk4eAwMc0MrLNvTDL5zY
+ cXcTRLlB1pwNrtk5VX9wPsKe7s9erfIa2LoQegRtuj9F25lU8U3LWizXdakIHmgM/kvm
+ C0TDmZbCKMg018oUC08XjOoFtACknDu6BFSz8XlUxV2NAQ7Z8/3rFXE8YVLSJ0ufe9c8
+ HN3tC/VVhYbH77LIsadSCJ7O+cEtRgxG2YMDK08i8dY67Dba1gO57/fQtekkmqjLABzb tg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 35wepm9h4p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 06 Jan 2021 19:31:30 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 106JUchj071415;
+        Wed, 6 Jan 2021 19:31:29 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 35w3qsed49-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 06 Jan 2021 19:31:29 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 106JVQCp018580;
+        Wed, 6 Jan 2021 19:31:26 GMT
+Received: from kadam (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 06 Jan 2021 11:31:25 -0800
+Date:   Wed, 6 Jan 2021 22:31:16 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Hans Verkuil <hans.verkuil@cisco.com>
+Cc:     Antoine Jacquet <royale@zerezo.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: zr364xx: fix memory leaks in probe()
+Message-ID: <20210106193116.GE2831@kadam>
+References: <X/WMfVDCsxRghKHH@mwanda>
+ <20210106164550.GB1012582@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f75d6e13-d1f7-0282-f93d-be4693e82e29@linux.intel.com>
+In-Reply-To: <20210106164550.GB1012582@rowland.harvard.edu>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9856 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 mlxscore=0
+ spamscore=0 mlxlogscore=999 phishscore=0 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101060109
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9856 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 spamscore=0
+ impostorscore=0 phishscore=0 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 mlxscore=0 malwarescore=0 clxscore=1011 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101060109
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 30, 2020 at 5:31 AM Mathias Nyman <mathias.nyman@linux.intel.com> wrote:
-<>
-> I was able to reproduce the issue with two USB devices on a different system.
->
-> I saw that the new incorrect dequeue pointer sometimes had the higher 32 bits
-> incorrect while the lower bits were correct.
-> So this looks like a memory access order issue.
->
-> The command TRB is 16 bytes. The xhci driver writes it in four 4 byte chunks.
-> Even if the driver writes the chunk that sets the cycle bit last, handing the TRB
-> over to the controller, it appears that the actual write order can be different.
-> The controller ends up reading a command TRB with updated cycle bit but old bogus
-> values in the "new dequeue pointer" field.
->
-> Adding a write memory barrier before writing the cycle bit solved the issue in my case.
->
-> Whole patch series is updated, added write memory barrier, and rebased on 5.10.
-> It can be found force-updated in the same rewrite_halt_stop_handling branch:
->
-> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git rewrite_halt_stop_handling
-> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=rewrite_halt_stop_handling
->
-> Does this work for you?
+On Wed, Jan 06, 2021 at 11:45:50AM -0500, Alan Stern wrote:
+> On Wed, Jan 06, 2021 at 01:10:05PM +0300, Dan Carpenter wrote:
+> > Syzbot discovered that the probe error handling doesn't clean up the
+> > resources allocated in zr364xx_board_init().  There are several
+> > related bugs in this code so I have re-written the error handling.
+> 
+> Dan:
+> 
+> I recently sent in a patch for a similar problem in the gspca driver
+> (commit e469d0b09a19 "media: gspca: Fix memory leak in probe").  It
+> seems there may be similar issues in that driver: one single function
+> call tries to undo an indeterminate number of initializations.
+> 
+> I don't know enough about these subsystems to evaluate this.  Can you
+> take a look at it?
+> 
 
-Yes, it does!!  I verified that I'm able to reproduce the issue in less than
-10 seconds with this commit which is the HEAD~1 of your series:
+The probe error handling in gspca_dev_probe2() is fine now.  All those
+functions are no-ops when they haven't been allocated/registered.
 
-a7d053d207121 xhci: handle halting transfer event properly after endpoint stop and halt raced.
+regards,
+dan carpenter
 
-With this commit (the final commit in your series, adding a single patch): 
-
-96887d191a88c xhci: make sure TRB is fully written before giving it to the controller
-
-I ran cleanly for over 20 minutes and haven't been able to reproduce the
-issue.  It looks like the wmb() added in that patch makes all the difference!
-
-Thank you for the fix, and you can add this tag to the series:
-
-Tested-by: Ross Zwisler <zwisler@google.com>
