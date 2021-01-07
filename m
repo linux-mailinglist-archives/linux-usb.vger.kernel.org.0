@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6FCA2ECCAD
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Jan 2021 10:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E552ECCB6
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Jan 2021 10:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727254AbhAGJ0R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jan 2021 04:26:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45622 "EHLO mail.kernel.org"
+        id S1727016AbhAGJ2P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jan 2021 04:28:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45866 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725900AbhAGJ0Q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 Jan 2021 04:26:16 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C032E2312E;
-        Thu,  7 Jan 2021 09:25:33 +0000 (UTC)
+        id S1726110AbhAGJ2O (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 7 Jan 2021 04:28:14 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5898623333;
+        Thu,  7 Jan 2021 09:27:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610011535;
-        bh=1aJhxIDD2Vnut5LarTGoKaEJliwkbJvwXYSuBMBrGZs=;
+        s=k20201202; t=1610011654;
+        bh=v6tvU4u75O87XGVKqhuOgv2RQDTCtSf4BgDyD57m030=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=JQRxFcEIL48LnXgW+dc8pOdNhle3qErICG8D7mONmBbWkkrH4bZAaMDeFf/nQUx9Z
-         Mt1VKi4NGttt6aFTbL9WTX/4eJzHOcCITcG7Zjr2qywDAp2x03/2hIWg13g+BbicSN
-         X43UKTnt0818Kf9QXw5qkl59/kQtgzUw5eAkicw1vok/Q4lGUHVmCy9rJIonNjxwi8
-         meZF2ApzWiMRSGj6qHXid1VZems+zzWoLvzVj6xrLmZ0g9TPTxFfmjc1Z7e/XhLM8h
-         Ht9QvZONdvK+e+TMf8RxQEVVXt9FmaR5HAbW0yEmmlkzE+BKAvKHGdj+ce8Yp0qhqH
-         V6J6K3heNbbuA==
+        b=Y8jTbsUXH5iyZAabxfYOFhllsKQo77IH4SzINhJ/wQrMUJA/sDLCg9EpoLvKvAMSn
+         MPEWbzMZJpiDububonhNxNxzZHUhUsF8EbBYUIdSo/EDDFdFKsri2TWBG7DndgCfda
+         Mu48kd6UacKCzEXUZ4warblVeMRUtSUrvgWkwvb2NUl3gcWUmIFIg+vIDxaBzptVyR
+         fjIwowTk+gYlauQ76i3r5+R/qHKLOlvMii4b9j4EGq3fJMHYT5k2nTzSKOIClqmox2
+         DM2pOsI5BMJUuU+r0gx4KAkauYW24OpYIwhl1IxJJJPPDo03xq1TesOPCSK7Yx6Qgb
+         6QGv2Fd2C/+bQ==
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Jerome Brunet <jbrunet@baylibre.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -30,13 +30,12 @@ Cc:     Jerome Brunet <jbrunet@baylibre.com>,
         Ruslan Bilovol <ruslan.bilovol@gmail.com>,
         Jack Pham <jackp@codeaurora.org>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] usb: gadget: u_audio: factorize ssize to alsa
- fmt conversion
-In-Reply-To: <20210106133652.512178-4-jbrunet@baylibre.com>
+Subject: Re: [PATCH v2 4/5] usb: gadget: u_audio: remove struct uac_req
+In-Reply-To: <20210106133652.512178-5-jbrunet@baylibre.com>
 References: <20210106133652.512178-1-jbrunet@baylibre.com>
- <20210106133652.512178-4-jbrunet@baylibre.com>
-Date:   Thu, 07 Jan 2021 11:25:28 +0200
-Message-ID: <87sg7dayk7.fsf@kernel.org>
+ <20210106133652.512178-5-jbrunet@baylibre.com>
+Date:   Thu, 07 Jan 2021 11:27:26 +0200
+Message-ID: <87pn2haygx.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -50,14 +49,13 @@ Content-Transfer-Encoding: quoted-printable
 
 Jerome Brunet <jbrunet@baylibre.com> writes:
 
-> Factorize format related code common to the capture and playback path.
+> 'struct uac_req' purpose is to link 'struct usb_request' to the
+> corresponding 'struct uac_rtd_params'. However member req is never
+> used. Using the context of the usb request, we can keep track of the
+> corresponding 'struct uac_rtd_params' just as well, without allocating
+> extra memory.
 >
 > Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
-
-It's never a good idea to send fixes and cleanups/refactors in the same
-series as that can confuse the person applying your changes.
-
-In any case:
 
 Acked-by: Felipe Balbi <balbi@kernel.org>
 
@@ -69,19 +67,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl/204gRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQYfmQ//T8FZigoooZYq/9Mjn79TiP+AZEY1Rfth
-JVyyKtPVtwYDY8zDfEgQGqu3IIG0oOiuhVBegSCnIsg4UxqNFAqFQS7N0SUdlEmU
-CROwa7p9hBJkGIHI49zs7R9gvaT19ngnM20pPDBa1o7xVMIOPb3bqmFMfxChSq/S
-LrFbqQThhvx+635ndaN+6suMZOGzYQ5PR383i++u1cWvouuASt329BwZlh2S3MjA
-hDFpkKNyFdnwRRS+Ndyi9G2NF59NRcSpTA8tMyiTksjweKdT75eZSCJmMlBTMof5
-3nzRe6zrTCtjld80/GTrcLAQjTu/hFRXt2wwHs9TMZrc0H28+MU1SvxYaqvjWcbk
-Hi2OmTcVqi75rnIgVE+OWeCgBeI3SmUoxRpDK1CUxKuMq70wRt1l2KqU93PIBakE
-W3T6+f0z+8PB8il1KTVHT5WCa5sa4bWV/D0vrUWOhujxuXtppbduHi6hz9sA2s/o
-23xhD9LLu1lABjOZ1RCYf2AL3379EsvogOXj/NqKXRAuFXGPONJlwFmP1bxZ+jwj
-nTsJwcivE6eQMu3U4ycx4Y51qBqnhMyHr/RJUBcm/4hXc6O+bMLggSvMM+fSDsGK
-c0ppj716R6ZRPBr13diQFZejum441ZXO2ftn7cptDGwtI+/iNYdOlAQecLyTVsj9
-Uxwu8VTtMOc=
-=e1QP
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl/20/8RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQazkQ/9FhF2BPE1CNXYaihR2W9A8AQb1CalTw3y
+El25MMwd6mbleUenrL6MKOnZln+ObUHfj7f6bYnEX+7w4MGBdYtXIgPV7HMoaSMF
+Z+vL+uoQMwHmHksLgmJzs1X2QSV4ZRYEqA9dlhxY7tipzAhI+aDudIrtiiH0c7Km
+5wspdF1tk7SapK3d0wdwBEQI1o8D58Uer0ULp8p6ODYhEhennIN+wfLm2J5sEkZp
+pgtETuzFxe04kz14vtkD3flhHsqDGl8M640s56sqR12nXU9Gqk7zI2qPjC7WW0Kr
+FTXyod8BStK/nBZOHfWiXDFYinrVNeIMTfuwhUX7vTGzcabE6d8ySIzP46BgKBWO
+Fc9NnBKFypNDZ0zlTBI1SjVlo+61QvBk2Z3mj9DOoD0l5zLHgKlrotUJcn0Mefpw
+h+z/l3cqp2HOZa1/sQ/s/2cBxhbx7Sm9kx/FbKsMvR7+J+3EuKHGktbonBCjNku8
+mZzGIcsbRBsnADTdLUR4WFL5TPsyNv0wSEr4WCYUV1sSC5+ZLgFYryGx16EePtmo
+CAxzDCV6/qges6cTph4ujw3EvOzeN0Eq6DbdyoXPWszgp1UXjBEtj7JXhns0akBc
+Ezn0rZl81/PeTI9D/0Ut2MieNKNffjRQU7fAxMr7IM2ENFA7p8mXRgAAcdj2zUrt
+jsode1yCWVQ=
+=Ylh8
 -----END PGP SIGNATURE-----
 --=-=-=--
