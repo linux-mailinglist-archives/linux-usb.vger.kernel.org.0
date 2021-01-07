@@ -2,136 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8ED2ECD5B
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Jan 2021 10:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2661D2ECE04
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Jan 2021 11:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727260AbhAGJxV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jan 2021 04:53:21 -0500
-Received: from mga09.intel.com ([134.134.136.24]:47845 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727137AbhAGJxV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 Jan 2021 04:53:21 -0500
-IronPort-SDR: QyFwKKnWZlSjLNZ6OK0V4I2BGiiagZQqhR2dp0L/Spk7fJUx1JhKYIrAdOl0HjCkRPgHRYSfs2
- GFgbfVRhYAzg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9856"; a="177554814"
-X-IronPort-AV: E=Sophos;i="5.79,329,1602572400"; 
-   d="scan'208";a="177554814"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2021 01:51:26 -0800
-IronPort-SDR: 6h3NZBaV5ofb/YMPh9Zl9+usdoMQSVv5IFbnGIJLs5PPCRemLpoZ+CEAdjcd2WWtOVk5GYHda9
- tDOuB1AKyjWA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,329,1602572400"; 
-   d="scan'208";a="343844806"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga007.fm.intel.com with ESMTP; 07 Jan 2021 01:51:24 -0800
-Subject: Re: [PATCH] xhci: tegra: Delay for disabling LFPS detector
-To:     JC Kuo <jckuo@nvidia.com>, Greg KH <gregkh@linuxfoundation.org>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com, robh@kernel.org,
-        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-        nkristam@nvidia.com
-References: <20201218164234.128762-1-jckuo@nvidia.com>
- <X9zelLu26bcQd7bs@kroah.com>
- <d508a7f9-da00-99a3-cf87-d1234efb10c9@nvidia.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <5e1d3cfb-790e-0c26-1300-98f64377f4ad@linux.intel.com>
-Date:   Thu, 7 Jan 2021 11:53:18 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1727805AbhAGKhx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jan 2021 05:37:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727429AbhAGKhx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jan 2021 05:37:53 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A8EC0612FA
+        for <linux-usb@vger.kernel.org>; Thu,  7 Jan 2021 02:36:53 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id a12so13466342lfl.6
+        for <linux-usb@vger.kernel.org>; Thu, 07 Jan 2021 02:36:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nFfGlH5hXwbuaYUBsZBOfb6uPO2NVxjByxMtfTjhGZ4=;
+        b=OvqgYG5GfLnUWMDVt7fwGeXDObUORXSH+iOnzildwroxSkzsO/YzNGjGRmbA7SYLPV
+         x8nxD4BNfcPV6O2VQ+H2sXHcBagqd3oT5/cSajzlk/tGpxe5DIt7+J21on5fSDkjwPBE
+         je997Wma6HpOQpxEn74aFuJskTFroRdqupPPP1RoadoStwgVfKrRXLnEMJg0nXKpjFb+
+         thRNzVOAUQJk/fJDOvb08chmTAZOJx1FawgClXTTJ56ubJsL96r4ruCXLe076I2FlDey
+         l3Uyye8Vb8lv6IQvas953SreICCTijWTJEp7H8IMUn+A6U4qpQbflPXJ5xuWSeugoT+N
+         nk3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nFfGlH5hXwbuaYUBsZBOfb6uPO2NVxjByxMtfTjhGZ4=;
+        b=RohRuSMwV5ILhFviqT0LbSmu9VsW9mnUjEbuveqDSGG+9fskB+oikWq+ge/fKQRbsm
+         3Ltj17SPzGQgVd4x6JDeLq8LI0h7acWhxlVTlztbAA1z/XxSvQzUynfqxUGcUfAN5ECg
+         Zu3R1MDkOcenvmbARILnF3QaEtEU4YGQ066Mu8kSmz0E6SHCk45snlO+jJGOhLAciGy4
+         3WT780UQVgJRzeZCOTttGcaZRM+KVkvh6j9T7tvYuS4Q8tRythNRmQnyBnMrkOcvsLQh
+         ps3ZyfqvqIY4r4Tx04X0BmiN+qOWMYYvg2Ay4KYeZbClLDMPbbDEnTmu0UGs49M/K0Ft
+         2yUg==
+X-Gm-Message-State: AOAM533V7L3ZIqGCSQAmYirla4S8+Z65D6JZ39fDG2Qh5C0Ojc5/hLPl
+        dQBC552MRwlZigcGkeKjZM7IvwM47kEC7pLT/krNGA==
+X-Google-Smtp-Source: ABdhPJyfAnEcXOXLY4xTmk1dpmDhjGS0UtzXooi8t4a+PiMBAIP9rKiFMYgT/OAB+huqAHSbFRl1FEjWiqnjm8x/c0g=
+X-Received: by 2002:a05:6512:74e:: with SMTP id c14mr4116363lfs.529.1610015811936;
+ Thu, 07 Jan 2021 02:36:51 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <d508a7f9-da00-99a3-cf87-d1234efb10c9@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20201004162908.3216898-1-martin.blumenstingl@googlemail.com>
+ <20201004162908.3216898-4-martin.blumenstingl@googlemail.com>
+ <CACRpkdZo-U_cAhbKb4E+d+p+5FenXkGYW0RXxyk4M5uyEPCpzw@mail.gmail.com>
+ <CAFBinCCLubmDvxfabQHx2-ucgAsm1NArMUrtPx-UA2nX5xoFFA@mail.gmail.com>
+ <CAFBinCAZXJ2=fTQuAUyW1hNeJDHY3_pxo4UhxUaOZC=i1bpFxw@mail.gmail.com>
+ <CACRpkdbKQaT61w6r9Hx40Qvy+7qyLNm-fx-BpL_wdGcB=tmcqQ@mail.gmail.com> <CAFBinCBCYZ3bzvvn==CFZyVh8E7TiGvW9PnqmK-Qd=y4X2HgNw@mail.gmail.com>
+In-Reply-To: <CAFBinCBCYZ3bzvvn==CFZyVh8E7TiGvW9PnqmK-Qd=y4X2HgNw@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 7 Jan 2021 11:36:40 +0100
+Message-ID: <CACRpkdbs_ddxrGWeDrj9MOZXuuTT-DPYibaiTcCKjfFyL9tDww@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/3] gpio: ej1x8: Add GPIO driver for Etron Tech Inc. EJ168/EJ188/EJ198
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6.1.2021 8.05, JC Kuo wrote:
-> On 12/19/20 12:53 AM, Greg KH wrote:
->> On Sat, Dec 19, 2020 at 12:42:34AM +0800, JC Kuo wrote:
->>> Occasionally, we are seeing some SuperSpeed devices resumes right after
->>> being directed to U3. This commits add 500us delay to ensure LFPS
->>> detector is disabled before sending ACK to firmware.
->>>
->>> [   16.099363] tegra-xusb 70090000.usb: entering ELPG
->>> [   16.104343] tegra-xusb 70090000.usb: 2-1 isn't suspended: 0x0c001203
->>> [   16.114576] tegra-xusb 70090000.usb: not all ports suspended: -16
->>> [   16.120789] tegra-xusb 70090000.usb: entering ELPG failed
->>>
->>> Signed-off-by: JC Kuo <jckuo@nvidia.com>
->>> ---
->>>  drivers/usb/host/xhci-tegra.c | 6 ++++++
->>>  1 file changed, 6 insertions(+)
->>>
->>> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
->>> index 934be1686352..20cdc11f7dc6 100644
->>> --- a/drivers/usb/host/xhci-tegra.c
->>> +++ b/drivers/usb/host/xhci-tegra.c
->>> @@ -623,6 +623,12 @@ static void tegra_xusb_mbox_handle(struct tegra_xusb *tegra,
->>>  								     enable);
->>>  			if (err < 0)
->>>  				break;
->>> +
->>> +			/*
->>> +			 * wait 500us for LFPS detector to be disabled before sending ACK
->>> +			 */
->>> +			if (!enable)
->>> +				usleep_range(500, 1000);
->>
->> Where does the magic 500us come from?  How can we "know" this is long
->> enough?
-> 
-> Hi Greg,
-> The register write passes through a few flop stages of 32KHz clock domain. Our
-> ASIC designer reviewed RTL and suggests 500us delay. It has also been verified
-> thoroughly.
-> 
+On Wed, Jan 6, 2021 at 4:17 PM Martin Blumenstingl
+<martin.blumenstingl@googlemail.com> wrote:
 
-Could you add that comment to the commit message? I can pick it up then.
-Should this go to stable as well?
+> > > unfortunately this means that xhci-pci now depends on xhci-pci-etron.
+> > > for xhci-pci-renesas this is fine (I think) because that part of the
+> > > code is needed to get the xHCI controller going
+> > > but for xhci-pci-etron this is a different story: the GPIO controller
+> > > is entirely optional and only used on few devices
+> >
+> > I might be naive but should it not be the other way around?
+> > That xhci-pci-etron is dependent on xhci-pci? I imagine
+> > it would be an optional add-on.
+>
+> the only way to achieve this that I can think of is to basically have
+> xhci-pci-etron implement it's own pci_driver and then call
+> xhci_pci_probe, xhci_pci_remove, etc.
+> but then it depends on the driver load order if the GPIO controller is exposed
+>
+> what structure did you have in mind to achieve this?
 
-Thanks
--Mathias
+Something that is compiled and called conditionally with
+stubs in the local .h file.
+
+
+Kconfig:
+
+config FOO
+   tristate "Main matter"
+
+config FOO_ADD_ON
+    tristate "Optional on"
+    depends on FOO
+
+
+Makefile:
+
+obj-$(CONFIG_FOO) += foo.o
+obj-$(CONFIG_FOO_ADD_ON) += foo-add-on.o
+
+
+foo.h:
+
+struct foo {
+...
+};
+
+#if IS_ENABLED(CONFIG_FOO_ADD_ON)
+int foo_add_on_init(struct foo *);
+#else /* No CONFIG_FOO_ADD_ON */
+static int foo_add_on_init(struct foo *)
+{
+    return 0;
+}
+#endif
+
+
+foo.c:
+
+#include "foo.h"
+
+ret = foo_add_on_init(foo);
+(...)
+
+
+foo-add-on.c:
+
+int foo_add_on_init(struct foo *)
+{
+(...)
+}
+EXPORT_SYMBOL_GPL(foo_add_on_init);
+
+> > Make sure the etron part is an additional module that can be
+> > loaded after xhci-pci.
+>
+> my approach from above unfortunately would not achieve this
+> so if you have an idea how to achieve this (or have any other driver
+> in mind that I can use as reference, even if not related to
+> GPIO/USB/PCI then please let me know)
+
+See per above. I don't see any problem with this, it will be an additional
+module that does not feature a probe() call and device driver bind.
+
+I think it is also possible to link both files into the same object if
+the optional add on is enabled, so it is part of the main module
+when modprobing. The foo.h stubs are still needed, then the
+binary will just be smaller if the add-on is not enabled. There are
+solutions like this in the kernel, I just don't remember one right
+now so grep around.
+
+Yours,
+Linus Walleij
