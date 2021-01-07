@@ -2,227 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC682ED10C
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Jan 2021 14:43:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 680682ED14F
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Jan 2021 15:03:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728731AbhAGNm2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jan 2021 08:42:28 -0500
-Received: from mga03.intel.com ([134.134.136.65]:46501 "EHLO mga03.intel.com"
+        id S1728565AbhAGODN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 7 Jan 2021 09:03:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36736 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726854AbhAGNl5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 Jan 2021 08:41:57 -0500
-IronPort-SDR: OS0YQFG5p5PiTgZq3XmylXi6pPeOs1Sk1Dr2ir+6m5aRc1HkXl9tzcxM5MykumoN7DHhjNFiCl
- L1DK/ouFaglQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9856"; a="177522877"
-X-IronPort-AV: E=Sophos;i="5.79,329,1602572400"; 
-   d="scan'208";a="177522877"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2021 05:40:11 -0800
-IronPort-SDR: 6HRgmbEUNhqQNWbk9xJ3cLtw9ba9T0jNKj/hPvMy0f8lLW+9mN2K6gG0M1QAi3G3t5nJ1IHgPw
- wLINuh40YCSQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,329,1602572400"; 
-   d="scan'208";a="463040037"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 07 Jan 2021 05:40:09 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 07 Jan 2021 15:40:08 +0200
-Date:   Thu, 7 Jan 2021 15:40:08 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Mayank Rana <mrana@codeaurora.org>
-Subject: Re: [PATCH] usb: typec: ucsi: Add support for USB role switch
-Message-ID: <20210107134008.GB940479@kuha.fi.intel.com>
-References: <20201217062047.13126-1-jackp@codeaurora.org>
+        id S1728517AbhAGODN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 7 Jan 2021 09:03:13 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 8B02C23142
+        for <linux-usb@vger.kernel.org>; Thu,  7 Jan 2021 14:02:32 +0000 (UTC)
+Received: by pdx-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 7AAB781F02; Thu,  7 Jan 2021 14:02:32 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 210801] TopSeed Technology Corp. eHome Infrared Transceiver
+ spams log with Error: urb status = -71
+Date:   Thu, 07 Jan 2021 14:02:32 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: hpj@urpla.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-210801-208809-jFiHs4J6vZ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-210801-208809@https.bugzilla.kernel.org/>
+References: <bug-210801-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201217062047.13126-1-jackp@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 16, 2020 at 10:20:47PM -0800, Jack Pham wrote:
-> From: Mayank Rana <mrana@codeaurora.org>
-> 
-> UCSI already conveys the information about a port's connection
-> status, whether it is operating in UFP or DFP mode, and whether the
-> partner supports USB data or not. This information can be used to
-> notify a dual-role controller to start up its host or peripheral
-> mode accordingly. Add optional support for this by querying each
-> port's fwnode to look for an associated USB role switch device.
-> If present, call usb_role_switch_set() with the determined data
-> role upon Connect Change or Connector Partner Change updates.
-> 
-> Signed-off-by: Mayank Rana <mrana@codeaurora.org>
-> Signed-off-by: Jack Pham <jackp@codeaurora.org>
+https://bugzilla.kernel.org/show_bug.cgi?id=210801
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+--- Comment #5 from Hans-Peter Jansen (hpj@urpla.net) ---
+Okay, reverting 528222d853f92 does the trick. 
 
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 55 +++++++++++++++++++++++++++++++++--
->  drivers/usb/typec/ucsi/ucsi.h |  3 ++
->  2 files changed, 55 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 51a570d40a42..8d3e3518a506 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -588,6 +588,7 @@ static void ucsi_unregister_partner(struct ucsi_connector *con)
->  
->  static void ucsi_partner_change(struct ucsi_connector *con)
->  {
-> +	enum usb_role u_role = USB_ROLE_NONE;
->  	int ret;
->  
->  	if (!con->partner)
-> @@ -595,11 +596,14 @@ static void ucsi_partner_change(struct ucsi_connector *con)
->  
->  	switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
->  	case UCSI_CONSTAT_PARTNER_TYPE_UFP:
-> -	case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
->  	case UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP:
-> +		u_role = USB_ROLE_HOST;
-> +		fallthrough;
-> +	case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
->  		typec_set_data_role(con->port, TYPEC_HOST);
->  		break;
->  	case UCSI_CONSTAT_PARTNER_TYPE_DFP:
-> +		u_role = USB_ROLE_DEVICE;
->  		typec_set_data_role(con->port, TYPEC_DEVICE);
->  		break;
->  	default:
-> @@ -610,6 +614,15 @@ static void ucsi_partner_change(struct ucsi_connector *con)
->  	if (!completion_done(&con->complete))
->  		complete(&con->complete);
->  
-> +	/* Only notify USB controller if partner supports USB data */
-> +	if (!(UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) & UCSI_CONSTAT_PARTNER_FLAG_USB))
-> +		u_role = USB_ROLE_NONE;
-> +
-> +	ret = usb_role_switch_set_role(con->usb_role_sw, u_role);
-> +	if (ret)
-> +		dev_err(con->ucsi->dev, "con:%d: failed to set usb role:%d\n",
-> +			con->num, u_role);
-> +
->  	/* Can't rely on Partner Flags field. Always checking the alt modes. */
->  	ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_SOP);
->  	if (ret)
-> @@ -626,6 +639,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->  						  work);
->  	struct ucsi *ucsi = con->ucsi;
->  	enum typec_role role;
-> +	enum usb_role u_role = USB_ROLE_NONE;
->  	u64 command;
->  	int ret;
->  
-> @@ -661,11 +675,14 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->  
->  		switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
->  		case UCSI_CONSTAT_PARTNER_TYPE_UFP:
-> -		case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
->  		case UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP:
-> +			u_role = USB_ROLE_HOST;
-> +			fallthrough;
-> +		case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
->  			typec_set_data_role(con->port, TYPEC_HOST);
->  			break;
->  		case UCSI_CONSTAT_PARTNER_TYPE_DFP:
-> +			u_role = USB_ROLE_DEVICE;
->  			typec_set_data_role(con->port, TYPEC_DEVICE);
->  			break;
->  		default:
-> @@ -678,6 +695,16 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->  			ucsi_unregister_partner(con);
->  
->  		ucsi_port_psy_changed(con);
-> +
-> +		/* Only notify USB controller if partner supports USB data */
-> +		if (!(UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) &
-> +				UCSI_CONSTAT_PARTNER_FLAG_USB))
-> +			u_role = USB_ROLE_NONE;
-> +
-> +		ret = usb_role_switch_set_role(con->usb_role_sw, u_role);
-> +		if (ret)
-> +			dev_err(ucsi->dev, "con:%d: failed to set usb role:%d\n",
-> +				con->num, u_role);
->  	}
->  
->  	if (con->status.change & UCSI_CONSTAT_CAM_CHANGE) {
-> @@ -903,6 +930,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
->  	struct ucsi_connector *con = &ucsi->connector[index];
->  	struct typec_capability *cap = &con->typec_cap;
->  	enum typec_accessory *accessory = cap->accessory;
-> +	enum usb_role u_role = USB_ROLE_NONE;
->  	u64 command;
->  	int ret;
->  
-> @@ -981,11 +1009,14 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
->  
->  	switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
->  	case UCSI_CONSTAT_PARTNER_TYPE_UFP:
-> -	case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
->  	case UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP:
-> +		u_role = USB_ROLE_HOST;
-> +		fallthrough;
-> +	case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
->  		typec_set_data_role(con->port, TYPEC_HOST);
->  		break;
->  	case UCSI_CONSTAT_PARTNER_TYPE_DFP:
-> +		u_role = USB_ROLE_DEVICE;
->  		typec_set_data_role(con->port, TYPEC_DEVICE);
->  		break;
->  	default:
-> @@ -1001,6 +1032,24 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
->  		ucsi_port_psy_changed(con);
->  	}
->  
-> +	con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
-> +	if (IS_ERR(con->usb_role_sw)) {
-> +		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
-> +			con->num);
-> +		con->usb_role_sw = NULL;
-> +	}
-> +
-> +	/* Only notify USB controller if partner supports USB data */
-> +	if (!(UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) & UCSI_CONSTAT_PARTNER_FLAG_USB))
-> +		u_role = USB_ROLE_NONE;
-> +
-> +	ret = usb_role_switch_set_role(con->usb_role_sw, u_role);
-> +	if (ret) {
-> +		dev_err(ucsi->dev, "con:%d: failed to set usb role:%d\n",
-> +			con->num, u_role);
-> +		ret = 0;
-> +	}
-> +
->  	if (con->partner) {
->  		ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_SOP);
->  		if (ret) {
-> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> index b7a92f246050..8474342b79a7 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.h
-> +++ b/drivers/usb/typec/ucsi/ucsi.h
-> @@ -8,6 +8,7 @@
->  #include <linux/power_supply.h>
->  #include <linux/types.h>
->  #include <linux/usb/typec.h>
-> +#include <linux/usb/role.h>
->  
->  /* -------------------------------------------------------------------------- */
->  
-> @@ -329,6 +330,8 @@ struct ucsi_connector {
->  	u32 rdo;
->  	u32 src_pdos[UCSI_MAX_PDOS];
->  	int num_pdos;
-> +
-> +	struct usb_role_switch *usb_role_sw;
->  };
->  
->  int ucsi_send_command(struct ucsi *ucsi, u64 command,
-> -- 
-> 2.24.0
+My RC is working fine again for VDR, I can pull and plug the RC controller, VDR
+is complaining, but after restarting VDR, all is fine again. 
 
-thanks,
+This is the kernel log of pulling and plugging the RC controller:
+```
+[    4.903556] rc rc0: lirc_dev: driver mceusb registered at minor = 0, raw IR
+receiver, raw IR transmitter
+[    5.084059] mceusb 5-10.4:1.0: long-range (0x1) receiver active
+[    5.127510] mceusb 5-10.4:1.0: Registered TopSeed Technology Corp. eHome
+Infrared Transceiver with mce emulator interface version 1
+[    5.127512] mceusb 5-10.4:1.0: 2 tx ports (0x0 cabled) and 2 rx sensors (0x1
+active)
+[    5.127530] usbcore: registered new interface driver mceusb
+[ 1537.725685] mceusb 5-10.4:1.0: Error: urb status = -71
+[ 1537.733681] mceusb 5-10.4:1.0: Error: urb status = -71
+[ 1537.741680] mceusb 5-10.4:1.0: Error: urb status = -71
+[ 1537.749683] mceusb 5-10.4:1.0: Error: urb status = -71
+[ 1537.757670] mceusb 5-10.4:1.0: Error: urb status = -71
+[ 1537.765684] mceusb 5-10.4:1.0: Error: urb status = -71
+[ 1537.773662] mceusb 5-10.4:1.0: Error: urb status = -71
+[ 1537.781659] mceusb 5-10.4:1.0: Error: urb status = -71
+[ 1537.789654] mceusb 5-10.4:1.0: Error: urb status = -71
+[ 1540.361827] rc rc0: lirc_dev: driver mceusb registered at minor = 0, raw IR
+receiver, raw IR transmitter
+[ 1540.541769] mceusb 5-10.4:1.0: long-range (0x1) receiver active
+[ 1540.585785] mceusb 5-10.4:1.0: Registered TopSeed Technology Corp. eHome
+Infrared Transceiver with mce emulator interface version 1
+[ 1540.585787] mceusb 5-10.4:1.0: 2 tx ports (0x0 cabled) and 2 rx sensors (0x1
+active)
+```
+
+With 528222d853f92 applied, I wasn't able to recover at all, I had to stop VDR
+and pulling the RC controller in order to stop flooding the log with the urb
+status = -71 errors.
+
+Sean, do you have any idea, what could have changed with 528222d853f92
+resulting in this behavior?
 
 -- 
-heikki
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.
