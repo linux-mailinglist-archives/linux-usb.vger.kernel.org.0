@@ -2,105 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1632EE722
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Jan 2021 21:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE8F2EE769
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Jan 2021 22:08:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726468AbhAGUpV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jan 2021 15:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
+        id S1727332AbhAGVHA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jan 2021 16:07:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725903AbhAGUpU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jan 2021 15:45:20 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E004C0612F5;
-        Thu,  7 Jan 2021 12:44:40 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id x20so17674431lfe.12;
-        Thu, 07 Jan 2021 12:44:40 -0800 (PST)
+        with ESMTP id S1727265AbhAGVG7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jan 2021 16:06:59 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D4CC0612F9
+        for <linux-usb@vger.kernel.org>; Thu,  7 Jan 2021 13:06:19 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id q25so8909776oij.10
+        for <linux-usb@vger.kernel.org>; Thu, 07 Jan 2021 13:06:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cDj24nQLqkfghbvcs4G0WvAJK+f5RlZi3A5SM53n9gk=;
-        b=jO13V9gUn/zTIiGcWY0Rq1E/WIIrS6HDI09qtunmeFF8qh9v6+J0WLffkEUi8M/hDx
-         +oo7yg0+7+UfZyQgq5IHDfnSuEwFEU8rekiRmjUYbSgmCvfgsGwYsyyIS8fs1UHskejl
-         V3RDR878n34Viurn0LEnvbPHAs7G7wGqxYx8s+1avqfhDJ0ILImFNrjIvHHp4ybiVqcW
-         EDTlNuMqwT3ndFr+fjhjQ6SjbtKZk0EAOm9DTjxEkQ3vyKLGKj5Unpny5f0eKy2DnWoP
-         zpveR/UUJxXe+5PnqzGLismBK2ARBmDRBOginO4RfRjWFFpT8H4U8DiJ1dXgYaqaLQEW
-         Wpow==
+        d=rollanet.org; s=google;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=lHC87a5gYkk+qNM6dj7Rwdv8K9KfmhHxFSOqlwzkfyk=;
+        b=T+0886ztA2VlL8f3DktDVjIPxd8pE5ZLzktzzEB3AODkow6vIhyljVrPwxbzsA1a41
+         aWn2Rxz8JKFsCaEI3NYVLr9sQGrcMglxGEl7sKfleow7d9vIxVFvHK6RRvo5tVgCNOH+
+         02g2UqsW5fl9kX3MliS+DLpZL0lRcz17h3xIQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=cDj24nQLqkfghbvcs4G0WvAJK+f5RlZi3A5SM53n9gk=;
-        b=A0Qg61Pt0DMsSBrq5euMSqbzbt5IWZCftGULu1/CkfFjQjgZ4jmwwdVt5KEC4QZ+/S
-         euRAkTgfEPv+Gq/ZtEDLqHtRfVSS26MB5GyfBXBdt9vqa63PrAMuzL3/y/S37PTBg7GT
-         rufSjOprM4s0G4NIv68r1+GVdD2bbDVDCfQVW/rya8TDTJglmRfDNhN9Q1H3LbNz7uEU
-         bPQgB/xNxqUTI8IR373a1+aPFmxRRljUga3t6YtN9x7TxDq0FJEPlzgCsbrU2lFQsJZn
-         LkrM8tzCeMemw5LZ91M5+XD9fykHTyw00DWuL77gP3xxLFeEWzgEb+/qJYZwYBQmORXu
-         tVUA==
-X-Gm-Message-State: AOAM5320q2Lyy4zrl2zOT9lK631DR9bTqNHR9iyeQalUO2qN8qbI8Sgb
-        Zt2C7B8LuMafwUx6nSk9iXoCeCUtsDg=
-X-Google-Smtp-Source: ABdhPJw/stpc+/SEdV7S4l2iLI7Akpf6WUiTU7Egu41NgcOrWyCArp2jZEvXYK7ZQp4ynzVJOpyShA==
-X-Received: by 2002:a19:cb45:: with SMTP id b66mr235839lfg.441.1610052278773;
-        Thu, 07 Jan 2021 12:44:38 -0800 (PST)
-Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.googlemail.com with ESMTPSA id b11sm1394720lfi.174.2021.01.07.12.44.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Jan 2021 12:44:38 -0800 (PST)
-Subject: Re: [PATCH] usb: dwc3: core: Replace devm_reset_control_array_get()
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Yejune Deng <yejune.deng@gmail.com>, balbi@kernel.org,
-        p.zabel@pengutronix.de, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1604375863-6649-1-git-send-email-yejune.deng@gmail.com>
- <11be44c1-0bd5-d09a-7820-f320a37a9da8@gmail.com> <X/dfxmkAThIsMIoO@kroah.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <86247ea3-7f34-3d8f-eed9-350012384083@gmail.com>
-Date:   Thu, 7 Jan 2021 23:44:37 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=lHC87a5gYkk+qNM6dj7Rwdv8K9KfmhHxFSOqlwzkfyk=;
+        b=sRX6T4PUpvjaaan045a52extpptd1ZFGFOBnXi8+m9n/Y525wjJQKrKRulbHz7xCDH
+         +xHgl+zNU3PGB6mTzGC/4IfTfZrKKTeFqWEmkdtm6UXhJvJsWWTZ454qYadBCa2zXpNw
+         9wNp3kivmZjmpFaiQEyCBIAxOiqNRIzZSKL6araskzWnU3KZxtsUfAjnWMZUb1Nc55aW
+         GkI27+o0ZRlS7ScVCY1ZZFRryFwvndOrdZ+onNKug7Hd0GIqam3g4GvKtLzbBzOW1t92
+         CFJKJzH9qKRxf3z4Q7yOSz6CTYamHXDQiveVLiKkAlKFzKL2HKx78Uu3pBwo/qn0bM8d
+         ULAQ==
+X-Gm-Message-State: AOAM533W8mGjEvYKVYgcnVXqUXtP51aGEIWw4fM7f2uToiB4WJ/hUD9k
+        8UfKQLJMQHXZ+xYsztrTLclq6FPO9AClloXUj0Kx3cgGHRAtq3SZ
+X-Google-Smtp-Source: ABdhPJxfsPQH53y/vYQ3/lB3j1xjM6q2vj7DRi/lYdEsBClyJBPX2PgUYUbs3ftxEa6bjzlK+ywaUtUVVqTraCubNXc=
+X-Received: by 2002:aca:5548:: with SMTP id j69mr365734oib.32.1610053578754;
+ Thu, 07 Jan 2021 13:06:18 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <X/dfxmkAThIsMIoO@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+From:   Joe Abbott <jabbott@rollanet.org>
+Date:   Thu, 7 Jan 2021 15:06:07 -0600
+Message-ID: <CADuz4ONmN299aw460r4wXCEK5F1v9kt_cewCCrdg2hb5nJV9uQ@mail.gmail.com>
+Subject: pl2303.c 110 baud not working
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-07.01.2021 22:23, Greg KH пишет:
-> On Thu, Jan 07, 2021 at 10:16:50PM +0300, Dmitry Osipenko wrote:
->> 03.11.2020 06:57, Yejune Deng пишет:
->>> devm_reset_control_array_get_optional_shared() looks more readable
->>>
->>> Signed-off-by: Yejune Deng <yejune.deng@gmail.com>
->>> ---
->>>  drivers/usb/dwc3/core.c | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>> index 841daec..b87acf0 100644
->>> --- a/drivers/usb/dwc3/core.c
->>> +++ b/drivers/usb/dwc3/core.c
->>> @@ -1490,7 +1490,7 @@ static int dwc3_probe(struct platform_device *pdev)
->>>  
->>>  	dwc3_get_properties(dwc);
->>>  
->>> -	dwc->reset = devm_reset_control_array_get(dev, true, true);
->>> +	dwc->reset = devm_reset_control_array_get_optional_shared(dev);
->>>  	if (IS_ERR(dwc->reset))
->>>  		return PTR_ERR(dwc->reset);
->>>  
->>>
->>
->> Greg / Felipe, could you please pick up this patch?
->>
->> I want to add devm_reset_control_array_get_exclusive_released() for
->> NVIDIA Tegra drivers and we need to get rid of all the open-coded
->> devm_reset_control_array_get() users in order to extend the reset API
->> sanely.
-> 
-> Care to ack it or send a reviewed-by for it?
+Got redirected here by GKH email-bot.
 
-I sent r-b, thanks.
+My message to him was:
+I have an ASR33 teletype that I'm trying to communicate with using a
+PL2303 based Benfei USB serial adapter.  The ASR requires 110 baud 7E1
+and it appears that the driver is defaulting to 9600 baud. (possibly
+because the baud_sup array doesn't contain 110?)  I've tried adding
+110 to the array and recompiling but that doesn't seem to help. I did
+have to comment out the '/ SPDX-License-Identifier: GPL-2.0' line in
+pl2303.c to get it to compile.
+
+The windows driver works so the hardware is capable.
+
+I must be missing something.  Any help appreciated.
+
+Running Mint 19.3 64-bit.
+
+I'm using stty to set baud rate like this:
+stty 110 cs7 evenp -F /dev/ttyUSB0
+stty reports that 110 is in use when I:
+stty -F /dev/ttyUSB0
+
+Oscope shows 150 and above changing (didn't try 75) but 110 reverts to
+9600 (mentioned in pl2303.c file).
+
+Also tried putty.
+
+dmesg:
+[ 3990.294929] usb 6-1: new full-speed USB device number 13 using uhci_hcd
+[ 3990.479021] usb 6-1: New USB device found, idVendor=067b,
+idProduct=2303, bcdDevice= 3.00
+[ 3990.479028] usb 6-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[ 3990.479032] usb 6-1: Product: USB-Serial Controller
+[ 3990.479036] usb 6-1: Manufacturer: Prolific Technology Inc.
+[ 3990.481075] pl2303 6-1:1.0: pl2303 converter detected
+[ 3990.494144] usb 6-1: pl2303 converter now attached to ttyUSB0
+
+
+Here is lsusb:
+Bus 002 Device 002: ID 0bda:0158 Realtek Semiconductor Corp. USB 2.0
+multicard reader
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 007 Device 002: ID 046d:c00e Logitech, Inc. M-BJ58/M-BJ69 Optical
+Wheel Mouse
+Bus 007 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 006 Device 009: ID 067b:2303 Prolific Technology, Inc. PL2303 Serial Port
+Bus 006 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 005 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 001 Device 002: ID 04f2:b027 Chicony Electronics Co., Ltd Gateway
+USB 2.0 Webcam
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 003 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+
+Here's modinfo:
+filename:
+/lib/modules/5.0.0-32-generic/kernel/drivers/usb/serial/pl2303.ko
+license:        GPL v2
+description:    Prolific PL2303 USB to serial adaptor driver
+srcversion:     4864FE101A0398064B5D9A8
+alias:          usb:v0CAAp3001d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v0B8Cp2303d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v0B63p6530d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v11ADp0001d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v054Cp0437d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v04B8p0522d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v04B8p0521d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v03F0p0956d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v03F0p5039d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v03F0p026Bd*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v03F0p3239d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v03F0p3139d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v03F0p4439d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v03F0p0B39d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v03F0p0183d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v03F0p0F7Fd*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v03F0p4349d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v03F0p3524d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v5372p2303d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v05ADp0FBAd*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v07AAp002Ad*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v11F6p2001d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v058Fp9720d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v050Dp0257d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v0731p2003d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v0E55p110Bd*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v0413p2101d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v079Bp0027d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v10B5pAC70d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v078Bp1234d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v0745p0001d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v04A5p4027d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v11F5p0005d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v11F5p0004d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v11F5p0003d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v11F5p0001d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v11F7p02DFd*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v6189p2068d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v0731p0528d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v1453p4026d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v2478p2008d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v0584pB000d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v0DF7p0620d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v0EBAp2080d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v0EBAp1080d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v056Ep5004d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v056Ep5003d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v0547p2008d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v0557p2118d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v0557p2022d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v0557p2021d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v0557p2008d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v04BBp0A0Ed*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v04BBp0A03d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067Bp23F3d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067Bp23E3d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067Bp23D3d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067Bp23C3d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067Bp23B3d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067Bp23A3d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067Bp2304d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067BpE1F1d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067Bp0307d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067Bp331Ad*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067Bp0609d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067Bp0612d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067Bp0611d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067BpAAA0d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067BpAAA8d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067BpAAA2d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067Bp1234d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067Bp04BBd*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v067Bp2303d*dc*dsc*dp*ic*isc*ip*in*
+depends:        usbserial
+retpoline:      Y
+name:           pl2303
+vermagic:       5.0.0-32-generic SMP mod_unload
