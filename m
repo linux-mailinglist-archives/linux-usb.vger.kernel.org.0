@@ -2,134 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 685062EEB1F
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 02:52:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F38CF2EEB36
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 03:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729872AbhAHBwE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jan 2021 20:52:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50564 "EHLO
+        id S1727388AbhAHCRh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jan 2021 21:17:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729778AbhAHBwE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jan 2021 20:52:04 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA56C0612F6
-        for <linux-usb@vger.kernel.org>; Thu,  7 Jan 2021 17:51:24 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id n7so6640242pgg.2
-        for <linux-usb@vger.kernel.org>; Thu, 07 Jan 2021 17:51:24 -0800 (PST)
+        with ESMTP id S1726477AbhAHCRh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jan 2021 21:17:37 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473FDC0612F4;
+        Thu,  7 Jan 2021 18:16:51 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id b8so4904311plx.0;
+        Thu, 07 Jan 2021 18:16:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=eaHrQpKpeurHZv+OYTMBBGGPpB4FZE1mWJW48Z/oiNs=;
-        b=AP8eKNDXK+f3yABttnermAH/48jx7jQD5O+GUTNSbdHW4WUqvESmttKvccFPZgp9Sz
-         A/YcciJTOSsQ6+nNIXjhfmrvn0z5OHXeNczZZtuJ9rOh7lSh2pqKfx1H2QasQsPXu2uW
-         b1XW6ubHyF2oGGSxPTrqhF2hOxNrVgHdoUz0tmPRsD9X+RpmSPMkEOi+kpNicXxGr+Uh
-         dly3HIYPB8GjbhlHvWkUJleD9z8FLiohhDzF1EsJjM3RLPjrtmilqEhb2JCvPpLx5+jP
-         zvTUmqdeh6WWeEkQNyu6ssL4OkK/K2O/JsOZIJZzTcpa872nVlRHmbZtZOl5GIBDIbrq
-         36WA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Pyc4ZaRYzaKh+DuAqPHNV2VpXxYFfX6jhSmWrxeGi9E=;
+        b=IjdHLom2xDhfM/UCE3BSZJk34lNdhwQhoLOD+gyf1cZTGrhGgUgyj9XwmgkPlMTjL1
+         +fF2x2VojydGmvI/YhGNkjqptQlKQjR8pbeXw/l0bU2nyTHYVPMgtRt6uJ0oE8woEh2n
+         j/7JUlTtCM91OvAWfkOV9UEZDyM0slsy4Obzf95U2RmVN7dX84v9b16QbL3LyKfCOQKB
+         tK8/+SuVk2dj3SxJ/hBMwBJM5LiHFIblzWOpR47tdF5LXb8T9NnvS7M/1gjHvMy68w2x
+         Fw2ICNZXDG2IGPWQGrlEu0LtsYQ1MjACG5R2scYLWPrEyGinGUhAJRIb6wxC/Sm4+ja0
+         2S0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=eaHrQpKpeurHZv+OYTMBBGGPpB4FZE1mWJW48Z/oiNs=;
-        b=T2bXjj7NuS4nx8tIuq40sprrkZHZOPPPdsLUJGSXP+twWkJwuymWAyQr3wie6Rf/PH
-         7Y6OkQn1lgCLXJKMzMwXXG47OW1imFGSYuavHT0pk2ECyrbH+V+UNPIyy1tTx2RK2SYV
-         dzaHc9lIsQ1rYgknx5i+C+1Ljz2Wry9hagi9IccGYEQBvY5THOSrpSzM+bsXtla0k5OE
-         7MdJF3rNxRtOsu7MY6TbMJ6dfUfFijKe1MqhjarlmwRNFoHjCAQswRIp7ghLBEOFPOKG
-         fdo1FQ42yWTlS2CQtTj4zj2jVrAe0wO27MkwZr6XEjVEPuOYEabUfKUeMB6VlGuSpXaV
-         SybQ==
-X-Gm-Message-State: AOAM532s9Htu7ebR2ClvU3QExnZS8JjrZgRrA01BYSualrqKTbrpnR9I
-        o4q/CG+//SjAx3LjDQewE0Ruxg==
-X-Google-Smtp-Source: ABdhPJxSbJhBpM2A0dR5cqQKxAWgztVnTaKnRROtWkb337/i7shPcaEJlVeBtCPmt827WMdg7g/VlA==
-X-Received: by 2002:a63:1261:: with SMTP id 33mr4538228pgs.213.1610070683769;
-        Thu, 07 Jan 2021 17:51:23 -0800 (PST)
-Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id fw12sm6142756pjb.43.2021.01.07.17.51.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jan 2021 17:51:22 -0800 (PST)
-From:   John Stultz <john.stultz@linaro.org>
-To:     lkml <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Tejas Joglekar <tejas.joglekar@synopsys.com>,
-        Yang Fei <fei.yang@intel.com>,
-        YongQin Liu <yongqin.liu@linaro.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v3 2/2] usb: dwc3: Fix DRD mode change sequence following programming guide
-Date:   Fri,  8 Jan 2021 01:51:15 +0000
-Message-Id: <20210108015115.27920-2-john.stultz@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210108015115.27920-1-john.stultz@linaro.org>
-References: <20210108015115.27920-1-john.stultz@linaro.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Pyc4ZaRYzaKh+DuAqPHNV2VpXxYFfX6jhSmWrxeGi9E=;
+        b=Jr5aYZXvyGzdPPLjZLV0w1YjH7Fwj/3z4PcaFjRpsipi+HAXgC4lQmej+aEYklw9TX
+         SJ2ON4IwniJjp4yInar4EW4sLqENSl8XueZTri4vfjRfCtcttFEBqnwR/BkvYt+7XIDV
+         KH8dF+tl1x5dh0JrsrA+xS+tzl2o65GF+9svCVqJIp0J3MEGMaufywumQjtT02UQ9w15
+         c9dq7yU17X+K0DWzB2j4PwEu4WGZxzN/WlpgGyW9bQwwzY0fue53Nxq4KJRbjZ3fOr5A
+         wCJTULvomgQg1XPJ6oSJ8zOGL3brjjEpHlRzXHtjs47ANbdD8tt/1EMdTcrn832HCAsg
+         RTBw==
+X-Gm-Message-State: AOAM533ej0LTvO9rFW6RtzgjD1Cu69ZBqnn2PhBu1oGCjczwbStVGV8F
+        sDXDhlb2TENHpfsCOrsj2Pg=
+X-Google-Smtp-Source: ABdhPJzt7Q6iNDHRNz4zJaH3R9rtLQKDQ22lBiBqHVgi1dtVSQabYnI6eIQh7hUoktL0i/QHx9If6Q==
+X-Received: by 2002:a17:90a:8508:: with SMTP id l8mr1308039pjn.131.1610072210874;
+        Thu, 07 Jan 2021 18:16:50 -0800 (PST)
+Received: from b29397-desktop ([194.5.48.251])
+        by smtp.gmail.com with ESMTPSA id h5sm8047912pgl.86.2021.01.07.18.16.46
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 07 Jan 2021 18:16:49 -0800 (PST)
+Date:   Fri, 8 Jan 2021 10:16:42 +0800
+From:   Peter Chen <hzpeterchen@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Albert Wang <albertccwang@google.com>, balbi@kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Revert "usb: gadget: Quieten gadget config message"
+Message-ID: <20210108021642.GA4672@b29397-desktop>
+References: <20210107090604.299270-1-albertccwang@google.com>
+ <X/bZbluYJ0syB/Do@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <X/bZbluYJ0syB/Do@kroah.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In reviewing the previous patch, Thinh Nguyen pointed out that
-the DRD mode change sequence should be like the following when
-switching from host -> device according to the programming guide
-(for all DRD IPs):
-1. Reset controller with GCTL.CoreSoftReset
-2. Set GCTL.PrtCapDir(device)
-3. Soft reset with DCTL.CSftRst
-4. Then follow up with the initializing registers sequence
+On 21-01-07 10:50:38, Greg KH wrote:
+> On Thu, Jan 07, 2021 at 09:06:04AM +0000, Albert Wang wrote:
+> > This reverts commit 1cbfb8c4f62d667f6b8b3948949737edb92992cc.
+> > 
+> > The log of USB enumeration result is a useful log and only occupies
+> > one line especially when USB3 enumeration failed and then downgrade
+> > to USB2.
+> > 
+> > Signed-off-by: Albert Wang <albertccwang@google.com>
+> > ---
+> >  drivers/usb/gadget/composite.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+> > index c6d455f2bb92..5b0d6103a63d 100644
+> > --- a/drivers/usb/gadget/composite.c
+> > +++ b/drivers/usb/gadget/composite.c
+> > @@ -840,9 +840,9 @@ static int set_config(struct usb_composite_dev *cdev,
+> >  		result = 0;
+> >  	}
+> >  
+> > -	DBG(cdev, "%s config #%d: %s\n",
+> > -	    usb_speed_string(gadget->speed),
+> > -	    number, c ? c->label : "unconfigured");
+> > +	INFO(cdev, "%s config #%d: %s\n",
+> > +	     usb_speed_string(gadget->speed),
+> > +	     number, c ? c->label : "unconfigured");
+> 
+> When everything is working properly, the kernel should be quiet.  If you
+> have to see this message, you can turn it on at runtime, as Felipe
+> pointed out, to enable it for your system.  But it's not a good default
+> thing to have.
 
-The current code does:
-a. Soft reset with DCTL.CSftRst on driver probe
-b. Reset controller with GCTL.CoreSoftReset (added in previous
-   patch)
-c. Set GCTL.PrtCapDir(device)
-d. < missing DCTL.CSftRst >
-e. Then follow up with initializing registers sequence
+For most production kernel (or kernel ready for customers), it may not enable
+CONFIG_DYNAMIC_DEBUG.
 
-So this patch adds the DCTL.CSftRst soft reset that was currently
-missing from the dwc3 mode switching.
+> 
+> What do you need to see this message for?  What tool relies on it?  Who
+> reads it?
+> 
 
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
-Cc: Yang Fei <fei.yang@intel.com>
-Cc: YongQin Liu <yongqin.liu@linaro.org>
-Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc: Thinh Nguyen <thinhn@synopsys.com>
-Cc: Jun Li <lijun.kernel@gmail.com>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: John Stultz <john.stultz@linaro.org>
----
-Feedback would be appreciated. I'm a little worried I should be
-conditionalizing the DCTL.CSftRst on DRD mode controllers, but
-I'm really not sure what the right thing to do is for non-DRD
-mode controllers.
----
- drivers/usb/dwc3/core.c | 3 +++
- 1 file changed, 3 insertions(+)
+Usually, the developer him(her)self wants to read it to know if current
+USB gadget enumerated and what speed is recognized, reading from the
+console by eyes is the quickest way. Without this message, there is no
+any messages when the USB gadget connects to host.
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index b6a6b90eb2d5..71f8b07ecb99 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -40,6 +40,8 @@
- 
- #define DWC3_DEFAULT_AUTOSUSPEND_DELAY	5000 /* ms */
- 
-+static int dwc3_core_soft_reset(struct dwc3 *dwc);
-+
- /**
-  * dwc3_get_dr_mode - Validates and sets dr_mode
-  * @dwc: pointer to our context structure
-@@ -177,6 +179,7 @@ static void __dwc3_set_mode(struct work_struct *work)
- 
- 	dwc3_set_prtcap(dwc, dwc->desired_dr_role);
- 
-+	dwc3_core_soft_reset(dwc);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
- 	switch (dwc->desired_dr_role) {
+If enable debug message, there are too many messages, but I think most
+developers may only need one information message to know if enumeration
+is established correctly.
+
 -- 
-2.17.1
+
+Thanks,
+Peter Chen
 
