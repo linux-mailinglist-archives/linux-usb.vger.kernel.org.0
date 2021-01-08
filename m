@@ -2,42 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35EDA2EF427
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 15:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F1D2EF44A
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 15:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727390AbhAHOqd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jan 2021 09:46:33 -0500
-Received: from mga06.intel.com ([134.134.136.31]:37023 "EHLO mga06.intel.com"
+        id S1727439AbhAHO4m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jan 2021 09:56:42 -0500
+Received: from mga05.intel.com ([192.55.52.43]:17900 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726745AbhAHOqc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 8 Jan 2021 09:46:32 -0500
-IronPort-SDR: IADCaRyF/H698K9FZKOYBk4jhrYwJriTtQXiZJuyXY7gEg9z8yceWXI0UYaGyaVCL9UxHXNtAJ
- FpAvJxyi58VQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="239153526"
+        id S1726666AbhAHO4m (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 8 Jan 2021 09:56:42 -0500
+IronPort-SDR: qVJ/Hza9hLYKyLcbywH2FcKgQcxzHvMuBfNTBSTFjCE8Z4iEYYT5U0Yr1FxKKrOATv0QiidBbt
+ 3tB7mCox/sTg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="262377173"
 X-IronPort-AV: E=Sophos;i="5.79,331,1602572400"; 
-   d="scan'208";a="239153526"
+   d="scan'208";a="262377173"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2021 06:44:45 -0800
-IronPort-SDR: W9GUDFKpUXLXnOWcKVurlYQvPWxV/ixjHsiPNKdR4wp0BFukVJ0qfcjscf4CN1fkHH4rhfvyR8
- T5yQb3SHWFMw==
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2021 06:54:56 -0800
+IronPort-SDR: 0IrRF/bXYvokfmPkPdtmF6XqnEknXMzh1ykistOi4cgswB2T0o+Ke2pmT84vgz7msiFLEm8hpx
+ uywqyqi9uEEw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.79,331,1602572400"; 
-   d="scan'208";a="344241586"
+   d="scan'208";a="344243358"
 Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Jan 2021 06:44:43 -0800
-Subject: Re: [PATCH v5] usb: xhci-mtk: fix unreleased bandwidth data
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Ikjoon Jang <ikjn@chromium.org>,
-        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Zhanyong Wang <zhanyong.wang@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20201229142406.v5.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
- <2aea44f0-85e7-fd55-2c35-c1d994f20e03@linux.intel.com>
- <1610086308.24856.30.camel@mhfsdcap03>
+  by fmsmga007.fm.intel.com with ESMTP; 08 Jan 2021 06:54:53 -0800
+Subject: Re: [PATCH v2] xhci: tegra: Delay for disabling LFPS detector
+To:     JC Kuo <jckuo@nvidia.com>, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, robh@kernel.org
+Cc:     linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+        nkristam@nvidia.com, stable@vger.kernel.org
+References: <20210108064148.26766-1-jckuo@nvidia.com>
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
  mQINBFMB0ccBEADd+nZnZrFDsIjQtclVz6OsqFOQ6k0nQdveiDNeBuwyFYykkBpaGekoHZ6f
@@ -81,65 +74,44 @@ Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
  Gjynb3sXforM/GVbr4mnuxTdLXQYlj2EJ4O4f0tkLlADT7podzKSlSuZsLi2D+ohKxtP3U/r
  42i8PBnX2oAV0UIkYk7Oel/3hr0+BP666SnTls9RJuoXc7R5XQVsomqXID6GmjwFQR5Wh/RE
  IJtkiDAsk37cfZ9d1kZ2gCQryTV9lmflSOB6AFZkOLuEVSC5qW8M/s6IGDfYXN12YJaZPptJ fiD/
-Message-ID: <e43632e2-08b3-7a1a-8272-1d493e25fc67@linux.intel.com>
-Date:   Fri, 8 Jan 2021 16:46:38 +0200
+Message-ID: <822ad4aa-f8cb-1f8c-737c-98e517441e53@linux.intel.com>
+Date:   Fri, 8 Jan 2021 16:56:49 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <1610086308.24856.30.camel@mhfsdcap03>
+In-Reply-To: <20210108064148.26766-1-jckuo@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8.1.2021 8.11, Chunfeng Yun wrote:
-> On Thu, 2021-01-07 at 13:09 +0200, Mathias Nyman wrote:
->> On 29.12.2020 8.24, Ikjoon Jang wrote:
->>> xhci-mtk has hooks on add_endpoint() and drop_endpoint() from xhci
->>> to handle its own sw bandwidth managements and stores bandwidth data
->>> into internal table every time add_endpoint() is called,
->>> so when bandwidth allocation fails at one endpoint, all earlier
->>> allocation from the same interface could still remain at the table.
->>>
->>> This patch adds two more hooks from check_bandwidth() and
->>> reset_bandwidth(), and make mtk-xhci to releases all failed endpoints
->>> from reset_bandwidth().
->>>
->>> Fixes: 08e469de87a2 ("usb: xhci-mtk: supports bandwidth scheduling with multi-TT")
->>> Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
->>>
->>
->> ...
->>
->>>
->>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
->>> index d4a8d0efbbc4..e1fcd3cf723f 100644
->>> --- a/drivers/usb/host/xhci.c
->>> +++ b/drivers/usb/host/xhci.c
->>> @@ -2882,6 +2882,12 @@ static int xhci_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
->>>  	xhci_dbg(xhci, "%s called for udev %p\n", __func__, udev);
->>>  	virt_dev = xhci->devs[udev->slot_id];
->>>  
->>> +	if (xhci->quirks & XHCI_MTK_HOST) {
->>> +		ret = xhci_mtk_check_bandwidth(hcd, udev);
->>> +		if (ret < 0)
->>> +			return ret;
->>> +	}
->>> +
->>
->> Just noticed that XHCI_MTK_HOST quirk is only set in xhci-mtk.c.
->> xhci-mtk.c calls xhci_init_driver(..., xhci_mtk_overrides) with a .reset override function.
->>
->> why not add override functions for .check_bandwidth and .reset_bandwidth to xhci_mtk_overrides instead?
->>
->> Another patch to add similar overrides for .add_endpoint and .drop_endpoint should probably be
->> done so that we can get rid of the xhci_mtk_add/drop_ep_quirk() calls in xhci.c as well
-> You mean, we can export xhci_add/drop_endpoint()?
+On 8.1.2021 8.41, JC Kuo wrote:
+> Occasionally, we are seeing some SuperSpeed devices resumes right after
+> being directed to U3. This commits add 500us delay to ensure LFPS
+> detector is disabled before sending ACK to firmware.
+> 
+> [   16.099363] tegra-xusb 70090000.usb: entering ELPG
+> [   16.104343] tegra-xusb 70090000.usb: 2-1 isn't suspended: 0x0c001203
+> [   16.114576] tegra-xusb 70090000.usb: not all ports suspended: -16
+> [   16.120789] tegra-xusb 70090000.usb: entering ELPG failed
+> 
+> The register write passes through a few flop stages of 32KHz clock domain.
+> NVIDIA ASIC designer reviewed RTL and suggests 500us delay.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: JC Kuo <jckuo@nvidia.com>
+> ---
+>  drivers/usb/host/xhci-tegra.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> changes in v2: 
+>     describes how 500us was determined in commit message
+>     cc stable@vger.kernel.org
+> 
 
-I think so, unless you have a better idea.
-I prefer exporting the generic add/drop_endpoint functions rather than the vendor specific quirk functions.
+Thanks, added.
 
 -Mathias
-  
+
