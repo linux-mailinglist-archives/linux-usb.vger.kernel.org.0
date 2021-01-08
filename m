@@ -2,75 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 557572EEF3F
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 10:14:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 754732EEF5E
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 10:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727934AbhAHJMw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jan 2021 04:12:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48656 "EHLO mail.kernel.org"
+        id S1728073AbhAHJVK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jan 2021 04:21:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49738 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727906AbhAHJMv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 8 Jan 2021 04:12:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7E70522248;
-        Fri,  8 Jan 2021 09:12:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1610097131;
-        bh=DZfi/I+2yXa4/m5ViwQoChMYe+Ckti6vA220I8dggV4=;
+        id S1727478AbhAHJVJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 8 Jan 2021 04:21:09 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 19BF323372;
+        Fri,  8 Jan 2021 09:20:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610097628;
+        bh=oiPKPwrLUTXmyxEg4htGUPgFpzc+ZSlNsGuIlmxZcHA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o++K5dKK+ctBEHmms2e/B1ounGtdhNSqrQ6j6DO50hwBrQh7MJrpOzMfvT/3SUOCS
-         3tWht+wTZY/IQ8KsSo3NiyADAozYEJuaiKr2qxtC4baSIV6eon3dYefeHiW5gD7Ka4
-         J2j6QymNlShZWTQ9tQ+kWiElFgtkmz+D/TNu80cc=
-Date:   Fri, 8 Jan 2021 10:13:28 +0100
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        "peter.chen@nxp.com" <peter.chen@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 2/3] usb: gadget: composite: Split composite reset and
- disconnect
-Message-ID: <X/giOFJLsx2E3krg@kroah.com>
-References: <1609283011-21997-1-git-send-email-wcheng@codeaurora.org>
- <1609283011-21997-3-git-send-email-wcheng@codeaurora.org>
- <87k0srcyq7.fsf@kernel.org>
- <37f3412c-9e91-eb1e-3974-bb16546b4b39@synopsys.com>
+        b=FmG54POPm2c2tiKdpWlDe940ivqmckLWEjMutD1Z9iWCYSH1oOGMajQcbIW3dJMec
+         n9TFS+6rhKwqcvHge4pnOswKtWes6MxZUvil9oNN4hUhJyuCaofAqFpYXsdRw5Bjfy
+         a7lkb0cRHVP+PxTQy62P2GE/d3k7oCBGoOFbXSRdjbzX9YcRRTZmhsLY/fdzw+pDMP
+         HBtNNxb3lQEYayOFbkI7wAPEOuggq7xk3P2nSlM+c+P5n17w90rX9o5JJIUN8FE/KZ
+         pzVGRvRLjOM4zY99FjwjvuyGp9rX8XwxhtEZmg3e5gL4IaT+QS0ONb9h/CXJOyxfo7
+         cUblV5M4jCQoQ==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kxnwd-00019U-DK; Fri, 08 Jan 2021 10:20:31 +0100
+Date:   Fri, 8 Jan 2021 10:20:31 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 05/15] usb: misc: emi26: update to use
+ usb_control_msg_send()
+Message-ID: <X/gj3yFkLjuLxTZs@hovoldconsulting.com>
+References: <20201130011819.2576481-1-anant.thazhemadam@gmail.com>
+ <20201130012847.2579463-1-anant.thazhemadam@gmail.com>
+ <X8pKmmdvO0cIQXnL@localhost>
+ <6806f8e4-c2f7-3c6a-b855-3f87ab8d9e22@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <37f3412c-9e91-eb1e-3974-bb16546b4b39@synopsys.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6806f8e4-c2f7-3c6a-b855-3f87ab8d9e22@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 08, 2021 at 02:19:30AM +0000, Thinh Nguyen wrote:
-> Hi Wesley,
-> 
-> Felipe Balbi wrote:
-> > Hi,
+On Thu, Jan 07, 2021 at 07:43:54PM +0530, Anant Thazhemadam wrote:
+> On 04/12/20 8:11 pm, Johan Hovold wrote:
+> > On Mon, Nov 30, 2020 at 06:58:47AM +0530, Anant Thazhemadam wrote:
+> >> The newer usb_control_msg_{send|recv}() API are an improvement on the
+> >> existing usb_control_msg() as it ensures that a short read/write is treated
+> >> as an error,
+> > Short writes have always been treated as an error. The new send helper
+> > only changes the return value from the transfer size to 0.
 > >
-> > Wesley Cheng <wcheng@codeaurora.org> writes:
-> >> +void composite_reset(struct usb_gadget *gadget)
-> >> +{
-> >> +	/*
-> >> +	 * Section 1.4.13 Standard Downstream Port of the USB battery charging
-> >> +	 * specification v1.2 states that a device connected on a SDP shall only
-> >> +	 * draw at max 100mA while in a connected, but unconfigured state.
-> > The requirements are different, though. I think OTG spec has some extra
-> > requirements where only 8mA can be drawn max. You need to check for the
-> > otg flag. Moreover, USB3+ spec has units of 150mA meaning the device
-> > can't draw 100mA (IIRC).
+> > And this driver never reads.
 > >
+> > Try to describe the motivation for changing this driver which is to
+> > avoid the explicit kmemdup().
+
+> >>  /* thanks to drivers/usb/serial/keyspan_pda.c code */
+> >> @@ -77,11 +67,7 @@ static int emi26_load_firmware (struct usb_device *dev)
+> >>  	int err = -ENOMEM;
+> >>  	int i;
+> >>  	__u32 addr;	/* Address to write */
+> >> -	__u8 *buf;
+> >> -
+> >> -	buf = kmalloc(FW_LOAD_SIZE, GFP_KERNEL);
+> >> -	if (!buf)
+> >> -		goto wraperr;
+> >> +	__u8 buf[FW_LOAD_SIZE];
+> > As the build bots reported, you must not put large structures like this
+> > on the stack.
 > 
-> We see issue with this patch series. For our device running at SSP, the
-> device couldn't recover from a port reset and remained in eSS.Inactive
-> state.
-> 
-> This patch series is already in Greg's usb-testing. Please review and
-> help fix it.
+> Understood. 
+> But I'm considering dropping this change (and the one proposed for
+> emi62) altogether in v3 - since these would end up requiring memory to
+> dynamically allocated twice for the same purpose.  However, if you
+> still think the pros of updating this (and emi62) outweigh the cons,
+> please let me know, and I'll make sure to send in another version
+> fixing it.
 
-Should I just revert this?  I'll be glad to drop it.
+The redundant memdup() is already there for the firmware buffer and
+changing to usb_control_msg_send() will only make it slightly harder to
+get rid of that, if anyone would bother.
 
-thanks,
+But yeah, it's probably not worth switching usb_control_msg_send() for
+these drivers.
 
-greg k-h
+Johan
