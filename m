@@ -2,77 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2E72EF28A
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 13:29:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C41982EF30C
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 14:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727401AbhAHM2j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jan 2021 07:28:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55296 "EHLO mail.kernel.org"
+        id S1726992AbhAHNaz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 8 Jan 2021 08:30:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36320 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725926AbhAHM2i (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 8 Jan 2021 07:28:38 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 990FD239EB;
-        Fri,  8 Jan 2021 12:27:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610108878;
-        bh=7Xo7mSbLPZgJ0KB4zSspcHTOUBO4KZLNffBMqGNo2/8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=jKI8wGewQbd7KOMctKJswhxv+ll820IcTzmFrqTn4wwm+LeD/nLU/7XvHnEngK+bv
-         XBnt0OtSDsKF3CxgbJAxVbqn2sEj5cC9kaTQ/jA8ZB19HHZUPyyp28qwt5FYRM60sr
-         Xd6tY1I69xXo2dUktyGPQOyekwxe2/ZT4elRTt6T8KL4n5BSMkPIar7dGqXR63cp9r
-         nJSMNjLqEKE3NeEpTabZuC2Nf33xeaiYEK2mSzawC7zKTD1NawrwZkf0QgrnyiOPPB
-         CW3qEaq6lpkfg2S39UFpSNsKLmI3bucFDCrmSdZH5n91da+rDGJUa2aD9mFwXk+vd3
-         E/kV0ruKuF1Wg==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Yejune Deng <yejune.deng@gmail.com>, gregkh@linuxfoundation.org,
-        p.zabel@pengutronix.de
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yejune.deng@gmail.com
-Subject: Re: [PATCH] usb: dwc3: core: Replace devm_reset_control_array_get()
-In-Reply-To: <1604375863-6649-1-git-send-email-yejune.deng@gmail.com>
-References: <1604375863-6649-1-git-send-email-yejune.deng@gmail.com>
-Date:   Fri, 08 Jan 2021 14:27:50 +0200
-Message-ID: <878s93wr3t.fsf@kernel.org>
+        id S1726060AbhAHNaz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 8 Jan 2021 08:30:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 70686235FF
+        for <linux-usb@vger.kernel.org>; Fri,  8 Jan 2021 13:30:14 +0000 (UTC)
+Received: by pdx-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 6252281F02; Fri,  8 Jan 2021 13:30:14 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 210351] Wrong setting baudrate for FTDI chip FT230X
+Date:   Fri, 08 Jan 2021 13:30:14 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: johan@kernel.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-210351-208809-aNsdbh1OPx@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-210351-208809@https.bugzilla.kernel.org/>
+References: <bug-210351-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+https://bugzilla.kernel.org/show_bug.cgi?id=210351
 
-Yejune Deng <yejune.deng@gmail.com> writes:
+--- Comment #3 from Johan Hovold (johan@kernel.org) ---
+On Fri, Jan 08, 2021 at 11:37:13AM +0000, bugzilla-daemon@bugzilla.kernel.org
+wrote:
+> Unfortunately, I don't have a device at hand right now. But I remember the
+> lsusb output was showing FT-X type. And under Windows, all three chips I
+> mentioned work correctly with all prescalers. I contacted FTDI tech support
+> with this problem. They advised me to have such a patch for ftdi_sio.c and it
+> solved the problem. Here's the patch:
 
-> devm_reset_control_array_get_optional_shared() looks more readable
->
-> Signed-off-by: Yejune Deng <yejune.deng@gmail.com>
+>       if ((priv-> chip_type == FT2232C) || (priv-> chip_type == FT2232H) ||
+> 
+>             (priv-> chip_type == FT4232H) || (priv-> chip_type == FT232H) ||
+> 
+> (priv-> chip_type == FTX)) {
+> 
+>             / * Probably the BM type needs the MSB of the encoded fractional
+> 
+>             * divider also moved like for the chips above. Any infos? * /
+> 
+>             index = (u16) ((index << 8) | priv-> interface);
+> 
+>       }
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
+Ah, that's good to hear. Do you want to submit that as a proper patch
+that I can apply, or do you want me to do that?
 
-=2D-=20
-balbi
+> But I don't know why the most significant bit of the prescaler is masked by
+> something. I have no information about the chip configuration registers. It
+> looks like this is confidential information. But they could provide it to you
+> as the driver developer.
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+I don't have access to any details about these chips apart from the
+public sources either, I'm afraid.
 
------BEGIN PGP SIGNATURE-----
+But here it seems the upper bits simply needs to be shifted to make room
+for the interface number just like for the H-types (which can have more
+than one port).
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl/4T8cRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQZLfg/+OBXk3NrhzwjQIr6AI6W3nD8PBgpk4cFs
-yjIB72TCEe4w1DuzQxt8C4f+JUoJ8U8BVgixQoDyKRK1DYkWhc3R+Pn111hPZXST
-jlOtG4+L+d/l2wlevV4fzQLtAA1gWWvvdLPgl5hoBYAcbeQDLPclMFdNkSt0S/Xi
-tglYtwpxWTM/7X4VxAhvI9w9A9v7gxZB+l/UTxeAxI6vUsrVaytiZGVrHS7zGRkt
-DgEkFWelROeN9BisRByZUe8Fzb4t67rBuy80ai1oBqKubWy9SxRE3JnUoqD54+3a
-UgHBQEK5+VtoZaf0Tul6knixErYT696y7IL2TxryYZGaVjByqWfvo4hSr8qaC8O+
-M3eLpYSJz2S3A4ecX6ojEZuy5LAHn8pISbrOkIMcw0lNO9UkOrsWdP0EZS3swmZk
-KVkDq9i8yj9Y/MRLok/vjv78gjzbL9itawgnH8sHBhnpfrzt0QHjYjLcyDl84fKU
-WO2JpZa2K/Xc/N3quvwJnO4br8h4Uv9VMp2SeD5BhUTH/MPPbZEE09AxUurgKHW8
-zXH6mWQqZs5SRjYqjameA2G7VCknRb6NtoYQoH7qtBE8VaDIWtBoDNNmF8YnWzKI
-ico44s3g6SlN4vcvSlLS7mBFx04HYoDXyiwxreaiHaN7DAZMrjJEIImj3dczl6L3
-7sjmIdFiL4s=
-=25Oe
------END PGP SIGNATURE-----
---=-=-=--
+Johan
+
+-- 
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.
