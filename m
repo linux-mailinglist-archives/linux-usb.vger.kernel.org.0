@@ -2,187 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE8F2EE769
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Jan 2021 22:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC492EEA6B
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 01:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727332AbhAGVHA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jan 2021 16:07:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
+        id S1729290AbhAHA3z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jan 2021 19:29:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727265AbhAGVG7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jan 2021 16:06:59 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D4CC0612F9
-        for <linux-usb@vger.kernel.org>; Thu,  7 Jan 2021 13:06:19 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id q25so8909776oij.10
-        for <linux-usb@vger.kernel.org>; Thu, 07 Jan 2021 13:06:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rollanet.org; s=google;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=lHC87a5gYkk+qNM6dj7Rwdv8K9KfmhHxFSOqlwzkfyk=;
-        b=T+0886ztA2VlL8f3DktDVjIPxd8pE5ZLzktzzEB3AODkow6vIhyljVrPwxbzsA1a41
-         aWn2Rxz8JKFsCaEI3NYVLr9sQGrcMglxGEl7sKfleow7d9vIxVFvHK6RRvo5tVgCNOH+
-         02g2UqsW5fl9kX3MliS+DLpZL0lRcz17h3xIQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=lHC87a5gYkk+qNM6dj7Rwdv8K9KfmhHxFSOqlwzkfyk=;
-        b=sRX6T4PUpvjaaan045a52extpptd1ZFGFOBnXi8+m9n/Y525wjJQKrKRulbHz7xCDH
-         +xHgl+zNU3PGB6mTzGC/4IfTfZrKKTeFqWEmkdtm6UXhJvJsWWTZ454qYadBCa2zXpNw
-         9wNp3kivmZjmpFaiQEyCBIAxOiqNRIzZSKL6araskzWnU3KZxtsUfAjnWMZUb1Nc55aW
-         GkI27+o0ZRlS7ScVCY1ZZFRryFwvndOrdZ+onNKug7Hd0GIqam3g4GvKtLzbBzOW1t92
-         CFJKJzH9qKRxf3z4Q7yOSz6CTYamHXDQiveVLiKkAlKFzKL2HKx78Uu3pBwo/qn0bM8d
-         ULAQ==
-X-Gm-Message-State: AOAM533W8mGjEvYKVYgcnVXqUXtP51aGEIWw4fM7f2uToiB4WJ/hUD9k
-        8UfKQLJMQHXZ+xYsztrTLclq6FPO9AClloXUj0Kx3cgGHRAtq3SZ
-X-Google-Smtp-Source: ABdhPJxfsPQH53y/vYQ3/lB3j1xjM6q2vj7DRi/lYdEsBClyJBPX2PgUYUbs3ftxEa6bjzlK+ywaUtUVVqTraCubNXc=
-X-Received: by 2002:aca:5548:: with SMTP id j69mr365734oib.32.1610053578754;
- Thu, 07 Jan 2021 13:06:18 -0800 (PST)
-MIME-Version: 1.0
-From:   Joe Abbott <jabbott@rollanet.org>
-Date:   Thu, 7 Jan 2021 15:06:07 -0600
-Message-ID: <CADuz4ONmN299aw460r4wXCEK5F1v9kt_cewCCrdg2hb5nJV9uQ@mail.gmail.com>
-Subject: pl2303.c 110 baud not working
+        with ESMTP id S1727858AbhAHA3z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jan 2021 19:29:55 -0500
+X-Greylist: delayed 393 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Jan 2021 16:29:14 PST
+Received: from vulcan.kevinlocke.name (vulcan.kevinlocke.name [IPv6:2001:19f0:5:727:1e84:17da:7c52:5ab4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36E5C0612F4
+        for <linux-usb@vger.kernel.org>; Thu,  7 Jan 2021 16:29:14 -0800 (PST)
+Received: from kevinlocke.name (2600-6c67-5080-46fc-e707-8c1f-78ba-ee21.res6.spectrum.com [IPv6:2600:6c67:5080:46fc:e707:8c1f:78ba:ee21])
+        (Authenticated sender: kevin@kevinlocke.name)
+        by vulcan.kevinlocke.name (Postfix) with ESMTPSA id 4EBAB1F5C10D;
+        Fri,  8 Jan 2021 00:22:39 +0000 (UTC)
+Received: by kevinlocke.name (Postfix, from userid 1000)
+        id B47A81304D95; Thu,  7 Jan 2021 17:22:36 -0700 (MST)
+Date:   Thu, 7 Jan 2021 17:22:36 -0700
+From:   Kevin Locke <kevin@kevinlocke.name>
 To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Mathias Nyman <mathias.nyman@intel.com>
+Subject: Oops from xhci_configure_endpoint on resume from S3
+Message-ID: <X/elzOTOOJMAc+1e@kevinlocke.name>
+Mail-Followup-To: Kevin Locke <kevin@kevinlocke.name>,
+        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Got redirected here by GKH email-bot.
+On a ThinkPad T430 (2342-CTO) with an Intel 7 Series USB xHCI Host
+Controller (8086:1e31) running Linux 5.11-rc2 (or torvalds master
+71c061d24438, or 4.19.0-13-amd64 from Debian stable), I can provoke a
+kernel Oops in code called from xhci_configure_endpoint by doing the
+following (performed after booting into single-user mode):
 
-My message to him was:
-I have an ASR33 teletype that I'm trying to communicate with using a
-PL2303 based Benfei USB serial adapter.  The ASR requires 110 baud 7E1
-and it appears that the driver is defaulting to 9600 baud. (possibly
-because the baud_sup array doesn't contain 110?)  I've tried adding
-110 to the array and recompiling but that doesn't seem to help. I did
-have to comment out the '/ SPDX-License-Identifier: GPL-2.0' line in
-pl2303.c to get it to compile.
+1. Connect USB3 UAS disk drive (Seagate Backup Plus Hub - 1180:e823)
+2. When "Spinning up disk..." is logged by the kernel, initiate suspend
+   to memory (`echo mem >/sys/power/state`).
+3. Once suspended, disconnect the drive.
+4. Initiate wake then immediately plug and unplug a USB2 device (Yubikey
+   1050:0406) in the same port repeatedly.
 
-The windows driver works so the hardware is capable.
+This usually causes the system to freeze (unresponsive to Magic SysRq).
+If not, repeat the steps.  Relevant (decoded) dmesg (from EFI pstore):
 
-I must be missing something.  Any help appreciated.
+kernel BUG at lib/list_debug.c:54!
+invalid opcode: 0000 [#1] SMP PTI
+CPU: 0 PID: 202 Comm: kworker/0:3 Not tainted 5.11.0-rc2 #35
+Hardware name: LENOVO 2342CTO/2342CTO, BIOS G1ETC2WW (2.82 ) 08/07/2019
+Workqueue: usb_hub_wq hub_event [usbcore]
+RIP: 0010:__list_del_entry_valid.cold (/usr/src/linux/lib/list_debug.c:54 (discriminator 3)) 
+Code: c7 c7 58 c7 8f af e8 55 1b ff ff 0f 0b 48 89 fe 48 c7 c7 e8 c7 8f af e8 44 1b ff ff 0f 0b 48 c7 c7 98 c8 8f af e8 36 1b ff ff <0f> 0b 48 89 f2 48 89 fe 48 c7 c7 58 c8 8f af e8 22 1b ff ff 0f 0b
+All code
+========
+   0:	c7 c7 58 c7 8f af    	mov    $0xaf8fc758,%edi
+   6:	e8 55 1b ff ff       	callq  0xffffffffffff1b60
+   b:	0f 0b                	ud2    
+   d:	48 89 fe             	mov    %rdi,%rsi
+  10:	48 c7 c7 e8 c7 8f af 	mov    $0xffffffffaf8fc7e8,%rdi
+  17:	e8 44 1b ff ff       	callq  0xffffffffffff1b60
+  1c:	0f 0b                	ud2    
+  1e:	48 c7 c7 98 c8 8f af 	mov    $0xffffffffaf8fc898,%rdi
+  25:	e8 36 1b ff ff       	callq  0xffffffffffff1b60
+  2a:*	0f 0b                	ud2    		<-- trapping instruction
+  2c:	48 89 f2             	mov    %rsi,%rdx
+  2f:	48 89 fe             	mov    %rdi,%rsi
+  32:	48 c7 c7 58 c8 8f af 	mov    $0xffffffffaf8fc858,%rdi
+  39:	e8 22 1b ff ff       	callq  0xffffffffffff1b60
+  3e:	0f 0b                	ud2    
 
-Running Mint 19.3 64-bit.
+Code starting with the faulting instruction
+===========================================
+   0:	0f 0b                	ud2    
+   2:	48 89 f2             	mov    %rsi,%rdx
+   5:	48 89 fe             	mov    %rdi,%rsi
+   8:	48 c7 c7 58 c8 8f af 	mov    $0xffffffffaf8fc858,%rdi
+   f:	e8 22 1b ff ff       	callq  0xffffffffffff1b36
+  14:	0f 0b                	ud2    
+RSP: 0018:ffffa4158062b8c8 EFLAGS: 00010046
+RAX: 0000000000000054 RBX: ffff99b684412408 RCX: ffff99b796217a48
+RDX: 0000000000000000 RSI: 0000000000000027 RDI: ffff99b796217a40
+RBP: ffff99b684412498 R08: 0000000000000000 R09: ffffa4158062b700
+R10: 0000000000000001 R11: 0000000000000001 R12: ffff99b680b14260
+Call Trace:
+xhci_drop_ep_from_interval_table (/usr/src/linux/./include/linux/list.h:132 /usr/src/linux/./include/linux/list.h:204 /usr/src/linux/drivers/usb/host/xhci.c:2678) xhci_hcd
+xhci_reserve_bandwidth (/usr/src/linux/drivers/usb/host/xhci.c:2805) xhci_hcd
+? __wake_up_common_lock (/usr/src/linux/kernel/sched/wait.c:141 (discriminator 1)) 
+? ep_poll_callback (/usr/src/linux/fs/eventpoll.c:1197) 
+? __wake_up_common (/usr/src/linux/kernel/sched/wait.c:109) 
+? __wake_up_common_lock (/usr/src/linux/kernel/sched/wait.c:141 (discriminator 1)) 
+? ep_poll_callback (/usr/src/linux/fs/eventpoll.c:1197) 
+? __wake_up_common (/usr/src/linux/kernel/sched/wait.c:109) 
+? __inode_wait_for_writeback (/usr/src/linux/fs/fs-writeback.c:1339) 
+? select_collect2 (/usr/src/linux/fs/dcache.c:1501) 
+? d_walk (/usr/src/linux/./include/linux/rcupdate.h:697 /usr/src/linux/fs/dcache.c:1384) 
+? select_collect2 (/usr/src/linux/fs/dcache.c:1501) 
+? __inode_wait_for_writeback (/usr/src/linux/fs/fs-writeback.c:1339) 
+? fsnotify_grab_connector (/usr/src/linux/fs/notify/mark.c:539) 
+? xhci_update_device (/usr/src/linux/./arch/x86/include/asm/jump_label.h:25 /usr/src/linux/./include/linux/jump_label.h:200 /usr/src/linux/drivers/usb/host/xhci-trace.h:50) xhci_hcd
+? xhci_dbg_trace (/usr/src/linux/drivers/usb/host/xhci-dbg.c:34) xhci_hcd
+xhci_configure_endpoint (/usr/src/linux/drivers/usb/host/xhci.c:2907 (discriminator 1)) xhci_hcd
+xhci_check_bandwidth (/usr/src/linux/drivers/usb/host/xhci.c:3048 /usr/src/linux/drivers/usb/host/xhci.c:2988) xhci_hcd
+Modules linked in: uas usb_storage nf_tables libcrc32c nfnetlink ctr ccm blowfish_generic blowfish_x86_64 blowfish_common des_generic des3_ede_x86_64 libdes cast5_avx_x86_64 cast5_generic cast_common cbc hid_generic usbhid hid aes_generic lrw gf128mul ecb camellia_generic camellia_aesni_avx_x86_64 camellia_x86_64 twofish_generic twofish_avx_x86_64 twofish_x86_64_3way twofish_x86_64 twofish_common snd_hda_codec_realtek snd_hda_codec_generic intel_rapl_msr intel_rapl_common serpent_avx_x86_64 x86_pkg_temp_thermal intel_powerclamp coretemp kvm_intel serpent_sse2_x86_64 kvm serpent_generic nls_ascii irqbypass xts crc32_pclmul i915 nls_cp437 snd_hda_intel algif_skcipher snd_intel_dspcfg vfat fat mei_wdt at24 ghash_clmulni_intel af_alg iwldvm soundwire_intel rapl wmi_bmof essiv authenc intel_cstate drm_kms_helper soundwire_generic_allocation mac80211 snd_soc_core snd_compress cec soundwire_cadence intel_uncore libarc4 snd_hda_codec drm pcspkr iwlwifi snd_hda_core iTCO_wdt
+snd_hwdep sdhci_pci intel_pmc_bxt joydev xhci_pci soundwire_bus cqhci i2c_algo_bit sr_mod e1000e xhci_hcd efi_pstore ehci_pci thinkpad_acpi snd_pcm fb_sys_fops cdrom sdhci syscopyarea ehci_hcd iTCO_vendor_support tpm_tis ptp nvram mei_me sysfillrect snd_timer sg i2c_i801 watchdog cfg80211 tpm_tis_core ledtrig_audio usbcore mmc_core sysimgblt mei i2c_smbus snd pps_core tpm soundcore rfkill wmi ac rng_core battery video button loop fuse configfs efivarfs ip_tables x_tables autofs4 ext4 crc32c_generic crc16 mbcache jbd2 dm_crypt dm_mod sd_mod t10_pi crc_t10dif crct10dif_generic crct10dif_pclmul crct10dif_common crc32c_intel ahci libahci psmouse libata aesni_intel glue_helper libaes crypto_simd evdev scsi_mod serio_raw cryptd
 
-I'm using stty to set baud rate like this:
-stty 110 cs7 evenp -F /dev/ttyUSB0
-stty reports that 110 is in use when I:
-stty -F /dev/ttyUSB0
+The stacktrace tends to change, but always includes
+xhci_configure_endpoint called from xhci_check_bandwidth.  The .config,
+along with two full dmesg for kernel 5.11-rc2 (with different stack
+traces) and one for 4.19.0-13-amd64 are hosted at
+https://gitlab.com/kevinoid/linux-xhci-resume-oops-info
 
-Oscope shows 150 and above changing (didn't try 75) but 110 reverts to
-9600 (mentioned in pl2303.c file).
+Let me know if there's anything else I can do to help diagnose/debug.
 
-Also tried putty.
+Thanks,
+Kevin
 
-dmesg:
-[ 3990.294929] usb 6-1: new full-speed USB device number 13 using uhci_hcd
-[ 3990.479021] usb 6-1: New USB device found, idVendor=067b,
-idProduct=2303, bcdDevice= 3.00
-[ 3990.479028] usb 6-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-[ 3990.479032] usb 6-1: Product: USB-Serial Controller
-[ 3990.479036] usb 6-1: Manufacturer: Prolific Technology Inc.
-[ 3990.481075] pl2303 6-1:1.0: pl2303 converter detected
-[ 3990.494144] usb 6-1: pl2303 converter now attached to ttyUSB0
-
-
-Here is lsusb:
-Bus 002 Device 002: ID 0bda:0158 Realtek Semiconductor Corp. USB 2.0
-multicard reader
-Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 007 Device 002: ID 046d:c00e Logitech, Inc. M-BJ58/M-BJ69 Optical
-Wheel Mouse
-Bus 007 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 006 Device 009: ID 067b:2303 Prolific Technology, Inc. PL2303 Serial Port
-Bus 006 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 005 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 001 Device 002: ID 04f2:b027 Chicony Electronics Co., Ltd Gateway
-USB 2.0 Webcam
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 004 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 003 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-
-Here's modinfo:
-filename:
-/lib/modules/5.0.0-32-generic/kernel/drivers/usb/serial/pl2303.ko
-license:        GPL v2
-description:    Prolific PL2303 USB to serial adaptor driver
-srcversion:     4864FE101A0398064B5D9A8
-alias:          usb:v0CAAp3001d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v0B8Cp2303d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v0B63p6530d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v11ADp0001d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v054Cp0437d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v04B8p0522d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v04B8p0521d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v03F0p0956d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v03F0p5039d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v03F0p026Bd*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v03F0p3239d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v03F0p3139d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v03F0p4439d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v03F0p0B39d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v03F0p0183d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v03F0p0F7Fd*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v03F0p4349d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v03F0p3524d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v5372p2303d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v05ADp0FBAd*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v07AAp002Ad*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v11F6p2001d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v058Fp9720d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v050Dp0257d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v0731p2003d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v0E55p110Bd*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v0413p2101d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v079Bp0027d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v10B5pAC70d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v078Bp1234d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v0745p0001d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v04A5p4027d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v11F5p0005d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v11F5p0004d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v11F5p0003d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v11F5p0001d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v11F7p02DFd*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v6189p2068d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v0731p0528d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v1453p4026d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v2478p2008d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v0584pB000d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v0DF7p0620d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v0EBAp2080d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v0EBAp1080d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v056Ep5004d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v056Ep5003d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v0547p2008d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v0557p2118d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v0557p2022d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v0557p2021d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v0557p2008d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v04BBp0A0Ed*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v04BBp0A03d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067Bp23F3d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067Bp23E3d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067Bp23D3d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067Bp23C3d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067Bp23B3d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067Bp23A3d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067Bp2304d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067BpE1F1d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067Bp0307d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067Bp331Ad*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067Bp0609d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067Bp0612d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067Bp0611d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067BpAAA0d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067BpAAA8d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067BpAAA2d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067Bp1234d*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067Bp04BBd*dc*dsc*dp*ic*isc*ip*in*
-alias:          usb:v067Bp2303d*dc*dsc*dp*ic*isc*ip*in*
-depends:        usbserial
-retpoline:      Y
-name:           pl2303
-vermagic:       5.0.0-32-generic SMP mod_unload
+P.S. Please CC me in responses as I am not subscribed to linux-usb.
