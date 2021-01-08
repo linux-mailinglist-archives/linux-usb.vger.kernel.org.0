@@ -2,58 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C659D2EEEA8
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 09:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 557572EEF3F
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 10:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727265AbhAHIgz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jan 2021 03:36:55 -0500
-Received: from m43-15.mailgun.net ([69.72.43.15]:23575 "EHLO
-        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725793AbhAHIgz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jan 2021 03:36:55 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1610094989; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=FBXv1OEG0N3B6hZlapLTMyecBYVCSlwsfuCoe1hhnzA=; b=Mb1CLA4oLCLHK/rfcEQs3+epvPb9FOPa5Ja6JZtcrCMAs6q+4tnaW/3Nk83a4fE82SDfAqng
- tUbu76vUPxgpffF172IwckLlZoMxxOOHzdvaM3IAUFCjLP8bl+tvU9v8R35vUir9JdBmrNor
- B69DtWQisNyjniywnUe6SWLioYY=
-X-Mailgun-Sending-Ip: 69.72.43.15
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
- 5ff81973661021aa28804613 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 08 Jan 2021 08:36:03
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id CF7A8C433CA; Fri,  8 Jan 2021 08:36:02 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B3975C433C6;
-        Fri,  8 Jan 2021 08:36:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B3975C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-Date:   Fri, 8 Jan 2021 00:35:59 -0800
-From:   Jack Pham <jackp@codeaurora.org>
+        id S1727934AbhAHJMw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jan 2021 04:12:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48656 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727906AbhAHJMv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 8 Jan 2021 04:12:51 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7E70522248;
+        Fri,  8 Jan 2021 09:12:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1610097131;
+        bh=DZfi/I+2yXa4/m5ViwQoChMYe+Ckti6vA220I8dggV4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o++K5dKK+ctBEHmms2e/B1ounGtdhNSqrQ6j6DO50hwBrQh7MJrpOzMfvT/3SUOCS
+         3tWht+wTZY/IQ8KsSo3NiyADAozYEJuaiKr2qxtC4baSIV6eon3dYefeHiW5gD7Ka4
+         J2j6QymNlShZWTQ9tQ+kWiElFgtkmz+D/TNu80cc=
+Date:   Fri, 8 Jan 2021 10:13:28 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 Cc:     Felipe Balbi <balbi@kernel.org>,
         Wesley Cheng <wcheng@codeaurora.org>,
         "peter.chen@nxp.com" <peter.chen@nxp.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
 Subject: Re: [PATCH 2/3] usb: gadget: composite: Split composite reset and
  disconnect
-Message-ID: <20210108083559.GD31406@jackp-linux.qualcomm.com>
+Message-ID: <X/giOFJLsx2E3krg@kroah.com>
 References: <1609283011-21997-1-git-send-email-wcheng@codeaurora.org>
  <1609283011-21997-3-git-send-email-wcheng@codeaurora.org>
  <87k0srcyq7.fsf@kernel.org>
@@ -62,12 +39,9 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <37f3412c-9e91-eb1e-3974-bb16546b4b39@synopsys.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
-
-Hi Thinh,
 
 On Fri, Jan 08, 2021 at 02:19:30AM +0000, Thinh Nguyen wrote:
 > Hi Wesley,
@@ -94,23 +68,9 @@ On Fri, Jan 08, 2021 at 02:19:30AM +0000, Thinh Nguyen wrote:
 > 
 > This patch series is already in Greg's usb-testing. Please review and
 > help fix it.
-> 
-> We can see the failure once the patch "usb: gadget: configfs: Add a
-> specific configFS reset callback" is introduced.
 
-Hmm. Does your device use a legacy USB2 PHY (not generic PHY) driver,
-and does it implement the usb_phy_set_power() callback? Because
-otherwise this new configfs_composite_reset() callback would not have
-changed from the original behavior since the newly introduced (in patch
-1/3) dwc3_gadget_vbus_draw() callback would simply be a no-op if
-dwc->usb2_phy is not present.
+Should I just revert this?  I'll be glad to drop it.
 
-If it does turn out to be something with your PHY driver's set_power(),
-it's still puzzling since it's directed to only the usb2_phy, so I'm
-curious how telling it to draw 100mA could affect SSP operation at all.
+thanks,
 
-Thanks,
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+greg k-h
