@@ -2,107 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D25352EEFCC
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 10:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 695B92EEFFF
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 10:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727860AbhAHJlO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jan 2021 04:41:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727762AbhAHJlN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jan 2021 04:41:13 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EE8C0612F4;
-        Fri,  8 Jan 2021 01:40:27 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id i7so7324508pgc.8;
-        Fri, 08 Jan 2021 01:40:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=UIMWNThMlb8quIZqiuEB9j3wA4qlDG0Qv9DWb7+v2mg=;
-        b=rM/0CSYSV/d+qd8imNdoEixIqJLgfyDqZ7gLL1tNlWGJLfLlz7RMee5uFvDKkEaWbc
-         O6Q79MizkB+gdhvcDH3uHUlDiDiyzRaPn4I/ZAt4yZjhqoFgYz1078KCohANjUIscoko
-         pdDcRYgi5kNGRpHWtt23USorGxWR+SvwxEw40HtZfel32CFLxZmN4ESWepiK1+G7HI9E
-         ymLW6sPRUHvo3ILuZ8/BrfzzW6kzkAVZV3Ax2jIgk6ZFbPzjzN0UHawijF3AF7N/+ZCp
-         uwshOCGSdyIeuTIhAd/o7xuK1jND12IcMcd9XwED7p8dFkLdb++UEMmM4CfjrU6AbX9l
-         vcCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=UIMWNThMlb8quIZqiuEB9j3wA4qlDG0Qv9DWb7+v2mg=;
-        b=CAiwbEB1mUy+E6HyguVpLEY3OmAri2V/FPpid6mrm9wOg3wlhGoKmDWPLeYwkYXnCL
-         KCweZCGcESyzk7J77ojb/qnDrpLmxG9NN/kG9BzBw+JTsvZ+2UH6S7ePSqsPDVdjnFGF
-         2IwwBHvCsxfd+5wP6rp6ZKSuTw1wd58+rhxYP7BQ3AgzNqECbCgRP7zff24PlbIxwnaQ
-         HHF37R9spSB7rCN/uUDNZa8oN5UdRNhEPBlBZTMqZ1bcAt7Z2qaNh2KupRQ6olZAILki
-         cyHURUdba9BEL3Ish6rkK9qXDaam4i+dINqEXneWXiXuxVPJwRKeuDr2rmFGbVeSiIaU
-         ooLQ==
-X-Gm-Message-State: AOAM532ujw3j1jrOx+TMhQq7OaP9S+tdyhJrVfdlQ7zixn4Hx+bZ6Gk5
-        DcSUQafM8SFkVgtdP1OGqXg=
-X-Google-Smtp-Source: ABdhPJzY9j3GBFIGUnHKx/qtTLAdiLq3NA007Pxtpm6t421urUpmoDTlnIiKA/E496vt+h5nNPoZeA==
-X-Received: by 2002:a63:c84a:: with SMTP id l10mr6310502pgi.159.1610098827099;
-        Fri, 08 Jan 2021 01:40:27 -0800 (PST)
-Received: from b29397-desktop ([84.17.34.154])
-        by smtp.gmail.com with ESMTPSA id b2sm8208602pff.79.2021.01.08.01.40.22
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 08 Jan 2021 01:40:25 -0800 (PST)
-Date:   Fri, 8 Jan 2021 17:40:16 +0800
-From:   Peter Chen <hzpeterchen@gmail.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        John Youn <John.Youn@synopsys.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH 0/2] usb: dwc3: gadget: Check for multiple start/stop
-Message-ID: <20210108094016.GA13606@b29397-desktop>
-References: <cover.1609865348.git.Thinh.Nguyen@synopsys.com>
- <20210108023646.GB4672@b29397-desktop>
- <93173de2-4ba0-52ab-1453-da5535c70ace@synopsys.com>
+        id S1727965AbhAHJqd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jan 2021 04:46:33 -0500
+Received: from mail-am6eur05on2051.outbound.protection.outlook.com ([40.107.22.51]:19936
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727525AbhAHJqc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 8 Jan 2021 04:46:32 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Pwf+oQNRrOui2CVg3kcJxwjYDu50dVHGz+ZbhodWApOP00c4Nd9DtkjPzDYJ2UCSU4LigZK8cirobziUhV1Cqi45yVnFkvrtjk3FtDI+pc42ocAiVhqPZqZnmNgrnBdYFZXJQimuH8cb9Uak+XKHRE1rY5q4iuV6+CP/V7tBfoMzqZgBAyKrpPwMJx04rivPo/VAXhxWqp2Dn4hcfyiyi+UoGkF46KwrEOpsDYucouN8SwE2DtpTJpEibDL1ERC5kjd4WkmBX1RqmWfmF6b1vOOeNgQNMdf61M7OIZM4YOnWLvDJYI6wGHWHei3I9mEY1ezPgyzGU1QdXeh0g7IOkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pgUEiHm7smP//4W0CGvgoOsGsPlkKbeKzmIkYpc+hg4=;
+ b=CdORIZ7aWQMx9Rtg/uBrz+XG07YEaXEtED/qdUgrFm1M4vOHwfwDDa+bfKVN9lBYLt4i72WB3FiaXjAhK0UdGVx/KBubRBucnXwesdTUZB7mljP/5vvxbnE2BJhJFuir+0pJ867TxARivS2KfzjAJ2Q5C4I2UNgSG2pwOjUeU2KslitoaymEg+fA/tOFQMcDTGfhvQL4j0dtdcaP3s76X1yfzjot1PRJ6pTrBvM0pMymEQWYRDsaUmkykmF3atPY7EMvBAVnfijfExKHsxAywMM7mWYjCjU9ngfL3hQUYVpZ+GjOF0fzlTHjOJFeztOap0HUclhFgUC/lbf71Ul7Hw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pgUEiHm7smP//4W0CGvgoOsGsPlkKbeKzmIkYpc+hg4=;
+ b=q4Dc+rUQG7zmIN44KUefmt6keW669tokcKewvqmJn49mwdi+vId/FZCQJbTb5+DBShQyVFr7WOonPOV5+qXlNreBNh+V8eNWXsW+jRR2BC8UVGjvk/vyjathGN8Y0e9ShHaXl+EHjLE8sVJ/cBDJAKe5JqKN6ZDOoacc5xn+NfY=
+Authentication-Results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=nxp.com;
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
+ by DB8PR04MB7180.eurprd04.prod.outlook.com (2603:10a6:10:12c::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.6; Fri, 8 Jan
+ 2021 09:45:43 +0000
+Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::89de:bd7c:7245:f139]) by DBBPR04MB7979.eurprd04.prod.outlook.com
+ ([fe80::89de:bd7c:7245:f139%5]) with mapi id 15.20.3742.006; Fri, 8 Jan 2021
+ 09:45:43 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     mathias.nyman@intel.com
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        linux-imx@nxp.com, Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH RESEND 1/1]usb: host: xhci-plat: forbid runtime pm conditionally
+Date:   Fri,  8 Jan 2021 17:45:01 +0800
+Message-Id: <20210108094501.18903-1-peter.chen@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-Originating-IP: [119.31.174.66]
+X-ClientProxiedBy: SG2PR03CA0089.apcprd03.prod.outlook.com
+ (2603:1096:4:7c::17) To DBBPR04MB7979.eurprd04.prod.outlook.com
+ (2603:10a6:10:1ec::9)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <93173de2-4ba0-52ab-1453-da5535c70ace@synopsys.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from b29397-desktop.ap.freescale.net (119.31.174.66) by SG2PR03CA0089.apcprd03.prod.outlook.com (2603:1096:4:7c::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.2 via Frontend Transport; Fri, 8 Jan 2021 09:45:41 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 12e854dc-9807-408a-e15e-08d8b3ba2a84
+X-MS-TrafficTypeDiagnostic: DB8PR04MB7180:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DB8PR04MB718077BE81BA9D0EE63DFF4A8BAE0@DB8PR04MB7180.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: B9YNJeGv5tHHqo46CkC8b2Qm9h2pLb9XsAFijMzcLfNLWkOmoMGYw9YIDj4dpYQ2z3XF6HRfL7Pm2IkT4YXekK3wBzWHrReOJyEFh2FNNcCEUNLtULyru36vywUokBI8ATZklRZdJ67ZTo9JAkaepaKJ6oRMb8tiWde8vUc/BqBlDaxx+povu4KINUFT/z+TQtTQLk25s2OHcql+M3/cNjG44lShr7pCYy0TwIhUopPSrXtpXB4KtURbKQgklopCGfhwHxOaEz+AQTJnRZkIn9Tii0zJV5/SEiDOO6xKml6k2m6xO0Y9L6OJB1075yrW5DJFJNNQGqKnD78mIlsLb8WZeHnYVRyM7bQDc64+WZupMHGcsI2zWlJkdRVu0KLrTaMVSzKopSf99auNiNmAUA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(376002)(39860400002)(136003)(346002)(366004)(6512007)(52116002)(6666004)(6916009)(6486002)(36756003)(8676002)(83380400001)(1076003)(6506007)(66556008)(2906002)(2616005)(5660300002)(8936002)(956004)(16526019)(4744005)(86362001)(44832011)(66476007)(186003)(66946007)(4326008)(478600001)(26005)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?jGNZZSZPhYr5nJVlHKNimjNR4whFobQmYl7Buls4E5GucaVR7ogZb8uKwtoO?=
+ =?us-ascii?Q?vbYOqJfWHeeZjJ4Lurl09zeF8z+aqdrGtS492DQ4e/r5GZ3RPrmIR60ZWOjD?=
+ =?us-ascii?Q?lE9BwrI1O2+ooQjxouqHyimlxNnVtTl0oY1tuFx0/W1hWC+rbRjCJXdpfq/4?=
+ =?us-ascii?Q?sGfuDZ6sDEcl/koialJTgtkDbN3d1uV6YumsZSLXIPt8DilUQG51x9L/fK7J?=
+ =?us-ascii?Q?vbFyK8Pe6BegYjPRd9Bz8Kfc5E0vmz1yTZA4F2uiEDEMZSVJnWCa+ScW2xp+?=
+ =?us-ascii?Q?WhwyqxDuO5W3ioaGFpEzMMjz8d3BtjlUots3IuTeMozdMemHgsgKwdDDANVP?=
+ =?us-ascii?Q?27IgdzfY6fYNpNG7V1pEPQjcrDe+Oxx6PbvUUIV4aCF2Pyte+ck2bwpo+yx0?=
+ =?us-ascii?Q?oNjazLvpsc9N6oGixZ57BwpszvcQh/x6vA/mXl4vpbDL/65CbQ9RBH3GY1AS?=
+ =?us-ascii?Q?UA1jrFWBJ2EDkNNE6Xiq5dhMiTOSOB6gqPmRy2n+fcSCtMWgcPOEHAr/a7il?=
+ =?us-ascii?Q?GOTn1Z+wgSKz7+lIUl/KK4RrArdwnEkJPJ2F5SBJdTPDOl+gfWNmD8XdK1t7?=
+ =?us-ascii?Q?eV6NnO/iBkaJCsGzW8o9Y3MUFdioV0XrZfYZ87CEPDkZcBY4HYewTt7HjbKP?=
+ =?us-ascii?Q?tPUu3kJ85rV96Wq5lDZ2kReuPE2M3hnW5sHSejADJvDyAfsRZTRoot+i1kxd?=
+ =?us-ascii?Q?CGsK4MhxorMdcjT1JIl6A5kOD+Hih6FxxGf3vJ7fK3utimxHNoDN2j23hL/D?=
+ =?us-ascii?Q?ejeJLqYsBpA/dFm26eUNYry0A39fyZFEXvcdsMW9L9clEpTr0zdE0j2V03IN?=
+ =?us-ascii?Q?xeN68C0HgXCg/Rst+S5iwbVrWjbAnYSrSLHx1Dt7ML38KO6t486R/d0jE+mu?=
+ =?us-ascii?Q?92pKL+wdo5cjisJICADkSD5kTOFiEC/5WiCxhxfWGD5oqvgCqAcL60DPst/i?=
+ =?us-ascii?Q?qZWGUAZUGyUy2LrFh+J6wCQEGoaD1LNli3kNcfsWUim8TIkfBLtLY8y/AodH?=
+ =?us-ascii?Q?zH46?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2021 09:45:43.1207
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12e854dc-9807-408a-e15e-08d8b3ba2a84
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fZz8dXe2O5RQ7RZT18VvRypZO+24JeyqBfM6WxPKhIVTj5FtjssJCVwa9svU28OxCNckKwCXKk38/e6Tx3FBOQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7180
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-01-08 02:40:55, Thinh Nguyen wrote:
-> Hi Peter,
-> 
-> Peter Chen wrote:
-> > On 21-01-05 08:56:28, Thinh Nguyen wrote:
-> >> Add some checks to avoid going through the start/stop sequence if the gadget
-> >> had already started/stopped. This series base-commit is Greg's usb-linus
-> >> branch.
-> >>
-> > Hi Thinh,
-> >
-> > What's the sequence your could reproduce it?
-> >
-> > Peter
-> 
-> You can test as follow:
-> 
-> # echo connect > /sys/class/udc/<UDC>/soft_connect
-> # echo connect > /sys/class/udc/<UDC>/soft_connect
-> 
-> and
-> 
-> # echo disconnect > /sys/class/udc/<UDC>/soft_connect
-> # echo disconnect > /sys/class/udc/<UDC>/soft_connect
-> 
-> Thinh
-> 
+Some users may want to enable runtime pm by default, using the quirk
+to judge it.
 
-Thanks, now I reproduce the issue. Another improvement you
-might consider adding is checking return value for usb_gadget_udc_start
-at soft_connect_store.
+Reviewed-by: Jun Li <jun.li@nxp.com>
+Reviewed-by: Ran Wang <ran.wang_1@nxp.com>
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+ drivers/usb/host/xhci-plat.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 3ff84a489ce5..00f98243f6cf 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -355,7 +355,8 @@ static int xhci_plat_probe(struct platform_device *pdev)
+ 	 * Prevent runtime pm from being on as default, users should enable
+ 	 * runtime pm using power/control in sysfs.
+ 	 */
+-	pm_runtime_forbid(&pdev->dev);
++	if (!(xhci->quirks & XHCI_DEFAULT_PM_RUNTIME_ALLOW))
++		pm_runtime_forbid(&pdev->dev);
+ 
+ 	return 0;
+ 
 -- 
-
-Thanks,
-Peter Chen
+2.17.1
 
