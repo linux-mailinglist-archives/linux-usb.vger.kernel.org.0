@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E472EFBCF
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Jan 2021 00:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13BE92EFBE5
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Jan 2021 00:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725916AbhAHXrN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jan 2021 18:47:13 -0500
-Received: from mga04.intel.com ([192.55.52.120]:10261 "EHLO mga04.intel.com"
+        id S1726088AbhAHX5O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jan 2021 18:57:14 -0500
+Received: from mga02.intel.com ([134.134.136.20]:49311 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725793AbhAHXrN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 8 Jan 2021 18:47:13 -0500
-IronPort-SDR: q2OHDib1WS15dvExUMM+1Y7mk4T1UGV6Mn3+RrE6Xz0UO0karnALi9CnB8i9CQNJ3HA5NX/na6
- hk97bGKplQDw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9858"; a="175091242"
+        id S1725792AbhAHX5O (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 8 Jan 2021 18:57:14 -0500
+IronPort-SDR: Lv0gAcJ7ReAXYm028hfwsUK1PcAAVWuXesUI04KUiqHIlRhRdxV9TyeXWgU6moxTWch6GPLtwJ
+ p41IesCi9DrQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9858"; a="164748948"
 X-IronPort-AV: E=Sophos;i="5.79,333,1602572400"; 
-   d="scan'208";a="175091242"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2021 15:46:32 -0800
-IronPort-SDR: pJnh+yNohsWNdK8fNf+CW+3QeCpt+EsjdCU0iNXAliG7M5JXvmpEUjIngmzXFoGHCdqoudHLT/
- VUQ2jC6JTlSw==
+   d="scan'208";a="164748948"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2021 15:56:33 -0800
+IronPort-SDR: 2sGDOrOD3ZaBLPe5L0HO0p8je35D7LIkx7YPhmH8Ey2mzoS1WtmxPklPctfFnH4fh29P+rCvU5
+ rsrXy8bPh92g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.79,333,1602572400"; 
-   d="scan'208";a="351025007"
+   d="scan'208";a="380294661"
 Received: from lkp-server01.sh.intel.com (HELO 412602b27703) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 08 Jan 2021 15:46:31 -0800
+  by orsmga008.jf.intel.com with ESMTP; 08 Jan 2021 15:56:31 -0800
 Received: from kbuild by 412602b27703 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1ky1Sg-0000l1-Hv; Fri, 08 Jan 2021 23:46:30 +0000
-Date:   Sat, 09 Jan 2021 07:46:13 +0800
+        id 1ky1cN-0000lM-9N; Fri, 08 Jan 2021 23:56:31 +0000
+Date:   Sat, 09 Jan 2021 07:56:04 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 841081d89d5adf96759f2df50185de950f5d8694
-Message-ID: <5ff8eec5.j7VgPY7tCdq4uTOm%lkp@intel.com>
+Subject: [usb:usb-next] BUILD SUCCESS
+ ed054e4e95d6cb0582f1283707ddb40f18d14bfb
+Message-ID: <5ff8f114.ItUNABZIHTAJdhrJ%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -43,12 +43,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: 841081d89d5adf96759f2df50185de950f5d8694  usb: usbip: Use DEFINE_SPINLOCK() for spinlock
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-next
+branch HEAD: ed054e4e95d6cb0582f1283707ddb40f18d14bfb  USB: gadget: f_printer: set a default q_len
 
-elapsed time: 1324m
+elapsed time: 1334m
 
-configs tested: 178
+configs tested: 187
 configs skipped: 2
 
 The following configs have been built successfully.
@@ -64,16 +64,16 @@ powerpc                 xes_mpc85xx_defconfig
 powerpc                 mpc832x_rdb_defconfig
 arm                       imx_v6_v7_defconfig
 x86_64                              defconfig
-arm                          iop32x_defconfig
-powerpc                         wii_defconfig
-mips                      pistachio_defconfig
-m68k                           sun3_defconfig
 nios2                            allyesconfig
 powerpc                    mvme5100_defconfig
 mips                          ath25_defconfig
 sh                             shx3_defconfig
 m68k                          multi_defconfig
 sh                          lboxre2_defconfig
+sh                          rsk7269_defconfig
+sh                               j2_defconfig
+arm                       multi_v4t_defconfig
+h8300                            alldefconfig
 arc                     haps_hs_smp_defconfig
 um                           x86_64_defconfig
 sparc64                          alldefconfig
@@ -82,6 +82,7 @@ sh                           se7721_defconfig
 powerpc                      mgcoge_defconfig
 mips                      malta_kvm_defconfig
 m68k                        mvme16x_defconfig
+powerpc                         wii_defconfig
 riscv                          rv32_defconfig
 m68k                             alldefconfig
 openrisc                  or1klitex_defconfig
@@ -103,13 +104,20 @@ sparc                       sparc64_defconfig
 c6x                        evmc6472_defconfig
 xtensa                generic_kc705_defconfig
 mips                  decstation_64_defconfig
+c6x                        evmc6457_defconfig
+powerpc                 mpc8272_ads_defconfig
+powerpc                     ep8248e_defconfig
+powerpc                   lite5200b_defconfig
+arm                         assabet_defconfig
+powerpc                    sam440ep_defconfig
+mips                         tb0219_defconfig
+mips                      bmips_stb_defconfig
+powerpc                      ppc6xx_defconfig
 mips                        workpad_defconfig
 mips                        omega2p_defconfig
 sh                            titan_defconfig
 powerpc                      ppc64e_defconfig
 sh                        dreamcast_defconfig
-powerpc                 mpc8560_ads_defconfig
-powerpc                     taishan_defconfig
 arm                         lpc18xx_defconfig
 arm                        mvebu_v7_defconfig
 microblaze                          defconfig
@@ -129,6 +137,12 @@ arm                       omap2plus_defconfig
 mips                     cu1830-neo_defconfig
 alpha                            alldefconfig
 mips                           ci20_defconfig
+nios2                               defconfig
+sh                          sdk7780_defconfig
+sparc                               defconfig
+powerpc                        fsp2_defconfig
+arm                        neponset_defconfig
+microblaze                      mmu_defconfig
 powerpc                  mpc885_ads_defconfig
 mips                malta_kvm_guest_defconfig
 i386                             allyesconfig
@@ -143,10 +157,6 @@ sh                         ecovec24_defconfig
 powerpc                     pseries_defconfig
 arm                         lpc32xx_defconfig
 powerpc                     kilauea_defconfig
-arc                      axs103_smp_defconfig
-openrisc                    or1ksim_defconfig
-mips                        nlm_xlp_defconfig
-arm                          imote2_defconfig
 arm                       aspeed_g5_defconfig
 m68k                       m5249evb_defconfig
 sh                           se7619_defconfig
@@ -155,14 +165,15 @@ arc                          axs103_defconfig
 arm                     eseries_pxa_defconfig
 sh                          r7780mp_defconfig
 powerpc                      acadia_defconfig
-sh                           se7722_defconfig
-sh                        sh7763rdp_defconfig
-parisc                generic-64bit_defconfig
-powerpc                       holly_defconfig
-powerpc                     mpc83xx_defconfig
 arc                          axs101_defconfig
 mips                           gcw0_defconfig
 mips                      pic32mzda_defconfig
+mips                      pistachio_defconfig
+arm                        vexpress_defconfig
+mips                            gpr_defconfig
+sh                            hp6xx_defconfig
+arm                      integrator_defconfig
+sh                   rts7751r2dplus_defconfig
 arm                    vt8500_v6_v7_defconfig
 powerpc                      chrp32_defconfig
 arm                          lpd270_defconfig
@@ -172,14 +183,13 @@ ia64                             allyesconfig
 m68k                             allmodconfig
 m68k                                defconfig
 m68k                             allyesconfig
-nios2                               defconfig
 arc                              allyesconfig
 nds32                             allnoconfig
 c6x                              allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
 nds32                               defconfig
 csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
 xtensa                           allyesconfig
 h8300                            allyesconfig
 arc                                 defconfig
@@ -189,7 +199,6 @@ s390                             allyesconfig
 parisc                           allyesconfig
 s390                                defconfig
 sparc                            allyesconfig
-sparc                               defconfig
 i386                               tinyconfig
 i386                                defconfig
 mips                             allyesconfig
