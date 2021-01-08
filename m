@@ -2,70 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3462EED7A
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 07:35:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 477402EED86
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 07:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725901AbhAHGe4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jan 2021 01:34:56 -0500
-Received: from mailgw02.mediatek.com ([1.203.163.81]:45451 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725308AbhAHGe4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jan 2021 01:34:56 -0500
-X-UUID: 55c8912c73be4b9ebcb8bec3238891e7-20210108
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=FMnLCnisKI4QJNM0w1sFZfQNsdLpDgJ5G65JySoATkI=;
-        b=soUUJ1C6hznBgM+w3yueqmo+Q4tJAZo9zIOhxZDGIG7ubUvSMl7cPvmGXuN6C+8WERRV2s3ZCTodJG056kf8nwuLhyLJ1tvbRvGLYdeBXr4VO2nsRaEDoai6ljrib4+R0Mb2Y6ca1cr47P8Nl3Fbhuu8k/Q9HR7UQCG8ZZwi5QQ=;
-X-UUID: 55c8912c73be4b9ebcb8bec3238891e7-20210108
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1488119658; Fri, 08 Jan 2021 14:34:12 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31DR.mediatek.inc
- (172.27.6.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 8 Jan
- 2021 14:34:09 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 8 Jan 2021 14:34:08 +0800
-Message-ID: <1610087648.24856.41.camel@mhfsdcap03>
-Subject: Re: [PATCH v5] usb: xhci-mtk: fix unreleased bandwidth data
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Ikjoon Jang <ikjn@chromium.org>
-CC:     <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        "Tianping Fang" <tianping.fang@mediatek.com>,
-        Zhanyong Wang <zhanyong.wang@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Fri, 8 Jan 2021 14:34:08 +0800
-In-Reply-To: <20201229142406.v5.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
-References: <20201229142406.v5.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1725942AbhAHGme (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jan 2021 01:42:34 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:3466 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725791AbhAHGme (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jan 2021 01:42:34 -0500
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5ff7feb10000>; Thu, 07 Jan 2021 22:41:53 -0800
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 8 Jan
+ 2021 06:41:52 +0000
+Received: from jckuo-lt.nvidia.com (172.20.145.6) by mail.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
+ Transport; Fri, 8 Jan 2021 06:41:50 +0000
+From:   JC Kuo <jckuo@nvidia.com>
+To:     <mathias.nyman@linux.intel.com>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <robh@kernel.org>
+CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <nkristam@nvidia.com>, <stable@vger.kernel.org>,
+        JC Kuo <jckuo@nvidia.com>
+Subject: [PATCH v2] xhci: tegra: Delay for disabling LFPS detector
+Date:   Fri, 8 Jan 2021 14:41:48 +0800
+Message-ID: <20210108064148.26766-1-jckuo@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 84426B80790F79195531223CD2A53D05FA1963BDE08E9CE47C2D172FE34682F02000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1610088113; bh=pczClffUlnMYECBb52f5ayAnqt859pvkCJeq1rn2FTQ=;
+        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+         X-NVConfidentiality:Content-Transfer-Encoding:Content-Type;
+        b=eoLjhqaXttCCV9F88l1SH+B0VEfLHw/1twmDD2ElY/juSHvJeOMYCxKb4jPi9Xntb
+         EWqW+/NBiwxQr1WP8zVU9/TzBzt5ia5X2NGmUVcbIZ57wDLs1DxSPF8eWGLY3pfNku
+         knsNU08gNzr09MH1Ki9d5ZPc7DWomlkTwL8WlGmCxbwg7l4meYuys4QzzhwMn9Pz0l
+         qIaBJFOB+XE9O+3tWT0yZ6Shv9g7cvtiWSB7+Dl+EAiBFmM5V8/dWAJwPTR4/BRgWY
+         ghEWpPiQ5smY3AD6xPv2KvWtbqFsBnTTlwZJ5/F2j1jBgEnc/9uLR2od3MFTGoYiCd
+         KModYdqZU1yDw==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVHVlLCAyMDIwLTEyLTI5IGF0IDE0OjI0ICswODAwLCBJa2pvb24gSmFuZyB3cm90ZToNCj4g
-eGhjaS1tdGsgaGFzIGhvb2tzIG9uIGFkZF9lbmRwb2ludCgpIGFuZCBkcm9wX2VuZHBvaW50KCkg
-ZnJvbSB4aGNpDQo+IHRvIGhhbmRsZSBpdHMgb3duIHN3IGJhbmR3aWR0aCBtYW5hZ2VtZW50cyBh
-bmQgc3RvcmVzIGJhbmR3aWR0aCBkYXRhDQo+IGludG8gaW50ZXJuYWwgdGFibGUgZXZlcnkgdGlt
-ZSBhZGRfZW5kcG9pbnQoKSBpcyBjYWxsZWQsDQo+IHNvIHdoZW4gYmFuZHdpZHRoIGFsbG9jYXRp
-b24gZmFpbHMgYXQgb25lIGVuZHBvaW50LCBhbGwgZWFybGllcg0KPiBhbGxvY2F0aW9uIGZyb20g
-dGhlIHNhbWUgaW50ZXJmYWNlIGNvdWxkIHN0aWxsIHJlbWFpbiBhdCB0aGUgdGFibGUuDQpJZiBm
-YWlsZWQgdG8gYWRkIGFuIGVuZHBvaW50LCB3aWxsIGNhdXNlIGZhaWx1cmUgb2YgaXRzIGludGVy
-ZmFjZQ0KY29uZmlnLCB0aGVuIHRoZSBvdGhlciBlbmRwb2ludHMgaW4gdGhlIHNhbWUgaW50ZXJm
-YWNlIHdpbGwgYmUgZHJvcHBlZA0KbGF0ZXI/IHlvdSBtZWFuIHNvbWUgZW5kcG9pbnRzIGluIGFu
-IGludGVyZmFjZSBtYXkgZmFpbCBidXQgd2l0aG91dA0KYWZmZWN0aW5nIGl0cyBmdW5jdGlvbj8N
-Cg0KPiANCj4gVGhpcyBwYXRjaCBhZGRzIHR3byBtb3JlIGhvb2tzIGZyb20gY2hlY2tfYmFuZHdp
-ZHRoKCkgYW5kDQo+IHJlc2V0X2JhbmR3aWR0aCgpLCBhbmQgbWFrZSBtdGsteGhjaSB0byByZWxl
-YXNlcyBhbGwgZmFpbGVkIGVuZHBvaW50cw0KPiBmcm9tIHJlc2V0X2JhbmR3aWR0aCgpLg0KPiAN
-Cj4gRml4ZXM6IDA4ZTQ2OWRlODdhMiAoInVzYjogeGhjaS1tdGs6IHN1cHBvcnRzIGJhbmR3aWR0
-aCBzY2hlZHVsaW5nIHdpdGggbXVsdGktVFQiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBJa2pvb24gSmFu
-ZyA8aWtqbkBjaHJvbWl1bS5vcmc+DQoNCg==
+Occasionally, we are seeing some SuperSpeed devices resumes right after
+being directed to U3. This commits add 500us delay to ensure LFPS
+detector is disabled before sending ACK to firmware.
+
+[   16.099363] tegra-xusb 70090000.usb: entering ELPG
+[   16.104343] tegra-xusb 70090000.usb: 2-1 isn't suspended: 0x0c001203
+[   16.114576] tegra-xusb 70090000.usb: not all ports suspended: -16
+[   16.120789] tegra-xusb 70090000.usb: entering ELPG failed
+
+The register write passes through a few flop stages of 32KHz clock domain.
+NVIDIA ASIC designer reviewed RTL and suggests 500us delay.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: JC Kuo <jckuo@nvidia.com>
+---
+ drivers/usb/host/xhci-tegra.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+changes in v2:=20
+    describes how 500us was determined in commit message
+    cc stable@vger.kernel.org
+
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index 934be1686352..20cdc11f7dc6 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -623,6 +623,12 @@ static void tegra_xusb_mbox_handle(struct tegra_xusb *=
+tegra,
+ 								     enable);
+ 			if (err < 0)
+ 				break;
++
++			/*
++			 * wait 500us for LFPS detector to be disabled before sending ACK
++			 */
++			if (!enable)
++				usleep_range(500, 1000);
+ 		}
+=20
+ 		if (err < 0) {
+--=20
+2.25.1
 
