@@ -2,153 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 157142EEB88
+	by mail.lfdr.de (Postfix) with ESMTP id F10DB2EEB8A
 	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 03:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727110AbhAHC4N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jan 2021 21:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
+        id S1726520AbhAHC5S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jan 2021 21:57:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726482AbhAHC4N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jan 2021 21:56:13 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA33CC0612F5
-        for <linux-usb@vger.kernel.org>; Thu,  7 Jan 2021 18:55:32 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id q4so4921565plr.7
-        for <linux-usb@vger.kernel.org>; Thu, 07 Jan 2021 18:55:32 -0800 (PST)
+        with ESMTP id S1726358AbhAHC5S (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jan 2021 21:57:18 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317B6C0612F4
+        for <linux-usb@vger.kernel.org>; Thu,  7 Jan 2021 18:56:38 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id z12so2885839pjn.1
+        for <linux-usb@vger.kernel.org>; Thu, 07 Jan 2021 18:56:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=R0blasZhwdMwc6nrzMH/OCyT8puA072sz2fcR9f9KjE=;
-        b=uVExDgGaUABjY9+/LeZU4Uo1uUka5jgQtNx0b7bENpR9vUgBH0JLKxg8+zkWDbLypi
-         mZVB0grwBcDlXJSAlfkPTSHj3u9sEqVgj0URVhhqbj/8AGPWYMdXPFeojN3XTSLvAfC1
-         R+n6M6DmiNeJopN/4UTId95vUB7EmtEoyvfTUvtUtuLqxdNhhbQhliOA/BxQfV7+uC6T
-         //gTVuBFmGL9eImXlyg+BW5ym/9Ij3DafT0Ru5VDWeQjeEuwjeGk0JEC1QeGUF6eFDn0
-         IB6fuXqWtDKL7qs0twD4lrEDUDpvIyt+oa3SxgMGKHpTf8LPagDrwojQUGMmBQP+zjQ7
-         XumA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3O9zuZkl9ZCDWe21i1b+VXFMIgQt5YzM+o0I5kD2q18=;
+        b=EsLZpaTiHt45R+RX9vSof5hFiKU/thtsi7O0RCTnt7lezGkxOIc+1P6/BWbTv9yESI
+         p8CTkQQLqtCqTaS8bEbkrsgrOkCPgzXnm3odm7+DBejXM4P1aP388fNOcOrFZZMUuiYH
+         eiJqFXqS2CE+gC5m/PJv6Yjwm0TbnubxcYJ2U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=R0blasZhwdMwc6nrzMH/OCyT8puA072sz2fcR9f9KjE=;
-        b=X1/on/yKQ6l/SYfe+iKdDLLP644x8AdTPyKWKyq2585mvlAS8Yp6IhWyRo/ddi8zQ2
-         QESi0NKAatik1MdVoBH68vfBXKfhdn+UCmD6YC62y6cJNZXcQJhKPYOEoPmCnik68xrS
-         U1mto0E0RAFa382U48tXg9W7uqNKOOxqViYVloHeolBQokZxcQHoaxuvcOkKdDaX0PGM
-         ddUOguVHOYcciOSappHHWtbwXe+K2i74/bKYjpyWJr7uqe0AzpxCKKjJ1QdgXGduUqSa
-         QiLFobNygjzrRohAEdkVGPNQzRW3ocX9HhxFw+wyL63zkWo6QiAlHY2UK7xN1GfOMWyy
-         88nQ==
-X-Gm-Message-State: AOAM531xLoCnxIWe/QYogPbRwQ/mf81jXQ92vZp9NvbFZ/iEGqqhTmyl
-        Nd90Os0f39LZBDiydmf8/ro=
-X-Google-Smtp-Source: ABdhPJxlf5ZhepdebnD0rXisNo708id4DtiaQkjRFyGSlZGIHx1lUkFcaHgfCXwFOAZS68obnxfI6A==
-X-Received: by 2002:a17:90b:e96:: with SMTP id fv22mr1500119pjb.92.1610074532397;
-        Thu, 07 Jan 2021 18:55:32 -0800 (PST)
-Received: from b29397-desktop ([84.17.34.154])
-        by smtp.gmail.com with ESMTPSA id q35sm3172708pjh.38.2021.01.07.18.55.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 07 Jan 2021 18:55:31 -0800 (PST)
-Date:   Fri, 8 Jan 2021 10:55:22 +0800
-From:   Peter Chen <hzpeterchen@gmail.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        John Youn <John.Youn@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [RESEND PATCH v6 3/3] usb: dwc3: Pass quirk as platform data
-Message-ID: <20210108025521.GC4672@b29397-desktop>
-References: <cover.1606149078.git.joglekar@synopsys.com>
- <0b96cb765bb154cf0e83a436e7fed8882f566cf9.1606149078.git.joglekar@synopsys.com>
- <X/LQ5ZWLUCGzC8vz@kroah.com>
- <090742a1-a9a1-b89a-e078-a960b5ca3064@synopsys.com>
- <X/M3nxyjiIN/R4MC@kroah.com>
- <2b63edec-f32c-ba80-0be4-53e894272395@synopsys.com>
- <a9217abb-7923-6a9a-0fed-a81480336730@linux.intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3O9zuZkl9ZCDWe21i1b+VXFMIgQt5YzM+o0I5kD2q18=;
+        b=bf4s/UI7dwIfbdf9QCvjVidfzau8v6sgneRwMvuk/Z0VSEjrx8egWk9IJe/xB/TWu3
+         nKUo2EaEkLWJZmHvwOWk804HlVp3jSkODrtV6FIM3pp/vSrCWSotwGOvNvIrG1J0I6O5
+         jHy0subxBvgZJPi52dIWkav/Spk05xUYOAFA7Melbw6w/jy4SOLBVBpHZn6fmDKFS5S6
+         l4o00xA3Jv5vrZSSCFYI8MJRcevPW2kyja7RePzBXNshMbwv6BDMghJrdthS6i2vUx/W
+         PUnxRrjHwgVFptoOgbF313xn/xtKK/VtlDO+TPD4l3rhPTKawJNJdofwc/CtMrbWOEWN
+         IEYQ==
+X-Gm-Message-State: AOAM530NOmK1UuEcNPZFAVJ/gb8E1jb2H4wHKb2aTBi9za7AJZIDmCm6
+        3huFXf3r2EDpuXNSKSEjLfdY2c/cj1zlwUC/0V9cag==
+X-Google-Smtp-Source: ABdhPJzKGxYU6yAsvjkCKTP+2vQ3R7MIV+PsqPkURWLcF6PiijJ9ZVBxcWLGKVYSFjx9ws0RQhVHdLOmDDgsMI6i+zI=
+X-Received: by 2002:a17:90a:2e83:: with SMTP id r3mr1457895pjd.112.1610074597749;
+ Thu, 07 Jan 2021 18:56:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a9217abb-7923-6a9a-0fed-a81480336730@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20201229142406.v5.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
+ <2aea44f0-85e7-fd55-2c35-c1d994f20e03@linux.intel.com>
+In-Reply-To: <2aea44f0-85e7-fd55-2c35-c1d994f20e03@linux.intel.com>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Fri, 8 Jan 2021 10:56:26 +0800
+Message-ID: <CAATdQgBSh+Rkfj5a=g=4LwoNYcG+87zTJJF-VdeaA4WH5ARhuA@mail.gmail.com>
+Subject: Re: [PATCH v5] usb: xhci-mtk: fix unreleased bandwidth data
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>, linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Zhanyong Wang <zhanyong.wang@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-01-06 00:35:04, Mathias Nyman wrote:
-> On 5.1.2021 11.30, Tejas Joglekar wrote:
-> > Hi Mathias,
-> > On 1/4/2021 9:13 PM, Greg Kroah-Hartman wrote:
-> >> On Mon, Jan 04, 2021 at 09:32:13AM +0000, Tejas Joglekar wrote:
-> >>> Hi Greg,
-> >>> On 1/4/2021 1:55 PM, Greg Kroah-Hartman wrote:
-> >>>> On Mon, Jan 04, 2021 at 01:38:43PM +0530, Tejas Joglekar wrote:
-> >>>>> This commit adds the platform device data to setup
-> >>>>> the XHCI_SG_TRB_CACHE_SIZE_QUIRK quirk. DWC3 hosts
-> >>>>> which are PCI devices does not use OF to create platform device
-> >>>>> but create xhci-plat platform device at runtime. So
-> >>>>> this patch allows parent device to supply the quirk
-> >>>>> through platform data.
-> >>>>>
-> >>>>> Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
-> >>>>> ---
-> >>>>>  drivers/usb/dwc3/host.c | 10 ++++++++++
-> >>>>>  1 file changed, 10 insertions(+)
-> >>>> What changed from previous versions?
-> >>> Resent the patch as it was missed for review by Felipe and I saw your mail
-> >>>
-> >>> to resend the patch if not reviewed. Other two patches from series are
-> >>>
-> >>> picked up by Mathias, this one is remaining for review.
-> >> Ah, how was I supposed to guess that?  :)
-> >>
-> >>>>> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> >>>>> index e195176580de..0434bc8cec12 100644
-> >>>>> --- a/drivers/usb/dwc3/host.c
-> >>>>> +++ b/drivers/usb/dwc3/host.c
-> >>>>> @@ -11,6 +11,11 @@
-> >>>>>  #include <linux/platform_device.h>
-> >>>>>  
-> >>>>>  #include "core.h"
-> >>>>> +#include "../host/xhci-plat.h"
-> >>>> That feels really wrong.  Are you sure about that?
-> >>> To use the struct xhci_plat_priv this was included, can you suggest alternative?
-> >> If that is the "normal" way to do this with the xhci driver, ok, but I
-> >> would like to get an ack from Mathias for this before taking it.
-> >>
-> > Can you please review this patch which is including the xhci-plat header?  Let me
-> > 
-> > know if anything should be modified. Ack if this patch looks ok so Greg can
-> > 
-> > take it.
-> > 
-> 
-> This doesn't look right. 
-> 
-> dwc3 shouldn't need to know about xhci platform private structures,
+On Thu, Jan 7, 2021 at 7:07 PM Mathias Nyman
+<mathias.nyman@linux.intel.com> wrote:
+>
+> On 29.12.2020 8.24, Ikjoon Jang wrote:
+> > xhci-mtk has hooks on add_endpoint() and drop_endpoint() from xhci
+> > to handle its own sw bandwidth managements and stores bandwidth data
+> > into internal table every time add_endpoint() is called,
+> > so when bandwidth allocation fails at one endpoint, all earlier
+> > allocation from the same interface could still remain at the table.
+> >
+> > This patch adds two more hooks from check_bandwidth() and
+> > reset_bandwidth(), and make mtk-xhci to releases all failed endpoints
+> > from reset_bandwidth().
+> >
+> > Fixes: 08e469de87a2 ("usb: xhci-mtk: supports bandwidth scheduling with multi-TT")
+> > Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+> >
+>
+> ...
+>
+> >
+> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > index d4a8d0efbbc4..e1fcd3cf723f 100644
+> > --- a/drivers/usb/host/xhci.c
+> > +++ b/drivers/usb/host/xhci.c
+> > @@ -2882,6 +2882,12 @@ static int xhci_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
+> >       xhci_dbg(xhci, "%s called for udev %p\n", __func__, udev);
+> >       virt_dev = xhci->devs[udev->slot_id];
+> >
+> > +     if (xhci->quirks & XHCI_MTK_HOST) {
+> > +             ret = xhci_mtk_check_bandwidth(hcd, udev);
+> > +             if (ret < 0)
+> > +                     return ret;
+> > +     }
+> > +
+>
+> Just noticed that XHCI_MTK_HOST quirk is only set in xhci-mtk.c.
+> xhci-mtk.c calls xhci_init_driver(..., xhci_mtk_overrides) with a .reset override function.
+>
+> why not add override functions for .check_bandwidth and .reset_bandwidth to xhci_mtk_overrides instead?
+>
+> Another patch to add similar overrides for .add_endpoint and .drop_endpoint should probably be
+> done so that we can get rid of the xhci_mtk_add/drop_ep_quirk() calls in xhci.c as well
 
-Then, how dwc3 host let xhci know which xhci quirks it needs to use?
+Yes, I agree.
+Let me submit another patch adding more overridables to xhci_driver_overrides.
+Thanks.
 
-> besides, this patch now adds the quirk to all xhci platform devices created by dwc3.
-> 
-> I haven't touched dwc3 at all, but I'd guess you probably need to add a new entry to
-> the dwc3_pci_id_table[] in dwc3-pci.c, add a device property, and then look for that
-> property in xhci-plat.c, and set the quirk. 
-> 
-
-For non-PCI devices, it uses common platform bus, the specific platform
-drivers use platform data to pass platform quirks to common driver, so
-I added below patch.
-
-46034a999c07 usb: host: xhci-plat: add platform data support
-
-At platform data, the specific host driver could add xhci quirks and let
-xhci handle later.
-
--- 
-
-Thanks,
-Peter Chen
-
+>
+> Thanks
+> -Mathias
+>
