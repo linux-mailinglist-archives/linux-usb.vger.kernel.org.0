@@ -2,160 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6562EEB6C
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 03:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 157142EEB88
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 03:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726902AbhAHCmA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jan 2021 21:42:00 -0500
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:38434 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726526AbhAHCmA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jan 2021 21:42:00 -0500
-Received: from mailhost.synopsys.com (badc-mailhost2.synopsys.com [10.192.0.18])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 83B9740239;
-        Fri,  8 Jan 2021 02:40:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1610073659; bh=TWCRUJKUJuxOIoqzgEGa4GqzgWg6fhgmazERnfjXIhQ=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=eM+mWWZj5wI26PbWTReGf5lmHL0A5POgBpYtJRCTh/c23mTN4i9vIWZu80svJebr5
-         +fQXHVgECBnRblNhSx5dkSQjvW1sjAOoVwAi8i142theQU14I08wk+LMxHU+5yvGw3
-         kIX2tBsG6Y6bP0V6a6c1WluhOf/vG9Yo9uso9IvjVoRW7Vlu6imdbi/HWhN7W5iMO1
-         vMGKRIODHwMDtMqALWJo9UcYlxcJ2wI7RluZFNYwUvbdAVP8YgXpXDnHwpUMgmqKfa
-         4n6aYjRCOvM8pw7r5kk+0PM9w8/WT3iSri49kiHkoaF8Ig4DhSON7T7cBW1+uCpUBB
-         0mocpM5+rHRQA==
-Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id CE653A0067;
-        Fri,  8 Jan 2021 02:40:58 +0000 (UTC)
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2100.outbound.protection.outlook.com [104.47.55.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 9EFCE80FD7;
-        Fri,  8 Jan 2021 02:40:57 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="kgA+P4y5";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bgV3mlHgmWrvbxsiV9r4yRC1tTsBeDWGLfYXVgKXD+UBn3PG8VjG55oQTT09F4ghajVpC1gLg1cfTs58sqCLWyXr8oHsnr9ztvZkMmXXcuPXwvotEw8FDuSkPotXSeNCzBLSWS10k+CYUD9b++Bo9uEc5eCAR5tNQulbHZ8nA9RUJlJrDK3+SyU1LruWq/dmFCPVPwYoi419frM/og+uJ652GLHq+LRaQ7jeSIge+PSrexDeduLYwdJZrdgFBuudcExc123IHeDLUeZcBkmqq+o3XexxayCzgIgQQ8yqRUTMI0oMVpReKtGTw6reSdPubBWl+YuBcJr/EAqMT5+vkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TWCRUJKUJuxOIoqzgEGa4GqzgWg6fhgmazERnfjXIhQ=;
- b=DYit6Z5ygehSgl2KbDtWsh/FgpALcGCBd1EgG5prRSY1IZEqfYMlAJgciEgm2TbwJK3ZteW4bGzq1XOZSvKk2U1Fl9k3sM8ZbrCT/l+mI/ZBY93F3GBYUaiC/fwISKO47wgr1GPYe6Ng4reIfKCEgdlrjTVKRhyKy407ZFGKyztFcZfFA8l0SgsGnm4Zn9t4yQQtld9x4WPXdmV8ztj6uDTHNN3qOHuaX6P0rnvPyuvrdHfrlSl5mbaM5P9CB4Kp5L1MA+1hELAiBbLv1iMYpXB8RJXhU97OYJSUoCvnUaCRjnKMvLtOIhMVJC+6OseaH2WfLyhNhVb/6AQlAiHeFA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TWCRUJKUJuxOIoqzgEGa4GqzgWg6fhgmazERnfjXIhQ=;
- b=kgA+P4y5smcdikO+s44j6aNSjxr8fOJC4ei8ibrY9ki9vOfg28rz7iSKpwfGSeoNTfCG1bCvdwiLN9TVs9hDu0pvRFgygbrM9EzqneDtqYFQJDAnAR2r+3rBzAHkLFtmP7hMgPDCiEEffpWXZWqgJZsdCG6gvZTTm1cFbMlPO2I=
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
- by BY5PR12MB5014.namprd12.prod.outlook.com (2603:10b6:a03:1c4::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.6; Fri, 8 Jan
- 2021 02:40:55 +0000
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::895b:620d:8f20:c4d6]) by BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::895b:620d:8f20:c4d6%6]) with mapi id 15.20.3721.024; Fri, 8 Jan 2021
- 02:40:55 +0000
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Peter Chen <hzpeterchen@gmail.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1727110AbhAHC4N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jan 2021 21:56:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726482AbhAHC4N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jan 2021 21:56:13 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA33CC0612F5
+        for <linux-usb@vger.kernel.org>; Thu,  7 Jan 2021 18:55:32 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id q4so4921565plr.7
+        for <linux-usb@vger.kernel.org>; Thu, 07 Jan 2021 18:55:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=R0blasZhwdMwc6nrzMH/OCyT8puA072sz2fcR9f9KjE=;
+        b=uVExDgGaUABjY9+/LeZU4Uo1uUka5jgQtNx0b7bENpR9vUgBH0JLKxg8+zkWDbLypi
+         mZVB0grwBcDlXJSAlfkPTSHj3u9sEqVgj0URVhhqbj/8AGPWYMdXPFeojN3XTSLvAfC1
+         R+n6M6DmiNeJopN/4UTId95vUB7EmtEoyvfTUvtUtuLqxdNhhbQhliOA/BxQfV7+uC6T
+         //gTVuBFmGL9eImXlyg+BW5ym/9Ij3DafT0Ru5VDWeQjeEuwjeGk0JEC1QeGUF6eFDn0
+         IB6fuXqWtDKL7qs0twD4lrEDUDpvIyt+oa3SxgMGKHpTf8LPagDrwojQUGMmBQP+zjQ7
+         XumA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=R0blasZhwdMwc6nrzMH/OCyT8puA072sz2fcR9f9KjE=;
+        b=X1/on/yKQ6l/SYfe+iKdDLLP644x8AdTPyKWKyq2585mvlAS8Yp6IhWyRo/ddi8zQ2
+         QESi0NKAatik1MdVoBH68vfBXKfhdn+UCmD6YC62y6cJNZXcQJhKPYOEoPmCnik68xrS
+         U1mto0E0RAFa382U48tXg9W7uqNKOOxqViYVloHeolBQokZxcQHoaxuvcOkKdDaX0PGM
+         ddUOguVHOYcciOSappHHWtbwXe+K2i74/bKYjpyWJr7uqe0AzpxCKKjJ1QdgXGduUqSa
+         QiLFobNygjzrRohAEdkVGPNQzRW3ocX9HhxFw+wyL63zkWo6QiAlHY2UK7xN1GfOMWyy
+         88nQ==
+X-Gm-Message-State: AOAM531xLoCnxIWe/QYogPbRwQ/mf81jXQ92vZp9NvbFZ/iEGqqhTmyl
+        Nd90Os0f39LZBDiydmf8/ro=
+X-Google-Smtp-Source: ABdhPJxlf5ZhepdebnD0rXisNo708id4DtiaQkjRFyGSlZGIHx1lUkFcaHgfCXwFOAZS68obnxfI6A==
+X-Received: by 2002:a17:90b:e96:: with SMTP id fv22mr1500119pjb.92.1610074532397;
+        Thu, 07 Jan 2021 18:55:32 -0800 (PST)
+Received: from b29397-desktop ([84.17.34.154])
+        by smtp.gmail.com with ESMTPSA id q35sm3172708pjh.38.2021.01.07.18.55.27
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 07 Jan 2021 18:55:31 -0800 (PST)
+Date:   Fri, 8 Jan 2021 10:55:22 +0800
+From:   Peter Chen <hzpeterchen@gmail.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         John Youn <John.Youn@synopsys.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH 0/2] usb: dwc3: gadget: Check for multiple start/stop
-Thread-Topic: [PATCH 0/2] usb: dwc3: gadget: Check for multiple start/stop
-Thread-Index: AQHW44O4pMz5R7e5g0W2OmYsrsvDEaodBy8AgAABKAA=
-Date:   Fri, 8 Jan 2021 02:40:55 +0000
-Message-ID: <93173de2-4ba0-52ab-1453-da5535c70ace@synopsys.com>
-References: <cover.1609865348.git.Thinh.Nguyen@synopsys.com>
- <20210108023646.GB4672@b29397-desktop>
-In-Reply-To: <20210108023646.GB4672@b29397-desktop>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=synopsys.com;
-x-originating-ip: [98.248.94.126]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bc6498e8-eb58-4c8b-959e-08d8b37ed2ca
-x-ms-traffictypediagnostic: BY5PR12MB5014:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BY5PR12MB5014C8E83E98B0B63CD5E964AAAE0@BY5PR12MB5014.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:338;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WlE4fG/WBBYLlALGZ1yH2XK3NS/p23lhldi7/EV4uZ5hpfnZG2h6c1kUvvyiWaD3ERw2xxXqargRTqaYM6I7Wwx/2cUJboZ2qkqBUsoaxr/14hsBdF9V2UfuYrpZxOqAtYo6R29LMdsvw6MGn4nE60TsE1PBHsvDu4PeAEsdqNP44w66ccmUtr3L4LHufFomHoGt9EA0LWV6Y7XlqZ38mqVoVH5HEDDNtMFs58ZfyXt8I02k1tcsN8JSWC3iujQ5jVM7p6Xz3NNGipxZI8FjE/VgV0G2dHs2Acbq0RLq5oWP7uFB14UGD8pwRxiW8NQbRMdfv8Yx6hqxZjzOPBtuTbDI05rdYZVpFfSTT9Ekr0RQ0D5XWq8BeOQZ2P8Qgaoc/wn63pzx6CoadRSx2CzEPpTj1xHxQHyq/AesUP93vAfwODTXsqMxdaqaV82SVzp5Dgqnu1QNIc9MBvxGQeRSDSbpCH+INkfQQWUGxREJE8I=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(346002)(376002)(39860400002)(136003)(396003)(66476007)(36756003)(6506007)(66556008)(53546011)(76116006)(64756008)(66946007)(2616005)(66446008)(5660300002)(4744005)(26005)(316002)(4326008)(186003)(54906003)(8676002)(110136005)(6512007)(86362001)(8936002)(31696002)(6486002)(71200400001)(83380400001)(31686004)(478600001)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?M1VXMmFVUTFJbXdMWUt0Z09SeGZaNlYxM2VjTmo4NjR5UUtWSHZyQmlYT0gy?=
- =?utf-8?B?OW5UZjZ6UlcrdWVIR011aUppOW9nKzhtZ1JnK3RhYVpjM3E4YW9hd3FlREZk?=
- =?utf-8?B?elY1ZUhlMm84U1RRbzVDY1BPc3VEcEtmVUtFbEJlMmNwOU1hdDMvNUFaMTNn?=
- =?utf-8?B?Ukx1b1BsZzB6R0V2c1FUWEtOcXVsdUNxVmRDVDVXU0s3c3JVNTl1Uzd1TGJG?=
- =?utf-8?B?T2ltcnNiRGplNEZJS1RTakFpcjVIenUyZUMxMGhIYVljbzV5cDRnQjd1QWJJ?=
- =?utf-8?B?cERJMitBK1ZuOEFrL3U0UEU5YkN5TElXcFpKbXFIaFY0cXIyVmprSUczQXJI?=
- =?utf-8?B?Rk5adEFBTUkxMWd0QXJXNlozSVZmTVF3RWVvbWN0cjdSbHlPWFp2N2ZxUHFk?=
- =?utf-8?B?Y2lyelpWbGhvN1pPWUNGalIxR1hvMHpMOGpHdGJScTdZNmQ0S1BmTWJyczRJ?=
- =?utf-8?B?dmViYXUvb0VzV1VleW5uNi85dDh0WkpuZ1VCckxDVXE3RUxMU1F5K0NzWTV5?=
- =?utf-8?B?ZzduVExmRzhTc1VIeVM5TmIrU0tVTk9Ld0R4L1BHM3k1TUgvT0FaNVVHcmkz?=
- =?utf-8?B?ZXdyNGZSNjdYWEwvemh0WjVKajZYSVE3UmhsZkFjd3R6R25odjU4Y21sV1F2?=
- =?utf-8?B?dlUwcVpBakxteUNHdVoyRHAzdUkxRExCVEhJU09qeldLemhiS1RPdDV5ZGgx?=
- =?utf-8?B?Y3AybVlDS1c4OUVYa0FjLzcyQmJITXhSQjk2cmp5aFM1dFcyMklkdTlrMkw3?=
- =?utf-8?B?RzhMcDVXVXRSVmlPWTNsQ3FhS0pDZWFiM0gxS0tsRFIwalhSMGsvSUVBeFNC?=
- =?utf-8?B?Z29oYVVJWkNZWnRNN215YkVET0dmSmhrT1BnUDczMzBCNnRGa1l1Z2tVL1E4?=
- =?utf-8?B?VVVNYk8wRzk0S2dOTlNwYVVOa3pxUFZQbVZCN01TOG9ZU0J4dDRhdTVIVWQ2?=
- =?utf-8?B?d1dRa3hWK1ZJaUpmTmR3WUFGU20zVFdFbmJQS092WmZ3WGJXaEhqK0FTeGQ0?=
- =?utf-8?B?c3RrdElaMVlnZ2xSUWUvTDVjWjNNekFQWENtQ25IQzFtTUJsNUVCdUhQU1Bu?=
- =?utf-8?B?bVBuUWUrQnRTcE9rNDhlVEc5d3Z0a3JWY25ZOGhCSVI4K3YwTUxYZ2dnMkRJ?=
- =?utf-8?B?cmFrS2RHTVhVamNGSEVJT1VKU2VhOW9CTVNyQm9iSkJMcmJxTDF1aHNPc2tj?=
- =?utf-8?B?YWhBUHJNak1jMXhJbHk3MVNxZCtRcGFrVERoeXN6S3NRL1BIMUlOWTQweUN3?=
- =?utf-8?B?QjlnSllHZisva3JqR3N0ZElxZHhYeUtoYWR4Vm5oR3d3RTFRdzQ2RzFrNzNl?=
- =?utf-8?Q?Wt8x4cFvxgbk4=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8D0F4807794B5448905AB678A44EED5E@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [RESEND PATCH v6 3/3] usb: dwc3: Pass quirk as platform data
+Message-ID: <20210108025521.GC4672@b29397-desktop>
+References: <cover.1606149078.git.joglekar@synopsys.com>
+ <0b96cb765bb154cf0e83a436e7fed8882f566cf9.1606149078.git.joglekar@synopsys.com>
+ <X/LQ5ZWLUCGzC8vz@kroah.com>
+ <090742a1-a9a1-b89a-e078-a960b5ca3064@synopsys.com>
+ <X/M3nxyjiIN/R4MC@kroah.com>
+ <2b63edec-f32c-ba80-0be4-53e894272395@synopsys.com>
+ <a9217abb-7923-6a9a-0fed-a81480336730@linux.intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc6498e8-eb58-4c8b-959e-08d8b37ed2ca
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jan 2021 02:40:55.5608
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hMhoCXbceVsdz6Ud0L45c/dKPyiKvfsy3s1qqZXVEpFLmYDBSkZJm+If+wj8yxO2kY6rwBWAy/AirldaYyIppg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB5014
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a9217abb-7923-6a9a-0fed-a81480336730@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgUGV0ZXIsDQoNClBldGVyIENoZW4gd3JvdGU6DQo+IE9uIDIxLTAxLTA1IDA4OjU2OjI4LCBU
-aGluaCBOZ3V5ZW4gd3JvdGU6DQo+PiBBZGQgc29tZSBjaGVja3MgdG8gYXZvaWQgZ29pbmcgdGhy
-b3VnaCB0aGUgc3RhcnQvc3RvcCBzZXF1ZW5jZSBpZiB0aGUgZ2FkZ2V0DQo+PiBoYWQgYWxyZWFk
-eSBzdGFydGVkL3N0b3BwZWQuIFRoaXMgc2VyaWVzIGJhc2UtY29tbWl0IGlzIEdyZWcncyB1c2It
-bGludXMNCj4+IGJyYW5jaC4NCj4+DQo+IEhpIFRoaW5oLA0KPg0KPiBXaGF0J3MgdGhlIHNlcXVl
-bmNlIHlvdXIgY291bGQgcmVwcm9kdWNlIGl0Pw0KPg0KPiBQZXRlcg0KDQpZb3UgY2FuIHRlc3Qg
-YXMgZm9sbG93Og0KDQojIGVjaG8gY29ubmVjdCA+IC9zeXMvY2xhc3MvdWRjLzxVREM+L3NvZnRf
-Y29ubmVjdA0KIyBlY2hvIGNvbm5lY3QgPiAvc3lzL2NsYXNzL3VkYy88VURDPi9zb2Z0X2Nvbm5l
-Y3QNCg0KYW5kDQoNCiMgZWNobyBkaXNjb25uZWN0ID4gL3N5cy9jbGFzcy91ZGMvPFVEQz4vc29m
-dF9jb25uZWN0DQojIGVjaG8gZGlzY29ubmVjdCA+IC9zeXMvY2xhc3MvdWRjLzxVREM+L3NvZnRf
-Y29ubmVjdA0KDQpUaGluaA0KDQo+Pg0KPj4gVGhpbmggTmd1eWVuICgyKToNCj4+ICAgdXNiOiBk
-d2MzOiBnYWRnZXQ6IENoZWNrIGlmIHRoZSBnYWRnZXQgaGFkIHN0YXJ0ZWQNCj4+ICAgdXNiOiBk
-d2MzOiBnYWRnZXQ6IENoZWNrIGlmIHRoZSBnYWRnZXQgaGFkIHN0b3BwZWQNCj4+DQo+PiAgZHJp
-dmVycy91c2IvZHdjMy9nYWRnZXQuYyB8IDI4ICsrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0N
-Cj4+ICAxIGZpbGUgY2hhbmdlZCwgMTIgaW5zZXJ0aW9ucygrKSwgMTYgZGVsZXRpb25zKC0pDQo+
-Pg0KPj4NCj4+IGJhc2UtY29tbWl0OiA5NmViYzljODcxZDhhMjhmYjIyYWE3NThkZDkxODhhNDcz
-MmRmNDgyDQo+PiAtLSANCj4+IDIuMjguMA0KPj4NCg0K
+On 21-01-06 00:35:04, Mathias Nyman wrote:
+> On 5.1.2021 11.30, Tejas Joglekar wrote:
+> > Hi Mathias,
+> > On 1/4/2021 9:13 PM, Greg Kroah-Hartman wrote:
+> >> On Mon, Jan 04, 2021 at 09:32:13AM +0000, Tejas Joglekar wrote:
+> >>> Hi Greg,
+> >>> On 1/4/2021 1:55 PM, Greg Kroah-Hartman wrote:
+> >>>> On Mon, Jan 04, 2021 at 01:38:43PM +0530, Tejas Joglekar wrote:
+> >>>>> This commit adds the platform device data to setup
+> >>>>> the XHCI_SG_TRB_CACHE_SIZE_QUIRK quirk. DWC3 hosts
+> >>>>> which are PCI devices does not use OF to create platform device
+> >>>>> but create xhci-plat platform device at runtime. So
+> >>>>> this patch allows parent device to supply the quirk
+> >>>>> through platform data.
+> >>>>>
+> >>>>> Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
+> >>>>> ---
+> >>>>>  drivers/usb/dwc3/host.c | 10 ++++++++++
+> >>>>>  1 file changed, 10 insertions(+)
+> >>>> What changed from previous versions?
+> >>> Resent the patch as it was missed for review by Felipe and I saw your mail
+> >>>
+> >>> to resend the patch if not reviewed. Other two patches from series are
+> >>>
+> >>> picked up by Mathias, this one is remaining for review.
+> >> Ah, how was I supposed to guess that?  :)
+> >>
+> >>>>> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> >>>>> index e195176580de..0434bc8cec12 100644
+> >>>>> --- a/drivers/usb/dwc3/host.c
+> >>>>> +++ b/drivers/usb/dwc3/host.c
+> >>>>> @@ -11,6 +11,11 @@
+> >>>>>  #include <linux/platform_device.h>
+> >>>>>  
+> >>>>>  #include "core.h"
+> >>>>> +#include "../host/xhci-plat.h"
+> >>>> That feels really wrong.  Are you sure about that?
+> >>> To use the struct xhci_plat_priv this was included, can you suggest alternative?
+> >> If that is the "normal" way to do this with the xhci driver, ok, but I
+> >> would like to get an ack from Mathias for this before taking it.
+> >>
+> > Can you please review this patch which is including the xhci-plat header?  Let me
+> > 
+> > know if anything should be modified. Ack if this patch looks ok so Greg can
+> > 
+> > take it.
+> > 
+> 
+> This doesn't look right. 
+> 
+> dwc3 shouldn't need to know about xhci platform private structures,
+
+Then, how dwc3 host let xhci know which xhci quirks it needs to use?
+
+> besides, this patch now adds the quirk to all xhci platform devices created by dwc3.
+> 
+> I haven't touched dwc3 at all, but I'd guess you probably need to add a new entry to
+> the dwc3_pci_id_table[] in dwc3-pci.c, add a device property, and then look for that
+> property in xhci-plat.c, and set the quirk. 
+> 
+
+For non-PCI devices, it uses common platform bus, the specific platform
+drivers use platform data to pass platform quirks to common driver, so
+I added below patch.
+
+46034a999c07 usb: host: xhci-plat: add platform data support
+
+At platform data, the specific host driver could add xhci quirks and let
+xhci handle later.
+
+-- 
+
+Thanks,
+Peter Chen
+
