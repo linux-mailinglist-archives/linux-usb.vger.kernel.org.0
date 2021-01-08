@@ -2,93 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 754732EEF5E
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 10:21:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D25352EEFCC
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 10:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728073AbhAHJVK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jan 2021 04:21:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49738 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727478AbhAHJVJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 8 Jan 2021 04:21:09 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 19BF323372;
-        Fri,  8 Jan 2021 09:20:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610097628;
-        bh=oiPKPwrLUTXmyxEg4htGUPgFpzc+ZSlNsGuIlmxZcHA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FmG54POPm2c2tiKdpWlDe940ivqmckLWEjMutD1Z9iWCYSH1oOGMajQcbIW3dJMec
-         n9TFS+6rhKwqcvHge4pnOswKtWes6MxZUvil9oNN4hUhJyuCaofAqFpYXsdRw5Bjfy
-         a7lkb0cRHVP+PxTQy62P2GE/d3k7oCBGoOFbXSRdjbzX9YcRRTZmhsLY/fdzw+pDMP
-         HBtNNxb3lQEYayOFbkI7wAPEOuggq7xk3P2nSlM+c+P5n17w90rX9o5JJIUN8FE/KZ
-         pzVGRvRLjOM4zY99FjwjvuyGp9rX8XwxhtEZmg3e5gL4IaT+QS0ONb9h/CXJOyxfo7
-         cUblV5M4jCQoQ==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kxnwd-00019U-DK; Fri, 08 Jan 2021 10:20:31 +0100
-Date:   Fri, 8 Jan 2021 10:20:31 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>,
+        id S1727860AbhAHJlO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jan 2021 04:41:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727762AbhAHJlN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jan 2021 04:41:13 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EE8C0612F4;
+        Fri,  8 Jan 2021 01:40:27 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id i7so7324508pgc.8;
+        Fri, 08 Jan 2021 01:40:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=UIMWNThMlb8quIZqiuEB9j3wA4qlDG0Qv9DWb7+v2mg=;
+        b=rM/0CSYSV/d+qd8imNdoEixIqJLgfyDqZ7gLL1tNlWGJLfLlz7RMee5uFvDKkEaWbc
+         O6Q79MizkB+gdhvcDH3uHUlDiDiyzRaPn4I/ZAt4yZjhqoFgYz1078KCohANjUIscoko
+         pdDcRYgi5kNGRpHWtt23USorGxWR+SvwxEw40HtZfel32CFLxZmN4ESWepiK1+G7HI9E
+         ymLW6sPRUHvo3ILuZ8/BrfzzW6kzkAVZV3Ax2jIgk6ZFbPzjzN0UHawijF3AF7N/+ZCp
+         uwshOCGSdyIeuTIhAd/o7xuK1jND12IcMcd9XwED7p8dFkLdb++UEMmM4CfjrU6AbX9l
+         vcCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=UIMWNThMlb8quIZqiuEB9j3wA4qlDG0Qv9DWb7+v2mg=;
+        b=CAiwbEB1mUy+E6HyguVpLEY3OmAri2V/FPpid6mrm9wOg3wlhGoKmDWPLeYwkYXnCL
+         KCweZCGcESyzk7J77ojb/qnDrpLmxG9NN/kG9BzBw+JTsvZ+2UH6S7ePSqsPDVdjnFGF
+         2IwwBHvCsxfd+5wP6rp6ZKSuTw1wd58+rhxYP7BQ3AgzNqECbCgRP7zff24PlbIxwnaQ
+         HHF37R9spSB7rCN/uUDNZa8oN5UdRNhEPBlBZTMqZ1bcAt7Z2qaNh2KupRQ6olZAILki
+         cyHURUdba9BEL3Ish6rkK9qXDaam4i+dINqEXneWXiXuxVPJwRKeuDr2rmFGbVeSiIaU
+         ooLQ==
+X-Gm-Message-State: AOAM532ujw3j1jrOx+TMhQq7OaP9S+tdyhJrVfdlQ7zixn4Hx+bZ6Gk5
+        DcSUQafM8SFkVgtdP1OGqXg=
+X-Google-Smtp-Source: ABdhPJzY9j3GBFIGUnHKx/qtTLAdiLq3NA007Pxtpm6t421urUpmoDTlnIiKA/E496vt+h5nNPoZeA==
+X-Received: by 2002:a63:c84a:: with SMTP id l10mr6310502pgi.159.1610098827099;
+        Fri, 08 Jan 2021 01:40:27 -0800 (PST)
+Received: from b29397-desktop ([84.17.34.154])
+        by smtp.gmail.com with ESMTPSA id b2sm8208602pff.79.2021.01.08.01.40.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 08 Jan 2021 01:40:25 -0800 (PST)
+Date:   Fri, 8 Jan 2021 17:40:16 +0800
+From:   Peter Chen <hzpeterchen@gmail.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 05/15] usb: misc: emi26: update to use
- usb_control_msg_send()
-Message-ID: <X/gj3yFkLjuLxTZs@hovoldconsulting.com>
-References: <20201130011819.2576481-1-anant.thazhemadam@gmail.com>
- <20201130012847.2579463-1-anant.thazhemadam@gmail.com>
- <X8pKmmdvO0cIQXnL@localhost>
- <6806f8e4-c2f7-3c6a-b855-3f87ab8d9e22@gmail.com>
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        John Youn <John.Youn@synopsys.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH 0/2] usb: dwc3: gadget: Check for multiple start/stop
+Message-ID: <20210108094016.GA13606@b29397-desktop>
+References: <cover.1609865348.git.Thinh.Nguyen@synopsys.com>
+ <20210108023646.GB4672@b29397-desktop>
+ <93173de2-4ba0-52ab-1453-da5535c70ace@synopsys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6806f8e4-c2f7-3c6a-b855-3f87ab8d9e22@gmail.com>
+In-Reply-To: <93173de2-4ba0-52ab-1453-da5535c70ace@synopsys.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 07, 2021 at 07:43:54PM +0530, Anant Thazhemadam wrote:
-> On 04/12/20 8:11 pm, Johan Hovold wrote:
-> > On Mon, Nov 30, 2020 at 06:58:47AM +0530, Anant Thazhemadam wrote:
-> >> The newer usb_control_msg_{send|recv}() API are an improvement on the
-> >> existing usb_control_msg() as it ensures that a short read/write is treated
-> >> as an error,
-> > Short writes have always been treated as an error. The new send helper
-> > only changes the return value from the transfer size to 0.
-> >
-> > And this driver never reads.
-> >
-> > Try to describe the motivation for changing this driver which is to
-> > avoid the explicit kmemdup().
-
-> >>  /* thanks to drivers/usb/serial/keyspan_pda.c code */
-> >> @@ -77,11 +67,7 @@ static int emi26_load_firmware (struct usb_device *dev)
-> >>  	int err = -ENOMEM;
-> >>  	int i;
-> >>  	__u32 addr;	/* Address to write */
-> >> -	__u8 *buf;
-> >> -
-> >> -	buf = kmalloc(FW_LOAD_SIZE, GFP_KERNEL);
-> >> -	if (!buf)
-> >> -		goto wraperr;
-> >> +	__u8 buf[FW_LOAD_SIZE];
-> > As the build bots reported, you must not put large structures like this
-> > on the stack.
+On 21-01-08 02:40:55, Thinh Nguyen wrote:
+> Hi Peter,
 > 
-> Understood. 
-> But I'm considering dropping this change (and the one proposed for
-> emi62) altogether in v3 - since these would end up requiring memory to
-> dynamically allocated twice for the same purpose.  However, if you
-> still think the pros of updating this (and emi62) outweigh the cons,
-> please let me know, and I'll make sure to send in another version
-> fixing it.
+> Peter Chen wrote:
+> > On 21-01-05 08:56:28, Thinh Nguyen wrote:
+> >> Add some checks to avoid going through the start/stop sequence if the gadget
+> >> had already started/stopped. This series base-commit is Greg's usb-linus
+> >> branch.
+> >>
+> > Hi Thinh,
+> >
+> > What's the sequence your could reproduce it?
+> >
+> > Peter
+> 
+> You can test as follow:
+> 
+> # echo connect > /sys/class/udc/<UDC>/soft_connect
+> # echo connect > /sys/class/udc/<UDC>/soft_connect
+> 
+> and
+> 
+> # echo disconnect > /sys/class/udc/<UDC>/soft_connect
+> # echo disconnect > /sys/class/udc/<UDC>/soft_connect
+> 
+> Thinh
+> 
 
-The redundant memdup() is already there for the firmware buffer and
-changing to usb_control_msg_send() will only make it slightly harder to
-get rid of that, if anyone would bother.
+Thanks, now I reproduce the issue. Another improvement you
+might consider adding is checking return value for usb_gadget_udc_start
+at soft_connect_store.
 
-But yeah, it's probably not worth switching usb_control_msg_send() for
-these drivers.
+-- 
 
-Johan
+Thanks,
+Peter Chen
+
