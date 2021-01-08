@@ -2,124 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 454002EF27B
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 13:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC71D2EF285
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jan 2021 13:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727074AbhAHMYL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jan 2021 07:24:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54434 "EHLO mail.kernel.org"
+        id S1726869AbhAHM0p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jan 2021 07:26:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54930 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725965AbhAHMYL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 8 Jan 2021 07:24:11 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6F45B238E4;
-        Fri,  8 Jan 2021 12:23:28 +0000 (UTC)
+        id S1726754AbhAHM0p (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 8 Jan 2021 07:26:45 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B6883238E8;
+        Fri,  8 Jan 2021 12:26:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610108609;
-        bh=ZzSOhR3nBEfxPyiyHvg9czfSgN+1Vzlu8H1WwrVePj0=;
+        s=k20201202; t=1610108764;
+        bh=3Sa0Em/ZGPisFrTI0JuPpmbH+3oTgWsFlEcpdO59oS8=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=NuvHD1DVqJgXPUh5jVhqL+aCPodJoG2kGqIfK2nUMLD2wnnHRwWcbdW80U73Ha/ZP
-         bwiqHGYCL41EsIKYyUdoiBHr7cy8KHhThNoFqE22SzwAm8NCHm7PP64vlp1bCT0ACo
-         gKia2Rz6S3z3CVqDq+/mvYF1E0tVijxCehP8aS1xfqOp44mgOiMk0kmLkwN1WPrZvB
-         uhLOsqIm/kHOKRe1vnW7y+eNzyf0PcknbQFEcAxk3oeEY0kzQGoyJbVBT4zeLQq1v6
-         BJlX4YOauK5S0JpYf0zuM5th+Vfy3SQV26Y8UDt/BQKvZyW81JU3MUrk3F2CMCr1+n
-         k8INkluH5IWvQ==
+        b=Qyx1l48in8phi8u4p3epf4fMVj9EEB5cY1iQCjRDu5dQ8LxYlbALOHVMMX8KCBeIU
+         qo+nog0IEIN7Vm6a4PABDK9qHTxV+ows8rK6AzqiMYqgsxap4K6dmdtT9N2NGi5ZqH
+         wRmUBVHzvoT4abdlq4hwsjTDLMqNtio8WgA77sq0FQ9QH8vraKvUOeHWTuw+zrNbJI
+         rDb7NBgqPlhCGWTFPRZRVM3FQZkv4DXr8nFrQYi0RcEZ8CwnF2vxaJ/McFD6hgadnp
+         +lHNY00eypdJqXRAI/XiV/U9TN7R8l15Qwtpl2oRdM3/KsW+a2PrXatyde2hgvyNvy
+         CwoCeWRB3Dj1Q==
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+To:     John Stultz <john.stultz@linaro.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Cc:     Yu Chen <chenyu56@huawei.com>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Yang Fei <fei.yang@intel.com>,
+        YongQin Liu <yongqin.liu@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Bryan O'Donoghue <pure.logic@nexus-software.ie>
-Cc:     John Youn <John.Youn@synopsys.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: dwc3: gadget: Init only available HW eps
-In-Reply-To: <19b685a9-0c25-9b6c-ecaf-ffca4069182b@synopsys.com>
-References: <3080c0452df14d510d24471ce0f9bb7592cdfd4d.1609866964.git.Thinh.Nguyen@synopsys.com>
- <87eeiycxld.fsf@kernel.org>
- <75d63bab-1cdc-737e-8ae2-64e0ddeeef75@synopsys.com>
- <87k0spay6z.fsf@kernel.org>
- <cacf58e7-e131-2caa-5fb3-1af7db8270b4@synopsys.com>
- <19b685a9-0c25-9b6c-ecaf-ffca4069182b@synopsys.com>
-Date:   Fri, 08 Jan 2021 14:23:22 +0200
-Message-ID: <87eeivwrb9.fsf@kernel.org>
+        linux-usb@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Roger Quadros <rogerq@ti.com>
+Subject: Re: [PATCH v3 1/2] usb: dwc3: Trigger a GCTL soft reset when
+ switching modes in DRD
+In-Reply-To: <20210108015115.27920-1-john.stultz@linaro.org>
+References: <20210108015115.27920-1-john.stultz@linaro.org>
+Date:   Fri, 08 Jan 2021 14:25:58 +0200
+Message-ID: <87bldzwr6x.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-
 
 Hi,
 
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
->>>>> How have you verified this patch? Did you read Bryan's commit log? Th=
-is
->>>>> is likely to reintroduce the problem raised by Bryan.
->>>>>
->>>> We verified with our FPGA HAPS with various number of endpoints. No
->>>> issue is seen.
->>> That's cool. Could you please make sure our understanding of this is
->>> sound and won't interfere with any designs? If we modify this part of
->>> the code again, I'd like to see a clear reference to a specific section
->>> of the databook detailing the expected behavior :-)
->>>
->>> cheers
->>>
->> Hm... I didn't consider bidirection endpoint other than control endpoint.
->>
->> DWC3_USB3x_NUM_EPS specifies the number of device mode for single
->> directional endpoints. A bidirectional endpoint needs 2 single
->> directional endpoints, 1 IN and 1 OUT. So, if your setup uses 3
->> bidirection endpoints and only those, DWC3_USB3x_NUM_EPS should be 6.
->> DWC3_USB3x_NUM_IN_EPS specifies the maximum number of IN endpoint active
->> at any time.
->>
->> However, I will have to double check and confirm internally regarding
->> how to determine many endpoint would be available if bidirection
->> endpoints come into play.
->>
->> Thanks for pointing this out. Will get back on this.
->>
->> Thinh
->>
+John Stultz <john.stultz@linaro.org> writes:
+> From: Yu Chen <chenyu56@huawei.com>
 >
-> Ok. Just had some discussion internally. So, like you said, any endpoint
-> can be configured in either direction. However, we are limited to
-> configuring up to DWC_USB3x_NUM_IN_EPS because each IN endpoint has its
-> own TxFIFO while for OUT, they share the same RxFIFO. So we could have
-> up to DWC_USB3x_NUM_EPS number of OUT endpoints. So, the issue Bryan
-> attempted to address is still there.
+> Just resending this, as discussion died out a bit and I'm not
+> sure how to make further progress. See here for debug data that
+> was requested last time around:
+>   https://lore.kernel.org/lkml/CALAqxLXdnaUfJKx0aN9xWwtfWVjMWigPpy2aqsNj56yvnbU80g@mail.gmail.com/
 >
-> However, the current code still has some assumption on the number of IN
-> and OUT endpoints, I need to think of a better solution.
+> With the current dwc3 code on the HiKey960 we often see the
+> COREIDLE flag get stuck off in __dwc3_gadget_start(), which
+> seems to prevent the reset irq and causes the USB gadget to
+> fail to initialize.
+>
+> We had seen occasional initialization failures with older
+> kernels but with recent 5.x era kernels it seemed to be becoming
+> much more common, so I dug back through some older trees and
+> realized I dropped this quirk from Yu Chen during upstreaming
+> as I couldn't provide a proper rational for it and it didn't
+> seem to be necessary. I now realize I was wrong.
+>
+> After resubmitting the quirk, Thinh Nguyen pointed out that it
+> shouldn't be a quirk at all and it is actually mentioned in the
+> programming guide that it should be done when switching modes
+> in DRD.
+>
+> So, to avoid these !COREIDLE lockups seen on HiKey960, this
+> patch issues GCTL soft reset when switching modes if the
+> controller is in DRD mode.
+>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
+> Cc: Yang Fei <fei.yang@intel.com>
+> Cc: YongQin Liu <yongqin.liu@linaro.org>
+> Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+> Cc: Thinh Nguyen <thinhn@synopsys.com>
+> Cc: Jun Li <lijun.kernel@gmail.com>
+> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Yu Chen <chenyu56@huawei.com>
+> Signed-off-by: John Stultz <john.stultz@linaro.org>
+> ---
+> v2:
+> * Rework to always call the GCTL soft reset in DRD mode,
+>   rather then using a quirk as suggested by Thinh Nguyen
+>
+> v3:
+> * Move GCTL soft reset under the spinlock as suggested by
+>   Thinh Nguyen
 
-Yes, the assumption still exists because at the time there was no better
-solution :-)
+Because this is such an invasive change, I would prefer that we get
+Tested-By tags from a good fraction of the users before applying these
+two changes.
 
-=2D-=20
+-- 
 balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl/4TroRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQZFmhAApbw/t3Pa+MivXGnuYovwVIBzT8NFGj0m
-/1NL7rp49TnkIe/oHY0ZFiFIKBA7liwUKBIQGNOZgLG02yFaffGLRO+4RhmrydIC
-AmbzzEz51xmiypiFWQ+VoF5F2Eacl2VJGKYZbL9yiTaQ/ilgIZI8tWUkBEprxpYB
-Vb2aZyDgxVP1efGStMDtOlZRSgk0xqPeuCcbZmQZW4op51MkczkEjwKIc1rWBCvO
-H/YRRtM5/DmIvrr8C/HEEbhJ+Y/cZS4kXygvMHf6LPbt1vVvFGEckgXVvH6gVgUv
-Y6br85LsG+TI2lqy2+dKTX2uBmNuM4MQGe2oCNHdloGm2VXbVn+EczosGGvVlFQH
-yUjcEgsOuChkQ9RZGh311iZwSU+9x8atg71Q9lqRhqtKva2rYQanGZlcWmmwyUkn
-PFcqsRg+ZWf4azlqObvKupcW4Zz9NH+pA6lziPEycpXoAXD9rIJO+dDpzZwOgvZK
-dwI0qnoXGv5pG2ol2idmFf8dNofws5P37+NIFlxCD+5v754hwWla3ko7wy76GlJY
-+V8oqn2uiOiUMsx/HkLUV9+m46vGeQ5ttx7PJWag1EBtVqLpz2fbNiktbHk1b/dR
-G0aKPi/zIVu8ERZSrNdWKe5GxhTW2JBvC6pGZP3j6sRki+DoXmZbRyA2WFilDYqb
-MRE0hHmzsv8=
-=64FX
------END PGP SIGNATURE-----
---=-=-=--
