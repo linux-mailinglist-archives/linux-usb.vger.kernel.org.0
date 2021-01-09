@@ -2,97 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B19FC2F03B2
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Jan 2021 22:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0C322F03CC
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Jan 2021 22:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726062AbhAIVFd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 Jan 2021 16:05:33 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:49201 "HELO
+        id S1726195AbhAIV0u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 Jan 2021 16:26:50 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:56859 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726005AbhAIVFd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Jan 2021 16:05:33 -0500
-Received: (qmail 1136841 invoked by uid 1000); 9 Jan 2021 16:04:52 -0500
-Date:   Sat, 9 Jan 2021 16:04:52 -0500
+        with SMTP id S1726006AbhAIV0t (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Jan 2021 16:26:49 -0500
+Received: (qmail 1137346 invoked by uid 1000); 9 Jan 2021 16:26:08 -0500
+Date:   Sat, 9 Jan 2021 16:26:08 -0500
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Eugene Korenevsky <ekorenevsky@astralinux.ru>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v3] ehci: fix EHCI host controller initialization sequence
-Message-ID: <20210109210452.GA1136657@rowland.harvard.edu>
-References: <20210109181828.GA7585@himera.home>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Hamish Martin <hamish.martin@alliedtelesis.co.nz>,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] usb: ohci: Default to per-port over-current
+ protection
+Message-ID: <20210109212608.GB1136657@rowland.harvard.edu>
+References: <20200910212512.16670-1-hamish.martin@alliedtelesis.co.nz>
+ <X+huemxT9XOeDi5E@aptenodytes>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210109181828.GA7585@himera.home>
+In-Reply-To: <X+huemxT9XOeDi5E@aptenodytes>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jan 09, 2021 at 09:18:28PM +0300, Eugene Korenevsky wrote:
-> According to EHCI spec, EHCI HC clears USBSTS.HCHalted whenever USBCMD.RS=1.
-> However, it is a good practice to wait some time after setting USBCMD.RS
-> (approximately 100ms) until USBSTS.HCHalted become zero.
-> 
-> Instead, previous version of ehci_run() wrote 1 to USBCMD.RS, issued read to
-> USBCMD and waited for 5 ms.
-> That worked incorrectly at least for VirtualBox's EHCI virtual HC and caused
-> accidental hangs.
-> 
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=211095 
-> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Sun, Dec 27, 2020 at 12:22:34PM +0100, Paul Kocialkowski wrote:
+> Hi,
 
-This is a big no-no!  You must not add other people's Reviewed-by or 
-Acked-by tags to a patch unless they give you explicit permission to do 
-so.
+Sorry it has taken so long to respond to this.  The holidays intervened, 
+but that's no excuse.
 
-> Signed-off-by: Eugene Korenevsky <ekorenevsky@astralinux.ru>
-> ---
->  drivers/usb/host/ehci-hcd.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
+> On Fri 11 Sep 20, 09:25, Hamish Martin wrote:
+> > Some integrated OHCI controller hubs do not expose all ports of the hub
+> > to pins on the SoC. In some cases the unconnected ports generate
+> > spurious over-current events. For example the Broadcom 56060/Ranger 2 SoC
+> > contains a nominally 3 port hub but only the first port is wired.
+> > 
+> > Default behaviour for ohci-platform driver is to use global over-current
+> > protection mode (AKA "ganged"). This leads to the spurious over-current
+> > events affecting all ports in the hub.
+> > 
+> > We now alter the default to use per-port over-current protection.
 > 
-> diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
-> index e358ae17d51e..f3b73b5ab6e3 100644
-> --- a/drivers/usb/host/ehci-hcd.c
-> +++ b/drivers/usb/host/ehci-hcd.c
-> @@ -574,6 +574,7 @@ static int ehci_run (struct usb_hcd *hcd)
->  	struct ehci_hcd		*ehci = hcd_to_ehci (hcd);
->  	u32			temp;
->  	u32			hcc_params;
-> +	int			rc;
->  
->  	hcd->uses_new_polling = 1;
->  
-> @@ -629,9 +630,19 @@ static int ehci_run (struct usb_hcd *hcd)
->  	down_write(&ehci_cf_port_reset_rwsem);
->  	ehci->rh_state = EHCI_RH_RUNNING;
->  	ehci_writel(ehci, FLAG_CF, &ehci->regs->configured_flag);
-> -	ehci_readl(ehci, &ehci->regs->command);	/* unblock posted writes */
-> +
-> +	/* Wait until HC become operational */
->  	msleep(5);
-> +	rc = ehci_handshake(ehci, &ehci->regs->status, STS_HALT, 0, 100 * 1000);
+> This specific patch lead to breaking OHCI on my mom's laptop (whom was about
+> to buy a new one thinking the hardware had failed). I get no OHCI interrupt at
+> all and no USB 1 device is ever detected.
+> 
+> I haven't really found a reasonable explanation about why that is, but here
+> are some notes I was able to collect:
+> - The issue showed up on 5.8,18 and 5.9.15, which don't include the patch
+>   from this series that sets distrust_firmware = false; This results in the NPS
+>   bit being set via OHCI_QUIRK_HUB_POWER.
+> - Adding val &= ~RH_A_PSM; (as was done before this change) solves the issue
+>   which is weird because the bit is supposed to be inactive when NPS is set;
+> - Setting ohci_hcd.distrust_firmware=0 in the cmdline results in not setting
+>   the NPS bit and also solves the issue;
+> - The initial value of the register at function entry is 0x1001104 (PSM bit
+>   is set, NPS is unset);
+> - The OHCI controller is the following:
+> 00:03.0 USB controller: Silicon Integrated Systems [SiS] USB 1.1 Controller (rev 0f) (prog-if 10 [OHCI])
+> 	Subsystem: ASUSTeK Computer Inc. Device 1aa7
 
-You should not remove the ehci_readl call above.  With that line gone, 
-the PCI bus might not send the new value of configured_flag to the 
-controller until after the 5-ms sleep has ended, which makes the msleep 
-useless.
+Great reporting -- thanks.
+
+> Does that make any sense to you?
+> 
+> I really wonder what a proper fix could be and here are some suggestions:
+> - Adding a specific quirk to clear the PSM bit for this hardware which seems to
+>   consider the bit regardless of NPS;
+
+We don't need a quirk for this.  There shouldn't be anything wrong with 
+_always_ clearing PSM whenever NPS is set, since the controller is 
+supposed to ignore PSM under that condition.
+
+Would you like to submit a patch for this?
+
+> - Adding the patch that sets distrust_firmware = false to stable branches;
+
+That's certainly reasonable.  Nobody has reported any problems caused by 
+that patch, so adding it to the stable branches should be safe enough.
+
+> What do you think?
+
+We could even do both.  That would help if, for example, somebody 
+decided to set ohci_hcd.distrust_firmware=true explicitly.
+
+Greg, in the meantime can we have commit c4005a8f65ed ("usb: ohci: Make 
+distrust_firmware param default to false") added to all the stable 
+kernels which have back-ported versions of commit b77d2a0a223b?
 
 Alan Stern
-
-> +
->  	up_write(&ehci_cf_port_reset_rwsem);
-> +
-> +	if (rc) {
-> +		ehci_err(ehci, "USB %x.%x, controller refused to start: %d\n",
-> +			 ((ehci->sbrn & 0xf0)>>4), (ehci->sbrn & 0x0f), rc);
-> +		return rc;
-> +	}
-> +
->  	ehci->last_periodic_enable = ktime_get_real();
->  
->  	temp = HC_VERSION(ehci, ehci_readl(ehci, &ehci->caps->hc_capbase));
-> -- 
-> 2.20.1
-> 
