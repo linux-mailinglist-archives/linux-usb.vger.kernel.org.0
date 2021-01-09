@@ -2,89 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 756062EFCB8
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Jan 2021 02:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8558A2EFD1E
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Jan 2021 03:22:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725942AbhAIB11 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jan 2021 20:27:27 -0500
-Received: from mga07.intel.com ([134.134.136.100]:50567 "EHLO mga07.intel.com"
+        id S1726011AbhAICVL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jan 2021 21:21:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43048 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725836AbhAIB11 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 8 Jan 2021 20:27:27 -0500
-IronPort-SDR: SZZHvTH4jzrRzmk2V629i7ByuRAkLY8x6A36qhXCFu4SmRRSJEZKeuTYnILrnpibuDYLiIY9Qy
- 2dTYF3/O9M8w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9858"; a="241751945"
-X-IronPort-AV: E=Sophos;i="5.79,333,1602572400"; 
-   d="scan'208";a="241751945"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2021 17:26:45 -0800
-IronPort-SDR: M5Tr2XvGFmxX+W4P8wLF02CuPB7ws/wk22au9Q44KKdH932StrzCfalObBHczxDvZ9P6SgNFNJ
- KTEFGhp599sQ==
-X-IronPort-AV: E=Sophos;i="5.79,333,1602572400"; 
-   d="scan'208";a="399163877"
-Received: from jekeller-mobl1.amr.corp.intel.com (HELO [10.212.196.132]) ([10.212.196.132])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2021 17:26:43 -0800
-Subject: Re: [RFC PATCH v2 net-next 00/12] Make .ndo_get_stats64 sleepable
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jiri Benc <jbenc@redhat.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Eric Dumazet <edumazet@google.com>,
-        George McCollister <george.mccollister@gmail.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Taehee Yoo <ap420073@gmail.com>,
-        Jiri Pirko <jiri@mellanox.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Florian Westphal <fw@strlen.de>, linux-s390@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-parisc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        dev@openvswitch.org
-References: <20210105185902.3922928-1-olteanv@gmail.com>
- <20210106134516.jnh2b5p5oww4cghz@skbuf>
-From:   Jacob Keller <jacob.e.keller@intel.com>
-Organization: Intel Corporation
-Message-ID: <e0edda65-5421-94aa-19c5-1bd88a602f92@intel.com>
-Date:   Fri, 8 Jan 2021 17:26:40 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1725793AbhAICVL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 8 Jan 2021 21:21:11 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D3AB2238EC;
+        Sat,  9 Jan 2021 02:20:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610158831;
+        bh=uocowzg7s48gfkBOz3hrazFeCcd9+Q3pza9jR5nUc2E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BOtY/W+h4VUX8rA/9vynD/4FMXJvKerxQ1LQ878ZPZbZ98EsESb4BIyH2jZWOOWJy
+         OjUu49G/FwRU0POHp8FF6qOx+Rd61XQ/tlGnBKOr4v9weRduPxhFmPAYMBVaRoFPm7
+         nrL9DOZqeGdY+pwF6QbUqob8zdkM3vIVUMnTmZ9ve9iYPke90xpw1st+q5VVsl/Y5R
+         W3g9xKeAAHYJAdJLMwEYpBI0j5KmofdPYTvT9T9EpuosLdXf1KegtsjxqXGPlfC0mF
+         sIZT/z8uM+szmbYgRYn9BMnC2nn4g+z7xI/7pi8YRd3g//gtRMPzjKoawnipIe6Ov+
+         GGI5qM/Xkr4jg==
+Date:   Fri, 8 Jan 2021 18:20:30 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Leon Schuermann <leon@is.currently.online>
+Cc:     oliver@neukum.org, davem@davemloft.net, hayeswang@realtek.com,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 1/1] r8152: Add Lenovo Powered USB-C Travel Hub
+Message-ID: <20210108182030.77839d11@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210108202727.11728-2-leon@is.currently.online>
+References: <20210108202727.11728-1-leon@is.currently.online>
+        <20210108202727.11728-2-leon@is.currently.online>
 MIME-Version: 1.0
-In-Reply-To: <20210106134516.jnh2b5p5oww4cghz@skbuf>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri,  8 Jan 2021 21:27:27 +0100 Leon Schuermann wrote:
+> This USB-C Hub (17ef:721e) based on the Realtek RTL8153B chip used to
+> work with the cdc_ether driver.
 
+When you say "used to work" do you mean there was a regression where
+the older kernels would work fine and newer don't? Or just "it works
+most of the time"?
 
-On 1/6/2021 5:45 AM, Vladimir Oltean wrote:
-> On Tue, Jan 05, 2021 at 08:58:50PM +0200, Vladimir Oltean wrote:
->> This is marked as Request For Comments for a reason.
+> However, using this driver, with the
+> system suspended the device sends pause-frames as soon as the receive
+> buffer fills up. This produced substantial network load, up to the
+> point where some Ethernet switches stopped processing packets
+> altogether.
 > 
-> If nobody has any objections, I will remove the memory leaks I
-> introduced to check if anybody is paying attention, and I will resubmit
-> this as a non-RFC series.
+> Using the Realtek driver (r8152) fixes this issue. Pause frames are no
+> longer sent while the host system is suspended.
 > 
-
-I read through this, and it makes sense to me. I admit that I still
-don't grasp all the details of the locking involved.
-
-Thanks,
-Jake
+> Signed-off-by: Leon Schuermann <leon@is.currently.online>
+> Tested-by: Leon Schuermann <leon@is.currently.online>
