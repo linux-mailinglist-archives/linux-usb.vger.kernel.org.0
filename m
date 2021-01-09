@@ -2,53 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6062EFEA7
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Jan 2021 09:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D912EFED3
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Jan 2021 10:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726321AbhAIIkR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 Jan 2021 03:40:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43378 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725938AbhAIIkR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 9 Jan 2021 03:40:17 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E221720DD4;
-        Sat,  9 Jan 2021 08:39:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1610181576;
-        bh=iuNAI3pk1SLsdAgTljOFAYsbERhp/qXVjYwUqechX5E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WjwNJ2EAXFvR7nHqnb0F0RbbT6VKWlAtkMPmatPHRiuaJvY5homWNSfUbAIj3CSxs
-         G3zOU+I+nyJPipp1xpg5WDCxsYZTuCsWpVYj3alNPYMH6aZoST0zQ7+lbUX0cqxoXI
-         g++9NJEVlod4kfr8S91APUbUAwYkPj+xqgjXQWoE=
-Date:   Sat, 9 Jan 2021 09:39:32 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Eugene Korenevsky <ekorenevsky@astralinux.ru>
-Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH] ehci: fix EHCI host controller initialization sequence
-Message-ID: <X/lrxKfyGQTekKCN@kroah.com>
-References: <20210108215504.GA27050@himera.home>
+        id S1726855AbhAIJkP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 Jan 2021 04:40:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726848AbhAIJkP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Jan 2021 04:40:15 -0500
+Received: from ficht.host.rs.currently.online (ficht.host.rs.currently.online [IPv6:2a01:4f8:120:614b::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1A5C061786;
+        Sat,  9 Jan 2021 01:39:34 -0800 (PST)
+Received: from carbon.srv.schuermann.io (carbon.srv.schuermann.io [178.63.44.188])
+        by ficht.host.rs.currently.online (Postfix) with ESMTPS id 9D1521EA5C;
+        Sat,  9 Jan 2021 09:39:30 +0000 (UTC)
+From:   Leon Schuermann <leon@is.currently.online>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     oliver@neukum.org, davem@davemloft.net, hayeswang@realtek.com,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 1/1] r8152: Add Lenovo Powered USB-C Travel Hub
+In-Reply-To: <20210108182030.77839d11@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <20210108202727.11728-1-leon@is.currently.online>
+ <20210108202727.11728-2-leon@is.currently.online>
+ <20210108182030.77839d11@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Date:   Sat, 09 Jan 2021 10:39:27 +0100
+Message-ID: <87bldye9f4.fsf@is.currently.online>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210108215504.GA27050@himera.home>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jan 09, 2021 at 12:55:04AM +0300, Eugene Korenevsky wrote:
-> According to EHCI spec, EHCI HCD clears USBSTS.HCHalted whenever USBCMD.RS=1.
-> However, it is a good practice to wait some time after setting USBCMD.RS
-> (approximately 100ms) until USBSTS.HCHalted become zero.
-> 
-> Instead, previous version of ehci_run() wrote 1 to USBCMD.RS, issued read to
-> USBCMD and waited for 5 ms.
-> That worked incorrectly at least at VirtualBox's EHCI virtual HCD and caused
-> accidental hangs (bugzilla #211095).
-> 
-> This patch fixes #211095.
+Jakub Kicinski <kuba@kernel.org> writes:
+> On Fri,  8 Jan 2021 21:27:27 +0100 Leon Schuermann wrote:
+>> This USB-C Hub (17ef:721e) based on the Realtek RTL8153B chip used to
+>> work with the cdc_ether driver.
+>
+> When you say "used to work" do you mean there was a regression where
+> the older kernels would work fine and newer don't? Or just "it works
+> most of the time"?
 
-What is this number from?  Can you just provide a "Link:" tag?
+Sorry, I should've clarified that. "Used to work" is supposed to say
+"the device used the generic cdc_ether driver", as in
 
-thanks,
+[  +0.000004] usb 4-1.1: Product: Lenovo Powered Hub
+[  +0.000003] usb 4-1.1: Manufacturer: Lenovo
+[  +0.000002] usb 4-1.1: SerialNumber: xxxxxxxxx
+[  +0.024803] cdc_ether 4-1.1:2.0 eth0: register 'cdc_ether' at
+              usb-0000:2f:00.0-1.1, CDC Ethernet Device,
+              xx:xx:xx:xx:xx:xx
 
-greg k-h
+I guess it did technically work correctly, except for the reported issue
+when the host system suspends, which is fixed by using the dedicated
+Realtek driver. As far as I know this hasn't been fixed before, so it's
+not a regression.
+
+Should I update the commit message accordingly? Thanks!
+
+Leon
