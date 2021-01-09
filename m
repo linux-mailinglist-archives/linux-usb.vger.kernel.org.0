@@ -2,99 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C322F03CC
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Jan 2021 22:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 246C12F042A
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Jan 2021 23:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726195AbhAIV0u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 Jan 2021 16:26:50 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:56859 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726006AbhAIV0t (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Jan 2021 16:26:49 -0500
-Received: (qmail 1137346 invoked by uid 1000); 9 Jan 2021 16:26:08 -0500
-Date:   Sat, 9 Jan 2021 16:26:08 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Hamish Martin <hamish.martin@alliedtelesis.co.nz>,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] usb: ohci: Default to per-port over-current
- protection
-Message-ID: <20210109212608.GB1136657@rowland.harvard.edu>
-References: <20200910212512.16670-1-hamish.martin@alliedtelesis.co.nz>
- <X+huemxT9XOeDi5E@aptenodytes>
+        id S1726303AbhAIWpR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 Jan 2021 17:45:17 -0500
+Received: from smtp.infotech.no ([82.134.31.41]:57317 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726198AbhAIWpR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 9 Jan 2021 17:45:17 -0500
+X-Greylist: delayed 446 seconds by postgrey-1.27 at vger.kernel.org; Sat, 09 Jan 2021 17:45:16 EST
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id C062620425A;
+        Sat,  9 Jan 2021 23:37:08 +0100 (CET)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id w9BlicSeMm7Y; Sat,  9 Jan 2021 23:37:02 +0100 (CET)
+Received: from xtwo70.bingwo.ca (host-104-157-204-209.dyn.295.ca [104.157.204.209])
+        by smtp.infotech.no (Postfix) with ESMTPA id 5A36E204192;
+        Sat,  9 Jan 2021 23:37:01 +0100 (CET)
+From:   Douglas Gilbert <dgilbert@interlog.com>
+To:     linux-input@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com
+Subject: [PATCH] [input]: hid-cp2112: fix multiple gpiochips
+Date:   Sat,  9 Jan 2021 17:36:58 -0500
+Message-Id: <20210109223658.749743-1-dgilbert@interlog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <X+huemxT9XOeDi5E@aptenodytes>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Dec 27, 2020 at 12:22:34PM +0100, Paul Kocialkowski wrote:
-> Hi,
+In lk 5.11.0-rc2 connecting a USB based Silicon Labs HID to I2C
+bridge evaluation board (CP2112EK) causes this warning:
+  gpio gpiochip0: (cp2112_gpio): detected irqchip that is shared
+       with multiple gpiochips: please fix the driver
 
-Sorry it has taken so long to respond to this.  The holidays intervened, 
-but that's no excuse.
+Simply copy what other gpio related drivers do to fix this
+particular warning: replicate the struct irq_chip object in each
+device instance rather than have a static object which makes that
+object (incorrectly) shared by each device.
 
-> On Fri 11 Sep 20, 09:25, Hamish Martin wrote:
-> > Some integrated OHCI controller hubs do not expose all ports of the hub
-> > to pins on the SoC. In some cases the unconnected ports generate
-> > spurious over-current events. For example the Broadcom 56060/Ranger 2 SoC
-> > contains a nominally 3 port hub but only the first port is wired.
-> > 
-> > Default behaviour for ohci-platform driver is to use global over-current
-> > protection mode (AKA "ganged"). This leads to the spurious over-current
-> > events affecting all ports in the hub.
-> > 
-> > We now alter the default to use per-port over-current protection.
-> 
-> This specific patch lead to breaking OHCI on my mom's laptop (whom was about
-> to buy a new one thinking the hardware had failed). I get no OHCI interrupt at
-> all and no USB 1 device is ever detected.
-> 
-> I haven't really found a reasonable explanation about why that is, but here
-> are some notes I was able to collect:
-> - The issue showed up on 5.8,18 and 5.9.15, which don't include the patch
->   from this series that sets distrust_firmware = false; This results in the NPS
->   bit being set via OHCI_QUIRK_HUB_POWER.
-> - Adding val &= ~RH_A_PSM; (as was done before this change) solves the issue
->   which is weird because the bit is supposed to be inactive when NPS is set;
-> - Setting ohci_hcd.distrust_firmware=0 in the cmdline results in not setting
->   the NPS bit and also solves the issue;
-> - The initial value of the register at function entry is 0x1001104 (PSM bit
->   is set, NPS is unset);
-> - The OHCI controller is the following:
-> 00:03.0 USB controller: Silicon Integrated Systems [SiS] USB 1.1 Controller (rev 0f) (prog-if 10 [OHCI])
-> 	Subsystem: ASUSTeK Computer Inc. Device 1aa7
+Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+---
+ drivers/hid/hid-cp2112.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-Great reporting -- thanks.
+diff --git a/drivers/hid/hid-cp2112.c b/drivers/hid/hid-cp2112.c
+index 21e15627a461..477baa30889c 100644
+--- a/drivers/hid/hid-cp2112.c
++++ b/drivers/hid/hid-cp2112.c
+@@ -161,6 +161,7 @@ struct cp2112_device {
+ 	atomic_t read_avail;
+ 	atomic_t xfer_avail;
+ 	struct gpio_chip gc;
++	struct irq_chip irq;
+ 	u8 *in_out_buffer;
+ 	struct mutex lock;
+ 
+@@ -1175,16 +1176,6 @@ static int cp2112_gpio_irq_type(struct irq_data *d, unsigned int type)
+ 	return 0;
+ }
+ 
+-static struct irq_chip cp2112_gpio_irqchip = {
+-	.name = "cp2112-gpio",
+-	.irq_startup = cp2112_gpio_irq_startup,
+-	.irq_shutdown = cp2112_gpio_irq_shutdown,
+-	.irq_ack = cp2112_gpio_irq_ack,
+-	.irq_mask = cp2112_gpio_irq_mask,
+-	.irq_unmask = cp2112_gpio_irq_unmask,
+-	.irq_set_type = cp2112_gpio_irq_type,
+-};
+-
+ static int __maybe_unused cp2112_allocate_irq(struct cp2112_device *dev,
+ 					      int pin)
+ {
+@@ -1339,8 +1330,17 @@ static int cp2112_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 	dev->gc.can_sleep		= 1;
+ 	dev->gc.parent			= &hdev->dev;
+ 
++	dev->irq.name = "cp2112-gpio";
++	dev->irq.irq_startup = cp2112_gpio_irq_startup;
++	dev->irq.irq_shutdown = cp2112_gpio_irq_shutdown;
++	dev->irq.irq_ack = cp2112_gpio_irq_ack;
++	dev->irq.irq_mask = cp2112_gpio_irq_mask;
++	dev->irq.irq_unmask = cp2112_gpio_irq_unmask;
++	dev->irq.irq_set_type = cp2112_gpio_irq_type;
++	dev->irq.flags = IRQCHIP_MASK_ON_SUSPEND;
++
+ 	girq = &dev->gc.irq;
+-	girq->chip = &cp2112_gpio_irqchip;
++	girq->chip = &dev->irq;
+ 	/* The event comes from the outside so no parent handler */
+ 	girq->parent_handler = NULL;
+ 	girq->num_parents = 0;
+-- 
+2.25.1
 
-> Does that make any sense to you?
-> 
-> I really wonder what a proper fix could be and here are some suggestions:
-> - Adding a specific quirk to clear the PSM bit for this hardware which seems to
->   consider the bit regardless of NPS;
-
-We don't need a quirk for this.  There shouldn't be anything wrong with 
-_always_ clearing PSM whenever NPS is set, since the controller is 
-supposed to ignore PSM under that condition.
-
-Would you like to submit a patch for this?
-
-> - Adding the patch that sets distrust_firmware = false to stable branches;
-
-That's certainly reasonable.  Nobody has reported any problems caused by 
-that patch, so adding it to the stable branches should be safe enough.
-
-> What do you think?
-
-We could even do both.  That would help if, for example, somebody 
-decided to set ohci_hcd.distrust_firmware=true explicitly.
-
-Greg, in the meantime can we have commit c4005a8f65ed ("usb: ohci: Make 
-distrust_firmware param default to false") added to all the stable 
-kernels which have back-ported versions of commit b77d2a0a223b?
-
-Alan Stern
