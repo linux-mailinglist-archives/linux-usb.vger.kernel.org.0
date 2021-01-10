@@ -2,90 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0752F08CD
-	for <lists+linux-usb@lfdr.de>; Sun, 10 Jan 2021 18:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A2C2F09D6
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Jan 2021 22:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbhAJRgy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 10 Jan 2021 12:36:54 -0500
-Received: from mail.astralinux.ru ([217.74.38.120]:51073 "EHLO
-        mail.astralinux.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726263AbhAJRgy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 Jan 2021 12:36:54 -0500
-Received: from [95.24.186.126] (account ekorenevsky@astralinux.ru HELO himera.home)
-  by astralinux.ru (CommuniGate Pro SMTP 6.3.4)
-  with ESMTPSA id 2776966; Sun, 10 Jan 2021 20:34:52 +0300
-Date:   Sun, 10 Jan 2021 20:36:09 +0300
-From:   Eugene Korenevsky <ekorenevsky@astralinux.ru>
-To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v6] ehci: fix EHCI host controller initialization sequence
-Message-ID: <20210110173609.GA17313@himera.home>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727008AbhAJVV6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 10 Jan 2021 16:21:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53856 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726735AbhAJVV6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 10 Jan 2021 16:21:58 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 8470722AAC;
+        Sun, 10 Jan 2021 21:21:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610313677;
+        bh=Nno+3pKGQr/ZyEJh/RO8akz3NQ1ZmbQwk9xRF41jSqc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=h7zBtu7BToSSxFpFgJmLfFc2cRSbENxbJqeKESM0Ut+roI+DT0W2dI8qYrNNrArrm
+         6sJWhSeApdvUiZ+XTQ0oZVpdArhg7wVKdwG5+hCE9tgHYPMQW2fiUXx/wEzHP5n1W+
+         l3Kn17TPtgKJJ7umVvN0srLXkIBoAiv0+xQce+q5LDzrH27zK799MXmRNqWKeZhXHp
+         DzJ9joYOTAvHXIvML4kG6TNDixZ9npQeZDsok6VnTJduykF1pnPU8KhD2zx94kVM/o
+         L1bBLpN9XR5tsNyQHg96nR5A+mE44flZZ1ZVwvil9DOVspgawcbp7h3/qzqGj99hru
+         Or7b39OtFNJpw==
+Received: from pdx-korg-docbuild-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-1.ci.codeaurora.org (Postfix) with ESMTP id 7A5B560141;
+        Sun, 10 Jan 2021 21:21:17 +0000 (UTC)
+Subject: Re: [GIT PULL] USB driver fixes for 5.11-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <X/sK8J7QqiNSPZ1e@kroah.com>
+References: <X/sK8J7QqiNSPZ1e@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <X/sK8J7QqiNSPZ1e@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.11-rc3
+X-PR-Tracked-Commit-Id: a5c7682aaaa10e42928d73de1c9e1e02d2b14c2e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 28318f53503090fcd8fd27c49445396ea2ace44b
+Message-Id: <161031367749.28318.2198119359449543218.pr-tracker-bot@kernel.org>
+Date:   Sun, 10 Jan 2021 21:21:17 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-According to EHCI spec, EHCI HC clears USBSTS.HCHalted whenever
-USBCMD.RS=1.
+The pull request you sent on Sun, 10 Jan 2021 15:10:56 +0100:
 
-However, it is a good practice to wait some time after setting USBCMD.RS
-(approximately 100ms) until USBSTS.HCHalted become zero.
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.11-rc3
 
-Without this waiting, VirtualBox's EHCI virtual HC accidentally hangs
-(see BugLink).
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/28318f53503090fcd8fd27c49445396ea2ace44b
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=211095 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Eugene Korenevsky <ekorenevsky@astralinux.ru>
----
-v1: initial patch
-v2: add BugLink tag
-v3: add Revieved-By tags (incorrect), restore `msleep(5)`
-v4: remove Reviewed-By tags, restore reading from USBCMD prior to msleep,
-adjust description
-v5: add `patch changelog`
-v6: add `Acked-by: Alan Stern <stern@rowland.harvard.edu>` tag
+Thank you!
 
- drivers/usb/host/ehci-hcd.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
-index e358ae17d51e..1926b328b6aa 100644
---- a/drivers/usb/host/ehci-hcd.c
-+++ b/drivers/usb/host/ehci-hcd.c
-@@ -574,6 +574,7 @@ static int ehci_run (struct usb_hcd *hcd)
- 	struct ehci_hcd		*ehci = hcd_to_ehci (hcd);
- 	u32			temp;
- 	u32			hcc_params;
-+	int			rc;
- 
- 	hcd->uses_new_polling = 1;
- 
-@@ -629,9 +630,20 @@ static int ehci_run (struct usb_hcd *hcd)
- 	down_write(&ehci_cf_port_reset_rwsem);
- 	ehci->rh_state = EHCI_RH_RUNNING;
- 	ehci_writel(ehci, FLAG_CF, &ehci->regs->configured_flag);
-+
-+	/* Wait until HC become operational */
- 	ehci_readl(ehci, &ehci->regs->command);	/* unblock posted writes */
- 	msleep(5);
-+	rc = ehci_handshake(ehci, &ehci->regs->status, STS_HALT, 0, 100 * 1000);
-+
- 	up_write(&ehci_cf_port_reset_rwsem);
-+
-+	if (rc) {
-+		ehci_err(ehci, "USB %x.%x, controller refused to start: %d\n",
-+			 ((ehci->sbrn & 0xf0)>>4), (ehci->sbrn & 0x0f), rc);
-+		return rc;
-+	}
-+
- 	ehci->last_periodic_enable = ktime_get_real();
- 
- 	temp = HC_VERSION(ehci, ehci_readl(ehci, &ehci->caps->hc_capbase));
 -- 
-2.20.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
