@@ -2,78 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACEBA2F0425
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Jan 2021 23:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 075842F05D9
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Jan 2021 08:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726398AbhAIWnx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 Jan 2021 17:43:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43708 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726223AbhAIWnx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 9 Jan 2021 17:43:53 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A009823888;
-        Sat,  9 Jan 2021 22:43:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610232192;
-        bh=k6kk6F01bGxYTyYPJrz+JYD1LJ/D00VjaUlcsERDN7s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mJaTtJSGwLwfAh64b8YhG+0VXdoFaFkZcHnZJ0uP/lzaYR7RbAuUauCujeY91wx1f
-         lwo3TVT/JNUcf2mJZwjaAmo2w+L5b95L3pVCikDw2k0aUcB6IpyXGWJ5I9aYxteIaA
-         qP0KmwcR16pJHNRLJT0/zZcS6R5plY7JX6RS5tB7eZ81Hzc71VtLaH0lHDelB2mEVq
-         ugC6W8gCeg/+Gzrn/L+aruNbhe4Aw6zn51mXyVUz3CHGTchy/5zHaSNh7uGge2mF3Y
-         btxGwst+qxjct623pc43ANWW0YY/GiYyla6anFvzcmrCXIXqnoTmCs0wyAURJQMJ5k
-         rwon9JdJt/lIA==
-Date:   Sat, 9 Jan 2021 14:43:11 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Leon Schuermann <leon@is.currently.online>
-Cc:     oliver@neukum.org, davem@davemloft.net, hayeswang@realtek.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 1/1] r8152: Add Lenovo Powered USB-C Travel Hub
-Message-ID: <20210109144311.47760f7e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <87bldye9f4.fsf@is.currently.online>
-References: <20210108202727.11728-1-leon@is.currently.online>
-        <20210108202727.11728-2-leon@is.currently.online>
-        <20210108182030.77839d11@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <87bldye9f4.fsf@is.currently.online>
+        id S1726414AbhAJHib (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 10 Jan 2021 02:38:31 -0500
+Received: from mail.astralinux.ru ([217.74.38.120]:34895 "EHLO
+        mail.astralinux.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726384AbhAJHib (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 Jan 2021 02:38:31 -0500
+Received: from [95.24.186.126] (account ekorenevsky@astralinux.ru HELO himera.home)
+  by astralinux.ru (CommuniGate Pro SMTP 6.3.4)
+  with ESMTPSA id 2776865; Sun, 10 Jan 2021 10:36:20 +0300
+Date:   Sun, 10 Jan 2021 10:37:37 +0300
+From:   Eugene Korenevsky <ekorenevsky@astralinux.ru>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v3] ehci: fix EHCI host controller initialization sequence
+Message-ID: <20210110073737.GA10541@himera.home>
+References: <20210109181828.GA7585@himera.home>
+ <20210109210452.GA1136657@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210109210452.GA1136657@rowland.harvard.edu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 09 Jan 2021 10:39:27 +0100 Leon Schuermann wrote:
-> Jakub Kicinski <kuba@kernel.org> writes:
-> > On Fri,  8 Jan 2021 21:27:27 +0100 Leon Schuermann wrote:  
-> >> This USB-C Hub (17ef:721e) based on the Realtek RTL8153B chip used to
-> >> work with the cdc_ether driver.  
-> >
-> > When you say "used to work" do you mean there was a regression where
-> > the older kernels would work fine and newer don't? Or just "it works
-> > most of the time"?  
-> 
-> Sorry, I should've clarified that. "Used to work" is supposed to say
-> "the device used the generic cdc_ether driver", as in
-> 
-> [  +0.000004] usb 4-1.1: Product: Lenovo Powered Hub
-> [  +0.000003] usb 4-1.1: Manufacturer: Lenovo
-> [  +0.000002] usb 4-1.1: SerialNumber: xxxxxxxxx
-> [  +0.024803] cdc_ether 4-1.1:2.0 eth0: register 'cdc_ether' at
->               usb-0000:2f:00.0-1.1, CDC Ethernet Device,
->               xx:xx:xx:xx:xx:xx
-> 
-> I guess it did technically work correctly, except for the reported issue
-> when the host system suspends, which is fixed by using the dedicated
-> Realtek driver. As far as I know this hasn't been fixed before, so it's
-> not a regression.
+> > -	ehci_readl(ehci, &ehci->regs->command);	/* unblock posted writes */
 
-I see. In the last release cycle there were patches for allowing
-cdc_ether to drive RTL8153 devices when r8152 is not available. 
-I wanted to double check with you that nothing changed here,
-that's to say that the cdc_ether is not used even if r8152 is 
-built after an upgrade to 5.11-rc.
+> You should not remove the ehci_readl call above.  With that line gone, 
+> the PCI bus might not send the new value of configured_flag to the 
+> controller until after the 5-ms sleep has ended, which makes the msleep 
+> useless.
 
-> Should I update the commit message accordingly? Thanks!
+Could not find reads from USBCMD in similar drivers (for
+example here: https://github.com/NetBSD/src/blob/trunk/sys/dev/usb/ehci.c#L625).
+Is this feature (reading from USBCMD for unblocking posted writes)
+documented anywhere or it is found empirically?
 
-Yes please, otherwise backporters may be confused about how 
-to classify this change.
+--
+Eugene
