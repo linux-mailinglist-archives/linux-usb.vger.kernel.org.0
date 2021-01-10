@@ -2,100 +2,200 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A39B22F06FE
-	for <lists+linux-usb@lfdr.de>; Sun, 10 Jan 2021 13:05:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DEA2F0789
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Jan 2021 15:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726142AbhAJMEy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 10 Jan 2021 07:04:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50966 "EHLO mail.kernel.org"
+        id S1726456AbhAJOKY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 10 Jan 2021 09:10:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34834 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726069AbhAJMEx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 10 Jan 2021 07:04:53 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CB5982376E;
-        Sun, 10 Jan 2021 12:04:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610280252;
-        bh=BH09Z18/iuEnfef78NF+lc4mjUfTJ8I0SPRUHw8C3qc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ktg2qykg/tqzSS2Xxm+EM+9KnyFj6OS3F+tqy0igHJnYeqhd9czoBfIHNB63aYx0w
-         JOnJerCRjk+Y84R2hPHTWZ6UxulwABIMbPf78ViEJn6MACUo16/32FP5UYZKvIQse+
-         ZIr+0KedXPICGWthUmquzULE1+nk/ujWpyB8iLgOooWWYuRO3fihlelDLNuJkUB7lO
-         AyI7wGpoPMHs4CQC8kiqeZ4Xe+Lk7xvrnC9nFjRe1Ys+WPlHQWr5PUGpsGY5UflP07
-         nrDuX/NCneHNZG4j6eUig/99xRAyMeaBfeXa6o3YiHDiB/Gy0eETcB6c90GFpKV4Lx
-         E/RMeRiBmnZ2Q==
-Received: from johan by xi with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kyZSA-0008RA-Ln; Sun, 10 Jan 2021 13:04:15 +0100
-Date:   Sun, 10 Jan 2021 13:04:14 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Joe Abbott <jabbott@rollanet.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: pl2303.c 110 baud not working
-Message-ID: <X/rtPpHMii7AxXPJ@hovoldconsulting.com>
-References: <CADuz4ONmN299aw460r4wXCEK5F1v9kt_cewCCrdg2hb5nJV9uQ@mail.gmail.com>
- <X/gwVvn09NFiIOWw@hovoldconsulting.com>
- <CADuz4ONNPq+mADWYPKp8+M2rZtuoMwjO=+HDXfgrO2dQ0S1vQA@mail.gmail.com>
- <X/htEGiNbjGb2dy8@hovoldconsulting.com>
- <CADuz4OPCnq_4Xx-sWc-ZijoQRAZR-4+MRvpOx4np2rXifoCL5A@mail.gmail.com>
+        id S1726415AbhAJOKX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 10 Jan 2021 09:10:23 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 97DCF2333E;
+        Sun, 10 Jan 2021 14:09:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1610287783;
+        bh=qx0PDNl7K0ujYA+xmp3tepZFkfNJbClmmtaz/xw7Hek=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mSV8RvuYCgya7dTlwKpll1ATDR6IWOXgbKA3wNezMpBm8KboCsd9d0xxVqZsdaaTK
+         05vzMEU4NRy8/LUEs1izI1fCTwBoT6/eUicPR7o6LUpbSC0Av3+97hBz92TMkAJs0+
+         5bR4meGVVZ8y+7wT8WKQ95y2GO19xo/inIrw15+U=
+Date:   Sun, 10 Jan 2021 15:10:56 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 5.11-rc3
+Message-ID: <X/sK8J7QqiNSPZ1e@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CADuz4OPCnq_4Xx-sWc-ZijoQRAZR-4+MRvpOx4np2rXifoCL5A@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jan 09, 2021 at 08:26:26AM -0600, Joe Abbott wrote:
-> Hi Johan,
-> 
-> > Please keep the USB list on CC.
-> I'm sorry, I don't know what you mean.
+The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
-You're only replying to me instead of replying to "all" so that the USB
-mailing list is CCed. We don't do kernel development in private so
-please make sure that your mails do not drop the list from CC.
+  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
 
-I've added linux-usb@vger.kernel.org back on CC in my replies.
+are available in the Git repository at:
 
-> Here's dmesg after debug turned on and 'stty 110 cs7 parenb evenp -F
-> /dev/ttyUSB0':
-> [  315.112142] pl2303 ttyUSB0: pl2303_set_control_lines - 03
-> [  315.115032] pl2303 ttyUSB0: pl2303_get_line_request - 80 25 00 00 00 00 08
-> [  315.115038] pl2303 ttyUSB0: data bits = 7
-> [  315.115041] pl2303 ttyUSB0: baud requested = 110
-> [  315.115045] pl2303 ttyUSB0: baud set = 110
-> [  315.115048] pl2303 ttyUSB0: stop bits = 1
-> [  315.115051] pl2303 ttyUSB0: parity = even
-> [  315.116032] pl2303 ttyUSB0: pl2303_set_line_request - d5 0e 00 80 00 02 07
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.11-rc3
 
-So as expected, your 5.0 Mint kernel behaves just like mainline:
+for you to fetch changes up to a5c7682aaaa10e42928d73de1c9e1e02d2b14c2e:
 
-	pl2303_set_line_request - d5 0e 00 80 00 02 07
+  usb: dwc3: gadget: Clear wait flag on dequeue (2021-01-07 14:24:35 +0100)
 
-> [  315.116037] pl2303 6-1:1.0: pl2303_vendor_write - [0000] = 00
-> 
-> I have some windows wireshark usb captures for 110 and 9600 taken
-> while using putty.
-> I don't know how to interpret them.  What is the best way to send them to you?
+----------------------------------------------------------------
+USB fixes for 5.11-rc3
 
-Look for the set-line-request control request:
+Here are a number of small USB driver fixes for 5.11-rc3.
 
-	bmRequestType	0x21
-	bRequest 	0x20	(SET_LINE_REQUEST)
-	wValue		0
-	wIndex		0
-	wLength		7
+Include in here are:
+	- USB gadget driver fixes for reported issues
+	- new usb-serial driver ids
+	- dma from stack bugfixes
+	- typec bugfixes
+	- dwc3 bugfixes
+	- xhci driver bugfixes
+	- other small misc usb driver bugfixes
 
-the data stage should contain the corresponding 7 bytes of request data
-for 110/cs7/parenb:
+All of these have been in linux-next with no reported issues.
 
-	d5 0e 00 80 00 02 07
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-where the first four bytes encodes the baud rate (either directly or as
-for 110 baud using divisors, see the code for details).
+----------------------------------------------------------------
+Alan Stern (1):
+      USB: Gadget: dummy-hcd: Fix shift-out-of-bounds bug
 
-I'm afraid I don't have time to be reverse-engineering this myself, but
-if you manage to find a difference in how the Windows driver configures
-your device we may be able to figure out how to get 110 baud working.
+Andrey Konovalov (1):
+      kcov, usb: hide in_serving_softirq checks in __usb_hcd_giveback_urb
 
-Johan
+Arnd Bergmann (1):
+      usb: gadget: select CONFIG_CRC32
+
+Aswath Govindraju (1):
+      dt-bindings: usb: Add new compatible string for AM64 SoC
+
+Bjørn Mork (1):
+      USB: serial: option: add Quectel EM160R-GL
+
+Chandana Kishori Chiluveru (1):
+      usb: gadget: configfs: Preserve function ordering after bind failure
+
+Daniel Palmer (1):
+      USB: serial: option: add LongSung M5710 module support
+
+Eddie Hung (1):
+      usb: gadget: configfs: Fix use-after-free issue with udc_name
+
+Fabio Estevam (1):
+      usb: gadget: fsl_mxc_udc: Remove the driver
+
+Greg Kroah-Hartman (1):
+      Merge tag 'usb-serial-5.11-rc3' of https://git.kernel.org/.../johan/usb-serial into usb-linus
+
+Jerome Brunet (1):
+      usb: gadget: f_uac2: reset wMaxPacketSize
+
+Johan Hovold (3):
+      USB: yurex: fix control-URB timeout handling
+      USB: serial: iuu_phoenix: fix DMA from stack
+      USB: usblp: fix DMA to stack
+
+Madhusudanarao Amara (1):
+      usb: typec: intel_pmc_mux: Configure HPD first for HPD+IRQ request
+
+Manish Narani (1):
+      usb: gadget: u_ether: Fix MTU size mismatch with RX packet size
+
+Michael Grzeschik (1):
+      USB: xhci: fix U1/U2 handling for hardware with XHCI_INTEL_HOST quirk set
+
+Peter Chen (1):
+      usb: gadget: core: change the comment for usb_gadget_connect
+
+Peter Robinson (1):
+      usb: typec: Fix copy paste error for NVIDIA alt-mode description
+
+Prashant Malani (1):
+      usb: typec: Send uevent for num_altmodes update
+
+Randy Dunlap (1):
+      usb: usbip: vhci_hcd: protect shift size
+
+Roger Quadros (1):
+      MAINTAINERS: Update address for Cadence USB3 driver
+
+Sean Young (1):
+      USB: cdc-acm: blacklist another IR Droid device
+
+Serge Semin (3):
+      usb: dwc3: ulpi: Use VStsDone to detect PHY regs access completion
+      usb: dwc3: ulpi: Replace CPU-based busyloop with Protocol-based one
+      usb: dwc3: ulpi: Fix USB2.0 HS/FS/LS PHY suspend regression
+
+Sriharsha Allenki (1):
+      usb: gadget: Fix spinlock lockup on usb_function_deactivate
+
+Tetsuo Handa (1):
+      USB: cdc-wdm: Fix use after free in service_outstanding_interrupt().
+
+Thinh Nguyen (2):
+      usb: uas: Add PNY USB Portable SSD to unusual_uas
+      usb: dwc3: gadget: Clear wait flag on dequeue
+
+Wesley Cheng (1):
+      usb: dwc3: gadget: Restart DWC3 gadget when enabling pullup
+
+Yang Yingliang (1):
+      USB: gadget: legacy: fix return error code in acm_ms_bind()
+
+Yu Kuai (1):
+      usb: chipidea: ci_hdrc_imx: add missing put_device() call in usbmisc_get_init_data()
+
+Zheng Zengkai (1):
+      usb: dwc3: meson-g12a: disable clk on error handling path in probe
+
+Zqiang (1):
+      usb: gadget: function: printer: Fix a memory leak for interface descriptor
+
+taehyun.cho (1):
+      usb: gadget: enable super speed plus
+
+ .../devicetree/bindings/usb/ti,j721e-usb.yaml      |   6 +-
+ MAINTAINERS                                        |   2 +-
+ drivers/usb/chipidea/ci_hdrc_imx.c                 |   6 +-
+ drivers/usb/class/cdc-acm.c                        |   4 +
+ drivers/usb/class/cdc-wdm.c                        |  16 ++-
+ drivers/usb/class/usblp.c                          |  21 +++-
+ drivers/usb/core/hcd.c                             |   8 +-
+ drivers/usb/dwc3/core.h                            |   1 +
+ drivers/usb/dwc3/dwc3-meson-g12a.c                 |   2 +-
+ drivers/usb/dwc3/gadget.c                          |  16 +--
+ drivers/usb/dwc3/ulpi.c                            |  38 ++++---
+ drivers/usb/gadget/Kconfig                         |   2 +
+ drivers/usb/gadget/composite.c                     |  10 +-
+ drivers/usb/gadget/configfs.c                      |  19 +++-
+ drivers/usb/gadget/function/f_printer.c            |   1 +
+ drivers/usb/gadget/function/f_uac2.c               |  69 +++++++++---
+ drivers/usb/gadget/function/u_ether.c              |   9 +-
+ drivers/usb/gadget/legacy/acm_ms.c                 |   4 +-
+ drivers/usb/gadget/udc/Kconfig                     |   2 +-
+ drivers/usb/gadget/udc/Makefile                    |   1 -
+ drivers/usb/gadget/udc/core.c                      |   3 +-
+ drivers/usb/gadget/udc/dummy_hcd.c                 |  35 ++++--
+ drivers/usb/gadget/udc/fsl_mxc_udc.c               | 122 ---------------------
+ drivers/usb/host/xhci.c                            |  24 ++--
+ drivers/usb/misc/yurex.c                           |   3 +
+ drivers/usb/serial/iuu_phoenix.c                   |  20 +++-
+ drivers/usb/serial/option.c                        |   3 +
+ drivers/usb/storage/unusual_uas.h                  |   7 ++
+ drivers/usb/typec/altmodes/Kconfig                 |   2 +-
+ drivers/usb/typec/class.c                          |   2 +
+ drivers/usb/typec/mux/intel_pmc_mux.c              |  11 ++
+ drivers/usb/usbip/vhci_hcd.c                       |   2 +
+ include/linux/kcov.h                               |  21 ++++
+ 33 files changed, 267 insertions(+), 225 deletions(-)
+ delete mode 100644 drivers/usb/gadget/udc/fsl_mxc_udc.c
