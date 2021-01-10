@@ -2,88 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A262F062D
-	for <lists+linux-usb@lfdr.de>; Sun, 10 Jan 2021 10:22:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A39B22F06FE
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Jan 2021 13:05:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726210AbhAJJWe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 10 Jan 2021 04:22:34 -0500
-Received: from mail.astralinux.ru ([217.74.38.120]:41567 "EHLO
-        mail.astralinux.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726012AbhAJJWa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 Jan 2021 04:22:30 -0500
-Received: from [95.24.186.126] (account ekorenevsky@astralinux.ru HELO himera.home)
-  by astralinux.ru (CommuniGate Pro SMTP 6.3.4)
-  with ESMTPSA id 2776868; Sun, 10 Jan 2021 12:20:30 +0300
-Date:   Sun, 10 Jan 2021 12:21:47 +0300
-From:   Eugene Korenevsky <ekorenevsky@astralinux.ru>
-To:     linux-usb@vger.kernel.org
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v5] ehci: fix EHCI host controller initialization sequence
-Message-ID: <20210110092146.GA12790@himera.home>
+        id S1726142AbhAJMEy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 10 Jan 2021 07:04:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50966 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726069AbhAJMEx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 10 Jan 2021 07:04:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CB5982376E;
+        Sun, 10 Jan 2021 12:04:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610280252;
+        bh=BH09Z18/iuEnfef78NF+lc4mjUfTJ8I0SPRUHw8C3qc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ktg2qykg/tqzSS2Xxm+EM+9KnyFj6OS3F+tqy0igHJnYeqhd9czoBfIHNB63aYx0w
+         JOnJerCRjk+Y84R2hPHTWZ6UxulwABIMbPf78ViEJn6MACUo16/32FP5UYZKvIQse+
+         ZIr+0KedXPICGWthUmquzULE1+nk/ujWpyB8iLgOooWWYuRO3fihlelDLNuJkUB7lO
+         AyI7wGpoPMHs4CQC8kiqeZ4Xe+Lk7xvrnC9nFjRe1Ys+WPlHQWr5PUGpsGY5UflP07
+         nrDuX/NCneHNZG4j6eUig/99xRAyMeaBfeXa6o3YiHDiB/Gy0eETcB6c90GFpKV4Lx
+         E/RMeRiBmnZ2Q==
+Received: from johan by xi with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kyZSA-0008RA-Ln; Sun, 10 Jan 2021 13:04:15 +0100
+Date:   Sun, 10 Jan 2021 13:04:14 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Joe Abbott <jabbott@rollanet.org>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: pl2303.c 110 baud not working
+Message-ID: <X/rtPpHMii7AxXPJ@hovoldconsulting.com>
+References: <CADuz4ONmN299aw460r4wXCEK5F1v9kt_cewCCrdg2hb5nJV9uQ@mail.gmail.com>
+ <X/gwVvn09NFiIOWw@hovoldconsulting.com>
+ <CADuz4ONNPq+mADWYPKp8+M2rZtuoMwjO=+HDXfgrO2dQ0S1vQA@mail.gmail.com>
+ <X/htEGiNbjGb2dy8@hovoldconsulting.com>
+ <CADuz4OPCnq_4Xx-sWc-ZijoQRAZR-4+MRvpOx4np2rXifoCL5A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CADuz4OPCnq_4Xx-sWc-ZijoQRAZR-4+MRvpOx4np2rXifoCL5A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-According to EHCI spec, EHCI HC clears USBSTS.HCHalted whenever
-USBCMD.RS=1.
+On Sat, Jan 09, 2021 at 08:26:26AM -0600, Joe Abbott wrote:
+> Hi Johan,
+> 
+> > Please keep the USB list on CC.
+> I'm sorry, I don't know what you mean.
 
-However, it is a good practice to wait some time after setting USBCMD.RS
-(approximately 100ms) until USBSTS.HCHalted become zero.
+You're only replying to me instead of replying to "all" so that the USB
+mailing list is CCed. We don't do kernel development in private so
+please make sure that your mails do not drop the list from CC.
 
-Without this waiting, VirtualBox's EHCI virtual HC accidentally hangs
-(see BugLink).
+I've added linux-usb@vger.kernel.org back on CC in my replies.
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=211095 
-Signed-off-by: Eugene Korenevsky <ekorenevsky@astralinux.ru>
----
-v1: initial patch
-v2: add BugLink tag
-v3: add Revieved-By tags (incorrect), restore `msleep(5)`
-v4: remove Reviewed-By tags, restore reading from USBCMD prior to msleep,
-adjust description
-v5: add `patch changelog`
+> Here's dmesg after debug turned on and 'stty 110 cs7 parenb evenp -F
+> /dev/ttyUSB0':
+> [  315.112142] pl2303 ttyUSB0: pl2303_set_control_lines - 03
+> [  315.115032] pl2303 ttyUSB0: pl2303_get_line_request - 80 25 00 00 00 00 08
+> [  315.115038] pl2303 ttyUSB0: data bits = 7
+> [  315.115041] pl2303 ttyUSB0: baud requested = 110
+> [  315.115045] pl2303 ttyUSB0: baud set = 110
+> [  315.115048] pl2303 ttyUSB0: stop bits = 1
+> [  315.115051] pl2303 ttyUSB0: parity = even
+> [  315.116032] pl2303 ttyUSB0: pl2303_set_line_request - d5 0e 00 80 00 02 07
 
- drivers/usb/host/ehci-hcd.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+So as expected, your 5.0 Mint kernel behaves just like mainline:
 
-diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
-index e358ae17d51e..1926b328b6aa 100644
---- a/drivers/usb/host/ehci-hcd.c
-+++ b/drivers/usb/host/ehci-hcd.c
-@@ -574,6 +574,7 @@ static int ehci_run (struct usb_hcd *hcd)
- 	struct ehci_hcd		*ehci = hcd_to_ehci (hcd);
- 	u32			temp;
- 	u32			hcc_params;
-+	int			rc;
- 
- 	hcd->uses_new_polling = 1;
- 
-@@ -629,9 +630,20 @@ static int ehci_run (struct usb_hcd *hcd)
- 	down_write(&ehci_cf_port_reset_rwsem);
- 	ehci->rh_state = EHCI_RH_RUNNING;
- 	ehci_writel(ehci, FLAG_CF, &ehci->regs->configured_flag);
-+
-+	/* Wait until HC become operational */
- 	ehci_readl(ehci, &ehci->regs->command);	/* unblock posted writes */
- 	msleep(5);
-+	rc = ehci_handshake(ehci, &ehci->regs->status, STS_HALT, 0, 100 * 1000);
-+
- 	up_write(&ehci_cf_port_reset_rwsem);
-+
-+	if (rc) {
-+		ehci_err(ehci, "USB %x.%x, controller refused to start: %d\n",
-+			 ((ehci->sbrn & 0xf0)>>4), (ehci->sbrn & 0x0f), rc);
-+		return rc;
-+	}
-+
- 	ehci->last_periodic_enable = ktime_get_real();
- 
- 	temp = HC_VERSION(ehci, ehci_readl(ehci, &ehci->caps->hc_capbase));
--- 
-2.20.1
+	pl2303_set_line_request - d5 0e 00 80 00 02 07
 
+> [  315.116037] pl2303 6-1:1.0: pl2303_vendor_write - [0000] = 00
+> 
+> I have some windows wireshark usb captures for 110 and 9600 taken
+> while using putty.
+> I don't know how to interpret them.  What is the best way to send them to you?
+
+Look for the set-line-request control request:
+
+	bmRequestType	0x21
+	bRequest 	0x20	(SET_LINE_REQUEST)
+	wValue		0
+	wIndex		0
+	wLength		7
+
+the data stage should contain the corresponding 7 bytes of request data
+for 110/cs7/parenb:
+
+	d5 0e 00 80 00 02 07
+
+where the first four bytes encodes the baud rate (either directly or as
+for 110 baud using divisors, see the code for details).
+
+I'm afraid I don't have time to be reverse-engineering this myself, but
+if you manage to find a difference in how the Windows driver configures
+your device we may be able to figure out how to get 110 baud working.
+
+Johan
