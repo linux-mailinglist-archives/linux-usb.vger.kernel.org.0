@@ -2,78 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBAF2F1777
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 15:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60ACD2F17CA
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 15:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730226AbhAKOHB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Jan 2021 09:07:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59710 "EHLO mail.kernel.org"
+        id S1729341AbhAKOOa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Jan 2021 09:14:30 -0500
+Received: from mga17.intel.com ([192.55.52.151]:16819 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388476AbhAKOGz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 11 Jan 2021 09:06:55 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 72A262071C;
-        Mon, 11 Jan 2021 14:06:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610373974;
-        bh=SVyoGsxgsyx3sjZbfsKtoTHspzMeS5/7axBuJTwpsLA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=EaDqD7/5WqWDCCvPFDZUB/Z2gjztwJfg5Bh7t6sf7GMsRkUTpty8Pks7/6s1AS9QS
-         V5y1t5wu9qnJTjZr0qsvSxuZmMYieBGXkULPEd660uKCmMlU0LRmR/qDlagr7YME7w
-         7lZI+m5sDWlBDCo8mD8SuhZud6f7xOwIANvZJ8V+wfPwwvLhduJwrKKipo/S97sv7N
-         E4mIZjNY10Q7dFAMt0ej1oQlyuiXVXa92gBu/U4l2nS3n6lGrOdrg5OUnz/tgfkzNc
-         DeXZlgh5rFNjRPpDNS4yAJQPmJkYv6M9DCzSED7WtqLWppJyaVmS79f0Ly5lc2dHfx
-         pHp9i1rP74Xmg==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [RESEND PATCH v1] usb: dwc3: Simplify with dev_err_probe()
-In-Reply-To: <20210111135458.57084-1-andriy.shevchenko@linux.intel.com>
-References: <20210111135458.57084-1-andriy.shevchenko@linux.intel.com>
-Date:   Mon, 11 Jan 2021 16:06:08 +0200
-Message-ID: <8735z7601b.fsf@kernel.org>
+        id S1727729AbhAKOOa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 11 Jan 2021 09:14:30 -0500
+IronPort-SDR: 2Bc25o2MjjvkXojzrho1B5AdZtdCNISIqhr42ONm9VZ4kR4cy5Rf57FRV3qQjRaIW8cFUgiAuH
+ VTLXL5yfJWLw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9860"; a="157645639"
+X-IronPort-AV: E=Sophos;i="5.79,338,1602572400"; 
+   d="scan'208";a="157645639"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2021 06:10:49 -0800
+IronPort-SDR: MF2WUMTefHbLY7GYlVcbJw2hXRiTZ24sWwHdmNcdiXSLthgwEUxdoWYIvc/xWxbOQzDkxqoOBb
+ IXiLkr5yYiwA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,338,1602572400"; 
+   d="scan'208";a="464171555"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Jan 2021 06:10:46 -0800
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: [PATCH v2 0/3] Remove one more platform_device_add_properties() call
+Date:   Mon, 11 Jan 2021 17:10:42 +0300
+Message-Id: <20210111141045.14027-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Hi Felipe, Rafael,
 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+This is the second version of this series. There are no real changes,
+but I added the Tiger Lake ID patch to this series in hope that it
+will make your life a bit easier, assuming that Rafael will still pick
+these.
 
-> Common pattern of handling deferred probe can be simplified with
-> dev_err_probe(). Less code and the error value gets printed.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
+The original over letter:
 
-=2D-=20
-balbi
+I originally introduced these as part of my series where I was
+proposing PM ops for software nodes [1], but since that still needs
+work, I'm sending these two separately.
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+So basically I'm only modifying dwc3-pci.c so it registers a software
+node directly at this point. That will remove one more user of
+platform_device_add_properties().
 
------BEGIN PGP SIGNATURE-----
+[1] https://lore.kernel.org/lkml/20201029105941.63410-1-heikki.krogerus@linux.intel.com/
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl/8W1ARHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQZEGhAAtVW1nkgKEedT0H2S0spU/zIU8ltaVEJL
-ISmYzdjU8Fb3a032d0uY+d4Rg1qlDaKf7RJbCvHOL4O5NQ12lcIhE3Lf3MpCunt8
-qlZKTFqjAqAVei2yTIzmTDjZ5oFwtzPmHHSlAS2KHcgHpOMCwQBu/E2UPFV1WgQ6
-WjF2kwYLwUsMZ8dLXQlOSDRgAmTVmFYKgSstdqPVU+1HqNTPDHq6kdGf/SkLCgON
-pqqz42mOJWolAXo6UA6JtUYOSI6wmPwyQZiblIrzheuhlAFYl0bFPQK7eE8mMfja
-LWHQsYCewZClSyw3H8D8udyeu1L+dn2qNBt5KuM14izTjTqq4fFKeLQuL2fTQEoM
-cgp0Fl8KP6kpd4UF+8x2ONJRFUD0NzPb/4TFXPAXkewAemZZexnPVcO3JxQZuSFq
-oXys+KO7WItfPQu0bBLjNOFgMij2b9o9FDEyoQH+4p7wlS6aSs2pNNuNNhwXTBRx
-YUYVSZKi0E9UhwCf0C4bgRw0lr5wKd9q6J0rolAoMPRiZi5k0ptl42BRtwcC++4s
-D73cdt1A4JERtO2v5qdRCh+gainx00jn4rdtVQU5ZE+mypPI0eKVK6ovgcAeEmd8
-7NksCmJSQoydmcoEd8+zDXTxjq/jRrR06h65kcJVvCTzdKW3/Qcv9IkdMl/6pLP6
-CXoBXDdAFzo=
-=oqTf
------END PGP SIGNATURE-----
---=-=-=--
+thanks,
+
+Heikki Krogerus (3):
+  software node: Introduce device_add_software_node()
+  usb: dwc3: pci: Register a software node for the dwc3 platform device
+  usb: dwc3: pci: ID for Tiger Lake CPU
+
+ drivers/base/swnode.c       | 69 ++++++++++++++++++++++++++++++++-----
+ drivers/usb/dwc3/dwc3-pci.c | 65 +++++++++++++++++++++-------------
+ include/linux/property.h    |  3 ++
+ 3 files changed, 104 insertions(+), 33 deletions(-)
+
+-- 
+2.29.2
+
