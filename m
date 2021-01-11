@@ -2,86 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF68B2F2261
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 23:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E87642F2276
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 23:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732206AbhAKWDX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Jan 2021 17:03:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731408AbhAKWDW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Jan 2021 17:03:22 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EE9C061786
-        for <linux-usb@vger.kernel.org>; Mon, 11 Jan 2021 14:02:41 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id o19so304769lfo.1
-        for <linux-usb@vger.kernel.org>; Mon, 11 Jan 2021 14:02:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=L04umv6qv4ESTh2voyQwzzNRDxtMh3ldDzgJSuRk7uw=;
-        b=Wz04i5Nr0V1v2ypE/g4+U8fUexoNk2VFXx3OXYqaWzVl3osh85aVypL6Nz0C5gU1Cs
-         A4JVfYI8hWA1Rs4Fyr9nfjCsditVrJVYbKpyEocxNBikBOmL54lZkRT5xtjUZ0Q27uDl
-         pWXzZhz+8z3+5pfsZcI0pA9AMDzSf5sYHZlhgMB02y/rd2rxomCnXWuXzrvB6B5O+sjA
-         GTGnda3zt2lHDuSK7A7YL6kIj+nG6+xtjsmC3OqM0A85gfwqiZhtO1DjulxpviY+NCgZ
-         5jj94QBCiwS3FHQfddfaU3oo7FGEAUzF9l/kh9icMRIFeKG/zJl6HgrMts8FoeJfel4D
-         sSGA==
+        id S2389353AbhAKWKl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Jan 2021 17:10:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:58952 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388713AbhAKWKk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Jan 2021 17:10:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1610402954;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wAtnYWwrlK7tpbrs/+tnNUH4YreR07+THJRUh9/6qM8=;
+        b=Xr3SyOBCz/uoEUWxRmgZJo9D4ZNDdSjfbyIuxL/5KDpa7R1DVMWCtNcTeo/DreIC+CUgTx
+        +HDxYvMhjFqvLImjm5Js34noaOpmHDqRoyh5aOXenvungc/RPtp+D2dhOkzUyp+5wZQ/5n
+        kKrRwRYP2laX0pqhSRvobTW5Ddsn2iI=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-544-FADnVDxlPSW4mpLUC8sLhg-1; Mon, 11 Jan 2021 17:09:12 -0500
+X-MC-Unique: FADnVDxlPSW4mpLUC8sLhg-1
+Received: by mail-io1-f70.google.com with SMTP id n9so214682iog.6
+        for <linux-usb@vger.kernel.org>; Mon, 11 Jan 2021 14:09:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L04umv6qv4ESTh2voyQwzzNRDxtMh3ldDzgJSuRk7uw=;
-        b=Pjba2Cmi3I2Fx+paW1J/uWIsQNcJKgzKN5r5ocJZy9sz+vYY1ygnMxdjJqIxmvZiAJ
-         fb7z6rbKwBTQ69LithodwStCbKs5Le7IdH8niThLEPJBAzyn4bYyChrghwlZEgNQE9ng
-         Ja/MQoz95A7pxa8ngBoZw6CbgUjM2/+9Foo8+fLHRUs8dbazIJTy9j3bmHd/Xse3A/9+
-         KVb2hLaP8Sq5mAsRZbPgMSFi6clpu+ICJRf7wxCn9g3Zea1Xnc7oBxdnXOIA8DRBeLzb
-         +tAsP8Rctu1xyx9BPgGRI4DwMc62e+SkQ/iGzXHgyiG46+cPv582kS6o9et39zX7Er61
-         aHhg==
-X-Gm-Message-State: AOAM532t2izQZ9JedqXfQ25J8WVgBiKi89/q2VXY3XFbAmtXowbG0igK
-        ew2jQ9tIONu20aq/q0lZi92fYep/ycZ8XarQqwQ=
-X-Google-Smtp-Source: ABdhPJz4I47ji0Ed9CNF0C+j7MvfMWvylTWTVkScqXlg/GesSCAQHVBfq/itZDhBY89/+yZrsEFgm7/BpnLesrUWE80=
-X-Received: by 2002:ac2:5685:: with SMTP id 5mr736097lfr.325.1610402559561;
- Mon, 11 Jan 2021 14:02:39 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wAtnYWwrlK7tpbrs/+tnNUH4YreR07+THJRUh9/6qM8=;
+        b=Lf3rtOdy/RyL+Vzujn4209skNe26r+zJfWCEZCtCVTD6O5Frb/nDItcH7ej/P2pMkW
+         MqZi9JpP44cVXyEapt3mTmDdwEb0o+DaOSrJ4g+11U3nZKzCqwyPSD1iwW75sj1ZHjWm
+         J0XBVEG9lknC2ARJ/fD0n7P0aBobsXTNPnAEbejrnfJVsD2Yyo8dyv6WDjj+p8Zbp7Yi
+         jI+KoZkdlGum6usjXGMPiNsEdYSUTi7jG1thnLDqVJSnwwbhhsoCF7cuNYALSXyHjHRv
+         LK7YkpRCH7RMcEq+iB89nsa5n+CcRbgrUY6PjCDmMcocsJZP7Wv5S8OunzxJm9eDJaeh
+         tk7w==
+X-Gm-Message-State: AOAM530QzO3fYjxt0tW53at/bQ7sqg6dxK+gnfZQWMwoa2MyIi8zO6Sf
+        kt7dop/khMILcVM5gMA7sy0P+v54jYmgPyjm6ISJgXgwNTD4IZCUEehtqKMnQD02hIYJTXDIF6C
+        T6Dpu4gN4uwLjUv3aLNuU
+X-Received: by 2002:a02:bb99:: with SMTP id g25mr1555072jan.11.1610402951223;
+        Mon, 11 Jan 2021 14:09:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxswd5YF7Eo0k165Z8e6I3dQ4wtHbxizYkFRXv1FPhiW6/Y1lObuf/ddgaiWUlhPY/R/ftasg==
+X-Received: by 2002:a02:bb99:: with SMTP id g25mr1555056jan.11.1610402951001;
+        Mon, 11 Jan 2021 14:09:11 -0800 (PST)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id m15sm692170ilh.6.2021.01.11.14.09.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jan 2021 14:09:10 -0800 (PST)
+From:   trix@redhat.com
+To:     johan@kernel.org, gregkh@linuxfoundation.org,
+        natechancellor@gmail.com, ndesaulniers@google.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com, Tom Rix <trix@redhat.com>
+Subject: [PATCH] USB: serial: mos7720: improve handling of a kmalloc failure in read_mos_reg()
+Date:   Mon, 11 Jan 2021 14:09:04 -0800
+Message-Id: <20210111220904.1035957-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <CAMeQTsacNs-YVWeX6vFJyMBLeD_AX6imNQRodV_X-QS54wAREA@mail.gmail.com>
- <X/y1ekqBrjXK8lZO@kroah.com>
-In-Reply-To: <X/y1ekqBrjXK8lZO@kroah.com>
-From:   Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Date:   Mon, 11 Jan 2021 23:02:28 +0100
-Message-ID: <CAMeQTsaL0mx=WW2Ekr2gh_aCWKnumS4mSr5tTH_ac+cdarzxMA@mail.gmail.com>
-Subject: Re: Conflicting PCI ID in bdc driver
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Al Cooper <alcooperx@gmail.com>, Felipe Balbi <balbi@kernel.org>,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 11, 2021 at 9:29 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Jan 11, 2021 at 08:34:01PM +0100, Patrik Jakobsson wrote:
-> > Hi Al,
-> > The PCI device ID of 0x1570 in the bdc driver (bdc_pci.c) is
-> > conflicting with the Apple FacetimeHD webcam [1]. Is this caused by an
-> > incorrect ID in the bdc driver or are there actually two devices with
-> > the same ID in the wild? If we have a real conflict, how would we go
-> > about solving this?
->
-> Looks like someone at broadcom messed up :(
->
-> Can you look for any other fields in the device other than just the
-> vendor/device ids to verify that this really is a webcam so you can not
-> bind to the same thing this driver wants to bind to?
+From: Tom Rix <trix@redhat.com>
 
-Right, we could check the class. But I suppose it must be fixed in
-both drivers? bdc must not bind to the webcam and facetimehd must not
-bind to the UDC. So which class is bdc reporting?
-PCI_CLASS_SERIAL_USB_DEVICE?
+clang static analysis reports this problem
 
->
-> thanks,
->
-> greg k-h
+mos7720.c:352:2: warning: Undefined or garbage value returned to caller
+        return d;
+        ^~~~~~~~
+
+In the parport_mos7715_read_data()'s call to read_mos_reg(), 'd' is
+only set after the alloc block.
+
+	buf = kmalloc(1, GFP_KERNEL);
+	if (!buf)
+		return -ENOMEM;
+
+Although the problem is reported in parport_most7715_read_data(),
+none of the callee's of read_mos_reg() check the return status.
+
+So move the clearing of data to before the malloc.
+
+Fixes: 0d130367abf5 ("USB: serial: mos7720: fix control-message error handling")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/usb/serial/mos7720.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/serial/mos7720.c b/drivers/usb/serial/mos7720.c
+index 41ee2984a0df..23e8162c768b 100644
+--- a/drivers/usb/serial/mos7720.c
++++ b/drivers/usb/serial/mos7720.c
+@@ -214,6 +214,7 @@ static int read_mos_reg(struct usb_serial *serial, unsigned int serial_portnum,
+ 	u8 *buf;
+ 	int status;
+ 
++	*data = 0;
+ 	buf = kmalloc(1, GFP_KERNEL);
+ 	if (!buf)
+ 		return -ENOMEM;
+@@ -227,7 +228,6 @@ static int read_mos_reg(struct usb_serial *serial, unsigned int serial_portnum,
+ 			"mos7720: usb_control_msg() failed: %d\n", status);
+ 		if (status >= 0)
+ 			status = -EIO;
+-		*data = 0;
+ 	}
+ 
+ 	kfree(buf);
+-- 
+2.27.0
+
