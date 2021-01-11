@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 619FE2F0BD2
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 05:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9F02F0BDC
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 05:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726029AbhAKE3p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 10 Jan 2021 23:29:45 -0500
-Received: from mx2.suse.de ([195.135.220.15]:42110 "EHLO mx2.suse.de"
+        id S1726626AbhAKElk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 10 Jan 2021 23:41:40 -0500
+Received: from mx2.suse.de ([195.135.220.15]:43588 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725797AbhAKE3p (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 10 Jan 2021 23:29:45 -0500
+        id S1726494AbhAKElk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 10 Jan 2021 23:41:40 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 60140AC95;
-        Mon, 11 Jan 2021 04:29:03 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 6C661AD7A;
+        Mon, 11 Jan 2021 04:40:58 +0000 (UTC)
 From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     balbi@kernel.org
+To:     jacmet@sunsite.dk
 Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, dave@stgolabs.net,
-        Takashi Iwai <tiwai@suse.de>, Davidlohr Bueso <dbueso@suse.de>
-Subject: [PATCH] usb/gadget: f_midi: Replace tasklet with work
-Date:   Sun, 10 Jan 2021 20:28:55 -0800
-Message-Id: <20210111042855.73289-1-dave@stgolabs.net>
+        Davidlohr Bueso <dbueso@suse.de>
+Subject: [PATCH] usb/c67x00: Replace tasklet with work
+Date:   Sun, 10 Jan 2021 20:40:50 -0800
+Message-Id: <20210111044050.86763-1-dave@stgolabs.net>
 X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -30,69 +30,72 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently a tasklet is used to transmit input substream buffer
-data. However, tasklets have long been deprecated as being too
-heavy on the system by running in irq context - and this is not
-a performance critical path. If a higher priority process wants
-to run, it must wait for the tasklet to finish before doing so.
+Tasklets have long been deprecated as being too heavy on the system
+by running in irq context - and this is not a performance critical
+path. If a higher priority process wants to run, it must wait for
+the tasklet to finish before doing so.
 
-Deferring work to a workqueue and executing in process context
-should be fine considering the callback already does
-f_midi_do_transmit() under the transmit_lock and thus changes in
-semantics are ok regarding concurrency - tasklets being serialized
-against itself.
+c67x00_do_work() will now run in process context and have further
+concurrency (tasklets being serialized among themselves), but this
+is done holding the c67x00->lock, so it should be fine. Furthermore,
+this patch fixes the usage of the lock in the callback as otherwise
+it would need to be irq-safe.
 
-Cc: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Davidlohr Bueso <dbueso@suse.de>
 ---
- drivers/usb/gadget/function/f_midi.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/usb/c67x00/c67x00-hcd.h   |  2 +-
+ drivers/usb/c67x00/c67x00-sched.c | 12 +++++++-----
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
-index 8fff995b8dd5..71a1a26e85c7 100644
---- a/drivers/usb/gadget/function/f_midi.c
-+++ b/drivers/usb/gadget/function/f_midi.c
-@@ -87,7 +87,7 @@ struct f_midi {
- 	struct snd_rawmidi_substream *out_substream[MAX_PORTS];
+diff --git a/drivers/usb/c67x00/c67x00-hcd.h b/drivers/usb/c67x00/c67x00-hcd.h
+index 6b6b04a3fe0f..6332a6b5dce6 100644
+--- a/drivers/usb/c67x00/c67x00-hcd.h
++++ b/drivers/usb/c67x00/c67x00-hcd.h
+@@ -76,7 +76,7 @@ struct c67x00_hcd {
+ 	u16 next_td_addr;
+ 	u16 next_buf_addr;
  
- 	unsigned long		out_triggered;
--	struct tasklet_struct	tasklet;
-+	struct work_struct	work;
- 	unsigned int in_ports;
- 	unsigned int out_ports;
- 	int index;
-@@ -698,9 +698,11 @@ static void f_midi_transmit(struct f_midi *midi)
- 	f_midi_drop_out_substreams(midi);
- }
+-	struct tasklet_struct tasklet;
++	struct work_struct work;
  
--static void f_midi_in_tasklet(struct tasklet_struct *t)
-+static void f_midi_in_work(struct work_struct *work)
+ 	struct completion endpoint_disable;
+ 
+diff --git a/drivers/usb/c67x00/c67x00-sched.c b/drivers/usb/c67x00/c67x00-sched.c
+index e65f1a0ae80b..af60f4fdd340 100644
+--- a/drivers/usb/c67x00/c67x00-sched.c
++++ b/drivers/usb/c67x00/c67x00-sched.c
+@@ -1123,24 +1123,26 @@ static void c67x00_do_work(struct c67x00_hcd *c67x00)
+ 
+ /* -------------------------------------------------------------------------- */
+ 
+-static void c67x00_sched_tasklet(struct tasklet_struct *t)
++static void c67x00_sched_work(struct work_struct *work)
  {
--	struct f_midi *midi = from_tasklet(midi, t, tasklet);
-+	struct f_midi *midi;
+-	struct c67x00_hcd *c67x00 = from_tasklet(c67x00, t, tasklet);
++	struct c67x00_hcd *c67x00;
 +
-+	midi = container_of(work, struct f_midi, work);
- 	f_midi_transmit(midi);
++	c67x00 = container_of(work, struct c67x00_hcd, work);
+ 	c67x00_do_work(c67x00);
  }
  
-@@ -737,7 +739,7 @@ static void f_midi_in_trigger(struct snd_rawmidi_substream *substream, int up)
- 	VDBG(midi, "%s() %d\n", __func__, up);
- 	midi->in_ports_array[substream->number].active = up;
- 	if (up)
--		tasklet_hi_schedule(&midi->tasklet);
-+		queue_work(system_highpri_wq, &midi->work);
+ void c67x00_sched_kick(struct c67x00_hcd *c67x00)
+ {
+-	tasklet_hi_schedule(&c67x00->tasklet);
++        queue_work(system_highpri_wq, &c67x00->work);
  }
  
- static int f_midi_out_open(struct snd_rawmidi_substream *substream)
-@@ -875,7 +877,7 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
- 	int status, n, jack = 1, i = 0, endpoint_descriptor_index = 0;
+ int c67x00_sched_start_scheduler(struct c67x00_hcd *c67x00)
+ {
+-	tasklet_setup(&c67x00->tasklet, c67x00_sched_tasklet);
++        INIT_WORK(&c67x00->work, c67x00_sched_work);
+ 	return 0;
+ }
  
- 	midi->gadget = cdev->gadget;
--	tasklet_setup(&midi->tasklet, f_midi_in_tasklet);
-+	INIT_WORK(&midi->work, f_midi_in_work);
- 	status = f_midi_register_card(midi);
- 	if (status < 0)
- 		goto fail_register;
+ void c67x00_sched_stop_scheduler(struct c67x00_hcd *c67x00)
+ {
+-	tasklet_kill(&c67x00->tasklet);
++        cancel_work_sync(&c67x00->work);
+ }
 -- 
 2.26.2
 
