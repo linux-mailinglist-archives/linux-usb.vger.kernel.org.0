@@ -2,96 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BE52F1C13
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 18:19:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5FF2F1CB4
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 18:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388333AbhAKRRf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Jan 2021 12:17:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728677AbhAKRRf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Jan 2021 12:17:35 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21878C061794;
-        Mon, 11 Jan 2021 09:16:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=w77NvkyhVe01jYdKlHVfsoJZzz8kazo4ynUnMPEyO1U=; b=sGPkof8OnX0wbFnjD7Dt/HAFr6
-        XLQuv6PhR2CaguRrKWu5gY+CnQ8iNdn2p0Bp/D4OfMQKumo9iDoQIZ8mTGu+MIWhAk0GeTah0UVaD
-        Qac4vqDokPe23qcXljh40F59HlcABw8W1zPrwvtX0uiXtvOUgIkIuOw/VXoGGN9KN/0IVZAQO153Y
-        pNtGyXcfzj0H794gItlfkz5P5JYfYGQeA/CxJn9gdsW23OSz8LIJwsAcBp6/dAMzirnCbywgQlHhd
-        4tphxcLugS06JxJ7BZQkZmm8ju96tQ79WF4bsFft/57QDmd1Y2d7SIH07objEfpoJHDh4ycj/6BvE
-        Ha3jAwdw==;
-Received: from [2601:1c0:6280:3f0::79df]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kz0oG-0005DL-NT; Mon, 11 Jan 2021 17:16:53 +0000
-Subject: Re: [PATCH] usb: cdnsp: fixes undefined reference to cdns_remove
-To:     Pawel Laszczak <pawell@cadence.com>, peter.chen@nxp.com
-Cc:     a-govindraju@ti.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kurahul@cadence.com
-References: <20210111144226.16372-1-pawell@cadence.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <7aa22b3c-f56f-b215-2f84-348e24a48044@infradead.org>
-Date:   Mon, 11 Jan 2021 09:16:47 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
-MIME-Version: 1.0
-In-Reply-To: <20210111144226.16372-1-pawell@cadence.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S2389706AbhAKRlw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Jan 2021 12:41:52 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:44300 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387515AbhAKRlw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Jan 2021 12:41:52 -0500
+Received: by mail-oi1-f175.google.com with SMTP id d189so114805oig.11;
+        Mon, 11 Jan 2021 09:41:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=NrJ0x/AGrMcXXrck2Rvzbb1jDWMqSZzFStoZ2toCiOw=;
+        b=ft+9J7P7PMCpmKT530hiKmPlBzjPx8itXGsDFL2jxhBPBAjO4D5IvCARi6pU2+9vRD
+         Wng6d2RppDzUxcFpLHsCoe3C/+ZaJPDmIPmknd5mNlpxmKNvJOnoEhbsKkf+yOKH9sVe
+         sIv2FXcmBsVLmDttpa0UeLzQqn/veoglztf88lCc3JKvkVAjPrDsU8xxrmxBvGy6/Wkk
+         74NhV89caFP8cKVCGK421aRjupILG69XKjD78gFiy3MiSmo0PxpDYJsScUFZzpnXQaEx
+         uKtFN2yoDMtSgeAYK4BXCncdF22ZnLQeQObwctdyNTnUsHWktLPMbBtB0cQiJ6lD8QTT
+         Y38Q==
+X-Gm-Message-State: AOAM530oC+cFLtywT/A3FboLIEeuYkwCX5Mi5q5K28Rk2t1IaQrdcMx+
+        sp7Rm6z1GQsfQHGpg0Y42w==
+X-Google-Smtp-Source: ABdhPJzmJ1Be331ZHyQyTPvnWp3f9WF7yrDuRybQKhWKiKKxit9hJYoA0AVWNvs5xVnI+mTtMvTgzQ==
+X-Received: by 2002:aca:53ca:: with SMTP id h193mr323974oib.122.1610386871786;
+        Mon, 11 Jan 2021 09:41:11 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 126sm32398oop.30.2021.01.11.09.41.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jan 2021 09:41:10 -0800 (PST)
+Received: (nullmailer pid 2784733 invoked by uid 1000);
+        Mon, 11 Jan 2021 17:41:09 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        Minas Harutyunyan <hminas@synopsys.com>
+In-Reply-To: <20210111151337.5643-2-s.hauer@pengutronix.de>
+References: <20210111151337.5643-1-s.hauer@pengutronix.de> <20210111151337.5643-2-s.hauer@pengutronix.de>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc2: Add support for additional clock
+Date:   Mon, 11 Jan 2021 11:41:09 -0600
+Message-Id: <1610386869.406608.2784732.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 1/11/21 6:42 AM, Pawel Laszczak wrote:
-> Patch fixes the following errors:
-> ld: drivers/usb/cdns3/cdnsp-pci.o: in function `cdnsp_pci_remove':
-> cdnsp-pci.c:(.text+0x80): undefined reference to `cdns_remove'
-> ld: drivers/usb/cdns3/cdnsp-pci.o: in function `cdnsp_pci_probe':
-> cdnsp-pci.c:(.text+0x34c): undefined reference to `cdns_init'
+On Mon, 11 Jan 2021 16:13:36 +0100, Sascha Hauer wrote:
+> This adds support for an additional clock for the dwc2 core in case
+> there is another clock to the phy which must be enabled.
 > 
-> Issue occurs for USB/CDNS3/CDNSP kernel configuration:
-> CONFIG_USB=m
-> CONFIG_USB_CDNS_SUPPORT=y
-> CONFIG_USB_CDNS3=m
-> CONFIG_USB_CDNS3_PCI_WRAP=m
-> CONFIG_USB_CDNSP_PCI=y
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-
-Yep, that works. Thanks.
-
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
-
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 > ---
->  drivers/usb/cdns3/Makefile | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/cdns3/Makefile b/drivers/usb/cdns3/Makefile
-> index 3f9b7fa8a594..be906910f98b 100644
-> --- a/drivers/usb/cdns3/Makefile
-> +++ b/drivers/usb/cdns3/Makefile
-> @@ -26,7 +26,11 @@ obj-$(CONFIG_USB_CDNS3_TI)			+= cdns3-ti.o
->  obj-$(CONFIG_USB_CDNS3_IMX)			+= cdns3-imx.o
->  
->  cdnsp-udc-pci-y					:= cdnsp-pci.o
-> +ifeq ($(CONFIG_USB),m)
-> +obj-m						+= cdnsp-udc-pci.o
-> +else
->  obj-$(CONFIG_USB_CDNSP_PCI) 			+= cdnsp-udc-pci.o
-> +endif
->  cdnsp-udc-pci-$(CONFIG_USB_CDNSP_GADGET)	+= cdnsp-ring.o cdnsp-gadget.o \
->  						   cdnsp-mem.o cdnsp-ep0.o
->  
+>  Documentation/devicetree/bindings/usb/dwc2.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
 
+My bot found errors running 'make dt_binding_check' on your patch:
 
--- 
-~Randy
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.example.dt.yaml: usb@ff400000: clocks: [[4294967295]] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/dwc2.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.example.dt.yaml: usb@ff400000: clock-names: ['otg'] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/dwc2.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/dwc2.example.dt.yaml: usb@101c0000: clocks: [[4294967295]] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/dwc2.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/dwc2.example.dt.yaml: usb@101c0000: clock-names: ['otg'] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/dwc2.yaml
+
+See https://patchwork.ozlabs.org/patch/1424674
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
