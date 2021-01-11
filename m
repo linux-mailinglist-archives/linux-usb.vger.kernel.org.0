@@ -2,110 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5192D2F0F1B
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 10:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66BCA2F0F42
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 10:40:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728351AbhAKJ3K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Jan 2021 04:29:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33334 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728266AbhAKJ3J (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 11 Jan 2021 04:29:09 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D8E48224F9;
-        Mon, 11 Jan 2021 09:28:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610357309;
-        bh=VsJf0gkn4cnQOZkIym/hiz+2A4VjXcg9UdODZ6ITzp0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BVUcXcPn2WaFiyBw27UiXJF0C9a5h6trxC7d4GOxI+3gTU9WyMDNqq/mRjGt5V5Dc
-         6ZJo6T4LMx9vEhSOfUirpOb93CqHJdXzM4x8O4juRhqh5rYpIjlroPz/GD5Syr45aB
-         C9k2SAQkC0CTlZwF+Qhsx4bjjD5n7+UWmXqO2c1YqNMePRg8aVKoGRilHUaFO8To5K
-         qOMgBnuTEUUXis5r8IPVsaCtz4z9rqyH+ph99XlkvGAcNjx79AmwqM1MTt3cktfQaA
-         PTIiqgPofbPiWbo/nrzws/3Z0P1W3Sro2eOMg56ty2u7rAIEMwDpeav5yVpaZoYiRI
-         /XLI2uBuDrQ4A==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kytV3-000772-Nu; Mon, 11 Jan 2021 10:28:33 +0100
-Date:   Mon, 11 Jan 2021 10:28:33 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Joe Abbott <jabbott@rollanet.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: pl2303.c 110 baud not working
-Message-ID: <X/waQXmnsYGX3d1b@hovoldconsulting.com>
-References: <CADuz4ONmN299aw460r4wXCEK5F1v9kt_cewCCrdg2hb5nJV9uQ@mail.gmail.com>
- <X/gwVvn09NFiIOWw@hovoldconsulting.com>
- <CADuz4ONNPq+mADWYPKp8+M2rZtuoMwjO=+HDXfgrO2dQ0S1vQA@mail.gmail.com>
- <X/htEGiNbjGb2dy8@hovoldconsulting.com>
- <CADuz4OPCnq_4Xx-sWc-ZijoQRAZR-4+MRvpOx4np2rXifoCL5A@mail.gmail.com>
- <X/rtPpHMii7AxXPJ@hovoldconsulting.com>
- <CADuz4OPhcFSdRhw9pmjzhEwaLJMih+X-suZg=NRR-QwOq8410A@mail.gmail.com>
+        id S1728453AbhAKJjY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Jan 2021 04:39:24 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:11377 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728042AbhAKJjY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Jan 2021 04:39:24 -0500
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DDpXQ17Hlz6vGV;
+        Mon, 11 Jan 2021 17:37:42 +0800 (CST)
+Received: from [10.67.102.118] (10.67.102.118) by
+ DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
+ 14.3.498.0; Mon, 11 Jan 2021 17:38:39 +0800
+Subject: Re: [PATCH] USB:ehci:fix an interrupt calltrace error
+From:   liulongfang <liulongfang@huawei.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1606361673-573-1-git-send-email-liulongfang@huawei.com>
+ <20201126160830.GA827745@rowland.harvard.edu>
+ <96b4d366-c94c-9708-da12-5693bf16b716@huawei.com>
+ <20201127154718.GA861473@rowland.harvard.edu>
+ <3c2366c8-4b3e-dac0-48ad-6b33b6eed10e@huawei.com>
+Message-ID: <0f747f03-72e8-84de-c1c1-297398ca516c@huawei.com>
+Date:   Mon, 11 Jan 2021 17:38:39 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADuz4OPhcFSdRhw9pmjzhEwaLJMih+X-suZg=NRR-QwOq8410A@mail.gmail.com>
+In-Reply-To: <3c2366c8-4b3e-dac0-48ad-6b33b6eed10e@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.102.118]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jan 10, 2021 at 04:15:41PM -0600, Joe Abbott wrote:
-
-> > Look for the set-line-request control request:
-> >
-> >         bmRequestType   0x21
-> >         bRequest        0x20    (SET_LINE_REQUEST)
-> >         wValue          0
-> >         wIndex          0
-> >         wLength         7
-> >
-> > the data stage should contain the corresponding 7 bytes of request data
-> > for 110/cs7/parenb:
-> >
-> >         d5 0e 00 80 00 02 07
+On 2020/11/28 11:22, liulongfang Wrote:
+> On 2020/11/27 23:47, Alan Stern Wrote:
+>> On Fri, Nov 27, 2020 at 10:29:03AM +0800, liulongfang wrote:
+>>> On 2020/11/27 0:08, Alan Stern Wrote:
+>>>> On Thu, Nov 26, 2020 at 11:34:33AM +0800, Longfang Liu wrote:
+>>>>> The system goes to suspend when using USB audio player. This causes
+>>>>> the USB device continuous send interrupt signal to system, When the
+>>>>> number of interrupts exceeds 100000, the system will forcibly close
+>>>>> the interrupts and output a calltrace error.
+>>>>
+>>>> This description is very confusing.  USB devices do not send interrupt 
+>>>> signals to the host.  Do you mean that the device sends a wakeup 
+>>>> request?  Or do you mean something else?
+>>> The irq type is IRQ_NONE，It's counted in the note_interrupt function.
+>>> From the analysis of the driver code, that are indeed  interrupt signals.
+>>
+>> Above you wrote: "the USB device continuous send interrupt signal to 
+>> system".  But that's not correct.  The interrupt signals are sent by the 
+>> USB host controller, not by the USB audio device.
+>>
+> OK, I will modify the description in the next patch.
+>> The patch description should mention that this happens only with some 
+>> Synopsys host controllers.
+>>
+>>>>> When the system goes to suspend, the last interrupt is reported to
+>>>>> the driver. At this time, the system has set the state to suspend.
+>>>>> This causes the last interrupt to not be processed by the system and
+>>>>> not clear the interrupt state flag. This uncleared interrupt flag
+>>>>> constantly triggers new interrupt event. This causing the driver to
+>>>>> receive more than 100,000 interrupts, which causes the system to
+>>>>> forcibly close the interrupt report and report the calltrace error.
+>>>>
+>>>> If the driver receives an interrupt, it is supposed to process the event 
+>>>> even if the host controller is suspended.  And when ehci_irq() runs, it 
+>>>> clears the bits that are set in the USBSYS register.
+>>> When the host controller is suspended, the ehci_suspend() will clear
+>>> the HCD_FLAG_HW_ACCESSIBLE, and then usb_hcd_irq() will return IRQ_NONE
+>>> directly without calling ehci_irq().
+>>
+>> Yes.  But ehci_bus_suspend() runs _before_ the host controller is 
+>> suspended.  While ehci_bus_suspend() is running, usb_hcd_irq() _will_ 
+>> call ehci_irq(), and ehci_irq() _will_ clear the status bits.
+>>
+>> After the host controller is suspended it is not supposed to generate 
+>> any interrupt signals at all, because ehci_suspend() writes 0 to the 
+>> USBINTR register, and it does this _before_ clearing 
+>> HCD_FLAG_HW_ACCESSIBLE.
+>>
+> According to this process, there should be no interruption storm problem,
+> but the current fact is that the problem has occurred, so the actual
+> execution process did not follow the correct process above.
 > 
-> Windows wireshark  URB_CONTROL_OUT packets
-> using putty set to at 110 baud 7E1
+>>>> Why is your system getting interrupts?  That is, which bits are set in 
+>>>> the USBSTS register?
+>>> BIT(5) and BIT(3) are setted, STS_IAA and STS_FLR.
+>>
+>> STS_FLR is not set in the USBINTR register, but STS_IAA is.  So that's 
+>> the one which matters.
+>>
+>>>>> so, when the driver goes to sleep and changes the system state to
+>>>>> suspend, the interrupt flag needs to be cleared.
+>>>>>
+>>>>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+>>>>> ---
+>>>>>  drivers/usb/host/ehci-hub.c | 5 +++++
+>>>>>  1 file changed, 5 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/usb/host/ehci-hub.c b/drivers/usb/host/ehci-hub.c
+>>>>> index ce0eaf7..5b13825 100644
+>>>>> --- a/drivers/usb/host/ehci-hub.c
+>>>>> +++ b/drivers/usb/host/ehci-hub.c
+>>>>> @@ -348,6 +348,11 @@ static int ehci_bus_suspend (struct usb_hcd *hcd)
+>>>>>  
+>>>>>  	/* Any IAA cycle that started before the suspend is now invalid */
+>>>>>  	end_iaa_cycle(ehci);
+>>>>> +
+>>>>> +	/* clear interrupt status */
+>>>>> +	if (ehci->has_synopsys_hc_bug)
+>>>>> +		ehci_writel(ehci, INTR_MASK | STS_FLR, &ehci->regs->status);
+>>>>
+>>>> This is a very strange place to add your new code -- right in the middle 
+>>>> of the IAA and unlink handling.  Why not put it in a more reasonable 
+>>>> place?After the IAA is processed, clear the STS_IAA interrupt state flag.
+>>>>
+>>>> Also, the patch description does not mention has_synopsys_hc_bug.  The 
+>>>> meaning of this flag has no connection with the interrupt status 
+>>>> register, so why do you use it here?
+>>> Because of our USB IP comes from Synopsys, and the uncleared flage is also caused by
+>>> special hardware design, in addition, we have not tested other manufacturers' USB
+>>> controllers.We don’t know if other manufacturers’ designs have this problem,
+>>> so this modification is only limited to this kind of design.
+>>
+>> Clearing the STS_IAA flag won't hurt, no matter who manufactured the 
+>> controller.  So your patch should look more like this:
+>>
+>> +	/* Some Synopsys controllers mistakenly leave IAA turned on */
+>> +	ehci_writel(ehci, STS_IAA, &ehci->regs->status);
+>>
+>> And these lines should come before the "Any IAA cycle..." comment line.
+>> Does that fix the problem?
+> I will conduct a round of testing based on this modification
+> and provide the test results.
+>>
+>> Alan Stern
+>> .
+>>
+> Thanks.
+> Longfang Liu
+> .
 > 
-> The windows usb captures have these 7 bytes for 110 baud:
->            a8 a6 01 80 00 02 07
-
-Interesting...
-
-> and these 7 bytes for 9600 baud:
->            80 25 00 00 00 02 07   0x2580 = 9600
-> 
-> --------------------------------------------------------------------
-> Linux wireshark URB_CONTROL_OUT packet
-> using stty 110 evenp
-> 
-> usb capture for 110 baud 7E1
->             d5 0e 00 80 00 02 07
-> 
-> I tried hard coding the first four 110 baud bytes into buf[0] - buf[3]
-> in the divisor subroutine and
-> 110 baud work fine.  Possible problem in the divisor routine?
-
-Or rather a new feature which do not yet support (or understand).
-
-I tried hardcoding the same request with a HXD and it doesn't give me
-110 baud. Instead the unsupported bits appears to be ignored and the
-current divisor algorithm is applied so that
-
-	a8 a6 01 80 00 02 07
-
-gives the same result as if
-
-	a8 06 00 80 00 02 07
-
-had been requested (~35720 baud).
-
-So in any case, we'd need to key this off of the device type.
-
-I noticed that
-
-	12000000 / 0x1a6a8 ~= 110.9
-
-Possibly just a coincidence, especially as 0x1aa22 would be closer
-match. But perhaps you can try a few more rates not in baud_sup and see
-if you can figure it out.
-
-Johan
+After continuous sleep and wake-up operation stress tests,
+this problem can be solved by using a solution that
+only cleans up STS_IAA
+Thanks.
+Longfang Liu
