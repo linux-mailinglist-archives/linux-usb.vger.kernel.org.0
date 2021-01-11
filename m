@@ -2,94 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0624C2F12AD
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 13:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4962F147E
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 14:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727648AbhAKM60 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Jan 2021 07:58:26 -0500
-Received: from mga09.intel.com ([134.134.136.24]:19306 "EHLO mga09.intel.com"
+        id S1731146AbhAKNZ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Jan 2021 08:25:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35568 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726686AbhAKM60 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 11 Jan 2021 07:58:26 -0500
-IronPort-SDR: LoT3vkwoCskR2FOcijk4ohDA0eQpWoCBxt6Y4YZLBLQySxAR9oQwrZtsOqCNdqdW+tMNO8PNgu
- 5/LjBgUW4t0w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9860"; a="178002962"
-X-IronPort-AV: E=Sophos;i="5.79,338,1602572400"; 
-   d="scan'208";a="178002962"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2021 04:56:36 -0800
-IronPort-SDR: rYQXHqKv5O3uuQA3e427T24HknA9G3wkZhKo2mwyILHTWFz9r0QGNRFJzThPjPlIQ2vfrvk3st
- f8enqWbH0Zdg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,338,1602572400"; 
-   d="scan'208";a="464152338"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 11 Jan 2021 04:56:33 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 11 Jan 2021 14:56:32 +0200
-Date:   Mon, 11 Jan 2021 14:56:32 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH 0/2] Remove one more platform_device_add_properties() call
-Message-ID: <20210111125632.GA2020859@kuha.fi.intel.com>
-References: <20201123153148.52647-1-heikki.krogerus@linux.intel.com>
- <CAJZ5v0jAaz2zELkJoKjHtxyfuKEi=ORuCCad-F0yp6KephieGg@mail.gmail.com>
- <20201204112318.GA4013126@kuha.fi.intel.com>
+        id S1732499AbhAKNRH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 11 Jan 2021 08:17:07 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9C8D722B49;
+        Mon, 11 Jan 2021 13:16:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1610370987;
+        bh=/pd8RLnDeNu7p+BdZvik1txSdKxNe8f/cfwwP4ayZU8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=D4PPowDYvR3lEVFd2FCYoGIQre1dIZEx+cutlJL//zPRrUSo+NRsK7sSTWTz9J9X5
+         b/ULHvOSPVqfdHQOQ7/+uB9OLydXQpbvQpLWHCPX3ZOgLdykcbG7y8v8hsRKR1k1qG
+         JwIgKNgyjG9wm7JfDDOOj8HEwOudTu8zfPgl233E=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        syzbot+297d20e437b79283bf6d@syzkaller.appspotmail.com,
+        Yuyang Du <yuyang.du@intel.com>,
+        Shuah Khan <shuahkh@osg.samsung.com>, linux-usb@vger.kernel.org
+Subject: [PATCH 5.10 090/145] usb: usbip: vhci_hcd: protect shift size
+Date:   Mon, 11 Jan 2021 14:01:54 +0100
+Message-Id: <20210111130052.856084802@linuxfoundation.org>
+X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20210111130048.499958175@linuxfoundation.org>
+References: <20210111130048.499958175@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201204112318.GA4013126@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 04, 2020 at 01:23:22PM +0200, Heikki Krogerus wrote:
-> Hi Felipe,
-> 
-> On Mon, Nov 23, 2020 at 06:06:31PM +0100, Rafael J. Wysocki wrote:
-> > On Mon, Nov 23, 2020 at 4:32 PM Heikki Krogerus
-> > <heikki.krogerus@linux.intel.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > I originally introduced these as part of my series where I was
-> > > proposing PM ops for software nodes [1], but since that still needs
-> > > work, I'm sending these two separately.
-> > >
-> > > So basically I'm only modifying dwc3-pci.c so it registers a software
-> > > node directly at this point. That will remove one more user of
-> > > platform_device_add_properties().
-> > >
-> > > [1] https://lore.kernel.org/lkml/20201029105941.63410-1-heikki.krogerus@linux.intel.com/
-> > >
-> > > thanks,
-> > >
-> > > Heikki Krogerus (2):
-> > >   software node: Introduce device_add_software_node()
-> > >   usb: dwc3: pci: Register a software node for the dwc3 platform device
-> > >
-> > >  drivers/base/swnode.c       | 69 ++++++++++++++++++++++++++++++++-----
-> > >  drivers/usb/dwc3/dwc3-pci.c | 61 +++++++++++++++++++-------------
-> > >  include/linux/property.h    |  3 ++
-> > >  3 files changed, 100 insertions(+), 33 deletions(-)
-> > >
-> > > --
-> > 
-> > These look good to me.
-> > 
-> > If you want me to take them, though, I need an ACK from the dwc3 side.
-> 
-> Is this OK?
+From: Randy Dunlap <rdunlap@infradead.org>
 
-I think this went under you radar, so I'll resend these.
+commit 718bf42b119de652ebcc93655a1f33a9c0d04b3c upstream.
 
-Br,
+Fix shift out-of-bounds in vhci_hcd.c:
 
--- 
-heikki
+  UBSAN: shift-out-of-bounds in ../drivers/usb/usbip/vhci_hcd.c:399:41
+  shift exponent 768 is too large for 32-bit type 'int'
+
+Fixes: 03cd00d538a6 ("usbip: vhci-hcd: Set the vhci structure up to work")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: syzbot+297d20e437b79283bf6d@syzkaller.appspotmail.com
+Cc: Yuyang Du <yuyang.du@intel.com>
+Cc: Shuah Khan <shuahkh@osg.samsung.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: stable <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20201229071309.18418-1-rdunlap@infradead.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+---
+ drivers/usb/usbip/vhci_hcd.c |    2 ++
+ 1 file changed, 2 insertions(+)
+
+--- a/drivers/usb/usbip/vhci_hcd.c
++++ b/drivers/usb/usbip/vhci_hcd.c
+@@ -396,6 +396,8 @@ static int vhci_hub_control(struct usb_h
+ 		default:
+ 			usbip_dbg_vhci_rh(" ClearPortFeature: default %x\n",
+ 					  wValue);
++			if (wValue >= 32)
++				goto error;
+ 			vhci_hcd->port_status[rhport] &= ~(1 << wValue);
+ 			break;
+ 		}
+
+
