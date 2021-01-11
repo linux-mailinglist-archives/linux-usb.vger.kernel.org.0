@@ -2,106 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8EB2F0B06
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 03:26:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 619FE2F0BD2
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 05:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726325AbhAKCZW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 10 Jan 2021 21:25:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726151AbhAKCZV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 Jan 2021 21:25:21 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96F8C061786;
-        Sun, 10 Jan 2021 18:24:40 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id l14so6874393qvh.2;
-        Sun, 10 Jan 2021 18:24:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MGQGE/P7zFeVjmp8sXkUln0e8v6TZ5uhfq3Bnowm7sI=;
-        b=kBLXwma7GmjHOu9EnI+4kzdu6mLbzGBHunbcBL53iYVea9o9twxuwVa/v8ecYOgkn0
-         aF44jCNymnQOZ0tLwQMfcsXOOpCmjLV8EhX2pNgKJhOdxOddbsvwwwpuf0ho/1nlbFIN
-         o7GZkyXTl8kK5METyATFCT28HtoLcHEE291yk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MGQGE/P7zFeVjmp8sXkUln0e8v6TZ5uhfq3Bnowm7sI=;
-        b=foPsH/yeFkl6v82nCh8p2biqEXDKT1/da0N6Mp2nlOX9u9+cKfw+ep/zS2m19m1U0n
-         n8DEWVbux+hAzsaBB5+vF8qQqSCEUAyQsYxeMeXrlzGIKDz9u/PAeRFHHknHoVUvlck8
-         UBocWeIR+Al48wWLlRVyyXOYadHX6T42eyMrW+XL2IKUZgd3RADjE8ZN/pu7YsGOf+jN
-         I1rnVQ5TQpbawgP340axx+mekkyxszvT5nOqgR4m5aOv9Qg84q4PqkwY4qZGMKGn5mmv
-         YP2TQldmEI6dEPbGNG5lN63Uf3CFlwZk3djQBOl5tnV0QpEpfvP4azpXAVgU5iS1Zisq
-         aRjg==
-X-Gm-Message-State: AOAM532spGwz3cpA8Q8xEqZENBERViZTcDWfWoUenAGyvzaLp4j4Ga/7
-        O5tc4X4IEHXCqnC/7mYZ4k9rJ8j5pB14hN2uHSfoHnN2oQtWaA==
-X-Google-Smtp-Source: ABdhPJxaouI1Ui10wouE803ofFsrqx8gIkuSfvXhW51lYC9+Xwm3efzJcConRIfxsHULH9ZAnV5bDCL5+uB1oErJMKM=
-X-Received: by 2002:a0c:a98c:: with SMTP id a12mr9902794qvb.43.1610331879213;
- Sun, 10 Jan 2021 18:24:39 -0800 (PST)
+        id S1726029AbhAKE3p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 10 Jan 2021 23:29:45 -0500
+Received: from mx2.suse.de ([195.135.220.15]:42110 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725797AbhAKE3p (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 10 Jan 2021 23:29:45 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 60140AC95;
+        Mon, 11 Jan 2021 04:29:03 +0000 (UTC)
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dave@stgolabs.net,
+        Takashi Iwai <tiwai@suse.de>, Davidlohr Bueso <dbueso@suse.de>
+Subject: [PATCH] usb/gadget: f_midi: Replace tasklet with work
+Date:   Sun, 10 Jan 2021 20:28:55 -0800
+Message-Id: <20210111042855.73289-1-dave@stgolabs.net>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20210108081238.10199-1-ryan_chen@aspeedtech.com> <20210108081238.10199-2-ryan_chen@aspeedtech.com>
-In-Reply-To: <20210108081238.10199-2-ryan_chen@aspeedtech.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Mon, 11 Jan 2021 02:24:27 +0000
-Message-ID: <CACPK8XdWKY4QmuojaZ13tmKR3MVEzU8MOV=bmqyTiotScaGfRA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] usb: gadget: aspeed: fix stop dma register setting.
-To:     Ryan Chen <ryan_chen@aspeedtech.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     BMC-SW <BMC-SW@aspeedtech.com>, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>, linux-usb@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 8 Jan 2021 at 08:13, Ryan Chen <ryan_chen@aspeedtech.com> wrote:
->
-> The vhub engine has two dma mode, one is descriptor list, another
-> is single stage DMA. Each mode has different stop register setting.
-> Descriptor list operation (bit2) : 0 disable reset, 1: enable reset
-> Single mode operation (bit0) : 0 : disable, 1: enable
->
-> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
-> ---
->  drivers/usb/gadget/udc/aspeed-vhub/epn.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/epn.c b/drivers/usb/gadget/udc/aspeed-vhub/epn.c
-> index 0bd6b20435b8..02d8bfae58fb 100644
-> --- a/drivers/usb/gadget/udc/aspeed-vhub/epn.c
-> +++ b/drivers/usb/gadget/udc/aspeed-vhub/epn.c
-> @@ -420,7 +420,10 @@ static void ast_vhub_stop_active_req(struct ast_vhub_ep *ep,
->         u32 state, reg, loops;
->
->         /* Stop DMA activity */
-> -       writel(0, ep->epn.regs + AST_VHUB_EP_DMA_CTLSTAT);
-> +       if (ep->epn.desc_mode)
-> +               writel(VHUB_EP_DMA_CTRL_RESET, ep->epn.regs + AST_VHUB_EP_DMA_CTLSTAT);
-> +       else
-> +               writel(0, ep->epn.regs + AST_VHUB_EP_DMA_CTLSTAT);
+Currently a tasklet is used to transmit input substream buffer
+data. However, tasklets have long been deprecated as being too
+heavy on the system by running in irq context - and this is not
+a performance critical path. If a higher priority process wants
+to run, it must wait for the tasklet to finish before doing so.
 
-This looks correct, as whenever the driver re-enables DMA it uses
-ep->epn.dma_conf for the value of this register. So we're not losing
-any configuration by setting it to 0.
+Deferring work to a workqueue and executing in process context
+should be fine considering the callback already does
+f_midi_do_transmit() under the transmit_lock and thus changes in
+semantics are ok regarding concurrency - tasklets being serialized
+against itself.
 
-Acked-by: Joel Stanley <joel@jms.id.au>
-Fixes: 7ecca2a4080c ("usb/gadget: Add driver for Aspeed SoC virtual hub")
+Cc: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Davidlohr Bueso <dbueso@suse.de>
+---
+ drivers/usb/gadget/function/f_midi.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-I've cc'd Ben for his ack too.
+diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
+index 8fff995b8dd5..71a1a26e85c7 100644
+--- a/drivers/usb/gadget/function/f_midi.c
++++ b/drivers/usb/gadget/function/f_midi.c
+@@ -87,7 +87,7 @@ struct f_midi {
+ 	struct snd_rawmidi_substream *out_substream[MAX_PORTS];
+ 
+ 	unsigned long		out_triggered;
+-	struct tasklet_struct	tasklet;
++	struct work_struct	work;
+ 	unsigned int in_ports;
+ 	unsigned int out_ports;
+ 	int index;
+@@ -698,9 +698,11 @@ static void f_midi_transmit(struct f_midi *midi)
+ 	f_midi_drop_out_substreams(midi);
+ }
+ 
+-static void f_midi_in_tasklet(struct tasklet_struct *t)
++static void f_midi_in_work(struct work_struct *work)
+ {
+-	struct f_midi *midi = from_tasklet(midi, t, tasklet);
++	struct f_midi *midi;
++
++	midi = container_of(work, struct f_midi, work);
+ 	f_midi_transmit(midi);
+ }
+ 
+@@ -737,7 +739,7 @@ static void f_midi_in_trigger(struct snd_rawmidi_substream *substream, int up)
+ 	VDBG(midi, "%s() %d\n", __func__, up);
+ 	midi->in_ports_array[substream->number].active = up;
+ 	if (up)
+-		tasklet_hi_schedule(&midi->tasklet);
++		queue_work(system_highpri_wq, &midi->work);
+ }
+ 
+ static int f_midi_out_open(struct snd_rawmidi_substream *substream)
+@@ -875,7 +877,7 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
+ 	int status, n, jack = 1, i = 0, endpoint_descriptor_index = 0;
+ 
+ 	midi->gadget = cdev->gadget;
+-	tasklet_setup(&midi->tasklet, f_midi_in_tasklet);
++	INIT_WORK(&midi->work, f_midi_in_work);
+ 	status = f_midi_register_card(midi);
+ 	if (status < 0)
+ 		goto fail_register;
+-- 
+2.26.2
 
-Cheers,
-
-Joel
-
->
->         /* Wait for it to complete */
->         for (loops = 0; loops < 1000; loops++) {
-> --
-> 2.17.1
->
