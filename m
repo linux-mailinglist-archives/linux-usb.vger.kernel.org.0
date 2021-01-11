@@ -2,267 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 943192F1E5D
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 19:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF562F1E83
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 20:05:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390682AbhAKS6W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Jan 2021 13:58:22 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.53]:9854 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731334AbhAKS6W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Jan 2021 13:58:22 -0500
-X-Greylist: delayed 529 seconds by postgrey-1.27 at vger.kernel.org; Mon, 11 Jan 2021 13:58:18 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1610391326;
-        s=strato-dkim-0002; d=gerhold.net;
-        h=Message-ID:Subject:Cc:To:From:Date:From:Subject:Sender;
-        bh=WH0H0/U0+7xOmeRhVlVuX+/dYtaThWYbRJjUaN+ZyIw=;
-        b=e39wfakhMefyVP/v5tJFIYqJafv0QV0di65sEQrdRCnbdEjXYVCkR82exHMa/tX3IG
-        vXBBxqe/PRk0Djl75T5QmuwLMohW4A2h86ExSZ1GFAfPpmSGBsCssoVT3gL6JaefiUaZ
-        xG5uNuzYiTCtneLwzQHapogmsFwG0IcZ0lGKO2bcbUimzEjRHVTfQC1itvbs9zpvsiEw
-        xrZrF2vSu4uKMXhGHBdLzgnbuCNc4frYOUC1JQR0Epjlw9CXIDZYyfdchekWGqH0URnL
-        ZbySNPRVNT4YWqRBa6+0BqdBVjzJtOrS67Kw/39gcLPHcxgT+6PHEB1PSjuORLtod0Em
-        16EQ==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8jxIc/DBg=="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-        by smtp.strato.de (RZmta 47.12.1 DYNA|AUTH)
-        with ESMTPSA id R0a218x0BIhMzCM
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Mon, 11 Jan 2021 19:43:22 +0100 (CET)
-Date:   Mon, 11 Jan 2021 19:43:14 +0100
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Peter Chen <Peter.Chen@nxp.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-usb@vger.kernel.org, Thierry Reding <treding@nvidia.com>
-Subject: Infinite recursion in device_reorder_to_tail() due to circular
- device links
-Message-ID: <X/ycQpu7NIGI969v@gerhold.net>
+        id S2390619AbhAKTEt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Jan 2021 14:04:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727052AbhAKTEs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Jan 2021 14:04:48 -0500
+Received: from ficht.host.rs.currently.online (ficht.host.rs.currently.online [IPv6:2a01:4f8:120:614b::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E47C06179F;
+        Mon, 11 Jan 2021 11:04:03 -0800 (PST)
+Received: from carbon.srv.schuermann.io (carbon.srv.schuermann.io [IPv6:2a01:4f8:120:614b:2::1])
+        by ficht.host.rs.currently.online (Postfix) with ESMTPS id 45A201FE03;
+        Mon, 11 Jan 2021 19:03:58 +0000 (UTC)
+From:   Leon Schuermann <leon@is.currently.online>
+To:     kuba@kernel.org, oliver@neukum.org, davem@davemloft.net
+Cc:     hayeswang@realtek.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, Leon Schuermann <leon@is.currently.online>
+Subject: Re: [PATCH 1/1] r8152: Add Lenovo Powered USB-C Travel Hub
+Date:   Mon, 11 Jan 2021 20:03:11 +0100
+Message-Id: <20210111190312.12589-1-leon@is.currently.online>
+In-Reply-To: <20210109144311.47760f7e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <20210109144311.47760f7e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="qsnshZ7+7gs41/Sw"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Jakub Kicinski <kuba@kernel.org> writes:
+> On Sat, 09 Jan 2021 10:39:27 +0100 Leon Schuermann wrote:
+>> Jakub Kicinski <kuba@kernel.org> writes:
+>> > On Fri,  8 Jan 2021 21:27:27 +0100 Leon Schuermann wrote:  
+>> >> This USB-C Hub (17ef:721e) based on the Realtek RTL8153B chip used to
+>> >> work with the cdc_ether driver.  
+>> >
+>> > When you say "used to work" do you mean there was a regression where
+>> > the older kernels would work fine and newer don't? Or just "it works
+>> > most of the time"?  
+>> 
+>> Sorry, I should've clarified that. "Used to work" is supposed to say
+>> "the device used the generic cdc_ether driver", as in
+>> 
+>> [  +0.000004] usb 4-1.1: Product: Lenovo Powered Hub
+>> [  +0.000003] usb 4-1.1: Manufacturer: Lenovo
+>> [  +0.000002] usb 4-1.1: SerialNumber: xxxxxxxxx
+>> [  +0.024803] cdc_ether 4-1.1:2.0 eth0: register 'cdc_ether' at
+>>               usb-0000:2f:00.0-1.1, CDC Ethernet Device,
+>>               xx:xx:xx:xx:xx:xx
+>> 
+>> I guess it did technically work correctly, except for the reported issue
+>> when the host system suspends, which is fixed by using the dedicated
+>> Realtek driver. As far as I know this hasn't been fixed before, so it's
+>> not a regression.
+>
+> I see. In the last release cycle there were patches for allowing
+> cdc_ether to drive RTL8153 devices when r8152 is not available. 
+> I wanted to double check with you that nothing changed here,
+> that's to say that the cdc_ether is not used even if r8152 is 
+> built after an upgrade to 5.11-rc.
 
---qsnshZ7+7gs41/Sw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks for the info, I didn't notice that. I can confirm that
+`cdc_ether` (for this specific USB-C Hub) is used prior and after the
+patches introducing r8153_ecm.
 
-Hi,
+However, the r8153_ecm driver resolves the issue of my first patch,
+being unable to use the device without r8152 available. To enable a
+fallback onto this driver I added a second commit, because my device
+uses a different VID/PID combination compared to the default Realtek
+VID/PID on which the r8153_ecm currently matches.
 
-since 5.11-rc1 I get kernel crashes with infinite recursion in
-device_reorder_to_tail() in some situations... It's a bit complicated to
-explain so I want to apologize in advance for the long mail. :)
+I've tested the first commit standalone (r8152: Add Lenovo...), both
+commits (r8153_ecm: Add Le...), as well as two vanilla kernel
+versions, each with and without the r8152 driver available, with the
+following results:
 
-  Kernel panic - not syncing: kernel stack overflow
-  CPU: 1 PID: 33 Comm: kworker/1:1 Not tainted 5.11.0-rc3 #1
-  Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-  Call trace:
-   ...
-   device_reorder_to_tail+0x4c/0xf0
-   device_reorder_to_tail+0x98/0xf0
-   device_reorder_to_tail+0x60/0xf0
-   device_reorder_to_tail+0x60/0xf0
-   device_reorder_to_tail+0x60/0xf0
-   ...
+|                      | CONFIG_USB_RTL8152 | !(CONFIG_USB_RTL8152) |
+|----------------------+--------------------+-----------------------|
+| r8153_ecm: Add Le... | `r8152` used       | `r8153_ecm` used      |
+| r8152: Add Lenovo... | `r8152` used       | No matching driver    |
+| 5.11.0-rc3           | `cdc_ether` used   | `cdc_ether` used      |
+| 5.10.3               | `cdc_ether` used   | `cdc_ether` used      |
 
-The crash happens only in 5.11 with commit 5b6164d3465f ("driver core:
-Reorder devices on successful probe"). It stops happening when I revert
-this commit. But I don't think this commit is the actual problem...
+Unfortunately, r8153_ecm has the same issue with regards to pause frames
+during host system suspend as does cdc_ether and potentially requires
+some special handling (if that is even possible in ECM mode). That is
+outside of the scope of this patchset though.
 
-It's easy to reproduce on any device based on the Qualcomm MSM8916 SoC
-by adding a random regulator to the USB node, e.g.:
+Nonetheless, I do believe that the option of using r8152 if it is
+available and falling back to r8153_ecm (applying both patches) is the
+most appropriate, as it is unlikely to break anyone's hardware while
+still fixing my issue.
 
-diff --git a/arch/arm64/boot/dts/qcom/apq8016-sbc.dtsi b/arch/arm64/boot/dts/qcom/apq8016-sbc.dtsi
-index 3a9538e1ec97..9f43fce9e6e3 100644
---- a/arch/arm64/boot/dts/qcom/apq8016-sbc.dtsi
-+++ b/arch/arm64/boot/dts/qcom/apq8016-sbc.dtsi
-@@ -372,6 +372,7 @@ codec {
- 
- &usb {
- 	status = "okay";
-+	vbus-supply = <&pm8916_l5>;
- 	extcon = <&usb_id>, <&usb_id>;
- 
- 	pinctrl-names = "default", "device";
 
-I searched for problems in the regulator core but the problem actually
-has nothing to do with regulators: The additional regulator supply just
-delays probing of the USB driver long enough to trigger the issue.
+I suppose that in theory, it might make sense to add all devices
+listed as using the RTL8153 in cdc_ether.c to the products of
+r8153_ecm, as none of them will currently work without r5182. I can't
+test them though, so I'm not sure whether that's a good idea. This
+patch therefore only resolves the issue for my specific USB-C Hub.
 
-Adding some debug output to device_reorder_to_tail() reveals that it
-keeps recursing over the same 4 devices:
 
-  msm_hsusb 78d9000.usb: device_reorder_to_tail()
-  ci_hdrc ci_hdrc.0: device_reorder_to_tail()
-  qcom_usb_hs_phy ci_hdrc.0.ulpi: device_reorder_to_tail()
-  phy phy-ci_hdrc.0.ulpi.0: device_reorder_to_tail()
-  msm_hsusb 78d9000.usb: device_reorder_to_tail()
-  ...
+>> Should I update the commit message accordingly? Thanks!
+>
+> Yes please, otherwise backporters may be confused about how 
+> to classify this change.
 
-The device hierarchy of these is (children devices):
+I've updated the commit message. Let me know what you think.
 
-  78d9000.usb -> ci_hdrc.0 -> ci_hdrc.0.ulpi -> phy-ci_hdrc.0.ulpi.0
+Thanks!
 
-ci_hdrc.0 calls phy_get(dev->parent, "usb-phy"). In phy_get(),
-the phy-core then attempts to add the following device link:
+Leon
 
-  phy-ci_hdrc.0.ulpi.0 -> 78d9000.usb
+Leon Schuermann (2):
+  r8152: Add Lenovo Powered USB-C Travel Hub
+  r8153_ecm: Add Lenovo Powered USB-C Hub as a fallback of r8152
 
-The device link creation in phy-core is optional (see commit 1d7cb11e1090
-("phy: core: Fix phy_get() to not return error on link creation failure"))
-because this device link is circular in case of ULPI PHYs (like here).
+ drivers/net/usb/cdc_ether.c | 7 +++++++
+ drivers/net/usb/r8152.c     | 1 +
+ drivers/net/usb/r8153_ecm.c | 8 ++++++++
+ 3 files changed, 16 insertions(+)
 
-And indeed, creating this device link usually fails (as it should).
-However, adding the "vbus-supply" changes probe order in some way that
-this circular device link ends up being created:
-  /sys/class/devlink/phy-ci_hdrc.0.ulpi.0--78d9000.usb/ exists only when
-I add the "vbus-supply" as in the diff above.
 
-Apparently, there is a special situation where device_is_dependent()
-does not work properly, and therefore the driver core allows creating
-the circular device link.
+base-commit: 7c53f6b671f4aba70ff15e1b05148b10d58c2837
+-- 
+2.29.2
 
-To show the problem, I enabled some debug messages and added the
-following log message:
-
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 25e08e5f40bd..ff1344eabb31 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -3089,9 +3089,11 @@ int device_add(struct device *dev)
- 	}
- 
- 	bus_probe_device(dev);
--	if (parent)
-+	if (parent) {
-+		dev_info(dev, "add to parent %s\n", dev_name(parent));
- 		klist_add_tail(&dev->p->knode_parent,
- 			       &parent->p->klist_children);
-+	}
- 
- 	if (dev->class) {
- 		mutex_lock(&dev->class->p->mutex);
-
-Running this with "vbus-supply" (where it crashes) produces:
-
-     bus: 'platform': probing driver msm_hsusb with device 78d9000.usb
-       <some probe deferrals while waiting for the regulator>
-     bus: 'platform': probing driver msm_hsusb with device 78d9000.usb
-     bus: 'platform': probing driver ci_hdrc with device ci_hdrc.0
-     bus: 'ulpi': probing driver qcom_usb_hs_phy with device ci_hdrc.0.ulpi
-     phy phy-ci_hdrc.0.ulpi.0: add to parent ci_hdrc.0.ulpi
-     qcom_usb_hs_phy ci_hdrc.0.ulpi: add to parent ci_hdrc.0
- (1) msm_hsusb 78d9000.usb: Linked as a consumer to phy-ci_hdrc.0.ulpi.0
- (2) ci_hdrc ci_hdrc.0: add to parent 78d9000.usb
-     Kernel panic - not syncing: kernel stack overflow
-      ...
-
-Note how ci_hdrc is added to the children list of 78d9000.usb (2) after
-the device link was already created in (1). This is why device_is_dependent()
-does not realize the devices will eventually be dependent on each other.
-
-Without "vbus-supply" (2) happens before (1) because then the PHY driver
-requests probe deferral a few times while waiting for regulators.
-
-I'm not really sure what to do here, any suggestions how to fix this properly?
-
-(In case it helps, I have attached an example kernel module (circdl.c)
- that allows reproducing the exact same crash.)
-
-Thanks in advance!
-Stephan
-
---qsnshZ7+7gs41/Sw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="circdl.c"
-
-#include <linux/module.h>
-#include <linux/platform_device.h>
-
-static int parent_probe(struct platform_device *pdev)
-{
-	struct device *dev = &pdev->dev;
-	struct platform_device *middle;
-
-	dev_info(dev, "probe\n");
-
-	middle = platform_device_register_data(dev, "middle", PLATFORM_DEVID_AUTO, NULL, 0);
-	if (IS_ERR(middle))
-		return dev_err_probe(dev, PTR_ERR(middle), "failed to create middle\n");
-
-	return 0;
-}
-
-static int middle_probe(struct platform_device *pdev)
-{
-	struct device *dev = &pdev->dev;
-	struct platform_device *child;
-	struct device_link *link;
-
-	dev_info(dev, "probe\n");
-
-	child = platform_device_register_data(dev, "child", PLATFORM_DEVID_AUTO, NULL, 0);
-	if (IS_ERR(child))
-		return dev_err_probe(dev, PTR_ERR(child), "failed to create child\n");
-
-	dev_info(dev, "device_link_add\n");
-
-	/*
-	 * Note how the device link is created between the parent device and the
-	 * child device. This is equivalent to what happens in the phy-core
-	 * because ci_hdrc calls phy_get(dev->parent, "usb-phy");
-	 */
-	link = device_link_add(dev->parent, &child->dev, DL_FLAG_STATELESS);
-	if (link)
-		dev_err(dev, "Creating circular device link should have failed!\n");
-	else
-		dev_info(dev, "Creating device link failed (as it should)\n");
-
-	return 0;
-}
-
-static int child_probe(struct platform_device *pdev)
-{
-	dev_info(&pdev->dev, "probe\n");
-	return 0;
-}
-
-static struct platform_driver parent_driver = {
-	.probe	= parent_probe,
-	.driver	= {
-		.name = "parent",
-	},
-};
-
-static struct platform_driver middle_driver = {
-	.probe	= middle_probe,
-	.driver	= {
-		.name = "middle",
-	},
-};
-
-static struct platform_driver child_driver = {
-	.probe	= child_probe,
-	.driver	= {
-		.name = "child",
-	},
-};
-
-static int __init circdl_init(void)
-{
-	platform_driver_register(&parent_driver);
-	platform_driver_register(&middle_driver);
-	platform_driver_register(&child_driver);
-	platform_device_register_simple("parent", PLATFORM_DEVID_AUTO, NULL, 0);
-	return 0;
-}
-
-module_init(circdl_init)
-MODULE_LICENSE("GPL v2");
-
---qsnshZ7+7gs41/Sw--
