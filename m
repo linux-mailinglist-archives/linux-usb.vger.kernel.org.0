@@ -2,82 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 563572F1E8D
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 20:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED1E2F1F2A
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 20:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390703AbhAKTF2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Jan 2021 14:05:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727308AbhAKTF2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Jan 2021 14:05:28 -0500
-Received: from ficht.host.rs.currently.online (ficht.host.rs.currently.online [IPv6:2a01:4f8:120:614b::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7744DC061786;
-        Mon, 11 Jan 2021 11:04:47 -0800 (PST)
-Received: from carbon.srv.schuermann.io (carbon.srv.schuermann.io [IPv6:2a01:4f8:120:614b:2::1])
-        by ficht.host.rs.currently.online (Postfix) with ESMTPS id 0B5771FC6E;
-        Mon, 11 Jan 2021 19:04:46 +0000 (UTC)
-From:   Leon Schuermann <leon@is.currently.online>
-To:     kuba@kernel.org, oliver@neukum.org, davem@davemloft.net
-Cc:     hayeswang@realtek.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, Leon Schuermann <leon@is.currently.online>
-Subject: [PATCH 2/2] r8153_ecm: Add Lenovo Powered USB-C Hub as a fallback of r8152
-Date:   Mon, 11 Jan 2021 20:03:15 +0100
-Message-Id: <20210111190312.12589-3-leon@is.currently.online>
-In-Reply-To: <20210109144311.47760f7e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20210109144311.47760f7e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        id S2403940AbhAKTXa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Jan 2021 14:23:30 -0500
+Received: from mx2.suse.de ([195.135.220.15]:33836 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2404152AbhAKTX3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 11 Jan 2021 14:23:29 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id E6432AB7F;
+        Mon, 11 Jan 2021 19:22:47 +0000 (UTC)
+Date:   Mon, 11 Jan 2021 11:22:40 -0800
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     jacmet@sunsite.dk, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Davidlohr Bueso <dbueso@suse.de>
+Subject: Re: [PATCH] usb/c67x00: Replace tasklet with work
+Message-ID: <20210111192240.osls6hi5wmnw76ts@offworld>
+References: <20210111044050.86763-1-dave@stgolabs.net>
+ <20210111090533.1450-1-hdanton@sina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20210111090533.1450-1-hdanton@sina.com>
+User-Agent: NeoMutt/20201120
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This commit enables the use of the r8153_ecm driver, introduced with
-commit c1aedf015ebdd0 ("net/usb/r8153_ecm: support ECM mode for
-RTL8153") for the Lenovo Powered USB-C Hub (17ef:721e) based on the
-Realtek RTL8153B chip.
+On Mon, 11 Jan 2021, Hillf Danton wrote:
 
-This results in the following driver preference:
+>On Sun, 10 Jan 2021 20:40:50 -0800 Davidlohr Bueso wrote:
+>> Tasklets have long been deprecated as being too heavy on the system
+>> by running in irq context - and this is not a performance critical
+>> path. If a higher priority process wants to run, it must wait for
+>> the tasklet to finish before doing so.
+>>
+>> c67x00_do_work() will now run in process context and have further
+>> concurrency (tasklets being serialized among themselves), but this
+>> is done holding the c67x00->lock, so it should be fine. Furthermore,
+>> this patch fixes the usage of the lock in the callback as otherwise
+>> it would need to be irq-safe.
+>
+>Can you add a couple of words about the need to be irq-safe because
+>no lock is taken for scheduling either tasklet or work?
 
-- if r8152 is available, use the r8152 driver
-- if r8152 is not available, use the r8153_ecm driver
+I was refering to the locking in the c67x00_do_work() tasklet callback.
+Because it is currently under irq it should be disabling irq (or at least
+BH) but after this patch that is no longer the case.
 
-This is done to prevent the NIC from constantly sending pause frames
-when the host system enters standby (fixed by using the r8152 driver
-in "r8152: Add Lenovo Powered USB-C Travel Hub"), while still allowing
-the device to work with the r8153_ecm driver as a fallback.
+>>
+>> Signed-off-by: Davidlohr Bueso <dbueso@suse.de>
+>> ---
+>>  drivers/usb/c67x00/c67x00-hcd.h   |  2 +-
+>>  drivers/usb/c67x00/c67x00-sched.c | 12 +++++++-----
+>>  2 files changed, 8 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/usb/c67x00/c67x00-hcd.h b/drivers/usb/c67x00/c67x00-hcd.h
+>> index 6b6b04a3fe0f..6332a6b5dce6 100644
+>> --- a/drivers/usb/c67x00/c67x00-hcd.h
+>> +++ b/drivers/usb/c67x00/c67x00-hcd.h
+>> @@ -76,7 +76,7 @@ struct c67x00_hcd {
+>>	u16 next_td_addr;
+>>	u16 next_buf_addr;
+>>
+>> -	struct tasklet_struct tasklet;
+>> +	struct work_struct work;
+>>
+>>	struct completion endpoint_disable;
+>>
+>> diff --git a/drivers/usb/c67x00/c67x00-sched.c b/drivers/usb/c67x00/c67x00-sched.c
+>> index e65f1a0ae80b..af60f4fdd340 100644
+>> --- a/drivers/usb/c67x00/c67x00-sched.c
+>> +++ b/drivers/usb/c67x00/c67x00-sched.c
+>> @@ -1123,24 +1123,26 @@ static void c67x00_do_work(struct c67x00_hcd *c67x00)
+>>
+>>  /* -------------------------------------------------------------------------- */
+>>
+>> -static void c67x00_sched_tasklet(struct tasklet_struct *t)
+>> +static void c67x00_sched_work(struct work_struct *work)
+>>  {
+>> -	struct c67x00_hcd *c67x00 = from_tasklet(c67x00, t, tasklet);
+>> +	struct c67x00_hcd *c67x00;
+>> +
+>> +	c67x00 = container_of(work, struct c67x00_hcd, work);
+>>	c67x00_do_work(c67x00);
+>>  }
+>>
+>>  void c67x00_sched_kick(struct c67x00_hcd *c67x00)
+>>  {
+>> -	tasklet_hi_schedule(&c67x00->tasklet);
+>> +        queue_work(system_highpri_wq, &c67x00->work);
+>
+>Better if one line comment is added for highpri, given this is not a
+>performance critical path.
 
-Signed-off-by: Leon Schuermann <leon@is.currently.online>
-Tested-by: Leon Schuermann <leon@is.currently.online>
----
- drivers/net/usb/r8153_ecm.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+I'm not sure the value here, considering the highprio is not being
+changed here. There are a few drivers who use highpri workqueue and
+care about latencies but they are still not performance critical (to
+the overall system that is, which is what I meant by that).
 
-diff --git a/drivers/net/usb/r8153_ecm.c b/drivers/net/usb/r8153_ecm.c
-index 2c3fabd38b16..20b2df8d74ae 100644
---- a/drivers/net/usb/r8153_ecm.c
-+++ b/drivers/net/usb/r8153_ecm.c
-@@ -122,12 +122,20 @@ static const struct driver_info r8153_info = {
- };
- 
- static const struct usb_device_id products[] = {
-+/* Realtek RTL8153 Based USB 3.0 Ethernet Adapters */
- {
- 	USB_DEVICE_AND_INTERFACE_INFO(VENDOR_ID_REALTEK, 0x8153, USB_CLASS_COMM,
- 				      USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
- 	.driver_info = (unsigned long)&r8153_info,
- },
- 
-+/* Lenovo Powered USB-C Travel Hub (4X90S92381, based on Realtek RTL8153) */
-+{
-+	USB_DEVICE_AND_INTERFACE_INFO(VENDOR_ID_LENOVO, 0x721e, USB_CLASS_COMM,
-+				      USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
-+	.driver_info = (unsigned long)&r8153_info,
-+},
-+
- 	{ },		/* END */
- };
- MODULE_DEVICE_TABLE(usb, products);
--- 
-2.29.2
-
+Thanks,
+Davidlohr
