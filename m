@@ -2,69 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4432F120A
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 13:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0624C2F12AD
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 13:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729889AbhAKMBP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Jan 2021 07:01:15 -0500
-Received: from mx2.suse.de ([195.135.220.15]:49112 "EHLO mx2.suse.de"
+        id S1727648AbhAKM60 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Jan 2021 07:58:26 -0500
+Received: from mga09.intel.com ([134.134.136.24]:19306 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726807AbhAKMBP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 11 Jan 2021 07:01:15 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 54F1FABC4;
-        Mon, 11 Jan 2021 12:00:33 +0000 (UTC)
-Message-ID: <7d6dc09fedc84f9fce942d85c34d5cd41931bbf6.camel@suse.de>
-Subject: Re: [PATCH v2] can: mcba_usb: Fix memory leak when cancelling urb
-From:   Oliver Neukum <oneukum@suse.de>
-To:     Bui Quang Minh <minhquangbui99@gmail.com>,
-        linux-usb@vger.kernel.org
-Cc:     a.darwish@linutronix.de, bigeasy@linutronix.de,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de
-Date:   Mon, 11 Jan 2021 13:00:31 +0100
-In-Reply-To: <20210111104927.2561-1-minhquangbui99@gmail.com>
-References: <20210111104927.2561-1-minhquangbui99@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S1726686AbhAKM60 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 11 Jan 2021 07:58:26 -0500
+IronPort-SDR: LoT3vkwoCskR2FOcijk4ohDA0eQpWoCBxt6Y4YZLBLQySxAR9oQwrZtsOqCNdqdW+tMNO8PNgu
+ 5/LjBgUW4t0w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9860"; a="178002962"
+X-IronPort-AV: E=Sophos;i="5.79,338,1602572400"; 
+   d="scan'208";a="178002962"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2021 04:56:36 -0800
+IronPort-SDR: rYQXHqKv5O3uuQA3e427T24HknA9G3wkZhKo2mwyILHTWFz9r0QGNRFJzThPjPlIQ2vfrvk3st
+ f8enqWbH0Zdg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,338,1602572400"; 
+   d="scan'208";a="464152338"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 11 Jan 2021 04:56:33 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 11 Jan 2021 14:56:32 +0200
+Date:   Mon, 11 Jan 2021 14:56:32 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH 0/2] Remove one more platform_device_add_properties() call
+Message-ID: <20210111125632.GA2020859@kuha.fi.intel.com>
+References: <20201123153148.52647-1-heikki.krogerus@linux.intel.com>
+ <CAJZ5v0jAaz2zELkJoKjHtxyfuKEi=ORuCCad-F0yp6KephieGg@mail.gmail.com>
+ <20201204112318.GA4013126@kuha.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201204112318.GA4013126@kuha.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 11.01.2021, 10:49 +0000 schrieb Bui Quang Minh:
-> In mcba_usb_read_bulk_callback(), when we don't resubmit or fails to
-> resubmit the urb, we need to deallocate the transfer buffer that is
-> allocated in mcba_usb_start().
+On Fri, Dec 04, 2020 at 01:23:22PM +0200, Heikki Krogerus wrote:
+> Hi Felipe,
 > 
-> Reported-by: syzbot+57281c762a3922e14dfe@syzkaller.appspotmail.com
-> Signed-off-by: Bui Quang Minh <minhquangbui99@gmail.com>
-> ---
-> v1: add memory leak fix when not resubmitting urb
-> v2: add memory leak fix when failing to resubmit urb
+> On Mon, Nov 23, 2020 at 06:06:31PM +0100, Rafael J. Wysocki wrote:
+> > On Mon, Nov 23, 2020 at 4:32 PM Heikki Krogerus
+> > <heikki.krogerus@linux.intel.com> wrote:
+> > >
+> > > Hi,
+> > >
+> > > I originally introduced these as part of my series where I was
+> > > proposing PM ops for software nodes [1], but since that still needs
+> > > work, I'm sending these two separately.
+> > >
+> > > So basically I'm only modifying dwc3-pci.c so it registers a software
+> > > node directly at this point. That will remove one more user of
+> > > platform_device_add_properties().
+> > >
+> > > [1] https://lore.kernel.org/lkml/20201029105941.63410-1-heikki.krogerus@linux.intel.com/
+> > >
+> > > thanks,
+> > >
+> > > Heikki Krogerus (2):
+> > >   software node: Introduce device_add_software_node()
+> > >   usb: dwc3: pci: Register a software node for the dwc3 platform device
+> > >
+> > >  drivers/base/swnode.c       | 69 ++++++++++++++++++++++++++++++++-----
+> > >  drivers/usb/dwc3/dwc3-pci.c | 61 +++++++++++++++++++-------------
+> > >  include/linux/property.h    |  3 ++
+> > >  3 files changed, 100 insertions(+), 33 deletions(-)
+> > >
+> > > --
+> > 
+> > These look good to me.
+> > 
+> > If you want me to take them, though, I need an ACK from the dwc3 side.
 > 
->  drivers/net/can/usb/mcba_usb.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
-> index df54eb7d4b36..30236e640116 100644
-> --- a/drivers/net/can/usb/mcba_usb.c
-> +++ b/drivers/net/can/usb/mcba_usb.c
-> @@ -584,6 +584,8 @@ static void mcba_usb_read_bulk_callback(struct urb *urb)
->  	case -EPIPE:
->  	case -EPROTO:
->  	case -ESHUTDOWN:
-> +		usb_free_coherent(urb->dev, urb->transfer_buffer_length,
-> +				  urb->transfer_buffer, urb->transfer_dma);
->  		return;
->  
+> Is this OK?
 
-Can you call usb_free_coherent() in what can be hard IRQ context?
+I think this went under you radar, so I'll resend these.
 
-	Regards
-		Oliver
+Br,
 
-
+-- 
+heikki
