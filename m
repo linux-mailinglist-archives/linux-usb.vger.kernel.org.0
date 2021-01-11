@@ -2,167 +2,237 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DC62F221E
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 22:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4FFA2F2249
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 22:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730445AbhAKVqd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Jan 2021 16:46:33 -0500
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:49418 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388333AbhAKVqc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Jan 2021 16:46:32 -0500
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        id S2387615AbhAKV4i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Jan 2021 16:56:38 -0500
+Received: from so254-31.mailgun.net ([198.61.254.31]:52644 "EHLO
+        so254-31.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732176AbhAKV4h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Jan 2021 16:56:37 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1610402173; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=PtaFRiDxRtZj8p7OuuzON49LnTL2oAXa3kHM/ZbEbDY=; b=I+DNg95MMf4Jo3GU9T57DspNvq+5KZhYwxrjbch5Z1jI0yn7mWq9tJH9aeGbeqeNljzuixII
+ OlsyI8hhIUj/bRZKYy+ovokPKDCNdRg7RYk/eBvL9Hdzv1p7/mydAu6UYr8RV1eIehLUIgMA
+ WPqIGVR70x8g4ABzEkD0XnxoJtY=
+X-Mailgun-Sending-Ip: 198.61.254.31
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
+ 5ffcc95bd84bad3547eaaaf8 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 11 Jan 2021 21:55:39
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 00F87C43461; Mon, 11 Jan 2021 21:55:39 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id EA17BC0354;
-        Mon, 11 Jan 2021 21:45:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1610401531; bh=oASROCYKW8RTXigwoSA3M0VuIdHJUZI1ZG/G2rYjHhc=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=GsK4Xs1IkqlapCWzFvPgfgyVflsH+R0im9UQYdVbZT5U1QI6D15n8qwTaAhuXxsFS
-         PRYD/Ne/BmJ/LFuAseRkxpReS8Wgj/AoLIlIzwjsATiVURL9izYOKwcKgnmnj/MSPS
-         cSCaHnf5wunDxzj3YPAwT6GenUtqVtCUu8Aei9V2eXOPKgbPIYTCGub28iNHFvSGzC
-         lz8vHBDFTdueVess1q3YifhlkyB/bxoEiWfr1aiW2OffNI/+fM/QgRlCasKzN5CWqc
-         kR1P9cLDa8pOTHivSsWVK54Ef3m1TQG9kr+OEkPkMhDVsdifbeHvdsGX3E93sMrb1F
-         ncwMsX9I7py6g==
-Received: from o365relay-in.synopsys.com (sv2-o365relay3.synopsys.com [10.202.1.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 6529BA0096;
-        Mon, 11 Jan 2021 21:45:28 +0000 (UTC)
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2104.outbound.protection.outlook.com [104.47.58.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id AF7044009F;
-        Mon, 11 Jan 2021 21:45:26 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="OfBM44HP";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Sp/+xC8uAyjuK3L611X0zHSDCRWenP0tRrb8YvbyxNutsUSUvkYxmh4MB3HleCD6S5nh8abL+5uEwRRmZt1gF8NytlXOgyhFiGiV6xwusc6iyqDfIIw3JC9ASnqx9dG5hqQnPyE4xSVqQLUp3ZCTlT4qr1JtFdUVIUmBXqXbbKimEqRi0D4xV7eVWezzMRGH3mYQ35U8WvbdvrkZ0jIm3fSVS9DW8NnhZGBfC0P/qHl01IP3w0veRurZZISUSCahTvjqC9FnDNLHLozKgoPReZObnw7TWTSJF4sg6+g166ePU1hy3CDJsSPphDyR4JIfz4D6B8HEiUeLbo2oIlG9Lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oASROCYKW8RTXigwoSA3M0VuIdHJUZI1ZG/G2rYjHhc=;
- b=AHoIX0bpdwuXPa4HYm9/0jdHsiiXIASagNndnJtxqE7ZmCd1JsJGCXKr6chE1KsvD+sB2O8igduXx02qsgLFDQKIn24rNOqsnv2W1k/OtTIyWWiL2/QbP1QnOd5MBve+IUjk0ZtxME0/Mm68/z8A3zLUP9afOVvEjnziCT0b5w9yOndoGnnH1KRDm47m4QiFK/z4M4wLP5Ag+bJUwo2nxiGPHv9c9hVVjGxpNWKc8TOQQgpHPMzf8PW6lSOs3e2KrAqDhYhQHZjq25pvSskhD8b5nxdhTHFhQTIdwiYBj0iWdkxnLktVjWGFTuljjH45VKUG9LyDL6/XbehraQQIEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oASROCYKW8RTXigwoSA3M0VuIdHJUZI1ZG/G2rYjHhc=;
- b=OfBM44HPriipETBBh/FXBP3bTp/a2MAK5sqGeVkQLA6mct8tjPdHy8KjhOTGUXw7IE9Ya7EDh3s9cJRMRSLlJ21D6jDqiRWkw1EpNewg0o+9vRt3CIwlEcTsSvP4q2Na5lDe9NiyYy9iMZmBU+Dos8RcwCAqqmTartDsbEYodng=
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
- by BY5PR12MB4097.namprd12.prod.outlook.com (2603:10b6:a03:213::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.6; Mon, 11 Jan
- 2021 21:45:24 +0000
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::895b:620d:8f20:c4d6]) by BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::895b:620d:8f20:c4d6%6]) with mapi id 15.20.3742.012; Mon, 11 Jan 2021
- 21:45:24 +0000
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Peter Chen <peter.chen@nxp.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: Re: [PATCH] usb: udc: core: Introduce started state
-Thread-Topic: [PATCH] usb: udc: core: Introduce started state
-Thread-Index: AQHW6Fn42t/s7d2V5ECRC4W61zuEWKoi8RqAgAAEU4A=
-Date:   Mon, 11 Jan 2021 21:45:24 +0000
-Message-ID: <1e5bbddf-df52-d293-d27d-9cb034eadce8@synopsys.com>
-References: <a7c4112fcd4dc2f0169af94a24f5685ca77f09fd.1610395599.git.Thinh.Nguyen@synopsys.com>
- <20210111212955.GA1209265@rowland.harvard.edu>
-In-Reply-To: <20210111212955.GA1209265@rowland.harvard.edu>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-authentication-results: rowland.harvard.edu; dkim=none (message not signed)
- header.d=none;rowland.harvard.edu; dmarc=none action=none
- header.from=synopsys.com;
-x-originating-ip: [98.248.94.126]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 54b623dc-9039-4f7b-cf32-08d8b67a340d
-x-ms-traffictypediagnostic: BY5PR12MB4097:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BY5PR12MB4097EF20A6C5897836C76C97AAAB0@BY5PR12MB4097.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7kahGnPPdzAO49tBAD/QKa21v0k6zmN8batTwcCIQEbZrV6RgSOgRWQQhQq9MK9tL5Ysw0kFKWrA20UhsSGzX+bikod5L4mx/+jy7K8iHBOZQra57WQ/FSA/tVndG+V05yY34qTqmT6muvjn1xKg9rEZJL+CKunOvrtZzZ1vzJiK60xqZG2dA2GMMP8JeVAszkWQFSy0gzG3pRgJd1b1HB1jUgIg3tlKs51IgBC2icosu8HDo+8masxSMOnz8zlBWzOF6V4mTFyp8GQt6LYzV786WAxUg+HWqh0CSKl8wQLBwlOgLvFsmQu+z0b+T/WyAl8acISsn1wxU1Jvo0hTbftwD0EV+cirNDnAhYZufcTVt/LghQWIoRtIJ2JeMJefhWl9a+fT4wM6wKUnZwYWMOyfWf2J6Pk4z4TlGUSkgGKKDiI2FsbQKZI+QqX0NaLyrQoWsb0wpF7bVldqETNhOPbvcXbeyjHEUFFF4Qysbsk=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(366004)(396003)(376002)(346002)(39860400002)(64756008)(66556008)(66946007)(6486002)(66446008)(8676002)(76116006)(66476007)(83380400001)(86362001)(110136005)(6506007)(8936002)(31686004)(5660300002)(36756003)(6512007)(478600001)(31696002)(54906003)(71200400001)(2906002)(4326008)(316002)(186003)(26005)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?Z1Q1a2wrNUdwT05GNDlJSnJrbTZvOWNtN3lsc1JYQ1ZKZjU5dSsrZlM2MEUr?=
- =?utf-8?B?NHhaalRkK0hVYWx4b0QvSE1ZNnl2M0tDdXBsQzVBeGMvUEhrbWc0OGliblhu?=
- =?utf-8?B?KzBFQkVKNXZYQUQ0alZmRVZ0NmJwaEJWNExPV3B5NThTbHMrN0dxU0w0ekdt?=
- =?utf-8?B?aGEvYlVnRjBBaXovSFh3ZUppd1lRMytSeGlTb21ya1l4RXdnVnM2aDhzWDIz?=
- =?utf-8?B?cEo3OERzalBpMC9vYW9ibWxqZXBwYm16NGlLQ2lsR2wyOERRemR2UU94Zmda?=
- =?utf-8?B?MmcyZWorWllYMHJYeVZjNW5pZjZrbkZ4WENxUGhtWG1wby9EMlc5OGl6WFJq?=
- =?utf-8?B?aVE5eGlmUld5dE41R1pLcXpaMW5sQ0ZmdmR2L3EwczFzZjdrWml5RnBFV0Nr?=
- =?utf-8?B?ZDlEM2FkMHJyNEw0YW9wZlpra2EycklRakhxQjRJKzMwZFRVMkxJSEY4bmtR?=
- =?utf-8?B?NzZNQTJubmRKc1ZoL3JqTVBQdTQ1NEhBZ0pQaklHdVhRdS9EaDIzbjZJcTlW?=
- =?utf-8?B?MFNUclZtNDZiazZhOVRrUkZBNHJlRktxTE9XZHhoMWdMbDAzYkRWRWF1ajlt?=
- =?utf-8?B?dGJGdmx1ODFCS1BGVFVaQVFJaU1PMWRtTFJHWlE0QU9XRnNENWNMUVBJM2N6?=
- =?utf-8?B?bThYSTcrQXhZaUJXSXF1ODl5NGhFWGt4QUVnS0w0N0NkT28vOG84ZElzVkhO?=
- =?utf-8?B?eHZCT2lnZGlrM0F2cmF3RER0VHRIUTYyQXVnaFUwVXNHZnFXVU5MMXVwRHhH?=
- =?utf-8?B?VjRoV3JTQ1dBUngzMDZ4eWtxY3pjUEZxRG8vMjVhaW1YSEFQVm4rbTdwZzZW?=
- =?utf-8?B?bXlGeWJiZGJXaXpSV0Fhc3pvK2t1UXFab1hGYVVpdmRZQklPUUdWNjRHUzRy?=
- =?utf-8?B?d1ZaczFoWGJ0b1VLYW9IZU5BODI2NUVqVkRJNVdoQmJiaW9MU2ZBeWIvNXV0?=
- =?utf-8?B?OGhpM25MTGJGYk9lOCtrMHdYY1NZV1J3RFJ3N2I3Z0hTY2VWSFA5a3ZPQTJW?=
- =?utf-8?B?SlZRQXM1SDRrMUVqYlVBVWRkb1YzM2N4ZlVxN2YwWmQ1bFdnZ3pQOEV3NDNm?=
- =?utf-8?B?Ykt4bEoyRVkzejFOMjQ0ZU8xTFM3NEtwaGtRcmhVMTFNbmEvZit4SEpWUG95?=
- =?utf-8?B?OWVDWGVZZWV6dnNFK1cvcnJmQi9aUXFMak5YSDlQbXY2T1NKcDdWOUNOaFBy?=
- =?utf-8?B?NXlBRi9RNCtUWEpSdnlTb1BuYVZrSXlweHVOOTV6VWU4aU9JQjhSbVgrL3py?=
- =?utf-8?B?bVJvQU9IRnlzUXViZ3k1QUVRZmIrREVPZTl0ZUpIYmVHdXp5ajc0T1JQOWV0?=
- =?utf-8?Q?BJVBaQ4KzZSAI=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7AACB02FB09B77478E41615BF797F837@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 93850C433C6;
+        Mon, 11 Jan 2021 21:55:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 93850C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Mayank Rana <mrana@codeaurora.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jack Pham <jackp@codeaurora.org>
+Subject: [PATCH v2] usb: typec: ucsi: Add support for USB role switch
+Date:   Mon, 11 Jan 2021 13:55:20 -0800
+Message-Id: <20210111215520.18476-1-jackp@codeaurora.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54b623dc-9039-4f7b-cf32-08d8b67a340d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2021 21:45:24.7401
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OAjtAp6ZdIoe2/owc7K58b9Hrhm/m+p1GUQCuQb4jRf/4TvtWwO0LAedKF1BRekvq22svMufDxO8tBD8Fns9Rw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4097
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGksDQoNCkFsYW4gU3Rlcm4gd3JvdGU6DQo+IE9uIE1vbiwgSmFuIDExLCAyMDIxIGF0IDEyOjM4
-OjA1UE0gLTA4MDAsIFRoaW5oIE5ndXllbiB3cm90ZToNCj4+IEZvciBzb21lIFVEQ3MsIHRoZSBp
-bml0aWFsaXphdGlvbiBzZXF1ZW5jZSBieSB1ZGNfc3RhcnQoKSBzaG91bGQgbm90IGJlDQo+PiBy
-ZXBlYXRlZCB1bnRpbCBpdCBpcyBwcm9wZXJseSBjbGVhbmVkIHVwIHdpdGggdWRjX3N0b3AoKSBh
-bmQgdmlzZSB2ZXJzYS4NCj4+IFdlIG1heSBydW4gaW50byBzb21lIGNsZWFudXAgZmFpbHVyZSBh
-cyBzZWVuIHdpdGggdGhlIERXQzMgZHJpdmVyIGR1cmluZw0KPj4gdGhlIGlycSBjbGVhbnVwLiBU
-aGlzIGlzc3VlIGNhbiBvY2N1ciB3aGVuIHRoZSB1c2VyIHRyaWdnZXJzDQo+PiBzb2Z0LWNvbm5l
-Y3Qvc29mdC1kaXNjb25uZWN0IGZyb20gdGhlIHNvZnRfY29ubmVjdCBzeXNmcy4gVG8gYXZvaWQN
-Cj4+IGFkZGluZyBjaGVja3MgdG8gZXZlcnkgVURDIGRyaXZlciwgYXQgdGhlIFVEQyBmcmFtZXdv
-cmssIGludHJvZHVjZSBhDQo+PiAic3RhcnRlZCIgc3RhdGUgdG8gdHJhY2sgYW5kIHByZXZlbnQg
-dGhlIFVEQyBmcm9tIHJlcGVhdGluZyB0aGUNCj4+IHVkY19zdGFydCgpIGFuZCB1ZGNfc3RvcCgp
-IGlmIGl0IGhhZCBhbHJlYWR5IHN0YXJ0ZWQvc3RvcHBlZC4NCj4+DQo+PiBTaWduZWQtb2ZmLWJ5
-OiBUaGluaCBOZ3V5ZW4gPFRoaW5oLk5ndXllbkBzeW5vcHN5cy5jb20+DQo+IElzIHRoZSBuZXcg
-InN0YXJ0ZWQiIGZpZWxkIHN1YmplY3QgdG8gcmFjZXM/ICBXaGF0IGhhcHBlbnMgaWYgdGhlcmUg
-YXJlIA0KPiBjb25jdXJyZW50IHJlcXVlc3RzIHRvIHN0YXJ0IGFuZCBzdG9wIHRoZSBVREM/DQo+
-DQo+IEFsYW4gU3Rlcm4NCg0KVGhlIGNhbGxlciBvZiB0aGlzIHVzYl9nYWRnZXRfdWRjX3N0YXJ0
-L3N0b3AoKSBzaG91bGQgdGFrZSBjYXJlIG9mIHRoZQ0KbG9ja2luZy4gSXQncyBhbHJlYWR5IGRv
-bmUgaW4gdGhlIGNhc2Ugb2YgZHJpdmVyIHByb2JlL3JlbW92ZSwgYnV0IG5vdA0KZm9yIHRoZSBz
-eXNmcyBzb2Z0X2Nvbm5lY3QuIE1heWJlIEkgc2hvdWxkIGFkZCB0aGF0IHRvIHRoaXMgcGF0Y2gu
-DQoNClRoYW5rcywNClRoaW5oDQo=
+From: Mayank Rana <mrana@codeaurora.org>
+
+UCSI already conveys the information about a port's connection
+status, whether it is operating in UFP or DFP mode, and whether the
+partner supports USB data or not. This information can be used to
+notify a dual-role controller to start up its host or peripheral
+mode accordingly. Add optional support for this by querying each
+port's fwnode to look for an associated USB role switch device.
+If present, call usb_role_switch_set() with the determined data
+role upon Connect Change or Connector Partner Change updates.
+
+Signed-off-by: Mayank Rana <mrana@codeaurora.org>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Jack Pham <jackp@codeaurora.org>
+---
+v2: Rebased on gregkh/usb-next and added Heikki's Reviewed-by tag
+
+ drivers/usb/typec/ucsi/ucsi.c | 55 +++++++++++++++++++++++++++++++++--
+ drivers/usb/typec/ucsi/ucsi.h |  3 ++
+ 2 files changed, 55 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index f02958927cbd..ca3f4194ad90 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -588,6 +588,7 @@ static void ucsi_unregister_partner(struct ucsi_connector *con)
+ 
+ static void ucsi_partner_change(struct ucsi_connector *con)
+ {
++	enum usb_role u_role = USB_ROLE_NONE;
+ 	int ret;
+ 
+ 	if (!con->partner)
+@@ -595,11 +596,14 @@ static void ucsi_partner_change(struct ucsi_connector *con)
+ 
+ 	switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
+ 	case UCSI_CONSTAT_PARTNER_TYPE_UFP:
+-	case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
+ 	case UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP:
++		u_role = USB_ROLE_HOST;
++		fallthrough;
++	case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
+ 		typec_set_data_role(con->port, TYPEC_HOST);
+ 		break;
+ 	case UCSI_CONSTAT_PARTNER_TYPE_DFP:
++		u_role = USB_ROLE_DEVICE;
+ 		typec_set_data_role(con->port, TYPEC_DEVICE);
+ 		break;
+ 	default:
+@@ -610,6 +614,15 @@ static void ucsi_partner_change(struct ucsi_connector *con)
+ 	if (!completion_done(&con->complete))
+ 		complete(&con->complete);
+ 
++	/* Only notify USB controller if partner supports USB data */
++	if (!(UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) & UCSI_CONSTAT_PARTNER_FLAG_USB))
++		u_role = USB_ROLE_NONE;
++
++	ret = usb_role_switch_set_role(con->usb_role_sw, u_role);
++	if (ret)
++		dev_err(con->ucsi->dev, "con:%d: failed to set usb role:%d\n",
++			con->num, u_role);
++
+ 	/* Can't rely on Partner Flags field. Always checking the alt modes. */
+ 	ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_SOP);
+ 	if (ret)
+@@ -628,6 +641,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 	struct ucsi_connector_status pre_ack_status;
+ 	struct ucsi_connector_status post_ack_status;
+ 	enum typec_role role;
++	enum usb_role u_role = USB_ROLE_NONE;
+ 	u16 inferred_changes;
+ 	u16 changed_flags;
+ 	u64 command;
+@@ -753,11 +767,14 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 
+ 		switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
+ 		case UCSI_CONSTAT_PARTNER_TYPE_UFP:
+-		case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
+ 		case UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP:
++			u_role = USB_ROLE_HOST;
++			fallthrough;
++		case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
+ 			typec_set_data_role(con->port, TYPEC_HOST);
+ 			break;
+ 		case UCSI_CONSTAT_PARTNER_TYPE_DFP:
++			u_role = USB_ROLE_DEVICE;
+ 			typec_set_data_role(con->port, TYPEC_DEVICE);
+ 			break;
+ 		default:
+@@ -770,6 +787,16 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 			ucsi_unregister_partner(con);
+ 
+ 		ucsi_port_psy_changed(con);
++
++		/* Only notify USB controller if partner supports USB data */
++		if (!(UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) &
++				UCSI_CONSTAT_PARTNER_FLAG_USB))
++			u_role = USB_ROLE_NONE;
++
++		ret = usb_role_switch_set_role(con->usb_role_sw, u_role);
++		if (ret)
++			dev_err(ucsi->dev, "con:%d: failed to set usb role:%d\n",
++				con->num, u_role);
+ 	}
+ 
+ 	if (con->status.change & UCSI_CONSTAT_PARTNER_CHANGE)
+@@ -988,6 +1015,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ 	struct ucsi_connector *con = &ucsi->connector[index];
+ 	struct typec_capability *cap = &con->typec_cap;
+ 	enum typec_accessory *accessory = cap->accessory;
++	enum usb_role u_role = USB_ROLE_NONE;
+ 	u64 command;
+ 	int ret;
+ 
+@@ -1066,11 +1094,14 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ 
+ 	switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
+ 	case UCSI_CONSTAT_PARTNER_TYPE_UFP:
+-	case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
+ 	case UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP:
++		u_role = USB_ROLE_HOST;
++		fallthrough;
++	case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
+ 		typec_set_data_role(con->port, TYPEC_HOST);
+ 		break;
+ 	case UCSI_CONSTAT_PARTNER_TYPE_DFP:
++		u_role = USB_ROLE_DEVICE;
+ 		typec_set_data_role(con->port, TYPEC_DEVICE);
+ 		break;
+ 	default:
+@@ -1086,6 +1117,24 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ 		ucsi_port_psy_changed(con);
+ 	}
+ 
++	con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
++	if (IS_ERR(con->usb_role_sw)) {
++		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
++			con->num);
++		con->usb_role_sw = NULL;
++	}
++
++	/* Only notify USB controller if partner supports USB data */
++	if (!(UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) & UCSI_CONSTAT_PARTNER_FLAG_USB))
++		u_role = USB_ROLE_NONE;
++
++	ret = usb_role_switch_set_role(con->usb_role_sw, u_role);
++	if (ret) {
++		dev_err(ucsi->dev, "con:%d: failed to set usb role:%d\n",
++			con->num, u_role);
++		ret = 0;
++	}
++
+ 	if (con->partner) {
+ 		ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_SOP);
+ 		if (ret) {
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index dd9ba60ab4a3..3920e20a9e9e 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -8,6 +8,7 @@
+ #include <linux/power_supply.h>
+ #include <linux/types.h>
+ #include <linux/usb/typec.h>
++#include <linux/usb/role.h>
+ 
+ /* -------------------------------------------------------------------------- */
+ 
+@@ -331,6 +332,8 @@ struct ucsi_connector {
+ 	u32 rdo;
+ 	u32 src_pdos[UCSI_MAX_PDOS];
+ 	int num_pdos;
++
++	struct usb_role_switch *usb_role_sw;
+ };
+ 
+ int ucsi_send_command(struct ucsi *ucsi, u64 command,
+-- 
+2.24.0
+
