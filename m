@@ -2,24 +2,24 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4962F147E
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 14:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5962F13BD
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 14:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731146AbhAKNZ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Jan 2021 08:25:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35568 "EHLO mail.kernel.org"
+        id S1732020AbhAKNN6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Jan 2021 08:13:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60788 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732499AbhAKNRH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 11 Jan 2021 08:17:07 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9C8D722B49;
-        Mon, 11 Jan 2021 13:16:26 +0000 (UTC)
+        id S1732013AbhAKNN4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 11 Jan 2021 08:13:56 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E356622AAB;
+        Mon, 11 Jan 2021 13:13:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1610370987;
+        s=korg; t=1610370795;
         bh=/pd8RLnDeNu7p+BdZvik1txSdKxNe8f/cfwwP4ayZU8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D4PPowDYvR3lEVFd2FCYoGIQre1dIZEx+cutlJL//zPRrUSo+NRsK7sSTWTz9J9X5
-         b/ULHvOSPVqfdHQOQ7/+uB9OLydXQpbvQpLWHCPX3ZOgLdykcbG7y8v8hsRKR1k1qG
-         JwIgKNgyjG9wm7JfDDOOj8HEwOudTu8zfPgl233E=
+        b=ogF+5Ed/ekbGB73CJG0fdit2WXTS4QnaYYosoPrxCcU0CQgHVvCfU/yRzNF3pW/wL
+         ArNC7Ph7ejbrJMrKk5Qz4SY8ODEAAN1t1o4NCmbDLg9IBX8fy+Tkw3CCE9gT1G+M9n
+         Cz9llMgmfK95cQlmKeCdaQ9OOxha+ga4m3zBlGEo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -27,12 +27,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         syzbot+297d20e437b79283bf6d@syzkaller.appspotmail.com,
         Yuyang Du <yuyang.du@intel.com>,
         Shuah Khan <shuahkh@osg.samsung.com>, linux-usb@vger.kernel.org
-Subject: [PATCH 5.10 090/145] usb: usbip: vhci_hcd: protect shift size
-Date:   Mon, 11 Jan 2021 14:01:54 +0100
-Message-Id: <20210111130052.856084802@linuxfoundation.org>
+Subject: [PATCH 5.4 59/92] usb: usbip: vhci_hcd: protect shift size
+Date:   Mon, 11 Jan 2021 14:02:03 +0100
+Message-Id: <20210111130041.991864965@linuxfoundation.org>
 X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210111130048.499958175@linuxfoundation.org>
-References: <20210111130048.499958175@linuxfoundation.org>
+In-Reply-To: <20210111130039.165470698@linuxfoundation.org>
+References: <20210111130039.165470698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
