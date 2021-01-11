@@ -2,87 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B31F2F17DD
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 15:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9748C2F1822
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Jan 2021 15:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729779AbhAKOPv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Jan 2021 09:15:51 -0500
-Received: from mga17.intel.com ([192.55.52.151]:16819 "EHLO mga17.intel.com"
+        id S1731497AbhAKOYu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Jan 2021 09:24:50 -0500
+Received: from mga02.intel.com ([134.134.136.20]:24227 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727901AbhAKOPu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 11 Jan 2021 09:15:50 -0500
-IronPort-SDR: 33Lji3lI5WhBwd9SZKlASCbz2XQJAUBkjlHFasLyhgnSj7cbzc37lVFECPC5o5Y7wP7Yvdlfqy
- SYdZXZdSFEDQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9860"; a="157645656"
+        id S1728070AbhAKOYt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 11 Jan 2021 09:24:49 -0500
+IronPort-SDR: re0w/xQO7P8MiF3eAvY5YBTjRwKvKVNkT473SFlR3oA4h4WBgeD1a67KB/njNNDKcHo/F6M8Sy
+ lzCtxtRnrXtA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9860"; a="164951204"
 X-IronPort-AV: E=Sophos;i="5.79,338,1602572400"; 
-   d="scan'208";a="157645656"
+   d="scan'208";a="164951204"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2021 06:10:56 -0800
-IronPort-SDR: 80nKZa5+vzdWdub2518utsZrmhx4RamZ6dnQTww03pLys3O8rRQnG8fFqiXFEZ0EuWSa0S4QD8
- Qmk152lNN33w==
-X-ExtLoop1: 1
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2021 06:23:01 -0800
+IronPort-SDR: B5TjygFGefN9FVfrELU2SAeYsEHkhVJO/QW2XaiFIS98paWfaA/Fo5AckIvjO6rydn5bprDHNy
+ FkqZZfsc7l+g==
 X-IronPort-AV: E=Sophos;i="5.79,338,1602572400"; 
-   d="scan'208";a="464171628"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Jan 2021 06:10:54 -0800
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: [PATCH v2 3/3] usb: dwc3: pci: ID for Tiger Lake CPU
-Date:   Mon, 11 Jan 2021 17:10:45 +0300
-Message-Id: <20210111141045.14027-4-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210111141045.14027-1-heikki.krogerus@linux.intel.com>
-References: <20210111141045.14027-1-heikki.krogerus@linux.intel.com>
+   d="scan'208";a="464175188"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2021 06:22:58 -0800
+Received: by lahna (sSMTP sendmail emulation); Mon, 11 Jan 2021 16:22:56 +0200
+Date:   Mon, 11 Jan 2021 16:22:56 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Yehezkel Bernat <yehezkelshb@gmail.com>
+Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Christian Kellner <christian@kellner.me>,
+        Mario Limonciello <mario.limonciello@dell.com>
+Subject: Re: [PATCH 1/2] thunderbolt: Start lane initialization after sleep
+Message-ID: <20210111142256.GL968855@lahna.fi.intel.com>
+References: <20210105092808.15817-1-mika.westerberg@linux.intel.com>
+ <CA+CmpXuMD+OcNNJXHHc9oXUMkOjt8mt-UzrQrpe0mHXSmYvNrw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+CmpXuMD+OcNNJXHHc9oXUMkOjt8mt-UzrQrpe0mHXSmYvNrw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Tiger Lake SOC (the versions of it that have integrated USB4
-controller) may have two DWC3 controllers. One is part of
-the PCH (Platform Controller Hub, i.e. the chipset) as
-usual, and the other is inside the actual CPU block.
+On Tue, Jan 05, 2021 at 03:35:27PM +0200, Yehezkel Bernat wrote:
+> On Tue, Jan 5, 2021 at 11:28 AM Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+> >
+> > USB4 spec says that for TBT3 compatible device routers the connection
+> > manager needs to set SLI (Start Lane Initialization) to get the lanes
+> > that were not connected back to functional state after sleep. Same needs
+> > to be done if the link was XDomain.
+> >
+> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > ---
+> >  drivers/thunderbolt/lc.c      | 35 +++++++++++++++++++++++++++++++++++
+> >  drivers/thunderbolt/switch.c  | 27 ++++++++++++++++++++++++++-
+> >  drivers/thunderbolt/tb.h      |  1 +
+> >  drivers/thunderbolt/tb_regs.h |  1 +
+> >  4 files changed, 63 insertions(+), 1 deletion(-)
+> >
+> 
+> Acked-by: Yehezkel Bernat <YehezkelShB@gmail.com>
 
-On all Intel platforms that have the two separate DWC3
-controllers, the one inside the CPU handles USB3 and only
-USB3 traffic, while the PCH version handles USB2 and USB2
-alone. The reason for splitting the two busses like this is
-to allow easy USB3 tunneling over USB4 connections. As USB2
-is not tunneled over USB4, it has dedicated USB controllers
-(both xHCI and DWC3).
-
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/dwc3/dwc3-pci.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 037bc21bffa66..51029cec119ed 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -41,6 +41,7 @@
- #define PCI_DEVICE_ID_INTEL_TGPH		0x43ee
- #define PCI_DEVICE_ID_INTEL_JSP			0x4dee
- #define PCI_DEVICE_ID_INTEL_ADLS		0x7ae1
-+#define PCI_DEVICE_ID_INTEL_TGL			0x9a15
- 
- #define PCI_INTEL_BXT_DSM_GUID		"732b85d5-b7a7-4a1b-9ba0-4bbd00ffd511"
- #define PCI_INTEL_BXT_FUNC_PMU_PWR	4
-@@ -384,6 +385,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADLS),
- 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGL),
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
-+
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_NL_USB),
- 	  (kernel_ulong_t) &dwc3_pci_amd_swnode, },
- 	{  }	/* Terminating Entry */
--- 
-2.29.2
-
+Applied to thunderbolt.git/next.
