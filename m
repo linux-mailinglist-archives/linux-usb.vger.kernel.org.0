@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEBCF2F30CB
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jan 2021 14:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 609AF2F30AE
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jan 2021 14:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730732AbhALNLj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jan 2021 08:11:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53818 "EHLO mail.kernel.org"
+        id S1731684AbhALNJs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jan 2021 08:09:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54596 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404475AbhALM6D (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 12 Jan 2021 07:58:03 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1A0DE2312C;
-        Tue, 12 Jan 2021 12:57:06 +0000 (UTC)
+        id S2404886AbhALM6M (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 12 Jan 2021 07:58:12 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C6B3C23133;
+        Tue, 12 Jan 2021 12:57:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610456227;
-        bh=W4ju/Tja8E0RF+SIbo28RnuwMmUJu+LKvrId3OmdUxE=;
+        s=k20201202; t=1610456239;
+        bh=mvaNFAlw7j4xFI4gIfaMQt/1iJxGTU0GW3H2ruuMEEs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g1KCNxRKyElbK3H5QCwgz768sXYFRxNHMgNUz+djmnjiJWeNQqJGd3f3Ad5ukVBHn
-         Y+AVbZuxYY+MsZHP2RQoFbN/p12Xj3GKJFGqHebKRVxsokSpA4GyrSAixxFym29uPj
-         gJZxpFd28BXWk4ngdvurIUa0PXU+Gvjk7ad2mzP2KNhJmLesfeXrkTGzkfWrDPNZsg
-         ERHHu66v2ZMdEuFxDtS0/f6hd3qYxm9Tjouz+pqWfl5Ccr/n5QooxIDZDo2HPXYzgP
-         RqOxvz9X5zMZ/GNyzyChduIkyjU/qIvN07IvVABuONIYL1KX8WKOIuHPWLsL9l8/eU
-         mtjL092Xtpl8Q==
+        b=uCxR+cETfXj1P0A953751xwwVGDivpKeME+1HOZ2F7I6B/Um6kBOFnKGRnUYmBlV9
+         TOWUR7vVgMXH7ostqELSMwFKXG1CixGCDAwsWT9/Ux5Vv5pRR9IDzHpcWjwGJ+mU5P
+         KR6n/Nrdp6gOKR2RfbRysLMzvg2dliD2Ckfvll/eoM5toHSc+5skfNMKWjYo2/PsVV
+         g2kSGHvgUQzh1ZIb3oim9bZGufz0QJED/B9hSj224lrMdQPI8ttwJrh9ojA7opSzNN
+         ZS+DkWKZwDSxgfX5M9BKYVKbS16gTYNPk9+71tSPYwiu7kF6m7F8PgQl+qlygHJy0B
+         MlrLvYlkOmw4Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 16/28] net: usb: qmi_wwan: add Quectel EM160R-GL
-Date:   Tue, 12 Jan 2021 07:56:32 -0500
-Message-Id: <20210112125645.70739-16-sashal@kernel.org>
+Cc:     Peter Robinson <pbrobinson@gmail.com>,
+        Ajay Gupta <ajayg@nvidia.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 25/28] usb: typec: Fix copy paste error for NVIDIA alt-mode description
+Date:   Tue, 12 Jan 2021 07:56:41 -0500
+Message-Id: <20210112125645.70739-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210112125645.70739-1-sashal@kernel.org>
 References: <20210112125645.70739-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -44,60 +44,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Bjørn Mork <bjorn@mork.no>
+From: Peter Robinson <pbrobinson@gmail.com>
 
-[ Upstream commit cfd82dfc9799c53ef109343a23af006a0f6860a9 ]
+[ Upstream commit 41952a66015466c3208aac96b14ffd92e0943589 ]
 
-New modem using ff/ff/30 for QCDM, ff/00/00 for  AT and NMEA,
-and ff/ff/ff for RMNET/QMI.
+The name of the module for the NVIDIA alt-mode is incorrect as it
+looks to be a copy-paste error from the entry above, update it to
+the correct typec_nvidia module name.
 
-T: Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 2 Spd=5000 MxCh= 0
-D: Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs= 1
-P: Vendor=2c7c ProdID=0620 Rev= 4.09
-S: Manufacturer=Quectel
-S: Product=EM160R-GL
-S: SerialNumber=e31cedc1
-C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
-E: Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E: Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-E: Ad=83(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
-E: Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E: Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-E: Ad=85(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
-E: Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E: Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-E: Ad=87(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
-E: Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E: Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-E: Ad=88(I) Atr=03(Int.) MxPS= 8 Ivl=32ms
-E: Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E: Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-
-Signed-off-by: Bjørn Mork <bjorn@mork.no>
-Link: https://lore.kernel.org/r/20201230152451.245271-1-bjorn@mork.no
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Cc: Ajay Gupta <ajayg@nvidia.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
+Link: https://lore.kernel.org/r/20210106001605.167917-1-pbrobinson@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/typec/altmodes/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 74de621fa3504..b0d748a614a9e 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1058,6 +1058,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0125)},	/* Quectel EC25, EC20 R2.0  Mini PCIe */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0306)},	/* Quectel EP06/EG06/EM06 */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
-+	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0620)},	/* Quectel EM160R-GL */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0800)},	/* Quectel RM500Q-GL */
+diff --git a/drivers/usb/typec/altmodes/Kconfig b/drivers/usb/typec/altmodes/Kconfig
+index 187690fd1a5bd..60d375e9c3c7c 100644
+--- a/drivers/usb/typec/altmodes/Kconfig
++++ b/drivers/usb/typec/altmodes/Kconfig
+@@ -20,6 +20,6 @@ config TYPEC_NVIDIA_ALTMODE
+ 	  to enable support for VirtualLink devices with NVIDIA GPUs.
  
- 	/* 3. Combined interface devices matching on interface number */
+ 	  To compile this driver as a module, choose M here: the
+-	  module will be called typec_displayport.
++	  module will be called typec_nvidia.
+ 
+ endmenu
 -- 
 2.27.0
 
