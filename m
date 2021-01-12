@@ -2,37 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6AF2F2FAA
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jan 2021 13:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DBB2F305B
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jan 2021 14:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404159AbhALM5r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jan 2021 07:57:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53814 "EHLO mail.kernel.org"
+        id S2404060AbhALM5m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jan 2021 07:57:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54600 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404107AbhALM5q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 12 Jan 2021 07:57:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E84D2311A;
-        Tue, 12 Jan 2021 12:56:35 +0000 (UTC)
+        id S2403960AbhALM5k (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 12 Jan 2021 07:57:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DE28523130;
+        Tue, 12 Jan 2021 12:56:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610456196;
-        bh=mvaNFAlw7j4xFI4gIfaMQt/1iJxGTU0GW3H2ruuMEEs=;
+        s=k20201202; t=1610456165;
+        bh=mxrOyx50zYnD+PXA6krjmpAE9+v/G6l9keQzUlXiBY4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PlUDvUbegh0ThDpng4zCntO6qtDK7pHi//ddz/O4flYiMnTeXS+eAj295ID0+w4Tj
-         CSp0IdagBs7JrRlF5T3MEqUSz/67D0fsZUeEaPJQbk4NBBP+srjX+Zfr9inD54ZE6i
-         ok1l+DaSkK9br6g2xh3u9Qo5JMpzJfrO3WFi70BD9M4TH3jOSLY+eO+JVr73JbERZK
-         RRs21FfwGo/45Ap/US/nWNFCzAPB7x+MBaE4vfqsvJDnbo38lZk4RKCv65tJE1Gc7r
-         E51MhoK5BTbriR094fr6doJNCWdctasI48lUEdzPxKaGGgkK9Fmrq4W2811d+01gu8
-         LBaY62sNMOIgg==
+        b=mRHkipXskZ0uTmiq2QYMw+NWJ9VGWb8b2/eBMYYclSYFizf0xroz/qu/Ne2HtfJAT
+         iwYGJiFBvr9vkbLRUjZg/LMAO3Al2Y1FMYcWKEVgkjnTmCN8Rf1KKdhysrdscT6DZS
+         BP+mxodFMASv0mrxniggJ8KC3016gIMGEZ7iwV6aToKgpz0jtbmBex9uQzCE68s4+U
+         OhgLfe+0Xvt53d3m6F8wpIXkJqXVNYvf3rkFml8DDzoAwyzcRePM90ZSFm8mu+368R
+         Yu8R3/TvQiXnjZsWz++0XAYn8qWl6iTsSdIuNFNBzvo/eFvRO5OcSaGW8szn2RyezI
+         YPQTDzPbe0yPg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Peter Robinson <pbrobinson@gmail.com>,
-        Ajay Gupta <ajayg@nvidia.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+Cc:     Roland Dreier <roland@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 46/51] usb: typec: Fix copy paste error for NVIDIA alt-mode description
-Date:   Tue, 12 Jan 2021 07:55:28 -0500
-Message-Id: <20210112125534.70280-46-sashal@kernel.org>
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 23/51] CDC-NCM: remove "connected" log message
+Date:   Tue, 12 Jan 2021 07:55:05 -0500
+Message-Id: <20210112125534.70280-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210112125534.70280-1-sashal@kernel.org>
 References: <20210112125534.70280-1-sashal@kernel.org>
@@ -44,36 +44,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Peter Robinson <pbrobinson@gmail.com>
+From: Roland Dreier <roland@kernel.org>
 
-[ Upstream commit 41952a66015466c3208aac96b14ffd92e0943589 ]
+[ Upstream commit 59b4a8fa27f5a895582ada1ae5034af7c94a57b5 ]
 
-The name of the module for the NVIDIA alt-mode is incorrect as it
-looks to be a copy-paste error from the entry above, update it to
-the correct typec_nvidia module name.
+The cdc_ncm driver passes network connection notifications up to
+usbnet_link_change(), which is the right place for any logging.
+Remove the netdev_info() duplicating this from the driver itself.
 
-Cc: Ajay Gupta <ajayg@nvidia.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
-Link: https://lore.kernel.org/r/20210106001605.167917-1-pbrobinson@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This stops devices such as my "TRENDnet USB 10/100/1G/2.5G LAN"
+(ID 20f4:e02b) adapter from spamming the kernel log with
+
+    cdc_ncm 2-2:2.0 enp0s2u2c2: network connection: connected
+
+messages every 60 msec or so.
+
+Signed-off-by: Roland Dreier <roland@kernel.org>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20201224032116.2453938-1-roland@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/altmodes/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/usb/cdc_ncm.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/usb/typec/altmodes/Kconfig b/drivers/usb/typec/altmodes/Kconfig
-index 187690fd1a5bd..60d375e9c3c7c 100644
---- a/drivers/usb/typec/altmodes/Kconfig
-+++ b/drivers/usb/typec/altmodes/Kconfig
-@@ -20,6 +20,6 @@ config TYPEC_NVIDIA_ALTMODE
- 	  to enable support for VirtualLink devices with NVIDIA GPUs.
+diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+index e04f588538ccb..5dc1365dc1f9a 100644
+--- a/drivers/net/usb/cdc_ncm.c
++++ b/drivers/net/usb/cdc_ncm.c
+@@ -1863,9 +1863,6 @@ static void cdc_ncm_status(struct usbnet *dev, struct urb *urb)
+ 		 * USB_CDC_NOTIFY_NETWORK_CONNECTION notification shall be
+ 		 * sent by device after USB_CDC_NOTIFY_SPEED_CHANGE.
+ 		 */
+-		netif_info(dev, link, dev->net,
+-			   "network connection: %sconnected\n",
+-			   !!event->wValue ? "" : "dis");
+ 		usbnet_link_change(dev, !!event->wValue, 0);
+ 		break;
  
- 	  To compile this driver as a module, choose M here: the
--	  module will be called typec_displayport.
-+	  module will be called typec_nvidia.
- 
- endmenu
 -- 
 2.27.0
 
