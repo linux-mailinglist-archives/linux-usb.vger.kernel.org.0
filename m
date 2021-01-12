@@ -2,140 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A44332F27FC
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jan 2021 06:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E122F2871
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jan 2021 07:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730736AbhALFtc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jan 2021 00:49:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37920 "EHLO
+        id S1731141AbhALGnZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jan 2021 01:43:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727847AbhALFtb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jan 2021 00:49:31 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65885C061575
-        for <linux-usb@vger.kernel.org>; Mon, 11 Jan 2021 21:48:51 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id v3so792348plz.13
-        for <linux-usb@vger.kernel.org>; Mon, 11 Jan 2021 21:48:51 -0800 (PST)
+        with ESMTP id S1728072AbhALGnZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jan 2021 01:43:25 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5960FC061786;
+        Mon, 11 Jan 2021 22:42:45 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id p187so1865953iod.4;
+        Mon, 11 Jan 2021 22:42:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=z+UuZJMzg7vrix92H8yNvymjWYn4v4tuh1SrKJzSLm8=;
-        b=JQsTmcLPoTaeeli611Tt6mGBNg5TJNkKTfXLDKVEnoX/OOqLNikQE4Ip2Rw6MA9Yuz
-         KemfmMaptOX/ZNgHeDXdIN72y0gMJ44Dj2zLYwZ6eAwiDN9a7SPJjT4Vn3yO4vLV00pL
-         DOY6W8keINeAjRVcriy8igeimSynyNmMITakQ=
+        bh=bzQDoKieRWjb9Oo3b8L2/tnj6Z9GSRsyxzx9Q4knxlg=;
+        b=s9lXI/isxUg9fOOOTK7v3Fe2AfUuHy7sNxFCRk47FQIBN19Kt2TsKtDFw0V9IDNJoU
+         zICUaEYKakF8VZscWGIfYRNifWBao6QqSHI3exXqK1rRcF+h2Pch+QVR0iTmBqWFuWci
+         AJnKlUOCDu2hKP4RYL3D/wr11tgP4F2o6xiA3o6Xd91+6DKCwC941hMQWO7nraq5CZMY
+         IeV5kw7LLNBDiFMv5nFUfur0YZLzXo7qo7A5YvS5r+CSYl74MIxjLGztWqL4LBejjbs1
+         yvLxUg5Hb85T3MZevU7aTe4zSF32Nk/DTXmHFE86McJwCivZJWmz1Jjb0JkBTWamPd1I
+         Yvng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=z+UuZJMzg7vrix92H8yNvymjWYn4v4tuh1SrKJzSLm8=;
-        b=hA1zYv8bGE1IrJ/UCOfaeVMINWPtB1z+rRW4AhZnpp9sQO8sKo+HYpEk9NFLVHkkXi
-         d+rWWIOQexAXFhfV2GrjPztFcQMZsDtjZDmsJ2j/XnIzVAh5TIme+JtRxAQyhTJRG3AB
-         jP42705oNW8XusozJSS5B7nYlhejU0vHp9qPxZfYdjtREEwGBuM5OU0udJ+A94ZFg70W
-         CyDXnsRgyHNJQ+YMTdp3dfxkRpx6Sc4XQWCfWmRq73KBKNDawrOfgnAp51FISs55nkGz
-         VDlSGRxxNVb9fA7uDu+s/YAN4L6d5mpDUQVtTNlvr/uuVIcSf9bbLlCV1iMe9f6wXR+1
-         Cklg==
-X-Gm-Message-State: AOAM530OinqSNCRngWxhqrGWndNRhq8aF+0uFI2U4yUu/B+8TlurFuwQ
-        uzLK+3I/U27wpk2y0WUFSzSGivOtEhpNUB116RoqVw==
-X-Google-Smtp-Source: ABdhPJz9iIQLZymh1Is42qGoVxhqbm83qoS8/tq7zs4AGxjPBu/MVfIrFA556/ppn3JB78x6W6Xh7UezS/ywc0QGduM=
-X-Received: by 2002:a17:902:a501:b029:dc:3e1d:4ddb with SMTP id
- s1-20020a170902a501b02900dc3e1d4ddbmr3151522plq.60.1610430530661; Mon, 11 Jan
- 2021 21:48:50 -0800 (PST)
+        bh=bzQDoKieRWjb9Oo3b8L2/tnj6Z9GSRsyxzx9Q4knxlg=;
+        b=P60+VDZoFgMmYwdsI6OAiElFg7aryQXQWQC8vahWWngvV4yyW8Ri3orWv+1s1kDgVK
+         BcCPS1KVex63DRilQ6b980W7Nkj3EIVWw8L7olIcxLVvmedbnHn5fimU8G6t+FCGbn9E
+         Omk5G97mNa+7dm64MOds1KfjXNP6+scJb7VAnWZr827pCWWvGxHpVArhGEJY2amULVeG
+         7LkWGOtqVS2oTqGWU3HvPyGJZCualPHQl0T6uL4OBrrOatsGa++V76/Fq7uLCih1wOmJ
+         /BmHLZiiOUcozZ/q2kXFTb6fjUTTp1fusZ2xRAuAEysMnG2qtAT46UEnTqGVwrrI4ePf
+         6dgA==
+X-Gm-Message-State: AOAM531HqB58NTai+yTb94fIVLDjzahVptuUrrsNex90Rzfp2+Yv6Jzt
+        WypfXyKOP9aaO3suf3hrBz+uukC9qxwcRDnAnOY=
+X-Google-Smtp-Source: ABdhPJxF/DgVB4iihPD4eX+IDDS8yEeLdAguj2QPVdJCwDG+681NBiyEC5Hch0SLUvynq/YW+1gQz1OSYBnqxMurbqI=
+X-Received: by 2002:a02:b709:: with SMTP id g9mr3027995jam.90.1610433764709;
+ Mon, 11 Jan 2021 22:42:44 -0800 (PST)
 MIME-Version: 1.0
-References: <20201229142406.v5.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
- <2aea44f0-85e7-fd55-2c35-c1d994f20e03@linux.intel.com> <1610086308.24856.30.camel@mhfsdcap03>
- <e43632e2-08b3-7a1a-8272-1d493e25fc67@linux.intel.com>
-In-Reply-To: <e43632e2-08b3-7a1a-8272-1d493e25fc67@linux.intel.com>
-From:   Ikjoon Jang <ikjn@chromium.org>
-Date:   Tue, 12 Jan 2021 13:48:39 +0800
-Message-ID: <CAATdQgD2OAmf7_NWSVwzyJE7mF0vngzE=QeE79PS7MJsgPhbtA@mail.gmail.com>
-Subject: Re: [PATCH v5] usb: xhci-mtk: fix unreleased bandwidth data
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>, linux-usb@vger.kernel.org,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Zhanyong Wang <zhanyong.wang@mediatek.com>,
+References: <20210111104927.2561-1-minhquangbui99@gmail.com>
+ <7d6dc09fedc84f9fce942d85c34d5cd41931bbf6.camel@suse.de> <20210111143120.GA2769@minh>
+In-Reply-To: <20210111143120.GA2769@minh>
+From:   =?UTF-8?Q?Minh_B=C3=B9i_Quang?= <minhquangbui99@gmail.com>
+Date:   Tue, 12 Jan 2021 13:42:33 +0700
+Message-ID: <CACtPs=FB_=JMEymLHE0_ko4ZF5zj9NBCHkRC7O3tj6pkSp3oiA@mail.gmail.com>
+Subject: Re: [PATCH v2] can: mcba_usb: Fix memory leak when cancelling urb
+To:     Oliver Neukum <oneukum@suse.de>
+Cc:     linux-usb@vger.kernel.org, a.darwish@linutronix.de,
+        bigeasy@linutronix.de,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
+        linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        syzkaller-bugs@googlegroups.com,
+        Thomas Gleixner <tglx@linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 8, 2021 at 10:44 PM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
+On Mon, Jan 11, 2021 at 9:31 PM Bui Quang Minh <minhquangbui99@gmail.com> wrote:
 >
-> On 8.1.2021 8.11, Chunfeng Yun wrote:
-> > On Thu, 2021-01-07 at 13:09 +0200, Mathias Nyman wrote:
-> >> On 29.12.2020 8.24, Ikjoon Jang wrote:
-> >>> xhci-mtk has hooks on add_endpoint() and drop_endpoint() from xhci
-> >>> to handle its own sw bandwidth managements and stores bandwidth data
-> >>> into internal table every time add_endpoint() is called,
-> >>> so when bandwidth allocation fails at one endpoint, all earlier
-> >>> allocation from the same interface could still remain at the table.
-> >>>
-> >>> This patch adds two more hooks from check_bandwidth() and
-> >>> reset_bandwidth(), and make mtk-xhci to releases all failed endpoints
-> >>> from reset_bandwidth().
-> >>>
-> >>> Fixes: 08e469de87a2 ("usb: xhci-mtk: supports bandwidth scheduling with multi-TT")
-> >>> Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
-> >>>
-> >>
-> >> ...
-> >>
-> >>>
-> >>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> >>> index d4a8d0efbbc4..e1fcd3cf723f 100644
-> >>> --- a/drivers/usb/host/xhci.c
-> >>> +++ b/drivers/usb/host/xhci.c
-> >>> @@ -2882,6 +2882,12 @@ static int xhci_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
-> >>>     xhci_dbg(xhci, "%s called for udev %p\n", __func__, udev);
-> >>>     virt_dev = xhci->devs[udev->slot_id];
-> >>>
-> >>> +   if (xhci->quirks & XHCI_MTK_HOST) {
-> >>> +           ret = xhci_mtk_check_bandwidth(hcd, udev);
-> >>> +           if (ret < 0)
-> >>> +                   return ret;
-> >>> +   }
-> >>> +
-> >>
-> >> Just noticed that XHCI_MTK_HOST quirk is only set in xhci-mtk.c.
-> >> xhci-mtk.c calls xhci_init_driver(..., xhci_mtk_overrides) with a .reset override function.
-> >>
-> >> why not add override functions for .check_bandwidth and .reset_bandwidth to xhci_mtk_overrides instead?
-> >>
-> >> Another patch to add similar overrides for .add_endpoint and .drop_endpoint should probably be
-> >> done so that we can get rid of the xhci_mtk_add/drop_ep_quirk() calls in xhci.c as well
-> > You mean, we can export xhci_add/drop_endpoint()?
+> On Mon, Jan 11, 2021 at 01:00:31PM +0100, Oliver Neukum wrote:
+> > Am Montag, den 11.01.2021, 10:49 +0000 schrieb Bui Quang Minh:
+> > > In mcba_usb_read_bulk_callback(), when we don't resubmit or fails to
+> > > resubmit the urb, we need to deallocate the transfer buffer that is
+> > > allocated in mcba_usb_start().
+> > >
+> > > Reported-by: syzbot+57281c762a3922e14dfe@syzkaller.appspotmail.com
+> > > Signed-off-by: Bui Quang Minh <minhquangbui99@gmail.com>
+> > > ---
+> > > v1: add memory leak fix when not resubmitting urb
+> > > v2: add memory leak fix when failing to resubmit urb
+> > >
+> > >  drivers/net/can/usb/mcba_usb.c | 11 ++++++++---
+> > >  1 file changed, 8 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
+> > > index df54eb7d4b36..30236e640116 100644
+> > > --- a/drivers/net/can/usb/mcba_usb.c
+> > > +++ b/drivers/net/can/usb/mcba_usb.c
+> > > @@ -584,6 +584,8 @@ static void mcba_usb_read_bulk_callback(struct urb *urb)
+> > >     case -EPIPE:
+> > >     case -EPROTO:
+> > >     case -ESHUTDOWN:
+> > > +           usb_free_coherent(urb->dev, urb->transfer_buffer_length,
+> > > +                             urb->transfer_buffer, urb->transfer_dma);
+> > >             return;
+> > >
+> >
+> > Can you call usb_free_coherent() in what can be hard IRQ context?
 >
-> I think so, unless you have a better idea.
-> I prefer exporting the generic add/drop_endpoint functions rather than the vendor specific quirk functions.
->
+> You are right, I digged in the code and saw some comments that on some
+> architectures, usb_free_coherent() cannot be called in hard IRQ context.
+> I see the usb_free_coherent() is called in write_bulk_callback too. I will
+> send a patch that uses usb_anchor to keep track of these urbs and cleanup
+> the transfer buffer later in disconnect().
 
-When moving out all MTK_HOST quirks and unlink xhci-mtk-sch from xhci,
-xhci-mtk-sch still needs to touch the xhci internals, at least struct
-xhci_ep_ctx.
+Hi, I have sent a version 3 patch. However, I found out that usb_free_coherent()
+is ok in this situation. In usb_free_coherent(), if the buffer is allocated via
+dma_alloc_coherent() in usb_alloc_coherent(), dma_free_coherent() is called.
+In dma_free_coherent(), ops->free() may be called in some cases which may
+contains calls to vunmap() that is not permitted in interrupt context. However,
+in usb_alloc_coherent(), buffer can be allocated from dma pool if the
+size is less
+than 2048 and the buffer size in mcba_usb is obviously less than 2048.
+As a result,
+usb_free_coherent() will at most fall in the path that calls
+dma_pool_free(), which is
+safe. Am I right?
 
-My naive idea is just let xhci export one more function to expose xhci_ep_ctx.
-But I'm not sure whether this is acceptable:
-
-+struct xhci_ep_ctx* xhci_get_ep_contex(struct xhci_hcd *xhci, struct
-usb_host_endpoint *ep)
-+{ ... }
-+EXPORT_SYMBOL(xhci_get_ep_context);
-
-But for v6, I'm going to submit a patch with {check|reset}_bandwidth()
-quirk function
- switched into xhci_driver_overrides first. (and preserve existing
-MTK_HOST quirk functions).
-
-Thanks!
-
-> -Mathias
->
+Thanks,
+Quang Minh.
