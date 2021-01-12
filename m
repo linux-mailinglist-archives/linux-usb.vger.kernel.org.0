@@ -2,100 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6EA2F2A6E
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jan 2021 09:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C76D2F2A6C
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jan 2021 09:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388011AbhALI6F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jan 2021 03:58:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58036 "EHLO mail.kernel.org"
+        id S2387677AbhALI55 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jan 2021 03:57:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58014 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726890AbhALI6F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 12 Jan 2021 03:58:05 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 70AC62220F;
-        Tue, 12 Jan 2021 08:57:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610441844;
-        bh=5tRdddFOBQhc/BLqX1deVT71d1tPhTHmXOX1cizkxbY=;
+        id S1726890AbhALI55 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 12 Jan 2021 03:57:57 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 16290208E4;
+        Tue, 12 Jan 2021 08:57:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1610441836;
+        bh=/BWI8ml44u+WpRQf99FUNdGQQolq2s8YmjvOgv2Gx9E=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gLVL1JFZ03tcpsnuXRFI4xY/SE6dSaBtgn9sPLysmBvaZmRF1SCvFnoeKFpkCHRYH
-         ch0Kk5c38IRElXG1DYKH8MhxE/3Nhce1Sk8TQDzxSDpSpS5ibUTtGJADUonpX9wpKN
-         mXnJJ3fMcfTA5i34zsuYOyp73/bFALySZrrkItF49gbH4SYelzspkMm/SuPYbZ4p59
-         sy0gglCZz1viu+RYZ7qDArlomQJcxzST+mSGyaqlv+40ELZ3qwz1ADR+fvGqW2qBkg
-         rk1lKfMBDHboSSZO3h9GQQ9PQcq4Qmuz7+xrxVbAmZDBUC2xAlzxd6GYTjsC6+WrHa
-         p0ayWS3Hyl50Q==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kzFUZ-0002xG-3t; Tue, 12 Jan 2021 09:57:31 +0100
-Date:   Tue, 12 Jan 2021 09:57:31 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     trix@redhat.com
-Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
-        natechancellor@gmail.com, ndesaulniers@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH] USB: serial: mos7720: improve handling of a kmalloc
- failure in read_mos_reg()
-Message-ID: <X/1ke4/PaRQRGJTg@hovoldconsulting.com>
-References: <20210111220904.1035957-1-trix@redhat.com>
+        b=P6v4HZnmbIf6s1L1kvGXIqJr72THbA1JTNmmDWZ+7hwGEEb2Qegb6siJTVFaK+Xx6
+         JV1t71yA5/PlkJyCNBZtsvV1eCp+LqPJjSWdGYzz6AfFyPAKPWo7ow+2hwpk54xny0
+         vopr8rQLZFm22raeL67E39XSnc9MwoqcwfnJjiy8=
+Date:   Tue, 12 Jan 2021 09:58:25 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Cc:     Alan Cooper <alcooperx@gmail.com>, Felipe Balbi <balbi@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: Conflicting PCI ID in bdc driver
+Message-ID: <X/1ksTC4SBgrQoak@kroah.com>
+References: <CAMeQTsacNs-YVWeX6vFJyMBLeD_AX6imNQRodV_X-QS54wAREA@mail.gmail.com>
+ <X/y1ekqBrjXK8lZO@kroah.com>
+ <CAMeQTsaL0mx=WW2Ekr2gh_aCWKnumS4mSr5tTH_ac+cdarzxMA@mail.gmail.com>
+ <CAOGqxeUkZ8VK-D3xutVvQk7e2t1=9GzLQL7oHz0GTj_FMdVeqw@mail.gmail.com>
+ <CAMeQTsZA7a9WcJq2tudWhaJbc6Z4vb4jtcUnHOCzg9u3oLxzbw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210111220904.1035957-1-trix@redhat.com>
+In-Reply-To: <CAMeQTsZA7a9WcJq2tudWhaJbc6Z4vb4jtcUnHOCzg9u3oLxzbw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 11, 2021 at 02:09:04PM -0800, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
+On Tue, Jan 12, 2021 at 09:42:58AM +0100, Patrik Jakobsson wrote:
+> On Tue, Jan 12, 2021 at 2:06 AM Alan Cooper <alcooperx@gmail.com> wrote:
+> >
+> > This driver was written for a PCI FPGA development board used to
+> > verify the controller logic and to help with driver development before
+> > adding the logic to our SoC's. I'm not sure why the driver was pushed
+> > upstream but I'd like to remove it. I'm checking with a few other
+> > groups to make sure I'm not missing anything.
 > 
-> clang static analysis reports this problem
-> 
-> mos7720.c:352:2: warning: Undefined or garbage value returned to caller
->         return d;
->         ^~~~~~~~
-> 
-> In the parport_mos7715_read_data()'s call to read_mos_reg(), 'd' is
-> only set after the alloc block.
-> 
-> 	buf = kmalloc(1, GFP_KERNEL);
-> 	if (!buf)
-> 		return -ENOMEM;
-> 
-> Although the problem is reported in parport_most7715_read_data(),
-> none of the callee's of read_mos_reg() check the return status.
-> 
-> So move the clearing of data to before the malloc.
-> 
-> Fixes: 0d130367abf5 ("USB: serial: mos7720: fix control-message error handling")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/usb/serial/mos7720.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/serial/mos7720.c b/drivers/usb/serial/mos7720.c
-> index 41ee2984a0df..23e8162c768b 100644
-> --- a/drivers/usb/serial/mos7720.c
-> +++ b/drivers/usb/serial/mos7720.c
-> @@ -214,6 +214,7 @@ static int read_mos_reg(struct usb_serial *serial, unsigned int serial_portnum,
->  	u8 *buf;
->  	int status;
->  
-> +	*data = 0;
->  	buf = kmalloc(1, GFP_KERNEL);
->  	if (!buf)
->  		return -ENOMEM;
+> That would solve my problem. Is removing a driver acceptable for
+> stable submission?
 
-I added a clearing of the buffer to this error path instead to avoid the
-redundant assignment for every call due to something which will
-basically never happen.
+Not really, if there are users of that driver.  Why not just mark the
+config to depend on BROKEN instead?
 
-> @@ -227,7 +228,6 @@ static int read_mos_reg(struct usb_serial *serial, unsigned int serial_portnum,
->  			"mos7720: usb_control_msg() failed: %d\n", status);
->  		if (status >= 0)
->  			status = -EIO;
-> -		*data = 0;
->  	}
->  
->  	kfree(buf);
+But first we need to ensure that the users of it are really all gone.
 
-Johan
+> If not, it would be helpful to have a patch
+> suitable for stable that disables the driver before removal. I'm
+> somewhat tired of explaining to people how to blacklist bdc.
+
+Why not submit your driver for inclusion in the kernel tree?  We can
+make sure it doesn't conflict when that happens.
+
+thanks,
+
+greg k-h
