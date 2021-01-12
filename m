@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DDBF2F2FD1
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jan 2021 14:05:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E17242F3007
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jan 2021 14:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405471AbhALM6l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jan 2021 07:58:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53892 "EHLO mail.kernel.org"
+        id S1728787AbhALNBj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jan 2021 08:01:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54600 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405410AbhALM6i (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 12 Jan 2021 07:58:38 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5386C2312C;
-        Tue, 12 Jan 2021 12:58:14 +0000 (UTC)
+        id S2390378AbhALM6t (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 12 Jan 2021 07:58:49 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6A6E523131;
+        Tue, 12 Jan 2021 12:58:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610456295;
-        bh=1QBy9uGAdT1DowTzV7NSXS+3t2ZLJWnL4rANv7aU6dc=;
+        s=k20201202; t=1610456308;
+        bh=QJ0A0EhUashHLTJ1XMRAOnWqgYjJaaUrFi4eR/gRtEM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DaG/Q7yVHw9+apyhCmUBKtxsV2z6jSZ6IOs2s/TjRF+plMMlM9189zzJj0k4JLdKB
-         jqrgIkqIheWzVoeWzbUlmZlCpHHdH6EJM8OKeWIqLJT0D7VgaaEZ0r24Ui713wmC5o
-         vFj6tuTWrYF9oPCd4eWn95DwnpQ+jJtAfK1yhe5obw0HIfoxh1erh6Gr1F0lpMvwAx
-         dzxjtSZdziXBIvwK7VEFJ71mq9IF3wmkkLb6f/0O39Tfgdoy5m8/+UPaJafDrnA4fD
-         F3SKkK1UAIqiAk8RssXsxa04Yy6fRYIk5YT8zGfOAn6TLDx8i7ecL0N0CurflygVDt
-         6m47c3CTQi2NA==
+        b=J1BJ4Te/u9pGr3nfF2iGOMJKqMBX7ZIAWaHuZCtZtsF3kMaN3Spy3bkGibfXaqZFc
+         fT5UtJteaPIBRiY1PE8R4npuQ3MYm9GZD8RAQ/OWj7LsfSkBtuBtqqUuc+Ypf/0OhF
+         yY/tm8Yjhvty1xjh5ktzETZaagnpo+4d4TF8327qILT4fHFTofH2T2FdTrdXMNic+6
+         rrsT7rzhobBs5bMIWNzUDVmh0xVcgixrPEl++6QsoZPEmMr4cJLG6SBgkFaSM7+Q7u
+         tNTNT5jXXzlKlHSS0N94kDqm8cEqBrbKiaCCk7hXImsvYY2cIFctM1fWFB9sMcXxAi
+         Z+FQSt2KNP3QQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Roland Dreier <roland@kernel.org>,
@@ -30,12 +30,12 @@ Cc:     Roland Dreier <roland@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 3/8] CDC-NCM: remove "connected" log message
-Date:   Tue, 12 Jan 2021 07:58:04 -0500
-Message-Id: <20210112125810.71348-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 3/8] CDC-NCM: remove "connected" log message
+Date:   Tue, 12 Jan 2021 07:58:18 -0500
+Message-Id: <20210112125823.71463-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210112125810.71348-1-sashal@kernel.org>
-References: <20210112125810.71348-1-sashal@kernel.org>
+In-Reply-To: <20210112125823.71463-1-sashal@kernel.org>
+References: <20210112125823.71463-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -69,10 +69,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 deletions(-)
 
 diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-index be4e56826daf6..99ca9526dd65a 100644
+index bab13ccfb0850..e9f82b67c7edf 100644
 --- a/drivers/net/usb/cdc_ncm.c
 +++ b/drivers/net/usb/cdc_ncm.c
-@@ -1602,9 +1602,6 @@ static void cdc_ncm_status(struct usbnet *dev, struct urb *urb)
+@@ -1553,9 +1553,6 @@ static void cdc_ncm_status(struct usbnet *dev, struct urb *urb)
  		 * USB_CDC_NOTIFY_NETWORK_CONNECTION notification shall be
  		 * sent by device after USB_CDC_NOTIFY_SPEED_CHANGE.
  		 */
