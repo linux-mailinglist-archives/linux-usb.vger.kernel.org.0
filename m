@@ -2,105 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D052F2A4B
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jan 2021 09:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6EA2F2A6E
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jan 2021 09:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392405AbhALIrP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jan 2021 03:47:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55062 "EHLO mail.kernel.org"
+        id S2388011AbhALI6F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jan 2021 03:58:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58036 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727057AbhALIrP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 12 Jan 2021 03:47:15 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4E2DD22D58;
-        Tue, 12 Jan 2021 08:46:29 +0000 (UTC)
+        id S1726890AbhALI6F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 12 Jan 2021 03:58:05 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 70AC62220F;
+        Tue, 12 Jan 2021 08:57:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610441194;
-        bh=ciAXMWsi1OyGELvtpt/m0CxKb/Rp63H/1ov/9xDpsh0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Dow033TIMEXBUvK39a+HbkQl5oExK3dD2H8Exj34bpAyN3K+YeGOG70iQbSyzOz59
-         K+v+e1FOSy3JA2W7gtCTMGyzZfdeaGk9hChJth9En0QvssfkedVOlk1/ZHP6V3hx1x
-         +5v7pZOhrffdm+fWLLEuOIhAl1NbhAw9IIDgv3eXALPd1EBSF0P2p8HibvAgeyqJT6
-         LXhfpGzcNFBrDAn9txs+Pg8yKuEXGWJctpWyPx9qJIbteSwoRRRwdpD6SRoGLE8gHT
-         dE5Z+puoi+dCmOhX7vvpMMXcycTaPz5VvGtkWCJhY3QUj6xEbyrTBMEqKZZye4xRzv
-         BeYP7sfjtOP4Q==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] Remove one more platform_device_add_properties()
- call
-In-Reply-To: <20210111141045.14027-1-heikki.krogerus@linux.intel.com>
-References: <20210111141045.14027-1-heikki.krogerus@linux.intel.com>
-Date:   Tue, 12 Jan 2021 10:46:17 +0200
-Message-ID: <87v9c24k6e.fsf@kernel.org>
+        s=k20201202; t=1610441844;
+        bh=5tRdddFOBQhc/BLqX1deVT71d1tPhTHmXOX1cizkxbY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gLVL1JFZ03tcpsnuXRFI4xY/SE6dSaBtgn9sPLysmBvaZmRF1SCvFnoeKFpkCHRYH
+         ch0Kk5c38IRElXG1DYKH8MhxE/3Nhce1Sk8TQDzxSDpSpS5ibUTtGJADUonpX9wpKN
+         mXnJJ3fMcfTA5i34zsuYOyp73/bFALySZrrkItF49gbH4SYelzspkMm/SuPYbZ4p59
+         sy0gglCZz1viu+RYZ7qDArlomQJcxzST+mSGyaqlv+40ELZ3qwz1ADR+fvGqW2qBkg
+         rk1lKfMBDHboSSZO3h9GQQ9PQcq4Qmuz7+xrxVbAmZDBUC2xAlzxd6GYTjsC6+WrHa
+         p0ayWS3Hyl50Q==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kzFUZ-0002xG-3t; Tue, 12 Jan 2021 09:57:31 +0100
+Date:   Tue, 12 Jan 2021 09:57:31 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     trix@redhat.com
+Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
+        natechancellor@gmail.com, ndesaulniers@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: Re: [PATCH] USB: serial: mos7720: improve handling of a kmalloc
+ failure in read_mos_reg()
+Message-ID: <X/1ke4/PaRQRGJTg@hovoldconsulting.com>
+References: <20210111220904.1035957-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210111220904.1035957-1-trix@redhat.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jan 11, 2021 at 02:09:04PM -0800, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> clang static analysis reports this problem
+> 
+> mos7720.c:352:2: warning: Undefined or garbage value returned to caller
+>         return d;
+>         ^~~~~~~~
+> 
+> In the parport_mos7715_read_data()'s call to read_mos_reg(), 'd' is
+> only set after the alloc block.
+> 
+> 	buf = kmalloc(1, GFP_KERNEL);
+> 	if (!buf)
+> 		return -ENOMEM;
+> 
+> Although the problem is reported in parport_most7715_read_data(),
+> none of the callee's of read_mos_reg() check the return status.
+> 
+> So move the clearing of data to before the malloc.
+> 
+> Fixes: 0d130367abf5 ("USB: serial: mos7720: fix control-message error handling")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/usb/serial/mos7720.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/serial/mos7720.c b/drivers/usb/serial/mos7720.c
+> index 41ee2984a0df..23e8162c768b 100644
+> --- a/drivers/usb/serial/mos7720.c
+> +++ b/drivers/usb/serial/mos7720.c
+> @@ -214,6 +214,7 @@ static int read_mos_reg(struct usb_serial *serial, unsigned int serial_portnum,
+>  	u8 *buf;
+>  	int status;
+>  
+> +	*data = 0;
+>  	buf = kmalloc(1, GFP_KERNEL);
+>  	if (!buf)
+>  		return -ENOMEM;
 
-Heikki Krogerus <heikki.krogerus@linux.intel.com> writes:
+I added a clearing of the buffer to this error path instead to avoid the
+redundant assignment for every call due to something which will
+basically never happen.
 
-> Hi Felipe, Rafael,
->
-> This is the second version of this series. There are no real changes,
-> but I added the Tiger Lake ID patch to this series in hope that it
-> will make your life a bit easier, assuming that Rafael will still pick
-> these.
->
->
-> The original over letter:
->
-> I originally introduced these as part of my series where I was
-> proposing PM ops for software nodes [1], but since that still needs
-> work, I'm sending these two separately.
->
-> So basically I'm only modifying dwc3-pci.c so it registers a software
-> node directly at this point. That will remove one more user of
-> platform_device_add_properties().
->
-> [1] https://lore.kernel.org/lkml/20201029105941.63410-1-heikki.krogerus@l=
-inux.intel.com/
->
-> thanks,
->
-> Heikki Krogerus (3):
->   software node: Introduce device_add_software_node()
->   usb: dwc3: pci: Register a software node for the dwc3 platform device
->   usb: dwc3: pci: ID for Tiger Lake CPU
+> @@ -227,7 +228,6 @@ static int read_mos_reg(struct usb_serial *serial, unsigned int serial_portnum,
+>  			"mos7720: usb_control_msg() failed: %d\n", status);
+>  		if (status >= 0)
+>  			status = -EIO;
+> -		*data = 0;
+>  	}
+>  
+>  	kfree(buf);
 
-Looks good to me.
-
-Acked-by: Felipe Balbi <balbi@kernel.org>
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl/9YdkRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQZP8Q//SjHqtKRaghDM4izhNhkimSEdFbeFCGzK
-CmxKzi3ipE+TAXUceA2AEf1fjaVbn4L2yFQvaWx72exq3kco42rjNZMHURS+y0um
-zpFsaNsuzUojMJe9nJcOP2or0fU/5bZzl0Dt7FeEtT66wIwhBBW+YeuA5Acb4Cvz
-EV3JFq/YrCBoU5aaipyZmjH4E3WS8QWAfN40XkOc8Z5fGLNZ6XcdOyAxvLHX7W0S
-M0P1McOUPOA6weaRfbCfwHQ5g1hebPnpK/5kXBr4usxJ9TkjU4mGu3EFYtfhP1aq
-pds+DUXzTFnigBspfP/swr8t5lC7Qzqy07G4mKSNU0KnHH7lzrk1UKoKxlI5wy/o
-s+PhylYkLmpeoasRQzni6S3n48xxeHuZDWxSHA/NL8jV/J489SahB5qcz9p+omOP
-XCMM8Sf7xjSiXTohNw35RxqaAHo8kDJiof1yUSO13s9tpkjb8cSM+9wINGa34EPa
-wgZeHLmyMZ+dwMW7o6xoPktvi82ybcAvgpAdwOR4r+1uZGsvxds+EPtSZOI9cnc9
-1M8GnD/RnVJ5B2Aj+IZlsFcR3Elumk5NZJeJ/CnuXpBHshlZmStDDekoaZWGAOrd
-lK5VkgSUBxzl5hJrvna6MXS4nT3Ji4BWp6yAoykIMuDYjW6rsW0ssHAgk22BOVGC
-JQIyOTA7uKk=
-=FYgQ
------END PGP SIGNATURE-----
---=-=-=--
+Johan
