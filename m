@@ -2,154 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5742F289C
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jan 2021 07:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC6E2F29D4
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jan 2021 09:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391624AbhALG5W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jan 2021 01:57:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726814AbhALG5W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jan 2021 01:57:22 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B2EC061575;
-        Mon, 11 Jan 2021 22:56:41 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id u11so1610336ljo.13;
-        Mon, 11 Jan 2021 22:56:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+mcGfBDh2HaL2D1G9xE8gCCyle1yTK3SDdAW7IN4ZiQ=;
-        b=Oexi8t3aHxziEeTcB022ZXJtY7b6aDckY/m92s8/xdzPhgqrdZcf49P7amEmSe5wR+
-         XVrOrmIGT+G5/7BW9jcTOqMrNJFF1kTv7fYAqMKckKy5KsNmtA6/K/2jAcVdpydmZSPV
-         qieiC6KpquDdbWfrdKH8803mRO6mJFJxQaTrXPs5/mCwg+wyt9FyN89krHon4UIveBr9
-         HZ7lrglMic2Am0sLisAB2RYSIX4tD1Vx+A+ZjdQYRUMImFLJF24Pmud+Y/NHTomW0AOs
-         oChVVTAYuVveQFmOafLJQYyFiHwSZH4YixcWSOnfep9OiCi8TtTmpKmDiTO2ugTE1inL
-         UUSg==
+        id S1728055AbhALIQY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jan 2021 03:16:24 -0500
+Received: from mail-oo1-f51.google.com ([209.85.161.51]:44543 "EHLO
+        mail-oo1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727530AbhALIQY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jan 2021 03:16:24 -0500
+Received: by mail-oo1-f51.google.com with SMTP id j21so392408oou.11;
+        Tue, 12 Jan 2021 00:16:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+mcGfBDh2HaL2D1G9xE8gCCyle1yTK3SDdAW7IN4ZiQ=;
-        b=MnsYyNY1CTtDS9FbCqrgS7tzDhhFRD/eKLOLpYHlSW40Ds5+KmX1HSN1cTPdkl2grA
-         W3tKc8qWo/Ataje0opW8nk0fDgqcSVtEWsMbrdvIaX6b3xCYTBpocenAafYV0rq9utwe
-         N6D8DDd2VgOEbS5MM89vC64URvUuybskukLxMoEwFq3Fw+cGaW1nwCANFtp7VO3LSLut
-         aWppdkMRK55DYxahnPa5Ley4ABBlcQUvewIZnuOLMMSBCHlKOBi5CZqkY9Kyml8o1MrT
-         CBlkO4qWhmGVcvLfG4UHVip4akpdawqY5R3Y9x9mYeqMkRFJxKckRpY64XrBFsAyNjDB
-         mNEw==
-X-Gm-Message-State: AOAM530kQP5cuCLqPBIbZ+dgIuRqgH/qqLzm11ZuZq7NeoDrVtcq11Qn
-        LD4puzPAKgygMIGe7xKdril5RdIIxII=
-X-Google-Smtp-Source: ABdhPJxV4KMH5KWxYxRKGXp85MQcxBFQnS2rkLTJJOz6otCaiJaIUvdP/f7PFgl368JfvPRtBbtSVA==
-X-Received: by 2002:a2e:9b47:: with SMTP id o7mr1361983ljj.99.1610434598666;
-        Mon, 11 Jan 2021 22:56:38 -0800 (PST)
-Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.googlemail.com with ESMTPSA id a9sm271890lfl.143.2021.01.11.22.56.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jan 2021 22:56:37 -0800 (PST)
-Subject: Re: [PATCH v3 0/9] Support Runtime PM and host mode by Tegra ChipIdea
- USB driver
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Peter Chen <peter.chen@nxp.com>, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Ion Agorria <ion@agorria.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20201218120246.7759-1-digetx@gmail.com>
- <20201229051615.GA5823@b29397-desktop>
- <b2c21687-4cb9-ba0a-a724-3a82ddd8daff@gmail.com>
-Message-ID: <713c4b1a-a4b3-41ad-7aad-c49e594f778b@gmail.com>
-Date:   Tue, 12 Jan 2021 09:56:37 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/Nhlg5QFisRejoMRT0fRkCjf1tfZAoZTP+NYQ9XWWTI=;
+        b=n/vfu7mlx5LWqfvBki9+vJ2b/NmCqGongVh/fDH443fhh5J8icdO69uODNDA53IDbW
+         f69I3EVr0igS7Vd8ATCaJ4BV3ZCgtuF8q9DRyV4bFytwXXhjWTCfpFIvjdDI4w5yqZz/
+         6HrDKMFt3QaKjXMWJkm14QQPoqX3Bf1epaesSoMrn8KOZlElNjSOA4XjIneYJaTTochC
+         +4m/FVckKVLdOyZDf05kcHYyipWmaXCgX6VKEunwFYbO519VZ105IMcZ6ws3rXtTy2sU
+         OXQDrts8X2hr6lVkZYm19vqP2o0iVJ7Q5CNkQ7FpEpWXbb4SbZ8mwzakG9ESBcvgmLZa
+         HvQg==
+X-Gm-Message-State: AOAM530lRzP4EF5Q8Yvu5MJZpFQ8GTlPEj5P+zEOiIY/M4F6/vfr2SeJ
+        F2RvigPjVlWM7QRrYZgDhHIraHCZrjo8tnntaUDnLluC4EA=
+X-Google-Smtp-Source: ABdhPJzhw0U1zIBEQrFXqk95oraRyz21olHqiCGRIYe8zn+mcG0n6joZw4PcgZ2qh7iXazilL7snXv87+Ko+tcclmaw=
+X-Received: by 2002:a4a:c191:: with SMTP id w17mr2117914oop.1.1610439343492;
+ Tue, 12 Jan 2021 00:15:43 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <b2c21687-4cb9-ba0a-a724-3a82ddd8daff@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210111144226.16372-1-pawell@cadence.com>
+In-Reply-To: <20210111144226.16372-1-pawell@cadence.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 12 Jan 2021 09:15:32 +0100
+Message-ID: <CAMuHMdXQE+eFV51HdLHF7QfN-A2qXSKZsP6ofZzvOwNZ_N2jHQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: cdnsp: fixes undefined reference to cdns_remove
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     Peter Chen <peter.chen@nxp.com>,
+        Randy Dunlap <rdunlap@infradead.org>, a-govindraju@ti.com,
+        Greg KH <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kurahul@cadence.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-29.12.2020 17:26, Dmitry Osipenko пишет:
-> 29.12.2020 08:16, Peter Chen пишет:
->> On 20-12-18 15:02:37, Dmitry Osipenko wrote:
->>> This series implements Runtime PM support for the Tegra ChipIdea USB driver.
->>> It also squashes the older ehci-tegra driver into the ChipIdea driver, hence
->>> the RPM is supported by both UDC and host controllers, secondly this opens
->>> opportunity for implementing OTG support in the future.
->>>
->>> Patchset was tested on various Tegra20, Tegra30 and Tegra124 devices.
->>> Thanks to Peter Geis, Matt Merhar, Nicolas Chauvet and Ion Agorria for
->>> helping with the extensive and productive testing!
->>>
->>> Changelog:
->>>
->>> v3: - Replaced "goto" with if-statements as was suggested by Thierry Reding.
->>>
->>>     - Improved wording of the deprecated Kconfig entry as was suggested
->>>       by Alan Stern.
->>>
->>>     - Added ACKs from Thierry Reding and Alan Stern.
->>>
->>>     - Added a new minor patch "Specify TX FIFO threshold in UDC SoC info"
->>>       just for completeness, since we can now switch OTG to host mode in
->>>       the ChipIdea driver. Although, OTG support remains a work-in-progress
->>>       for now.
->>>
->>> v2: - Improved comments in the code as it was suggested by Peter Chen and
->>>       Sergei Shtylyov for v1.
->>>
->>>     - Replaced mdelay() with fsleep() and made ci->hdc to reset to NULL in
->>>       a error code path, like it was suggested by Peter Chen.
->>>
->>>     - Redirected deprecated USB_EHCI_TEGRA Kconfig entry to USB_CHIPIDEA_TEGRA
->>>       as was suggested by Alan Stern.
->>>
->>>     - Improved commit message and added ACK from Thierry Reding to the patch
->>>       that removes MODULE_ALIAS.
->>>
->>>     - Fixed UDC PHY waking up on ASUS TF201 tablet device by utilizing
->>>       additional VBUS sensor. This was reported and tested by Ion Agorria.
->>>
->>>     - Added t-b from Ion Agorria.
->>>
->>> Dmitry Osipenko (8):
->>>   usb: phy: tegra: Add delay after power up
->>>   usb: phy: tegra: Support waking up from a low power mode
->>>   usb: chipidea: tegra: Remove MODULE_ALIAS
->>>   usb: chipidea: tegra: Rename UDC to USB
->>>   usb: chipidea: tegra: Support runtime PM
->>>   usb: chipidea: tegra: Specify TX FIFO threshold in UDC SoC info
->>>   usb: host: ehci-tegra: Remove the driver
->>>   ARM: tegra_defconfig: Enable USB_CHIPIDEA_HOST and remove
->>>     USB_EHCI_TEGRA
->>>
->>> Peter Geis (1):
->>>   usb: chipidea: tegra: Support host mode
->>
->> Chipidea related (patch 3-7) are applied, thanks.
-> 
-> Hello Peter,
-> 
-> Thank you for applying the patches.
-> 
-> Who will apply the remaining patches?
-> 
-> The Chipidea patch #6 depends on the PHY changes, otherwise USB will
-> suspend and never resume.
-> 
+Hi Pawel,
 
-Peter, could you please apply the PHY and defconfig patches along with
-the CI patches to -next? I.e. the whole series. Preferentially in
-original ordering of patches should be preserved.
+On Tue, Jan 12, 2021 at 8:17 AM Pawel Laszczak <pawell@cadence.com> wrote:
+> Patch fixes the following errors:
+> ld: drivers/usb/cdns3/cdnsp-pci.o: in function `cdnsp_pci_remove':
+> cdnsp-pci.c:(.text+0x80): undefined reference to `cdns_remove'
+> ld: drivers/usb/cdns3/cdnsp-pci.o: in function `cdnsp_pci_probe':
+> cdnsp-pci.c:(.text+0x34c): undefined reference to `cdns_init'
+>
+> Issue occurs for USB/CDNS3/CDNSP kernel configuration:
+> CONFIG_USB=m
+> CONFIG_USB_CDNS_SUPPORT=y
+> CONFIG_USB_CDNS3=m
+> CONFIG_USB_CDNS3_PCI_WRAP=m
+> CONFIG_USB_CDNSP_PCI=y
+>
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 
-Thanks in advance.
+Thanks for your patch!
+
+noreply@ellerman.id.au reports for m68k-allmodconfig:
+
+drivers/usb/cdns3/cdnsp-pci.c:92:6: error: implicit declaration of
+function 'pci_is_enabled'; did you mean 'pci_acs_enabled'?
+[-Werror=implicit-function-declaration]
+drivers/usb/cdns3/cdnsp-pci.c:166:6: error: implicit declaration of
+function 'pci_dev_run_wake'; did you mean 'pci_enable_wake'?
+[-Werror=implicit-function-declaration]
+drivers/usb/cdns3/cdnsp-pci.c:248:1: error: type defaults to 'int' in
+declaration of 'module_pci_driver' [-Werror=implicit-int]
+
+> --- a/drivers/usb/cdns3/Makefile
+> +++ b/drivers/usb/cdns3/Makefile
+> @@ -26,7 +26,11 @@ obj-$(CONFIG_USB_CDNS3_TI)                   += cdns3-ti.o
+>  obj-$(CONFIG_USB_CDNS3_IMX)                    += cdns3-imx.o
+>
+>  cdnsp-udc-pci-y                                        := cdnsp-pci.o
+> +ifeq ($(CONFIG_USB),m)
+> +obj-m                                          += cdnsp-udc-pci.o
+
+This includes cdnsp-udc-pci.o even if CONFIG_USB_CDNSP_PCI=n,
+causing the aforementioned build failure.
+
+> +else
+>  obj-$(CONFIG_USB_CDNSP_PCI)                    += cdnsp-udc-pci.o
+> +endif
+>  cdnsp-udc-pci-$(CONFIG_USB_CDNSP_GADGET)       += cdnsp-ring.o cdnsp-gadget.o \
+>                                                    cdnsp-mem.o cdnsp-ep0.o
+>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
