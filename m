@@ -2,118 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E122F2871
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jan 2021 07:44:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5742F289C
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jan 2021 07:58:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731141AbhALGnZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jan 2021 01:43:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
+        id S2391624AbhALG5W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jan 2021 01:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728072AbhALGnZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jan 2021 01:43:25 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5960FC061786;
-        Mon, 11 Jan 2021 22:42:45 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id p187so1865953iod.4;
-        Mon, 11 Jan 2021 22:42:45 -0800 (PST)
+        with ESMTP id S1726814AbhALG5W (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jan 2021 01:57:22 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B2EC061575;
+        Mon, 11 Jan 2021 22:56:41 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id u11so1610336ljo.13;
+        Mon, 11 Jan 2021 22:56:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bzQDoKieRWjb9Oo3b8L2/tnj6Z9GSRsyxzx9Q4knxlg=;
-        b=s9lXI/isxUg9fOOOTK7v3Fe2AfUuHy7sNxFCRk47FQIBN19Kt2TsKtDFw0V9IDNJoU
-         zICUaEYKakF8VZscWGIfYRNifWBao6QqSHI3exXqK1rRcF+h2Pch+QVR0iTmBqWFuWci
-         AJnKlUOCDu2hKP4RYL3D/wr11tgP4F2o6xiA3o6Xd91+6DKCwC941hMQWO7nraq5CZMY
-         IeV5kw7LLNBDiFMv5nFUfur0YZLzXo7qo7A5YvS5r+CSYl74MIxjLGztWqL4LBejjbs1
-         yvLxUg5Hb85T3MZevU7aTe4zSF32Nk/DTXmHFE86McJwCivZJWmz1Jjb0JkBTWamPd1I
-         Yvng==
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+mcGfBDh2HaL2D1G9xE8gCCyle1yTK3SDdAW7IN4ZiQ=;
+        b=Oexi8t3aHxziEeTcB022ZXJtY7b6aDckY/m92s8/xdzPhgqrdZcf49P7amEmSe5wR+
+         XVrOrmIGT+G5/7BW9jcTOqMrNJFF1kTv7fYAqMKckKy5KsNmtA6/K/2jAcVdpydmZSPV
+         qieiC6KpquDdbWfrdKH8803mRO6mJFJxQaTrXPs5/mCwg+wyt9FyN89krHon4UIveBr9
+         HZ7lrglMic2Am0sLisAB2RYSIX4tD1Vx+A+ZjdQYRUMImFLJF24Pmud+Y/NHTomW0AOs
+         oChVVTAYuVveQFmOafLJQYyFiHwSZH4YixcWSOnfep9OiCi8TtTmpKmDiTO2ugTE1inL
+         UUSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bzQDoKieRWjb9Oo3b8L2/tnj6Z9GSRsyxzx9Q4knxlg=;
-        b=P60+VDZoFgMmYwdsI6OAiElFg7aryQXQWQC8vahWWngvV4yyW8Ri3orWv+1s1kDgVK
-         BcCPS1KVex63DRilQ6b980W7Nkj3EIVWw8L7olIcxLVvmedbnHn5fimU8G6t+FCGbn9E
-         Omk5G97mNa+7dm64MOds1KfjXNP6+scJb7VAnWZr827pCWWvGxHpVArhGEJY2amULVeG
-         7LkWGOtqVS2oTqGWU3HvPyGJZCualPHQl0T6uL4OBrrOatsGa++V76/Fq7uLCih1wOmJ
-         /BmHLZiiOUcozZ/q2kXFTb6fjUTTp1fusZ2xRAuAEysMnG2qtAT46UEnTqGVwrrI4ePf
-         6dgA==
-X-Gm-Message-State: AOAM531HqB58NTai+yTb94fIVLDjzahVptuUrrsNex90Rzfp2+Yv6Jzt
-        WypfXyKOP9aaO3suf3hrBz+uukC9qxwcRDnAnOY=
-X-Google-Smtp-Source: ABdhPJxF/DgVB4iihPD4eX+IDDS8yEeLdAguj2QPVdJCwDG+681NBiyEC5Hch0SLUvynq/YW+1gQz1OSYBnqxMurbqI=
-X-Received: by 2002:a02:b709:: with SMTP id g9mr3027995jam.90.1610433764709;
- Mon, 11 Jan 2021 22:42:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20210111104927.2561-1-minhquangbui99@gmail.com>
- <7d6dc09fedc84f9fce942d85c34d5cd41931bbf6.camel@suse.de> <20210111143120.GA2769@minh>
-In-Reply-To: <20210111143120.GA2769@minh>
-From:   =?UTF-8?Q?Minh_B=C3=B9i_Quang?= <minhquangbui99@gmail.com>
-Date:   Tue, 12 Jan 2021 13:42:33 +0700
-Message-ID: <CACtPs=FB_=JMEymLHE0_ko4ZF5zj9NBCHkRC7O3tj6pkSp3oiA@mail.gmail.com>
-Subject: Re: [PATCH v2] can: mcba_usb: Fix memory leak when cancelling urb
-To:     Oliver Neukum <oneukum@suse.de>
-Cc:     linux-usb@vger.kernel.org, a.darwish@linutronix.de,
-        bigeasy@linutronix.de,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+mcGfBDh2HaL2D1G9xE8gCCyle1yTK3SDdAW7IN4ZiQ=;
+        b=MnsYyNY1CTtDS9FbCqrgS7tzDhhFRD/eKLOLpYHlSW40Ds5+KmX1HSN1cTPdkl2grA
+         W3tKc8qWo/Ataje0opW8nk0fDgqcSVtEWsMbrdvIaX6b3xCYTBpocenAafYV0rq9utwe
+         N6D8DDd2VgOEbS5MM89vC64URvUuybskukLxMoEwFq3Fw+cGaW1nwCANFtp7VO3LSLut
+         aWppdkMRK55DYxahnPa5Ley4ABBlcQUvewIZnuOLMMSBCHlKOBi5CZqkY9Kyml8o1MrT
+         CBlkO4qWhmGVcvLfG4UHVip4akpdawqY5R3Y9x9mYeqMkRFJxKckRpY64XrBFsAyNjDB
+         mNEw==
+X-Gm-Message-State: AOAM530kQP5cuCLqPBIbZ+dgIuRqgH/qqLzm11ZuZq7NeoDrVtcq11Qn
+        LD4puzPAKgygMIGe7xKdril5RdIIxII=
+X-Google-Smtp-Source: ABdhPJxV4KMH5KWxYxRKGXp85MQcxBFQnS2rkLTJJOz6otCaiJaIUvdP/f7PFgl368JfvPRtBbtSVA==
+X-Received: by 2002:a2e:9b47:: with SMTP id o7mr1361983ljj.99.1610434598666;
+        Mon, 11 Jan 2021 22:56:38 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
+        by smtp.googlemail.com with ESMTPSA id a9sm271890lfl.143.2021.01.11.22.56.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jan 2021 22:56:37 -0800 (PST)
+Subject: Re: [PATCH v3 0/9] Support Runtime PM and host mode by Tegra ChipIdea
+ USB driver
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Peter Chen <peter.chen@nxp.com>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Alan Stern <stern@rowland.harvard.edu>,
-        syzkaller-bugs@googlegroups.com,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Ion Agorria <ion@agorria.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20201218120246.7759-1-digetx@gmail.com>
+ <20201229051615.GA5823@b29397-desktop>
+ <b2c21687-4cb9-ba0a-a724-3a82ddd8daff@gmail.com>
+Message-ID: <713c4b1a-a4b3-41ad-7aad-c49e594f778b@gmail.com>
+Date:   Tue, 12 Jan 2021 09:56:37 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
+MIME-Version: 1.0
+In-Reply-To: <b2c21687-4cb9-ba0a-a724-3a82ddd8daff@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 11, 2021 at 9:31 PM Bui Quang Minh <minhquangbui99@gmail.com> wrote:
->
-> On Mon, Jan 11, 2021 at 01:00:31PM +0100, Oliver Neukum wrote:
-> > Am Montag, den 11.01.2021, 10:49 +0000 schrieb Bui Quang Minh:
-> > > In mcba_usb_read_bulk_callback(), when we don't resubmit or fails to
-> > > resubmit the urb, we need to deallocate the transfer buffer that is
-> > > allocated in mcba_usb_start().
-> > >
-> > > Reported-by: syzbot+57281c762a3922e14dfe@syzkaller.appspotmail.com
-> > > Signed-off-by: Bui Quang Minh <minhquangbui99@gmail.com>
-> > > ---
-> > > v1: add memory leak fix when not resubmitting urb
-> > > v2: add memory leak fix when failing to resubmit urb
-> > >
-> > >  drivers/net/can/usb/mcba_usb.c | 11 ++++++++---
-> > >  1 file changed, 8 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
-> > > index df54eb7d4b36..30236e640116 100644
-> > > --- a/drivers/net/can/usb/mcba_usb.c
-> > > +++ b/drivers/net/can/usb/mcba_usb.c
-> > > @@ -584,6 +584,8 @@ static void mcba_usb_read_bulk_callback(struct urb *urb)
-> > >     case -EPIPE:
-> > >     case -EPROTO:
-> > >     case -ESHUTDOWN:
-> > > +           usb_free_coherent(urb->dev, urb->transfer_buffer_length,
-> > > +                             urb->transfer_buffer, urb->transfer_dma);
-> > >             return;
-> > >
-> >
-> > Can you call usb_free_coherent() in what can be hard IRQ context?
->
-> You are right, I digged in the code and saw some comments that on some
-> architectures, usb_free_coherent() cannot be called in hard IRQ context.
-> I see the usb_free_coherent() is called in write_bulk_callback too. I will
-> send a patch that uses usb_anchor to keep track of these urbs and cleanup
-> the transfer buffer later in disconnect().
+29.12.2020 17:26, Dmitry Osipenko пишет:
+> 29.12.2020 08:16, Peter Chen пишет:
+>> On 20-12-18 15:02:37, Dmitry Osipenko wrote:
+>>> This series implements Runtime PM support for the Tegra ChipIdea USB driver.
+>>> It also squashes the older ehci-tegra driver into the ChipIdea driver, hence
+>>> the RPM is supported by both UDC and host controllers, secondly this opens
+>>> opportunity for implementing OTG support in the future.
+>>>
+>>> Patchset was tested on various Tegra20, Tegra30 and Tegra124 devices.
+>>> Thanks to Peter Geis, Matt Merhar, Nicolas Chauvet and Ion Agorria for
+>>> helping with the extensive and productive testing!
+>>>
+>>> Changelog:
+>>>
+>>> v3: - Replaced "goto" with if-statements as was suggested by Thierry Reding.
+>>>
+>>>     - Improved wording of the deprecated Kconfig entry as was suggested
+>>>       by Alan Stern.
+>>>
+>>>     - Added ACKs from Thierry Reding and Alan Stern.
+>>>
+>>>     - Added a new minor patch "Specify TX FIFO threshold in UDC SoC info"
+>>>       just for completeness, since we can now switch OTG to host mode in
+>>>       the ChipIdea driver. Although, OTG support remains a work-in-progress
+>>>       for now.
+>>>
+>>> v2: - Improved comments in the code as it was suggested by Peter Chen and
+>>>       Sergei Shtylyov for v1.
+>>>
+>>>     - Replaced mdelay() with fsleep() and made ci->hdc to reset to NULL in
+>>>       a error code path, like it was suggested by Peter Chen.
+>>>
+>>>     - Redirected deprecated USB_EHCI_TEGRA Kconfig entry to USB_CHIPIDEA_TEGRA
+>>>       as was suggested by Alan Stern.
+>>>
+>>>     - Improved commit message and added ACK from Thierry Reding to the patch
+>>>       that removes MODULE_ALIAS.
+>>>
+>>>     - Fixed UDC PHY waking up on ASUS TF201 tablet device by utilizing
+>>>       additional VBUS sensor. This was reported and tested by Ion Agorria.
+>>>
+>>>     - Added t-b from Ion Agorria.
+>>>
+>>> Dmitry Osipenko (8):
+>>>   usb: phy: tegra: Add delay after power up
+>>>   usb: phy: tegra: Support waking up from a low power mode
+>>>   usb: chipidea: tegra: Remove MODULE_ALIAS
+>>>   usb: chipidea: tegra: Rename UDC to USB
+>>>   usb: chipidea: tegra: Support runtime PM
+>>>   usb: chipidea: tegra: Specify TX FIFO threshold in UDC SoC info
+>>>   usb: host: ehci-tegra: Remove the driver
+>>>   ARM: tegra_defconfig: Enable USB_CHIPIDEA_HOST and remove
+>>>     USB_EHCI_TEGRA
+>>>
+>>> Peter Geis (1):
+>>>   usb: chipidea: tegra: Support host mode
+>>
+>> Chipidea related (patch 3-7) are applied, thanks.
+> 
+> Hello Peter,
+> 
+> Thank you for applying the patches.
+> 
+> Who will apply the remaining patches?
+> 
+> The Chipidea patch #6 depends on the PHY changes, otherwise USB will
+> suspend and never resume.
+> 
 
-Hi, I have sent a version 3 patch. However, I found out that usb_free_coherent()
-is ok in this situation. In usb_free_coherent(), if the buffer is allocated via
-dma_alloc_coherent() in usb_alloc_coherent(), dma_free_coherent() is called.
-In dma_free_coherent(), ops->free() may be called in some cases which may
-contains calls to vunmap() that is not permitted in interrupt context. However,
-in usb_alloc_coherent(), buffer can be allocated from dma pool if the
-size is less
-than 2048 and the buffer size in mcba_usb is obviously less than 2048.
-As a result,
-usb_free_coherent() will at most fall in the path that calls
-dma_pool_free(), which is
-safe. Am I right?
+Peter, could you please apply the PHY and defconfig patches along with
+the CI patches to -next? I.e. the whole series. Preferentially in
+original ordering of patches should be preserved.
 
-Thanks,
-Quang Minh.
+Thanks in advance.
