@@ -2,346 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 200A52F485B
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 11:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C49A2F485E
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 11:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726900AbhAMKJj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jan 2021 05:09:39 -0500
-Received: from mga12.intel.com ([192.55.52.136]:5974 "EHLO mga12.intel.com"
+        id S1727075AbhAMKJ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jan 2021 05:09:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57796 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726734AbhAMKJj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 Jan 2021 05:09:39 -0500
-IronPort-SDR: 7fwrtc9Y4Y82UIwZ14LTXJp43w0Lzpb9g9xo7f0va68xn1odeSsnJc0cRyq4Eu+CTYVgVnFGUt
- YoHr/pwHDLKA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9862"; a="157364138"
-X-IronPort-AV: E=Sophos;i="5.79,344,1602572400"; 
-   d="scan'208";a="157364138"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2021 02:07:53 -0800
-IronPort-SDR: v9fsfxy0svdXlmUKJScjFdW+TKfqVdS38APoiyc3JPoRnFC0FCJA4pgGGmukKWJzmV5+WjfB6R
- 7w86IQgvbmqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,344,1602572400"; 
-   d="scan'208";a="353400344"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Jan 2021 02:07:51 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 930041F4; Wed, 13 Jan 2021 12:07:50 +0200 (EET)
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Christian Kellner <christian@kellner.me>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v2] thunderbolt: Add support for de-authorizing devices
-Date:   Wed, 13 Jan 2021 13:07:50 +0300
-Message-Id: <20210113100750.32692-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.29.2
+        id S1727052AbhAMKJ6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 Jan 2021 05:09:58 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 78E7623370;
+        Wed, 13 Jan 2021 10:09:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610532557;
+        bh=RG5P0L+hCZa+zQYGZl7WdN+Z4YDh+Ch46/n83QaYUKA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j7rFkLM4DaO8lBjpiEOxtMCWk90Nwf8yO1TvQaeXHzEFS4rS+xEKIzHtusg/QEYpN
+         J3MM2zX1hxakT4Myk7qcUeFQIk6K17oe9mT36qGOq9KSZJLGY1A8viFjF2RRJLA2K6
+         gmJX9YuhmhRyStG9mu3JQB6hfntNhxPgdQ1/yErH18++4VYiJ5nAQ8K3/r6tpL5vxE
+         vZ3RPWg859W/IT+2Q2J728S2g7iBP2LiFDr5N857KQIo5p18tRj81YUl9e8RcqNQK3
+         7GiSMnZcZOsPxteOx6GHOK9SHlvOn4tWQb6TSXYmlW5PYhYgEC1qTM3QJat7SDm68q
+         jGeRJaTcnqv2w==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kzd5g-00040R-CA; Wed, 13 Jan 2021 11:09:25 +0100
+Date:   Wed, 13 Jan 2021 11:09:24 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Jin ChenXin <bg4akv@hotmail.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drivers: add new VID/PID for supporting Teraoka AD2000
+Message-ID: <X/7G1LAzmTpfbPQF@hovoldconsulting.com>
+References: <ME2PR01MB4483D68A6A925810E9A0B23082A90@ME2PR01MB4483.ausprd01.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ME2PR01MB4483D68A6A925810E9A0B23082A90@ME2PR01MB4483.ausprd01.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In some cases it is useful to be able de-authorize devices. For example
-if user logs out the userspace can have a policy that disconnects PCIe
-devices until logged in again. This is only possible for software based
-connection manager as it directly controls the tunnels.
+On Wed, Jan 13, 2021 at 09:03:36AM +0000, Jin ChenXin wrote:
 
-For this reason make the authorized attribute accept writing 0 which
-makes the software connection manager to tear down the corresponding
-PCIe tunnel. Userspace can check if this is supported by reading a new
-domain attribute deauthorization, that holds 1 in that case.
+Thanks for the patch. I've applied it now after fixing up some minor
+nits (so you don't need to resend), but for next time please consider
+the following comments.
 
-While there correct tb_domain_approve_switch() kernel-doc and
-description of authorized attribute to mention that it is only about
-PCIe tunnels.
+> From 905036e81e0d32705379c40acddb634428aff0a6 Mon Sep 17 00:00:00 2001
 
-Cc: Christian Kellner <christian@kellner.me>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
-The previous version of the patch can be found here:
+Don't include this line since it prevents git-am from considering the
+following lines.
 
-  https://lore.kernel.org/linux-usb/20210105092808.15817-2-mika.westerberg@linux.intel.com/
+It also seems hotmail base64-encoded your message, which you should try
+to avoid (see Documentation/process/email-clients.rst).
 
-Changes from the previous vers:
+> From: Chenxin Jin <bg4akv@hotmail.com>
+> Date: Wed, 13 Jan 2021 16:59:05 +0800
+> Subject: [PATCH] drivers: add new VID/PID for supporting Teraoka AD2000
 
-  * Improve ABI documentation
-  * Document de-authorization in admin-guide too
-  * Rename data parameter to not_used in disapprove_switch().
+Please use the same commit-summary prefix as other commits for the
+subsystem and driver you're patching (e.g. "USB: serial: cp210x: ")
 
- .../ABI/testing/sysfs-bus-thunderbolt         | 20 ++++++++---
- Documentation/admin-guide/thunderbolt.rst     | 16 +++++++++
- drivers/thunderbolt/domain.c                  | 32 +++++++++++++++--
- drivers/thunderbolt/switch.c                  | 34 ++++++++++++++++++-
- drivers/thunderbolt/tb.c                      | 20 +++++++++++
- drivers/thunderbolt/tb.h                      |  3 ++
- 6 files changed, 118 insertions(+), 7 deletions(-)
+> Teraoka AD2000 uses the CP210x driver, but the chip VID/PID is
+> customized with 0988/0578. We need the driver to support the new VID/PID.
+> 
+> Signed-off-by: Chenxin Jin <bg4akv@hotmail.com>
+> ---
+>  drivers/usb/serial/cp210x.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+> index fbb10df..c274cc3 100644
+> --- a/drivers/usb/serial/cp210x.c
+> +++ b/drivers/usb/serial/cp210x.c
+> @@ -234,6 +234,7 @@ static int cp210x_tiocmset_port(struct usb_serial_port *port,
+>  	{ USB_DEVICE(0x3195, 0xF281) }, /* Link Instruments MSO-28 */
+>  	{ USB_DEVICE(0x3923, 0x7A0B) }, /* National Instruments USB Serial Console */
+>  	{ USB_DEVICE(0x413C, 0x9500) }, /* DW700 GPS USB interface */
+> +	{ USB_DEVICE(0x0988, 0x0578) }, /* Teraoka AD2000 */
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-thunderbolt b/Documentation/ABI/testing/sysfs-bus-thunderbolt
-index a91b4b24496e..581dea95245b 100644
---- a/Documentation/ABI/testing/sysfs-bus-thunderbolt
-+++ b/Documentation/ABI/testing/sysfs-bus-thunderbolt
-@@ -49,6 +49,15 @@ Description:	Holds a comma separated list of device unique_ids that
- 		If a device is authorized automatically during boot its
- 		boot attribute is set to 1.
- 
-+What: /sys/bus/thunderbolt/devices/.../domainX/deauthorization
-+Date:		May 2021
-+KernelVersion:	5.12
-+Contact:	Mika Westerberg <mika.westerberg@linux.intel.com>
-+Description:	This attribute tells whether the system supports
-+		de-authorization of devices. Value of 1 means user can
-+		de-authorize PCIe tunnel by writing 0 to authorized
-+		attribute under each device.
-+
- What: /sys/bus/thunderbolt/devices/.../domainX/iommu_dma_protection
- Date:		Mar 2019
- KernelVersion:	4.21
-@@ -84,22 +93,25 @@ KernelVersion:	4.13
- Contact:	thunderbolt-software@lists.01.org
- Description:	This attribute is used to authorize Thunderbolt devices
- 		after they have been connected. If the device is not
--		authorized, no devices such as PCIe and Display port are
--		available to the system.
-+		authorized, no PCIe devices are available to the system.
- 
- 		Contents of this attribute will be 0 when the device is not
- 		yet authorized.
- 
- 		Possible values are supported:
- 
--		==  ===========================================
-+		==  ===================================================
-+		0   The device will be de-authorized (only supported if
-+		    deauthorization attribute under domain contains 1)
- 		1   The device will be authorized and connected
--		==  ===========================================
-+		==  ===================================================
- 
- 		When key attribute contains 32 byte hex string the possible
- 		values are:
- 
- 		==  ========================================================
-+		0   The device will be de-authorized (only supported if
-+		    deauthorization attribute under domain contains 1)
- 		1   The 32 byte hex string is added to the device NVM and
- 		    the device is authorized.
- 		2   Send a challenge based on the 32 byte hex string. If the
-diff --git a/Documentation/admin-guide/thunderbolt.rst b/Documentation/admin-guide/thunderbolt.rst
-index 613cb24c76c7..0d4348445f91 100644
---- a/Documentation/admin-guide/thunderbolt.rst
-+++ b/Documentation/admin-guide/thunderbolt.rst
-@@ -153,6 +153,22 @@ If the user still wants to connect the device they can either approve
- the device without a key or write a new key and write 1 to the
- ``authorized`` file to get the new key stored on the device NVM.
- 
-+De-authorizing devices
-+----------------------
-+It is possible to de-authorize devices by writing ``0`` to their
-+``authorized`` attribute. This requires support from the connection
-+manager implementation and can be checked by reading domain
-+``deauthorization`` attribute. If it reads ``1`` then the feature is
-+supported.
-+
-+When a device is de-authorized the PCIe tunnel from the parent device
-+PCIe downstream (or root) port to the device PCIe upstream port is torn
-+down. This is essentially the same thing as PCIe hot-remove and the PCIe
-+toplogy in question will not be accessible anymore until the device is
-+authorized again. If there is storage such as NVMe or similar involved,
-+there is a risk for data loss if the filesystem on that storage is not
-+properly shut down. You have been warned!
-+
- DMA protection utilizing IOMMU
- ------------------------------
- Recent systems from 2018 and forward with Thunderbolt ports may natively
-diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
-index d2b92a8be577..9ba2181464cc 100644
---- a/drivers/thunderbolt/domain.c
-+++ b/drivers/thunderbolt/domain.c
-@@ -238,6 +238,16 @@ static ssize_t boot_acl_store(struct device *dev, struct device_attribute *attr,
- }
- static DEVICE_ATTR_RW(boot_acl);
- 
-+static ssize_t deauthorization_show(struct device *dev,
-+				    struct device_attribute *attr,
-+				    char *buf)
-+{
-+	const struct tb *tb = container_of(dev, struct tb, dev);
-+
-+	return sprintf(buf, "%d\n", !!tb->cm_ops->disapprove_switch);
-+}
-+static DEVICE_ATTR_RO(deauthorization);
-+
- static ssize_t iommu_dma_protection_show(struct device *dev,
- 					 struct device_attribute *attr,
- 					 char *buf)
-@@ -267,6 +277,7 @@ static DEVICE_ATTR_RO(security);
- 
- static struct attribute *domain_attrs[] = {
- 	&dev_attr_boot_acl.attr,
-+	&dev_attr_deauthorization.attr,
- 	&dev_attr_iommu_dma_protection.attr,
- 	&dev_attr_security.attr,
- 	NULL,
-@@ -601,14 +612,31 @@ int tb_domain_runtime_resume(struct tb *tb)
- 	return 0;
- }
- 
-+/**
-+ * tb_domain_disapprove_switch() - Disapprove switch
-+ * @tb: Domain the switch belongs to
-+ * @sw: Switch to disapprove
-+ *
-+ * This will disconnect PCIe tunnel from parent to this @sw.
-+ *
-+ * Return: %0 on success and negative errno in case of failure.
-+ */
-+int tb_domain_disapprove_switch(struct tb *tb, struct tb_switch *sw)
-+{
-+	if (!tb->cm_ops->disapprove_switch)
-+		return -EPERM;
-+
-+	return tb->cm_ops->disapprove_switch(tb, sw);
-+}
-+
- /**
-  * tb_domain_approve_switch() - Approve switch
-  * @tb: Domain the switch belongs to
-  * @sw: Switch to approve
-  *
-  * This will approve switch by connection manager specific means. In
-- * case of success the connection manager will create tunnels for all
-- * supported protocols.
-+ * case of success the connection manager will create PCIe tunnel from
-+ * parent to @sw.
-  */
- int tb_domain_approve_switch(struct tb *tb, struct tb_switch *sw)
- {
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index ad992e6204d9..cdba05e72486 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -1387,6 +1387,30 @@ static ssize_t authorized_show(struct device *dev,
- 	return sprintf(buf, "%u\n", sw->authorized);
- }
- 
-+static int disapprove_switch(struct device *dev, void *not_used)
-+{
-+	struct tb_switch *sw;
-+
-+	sw = tb_to_switch(dev);
-+	if (sw && sw->authorized) {
-+		int ret;
-+
-+		/* First children */
-+		ret = device_for_each_child_reverse(&sw->dev, NULL, disapprove_switch);
-+		if (ret)
-+			return ret;
-+
-+		ret = tb_domain_disapprove_switch(sw->tb, sw);
-+		if (ret)
-+			return ret;
-+
-+		sw->authorized = 0;
-+		kobject_uevent(&sw->dev.kobj, KOBJ_CHANGE);
-+	}
-+
-+	return 0;
-+}
-+
- static int tb_switch_set_authorized(struct tb_switch *sw, unsigned int val)
- {
- 	int ret = -EINVAL;
-@@ -1394,10 +1418,18 @@ static int tb_switch_set_authorized(struct tb_switch *sw, unsigned int val)
- 	if (!mutex_trylock(&sw->tb->lock))
- 		return restart_syscall();
- 
--	if (sw->authorized)
-+	if (!!sw->authorized == !!val)
- 		goto unlock;
- 
- 	switch (val) {
-+	/* Disapprove switch */
-+	case 0:
-+		if (tb_route(sw)) {
-+			ret = disapprove_switch(&sw->dev, NULL);
-+			goto unlock;
-+		}
-+		break;
-+
- 	/* Approve switch */
- 	case 1:
- 		if (sw->key)
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 51d5b031cada..d08879849abe 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -1002,6 +1002,25 @@ static void tb_disconnect_and_release_dp(struct tb *tb)
- 	}
- }
- 
-+static int tb_disconnect_pci(struct tb *tb, struct tb_switch *sw)
-+{
-+	struct tb_tunnel *tunnel;
-+	struct tb_port *up;
-+
-+	up = tb_switch_find_port(sw, TB_TYPE_PCIE_UP);
-+	if (WARN_ON(!up))
-+		return -ENODEV;
-+
-+	tunnel = tb_find_tunnel(tb, TB_TUNNEL_PCI, NULL, up);
-+	if (WARN_ON(!tunnel))
-+		return -ENODEV;
-+
-+	tb_tunnel_deactivate(tunnel);
-+	list_del(&tunnel->list);
-+	tb_tunnel_free(tunnel);
-+	return 0;
-+}
-+
- static int tb_tunnel_pci(struct tb *tb, struct tb_switch *sw)
- {
- 	struct tb_port *up, *down, *port;
-@@ -1512,6 +1531,7 @@ static const struct tb_cm_ops tb_cm_ops = {
- 	.runtime_suspend = tb_runtime_suspend,
- 	.runtime_resume = tb_runtime_resume,
- 	.handle_event = tb_handle_event,
-+	.disapprove_switch = tb_disconnect_pci,
- 	.approve_switch = tb_tunnel_pci,
- 	.approve_xdomain_paths = tb_approve_xdomain_paths,
- 	.disconnect_xdomain_paths = tb_disconnect_xdomain_paths,
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index 34ae83b9e52a..31468de658e4 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -361,6 +361,7 @@ struct tb_path {
-  * @handle_event: Handle thunderbolt event
-  * @get_boot_acl: Get boot ACL list
-  * @set_boot_acl: Set boot ACL list
-+ * @disapprove_switch: Disapprove switch (disconnect PCIe tunnel)
-  * @approve_switch: Approve switch
-  * @add_switch_key: Add key to switch
-  * @challenge_switch_key: Challenge switch using key
-@@ -394,6 +395,7 @@ struct tb_cm_ops {
- 			     const void *buf, size_t size);
- 	int (*get_boot_acl)(struct tb *tb, uuid_t *uuids, size_t nuuids);
- 	int (*set_boot_acl)(struct tb *tb, const uuid_t *uuids, size_t nuuids);
-+	int (*disapprove_switch)(struct tb *tb, struct tb_switch *sw);
- 	int (*approve_switch)(struct tb *tb, struct tb_switch *sw);
- 	int (*add_switch_key)(struct tb *tb, struct tb_switch *sw);
- 	int (*challenge_switch_key)(struct tb *tb, struct tb_switch *sw,
-@@ -629,6 +631,7 @@ int tb_domain_thaw_noirq(struct tb *tb);
- void tb_domain_complete(struct tb *tb);
- int tb_domain_runtime_suspend(struct tb *tb);
- int tb_domain_runtime_resume(struct tb *tb);
-+int tb_domain_disapprove_switch(struct tb *tb, struct tb_switch *sw);
- int tb_domain_approve_switch(struct tb *tb, struct tb_switch *sw);
- int tb_domain_approve_switch_key(struct tb *tb, struct tb_switch *sw);
- int tb_domain_challenge_switch_key(struct tb *tb, struct tb_switch *sw);
--- 
-2.29.2
+When possible, try to keep the entries ordered by VID and PID.
 
+>  	{ } /* Terminating Entry */
+>  };
+
+The end-result is here:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-linus&id=43377df70480f82919032eb09832e9646a8a5efb
+
+Johan
