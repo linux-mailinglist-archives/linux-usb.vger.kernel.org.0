@@ -2,219 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1502F40D7
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 01:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8D52F40D8
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 01:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437827AbhAMAnK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jan 2021 19:43:10 -0500
-Received: from mga02.intel.com ([134.134.136.20]:42628 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392354AbhAMAZS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 12 Jan 2021 19:25:18 -0500
-IronPort-SDR: qW++mxGElEWpS8dJLvbRmmpU9wE9lt4iCzT7yiacTVMhAx8D+vwB8qQtn/S82B8S5pTjlGr3zg
- mL9zar+oPbCQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9862"; a="165214669"
-X-IronPort-AV: E=Sophos;i="5.79,342,1602572400"; 
-   d="scan'208";a="165214669"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2021 16:24:36 -0800
-IronPort-SDR: +4OUGYuOePTRsocppVvFMXn19TYH8BKmARx/WdlGqXrQZx9eQb0i70mwb7ovjNL96fKrWhrxhv
- Lydg3auonUvA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,342,1602572400"; 
-   d="scan'208";a="381636240"
-Received: from lkp-server01.sh.intel.com (HELO 974c6bfa98f0) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 12 Jan 2021 16:24:35 -0800
-Received: from kbuild by 974c6bfa98f0 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kzTxi-00002g-Hk; Wed, 13 Jan 2021 00:24:34 +0000
-Date:   Wed, 13 Jan 2021 08:23:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 89795852c9c46b9b0701f7376d30a1c5ab4d146c
-Message-ID: <5ffe3d98.0mhiZ1RZNZRONVey%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S2393730AbhAMAnL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jan 2021 19:43:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392455AbhAMAkr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jan 2021 19:40:47 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32124C061575;
+        Tue, 12 Jan 2021 16:40:07 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id 91so286425wrj.7;
+        Tue, 12 Jan 2021 16:40:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=agaH5FJUb4ubbdgR/UcbnaFztHWYbAMVBCEVNxmNcy8=;
+        b=AEiVjcsifZD/SApb4CWBqPM8yQ6WK74QGMmg2REtPE/Tdx+vurF8XkOdcLWRXrxdPU
+         bQmqmRBuCE2cCYeK2XH2DHYBG6gT3IgNU0qZGQXy794LDOIS5/1U50L9IDAf2dD8G3iN
+         2budy9g2NYNdLUH3UPmHas//5wOJFn8R1LReu6FQsgJLvC7JzbAeFW+0eTfjJRlfwZMe
+         1IDCPT0oiFffYb4mQO5khNTAa+zHrtXbuIKksIIn4mkzTMUx3d5/HvSlAhgDMAyNRdk4
+         79z2PIuoH7rMivFXbDKjLi84he2EQA578J+tgcyEPFVIMSSuhXFfFi5bgyZV7GL/Fl4A
+         Z2wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=agaH5FJUb4ubbdgR/UcbnaFztHWYbAMVBCEVNxmNcy8=;
+        b=oR0ntZh3YRo3LFHC+BYtK4rn1MyRT/TQgijs3csb1M53T+Qmu4Uq8TWpZKbZVF4c0+
+         NDEfObIUXJzAUH2TO6uXf9869k4wu3SjFIfcIEKt1LaptUOgG+rwacKb6MmktDunq8dB
+         GOegmKRaT4xVIz6n2GoqRfxHGnlsbB184JNpGjoirSRfcUESXOrttPI7CzeTIA/oVgko
+         0W6Q6YPOlXkalTCiIUzSBSZ34mFfo4WBwpsvjUQYag8AFi5CiDA0+G2clgGayes6fI1v
+         GTUV6Wdlk5vg2atmkcwIGbvHZsgMruOpmRrx09U+qznt6JQ0ot6YZNxtBvAGKxfikETn
+         n9Uw==
+X-Gm-Message-State: AOAM5309a8fgOMKwWsDGqEKnU7yQ9kGJmhKIiBeWt9dULsX/dl2zHFbZ
+        AqaiGrXEgnTJDC3vqOPZs2cvaYyYX+E=
+X-Google-Smtp-Source: ABdhPJwvzNZjqoLMW8eDlE/oWXuA09aJJIhBO4f5MUR/UDgX93JftIaiVDErBWpr2ggyhb/0tiuEjw==
+X-Received: by 2002:adf:9467:: with SMTP id 94mr1295788wrq.235.1610498405779;
+        Tue, 12 Jan 2021 16:40:05 -0800 (PST)
+Received: from [192.168.1.211] ([2.29.208.120])
+        by smtp.gmail.com with ESMTPSA id l8sm202548wrb.73.2021.01.12.16.40.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jan 2021 16:40:04 -0800 (PST)
+Subject: Re: [PATCH v2 1/3] software node: Introduce
+ device_add_software_node()
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+References: <20210111141045.14027-1-heikki.krogerus@linux.intel.com>
+ <20210111141045.14027-2-heikki.krogerus@linux.intel.com>
+From:   Daniel Scally <djrscally@gmail.com>
+Message-ID: <2f552de5-4839-a1e5-3012-c56f9fa3bdd5@gmail.com>
+Date:   Wed, 13 Jan 2021 00:40:03 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20210111141045.14027-2-heikki.krogerus@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: 89795852c9c46b9b0701f7376d30a1c5ab4d146c  usb: typec: ucsi: Add support for USB role switch
+Hi Heikki
 
-elapsed time: 725m
+On 11/01/2021 14:10, Heikki Krogerus wrote:
+> This helper will register a software node and then assign
+> it to device at the same time. The function will also make
+> sure that the device can't have more than one software node.
+> 
+> Tested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
 
-configs tested: 157
-configs skipped: 2
+I like this change. One comment below, but for what it's worth:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Reviewed-by: Daniel Scally <djrscally@gmail.com>
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sh                           se7206_defconfig
-um                            kunit_defconfig
-powerpc                     akebono_defconfig
-powerpc                  mpc866_ads_defconfig
-mips                         db1xxx_defconfig
-mips                           rs90_defconfig
-powerpc                mpc7448_hpc2_defconfig
-xtensa                  cadence_csp_defconfig
-arm                    vt8500_v6_v7_defconfig
-powerpc                   motionpro_defconfig
-c6x                        evmc6678_defconfig
-m68k                       m5275evb_defconfig
-h8300                               defconfig
-arm                         shannon_defconfig
-sparc64                             defconfig
-arm                            xcep_defconfig
-arm                            hisi_defconfig
-powerpc                     tqm8548_defconfig
-riscv                            allyesconfig
-sh                            titan_defconfig
-mips                     loongson1c_defconfig
-powerpc                      bamboo_defconfig
-powerpc                      katmai_defconfig
-sh                           se7343_defconfig
-arm                         cm_x300_defconfig
-m68k                       m5475evb_defconfig
-ia64                          tiger_defconfig
-mips                      loongson3_defconfig
-arm                          collie_defconfig
-m68k                          amiga_defconfig
-mips                        qi_lb60_defconfig
-ia64                         bigsur_defconfig
-powerpc                 mpc836x_mds_defconfig
-sh                           se7780_defconfig
-powerpc                       ebony_defconfig
-arm                            lart_defconfig
-arm                         lubbock_defconfig
-arm                     am200epdkit_defconfig
-mips                        bcm47xx_defconfig
-ia64                      gensparse_defconfig
-arm                           corgi_defconfig
-sh                          r7785rp_defconfig
-powerpc                       eiger_defconfig
-m68k                            mac_defconfig
-arm                       spear13xx_defconfig
-arm                          moxart_defconfig
-powerpc                    amigaone_defconfig
-sh                          sdk7780_defconfig
-arm                        spear3xx_defconfig
-sh                                  defconfig
-mips                      malta_kvm_defconfig
-sh                ecovec24-romimage_defconfig
-mips                        maltaup_defconfig
-sh                        dreamcast_defconfig
-powerpc                    socrates_defconfig
-um                           x86_64_defconfig
-arm                         palmz72_defconfig
-arm                         assabet_defconfig
-powerpc                     stx_gp3_defconfig
-sh                   rts7751r2dplus_defconfig
-powerpc                     mpc5200_defconfig
-sh                           se7724_defconfig
-powerpc                      arches_defconfig
-xtensa                       common_defconfig
-arm                        oxnas_v6_defconfig
-powerpc                  storcenter_defconfig
-sparc64                          alldefconfig
-powerpc                     kmeter1_defconfig
-xtensa                  nommu_kc705_defconfig
-powerpc                       maple_defconfig
-mips                           gcw0_defconfig
-arm                        magician_defconfig
-sh                           sh2007_defconfig
-powerpc                        icon_defconfig
-mips                  cavium_octeon_defconfig
-arm                           omap1_defconfig
-powerpc                       holly_defconfig
-microblaze                      mmu_defconfig
-arm                         hackkit_defconfig
-m68k                          atari_defconfig
-arm                              zx_defconfig
-powerpc                          g5_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a002-20210112
-i386                 randconfig-a005-20210112
-i386                 randconfig-a006-20210112
-i386                 randconfig-a003-20210112
-i386                 randconfig-a001-20210112
-i386                 randconfig-a004-20210112
-x86_64               randconfig-a015-20210112
-x86_64               randconfig-a012-20210112
-x86_64               randconfig-a013-20210112
-x86_64               randconfig-a016-20210112
-x86_64               randconfig-a014-20210112
-x86_64               randconfig-a011-20210112
-i386                 randconfig-a012-20210112
-i386                 randconfig-a011-20210112
-i386                 randconfig-a016-20210112
-i386                 randconfig-a013-20210112
-i386                 randconfig-a015-20210112
-i386                 randconfig-a014-20210112
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+> +/**
+> + * device_remove_software_node - Remove device's software node
+> + * @dev: The device with the software node.
+> + *
+> + * This function will unregister the software node of @dev.
+> + */
+> +void device_remove_software_node(struct device *dev)
+> +{
+> +	struct swnode *swnode;
+> +
+> +	swnode = dev_to_swnode(dev);
+> +	if (!swnode)
+> +		return;
+> +
+> +	kobject_put(&swnode->kobj);
+> +}
+> +EXPORT_SYMBOL_GPL(device_remove_software_node);
 
-clang tested configs:
-x86_64               randconfig-a006-20210112
-x86_64               randconfig-a004-20210112
-x86_64               randconfig-a001-20210112
-x86_64               randconfig-a005-20210112
-x86_64               randconfig-a003-20210112
-x86_64               randconfig-a002-20210112
+I wonder if this also ought to set dev_fwnode(dev)->secondary back to
+ERR_PTR(-ENODEV)?
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +
+>  int software_node_notify(struct device *dev, unsigned long action)
+>  {
+> -	struct fwnode_handle *fwnode = dev_fwnode(dev);
+>  	struct swnode *swnode;
+>  	int ret;
+>  
+> -	if (!fwnode)
+> -		return 0;
+> -
+> -	if (!is_software_node(fwnode))
+> -		fwnode = fwnode->secondary;
+> -	if (!is_software_node(fwnode))
+> +	swnode = dev_to_swnode(dev);
+> +	if (!swnode)
+>  		return 0;
+>  
+> -	swnode = to_swnode(fwnode);
+> -
+>  	switch (action) {
+>  	case KOBJ_ADD:
+>  		ret = sysfs_create_link(&dev->kobj, &swnode->kobj,
+> diff --git a/include/linux/property.h b/include/linux/property.h
+> index 0a9001fe7aeab..b0e413dc59271 100644
+> --- a/include/linux/property.h
+> +++ b/include/linux/property.h
+> @@ -488,4 +488,7 @@ fwnode_create_software_node(const struct property_entry *properties,
+>  			    const struct fwnode_handle *parent);
+>  void fwnode_remove_software_node(struct fwnode_handle *fwnode);
+>  
+> +int device_add_software_node(struct device *dev, const struct software_node *swnode);
+> +void device_remove_software_node(struct device *dev);
+> +
+>  #endif /* _LINUX_PROPERTY_H_ */
+> 
+
