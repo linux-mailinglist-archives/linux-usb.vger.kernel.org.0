@@ -2,98 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E183A2F46E3
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 09:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 395572F4706
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 10:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727012AbhAMIvH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jan 2021 03:51:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43732 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726953AbhAMIvH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 Jan 2021 03:51:07 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 769C223139;
-        Wed, 13 Jan 2021 08:50:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610527826;
-        bh=eMpOcIgc2LkAVihH8vbM6HoFr+v+uKc2FtIxMqXrYGA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=rQqd5I+PyQIIgFA1Xw4ZC8bsTqDPx/PCOoXKLAALE0nvcnKFMRW6S8+HbJcMv2t2i
-         3aajC6JhAbPQyKKOdXErNylu+5HglXrvUO/8WGt9+9Dmpn3xqIjR6Y3avwJbb58K+/
-         tJqqxOK0K/O6I/+3TIxOnODyxVzyFra6KSfGLbMDBiEg8/JKWe3Ek33zlZ/tmiJlwO
-         UzQRibkpkLckmmOhiy+fXr8Nj85Cf/aPtyVX66VFeYgkczN7v0/8MPDxsBvMfLO05K
-         psO5qCsbWWsEAorO42wumdsQSORqXJ5yUM8Lz0jlplmWYjAFxUz3ZKBxZzbYz8GvJZ
-         Y2/rX5AekfnnA==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: DWC3 controller Runtime PM
-In-Reply-To: <887ef415-4d15-062a-361f-f55c8ce5c351@amd.com>
-References: <049dc0b1-1c3c-de1f-f788-ab1cc0dba3a4@amd.com>
- <887ef415-4d15-062a-361f-f55c8ce5c351@amd.com>
-Date:   Wed, 13 Jan 2021 10:50:20 +0200
-Message-ID: <87turl2pbn.fsf@kernel.org>
+        id S1727431AbhAMJCg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jan 2021 04:02:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727067AbhAMJCg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jan 2021 04:02:36 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3E0C061575;
+        Wed, 13 Jan 2021 01:01:55 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id y22so1657412ljn.9;
+        Wed, 13 Jan 2021 01:01:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zkyW24Nem9pNLyI2wkdK3KzUwBFzPFBOJwsBkINN3LQ=;
+        b=Hn426ULH1yMmh0ZdIKPuTDeQAShrud9SMoAHdN1a1K+5pPyYne1zavl4UhOf8Y5EHu
+         vuz5wjnMKki/EvHzDH3QSMqVWaBLQHcBhOHguS5hFMIFrh0YT8hcLeUxpg9KpIns3+R0
+         2/ldFBLlVoLsVaWrDG+lcAwvTHZ20Sfzz4fICZJJ/tfN31cwx+7LGPdWVx/6CtgTcDfu
+         iKPLXvjmJF50GWJptOBc6khiKZyyraNkuEsk4BV7fHxiEIzlly9n60atGxBb+pmJgdid
+         z2JynXqDhSCODV5gwAtODbBLZxi0yu1JpPZKeNinaTMrsoPSSrey5NzvtHvjH20FnezA
+         azNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zkyW24Nem9pNLyI2wkdK3KzUwBFzPFBOJwsBkINN3LQ=;
+        b=mtJOgsDuoTkl9Em2P5UG+ODFkQ8y0fHgCG4AGEs3SLCI5NjyBNw6VnI483kX7gMmmN
+         ikJRHU6OAJWYD8Wx5ClqvYwhq2xeBQnUkkpWH5y87mGFuZcKjqkVZE5Sm94xXeaXmSnZ
+         H0CG+bOzWKZYQNqVFx38vOKgwwbAu+XnBNFGi3DgYbBNqwXXmTco+ZIQc5tDjQwZGjZf
+         /lMNYJK0Wt5mSuh1Zkbt2eSVAgLMBHLVUg2omJoh3LxHKeitJUkTIM37W7+XyoifacMZ
+         7MXrhf6HWBTp4O3+BXZESFwL3mdw3qURhrrZ3QQjDpvz75oGf4wnvOA1NCigyZ0Y3Z+W
+         201g==
+X-Gm-Message-State: AOAM533gHwgxzhZtIh47RPioFiwW17Y8Ph2rMKS+diJFjCngKHF3JGc8
+        XJ8FBdscN706HLWpNtWUbbSNjeOUBNo=
+X-Google-Smtp-Source: ABdhPJwMm5gYNC4xZ9bHfrW/x4wSrrarMTzx/yNo4Kg+q5sAU2GFM4WIwlVNPpEFDDt7yin33Gwdeg==
+X-Received: by 2002:a2e:9b47:: with SMTP id o7mr484867ljj.99.1610528513514;
+        Wed, 13 Jan 2021 01:01:53 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
+        by smtp.googlemail.com with ESMTPSA id a8sm141538lfo.206.2021.01.13.01.01.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jan 2021 01:01:52 -0800 (PST)
+Subject: Re: [PATCH v3 0/9] Support Runtime PM and host mode by Tegra ChipIdea
+ USB driver
+To:     Peter Chen <hzpeterchen@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Peter Chen <peter.chen@nxp.com>, Felipe Balbi <balbi@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Ion Agorria <ion@agorria.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20201218120246.7759-1-digetx@gmail.com>
+ <20201229051615.GA5823@b29397-desktop>
+ <b2c21687-4cb9-ba0a-a724-3a82ddd8daff@gmail.com>
+ <713c4b1a-a4b3-41ad-7aad-c49e594f778b@gmail.com>
+ <20210113012036.GA1560@b29397-desktop>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <5cfc067a-0b3b-05fc-7567-4b2b475dd6e4@gmail.com>
+Date:   Wed, 13 Jan 2021 12:01:51 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+In-Reply-To: <20210113012036.GA1560@b29397-desktop>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-
-
-Hi,
-
-"Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com> writes:
-> Hi
->
-> On 12/15/2020 4:03 PM, Shah, Nehal-bakulchandra wrote:
->> Hi Heikkie and all,
+13.01.2021 04:20, Peter Chen пишет:
+> On 21-01-12 09:56:37, Dmitry Osipenko wrote:
+>> 29.12.2020 17:26, Dmitry Osipenko пишет:
+>>> 29.12.2020 08:16, Peter Chen пишет:
+>>>> On 20-12-18 15:02:37, Dmitry Osipenko wrote:
+>>>>> This series implements Runtime PM support for the Tegra ChipIdea USB driver.
+>>>>> It also squashes the older ehci-tegra driver into the ChipIdea driver, hence
+>>>>> the RPM is supported by both UDC and host controllers, secondly this opens
+>>>>> opportunity for implementing OTG support in the future.
+>>>>>
+>>>>> Patchset was tested on various Tegra20, Tegra30 and Tegra124 devices.
+>>>>> Thanks to Peter Geis, Matt Merhar, Nicolas Chauvet and Ion Agorria for
+>>>>> helping with the extensive and productive testing!
+>>>>>
+>>>>> Changelog:
+>>>>>
+>>>>> v3: - Replaced "goto" with if-statements as was suggested by Thierry Reding.
+>>>>>
+>>>>>     - Improved wording of the deprecated Kconfig entry as was suggested
+>>>>>       by Alan Stern.
+>>>>>
+>>>>>     - Added ACKs from Thierry Reding and Alan Stern.
+>>>>>
+>>>>>     - Added a new minor patch "Specify TX FIFO threshold in UDC SoC info"
+>>>>>       just for completeness, since we can now switch OTG to host mode in
+>>>>>       the ChipIdea driver. Although, OTG support remains a work-in-progress
+>>>>>       for now.
+>>>>>
+>>>>> v2: - Improved comments in the code as it was suggested by Peter Chen and
+>>>>>       Sergei Shtylyov for v1.
+>>>>>
+>>>>>     - Replaced mdelay() with fsleep() and made ci->hdc to reset to NULL in
+>>>>>       a error code path, like it was suggested by Peter Chen.
+>>>>>
+>>>>>     - Redirected deprecated USB_EHCI_TEGRA Kconfig entry to USB_CHIPIDEA_TEGRA
+>>>>>       as was suggested by Alan Stern.
+>>>>>
+>>>>>     - Improved commit message and added ACK from Thierry Reding to the patch
+>>>>>       that removes MODULE_ALIAS.
+>>>>>
+>>>>>     - Fixed UDC PHY waking up on ASUS TF201 tablet device by utilizing
+>>>>>       additional VBUS sensor. This was reported and tested by Ion Agorria.
+>>>>>
+>>>>>     - Added t-b from Ion Agorria.
+>>>>>
+>>>>> Dmitry Osipenko (8):
+>>>>>   usb: phy: tegra: Add delay after power up
+>>>>>   usb: phy: tegra: Support waking up from a low power mode
+>>>>>   usb: chipidea: tegra: Remove MODULE_ALIAS
+>>>>>   usb: chipidea: tegra: Rename UDC to USB
+>>>>>   usb: chipidea: tegra: Support runtime PM
+>>>>>   usb: chipidea: tegra: Specify TX FIFO threshold in UDC SoC info
+>>>>>   usb: host: ehci-tegra: Remove the driver
+>>>>>   ARM: tegra_defconfig: Enable USB_CHIPIDEA_HOST and remove
+>>>>>     USB_EHCI_TEGRA
+>>>>>
+>>>>> Peter Geis (1):
+>>>>>   usb: chipidea: tegra: Support host mode
+>>>>
+>>>> Chipidea related (patch 3-7) are applied, thanks.
+>>>
+>>> Hello Peter,
+>>>
+>>> Thank you for applying the patches.
+>>>
+>>> Who will apply the remaining patches?
+>>>
+>>> The Chipidea patch #6 depends on the PHY changes, otherwise USB will
+>>> suspend and never resume.
+>>>
 >>
->> On one of our platform , i have added pci ids in dwc3-pci.c file.
+>> Peter, could you please apply the PHY and defconfig patches along with
+>> the CI patches to -next? I.e. the whole series. Preferentially in
+>> original ordering of patches should be preserved.
 >>
->> Now when controller is switched to host mode and nothing is connected
->> to port all ports are showing run time power status
->>
->> as "suspended". But controller on PCI bus always shows active. The
->> xhci_plat_probe function already sets pm run time enabled.
->>
->> Anything is missing?
->>
->>
->> thanks
->>
->> Nehal
->
-> Can you please guide here?
+> 
+> Hi Dmitry,
+> 
+> Usually, Greg could apply all USB patches, if I apply other USB related
+> patches, it may cause conflict with other patches in other's tree.
+> Greg, free feel to apply this series with 
+> Acked-by: Peter Chen <peter.chen@kernel.org>
+> for chipidea part.
+> 
+> For ARM defconfig patch, I think it should go ARM's tree.
+> 
 
-controller in host mode is xHCI. Mathias, any ideas?
+Thank you for the answer!
 
-=2D-=20
-balbi
+It's not the ARM defconfig, but a local tegra_defconfig. It should be
+fine to take the patch via the USB tree since Thierry already acked it
+and asked to do so.
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl/+tEwRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQb5qg//VQOcJ+ZItaN8nsN4E/T1z46mhtJm4mTm
-o73/RlNEPnFqVPQJCp6kb4pRKf1rG1J/jjOPGmY9wl51HmzZQS19V9CaO5JSciF+
-G89AniHab/czZ0Ogg+x1q7dpivL03xBsnoJSXWDgE7lNl/vKwE7qqRwlXem79tq2
-Fgvb3zOngXZJamT9iGhthkJvW6GQNl6gPy0BODPuZ+BHepQ6C9/yrvQLdDCd6/h9
-cCycAHV+7TB3qZc778okaxTT799nFU4P1etlgncdI5vwERefcaxOdfl9A3VglXil
-4TVh0V4PxtACGvDAf6LYELWTLi5h/PXquHZ6fMigFUvTUe8hq+Zz7SK4Sah2PfqR
-70w2suA8R4POsqK/ByJpFdEh1HbsQ3WcbBZUXzbU20DHltnXvKr+qJwaY8H5COv9
-PCEp52QXtycuT2h0pl1Ms9bHREZNu2j0tjbzKocpEdJnWQ3WIra7z2ztkgEfGC9w
-yAm0LxXzWCFJfk0Xng3ZFpZ3XDrIvsu9zQ9XZ79OyWBRSujV5Fog7+9nL0Q6LJe+
-97qKIltGvoFNBKEBBRS8y0bpsFiQakQP5P/pNUPG3Lu5R/jn8zjf5K9KyOuPSKqI
-JO/gsPD3QTx3yc7OOWQw5qV5gmSCwXqD0InlrXn6tNWw1vuz7w83eS6cA5tKnBtk
-7ku+spMSRyU=
-=u+f4
------END PGP SIGNATURE-----
---=-=-=--
+Greg, please take this whole series. Thanks in advance!
