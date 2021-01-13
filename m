@@ -2,145 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8D52F40D8
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 01:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3CC92F410D
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 02:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393730AbhAMAnL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jan 2021 19:43:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
+        id S1726807AbhAMBV3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jan 2021 20:21:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392455AbhAMAkr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jan 2021 19:40:47 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32124C061575;
-        Tue, 12 Jan 2021 16:40:07 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id 91so286425wrj.7;
-        Tue, 12 Jan 2021 16:40:07 -0800 (PST)
+        with ESMTP id S1726345AbhAMBV2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jan 2021 20:21:28 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08ABCC061575;
+        Tue, 12 Jan 2021 17:20:48 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id p15so29690pjv.3;
+        Tue, 12 Jan 2021 17:20:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=agaH5FJUb4ubbdgR/UcbnaFztHWYbAMVBCEVNxmNcy8=;
-        b=AEiVjcsifZD/SApb4CWBqPM8yQ6WK74QGMmg2REtPE/Tdx+vurF8XkOdcLWRXrxdPU
-         bQmqmRBuCE2cCYeK2XH2DHYBG6gT3IgNU0qZGQXy794LDOIS5/1U50L9IDAf2dD8G3iN
-         2budy9g2NYNdLUH3UPmHas//5wOJFn8R1LReu6FQsgJLvC7JzbAeFW+0eTfjJRlfwZMe
-         1IDCPT0oiFffYb4mQO5khNTAa+zHrtXbuIKksIIn4mkzTMUx3d5/HvSlAhgDMAyNRdk4
-         79z2PIuoH7rMivFXbDKjLi84he2EQA578J+tgcyEPFVIMSSuhXFfFi5bgyZV7GL/Fl4A
-         Z2wg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=LWJKx5e/3nBhUYP+sVXTWgSC9bn3CdJLTBX9fjR0myY=;
+        b=GDX+7VGOIINqOYBqiCBUfaOL/XOcA6euoO0h3za//aZwedDlehD3Si+8V8Fovqu8tw
+         O5oCO7pqbncIw+mKm+1ZiNGpz5jBM85FBCIDMPnDckkAsx+vSh6BLOZ25V5UP4vmExaq
+         kbqEOIAP+6Z6k/zjluH1RooZ5HNa/XFXbE1QR4Dzt4AkZQxB4YerdxLq2S0BOJGpvvmY
+         W+D2byFS5vrHkSHjH0SYe137KRV6QPHQ5ZClQiuBh4x6nTvQwHBZXVxZoPrF1qB7JHGh
+         TpCbCgiFKN9T3EsAoIFHnTPTPySNBI717DUgI26gOo7oAKDtIS1rfsDCgtn9Y0mW5nfJ
+         RFiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=agaH5FJUb4ubbdgR/UcbnaFztHWYbAMVBCEVNxmNcy8=;
-        b=oR0ntZh3YRo3LFHC+BYtK4rn1MyRT/TQgijs3csb1M53T+Qmu4Uq8TWpZKbZVF4c0+
-         NDEfObIUXJzAUH2TO6uXf9869k4wu3SjFIfcIEKt1LaptUOgG+rwacKb6MmktDunq8dB
-         GOegmKRaT4xVIz6n2GoqRfxHGnlsbB184JNpGjoirSRfcUESXOrttPI7CzeTIA/oVgko
-         0W6Q6YPOlXkalTCiIUzSBSZ34mFfo4WBwpsvjUQYag8AFi5CiDA0+G2clgGayes6fI1v
-         GTUV6Wdlk5vg2atmkcwIGbvHZsgMruOpmRrx09U+qznt6JQ0ot6YZNxtBvAGKxfikETn
-         n9Uw==
-X-Gm-Message-State: AOAM5309a8fgOMKwWsDGqEKnU7yQ9kGJmhKIiBeWt9dULsX/dl2zHFbZ
-        AqaiGrXEgnTJDC3vqOPZs2cvaYyYX+E=
-X-Google-Smtp-Source: ABdhPJwvzNZjqoLMW8eDlE/oWXuA09aJJIhBO4f5MUR/UDgX93JftIaiVDErBWpr2ggyhb/0tiuEjw==
-X-Received: by 2002:adf:9467:: with SMTP id 94mr1295788wrq.235.1610498405779;
-        Tue, 12 Jan 2021 16:40:05 -0800 (PST)
-Received: from [192.168.1.211] ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id l8sm202548wrb.73.2021.01.12.16.40.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jan 2021 16:40:04 -0800 (PST)
-Subject: Re: [PATCH v2 1/3] software node: Introduce
- device_add_software_node()
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-References: <20210111141045.14027-1-heikki.krogerus@linux.intel.com>
- <20210111141045.14027-2-heikki.krogerus@linux.intel.com>
-From:   Daniel Scally <djrscally@gmail.com>
-Message-ID: <2f552de5-4839-a1e5-3012-c56f9fa3bdd5@gmail.com>
-Date:   Wed, 13 Jan 2021 00:40:03 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=LWJKx5e/3nBhUYP+sVXTWgSC9bn3CdJLTBX9fjR0myY=;
+        b=hVsjA2uxntGeCozfW02Lffj40b8PWl8Bx/jUu7wSUgmPVBKUxtNpjCwd7dxVDzSo4D
+         O1T8glXaF39o7Z4K+6vOgapsT0hWSL/O/HQJKx6wA1RDkFyF1mKqvfTYnecI+ODCgUHP
+         hkspWePgvhd0ori0GPsiEWc/KpWUPj/KUxd11PmMqZGGMqy2gV3wIEXQI3UR3uRnVlST
+         lM4KbEDSSL0NIGmsEhzZ+hOxuA3O5sq0kpzpFQcvr1Bwz3zOKYsouW7TjW8agAQ4pKtS
+         fZowNSshLcfRNQie2pJ4DEnFCZZgYFu3MAO2OsdRGqcDQVv0wQkygLnUAiUbaUlugPIY
+         J9gw==
+X-Gm-Message-State: AOAM533OE8tzbiJ7c7Txp0MxIeJejwYE8K6Jo2V0JZUEaYogJlMAL80K
+        ujLfxBXyCeSO787XNNnGIjU=
+X-Google-Smtp-Source: ABdhPJxm6gvC8e5Szk4GNsXqMZ73c0ahtHKRbf0g00YQY0/ymdib8nTj09R21K+oIPgXLDG2hZZ0FQ==
+X-Received: by 2002:a17:90a:ae02:: with SMTP id t2mr466890pjq.169.1610500847583;
+        Tue, 12 Jan 2021 17:20:47 -0800 (PST)
+Received: from b29397-desktop ([84.17.34.154])
+        by smtp.gmail.com with ESMTPSA id g30sm319909pfr.152.2021.01.12.17.20.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 12 Jan 2021 17:20:46 -0800 (PST)
+Date:   Wed, 13 Jan 2021 09:20:36 +0800
+From:   Peter Chen <hzpeterchen@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Peter Chen <peter.chen@nxp.com>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Matt Merhar <mattmerhar@protonmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Ion Agorria <ion@agorria.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 0/9] Support Runtime PM and host mode by Tegra
+ ChipIdea USB driver
+Message-ID: <20210113012036.GA1560@b29397-desktop>
+References: <20201218120246.7759-1-digetx@gmail.com>
+ <20201229051615.GA5823@b29397-desktop>
+ <b2c21687-4cb9-ba0a-a724-3a82ddd8daff@gmail.com>
+ <713c4b1a-a4b3-41ad-7aad-c49e594f778b@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210111141045.14027-2-heikki.krogerus@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <713c4b1a-a4b3-41ad-7aad-c49e594f778b@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki
-
-On 11/01/2021 14:10, Heikki Krogerus wrote:
-> This helper will register a software node and then assign
-> it to device at the same time. The function will also make
-> sure that the device can't have more than one software node.
+On 21-01-12 09:56:37, Dmitry Osipenko wrote:
+> 29.12.2020 17:26, Dmitry Osipenko пишет:
+> > 29.12.2020 08:16, Peter Chen пишет:
+> >> On 20-12-18 15:02:37, Dmitry Osipenko wrote:
+> >>> This series implements Runtime PM support for the Tegra ChipIdea USB driver.
+> >>> It also squashes the older ehci-tegra driver into the ChipIdea driver, hence
+> >>> the RPM is supported by both UDC and host controllers, secondly this opens
+> >>> opportunity for implementing OTG support in the future.
+> >>>
+> >>> Patchset was tested on various Tegra20, Tegra30 and Tegra124 devices.
+> >>> Thanks to Peter Geis, Matt Merhar, Nicolas Chauvet and Ion Agorria for
+> >>> helping with the extensive and productive testing!
+> >>>
+> >>> Changelog:
+> >>>
+> >>> v3: - Replaced "goto" with if-statements as was suggested by Thierry Reding.
+> >>>
+> >>>     - Improved wording of the deprecated Kconfig entry as was suggested
+> >>>       by Alan Stern.
+> >>>
+> >>>     - Added ACKs from Thierry Reding and Alan Stern.
+> >>>
+> >>>     - Added a new minor patch "Specify TX FIFO threshold in UDC SoC info"
+> >>>       just for completeness, since we can now switch OTG to host mode in
+> >>>       the ChipIdea driver. Although, OTG support remains a work-in-progress
+> >>>       for now.
+> >>>
+> >>> v2: - Improved comments in the code as it was suggested by Peter Chen and
+> >>>       Sergei Shtylyov for v1.
+> >>>
+> >>>     - Replaced mdelay() with fsleep() and made ci->hdc to reset to NULL in
+> >>>       a error code path, like it was suggested by Peter Chen.
+> >>>
+> >>>     - Redirected deprecated USB_EHCI_TEGRA Kconfig entry to USB_CHIPIDEA_TEGRA
+> >>>       as was suggested by Alan Stern.
+> >>>
+> >>>     - Improved commit message and added ACK from Thierry Reding to the patch
+> >>>       that removes MODULE_ALIAS.
+> >>>
+> >>>     - Fixed UDC PHY waking up on ASUS TF201 tablet device by utilizing
+> >>>       additional VBUS sensor. This was reported and tested by Ion Agorria.
+> >>>
+> >>>     - Added t-b from Ion Agorria.
+> >>>
+> >>> Dmitry Osipenko (8):
+> >>>   usb: phy: tegra: Add delay after power up
+> >>>   usb: phy: tegra: Support waking up from a low power mode
+> >>>   usb: chipidea: tegra: Remove MODULE_ALIAS
+> >>>   usb: chipidea: tegra: Rename UDC to USB
+> >>>   usb: chipidea: tegra: Support runtime PM
+> >>>   usb: chipidea: tegra: Specify TX FIFO threshold in UDC SoC info
+> >>>   usb: host: ehci-tegra: Remove the driver
+> >>>   ARM: tegra_defconfig: Enable USB_CHIPIDEA_HOST and remove
+> >>>     USB_EHCI_TEGRA
+> >>>
+> >>> Peter Geis (1):
+> >>>   usb: chipidea: tegra: Support host mode
+> >>
+> >> Chipidea related (patch 3-7) are applied, thanks.
+> > 
+> > Hello Peter,
+> > 
+> > Thank you for applying the patches.
+> > 
+> > Who will apply the remaining patches?
+> > 
+> > The Chipidea patch #6 depends on the PHY changes, otherwise USB will
+> > suspend and never resume.
+> > 
 > 
-> Tested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
-
-I like this change. One comment below, but for what it's worth:
-
-Reviewed-by: Daniel Scally <djrscally@gmail.com>
-
-> +/**
-> + * device_remove_software_node - Remove device's software node
-> + * @dev: The device with the software node.
-> + *
-> + * This function will unregister the software node of @dev.
-> + */
-> +void device_remove_software_node(struct device *dev)
-> +{
-> +	struct swnode *swnode;
-> +
-> +	swnode = dev_to_swnode(dev);
-> +	if (!swnode)
-> +		return;
-> +
-> +	kobject_put(&swnode->kobj);
-> +}
-> +EXPORT_SYMBOL_GPL(device_remove_software_node);
-
-I wonder if this also ought to set dev_fwnode(dev)->secondary back to
-ERR_PTR(-ENODEV)?
-
-> +
->  int software_node_notify(struct device *dev, unsigned long action)
->  {
-> -	struct fwnode_handle *fwnode = dev_fwnode(dev);
->  	struct swnode *swnode;
->  	int ret;
->  
-> -	if (!fwnode)
-> -		return 0;
-> -
-> -	if (!is_software_node(fwnode))
-> -		fwnode = fwnode->secondary;
-> -	if (!is_software_node(fwnode))
-> +	swnode = dev_to_swnode(dev);
-> +	if (!swnode)
->  		return 0;
->  
-> -	swnode = to_swnode(fwnode);
-> -
->  	switch (action) {
->  	case KOBJ_ADD:
->  		ret = sysfs_create_link(&dev->kobj, &swnode->kobj,
-> diff --git a/include/linux/property.h b/include/linux/property.h
-> index 0a9001fe7aeab..b0e413dc59271 100644
-> --- a/include/linux/property.h
-> +++ b/include/linux/property.h
-> @@ -488,4 +488,7 @@ fwnode_create_software_node(const struct property_entry *properties,
->  			    const struct fwnode_handle *parent);
->  void fwnode_remove_software_node(struct fwnode_handle *fwnode);
->  
-> +int device_add_software_node(struct device *dev, const struct software_node *swnode);
-> +void device_remove_software_node(struct device *dev);
-> +
->  #endif /* _LINUX_PROPERTY_H_ */
+> Peter, could you please apply the PHY and defconfig patches along with
+> the CI patches to -next? I.e. the whole series. Preferentially in
+> original ordering of patches should be preserved.
 > 
+
+Hi Dmitry,
+
+Usually, Greg could apply all USB patches, if I apply other USB related
+patches, it may cause conflict with other patches in other's tree.
+Greg, free feel to apply this series with 
+Acked-by: Peter Chen <peter.chen@kernel.org>
+for chipidea part.
+
+For ARM defconfig patch, I think it should go ARM's tree.
+
+-- 
+
+Thanks,
+Peter Chen
 
