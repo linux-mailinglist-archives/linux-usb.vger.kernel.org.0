@@ -2,75 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D0C2F49F5
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 12:29:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E67842F4A61
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 12:43:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726882AbhAMLVw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jan 2021 06:21:52 -0500
-Received: from mx2.suse.de ([195.135.220.15]:41060 "EHLO mx2.suse.de"
+        id S1725770AbhAMLlI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jan 2021 06:41:08 -0500
+Received: from mga12.intel.com ([192.55.52.136]:11586 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728292AbhAMLVs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 Jan 2021 06:21:48 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 624B1AF2D;
-        Wed, 13 Jan 2021 11:21:06 +0000 (UTC)
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     Paul Zimmerman <Paul.Zimmerman@synopsys.com>,
-        Felipe Balbi <balbi@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Hudson <skrll@netbsd.org>, linux-usb@vger.kernel.org,
-        Minas Harutyunyan <hminas@synopsys.com>
-Cc:     linux@roeck-us.net, dianders@chromium.org,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] usb: dwc2: Make "trimming xfer length" a debug message
-Date:   Wed, 13 Jan 2021 12:20:51 +0100
-Message-Id: <20210113112052.17063-4-nsaenzjulienne@suse.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210113112052.17063-1-nsaenzjulienne@suse.de>
-References: <20210113112052.17063-1-nsaenzjulienne@suse.de>
+        id S1725372AbhAMLlH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 Jan 2021 06:41:07 -0500
+IronPort-SDR: 0i/DJgzDG2v72HNx/gP4SEJejiEDICLZHB/KkUkUET9U+x6OXX4BvavmY/zXEuj0XG4JoPUmGx
+ s+APbaj6DHKg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9862"; a="157372307"
+X-IronPort-AV: E=Sophos;i="5.79,344,1602572400"; 
+   d="scan'208";a="157372307"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2021 03:39:22 -0800
+IronPort-SDR: F4QfWDhQmMVhm/NBOenRV64v/39JG/j8AwMg5wJsMkCr3vaTbrJI8I9ozWX/mELeduZ0GDaAIM
+ BGP8qV/wx+OA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,344,1602572400"; 
+   d="scan'208";a="464880901"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 13 Jan 2021 03:39:19 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 13 Jan 2021 13:39:18 +0200
+Date:   Wed, 13 Jan 2021 13:39:18 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] software node: Introduce
+ device_add_software_node()
+Message-ID: <20210113113918.GA2584629@kuha.fi.intel.com>
+References: <20210111141045.14027-1-heikki.krogerus@linux.intel.com>
+ <20210111141045.14027-2-heikki.krogerus@linux.intel.com>
+ <2f552de5-4839-a1e5-3012-c56f9fa3bdd5@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2f552de5-4839-a1e5-3012-c56f9fa3bdd5@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+Hi Daniel,
 
-With some USB network adapters, such as DM96xx, the following message
-is seen for each maximum size receive packet.
+On Wed, Jan 13, 2021 at 12:40:03AM +0000, Daniel Scally wrote:
+> Hi Heikki
+> 
+> On 11/01/2021 14:10, Heikki Krogerus wrote:
+> > This helper will register a software node and then assign
+> > it to device at the same time. The function will also make
+> > sure that the device can't have more than one software node.
+> > 
+> > Tested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > ---
+> 
+> I like this change. One comment below, but for what it's worth:
+> 
+> Reviewed-by: Daniel Scally <djrscally@gmail.com>
 
-dwc2 ff540000.usb: dwc2_update_urb_state(): trimming xfer length
+Thanks!
 
-This happens because the packet size requested by the driver is 1522
-bytes, wMaxPacketSize is 64, the dwc2 driver configures the chip to
-receive 24*64 = 1536 bytes, and the chip does indeed send more than
-1522 bytes of data. Since the event does not indicate an error condition,
-the message is just noise. Demote it to debug level.
+> > +/**
+> > + * device_remove_software_node - Remove device's software node
+> > + * @dev: The device with the software node.
+> > + *
+> > + * This function will unregister the software node of @dev.
+> > + */
+> > +void device_remove_software_node(struct device *dev)
+> > +{
+> > +	struct swnode *swnode;
+> > +
+> > +	swnode = dev_to_swnode(dev);
+> > +	if (!swnode)
+> > +		return;
+> > +
+> > +	kobject_put(&swnode->kobj);
+> > +}
+> > +EXPORT_SYMBOL_GPL(device_remove_software_node);
+> 
+> I wonder if this also ought to set dev_fwnode(dev)->secondary back to
+> ERR_PTR(-ENODEV)?
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Fixes: 7359d482eb4d3 ("staging: HCD files for the DWC2 driver")
-Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Tested-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
----
- drivers/usb/dwc2/hcd_intr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+We can't do that here unfortunately. Other places still have a
+reference to the swnode at this point and they may still need to
+access it using the dev_fwnode(dev)->secondary pointer.
 
-diff --git a/drivers/usb/dwc2/hcd_intr.c b/drivers/usb/dwc2/hcd_intr.c
-index 12819e019e13..d5f4ec1b73b1 100644
---- a/drivers/usb/dwc2/hcd_intr.c
-+++ b/drivers/usb/dwc2/hcd_intr.c
-@@ -500,7 +500,7 @@ static int dwc2_update_urb_state(struct dwc2_hsotg *hsotg,
- 						      &short_read);
- 
- 	if (urb->actual_length + xfer_length > urb->length) {
--		dev_warn(hsotg->dev, "%s(): trimming xfer length\n", __func__);
-+		dev_dbg(hsotg->dev, "%s(): trimming xfer length\n", __func__);
- 		xfer_length = urb->length - urb->actual_length;
- 	}
- 
 -- 
-2.29.2
-
+heikki
