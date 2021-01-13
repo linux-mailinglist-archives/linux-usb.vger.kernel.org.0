@@ -2,177 +2,324 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 395572F4706
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 10:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCEAF2F47EF
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 10:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727431AbhAMJCg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jan 2021 04:02:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
+        id S1727273AbhAMJof (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jan 2021 04:44:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727067AbhAMJCg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jan 2021 04:02:36 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3E0C061575;
-        Wed, 13 Jan 2021 01:01:55 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id y22so1657412ljn.9;
-        Wed, 13 Jan 2021 01:01:55 -0800 (PST)
+        with ESMTP id S1727011AbhAMJoe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jan 2021 04:44:34 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940BBC0617B1
+        for <linux-usb@vger.kernel.org>; Wed, 13 Jan 2021 01:43:48 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id j13so833167pjz.3
+        for <linux-usb@vger.kernel.org>; Wed, 13 Jan 2021 01:43:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zkyW24Nem9pNLyI2wkdK3KzUwBFzPFBOJwsBkINN3LQ=;
-        b=Hn426ULH1yMmh0ZdIKPuTDeQAShrud9SMoAHdN1a1K+5pPyYne1zavl4UhOf8Y5EHu
-         vuz5wjnMKki/EvHzDH3QSMqVWaBLQHcBhOHguS5hFMIFrh0YT8hcLeUxpg9KpIns3+R0
-         2/ldFBLlVoLsVaWrDG+lcAwvTHZ20Sfzz4fICZJJ/tfN31cwx+7LGPdWVx/6CtgTcDfu
-         iKPLXvjmJF50GWJptOBc6khiKZyyraNkuEsk4BV7fHxiEIzlly9n60atGxBb+pmJgdid
-         z2JynXqDhSCODV5gwAtODbBLZxi0yu1JpPZKeNinaTMrsoPSSrey5NzvtHvjH20FnezA
-         azNg==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ggwCQ2nMs/qCg8xOcGU9zlA1FOPg8wD+5UMiQCq5yQM=;
+        b=LLVDRjiG+sC7KV+ZWsiAqLcKQLlgUjwIfbsiGzMmG2zokdzy7J3yOviQ6f43z6BTIf
+         b522HoWH6CDcGKlXpYVUFaaqLj0k2Ep7vEbRctuxHdoWdGaOBf2E0EaTDurbTcwo4EWu
+         LC1uPXXFLlYYeVQghnjzPSe8uFrAVWp2k9AvY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zkyW24Nem9pNLyI2wkdK3KzUwBFzPFBOJwsBkINN3LQ=;
-        b=mtJOgsDuoTkl9Em2P5UG+ODFkQ8y0fHgCG4AGEs3SLCI5NjyBNw6VnI483kX7gMmmN
-         ikJRHU6OAJWYD8Wx5ClqvYwhq2xeBQnUkkpWH5y87mGFuZcKjqkVZE5Sm94xXeaXmSnZ
-         H0CG+bOzWKZYQNqVFx38vOKgwwbAu+XnBNFGi3DgYbBNqwXXmTco+ZIQc5tDjQwZGjZf
-         /lMNYJK0Wt5mSuh1Zkbt2eSVAgLMBHLVUg2omJoh3LxHKeitJUkTIM37W7+XyoifacMZ
-         7MXrhf6HWBTp4O3+BXZESFwL3mdw3qURhrrZ3QQjDpvz75oGf4wnvOA1NCigyZ0Y3Z+W
-         201g==
-X-Gm-Message-State: AOAM533gHwgxzhZtIh47RPioFiwW17Y8Ph2rMKS+diJFjCngKHF3JGc8
-        XJ8FBdscN706HLWpNtWUbbSNjeOUBNo=
-X-Google-Smtp-Source: ABdhPJwMm5gYNC4xZ9bHfrW/x4wSrrarMTzx/yNo4Kg+q5sAU2GFM4WIwlVNPpEFDDt7yin33Gwdeg==
-X-Received: by 2002:a2e:9b47:: with SMTP id o7mr484867ljj.99.1610528513514;
-        Wed, 13 Jan 2021 01:01:53 -0800 (PST)
-Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.googlemail.com with ESMTPSA id a8sm141538lfo.206.2021.01.13.01.01.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jan 2021 01:01:52 -0800 (PST)
-Subject: Re: [PATCH v3 0/9] Support Runtime PM and host mode by Tegra ChipIdea
- USB driver
-To:     Peter Chen <hzpeterchen@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Peter Chen <peter.chen@nxp.com>, Felipe Balbi <balbi@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Ion Agorria <ion@agorria.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20201218120246.7759-1-digetx@gmail.com>
- <20201229051615.GA5823@b29397-desktop>
- <b2c21687-4cb9-ba0a-a724-3a82ddd8daff@gmail.com>
- <713c4b1a-a4b3-41ad-7aad-c49e594f778b@gmail.com>
- <20210113012036.GA1560@b29397-desktop>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <5cfc067a-0b3b-05fc-7567-4b2b475dd6e4@gmail.com>
-Date:   Wed, 13 Jan 2021 12:01:51 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ggwCQ2nMs/qCg8xOcGU9zlA1FOPg8wD+5UMiQCq5yQM=;
+        b=dBpDVf30neVsexab6sUPyKMLPlxW1x6kN2TSOSezs4Jt+3bl9YiUERCmOYxe8nzQbq
+         ZWcE7dp+rYD2SjqRUT8B1hjBsj+5P7NEJKM96Gs+cm8giHIJuI5qWWYdSe78UpHIjCHv
+         B4AAs6Isc/krj9npRk3A2L7T2SWQn3rNrugcdwPxMtHrx0mN5PDBjk7cczAe3/QoYnE5
+         4ZW4Ib+edxnYbBL3WQwhOrvIFVkJGKET/FNNRxeaRUGuwCAlW+uvHJiwWd0H3miWr6nb
+         qItzgLKVcO9lO2LmmyGaFjCeBL8We/IYwZFSc0Md97TGI02dzEloYfPaZ5chIJeEq3Fo
+         kYbw==
+X-Gm-Message-State: AOAM532WkCD+iez+H2aesk3WRSgOzpLTNI5I78AbmFUyheKlQyySJtBC
+        9B2fIGmD3fU5y6scXdg/G7IKXxTP/iZBo7H8OgCTBQ==
+X-Google-Smtp-Source: ABdhPJwCXia26b34asv7gEsg8E0+Q6vTaIKwYTEu/rVaSqlikKojBMTCnW+L5rJqB729GSFBglW6hTA3XV4tib/VHB8=
+X-Received: by 2002:a17:90b:23d8:: with SMTP id md24mr1422315pjb.144.1610531027983;
+ Wed, 13 Jan 2021 01:43:47 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210113012036.GA1560@b29397-desktop>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <1608629682-8535-1-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <1608629682-8535-1-git-send-email-chunfeng.yun@mediatek.com>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Wed, 13 Jan 2021 17:43:37 +0800
+Message-ID: <CAATdQgAx_3X6=HXa78P_UNumCyrt9ejyuVu_y5YZc4cPsJ6=ww@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 1/5] usb: xhci-mtk: improve bandwidth scheduling
+ with multi-TT
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Yaqii Wu <yaqii.wu@mediatek.com>,
+        Zhanyong Wang <zhanyong.wang@mediatek.com>,
+        Zhanyong Wang <zhangyong.wang@mediatek.com>,
+        linux-usb@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-13.01.2021 04:20, Peter Chen пишет:
-> On 21-01-12 09:56:37, Dmitry Osipenko wrote:
->> 29.12.2020 17:26, Dmitry Osipenko пишет:
->>> 29.12.2020 08:16, Peter Chen пишет:
->>>> On 20-12-18 15:02:37, Dmitry Osipenko wrote:
->>>>> This series implements Runtime PM support for the Tegra ChipIdea USB driver.
->>>>> It also squashes the older ehci-tegra driver into the ChipIdea driver, hence
->>>>> the RPM is supported by both UDC and host controllers, secondly this opens
->>>>> opportunity for implementing OTG support in the future.
->>>>>
->>>>> Patchset was tested on various Tegra20, Tegra30 and Tegra124 devices.
->>>>> Thanks to Peter Geis, Matt Merhar, Nicolas Chauvet and Ion Agorria for
->>>>> helping with the extensive and productive testing!
->>>>>
->>>>> Changelog:
->>>>>
->>>>> v3: - Replaced "goto" with if-statements as was suggested by Thierry Reding.
->>>>>
->>>>>     - Improved wording of the deprecated Kconfig entry as was suggested
->>>>>       by Alan Stern.
->>>>>
->>>>>     - Added ACKs from Thierry Reding and Alan Stern.
->>>>>
->>>>>     - Added a new minor patch "Specify TX FIFO threshold in UDC SoC info"
->>>>>       just for completeness, since we can now switch OTG to host mode in
->>>>>       the ChipIdea driver. Although, OTG support remains a work-in-progress
->>>>>       for now.
->>>>>
->>>>> v2: - Improved comments in the code as it was suggested by Peter Chen and
->>>>>       Sergei Shtylyov for v1.
->>>>>
->>>>>     - Replaced mdelay() with fsleep() and made ci->hdc to reset to NULL in
->>>>>       a error code path, like it was suggested by Peter Chen.
->>>>>
->>>>>     - Redirected deprecated USB_EHCI_TEGRA Kconfig entry to USB_CHIPIDEA_TEGRA
->>>>>       as was suggested by Alan Stern.
->>>>>
->>>>>     - Improved commit message and added ACK from Thierry Reding to the patch
->>>>>       that removes MODULE_ALIAS.
->>>>>
->>>>>     - Fixed UDC PHY waking up on ASUS TF201 tablet device by utilizing
->>>>>       additional VBUS sensor. This was reported and tested by Ion Agorria.
->>>>>
->>>>>     - Added t-b from Ion Agorria.
->>>>>
->>>>> Dmitry Osipenko (8):
->>>>>   usb: phy: tegra: Add delay after power up
->>>>>   usb: phy: tegra: Support waking up from a low power mode
->>>>>   usb: chipidea: tegra: Remove MODULE_ALIAS
->>>>>   usb: chipidea: tegra: Rename UDC to USB
->>>>>   usb: chipidea: tegra: Support runtime PM
->>>>>   usb: chipidea: tegra: Specify TX FIFO threshold in UDC SoC info
->>>>>   usb: host: ehci-tegra: Remove the driver
->>>>>   ARM: tegra_defconfig: Enable USB_CHIPIDEA_HOST and remove
->>>>>     USB_EHCI_TEGRA
->>>>>
->>>>> Peter Geis (1):
->>>>>   usb: chipidea: tegra: Support host mode
->>>>
->>>> Chipidea related (patch 3-7) are applied, thanks.
->>>
->>> Hello Peter,
->>>
->>> Thank you for applying the patches.
->>>
->>> Who will apply the remaining patches?
->>>
->>> The Chipidea patch #6 depends on the PHY changes, otherwise USB will
->>> suspend and never resume.
->>>
->>
->> Peter, could you please apply the PHY and defconfig patches along with
->> the CI patches to -next? I.e. the whole series. Preferentially in
->> original ordering of patches should be preserved.
->>
-> 
-> Hi Dmitry,
-> 
-> Usually, Greg could apply all USB patches, if I apply other USB related
-> patches, it may cause conflict with other patches in other's tree.
-> Greg, free feel to apply this series with 
-> Acked-by: Peter Chen <peter.chen@kernel.org>
-> for chipidea part.
-> 
-> For ARM defconfig patch, I think it should go ARM's tree.
-> 
+On Tue, Dec 22, 2020 at 5:35 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+>
+> From: Zhanyong Wang <zhanyong.wang@mediatek.com>
+>
+> After inserted the usb type-c 3.5mm dongle with headset, dmesg showed:
+> usb 1-1.1: new full-speed USB device number 5 using xhci-mtk
+> usb 1-1.1: New USB device found, idVendor=05ac, idProduct=110a, bcdDevice=26.11
+> usb 1-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> usb 1-1.1: Product: USB-C to 3.5mm Headphone Jack Adapter
+> usb 1-1.1: Manufacturer: Apple, Inc.
+> usb 1-1.1: SerialNumber: DWH915501TFJKLTAM
+> xhci-mtk 11200000.xhci: Not enough bandwidth!
+> usb 1-1.1: can't set config #2, error -28
+>
+> improve low-speed/full-speed INT/ISOC bandwidth scheduling with USB
+> muli-TT.
+>
+> Signed-off-by: Yaqii Wu <yaqii.wu@mediatek.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v2~v3: no changes
+> ---
+>  drivers/usb/host/xhci-mtk-sch.c | 91 ++++++++++++++++++++++++++++-----
+>  drivers/usb/host/xhci-mtk.h     |  8 ++-
+>  2 files changed, 84 insertions(+), 15 deletions(-)
+>  mode change 100644 => 100755 drivers/usb/host/xhci-mtk-sch.c
+>
+> diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+> old mode 100644
+> new mode 100755
+> index 45c54d56ecbd..94292b9bbc63
+> --- a/drivers/usb/host/xhci-mtk-sch.c
+> +++ b/drivers/usb/host/xhci-mtk-sch.c
+> @@ -383,7 +383,9 @@ static int check_sch_tt(struct usb_device *udev,
+>         u32 fs_budget_start;
+>         u32 start_ss, last_ss;
+>         u32 start_cs, last_cs;
+> -       int i;
+> +       u32 num_esit, base;
+> +       int i, j;
+> +       u32 tmp;
+>
+>         start_ss = offset % 8;
+>         fs_budget_start = (start_ss + 1) % 8;
+> @@ -398,10 +400,13 @@ static int check_sch_tt(struct usb_device *udev,
+>                 if (!(start_ss == 7 || last_ss < 6))
+>                         return -ERANGE;
+>
+> -               for (i = 0; i < sch_ep->cs_count; i++)
+> -                       if (test_bit(offset + i, tt->split_bit_map))
+> +               for (i = 0; i < sch_ep->cs_count; i++) {
+> +                       if (test_bit(offset + i, tt->ss_bit_map))
+>                                 return -ERANGE;
+>
+> +                       if (test_bit(offset + i, tt->cs_bit_map))
+> +                               return -ERANGE;
+> +               }
 
-Thank you for the answer!
+Are there any reasons for doing this?
+Why can only one split packet be scheduled in a u-frame for isochronous out?
+This looks like overkill.
 
-It's not the ARM defconfig, but a local tegra_defconfig. It should be
-fine to take the patch via the USB tree since Thierry already acked it
-and asked to do so.
+>         } else {
+>                 u32 cs_count = DIV_ROUND_UP(sch_ep->maxpkt, FS_PAYLOAD_MAX);
+>
+> @@ -428,8 +433,10 @@ static int check_sch_tt(struct usb_device *udev,
+>                 if (cs_count > 7)
+>                         cs_count = 7; /* HW limit */
+>
+> -               for (i = 0; i < cs_count + 2; i++) {
+> -                       if (test_bit(offset + i, tt->split_bit_map))
+> +               if (test_bit(offset, tt->ss_bit_map))
+> +                       return -ERANGE;
+> +               for (i = 0; i < cs_count; i++) {
+> +                       if (test_bit(offset + 2 + i, tt->cs_bit_map))
+>                                 return -ERANGE;
+>                 }
+>
 
-Greg, please take this whole series. Thanks in advance!
+same here. It would be much better to understand
+if you can provide some counterexamples of schedule
+that can happen when this bitmap checking logic is omitted.
+
+> @@ -445,11 +452,22 @@ static int check_sch_tt(struct usb_device *udev,
+>                         sch_ep->num_budget_microframes = sch_ep->esit;
+>         }
+>
+> +       num_esit = XHCI_MTK_MAX_ESIT / sch_ep->esit;
+> +       for (i = 0; i < num_esit; i++) {
+> +               base = sch_ep->offset + i * sch_ep->esit;
+> +               for (j = 0; j < sch_ep->num_budget_microframes; j++) {
+> +                       tmp = tt->fs_bus_bw[base + j]
+> +                             + sch_ep->bw_cost_per_microframe;
+> +                       if (tmp > FS_PAYLOAD_MAX)
+> +                               return -ERANGE;
+> +               }
+> +       }
+
+I guess this is enough to check the bandwidth limit of the
+lower speed bus without a bitmap.
+
+> +
+>         return 0;
+>  }
+>
+>  static void update_sch_tt(struct usb_device *udev,
+> -       struct mu3h_sch_ep_info *sch_ep)
+> +       struct mu3h_sch_ep_info *sch_ep, bool used)
+>  {
+>         struct mu3h_sch_tt *tt = sch_ep->sch_tt;
+>         u32 base, num_esit;
+> @@ -458,11 +476,52 @@ static void update_sch_tt(struct usb_device *udev,
+>         num_esit = XHCI_MTK_MAX_ESIT / sch_ep->esit;
+>         for (i = 0; i < num_esit; i++) {
+>                 base = sch_ep->offset + i * sch_ep->esit;
+> -               for (j = 0; j < sch_ep->num_budget_microframes; j++)
+> -                       set_bit(base + j, tt->split_bit_map);
+> +               for (j = 0; j < sch_ep->num_budget_microframes; j++) {
+> +                       if (used)
+> +                               set_bit(base + j, tt->split_bit_map);
+> +                       else
+> +                               clear_bit(base + j, tt->split_bit_map);
+> +               }
+> +
+> +               if (sch_ep->ep_type == ISOC_OUT_EP) {
+> +                       for (j = 0; j < sch_ep->num_budget_microframes; j++) {
+> +                               if (used) {
+> +                                       set_bit(base + j, tt->ss_bit_map);
+> +                                       set_bit(base + j, tt->cs_bit_map);
+> +                                       tt->fs_bus_bw[base + j] +=
+> +                                               sch_ep->bw_cost_per_microframe;
+> +                               } else {
+> +                                       clear_bit(base + j, tt->ss_bit_map);
+> +                                       clear_bit(base + j, tt->cs_bit_map);
+> +                                       tt->fs_bus_bw[base + j] -=
+> +                                               sch_ep->bw_cost_per_microframe;
+> +                               }
+> +                       }
+> +               } else {
+> +                       if (used)
+> +                               set_bit(base, tt->ss_bit_map);
+> +                       else
+> +                               clear_bit(base, tt->ss_bit_map);
+> +
+> +                       for (j = 0; j < sch_ep->cs_count; j++) {
+> +                               if (used) {
+> +                                       set_bit(base + 2 + j, tt->cs_bit_map);
+> +
+> +                                       tt->fs_bus_bw[base + 2 + j] +=
+> +                                               sch_ep->bw_cost_per_microframe;
+> +                               } else {
+> +                                       clear_bit(base + 2 + j, tt->cs_bit_map);
+> +                                       tt->fs_bus_bw[base + 2 + j] -=
+> +                                               sch_ep->bw_cost_per_microframe;
+> +                               }
+> +                       }
+> +               }
+>         }
+>
+> -       list_add_tail(&sch_ep->tt_endpoint, &tt->ep_list);
+> +       if (used)
+> +               list_add_tail(&sch_ep->tt_endpoint, &tt->ep_list);
+> +       else
+> +               list_del(&sch_ep->tt_endpoint);
+>  }
+>
+>  static int check_sch_bw(struct usb_device *udev,
+> @@ -470,6 +529,7 @@ static int check_sch_bw(struct usb_device *udev,
+>  {
+>         u32 offset;
+>         u32 esit;
+> +       u32 boundary;
+>         u32 min_bw;
+>         u32 min_index;
+>         u32 worst_bw;
+> @@ -487,10 +547,13 @@ static int check_sch_bw(struct usb_device *udev,
+>          */
+>         min_bw = ~0;
+>         min_index = 0;
+> +       boundary = esit;
+>         min_cs_count = sch_ep->cs_count;
+>         min_num_budget = sch_ep->num_budget_microframes;
+>         for (offset = 0; offset < esit; offset++) {
+>                 if (is_fs_or_ls(udev->speed)) {
+> +                       if (sch_ep->ep_type != ISOC_OUT_EP)
+> +                               boundary = esit + 1;
+>                         ret = check_sch_tt(udev, sch_ep, offset);
+>                         if (ret)
+>                                 continue;
+> @@ -498,7 +561,7 @@ static int check_sch_bw(struct usb_device *udev,
+>                                 tt_offset_ok = true;
+>                 }
+>
+> -               if ((offset + sch_ep->num_budget_microframes) > sch_ep->esit)
+> +               if ((offset + sch_ep->num_budget_microframes) > boundary)
+>                         break;
+>
+>                 worst_bw = get_max_bw(sch_bw, sch_ep, offset);
+> @@ -532,7 +595,7 @@ static int check_sch_bw(struct usb_device *udev,
+>                 if (!tt_offset_ok)
+>                         return -ERANGE;
+>
+> -               update_sch_tt(udev, sch_ep);
+> +               update_sch_tt(udev, sch_ep, 1);
+>         }
+>
+>         /* update bus bandwidth info */
+> @@ -696,12 +759,12 @@ void xhci_mtk_drop_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
+>
+>         list_for_each_entry(sch_ep, &sch_bw->bw_ep_list, endpoint) {
+>                 if (sch_ep->ep == ep) {
+> -                       update_bus_bw(sch_bw, sch_ep, 0);
+> -                       list_del(&sch_ep->endpoint);
+>                         if (is_fs_or_ls(udev->speed)) {
+> -                               list_del(&sch_ep->tt_endpoint);
+> +                               update_sch_tt(udev, sch_ep, 0);
+>                                 drop_tt(udev);
+>                         }
+> +                       update_bus_bw(sch_bw, sch_ep, 0);
+> +                       list_del(&sch_ep->endpoint);
+>                         kfree(sch_ep);
+>                         break;
+>                 }
+> diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
+> index a93cfe817904..323b281933b9 100644
+> --- a/drivers/usb/host/xhci-mtk.h
+> +++ b/drivers/usb/host/xhci-mtk.h
+> @@ -21,12 +21,18 @@
+>
+>  /**
+>   * @split_bit_map: used to avoid split microframes overlay
+> + * @ss_bit_map: used to avoid start split microframes overlay
+> + * @cs_bit_map: used to avoid complete split microframes overlay
+> + * @fs_bus_bw: array to keep track of bandwidth already used at full speed
+>   * @ep_list: Endpoints using this TT
+>   * @usb_tt: usb TT related
+>   * @tt_port: TT port number
+>   */
+>  struct mu3h_sch_tt {
+>         DECLARE_BITMAP(split_bit_map, XHCI_MTK_MAX_ESIT);
+> +       DECLARE_BITMAP(ss_bit_map, XHCI_MTK_MAX_ESIT);
+> +       DECLARE_BITMAP(cs_bit_map, XHCI_MTK_MAX_ESIT + 1);
+> +       u32 fs_bus_bw[XHCI_MTK_MAX_ESIT];
+>         struct list_head ep_list;
+>         struct usb_tt *usb_tt;
+>         int tt_port;
+> @@ -42,7 +48,7 @@ struct mu3h_sch_tt {
+>   * two bandwidth domains, one for IN eps and another for OUT eps.
+>   */
+>  struct mu3h_sch_bw_info {
+> -       u32 bus_bw[XHCI_MTK_MAX_ESIT];
+> +       u32 bus_bw[XHCI_MTK_MAX_ESIT + 1];
+>         struct list_head bw_ep_list;
+>  };
+>
+> --
+> 2.18.0
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
