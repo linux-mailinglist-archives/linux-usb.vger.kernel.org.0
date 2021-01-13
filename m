@@ -2,122 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F9E2F460A
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 09:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 663442F463D
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 09:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726736AbhAMINH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jan 2021 03:13:07 -0500
-Received: from mail-eopbgr1310099.outbound.protection.outlook.com ([40.107.131.99]:39488
-        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726460AbhAMINH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 Jan 2021 03:13:07 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OYVlqeuZ0/80UkZNr+BkQSAw3uZoMLiMUaK1onybTWKxHCXsA61t21U0agmfZjjYfBql1P2hyJMyr+LM7xs1OsVI+BxyKPwA7NSbsGuZdDkNwmY/fh4h7Z7vgp4JMKc7gw71boaHgheqZ49N4QeN+/H1aX6BoOogEbJsL4vdaSoe3Y6dMIyeLAHEFfQjgpMRWuwQcG2/M4YlRpByp6/2AVt+oatqE7rC2kI+6/UDP2APm8eWVNvBCxFCa6Zq4EYBj65RuCOCNClsApsT4G0K29R05gBaI6Gk2rcygt75QuQNB8oxKLtZIFYCJB2A+L5POvPRZMpUcBhDoIOhf83dLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=99ZgweiB9ViK6XVyVH4WxbtBrvv2BVkbv+M6R0/VPq0=;
- b=UTuL2RFfpLUW7PGwd+nhvJOozvJoZt9ppYW1pnuQsm0qxZ81pGv7tH7BgiEFNO7ItgrjHpzdhqOd1+i4Dgpn/rZ32dwsWhE3hci3Tip0HTtxdv02nukkEH6mdRfKfE1jbr1uDo4VEdTM0joaZRxk3I0v+TeWcyslymAeEpSx5dNzEIbntX/7BV+zSpmQbwhdyeH/O68AlFmQgCjiqKr2BXmNKo4QaeZR9TZOR9YromfTDoDFMMIQrHp+CDayqDI4dLWwd8+Iwi9D3EVPlFAg/Gyv7qs0zCZjTlRzyBpskMdUd/TZIuq692v6PicvPHEBUFNnNw9i1O3IO034V9FpJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cn.digi-group.com; dmarc=pass action=none
- header.from=cn.digi-group.com; dkim=pass header.d=cn.digi-group.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=digiworld.onmicrosoft.com; s=selector2-digiworld-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=99ZgweiB9ViK6XVyVH4WxbtBrvv2BVkbv+M6R0/VPq0=;
- b=s1tNPQgrfWuDvSHLt1WuEumaccUP8bAgJ0XHpBqd4lpOzRlE+giFBS9TIp+CSlKOsA/rPd7QPIfMWro0lmoOHGByrAxYhcN7Hj7fj9KpyFvhzU/Drd59ECHZdnuZUTHuDR4hFpaCNzdF4t7Gae4pYpodsSpu5QKVY5qQ5yMLFQE=
-Received: from HK0PR06MB3825.apcprd06.prod.outlook.com (2603:1096:203:ad::15)
- by HK0PR06MB2290.apcprd06.prod.outlook.com (2603:1096:203:4f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.8; Wed, 13 Jan
- 2021 08:11:33 +0000
-Received: from HK0PR06MB3825.apcprd06.prod.outlook.com
- ([fe80::f5c6:1f35:5fd5:9501]) by HK0PR06MB3825.apcprd06.prod.outlook.com
- ([fe80::f5c6:1f35:5fd5:9501%7]) with mapi id 15.20.3742.012; Wed, 13 Jan 2021
- 08:11:33 +0000
-From:   Jin Chen Xin <cx.jin@cn.digi-group.com>
-To:     Johan Hovold <johan@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1726896AbhAMIOr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jan 2021 03:14:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34196 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726843AbhAMIOq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 Jan 2021 03:14:46 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 226E72333B;
+        Wed, 13 Jan 2021 08:14:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1610525646;
+        bh=l6CuHq4+9qsep0eDFA7g1NKtLaA3YingdmHMtCFBEqQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JT8pMbqIqd4+nyaVucfSvDJlKZ9G9ZAiG5qxM7XCTsGDj/4zBguw0AzgCPC8lDJ+X
+         /ZZShJWvRL9KGvTq8aEOOnU1DbWmrEKahy+9N3/hyAV26w38wj3I3jzlOCp+s8T2EZ
+         MCLen7gKBgQUquO7anVgIeUA3uZQPCyjuxK33qSk=
+Date:   Wed, 13 Jan 2021 09:14:01 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jin Chen Xin <cx.jin@cn.digi-group.com>
+Cc:     Johan Hovold <johan@kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Recall: [PATCH] drivers: add new VID/PID for supporting Teraoka
- AD2000
-Thread-Topic: [PATCH] drivers: add new VID/PID for supporting Teraoka AD2000
-Thread-Index: AQHW6YO0y63ZImDip0mOroYDEeLkAA==
-X-CallingTelephoneNumber: IPM.Note
-X-VoiceMessageDuration: 17
-X-FaxNumberOfPages: 0
-Date:   Wed, 13 Jan 2021 08:11:32 +0000
-Message-ID: <HK0PR06MB382565484E019A51BA3BCDA49FA90@HK0PR06MB3825.apcprd06.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none
- header.from=cn.digi-group.com;
-x-originating-ip: [116.228.41.234]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8ed9fe23-55da-428e-2da1-08d8b79ad6da
-x-ms-traffictypediagnostic: HK0PR06MB2290:
-x-microsoft-antispam-prvs: <HK0PR06MB2290A0F2F966405A48C664779FA90@HK0PR06MB2290.apcprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4941;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nOVgh+bzeCsYI4LTBDIXlTNMkpDjbtM+eqq0HXO/RsJu2CuUyIYwSiPKRisLwAq9HsCvQ06B3oLP05JcS1rlZKnQugP8QXd1pakUb7pth7sFVl/4LM/ns8QiN7MCCq9FSvRcMWwBBZjrD/ERCjwnZGj0o9E1roPXOeQn8tEs5t7MbopNnWRm5i1OqsRgw3an0kXv5StKrovUh5GxVj0W09v8QHHVcFGGWiDsWXZD8GohXrFCvPhQBOBAd0Bre8hqdHYA1cneOPPKojOpgnXKmuomCRrv3V+0AFe6PlL3eHt9Rxo00isNtSENvYRzTcjTq5SBe408FQe/8/QfRKhDedQMpy6f4eEfka8HGNM72/TN2DHf/k0RazmFFsKjdMIzxqxGePBg6cqCF/W++JeUuA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3825.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(136003)(376002)(396003)(366004)(346002)(478600001)(6506007)(6916009)(2906002)(4326008)(186003)(7696005)(86362001)(4744005)(54906003)(33656002)(66476007)(83380400001)(9686003)(8936002)(64756008)(316002)(66556008)(8676002)(66946007)(66446008)(52536014)(76116006)(26005)(55016002)(5660300002)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?Q3ZQM0dTTWNock9sQU1tUGN6R2Rkdk9mcStTUGZWaHR2cnJCWU40bGpWVk04?=
- =?utf-8?B?TU1sVm1TZEtGU3o3SXEvOTJlckIrMERlM01YZ1NCZVNuL2lGOHFod3JneUJh?=
- =?utf-8?B?TGN0UzVzaTI2aTdiSlZsaFJjU2prVm9jRW1qaWU1bmR5VGFSdndIWWkwMXJQ?=
- =?utf-8?B?UDYvZU1ITnAya1Bvc1NxeVdkcnMvcnNTMUFCeUs4d1NHWDBJMVY0cVplckpk?=
- =?utf-8?B?alU2TGUvTXFuckZhemxpL1ZwZTluM3JWWlVqQVBUbHFQVkg3M3l4blc2TWFC?=
- =?utf-8?B?cjFLTGIyKzJEVnBjSU9JdFlUVjQ1MVNzNzMvRm94QlAyeUxHd1FCa29wYzZY?=
- =?utf-8?B?MW1HQjd2S2s3d2Y2eTdoV3ZncTdWaDZrbUM5dGtadTdteGoyWlZSSnVoYjZm?=
- =?utf-8?B?MVBEb0pOK0M4dCtTRkxiR3hwR3VOZmpHSkkrTDgxZ0dtMjRUYW9NK3dDaVBN?=
- =?utf-8?B?dmpVdUpKcEM4dDZuODZXZitLSW1KK0NzRTl3cForcXgwZ0V4b1Nka05BNjFm?=
- =?utf-8?B?UzUvWWRxL1FkYnphVGhsWWRNVERNK3IzOEQxVCtxSlFyajdqbEZSdHdZWndu?=
- =?utf-8?B?eTBpOC93NjhGaGpvYnp5MFBxT1Q0K2xkekdGdkREcUx1a280MnQ2N080clNM?=
- =?utf-8?B?ZDdwL2dOVHRaYTJDdzJtS29HMEdXYUJKL0VVVEVkU1BJSzlsWGhFcDFYeDZR?=
- =?utf-8?B?ZUlFUDVWZVJVRjZhbjlmUG5hY2lvRTNJeVBZcnhlWmxBcDFoRjByU3VnVkFh?=
- =?utf-8?B?dW5BNkxiM0FjemdaRlJXOVgvdFZ0TTIxT1NZWGdJRGpwREdRMEtyODFITE51?=
- =?utf-8?B?Y3ZWUDEyS2xieWRxSWhja0pORUFyNWxPaThzZzJVUzZVcC9HS0N4ajBFL3dr?=
- =?utf-8?B?OFJNWFUxL2MvamFmQUVPL3VZdlVQYmtwRWdUd2ZFc2dsYlhUUzdISjF0dGMy?=
- =?utf-8?B?QTMyTWZkUzBHNzJOeGhWaUswQ1V0L1pRNTFPVnFhRlMxc2xLcFBiazdPOG5i?=
- =?utf-8?B?bUFhR05yVDgydGRGdXpMZXJQMGFRS0RxV0doWFlkVFQ0TGxOWGI3MnJGcHZ1?=
- =?utf-8?B?ZDYwekJaQVQwZDBxSitjZkoxdkNQTUs3V0RFblFrVjI1NXdYdnJGam4rY3pY?=
- =?utf-8?B?MEl1UE1XaEh3MlV4cXp4blpPWTNLZkdyd3gxTEc0bXpWMHVZS2pTMWYzZnZr?=
- =?utf-8?B?VlpmTFhLZ1Q4SXlzYmpFR0dzMlJicVhEbzlIcEFlRFlWbThTcXJjS1QxdlBS?=
- =?utf-8?B?ejlIWVd2Q1BhR1BzNHBIYS90WlVPWE1pUmNWNy9uZ2ptQlJYZFVZSkRrSytI?=
- =?utf-8?Q?Heb/VZlOBuWi4=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Subject: Re: [PATCH] drivers: add new VID/PID for supporting Teraoka AD2000
+Message-ID: <X/6ryenJBM+seTiw@kroah.com>
+References: <HK0PR06MB38255C7062AD2A1F578AE7459FA90@HK0PR06MB3825.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: cn.digi-group.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3825.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8ed9fe23-55da-428e-2da1-08d8b79ad6da
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jan 2021 08:11:32.8835
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 05a6dd31-dbec-4a4f-a8cd-2eada561cecf
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dbKKpaQKTKESUvmN0Oe3QfvgdDVqtwn54cKDk4I34VcItWjDbSqtTYcShXQv1niNqwrZG1UpA0kJK9OXrvTLR514Td3Yf/qhCuAyCPRYFuk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB2290
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <HK0PR06MB38255C7062AD2A1F578AE7459FA90@HK0PR06MB3825.apcprd06.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SmluIENoZW4gWGluIHdvdWxkIGxpa2UgdG8gcmVjYWxsIHRoZSBtZXNzYWdlLCAiW1BBVENIXSBk
-cml2ZXJzOiBhZGQgbmV3IFZJRC9QSUQgZm9yIHN1cHBvcnRpbmcgVGVyYW9rYSBBRDIwMDAiLg0K
-KiBUaGUgaW5mb3JtYXRpb24gY29udGFpbmVkIGluIHRoaXMgbWVzc2FnZSBpcyBpbnRlbmRlZCBm
-b3IgdGhlIHVzZSBvZiB0aGUgaW5kaXZpZHVhbHMgdG8gd2hvbSBpdCBpcyBhZGRyZXNzZWQgYW5k
-IG1heSBjb250YWluIGluZm9ybWF0aW9uIHRoYXQgaXMgcHJpdmlsZWdlZCBhbmQgY29uZmlkZW50
-aWFsLiBJZiB5b3UgaGF2ZSByZWNlaXZlZCB0aGlzIGVtYWlsIGJ5IG1pc3Rha2UsIHBsZWFzZSBk
-aXNjYXJkIHRoaXMgZW1haWwgaW1tZWRpYXRlbHkuIERvIG5vdCBkaXNjbG9zZSwgZm9yd2FyZCBv
-ciBjb3B5Lg0KKiDkv6Hmga/lronlhajlo7DmmI7vvJrmnKzpgq7ku7Yo5YyF5ous5YW25Lu75L2V
-6ZmE5Lu277yJ55qE5L+h5oGv77yM5LuF55So5LqO6YKu5Lu25YiX5Ye655qE5o6l5pS26ICF5L2/
-55So77yM5bm25LiU5Y+v6IO95YyF5ZCr5pyJ54m56K645ZKM5py65a+G55qE5L+h5oGv44CC5aaC
-5p6c5oKo6K+v5pS25Yiw6L+Z5bCB55S15a2Q6YKu5Lu277yM6K+36YCa55+l5Y+R5Lu25Lq677yM
-5bm256uL5Y2z5Yig6Zmk5a6D77yM6K+35Yu/6YCP6Zyy44CB6L2s5Y+R5oiW5aSN5Yi244CCDQo=
+On Wed, Jan 13, 2021 at 08:02:33AM +0000, Jin Chen Xin wrote:
+> 
+> From 1df119cfa105383a0e047a68602b3a9dc4f81c3c Mon Sep 17 00:00:00 2001
+> From: Jin Chen-Xin <cx.jin@cn.digi-group.com>
+> Date: Wed, 13 Jan 2021 14:09:07 +0800
+> Subject: [PATCH] drivers: add new VID/PID for supporting Teraoka AD2000
+> 
+> Teraoka AD2000 uses the CP210x driver, but the chip VID/PID is
+> customized with 0988/0578. We need the driver to support the new VID/PID.
+> 
+> Signed-off-by: Jin Chen-Xin <cx.jin@cn.digi-group.com>
+> ---
+>  drivers/usb/serial/cp210x.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+> index fbb10df..c274cc3 100644
+> --- a/drivers/usb/serial/cp210x.c
+> +++ b/drivers/usb/serial/cp210x.c
+> @@ -234,6 +234,7 @@ static int cp210x_tiocmset_port(struct usb_serial_port *port,
+>  { USB_DEVICE(0x3195, 0xF281) }, /* Link Instruments MSO-28 */
+>  { USB_DEVICE(0x3923, 0x7A0B) }, /* National Instruments USB Serial Console */
+>  { USB_DEVICE(0x413C, 0x9500) }, /* DW700 GPS USB interface */
+> +{ USB_DEVICE(0x0988, 0x0578) }, /* Teraoka AD2000 */
+>  { } /* Terminating Entry */
+>  };
+> 
+> --
+> 1.8.3.1
+> 
+> 
+> 
+> 
+> Best Regards,
+> 
+> Jin Chen-Xin
+> Software Development Dept.
+> Shanghai Teraoka Electronic Co., Ltd.
+> 
+> * The information contained in this message is intended for the use of the individuals to whom it is addressed and may contain information that is privileged and confidential. If you have received this email by mistake, please discard this email immediately. Do not disclose, forward or copy.
+> * 信息安全声明：本邮件(包括其任何附件）的信息，仅用于邮件列出的接收者使用，并且可能包含有特许和机密的信息。如果您误收到这封电子邮件，请通知发件人，并立即删除它，请勿透露、转发或复制。
+
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
+  and can not be applied.  Please read the file,
+  Documentation/email-clients.txt in order to fix this.
+
+- Your patch was attached, please place it inline so that it can be
+  applied directly from the email message itself.
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
