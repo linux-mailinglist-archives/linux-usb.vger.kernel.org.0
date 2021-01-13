@@ -2,105 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D152F517F
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 18:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7582F5399
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 20:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728007AbhAMRxX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jan 2021 12:53:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727984AbhAMRxX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jan 2021 12:53:23 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B396FC061575;
-        Wed, 13 Jan 2021 09:52:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=g97u/LLEJ1YBimCAOlC5uc788cogRUnQO844OVvNDss=; b=DgcoOLZPgBiUJLGzw/INrHwqey
-        FzdDNVSIqBba3vN4w8qyAJW9DLvDxUhEq37VKYLT204nN3wJyaLQSERzaKqvNe+KNWwMrp6tRyaBA
-        vpbbdDM2fgvWaOKCmVjqNAb/PiGgHCto6g10V8SNB4n0zG0gmvXQ98ISX3LAbQ67NHcGYe6eco8Kd
-        +LR0dDs/lHsS+yXsyArrxlmRIoBI+GCc0ZXIcRzvUNS6ahtyKhglNmQInd1MjtT9MGTbR/WTr/ljX
-        sG8Wn2EHzd8Hu3DESlkmJ4TZXNzACBy91rgACGfq0aBoxBaUtVI8HFMohJZogCMrSAUOVgI8cethe
-        q5myGCPA==;
-Received: from [2601:1c0:6280:3f0::9abc]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kzkJy-0005q0-2j; Wed, 13 Jan 2021 17:52:38 +0000
-Subject: Re: [PATCH v2] usb: cdnsp: fixes undefined reference to cdns_remove
-To:     Pawel Laszczak <pawell@cadence.com>, peter.chen@nxp.com
-Cc:     a-govindraju@ti.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kurahul@cadence.com, geert@linux-m68k.org
-References: <20210113141407.25473-1-pawell@cadence.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <13f338f1-9ba9-c848-0b75-10e73e8c6a7d@infradead.org>
-Date:   Wed, 13 Jan 2021 09:52:30 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1728628AbhAMTpv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jan 2021 14:45:51 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:39947 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728387AbhAMTpv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jan 2021 14:45:51 -0500
+Received: (qmail 1290922 invoked by uid 1000); 13 Jan 2021 14:45:10 -0500
+Date:   Wed, 13 Jan 2021 14:45:10 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Felipe Balbi <balbi@kernel.org>, Greg KH <greg@kroah.com>
+Cc:     USB mailing list <linux-usb@vger.kernel.org>
+Subject: [PATCH] USB: gadget: dummy-hcd: Fix errors in port-reset handling
+Message-ID: <20210113194510.GA1290698@rowland.harvard.edu>
 MIME-Version: 1.0
-In-Reply-To: <20210113141407.25473-1-pawell@cadence.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 1/13/21 6:14 AM, Pawel Laszczak wrote:
-> Patch fixes the following errors:
-> ld: drivers/usb/cdns3/cdnsp-pci.o: in function `cdnsp_pci_remove':
-> cdnsp-pci.c:(.text+0x80): undefined reference to `cdns_remove'
-> ld: drivers/usb/cdns3/cdnsp-pci.o: in function `cdnsp_pci_probe':
-> cdnsp-pci.c:(.text+0x34c): undefined reference to `cdns_init'
-> 
-> Issue occurs for USB/CDNS3/CDNSP kernel configuration:
-> CONFIG_USB=m
-> CONFIG_USB_CDNS_SUPPORT=y
-> CONFIG_USB_CDNS3=m
-> CONFIG_USB_CDNS3_PCI_WRAP=m
-> CONFIG_USB_CDNSP_PCI=y
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+Commit c318840fb2a4 ("USB: Gadget: dummy-hcd: Fix shift-out-of-bounds
+bug") messed up the way dummy-hcd handles requests to turn on the
+RESET port feature (I didn't notice that the original switch case
+ended with a fallthrough).  The call to set_link_state() was
+inadvertently removed, as was the code to set the USB_PORT_STAT_RESET
+flag when the speed is USB2.
 
-After removing the v1 patch and applying this one, my build errors are gone.
-Thanks.
+In addition, the original code never checked whether the port was
+connected before handling the port-reset request.  There was a check
+for the port being powered, but it was removed by that commit!  In
+practice this doesn't matter much because the kernel doesn't try to
+reset disconnected ports, but it's still bad form.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+This patch fixes these problems by changing the fallthrough to break,
+adding back in the missing set_link_state() call, setting the
+port-reset status flag, adding a port-is-connected test, and removing
+a redundant assignment statement.
 
-> ---
-> changelog:
-> v2
-> - added missing condition
-> 
->  drivers/usb/cdns3/Makefile | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/usb/cdns3/Makefile b/drivers/usb/cdns3/Makefile
-> index 3f9b7fa8a594..61edb2f89276 100644
-> --- a/drivers/usb/cdns3/Makefile
-> +++ b/drivers/usb/cdns3/Makefile
-> @@ -26,7 +26,15 @@ obj-$(CONFIG_USB_CDNS3_TI)			+= cdns3-ti.o
->  obj-$(CONFIG_USB_CDNS3_IMX)			+= cdns3-imx.o
->  
->  cdnsp-udc-pci-y					:= cdnsp-pci.o
-> +
-> +ifdef CONFIG_USB_CDNSP_PCI
-> +ifeq ($(CONFIG_USB),m)
-> +obj-m						+= cdnsp-udc-pci.o
-> +else
->  obj-$(CONFIG_USB_CDNSP_PCI) 			+= cdnsp-udc-pci.o
-> +endif
-> +endif
-> +
->  cdnsp-udc-pci-$(CONFIG_USB_CDNSP_GADGET)	+= cdnsp-ring.o cdnsp-gadget.o \
->  						   cdnsp-mem.o cdnsp-ep0.o
->  
-> 
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Fixes: c318840fb2a4 ("USB: Gadget: dummy-hcd: Fix shift-out-of-bounds bug")
+CC: <stable@vger.kernel.org>
+
+---
 
 
--- 
-~Randy
-You can't do anything without having to do something else first.
--- Belefant's Law
+[as1952]
+
+
+ drivers/usb/gadget/udc/dummy_hcd.c |   10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+Index: usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/udc/dummy_hcd.c
++++ usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -2266,17 +2266,20 @@ static int dummy_hub_control(
+ 			}
+ 			fallthrough;
+ 		case USB_PORT_FEAT_RESET:
++			if (!(dum_hcd->port_status & USB_PORT_STAT_CONNECTION))
++				break;
+ 			/* if it's already enabled, disable */
+ 			if (hcd->speed == HCD_USB3) {
+-				dum_hcd->port_status = 0;
+ 				dum_hcd->port_status =
+ 					(USB_SS_PORT_STAT_POWER |
+ 					 USB_PORT_STAT_CONNECTION |
+ 					 USB_PORT_STAT_RESET);
+-			} else
++			} else {
+ 				dum_hcd->port_status &= ~(USB_PORT_STAT_ENABLE
+ 					| USB_PORT_STAT_LOW_SPEED
+ 					| USB_PORT_STAT_HIGH_SPEED);
++				dum_hcd->port_status |= USB_PORT_STAT_RESET;
++			}
+ 			/*
+ 			 * We want to reset device status. All but the
+ 			 * Self powered feature
+@@ -2288,7 +2291,8 @@ static int dummy_hub_control(
+ 			 * interval? Is it still 50msec as for HS?
+ 			 */
+ 			dum_hcd->re_timeout = jiffies + msecs_to_jiffies(50);
+-			fallthrough;
++			set_link_state(dum_hcd);
++			break;
+ 		case USB_PORT_FEAT_C_CONNECTION:
+ 		case USB_PORT_FEAT_C_RESET:
+ 		case USB_PORT_FEAT_C_ENABLE:
