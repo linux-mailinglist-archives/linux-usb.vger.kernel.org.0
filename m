@@ -2,410 +2,346 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA362F4846
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 11:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 200A52F485B
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 11:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727251AbhAMKF6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jan 2021 05:05:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727241AbhAMKF6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jan 2021 05:05:58 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F728C061575
-        for <linux-usb@vger.kernel.org>; Wed, 13 Jan 2021 02:05:18 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id q4so783810plr.7
-        for <linux-usb@vger.kernel.org>; Wed, 13 Jan 2021 02:05:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q4435Xpxy2byoXpOE3RdPb+PJ3jUMEAD9x2tjKbDyqo=;
-        b=NRGZFCUDrMZb5tJ65hUJZK4VVDYCIAvtqtjZBEvbTeLyztm3/7l0nlXOKrW9Bfk7KN
-         A2VYZzvOVN9i07me0OeCbHdOEOdmT7QGwYaL8AGyfK6Mt57JwP5H1MKe6ODWlHiSympu
-         +sUir5N0oy4EG9KWsE/T51SmX5x9LMMPlVu9A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q4435Xpxy2byoXpOE3RdPb+PJ3jUMEAD9x2tjKbDyqo=;
-        b=a+PCZl3lw7s760tut7BWrJDr/cdicD1/L0nxZTMfTTYpbkqSOuGac2GUk2kzjgQj+u
-         Mg5pAXGi0djZhqVAt29zmRV5tVT6/m2JUMiNYeYDOnYgoNqkIrnUNBztFBroOtXUOrbA
-         l3u9kMfnsFtzIHAT3jD+gsn8WR6h7IlDqeoMcEnQWkzGXfeYyQkqb+sNKj/dI1xcZP+v
-         T6eybNlmWzATWFvqO4SNY5QYqEB0wr3eANOiIaFX8IuFeFRxMsrL3I8JaUllOqfg1Fay
-         bYZCGKS/D+yk1gaxUFwdWiZ0tJBqNpT4YqoWigyLqhm93f88Za0YizcnG08D5/wUp+Vh
-         5/1Q==
-X-Gm-Message-State: AOAM531VPCCTKXq0cstDXwJym+Knutj/HMaOB6Eaxoj98sgUghygNKBv
-        hLe//+27noQ2z1hMqYny4igcjA==
-X-Google-Smtp-Source: ABdhPJxxK+XiXYrUme2oI9JqFwbNHefVZlbkheVM5CqlWnkJAgIHBAX5kLsO/urUVdOxXDJS7Telow==
-X-Received: by 2002:a17:90a:940e:: with SMTP id r14mr1533628pjo.105.1610532317674;
-        Wed, 13 Jan 2021 02:05:17 -0800 (PST)
-Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:b:f693:9fff:fef4:a8fc])
-        by smtp.gmail.com with ESMTPSA id r67sm1917889pfc.82.2021.01.13.02.05.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jan 2021 02:05:17 -0800 (PST)
-From:   Ikjoon Jang <ikjn@chromium.org>
-To:     linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org
-Cc:     Zhanyong Wang <zhanyong.wang@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6] usb: xhci-mtk: fix unreleased bandwidth data
-Date:   Wed, 13 Jan 2021 18:05:11 +0800
-Message-Id: <20210113180444.v6.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
-X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
+        id S1726900AbhAMKJj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jan 2021 05:09:39 -0500
+Received: from mga12.intel.com ([192.55.52.136]:5974 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726734AbhAMKJj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 Jan 2021 05:09:39 -0500
+IronPort-SDR: 7fwrtc9Y4Y82UIwZ14LTXJp43w0Lzpb9g9xo7f0va68xn1odeSsnJc0cRyq4Eu+CTYVgVnFGUt
+ YoHr/pwHDLKA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9862"; a="157364138"
+X-IronPort-AV: E=Sophos;i="5.79,344,1602572400"; 
+   d="scan'208";a="157364138"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2021 02:07:53 -0800
+IronPort-SDR: v9fsfxy0svdXlmUKJScjFdW+TKfqVdS38APoiyc3JPoRnFC0FCJA4pgGGmukKWJzmV5+WjfB6R
+ 7w86IQgvbmqg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,344,1602572400"; 
+   d="scan'208";a="353400344"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 13 Jan 2021 02:07:51 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 930041F4; Wed, 13 Jan 2021 12:07:50 +0200 (EET)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Christian Kellner <christian@kellner.me>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v2] thunderbolt: Add support for de-authorizing devices
+Date:   Wed, 13 Jan 2021 13:07:50 +0300
+Message-Id: <20210113100750.32692-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-xhci-mtk needs XHCI_MTK_HOST quirk functions in add_endpoint() and
-drop_endpoint() to handle its own sw bandwidth management.
+In some cases it is useful to be able de-authorize devices. For example
+if user logs out the userspace can have a policy that disconnects PCIe
+devices until logged in again. This is only possible for software based
+connection manager as it directly controls the tunnels.
 
-It stores bandwidth data into an internal table every time
-add_endpoint() is called, and drops those in drop_endpoint().
-But when bandwidth allocation fails at one endpoint, all earlier
-allocation from the same interface could still remain at the table.
+For this reason make the authorized attribute accept writing 0 which
+makes the software connection manager to tear down the corresponding
+PCIe tunnel. Userspace can check if this is supported by reading a new
+domain attribute deauthorization, that holds 1 in that case.
 
-This patch moves bandwidth management codes to check_bandwidth() and
-reset_bandwidth() path. To do so, this patch also adds those functions
-to xhci_driver_overrides and lets mtk-xhci to release all failed
-endpoints in reset_bandwidth() path.
+While there correct tb_domain_approve_switch() kernel-doc and
+description of authorized attribute to mention that it is only about
+PCIe tunnels.
 
-Fixes: 08e469de87a2 ("usb: xhci-mtk: supports bandwidth scheduling with multi-TT")
-Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
-
+Cc: Christian Kellner <christian@kellner.me>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
+The previous version of the patch can be found here:
 
-Changes in v6:
-- use xhci overrides instead of quirk functions for
-  {check|reset}_bandwidth().
+  https://lore.kernel.org/linux-usb/20210105092808.15817-2-mika.westerberg@linux.intel.com/
 
-Changes in v5:
-- Fix a wrong commit id in Fixes tag
+Changes from the previous vers:
 
-Changes in v4:
-- bugfix in v3, check_bandwidth() return uninitialized value
-  when no new endpoints were added.
-- change Fixes tag to keep dependency
+  * Improve ABI documentation
+  * Document de-authorization in admin-guide too
+  * Rename data parameter to not_used in disapprove_switch().
 
-Changes in v3:
-- drop unrelated code cleanups
-- change Fixes tag to keep dependency
+ .../ABI/testing/sysfs-bus-thunderbolt         | 20 ++++++++---
+ Documentation/admin-guide/thunderbolt.rst     | 16 +++++++++
+ drivers/thunderbolt/domain.c                  | 32 +++++++++++++++--
+ drivers/thunderbolt/switch.c                  | 34 ++++++++++++++++++-
+ drivers/thunderbolt/tb.c                      | 20 +++++++++++
+ drivers/thunderbolt/tb.h                      |  3 ++
+ 6 files changed, 118 insertions(+), 7 deletions(-)
 
-Changes in v2:
-- fix a 0-day warning from unused variable
-- split one big patch into three patches
-- fix wrong offset in mediatek hw flags
-
- drivers/usb/host/xhci-mtk-sch.c | 123 ++++++++++++++++++++++----------
- drivers/usb/host/xhci-mtk.c     |   2 +
- drivers/usb/host/xhci-mtk.h     |  13 ++++
- drivers/usb/host/xhci.c         |   8 ++-
- drivers/usb/host/xhci.h         |   4 ++
- 5 files changed, 111 insertions(+), 39 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
-index 45c54d56ecbd..a313e75ff1c6 100644
---- a/drivers/usb/host/xhci-mtk-sch.c
-+++ b/drivers/usb/host/xhci-mtk-sch.c
-@@ -200,6 +200,7 @@ static struct mu3h_sch_ep_info *create_sch_ep(struct usb_device *udev,
+diff --git a/Documentation/ABI/testing/sysfs-bus-thunderbolt b/Documentation/ABI/testing/sysfs-bus-thunderbolt
+index a91b4b24496e..581dea95245b 100644
+--- a/Documentation/ABI/testing/sysfs-bus-thunderbolt
++++ b/Documentation/ABI/testing/sysfs-bus-thunderbolt
+@@ -49,6 +49,15 @@ Description:	Holds a comma separated list of device unique_ids that
+ 		If a device is authorized automatically during boot its
+ 		boot attribute is set to 1.
  
- 	sch_ep->sch_tt = tt;
- 	sch_ep->ep = ep;
-+	INIT_LIST_HEAD(&sch_ep->tt_endpoint);
- 
- 	return sch_ep;
- }
-@@ -583,6 +584,8 @@ int xhci_mtk_sch_init(struct xhci_hcd_mtk *mtk)
- 
- 	mtk->sch_array = sch_array;
- 
-+	INIT_LIST_HEAD(&mtk->bw_ep_list_new);
++What: /sys/bus/thunderbolt/devices/.../domainX/deauthorization
++Date:		May 2021
++KernelVersion:	5.12
++Contact:	Mika Westerberg <mika.westerberg@linux.intel.com>
++Description:	This attribute tells whether the system supports
++		de-authorization of devices. Value of 1 means user can
++		de-authorize PCIe tunnel by writing 0 to authorized
++		attribute under each device.
 +
+ What: /sys/bus/thunderbolt/devices/.../domainX/iommu_dma_protection
+ Date:		Mar 2019
+ KernelVersion:	4.21
+@@ -84,22 +93,25 @@ KernelVersion:	4.13
+ Contact:	thunderbolt-software@lists.01.org
+ Description:	This attribute is used to authorize Thunderbolt devices
+ 		after they have been connected. If the device is not
+-		authorized, no devices such as PCIe and Display port are
+-		available to the system.
++		authorized, no PCIe devices are available to the system.
+ 
+ 		Contents of this attribute will be 0 when the device is not
+ 		yet authorized.
+ 
+ 		Possible values are supported:
+ 
+-		==  ===========================================
++		==  ===================================================
++		0   The device will be de-authorized (only supported if
++		    deauthorization attribute under domain contains 1)
+ 		1   The device will be authorized and connected
+-		==  ===========================================
++		==  ===================================================
+ 
+ 		When key attribute contains 32 byte hex string the possible
+ 		values are:
+ 
+ 		==  ========================================================
++		0   The device will be de-authorized (only supported if
++		    deauthorization attribute under domain contains 1)
+ 		1   The 32 byte hex string is added to the device NVM and
+ 		    the device is authorized.
+ 		2   Send a challenge based on the 32 byte hex string. If the
+diff --git a/Documentation/admin-guide/thunderbolt.rst b/Documentation/admin-guide/thunderbolt.rst
+index 613cb24c76c7..0d4348445f91 100644
+--- a/Documentation/admin-guide/thunderbolt.rst
++++ b/Documentation/admin-guide/thunderbolt.rst
+@@ -153,6 +153,22 @@ If the user still wants to connect the device they can either approve
+ the device without a key or write a new key and write 1 to the
+ ``authorized`` file to get the new key stored on the device NVM.
+ 
++De-authorizing devices
++----------------------
++It is possible to de-authorize devices by writing ``0`` to their
++``authorized`` attribute. This requires support from the connection
++manager implementation and can be checked by reading domain
++``deauthorization`` attribute. If it reads ``1`` then the feature is
++supported.
++
++When a device is de-authorized the PCIe tunnel from the parent device
++PCIe downstream (or root) port to the device PCIe upstream port is torn
++down. This is essentially the same thing as PCIe hot-remove and the PCIe
++toplogy in question will not be accessible anymore until the device is
++authorized again. If there is storage such as NVMe or similar involved,
++there is a risk for data loss if the filesystem on that storage is not
++properly shut down. You have been warned!
++
+ DMA protection utilizing IOMMU
+ ------------------------------
+ Recent systems from 2018 and forward with Thunderbolt ports may natively
+diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
+index d2b92a8be577..9ba2181464cc 100644
+--- a/drivers/thunderbolt/domain.c
++++ b/drivers/thunderbolt/domain.c
+@@ -238,6 +238,16 @@ static ssize_t boot_acl_store(struct device *dev, struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RW(boot_acl);
+ 
++static ssize_t deauthorization_show(struct device *dev,
++				    struct device_attribute *attr,
++				    char *buf)
++{
++	const struct tb *tb = container_of(dev, struct tb, dev);
++
++	return sprintf(buf, "%d\n", !!tb->cm_ops->disapprove_switch);
++}
++static DEVICE_ATTR_RO(deauthorization);
++
+ static ssize_t iommu_dma_protection_show(struct device *dev,
+ 					 struct device_attribute *attr,
+ 					 char *buf)
+@@ -267,6 +277,7 @@ static DEVICE_ATTR_RO(security);
+ 
+ static struct attribute *domain_attrs[] = {
+ 	&dev_attr_boot_acl.attr,
++	&dev_attr_deauthorization.attr,
+ 	&dev_attr_iommu_dma_protection.attr,
+ 	&dev_attr_security.attr,
+ 	NULL,
+@@ -601,14 +612,31 @@ int tb_domain_runtime_resume(struct tb *tb)
  	return 0;
  }
- EXPORT_SYMBOL_GPL(xhci_mtk_sch_init);
-@@ -601,19 +604,14 @@ int xhci_mtk_add_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
- 	struct xhci_ep_ctx *ep_ctx;
- 	struct xhci_slot_ctx *slot_ctx;
- 	struct xhci_virt_device *virt_dev;
--	struct mu3h_sch_bw_info *sch_bw;
- 	struct mu3h_sch_ep_info *sch_ep;
--	struct mu3h_sch_bw_info *sch_array;
- 	unsigned int ep_index;
--	int bw_index;
--	int ret = 0;
  
- 	xhci = hcd_to_xhci(hcd);
- 	virt_dev = xhci->devs[udev->slot_id];
- 	ep_index = xhci_get_endpoint_index(&ep->desc);
- 	slot_ctx = xhci_get_slot_ctx(xhci, virt_dev->in_ctx);
- 	ep_ctx = xhci_get_ep_ctx(xhci, virt_dev->in_ctx, ep_index);
--	sch_array = mtk->sch_array;
- 
- 	xhci_dbg(xhci, "%s() type:%d, speed:%d, mpkt:%d, dir:%d, ep:%p\n",
- 		__func__, usb_endpoint_type(&ep->desc), udev->speed,
-@@ -632,39 +630,34 @@ int xhci_mtk_add_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
- 		return 0;
- 	}
- 
--	bw_index = get_bw_index(xhci, udev, ep);
--	sch_bw = &sch_array[bw_index];
--
- 	sch_ep = create_sch_ep(udev, ep, ep_ctx);
- 	if (IS_ERR_OR_NULL(sch_ep))
- 		return -ENOMEM;
- 
- 	setup_sch_info(udev, ep_ctx, sch_ep);
- 
--	ret = check_sch_bw(udev, sch_bw, sch_ep);
--	if (ret) {
--		xhci_err(xhci, "Not enough bandwidth!\n");
--		if (is_fs_or_ls(udev->speed))
--			drop_tt(udev);
--
--		kfree(sch_ep);
--		return -ENOSPC;
--	}
-+	list_add_tail(&sch_ep->endpoint, &mtk->bw_ep_list_new);
- 
--	list_add_tail(&sch_ep->endpoint, &sch_bw->bw_ep_list);
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(xhci_mtk_add_ep_quirk);
- 
--	ep_ctx->reserved[0] |= cpu_to_le32(EP_BPKTS(sch_ep->pkts)
--		| EP_BCSCOUNT(sch_ep->cs_count) | EP_BBM(sch_ep->burst_mode));
--	ep_ctx->reserved[1] |= cpu_to_le32(EP_BOFFSET(sch_ep->offset)
--		| EP_BREPEAT(sch_ep->repeat));
-+static void xhci_mtk_drop_ep(struct xhci_hcd_mtk *mtk, struct usb_device *udev,
-+			     struct mu3h_sch_ep_info *sch_ep)
++/**
++ * tb_domain_disapprove_switch() - Disapprove switch
++ * @tb: Domain the switch belongs to
++ * @sw: Switch to disapprove
++ *
++ * This will disconnect PCIe tunnel from parent to this @sw.
++ *
++ * Return: %0 on success and negative errno in case of failure.
++ */
++int tb_domain_disapprove_switch(struct tb *tb, struct tb_switch *sw)
 +{
-+	struct xhci_hcd *xhci = hcd_to_xhci(mtk->hcd);
-+	int bw_index = get_bw_index(xhci, udev, sch_ep->ep);
-+	struct mu3h_sch_bw_info *sch_bw = &mtk->sch_array[bw_index];
- 
--	xhci_dbg(xhci, " PKTS:%x, CSCOUNT:%x, BM:%x, OFFSET:%x, REPEAT:%x\n",
--			sch_ep->pkts, sch_ep->cs_count, sch_ep->burst_mode,
--			sch_ep->offset, sch_ep->repeat);
-+	update_bus_bw(sch_bw, sch_ep, 0);
-+	list_del(&sch_ep->endpoint);
- 
--	return 0;
-+	if (sch_ep->sch_tt) {
-+		list_del(&sch_ep->tt_endpoint);
-+		drop_tt(udev);
-+	}
-+	kfree(sch_ep);
- }
--EXPORT_SYMBOL_GPL(xhci_mtk_add_ep_quirk);
- 
- void xhci_mtk_drop_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
- 		struct usb_host_endpoint *ep)
-@@ -675,7 +668,7 @@ void xhci_mtk_drop_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
- 	struct xhci_virt_device *virt_dev;
- 	struct mu3h_sch_bw_info *sch_array;
- 	struct mu3h_sch_bw_info *sch_bw;
--	struct mu3h_sch_ep_info *sch_ep;
-+	struct mu3h_sch_ep_info *sch_ep, *tmp;
- 	int bw_index;
- 
- 	xhci = hcd_to_xhci(hcd);
-@@ -694,17 +687,73 @@ void xhci_mtk_drop_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
- 	bw_index = get_bw_index(xhci, udev, ep);
- 	sch_bw = &sch_array[bw_index];
- 
--	list_for_each_entry(sch_ep, &sch_bw->bw_ep_list, endpoint) {
-+	list_for_each_entry_safe(sch_ep, tmp, &sch_bw->bw_ep_list, endpoint) {
- 		if (sch_ep->ep == ep) {
--			update_bus_bw(sch_bw, sch_ep, 0);
--			list_del(&sch_ep->endpoint);
--			if (is_fs_or_ls(udev->speed)) {
--				list_del(&sch_ep->tt_endpoint);
--				drop_tt(udev);
--			}
--			kfree(sch_ep);
--			break;
-+			xhci_mtk_drop_ep(mtk, udev, sch_ep);
- 		}
- 	}
- }
- EXPORT_SYMBOL_GPL(xhci_mtk_drop_ep_quirk);
++	if (!tb->cm_ops->disapprove_switch)
++		return -EPERM;
 +
-+int xhci_mtk_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
-+{
-+	struct xhci_hcd_mtk *mtk = hcd_to_mtk(hcd);
-+	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+	struct xhci_virt_device *virt_dev = xhci->devs[udev->slot_id];
-+	struct mu3h_sch_bw_info *sch_bw;
-+	struct mu3h_sch_ep_info *sch_ep, *tmp;
-+	int bw_index, ret;
-+
-+	dev_dbg(&udev->dev, "%s\n", __func__);
-+
-+	list_for_each_entry(sch_ep, &mtk->bw_ep_list_new, endpoint) {
-+		bw_index = get_bw_index(xhci, udev, sch_ep->ep);
-+		sch_bw = &mtk->sch_array[bw_index];
-+
-+		ret = check_sch_bw(udev, sch_bw, sch_ep);
-+		if (ret) {
-+			xhci_err(xhci, "Not enough bandwidth!\n");
-+			return -ENOSPC;
-+		}
-+	}
-+
-+	list_for_each_entry_safe(sch_ep, tmp, &mtk->bw_ep_list_new, endpoint) {
-+		struct xhci_ep_ctx *ep_ctx;
-+		struct usb_host_endpoint *ep = sch_ep->ep;
-+		unsigned int ep_index = xhci_get_endpoint_index(&ep->desc);
-+
-+		bw_index = get_bw_index(xhci, udev, ep);
-+		sch_bw = &mtk->sch_array[bw_index];
-+
-+		list_move_tail(&sch_ep->endpoint, &sch_bw->bw_ep_list);
-+
-+		ep_ctx = xhci_get_ep_ctx(xhci, virt_dev->in_ctx, ep_index);
-+		ep_ctx->reserved[0] |= cpu_to_le32(EP_BPKTS(sch_ep->pkts)
-+			| EP_BCSCOUNT(sch_ep->cs_count)
-+			| EP_BBM(sch_ep->burst_mode));
-+		ep_ctx->reserved[1] |= cpu_to_le32(EP_BOFFSET(sch_ep->offset)
-+			| EP_BREPEAT(sch_ep->repeat));
-+
-+		xhci_dbg(xhci, " PKTS:%x, CSCOUNT:%x, BM:%x, OFFSET:%x, REPEAT:%x\n",
-+			sch_ep->pkts, sch_ep->cs_count, sch_ep->burst_mode,
-+			sch_ep->offset, sch_ep->repeat);
-+	}
-+
-+	return xhci_check_bandwidth(hcd, udev);
-+}
-+EXPORT_SYMBOL_GPL(xhci_mtk_check_bandwidth);
-+
-+void xhci_mtk_reset_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
-+{
-+	struct xhci_hcd_mtk *mtk = hcd_to_mtk(hcd);
-+	struct mu3h_sch_ep_info *sch_ep, *tmp;
-+
-+	dev_dbg(&udev->dev, "%s\n", __func__);
-+
-+	list_for_each_entry_safe(sch_ep, tmp, &mtk->bw_ep_list_new, endpoint) {
-+		xhci_mtk_drop_ep(mtk, udev, sch_ep);
-+	}
-+
-+	xhci_reset_bandwidth(hcd, udev);
-+}
-+EXPORT_SYMBOL_GPL(xhci_mtk_reset_bandwidth);
-diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-index ee9af03a9593..c9b7b3527642 100644
---- a/drivers/usb/host/xhci-mtk.c
-+++ b/drivers/usb/host/xhci-mtk.c
-@@ -359,6 +359,8 @@ static void usb_wakeup_set(struct xhci_hcd_mtk *mtk, bool enable)
- static int xhci_mtk_setup(struct usb_hcd *hcd);
- static const struct xhci_driver_overrides xhci_mtk_overrides __initconst = {
- 	.reset = xhci_mtk_setup,
-+	.check_bandwidth = xhci_mtk_check_bandwidth,
-+	.reset_bandwidth = xhci_mtk_reset_bandwidth,
- };
- 
- static struct hc_driver __read_mostly xhci_mtk_hc_driver;
-diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
-index 8be8c5f7ff62..05ca989985fc 100644
---- a/drivers/usb/host/xhci-mtk.h
-+++ b/drivers/usb/host/xhci-mtk.h
-@@ -130,6 +130,7 @@ struct mu3c_ippc_regs {
- struct xhci_hcd_mtk {
- 	struct device *dev;
- 	struct usb_hcd *hcd;
-+	struct list_head bw_ep_list_new;
- 	struct mu3h_sch_bw_info *sch_array;
- 	struct mu3c_ippc_regs __iomem *ippc_regs;
- 	bool has_ippc;
-@@ -165,6 +166,8 @@ int xhci_mtk_add_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
- 		struct usb_host_endpoint *ep);
- void xhci_mtk_drop_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
- 		struct usb_host_endpoint *ep);
-+int xhci_mtk_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev);
-+void xhci_mtk_reset_bandwidth(struct usb_hcd *hcd, struct usb_device *udev);
- 
- #else
- static inline int xhci_mtk_add_ep_quirk(struct usb_hcd *hcd,
-@@ -178,6 +181,16 @@ static inline void xhci_mtk_drop_ep_quirk(struct usb_hcd *hcd,
- {
- }
- 
-+static inline int xhci_mtk_check_bandwidth(struct usb_hcd *hcd,
-+		struct usb_device *udev)
-+{
-+	return 0;
++	return tb->cm_ops->disapprove_switch(tb, sw);
 +}
 +
-+static inline void xhci_mtk_reset_bandwidth(struct usb_hcd *hcd,
-+		struct usb_device *udev)
-+{
-+}
- #endif
- 
- #endif		/* _XHCI_MTK_H_ */
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 2bf6c526ac7a..90d7818dfc23 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -2833,7 +2833,7 @@ static void xhci_check_bw_drop_ep_streams(struct xhci_hcd *xhci,
-  * else should be touching the xhci->devs[slot_id] structure, so we
-  * don't need to take the xhci->lock for manipulating that.
+ /**
+  * tb_domain_approve_switch() - Approve switch
+  * @tb: Domain the switch belongs to
+  * @sw: Switch to approve
+  *
+  * This will approve switch by connection manager specific means. In
+- * case of success the connection manager will create tunnels for all
+- * supported protocols.
++ * case of success the connection manager will create PCIe tunnel from
++ * parent to @sw.
   */
--static int xhci_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
-+int xhci_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
+ int tb_domain_approve_switch(struct tb *tb, struct tb_switch *sw)
  {
- 	int i;
- 	int ret = 0;
-@@ -2930,7 +2930,7 @@ static int xhci_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
- 	return ret;
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index ad992e6204d9..cdba05e72486 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -1387,6 +1387,30 @@ static ssize_t authorized_show(struct device *dev,
+ 	return sprintf(buf, "%u\n", sw->authorized);
  }
  
--static void xhci_reset_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
-+void xhci_reset_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
++static int disapprove_switch(struct device *dev, void *not_used)
++{
++	struct tb_switch *sw;
++
++	sw = tb_to_switch(dev);
++	if (sw && sw->authorized) {
++		int ret;
++
++		/* First children */
++		ret = device_for_each_child_reverse(&sw->dev, NULL, disapprove_switch);
++		if (ret)
++			return ret;
++
++		ret = tb_domain_disapprove_switch(sw->tb, sw);
++		if (ret)
++			return ret;
++
++		sw->authorized = 0;
++		kobject_uevent(&sw->dev.kobj, KOBJ_CHANGE);
++	}
++
++	return 0;
++}
++
+ static int tb_switch_set_authorized(struct tb_switch *sw, unsigned int val)
  {
- 	struct xhci_hcd *xhci;
- 	struct xhci_virt_device	*virt_dev;
-@@ -5348,6 +5348,10 @@ void xhci_init_driver(struct hc_driver *drv,
- 			drv->reset = over->reset;
- 		if (over->start)
- 			drv->start = over->start;
-+		if (over->check_bandwidth)
-+			drv->check_bandwidth = over->check_bandwidth;
-+		if (over->reset_bandwidth)
-+			drv->reset_bandwidth = over->reset_bandwidth;
+ 	int ret = -EINVAL;
+@@ -1394,10 +1418,18 @@ static int tb_switch_set_authorized(struct tb_switch *sw, unsigned int val)
+ 	if (!mutex_trylock(&sw->tb->lock))
+ 		return restart_syscall();
+ 
+-	if (sw->authorized)
++	if (!!sw->authorized == !!val)
+ 		goto unlock;
+ 
+ 	switch (val) {
++	/* Disapprove switch */
++	case 0:
++		if (tb_route(sw)) {
++			ret = disapprove_switch(&sw->dev, NULL);
++			goto unlock;
++		}
++		break;
++
+ 	/* Approve switch */
+ 	case 1:
+ 		if (sw->key)
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index 51d5b031cada..d08879849abe 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -1002,6 +1002,25 @@ static void tb_disconnect_and_release_dp(struct tb *tb)
  	}
  }
- EXPORT_SYMBOL_GPL(xhci_init_driver);
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 31be8625b570..7fbe6cfc9f68 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1918,6 +1918,8 @@ struct xhci_driver_overrides {
- 	size_t extra_priv_size;
- 	int (*reset)(struct usb_hcd *hcd);
- 	int (*start)(struct usb_hcd *hcd);
-+	int (*check_bandwidth)(struct usb_hcd *, struct usb_device *);
-+	void (*reset_bandwidth)(struct usb_hcd *, struct usb_device *);
- };
  
- #define	XHCI_CFC_DELAY		10
-@@ -2070,6 +2072,8 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks);
- void xhci_shutdown(struct usb_hcd *hcd);
- void xhci_init_driver(struct hc_driver *drv,
- 		      const struct xhci_driver_overrides *over);
-+int xhci_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev);
-+void xhci_reset_bandwidth(struct usb_hcd *hcd, struct usb_device *udev);
- int xhci_disable_slot(struct xhci_hcd *xhci, u32 slot_id);
- int xhci_ext_cap_init(struct xhci_hcd *xhci);
- 
++static int tb_disconnect_pci(struct tb *tb, struct tb_switch *sw)
++{
++	struct tb_tunnel *tunnel;
++	struct tb_port *up;
++
++	up = tb_switch_find_port(sw, TB_TYPE_PCIE_UP);
++	if (WARN_ON(!up))
++		return -ENODEV;
++
++	tunnel = tb_find_tunnel(tb, TB_TUNNEL_PCI, NULL, up);
++	if (WARN_ON(!tunnel))
++		return -ENODEV;
++
++	tb_tunnel_deactivate(tunnel);
++	list_del(&tunnel->list);
++	tb_tunnel_free(tunnel);
++	return 0;
++}
++
+ static int tb_tunnel_pci(struct tb *tb, struct tb_switch *sw)
+ {
+ 	struct tb_port *up, *down, *port;
+@@ -1512,6 +1531,7 @@ static const struct tb_cm_ops tb_cm_ops = {
+ 	.runtime_suspend = tb_runtime_suspend,
+ 	.runtime_resume = tb_runtime_resume,
+ 	.handle_event = tb_handle_event,
++	.disapprove_switch = tb_disconnect_pci,
+ 	.approve_switch = tb_tunnel_pci,
+ 	.approve_xdomain_paths = tb_approve_xdomain_paths,
+ 	.disconnect_xdomain_paths = tb_disconnect_xdomain_paths,
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index 34ae83b9e52a..31468de658e4 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -361,6 +361,7 @@ struct tb_path {
+  * @handle_event: Handle thunderbolt event
+  * @get_boot_acl: Get boot ACL list
+  * @set_boot_acl: Set boot ACL list
++ * @disapprove_switch: Disapprove switch (disconnect PCIe tunnel)
+  * @approve_switch: Approve switch
+  * @add_switch_key: Add key to switch
+  * @challenge_switch_key: Challenge switch using key
+@@ -394,6 +395,7 @@ struct tb_cm_ops {
+ 			     const void *buf, size_t size);
+ 	int (*get_boot_acl)(struct tb *tb, uuid_t *uuids, size_t nuuids);
+ 	int (*set_boot_acl)(struct tb *tb, const uuid_t *uuids, size_t nuuids);
++	int (*disapprove_switch)(struct tb *tb, struct tb_switch *sw);
+ 	int (*approve_switch)(struct tb *tb, struct tb_switch *sw);
+ 	int (*add_switch_key)(struct tb *tb, struct tb_switch *sw);
+ 	int (*challenge_switch_key)(struct tb *tb, struct tb_switch *sw,
+@@ -629,6 +631,7 @@ int tb_domain_thaw_noirq(struct tb *tb);
+ void tb_domain_complete(struct tb *tb);
+ int tb_domain_runtime_suspend(struct tb *tb);
+ int tb_domain_runtime_resume(struct tb *tb);
++int tb_domain_disapprove_switch(struct tb *tb, struct tb_switch *sw);
+ int tb_domain_approve_switch(struct tb *tb, struct tb_switch *sw);
+ int tb_domain_approve_switch_key(struct tb *tb, struct tb_switch *sw);
+ int tb_domain_challenge_switch_key(struct tb *tb, struct tb_switch *sw);
 -- 
-2.30.0.284.gd98b1dd5eaa7-goog
+2.29.2
 
