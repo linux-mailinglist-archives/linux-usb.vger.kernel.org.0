@@ -2,86 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BACAA2F46BE
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 09:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 330F12F46BF
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 09:46:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbhAMIn6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jan 2021 03:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726694AbhAMIn5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jan 2021 03:43:57 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86235C061786
-        for <linux-usb@vger.kernel.org>; Wed, 13 Jan 2021 00:43:17 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1kzbkI-0007Am-Jm; Wed, 13 Jan 2021 09:43:14 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1kzbkH-0007KO-AN; Wed, 13 Jan 2021 09:43:13 +0100
-Date:   Wed, 13 Jan 2021 09:43:13 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        Minas Harutyunyan <hminas@synopsys.com>
-Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc2: Add support for additional
- clock
-Message-ID: <20210113084313.GD19063@pengutronix.de>
-References: <1610386869.406608.2784732.nullmailer@robh.at.kernel.org>
+        id S1726951AbhAMIoF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jan 2021 03:44:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41948 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726694AbhAMIoF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 Jan 2021 03:44:05 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B65C123356;
+        Wed, 13 Jan 2021 08:43:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610527404;
+        bh=8+yKvyuxptk1pipmKCR8+8bScEfAZHCFMfMegzhFIRg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=PKx4bzbIjdd2A3hiNvX13tAGG2oavr+Diyd3+RRBc6pUL8vcl+MAb+SLzzj/yJD28
+         WWuk/5fYLY0vwHwkUJaFrx8pwp1Cbg4PRQa/i/DJio+jjvWCejfspv4+CHw9x7NjZ8
+         8yiVJzEPLNXhIqq1xIPDmSh3fJSAAQQynBsKbAxabZ0cWWXW6X4Zy+4lRFAKINWaT6
+         +UDxx0zcGx7GMCs/HGFIsnTwAk6U8CvSP3LicMiObJnXV8w7KdSMMHrUia/A4BToMG
+         HAg90iyiYHzCVhlaSLC4+5c+BjNw5xsLz7XuQK6yGbj0BGFm2yAhY8PU7KvHummQ3f
+         xV798FKKg/jag==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: Re: [PATCH RESEND v4 05/11] usb: gadget: bdc: fix check warning of
+ block comments alignment
+In-Reply-To: <1610505748-30616-5-git-send-email-chunfeng.yun@mediatek.com>
+References: <1610505748-30616-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1610505748-30616-5-git-send-email-chunfeng.yun@mediatek.com>
+Date:   Wed, 13 Jan 2021 10:43:16 +0200
+Message-ID: <87eeip447v.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1610386869.406608.2784732.nullmailer@robh.at.kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 09:41:46 up 41 days, 21:08, 80 users,  load average: 0.15, 0.12,
- 0.10
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 11, 2021 at 11:41:09AM -0600, Rob Herring wrote:
-> On Mon, 11 Jan 2021 16:13:36 +0100, Sascha Hauer wrote:
-> > This adds support for an additional clock for the dwc2 core in case
-> > there is another clock to the phy which must be enabled.
-> > 
-> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> > ---
-> >  Documentation/devicetree/bindings/usb/dwc2.yaml | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> 
-> My bot found errors running 'make dt_binding_check' on your patch:
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.example.dt.yaml: usb@ff400000: clocks: [[4294967295]] is too short
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/dwc2.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.example.dt.yaml: usb@ff400000: clock-names: ['otg'] is too short
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/dwc2.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/dwc2.example.dt.yaml: usb@101c0000: clocks: [[4294967295]] is too short
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Ok, this can be fixed by adding a "minItems" property to clocks and
-clock-names. Will do next round.
+Chunfeng Yun <chunfeng.yun@mediatek.com> writes:
 
-Anything more to say to this series?
+> fix the warning:
+>   WARNING:BLOCK_COMMENT_STYLE:
+>   Block comments should align the * on each line
+>
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Sascha
+Acked-by: Felipe Balbi <balbi@kernel.org>
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl/+sqQRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQa71g/+IXwmgnZqM0ZXbxmaTqE/LVIqJZi+eVDQ
+A1FWYn3dGmyOA7pxRD+U3su3ZJa3peAMmVSuJqIT5re1Tew+ie1rjUvoa9AZEBjE
+K/5cN8GC9TrDYhqsD3/Z+HRTnnJLxqeBs4qpeCKBB3MRJsHV5fUH0bi1uYFCx/eA
+RiSU2t+SKqXhkWgoZd1JRTxejDGXb/gB/4Xrq7l3wkeUJygYNGuy2bZhjLoEsRsR
+K53+CxaHrra3knwfrnEF0C/mRneEQLy0iQIkqISADCM31Zn0ddCjQM6KtYrK5eqo
+bvquaEsqd8N60fgJE2OWZ/UjQSkkvn5VfgzQnYJw4AKkeb9o6cYOYp5RgySfkF1k
+xOklNZNxXgXeXgoOIFlECvjr2TTdSHTVzo8rHFWH8QslwuvpzluQJ457nY19B+iv
+Sy5b0eUmf3sBlfkCExZcZUEP93GXV1ipYKNUkxSvXwJlpfAh1N/bAHwOvSl2Z7gW
+bgkXWS0o1gV64A/1vUQCOKnvlneyUBDrPr1pkv0ZvvOKNXY1xJyb/YskfzvWL+iG
+2lW6Mz2+9SZNGWlCo7b0H8JT7WoHIiyMzZikrR+SEjZUnj+nJEQK+QE7izVyev2H
+fFVVoYCYLs61plh5qRGA0WbxBaQhiT2eXYFMmyXfQN01y+DItssGlP1KsgQgWffh
+V7nWUTzzAwg=
+=B3ks
+-----END PGP SIGNATURE-----
+--=-=-=--
