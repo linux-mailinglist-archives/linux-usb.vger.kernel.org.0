@@ -2,81 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1E62F420E
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 03:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DA82F424B
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 04:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728566AbhAMCsz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jan 2021 21:48:55 -0500
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:25558 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726724AbhAMCsx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jan 2021 21:48:53 -0500
-X-UUID: cab90534e341438d89bdbed410e9d0b4-20210113
-X-UUID: cab90534e341438d89bdbed410e9d0b4-20210113
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1374249250; Wed, 13 Jan 2021 10:42:57 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- MTKMBS31N1.mediatek.inc (172.27.4.69) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 13 Jan 2021 10:42:55 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 13 Jan 2021 10:42:54 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Felipe Balbi <balbi@kernel.org>
-CC:     Florian Fainelli <f.fainelli@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: [PATCH RESEND v4 11/11] usb: gadget: bdc: fix checkpatch.pl repeated word warning
-Date:   Wed, 13 Jan 2021 10:42:28 +0800
-Message-ID: <1610505748-30616-11-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1610505748-30616-1-git-send-email-chunfeng.yun@mediatek.com>
-References: <1610505748-30616-1-git-send-email-chunfeng.yun@mediatek.com>
+        id S1728616AbhAMDQ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jan 2021 22:16:29 -0500
+Received: from mx2.suse.de ([195.135.220.15]:39364 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728105AbhAMDQ2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 12 Jan 2021 22:16:28 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id E72E6AD11;
+        Wed, 13 Jan 2021 03:15:46 +0000 (UTC)
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     jacmet@sunsite.dk
+Cc:     gregkh@linuxfoundation.org, sergei.shtylyov@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dave@stgolabs.net, Davidlohr Bueso <dbueso@suse.de>
+Subject: [PATCH v2] usb/c67x00: Replace tasklet with work
+Date:   Tue, 12 Jan 2021 19:15:37 -0800
+Message-Id: <20210113031537.79859-1-dave@stgolabs.net>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: FDAA44C23B2B42B306B13E2F2822B6FE1DF8A009A5423C91669EA343F83EFDA82000:8
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-fix the warning:
-WARNING:REPEATED_WORD: Possible repeated word: 'and'
+Tasklets have long been deprecated as being too heavy on the system
+by running in irq context - and this is not a performance critical
+path. If a higher priority process wants to run, it must wait for
+the tasklet to finish before doing so.
 
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
----
-v4 resend: base on kernel5.11-rc1
-v4: no changes, but rebase on kernel 5.10-rc1
-v3: add acked-by Florian
-v2: add Cc Florian
----
- drivers/usb/gadget/udc/bdc/bdc_ep.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+c67x00_do_work() will now run in process context and have further
+concurrency (tasklets being serialized among themselves), but this
+is done holding the c67x00->lock, so it should be fine. Furthermore,
+this patch fixes the usage of the lock in the callback as otherwise
+it would need to be irq-safe.
 
-diff --git a/drivers/usb/gadget/udc/bdc/bdc_ep.c b/drivers/usb/gadget/udc/bdc/bdc_ep.c
-index d227d2682dd8..8e2f20b12519 100644
---- a/drivers/usb/gadget/udc/bdc/bdc_ep.c
-+++ b/drivers/usb/gadget/udc/bdc/bdc_ep.c
-@@ -1405,7 +1405,7 @@ static int ep0_set_sel(struct bdc *bdc,
+Signed-off-by: Davidlohr Bueso <dbueso@suse.de>
+---
+Changes from v1: cleaned up busted white spaces.
+
+ drivers/usb/c67x00/c67x00-hcd.h   |  2 +-
+ drivers/usb/c67x00/c67x00-sched.c | 12 +++++++-----
+ 2 files changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/c67x00/c67x00-hcd.h b/drivers/usb/c67x00/c67x00-hcd.h
+index 6b6b04a3fe0f..6332a6b5dce6 100644
+--- a/drivers/usb/c67x00/c67x00-hcd.h
++++ b/drivers/usb/c67x00/c67x00-hcd.h
+@@ -76,7 +76,7 @@ struct c67x00_hcd {
+ 	u16 next_td_addr;
+ 	u16 next_buf_addr;
+ 
+-	struct tasklet_struct tasklet;
++	struct work_struct work;
+ 
+ 	struct completion endpoint_disable;
+ 
+diff --git a/drivers/usb/c67x00/c67x00-sched.c b/drivers/usb/c67x00/c67x00-sched.c
+index e65f1a0ae80b..c7d3e907be81 100644
+--- a/drivers/usb/c67x00/c67x00-sched.c
++++ b/drivers/usb/c67x00/c67x00-sched.c
+@@ -1123,24 +1123,26 @@ static void c67x00_do_work(struct c67x00_hcd *c67x00)
+ 
+ /* -------------------------------------------------------------------------- */
+ 
+-static void c67x00_sched_tasklet(struct tasklet_struct *t)
++static void c67x00_sched_work(struct work_struct *work)
+ {
+-	struct c67x00_hcd *c67x00 = from_tasklet(c67x00, t, tasklet);
++	struct c67x00_hcd *c67x00;
++
++	c67x00 = container_of(work, struct c67x00_hcd, work);
+ 	c67x00_do_work(c67x00);
  }
  
- /*
-- * Queue a 0 byte bd only if wLength is more than the length and and length is
-+ * Queue a 0 byte bd only if wLength is more than the length and length is
-  * a multiple of MaxPacket then queue 0 byte BD
-  */
- static int ep0_queue_zlp(struct bdc *bdc)
+ void c67x00_sched_kick(struct c67x00_hcd *c67x00)
+ {
+-	tasklet_hi_schedule(&c67x00->tasklet);
++	queue_work(system_highpri_wq, &c67x00->work);
+ }
+ 
+ int c67x00_sched_start_scheduler(struct c67x00_hcd *c67x00)
+ {
+-	tasklet_setup(&c67x00->tasklet, c67x00_sched_tasklet);
++	INIT_WORK(&c67x00->work, c67x00_sched_work);
+ 	return 0;
+ }
+ 
+ void c67x00_sched_stop_scheduler(struct c67x00_hcd *c67x00)
+ {
+-	tasklet_kill(&c67x00->tasklet);
++	cancel_work_sync(&c67x00->work);
+ }
 -- 
-2.18.0
+2.26.2
 
