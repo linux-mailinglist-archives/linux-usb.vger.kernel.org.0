@@ -2,91 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E330A2F53DA
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 21:09:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B74B92F5460
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 22:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728861AbhAMUH4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jan 2021 15:07:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726599AbhAMUH4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jan 2021 15:07:56 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8350EC061575
-        for <linux-usb@vger.kernel.org>; Wed, 13 Jan 2021 12:07:15 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id r9so6651798ioo.7
-        for <linux-usb@vger.kernel.org>; Wed, 13 Jan 2021 12:07:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KzkNfs4/imopAocbFGy0VBdJlcTsJ8WoqZQGFlTzMF4=;
-        b=mW5zw6WvG9nP1PStwRNnJR9bV1tVh6caG5zlhbZtETWT8nJCb96wUkFz0X/aMgfeKl
-         fATp9LqR/OwNne0zgvAuKnUuakK3Pga1ZSyWrenF2TizA7ooZ+HyvNjTwuTA1M47Q2/b
-         aDqLIu8KiTnxeoz4fqdOdHf5I+MYdMfEe6qfqgkdgqCfOw/tdr6Pq4wIpPqg2JeptxCj
-         RFSLyd2PBbFqjo3fYBbTkzoUiZEgV5wK/62mnPyUZ19IB14wZ9j+UqniJ0xy9SupJTVZ
-         mVo24vN237SSvGRN8Gjix7yBVrwfegMcwUB0Tpdf+qwujS7Uf11Jk+gysGfnjoDRk9Sr
-         R6Ug==
+        id S1726784AbhAMU6Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jan 2021 15:58:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:24582 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728724AbhAMU5f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jan 2021 15:57:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1610571422;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KyeVTvomgCzlV9Xq0HncJHDevMWvQaxSid6diziHy50=;
+        b=iGwsCkDf0987fTSNdrj/aZfBcSZcbABgvQ3f0kNqZv6giuYdf4AEasgKsmVFcNqv2XACe2
+        Ea+BzSWptZfWpZ4ALS40gAaHPsQfY1YEcA3XdGWPI9p4ln+gGP7T6Uh+aeXa5x/NkGh9QC
+        mz0MIYZmFzzv3NzP4g7Uh3eca6mJAuQ=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-542-BPCYKkWKNCOLyCpqF6KAWw-1; Wed, 13 Jan 2021 15:55:52 -0500
+X-MC-Unique: BPCYKkWKNCOLyCpqF6KAWw-1
+Received: by mail-ej1-f71.google.com with SMTP id q11so1384562ejd.0
+        for <linux-usb@vger.kernel.org>; Wed, 13 Jan 2021 12:55:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KzkNfs4/imopAocbFGy0VBdJlcTsJ8WoqZQGFlTzMF4=;
-        b=GwllvqnGWamvAOfkBitfjpeN4zAK2AjUOurfLwoKV6QIiPdFM+ExfDIKhSVSODq5OP
-         n7ljUxHr446f+9xw3k9MkxTS31+Csdly7b3iKUhSGvNZ+I342TvS0MExWWEZNY8xMhHM
-         VSgjgDjJ+2gf++4Y76NC/2H5CK2A16u8wAEEVJqLkNVHZ/yoamK5lheP9vsioxDBX94F
-         CTLisMLrnEOGaEulkVsSQJUdWAsxnLE0IDqNwVRd3arbyTqtZI0wtvzbXS2WTuoBNGig
-         c8HyjimgoXNiNzIpBydwGuzzbDo3NYA5mC+GhpWmn1ypY3MVeciFFRm71lhWCPynvRCb
-         EQYQ==
-X-Gm-Message-State: AOAM5311xdOc/JbJNfopbwNG9xY2FvO8F1bylXtE3WHjtaWK2O7V5gBN
-        XdQq8YYqobjUur8DKiuaCz7aHTr0OAJZevieBWA2Axkg
-X-Google-Smtp-Source: ABdhPJxDK0v09suGKR4737SyQGhkIPNCWaaZKYvgQ2Djhn/4f5GeZL95EEbuR5+JziBX3PyWUIDc+Ey2+UzWSIgCFTQ=
-X-Received: by 2002:a5e:c012:: with SMTP id u18mr2994768iol.15.1610568434580;
- Wed, 13 Jan 2021 12:07:14 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=KyeVTvomgCzlV9Xq0HncJHDevMWvQaxSid6diziHy50=;
+        b=Bbfj5PGZO+E1mMGZfZv/JP/1enzVRbYx0wimmdyLhDHu71Hr7LJ7ILqN/bgdj7AZ8Y
+         g5XATLIcfgbAksv5HMBuK+C1xgKYId7jgIdExoLJSR1+Jl9kbU8q4V+LB2aCUGMv/BmL
+         ubBC820qEix2Mv+3OpehxnEI+B69V/+sblcJ3AleH4RojcpmDNefWyONzWbMgqX/z/ef
+         UyGjHw/oGL3AgRt7PSJ5gA03pdfmDa0O7/dFJ0Eg5IIi/jet2+jkpowOdaxu7sqT/9Mh
+         e9ovAjqRzbJWBvM4kykBwd3wuLMa7wrhic0r88sqCo5D5YrVgo8LL9b7VP0hZ6ZtWUVh
+         A4JA==
+X-Gm-Message-State: AOAM531r0p+YARsbxRH9mDxwHifHHZlnhf86k+NmFt11aJfGMn1XtNYs
+        JAI88KkBSWn/QUOFb4E5gpq7hZZCXeCaw/iX8Gt2Zcc3zW3EBM7ry0BP77F6Hn+rWQRbAROIYqR
+        +YtgQ6XOjNqBrzV7xL/x6
+X-Received: by 2002:a17:906:24d1:: with SMTP id f17mr1985208ejb.21.1610571351326;
+        Wed, 13 Jan 2021 12:55:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzIFkrj0zV6MG35I2/95jUJA70odVCeRn+Mht21EoWlSfwxuvEVlcTT4VHqNFVhHDJZ3rHKfQ==
+X-Received: by 2002:a17:906:24d1:: with SMTP id f17mr1985197ejb.21.1610571351193;
+        Wed, 13 Jan 2021 12:55:51 -0800 (PST)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-37a3-353b-be90-1238.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:37a3:353b:be90:1238])
+        by smtp.gmail.com with ESMTPSA id i8sm1312749eds.72.2021.01.13.12.55.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jan 2021 12:55:50 -0800 (PST)
+Subject: Re: [PATCH v5 1/3] usb: typec: tcpm: AMS and Collision Avoidance
+To:     Kyle Tso <kyletso@google.com>,
+        Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Will McVicker <willmcvicker@google.com>
+References: <20210105163927.1376770-1-kyletso@google.com>
+ <20210105163927.1376770-2-kyletso@google.com>
+ <20210112132925.GC2020859@kuha.fi.intel.com>
+ <CAPTae5LLtjQAt4db+ZVttEGxnueydmEZ4eu+gQSEOaZE4B=u0A@mail.gmail.com>
+ <CAGZ6i=2cQywq82QrJg=t-KVMqSdjME-dkd-8aH3au_RTju2zTA@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <ad606425-8c2c-d95b-5d72-602d55ac6aa2@redhat.com>
+Date:   Wed, 13 Jan 2021 21:55:49 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-References: <CAMeQTsacNs-YVWeX6vFJyMBLeD_AX6imNQRodV_X-QS54wAREA@mail.gmail.com>
- <X/y1ekqBrjXK8lZO@kroah.com> <CAMeQTsaL0mx=WW2Ekr2gh_aCWKnumS4mSr5tTH_ac+cdarzxMA@mail.gmail.com>
- <CAOGqxeUkZ8VK-D3xutVvQk7e2t1=9GzLQL7oHz0GTj_FMdVeqw@mail.gmail.com>
- <CAMeQTsZA7a9WcJq2tudWhaJbc6Z4vb4jtcUnHOCzg9u3oLxzbw@mail.gmail.com>
- <X/1ksTC4SBgrQoak@kroah.com> <CAOGqxeXE4D7Dyf-9c=evZMG+PTGrycKTpY1=VBk7OVAWKmyh0A@mail.gmail.com>
- <X/7KJ1gbcnQDUWx3@kroah.com>
-In-Reply-To: <X/7KJ1gbcnQDUWx3@kroah.com>
-From:   Alan Cooper <alcooperx@gmail.com>
-Date:   Wed, 13 Jan 2021 15:07:03 -0500
-Message-ID: <CAOGqxeWYcsQMRfGQeefufriba33hZ7__g+77dzwE=kT=csWywA@mail.gmail.com>
-Subject: Re: Conflicting PCI ID in bdc driver
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAGZ6i=2cQywq82QrJg=t-KVMqSdjME-dkd-8aH3au_RTju2zTA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Just to be clear, I'm only interested in removing the bdc_pci.c file
-and not the rest of the BDC driver.
-I talked to the hardware engineer that designed the BDC core and he
-said that there were only a few of these PCIe/FPGA boards. They were
-used for development until the BDC core was added to various ARM SoC's
-as a memory mapped platform bus controller. The original PCIe boards
-are no longer in existence.
+Hi,
 
-Al
+On 1/13/21 3:46 PM, Kyle Tso wrote:
+> On Wed, Jan 13, 2021 at 2:11 PM Badhri Jagan Sridharan
+> <badhri@google.com> wrote:
+>>
+>> Hi Kyle,
+>>
+>> Do you want to handle the FAST_ROLE_SWAP case as well ?
+>>
+> I forgot this part....
+> Thanks for catching this.
+> I will fix it.
 
-On Wed, Jan 13, 2021 at 5:22 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Jan 12, 2021 at 02:51:05PM -0500, Alan Cooper wrote:
-> > I just checked with the hardware engineer that designed the BDC core.
-> > The BDC PCI driver was used with an FPGA/PCIe board for design
-> > verification and no one should be using this driver. I'll send a patch
-> > that will remove this driver.
->
-> Based on the recent patches for this driver on the mailing list, are you
-> sure that no one is using this?  We can't delete a driver that people
-> are using.
->
-> thanks,
->
-> greg k-h
+That sounds like a v6 is upcoming which not only will have
+code-style changes but also some functional changes ?
+
+In that case I will wait a bit before running the tests
+which I want to run with this patch-set and run those
+tests with v6 so that I don't have to redo them later.
+
+Regards,
+
+Hans
+
+
+
+> 
+> 
+>> You would have to fix up in two places:
+>>
+>> #1
+>> -                       if (port->state == SNK_READY)
+>> -                               tcpm_set_state(port, FR_SWAP_SEND, 0);
+>> -                       else
+>> +                       if (port->state == SNK_READY) {
+>> +                               int ret;
+>> +
+>> +                               port->upcoming_state = FR_SWAP_SEND;
+>> +                               ret = tcpm_ams_start(port, FAST_ROLE_SWAP);
+>> +                               if (ret == -EAGAIN)
+>> +                                       port->upcoming_state = INVALID_STATE;
+>> +                       } else {
+>>                                 tcpm_log(port, "Discarding FRS_SIGNAL!
+>> Not in sink ready");
+>> +                       }
+>>
+>> #2
+>> --- a/drivers/usb/typec/tcpm/tcpm.c
+>> +++ b/drivers/usb/typec/tcpm/tcpm.c
+>> @@ -4449,9 +4449,14 @@ static void tcpm_enable_frs_work(struct
+>> kthread_work *work)
+>>         if (port->state != SNK_READY || port->vdm_state !=
+>> VDM_STATE_DONE || port->send_discover)
+>>                 goto resched;
+>>
+>> -       tcpm_set_state(port, GET_SINK_CAP, 0);
+>> -       port->sink_cap_done = true;
+>> -
+>> +       port->upcoming_state = GET_SINK_CAP;
+>> +       ret = tcpm_ams_start(port, GET_SINK_CAPABILITIES);
+>> +       if (ret == -EAGAIN) {
+>> +               port->upcoming_state = INVALID_STATE;
+>> +       } else {
+>> +               port->sink_cap_done = true;
+>> +               goto unlock;
+>> +       }
+>>
+>> Thanks,
+>> Badhri
+>>
+>>
+> 
+
