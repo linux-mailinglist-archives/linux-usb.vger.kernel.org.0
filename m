@@ -2,102 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DA82F424B
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 04:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3611C2F42DB
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jan 2021 05:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728616AbhAMDQ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jan 2021 22:16:29 -0500
-Received: from mx2.suse.de ([195.135.220.15]:39364 "EHLO mx2.suse.de"
+        id S1726234AbhAMEKu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jan 2021 23:10:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50142 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728105AbhAMDQ2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 12 Jan 2021 22:16:28 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id E72E6AD11;
-        Wed, 13 Jan 2021 03:15:46 +0000 (UTC)
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     jacmet@sunsite.dk
-Cc:     gregkh@linuxfoundation.org, sergei.shtylyov@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dave@stgolabs.net, Davidlohr Bueso <dbueso@suse.de>
-Subject: [PATCH v2] usb/c67x00: Replace tasklet with work
-Date:   Tue, 12 Jan 2021 19:15:37 -0800
-Message-Id: <20210113031537.79859-1-dave@stgolabs.net>
-X-Mailer: git-send-email 2.26.2
+        id S1725815AbhAMEKt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 12 Jan 2021 23:10:49 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 5752E2312E;
+        Wed, 13 Jan 2021 04:10:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610511009;
+        bh=XNGVhzdi/X3V5r1uz1q2XrNcCW0KPxFf+HNYg8L+3c4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=WREwutCuDDpr7ljECPpnwuczb1C9EvI7DXTJuPlUw1/i49Xkv3NNcihkPU1WzTov1
+         F5Ug9vz5FXJhmUOWYxWoqEb46UxoYJZ2ImEK+u/FY1xuh3ULH+C0dZc0EDIf/TV2Fb
+         Q6v2rnCxGmLECY+BuZ0+JXMiN30KIrCl42FZdyXaFVgEPMRUG0xLAQBC1Otd7ylbNK
+         QUdPHaQq/RoQZTUg3HP4TReTP55zhkK4S6py24BnHRWG7QCf10DDB3NDBa/ztrWahu
+         f8fIsIQwXYGylUBsVXbkezs7z6c3fTETHlP+LNwsabbjh8m/q1eS+DKxI7avZ3htHE
+         0CHRkfe/9AZjA==
+Received: from pdx-korg-docbuild-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-1.ci.codeaurora.org (Postfix) with ESMTP id 49CBA60156;
+        Wed, 13 Jan 2021 04:10:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 1/2] r8152: Add Lenovo Powered USB-C Travel Hub
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161051100929.28597.11266832890595155753.git-patchwork-notify@kernel.org>
+Date:   Wed, 13 Jan 2021 04:10:09 +0000
+References: <20210111190312.12589-2-leon@is.currently.online>
+In-Reply-To: <20210111190312.12589-2-leon@is.currently.online>
+To:     Leon Schuermann <leon@is.currently.online>
+Cc:     kuba@kernel.org, oliver@neukum.org, davem@davemloft.net,
+        hayeswang@realtek.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Tasklets have long been deprecated as being too heavy on the system
-by running in irq context - and this is not a performance critical
-path. If a higher priority process wants to run, it must wait for
-the tasklet to finish before doing so.
+Hello:
 
-c67x00_do_work() will now run in process context and have further
-concurrency (tasklets being serialized among themselves), but this
-is done holding the c67x00->lock, so it should be fine. Furthermore,
-this patch fixes the usage of the lock in the callback as otherwise
-it would need to be irq-safe.
+This series was applied to netdev/net.git (refs/heads/master):
 
-Signed-off-by: Davidlohr Bueso <dbueso@suse.de>
----
-Changes from v1: cleaned up busted white spaces.
+On Mon, 11 Jan 2021 20:03:13 +0100 you wrote:
+> This USB-C Hub (17ef:721e) based on the Realtek RTL8153B chip used to
+> use the cdc_ether driver. However, using this driver, with the system
+> suspended the device constantly sends pause-frames as soon as the
+> receive buffer fills up. This causes issues with other devices, where
+> some Ethernet switches stop forwarding packets altogether.
+> 
+> Using the Realtek driver (r8152) fixes this issue. Pause frames are no
+> longer sent while the host system is suspended.
+> 
+> [...]
 
- drivers/usb/c67x00/c67x00-hcd.h   |  2 +-
- drivers/usb/c67x00/c67x00-sched.c | 12 +++++++-----
- 2 files changed, 8 insertions(+), 6 deletions(-)
+Here is the summary with links:
+  - [1/2] r8152: Add Lenovo Powered USB-C Travel Hub
+    https://git.kernel.org/netdev/net/c/cb82a54904a9
+  - [2/2] r8153_ecm: Add Lenovo Powered USB-C Hub as a fallback of r8152
+    https://git.kernel.org/netdev/net/c/2284bbd0cf39
 
-diff --git a/drivers/usb/c67x00/c67x00-hcd.h b/drivers/usb/c67x00/c67x00-hcd.h
-index 6b6b04a3fe0f..6332a6b5dce6 100644
---- a/drivers/usb/c67x00/c67x00-hcd.h
-+++ b/drivers/usb/c67x00/c67x00-hcd.h
-@@ -76,7 +76,7 @@ struct c67x00_hcd {
- 	u16 next_td_addr;
- 	u16 next_buf_addr;
- 
--	struct tasklet_struct tasklet;
-+	struct work_struct work;
- 
- 	struct completion endpoint_disable;
- 
-diff --git a/drivers/usb/c67x00/c67x00-sched.c b/drivers/usb/c67x00/c67x00-sched.c
-index e65f1a0ae80b..c7d3e907be81 100644
---- a/drivers/usb/c67x00/c67x00-sched.c
-+++ b/drivers/usb/c67x00/c67x00-sched.c
-@@ -1123,24 +1123,26 @@ static void c67x00_do_work(struct c67x00_hcd *c67x00)
- 
- /* -------------------------------------------------------------------------- */
- 
--static void c67x00_sched_tasklet(struct tasklet_struct *t)
-+static void c67x00_sched_work(struct work_struct *work)
- {
--	struct c67x00_hcd *c67x00 = from_tasklet(c67x00, t, tasklet);
-+	struct c67x00_hcd *c67x00;
-+
-+	c67x00 = container_of(work, struct c67x00_hcd, work);
- 	c67x00_do_work(c67x00);
- }
- 
- void c67x00_sched_kick(struct c67x00_hcd *c67x00)
- {
--	tasklet_hi_schedule(&c67x00->tasklet);
-+	queue_work(system_highpri_wq, &c67x00->work);
- }
- 
- int c67x00_sched_start_scheduler(struct c67x00_hcd *c67x00)
- {
--	tasklet_setup(&c67x00->tasklet, c67x00_sched_tasklet);
-+	INIT_WORK(&c67x00->work, c67x00_sched_work);
- 	return 0;
- }
- 
- void c67x00_sched_stop_scheduler(struct c67x00_hcd *c67x00)
- {
--	tasklet_kill(&c67x00->tasklet);
-+	cancel_work_sync(&c67x00->work);
- }
--- 
-2.26.2
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
