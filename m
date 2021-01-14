@@ -2,107 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 772532F5C3E
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 09:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB96D2F5C4E
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 09:22:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728020AbhANIKy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jan 2021 03:10:54 -0500
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:53798 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727155AbhANIKx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jan 2021 03:10:53 -0500
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 7FD5F40409;
-        Thu, 14 Jan 2021 08:09:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1610611793; bh=DYt3fzSUtsgqmE3RhzpKHDj+iN18zUya5J+pxlOZcEk=;
-        h=Date:From:Subject:To:Cc:From;
-        b=a5Wiq/SB3uBpQNmhY+LGcdlNBn+8uIt0M2Aclh9wcAy0Rsc56ipj17DYdj6zZy3wU
-         saXtKbUByc9nqC4cflk/1fQcheNcksd/QbLRlbLwHelsC9l4oTCKZ9274RZK+cDYRj
-         2KsHaGI7Wr+OuS7WTe+5NYrXuoSRJV2wRhuRF9Du3lVWFDL82x7bChLe1BI/WOB5GV
-         DVUO99ZpOVI2wyl2lH3gBeG/2aJUU42jTi72+yFrj/7tu92ZHlIOikDAE3D9Vve07f
-         RpZSHNNWTWIi+w1AWTSDO8RLPtZp+cTtTHld116M7exOut4TqnRLgoI7x+16OjzifL
-         YeEC3BITvIjOw==
-Received: from te-lab16 (unknown [10.10.52.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 371CEA0072;
-        Thu, 14 Jan 2021 08:09:51 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Thu, 14 Jan 2021 00:09:51 -0800
-Date:   Thu, 14 Jan 2021 00:09:51 -0800
-Message-Id: <338ea01fbd69b1985ef58f0f59af02c805ddf189.1610611437.git.Thinh.Nguyen@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v3] usb: udc: core: Use lock when write to soft_connect
-To:     Felipe Balbi <balbi@kernel.org>,
+        id S1727672AbhANIUS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jan 2021 03:20:18 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.82]:35989 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727482AbhANIUS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jan 2021 03:20:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1610612243;
+        s=strato-dkim-0002; d=gerhold.net;
+        h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Subject:Sender;
+        bh=fEEp0Noi7jJWrCuf7sZQZHb+rVCjvIPHa+3gQdjlcmY=;
+        b=GMf35K9dvlnfUsmw8xfeU6TEOgtXv/3Ewb/cqui18sywyEbfFDOtSCetP1XVuzOw/O
+        2YVQ/MQhMRsJVvCuIr5lh2BiTwyGrK/6O514rWSm/Jdtc3NVUs4BtxwEO3Btx+vtVqAh
+        7mZAuMBVJBoPzL0UeC6SeJqFflAc3rCfFaiy0qtOoX8/EeISrWuZoW6slyr8ki9nF2tt
+        R+/e8+pg1LpfJNoCb05zGKS2VX7Kwab95yzaZV8uMh26wlR5nxcPH3wn9N1B0sMOeLKU
+        FppVs8ihFc+XsyqkCVuFVWqbVFjI0sqcT2bBSqYIB+dtAa0uj/Sou98X5yjus9M8oMrc
+        F74A==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8j5IczAa4o="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+        by smtp.strato.de (RZmta 47.12.1 DYNA|AUTH)
+        with ESMTPSA id R0a218x0E8HGhGG
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Thu, 14 Jan 2021 09:17:16 +0100 (CET)
+Date:   Thu, 14 Jan 2021 09:17:08 +0100
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Peter Chen <hzpeterchen@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
-        Michal Nazarewicz <mina86@mina86.com>
-Cc:     stable@vger.kernel.org
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>, Thierry Reding <treding@nvidia.com>
+Subject: Re: Infinite recursion in device_reorder_to_tail() due to circular
+ device links
+Message-ID: <X//+BBbv454RuYqm@gerhold.net>
+References: <X/ycQpu7NIGI969v@gerhold.net>
+ <CAJZ5v0gAsZ45O8mv-gz0UvbyxnKA6fQBYvambBYEH6OSk3-m3g@mail.gmail.com>
+ <CAJZ5v0h8bNp-=1zVfY5gZ1ezr8JRV4L8cEV45e+0f-aRSJnb1A@mail.gmail.com>
+ <X/7XCzdDG7kbiNfM@gerhold.net>
+ <20210114005454.GA14220@b29397-desktop>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210114005454.GA14220@b29397-desktop>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use lock to guard against concurrent access for soft-connect/disconnect
-operations when writing to soft_connect sysfs.
+Hi Peter,
 
-Cc: stable@vger.kernel.org
-Fixes: 2ccea03a8f7e ("usb: gadget: introduce UDC Class")
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
- Changes in v3:
- - Improve flow: avoid assigning "ret = n" early
- Changes in v2:
- - Consolidate mutex_unlock to a single place using "goto out"
+On Thu, Jan 14, 2021 at 08:54:54AM +0800, Peter Chen wrote:
+> On 21-01-13 12:18:35, Stephan Gerhold wrote:
+> > 
+> > Also, on a completely different note I looked again at the chipidea USB
+> > driver that produces this situation. To request the PHY (which ends up
+> > in the circular device link) it does:
+> > 
+> > 	/* Look for a generic PHY first */
+> > 	ci->phy = devm_phy_get(dev->parent, "usb-phy");
+> > 
+> > To me it doesn't really seem great to use the devm_* helpers on the
+> > parent device either, so I will check if I can refactor this somehow.
+> > Perhaps this situation can be prevented entirely.
+> > 
+> 
+> You could try to get the PHY at parent driver
+> (drivers/usb/chipidea/ci_hdrc_msm.c) to see the difference.
+> 
 
- drivers/usb/gadget/udc/core.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+Unfortunately, I don't think this works in my case because I have an
+ULPI PHY. It's not available until ret = ci_ulpi_init(ci); is called
+from the ci_hdrc.0 platform device.
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 6a62bbd01324..ea114f922ccf 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1529,10 +1529,13 @@ static ssize_t soft_connect_store(struct device *dev,
- 		struct device_attribute *attr, const char *buf, size_t n)
- {
- 	struct usb_udc		*udc = container_of(dev, struct usb_udc, dev);
-+	ssize_t			ret;
- 
-+	mutex_lock(&udc_lock);
- 	if (!udc->driver) {
- 		dev_err(dev, "soft-connect without a gadget driver\n");
--		return -EOPNOTSUPP;
-+		ret = -EOPNOTSUPP;
-+		goto out;
+I tried the following diff yesterday. It prevents the circular device
+link, therefore also the crash and even devm_* on the parent device:
+
+diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+index aa40e510b806..79f556d0c93e 100644
+--- a/drivers/usb/chipidea/core.c
++++ b/drivers/usb/chipidea/core.c
+@@ -847,6 +847,8 @@ struct platform_device *ci_hdrc_add_device(struct device *dev,
  	}
  
- 	if (sysfs_streq(buf, "connect")) {
-@@ -1543,10 +1546,14 @@ static ssize_t soft_connect_store(struct device *dev,
- 		usb_gadget_udc_stop(udc);
+ 	pdev->dev.parent = dev;
++	device_set_of_node_from_dev(&pdev->dev, dev);
++	pdev->driver_override = kstrdup("ci_hdrc", GFP_KERNEL);
+ 
+ 	ret = platform_device_add_resources(pdev, res, nres);
+ 	if (ret)
+@@ -1027,7 +1029,7 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+ 		ci->usb_phy = ci->platdata->usb_phy;
  	} else {
- 		dev_err(dev, "unsupported command '%s'\n", buf);
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out;
- 	}
+ 		/* Look for a generic PHY first */
+-		ci->phy = devm_phy_get(dev->parent, "usb-phy");
++		ci->phy = devm_phy_get(dev, "usb-phy");
  
--	return n;
-+	ret = n;
-+out:
-+	mutex_unlock(&udc_lock);
-+	return ret;
- }
- static DEVICE_ATTR_WO(soft_connect);
- 
+ 		if (PTR_ERR(ci->phy) == -EPROBE_DEFER) {
+ 			ret = -EPROBE_DEFER;
 
-base-commit: 4e0dcf62ab4cf917d0cbe751b8bf229a065248d4
--- 
-2.28.0
+Basically my idea was to share the of_node with the ci_hdrc.0 platform
+device, so that it can request the PHY itself instead of going through
+the parent.
 
+It seems to work fine but I had to add pdev->driver_override to prevent
+the ci_hdrc.0 device from probing using ci_hdrc_msm (since it considers
+the "compatible" value on the of_node otherwise).
+
+This is a bit weird (I think driver_override is mainly intended to be
+written through sysfs, not from kernel code directly).
+That is why I did not post this as a proper patch yet...
+
+Thanks,
+Stephan
