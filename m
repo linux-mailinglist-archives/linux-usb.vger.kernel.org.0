@@ -2,101 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 056E22F58F3
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 04:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08BD42F5970
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 04:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726013AbhANDIE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jan 2021 22:08:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725902AbhANDIB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jan 2021 22:08:01 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E8AC061575;
-        Wed, 13 Jan 2021 19:07:21 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id x5so3987909otp.9;
-        Wed, 13 Jan 2021 19:07:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Wt4c3hj4ZNh4hMLpR61yHCrDZAWL6JHj7ZjRuFGj1Pw=;
-        b=fBsj0RnZa25qYcgFyptF/Ij/98L05uF/+BBI0N0B+3SuTyalm+A3fl6HDAqOhe+OyR
-         sWGebKw6B7VLU+UU2zP0MsjnS7Bs2xSQkurR2HRx2qugh8TD5e1GWD2SEhqbASOpvDKF
-         JOr0GHl0ebEaASF7MMtIkWxwBvcViT5X0QkSGKujZar59berdPvDYDgJ7E5sYG42zC8Q
-         JpAnF01i1kzJEXa9XYY6bT8pIfe7hK5H7KYQTyKPyuzEl2Z3B3nsImO0Z21Et7mswboW
-         kbVDjLlAsonlg+X2HWDvDnVYgHhgQdEyISIXR4Qpxy7EFBybh2dai0de8FTTawMziwZU
-         bnRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Wt4c3hj4ZNh4hMLpR61yHCrDZAWL6JHj7ZjRuFGj1Pw=;
-        b=foAOqK1K+CoPPa8kq5bKGBKLSoxgxk96BDOiyzvllA9FZgFovPVFv9XxnNB5Pk3ldw
-         8SOl8dgNElXuc97DSwxL8jVhOPkm+2dOxuEV8Ev8Qde0N+5W5XDwBR4AkwzqWA9lAkJf
-         vBxb56jAOlOohdKCF6V9Z6KN66XZT5aPHXCn9ISHw24e7uM8LWfEIz2fuPG6H7XLA3w3
-         m40jhFeQoA4FH1hR9OcoltuNIo1HlfFjWw5qcVvat3xjF6wQZOePX44uhpVorUNSfms/
-         9sxMEA+unmm6CQlKQQfZ1Ag/K2k+au4ApJpfnil+Fa3ckMz1fSdPEDF8FY+qg9LtpVSN
-         92oA==
-X-Gm-Message-State: AOAM533/9B81bNhJ1jcHVM8g3aEnmrP2QcSTnfbwQYDu28PDqrmjOOaC
-        16lh7NjCUjJ9VtYThEBPgEo=
-X-Google-Smtp-Source: ABdhPJxF0kTUTYxrv+YeLvUo0YQUlV/1rUkKv3GXl1lH1tr0FVEujO5BYSs07NnlMKqzAAMElY1+QQ==
-X-Received: by 2002:a9d:7407:: with SMTP id n7mr3276817otk.189.1610593640069;
-        Wed, 13 Jan 2021 19:07:20 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u76sm817425oia.48.2021.01.13.19.07.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 13 Jan 2021 19:07:18 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 13 Jan 2021 19:07:15 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Paul Zimmerman <Paul.Zimmerman@synopsys.com>,
-        Felipe Balbi <balbi@ti.com>,
+        id S1726404AbhANDjb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jan 2021 22:39:31 -0500
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:43270 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726198AbhANDja (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jan 2021 22:39:30 -0500
+Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 15B114025A;
+        Thu, 14 Jan 2021 03:38:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1610595510; bh=av7mt7Tvas77VdAORFuYEb9QVuhpUCn+UocN3bdElgw=;
+        h=Date:From:Subject:To:Cc:From;
+        b=JSGOQsHAYq/g9YnFSgY5pxq3Oe5GmRs02S0kAO4Xv8aDHNSeOhvwbnQvta8zEpm6e
+         uXdTm2s2I3mIkLuq3L98A9MwQ87bF0hsuUhugQTyhcTql6B7IaAhR8wDeOMmDiLZ7O
+         RwTimFeVl7PbDeHYuuB0SadjuDbGwn/N9cEUsIJRN5n5vozVisDRjtqvxDlL7r122U
+         zmdaDRainSB7xeDQNCrIaQ/19Y//9Dtp6gd6U5DN//2NJgf5BAMqEwUESLIs5UisKU
+         IeeEY4eQCyc8OKcnUzrb4I7R+WlYw/1mzADdxFDrFARlCFhbTpEe61gFNPGlAkG8ID
+         Mb4pdt3hZ5SHg==
+Received: from te-lab16 (unknown [10.10.52.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 76789A007A;
+        Thu, 14 Jan 2021 03:38:28 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Wed, 13 Jan 2021 19:38:28 -0800
+Date:   Wed, 13 Jan 2021 19:38:28 -0800
+Message-Id: <311bc6d30b23427420133602c2833308310b7fcb.1610595364.git.Thinh.Nguyen@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH v2] usb: udc: core: Use lock when write to soft_connect
+To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Hudson <skrll@netbsd.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/3] usb: dwc2: Fixes and improvements
-Message-ID: <20210114030715.GA102157@roeck-us.net>
-References: <20210113112052.17063-1-nsaenzjulienne@suse.de>
- <CAD=FV=VnsVgTGTkr9VYQHCkBSVVksT1UGfsmk+dqTyQ1sqF=Qw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=VnsVgTGTkr9VYQHCkBSVVksT1UGfsmk+dqTyQ1sqF=Qw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        linux-usb@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dejin Zheng <zhengdejin5@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
+        Michal Nazarewicz <mina86@mina86.com>
+Cc:     stable@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 13, 2021 at 03:20:55PM -0800, Doug Anderson wrote:
-> Hi,
-> 
-[ ... ]
-> 
-> It's been long enough ago that I've forgotten where this was left off,
-> but IIRC the 3 patches that you have here are all fine to land (and
-> have my Reviewed-by tag).  However, I think Guenter was still tracking
-> down additional problems.  Guenter: does that match your recollection?
-> 
-> It looks like there are still bugs open for this on our public bug tracker:
-> 
-> https://issuetracker.google.com/issues/172208170
-> https://issuetracker.google.com/issues/172216241
-> 
-> ...but, as Guenter said, I don't think there's anyone actively working on them.
-> 
-> I'm not really doing too much with dwc2 these days either and don't
-> currently have good HW setup for testing, so for the most part I'll
-> leave it to you.  I wanted to at least summarize what I remembered,
-> though!  :-)
-> 
+Use lock to guard against concurrent access for soft-connect/disconnect
+operations when writing to soft_connect sysfs.
 
-The patches in this series still match what I had in my latest test code,
-so it makes sense to move forward with them. I don't think I ever found
-an acceptable version of the DMA alignment code.
+Cc: stable@vger.kernel.org
+Fixes: 2ccea03a8f7e ("usb: gadget: introduce UDC Class")
+Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
+ Changes in v2:
+ - Consolidate mutex_unlock to a single place using "goto out"
 
-Guenter
+ drivers/usb/gadget/udc/core.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 6a62bbd01324..3363f5c282f1 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -1529,10 +1529,13 @@ static ssize_t soft_connect_store(struct device *dev,
+ 		struct device_attribute *attr, const char *buf, size_t n)
+ {
+ 	struct usb_udc		*udc = container_of(dev, struct usb_udc, dev);
++	ssize_t			ret = n;
+ 
++	mutex_lock(&udc_lock);
+ 	if (!udc->driver) {
+ 		dev_err(dev, "soft-connect without a gadget driver\n");
+-		return -EOPNOTSUPP;
++		ret = -EOPNOTSUPP;
++		goto out;
+ 	}
+ 
+ 	if (sysfs_streq(buf, "connect")) {
+@@ -1543,10 +1546,12 @@ static ssize_t soft_connect_store(struct device *dev,
+ 		usb_gadget_udc_stop(udc);
+ 	} else {
+ 		dev_err(dev, "unsupported command '%s'\n", buf);
+-		return -EINVAL;
++		ret = -EINVAL;
+ 	}
+ 
+-	return n;
++out:
++	mutex_unlock(&udc_lock);
++	return ret;
+ }
+ static DEVICE_ATTR_WO(soft_connect);
+ 
+
+base-commit: 4e0dcf62ab4cf917d0cbe751b8bf229a065248d4
+-- 
+2.28.0
+
