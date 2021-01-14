@@ -2,37 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA752F5CB2
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 09:57:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7BE42F5CB3
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 09:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727481AbhANI4y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jan 2021 03:56:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39916 "EHLO mail.kernel.org"
+        id S1727174AbhANI5o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jan 2021 03:57:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40046 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726742AbhANI4y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 Jan 2021 03:56:54 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1C846239A1;
-        Thu, 14 Jan 2021 08:56:11 +0000 (UTC)
+        id S1725989AbhANI5n (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 Jan 2021 03:57:43 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B6977239A1;
+        Thu, 14 Jan 2021 08:57:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610614573;
-        bh=sv+9qVGO7egBfOkGjfzcpaTzrwk3mgzrhgB3qJS9h3Y=;
+        s=k20201202; t=1610614623;
+        bh=zsx5nPtADKLjuunMgy8/KCoh2CcAacruI1Wlbf7EFek=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=eHt4b/m0MHTnpFxAkA46FSm7JjfLFoR0M2RAvsI6KuNL1c3gISH4NYXkihZpEmPNm
-         DRQclGy59WKzjq4Oj81RkDvMV/uJBupgjascbyWoBtamTAh66lUT5fv86sf1o0BN6U
-         yWqYp+nJEvtqAR1u3J4kFjfkmKnr7TPCoDVuncRcEG64nrYB9GadUbnfwGQerRR5+c
-         Pg5EtMsVx+NvY9nsej77Ko71Ju4gjvd3GdmIAfw57jUvhjaQ4R/nJn6Kkia/AwbuzN
-         PErwt8TlFNgbC5Xx7BG3xBcPJSBywMLFdI404V1w7+XCJhyv0VGWqqzalYVepehXUT
-         7VuHg8zJUi0OA==
+        b=T1XU1ABZIGJeRd0lUDN7Qz58mIr5ThbTRHwkHAu5Tb8FhpXrE+HzrZ3g6T7KTbqTy
+         wgqkUyN/wAm+IH4EDY+nSVWoj0VMtiBDVQzc3f2h9Z8MJWZUylm/bgSaVicvvngV9Y
+         Qs3hhuZrmSGjqkfDlGYIR7YsQwfYpfcyidC3SvgBYLsoT6+yYivJOBflppZ/x5laBy
+         /INdqHZnW//Tf7IqBnw0nWP4b+ETEM+2CbBZzTdP9gErtLgg5TQI5gV6zdM/DTpjjt
+         ERlacjZxetXiuch7pXgY2GzFOqfYdztgHwQU07Q7JY/qnb5rZD4IF1zPl1xz6AKMDH
+         8oFxaeSDPn6+w==
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH] usb: dwc3: gadget: Disable Vendor Test LMP Received event
-In-Reply-To: <4e785ba5d5e95801b6fcf96116f6090216e70760.1610596478.git.Thinh.Nguyen@synopsys.com>
-References: <4e785ba5d5e95801b6fcf96116f6090216e70760.1610596478.git.Thinh.Nguyen@synopsys.com>
-Date:   Thu, 14 Jan 2021 10:56:06 +0200
-Message-ID: <87mtxb3nix.fsf@kernel.org>
+        linux-usb@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dejin Zheng <zhengdejin5@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
+        Michal Nazarewicz <mina86@mina86.com>
+Cc:     stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: udc: core: Use lock when write to soft_connect
+In-Reply-To: <311bc6d30b23427420133602c2833308310b7fcb.1610595364.git.Thinh.Nguyen@synopsys.com>
+References: <311bc6d30b23427420133602c2833308310b7fcb.1610595364.git.Thinh.Nguyen@synopsys.com>
+Date:   Thu, 14 Jan 2021 10:56:55 +0200
+Message-ID: <87k0sf3nhk.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -44,17 +50,13 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-
-Hi,
-
 Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
-> Some users questioned why Vendor Test LMP Received event was enabled.
-> The driver currently doesn't handle this event. Let's disable it to
-> avoid confusion.
 
-in case you're curious, it's left-over from early development where we
-thought we should "enable everything and add code for each one" ;-)
-
+> Use lock to guard against concurrent access for soft-connect/disconnect
+> operations when writing to soft_connect sysfs.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 2ccea03a8f7e ("usb: gadget: introduce UDC Class")
 > Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
 Acked-by: Felipe Balbi <balbi@kernel.org>
@@ -67,19 +69,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmAAByYRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQY34w//UEYSTDYCgpkdoil/iFcrPg5gPEy3zRvz
-DdLc8UAAQvd7MLhfypMS6Q9/aHj9ZkN+ZnjMkf5qYt0yOLUuK/R/biY9Vz6YH6F3
-B2gglnXwVgDgiKjKN7ncH+XutNruc0xgHSqxwW6hZdN3QZInLw7F2l4PsjxWejyF
-NTRdOUX8XStnoFB3GU+otpBXDJ6m4O6EfYe2SE35wE7xOYD2TeDTGjt4Yjrx3MO5
-PZAIRmYCfumUfqe1h3s1/Q3+iVU5ULYcIv+iC45Y+wSEIHL2N7fiXnKVQO4ZNjm0
-2rjtI/IaFXDBUh1MzuROxj8b9OCx8fXPU7njjebKatjBciGmsV+O7+bMSNs3muZw
-T1RrzyuV5UDyKtEMl4SXrnsgnoQD8WEuCJ1I7PSAmC8VnMuevKqYfmVha6BKRtvx
-DwnupBwe3tfHBTvd6yXxN7m4PRTc7kwzWBgmVmnWlawXlRL2xaOxFnucdiWTbnkY
-PSgq2ghc3kSJI5c7cjBDfOUVAhqwGcEIa9rkuAQjNtN1RtUqkRX0G655vvKh7FVg
-qvi2i1TQZ/ytbhAcyR/5gAJfa6PBnSskqQkerkWvDw9DnbsxJEoL8EytdmV/3/0i
-N9dc/QTAWRvPaNJAo37GMZPYV/UsFFqqt9julEtbYIQPoMKzwcgk1N2uM146fFFS
-mhYADqGoJU4=
-=twKJ
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmAAB1cRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQZTDxAAjkYg8B0C4kfry3iSFLT/uXx90OYywx1q
+81IZCwAEmCJVAwaQoWGnnvmMIImRnpxIqpAE91C9ZO86toqUNHZvu0SMQOUUgJcm
+4LX+JOYY3DQjN6knFpvOaKuaH9DPXZmGKqSQ0Gns994hVhFJ2sLPfSaEgsVqEdha
+ZcOqD6yItpIIMWAd4RTm//AMp8UumTcRbyhMdkpScbNAXyPSrxqokHsgOg3rUJ+B
+xZlsbq1gCsZlZMBPK2nSfoGfC3WYP/iOik0nf7SRVTt6mwHT0xuufJg7bb5+sxMv
+NSSatGCXvER/Kt1zTHatr1j/T3dqgaDleAfZWK+UesA06rh4tNCMStLT93AgJikh
+itFTLlunBkesgofytv03KUyxqUByWnppVaGAup2eO++PHYStiMQnYBdl336bagkI
+szILyTYkMWI66zXO+vOWJvbs5wjWpQinfekCW5crMTT4wlApFXDOwqzU3wU++/jI
+NF3k52isu5zorSb8sG1A9W96CcZJbj4HdGUHJbnkEPC2rTI0sEO8nvSQjjRRnxLb
+M+nY9efuyhjl7eR8QhkLgrj0lYOeFbw7P/JLkWW/uPomAUAdMEdMmxCa7H5WtO5K
+Ldp2iaY2dNOTq6Z34MTZWNKj+vbtjLqRXUeWn5AS2YANfGePWT1jSB9CcURellif
+LO5AED7lJqo=
+=ZA5Q
 -----END PGP SIGNATURE-----
 --=-=-=--
