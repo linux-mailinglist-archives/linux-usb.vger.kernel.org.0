@@ -2,67 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8409B2F6A54
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 20:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 565412F6BB1
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 21:01:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729609AbhANTAw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jan 2021 14:00:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54580 "EHLO mail.kernel.org"
+        id S1730397AbhANUAk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 14 Jan 2021 15:00:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36820 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729485AbhANTAv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 Jan 2021 14:00:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 4353123B6C;
-        Thu, 14 Jan 2021 19:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610650811;
-        bh=hJGvoAH++TMBT1K8ortkNTeQkSCNIKaaVGZNe31IpBE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=j1YeTxLNVe44u02qg5grX0v84HRmPvO/LrifvYf1Ut/WW/vyCID9d6vYr32iauULg
-         j3P6pEe1O5Ys8xaQJlFKvvIF5wOpoxHqWPdid/tI4PY3bPUKWdOaG4dpNiq2OSqdNN
-         i1u7vPyswfBxadHDNKoS/W0ofnX7Sbz3f0WV7dlIOCiRPr2jFhUMkd9rY6wmPZRsTB
-         nz18ueslA/252UT7uKbHW9rC28dU3QyylmqyGCO2UpXWVryHMYt750ELdC2nOqd3wD
-         uTf4odUpQGtthXJwO6qguttJyTDXDHp7lmblporqgVU60zlaSApmwekI1YBRu46fpX
-         dRqIM5a79OEwQ==
-Received: from pdx-korg-docbuild-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-1.ci.codeaurora.org (Postfix) with ESMTP id 395866018E;
-        Thu, 14 Jan 2021 19:00:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S1726459AbhANUAk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 Jan 2021 15:00:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 28ADB23117
+        for <linux-usb@vger.kernel.org>; Thu, 14 Jan 2021 19:59:58 +0000 (UTC)
+Received: by pdx-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 18F6D816A9; Thu, 14 Jan 2021 19:59:58 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 211143] 258a:0001 SINO WEALTH USB KEYBOARD SCRLK/backlight
+ button not work
+Date:   Thu, 14 Jan 2021 19:59:57 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: Input Devices
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: l0rdg3x@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: component
+Message-ID: <bug-211143-208809-5p2FWRnWSk@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-211143-208809@https.bugzilla.kernel.org/>
+References: <bug-211143-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] nt: usb: USB_RTL8153_ECM should not default to y
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161065081122.20848.13718242969885388287.git-patchwork-notify@kernel.org>
-Date:   Thu, 14 Jan 2021 19:00:11 +0000
-References: <20210113144309.1384615-1-geert+renesas@glider.be>
-In-Reply-To: <20210113144309.1384615-1-geert+renesas@glider.be>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     davem@davemloft.net, kuba@kernel.org, hayeswang@realtek.com,
-        m.szyprowski@samsung.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
+https://bugzilla.kernel.org/show_bug.cgi?id=211143
 
-This patch was applied to netdev/net.git (refs/heads/master):
+Gennaro Cimmino (l0rdg3x@gmail.com) changed:
 
-On Wed, 13 Jan 2021 15:43:09 +0100 you wrote:
-> In general, device drivers should not be enabled by default.
-> 
-> Fixes: 657bc1d10bfc23ac ("r8153_ecm: avoid to be prior to r8152 driver")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  drivers/net/usb/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+          Component|USB                         |Input Devices
 
-Here is the summary with links:
-  - nt: usb: USB_RTL8153_ECM should not default to y
-    https://git.kernel.org/netdev/net/c/7da17624e794
+-- 
+You may reply to this email to add a comment.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+You are receiving this mail because:
+You are watching the assignee of the bug.
