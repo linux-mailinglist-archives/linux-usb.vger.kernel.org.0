@@ -2,75 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E552F5AB0
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 07:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E02542F5AC5
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 07:41:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726924AbhANG0s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jan 2021 01:26:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45374 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726882AbhANG0r (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 Jan 2021 01:26:47 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 11602238E7;
-        Thu, 14 Jan 2021 06:26:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610605567;
-        bh=bK/dLNM7Vog121qYXM4GcqzdLhmfDEMXzDwUKOT9i8M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fu0n6AhEZS3CUyI4s4FezlFOCXRCeJjSndghs/fTZHZZSgaa1slZdnVerlYCrd8cx
-         I7Tj1PBwAkU0zTinpU4lWnkyNl1IA95WVtgx8twEcKVJJd6nR9maJpnvvR47GrzmhJ
-         kePJZAMn0u1/b+7nixf+Lcpee7/Z40Byp//fpXeHsailaBlJMJ6uS4vOLnPZrXitW/
-         ceStgLL99LqD/x+g5Hm5vkvducRcdnFp30Ip38esLsYkd4qlFVWYszisHTMb/rCeks
-         53BbozoUrWa2hPU3rLBWU+ujfNx97QcT/CfC3eDbir8cEdd+l6v+1hFac7coSUJrzC
-         oqe/575nTujmQ==
-Received: by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kzw56-00EJ7G-Ht; Thu, 14 Jan 2021 07:26:04 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Linux Doc Mailing List" <linux-doc@vger.kernel.org>,
+        id S1726075AbhANGlp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jan 2021 01:41:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725975AbhANGlp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jan 2021 01:41:45 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F4EC061575;
+        Wed, 13 Jan 2021 22:41:04 -0800 (PST)
+Date:   Thu, 14 Jan 2021 07:41:00 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1610606462;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VB3LT83nvUNrPtVk0ucHr6Pvx44lX5Zq06M2c7g1170=;
+        b=1a9gqTj8yNOQRj+3I8iqQHVwK5ueMkNbCXzamDAgWwASRq+MzcGW0m9sNjXuLJsTwpX8kp
+        Wpxxb4uZwTSHwdBTPHUZaFkoDfm3dHlEXPL0r/EL7rDfr7PIWjorQUclyz88gzhWWmG+82
+        SQ3fwdKxM87m/mfg9booNeXrOgaOTy3qhUfo5r8iKsA6mK9rtUZe5Lixi/tkxRVdVZnods
+        Kj879j1RkQ7dsJZ39cuIcBoX9RGj9VgjufQU5dtI9OESP5X9cjO9VtW5PlKCItsVu6/jjF
+        VvQQHXmx2EMbLTmlfhLb91GfFs+tZeeU1y1g4OdDgd9b6mRiRmbcM7zdBWmvjw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1610606462;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VB3LT83nvUNrPtVk0ucHr6Pvx44lX5Zq06M2c7g1170=;
+        b=u0PWeUA9ko6hRjuvT4NezRR2RadT00GM1osGA77IrHXHJBlu++h1pi3E2scmQNaYcWGdHg
+        OKeoMuhpZqf+s+Dw==
+From:   "Ahmed S. Darwish" <a.darwish@linutronix.de>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 2/3] Documentation/devicetree/bindings/usb/dwc3-st.txt: update usb-drd.yaml reference
-Date:   Thu, 14 Jan 2021 07:25:59 +0100
-Message-Id: <43d5049a8ed688980bee12ecf18ef9937981de39.1610605373.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <cover.1610605373.git.mchehab+huawei@kernel.org>
-References: <cover.1610605373.git.mchehab+huawei@kernel.org>
+        linux-usb@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dejin Zheng <zhengdejin5@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Michal Nazarewicz <mina86@mina86.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: udc: core: Use lock when write to soft_connect
+Message-ID: <X//nfLN9bW1K/yVm@lx-t490>
+References: <311bc6d30b23427420133602c2833308310b7fcb.1610595364.git.Thinh.Nguyen@synopsys.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <311bc6d30b23427420133602c2833308310b7fcb.1610595364.git.Thinh.Nguyen@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Changeset b0864e1a4d9d ("dt-bindings: usb: Convert generic USB properties to DT schemas")
-renamed: Documentation/devicetree/bindings/usb/generic.txt
-to: Documentation/devicetree/bindings/usb/usb-drd.yaml.
+On Wed, Jan 13, 2021 at 07:38:28PM -0800, Thinh Nguyen wrote:
+...
+> @@ -1543,10 +1546,12 @@ static ssize_t soft_connect_store(struct device *dev,
+>  		usb_gadget_udc_stop(udc);
+>  	} else {
+>  		dev_err(dev, "unsupported command '%s'\n", buf);
+> -		return -EINVAL;
+> +		ret = -EINVAL;
+>  	}
+>
+> -	return n;
+> +out:
+> +	mutex_unlock(&udc_lock);
+> +	return ret;
+>  }
 
-Update its cross-reference accordingly.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/devicetree/bindings/usb/dwc3-st.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/usb/dwc3-st.txt b/Documentation/devicetree/bindings/usb/dwc3-st.txt
-index ad526e76f2a8..bf73de0d5b4a 100644
---- a/Documentation/devicetree/bindings/usb/dwc3-st.txt
-+++ b/Documentation/devicetree/bindings/usb/dwc3-st.txt
-@@ -37,7 +37,7 @@ NB: The dr_mode property described in [1] is NOT optional for this driver, as th
- is "otg", which isn't supported by this SoC. Valid dr_mode values for dwc3-st are either "host"
- or "device".
- 
--[1] Documentation/devicetree/bindings/usb/generic.txt
-+[1] Documentation/devicetree/bindings/usb/usb-drd.yaml
- 
- Example:
- 
--- 
-2.29.2
-
+This is *very* tricky: the return value will be easily broken if someone
+adds any code later after the else body and before the "out" label.
