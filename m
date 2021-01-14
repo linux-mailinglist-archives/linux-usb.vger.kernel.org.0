@@ -2,247 +2,272 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DE62F5A7D
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 06:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEE12F5A96
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 07:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726013AbhANFr6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jan 2021 00:47:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37488 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725997AbhANFr6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jan 2021 00:47:58 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E3EC061575
-        for <linux-usb@vger.kernel.org>; Wed, 13 Jan 2021 21:47:18 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id md11so2500086pjb.0
-        for <linux-usb@vger.kernel.org>; Wed, 13 Jan 2021 21:47:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=NdJMMT4DtSZ9q/lNgjRXKa/tiOz9gzIv2rKboQ8lGJ8=;
-        b=BkZmP0EOnxXq71aZTqLGP4PJxULEc8yJ184CNTjgQ2QVdE/Du+2eB8Yqc5cliTtOdW
-         l691JVp/PD7hR59783G14kIVdSf1v62ANxAhjve/kV0OoFwr+zYOaoKAwT70G9yoXDId
-         RzE59l5MTKlQXmd9zeEjOgocAOxl/4z8xn41R8ev5kB6id+fFglSmJwFul+yWv6eXi4c
-         zFznaKe1Db5Ab835hsA1UnxjcBzZiZfMeijSvAPrPL3pJuyoqE6hsxzOiipS9BF7z451
-         W4/p/mKrN+4G06It379z3EYDs0ktylPWcCePNlaBKO3AMo3LiAlF6o1viYfXsheEWxAX
-         oGTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NdJMMT4DtSZ9q/lNgjRXKa/tiOz9gzIv2rKboQ8lGJ8=;
-        b=RAHISUDz/V4EzUgbE0HKvy+N4fuyK+nojoz85plnnq8ElJlNMjAW91b/WxAll5chwu
-         nPzY1iXyyHqvwbio0ke32P4r5E+GXHvFafYOnZHEBQ6Wr30fZ0efkTVv+S5JRDsVeXko
-         w1gJ5zrIbxrtrTCjsXS3YGY8p7fSCmztWpsYtsfLuoemCngwCpSkwGUNiwTff2KnmrRg
-         SZwd81oB+ObOjJ1yjZeaFKWY7bYIxIOCLlzCIizR18UdjbHNlJFSWYWdrbFWcd+vqOhc
-         4D+ZTYBgI9G0IdgMM+03SfrdbTN/56kol7yApBVhNGzMMIEffX3cc51AeFXPUs+Ia5Ts
-         ur+A==
-X-Gm-Message-State: AOAM530hNwU1HdAOYAdy3Tbhqp4ziJQXyDqXCVflTu0++wauc0mO6nVo
-        LntUwyrCtIJ+r3zcrWRm/OK9YvryUCc81Q==
-X-Google-Smtp-Source: ABdhPJzvf0tuJg42XUc1Bz3aBB/FUnz8N5fRKAAkygabHOQy+fhaYhmEH5VBdD72okD5+usaMCJEDg==
-X-Received: by 2002:a17:90b:400c:: with SMTP id ie12mr930556pjb.236.1610603238178;
-        Wed, 13 Jan 2021 21:47:18 -0800 (PST)
-Received: from b29397-desktop ([194.5.48.251])
-        by smtp.gmail.com with ESMTPSA id gp14sm4502972pjb.6.2021.01.13.21.47.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 13 Jan 2021 21:47:17 -0800 (PST)
-Date:   Thu, 14 Jan 2021 13:47:08 +0800
-From:   Peter Chen <hzpeterchen@gmail.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+        id S1726081AbhANGRY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jan 2021 01:17:24 -0500
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:47458 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725945AbhANGRW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jan 2021 01:17:22 -0500
+Received: from mailhost.synopsys.com (us03-mailhost2.synopsys.com [10.4.17.18])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id F32FA4025A;
+        Thu, 14 Jan 2021 06:16:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1610604982; bh=37SlvmSYyumT91kzJuK5xYEhfFOiCqlZhihAZ8PQRQI=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=UQp/xPmWV8+9qW40wV6Vkfmg+7oNra8iDr3/PsOTGBvwmxF1R6wT0BJadykH2+2M+
+         LdLqneFjOPSsZAydC/Yt8ZRfT9T6zXrtaDm5qyXK/VYf0+S/LHRRSmlBtW99kIcsE4
+         CAm66jL71yfn3XTYRU/fC5WB+Ne+Td/1jZN68tbqZHIHRrOQ4HRhtZMiNrExJl6Vfw
+         gvtrNLJ45yrjZnX7bP36FjAcSpwnPagDnvzx4JUgun6Yc4p67TPbYPcdpc5ZPW+S/m
+         FVLn5/VZsqxjStluwVrjgmbCXWS89pMsO2rIjj0zJItDLZaACHFiEVqdc6Lg/diMhG
+         cRglSpuPZNr+A==
+Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 52AF8A0081;
+        Thu, 14 Jan 2021 06:16:21 +0000 (UTC)
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2107.outbound.protection.outlook.com [104.47.58.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 869CF802BD;
+        Thu, 14 Jan 2021 06:16:20 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="Avt/D+FR";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gqXUuUvknYCA9XZFs5e6mF5TxEY5YtFN9+TYbaPNuAdf+lW86RPNPOGMbYL9XOzi+2DV/dXFHv6qfjrwMvMnNWiEoI5+vGmTujQeYNTzQqblcyAa9k8SmSr5S0pavaYN8ptVQ64zTibg4nfZaCp84rHO5HJeL8i3+yMHc65x1iuMZtEZBweY18XI4UXvhWvKQERpTl7qaenBCUvavDTmU3SG2bDcof8gwkVAt3TdslhPknewXrXmhhBLzb2gMRW2xZTcdHZBPp3QKFsbClbByflseaFlh/mHv/dY/OQb3IQV9gtYPXtd7oUHjkzoX26RxWQdTtls6P7FmrhYtDvGMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=37SlvmSYyumT91kzJuK5xYEhfFOiCqlZhihAZ8PQRQI=;
+ b=LZc04toreSeHypABKy6Gy8XJdTWm0HB4Gw14d2aeenqtSlMGFLmCgjHiRHqoGliTy8Drdavwis0t5SokDrpf4oxUOch+AhD3q/aGUe5DAySOng1MYfV+Wgf2+GXC5uTaEhbrWhCGYloyO2Y0JItWqXFBNIITiUdNF1v0mh/ZtmBoklUdGxdV9RuC65GNN3vsB2cA4tniDx1H7XmxQwkpFjDBR1sVHEw/8ozvcsk+xq9gpVd8LNegAPA4i1D628UGWpeUZM1NdM6JhNkCB99HrtViGgzxzqrvIwxdCMg44vDQAk6XY3DXgnbI8R4fa3GJrY6G9nXmndQoyqBKVgvNyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=37SlvmSYyumT91kzJuK5xYEhfFOiCqlZhihAZ8PQRQI=;
+ b=Avt/D+FRkaQBCRBkXPROY7n2s8ktMW+ZJX4femRkeIiLp/BxI9CaOEcjGrMtMBKGBqmvAeRzW0UopqxJIsd9qDQozHd4MHeDXSFZf/2TaJ23sZFRnDVAWheJxJDVhijtQmzZR9y7RZAG+LoMXhgsMkd50hWaLuju2d8KWfgworU=
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
+ by BYAPR12MB3207.namprd12.prod.outlook.com (2603:10b6:a03:135::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.6; Thu, 14 Jan
+ 2021 06:16:18 +0000
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::895b:620d:8f20:c4d6]) by BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::895b:620d:8f20:c4d6%6]) with mapi id 15.20.3742.012; Thu, 14 Jan 2021
+ 06:16:18 +0000
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Peter Chen <hzpeterchen@gmail.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, John Youn <John.Youn@synopsys.com>
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        John Youn <John.Youn@synopsys.com>
 Subject: Re: [PATCH v6 05/11] usb: gadget: composite: Report various SSP
  sublink speeds
-Message-ID: <20210114054708.GB18650@b29397-desktop>
+Thread-Topic: [PATCH v6 05/11] usb: gadget: composite: Report various SSP
+ sublink speeds
+Thread-Index: AQHW6iBokEo/rqeRGkeerJ/I0Ocn+6omnSMAgAAIJYA=
+Date:   Thu, 14 Jan 2021 06:16:18 +0000
+Message-ID: <227f3064-8016-33db-6575-fc1a642ef485@synopsys.com>
 References: <cover.1610592135.git.Thinh.Nguyen@synopsys.com>
  <eb0386fdd5d87a858281e8006a72723d3732240f.1610592135.git.Thinh.Nguyen@synopsys.com>
+ <20210114054708.GB18650@b29397-desktop>
+In-Reply-To: <20210114054708.GB18650@b29397-desktop>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=synopsys.com;
+x-originating-ip: [98.248.94.126]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 75ac5fd8-3fe8-40fa-635b-08d8b853e7c1
+x-ms-traffictypediagnostic: BYAPR12MB3207:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR12MB32079316060ACDEE6EC2E9A8AAA80@BYAPR12MB3207.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: u32wS9ilKBzOm3yfbeTie4ipckMQNMc20P9nChjowsMY4Mfd4kY8ijay+NBVnQUfB7uju/53Lp6k0T8Itd9fBeYbgX/116DIPx64PHA75+GtqYaSOQYdjzscUGNp65W4TVaG92GNNjETmR2cPgcxGfwn2SDKRu+l+bWoK+Dp7B9iVd1zFbvG+uBO5DulGcvt7Z+M9kdBKVFn3hfU5zk+X47TDtt217DtxHyN/ZWeidCk7W+T/wVEjAQVruVbEk0RcEBOVQ7jaDEXf252+8MvFqVSkbfgutgJHwS/QhO2fIusFb1sHRRLOzStjaWQ5TU39z2TFjsxtsjQfPU0BMcLd39+P4cO3gg3+rrAS40wo8l9HZAPtGm+p1iDyELe5EDjWIEo8wiXmBt4tMl8YdqV0g+L6uK1ZJQEj7AI7Q6PuQKvS7P4kxnmFrm5AAOApKBFG3gKzzE5Q92NT56DdRQ9gvTkUFu06WxC0BovEVX7/LA=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(39860400002)(136003)(396003)(376002)(366004)(31686004)(31696002)(86362001)(36756003)(76116006)(6486002)(8676002)(64756008)(478600001)(71200400001)(66946007)(6506007)(66476007)(5660300002)(110136005)(186003)(26005)(6512007)(54906003)(4326008)(8936002)(2616005)(107886003)(316002)(83380400001)(66446008)(2906002)(53546011)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?STFxeHQwWWlCRHpuclQ4NEMwSnI5aUpuN2JYNmUzTWVNenNDd3RSOTBIM0RE?=
+ =?utf-8?B?VE04V3FCWWJwSitvSDNBQnFHTjNDd0VMU044QXlHUFU0VEtPV0tXYkhHeEVi?=
+ =?utf-8?B?QWVpOGkrbmRRNjBjOWhLeGtESVp4Q3dRVWhPdGtwNmI4YjJDVFZHb3BYTDhM?=
+ =?utf-8?B?N0RTblhpZnVkVytybjVtcUtsNVVpS28vZGJrUTdubGRLUG8wSlVnZTFlZUc2?=
+ =?utf-8?B?dnFLY20rcyswNG5UMXpqd3piNHc4alZ0RTkvZTVWZWVOMXMyUmdab3A3bGZJ?=
+ =?utf-8?B?bjlyNHZVVEx3UVdkTk5XM2ZHRTFYbGNHUUJUckF4d0hpbEtoVjRvdGZ4YkFr?=
+ =?utf-8?B?VGJhSFErWU5tTGZXTVRpN21tL2tPS09ZYVlNbzBRWXhXV3FReUs3NHk0cFNh?=
+ =?utf-8?B?RFpaZXc3UE9pTG9OWDh6SlRsdTgrUlA4R0hHak8wamdIdlBBVWF6bm5SZjlv?=
+ =?utf-8?B?YzF1ZEVTTVZxQjB0QTExTm9pTmJYbnRIa3VRTTRZZWUxNzNmR1cvZ29LZEcx?=
+ =?utf-8?B?d3BBL3Z6SEtFU29XTFYwWXlpYnh5dFJrT2NvZHZJWjVDTTh3S2RnKzV0a1FO?=
+ =?utf-8?B?RkZFYnNoQ0QzUTVuODQ0d2Jnd3g2cmVWckxVSENQQWhUejJDcFVscnVoZnZt?=
+ =?utf-8?B?YmtRNVRpNjF2dEY3Z09oekkyNm1yakRUNFY0Mi94UUVBRi9CUXNWak4yQzM4?=
+ =?utf-8?B?R3FWekIrVkFFZExzTUsvZE9KVThvQU9aTFVGUWptOWlZNU1JTkh5M0s1TFll?=
+ =?utf-8?B?cTVJeEVhT29FZWhMSlhsMW9KMks0c3BhNFFYaWFiQ0ttdW1OR2kwVDloWFUv?=
+ =?utf-8?B?Nk9RSURxcy9KSTVhVlhGbHNkSHgwUEhKUEFDLzNnWVM4b21DZWFpOTkrdjBD?=
+ =?utf-8?B?NmtVN0hHd2RBWDh5VXhmeWVYRkhiS3E4aEw3cVhuT21ycVQyQ0JKakJDeTli?=
+ =?utf-8?B?ZWpzcVRCd1MyZjZKd0t5K2Mzb1BCY21tZ0NleVBTMjJaRW9kNDlnQVBDVnVQ?=
+ =?utf-8?B?YVB2QkdyNitiZHMxVUIrYnRBdk56dnpmWkQ5T3ZGTDhpOHZUMitsdzZ5Rm5o?=
+ =?utf-8?B?N0tmRldaSk4xN1U3U3UwYnhWMzVSdjlBbkszbGJIRzdUVkRtYzJ4WG4vclFy?=
+ =?utf-8?B?T0VIRS93S3dKVkhMRXdkLytKOHEzK21wdDN0a2ZrT3VaT1BGdTNsWEkyN2Fa?=
+ =?utf-8?B?V2hSYkRQcjNCK3I5by9xUnNkWXhJRythcFhYTnQ2SE9UUU1JUUFkYmxVbmJU?=
+ =?utf-8?B?V2xiK0M4ZVRMWk1aTGlnSHhhL3lwSzVnTFFGNmwrWVNGTmxaV01FdXVscEYr?=
+ =?utf-8?Q?R6Pmi7AzeKLdQ=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B65C4F607FDE524BAC72DB4D83948026@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eb0386fdd5d87a858281e8006a72723d3732240f.1610592135.git.Thinh.Nguyen@synopsys.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75ac5fd8-3fe8-40fa-635b-08d8b853e7c1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jan 2021 06:16:18.1713
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2OfVVhOk2nFFrV6jDJTKoh8Wf3wDz1c9+PTMOB5EPA/esy+gdiIp25TaEU+0h35rya6iTRRQdu3roS4/sCRoMw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3207
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-01-13 18:53:14, Thinh Nguyen wrote:
-> If a gadget supports SuperSpeed Plus, then it may operate in different
-> sublink speeds. For example, if the gadget supports SuperSpeed Plus
-> gen2x2, then it can support 2 sublink speeds gen1 and gen2. Inform the
-> host of these speeds in the BOS descriptor.
-> 
-
-Hi Thinh,
-
-I read USB 3.2 spec: ch9.6.2.5 SuperSpeedPlus USB Device Capability
-
-Symmetric. Rx and Tx Sublinks have the same number of lanes and operate
-at the same speed.
-Asymmetric. Rx and Tx Sublink have different number of lanes and/or
-operate at different speeds.
-
-Why your below cases are all for symmetric, at least, the example 3
-is asymmetric, it has different speed for sublink pairs?
-Does your below cases are specification defined or user defined?
-
-> Use 1 SSID if the gadget supports up to gen2x1, or not specified:
-> - SSID 0 for symmetric RX/TX sublink speed of 10 Gbps.
-> 
-> Use 1 SSID if the gadget supports up to gen1x2:
-> - SSID 0 for symmetric RX/TX sublink speed of 5 Gbps.
-> 
-> Use 2 SSIDs if the gadget supports up to gen2x2:
-> - SSID 0 for symmetric RX/TX sublink speed of 5 Gbps.
-
-Why SSID 0 is not 10Gbps?
-> - SSID 1 for symmetric RX/TX sublink speed of 10 Gbps.
-
-Besides, would you give me an example what kinds of system design
-will use below sublink speed?
-- SSID 0 for symmetric RX/TX sublink speed of 5 Gbps.
-- SSID 1 for symmetric RX/TX sublink speed of 10 Gbps.
-
-Peter
-
-
-> 
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> ---
-> Changes in v6:
-> - Rebase on Greg's usb-testing branch
-> - Use gadget->max_ssp_rate instead of all the sublink attribute fields (now
->   removed) in usb_gadget
-> - Use the updated macros
-> - Update commit message
-> Changes in v5:
-> - Rebase on Felipe's testing/next branch
-> - Changed Signed-off-by email to match From: email header
-> Changes in v4:
-> - None
-> Changes in v3:
-> - None
-> Changes in v2:
-> - None
-> 
->  drivers/usb/gadget/composite.c | 80 +++++++++++++++++++++++-----------
->  1 file changed, 54 insertions(+), 26 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-> index bc17302a9e85..72a9797dbbae 100644
-> --- a/drivers/usb/gadget/composite.c
-> +++ b/drivers/usb/gadget/composite.c
-> @@ -735,49 +735,77 @@ static int bos_desc(struct usb_composite_dev *cdev)
->  	/* The SuperSpeedPlus USB Device Capability descriptor */
->  	if (gadget_is_superspeed_plus(cdev->gadget)) {
->  		struct usb_ssp_cap_descriptor *ssp_cap;
-> +		u8 ssac = 1;
-> +		u8 ssic;
-> +		int i;
->  
-> -		ssp_cap = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
-> -		bos->bNumDeviceCaps++;
-> +		if (cdev->gadget->max_ssp_rate == USB_SSP_GEN_2x2)
-> +			ssac = 3;
->  
->  		/*
-> -		 * Report typical values.
-> +		 * Paired RX and TX sublink speed attributes share
-> +		 * the same SSID.
->  		 */
-> +		ssic = (ssac + 1) / 2 - 1;
->  
-> -		le16_add_cpu(&bos->wTotalLength, USB_DT_USB_SSP_CAP_SIZE(1));
-> -		ssp_cap->bLength = USB_DT_USB_SSP_CAP_SIZE(1);
-> +		ssp_cap = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
-> +		bos->bNumDeviceCaps++;
-> +
-> +		le16_add_cpu(&bos->wTotalLength, USB_DT_USB_SSP_CAP_SIZE(ssac));
-> +		ssp_cap->bLength = USB_DT_USB_SSP_CAP_SIZE(ssac);
->  		ssp_cap->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
->  		ssp_cap->bDevCapabilityType = USB_SSP_CAP_TYPE;
->  		ssp_cap->bReserved = 0;
->  		ssp_cap->wReserved = 0;
->  
->  		ssp_cap->bmAttributes =
-> -			cpu_to_le32(FIELD_PREP(USB_SSP_SUBLINK_SPEED_ATTRIBS, 1) |
-> -				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_IDS, 0));
-> +			cpu_to_le32(FIELD_PREP(USB_SSP_SUBLINK_SPEED_ATTRIBS, ssac) |
-> +				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_IDS, ssic));
->  
->  		ssp_cap->wFunctionalitySupport =
->  			cpu_to_le16(FIELD_PREP(USB_SSP_MIN_SUBLINK_SPEED_ATTRIBUTE_ID, 0) |
->  				    FIELD_PREP(USB_SSP_MIN_RX_LANE_COUNT, 1) |
->  				    FIELD_PREP(USB_SSP_MIN_TX_LANE_COUNT, 1));
->  
-> -		ssp_cap->bmSublinkSpeedAttr[0] =
-> -			cpu_to_le32(FIELD_PREP(USB_SSP_SUBLINK_SPEED_SSID, 0) |
-> -				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSE,
-> -					       USB_SSP_SUBLINK_SPEED_LSE_GBPS) |
-> -				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_ST,
-> -					       USB_SSP_SUBLINK_SPEED_ST_SYM_RX) |
-> -				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LP,
-> -					       USB_SSP_SUBLINK_SPEED_LP_SSP) |
-> -				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSM, 10));
-> -
-> -		ssp_cap->bmSublinkSpeedAttr[1] =
-> -			cpu_to_le32(FIELD_PREP(USB_SSP_SUBLINK_SPEED_SSID, 0) |
-> -				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSE,
-> -					       USB_SSP_SUBLINK_SPEED_LSE_GBPS) |
-> -				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_ST,
-> -					       USB_SSP_SUBLINK_SPEED_ST_SYM_TX) |
-> -				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LP,
-> -					       USB_SSP_SUBLINK_SPEED_LP_SSP) |
-> -				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSM, 10));
-> +		/*
-> +		 * Use 1 SSID if the gadget supports up to gen2x1 or not
-> +		 * specified:
-> +		 * - SSID 0 for symmetric RX/TX sublink speed of 10 Gbps.
-> +		 *
-> +		 * Use 1 SSID if the gadget supports up to gen1x2:
-> +		 * - SSID 0 for symmetric RX/TX sublink speed of 5 Gbps.
-> +		 *
-> +		 * Use 2 SSIDs if the gadget supports up to gen2x2:
-> +		 * - SSID 0 for symmetric RX/TX sublink speed of 5 Gbps.
-> +		 * - SSID 1 for symmetric RX/TX sublink speed of 10 Gbps.
-> +		 */
-> +		for (i = 0; i < ssac + 1; i++) {
-> +			u8 ssid;
-> +			u8 mantissa;
-> +			u8 type;
-> +
-> +			ssid = i >> 1;
-> +
-> +			if (cdev->gadget->max_ssp_rate == USB_SSP_GEN_2x1 ||
-> +			    cdev->gadget->max_ssp_rate == USB_SSP_GEN_UNKNOWN)
-> +				mantissa = 10;
-> +			else
-> +				mantissa = 5 << ssid;
-> +
-> +			if (i % 2)
-> +				type = USB_SSP_SUBLINK_SPEED_ST_SYM_TX;
-> +			else
-> +				type = USB_SSP_SUBLINK_SPEED_ST_SYM_RX;
-> +
-> +			ssp_cap->bmSublinkSpeedAttr[i] =
-> +				cpu_to_le32(FIELD_PREP(USB_SSP_SUBLINK_SPEED_SSID, ssid) |
-> +					    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSE,
-> +						       USB_SSP_SUBLINK_SPEED_LSE_GBPS) |
-> +					    FIELD_PREP(USB_SSP_SUBLINK_SPEED_ST, type) |
-> +					    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LP,
-> +						       USB_SSP_SUBLINK_SPEED_LP_SSP) |
-> +					    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSM, mantissa));
-> +		}
->  	}
->  
->  	return le16_to_cpu(bos->wTotalLength);
-> -- 
-> 2.28.0
-> 
-
--- 
-
-Thanks,
-Peter Chen
-
+SGkgUGV0ZXIsDQoNClBldGVyIENoZW4gd3JvdGU6DQo+IE9uIDIxLTAxLTEzIDE4OjUzOjE0LCBU
+aGluaCBOZ3V5ZW4gd3JvdGU6DQo+PiBJZiBhIGdhZGdldCBzdXBwb3J0cyBTdXBlclNwZWVkIFBs
+dXMsIHRoZW4gaXQgbWF5IG9wZXJhdGUgaW4gZGlmZmVyZW50DQo+PiBzdWJsaW5rIHNwZWVkcy4g
+Rm9yIGV4YW1wbGUsIGlmIHRoZSBnYWRnZXQgc3VwcG9ydHMgU3VwZXJTcGVlZCBQbHVzDQo+PiBn
+ZW4yeDIsIHRoZW4gaXQgY2FuIHN1cHBvcnQgMiBzdWJsaW5rIHNwZWVkcyBnZW4xIGFuZCBnZW4y
+LiBJbmZvcm0gdGhlDQo+PiBob3N0IG9mIHRoZXNlIHNwZWVkcyBpbiB0aGUgQk9TIGRlc2NyaXB0
+b3IuDQo+Pg0KPiBIaSBUaGluaCwNCj4NCj4gSSByZWFkIFVTQiAzLjIgc3BlYzogY2g5LjYuMi41
+IFN1cGVyU3BlZWRQbHVzIFVTQiBEZXZpY2UgQ2FwYWJpbGl0eQ0KPg0KPiBTeW1tZXRyaWMuIFJ4
+IGFuZCBUeCBTdWJsaW5rcyBoYXZlIHRoZSBzYW1lIG51bWJlciBvZiBsYW5lcyBhbmQgb3BlcmF0
+ZQ0KPiBhdCB0aGUgc2FtZSBzcGVlZC4NCj4gQXN5bW1ldHJpYy4gUnggYW5kIFR4IFN1Ymxpbmsg
+aGF2ZSBkaWZmZXJlbnQgbnVtYmVyIG9mIGxhbmVzIGFuZC9vcg0KPiBvcGVyYXRlIGF0IGRpZmZl
+cmVudCBzcGVlZHMuDQo+DQo+IFdoeSB5b3VyIGJlbG93IGNhc2VzIGFyZSBhbGwgZm9yIHN5bW1l
+dHJpYywgYXQgbGVhc3QsIHRoZSBleGFtcGxlIDMNCj4gaXMgYXN5bW1ldHJpYywgaXQgaGFzIGRp
+ZmZlcmVudCBzcGVlZCBmb3Igc3VibGluayBwYWlycz8NCj4gRG9lcyB5b3VyIGJlbG93IGNhc2Vz
+IGFyZSBzcGVjaWZpY2F0aW9uIGRlZmluZWQgb3IgdXNlciBkZWZpbmVkPw0KDQpVU0IgMy4yIHNw
+ZWMgc2VjdGlvbiA4LjUuNi43Og0KQXN5bW1ldHJpYyBsYW5lIHR5cGVzIGFyZSBvbmx5IGZvciBT
+dXBlclNwZWVkIEludGVyY2hpcCAoU1NJQykuIElNTywNCkl0J3MgdW5saWtlbHkgdGhhdCBTU0lD
+IHVzZXIgd2lsbCB1c2UgTGludXgga2VybmVsLiBXZSBjYW4gZXh0ZW5kIGFuZA0KdXBkYXRlIHRo
+ZSBnYWRnZXQgZnJhbWV3b3JrIGlmIHRoZXJlJ3MgYW55IHVzZSBjYXNlIGZvciB0aGF0Lg0KDQoN
+Cj4NCj4+IFVzZSAxIFNTSUQgaWYgdGhlIGdhZGdldCBzdXBwb3J0cyB1cCB0byBnZW4yeDEsIG9y
+IG5vdCBzcGVjaWZpZWQ6DQo+PiAtIFNTSUQgMCBmb3Igc3ltbWV0cmljIFJYL1RYIHN1Ymxpbmsg
+c3BlZWQgb2YgMTAgR2Jwcy4NCj4+DQo+PiBVc2UgMSBTU0lEIGlmIHRoZSBnYWRnZXQgc3VwcG9y
+dHMgdXAgdG8gZ2VuMXgyOg0KPj4gLSBTU0lEIDAgZm9yIHN5bW1ldHJpYyBSWC9UWCBzdWJsaW5r
+IHNwZWVkIG9mIDUgR2Jwcy4NCj4+DQo+PiBVc2UgMiBTU0lEcyBpZiB0aGUgZ2FkZ2V0IHN1cHBv
+cnRzIHVwIHRvIGdlbjJ4MjoNCj4+IC0gU1NJRCAwIGZvciBzeW1tZXRyaWMgUlgvVFggc3VibGlu
+ayBzcGVlZCBvZiA1IEdicHMuDQo+IFdoeSBTU0lEIDAgaXMgbm90IDEwR2Jwcz8NCg0KU1NJRCAw
+IGFuZCAxIGFyZSBhcmJpdHJhcnksIHdlIGNhbiBkbyAwIGZvciAxMEdicHMuIFRoZXJlJ3Mgbm8N
+CmNvbnN0cmFpbnQgb3Igc3RhbmRhcmQgZnJvbSB0aGUgVVNCIDMuMiBzcGVjLiBIb3dldmVyLCB5
+b3UgbmVlZCB0byBzZXQNCnRoZSBkZXNjcmlwdG9yIHdGdW5jdGlvbmFsaXR5U3VwcG9ydC5TU0lE
+IHRvIGJlIHRoZSBtaW5pbXVtIGxhbmUgc3BlZWQNClNTSUQgaXQgc3VwcG9ydHMuIFVzaW5nIFNT
+SUQgMCBtYWtlcyBpdCBlYXNpZXIgc2luY2Ugd2UgZG9uJ3QgaGF2ZSB0bw0KY29uZGl0aW9uIGl0
+IGZvciBtdWx0aXBsZSBTU0lEcy4NCg0KPj4gLSBTU0lEIDEgZm9yIHN5bW1ldHJpYyBSWC9UWCBz
+dWJsaW5rIHNwZWVkIG9mIDEwIEdicHMuDQo+IEJlc2lkZXMsIHdvdWxkIHlvdSBnaXZlIG1lIGFu
+IGV4YW1wbGUgd2hhdCBraW5kcyBvZiBzeXN0ZW0gZGVzaWduDQo+IHdpbGwgdXNlIGJlbG93IHN1
+Ymxpbmsgc3BlZWQ/DQo+IC0gU1NJRCAwIGZvciBzeW1tZXRyaWMgUlgvVFggc3VibGluayBzcGVl
+ZCBvZiA1IEdicHMuDQo+IC0gU1NJRCAxIGZvciBzeW1tZXRyaWMgUlgvVFggc3VibGluayBzcGVl
+ZCBvZiAxMCBHYnBzLg0KPg0KPiBQZXRlcg0KDQpUaGVzZSAyIFNTSURzIGluZGljYXRlIHRoYXQg
+dGhlIGRldmljZSBpcyBjYXBhYmxlIG9mIHJ1bm5pbmcgaW4gZ2VuMSBhbmQNCmdlbjIgaW4gU1NQ
+Lg0KDQpUaGFuayB5b3UgZm9yIHJldmlld2luZyBpdC4NCg0KQlIsDQpUaGluaA0KDQo+DQo+DQo+
+PiBTaWduZWQtb2ZmLWJ5OiBUaGluaCBOZ3V5ZW4gPFRoaW5oLk5ndXllbkBzeW5vcHN5cy5jb20+
+DQo+PiAtLS0NCj4+IENoYW5nZXMgaW4gdjY6DQo+PiAtIFJlYmFzZSBvbiBHcmVnJ3MgdXNiLXRl
+c3RpbmcgYnJhbmNoDQo+PiAtIFVzZSBnYWRnZXQtPm1heF9zc3BfcmF0ZSBpbnN0ZWFkIG9mIGFs
+bCB0aGUgc3VibGluayBhdHRyaWJ1dGUgZmllbGRzIChub3cNCj4+ICAgcmVtb3ZlZCkgaW4gdXNi
+X2dhZGdldA0KPj4gLSBVc2UgdGhlIHVwZGF0ZWQgbWFjcm9zDQo+PiAtIFVwZGF0ZSBjb21taXQg
+bWVzc2FnZQ0KPj4gQ2hhbmdlcyBpbiB2NToNCj4+IC0gUmViYXNlIG9uIEZlbGlwZSdzIHRlc3Rp
+bmcvbmV4dCBicmFuY2gNCj4+IC0gQ2hhbmdlZCBTaWduZWQtb2ZmLWJ5IGVtYWlsIHRvIG1hdGNo
+IEZyb206IGVtYWlsIGhlYWRlcg0KPj4gQ2hhbmdlcyBpbiB2NDoNCj4+IC0gTm9uZQ0KPj4gQ2hh
+bmdlcyBpbiB2MzoNCj4+IC0gTm9uZQ0KPj4gQ2hhbmdlcyBpbiB2MjoNCj4+IC0gTm9uZQ0KPj4N
+Cj4+ICBkcml2ZXJzL3VzYi9nYWRnZXQvY29tcG9zaXRlLmMgfCA4MCArKysrKysrKysrKysrKysr
+KysrKysrKy0tLS0tLS0tLS0tDQo+PiAgMSBmaWxlIGNoYW5nZWQsIDU0IGluc2VydGlvbnMoKyks
+IDI2IGRlbGV0aW9ucygtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9nYWRnZXQv
+Y29tcG9zaXRlLmMgYi9kcml2ZXJzL3VzYi9nYWRnZXQvY29tcG9zaXRlLmMNCj4+IGluZGV4IGJj
+MTczMDJhOWU4NS4uNzJhOTc5N2RiYmFlIDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy91c2IvZ2Fk
+Z2V0L2NvbXBvc2l0ZS5jDQo+PiArKysgYi9kcml2ZXJzL3VzYi9nYWRnZXQvY29tcG9zaXRlLmMN
+Cj4+IEBAIC03MzUsNDkgKzczNSw3NyBAQCBzdGF0aWMgaW50IGJvc19kZXNjKHN0cnVjdCB1c2Jf
+Y29tcG9zaXRlX2RldiAqY2RldikNCj4+ICAJLyogVGhlIFN1cGVyU3BlZWRQbHVzIFVTQiBEZXZp
+Y2UgQ2FwYWJpbGl0eSBkZXNjcmlwdG9yICovDQo+PiAgCWlmIChnYWRnZXRfaXNfc3VwZXJzcGVl
+ZF9wbHVzKGNkZXYtPmdhZGdldCkpIHsNCj4+ICAJCXN0cnVjdCB1c2Jfc3NwX2NhcF9kZXNjcmlw
+dG9yICpzc3BfY2FwOw0KPj4gKwkJdTggc3NhYyA9IDE7DQo+PiArCQl1OCBzc2ljOw0KPj4gKwkJ
+aW50IGk7DQo+PiAgDQo+PiAtCQlzc3BfY2FwID0gY2Rldi0+cmVxLT5idWYgKyBsZTE2X3RvX2Nw
+dShib3MtPndUb3RhbExlbmd0aCk7DQo+PiAtCQlib3MtPmJOdW1EZXZpY2VDYXBzKys7DQo+PiAr
+CQlpZiAoY2Rldi0+Z2FkZ2V0LT5tYXhfc3NwX3JhdGUgPT0gVVNCX1NTUF9HRU5fMngyKQ0KPj4g
+KwkJCXNzYWMgPSAzOw0KPj4gIA0KPj4gIAkJLyoNCj4+IC0JCSAqIFJlcG9ydCB0eXBpY2FsIHZh
+bHVlcy4NCj4+ICsJCSAqIFBhaXJlZCBSWCBhbmQgVFggc3VibGluayBzcGVlZCBhdHRyaWJ1dGVz
+IHNoYXJlDQo+PiArCQkgKiB0aGUgc2FtZSBTU0lELg0KPj4gIAkJICovDQo+PiArCQlzc2ljID0g
+KHNzYWMgKyAxKSAvIDIgLSAxOw0KPj4gIA0KPj4gLQkJbGUxNl9hZGRfY3B1KCZib3MtPndUb3Rh
+bExlbmd0aCwgVVNCX0RUX1VTQl9TU1BfQ0FQX1NJWkUoMSkpOw0KPj4gLQkJc3NwX2NhcC0+Ykxl
+bmd0aCA9IFVTQl9EVF9VU0JfU1NQX0NBUF9TSVpFKDEpOw0KPj4gKwkJc3NwX2NhcCA9IGNkZXYt
+PnJlcS0+YnVmICsgbGUxNl90b19jcHUoYm9zLT53VG90YWxMZW5ndGgpOw0KPj4gKwkJYm9zLT5i
+TnVtRGV2aWNlQ2FwcysrOw0KPj4gKw0KPj4gKwkJbGUxNl9hZGRfY3B1KCZib3MtPndUb3RhbExl
+bmd0aCwgVVNCX0RUX1VTQl9TU1BfQ0FQX1NJWkUoc3NhYykpOw0KPj4gKwkJc3NwX2NhcC0+Ykxl
+bmd0aCA9IFVTQl9EVF9VU0JfU1NQX0NBUF9TSVpFKHNzYWMpOw0KPj4gIAkJc3NwX2NhcC0+YkRl
+c2NyaXB0b3JUeXBlID0gVVNCX0RUX0RFVklDRV9DQVBBQklMSVRZOw0KPj4gIAkJc3NwX2NhcC0+
+YkRldkNhcGFiaWxpdHlUeXBlID0gVVNCX1NTUF9DQVBfVFlQRTsNCj4+ICAJCXNzcF9jYXAtPmJS
+ZXNlcnZlZCA9IDA7DQo+PiAgCQlzc3BfY2FwLT53UmVzZXJ2ZWQgPSAwOw0KPj4gIA0KPj4gIAkJ
+c3NwX2NhcC0+Ym1BdHRyaWJ1dGVzID0NCj4+IC0JCQljcHVfdG9fbGUzMihGSUVMRF9QUkVQKFVT
+Ql9TU1BfU1VCTElOS19TUEVFRF9BVFRSSUJTLCAxKSB8DQo+PiAtCQkJCSAgICBGSUVMRF9QUkVQ
+KFVTQl9TU1BfU1VCTElOS19TUEVFRF9JRFMsIDApKTsNCj4+ICsJCQljcHVfdG9fbGUzMihGSUVM
+RF9QUkVQKFVTQl9TU1BfU1VCTElOS19TUEVFRF9BVFRSSUJTLCBzc2FjKSB8DQo+PiArCQkJCSAg
+ICBGSUVMRF9QUkVQKFVTQl9TU1BfU1VCTElOS19TUEVFRF9JRFMsIHNzaWMpKTsNCj4+ICANCj4+
+ICAJCXNzcF9jYXAtPndGdW5jdGlvbmFsaXR5U3VwcG9ydCA9DQo+PiAgCQkJY3B1X3RvX2xlMTYo
+RklFTERfUFJFUChVU0JfU1NQX01JTl9TVUJMSU5LX1NQRUVEX0FUVFJJQlVURV9JRCwgMCkgfA0K
+Pj4gIAkJCQkgICAgRklFTERfUFJFUChVU0JfU1NQX01JTl9SWF9MQU5FX0NPVU5ULCAxKSB8DQo+
+PiAgCQkJCSAgICBGSUVMRF9QUkVQKFVTQl9TU1BfTUlOX1RYX0xBTkVfQ09VTlQsIDEpKTsNCj4+
+ICANCj4+IC0JCXNzcF9jYXAtPmJtU3VibGlua1NwZWVkQXR0clswXSA9DQo+PiAtCQkJY3B1X3Rv
+X2xlMzIoRklFTERfUFJFUChVU0JfU1NQX1NVQkxJTktfU1BFRURfU1NJRCwgMCkgfA0KPj4gLQkJ
+CQkgICAgRklFTERfUFJFUChVU0JfU1NQX1NVQkxJTktfU1BFRURfTFNFLA0KPj4gLQkJCQkJICAg
+ICAgIFVTQl9TU1BfU1VCTElOS19TUEVFRF9MU0VfR0JQUykgfA0KPj4gLQkJCQkgICAgRklFTERf
+UFJFUChVU0JfU1NQX1NVQkxJTktfU1BFRURfU1QsDQo+PiAtCQkJCQkgICAgICAgVVNCX1NTUF9T
+VUJMSU5LX1NQRUVEX1NUX1NZTV9SWCkgfA0KPj4gLQkJCQkgICAgRklFTERfUFJFUChVU0JfU1NQ
+X1NVQkxJTktfU1BFRURfTFAsDQo+PiAtCQkJCQkgICAgICAgVVNCX1NTUF9TVUJMSU5LX1NQRUVE
+X0xQX1NTUCkgfA0KPj4gLQkJCQkgICAgRklFTERfUFJFUChVU0JfU1NQX1NVQkxJTktfU1BFRURf
+TFNNLCAxMCkpOw0KPj4gLQ0KPj4gLQkJc3NwX2NhcC0+Ym1TdWJsaW5rU3BlZWRBdHRyWzFdID0N
+Cj4+IC0JCQljcHVfdG9fbGUzMihGSUVMRF9QUkVQKFVTQl9TU1BfU1VCTElOS19TUEVFRF9TU0lE
+LCAwKSB8DQo+PiAtCQkJCSAgICBGSUVMRF9QUkVQKFVTQl9TU1BfU1VCTElOS19TUEVFRF9MU0Us
+DQo+PiAtCQkJCQkgICAgICAgVVNCX1NTUF9TVUJMSU5LX1NQRUVEX0xTRV9HQlBTKSB8DQo+PiAt
+CQkJCSAgICBGSUVMRF9QUkVQKFVTQl9TU1BfU1VCTElOS19TUEVFRF9TVCwNCj4+IC0JCQkJCSAg
+ICAgICBVU0JfU1NQX1NVQkxJTktfU1BFRURfU1RfU1lNX1RYKSB8DQo+PiAtCQkJCSAgICBGSUVM
+RF9QUkVQKFVTQl9TU1BfU1VCTElOS19TUEVFRF9MUCwNCj4+IC0JCQkJCSAgICAgICBVU0JfU1NQ
+X1NVQkxJTktfU1BFRURfTFBfU1NQKSB8DQo+PiAtCQkJCSAgICBGSUVMRF9QUkVQKFVTQl9TU1Bf
+U1VCTElOS19TUEVFRF9MU00sIDEwKSk7DQo+PiArCQkvKg0KPj4gKwkJICogVXNlIDEgU1NJRCBp
+ZiB0aGUgZ2FkZ2V0IHN1cHBvcnRzIHVwIHRvIGdlbjJ4MSBvciBub3QNCj4+ICsJCSAqIHNwZWNp
+ZmllZDoNCj4+ICsJCSAqIC0gU1NJRCAwIGZvciBzeW1tZXRyaWMgUlgvVFggc3VibGluayBzcGVl
+ZCBvZiAxMCBHYnBzLg0KPj4gKwkJICoNCj4+ICsJCSAqIFVzZSAxIFNTSUQgaWYgdGhlIGdhZGdl
+dCBzdXBwb3J0cyB1cCB0byBnZW4xeDI6DQo+PiArCQkgKiAtIFNTSUQgMCBmb3Igc3ltbWV0cmlj
+IFJYL1RYIHN1Ymxpbmsgc3BlZWQgb2YgNSBHYnBzLg0KPj4gKwkJICoNCj4+ICsJCSAqIFVzZSAy
+IFNTSURzIGlmIHRoZSBnYWRnZXQgc3VwcG9ydHMgdXAgdG8gZ2VuMngyOg0KPj4gKwkJICogLSBT
+U0lEIDAgZm9yIHN5bW1ldHJpYyBSWC9UWCBzdWJsaW5rIHNwZWVkIG9mIDUgR2Jwcy4NCj4+ICsJ
+CSAqIC0gU1NJRCAxIGZvciBzeW1tZXRyaWMgUlgvVFggc3VibGluayBzcGVlZCBvZiAxMCBHYnBz
+Lg0KPj4gKwkJICovDQo+PiArCQlmb3IgKGkgPSAwOyBpIDwgc3NhYyArIDE7IGkrKykgew0KPj4g
+KwkJCXU4IHNzaWQ7DQo+PiArCQkJdTggbWFudGlzc2E7DQo+PiArCQkJdTggdHlwZTsNCj4+ICsN
+Cj4+ICsJCQlzc2lkID0gaSA+PiAxOw0KPj4gKw0KPj4gKwkJCWlmIChjZGV2LT5nYWRnZXQtPm1h
+eF9zc3BfcmF0ZSA9PSBVU0JfU1NQX0dFTl8yeDEgfHwNCj4+ICsJCQkgICAgY2Rldi0+Z2FkZ2V0
+LT5tYXhfc3NwX3JhdGUgPT0gVVNCX1NTUF9HRU5fVU5LTk9XTikNCj4+ICsJCQkJbWFudGlzc2Eg
+PSAxMDsNCj4+ICsJCQllbHNlDQo+PiArCQkJCW1hbnRpc3NhID0gNSA8PCBzc2lkOw0KPj4gKw0K
+Pj4gKwkJCWlmIChpICUgMikNCj4+ICsJCQkJdHlwZSA9IFVTQl9TU1BfU1VCTElOS19TUEVFRF9T
+VF9TWU1fVFg7DQo+PiArCQkJZWxzZQ0KPj4gKwkJCQl0eXBlID0gVVNCX1NTUF9TVUJMSU5LX1NQ
+RUVEX1NUX1NZTV9SWDsNCj4+ICsNCj4+ICsJCQlzc3BfY2FwLT5ibVN1YmxpbmtTcGVlZEF0dHJb
+aV0gPQ0KPj4gKwkJCQljcHVfdG9fbGUzMihGSUVMRF9QUkVQKFVTQl9TU1BfU1VCTElOS19TUEVF
+RF9TU0lELCBzc2lkKSB8DQo+PiArCQkJCQkgICAgRklFTERfUFJFUChVU0JfU1NQX1NVQkxJTktf
+U1BFRURfTFNFLA0KPj4gKwkJCQkJCSAgICAgICBVU0JfU1NQX1NVQkxJTktfU1BFRURfTFNFX0dC
+UFMpIHwNCj4+ICsJCQkJCSAgICBGSUVMRF9QUkVQKFVTQl9TU1BfU1VCTElOS19TUEVFRF9TVCwg
+dHlwZSkgfA0KPj4gKwkJCQkJICAgIEZJRUxEX1BSRVAoVVNCX1NTUF9TVUJMSU5LX1NQRUVEX0xQ
+LA0KPj4gKwkJCQkJCSAgICAgICBVU0JfU1NQX1NVQkxJTktfU1BFRURfTFBfU1NQKSB8DQo+PiAr
+CQkJCQkgICAgRklFTERfUFJFUChVU0JfU1NQX1NVQkxJTktfU1BFRURfTFNNLCBtYW50aXNzYSkp
+Ow0KPj4gKwkJfQ0KPj4gIAl9DQo+PiAgDQo+PiAgCXJldHVybiBsZTE2X3RvX2NwdShib3MtPndU
+b3RhbExlbmd0aCk7DQo+PiAtLSANCj4+IDIuMjguMA0KPj4NCg0K
