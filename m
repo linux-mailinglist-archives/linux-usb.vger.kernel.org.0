@@ -2,104 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E95F12F5D62
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 10:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1282F5E36
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 11:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727441AbhANJ1L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jan 2021 04:27:11 -0500
-Received: from mx2.suse.de ([195.135.220.15]:58488 "EHLO mx2.suse.de"
+        id S1728496AbhANJ7y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jan 2021 04:59:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54414 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727382AbhANJ1K (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 Jan 2021 04:27:10 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 39E03AB7A;
-        Thu, 14 Jan 2021 09:26:28 +0000 (UTC)
-Message-ID: <9a8d9a57a1837fb7e0b17f19f089c55f955c98fc.camel@suse.de>
-Subject: Re: [PATCH 0/3] usb: dwc2: Fixes and improvements
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Doug Anderson <dianders@chromium.org>
-Cc:     Paul Zimmerman <Paul.Zimmerman@synopsys.com>,
-        Felipe Balbi <balbi@ti.com>,
+        id S1727974AbhANJ7n (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 Jan 2021 04:59:43 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6632E23A22;
+        Thu, 14 Jan 2021 09:59:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610618343;
+        bh=07yN5lUT3ag6EUOVjq+NXhoRMSbGAVxVDO0NSYzPwO0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=TSdYM1r/arNFrW6fLvDPVNzS4G5r9N2vtD71De1ONw4ErgVZv6ruLmggdAH9O5xSU
+         vL0GqsA784pIA9HvdZa7VX86lk1O5lj2qDRCrYVLciAtJTmbsOuJlyM/1P8hcko6kb
+         xdnDx6lwutBjrHAzjYMl+nVD09TqtuMswJCwppiw2w+jqGHhcpUNjhfb/mFNvHbf9x
+         /y2xWKAxnsZbGxW+7JS1fN8pS5Oz9iAz/WN0JRD/sQOxXUhDkeQ20bl6STYM6+MnmP
+         ynnoMPuXy9BZvONdEoUiMz4r8jtWOpFTQg6uHlQlzO0Jmx817wysSyZScQKPQ0k6ql
+         JlcfCmdlE4AZQ==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Hudson <skrll@netbsd.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Thu, 14 Jan 2021 10:26:25 +0100
-In-Reply-To: <20210114030715.GA102157@roeck-us.net>
-References: <20210113112052.17063-1-nsaenzjulienne@suse.de>
-         <CAD=FV=VnsVgTGTkr9VYQHCkBSVVksT1UGfsmk+dqTyQ1sqF=Qw@mail.gmail.com>
-         <20210114030715.GA102157@roeck-us.net>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-E4/aw+LDBvAEHrn4g2Fu"
-User-Agent: Evolution 3.38.2 
+        Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Rob Gill <rrobgill@protonmail.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>, Bin Liu <b-liu@ti.com>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Cc:     John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH v6 01/11] usb: ch9: Add USB 3.2 SSP attributes
+In-Reply-To: <ae9293ebd63a29f2a2035054753534d9eb123d74.1610592135.git.Thinh.Nguyen@synopsys.com>
+References: <cover.1610592135.git.Thinh.Nguyen@synopsys.com>
+ <ae9293ebd63a29f2a2035054753534d9eb123d74.1610592135.git.Thinh.Nguyen@synopsys.com>
+Date:   Thu, 14 Jan 2021 11:58:55 +0200
+Message-ID: <875z3z3km8.fsf@kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---=-E4/aw+LDBvAEHrn4g2Fu
-Content-Type: text/plain; charset="UTF-8"
+--=-=-=
+Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-Hi Guenter, Doug, thanks for having a look at this.
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
 
-On Wed, 2021-01-13 at 19:07 -0800, Guenter Roeck wrote:
-> On Wed, Jan 13, 2021 at 03:20:55PM -0800, Doug Anderson wrote:
-> > Hi,
-> >=20
-> [ ... ]
-> >=20
-> > It's been long enough ago that I've forgotten where this was left off,
-> > but IIRC the 3 patches that you have here are all fine to land (and
-> > have my Reviewed-by tag).  However, I think Guenter was still tracking
-> > down additional problems.  Guenter: does that match your recollection?
-> >=20
-> > It looks like there are still bugs open for this on our public bug trac=
-ker:
-> >=20
-> > https://issuetracker.google.com/issues/172208170
-> > https://issuetracker.google.com/issues/172216241
-> >=20
-> > ...but, as Guenter said, I don't think there's anyone actively working =
-on them.
-> >=20
-> > I'm not really doing too much with dwc2 these days either and don't
-> > currently have good HW setup for testing, so for the most part I'll
-> > leave it to you.  I wanted to at least summarize what I remembered,
-> > though!  :-)
-> >=20
->=20
-> The patches in this series still match what I had in my latest test code,
-> so it makes sense to move forward with them. I don't think I ever found
-> an acceptable version of the DMA alignment code.
+> In preparation for USB 3.2 dual-lane support, add sublink speed
+> attribute macros and enum usb_ssp_rate. A USB device that operates in
+> SuperSpeed Plus may operate at different speed and lane count. These
+> additional macros and enum values help specifying that.
+>
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+> Changes in v6:
+> - Rebase on Greg's usb-testing branch
+> - Convert the sublink speed attribute enum to macros and move it to uapi
+> - Remove usb_sublink_speed struct
+> - To simplify things, use usb_ssp_rate enum to specify the signaling rate
+>   generation and lane count
+> - Update commit message
+> Changes in v5:
+> - Rebase on Felipe's testing/next branch
+> - Changed Signed-off-by email to match From: email header
+> Changes in v4:
+> - None
+> Changes in v3:
+> - None
+> Changes in v2:
+> - Move to include/linux/usb/ch9.h instead of under uapi
+>
+>  include/linux/usb/ch9.h      |  9 +++++++++
+>  include/uapi/linux/usb/ch9.h | 13 +++++++++++++
+>  2 files changed, 22 insertions(+)
+>
+> diff --git a/include/linux/usb/ch9.h b/include/linux/usb/ch9.h
+> index 604c6c514a50..86c50907634e 100644
+> --- a/include/linux/usb/ch9.h
+> +++ b/include/linux/usb/ch9.h
+> @@ -36,6 +36,15 @@
+>  #include <linux/device.h>
+>  #include <uapi/linux/usb/ch9.h>
+>=20=20
+> +/* USB 3.2 SuperSpeed Plus phy signaling rate generation and lane count =
+*/
+> +
+> +enum usb_ssp_rate {
+> +	USB_SSP_GEN_UNKNOWN =3D 0,
+> +	USB_SSP_GEN_2x1,
+> +	USB_SSP_GEN_1x2,
+> +	USB_SSP_GEN_2x2,
+> +};
 
-As for the alignment code rework, can you recall the underlying issue that
-warranted it?
+note that xHCI has some private definitions for USB 3.2 support. Maybe
+add a patch converting xHCI to the generic versions?
 
-Regards,
-Nicolas
+=2D-=20
+balbi
 
-
---=-E4/aw+LDBvAEHrn4g2Fu
+--=-=-=
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAmAADkIACgkQlfZmHno8
-x/6lhgf/aLYEr1NNy/j/1kCMGm3ZQ0fUj2UouvGMACD6xO1/6Tmj62vq4aUO62f0
-+RiSLkwYCe1gxXaZB9KQ2bYko/9s+D5i8O12Ha/oUfypARXx/ebXR4m3TGa8H1Eg
-36U7pdEVvWKCLZ8pDqFVvFdiq5ApnoIuI24xF0mUPJIZLEhdMqafT5sSzrmuTXkF
-y1JMjVYC/3lMPlGcnm6vfWU7iLfyh2aDBq7K9okOjEG+JB0ZYKH7qCD2mL3vZzFU
-m0bngWMsFfKJWPxtwo0mpQnDY1gaTar5nanXiLXNFD34yNwtYgEeQdIjT2edg9oT
-1w+CaKBIM8VAkDipHlttQP3TWcRokg==
-=tmhn
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmAAFd8RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQY/oRAAwGwd0M+4y81Yv7n9zZESjvcH4MNrIBxF
+3ZnZzd5xUc3mOokAiInix2k+tLp5Se5aZ4KpbBwznPHpiidm/qWr2eVGuPFoGwsi
+Ru1lkOqT/HH3pIWgG+Akx0MqsPdfAItgZBPPLZwsfr92DNJihz2NOGLeAAB+Wfzr
+QUKy752kkFZRcL+jOT/9zGDvd12Lw7GlDUEIDs5hq6fJoU55bVDzclUWTWJ6m1C7
+SjjrQKmSr05Yd93At8GINrtby78Vli/n9NmCMPrgTggJxjuJok4HXk6a1e3IfnzR
+Qx7vIxH1EutvDSZ0UrFt2f1i/k0sUKAiubeq3uaTTfH0/sYf6r5/IhVBU3wgqVsz
+0sZNb2iMOCE8PqPMDnTkdJqlTfUzmZd2gmAdT6QYzMjlz3KWdbTXlgmuQ0i1ItWu
+HVnftpFtBnkqbksn9TTCSykq4bEpNu8vGGTxEFKWR+GP4WnO2VariMRokgP2s9Ly
+UfRhkOzeKEYl+S1Ggnq4dpf/NVzvb4v32mV8VgBDBqe8gHRJ5G8SzlsQM2eWflU8
+doRn8PhmsiVsPV220AGZV825fNZ0t4mGXDCYmQtUEIn1EWjmOyQsDju/mTDzEpRc
+vKqobP9GZnUt/SgQS/Y1ZK2ol4hp94IXEpzdpgUD1P8AbY15LGZNdQmASoWcYpOc
+3+24Fu1qtMk=
+=Vfrv
 -----END PGP SIGNATURE-----
-
---=-E4/aw+LDBvAEHrn4g2Fu--
-
+--=-=-=--
