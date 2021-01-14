@@ -2,84 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0C72F5D36
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 10:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E95F12F5D62
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 10:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727857AbhANJXP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jan 2021 04:23:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46912 "EHLO mail.kernel.org"
+        id S1727441AbhANJ1L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jan 2021 04:27:11 -0500
+Received: from mx2.suse.de ([195.135.220.15]:58488 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727784AbhANJXO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 Jan 2021 04:23:14 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5EDE723A05;
-        Thu, 14 Jan 2021 09:22:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610616153;
-        bh=rl/OZbF6JUQS9sIGmcSDh6QItwMe/RtTMl+EH3aVz6M=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=MZ3JFxZdid5QjCO73uxBdmV0E3WZ9pomx5Xd3Fop7TGiuyNvNi7y4ppH0EKygAy/n
-         VkoHP9SWwF2DVnR3vTB0h9ouVbYPpFUHkE5umMcPk9PEKG3zHFoQPP06uAMhI6xCR9
-         Jn5x9kLJiI/Tnx5cETNHjLIKk/nl6ESfb/8L2V0Mm7fVbCoZxzMmrcVTgujZ+nrg4A
-         8VnAZS72WR1FsllNHR/uTJDFMu0kmCKsdAcdL0DXIJTM/Yo5eIX4c6ackED8O1kM8L
-         Fwi65Nq1c4m7YHDuh4UACHrf6hJcUaXCI3HU3yaSuhPKXgaE+sTPuQsLXQVPGu7erE
-         E9Hqt9wXzNjQQ==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
-Cc:     gregkh@linuxfoundation.org, michal.simek@xilinx.com, b-liu@ti.com,
-        hminas@synopsys.com, jbi.octave@gmail.com,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
-Subject: Re: [PATCH] drivers/usb/gadget/udc: Assign boolean values to a bool
- variable
-In-Reply-To: <1610615002-66235-1-git-send-email-abaci-bugfix@linux.alibaba.com>
-References: <1610615002-66235-1-git-send-email-abaci-bugfix@linux.alibaba.com>
-Date:   Thu, 14 Jan 2021 11:22:25 +0200
-Message-ID: <878s8v3mb2.fsf@kernel.org>
+        id S1727382AbhANJ1K (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 Jan 2021 04:27:10 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 39E03AB7A;
+        Thu, 14 Jan 2021 09:26:28 +0000 (UTC)
+Message-ID: <9a8d9a57a1837fb7e0b17f19f089c55f955c98fc.camel@suse.de>
+Subject: Re: [PATCH 0/3] usb: dwc2: Fixes and improvements
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Doug Anderson <dianders@chromium.org>
+Cc:     Paul Zimmerman <Paul.Zimmerman@synopsys.com>,
+        Felipe Balbi <balbi@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nick Hudson <skrll@netbsd.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Thu, 14 Jan 2021 10:26:25 +0100
+In-Reply-To: <20210114030715.GA102157@roeck-us.net>
+References: <20210113112052.17063-1-nsaenzjulienne@suse.de>
+         <CAD=FV=VnsVgTGTkr9VYQHCkBSVVksT1UGfsmk+dqTyQ1sqF=Qw@mail.gmail.com>
+         <20210114030715.GA102157@roeck-us.net>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-E4/aw+LDBvAEHrn4g2Fu"
+User-Agent: Evolution 3.38.2 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
+
+--=-E4/aw+LDBvAEHrn4g2Fu
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Jiapeng Zhong <abaci-bugfix@linux.alibaba.com> writes:
+Hi Guenter, Doug, thanks for having a look at this.
 
-> Fix the following coccicheck warnings:
->
-> ./drivers/usb/gadget/udc/udc-xilinx.c:1957:2-18: WARNING:
-> Assignment of 0/1 to bool variable.
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
+On Wed, 2021-01-13 at 19:07 -0800, Guenter Roeck wrote:
+> On Wed, Jan 13, 2021 at 03:20:55PM -0800, Doug Anderson wrote:
+> > Hi,
+> >=20
+> [ ... ]
+> >=20
+> > It's been long enough ago that I've forgotten where this was left off,
+> > but IIRC the 3 patches that you have here are all fine to land (and
+> > have my Reviewed-by tag).  However, I think Guenter was still tracking
+> > down additional problems.  Guenter: does that match your recollection?
+> >=20
+> > It looks like there are still bugs open for this on our public bug trac=
+ker:
+> >=20
+> > https://issuetracker.google.com/issues/172208170
+> > https://issuetracker.google.com/issues/172216241
+> >=20
+> > ...but, as Guenter said, I don't think there's anyone actively working =
+on them.
+> >=20
+> > I'm not really doing too much with dwc2 these days either and don't
+> > currently have good HW setup for testing, so for the most part I'll
+> > leave it to you.  I wanted to at least summarize what I remembered,
+> > though!  :-)
+> >=20
+>=20
+> The patches in this series still match what I had in my latest test code,
+> so it makes sense to move forward with them. I don't think I ever found
+> an acceptable version of the DMA alignment code.
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
+As for the alignment code rework, can you recall the underlying issue that
+warranted it?
 
-=2D-=20
-balbi
+Regards,
+Nicolas
 
---=-=-=
+
+--=-E4/aw+LDBvAEHrn4g2Fu
 Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmAADVERHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQazOw/+KYL6BI1GvbgwRPbFX2l90ThFvh1AGucw
-TKbWohDlwgO5GnxjJU7ztN4VU4DlG29MpAkEBehredbmg6nfnCTcsSNG4rT1aQ9S
-rAL2BXirGjDzVvd75kDVd614pLYm84V2Xqt4Q/SgMfKMGVz+b5XYmkCjoro7toDe
-RGESq8JlHlAHXPC963vmd7YIpuvHf+K6CVweqPv8xm25C/iCTgE8wb0opTKc6/6W
-ko1Lu6ghooCXTIs6HFsdoCg785IRF39noYlx+CS/C4BDvseZvinJMcSTkuzctNTC
-SOZo9rOBDvcMvVJ3qQbu1t8mlzwFvfmog0D6BuQunEWJ2AYiic9sv/KwTbVmmuRJ
-d2wLSXVQPclkmYh3ZCrsZxdZesNUS4LnOhwnr5llqUkERhe33YRRkbVMOQywzJ6+
-DQP7R9tczw2TG++05Q9oYBVStI2rY3IjpElVM5AdIpfSQaxhLvl7N2xGT9tAfKGG
-lqj1vrZvXdnfV16ChJ6s4ThkNt1cxqFXEcK4Hm5cbwcKq/EEiRHdkN9FEL7Ls0Jo
-7tO3RFeBS/gYOiDZqtJ32KPn9EMrsOlLWe4gh/LKWb303iMPGt3q8cNUfnIRUJcC
-wRcJ87ufSyEk9QuVoGKbO/nMwKgk04+utlOueG/5lv50gtMltScLKo9tTQFjt6QP
-3pgCqJ0oV/Q=
-=seLA
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAmAADkIACgkQlfZmHno8
+x/6lhgf/aLYEr1NNy/j/1kCMGm3ZQ0fUj2UouvGMACD6xO1/6Tmj62vq4aUO62f0
++RiSLkwYCe1gxXaZB9KQ2bYko/9s+D5i8O12Ha/oUfypARXx/ebXR4m3TGa8H1Eg
+36U7pdEVvWKCLZ8pDqFVvFdiq5ApnoIuI24xF0mUPJIZLEhdMqafT5sSzrmuTXkF
+y1JMjVYC/3lMPlGcnm6vfWU7iLfyh2aDBq7K9okOjEG+JB0ZYKH7qCD2mL3vZzFU
+m0bngWMsFfKJWPxtwo0mpQnDY1gaTar5nanXiLXNFD34yNwtYgEeQdIjT2edg9oT
+1w+CaKBIM8VAkDipHlttQP3TWcRokg==
+=tmhn
 -----END PGP SIGNATURE-----
---=-=-=--
+
+--=-E4/aw+LDBvAEHrn4g2Fu--
+
