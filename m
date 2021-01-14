@@ -2,43 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7BE42F5CB3
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 09:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4ED2F5CBC
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 10:01:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727174AbhANI5o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jan 2021 03:57:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40046 "EHLO mail.kernel.org"
+        id S1727328AbhANJBD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jan 2021 04:01:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40768 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725989AbhANI5n (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 Jan 2021 03:57:43 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B6977239A1;
-        Thu, 14 Jan 2021 08:57:00 +0000 (UTC)
+        id S1727244AbhANJBD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 Jan 2021 04:01:03 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DE72C239D3;
+        Thu, 14 Jan 2021 09:00:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610614623;
-        bh=zsx5nPtADKLjuunMgy8/KCoh2CcAacruI1Wlbf7EFek=;
+        s=k20201202; t=1610614822;
+        bh=6rnZj3Krzfgg8bKsBEta50ZSopCDSVBFUyfWhhqFz4k=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=T1XU1ABZIGJeRd0lUDN7Qz58mIr5ThbTRHwkHAu5Tb8FhpXrE+HzrZ3g6T7KTbqTy
-         wgqkUyN/wAm+IH4EDY+nSVWoj0VMtiBDVQzc3f2h9Z8MJWZUylm/bgSaVicvvngV9Y
-         Qs3hhuZrmSGjqkfDlGYIR7YsQwfYpfcyidC3SvgBYLsoT6+yYivJOBflppZ/x5laBy
-         /INdqHZnW//Tf7IqBnw0nWP4b+ETEM+2CbBZzTdP9gErtLgg5TQI5gV6zdM/DTpjjt
-         ERlacjZxetXiuch7pXgY2GzFOqfYdztgHwQU07Q7JY/qnb5rZD4IF1zPl1xz6AKMDH
-         8oFxaeSDPn6+w==
+        b=C4ZUWfXkasmuQS21mExZvDErQLRxjb543ePDx2/uwboteuN+tWeSFXXshSSY5Lx7V
+         KQ6zIHRJ35K1wss66OBHl8CpuhkweZ1Op0szJfvSg9k5zPxi8KAzJ06rHg8/807Y1C
+         slMaCf1OtyfyfMA97JSm0D6IfOckeQ1YUM+eE+PrLl2Sa3Bxnmb09kQFTEkSp3tL7a
+         rZ0jZwvyqtoWkasv6+DxFi1T+sVFP2gKnnxkIpXRJ9DHRqfjJ2cAazoy85mHhQkils
+         9XdqyAnQpK/N3UqCtIdx4CG1YXS+OZAjm8YxhcAAWB3lBn0RiPzBfq4DSlleve9yC+
+         j7+9ffb3MSPMQ==
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
-        Michal Nazarewicz <mina86@mina86.com>
-Cc:     stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: udc: core: Use lock when write to soft_connect
-In-Reply-To: <311bc6d30b23427420133602c2833308310b7fcb.1610595364.git.Thinh.Nguyen@synopsys.com>
-References: <311bc6d30b23427420133602c2833308310b7fcb.1610595364.git.Thinh.Nguyen@synopsys.com>
-Date:   Thu, 14 Jan 2021 10:56:55 +0200
-Message-ID: <87k0sf3nhk.fsf@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>, Greg KH <greg@kroah.com>
+Cc:     USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] USB: gadget: dummy-hcd: Fix errors in port-reset handling
+In-Reply-To: <20210113194510.GA1290698@rowland.harvard.edu>
+References: <20210113194510.GA1290698@rowland.harvard.edu>
+Date:   Thu, 14 Jan 2021 11:00:16 +0200
+Message-ID: <87h7nj3nbz.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -50,14 +42,30 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+Alan Stern <stern@rowland.harvard.edu> writes:
 
-> Use lock to guard against concurrent access for soft-connect/disconnect
-> operations when writing to soft_connect sysfs.
+> Commit c318840fb2a4 ("USB: Gadget: dummy-hcd: Fix shift-out-of-bounds
+> bug") messed up the way dummy-hcd handles requests to turn on the
+> RESET port feature (I didn't notice that the original switch case
+> ended with a fallthrough).  The call to set_link_state() was
+> inadvertently removed, as was the code to set the USB_PORT_STAT_RESET
+> flag when the speed is USB2.
 >
-> Cc: stable@vger.kernel.org
-> Fixes: 2ccea03a8f7e ("usb: gadget: introduce UDC Class")
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> In addition, the original code never checked whether the port was
+> connected before handling the port-reset request.  There was a check
+> for the port being powered, but it was removed by that commit!  In
+> practice this doesn't matter much because the kernel doesn't try to
+> reset disconnected ports, but it's still bad form.
+>
+> This patch fixes these problems by changing the fallthrough to break,
+> adding back in the missing set_link_state() call, setting the
+> port-reset status flag, adding a port-is-connected test, and removing
+> a redundant assignment statement.
+>
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> Fixes: c318840fb2a4 ("USB: Gadget: dummy-hcd: Fix shift-out-of-bounds bug=
+")
+> CC: <stable@vger.kernel.org>
 
 Acked-by: Felipe Balbi <balbi@kernel.org>
 
@@ -69,19 +77,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmAAB1cRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQZTDxAAjkYg8B0C4kfry3iSFLT/uXx90OYywx1q
-81IZCwAEmCJVAwaQoWGnnvmMIImRnpxIqpAE91C9ZO86toqUNHZvu0SMQOUUgJcm
-4LX+JOYY3DQjN6knFpvOaKuaH9DPXZmGKqSQ0Gns994hVhFJ2sLPfSaEgsVqEdha
-ZcOqD6yItpIIMWAd4RTm//AMp8UumTcRbyhMdkpScbNAXyPSrxqokHsgOg3rUJ+B
-xZlsbq1gCsZlZMBPK2nSfoGfC3WYP/iOik0nf7SRVTt6mwHT0xuufJg7bb5+sxMv
-NSSatGCXvER/Kt1zTHatr1j/T3dqgaDleAfZWK+UesA06rh4tNCMStLT93AgJikh
-itFTLlunBkesgofytv03KUyxqUByWnppVaGAup2eO++PHYStiMQnYBdl336bagkI
-szILyTYkMWI66zXO+vOWJvbs5wjWpQinfekCW5crMTT4wlApFXDOwqzU3wU++/jI
-NF3k52isu5zorSb8sG1A9W96CcZJbj4HdGUHJbnkEPC2rTI0sEO8nvSQjjRRnxLb
-M+nY9efuyhjl7eR8QhkLgrj0lYOeFbw7P/JLkWW/uPomAUAdMEdMmxCa7H5WtO5K
-Ldp2iaY2dNOTq6Z34MTZWNKj+vbtjLqRXUeWn5AS2YANfGePWT1jSB9CcURellif
-LO5AED7lJqo=
-=ZA5Q
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmAACCARHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQYTzw//TkPyo2EeeoEi5INXap1Va1HfDo4H+Nak
+kzTI1ysVTT52Mn7FsrKSOVL0QPWBMKKcZgpGkW+fuYuLM12aCYLCE4UYDKVbLPww
+saelzwMOK8DanszBxqrfyKq1dY1n0XG8vC9adgT0kqEihL1jZ68Jte6tkeq73KK+
+wifdZ+WECPL6Q9a7wF0cmdYLn0OLJT5BiUTW4VllLIm+gOCzN/kOme4uqyqubNnP
+l9rmpULk6yyyvw6IyNC++c8SNRr2BhHtQM4tu/FjZEeibev4EExEaFbkNvQRTsbk
+XQ5h6JyNqD2oEs4r/IpgcCv7hCof7VSGGSsA5C0rGgcOZgP0nsmAvpXnFjhY3tpi
++YF30PDNOrBXWzKD1QHijZ5ehDhOeKa+O2pIUR50lmfg6CbSt/s8pBTlc8h+e2aD
+93kpCeE0t0BkELUZdFj+gwxLpiii4FhA6Sx7fAxduKXtcaB96x4grU3W75EGJouP
+cn1aTZyFPrrdde5U1jYd/9pIu3pWWWwyzPzszjGqb3SXjy8oHqv8UdNM12LREi/N
+wnS8l0KXkcj9FJjahX5t6uLE0W7e31yxlXSY4nlE0pR7V19nKngc/g/VP3Qvek+z
+M873LJHCHoAR6duYiuJlZFeLyOH7cihTpYKkmBJ1fry6p4+ILD3FBccdCT74Y8JE
+VdFx6FrbaPY=
+=Mjw9
 -----END PGP SIGNATURE-----
 --=-=-=--
