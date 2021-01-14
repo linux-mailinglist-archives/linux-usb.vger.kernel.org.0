@@ -2,58 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D02B02F5CD5
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 10:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDF32F5CE2
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 10:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727750AbhANJE2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jan 2021 04:04:28 -0500
-Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:56270 "EHLO
-        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727274AbhANJE1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jan 2021 04:04:27 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=abaci-bugfix@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0ULhZcSS_1610615004;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:abaci-bugfix@linux.alibaba.com fp:SMTPD_---0ULhZcSS_1610615004)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 14 Jan 2021 17:03:30 +0800
-From:   Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
-To:     balbi@kernel.org
-Cc:     gregkh@linuxfoundation.org, michal.simek@xilinx.com, b-liu@ti.com,
-        hminas@synopsys.com, jbi.octave@gmail.com,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
-Subject: [PATCH] drivers/usb/gadget/udc: Assign boolean values to a bool variable
-Date:   Thu, 14 Jan 2021 17:03:22 +0800
-Message-Id: <1610615002-66235-1-git-send-email-abaci-bugfix@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S1727632AbhANJGV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jan 2021 04:06:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43110 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726893AbhANJGU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 Jan 2021 04:06:20 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B39D8221E2;
+        Thu, 14 Jan 2021 09:05:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1610615140;
+        bh=qDLAwr206zXZGSraoMYhwbCT8GXAxyVUGRS5xaVvuCs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D8nfgL2RYDjxvaiOr+aBNxixlWHMIzKz88eFYWFcrnGOofzWISWWWy34X/OLkS4Ko
+         GbGIju3ZfNsq7Q4ymiYpPiM7TSD7R2s63diJ0qgEB6bWniRowRgADpoD/IKFhCAHTB
+         aDfe3E1nxWIYwk6sUpOlzOIyX9DF8DyJzui5wbZs=
+Date:   Thu, 14 Jan 2021 10:06:45 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     "Ahmed S. Darwish" <a.darwish@linutronix.de>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dejin Zheng <zhengdejin5@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Michal Nazarewicz <mina86@mina86.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v2] usb: udc: core: Use lock when write to soft_connect
+Message-ID: <YAAJpb1myYDviJO7@kroah.com>
+References: <311bc6d30b23427420133602c2833308310b7fcb.1610595364.git.Thinh.Nguyen@synopsys.com>
+ <X//nfLN9bW1K/yVm@lx-t490>
+ <CAHp75Vf3eZjg20QEr6YqdY7R1Eu=D2za+sKb0vVBaAmETg1z4Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vf3eZjg20QEr6YqdY7R1Eu=D2za+sKb0vVBaAmETg1z4Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix the following coccicheck warnings:
+On Thu, Jan 14, 2021 at 09:03:53AM +0200, Andy Shevchenko wrote:
+> On Thursday, January 14, 2021, Ahmed S. Darwish <a.darwish@linutronix.de>
+> wrote:
+> 
+> > On Wed, Jan 13, 2021 at 07:38:28PM -0800, Thinh Nguyen wrote:
+> > ...
+> > > @@ -1543,10 +1546,12 @@ static ssize_t soft_connect_store(struct device
+> > *dev,
+> > >               usb_gadget_udc_stop(udc);
+> > >       } else {
+> > >               dev_err(dev, "unsupported command '%s'\n", buf);
+> > > -             return -EINVAL;
+> > > +             ret = -EINVAL;
+> > >       }
+> > >
+> > > -     return n;
+> 
+> 
+> 
+> Should be ret = n; here.
 
-./drivers/usb/gadget/udc/udc-xilinx.c:1957:2-18: WARNING:
-Assignment of 0/1 to bool variable.
+Why?  That happened higher up in the patch.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
----
- drivers/usb/gadget/udc/udc-xilinx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+thanks,
 
-diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
-index d5e9d20..77610b5 100644
---- a/drivers/usb/gadget/udc/udc-xilinx.c
-+++ b/drivers/usb/gadget/udc/udc-xilinx.c
-@@ -1954,7 +1954,7 @@ static void xudc_nonctrl_ep_handler(struct xusb_udc *udc, u8 epnum,
- 	if (intrstatus & (XUSB_STATUS_EP0_BUFF1_COMP_MASK << epnum))
- 		ep->buffer0ready = 0;
- 	if (intrstatus & (XUSB_STATUS_EP0_BUFF2_COMP_MASK << epnum))
--		ep->buffer1ready = 0;
-+		ep->buffer1ready = false;
- 
- 	if (list_empty(&ep->queue))
- 		return;
--- 
-1.8.3.1
-
+greg k-h
