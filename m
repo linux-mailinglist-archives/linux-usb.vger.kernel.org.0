@@ -2,74 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E02542F5AC5
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 07:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7A02F5B8D
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 08:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726075AbhANGlp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jan 2021 01:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725975AbhANGlp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jan 2021 01:41:45 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F4EC061575;
-        Wed, 13 Jan 2021 22:41:04 -0800 (PST)
-Date:   Thu, 14 Jan 2021 07:41:00 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1610606462;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VB3LT83nvUNrPtVk0ucHr6Pvx44lX5Zq06M2c7g1170=;
-        b=1a9gqTj8yNOQRj+3I8iqQHVwK5ueMkNbCXzamDAgWwASRq+MzcGW0m9sNjXuLJsTwpX8kp
-        Wpxxb4uZwTSHwdBTPHUZaFkoDfm3dHlEXPL0r/EL7rDfr7PIWjorQUclyz88gzhWWmG+82
-        SQ3fwdKxM87m/mfg9booNeXrOgaOTy3qhUfo5r8iKsA6mK9rtUZe5Lixi/tkxRVdVZnods
-        Kj879j1RkQ7dsJZ39cuIcBoX9RGj9VgjufQU5dtI9OESP5X9cjO9VtW5PlKCItsVu6/jjF
-        VvQQHXmx2EMbLTmlfhLb91GfFs+tZeeU1y1g4OdDgd9b6mRiRmbcM7zdBWmvjw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1610606462;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VB3LT83nvUNrPtVk0ucHr6Pvx44lX5Zq06M2c7g1170=;
-        b=u0PWeUA9ko6hRjuvT4NezRR2RadT00GM1osGA77IrHXHJBlu++h1pi3E2scmQNaYcWGdHg
-        OKeoMuhpZqf+s+Dw==
-From:   "Ahmed S. Darwish" <a.darwish@linutronix.de>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Michal Nazarewicz <mina86@mina86.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: udc: core: Use lock when write to soft_connect
-Message-ID: <X//nfLN9bW1K/yVm@lx-t490>
-References: <311bc6d30b23427420133602c2833308310b7fcb.1610595364.git.Thinh.Nguyen@synopsys.com>
+        id S1727328AbhANHuX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jan 2021 02:50:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55954 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727319AbhANHuW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 Jan 2021 02:50:22 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 65459233FD;
+        Thu, 14 Jan 2021 07:49:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1610610582;
+        bh=GPgqayWa7ykvGcn6a7LLuziq41A+EEiloyOtgv0bL8Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cvjpuFwvQ4irz9ZWBE24KdQJQEzCEdnznrqRXs2S/I0QE96rgF2/jRfzS/7JNvj3u
+         vZToM7052lvei3OYNV19uJNIU/tg4lYDVWtIXv3Xe54JqG+92ZoT/e9HJF/BOg6V5I
+         T+R7HwVKs7km1gO5xj83dQIS6PhrxH/2j1xP3Mf4=
+Date:   Thu, 14 Jan 2021 08:49:38 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alan Cooper <alcooperx@gmail.com>
+Cc:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: Conflicting PCI ID in bdc driver
+Message-ID: <X//3kiH8Frw2dTyM@kroah.com>
+References: <CAMeQTsacNs-YVWeX6vFJyMBLeD_AX6imNQRodV_X-QS54wAREA@mail.gmail.com>
+ <X/y1ekqBrjXK8lZO@kroah.com>
+ <CAMeQTsaL0mx=WW2Ekr2gh_aCWKnumS4mSr5tTH_ac+cdarzxMA@mail.gmail.com>
+ <CAOGqxeUkZ8VK-D3xutVvQk7e2t1=9GzLQL7oHz0GTj_FMdVeqw@mail.gmail.com>
+ <CAMeQTsZA7a9WcJq2tudWhaJbc6Z4vb4jtcUnHOCzg9u3oLxzbw@mail.gmail.com>
+ <X/1ksTC4SBgrQoak@kroah.com>
+ <CAOGqxeXE4D7Dyf-9c=evZMG+PTGrycKTpY1=VBk7OVAWKmyh0A@mail.gmail.com>
+ <X/7KJ1gbcnQDUWx3@kroah.com>
+ <CAOGqxeWYcsQMRfGQeefufriba33hZ7__g+77dzwE=kT=csWywA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <311bc6d30b23427420133602c2833308310b7fcb.1610595364.git.Thinh.Nguyen@synopsys.com>
+In-Reply-To: <CAOGqxeWYcsQMRfGQeefufriba33hZ7__g+77dzwE=kT=csWywA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 13, 2021 at 07:38:28PM -0800, Thinh Nguyen wrote:
-...
-> @@ -1543,10 +1546,12 @@ static ssize_t soft_connect_store(struct device *dev,
->  		usb_gadget_udc_stop(udc);
->  	} else {
->  		dev_err(dev, "unsupported command '%s'\n", buf);
-> -		return -EINVAL;
-> +		ret = -EINVAL;
->  	}
->
-> -	return n;
-> +out:
-> +	mutex_unlock(&udc_lock);
-> +	return ret;
->  }
+On Wed, Jan 13, 2021 at 03:07:03PM -0500, Alan Cooper wrote:
+> Just to be clear, I'm only interested in removing the bdc_pci.c file
+> and not the rest of the BDC driver.
 
-This is *very* tricky: the return value will be easily broken if someone
-adds any code later after the else body and before the "out" label.
+Ok, that's better, please send a patch for this.
+
+thanks,
+
+greg k-h
