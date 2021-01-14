@@ -2,93 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 243C72F5E40
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 11:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB82C2F61D7
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 14:22:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727265AbhANKDV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jan 2021 05:03:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54766 "EHLO mail.kernel.org"
+        id S1729008AbhANNVj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jan 2021 08:21:39 -0500
+Received: from mga02.intel.com ([134.134.136.20]:54136 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726893AbhANKDS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 Jan 2021 05:03:18 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 613BE23A22;
-        Thu, 14 Jan 2021 10:02:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610618558;
-        bh=jU9Kx+SAyNRUMqcNs55vc7+Ly8dOmlGsSqJSE2JyKzM=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Kef4hxpAHmkBqYvdjp7ixctbyFWoHqvvt5i8ubExMjEO9S6jRC0dMMs0/PEdO7a74
-         MO4wKRrZWeIHCmbk1Pgjx/bktMIVF3+rNwHDIl+m4Zl7UTILvnAqLvwf/mCAHxh/9E
-         Dw6dmwSH7KYjAuw0lBkgPKi25yjblVo32GBjplEtZ72l6oCu/waSQt6a27qVnA62w9
-         6Sz8YKt4l5NDPVRuxU6DSrj2zh/NvKqF9ecp5f3qCF7MYjb/no9XU7IC+Q4/ZV3ltM
-         GO/gewU9knYAtodCtm4jW67yuPNwDY2WafLCJttsmBfwf5IGh+FbQPKKr/b+M3/vpN
-         Xq96Py9+b9ndw==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH v6 09/11] usb: dwc3: gadget: Implement setting of SSP rate
-In-Reply-To: <1bbbb6cd0d80696c0b1c112a225dad0b0efe8b91.1610592135.git.Thinh.Nguyen@synopsys.com>
-References: <cover.1610592135.git.Thinh.Nguyen@synopsys.com>
- <1bbbb6cd0d80696c0b1c112a225dad0b0efe8b91.1610592135.git.Thinh.Nguyen@synopsys.com>
-Date:   Thu, 14 Jan 2021 12:02:31 +0200
-Message-ID: <871ren3kg8.fsf@kernel.org>
+        id S1728487AbhANNVi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 Jan 2021 08:21:38 -0500
+IronPort-SDR: NkXh9l118uZTePA8J9QfL1fQUxObbyT/VjM/LN+7G0sYEyzmjwpoKYQxZg07Ap9oWh5zOMjrUx
+ SpWMappLRK1g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9863"; a="165450508"
+X-IronPort-AV: E=Sophos;i="5.79,347,1602572400"; 
+   d="scan'208";a="165450508"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2021 05:19:51 -0800
+IronPort-SDR: iLDvyTTHYtPoMIQuwU7LBSL+zcn3p+k9gtx+1QBo9/qL7etd+gMGccwbeiZG2Wm5Ng6QIitNT1
+ RFA45bGs/6gw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,347,1602572400"; 
+   d="scan'208";a="465250027"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 14 Jan 2021 05:19:48 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 14 Jan 2021 15:19:48 +0200
+Date:   Thu, 14 Jan 2021 15:19:48 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] software node: Introduce
+ device_add_software_node()
+Message-ID: <20210114131948.GA2864731@kuha.fi.intel.com>
+References: <20210111141045.14027-1-heikki.krogerus@linux.intel.com>
+ <20210111141045.14027-2-heikki.krogerus@linux.intel.com>
+ <2f552de5-4839-a1e5-3012-c56f9fa3bdd5@gmail.com>
+ <20210113113918.GA2584629@kuha.fi.intel.com>
+ <20210113153003.GR4077@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210113153003.GR4077@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jan 13, 2021 at 05:30:03PM +0200, Andy Shevchenko wrote:
+> On Wed, Jan 13, 2021 at 01:39:18PM +0200, Heikki Krogerus wrote:
+> > On Wed, Jan 13, 2021 at 12:40:03AM +0000, Daniel Scally wrote:
+> > > On 11/01/2021 14:10, Heikki Krogerus wrote:
+> 
+> ...
+> 
+> > > > +/**
+> > > > + * device_remove_software_node - Remove device's software node
+> > > > + * @dev: The device with the software node.
+> > > > + *
+> > > > + * This function will unregister the software node of @dev.
+> > > > + */
+> > > > +void device_remove_software_node(struct device *dev)
+> > > > +{
+> > > > +	struct swnode *swnode;
+> > > > +
+> > > > +	swnode = dev_to_swnode(dev);
+> > > > +	if (!swnode)
+> > > > +		return;
+> > > > +
+> > > > +	kobject_put(&swnode->kobj);
+> > > > +}
+> > > > +EXPORT_SYMBOL_GPL(device_remove_software_node);
+> > > 
+> > > I wonder if this also ought to set dev_fwnode(dev)->secondary back to
+> > > ERR_PTR(-ENODEV)?
+> 
+> Actually it's a good question.
+> 
+> > We can't do that here unfortunately. Other places still have a
+> > reference to the swnode at this point and they may still need to
+> > access it using the dev_fwnode(dev)->secondary pointer.
+> 
+> Yeah, but in this case we potentially leave a dangling pointer when last of the
+> user gone and kobject_put() will call for release.
+
+The caller has to be responsible of setting the secondary back to
+ERR_PTR(-ENODEV). We can not do anything here like I explained. We can
+not even do that in software_node_notify() when the association to the
+struct device is removed, because the fwnode->secondary is still
+accessed after that. The caller needs to remove both the node and the
+device, and only after that it is safe to set the secondary back to
+ERR_PTR(-ENODEV).
+
+This clearly needs to explained in the comment... I'll fix it.
 
 
-Hi,
+thanks,
 
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
-> @@ -2476,6 +2506,17 @@ static void dwc3_gadget_set_speed(struct usb_gadge=
-t *g,
->  	spin_unlock_irqrestore(&dwc->lock, flags);
->  }
->=20=20
-> +static void dwc3_gadget_set_ssp_rate(struct usb_gadget *g,
-> +				     enum usb_ssp_rate rate)
-> +{
-> +	struct dwc3		*dwc =3D gadget_to_dwc(g);
-> +	unsigned long		flags;
-> +
-> +	spin_lock_irqsave(&dwc->lock, flags);
-> +	dwc->gadget_ssp_rate =3D rate;
-> +	spin_unlock_irqrestore(&dwc->lock, flags);
-> +}
-
-it would be best to make this return a value. If udc_set_ssp_rate() is
-called with invalid rate, UDC can notify core.
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmAAFrcRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQbuGxAA00trg+RB7K29mVt2/Ber2BZuTZV1WwUR
-ueBEvXpoJOWXoKKBUXyMUMw06XCCg2NeTVfrHXBMFft+6ZmAcIwDQyMYyVCjFp42
-7q47eKNTs0Itys5JT9xI0JPWY1OFMjSwQt46jNb1Hzi2xpHCCZMvv7Ihwbnuw55e
-Hddf5hktCIpGT9MeL55NJ8vymh2bw85O9kCCrE5cJA9VaBaUZCstiK5zYW6O3JxP
-s236ajWdMM/8pJ8PMN1zXHKRW5qziGdRG1qCfxNeiq1ovpTC9ivF3YMWr4Es9yfB
-13ws/lJzaRVsJ/ytkwc2K9dJvkz4RyScI4bOJR+maXX2ygzNwxRbACDdtcpc7nLY
-A/e9PDghDhqLOXMgxBtwzBfB1ZmkiSToG+XAE/yI74CW+NJ90Ee9mQWXoZ7vjocB
-p++QgtYxJl9XpGzXCGUDNc63YzBzuDEwWNxSgyr/JSkbMd+NeoHRiMRFLLNZw2Pj
-6Qcsj0umNZ/rjsLXsxYZBYbcQF+hVv4eG0xLHzjtqCcwB3Fp7BZLHcv0EW0Z8OFl
-0oa30BA9fU2rDUzyv1WFcMbiVgMZ9WB9IjVVJexvxw/fqbdzSBKujKEuyqIH9Og3
-tiXXoyuqD1+hGwRNMXXUwZtVwAeSU3nJ4YLmJ8kOo1WmVxrE01A7gPYXX+UvPHr4
-9xPsm1lInBk=
-=Gewb
------END PGP SIGNATURE-----
---=-=-=--
+-- 
+heikki
