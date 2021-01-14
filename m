@@ -2,43 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 890862F5D30
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 10:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0C72F5D36
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 10:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727207AbhANJWN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jan 2021 04:22:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46692 "EHLO mail.kernel.org"
+        id S1727857AbhANJXP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jan 2021 04:23:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46912 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725989AbhANJWM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 Jan 2021 04:22:12 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2B25923A05;
-        Thu, 14 Jan 2021 09:21:28 +0000 (UTC)
+        id S1727784AbhANJXO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 Jan 2021 04:23:14 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5EDE723A05;
+        Thu, 14 Jan 2021 09:22:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610616091;
-        bh=Xg+Nb7sW7RlMhBK1L0mV7+DrrI+r1gMKsDrYK5yTTBI=;
+        s=k20201202; t=1610616153;
+        bh=rl/OZbF6JUQS9sIGmcSDh6QItwMe/RtTMl+EH3aVz6M=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=SnCuI9YnOVaqEMf6iWH/Yd/vSCtCZU/F0K2GMT9r4OTbmJbW9FL5ThFoSWn/Kr7Ya
-         G8m4mf6s/FCq+os708ckhRPbLaVk7FjI8hfJrOXuP2mM8FkkJAjbxm3gGVdILVR4Jo
-         czFhx0D7eO50FR4UYnbds0KztcfBp6p0TChpQTEE/Ug85hL8cJLTBUn1za46wRuner
-         e5LV1PD07czU7arTct9GDo5NNM2x7jJUWXI0gBakE1yxRXXTAW04lHUyT+a2P4tKnL
-         bomm4WxwDdjZxSeL3LJiAXZO5yWjWE28fFdldAnp3PBMODPtTmfsKg03IQXgvw9ZYK
-         Iik8c4qxG4KRQ==
+        b=MZ3JFxZdid5QjCO73uxBdmV0E3WZ9pomx5Xd3Fop7TGiuyNvNi7y4ppH0EKygAy/n
+         VkoHP9SWwF2DVnR3vTB0h9ouVbYPpFUHkE5umMcPk9PEKG3zHFoQPP06uAMhI6xCR9
+         Jn5x9kLJiI/Tnx5cETNHjLIKk/nl6ESfb/8L2V0Mm7fVbCoZxzMmrcVTgujZ+nrg4A
+         8VnAZS72WR1FsllNHR/uTJDFMu0kmCKsdAcdL0DXIJTM/Yo5eIX4c6ackED8O1kM8L
+         Fwi65Nq1c4m7YHDuh4UACHrf6hJcUaXCI3HU3yaSuhPKXgaE+sTPuQsLXQVPGu7erE
+         E9Hqt9wXzNjQQ==
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
-        Michal Nazarewicz <mina86@mina86.com>
-Cc:     stable@vger.kernel.org
-Subject: Re: [PATCH v3] usb: udc: core: Use lock when write to soft_connect
-In-Reply-To: <338ea01fbd69b1985ef58f0f59af02c805ddf189.1610611437.git.Thinh.Nguyen@synopsys.com>
-References: <338ea01fbd69b1985ef58f0f59af02c805ddf189.1610611437.git.Thinh.Nguyen@synopsys.com>
-Date:   Thu, 14 Jan 2021 11:21:23 +0200
-Message-ID: <87bldr3mcs.fsf@kernel.org>
+To:     Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
+Cc:     gregkh@linuxfoundation.org, michal.simek@xilinx.com, b-liu@ti.com,
+        hminas@synopsys.com, jbi.octave@gmail.com,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
+Subject: Re: [PATCH] drivers/usb/gadget/udc: Assign boolean values to a bool
+ variable
+In-Reply-To: <1610615002-66235-1-git-send-email-abaci-bugfix@linux.alibaba.com>
+References: <1610615002-66235-1-git-send-email-abaci-bugfix@linux.alibaba.com>
+Date:   Thu, 14 Jan 2021 11:22:25 +0200
+Message-ID: <878s8v3mb2.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -50,18 +47,15 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
+Jiapeng Zhong <abaci-bugfix@linux.alibaba.com> writes:
 
-Hi,
-
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
-> Use lock to guard against concurrent access for soft-connect/disconnect
-> operations when writing to soft_connect sysfs.
+> Fix the following coccicheck warnings:
 >
-> Cc: stable@vger.kernel.org
-> Fixes: 2ccea03a8f7e ("usb: gadget: introduce UDC Class")
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-
-this does look better than v2 :-p
+> ./drivers/usb/gadget/udc/udc-xilinx.c:1957:2-18: WARNING:
+> Assignment of 0/1 to bool variable.
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
 
 Acked-by: Felipe Balbi <balbi@kernel.org>
 
@@ -73,19 +67,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmAADRMRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQafDBAAnq0BJv+hBqwh25lXNBrUOl+VvDUu1RrN
-5qJH7t8M3r5N/l+r061Pq6EhdymblxPFtvnPTOvmqZH9LJMbJUrUB51dXgjOB3Uv
-Cn0Vf8aInJK0PzTEXGbBcSK06/EQrCJFxI5GlUD7h4q1vwrYQ4h8k51tSVPJv8sx
-nfPzUqKXmbtMiXDwyHAWlm1QAxK1R1m4eE17sRTZUz1kz9ENwdzueZeZ3e2ScytR
-vdh2XelxW42qrx1/0IgwK0wXABf7cdQXtXluGKEzibje/XhHwHzedflRqvetnPvx
-scUyaR1U19loZTnz3NZOLpRZrFr8DtH2NiFUp07ZpLtQ5CimP+f6OpRLyuGrBJdK
-ujL3OQA8Tw4BxGufoShWch7tqhDKwKz1vacB4UKY5vl3meYeKpi6LsrlOCjnSQyc
-h8bE8Ev7eLaVWvWueXrTtybzSE+FuWkLCzGWK/UNqflSvVsZKgw7PotdU0Wr8G2q
-YcliBiS4DFhYUUFqQtq0dkAwGSKVTf8jGtk4C5xpZqZQouV3/jxAjkzGMiDmD9LR
-s+O2Ug3ew34skwQL0Aw40U8L3McyC1lkKPfr3v+4zAi/k7vJUWRg9B4Etf19ihMO
-QmzGTdRKfghNiLbLAVWYzUaduJ3rN7FltJysV9BkDDinxfeGfWJNG3SHbvnb35hb
-9GggHt0iznk=
-=VKbr
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmAADVERHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQazOw/+KYL6BI1GvbgwRPbFX2l90ThFvh1AGucw
+TKbWohDlwgO5GnxjJU7ztN4VU4DlG29MpAkEBehredbmg6nfnCTcsSNG4rT1aQ9S
+rAL2BXirGjDzVvd75kDVd614pLYm84V2Xqt4Q/SgMfKMGVz+b5XYmkCjoro7toDe
+RGESq8JlHlAHXPC963vmd7YIpuvHf+K6CVweqPv8xm25C/iCTgE8wb0opTKc6/6W
+ko1Lu6ghooCXTIs6HFsdoCg785IRF39noYlx+CS/C4BDvseZvinJMcSTkuzctNTC
+SOZo9rOBDvcMvVJ3qQbu1t8mlzwFvfmog0D6BuQunEWJ2AYiic9sv/KwTbVmmuRJ
+d2wLSXVQPclkmYh3ZCrsZxdZesNUS4LnOhwnr5llqUkERhe33YRRkbVMOQywzJ6+
+DQP7R9tczw2TG++05Q9oYBVStI2rY3IjpElVM5AdIpfSQaxhLvl7N2xGT9tAfKGG
+lqj1vrZvXdnfV16ChJ6s4ThkNt1cxqFXEcK4Hm5cbwcKq/EEiRHdkN9FEL7Ls0Jo
+7tO3RFeBS/gYOiDZqtJ32KPn9EMrsOlLWe4gh/LKWb303iMPGt3q8cNUfnIRUJcC
+wRcJ87ufSyEk9QuVoGKbO/nMwKgk04+utlOueG/5lv50gtMltScLKo9tTQFjt6QP
+3pgCqJ0oV/Q=
+=seLA
 -----END PGP SIGNATURE-----
 --=-=-=--
