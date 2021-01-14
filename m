@@ -2,119 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 663322F5C70
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 09:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA752F5CB2
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 09:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727561AbhANIar (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jan 2021 03:30:47 -0500
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:27050 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726055AbhANIar (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jan 2021 03:30:47 -0500
-X-UUID: 6eaf607c35ee487890ac4a2f17d8cba0-20210114
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=3vfvY7ZKwRB4qS/zo2PCJVSCObWf38oxlkKwvoQoKvE=;
-        b=e+g3JUNLC2GDGrGTmoZw7wUbqwdbajdsDTsYGPji9D0TJ082n73ZqIjmnuvYwjDDs1G0VJEuv+yMKvydtIVtfPxm2G2mGQpWBM7wwNRsITV3PA/w6WYPMuEQqY3F+YnijrfWrl/JZdvNyxqBXatbXU7iZOu7SW/Bl4tsuCSq1e4=;
-X-UUID: 6eaf607c35ee487890ac4a2f17d8cba0-20210114
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 469205974; Thu, 14 Jan 2021 16:29:56 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 Jan
- 2021 16:29:54 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 Jan 2021 16:29:52 +0800
-Message-ID: <1610612988.30053.15.camel@mhfsdcap03>
-Subject: Re: [PATCH v5] usb: xhci-mtk: fix unreleased bandwidth data
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Ikjoon Jang <ikjn@chromium.org>
-CC:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Zhanyong Wang <zhanyong.wang@mediatek.com>,
+        id S1727481AbhANI4y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jan 2021 03:56:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39916 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726742AbhANI4y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 Jan 2021 03:56:54 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1C846239A1;
+        Thu, 14 Jan 2021 08:56:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610614573;
+        bh=sv+9qVGO7egBfOkGjfzcpaTzrwk3mgzrhgB3qJS9h3Y=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=eHt4b/m0MHTnpFxAkA46FSm7JjfLFoR0M2RAvsI6KuNL1c3gISH4NYXkihZpEmPNm
+         DRQclGy59WKzjq4Oj81RkDvMV/uJBupgjascbyWoBtamTAh66lUT5fv86sf1o0BN6U
+         yWqYp+nJEvtqAR1u3J4kFjfkmKnr7TPCoDVuncRcEG64nrYB9GadUbnfwGQerRR5+c
+         Pg5EtMsVx+NvY9nsej77Ko71Ju4gjvd3GdmIAfw57jUvhjaQ4R/nJn6Kkia/AwbuzN
+         PErwt8TlFNgbC5Xx7BG3xBcPJSBywMLFdI404V1w7+XCJhyv0VGWqqzalYVepehXUT
+         7VuHg8zJUi0OA==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Thu, 14 Jan 2021 16:29:48 +0800
-In-Reply-To: <CAATdQgD2OAmf7_NWSVwzyJE7mF0vngzE=QeE79PS7MJsgPhbtA@mail.gmail.com>
-References: <20201229142406.v5.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
-         <2aea44f0-85e7-fd55-2c35-c1d994f20e03@linux.intel.com>
-         <1610086308.24856.30.camel@mhfsdcap03>
-         <e43632e2-08b3-7a1a-8272-1d493e25fc67@linux.intel.com>
-         <CAATdQgD2OAmf7_NWSVwzyJE7mF0vngzE=QeE79PS7MJsgPhbtA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH] usb: dwc3: gadget: Disable Vendor Test LMP Received event
+In-Reply-To: <4e785ba5d5e95801b6fcf96116f6090216e70760.1610596478.git.Thinh.Nguyen@synopsys.com>
+References: <4e785ba5d5e95801b6fcf96116f6090216e70760.1610596478.git.Thinh.Nguyen@synopsys.com>
+Date:   Thu, 14 Jan 2021 10:56:06 +0200
+Message-ID: <87mtxb3nix.fsf@kernel.org>
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 77ED6FFC0E264159D06B048F03B8B8C65875304C49FE305525CD3102406645DB2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgSWtqb29uLA0KDQpPbiBUdWUsIDIwMjEtMDEtMTIgYXQgMTM6NDggKzA4MDAsIElram9vbiBK
-YW5nIHdyb3RlOg0KPiBPbiBGcmksIEphbiA4LCAyMDIxIGF0IDEwOjQ0IFBNIE1hdGhpYXMgTnlt
-YW4NCj4gPG1hdGhpYXMubnltYW5AbGludXguaW50ZWwuY29tPiB3cm90ZToNCj4gPg0KPiA+IE9u
-IDguMS4yMDIxIDguMTEsIENodW5mZW5nIFl1biB3cm90ZToNCj4gPiA+IE9uIFRodSwgMjAyMS0w
-MS0wNyBhdCAxMzowOSArMDIwMCwgTWF0aGlhcyBOeW1hbiB3cm90ZToNCj4gPiA+PiBPbiAyOS4x
-Mi4yMDIwIDguMjQsIElram9vbiBKYW5nIHdyb3RlOg0KPiA+ID4+PiB4aGNpLW10ayBoYXMgaG9v
-a3Mgb24gYWRkX2VuZHBvaW50KCkgYW5kIGRyb3BfZW5kcG9pbnQoKSBmcm9tIHhoY2kNCj4gPiA+
-Pj4gdG8gaGFuZGxlIGl0cyBvd24gc3cgYmFuZHdpZHRoIG1hbmFnZW1lbnRzIGFuZCBzdG9yZXMg
-YmFuZHdpZHRoIGRhdGENCj4gPiA+Pj4gaW50byBpbnRlcm5hbCB0YWJsZSBldmVyeSB0aW1lIGFk
-ZF9lbmRwb2ludCgpIGlzIGNhbGxlZCwNCj4gPiA+Pj4gc28gd2hlbiBiYW5kd2lkdGggYWxsb2Nh
-dGlvbiBmYWlscyBhdCBvbmUgZW5kcG9pbnQsIGFsbCBlYXJsaWVyDQo+ID4gPj4+IGFsbG9jYXRp
-b24gZnJvbSB0aGUgc2FtZSBpbnRlcmZhY2UgY291bGQgc3RpbGwgcmVtYWluIGF0IHRoZSB0YWJs
-ZS4NCj4gPiA+Pj4NCj4gPiA+Pj4gVGhpcyBwYXRjaCBhZGRzIHR3byBtb3JlIGhvb2tzIGZyb20g
-Y2hlY2tfYmFuZHdpZHRoKCkgYW5kDQo+ID4gPj4+IHJlc2V0X2JhbmR3aWR0aCgpLCBhbmQgbWFr
-ZSBtdGsteGhjaSB0byByZWxlYXNlcyBhbGwgZmFpbGVkIGVuZHBvaW50cw0KPiA+ID4+PiBmcm9t
-IHJlc2V0X2JhbmR3aWR0aCgpLg0KPiA+ID4+Pg0KPiA+ID4+PiBGaXhlczogMDhlNDY5ZGU4N2Ey
-ICgidXNiOiB4aGNpLW10azogc3VwcG9ydHMgYmFuZHdpZHRoIHNjaGVkdWxpbmcgd2l0aCBtdWx0
-aS1UVCIpDQo+ID4gPj4+IFNpZ25lZC1vZmYtYnk6IElram9vbiBKYW5nIDxpa2puQGNocm9taXVt
-Lm9yZz4NCj4gPiA+Pj4NCj4gPiA+Pg0KPiA+ID4+IC4uLg0KPiA+ID4+DQo+ID4gPj4+DQo+ID4g
-Pj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0L3hoY2kuYyBiL2RyaXZlcnMvdXNiL2hv
-c3QveGhjaS5jDQo+ID4gPj4+IGluZGV4IGQ0YThkMGVmYmJjNC4uZTFmY2QzY2Y3MjNmIDEwMDY0
-NA0KPiA+ID4+PiAtLS0gYS9kcml2ZXJzL3VzYi9ob3N0L3hoY2kuYw0KPiA+ID4+PiArKysgYi9k
-cml2ZXJzL3VzYi9ob3N0L3hoY2kuYw0KPiA+ID4+PiBAQCAtMjg4Miw2ICsyODgyLDEyIEBAIHN0
-YXRpYyBpbnQgeGhjaV9jaGVja19iYW5kd2lkdGgoc3RydWN0IHVzYl9oY2QgKmhjZCwgc3RydWN0
-IHVzYl9kZXZpY2UgKnVkZXYpDQo+ID4gPj4+ICAgICB4aGNpX2RiZyh4aGNpLCAiJXMgY2FsbGVk
-IGZvciB1ZGV2ICVwXG4iLCBfX2Z1bmNfXywgdWRldik7DQo+ID4gPj4+ICAgICB2aXJ0X2RldiA9
-IHhoY2ktPmRldnNbdWRldi0+c2xvdF9pZF07DQo+ID4gPj4+DQo+ID4gPj4+ICsgICBpZiAoeGhj
-aS0+cXVpcmtzICYgWEhDSV9NVEtfSE9TVCkgew0KPiA+ID4+PiArICAgICAgICAgICByZXQgPSB4
-aGNpX210a19jaGVja19iYW5kd2lkdGgoaGNkLCB1ZGV2KTsNCj4gPiA+Pj4gKyAgICAgICAgICAg
-aWYgKHJldCA8IDApDQo+ID4gPj4+ICsgICAgICAgICAgICAgICAgICAgcmV0dXJuIHJldDsNCj4g
-PiA+Pj4gKyAgIH0NCj4gPiA+Pj4gKw0KPiA+ID4+DQo+ID4gPj4gSnVzdCBub3RpY2VkIHRoYXQg
-WEhDSV9NVEtfSE9TVCBxdWlyayBpcyBvbmx5IHNldCBpbiB4aGNpLW10ay5jLg0KPiA+ID4+IHho
-Y2ktbXRrLmMgY2FsbHMgeGhjaV9pbml0X2RyaXZlciguLi4sIHhoY2lfbXRrX292ZXJyaWRlcykg
-d2l0aCBhIC5yZXNldCBvdmVycmlkZSBmdW5jdGlvbi4NCj4gPiA+Pg0KPiA+ID4+IHdoeSBub3Qg
-YWRkIG92ZXJyaWRlIGZ1bmN0aW9ucyBmb3IgLmNoZWNrX2JhbmR3aWR0aCBhbmQgLnJlc2V0X2Jh
-bmR3aWR0aCB0byB4aGNpX210a19vdmVycmlkZXMgaW5zdGVhZD8NCj4gPiA+Pg0KPiA+ID4+IEFu
-b3RoZXIgcGF0Y2ggdG8gYWRkIHNpbWlsYXIgb3ZlcnJpZGVzIGZvciAuYWRkX2VuZHBvaW50IGFu
-ZCAuZHJvcF9lbmRwb2ludCBzaG91bGQgcHJvYmFibHkgYmUNCj4gPiA+PiBkb25lIHNvIHRoYXQg
-d2UgY2FuIGdldCByaWQgb2YgdGhlIHhoY2lfbXRrX2FkZC9kcm9wX2VwX3F1aXJrKCkgY2FsbHMg
-aW4geGhjaS5jIGFzIHdlbGwNCj4gPiA+IFlvdSBtZWFuLCB3ZSBjYW4gZXhwb3J0IHhoY2lfYWRk
-L2Ryb3BfZW5kcG9pbnQoKT8NCj4gPg0KPiA+IEkgdGhpbmsgc28sIHVubGVzcyB5b3UgaGF2ZSBh
-IGJldHRlciBpZGVhLg0KPiA+IEkgcHJlZmVyIGV4cG9ydGluZyB0aGUgZ2VuZXJpYyBhZGQvZHJv
-cF9lbmRwb2ludCBmdW5jdGlvbnMgcmF0aGVyIHRoYW4gdGhlIHZlbmRvciBzcGVjaWZpYyBxdWly
-ayBmdW5jdGlvbnMuDQo+ID4NCj4gDQo+IFdoZW4gbW92aW5nIG91dCBhbGwgTVRLX0hPU1QgcXVp
-cmtzIGFuZCB1bmxpbmsgeGhjaS1tdGstc2NoIGZyb20geGhjaSwNCj4geGhjaS1tdGstc2NoIHN0
-aWxsIG5lZWRzIHRvIHRvdWNoIHRoZSB4aGNpIGludGVybmFscywgYXQgbGVhc3Qgc3RydWN0DQo+
-IHhoY2lfZXBfY3R4Lg0KPiANCj4gTXkgbmFpdmUgaWRlYSBpcyBqdXN0IGxldCB4aGNpIGV4cG9y
-dCBvbmUgbW9yZSBmdW5jdGlvbiB0byBleHBvc2UgeGhjaV9lcF9jdHguDQo+IEJ1dCBJJ20gbm90
-IHN1cmUgd2hldGhlciB0aGlzIGlzIGFjY2VwdGFibGU6DQpJIGZpbmQgdGhhdCB4aGNpX2FkZF9l
-bmRwb2ludCgpIGlnbm9yZXMgc29tZSBlcnJvcnMgd2l0aCByZXR1cm4gMCwgZm9yDQp0aGVzZSBj
-YXNlcyB3ZSBuZWVkbid0IGNhbGwgeGhjaV9tdGtfYWRkX2VwLXF1aXJrKCksIHNvIG1heSBiZSBu
-b3QgYQ0KZ29vZCB3YXkgdG8ganVzdCBleHBvcnQgeGhjaV9hZGRfZW5kcG9pbnQoKS4NCg0KPiAN
-Cj4gK3N0cnVjdCB4aGNpX2VwX2N0eCogeGhjaV9nZXRfZXBfY29udGV4KHN0cnVjdCB4aGNpX2hj
-ZCAqeGhjaSwgc3RydWN0DQo+IHVzYl9ob3N0X2VuZHBvaW50ICplcCkNCj4gK3sgLi4uIH0NCj4g
-K0VYUE9SVF9TWU1CT0woeGhjaV9nZXRfZXBfY29udGV4dCk7DQo+IA0KPiBCdXQgZm9yIHY2LCBJ
-J20gZ29pbmcgdG8gc3VibWl0IGEgcGF0Y2ggd2l0aCB7Y2hlY2t8cmVzZXR9X2JhbmR3aWR0aCgp
-DQo+IHF1aXJrIGZ1bmN0aW9uDQo+ICBzd2l0Y2hlZCBpbnRvIHhoY2lfZHJpdmVyX292ZXJyaWRl
-cyBmaXJzdC4gKGFuZCBwcmVzZXJ2ZSBleGlzdGluZw0KPiBNVEtfSE9TVCBxdWlyayBmdW5jdGlv
-bnMpLg0KPiANCj4gVGhhbmtzIQ0KPiANCj4gPiAtTWF0aGlhcw0KPiA+DQoNCg==
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
+
+Hi,
+
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+> Some users questioned why Vendor Test LMP Received event was enabled.
+> The driver currently doesn't handle this event. Let's disable it to
+> avoid confusion.
+
+in case you're curious, it's left-over from early development where we
+thought we should "enable everything and add code for each one" ;-)
+
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+
+Acked-by: Felipe Balbi <balbi@kernel.org>
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmAAByYRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQY34w//UEYSTDYCgpkdoil/iFcrPg5gPEy3zRvz
+DdLc8UAAQvd7MLhfypMS6Q9/aHj9ZkN+ZnjMkf5qYt0yOLUuK/R/biY9Vz6YH6F3
+B2gglnXwVgDgiKjKN7ncH+XutNruc0xgHSqxwW6hZdN3QZInLw7F2l4PsjxWejyF
+NTRdOUX8XStnoFB3GU+otpBXDJ6m4O6EfYe2SE35wE7xOYD2TeDTGjt4Yjrx3MO5
+PZAIRmYCfumUfqe1h3s1/Q3+iVU5ULYcIv+iC45Y+wSEIHL2N7fiXnKVQO4ZNjm0
+2rjtI/IaFXDBUh1MzuROxj8b9OCx8fXPU7njjebKatjBciGmsV+O7+bMSNs3muZw
+T1RrzyuV5UDyKtEMl4SXrnsgnoQD8WEuCJ1I7PSAmC8VnMuevKqYfmVha6BKRtvx
+DwnupBwe3tfHBTvd6yXxN7m4PRTc7kwzWBgmVmnWlawXlRL2xaOxFnucdiWTbnkY
+PSgq2ghc3kSJI5c7cjBDfOUVAhqwGcEIa9rkuAQjNtN1RtUqkRX0G655vvKh7FVg
+qvi2i1TQZ/ytbhAcyR/5gAJfa6PBnSskqQkerkWvDw9DnbsxJEoL8EytdmV/3/0i
+N9dc/QTAWRvPaNJAo37GMZPYV/UsFFqqt9julEtbYIQPoMKzwcgk1N2uM146fFFS
+mhYADqGoJU4=
+=twKJ
+-----END PGP SIGNATURE-----
+--=-=-=--
