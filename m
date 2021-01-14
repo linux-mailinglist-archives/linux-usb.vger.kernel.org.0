@@ -2,129 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 862892F6314
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 15:28:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C4B2F6376
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 15:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729181AbhANO0F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jan 2021 09:26:05 -0500
-Received: from mga02.intel.com ([134.134.136.20]:58501 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726805AbhANO0F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 Jan 2021 09:26:05 -0500
-IronPort-SDR: TDMe6LdtLjRGuZ8lKfkYMxJMTrtDJJSVQTW0w9Bw3CKAG8vWc/MU9SKNG+eKxNNbPyDhmvb+V3
- +c5XOCP1MMsg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9863"; a="165460677"
-X-IronPort-AV: E=Sophos;i="5.79,347,1602572400"; 
-   d="scan'208";a="165460677"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2021 06:24:19 -0800
-IronPort-SDR: wjo3JEq5Z7etD61x5dHXSeFHh6gJJdzfdd8jSXbekk17AFuZU32aQSpp8aQeDKH6fHgIo3tbYl
- s4MX/Mzh9VFA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,347,1602572400"; 
-   d="scan'208";a="465266602"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 14 Jan 2021 06:24:16 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 14 Jan 2021 16:24:15 +0200
-Date:   Thu, 14 Jan 2021 16:24:15 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] software node: Introduce
- device_add_software_node()
-Message-ID: <20210114142415.GC2864731@kuha.fi.intel.com>
-References: <20210111141045.14027-1-heikki.krogerus@linux.intel.com>
- <20210111141045.14027-2-heikki.krogerus@linux.intel.com>
- <2f552de5-4839-a1e5-3012-c56f9fa3bdd5@gmail.com>
- <20210113113918.GA2584629@kuha.fi.intel.com>
- <20210113153003.GR4077@smile.fi.intel.com>
- <20210114131948.GA2864731@kuha.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210114131948.GA2864731@kuha.fi.intel.com>
+        id S1727025AbhANOvq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jan 2021 09:51:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726459AbhANOvq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jan 2021 09:51:46 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C469DC061757
+        for <linux-usb@vger.kernel.org>; Thu, 14 Jan 2021 06:51:05 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id 68so3495047pfe.2
+        for <linux-usb@vger.kernel.org>; Thu, 14 Jan 2021 06:51:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=7kvb6SONHWlWJj0uvlf5mKCiFCFFS7yUKPi3x7vpoHg=;
+        b=WMxGQG4KUm26LkHOmsdz+QN5JZugw1rTz0r2kxwWcuT9rBvfwOf8X0o3XXeWB2Aq9x
+         eDyyU228NDk9+wMT+2TZXn5sWhxd2XAYGsR8E2eYU2jaG8PdNZICZaJr6bdRTSwAuX4p
+         q1M5tfETC6/FnGYd7u5vM27I84VoO1xPX24hvrCSwaMGqyIX7AmySPiPV1koq2iApDQv
+         uyHurOzhl9oRYo70SyaspR1eMKeVF1TSNr+SP4AZlcT0rFCzk2bSxSN/gBFU9jJJZYyg
+         mvqlSTzKkK5Ht+1lSC3oTX8CK00s3GuKooXI+GiFQ6ADT119Vhn/MgzQ88sbzwTTJ2zr
+         Dr8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=7kvb6SONHWlWJj0uvlf5mKCiFCFFS7yUKPi3x7vpoHg=;
+        b=J8N/OErGvslz3zF++9vYBC5QjPPNy/loa/4IR0E9cTN4XTx/Gv4+nF5l2D7kmisAm3
+         T6oEBRhlUDA/chqnIgAlRSIWZIq67tsx7KKrmLNP2Z57ekekQ0hh/lTivTb8fpID96rd
+         xu/J6450sEeAPU/YSRYaT/JgWwzfZ+WopA4nQHgc68OPboh6zKmEK0Wp/xesAJOys7Cz
+         Z/HEq6ZYpQedQeqiNkvIdQwPzfskmeYNejnhai4X3tNqGRX1V7r+R1TzMYJtjDKi0I7S
+         U4wsN9Dybww45GJbt6fum3jqZnvwnGwCW5BBYBif28h5XT1BrxG/n47tP8MPoHRvCU0C
+         U0kw==
+X-Gm-Message-State: AOAM533kqSch75zkoGW47kRN1ZUxdnWZodT2CoN9ak5G1AMsPJYLQvuH
+        gGXViYuZbG+cT11lYXFaQiAjIGfkh7qK
+X-Google-Smtp-Source: ABdhPJzCskz4Kp5ieZDTzHicrrsh6DAQIAhhmclUFnJqDDfaXKz9SPAFZz8ZCz8ktWv4H8hNUx2k0Sk/wcal
+Sender: "kyletso via sendgmr" <kyletso@kyletso.ntc.corp.google.com>
+X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:3e52:82ff:fe5b:30db])
+ (user=kyletso job=sendgmr) by 2002:a62:84ca:0:b029:19e:6f95:11b1 with SMTP id
+ k193-20020a6284ca0000b029019e6f9511b1mr7753364pfd.68.1610635864657; Thu, 14
+ Jan 2021 06:51:04 -0800 (PST)
+Date:   Thu, 14 Jan 2021 22:50:50 +0800
+Message-Id: <20210114145053.1952756-1-kyletso@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
+Subject: [PATCH v6 0/3] AMS, Collision Avoidance, and Protocol Error
+From:   Kyle Tso <kyletso@google.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, hdegoede@redhat.com
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 14, 2021 at 03:19:52PM +0200, Heikki Krogerus wrote:
-> On Wed, Jan 13, 2021 at 05:30:03PM +0200, Andy Shevchenko wrote:
-> > On Wed, Jan 13, 2021 at 01:39:18PM +0200, Heikki Krogerus wrote:
-> > > On Wed, Jan 13, 2021 at 12:40:03AM +0000, Daniel Scally wrote:
-> > > > On 11/01/2021 14:10, Heikki Krogerus wrote:
-> > 
-> > ...
-> > 
-> > > > > +/**
-> > > > > + * device_remove_software_node - Remove device's software node
-> > > > > + * @dev: The device with the software node.
-> > > > > + *
-> > > > > + * This function will unregister the software node of @dev.
-> > > > > + */
-> > > > > +void device_remove_software_node(struct device *dev)
-> > > > > +{
-> > > > > +	struct swnode *swnode;
-> > > > > +
-> > > > > +	swnode = dev_to_swnode(dev);
-> > > > > +	if (!swnode)
-> > > > > +		return;
-> > > > > +
-> > > > > +	kobject_put(&swnode->kobj);
-> > > > > +}
-> > > > > +EXPORT_SYMBOL_GPL(device_remove_software_node);
-> > > > 
-> > > > I wonder if this also ought to set dev_fwnode(dev)->secondary back to
-> > > > ERR_PTR(-ENODEV)?
-> > 
-> > Actually it's a good question.
-> > 
-> > > We can't do that here unfortunately. Other places still have a
-> > > reference to the swnode at this point and they may still need to
-> > > access it using the dev_fwnode(dev)->secondary pointer.
-> > 
-> > Yeah, but in this case we potentially leave a dangling pointer when last of the
-> > user gone and kobject_put() will call for release.
-> 
-> The caller has to be responsible of setting the secondary back to
-> ERR_PTR(-ENODEV). We can not do anything here like I explained. We can
-> not even do that in software_node_notify() when the association to the
-> struct device is removed, because the fwnode->secondary is still
-> accessed after that. The caller needs to remove both the node and the
-> device, and only after that it is safe to set the secondary back to
-> ERR_PTR(-ENODEV).
+v5 https://lore.kernel.org/r/20210105163927.1376770-1-kyletso@google.com
 
-I studied the code again, and it actually looks like this is only a
-problem when device_add_properties() is used and there is an
-expectation that the node/properties are removed automatically in
-device_del().
+"usb: typec: tcpm: AMS and Collision Avoidance"
+ - removed the signed-off
+ - modified the coding style suggested from Heikki
+ - added FR_SWAP AMS handling
 
-When this new API is used, the only place that needs to access the
-swnode using the secondary pointer is software_node_notify(), so if we
-simply handle that separately here, we should be able to clear the
-secondary pointer after all. It would look something like this:
+"usb: typec: tcpm: Protocol Error handling"
+ - removed the signed-off
+ - modified the coding style suggested from Heikki
+ - modified more coding style problems (line wrapping limit)
 
-        void device_remove_software_node(struct device *dev)
-        {
-        	struct swnode *swnode;
-        
-        	swnode = dev_to_swnode(dev);
-        	if (!swnode)
-        		return;
-        
-                software_node_notify(dev, KOBJ_REMOVE);
-                set_secondary_fwnode(dev, NULL);
-        	kobject_put(&swnode->kobj);
-        }
+"usb: typec: tcpm: Respond Wait if VDM state machine is running"
+ - no change
 
-I'll test that, and if it works, and you guys don't see any problems
-with it, I'll use it in v3.
+-------------------------------------------------------------------
 
+Kyle Tso (3):
+  usb: typec: tcpm: AMS and Collision Avoidance
+  usb: typec: tcpm: Protocol Error handling
+  usb: typec: tcpm: Respond Wait if VDM state machine is running
 
-Br,
+ drivers/usb/typec/tcpm/tcpm.c | 1001 +++++++++++++++++++++++++++------
+ include/linux/usb/pd.h        |    2 +
+ include/linux/usb/tcpm.h      |    4 +
+ 3 files changed, 829 insertions(+), 178 deletions(-)
 
 -- 
-heikki
+2.30.0.284.gd98b1dd5eaa7-goog
+
