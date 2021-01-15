@@ -2,109 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D7BD2F7DE6
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 15:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1983A2F7EDC
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 16:03:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732972AbhAOOOW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jan 2021 09:14:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60960 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731745AbhAOOOW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jan 2021 09:14:22 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766ADC0613C1;
-        Fri, 15 Jan 2021 06:13:40 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id b8so4777955plx.0;
-        Fri, 15 Jan 2021 06:13:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=pEukWvtuwh82TDEPEZ3woLLJLq853GtFGRDGVW376W0=;
-        b=d56nTDt327VgF/XuYROfVX7Ku4gbnv881jVJBzfwSdhMsqCb8W3xDas4Ii4WP+3rym
-         y1jbl0OHSy2yL2Qfm6Xatbk4PvpjuiIjVbeLpGibFMYI2unQT2LA3qpK4ZrfXMTdSeo7
-         d9WQ8asbVfBdxxwbrSVMxgt+VI4r3jLDbyYjFsxx6bzqZ4j/cUnSHlklmYfQOGE2BwF/
-         cugv4B7yy40HyQWJFkunnBqNZL9l40c0l3U+YEtmducQgtcrKQpgMh/4dhD/Ipf6pxgj
-         vJTdIrhLFXNTYs1G13vxi7AOZEB6fG7h1X1n9cCowKokdjfDRXDuERCE5kO1o0CFLHW3
-         6YCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=pEukWvtuwh82TDEPEZ3woLLJLq853GtFGRDGVW376W0=;
-        b=MueGgKYIYLwk7x3IMaGjlWUSu/9yXphEfMWCOWSAX8WDGYFXgLsgmt4BvmQus6ew1c
-         CARothZtyouE2xqYRlvSRqDUnniHxZpODIMBFHhiXIyQvycmBq42zFXdSau8u/fK09ap
-         49DmXYSvm+vnzxl4aTa4zC5SkttprKXa/OpJeoMat6rcmF2MteAs5yqNE+9Jg7OZbzcT
-         ZdoUqXU5JN5J6ImWllB6339AS84YR2l7Dz85CrWSd/VuZcyAtXcRnIQ5WzfXkXe5KWz5
-         17/m0xFggOFey5riEAYpHHu2fUqrSYn2Za81DF9UMlz4DGEOdMvjG6dN+ZW/aUym3170
-         pplw==
-X-Gm-Message-State: AOAM5319o5Of077gG989vWsB5AdBr4ZZhyWPX7uCI9dRmUw0by6DwHMq
-        UNc5JRje02YErjsDZp/6f2k=
-X-Google-Smtp-Source: ABdhPJwLvlOK7S6tSYllr+OMNyZgyloJTKWhIZLiNjcdhjGKjeEWhTc0QmEW8fZcY9NCzKk9a2u6Jg==
-X-Received: by 2002:a17:902:9896:b029:dc:3306:8aa7 with SMTP id s22-20020a1709029896b02900dc33068aa7mr12972171plp.6.1610720019995;
-        Fri, 15 Jan 2021 06:13:39 -0800 (PST)
-Received: from localhost.localdomain (1-171-15-80.dynamic-ip.hinet.net. [1.171.15.80])
-        by smtp.gmail.com with ESMTPSA id h5sm8898408pgl.86.2021.01.15.06.13.36
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 15 Jan 2021 06:13:39 -0800 (PST)
-From:   cy_huang <u0084500@gmail.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        cy_huang@richtek.com, gene_chen@richtek.com,
-        devicetree@vger.kernel.org
-Subject: [PATCH 2/2] usb typec: tcpci: mt6360: Add vbus supply into dt-binding description
-Date:   Fri, 15 Jan 2021 22:13:21 +0800
-Message-Id: <1610720001-15300-2-git-send-email-u0084500@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1610720001-15300-1-git-send-email-u0084500@gmail.com>
-References: <1610720001-15300-1-git-send-email-u0084500@gmail.com>
+        id S1732891AbhAOPCq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jan 2021 10:02:46 -0500
+Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:51721 "EHLO
+        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726019AbhAOPCp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jan 2021 10:02:45 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id BC24AE6D;
+        Fri, 15 Jan 2021 10:01:39 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 15 Jan 2021 10:01:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=DAZvSPO0S+QnpLxAY7yTcaJiZtB
+        epR9CLv2uJSu9blc=; b=NLUILfmvRZ4ZCx7GAXZsWdTwHd1Wm0weJvrchGhnpvx
+        flIUmK6fxaK5BAGl7srXn2FyG5FGlmVKF7B9vXjJ2CeU/Y/PkocKAdzUfbWwgqWV
+        qHjguR8L7ENaj8bQPWp1CFxd81V0hm6ZB2AVzX8Hx2vSl0nHglCShsKLsn//aPBx
+        SPF4G7Oernwu3fmMb/L2jGPZ96evDE7DIjTbL75Ck+JbwOwrZ2NqPtO68aog+YGq
+        diR2bY7lsBMk6fQ9SZGgoxsPTB1AtU85HEGZovAdUdGK5hVWC0CQ/XGmEpEH+ijD
+        bNGmHp4Y2CLgi0RgWXAqFFubFcscwGCqnjJDmhsV5sg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=DAZvSP
+        O0S+QnpLxAY7yTcaJiZtBepR9CLv2uJSu9blc=; b=M1uGAGg0zzuhfj47zxbZwC
+        AWV5Ys27vFa1NQ4zZrkmhE2igwkvWtZ46dDAoDbttsEi5Si3oC1rcHWsckVyUDNj
+        /mECtA+CvZzy44jiHFi6HvStk8nTYD46tQ1P0re4ijYk629Yo3Ix52vLYh9Xv/fa
+        1+uvbiTnFdbJr045f/ccJkgEgEYn1mcd+bqv0H2cYZc5YfSOB9wVcNGWAjKYauXu
+        RSNCZ4P7Nor7W2MVSmCOUeLjSVrz017wbKUynVTnwUY6D6W77S2SON5rJgIbMkfa
+        UuaEGmoonsi/Qeg2EaQYkvwrqEk1rUQMaIVraTFhO2g5kLXtkX+WGSh4e7svfw9A
+        ==
+X-ME-Sender: <xms:Uq4BYNBHXiE90xOq2encA-fcONjsryGjjXSR8V4Yi9k7z3_P3aE-7A>
+    <xme:Uq4BYLiPX8XmN6XN7WxRCcJWJPDYH6ee_6ysdit6df0iUN1mKIDVxIex_rOHYTJhr
+    7ZVLiIBkjH0lA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrtddvgdegiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
+    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecukfhppeekfedr
+    keeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:Uq4BYInZz-lmiVjxtnLbdpAZgDlCvO-OAGfBjlP9cwyTvl1-52Zf5A>
+    <xmx:Uq4BYHwhIOhsdXbmCfjoztOSm6N0NFeZR8AvOMnTaXsihDizu_iKiA>
+    <xmx:Uq4BYCRuV1aA598MzNYSg-DivYUzU3xyszEpamdmlWqm66wmE1FaVg>
+    <xmx:U64BYINiggfjagkBKvf9lDSP3p4hPRtqDb_gtM9NDKO0tqe5xbDX1g>
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 87581240064;
+        Fri, 15 Jan 2021 10:01:38 -0500 (EST)
+Date:   Fri, 15 Jan 2021 16:01:37 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] Remove one more platform_device_add_properties()
+ call
+Message-ID: <YAGuURTCW/9HAprF@kroah.com>
+References: <20210111141045.14027-1-heikki.krogerus@linux.intel.com>
+ <X/2MupFIWVI5DTUe@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <X/2MupFIWVI5DTUe@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+On Tue, Jan 12, 2021 at 12:49:14PM +0100, Greg KH wrote:
+> On Mon, Jan 11, 2021 at 05:10:42PM +0300, Heikki Krogerus wrote:
+> > Hi Felipe, Rafael,
+> > 
+> > This is the second version of this series. There are no real changes,
+> > but I added the Tiger Lake ID patch to this series in hope that it
+> > will make your life a bit easier, assuming that Rafael will still pick
+> > these.
+> 
+> I can take all 3 of these if that makes it easier.  Rafael, let me know
+> what you want to do, either is fine with me.
 
-Add external vbus source into dt-binding description.
+I've added it to my usb-next branch now.
 
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
- Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+thanks,
 
-diff --git a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
-index 1e8e1c2..b8d842b 100644
---- a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
-+++ b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
-@@ -26,6 +26,11 @@ properties:
-     items:
-       - const: PD_IRQB
- 
-+  vbus-supply:
-+    description:
-+      Vbus source supply regulator.
-+    maxItems: 1
-+
-   connector:
-     type: object
-     $ref: ../connector/usb-connector.yaml#
-@@ -38,6 +43,7 @@ required:
-   - compatible
-   - interrupts
-   - interrupt-names
-+  - vbus-supply
- 
- examples:
-   - |
-@@ -54,6 +60,7 @@ examples:
-           compatible = "mediatek,mt6360-tcpc";
-           interrupts-extended = <&gpio26 3 IRQ_TYPE_LEVEL_LOW>;
-           interrupt-names = "PD_IRQB";
-+          vbus-supply = <&otg_vbus>;
- 
-           connector {
-             compatible = "usb-c-connector";
--- 
-2.7.4
-
+greg k-h
