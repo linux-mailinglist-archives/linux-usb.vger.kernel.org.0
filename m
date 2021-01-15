@@ -2,93 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7556D2F858C
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 20:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A18832F876F
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 22:17:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729990AbhAOTcQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jan 2021 14:32:16 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:37620 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726483AbhAOTcQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jan 2021 14:32:16 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 10FJVYmk009482;
-        Fri, 15 Jan 2021 13:31:34 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1610739094;
-        bh=s4yqArMb0hjWfckvA2wYPty2j60vPxoJhIt411BfUPU=;
-        h=From:To:CC:Subject:Date;
-        b=IRxLjnbRNw45kCnuIJp/fxvQwtzUQqdGTsdYXLACpvRvayJH4I8rXe402k7u+mxYm
-         Qq7G6oQ4Fi8mqchiqNJRVXsXui2OHEkFx7jC/P6hFJ31KYijBQnqHhQ4MhKAGJ3hUm
-         HJk+/7U+NUBlgCw+jUvaadmzPKmClvgkvzrmb6BA=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 10FJVYgP028544
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 15 Jan 2021 13:31:34 -0600
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 15
- Jan 2021 13:31:33 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 15 Jan 2021 13:31:33 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 10FJVWRe063203;
-        Fri, 15 Jan 2021 13:31:33 -0600
-From:   Grygorii Strashko <grygorii.strashko@ti.com>
-To:     Rob Herring <robh+dt@kernel.org>,
+        id S1726434AbhAOVRA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jan 2021 16:17:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39442 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726969AbhAOVQ6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jan 2021 16:16:58 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210AEC0613D3;
+        Fri, 15 Jan 2021 13:16:18 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id c79so6290075pfc.2;
+        Fri, 15 Jan 2021 13:16:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=P1F2p8q5a6/P2LLGT6PbiRW8fW48uJP7OTSXVwwF5MA=;
+        b=smsaGFHkbJzmruXEkpuRLUcyKuZJrQLw8O3xlWLdYGLSNBskkyMhPnSjJJFugY8tkN
+         q9fVLzd+l49uJIui0LvlA3Y7rKQbnYiqjl/3SUTPOTRtYpqVkaH/eWbioy0lKkUQXLX/
+         aKoNM44cn7Q83F2jafUTqVircxUDuVihjI8fAOqVftKBznkQQiy9wE7Zr3uk17vKJL7e
+         JNW1sRa3WVbmqFFEWuOCVqmigmYW5VPVXyUAAS+ktk4YfLdI0U7vtnAxuMRUVUikfdHj
+         8HOk1DDt+fK7C8PSGoOlHYr/wAX/kUVfR12meuwOdnnqHfyuorWPDnW9iSb/ncGmFnWx
+         uwZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=P1F2p8q5a6/P2LLGT6PbiRW8fW48uJP7OTSXVwwF5MA=;
+        b=f+XxR84nc9lXu/DYAABukv1LJfndfiC9NGnz+3tO8fWCezVQZJWb5vOBX96Frh1B51
+         dn1vg1i3EQV5ERuejGbdV694/q12R9ES6VhvPb4gtqgajGxgls8H41gd7lBpLy32rqU+
+         BugY5TRDZp4k9NCu1rnrQkyvIeVdVZt58VmfDBUVzw+gTMTFuvTEFVSCX/ossXRwp2/a
+         ViNaOyyJW9yx2edXgEnKt4v9k3JMFZJBxMFPvxEPh4QympEas+RTShe800QSrRHQImj2
+         nllcfONjCeEruLKWThuj4fzX4QHWwl8/2rfoqye5P1MEFQqYv3IH1uE5DdfOybsYhGzI
+         QoRQ==
+X-Gm-Message-State: AOAM532aizEIlIn4wT5v3iJOkDKJgtCZStyNZYYv83YekF06Sf8kgEH8
+        wiU670c/A3a5x3752AizTs/hB/vbtzw=
+X-Google-Smtp-Source: ABdhPJxnMYqdYNxQBggNBk+ryw2wEC+n3MYVAbYXP54Qa3XmUNm3PJ8f62vX3almY1OHFUg4KiV/GQ==
+X-Received: by 2002:a63:4f5d:: with SMTP id p29mr14430811pgl.110.1610745377498;
+        Fri, 15 Jan 2021 13:16:17 -0800 (PST)
+Received: from stbsrv-and-01.and.broadcom.net ([192.19.231.250])
+        by smtp.gmail.com with ESMTPSA id 77sm9321827pfv.16.2021.01.15.13.16.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jan 2021 13:16:17 -0800 (PST)
+From:   Al Cooper <alcooperx@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Al Cooper <alcooperx@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Aswath Govindraju <a-govindraju@ti.com>
-CC:     Nishanth Menon <nm@ti.com>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-usb@vger.kernel.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>
-Subject: [PATCH] dt-bindings: usb: j721e: add ranges and dma-coherent props
-Date:   Fri, 15 Jan 2021 21:31:24 +0200
-Message-ID: <20210115193124.5706-1-grygorii.strashko@ti.com>
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH v2 0/2] serial: 8250: Add driver for Broadcom UART
+Date:   Fri, 15 Jan 2021 16:15:41 -0500
+Message-Id: <20210115211543.33563-1-alcooperx@gmail.com>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add missed 'ranges' and 'dma-coherent' properties as cdns-usb DT nodes has
-child node and DMA IO is coherent on TI K3 J721E/J7200 SoCs.
+v2 - remove the patch that modified 8250_of.c to keep it from
+     registering before this driver when this driver was deferred
+     as it was getting it's "clocks". This was fixed by changing
+     the Device Tree entry to remove "clock-frequency". This results
+     in both drivers getting "clocks" and getting same deferral.
 
-This also fixes dtbs_check warning:
- cdns-usb@4104000: 'dma-coherent', 'ranges' do not match any of the regexes: '^usb@', 'pinctrl-[0-9]+'
+Add UART driver for the new Broadcom 8250 based STB UART. The new
+UART is backward compatible with the standard 8250, but has some
+additional features. The new features include a high accuracy baud
+rate clock system and DMA support.
 
-Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
----
- Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+Al Cooper (2):
+  dt-bindings: Add support for the Broadcom UART driver
+  serial: 8250: Add new 8250-core based Broadcom STB driver
 
-diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-index 4423f0a29f54..7ec87a783c5c 100644
---- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-+++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-@@ -21,6 +21,8 @@ properties:
-   reg:
-     maxItems: 1
- 
-+  ranges: true
-+
-   power-domains:
-     description:
-       PM domain provider node and an args specifier containing
-@@ -63,6 +65,8 @@ properties:
-   '#size-cells':
-     const: 2
- 
-+  dma-coherent: true
-+
- patternProperties:
-   "^usb@":
-     type: object
+ .../bindings/serial/brcm,bcm7271-uart.yaml    |   94 ++
+ MAINTAINERS                                   |    8 +
+ drivers/tty/serial/8250/8250_bcm7271.c        | 1131 +++++++++++++++++
+ drivers/tty/serial/8250/Kconfig               |   11 +
+ drivers/tty/serial/8250/Makefile              |    1 +
+ drivers/tty/serial/8250/bcm7271_uart.h        |  158 +++
+ 6 files changed, 1403 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/serial/brcm,bcm7271-uart.yaml
+ create mode 100644 drivers/tty/serial/8250/8250_bcm7271.c
+ create mode 100644 drivers/tty/serial/8250/bcm7271_uart.h
+
 -- 
 2.17.1
 
