@@ -2,180 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 280B72F6DAA
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jan 2021 23:07:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F05462F6F90
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 01:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730043AbhANWEc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jan 2021 17:04:32 -0500
-Received: from mga07.intel.com ([134.134.136.100]:10520 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727105AbhANWEb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 Jan 2021 17:04:31 -0500
-IronPort-SDR: Ej4qpEnPjtNzBcPJIaMf3N7jc0sd3MglCAubxh8ppGyCM3zB9fDdAEWrXLM/raEvrN3DOulCfr
- fLhpa7jjv4KQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9864"; a="242520879"
-X-IronPort-AV: E=Sophos;i="5.79,347,1602572400"; 
-   d="scan'208";a="242520879"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2021 14:03:49 -0800
-IronPort-SDR: NpeGfDXZQIj+BdXNP+e4fyIreiITMmO4H+ngGZNnSaUaeRU9RTZvF3dob+EUC3onwGgjyQpv7F
- IfjY8CkTQ9vQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,347,1602572400"; 
-   d="scan'208";a="398180625"
-Received: from lkp-server01.sh.intel.com (HELO 49c0485bf89a) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 14 Jan 2021 14:03:48 -0800
-Received: from kbuild by 49c0485bf89a with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1l0AiZ-00000M-Ld; Thu, 14 Jan 2021 22:03:47 +0000
-Date:   Fri, 15 Jan 2021 06:03:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 6e6aa61d81194c01283880950df563b1b9abec46
-Message-ID: <6000bfc2.eG3N6GjP2JyGBPpN%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1731232AbhAOAdr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jan 2021 19:33:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731219AbhAOAdq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jan 2021 19:33:46 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7ADC061575;
+        Thu, 14 Jan 2021 16:33:06 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id n25so4922559pgb.0;
+        Thu, 14 Jan 2021 16:33:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=SCnQ1+aOhtuEtW+MTDlHvjEGWFVpNMZLVq5aeaBymAQ=;
+        b=Og1D23NkHTNY2bXSSMHkjbb4tcGJNXKnPZTQODkbYzoCjPYqnDHK67W31fXy5kM2aG
+         A+KSSCPL0bWBfoAi+WJqOccetoQAN9mH6KAoOYMvM3m9lF+TGcZsT4Kzx3BVmMmyPwxn
+         bX3xU6DAoYX56RUBtX5TRRoWOYnwo+5nc7BaitM7QScu7rYlu9EIXtgJHWqfXue6c03Q
+         tExKve3JX0U6QQpQ/GNjebLJTTZOY16mDKaXu0Nbe7Hg22A7jQgXntuIo58vibfSc2Kw
+         7qlYHySaQUENUXIMn6oe1QzbhGh7MTKmD9KyPvtJaU4mcbykxsy6N5xYKTCbkp9eRiqr
+         JcDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=SCnQ1+aOhtuEtW+MTDlHvjEGWFVpNMZLVq5aeaBymAQ=;
+        b=Yh1KPz/brDrMKSy819l4I9viyeMuMXGJ7gIhQjRl6Mk5HfPEcgsWvoXZOYhH9dBAUX
+         W71ij/YP88Pt1v7RHWAg3BkxAXvLhYqHOClfTXX/4ah6YDvKN6HfABxNKm6awajHkjKd
+         MOMLE7vHKzPN2p+Hxziq1q2CeaO1eObqLNGSjNpruNgK6cLDNZnmYJ7S16xAxd7fIuf5
+         ZXNbNABAE4dMNMcnLeVq4KfAfOb/3ubfaAyb4YdbtBu40m9e4Vvjt/fmbgqKyySR9qZG
+         b+ue3TnJt5m95BjM1N/Pyn1aBulfQNpli7vGbE2Eq7KyOmVMfJgrfavCB5NXzcyVZJVP
+         V47g==
+X-Gm-Message-State: AOAM530NYFCnd8E1j7XpEu1Js/c4Hl0vMRBL3kmHhjWKka4v/bPR+Ib3
+        rsm3SmflCw17L+IGoYVV2nezadFrKhgXZw==
+X-Google-Smtp-Source: ABdhPJzMwRhupsGWd80NAW1EnVGbg2nzZBlGFxFaGR1yEuNLM2waMBOy7SzqtWpXE61k+jZQDaUR2A==
+X-Received: by 2002:a62:7858:0:b029:19d:c011:1cfe with SMTP id t85-20020a6278580000b029019dc0111cfemr9807227pfc.47.1610670785807;
+        Thu, 14 Jan 2021 16:33:05 -0800 (PST)
+Received: from b29397-desktop ([194.5.48.251])
+        by smtp.gmail.com with ESMTPSA id z11sm6539118pjn.5.2021.01.14.16.32.59
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 14 Jan 2021 16:33:04 -0800 (PST)
+Date:   Fri, 15 Jan 2021 08:32:51 +0800
+From:   Peter Chen <hzpeterchen@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Daewoong Kim <daewoong00.kim@lge.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        allen.lkml@gmail.com, gustavoars@kernel.org,
+        a.darwish@linutronix.de, romain.perier@gmail.com,
+        dvyukov@google.com, andreyknvl@google.com, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH 1/1] usb: xhci: setup packets don't need DMA mapping
+Message-ID: <20210115003251.GA3443@b29397-desktop>
+References: <1610593147-12511-1-git-send-email-daewoong00.kim@lge.com>
+ <20210114050402.GA18650@b29397-desktop>
+ <20210114180021.GA1935@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20210114180021.GA1935@rowland.harvard.edu>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
-branch HEAD: 6e6aa61d81194c01283880950df563b1b9abec46  USB: gadget: dummy-hcd: Fix errors in port-reset handling
+On 21-01-14 13:00:21, Alan Stern wrote:
+> On Thu, Jan 14, 2021 at 01:04:02PM +0800, Peter Chen wrote:
+> > On 21-01-14 11:59:07, Daewoong Kim wrote:
+> > > DMA mapping of urb->setup_packet is not necessary for xHCI host
+> > > controllers. The xHCI specification says that Setup Stage TRB includes
+> > > whole Setup Data; therefore, urb->setup_dma will not be used in the xhci
+> > > HCD code.
+> > > 
+> > 
+> > How about bypass map/unmap operation for xHCI control transfer directly?
+> > 
+> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > index 91ab81c3fc79..0a0ab14b7638 100644
+> > --- a/drivers/usb/host/xhci.c
+> > +++ b/drivers/usb/host/xhci.c
+> > @@ -1374,7 +1374,8 @@ static int xhci_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
+> >  
+> >  	xhci = hcd_to_xhci(hcd);
+> >  
+> > -	if (xhci_urb_suitable_for_idt(urb))
+> > +	if (xhci_urb_suitable_for_idt(urb) ||
+> > +		(usb_endpoint_xfer_control(&urb->ep->desc)))
+> >  		return 0;
+> 
+> Would this affect the map/unmap operations for the DATA packets in a 
+> control transfer, along with the SETUP packet?
+> 
 
-elapsed time: 729m
+Oh, you are right, Alan. We do need map/unmap operation for DATA
+packet in control transfer.
 
-configs tested: 118
-configs skipped: 2
+-- 
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks,
+Peter Chen
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                 mpc836x_rdk_defconfig
-powerpc                 mpc8313_rdb_defconfig
-arm                        mvebu_v7_defconfig
-mips                        bcm47xx_defconfig
-sh                          rsk7201_defconfig
-mips                  maltasmvp_eva_defconfig
-arm                         s3c6400_defconfig
-arm                          pcm027_defconfig
-powerpc                      katmai_defconfig
-mips                           ip28_defconfig
-m68k                       m5475evb_defconfig
-powerpc                 linkstation_defconfig
-mips                     loongson1c_defconfig
-arm                             ezx_defconfig
-sh                            shmin_defconfig
-arm                           corgi_defconfig
-arm                       aspeed_g5_defconfig
-arm                        mvebu_v5_defconfig
-arm                         assabet_defconfig
-arm                        multi_v7_defconfig
-powerpc                      pcm030_defconfig
-sh                           se7751_defconfig
-sparc                            allyesconfig
-powerpc                      cm5200_defconfig
-arm64                            alldefconfig
-powerpc                     pseries_defconfig
-mips                        nlm_xlp_defconfig
-powerpc                           allnoconfig
-sh                                  defconfig
-arm                      pxa255-idp_defconfig
-sparc64                          alldefconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-sh                           se7721_defconfig
-sh                           se7722_defconfig
-mips                        maltaup_defconfig
-csky                             alldefconfig
-arm                          iop32x_defconfig
-powerpc                     tqm8541_defconfig
-sh                         ap325rxa_defconfig
-arm                         palmz72_defconfig
-s390                             alldefconfig
-h8300                    h8300h-sim_defconfig
-powerpc                     tqm8540_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-i386                               tinyconfig
-i386                                defconfig
-sparc                               defconfig
-nios2                               defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-i386                 randconfig-a002-20210114
-i386                 randconfig-a005-20210114
-i386                 randconfig-a006-20210114
-i386                 randconfig-a001-20210114
-i386                 randconfig-a003-20210114
-i386                 randconfig-a004-20210114
-x86_64               randconfig-a015-20210114
-x86_64               randconfig-a012-20210114
-x86_64               randconfig-a013-20210114
-x86_64               randconfig-a016-20210114
-x86_64               randconfig-a014-20210114
-x86_64               randconfig-a011-20210114
-i386                 randconfig-a012-20210114
-i386                 randconfig-a011-20210114
-i386                 randconfig-a016-20210114
-i386                 randconfig-a015-20210114
-i386                 randconfig-a013-20210114
-i386                 randconfig-a014-20210114
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a004-20210114
-x86_64               randconfig-a006-20210114
-x86_64               randconfig-a001-20210114
-x86_64               randconfig-a003-20210114
-x86_64               randconfig-a005-20210114
-x86_64               randconfig-a002-20210114
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
