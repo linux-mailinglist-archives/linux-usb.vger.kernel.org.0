@@ -2,98 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E28A2F76ED
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 11:47:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F962F76E2
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 11:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731676AbhAOKog (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jan 2021 05:44:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:38552 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731624AbhAOKo3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jan 2021 05:44:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1610707384;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+RX5uSiRrVlvyzLUv66fuI7aYcwumIOTQtngnkQr2i4=;
-        b=A45enfGWXwDupMvceC1Z6s4ySMV6gCgunBFV2B5XLYk9u1c12EDBaGguUUfxOnQFcb8We3
-        CHMmUfxBfmvSbsz5osD003NmIgIyGtq088nhv/jT0LzTZp5+Be+C7rbMaYyYzvxawmtgD3
-        lajjxcvmk+jb//qekxCPnB7r2NFSx3A=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-18-odYQOaOsPN-NJ8co0uspbA-1; Fri, 15 Jan 2021 05:40:32 -0500
-X-MC-Unique: odYQOaOsPN-NJ8co0uspbA-1
-Received: by mail-ed1-f70.google.com with SMTP id y19so3646805edw.16
-        for <linux-usb@vger.kernel.org>; Fri, 15 Jan 2021 02:40:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+RX5uSiRrVlvyzLUv66fuI7aYcwumIOTQtngnkQr2i4=;
-        b=iQaPe3lXFV2P+GWlvvUU/1uBxBE2fXxG6A5sYKY0DJ4CpCTRns4JdvE9V5P9tGGH1T
-         fyqtvt1UtXAmF3xGXnEf8iY7M+O7rSlBGwpeO8APzdNftONZs6Vcg3JdTyyEioQtQ0lL
-         ARyGtg/D5ZT7O5NwA85bovRvmvyA54r4os2td2tvgu1gtf9l+HLn9gxM+QqB5oMouXcU
-         LBRtAKwzogkGycmvgxCTtsGEXgYasPStOfSELoRAwiiZwPX1jQrTGcTJ0Z2R9ixV3AaE
-         TcWz/n3VBN5qzIeGFKI98MppHgTeftlYC1D4eTCYSvlwgwXiTolXbusYQDe9Xv9xNxcL
-         Hsog==
-X-Gm-Message-State: AOAM531L3O10PA00Lqe4TRJEFY8JnMYxKUSarESCbbJ/XhuUd6qC67dV
-        Zi2CGEZzKvANQwcNtau8+bMASnr9YrTzhyLNbOSg9zrYOKC+CSfpIoByzJriXPlaAL4FbM2kvyW
-        YPeIC/s9JGd1sVfMUrIF6
-X-Received: by 2002:a05:6402:1d3b:: with SMTP id dh27mr9307301edb.238.1610707231345;
-        Fri, 15 Jan 2021 02:40:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzZs5Sz7+YFJaD03HU8KCcm+88b1j1m3a3tn8+yo8YaQhzFmQM5f8wIS5j7vGlJ1xHqTLXYZA==
-X-Received: by 2002:a05:6402:1d3b:: with SMTP id dh27mr9307297edb.238.1610707231204;
-        Fri, 15 Jan 2021 02:40:31 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-37a3-353b-be90-1238.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:37a3:353b:be90:1238])
-        by smtp.gmail.com with ESMTPSA id z22sm1936703edb.88.2021.01.15.02.40.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jan 2021 02:40:30 -0800 (PST)
-Subject: Re: [PATCH v6 0/3] AMS, Collision Avoidance, and Protocol Error
-To:     Kyle Tso <kyletso@google.com>, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210114145053.1952756-1-kyletso@google.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <46d0f968-0fe6-3ce2-420d-d1a4d9042d79@redhat.com>
-Date:   Fri, 15 Jan 2021 11:40:29 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1727727AbhAOKl4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jan 2021 05:41:56 -0500
+Received: from m43-15.mailgun.net ([69.72.43.15]:13898 "EHLO
+        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726686AbhAOKlz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jan 2021 05:41:55 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1610707296; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=kFrYQpPYNOC5TAgQ7nxo/oRkgxMVqlCmLX0urW7tDBM=; b=YHGMAQ22+mRxqdA6tAk/RLE0LZ9RDBoM84i0amKzuHN1U4Eg3yc2R2hlUDcnuAJcp2MxbL6D
+ +C6MRWt7RVBRsxUzOseyo93FX22utaxHwhxk5EniA/eYD/gm+R86k3o0UaIFfgjJBKjSrVxS
+ bwl9xSBclWUo+4Hv61L12T0NvsE=
+X-Mailgun-Sending-Ip: 69.72.43.15
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 6001713e75e5c01cba60671e (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 15 Jan 2021 10:41:02
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id EB5BFC433CA; Fri, 15 Jan 2021 10:41:01 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id D219EC433CA;
+        Fri, 15 Jan 2021 10:41:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org D219EC433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Wesley Cheng <wcheng@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Jack Pham <jackp@codeaurora.org>
+Subject: [PATCH 0/4] SM8350 USB and dt-bindings updates
+Date:   Fri, 15 Jan 2021 02:40:43 -0800
+Message-Id: <20210115104047.3460-1-jackp@codeaurora.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-In-Reply-To: <20210114145053.1952756-1-kyletso@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi All,
+This series adds support for the SM8350 USB PHY to the QMP PHY driver
+as well as adds the documentation for the QMP, SNPS PHY and DWC3
+controller bindings. This also adds the bindings for SM8150 and SM8250
+to the same docs which had not been added previously even though they
+are in use now.
 
-On 1/14/21 3:50 PM, Kyle Tso wrote:
-> v5 https://lore.kernel.org/r/20210105163927.1376770-1-kyletso@google.com
-> 
-> "usb: typec: tcpm: AMS and Collision Avoidance"
->  - removed the signed-off
->  - modified the coding style suggested from Heikki
->  - added FR_SWAP AMS handling
-> 
-> "usb: typec: tcpm: Protocol Error handling"
->  - removed the signed-off
->  - modified the coding style suggested from Heikki
->  - modified more coding style problems (line wrapping limit)
-> 
-> "usb: typec: tcpm: Respond Wait if VDM state machine is running"
->  - no change
+Jack Pham (4):
+  phy: qcom-qmp: Add SM8350 USB QMP PHYs
+  dt-bindings: phy: qcom,qmp: Add SM8150, SM8250 and SM8350 USB PHY
+    bindings
+  dt-bindings: phy: qcom,usb-snps-femto-v2: Add SM8250 and SM8350
+    bindings
+  dt-bindings: usb: qcom,dwc3: Add bindings for SM8150, SM8250, SM8350
 
-I'm afraid that my testing of this patch-set has been delayed due to a
-5.11 regression which I'm chasing down. I have put a task for this
-in my calendar for Wednesday Jan 20.
+ .../devicetree/bindings/phy/qcom,qmp-phy.yaml |  67 ++++++
+ .../bindings/phy/qcom,usb-snps-femto-v2.yaml  |   2 +
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |   3 +
+ drivers/phy/qualcomm/phy-qcom-qmp.c           | 209 ++++++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-qmp.h           | 100 +++++++++
+ 5 files changed, 381 insertions(+)
 
-Regards,
-
-Hans
+-- 
+2.24.0
 
