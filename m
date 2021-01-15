@@ -2,94 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1ED2F7DD8
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 15:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4162F7DDF
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 15:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732456AbhAOONc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jan 2021 09:13:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60774 "EHLO
+        id S1732175AbhAOOOR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jan 2021 09:14:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731286AbhAOONc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jan 2021 09:13:32 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B362CC061757
-        for <linux-usb@vger.kernel.org>; Fri, 15 Jan 2021 06:12:51 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id n42so8582482ota.12
-        for <linux-usb@vger.kernel.org>; Fri, 15 Jan 2021 06:12:51 -0800 (PST)
+        with ESMTP id S1731745AbhAOOOQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jan 2021 09:14:16 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98172C061757;
+        Fri, 15 Jan 2021 06:13:36 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id e9so603114plh.3;
+        Fri, 15 Jan 2021 06:13:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=408lnKE4uwqEZS3Lx4O9NO/RpZq3O+rWUdDPyfRlupI=;
-        b=DnZoxc51s8XqlXus1kRsH/l2WSiexb/+Xw1xJkJHbF9r6ooRHLWHYha+uzcnEkwctk
-         KGA4dJRz/Lb7yq/NutYm35X7dy6Cnh5+iky28vBj9vLrVIQ6NdXCWPHckzdbbwPyp+/T
-         rToIaD9AWunaAlanQBbkiCQUMvkUAn8vVKnHVuHv7B3bPlvKiM5UJkvAbumSMbjT5Tpr
-         PBdU0KF03alWtVUYdYajeVO3MLGdY79bE6kXv2poUfx4+4t1YpOZWUErzUQawLhNYSp4
-         iAogSWtyJhTs7q3nUlM0RSkf4eFQJdvoTUO9m8Q3tlg5QiGRmJ/I9rhQ4t8fws5wMYf8
-         z6rA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=CbZNeMTYUi7Mg7VyMn/xUQXZnoLVOk+YmqoECElgO5I=;
+        b=QUTm2d97niOvJWqofhkNL9W7lxALHkiFYLbsnmHT0j6+l2dfDaVQyUZVkUTC1l0mdl
+         EICM5zti7BnGQNrwu4DiXRWqFvaBLTaXJp/19o0TYCNYaDP2Snwoj15htcJAHpvMwipe
+         NSqam4a9wE5z+mxPyB7GAYPZNLg+w0K4Eal2jElAfNitB8PrVW0VEIN2iAm2FetBHQLN
+         W3WhorgQ03TvG6kvqY2qIEI3tH8uYI2+a2xEGi3Jw3GKnrmGg4lsIyr4GXpqFdlkTxQe
+         lncTy92kOlFjxnnKl0b7d31JCFUFAgEfJgjr5DMfVuhvkOEkoO5xcdJIOahzNQUrx8b2
+         EApg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=408lnKE4uwqEZS3Lx4O9NO/RpZq3O+rWUdDPyfRlupI=;
-        b=VgAGZxFnudF60pNPfji8zxXZ/q6HN4zN4J7i1theaBMQJbV1e+mMJaMbjg6F0mclSi
-         9K+gcZRKuKg2451j6MrpahcdEvcDU84K8VzFLozXeKCUlHL04IxHCBrSCXqhLgE7dkzU
-         FA3Dn48mJJvq7UU+dCM+QqFOYWsf6jYAKTF8NYbsetG2Cpzl7ezFTc/+5lF0SpQmHLdr
-         Ljm40OgUgxV9j4fTQWU+wdve1Fnvi94IBTEuaVBIvQpRpIWktMUfgPM2FYLjqdg8zYkC
-         OfoEyPAL9mcHL4J9AGGKLla0CyDUAwDg3OiTNj00CNvIMQeX0nEFthflu7ZONbqu89ux
-         DfFQ==
-X-Gm-Message-State: AOAM531234S74AT3EM8luTZKIR3lR34BhbXP7RM/OV5IQfjBhN0Z0+dl
-        0S1YLG7J/MgM38TKoof2B0FIVg==
-X-Google-Smtp-Source: ABdhPJzOV2VCbP2OGrGHgdeSCFbvOuMGqpwgee0DF+7Ty59/kol2V6S2ApNCyNYHcd2JG9h8QGg7QA==
-X-Received: by 2002:a9d:7f81:: with SMTP id t1mr8564174otp.166.1610719971063;
-        Fri, 15 Jan 2021 06:12:51 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id j22sm1906414otp.45.2021.01.15.06.12.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jan 2021 06:12:50 -0800 (PST)
-Date:   Fri, 15 Jan 2021 08:12:48 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Shawn Guo <shawn.guo@linaro.org>, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: dwc3: qcom: add URS Host support for sdm845 ACPI
- boot
-Message-ID: <YAGi4N26BUdTeIPA@builder.lan>
-References: <20210115035057.10994-1-shawn.guo@linaro.org>
- <87mtxa1gb9.fsf@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mtxa1gb9.fsf@kernel.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=CbZNeMTYUi7Mg7VyMn/xUQXZnoLVOk+YmqoECElgO5I=;
+        b=XwFawtYvV5QlbxxTMkHlvzkkKzA2h3kooPLAIsskyGnezCwpCT5SXET05bUoKE6gad
+         DHxZpztMx7N4RomIvQ+xsiXqqTyzAOjKvG/A8JMNs0WRI6xVolucu3zWIt9dpI6Be8qO
+         C8wlbtpKhd01UOVLq0kUPpJKn+E9ncSrYSgRnJ+RSA12ThWUe14mtHBntuKX9ewBjWWE
+         zmLl9bffBjsFli0HIO1TklZGjWyQpV0SmBH17eniGWlsLt651P/4aI62b6V7RNYDL5E8
+         h16NBK4eW4heYutMDT2IAEFevIanm6yt2qZ0dT4M2oKUaaYmWzbDx5ahUWZJWIRlsWBK
+         0yEw==
+X-Gm-Message-State: AOAM532SCis/6kwWrrSqch+JFg20x6O+LOwke/wrjdqZSjLDWfdcpw3a
+        pGRQIZ5qQ1riqQuIBZh2VdGMO1XLNms=
+X-Google-Smtp-Source: ABdhPJyGv8T8Tw0nXwlkPBk1os5KvQGNW2rZCV/3HHX43JkUZJkmNwkV4CuqIo7ieQn+gWYnNXksow==
+X-Received: by 2002:a17:90a:b395:: with SMTP id e21mr10781383pjr.197.1610720015990;
+        Fri, 15 Jan 2021 06:13:35 -0800 (PST)
+Received: from localhost.localdomain (1-171-15-80.dynamic-ip.hinet.net. [1.171.15.80])
+        by smtp.gmail.com with ESMTPSA id h5sm8898408pgl.86.2021.01.15.06.13.31
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 15 Jan 2021 06:13:34 -0800 (PST)
+From:   cy_huang <u0084500@gmail.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        cy_huang@richtek.com, gene_chen@richtek.com,
+        devicetree@vger.kernel.org
+Subject: [PATCH 1/2] usb typec: tcpci: mt6360: Add vsafe0v support and external vbus supply control
+Date:   Fri, 15 Jan 2021 22:13:20 +0800
+Message-Id: <1610720001-15300-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri 15 Jan 07:27 CST 2021, Felipe Balbi wrote:
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-> Hi,
-> 
-> Shawn Guo <shawn.guo@linaro.org> writes:
-> > For sdm845 ACPI boot, the URS (USB Role Switch) node in ACPI DSDT table
-> > holds the memory resource, while interrupt resources reside in the child
-> > nodes USB0 and UFN0.  It adds USB0 host support by probing URS node,
-> > creating platform device for USB0 node, and then retrieve interrupt
-> > resources from USB0 platform device.
-> 
-> just so I understand this: the interrupt was listed under a separate
-> device altogether?
-> 
+MT6360 not support for TCPC command to control source and sink.
+Uses external 5V vbus regulator as the vbus source control.
 
-Correct, this seems to be the standard structure for a role-switching
-usb controller, as shown under "ACPI System configuration" at
-https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-dual-role-driver-stack-architecture
+Also adds the capability to report vsafe0v.
 
-Regards,
-Bjorn
+Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+---
+ drivers/usb/typec/tcpm/tcpci_mt6360.c | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-> Nothing wrong with the patch itself, but just curious.
-> 
-> -- 
-> balbi
-
+diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+index f1bd9e0..0edf4b6 100644
+--- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
++++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+@@ -11,6 +11,7 @@
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
++#include <linux/regulator/consumer.h>
+ #include <linux/usb/tcpm.h>
+ 
+ #include "tcpci.h"
+@@ -36,6 +37,7 @@ struct mt6360_tcpc_info {
+ 	struct tcpci_data tdata;
+ 	struct tcpci *tcpci;
+ 	struct device *dev;
++	struct regulator *vbus;
+ 	int irq;
+ };
+ 
+@@ -51,6 +53,27 @@ static inline int mt6360_tcpc_write16(struct regmap *regmap,
+ 	return regmap_raw_write(regmap, reg, &val, sizeof(u16));
+ }
+ 
++static int mt6360_tcpc_set_vbus(struct tcpci *tcpci, struct tcpci_data *data, bool src, bool snk)
++{
++	struct mt6360_tcpc_info *mti = container_of(data, struct mt6360_tcpc_info, tdata);
++	int ret;
++
++	/* To correctly handle the already enabled vbus and disable its supply first */
++	if (regulator_is_enabled(mti->vbus)) {
++		ret = regulator_disable(mti->vbus);
++		if (ret)
++			return ret;
++	}
++
++	if (src) {
++		ret = regulator_enable(mti->vbus);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
+ static int mt6360_tcpc_init(struct tcpci *tcpci, struct tcpci_data *tdata)
+ {
+ 	struct regmap *regmap = tdata->regmap;
+@@ -138,7 +161,13 @@ static int mt6360_tcpc_probe(struct platform_device *pdev)
+ 	if (mti->irq < 0)
+ 		return mti->irq;
+ 
++	mti->vbus = devm_regulator_get(&pdev->dev, "vbus");
++	if (IS_ERR(mti->vbus))
++		return PTR_ERR(mti->vbus);
++
+ 	mti->tdata.init = mt6360_tcpc_init;
++	mti->tdata.set_vbus = mt6360_tcpc_set_vbus;
++	mti->tdata.vbus_vsafe0v = 1;
+ 	mti->tcpci = tcpci_register_port(&pdev->dev, &mti->tdata);
+ 	if (IS_ERR(mti->tcpci)) {
+ 		dev_err(&pdev->dev, "Failed to register tcpci port\n");
+-- 
+2.7.4
 
