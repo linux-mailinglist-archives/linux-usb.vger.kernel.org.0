@@ -2,41 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8032F774F
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 12:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825A72F775D
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 12:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727496AbhAOLOI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jan 2021 06:14:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41232 "EHLO mail.kernel.org"
+        id S1728820AbhAOLPH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jan 2021 06:15:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41552 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725831AbhAOLOI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 15 Jan 2021 06:14:08 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C31F2235F9;
-        Fri, 15 Jan 2021 11:13:26 +0000 (UTC)
+        id S1726981AbhAOLPH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 15 Jan 2021 06:15:07 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D629D235F9;
+        Fri, 15 Jan 2021 11:14:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610709208;
-        bh=Ah8fITGZSMYyxsoJ2OMIXXckJoRxcxue8sshMHf9ECA=;
+        s=k20201202; t=1610709266;
+        bh=5lyd6863Ma27pfAieJ1TVSBg4uSrd4TdeURetyMDZ5s=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=DVJzDNbt8F28MblEnsu+qMtEyjoKaLnX8iSSXX3maMyK9h0v6Lb30iy078u0fvNmc
-         koPIXta1/7EZN9BYIkF/iAw0jEpdbEg0jiiUkaxIZta4IgHLwZGJPuf4W+thoz76xN
-         rBCBYcQRenYkdkFHKXxGpPTANxY2/GOMOW0oxQx0KTVPi9PGjdjQGwM1Yz88u9oEBn
-         yedwUm0NNHcjJJukPXZlpt2+k6kfKelPYFWZzFFzLpH5mnFLV2xxjdM9xfHlRx41qk
-         DgH1FzbzkUc4skx9sYtRS2vGoW9054XkKf4C/wS8XY4cVEG6wYeT7jUuZrq2xbsm63
-         FV8YD305XjeMw==
+        b=JgLoSKVFZXEFLeQ9VJ6doX1KcvL+dKiPZU9EI2ux/xHVxXAM8Wa+aE15bjHoQaYYW
+         Ni2tuj4Ss0tEMlWy1MvpICkTxMNV719fsug7BBFZ2pkt5TbV4/uZ1eGpHj7y0bNGmR
+         gM4QRu7BOGqdp1ZBG5xzoeqWH+rUS0OztIQhO6zKxMQaAihYyKEjIqz6RODX5mtcCp
+         vcg64mWL9p8mIgAmANGKAVOeDqqC1F+JEvaMplAXiq7DDoQDuEaPCIY0xNXDkpQc4X
+         E5NG/Pkl9QVFpNNMcgXxqoAXrIS59v10bGgympBE9y6NjhHuZjyMlnQTyMZvyQkkTM
+         20SIB5W08XuBg==
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH v6 09/11] usb: dwc3: gadget: Implement setting of SSP rate
-In-Reply-To: <13fad6ff-f056-f6ab-713b-68794113e03c@synopsys.com>
-References: <cover.1610592135.git.Thinh.Nguyen@synopsys.com>
- <1bbbb6cd0d80696c0b1c112a225dad0b0efe8b91.1610592135.git.Thinh.Nguyen@synopsys.com>
- <871ren3kg8.fsf@kernel.org>
- <13fad6ff-f056-f6ab-713b-68794113e03c@synopsys.com>
-Date:   Fri, 15 Jan 2021 13:13:21 +0200
-Message-ID: <87v9by1mi6.fsf@kernel.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg KH <greg@kroah.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] usb: dwc3: pci: add support for the Intel Alder
+ Lake-P
+In-Reply-To: <20210115094914.88401-5-heikki.krogerus@linux.intel.com>
+References: <20210115094914.88401-1-heikki.krogerus@linux.intel.com>
+ <20210115094914.88401-5-heikki.krogerus@linux.intel.com>
+Date:   Fri, 15 Jan 2021 13:14:19 +0200
+Message-ID: <87sg721mgk.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -48,47 +49,16 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
+Heikki Krogerus <heikki.krogerus@linux.intel.com> writes:
 
-Hi,
-
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
-> Felipe Balbi wrote:
->> Hi,
->>
->> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
->>> @@ -2476,6 +2506,17 @@ static void dwc3_gadget_set_speed(struct usb_gad=
-get *g,
->>>  	spin_unlock_irqrestore(&dwc->lock, flags);
->>>  }
->>>=20=20
->>> +static void dwc3_gadget_set_ssp_rate(struct usb_gadget *g,
->>> +				     enum usb_ssp_rate rate)
->>> +{
->>> +	struct dwc3		*dwc =3D gadget_to_dwc(g);
->>> +	unsigned long		flags;
->>> +
->>> +	spin_lock_irqsave(&dwc->lock, flags);
->>> +	dwc->gadget_ssp_rate =3D rate;
->>> +	spin_unlock_irqrestore(&dwc->lock, flags);
->>> +}
->> it would be best to make this return a value. If udc_set_ssp_rate() is
->> called with invalid rate, UDC can notify core.
->>
+> This patch adds the necessary PCI ID for Intel Alder Lake-P
+> devices.
 >
-> The core should know what ssp rate the gadget supports via the
-> gadget->max_ssp_rate capability field. Any rate beyond that is invalid.
-> Is it necessary to have a return value here? This uses the same logic as
-> udc_set_speed()
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Yeah, I don't know what I had in mind when I made ->udc_set_speed()
-void. Then again, we know exactly who's calling it and we can guarantee
-that no invalid values will be passed. There's no way for, for example,
-userspace (via ffs) to call it with a bogus value.
+The only missing my ack:
 
-Perhaps it's okay, but something to keep an eye for both
-=2D>udc_set_ssp_rate() and ->udc_set_speed().
-
-Thanks for pointing me back at ->udc_set_speed().
+Acked-by: Felipe Balbi <balbi@kernel.org>
 
 =2D-=20
 balbi
@@ -98,19 +68,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJEBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmABeNERHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQYQaw/1GBueMdih0JYf+tFigGSRwKtR5Vq/rYGE
-tI086uqBT8XvMaLhPDKw/D57IeYEw28NVH3klVxNn1ZUNhBQ7D2UkoGqy6c3mb1O
-wAM0wjiiVXkFQJ1Mjx9r1Yt5kvpNzNU5pV4Q+4PiqPJqo3tTsi1ujnUMBbrR9nGh
-sDPTnIw2ze+OP+Z6dsOUH6TbaYbxpgTzNn/WztR5nExrcXekBApjsHP/QJXr7PWP
-+Y8/pWx+xmAGg+stbqtH/To1c98yXi/qqGFvRt0K14P7hzouodUHYTzDM9p1uemM
-RH5Wc0dzYLY5mo3jXUjwQRmXaM3EJA3KRY2p0ZzYXBn0M25NHFEPIifsMZMbdfOI
-0T8P01Rf+hV6MGuAU5aocrRrvP5UR+6qm5BwYjpeuS9Pely571YdsxmUZZ5jku0D
-bWDfp9dTfg2PFa/cjPNzEkLJ2nMLb4qVKrTqN2id+9lJHdWJ/gm7OuZi7ZZgZYTe
-YddGMNKKIboMeqtoSDVDbBYrYJcDr98nVJbNSYgtl9kxpDU5cT9csKo16oWfpTal
-JwM3smzMSWgOqdyQa4MzDYTkvfy5ccHzhWFisaFtWHxVRE1MhbInV9ZZMImmbIk8
-I2ItXbYZSQ1uHJEtgAUWwIPoRx0Nb5Va7tKu9btbG8ODZ8Tkhx+umP7PafrzsepX
-Px4CDpraAQ==
-=cP4E
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmABeQsRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQbrIQ//ZAxEwchAfysHEqsi/Ie4N1H323D8J3HA
+jkOYCv20KTb+uja9TWcp0r5Ef1yQ6ATqc5mheL+R+mVdVQQVpb0rotECK81fArur
+BGYPLoR/wRe4yFMff+WuzG3idKaZEcY2lKwQOyClApU4PJpzdg6n36WfQJTzEx6s
+WMaQETXakRACSdKY1mop6oMvbElG3Fgd2Da8posUBO00NKVkRpnSd0L339JDrf34
+2WH9T/Lc94d1937xM/y4/PrC255vIkwtSYxS1ZwKcCpPIz9/HPpXNAMui2nXjTXT
+NuFQ85oIU5R/kMdx3aDvIJ5d2t/vxxHDu6KN7AKdoGsJv+KH35XckCGKMPNl31AU
+jei0Eseg20HZyi5aJEQoMLApzCGdLw7IBaDqvTujG9GJZfIJzqX3E5FavepZeO8v
+vHT5jqKrzOvKDlSrm8Y53dAjyI+5iKVHXvsYr1vQxVzvp/ocK8SsOfBikEHcFwib
+fLCXpg8o2iZ1Z5+MjULUQWVGkr3n8nQA703Ly/8pTWfiFZvfRMb7njxuHONhav4s
+Fp3OcHrMmxGRalvVSLu3ngmPDdOiKZZ2ywiCZExF8wx8qWEs2oeywkXXTroEcx1l
+7Wmj9UOMKdHhV9+xXOrTeyqr5kAqpO1vcTQ4RNaWYHtWMK1yO517ZmQAzFWBozno
+DZcUEyRBYDM=
+=ZzEF
 -----END PGP SIGNATURE-----
 --=-=-=--
