@@ -2,74 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F252F73E6
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 08:59:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78FC2F75DD
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 10:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731998AbhAOH7Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jan 2021 02:59:16 -0500
-Received: from mga04.intel.com ([192.55.52.120]:43100 "EHLO mga04.intel.com"
+        id S1730147AbhAOJuz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jan 2021 04:50:55 -0500
+Received: from mga18.intel.com ([134.134.136.126]:51113 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728688AbhAOH7P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 15 Jan 2021 02:59:15 -0500
-IronPort-SDR: HhKihgQMw3fwCvikzy9M2OdjgrbhdR/8Ntgoi4R9Kz2JA/dhjX9/7fpjm2+E2EP9bFu5tNE60v
- ZDm9wDd85RvA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9864"; a="175935420"
-X-IronPort-AV: E=Sophos;i="5.79,348,1602572400"; 
-   d="scan'208";a="175935420"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2021 23:57:27 -0800
-IronPort-SDR: 8EElx/k8/cRK3gbQxBTJnL+oOe0vzs2NsZn8zV9ot+fZTvtspVlOHMPp8daBG64Kw8gk4DbiQY
- /GQbjCFfXzsQ==
-X-IronPort-AV: E=Sophos;i="5.79,348,1602572400"; 
-   d="scan'208";a="425227787"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2021 23:57:23 -0800
-Received: by lahna (sSMTP sendmail emulation); Fri, 15 Jan 2021 09:57:21 +0200
-Date:   Fri, 15 Jan 2021 09:57:21 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Yehezkel Bernat <yehezkelshb@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Christian Kellner <christian@kellner.me>,
-        Mario Limonciello <mario.limonciello@dell.com>
-Subject: Re: [PATCH v2] thunderbolt: Add support for de-authorizing devices
-Message-ID: <20210115075721.GB968855@lahna.fi.intel.com>
-References: <20210113100750.32692-1-mika.westerberg@linux.intel.com>
- <CA+CmpXscND_KCPj0yX=OEBW3=NibX3jDc3uKzcpTnVCL4c5AEw@mail.gmail.com>
+        id S1726829AbhAOJuz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 15 Jan 2021 04:50:55 -0500
+IronPort-SDR: WcKDESq7H4ynFERcAiuFJDutXHrOgSR8bdXsDVoPCUJQpMhFsa8h4ZzzVe6XbSTsE9zaba2fE0
+ 9DHx4/LDSPng==
+X-IronPort-AV: E=McAfee;i="6000,8403,9864"; a="166195715"
+X-IronPort-AV: E=Sophos;i="5.79,349,1602572400"; 
+   d="scan'208";a="166195715"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2021 01:49:17 -0800
+IronPort-SDR: ogNTLClcTE7XycGsagNh8CZ8d+3nIpa8dtTrJhgV+fBOcf75Yt0rJ05O8A2nv8KbMmNHmn3h0S
+ J/oi4N1lmU/Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,349,1602572400"; 
+   d="scan'208";a="465538723"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Jan 2021 01:49:15 -0800
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg KH <greg@kroah.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: [PATCH v3 0/4] Remove one more platform_device_add_properties() call
+Date:   Fri, 15 Jan 2021 12:49:10 +0300
+Message-Id: <20210115094914.88401-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+CmpXscND_KCPj0yX=OEBW3=NibX3jDc3uKzcpTnVCL4c5AEw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 13, 2021 at 02:56:14PM +0200, Yehezkel Bernat wrote:
-> On Wed, Jan 13, 2021 at 12:07 PM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > In some cases it is useful to be able de-authorize devices. For example
-> > if user logs out the userspace can have a policy that disconnects PCIe
-> > devices until logged in again. This is only possible for software based
-> > connection manager as it directly controls the tunnels.
-> >
-> > For this reason make the authorized attribute accept writing 0 which
-> > makes the software connection manager to tear down the corresponding
-> > PCIe tunnel. Userspace can check if this is supported by reading a new
-> > domain attribute deauthorization, that holds 1 in that case.
-> >
-> > While there correct tb_domain_approve_switch() kernel-doc and
-> > description of authorized attribute to mention that it is only about
-> > PCIe tunnels.
-> >
-> > Cc: Christian Kellner <christian@kellner.me>
-> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > ---
-> 
-> Acked-by: Yehezkel Bernat <YehezkelShB@gmail.com>
+Hi,
 
-Thanks!
+I'm now clearing the dev_fwnode(dev)->secondary pointer in
+device_remove_software_node() as requested by Daniel and Andy. Thanks
+guys, it's much better now. I also took the liberty of including one
+more PCI ID patch where I add PCI ID for the Alder Lake-P variant. I
+hope that is OK.
 
-Applied to thunderbolt.git/next.
+Andy, I dropped your Tested-by tag because of the change I made to the
+first patch. If you have time to retest these, I would much appreciate.
+
+
+v2 cover letter:
+
+Hi Felipe, Rafael,
+
+This is the second version of this series. There are no real changes,
+but I added the Tiger Lake ID patch to this series in hope that it
+will make your life a bit easier, assuming that Rafael will still pick
+these.
+
+
+The original over letter:
+
+I originally introduced these as part of my series where I was
+proposing PM ops for software nodes [1], but since that still needs
+work, I'm sending these two separately.
+
+So basically I'm only modifying dwc3-pci.c so it registers a software
+node directly at this point. That will remove one more user of
+platform_device_add_properties().
+
+[1] https://lore.kernel.org/lkml/20201029105941.63410-1-heikki.krogerus@linux.intel.com/
+
+thanks,
+
+Heikki Krogerus (4):
+  software node: Introduce device_add_software_node()
+  usb: dwc3: pci: Register a software node for the dwc3 platform device
+  usb: dwc3: pci: ID for Tiger Lake CPU
+  usb: dwc3: pci: add support for the Intel Alder Lake-P
+
+ drivers/base/swnode.c       | 71 ++++++++++++++++++++++++++++++++-----
+ drivers/usb/dwc3/dwc3-pci.c | 69 ++++++++++++++++++++++-------------
+ include/linux/property.h    |  3 ++
+ 3 files changed, 110 insertions(+), 33 deletions(-)
+
+-- 
+2.29.2
+
