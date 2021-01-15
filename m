@@ -2,183 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F332F7CBC
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 14:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1ED2F7DD8
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 15:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730792AbhAONcG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jan 2021 08:32:06 -0500
-Received: from mga02.intel.com ([134.134.136.20]:4203 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727198AbhAONcF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 15 Jan 2021 08:32:05 -0500
-IronPort-SDR: O55sX5ETQxJsZPkYlCr7P8nF5NRrMBmJ2vZHSZITNE6gZDdoxx3rY/HAZtDLGtuj9CTgwLgqb2
- b/GDwF9ZjzZw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9864"; a="165632800"
-X-IronPort-AV: E=Sophos;i="5.79,349,1602572400"; 
-   d="scan'208";a="165632800"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2021 05:30:34 -0800
-IronPort-SDR: rkuGIN6PyV/OIl9tLX8fMuB71hxEhDyCqOQV8o22rtlXLRozEx++TRMRSr8fDCq7JXduWKXAYK
- N4h9wUCk8q8g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,349,1602572400"; 
-   d="scan'208";a="346200160"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga007.fm.intel.com with ESMTP; 15 Jan 2021 05:30:32 -0800
-Subject: Re: [PATCH v2] usb: host: xhci-plat: fix support for
- XHCI_SKIP_PHY_INIT quirk
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Peter Chen <peter.chen@nxp.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jun Li <jun.li@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-References: <20201221150903.26630-1-pali@kernel.org>
- <20201223161847.10811-1-pali@kernel.org>
- <20201224055836.GB27629@b29397-desktop>
- <20210113232057.niqamgsqlaw7gojw@pali>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <88b48c61-65e4-cc24-d90d-5fba92f05f27@linux.intel.com>
-Date:   Fri, 15 Jan 2021 15:32:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1732456AbhAOONc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jan 2021 09:13:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731286AbhAOONc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jan 2021 09:13:32 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B362CC061757
+        for <linux-usb@vger.kernel.org>; Fri, 15 Jan 2021 06:12:51 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id n42so8582482ota.12
+        for <linux-usb@vger.kernel.org>; Fri, 15 Jan 2021 06:12:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=408lnKE4uwqEZS3Lx4O9NO/RpZq3O+rWUdDPyfRlupI=;
+        b=DnZoxc51s8XqlXus1kRsH/l2WSiexb/+Xw1xJkJHbF9r6ooRHLWHYha+uzcnEkwctk
+         KGA4dJRz/Lb7yq/NutYm35X7dy6Cnh5+iky28vBj9vLrVIQ6NdXCWPHckzdbbwPyp+/T
+         rToIaD9AWunaAlanQBbkiCQUMvkUAn8vVKnHVuHv7B3bPlvKiM5UJkvAbumSMbjT5Tpr
+         PBdU0KF03alWtVUYdYajeVO3MLGdY79bE6kXv2poUfx4+4t1YpOZWUErzUQawLhNYSp4
+         iAogSWtyJhTs7q3nUlM0RSkf4eFQJdvoTUO9m8Q3tlg5QiGRmJ/I9rhQ4t8fws5wMYf8
+         z6rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=408lnKE4uwqEZS3Lx4O9NO/RpZq3O+rWUdDPyfRlupI=;
+        b=VgAGZxFnudF60pNPfji8zxXZ/q6HN4zN4J7i1theaBMQJbV1e+mMJaMbjg6F0mclSi
+         9K+gcZRKuKg2451j6MrpahcdEvcDU84K8VzFLozXeKCUlHL04IxHCBrSCXqhLgE7dkzU
+         FA3Dn48mJJvq7UU+dCM+QqFOYWsf6jYAKTF8NYbsetG2Cpzl7ezFTc/+5lF0SpQmHLdr
+         Ljm40OgUgxV9j4fTQWU+wdve1Fnvi94IBTEuaVBIvQpRpIWktMUfgPM2FYLjqdg8zYkC
+         OfoEyPAL9mcHL4J9AGGKLla0CyDUAwDg3OiTNj00CNvIMQeX0nEFthflu7ZONbqu89ux
+         DfFQ==
+X-Gm-Message-State: AOAM531234S74AT3EM8luTZKIR3lR34BhbXP7RM/OV5IQfjBhN0Z0+dl
+        0S1YLG7J/MgM38TKoof2B0FIVg==
+X-Google-Smtp-Source: ABdhPJzOV2VCbP2OGrGHgdeSCFbvOuMGqpwgee0DF+7Ty59/kol2V6S2ApNCyNYHcd2JG9h8QGg7QA==
+X-Received: by 2002:a9d:7f81:: with SMTP id t1mr8564174otp.166.1610719971063;
+        Fri, 15 Jan 2021 06:12:51 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id j22sm1906414otp.45.2021.01.15.06.12.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jan 2021 06:12:50 -0800 (PST)
+Date:   Fri, 15 Jan 2021 08:12:48 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Shawn Guo <shawn.guo@linaro.org>, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: dwc3: qcom: add URS Host support for sdm845 ACPI
+ boot
+Message-ID: <YAGi4N26BUdTeIPA@builder.lan>
+References: <20210115035057.10994-1-shawn.guo@linaro.org>
+ <87mtxa1gb9.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20210113232057.niqamgsqlaw7gojw@pali>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87mtxa1gb9.fsf@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 14.1.2021 1.20, Pali Rohár wrote:
-> On Thursday 24 December 2020 05:59:05 Peter Chen wrote:
->> On 20-12-23 17:18:47, Pali Rohár wrote:
->>> Currently init_quirk callbacks for xhci platform drivers are called
->>> xhci_plat_setup() function which is called after chip reset completes.
->>> It happens in the middle of the usb_add_hcd() function.
->>>
->>> But XHCI_SKIP_PHY_INIT quirk is checked in the xhci_plat_probe() function
->>> prior calling usb_add_hcd() function. Therefore this XHCI_SKIP_PHY_INIT
->>> currently does nothing as prior xhci_plat_setup() it is not set.
->>>
->>> Quirk XHCI_SKIP_PHY_INIT is only setting hcd->skip_phy_initialization value
->>> which really needs to be set prior calling usb_add_hcd() as this function
->>> at its beginning skips PHY init if this member is set.
->>>
->>> This patch fixes implementation of the XHCI_SKIP_PHY_INIT quirk by calling
->>> init_quirk callbacks (via xhci_priv_init_quirk()) prior checking if
->>> XHCI_SKIP_PHY_INIT is set. Also checking if either xhci->quirks or
->>> priv->quirks contains this XHCI_SKIP_PHY_INIT quirk.
->>>
->>> Signed-off-by: Pali Rohár <pali@kernel.org>
->>>
->>> ---
->>> Changes in v2:
->>> * Check also xhci->quirks as xhci_priv_init_quirk() callbacks are setting xhci->quirks
->>> * Tested with "usb: host: xhci: mvebu: make USB 3.0 PHY optional for Armada 3720" patch
->>> * Removed Fixes: line
->>> ---
->>>  drivers/usb/host/xhci-plat.c | 16 ++++++++--------
->>>  1 file changed, 8 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
->>> index 4d34f6005381..0eab7cb5a767 100644
->>> --- a/drivers/usb/host/xhci-plat.c
->>> +++ b/drivers/usb/host/xhci-plat.c
->>> @@ -89,13 +89,6 @@ static void xhci_plat_quirks(struct device *dev, struct xhci_hcd *xhci)
->>>  /* called during probe() after chip reset completes */
->>>  static int xhci_plat_setup(struct usb_hcd *hcd)
->>>  {
->>> -	int ret;
->>> -
->>> -
->>> -	ret = xhci_priv_init_quirk(hcd);
->>> -	if (ret)
->>> -		return ret;
->>> -
->>>  	return xhci_gen_setup(hcd, xhci_plat_quirks);
->>>  }
->>>  
->>> @@ -330,7 +323,14 @@ static int xhci_plat_probe(struct platform_device *pdev)
->>>  
->>>  	hcd->tpl_support = of_usb_host_tpl_support(sysdev->of_node);
->>>  	xhci->shared_hcd->tpl_support = hcd->tpl_support;
->>> -	if (priv && (priv->quirks & XHCI_SKIP_PHY_INIT))
->>> +
->>> +	if (priv) {
->>> +		ret = xhci_priv_init_quirk(hcd);
->>> +		if (ret)
->>> +			goto disable_usb_phy;
->>> +	}
->>> +
->>> +	if ((xhci->quirks & XHCI_SKIP_PHY_INIT) || (priv && (priv->quirks & XHCI_SKIP_PHY_INIT)))
->>>  		hcd->skip_phy_initialization = 1;
->>
->> I am not sure if others agree with you move the position of
->> xhci_priv_init_quirk, Let's see Mathias opinion.
+On Fri 15 Jan 07:27 CST 2021, Felipe Balbi wrote:
+
+> Hi,
 > 
-> Hello! Do you have an opinion how to handle this issue? As currently it
-> is needed for another patch which is fixing issue/regression in xhci-mvebu:
-> https://lore.kernel.org/linux-usb/20201223162403.10897-1-pali@kernel.org/
+> Shawn Guo <shawn.guo@linaro.org> writes:
+> > For sdm845 ACPI boot, the URS (USB Role Switch) node in ACPI DSDT table
+> > holds the memory resource, while interrupt resources reside in the child
+> > nodes USB0 and UFN0.  It adds USB0 host support by probing URS node,
+> > creating platform device for USB0 node, and then retrieve interrupt
+> > resources from USB0 platform device.
+> 
+> just so I understand this: the interrupt was listed under a separate
+> device altogether?
 > 
 
-I can see the benefit in this. 
-In the xhci-plat case usb_create_hcd and usb_add_hcd are separate steps, and
-we could both copy the xhci_plat_priv .quirks and run the .init_qurks before
-adding the hcd.
-I guess the current way is inherited from pci case where the earliest place
-to do this after hcd is created is the hcd->driver->reset callback (which is
-set to xhci_pci_setup() or xhci_plat_setup()).
+Correct, this seems to be the standard structure for a role-switching
+usb controller, as shown under "ACPI System configuration" at
+https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-dual-role-driver-stack-architecture
 
-xhci-rcar.c is using the .init_quirk to load firmware, we need to check with
-them if this change is ok. (added Yoshihiro Shimoda to cc)
-Their firmware would be loaded before phy parts are initialized, usb bus
-registered, or roothub device allocated.
+Regards,
+Bjorn
 
-Thanks
--Mathias
+> Nothing wrong with the patch itself, but just curious.
+> 
+> -- 
+> balbi
+
+
