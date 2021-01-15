@@ -2,94 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2C82F81B0
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 18:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 574F02F821A
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 18:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727863AbhAORKG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jan 2021 12:10:06 -0500
-Received: from m43-15.mailgun.net ([69.72.43.15]:63594 "EHLO
-        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728176AbhAORKE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jan 2021 12:10:04 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1610730583; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=aiKLgWl9D/qmUkm2ChFG0sCHujSYfskh5yLKLQlSwFY=; b=cd+9hfXcDIV/mQOk1/H//XUPiEx9/V7jmax6YH6+Fwa74TmAHHdrhlbU9LP0AvXF3RqSAucB
- lLt0hUEcPTlTlt16+iY9Dl9xXIqedWC7jNB0sdp5rJpnAcxzzQzYGhO/JqWqPD/y2VRyHitj
- H4puaZAk3Gwu/QzqbAsu3JR40IA=
-X-Mailgun-Sending-Ip: 69.72.43.15
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
- 6001cc37859d74370ddbd090 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 15 Jan 2021 17:09:11
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 4965FC43468; Fri, 15 Jan 2021 17:09:10 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 590D7C43464;
-        Fri, 15 Jan 2021 17:09:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 590D7C43464
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-Date:   Fri, 15 Jan 2021 09:09:06 -0800
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/4] phy: qcom-qmp: Add SM8350 USB QMP PHYs
-Message-ID: <20210115170906.GB5063@jackp-linux.qualcomm.com>
-References: <20210115104047.3460-1-jackp@codeaurora.org>
- <20210115104047.3460-2-jackp@codeaurora.org>
- <2c5481fe-f5be-5d6a-f62f-c93d04b9210e@somainline.org>
- <20210115124736.GF2771@vkoul-mobl>
+        id S1727973AbhAORWI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jan 2021 12:22:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727876AbhAORWI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jan 2021 12:22:08 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA1EC0613C1;
+        Fri, 15 Jan 2021 09:21:27 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id v67so14253781lfa.0;
+        Fri, 15 Jan 2021 09:21:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=QMmi0FiVN5Cp+wQqEnMWwUuN5A0IFrb/oyH6nkhKchE=;
+        b=jG1XP3AcqNCblv1qXe5AjSjMBYYK5Kz59EVyhMXaPHZ0dBEPvgBjpishmsxGgts2Bs
+         btCo+2EP5lMzugLeGBR7GOPppvRpZMWOZkr9BvMk2Hq6GFhJfG3FrryLLfjp588kW+8h
+         xAmhRpLqzSxd4L4IVDIt+ys0k4ZCrCdflxAoMCle/PbzDd1ygAcC8YPU76kOSgeXCmG1
+         iRKHI6vl/NgtEZ1KLriVeB7NMoXmFrgnQSfFP2kMYK+K+4WiziCPLcjO4jTx7lBMdlMe
+         RrCfenHCAXFtEfq88MFD9NvEfjmigfEwqDcu8F8+0gwXw/ysJl1fX99MadcloLjlLd7V
+         WMdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=QMmi0FiVN5Cp+wQqEnMWwUuN5A0IFrb/oyH6nkhKchE=;
+        b=sBDMWXyyLCxjRGoO9jh8GnLoTZhtv1mUP3fYVqTiEWoz+99eLaB2lbwd4ASdNZDq5C
+         YpaWP1YvQIFKFyxo8NKMx2JaaUl6e+/KvQr1zT3GrIfsqg441+ZZFhiFYke6lEmNfwJz
+         XSFdSzbaoPylL6dXd4Ifs1AwT11/lnkFdXzpUE6WvjkkPEcdGiB8sRiHk5V44ywmFHzI
+         pPHZPTwsuT+l7i88Ww//G7rl5qR9giizPyJrD+cxTbP5Ru3GP96lJ/zJ5hDrgjzDUFse
+         X4uStXYbj+8Qm/jZyZWe3efdTINomN25OnxYOtGARA2didoLzppRG93ESh5g22TieN42
+         uZOA==
+X-Gm-Message-State: AOAM532M7atSwVC5hhoYWBG3xd5i8lG972T0R9b9FBssG6x1uikYwhrV
+        0LXvIyFvrjZMvkWiKkIzX3LO6JXZvGo=
+X-Google-Smtp-Source: ABdhPJy4NpPDHIUkWz8c0QwaaqaiZwWyk3xmk8Bbh5vDr/Ll94AaVLDJP0qbWcMdDUyp+32ET6A2kw==
+X-Received: by 2002:ac2:4e92:: with SMTP id o18mr5557431lfr.576.1610731286280;
+        Fri, 15 Jan 2021 09:21:26 -0800 (PST)
+Received: from [192.168.1.101] ([178.176.73.247])
+        by smtp.gmail.com with ESMTPSA id n7sm526185lfu.123.2021.01.15.09.21.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Jan 2021 09:21:25 -0800 (PST)
+Subject: Re: [PATCH 1/2] xhci: make sure TRB is fully written before giving it
+ to the controller
+To:     David Laight <David.Laight@ACULAB.COM>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Ross Zwisler <zwisler@google.com>
+References: <20210115161907.2875631-1-mathias.nyman@linux.intel.com>
+ <20210115161907.2875631-2-mathias.nyman@linux.intel.com>
+ <42c6632e-28f1-9aae-e1a6-3525bb493c58@gmail.com>
+ <b70e0bb512d44f00ac5f8380ba450ba6@AcuMS.aculab.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <f439cf12-106f-3634-397f-dc17a4d0e94d@gmail.com>
+Date:   Fri, 15 Jan 2021 20:21:24 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210115124736.GF2771@vkoul-mobl>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <b70e0bb512d44f00ac5f8380ba450ba6@AcuMS.aculab.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Vinod,
+On 1/15/21 7:50 PM, David Laight wrote:
+> From: Sergei Shtylyov
+>> Sent: 15 January 2021 16:40
+>>
+>> On 1/15/21 7:19 PM, Mathias Nyman wrote:
+>>
+>>> Once the command ring doorbell is rung the xHC controller will parse all
+>>> command TRBs on the command ring that have the cycle bit set properly.
+>>>
+>>> If the driver just started writing the next command TRB to the ring when
+>>> hardware finished the previous TRB, then HW might fetch an incomplete TRB
+>>> as long as its cycle bit set correctly.
+>>>
+>>> A command TRB is 16 bytes (128 bits) long.
+>>> Driver writes the command TRB in four 32 bit chunks, with the chunk
+>>> containing the cycle bit last. This does however not guarantee that
+>>> chunks actually get written in that order.
+>>>
+>>> This was detected in stress testing when canceling URBs with several
+>>> connected USB devices.
+>>> Two consecutive "Set TR Dequeue pointer" commands got queued right
+>>> after each other, and the second one was only partially written when
+>>> the controller parsed it, causing the dequeue pointer to be set
+>>> to bogus values. This was seen as error messages:
+>>>
+>>> "Mismatch between completed Set TR Deq Ptr command & xHCI internal state"
+>>>
+>>> Solution is to add a write memory barrier before writing the cycle bit.
+>>>
+>>> Cc: <stable@vger.kernel.org>
+>>> Tested-by: Ross Zwisler <zwisler@google.com>
+>>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>> ---
+>>>  drivers/usb/host/xhci-ring.c | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+>>> index 5677b81c0915..cf0c93a90200 100644
+>>> --- a/drivers/usb/host/xhci-ring.c
+>>> +++ b/drivers/usb/host/xhci-ring.c
+>>> @@ -2931,6 +2931,8 @@ static void queue_trb(struct xhci_hcd *xhci, struct xhci_ring *ring,
+>>>  	trb->field[0] = cpu_to_le32(field1);
+>>>  	trb->field[1] = cpu_to_le32(field2);
+>>>  	trb->field[2] = cpu_to_le32(field3);
+>>> +	/* make sure TRB is fully written before giving it to the controller */
+>>> +	wmb();
+>>
+>>    Have you tried the lighter barrier, dma_wmb()? IIRC, it exists for these exact cases...
+> 
+> Isn't dma_wmb() needed between the last memory write and the io_write to the doorbell?
 
-On Fri, Jan 15, 2021 at 06:17:36PM +0530, Vinod Koul wrote:
-> On 15-01-21, 12:54, Konrad Dybcio wrote:
-> > I might be wrong but it looks as if you forgot to add a compatible
-> > for the "sm8350_usb3_uniphy_cfg" configuration.
+   No.
 
-I believe Konrad was referring to the driver in which I had neglected to
-add the compatible to the qcom_qmp_phy_of_match_table. My mistake.
+> Here we need to ensure the two memory writes aren't re-ordered.
 
-> It seems to be documented in patch 2, ideally we should have the
-> bindings patches first and this as patch 3...
+   No, we need all 3 ring memory writes to be ordered such that they all happen before the 4th
+write. It's not wonder this bug hasn't been noticed before -- x86 has strong write ordering
+unlike ARM/etc.
 
-Ok. I think driver change would be patch 2 rather, with the bindings in
-patch 1? Patch 3 and 4 are dt-bindings updates to the SNPS Femto PHY and
-DWC3 QCOM docs respectively.
+> Apart from alpha isn't a barrier() likely to be enough for that.
 
-Will send v2, thanks.
+   Not sure -- we don't have any barriers before the equivalents of a doorbell write
+in e.g. the Renesas Ehter driver.
 
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+> It is worth checking that the failing compiles didn't have the writes reordered.
+
+  The writes are reordered not because of the compiler -- the read/write reordering is a
+CPU feature (on at least non-x86). :-)
+
+> 	David
+> 
+>>
+>>>  	trb->field[3] = cpu_to_le32(field4);
+>>>
+>>>  	trace_xhci_queue_trb(ring, trb);
+
+MBR, Sergei
