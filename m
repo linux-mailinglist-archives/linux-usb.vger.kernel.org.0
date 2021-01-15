@@ -2,205 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C37B02F70AE
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 03:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59CF32F70BD
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jan 2021 03:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732280AbhAOCmB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jan 2021 21:42:01 -0500
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:59194 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732281AbhAOCmA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jan 2021 21:42:00 -0500
-Received: from mailhost.synopsys.com (us03-mailhost2.synopsys.com [10.4.17.18])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id C9FDEC041F;
-        Fri, 15 Jan 2021 02:40:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1610678459; bh=jT2AhQILoDZ4ICoebXgQCJvTbNIcswgm6GOWb5JwOxs=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=SY3fw1hMiI2yMLHkDgYiZ3K6Ow+f2hWfLGV7XrnxZdvVvP1vAEkolvAqmI6USwtJk
-         mX7P3Iy0OqvSphS5HK1sJvfPxLmRVT2YzjagowWKMVL0/5AWOHS99q6zfyxz3PvjmU
-         zqVUTJ7GaYpHbKoqlmsLnAw0FYvAN5pwDY/EEfvmdQVkIWOYqOyPL1PskqQJpKgGRG
-         9cqXDmzdLOak0CceQHYNUTD1TCgq5EPSF1w28C8KH9CaqHmTHdAidUtcVd30SG5KMO
-         /iv3Ufcbfnmf5SVCHwWgDaWR5Er6IryE3HPVju9wWzZxny1URJBqSmCIaxMGNb4CmY
-         dLJOAvjymMc3Q==
-Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 378ACA0084;
-        Fri, 15 Jan 2021 02:40:58 +0000 (UTC)
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2103.outbound.protection.outlook.com [104.47.55.103])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 0A8D3802BC;
-        Fri, 15 Jan 2021 02:40:57 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="a4cHhiZY";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LYRTd8SDa7ozNJZ55HdduVAjnWbLtWtJS75J99aoUFwnto1ffnSWAVmI9MMLPsi1B3Khu4ocuyw08XiB0lCDlsI0Ihi8aiafUZwKUNg1JbT/oEWDv0m213G5yYWaEwYBXTj7NmpGdaJ4e3i8bnmxnjoC63n5WzNx3qijfuIO4KlSQU9LMTt8K9B9wfZhSKMwdhnQNTpXFbwBOmj11tJaRRhJOQL9+UdazTTpnrRkL4J7N/7zKNq3T+sKgNrQNPIijzXADhOGQm92I02ktMQqRFovmHBLmOKYLXYbKS5qHWWtGKNCKwXETsKcxPmUGInaagEqEya8FZMv2hRADw/kqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jT2AhQILoDZ4ICoebXgQCJvTbNIcswgm6GOWb5JwOxs=;
- b=SVsGU6DWndA3TxHFrC5CUhM7MmYwDOfoz1Gc76na4PCFJV0jAI4oxSx2hKXn0DmmImQlbQArbDSyl8NMbcDaxgQePUK9puVXtOgZtS6+Gv5kUvQoxhlg6UEHEzq1/aShe2EFvJ4K0lBjTtAoidzxehxoWRSwT0VO1BAn22AZO37K75vVxL21zgsWPlx0VclgAaYLOeyu8z4tnsD+4QRp4W88KLlccV6whBYkeRHPsPXlCr0S96SZhb52YnM+R1uBBUNVKIOC5URo8Ycql/5BhIPyTcBwYJ0e7MYE31xRBudlNHnzLTL0Cidus63qw9a6WJFbaoTP1HM8ricFgFq8TA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jT2AhQILoDZ4ICoebXgQCJvTbNIcswgm6GOWb5JwOxs=;
- b=a4cHhiZYPwQ81MpkPfFgrZ41lpsVe7QtcmAPEONIP3DgJzYflZJsYV/cQUm3NYnJDPkZq3WPRJ5qZASNJAQ4Mmviy+X7CnATV/kt8u7MtfGBhRBn2IDFhNXPqcWJ0NF/6T5pDTn4ydTRR3Gnwte6t1E0q6d2K9eYVIZ1v7oOnJ8=
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
- by BYAPR12MB2902.namprd12.prod.outlook.com (2603:10b6:a03:12f::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.9; Fri, 15 Jan
- 2021 02:40:55 +0000
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::895b:620d:8f20:c4d6]) by BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::895b:620d:8f20:c4d6%6]) with mapi id 15.20.3742.012; Fri, 15 Jan 2021
- 02:40:55 +0000
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Peter Chen <hzpeterchen@gmail.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH v6 05/11] usb: gadget: composite: Report various SSP
- sublink speeds
-Thread-Topic: [PATCH v6 05/11] usb: gadget: composite: Report various SSP
- sublink speeds
-Thread-Index: AQHW6iBokEo/rqeRGkeerJ/I0Ocn+6omnSMAgAAIJYCAATedAIAAHooA
-Date:   Fri, 15 Jan 2021 02:40:55 +0000
-Message-ID: <3803df98-0321-ad69-babe-ceb41f95229d@synopsys.com>
-References: <cover.1610592135.git.Thinh.Nguyen@synopsys.com>
- <eb0386fdd5d87a858281e8006a72723d3732240f.1610592135.git.Thinh.Nguyen@synopsys.com>
- <20210114054708.GB18650@b29397-desktop>
- <227f3064-8016-33db-6575-fc1a642ef485@synopsys.com>
- <20210115005135.GB3443@b29397-desktop>
-In-Reply-To: <20210115005135.GB3443@b29397-desktop>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=synopsys.com;
-x-originating-ip: [98.248.94.126]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 31be4433-df70-4420-3ccc-08d8b8fefb94
-x-ms-traffictypediagnostic: BYAPR12MB2902:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BYAPR12MB2902EC069FAB5BF8D8739EEDAAA70@BYAPR12MB2902.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Og3Tr66eBksYveRznrX8Zkfh6muc4H9pb4DHNg+2X4KsGprDP0xA7fphqGpAf0twrB30f+C3+Yql+ibxzazPdy+DH3PDJxMjle19dqdh7crc1YjW6jQNVcZkttOWk4ld+iLimeq/U9/9giP1kztMHQJbnmUScojNv8JSA4CE9NSVA6AejF7JRkW2xB7yY8WYmyMW6xhnB4Ew84v+eHcRnF9G1yePg65SUrJ+rndaWm1Nl2zuEU6xuDYlBNUa6e15kJ8nYWpkfhjDka7FL+MRG5UK0E/RA5QSt6yR7HadlDP3oZ48IECxNTM+rr/y1W6K6LHP2vkcSN+VNACjgZSKJkQaurlSv6+o9yS7f60xb0FE1ijS2FLzBs7+UMuh1JiwMuBohPFaUjMXalscv4dCmEB6Qm2AT4qXZRZcQtxtiqkVTH8hzoQZyWF7dFXx25+Q6ZSXazutoPCbGZ5iDcV7H7BCugtCk/gf1NVZzteUrcc=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(346002)(39860400002)(376002)(396003)(136003)(5660300002)(2906002)(53546011)(6486002)(8936002)(4326008)(6506007)(31696002)(76116006)(316002)(66556008)(54906003)(64756008)(86362001)(66446008)(66476007)(66946007)(110136005)(8676002)(31686004)(6512007)(71200400001)(186003)(107886003)(83380400001)(478600001)(2616005)(36756003)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?ZHBmWEl3Y2RHUmc4czMwbzJ4a3FxUjNmVGI4cGZNTGIySjExL0Z1blVnNzRx?=
- =?utf-8?B?VG5VSHYvcUdCcVZLeU9SdmN6Y3ROYlpNY3dQS01KQWFxejdyYmJFMlEyZVV1?=
- =?utf-8?B?TnlYK0wrREN5YXVmaVhJOHliRnJWRG5pQXFYZTRiWStyRW1KbkdDMXQvSHM3?=
- =?utf-8?B?UThZZ215Vm1mSU44T2JKOSt2am1CWTR6ZVR0RlZSL2d4V0g3THZZUzVrbC9i?=
- =?utf-8?B?NG1xNGdKL2lJYVcyNE1kQy9zb1N3SERTZ1lDUW1oZnc0YWpxa09UT2pTNHVS?=
- =?utf-8?B?TnVYUVhqdFNOWnRsSCtRM2lOMlk5dkE5SjVLV3kzS3F1ZXpaYngzYkVOeVNG?=
- =?utf-8?B?UzY2bDlUQlI2cTFLdlNKRFp3L1Q3TlcvcWZHRGVCSWhGbTB1VlBzbXFKUmhm?=
- =?utf-8?B?K2hhMkduc0tBajF1Q0xWM2QwNkp6VDNBdGZnNG5SU1ZOTmNHZFZHVUwyK0NZ?=
- =?utf-8?B?SXFMVi96UEZiYzkzNi9vY2R5bmt0eHlPNkpONFZHdEV1VFhXa2trK3YxcGV2?=
- =?utf-8?B?RlNWRStGSmFEdkFPZG1BTk5KQUVwWHozeXI2QTBrcDRjZDZsRFBNdFBKbFFw?=
- =?utf-8?B?VXhnb1dvdU5INkNnNFVGTng1c3plUENEUGJ0QlR2RS9vZXJFeVExRUJqcWli?=
- =?utf-8?B?d3VMa08rOEVSZEVqRkdVNmN0dEhJU0pIZ1lCTGRwYzBXMEpoamYzRlJtd0c0?=
- =?utf-8?B?bk1sbzV2WmRRWllHYUU4cmI4UG9BNWhCNy84QTJhWVlQMkVOR1FCajhncUVJ?=
- =?utf-8?B?WFUyb29SemxXV2c2THBRWWxRRkM2cnJseFBkbzdrd3c0VnliRmRoRDhWd1F4?=
- =?utf-8?B?aTFQU3lKRDlCNllDVUdXVUU1QWxGZzZYV0F0aHRuN0pKWFRlN2hpZUtQY3Fj?=
- =?utf-8?B?cGRnaWFBanAyMlBJLzVEK0p2SFBvb2dQSlRHYXJIVVlUSWJ6M2hXNnhHVkFo?=
- =?utf-8?B?c0xla2ZMOWh0NC9MTFF5dkdCdTRrUlpUd0d1Z1hkbXJUV2xtQlhyREFmaks1?=
- =?utf-8?B?OXVrcW9nZzRuVFYwTTJFV2I3NjR5ZGU4Ukc1OFpibjlOUUxLWFJpcjVuVnNy?=
- =?utf-8?B?Sk92TUIrcHJ4bkgrQy9WWjVnSnFFTGs4KzIyNWRGNG5lWllNR0FsZk5nUDZz?=
- =?utf-8?B?UEc2UU40azRhUUtZS2grL1k0MVh2d1dBYUlzMlBvb29FOXNVTXBkTGxUTXhr?=
- =?utf-8?B?cThzcWUxU2VLU3lWM2NyMFhFZU9uOFB5Q2NScTFhWGlGelliZitYUE52Q1RC?=
- =?utf-8?B?TnF4ZlRycE1ieWpRWmdnQ2tneGtCNWNhOUgzbVBuWUMwRFpqMkNOR2RGekVh?=
- =?utf-8?Q?M7u12pcbIVeEs=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <46744C69D7899D41AB15FAE677593A87@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1732293AbhAOCv4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jan 2021 21:51:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732288AbhAOCvz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jan 2021 21:51:55 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA08C0613C1
+        for <linux-usb@vger.kernel.org>; Thu, 14 Jan 2021 18:51:14 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id w2so4555211pfc.13
+        for <linux-usb@vger.kernel.org>; Thu, 14 Jan 2021 18:51:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JC7oohfALujgMdyPvPz4HUk+eyvN9WaqpC/oTBTunFI=;
+        b=PrktYQGnOhf6EonDJAl8crgFkgsS7LCIJaR7PlQ1E+Uy0kyhg5qSosGhtYPiiq7b6V
+         5xz5WW/SyAckeqPvTvrSqmIrAy51BY6+mPjJn45FCtc7F53DB5wiDx/DJjJHzHeQm65j
+         FyZsL2UAupewpdTXTuV65l3UjDbXMI1QzA7kQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JC7oohfALujgMdyPvPz4HUk+eyvN9WaqpC/oTBTunFI=;
+        b=Y2affCiZ2YmjdZevNZFPgW5Y+13lMAJGS9k5uoyaj/SSGkyY/yaVAnHo9qjmeva3e5
+         xzbxrCT9hAystGYKBkK9Nty7GcP3MjBkIh1jakKiyXAMVbsEEcn6WlnKKVff0s+0Zx9K
+         XooT+LNaLhbLI7BhFIOzgfWssw1uUSnoMRDguJWRziNVqFjiYnFbXD2gVhCQH4DA2acX
+         Ptr8YJK+2ZjZIAEGkHSNPe/IwIwCvowhCl8X8uEUkdw4g+/wMVK0LU+WSvRaTh9/C2wq
+         dy03ZRCOXFk4rItUj23+SpzdZEHbOPFGfXOTqXpsUl08ThxfvorEmNyiBGERbMbsqICP
+         xW6Q==
+X-Gm-Message-State: AOAM5304IsaRC2orbwUVGdU0m10SBJK/c335k7Od978ymvwAOA7rAsf6
+        hi3PMcZFym+KU11zetk21y0VopqAAduP4vRIOKVOrg==
+X-Google-Smtp-Source: ABdhPJwEr7vgyC+XwBFfX12iNXroO8R+0dGE9jOmm8CmOWVFx0OdWCdNJ4jSrTu1mfkC1rQ3Zt0rCf+jrGnngfKGlzg=
+X-Received: by 2002:a63:1a10:: with SMTP id a16mr10165921pga.317.1610679074288;
+ Thu, 14 Jan 2021 18:51:14 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 31be4433-df70-4420-3ccc-08d8b8fefb94
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jan 2021 02:40:55.4365
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ilmSL69ATcMCXmfnIzNR82R0At3mmn9sbnA/q1ya9Ans1d5rkIRSHCVwAod8J62brFA+NuxbR3R6WbrNZTi13g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2902
+References: <20201229142406.v5.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
+ <2aea44f0-85e7-fd55-2c35-c1d994f20e03@linux.intel.com> <1610086308.24856.30.camel@mhfsdcap03>
+ <e43632e2-08b3-7a1a-8272-1d493e25fc67@linux.intel.com> <CAATdQgD2OAmf7_NWSVwzyJE7mF0vngzE=QeE79PS7MJsgPhbtA@mail.gmail.com>
+ <1610612988.30053.15.camel@mhfsdcap03>
+In-Reply-To: <1610612988.30053.15.camel@mhfsdcap03>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Fri, 15 Jan 2021 10:51:03 +0800
+Message-ID: <CAATdQgCb254YJ2tpiqWZ0RDHRiN59NuuHBuhavoYQT3STh=jkg@mail.gmail.com>
+Subject: Re: [PATCH v5] usb: xhci-mtk: fix unreleased bandwidth data
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>, linux-usb@vger.kernel.org,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Zhanyong Wang <zhanyong.wang@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-UGV0ZXIgQ2hlbiB3cm90ZToNCj4gT24gMjEtMDEtMTQgMDY6MTY6MTgsIFRoaW5oIE5ndXllbiB3
-cm90ZToNCj4+IEhpIFBldGVyLA0KPj4NCj4+IFBldGVyIENoZW4gd3JvdGU6DQo+Pj4gT24gMjEt
-MDEtMTMgMTg6NTM6MTQsIFRoaW5oIE5ndXllbiB3cm90ZToNCj4+Pj4gSWYgYSBnYWRnZXQgc3Vw
-cG9ydHMgU3VwZXJTcGVlZCBQbHVzLCB0aGVuIGl0IG1heSBvcGVyYXRlIGluIGRpZmZlcmVudA0K
-Pj4+PiBzdWJsaW5rIHNwZWVkcy4gRm9yIGV4YW1wbGUsIGlmIHRoZSBnYWRnZXQgc3VwcG9ydHMg
-U3VwZXJTcGVlZCBQbHVzDQo+Pj4+IGdlbjJ4MiwgdGhlbiBpdCBjYW4gc3VwcG9ydCAyIHN1Ymxp
-bmsgc3BlZWRzIGdlbjEgYW5kIGdlbjIuIEluZm9ybSB0aGUNCj4+Pj4gaG9zdCBvZiB0aGVzZSBz
-cGVlZHMgaW4gdGhlIEJPUyBkZXNjcmlwdG9yLg0KPj4+Pg0KPj4+IEhpIFRoaW5oLA0KPj4+DQo+
-Pj4gSSByZWFkIFVTQiAzLjIgc3BlYzogY2g5LjYuMi41IFN1cGVyU3BlZWRQbHVzIFVTQiBEZXZp
-Y2UgQ2FwYWJpbGl0eQ0KPj4+DQo+Pj4gU3ltbWV0cmljLiBSeCBhbmQgVHggU3VibGlua3MgaGF2
-ZSB0aGUgc2FtZSBudW1iZXIgb2YgbGFuZXMgYW5kIG9wZXJhdGUNCj4+PiBhdCB0aGUgc2FtZSBz
-cGVlZC4NCj4+PiBBc3ltbWV0cmljLiBSeCBhbmQgVHggU3VibGluayBoYXZlIGRpZmZlcmVudCBu
-dW1iZXIgb2YgbGFuZXMgYW5kL29yDQo+Pj4gb3BlcmF0ZSBhdCBkaWZmZXJlbnQgc3BlZWRzLg0K
-Pj4+DQo+Pj4gV2h5IHlvdXIgYmVsb3cgY2FzZXMgYXJlIGFsbCBmb3Igc3ltbWV0cmljLCBhdCBs
-ZWFzdCwgdGhlIGV4YW1wbGUgMw0KPj4+IGlzIGFzeW1tZXRyaWMsIGl0IGhhcyBkaWZmZXJlbnQg
-c3BlZWQgZm9yIHN1YmxpbmsgcGFpcnM/DQo+Pj4gRG9lcyB5b3VyIGJlbG93IGNhc2VzIGFyZSBz
-cGVjaWZpY2F0aW9uIGRlZmluZWQgb3IgdXNlciBkZWZpbmVkPw0KPj4gVVNCIDMuMiBzcGVjIHNl
-Y3Rpb24gOC41LjYuNzoNCj4+IEFzeW1tZXRyaWMgbGFuZSB0eXBlcyBhcmUgb25seSBmb3IgU3Vw
-ZXJTcGVlZCBJbnRlcmNoaXAgKFNTSUMpLiBJTU8sDQo+PiBJdCdzIHVubGlrZWx5IHRoYXQgU1NJ
-QyB1c2VyIHdpbGwgdXNlIExpbnV4IGtlcm5lbC4gV2UgY2FuIGV4dGVuZCBhbmQNCj4+IHVwZGF0
-ZSB0aGUgZ2FkZ2V0IGZyYW1ld29yayBpZiB0aGVyZSdzIGFueSB1c2UgY2FzZSBmb3IgdGhhdC4N
-Cj4+DQo+Pg0KPj4+PiBVc2UgMSBTU0lEIGlmIHRoZSBnYWRnZXQgc3VwcG9ydHMgdXAgdG8gZ2Vu
-MngxLCBvciBub3Qgc3BlY2lmaWVkOg0KPj4+PiAtIFNTSUQgMCBmb3Igc3ltbWV0cmljIFJYL1RY
-IHN1Ymxpbmsgc3BlZWQgb2YgMTAgR2Jwcy4NCj4+Pj4NCj4+Pj4gVXNlIDEgU1NJRCBpZiB0aGUg
-Z2FkZ2V0IHN1cHBvcnRzIHVwIHRvIGdlbjF4MjoNCj4+Pj4gLSBTU0lEIDAgZm9yIHN5bW1ldHJp
-YyBSWC9UWCBzdWJsaW5rIHNwZWVkIG9mIDUgR2Jwcy4NCj4+Pj4NCj4+Pj4gVXNlIDIgU1NJRHMg
-aWYgdGhlIGdhZGdldCBzdXBwb3J0cyB1cCB0byBnZW4yeDI6DQo+Pj4+IC0gU1NJRCAwIGZvciBz
-eW1tZXRyaWMgUlgvVFggc3VibGluayBzcGVlZCBvZiA1IEdicHMuDQo+Pj4gV2h5IFNTSUQgMCBp
-cyBub3QgMTBHYnBzPw0KPj4gU1NJRCAwIGFuZCAxIGFyZSBhcmJpdHJhcnksIHdlIGNhbiBkbyAw
-IGZvciAxMEdicHMuIFRoZXJlJ3Mgbm8NCj4+IGNvbnN0cmFpbnQgb3Igc3RhbmRhcmQgZnJvbSB0
-aGUgVVNCIDMuMiBzcGVjLiBIb3dldmVyLCB5b3UgbmVlZCB0byBzZXQNCj4+IHRoZSBkZXNjcmlw
-dG9yIHdGdW5jdGlvbmFsaXR5U3VwcG9ydC5TU0lEIHRvIGJlIHRoZSBtaW5pbXVtIGxhbmUgc3Bl
-ZWQNCj4+IFNTSUQgaXQgc3VwcG9ydHMuIFVzaW5nIFNTSUQgMCBtYWtlcyBpdCBlYXNpZXIgc2lu
-Y2Ugd2UgZG9uJ3QgaGF2ZSB0bw0KPj4gY29uZGl0aW9uIGl0IGZvciBtdWx0aXBsZSBTU0lEcy4N
-Cj4+DQo+Pj4+IC0gU1NJRCAxIGZvciBzeW1tZXRyaWMgUlgvVFggc3VibGluayBzcGVlZCBvZiAx
-MCBHYnBzLg0KPj4+IEJlc2lkZXMsIHdvdWxkIHlvdSBnaXZlIG1lIGFuIGV4YW1wbGUgd2hhdCBr
-aW5kcyBvZiBzeXN0ZW0gZGVzaWduDQo+Pj4gd2lsbCB1c2UgYmVsb3cgc3VibGluayBzcGVlZD8N
-Cj4+PiAtIFNTSUQgMCBmb3Igc3ltbWV0cmljIFJYL1RYIHN1Ymxpbmsgc3BlZWQgb2YgNSBHYnBz
-Lg0KPj4+IC0gU1NJRCAxIGZvciBzeW1tZXRyaWMgUlgvVFggc3VibGluayBzcGVlZCBvZiAxMCBH
-YnBzLg0KPj4+DQo+Pj4gUGV0ZXINCj4+IFRoZXNlIDIgU1NJRHMgaW5kaWNhdGUgdGhhdCB0aGUg
-ZGV2aWNlIGlzIGNhcGFibGUgb2YgcnVubmluZyBpbiBnZW4xIGFuZA0KPj4gZ2VuMiBpbiBTU1Au
-DQo+Pg0KPiBIaSBUaGluaCwNCj4NCj4gSSBhbSBwdXp6bGVkLCBHRU4yIGlzIGJhY2sgY29tcGF0
-aWJsZSBmb3IgR0VOMS4gVGhlbiwgd2hhdCdzIHRoZSB1c2FnZQ0KPiBvZiB0aGlzIGRlc2NyaXB0
-b3IsIHdoYXQga2luZHMgb2Ygc3BlY2lmaWMgaW5mb3JtYXRpb24gdGhlIGhvc3Qgd2FudHMgdG8g
-Z2V0Pw0KPiBJIHRoaW5rIHRoZSBob3N0IHdhbnRzIHRvIGdldCBpZiB0d28gcGFpcnMgb2YgdHgv
-cnggYXJlIHN1cHBvcnRlZCwgdGhhdA0KPiBpcyB3aGF0IFVTQiAzLjIgYWRkcy4NCj4NCg0KSGkg
-UGV0ZXIsDQoNClllcywgaXQncyBiYWNrd2FyZCBjb21wYXRpYmxlLiBIb3dldmVyIEdlbjF4MiB1
-c2VzIFN1cGVyU3BlZWQgUGx1cyBMaW5rDQpQcm90b2NvbC4gU2luZ2xlIGxhbmUgR2VuIDEgZG9l
-c24ndC4gVGhpcyBhZGRpdGlvbmFsIFJYL1RYIHN1Ymxpbmsgc3BlZWQNCmF0dHJpYnV0ZSBwYWly
-IGlzIHRlbGxpbmcgdGhlIGhvc3QgdGhhdCB0aGUgZGV2aWNlIGlzIGNhcGFibGUgb2YgcnVubmlu
-Zw0KYXQgR2VuMXgyIGFuZCBHZW4yeDIuIEhvc3QgY2FuIHVzZSB0aGlzIGluZm9ybWF0aW9uIHRv
-IGtub3cgdGhhdCB0aGUNCmRldmljZSBzdXBwb3J0cyBHZW4gMSBhcyBTU1AsIGFuZCBpdCBjYW4g
-aW5mZXIgdGhhdCB0aGUgZGV2aWNlIHN1cHBvcnRzDQpkdWFsLWxhbmUuIE90aGVyd2lzZSwgdGhl
-IGhvc3QgY2FuIG9ubHkgY2hlY2sgZm9yIGR1YWwtbGFuZSBzdXBwb3J0DQphZnRlciBpdCByZWNl
-aXZlcyBhIHBvcnQgc3RhdHVzIG9yIHN1Ymxpbmsgc3BlZWQgZGV2aWNlIG5vdGlmaWNhdGlvbiBU
-UC4NClJlZ2FyZGxlc3MsIHRoZSBnYWRnZXQgc2hvdWxkIGRlc2NyaWJlIGFsbCB0aGUgc3VibGlu
-ayBzcGVlZHMgdGhlIGRldmljZQ0KaXMgY2FwYWJsZSBvZiBpbiB0aGUgU1NQIGNhcGFiaWxpdHkg
-ZGVzY3JpcHRvci4NCg0KQlIsDQpUaGluaA0KDQo=
+On Thu, Jan 14, 2021 at 4:30 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+>
+> Hi Ikjoon,
+>
+> On Tue, 2021-01-12 at 13:48 +0800, Ikjoon Jang wrote:
+> > On Fri, Jan 8, 2021 at 10:44 PM Mathias Nyman
+> > <mathias.nyman@linux.intel.com> wrote:
+> > >
+> > > On 8.1.2021 8.11, Chunfeng Yun wrote:
+> > > > On Thu, 2021-01-07 at 13:09 +0200, Mathias Nyman wrote:
+> > > >> On 29.12.2020 8.24, Ikjoon Jang wrote:
+> > > >>> xhci-mtk has hooks on add_endpoint() and drop_endpoint() from xhci
+> > > >>> to handle its own sw bandwidth managements and stores bandwidth data
+> > > >>> into internal table every time add_endpoint() is called,
+> > > >>> so when bandwidth allocation fails at one endpoint, all earlier
+> > > >>> allocation from the same interface could still remain at the table.
+> > > >>>
+> > > >>> This patch adds two more hooks from check_bandwidth() and
+> > > >>> reset_bandwidth(), and make mtk-xhci to releases all failed endpoints
+> > > >>> from reset_bandwidth().
+> > > >>>
+> > > >>> Fixes: 08e469de87a2 ("usb: xhci-mtk: supports bandwidth scheduling with multi-TT")
+> > > >>> Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+> > > >>>
+> > > >>
+> > > >> ...
+> > > >>
+> > > >>>
+> > > >>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > > >>> index d4a8d0efbbc4..e1fcd3cf723f 100644
+> > > >>> --- a/drivers/usb/host/xhci.c
+> > > >>> +++ b/drivers/usb/host/xhci.c
+> > > >>> @@ -2882,6 +2882,12 @@ static int xhci_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
+> > > >>>     xhci_dbg(xhci, "%s called for udev %p\n", __func__, udev);
+> > > >>>     virt_dev = xhci->devs[udev->slot_id];
+> > > >>>
+> > > >>> +   if (xhci->quirks & XHCI_MTK_HOST) {
+> > > >>> +           ret = xhci_mtk_check_bandwidth(hcd, udev);
+> > > >>> +           if (ret < 0)
+> > > >>> +                   return ret;
+> > > >>> +   }
+> > > >>> +
+> > > >>
+> > > >> Just noticed that XHCI_MTK_HOST quirk is only set in xhci-mtk.c.
+> > > >> xhci-mtk.c calls xhci_init_driver(..., xhci_mtk_overrides) with a .reset override function.
+> > > >>
+> > > >> why not add override functions for .check_bandwidth and .reset_bandwidth to xhci_mtk_overrides instead?
+> > > >>
+> > > >> Another patch to add similar overrides for .add_endpoint and .drop_endpoint should probably be
+> > > >> done so that we can get rid of the xhci_mtk_add/drop_ep_quirk() calls in xhci.c as well
+> > > > You mean, we can export xhci_add/drop_endpoint()?
+> > >
+> > > I think so, unless you have a better idea.
+> > > I prefer exporting the generic add/drop_endpoint functions rather than the vendor specific quirk functions.
+> > >
+> >
+> > When moving out all MTK_HOST quirks and unlink xhci-mtk-sch from xhci,
+> > xhci-mtk-sch still needs to touch the xhci internals, at least struct
+> > xhci_ep_ctx.
+> >
+> > My naive idea is just let xhci export one more function to expose xhci_ep_ctx.
+> > But I'm not sure whether this is acceptable:
+> I find that xhci_add_endpoint() ignores some errors with return 0, for
+> these cases we needn't call xhci_mtk_add_ep-quirk(), so may be not a
+> good way to just export xhci_add_endpoint().
+
+yeah, maybe that's from ep0 case?
+
+And I've thought that we could also unlink xhci-mtk-sch from the xhci module
+if MTK_HOST quirk functions are moved out to mtk platform driver's overrides.
+I guess I've gone too far.
+
+If we keep xhci-mtk-sch being built with the xhci module,
+xhci-mtk-sch can directly access input control context and its drop/add flags,
+so I think we can simply remove {add|drop}_endpoint() quirks and just handle
+them all in {check|reset}_bandwidth() overrides.
+
+>
+> >
+> > +struct xhci_ep_ctx* xhci_get_ep_contex(struct xhci_hcd *xhci, struct
+> > usb_host_endpoint *ep)
+> > +{ ... }
+> > +EXPORT_SYMBOL(xhci_get_ep_context);
+> >
+> > But for v6, I'm going to submit a patch with {check|reset}_bandwidth()
+> > quirk function
+> >  switched into xhci_driver_overrides first. (and preserve existing
+> > MTK_HOST quirk functions).
+> >
+> > Thanks!
+> >
+> > > -Mathias
+> > >
+>
