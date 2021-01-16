@@ -2,164 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6B02F8BA7
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Jan 2021 06:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6182F8C76
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Jan 2021 10:12:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726521AbhAPF2L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 16 Jan 2021 00:28:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726126AbhAPF2K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Jan 2021 00:28:10 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732A5C061799
-        for <linux-usb@vger.kernel.org>; Fri, 15 Jan 2021 21:27:16 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id f6so1555921ots.9
-        for <linux-usb@vger.kernel.org>; Fri, 15 Jan 2021 21:27:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=MQG99hmEs+jm/LvVCjiZprhkiqjwfzt+Jg3xINgEKjM=;
-        b=LiZxsf4OcoSXehQoNzHnUlYjJxMgCQ+3xFvngfwsqKwT7lQizZj1IzW2M1345vvWCb
-         sI/JB1jG55Ntixm1svalk1mLKw4m8FFZGRnDpnXOzZD2WHk2i+Iw3L9eUILQzH93vfG3
-         OhP5nldvH311qffuxlpI2my3+06D+tvfKT020=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MQG99hmEs+jm/LvVCjiZprhkiqjwfzt+Jg3xINgEKjM=;
-        b=SquhpjOuZl/0saxPyT9aHzy7SdmiA6h3uRP1OgQupriOZ28GgzsNJby2DGbp15AWcn
-         Ej+dUZVEmMDnbAIujwNN+J4YsFuioFfLz7lwH7CawOhb4lXzNTBlKU/9dVWsVJeU2Gnn
-         fR+iOomYaJ4cz4FZPGfJkfy9cauR5w8b7PjpRP2mdIdfwEMiNpw6xoVLtnhJK8oBN0Zr
-         D6nSH281qDF2GqIQW/zoD9MGvv0AYnOFw0dwh2lxzO9WMrytrfE5laXPptuFiHrcpZTP
-         N+87gWOhjnV4yc50h9U46P0mBKLtl29g88jyfuab5JWD5LZeBlorjLqFmtn25A1RN3vi
-         DA+Q==
-X-Gm-Message-State: AOAM532DZ3ESxmi64GNO4zxO862uz3Oe1Hq4oCvyWgKij3fWWvAAiD7+
-        DBsLB1e3aTJQIiqFuobIOTRvTQ==
-X-Google-Smtp-Source: ABdhPJxukKQ1dpghDQU4L5E3YI7oypsEzcF9dQOmplV8O2VC++cgA+TXNjwmeGXB4BlVVbqLoxMT8w==
-X-Received: by 2002:a05:6830:1605:: with SMTP id g5mr10750341otr.369.1610774834421;
-        Fri, 15 Jan 2021 21:27:14 -0800 (PST)
-Received: from grundler-glapstation.lan ([70.134.62.80])
-        by smtp.gmail.com with ESMTPSA id 94sm2359230otw.41.2021.01.15.21.27.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jan 2021 21:27:13 -0800 (PST)
-From:   Grant Grundler <grundler@chromium.org>
-To:     Oliver Neukum <oliver@neukum.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        id S1726156AbhAPJHs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 16 Jan 2021 04:07:48 -0500
+Received: from mailgw02.mediatek.com ([1.203.163.81]:9174 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725964AbhAPJHr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Jan 2021 04:07:47 -0500
+X-UUID: b9104e2364bb4d6d91ad2047620d1b62-20210116
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=yGhzv1EUXi8QSnA1bSVjasGhtffl3aQKGg5i1yBbnS8=;
+        b=Y5SBmYAYo7fcFrhZtZHxFoOdaSHU2ehxp00visSoefv7nbHwKZX+uWCA2bSW2W+fu+BNTiPU5dVtbIHvk5dnQGLSkFXLGfF//I3nyCLOS9CtjbCzkmNSuo79XPY4LXERSkJRFp604XpJfz2+Sbfyqo8wTRP0KMxizCtPKha0gLc=;
+X-UUID: b9104e2364bb4d6d91ad2047620d1b62-20210116
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 449338106; Sat, 16 Jan 2021 17:07:01 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 16 Jan 2021 17:06:57 +0800
+Received: from mtkslt301.mediatek.inc (10.21.14.114) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 16 Jan 2021 17:06:57 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Grant Grundler <grundler@chromium.org>
-Subject: [PATCH 3/3] net: usb: cdc_ncm: don't spew notifications
-Date:   Fri, 15 Jan 2021 21:26:23 -0800
-Message-Id: <20210116052623.3196274-3-grundler@chromium.org>
-X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
-In-Reply-To: <20210116052623.3196274-1-grundler@chromium.org>
-References: <20210116052623.3196274-1-grundler@chromium.org>
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Min Guo <min.guo@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Subject: [PATCH next 01/15] dt-bindings: usb: fix yamllint check warning
+Date:   Sat, 16 Jan 2021 17:06:42 +0800
+Message-ID: <20210116090656.11752-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-SNTS-SMTP: D4253F565DE206D3F1DE0E9951088A82B846C0C7F21195BBF20DABE1589C86902000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-RTL8156 sends notifications about every 32ms.
-Only display/log notifications when something changes.
-
-This issue has been reported by others:
-	https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1832472
-	https://lkml.org/lkml/2020/8/27/1083
-
-...
-[785962.779840] usb 1-1: new high-speed USB device number 5 using xhci_hcd
-[785962.929944] usb 1-1: New USB device found, idVendor=0bda, idProduct=8156, bcdDevice=30.00
-[785962.929949] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=6
-[785962.929952] usb 1-1: Product: USB 10/100/1G/2.5G LAN
-[785962.929954] usb 1-1: Manufacturer: Realtek
-[785962.929956] usb 1-1: SerialNumber: 000000001
-[785962.991755] usbcore: registered new interface driver cdc_ether
-[785963.017068] cdc_ncm 1-1:2.0: MAC-Address: 00:24:27:88:08:15
-[785963.017072] cdc_ncm 1-1:2.0: setting rx_max = 16384
-[785963.017169] cdc_ncm 1-1:2.0: setting tx_max = 16384
-[785963.017682] cdc_ncm 1-1:2.0 usb0: register 'cdc_ncm' at usb-0000:00:14.0-1, CDC NCM, 00:24:27:88:08:15
-[785963.019211] usbcore: registered new interface driver cdc_ncm
-[785963.023856] usbcore: registered new interface driver cdc_wdm
-[785963.025461] usbcore: registered new interface driver cdc_mbim
-[785963.038824] cdc_ncm 1-1:2.0 enx002427880815: renamed from usb0
-[785963.089586] cdc_ncm 1-1:2.0 enx002427880815: network connection: disconnected
-[785963.121673] cdc_ncm 1-1:2.0 enx002427880815: network connection: disconnected
-[785963.153682] cdc_ncm 1-1:2.0 enx002427880815: network connection: disconnected
-...
-
-This is about 2KB per second and will overwrite all contents of a 1MB
-dmesg buffer in under 10 minutes rendering them useless for debugging
-many kernel problems.
-
-This is also an extra 180 MB/day in /var/logs (or 1GB per week) rendering
-the majority of those logs useless too.
-
-When the link is up (expected state), spew amount is >2x higher:
-...
-[786139.600992] cdc_ncm 2-1:2.0 enx002427880815: network connection: connected
-[786139.632997] cdc_ncm 2-1:2.0 enx002427880815: 2500 mbit/s downlink 2500 mbit/s uplink
-[786139.665097] cdc_ncm 2-1:2.0 enx002427880815: network connection: connected
-[786139.697100] cdc_ncm 2-1:2.0 enx002427880815: 2500 mbit/s downlink 2500 mbit/s uplink
-[786139.729094] cdc_ncm 2-1:2.0 enx002427880815: network connection: connected
-[786139.761108] cdc_ncm 2-1:2.0 enx002427880815: 2500 mbit/s downlink 2500 mbit/s uplink
-...
-
-Chrome OS cannot support RTL8156 until this is fixed.
-
-Signed-off-by: Grant Grundler <grundler@chromium.org>
----
- drivers/net/usb/cdc_ncm.c  | 12 +++++++++++-
- include/linux/usb/usbnet.h |  2 ++
- 2 files changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-index 25498c311551..5de096545b86 100644
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -1827,6 +1827,15 @@ cdc_ncm_speed_change(struct usbnet *dev,
- 	uint32_t rx_speed = le32_to_cpu(data->DLBitRRate);
- 	uint32_t tx_speed = le32_to_cpu(data->ULBitRate);
- 
-+	/* if the speed hasn't changed, don't report it.
-+	 * RTL8156 shipped before 2021 sends notification about every 32ms.
-+	 */
-+	if (dev->rx_speed == rx_speed && dev->tx_speed == tx_speed)
-+		return;
-+
-+	dev->rx_speed = rx_speed;
-+	dev->tx_speed = tx_speed;
-+
- 	/*
- 	 * Currently the USB-NET API does not support reporting the actual
- 	 * device speed. Do print it instead.
-@@ -1867,7 +1876,8 @@ static void cdc_ncm_status(struct usbnet *dev, struct urb *urb)
- 		 * USB_CDC_NOTIFY_NETWORK_CONNECTION notification shall be
- 		 * sent by device after USB_CDC_NOTIFY_SPEED_CHANGE.
- 		 */
--		usbnet_link_change(dev, !!event->wValue, 0);
-+		if (netif_carrier_ok(dev->net) != !!event->wValue)
-+			usbnet_link_change(dev, !!event->wValue, 0);
- 		break;
- 
- 	case USB_CDC_NOTIFY_SPEED_CHANGE:
-diff --git a/include/linux/usb/usbnet.h b/include/linux/usb/usbnet.h
-index 88a7673894d5..cfbfd6fe01df 100644
---- a/include/linux/usb/usbnet.h
-+++ b/include/linux/usb/usbnet.h
-@@ -81,6 +81,8 @@ struct usbnet {
- #		define EVENT_LINK_CHANGE	11
- #		define EVENT_SET_RX_MODE	12
- #		define EVENT_NO_IP_ALIGN	13
-+	u32			rx_speed;	/* in bps - NOT Mbps */
-+	u32			tx_speed;	/* in bps - NOT Mbps */
- };
- 
- static inline struct usb_driver *driver_of(struct usb_interface *intf)
--- 
-2.29.2
+Rml4IHdhcm5pbmc6ICJtaXNzaW5nIHN0YXJ0aW5nIHNwYWNlIGluIGNvbW1lbnQiDQoNClNpZ25l
+ZC1vZmYtYnk6IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCi0tLQ0K
+IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNiLWRldmljZS55YW1sIHwg
+NiArKystLS0NCiAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygt
+KQ0KDQpkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi91
+c2ItZGV2aWNlLnlhbWwgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL3Vz
+Yi1kZXZpY2UueWFtbA0KaW5kZXggN2JiMjVhNDU0MjdkLi4yM2U3NmNmYjIwNjYgMTAwNjQ0DQot
+LS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL3VzYi1kZXZpY2UueWFt
+bA0KKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi91c2ItZGV2aWNl
+LnlhbWwNCkBAIC04Miw5ICs4Miw5IEBAIHJlcXVpcmVkOg0KIGFkZGl0aW9uYWxQcm9wZXJ0aWVz
+OiB0cnVlDQogDQogZXhhbXBsZXM6DQotICAjaHViIGNvbm5lY3RlZCB0byBwb3J0IDENCi0gICNk
+ZXZpY2UgY29ubmVjdGVkIHRvIHBvcnQgMg0KLSAgI2RldmljZSBjb25uZWN0ZWQgdG8gcG9ydCAz
+DQorICAjIGh1YiBjb25uZWN0ZWQgdG8gcG9ydCAxDQorICAjIGRldmljZSBjb25uZWN0ZWQgdG8g
+cG9ydCAyDQorICAjIGRldmljZSBjb25uZWN0ZWQgdG8gcG9ydCAzDQogICAjICAgIGludGVyZmFj
+ZSAwIG9mIGNvbmZpZ3VyYXRpb24gMQ0KICAgIyAgICBpbnRlcmZhY2UgMCBvZiBjb25maWd1cmF0
+aW9uIDINCiAgIC0gfA0KLS0gDQoyLjE4LjANCg==
 
