@@ -2,132 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE432F90C7
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Jan 2021 06:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E212F93AD
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Jan 2021 16:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726298AbhAQFnt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 17 Jan 2021 00:43:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726203AbhAQFne (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 17 Jan 2021 00:43:34 -0500
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D485FC061574
-        for <linux-usb@vger.kernel.org>; Sat, 16 Jan 2021 21:42:52 -0800 (PST)
-Received: by mail-ua1-x935.google.com with SMTP id t43so4398035uad.7
-        for <linux-usb@vger.kernel.org>; Sat, 16 Jan 2021 21:42:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Olt2YOxfNlY0a+PB/Ct3vvAUbttTgv/DLZUtCACcw8A=;
-        b=EQI2syrqKXMoRfyWu1KSfQ7T474G8zDMmq/hd9N2q/GIm5i59uLyxltnLhA4QudIcD
-         QnuQn+XWFa+E/LL5fsm9LIPowQjdwgtihyIm6O17SPOQIbOaJOLNhY/aWn1AYZf557Ow
-         JEFQGLCjLgLFQUQvIikIs7LkZJX7lKNAqDI3E=
+        id S1729630AbhAQPqv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 17 Jan 2021 10:46:51 -0500
+Received: from mail-oo1-f51.google.com ([209.85.161.51]:41086 "EHLO
+        mail-oo1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729552AbhAQPqn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 17 Jan 2021 10:46:43 -0500
+Received: by mail-oo1-f51.google.com with SMTP id q6so3516233ooo.8;
+        Sun, 17 Jan 2021 07:46:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Olt2YOxfNlY0a+PB/Ct3vvAUbttTgv/DLZUtCACcw8A=;
-        b=WEOochuctdE1GqDwBUKW4qqG1VDQJTuqJMxv/x5eU5eeb8jZyVZj7VZL5SBjwnNDJr
-         qFIzilazuuBtd30QX/4BHFppuzjLYnFANnqHdD+YexEeoDplLbvassJXGWgGdsllCecK
-         BMXjHJVylvzlNiTVLENfjBJbuFx+GYKa7mrIVOM4JPvmlexqMjYV9HTT/Cy4atV9h5a0
-         Vdy3FApSt/WU9y0NDMwVqSonJ/VizetfSYqJbdyFECIc4s8lzi/uRPHj+LZ0yEm/VxX3
-         o2mbhd7vKC2ADf4E8Tb4zNfF4RrgbbY5PP+Tm7UggEhLHgUMnE9hZqeXxoH3f6+IsbTA
-         NRDw==
-X-Gm-Message-State: AOAM531nEqiknnSJoFHBJd6Qosrw15LTYzpgrAkQ4isJrNV9fOvZGSie
-        1WuuBFXmVyD0B1jdXoUEtnpn1fhfe5C4KnBo1swzeg==
-X-Google-Smtp-Source: ABdhPJwXwI0RYPLjRggAllyTjh/EEvwkgVxdYKDanZi5mBCStwwyCakvkuOuYkJ0GyG4FSWpv7KhZ7m0RG1NXRl+P+w=
-X-Received: by 2002:ab0:3894:: with SMTP id z20mr13880263uav.82.1610862171854;
- Sat, 16 Jan 2021 21:42:51 -0800 (PST)
-MIME-Version: 1.0
-References: <20210116090656.11752-1-chunfeng.yun@mediatek.com>
- <20210116090656.11752-12-chunfeng.yun@mediatek.com> <CANMq1KA63Lcifv0G80AyF9-JAdojtsnR18QtfytTMuKw7pTkPA@mail.gmail.com>
-In-Reply-To: <CANMq1KA63Lcifv0G80AyF9-JAdojtsnR18QtfytTMuKw7pTkPA@mail.gmail.com>
-From:   Nicolas Boichat <drinkcat@chromium.org>
-Date:   Sun, 17 Jan 2021 13:42:40 +0800
-Message-ID: <CANMq1KDkEL1Uh3yCG_-D=Kcm2Nob+mLNiA87syoaiuBFrrsnvg@mail.gmail.com>
-Subject: Re: [PATCH next 12/15] arm64: dts: mediatek: mt8183: fix dtbs_check warning
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=YYZdReruX4QPpNn9itV0r843NXru2A244Vndhzd0IdI=;
+        b=Mo5hoMopcczSObbsjbIE1fNqSGIEaTo2q8lGTQ4gCCNwk9XqnxWitBTdFS+qTAd4K0
+         QHGfx9LnRLQK+Lxhwd98jXjuoUm7VCzr8CcOYpiRUgqJLvX4Ydmhw7WoG6wD9SepUcCD
+         snKtGjnTilVu8OmxbAeKG7oyxgzkAaoMLgeOG6AQ9LcbZ6DDGfO8YeDogyeHxanuE6mr
+         SaWN981n3E9xkqiDrJsg2kdKrGiH4jfC95HQXWyxrPCHpe2EgThVqMV3RNHT14CePPlh
+         5OlZqDMOUG7z+ErN+1F9GIGX6nx8U+Gw+2xHGySCJHgynNcF/T0e4e0ifP02XXEDUuqT
+         g7Wg==
+X-Gm-Message-State: AOAM5326oiG/Uuv2aUeqoDTr4QzwZNzP8SpqSeqLuolOXDNriSFVur9I
+        LhAPpwDm1sYWrRqoIp5FQw==
+X-Google-Smtp-Source: ABdhPJwVtq7EztM2ZiB62TEnbKGxQL6nj+sao0EbrChJ1paylGZ7W62l8XhMZKKH3hDWLm9ubS1rkQ==
+X-Received: by 2002:a4a:2cc9:: with SMTP id o192mr14787473ooo.66.1610898361904;
+        Sun, 17 Jan 2021 07:46:01 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id m15sm3197353otl.11.2021.01.17.07.46.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Jan 2021 07:46:01 -0800 (PST)
+Received: (nullmailer pid 1730316 invoked by uid 1000);
+        Sun, 17 Jan 2021 15:45:57 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Al Cooper <alcooperx@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        linux-usb@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Min Guo <min.guo@mediatek.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-usb@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com
+In-Reply-To: <20210115211543.33563-2-alcooperx@gmail.com>
+References: <20210115211543.33563-1-alcooperx@gmail.com> <20210115211543.33563-2-alcooperx@gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: Add support for the Broadcom UART driver
+Date:   Sun, 17 Jan 2021 09:45:57 -0600
+Message-Id: <1610898357.217119.1730315.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jan 17, 2021 at 9:58 AM Nicolas Boichat <drinkcat@chromium.org> wrote:
->
-> On Sat, Jan 16, 2021 at 5:07 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
-> >
-> > Harmonize node names, compatibles and properties.
-> >
-> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > ---
-> >  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 9 ++++-----
-> >  1 file changed, 4 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > index 5b782a4769e7..a69a033a68ac 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > @@ -865,7 +865,7 @@
-> >                         ranges;
-> >                         status = "disabled";
-> >
-> > -                       usb_host: xhci@11200000 {
-> > +                       usb_host: usb@11200000 {
-> >                                 compatible = "mediatek,mt8183-xhci",
-> >                                              "mediatek,mtk-xhci";
-> >                                 reg = <0 0x11200000 0 0x1000>;
-> > @@ -908,11 +908,11 @@
-> >                         status = "disabled";
-> >                 };
-> >
-> > -               mipi_tx0: mipi-dphy@11e50000 {
-> > +               mipi_tx0: dsi-phy@11e50000 {
-> >                         compatible = "mediatek,mt8183-mipi-tx";
-> >                         reg = <0 0x11e50000 0 0x1000>;
-> >                         clocks = <&apmixedsys CLK_APMIXED_MIPID0_26M>;
-> > -                       clock-names = "ref_clk";
-> > +                       clock-names = "ref";
-> >                         #clock-cells = <0>;
-> >                         #phy-cells = <0>;
-> >                         clock-output-names = "mipi_tx0_pll";
->
-> This is unrelated to USB, so this should probably be a separate patch.
+On Fri, 15 Jan 2021 16:15:42 -0500, Al Cooper wrote:
+> Add DT bindings for the Broadcom 8250 based UART driver. This
+> UART is based on an 8250 but adds additional functionality. The
+> additional features include the ability to use DMA for transfers and
+> a baud rate clock system that is more accurate at high baud rates.
+> This UART is backward compatible with the standard 8250 UART.
+> 
+> Signed-off-by: Al Cooper <alcooperx@gmail.com>
+> ---
+>  .../bindings/serial/brcm,bcm7271-uart.yaml    | 94 +++++++++++++++++++
+>  1 file changed, 94 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/serial/brcm,bcm7271-uart.yaml
+> 
 
-Actually, after looking again at the complete stack of patches, I
-think this might be ok as part of this overall cleanup (I'll let the
-maintainer speak up).
+My bot found errors running 'make dt_binding_check' on your patch:
 
->
-> > @@ -931,11 +931,10 @@
-> >                         };
-> >                 };
-> >
-> > -               u3phy: usb-phy@11f40000 {
-> > +               u3phy: t-phy@11f40000 {
-> >                         compatible = "mediatek,mt8183-tphy",
-> >                                      "mediatek,generic-tphy-v2";
-> >                         #address-cells = <1>;
-> > -                       #phy-cells = <1>;
-> >                         #size-cells = <1>;
-> >                         ranges = <0 0 0x11f40000 0x1000>;
-> >                         status = "okay";
-> > --
-> > 2.18.0
-> > _______________________________________________
-> > Linux-mediatek mailing list
-> > Linux-mediatek@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-mediatek
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/serial/brcm,bcm7271-uart.yaml: 'additionalProperties' is a required property
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/serial/brcm,bcm7271-uart.yaml: ignoring, error in schema: 
+warning: no schema found in file: ./Documentation/devicetree/bindings/serial/brcm,bcm7271-uart.yaml
+
+See https://patchwork.ozlabs.org/patch/1427364
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
