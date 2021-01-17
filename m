@@ -2,74 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD392F94C8
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Jan 2021 20:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6F32F9556
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Jan 2021 22:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729927AbhAQTDy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 17 Jan 2021 14:03:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58372 "EHLO
+        id S1729202AbhAQVGj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 17 Jan 2021 16:06:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729527AbhAQTDD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 17 Jan 2021 14:03:03 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78B5C061573
-        for <linux-usb@vger.kernel.org>; Sun, 17 Jan 2021 11:02:22 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id c79so8901791pfc.2
-        for <linux-usb@vger.kernel.org>; Sun, 17 Jan 2021 11:02:22 -0800 (PST)
+        with ESMTP id S1729755AbhAQVGg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 17 Jan 2021 16:06:36 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328E8C061573;
+        Sun, 17 Jan 2021 13:05:56 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id n10so9664899pgl.10;
+        Sun, 17 Jan 2021 13:05:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=sBsWkGjaLI4ns0nT61e+91kOHbpUWMRH5vWp3GHiSRk=;
-        b=CBUUU7gkDw1FG3PnsDX9IQZBQd6qO0tZof+4xbyTpu30+AkkmBT7f3xsgL1eOzYM7i
-         Y7u8lTIXR2nK3W191r2G21DZO0W3b4Bcd6PD5Gxw9vyDYw1tbwTE1LbfoMnzug3u+b8X
-         JgrDuScT+gh3EelRY28Gk3qvIAt3VY3uIIkNOLGe/dgxldHMjuEcusW2E80SrIKHGUxP
-         BPovd7tiUQmQFjWo7jTaWcfdNK13WmcA2hyZhxzr4HqWYeQ5kHG/d6EgPwy9nJZSonbd
-         AmOwyjOuCGzOKYL/RdHKv3CGY5hiUQZxeDqdfca1kPzlXdWM5Anj14tAE3TguMzq79Mr
-         vHEQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xiGgpCOMLVvvF9WOTNFX2PUnJFl3Im7GCb/838FY8K0=;
+        b=h5MpDdNNlaywbMeHtLCOkKGg0rqIU+7qo0RnhFCcKeYI6cfK0L1XFUpchPVK7dzlL3
+         ptCthdEin3/btB83rIq849MmVd6Etci0R0/Et02MUr+0DWHM2dcT0JnpCow1ux0zXPcB
+         N2QdzP8QSJKeD6ZTwldL61676CYcmiD08jAAKMzC1SSoK7P5V/oLp5lh0YLKaJ0TBPXj
+         nQ7e+4J5zNonniPcdWOd9oZ4pPA8PIrnmnk53A3afiGX79cSsOkuTwxStiDZC0udgg+o
+         Th5HUZnuZ2CD/jjgXLAFcxc14BfN/BlEV+6N4EOLVx2eqj3ZkzEeOTZsXKN8yEMYywjI
+         62/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=sBsWkGjaLI4ns0nT61e+91kOHbpUWMRH5vWp3GHiSRk=;
-        b=PcJ8/BG4IY4zQVH0B1KfqpFDfCb4D3E7+1JCLn95Hs7+tmwVUacu59N4izbsHVsn2t
-         rfiQ/uoCNMEHOTU0MNSNMRwbE1MeBEz5AIhXXATkmfYgmLy+6LURju0cLfJ5C8sD4VWE
-         33fZ5jORjvp8kVzxWXoi7IC0wUKNTA3jO9iHh6sZ6RsnmHaWb3UVszQgvSYBpGBAzHt3
-         XRoUB4rvLSP0xgnmN6ljHsULVK8Us5WGJmKES98VUSV5jHuovNoEs/3BXVPBN8y7E9Iu
-         aqhnuwsh+wfqVTMarS00C/2+HOdglUGCO8kXqD0aWlpeOOHhmDRSXU8LpAw/zoyre6hT
-         snAw==
-X-Gm-Message-State: AOAM533bSRN/5Pj3iHRxjeGXZjCBdU48ndg/KdemOyoy7rV4imQhLZgz
-        tsEjbgE8b7Mt6EIvei+GQsy6FkNE5rLBoSkOlVM=
-X-Google-Smtp-Source: ABdhPJx6/U2hosTv0Vbt4TgA5xOER63xwickSPVBFLF6MtcGt6y9FBZD594Wfrm9gdM4peP+G5YQAThb6a5l7Hu6ArI=
-X-Received: by 2002:aa7:95b6:0:b029:1ae:8a7b:59ac with SMTP id
- a22-20020aa795b60000b02901ae8a7b59acmr22930146pfk.15.1610910142278; Sun, 17
- Jan 2021 11:02:22 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xiGgpCOMLVvvF9WOTNFX2PUnJFl3Im7GCb/838FY8K0=;
+        b=ufgAkclTrJQCijzSJrDzl6yfOMfT0vn63YkONtCBrnOXosIu1ZHm5eQllo5v5hipCx
+         +6ibGXSQPdScgarHQ57sYkIWAdusOrcWDWyjHH+MEaFDW3z2Mtsh+uzY5xoBLJ0F8Sxz
+         O3UjolqL27U04MGUdsLL39ADSvgbzQAH0ra7pK9Qry3fvb9Hud/0v7g3IwzmuNrwv8Rl
+         zEix49Q/v0Vnp0PIihepGdk7WSz5V3j0fdBSBY1pQ4KkaxhFZrB97FZRrRN/oaB1eXY+
+         lNzpdhAtsk/VUfXPjGUO7Iyd6WsYZa3TRdHUcD2VDuv+ejoSU+NJKO4zNkYOSyMaeprx
+         H2dQ==
+X-Gm-Message-State: AOAM532PQ2zjLNMU5iwSrSPDDDNFyDbWaMOUGWYYXkL6zKA2OBRFBU5j
+        dmchCuDttWGALUNBLPDw++j7eE1xDwjv1dAbkEk=
+X-Google-Smtp-Source: ABdhPJwjg5Yk5pppvzZNoyX+G14S7BE0gcMIIaGeDa21EYhslEqdMfrwUvtYV854GA05PDl4Fau5aZtrx0r53yTkgP8=
+X-Received: by 2002:a05:6a00:854:b029:1b7:6233:c5f with SMTP id
+ q20-20020a056a000854b02901b762330c5fmr2467555pfk.73.1610917555805; Sun, 17
+ Jan 2021 13:05:55 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:40c5:0:0:0:0 with HTTP; Sun, 17 Jan 2021 11:02:21
- -0800 (PST)
-Reply-To: tracymedicinemed3@gmail.com
-From:   Dr Tracy William <captraymondjpierce@gmail.com>
-Date:   Sun, 17 Jan 2021 20:02:21 +0100
-Message-ID: <CAAcDt7ENdzM3gqY1TeKn+yPByqBRqSWbzzSMzmW70FkBCWbVGw@mail.gmail.com>
-Subject: From Dr Tracy from United States
-To:     undisclosed-recipients:;
+References: <20210115094914.88401-1-heikki.krogerus@linux.intel.com>
+ <CAHp75Vc3xjaOugX3d8bohz12OEP=n4BAonNyQJQ=UgBfVZorOg@mail.gmail.com> <c644e72c-bb46-56c2-931e-7cb98b024cc3@gmail.com>
+In-Reply-To: <c644e72c-bb46-56c2-931e-7cb98b024cc3@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 17 Jan 2021 23:05:39 +0200
+Message-ID: <CAHp75VfMOcPyXELoD4S+oQjAaVg6H0Hn2hs2UAbYEKhnFZp36A@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Remove one more platform_device_add_properties() call
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg KH <greg@kroah.com>, Felipe Balbi <balbi@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Sat, Jan 16, 2021 at 11:29 PM Daniel Scally <djrscally@gmail.com> wrote:
+> On 16/01/2021 20:23, Andy Shevchenko wrote:
+> > On Fri, Jan 15, 2021 at 11:52 AM Heikki Krogerus
+> > <heikki.krogerus@linux.intel.com> wrote:
+> >> Hi,
+> >>
+> >> I'm now clearing the dev_fwnode(dev)->secondary pointer in
+> >> device_remove_software_node() as requested by Daniel and Andy. Thanks
+> >> guys, it's much better now. I also took the liberty of including one
+> >> more PCI ID patch where I add PCI ID for the Alder Lake-P variant. I
+> >> hope that is OK.
+> >>
+> >> Andy, I dropped your Tested-by tag because of the change I made to the
+> >> first patch. If you have time to retest these, I would much appreciate.
+> > Since Greg already grabbed a v3 I will test it when it appears in linux-next.
+> >
+> It seems the grabbed one is the v2 one though actually
+
+In his last message he wrote that he noticed the v3 *as I understand that*.
+Greg, is it right? I mean you took v3 eventually?
+
 -- 
-Hello Dear,
-how are you doing?I hope you are good
-Its my pleasure to contact you for friendship as i have been busy with work
-for so long and i believe this is the right time to find someone.
-
-I was just surfing through the Internet when i found your email,i want
-to make a new
-and special friend.
-
-My name is Dr Tracy William,I am from the United States of America.
-Pls respond to my personal email(tracymedicinemed3@gmail.com) and i
-will send my details and pictures upon hearing from you
-bye
-With love
-Tracy
+With Best Regards,
+Andy Shevchenko
