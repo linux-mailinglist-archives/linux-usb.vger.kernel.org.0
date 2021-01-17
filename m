@@ -2,214 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6354C2F943B
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Jan 2021 18:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD392F94C8
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Jan 2021 20:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729993AbhAQRof (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 17 Jan 2021 12:44:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41616 "EHLO
+        id S1729927AbhAQTDy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 17 Jan 2021 14:03:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729972AbhAQRod (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 17 Jan 2021 12:44:33 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD907C061573;
-        Sun, 17 Jan 2021 09:43:52 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id c18so8252054oto.3;
-        Sun, 17 Jan 2021 09:43:52 -0800 (PST)
+        with ESMTP id S1729527AbhAQTDD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 17 Jan 2021 14:03:03 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78B5C061573
+        for <linux-usb@vger.kernel.org>; Sun, 17 Jan 2021 11:02:22 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id c79so8901791pfc.2
+        for <linux-usb@vger.kernel.org>; Sun, 17 Jan 2021 11:02:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=tMDYAz1pcj84nMeQHFK12E26S9/O9jmFFjULa1oURTA=;
-        b=pLjOXjUntYAE/ggZnSXScD/DaoICvnle5d0XGm/a32S7PAxfN6QuhxNKsIF3FpSZMh
-         nb5WMrfb9NayshRIO7QN4P70Vpf2if/ILkN0n7zr9xoQvpDQSdjhtV4jELZlY3BUZuEM
-         trW6mJpGt6t4qhE50N0LoWjcy8X4mqYtqAo9QD1nucRNympCqZ2N/yHtD0exhfumM4Er
-         c2qfsS+9Add6z2tU3dDWObKxTfnZnenetyNLv/Mz1cf3lK1XTvt0u+1qDl4sv99KCe+S
-         TTGAofvOkJcaGgUvwhfWTCwWtbIklPeDTCP9LFishRNtFqdVo8kISVp1V8HKN/sMJ+lF
-         wK+w==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=sBsWkGjaLI4ns0nT61e+91kOHbpUWMRH5vWp3GHiSRk=;
+        b=CBUUU7gkDw1FG3PnsDX9IQZBQd6qO0tZof+4xbyTpu30+AkkmBT7f3xsgL1eOzYM7i
+         Y7u8lTIXR2nK3W191r2G21DZO0W3b4Bcd6PD5Gxw9vyDYw1tbwTE1LbfoMnzug3u+b8X
+         JgrDuScT+gh3EelRY28Gk3qvIAt3VY3uIIkNOLGe/dgxldHMjuEcusW2E80SrIKHGUxP
+         BPovd7tiUQmQFjWo7jTaWcfdNK13WmcA2hyZhxzr4HqWYeQ5kHG/d6EgPwy9nJZSonbd
+         AmOwyjOuCGzOKYL/RdHKv3CGY5hiUQZxeDqdfca1kPzlXdWM5Anj14tAE3TguMzq79Mr
+         vHEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=tMDYAz1pcj84nMeQHFK12E26S9/O9jmFFjULa1oURTA=;
-        b=gUoFvzH6DTxNXVPY9ILJGsxVU5bfgpSGW7k/XglbQRmceQrvS/x4QWzqulqSLnfeBP
-         HcOiU9YmjEE1FZMdKtNNlfOci2bWMtD/b7q6Vy2CDTA+bSrdU+AX/9jhQ8dzuK3PoUQj
-         RlbDdZgqF5fTVxCXHCwNQAlAMBSywiNpXQtCgtcI+RhqJSA5COqEuulsB/RsY4k2H/Wn
-         FNVoi66kHdQqloup85/Uq+x5KrqqMhFiDkBJzfQ5jsoVLYnlmF34CQlSVmXGbtTWF3Mc
-         B5IyVm5l+zDojTiaZqS/v+/N/DSRsvZU3i8OUsNenzdG1Z7ObtGBQuU4M+9mgYDxdB3K
-         H0mA==
-X-Gm-Message-State: AOAM531RL/6GxPvkFuH/deJt6ZRGKk1izgJAXvl00KcROcnhwMoMVcY8
-        mr0/ClOCQcHQqmyE50uqxb00LxXE7QQ=
-X-Google-Smtp-Source: ABdhPJw1xzKjrlHsz0gVmd2NFTcsxhLrktpAuJiCemlq78SyrLFQkTyV8dbuErOUO1x8yxfC8/LqwA==
-X-Received: by 2002:a9d:ea6:: with SMTP id 35mr15093975otj.188.1610905431845;
-        Sun, 17 Jan 2021 09:43:51 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l12sm3142862ooq.22.2021.01.17.09.43.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Jan 2021 09:43:51 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 1/2] usb typec: tcpci: mt6360: Add vsafe0v support and
- external vbus supply control
-To:     cy_huang <u0084500@gmail.com>, heikki.krogerus@linux.intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        cy_huang@richtek.com, gene_chen@richtek.com,
-        devicetree@vger.kernel.org
-References: <1610720001-15300-1-git-send-email-u0084500@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <3a4a88a9-f0e3-2b65-9df4-6c1d4e3f1c14@roeck-us.net>
-Date:   Sun, 17 Jan 2021 09:43:48 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=sBsWkGjaLI4ns0nT61e+91kOHbpUWMRH5vWp3GHiSRk=;
+        b=PcJ8/BG4IY4zQVH0B1KfqpFDfCb4D3E7+1JCLn95Hs7+tmwVUacu59N4izbsHVsn2t
+         rfiQ/uoCNMEHOTU0MNSNMRwbE1MeBEz5AIhXXATkmfYgmLy+6LURju0cLfJ5C8sD4VWE
+         33fZ5jORjvp8kVzxWXoi7IC0wUKNTA3jO9iHh6sZ6RsnmHaWb3UVszQgvSYBpGBAzHt3
+         XRoUB4rvLSP0xgnmN6ljHsULVK8Us5WGJmKES98VUSV5jHuovNoEs/3BXVPBN8y7E9Iu
+         aqhnuwsh+wfqVTMarS00C/2+HOdglUGCO8kXqD0aWlpeOOHhmDRSXU8LpAw/zoyre6hT
+         snAw==
+X-Gm-Message-State: AOAM533bSRN/5Pj3iHRxjeGXZjCBdU48ndg/KdemOyoy7rV4imQhLZgz
+        tsEjbgE8b7Mt6EIvei+GQsy6FkNE5rLBoSkOlVM=
+X-Google-Smtp-Source: ABdhPJx6/U2hosTv0Vbt4TgA5xOER63xwickSPVBFLF6MtcGt6y9FBZD594Wfrm9gdM4peP+G5YQAThb6a5l7Hu6ArI=
+X-Received: by 2002:aa7:95b6:0:b029:1ae:8a7b:59ac with SMTP id
+ a22-20020aa795b60000b02901ae8a7b59acmr22930146pfk.15.1610910142278; Sun, 17
+ Jan 2021 11:02:22 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1610720001-15300-1-git-send-email-u0084500@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6a10:40c5:0:0:0:0 with HTTP; Sun, 17 Jan 2021 11:02:21
+ -0800 (PST)
+Reply-To: tracymedicinemed3@gmail.com
+From:   Dr Tracy William <captraymondjpierce@gmail.com>
+Date:   Sun, 17 Jan 2021 20:02:21 +0100
+Message-ID: <CAAcDt7ENdzM3gqY1TeKn+yPByqBRqSWbzzSMzmW70FkBCWbVGw@mail.gmail.com>
+Subject: From Dr Tracy from United States
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 1/15/21 6:13 AM, cy_huang wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> MT6360 not support for TCPC command to control source and sink.
+-- 
+Hello Dear,
+how are you doing?I hope you are good
+Its my pleasure to contact you for friendship as i have been busy with work
+for so long and i believe this is the right time to find someone.
 
-does not
+I was just surfing through the Internet when i found your email,i want
+to make a new
+and special friend.
 
-> Uses external 5V vbus regulator as the vbus source control.
-> 
-Use
-
-> Also adds the capability to report vsafe0v.
-> 
-add
-
-So far this driver works without regulator. Unless I am missing something,
-this patch makes regulator support mandatory, meaning existing code will fail.
-I am not sure if that is appropriate/acceptable. Can we be sure that this will
-work for existing users of this driver ?
-
-Thanks,
-Guenter
-
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
->  drivers/usb/typec/tcpm/tcpci_mt6360.c | 29 +++++++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> index f1bd9e0..0edf4b6 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> @@ -11,6 +11,7 @@
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
-> +#include <linux/regulator/consumer.h>
->  #include <linux/usb/tcpm.h>
->  
->  #include "tcpci.h"
-> @@ -36,6 +37,7 @@ struct mt6360_tcpc_info {
->  	struct tcpci_data tdata;
->  	struct tcpci *tcpci;
->  	struct device *dev;
-> +	struct regulator *vbus;
->  	int irq;
->  };
->  
-> @@ -51,6 +53,27 @@ static inline int mt6360_tcpc_write16(struct regmap *regmap,
->  	return regmap_raw_write(regmap, reg, &val, sizeof(u16));
->  }
->  
-> +static int mt6360_tcpc_set_vbus(struct tcpci *tcpci, struct tcpci_data *data, bool src, bool snk)
-> +{
-> +	struct mt6360_tcpc_info *mti = container_of(data, struct mt6360_tcpc_info, tdata);
-> +	int ret;
-> +
-> +	/* To correctly handle the already enabled vbus and disable its supply first */
-> +	if (regulator_is_enabled(mti->vbus)) {
-> +		ret = regulator_disable(mti->vbus);
-> +		if (ret)
-> +			return ret;
-> +	}
-
-Is it really a good idea to disable vbus if it happens to be already enabled
-and there is (another ?) request to enable it ?
-
-> +
-> +	if (src) {
-> +		ret = regulator_enable(mti->vbus);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int mt6360_tcpc_init(struct tcpci *tcpci, struct tcpci_data *tdata)
->  {
->  	struct regmap *regmap = tdata->regmap;
-> @@ -138,7 +161,13 @@ static int mt6360_tcpc_probe(struct platform_device *pdev)
->  	if (mti->irq < 0)
->  		return mti->irq;
->  
-> +	mti->vbus = devm_regulator_get(&pdev->dev, "vbus");
-> +	if (IS_ERR(mti->vbus))
-> +		return PTR_ERR(mti->vbus);
-> +
->  	mti->tdata.init = mt6360_tcpc_init;
-> +	mti->tdata.set_vbus = mt6360_tcpc_set_vbus;
-> +	mti->tdata.vbus_vsafe0v = 1;
->  	mti->tcpci = tcpci_register_port(&pdev->dev, &mti->tdata);
->  	if (IS_ERR(mti->tcpci)) {
->  		dev_err(&pdev->dev, "Failed to register tcpci port\n");
-> 
-
+My name is Dr Tracy William,I am from the United States of America.
+Pls respond to my personal email(tracymedicinemed3@gmail.com) and i
+will send my details and pictures upon hearing from you
+bye
+With love
+Tracy
