@@ -2,91 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 715D32F8F72
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Jan 2021 22:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D862F901C
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Jan 2021 03:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727255AbhAPVaS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 16 Jan 2021 16:30:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
+        id S1727868AbhAQB7n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 16 Jan 2021 20:59:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726864AbhAPVaM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Jan 2021 16:30:12 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C42C061573;
-        Sat, 16 Jan 2021 13:29:31 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id 6so5501213wri.3;
-        Sat, 16 Jan 2021 13:29:31 -0800 (PST)
+        with ESMTP id S1727838AbhAQB7l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Jan 2021 20:59:41 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92291C061575
+        for <linux-usb@vger.kernel.org>; Sat, 16 Jan 2021 17:59:01 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id e20so7251332vsr.12
+        for <linux-usb@vger.kernel.org>; Sat, 16 Jan 2021 17:59:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=2Th5lDGpBI/Rhu3/73k5rMrbZQS4Y/S/x1FlM2kyjVU=;
-        b=A0K6e7pgp6V067iGxutfRK0GYQppIu37GjUXW4hN/fNIkicSKz288qebc35p31RaII
-         X6zbjFRfQo+4F9Sr1KV/xhWNxY3aoK4bpnEGfgNgVY2c0yDzubI3yngZM5oHWfzX0quM
-         2FEioGjTO+UdhYiQYnrPFIHyJkSY5UOMRoq3fXjQXelEvm+V4Mo4OMkCG/tk5/hfqE6I
-         8jHtvnlr7O/R3cs+vA//i7ZbBA6XCQ9TMRZp8xJVO7waREOL3oF2swyzsUxYIworNuYP
-         2rZKRcaX+ejEK8yNli3MhJxRJFM/l6gZm4zKxrZizB6LZ0PgbRqSRcHM21xJ1Gnj+7mS
-         X+IA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2uAbgzuqmaaFgsco0W8wfFh6+uslGxzhS9k3Gwh6YFI=;
+        b=FaYfKVQeStbG1gqWxtrRCWvSxrbDmCYERAiLUhM5XJP6pD4zbxUn3qSMfxYKLMVjz0
+         kmsuhIXsqwGaS8U0MCOMPh6ThjcoSOE+0xe6x3hHLPEPFlOVZqVT0kW+gtBFZvHPOuP7
+         2eDneJ00EhW6A7YBL7Zp9mPlMcBnKQmolzojs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=2Th5lDGpBI/Rhu3/73k5rMrbZQS4Y/S/x1FlM2kyjVU=;
-        b=XnWApkg+/CLk+CnfQmR4DP8levSh5OBwFoB6rKl+j2yan4SzTFKT/o/DXSQwwztpE1
-         y02X8edcEF02ZUoy57nuoGNifga/zYdKIAbJ2vB6PIVquAaZ5cqkzeIgaOS1xQYYplgz
-         jU5ZIe1rBmB02f7K2/rj0nVkY+++rK5DqP0TWcm+F3f+4E/Lb7AYfXbX9kTI0GRs5cMj
-         Xk5zK+LxVtrGhIsHtvMaJr8ZHG0MULVik/AvAVcFyPronhdT01OhucNcvkKV3arTAzrF
-         0K81hWNmK8l0Q4V+tt8+NAXI+6OF+0dWfN4gYl/HmiZuO8f3kFA+sP/KoVUVubqPZ93B
-         jVxg==
-X-Gm-Message-State: AOAM530yaaycizgJqsGAa1yEX4lD61Qt5XEfqer0suDskcJl0jaVjQ1i
-        NZVEKmWS5wTcH2RuqxlKYMC+6tGYOQ0=
-X-Google-Smtp-Source: ABdhPJz+i5Ro02n6fk6qh4otSWdV1pNKb/SlP/Oa0qdCaFU9Nxg9lTmkKpR5//+vCGOFFrlcVwjn6w==
-X-Received: by 2002:adf:ee51:: with SMTP id w17mr19730858wro.97.1610832570621;
-        Sat, 16 Jan 2021 13:29:30 -0800 (PST)
-Received: from [192.168.1.211] ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id y14sm15263314wru.96.2021.01.16.13.29.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Jan 2021 13:29:30 -0800 (PST)
-Subject: Re: [PATCH v3 0/4] Remove one more platform_device_add_properties()
- call
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg KH <greg@kroah.com>, Felipe Balbi <balbi@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-References: <20210115094914.88401-1-heikki.krogerus@linux.intel.com>
- <CAHp75Vc3xjaOugX3d8bohz12OEP=n4BAonNyQJQ=UgBfVZorOg@mail.gmail.com>
-From:   Daniel Scally <djrscally@gmail.com>
-Message-ID: <c644e72c-bb46-56c2-931e-7cb98b024cc3@gmail.com>
-Date:   Sat, 16 Jan 2021 21:29:29 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2uAbgzuqmaaFgsco0W8wfFh6+uslGxzhS9k3Gwh6YFI=;
+        b=I7JwjBwDAcAitJhLirWyFOtjLeRZIN3vOrb6D2sg3ObPZpe3XdPSljw9aVccsMzIe2
+         kVExYemh7BGeZssECcvqH7OMuEHnuaKn2eqCpoMF1ilTy9cxwwQ2GiqtVR1UZ3lcUKod
+         yXbi7f9QDBNxTTw3awJGK9qMzvpAWaoABuccEZ115aH6unYw6lmbTyr4OkY8EcTDEKMm
+         QG5CBrJCxjYdTcxaJilzhMbF3EqnD1sgGrGij0RTdRerN5S5cxeOnwl1j4y0hUDQIS/b
+         N0y1TXfgcS09W9Jv6/b3CFVSv3d/OUrFN5DYckP3EjqeHcdaJqIqOBM2XwVQZ0vuZhXk
+         oLnA==
+X-Gm-Message-State: AOAM531gCiAMzYovmCZ5p0pXH2NAV5HI2VCEWfmv/7ElJTaC4DOqqDRW
+        iIwTH7O/dsOk7kJ3st0JF3typup9YBt2HOzni9I7sA==
+X-Google-Smtp-Source: ABdhPJy5/LYHoUfJYfigPp7aEf81RaJx2lXHqgcnMUkYl6viFx+oN9nDTEB9raOjMFYrAG23L3VvR25Vn7ilnouI3bk=
+X-Received: by 2002:a67:73c2:: with SMTP id o185mr15071090vsc.16.1610848740123;
+ Sat, 16 Jan 2021 17:59:00 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAHp75Vc3xjaOugX3d8bohz12OEP=n4BAonNyQJQ=UgBfVZorOg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20210116090656.11752-1-chunfeng.yun@mediatek.com> <20210116090656.11752-12-chunfeng.yun@mediatek.com>
+In-Reply-To: <20210116090656.11752-12-chunfeng.yun@mediatek.com>
+From:   Nicolas Boichat <drinkcat@chromium.org>
+Date:   Sun, 17 Jan 2021 09:58:49 +0800
+Message-ID: <CANMq1KA63Lcifv0G80AyF9-JAdojtsnR18QtfytTMuKw7pTkPA@mail.gmail.com>
+Subject: Re: [PATCH next 12/15] arm64: dts: mediatek: mt8183: fix dtbs_check warning
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        linux-usb@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Min Guo <min.guo@mediatek.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 16/01/2021 20:23, Andy Shevchenko wrote:
-> On Fri, Jan 15, 2021 at 11:52 AM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
->> Hi,
->>
->> I'm now clearing the dev_fwnode(dev)->secondary pointer in
->> device_remove_software_node() as requested by Daniel and Andy. Thanks
->> guys, it's much better now. I also took the liberty of including one
->> more PCI ID patch where I add PCI ID for the Alder Lake-P variant. I
->> hope that is OK.
->>
->> Andy, I dropped your Tested-by tag because of the change I made to the
->> first patch. If you have time to retest these, I would much appreciate.
-> Since Greg already grabbed a v3 I will test it when it appears in linux-next.
+On Sat, Jan 16, 2021 at 5:07 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
 >
-It seems the grabbed one is the v2 one though actually
+> Harmonize node names, compatibles and properties.
+>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index 5b782a4769e7..a69a033a68ac 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -865,7 +865,7 @@
+>                         ranges;
+>                         status = "disabled";
+>
+> -                       usb_host: xhci@11200000 {
+> +                       usb_host: usb@11200000 {
+>                                 compatible = "mediatek,mt8183-xhci",
+>                                              "mediatek,mtk-xhci";
+>                                 reg = <0 0x11200000 0 0x1000>;
+> @@ -908,11 +908,11 @@
+>                         status = "disabled";
+>                 };
+>
+> -               mipi_tx0: mipi-dphy@11e50000 {
+> +               mipi_tx0: dsi-phy@11e50000 {
+>                         compatible = "mediatek,mt8183-mipi-tx";
+>                         reg = <0 0x11e50000 0 0x1000>;
+>                         clocks = <&apmixedsys CLK_APMIXED_MIPID0_26M>;
+> -                       clock-names = "ref_clk";
+> +                       clock-names = "ref";
+>                         #clock-cells = <0>;
+>                         #phy-cells = <0>;
+>                         clock-output-names = "mipi_tx0_pll";
+
+This is unrelated to USB, so this should probably be a separate patch.
+
+> @@ -931,11 +931,10 @@
+>                         };
+>                 };
+>
+> -               u3phy: usb-phy@11f40000 {
+> +               u3phy: t-phy@11f40000 {
+>                         compatible = "mediatek,mt8183-tphy",
+>                                      "mediatek,generic-tphy-v2";
+>                         #address-cells = <1>;
+> -                       #phy-cells = <1>;
+>                         #size-cells = <1>;
+>                         ranges = <0 0 0x11f40000 0x1000>;
+>                         status = "okay";
+> --
+> 2.18.0
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
