@@ -2,132 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3FE2F99F1
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 07:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 867032F9B46
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 09:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732549AbhARGcw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jan 2021 01:32:52 -0500
-Received: from m43-15.mailgun.net ([69.72.43.15]:21190 "EHLO
-        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732441AbhARGcu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jan 2021 01:32:50 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1610951549; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=FvvEhUCfCsPdOZ5IqVfNiwN/9PpX9OC08L+DYKz9fAw=;
- b=OAse5MERRkI6gojcccC4SE+NP37Z6SPBHuaO/W96beMacrn1ZtlnVtV4B+VZiA2SXpJfFAbL
- Wt6os8qSMnrD7EJWvXghn13tt2I/vmvsWm4E0b+z4lHC5xAuGbzRfLB8xpRv6E1W+OQKuOVN
- w2DxURlnzFwRJVvvh8tfc54mthI=
-X-Mailgun-Sending-Ip: 69.72.43.15
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 60052b63ba7f868506fe6376 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 18 Jan 2021 06:32:03
- GMT
-Sender: sanm=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id AE935C43463; Mon, 18 Jan 2021 06:32:02 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sanm)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id C78E9C433CA;
-        Mon, 18 Jan 2021 06:32:01 +0000 (UTC)
+        id S2387711AbhARI3b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jan 2021 03:29:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733226AbhARI31 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jan 2021 03:29:27 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E2EC061573;
+        Mon, 18 Jan 2021 00:28:47 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id u25so22842545lfc.2;
+        Mon, 18 Jan 2021 00:28:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KLqGbxNa2Y//bSC/m+YoN3yy9E8IE8S0pxgJYj58niI=;
+        b=Tfe7yWK4zDgBHMzIL7TOZmcC9zEBk86gzt6EuxaaK+Ya2f8nnOhvclMuu/30j1XSiL
+         odccw1S4tfuCzYqsW9+c8tiQDO/Tl+gKvHR4mAMpnxAlKGSJyc+EdP72IvPJ1bHId9rl
+         wzsXvsD5i7PeY0MrYhJQiHBFuRmNhqw34635KhB9eBd2qOZ0QXcrZYzaQBToN4ShM+YS
+         qxWWwqOvZADYcDgzw3YOkPUrMyXdG9ozdXmdbK0YQlSDbnLJNWSI5HIfPzDjWd64F8nn
+         mf6KsiE2zuhDwMSd/kGAdsklAGp/Vwu8Y5o/ChUSF9A7hx/sTIarKpaE7v5J6UVUCg1X
+         MrLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KLqGbxNa2Y//bSC/m+YoN3yy9E8IE8S0pxgJYj58niI=;
+        b=tzDFbsdk8Fn6hToJ6hI5rGDtXZSlTikuMLx/bGlO/0BgWpUUpSrDyEoUe+N782vs3x
+         D+ZGDJs6CWApTPk0HpsBdQeuyF3QhnF+3/Iy1oGZgIu+rS4/CDaJpX5JEeetFnoG9fbf
+         twukx9QGH/1rUxEjMPVEajwk3ADlNgTACEM0VuYtnE0DHBvnE26zGh/2NyaaeqVTeNXh
+         EymWCgQlKwUcVjHMvB8CSM7fYU+GnW9pkrnounTj+4TD20mZZqoCtPwCQqlYxYOrM820
+         Tp+4EiWK5rFF9u2w89oRDoQE64OzTcKz7yngQCZht14TQWhbNJqTTqysMsQhXSEIkgxa
+         lquQ==
+X-Gm-Message-State: AOAM532BgJTa9sBEo9+AuCQlfLyTS4frwhYxeAtmGdAM/LDyuTNOFGqv
+        5tNI3bKvD4KuZu9d7s29FSxFQxk0VM/KG+eJ1MQ=
+X-Google-Smtp-Source: ABdhPJzQnwoABZVMam3MBtsrDW5CKBbIRNTR8LDPVSYlnnj70IT1dmoQYSz9szEAPTqj0/sUuSA1tQIbOLR4AZgLZKk=
+X-Received: by 2002:a19:991:: with SMTP id 139mr10815362lfj.637.1610958525450;
+ Mon, 18 Jan 2021 00:28:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 18 Jan 2021 12:02:01 +0530
-From:   sanm@codeaurora.org
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>
-Subject: Re: [PATCH] usb: dwc3: qcom: Add shutdown callback for dwc3
-In-Reply-To: <87sg7544da.fsf@kernel.org>
-References: <1605162619-10064-1-git-send-email-sanm@codeaurora.org>
- <87sg7544da.fsf@kernel.org>
-Message-ID: <1a9050a56805b4d95482ccb45edcbb97@codeaurora.org>
-X-Sender: sanm@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+References: <1610720001-15300-1-git-send-email-u0084500@gmail.com> <3a4a88a9-f0e3-2b65-9df4-6c1d4e3f1c14@roeck-us.net>
+In-Reply-To: <3a4a88a9-f0e3-2b65-9df4-6c1d4e3f1c14@roeck-us.net>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Mon, 18 Jan 2021 16:28:34 +0800
+Message-ID: <CADiBU38g_E+iH4jTwQfPvJh4=WRH4vzQ12oubGg47gj+CpTU0A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usb typec: tcpci: mt6360: Add vsafe0v support and
+ external vbus supply control
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        matthias.bgg@gmail.com, Rob Herring <robh+dt@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-01-13 14:10, Felipe Balbi wrote:
-> Hi,
-> 
-> Sandeep Maheswaram <sanm@codeaurora.org> writes:
->> This patch adds a shutdown callback to USB DWC QCOM driver to ensure 
->> that
->> it is properly shutdown in reboot/shutdown path. This is required
->> where SMMU address translation is enabled like on SC7180
->> SoC and few others. If the hardware is still accessing memory after
->> SMMU translation is disabled as part of SMMU shutdown callback in
->> system reboot or shutdown path, then IOVAs(I/O virtual address)
->> which it was using will go on the bus as the physical addresses which
->> might result in unknown crashes (NoC/interconnect errors).
->> 
->> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> 
-> sounds like this is fixing a bug. Do you have a Fixes tag for it? 
-> Should
-> this go to stable?
-> 
-Didn't encounter any bug till now but made this change to prevent issue.
+Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2021=E5=B9=B41=E6=9C=8818=E6=
+=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8A=E5=8D=881:43=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On 1/15/21 6:13 AM, cy_huang wrote:
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > MT6360 not support for TCPC command to control source and sink.
+>
+> does not
+>
+Ack
+> > Uses external 5V vbus regulator as the vbus source control.
+> >
+> Use
+>
+Ack
+> > Also adds the capability to report vsafe0v.
+> >
+> add
+>
+Ack
+> So far this driver works without regulator. Unless I am missing something=
+,
+> this patch makes regulator support mandatory, meaning existing code will =
+fail.
+> I am not sure if that is appropriate/acceptable. Can we be sure that this=
+ will
+> work for existing users of this driver ?
+>
+Yes, I already checked all the src/snk functionality based on  the
+latest typec code.
+It'll be common for our TCPC. It didn't support for TCPC command.
+From the recent patches, actually, I have the local change to test the
+src capability.
+But I didn't submit it. It's almost the same to add set_vbus callback.
+That's why I submit this change after tcpci 'set_vbus callback' is added.
 
->> diff --git a/drivers/usb/dwc3/dwc3-qcom.c 
->> b/drivers/usb/dwc3/dwc3-qcom.c
->> index c703d55..a930e06 100644
->> --- a/drivers/usb/dwc3/dwc3-qcom.c
->> +++ b/drivers/usb/dwc3/dwc3-qcom.c
->> @@ -790,13 +790,11 @@ static int dwc3_qcom_probe(struct 
->> platform_device *pdev)
->>  	return ret;
->>  }
->> 
->> -static int dwc3_qcom_remove(struct platform_device *pdev)
->> +static void __dwc3_qcom_teardown(struct dwc3_qcom *qcom)
->>  {
->> -	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
->> -	struct device *dev = &pdev->dev;
->>  	int i;
->> 
->> -	of_platform_depopulate(dev);
->> +	of_platform_depopulate(qcom->dev);
->> 
->>  	for (i = qcom->num_clocks - 1; i >= 0; i--) {
->>  		clk_disable_unprepare(qcom->clks[i]);
->> @@ -807,12 +805,27 @@ static int dwc3_qcom_remove(struct 
->> platform_device *pdev)
->>  	dwc3_qcom_interconnect_exit(qcom);
->>  	reset_control_assert(qcom->resets);
->> 
->> -	pm_runtime_allow(dev);
->> -	pm_runtime_disable(dev);
->> +	pm_runtime_allow(qcom->dev);
->> +	pm_runtime_disable(qcom->dev);
->> +}
-> 
-> you can make the changes smaller by adding:
-> 
-> 	struct device *dev = qcom->dev;
-> 
-> The nothing else needs to change in this function ;-)
-
-I will do this in next version
+> Thanks,
+> Guenter
+>
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > ---
+> >  drivers/usb/typec/tcpm/tcpci_mt6360.c | 29 +++++++++++++++++++++++++++=
+++
+> >  1 file changed, 29 insertions(+)
+> >
+> > diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/=
+tcpm/tcpci_mt6360.c
+> > index f1bd9e0..0edf4b6 100644
+> > --- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> > +++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> > @@ -11,6 +11,7 @@
+> >  #include <linux/of.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/regmap.h>
+> > +#include <linux/regulator/consumer.h>
+> >  #include <linux/usb/tcpm.h>
+> >
+> >  #include "tcpci.h"
+> > @@ -36,6 +37,7 @@ struct mt6360_tcpc_info {
+> >       struct tcpci_data tdata;
+> >       struct tcpci *tcpci;
+> >       struct device *dev;
+> > +     struct regulator *vbus;
+> >       int irq;
+> >  };
+> >
+> > @@ -51,6 +53,27 @@ static inline int mt6360_tcpc_write16(struct regmap =
+*regmap,
+> >       return regmap_raw_write(regmap, reg, &val, sizeof(u16));
+> >  }
+> >
+> > +static int mt6360_tcpc_set_vbus(struct tcpci *tcpci, struct tcpci_data=
+ *data, bool src, bool snk)
+> > +{
+> > +     struct mt6360_tcpc_info *mti =3D container_of(data, struct mt6360=
+_tcpc_info, tdata);
+> > +     int ret;
+> > +
+> > +     /* To correctly handle the already enabled vbus and disable its s=
+upply first */
+> > +     if (regulator_is_enabled(mti->vbus)) {
+> > +             ret =3D regulator_disable(mti->vbus);
+> > +             if (ret)
+> > +                     return ret;
+> > +     }
+>
+> Is it really a good idea to disable vbus if it happens to be already enab=
+led
+> and there is (another ?) request to enable it ?
+>
+Yes, for  the state change from src_attach_wait to src_attach,
+It need to meet the requirement that  the vbus is at vsafe0v.
+So to disable it first is needed.
+And to prevent other users from enabling/disabling external vbus
+regulator in any case.
+I think we may change regulator_get  to 'regulator_get_exclusive'.
+From the design, 5v regulator only can be controlled via typec framework.
+If other user touch it, it'll affect the typec state transition.
+> > +
+> > +     if (src) {
+> > +             ret =3D regulator_enable(mti->vbus);
+> > +             if (ret)
+> > +                     return ret;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  static int mt6360_tcpc_init(struct tcpci *tcpci, struct tcpci_data *td=
+ata)
+> >  {
+> >       struct regmap *regmap =3D tdata->regmap;
+> > @@ -138,7 +161,13 @@ static int mt6360_tcpc_probe(struct platform_devic=
+e *pdev)
+> >       if (mti->irq < 0)
+> >               return mti->irq;
+> >
+> > +     mti->vbus =3D devm_regulator_get(&pdev->dev, "vbus");
+> > +     if (IS_ERR(mti->vbus))
+> > +             return PTR_ERR(mti->vbus);
+> > +
+> >       mti->tdata.init =3D mt6360_tcpc_init;
+> > +     mti->tdata.set_vbus =3D mt6360_tcpc_set_vbus;
+> > +     mti->tdata.vbus_vsafe0v =3D 1;
+> >       mti->tcpci =3D tcpci_register_port(&pdev->dev, &mti->tdata);
+> >       if (IS_ERR(mti->tcpci)) {
+> >               dev_err(&pdev->dev, "Failed to register tcpci port\n");
+> >
+>
