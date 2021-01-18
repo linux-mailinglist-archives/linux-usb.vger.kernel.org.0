@@ -2,97 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0FFF2F9F73
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 13:24:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC112FA03C
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 13:45:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390894AbhARMYG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jan 2021 07:24:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47642 "EHLO mail.kernel.org"
+        id S2404270AbhARMoB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jan 2021 07:44:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53374 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391463AbhARMXn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 Jan 2021 07:23:43 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7C7DB2065E;
-        Mon, 18 Jan 2021 12:22:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610972577;
-        bh=fF4wtqQGQ2Oe/6iqTOjeEP/+CSVc/k3JPe+jPgdiYZQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Ar035qCvQMyBju8zFR/+3aDLKPcaM9RA81lnEyPn5cg+h8+B9y+e2CuyCXTVtb1ns
-         DGHqqy9wxa5u0IaGXJgYQA1CqGY+dckYCBLrhyfTZsibxJxxPt70Z1/FDNSBwIvB5X
-         Hs2k49nngppxx+nRrqSoKzgZqAAWH6I8VqWXdd5ZH6rtmdO8PUr3DtuQbqd1gErBpw
-         X1SwKc+plhlWKbURMEyRgIlss4Tc3WD8JH1x+I5QMZfjRAy4b7b+1av2Xa9jzKOVen
-         3oTZt0fVVQpDMbDrm7tNcRsYFqVxFm5J44h1Hsn6A1AMtMp2RLP8WUHZKGJUgppXXo
-         8eh2fAaySYNiQ==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, linux-usb@vger.kernel.org,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Subject: Re: [PATCH] usb: bdc: Remove the BDC PCI driver
-In-Reply-To: <YAVy3KKu7n522aUU@kroah.com>
-References: <20210115213142.35003-1-alcooperx@gmail.com>
- <878s8qwkgz.fsf@kernel.org> <YAVy3KKu7n522aUU@kroah.com>
-Date:   Mon, 18 Jan 2021 14:22:49 +0200
-Message-ID: <87wnwav3hi.fsf@kernel.org>
+        id S2404258AbhARMnn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 18 Jan 2021 07:43:43 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E68D4224B8;
+        Mon, 18 Jan 2021 12:43:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1610973782;
+        bh=cnYltJ7zUV+fZqR6uHbvvuu1Kt2sdtSKH8lV9MldO9M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Pe0tZDZ9HpTSaSWYPslmezr5rJkdmANyDW5cK8qWRMpSBoJz6YTJ7tmS4rAmRZvLd
+         j6g8Ne5APyTRlaviyNw5EtoMvam3T9sosOErFLhbVncpMub43A11wxHJRR8sond29C
+         RWhlpbW80zGhPhlXEJRiouHXKa0AicosLvH/1g+8=
+Date:   Mon, 18 Jan 2021 13:42:59 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org,
+        Sheng Long Wang <china_shenglong@163.com>,
+        Wang Sheng Long <shenglong.wang.ext@siemens.com>
+Subject: Re: [PATCH 1/6] USB: serial: cp210x: add support for software flow
+ control
+Message-ID: <YAWCU9D+FTHgW5wj@kroah.com>
+References: <20210118111331.5048-1-johan@kernel.org>
+ <20210118111331.5048-2-johan@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210118111331.5048-2-johan@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jan 18, 2021 at 12:13:26PM +0100, Johan Hovold wrote:
+> From: Wang Sheng Long <shenglong.wang.ext@siemens.com>
+> 
+> When data is transmitted between two serial ports, the phenomenon of
+> data loss often occurs. The two kinds of flow control commonly used in
+> serial communication are hardware flow control and software flow
+> control.
+> 
+> In serial communication, If you only use RX/TX/GND Pins, you can't do
+> hardware flow. So we often used software flow control and prevent data
+> loss. The user sets the software flow control through the application
+> program, and the application program sets the software flow control mode
+> for the serial port chip through the driver.
+> 
+> For the cp210 serial port chip, its driver lacks the software flow
+> control setting code, so the user cannot set the software flow control
+> function through the application program. This adds the missing software
+> flow control.
+> 
+> Signed-off-by: Wang Sheng Long <shenglong.wang.ext@siemens.com>
+> Link: https://lore.kernel.org/r/20210104094502.3942-1-china_shenglong@163.com
+> [ johan: rework properly on top of recent termios changes ]
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
+>  drivers/usb/serial/cp210x.c | 67 +++++++++++++++++++++++++++++++++++--
+>  1 file changed, 65 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+> index fbb10dfc56e3..5bd14770065b 100644
+> --- a/drivers/usb/serial/cp210x.c
+> +++ b/drivers/usb/serial/cp210x.c
+> @@ -377,6 +377,16 @@ static struct usb_serial_driver * const serial_drivers[] = {
+>  #define CONTROL_WRITE_DTR	0x0100
+>  #define CONTROL_WRITE_RTS	0x0200
+>  
+> +/* CP210X_(GET|SET)_CHARS */
+> +struct cp210x_special_chars {
+> +	u8	bEofChar;
+> +	u8	bErrorChar;
+> +	u8	bBreakChar;
+> +	u8	bEventChar;
+> +	u8	bXonChar;
+> +	u8	bXoffChar;
+> +};
+> +
+>  /* CP210X_VENDOR_SPECIFIC values */
+>  #define CP210X_READ_2NCONFIG	0x000E
+>  #define CP210X_READ_LATCH	0x00C2
+> @@ -1074,11 +1084,38 @@ static void cp210x_disable_event_mode(struct usb_serial_port *port)
+>  	port_priv->event_mode = false;
+>  }
+>  
+> +static int cp210x_set_chars(struct usb_serial_port *port,
+> +		struct cp210x_special_chars *chars)
+> +{
+> +	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
+> +	struct usb_serial *serial = port->serial;
+> +	void *dmabuf;
+> +	int result;
+> +
+> +	dmabuf = kmemdup(chars, sizeof(*chars), GFP_KERNEL);
+> +	if (!dmabuf)
+> +		return -ENOMEM;
+> +
+> +	result = usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev, 0),
+> +				CP210X_SET_CHARS, REQTYPE_HOST_TO_INTERFACE, 0,
+> +				port_priv->bInterfaceNumber,
+> +				dmabuf, sizeof(*chars), USB_CTRL_SET_TIMEOUT);
+> +
+> +	kfree(dmabuf);
+> +
+> +	if (result < 0) {
+> +		dev_err(&port->dev, "failed to set special chars: %d\n", result);
+> +		return result;
+> +	}
 
+This is an "open coded" usb_control_msg_send() call :)
 
-Hi,
+Other than that minor thing:
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
->> Al Cooper <alcooperx@gmail.com> writes:
->> > The BDC PCI driver was only used for design verification with
->> > an PCI/FPGA board. The board no longer exists and is not in use
->> > anywhere. All instances of this core now exist as a memory mapped
->> > device on the platform bus.
->> >
->> > NOTE: This only removes the PCI driver and does not remove the
->> > platform driver.
->> >
->> > Signed-off-by: Al Cooper <alcooperx@gmail.com>
->>=20
->> It sounds like it could be used for pre-silicon verification of newer
->> Core Releases, much like Synopsys still uses the HAPS (with mainline
->> linux, mind you) for silicon validation.
->>=20
->> Why would we delete this small shim if it *could* still be useful?
->
-> It ends up conflicting with the PCI id of a device that is actually in
-> the wild (a camera on Apple laptops).  So it's good to drop this driver
-> so the wrong driver doesn't get constantly bound to the wrong device.
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-I see. Oh well...
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmAFfZkRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQavQBAA1MhmHql36rIsV2AInQNInIzr80zE6/75
-uXso+pSgN7F5FnIhy+OGsCMim/pvrmsEYTyflB3eP8bMlclD2he7QBOEBJkRPQJ4
-J22LWXPoyiP1OIuxzfenec1BJMFnA88gf6NQkE7NU4HIbZkVjz8vH1l2s+Qrhou4
-CNPx4oDEc56nlAxHdWZhMjAhsiRPbf1ro4ocOeM0HoCP3jkk7xsOvAV+2iRbfbAF
-tliO2Pp0ygjTZg4Q0iF7G77NhpTKYd2jlwYYOQAS6K5WaFj+GLVoimlalBePx877
-3jfAlRUQj0QYDpbLXkohgRNcwyIUu2BUmhj2HUc4ULZIGpLLl9yy8LqowPo3BkLJ
-uFDhlTJ/Gn6VlUpY4svIxDZhYgQ2lm3FIFT0k5s7V/NwegCE+hoKlmBEuv1mHTYI
-Jh34G88ycIjO9MrFCNw7JDLB8SY4ajhI43/G5NMpDyoJF7z1wdftHs5NlBaHupd+
-qaO/uDCSxxMb7eqZqgJws7YwGbjHBhyETezJjZMX8Xf7Ps6UJq++nNd+L/DAJ1iU
-TaZnKx64ydb2BEQVOe1wiaBO+LU8CamWWaobRPSfym3rCoZoHr+1GknPceJdZXn4
-DKkkX+PhO+zUDAe8NKnOp4Kf5ZQncny55QDj5nS8rzoczGlQNpovV1qYuiLLuql7
-kHEOzNv2+yk=
-=4Bh8
------END PGP SIGNATURE-----
---=-=-=--
