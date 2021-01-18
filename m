@@ -2,199 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 867032F9B46
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 09:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D0F2F9B5A
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 09:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387711AbhARI3b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jan 2021 03:29:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
+        id S2387881AbhARIew (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jan 2021 03:34:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733226AbhARI31 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jan 2021 03:29:27 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E2EC061573;
-        Mon, 18 Jan 2021 00:28:47 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id u25so22842545lfc.2;
-        Mon, 18 Jan 2021 00:28:47 -0800 (PST)
+        with ESMTP id S1726488AbhARIeo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jan 2021 03:34:44 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD621C061573;
+        Mon, 18 Jan 2021 00:34:03 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id x23so17278875lji.7;
+        Mon, 18 Jan 2021 00:34:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=KLqGbxNa2Y//bSC/m+YoN3yy9E8IE8S0pxgJYj58niI=;
-        b=Tfe7yWK4zDgBHMzIL7TOZmcC9zEBk86gzt6EuxaaK+Ya2f8nnOhvclMuu/30j1XSiL
-         odccw1S4tfuCzYqsW9+c8tiQDO/Tl+gKvHR4mAMpnxAlKGSJyc+EdP72IvPJ1bHId9rl
-         wzsXvsD5i7PeY0MrYhJQiHBFuRmNhqw34635KhB9eBd2qOZ0QXcrZYzaQBToN4ShM+YS
-         qxWWwqOvZADYcDgzw3YOkPUrMyXdG9ozdXmdbK0YQlSDbnLJNWSI5HIfPzDjWd64F8nn
-         mf6KsiE2zuhDwMSd/kGAdsklAGp/Vwu8Y5o/ChUSF9A7hx/sTIarKpaE7v5J6UVUCg1X
-         MrLg==
+        bh=NxbXFKF94p6kEsRAtmd8BKyy9JENwa9sivc+ZAodEKA=;
+        b=A2RSX4y2LmMv6mR7pwlrf3u6T3rGFBse1drQ3xjZKsSLH2Wb5CBopN0Tdz9y8eXBQP
+         kAFWmHreQYGoFj+NYj3SHu6ce3tYIQMekoexo1meFdbwptfhfM44+l3RDgA7JQVVFEbd
+         8bm9FjCb8rzH8w6Ew8sijtTEYsfyzOoNBPxcVvAu7mrpZWtqwzqevN5S6qSYBg1m8vSL
+         piLsmxcfauKP/oTrw8wu7xtJD0MddqhyzJ7iqkN/jZNRUm4Y6LM8YY3jEduWM49lnYIg
+         /bsJ++4LJSwhCDav/DwNlIbCiYP3FuEBFqfOiYvEHZqXoJGeItOcb1YzywOHWuhz1nuI
+         d4KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KLqGbxNa2Y//bSC/m+YoN3yy9E8IE8S0pxgJYj58niI=;
-        b=tzDFbsdk8Fn6hToJ6hI5rGDtXZSlTikuMLx/bGlO/0BgWpUUpSrDyEoUe+N782vs3x
-         D+ZGDJs6CWApTPk0HpsBdQeuyF3QhnF+3/Iy1oGZgIu+rS4/CDaJpX5JEeetFnoG9fbf
-         twukx9QGH/1rUxEjMPVEajwk3ADlNgTACEM0VuYtnE0DHBvnE26zGh/2NyaaeqVTeNXh
-         EymWCgQlKwUcVjHMvB8CSM7fYU+GnW9pkrnounTj+4TD20mZZqoCtPwCQqlYxYOrM820
-         Tp+4EiWK5rFF9u2w89oRDoQE64OzTcKz7yngQCZht14TQWhbNJqTTqysMsQhXSEIkgxa
-         lquQ==
-X-Gm-Message-State: AOAM532BgJTa9sBEo9+AuCQlfLyTS4frwhYxeAtmGdAM/LDyuTNOFGqv
-        5tNI3bKvD4KuZu9d7s29FSxFQxk0VM/KG+eJ1MQ=
-X-Google-Smtp-Source: ABdhPJzQnwoABZVMam3MBtsrDW5CKBbIRNTR8LDPVSYlnnj70IT1dmoQYSz9szEAPTqj0/sUuSA1tQIbOLR4AZgLZKk=
-X-Received: by 2002:a19:991:: with SMTP id 139mr10815362lfj.637.1610958525450;
- Mon, 18 Jan 2021 00:28:45 -0800 (PST)
+        bh=NxbXFKF94p6kEsRAtmd8BKyy9JENwa9sivc+ZAodEKA=;
+        b=ema9lq1Tvx5TAG8zNbtYzZ3D2gq3NkXKEV96SoFrUYf8ZJ/FtkZAYKUTjDyW92Tpjf
+         380cN2IsRAj7fhnrrmGtSeF28nMmOXmVErvDtSPg+71lwj7gviKW3aY23QIwjjWy9Zie
+         apbNjc9nUez39/66+NXAo4MUPW/OGVyeSbrLzvVp3ZjGH1U/mjz5CO6+ef+FN1SiB8r/
+         EprgP8q/Y76jm64rF5n/WSlXd7PQA8C7Y9Jyxz0m/TSbkwGt65+aA7e7X2dGDzs33CmS
+         bBdFmqxGm33CMY4zpuvt1vBy9pD+7dpLFXJ+kBhXKeS3tgfsiBmfWNK1lHIKVmhQs6oP
+         Dzog==
+X-Gm-Message-State: AOAM531ZcjDh76hE22t2fZAMh6dQanG/0y+v3QUAXnzV3AoLNgxchQMv
+        kbeR1vVvbTXYtcasPR35vJITwwsRDB7ORprticg=
+X-Google-Smtp-Source: ABdhPJynqi6oTwFjkTNFUl1fP0igBITsisexmUdUKnImyJVj0NHltLH5ZKbkHMkITjIr3opjkpv5LEywTjJJTrhJ9R4=
+X-Received: by 2002:a2e:8e64:: with SMTP id t4mr10154052ljk.141.1610958842168;
+ Mon, 18 Jan 2021 00:34:02 -0800 (PST)
 MIME-Version: 1.0
-References: <1610720001-15300-1-git-send-email-u0084500@gmail.com> <3a4a88a9-f0e3-2b65-9df4-6c1d4e3f1c14@roeck-us.net>
-In-Reply-To: <3a4a88a9-f0e3-2b65-9df4-6c1d4e3f1c14@roeck-us.net>
+References: <1610720001-15300-1-git-send-email-u0084500@gmail.com>
+ <1610720001-15300-2-git-send-email-u0084500@gmail.com> <1610898357.197444.1730305.nullmailer@robh.at.kernel.org>
+In-Reply-To: <1610898357.197444.1730305.nullmailer@robh.at.kernel.org>
 From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Mon, 18 Jan 2021 16:28:34 +0800
-Message-ID: <CADiBU38g_E+iH4jTwQfPvJh4=WRH4vzQ12oubGg47gj+CpTU0A@mail.gmail.com>
-Subject: Re: [PATCH 1/2] usb typec: tcpci: mt6360: Add vsafe0v support and
- external vbus supply control
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        matthias.bgg@gmail.com, Rob Herring <robh+dt@kernel.org>,
+Date:   Mon, 18 Jan 2021 16:33:50 +0800
+Message-ID: <CADiBU3_pH3_=Dpi8auWTekBaev-ZF2WNPUZRzJEu8+pA0Lk18w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] usb typec: tcpci: mt6360: Add vbus supply into
+ dt-binding description
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Guenter Roeck <linux@roeck-us.net>,
         Greg KH <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
+        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
+        Rob Herring <robh+dt@kernel.org>, gene_chen@richtek.com,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
+        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        cy_huang <cy_huang@richtek.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Linux USB List <linux-usb@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2021=E5=B9=B41=E6=9C=8818=E6=
-=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8A=E5=8D=881:43=E5=AF=AB=E9=81=93=EF=BC=9A
+Rob Herring <robh@kernel.org> =E6=96=BC 2021=E5=B9=B41=E6=9C=8817=E6=97=A5 =
+=E9=80=B1=E6=97=A5 =E4=B8=8B=E5=8D=8811:46=E5=AF=AB=E9=81=93=EF=BC=9A
 >
-> On 1/15/21 6:13 AM, cy_huang wrote:
+> On Fri, 15 Jan 2021 22:13:21 +0800, cy_huang wrote:
 > > From: ChiYuan Huang <cy_huang@richtek.com>
 > >
-> > MT6360 not support for TCPC command to control source and sink.
->
-> does not
->
-Ack
-> > Uses external 5V vbus regulator as the vbus source control.
+> > Add external vbus source into dt-binding description.
 > >
-> Use
->
-Ack
-> > Also adds the capability to report vsafe0v.
-> >
-> add
->
-Ack
-> So far this driver works without regulator. Unless I am missing something=
-,
-> this patch makes regulator support mandatory, meaning existing code will =
-fail.
-> I am not sure if that is appropriate/acceptable. Can we be sure that this=
- will
-> work for existing users of this driver ?
->
-Yes, I already checked all the src/snk functionality based on  the
-latest typec code.
-It'll be common for our TCPC. It didn't support for TCPC command.
-From the recent patches, actually, I have the local change to test the
-src capability.
-But I didn't submit it. It's almost the same to add set_vbus callback.
-That's why I submit this change after tcpci 'set_vbus callback' is added.
-
-> Thanks,
-> Guenter
->
 > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 > > ---
-> >  drivers/usb/typec/tcpm/tcpci_mt6360.c | 29 +++++++++++++++++++++++++++=
-++
-> >  1 file changed, 29 insertions(+)
-> >
-> > diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/=
-tcpm/tcpci_mt6360.c
-> > index f1bd9e0..0edf4b6 100644
-> > --- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> > +++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> > @@ -11,6 +11,7 @@
-> >  #include <linux/of.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/regmap.h>
-> > +#include <linux/regulator/consumer.h>
-> >  #include <linux/usb/tcpm.h>
-> >
-> >  #include "tcpci.h"
-> > @@ -36,6 +37,7 @@ struct mt6360_tcpc_info {
-> >       struct tcpci_data tdata;
-> >       struct tcpci *tcpci;
-> >       struct device *dev;
-> > +     struct regulator *vbus;
-> >       int irq;
-> >  };
-> >
-> > @@ -51,6 +53,27 @@ static inline int mt6360_tcpc_write16(struct regmap =
-*regmap,
-> >       return regmap_raw_write(regmap, reg, &val, sizeof(u16));
-> >  }
-> >
-> > +static int mt6360_tcpc_set_vbus(struct tcpci *tcpci, struct tcpci_data=
- *data, bool src, bool snk)
-> > +{
-> > +     struct mt6360_tcpc_info *mti =3D container_of(data, struct mt6360=
-_tcpc_info, tdata);
-> > +     int ret;
-> > +
-> > +     /* To correctly handle the already enabled vbus and disable its s=
-upply first */
-> > +     if (regulator_is_enabled(mti->vbus)) {
-> > +             ret =3D regulator_disable(mti->vbus);
-> > +             if (ret)
-> > +                     return ret;
-> > +     }
->
-> Is it really a good idea to disable vbus if it happens to be already enab=
-led
-> and there is (another ?) request to enable it ?
->
-Yes, for  the state change from src_attach_wait to src_attach,
-It need to meet the requirement that  the vbus is at vsafe0v.
-So to disable it first is needed.
-And to prevent other users from enabling/disabling external vbus
-regulator in any case.
-I think we may change regulator_get  to 'regulator_get_exclusive'.
-From the design, 5v regulator only can be controlled via typec framework.
-If other user touch it, it'll affect the typec state transition.
-> > +
-> > +     if (src) {
-> > +             ret =3D regulator_enable(mti->vbus);
-> > +             if (ret)
-> > +                     return ret;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> >  static int mt6360_tcpc_init(struct tcpci *tcpci, struct tcpci_data *td=
-ata)
-> >  {
-> >       struct regmap *regmap =3D tdata->regmap;
-> > @@ -138,7 +161,13 @@ static int mt6360_tcpc_probe(struct platform_devic=
-e *pdev)
-> >       if (mti->irq < 0)
-> >               return mti->irq;
-> >
-> > +     mti->vbus =3D devm_regulator_get(&pdev->dev, "vbus");
-> > +     if (IS_ERR(mti->vbus))
-> > +             return PTR_ERR(mti->vbus);
-> > +
-> >       mti->tdata.init =3D mt6360_tcpc_init;
-> > +     mti->tdata.set_vbus =3D mt6360_tcpc_set_vbus;
-> > +     mti->tdata.vbus_vsafe0v =3D 1;
-> >       mti->tcpci =3D tcpci_register_port(&pdev->dev, &mti->tdata);
-> >       if (IS_ERR(mti->tcpci)) {
-> >               dev_err(&pdev->dev, "Failed to register tcpci port\n");
+> >  Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml | 7 ++=
++++++
+> >  1 file changed, 7 insertions(+)
 > >
 >
+> My bot found errors running 'make dt_binding_check' on your patch:
+>
+> yamllint warnings/errors:
+>
+> dtschema/dtc warnings/errors:
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/=
+mediatek,mt6360-tcpc.yaml: properties:vbus-supply: 'maxItems' is not one of=
+ ['description', 'deprecated']
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/=
+mediatek,mt6360-tcpc.yaml: ignoring, error in schema: properties: vbus-supp=
+ly
+> warning: no schema found in file: ./Documentation/devicetree/bindings/usb=
+/mediatek,mt6360-tcpc.yaml
+>
+> See https://patchwork.ozlabs.org/patch/1427073
+>
+> This check can fail if there are any dependencies. The base for a patch
+> series is generally the most recent rc1.
+>
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+>
+> pip3 install dtschema --upgrade
+>
+> Please check and re-submit.
+>
+Thanks, after I re-installed the yamlint, the error can be seen.
+Refer to https://www.kernel.org/doc/Documentation/devicetree/bindings/examp=
+le-schema.yaml
+*-supply is only a phandle
+
+In next series patch, I'll remove the maxItems in vbus-supply.
+I already checked the below change. make dt_binding_check can be passed
+
+   vbus-supply:
+     description:
+       Vbus source supply regulator.
+-    maxItems: 1
+
+   connector:
+     type: object
