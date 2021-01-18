@@ -2,68 +2,191 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3532F9764
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 02:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 970F42F98EA
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 06:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730607AbhARBl6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 17 Jan 2021 20:41:58 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:44065 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730186AbhARBlx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 17 Jan 2021 20:41:53 -0500
-Received: by mail-io1-f72.google.com with SMTP id e12so2516633ioh.11
-        for <linux-usb@vger.kernel.org>; Sun, 17 Jan 2021 17:41:37 -0800 (PST)
+        id S1726470AbhARFET (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jan 2021 00:04:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726284AbhARFER (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jan 2021 00:04:17 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFF6C061573
+        for <linux-usb@vger.kernel.org>; Sun, 17 Jan 2021 21:03:37 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id c18so9341513oto.3
+        for <linux-usb@vger.kernel.org>; Sun, 17 Jan 2021 21:03:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Z4oglCVulBWmDn0dekUWDPRQjOgo6IY9sFXRuc9dJxY=;
+        b=JBTJXnEuh9FyRTOI2uyKWGdPoD4q7mkq7YxrBAKlTcMIDvenODlAOemATr3iPmRb28
+         FNJFuwaw6X/eQSrWTnAd2BK898mKExMBFS0fhoGpaTscVVNOtCUgYS+zmvBL7w8//bUE
+         tRoQT96/zE3GuHOl9NR6tDeg5G4WdKGX62fgHuKjSO2Pmc45FH4cRtBbxwAkC4YyKsYJ
+         TSw3X4oaeddsRFs9t1ddnBFgL/Q8PlMs1DiF8nRXfPNTDwRmTa/5WdQ7jxC2ARseGrdf
+         vns7YVa+fgkvP/++k4hjM/p2BzNQyWWsCNB69EhyGBv8m6dKg6lOZVv9TVaR5T7xPdGx
+         qYVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=zXt1APc63d5cqI4C3FVQzfai/THABxZpNpQe8JJ5MKo=;
-        b=K7NkMXEdIMxpu/WNUWuZ7QuY9UB5XjvFe2Jo9WttxFx9hVOrqQdPwiVKlr6bl4XI3E
-         OEa/XrWzIq96zzxwVmm6J9tmB/pl0on1HHjeXNBHR5iXhtq7rQPdeqtH7kqVrDssYtiz
-         Zn2kRpvfw1NDjtSCWOGsYJmWYUzkMtNpgrHFjOO4uyDUzBUMrJ8e3RNxTUIDYkeX1JZl
-         RVa5Uz8neDBJ4wtZL1IRV/T9kw12Sy4AYCKib834OOjCKFxJY/BpGocT/Vn8kp5vJdAr
-         dpM6UF4s89lLOy0TwgqlfqEsFJQ58tmwz6U2yOkglEdTHOdL2QNqpi/Rj837yI14uxxO
-         QkRA==
-X-Gm-Message-State: AOAM530fa+0Ff3LcO5XiMqMvCnweS1FmEsr5kTnHiJFGYYd8SsIggAN/
-        rhSMhqzatqvaKbHkt7Nr1MP9N3vQamsZr8h8AuPFeeXxtpWp
-X-Google-Smtp-Source: ABdhPJxhyH2KZ1i2QjJL1genE0aYzGwyDF4fwoVfzFRdAdSet85f0cfW/AbR0mGFCPXl517bIx2GQX6qojJGb9aNthgLSSBy1lKp
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Z4oglCVulBWmDn0dekUWDPRQjOgo6IY9sFXRuc9dJxY=;
+        b=rGiyWenrmQtxg08wA2UkFF4FqU2o+6dkVEc6ILTIoayG7NSYppqDPrLyVOrQ9/4xhI
+         UIKDIUC0m6M+GD9KAJuehaFR2vfoD7Z9vconP14i+UnPzYF6VhJCyllUuwftQbU+uhMQ
+         SSAAPMm0AQ1IrhGGLiqCE7N2TvX1a7iAJSwuspRi8AuHgoIEg4/C0PHcJ2ZTW2DDyfUI
+         9vHPfMb1JTkdj2pr7Y/2sM9Al1l7J5uX727HKfxcyj7cOdJKNOA4nWR35Op5hzBsp/aV
+         735zj5MB32JZ6vLaHD4DlbevkEULh1fAqxex1VJ4rtcajRZLDevVBOyaOI47ihDeLV1t
+         1twA==
+X-Gm-Message-State: AOAM531GQGsnb3MpwLplWZxf21ScuPTTPyvmNEWZ3gIxF/4VdQ/SQxC2
+        z6OhC5b9FlsQGJc5gZLEDOgNng==
+X-Google-Smtp-Source: ABdhPJxK0tNNlZlGHFgho/gn1Vz0CB98yT341TmVUA8SjRkg+DQ+s1p34w/MEq8yD6nV89ned1wH3g==
+X-Received: by 2002:a9d:a61:: with SMTP id 88mr16383403otg.18.1610946216339;
+        Sun, 17 Jan 2021 21:03:36 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id o135sm3414613ooo.38.2021.01.17.21.03.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Jan 2021 21:03:35 -0800 (PST)
+Date:   Sun, 17 Jan 2021 23:03:33 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Jack Pham <jackp@codeaurora.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: phy: qcom,qmp: Add SM8150, SM8250
+ and SM8350 USB PHY bindings
+Message-ID: <YAUWpWfdsmQTXM3s@builder.lan>
+References: <20210115174723.7424-1-jackp@codeaurora.org>
+ <20210115174723.7424-2-jackp@codeaurora.org>
 MIME-Version: 1.0
-X-Received: by 2002:a02:6d10:: with SMTP id m16mr17070188jac.86.1610934072416;
- Sun, 17 Jan 2021 17:41:12 -0800 (PST)
-Date:   Sun, 17 Jan 2021 17:41:12 -0800
-In-Reply-To: <000000000000872b5405b36f8e31@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000024a0ec05b922d186@google.com>
-Subject: Re: WARNING in input_register_device
-From:   syzbot <syzbot+92340f7b2b4789907fdb@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, ebiggers@kernel.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, rafael@kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210115174723.7424-2-jackp@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On Fri 15 Jan 11:47 CST 2021, Jack Pham wrote:
 
-commit c318840fb2a42ce25febc95c4c19357acf1ae5ca
-Author: Alan Stern <stern@rowland.harvard.edu>
-Date:   Wed Dec 30 16:20:44 2020 +0000
+> Add the compatible strings for the USB3 PHYs found on SM8150, SM8250
+> and SM8350 SoCs. These require separate subschemas due to the different
+> required clock entries.
+> 
+> Note the SM8150 and SM8250 compatibles have already been in place in
+> the dts as well as the driver implementation but were missing from
+> the documentation.
+> 
 
-    USB: Gadget: dummy-hcd: Fix shift-out-of-bounds bug
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10be15d7500000
-start commit:   2c85ebc5 Linux 5.10
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8aff533d6c635e6
-dashboard link: https://syzkaller.appspot.com/bug?extid=92340f7b2b4789907fdb
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1763d433500000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ef12cb500000
+Regards,
+Bjorn
 
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: USB: Gadget: dummy-hcd: Fix shift-out-of-bounds bug
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> Signed-off-by: Jack Pham <jackp@codeaurora.org>
+> ---
+>  .../devicetree/bindings/phy/qcom,qmp-phy.yaml | 67 +++++++++++++++++++
+>  1 file changed, 67 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> index 390df23b82e7..841c72863b4f 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> @@ -30,15 +30,24 @@ properties:
+>        - qcom,sdm845-qmp-ufs-phy
+>        - qcom,sdm845-qmp-usb3-uni-phy
+>        - qcom,sm8150-qmp-ufs-phy
+> +      - qcom,sm8150-qmp-usb3-phy
+> +      - qcom,sm8150-qmp-usb3-uni-phy
+>        - qcom,sm8250-qmp-ufs-phy
+>        - qcom,sm8250-qmp-gen3x1-pcie-phy
+>        - qcom,sm8250-qmp-gen3x2-pcie-phy
+>        - qcom,sm8250-qmp-modem-pcie-phy
+> +      - qcom,sm8250-qmp-usb3-phy
+> +      - qcom,sm8250-qmp-usb3-uni-phy
+> +      - qcom,sm8350-qmp-usb3-phy
+> +      - qcom,sm8350-qmp-usb3-uni-phy
+>        - qcom,sdx55-qmp-usb3-uni-phy
+>  
+>    reg:
+> +    minItems: 1
+> +    maxItems: 2
+>      items:
+>        - description: Address and length of PHY's common serdes block.
+> +      - description: Address and length of PHY's DP_COM control block.
+>  
+>    "#clock-cells":
+>      enum: [ 1, 2 ]
+> @@ -287,6 +296,64 @@ allOf:
+>          reset-names:
+>            items:
+>              - const: phy
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sm8150-qmp-usb3-phy
+> +              - qcom,sm8150-qmp-usb3-uni-phy
+> +              - qcom,sm8250-qmp-usb3-uni-phy
+> +              - qcom,sm8350-qmp-usb3-uni-phy
+> +    then:
+> +      properties:
+> +        clocks:
+> +          items:
+> +            - description: Phy aux clock.
+> +            - description: 19.2 MHz ref clk source.
+> +            - description: 19.2 MHz ref clk.
+> +            - description: Phy common block aux clock.
+> +        clock-names:
+> +          items:
+> +            - const: aux
+> +            - const: ref_clk_src
+> +            - const: ref
+> +            - const: com_aux
+> +        resets:
+> +          items:
+> +            - description: reset of phy block.
+> +            - description: phy common block reset.
+> +        reset-names:
+> +          items:
+> +            - const: phy
+> +            - const: common
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sm8250-qmp-usb3-phy
+> +              - qcom,sm8350-qmp-usb3-phy
+> +    then:
+> +      properties:
+> +        clocks:
+> +          items:
+> +            - description: Phy aux clock.
+> +            - description: 19.2 MHz ref clk.
+> +            - description: Phy common block aux clock.
+> +        clock-names:
+> +          items:
+> +            - const: aux
+> +            - const: ref_clk_src
+> +            - const: com_aux
+> +        resets:
+> +          items:
+> +            - description: reset of phy block.
+> +            - description: phy common block reset.
+> +        reset-names:
+> +          items:
+> +            - const: phy
+> +            - const: common
+>  
+>  examples:
+>    - |
+> -- 
+> 2.24.0
+> 
