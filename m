@@ -2,86 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC232FA695
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 17:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2EE2FA7B1
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 18:41:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406068AbhARQoh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 18 Jan 2021 11:44:37 -0500
-Received: from mail.msweet.org ([173.255.209.91]:46934 "EHLO mail.msweet.org"
+        id S2407203AbhARRkM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jan 2021 12:40:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41754 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405883AbhARQo0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 Jan 2021 11:44:26 -0500
-Received: from [10.0.1.137] (cbl-66-186-76-47.vianet.ca [66.186.76.47])
-        by mail.msweet.org (Postfix) with ESMTPSA id AD55B809DE;
-        Mon, 18 Jan 2021 16:43:43 +0000 (UTC)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.40.0.2.32\))
-Subject: Re: [PATCH] USB: usblp: add USBLP_QUIRK_NO_SET_INTF flag
-From:   Michael Sweet <msweet@msweet.org>
-In-Reply-To: <20210118163117.GA142198@rowland.harvard.edu>
-Date:   Mon, 18 Jan 2021 11:43:42 -0500
-Cc:     Pete Zaitcev <zaitcev@redhat.com>,
-        Jeremy Figgins <kernel@jeremyfiggins.com>,
-        "<gregkh@linuxfoundation.org>" <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <B5544550-3209-4D98-ABA0-7FA389AED95F@msweet.org>
-References: <YASt5wgOCkXhH2Dv@watson>
- <20210117234416.49d59761@suzdal.zaitcev.lan>
- <20210118163117.GA142198@rowland.harvard.edu>
-To:     Alan Stern <stern@rowland.harvard.edu>
-X-Mailer: Apple Mail (2.3654.40.0.2.32)
+        id S2407154AbhARRiC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 18 Jan 2021 12:38:02 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 446E1223E8;
+        Mon, 18 Jan 2021 17:37:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1610991424;
+        bh=bvqqgkmFm3rdSY0WYtfXdrX5syoNxA/lRBODaxHFdA8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XNjUdsAH/RmPHlzwkm0jOtNsZuDRO9qO8liR7juCrVZd/8WCzwmTfnjRo3TuLFu6+
+         e+9AXAZzDX5QBKI/KV8qOyebh1UW10KkeVrGKE2acv0SBQ6+O2LzzGcgFXzyg+6oS7
+         xbAXBvXrm393GkG9isrSKFLIt5OiQkzOEMgjpcfI=
+Date:   Mon, 18 Jan 2021 18:37:02 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, Al Cooper <alcooperx@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: bdc: Remove the BDC PCI driver
+Message-ID: <YAXHPk+kAGY45cgN@kroah.com>
+References: <20210115213142.35003-1-alcooperx@gmail.com>
+ <878s8qwkgz.fsf@kernel.org>
+ <YAVy3KKu7n522aUU@kroah.com>
+ <87wnwav3hi.fsf@kernel.org>
+ <CAMeQTsbQcbrBMvh2uzPjCJ1bMDQtZTEUMJ9Y9mhmGTnxhN-3+A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMeQTsbQcbrBMvh2uzPjCJ1bMDQtZTEUMJ9Y9mhmGTnxhN-3+A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-FWIW, the CUPS libusb-based backend only sets the alt setting if there is more than 1 alt setting in the descriptor.
-
-
-> On Jan 18, 2021, at 11:31 AM, Alan Stern <stern@rowland.harvard.edu> wrote:
+On Mon, Jan 18, 2021 at 01:54:16PM +0100, Patrik Jakobsson wrote:
+> On Mon, Jan 18, 2021 at 1:22 PM Felipe Balbi <balbi@kernel.org> wrote:
+> >
+> >
+> > Hi,
+> >
+> > Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+> > >> Al Cooper <alcooperx@gmail.com> writes:
+> > >> > The BDC PCI driver was only used for design verification with
+> > >> > an PCI/FPGA board. The board no longer exists and is not in use
+> > >> > anywhere. All instances of this core now exist as a memory mapped
+> > >> > device on the platform bus.
+> > >> >
+> > >> > NOTE: This only removes the PCI driver and does not remove the
+> > >> > platform driver.
+> > >> >
+> > >> > Signed-off-by: Al Cooper <alcooperx@gmail.com>
+> > >>
+> > >> It sounds like it could be used for pre-silicon verification of newer
+> > >> Core Releases, much like Synopsys still uses the HAPS (with mainline
+> > >> linux, mind you) for silicon validation.
+> > >>
+> > >> Why would we delete this small shim if it *could* still be useful?
+> > >
+> > > It ends up conflicting with the PCI id of a device that is actually in
+> > > the wild (a camera on Apple laptops).  So it's good to drop this driver
+> > > so the wrong driver doesn't get constantly bound to the wrong device.
+> >
+> > I see. Oh well...
 > 
-> On Sun, Jan 17, 2021 at 11:44:16PM -0600, Pete Zaitcev wrote:
->> On Sun, 17 Jan 2021 15:36:39 -0600
->> Jeremy Figgins <kernel@jeremyfiggins.com> wrote:
->> 
->>> The naming is designed to mirror the existing
->>> USB_QUIRK_NO_SET_INTF flag, but that flag is
->>> not sufficient to make these devices work.
->>> +	{ 0x0416, 0x5011, USBLP_QUIRK_NO_SET_INTF }, /* Winbond Electronics Corp. Virtual Com Port */
->> 
->> Jeremy, thanks for the patch. It looks mostly fine code-wise (quirk is
->> out of numerical order), but I have a question: did you consider keying
->> off usblp->dev->quirks instead?
->> 
->> How about this:
->> 
->> diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
->> index 37062130a03c..0c4a98f00797 100644
->> --- a/drivers/usb/class/usblp.c
->> +++ b/drivers/usb/class/usblp.c
->> @@ -1315,7 +1315,11 @@ static int usblp_set_protocol(struct usblp *usblp, int protocol)
->> 	alts = usblp->protocol[protocol].alt_setting;
->> 	if (alts < 0)
->> 		return -EINVAL;
->> -	r = usb_set_interface(usblp->dev, usblp->ifnum, alts);
->> +	if (usblp->dev->quirks & USB_QUIRK_NO_SET_INTF) {
->> +		r = 0;
->> +	} else {
->> +		r = usb_set_interface(usblp->dev, usblp->ifnum, alts);
->> +	}
->> 	if (r < 0) {
->> 		printk(KERN_ERR "usblp: can't set desired altsetting %d on interface %d\n",
->> 			alts, usblp->ifnum);
+> It would also help if this got disabled in stable so existing kernels
+> stop loading bdc.
 > 
-> Would it be practical simply to skip the usb_set_interface() call 
-> whenever alts is 0?  After all, devices use altsetting 0 by default; it 
-> shouldn't be necessary to tell them to do so.
-> 
-> Alan Stern
+> Can this patch go directly into stable or should I send a patch that
+> adds "depends on BROKEN"?
 
-________________________
-Michael Sweet
+A patch for that, that I can take now for 5.11-final and backport to
+stable kernels would be fine.
 
+thanks,
 
-
+greg k-h
