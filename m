@@ -2,491 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 971082F994D
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 06:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9062F997E
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 06:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731706AbhARFcw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jan 2021 00:32:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51640 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728799AbhARFcr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jan 2021 00:32:47 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45178C061573
-        for <linux-usb@vger.kernel.org>; Sun, 17 Jan 2021 21:32:07 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id f1so2029764edr.12
-        for <linux-usb@vger.kernel.org>; Sun, 17 Jan 2021 21:32:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=UZmB4BFw+sflHCAeBaRBA/VSc/ur1xYNqfwpdc90lDM=;
-        b=UMhK6KflAhGrqod3ToL4nJH3lDLZ+NYJNh9sYhumFVB6ZruQYR5pnk7jLhoCzt8Tez
-         J4ha+eE3vHxdIjXytKxKDi19n1x88UuO3bwCLHpvN8zRL78+BtoKPFo7Y6yF988qtbUV
-         95rYXEAzMHpsRV8q0g+DuHCh13nZ0K7U/kv1ZyvBAT0qBrkxd+13HR1pXfaQYM7hmSpl
-         NjaH3PoHzrOFzvLMEsV7nDHn6q9CcTPT1hVGhl5/tMEoQnozPHW9x8NwdHzHiw5bPSLe
-         7sAZwnlQpjUN2c2OMfk+HX2VaxBlqttk9YrfgOowQA5fTWDhJEOSYbYD5b6bet0eWWZW
-         YDuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=UZmB4BFw+sflHCAeBaRBA/VSc/ur1xYNqfwpdc90lDM=;
-        b=LSp3RjVPlyxbQ1N1JDflJUt8UOSWOfMndB5CqWBKHDVSQpw+RfyLI/hFj4ulS0vX3U
-         AO5P14V69JX0FkHm3uROeN+8o+e8f3h8JChObFt22CCbGlPeMfOdCsIKSV73nOARQCrV
-         vdzqeBw/RmiNAO79j82wAHsMKtQjeiBZUCTnFv9WHF8+uh/KoFgJ3n7jCL8cZsSS7tYj
-         8a/9OEeTc4qq2lqyPMq3KktpasDENwfy2nx1g+PrUGckqoIRgFLFrv2tassYNkXZSTW/
-         2YP9nVxQUhze2chq6CfsED+ahJiSk36Vh1NmiEZ5iwDoBuDlrYUCj6s62t+WPdb97BPo
-         c3uw==
-X-Gm-Message-State: AOAM532g7Z4vmZRYGayKyV4Bkwohv1pEnLJ+UAs0nWKsPZ4oyIgX8l03
-        sOb//gnOPdJdmIWSjd19O/x2bmwE8NE=
-X-Google-Smtp-Source: ABdhPJyWEsaEK36pIWXOfV6+ZNIHruUet74WXgQJc+Luuu/Cn9dDXqh2TcA4tSqdfAQx8xIEtJ/qjg==
-X-Received: by 2002:aa7:db1a:: with SMTP id t26mr18605608eds.25.1610947926069;
-        Sun, 17 Jan 2021 21:32:06 -0800 (PST)
-Received: from gci-Precision-M2800.fritz.box ([2a02:8109:8b00:c24:ec4f:4ed0:f07b:e16d])
-        by smtp.googlemail.com with ESMTPSA id w12sm4132379edr.29.2021.01.17.21.32.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jan 2021 21:32:05 -0800 (PST)
-From:   Giacinto Cifelli <gciofono@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Giacinto Cifelli <gciofono@gmail.com>
-Subject: [PATCH] net: usb: cdc_ether: added support for Thales Cinterion PLSx3 modem family.
-Date:   Mon, 18 Jan 2021 06:32:03 +0100
-Message-Id: <20210118053203.8155-1-gciofono@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1732240AbhARFqH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jan 2021 00:46:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:55036 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732163AbhARFpr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jan 2021 00:45:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1610948661;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VOf6YYpsCCTW0hOXZG8vk+4qqe4zPxwo1VVrYS7gvyI=;
+        b=LYmcWupOFvMy4HiY7jqIpmPOTQTilDuZ0kP9ssh9B5AZ+GaQFNr8Ovf38CXXjNjRJg6zxF
+        mT36lnHfxB1QXM3nTTaWyOwFvQdwnLfxJb55V39tN9AJp5Ie7Ay4qD/xHUDjY/x93bHJ/h
+        WLxDNyof/I2YeSYcoSxcmmbj55VuiYU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-219-DQQMn__uML2-xZcj7ALBkg-1; Mon, 18 Jan 2021 00:44:18 -0500
+X-MC-Unique: DQQMn__uML2-xZcj7ALBkg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8417815722;
+        Mon, 18 Jan 2021 05:44:17 +0000 (UTC)
+Received: from suzdal.zaitcev.lan (ovpn-112-202.phx2.redhat.com [10.3.112.202])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 28A4E5D720;
+        Mon, 18 Jan 2021 05:44:17 +0000 (UTC)
+Date:   Sun, 17 Jan 2021 23:44:16 -0600
+From:   Pete Zaitcev <zaitcev@redhat.com>
+To:     Jeremy Figgins <kernel@jeremyfiggins.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        zaitcev@redhat.com
+Subject: Re: [PATCH] USB: usblp: add USBLP_QUIRK_NO_SET_INTF flag
+Message-ID: <20210117234416.49d59761@suzdal.zaitcev.lan>
+In-Reply-To: <YASt5wgOCkXhH2Dv@watson>
+References: <YASt5wgOCkXhH2Dv@watson>
+Organization: Red Hat, Inc.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-lsusb -v for this device:
+On Sun, 17 Jan 2021 15:36:39 -0600
+Jeremy Figgins <kernel@jeremyfiggins.com> wrote:
 
-Bus 003 Device 007: ID 1e2d:0069
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2 ?
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0        64
-  idVendor           0x1e2d
-  idProduct          0x0069
-  bcdDevice            0.00
-  iManufacturer           4 Cinterion Wireless Modules
-  iProduct                3 PLSx3
-  iSerial                 5 fa3c1419
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength          352
-    bNumInterfaces         10
-    bConfigurationValue     1
-    iConfiguration          2 Cinterion Configuration
-    bmAttributes         0xe0
-      Self Powered
-      Remote Wakeup
-    MaxPower              500mA
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         0
-      bInterfaceCount         2
-      bFunctionClass          2 Communications
-      bFunctionSubClass       2 Abstract (modem)
-      bFunctionProtocol       1 AT-commands (v.25ter)
-      iFunction               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      2 Abstract (modem)
-      bInterfaceProtocol      1 AT-commands (v.25ter)
-      iInterface              0
-      CDC Header:
-        bcdCDC               1.10
-      CDC ACM:
-        bmCapabilities       0x02
-          line coding and serial state
-      CDC Call Management:
-        bmCapabilities       0x03
-          call management
-          use DataInterface
-        bDataInterface          1
-      CDC Union:
-        bMasterInterface        0
-        bSlaveInterface         1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 Unused
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         2
-      bInterfaceCount         2
-      bFunctionClass          2 Communications
-      bFunctionSubClass       2 Abstract (modem)
-      bFunctionProtocol       1 AT-commands (v.25ter)
-      iFunction               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        2
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      2 Abstract (modem)
-      bInterfaceProtocol      1 AT-commands (v.25ter)
-      iInterface              0
-      CDC Header:
-        bcdCDC               1.10
-      CDC ACM:
-        bmCapabilities       0x02
-          line coding and serial state
-      CDC Call Management:
-        bmCapabilities       0x03
-          call management
-          use DataInterface
-        bDataInterface          3
-      CDC Union:
-        bMasterInterface        2
-        bSlaveInterface         3
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        3
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 Unused
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x84  EP 4 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         4
-      bInterfaceCount         2
-      bFunctionClass          2 Communications
-      bFunctionSubClass       2 Abstract (modem)
-      bFunctionProtocol       1 AT-commands (v.25ter)
-      iFunction               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        4
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      2 Abstract (modem)
-      bInterfaceProtocol      1 AT-commands (v.25ter)
-      iInterface              0
-      CDC Header:
-        bcdCDC               1.10
-      CDC ACM:
-        bmCapabilities       0x02
-          line coding and serial state
-      CDC Call Management:
-        bmCapabilities       0x03
-          call management
-          use DataInterface
-        bDataInterface          5
-      CDC Union:
-        bMasterInterface        4
-        bSlaveInterface         5
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x85  EP 5 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        5
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 Unused
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x86  EP 6 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x03  EP 3 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         6
-      bInterfaceCount         2
-      bFunctionClass          2 Communications
-      bFunctionSubClass       2 Abstract (modem)
-      bFunctionProtocol       1 AT-commands (v.25ter)
-      iFunction               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        6
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      2 Abstract (modem)
-      bInterfaceProtocol      1 AT-commands (v.25ter)
-      iInterface              0
-      CDC Header:
-        bcdCDC               1.10
-      CDC ACM:
-        bmCapabilities       0x02
-          line coding and serial state
-      CDC Call Management:
-        bmCapabilities       0x03
-          call management
-          use DataInterface
-        bDataInterface          7
-      CDC Union:
-        bMasterInterface        6
-        bSlaveInterface         7
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x87  EP 7 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        7
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 Unused
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x88  EP 8 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x04  EP 4 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         8
-      bInterfaceCount         2
-      bFunctionClass          2 Communications
-      bFunctionSubClass       0
-      bFunctionProtocol       0
-      iFunction               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        8
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      6 Ethernet Networking
-      bInterfaceProtocol      0
-      iInterface              0
-      CDC Header:
-        bcdCDC               1.10
-      CDC Ethernet:
-        iMacAddress                      1 00A0C6C14190
-        bmEthernetStatistics    0x00000000
-        wMaxSegmentSize              16384
-        wNumberMCFilters            0x0001
-        bNumberPowerFilters              0
-      CDC Union:
-        bMasterInterface        8
-        bSlaveInterface         9
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x89  EP 9 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        9
-      bAlternateSetting       0
-      bNumEndpoints           0
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 Unused
-      bInterfaceProtocol      0
-      iInterface              0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        9
-      bAlternateSetting       1
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 Unused
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x8a  EP 10 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x05  EP 5 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-Device Qualifier (for other device speed):
-  bLength                10
-  bDescriptorType         6
-  bcdUSB               2.00
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2 ?
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0        64
-  bNumConfigurations      1
-Device Status:     0x0000
-  (Bus Powered)
+> The naming is designed to mirror the existing
+> USB_QUIRK_NO_SET_INTF flag, but that flag is
+> not sufficient to make these devices work.
+> +	{ 0x0416, 0x5011, USBLP_QUIRK_NO_SET_INTF }, /* Winbond Electronics Corp. Virtual Com Port */
 
-Signed-off-by: Giacinto Cifelli <gciofono@gmail.com>
----
- drivers/net/usb/cdc_ether.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Jeremy, thanks for the patch. It looks mostly fine code-wise (quirk is
+out of numerical order), but I have a question: did you consider keying
+off usblp->dev->quirks instead?
 
-diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
-index 8c1d61c2cbac..3157184a6274 100644
---- a/drivers/net/usb/cdc_ether.c
-+++ b/drivers/net/usb/cdc_ether.c
-@@ -961,6 +961,12 @@ static const struct usb_device_id	products[] = {
- 				      USB_CDC_SUBCLASS_ETHERNET,
- 				      USB_CDC_PROTO_NONE),
- 	.driver_info = (unsigned long)&wwan_info,
-+}, {
-+	/* Cinterion PLS83/PLS63 modem by GEMALTO/THALES */
-+	USB_DEVICE_AND_INTERFACE_INFO(0x1e2d, 0x0069, USB_CLASS_COMM,
-+				      USB_CDC_SUBCLASS_ETHERNET,
-+				      USB_CDC_PROTO_NONE),
-+	.driver_info = (unsigned long)&wwan_info,
- }, {
- 	USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_ETHERNET,
- 			USB_CDC_PROTO_NONE),
--- 
-2.17.1
+How about this:
+
+diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
+index 37062130a03c..0c4a98f00797 100644
+--- a/drivers/usb/class/usblp.c
++++ b/drivers/usb/class/usblp.c
+@@ -1315,7 +1315,11 @@ static int usblp_set_protocol(struct usblp *usblp, int protocol)
+ 	alts = usblp->protocol[protocol].alt_setting;
+ 	if (alts < 0)
+ 		return -EINVAL;
+-	r = usb_set_interface(usblp->dev, usblp->ifnum, alts);
++	if (usblp->dev->quirks & USB_QUIRK_NO_SET_INTF) {
++		r = 0;
++	} else {
++		r = usb_set_interface(usblp->dev, usblp->ifnum, alts);
++	}
+ 	if (r < 0) {
+ 		printk(KERN_ERR "usblp: can't set desired altsetting %d on interface %d\n",
+ 			alts, usblp->ifnum);
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 1b4eb7046b07..632c60401d53 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -205,6 +205,9 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	/* HP v222w 16GB Mini USB Drive */
+ 	{ USB_DEVICE(0x03f0, 0x3f40), .driver_info = USB_QUIRK_DELAY_INIT },
+ 
++	/* Winbond Electronics Corp. Virtual Com Port */
++	{ USB_DEVICE(0x0416, 0x5011), .driver_info = USB_QUIRK_NO_SET_INTF },
++
+ 	/* Creative SB Audigy 2 NX */
+ 	{ USB_DEVICE(0x041e, 0x3020), .driver_info = USB_QUIRK_RESET_RESUME },
+ 
+
+Please let me know if it works for you.
+
+-- Pete
 
