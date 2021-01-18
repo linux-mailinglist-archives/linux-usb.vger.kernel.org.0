@@ -2,38 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C692F9DE7
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 12:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D81D2F9DE4
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 12:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390125AbhARLSb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jan 2021 06:18:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57294 "EHLO mail.kernel.org"
+        id S2390120AbhARLSZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jan 2021 06:18:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57290 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390065AbhARLRB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S2390066AbhARLRB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Mon, 18 Jan 2021 06:17:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3986D22AB0;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1EC0220E65;
         Mon, 18 Jan 2021 11:14:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1610968475;
-        bh=3312tomEZXi96piv6nh/oGdopZw+YFazo/XKp9euQvM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=C+rXDPzrWYFTLUnJB4guJUoa0WyfgYdKAhRgScadzF9NZoNcrqwUo3xbeensyBqLJ
-         bnmsquYwC5+MxUEAcd/hfkdBbWZSCEVKNUHAwsiJKZCbQD97uDTxqnGjXbKuU8QBKX
-         FuGD0j+pQ5YGSXXcFI7Z6ec+60FDlRgDSKBEMNhu5Pa6NzQ33hxGI1/+7UVy3uj2D3
-         QHQODqHjL5SsfUiJ3WEv/4XbRmOKsiRtKcf6jW60/aAnWzeXpPOasKPPNRE4GJdRMe
-         uyc1XGtMiwgZexMx7icW5M4P10SiXbNDMYgZJFriwbmz/WBaT98YXW7O+bTW/u7Ucu
-         F4CCLFxPnuAtw==
+        bh=NjUQ79cLJwXWs5mX+phDrSbtcH57D8CjxBUMCpDkGTQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hZCy9xZ+bAbCNZMK+H1sSqsaZDTD00bs0Kw8++DRbgfn3oSeUCDXIosLaKXugb1Ey
+         czMa08/KrY6e7HIUngzNY6RSYtvejGVlba+LaIhcXzpi1HxDadM92q0SIPtiQjs71t
+         ffwfDnE9QDxnhpss1HgGhrPJZEugKrk7iEI/W+ENPniuOXUs20VnE758ncULfrXmzL
+         8hwQzO2CiYZNnW/pBHKlen7d7HByG2ngeXa0F8Bh+/t+maMzasQazjZNuCrALWJaU8
+         0HAyyj9YEojyKo4ZsodOdO37sf4NgIxsMPgDVIGZNOkZE4aFWtECf2y7/NODekIgcj
+         SlgeK1gbmme5w==
 Received: from johan by xi with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1l1SUb-0001Ls-Mo; Mon, 18 Jan 2021 12:14:41 +0100
+        id 1l1SUb-0001Lu-QR; Mon, 18 Jan 2021 12:14:41 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     linux-usb@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Johan Hovold <johan@kernel.org>
-Subject: [PATCH 0/6] USB: serial: drop short control-transfer checks
-Date:   Mon, 18 Jan 2021 12:14:20 +0100
-Message-Id: <20210118111426.5147-1-johan@kernel.org>
+Subject: [PATCH 1/6] USB: serial: mxuport: drop short control-transfer check
+Date:   Mon, 18 Jan 2021 12:14:21 +0100
+Message-Id: <20210118111426.5147-2-johan@kernel.org>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210118111426.5147-1-johan@kernel.org>
+References: <20210118111426.5147-1-johan@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -41,28 +43,31 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 There's no need to check for short control transfers when sending data
-so remove the redundant sanity checks from the drivers that had them.
+so remove the redundant sanity check.
 
-Included is also a related fix of a copy-paste error in a debug message.
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/serial/mxuport.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-Johan
-
-
-Johan Hovold (6):
-  USB: serial: mxuport: drop short control-transfer check
-  USB: serial: upd78f0730: drop short control-transfer check
-  USB: serial: io_ti: drop short control-transfer check
-  USB: serial: io_ti: fix a debug-message copy-paste error
-  USB: serial: f81232: drop short control-transfer checks
-  USB: serial: f81534: drop short control-transfer check
-
- drivers/usb/serial/f81232.c     | 12 ++----------
- drivers/usb/serial/f81534.c     |  4 +---
- drivers/usb/serial/io_ti.c      |  8 ++------
- drivers/usb/serial/mxuport.c    |  7 -------
- drivers/usb/serial/upd78f0730.c |  5 +----
- 5 files changed, 6 insertions(+), 30 deletions(-)
-
+diff --git a/drivers/usb/serial/mxuport.c b/drivers/usb/serial/mxuport.c
+index 5d38c2a0f590..eb45a9b0005c 100644
+--- a/drivers/usb/serial/mxuport.c
++++ b/drivers/usb/serial/mxuport.c
+@@ -261,13 +261,6 @@ static int mxuport_send_ctrl_data_urb(struct usb_serial *serial,
+ 		return status;
+ 	}
+ 
+-	if (status != size) {
+-		dev_err(&serial->interface->dev,
+-			"%s - short write (%d / %zd)\n",
+-			__func__, status, size);
+-		return -EIO;
+-	}
+-
+ 	return 0;
+ }
+ 
 -- 
 2.26.2
 
