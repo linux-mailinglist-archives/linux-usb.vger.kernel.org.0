@@ -2,115 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0782FA8C1
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 19:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3E42FA9AE
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 20:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393631AbhARS0i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jan 2021 13:26:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52548 "EHLO mail.kernel.org"
+        id S2390574AbhARTHv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jan 2021 14:07:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35694 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392937AbhARPGT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 Jan 2021 10:06:19 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 56C2422BF3;
-        Mon, 18 Jan 2021 15:05:38 +0000 (UTC)
+        id S2390584AbhARLjw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 18 Jan 2021 06:39:52 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1286C222BB;
+        Mon, 18 Jan 2021 11:39:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610982338;
-        bh=O6M1n/+xN3XivdFxg/+MeYf0/keKDicCppxhlPQcqAo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gu4q31Ni9yGfcWk46rz/cLDZVGk5skrlSQ0hEbFEU2l+cFzxD2LvJvCh+TMY7DNWw
-         OsbMuu1lvYbvUuKIHXO2vMxoHqqzJLyqNyIPtzTWfpsXmIU87GkEjdXojUOOx9YY47
-         Hv0daJ84K6I9xYWSAzqu3i/z6PMRjYZoNLUbNdh0TQ8358/2WoJ207Pm7xnMgLIwxX
-         mhE8cPknJ6sm7Tb09I1hPPJLJRjFUfhJeLXDKka+a4aoXBEjfbzZah32BNKEMawIlp
-         s96ecjh0LQnBQsbGQplb8R+rMfQqJS3imqFt81LxnkecaBOW4UJpysnFpD+wHYjbma
-         akC2YMZzsTnxQ==
-Received: by mail-ed1-f54.google.com with SMTP id b21so9122897edy.6;
-        Mon, 18 Jan 2021 07:05:38 -0800 (PST)
-X-Gm-Message-State: AOAM530x5bhKVGxke+aLaEpgIbZSf8GqITwKuyHLBMCnrYTJaFm0t3iW
-        jkGgEfKLsd6UsMTB+RJ9wo47W22EhzctYr6B9Q==
-X-Google-Smtp-Source: ABdhPJyfXzalDLfP+23Rji9ljj49KRJPNaWxn9PX5oQgRjG3us5FDJGuKT75vRlC9zwSL0fJPMRPsmGBGhMExyQutg0=
-X-Received: by 2002:a05:6402:55:: with SMTP id f21mr20025590edu.38.1610982336942;
- Mon, 18 Jan 2021 07:05:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20210116090656.11752-1-chunfeng.yun@mediatek.com> <20210116090656.11752-4-chunfeng.yun@mediatek.com>
-In-Reply-To: <20210116090656.11752-4-chunfeng.yun@mediatek.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 18 Jan 2021 23:05:25 +0800
-X-Gmail-Original-Message-ID: <CAAOTY__DtGc85JNyxWcebof5h3_Os2ugyy1P0jZsOs0Yzj2miw@mail.gmail.com>
-Message-ID: <CAAOTY__DtGc85JNyxWcebof5h3_Os2ugyy1P0jZsOs0Yzj2miw@mail.gmail.com>
-Subject: Re: [PATCH next 04/15] dt-bindings: phy: mediatek: hdmi-phy: modify
- compatible items
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        s=k20201202; t=1610969951;
+        bh=LsDiKpAXfFsvoIt/CkJHtJcTokFYsuXapYBygCW0Ys4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=ruS/9hf12xaXkqkqoCYdNtNsYyVCdevm1OTWhIZng2TPa7jdYysPF/p1/mM07RoJI
+         0X3Kja3uAy4VYucSeN8zPivGthZ2MzMqOe9lxILlncsItfBToMJL8Ei2mpDA8LCbgS
+         Jrg377sa2d+MEmZh3RSTWwhOgW9rSMW8v2oc4k0NYxRqJJHsVZQa5km5G69TTkCwkn
+         I/odljS3nKROcrnfU38/+nDJTS1qh5Clq4xxnZMha6/t7IFk2FBoJFNXuzK+hLdw2t
+         Ou0ncyzFJsLjeezn/Aw7M6T35zaFVLeUvn//ySvadNsLBqYA61860LmBQNFf7WuqIF
+         ZiBVSCzokXnpw==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Jack Pham <jackp@codeaurora.org>, Vinod Koul <vkoul@kernel.org>,
         Kishon Vijay Abraham I <kishon@ti.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Min Guo <min.guo@mediatek.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Wesley Cheng <wcheng@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Jack Pham <jackp@codeaurora.org>
+Subject: Re: [PATCH v2 4/4] dt-bindings: usb: qcom,dwc3: Add bindings for
+ SM8150, SM8250, SM8350
+In-Reply-To: <20210115174723.7424-5-jackp@codeaurora.org>
+References: <20210115174723.7424-1-jackp@codeaurora.org>
+ <20210115174723.7424-5-jackp@codeaurora.org>
+Date:   Mon, 18 Jan 2021 13:39:02 +0200
+Message-ID: <87zh16v5ih.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi, Chunfeng:
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Chunfeng Yun <chunfeng.yun@mediatek.com> =E6=96=BC 2021=E5=B9=B41=E6=9C=881=
-6=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=885:07=E5=AF=AB=E9=81=93=EF=
-=BC=9A
+Hi,
+
+Jack Pham <jackp@codeaurora.org> writes:
+> Add compatible strings for the USB DWC3 controller on QCOM SM8150,
+> SM8250 and SM8350 SoCs.
 >
-> The compatilbe "mediatek,mt7623-hdmi-tx" is not supported in driver,
-> and in fact uses "mediatek,mt2701-hdmi-tx" instead on MT7623, so changes
-> the compatible items to make dependence clear.
+> Note the SM8150 & SM8250 compatibles are already being used in the
+> dts but was missing from the documentation.
 >
-> Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Signed-off-by: Jack Pham <jackp@codeaurora.org>
 > ---
->  .../devicetree/bindings/phy/mediatek,hdmi-phy.yaml    | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
 >
-> diff --git a/Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml=
- b/Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml
-> index 4752517a1446..0d94950b84ca 100644
-> --- a/Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml
-> @@ -21,10 +21,13 @@ properties:
->      pattern: "^hdmi-phy@[0-9a-f]+$"
->
->    compatible:
-> -    enum:
-> -      - mediatek,mt2701-hdmi-phy
-> -      - mediatek,mt7623-hdmi-phy
-> -      - mediatek,mt8173-hdmi-phy
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt7623-hdmi-phy
-> +          - const: mediatek,mt2701-hdmi-phy
-> +      - const: mediatek,mt2701-hdmi-phy
-> +      - const: mediatek,mt8173-hdmi-phy
->
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Docum=
+entation/devicetree/bindings/usb/qcom,dwc3.yaml
+> index 2cf525d21e05..da47f43d6b04 100644
+> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> @@ -17,6 +17,9 @@ properties:
+>            - qcom,msm8998-dwc3
+>            - qcom,sc7180-dwc3
+>            - qcom,sdm845-dwc3
+> +          - qcom,sm8150-dwc3
+> +          - qcom,sm8250-dwc3
+> +          - qcom,sm8350-dwc3
 
-I like move 'items' to the bottom.
+nicely done!
 
-- const: mediatek,mt2701-hdmi-phy
-- const: mediatek,mt8173-hdmi-phy
+Acked-by: Felipe Balbi <balbi@kernel.org>
 
-- items:
-  - enum:
-      - mediatek,mt7623-hdmi-phy
-  - const: mediatek,mt2701-hdmi-phy
+=2D-=20
+balbi
 
-Regards,
-Chun-Kuang.
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
->    reg:
->      maxItems: 1
-> --
-> 2.18.0
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmAFc1YRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQZxrw//fSf5M/ifV+IvyWh08Kp8BJ+dLMcZAZNu
+kOAV4BxvEAwPCylflF/FudCWIzMlYDnlYEAQGKjas2gXqOaI3Cz/vewlBfF4wa/X
+Xme7xWRedpKmKxpL71P0NrdQ3DzDwFdo1mCRbshh3m15MUrWpuDf7PtzBE1sIZg6
+u804URsW2Q0k9NWLjYM/NhhqeRnaZwMFLlI6njmPF8yqqzkYi62/u8GxV2YXnJ14
+oXCl/WQwRcklGMPrR/JCGmL4RFiWmVaMEovPjBCVvO4JielFIrRsRXkYHoOrAHWj
+fOGTaN7TQII3J+toOK2OmRVeccXdUM54bdo7bC3Mb9TCHi916B0LIZLobMMAy4D0
+Tz6prg4F5MCkZuyo5ePzW5ZnK9b8HstXd3A4mv2qk87eeJVndWraHzzW6GTnQj8K
+h5l74ftKn3QpwwFXkB01N6qjzfBIoo5IeBTQUZXcQDve+gIxXX5iNWKeUMofqJaq
+byrI5DHrWbAX2DI8df4lPUdZ13nPrJlEnny/FlOzsc/q2Ay32Hah9ZTaknna1k/y
+Bs+zku8yF4Ghoc7m+Zjct0k4m8JIbRYXSpCD/kVsH2bbA40XbRfOTdsHUcBYfEhu
+YLsMyQrOsL3PG02iwN/7mWgfdiwEFqrcLZFNqVLikFznokD3fZMYKxyn1IKVoLAd
+wIJDcmVJZHg=
+=uCXF
+-----END PGP SIGNATURE-----
+--=-=-=--
