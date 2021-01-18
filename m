@@ -2,46 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3E42FA9AE
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 20:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83ECD2FAA8F
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Jan 2021 20:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390574AbhARTHv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jan 2021 14:07:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35694 "EHLO mail.kernel.org"
+        id S2437293AbhART0u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jan 2021 14:26:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33394 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390584AbhARLjw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 Jan 2021 06:39:52 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1286C222BB;
-        Mon, 18 Jan 2021 11:39:07 +0000 (UTC)
+        id S2390424AbhARLiE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 18 Jan 2021 06:38:04 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 385FF22CAD;
+        Mon, 18 Jan 2021 11:37:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610969951;
-        bh=LsDiKpAXfFsvoIt/CkJHtJcTokFYsuXapYBygCW0Ys4=;
+        s=k20201202; t=1610969842;
+        bh=DFDLTsvgjvFrpYts0MUpDKjSJv7X4cfmoGmxg2T+lxE=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ruS/9hf12xaXkqkqoCYdNtNsYyVCdevm1OTWhIZng2TPa7jdYysPF/p1/mM07RoJI
-         0X3Kja3uAy4VYucSeN8zPivGthZ2MzMqOe9lxILlncsItfBToMJL8Ei2mpDA8LCbgS
-         Jrg377sa2d+MEmZh3RSTWwhOgW9rSMW8v2oc4k0NYxRqJJHsVZQa5km5G69TTkCwkn
-         I/odljS3nKROcrnfU38/+nDJTS1qh5Clq4xxnZMha6/t7IFk2FBoJFNXuzK+hLdw2t
-         Ou0ncyzFJsLjeezn/Aw7M6T35zaFVLeUvn//ySvadNsLBqYA61860LmBQNFf7WuqIF
-         ZiBVSCzokXnpw==
+        b=Ht/K/dOm+n6j+u4svc925LDLs7DG0tdGysPEGezRHEQ/ebqEso/O5saSc7kmWadXV
+         /JyQEf9IQNXMGToB5jEMQT3iUdB4shoFnfHzwJBKDSD05Fi6PCVVpVxXlDGP1Sn1nj
+         MKnl++d/T1RP7oj8YwCWeVerHgo7Hffwz0ye3T/grhGJ8McwpKAYw5JkmVNyh/3zx7
+         +rBLamk68TUHdDNi84r/8RIFAlAVfvs76/Sat5LZkkNWf2fJ6eSH15402pGzdrfhrd
+         vVrDgTWH+kPj1/kj+CVgLG353yl0vv+EL2h7AhoKS5WsPWnEHu7dNUu8u1mYSidrCU
+         bLWa0+5qSHtag==
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Jack Pham <jackp@codeaurora.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Wesley Cheng <wcheng@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Jack Pham <jackp@codeaurora.org>
-Subject: Re: [PATCH v2 4/4] dt-bindings: usb: qcom,dwc3: Add bindings for
- SM8150, SM8250, SM8350
-In-Reply-To: <20210115174723.7424-5-jackp@codeaurora.org>
-References: <20210115174723.7424-1-jackp@codeaurora.org>
- <20210115174723.7424-5-jackp@codeaurora.org>
-Date:   Mon, 18 Jan 2021 13:39:02 +0200
-Message-ID: <87zh16v5ih.fsf@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        agross@kernel.org, bjorn.andersson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/7] dt-bindings: usb: qcom,dwc3: Add binding for SDX55
+In-Reply-To: <20210118051005.55958-2-manivannan.sadhasivam@linaro.org>
+References: <20210118051005.55958-1-manivannan.sadhasivam@linaro.org>
+ <20210118051005.55958-2-manivannan.sadhasivam@linaro.org>
+Date:   Mon, 18 Jan 2021 13:37:14 +0200
+Message-ID: <8735yywk5x.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -55,32 +49,14 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Jack Pham <jackp@codeaurora.org> writes:
-> Add compatible strings for the USB DWC3 controller on QCOM SM8150,
-> SM8250 and SM8350 SoCs.
+Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org> writes:
+> Add devicetree binding for SDX55 USB controller based on Qcom designware
+> IP.
 >
-> Note the SM8150 & SM8250 compatibles are already being used in the
-> dts but was missing from the documentation.
->
-> Signed-off-by: Jack Pham <jackp@codeaurora.org>
-> ---
->  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Docum=
-entation/devicetree/bindings/usb/qcom,dwc3.yaml
-> index 2cf525d21e05..da47f43d6b04 100644
-> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> @@ -17,6 +17,9 @@ properties:
->            - qcom,msm8998-dwc3
->            - qcom,sc7180-dwc3
->            - qcom,sdm845-dwc3
-> +          - qcom,sm8150-dwc3
-> +          - qcom,sm8250-dwc3
-> +          - qcom,sm8350-dwc3
-
-nicely done!
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
 Acked-by: Felipe Balbi <balbi@kernel.org>
 
@@ -92,19 +68,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmAFc1YRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQZxrw//fSf5M/ifV+IvyWh08Kp8BJ+dLMcZAZNu
-kOAV4BxvEAwPCylflF/FudCWIzMlYDnlYEAQGKjas2gXqOaI3Cz/vewlBfF4wa/X
-Xme7xWRedpKmKxpL71P0NrdQ3DzDwFdo1mCRbshh3m15MUrWpuDf7PtzBE1sIZg6
-u804URsW2Q0k9NWLjYM/NhhqeRnaZwMFLlI6njmPF8yqqzkYi62/u8GxV2YXnJ14
-oXCl/WQwRcklGMPrR/JCGmL4RFiWmVaMEovPjBCVvO4JielFIrRsRXkYHoOrAHWj
-fOGTaN7TQII3J+toOK2OmRVeccXdUM54bdo7bC3Mb9TCHi916B0LIZLobMMAy4D0
-Tz6prg4F5MCkZuyo5ePzW5ZnK9b8HstXd3A4mv2qk87eeJVndWraHzzW6GTnQj8K
-h5l74ftKn3QpwwFXkB01N6qjzfBIoo5IeBTQUZXcQDve+gIxXX5iNWKeUMofqJaq
-byrI5DHrWbAX2DI8df4lPUdZ13nPrJlEnny/FlOzsc/q2Ay32Hah9ZTaknna1k/y
-Bs+zku8yF4Ghoc7m+Zjct0k4m8JIbRYXSpCD/kVsH2bbA40XbRfOTdsHUcBYfEhu
-YLsMyQrOsL3PG02iwN/7mWgfdiwEFqrcLZFNqVLikFznokD3fZMYKxyn1IKVoLAd
-wIJDcmVJZHg=
-=uCXF
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmAFcuoRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQZxIRAAlpEpxTpJDTCzj+N4SW/IvB68Da7w97Zi
+3Y1rUZSbQmbLkclkDEnF0H10rF1oT2b39xeVbj++j56S1BCB3XVRli+LRYcnEx+o
+SissxEDGr1baczSn8uZJ/UgWIEFrp1JztyqLSWtA62NCEmC7+HQoZf0765CMELVv
+V3dC8Y6GFRWBNErxfuwoJdVgbWe3SPNrrkTodnAZxNKsxiV2V23jy1j+kWRKMabx
+50gMSKBbAhbLNuvZMVoOHp3TgXZofcCboT0RH6sr0ycBGipJkIjApn03zslFL2RW
+tgIR2Y1H4HN3JimLP4NEfERyCU0v0ibwf/gLMdMy4/psfEcoE7E+I2GLadAlL5wa
+0iDVPyLvjmpyj136DAM0X07iZsak5mpeaTMvkrYqPDABnOflfyOAv5eysXPkh+Sf
+xh/676DIR7LfNBrdPrql/69sQmW54t9kBR803jYHhYr8tvVdqYLnKFGNMpEFGH1+
+/05EFqwnR3M5cppmBPL2qhP7y8Blig29o/YTB6ysrArdkcfosp7ZrABliUJ0CuU4
+bfKjRDeJamJGoYTZu0hcKX5pF+/3teJXESoBK3j0jXTGkr+mCCJG+VfWArXEd3x5
+BoKrdA2D65G+i/kyZ6x983augUgAit9GW4y2IldPMHhE0E4GgDWnpoEuBnmuxk3+
+s2CVt/FiDaI=
+=KbUF
 -----END PGP SIGNATURE-----
 --=-=-=--
