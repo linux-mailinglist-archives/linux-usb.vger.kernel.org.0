@@ -2,113 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C12572FC2B5
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 22:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B18A62FC34E
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 23:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726707AbhASVrP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jan 2021 16:47:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46294 "EHLO mail.kernel.org"
+        id S1729360AbhASWXe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jan 2021 17:23:34 -0500
+Received: from m42-8.mailgun.net ([69.72.42.8]:32675 "EHLO m42-8.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389596AbhASVqk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 Jan 2021 16:46:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3ABC222E01;
-        Tue, 19 Jan 2021 21:45:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611092759;
-        bh=kruhdxPqhzyBqegCl6kwbaI4zJnzo6UfMpl35chwUTE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dVnUdrVRoybRE2url3sGJw/jBPjn4oeyw1lNmJ9DOO1/HH4AiW4mA4N4Jy7/W2zNr
-         sTmZuoWPEh/V0rRj6JRhcPpmunyiYPzSbHoTR7M92MYIJSUvbBcCBunPbxg2EjcJ1N
-         P01XODXIosk72N/Q2Zta2dOgG6BIB3CxD/CgfbHUScM12qlzgt0IuYZN0UrsepyJ/t
-         tAv5FFggYGTk1Ejd2bGZlWPxMzyl0PsuwzIHMrG40yQnlcDt2TU3ar74A0t9OuG0tp
-         vuiHGIkHaooNjquYXDiq58fylDuNxFjXkhMEAfdoLk406MMO8XGCDSxAzxXxD46MBt
-         MiX5VYsLMWCNw==
-Date:   Tue, 19 Jan 2021 13:45:58 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Grant Grundler <grundler@chromium.org>
-Cc:     Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] net: usb: cdc_ncm: don't spew notifications
-Message-ID: <20210119134558.5072a1cc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20210116052623.3196274-3-grundler@chromium.org>
-References: <20210116052623.3196274-1-grundler@chromium.org>
-        <20210116052623.3196274-3-grundler@chromium.org>
+        id S1731375AbhASRqa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 Jan 2021 12:46:30 -0500
+X-Greylist: delayed 394 seconds by postgrey-1.27 at vger.kernel.org; Tue, 19 Jan 2021 12:46:29 EST
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1611078329; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=L0vFdFdhSXmndQrwYXuvFainDV9NH9XIG05iM/Zdhg8=; b=UJJobJMflGF1rKcuJrFDGXXVKNbqQZXn622SaS56eg1T2OghZcxQsXbiBRhFrzHz7E/DYDwl
+ UC4nUXUCCw2vm8BaordFqBqIRcoeFskrYytLyO7VimRkZwnivDR0kyiP86AmL/YrMG/zExIC
+ 81gofQSEaJzMAD7WKjQLX2ptNas=
+X-Mailgun-Sending-Ip: 69.72.42.8
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 6007193502b2f1cb1a797d58 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 19 Jan 2021 17:39:01
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B2471C43462; Tue, 19 Jan 2021 17:39:00 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5B93EC433C6;
+        Tue, 19 Jan 2021 17:38:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 5B93EC433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Jack Pham <jackp@codeaurora.org>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: [PATCH v3] dt-bindings: usb: qcom,dwc3: Add bindings for SM8150, SM8250, SM8350
+Date:   Tue, 19 Jan 2021 09:37:48 -0800
+Message-Id: <20210119173748.6729-1-jackp@codeaurora.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 15 Jan 2021 21:26:23 -0800 Grant Grundler wrote:
-> RTL8156 sends notifications about every 32ms.
-> Only display/log notifications when something changes.
-> 
-> This issue has been reported by others:
-> 	https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1832472
-> 	https://lkml.org/lkml/2020/8/27/1083
-> 
-> ...
-> [785962.779840] usb 1-1: new high-speed USB device number 5 using xhci_hcd
-> [785962.929944] usb 1-1: New USB device found, idVendor=0bda, idProduct=8156, bcdDevice=30.00
-> [785962.929949] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=6
-> [785962.929952] usb 1-1: Product: USB 10/100/1G/2.5G LAN
-> [785962.929954] usb 1-1: Manufacturer: Realtek
-> [785962.929956] usb 1-1: SerialNumber: 000000001
-> [785962.991755] usbcore: registered new interface driver cdc_ether
-> [785963.017068] cdc_ncm 1-1:2.0: MAC-Address: 00:24:27:88:08:15
-> [785963.017072] cdc_ncm 1-1:2.0: setting rx_max = 16384
-> [785963.017169] cdc_ncm 1-1:2.0: setting tx_max = 16384
-> [785963.017682] cdc_ncm 1-1:2.0 usb0: register 'cdc_ncm' at usb-0000:00:14.0-1, CDC NCM, 00:24:27:88:08:15
-> [785963.019211] usbcore: registered new interface driver cdc_ncm
-> [785963.023856] usbcore: registered new interface driver cdc_wdm
-> [785963.025461] usbcore: registered new interface driver cdc_mbim
-> [785963.038824] cdc_ncm 1-1:2.0 enx002427880815: renamed from usb0
-> [785963.089586] cdc_ncm 1-1:2.0 enx002427880815: network connection: disconnected
-> [785963.121673] cdc_ncm 1-1:2.0 enx002427880815: network connection: disconnected
-> [785963.153682] cdc_ncm 1-1:2.0 enx002427880815: network connection: disconnected
-> ...
-> 
-> This is about 2KB per second and will overwrite all contents of a 1MB
-> dmesg buffer in under 10 minutes rendering them useless for debugging
-> many kernel problems.
-> 
-> This is also an extra 180 MB/day in /var/logs (or 1GB per week) rendering
-> the majority of those logs useless too.
-> 
-> When the link is up (expected state), spew amount is >2x higher:
-> ...
-> [786139.600992] cdc_ncm 2-1:2.0 enx002427880815: network connection: connected
-> [786139.632997] cdc_ncm 2-1:2.0 enx002427880815: 2500 mbit/s downlink 2500 mbit/s uplink
-> [786139.665097] cdc_ncm 2-1:2.0 enx002427880815: network connection: connected
-> [786139.697100] cdc_ncm 2-1:2.0 enx002427880815: 2500 mbit/s downlink 2500 mbit/s uplink
-> [786139.729094] cdc_ncm 2-1:2.0 enx002427880815: network connection: connected
-> [786139.761108] cdc_ncm 2-1:2.0 enx002427880815: 2500 mbit/s downlink 2500 mbit/s uplink
-> ...
-> 
-> Chrome OS cannot support RTL8156 until this is fixed.
+Add compatible strings for the USB DWC3 controller on QCOM SM8150,
+SM8250 and SM8350 SoCs.
 
-> @@ -1867,7 +1876,8 @@ static void cdc_ncm_status(struct usbnet *dev, struct urb *urb)
->  		 * USB_CDC_NOTIFY_NETWORK_CONNECTION notification shall be
->  		 * sent by device after USB_CDC_NOTIFY_SPEED_CHANGE.
->  		 */
-> -		usbnet_link_change(dev, !!event->wValue, 0);
-> +		if (netif_carrier_ok(dev->net) != !!event->wValue)
-> +			usbnet_link_change(dev, !!event->wValue, 0);
->  		break;
->  
->  	case USB_CDC_NOTIFY_SPEED_CHANGE:
+Note the SM8150 & SM8250 compatibles are already being used in the
+dts but was missing from the documentation.
 
-Thanks for the patch, this looks like an improvement over:
+Acked-by: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Jack Pham <jackp@codeaurora.org>
+---
+v3: Resend of #4/4 of https://lore.kernel.org/linux-usb/20210115174723.7424-1-jackp@codeaurora.org
+    added Felipe's Ack & rebased on gregkh/usb-testing
 
-59b4a8fa27f5 ("CDC-NCM: remove "connected" log message")
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-right? Should we bring the "network connection: connected" message back?
+diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+index dd1d8bcd9254..c3cbd1fa9944 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+@@ -18,6 +18,9 @@ properties:
+           - qcom,sc7180-dwc3
+           - qcom,sdm845-dwc3
+           - qcom,sdx55-dwc3
++          - qcom,sm8150-dwc3
++          - qcom,sm8250-dwc3
++          - qcom,sm8350-dwc3
+       - const: qcom,dwc3
+ 
+   reg:
+-- 
+2.24.0
 
-
-Do you want all of these patches to be applied to 5.11 and backported?
-Feels to me like the last one is a fix and the rest can go into -next,
-WDYT?
