@@ -2,154 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 396EA2FBEBC
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 19:18:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABCC2FBED3
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 19:23:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392383AbhASSRu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jan 2021 13:17:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45220 "EHLO
+        id S1727230AbhASSVy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jan 2021 13:21:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392438AbhASSQw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 13:16:52 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2379BC0617A0;
-        Tue, 19 Jan 2021 10:16:20 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id q4so10974493plr.7;
-        Tue, 19 Jan 2021 10:16:20 -0800 (PST)
+        with ESMTP id S2403965AbhASSVl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 13:21:41 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7D0C061574
+        for <linux-usb@vger.kernel.org>; Tue, 19 Jan 2021 10:21:00 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id d81so26357405iof.3
+        for <linux-usb@vger.kernel.org>; Tue, 19 Jan 2021 10:21:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=yO2k+wmEJJ8xH/LdKcVR5jElonjFD3LzbOdCVG89a24=;
-        b=JuAp4fE1Om8r2jXXlMjO5EQi5ELsiLrAOz/7Zy1G6MLGJZu8BbcFwCxCtNHSUrn1jj
-         MmAgtIXKIPipjExj1ugO237PHHtr7KE34SawUz5NB/gwppYKIcabT5jjH6rEn489hG83
-         Twr9iCkqfYBF6/5myQHtdrcFuDYyeMk+PZEoL1SnFS7OzMNVmYArnSDx6s+tCQlvDqCN
-         6xQVc4dtO2sI24n/ZN3pbXuADpSQFPslbOAnByTeZLqLeijMXFupmKD0uTal0iwxDJsM
-         DGSJKnbxDZGnib4SEKELE+G0FY2R3UdBGwyAV22p7zhKnNuggW5IsRdFUN4vGoctgcKS
-         TMQw==
+        d=randomnotes-org.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=d0LQYnSSwDHxvNapYa/8Cf3qPMBLWUFpusNkHQ0hMak=;
+        b=gwzFikqStPSco6ed4qM39J/GFeXkHP6l3kqYRCIcaHpE6sTb2M9S+k7jBU09XqeTTk
+         n1YAsADbNsHboWRiRDPCLx5ydxn5bKYqkjkkIRqt2ErHo3fqZvBZoJlmPEsHD2GeG+qR
+         yiRYwk58/MMaKHze5wjmen2k3mjV4MY9HSa/iLUMwQxDsAA/0pUjbPXZt60ML+v9zolN
+         ASeUN3QzLLBKm6/vCktvZitKulmqeJoiQt8b2a5meh7JcJuhZxzG/BYPS9xId1P+1Aqk
+         DNu7UGFSOTYVYt+v+GVM36zOOz1Xn4lC/+9q+qg73ibbykWufqFmoio7StpSQzxvFdSF
+         AQ+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yO2k+wmEJJ8xH/LdKcVR5jElonjFD3LzbOdCVG89a24=;
-        b=tvVZ+XiEXpmPnk5Xv6+ARucPt2VssILU20tFcZnxgztVo8YnyrJgTTJium7SNiPUvv
-         cpQXA94wI2FKsjWeH+AI2HXEIA13EAh/zj0v1aohnTn14OXv5euGo/ERDdwqNY2kexx+
-         Nb4UMA/dE9bmCUNkB8IraVHsADkjALmQXPHsVRSJC9Ohhi6a+VkNactrieV0sf6muj/c
-         YPJ23quoq5nRiaEwPUzSNAq+kLiRJtP1FkPYhXjtdRmk2r+ZY+x2aTZlXUJWyhk0yRpg
-         /MzrfI354q3zujLa3YoTsqgyoibehQeitReyZA5FXaUy0p7GyzbHZPO3NqTn7g6cY3Hd
-         a+Vg==
-X-Gm-Message-State: AOAM531mlBd/ZobnFJoqllNfH9i9Xs0QWK6CuxF0fQIY+20IxmNSoQni
-        wp3TEJHQYQki4vkbpQFKb+80kjJcOZE=
-X-Google-Smtp-Source: ABdhPJzcggUh79T/vPrFJplztZOgRtqaMxMfiR3jkAw2gStudADC7DJRMqW/nK/e4Tb6fVJmNFZXqw==
-X-Received: by 2002:a17:90b:4d09:: with SMTP id mw9mr990860pjb.199.1611080179615;
-        Tue, 19 Jan 2021 10:16:19 -0800 (PST)
-Received: from [10.230.29.29] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k128sm8187958pfd.137.2021.01.19.10.16.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jan 2021 10:16:18 -0800 (PST)
-Subject: Re: [PATCH v2 2/2] serial: 8250: Add new 8250-core based Broadcom STB
- driver
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Rob Herring <robh+dt@kernel.org>
-References: <20210115211543.33563-1-alcooperx@gmail.com>
- <20210115211543.33563-3-alcooperx@gmail.com>
- <CAHp75VdQPQK8jTF3QDKx6mF1QzOg-qiuHrTiojnWn7GskokfoA@mail.gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <71d58a3e-2707-69d7-8074-c67235912e06@gmail.com>
-Date:   Tue, 19 Jan 2021 10:16:16 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.6.1
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=d0LQYnSSwDHxvNapYa/8Cf3qPMBLWUFpusNkHQ0hMak=;
+        b=EdI7swDYi48FT00wzOxv1nqYLfWKLb7TR3F4KrBP/hAb/kujqwkumolb8CNXNCMtL3
+         a6wdcM+2hHU6HQeChfoRntm5DpnP+GBH4da82r7TcJlePgf47ZiTGHcHRPmYRYN1dJuj
+         xCJgJtB5fu9wAU2W/cVSbGxFpeeQrey5Qh44WjpJCOzCiGj3B6m+VMWYv8eU/m2hECMx
+         I5yRx3RwaZR6rlTMcV+aXhIorvRoTDgo9oDeT0ale3iOYqcT/U6tSlbX9gPWOKd7SBE3
+         81CktHGfVqj15aftqMxmqN6dUguWjXPvpJurSteti8G8RAWaPevA1KKn9eYf+SiIyq+z
+         WRTg==
+X-Gm-Message-State: AOAM531Ct/n8x9htqt6brUy6rIYqJJk+WmTfDWTW90/H19j4AwM7s50I
+        qvmKU8EF3axhg30oIHvdxNCdnLMJ+nH8mrSgnfPM6oDW8nOq/K83
+X-Google-Smtp-Source: ABdhPJyEe58Wnm6bs4c800S4Zqhce1fPjOx9WWpsP0CrckOK6u3pImGaJS1iJ9wc/WLWhxbKTrelk5888qmuk6MCTvw=
+X-Received: by 2002:a5e:c00e:: with SMTP id u14mr3847158iol.194.1611080459646;
+ Tue, 19 Jan 2021 10:20:59 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAHp75VdQPQK8jTF3QDKx6mF1QzOg-qiuHrTiojnWn7GskokfoA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+From:   Doug Kingston <dpk@randomnotes.org>
+Date:   Tue, 19 Jan 2021 10:20:34 -0800
+Message-ID: <CAGPaoUucowcpa5k_9VVjnRnrUkiG=npiCJYaOyT6-Ya7hEfJKg@mail.gmail.com>
+Subject: USB Sound Device detection problem
+To:     linux-usb@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+I am doing some work setting up some radio data nodes that use USB
+soundcard devices to attach to radios.  I am building a system with
+two radios and two identical soundcard devices attached to a Raspberry
+Pi running Raspbian.  The devices are discovered at boot time by the
+hid-generic subsystem:
+
+(see dmesg output below)
+
+I am accessing the sound devices from Wine via the ALSA stack.  The
+problem I have is that
+the product string is identical for both devices and they show up
+identically to the Windows app ("USB PnP Sound Device").  I need to
+find a way to alter this string so that they are different.  If they
+were processed by udev I might be able to do something there.
+
+The options seem to be:
+1) fix at kernel usb discovery
+2) somehow fix in the ALSA library (snd_*)
+3) fix in Wine (mmsys.drv / winealsa.drv/mmdevdrv.c
+4) somewhere else?
+
+And, we need to do this in a supportable fashion that does not break
+existing users of this subsystem.
+
+Do you have any suggestions?
+
+Regards,
+  -Doug-
 
 
-On 1/19/2021 7:21 AM, Andy Shevchenko wrote:
-> On Fri, Jan 15, 2021 at 11:19 PM Al Cooper <alcooperx@gmail.com> wrote:
->>
->> Add a UART driver for the new Broadcom 8250 based STB UART. The new
->> UART is backward compatible with the standard 8250, but has some
->> additional features. The new features include a high accuracy baud
->> rate clock system and DMA support.
->>
->> The driver will use the new optional BAUD MUX clock to select the best
->> one of the four master clocks (81MHz, 108MHz, 64MHz and 48MHz) to feed
->> the baud rate selection logic for any requested baud rate.  This allows
->> for more accurate BAUD rates when high speed baud rates are selected.
->>
->> The driver will use the new UART DMA hardware if the UART DMA registers
->> are specified in Device Tree "reg" property. The DMA functionality can
->> be disabled on kernel boot with the argument:
->> "8250_bcm7271.disable_dma=Y".
->>
->> The driver also set the UPSTAT_AUTOCTS flag when hardware flow control
->> is enabled. This flag is needed for UARTs that don't assert a CTS
->> changed interrupt when CTS changes and AFE (Hardware Flow Control) is
->> enabled.
->>
->> The driver also contains a workaround for a bug in the Synopsis 8250
->> core. The problem is that at high baud rates, the RX partial FIFO
->> timeout interrupt can occur but there is no RX data (DR not set in
->> the LSR register). In this case the driver will not read the Receive
->> Buffer Register, which clears the interrupt, and the system will get
->> continuous UART interrupts until the next RX character arrives. The
->> fix originally suggested by Synopsis was to read the Receive Buffer
->> Register and discard the character when the DR bit in the LSR was
->> not set, to clear the interrupt. The problem was that occasionally
->> a character would arrive just after the DR bit check and a valid
->> character would be discarded. The fix that was added will clear
->> receive interrupts to stop the interrupt, deassert RTS to insure
->> that no new data can arrive, wait for 1.5 character times for the
->> sender to react to RTS and then check for data and either do a dummy
->> read or a valid read. Sysfs error counters were also added and were
->> used to help create test software that would cause the error condition.
->> The counters can be found at:
->> /sys/devices/platform/rdb/*serial/rx_bad_timeout_late_char
->> /sys/devices/platform/rdb/*serial/rx_bad_timeout_no_char
-> 
-> Brief looking into the code raises several questions:
->  - is it driver from the last decade?
+winlink@acs-vara-cappark:~$ lsusb
+Bus 004 Device 002: ID 8087:8000 Intel Corp.
+Bus 004 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 003 Device 002: ID 8087:8008 Intel Corp.
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 003: ID 0d8c:013a C-Media Electronics, Inc.
+Bus 001 Device 002: ID 0403:6015 Future Technology Devices
+International, Ltd Bridge(I2C/SPI/UART/FIFO)
+Bus 001 Device 004: ID 0d8c:013a C-Media Electronics, Inc.
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 
-Work on this driver started back in 2018, that was indeed the last decade.
+winlink@acs-vara-cappark:~$ amixer -c 2 info
+Card hw:2 'Device'/'C-Media Electronics Inc. USB PnP Sound Device at
+usb-0000:00:14.0-9, full speed'
+  Mixer name : 'USB Mixer'
+  Components : 'USB0d8c:013a'
+  Controls      : 10
+  Simple ctrls  : 3
+winlink@acs-vara-cappark:~$ amixer -c 3 info
+Card hw:3 'Device_1'/'C-Media Electronics Inc. USB PnP Sound Device at
+usb-0000:00:14.0-10, full spee'
+  Mixer name : 'USB Mixer'
+  Components : 'USB0d8c:013a'
+  Controls      : 10
+  Simple ctrls  : 3
+winlink@acs-vara-cappark:~$
 
->  - why it's not using what kernel provides?
->  - we have a lot of nice helpers:
->    - DMA Engine API
+dmesg output:
 
-Not sure this makes sense, given that the DMA hardware that was added to
-this UART block is only used by the UART block and no other pieces of HW
-in the system, nor will they ever be. Not sure it makes sense to pay the
-cost of an extra indirection and subsystem unless there are at least two
-consumers of that DMA hardware to warrant modeling it after a dmaengine
-driver. I also remember that Al researched before whether 8250_dma.c
-could work, and came to the conclusion that it would not, but I will let
-him comment on the specifics.
+[    1.743798] usb 3-1: New USB device found, idVendor=8087,
+idProduct=8008, bcdDevice= 0.04
+[    1.743799] usb 3-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+[    1.743935] hub 3-1:1.0: USB hub found
+[    1.744047] hub 3-1:1.0: 6 ports detected
+[    1.759796] usb 4-1: New USB device found, idVendor=8087,
+idProduct=8000, bcdDevice= 0.04
+[    1.759799] usb 4-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+[    1.759921] hub 4-1:1.0: USB hub found
+[    1.760055] hub 4-1:1.0: 8 ports detected
+[    1.831425] usb 1-9: new full-speed USB device number 3 using xhci_hcd
+[    2.020574] usb 1-9: New USB device found, idVendor=0d8c,
+idProduct=013a, bcdDevice= 1.00
+[    2.020576] usb 1-9: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[    2.020577] usb 1-9: Product: USB PnP Sound Device
+[    2.020577] usb 1-9: Manufacturer: C-Media Electronics Inc.
+[    2.025323] hidraw: raw HID events driver (C) Jiri Kosina
+[    2.027693] usbcore: registered new interface driver usbhid
+[    2.027694] usbhid: USB HID core driver
+[    2.028580] input: C-Media Electronics Inc.       USB PnP Sound
+Device as /devices/pci0000:00/0000:00:14.0/usb1/1-9/1-9:1.3/0003:0D8C:013A.0001/input/input3
+[    2.087471] hid-generic 0003:0D8C:013A.0001: input,hidraw0: USB HID
+v1.00 Device [C-Media Electronics Inc.       USB PnP Sound Device] on
+usb-0000:00:14.0-9/input3
+[    2.171437] usb 1-10: new full-speed USB device number 4 using xhci_hcd
+[    2.288774] EXT4-fs (dm-0): mounted filesystem with ordered data
+mode. Opts: (null)
+[    2.299437] [drm] Cannot find any crtc or sizes
+[    2.364637] usb 1-10: New USB device found, idVendor=0d8c,
+idProduct=013a, bcdDevice= 1.00
+[    2.364639] usb 1-10: New USB device strings: Mfr=1, Product=2,
+SerialNumber=0
+[    2.364641] usb 1-10: Product: USB PnP Sound Device
+[    2.364641] usb 1-10: Manufacturer: C-Media Electronics Inc.
+[    2.365761] input: C-Media Electronics Inc.       USB PnP Sound
+Device as /devices/pci0000:00/0000:00:14.0/usb1/1-10/1-10:1.3/0003:0D8C:013A.0002/input/input4
+[    2.423454] hid-generic 0003:0D8C:013A.0002: input,hidraw1: USB HID
+v1.00 Device [C-Media Electronics Inc.       USB PnP Sound Device] on
+usb-0000:00:14.0-10/input3
 
-
->    - BIT() and GENMASK() macros
->    - tons of different helpers like regmap API (if you wish to dump
-> registers via debugfs)
-> 
-> Can you shrink this driver by 20-30% (I truly believe it's possible)
-> and split DMA driver to drivers/dma (which may already have something
-> similar there)?
-
-See previous response.
--- 
-Florian
+-Doug-
