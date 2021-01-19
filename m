@@ -2,141 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21DA32FC50B
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 00:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F6A2FC50D
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 00:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728942AbhASXhA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jan 2021 18:37:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
+        id S1729187AbhASXhE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jan 2021 18:37:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2395056AbhASOFD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 09:05:03 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC21C061574;
-        Tue, 19 Jan 2021 06:04:20 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id e15so13678885qte.9;
-        Tue, 19 Jan 2021 06:04:20 -0800 (PST)
+        with ESMTP id S2394764AbhASOJQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 09:09:16 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06606C061574;
+        Tue, 19 Jan 2021 06:07:31 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id b64so21866930qkc.12;
+        Tue, 19 Jan 2021 06:07:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=TH6tIa7KmmTBxKCeREOLdZWW+HlzUZd6P/Dq1uJJcvo=;
-        b=VGhLZsyv+gpGddxVKxIkOaWu3PVVMK8hpdjXJLLlA4F81h1k0YkPSiEnQAd4bVv6pA
-         JgRtf+bhPCzcUdd4sqblBP/PyDjQApDKodflTiZblp036j001pZm9Alho8iS2tbT1Q8/
-         QNfPnykbPuA0b6XZ576Qnd9SMZqKKnKAWAaRnkJbbPsWv7651gHbAh28Ux0GhBiF0TgW
-         Su5atvXpCaAczl3eSAFErJsOJo07stP2icTwHW/KLsF5mq0XiZu0Z/SFLrfLLdTccYhW
-         lPG/+rmgZs4h3P1Aqj7PuIRE0aRIOnAV5CzIF/sY/D9I07KZ38x47Xbgey18jILnNadU
-         FLdw==
+        bh=NcDssZnsaNf6Rai7lpFa5M2x05CINEtN7cqGzRNqP6o=;
+        b=W/9waIwjMSUaCUHTbG7tgovadbhyB7XK6FnrKjlg35+teIAmVI5tY684l+Ve/UpCCs
+         Pb2/VmcNSqjI/OjkXAHgu2Zzv70FOaTkH4hV1ZwFKd5E5AQaciinT1yVl+D8pfmoD8Ee
+         /eyjtclAHQD/hhSnr2Jic5rFraf37Ed2uh/dFM2vBqqbTI/w0t/bvTPr4xs3hxECXL1Z
+         urSB6nkibYUjhuOW/CUeB6h8O8gHGo1J1I8pVeiwBS4qDYrx/M9TTHDl1AVmnFntuJa8
+         1xbWBTuUk4By5UQgYHzOHrQIZF3EbsaBN1C3e7YYPzm9vIE525hNwxDW0rnTcfIU/2Rx
+         2ccg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TH6tIa7KmmTBxKCeREOLdZWW+HlzUZd6P/Dq1uJJcvo=;
-        b=KBoHpUvhWb1pK4+BwCKiEkTE9Yn47FisVdu8Ys00jokLUu3GcbZ7Wz8D2O4tyU/Bx9
-         Pq+uoI2U/k8MWqokGawPqoW0eS3SMezJPuHKNXG02oHvaz4iVfy8Jrir/Ck7p3fc5A62
-         M6rJAY3lPAtKdQ1ksIyGPi6skB5/yZRG1v7/ICdbWhEFhKmR+TZNZq57dCjklx6VaL4K
-         Dl9WKPPt37XuroEsqSoQR26Vn3KKvFYK++OxZ8iGsGW8Or9XErJyDoCU+df0gnyNELGU
-         u83OyYZC+n11Lz8+Iqpxbtig8dSWHT0oB0hx8yP2hHPeCqozCMi25cHPGdsvwwUIf5lW
-         wGKg==
-X-Gm-Message-State: AOAM530fQWjoPEtmBKvPcWZRmqAsmMYQL0gBFNKUWJa114YBUIQbhAPX
-        YFQFFtH4qZqmpI307G05QJE=
-X-Google-Smtp-Source: ABdhPJzMe8jbW50g1iVGM3lGWpJV0ziRnIiiTGPcykrnoO8Tj71NQBBD2B/hMWGfGZj5U2douqQ5KA==
-X-Received: by 2002:ac8:742:: with SMTP id k2mr4228578qth.46.1611065059735;
-        Tue, 19 Jan 2021 06:04:19 -0800 (PST)
+        bh=NcDssZnsaNf6Rai7lpFa5M2x05CINEtN7cqGzRNqP6o=;
+        b=lgx/mFxb58KzZaIICwnSUe+HBL7gU0JtskUSMJ38qEooYDsKZ4WEmv5yfFM+ZlFlKW
+         tB7TwsfsAMMYLPVveeGwUsFMLtW7NgCdyHEHdzNBHuyeru15kcfvc24vLD37JHmVYSau
+         OFjGYOJynyJfvrwPN6NtAHYwXti5BwAY1qYWg6CsLEFnQWHoDEbNc7EpKKu8ET3H9LTk
+         jgC2fNUwsJ1oSYsaEYp43bWHrYxDMlqv6Ulw02uslpwLDTUC/2Tayk4QB4VfZhylPhfe
+         flwUZJ8/A0joOgLB4LZwPW5EaIGCmrjG/j3oy+pWebnzoa5Pe9l20HhikMSmvMzJ6Bg2
+         6EKw==
+X-Gm-Message-State: AOAM530F1dYxYP2EfY8uEN+bJe3lHPZZHU+Wka7gE6QO5SwEnNOo5dKg
+        Ec+Zjlvlj7BJE/wjcII8qGQ=
+X-Google-Smtp-Source: ABdhPJylMgz7+13MxjiyAA8Ex/73nFQsAX9snddHxgeIYr9csvoXPF6GW1zvTUYXOhsBogdMc9HGgw==
+X-Received: by 2002:a05:620a:12b9:: with SMTP id x25mr4435830qki.421.1611065250318;
+        Tue, 19 Jan 2021 06:07:30 -0800 (PST)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id b16sm5234059qtx.85.2021.01.19.06.04.17
+        by smtp.gmail.com with ESMTPSA id l204sm12919713qke.56.2021.01.19.06.07.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 06:04:17 -0800 (PST)
-Date:   Tue, 19 Jan 2021 15:04:15 +0100
+        Tue, 19 Jan 2021 06:07:28 -0800 (PST)
+Date:   Tue, 19 Jan 2021 15:07:26 +0100
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     JC Kuo <jckuo@nvidia.com>
 Cc:     gregkh@linuxfoundation.org, robh@kernel.org, jonathanh@nvidia.com,
         kishon@ti.com, linux-tegra@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, nkristam@nvidia.com
-Subject: Re: [PATCH v6 15/15] xhci: tegra: Enable ELPG for runtime/system PM
-Message-ID: <YAbm39gww7F3okLP@ulmo>
+Subject: Re: [PATCH v6 00/15] Tegra XHCI controller ELPG support
+Message-ID: <YAbnnjLKW43cwlDS@ulmo>
 References: <20210119085546.725005-1-jckuo@nvidia.com>
- <20210119085546.725005-16-jckuo@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="m4cIgoQOaH3JJzUk"
+        protocol="application/pgp-signature"; boundary="7FdDSoIoMbtVUw/Z"
 Content-Disposition: inline
-In-Reply-To: <20210119085546.725005-16-jckuo@nvidia.com>
+In-Reply-To: <20210119085546.725005-1-jckuo@nvidia.com>
 User-Agent: Mutt/2.0.4 (26f41dd1) (2020-12-30)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---m4cIgoQOaH3JJzUk
+--7FdDSoIoMbtVUw/Z
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 19, 2021 at 04:55:46PM +0800, JC Kuo wrote:
-> This commit implements the complete programming sequence for ELPG
-> entry and exit.
+On Tue, Jan 19, 2021 at 04:55:31PM +0800, JC Kuo wrote:
+> Tegra XHCI controler can be placed in ELPG (Engine Level PowerGated)
+> state for power saving when all of the connected USB devices are in
+> suspended state. This patch series includes clk, phy and pmc changes
+> that are required for properly place controller in ELPG and bring
+> controller out of ELPG.
 >=20
->  1. At ELPG entry, invokes tegra_xusb_padctl_enable_phy_sleepwalk()
->     and tegra_xusb_padctl_enable_phy_wake() to configure XUSB PADCTL
->     sleepwalk and wake detection circuits to maintain USB lines level
->     and respond to wake events (wake-on-connect, wake-on-disconnect,
->     device-initiated-wake).
->=20
->  2. At ELPG exit, invokes tegra_xusb_padctl_disable_phy_sleepwalk()
->     and tegra_xusb_padctl_disable_phy_wake() to disarm sleepwalk and
->     wake detection circuits.
->=20
-> At runtime suspend, XUSB host controller can enter ELPG to reduce
-> power consumption. When XUSB PADCTL wake detection circuit detects
-> a wake event, an interrupt will be raised. xhci-tegra driver then
-> will invoke pm_runtime_resume() for xhci-tegra.
->=20
-> Runtime resume could also be triggered by protocol drivers, this is
-> the host-initiated-wake event. At runtime resume, xhci-tegra driver
-> brings XUSB host controller out of ELPG to handle the wake events.
->=20
-> The same ELPG enter/exit procedure will be performed for system
-> suspend/resume path so USB devices can remain connected across SC7.
->=20
-> Signed-off-by: JC Kuo <jckuo@nvidia.com>
-> ---
-> v6:
->    fix compiling warning: extra tokens at end of #ifdef directive
-> v5:
->    avoid using xhci_get_rhub()
->    protect ELPG routines with (CONFIG_PM || CONFIG_PM_SLEEP)
-> v4:
->    reshuffle the code to avoid these pre-declarations
-> v3:
->    use 'unsigned int' for PHY index
->    remove unnecessary 'else'
->    drop IRQF_TRIGGER_HIGH when invokes devm_request_threaded_irq()
->=20
->  drivers/usb/host/xhci-tegra.c | 407 ++++++++++++++++++++++++++++++----
->  1 file changed, 370 insertions(+), 37 deletions(-)
+> JC Kuo (15):
+>   clk: tegra: Add PLLE HW power sequencer control
+>   clk: tegra: Don't enable PLLE HW sequencer at init
+>   phy: tegra: xusb: Move usb3 port init for Tegra210
+>   phy: tegra: xusb: tegra210: Do not reset UPHY PLL
+>   phy: tegra: xusb: Rearrange UPHY init on Tegra210
+>   phy: tegra: xusb: Add Tegra210 lane_iddq operation
+>   phy: tegra: xusb: Add sleepwalk and suspend/resume
+>   soc/tegra: pmc: Provide USB sleepwalk register map
+>   arm64: tegra210: XUSB PADCTL add "nvidia,pmc" prop
+>   dt-bindings: phy: tegra-xusb: Add nvidia,pmc prop
+>   phy: tegra: xusb: Add wake/sleepwalk for Tegra210
+>   phy: tegra: xusb: Tegra210 host mode VBUS control
+>   phy: tegra: xusb: Add wake/sleepwalk for Tegra186
+>   usb: host: xhci-tegra: Unlink power domain devices
+>   xhci: tegra: Enable ELPG for runtime/system PM
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+Greg, Kishon,
 
---m4cIgoQOaH3JJzUk
+it might be best if one of you merged the whole set, except perhaps the
+arm64 device tree change, because there's a lot of build-time
+dependencies here that would be non-trivial to resolve otherwise. I
+could prepare branches that model the dependencies correctly, but the
+USB branch with the last two patches is ultimately going to depend on
+all the rest anyway and pull that in, so the result is the same.
+
+Thierry
+
+--7FdDSoIoMbtVUw/Z
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmAG5t8ACgkQ3SOs138+
-s6FiRA/+JzS85x8wlzd3wVtXLr/NrOGVX+ABlM+gzXd5MCguuF81Ih/SXmYHBc3Z
-99OFwL708T0qXOS0/DM7Wq/VUmFM8mlbyjSujsrG3Daa69CrEbH9pboUMBihc6ki
-I1TNQe+SWlnrMxaS9YjuMtM8bSIWIiVmSDUlpOuzFFjm37CESKGCTx3u3T4+jO9D
-IsVDgcwkX63kIb25yeIyVkfS9mYwD4NlMkBdIo4NIULSscGQB2fKX9gZX2HCBA7u
-qQvxc2+1jdnp5mV4wZGmQ2iXZ55ErmCh315kLI5jIE3KYGsilwvcvJAYAsZDN1rL
-wyp9Bq0pkT41f/xQqe7OYKYUxKBHdD5LgbSpXf7CvqyMG930rCgHDDooERfnQNAN
-8cly6toEj/ugUhknxB7TU7mt1FO3c2BNjSYc7xPHlLXGaKEqa5reYYGoufP+SEuL
-uAY/4tqxWroI+8afW4BVYCrDevQNjDH7FniUePgX5xd6ejhvjfFPU0YnyszM7dE9
-egmqzDp9bpkM4ddIwHXZYYITL8AdM0n9FsgYvFu6/evzy2oUDC4caQTZwoiU2s6r
-4Imn6H/rxR5zShSi6zZKTrDdnFQIUwfPHPLbNHuiqzcucaaLIXFSMVHZYiBPhX6M
-yh1hWi2U4b1gPfPb8Rpy3ZWvWKfkYOrwg5l4GTIPphIWJ9MKnBg=
-=B9a4
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmAG554ACgkQ3SOs138+
+s6H9rw//UahFAahmjZKmXDHNOMVyQVuQtoD55kh38++h2kK7+GW3eNx3ndswu1eY
+7rSMJGd1P99gd271mofobnujRwVBcV1P0UYnNfVaDRdyZU98REoiwuX5VtsZ2gVZ
+I8xPGc8Ud9PmkisXH4PWAu6Taykd22dHbKwzY+l5srVWsALIG+t9i2o8ccw6FZFJ
+q5VYjqpKRJNlb9eziJ1OkgW4PH9Rwl1Bf9rrDRp/i5RQzNjPLnZaaOg6BFjPrQ3X
+MLQB7ucVAHVs5BK5hAzBwLt/AXdvblbTq6IovTfl11PwZzDXNHEo/d/Oy0r0u4kG
+ihvqqw25mczwWoUAuNI2QYUvs456tfuPdA/DrM0a4W3+R/IORj71C6HTgh/67K15
+AOzhYOlW1ekwl/UtNTOp4vtFSbl0+2Rv3PMenSYFxMWG6GfNFhp5iB87pfB+uTUt
+KO6FMrinD2QeM+A+eZBUFT1HhTikmicI+2vjN7d7RUrbH5gEwz9aJOhTdDQqpExh
+NTvY75CO+Dasb38bAtr2I4NAIl0MIE1lF+7k3Py9z67gVZagY4r7a75RKwMRusGv
+Nm4iCrs7OR2aaUL5j5+ANShl7j1x5nnDTcFxUwQElXsiegtxZ1nILZNsaJT4dt0n
+CBRcCdWceMfX97Bf3Ec8jjQZTDDWaGkai75jG2kxalg5ZPbQgv4=
+=LKox
 -----END PGP SIGNATURE-----
 
---m4cIgoQOaH3JJzUk--
+--7FdDSoIoMbtVUw/Z--
