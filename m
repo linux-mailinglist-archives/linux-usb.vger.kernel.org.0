@@ -2,139 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8CA2FBCD3
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 17:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F375A2FBE0C
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 18:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731837AbhASQqz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jan 2021 11:46:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389138AbhASQkp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 11:40:45 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42438C061757
-        for <linux-usb@vger.kernel.org>; Tue, 19 Jan 2021 08:40:05 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1l1u2Y-0005Fo-8U; Tue, 19 Jan 2021 17:39:34 +0100
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1l1u2X-0006I4-9p; Tue, 19 Jan 2021 17:39:33 +0100
-Date:   Tue, 19 Jan 2021 17:39:33 +0100
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Manish Narani <manish.narani@xilinx.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        michal.simek@xilinx.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, git@xilinx.com,
-        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
-Subject: Re: [RESEND PATCH v3 2/2] usb: dwc3: Add driver for Xilinx platforms
-Message-ID: <20210119163933.GG12316@pengutronix.de>
-References: <1608015291-52007-1-git-send-email-manish.narani@xilinx.com>
- <1608015291-52007-3-git-send-email-manish.narani@xilinx.com>
- <20210118134223.GE12316@pengutronix.de>
- <87r1miuv2h.fsf@kernel.org>
+        id S1729063AbhASO7b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jan 2021 09:59:31 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:43448 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2391618AbhASOXi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 09:23:38 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10JEDDUY023322;
+        Tue, 19 Jan 2021 15:22:47 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=UvHs684uAeD3bFunUh/ZA4myF0Q6gk6gMB70PXJxIjE=;
+ b=QCLXI6/HOvFgfT4D28a3yWwJHglhJbIVhGZ7chesWbxNodmKk10TeJ+CdRCy5YcAmjNz
+ AlOXjsO5am1Aau5zHR63KTcJc3KvHKzheXwL62JX7Ji+SnSy0Ce+VWdnh91bsvuJ0ADS
+ R1MFaoMFF2Gl2h8SLloNPcllVHKQ9STH5NWFypJ5XkrY3CzkFzyEDRPgD58hwPVprzpP
+ 0yewEl+qQWxXt2IJZyAxin/IvjHWWHijSJzhoTqkaaDbOaGLclXiMyUEBNnddRhEOtZ/
+ E+kpVKSDJCWut664z4Q0RyG+7pGtdlfS0peF1KAYfc6fj7Jick8D4fxq/8prmaKsORxi UQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 363qwnga5j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 19 Jan 2021 15:22:47 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A1110100034;
+        Tue, 19 Jan 2021 15:22:45 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7AD8A25D007;
+        Tue, 19 Jan 2021 15:22:45 +0100 (CET)
+Received: from lmecxl0995.lme.st.com (10.75.127.48) by SFHDAG2NODE3.st.com
+ (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 19 Jan
+ 2021 15:22:44 +0100
+Subject: Re: [Linux-stm32] [PATCH] usb: dwc2: Change ordering of phy_init and
+ phy_power_on
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        <linux-usb@vger.kernel.org>
+CC:     Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+References: <6cd01e79-fdc0-3bd4-32b5-a85142533f8a@pengutronix.de>
+ <20210112170124.14148-1-jmaselbas@kalray.eu>
+ <20c8617b-069c-e9a5-f394-4e5a8e67deb4@pengutronix.de>
+From:   Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Message-ID: <ccfd600c-112e-2dbd-0117-8cef6f591d45@foss.st.com>
+Date:   Tue, 19 Jan 2021 15:22:44 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uc35eWnScqDcQrv5"
-Content-Disposition: inline
-In-Reply-To: <87r1miuv2h.fsf@kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 17:35:27 up 48 days,  5:02, 89 users,  load average: 0.15, 0.23,
- 0.19
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20c8617b-069c-e9a5-f394-4e5a8e67deb4@pengutronix.de>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-19_04:2021-01-18,2021-01-19 signatures=0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Ahmad, Jules,
 
---uc35eWnScqDcQrv5
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 1/12/21 10:30 PM, Ahmad Fatoum wrote:
+> Hello Jules,
+> 
+> + linux-stm32 and Amelie, who upstreamed dwc2 glue for the stm32mp1.
+> 
+> [ some context: https://lore.kernel.org/lkml/6cd01e79-fdc0-3bd4-32b5-a85142533f8a@pengutronix.de/ ]
+> 
+> On 12.01.21 18:01, Jules Maselbas wrote:
+>> Call phy_init before phy_power_on as this is the intended way of using
+>> the generic phy api.
+> 
+> Even if the PHY driver code itself doesn't show an apparent dependency
+> between the power on and init operation, the hardware may expect things to
+> happen in a defined order. This is at least the case for the stm32-usbphyc
+> and would be violated if we just swap the order in the controller.
+> 
+> Instead, why not take it slow:
+> 
+>   - Document that phy_init -> phy_power_on is the correct order
+>   - Throw a warning when the order is violated
+>   - Ask for this patch to marinate a while in linux-next, so people
+>     have a chance to sort out incompatibilities with their PHY drivers
+> 
 
-On Mon, Jan 18, 2021 at 05:24:38PM +0200, Felipe Balbi wrote:
->
->Hi,
->
->Michael Grzeschik <mgr@pengutronix.de> writes:
->> On Tue, Dec 15, 2020 at 12:24:51PM +0530, Manish Narani wrote:
->>>Add a new driver for supporting Xilinx platforms. This driver is used
->>>for some sequence of operations required for Xilinx USB controllers.
->>>This driver is also used to choose between PIPE clock coming from SerDes
->>>and the Suspend Clock. Before the controller is out of reset, the clock
->>>selection should be changed to PIPE clock in order to make the USB
->>>controller work. There is a register added in Xilinx USB controller
->>>register space for the same.
->>
->> I tried out this driver with the vanilla kernel on an zynqmp. Without
->> this patch the USB-Gadget is already acting buggy. In the gadget mode,
->> some iterations of plug/unplug results to an stalled gadget which will
->> never come back without a reboot.
->>
->> With the corresponding code of this driver (reset assert, clk modify,
->> reset deassert) in the downstream kernels phy driver we found out it is
->> totaly stable. But using this exact glue driver which should do the same
->> as the downstream code, the gadget still was buggy the way described
->> above.
->>
->> I suspect the difference lays in the different order of operations.
->> While the downstream code is runing the resets inside the phy driver
->> which is powered and initialized in the dwc3-core itself. With this glue
->> layser approach of this patch the whole phy init is done before even
->> touching dwc3-core in any way. It seems not to have the same effect,
->> though.
->>
->> If really the order of operations is limiting us, we probably need
->> another solution than this glue layer. Any Ideas?
->
->might be a good idea to collect dwc3 trace events. Can you do that?
+I agree with Ahmad, this should be documented somewhere.
 
-I already did that. In case the port is not working properly, the port
-was producing several "Erratic Errors" between the plug/unplug events.
-
-This was not the case until the reset_assert, pll configure,
-reset_deassert sequence was applied like in the downstream kernels
-phy driver on phy_init.
+Even if, with latest stm32-usbphyc updates 
+(https://lore.kernel.org/patchwork/project/lkml/list/?series=478783), 
+the order phy_init() then phy_power_on() would ensure a recommendation 
+of STM32MP15 AN5031 [1].
 
 Regards,
-Michael
+Amelie
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+[1] 
+https://www.st.com/resource/en/application_note/dm00389996-getting-started-with-stm32mp151-stm32mp153-and-stm32mp157-line-hardware-development-stmicroelectronics.pdf
 
---uc35eWnScqDcQrv5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmAHCz8ACgkQC+njFXoe
-LGSODxAAxydcsZuiOW+cXJH7OETTYOD83zHcdXo2Y3fWuKeUHaZoiZ+YZTXX3HeL
-rgVC/aSf2+ONKW6kxuUmnxKCrcDRv52y2TAbXEic9MstbxfPHUMae5gxWtTmdX62
-LxZ1YxebJ85wXVukcjUfA9ABOmHe0ZE9m3WxvDW15lwhRuJAx3vCmVQm/VgcyVCM
-pTFOdQ4pIxSXp+I0AHUUi1yteA51tzEToXOJiSgWCGd+mN5NAA19okhzQZlbhJ4G
-Gs78Ca6elF9F6DGSZVZ41ry/dcyrQfIQ5mnXWZuUF5BlpAW9zLl/FQBB3Wnjijx9
-8LFcpHrfJJlxU10UqptLeEc28zYx7uouSYdtXghv+kzlxm67qWEUV7cht+PXJ69y
-1rlNclKk7roqJNZnc9nnzmwa7AdFqCSWtN5c/ZmohhSNUDe4xFiUEyorkNRFVIe7
-gyBalT21ho83I5jar0u6FJ99ZCKCbi++yC2V0zoDKXxbpfdHf5MbcrLBRHzXuiXj
-chIXOsVpM07gDCwMNBUhZqy9FFZERzY3xxoHYnhhDZ4tgy1crtfFxfMnaPro+u1M
-b/j4UCjWcSb0AJ0uvzJuMVEy4JDFb/feaNJCGLqFeG97DaChgYJm5uy6yhj434yk
-ExLqsU4gk4lSpCTesHqcas2r2IoM231ew/Ma7ni3CSWhRUp4tgA=
-=DxJJ
------END PGP SIGNATURE-----
-
---uc35eWnScqDcQrv5--
+> Cheers,
+> Ahmad
+> 
+>>
+>> Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+>> Cc: Ahmad Fatoum <a.fatoum@pengutronix.de>
+>> Cc: Minas Harutyunyan <hminas@synopsys.com>
+>> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+>>
+>> ---
+>>
+>> I have quickly looked at usb-phy if this change could break something or
+>> not. The following cmd list the compatible strings for usb-phy used by dwc2:
+>>
+>> git grep 'snps,dwc2' -- arch/ | sed 's/:.*$//' | { while read file; do \
+>>          phyname=$(git grep -A10 'snps,dwc2' -- "$file" | \
+>>                  sed -n '/phys/{s/.*<&\([^ >]*\).*/\1/p}'); \
+>>          [ "$phyname" ] && { \
+>> 	        git grep -A10 "${phyname}: " -- "$file" | \
+>>                  grep -m1 'compatible'; \
+>>          }; done };
+>>
+>>  From this output I took a look at:
+>>   - brcm,kona-usb2-phy
+>>   - samsung,exynos3250-usb2-phy
+>>   - rockchip,rk3288-usb
+>>   - amlogic,meson-gxbb-usb2-phy
+>>   - amlogic,meson-gxl-usb2-phy
+>>   - img,pistachio-usb-phy
+>>
+>> Most of these phys only defines .power_on and .power_off;
+>> brcm,kona-usb2-phy also defines .init; and amlogic,meson-gxl-usb2-phy defines
+>> .init .exit and .reset
+>>
+>>  From what I've seen it seems to be OK for these two phy to call
+>> init/exit first and then power_on/power_off.
+>> ---
+>>   drivers/usb/dwc2/platform.c | 8 ++++----
+>>   1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+>> index b58ce996add7..a07dff088a26 100644
+>> --- a/drivers/usb/dwc2/platform.c
+>> +++ b/drivers/usb/dwc2/platform.c
+>> @@ -142,9 +142,9 @@ static int __dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg)
+>>   	} else if (hsotg->plat && hsotg->plat->phy_init) {
+>>   		ret = hsotg->plat->phy_init(pdev, hsotg->plat->phy_type);
+>>   	} else {
+>> -		ret = phy_power_on(hsotg->phy);
+>> +		ret = phy_init(hsotg->phy);
+>>   		if (ret == 0)
+>> -			ret = phy_init(hsotg->phy);
+>> +			ret = phy_power_on(hsotg->phy);
+>>   	}
+>>   
+>>   	return ret;
+>> @@ -176,9 +176,9 @@ static int __dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg)
+>>   	} else if (hsotg->plat && hsotg->plat->phy_exit) {
+>>   		ret = hsotg->plat->phy_exit(pdev, hsotg->plat->phy_type);
+>>   	} else {
+>> -		ret = phy_exit(hsotg->phy);
+>> +		ret = phy_power_off(hsotg->phy);
+>>   		if (ret == 0)
+>> -			ret = phy_power_off(hsotg->phy);
+>> +			ret = phy_exit(hsotg->phy);
+>>   	}
+>>   	if (ret)
+>>   		return ret;
+>>
+> 
