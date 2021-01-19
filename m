@@ -2,76 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D594D2FB84D
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 15:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5832FB84E
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 15:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392540AbhASMQu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jan 2021 07:16:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41638 "EHLO mail.kernel.org"
+        id S2392547AbhASMQx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jan 2021 07:16:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41914 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389369AbhASKX1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 Jan 2021 05:23:27 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D4E7323117;
-        Tue, 19 Jan 2021 10:22:45 +0000 (UTC)
+        id S1731918AbhASKZ7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 Jan 2021 05:25:59 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 175F823121;
+        Tue, 19 Jan 2021 10:25:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1611051766;
-        bh=ZCWD/b7A3OwSWmg8JXwsE+BsDPVkRktwRfyNPO6lUdg=;
+        s=korg; t=1611051918;
+        bh=rJ1uCicSSQ5/QeLcb18MjtBsaOZqSMFDCFq0yZetY5Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UR8Jsg+mtUefwVHLkFSOyOYRGJOn/FgSapdFW7e+NAyIxOesltcdss4GA/ncuPXH1
-         Iq+lN2DMdA7/4RmShHjcaMGDRxQAhU4tua2Mauvf8YntfgBpSLPAd+UJ1wz3pooc+P
-         n7NoWJytThrmgGbwLYaloNtXMc+8P4137vFR9DAs=
-Date:   Tue, 19 Jan 2021 11:22:43 +0100
+        b=iB7K0NHSjmHrAKf8s6td3w+KUc6daSeEdRFYyfNGIuWHEP2y8BAvt/TTlRUiIWkUI
+         SSk+yCqsmtp85Tc25Qr/I5dc1DAwGQHKoJvtjKACnHukZMY5bIx/TDGzavzUsrOV0l
+         mOdvSV4TULndwGlVYyAmai06rf29xq+K0zwkWdQQ=
+Date:   Tue, 19 Jan 2021 11:25:15 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Howard Yen <howardyen@google.com>
 Cc:     robh+dt@kernel.org, mathias.nyman@intel.com,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] dt-bindings: usb: usb-xhci: add USB offload support
-Message-ID: <YAay83Ze47hNu5Ii@kroah.com>
+Subject: Re: [PATCH 0/4] add xhci hooks for USB offload
+Message-ID: <YAaziw6VGKY4eNgY@kroah.com>
 References: <20210119101044.1637023-1-howardyen@google.com>
- <20210119101044.1637023-5-howardyen@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210119101044.1637023-5-howardyen@google.com>
+In-Reply-To: <20210119101044.1637023-1-howardyen@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 19, 2021 at 06:10:44PM +0800, Howard Yen wrote:
-> Document USB offload support for usb-xhci.
+On Tue, Jan 19, 2021 at 06:10:40PM +0800, Howard Yen wrote:
+> To let the xhci driver support USB offload, add hooks for vendor to have
+> customized behavior for the initialization, memory allocation, irq work, and 
+> device context synchronization. Detail is in each patch commit message.
 > 
-> For example:
+> Howard Yen (4):
+>   usb: host: add xhci hooks for USB offload
+>   usb: host: export symbols for xhci hooks usage
+>   usb: xhci-plat: add xhci_plat_priv_overwrite
+>   dt-bindings: usb: usb-xhci: add USB offload support
 > 
-> &usbdrd_dwc3 {
-> 	...
-> 	/* support usb offloading, 0: disabled, 1: audio */
-> 	offload = <1>;
-> 	...
-> };
-> 
-> Signed-off-by: Howard Yen <howardyen@google.com>
-> ---
->  Documentation/devicetree/bindings/usb/usb-xhci.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.txt b/Documentation/devicetree/bindings/usb/usb-xhci.txt
-> index b120dd6612a2..aab1fd499f15 100644
-> --- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
-> +++ b/Documentation/devicetree/bindings/usb/usb-xhci.txt
-> @@ -46,6 +46,7 @@ Optional properties:
->    - quirk-broken-port-ped: set if the controller has broken port disable mechanism
->    - imod-interval-ns: default interrupt moderation interval is 5000ns
->    - phys : see usb-hcd.yaml in the current directory
-> +  - offload: supporting USB offload feature, 0: disabled, 1: audio
+>  .../devicetree/bindings/usb/usb-xhci.txt      |  1 +
+>  drivers/usb/host/xhci-hub.c                   |  5 +
+>  drivers/usb/host/xhci-mem.c                   | 99 ++++++++++++++++---
+>  drivers/usb/host/xhci-plat.c                  | 45 ++++++++-
+>  drivers/usb/host/xhci-plat.h                  |  9 ++
+>  drivers/usb/host/xhci-ring.c                  | 19 +++-
+>  drivers/usb/host/xhci.c                       | 89 +++++++++++++++++
+>  drivers/usb/host/xhci.h                       | 38 +++++++
+>  8 files changed, 289 insertions(+), 16 deletions(-)
 
-Why does the "type" of offload matter, shouldn't it just be:
-	0: disabled, 1: enabled
-?
+Thanks so much for posting this.
 
-And in thinking about it some more, why does this need to be a binding
-at all, shouldn't this just be an issue if the platform-specific ops are
-available or not, meaning no DT change should be needed at all?
+A bit of background for the lists.  I helped review previous versions of
+this patchset from Howard as he worked to convert the hacks from a
+previous vendor into something that would be semi-sane.  It would be
+great if we can take the previously-submitted Samsung usb-audio hooks
+(as published in their kernel sources for their last-year phones) and
+get it into something mergable with this scheme as well, as this is the
+"correct" way to do what they were wanting to do.
+
+Although I know that is outside of the work you probably have time for,
+maybe I will work on that over the next few weeks...
 
 thanks,
 
