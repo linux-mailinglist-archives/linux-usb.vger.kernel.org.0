@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 738182FB849
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 15:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 587E62FB84B
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 15:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392189AbhASMQm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jan 2021 07:16:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
+        id S2392197AbhASMQo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jan 2021 07:16:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388461AbhASKNF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 05:13:05 -0500
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFA8C061574
-        for <linux-usb@vger.kernel.org>; Tue, 19 Jan 2021 02:12:24 -0800 (PST)
-Received: by mail-qt1-x84a.google.com with SMTP id t5so9325179qti.5
-        for <linux-usb@vger.kernel.org>; Tue, 19 Jan 2021 02:12:24 -0800 (PST)
+        with ESMTP id S2389738AbhASKPe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 05:15:34 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D96C0613ED
+        for <linux-usb@vger.kernel.org>; Tue, 19 Jan 2021 02:12:27 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id s7so19809721ybj.0
+        for <linux-usb@vger.kernel.org>; Tue, 19 Jan 2021 02:12:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=BcPoYEbdIYyM8L8hAhQ7ZZD170CnJQ01Heu1vKTFsss=;
-        b=D9fyG4LJqOzR0b1Nb7kKUNMQjqR37zsPPSq6cWgywvRFNX+bsd5Hw9DpESDF1e6QZy
-         copoF54mllDVMx7zq7x8SSCSRrDticTfSiZUazhWQUUpn8+cCCGefIH4jz/ZCwuAwe4x
-         RCtuo/yVBqwnFBojFsNIC8cCoNLq7Vs34nfiNUpaBaaHKZGkpkG1HdirEla6Glgox1OW
-         gVZk+rxOA/ibk/V8aS1JEsfXjhupQhS8pjk0kxw2E3nJppUmXmleexR19+cM1LU/RzlC
-         nHx+842pBCrGXanuDNznserDO6Vq4sDDorTu6ccLwVa9zERO3AADhtU7MPVMSYbZLJkB
-         Upyw==
+        bh=pGshkdllAmKtNcf+vD4gEuZmFdpUuE7wrXzrPvtHY6U=;
+        b=aBbV9BLrnSNnW8vIGkex+VzAlyluZdM1gnAE81BpnN1hCkywVz/dEq4EHoDarAAHt0
+         X9U8mMzbWj3Xwz8m2qQ/ozDwjsNbRV+QaHzswQYFXD8QH9x0zeRoOH4EGk1CGjWQs3jD
+         V8CsWEtoCPB58qIfVBMyvO9wR1xiiqKgWtqz9PmzgJwCTbQfwmFQ2ApdVrMW55/6qITm
+         V1m/PMLSjiKOtNUqwuriruAuAXKF7M8KOWfNIABsx1xPPTOSXsMKBPkArvb9NXVlfm3K
+         zLydVvWS8iOT/cGeSBXCkzwLjNpeXY/710agMz1kxP5IAF2V+Q5yLKWLVbOV5pblwA1a
+         d54g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=BcPoYEbdIYyM8L8hAhQ7ZZD170CnJQ01Heu1vKTFsss=;
-        b=XHVCQ/ZdkRi52+d4LrWXCNJd/xKmHTlZk+yYRthixwxmj+3Q24ZsSWS5w/d5n72EBb
-         cIoCYCyXRaUZnaXhMTmH9AOHD80fRYAzBnbG8QLFQSUh6ku8GW2HaI9t2QDVohbAbU3L
-         qxLenH9QC/WAsV4Ec2OKKN/aYKcg1ctys5gGhD1pnZg9jyxjw5NShQYPqxIasTGpz7Z4
-         ZyxnQT+7b5/6DsynqMdknSGrRVBv/6Q9Y+rSIq+H1yyF02kVlbYT8gxmlo5l3uZHdQTX
-         k8wxPgxVYEZBZI72hV6cl2UwuZeTHd2L6uPDfu4B4WTd9E6cS/9iQhFQtkcZFcehmQa3
-         fR6w==
-X-Gm-Message-State: AOAM531bJrpRkfl5P/jsMYz2GVu06QYC/rktNjdWES3YNTWaeY9Lh1SL
-        oieXrVXdBid/S8VqMMAnhvrgooo/QgoKt+A=
-X-Google-Smtp-Source: ABdhPJxPc60+P7BA14J36TtxyZFPsqKyXLgHrTt6kDEo/6Jh2iH64s5ke2Ms8gj3mhQnsczWl55KUlM4WUQAsKo=
+        bh=pGshkdllAmKtNcf+vD4gEuZmFdpUuE7wrXzrPvtHY6U=;
+        b=SH1a3jQUw+26tWxbNFv7XuwKvOShwB1a0ALYncrQIgRsW6t8llJAXa3KMEoin1Lv7H
+         NtjyYNCcMJq3+Y8slcAeXL/h0snlCA3WulpVoEm2ffoR2N2bGMDUThRAKtNv1KBCvXiz
+         OfAQmbHLZche2KXvGMseP+tlAf2IgcbNArZcxzZTg5iElqIabCW0XrXtSWdupLIte7fN
+         PeYUuR/AJhQ4dkUlaXaloVzqOzViD2WY839a/BlvbPLCR0/DWzAzzjuq0izWIOtj1vPU
+         Ol93JrMW2BQP1+bzwyJFRsilNBkBf+LCz2XKbrcrD9ggsP7QwV+JUEAYObef5Fs9JvxR
+         AMyw==
+X-Gm-Message-State: AOAM533pjqhDi3Qju3xiaCujWWAiOS4lA5DFtccDDabP5RTIe52MQNeh
+        zy4FsdODwHfJTpURJhRHp6QOg4W+MlHgQfY=
+X-Google-Smtp-Source: ABdhPJzKYU2xntqX/Jwro+f0uDstVG47y9IPd/tRbPXo+heIpzlduI9IDXetOxxlzGvYbdrFWIcrkWbEDQt5fAY=
 Sender: "howardyen via sendgmr" <howardyen@howardyen.ntc.corp.google.com>
 X-Received: from howardyen.ntc.corp.google.com ([2401:fa00:fc:202:5d06:ba6f:6a89:a201])
- (user=howardyen job=sendgmr) by 2002:a0c:d403:: with SMTP id
- t3mr3780313qvh.4.1611051143686; Tue, 19 Jan 2021 02:12:23 -0800 (PST)
-Date:   Tue, 19 Jan 2021 18:10:42 +0800
+ (user=howardyen job=sendgmr) by 2002:a25:5404:: with SMTP id
+ i4mr5226459ybb.519.1611051147046; Tue, 19 Jan 2021 02:12:27 -0800 (PST)
+Date:   Tue, 19 Jan 2021 18:10:43 +0800
 In-Reply-To: <20210119101044.1637023-1-howardyen@google.com>
-Message-Id: <20210119101044.1637023-3-howardyen@google.com>
+Message-Id: <20210119101044.1637023-4-howardyen@google.com>
 Mime-Version: 1.0
 References: <20210119101044.1637023-1-howardyen@google.com>
 X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
-Subject: [PATCH 2/4] usb: host: export symbols for xhci hooks usage
+Subject: [PATCH 3/4] usb: xhci-plat: add xhci_plat_priv_overwrite
 From:   Howard Yen <howardyen@google.com>
 To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
         mathias.nyman@intel.com
@@ -62,97 +62,82 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Export symbols for xhci hooks usage:
-    xhci_ring_free
-        - Allow xhci hook to free xhci_ring.
-    xhci_get_slot_ctx
-        - Allow xhci hook to get slot_ctx from the xhci_container_ctx
-	  for getting the slot_ctx information to know which slot is
-	  offloading and compare the context in remote subsystem memory
-	  if needed.
-    xhci_get_ep_ctx
-        - Allow xhci hook to get ep_ctx from the xhci_container_ctx for
-	  getting the ep_ctx information to know which ep is offloading and
-	  comparing the context in remote subsystem memory if needed.
-    xhci_handle_event
-        - Allow xhci hook to handle the xhci events from the USB
-	  controller.
-    xhci_update_erst_dequeue
-        - If xhci events was handle by xhci hook, it needs to update
-	  the erst dequeue pointer to let the USB controller know the
-	  events was handled.
+Add an overwrite to platform specific callback for setting up the
+xhci_vendor_ops, allow vendor to store the xhci_vendor_ops and
+overwrite them when xhci_plat_probe invoked.
+
+This change is depend on Commit in this patch series
+("usb: host: add xhci hooks for USB offload"), vendor needs
+to invoke xhci_plat_register_vendor_ops() to register the vendor specific
+vendor_ops. And the vendor_ops will overwrite the vendor_ops inside
+xhci_plat_priv in xhci_vendor_init() during xhci-plat-hcd probe.
 
 Signed-off-by: Howard Yen <howardyen@google.com>
 ---
- drivers/usb/host/xhci-mem.c  | 3 +++
- drivers/usb/host/xhci-ring.c | 6 ++++--
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ drivers/usb/host/xhci-plat.c | 20 ++++++++++++++++++++
+ drivers/usb/host/xhci-plat.h |  7 +++++++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index f3dbc5956290..69f19774b914 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -289,6 +289,7 @@ void xhci_ring_free(struct xhci_hcd *xhci, struct xhci_ring *ring)
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 5f8e69089654..a8e217494831 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -163,9 +163,26 @@ static const struct of_device_id usb_xhci_of_match[] = {
+ MODULE_DEVICE_TABLE(of, usb_xhci_of_match);
+ #endif
  
- 	kfree(ring);
- }
-+EXPORT_SYMBOL_GPL(xhci_ring_free);
- 
- static void xhci_initialize_ring_info(struct xhci_ring *ring,
- 					unsigned int cycle_state)
-@@ -545,6 +546,7 @@ struct xhci_slot_ctx *xhci_get_slot_ctx(struct xhci_hcd *xhci,
- 	return (struct xhci_slot_ctx *)
- 		(ctx->bytes + CTX_SIZE(xhci->hcc_params));
- }
-+EXPORT_SYMBOL_GPL(xhci_get_slot_ctx);
- 
- struct xhci_ep_ctx *xhci_get_ep_ctx(struct xhci_hcd *xhci,
- 				    struct xhci_container_ctx *ctx,
-@@ -558,6 +560,7 @@ struct xhci_ep_ctx *xhci_get_ep_ctx(struct xhci_hcd *xhci,
- 	return (struct xhci_ep_ctx *)
- 		(ctx->bytes + (ep_index * CTX_SIZE(xhci->hcc_params)));
- }
-+EXPORT_SYMBOL_GPL(xhci_get_ep_ctx);
- 
- 
- /***************** Streams structures manipulation *************************/
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index bfd653a1e5f6..f3b387e2fcb3 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2717,7 +2717,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
-  * Returns >0 for "possibly more events to process" (caller should call again),
-  * otherwise 0 if done.  In future, <0 returns should indicate error code.
-  */
--static int xhci_handle_event(struct xhci_hcd *xhci)
-+int xhci_handle_event(struct xhci_hcd *xhci)
++static struct xhci_plat_priv_overwrite xhci_plat_vendor_overwrite;
++
++int xhci_plat_register_vendor_ops(struct xhci_vendor_ops *vendor_ops)
++{
++	if (vendor_ops == NULL)
++		return -EINVAL;
++
++	xhci_plat_vendor_overwrite.vendor_ops = vendor_ops;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(xhci_plat_register_vendor_ops);
++
+ static int xhci_vendor_init(struct xhci_hcd *xhci)
  {
- 	union xhci_trb *event;
- 	int update_ptrs = 1;
-@@ -2786,13 +2786,14 @@ static int xhci_handle_event(struct xhci_hcd *xhci)
- 	 */
- 	return 1;
- }
-+EXPORT_SYMBOL_GPL(xhci_handle_event);
+ 	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
++	struct xhci_plat_priv *priv = xhci_to_priv(xhci);
++
++	if (xhci_plat_vendor_overwrite.vendor_ops)
++		ops = priv->vendor_ops = xhci_plat_vendor_overwrite.vendor_ops;
  
- /*
-  * Update Event Ring Dequeue Pointer:
-  * - When all events have finished
-  * - To avoid "Event Ring Full Error" condition
-  */
--static void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
-+void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
- 		union xhci_trb *event_ring_deq)
+ 	if (ops && ops->vendor_init)
+ 		return ops->vendor_init(xhci);
+@@ -175,9 +192,12 @@ static int xhci_vendor_init(struct xhci_hcd *xhci)
+ static void xhci_vendor_cleanup(struct xhci_hcd *xhci)
  {
- 	u64 temp_64;
-@@ -2822,6 +2823,7 @@ static void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
- 	temp_64 |= ERST_EHB;
- 	xhci_write_64(xhci, temp_64, &xhci->ir_set->erst_dequeue);
- }
-+EXPORT_SYMBOL_GPL(xhci_update_erst_dequeue);
+ 	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
++	struct xhci_plat_priv *priv = xhci_to_priv(xhci);
  
- static irqreturn_t xhci_vendor_queue_irq_work(struct xhci_hcd *xhci)
- {
+ 	if (ops && ops->vendor_cleanup)
+ 		ops->vendor_cleanup(xhci);
++
++	priv->vendor_ops = NULL;
+ }
+ 
+ static int xhci_plat_probe(struct platform_device *pdev)
+diff --git a/drivers/usb/host/xhci-plat.h b/drivers/usb/host/xhci-plat.h
+index 2b2d090c4c01..d85802725208 100644
+--- a/drivers/usb/host/xhci-plat.h
++++ b/drivers/usb/host/xhci-plat.h
+@@ -22,4 +22,11 @@ struct xhci_plat_priv {
+ 
+ #define hcd_to_xhci_priv(h) ((struct xhci_plat_priv *)hcd_to_xhci(h)->priv)
+ #define xhci_to_priv(x) ((struct xhci_plat_priv *)(x)->priv)
++
++struct xhci_plat_priv_overwrite {
++	struct xhci_vendor_ops *vendor_ops;
++};
++
++int xhci_plat_register_vendor_ops(struct xhci_vendor_ops *vendor_ops);
++
+ #endif	/* _XHCI_PLAT_H */
 -- 
 2.30.0.284.gd98b1dd5eaa7-goog
 
