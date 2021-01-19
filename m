@@ -2,91 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB9B2FBAA4
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 16:05:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CCEE2FBAA7
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 16:05:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727272AbhASO6f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jan 2021 09:58:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41002 "EHLO mail.kernel.org"
+        id S1728434AbhASO6x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jan 2021 09:58:53 -0500
+Received: from mga12.intel.com ([192.55.52.136]:15227 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404937AbhASMel (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 Jan 2021 07:34:41 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3A52D2310E;
-        Tue, 19 Jan 2021 12:33:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1611059632;
-        bh=nhLuurJSrgADMg3lBfOTeTfYMIf5bFMG7UNgaXRHqZ4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XMFySzbpHGeNgMMesjH9tuaLgO7p7bI6r5Eg9KF5YH4R+v+FeIvF8htdqA9C2hk2z
-         cZjZWaTyWQz+PWPcYgAX5FxSUAUWHtx8YqgpkkHPXhTgJonIU8FKqtiPzqPIIGRgc4
-         GEfcF2bkYGSR4csEKZpOTayWgH0Mz+4RHeu7OT/w=
-Date:   Tue, 19 Jan 2021 13:33:49 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Al Cooper <al.cooper@broadcom.com>
-Cc:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 2/2] serial: 8250: Add new 8250-core based Broadcom
- STB driver
-Message-ID: <YAbRrSSNkzcvGSL3@kroah.com>
-References: <20210115211543.33563-1-alcooperx@gmail.com>
- <20210115211543.33563-3-alcooperx@gmail.com>
- <YAXJRDhS1HXeYaZz@kroah.com>
- <CAGh=XABU=jdLWo8AfSBZPwn+_gDfCNN07cg9a58nxknjjyEfxg@mail.gmail.com>
+        id S2390832AbhASMsi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 Jan 2021 07:48:38 -0500
+IronPort-SDR: /QpIOURqXPzRDV1NQ2XdxlR9XAhn6Jy+A/ziMz3rgVW4mrmQMbeF1LRpIHpJAUEoz69XXdpU37
+ CllaBOMbY84Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9868"; a="158099304"
+X-IronPort-AV: E=Sophos;i="5.79,358,1602572400"; 
+   d="scan'208";a="158099304"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2021 04:47:32 -0800
+IronPort-SDR: 0/Avog7veZRp0XfmHXYOC5xnDKbh2OAfJijzP0zb/Nlbv6lGQOhGe22qcmlerOBDfEtdPrzIDE
+ ekyynMp6JQRw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,358,1602572400"; 
+   d="scan'208";a="347166339"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga007.fm.intel.com with ESMTP; 19 Jan 2021 04:47:31 -0800
+Subject: Re: [PATCH 0/4] add xhci hooks for USB offload
+To:     Howard Yen <howardyen@google.com>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210119101044.1637023-1-howardyen@google.com>
+From:   Mathias Nyman <mathias.nyman@intel.com>
+Message-ID: <af91bbf1-6731-3e87-4086-de0dbba22c22@intel.com>
+Date:   Tue, 19 Jan 2021 14:49:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGh=XABU=jdLWo8AfSBZPwn+_gDfCNN07cg9a58nxknjjyEfxg@mail.gmail.com>
+In-Reply-To: <20210119101044.1637023-1-howardyen@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 18, 2021 at 03:32:57PM -0500, Al Cooper wrote:
-> On Mon, Jan 18, 2021 at 12:45 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Fri, Jan 15, 2021 at 04:15:43PM -0500, Al Cooper wrote:
-> > > Add a UART driver for the new Broadcom 8250 based STB UART. The new
-> > > UART is backward compatible with the standard 8250, but has some
-> > > additional features. The new features include a high accuracy baud
-> > > rate clock system and DMA support.
-> > >
-> > > The driver will use the new optional BAUD MUX clock to select the best
-> > > one of the four master clocks (81MHz, 108MHz, 64MHz and 48MHz) to feed
-> > > the baud rate selection logic for any requested baud rate.  This allows
-> > > for more accurate BAUD rates when high speed baud rates are selected.
-> > >
-> > > The driver will use the new UART DMA hardware if the UART DMA registers
-> > > are specified in Device Tree "reg" property. The DMA functionality can
-> > > be disabled on kernel boot with the argument:
-> > > "8250_bcm7271.disable_dma=Y".
-> >
-> > Shouldn't that be on a per-device basis, and not a per-driver basis?
-> 
-> There is only one instance of the UART DMA hardware and it gets muxed
-> to just one of the possible UARTS.
+On 19.1.2021 12.10, Howard Yen wrote:
+> To let the xhci driver support USB offload, add hooks for vendor to have
+> customized behavior for the initialization, memory allocation, irq work, and 
+> device context synchronization. Detail is in each patch commit message.
 
-But the driver doesn't know/care about that, it binds to any device that
-matches it.  per-module/driver flags are not a good idea.
+Is this related to the usb audio sideband capability that was added to the xHCI specification?
+If yes, then we should probably implement the generic parts first, and then add
+the vendor specific hooks.
 
-> > And why would you want to disable this, if you have support for this in
-> > the DT?  Why not just rely on the DT setting?
-> 
-> The DMA feature is used when the UART is connected to a Bluetooth
-> controller and the BAUD rate is typically 2-3Mbs. The ability to
-> easily disable DMA is very useful when debugging BT communication
-> problems in the field. DT settings could also be used to disable DMA,
-> but knowing the correct modifications to the "reg" and "reg-names"
-> properties is a lot more complicated.
+-Mathias
+ 
 
-So this is a debug-only option?  If so, why not just make it a debugfs
-file then?  No need to clutter up a module parameter for this mess.
-
-thanks,
-
-greg k-h
