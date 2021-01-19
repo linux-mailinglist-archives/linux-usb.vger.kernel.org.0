@@ -2,98 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B18A62FC34E
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 23:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453D52FC496
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 00:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729360AbhASWXe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jan 2021 17:23:34 -0500
-Received: from m42-8.mailgun.net ([69.72.42.8]:32675 "EHLO m42-8.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731375AbhASRqa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 Jan 2021 12:46:30 -0500
-X-Greylist: delayed 394 seconds by postgrey-1.27 at vger.kernel.org; Tue, 19 Jan 2021 12:46:29 EST
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1611078329; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=L0vFdFdhSXmndQrwYXuvFainDV9NH9XIG05iM/Zdhg8=; b=UJJobJMflGF1rKcuJrFDGXXVKNbqQZXn622SaS56eg1T2OghZcxQsXbiBRhFrzHz7E/DYDwl
- UC4nUXUCCw2vm8BaordFqBqIRcoeFskrYytLyO7VimRkZwnivDR0kyiP86AmL/YrMG/zExIC
- 81gofQSEaJzMAD7WKjQLX2ptNas=
-X-Mailgun-Sending-Ip: 69.72.42.8
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
- 6007193502b2f1cb1a797d58 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 19 Jan 2021 17:39:01
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B2471C43462; Tue, 19 Jan 2021 17:39:00 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5B93EC433C6;
-        Tue, 19 Jan 2021 17:38:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 5B93EC433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Jack Pham <jackp@codeaurora.org>,
-        Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH v3] dt-bindings: usb: qcom,dwc3: Add bindings for SM8150, SM8250, SM8350
-Date:   Tue, 19 Jan 2021 09:37:48 -0800
-Message-Id: <20210119173748.6729-1-jackp@codeaurora.org>
-X-Mailer: git-send-email 2.24.0
+        id S1727073AbhASXPZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jan 2021 18:15:25 -0500
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:39776 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728496AbhASXLn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 18:11:43 -0500
+Received: by mail-ot1-f46.google.com with SMTP id i30so8621037ota.6;
+        Tue, 19 Jan 2021 15:11:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zwnspLO1XU1UxAjviLLOho2793ZeLPfsqMsqct/RJD4=;
+        b=I5p36v8nFPGov43Xa1UYERG+V0gM6jF+5D0bBQWU43E5o9eNphYHXgvk+Chaa1xecP
+         41Vq/8rFz7MJLVprcK6PfeBzI04li/dWROHEq14rSvy7y6kTfYxmGNyJskvWuytAIVqS
+         013ksw1IHmOJ6KnA0j5YoUhy5YtM/hzvPuskuz7m8VAckMwLlfTPl5hQzWeEOPMTI2E+
+         9YvXmiHjuer+sMu0SL4Jfcda55SY0DH8f9Ud10Nc4Dl4o5qWZpoIEYWo6Q9hVxLmeE08
+         +fEi3tmAA0MVGTKI598IcMXuBF71WxlTB6LBjVHog/IHgjR9ZwNfz+WXFNmS6imHVHkM
+         VjwA==
+X-Gm-Message-State: AOAM530VJCefrYW79vck7PVIiAD6ZQYqlieyGOFGzinZTh8N8Fm92/qh
+        ZSBfhWgCDvpzln3w7z0nuRP2Fzw1RQ==
+X-Google-Smtp-Source: ABdhPJyTgJTFM5NXoV7ntdMWXNrAUbzEb6Iwjg696qOUlnMDqKMVqsb1IVxmC6Gqyn9VRUxLSXvACQ==
+X-Received: by 2002:a9d:4e8d:: with SMTP id v13mr5250786otk.12.1611097860450;
+        Tue, 19 Jan 2021 15:11:00 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id h203sm31052oib.11.2021.01.19.15.10.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jan 2021 15:10:59 -0800 (PST)
+Received: (nullmailer pid 2774332 invoked by uid 1000);
+        Tue, 19 Jan 2021 23:10:58 -0000
+Date:   Tue, 19 Jan 2021 17:10:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     cy_huang <u0084500@gmail.com>
+Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        matthias.bgg@gmail.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        cy_huang@richtek.com, gene_chen@richtek.com,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] usb typec: tcpci: mt6360: Add vbus supply into
+ dt-binding description
+Message-ID: <20210119231058.GA2772032@robh.at.kernel.org>
+References: <1610720001-15300-1-git-send-email-u0084500@gmail.com>
+ <1610720001-15300-2-git-send-email-u0084500@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1610720001-15300-2-git-send-email-u0084500@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add compatible strings for the USB DWC3 controller on QCOM SM8150,
-SM8250 and SM8350 SoCs.
+On Fri, Jan 15, 2021 at 10:13:21PM +0800, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> Add external vbus source into dt-binding description.
+> 
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+>  Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
+> index 1e8e1c2..b8d842b 100644
+> --- a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
+> +++ b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
+> @@ -26,6 +26,11 @@ properties:
+>      items:
+>        - const: PD_IRQB
+>  
+> +  vbus-supply:
+> +    description:
+> +      Vbus source supply regulator.
+> +    maxItems: 1
 
-Note the SM8150 & SM8250 compatibles are already being used in the
-dts but was missing from the documentation.
+vbus-supply is already in the 'connector' node, you don't need it here.
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
-Signed-off-by: Jack Pham <jackp@codeaurora.org>
----
-v3: Resend of #4/4 of https://lore.kernel.org/linux-usb/20210115174723.7424-1-jackp@codeaurora.org
-    added Felipe's Ack & rebased on gregkh/usb-testing
-
- Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index dd1d8bcd9254..c3cbd1fa9944 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -18,6 +18,9 @@ properties:
-           - qcom,sc7180-dwc3
-           - qcom,sdm845-dwc3
-           - qcom,sdx55-dwc3
-+          - qcom,sm8150-dwc3
-+          - qcom,sm8250-dwc3
-+          - qcom,sm8350-dwc3
-       - const: qcom,dwc3
- 
-   reg:
--- 
-2.24.0
-
+> +
+>    connector:
+>      type: object
+>      $ref: ../connector/usb-connector.yaml#
+> @@ -38,6 +43,7 @@ required:
+>    - compatible
+>    - interrupts
+>    - interrupt-names
+> +  - vbus-supply
+>  
+>  examples:
+>    - |
+> @@ -54,6 +60,7 @@ examples:
+>            compatible = "mediatek,mt6360-tcpc";
+>            interrupts-extended = <&gpio26 3 IRQ_TYPE_LEVEL_LOW>;
+>            interrupt-names = "PD_IRQB";
+> +          vbus-supply = <&otg_vbus>;
+>  
+>            connector {
+>              compatible = "usb-c-connector";
+> -- 
+> 2.7.4
+> 
