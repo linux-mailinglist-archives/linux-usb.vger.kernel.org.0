@@ -2,142 +2,197 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B40A12FB351
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 08:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 428922FB3F2
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 09:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731162AbhASHjQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jan 2021 02:39:16 -0500
-Received: from mailgw02.mediatek.com ([1.203.163.81]:2095 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730012AbhASHjF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 02:39:05 -0500
-X-UUID: 08f0aad841294f2ba5a875879051e5fe-20210119
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=umF0/4THUCkSbBZUhmq56lfHoNBXzIPnzphItGv/KMI=;
-        b=uoiTEcHxGC64lJXUJBfDRQNPGziRFltn+5ywxrdNMuiHtk5nfOGoPW34Cl3XfMkZHILw5Y4IcbiF5HnqUi4qVpKGbN6fZ57Vn9a55Wp4oipVxygjcvT7df7nn4jX3EDw7skviLs7ipm2c2yI0RhBqsCrVGtK2ZaC86ItRguHUiE=;
-X-UUID: 08f0aad841294f2ba5a875879051e5fe-20210119
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 23337932; Tue, 19 Jan 2021 15:37:57 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS32N1.mediatek.inc
- (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 19 Jan
- 2021 15:37:55 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 19 Jan 2021 15:37:54 +0800
-Message-ID: <1611041874.12761.13.camel@mhfsdcap03>
+        id S1729511AbhASIWu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jan 2021 03:22:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729385AbhASIWE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 03:22:04 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3DDC061574;
+        Tue, 19 Jan 2021 00:21:21 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id b26so27874063lff.9;
+        Tue, 19 Jan 2021 00:21:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=NSnwppJM4RBea6rhgGGM4rDbGdYQwq/CEd9KX8c0D8U=;
+        b=KKX43xE7CyF2OAHuoufRljedddmzgKGxjqqoHL0WRNIJh7aY09SxmQA88AnYR2a812
+         hLSEHieWkcK1Qnyq4av0mhU1BT8vD0Voa8VgjhuwHdW3XO6OaPJymUgX5TlGksBxlJKH
+         RfLZMBS8xRUo8/o4tLPTsIrdRI2qYz2odIaI6VLXwEsFi3N+YcGl1tcJdgXKg6LkFqSZ
+         wbnOevLZ/MdE4bLfktG88R1UChwhJCyp+TxWrl/nCTg4rqCwar/PzykpOE8ZvJiaswVp
+         1vDe+CDfuDEpfNdr8/u9Dk2Ff5RrCF0MtXcInHEn0yvJla/Mo/ltmKB0y0YcKXvNtywO
+         7ciQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=NSnwppJM4RBea6rhgGGM4rDbGdYQwq/CEd9KX8c0D8U=;
+        b=eooyZEiT1bFLCnec5C8M3dx9x3taUGC0/ZlJGvQsmjqRYnLMniJeMeRZhT0WYI7SJu
+         qyQWbytjYwds5fpmLTdK5zM03USAMID0SxBq3kNphovb9+W4nntoJ11o/mrER8Q+jXQB
+         VrYac65LVe0iceAkkbtwD3zpyT80sxD2iyo89nwKNDXyvczZgXFR+s0IqpDUlawqsF0C
+         9tn8kpE3g5L6NYfLqrYspgAtadZiirSgqXa0ZsuirDcKCOpMCmHcMdwKVM5lgcPvQeSZ
+         CmMYLLlimlzcoOU5WNisCH92KhDvEoOFFbjGuEs/py3vrzo3QFJsgQjQ2ZVp1NRt3C+v
+         Pq+g==
+X-Gm-Message-State: AOAM530wFE/afdA0jZdUBQN4e2vNuA3YZj3vp6Bw2Asm4KpFOpQz2EU/
+        zB/zc2CPxb0ms24jM0bkrFiqMygsqbugYCk1sFEkwmY9sSU=
+X-Google-Smtp-Source: ABdhPJy7lFmGjvnX+2QdulCkZeQ6a/G+bDIiQs0QLBdf5QXWUq0IjnzT13t9tJXYesmgQNMi5ZCyMg4N+moiqesZvqc=
+X-Received: by 2002:a19:ca5a:: with SMTP id h26mr1393081lfj.612.1611044480139;
+ Tue, 19 Jan 2021 00:21:20 -0800 (PST)
+MIME-Version: 1.0
+References: <1610720001-15300-1-git-send-email-u0084500@gmail.com>
+ <3a4a88a9-f0e3-2b65-9df4-6c1d4e3f1c14@roeck-us.net> <1611041612.12761.9.camel@mhfsdcap03>
+In-Reply-To: <1611041612.12761.9.camel@mhfsdcap03>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Tue, 19 Jan 2021 16:21:08 +0800
+Message-ID: <CADiBU3-2DL9GOBesE6sZmWv_OeFNP5C5-TfrZ9tVkUXKSiV9wQ@mail.gmail.com>
 Subject: Re: [PATCH 1/2] usb typec: tcpci: mt6360: Add vsafe0v support and
  external vbus supply control
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     ChiYuan Huang <u0084500@gmail.com>
-CC:     Guenter Roeck <linux@roeck-us.net>,
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        <matthias.bgg@gmail.com>, Rob Herring <robh+dt@kernel.org>,
+        matthias.bgg@gmail.com, Rob Herring <robh+dt@kernel.org>,
         Greg KH <gregkh@linuxfoundation.org>,
         Linux USB List <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
         lkml <linux-kernel@vger.kernel.org>,
-        cy_huang <cy_huang@richtek.com>, <gene_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>
-Date:   Tue, 19 Jan 2021 15:37:54 +0800
-In-Reply-To: <CADiBU38g_E+iH4jTwQfPvJh4=WRH4vzQ12oubGg47gj+CpTU0A@mail.gmail.com>
-References: <1610720001-15300-1-git-send-email-u0084500@gmail.com>
-         <3a4a88a9-f0e3-2b65-9df4-6c1d4e3f1c14@roeck-us.net>
-         <CADiBU38g_E+iH4jTwQfPvJh4=WRH4vzQ12oubGg47gj+CpTU0A@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
-MIME-Version: 1.0
-X-TM-SNTS-SMTP: 6EE5827DE37D4448BF61698E731BEF2DC0EBC05DC3114276BD0A92C72F7ECB172000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gTW9uLCAyMDIxLTAxLTE4IGF0IDE2OjI4ICswODAwLCBDaGlZdWFuIEh1YW5nIHdyb3RlOg0K
-PiBHdWVudGVyIFJvZWNrIDxsaW51eEByb2Vjay11cy5uZXQ+IOaWvCAyMDIx5bm0MeaciDE45pel
-IOmAseS4gCDkuIrljYgxOjQz5a+r6YGT77yaDQo+ID4NCj4gPiBPbiAxLzE1LzIxIDY6MTMgQU0s
-IGN5X2h1YW5nIHdyb3RlOg0KPiA+ID4gRnJvbTogQ2hpWXVhbiBIdWFuZyA8Y3lfaHVhbmdAcmlj
-aHRlay5jb20+DQo+ID4gPg0KPiA+ID4gTVQ2MzYwIG5vdCBzdXBwb3J0IGZvciBUQ1BDIGNvbW1h
-bmQgdG8gY29udHJvbCBzb3VyY2UgYW5kIHNpbmsuDQo+ID4NCj4gPiBkb2VzIG5vdA0KPiA+DQo+
-IEFjaw0KPiA+ID4gVXNlcyBleHRlcm5hbCA1ViB2YnVzIHJlZ3VsYXRvciBhcyB0aGUgdmJ1cyBz
-b3VyY2UgY29udHJvbC4NCj4gPiA+DQo+ID4gVXNlDQo+ID4NCj4gQWNrDQo+ID4gPiBBbHNvIGFk
-ZHMgdGhlIGNhcGFiaWxpdHkgdG8gcmVwb3J0IHZzYWZlMHYuDQo+ID4gPg0KPiA+IGFkZA0KPiA+
-DQo+IEFjaw0KPiA+IFNvIGZhciB0aGlzIGRyaXZlciB3b3JrcyB3aXRob3V0IHJlZ3VsYXRvci4g
-VW5sZXNzIEkgYW0gbWlzc2luZyBzb21ldGhpbmcsDQo+ID4gdGhpcyBwYXRjaCBtYWtlcyByZWd1
-bGF0b3Igc3VwcG9ydCBtYW5kYXRvcnksIG1lYW5pbmcgZXhpc3RpbmcgY29kZSB3aWxsIGZhaWwu
-DQo+ID4gSSBhbSBub3Qgc3VyZSBpZiB0aGF0IGlzIGFwcHJvcHJpYXRlL2FjY2VwdGFibGUuIENh
-biB3ZSBiZSBzdXJlIHRoYXQgdGhpcyB3aWxsDQo+ID4gd29yayBmb3IgZXhpc3RpbmcgdXNlcnMg
-b2YgdGhpcyBkcml2ZXIgPw0KPiA+DQo+IFllcywgSSBhbHJlYWR5IGNoZWNrZWQgYWxsIHRoZSBz
-cmMvc25rIGZ1bmN0aW9uYWxpdHkgYmFzZWQgb24gIHRoZQ0KPiBsYXRlc3QgdHlwZWMgY29kZS4N
-Cj4gSXQnbGwgYmUgY29tbW9uIGZvciBvdXIgVENQQy4gSXQgZGlkbid0IHN1cHBvcnQgZm9yIFRD
-UEMgY29tbWFuZC4NCj4gRnJvbSB0aGUgcmVjZW50IHBhdGNoZXMsIGFjdHVhbGx5LCBJIGhhdmUg
-dGhlIGxvY2FsIGNoYW5nZSB0byB0ZXN0IHRoZQ0KPiBzcmMgY2FwYWJpbGl0eS4NCj4gQnV0IEkg
-ZGlkbid0IHN1Ym1pdCBpdC4gSXQncyBhbG1vc3QgdGhlIHNhbWUgdG8gYWRkIHNldF92YnVzIGNh
-bGxiYWNrLg0KPiBUaGF0J3Mgd2h5IEkgc3VibWl0IHRoaXMgY2hhbmdlIGFmdGVyIHRjcGNpICdz
-ZXRfdmJ1cyBjYWxsYmFjaycgaXMgYWRkZWQuDQo+IA0KPiA+IFRoYW5rcywNCj4gPiBHdWVudGVy
-DQo+ID4NCj4gPiA+IFNpZ25lZC1vZmYtYnk6IENoaVl1YW4gSHVhbmcgPGN5X2h1YW5nQHJpY2h0
-ZWsuY29tPg0KPiA+ID4gLS0tDQo+ID4gPiAgZHJpdmVycy91c2IvdHlwZWMvdGNwbS90Y3BjaV9t
-dDYzNjAuYyB8IDI5ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ID4gPiAgMSBmaWxl
-IGNoYW5nZWQsIDI5IGluc2VydGlvbnMoKykNCj4gPiA+DQo+ID4gPiBkaWZmIC0tZ2l0IGEvZHJp
-dmVycy91c2IvdHlwZWMvdGNwbS90Y3BjaV9tdDYzNjAuYyBiL2RyaXZlcnMvdXNiL3R5cGVjL3Rj
-cG0vdGNwY2lfbXQ2MzYwLmMNCj4gPiA+IGluZGV4IGYxYmQ5ZTAuLjBlZGY0YjYgMTAwNjQ0DQo+
-ID4gPiAtLS0gYS9kcml2ZXJzL3VzYi90eXBlYy90Y3BtL3RjcGNpX210NjM2MC5jDQo+ID4gPiAr
-KysgYi9kcml2ZXJzL3VzYi90eXBlYy90Y3BtL3RjcGNpX210NjM2MC5jDQo+ID4gPiBAQCAtMTEs
-NiArMTEsNyBAQA0KPiA+ID4gICNpbmNsdWRlIDxsaW51eC9vZi5oPg0KPiA+ID4gICNpbmNsdWRl
-IDxsaW51eC9wbGF0Zm9ybV9kZXZpY2UuaD4NCj4gPiA+ICAjaW5jbHVkZSA8bGludXgvcmVnbWFw
-Lmg+DQo+ID4gPiArI2luY2x1ZGUgPGxpbnV4L3JlZ3VsYXRvci9jb25zdW1lci5oPg0KPiA+ID4g
-ICNpbmNsdWRlIDxsaW51eC91c2IvdGNwbS5oPg0KPiA+ID4NCj4gPiA+ICAjaW5jbHVkZSAidGNw
-Y2kuaCINCj4gPiA+IEBAIC0zNiw2ICszNyw3IEBAIHN0cnVjdCBtdDYzNjBfdGNwY19pbmZvIHsN
-Cj4gPiA+ICAgICAgIHN0cnVjdCB0Y3BjaV9kYXRhIHRkYXRhOw0KPiA+ID4gICAgICAgc3RydWN0
-IHRjcGNpICp0Y3BjaTsNCj4gPiA+ICAgICAgIHN0cnVjdCBkZXZpY2UgKmRldjsNCj4gPiA+ICsg
-ICAgIHN0cnVjdCByZWd1bGF0b3IgKnZidXM7DQo+ID4gPiAgICAgICBpbnQgaXJxOw0KPiA+ID4g
-IH07DQo+ID4gPg0KPiA+ID4gQEAgLTUxLDYgKzUzLDI3IEBAIHN0YXRpYyBpbmxpbmUgaW50IG10
-NjM2MF90Y3BjX3dyaXRlMTYoc3RydWN0IHJlZ21hcCAqcmVnbWFwLA0KPiA+ID4gICAgICAgcmV0
-dXJuIHJlZ21hcF9yYXdfd3JpdGUocmVnbWFwLCByZWcsICZ2YWwsIHNpemVvZih1MTYpKTsNCj4g
-PiA+ICB9DQo+ID4gPg0KPiA+ID4gK3N0YXRpYyBpbnQgbXQ2MzYwX3RjcGNfc2V0X3ZidXMoc3Ry
-dWN0IHRjcGNpICp0Y3BjaSwgc3RydWN0IHRjcGNpX2RhdGEgKmRhdGEsIGJvb2wgc3JjLCBib29s
-IHNuaykNCj4gPiA+ICt7DQo+ID4gPiArICAgICBzdHJ1Y3QgbXQ2MzYwX3RjcGNfaW5mbyAqbXRp
-ID0gY29udGFpbmVyX29mKGRhdGEsIHN0cnVjdCBtdDYzNjBfdGNwY19pbmZvLCB0ZGF0YSk7DQo+
-ID4gPiArICAgICBpbnQgcmV0Ow0KPiA+ID4gKw0KPiA+ID4gKyAgICAgLyogVG8gY29ycmVjdGx5
-IGhhbmRsZSB0aGUgYWxyZWFkeSBlbmFibGVkIHZidXMgYW5kIGRpc2FibGUgaXRzIHN1cHBseSBm
-aXJzdCAqLw0KPiA+ID4gKyAgICAgaWYgKHJlZ3VsYXRvcl9pc19lbmFibGVkKG10aS0+dmJ1cykp
-IHsNCj4gPiA+ICsgICAgICAgICAgICAgcmV0ID0gcmVndWxhdG9yX2Rpc2FibGUobXRpLT52YnVz
-KTsNCj4gPiA+ICsgICAgICAgICAgICAgaWYgKHJldCkNCj4gPiA+ICsgICAgICAgICAgICAgICAg
-ICAgICByZXR1cm4gcmV0Ow0KPiA+ID4gKyAgICAgfQ0KPiA+DQo+ID4gSXMgaXQgcmVhbGx5IGEg
-Z29vZCBpZGVhIHRvIGRpc2FibGUgdmJ1cyBpZiBpdCBoYXBwZW5zIHRvIGJlIGFscmVhZHkgZW5h
-YmxlZA0KPiA+IGFuZCB0aGVyZSBpcyAoYW5vdGhlciA/KSByZXF1ZXN0IHRvIGVuYWJsZSBpdCA/
-DQo+ID4NCj4gWWVzLCBmb3IgIHRoZSBzdGF0ZSBjaGFuZ2UgZnJvbSBzcmNfYXR0YWNoX3dhaXQg
-dG8gc3JjX2F0dGFjaCwNCj4gSXQgbmVlZCB0byBtZWV0IHRoZSByZXF1aXJlbWVudCB0aGF0ICB0
-aGUgdmJ1cyBpcyBhdCB2c2FmZTB2Lg0KPiBTbyB0byBkaXNhYmxlIGl0IGZpcnN0IGlzIG5lZWRl
-ZC4NCj4gQW5kIHRvIHByZXZlbnQgb3RoZXIgdXNlcnMgZnJvbSBlbmFibGluZy9kaXNhYmxpbmcg
-ZXh0ZXJuYWwgdmJ1cw0KPiByZWd1bGF0b3IgaW4gYW55IGNhc2UuDQo+IEkgdGhpbmsgd2UgbWF5
-IGNoYW5nZSByZWd1bGF0b3JfZ2V0ICB0byAncmVndWxhdG9yX2dldF9leGNsdXNpdmUnLg0KPiBG
-cm9tIHRoZSBkZXNpZ24sIDV2IHJlZ3VsYXRvciBvbmx5IGNhbiBiZSBjb250cm9sbGVkIHZpYSB0
-eXBlYyBmcmFtZXdvcmsuDQo+IElmIG90aGVyIHVzZXIgdG91Y2ggaXQsIGl0J2xsIGFmZmVjdCB0
-aGUgdHlwZWMgc3RhdGUgdHJhbnNpdGlvbi4NCkhvdyBhYm91dCB0byBwcm9jZXNzIHRoZSBjYXNl
-IHRoYXQgZXZlbiBzd2l0Y2ggdXNiIGNvbnRyb2xsZXIgdG8gZGV2aWNlDQptb2RlLCBwbGF0Zm9y
-bSBhbHNvIG5lZWQgdG8ga2VlcCB2YnVzIG9uPyBlLmcuIElwaG9uZSBDYXJwbGF5DQoNCg0KPiA+
-ID4gKw0KPiA+ID4gKyAgICAgaWYgKHNyYykgew0KPiA+ID4gKyAgICAgICAgICAgICByZXQgPSBy
-ZWd1bGF0b3JfZW5hYmxlKG10aS0+dmJ1cyk7DQo+ID4gPiArICAgICAgICAgICAgIGlmIChyZXQp
-DQo+ID4gPiArICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIHJldDsNCj4gPiA+ICsgICAgIH0N
-Cj4gPiA+ICsNCj4gPiA+ICsgICAgIHJldHVybiAwOw0KPiA+ID4gK30NCj4gPiA+ICsNCj4gPiA+
-ICBzdGF0aWMgaW50IG10NjM2MF90Y3BjX2luaXQoc3RydWN0IHRjcGNpICp0Y3BjaSwgc3RydWN0
-IHRjcGNpX2RhdGEgKnRkYXRhKQ0KPiA+ID4gIHsNCj4gPiA+ICAgICAgIHN0cnVjdCByZWdtYXAg
-KnJlZ21hcCA9IHRkYXRhLT5yZWdtYXA7DQo+ID4gPiBAQCAtMTM4LDcgKzE2MSwxMyBAQCBzdGF0
-aWMgaW50IG10NjM2MF90Y3BjX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+
-ID4gPiAgICAgICBpZiAobXRpLT5pcnEgPCAwKQ0KPiA+ID4gICAgICAgICAgICAgICByZXR1cm4g
-bXRpLT5pcnE7DQo+ID4gPg0KPiA+ID4gKyAgICAgbXRpLT52YnVzID0gZGV2bV9yZWd1bGF0b3Jf
-Z2V0KCZwZGV2LT5kZXYsICJ2YnVzIik7DQo+ID4gPiArICAgICBpZiAoSVNfRVJSKG10aS0+dmJ1
-cykpDQo+ID4gPiArICAgICAgICAgICAgIHJldHVybiBQVFJfRVJSKG10aS0+dmJ1cyk7DQo+ID4g
-PiArDQo+ID4gPiAgICAgICBtdGktPnRkYXRhLmluaXQgPSBtdDYzNjBfdGNwY19pbml0Ow0KPiA+
-ID4gKyAgICAgbXRpLT50ZGF0YS5zZXRfdmJ1cyA9IG10NjM2MF90Y3BjX3NldF92YnVzOw0KPiA+
-ID4gKyAgICAgbXRpLT50ZGF0YS52YnVzX3ZzYWZlMHYgPSAxOw0KPiA+ID4gICAgICAgbXRpLT50
-Y3BjaSA9IHRjcGNpX3JlZ2lzdGVyX3BvcnQoJnBkZXYtPmRldiwgJm10aS0+dGRhdGEpOw0KPiA+
-ID4gICAgICAgaWYgKElTX0VSUihtdGktPnRjcGNpKSkgew0KPiA+ID4gICAgICAgICAgICAgICBk
-ZXZfZXJyKCZwZGV2LT5kZXYsICJGYWlsZWQgdG8gcmVnaXN0ZXIgdGNwY2kgcG9ydFxuIik7DQo+
-ID4gPg0KPiA+DQoNCg==
+Chunfeng Yun <chunfeng.yun@mediatek.com> =E6=96=BC 2021=E5=B9=B41=E6=9C=881=
+9=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=883:33=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> On Sun, 2021-01-17 at 09:43 -0800, Guenter Roeck wrote:
+> > On 1/15/21 6:13 AM, cy_huang wrote:
+> > > From: ChiYuan Huang <cy_huang@richtek.com>
+> > >
+> > > MT6360 not support for TCPC command to control source and sink.
+> >
+> > does not
+> >
+> > > Uses external 5V vbus regulator as the vbus source control.
+> > >
+> > Use
+> >
+> > > Also adds the capability to report vsafe0v.
+> > >
+> > add
+> >
+> > So far this driver works without regulator. Unless I am missing somethi=
+ng,
+> > this patch makes regulator support mandatory, meaning existing code wil=
+l fail.
+> If don't provide vbus-supply in DTS, regulator framework will provide a
+> dummy regulator, so the code will not fail.
+ In the last reply, I will change from regulator_get to
+regulator_get_exclusive, it will return -ENODEV.
+The IS_ERR can catch this situation, no dummy regulator will be returned.
 
+And assume no vbus 5v for source & snk attached, It will cause typec
+state machine repeated from
+drp -> src_attach_wait -> src_attached -> PD_T_PS_SOURCE_on timeout.
+It will be stuck in the loop until snk detached.
+
+> > I am not sure if that is appropriate/acceptable. Can we be sure that th=
+is will
+> > work for existing users of this driver ?
+>
+> >
+> > Thanks,
+> > Guenter
+> >
+> > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > > ---
+> > >  drivers/usb/typec/tcpm/tcpci_mt6360.c | 29 +++++++++++++++++++++++++=
+++++
+> > >  1 file changed, 29 insertions(+)
+> > >
+> > > diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/type=
+c/tcpm/tcpci_mt6360.c
+> > > index f1bd9e0..0edf4b6 100644
+> > > --- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> > > +++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> > > @@ -11,6 +11,7 @@
+> > >  #include <linux/of.h>
+> > >  #include <linux/platform_device.h>
+> > >  #include <linux/regmap.h>
+> > > +#include <linux/regulator/consumer.h>
+> > >  #include <linux/usb/tcpm.h>
+> > >
+> > >  #include "tcpci.h"
+> > > @@ -36,6 +37,7 @@ struct mt6360_tcpc_info {
+> > >     struct tcpci_data tdata;
+> > >     struct tcpci *tcpci;
+> > >     struct device *dev;
+> > > +   struct regulator *vbus;
+> > >     int irq;
+> > >  };
+> > >
+> > > @@ -51,6 +53,27 @@ static inline int mt6360_tcpc_write16(struct regma=
+p *regmap,
+> > >     return regmap_raw_write(regmap, reg, &val, sizeof(u16));
+> > >  }
+> > >
+> > > +static int mt6360_tcpc_set_vbus(struct tcpci *tcpci, struct tcpci_da=
+ta *data, bool src, bool snk)
+> > > +{
+> > > +   struct mt6360_tcpc_info *mti =3D container_of(data, struct mt6360=
+_tcpc_info, tdata);
+> > > +   int ret;
+> > > +
+> > > +   /* To correctly handle the already enabled vbus and disable its s=
+upply first */
+> > > +   if (regulator_is_enabled(mti->vbus)) {
+> > > +           ret =3D regulator_disable(mti->vbus);
+> > > +           if (ret)
+> > > +                   return ret;
+> > > +   }
+> >
+> > Is it really a good idea to disable vbus if it happens to be already en=
+abled
+> > and there is (another ?) request to enable it ?
+> >
+> > > +
+> > > +   if (src) {
+> > > +           ret =3D regulator_enable(mti->vbus);
+> > > +           if (ret)
+> > > +                   return ret;
+> > > +   }
+> > > +
+> > > +   return 0;
+> > > +}
+> > > +
+> > >  static int mt6360_tcpc_init(struct tcpci *tcpci, struct tcpci_data *=
+tdata)
+> > >  {
+> > >     struct regmap *regmap =3D tdata->regmap;
+> > > @@ -138,7 +161,13 @@ static int mt6360_tcpc_probe(struct platform_dev=
+ice *pdev)
+> > >     if (mti->irq < 0)
+> > >             return mti->irq;
+> > >
+> > > +   mti->vbus =3D devm_regulator_get(&pdev->dev, "vbus");
+> > > +   if (IS_ERR(mti->vbus))
+> > > +           return PTR_ERR(mti->vbus);
+> > > +
+> > >     mti->tdata.init =3D mt6360_tcpc_init;
+> > > +   mti->tdata.set_vbus =3D mt6360_tcpc_set_vbus;
+> > > +   mti->tdata.vbus_vsafe0v =3D 1;
+> > >     mti->tcpci =3D tcpci_register_port(&pdev->dev, &mti->tdata);
+> > >     if (IS_ERR(mti->tcpci)) {
+> > >             dev_err(&pdev->dev, "Failed to register tcpci port\n");
+> > >
+> >
+>
