@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 587E62FB84B
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 15:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68FD72FB84C
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 15:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392197AbhASMQo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jan 2021 07:16:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
+        id S2392532AbhASMQs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jan 2021 07:16:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389738AbhASKPe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 05:15:34 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D96C0613ED
-        for <linux-usb@vger.kernel.org>; Tue, 19 Jan 2021 02:12:27 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id s7so19809721ybj.0
-        for <linux-usb@vger.kernel.org>; Tue, 19 Jan 2021 02:12:27 -0800 (PST)
+        with ESMTP id S2389749AbhASKPn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 05:15:43 -0500
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67847C061793
+        for <linux-usb@vger.kernel.org>; Tue, 19 Jan 2021 02:12:31 -0800 (PST)
+Received: by mail-qt1-x84a.google.com with SMTP id 22so17769611qty.14
+        for <linux-usb@vger.kernel.org>; Tue, 19 Jan 2021 02:12:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=pGshkdllAmKtNcf+vD4gEuZmFdpUuE7wrXzrPvtHY6U=;
-        b=aBbV9BLrnSNnW8vIGkex+VzAlyluZdM1gnAE81BpnN1hCkywVz/dEq4EHoDarAAHt0
-         X9U8mMzbWj3Xwz8m2qQ/ozDwjsNbRV+QaHzswQYFXD8QH9x0zeRoOH4EGk1CGjWQs3jD
-         V8CsWEtoCPB58qIfVBMyvO9wR1xiiqKgWtqz9PmzgJwCTbQfwmFQ2ApdVrMW55/6qITm
-         V1m/PMLSjiKOtNUqwuriruAuAXKF7M8KOWfNIABsx1xPPTOSXsMKBPkArvb9NXVlfm3K
-         zLydVvWS8iOT/cGeSBXCkzwLjNpeXY/710agMz1kxP5IAF2V+Q5yLKWLVbOV5pblwA1a
-         d54g==
+        bh=NjVlArdIN6XBREuMLmty8CemszohTwcOxRUNv6vk0tE=;
+        b=UAANM1vPEyK7nnN0KCnU2dCdvDX9ddj2cmxwwLimZZVKPH+auhlB6cTX3b92qgNccC
+         Th5o/ePELfILePjL9zfdtbv2tjholwMLzpIv2nwRVPWegVEHowxWP4ZZxmLcw1HntgSg
+         n++/Vk9KHT26SpvMeB4DrZ9/XT9UruIMjn2/FqWWhP2Vc73WZr1rroDsQWp+GbDRpRt+
+         qQY0RPbIhGSLyLjmhGditDJvEh3j6TuU8GFOMCAeGA5ReTOLKvOfyF/dYjH+Qy4Tx65s
+         wRWNgGWuhtRBeYTyVGZty2tw08bvF8suqoMYj+2sr4noSJ3WXwGSo1A2WbcavUDE2xTa
+         WYPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=pGshkdllAmKtNcf+vD4gEuZmFdpUuE7wrXzrPvtHY6U=;
-        b=SH1a3jQUw+26tWxbNFv7XuwKvOShwB1a0ALYncrQIgRsW6t8llJAXa3KMEoin1Lv7H
-         NtjyYNCcMJq3+Y8slcAeXL/h0snlCA3WulpVoEm2ffoR2N2bGMDUThRAKtNv1KBCvXiz
-         OfAQmbHLZche2KXvGMseP+tlAf2IgcbNArZcxzZTg5iElqIabCW0XrXtSWdupLIte7fN
-         PeYUuR/AJhQ4dkUlaXaloVzqOzViD2WY839a/BlvbPLCR0/DWzAzzjuq0izWIOtj1vPU
-         Ol93JrMW2BQP1+bzwyJFRsilNBkBf+LCz2XKbrcrD9ggsP7QwV+JUEAYObef5Fs9JvxR
-         AMyw==
-X-Gm-Message-State: AOAM533pjqhDi3Qju3xiaCujWWAiOS4lA5DFtccDDabP5RTIe52MQNeh
-        zy4FsdODwHfJTpURJhRHp6QOg4W+MlHgQfY=
-X-Google-Smtp-Source: ABdhPJzKYU2xntqX/Jwro+f0uDstVG47y9IPd/tRbPXo+heIpzlduI9IDXetOxxlzGvYbdrFWIcrkWbEDQt5fAY=
+        bh=NjVlArdIN6XBREuMLmty8CemszohTwcOxRUNv6vk0tE=;
+        b=q3vPVDwyVSnIwEriAAXe2Nnw1k9WVF7F46E06iNeS8O+eNYNhQhDUDY2MWU9JvD65M
+         ZIBBF1OJng7UNAhOPRrCiFBloHlsencDN35l+YVD9CPUNELYdzEDcCfZMJDnllljmx8z
+         s0zIYay5sux3Ez2r09+Q0h0erp0W369ViU3XAa3o6M6F1PU/6zY3+VNN+94sNmxELrV1
+         DEwyMS/JTNW7j6yGvYqb+EM7g8F9QKgQ+uTb3c0QRTT4b9/H2z9ms4oDYCZ0Zj74JZgt
+         wMJJX6ROgeKHTrG1OpP7jkFYrDAktIHK8LONDRzTpWiW6fLONQjecdRWIj/hjma9atWq
+         FuqQ==
+X-Gm-Message-State: AOAM531XoV8NM7pyGfiNagbxAZMapWj+SNuLQLz4xkOm4XwRXY1ve0Me
+        6cqSS5l+vqmgjHQ5fRnOGzjGMOT6qx2dZpg=
+X-Google-Smtp-Source: ABdhPJzKmB2mfsO4Dgp4lThaRebuuK4DObPDnyCOuCOnRLulqfaZapr8g6IraFi2N/rrIFpFg8uebolojyene2A=
 Sender: "howardyen via sendgmr" <howardyen@howardyen.ntc.corp.google.com>
 X-Received: from howardyen.ntc.corp.google.com ([2401:fa00:fc:202:5d06:ba6f:6a89:a201])
- (user=howardyen job=sendgmr) by 2002:a25:5404:: with SMTP id
- i4mr5226459ybb.519.1611051147046; Tue, 19 Jan 2021 02:12:27 -0800 (PST)
-Date:   Tue, 19 Jan 2021 18:10:43 +0800
+ (user=howardyen job=sendgmr) by 2002:ad4:49cd:: with SMTP id
+ j13mr3666683qvy.5.1611051150583; Tue, 19 Jan 2021 02:12:30 -0800 (PST)
+Date:   Tue, 19 Jan 2021 18:10:44 +0800
 In-Reply-To: <20210119101044.1637023-1-howardyen@google.com>
-Message-Id: <20210119101044.1637023-4-howardyen@google.com>
+Message-Id: <20210119101044.1637023-5-howardyen@google.com>
 Mime-Version: 1.0
 References: <20210119101044.1637023-1-howardyen@google.com>
 X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
-Subject: [PATCH 3/4] usb: xhci-plat: add xhci_plat_priv_overwrite
+Subject: [PATCH 4/4] dt-bindings: usb: usb-xhci: add USB offload support
 From:   Howard Yen <howardyen@google.com>
 To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
         mathias.nyman@intel.com
@@ -62,82 +62,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add an overwrite to platform specific callback for setting up the
-xhci_vendor_ops, allow vendor to store the xhci_vendor_ops and
-overwrite them when xhci_plat_probe invoked.
+Document USB offload support for usb-xhci.
 
-This change is depend on Commit in this patch series
-("usb: host: add xhci hooks for USB offload"), vendor needs
-to invoke xhci_plat_register_vendor_ops() to register the vendor specific
-vendor_ops. And the vendor_ops will overwrite the vendor_ops inside
-xhci_plat_priv in xhci_vendor_init() during xhci-plat-hcd probe.
+For example:
+
+&usbdrd_dwc3 {
+	...
+	/* support usb offloading, 0: disabled, 1: audio */
+	offload = <1>;
+	...
+};
 
 Signed-off-by: Howard Yen <howardyen@google.com>
 ---
- drivers/usb/host/xhci-plat.c | 20 ++++++++++++++++++++
- drivers/usb/host/xhci-plat.h |  7 +++++++
- 2 files changed, 27 insertions(+)
+ Documentation/devicetree/bindings/usb/usb-xhci.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 5f8e69089654..a8e217494831 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -163,9 +163,26 @@ static const struct of_device_id usb_xhci_of_match[] = {
- MODULE_DEVICE_TABLE(of, usb_xhci_of_match);
- #endif
+diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.txt b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+index b120dd6612a2..aab1fd499f15 100644
+--- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
++++ b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+@@ -46,6 +46,7 @@ Optional properties:
+   - quirk-broken-port-ped: set if the controller has broken port disable mechanism
+   - imod-interval-ns: default interrupt moderation interval is 5000ns
+   - phys : see usb-hcd.yaml in the current directory
++  - offload: supporting USB offload feature, 0: disabled, 1: audio
  
-+static struct xhci_plat_priv_overwrite xhci_plat_vendor_overwrite;
-+
-+int xhci_plat_register_vendor_ops(struct xhci_vendor_ops *vendor_ops)
-+{
-+	if (vendor_ops == NULL)
-+		return -EINVAL;
-+
-+	xhci_plat_vendor_overwrite.vendor_ops = vendor_ops;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(xhci_plat_register_vendor_ops);
-+
- static int xhci_vendor_init(struct xhci_hcd *xhci)
- {
- 	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
-+	struct xhci_plat_priv *priv = xhci_to_priv(xhci);
-+
-+	if (xhci_plat_vendor_overwrite.vendor_ops)
-+		ops = priv->vendor_ops = xhci_plat_vendor_overwrite.vendor_ops;
- 
- 	if (ops && ops->vendor_init)
- 		return ops->vendor_init(xhci);
-@@ -175,9 +192,12 @@ static int xhci_vendor_init(struct xhci_hcd *xhci)
- static void xhci_vendor_cleanup(struct xhci_hcd *xhci)
- {
- 	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
-+	struct xhci_plat_priv *priv = xhci_to_priv(xhci);
- 
- 	if (ops && ops->vendor_cleanup)
- 		ops->vendor_cleanup(xhci);
-+
-+	priv->vendor_ops = NULL;
- }
- 
- static int xhci_plat_probe(struct platform_device *pdev)
-diff --git a/drivers/usb/host/xhci-plat.h b/drivers/usb/host/xhci-plat.h
-index 2b2d090c4c01..d85802725208 100644
---- a/drivers/usb/host/xhci-plat.h
-+++ b/drivers/usb/host/xhci-plat.h
-@@ -22,4 +22,11 @@ struct xhci_plat_priv {
- 
- #define hcd_to_xhci_priv(h) ((struct xhci_plat_priv *)hcd_to_xhci(h)->priv)
- #define xhci_to_priv(x) ((struct xhci_plat_priv *)(x)->priv)
-+
-+struct xhci_plat_priv_overwrite {
-+	struct xhci_vendor_ops *vendor_ops;
-+};
-+
-+int xhci_plat_register_vendor_ops(struct xhci_vendor_ops *vendor_ops);
-+
- #endif	/* _XHCI_PLAT_H */
+ additionally the properties from usb-hcd.yaml (in the current directory) are
+ supported.
 -- 
 2.30.0.284.gd98b1dd5eaa7-goog
 
