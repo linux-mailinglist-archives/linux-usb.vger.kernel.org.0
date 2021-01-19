@@ -2,129 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D082FAEE2
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 03:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C00B2FAEE3
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 03:46:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394316AbhASCpq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jan 2021 21:45:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387605AbhASCpp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jan 2021 21:45:45 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AD0C061573
-        for <linux-usb@vger.kernel.org>; Mon, 18 Jan 2021 18:45:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=mR8oLEeg18czdbKXEZL+4tUmHcYN5LaoMXBI59LPQmc=; b=EqyI4K0VIYuDMmNjPf3yP4P9PA
-        AQXyZMtlpRnDNpCayjkjkdFepSYIpXT7vs6Ywo71cgkkNWv6fdfno7DwIfj30umexdb3UpqojvkSq
-        uVnHzZOqVRTu++FuSBwX2cL1+cy1mBUN/F22yiVih0Pt7p84V8ZO0HgpUX3ue3KeY8QZCtv3uFInh
-        XsXQBi4QhMexjzXAmSm5Ynot/nT0SY53a0pvd5fkeOdhgdp+G1SkIrD7RFcz9K9c6vQ2S6wRmTfAO
-        V2Y5XddS6YfvNsgt1dNd8W/mJ8WuXtIRBuJySsIFMzoPgF3GAfupIqHNgw3L67Mw8SuUrPbrxIUIy
-        JYUlXfTQ==;
-Received: from [2601:1c0:6280:3f0::9abc]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1l1h0u-0005ID-1w; Tue, 19 Jan 2021 02:45:00 +0000
-Subject: Re: [linux-next:master 2519/4500] ucsi.c:undefined reference to
- `fwnode_usb_role_switch_get'
-To:     Jack Pham <jackp@codeaurora.org>,
-        kernel test robot <lkp@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Mayank Rana <mrana@codeaurora.org>, kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        USB list <linux-usb@vger.kernel.org>
-References: <202101181814.rQtj0Eqo-lkp@intel.com>
- <20210118204040.GA19773@jackp-linux.qualcomm.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <96a4a684-998f-8b8e-4b19-ec690c4dfde9@infradead.org>
-Date:   Mon, 18 Jan 2021 18:44:52 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S2394381AbhASCqd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jan 2021 21:46:33 -0500
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:12701 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728372AbhASCqc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jan 2021 21:46:32 -0500
+X-UUID: 8b86654361fa431290aeeeadbb33294e-20210119
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=nkY5HVAfuNiTv1kPd0LeWdjKcUU6stCZlV+8WtTpNvA=;
+        b=FOeaHVb8aeW63jvuzSs/kfrgylBEPRshKawX1TZLZfafGIN52+yEo6lfm8lNHuDrTKTB0+DIlTu/8idQqltj48bdJx73Sjo1gA7hR3bQBSwJRH12lf/HEBWz/4XPGIV2WZTsuPXg9XgoCvXpwkccuUmVpK9LNdIZkeZdfZGQBts=;
+X-UUID: 8b86654361fa431290aeeeadbb33294e-20210119
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 611064642; Tue, 19 Jan 2021 10:45:45 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 19 Jan
+ 2021 10:45:43 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 19 Jan 2021 10:45:42 +0800
+Message-ID: <1611024342.11995.14.camel@mhfsdcap03>
+Subject: Re: [PATCH next 11/15] arm64: dts: mediatek: mt7622: harmonize node
+ names and compatibles
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
+CC:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Min Guo <min.guo@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Date:   Tue, 19 Jan 2021 10:45:42 +0800
+In-Reply-To: <8f859d54-f9f8-d7c9-db66-89860124b539@gmail.com>
+References: <20210116090656.11752-1-chunfeng.yun@mediatek.com>
+         <20210116090656.11752-11-chunfeng.yun@mediatek.com>
+         <8f859d54-f9f8-d7c9-db66-89860124b539@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-In-Reply-To: <20210118204040.GA19773@jackp-linux.qualcomm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: 413E3955A7FABB03405605F12E3C87305ECF06DF62AEE3A661B158243F74BBA22000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[adding linux-usb list]
+T24gU2F0LCAyMDIxLTAxLTE2IGF0IDEyOjM2ICswMzAwLCBTZXJnZWkgU2h0eWx5b3Ygd3JvdGU6
+DQo+IEhlbGxvIQ0KPiANCj4gT24gMTYuMDEuMjAyMSAxMjowNiwgQ2h1bmZlbmcgWXVuIHdyb3Rl
+Og0KPiANCj4gPiBUaGlzIGlzIHVzZWQgdG8gZml4IGR0YnNfY2hlY2sgd2FybmluZw0KPiA+IA0K
+PiA+IFNpZ25lZC1vZmYtYnk6IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNv
+bT4NCj4gPiAtLS0NCj4gPiAgIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ3NjIyLmR0
+c2kgfCA5ICsrKysrLS0tLQ0KPiA+ICAgMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwg
+NCBkZWxldGlvbnMoLSkNCj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm02NC9ib290L2R0
+cy9tZWRpYXRlay9tdDc2MjIuZHRzaSBiL2FyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ3
+NjIyLmR0c2kNCj4gPiBpbmRleCA1YjllYzAzMmNlOGQuLjRjZmEwOWIwY2EzYyAxMDA2NDQNCj4g
+PiAtLS0gYS9hcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210NzYyMi5kdHNpDQo+ID4gKysr
+IGIvYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDc2MjIuZHRzaQ0KPiA+IEBAIC03NDAs
+OCArNzQwLDggQEANCj4gPiAgIAkJc3RhdHVzID0gImRpc2FibGVkIjsNCj4gPiAgIAl9Ow0KPiA+
+ICAgDQo+ID4gLQl1M3BoeTogdXNiLXBoeUAxYTBjNDAwMCB7DQo+ID4gLQkJY29tcGF0aWJsZSA9
+ICJtZWRpYXRlayxtdDc2MjItdTNwaHkiLA0KPiA+ICsJdTNwaHk6IHQtcGh5QDFhMGM0MDAwIHsN
+Cj4gDQo+ICAgICBXaGF0IGlzICJ0LXBoeSI/IFBlcmhhcHMgeW91IHNob3VsZCBoYXZlIHVzZWQg
+anVzdCAicGh5IiBoZXJlLi4uDQpBdCBmaXJzdCBJIHVzZSAicGh5IiwgYnV0IGl0IGNhdXNlcyBk
+dF9iaW5kaW5nX2NoZWNrIGZhaWw6DQoiJyNwaHktY2VsbHMnIGlzIGEgcmVxdWlyZWQgcHJvcGVy
+dHkiDQoNCkR1ZSB0byB3ZSBvbmx5IG5lZWQgYWRkICcjcGh5LWNlbGxzJyBmb3IgZWFjaCBzdWJu
+b2RlICh1c2ItcGh5LCBwY2llLXBoeQ0Kb3Igc2F0YS1waHkpLCBidXQgbm90IGZvciBwYXJlbnQg
+b25lLCBJIGNoYW5nZSB0aGUgcGFyZW50IG5vZGUgbmFtZSBhcw0KInQtcGh5IiB3aGljaCBpcyBh
+IGdsdWUgbGF5ZXIgbm9kZSwgbm90IGEgcmVhbCBwaHkuDQpJIGFsc28gcHJlZmVyIHRvICJwaHki
+LCBidXQgc2VlbXMgZHRfYmluZGluZ19jaGVjayBjYW4ndCBkaXN0aW5ndWlzaA0KdGhpcyBjYXNl
+Lg0KDQpUaGFua3MNCg0KPiANCj4gPiArCQljb21wYXRpYmxlID0gIm1lZGlhdGVrLG10NzYyMi10
+cGh5IiwNCj4gPiAgIAkJCSAgICAgIm1lZGlhdGVrLGdlbmVyaWMtdHBoeS12MSI7DQo+ID4gICAJ
+CXJlZyA9IDwwIDB4MWEwYzQwMDAgMCAweDcwMD47DQo+ID4gICAJCSNhZGRyZXNzLWNlbGxzID0g
+PDI+Ow0KPiA+IEBAIC04NzUsOCArODc1LDkgQEANCj4gPiAgIAkJc3RhdHVzID0gImRpc2FibGVk
+IjsNCj4gPiAgIAl9Ow0KPiA+ICAgDQo+ID4gLQlzYXRhX3BoeTogc2F0YS1waHlAMWEyNDMwMDAg
+ew0KPiA+IC0JCWNvbXBhdGlibGUgPSAibWVkaWF0ZWssZ2VuZXJpYy10cGh5LXYxIjsNCj4gPiAr
+CXNhdGFfcGh5OiB0LXBoeUAxYTI0MzAwMCB7DQo+IA0KPiAgICAgU2FtZSBoZXJlLi4uDQo+IA0K
+PiA+ICsJCWNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ3NjIyLXRwaHkiLA0KPiA+ICsJCQkgICAg
+ICJtZWRpYXRlayxnZW5lcmljLXRwaHktdjEiOw0KPiA+ICAgCQkjYWRkcmVzcy1jZWxscyA9IDwy
+PjsNCj4gPiAgIAkJI3NpemUtY2VsbHMgPSA8Mj47DQo+ID4gICAJCXJhbmdlczsNCj4gDQo+IE1C
+UiwgU2VyZ2VpDQoNCg==
 
-On 1/18/21 12:40 PM, Jack Pham wrote:
-> On Mon, Jan 18, 2021 at 06:52:23PM +0800, kernel test robot wrote:
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
->> head:   93bf8b946e5f9a0b0c68155597b53fd8ccce2827
->> commit: 89795852c9c46b9b0701f7376d30a1c5ab4d146c [2519/4500] usb: typec: ucsi: Add support for USB role switch
->> config: nios2-randconfig-m031-20210118 (attached as .config)
->> compiler: nios2-linux-gcc (GCC) 9.3.0
->> reproduce (this is a W=1 build):
->>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>         chmod +x ~/bin/make.cross
->>         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=89795852c9c46b9b0701f7376d30a1c5ab4d146c
->>         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->>         git fetch --no-tags linux-next master
->>         git checkout 89795852c9c46b9b0701f7376d30a1c5ab4d146c
->>         # save the attached .config to linux build tree
->>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=nios2 
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
->>    nios2-linux-ld: drivers/usb/typec/ucsi/ucsi.o: in function `ucsi_register_port':
->>>> ucsi.c:(.text+0x15a8): undefined reference to `fwnode_usb_role_switch_get'
->>    ucsi.c:(.text+0x15a8): relocation truncated to fit: R_NIOS2_CALL26 against `fwnode_usb_role_switch_get'
->>>> nios2-linux-ld: ucsi.c:(.text+0x15e8): undefined reference to `usb_role_switch_set_role'
->>    ucsi.c:(.text+0x15e8): relocation truncated to fit: R_NIOS2_CALL26 against `usb_role_switch_set_role'
->>    nios2-linux-ld: drivers/usb/typec/ucsi/ucsi.o: in function `ucsi_handle_connector_change':
->>>> ucsi.c:(.text+0x1b50): undefined reference to `usb_role_switch_set_role'
->>    ucsi.c:(.text+0x1b50): relocation truncated to fit: R_NIOS2_CALL26 against `usb_role_switch_set_role'
->>    nios2-linux-ld: ucsi.c:(.text+0x1c28): undefined reference to `usb_role_switch_set_role'
->>    ucsi.c:(.text+0x1c28): relocation truncated to fit: R_NIOS2_CALL26 against `usb_role_switch_set_role'
->>
->> Kconfig warnings: (for reference only)
->>    WARNING: unmet direct dependencies detected for SERIAL_CORE_CONSOLE
->>    Depends on TTY && HAS_IOMEM
->>    Selected by
->>    - EARLY_PRINTK
->>
->> ---
->> 0-DAY CI Kernel Test Service, Intel Corporation
->> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 
-> I have no clue about the nios2, so not sure if this is an arch-specific
-> linker error or not.
-> 
-> Hmm but the .config has the following:
-> 
-> CONFIG_TYPEC_UCSI=y
-> CONFIG_USB_ROLE_SWITCH=m
-> 
-> So I'm guessing this patch also requires a Kconfig change to disallow
-> the above combination? If so, should UCSI have a "depends" or a "select"
-> on USB_ROLE_SWITCH?
-
-Hm, there is certainly a mixture of depends and selects in the kernel source
-tree. I would say "depends", based on Documentation/kbuild/kconfig-language.rst:
-("->" added for emphasis)
-
-  Note:
-	select should be used with care. select will force
-	a symbol to a value without visiting the dependencies.
-	By abusing select you are able to select a symbol FOO even
-	if FOO depends on BAR that is not set.
-->	In general use select only for non-visible symbols
-->	(no prompts anywhere) and for symbols with no dependencies.
-	That will limit the usefulness but on the other hand avoid
-	the illegal configurations all over.
-
-
--- 
-~Randy
-You can't do anything without having to do something else first.
--- Belefant's Law
