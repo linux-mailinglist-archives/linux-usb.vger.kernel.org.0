@@ -2,123 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7505A2FAE00
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 01:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0F42FAE47
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jan 2021 02:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730434AbhASARz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jan 2021 19:17:55 -0500
-Received: from mx2.suse.de ([195.135.220.15]:50440 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725968AbhASARp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 Jan 2021 19:17:45 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 49095AB9F;
-        Tue, 19 Jan 2021 00:17:03 +0000 (UTC)
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     gregkh@linuxfoundation.org
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dave@stgolabs.net,
-        Davidlohr Bueso <dbueso@suse.de>
-Subject: [PATCH] USB: gadget: udc: Process disconnect synchronously
-Date:   Mon, 18 Jan 2021 16:16:53 -0800
-Message-Id: <20210119001653.127975-1-dave@stgolabs.net>
-X-Mailer: git-send-email 2.26.2
+        id S2387720AbhASBRM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jan 2021 20:17:12 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:37537 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727730AbhASBRA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jan 2021 20:17:00 -0500
+X-Greylist: delayed 409 seconds by postgrey-1.27 at vger.kernel.org; Mon, 18 Jan 2021 20:16:58 EST
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 4625284487;
+        Tue, 19 Jan 2021 14:09:21 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1611018561;
+        bh=3UkdCiKqw6yX2AQKkNKW1k2y9uwHyEC6AuOUDO3Wq/o=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=byFBHgLB19ZtX9TXXLuas3RJEmKoA3hmje0x/aZwRmO8mi1VVFskdqUC+4n+Erq7p
+         XLpyXP5A2kDdKVmNQtiRd5yBb1KCWtNE8nRuZOCSHRFKnG6QshrxH7tPv3CthibmK2
+         kGZsDh9Y5JmxX6lsJqz4DUQzSoKHs0O8sr9n+H+bvYLza93JGQMDdta/RnXeGnYyez
+         iy1rB9D3zSH/spiKipwe1AVNUTAeZ1iVyoFko92eC0TwoeFqrLjaKYHFoFjS/zqJbB
+         0bDdjouUsIXmurkdvfud597rzQ3Mc1tgACDucsUYU2BOS8Ads0I4Bh73idZ7xwKxvH
+         /Aw68FnXW8a+w==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B600631410001>; Tue, 19 Jan 2021 14:09:21 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 19 Jan 2021 14:09:20 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.010; Tue, 19 Jan 2021 14:09:20 +1300
+From:   Hamish Martin <Hamish.Martin@alliedtelesis.co.nz>
+To:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "paul.kocialkowski@bootlin.com" <paul.kocialkowski@bootlin.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] usb: ohci: Default to per-port over-current
+ protection
+Thread-Topic: [PATCH v2 1/2] usb: ohci: Default to per-port over-current
+ protection
+Thread-Index: AQHWh7jkXz/Lqnxlg0WKmLEE3cgsQKoKm8UAgBUW8QCADmNYAA==
+Date:   Tue, 19 Jan 2021 01:09:20 +0000
+Message-ID: <83ed9f3929bd064b54bb9903cd489adde442e1c7.camel@alliedtelesis.co.nz>
+References: <20200910212512.16670-1-hamish.martin@alliedtelesis.co.nz>
+         <X+huemxT9XOeDi5E@aptenodytes>
+         <20210109212608.GB1136657@rowland.harvard.edu>
+In-Reply-To: <20210109212608.GB1136657@rowland.harvard.edu>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [2001:df5:b000:24:5bb:1ce7:342d:f966]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2DB8B9A8A0813546881F38C102CB76CE@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-As the comment in usb_disconnect() hints, do not defer the
-disconnect processing, and instead just do it directly in
-the irq handler. This allows the driver to avoid using a
-nowadays deprecated tasklet.
-
-Signed-off-by: Davidlohr Bueso <dbueso@suse.de>
----
- drivers/usb/gadget/udc/snps_udc_core.c | 30 +++-----------------------
- 1 file changed, 3 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/snps_udc_core.c b/drivers/usb/gadget/udc/snps_udc_core.c
-index 6c726d2e1788..d046c09fa566 100644
---- a/drivers/usb/gadget/udc/snps_udc_core.c
-+++ b/drivers/usb/gadget/udc/snps_udc_core.c
-@@ -36,7 +36,6 @@
- #include <asm/unaligned.h>
- #include "amd5536udc.h"
- 
--static void udc_tasklet_disconnect(unsigned long);
- static void udc_setup_endpoints(struct udc *dev);
- static void udc_soft_reset(struct udc *dev);
- static struct udc_request *udc_alloc_bna_dummy(struct udc_ep *ep);
-@@ -95,9 +94,6 @@ static struct timer_list udc_pollstall_timer;
- static int stop_pollstall_timer;
- static DECLARE_COMPLETION(on_pollstall_exit);
- 
--/* tasklet for usb disconnect */
--static DECLARE_TASKLET_OLD(disconnect_tasklet, udc_tasklet_disconnect);
--
- /* endpoint names used for print */
- static const char ep0_string[] = "ep0in";
- static const struct {
-@@ -1637,6 +1633,8 @@ static void usb_connect(struct udc *dev)
-  */
- static void usb_disconnect(struct udc *dev)
- {
-+	u32 tmp;
-+
- 	/* Return if already disconnected */
- 	if (!dev->connected)
- 		return;
-@@ -1648,23 +1646,6 @@ static void usb_disconnect(struct udc *dev)
- 	/* mask interrupts */
- 	udc_mask_unused_interrupts(dev);
- 
--	/* REVISIT there doesn't seem to be a point to having this
--	 * talk to a tasklet ... do it directly, we already hold
--	 * the spinlock needed to process the disconnect.
--	 */
--
--	tasklet_schedule(&disconnect_tasklet);
--}
--
--/* Tasklet for disconnect to be outside of interrupt context */
--static void udc_tasklet_disconnect(unsigned long par)
--{
--	struct udc *dev = udc;
--	u32 tmp;
--
--	DBG(dev, "Tasklet disconnect\n");
--	spin_lock_irq(&dev->lock);
--
- 	if (dev->driver) {
- 		spin_unlock(&dev->lock);
- 		dev->driver->disconnect(&dev->gadget);
-@@ -1673,13 +1654,10 @@ static void udc_tasklet_disconnect(unsigned long par)
- 		/* empty queues */
- 		for (tmp = 0; tmp < UDC_EP_NUM; tmp++)
- 			empty_req_queue(&dev->ep[tmp]);
--
- 	}
- 
- 	/* disable ep0 */
--	ep_init(dev->regs,
--			&dev->ep[UDC_EP0IN_IX]);
--
-+	ep_init(dev->regs, &dev->ep[UDC_EP0IN_IX]);
- 
- 	if (!soft_reset_occured) {
- 		/* init controller by soft reset */
-@@ -1695,8 +1673,6 @@ static void udc_tasklet_disconnect(unsigned long par)
- 		tmp = AMD_ADDBITS(tmp, UDC_DEVCFG_SPD_FS, UDC_DEVCFG_SPD);
- 		writel(tmp, &dev->regs->cfg);
- 	}
--
--	spin_unlock_irq(&dev->lock);
- }
- 
- /* Reset the UDC core */
--- 
-2.26.2
-
+T24gU2F0LCAyMDIxLTAxLTA5IGF0IDE2OjI2IC0wNTAwLCBBbGFuIFN0ZXJuIHdyb3RlOg0KPiBP
+biBTdW4sIERlYyAyNywgMjAyMCBhdCAxMjoyMjozNFBNICswMTAwLCBQYXVsIEtvY2lhbGtvd3Nr
+aSB3cm90ZToNCj4gPiBIaSwNCj4gDQo+IFNvcnJ5IGl0IGhhcyB0YWtlbiBzbyBsb25nIHRvIHJl
+c3BvbmQgdG8gdGhpcy4gIFRoZSBob2xpZGF5cw0KPiBpbnRlcnZlbmVkLCANCj4gYnV0IHRoYXQn
+cyBubyBleGN1c2UuDQpJJ20gc29ycnkgdG9vLCBzYW1lIHJlYXNvbi9ub24tZXhjdXNlLiBUaGFu
+a3MgZm9yIHlvdXIgdGhvcm91Z2ggcmVwb3J0DQpvbiB0aGUgaXNzdWUgbXkgY2hhbmdlcyBjYXVz
+ZWQgYW5kIHBhc3Mgb24gbXkgYXBvbG9naWVzIHRvIHlvdXIgTW9tIQ0KDQo+IA0KPiA+IE9uIEZy
+aSAxMSBTZXAgMjAsIDA5OjI1LCBIYW1pc2ggTWFydGluIHdyb3RlOg0KPiA+ID4gU29tZSBpbnRl
+Z3JhdGVkIE9IQ0kgY29udHJvbGxlciBodWJzIGRvIG5vdCBleHBvc2UgYWxsIHBvcnRzIG9mDQo+
+ID4gPiB0aGUgaHViDQo+ID4gPiB0byBwaW5zIG9uIHRoZSBTb0MuIEluIHNvbWUgY2FzZXMgdGhl
+IHVuY29ubmVjdGVkIHBvcnRzIGdlbmVyYXRlDQo+ID4gPiBzcHVyaW91cyBvdmVyLWN1cnJlbnQg
+ZXZlbnRzLiBGb3IgZXhhbXBsZSB0aGUgQnJvYWRjb20NCj4gPiA+IDU2MDYwL1JhbmdlciAyIFNv
+Qw0KPiA+ID4gY29udGFpbnMgYSBub21pbmFsbHkgMyBwb3J0IGh1YiBidXQgb25seSB0aGUgZmly
+c3QgcG9ydCBpcyB3aXJlZC4NCj4gPiA+IA0KPiA+ID4gRGVmYXVsdCBiZWhhdmlvdXIgZm9yIG9o
+Y2ktcGxhdGZvcm0gZHJpdmVyIGlzIHRvIHVzZSBnbG9iYWwgb3Zlci0NCj4gPiA+IGN1cnJlbnQN
+Cj4gPiA+IHByb3RlY3Rpb24gbW9kZSAoQUtBICJnYW5nZWQiKS4gVGhpcyBsZWFkcyB0byB0aGUg
+c3B1cmlvdXMgb3Zlci0NCj4gPiA+IGN1cnJlbnQNCj4gPiA+IGV2ZW50cyBhZmZlY3RpbmcgYWxs
+IHBvcnRzIGluIHRoZSBodWIuDQo+ID4gPiANCj4gPiA+IFdlIG5vdyBhbHRlciB0aGUgZGVmYXVs
+dCB0byB1c2UgcGVyLXBvcnQgb3Zlci1jdXJyZW50IHByb3RlY3Rpb24uDQo+ID4gDQo+ID4gVGhp
+cyBzcGVjaWZpYyBwYXRjaCBsZWFkIHRvIGJyZWFraW5nIE9IQ0kgb24gbXkgbW9tJ3MgbGFwdG9w
+ICh3aG9tDQo+ID4gd2FzIGFib3V0DQo+ID4gdG8gYnV5IGEgbmV3IG9uZSB0aGlua2luZyB0aGUg
+aGFyZHdhcmUgaGFkIGZhaWxlZCkuIEkgZ2V0IG5vIE9IQ0kNCj4gPiBpbnRlcnJ1cHQgYXQNCj4g
+PiBhbGwgYW5kIG5vIFVTQiAxIGRldmljZSBpcyBldmVyIGRldGVjdGVkLg0KPiA+IA0KPiA+IEkg
+aGF2ZW4ndCByZWFsbHkgZm91bmQgYSByZWFzb25hYmxlIGV4cGxhbmF0aW9uIGFib3V0IHdoeSB0
+aGF0IGlzLA0KPiA+IGJ1dCBoZXJlDQo+ID4gYXJlIHNvbWUgbm90ZXMgSSB3YXMgYWJsZSB0byBj
+b2xsZWN0Og0KPiA+IC0gVGhlIGlzc3VlIHNob3dlZCB1cCBvbiA1LjgsMTggYW5kIDUuOS4xNSwg
+d2hpY2ggZG9uJ3QgaW5jbHVkZSB0aGUNCj4gPiBwYXRjaA0KPiA+ICAgZnJvbSB0aGlzIHNlcmll
+cyB0aGF0IHNldHMgZGlzdHJ1c3RfZmlybXdhcmUgPSBmYWxzZTsgVGhpcw0KPiA+IHJlc3VsdHMg
+aW4gdGhlIE5QUw0KPiA+ICAgYml0IGJlaW5nIHNldCB2aWEgT0hDSV9RVUlSS19IVUJfUE9XRVIu
+DQo+ID4gLSBBZGRpbmcgdmFsICY9IH5SSF9BX1BTTTsgKGFzIHdhcyBkb25lIGJlZm9yZSB0aGlz
+IGNoYW5nZSkgc29sdmVzDQo+ID4gdGhlIGlzc3VlDQo+ID4gICB3aGljaCBpcyB3ZWlyZCBiZWNh
+dXNlIHRoZSBiaXQgaXMgc3VwcG9zZWQgdG8gYmUgaW5hY3RpdmUgd2hlbg0KPiA+IE5QUyBpcyBz
+ZXQ7DQo+ID4gLSBTZXR0aW5nIG9oY2lfaGNkLmRpc3RydXN0X2Zpcm13YXJlPTAgaW4gdGhlIGNt
+ZGxpbmUgcmVzdWx0cyBpbg0KPiA+IG5vdCBzZXR0aW5nDQo+ID4gICB0aGUgTlBTIGJpdCBhbmQg
+YWxzbyBzb2x2ZXMgdGhlIGlzc3VlOw0KPiA+IC0gVGhlIGluaXRpYWwgdmFsdWUgb2YgdGhlIHJl
+Z2lzdGVyIGF0IGZ1bmN0aW9uIGVudHJ5IGlzIDB4MTAwMTEwNA0KPiA+IChQU00gYml0DQo+ID4g
+ICBpcyBzZXQsIE5QUyBpcyB1bnNldCk7DQo+ID4gLSBUaGUgT0hDSSBjb250cm9sbGVyIGlzIHRo
+ZSBmb2xsb3dpbmc6DQo+ID4gMDA6MDMuMCBVU0IgY29udHJvbGxlcjogU2lsaWNvbiBJbnRlZ3Jh
+dGVkIFN5c3RlbXMgW1NpU10gVVNCIDEuMQ0KPiA+IENvbnRyb2xsZXIgKHJldiAwZikgKHByb2ct
+aWYgMTAgW09IQ0ldKQ0KPiA+IAlTdWJzeXN0ZW06IEFTVVNUZUsgQ29tcHV0ZXIgSW5jLiBEZXZp
+Y2UgMWFhNw0KPiANCj4gR3JlYXQgcmVwb3J0aW5nIC0tIHRoYW5rcy4NCj4gDQo+ID4gRG9lcyB0
+aGF0IG1ha2UgYW55IHNlbnNlIHRvIHlvdT8NCj4gPiANCj4gPiBJIHJlYWxseSB3b25kZXIgd2hh
+dCBhIHByb3BlciBmaXggY291bGQgYmUgYW5kIGhlcmUgYXJlIHNvbWUNCj4gPiBzdWdnZXN0aW9u
+czoNCj4gPiAtIEFkZGluZyBhIHNwZWNpZmljIHF1aXJrIHRvIGNsZWFyIHRoZSBQU00gYml0IGZv
+ciB0aGlzIGhhcmR3YXJlDQo+ID4gd2hpY2ggc2VlbXMgdG8NCj4gPiAgIGNvbnNpZGVyIHRoZSBi
+aXQgcmVnYXJkbGVzcyBvZiBOUFM7DQo+IA0KPiBXZSBkb24ndCBuZWVkIGEgcXVpcmsgZm9yIHRo
+aXMuICBUaGVyZSBzaG91bGRuJ3QgYmUgYW55dGhpbmcgd3JvbmcNCj4gd2l0aCANCj4gX2Fsd2F5
+c18gY2xlYXJpbmcgUFNNIHdoZW5ldmVyIE5QUyBpcyBzZXQsIHNpbmNlIHRoZSBjb250cm9sbGVy
+IGlzIA0KPiBzdXBwb3NlZCB0byBpZ25vcmUgUFNNIHVuZGVyIHRoYXQgY29uZGl0aW9uLg0KPiAN
+Cj4gV291bGQgeW91IGxpa2UgdG8gc3VibWl0IGEgcGF0Y2ggZm9yIHRoaXM/DQpZZXMsIEkgdGhp
+bmsgdGhhdCBsb29rcyByZWFzb25hYmxlIHRvby4NCg0KPiANCj4gPiAtIEFkZGluZyB0aGUgcGF0
+Y2ggdGhhdCBzZXRzIGRpc3RydXN0X2Zpcm13YXJlID0gZmFsc2UgdG8gc3RhYmxlDQo+ID4gYnJh
+bmNoZXM7DQo+IA0KPiBUaGF0J3MgY2VydGFpbmx5IHJlYXNvbmFibGUuICBOb2JvZHkgaGFzIHJl
+cG9ydGVkIGFueSBwcm9ibGVtcyBjYXVzZWQNCj4gYnkgDQo+IHRoYXQgcGF0Y2gsIHNvIGFkZGlu
+ZyBpdCB0byB0aGUgc3RhYmxlIGJyYW5jaGVzIHNob3VsZCBiZSBzYWZlDQo+IGVub3VnaC4NCj4g
+DQpZZXMsIHRoYXQgaXMgcHJvYmFibHkgYSBnb29kIGlkZWEuIEkndmUgY2FycmllZCBib3RoIHBh
+dGNoZXMgbG9jYWxseQ0KZm9yIG15IHN5c3RlbXMuDQoNCj4gPiBXaGF0IGRvIHlvdSB0aGluaz8N
+Cj4gDQo+IFdlIGNvdWxkIGV2ZW4gZG8gYm90aC4gIFRoYXQgd291bGQgaGVscCBpZiwgZm9yIGV4
+YW1wbGUsIHNvbWVib2R5IA0KPiBkZWNpZGVkIHRvIHNldCBvaGNpX2hjZC5kaXN0cnVzdF9maXJt
+d2FyZT10cnVlIGV4cGxpY2l0bHkuDQpJIHRoaW5rIGJvdGggbWlnaHQgYmUgYmVzdC4NCg0KPiAN
+Cj4gR3JlZywgaW4gdGhlIG1lYW50aW1lIGNhbiB3ZSBoYXZlIGNvbW1pdCBjNDAwNWE4ZjY1ZWQg
+KCJ1c2I6IG9oY2k6DQo+IE1ha2UgDQo+IGRpc3RydXN0X2Zpcm13YXJlIHBhcmFtIGRlZmF1bHQg
+dG8gZmFsc2UiKSBhZGRlZCB0byBhbGwgdGhlIHN0YWJsZSANCj4ga2VybmVscyB3aGljaCBoYXZl
+IGJhY2stcG9ydGVkIHZlcnNpb25zIG9mIGNvbW1pdCBiNzdkMmEwYTIyM2I/DQo+IA0KPiBBbGFu
+IFN0ZXJuDQpJIHNlY29uZCB0aGF0Lg0KDQpUaGFua3MsDQpIYW1pc2ggTWFydGluDQoNCg==
