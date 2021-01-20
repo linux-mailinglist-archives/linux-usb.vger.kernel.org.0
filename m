@@ -2,129 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA612FC743
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 02:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBBA22FC7C8
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 03:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727684AbhATB5F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jan 2021 20:57:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731431AbhATBvs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 20:51:48 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21984C061757;
-        Tue, 19 Jan 2021 17:51:08 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id m13so24169734ljo.11;
-        Tue, 19 Jan 2021 17:51:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=EOmNpRX8SEbQAJ9InTqMSNS2j7g0suVcBgq97tfbIbQ=;
-        b=I3qDBA9cDib9CkJzwuxF/g+0zMDc3JeLl4/2KThX16QQW/b9GqN6PeAwLvoWmhNgSr
-         yonfe7+Hp0cDnEFp19D5zWRQKycOsHRhVqsxYcGMFmiOBiH/nDUG0eRK9gPwHSrUg8cu
-         PPpxCmhNMLHm6IRN9FIr05AZpI8A1sDnubZp/fBN4qlEj3pOU4JOMUtkuHlv5krn4iqi
-         yBk7zYG29xoVqd20crDKnauAKeJu0NrapS/9fkYWCggiMIgI1Bya++HwZC/Kp+4uG2Lz
-         jfn5PVPSmwxUvAfLFj0nIL9dTU0/wmb6HsGGT8MM9I2o2k3Bl4nr191BGn3uYAV9LzX7
-         vPNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=EOmNpRX8SEbQAJ9InTqMSNS2j7g0suVcBgq97tfbIbQ=;
-        b=TiHmOQVFOLAiapjFOeWddrWOQKAeMx5+NjkqM6X9sRE7gsnYG42fqHRiIqL6UmMYnv
-         tPqK6/tqjCkKVrNss8iYJVnQlei3A8QP+1s+Xdz/QM2tPzymoq1hqjqAMWroDr7hh1pe
-         Kw6QIJJsrj2ZKcjt0V94GXn4vYhm4XvxW4DeQ4ZxDULDayynTJPF8zm1oBwEvjVnFXw2
-         ei4QWSYXSZSkr2n4zvLCVQbfufR3SxxeAlwbhGu8qI3ZL45W5HTpusOxBil5IPh2FGFz
-         R/mrOlgxIEuMcZdRaai1pL1KPO9w52+umHVE5Jj/2U6NzFsX3eBi7NgTBPQUcKDfYNPb
-         3teg==
-X-Gm-Message-State: AOAM532jOwDpTacEUuQKzxJx33f9dJhhT25htWgFkjo0PHJWHCDHGSP1
-        QvLlBVqQxlNmuyWlyvxhReGsNu+OcQTYzJBbV9BvPKQdeog=
-X-Google-Smtp-Source: ABdhPJygEfsArRDrh+JnpahiHFfQMmrfKhHFHuwAbP4alJJdACL3ihQ5Qh4sGJ6Cu8lTbQlN90Y6Ea5V6E77+v3Tbfc=
-X-Received: by 2002:a2e:a36a:: with SMTP id i10mr3159325ljn.342.1611107466601;
- Tue, 19 Jan 2021 17:51:06 -0800 (PST)
+        id S1730915AbhATCUF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jan 2021 21:20:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48240 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730829AbhATB3o (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 Jan 2021 20:29:44 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 042B823730;
+        Wed, 20 Jan 2021 01:28:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611106088;
+        bh=5yK5Fi0PTZ04fL2md8C6mizLSxtI95KJPCXu9GfAxsM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=X7vJ6QoPCRPrBIvPwh+ZYiOCcoYHYqyAJuwMO2lFeUOLexYSqOgc9c4O5OjvZ6LO1
+         UXEARl25V7zQF3SVBa2Z+B5k0kjVhBQs7/jPzPIADs33P7I/rm0ERKAtOWnGD8WhHi
+         YG5Pmmeu4jCghydHJ3UC18agpKLqRvfPL2SLKjG/psHkfm6CttXfdD6hDF508h4h7L
+         X5mCZrhDoM7T4kwbPguG981lQ2l6uagwxB1pc59EzPyV/OCH1zBS7oHpOit0Et/Iv0
+         pCKOwfup660pe2NjhCDTZBF1uDys/HhFVIJrX0Fs/nlj6nSlS4Z0wHM6yyDyRi+ZEJ
+         Uy9cIyrdCH7AQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Leon Schuermann <leon@is.currently.online>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 4/9] r8152: Add Lenovo Powered USB-C Travel Hub
+Date:   Tue, 19 Jan 2021 20:27:57 -0500
+Message-Id: <20210120012802.770525-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210120012802.770525-1-sashal@kernel.org>
+References: <20210120012802.770525-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <1610720001-15300-1-git-send-email-u0084500@gmail.com>
- <1610720001-15300-2-git-send-email-u0084500@gmail.com> <20210119231058.GA2772032@robh.at.kernel.org>
-In-Reply-To: <20210119231058.GA2772032@robh.at.kernel.org>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Wed, 20 Jan 2021 09:50:55 +0800
-Message-ID: <CADiBU3_t5jozakQnD7Wuuj1pjumbXhW3P9kkWRqh5pG1pfi_Sw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] usb typec: tcpci: mt6360: Add vbus supply into
- dt-binding description
-To:     Rob Herring <robh@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        matthias.bgg@gmail.com, Greg KH <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Rob Herring <robh@kernel.org> =E6=96=BC 2021=E5=B9=B41=E6=9C=8820=E6=97=A5 =
-=E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=887:11=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Fri, Jan 15, 2021 at 10:13:21PM +0800, cy_huang wrote:
-> > From: ChiYuan Huang <cy_huang@richtek.com>
-> >
-> > Add external vbus source into dt-binding description.
-> >
-> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > ---
-> >  Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml | 7 ++=
-+++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc=
-.yaml b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
-> > index 1e8e1c2..b8d842b 100644
-> > --- a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
-> > @@ -26,6 +26,11 @@ properties:
-> >      items:
-> >        - const: PD_IRQB
-> >
-> > +  vbus-supply:
-> > +    description:
-> > +      Vbus source supply regulator.
-> > +    maxItems: 1
->
-> vbus-supply is already in the 'connector' node, you don't need it here.
->
-If not put here, 'regulator_get' only can follow the legacy way to get
-vbus regulator.
-Currently, there's no one to use the 'vbus-supply' property.
-From my understanding, the 'vbus-supply' is the chip level property,
-not connector type property.
+From: Leon Schuermann <leon@is.currently.online>
 
-> > +
-> >    connector:
-> >      type: object
-> >      $ref: ../connector/usb-connector.yaml#
-> > @@ -38,6 +43,7 @@ required:
-> >    - compatible
-> >    - interrupts
-> >    - interrupt-names
-> > +  - vbus-supply
-> >
-> >  examples:
-> >    - |
-> > @@ -54,6 +60,7 @@ examples:
-> >            compatible =3D "mediatek,mt6360-tcpc";
-> >            interrupts-extended =3D <&gpio26 3 IRQ_TYPE_LEVEL_LOW>;
-> >            interrupt-names =3D "PD_IRQB";
-> > +          vbus-supply =3D <&otg_vbus>;
-> >
-> >            connector {
-> >              compatible =3D "usb-c-connector";
-> > --
-> > 2.7.4
-> >
+[ Upstream commit cb82a54904a99df9e8f9e9d282046055dae5a730 ]
+
+This USB-C Hub (17ef:721e) based on the Realtek RTL8153B chip used to
+use the cdc_ether driver. However, using this driver, with the system
+suspended the device constantly sends pause-frames as soon as the
+receive buffer fills up. This causes issues with other devices, where
+some Ethernet switches stop forwarding packets altogether.
+
+Using the Realtek driver (r8152) fixes this issue. Pause frames are no
+longer sent while the host system is suspended.
+
+Signed-off-by: Leon Schuermann <leon@is.currently.online>
+Tested-by: Leon Schuermann <leon@is.currently.online>
+Link: https://lore.kernel.org/r/20210111190312.12589-2-leon@is.currently.online
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/cdc_ether.c | 7 +++++++
+ drivers/net/usb/r8152.c     | 1 +
+ 2 files changed, 8 insertions(+)
+
+diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+index f3def96d35d42..8c9eae5f30722 100644
+--- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -800,6 +800,13 @@ static const struct usb_device_id	products[] = {
+ 	.driver_info = 0,
+ },
+ 
++/* Lenovo Powered USB-C Travel Hub (4X90S92381, based on Realtek RTL8153) */
++{
++	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0x721e, USB_CLASS_COMM,
++			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
++	.driver_info = 0,
++},
++
+ /* ThinkPad USB-C Dock Gen 2 (based on Realtek RTL8153) */
+ {
+ 	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0xa387, USB_CLASS_COMM,
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index e30792380812a..bd91d4bad49b2 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -5337,6 +5337,7 @@ static const struct usb_device_id rtl8152_table[] = {
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7205)},
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x720c)},
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7214)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x721e)},
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0xa387)},
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041)},
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff)},
+-- 
+2.27.0
+
