@@ -2,23 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B932FD0F2
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 14:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2596F2FD278
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 15:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728323AbhATNA3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Jan 2021 08:00:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732961AbhATL7x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jan 2021 06:59:53 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91473C061757
-        for <linux-usb@vger.kernel.org>; Wed, 20 Jan 2021 03:59:04 -0800 (PST)
+        id S1730253AbhATOQ1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 20 Jan 2021 09:16:27 -0500
+Received: from smtp.bonedaddy.net ([45.33.94.42]:42428 "EHLO
+        smtp.bonedaddy.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728483AbhATMqY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jan 2021 07:46:24 -0500
+Received: from [192.168.1.209] (unknown [49.190.168.235])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pabs3@bonedaddy.net)
+        by smtp.bonedaddy.net (Postfix) with ESMTPSA id CAC70180031;
+        Wed, 20 Jan 2021 07:44:48 -0500 (EST)
+Authentication-Results: smtp.bonedaddy.net; dmarc=fail (p=none dis=none) header.from=collabora.com
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk
+ [46.235.227.227]) (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384
+ (256/256 bits)) (No client certificate requested) by smtp.bonedaddy.net
+ (Postfix) with ESMTPS id 3B0CB180031 for <pabs3@bonedaddy.net>; Wed, 20 Jan
+ 2021 06:59:06 -0500 (EST)
+Authentication-Results: smtp.bonedaddy.net; dmarc=fail (p=none dis=none)
+ header.from=collabora.com
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: andrzej.p)
         with ESMTPSA id 4D2CF1F456A9
-Subject: Re: proposal: move Linux userspace USB gadget projects to linux-usb
- GitHub organisation?
+Subject: Re: proposal: move Linux userspace USB gadget projects to
+ linux-usb GitHub organisation?
 To:     Krzysztof Opasiak <k.opasiak@samsung.com>,
         Paul Wise <pabs3@bonedaddy.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,7 +49,7 @@ MIME-Version: 1.0
 In-Reply-To: <ef8906a7-0412-dbe3-d30a-2ac6d4f1b76d@samsung.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -96,3 +108,4 @@ Having an umbrella project for userspace USB gadget projects seems
 a good idea to me.
 
 Andrzej
+
