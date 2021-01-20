@@ -2,123 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8082FD74F
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 18:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 119A02FD785
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 18:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387733AbhATRhg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Jan 2021 12:37:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36742 "EHLO
+        id S1732361AbhATRvk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Jan 2021 12:51:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732001AbhATRgC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jan 2021 12:36:02 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17C2C0613C1;
-        Wed, 20 Jan 2021 09:35:21 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id g10so5510936wrx.1;
-        Wed, 20 Jan 2021 09:35:21 -0800 (PST)
+        with ESMTP id S2388723AbhATRuN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jan 2021 12:50:13 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61339C061757
+        for <linux-usb@vger.kernel.org>; Wed, 20 Jan 2021 09:49:28 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id w24so18006745ybi.7
+        for <linux-usb@vger.kernel.org>; Wed, 20 Jan 2021 09:49:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=bgWbillt2EgWWG5wuhiDZDSvtc6oP4uvK/bDe7atus4=;
-        b=m/DQCZTCFDAKAA47Fqyr754WPbDeIlXyeMyJc5X1hFhVDLxtVxK9YanCcfypvzCVTm
-         f4oeRquI2HYah+oWSPGB44coBCY0pbzUGmiVjq3BoIZ5eRH7vPNGqWFa/++/wlUF9sog
-         vVUpbF0+aUvcbCf7q80COT84GSMUolRI9fk5M0uMlbX6aVemVh27ksTZuJy813zMym6i
-         8HndGkfMoxwVk0a/wGLhj5fbZJRz3EajFrz7YXvXOZJTPR8a9Cfo1iYoqIE95k3TYdoS
-         a+rbQYxnPf3dIIvpdkjdkO4X4zRPfgqLtnNZQK2K5ZCD16ZIYj/RMO831ok5u+jVJjz9
-         g4Wg==
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=1PhAclZULQwbysk/mkrBuB0ypY2UFK2B9x9hQ0ArLyU=;
+        b=PKnCL3c12xNtaUgxfTXl1AFHvQy3cYfP7plFtQx8ivsifTomD+7OyzVK3rNBiKx8Jp
+         BfpdmStXrrd5YQjGo0eJibuoj0IEwDjxupUIVuiBk5RJC+OMsBVv/eWPFlfkIB45yBWA
+         8QOlOVEpLIG1bWahHIV2Hy817oGTKYP9WX1vk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bgWbillt2EgWWG5wuhiDZDSvtc6oP4uvK/bDe7atus4=;
-        b=pMkZHZIZbCZlrmsrS143XMv1/nfw8qtTk3DFN4pjLizPuYuTsewdyhYD2tKn5Q1rLc
-         04iP0BVNqrN/GzyX+QK/UdNZ10RrtMD6WuNdlNGrAO8gc6U8GHV5foyCxkBC3AyQBnqc
-         lL/FKP0Y2+UhB1ECBlXhbjkV8E0wxG3psK9fY5da0qyy9dbzmzMoLrlcY5/8NiZRQ8oQ
-         03LkTeIq2G4hpdj8x3eblZzrJJlGn40d+tWnqj2NU8IhPHM/RgwhJ4DM+T5ij5bvkFEo
-         XYMwawF5GUS8yUhC0aH6S8WM7O2LCcyG8H9//aLi8AldZ51Wnvt4TYLjGfgR1UGJ34f4
-         /ziw==
-X-Gm-Message-State: AOAM533QalzsIlaknlFzyfvRmGhFGJBwqPCtKnh9YqKdV8r8YOFmnBAX
-        3Eyj23PidBA7wDbvIiDEO7I=
-X-Google-Smtp-Source: ABdhPJzByxqsWOE3ecma2d/q4MjvAdPab8HfLtylXkpN1r5aMzK5sHc1+rLNxK0T60IIARVKjx0OjA==
-X-Received: by 2002:adf:e547:: with SMTP id z7mr10021098wrm.283.1611164120662;
-        Wed, 20 Jan 2021 09:35:20 -0800 (PST)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id r16sm5306760wrx.36.2021.01.20.09.35.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 09:35:19 -0800 (PST)
-Date:   Wed, 20 Jan 2021 18:35:18 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     JC Kuo <jckuo@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, robh@kernel.org, jonathanh@nvidia.com,
-        kishon@ti.com, mturquette@baylibre.com, sboyd@kernel.org,
-        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        nkristam@nvidia.com, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v7 08/14] arm64: tegra210: XUSB PADCTL add "nvidia,pmc"
- prop
-Message-ID: <YAhp1tzeVszKFAXt@ulmo>
-References: <20210120073414.69208-1-jckuo@nvidia.com>
- <20210120073414.69208-9-jckuo@nvidia.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=1PhAclZULQwbysk/mkrBuB0ypY2UFK2B9x9hQ0ArLyU=;
+        b=iuCSJK1f3LUZQRxX+luXDJkys0vN9Tg6XdhxFRlsB8mtgrbR+XbxxxypYB/ET9UkAN
+         KwQsulxD3o8EV/bSB+C7n7psbkUlRrF4QRcvQ9rcTwDvZTlXvEaKtED1WT3ZCuiu5gn6
+         IKn1IB1/45HELyTBXzfww6M7gJG3DSCcVIPaiKNVCTRIRnP/EJZUj7UlmjlpFWWfNCMl
+         DA0pd+29Jsf4IjGC+7n3TUL5UMcZ62Rcppxntuoq2cosWDGGMQ9ZHGaVq2D2Dyb1IXeH
+         19yYToaZSug7QZUXe65r0hgA5DrYaxtoN0Xu9MELbsiQZXJ83eYB89syVQGxSkmnlwsR
+         oCEQ==
+X-Gm-Message-State: AOAM533jq09wydPyuNbuziPSm6HBB91C0EuqSItL5lqczjl8CGv18Saa
+        zVCYzvPBwWbnjdbhkbXh1hJ6cJlyzEDR/Z8VrJM/OB8gqjY=
+X-Google-Smtp-Source: ABdhPJyQJxihaFNA4A53Zw4JJfauiFp1ByT3l2+b9XytEbEObkDahNtSovQIudpiKYScOGBh9rACIAdh0+OPg31F68w=
+X-Received: by 2002:a05:6830:1bef:: with SMTP id k15mr7631084otb.303.1611164527608;
+ Wed, 20 Jan 2021 09:42:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="18V6D7czgfXzXs7x"
-Content-Disposition: inline
-In-Reply-To: <20210120073414.69208-9-jckuo@nvidia.com>
-User-Agent: Mutt/2.0.4 (26f41dd1) (2020-12-30)
+References: <20210120170033.38468-1-noralf@tronnes.org> <20210120170033.38468-3-noralf@tronnes.org>
+In-Reply-To: <20210120170033.38468-3-noralf@tronnes.org>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Wed, 20 Jan 2021 18:41:56 +0100
+Message-ID: <CAKMK7uF62TrWhqBMM6qa+nXbKEs=sEGw6eF62S_NfTanyXc_Xg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] drm/probe-helper: Check epoch counter in output_poll_execute()
+To:     =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>, hudson@trmm.net,
+        markus@raatikainen.cc, Sam Ravnborg <sam@ravnborg.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Tyler Hardin <th020394@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>, pontus.fuchs@gmail.com,
+        peter@stuge.se
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---18V6D7czgfXzXs7x
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jan 20, 2021 at 03:34:08PM +0800, JC Kuo wrote:
-> PMC driver provides USB sleepwalk registers access to XUSB PADCTL
-> driver. This commit adds a "nvidia,pmc" property which points to
-> PMC node to XUSB PADCTL device node.
->=20
-> Signed-off-by: JC Kuo <jckuo@nvidia.com>
+On Wed, Jan 20, 2021 at 6:10 PM Noralf Tr=C3=B8nnes <noralf@tronnes.org> wr=
+ote:
+>
+> drm_helper_hpd_irq_event() checks the epoch counter to determine
+> connector status change. This was introduced in
+> commit 5186421cbfe2 ("drm: Introduce epoch counter to drm_connector").
+> Do the same for output_poll_execute() so it can detect other changes
+> beside connection status value changes.
+>
+> Signed-off-by: Noralf Tr=C3=B8nnes <noralf@tronnes.org>
 > ---
-> v7:
->    no change
-> v6:
->    no change
-> v5:
->    no change
-> v4:
->    no change
-> v3:
->    no change
->=20
->  arch/arm64/boot/dts/nvidia/tegra210.dtsi | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/gpu/drm/drm_probe_helper.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_pro=
+be_helper.c
+> index d6017726cc2a..e5432dcf6999 100644
+> --- a/drivers/gpu/drm/drm_probe_helper.c
+> +++ b/drivers/gpu/drm/drm_probe_helper.c
+> @@ -623,6 +623,7 @@ static void output_poll_execute(struct work_struct *w=
+ork)
+>         struct drm_connector_list_iter conn_iter;
+>         enum drm_connector_status old_status;
+>         bool repoll =3D false, changed;
+> +       u64 old_epoch_counter;
+>
+>         if (!dev->mode_config.poll_enabled)
+>                 return;
+> @@ -659,8 +660,9 @@ static void output_poll_execute(struct work_struct *w=
+ork)
+>
+>                 repoll =3D true;
+>
+> +               old_epoch_counter =3D connector->epoch_counter;
+>                 connector->status =3D drm_helper_probe_detect(connector, =
+NULL, false);
+> -               if (old_status !=3D connector->status) {
+Was about to ask whether we're not missing connector status changes
+here, but that's already handled. Not sure why this wasn't done as
+part of the original patch, I'd include a cc: stable here.
 
-Applied, thanks.
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
-Thierry
+> +               if (old_epoch_counter !=3D connector->epoch_counter) {
+>                         const char *old, *new;
+>
+>                         /*
+> @@ -689,6 +691,9 @@ static void output_poll_execute(struct work_struct *w=
+ork)
+>                                       connector->base.id,
+>                                       connector->name,
+>                                       old, new);
+> +                       DRM_DEBUG_KMS("[CONNECTOR:%d:%s] epoch counter %l=
+lu -> %llu\n",
+> +                                     connector->base.id, connector->name=
+,
+> +                                     old_epoch_counter, connector->epoch=
+_counter);
+>
+>                         changed =3D true;
+>                 }
+> --
+> 2.23.0
+>
+> _______________________________________________
+> dri-devel mailing list
+> dri-devel@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/dri-devel
 
---18V6D7czgfXzXs7x
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmAIadUACgkQ3SOs138+
-s6EDMRAAvfRgeCYikIL6BAwhM+SJloxBij+bHJARe9b4wi6pnROzxtFyJqUvo/cB
-g19sC695KcooGStaivQiO9I7P/oFiss+DW2X7p0gz/3QvOO9JCsjpw6rT87qi6d/
-ssfTnZ+vjiJg2YA+xvIomS9x6VTknLB4yNf0gN++hr/qkLUBviIg1WLwEKQ2TA4q
-42rT2OoJC1IXx+BJ7w6O1N+bu4RFRva2jv2E6dOrTFdgeP4WR6D3gvgoHfeqGYJ+
-HXtn/3j4X2DrTnUwAXkZ3EPBSTW/KxjUKKmUkZLkxILSZDFzQ2wIVH1DUEGIqQYn
-GN52PjCca4A7FYY0coZIEiW48lthCybbVu21NPs+C/qqBTwuyEBOZULvPfDeVJQa
-5b9K3RsL1M4z00iSTueUa/Q0aiiGcAoOoeOZIbdH+4E9AteeboFfO0NB+qmudQxi
-fpR0JJtEbov1KiE2xJG0McHesgUfWbqdcfyN9U2FNcEzNhppyDhdj1OfTiJ/frRy
-L8ryBXnTZ2aufYjDyJe7ShDJElIbssSBI4ETs48Zc9zYlejUuth8H4aNgNS7pCe1
-ihtyG2TegmRT2IgZDEvYn3CrPGElfcDaRBMBYaM0869tTa1Has8+SVIPxWO51UWK
-YZkkTPNo9qYFrMwP2E/EwyiImIxLsDeBQh8RTEUG0ED9CQgd/9M=
-=zY9/
------END PGP SIGNATURE-----
-
---18V6D7czgfXzXs7x--
+--=20
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
