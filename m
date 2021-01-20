@@ -2,146 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C61C02FC566
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 01:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2B62FC62B
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 01:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730692AbhATAJZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jan 2021 19:09:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
+        id S1726974AbhATA4Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jan 2021 19:56:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394941AbhASNxH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 08:53:07 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D38C061573;
-        Tue, 19 Jan 2021 05:52:04 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id w5so19788262wrm.11;
-        Tue, 19 Jan 2021 05:52:04 -0800 (PST)
+        with ESMTP id S1725842AbhATA4O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 19:56:14 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C922C0613D6
+        for <linux-usb@vger.kernel.org>; Tue, 19 Jan 2021 16:55:27 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id p20so4899623vsq.7
+        for <linux-usb@vger.kernel.org>; Tue, 19 Jan 2021 16:55:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Rdm/biE4a+mlahQDle49aMaEn2RSuJRihRF9ov5TZxY=;
-        b=tEPNj6jc4dDBVRN92ctn+19OOJlId09PKo+cbreOHGSTV52nPQG79Iq7VltOLAuL54
-         RwFuw2ciF8ad7tqWu4FoK1X3RSaOxIr7uRyJ7JTT9Wy+mbC9jnNePKXLYj1ndOHvIYG9
-         KTGek18TQo0jLucnu3PHmpoa/jDFw3spAIGr+SXoX8w+rYPuXfE31c74Cqq/l7hpiBuI
-         /N8XnQrFIFGFW2gM7LzWw7wv3AYkg2BXkWOAbdm4mAcEJhDsjZA6dUY5YOcF93CKkhzR
-         rBqxnqEPE90Swfla6YqCWizwq3Te8qkoXvejSA85Y1nyiTG8DNVFwmo26O+0+TUCz8an
-         C9nw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Mw49I/WjqXHtAn1nksIvlFE5Cbb/b93wT+2o+eq9Aao=;
+        b=QXU92RzdHm8WhBLTML/i6tbQedBOpmYB9c55gZtQ/k/5V8xEnPhpQuATlxhBWvsHKr
+         v+YOMpiO+AW1MbT5zIp8BjQt9+R9YN/XkLmzTDyt3BAK3iE0wHRd3PYM3FiDoPtKihPt
+         boovePotfeu3UNTqW5THBj44uJ4qfBgGmlLkc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Rdm/biE4a+mlahQDle49aMaEn2RSuJRihRF9ov5TZxY=;
-        b=URFFUaTSpc/tnO5tJidsjSN/BCmvJP9MXtXC//6VktD9oSFT5+HJOGYd2xBn43hjkF
-         qH9XFzLFgXKmgqPS6Gl37Z4SyJPCGJgw7bvzp2vu8Bva1Rgd44NZAfPFDtQ5uX1VLXHM
-         oRflI2lGLl4vZK8CfZSKpUdQ0dbxGZl4Qsxvtc2rz2cQnc/YMgkDIdv1z1FK8KSGcGwH
-         UPpNgwoqzXrMEV/V2aJASJY9rJ0IEbYQcCEMrNVTGRYhQHmjz8weapGoRynm+Yu3c1Z/
-         ltvZa65ThJ+LBOpdvNj9eMsIa/9Q3RlWK6a520j/GJi9MEyBbZlMcpVoiCMpJGZ81Gkq
-         7NkA==
-X-Gm-Message-State: AOAM530+oRlWG6JD49Jpuv/XffrNjkv7yDJJEEIpvgmwqS1Bvgq7gkWS
-        gW8mKUS0Zu/CebcmIlXTwLo=
-X-Google-Smtp-Source: ABdhPJws7vLn4dGCoaQ8qzPypxg+WVQRz6mwaCJ75KdkEoJ6PUn8D4EnMC/dQmsxJbHyAyppnbaLQw==
-X-Received: by 2002:a5d:4712:: with SMTP id y18mr4595230wrq.229.1611064323159;
-        Tue, 19 Jan 2021 05:52:03 -0800 (PST)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id b133sm5317905wme.33.2021.01.19.05.52.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 05:52:01 -0800 (PST)
-Date:   Tue, 19 Jan 2021 14:52:00 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     JC Kuo <jckuo@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, robh@kernel.org, jonathanh@nvidia.com,
-        kishon@ti.com, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, nkristam@nvidia.com
-Subject: Re: [PATCH v6 04/15] phy: tegra: xusb: tegra210: Do not reset UPHY
- PLL
-Message-ID: <YAbkABc68aMTvIyr@ulmo>
-References: <20210119085546.725005-1-jckuo@nvidia.com>
- <20210119085546.725005-5-jckuo@nvidia.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Mw49I/WjqXHtAn1nksIvlFE5Cbb/b93wT+2o+eq9Aao=;
+        b=LRxcEYdeoUQbtXLFAjl5rwC/qdmh7dgaypoPhgXG1iFpUWhzwBLgXTobWJcVJ9tBSk
+         LWI/PUSpKamEGppGrq/0dSS11zEKuKAN2aWZ+ZQEL3u4j96r0x8eryD6v3352GDEsADk
+         gnUSDHJwj8xUWBNlQ809xD7Muh+EJR69ntawAeb1Z4f0EuAsAX5ZJocCeJtGvMYmBfzk
+         q5y5/KcKBFQhGYPHAc+XkvUDcj8vdOUiZHdTepmnfVct2qz98CybkYRG+wBzPvTHiauX
+         OphCxz3oGtRADWhpKTB1m/o2N5i940FWXRbgGq2Th2qSJ5YXWI2VnM9j5YRZ1WEL1Ojr
+         cN8w==
+X-Gm-Message-State: AOAM531q8w8YgFBhzBG5IVZUoQd8HOljFbzvqUMZSMO1COHVlLM+utwV
+        /BWDSWg+9//ki1nzg+eVFsUfSYkyt609i9ShtBZwWq+67Og=
+X-Google-Smtp-Source: ABdhPJyGD9XHA9hSrZna7yVfHYBJ2SCRkroR+gd9m1y0xVyN/Eand4LjtS3RAVL7/xKPuBQ5ve/SsqTt781JmAnSxZs=
+X-Received: by 2002:a05:6102:3205:: with SMTP id r5mr4689659vsf.36.1611104126639;
+ Tue, 19 Jan 2021 16:55:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mjN8PrBnL8xAik0+"
-Content-Disposition: inline
-In-Reply-To: <20210119085546.725005-5-jckuo@nvidia.com>
-User-Agent: Mutt/2.0.4 (26f41dd1) (2020-12-30)
+References: <20210116052623.3196274-1-grundler@chromium.org>
+ <20210116052623.3196274-3-grundler@chromium.org> <20210119134558.5072a1cc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210119134558.5072a1cc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Grant Grundler <grundler@chromium.org>
+Date:   Wed, 20 Jan 2021 00:55:15 +0000
+Message-ID: <CANEJEGsd8c1RYnKXsWOhLFDOh89EXAUtLUPMrbWf+2+yin5kHw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] net: usb: cdc_ncm: don't spew notifications
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Grant Grundler <grundler@chromium.org>,
+        Oliver Neukum <oliver@neukum.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Jan 19, 2021 at 9:46 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Fri, 15 Jan 2021 21:26:23 -0800 Grant Grundler wrote:
+> > RTL8156 sends notifications about every 32ms.
+> > Only display/log notifications when something changes.
+> >
+> > This issue has been reported by others:
+> >       https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1832472
+> >       https://lkml.org/lkml/2020/8/27/1083
+> >
+> > ...
+> > [785962.779840] usb 1-1: new high-speed USB device number 5 using xhci_hcd
+> > [785962.929944] usb 1-1: New USB device found, idVendor=0bda, idProduct=8156, bcdDevice=30.00
+> > [785962.929949] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=6
+> > [785962.929952] usb 1-1: Product: USB 10/100/1G/2.5G LAN
+> > [785962.929954] usb 1-1: Manufacturer: Realtek
+> > [785962.929956] usb 1-1: SerialNumber: 000000001
+> > [785962.991755] usbcore: registered new interface driver cdc_ether
+> > [785963.017068] cdc_ncm 1-1:2.0: MAC-Address: 00:24:27:88:08:15
+> > [785963.017072] cdc_ncm 1-1:2.0: setting rx_max = 16384
+> > [785963.017169] cdc_ncm 1-1:2.0: setting tx_max = 16384
+> > [785963.017682] cdc_ncm 1-1:2.0 usb0: register 'cdc_ncm' at usb-0000:00:14.0-1, CDC NCM, 00:24:27:88:08:15
+> > [785963.019211] usbcore: registered new interface driver cdc_ncm
+> > [785963.023856] usbcore: registered new interface driver cdc_wdm
+> > [785963.025461] usbcore: registered new interface driver cdc_mbim
+> > [785963.038824] cdc_ncm 1-1:2.0 enx002427880815: renamed from usb0
+> > [785963.089586] cdc_ncm 1-1:2.0 enx002427880815: network connection: disconnected
+> > [785963.121673] cdc_ncm 1-1:2.0 enx002427880815: network connection: disconnected
+> > [785963.153682] cdc_ncm 1-1:2.0 enx002427880815: network connection: disconnected
+> > ...
+> >
+> > This is about 2KB per second and will overwrite all contents of a 1MB
+> > dmesg buffer in under 10 minutes rendering them useless for debugging
+> > many kernel problems.
+> >
+> > This is also an extra 180 MB/day in /var/logs (or 1GB per week) rendering
+> > the majority of those logs useless too.
+> >
+> > When the link is up (expected state), spew amount is >2x higher:
+> > ...
+> > [786139.600992] cdc_ncm 2-1:2.0 enx002427880815: network connection: connected
+> > [786139.632997] cdc_ncm 2-1:2.0 enx002427880815: 2500 mbit/s downlink 2500 mbit/s uplink
+> > [786139.665097] cdc_ncm 2-1:2.0 enx002427880815: network connection: connected
+> > [786139.697100] cdc_ncm 2-1:2.0 enx002427880815: 2500 mbit/s downlink 2500 mbit/s uplink
+> > [786139.729094] cdc_ncm 2-1:2.0 enx002427880815: network connection: connected
+> > [786139.761108] cdc_ncm 2-1:2.0 enx002427880815: 2500 mbit/s downlink 2500 mbit/s uplink
+> > ...
+> >
+> > Chrome OS cannot support RTL8156 until this is fixed.
+>
+> > @@ -1867,7 +1876,8 @@ static void cdc_ncm_status(struct usbnet *dev, struct urb *urb)
+> >                * USB_CDC_NOTIFY_NETWORK_CONNECTION notification shall be
+> >                * sent by device after USB_CDC_NOTIFY_SPEED_CHANGE.
+> >                */
+> > -             usbnet_link_change(dev, !!event->wValue, 0);
+> > +             if (netif_carrier_ok(dev->net) != !!event->wValue)
+> > +                     usbnet_link_change(dev, !!event->wValue, 0);
+> >               break;
+> >
+> >       case USB_CDC_NOTIFY_SPEED_CHANGE:
+>
+> Thanks for the patch, this looks like an improvement over:
+>
+> 59b4a8fa27f5 ("CDC-NCM: remove "connected" log message")
+>
+> right? Should we bring the "network connection: connected" message back?
 
---mjN8PrBnL8xAik0+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes, we can revert Roland's patch. I didn't see that one.
 
-On Tue, Jan 19, 2021 at 04:55:35PM +0800, JC Kuo wrote:
-> Once UPHY PLL hardware power sequencer is enabled, do not assert
-> reset to PEX/SATA PLLs, otherwise UPHY PLL operation will be broken.
-> This commit removes reset_control_assert(pcie->rst) and
-> reset_control_assert(sata->rst) from PEX/SATA UPHY disable procedure.
->=20
-> Signed-off-by: JC Kuo <jckuo@nvidia.com>
-> ---
-> v6:
->    no change
-> v5:
->    no change
-> v4:
->    no change
-> v3:
->    new, was a part of "phy: tegra: xusb: Rearrange UPHY init on Tegra210"
->=20
->  drivers/phy/tegra/xusb-tegra210.c | 2 --
->  1 file changed, 2 deletions(-)
->=20
-> diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-t=
-egra210.c
-> index 4dc9286ec1b8..9bfecdfecf35 100644
-> --- a/drivers/phy/tegra/xusb-tegra210.c
-> +++ b/drivers/phy/tegra/xusb-tegra210.c
-> @@ -502,7 +502,6 @@ static void tegra210_pex_uphy_disable(struct tegra_xu=
-sb_padctl *padctl)
->  	if (--pcie->enable > 0)
->  		return;
-> =20
-> -	reset_control_assert(pcie->rst);
->  	clk_disable_unprepare(pcie->pll);
->  }
-> =20
-> @@ -739,7 +738,6 @@ static void tegra210_sata_uphy_disable(struct tegra_x=
-usb_padctl *padctl)
->  	if (--sata->enable > 0)
->  		return;
-> =20
-> -	reset_control_assert(sata->rst);
->  	clk_disable_unprepare(sata->pll);
->  }
+> Do you want all of these patches to be applied to 5.11 and backported?
 
-Isn't this going to break things between here and patch 5 where the
-hardware sequencer is enabled? If so, it might be better to move this
-into patch 5 so that things stay functional and bisectible.
+Yes to 5.11. Only the 3rd one really needs to be applied to stable kernels.
 
-Thierry
+> Feels to me like the last one is a fix and the rest can go into -next,
+> WDYT?
 
---mjN8PrBnL8xAik0+
-Content-Type: application/pgp-signature; name="signature.asc"
+Exactly.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmAG4/0ACgkQ3SOs138+
-s6FRdBAAkdDGGqqOByCqXlI4BlCDvaCGH7gokubynuGUXTo+SPMkd//DHFmwPN6A
-7X081GnqqOEFdpEXJKFwPae6K2VX2JAT/q/wnGJLXDcDI2yw47YSyNbywux/aAo3
-RO0Ws8OkhFtLXzRx7y/ljYEC4rxf+eqtGEyZWjMDVt7HRTvT8cR/DfTyZFW5rB8l
-YGs3rlUqq9gtCKoY2YdrCWYveBDfEzug3IQ7ZYZUppu0r9t+Dmc/vjMkr53wciA6
-pRmkzisoO/3pjDHMv0kTVBtTs2EGCRMGN59LICXQyegLI2HtLloLsqBdAbet+vru
-JaaGFuAnrpD/D8GB83hZJkGuYIrAODd2RYuBJaima+V8VDGp6pwrvplcSSacC+61
-pAD6yy6ZWzoGdlSMp1TlG5mmhSy6Oyo2xWNdasezLOJU8SX3BjfuF0+E7NyRticC
-dL/kwTsO/rbLTx2oNytjPrvaClogBxTUWTOVyhUR6p6MBCYWqC5W08KuUQKvpj8x
-TGMQ5S4DaoDlptvDl92EneA16QLpwOsNalzvu5n+bMepQxlaBIbRcmMQtwXVM/am
-Du2XP/aFHvPfQPUIezFFDF3lRfurC5afAw8r9TNI8ElHfwasPdH2equiVK5Fqn7a
-XxR1qShC3WZUTBBsnOeG9iRJhFrssk3+4hE9PEfUAdN3MGE5iDE=
-=YdRC
------END PGP SIGNATURE-----
-
---mjN8PrBnL8xAik0+--
+Thanks!
+grant
