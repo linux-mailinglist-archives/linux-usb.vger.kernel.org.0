@@ -2,115 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B002FD467
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 16:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 949322FD5FD
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 17:49:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733099AbhATPmx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Jan 2021 10:42:53 -0500
-Received: from smtp.bonedaddy.net ([45.33.94.42]:42494 "EHLO
-        smtp.bonedaddy.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732906AbhATPkU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jan 2021 10:40:20 -0500
-Received: from [192.168.1.209] (unknown [49.190.168.235])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pabs3@bonedaddy.net)
-        by smtp.bonedaddy.net (Postfix) with ESMTPSA id AA010180031;
-        Wed, 20 Jan 2021 10:39:32 -0500 (EST)
-Authentication-Results: smtp.bonedaddy.net; dmarc=fail (p=none dis=none) header.from=bonedaddy.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bonedaddy.net;
-        s=mail; t=1611157175;
-        bh=Ge/SXjcXwEveYoaZLhUHiCTOeoWvk+GLGGVqQVDCUOk=;
-        h=Subject:From:To:Cc:In-Reply-To:References:Date;
-        b=O8SgIVfENLLaUjAgAqmB0ilggqvcXqxnvJ1sHUl86FAxCXKY72bno/MWhZqPWstn4
-         peLdZa6cJzDxk45rftzCLbR0mvHPUyf7J+grcAWrZkdz/9F54jAXWPAr+Ny+MzPZjb
-         TvAUhvqAJQbPiTCHA63P5Giu53EknKlSUqL6DEt8E2Wk8CpwP6wNOgWYYb4BghYA3w
-         gEn2Upse2tMvcYvmvgwDuCb3u4ohi0LTLkoypn5fPCx3rYBcbhg9qdNgjkh4UjExdt
-         TK1QcK+PXJkrS4QAkyDB2/ia2hcVF3p60JFfnG+DIwMvYRHvxl7qhpgFQjVr1tiOkV
-         FtOuE3gMp5VuA==
-Message-ID: <42c4ad2fa7709312b7ac7bc682f05ed1a3edc9a7.camel@bonedaddy.net>
-Subject: Re: proposal: move Linux userspace USB gadget projects to
- linux-usb GitHub organisation?
-From:   Paul Wise <pabs3@bonedaddy.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Krzysztof Opasiak <k.opasiak@samsung.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Karol Lewandowski <k.lewandowsk@samsung.com>,
-        linux-usb@vger.kernel.org
-In-Reply-To: <YAhKAiz2U9KQWQPE@kroah.com>
-References: <c38162833d1c8fede734e41eb5ce23cf393d6555.camel@bonedaddy.net>
-         <YAhKAiz2U9KQWQPE@kroah.com>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-uzKUI9Rf0blnipBuP3BC"
-Date:   Wed, 20 Jan 2021 23:39:22 +0800
+        id S2391655AbhATQsG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Jan 2021 11:48:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54566 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391641AbhATQrs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jan 2021 11:47:48 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D497C0613C1;
+        Wed, 20 Jan 2021 08:47:04 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id m6so14857964pfk.1;
+        Wed, 20 Jan 2021 08:47:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rI55C5R2Ib+0Rd7/giiUezyr291JCSLEI1Z384+KvVY=;
+        b=s1zHKUfXoRjGrKTJJxaYl7s7Ha8O7YCs7O1775EhIt7rVEMQ78+MGJysUShJ8Qo+31
+         uFfp8GS6DUZt2xQcl7//37wP3jc2S2aUNachb9KtLvr7GgLTq/UNr9fJGqomPIUS/URP
+         EsGWzAnWDz9a7K3T1z+9+oGHCs8r6ZmoWnDXYfCuU/b8yIrX2YI/osDfpM1Aed5CDBwt
+         yIpQPmWnRoK//R9/1bG+PR/EhMmrpH29k29Mp1wj5mn0Iw4xd2p/NpJBG5snV0ZRsvmc
+         X/YyeCPdm9K7BBUWuMTeBf/x9SWyHOZV2LvVX8SthGkkMmJERPKWHa69v8yxL+j6cskv
+         5+9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rI55C5R2Ib+0Rd7/giiUezyr291JCSLEI1Z384+KvVY=;
+        b=OOCmXKRsFQPjauS7I89IN/ApLiNXgen2ojAmYqTtbLfmiGzW8o69J04QKHhcdTpz8m
+         ke/t2Lv6PgfjGT1C21b/iTpUTtLwwoDmKafsO7hSBjc/YemfbNWPecaRFrwqTOjqfOXP
+         0cj7Jiu6iRIzcoNLzyqDWewL/YvAYHFCJq5bRbFCdcGmeze/0qnbzDsRJGVgcOzLOJhx
+         3+tIWYTruE2eF8NzkMmoFV/j6qpIorzekEqWXQ9yeJndlax+VmzyDipTqo7195YsIOUU
+         SBY9cPzhux0Eo3UfxX5eEhI11qZcx4HNWqutYUl/aj30awoo/7Z0eg5Mz7EUsovcROn9
+         HtGg==
+X-Gm-Message-State: AOAM530XT0veDwLw3uW79gQXm/ErqsC75HZdj92BbeO2JuzwsBefLN2X
+        VEtZ3o7NP6CuS0lGBQTutUrqjPx759KuMP8bQKw=
+X-Google-Smtp-Source: ABdhPJyrMn3IRyo0TyefSx6BpNfLQtd9Ybt6FKSJMpt+UY+Cd3SudbChqJoPM1x0xgoyhDn+KIm2H6Ni6STKEp89b1c=
+X-Received: by 2002:a62:445:0:b029:19c:162b:bbef with SMTP id
+ 66-20020a6204450000b029019c162bbbefmr9882734pfe.40.1611161223528; Wed, 20 Jan
+ 2021 08:47:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Evolution 3.38.2-1 
+References: <20210115211543.33563-1-alcooperx@gmail.com> <20210115211543.33563-3-alcooperx@gmail.com>
+ <CAHp75VdQPQK8jTF3QDKx6mF1QzOg-qiuHrTiojnWn7GskokfoA@mail.gmail.com> <71d58a3e-2707-69d7-8074-c67235912e06@gmail.com>
+In-Reply-To: <71d58a3e-2707-69d7-8074-c67235912e06@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 20 Jan 2021 18:47:52 +0200
+Message-ID: <CAHp75VfNumFBwbytCuA_YK1w-+kN20vRF+GhogtU+DDG3EB_7g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] serial: 8250: Add new 8250-core based Broadcom STB driver
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Al Cooper <alcooperx@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Jan 19, 2021 at 8:16 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+> On 1/19/2021 7:21 AM, Andy Shevchenko wrote:
+> > On Fri, Jan 15, 2021 at 11:19 PM Al Cooper <alcooperx@gmail.com> wrote:
+> >>
+> >> Add a UART driver for the new Broadcom 8250 based STB UART. The new
+> >> UART is backward compatible with the standard 8250, but has some
+> >> additional features. The new features include a high accuracy baud
+> >> rate clock system and DMA support.
+> >>
+> >> The driver will use the new optional BAUD MUX clock to select the best
+> >> one of the four master clocks (81MHz, 108MHz, 64MHz and 48MHz) to feed
+> >> the baud rate selection logic for any requested baud rate.  This allows
+> >> for more accurate BAUD rates when high speed baud rates are selected.
+> >>
+> >> The driver will use the new UART DMA hardware if the UART DMA registers
+> >> are specified in Device Tree "reg" property. The DMA functionality can
+> >> be disabled on kernel boot with the argument:
+> >> "8250_bcm7271.disable_dma=Y".
+> >>
+> >> The driver also set the UPSTAT_AUTOCTS flag when hardware flow control
+> >> is enabled. This flag is needed for UARTs that don't assert a CTS
+> >> changed interrupt when CTS changes and AFE (Hardware Flow Control) is
+> >> enabled.
+> >>
+> >> The driver also contains a workaround for a bug in the Synopsis 8250
+> >> core. The problem is that at high baud rates, the RX partial FIFO
+> >> timeout interrupt can occur but there is no RX data (DR not set in
+> >> the LSR register). In this case the driver will not read the Receive
+> >> Buffer Register, which clears the interrupt, and the system will get
+> >> continuous UART interrupts until the next RX character arrives. The
+> >> fix originally suggested by Synopsis was to read the Receive Buffer
+> >> Register and discard the character when the DR bit in the LSR was
+> >> not set, to clear the interrupt. The problem was that occasionally
+> >> a character would arrive just after the DR bit check and a valid
+> >> character would be discarded. The fix that was added will clear
+> >> receive interrupts to stop the interrupt, deassert RTS to insure
+> >> that no new data can arrive, wait for 1.5 character times for the
+> >> sender to react to RTS and then check for data and either do a dummy
+> >> read or a valid read. Sysfs error counters were also added and were
+> >> used to help create test software that would cause the error condition.
+> >> The counters can be found at:
+> >> /sys/devices/platform/rdb/*serial/rx_bad_timeout_late_char
+> >> /sys/devices/platform/rdb/*serial/rx_bad_timeout_no_char
+> >
+> > Brief looking into the code raises several questions:
+> >  - is it driver from the last decade?
+>
+> Work on this driver started back in 2018, that was indeed the last decade.
+>
+> >  - why it's not using what kernel provides?
+> >  - we have a lot of nice helpers:
+> >    - DMA Engine API
+>
+> Not sure this makes sense, given that the DMA hardware that was added to
+> this UART block is only used by the UART block and no other pieces of HW
+> in the system, nor will they ever be. Not sure it makes sense to pay the
+> cost of an extra indirection and subsystem unless there are at least two
+> consumers of that DMA hardware to warrant modeling it after a dmaengine
+> driver. I also remember that Al researched before whether 8250_dma.c
+> could work, and came to the conclusion that it would not, but I will let
+> him comment on the specifics.
 
---=-uzKUI9Rf0blnipBuP3BC
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+I see. In any case I still believe that the driver can be shrinked by
+a notable amount of lines.
 
-On Wed, 2021-01-20 at 16:19 +0100, Greg Kroah-Hartman wrote:
+> >    - BIT() and GENMASK() macros
+> >    - tons of different helpers like regmap API (if you wish to dump
+> > registers via debugfs)
+> >
+> > Can you shrink this driver by 20-30% (I truly believe it's possible)
+> > and split DMA driver to drivers/dma (which may already have something
+> > similar there)?
+>
+> See previous response.
 
-> If you can get the "owners" of these repos to agree, than sure.
 
-Excellent, please invite these GitHub users to the linux-usb admin
-list, so that they can move the projects if they want to.
-
-Matt Porter: @ohporter (for libusbg)
-Krzysztof Opasiak: @kopasiak (for libusbgx, gt)
-Karol Lewandowski: @lmctl (for gadgetd)
-Andrzej Pietrasiewicz: @andrzejtp (for cmtp-responder)
-
-If you would like to invite me too, I'm @pabs3 on GitHub.
-
-I expect some other folks on linux-usb might like to join too.
-
-> But we should work out the libusbg and libusbx issue, which is really
-> the "latest" one?
-
-libusbgx is a fork of libusbg and is more recently updated.
-
-I'd suggest to also move libusbg and archive it (make it read-only).
-
-> If you are moving the repos, why do you care about the issue and pull
-> request database anymore?  Will they just not end up going away?
-
-When moving projects (as opposed to forking them), GitHub moves
-everything along with the git repo, including issues and pull requests.
-
---=20
-bye,
-pabs
-
-https://bonedaddy.net/pabs3/
-
---=-uzKUI9Rf0blnipBuP3BC
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEYQsotVz8/kXqG1Y7MRa6Xp/6aaMFAmAITqoACgkQMRa6Xp/6
-aaM7sBAAgksO12wM4TTQCH3Qq5BoAf5OtBC8glQhq005p6ceYlhx25WqLMTl+dQ8
-U1AaU6dLVTiU/1aaJ2LtYYQe0k8uqRSyMSAuX9KQz3mFSEO/Qmqs98j4T9mLLb7Y
-mrlRtAo79tEaOejnvewK3SlFwTdCQFAVqso6BmQiuDKKXsswuB03SCBnLV1WmYh2
-4FhRBpAhuudx13f2CsT096Jl+xzCFq4d4/Rq1v6NB7ZGwL4Zl3oIc3/nGqjcSNB/
-N5yYq059ov3d0qgFT372qxkNJ12uvGjqQ+jqOjMlevIRwr3paTk0wBY9PnMWyKYz
-w1AWWKf/bCsumtOiYepjo1aBdBtiC5KVoJ4ZloCpog4+d4XUYAB3m0O83+algEHF
-SPU0LQSGHgXIzFPWXdeNED0gOV9Um6X32NeAy0aXZYOWZlUiVV49/6XHnt06lzJv
-v+LAc/vOnNE3e7O/jvc6gznHHEBgN+9j9cdLx1MEIJLl/KtbfnCYM9KeHmxJ63qf
-0UsLoo9iuctVllUXvDTlMknSWJB46eVnnyZZA2icqMM/NuwAku2RDtNHiUjqMshM
-z1riEu6i41Q9S6S7qsyHABlWZA91bRpod5Wc4PLnL64A+rdlllHi0NryA4U2Z0my
-gFpbJhWa6qQS0HJABnhf6MDJpcYmmKfTzj6/FNUHM4VJyR4AADc=
-=meMF
------END PGP SIGNATURE-----
-
---=-uzKUI9Rf0blnipBuP3BC--
-
+-- 
+With Best Regards,
+Andy Shevchenko
