@@ -2,92 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC0F2FC8CA
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 04:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A089D2FC97D
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 04:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730076AbhATDXV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jan 2021 22:23:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728131AbhATDXR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 22:23:17 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C29C061757;
-        Tue, 19 Jan 2021 19:22:37 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id e67so9536517ybc.12;
-        Tue, 19 Jan 2021 19:22:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=f9pMfHMJFLWFvKkxl3fDIxRex/hLf2XjpUacI+mZUlo=;
-        b=Y74qXsQE7DVaV2IaNQj6xHpHJyEOF2ivRh39VoknvHawJjTV3KMMtw2Zu26MXjH9V4
-         IQl0fm9vXz29qN4pKZVPWCbn8RY79Udnhfp4q3bmpixPzX0pRYkfzjj/KdyZv8GYMwf6
-         leD5Y+AS9fxDidVQ+wtTo06S5TWlTVlD/By0C4VKlj36a6aVD/6mW/j+CNyhbV3/7FZe
-         uEyYsEUIqiQx/7Fr9rFoOzPlwzCl98vpGt4wMbpCbEsJOeN/vMU0BhmwqYj307cNqWEX
-         vEWfkgDy2Osr3dv3yWSl2yKclvnYYY9cEovrPVbHaspDcq3EuwjfU7jS7Y69RXwI5vcK
-         gsnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=f9pMfHMJFLWFvKkxl3fDIxRex/hLf2XjpUacI+mZUlo=;
-        b=HEoDerz19yMzg5PVBLZhtOntX0HTAU6oArrkAdpOocLQvHKrYOYeBtm++Qbli58D7a
-         z4fwnUUj1KIdzcEABDMJyT10Dnqt+9qk8y7w+ozxBhsGH8K4kwAlL4Luy/s+81QdI4Yf
-         CNOz/Ajh5IYNElj3MRA3jcFhPxB9Neis3E6Ru1BEDthfoJAEvlTwwy0+ph5cCqRXjd35
-         EQpvWP4kEE/MVTJbdlV3JXQDk4YLhJmtL/Nd4VU/lGsMSP3G6GflckIt1kgeWHl7aiJB
-         jHOf0ThZft4cdUs7V0vGdTLV9XJQWRCB2lw2r+UOw8sIEZMsnLB542VbsXcVus7yIEMD
-         RgvQ==
-X-Gm-Message-State: AOAM5319kkuiz2OAuXaqzHMr9C+bCCjHFQof10CI51NFu+A4YcgXxk9I
-        1ThVBGLJXyPefgp8xilGYymZtq0xH/4fjVMi+m0=
-X-Google-Smtp-Source: ABdhPJzpBTZBCK5+V+Eko13BUTOyrdrdSVMlL6YqRHttJSTJr1LKYUuJjJUHuiZ75zl5fegkOpEfdFtTtwwqJ2/R9Pg=
-X-Received: by 2002:a25:688c:: with SMTP id d134mr10841417ybc.477.1611112956721;
- Tue, 19 Jan 2021 19:22:36 -0800 (PST)
+        id S1729234AbhATC22 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jan 2021 21:28:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47348 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729984AbhATB2N (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 Jan 2021 20:28:13 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6E27523331;
+        Wed, 20 Jan 2021 01:26:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611105990;
+        bh=7IpY0UwZe9ppe5KB7Y5C665xMW42lX2p9h6Dq1MNHvE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=K1C9l5/jeqE88BsrnN6KvIkR5lZymu02lfbWOdJfI8M4yyMcI1Yup1GL9K7hwJ2uk
+         lr/5hJprPbaNumciq9/NTp/FXFm25P6ccYlS3OsqmmGAh6LarDGHn0B9tMALrnGOrY
+         vqn5jfIg3mGWyBi9JfVfMkonX+qcHFBu/Vl5h5gvHlYlu6bZ2AI3Jgf9cIa2T3EnI3
+         IHGHiKXrhh7q616suzGic7yA+RMQspuqEhwgIgYipB1g1Z3GqhYz4mGYgusJCa0C9B
+         2ndXGAEPJ063KnCQ7fazoGRawV91B3HuOFJAXTJ86RCscmGUS4BBVukcwQe5wuDEhl
+         BEDWF5iyJyFUg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Leon Schuermann <leon@is.currently.online>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 21/45] r8152: Add Lenovo Powered USB-C Travel Hub
+Date:   Tue, 19 Jan 2021 20:25:38 -0500
+Message-Id: <20210120012602.769683-21-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210120012602.769683-1-sashal@kernel.org>
+References: <20210120012602.769683-1-sashal@kernel.org>
 MIME-Version: 1.0
-From:   =?UTF-8?B?5oWV5Yas5Lqu?= <mudongliangabcd@gmail.com>
-Date:   Wed, 20 Jan 2021 11:22:11 +0800
-Message-ID: <CAD-N9QUVDpHjSwZa+w3Zxx_Pn5ZrBKuhGhbg9PoyR=xbrMb88g@mail.gmail.com>
-Subject: =?UTF-8?Q?=E2=80=9CKASAN=3A_null=2Dptr=2Dderef_Write_in_event=5Fhandler=E2=80=9D_a?=
-        =?UTF-8?Q?nd_=22KASAN=3A_null=2Dptr=2Dderef_Write_in_vhci=5Fshutdown=5Fconnection=22?=
-        =?UTF-8?Q?_should_share_the_same_root_cause=2E?=
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org, shuah@kernel.org,
-        valentina.manea.m@gmail.com, hdanton@sina.com,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzkaller <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear kernel developers,
+From: Leon Schuermann <leon@is.currently.online>
 
-I found that on the syzbot dashboard, =E2=80=9CKASAN: null-ptr-deref Write =
-in
-event_handler=E2=80=9D[1] and
-"KASAN: null-ptr-deref Write in vhci_shutdown_connection" () should
-share the same root cause.
+[ Upstream commit cb82a54904a99df9e8f9e9d282046055dae5a730 ]
 
+This USB-C Hub (17ef:721e) based on the Realtek RTL8153B chip used to
+use the cdc_ether driver. However, using this driver, with the system
+suspended the device constantly sends pause-frames as soon as the
+receive buffer fills up. This causes issues with other devices, where
+some Ethernet switches stop forwarding packets altogether.
 
-The reasons for the above statement:
-1) the stack trace is the same, and this title difference is due to
-the inline property of "vhci_shutdown_connection";
-2) their PoCs are the same as each other.
+Using the Realtek driver (r8152) fixes this issue. Pause frames are no
+longer sent while the host system is suspended.
 
-If you can have any issues with this statement or our information is
-useful to you, please let us know. Thanks very much.
+Signed-off-by: Leon Schuermann <leon@is.currently.online>
+Tested-by: Leon Schuermann <leon@is.currently.online>
+Link: https://lore.kernel.org/r/20210111190312.12589-2-leon@is.currently.online
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/cdc_ether.c | 7 +++++++
+ drivers/net/usb/r8152.c     | 1 +
+ 2 files changed, 8 insertions(+)
 
-[1] KASAN: null-ptr-deref Write in event_handler -
-https://syzkaller.appspot.com/bug?id=3D28cccdd18b4bb8670d077937fb8d4849dca9=
-6230
-[2] KASAN: null-ptr-deref Write in vhci_shutdown_connection -
-https://syzkaller.appspot.com/bug?id=3Dc21c07f3d51769405e8efc027bdb927515dc=
-c7d6
+diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+index 8c1d61c2cbacb..6aaa0675c28a3 100644
+--- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -793,6 +793,13 @@ static const struct usb_device_id	products[] = {
+ 	.driver_info = 0,
+ },
+ 
++/* Lenovo Powered USB-C Travel Hub (4X90S92381, based on Realtek RTL8153) */
++{
++	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0x721e, USB_CLASS_COMM,
++			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
++	.driver_info = 0,
++},
++
+ /* ThinkPad USB-C Dock Gen 2 (based on Realtek RTL8153) */
+ {
+ 	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0xa387, USB_CLASS_COMM,
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index b1770489aca51..88f177aca342e 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -6893,6 +6893,7 @@ static const struct usb_device_id rtl8152_table[] = {
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7205)},
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x720c)},
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7214)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x721e)},
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0xa387)},
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041)},
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff)},
+-- 
+2.27.0
 
---
-My best regards to you.
-
-     No System Is Safe!
-     Dongliang Mu
