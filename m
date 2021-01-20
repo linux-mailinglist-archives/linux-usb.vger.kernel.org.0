@@ -2,110 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DF62FC703
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 02:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA612FC743
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 02:58:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728587AbhATBn4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jan 2021 20:43:56 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:8876 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726023AbhATBnw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 20:43:52 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B60078aaa0000>; Tue, 19 Jan 2021 17:43:06 -0800
-Received: from [10.19.109.31] (172.20.145.6) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 20 Jan
- 2021 01:43:00 +0000
-Subject: Re: [PATCH v6 04/15] phy: tegra: xusb: tegra210: Do not reset UPHY
- PLL
-To:     Thierry Reding <thierry.reding@gmail.com>
-CC:     <gregkh@linuxfoundation.org>, <robh@kernel.org>,
-        <jonathanh@nvidia.com>, <kishon@ti.com>,
-        <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <nkristam@nvidia.com>
-References: <20210119085546.725005-1-jckuo@nvidia.com>
- <20210119085546.725005-5-jckuo@nvidia.com> <YAbkABc68aMTvIyr@ulmo>
-From:   JC Kuo <jckuo@nvidia.com>
-Organization: NVIDIA
-Message-ID: <f389ab2f-1ecf-9eb5-6897-f780a27f4fec@nvidia.com>
-Date:   Wed, 20 Jan 2021 09:42:57 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1727684AbhATB5F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jan 2021 20:57:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731431AbhATBvs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 20:51:48 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21984C061757;
+        Tue, 19 Jan 2021 17:51:08 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id m13so24169734ljo.11;
+        Tue, 19 Jan 2021 17:51:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=EOmNpRX8SEbQAJ9InTqMSNS2j7g0suVcBgq97tfbIbQ=;
+        b=I3qDBA9cDib9CkJzwuxF/g+0zMDc3JeLl4/2KThX16QQW/b9GqN6PeAwLvoWmhNgSr
+         yonfe7+Hp0cDnEFp19D5zWRQKycOsHRhVqsxYcGMFmiOBiH/nDUG0eRK9gPwHSrUg8cu
+         PPpxCmhNMLHm6IRN9FIr05AZpI8A1sDnubZp/fBN4qlEj3pOU4JOMUtkuHlv5krn4iqi
+         yBk7zYG29xoVqd20crDKnauAKeJu0NrapS/9fkYWCggiMIgI1Bya++HwZC/Kp+4uG2Lz
+         jfn5PVPSmwxUvAfLFj0nIL9dTU0/wmb6HsGGT8MM9I2o2k3Bl4nr191BGn3uYAV9LzX7
+         vPNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=EOmNpRX8SEbQAJ9InTqMSNS2j7g0suVcBgq97tfbIbQ=;
+        b=TiHmOQVFOLAiapjFOeWddrWOQKAeMx5+NjkqM6X9sRE7gsnYG42fqHRiIqL6UmMYnv
+         tPqK6/tqjCkKVrNss8iYJVnQlei3A8QP+1s+Xdz/QM2tPzymoq1hqjqAMWroDr7hh1pe
+         Kw6QIJJsrj2ZKcjt0V94GXn4vYhm4XvxW4DeQ4ZxDULDayynTJPF8zm1oBwEvjVnFXw2
+         ei4QWSYXSZSkr2n4zvLCVQbfufR3SxxeAlwbhGu8qI3ZL45W5HTpusOxBil5IPh2FGFz
+         R/mrOlgxIEuMcZdRaai1pL1KPO9w52+umHVE5Jj/2U6NzFsX3eBi7NgTBPQUcKDfYNPb
+         3teg==
+X-Gm-Message-State: AOAM532jOwDpTacEUuQKzxJx33f9dJhhT25htWgFkjo0PHJWHCDHGSP1
+        QvLlBVqQxlNmuyWlyvxhReGsNu+OcQTYzJBbV9BvPKQdeog=
+X-Google-Smtp-Source: ABdhPJygEfsArRDrh+JnpahiHFfQMmrfKhHFHuwAbP4alJJdACL3ihQ5Qh4sGJ6Cu8lTbQlN90Y6Ea5V6E77+v3Tbfc=
+X-Received: by 2002:a2e:a36a:: with SMTP id i10mr3159325ljn.342.1611107466601;
+ Tue, 19 Jan 2021 17:51:06 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YAbkABc68aMTvIyr@ulmo>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.20.145.6]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1611106986; bh=7ZWJjA3V1BT8uXEoBJb4nujxJszYGXToGqMzgsjGGFY=;
-        h=Subject:To:CC:References:From:Organization:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:Content-Type:Content-Language:
-         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-        b=Y0G9aiLxpNBJoGv63xS+8ysFT8PWHMqh+wxlTDSkRUzlwYbtHZSz9M876pF0JmHyn
-         WJfi7TVUl8oPq+nMtRK575C6RKbH1eJI9GuO4k7iGa9t9nw7jUWmk4/5jNPaSWnROq
-         BTCAbhkY5bmLt1AuiqqypRGjAGPyVNzqfjtz8sXKMabPBZi/QVGMRoFnwATyxgZaUR
-         m2OrSKX4xQHLIFSJm8gDmfDODNFaIfopdEXijBNGPwarAmajfIFOCRR6cYay36wT5+
-         a1NEJv9HYE3MAzmVpPP5aQvxie4zQvscRJEpS1+Yuu2F0nTUcE3dR3SmcacZi6kSxP
-         Mn62fT258b/XQ==
+References: <1610720001-15300-1-git-send-email-u0084500@gmail.com>
+ <1610720001-15300-2-git-send-email-u0084500@gmail.com> <20210119231058.GA2772032@robh.at.kernel.org>
+In-Reply-To: <20210119231058.GA2772032@robh.at.kernel.org>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Wed, 20 Jan 2021 09:50:55 +0800
+Message-ID: <CADiBU3_t5jozakQnD7Wuuj1pjumbXhW3P9kkWRqh5pG1pfi_Sw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] usb typec: tcpci: mt6360: Add vbus supply into
+ dt-binding description
+To:     Rob Herring <robh@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        matthias.bgg@gmail.com, Greg KH <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Rob Herring <robh@kernel.org> =E6=96=BC 2021=E5=B9=B41=E6=9C=8820=E6=97=A5 =
+=E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=887:11=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Fri, Jan 15, 2021 at 10:13:21PM +0800, cy_huang wrote:
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > Add external vbus source into dt-binding description.
+> >
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > ---
+> >  Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml | 7 ++=
++++++
+> >  1 file changed, 7 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc=
+.yaml b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
+> > index 1e8e1c2..b8d842b 100644
+> > --- a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
+> > @@ -26,6 +26,11 @@ properties:
+> >      items:
+> >        - const: PD_IRQB
+> >
+> > +  vbus-supply:
+> > +    description:
+> > +      Vbus source supply regulator.
+> > +    maxItems: 1
+>
+> vbus-supply is already in the 'connector' node, you don't need it here.
+>
+If not put here, 'regulator_get' only can follow the legacy way to get
+vbus regulator.
+Currently, there's no one to use the 'vbus-supply' property.
+From my understanding, the 'vbus-supply' is the chip level property,
+not connector type property.
 
-On 1/19/21 9:52 PM, Thierry Reding wrote:
-> On Tue, Jan 19, 2021 at 04:55:35PM +0800, JC Kuo wrote:
->> Once UPHY PLL hardware power sequencer is enabled, do not assert
->> reset to PEX/SATA PLLs, otherwise UPHY PLL operation will be broken.
->> This commit removes reset_control_assert(pcie->rst) and
->> reset_control_assert(sata->rst) from PEX/SATA UPHY disable procedure.
->>
->> Signed-off-by: JC Kuo <jckuo@nvidia.com>
->> ---
->> v6:
->>    no change
->> v5:
->>    no change
->> v4:
->>    no change
->> v3:
->>    new, was a part of "phy: tegra: xusb: Rearrange UPHY init on Tegra210"
->>
->>  drivers/phy/tegra/xusb-tegra210.c | 2 --
->>  1 file changed, 2 deletions(-)
->>
->> diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-tegra210.c
->> index 4dc9286ec1b8..9bfecdfecf35 100644
->> --- a/drivers/phy/tegra/xusb-tegra210.c
->> +++ b/drivers/phy/tegra/xusb-tegra210.c
->> @@ -502,7 +502,6 @@ static void tegra210_pex_uphy_disable(struct tegra_xusb_padctl *padctl)
->>  	if (--pcie->enable > 0)
->>  		return;
->>  
->> -	reset_control_assert(pcie->rst);
->>  	clk_disable_unprepare(pcie->pll);
->>  }
->>  
->> @@ -739,7 +738,6 @@ static void tegra210_sata_uphy_disable(struct tegra_xusb_padctl *padctl)
->>  	if (--sata->enable > 0)
->>  		return;
->>  
->> -	reset_control_assert(sata->rst);
->>  	clk_disable_unprepare(sata->pll);
->>  }
-> 
-> Isn't this going to break things between here and patch 5 where the
-> hardware sequencer is enabled? If so, it might be better to move this
-> into patch 5 so that things stay functional and bisectible.
-Hi Thierry,
-Yes, I will move it into patch 5.
-
-Thanks,
-JC
-
-> 
-> Thierry
-> 
+> > +
+> >    connector:
+> >      type: object
+> >      $ref: ../connector/usb-connector.yaml#
+> > @@ -38,6 +43,7 @@ required:
+> >    - compatible
+> >    - interrupts
+> >    - interrupt-names
+> > +  - vbus-supply
+> >
+> >  examples:
+> >    - |
+> > @@ -54,6 +60,7 @@ examples:
+> >            compatible =3D "mediatek,mt6360-tcpc";
+> >            interrupts-extended =3D <&gpio26 3 IRQ_TYPE_LEVEL_LOW>;
+> >            interrupt-names =3D "PD_IRQB";
+> > +          vbus-supply =3D <&otg_vbus>;
+> >
+> >            connector {
+> >              compatible =3D "usb-c-connector";
+> > --
+> > 2.7.4
+> >
