@@ -2,257 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA2D2FD73F
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 18:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6518D2FD741
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 18:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731826AbhATRf2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Jan 2021 12:35:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
+        id S1727472AbhATRff (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Jan 2021 12:35:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387639AbhATRbN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jan 2021 12:31:13 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D6FC0613CF
-        for <linux-usb@vger.kernel.org>; Wed, 20 Jan 2021 09:30:32 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id y4so20203345ybn.3
-        for <linux-usb@vger.kernel.org>; Wed, 20 Jan 2021 09:30:32 -0800 (PST)
+        with ESMTP id S2388426AbhATRdE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jan 2021 12:33:04 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DFCC061757;
+        Wed, 20 Jan 2021 09:32:24 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id l12so18646597wry.2;
+        Wed, 20 Jan 2021 09:32:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zzTrytClNmqxd6dOB7wUtDQ7R3F+Ze8lHkQnxGY3LGg=;
-        b=bO6o0pG7I0CncVS5sQnY8lx1Rt5AI9fFkKbTXiLmCMHy0lyOLbYLjNrHLfnoDL46BT
-         vv4CdVgWFUwtvCxgCjcHOMsf0Z7/dEdJ5wt08UicE2P2AN+LeJkNInVILFKXNgbiW3n6
-         /tbLkGKWumKo831zu1PNB17C81t2EbueU2Fhg=
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zJ8U2n9EhC/Pe2YwUO2F/4kmI3QBIUjaTX8upLa9w3s=;
+        b=MYc0Q/Zq7AL//XO6p0OK/0G943MaPYNWwje52d/36sV45V1Xtm1jSSKO2fo3OQ1yXy
+         fNMNvoGS2tTRXLr7cbSklGkqSvy5Jhynuo08E4dwXc1oE+DBgNtk0MBjA7tTrRuI+/lv
+         INxe4jbm09t0KPGoFuxJj1eMmWkAMT44lr3PhOL3bCsPpjQWFj/Utg0ZoRjZL+1UrI1n
+         E6ZfCGM1urCaKoAIaS2DpUagQHZb/r71OF2oIfue7w8P9sZsRqmzUGxHWltd6KwleYSr
+         2NkI1F6QngBvGLQ/IoFWgofN/FzvuzpVeRCdGAUTrbZwSlj+1xh+ElnTg344Pa7Z7/QN
+         L33Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zzTrytClNmqxd6dOB7wUtDQ7R3F+Ze8lHkQnxGY3LGg=;
-        b=O7qCROW7mA0iZxaEP9js4n1gy7yB0pL1xhpTJNZuQEUgg7bt11aOYexba1nJkeD+30
-         3/oDmmGRR2nLPcYPpY5y4ffnrBFFp2Puhi5p3S3kQwBfv1+HCeEk8enji7GB8MY1S5kT
-         7wvdDAjpxlP3cSsKST7bYOZXIJDzDHkg5WjNYywEuPNc2RIMMNTRznewqP8KyhhKw+qT
-         RieIAPWWuCZ8jZdgIMxBXp2+dWM/hRP9HEOigsxf05LE+xQwvPYKN3iQmCZXS1l+lRDH
-         Q87QGl8CTZt5ShJiW16ev/duQXuq7fLzWCcGDGPCy6wWxsBx4zxgoKhpa7VX5MPqdJnP
-         Llhg==
-X-Gm-Message-State: AOAM530aCzVT5ZnkfwHiz4Ucojq9qlTqlobVJL5tJzbjWjiTSpuLiOqv
-        udczIMbDsJAvkvQI5BYUNq6G8jPlfTVbSWppIww6
-X-Google-Smtp-Source: ABdhPJwdq8JxL/t2+LDJM+zKFnhqGK+mRxzNKyTSXvw8lkMY1iy5t/8sJFNSlX6GmIApW3cm18I9WEngYyeRxmFb+HE=
-X-Received: by 2002:a25:7c06:: with SMTP id x6mr15101679ybc.445.1611163831555;
- Wed, 20 Jan 2021 09:30:31 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zJ8U2n9EhC/Pe2YwUO2F/4kmI3QBIUjaTX8upLa9w3s=;
+        b=czq/6dD+mqEErqrJn4WGvR0TEkl2PiJ1JqX0+PzPtmbVoic0UpJhzOnhFNRP/vynop
+         AEPxfjxqSuy4etIoL67ryQ2CcmdTBPOe6WKaI1SbekUNIsNEJBTXqrWsS50zJ3+JVc4w
+         eIJOPBCqzdy+G34ui7Lh00Y8U0qIkqfU3ToRSZ8IKXYCz39Clw42icv6r5w0sdJO1CGa
+         sSeIYHasxTZKsaLJJZIGMTD76kRZWIy0KBnEn0oddGVSoESlTWDwNYv4VGUAph0Zhm2h
+         +UE/w53VFtnmkAfibilUmt0BxlMQq3FazpyFLVwHFFT44INalIco1RoOo6HyBJOVv/3+
+         cxHg==
+X-Gm-Message-State: AOAM531nIVlZFnW1fYetXbBwF8X3S+OpBcVyXRjSShVB5jyqJV63TBLX
+        tYgNqA8nIGRje5J+LISeQ7jIjw2v88s=
+X-Google-Smtp-Source: ABdhPJy/lroUAMfjnIBypsieXp1MCgrzEomMwUoBSsdu1SDovt0TjmrvGHCmY05VokAinHrHmnerbQ==
+X-Received: by 2002:a5d:4bc5:: with SMTP id l5mr10415482wrt.15.1611163943108;
+        Wed, 20 Jan 2021 09:32:23 -0800 (PST)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id u3sm6185620wre.54.2021.01.20.09.32.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jan 2021 09:32:21 -0800 (PST)
+Date:   Wed, 20 Jan 2021 18:32:20 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     JC Kuo <jckuo@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, robh@kernel.org, jonathanh@nvidia.com,
+        kishon@ti.com, mturquette@baylibre.com, sboyd@kernel.org,
+        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        nkristam@nvidia.com, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v7 09/14] dt-bindings: phy: tegra-xusb: Add nvidia,pmc
+ prop
+Message-ID: <YAhpJOxdsKqdbT3i@ulmo>
+References: <20210120073414.69208-1-jckuo@nvidia.com>
+ <20210120073414.69208-10-jckuo@nvidia.com>
 MIME-Version: 1.0
-References: <20210115211543.33563-1-alcooperx@gmail.com> <20210115211543.33563-3-alcooperx@gmail.com>
- <CAHp75VdQPQK8jTF3QDKx6mF1QzOg-qiuHrTiojnWn7GskokfoA@mail.gmail.com>
- <71d58a3e-2707-69d7-8074-c67235912e06@gmail.com> <CAHp75VfNumFBwbytCuA_YK1w-+kN20vRF+GhogtU+DDG3EB_7g@mail.gmail.com>
-In-Reply-To: <CAHp75VfNumFBwbytCuA_YK1w-+kN20vRF+GhogtU+DDG3EB_7g@mail.gmail.com>
-From:   Al Cooper <al.cooper@broadcom.com>
-Date:   Wed, 20 Jan 2021 12:30:20 -0500
-Message-ID: <CAGh=XAAPPDP4dp1V2rhOt5gKGp1zRvUF+xJCuEHvhVAzw+5nGA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] serial: 8250: Add new 8250-core based Broadcom STB driver
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000e3ba4205b9584f6b"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="3aye17l91ktjNFcS"
+Content-Disposition: inline
+In-Reply-To: <20210120073414.69208-10-jckuo@nvidia.com>
+User-Agent: Mutt/2.0.4 (26f41dd1) (2020-12-30)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---000000000000e3ba4205b9584f6b
-Content-Type: text/plain; charset="UTF-8"
 
-I took another look at using the DMA framework for this and I still
-don't think it fits. The problem is that the DMA hardware is so
-tightly coupled to the 8250 UART hardware that a generic DMA model
-where a DMA engine will read the data from the UART data register when
-Data Ready is asserted and transfer it to memory, doesn't fit.  For
-example:
-- The flush timeout, parity error, framing error and overrun errors
-are kept separately in the DMA hardware.
-- The DMA hardware expects to be enabled before receiving input data
-and it will continually write the data to ping pong data buffers as
-long as a buffer empty bit is set on the next buffer.
-- When DMA is enabled it bypasses some of the normal 8250 control and
-data registers.
+--3aye17l91ktjNFcS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I think that trying to force this hardware into the current 8250 DMA
-model using the DMA framework would not be a good approach.
-I'll look at the other suggestions.
+On Wed, Jan 20, 2021 at 03:34:09PM +0800, JC Kuo wrote:
+> This commit describes the "nvidia,pmc" property for Tegra210 tegra-xusb
+> PHY driver. It is a phandle and specifier referring to the Tegra210
+> pmc@7000e400 node.
+>=20
+> Signed-off-by: JC Kuo <jckuo@nvidia.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> ---
+> v7:
+>    no change
+> v6:
+>    no change
+> v5:
+>    replace "pmc@7000e400 node" -> with "PMC node"
+> v4:
+>    new change to document "nvidia,pmc" prop
+>=20
+>  .../devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt      | 1 +
+>  1 file changed, 1 insertion(+)
 
-Thanks
-Al
+Acked-by: Thierry Reding <treding@nvidia.com>
 
+--3aye17l91ktjNFcS
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-On Wed, Jan 20, 2021 at 11:47 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Tue, Jan 19, 2021 at 8:16 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> > On 1/19/2021 7:21 AM, Andy Shevchenko wrote:
-> > > On Fri, Jan 15, 2021 at 11:19 PM Al Cooper <alcooperx@gmail.com> wrote:
-> > >>
-> > >> Add a UART driver for the new Broadcom 8250 based STB UART. The new
-> > >> UART is backward compatible with the standard 8250, but has some
-> > >> additional features. The new features include a high accuracy baud
-> > >> rate clock system and DMA support.
-> > >>
-> > >> The driver will use the new optional BAUD MUX clock to select the best
-> > >> one of the four master clocks (81MHz, 108MHz, 64MHz and 48MHz) to feed
-> > >> the baud rate selection logic for any requested baud rate.  This allows
-> > >> for more accurate BAUD rates when high speed baud rates are selected.
-> > >>
-> > >> The driver will use the new UART DMA hardware if the UART DMA registers
-> > >> are specified in Device Tree "reg" property. The DMA functionality can
-> > >> be disabled on kernel boot with the argument:
-> > >> "8250_bcm7271.disable_dma=Y".
-> > >>
-> > >> The driver also set the UPSTAT_AUTOCTS flag when hardware flow control
-> > >> is enabled. This flag is needed for UARTs that don't assert a CTS
-> > >> changed interrupt when CTS changes and AFE (Hardware Flow Control) is
-> > >> enabled.
-> > >>
-> > >> The driver also contains a workaround for a bug in the Synopsis 8250
-> > >> core. The problem is that at high baud rates, the RX partial FIFO
-> > >> timeout interrupt can occur but there is no RX data (DR not set in
-> > >> the LSR register). In this case the driver will not read the Receive
-> > >> Buffer Register, which clears the interrupt, and the system will get
-> > >> continuous UART interrupts until the next RX character arrives. The
-> > >> fix originally suggested by Synopsis was to read the Receive Buffer
-> > >> Register and discard the character when the DR bit in the LSR was
-> > >> not set, to clear the interrupt. The problem was that occasionally
-> > >> a character would arrive just after the DR bit check and a valid
-> > >> character would be discarded. The fix that was added will clear
-> > >> receive interrupts to stop the interrupt, deassert RTS to insure
-> > >> that no new data can arrive, wait for 1.5 character times for the
-> > >> sender to react to RTS and then check for data and either do a dummy
-> > >> read or a valid read. Sysfs error counters were also added and were
-> > >> used to help create test software that would cause the error condition.
-> > >> The counters can be found at:
-> > >> /sys/devices/platform/rdb/*serial/rx_bad_timeout_late_char
-> > >> /sys/devices/platform/rdb/*serial/rx_bad_timeout_no_char
-> > >
-> > > Brief looking into the code raises several questions:
-> > >  - is it driver from the last decade?
-> >
-> > Work on this driver started back in 2018, that was indeed the last decade.
-> >
-> > >  - why it's not using what kernel provides?
-> > >  - we have a lot of nice helpers:
-> > >    - DMA Engine API
-> >
-> > Not sure this makes sense, given that the DMA hardware that was added to
-> > this UART block is only used by the UART block and no other pieces of HW
-> > in the system, nor will they ever be. Not sure it makes sense to pay the
-> > cost of an extra indirection and subsystem unless there are at least two
-> > consumers of that DMA hardware to warrant modeling it after a dmaengine
-> > driver. I also remember that Al researched before whether 8250_dma.c
-> > could work, and came to the conclusion that it would not, but I will let
-> > him comment on the specifics.
->
-> I see. In any case I still believe that the driver can be shrinked by
-> a notable amount of lines.
->
-> > >    - BIT() and GENMASK() macros
-> > >    - tons of different helpers like regmap API (if you wish to dump
-> > > registers via debugfs)
-> > >
-> > > Can you shrink this driver by 20-30% (I truly believe it's possible)
-> > > and split DMA driver to drivers/dma (which may already have something
-> > > similar there)?
-> >
-> > See previous response.
->
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmAIaSQACgkQ3SOs138+
+s6GpchAAteXHL5ky9RQ6Yd7MFBnRuEK5lZ9ZpIYe+e05gDQqtvhzyzj4h1PF7WsR
+JJR4ZqZEg+2RECwKDKGogPTXqwitFXeuqopdbERxJEx1IMaTZTiC1nQ2rqjTfr1r
+2xe1Rnram3f0sfvvOmtVIqJmyZHT3Gpw4rvEXCil+9/W+WhAkGY0ofjohS+TJkTT
+xiaCjrDydYNolNFnzcRF3KRo6V+UfD4HBIGkKtCQZpiEFv4756FYbgCm5Z38RvWl
+UwW9Gaou7cvYYgbsKDOcDH1yDFOD4O24CRYc3j/pD+zTYPsvI59OnOt+RarClyMX
+Z6J9lmneLZlxUYZmQO9ncNqzGrhJQVUtodIrqvASrh1/whjEeUCyVu+CjCF9eY5m
+Rd0eIjepuqwX+LN9MzCPGMyKMlKXV8XwbAppmMw/8ptrHNVIGFpoL1XdcXu97Fdi
+MniIK4OMqXvsHMK6B1sFDJ8TDkSKuE0SiwbQdkwchR6qlCF7h4BKNfbvXZM+MQ4B
+nPVWeo7aYDysr3Etc5ATlNr8kusnMV8HbxIEIW+MiRhZy9aavp9FH30II9aRXvxb
+4YixtZs4EtbOFgs4HOPzt/3zRx1y0/IJ7WA7SfS5Au36CqnpTG/C/6CBYeuObPNc
+b0rHhHdeXCW5i1/oqhhriHe/2kbKW+4BIffCzRKFCac4i7Wu30g=
+=ak8W
+-----END PGP SIGNATURE-----
 
---000000000000e3ba4205b9584f6b
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-yXmUToMxtlREK8ddtKO4bV6ekA5Mxh5jo4JcHCHlgaNowvQgrCTX+FCX8utZUxwNAgMBAAGjggHN
-MIIByTAOBgNVHQ8BAf8EBAMCBaAwgZ4GCCsGAQUFBwEBBIGRMIGOME0GCCsGAQUFBzAChkFodHRw
-Oi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc3BlcnNvbmFsc2lnbjJzaGEyZzNvY3Nw
-LmNydDA9BggrBgEFBQcwAYYxaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL2dzcGVyc29uYWxz
-aWduMnNoYTJnMzBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6
-Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBEBgNVHR8EPTA7MDmg
-N6A1hjNodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzcGVyc29uYWxzaWduMnNoYTJnMy5jcmww
-IQYDVR0RBBowGIEWYWwuY29vcGVyQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBRpcoJiMWeVRIV3kYDEBDZJnXsLYTAdBgNVHQ4EFgQUgzDqs/CvVCxhgdEnsBOO
-IpL3nHAwDQYJKoZIhvcNAQELBQADggEBACPmJjK2ALJm+IX2DvRRxd7cn7ZA10wn9zxy4ifd84Y7
-MSoFpkcgMBFNZB0BF05H/KXZGTFlQm+DdKIIhg/LbPsca/s1i8rXgk1mo2wqn+/mNCtwllAfHe8j
-gvBuVbTIhYXp5o/JC2AX639UdQaVAV66YQUpyj5KiMA79MRQU3fbd62/7ynokd5Ufw7XbkhqG7uK
-8H7iL6o7IlMM8F5Mf22eZB8hM3WZGYFEyl8V2uYLFWiUDXcp4RiNeCV45AnT+Jg83AWNwTr0TxuE
-tlnxwkojsM1vKTuxUQ5kNI8Aq3v/obzat389kqxBjAd7HTjWDFso5KRS9ZVH2tsbKB1dZtAxggJv
-MIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTMwMQYD
-VQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hBMjU2IC0gRzMCDEzVwUNs2XQM
-HDSO3jANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgzJD78I1NJwJoWpYJSLKPYYGS
-aGK1+vXzA33fk/OL6m0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcN
-MjEwMTIwMTczMDMyWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYw
-CwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZI
-AWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAJBOfqB1cK+6L8xOGYcdF8/ERo4jP9nQ0SvrYfRrteUF
-4LkIkQ313AZCd2Igk0yy8nPI1jiaTfNxEcCtoUUtg3aPau+PU+lD9rv85hUFyEB6SaANEzuQOCON
-NMJ2n2E2xyJcnbBlHY/+YdtZ28Tpqi2VMAQCiY2Tk/5CU958QvWpNVIhYe02tlWNpX7P/ydiCEyT
-y+a5Wz/ddkEQEZFu2kZ0pc09qzQt/AGr01K6CxpEaFoBibKLtKa1CiIqiPmsFENNZ+KXoyp6oTpo
-Gxn8NWsT3jYP/OC+v+xwew14fIZdUd2auShD0DavnUjbU+/w7N5ppiZ6iRlVyN6KwQeANpQ=
---000000000000e3ba4205b9584f6b--
+--3aye17l91ktjNFcS--
