@@ -2,81 +2,184 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8CA2FCF68
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 13:13:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4E72FCF6C
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 13:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730924AbhATLYk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Jan 2021 06:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731037AbhATKFV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jan 2021 05:05:21 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8800AC0613CF
-        for <linux-usb@vger.kernel.org>; Wed, 20 Jan 2021 02:04:40 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id d81so30557093iof.3
-        for <linux-usb@vger.kernel.org>; Wed, 20 Jan 2021 02:04:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1x1DNnE2tmguD//mZOuWvz3mKIik8+ReShmCCkMxJPg=;
-        b=vOaQe2FJITlcZJobI1lcdZ2oifntBqUUxmvmDwD2+70GiSg80LuRavNbkVR4xTlJB5
-         HkmFVKYGb9UL0NEMHF4pM9oMx3hfzzR66xvyBwqiuttgAPmgnUmxb4gSR99x76JTNg6Y
-         0iZeTrSo6Ew+Nn6/uyYwDN5Mptk7SyQFecxE/UFUjqpmOt+PA48kPMZwgomvqHMrVOP3
-         01TxB7j+NH4tRGWtufzMDcJGx/WbGgoQEwBTp3d9SdNKesrTQC6m6ek27xOcGry5ONkI
-         4L8GTpjQ+5Vh17KfFJXfYK/5tV+sEW+D9qb9mx94sD5tl1f3CGHQTK386qlBws8uVAdK
-         4R8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1x1DNnE2tmguD//mZOuWvz3mKIik8+ReShmCCkMxJPg=;
-        b=AkJ0V2hyu35btjbdio0ZoXvwYXOncgbF+krR5pvUxl6ppyb5uDdKaEifvJx/S9ugUW
-         iI//RKw5JnwwIxAcpuFt4Xsb/11qbhq7GWlIJ1d3pcSwxwKFJkmeYbsY2PusxGvdJuSb
-         ST2jY2PVLEyHBgBV46aSeZoxlM69JXXdBzL/TEeuArqEc1K7rSIClUc6SETsEhJcf3kP
-         m4EfYGE6DiNZmqfIllC+K89rHmvFM897m8ZGutMoPojbh/zC10aZqzNk35gMZgPfJxpP
-         DR26vEQgmBPZOFx6wvZHuSfX4xaXSU2Td5FCJ3nsCZQ1T9zS94R38auJf5d/rVppZsXT
-         APvA==
-X-Gm-Message-State: AOAM530CGhrE4grxWI/ueTynHLxtmqiKiTbxJHmnsYXocTiNvI1Wj0wv
-        Mnoez53kuJjPCoKrNZDWsc6YGWxfvHm25kPXUJwNKQ==
-X-Google-Smtp-Source: ABdhPJyiec6rsJjOmlleiEJnWE+gm+rYerW942cFcdQ7OxN+oRRXKKjz/E4+amu2LBkxWlI1M74QCgrJBJYzZywiPXw=
-X-Received: by 2002:a05:6e02:1566:: with SMTP id k6mr7069593ilu.19.1611137079553;
- Wed, 20 Jan 2021 02:04:39 -0800 (PST)
+        id S1727909AbhATLZY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Jan 2021 06:25:24 -0500
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:37295 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388239AbhATKwR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jan 2021 05:52:17 -0500
+X-Originating-IP: 93.29.109.196
+Received: from aptenodytes (196.109.29.93.rev.sfr.net [93.29.109.196])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 316EF20008;
+        Wed, 20 Jan 2021 10:50:30 +0000 (UTC)
+Date:   Wed, 20 Jan 2021 11:50:30 +0100
+From:   "paul.kocialkowski@bootlin.com" <paul.kocialkowski@bootlin.com>
+To:     Hamish Martin <Hamish.Martin@alliedtelesis.co.nz>
+Cc:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] usb: ohci: Default to per-port over-current
+ protection
+Message-ID: <YAgK9mZppnAYQVvP@aptenodytes>
+References: <20200910212512.16670-1-hamish.martin@alliedtelesis.co.nz>
+ <X+huemxT9XOeDi5E@aptenodytes>
+ <20210109212608.GB1136657@rowland.harvard.edu>
+ <83ed9f3929bd064b54bb9903cd489adde442e1c7.camel@alliedtelesis.co.nz>
 MIME-Version: 1.0
-References: <20210119101044.1637023-1-howardyen@google.com> <af91bbf1-6731-3e87-4086-de0dbba22c22@intel.com>
-In-Reply-To: <af91bbf1-6731-3e87-4086-de0dbba22c22@intel.com>
-From:   Howard Yen <howardyen@google.com>
-Date:   Wed, 20 Jan 2021 18:04:28 +0800
-Message-ID: <CAJDAHvbTY3Z_bRg+++uLefWSvCWo_nGq+3OOQX3QHJ2w3X1SQw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] add xhci hooks for USB offload
-To:     Mathias Nyman <mathias.nyman@intel.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="OySCGVbEh1Xz1OCy"
+Content-Disposition: inline
+In-Reply-To: <83ed9f3929bd064b54bb9903cd489adde442e1c7.camel@alliedtelesis.co.nz>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 19, 2021 at 8:47 PM Mathias Nyman <mathias.nyman@intel.com> wrote:
->
-> On 19.1.2021 12.10, Howard Yen wrote:
-> > To let the xhci driver support USB offload, add hooks for vendor to have
-> > customized behavior for the initialization, memory allocation, irq work, and
-> > device context synchronization. Detail is in each patch commit message.
->
-> Is this related to the usb audio sideband capability that was added to the xHCI specification?
-> If yes, then we should probably implement the generic parts first, and then add
-> the vendor specific hooks.
->
-> -Mathias
->
->
 
-This is for offloading, no matter what type of offloading.
-I made the hooks generically and can be used for usb audio on the xhci
-which is not including the usb audio sideband capability.
+--OySCGVbEh1Xz1OCy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hi,
 
-- Howard
+On Tue 19 Jan 21, 01:09, Hamish Martin wrote:
+> On Sat, 2021-01-09 at 16:26 -0500, Alan Stern wrote:
+> > On Sun, Dec 27, 2020 at 12:22:34PM +0100, Paul Kocialkowski wrote:
+> > > Hi,
+> >=20
+> > Sorry it has taken so long to respond to this.  The holidays
+> > intervened,=20
+> > but that's no excuse.
+> I'm sorry too, same reason/non-excuse. Thanks for your thorough report
+> on the issue my changes caused and pass on my apologies to your Mom!
+
+Aaaand sorry for the delay here as well, I've been busy with other things
+lately. No problem at all :)
+
+> > > On Fri 11 Sep 20, 09:25, Hamish Martin wrote:
+> > > > Some integrated OHCI controller hubs do not expose all ports of
+> > > > the hub
+> > > > to pins on the SoC. In some cases the unconnected ports generate
+> > > > spurious over-current events. For example the Broadcom
+> > > > 56060/Ranger 2 SoC
+> > > > contains a nominally 3 port hub but only the first port is wired.
+> > > >=20
+> > > > Default behaviour for ohci-platform driver is to use global over-
+> > > > current
+> > > > protection mode (AKA "ganged"). This leads to the spurious over-
+> > > > current
+> > > > events affecting all ports in the hub.
+> > > >=20
+> > > > We now alter the default to use per-port over-current protection.
+> > >=20
+> > > This specific patch lead to breaking OHCI on my mom's laptop (whom
+> > > was about
+> > > to buy a new one thinking the hardware had failed). I get no OHCI
+> > > interrupt at
+> > > all and no USB 1 device is ever detected.
+> > >=20
+> > > I haven't really found a reasonable explanation about why that is,
+> > > but here
+> > > are some notes I was able to collect:
+> > > - The issue showed up on 5.8,18 and 5.9.15, which don't include the
+> > > patch
+> > >   from this series that sets distrust_firmware =3D false; This
+> > > results in the NPS
+> > >   bit being set via OHCI_QUIRK_HUB_POWER.
+> > > - Adding val &=3D ~RH_A_PSM; (as was done before this change) solves
+> > > the issue
+> > >   which is weird because the bit is supposed to be inactive when
+> > > NPS is set;
+> > > - Setting ohci_hcd.distrust_firmware=3D0 in the cmdline results in
+> > > not setting
+> > >   the NPS bit and also solves the issue;
+> > > - The initial value of the register at function entry is 0x1001104
+> > > (PSM bit
+> > >   is set, NPS is unset);
+> > > - The OHCI controller is the following:
+> > > 00:03.0 USB controller: Silicon Integrated Systems [SiS] USB 1.1
+> > > Controller (rev 0f) (prog-if 10 [OHCI])
+> > > 	Subsystem: ASUSTeK Computer Inc. Device 1aa7
+> >=20
+> > Great reporting -- thanks.
+> >=20
+> > > Does that make any sense to you?
+> > >=20
+> > > I really wonder what a proper fix could be and here are some
+> > > suggestions:
+> > > - Adding a specific quirk to clear the PSM bit for this hardware
+> > > which seems to
+> > >   consider the bit regardless of NPS;
+> >=20
+> > We don't need a quirk for this.  There shouldn't be anything wrong
+> > with=20
+> > _always_ clearing PSM whenever NPS is set, since the controller is=20
+> > supposed to ignore PSM under that condition.
+> >=20
+> > Would you like to submit a patch for this?
+> Yes, I think that looks reasonable too.
+
+Agreed, I'll craft a patch in this direction and have you CC-ed.
+
+> > > - Adding the patch that sets distrust_firmware =3D false to stable
+> > > branches;
+> >=20
+> > That's certainly reasonable.  Nobody has reported any problems caused
+> > by=20
+> > that patch, so adding it to the stable branches should be safe
+> > enough.
+> >=20
+> Yes, that is probably a good idea. I've carried both patches locally
+> for my systems.
+
+Thanks for requesting it :)
+
+Cheers,
+
+Paul
+
+> > > What do you think?
+> >=20
+> > We could even do both.  That would help if, for example, somebody=20
+> > decided to set ohci_hcd.distrust_firmware=3Dtrue explicitly.
+> I think both might be best.
+>=20
+> >=20
+> > Greg, in the meantime can we have commit c4005a8f65ed ("usb: ohci:
+> > Make=20
+> > distrust_firmware param default to false") added to all the stable=20
+> > kernels which have back-ported versions of commit b77d2a0a223b?
+> >=20
+> > Alan Stern
+> I second that.
+>=20
+> Thanks,
+> Hamish Martin
+>=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--OySCGVbEh1Xz1OCy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmAICvYACgkQ3cLmz3+f
+v9FrSQf+LFYcO3wfTOl8abvNBEaLSA9FYypMnm17gOEPVfvVivfzX1KASkP/1Vw9
+p0ml4+VPSnpIybsP461XOE4tXgad2g4Y1FL/gLzPQpYhJl+khiFVQnFyOMerv+q7
+DAES5mh79PriBntIyYWjzJg96bjVHTfDQwslsQe3kr2QXYXcJSEkXb5lF+CAlqea
+JbqHPEghypoZEQ7vf7Dab4MnIOn8Hw/UiTTpgYgTv49NQqTLGxZKRwm776xxw6wy
+BMzGxnSYsBetjxSEImc9tQ5p5ydObGWH7K+mMgTLEeYGC+yH0p+vtbcF8XR/9Cp5
+qnNnqbtjwuhGRo5Mw/ICM0vK7YvpWw==
+=GwoA
+-----END PGP SIGNATURE-----
+
+--OySCGVbEh1Xz1OCy--
