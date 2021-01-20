@@ -2,79 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58FBC2FD6B3
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 18:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D51682FD6BE
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 18:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391597AbhATRQL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Jan 2021 12:16:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60538 "EHLO mail.kernel.org"
+        id S2389565AbhATRSh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Jan 2021 12:18:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:32932 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404143AbhATRPy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 20 Jan 2021 12:15:54 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2E3AA22CE3;
-        Wed, 20 Jan 2021 17:15:10 +0000 (UTC)
+        id S2404050AbhATRSS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 20 Jan 2021 12:18:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 07C7022CE3;
+        Wed, 20 Jan 2021 17:17:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1611162910;
-        bh=icT6ldp0FVZTNs/72NOyreuoBFHN73VbBxC41uUl4iw=;
+        s=korg; t=1611163058;
+        bh=9WZ/m19z2HGkINVwNeYp/+wcK7hXnj4kx5NeS4ydpJU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q1+iWkrHj2DeduiQT4II0hNWE4A2UXg1nQdfTu/u7O3f4tEzJn6+N26uCzqz1QNL5
-         dEs8KQGQBQ6KYihWINdXaRZc46J0XM87o8/TVEufwLkVY6jTuYCN+pXpg/EnlX8hHi
-         WghRafhypYgnsxnDnU7wfeIloMACTvloNeI8wcGI=
-Date:   Wed, 20 Jan 2021 18:15:08 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 2/2] serial: 8250: Add new 8250-core based Broadcom
- STB driver
-Message-ID: <YAhlHL67rDmWSWdr@kroah.com>
-References: <20210115211543.33563-1-alcooperx@gmail.com>
- <20210115211543.33563-3-alcooperx@gmail.com>
- <CAHp75VdQPQK8jTF3QDKx6mF1QzOg-qiuHrTiojnWn7GskokfoA@mail.gmail.com>
- <71d58a3e-2707-69d7-8074-c67235912e06@gmail.com>
- <CAHp75VfNumFBwbytCuA_YK1w-+kN20vRF+GhogtU+DDG3EB_7g@mail.gmail.com>
- <YAhiw+6UiUplNcLq@kroah.com>
- <CAHp75Vf-ZmPuOjRYwNbURJXP3g_-m1LUDbsWtKHMvP49jseprw@mail.gmail.com>
+        b=XAosQ5P65dgOHKIO0YQi5Sj0fPMVYX1loaU/SHZ1bBzto/EbQxH7ttoCeQld4jojx
+         6/YFWJLma/2eAPw1Aq2WhdJ/koSKXt+Fya54smDXwV0+VU8PRakWl1//ZmXzGgZqh6
+         sINSZtlc9ccu8xdTcFTKpVS6uIiPHUK7T5RbmVyc=
+Date:   Wed, 20 Jan 2021 18:17:35 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Kyle Tso <kyletso@google.com>, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, badhri@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/3] AMS, Collision Avoidance, and Protocol Error
+Message-ID: <YAhlrxRdURu0djbf@kroah.com>
+References: <20210114145053.1952756-1-kyletso@google.com>
+ <2211ad43-b76c-fbe9-2cc8-bb40c4ee4e89@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHp75Vf-ZmPuOjRYwNbURJXP3g_-m1LUDbsWtKHMvP49jseprw@mail.gmail.com>
+In-Reply-To: <2211ad43-b76c-fbe9-2cc8-bb40c4ee4e89@redhat.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 07:09:46PM +0200, Andy Shevchenko wrote:
-> On Wed, Jan 20, 2021 at 7:05 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> > On Wed, Jan 20, 2021 at 06:47:52PM +0200, Andy Shevchenko wrote:
-> > > On Tue, Jan 19, 2021 at 8:16 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> > > > On 1/19/2021 7:21 AM, Andy Shevchenko wrote:
-> > > > > On Fri, Jan 15, 2021 at 11:19 PM Al Cooper <alcooperx@gmail.com> wrote:
+On Wed, Jan 20, 2021 at 02:45:02PM +0100, Hans de Goede wrote:
+> Hi,
 > 
-> ...
+> On 1/14/21 3:50 PM, Kyle Tso wrote:
+> > v5 https://lore.kernel.org/r/20210105163927.1376770-1-kyletso@google.com
+> > 
+> > "usb: typec: tcpm: AMS and Collision Avoidance"
+> >  - removed the signed-off
+> >  - modified the coding style suggested from Heikki
+> >  - added FR_SWAP AMS handling
+> > 
+> > "usb: typec: tcpm: Protocol Error handling"
+> >  - removed the signed-off
+> >  - modified the coding style suggested from Heikki
+> >  - modified more coding style problems (line wrapping limit)
+> > 
+> > "usb: typec: tcpm: Respond Wait if VDM state machine is running"
+> >  - no change
 > 
-> > > > Not sure this makes sense, given that the DMA hardware that was added to
-> > > > this UART block is only used by the UART block and no other pieces of HW
-> > > > in the system, nor will they ever be. Not sure it makes sense to pay the
-> > > > cost of an extra indirection and subsystem unless there are at least two
-> > > > consumers of that DMA hardware to warrant modeling it after a dmaengine
-> > > > driver. I also remember that Al researched before whether 8250_dma.c
-> > > > could work, and came to the conclusion that it would not, but I will let
-> > > > him comment on the specifics.
-> > >
-> > > I see. In any case I still believe that the driver can be shrinked by
-> > > a notable amount of lines.
-> >
-> > Patches always gladly accepted :)
+> I've finally gotten around to testing this. I'm happy to
+> report that the power-role swapping regression seen in one
+> of the older versions of this patch-set is gone.
 > 
-> Or a good review... :-)
+> So the entire series is:
+> Tested-by: Hans de Goede <hdegoede@redhat.com>
 
-Please do so!
+Thanks for testing and the review.
+
+Heikki, any thoughts?
+
+thanks,
+
+greg k-h
