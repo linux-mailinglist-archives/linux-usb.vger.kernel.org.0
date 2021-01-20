@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A089D2FC97D
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 04:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C6D2FC985
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 04:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729234AbhATC22 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jan 2021 21:28:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47348 "EHLO mail.kernel.org"
+        id S1730800AbhATC2m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jan 2021 21:28:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47300 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729984AbhATB2N (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 Jan 2021 20:28:13 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6E27523331;
-        Wed, 20 Jan 2021 01:26:29 +0000 (UTC)
+        id S1730650AbhATB3A (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 Jan 2021 20:29:00 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 908B9233A2;
+        Wed, 20 Jan 2021 01:27:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611105990;
-        bh=7IpY0UwZe9ppe5KB7Y5C665xMW42lX2p9h6Dq1MNHvE=;
+        s=k20201202; t=1611106040;
+        bh=DsoZY31YmaqOqDRU1mKE+CZPITeJVU24fOvHlE+DHt0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K1C9l5/jeqE88BsrnN6KvIkR5lZymu02lfbWOdJfI8M4yyMcI1Yup1GL9K7hwJ2uk
-         lr/5hJprPbaNumciq9/NTp/FXFm25P6ccYlS3OsqmmGAh6LarDGHn0B9tMALrnGOrY
-         vqn5jfIg3mGWyBi9JfVfMkonX+qcHFBu/Vl5h5gvHlYlu6bZ2AI3Jgf9cIa2T3EnI3
-         IHGHiKXrhh7q616suzGic7yA+RMQspuqEhwgIgYipB1g1Z3GqhYz4mGYgusJCa0C9B
-         2ndXGAEPJ063KnCQ7fazoGRawV91B3HuOFJAXTJ86RCscmGUS4BBVukcwQe5wuDEhl
-         BEDWF5iyJyFUg==
+        b=W42tCqz09CfkclyXU5Njnlwvfdgbt0cinoQEOueqSDUYqeYza5bmU5OaCVa9z1HpF
+         QCadpYPaJPMOKV6Tc7YYQ0dRRzpC7uJFzvDvAB/EtDUla2YTfpZ2FF+VmDv+cYl0I+
+         4dInWtk7ES7HJlZoHIhr7xmtQwLUEKip3F6HZbfHpqz7sLIoeTYktf2TzEWX98gYAE
+         0kR7EyG0fEYdUiMYlIGdyqnzEBRceGkCXzd/AZlnc/gvHlNh3WAhP/2jRflbOWcwBQ
+         RCE6CSCw24jQj926ejCAHtGQJ6c8Glv4j7bijjrOKT430VflCfYBwE0+IOppIqnfj2
+         Ne1rDknGjtZDA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Leon Schuermann <leon@is.currently.online>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 21/45] r8152: Add Lenovo Powered USB-C Travel Hub
-Date:   Tue, 19 Jan 2021 20:25:38 -0500
-Message-Id: <20210120012602.769683-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 12/26] r8152: Add Lenovo Powered USB-C Travel Hub
+Date:   Tue, 19 Jan 2021 20:26:49 -0500
+Message-Id: <20210120012704.770095-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210120012602.769683-1-sashal@kernel.org>
-References: <20210120012602.769683-1-sashal@kernel.org>
+In-Reply-To: <20210120012704.770095-1-sashal@kernel.org>
+References: <20210120012704.770095-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -67,10 +67,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 8 insertions(+)
 
 diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
-index 8c1d61c2cbacb..6aaa0675c28a3 100644
+index 9bb37ac99a108..8325f6d65dccc 100644
 --- a/drivers/net/usb/cdc_ether.c
 +++ b/drivers/net/usb/cdc_ether.c
-@@ -793,6 +793,13 @@ static const struct usb_device_id	products[] = {
+@@ -787,6 +787,13 @@ static const struct usb_device_id	products[] = {
  	.driver_info = 0,
  },
  
@@ -85,10 +85,10 @@ index 8c1d61c2cbacb..6aaa0675c28a3 100644
  {
  	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0xa387, USB_CLASS_COMM,
 diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index b1770489aca51..88f177aca342e 100644
+index cd1a07175e111..22f093797f417 100644
 --- a/drivers/net/usb/r8152.c
 +++ b/drivers/net/usb/r8152.c
-@@ -6893,6 +6893,7 @@ static const struct usb_device_id rtl8152_table[] = {
+@@ -5845,6 +5845,7 @@ static const struct usb_device_id rtl8152_table[] = {
  	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7205)},
  	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x720c)},
  	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7214)},
