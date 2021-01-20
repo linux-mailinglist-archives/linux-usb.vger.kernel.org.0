@@ -2,184 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4E72FCF6C
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 13:13:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B932FD0F2
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 14:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727909AbhATLZY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Jan 2021 06:25:24 -0500
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:37295 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388239AbhATKwR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jan 2021 05:52:17 -0500
-X-Originating-IP: 93.29.109.196
-Received: from aptenodytes (196.109.29.93.rev.sfr.net [93.29.109.196])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 316EF20008;
-        Wed, 20 Jan 2021 10:50:30 +0000 (UTC)
-Date:   Wed, 20 Jan 2021 11:50:30 +0100
-From:   "paul.kocialkowski@bootlin.com" <paul.kocialkowski@bootlin.com>
-To:     Hamish Martin <Hamish.Martin@alliedtelesis.co.nz>
-Cc:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] usb: ohci: Default to per-port over-current
- protection
-Message-ID: <YAgK9mZppnAYQVvP@aptenodytes>
-References: <20200910212512.16670-1-hamish.martin@alliedtelesis.co.nz>
- <X+huemxT9XOeDi5E@aptenodytes>
- <20210109212608.GB1136657@rowland.harvard.edu>
- <83ed9f3929bd064b54bb9903cd489adde442e1c7.camel@alliedtelesis.co.nz>
+        id S1728323AbhATNA3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Jan 2021 08:00:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732961AbhATL7x (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jan 2021 06:59:53 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91473C061757
+        for <linux-usb@vger.kernel.org>; Wed, 20 Jan 2021 03:59:04 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 4D2CF1F456A9
+Subject: Re: proposal: move Linux userspace USB gadget projects to linux-usb
+ GitHub organisation?
+To:     Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Paul Wise <pabs3@bonedaddy.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matt Porter <mporter@linaro.org>,
+        Karol Lewandowski <k.lewandowsk@samsung.com>
+Cc:     linux-usb@vger.kernel.org
+References: <CGME20210119200737eucas1p12bfb53d11543ee2ccb1a4bc2138f6535@eucas1p1.samsung.com>
+ <c38162833d1c8fede734e41eb5ce23cf393d6555.camel@bonedaddy.net>
+ <ef8906a7-0412-dbe3-d30a-2ac6d4f1b76d@samsung.com>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Message-ID: <72b91ed1-d2c8-cc02-9de4-344e8f423233@collabora.com>
+Date:   Wed, 20 Jan 2021 12:58:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="OySCGVbEh1Xz1OCy"
-Content-Disposition: inline
-In-Reply-To: <83ed9f3929bd064b54bb9903cd489adde442e1c7.camel@alliedtelesis.co.nz>
+In-Reply-To: <ef8906a7-0412-dbe3-d30a-2ac6d4f1b76d@samsung.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---OySCGVbEh1Xz1OCy
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
 Hi,
 
-On Tue 19 Jan 21, 01:09, Hamish Martin wrote:
-> On Sat, 2021-01-09 at 16:26 -0500, Alan Stern wrote:
-> > On Sun, Dec 27, 2020 at 12:22:34PM +0100, Paul Kocialkowski wrote:
-> > > Hi,
-> >=20
-> > Sorry it has taken so long to respond to this.  The holidays
-> > intervened,=20
-> > but that's no excuse.
-> I'm sorry too, same reason/non-excuse. Thanks for your thorough report
-> on the issue my changes caused and pass on my apologies to your Mom!
+W dniu 19.01.2021 o 21:15, Krzysztof Opasiak pisze:
+> 
+> 
+> On 19.01.2021 21:06, Paul Wise wrote:
+>> Hi Greg, all,
+>>
+>> Right now all the Linux userspace USB gadget projects (libusbg,
+>> libusbgx, gt, gadgetd, cmtp-responder etc) are spread out across
+>> different GitHub organisations and user accounts.
+> 
+> Anything that could increase the bandwidth on the components that I
+> maintain makes perfect sense to me.
+> I've been moved to a little bit different challenges and I've very
+> little to no time for the maintenance...
+> 
 
-Aaaand sorry for the delay here as well, I've been busy with other things
-lately. No problem at all :)
+I can offer 2h/week to help maintaining/developing.
 
-> > > On Fri 11 Sep 20, 09:25, Hamish Martin wrote:
-> > > > Some integrated OHCI controller hubs do not expose all ports of
-> > > > the hub
-> > > > to pins on the SoC. In some cases the unconnected ports generate
-> > > > spurious over-current events. For example the Broadcom
-> > > > 56060/Ranger 2 SoC
-> > > > contains a nominally 3 port hub but only the first port is wired.
-> > > >=20
-> > > > Default behaviour for ohci-platform driver is to use global over-
-> > > > current
-> > > > protection mode (AKA "ganged"). This leads to the spurious over-
-> > > > current
-> > > > events affecting all ports in the hub.
-> > > >=20
-> > > > We now alter the default to use per-port over-current protection.
-> > >=20
-> > > This specific patch lead to breaking OHCI on my mom's laptop (whom
-> > > was about
-> > > to buy a new one thinking the hardware had failed). I get no OHCI
-> > > interrupt at
-> > > all and no USB 1 device is ever detected.
-> > >=20
-> > > I haven't really found a reasonable explanation about why that is,
-> > > but here
-> > > are some notes I was able to collect:
-> > > - The issue showed up on 5.8,18 and 5.9.15, which don't include the
-> > > patch
-> > >   from this series that sets distrust_firmware =3D false; This
-> > > results in the NPS
-> > >   bit being set via OHCI_QUIRK_HUB_POWER.
-> > > - Adding val &=3D ~RH_A_PSM; (as was done before this change) solves
-> > > the issue
-> > >   which is weird because the bit is supposed to be inactive when
-> > > NPS is set;
-> > > - Setting ohci_hcd.distrust_firmware=3D0 in the cmdline results in
-> > > not setting
-> > >   the NPS bit and also solves the issue;
-> > > - The initial value of the register at function entry is 0x1001104
-> > > (PSM bit
-> > >   is set, NPS is unset);
-> > > - The OHCI controller is the following:
-> > > 00:03.0 USB controller: Silicon Integrated Systems [SiS] USB 1.1
-> > > Controller (rev 0f) (prog-if 10 [OHCI])
-> > > 	Subsystem: ASUSTeK Computer Inc. Device 1aa7
-> >=20
-> > Great reporting -- thanks.
-> >=20
-> > > Does that make any sense to you?
-> > >=20
-> > > I really wonder what a proper fix could be and here are some
-> > > suggestions:
-> > > - Adding a specific quirk to clear the PSM bit for this hardware
-> > > which seems to
-> > >   consider the bit regardless of NPS;
-> >=20
-> > We don't need a quirk for this.  There shouldn't be anything wrong
-> > with=20
-> > _always_ clearing PSM whenever NPS is set, since the controller is=20
-> > supposed to ignore PSM under that condition.
-> >=20
-> > Would you like to submit a patch for this?
-> Yes, I think that looks reasonable too.
+(re-pasting the links to de-obfuscate them after Krzysztof's reply)
 
-Agreed, I'll craft a patch in this direction and have you CC-ed.
+https://github.com/libusbg/libusbg
+https://github.com/libusbgx/libusbgx
+https://github.com/kopasiak/gt
+https://github.com/gadgetd/gadgetd
+https://github.com/cmtp-responder/cmtp-responder
 
-> > > - Adding the patch that sets distrust_firmware =3D false to stable
-> > > branches;
-> >=20
-> > That's certainly reasonable.  Nobody has reported any problems caused
-> > by=20
-> > that patch, so adding it to the stable branches should be safe
-> > enough.
-> >=20
-> Yes, that is probably a good idea. I've carried both patches locally
-> for my systems.
+As far as I know switching from libusbg to libusbgx is a move endorsed by 
+libusbg's author.
+@Matt: Am I right?
 
-Thanks for requesting it :)
+For sure gt depends on libusbgx, not libusbg.
 
-Cheers,
+>>
+>> I would like to move each of these projects to the linux-usb GitHub
+>> organisation and add some more folks to the list of admins so that
+>> these projects can be more collaboratively maintained. The linux-usb
+>> GitHub organisation is currently solely owned by Greg Kroah-Hartman.
+>>
 
-Paul
+https://github.com/linux-usb
 
-> > > What do you think?
-> >=20
-> > We could even do both.  That would help if, for example, somebody=20
-> > decided to set ohci_hcd.distrust_firmware=3Dtrue explicitly.
-> I think both might be best.
->=20
-> >=20
-> > Greg, in the meantime can we have commit c4005a8f65ed ("usb: ohci:
-> > Make=20
-> > distrust_firmware param default to false") added to all the stable=20
-> > kernels which have back-ported versions of commit b77d2a0a223b?
-> >=20
-> > Alan Stern
-> I second that.
->=20
-> Thanks,
-> Hamish Martin
->=20
+>>
+>> I don't propose to move maintenance of these projects to kernel.org
+>> since the issue and pull request databases for them are on GitHub and
+>> would need to be preserved.
+>>
+> 
 
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+Having an umbrella project for userspace USB gadget projects seems
+a good idea to me.
 
---OySCGVbEh1Xz1OCy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmAICvYACgkQ3cLmz3+f
-v9FrSQf+LFYcO3wfTOl8abvNBEaLSA9FYypMnm17gOEPVfvVivfzX1KASkP/1Vw9
-p0ml4+VPSnpIybsP461XOE4tXgad2g4Y1FL/gLzPQpYhJl+khiFVQnFyOMerv+q7
-DAES5mh79PriBntIyYWjzJg96bjVHTfDQwslsQe3kr2QXYXcJSEkXb5lF+CAlqea
-JbqHPEghypoZEQ7vf7Dab4MnIOn8Hw/UiTTpgYgTv49NQqTLGxZKRwm776xxw6wy
-BMzGxnSYsBetjxSEImc9tQ5p5ydObGWH7K+mMgTLEeYGC+yH0p+vtbcF8XR/9Cp5
-qnNnqbtjwuhGRo5Mw/ICM0vK7YvpWw==
-=GwoA
------END PGP SIGNATURE-----
-
---OySCGVbEh1Xz1OCy--
+Andrzej
