@@ -2,124 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 157C42FC94D
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 04:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0E32FC99D
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jan 2021 04:55:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728883AbhATDkI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 19 Jan 2021 22:40:08 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:57853 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728756AbhATDjw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 22:39:52 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 10K3cXZv9031456, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexmbs03.realtek.com.tw[172.21.6.96])
-        by rtits2.realtek.com.tw (8.15.2/2.70/5.88) with ESMTPS id 10K3cXZv9031456
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 20 Jan 2021 11:38:33 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Wed, 20 Jan 2021 11:38:32 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::ecca:80ca:53:e833]) by
- RTEXMBS04.realtek.com.tw ([fe80::ecca:80ca:53:e833%12]) with mapi id
- 15.01.2106.006; Wed, 20 Jan 2021 11:38:32 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     Grant Grundler <grundler@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oliver Neukum <oliver@neukum.org>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        nic_swsd <nic_swsd@realtek.com>,
+        id S1730552AbhATDyg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jan 2021 22:54:36 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:51080 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731536AbhATDwJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jan 2021 22:52:09 -0500
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20210120035125epoutp04535bd84bf7d18c31312e51a1d1e95be8~b1EVK-jlj0900909009epoutp04m
+        for <linux-usb@vger.kernel.org>; Wed, 20 Jan 2021 03:51:25 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20210120035125epoutp04535bd84bf7d18c31312e51a1d1e95be8~b1EVK-jlj0900909009epoutp04m
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1611114685;
+        bh=rmNVsadvUvfUSqyjvLgSW52JXvqmaHb2Wy0DJaMu3Dg=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=Jazlue4oPk80MGKWtq5jer+gs20fKpSjCGr1pJE/DrdSbMNr1lJYqFkKyc7ahwJIy
+         UwJWQH88ZMMJY9oSa442Eh6ibJYxqsi3tiV1wZ7oUestD41JGUV0pk79U6gxIdVuaN
+         YtaXyW0nf9DROcgHREB+WlSAQQ85C4o2viH1/Jsc=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20210120035124epcas2p19d47d33491f049d669e65b496a47d681~b1EUZf7cE0409004090epcas2p1n;
+        Wed, 20 Jan 2021 03:51:24 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.40.187]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4DLBQg68wvz4x9Q2; Wed, 20 Jan
+        2021 03:51:23 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        AB.2A.05262.BB8A7006; Wed, 20 Jan 2021 12:51:23 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20210120035123epcas2p2048f6d9896bd21f19d939a56fe0b6610~b1ESmBk-Q0078900789epcas2p2A;
+        Wed, 20 Jan 2021 03:51:23 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20210120035123epsmtrp11506a9812d8877c7dc11adc1a9faa50c~b1ESlZgnC1321313213epsmtrp1k;
+        Wed, 20 Jan 2021 03:51:23 +0000 (GMT)
+X-AuditID: b6c32a47-b81ff7000000148e-33-6007a8bb19c1
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8E.AE.13470.AB8A7006; Wed, 20 Jan 2021 12:51:22 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20210120035122epsmtip1d4e05b15d6286804b575393b25e403d7~b1ESaKF8o0536305363epsmtip1b;
+        Wed, 20 Jan 2021 03:51:22 +0000 (GMT)
+From:   Daehwan Jung <dh10.jung@samsung.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Daehwan Jung <dh10.jung@samsung.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH net] net: usb: cdc_ncm: don't spew notifications
-Thread-Topic: [PATCH net] net: usb: cdc_ncm: don't spew notifications
-Thread-Index: AQHW7smNYWwyfviJ4EOtGXflgw3CLaov3Wqg
-Date:   Wed, 20 Jan 2021 03:38:32 +0000
-Message-ID: <0a5e1dad04494f16869b44b8457f0980@realtek.com>
-References: <20210120011208.3768105-1-grundler@chromium.org>
-In-Reply-To: <20210120011208.3768105-1-grundler@chromium.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.177.146]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: usb: dwc3: gadget: skip pullup and set_speed after suspend
+Date:   Wed, 20 Jan 2021 12:39:28 +0900
+Message-Id: <1611113968-102424-1-git-send-email-dh10.jung@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrAKsWRmVeSWpSXmKPExsWy7bCmue7uFewJBqcmCVkca3vCbnFnwTQm
+        i+bF69ksLu+aw2axaFkrswOrx6ZVnWwe++euYffo27KK0ePzJrkAlqgcm4zUxJTUIoXUvOT8
+        lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE3FRbJRefAF23zBygvUoKZYk5pUChgMTiYiV9O5ui
+        /NKSVIWM/OISW6XUgpScAkPDAr3ixNzi0rx0veT8XCtDAwMjU6DKhJyM3T9OMhV846jYd7SD
+        vYFxBXsXIyeHhICJxILJr9m6GLk4hAR2MErc/NLLCuF8YpToeP4JKvONUWLPm99wLX//vWOC
+        SOxllFj57RILhPODUaLh13ugfg4ONgEtie8LGUEaRASUJab8aANrYBaYxijxcO0WJpCEsICz
+        xP/lR5lBbBYBVYlLm06CbeAVcJPo+bOeDWKbnMTNc53MIM0SAtPZJebPOcMIkXCRuHv6PpQt
+        LPHq+Bao86QkXva3sYMcISFQLrFovh1EbwejxJpPZ6HqjSVmPWtnBKlhFtCUWL9LH6JcWeLI
+        LRaQCmYBPomOw3+hpvBKdLQJQTQqS0y/PIEVwpaUOPj6HDNEiYfEyXVaIGEhgViJpWvuMU1g
+        lJ2FMH4BI+MqRrHUguLc9NRiowJj5DjaxAhOSlruOxhnvP2gd4iRiYPxEKMEB7OSCG/TX7YE
+        Id6UxMqq1KL8+KLSnNTiQ4ymwNCayCwlmpwPTIt5JfGGpkZmZgaWphamZkYWSuK8xQYP4oUE
+        0hNLUrNTUwtSi2D6mDg4pRqYnG9Zun1ZeUTkvbdNdM+pm0qrTMPM2jeIaLBLclyWk0rbzXfY
+        g/OTeN727hu902P+vkv7qmNacvvkJOlD9T6TpFpPyq1at6niRpiUDBP3hSvGr+9enTktT0Pz
+        wodPhwo09SY+mH2E993cq1OeLMvomZ0i65Ap78IiWLrbUcORUeM1ry730+q0CtmlT4x6Nhhd
+        Eb14zbbg3cZ9oYEtiuks24Osps6MVljxYzsDv4yF6OZOQfnZt3UvbOLZMmHXj1NzLGekP9rN
+        9fCpj6BMVtvW9Ysj5jrOl1jGvTFT/JLSr0c37nUtfXvXOi1Fkv9oyvGL1xwsls/780jhoNDd
+        uOdymy2Za+6VLcnTmz+FSenUKyWW4oxEQy3mouJEAIwswA7TAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrAJMWRmVeSWpSXmKPExsWy7bCSnO6uFewJBj0fLS2OtT1ht7izYBqT
+        RfPi9WwWl3fNYbNYtKyV2YHVY9OqTjaP/XPXsHv0bVnF6PF5k1wASxSXTUpqTmZZapG+XQJX
+        xu4fJ5kKvnFU7Dvawd7AuIK9i5GTQ0LAROLvv3dMXYxcHEICuxklet7vgEpISiydewPKFpa4
+        33KEFaLoG6PEiRmbGbsYOTjYBLQkvi9kBKkREVCWmPKjDWwQs8AMoJr+bhaQhLCAs8T/5UeZ
+        QWwWAVWJS5tOgg3lFXCT6Pmzng1igZzEzXOdzBMYeRYwMqxilEwtKM5Nzy02LDDMSy3XK07M
+        LS7NS9dLzs/dxAgOFC3NHYzbV33QO8TIxMF4iFGCg1lJhLfpL1uCEG9KYmVValF+fFFpTmrx
+        IUZpDhYlcd4LXSfjhQTSE0tSs1NTC1KLYLJMHJxSDUxOPX4X3rdr/drQpNVtebRwq0nBP957
+        D6WS/1uECX+4sGBRw6aZrvkt3Mt5n2wv1jaRufiaSytz7TvTgu0CB4+JT/weJXfFuH/CCouC
+        f29sLhgKxy542X04YMr5ac87P7Z25DkWsAgxlDPd15rhNG+ClUf2lWMfq2L/FG+/fEfjmYdF
+        mYtkevRrHS7eh14PD5js2i2rZfSkOy+0a9/m1UnOP5Q5elevXhSWkdMcNtN908P5CsqLYv18
+        ll3c6RZtcXGfZ2+P42WdoK065Z7nVJONi04Efvm72G/h98B/3yv+ntLf8OmWWfTLoJA21X/W
+        rTkiB/74f5G7X7eA03kC5/WqxNx1HHfP//kd38xgHK3EUpyRaKjFXFScCABgoX4igwIAAA==
+X-CMS-MailID: 20210120035123epcas2p2048f6d9896bd21f19d939a56fe0b6610
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210120035123epcas2p2048f6d9896bd21f19d939a56fe0b6610
+References: <CGME20210120035123epcas2p2048f6d9896bd21f19d939a56fe0b6610@epcas2p2.samsung.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Grant Grundler <grundler@chromium.org>
-> Sent: Wednesday, January 20, 2021 9:12 AM
-> Subject: [PATCH net] net: usb: cdc_ncm: don't spew notifications
-> 
-> RTL8156 sends notifications about every 32ms.
-> Only display/log notifications when something changes.
-> 
-> This issue has been reported by others:
-> 	https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1832472
-> 	https://lkml.org/lkml/2020/8/27/1083
-> 
-> ...
-> [785962.779840] usb 1-1: new high-speed USB device number 5 using xhci_hcd
-> [785962.929944] usb 1-1: New USB device found, idVendor=0bda,
-> idProduct=8156, bcdDevice=30.00
-> [785962.929949] usb 1-1: New USB device strings: Mfr=1, Product=2,
-> SerialNumber=6
-> [785962.929952] usb 1-1: Product: USB 10/100/1G/2.5G LAN
-> [785962.929954] usb 1-1: Manufacturer: Realtek
-> [785962.929956] usb 1-1: SerialNumber: 000000001
-> [785962.991755] usbcore: registered new interface driver cdc_ether
-> [785963.017068] cdc_ncm 1-1:2.0: MAC-Address: 00:24:27:88:08:15
-> [785963.017072] cdc_ncm 1-1:2.0: setting rx_max = 16384
-> [785963.017169] cdc_ncm 1-1:2.0: setting tx_max = 16384
-> [785963.017682] cdc_ncm 1-1:2.0 usb0: register 'cdc_ncm' at
-> usb-0000:00:14.0-1, CDC NCM, 00:24:27:88:08:15
-> [785963.019211] usbcore: registered new interface driver cdc_ncm
-> [785963.023856] usbcore: registered new interface driver cdc_wdm
-> [785963.025461] usbcore: registered new interface driver cdc_mbim
-> [785963.038824] cdc_ncm 1-1:2.0 enx002427880815: renamed from usb0
-> [785963.089586] cdc_ncm 1-1:2.0 enx002427880815: network connection:
-> disconnected
-> [785963.121673] cdc_ncm 1-1:2.0 enx002427880815: network connection:
-> disconnected
-> [785963.153682] cdc_ncm 1-1:2.0 enx002427880815: network connection:
-> disconnected
-> ...
-> 
-> This is about 2KB per second and will overwrite all contents of a 1MB
-> dmesg buffer in under 10 minutes rendering them useless for debugging
-> many kernel problems.
-> 
-> This is also an extra 180 MB/day in /var/logs (or 1GB per week) rendering
-> the majority of those logs useless too.
-> 
-> When the link is up (expected state), spew amount is >2x higher:
-> ...
-> [786139.600992] cdc_ncm 2-1:2.0 enx002427880815: network connection:
-> connected
-> [786139.632997] cdc_ncm 2-1:2.0 enx002427880815: 2500 mbit/s downlink
-> 2500 mbit/s uplink
-> [786139.665097] cdc_ncm 2-1:2.0 enx002427880815: network connection:
-> connected
-> [786139.697100] cdc_ncm 2-1:2.0 enx002427880815: 2500 mbit/s downlink
-> 2500 mbit/s uplink
-> [786139.729094] cdc_ncm 2-1:2.0 enx002427880815: network connection:
-> connected
-> [786139.761108] cdc_ncm 2-1:2.0 enx002427880815: 2500 mbit/s downlink
-> 2500 mbit/s uplink
-> ...
-> 
-> Chrome OS cannot support RTL8156 until this is fixed.
-> 
-> Signed-off-by: Grant Grundler <grundler@chromium.org>
+Sometimes dwc3_gadget_pullup and dwc3_gadget_set_speed are called after
+entering suspend. That's why it needs to check whether suspend
 
-Reviewed-by: Hayes Wang <hayeswang@realtek.com>
+1. dwc3 sends disconnect uevent and turn off. (suspend)
+2. Platform side causes pullup or set_speed(e.g., adbd closes ffs node)
+3. It causes unexpected behavior like ITMON error.
 
-Best Regards,
-Hayes
+Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+---
+ drivers/usb/dwc3/gadget.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index ee44321..d7d4202 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2093,6 +2093,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 	unsigned long		flags;
+ 	int			ret;
+ 
++	if (pm_runtime_suspended(dwc->dev))
++		return 0;
++
+ 	is_on = !!is_on;
+ 
+ 	/*
+@@ -2403,6 +2406,9 @@ static void dwc3_gadget_set_speed(struct usb_gadget *g,
+ 	unsigned long		flags;
+ 	u32			reg;
+ 
++	if (pm_runtime_suspended(dwc->dev))
++		return;
++
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
+ 	reg &= ~(DWC3_DCFG_SPEED_MASK);
+-- 
+2.7.4
 
