@@ -2,56 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3342FE774
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 11:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFDB2FE784
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 11:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729169AbhAUKW1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jan 2021 05:22:27 -0500
-Received: from mail-03.mail-europe.com ([91.134.188.129]:44270 "EHLO
-        mail-03.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729117AbhAUKWS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jan 2021 05:22:18 -0500
-Date:   Thu, 21 Jan 2021 10:20:34 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-        s=protonmail3; t=1611224443;
-        bh=NS6jIL1HjYTGB056Lzh6PU4kdZhf+ynx4UsW9FFdNJE=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=ungU9saH7Fmh3X9R6YqzPltWK/RnLGdSoGiVod8zlF6rBH4UNt8uca423m4EesFHq
-         T4d7Dnn9vOHjteazVmNvxiGQ0vetkeoZJmX3YBOUwm5X/cbRAZ2H7LnTqJ/SQukpnY
-         QYZZAw1qxRKDYkap37EcsFS+J27SdiduurgBphK4mtmn+/ffw2kcmKoaBnCOFMtifN
-         JCHKqhbtkX2qs7Va4hsQnAcfnxPOz7LE4y17Ng/vCF+uZA67bZ3tHIy634fnE+yjV8
-         b+xYBDlN43G1D8TbEWcZAU+YYWwDbBbYQPeCaE0Xon8QmpmauA9zNCNPxMkz5SPmGA
-         sAfss8vVAM9AA==
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-From:   Simon Ser <contact@emersion.fr>
-Cc:     =?utf-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        dri-devel@lists.freedesktop.org, hudson@trmm.net,
-        markus@raatikainen.cc, peter@stuge.se, linux-usb@vger.kernel.org,
-        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
-        sam@ravnborg.org
-Reply-To: Simon Ser <contact@emersion.fr>
-Subject: Re: [PATCH v4 0/3] Generic USB Display driver
-Message-ID: <-aBHMpNW0jmn4TF7fGiParPvZuVdzM0H0UGlmc0KGpZYJlBGkL-xq0ooPGErY0gl9iF9C7Il5jfFApcYHfypL06iv-6knlp7B6D7HfBhANc=@emersion.fr>
-In-Reply-To: <ebda4ea3-3352-f35f-883e-6db751d6ca8b@suse.de>
-References: <20210120170033.38468-1-noralf@tronnes.org> <ebda4ea3-3352-f35f-883e-6db751d6ca8b@suse.de>
+        id S1729143AbhAUKZ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jan 2021 05:25:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57384 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729104AbhAUKYc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 21 Jan 2021 05:24:32 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1EF6F23356;
+        Thu, 21 Jan 2021 10:23:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611224629;
+        bh=Vk+g6s1/mECeUrJ4TEUTgxd3IC/yHrCw9bhT4vdIydE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y//oif6RNho7eiB/JWL7uxdyTnNwfe6Ifi9MR5XodbwLLMrMhEK5H8/qaRkrWyHAG
+         aXW67zyO4Od3bbGPy3z4r1/nVh6zgS/QoZpqwQz6W4sZIXZFXLSejsr/5GzQaI52I8
+         sG+cYCkR0tZSYQcvQxrZxUuadGMHC5SrZMR0Lk03tjXa+CxlcfTlxCF3c8hH8P/EFg
+         lDNWSqqnb2RHiA0GDEbKwIlxGSVQaxhk4y6gUmt0Fpgah2WaioaLmqQylm420hB/Db
+         TnZiYnM1wugBTgtg28bpB4MpHMXMO6pIslQnZTDf1AdNBDQsmXEm9xfp6yGG3UPQv5
+         9E272uahxLWLQ==
+Received: from johan by xi with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1l2X88-0004VM-4w; Thu, 21 Jan 2021 11:23:56 +0100
+Date:   Thu, 21 Jan 2021 11:23:56 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patong.mxl@gmail.com, linus.walleij@linaro.org,
+        mchehab+huawei@kernel.org, angelo.dureghello@timesys.com
+Subject: Re: [PATCH v5 3/3] usb: cdc-acm: Ignore Exar XR21V141X when serial
+ driver is built
+Message-ID: <YAlWPF0vn/zFRsQu@hovoldconsulting.com>
+References: <20201122170822.21715-1-mani@kernel.org>
+ <20201122170822.21715-4-mani@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201122170822.21715-4-mani@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thursday, January 21st, 2021 at 10:59 AM, Thomas Zimmermann <tzimmermann=
-@suse.de> wrote:
+On Sun, Nov 22, 2020 at 10:38:22PM +0530, Manivannan Sadhasivam wrote:
+> From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> 
+> The RTS/CTS line discipline for this device doesn't follow
+> the standard. So, in order to properly support TX, a separate
+> driver is needed.
 
-> Well, I'd strongly ask to not call it "generic", because it isn't. We
-> have other USB drivers and anyone can make a USB display with these
-> protocols as well. That doesn't make them generic. A USB-standardized
-> protocol would be generic. Maybe call it custom, or home-made.
+This took a bit of effort to understand, but I think I know what you're
+referring to now. In ACM mode the device has RTS/CTS flow control
+enabled, which means TX will be disabled in case CTS isn't wired up
+correctly.
 
-Maybe rename it to "GUD USB Display driver"? :P
+It as nothing to do with line disciplines though.
+
+> Ensure that cdc_acm will ignore it during probe time, if the
+> Kernel is built with support for it.
+>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
+
+> ---
+>  drivers/usb/class/cdc-acm.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+> index 30ef946a8e1a..719829e6b6db 100644
+> --- a/drivers/usb/class/cdc-acm.c
+> +++ b/drivers/usb/class/cdc-acm.c
+> @@ -1890,6 +1890,12 @@ static const struct usb_device_id acm_ids[] = {
+>  	},
+>  #endif
+>  
+> +#if IS_ENABLED(CONFIG_USB_SERIAL_XR)
+> +	{ USB_DEVICE(0x04e2, 0x1410),   /* Ignore XR21V141X USB to Serial converter */
+> +	.driver_info = IGNORE_DEVICE,
+> +	},
+> +#endif
+> +
+>  	/*Samsung phone in firmware update mode */
+>  	{ USB_DEVICE(0x04e8, 0x685d),
+>  	.driver_info = IGNORE_DEVICE,
+
+I've rewritten the commit message and applied this one now.
+
+Johan
