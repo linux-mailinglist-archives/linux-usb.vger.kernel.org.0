@@ -2,169 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60B0F2FE445
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 08:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17FB02FE44E
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 08:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727511AbhAUHp2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jan 2021 02:45:28 -0500
-Received: from a1.mail.mailgun.net ([198.61.254.60]:55449 "EHLO
-        a1.mail.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726811AbhAUHpA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jan 2021 02:45:00 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1611215080; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=45SHXNGLf2GW49IFygSLw/pVD2P3JuS39NiipoEW1UQ=; b=U3bvABjJ1Fih3qHbVB/rBq8r+naO4d159jEIKnOHdVLjaB5cdTcdssQ/VkBbHta/lgg3nXgu
- 3t0vZSO0fHAatxSSbNy7NXARtv7vaN/hdHVd7q0nye1cKI5Fj6yVV2E5xIMPrjPmdzh8/u/o
- 3Rv6B2yNwiUlnq5IblTPtCBRMHc=
-X-Mailgun-Sending-Ip: 198.61.254.60
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 600930c95677aca7bdbe0b15 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 21 Jan 2021 07:44:09
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 573DFC43464; Thu, 21 Jan 2021 07:44:09 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.110.7.112] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 185CCC433CA;
-        Thu, 21 Jan 2021 07:44:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 185CCC433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: usb: dwc3: gadget: skip pullup and set_speed after suspend
-To:     Jung Daehwan <dh10.jung@samsung.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <CGME20210120035123epcas2p2048f6d9896bd21f19d939a56fe0b6610@epcas2p2.samsung.com>
- <1611113968-102424-1-git-send-email-dh10.jung@samsung.com>
- <fbde7781-8eef-ab3a-a339-8a2f61ca83be@synopsys.com>
- <20210121064956.GA69382@ubuntu>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <6c6429da-5d27-2d6a-9bcf-3606810e71a6@codeaurora.org>
-Date:   Wed, 20 Jan 2021 23:44:05 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S1726199AbhAUHrq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jan 2021 02:47:46 -0500
+Received: from mx2.suse.de ([195.135.220.15]:43416 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727741AbhAUHqH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 21 Jan 2021 02:46:07 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 93542AD29;
+        Thu, 21 Jan 2021 07:45:22 +0000 (UTC)
+To:     Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Cc:     hudson@trmm.net, markus@raatikainen.cc, peter@stuge.se,
+        USB list <linux-usb@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Tyler Hardin <th020394@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>, pontus.fuchs@gmail.com,
+        Sam Ravnborg <sam@ravnborg.org>
+References: <20210120170033.38468-1-noralf@tronnes.org>
+ <20210120170033.38468-2-noralf@tronnes.org>
+ <CAKMK7uHoALsGRgJjPzpeAvN10CoBpLsT86=gUm82ki-h2DkPwQ@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH v4 1/3] drm/uapi: Add USB connector type
+Message-ID: <9660eec0-15b7-ee8b-10ed-c6ceed54a56f@suse.de>
+Date:   Thu, 21 Jan 2021 08:45:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <20210121064956.GA69382@ubuntu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <CAKMK7uHoALsGRgJjPzpeAvN10CoBpLsT86=gUm82ki-h2DkPwQ@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="9j87slOnp5dXVR7mVMi6q4gWaKLdJY8uk"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--9j87slOnp5dXVR7mVMi6q4gWaKLdJY8uk
+Content-Type: multipart/mixed; boundary="gWfJxreA5R6PCSYL0yNv5ravgbAmv9EO5";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Daniel Vetter <daniel@ffwll.ch>, =?UTF-8?Q?Noralf_Tr=c3=b8nnes?=
+ <noralf@tronnes.org>
+Cc: hudson@trmm.net, markus@raatikainen.cc, peter@stuge.se,
+ USB list <linux-usb@vger.kernel.org>,
+ dri-devel <dri-devel@lists.freedesktop.org>,
+ Tyler Hardin <th020394@gmail.com>, Lubomir Rintel <lkundrak@v3.sk>,
+ pontus.fuchs@gmail.com, Sam Ravnborg <sam@ravnborg.org>
+Message-ID: <9660eec0-15b7-ee8b-10ed-c6ceed54a56f@suse.de>
+Subject: Re: [PATCH v4 1/3] drm/uapi: Add USB connector type
+References: <20210120170033.38468-1-noralf@tronnes.org>
+ <20210120170033.38468-2-noralf@tronnes.org>
+ <CAKMK7uHoALsGRgJjPzpeAvN10CoBpLsT86=gUm82ki-h2DkPwQ@mail.gmail.com>
+In-Reply-To: <CAKMK7uHoALsGRgJjPzpeAvN10CoBpLsT86=gUm82ki-h2DkPwQ@mail.gmail.com>
 
+--gWfJxreA5R6PCSYL0yNv5ravgbAmv9EO5
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
 
-On 1/20/2021 10:49 PM, Jung Daehwan wrote:
-> Hi,
-> 
-> On Thu, Jan 21, 2021 at 01:00:32AM +0000, Thinh Nguyen wrote:
->> Hi,
+Hi Noralf,
+
+glad to hear from you! Welcome back!
+
+Am 20.01.21 um 18:42 schrieb Daniel Vetter:
+> On Wed, Jan 20, 2021 at 6:10 PM Noralf Tr=C3=B8nnes <noralf@tronnes.org=
+> wrote:
 >>
->> Daehwan Jung wrote:
->>> Sometimes dwc3_gadget_pullup and dwc3_gadget_set_speed are called after
->>> entering suspend. That's why it needs to check whether suspend
->>>
->>> 1. dwc3 sends disconnect uevent and turn off. (suspend)
->>> 2. Platform side causes pullup or set_speed(e.g., adbd closes ffs node)
->>> 3. It causes unexpected behavior like ITMON error.
->>>
->>> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
->>> ---
->>>  drivers/usb/dwc3/gadget.c | 6 ++++++
->>>  1 file changed, 6 insertions(+)
->>>
->>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>> index ee44321..d7d4202 100644
->>> --- a/drivers/usb/dwc3/gadget.c
->>> +++ b/drivers/usb/dwc3/gadget.c
->>> @@ -2093,6 +2093,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>>  	unsigned long		flags;
->>>  	int			ret;
->>>  
->>> +	if (pm_runtime_suspended(dwc->dev))
->>> +		return 0;
->>> +
->>>  	is_on = !!is_on;
->>>  
->>>  	/*
->>> @@ -2403,6 +2406,9 @@ static void dwc3_gadget_set_speed(struct usb_gadget *g,
->>>  	unsigned long		flags;
->>>  	u32			reg;
->>>  
->>> +	if (pm_runtime_suspended(dwc->dev))
->>> +		return;
->>> +
->>>  	spin_lock_irqsave(&dwc->lock, flags);
->>>  	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
->>>  	reg &= ~(DWC3_DCFG_SPEED_MASK);
+>> Add a connector type for USB connected display panels.
 >>
->> This is already addressed in Wesley Cheng's patches. Can you try the
->> latest changes of DWC3 in Greg's usb-next branch?
+>> Signed-off-by: Noralf Tr=C3=B8nnes <noralf@tronnes.org>
+>> ---
+>>   include/uapi/drm/drm_mode.h | 1 +
+>>   1 file changed, 1 insertion(+)
 >>
->> Thanks,
->> Thinh
-> 
-> I checked Wesly Cheng's pathces but it's not same.
-> What I want to do for this patch is to avoid pullup from platform side.
-> (android in my case)
-> 
-> It's possible that platform side tries to pullup by UDC_Store after usb is already disconnected.
-> It can finally run controller and enable irq.
-> 
-> I think we have to avoid it and other possible things related to platform side.
-> 
-> 
+>> diff --git a/include/uapi/drm/drm_mode.h b/include/uapi/drm/drm_mode.h=
 
-Hi Daehwan,
+>> index fed66a03c7ae..33024cc5d26e 100644
+>> --- a/include/uapi/drm/drm_mode.h
+>> +++ b/include/uapi/drm/drm_mode.h
+>> @@ -367,6 +367,7 @@ enum drm_mode_subconnector {
+>>   #define DRM_MODE_CONNECTOR_DPI         17
+>>   #define DRM_MODE_CONNECTOR_WRITEBACK   18
+>>   #define DRM_MODE_CONNECTOR_SPI         19
+>> +#define DRM_MODE_CONNECTOR_USB         20
 
-I think what you're trying to do is to avoid the unnecessary runtime
-resume if the cable is disconnected and userspace attempts to
-bind/unbind the UDC.
+I would not call it USB. I could imagine that at some point a generic=20
+USB protocol could serve simple displays (i.e. in the sense of USB HID=20
+or data or imaging). (Maybe Thunderbold already counts.) Anyway, USB=20
+should be reserved for this case.
 
-I'm not exactly sure what patches you've pulled in, but assuming you
-didn't pull in any of the recent suspend changes:
+Best regards
+Thomas
 
-usb: dwc3: gadget: Allow runtime suspend if UDC unbinded
-usb: dwc3: gadget: Preserve UDC max speed setting
+>=20
+> Beware, new connector types have in the past resulted in userspace
+> burning&crashing. Maybe it's become better ...
+>=20
+> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+>>
+>>   /**
+>>    * struct drm_mode_get_connector - Get connector metadata.
+>> --
+>> 2.23.0
+>>
+>> _______________________________________________
+>> dri-devel mailing list
+>> dri-devel@lists.freedesktop.org
+>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+>=20
+>=20
+>=20
 
-Please consider the following scenario:
-1.  USB connected
-2.  UDC unbinded
-3.  DWC3 will continue to stay in runtime active, since dwc->connected =
-true
+--=20
+Thomas Zimmermann
+Graphics Driver Developer
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
+(HRB 36809, AG N=C3=BCrnberg)
+Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
 
-In this scenario, we should allow the DWC3 to enter runtime suspend,
-since runstop has been disabled.
 
-If you have pulled in the above changes, and adding your changes on top
-of it, then consider the following:
-1.  USB connected
-2.  UDC unbinded
-3.  DWC enters runtime suspend (due to the above changes)
-4.  UDC binded
+--gWfJxreA5R6PCSYL0yNv5ravgbAmv9EO5--
 
-The check for pm_runtime_suspended() will block step#4 from re-enabling
-the runstop bit even if the USB cable is connected.
+--9j87slOnp5dXVR7mVMi6q4gWaKLdJY8uk
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Thanks
-Wesley Cheng
+-----BEGIN PGP SIGNATURE-----
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmAJMREFAwAAAAAACgkQlh/E3EQov+Ai
+6RAAjAxmkSjaOON+hMbC8MwFq9UXDtyJg7ZbUl6iDRdGWAZKCFSTEi/XKc/j8BsLs5SfVgHZ6P1E
+6G0Bs5sYNiGsqxom37cZKOzDzDRAj/fPlsJ7f/bqn71kIwctZIrbGGJWgY6a2EOX+W8Kabb4WiOj
+lHOPCydgHlE+aJfFAz+MNT2Z/CV8CrCxyWO6fdsmMwxZjoHi3adlY/NPgZCYbkBrPuspYs6LT0Da
+X3u/wMCj48RpXjYhquMmHXSO0XkHqSLv3Nr/VDSlS499Y757Ib+y3kHEqGCt+Bqz4SMrgS52GJxB
+dxmON+V2oDKGmdwW9BT8VQZYmHR+3a5kcD4tmdvALI70oCQHw8gCrnlrgJJDkSBwppJR8wVguagm
+v/VcJXUzKa7W0JhUvwvHoqBCdtChanBF1rqVEa6q3XiYBs4TaCTO6gLJYgj+DEyHFFuWJc7yYsSn
+DDCPk0Ymvj/U1DFuyPWKaWaR/W8fy0bKW9ODObTy1r1v4Fd1iKZ1sN95aprRxui3otAPbjbi1Vqd
+e2E1u8deXgoWBgGhqQmYRUEmD5KInX5MmolY6x2AtB+5Wr/bK3LaXasq60reADuxrl+/KF5T9pLf
+q1IyoH/jLm1mqsfVG1p8mxc+ScLpLTRVgJeDkAZTvSgU0h28926HAiFOpl8QmdlxRdvKwE2Zsat4
+1/8=
+=rS5O
+-----END PGP SIGNATURE-----
+
+--9j87slOnp5dXVR7mVMi6q4gWaKLdJY8uk--
