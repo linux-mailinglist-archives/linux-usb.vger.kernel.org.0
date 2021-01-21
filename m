@@ -2,191 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B24A2FE700
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 11:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D64B2FE73D
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 11:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728764AbhAUKB5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jan 2021 05:01:57 -0500
-Received: from mx2.suse.de ([195.135.220.15]:45198 "EHLO mx2.suse.de"
+        id S1728764AbhAUKMw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jan 2021 05:12:52 -0500
+Received: from mga11.intel.com ([192.55.52.93]:32295 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729040AbhAUKBy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 21 Jan 2021 05:01:54 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 04255AD24;
-        Thu, 21 Jan 2021 10:01:13 +0000 (UTC)
-Subject: Re: [PATCH v4 1/3] drm/uapi: Add USB connector type
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     hudson@trmm.net, markus@raatikainen.cc,
-        Sam Ravnborg <sam@ravnborg.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Tyler Hardin <th020394@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>, pontus.fuchs@gmail.com,
-        peter@stuge.se
-References: <20210120170033.38468-1-noralf@tronnes.org>
- <20210120170033.38468-2-noralf@tronnes.org>
- <CAKMK7uHoALsGRgJjPzpeAvN10CoBpLsT86=gUm82ki-h2DkPwQ@mail.gmail.com>
- <9660eec0-15b7-ee8b-10ed-c6ceed54a56f@suse.de>
- <CAKMK7uHiQ3i-Rz_y_3joR2Zi3fA=1qp8MdGZ9w9PUcGoWT3urw@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-Message-ID: <1ea4e6e4-0806-dba1-a424-47f178dc882f@suse.de>
-Date:   Thu, 21 Jan 2021 11:01:11 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1729034AbhAUKMl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 21 Jan 2021 05:12:41 -0500
+IronPort-SDR: E6niDBA9gJTR7cvOBw2U+P6ivJbBPcOML8s+sGe5mUsrNi2ZWdi5xELpspnbfh8dIzs+I0rUQF
+ bWAtEB4b1UKg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9870"; a="175740727"
+X-IronPort-AV: E=Sophos;i="5.79,363,1602572400"; 
+   d="scan'208";a="175740727"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 02:10:46 -0800
+IronPort-SDR: uSMUMKGDE8CjOR1D9RKRhatqrMNNcGkc1dDf6wcc56HUsKxyho4JA6fGSyYp8chHGIq7ViYfus
+ B6Br5TKGIJRA==
+X-IronPort-AV: E=Sophos;i="5.79,363,1602572400"; 
+   d="scan'208";a="356407175"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 02:10:44 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1l2WwM-007MxW-HN; Thu, 21 Jan 2021 12:11:46 +0200
+Date:   Thu, 21 Jan 2021 12:11:46 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Oh Eomji <eomji.oh@samsung.com>
+Cc:     balbi@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_mass_storage: cahnge wait_event to
+ wait_event_timeout
+Message-ID: <YAlTYvi538xtAobf@smile.fi.intel.com>
+References: <eomji.oh@samsung.com>
+ <CGME20210121070836epcas2p130c0f62d82aa3fcd2e021a1ef88a7ebd@epcas2p1.samsung.com>
+ <1611212208-84202-1-git-send-email-eomji.oh@samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <CAKMK7uHiQ3i-Rz_y_3joR2Zi3fA=1qp8MdGZ9w9PUcGoWT3urw@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="mCmSvhEZha19ykyYCf4I0fHCDa1r5PhXD"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1611212208-84202-1-git-send-email-eomji.oh@samsung.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---mCmSvhEZha19ykyYCf4I0fHCDa1r5PhXD
-Content-Type: multipart/mixed; boundary="lfTYPP7prtNBzhmOUAvs9rdAVo9vDi3Or";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Daniel Vetter <daniel@ffwll.ch>
-Cc: hudson@trmm.net, markus@raatikainen.cc, Sam Ravnborg <sam@ravnborg.org>,
- USB list <linux-usb@vger.kernel.org>,
- dri-devel <dri-devel@lists.freedesktop.org>,
- Tyler Hardin <th020394@gmail.com>, Lubomir Rintel <lkundrak@v3.sk>,
- pontus.fuchs@gmail.com, peter@stuge.se
-Message-ID: <1ea4e6e4-0806-dba1-a424-47f178dc882f@suse.de>
-Subject: Re: [PATCH v4 1/3] drm/uapi: Add USB connector type
-References: <20210120170033.38468-1-noralf@tronnes.org>
- <20210120170033.38468-2-noralf@tronnes.org>
- <CAKMK7uHoALsGRgJjPzpeAvN10CoBpLsT86=gUm82ki-h2DkPwQ@mail.gmail.com>
- <9660eec0-15b7-ee8b-10ed-c6ceed54a56f@suse.de>
- <CAKMK7uHiQ3i-Rz_y_3joR2Zi3fA=1qp8MdGZ9w9PUcGoWT3urw@mail.gmail.com>
-In-Reply-To: <CAKMK7uHiQ3i-Rz_y_3joR2Zi3fA=1qp8MdGZ9w9PUcGoWT3urw@mail.gmail.com>
+On Thu, Jan 21, 2021 at 03:56:45PM +0900, Oh Eomji wrote:
+> Changed to return a timeout error if there is no response for a certain
+> period of time in order to solve the problem of waiting for a event
+> complete while executing unbind.
 
---lfTYPP7prtNBzhmOUAvs9rdAVo9vDi3Or
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+Can you shed a light on the choice of the timeout length?
 
-Hi
+> Signed-off-by: Oh Eomji <eomji.oh@samsung.com>
+> ---
+>  drivers/usb/gadget/function/f_mass_storage.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+> index 950c943..b474840 100644
+> --- a/drivers/usb/gadget/function/f_mass_storage.c
+> +++ b/drivers/usb/gadget/function/f_mass_storage.c
+> @@ -3000,7 +3000,7 @@ static void fsg_unbind(struct usb_configuration *c, struct usb_function *f)
+>  	if (fsg->common->fsg == fsg) {
+>  		__raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE, NULL);
+>  		/* FIXME: make interruptible or killable somehow? */
+> -		wait_event(common->fsg_wait, common->fsg != fsg);
+> +		wait_event_timeout(common->fsg_wait, common->fsg != fsg, HZ / 4);
+>  	}
+>  
+>  	usb_free_all_descriptors(&fsg->function);
+> -- 
+> 2.7.4
+> 
 
-Am 21.01.21 um 09:27 schrieb Daniel Vetter:
-> On Thu, Jan 21, 2021 at 8:45 AM Thomas Zimmermann <tzimmermann@suse.de>=
- wrote:
->>
->> Hi Noralf,
->>
->> glad to hear from you! Welcome back!
->>
->> Am 20.01.21 um 18:42 schrieb Daniel Vetter:
->>> On Wed, Jan 20, 2021 at 6:10 PM Noralf Tr=C3=B8nnes <noralf@tronnes.o=
-rg> wrote:
->>>>
->>>> Add a connector type for USB connected display panels.
->>>>
->>>> Signed-off-by: Noralf Tr=C3=B8nnes <noralf@tronnes.org>
->>>> ---
->>>>    include/uapi/drm/drm_mode.h | 1 +
->>>>    1 file changed, 1 insertion(+)
->>>>
->>>> diff --git a/include/uapi/drm/drm_mode.h b/include/uapi/drm/drm_mode=
-=2Eh
->>>> index fed66a03c7ae..33024cc5d26e 100644
->>>> --- a/include/uapi/drm/drm_mode.h
->>>> +++ b/include/uapi/drm/drm_mode.h
->>>> @@ -367,6 +367,7 @@ enum drm_mode_subconnector {
->>>>    #define DRM_MODE_CONNECTOR_DPI         17
->>>>    #define DRM_MODE_CONNECTOR_WRITEBACK   18
->>>>    #define DRM_MODE_CONNECTOR_SPI         19
->>>> +#define DRM_MODE_CONNECTOR_USB         20
->>
->> I would not call it USB. I could imagine that at some point a generic
->> USB protocol could serve simple displays (i.e. in the sense of USB HID=
-
->> or data or imaging). (Maybe Thunderbold already counts.) Anyway, USB
->> should be reserved for this case.
->=20
-> We end up calling those DisplayPort, since that's what's being
-> transported over thunderbolt or usb-C. So the usb connector would be
-> called usb-C. I think the reason we don't do fancy connector names is
-> that adding them is a bit a pain. Plus drm/i915 specifically has some
-> very quirky connector enumerating that doesn't match much with reality
-> unfortunately anyway :-/
-
-In the case of the other USB drivers, IIRC we use the connector type=20
-that is at the output (i.e., HDMI in the case of udl). I think we should =
-
-do the same here. Or use 'Unknown'.
-
-Best regards
-Thomas
-
-> -Daniel
->=20
->>
->> Best regards
->> Thomas
->>
->>>
->>> Beware, new connector types have in the past resulted in userspace
->>> burning&crashing. Maybe it's become better ...
->>>
->>> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
->>>>
->>>>    /**
->>>>     * struct drm_mode_get_connector - Get connector metadata.
->>>> --
->>>> 2.23.0
->>>>
->>>> _______________________________________________
->>>> dri-devel mailing list
->>>> dri-devel@lists.freedesktop.org
->>>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
->>>
->>>
->>>
->>
->> --
->> Thomas Zimmermann
->> Graphics Driver Developer
->> SUSE Software Solutions Germany GmbH
->> Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
->> (HRB 36809, AG N=C3=BCrnberg)
->> Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
->>
->=20
->=20
-
---=20
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
-(HRB 36809, AG N=C3=BCrnberg)
-Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
---lfTYPP7prtNBzhmOUAvs9rdAVo9vDi3Or--
-
---mCmSvhEZha19ykyYCf4I0fHCDa1r5PhXD
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmAJUOcFAwAAAAAACgkQlh/E3EQov+Be
-4BAAp1z0WmiKxITIHfPPs34dBNay9Q/OSTtuHD2m4TbJ/E2lZiZYGa4sp+kWDFRjdN3z7PzKqWxU
-sU0jfBMWjOxul7+Td4pjwgvslMlCAaaRExky06f5l5fGgX7ob+LmjG88pbUGd1wie5Xnl6nrXM42
-JG5UEMytTUiljRXxcFlqBYvBdrFGt1tF3RM/2VoRKGaVMl9cSsMy63lXiWwMp+XFjCgiucEAuoN3
-W+VHNclDAkaUFrtOSa11aDOmNmgo2F+8LtzuZLsNJmAjYudbMsW36mtK3xD/orcXCMQOpEOOzmon
-E8t/oUDIRUTMy2ov2/OUXYGre0lTkpWowZSKEg4AMBmhAC4yAXsVZfK47TDw8lWz+M9Hv5bjViMP
-+0qEdu2mGsBQ3ONMe/rypi5v/+rMjEjBhZ8+rKlm60Hldr442gauP0KwnRlHrPrnzkEjUDyDcPUJ
-uuIdYws8u6SRAsoE848gI6TbyiMT9SfRQn0XnvCQ1T5a6xgxTuDPxfAIL2NBUTwqs1Mkh6bGKp1E
-MHPlG0VmhT/38asfsL5ke2ndz4fgNHTopROhs82cknx1A7K65b73WwRz+X03/Ea4yepdvTevDs0A
-CxczhYAhW2ZsmlHYIF414MXUMljO103kN06JitpkUZfK5d6ggXa/CcLbhiSuQSyhZuS4VmiI5kJp
-wjM=
-=oEma
------END PGP SIGNATURE-----
-
---mCmSvhEZha19ykyYCf4I0fHCDa1r5PhXD--
