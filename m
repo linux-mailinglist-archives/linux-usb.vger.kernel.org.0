@@ -2,76 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B835D2FEF61
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 16:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F3F2FEFEF
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 17:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731806AbhAUPr5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jan 2021 10:47:57 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:58901 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1732963AbhAUPqi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jan 2021 10:46:38 -0500
-Received: (qmail 255135 invoked by uid 1000); 21 Jan 2021 10:45:33 -0500
-Date:   Thu, 21 Jan 2021 10:45:33 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Oh Eomji <eomji.oh@samsung.com>
-Cc:     balbi@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_mass_storage: cahnge wait_event to
- wait_event_timeout
-Message-ID: <20210121154533.GA254122@rowland.harvard.edu>
-References: <eomji.oh@samsung.com>
- <CGME20210121070836epcas2p130c0f62d82aa3fcd2e021a1ef88a7ebd@epcas2p1.samsung.com>
- <1611212208-84202-1-git-send-email-eomji.oh@samsung.com>
+        id S1731894AbhAUQP5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jan 2021 11:15:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732289AbhAUQPa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jan 2021 11:15:30 -0500
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35F9C061788
+        for <linux-usb@vger.kernel.org>; Thu, 21 Jan 2021 08:14:49 -0800 (PST)
+Received: by mail-ed1-x542.google.com with SMTP id s11so3159492edd.5
+        for <linux-usb@vger.kernel.org>; Thu, 21 Jan 2021 08:14:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=sBsWkGjaLI4ns0nT61e+91kOHbpUWMRH5vWp3GHiSRk=;
+        b=t6b2Z/5Xc3bRNWBPdk1CMNbrgUWrC+LrSlsH7Kw705wv8XVa2y67ZyRTJL+9ml14UX
+         83bI/RDXzIo0UAG/8cxvRz96OZehe5WMOCl3rP0muY+5LIFG7MH093zmQpDTwz3kuSSC
+         VFBlSS+K/0Q67L5Hq4NksrgcLNvs9W+brJuDSOQ4fQownWWlUN51jSeirQobDUJ4Om/Q
+         4DNbnRF8AQuMS94u8W3oJc+0HhAELNXtBE8wSr+T+anPK75p3UU4QOAkDYjDyC8kX4r+
+         cHN4IRVlfHCNUEDQyURnEYTz/DMKrndNrlNdMv3iqNhY3R4QpWeenlqcAmIl5mQZDb/+
+         VkpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=sBsWkGjaLI4ns0nT61e+91kOHbpUWMRH5vWp3GHiSRk=;
+        b=e+Co/y7jWDkcSuLI1P1mkgPMC8VIv41EFfc2U5Nhz+90mm5Ovbpz/O4yceQ2ekZRh4
+         xRQw/mP95cOzSR5v+hQHkWYNzAyzP4pjSk3ieQfNLqvW5Dz0He9d1WDHLxGzf6fjSIVb
+         hJnH+8TZn+dWgNguC0yT+mn2DMF823SNuXO3ZRnCw4YNoHediGBiTFtB59Yx1fUdsn/E
+         8A9hKGVo4/dB1zVkMfMd0I2RcqRAMy0OwR0bmMR2pbTdan58sgCZ5GBshoyfDlyXqmyI
+         zNbTm5foOTpPoMZi2t2sg57iiSgyeKV8ASpxJLYXWg4xuJQEJUC6h9gMaeidm7X6qwFq
+         9dsQ==
+X-Gm-Message-State: AOAM530+fdLoRQtNsx44Rs4+RGUQ9H4BR91HnggZqcFDtHgBCpqVM+u8
+        DenQAud8Zh+MUwK4bFqsO4ppCf+xQouR57H9888=
+X-Google-Smtp-Source: ABdhPJxo9d/95Gi2a7gbI/TzD2gRs5JzgjogLKlgoa01NgvkQfn9poHbwjof1d9EFhpCNoWfevhIUBh+lgeVGZY2cD0=
+X-Received: by 2002:aa7:d9c3:: with SMTP id v3mr11520292eds.133.1611245688281;
+ Thu, 21 Jan 2021 08:14:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1611212208-84202-1-git-send-email-eomji.oh@samsung.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a54:35cb:0:0:0:0:0 with HTTP; Thu, 21 Jan 2021 08:14:47
+ -0800 (PST)
+Reply-To: tracymedicinemed3@gmail.com
+From:   Dr Tracy William <bonarikan@gmail.com>
+Date:   Thu, 21 Jan 2021 17:14:47 +0100
+Message-ID: <CA+KHXtiUkBqW0A4h2moPUDVFWb35iz4_ewriGwj6_BY_qXcgMA@mail.gmail.com>
+Subject: From Dr Tracy from United States
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 21, 2021 at 03:56:45PM +0900, Oh Eomji wrote:
-> Changed to return a timeout error if there is no response for a certain
-> period of time in order to solve the problem of waiting for a event
-> complete while executing unbind.
-> 
-> Signed-off-by: Oh Eomji <eomji.oh@samsung.com>
-> ---
->  drivers/usb/gadget/function/f_mass_storage.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> index 950c943..b474840 100644
-> --- a/drivers/usb/gadget/function/f_mass_storage.c
-> +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> @@ -3000,7 +3000,7 @@ static void fsg_unbind(struct usb_configuration *c, struct usb_function *f)
->  	if (fsg->common->fsg == fsg) {
->  		__raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE, NULL);
->  		/* FIXME: make interruptible or killable somehow? */
-> -		wait_event(common->fsg_wait, common->fsg != fsg);
-> +		wait_event_timeout(common->fsg_wait, common->fsg != fsg, HZ / 4);
->  	}
->  
->  	usb_free_all_descriptors(&fsg->function);
+-- 
+Hello Dear,
+how are you doing?I hope you are good
+Its my pleasure to contact you for friendship as i have been busy with work
+for so long and i believe this is the right time to find someone.
 
-No, no, no!
+I was just surfing through the Internet when i found your email,i want
+to make a new
+and special friend.
 
-This patch completely misunderstands the purpose of the wait_event call.  
-The reason it isn't interruptible is not because that would be difficult 
--- all it takes is adding a timeout argument, as you did here.
-
-The reason is because the driver will get invalid memory accesses if 
-fsg_unbind returns too early.  fsg will be deallocated, but 
-fsg_set_interface will continue to use it.  This patch completely 
-ignores that issue.
-
-Was there any real reason for writing this patch?  Does it solve a 
-real-world problem?  Did you encounter a situation where the wait_event 
-call would wait for more than 1/4 second?
-
-Alan Stern
+My name is Dr Tracy William,I am from the United States of America.
+Pls respond to my personal email(tracymedicinemed3@gmail.com) and i
+will send my details and pictures upon hearing from you
+bye
+With love
+Tracy
