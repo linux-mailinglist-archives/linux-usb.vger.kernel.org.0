@@ -2,73 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFAA32FE8B0
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 12:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD31B2FEADE
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 13:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729212AbhAULXw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jan 2021 06:23:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43894 "EHLO mail.kernel.org"
+        id S1729266AbhAUKbb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jan 2021 05:31:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60222 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730394AbhAULXX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 21 Jan 2021 06:23:23 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 613D1238D7;
-        Thu, 21 Jan 2021 11:22:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1611228163;
-        bh=E5lCW8e76KF7jwvUqsIhRLZSQqyjdf7prScrWNH7Nro=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wnSHf/ilpNKTbTEYx9lGFGhJB2AN0rQKyG+KR6aoSOC4W68hfqDHneEwtc8IlSvBS
-         zkSRN0BfTTA4tiWAy7ywdg633RBYVOtdc31M+MLCXoz1kkY1UUzPBhVojV2ZfcjSDl
-         pfdd7QZz0LQ6zz5N9lr7ZpLgfxlfSdiJW1B6SOQU=
-Date:   Thu, 21 Jan 2021 12:22:40 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Oh Eomji <eomji.oh@samsung.com>
-Cc:     balbi@kernel.org, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_mass_storage: cahnge wait_event to
- wait_event_timeout
-Message-ID: <YAlkAHt5RQpE/qzZ@kroah.com>
-References: <eomji.oh@samsung.com>
- <CGME20210121070836epcas2p130c0f62d82aa3fcd2e021a1ef88a7ebd@epcas2p1.samsung.com>
- <1611212208-84202-1-git-send-email-eomji.oh@samsung.com>
+        id S1729273AbhAUKbU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 21 Jan 2021 05:31:20 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B89ED238EE;
+        Thu, 21 Jan 2021 10:29:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611224969;
+        bh=E3rqOhlNjsoj1qD6go+1xdGHgfZsx2+E9ZgBMrIJGPQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rCHPjIgRidSetEiDc/rT5Ghl1rwpxwhraSA2gf7FL8ZILU3DCyF+dffdL10fZg+Lj
+         n1AV7tutGE05vSTha7KYM3Nivlu/ZC/3oWAl3IhcSrRiDssMlnBtPTXXhbGH/95KL0
+         Wu2Brx46b3KGRom5yCT7zhEZ9SAiYiNpN75qfMKPmy+A/eq12BPrkbvhd1Hdi+9hkV
+         CzqSnkYeL7N5849hKFLbNzU2CVV78CiDnN9+mqkQRKB3lRWSlKGH5JblMYSZdM+mlJ
+         u+qCtJqxHlz3YWwm4dehjrDmOVZB6xrwv3ipl+F/oPFDrDZMP0D9Uxg87C/YA9k2KB
+         nz2zD5fiwkkoQ==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1l2XDd-0004Ya-5B; Thu, 21 Jan 2021 11:29:37 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: [PATCH 07/10] USB: serial: xr: simplify line-speed logic
+Date:   Thu, 21 Jan 2021 11:29:19 +0100
+Message-Id: <20210121102922.17439-9-johan@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210121102922.17439-1-johan@kernel.org>
+References: <20210121102922.17439-1-johan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1611212208-84202-1-git-send-email-eomji.oh@samsung.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 21, 2021 at 03:56:45PM +0900, Oh Eomji wrote:
-> Changed to return a timeout error if there is no response for a certain
-> period of time in order to solve the problem of waiting for a event
-> complete while executing unbind.
-> 
-> Signed-off-by: Oh Eomji <eomji.oh@samsung.com>
-> ---
->  drivers/usb/gadget/function/f_mass_storage.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> index 950c943..b474840 100644
-> --- a/drivers/usb/gadget/function/f_mass_storage.c
-> +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> @@ -3000,7 +3000,7 @@ static void fsg_unbind(struct usb_configuration *c, struct usb_function *f)
->  	if (fsg->common->fsg == fsg) {
->  		__raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE, NULL);
->  		/* FIXME: make interruptible or killable somehow? */
-> -		wait_event(common->fsg_wait, common->fsg != fsg);
-> +		wait_event_timeout(common->fsg_wait, common->fsg != fsg, HZ / 4);
+Simplify the changed-line-speed conditional expression.
 
-That's a random choice of a timeout value.
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/serial/xr_serial.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Please document this really really really well as to why you picked this
-number, and what it means.
+diff --git a/drivers/usb/serial/xr_serial.c b/drivers/usb/serial/xr_serial.c
+index 2000277bacc1..fc727f4283f2 100644
+--- a/drivers/usb/serial/xr_serial.c
++++ b/drivers/usb/serial/xr_serial.c
+@@ -451,8 +451,7 @@ static void xr_set_termios(struct tty_struct *tty,
+ 	u8 bits = 0;
+ 	int ret;
+ 
+-	if ((old_termios && tty->termios.c_ospeed != old_termios->c_ospeed) ||
+-	    !old_termios)
++	if (!old_termios || (tty->termios.c_ospeed != old_termios->c_ospeed))
+ 		xr_set_baudrate(tty, port);
+ 
+ 	switch (C_CSIZE(tty)) {
+-- 
+2.26.2
 
-Also, is the commet above this line still correct now?
-
-thanks,
-
-greg k-h
