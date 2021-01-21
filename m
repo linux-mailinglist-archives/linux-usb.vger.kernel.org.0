@@ -2,92 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFDB2FE784
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 11:26:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7454C2FE7A6
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 11:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729143AbhAUKZ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jan 2021 05:25:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57384 "EHLO mail.kernel.org"
+        id S1729260AbhAUKa4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jan 2021 05:30:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59612 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729104AbhAUKYc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 21 Jan 2021 05:24:32 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1EF6F23356;
-        Thu, 21 Jan 2021 10:23:49 +0000 (UTC)
+        id S1729446AbhAUKaK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 21 Jan 2021 05:30:10 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2EC06204EF;
+        Thu, 21 Jan 2021 10:29:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611224629;
-        bh=Vk+g6s1/mECeUrJ4TEUTgxd3IC/yHrCw9bhT4vdIydE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y//oif6RNho7eiB/JWL7uxdyTnNwfe6Ifi9MR5XodbwLLMrMhEK5H8/qaRkrWyHAG
-         aXW67zyO4Od3bbGPy3z4r1/nVh6zgS/QoZpqwQz6W4sZIXZFXLSejsr/5GzQaI52I8
-         sG+cYCkR0tZSYQcvQxrZxUuadGMHC5SrZMR0Lk03tjXa+CxlcfTlxCF3c8hH8P/EFg
-         lDNWSqqnb2RHiA0GDEbKwIlxGSVQaxhk4y6gUmt0Fpgah2WaioaLmqQylm420hB/Db
-         TnZiYnM1wugBTgtg28bpB4MpHMXMO6pIslQnZTDf1AdNBDQsmXEm9xfp6yGG3UPQv5
-         9E272uahxLWLQ==
-Received: from johan by xi with local (Exim 4.93.0.4)
+        s=k20201202; t=1611224969;
+        bh=hDcCV63sIsqexDfHHTIRFTcbjagA3dzVFYGYL6Q444A=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HzN1xzDbp9s8hPuvQ3l6FBlFuw36AW377Gq9RsrrO7vELsew92gQUSAmBlCDqpEkE
+         EKQ4bcF9bj2jkgWpq/boJRqw9Ar1ySZnXvFlm540SVTulmca53XFl6OGrsUx1P9/eK
+         fLP6mGntfsglXmzqtfGqmuIG0Ijj5Z5oMYrsmqMV1URj9RuPSfEBJnbBgguS0MD10s
+         c8DFFEJFoYgpM/InNtDAKWTv6ANqaGklluB8cDEtBu23JB5G4YJlSWEjg4SrGgTzFD
+         6k+PeZgWXU9b3/8qh9qaREGraoel+Y/fUpKehXJksfl6PJI3UhbSSY8bgxL/3Pp5g2
+         1socv+cJ9vx8A==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1l2X88-0004VM-4w; Thu, 21 Jan 2021 11:23:56 +0100
-Date:   Thu, 21 Jan 2021 11:23:56 +0100
+        id 1l2XDc-0004YF-EI; Thu, 21 Jan 2021 11:29:36 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patong.mxl@gmail.com, linus.walleij@linaro.org,
-        mchehab+huawei@kernel.org, angelo.dureghello@timesys.com
-Subject: Re: [PATCH v5 3/3] usb: cdc-acm: Ignore Exar XR21V141X when serial
- driver is built
-Message-ID: <YAlWPF0vn/zFRsQu@hovoldconsulting.com>
-References: <20201122170822.21715-1-mani@kernel.org>
- <20201122170822.21715-4-mani@kernel.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Pho Tran <pho.tran@silabs.com>
+Subject: [PATCH] USB: serial: cp210x: suppress modem-control error on open and close
+Date:   Thu, 21 Jan 2021 11:29:12 +0100
+Message-Id: <20210121102922.17439-2-johan@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210121102922.17439-1-johan@kernel.org>
+References: <20210121102922.17439-1-johan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201122170822.21715-4-mani@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Nov 22, 2020 at 10:38:22PM +0530, Manivannan Sadhasivam wrote:
-> From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> 
-> The RTS/CTS line discipline for this device doesn't follow
-> the standard. So, in order to properly support TX, a separate
-> driver is needed.
+The CP210X_SET_MHS request cannot be used to control DTR/RTS when
+hardware flow control is enabled and instead returns an error which is
+currently logged as:
 
-This took a bit of effort to understand, but I think I know what you're
-referring to now. In ACM mode the device has RTS/CTS flow control
-enabled, which means TX will be disabled in case CTS isn't wired up
-correctly.
+	cp210x ttyUSB0: failed set request 0x7 status: -32
 
-It as nothing to do with line disciplines though.
+Add a crtscts flag to keep track of the hardware flow-control setting
+and use it to suppress the request in dtr_rts().
 
-> Ensure that cdc_acm will ignore it during probe time, if the
-> Kernel is built with support for it.
->
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
+Note that both lines are still deasserted when disabling the UART as
+part of close().
 
-> ---
->  drivers/usb/class/cdc-acm.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> index 30ef946a8e1a..719829e6b6db 100644
-> --- a/drivers/usb/class/cdc-acm.c
-> +++ b/drivers/usb/class/cdc-acm.c
-> @@ -1890,6 +1890,12 @@ static const struct usb_device_id acm_ids[] = {
->  	},
->  #endif
->  
-> +#if IS_ENABLED(CONFIG_USB_SERIAL_XR)
-> +	{ USB_DEVICE(0x04e2, 0x1410),   /* Ignore XR21V141X USB to Serial converter */
-> +	.driver_info = IGNORE_DEVICE,
-> +	},
-> +#endif
-> +
->  	/*Samsung phone in firmware update mode */
->  	{ USB_DEVICE(0x04e8, 0x685d),
->  	.driver_info = IGNORE_DEVICE,
+Also note that TIOCMSET is left unchanged and will continue to return an
+error to user-space when flow control is enabled (i.e. instead of
+disabling and re-enabling auto-RTS when RTS is deasserted and
+re-asserted).
 
-I've rewritten the commit message and applied this one now.
+Reported-by: Pho Tran <pho.tran@silabs.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/serial/cp210x.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-Johan
+diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+index d813a052738f..ac1e5cbe61dd 100644
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -264,7 +264,8 @@ struct cp210x_port_private {
+ 	u8			bInterfaceNumber;
+ 	bool			event_mode;
+ 	enum cp210x_event_state event_state;
+-	u8 lsr;
++	u8			lsr;
++	bool			crtscts;
+ };
+ 
+ static struct usb_serial_driver cp210x_device = {
+@@ -1117,6 +1118,7 @@ static bool cp210x_termios_change(const struct ktermios *a, const struct ktermio
+ static void cp210x_set_flow_control(struct tty_struct *tty,
+ 		struct usb_serial_port *port, struct ktermios *old_termios)
+ {
++	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
+ 	struct cp210x_special_chars chars;
+ 	struct cp210x_flow_ctl flow_ctl;
+ 	u32 flow_repl;
+@@ -1161,10 +1163,12 @@ static void cp210x_set_flow_control(struct tty_struct *tty,
+ 		ctl_hs |= CP210X_SERIAL_CTS_HANDSHAKE;
+ 		flow_repl &= ~CP210X_SERIAL_RTS_MASK;
+ 		flow_repl |= CP210X_SERIAL_RTS_SHIFT(CP210X_SERIAL_RTS_FLOW_CTL);
++		port_priv->crtscts = true;
+ 	} else {
+ 		ctl_hs &= ~CP210X_SERIAL_CTS_HANDSHAKE;
+ 		flow_repl &= ~CP210X_SERIAL_RTS_MASK;
+ 		flow_repl |= CP210X_SERIAL_RTS_SHIFT(CP210X_SERIAL_RTS_ACTIVE);
++		port_priv->crtscts = false;
+ 	}
+ 
+ 	if (I_IXOFF(tty))
+@@ -1298,6 +1302,16 @@ static int cp210x_tiocmset_port(struct usb_serial_port *port,
+ 
+ static void cp210x_dtr_rts(struct usb_serial_port *port, int on)
+ {
++	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
++
++	/*
++	 * CP210X_SET_MHS cannot be used to control DTR/RTS when hardware flow
++	 * control is enabled. Note that both lines are still deasserted when
++	 * disabling the UART.
++	 */
++	if (port_priv->crtscts)
++		return;
++
+ 	if (on)
+ 		cp210x_tiocmset_port(port, TIOCM_DTR | TIOCM_RTS, 0);
+ 	else
+-- 
+2.26.2
+
