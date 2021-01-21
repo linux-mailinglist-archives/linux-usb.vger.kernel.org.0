@@ -2,52 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1622B2FEE2C
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 16:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB03F2FEE63
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 16:22:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732180AbhAUPMP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jan 2021 10:12:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
+        id S1732230AbhAUPWI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jan 2021 10:22:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732603AbhAUPL7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jan 2021 10:11:59 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E09C061786;
-        Thu, 21 Jan 2021 07:11:11 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id t6so1461750plq.1;
-        Thu, 21 Jan 2021 07:11:11 -0800 (PST)
+        with ESMTP id S1732560AbhAUPUt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jan 2021 10:20:49 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74678C06174A;
+        Thu, 21 Jan 2021 07:20:08 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id y205so1680078pfc.5;
+        Thu, 21 Jan 2021 07:20:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:message-id:mime-version:content-disposition
-         :content-transfer-encoding:user-agent;
-        bh=7I/jnjEzyYr5dUH24L9xu8d18K7Iyc5bqKRlqdETLLk=;
-        b=NGuPnDgqNmS0J1jH/SXbrRdUrrgeujfYehvKhTAoibP7KRII0jIpxi20R+QbgqyzW/
-         nA44pchI405CPXdx4bHJ94bPHSh2nQ5R3t0FwkczqB+OuTWF7hMWFd2Yt7YIgtPIR7z6
-         77ZKOHEikVwdRBIJF8QQh+Wx7tZZY7/NDr80N/RggagowumAU2ka0eUiDsF4M+Gz/xjw
-         TF2E2xByNDuUKA6Q3+dDY6hRAdq7EXJFgZ+0pRYy7FJCKjtYkVtnm0DOKaJBvC/cx3hp
-         4ChsF/f24zhvVhgEW4ichg9v5BTq64b2HtVxKrhwh1jLMmNP6gLyRak3/q10CNpwRUqS
-         zfPQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=17KvraJzNRdjrYwPQoxY6CW4jRA/1iQCnE0aBjokmlU=;
+        b=SjOiqGWeuGStl1nyx4FwEFhMBizLfAB4ruWAD4Qi1ph6c8DZ6tHOIhOV6cdy2lZbN3
+         twNbQ00yelHEmH4M6BqAxk4pFN3oR9WUoQXA+aXpo1cm9mihFwpoJPeJsWnNXs3uWCHG
+         hteJSdrsIdCxBfQsKXZu/lLnPgf9iBP6yLmTUVRIA5xYaIb90VzjMEr2cDBhsa3FJ1NE
+         /GKC4BNrEB9eu2gqRqJ8nAQTzyaj1RSjzXn0ZorwyMXWuxTQPD/63KKz00ugTtQ8XOYY
+         HFoTEbb7rOfHTtqc7rarNJsnlKUP0Ud/aVe3If1K5wLCIWwkk8diD/XFbwpjMH5ZSc3C
+         F3dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:message-id:mime-version
-         :content-disposition:content-transfer-encoding:user-agent;
-        bh=7I/jnjEzyYr5dUH24L9xu8d18K7Iyc5bqKRlqdETLLk=;
-        b=QZ2iIljD5+cvbtxZa2vMzew7fOn5a8zpyQnGuzJJUDg9V29Vvwq5wX3kzKdxgO0yLQ
-         FCboTa4wxJNpNP65leN0W2V/UmJJ9jrmyfGxJVVR3sTUtjvr+7d4dMYiKOSjjrzGVejT
-         PV0TJWVwHvaaW07BMHYL8bBDbJ/IS36dWAtTbUIss03duFoDEcclV2oHylcSzsEDa6ft
-         3jq007BntbG4B1SeH8tMJlm6tCLwKJVaMTDXGblUEXCRt9P7rN4kMH5Ga1o7Q0+l2WqB
-         VAKP7TRBj0M2GQ03ISBbV9dGVMbsd1uf7TzHS0Vk1FRZyrmIuqabtmaxjIHwX9a7LqMP
-         hn4A==
-X-Gm-Message-State: AOAM531M6vFHOqjJlAOInHCl2YsUlS+urSBkZS1eWYIbv9wjwEi1hfVa
-        KXJdJ9cM8kZIp4Scywz+h+iJ3U//+d9pROXGDeA=
-X-Google-Smtp-Source: ABdhPJyIRY49hFioEOC8Di93A0EXso6ZHkQn+L6Pr3eBBm1Tb6OqNa9b9uSUF6uEggraogThR51BSw==
-X-Received: by 2002:a17:90a:1057:: with SMTP id y23mr12409234pjd.97.1611241870275;
-        Thu, 21 Jan 2021 07:11:10 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=17KvraJzNRdjrYwPQoxY6CW4jRA/1iQCnE0aBjokmlU=;
+        b=YbHsqW8hG4Awd3R9l73MQ574hS0l17ZZBskxcpBJkFs+ZyE5ZnH4s3lX9MgHRKcKdG
+         8xbvZ3o6JiA9KdqEWfejeHMq9psKkEb/0XTMvWM5QEH750WrShdJQ21GQCTqP2XzjDnL
+         rjkdEdvJtMBPHjFBIBxjDwxXLFjRi8aNqv+v8lfLBtEPiiOZh6KeS1q8Yy56xTmrmsvv
+         /KQIcV/ilRpEinUstxgpHygYI0Da6YrqpF3sFLyStd0ct1TlfQ0Wj/r8f43pJ0Zk1QnD
+         jP2cK8bgE/2PFIKTIFeMkTjfk5LEdhurh3oi76sVqLzoyMNlNrkv4hbRZoL569BWXQvd
+         XGCA==
+X-Gm-Message-State: AOAM531/jDSoVeQ+YmhPhU68mNP6RQ3pUTT3rc/G/eVoyTqjNwOBNyje
+        NOWHDTLMc3sEutq1/EyPcBlRAtYd1n3yWjyVHkE=
+X-Google-Smtp-Source: ABdhPJwcVcFiWdMyynR3ZN1fs6rsTJq+vOi2ss4dGCgwHE7Bd1+AvpS37dAs+lgnoIjmolMg79lfTg==
+X-Received: by 2002:aa7:83c2:0:b029:1a5:daa9:f22f with SMTP id j2-20020aa783c20000b02901a5daa9f22fmr14131113pfn.48.1611242407660;
+        Thu, 21 Jan 2021 07:20:07 -0800 (PST)
 Received: from minh ([113.173.125.143])
-        by smtp.gmail.com with ESMTPSA id y6sm5859075pfn.123.2021.01.21.07.11.06
+        by smtp.gmail.com with ESMTPSA id o20sm439309pgn.6.2021.01.21.07.20.03
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 21 Jan 2021 07:11:09 -0800 (PST)
-Date:   Thu, 21 Jan 2021 22:10:53 +0700
+        Thu, 21 Jan 2021 07:20:06 -0800 (PST)
+Date:   Thu, 21 Jan 2021 22:19:55 +0700
 From:   Bui Quang Minh <minhquangbui99@gmail.com>
 To:     linux-usb@vger.kernel.org
 Cc:     a.darwish@linutronix.de, bigeasy@linutronix.de,
@@ -59,20 +61,21 @@ Cc:     a.darwish@linutronix.de, bigeasy@linutronix.de,
         Oliver Neukum <oneukum@suse.de>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Message-ID: <20210121151053.GA3377@minh>
+Subject: Re: [PATCH v2] can: mcba_usb: Fix memory leak when cancelling urb
+Message-ID: <20210121151955.GA3779@minh>
+References: <20210111104927.2561-1-minhquangbui99@gmail.com>
+ <7d6dc09fedc84f9fce942d85c34d5cd41931bbf6.camel@suse.de>
+ <20210111143120.GA2769@minh>
+ <CACtPs=FB_=JMEymLHE0_ko4ZF5zj9NBCHkRC7O3tj6pkSp3oiA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACtPs=FB_=JMEymLHE0_ko4ZF5zj9NBCHkRC7O3tj6pkSp3oiA@mail.gmail.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
-
-Bcc: 
-Subject: Re: [PATCH v2] can: mcba_usb: Fix memory leak when cancelling urb
-Reply-To: 
-In-Reply-To: <CACtPs=FB_=JMEymLHE0_ko4ZF5zj9NBCHkRC7O3tj6pkSp3oiA@mail.gmail.com>
 
 On Tue, Jan 12, 2021 at 01:42:33PM +0700, Minh Bùi Quang wrote:
 > On Mon, Jan 11, 2021 at 9:31 PM Bui Quang Minh <minhquangbui99@gmail.com> wrote:
@@ -127,6 +130,8 @@ On Tue, Jan 12, 2021 at 01:42:33PM +0700, Minh Bùi Quang wrote:
 > safe. Am I right?
 
 Hi, I'm CC'ing CAN network driver maintainers so we can discuss the patch properly.
+
+I'm so sorry for spamming emails.
 
 Thanks,
 Quang Minh.
