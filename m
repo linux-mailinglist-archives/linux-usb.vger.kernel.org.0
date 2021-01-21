@@ -2,14 +2,14 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F146B2FEAF3
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 14:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 938FF2FEAFA
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 14:04:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730059AbhAUM7T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jan 2021 07:59:19 -0500
-Received: from mx2.suse.de ([195.135.220.15]:59720 "EHLO mx2.suse.de"
+        id S1731183AbhAUM7L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jan 2021 07:59:11 -0500
+Received: from mx2.suse.de ([195.135.220.15]:59754 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731515AbhAUM63 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S1731516AbhAUM63 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Thu, 21 Jan 2021 07:58:29 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
@@ -17,20 +17,20 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EAqAb0c/gKUwR+7CRnnZB9SlYFc+YG+OWUE8tf7gBOg=;
-        b=slqDgIQSvYYWUEBQ0cWT/Ml1GnjlSC2bwBXlwdv3PyWPq6Ndii7KBiqrocADpkreBg1bu2
-        tjni0IFd+wyEIsTAPXyxIkccRi5W9SCzckbIS/Y7SucW2ek9eWZUAi+eAfTqCxUHJiaP6O
-        i5+aPn3B5c8zI+0nOQHxOHkQSUNOe7Q=
+        bh=aRusZ61I9GXOgaHONkCKudk0iEbZ4a0skoyM91fFR9c=;
+        b=cinRI8f/KgQPJp5yD/UAUwJ7BWqcdcpz1YmiwjcuDUXLhgDmqu/lazGz6NFNwgeKPRHjBs
+        AisIFJrYR5S++eIeH+YAklOAxtJfDlsIDT94+iPozlVvVtmnLCyhhvOIMmTAEXylh2z8uP
+        4TCFnhMU9fCOeU+PfUCt/LIyHFIb8ig=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 7FCA1AF45;
+        by mx2.suse.de (Postfix) with ESMTP id C09E7ABDA;
         Thu, 21 Jan 2021 12:57:41 +0000 (UTC)
 From:   Oliver Neukum <oneukum@suse.com>
 To:     hayeswang@realtek.com, grundler@chromium.org, davem@davemloft.net,
         netdev@vger.kernel.org, linux-usb@vger.kernel.org
 Cc:     Oliver Neukum <oneukum@suse.com>, Roland Dreier <roland@kernel.org>
-Subject: [PATCHv2 2/3] usbnet: add method for reporting speed without MDIO
-Date:   Thu, 21 Jan 2021 13:57:30 +0100
-Message-Id: <20210121125731.19425-3-oneukum@suse.com>
+Subject: [PATCHv2 3/3] CDC-NCM: record speed in status method
+Date:   Thu, 21 Jan 2021 13:57:31 +0100
+Message-Id: <20210121125731.19425-4-oneukum@suse.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210121125731.19425-1-oneukum@suse.com>
 References: <20210121125731.19425-1-oneukum@suse.com>
@@ -40,84 +40,70 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The old method for reporting network speed upwards
-assumed that a device uses MDIO and uses the generic phy
-functions based on that.
-Add a a primitive internal version not making the assumption
-reporting back directly what the status operations record.
+The driver has a status method for receiving speed updates.
+The framework, however, had support functions only for devices
+that reported their speed upon an explicit query over a MDIO
+interface.
+CDC_NCM however gets direct notifications from the device.
+As new support functions have become available, we shall now
+record such notifications and tell the usbnet framework
+to make direct use of them without going through the PHY layer.
 
 v2: adjusted to recent changes
 
 Signed-off-by: Oliver Neukum <oneukum@suse.com>
 Tested-by: Roland Dreier <roland@kernel.org>
 ---
- drivers/net/usb/usbnet.c   | 23 +++++++++++++++++++++++
- include/linux/usb/usbnet.h |  4 ++++
- 2 files changed, 27 insertions(+)
+ drivers/net/usb/cdc_ncm.c | 29 ++++-------------------------
+ 1 file changed, 4 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index e2ca88259b05..6f8fcc276ca7 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -961,6 +961,27 @@ int usbnet_get_link_ksettings_mdio(struct net_device *net,
+diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+index 04174704bf7c..9b5bb8ae5eb8 100644
+--- a/drivers/net/usb/cdc_ncm.c
++++ b/drivers/net/usb/cdc_ncm.c
+@@ -142,7 +142,7 @@ static const struct ethtool_ops cdc_ncm_ethtool_ops = {
+ 	.get_sset_count    = cdc_ncm_get_sset_count,
+ 	.get_strings       = cdc_ncm_get_strings,
+ 	.get_ethtool_stats = cdc_ncm_get_ethtool_stats,
+-	.get_link_ksettings      = usbnet_get_link_ksettings_mdio,
++	.get_link_ksettings      = usbnet_get_link_ksettings_internal,
+ 	.set_link_ksettings      = usbnet_set_link_ksettings_mdio,
+ };
+ 
+@@ -1827,30 +1827,9 @@ cdc_ncm_speed_change(struct usbnet *dev,
+ 	uint32_t rx_speed = le32_to_cpu(data->DLBitRRate);
+ 	uint32_t tx_speed = le32_to_cpu(data->ULBitRate);
+ 
+-	/* if the speed hasn't changed, don't report it.
+-	 * RTL8156 shipped before 2021 sends notification about every 32ms.
+-	 */
+-	if (dev->rx_speed == rx_speed && dev->tx_speed == tx_speed)
+-		return;
+-
+-	dev->rx_speed = rx_speed;
+-	dev->tx_speed = tx_speed;
+-
+-	/*
+-	 * Currently the USB-NET API does not support reporting the actual
+-	 * device speed. Do print it instead.
+-	 */
+-	if ((tx_speed > 1000000) && (rx_speed > 1000000)) {
+-		netif_info(dev, link, dev->net,
+-			   "%u mbit/s downlink %u mbit/s uplink\n",
+-			   (unsigned int)(rx_speed / 1000000U),
+-			   (unsigned int)(tx_speed / 1000000U));
+-	} else {
+-		netif_info(dev, link, dev->net,
+-			   "%u kbit/s downlink %u kbit/s uplink\n",
+-			   (unsigned int)(rx_speed / 1000U),
+-			   (unsigned int)(tx_speed / 1000U));
+-	}
++	 /* RTL8156 shipped before 2021 sends notification about every 32ms. */
++	dev->rxspeed = rx_speed;
++	dev->txspeed = tx_speed;
  }
- EXPORT_SYMBOL_GPL(usbnet_get_link_ksettings_mdio);
  
-+int usbnet_get_link_ksettings_internal(struct net_device *net,
-+					struct ethtool_link_ksettings *cmd)
-+{
-+	struct usbnet *dev = netdev_priv(net);
-+
-+	/* the assumption that speed is equal on tx and rx
-+	 * is deeply engrained into the networking layer.
-+	 * For wireless stuff it is not true.
-+	 * We assume that rxspeed matters more.
-+	 */
-+	if (dev->rxspeed != SPEED_UNKNOWN)
-+		cmd->base.speed = dev->rxspeed / 1000000;
-+	else if (dev->txspeed != SPEED_UNKNOWN)
-+		cmd->base.speed = dev->txspeed / 1000000;
-+	else
-+		cmd->base.speed = SPEED_UNKNOWN;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(usbnet_get_link_ksettings_internal);
-+
- int usbnet_set_link_ksettings_mdio(struct net_device *net,
- 			      const struct ethtool_link_ksettings *cmd)
- {
-@@ -1664,6 +1685,8 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
- 	dev->intf = udev;
- 	dev->driver_info = info;
- 	dev->driver_name = name;
-+	dev->rxspeed = SPEED_UNKNOWN; /* unknown or handled by MII */
-+	dev->txspeed = SPEED_UNKNOWN;
- 
- 	net->tstats = netdev_alloc_pcpu_stats(struct pcpu_sw_netstats);
- 	if (!net->tstats)
-diff --git a/include/linux/usb/usbnet.h b/include/linux/usb/usbnet.h
-index fd65b7a5ee15..a91c6defb104 100644
---- a/include/linux/usb/usbnet.h
-+++ b/include/linux/usb/usbnet.h
-@@ -53,6 +53,8 @@ struct usbnet {
- 	u32			hard_mtu;	/* count any extra framing */
- 	size_t			rx_urb_size;	/* size for rx urbs */
- 	struct mii_if_info	mii;
-+	long			rxspeed;	/* if MII is not used */
-+	long			txspeed;	/* if MII is not used */
- 
- 	/* various kinds of pending driver work */
- 	struct sk_buff_head	rxq;
-@@ -269,6 +271,8 @@ extern void usbnet_purge_paused_rxq(struct usbnet *);
- 
- extern int usbnet_get_link_ksettings_mdio(struct net_device *net,
- 				     struct ethtool_link_ksettings *cmd);
-+extern int usbnet_get_link_ksettings_internal(struct net_device *net,
-+					struct ethtool_link_ksettings *cmd);
- extern int usbnet_set_link_ksettings_mdio(struct net_device *net,
- 				     const struct ethtool_link_ksettings *cmd);
- extern u32 usbnet_get_link(struct net_device *net);
+ static void cdc_ncm_status(struct usbnet *dev, struct urb *urb)
 -- 
 2.26.2
 
