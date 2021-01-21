@@ -2,85 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7CE2FE409
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 08:35:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB2E82FE42B
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 08:40:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727270AbhAUHee (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jan 2021 02:34:34 -0500
-Received: from mga01.intel.com ([192.55.52.88]:21972 "EHLO mga01.intel.com"
+        id S1727463AbhAUHkZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jan 2021 02:40:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44934 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727718AbhAUHdg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 21 Jan 2021 02:33:36 -0500
-IronPort-SDR: buafFQ62VEW5UJen3JTWquNkR1q4qsqW8X0+3L09KTsYHWpmjbuq8MPJz1Z+Ub7T9letiDfrZ9
- LX9KR9OSeuvg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9870"; a="197965961"
-X-IronPort-AV: E=Sophos;i="5.79,363,1602572400"; 
-   d="scan'208";a="197965961"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 23:31:44 -0800
-IronPort-SDR: IwLJLE7bnqAyAbUodJ2eBOVv8dYmqDgm2/n14j37EBpAiB8x/8vb8DPTQ5XU3O8rNkIfJM/r42
- Ub4jXW6tOnvg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,363,1602572400"; 
-   d="scan'208";a="467368199"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 20 Jan 2021 23:31:41 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 21 Jan 2021 09:31:39 +0200
-Date:   Thu, 21 Jan 2021 09:31:39 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] usb: typec: tcpci_maxim: Drop GPIO includes
-Message-ID: <20210121073139.GB423216@kuha.fi.intel.com>
-References: <20210120225045.173556-1-linus.walleij@linaro.org>
+        id S1727458AbhAUHkV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 21 Jan 2021 02:40:21 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1F6BB238EE;
+        Thu, 21 Jan 2021 07:39:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1611214781;
+        bh=Js9RTQ+Gp199tmwcbMTEOUZ8ivQeNI+zmjDA6dqjb1g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yrzbtTfTY4WCk43ssvpGXnD1lQ4w/sLBZOdAunuAM4v8U0sU+77pln38X7jcwx6ru
+         RlXrdYqYbLUtNkCDWeW8r4WFPykyGcg87jDZKbPQSyR/KZybtSMJdpT3rjK0l7cLtP
+         tn5zyrn7qRK06UP1JdKSLF3mghdG9M0SdxlLt/ik=
+Date:   Thu, 21 Jan 2021 08:39:37 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Pho Tran <Pho.Tran@silabs.com>
+Cc:     "johan@kernel.org" <johan@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Hung Nguyen <Hung.Nguyen@silabs.com>
+Subject: Re: [PATCH v3] USB: serial: cp210x: Fix error 32 when hardware flow
+ control  is enabled.
+Message-ID: <YAkvua8BMkSh1QHs@kroah.com>
+References: <9E531B87-06A8-45F0-A2A8-EC6FA61A99A7@silabs.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210120225045.173556-1-linus.walleij@linaro.org>
+In-Reply-To: <9E531B87-06A8-45F0-A2A8-EC6FA61A99A7@silabs.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 11:50:45PM +0100, Linus Walleij wrote:
-> This driver includes the legacy GPIO header <linux/gpio.h>,
-> the new GPIO header <linux/gpio/consumer.h> and
-> the deprecated OF GPIO header <linux/of_gpio.h> yet
-> fail to use symbols from any of them, so drop these
-> includes.
+On Thu, Jan 21, 2021 at 07:09:13AM +0000, Pho Tran wrote:
+> Fix error 32 returned by CP210X_SET_MHS when hardware flow control is enabled.
 > 
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+> The root cause of error 32 is that user application (CoolTerm, linux-serial-test)
+> opened cp210x device with hardware flow control then attempt to control RTS/DTR pins.
+> In hardware flow control, RTS/DTR pins will be controlled by hardware only,
+> any attempt to control those pins will cause error 32 from the device.
+> This fix will block MHS command(command to control RTS/DTR pins) to the device
+> if hardware flow control is being used.
+> 
+> Signed-off-by: Pho Tran <pho.tran@silabs.com>
 > ---
->  drivers/usb/typec/tcpm/tcpci_maxim.c | 3 ---
->  1 file changed, 3 deletions(-)
+> 01/19/2021: Patch v2  Modified based on comment from Johan Hovold <johan@kernel.org>
+> and Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/usb/serial/cp210x.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> index 319266329b42..0e2bb1235ab5 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> @@ -5,13 +5,10 @@
->   * MAXIM TCPCI based TCPC driver
->   */
->  
-> -#include <linux/gpio.h>
-> -#include <linux/gpio/consumer.h>
->  #include <linux/interrupt.h>
->  #include <linux/i2c.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> -#include <linux/of_gpio.h>
->  #include <linux/regmap.h>
->  #include <linux/usb/pd.h>
->  #include <linux/usb/tcpm.h>
-> -- 
-> 2.29.2
+> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+> index fbb10dfc56e3..5b6bbda2b424 100644
+> --- a/drivers/usb/serial/cp210x.c
+> +++ b/drivers/usb/serial/cp210x.c
+> @@ -1204,7 +1204,12 @@ static int cp210x_tiocmset(struct tty_struct *tty,
+>  		unsigned int set, unsigned int clear)
+>  {
+>  	struct usb_serial_port *port = tty->driver_data;
+> -	return cp210x_tiocmset_port(port, set, clear);
+> +	if (C_CRTSCTS(tty))
+> +
+> +	/* Don't send SET_MHS command if device in hardware flow control mode. */
+> +		return 0;
+
+That indentation and whitespace is very odd.  Did you run checkpatch.pl
+on your change before sending it to us to verify that all is ok?
+
+Please do so.
 
 thanks,
 
--- 
-heikki
+greg k-h
