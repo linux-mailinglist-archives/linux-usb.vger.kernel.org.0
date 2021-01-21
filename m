@@ -2,176 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8312FE358
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 08:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C66062FE37F
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 08:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727140AbhAUHCW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jan 2021 02:02:22 -0500
-Received: from mailout1.samsung.com ([203.254.224.24]:10697 "EHLO
+        id S1727181AbhAUHKI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jan 2021 02:10:08 -0500
+Received: from mailout1.samsung.com ([203.254.224.24]:19965 "EHLO
         mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727135AbhAUHCR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jan 2021 02:02:17 -0500
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20210121070132epoutp01ea8fd54e70e2b44c7a1bee67219837a3~cLTmbK1kx1056010560epoutp01V
-        for <linux-usb@vger.kernel.org>; Thu, 21 Jan 2021 07:01:32 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20210121070132epoutp01ea8fd54e70e2b44c7a1bee67219837a3~cLTmbK1kx1056010560epoutp01V
+        with ESMTP id S1726497AbhAUHJe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jan 2021 02:09:34 -0500
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20210121070840epoutp0167cd4e98fccd0dc820b65ff898ace5ed~cLZ1u0CqJ1918919189epoutp01D
+        for <linux-usb@vger.kernel.org>; Thu, 21 Jan 2021 07:08:40 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20210121070840epoutp0167cd4e98fccd0dc820b65ff898ace5ed~cLZ1u0CqJ1918919189epoutp01D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1611212492;
-        bh=ZyIfm2xerJ7n5eZHUm+VKML0WJUVbU46w1Su9fus1ig=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=o1qfHrx4UXH2syiLC2MKQAraI3AdEc5FGV7DPWKh1EUjanbg3YbccYqqYU4Rszi/u
-         5ZQ8WwdbTZPx16/2v3XD98kJT7exMxOrxJArsnqVeUCP6vdS6UlvcY7DxB4qS8Jiio
-         8zNUaJiTHs1GcgrrfovS/jdYD3roGy8zkRR7Mv/k=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20210121070128epcas2p3476ad921377c37a9fcadc8b70c541d7b~cLTi-oVDJ1164711647epcas2p31;
-        Thu, 21 Jan 2021 07:01:28 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.40.183]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4DLtbW1rfZz4x9Pw; Thu, 21 Jan
-        2021 07:01:27 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        31.6A.10621.5C629006; Thu, 21 Jan 2021 16:01:25 +0900 (KST)
+        s=mail20170921; t=1611212920;
+        bh=A+3jbTyF6ufeu8ESMdpYJqVLwy5jij2UUmPAwjDCvhs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CiLbB9cf+P4F0n1t8WPsgs4YAiFEoVTWPlw5PGg65OBDdf9ywiycTdWbtD/72WAec
+         y+/hxgVZY+BJtvlz7chQHBr+1o4XVDZhdmCtPKGWkGiY02DQ+BvBZjbgZpqdLjokjD
+         DMH8s17s1mMafYxNc3KuOOR9crY4d8UVM1QhlxyM=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20210121070840epcas2p1fbcce04077f28e1873403204e82959ff~cLZ1H5lH72013420134epcas2p1p;
+        Thu, 21 Jan 2021 07:08:40 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.40.191]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4DLtlp2Sf9z4x9Pv; Thu, 21 Jan
+        2021 07:08:38 +0000 (GMT)
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E6.40.52511.57829006; Thu, 21 Jan 2021 16:08:37 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-        20210121070117epcas2p2f79aee8554d1c6d94e71efd0a4b248b4~cLTZArSEb1177811778epcas2p2K;
-        Thu, 21 Jan 2021 07:01:17 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+        20210121070836epcas2p130c0f62d82aa3fcd2e021a1ef88a7ebd~cLZxuNq9E1983419834epcas2p1J;
+        Thu, 21 Jan 2021 07:08:36 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20210121070117epsmtrp1dab25ef01fafa4412899263a1a181fdb~cLTY-5e6V3022230222epsmtrp1S;
-        Thu, 21 Jan 2021 07:01:17 +0000 (GMT)
-X-AuditID: b6c32a45-34dff7000001297d-bd-600926c5080c
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        43.7E.13470.DB629006; Thu, 21 Jan 2021 16:01:17 +0900 (KST)
-Received: from ubuntu (unknown [12.36.155.120]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20210121070117epsmtip1c8b35273b41ac8cd85b5ab0b52754318~cLTY2yNTs0633906339epsmtip1Q;
-        Thu, 21 Jan 2021 07:01:17 +0000 (GMT)
-Date:   Thu, 21 Jan 2021 15:49:56 +0900
-From:   Jung Daehwan <dh10.jung@samsung.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+        20210121070836epsmtrp106d41adf269ca1a4e9dbcb4340f2aa29~cLZxth4Un0074500745epsmtrp1_;
+        Thu, 21 Jan 2021 07:08:36 +0000 (GMT)
+X-AuditID: b6c32a48-4f9ff7000000cd1f-e3-6009287549bf
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C1.34.08745.47829006; Thu, 21 Jan 2021 16:08:36 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20210121070836epsmtip2eff9c92b3f89751b00feca2ea8bb0e74~cLZxc5odo2241422414epsmtip2G;
+        Thu, 21 Jan 2021 07:08:36 +0000 (GMT)
+From:   Oh Eomji <eomji.oh@samsung.com>
+To:     balbi@kernel.org
+Cc:     Oh Eomji <eomji.oh@samsung.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: usb: dwc3: gadget: skip pullup and set_speed after suspend
-Message-ID: <20210121064956.GA69382@ubuntu>
-MIME-Version: 1.0
-In-Reply-To: <fbde7781-8eef-ab3a-a339-8a2f61ca83be@synopsys.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupgk+LIzCtJLcpLzFFi42LZdljTTPeoGmeCwZvdphbH2p6wWzQvXs9m
-        cXnXHDaLRctamS1WLTjA7sDqsWlVJ5vH/rlr2D227P/M6PF5k1wAS1SOTUZqYkpqkUJqXnJ+
-        SmZeuq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QXiWFssScUqBQQGJxsZK+nU1R
-        fmlJqkJGfnGJrVJqQUpOgaFhgV5xYm5xaV66XnJ+rpWhgYGRKVBlQk7G828sBZsFK9q+zGRr
-        YPzP28XIySEhYCKx9fFGpi5GLg4hgR2MEv0rt7FCOJ8YJaZvXMwG4XxjlFjavYkVpuXti5PM
-        EIm9jBL7761jhHCeALXc3cwCUsUioCrx8+FsJhCbTUBL4t6PE8wgtoiAjsSBE+fBFjILXGKU
-        mNzZxgaSEBZwl5h4+y5YM6+AtsSZOf9ZIWxBiZMzn4DFOQUcJCbOegU0iINDVEBF4tXBepA5
-        EgKP2CVOrdrDDnGei8SUm8vZIGxhiVfHt0DFpSRe9rexg/RKCJRLLJpvB9HbwSix5tNZRoga
-        Y4lZz9rBbGaBDIlH725C1StLHLnFAhHmk+g4/BcqzCvR0SYE0aksMf3yBGgASUocfH2OGaLE
-        Q+LkOi1I8FxglPi+5CvzBEb5WUgem4VkGYStI7Fg9ye2WUDtzALSEsv/cUCYmhLrd+kvYGRd
-        xSiWWlCcm55abFRgiBzXmxjBSVLLdQfj5Lcf9A4xMnEwHmKU4GBWEuF9ZMmRIMSbklhZlVqU
-        H19UmpNafIjRFBhNE5mlRJPzgWk6ryTe0NTIzMzA0tTC1MzIQkmct9jgQbyQQHpiSWp2ampB
-        ahFMHxMHp1QDU3uPvpeNsfgkp+OS7rMmc162vrtr99zb3+79SpD7u9Rogya7/ZITq48mvFv3
-        oEbE+IVyJAPL7ytNKi5zz70OOb55xbEXEV0K9Y9nVE4xtVItt7IOLT/PkdfVqvFzK9PnpDVV
-        olIBH3NKDlom3tpWk9b51sf57b4tfh1qqziuzYhj/VHez8Ttwnomxd3zm82/d7mykvpCKyZ6
-        /dTmsN53udzxZ0NdvNHLpdunJdjenCe/8n1mi0Leji0VcnKrml7flKg6N937wXvrLP2C+UVn
-        rnw4XFSxcv466wuc+m0r8x32nPvkIsWZmphYuuls5Npmi2CJJompESFKKb8/rbU6/tev6+Tx
-        X2v/upmtqdoVqsRSnJFoqMVcVJwIAHhFKjQbBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrPLMWRmVeSWpSXmKPExsWy7bCSnO5eNc4Eg4U31S2OtT1ht2hevJ7N
-        4vKuOWwWi5a1MlusWnCA3YHVY9OqTjaP/XPXsHts2f+Z0ePzJrkAligum5TUnMyy1CJ9uwSu
-        jN9tD9gKPvNVNHzcydzAeIO7i5GTQ0LAROLti5PMXYxcHEICuxklnq/ZzwaRkJRYOvcGO4Qt
-        LHG/5QgrRNEjRolDR7axgCRYBFQlfj6czQRiswloSdz7cYIZxBYR0JE4cOI8E0gDs8AlRonr
-        9yCKhAXcJSbevgvWzCugLXFmzn+oqRcYJdpvzYVKCEqcnPkEzGYGmnrj30ugZg4gW1pi+T8O
-        kDCngIPExFmvmEHCogIqEq8O1k9gFJyFpHkWkuZZCM0LGJlXMUqmFhTnpucWGxYY5qWW6xUn
-        5haX5qXrJefnbmIEh7mW5g7G7as+6B1iZOJgPMQowcGsJML7yJIjQYg3JbGyKrUoP76oNCe1
-        +BCjNAeLkjjvha6T8UIC6YklqdmpqQWpRTBZJg5OqQam6MpJD3Pmex/SCtzu/0VW5ut1v4sP
-        5KV51CarsPXO6Wlf9WvNxYN/HlgL2O7iP/qBX8vW8uAmgaufRGZ5bHh2xnUB263T64sVDjt4
-        Wlv0Wz3NuHvhcYd7vF6msLiRqP7m2dOWTBFUe7B+SZCqYOIpR9tF80PMNbZPbM1I6T9db/w5
-        ms944csoCetAj++1s9rfm7L/We4rEH9rv3fhW48VgQ/XrOty2zzZYMa7Z7buGmZ8LeyK+pHP
-        zJxPPtgk5sMcsNJeacKznnMbeZcpcDvsfW/v9Efu+nrHnWJtnRoLG94L1p5imWzfsy6q/AKH
-        ZvydhXPcr01UaeS7YNXDoMw84VcJs7qM1Tf5P5ryLxKUWIozEg21mIuKEwHB/zkU4gIAAA==
-X-CMS-MailID: 20210121070117epcas2p2f79aee8554d1c6d94e71efd0a4b248b4
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: f_mass_storage: cahnge wait_event to
+ wait_event_timeout
+Date:   Thu, 21 Jan 2021 15:56:45 +0900
+Message-Id: <1611212208-84202-1-git-send-email-eomji.oh@samsung.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <eomji.oh@samsung.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrCKsWRmVeSWpSXmKPExsWy7bCmqW6pBmeCwYszXBa9TdOZLI61PWG3
+        mPbhJ7PFqeULmSyaF69ns/h1cRqrxeVdc9gsFi1rZXbg8Lh8xdtj06pONo95JwM99s9dw+7R
+        t2UVo8fnTXIBbFE5NhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2Si4+
+        AbpumTlA5ygplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCgwNC/SKE3OLS/PS9ZLz
+        c60MDQyMTIEqE3Iynq44y1zQwFGxu28pSwPjS7YuRk4OCQETifP3f7N3MXJxCAnsYJTomLqM
+        DcL5xChx8EETM4TzmVGi+d57RpiWfR83MUIkdjFKfNv5ix0kISTwg1Hi5h03EJtNQFVi+rLt
+        YA0iAiISbc9nMIE0MAvMZ5LYvaEVaAcHh7BAuMS7zxkgNSxA9a8XLGQFsXkFXCTuNn5ghlgm
+        J3HzXCeYzSmgLLHs41awxRIC59gluj68Z4cocpFYeuMI1EPCEq+Ob4GKS0m87G+Dssslzs45
+        DdXcwChx5dkjFoiEscSsZ+2MIAcxC2hKrN+lD2JKAC07cgusglmAT6Lj8F92iDCvREebEESj
+        ksSkpk4mCFtCYsXnJijbQ2Ll6g9skCApk9gy7RHTBEa5WQjzFzAyrmIUSy0ozk1PLTYqMEGO
+        sE2M4OSm5bGDcfbbD3qHGJk4GA8xSnAwK4nwPrLkSBDiTUmsrEotyo8vKs1JLT7EaAoMu4nM
+        UqLJ+cD0mlcSb2hqZGZmYGlqYWpmZKEkzltk8CBeSCA9sSQ1OzW1ILUIpo+Jg1OqgUnl6gNH
+        9eypp/b4BpSnhJqf7mIX0fcsFl7NZme6Oz+6N2RS8t69p3dNOL6qeNfLOSvXTVv8JWRhYszU
+        4P3z/Q5sDNX2e71H5fDUmbs0ZjN+nMb568it2xO+37tuEWYVs2Fp7b8JbgJdJx78z/lpXcUx
+        ofvG+h8Su5TN1fyD5AN2aM2fnbvt6tEZPCyFbPF3Y2TFPz6IW84h7/909oIbr7pMtV5Y3O2z
+        69KuuhAqZRk/gdEg+TSX9uMXhUdsnfO0Z0yuZJrLv/BvtElq3F+/hd8m5kdy/yoq2T4n4u1E
+        9VehE6Ze//jx3fXzsnOtJpT9lihyVLDiZxAoithqtELXg21/Qc3F+u9H7h3I5lo2446ZEktx
+        RqKhFnNRcSIA9fcRr/cDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPLMWRmVeSWpSXmKPExsWy7bCSvG6JBmeCwe9dUha9TdOZLI61PWG3
+        mPbhJ7PFqeULmSyaF69ns/h1cRqrxeVdc9gsFi1rZXbg8Lh8xdtj06pONo95JwM99s9dw+7R
+        t2UVo8fnTXIBbFFcNimpOZllqUX6dglcGU9XnGUuaOCo2N23lKWB8SVbFyMnh4SAicS+j5sY
+        QWwhgR2MEptvJkPEJSQWdL1mhrCFJe63HGHtYuQCqvnGKHH00UGwBjYBVYnpy7aD2SICIhJt
+        z2cwgRQxCyxmkmj8PpcFJCEsECpxf9YcsEksQA2vFyxkBbF5BVwk7jZ+gNogJ3HzXCeYzSmg
+        LLHs41aoi5Qkdr3fyTyBkW8BI8MqRsnUguLc9NxiwwKjvNRyveLE3OLSvHS95PzcTYzgMNTS
+        2sG4Z9UHvUOMTByMhxglOJiVRHgfWXIkCPGmJFZWpRblxxeV5qQWH2KU5mBREue90HUyXkgg
+        PbEkNTs1tSC1CCbLxMEp1cDU/Ofc3NPtXEcy9ty21LUrlnoS/GpbWJK/1hUm3z/MMlHzl0co
+        x2zzYAr1z0rp2i7B/zMnfcFv35PX/K+Jij3w/6g091e+SV3JVPt0hV0dp+1b9Gr/LT+z5nVT
+        64+KKLWdvemspc/3Gznv3j3xqfg1h+oznEfqfQsm1xoed5OxfLn9oO79sjtK+09qPd6yccON
+        hW5tyzebHuOYubt7V/CrkLZZp6JuSmjHaNVN2JBRxHxw6+3Tz3aYr6j6LLS6eUN8rotsierq
+        59NnL0/VvKqbyf3mzMtnt2SVRHef7n2+b+XrybodgoE7fXT/HpNKrTDfVc4Xn7PbVpG5oODN
+        Q5ECuYLEaU/jPty0s+rv0TytxFKckWioxVxUnAgAbwAAzbICAAA=
+X-CMS-MailID: 20210121070836epcas2p130c0f62d82aa3fcd2e021a1ef88a7ebd
 X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----WZLI4USkVYiVjVtGawWGutc5pNztY3GR2qy8kqsclN4GFAmP=_1566b_"
+Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20210120035123epcas2p2048f6d9896bd21f19d939a56fe0b6610
-References: <CGME20210120035123epcas2p2048f6d9896bd21f19d939a56fe0b6610@epcas2p2.samsung.com>
-        <1611113968-102424-1-git-send-email-dh10.jung@samsung.com>
-        <fbde7781-8eef-ab3a-a339-8a2f61ca83be@synopsys.com>
+X-CMS-RootMailID: 20210121070836epcas2p130c0f62d82aa3fcd2e021a1ef88a7ebd
+References: <eomji.oh@samsung.com>
+        <CGME20210121070836epcas2p130c0f62d82aa3fcd2e021a1ef88a7ebd@epcas2p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-------WZLI4USkVYiVjVtGawWGutc5pNztY3GR2qy8kqsclN4GFAmP=_1566b_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+Changed to return a timeout error if there is no response for a certain
+period of time in order to solve the problem of waiting for a event
+complete while executing unbind.
 
-Hi,
+Signed-off-by: Oh Eomji <eomji.oh@samsung.com>
+---
+ drivers/usb/gadget/function/f_mass_storage.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, Jan 21, 2021 at 01:00:32AM +0000, Thinh Nguyen wrote:
-> Hi,
-> 
-> Daehwan Jung wrote:
-> > Sometimes dwc3_gadget_pullup and dwc3_gadget_set_speed are called after
-> > entering suspend. That's why it needs to check whether suspend
-> >
-> > 1. dwc3 sends disconnect uevent and turn off. (suspend)
-> > 2. Platform side causes pullup or set_speed(e.g., adbd closes ffs node)
-> > 3. It causes unexpected behavior like ITMON error.
-> >
-> > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> > ---
-> >  drivers/usb/dwc3/gadget.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index ee44321..d7d4202 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -2093,6 +2093,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
-> >  	unsigned long		flags;
-> >  	int			ret;
-> >  
-> > +	if (pm_runtime_suspended(dwc->dev))
-> > +		return 0;
-> > +
-> >  	is_on = !!is_on;
-> >  
-> >  	/*
-> > @@ -2403,6 +2406,9 @@ static void dwc3_gadget_set_speed(struct usb_gadget *g,
-> >  	unsigned long		flags;
-> >  	u32			reg;
-> >  
-> > +	if (pm_runtime_suspended(dwc->dev))
-> > +		return;
-> > +
-> >  	spin_lock_irqsave(&dwc->lock, flags);
-> >  	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
-> >  	reg &= ~(DWC3_DCFG_SPEED_MASK);
-> 
-> This is already addressed in Wesley Cheng's patches. Can you try the
-> latest changes of DWC3 in Greg's usb-next branch?
-> 
-> Thanks,
-> Thinh
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index 950c943..b474840 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -3000,7 +3000,7 @@ static void fsg_unbind(struct usb_configuration *c, struct usb_function *f)
+ 	if (fsg->common->fsg == fsg) {
+ 		__raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE, NULL);
+ 		/* FIXME: make interruptible or killable somehow? */
+-		wait_event(common->fsg_wait, common->fsg != fsg);
++		wait_event_timeout(common->fsg_wait, common->fsg != fsg, HZ / 4);
+ 	}
+ 
+ 	usb_free_all_descriptors(&fsg->function);
+-- 
+2.7.4
 
-I checked Wesly Cheng's pathces but it's not same.
-What I want to do for this patch is to avoid pullup from platform side.
-(android in my case)
-
-It's possible that platform side tries to pullup by UDC_Store after usb is already disconnected.
-It can finally run controller and enable irq.
-
-I think we have to avoid it and other possible things related to platform side.
-
-
-------WZLI4USkVYiVjVtGawWGutc5pNztY3GR2qy8kqsclN4GFAmP=_1566b_
-Content-Type: text/plain; charset="utf-8"
-
-
-------WZLI4USkVYiVjVtGawWGutc5pNztY3GR2qy8kqsclN4GFAmP=_1566b_--
