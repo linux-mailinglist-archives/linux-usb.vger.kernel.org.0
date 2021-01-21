@@ -2,137 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD872FE6BB
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 10:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE562FE6CA
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 10:53:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727420AbhAUJum (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jan 2021 04:50:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728788AbhAUJtq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jan 2021 04:49:46 -0500
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E36C061757
-        for <linux-usb@vger.kernel.org>; Thu, 21 Jan 2021 01:49:03 -0800 (PST)
-Received: by mail-qk1-x729.google.com with SMTP id z11so1047945qkj.7
-        for <linux-usb@vger.kernel.org>; Thu, 21 Jan 2021 01:49:03 -0800 (PST)
+        id S1727815AbhAUJxj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jan 2021 04:53:39 -0500
+Received: from mail-eopbgr750083.outbound.protection.outlook.com ([40.107.75.83]:21230
+        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728501AbhAUJxI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 21 Jan 2021 04:53:08 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ylow4rxo45LFTlk3+8J+NerqD8KGyM97JYXI52poGs+wuLXqFNNDDB2/xV4i2i6h5Jj2VLNFFPAsWgwo3p4xchV8Gp0BvGPjesElLwdlddtqwNgxVOCFXTKqzEiRfWR+cCGspPOFXEH2eEGhBaWbd4txFEGfFXBm1zxPvgt9x1LkYjw6yh+waAICBA+x+ZPPOq2pSvdz0h4MDq0oXQpVSoB7xa+NujsTXTqp7OKms75WhFZ7E+zCFYmGhUI1c5tnHSNm2nPCG1EK+AI436gQtoArZOpwyfBzY7IbX02jmCqfXIEoe+KyrjD4gffMGlsPcPHQ5OHc68gvqCvLI2iINw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2qFaC4iLh5bxuRInL0bj6hoQIZKhzsHlSebnQPC/yLg=;
+ b=HmdeleryejjRqkt0LJvli3YTHDkmqL6yYHJtWiCse9rtKg3mY0/+3ZPoDz2zoSbGO7YeDmKr6QVleM/v2u34NDeLDhDOCFH1gRNskbUoH14+qlffj0lRIulWPPd9hs1X7QjPcAXaoaCfIDq3aLUsI9dJUTL8d6RJQV/UWNnBCs9dlhNWJS99LPcOhI2h5L04q2CyucY9CrvpG/fW/vY0Y2rQ1SVKhNHsA8WcMFAmz2B3PVWZg2oSQ0e/f9jjUHmYvc9kglO/D7wpizXCVOE+R1CLy5RWoQtmM8pXtK9kQ0oIb2BVBhzFeEonHFI7m23usNAk3tUWho5PU+pbxdp+uQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=silabs.com; dmarc=pass action=none header.from=silabs.com;
+ dkim=pass header.d=silabs.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7iZLr0v9O1rvkfQeB3DSvxH8ICzhuSdV/jEGC9+YKQw=;
-        b=mHYXvQBPTIQQRnvBYOHQ8UysiGpCK3V2AL+RKOOWTpKQjRLEbQHlSsf1J5cs2Y2ODF
-         tws5bxJndsIEw0B24vJ/eLTAbjnC3iXwyJkVc9Msd5L3EOrIZD2IsaJXqMwEWjiAeX0C
-         l2cIox8sbbEaDi3+mb957WSbAqp/gcgJb4AaPMuo5SJhbZg1bvPWgPBQYD9mBKBy+Jux
-         jDlpxKutpCev0x3PwfJ5/Gk+gL3RMnhQYVoz3YBusJb7HcZ5u7uYAzIBVuTIsFWlCwh4
-         JFYtoCKhPAUZlXXnfKuzaxwrVhOaBOmf2ewjKjKWT5/YL0urXjNEJ0PX7a+IGe0apbqh
-         Yjjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7iZLr0v9O1rvkfQeB3DSvxH8ICzhuSdV/jEGC9+YKQw=;
-        b=kd6jR/dnhDPK1qXE130++EeRBHf/F8C+RJCixsDC4FBdEMcH3A0HuJZvs84eaTzqjO
-         w7hGpjKHxuunTLavIlUzBGIXyzPnajqKmsafSGiRAgmOuuAPvBTGE7VPbS1D+LoqnMhn
-         vnb4vRy7JfGVvFWlFhix9bHaav/euZoHzGpjhMG12rrBMlZ5lgQwSx2PRes5doAW63RX
-         kUkJDRp/Zx+meCG0dPOSqT2aJKulUf9+DrEEm0MjVsc4JsO4ScXB4bkXqzBQaG6qUvAN
-         T2QAfsCE6YEd+xpYTxQb2j9H3EkKkxetdnyWr78BHWEFUBtKwDQvazziqFYYld08yiuw
-         J1TA==
-X-Gm-Message-State: AOAM532LyCL1OgRo/9Wdu3pWMlHdKbf4/cFSWYioHUPpdSm6jwIlxLSQ
-        tnng70rjcUZxwHuEx65odPkRxkXnB9eqsm/HVdzdlA==
-X-Google-Smtp-Source: ABdhPJwd2SrNVlF/ZOu9B9uCESbyB3db9/E7Qgq+yX9OO+x6vAl/7OB4qWRCvpv+8XIXeShg9GVyR16HG4SFMHUb4Ho=
-X-Received: by 2002:a37:2f82:: with SMTP id v124mr13247230qkh.212.1611222542722;
- Thu, 21 Jan 2021 01:49:02 -0800 (PST)
+ d=silabs.onmicrosoft.com; s=selector2-silabs-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2qFaC4iLh5bxuRInL0bj6hoQIZKhzsHlSebnQPC/yLg=;
+ b=PfydkT0Dzf/FVPIbW2Yt3nRYuLnOegG2i7bVaU2cTQ9jnPVgtkS4e9xb/DCKDscQei1Ok+TgQWWYGfqiBIAhkUGRVGhI33tzlEwf4XA+WZJth/CILAJoVk3qjpkD1XTEIjTHXJnbV29xF/uknSHQZYctI9dSNfdZFnbIkYIdGTQ=
+Received: from SJ0PR11MB5008.namprd11.prod.outlook.com (2603:10b6:a03:2d5::17)
+ by BYAPR11MB3624.namprd11.prod.outlook.com (2603:10b6:a03:b1::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.11; Thu, 21 Jan
+ 2021 09:52:23 +0000
+Received: from SJ0PR11MB5008.namprd11.prod.outlook.com
+ ([fe80::589d:3fe7:733c:eb72]) by SJ0PR11MB5008.namprd11.prod.outlook.com
+ ([fe80::589d:3fe7:733c:eb72%6]) with mapi id 15.20.3763.014; Thu, 21 Jan 2021
+ 09:52:23 +0000
+From:   Pho Tran <Pho.Tran@silabs.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "johan@kernel.org" <johan@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: [PATCH v4] USB: serial: cp210x: Fix error 32 when hardware flow
+ control  is enabled.
+Thread-Topic: [PATCH v4] USB: serial: cp210x: Fix error 32 when hardware flow
+ control  is enabled.
+Thread-Index: AQHW79sd4Ac+7L+UKUGhl4u2SgY08w==
+Date:   Thu, 21 Jan 2021 09:52:23 +0000
+Message-ID: <E0AAFEFF-2250-4991-8ED8-9B6EE14111EC@silabs.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3654.40.0.2.31)
+authentication-results: linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=none action=none
+ header.from=silabs.com;
+x-originating-ip: [118.70.199.1]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 76690e7d-21ba-4263-7f61-08d8bdf24050
+x-ms-traffictypediagnostic: BYAPR11MB3624:
+x-microsoft-antispam-prvs: <BYAPR11MB3624B654EA408427F6525406E3A19@BYAPR11MB3624.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1oQJIVQwLWpkrGtGgPmn7LU7rvBCIhB3FbvpnNX+2NtjMPa5odJ554y7uWPZiiMyUpvEm5j1B3jYjryhO3DrfZd9wFpQ8940vR5i24Y5DRymTf0xOEK31GvpR0uq9Jhlja4qGlQKFMvSrSgiSSc64s7S0nMTSdTZi8MKJd6gGRiFaam5b9wFwfil/2zPGiTuuV+hWXD/jTuyQg8Z3ibi7xKFDd0nmcafw1PMDu3HYBJUKuwULCTCsNyRLs2B8qudzxOq8Oz5uuOHD5KliagYz2QEI+sY3m3Kh+U28YkBeEuUKpYMeXWv9WSeNHq9wy+8ZZUFzjIw+fWJcZgPOF4I7IIhiU028c6qepZG/R4CGCqR3pj0122ZAWYkUAeXdoVLdeAdOkjQidq7vASjHfbpn74V4Dug3L2x1OfPYRJlO49+hhTCuKG5RbMbh/0DrUL1
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5008.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(376002)(39850400004)(366004)(136003)(396003)(71200400001)(6486002)(4326008)(86362001)(6512007)(5660300002)(83380400001)(110136005)(54906003)(316002)(91956017)(64756008)(2906002)(478600001)(8936002)(186003)(8676002)(66476007)(76116006)(2616005)(66446008)(66556008)(66946007)(6506007)(33656002)(26005)(36756003)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?/jlU3lV5lDgCzEko3pFuMVeFUesMa1dl6JvR1R7gQaribc0uWDNOuM1OPW0U?=
+ =?us-ascii?Q?K9ZcuP2PRjOFE91q6GUhaRuMcVrdIDwUBXpmYyVD/sHSgk9QNGbpy+Pq2whY?=
+ =?us-ascii?Q?EXI/7V93QQUen4hUo4qgboN8IQYFhctLkTgT/EOZiniGzheWqhkS1gaiRgEY?=
+ =?us-ascii?Q?j1ne1X1eaLCBhRAeMWXuzF9H8o9DKKyj3PhDHO1QiuDb++nKQCD3k2mOcOSX?=
+ =?us-ascii?Q?bS2X+nna243KQIl50jEAWejvqaUhvwZ/A270XVnpiEpCN+kdvL1NgkfltN16?=
+ =?us-ascii?Q?V8YtN1r/NeykJnjN2yX64pwvEcparUcNKjKgTBaCsybGyBHVwwn6TFlrRow9?=
+ =?us-ascii?Q?YZXARVTtdvvEq7W5/3lbjs75Dz6mVem69SpfWLfxN578Kwbj+qqDzHrsN3Rn?=
+ =?us-ascii?Q?AyIOeqsC96jOY3vh9yFXmeSZU1ibvxruBbLi6ijNTzqJQ7d7iyycUSmkH3My?=
+ =?us-ascii?Q?NLnmLxIHpzpa7O0Y339C0uok9j9yR0U2q9at1nsQ+JvzSKW7Ef0Vvy+KK9W2?=
+ =?us-ascii?Q?M5TSM3xnRY1ZFla9EdaJJNMXhYy00XlUZPX9mO5LppjGSkRbdjCMYLLZBUs5?=
+ =?us-ascii?Q?1HnoNXmrFBeOeEhBtDO4jYQoZTR9OSAvYaQIm4+susmfDn7YQDJKL5CwBJx/?=
+ =?us-ascii?Q?DBbKYeuWbnpu7jKxBUNXg6nNLwSAlWg7lovNXEH4boN5ZLBqgwTr0jlM6ne7?=
+ =?us-ascii?Q?GFvwHE1DYHAO6q3dMFmqB6N1BGQUpyMl6a0gkFjHgMHCzopcOXjxc1kGNu/1?=
+ =?us-ascii?Q?9wN+ebaHwdCCUkBysVBnt4GcW82Ax7J07Fz0a9PLDS/Qp25R5K4s6N97KrE+?=
+ =?us-ascii?Q?3lqPMxnjwu6UCMiQNK8AP3t0KN68Bv8nSOYf9XxSGtDsPp/89OGT8Zi6VuIf?=
+ =?us-ascii?Q?TS/tzZ6DX5RLUh56VRoOGPl2L/q/8JmSg6z73SHN2viNj/HmvbHSRqrS066N?=
+ =?us-ascii?Q?hwZWb1DCYFhBXWsXCg72Bt8HfTE3FOoIUm0+/2oSWBiQ/N8aJ0P0jX2UeL1Z?=
+ =?us-ascii?Q?z79E?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <7035E485B6690F4390DA422383227251@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20210115163311.391332-1-kyletso@google.com> <20210121084101.GC423216@kuha.fi.intel.com>
-In-Reply-To: <20210121084101.GC423216@kuha.fi.intel.com>
-From:   Kyle Tso <kyletso@google.com>
-Date:   Thu, 21 Jan 2021 17:48:46 +0800
-Message-ID: <CAGZ6i=0M6=cZpfm=Eu4s4XTjwz5GPbpStNNOdjnPAkJ1y2MRRA@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: tcpm: Create legacy PDOs for PD2 connection
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: silabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5008.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76690e7d-21ba-4263-7f61-08d8bdf24050
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jan 2021 09:52:23.1040
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 54dbd822-5231-4b20-944d-6f4abcd541fb
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 48uWNQOmytUzqlddNzn7/o6CTVy+ixukSseN9b0bDmU7W4pCVOb5ZclOmETiFLbjD4tx3F5iaGDZYGg5YF6OKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3624
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 21, 2021 at 4:41 PM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi Kyle,
->
-> On Sat, Jan 16, 2021 at 12:33:11AM +0800, Kyle Tso wrote:
-> > If the port partner is PD2, the PDOs of the local port should follow the
-> > format defined in PD2 Spec. Dynamically modify the pre-defined PD3 PDOs
-> > and transform them into PD2 format before sending them to the PD2 port
-> > partner.
->
-> I guess it's not possible for the system to supply separate static
-> PDOs for each PD revision?
->
-We can do that for sure. But a problem is that if there are more PD
-revisions in the future, we will need to add more PDO arrays.
-For backward compatibility, the new revision usually uses the
-previously-reserved bits for the new features.
-From my perspective, the better way to achieve the backward
-compatibility is to just clear the bits if those are reserved in the
-previous revision.
+Fix error 32 returned by CP210X_SET_MHS when hardware flow control is enabl=
+ed.
 
-I can submit another patch which adds another PDO array for PD2 if you
-think it is more appropriate.
+The root cause of error 32 is that user application (CoolTerm, linux-serial=
+-test)
+opened cp210x device with hardware flow control then attempt to control RTS=
+/DTR pins.
+In hardware flow control, RTS/DTR pins will be controlled by hardware only,
+any attempt to control those pins will cause error 32 from the device.
+This fix will block MHS command(command to control RTS/DTR pins) to the dev=
+ice
+if hardware flow control is being used.
 
-> > Signed-off-by: Kyle Tso <kyletso@google.com>
-> > ---
-> >  drivers/usb/typec/tcpm/tcpm.c | 62 +++++++++++++++++++++++++++++------
-> >  include/linux/usb/pd.h        |  1 +
-> >  2 files changed, 53 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> > index 22a85b396f69..1220ab1ed47d 100644
-> > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > @@ -911,13 +911,47 @@ static int tcpm_set_pwr_role(struct tcpm_port *port, enum typec_role role)
-> >       return 0;
-> >  }
-> >
-> > +/*
-> > + * Transform the PDO to be compliant to PD rev2.0.
-> > + * Return 0 if the PDO type is not defined in PD rev2.0.
-> > + * Otherwise, return the converted PDO.
-> > + */
-> > +static u32 tcpm_forge_legacy_pdo(struct tcpm_port *port, u32 pdo, enum typec_role role)
-> > +{
-> > +     switch (pdo_type(pdo)) {
-> > +     case PDO_TYPE_FIXED:
-> > +             if (role == TYPEC_SINK)
-> > +                     return pdo & ~PDO_FIXED_FRS_CURR_MASK;
-> > +             else
-> > +                     return pdo & ~PDO_FIXED_UNCHUNK_EXT;
-> > +     case PDO_TYPE_VAR:
-> > +     case PDO_TYPE_BATT:
-> > +             return pdo;
-> > +     case PDO_TYPE_APDO:
-> > +     default:
-> > +             return 0;
-> > +     }
-> > +}
-> > +
-> >  static int tcpm_pd_send_source_caps(struct tcpm_port *port)
-> >  {
-> >       struct pd_message msg;
-> > -     int i;
-> > +     u32 pdo;
-> > +     unsigned int i, nr_pdo = 0;
->
-> Side note. I think this driver uses the "reverse christmas tree"
-> style with the variables.
+Signed-off-by: Pho Tran <pho.tran@silabs.com>
+---
+01/21/2021: Patch v3 modified based on comment from Greg Kroah-Hartman <gre=
+gkh@linuxfoundation.org>
+01/19/2021: Patch v2  Modified based on comment from Johan Hovold <johan@ke=
+rnel.org>
+and Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/serial/cp210x.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-I will change the order (if there is a next version)
+diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+index fbb10dfc56e3..814dff5fee98 100644
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -1204,7 +1204,12 @@ static int cp210x_tiocmset(struct tty_struct *tty,
+ 		unsigned int set, unsigned int clear)
+ {
+ 	struct usb_serial_port *port =3D tty->driver_data;
+-	return cp210x_tiocmset_port(port, set, clear);
++
++	/* Don't send SET_MHS command if device in hardware flow control mode. */
++	if (C_CRTSCTS(tty))
++		return 0;
++	else
++		return cp210x_tiocmset_port(port, set, clear);
+ }
+=20
+ static int cp210x_tiocmset_port(struct usb_serial_port *port,
+--=20
+2.17.1
 
-thanks,
-Kyle
