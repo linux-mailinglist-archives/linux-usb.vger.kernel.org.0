@@ -2,246 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 480082FE331
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 07:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8312FE358
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 08:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726858AbhAUGrI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jan 2021 01:47:08 -0500
-Received: from aserp2130.oracle.com ([141.146.126.79]:38066 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726318AbhAUGq4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jan 2021 01:46:56 -0500
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10L6fPsv127833;
-        Thu, 21 Jan 2021 06:46:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type : in-reply-to;
- s=corp-2020-01-29; bh=seQuyGYo9v2lH1z0iBy3n60lw8YL3g3G68Vu2n7+Hyw=;
- b=palL15T3H+fNI1xmekxgngojpb5Z645duxGw706fOh6iDdxPaj3PnYKQCaqVhpOav8WX
- Tm5oMg215PIbGmy3DGyfrCUhYaKS6sWvGyrKNXu+/uPvIEQCdDc7rD/0ZO+xm7hexDwk
- LOA8Wow4WyWzgpcg3PYwat/JVGsGt8veIfYyOqAhFY+2B1fPJPe6WYqmouwjKHPjRonh
- dk2SdLAtIsKi0CwBDFwQvMoSaHV/8f29l1nSA7BasreLOjd103k9tG5u1xyRMhtV7LFc
- brJ1FzopWO7yfmOTXW8VMnyNLmyIYguUyfNUWvrKjo8bHO+3jZwMVz/eo8xb9FdjUGCg rQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2130.oracle.com with ESMTP id 3668qrduqk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 Jan 2021 06:46:09 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10L6TrNI171311;
-        Thu, 21 Jan 2021 06:44:08 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 3668rf71gr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 Jan 2021 06:44:08 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10L6i74d014380;
-        Thu, 21 Jan 2021 06:44:07 GMT
-Received: from mwanda (/102.36.221.92)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 20 Jan 2021 22:44:06 -0800
-Date:   Thu, 21 Jan 2021 09:44:00 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Antoine Jacquet <royale@zerezo.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH v2] media: zr364xx: fix memory leaks in probe()
-Message-ID: <YAkisFB1Ly0e2pPe@mwanda>
+        id S1727140AbhAUHCW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jan 2021 02:02:22 -0500
+Received: from mailout1.samsung.com ([203.254.224.24]:10697 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727135AbhAUHCR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jan 2021 02:02:17 -0500
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20210121070132epoutp01ea8fd54e70e2b44c7a1bee67219837a3~cLTmbK1kx1056010560epoutp01V
+        for <linux-usb@vger.kernel.org>; Thu, 21 Jan 2021 07:01:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20210121070132epoutp01ea8fd54e70e2b44c7a1bee67219837a3~cLTmbK1kx1056010560epoutp01V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1611212492;
+        bh=ZyIfm2xerJ7n5eZHUm+VKML0WJUVbU46w1Su9fus1ig=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=o1qfHrx4UXH2syiLC2MKQAraI3AdEc5FGV7DPWKh1EUjanbg3YbccYqqYU4Rszi/u
+         5ZQ8WwdbTZPx16/2v3XD98kJT7exMxOrxJArsnqVeUCP6vdS6UlvcY7DxB4qS8Jiio
+         8zNUaJiTHs1GcgrrfovS/jdYD3roGy8zkRR7Mv/k=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20210121070128epcas2p3476ad921377c37a9fcadc8b70c541d7b~cLTi-oVDJ1164711647epcas2p31;
+        Thu, 21 Jan 2021 07:01:28 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.40.183]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4DLtbW1rfZz4x9Pw; Thu, 21 Jan
+        2021 07:01:27 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        31.6A.10621.5C629006; Thu, 21 Jan 2021 16:01:25 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20210121070117epcas2p2f79aee8554d1c6d94e71efd0a4b248b4~cLTZArSEb1177811778epcas2p2K;
+        Thu, 21 Jan 2021 07:01:17 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20210121070117epsmtrp1dab25ef01fafa4412899263a1a181fdb~cLTY-5e6V3022230222epsmtrp1S;
+        Thu, 21 Jan 2021 07:01:17 +0000 (GMT)
+X-AuditID: b6c32a45-34dff7000001297d-bd-600926c5080c
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        43.7E.13470.DB629006; Thu, 21 Jan 2021 16:01:17 +0900 (KST)
+Received: from ubuntu (unknown [12.36.155.120]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20210121070117epsmtip1c8b35273b41ac8cd85b5ab0b52754318~cLTY2yNTs0633906339epsmtip1Q;
+        Thu, 21 Jan 2021 07:01:17 +0000 (GMT)
+Date:   Thu, 21 Jan 2021 15:49:56 +0900
+From:   Jung Daehwan <dh10.jung@samsung.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: usb: dwc3: gadget: skip pullup and set_speed after suspend
+Message-ID: <20210121064956.GA69382@ubuntu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <196887f5-677f-0aeb-5f5c-fb4a918d6128@xs4all.nl>
-X-Mailer: git-send-email haha only kidding
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9870 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 suspectscore=0
- adultscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101210033
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9870 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0
- suspectscore=0 lowpriorityscore=0 bulkscore=0 adultscore=0 spamscore=0
- phishscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2101210033
+In-Reply-To: <fbde7781-8eef-ab3a-a339-8a2f61ca83be@synopsys.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupgk+LIzCtJLcpLzFFi42LZdljTTPeoGmeCwZvdphbH2p6wWzQvXs9m
+        cXnXHDaLRctamS1WLTjA7sDqsWlVJ5vH/rlr2D227P/M6PF5k1wAS1SOTUZqYkpqkUJqXnJ+
+        SmZeuq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QXiWFssScUqBQQGJxsZK+nU1R
+        fmlJqkJGfnGJrVJqQUpOgaFhgV5xYm5xaV66XnJ+rpWhgYGRKVBlQk7G828sBZsFK9q+zGRr
+        YPzP28XIySEhYCKx9fFGpi5GLg4hgR2MEv0rt7FCOJ8YJaZvXMwG4XxjlFjavYkVpuXti5PM
+        EIm9jBL7761jhHCeALXc3cwCUsUioCrx8+FsJhCbTUBL4t6PE8wgtoiAjsSBE+fBFjILXGKU
+        mNzZxgaSEBZwl5h4+y5YM6+AtsSZOf9ZIWxBiZMzn4DFOQUcJCbOegU0iINDVEBF4tXBepA5
+        EgKP2CVOrdrDDnGei8SUm8vZIGxhiVfHt0DFpSRe9rexg/RKCJRLLJpvB9HbwSix5tNZRoga
+        Y4lZz9rBbGaBDIlH725C1StLHLnFAhHmk+g4/BcqzCvR0SYE0aksMf3yBGgASUocfH2OGaLE
+        Q+LkOi1I8FxglPi+5CvzBEb5WUgem4VkGYStI7Fg9ye2WUDtzALSEsv/cUCYmhLrd+kvYGRd
+        xSiWWlCcm55abFRgiBzXmxjBSVLLdQfj5Lcf9A4xMnEwHmKU4GBWEuF9ZMmRIMSbklhZlVqU
+        H19UmpNafIjRFBhNE5mlRJPzgWk6ryTe0NTIzMzA0tTC1MzIQkmct9jgQbyQQHpiSWp2ampB
+        ahFMHxMHp1QDU3uPvpeNsfgkp+OS7rMmc162vrtr99zb3+79SpD7u9Rogya7/ZITq48mvFv3
+        oEbE+IVyJAPL7ytNKi5zz70OOb55xbEXEV0K9Y9nVE4xtVItt7IOLT/PkdfVqvFzK9PnpDVV
+        olIBH3NKDlom3tpWk9b51sf57b4tfh1qqziuzYhj/VHez8Ttwnomxd3zm82/d7mykvpCKyZ6
+        /dTmsN53udzxZ0NdvNHLpdunJdjenCe/8n1mi0Leji0VcnKrml7flKg6N937wXvrLP2C+UVn
+        rnw4XFSxcv466wuc+m0r8x32nPvkIsWZmphYuuls5Npmi2CJJompESFKKb8/rbU6/tev6+Tx
+        X2v/upmtqdoVqsRSnJFoqMVcVJwIAHhFKjQbBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrPLMWRmVeSWpSXmKPExsWy7bCSnO5eNc4Eg4U31S2OtT1ht2hevJ7N
+        4vKuOWwWi5a1MlusWnCA3YHVY9OqTjaP/XPXsHts2f+Z0ePzJrkAligum5TUnMyy1CJ9uwSu
+        jN9tD9gKPvNVNHzcydzAeIO7i5GTQ0LAROLti5PMXYxcHEICuxklnq/ZzwaRkJRYOvcGO4Qt
+        LHG/5QgrRNEjRolDR7axgCRYBFQlfj6czQRiswloSdz7cYIZxBYR0JE4cOI8E0gDs8AlRonr
+        9yCKhAXcJSbevgvWzCugLXFmzn+oqRcYJdpvzYVKCEqcnPkEzGYGmnrj30ugZg4gW1pi+T8O
+        kDCngIPExFmvmEHCogIqEq8O1k9gFJyFpHkWkuZZCM0LGJlXMUqmFhTnpucWGxYY5qWW6xUn
+        5haX5qXrJefnbmIEh7mW5g7G7as+6B1iZOJgPMQowcGsJML7yJIjQYg3JbGyKrUoP76oNCe1
+        +BCjNAeLkjjvha6T8UIC6YklqdmpqQWpRTBZJg5OqQam6MpJD3Pmex/SCtzu/0VW5ut1v4sP
+        5KV51CarsPXO6Wlf9WvNxYN/HlgL2O7iP/qBX8vW8uAmgaufRGZ5bHh2xnUB263T64sVDjt4
+        Wlv0Wz3NuHvhcYd7vF6msLiRqP7m2dOWTBFUe7B+SZCqYOIpR9tF80PMNbZPbM1I6T9db/w5
+        ms944csoCetAj++1s9rfm7L/We4rEH9rv3fhW48VgQ/XrOty2zzZYMa7Z7buGmZ8LeyK+pHP
+        zJxPPtgk5sMcsNJeacKznnMbeZcpcDvsfW/v9Efu+nrHnWJtnRoLG94L1p5imWzfsy6q/AKH
+        ZvydhXPcr01UaeS7YNXDoMw84VcJs7qM1Tf5P5ryLxKUWIozEg21mIuKEwHB/zkU4gIAAA==
+X-CMS-MailID: 20210121070117epcas2p2f79aee8554d1c6d94e71efd0a4b248b4
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----WZLI4USkVYiVjVtGawWGutc5pNztY3GR2qy8kqsclN4GFAmP=_1566b_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210120035123epcas2p2048f6d9896bd21f19d939a56fe0b6610
+References: <CGME20210120035123epcas2p2048f6d9896bd21f19d939a56fe0b6610@epcas2p2.samsung.com>
+        <1611113968-102424-1-git-send-email-dh10.jung@samsung.com>
+        <fbde7781-8eef-ab3a-a339-8a2f61ca83be@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Syzbot discovered that the probe error handling doesn't clean up the
-resources allocated in zr364xx_board_init().  There are several
-related bugs in this code so I have re-written the error handling.
+------WZLI4USkVYiVjVtGawWGutc5pNztY3GR2qy8kqsclN4GFAmP=_1566b_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-1)  Introduce a new function zr364xx_board_uninit() which cleans up
-    the resources in zr364xx_board_init().
-2)  In zr364xx_board_init() if the call to zr364xx_start_readpipe()
-    fails then release the "cam->buffer.frame[i].lpvbits" memory
-    before returning.  This way every function either allocates
-    everything successfully or it cleans up after itself.
-3)  Re-write the probe function so that each failure path goto frees
-    the most recent allocation.  That way we don't free anything
-    before it has been allocated and we can also verify that
-    everything is freed.
-4)  Originally, in the probe function the "cam->v4l2_dev.release"
-    pointer was set to "zr364xx_release" near the start but I moved
-    that assignment to the end, after everything had succeeded.  The
-    release function was never actually called during the probe cleanup
-    process, but with this change I wanted to make it clear that we
-    don't want to call zr364xx_release() until everything is
-    allocated successfully.
+Hi,
 
-Next I re-wrote the zr364xx_release() function.  Ideally this would
-have been a simple matter of copy and pasting the cleanup code from
-probe and adding an additional call to video_unregister_device().  But
-there are a couple quirks to note.
+On Thu, Jan 21, 2021 at 01:00:32AM +0000, Thinh Nguyen wrote:
+> Hi,
+> 
+> Daehwan Jung wrote:
+> > Sometimes dwc3_gadget_pullup and dwc3_gadget_set_speed are called after
+> > entering suspend. That's why it needs to check whether suspend
+> >
+> > 1. dwc3 sends disconnect uevent and turn off. (suspend)
+> > 2. Platform side causes pullup or set_speed(e.g., adbd closes ffs node)
+> > 3. It causes unexpected behavior like ITMON error.
+> >
+> > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> > ---
+> >  drivers/usb/dwc3/gadget.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > index ee44321..d7d4202 100644
+> > --- a/drivers/usb/dwc3/gadget.c
+> > +++ b/drivers/usb/dwc3/gadget.c
+> > @@ -2093,6 +2093,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+> >  	unsigned long		flags;
+> >  	int			ret;
+> >  
+> > +	if (pm_runtime_suspended(dwc->dev))
+> > +		return 0;
+> > +
+> >  	is_on = !!is_on;
+> >  
+> >  	/*
+> > @@ -2403,6 +2406,9 @@ static void dwc3_gadget_set_speed(struct usb_gadget *g,
+> >  	unsigned long		flags;
+> >  	u32			reg;
+> >  
+> > +	if (pm_runtime_suspended(dwc->dev))
+> > +		return;
+> > +
+> >  	spin_lock_irqsave(&dwc->lock, flags);
+> >  	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
+> >  	reg &= ~(DWC3_DCFG_SPEED_MASK);
+> 
+> This is already addressed in Wesley Cheng's patches. Can you try the
+> latest changes of DWC3 in Greg's usb-next branch?
+> 
+> Thanks,
+> Thinh
 
-1)  The probe function does not call videobuf_mmap_free() and I don't
-    know where the videobuf_mmap is allocated.  I left the code as-is to
-    avoid introducing a bug in code I don't understand.
-2)  The zr364xx_board_uninit() has a call to zr364xx_stop_readpipe()
-    which is a change from the original behavior with regards to
-    unloading the driver.  Calling zr364xx_stop_readpipe() on a stopped
-    pipe is not a problem so this is safe and is potentially a bugfix.
+I checked Wesly Cheng's pathces but it's not same.
+What I want to do for this patch is to avoid pullup from platform side.
+(android in my case)
 
-Reported-by: syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Tested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
-v2: The first version introduced a double call of video_unregister_device()
-    in the unload path.
+It's possible that platform side tries to pullup by UDC_Store after usb is already disconnected.
+It can finally run controller and enable irq.
 
- drivers/media/usb/zr364xx/zr364xx.c | 49 ++++++++++++++++++-----------
- 1 file changed, 31 insertions(+), 18 deletions(-)
+I think we have to avoid it and other possible things related to platform side.
 
-diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
-index 1e1c6b4d1874..d29b861367ea 100644
---- a/drivers/media/usb/zr364xx/zr364xx.c
-+++ b/drivers/media/usb/zr364xx/zr364xx.c
-@@ -1181,15 +1181,11 @@ static int zr364xx_open(struct file *file)
- 	return err;
- }
- 
--static void zr364xx_release(struct v4l2_device *v4l2_dev)
-+static void zr364xx_board_uninit(struct zr364xx_camera *cam)
- {
--	struct zr364xx_camera *cam =
--		container_of(v4l2_dev, struct zr364xx_camera, v4l2_dev);
- 	unsigned long i;
- 
--	v4l2_device_unregister(&cam->v4l2_dev);
--
--	videobuf_mmap_free(&cam->vb_vidq);
-+	zr364xx_stop_readpipe(cam);
- 
- 	/* release sys buffers */
- 	for (i = 0; i < FRAMES; i++) {
-@@ -1200,9 +1196,19 @@ static void zr364xx_release(struct v4l2_device *v4l2_dev)
- 		cam->buffer.frame[i].lpvbits = NULL;
- 	}
- 
--	v4l2_ctrl_handler_free(&cam->ctrl_handler);
- 	/* release transfer buffer */
- 	kfree(cam->pipe->transfer_buffer);
-+}
-+
-+static void zr364xx_release(struct v4l2_device *v4l2_dev)
-+{
-+	struct zr364xx_camera *cam =
-+		container_of(v4l2_dev, struct zr364xx_camera, v4l2_dev);
-+
-+	videobuf_mmap_free(&cam->vb_vidq);
-+	v4l2_ctrl_handler_free(&cam->ctrl_handler);
-+	zr364xx_board_uninit(cam);
-+	v4l2_device_unregister(&cam->v4l2_dev);
- 	kfree(cam);
- }
- 
-@@ -1376,11 +1382,14 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
- 	/* start read pipe */
- 	err = zr364xx_start_readpipe(cam);
- 	if (err)
--		goto err_free;
-+		goto err_free_frames;
- 
- 	DBG(": board initialized\n");
- 	return 0;
- 
-+err_free_frames:
-+	for (i = 0; i < FRAMES; i++)
-+		vfree(cam->buffer.frame[i].lpvbits);
- err_free:
- 	kfree(cam->pipe->transfer_buffer);
- 	cam->pipe->transfer_buffer = NULL;
-@@ -1409,12 +1418,10 @@ static int zr364xx_probe(struct usb_interface *intf,
- 	if (!cam)
- 		return -ENOMEM;
- 
--	cam->v4l2_dev.release = zr364xx_release;
- 	err = v4l2_device_register(&intf->dev, &cam->v4l2_dev);
- 	if (err < 0) {
- 		dev_err(&udev->dev, "couldn't register v4l2_device\n");
--		kfree(cam);
--		return err;
-+		goto free_cam;
- 	}
- 	hdl = &cam->ctrl_handler;
- 	v4l2_ctrl_handler_init(hdl, 1);
-@@ -1423,7 +1430,7 @@ static int zr364xx_probe(struct usb_interface *intf,
- 	if (hdl->error) {
- 		err = hdl->error;
- 		dev_err(&udev->dev, "couldn't register control\n");
--		goto fail;
-+		goto unregister;
- 	}
- 	/* save the init method used by this camera */
- 	cam->method = id->driver_info;
-@@ -1496,7 +1503,7 @@ static int zr364xx_probe(struct usb_interface *intf,
- 	if (!cam->read_endpoint) {
- 		err = -ENOMEM;
- 		dev_err(&intf->dev, "Could not find bulk-in endpoint\n");
--		goto fail;
-+		goto unregister;
- 	}
- 
- 	/* v4l */
-@@ -1507,10 +1514,11 @@ static int zr364xx_probe(struct usb_interface *intf,
- 
- 	/* load zr364xx board specific */
- 	err = zr364xx_board_init(cam);
--	if (!err)
--		err = v4l2_ctrl_handler_setup(hdl);
- 	if (err)
--		goto fail;
-+		goto unregister;
-+	err = v4l2_ctrl_handler_setup(hdl);
-+	if (err)
-+		goto board_uninit;
- 
- 	spin_lock_init(&cam->slock);
- 
-@@ -1525,16 +1533,21 @@ static int zr364xx_probe(struct usb_interface *intf,
- 	err = video_register_device(&cam->vdev, VFL_TYPE_VIDEO, -1);
- 	if (err) {
- 		dev_err(&udev->dev, "video_register_device failed\n");
--		goto fail;
-+		goto free_handler;
- 	}
-+	cam->v4l2_dev.release = zr364xx_release;
- 
- 	dev_info(&udev->dev, DRIVER_DESC " controlling device %s\n",
- 		 video_device_node_name(&cam->vdev));
- 	return 0;
- 
--fail:
-+free_handler:
- 	v4l2_ctrl_handler_free(hdl);
-+board_uninit:
-+	zr364xx_board_uninit(cam);
-+unregister:
- 	v4l2_device_unregister(&cam->v4l2_dev);
-+free_cam:
- 	kfree(cam);
- 	return err;
- }
--- 
-2.29.2
 
+------WZLI4USkVYiVjVtGawWGutc5pNztY3GR2qy8kqsclN4GFAmP=_1566b_
+Content-Type: text/plain; charset="utf-8"
+
+
+------WZLI4USkVYiVjVtGawWGutc5pNztY3GR2qy8kqsclN4GFAmP=_1566b_--
