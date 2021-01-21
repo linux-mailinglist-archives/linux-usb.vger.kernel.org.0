@@ -2,104 +2,246 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC012FE0E8
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 05:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 480082FE331
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 07:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727355AbhAUEl5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Jan 2021 23:41:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43266 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726753AbhAUElE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 20 Jan 2021 23:41:04 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5004E238EB;
-        Thu, 21 Jan 2021 04:40:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611204022;
-        bh=uqaKgj8ERy+L2vgyvOGN9yOlUjntHTGqoSn1YcsOB4A=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ChtW9EXEiiWJxlBj7fuIxQ7XefenOGQVnbZqWkrO87TFGKbgemZLagxOHaZk/4kka
-         wxn06cX0D3wv2w38+MTLz5PH0TMf+N8DTO/XWbcON0F0f5bgamdV7Y8iMGdk/AMorf
-         t3fgbd4G1m86rNagSTgGmIhTRUnzUIT3hpT1e57SJdix3NxDf7Ncdb5bt0DxSNpxJO
-         9mH00TP+bdGAuuW1b2I6VsPAnURpTfX+lcNsBa+Gka2wdFHnJ2qDOK+RmOIoSlYe54
-         u0jEVjLSe6PRr7h3UsAwBv+4mGImUl/2QU2+2cnJhs2YaoToBeVf93khK4kLQnQhEp
-         e9UDpSh9Drs9w==
-Received: by mail-lf1-f53.google.com with SMTP id v24so717272lfr.7;
-        Wed, 20 Jan 2021 20:40:22 -0800 (PST)
-X-Gm-Message-State: AOAM533GtWUJa27noS14tDl2kUVw8BuM9+Bde9aYe9sSSMrLLcxIlMLX
-        +q7etbmVIcd+t92Yz8El6cueZbKdMOcDCgS4R/Y=
-X-Google-Smtp-Source: ABdhPJy8qhijve3RxQKPzmAsfsPdPAN5DUoEmElkmffNcBcnxlrBtAU2YthDmaPnmQr4komT5WSroZndwC/ucSf4o2w=
-X-Received: by 2002:a19:810:: with SMTP id 16mr5771851lfi.233.1611204020484;
- Wed, 20 Jan 2021 20:40:20 -0800 (PST)
+        id S1726858AbhAUGrI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jan 2021 01:47:08 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:38066 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726318AbhAUGq4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jan 2021 01:46:56 -0500
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10L6fPsv127833;
+        Thu, 21 Jan 2021 06:46:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type : in-reply-to;
+ s=corp-2020-01-29; bh=seQuyGYo9v2lH1z0iBy3n60lw8YL3g3G68Vu2n7+Hyw=;
+ b=palL15T3H+fNI1xmekxgngojpb5Z645duxGw706fOh6iDdxPaj3PnYKQCaqVhpOav8WX
+ Tm5oMg215PIbGmy3DGyfrCUhYaKS6sWvGyrKNXu+/uPvIEQCdDc7rD/0ZO+xm7hexDwk
+ LOA8Wow4WyWzgpcg3PYwat/JVGsGt8veIfYyOqAhFY+2B1fPJPe6WYqmouwjKHPjRonh
+ dk2SdLAtIsKi0CwBDFwQvMoSaHV/8f29l1nSA7BasreLOjd103k9tG5u1xyRMhtV7LFc
+ brJ1FzopWO7yfmOTXW8VMnyNLmyIYguUyfNUWvrKjo8bHO+3jZwMVz/eo8xb9FdjUGCg rQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2130.oracle.com with ESMTP id 3668qrduqk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 21 Jan 2021 06:46:09 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10L6TrNI171311;
+        Thu, 21 Jan 2021 06:44:08 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 3668rf71gr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 21 Jan 2021 06:44:08 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10L6i74d014380;
+        Thu, 21 Jan 2021 06:44:07 GMT
+Received: from mwanda (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 20 Jan 2021 22:44:06 -0800
+Date:   Thu, 21 Jan 2021 09:44:00 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Antoine Jacquet <royale@zerezo.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH v2] media: zr364xx: fix memory leaks in probe()
+Message-ID: <YAkisFB1Ly0e2pPe@mwanda>
 MIME-Version: 1.0
-References: <20200902181234.13955-1-lindsey.stanpoor@gmail.com>
- <CAEr9=gsH2UhjMO_55FKmGKS0DYrT_-XKf0iwCKCNc93epbiXNw@mail.gmail.com>
- <87ft5ly5nh.fsf@kernel.org> <CAEr9=gsc0L=rn5YDLrArqbOMSt25HhHF7cwhp7sxdPa6-PQGpg@mail.gmail.com>
-In-Reply-To: <CAEr9=gsc0L=rn5YDLrArqbOMSt25HhHF7cwhp7sxdPa6-PQGpg@mail.gmail.com>
-From:   Chen-Yu Tsai <wens@kernel.org>
-Date:   Thu, 21 Jan 2021 12:40:09 +0800
-X-Gmail-Original-Message-ID: <CAGb2v64L94oudNnjhumEE6P6B=MjyOpmbYuZFfDc-fDDBZ_+jQ@mail.gmail.com>
-Message-ID: <CAGb2v64L94oudNnjhumEE6P6B=MjyOpmbYuZFfDc-fDDBZ_+jQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/4] dt-bindings: usb: add rk3328 dwc3 docs
-To:     Lindsey Stanpoor <lindsey.stanpoor@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     devicetree <devicetree@vger.kernel.org>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        cnemo@tutanota.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <196887f5-677f-0aeb-5f5c-fb4a918d6128@xs4all.nl>
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9870 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 suspectscore=0
+ adultscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101210033
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9870 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0
+ suspectscore=0 lowpriorityscore=0 bulkscore=0 adultscore=0 spamscore=0
+ phishscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101210033
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 21, 2021 at 12:30 PM Lindsey Stanpoor
-<lindsey.stanpoor@gmail.com> wrote:
->
-> On Fri, Nov 6, 2020 at 11:42 PM Felipe Balbi <balbi@kernel.org> wrote:
-> >
-> >
-> > Hi,
-> >
-> > Lindsey Stanpoor <lindsey.stanpoor@gmail.com> writes:
-> > > On Wed, Sep 2, 2020 at 11:12 AM <lindsey.stanpoor@gmail.com> wrote:
-> > >>
-> > >> From: Cameron Nemo <cnemo@tutanota.com>
-> > >>
-> > >> Document compatible for dwc3 on the Rockchip rk3328 platform.
-> > >
-> > > Hi all,
-> > >
-> > > Wanted to give this patch submission a gentle ping.
-> > >
-> > > Rob Herring acked the documentation changes, but I have not heard
-> > > anything
-> > > from the USB or Rockchip maintainers. This patchset would facilitate USB3
-> > > support for Rockchip rk3328 devices like the Pine Rock64.
-> > >
-> > > If there is anything I can do to help move this along, please let me know.
-> >
-> > Sorry, it had fallen through the cracks. It's now in my testing/next.
->
-> Following up on this. Will this move out of your testing/next?
+Syzbot discovered that the probe error handling doesn't clean up the
+resources allocated in zr364xx_board_init().  There are several
+related bugs in this code so I have re-written the error handling.
 
-The binding changes are likely stale now that the dwc3 binding has been
-converted to YAML. See Greg's USB tree.
+1)  Introduce a new function zr364xx_board_uninit() which cleans up
+    the resources in zr364xx_board_init().
+2)  In zr364xx_board_init() if the call to zr364xx_start_readpipe()
+    fails then release the "cam->buffer.frame[i].lpvbits" memory
+    before returning.  This way every function either allocates
+    everything successfully or it cleans up after itself.
+3)  Re-write the probe function so that each failure path goto frees
+    the most recent allocation.  That way we don't free anything
+    before it has been allocated and we can also verify that
+    everything is freed.
+4)  Originally, in the probe function the "cam->v4l2_dev.release"
+    pointer was set to "zr364xx_release" near the start but I moved
+    that assignment to the end, after everything had succeeded.  The
+    release function was never actually called during the probe cleanup
+    process, but with this change I wanted to make it clear that we
+    don't want to call zr364xx_release() until everything is
+    allocated successfully.
 
-Also the DT changes should go through the arm-soc tree separately, so
-we can stack on additional changes enabling USB3 on other boards.
+Next I re-wrote the zr364xx_release() function.  Ideally this would
+have been a simple matter of copy and pasting the cleanup code from
+probe and adding an additional call to video_unregister_device().  But
+there are a couple quirks to note.
 
-ChenYu
+1)  The probe function does not call videobuf_mmap_free() and I don't
+    know where the videobuf_mmap is allocated.  I left the code as-is to
+    avoid introducing a bug in code I don't understand.
+2)  The zr364xx_board_uninit() has a call to zr364xx_stop_readpipe()
+    which is a change from the original behavior with regards to
+    unloading the driver.  Calling zr364xx_stop_readpipe() on a stopped
+    pipe is not a problem so this is safe and is potentially a bugfix.
 
+Reported-by: syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Tested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+v2: The first version introduced a double call of video_unregister_device()
+    in the unload path.
 
+ drivers/media/usb/zr364xx/zr364xx.c | 49 ++++++++++++++++++-----------
+ 1 file changed, 31 insertions(+), 18 deletions(-)
 
-> --
-> Cameron
->
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
+index 1e1c6b4d1874..d29b861367ea 100644
+--- a/drivers/media/usb/zr364xx/zr364xx.c
++++ b/drivers/media/usb/zr364xx/zr364xx.c
+@@ -1181,15 +1181,11 @@ static int zr364xx_open(struct file *file)
+ 	return err;
+ }
+ 
+-static void zr364xx_release(struct v4l2_device *v4l2_dev)
++static void zr364xx_board_uninit(struct zr364xx_camera *cam)
+ {
+-	struct zr364xx_camera *cam =
+-		container_of(v4l2_dev, struct zr364xx_camera, v4l2_dev);
+ 	unsigned long i;
+ 
+-	v4l2_device_unregister(&cam->v4l2_dev);
+-
+-	videobuf_mmap_free(&cam->vb_vidq);
++	zr364xx_stop_readpipe(cam);
+ 
+ 	/* release sys buffers */
+ 	for (i = 0; i < FRAMES; i++) {
+@@ -1200,9 +1196,19 @@ static void zr364xx_release(struct v4l2_device *v4l2_dev)
+ 		cam->buffer.frame[i].lpvbits = NULL;
+ 	}
+ 
+-	v4l2_ctrl_handler_free(&cam->ctrl_handler);
+ 	/* release transfer buffer */
+ 	kfree(cam->pipe->transfer_buffer);
++}
++
++static void zr364xx_release(struct v4l2_device *v4l2_dev)
++{
++	struct zr364xx_camera *cam =
++		container_of(v4l2_dev, struct zr364xx_camera, v4l2_dev);
++
++	videobuf_mmap_free(&cam->vb_vidq);
++	v4l2_ctrl_handler_free(&cam->ctrl_handler);
++	zr364xx_board_uninit(cam);
++	v4l2_device_unregister(&cam->v4l2_dev);
+ 	kfree(cam);
+ }
+ 
+@@ -1376,11 +1382,14 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
+ 	/* start read pipe */
+ 	err = zr364xx_start_readpipe(cam);
+ 	if (err)
+-		goto err_free;
++		goto err_free_frames;
+ 
+ 	DBG(": board initialized\n");
+ 	return 0;
+ 
++err_free_frames:
++	for (i = 0; i < FRAMES; i++)
++		vfree(cam->buffer.frame[i].lpvbits);
+ err_free:
+ 	kfree(cam->pipe->transfer_buffer);
+ 	cam->pipe->transfer_buffer = NULL;
+@@ -1409,12 +1418,10 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	if (!cam)
+ 		return -ENOMEM;
+ 
+-	cam->v4l2_dev.release = zr364xx_release;
+ 	err = v4l2_device_register(&intf->dev, &cam->v4l2_dev);
+ 	if (err < 0) {
+ 		dev_err(&udev->dev, "couldn't register v4l2_device\n");
+-		kfree(cam);
+-		return err;
++		goto free_cam;
+ 	}
+ 	hdl = &cam->ctrl_handler;
+ 	v4l2_ctrl_handler_init(hdl, 1);
+@@ -1423,7 +1430,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	if (hdl->error) {
+ 		err = hdl->error;
+ 		dev_err(&udev->dev, "couldn't register control\n");
+-		goto fail;
++		goto unregister;
+ 	}
+ 	/* save the init method used by this camera */
+ 	cam->method = id->driver_info;
+@@ -1496,7 +1503,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	if (!cam->read_endpoint) {
+ 		err = -ENOMEM;
+ 		dev_err(&intf->dev, "Could not find bulk-in endpoint\n");
+-		goto fail;
++		goto unregister;
+ 	}
+ 
+ 	/* v4l */
+@@ -1507,10 +1514,11 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 
+ 	/* load zr364xx board specific */
+ 	err = zr364xx_board_init(cam);
+-	if (!err)
+-		err = v4l2_ctrl_handler_setup(hdl);
+ 	if (err)
+-		goto fail;
++		goto unregister;
++	err = v4l2_ctrl_handler_setup(hdl);
++	if (err)
++		goto board_uninit;
+ 
+ 	spin_lock_init(&cam->slock);
+ 
+@@ -1525,16 +1533,21 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	err = video_register_device(&cam->vdev, VFL_TYPE_VIDEO, -1);
+ 	if (err) {
+ 		dev_err(&udev->dev, "video_register_device failed\n");
+-		goto fail;
++		goto free_handler;
+ 	}
++	cam->v4l2_dev.release = zr364xx_release;
+ 
+ 	dev_info(&udev->dev, DRIVER_DESC " controlling device %s\n",
+ 		 video_device_node_name(&cam->vdev));
+ 	return 0;
+ 
+-fail:
++free_handler:
+ 	v4l2_ctrl_handler_free(hdl);
++board_uninit:
++	zr364xx_board_uninit(cam);
++unregister:
+ 	v4l2_device_unregister(&cam->v4l2_dev);
++free_cam:
+ 	kfree(cam);
+ 	return err;
+ }
+-- 
+2.29.2
+
