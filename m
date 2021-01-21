@@ -2,119 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3092FEB59
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 14:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F146B2FEAF3
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jan 2021 14:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731491AbhAUND0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jan 2021 08:03:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60228 "EHLO mail.kernel.org"
+        id S1730059AbhAUM7T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jan 2021 07:59:19 -0500
+Received: from mx2.suse.de ([195.135.220.15]:59720 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729294AbhAUKbU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 21 Jan 2021 05:31:20 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E3562239EB;
-        Thu, 21 Jan 2021 10:29:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611224970;
-        bh=v5TgOwXWj0YY94HrnCt3iZPfS8p5FlPm3RviRv/L0ME=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mKY1pyJ5iW32eEeBPWbGWV4NQzWsqnbFjXsBeshkGsrUCN1s35y819qTxGvcME6H1
-         F20FMpcEU8JHAJjwQQXXrFj4HHLcDFTp40F+nr/aW6KNm8AhgESBChwxTKwlgtcnPx
-         athTudEMfwVgz0ygLTzGDk5PDX0SvHjpmTiSSP9rTaHE6a+otvPpZRWWz3+QcV4Kfr
-         frVdJD5r193stCExKb2PXyhSA5N6qwb7HtQdKmVoGUCIROHBxsBr2ARmeY2J46cGMl
-         eUeeoO85RR2s8pPvQ3G22lXcMBRuozk+1mghQOybuSFMELPAzM01Uf7oT6MyFyUXUi
-         AvGHeHZW6TAqw==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1l2XDd-0004Yj-Fe; Thu, 21 Jan 2021 11:29:37 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     linux-usb@vger.kernel.org
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: [PATCH 10/10] USB: serial: xr: fix B0 handling
-Date:   Thu, 21 Jan 2021 11:29:22 +0100
-Message-Id: <20210121102922.17439-12-johan@kernel.org>
+        id S1731515AbhAUM63 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 21 Jan 2021 07:58:29 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1611233861; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EAqAb0c/gKUwR+7CRnnZB9SlYFc+YG+OWUE8tf7gBOg=;
+        b=slqDgIQSvYYWUEBQ0cWT/Ml1GnjlSC2bwBXlwdv3PyWPq6Ndii7KBiqrocADpkreBg1bu2
+        tjni0IFd+wyEIsTAPXyxIkccRi5W9SCzckbIS/Y7SucW2ek9eWZUAi+eAfTqCxUHJiaP6O
+        i5+aPn3B5c8zI+0nOQHxOHkQSUNOe7Q=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 7FCA1AF45;
+        Thu, 21 Jan 2021 12:57:41 +0000 (UTC)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     hayeswang@realtek.com, grundler@chromium.org, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>, Roland Dreier <roland@kernel.org>
+Subject: [PATCHv2 2/3] usbnet: add method for reporting speed without MDIO
+Date:   Thu, 21 Jan 2021 13:57:30 +0100
+Message-Id: <20210121125731.19425-3-oneukum@suse.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210121102922.17439-1-johan@kernel.org>
-References: <20210121102922.17439-1-johan@kernel.org>
+In-Reply-To: <20210121125731.19425-1-oneukum@suse.com>
+References: <20210121125731.19425-1-oneukum@suse.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix up B0 handling which should leave the baud rate unchanged and
-specifically not report back a non-B0 rate when B0 is requested; must
-temporarily disable hardware flow control so that RTS can be deasserted;
-and should reassert DTR/RTS when moving from B0.
+The old method for reporting network speed upwards
+assumed that a device uses MDIO and uses the generic phy
+functions based on that.
+Add a a primitive internal version not making the assumption
+reporting back directly what the status operations record.
 
-Fixes: a8f54b7bd132 ("USB: serial: add MaxLinear/Exar USB to Serial driver")
-Signed-off-by: Johan Hovold <johan@kernel.org>
+v2: adjusted to recent changes
+
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Tested-by: Roland Dreier <roland@kernel.org>
 ---
- drivers/usb/serial/xr_serial.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ drivers/net/usb/usbnet.c   | 23 +++++++++++++++++++++++
+ include/linux/usb/usbnet.h |  4 ++++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/drivers/usb/serial/xr_serial.c b/drivers/usb/serial/xr_serial.c
-index f67e7dba9509..483d07dee19d 100644
---- a/drivers/usb/serial/xr_serial.c
-+++ b/drivers/usb/serial/xr_serial.c
-@@ -341,8 +341,11 @@ static int xr_set_baudrate(struct tty_struct *tty,
- 	u16 tx_mask, rx_mask;
- 	int ret;
- 
--	baud = clamp(tty->termios.c_ospeed, XR21V141X_MIN_SPEED,
--		     XR21V141X_MAX_SPEED);
-+	baud = tty->termios.c_ospeed;
-+	if (!baud)
-+		return 0;
-+
-+	baud = clamp(baud, XR21V141X_MIN_SPEED, XR21V141X_MAX_SPEED);
- 	divisor = XR_INT_OSC_HZ / baud;
- 	idx = ((32 * XR_INT_OSC_HZ) / baud) & 0x1f;
- 	tx_mask = xr21v141x_txrx_clk_masks[idx].tx;
-@@ -399,7 +402,8 @@ static int xr_set_baudrate(struct tty_struct *tty,
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index e2ca88259b05..6f8fcc276ca7 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -961,6 +961,27 @@ int usbnet_get_link_ksettings_mdio(struct net_device *net,
  }
+ EXPORT_SYMBOL_GPL(usbnet_get_link_ksettings_mdio);
  
- static void xr_set_flow_mode(struct tty_struct *tty,
--			     struct usb_serial_port *port)
-+			     struct usb_serial_port *port,
-+			     struct ktermios *old_termios)
++int usbnet_get_link_ksettings_internal(struct net_device *net,
++					struct ethtool_link_ksettings *cmd)
++{
++	struct usbnet *dev = netdev_priv(net);
++
++	/* the assumption that speed is equal on tx and rx
++	 * is deeply engrained into the networking layer.
++	 * For wireless stuff it is not true.
++	 * We assume that rxspeed matters more.
++	 */
++	if (dev->rxspeed != SPEED_UNKNOWN)
++		cmd->base.speed = dev->rxspeed / 1000000;
++	else if (dev->txspeed != SPEED_UNKNOWN)
++		cmd->base.speed = dev->txspeed / 1000000;
++	else
++		cmd->base.speed = SPEED_UNKNOWN;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(usbnet_get_link_ksettings_internal);
++
+ int usbnet_set_link_ksettings_mdio(struct net_device *net,
+ 			      const struct ethtool_link_ksettings *cmd)
  {
- 	u8 flow, gpio_mode;
- 	int ret;
-@@ -411,7 +415,7 @@ static void xr_set_flow_mode(struct tty_struct *tty,
- 	/* Set GPIO mode for controlling the pins manually by default. */
- 	gpio_mode &= ~XR21V141X_UART_MODE_GPIO_MASK;
+@@ -1664,6 +1685,8 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
+ 	dev->intf = udev;
+ 	dev->driver_info = info;
+ 	dev->driver_name = name;
++	dev->rxspeed = SPEED_UNKNOWN; /* unknown or handled by MII */
++	dev->txspeed = SPEED_UNKNOWN;
  
--	if (C_CRTSCTS(tty)) {
-+	if (C_CRTSCTS(tty) && C_BAUD(tty) != B0) {
- 		dev_dbg(&port->dev, "Enabling hardware flow ctrl\n");
- 		gpio_mode |= XR21V141X_UART_MODE_RTS_CTS;
- 		flow = XR21V141X_UART_FLOW_MODE_HW;
-@@ -438,6 +442,11 @@ static void xr_set_flow_mode(struct tty_struct *tty,
- 	xr_uart_enable(port);
+ 	net->tstats = netdev_alloc_pcpu_stats(struct pcpu_sw_netstats);
+ 	if (!net->tstats)
+diff --git a/include/linux/usb/usbnet.h b/include/linux/usb/usbnet.h
+index fd65b7a5ee15..a91c6defb104 100644
+--- a/include/linux/usb/usbnet.h
++++ b/include/linux/usb/usbnet.h
+@@ -53,6 +53,8 @@ struct usbnet {
+ 	u32			hard_mtu;	/* count any extra framing */
+ 	size_t			rx_urb_size;	/* size for rx urbs */
+ 	struct mii_if_info	mii;
++	long			rxspeed;	/* if MII is not used */
++	long			txspeed;	/* if MII is not used */
  
- 	xr_set_reg_uart(port, XR21V141X_REG_GPIO_MODE, gpio_mode);
-+
-+	if (C_BAUD(tty) == B0)
-+		xr_dtr_rts(port, 0);
-+	else if (old_termios && (old_termios->c_cflag & CBAUD) == B0)
-+		xr_dtr_rts(port, 1);
- }
+ 	/* various kinds of pending driver work */
+ 	struct sk_buff_head	rxq;
+@@ -269,6 +271,8 @@ extern void usbnet_purge_paused_rxq(struct usbnet *);
  
- static void xr_set_termios(struct tty_struct *tty,
-@@ -493,11 +502,7 @@ static void xr_set_termios(struct tty_struct *tty,
- 	if (ret)
- 		return;
- 
--	/* If baud rate is B0, clear DTR and RTS */
--	if (C_BAUD(tty) == B0)
--		xr_dtr_rts(port, 0);
--
--	xr_set_flow_mode(tty, port);
-+	xr_set_flow_mode(tty, port, old_termios);
- }
- 
- static int xr_open(struct tty_struct *tty, struct usb_serial_port *port)
+ extern int usbnet_get_link_ksettings_mdio(struct net_device *net,
+ 				     struct ethtool_link_ksettings *cmd);
++extern int usbnet_get_link_ksettings_internal(struct net_device *net,
++					struct ethtool_link_ksettings *cmd);
+ extern int usbnet_set_link_ksettings_mdio(struct net_device *net,
+ 				     const struct ethtool_link_ksettings *cmd);
+ extern u32 usbnet_get_link(struct net_device *net);
 -- 
 2.26.2
 
