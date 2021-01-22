@@ -2,37 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F0C300718
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 16:24:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B719300768
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 16:35:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729133AbhAVPXN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Jan 2021 10:23:13 -0500
-Received: from mga11.intel.com ([192.55.52.93]:38090 "EHLO mga11.intel.com"
+        id S1729117AbhAVPc7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Jan 2021 10:32:59 -0500
+Received: from mga14.intel.com ([192.55.52.115]:33225 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729126AbhAVPV7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 22 Jan 2021 10:21:59 -0500
-IronPort-SDR: jHKcvVUVmKbOqg2NIY+ENRcIKAKmK5XsF1fFiB3xoVP3tCqfZGqF5wkf2GTWYFagFhTiIpuwwa
- wY1vDbtJIHzg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9872"; a="175946606"
+        id S1729040AbhAVPct (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 22 Jan 2021 10:32:49 -0500
+IronPort-SDR: GBd63PaVdaHk0GBhWPWPNhfj7i8UfMeaP6GvfnB4B51q/n2ewMGf5GSF25pv3PWcYChFIyMl6J
+ 8+/CcOF8VXrQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9872"; a="178680811"
 X-IronPort-AV: E=Sophos;i="5.79,366,1602572400"; 
-   d="scan'208";a="175946606"
+   d="scan'208";a="178680811"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2021 07:20:02 -0800
-IronPort-SDR: whsO398kFbHnc97DbV7s3ZCOu0G/Q3wKeOTR/i5nUmkhIzZCpBPmYXjfSPC12Oa7ukT49H911j
- 1NP+Nw9C40Tg==
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2021 07:30:59 -0800
+IronPort-SDR: OtUq2s9zwphiU3lxtddnvRt3t/ACFbw02R1tYE41jZmmEvsUbqwn4MgNtoDpcAtImDQqvTsnXD
+ jHMLwu7rQzwg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.79,366,1602572400"; 
-   d="scan'208";a="348295148"
+   d="scan'208";a="348297792"
 Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga007.fm.intel.com with ESMTP; 22 Jan 2021 07:19:59 -0800
-Subject: Re: [PATCH] usb, xhci, rt2800usb: do not perform Soft Retry
-To:     Andreas Hartmann <andihartmann@freenet.de>,
-        Greg KH <greg@kroah.com>, stf_xl@wp.pl
-Cc:     linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Bernhard <bernhard.gebetsberger@gmx.at>
-References: <20210122104342.12451-1-stf_xl@wp.pl> <YAq9bt6q9dfk4F+F@kroah.com>
- <b0025964-490d-d8a0-f9af-f916d44e4f52@maya.org>
+  by fmsmga007.fm.intel.com with ESMTP; 22 Jan 2021 07:30:57 -0800
+Subject: Re: [PATCH 0/4] add xhci hooks for USB offload
+To:     Howard Yen <howardyen@google.com>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210119101044.1637023-1-howardyen@google.com>
+ <af91bbf1-6731-3e87-4086-de0dbba22c22@intel.com>
+ <CAJDAHvbTY3Z_bRg+++uLefWSvCWo_nGq+3OOQX3QHJ2w3X1SQw@mail.gmail.com>
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
  mQINBFMB0ccBEADd+nZnZrFDsIjQtclVz6OsqFOQ6k0nQdveiDNeBuwyFYykkBpaGekoHZ6f
@@ -76,12 +77,12 @@ Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
  Gjynb3sXforM/GVbr4mnuxTdLXQYlj2EJ4O4f0tkLlADT7podzKSlSuZsLi2D+ohKxtP3U/r
  42i8PBnX2oAV0UIkYk7Oel/3hr0+BP666SnTls9RJuoXc7R5XQVsomqXID6GmjwFQR5Wh/RE
  IJtkiDAsk37cfZ9d1kZ2gCQryTV9lmflSOB6AFZkOLuEVSC5qW8M/s6IGDfYXN12YJaZPptJ fiD/
-Message-ID: <4690235c-9676-7985-12a1-b8bcfd195a43@linux.intel.com>
-Date:   Fri, 22 Jan 2021 17:22:01 +0200
+Message-ID: <ca442ca7-a434-2527-9945-861dafa685cc@linux.intel.com>
+Date:   Fri, 22 Jan 2021 17:32:58 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <b0025964-490d-d8a0-f9af-f916d44e4f52@maya.org>
+In-Reply-To: <CAJDAHvbTY3Z_bRg+++uLefWSvCWo_nGq+3OOQX3QHJ2w3X1SQw@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -89,58 +90,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22.1.2021 15.17, Andreas Hartmann wrote:
+On 20.1.2021 12.04, Howard Yen wrote:
+> On Tue, Jan 19, 2021 at 8:47 PM Mathias Nyman <mathias.nyman@intel.com> wrote:
+>>
+>> On 19.1.2021 12.10, Howard Yen wrote:
+>>> To let the xhci driver support USB offload, add hooks for vendor to have
+>>> customized behavior for the initialization, memory allocation, irq work, and
+>>> device context synchronization. Detail is in each patch commit message.
+>>
+>> Is this related to the usb audio sideband capability that was added to the xHCI specification?
+>> If yes, then we should probably implement the generic parts first, and then add
+>> the vendor specific hooks.
+>>
+>> -Mathias
+>>
+>>
 > 
-> On 22.01.21 at 12:56 Greg KH wrote:
->> On Fri, Jan 22, 2021 at 11:43:42AM +0100, stf_xl@wp.pl wrote:
->>> From: Stanislaw Gruszka <stf_xl@wp.pl>
->>>
->>> Since f8f80be501aa ("xhci: Use soft retry to recover faster from transaction
->>> errors") on some systems rt2800usb devices are unable to operate. Looks
->>> that due to firmware or hardware limitations of those devices, they
->>> require full recovery from USB Transaction Errors.
->>>
->>> To avoid the problem add URB transfer flag, that restore pre f8f80be501aa
->>> xhci behaviour when the flag is set. For now only add it only to rt2800usb
->>> driver.
->>
->> This feels like a really heavy hammer, to add a xhci flag for a single
->> broken device.
->>
->> Are you sure this is really needed?  What does this device do on other
->> operating systems, do they have such a quirk for their host controller
->> driver?
->>
->> Or is this due to the specific host controller device hardware?  Should
->> this be a xhci quirk for a specific pci device instead?
+> This is for offloading, no matter what type of offloading.
+> I made the hooks generically and can be used for usb audio on the xhci
+> which is not including the usb audio sideband capability.
 > 
-> Well, rt2800usb USB implementation does have a lot of potential for
-> optimization since the very beginning (current throughput comparison
-> 2 MiB/s vs 13 MiB/s with the original driver e.g.). That's why I'm
-> using until today a self patched version (it's bound to cfg80211
-> meanwhile) of the original driver (rt5572sta), which doesn't have those
-> problems at all. From my point of view, the goal should be to solve the
-> real reason for the problem. The original driver works much better
-> (leastwise here) and doesn't show this problem at all!
 
-Ok, so it could be a rt2800 driver issue, or it just hitting some
-unlucky sequence that triggers this.
+Ok, before adding hooks like this I think we need to see how they are used.
+Do you have the rest of the patches that go on top of this series?
 
->
-> But anyway, there is from my point of view a basic problem with xhci_hcd,
-> which just seems not to be completely backward compatible to existing USB 2
-> drivers (see https://marc.info/?l=linux-usb&m=161130327411612&w=2) if the
-> device is plugged to an USB 3.x interface.
+Maybe it could make sense to use overrides for the functions in struct hc_driver
+instead in some cases? There is support for that already.
 
-This looks like a different issue, lets keep it in its own thread.
-
-The xHCI usb host controller handles both USB 2 and USB 3 speeds.
-If the USB port is connected to a xHC controller then the xhci driver will
-be used. If the port is connected to a EHCI then the ehci driever is used.
-EHCI does not support USB3 speeds.
-
-It's very possible that something that worked behind a EHCI host has issues
-when connected to a xHCI host.
-
--Mathias
+Thanks
+-Mathias  
 
