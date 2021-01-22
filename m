@@ -2,343 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B47A53001D9
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 12:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 275AA300243
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 13:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727096AbhAVLpm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Jan 2021 06:45:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727396AbhAVLpg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Jan 2021 06:45:36 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B206EC0613D6
-        for <linux-usb@vger.kernel.org>; Fri, 22 Jan 2021 03:44:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=oadEiLge0L1iF2OcAePbpuhPJcdF8BtVLNcRRdOfwE4=; b=dIXcwY1xSMKB8vebVdLsK7S3g7
-        u0pANiZiv+zCKWS6sMrm5ukp2YamEGcifiy11JWiRPOe+UHrJ3DrkzdlELqv3eL8fPSVeR4LFh9iV
-        hDgP+ujF0sSQTonKo3PgDxmRxUvFOAzLSho+kfaw8qvb13E2GwY3RA1NDPL5NyKjk4Jb/Df8DDgZ/
-        EznJHEeQKhp9GhC28V9BqX8Yy6Uq5SYMYgUQpniVfnq4LAuMxSFhTwmwIkT2sSOIyrklSMHHZc3oP
-        wNWIFyDp4cPHDBy+1Kqpnljo8noXI4gHXnxNp7VVFRF289oQak3Xf7w+OjAxLay+YOEbgFzyNd0wk
-        DeOmLzvQ==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:60527 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1l2urL-0000g7-5m; Fri, 22 Jan 2021 12:44:11 +0100
-Subject: Re: [PATCH v4 1/3] drm/uapi: Add USB connector type
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     hudson@trmm.net, markus@raatikainen.cc,
-        Sam Ravnborg <sam@ravnborg.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Tyler Hardin <th020394@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>, pontus.fuchs@gmail.com,
-        peter@stuge.se
-References: <20210120170033.38468-1-noralf@tronnes.org>
- <20210120170033.38468-2-noralf@tronnes.org>
- <CAKMK7uHoALsGRgJjPzpeAvN10CoBpLsT86=gUm82ki-h2DkPwQ@mail.gmail.com>
- <9660eec0-15b7-ee8b-10ed-c6ceed54a56f@suse.de>
- <CAKMK7uHiQ3i-Rz_y_3joR2Zi3fA=1qp8MdGZ9w9PUcGoWT3urw@mail.gmail.com>
- <1ea4e6e4-0806-dba1-a424-47f178dc882f@suse.de>
- <7f055c8e-4b60-3da5-058e-3991637db37a@tronnes.org>
- <a1de51bf-b602-9ac2-1058-b8ced7c6973e@suse.de>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-Message-ID: <dfd02473-f0b5-e8b2-3399-d87063a2fd1f@tronnes.org>
-Date:   Fri, 22 Jan 2021 12:44:06 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S1727072AbhAVL6f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Jan 2021 06:58:35 -0500
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:43797 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727410AbhAVL5j (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Jan 2021 06:57:39 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 923885C00FF;
+        Fri, 22 Jan 2021 06:56:32 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 22 Jan 2021 06:56:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=s5zUnZIga8YCsxtkCuU8+h7RKOP
+        gKeLXxz7i8hp47Tw=; b=u3sYz1KDMTYFbEyeRuRyc9DDE0BL1+tHrf0hTyHkwbJ
+        OMT0G1tdavoYXzY8XYCMysbO3dU53BTBOHYNjhTKaWZCoKpqBuasX+U/YGGKFS9g
+        10Ezlgzn2mJQUEDkhI7+FUoTGDOa3iFFVzJ9xN9CmiumRfD98qGhI1yMPTb6Tn1D
+        CllR7QQaEslx3m1FXuEiiWagraEFlWgtR7oi/3Fw3ylqemQTjvD5qC2QPg4/a6JM
+        rd7PeXQREkp+u1AOZ7IP9s8/7wVLSPBt0RwW9uVwtA7D6ju9e11/Ux6gd59Nq081
+        AHnAi5FkhG9LwJ06tY3tdzrtXQkdpgAedwmC1xE50Zg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=s5zUnZ
+        Iga8YCsxtkCuU8+h7RKOPgKeLXxz7i8hp47Tw=; b=SGWWzpFwuWLwDF2fV5Q584
+        91wl4EOuI0qwRFdbCyor75KKCQNJASXnsbwJ4lY8mYfDRCCaqIZNz3bLVkIluYLj
+        DMnQTTOlEFPyMtsmVNzOoZuiDV+eLqOYCR5h61yPcpGRx/wRdeFnxl2r4F1HMeMk
+        PDscgV1K+C5hFWuGJBpKNeqxVEHE81ByXGqGC/txw+u54qYmjM2VFxMD2bZZT/Fb
+        GhGS3DaUtLNYdOzxPKJ4Q0RYj0SiU6/f9ZhvmtXWYyKZ9vjF/NYxKD0MR+mlbu79
+        vxGMxay8BBde7kFEye/l5MEPrq8vSC824mcmIdHG0z7lV+zyTRGvFE/uDnZ0eTGw
+        ==
+X-ME-Sender: <xms:cL0KYLr1d9153tsWM9GGNJRTXM0ivbMIufObuwg9H8qsNitgQwH25Q>
+    <xme:cL0KYFrYRi4voIwQlyLXp_tRF91QXGniKikLbmAmsiw-0zwBXC0uiVQLKOJJIohhR
+    LYbiBlhMFuh6Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudeigdefkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepueelledthe
+    ekleethfeludduvdfhffeuvdffudevgeehkeegieffveehgeeftefgnecuffhomhgrihhn
+    pehkvghrnhgvlhdrohhrghenucfkphepkeefrdekiedrjeegrdeigeenucevlhhushhtvg
+    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdr
+    tghomh
+X-ME-Proxy: <xmx:cL0KYINS49AoHePejXWusJWyOeJyPtMIMLV_2xiXAsWA4mbWnYtwgg>
+    <xmx:cL0KYO4_kxzevlvLKo7tZcjigruNp5HXpG5DerRjlwHjForzBy4Fvw>
+    <xmx:cL0KYK7QzQVwPPkRmDOtHsgZqHHakrNEZ398NZuvCOgGs6-3J9lc3Q>
+    <xmx:cL0KYKEFFYwonaOkGc-JnZRExXIqJ3y8n9dG-s4JOQW1SsIPQVXOXw>
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id C3CEB24005A;
+        Fri, 22 Jan 2021 06:56:31 -0500 (EST)
+Date:   Fri, 22 Jan 2021 12:56:30 +0100
+From:   Greg KH <greg@kroah.com>
+To:     stf_xl@wp.pl
+Cc:     linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Bernhard <bernhard.gebetsberger@gmx.at>
+Subject: Re: [PATCH] usb, xhci, rt2800usb: do not perform Soft Retry
+Message-ID: <YAq9bt6q9dfk4F+F@kroah.com>
+References: <20210122104342.12451-1-stf_xl@wp.pl>
 MIME-Version: 1.0
-In-Reply-To: <a1de51bf-b602-9ac2-1058-b8ced7c6973e@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210122104342.12451-1-stf_xl@wp.pl>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-Den 22.01.2021 08.54, skrev Thomas Zimmermann:
-> Hi
+On Fri, Jan 22, 2021 at 11:43:42AM +0100, stf_xl@wp.pl wrote:
+> From: Stanislaw Gruszka <stf_xl@wp.pl>
 > 
-> Am 21.01.21 um 19:07 schrieb Noralf Trønnes:
->>
->>
->> Den 21.01.2021 11.01, skrev Thomas Zimmermann:
->>> Hi
->>>
->>> Am 21.01.21 um 09:27 schrieb Daniel Vetter:
->>>> On Thu, Jan 21, 2021 at 8:45 AM Thomas Zimmermann
->>>> <tzimmermann@suse.de> wrote:
->>>>>
->>>>> Hi Noralf,
->>>>>
->>>>> glad to hear from you! Welcome back!
->>
->> Thanks Thomas!
->>
->>>>>
->>>>> Am 20.01.21 um 18:42 schrieb Daniel Vetter:
->>>>>> On Wed, Jan 20, 2021 at 6:10 PM Noralf Trønnes <noralf@tronnes.org>
->>>>>> wrote:
->>>>>>>
->>>>>>> Add a connector type for USB connected display panels.
->>>>>>>
->>>>>>> Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
->>>>>>> ---
->>
->> I have forgotten to update drm_connector_enum_list which maps type to
->> name.
->>
->>>>>>>     include/uapi/drm/drm_mode.h | 1 +
->>>>>>>     1 file changed, 1 insertion(+)
->>>>>>>
->>>>>>> diff --git a/include/uapi/drm/drm_mode.h
->>>>>>> b/include/uapi/drm/drm_mode.h
->>>>>>> index fed66a03c7ae..33024cc5d26e 100644
->>>>>>> --- a/include/uapi/drm/drm_mode.h
->>>>>>> +++ b/include/uapi/drm/drm_mode.h
->>>>>>> @@ -367,6 +367,7 @@ enum drm_mode_subconnector {
->>>>>>>     #define DRM_MODE_CONNECTOR_DPI         17
->>>>>>>     #define DRM_MODE_CONNECTOR_WRITEBACK   18
->>>>>>>     #define DRM_MODE_CONNECTOR_SPI         19
->>>>>>> +#define DRM_MODE_CONNECTOR_USB         20
->>>>>
->>>>> I would not call it USB. I could imagine that at some point a generic
->>>>> USB protocol could serve simple displays (i.e. in the sense of USB HID
->>>>> or data or imaging). (Maybe Thunderbold already counts.) Anyway, USB
->>>>> should be reserved for this case.
->>>>
->>>> We end up calling those DisplayPort, since that's what's being
->>>> transported over thunderbolt or usb-C. So the usb connector would be
->>>> called usb-C. I think the reason we don't do fancy connector names is
->>>> that adding them is a bit a pain. Plus drm/i915 specifically has some
->>>> very quirky connector enumerating that doesn't match much with reality
->>>> unfortunately anyway :-/
->>>
->>> In the case of the other USB drivers, IIRC we use the connector type
->>> that is at the output (i.e., HDMI in the case of udl). I think we should
->>> do the same here. Or use 'Unknown'.
->>>
->>
->> There are 2 DRM USB drivers and they use:
->> - udl: DRM_MODE_CONNECTOR_DVII
+> Since f8f80be501aa ("xhci: Use soft retry to recover faster from transaction
+> errors") on some systems rt2800usb devices are unable to operate. Looks
+> that due to firmware or hardware limitations of those devices, they
+> require full recovery from USB Transaction Errors.
 > 
-> Mine has plain old VGA.
+> To avoid the problem add URB transfer flag, that restore pre f8f80be501aa
+> xhci behaviour when the flag is set. For now only add it only to rt2800usb
+> driver.
 
-Ok, maybe the Displaylink protocol doesn't provide info about the
-connector type or if it does the driver doesn't know about it.
+This feels like a really heavy hammer, to add a xhci flag for a single
+broken device.
 
-> Maybe we should change generally this to Unknown.
-> 
->> - gm12u320: DRM_MODE_CONNECTOR_VGA
->>
->> gm12u320 is a mini projector so it doesn't actually have a VGA
->> connector. I have never seen a udl device but I assume it has a DVII
->> connector?
->>
->> For display adapters it makes sense to use the connector on the adapter
->> as the reported connector, but for display panels that don't have any
->> connector except for the cable that is connected to the hosts USB
->> connector, why can't it be called a USB connector? That's the connector
->> the user sees.
-> 
-> It's not the relevant connector for the display output. USB is the bus
-> system. (Making your argument in terms of discrete GPUs, the connector
-> would always be PCI then.)
-> 
+Are you sure this is really needed?  What does this device do on other
+operating systems, do they have such a quirk for their host controller
+driver?
 
-Yes strictly speaking USB is the bus and the connectors have other
-names: USB (type)-A, USB-C etc., but I don't understand the problem
-here. Why does it matter that it is a bus?
+Or is this due to the specific host controller device hardware?  Should
+this be a xhci quirk for a specific pci device instead?
 
-And wrt PCI it wouldn't be a PCI connector if the card has some other
-connector for the display, but if it was possible to connect a display
-directly to the PCI connector, then yes I would call that a PCI connector.
 
-This begs the question: Why does the kernel provide info to userspace
-about the connector type?
-
-My take is that it is so the user can know which display is connected to
-which port on the computer.
-
-What's your opinion?
-
->>
->> Ofc as Daniel mentions it's a downside that userspace doesn't know about
->> the connector type, and who knows when it will updated (if I don't do
->> it).
->> Weston will name it: "UNNAMED-%d"
->> Mutter: "Unknown%d-%d"
->> X: "Unknown%d-%d"
->>
->> Sam and Laurent has discussed adding a PANEL connector type instead of
->> adding more connector types for panel connectors. I think that would
->> have been a better choice instead of the SPI connector type that I added
->> in 2019. But I think PANEL was meant for panels connected to an internal
->> connector.
->>
->> Here's my protocol connector types and how it's mapped to DRM:
->>
->> #define GUD_CONNECTOR_TYPE_PANEL        0
->> #define GUD_CONNECTOR_TYPE_VGA            1
->> #define GUD_CONNECTOR_TYPE_COMPOSITE        2
->> #define GUD_CONNECTOR_TYPE_SVIDEO        3
->> #define GUD_CONNECTOR_TYPE_COMPONENT        4
->> #define GUD_CONNECTOR_TYPE_DVI            5
->> #define GUD_CONNECTOR_TYPE_DISPLAYPORT        6
->> #define GUD_CONNECTOR_TYPE_HDMI            7
->>
->> static int gud_gadget_ctrl_get_connector(struct gud_gadget *gdg,
->> unsigned int index,
->>                      struct gud_connector_descriptor_req *desc)
->> {
->> ...
->>     gconn = &gdg->connectors[index];
->>
->>     switch (gconn->connector->connector_type) {
->>     case DRM_MODE_CONNECTOR_VGA:
->>         desc->connector_type = GUD_CONNECTOR_TYPE_VGA;
->>         break;
->>     case DRM_MODE_CONNECTOR_DVII:
->>         fallthrough;
->>     case DRM_MODE_CONNECTOR_DVID:
->>         fallthrough;
->>     case DRM_MODE_CONNECTOR_DVIA:
->>         desc->connector_type = GUD_CONNECTOR_TYPE_DVI;
->>         break;
->>     case DRM_MODE_CONNECTOR_Composite:
->>         desc->connector_type = GUD_CONNECTOR_TYPE_COMPOSITE;
->>         break;
->>     case DRM_MODE_CONNECTOR_SVIDEO:
->>         desc->connector_type = GUD_CONNECTOR_TYPE_SVIDEO;
->>         break;
->>     case DRM_MODE_CONNECTOR_Component:
->>         desc->connector_type = GUD_CONNECTOR_TYPE_COMPONENT;
->>         break;
->>     case DRM_MODE_CONNECTOR_DisplayPort:
->>         desc->connector_type = GUD_CONNECTOR_TYPE_DISPLAYPORT;
->>         break;
->>     case DRM_MODE_CONNECTOR_HDMIA:
->>         fallthrough;
->>     case DRM_MODE_CONNECTOR_HDMIB:
->>         desc->connector_type = GUD_CONNECTOR_TYPE_HDMI;
->>         break;
->>     default:
->>         desc->connector_type = GUD_CONNECTOR_TYPE_PANEL;
->>         break;
->>     };
->>
->>
->> int gud_connector_create(struct gud_device *gdrm, unsigned int index)
->> {
->> ...
->>     switch (desc.connector_type) {
->>     case GUD_CONNECTOR_TYPE_PANEL:
->>         connector_type = DRM_MODE_CONNECTOR_USB;
->>         break;
->>     case GUD_CONNECTOR_TYPE_VGA:
->>         connector_type = DRM_MODE_CONNECTOR_VGA;
->>         break;
->>     case GUD_CONNECTOR_TYPE_DVI:
->>         connector_type = DRM_MODE_CONNECTOR_DVID;
->>         break;
->>     case GUD_CONNECTOR_TYPE_COMPOSITE:
->>         connector_type = DRM_MODE_CONNECTOR_Composite;
->>         break;
->>     case GUD_CONNECTOR_TYPE_SVIDEO:
->>         connector_type = DRM_MODE_CONNECTOR_SVIDEO;
->>         break;
->>     case GUD_CONNECTOR_TYPE_COMPONENT:
->>         connector_type = DRM_MODE_CONNECTOR_Component;
->>         break;
->>     case GUD_CONNECTOR_TYPE_DISPLAYPORT:
->>         connector_type = DRM_MODE_CONNECTOR_DisplayPort;
->>         break;
->>     case GUD_CONNECTOR_TYPE_HDMI:
->>         connector_type = DRM_MODE_CONNECTOR_HDMIA;
->>         break;
->>     default: /* future types */
->>         connector_type = DRM_MODE_CONNECTOR_USB;
-> 
-> The more I look at it the more I think it should be 'Unknown' here.
-> 
-
-I don't understand this, how will that be better for the user?
-
-> BTW, can I try this out somehow? I do have an RPi3. Do I need a special
-> disk image?
-
-The Pi3 doesn'have a USB device/otg connector so I haven't made an image
-for that one. Only the Pi Zero, model A and Pi 4 have that.
-
-The Pi2 and Pi3 have a USB hub on the soc's single USB port.
-
-Noralf.
 
 > 
-> Best regards
-> Thomas
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=202541
+> Fixes: f8f80be501aa ("xhci: Use soft retry to recover faster from transaction errors")
+> Reported-and-tested-by: Bernhard <bernhard.gebetsberger@gmx.at>
+> Bisected-by: Bernhard <bernhard.gebetsberger@gmx.at>
+> Signed-off-by: Stanislaw Gruszka <stf_xl@wp.pl>
+> ---
+>  drivers/net/wireless/ralink/rt2x00/rt2x00usb.c | 3 +++
+>  drivers/usb/core/urb.c                         | 2 +-
+>  drivers/usb/host/xhci-ring.c                   | 3 ++-
+>  include/linux/usb.h                            | 1 +
+>  4 files changed, 7 insertions(+), 2 deletions(-)
 > 
->>         break;
->>     };
->>
->> Noralf.
->>
->>> Best regards
->>> Thomas
->>>
->>>> -Daniel
->>>>
->>>>>
->>>>> Best regards
->>>>> Thomas
->>>>>
->>>>>>
->>>>>> Beware, new connector types have in the past resulted in userspace
->>>>>> burning&crashing. Maybe it's become better ...
->>>>>>
->>>>>> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
->>>>>>>
->>>>>>>     /**
->>>>>>>      * struct drm_mode_get_connector - Get connector metadata.
->>>>>>> -- 
->>>>>>> 2.23.0
->>>>>>>
->>>>>>> _______________________________________________
->>>>>>> dri-devel mailing list
->>>>>>> dri-devel@lists.freedesktop.org
->>>>>>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
->>>>>>
->>>>>>
->>>>>>
->>>>>
->>>>> -- 
->>>>> Thomas Zimmermann
->>>>> Graphics Driver Developer
->>>>> SUSE Software Solutions Germany GmbH
->>>>> Maxfeldstr. 5, 90409 Nürnberg, Germany
->>>>> (HRB 36809, AG Nürnberg)
->>>>> Geschäftsführer: Felix Imendörffer
->>>>>
->>>>
->>>>
->>>
->>>
->>> _______________________________________________
->>> dri-devel mailing list
->>> dri-devel@lists.freedesktop.org
->>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
->>>
->> _______________________________________________
->> dri-devel mailing list
->> dri-devel@lists.freedesktop.org
->> https://lists.freedesktop.org/mailman/listinfo/dri-devel
->>
-> 
+> diff --git a/drivers/net/wireless/ralink/rt2x00/rt2x00usb.c b/drivers/net/wireless/ralink/rt2x00/rt2x00usb.c
+> index e4473a551241..f1d82b3e6bba 100644
+> --- a/drivers/net/wireless/ralink/rt2x00/rt2x00usb.c
+> +++ b/drivers/net/wireless/ralink/rt2x00/rt2x00usb.c
+> @@ -214,6 +214,7 @@ void rt2x00usb_register_read_async(struct rt2x00_dev *rt2x00dev,
+>  	usb_fill_control_urb(urb, usb_dev, usb_rcvctrlpipe(usb_dev, 0),
+>  			     (unsigned char *)(&rd->cr), &rd->reg, sizeof(rd->reg),
+>  			     rt2x00usb_register_read_async_cb, rd);
+> +	urb->transfer_flags |= URB_SOFT_RETRY_NOT_OK;
+>  	usb_anchor_urb(urb, rt2x00dev->anchor);
+>  	if (usb_submit_urb(urb, GFP_ATOMIC) < 0) {
+>  		usb_unanchor_urb(urb);
+> @@ -323,6 +324,7 @@ static bool rt2x00usb_kick_tx_entry(struct queue_entry *entry, void *data)
+>  			  usb_sndbulkpipe(usb_dev, entry->queue->usb_endpoint),
+>  			  entry->skb->data, length,
+>  			  rt2x00usb_interrupt_txdone, entry);
+> +	entry_priv->urb->transfer_flags |= URB_SOFT_RETRY_NOT_OK;
+>  
+>  	status = usb_submit_urb(entry_priv->urb, GFP_ATOMIC);
+>  	if (status) {
+> @@ -409,6 +411,7 @@ static bool rt2x00usb_kick_rx_entry(struct queue_entry *entry, void *data)
+>  			  usb_rcvbulkpipe(usb_dev, entry->queue->usb_endpoint),
+>  			  entry->skb->data, entry->skb->len,
+>  			  rt2x00usb_interrupt_rxdone, entry);
+> +	entry_priv->urb->transfer_flags |= URB_SOFT_RETRY_NOT_OK;
+>  
+>  	status = usb_submit_urb(entry_priv->urb, GFP_ATOMIC);
+>  	if (status) {
+> diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+> index 357b149b20d3..140bac59dc32 100644
+> --- a/drivers/usb/core/urb.c
+> +++ b/drivers/usb/core/urb.c
+> @@ -495,7 +495,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
+>  
+>  	/* Check against a simple/standard policy */
+>  	allowed = (URB_NO_TRANSFER_DMA_MAP | URB_NO_INTERRUPT | URB_DIR_MASK |
+> -			URB_FREE_BUFFER);
+> +		   URB_SOFT_RETRY_NOT_OK | URB_FREE_BUFFER);
+>  	switch (xfertype) {
+>  	case USB_ENDPOINT_XFER_BULK:
+>  	case USB_ENDPOINT_XFER_INT:
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index 5677b81c0915..6712e1a7735c 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -2302,7 +2302,8 @@ static int process_bulk_intr_td(struct xhci_hcd *xhci, struct xhci_td *td,
+>  		remaining	= 0;
+>  		break;
+>  	case COMP_USB_TRANSACTION_ERROR:
+> -		if ((ep_ring->err_count++ > MAX_SOFT_RETRY) ||
+> +		if (td->urb->transfer_flags & URB_SOFT_RETRY_NOT_OK ||
+> +		    (ep_ring->err_count++ > MAX_SOFT_RETRY) ||
+>  		    le32_to_cpu(slot_ctx->tt_info) & TT_SLOT)
+>  			break;
+>  		*status = 0;
+> diff --git a/include/linux/usb.h b/include/linux/usb.h
+> index 7d72c4e0713c..dcdac2f03263 100644
+> --- a/include/linux/usb.h
+> +++ b/include/linux/usb.h
+> @@ -1329,6 +1329,7 @@ extern int usb_disabled(void);
+>  #define URB_ISO_ASAP		0x0002	/* iso-only; use the first unexpired
+>  					 * slot in the schedule */
+>  #define URB_NO_TRANSFER_DMA_MAP	0x0004	/* urb->transfer_dma valid on submit */
+> +#define URB_SOFT_RETRY_NOT_OK	0x0008	/* Avoid XHCI Soft Retry */
+
+To match other flags here, how about "URB_NO_SOFT_RETRY"?
+
+thanks,
+
+greg k-h
