@@ -2,142 +2,233 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6499E2FFAC7
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 04:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D042FFB1E
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 04:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726695AbhAVDDR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jan 2021 22:03:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45630 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726670AbhAVDDQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jan 2021 22:03:16 -0500
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0EAC0613D6
-        for <linux-usb@vger.kernel.org>; Thu, 21 Jan 2021 19:02:35 -0800 (PST)
-Received: by mail-ua1-x92f.google.com with SMTP id k22so1399357ual.0
-        for <linux-usb@vger.kernel.org>; Thu, 21 Jan 2021 19:02:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=a8+5Gm76y+b0jt2/jBQKKYc91WSpLxV2qAWcOQhFTbY=;
-        b=n8H3wqeiuIjVOpELBQ8Z4PFvlxBpYqz3yetbaBoCZfuX/vTdUaOmXWpOWFOclUfyz8
-         TrLcf+HwJtRfiw9Lao24FzFUZnRsZMRHGb7rjfWqmAXODIkJAGjrca37EM8vLaSizI7s
-         Z+gpjc714T9DNkvIU2l7UAeA5AMAoTfpGt+lc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a8+5Gm76y+b0jt2/jBQKKYc91WSpLxV2qAWcOQhFTbY=;
-        b=Wb9GKCAH680l6F/I9ausd7LICOHEzJJmknjmbXFG+122GeF7VH8Gz3+KoVTNkvMGDs
-         geuCe2P2Q1m3fV/z6xw97rjvMzbmfYs1jpOr1avTsh8cNXTCD6PXxNVUM2F+3eon4U1C
-         Yqs4lMCSVfUtZ8CaxlDMNMu6zCn6ACDUhXST8PGPXkNrAkSKfp4P+A9VRft+zivN09oA
-         Ev/gZ7dmGWi6YlFtHCsPV6opYBuQOQqC1P90+CvqMWfbztDzJaft/bVSkDjnlv2x/dM4
-         8NHpOOQ3pJD7XkZho/uo/9MXQdBjF+YB1Z5VnerYEqUSzyLvYiv9LVgnXrQf3PKpEbmm
-         l5rA==
-X-Gm-Message-State: AOAM530oPdMxGHcu54hh7nFmTXdqQ3+4Bi5MlnZWf5l1/geH8nEfZ9JG
-        SFuuBMP88CgDWoVIJJEeYTytnsLtjbra3xBRSYT6+g==
-X-Google-Smtp-Source: ABdhPJyjjKeglVrq0ENqYc+6xUuuW5J9nEkjLxVZgWtLQTJFddnRviMdPkrIGbHTqpjdXi2uTNOzE5LNAqb8aouMHiU=
-X-Received: by 2002:ab0:7193:: with SMTP id l19mr62551uao.84.1611284554145;
- Thu, 21 Jan 2021 19:02:34 -0800 (PST)
+        id S1726433AbhAVDdV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jan 2021 22:33:21 -0500
+Received: from a1.mail.mailgun.net ([198.61.254.60]:16368 "EHLO
+        a1.mail.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726160AbhAVDdT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jan 2021 22:33:19 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1611286378; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=Yo6hdkp/knS7f7SvcKF1u2WZQ3qjT6GjvT7DGNBizLw=; b=VHXGcw8moq3E1SbEIytElGWz1z+JHCMFvLZQScOIxZqNMExymuCYwlu8f4LpIfYa7taynTr/
+ L/SFYT1OdvYc3tNBGQzq1BEVLhQDopiYLq9MW309p90z6Zn7kKSyypzeFV+pnLWPVeczpAUE
+ etZ1kLr0u2qvpVdmaW5WGMLTw10=
+X-Mailgun-Sending-Ip: 198.61.254.60
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
+ 600a4740ad4c9e395b97998a (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 22 Jan 2021 03:32:16
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 82EDBC433CA; Fri, 22 Jan 2021 03:32:16 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.110.7.112] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7EECCC433C6;
+        Fri, 22 Jan 2021 03:32:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7EECCC433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: usb: dwc3: gadget: skip pullup and set_speed after suspend
+To:     eg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        "supporter:USB SUBSYSTEM open list:DESIGNWARE USB3 DRD IP DRIVER" 
+        <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <CGME20210120035123epcas2p2048f6d9896bd21f19d939a56fe0b6610@epcas2p2.samsung.com>
+ <1611113968-102424-1-git-send-email-dh10.jung@samsung.com>
+ <fbde7781-8eef-ab3a-a339-8a2f61ca83be@synopsys.com>
+ <20210121064956.GA69382@ubuntu>
+ <6c6429da-5d27-2d6a-9bcf-3606810e71a6@codeaurora.org>
+ <20210121081333.GA2977@ubuntu>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <c8e2d476-e7a2-64ba-2fcd-eb94b32691ac@codeaurora.org>
+Date:   Thu, 21 Jan 2021 19:32:13 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-References: <20210121125731.19425-1-oneukum@suse.com> <20210121125731.19425-4-oneukum@suse.com>
-In-Reply-To: <20210121125731.19425-4-oneukum@suse.com>
-From:   Grant Grundler <grundler@chromium.org>
-Date:   Fri, 22 Jan 2021 03:02:23 +0000
-Message-ID: <CANEJEGsGr8VMCDLAviTXJ9wkRs8R3t79ccqmK3+CJ8cpAD=hdg@mail.gmail.com>
-Subject: Re: [PATCHv2 3/3] CDC-NCM: record speed in status method
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Hayes Wang <hayeswang@realtek.com>,
-        Grant Grundler <grundler@chromium.org>,
-        David Miller <davem@davemloft.net>,
-        netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        Roland Dreier <roland@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210121081333.GA2977@ubuntu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 21, 2021 at 12:57 PM Oliver Neukum <oneukum@suse.com> wrote:
->
-> The driver has a status method for receiving speed updates.
-> The framework, however, had support functions only for devices
-> that reported their speed upon an explicit query over a MDIO
-> interface.
-> CDC_NCM however gets direct notifications from the device.
-> As new support functions have become available, we shall now
-> record such notifications and tell the usbnet framework
-> to make direct use of them without going through the PHY layer.
->
-> v2: adjusted to recent changes
->
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> Tested-by: Roland Dreier <roland@kernel.org>
-> ---
->  drivers/net/usb/cdc_ncm.c | 29 ++++-------------------------
->  1 file changed, 4 insertions(+), 25 deletions(-)
->
-> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-> index 04174704bf7c..9b5bb8ae5eb8 100644
-> --- a/drivers/net/usb/cdc_ncm.c
-> +++ b/drivers/net/usb/cdc_ncm.c
-> @@ -142,7 +142,7 @@ static const struct ethtool_ops cdc_ncm_ethtool_ops = {
->         .get_sset_count    = cdc_ncm_get_sset_count,
->         .get_strings       = cdc_ncm_get_strings,
->         .get_ethtool_stats = cdc_ncm_get_ethtool_stats,
-> -       .get_link_ksettings      = usbnet_get_link_ksettings_mdio,
-> +       .get_link_ksettings      = usbnet_get_link_ksettings_internal,
->         .set_link_ksettings      = usbnet_set_link_ksettings_mdio,
->  };
->
-> @@ -1827,30 +1827,9 @@ cdc_ncm_speed_change(struct usbnet *dev,
->         uint32_t rx_speed = le32_to_cpu(data->DLBitRRate);
->         uint32_t tx_speed = le32_to_cpu(data->ULBitRate);
->
-> -       /* if the speed hasn't changed, don't report it.
-> -        * RTL8156 shipped before 2021 sends notification about every 32ms.
-> -        */
-> -       if (dev->rx_speed == rx_speed && dev->tx_speed == tx_speed)
-> -               return;
-> -
-> -       dev->rx_speed = rx_speed;
-> -       dev->tx_speed = tx_speed;
 
-Oliver,
-This patch removes the use of "rx_speed" field but doesn't remove the
-field from struct usbnet (usbnet.h).
 
-It might be better to revert my patch (make that the first patch in
-your series) and use your original patches.
-OR use "rx_speed" as the field name in the entire series and move them
-to the preferred location in struct usbnet (patch 2/3).
+On 1/21/2021 12:13 AM, Jung Daehwan wrote:
+> On Wed, Jan 20, 2021 at 11:44:05PM -0800, Wesley Cheng wrote:
+>>
+>>
+>> On 1/20/2021 10:49 PM, Jung Daehwan wrote:
+>>> Hi,
+>>>
+>>> On Thu, Jan 21, 2021 at 01:00:32AM +0000, Thinh Nguyen wrote:
+>>>> Hi,
+>>>>
+>>>> Daehwan Jung wrote:
+>>>>> Sometimes dwc3_gadget_pullup and dwc3_gadget_set_speed are called after
+>>>>> entering suspend. That's why it needs to check whether suspend
+>>>>>
+>>>>> 1. dwc3 sends disconnect uevent and turn off. (suspend)
+>>>>> 2. Platform side causes pullup or set_speed(e.g., adbd closes ffs node)
+>>>>> 3. It causes unexpected behavior like ITMON error.
+>>>>>
+>>>>> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+>>>>> ---
+>>>>>  drivers/usb/dwc3/gadget.c | 6 ++++++
+>>>>>  1 file changed, 6 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>>> index ee44321..d7d4202 100644
+>>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>>> @@ -2093,6 +2093,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>>>>  	unsigned long		flags;
+>>>>>  	int			ret;
+>>>>>  
+>>>>> +	if (pm_runtime_suspended(dwc->dev))
+>>>>> +		return 0;
+>>>>> +
+>>>>>  	is_on = !!is_on;
+>>>>>  
+>>>>>  	/*
+>>>>> @@ -2403,6 +2406,9 @@ static void dwc3_gadget_set_speed(struct usb_gadget *g,
+>>>>>  	unsigned long		flags;
+>>>>>  	u32			reg;
+>>>>>  
+>>>>> +	if (pm_runtime_suspended(dwc->dev))
+>>>>> +		return;
+>>>>> +
+>>>>>  	spin_lock_irqsave(&dwc->lock, flags);
+>>>>>  	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
+>>>>>  	reg &= ~(DWC3_DCFG_SPEED_MASK);
+>>>>
+>>>> This is already addressed in Wesley Cheng's patches. Can you try the
+>>>> latest changes of DWC3 in Greg's usb-next branch?
+>>>>
+>>>> Thanks,
+>>>> Thinh
+>>>
+>>> I checked Wesly Cheng's pathces but it's not same.
+>>> What I want to do for this patch is to avoid pullup from platform side.
+>>> (android in my case)
+>>>
+>>> It's possible that platform side tries to pullup by UDC_Store after usb is already disconnected.
+>>> It can finally run controller and enable irq.
+>>>
+>>> I think we have to avoid it and other possible things related to platform side.
+>>>
+>>>
+>>
+>> Hi Daehwan,
+>>
+>> I think what you're trying to do is to avoid the unnecessary runtime
+>> resume if the cable is disconnected and userspace attempts to
+>> bind/unbind the UDC.
+>>
+>> I'm not exactly sure what patches you've pulled in, but assuming you
+>> didn't pull in any of the recent suspend changes:
+>>
+>> usb: dwc3: gadget: Allow runtime suspend if UDC unbinded
+>> usb: dwc3: gadget: Preserve UDC max speed setting
+>>
+>> Please consider the following scenario:
+>> 1.  USB connected
+>> 2.  UDC unbinded
+>> 3.  DWC3 will continue to stay in runtime active, since dwc->connected =
+>> true
+>>
+>> In this scenario, we should allow the DWC3 to enter runtime suspend,
+>> since runstop has been disabled.
+>>
+>> If you have pulled in the above changes, and adding your changes on top
+>> of it, then consider the following:
+>> 1.  USB connected
+>> 2.  UDC unbinded
+>> 3.  DWC enters runtime suspend (due to the above changes)
+>> 4.  UDC binded
+>>
+>> The check for pm_runtime_suspended() will block step#4 from re-enabling
+>> the runstop bit even if the USB cable is connected.
+>>
+>> Thanks
+>> Wesley Cheng
+>>
+>> -- 
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+>>
+> 
+> Hi Wesley
+> 
+> The check for runtime_suspended() will block re-enabling the runstop bit as
+> you said after pulling your patches in.
+> 
+> UDC is contolled by userspace and it's possible UDC can be binded
+> unexpectedly. That's why I think it needs to handle it even if the
+> problem is from userspace.
+> 
+> Below is an example in my environment.
+> 
+> 1. USB disconnected
+> 2. UDC unbinded
+> 3. DWC enters runtime suspend
+> 4. UDC binded unexpectedly
+> 5. Gadget start and enable irq
+> 
+Hi Daehwan,
 
-cheers,
-grant
+If this is an unexpected event where userspace initiates the UDC bind
+sequence, then after the above sequence occurs, the DWC3 device should
+still be able to re-enter runtime suspend after the autosuspend timer
+expires.  Since the cable is disconnected, the dwc->connected flag would
+still be false.  Is this not happening in your situation?
 
-> -
-> -       /*
-> -        * Currently the USB-NET API does not support reporting the actual
-> -        * device speed. Do print it instead.
-> -        */
-> -       if ((tx_speed > 1000000) && (rx_speed > 1000000)) {
-> -               netif_info(dev, link, dev->net,
-> -                          "%u mbit/s downlink %u mbit/s uplink\n",
-> -                          (unsigned int)(rx_speed / 1000000U),
-> -                          (unsigned int)(tx_speed / 1000000U));
-> -       } else {
-> -               netif_info(dev, link, dev->net,
-> -                          "%u kbit/s downlink %u kbit/s uplink\n",
-> -                          (unsigned int)(rx_speed / 1000U),
-> -                          (unsigned int)(tx_speed / 1000U));
-> -       }
-> +        /* RTL8156 shipped before 2021 sends notification about every 32ms. */
-> +       dev->rxspeed = rx_speed;
-> +       dev->txspeed = tx_speed;
->  }
->
->  static void cdc_ncm_status(struct usbnet *dev, struct urb *urb)
-> --
-> 2.26.2
->
+I'm just trying to understand what issue you're seeing other than the
+momentary transition from runtime suspend (due to cable disconnect)
+-->runtime resume (due to unexpected UDC bind) --> runtime  suspend (due
+to nothing connected).
+
+Thanks
+Wesley Cheng
+
+> 
+> Line 9823: [   36.024428][ T2889] dwc3 10e00000.dwc3: Turn off gadget dwc3-gadget
+> Line 9827: [   36.024572][ T2889] __dwc3_gadget_stop called
+> Line 9828: [   36.025083][ T2603] android_work: sent uevent USB_STATE=DISCONNECTED
+> Line 9842: [   36.200896][  T554] usb_gadget_disconnect
+> Line 9843: [   36.200916][  T554] dwc3_gadget_pullup : 0
+> Line 9844: [   36.201165][  T554] dwc3_gadget_pullup: get_sync fail
+> Line 9845: [   36.201197][  T554] dwc3_gadget_stop called
+> Line 9846: [   36.201250][  T451] android_work: did not send uevent (0 0 0000000000000000)
+> Line 9849: [   36.202343][    T1] init: processing action (sys.usb.config=adb && sys.usb.configfs=1..
+> Line 9851: [   36.203622][    T1] dwc3_gadget_start called
+> Line 9852: [   36.204079][    T1] usb_gadget_connect
+> Line 9853: [   36.204086][    T1] dwc3_gadget_pullup : 1
+> Line 9854: [   36.204091][    T1] __dwc3_gadget_start called
+> 
+> Best Regrars,
+> Jung Daehwan
+> 
+> 
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
