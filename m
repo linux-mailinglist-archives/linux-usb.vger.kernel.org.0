@@ -2,71 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A80300992
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 18:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F22EE30099D
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 18:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729446AbhAVQzw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Jan 2021 11:55:52 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:41021 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729587AbhAVQVC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Jan 2021 11:21:02 -0500
-Received: (qmail 45515 invoked by uid 1000); 22 Jan 2021 11:20:19 -0500
-Date:   Fri, 22 Jan 2021 11:20:19 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Pete Zaitcev <zaitcev@redhat.com>
-Cc:     Jeremy Figgins <kernel@jeremyfiggins.com>,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: usblp: add USBLP_QUIRK_NO_SET_INTF flag
-Message-ID: <20210122162019.GA43566@rowland.harvard.edu>
-References: <YASt5wgOCkXhH2Dv@watson>
- <20210117234416.49d59761@suzdal.zaitcev.lan>
- <20210118163117.GA142198@rowland.harvard.edu>
- <20210121131954.7103881d@suzdal.zaitcev.lan>
- <20210121192929.GA12502@rowland.harvard.edu>
- <20210121170249.4081af4c@suzdal.zaitcev.lan>
+        id S1729019AbhAVRW3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Jan 2021 12:22:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729639AbhAVRS0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Jan 2021 12:18:26 -0500
+Received: from mout0.freenet.de (mout0.freenet.de [IPv6:2001:748:100:40::2:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91040C061786
+        for <linux-usb@vger.kernel.org>; Fri, 22 Jan 2021 09:16:44 -0800 (PST)
+Received: from [195.4.92.127] (helo=sub8.freenet.de)
+        by mout0.freenet.de with esmtpa (ID andihartmann@freenet.de) (port 25) (Exim 4.92 #3)
+        id 1l302u-0004OT-GY; Fri, 22 Jan 2021 18:16:28 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=01019freenet.de; s=mjaymdexmjqk; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=F7R+5WwCBnW2Nj2NOoKa9qkQMSNslBEtRYuMY0W8xh0=; b=kg1Cck7rxqYta9rj55SjkSB7I+
+        Oy7btzdztrKY7wLDqGNR4MxrQ+nedvksriB7Ic3ARSRHLGOd1NP1/wagBxgIFq5GJb0dvjtyBETec
+        +FPNGQoSyFuxDHToKhACQIq5at0GuldraBjng3CVQAswfl/oBD2fzp18c/Fn4noD0/eU+z7du5++n
+        WLMD8fuPYqe4VinPLl/9ueWK9M62F03WLcbShdA9625uNKREHMVNHegum8IQ6we92VneH3o6/2SR6
+        omX9ZS8ogEJBVSgNzqS+ZmU6zk66ypNMqOk1pICSEPbGczbXF1/x5LkzlFjnzW0hcATlWY3YfIAny
+        mx7oc23A==;
+Received: from p200300de573c8400505400fffe15ac42.dip0.t-ipconnect.de ([2003:de:573c:8400:5054:ff:fe15:ac42]:48696 helo=mail.maya.org)
+        by sub8.freenet.de with esmtpsa (ID andihartmann@freenet.de) (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128) (port 465) (Exim 4.92 #3)
+        id 1l302u-0000Ux-1k; Fri, 22 Jan 2021 18:16:28 +0100
+Received: internal info suppressed
+Subject: Re: [PATCH] usb, xhci, rt2800usb: do not perform Soft Retry
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg KH <greg@kroah.com>, stf_xl@wp.pl
+Cc:     linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Bernhard <bernhard.gebetsberger@gmx.at>
+References: <20210122104342.12451-1-stf_xl@wp.pl> <YAq9bt6q9dfk4F+F@kroah.com>
+ <b0025964-490d-d8a0-f9af-f916d44e4f52@maya.org>
+ <4690235c-9676-7985-12a1-b8bcfd195a43@linux.intel.com>
+From:   Andreas Hartmann <andihartmann@01019freenet.de>
+Message-ID: <43ebb270-2069-4672-f277-1222979305a8@01019freenet.de>
+Date:   Fri, 22 Jan 2021 18:16:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210121170249.4081af4c@suzdal.zaitcev.lan>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <4690235c-9676-7985-12a1-b8bcfd195a43@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originated-At: 2003:de:573c:8400:5054:ff:fe15:ac42!48696
+X-FNSign: v=2 s=8666CD2CC0E41124E56968FE17014D8EA7B0CB9D1539FAAFAC6C32596E456D50
+X-Scan-TS: Fri, 22 Jan 2021 18:16:28 +0100
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 21, 2021 at 05:02:49PM -0600, Pete Zaitcev wrote:
-> On Thu, 21 Jan 2021 14:29:29 -0500
-> Alan Stern <stern@rowland.harvard.edu> wrote:
+On 22.01.21 at 16:22 Mathias Nyman wrote:
+> On 22.1.2021 15.17, Andreas Hartmann wrote:
+>> But anyway, there is from my point of view a basic problem with xhci_hcd,
+>> which just seems not to be completely backward compatible to existing USB 2
+>> drivers (see https://marc.info/?l=linux-usb&m=161130327411612&w=2) if the
+>> device is plugged to an USB 3.x interface.
 > 
-> > > I'm also concerned about regressions. This is a legacy class driver,
-> > > only used where CUPS is not applicable, mostly with truly ancient
-> > > devices. So yes, setting a zero altsetting after enumeration should
-> > > be unnecessary. But you never know with the old firmware.  
+> This looks like a different issue, lets keep it in its own thread.
 > 
-> > How about skipping the call whenever the interface has only one 
-> > altsetting?
+> The xHCI usb host controller handles both USB 2 and USB 3 speeds.
+> If the USB port is connected to a xHC controller then the xhci driver will
+> be used. If the port is connected to a EHCI then the ehci driever is used.
+> EHCI does not support USB3 speeds.
 > 
-> Do you mean when it's only one and not equal to zero?
+> It's very possible that something that worked behind a EHCI host has issues
+> when connected to a xHCI host.
 
-If there's only one, it _has_ to be equal to 0.  According to section 
-9.2.3 of the USB-2 spec:
+I would be very glad to get this sorted out. At the moment I absolutely
+don't know where exactly to try to prevent to trigger the "xhci_hcd
+0000:05:00.3: WARN Wrong bounce buffer write length: 0 != 512"
+situation. Is it on the level where the bulk packages are created or
+even before?
 
-	Alternate settings range from zero to one less than the number 
-	of alternate settings for a specific interface.
 
-> BTW, one other thing bothers me. Jeremy confirmed that my patch
-> worked, which skips the call when USB_QUIRK_NO_SET_INTF is set.
-> But if we look into drivers/usb/core/message.c, the control
-> exchange to set the altsetting is skipped in that case anyway.
-> So, usblp was calling usb_set_protocol, the suspect control was
-> skipped, but something else caused a problem. Could it be the
-> attempt to clear halt that triggered the problem?
-
-It could very well be.  The printer might not reset the endpoint toggle 
-when it gets the Clear-Halt request.
-
-It's also possible that when the quirk flag wasn't set (so the 
-Set-Interface request was issued), the printer failed reset the endpoint 
-toggle.
-
-Alan Stern
+Thanks
+Andreas
