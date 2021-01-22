@@ -2,79 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAE22FF862
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 00:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5832FF98D
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 01:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725764AbhAUXEd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jan 2021 18:04:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:40162 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725842AbhAUXE2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jan 2021 18:04:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611270174;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AaoNvvaOoPteokGDzNbGYaURTMZC4GeGALMPHr9xXEA=;
-        b=bPF+ozAiPHZQdhe62w2pkqmqAvpv+O1cf1DKzE0Vy9NTD9dRwrBJG2Y0ADzgiN6MljoCM/
-        2A+EbkEw5g+jAoA9ftb9Z8lIPAzIOBpHp1PZZVbBVijEjzhGB9CHQAFRQfPBV5flxYto2R
-        PQfEWdleuRZ9Y5zZ7gmjiWOqqU0uZ2s=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-438-_KzraqEdNTaCAL5lxt-_IA-1; Thu, 21 Jan 2021 18:02:51 -0500
-X-MC-Unique: _KzraqEdNTaCAL5lxt-_IA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9BC6059;
-        Thu, 21 Jan 2021 23:02:50 +0000 (UTC)
-Received: from suzdal.zaitcev.lan (ovpn-112-202.phx2.redhat.com [10.3.112.202])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3D6895D749;
-        Thu, 21 Jan 2021 23:02:50 +0000 (UTC)
-Date:   Thu, 21 Jan 2021 17:02:49 -0600
-From:   Pete Zaitcev <zaitcev@redhat.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jeremy Figgins <kernel@jeremyfiggins.com>,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: usblp: add USBLP_QUIRK_NO_SET_INTF flag
-Message-ID: <20210121170249.4081af4c@suzdal.zaitcev.lan>
-In-Reply-To: <20210121192929.GA12502@rowland.harvard.edu>
-References: <YASt5wgOCkXhH2Dv@watson>
-        <20210117234416.49d59761@suzdal.zaitcev.lan>
-        <20210118163117.GA142198@rowland.harvard.edu>
-        <20210121131954.7103881d@suzdal.zaitcev.lan>
-        <20210121192929.GA12502@rowland.harvard.edu>
-Organization: Red Hat, Inc.
+        id S1726314AbhAVAni (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jan 2021 19:43:38 -0500
+Received: from mga06.intel.com ([134.134.136.31]:34104 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725831AbhAVAni (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 21 Jan 2021 19:43:38 -0500
+IronPort-SDR: HvYgo3RBAjLhF6kg9QURr8P1zy6rTX1fFt6JVQlubEfmIG6riXS0v2Zf9IXCOKWaqbOsOGBGu+
+ Yo834WbIcxQA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9871"; a="240907498"
+X-IronPort-AV: E=Sophos;i="5.79,365,1602572400"; 
+   d="scan'208";a="240907498"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 16:42:53 -0800
+IronPort-SDR: y78uhqqMtaobpzacrGgwehKL/OomKFqrTQPNO1maEAHqcyea3W+z5Ttiqx5U2NeH4cb0em61cp
+ kUK9E3iRp0Vg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,365,1602572400"; 
+   d="scan'208";a="385543900"
+Received: from lkp-server01.sh.intel.com (HELO 260eafd5ecd0) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 21 Jan 2021 16:42:51 -0800
+Received: from kbuild by 260eafd5ecd0 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1l2kXL-0006nr-6X; Fri, 22 Jan 2021 00:42:51 +0000
+Date:   Fri, 22 Jan 2021 08:42:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 386ce1d748edfdf57f21310647e2d42dd5f737f2
+Message-ID: <600a1f7c.fbhXr/MDFHtMIOoi%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 21 Jan 2021 14:29:29 -0500
-Alan Stern <stern@rowland.harvard.edu> wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 386ce1d748edfdf57f21310647e2d42dd5f737f2  usb: typec: tcpci_maxim: Drop GPIO includes
 
-> > I'm also concerned about regressions. This is a legacy class driver,
-> > only used where CUPS is not applicable, mostly with truly ancient
-> > devices. So yes, setting a zero altsetting after enumeration should
-> > be unnecessary. But you never know with the old firmware.  
+elapsed time: 724m
 
-> How about skipping the call whenever the interface has only one 
-> altsetting?
+configs tested: 102
+configs skipped: 2
 
-Do you mean when it's only one and not equal to zero?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-BTW, one other thing bothers me. Jeremy confirmed that my patch
-worked, which skips the call when USB_QUIRK_NO_SET_INTF is set.
-But if we look into drivers/usb/core/message.c, the control
-exchange to set the altsetting is skipped in that case anyway.
-So, usblp was calling usb_set_protocol, the suspect control was
-skipped, but something else caused a problem. Could it be the
-attempt to clear halt that triggered the problem?
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+openrisc                         alldefconfig
+arm                            lart_defconfig
+arm                            pleb_defconfig
+arm                         assabet_defconfig
+sh                           se7619_defconfig
+arm                        trizeps4_defconfig
+powerpc                   motionpro_defconfig
+c6x                        evmc6457_defconfig
+mips                         tb0226_defconfig
+mips                           ip22_defconfig
+powerpc                        icon_defconfig
+mips                        nlm_xlp_defconfig
+arc                          axs101_defconfig
+arc                        vdk_hs38_defconfig
+x86_64                           alldefconfig
+mips                          ath79_defconfig
+sh                          lboxre2_defconfig
+arm                         cm_x300_defconfig
+mips                           ip27_defconfig
+m68k                         amcore_defconfig
+powerpc                     sequoia_defconfig
+mips                          ath25_defconfig
+arm                         orion5x_defconfig
+arm                         s3c6400_defconfig
+arm                           u8500_defconfig
+powerpc                  storcenter_defconfig
+powerpc                         wii_defconfig
+xtensa                              defconfig
+sh                   rts7751r2dplus_defconfig
+m68k                       m5208evb_defconfig
+arm                         lpc32xx_defconfig
+sh                           se7780_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a002-20210121
+x86_64               randconfig-a003-20210121
+x86_64               randconfig-a001-20210121
+x86_64               randconfig-a005-20210121
+x86_64               randconfig-a006-20210121
+x86_64               randconfig-a004-20210121
+i386                 randconfig-a001-20210121
+i386                 randconfig-a002-20210121
+i386                 randconfig-a004-20210121
+i386                 randconfig-a006-20210121
+i386                 randconfig-a005-20210121
+i386                 randconfig-a003-20210121
+i386                 randconfig-a013-20210121
+i386                 randconfig-a011-20210121
+i386                 randconfig-a012-20210121
+i386                 randconfig-a014-20210121
+i386                 randconfig-a015-20210121
+i386                 randconfig-a016-20210121
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
--- Pete
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
