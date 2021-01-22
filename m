@@ -2,428 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4D130064F
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 15:57:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA7D300671
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 16:03:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728700AbhAVO4r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Jan 2021 09:56:47 -0500
-Received: from mx2.suse.de ([195.135.220.15]:55164 "EHLO mx2.suse.de"
+        id S1729016AbhAVPCK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Jan 2021 10:02:10 -0500
+Received: from mga09.intel.com ([134.134.136.24]:32907 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728633AbhAVO4U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 22 Jan 2021 09:56:20 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 4F271AE89;
-        Fri, 22 Jan 2021 14:55:36 +0000 (UTC)
-Subject: Re: [PATCH v4 1/3] drm/uapi: Add USB connector type
-To:     =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     hudson@trmm.net, markus@raatikainen.cc, peter@stuge.se,
-        USB list <linux-usb@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Tyler Hardin <th020394@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>, pontus.fuchs@gmail.com,
-        Sam Ravnborg <sam@ravnborg.org>
-References: <20210120170033.38468-1-noralf@tronnes.org>
- <20210120170033.38468-2-noralf@tronnes.org>
- <CAKMK7uHoALsGRgJjPzpeAvN10CoBpLsT86=gUm82ki-h2DkPwQ@mail.gmail.com>
- <9660eec0-15b7-ee8b-10ed-c6ceed54a56f@suse.de>
- <CAKMK7uHiQ3i-Rz_y_3joR2Zi3fA=1qp8MdGZ9w9PUcGoWT3urw@mail.gmail.com>
- <1ea4e6e4-0806-dba1-a424-47f178dc882f@suse.de>
- <7f055c8e-4b60-3da5-058e-3991637db37a@tronnes.org>
- <a1de51bf-b602-9ac2-1058-b8ced7c6973e@suse.de>
- <dfd02473-f0b5-e8b2-3399-d87063a2fd1f@tronnes.org>
- <9168c91b-f97d-5725-7d6f-8c97fb422d9a@suse.de>
- <9422f5f9-1889-f556-7297-202d6fb52433@tronnes.org>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-Message-ID: <d171596d-f967-ee6a-44f1-c06713cf10cb@suse.de>
-Date:   Fri, 22 Jan 2021 15:55:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1729063AbhAVPAS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 22 Jan 2021 10:00:18 -0500
+IronPort-SDR: u7ej3DzUCXK5uiglhRu/y+C8IijM/LPeQNjuhqHM+Rms/ZTpDdF3gOMmrnLwN2ZgGmK1SxNosX
+ 9tVl7wK+YCXQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9871"; a="179599391"
+X-IronPort-AV: E=Sophos;i="5.79,366,1602572400"; 
+   d="scan'208";a="179599391"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2021 06:58:22 -0800
+IronPort-SDR: gCs2QRqJIDSxR47Y7ZpqrBltZK0ls7Lg0mnE87ieoIz8WTZjzLtO8o2VahKuu4ER//ABNsJIum
+ yzAMKrfHAqPw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,366,1602572400"; 
+   d="scan'208";a="348288845"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Jan 2021 06:58:20 -0800
+Subject: Re: [PATCH] usb, xhci, rt2800usb: do not perform Soft Retry
+To:     Stanislaw Gruszka <stf_xl@wp.pl>, Greg KH <greg@kroah.com>
+Cc:     linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Bernhard <bernhard.gebetsberger@gmx.at>
+References: <20210122104342.12451-1-stf_xl@wp.pl> <YAq9bt6q9dfk4F+F@kroah.com>
+ <20210122132650.GA13029@wp.pl>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ mQINBFMB0ccBEADd+nZnZrFDsIjQtclVz6OsqFOQ6k0nQdveiDNeBuwyFYykkBpaGekoHZ6f
+ lH4ogPZzQ+pzoJEMlRGXc881BIggKMCMH86fYJGfZKWdfpg9O6mqSxyEuvBHKe9eZCBKPvoC
+ L2iwygtO8TcXXSCynvXSeZrOwqAlwnxWNRm4J2ikDck5S5R+Qie0ZLJIfaId1hELofWfuhy+
+ tOK0plFR0HgVVp8O7zWYT2ewNcgAzQrRbzidA3LNRfkL7jrzyAxDapuejuK8TMrFQT/wW53e
+ uegnXcRJaibJD84RUJt+mJrn5BvZ0MYfyDSc1yHVO+aZcpNr+71yZBQVgVEI/AuEQ0+p9wpt
+ O9Wt4zO2KT/R5lq2lSz1MYMJrtfFRKkqC6PsDSB4lGSgl91XbibK5poxrIouVO2g9Jabg04T
+ MIPpVUlPme3mkYHLZUsboemRQp5/pxV4HTFR0xNBCmsidBICHOYAepCzNmfLhfo1EW2Uf+t4
+ L8IowAaoURKdgcR2ydUXjhACVEA/Ldtp3ftF4hTQ46Qhba/p4MUFtDAQ5yeA5vQVuspiwsqB
+ BoL/298+V119JzM998d70Z1clqTc8fiGMXyVnFv92QKShDKyXpiisQn2rrJVWeXEIVoldh6+
+ J8M3vTwzetnvIKpoQdSFJ2qxOdQ8iYRtz36WYl7hhT3/hwkHuQARAQABtCdNYXRoaWFzIE55
+ bWFuIDxtYXRoaWFzLm55bWFuQGdtYWlsLmNvbT6JAjsEEwECACUCGwMGCwkIBwMCBhUIAgkK
+ CwQWAgMBAh4BAheABQJTAeo1AhkBAAoJEFiDn/uYk8VJOdIP/jhA+RpIZ7rdUHFIYkHEKzHw
+ tkwrJczGA5TyLgQaI8YTCTPSvdNHU9Rj19mkjhUO/9MKvwfoT2RFYqhkrtk0K92STDaBNXTL
+ JIi4IHBqjXOyJ/dPADU0xiRVtCHWkBgjEgR7Wihr7McSdVpgupsaXhbZjXXgtR/N7PE0Wltz
+ hAL2GAnMuIeJyXhIdIMLb+uyoydPCzKdH6znfu6Ox76XfGWBCqLBbvqPXvk4oH03jcdt+8UG
+ 2nfSeti/To9ANRZIlSKGjddCGMa3xzjtTx9ryf1Xr0MnY5PeyNLexpgHp93sc1BKxKKtYaT0
+ lR6p0QEKeaZ70623oB7Sa2Ts4IytqUVxkQKRkJVWeQiPJ/dZYTK5uo15GaVwufuF8VTwnMkC
+ 4l5X+NUYNAH1U1bpRtlT40aoLEUhWKAyVdowxW4yGCP3nL5E69tZQQgsag+OnxBa6f88j63u
+ wxmOJGNXcwCerkCb+wUPwJzChSifFYmuV5l89LKHgSbv0WHSN9OLkuhJO+I9fsCNvro1Y7dT
+ U/yq4aSVzjaqPT3yrnQkzVDxrYT54FLWO1ssFKAOlcfeWzqrT9QNcHIzHMQYf5c03Kyq3yMI
+ Xi91hkw2uc/GuA2CZ8dUD3BZhUT1dm0igE9NViE1M7F5lHQONEr7MOCg1hcrkngY62V6vh0f
+ RcDeV0ISwlZWuQINBFMB0ccBEACXKmWvojkaG+kh/yipMmqZTrCozsLeGitxJzo5hq9ev31N
+ 2XpPGx4AGhpccbco63SygpVN2bOd0W62fJJoxGohtf/g0uVtRSuK43OTstoBPqyY/35+VnAV
+ oA5cnfvtdx5kQPIL6LRcxmYKgN4/3+A7ejIxbOrjWFmbWCC+SgX6mzHHBrV0OMki8R+NnrNa
+ NkUmMmosi7jBSKdoi9VqDqgQTJF/GftvmaZHqgmVJDWNrCv7UiorhesfIWPt1O/AIk9luxlE
+ dHwkx5zkWa9CGYvV6LfP9BznendEoO3qYZ9IcUlW727Le80Q1oh69QnHoI8pODDBBTJvEq1h
+ bOWcPm/DsNmDD8Rwr/msRmRyIoxjasFi5WkM/K/pzujICKeUcNGNsDsEDJC5TCmRO/TlvCvm
+ 0X+vdfEJRZV6Z+QFBflK1asUz9QHFre5csG8MyVZkwTR9yUiKi3KiqQdaEu+LuDD2CGF5t68
+ xEl66Y6mwfyiISkkm3ETA4E8rVZP1rZQBBm83c5kJEDvs0A4zrhKIPTcI1smK+TWbyVyrZ/a
+ mGYDrZzpF2N8DfuNSqOQkLHIOL3vuOyx3HPzS05lY3p+IIVmnPOEdZhMsNDIGmVorFyRWa4K
+ uYjBP/W3E5p9e6TvDSDzqhLoY1RHfAIadM3I8kEx5wqco67VIgbIHHB9DbRcxQARAQABiQIf
+ BBgBAgAJBQJTAdHHAhsMAAoJEFiDn/uYk8VJb7AQAK56tgX8V1Wa6RmZDmZ8dmBC7W8nsMRz
+ PcKWiDSMIvTJT5bygMy1lf7gbHXm7fqezRtSfXAXr/OJqSA8LB2LWfThLyuuCvrdNsQNrI+3
+ D+hjHJjhW/4185y3EdmwwHcelixPg0X9EF+lHCltV/w29Pv3PiGDkoKxJrnOpnU6jrwiBebz
+ eAYBfpSEvrCm4CR4hf+T6MdCs64UzZnNt0nxL8mLCCAGmq1iks9M4bZk+LG36QjCKGh8PDXz
+ 9OsnJmCggptClgjTa7pO6040OW76pcVrP2rZrkjo/Ld/gvSc7yMO/m9sIYxLIsR2NDxMNpmE
+ q/H7WO+2bRG0vMmsndxpEYS4WnuhKutoTA/goBEhtHu1fg5KC+WYXp9wZyTfeNPrL0L8F3N1
+ BCEYefp2JSZ/a355X6r2ROGSRgIIeYjAiSMgGAZMPEVsdvKsYw6BH17hDRzltNyIj5S0dIhb
+ Gjynb3sXforM/GVbr4mnuxTdLXQYlj2EJ4O4f0tkLlADT7podzKSlSuZsLi2D+ohKxtP3U/r
+ 42i8PBnX2oAV0UIkYk7Oel/3hr0+BP666SnTls9RJuoXc7R5XQVsomqXID6GmjwFQR5Wh/RE
+ IJtkiDAsk37cfZ9d1kZ2gCQryTV9lmflSOB6AFZkOLuEVSC5qW8M/s6IGDfYXN12YJaZPptJ fiD/
+Message-ID: <eb37b28d-5046-f0cd-92ee-55af0e350802@linux.intel.com>
+Date:   Fri, 22 Jan 2021 17:00:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <9422f5f9-1889-f556-7297-202d6fb52433@tronnes.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="U15ie7P0eO1UXCEISDaTYtapBh7xKKlDp"
+In-Reply-To: <20210122132650.GA13029@wp.pl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---U15ie7P0eO1UXCEISDaTYtapBh7xKKlDp
-Content-Type: multipart/mixed; boundary="xXiyRVdf8GYocZbXU0ORannGXnhdOOh3Z";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
- Daniel Vetter <daniel@ffwll.ch>
-Cc: hudson@trmm.net, markus@raatikainen.cc, peter@stuge.se,
- USB list <linux-usb@vger.kernel.org>,
- dri-devel <dri-devel@lists.freedesktop.org>,
- Tyler Hardin <th020394@gmail.com>, Lubomir Rintel <lkundrak@v3.sk>,
- pontus.fuchs@gmail.com, Sam Ravnborg <sam@ravnborg.org>
-Message-ID: <d171596d-f967-ee6a-44f1-c06713cf10cb@suse.de>
-Subject: Re: [PATCH v4 1/3] drm/uapi: Add USB connector type
-References: <20210120170033.38468-1-noralf@tronnes.org>
- <20210120170033.38468-2-noralf@tronnes.org>
- <CAKMK7uHoALsGRgJjPzpeAvN10CoBpLsT86=gUm82ki-h2DkPwQ@mail.gmail.com>
- <9660eec0-15b7-ee8b-10ed-c6ceed54a56f@suse.de>
- <CAKMK7uHiQ3i-Rz_y_3joR2Zi3fA=1qp8MdGZ9w9PUcGoWT3urw@mail.gmail.com>
- <1ea4e6e4-0806-dba1-a424-47f178dc882f@suse.de>
- <7f055c8e-4b60-3da5-058e-3991637db37a@tronnes.org>
- <a1de51bf-b602-9ac2-1058-b8ced7c6973e@suse.de>
- <dfd02473-f0b5-e8b2-3399-d87063a2fd1f@tronnes.org>
- <9168c91b-f97d-5725-7d6f-8c97fb422d9a@suse.de>
- <9422f5f9-1889-f556-7297-202d6fb52433@tronnes.org>
-In-Reply-To: <9422f5f9-1889-f556-7297-202d6fb52433@tronnes.org>
-
---xXiyRVdf8GYocZbXU0ORannGXnhdOOh3Z
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-
-Hi
-
-Am 22.01.21 um 15:35 schrieb Noralf Tr=C3=B8nnes:
->=20
->=20
-> Den 22.01.2021 13.47, skrev Thomas Zimmermann:
->> Hi
+On 22.1.2021 15.26, Stanislaw Gruszka wrote:
+> On Fri, Jan 22, 2021 at 12:56:30PM +0100, Greg KH wrote:
+>> On Fri, Jan 22, 2021 at 11:43:42AM +0100, stf_xl@wp.pl wrote:
+>>> From: Stanislaw Gruszka <stf_xl@wp.pl>
+>>>
+>>> Since f8f80be501aa ("xhci: Use soft retry to recover faster from transaction
+>>> errors") on some systems rt2800usb devices are unable to operate. Looks
+>>> that due to firmware or hardware limitations of those devices, they
+>>> require full recovery from USB Transaction Errors.
+>>>
+>>> To avoid the problem add URB transfer flag, that restore pre f8f80be501aa
+>>> xhci behaviour when the flag is set. For now only add it only to rt2800usb
+>>> driver.
 >>
->> Am 22.01.21 um 12:44 schrieb Noralf Tr=C3=B8nnes:
->>>
->>> And wrt PCI it wouldn't be a PCI connector if the card has some other=
+>> This feels like a really heavy hammer, to add a xhci flag for a single
+>> broken device.
 
->>> connector for the display, but if it was possible to connect a displa=
-y
->>> directly to the PCI connector, then yes I would call that a PCI
->>> connector.
+I agree, rootcause is still unknown.
+This bug hasn't gotten enough attention.
+
+I'm tidying up a rewrite of areas that touches this, but it didn't seem to help.
+I'd anyway like to get the rewrite done first, then get a new set of logs and traces,
+and take a fresh look at this
+
+Meanwhile it could be checked if this issue is seen only on some xHCI controllers.
+Maybe some vendors don't support soft retry properly.
+we could easily prevent soft retry usage on those xHC hosts. 
+
 >>
->> You're not connecting a display to the computer. You're connecting an
->> RPi and then connect the display to the RPi. The RPi acts like an
->> external graphics card.
->>
->>> This begs the question: Why does the kernel provide info to userspace=
+>> Are you sure this is really needed?
+> 
+> I'm not sure if this is needed, however this particular bug was reported
+> as regression caused by f8f80be501aa commit on 4.19 -> 4.20 cycle. It
+> was reported to Mathias Nyman - xhci maintainer and f8f80be501aa commit
+> author. But since then, regardless of some Mathias work on this on xhci
+> side, we did not get solution that fixed the problem.
+> 
+> From other side, I can ask why change from f8f80be501aa is need? Taking
+> it's commit message, the benefit of the change is not obvious. What
+> I can notice, is that it only broke support for hardware that worked
+> previously. However I assume that the change is useful and needed,
+> so I come up with patch that just revert this change only for rt2800usb.
 
->>> about the connector type?
->>>
->>> My take is that it is so the user can know which display is connected=
- to
->>> which port on the computer.
->>
->> This exactly illustrates the problem with the current naming. For a
->> single output the distinction between bus and connector might be fuzzy=
-=2E
->> As soon as a connected SoC contains multiple connectors. The user then=
+Significantly faster recovery from transaction errors. Many errors are temporary
+due to electrical interference, and a simple retry will solve the case.
+see xhci spec section 4.6.8.1 "Soft Retry" for details.
 
->> sees names such as card1-USB-0 and card1-USB-1, which makes no sense.
->>
->=20
-> If you look at the code I pasted in, you'll see that the SoC connector
-> types are passed through to the host driver as-is unless they are panel=
+> 
+>>  What does this device do on other
+>> operating systems, do they have such a quirk for their host controller
+>> driver?
+> 
+> I don't know what other OSes do.
+> 
+>> Or is this due to the specific host controller device hardware?  Should
+>> this be a xhci quirk for a specific pci device instead?
 
-> connectors like DSI/DPI, which will be interpreted as USB (the protocol=
+Exactly, this should be checked.
+Stanislaw, weren't there a few users already that saw this issue?
+Do we know what xHCI controllers they were using?
 
-> does support multiple connectors, but only one can be used at a time).
->=20
-> So for the Pi4 as a display adapter, the host will see card1-HDMI-0 and=
-
-> card1-HDMI-1, the same is true for the composite output (if enabled) it=
-
-> shows up as card1-Composite-0 (can't be enabled together with HDMI).
->=20
-> If the Pi4 is used together with a DSI connected touchscreen, it makes
-> sense to disable the SoC HDMI outputs and the host only will see the
-> board as card1-USB-0 (I haven't done this exercise yet since there's
-> problems with getting the official Pi touchscreen to work with vc4 on P=
-i4).
-
-I saw that. I can even get your point about using USB for panel (still=20
-don't agree). But you're also using USB as default case.
-
-Best regards
-Thomas
-
->=20
-> The USB connector type is most important for tiny displays that is
-> microcontroller based without Linux running. There are lots of tiny SPI=
-
-> displays and I expect this market to shift towards USB because it much
-> easier to connect and the display will be useable on a desktop/server
-> computer as status displays perhaps. But embedded will also benefit fro=
-m
-> having these displays USB interfaced.
->=20
-> Another use case I see is repurposing old Android tablets as USB
-> displays that can be connected to any computer and become a touchscreen=
-=2E
-> In this case I also want the connector to be called card1-USB-0 (I
-> haven't done any work in this area, old Android is fbdev so some work i=
-s
-> needed for this to happen).
->=20
-> Noralf.
->=20
->>>
->>> What's your opinion?
->>>
->>>>>
->>>>> Ofc as Daniel mentions it's a downside that userspace doesn't know
->>>>> about
->>>>> the connector type, and who knows when it will updated (if I don't =
-do
->>>>> it).
->>>>> Weston will name it: "UNNAMED-%d"
->>>>> Mutter: "Unknown%d-%d"
->>>>> X: "Unknown%d-%d"
->>>>>
->>>>> Sam and Laurent has discussed adding a PANEL connector type instead=
- of
->>>>> adding more connector types for panel connectors. I think that woul=
-d
->>>>> have been a better choice instead of the SPI connector type that I
->>>>> added
->>>>> in 2019. But I think PANEL was meant for panels connected to an
->>>>> internal
->>>>> connector.
->>>>>
->>>>> Here's my protocol connector types and how it's mapped to DRM:
->>>>>
->>>>> #define GUD_CONNECTOR_TYPE_PANEL=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 0
->>>>> #define GUD_CONNECTOR_TYPE_VGA=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 1
->>>>> #define GUD_CONNECTOR_TYPE_COMPOSITE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 2
->>>>> #define GUD_CONNECTOR_TYPE_SVIDEO=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 3
->>>>> #define GUD_CONNECTOR_TYPE_COMPONENT=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 4
->>>>> #define GUD_CONNECTOR_TYPE_DVI=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 5
->>>>> #define GUD_CONNECTOR_TYPE_DISPLAYPORT=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 6
->>>>> #define GUD_CONNECTOR_TYPE_HDMI=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 7
->>>>>
->>>>> static int gud_gadget_ctrl_get_connector(struct gud_gadget *gdg,
->>>>> unsigned int index,
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct gud_c=
-onnector_descriptor_req *desc)
->>>>> {
->>>>> ...
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0gconn =3D &gdg->connectors[index];
->>>>>
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0switch (gconn->connector->connector_=
-type) {
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case DRM_MODE_CONNECTOR_VGA:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 desc->connector_t=
-ype =3D GUD_CONNECTOR_TYPE_VGA;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case DRM_MODE_CONNECTOR_DVII:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fallthrough;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case DRM_MODE_CONNECTOR_DVID:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fallthrough;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case DRM_MODE_CONNECTOR_DVIA:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 desc->connector_t=
-ype =3D GUD_CONNECTOR_TYPE_DVI;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case DRM_MODE_CONNECTOR_Composite:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 desc->connector_t=
-ype =3D GUD_CONNECTOR_TYPE_COMPOSITE;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case DRM_MODE_CONNECTOR_SVIDEO:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 desc->connector_t=
-ype =3D GUD_CONNECTOR_TYPE_SVIDEO;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case DRM_MODE_CONNECTOR_Component:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 desc->connector_t=
-ype =3D GUD_CONNECTOR_TYPE_COMPONENT;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case DRM_MODE_CONNECTOR_DisplayPort:=
-
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 desc->connector_t=
-ype =3D GUD_CONNECTOR_TYPE_DISPLAYPORT;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case DRM_MODE_CONNECTOR_HDMIA:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fallthrough;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case DRM_MODE_CONNECTOR_HDMIB:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 desc->connector_t=
-ype =3D GUD_CONNECTOR_TYPE_HDMI;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0default:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 desc->connector_t=
-ype =3D GUD_CONNECTOR_TYPE_PANEL;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
->>>>>
->>>>>
->>>>> int gud_connector_create(struct gud_device *gdrm, unsigned int inde=
-x)
->>>>> {
->>>>> ...
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0switch (desc.connector_type) {
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case GUD_CONNECTOR_TYPE_PANEL:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 connector_type =3D=
- DRM_MODE_CONNECTOR_USB;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case GUD_CONNECTOR_TYPE_VGA:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 connector_type =3D=
- DRM_MODE_CONNECTOR_VGA;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case GUD_CONNECTOR_TYPE_DVI:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 connector_type =3D=
- DRM_MODE_CONNECTOR_DVID;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case GUD_CONNECTOR_TYPE_COMPOSITE:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 connector_type =3D=
- DRM_MODE_CONNECTOR_Composite;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case GUD_CONNECTOR_TYPE_SVIDEO:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 connector_type =3D=
- DRM_MODE_CONNECTOR_SVIDEO;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case GUD_CONNECTOR_TYPE_COMPONENT:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 connector_type =3D=
- DRM_MODE_CONNECTOR_Component;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case GUD_CONNECTOR_TYPE_DISPLAYPORT:=
-
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 connector_type =3D=
- DRM_MODE_CONNECTOR_DisplayPort;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case GUD_CONNECTOR_TYPE_HDMI:
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 connector_type =3D=
- DRM_MODE_CONNECTOR_HDMIA;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0default: /* future types */
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 connector_type =3D=
- DRM_MODE_CONNECTOR_USB;
->>>>
->>>> The more I look at it the more I think it should be 'Unknown' here.
->>>>
->>>
->>> I don't understand this, how will that be better for the user?
->>
->> As I said before, the display is not connected via USB. The RPi (i.e.,=
-
->> graphics card) is. The naming would be off.
->>
->> Best regards
->> Thomas
->>
->>>
->>>> BTW, can I try this out somehow? I do have an RPi3. Do I need a spec=
-ial
->>>> disk image?
->>>
->>> The Pi3 doesn'have a USB device/otg connector so I haven't made an im=
-age
->>> for that one. Only the Pi Zero, model A and Pi 4 have that.
->>>
->>> The Pi2 and Pi3 have a USB hub on the soc's single USB port.
->>>
->>> Noralf.
->>>
->>>>
->>>> Best regards
->>>> Thomas
->>>>
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
->>>>>
->>>>> Noralf.
->>>>>
->>>>>> Best regards
->>>>>> Thomas
->>>>>>
->>>>>>> -Daniel
->>>>>>>
->>>>>>>>
->>>>>>>> Best regards
->>>>>>>> Thomas
->>>>>>>>
->>>>>>>>>
->>>>>>>>> Beware, new connector types have in the past resulted in usersp=
-ace
->>>>>>>>> burning&crashing. Maybe it's become better ...
->>>>>>>>>
->>>>>>>>> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
->>>>>>>>>>
->>>>>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0 /**
->>>>>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * struct drm_mode_get_connecto=
-r - Get connector metadata.
->>>>>>>>>> --=20
->>>>>>>>>> 2.23.0
->>>>>>>>>>
->>>>>>>>>> _______________________________________________
->>>>>>>>>> dri-devel mailing list
->>>>>>>>>> dri-devel@lists.freedesktop.org
->>>>>>>>>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
->>>>>>>>>
->>>>>>>>>
->>>>>>>>>
->>>>>>>>
->>>>>>>> --=20
->>>>>>>> Thomas Zimmermann
->>>>>>>> Graphics Driver Developer
->>>>>>>> SUSE Software Solutions Germany GmbH
->>>>>>>> Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
->>>>>>>> (HRB 36809, AG N=C3=BCrnberg)
->>>>>>>> Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
->>>>>>>>
->>>>>>>
->>>>>>>
->>>>>>
->>>>>>
->>>>>> _______________________________________________
->>>>>> dri-devel mailing list
->>>>>> dri-devel@lists.freedesktop.org
->>>>>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
->>>>>>
->>>>> _______________________________________________
->>>>> dri-devel mailing list
->>>>> dri-devel@lists.freedesktop.org
->>>>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
->>>>>
->>>>
->>
-> _______________________________________________
-> dri-devel mailing list
-> dri-devel@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/dri-devel
->=20
-
---=20
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
-(HRB 36809, AG N=C3=BCrnberg)
-Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
-
-
---xXiyRVdf8GYocZbXU0ORannGXnhdOOh3Z--
-
---U15ie7P0eO1UXCEISDaTYtapBh7xKKlDp
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmAK52cFAwAAAAAACgkQlh/E3EQov+At
-Qg/+INfbIwCo2S4zsWcVKxUzNBNacypuoxkqbYgWdTSDBHqTjSbTwNxqF+ONpADXm3PolHNllM2q
-49yVcWqn1Zzqjg17QX4FfutRkllM/spIIwb2gcB0bZ7Kv1msKJyy0SadzkPwuWjMqf2+lma03fS6
-I+60AvPnEmwhap6hYd1C3D136cZO83UsteB4lS5na+A51N+xTsunXl7th6Yo+KSmeG94wkqnRqwl
-qWmRRLIbLcJNGpkPPnvrHTfmDzqLZAs7kHqMxmGVhBPVV4i1xiv4COC1Wk3APPTNW+ImRkWeKZHY
-N//RqNPQYl68zrDxQIZOq9fjPPkijVsfvBjLmz12vu9Ewn/EbPcK8a+lhsqmo03Wq/MAIdQXmyWs
-ITfUJHXTxYA5UsCWetxFPbu7CtnA6cR0tl141AgiG5AbM9PtU9xVW5uoThLl5W9k7Qq/8jPIZds3
-xlJ99I5bJ898MHbcQN11otm+7z/MfA5iSKwGgNK+yxuQk0of/m1pKvL+L+JC2w8vwa2XDf+9WWTQ
-98lpp48QrDvsRti3xd/+AEj5sS7D5sWj6RfOYEb4IIH5wHbO52kpPqP3PqlboUSEDEuwK2gRdCuW
-Zqf6/Q/RGNn8bH2WHBsJH+KKjR75ol9CHlpV2rr1IGjL2uBgIPq6+/989PfVqFskEZrZ9NAV7wAi
-dy4=
-=KNcW
------END PGP SIGNATURE-----
-
---U15ie7P0eO1UXCEISDaTYtapBh7xKKlDp--
+-Mathias
