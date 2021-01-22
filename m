@@ -2,28 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 645B52FFDAD
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 08:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5672FFDC9
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 09:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726546AbhAVHze (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Jan 2021 02:55:34 -0500
-Received: from mx2.suse.de ([195.135.220.15]:36060 "EHLO mx2.suse.de"
+        id S1727006AbhAVH7x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Jan 2021 02:59:53 -0500
+Received: from mx2.suse.de ([195.135.220.15]:38984 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725829AbhAVHzU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 22 Jan 2021 02:55:20 -0500
+        id S1726351AbhAVH7v (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 22 Jan 2021 02:59:51 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 448A6AC45;
-        Fri, 22 Jan 2021 07:54:36 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 064E8ADCA;
+        Fri, 22 Jan 2021 07:59:10 +0000 (UTC)
+Subject: Re: [PATCH v4 1/3] drm/uapi: Add USB connector type
+From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
         Daniel Vetter <daniel@ffwll.ch>
-Cc:     hudson@trmm.net, markus@raatikainen.cc,
-        Sam Ravnborg <sam@ravnborg.org>,
+Cc:     hudson@trmm.net, markus@raatikainen.cc, peter@stuge.se,
         USB list <linux-usb@vger.kernel.org>,
         dri-devel <dri-devel@lists.freedesktop.org>,
         Tyler Hardin <th020394@gmail.com>,
         Lubomir Rintel <lkundrak@v3.sk>, pontus.fuchs@gmail.com,
-        peter@stuge.se
+        Sam Ravnborg <sam@ravnborg.org>
 References: <20210120170033.38468-1-noralf@tronnes.org>
  <20210120170033.38468-2-noralf@tronnes.org>
  <CAKMK7uHoALsGRgJjPzpeAvN10CoBpLsT86=gUm82ki-h2DkPwQ@mail.gmail.com>
@@ -31,34 +32,33 @@ References: <20210120170033.38468-1-noralf@tronnes.org>
  <CAKMK7uHiQ3i-Rz_y_3joR2Zi3fA=1qp8MdGZ9w9PUcGoWT3urw@mail.gmail.com>
  <1ea4e6e4-0806-dba1-a424-47f178dc882f@suse.de>
  <7f055c8e-4b60-3da5-058e-3991637db37a@tronnes.org>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH v4 1/3] drm/uapi: Add USB connector type
-Message-ID: <a1de51bf-b602-9ac2-1058-b8ced7c6973e@suse.de>
-Date:   Fri, 22 Jan 2021 08:54:34 +0100
+ <a1de51bf-b602-9ac2-1058-b8ced7c6973e@suse.de>
+Message-ID: <57dab920-1aaf-e009-59c9-38e79b43edb1@suse.de>
+Date:   Fri, 22 Jan 2021 08:59:08 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <7f055c8e-4b60-3da5-058e-3991637db37a@tronnes.org>
+In-Reply-To: <a1de51bf-b602-9ac2-1058-b8ced7c6973e@suse.de>
 Content-Type: multipart/signed; micalg=pgp-sha256;
  protocol="application/pgp-signature";
- boundary="epu1D3JI0uBYzAXZ989g1Lya8WJzESvC3"
+ boundary="XpMwuMXaRbcK8D7wMg0ov3pkYTpYUK44g"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---epu1D3JI0uBYzAXZ989g1Lya8WJzESvC3
-Content-Type: multipart/mixed; boundary="nri1PVPucg8bDytObE1K9mkd3ByRXcvQZ";
+--XpMwuMXaRbcK8D7wMg0ov3pkYTpYUK44g
+Content-Type: multipart/mixed; boundary="7itqifw3deecmn20jACgRoOoGVAmq57oX";
  protected-headers="v1"
 From: Thomas Zimmermann <tzimmermann@suse.de>
 To: =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
  Daniel Vetter <daniel@ffwll.ch>
-Cc: hudson@trmm.net, markus@raatikainen.cc, Sam Ravnborg <sam@ravnborg.org>,
+Cc: hudson@trmm.net, markus@raatikainen.cc, peter@stuge.se,
  USB list <linux-usb@vger.kernel.org>,
  dri-devel <dri-devel@lists.freedesktop.org>,
  Tyler Hardin <th020394@gmail.com>, Lubomir Rintel <lkundrak@v3.sk>,
- pontus.fuchs@gmail.com, peter@stuge.se
-Message-ID: <a1de51bf-b602-9ac2-1058-b8ced7c6973e@suse.de>
+ pontus.fuchs@gmail.com, Sam Ravnborg <sam@ravnborg.org>
+Message-ID: <57dab920-1aaf-e009-59c9-38e79b43edb1@suse.de>
 Subject: Re: [PATCH v4 1/3] drm/uapi: Add USB connector type
 References: <20210120170033.38468-1-noralf@tronnes.org>
  <20210120170033.38468-2-noralf@tronnes.org>
@@ -67,269 +67,88 @@ References: <20210120170033.38468-1-noralf@tronnes.org>
  <CAKMK7uHiQ3i-Rz_y_3joR2Zi3fA=1qp8MdGZ9w9PUcGoWT3urw@mail.gmail.com>
  <1ea4e6e4-0806-dba1-a424-47f178dc882f@suse.de>
  <7f055c8e-4b60-3da5-058e-3991637db37a@tronnes.org>
-In-Reply-To: <7f055c8e-4b60-3da5-058e-3991637db37a@tronnes.org>
+ <a1de51bf-b602-9ac2-1058-b8ced7c6973e@suse.de>
+In-Reply-To: <a1de51bf-b602-9ac2-1058-b8ced7c6973e@suse.de>
 
---nri1PVPucg8bDytObE1K9mkd3ByRXcvQZ
+--7itqifw3deecmn20jACgRoOoGVAmq57oX
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-Hi
-
-Am 21.01.21 um 19:07 schrieb Noralf Tr=C3=B8nnes:
->=20
->=20
-> Den 21.01.2021 11.01, skrev Thomas Zimmermann:
->> Hi
->>
->> Am 21.01.21 um 09:27 schrieb Daniel Vetter:
->>> On Thu, Jan 21, 2021 at 8:45 AM Thomas Zimmermann
->>> <tzimmermann@suse.de> wrote:
->>>>
->>>> Hi Noralf,
->>>>
->>>> glad to hear from you! Welcome back!
->=20
-> Thanks Thomas!
->=20
->>>>
->>>> Am 20.01.21 um 18:42 schrieb Daniel Vetter:
->>>>> On Wed, Jan 20, 2021 at 6:10 PM Noralf Tr=C3=B8nnes <noralf@tronnes=
-=2Eorg>
->>>>> wrote:
->>>>>>
->>>>>> Add a connector type for USB connected display panels.
->>>>>>
->>>>>> Signed-off-by: Noralf Tr=C3=B8nnes <noralf@tronnes.org>
->>>>>> ---
->=20
-> I have forgotten to update drm_connector_enum_list which maps type to n=
-ame.
->=20
->>>>>>  =C2=A0=C2=A0 include/uapi/drm/drm_mode.h | 1 +
->>>>>>  =C2=A0=C2=A0 1 file changed, 1 insertion(+)
->>>>>>
->>>>>> diff --git a/include/uapi/drm/drm_mode.h b/include/uapi/drm/drm_mo=
-de.h
->>>>>> index fed66a03c7ae..33024cc5d26e 100644
->>>>>> --- a/include/uapi/drm/drm_mode.h
->>>>>> +++ b/include/uapi/drm/drm_mode.h
->>>>>> @@ -367,6 +367,7 @@ enum drm_mode_subconnector {
->>>>>>  =C2=A0=C2=A0 #define DRM_MODE_CONNECTOR_DPI=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 17
->>>>>>  =C2=A0=C2=A0 #define DRM_MODE_CONNECTOR_WRITEBACK=C2=A0=C2=A0 18
->>>>>>  =C2=A0=C2=A0 #define DRM_MODE_CONNECTOR_SPI=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 19
->>>>>> +#define DRM_MODE_CONNECTOR_USB=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 20
->>>>
->>>> I would not call it USB. I could imagine that at some point a generi=
-c
->>>> USB protocol could serve simple displays (i.e. in the sense of USB H=
-ID
->>>> or data or imaging). (Maybe Thunderbold already counts.) Anyway, USB=
-
->>>> should be reserved for this case.
->>>
->>> We end up calling those DisplayPort, since that's what's being
->>> transported over thunderbolt or usb-C. So the usb connector would be
->>> called usb-C. I think the reason we don't do fancy connector names is=
-
->>> that adding them is a bit a pain. Plus drm/i915 specifically has some=
-
->>> very quirky connector enumerating that doesn't match much with realit=
-y
->>> unfortunately anyway :-/
->>
->> In the case of the other USB drivers, IIRC we use the connector type
->> that is at the output (i.e., HDMI in the case of udl). I think we shou=
-ld
->> do the same here. Or use 'Unknown'.
->>
->=20
-> There are 2 DRM USB drivers and they use:
-> - udl: DRM_MODE_CONNECTOR_DVII
-
-Mine has plain old VGA. Maybe we should change generally this to Unknown.=
 
 
-> - gm12u320: DRM_MODE_CONNECTOR_VGA
->=20
-> gm12u320 is a mini projector so it doesn't actually have a VGA
-> connector. I have never seen a udl device but I assume it has a DVII
-> connector?
->=20
-> For display adapters it makes sense to use the connector on the adapter=
-
-> as the reported connector, but for display panels that don't have any
-> connector except for the cable that is connected to the hosts USB
-> connector, why can't it be called a USB connector? That's the connector=
-
-> the user sees.
-
-It's not the relevant connector for the display output. USB is the bus=20
-system. (Making your argument in terms of discrete GPUs, the connector=20
-would always be PCI then.)
-
->=20
-> Ofc as Daniel mentions it's a downside that userspace doesn't know abou=
-t
-> the connector type, and who knows when it will updated (if I don't do i=
-t).
-> Weston will name it: "UNNAMED-%d"
-> Mutter: "Unknown%d-%d"
-> X: "Unknown%d-%d"
->=20
-> Sam and Laurent has discussed adding a PANEL connector type instead of
-> adding more connector types for panel connectors. I think that would
-> have been a better choice instead of the SPI connector type that I adde=
-d
-> in 2019. But I think PANEL was meant for panels connected to an interna=
-l
-> connector.
->=20
-> Here's my protocol connector types and how it's mapped to DRM:
->=20
-> #define GUD_CONNECTOR_TYPE_PANEL		0
-> #define GUD_CONNECTOR_TYPE_VGA			1
-> #define GUD_CONNECTOR_TYPE_COMPOSITE		2
-> #define GUD_CONNECTOR_TYPE_SVIDEO		3
-> #define GUD_CONNECTOR_TYPE_COMPONENT		4
-> #define GUD_CONNECTOR_TYPE_DVI			5
-> #define GUD_CONNECTOR_TYPE_DISPLAYPORT		6
-> #define GUD_CONNECTOR_TYPE_HDMI			7
->=20
-> static int gud_gadget_ctrl_get_connector(struct gud_gadget *gdg,
-> unsigned int index,
-> 					 struct gud_connector_descriptor_req *desc)
-> {
-> ...
-> 	gconn =3D &gdg->connectors[index];
->=20
-> 	switch (gconn->connector->connector_type) {
-> 	case DRM_MODE_CONNECTOR_VGA:
-> 		desc->connector_type =3D GUD_CONNECTOR_TYPE_VGA;
-> 		break;
-> 	case DRM_MODE_CONNECTOR_DVII:
-> 		fallthrough;
-> 	case DRM_MODE_CONNECTOR_DVID:
-> 		fallthrough;
-> 	case DRM_MODE_CONNECTOR_DVIA:
-> 		desc->connector_type =3D GUD_CONNECTOR_TYPE_DVI;
-> 		break;
-> 	case DRM_MODE_CONNECTOR_Composite:
-> 		desc->connector_type =3D GUD_CONNECTOR_TYPE_COMPOSITE;
-> 		break;
-> 	case DRM_MODE_CONNECTOR_SVIDEO:
-> 		desc->connector_type =3D GUD_CONNECTOR_TYPE_SVIDEO;
-> 		break;
-> 	case DRM_MODE_CONNECTOR_Component:
-> 		desc->connector_type =3D GUD_CONNECTOR_TYPE_COMPONENT;
-> 		break;
-> 	case DRM_MODE_CONNECTOR_DisplayPort:
-> 		desc->connector_type =3D GUD_CONNECTOR_TYPE_DISPLAYPORT;
-> 		break;
-> 	case DRM_MODE_CONNECTOR_HDMIA:
-> 		fallthrough;
-> 	case DRM_MODE_CONNECTOR_HDMIB:
-> 		desc->connector_type =3D GUD_CONNECTOR_TYPE_HDMI;
-> 		break;
-> 	default:
-> 		desc->connector_type =3D GUD_CONNECTOR_TYPE_PANEL;
-> 		break;
-> 	};
->=20
->=20
-> int gud_connector_create(struct gud_device *gdrm, unsigned int index)
-> {
-> ...
-> 	switch (desc.connector_type) {
-> 	case GUD_CONNECTOR_TYPE_PANEL:
-> 		connector_type =3D DRM_MODE_CONNECTOR_USB;
-> 		break;
-> 	case GUD_CONNECTOR_TYPE_VGA:
-> 		connector_type =3D DRM_MODE_CONNECTOR_VGA;
-> 		break;
-> 	case GUD_CONNECTOR_TYPE_DVI:
-> 		connector_type =3D DRM_MODE_CONNECTOR_DVID;
-> 		break;
-> 	case GUD_CONNECTOR_TYPE_COMPOSITE:
-> 		connector_type =3D DRM_MODE_CONNECTOR_Composite;
-> 		break;
-> 	case GUD_CONNECTOR_TYPE_SVIDEO:
-> 		connector_type =3D DRM_MODE_CONNECTOR_SVIDEO;
-> 		break;
-> 	case GUD_CONNECTOR_TYPE_COMPONENT:
-> 		connector_type =3D DRM_MODE_CONNECTOR_Component;
-> 		break;
-> 	case GUD_CONNECTOR_TYPE_DISPLAYPORT:
-> 		connector_type =3D DRM_MODE_CONNECTOR_DisplayPort;
-> 		break;
-> 	case GUD_CONNECTOR_TYPE_HDMI:
-> 		connector_type =3D DRM_MODE_CONNECTOR_HDMIA;
-> 		break;
-> 	default: /* future types */
-> 		connector_type =3D DRM_MODE_CONNECTOR_USB;
-
+Am 22.01.21 um 08:54 schrieb Thomas Zimmermann:
 The more I look at it the more I think it should be 'Unknown' here.
-
-BTW, can I try this out somehow? I do have an RPi3. Do I need a special=20
-disk image?
-
-Best regards
-Thomas
-
-> 		break;
-> 	};
 >=20
-> Noralf.
+> BTW, can I try this out somehow? I do have an RPi3. Do I need a special=
+=20
+> disk image?
+
+Oh, I saw that wiki url now. I'll check this out.
+
 >=20
->> Best regards
->> Thomas
+> Best regards
+> Thomas
+>=20
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
+>> =C2=A0=C2=A0=C2=A0=C2=A0};
 >>
->>> -Daniel
+>> Noralf.
+>>
+>>> Best regards
+>>> Thomas
 >>>
->>>>
->>>> Best regards
->>>> Thomas
+>>>> -Daniel
 >>>>
 >>>>>
->>>>> Beware, new connector types have in the past resulted in userspace
->>>>> burning&crashing. Maybe it's become better ...
+>>>>> Best regards
+>>>>> Thomas
 >>>>>
->>>>> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 >>>>>>
->>>>>>  =C2=A0=C2=A0 /**
->>>>>>  =C2=A0=C2=A0=C2=A0 * struct drm_mode_get_connector - Get connecto=
-r metadata.
->>>>>> --=20
->>>>>> 2.23.0
+>>>>>> Beware, new connector types have in the past resulted in userspace=
+
+>>>>>> burning&crashing. Maybe it's become better ...
 >>>>>>
->>>>>> _______________________________________________
->>>>>> dri-devel mailing list
->>>>>> dri-devel@lists.freedesktop.org
->>>>>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+>>>>>> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+>>>>>>>
+>>>>>>> =C2=A0=C2=A0=C2=A0 /**
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 * struct drm_mode_get_connector - Get co=
+nnector metadata.
+>>>>>>> --=20
+>>>>>>> 2.23.0
+>>>>>>>
+>>>>>>> _______________________________________________
+>>>>>>> dri-devel mailing list
+>>>>>>> dri-devel@lists.freedesktop.org
+>>>>>>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+>>>>>>
+>>>>>>
+>>>>>>
 >>>>>
->>>>>
+>>>>> --=20
+>>>>> Thomas Zimmermann
+>>>>> Graphics Driver Developer
+>>>>> SUSE Software Solutions Germany GmbH
+>>>>> Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
+>>>>> (HRB 36809, AG N=C3=BCrnberg)
+>>>>> Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
 >>>>>
 >>>>
->>>> --=20
->>>> Thomas Zimmermann
->>>> Graphics Driver Developer
->>>> SUSE Software Solutions Germany GmbH
->>>> Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
->>>> (HRB 36809, AG N=C3=BCrnberg)
->>>> Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
 >>>>
 >>>
 >>>
->>
->>
+>>> _______________________________________________
+>>> dri-devel mailing list
+>>> dri-devel@lists.freedesktop.org
+>>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+>>>
 >> _______________________________________________
 >> dri-devel mailing list
 >> dri-devel@lists.freedesktop.org
 >> https://lists.freedesktop.org/mailman/listinfo/dri-devel
 >>
+>=20
+>=20
 > _______________________________________________
 > dri-devel mailing list
 > dri-devel@lists.freedesktop.org
@@ -345,27 +164,27 @@ Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
 Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
 
 
---nri1PVPucg8bDytObE1K9mkd3ByRXcvQZ--
+--7itqifw3deecmn20jACgRoOoGVAmq57oX--
 
---epu1D3JI0uBYzAXZ989g1Lya8WJzESvC3
+--XpMwuMXaRbcK8D7wMg0ov3pkYTpYUK44g
 Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmAKhLoFAwAAAAAACgkQlh/E3EQov+A5
-7xAAqhWBr/COD3T4aBC2D1ZsrWNEWJbhIWcxqCE2mualwimrYR6Rr77CeZhE3dcdRIZdqUYNZjFI
-mw/nJgx+CcObAfZitEsPqZBLMmkHGrJPUMDH9H6hP296b+aY7E9lzKfHw6CR+yWt1Rm9JnQLPQvn
-pRMUzNoputmDTjibuXrBQWHTSioqbcCJkdJkNHA6J70V8gdN79KX9bb85do7eUie+IP1D1CNNXHY
-7YUEcp2B5K4AYY6p6y37jtx9gR+C/QTRAa6ZVJjKOioOk2nVWDBSqzIk5gD/nETiHxF3krwuQW/k
-CNwtAZ5x13LKNKeF9JwekK1pOAUx2V63NlZMK+ySQezW72W4jCMZsLmI9i0SfaFYc4w8UZ32EcEm
-2GPc9f4kQKpVxQUqJPQbwBqrNqLQ42bb2WphatZrtxn8fa9R89p55YIPpBnxdi4ydMEpwvU77tRc
-HJm8X7rJK8CAiOLnjiap25MnVXJvpJjnOZWhzakf0RCsYGvh8TfCkk8QwTjO3+n8mLvJtIXmUfTl
-SFe8Wyh3Ogz72yBP+GS3I9+HXAKFuG0+xvK+v+77gfT7jOU9K2IWgSjKeeO8HKyt+tQ/ROJ1rLvz
-rsSLNX5n6ZSBcZ2y9Tbc2ucY07ndNjHwtJX0mprprIxdf5s/aruF+XkOadc4inbFg246o7msQ0sO
-FQQ=
-=OFct
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmAKhcwFAwAAAAAACgkQlh/E3EQov+BW
+lxAAp8Cou5KuCVIYp21fZ/yDoA/fC2XnxPjTDiX8arQIv0Eau/d4FJ0vQx8ex5tNeMcwRs56C6Ja
+pOLGdjphfGoOnpYNgDHlKkK2mDFRGwp/rTV2FNb2gRSbKHFKebzACBBIUe/Z01GoBWBLd8kUlj+2
+cOpvHaHK1aioBEYp1bZcOZ/OWjI2zR2Yj3qjaVi3ZR79pDRKVf2H7+QlzubwCSZgGPo+4jApmiBG
+sANTdLVpqZAtRoZ/c4u3ALq3WiZUj4I3T9AV7QE2On1fUJ7KaKh98zRsxH3cqA5I7UiVMA8NB9BO
+X7qfjBXwNgjlOU2+lhkK1wwDPPX87JnbXTO/b1U9GbkKNJNp2TPHeLcy9HRW2iK2tkeDSAwax9uh
+3oeLVz9ucIZ3YizHVf58MTOrM95y/0O/LFSf6Tuadyng0/Hn4psSeaGKHhntXFp9fcY8fIndhPvW
+n4WreDLn4tePKnfCWApEr/CmxDuaxNzDVAMCRhe+Txt+pavFTxW84lO8jsRNbjmq9Y1mn77tRvYF
+jNURnpdGTZONIIIbyEZvTqGzozuEVdgmf/mqCTFZNWC+H13r4YydHhViKhw3nqrsHwmkpB31o64L
+jsrZqgl38YNyKak0jnV4OeV261qxol06jJzM/C2+aPIGLOP2aPu/bKtY8GeWZsZFOG0/a2WCsSFR
+EHU=
+=fl2O
 -----END PGP SIGNATURE-----
 
---epu1D3JI0uBYzAXZ989g1Lya8WJzESvC3--
+--XpMwuMXaRbcK8D7wMg0ov3pkYTpYUK44g--
