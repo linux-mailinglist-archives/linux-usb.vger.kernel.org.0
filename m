@@ -2,148 +2,370 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B00142FFD5E
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 08:30:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 645B52FFDAD
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 08:56:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727080AbhAVH16 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Jan 2021 02:27:58 -0500
-Received: from mailout4.samsung.com ([203.254.224.34]:61136 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726951AbhAVH1t (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Jan 2021 02:27:49 -0500
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20210122072704epoutp04092590bb9ba6727125d3ff5f12a4d5d9~cfTL8Z0lq2327323273epoutp04R
-        for <linux-usb@vger.kernel.org>; Fri, 22 Jan 2021 07:27:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20210122072704epoutp04092590bb9ba6727125d3ff5f12a4d5d9~cfTL8Z0lq2327323273epoutp04R
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1611300424;
-        bh=rRKA82/8D1nqq9PmfoTE6xnuxlEuH7qiqplBHYpduts=;
-        h=Date:From:To:Cc:Subject:Reply-To:In-Reply-To:References:From;
-        b=EkLuvthh3rbn35PKSSdrJFBN80ueG5qzV9T65MRQYSi806fVOqPL/QP91/Mz7GEsy
-         w+Knunsl2SmNf/GxlVm9tMDybM0anfDEdzs2GTEby4Dn1I/VuBD0wmm67v8bLieYB7
-         2nthNWJUDLwI/WtZSwM92duckFfSQ/IiqDrdjwmM=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20210122072704epcas2p10a96317a83563d77c4d84952af4226ac~cfTLaOYeg1701917019epcas2p1A;
-        Fri, 22 Jan 2021 07:27:04 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.40.181]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4DMW6Z43qgz4x9Q1; Fri, 22 Jan
-        2021 07:27:02 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B1.80.52511.44E7A006; Fri, 22 Jan 2021 16:27:00 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-        20210122072700epcas2p37a79e9fb536c69b3f2ed135f39e08749~cfTH8Kvtp1917319173epcas2p37;
-        Fri, 22 Jan 2021 07:27:00 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20210122072700epsmtrp146937bead56b30d4f6e768e36f97590a~cfTH7Irje0115301153epsmtrp15;
-        Fri, 22 Jan 2021 07:27:00 +0000 (GMT)
-X-AuditID: b6c32a48-50fff7000000cd1f-2d-600a7e44911c
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F1.10.13470.44E7A006; Fri, 22 Jan 2021 16:27:00 +0900 (KST)
-Received: from ubuntu (unknown [12.36.155.120]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20210122072700epsmtip2a1b108374f4bd34df6dd6434a0389bbb~cfTHwxfTN0187401874epsmtip2j;
-        Fri, 22 Jan 2021 07:27:00 +0000 (GMT)
-Date:   Fri, 22 Jan 2021 16:15:40 +0900
-From:   Jung Daehwan <dh10.jung@samsung.com>
-To:     Wesley Cheng <wcheng@codeaurora.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:DESIGNWARE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: usb: dwc3: gadget: skip pullup and set_speed after suspend
-Message-ID: <20210122071540.GB121941@ubuntu>
-Reply-To: eg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S1726546AbhAVHze (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Jan 2021 02:55:34 -0500
+Received: from mx2.suse.de ([195.135.220.15]:36060 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725829AbhAVHzU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 22 Jan 2021 02:55:20 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 448A6AC45;
+        Fri, 22 Jan 2021 07:54:36 +0000 (UTC)
+To:     =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     hudson@trmm.net, markus@raatikainen.cc,
+        Sam Ravnborg <sam@ravnborg.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Tyler Hardin <th020394@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>, pontus.fuchs@gmail.com,
+        peter@stuge.se
+References: <20210120170033.38468-1-noralf@tronnes.org>
+ <20210120170033.38468-2-noralf@tronnes.org>
+ <CAKMK7uHoALsGRgJjPzpeAvN10CoBpLsT86=gUm82ki-h2DkPwQ@mail.gmail.com>
+ <9660eec0-15b7-ee8b-10ed-c6ceed54a56f@suse.de>
+ <CAKMK7uHiQ3i-Rz_y_3joR2Zi3fA=1qp8MdGZ9w9PUcGoWT3urw@mail.gmail.com>
+ <1ea4e6e4-0806-dba1-a424-47f178dc882f@suse.de>
+ <7f055c8e-4b60-3da5-058e-3991637db37a@tronnes.org>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH v4 1/3] drm/uapi: Add USB connector type
+Message-ID: <a1de51bf-b602-9ac2-1058-b8ced7c6973e@suse.de>
+Date:   Fri, 22 Jan 2021 08:54:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <20210122064125.GA121941@ubuntu>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOJsWRmVeSWpSXmKPExsWy7bCmha5LHVeCwbMryhbH2p6wW9xZMI3J
-        onnxejaLy7vmsFksWtbKbLFqwQF2i7VNs9gc2D0u9/UyeWxa1cnmsX/uGnaPvi2rGD227P/M
-        6PF5k1wAW1SOTUZqYkpqkUJqXnJ+SmZeuq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5b
-        Zg7QLUoKZYk5pUChgMTiYiV9O5ui/NKSVIWM/OISW6XUgpScAkPDAr3ixNzi0rx0veT8XCtD
-        AwMjU6DKhJyMA8vvsBTM5qpYNnUZcwPjPo4uRk4OCQETifs39jJ3MXJxCAnsYJR4POckK0hC
-        SOATo8S6/nCIxDdGiVNHZjF1MXKAdZybrAIR38socezKJjYI5wmjxNapx8G6WQRUJbqa5zKC
-        2GwCWhL3fpxgBrFFBKok9n+axgZiMwucZJTY8zUdxBYWcJeYePsuC4jNK6AjsW7dBXaIK8wl
-        /i2bDxUXlDg58wmYzSmgK/Fv4yxmkINEBVQkXh2sB7lBQmAih0Tb94vsEK+5SEx8txTKFpZ4
-        dXwLlC0l8bK/jR3imXKJRfPtIHo7GCXWfDrLCFFjLDHrWTsjxJ0ZEhOfTYaqV5Y4cosFIswn
-        0XH4L1SYV6KjTQiiU1li+uUJrBC2pMTB1+eYIWwPiW+v/0GDqoFR4t2OmcwTGBVmIflsFpJt
-        ELaOxILdn9hmAa1gFpCWWP6PA8LUlFi/S38BI+sqRrHUguLc9NRiowIT5GjfxAhOsVoeOxhn
-        v/2gd4iRiYPxEKMEB7OSCO8jS44EId6UxMqq1KL8+KLSnNTiQ4ymwCibyCwlmpwPTPJ5JfGG
-        pkZmZgaWphamZkYWSuK8RQYP4oUE0hNLUrNTUwtSi2D6mDg4pRqYGv3lT7CGeW3xbTrwtqSn
-        iMdF2GhrSyJfhsLNv8eXrgn5z5h0OHxHes+9hiS3nbur/CKtf6/T95wmxHpb9i/79I26m66f
-        DfM10S/P5vkqfIfZPbk+crbHpm3X4x1Vans4pndPTrpyekWwY3aJqNKOPXnpwQaROc3HFzbM
-        PPz89XznR1EBf9rDLpX9Sl/CKhBXWZ9tEhbH2OfAJPjdrEPgcQrH+ch6lYCXRsXrdsr1J8e3
-        CkZtvTNTOXQyU8tpTudEndm7M7pZGjlq7SZ+crJWLk2f91Vt7TzP54ujT8rteWE+tcCJvztr
-        daF7xD6/lGf95vGaPkoXdvgfWf5Maw7rkdx7+/7+X/962n6xeUosxRmJhlrMRcWJAAOB75M6
-        BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrHLMWRmVeSWpSXmKPExsWy7bCSvK5LHVeCwY8WPotjbU/YLe4smMZk
-        0bx4PZvF5V1z2CwWLWtltli14AC7xdqmWWwO7B6X+3qZPDat6mTz2D93DbtH35ZVjB5b9n9m
-        9Pi8SS6ALYrLJiU1J7MstUjfLoEr4/T63WwFt9krTh//ztLAOJ2ti5GDQ0LAROLcZJUuRi4O
-        IYHdjBIT+28xdTFyAsUlJZbOvcEOYQtL3G85wgpR9IhR4vaTpawgCRYBVYmu5rmMIDabgJbE
-        vR8nmEFsEYEaieauNSwgDcwCpxkllhydDpYQFnCXmHj7LguIzSugI7Fu3QWwDUIC5hL/ls1n
-        gdjQwChx5N1VqCJBiZMzn4DZzEAbbvx7yQRyNrOAtMTyfxwgYU4BXYl/G2cxg4RFBVQkXh2s
-        n8AoNAtJ8ywkzbMQmhcwMq9ilEwtKM5Nzy02LDDMSy3XK07MLS7NS9dLzs/dxAiOEi3NHYzb
-        V33QO8TIxMF4iFGCg1lJhPeRJUeCEG9KYmVValF+fFFpTmrxIUZpDhYlcd4LXSfjhQTSE0tS
-        s1NTC1KLYLJMHJxSDUwn7RifPVZJ+Cr+gZlHxOB746694kdL+r/x7lqxcdPVHQ++5V+bGcVw
-        4rvU/dDJn6Vkj3xL9vKwmzBxnRp/dYS3zNmXHj/0Kza4H3rY2aQnF7tmhmVYQ1DVxXa2+uiW
-        VDGdjaYM7LsZFJ+dM3zG9NF392GeuI3Tz3wXjam5quRSp2obX1q/1Pq2f2tN0oHGCfrumi9r
-        7iwzeDQ38WHGwuc5pnb6X2zENPf+uG93sdrwEkO0kv1lg/LDHw8Utp1KZjd2dTd+oN76/33Y
-        3XDTvV52h1zZlwu9+qIYOUP4flfcnSvCr24k3N33xNDynPki83eSGUkKZv+4Cupll9+Su6HK
-        GsrktnWi5zYXvrg2ZSWW4oxEQy3mouJEACp2MQQBAwAA
-X-CMS-MailID: 20210122072700epcas2p37a79e9fb536c69b3f2ed135f39e08749
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----WZLI4USkVYiVjVtGawWGutc5pNztY3GR2qy8kqsclN4GFAmP=_2224e_"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20210122065248epcas2p19a972d3a385b91d6e05a16f2ef7b0dd6
-References: <CGME20210122065248epcas2p19a972d3a385b91d6e05a16f2ef7b0dd6@epcas2p1.samsung.com>
-        <20210122064125.GA121941@ubuntu>
+In-Reply-To: <7f055c8e-4b60-3da5-058e-3991637db37a@tronnes.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="epu1D3JI0uBYzAXZ989g1Lya8WJzESvC3"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-------WZLI4USkVYiVjVtGawWGutc5pNztY3GR2qy8kqsclN4GFAmP=_2224e_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--epu1D3JI0uBYzAXZ989g1Lya8WJzESvC3
+Content-Type: multipart/mixed; boundary="nri1PVPucg8bDytObE1K9mkd3ByRXcvQZ";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+ Daniel Vetter <daniel@ffwll.ch>
+Cc: hudson@trmm.net, markus@raatikainen.cc, Sam Ravnborg <sam@ravnborg.org>,
+ USB list <linux-usb@vger.kernel.org>,
+ dri-devel <dri-devel@lists.freedesktop.org>,
+ Tyler Hardin <th020394@gmail.com>, Lubomir Rintel <lkundrak@v3.sk>,
+ pontus.fuchs@gmail.com, peter@stuge.se
+Message-ID: <a1de51bf-b602-9ac2-1058-b8ced7c6973e@suse.de>
+Subject: Re: [PATCH v4 1/3] drm/uapi: Add USB connector type
+References: <20210120170033.38468-1-noralf@tronnes.org>
+ <20210120170033.38468-2-noralf@tronnes.org>
+ <CAKMK7uHoALsGRgJjPzpeAvN10CoBpLsT86=gUm82ki-h2DkPwQ@mail.gmail.com>
+ <9660eec0-15b7-ee8b-10ed-c6ceed54a56f@suse.de>
+ <CAKMK7uHiQ3i-Rz_y_3joR2Zi3fA=1qp8MdGZ9w9PUcGoWT3urw@mail.gmail.com>
+ <1ea4e6e4-0806-dba1-a424-47f178dc882f@suse.de>
+ <7f055c8e-4b60-3da5-058e-3991637db37a@tronnes.org>
+In-Reply-To: <7f055c8e-4b60-3da5-058e-3991637db37a@tronnes.org>
 
-On Fri, Jan 22, 2021 03:32, Wesley cheng wrote:
-> Hi Daehwan,
-> 
-> If this is an unexpected event where userspace initiates the UDC bind
-> sequence, then after the above sequence occurs, the DWC3 device should
-> still be able to re-enter runtime suspend after the autosuspend timer
-> expires.  Since the cable is disconnected, the dwc->connected flag would
-> still be false.  Is this not happening in your situation?
-> 
-> I'm just trying to understand what issue you're seeing other than the
-> momentary transition from runtime suspend (due to cable disconnect)
-> -->runtime resume (due to unexpected UDC bind) --> runtime  suspend (due
-> to nothing connected).
-> 
-> Thanks
-> Wesley cheng
+--nri1PVPucg8bDytObE1K9mkd3ByRXcvQZ
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
 
-Hi Wesley,
+Hi
 
-I don't know why but DWC3 device is not re-entering runtime-suspend in
-my situation. I'm still debugging it.
-Even if DWC3 re-enter runtime-suspend but it doesn't mean stopping gadget.
-Are you stopping gadget manually in this case?
+Am 21.01.21 um 19:07 schrieb Noralf Tr=C3=B8nnes:
+>=20
+>=20
+> Den 21.01.2021 11.01, skrev Thomas Zimmermann:
+>> Hi
+>>
+>> Am 21.01.21 um 09:27 schrieb Daniel Vetter:
+>>> On Thu, Jan 21, 2021 at 8:45 AM Thomas Zimmermann
+>>> <tzimmermann@suse.de> wrote:
+>>>>
+>>>> Hi Noralf,
+>>>>
+>>>> glad to hear from you! Welcome back!
+>=20
+> Thanks Thomas!
+>=20
+>>>>
+>>>> Am 20.01.21 um 18:42 schrieb Daniel Vetter:
+>>>>> On Wed, Jan 20, 2021 at 6:10 PM Noralf Tr=C3=B8nnes <noralf@tronnes=
+=2Eorg>
+>>>>> wrote:
+>>>>>>
+>>>>>> Add a connector type for USB connected display panels.
+>>>>>>
+>>>>>> Signed-off-by: Noralf Tr=C3=B8nnes <noralf@tronnes.org>
+>>>>>> ---
+>=20
+> I have forgotten to update drm_connector_enum_list which maps type to n=
+ame.
+>=20
+>>>>>>  =C2=A0=C2=A0 include/uapi/drm/drm_mode.h | 1 +
+>>>>>>  =C2=A0=C2=A0 1 file changed, 1 insertion(+)
+>>>>>>
+>>>>>> diff --git a/include/uapi/drm/drm_mode.h b/include/uapi/drm/drm_mo=
+de.h
+>>>>>> index fed66a03c7ae..33024cc5d26e 100644
+>>>>>> --- a/include/uapi/drm/drm_mode.h
+>>>>>> +++ b/include/uapi/drm/drm_mode.h
+>>>>>> @@ -367,6 +367,7 @@ enum drm_mode_subconnector {
+>>>>>>  =C2=A0=C2=A0 #define DRM_MODE_CONNECTOR_DPI=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 17
+>>>>>>  =C2=A0=C2=A0 #define DRM_MODE_CONNECTOR_WRITEBACK=C2=A0=C2=A0 18
+>>>>>>  =C2=A0=C2=A0 #define DRM_MODE_CONNECTOR_SPI=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 19
+>>>>>> +#define DRM_MODE_CONNECTOR_USB=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 20
+>>>>
+>>>> I would not call it USB. I could imagine that at some point a generi=
+c
+>>>> USB protocol could serve simple displays (i.e. in the sense of USB H=
+ID
+>>>> or data or imaging). (Maybe Thunderbold already counts.) Anyway, USB=
 
-Best Regards,
-Jung Daehwan
+>>>> should be reserved for this case.
+>>>
+>>> We end up calling those DisplayPort, since that's what's being
+>>> transported over thunderbolt or usb-C. So the usb connector would be
+>>> called usb-C. I think the reason we don't do fancy connector names is=
 
-------WZLI4USkVYiVjVtGawWGutc5pNztY3GR2qy8kqsclN4GFAmP=_2224e_
-Content-Type: text/plain; charset="utf-8"
+>>> that adding them is a bit a pain. Plus drm/i915 specifically has some=
+
+>>> very quirky connector enumerating that doesn't match much with realit=
+y
+>>> unfortunately anyway :-/
+>>
+>> In the case of the other USB drivers, IIRC we use the connector type
+>> that is at the output (i.e., HDMI in the case of udl). I think we shou=
+ld
+>> do the same here. Or use 'Unknown'.
+>>
+>=20
+> There are 2 DRM USB drivers and they use:
+> - udl: DRM_MODE_CONNECTOR_DVII
+
+Mine has plain old VGA. Maybe we should change generally this to Unknown.=
 
 
-------WZLI4USkVYiVjVtGawWGutc5pNztY3GR2qy8kqsclN4GFAmP=_2224e_--
+> - gm12u320: DRM_MODE_CONNECTOR_VGA
+>=20
+> gm12u320 is a mini projector so it doesn't actually have a VGA
+> connector. I have never seen a udl device but I assume it has a DVII
+> connector?
+>=20
+> For display adapters it makes sense to use the connector on the adapter=
+
+> as the reported connector, but for display panels that don't have any
+> connector except for the cable that is connected to the hosts USB
+> connector, why can't it be called a USB connector? That's the connector=
+
+> the user sees.
+
+It's not the relevant connector for the display output. USB is the bus=20
+system. (Making your argument in terms of discrete GPUs, the connector=20
+would always be PCI then.)
+
+>=20
+> Ofc as Daniel mentions it's a downside that userspace doesn't know abou=
+t
+> the connector type, and who knows when it will updated (if I don't do i=
+t).
+> Weston will name it: "UNNAMED-%d"
+> Mutter: "Unknown%d-%d"
+> X: "Unknown%d-%d"
+>=20
+> Sam and Laurent has discussed adding a PANEL connector type instead of
+> adding more connector types for panel connectors. I think that would
+> have been a better choice instead of the SPI connector type that I adde=
+d
+> in 2019. But I think PANEL was meant for panels connected to an interna=
+l
+> connector.
+>=20
+> Here's my protocol connector types and how it's mapped to DRM:
+>=20
+> #define GUD_CONNECTOR_TYPE_PANEL		0
+> #define GUD_CONNECTOR_TYPE_VGA			1
+> #define GUD_CONNECTOR_TYPE_COMPOSITE		2
+> #define GUD_CONNECTOR_TYPE_SVIDEO		3
+> #define GUD_CONNECTOR_TYPE_COMPONENT		4
+> #define GUD_CONNECTOR_TYPE_DVI			5
+> #define GUD_CONNECTOR_TYPE_DISPLAYPORT		6
+> #define GUD_CONNECTOR_TYPE_HDMI			7
+>=20
+> static int gud_gadget_ctrl_get_connector(struct gud_gadget *gdg,
+> unsigned int index,
+> 					 struct gud_connector_descriptor_req *desc)
+> {
+> ...
+> 	gconn =3D &gdg->connectors[index];
+>=20
+> 	switch (gconn->connector->connector_type) {
+> 	case DRM_MODE_CONNECTOR_VGA:
+> 		desc->connector_type =3D GUD_CONNECTOR_TYPE_VGA;
+> 		break;
+> 	case DRM_MODE_CONNECTOR_DVII:
+> 		fallthrough;
+> 	case DRM_MODE_CONNECTOR_DVID:
+> 		fallthrough;
+> 	case DRM_MODE_CONNECTOR_DVIA:
+> 		desc->connector_type =3D GUD_CONNECTOR_TYPE_DVI;
+> 		break;
+> 	case DRM_MODE_CONNECTOR_Composite:
+> 		desc->connector_type =3D GUD_CONNECTOR_TYPE_COMPOSITE;
+> 		break;
+> 	case DRM_MODE_CONNECTOR_SVIDEO:
+> 		desc->connector_type =3D GUD_CONNECTOR_TYPE_SVIDEO;
+> 		break;
+> 	case DRM_MODE_CONNECTOR_Component:
+> 		desc->connector_type =3D GUD_CONNECTOR_TYPE_COMPONENT;
+> 		break;
+> 	case DRM_MODE_CONNECTOR_DisplayPort:
+> 		desc->connector_type =3D GUD_CONNECTOR_TYPE_DISPLAYPORT;
+> 		break;
+> 	case DRM_MODE_CONNECTOR_HDMIA:
+> 		fallthrough;
+> 	case DRM_MODE_CONNECTOR_HDMIB:
+> 		desc->connector_type =3D GUD_CONNECTOR_TYPE_HDMI;
+> 		break;
+> 	default:
+> 		desc->connector_type =3D GUD_CONNECTOR_TYPE_PANEL;
+> 		break;
+> 	};
+>=20
+>=20
+> int gud_connector_create(struct gud_device *gdrm, unsigned int index)
+> {
+> ...
+> 	switch (desc.connector_type) {
+> 	case GUD_CONNECTOR_TYPE_PANEL:
+> 		connector_type =3D DRM_MODE_CONNECTOR_USB;
+> 		break;
+> 	case GUD_CONNECTOR_TYPE_VGA:
+> 		connector_type =3D DRM_MODE_CONNECTOR_VGA;
+> 		break;
+> 	case GUD_CONNECTOR_TYPE_DVI:
+> 		connector_type =3D DRM_MODE_CONNECTOR_DVID;
+> 		break;
+> 	case GUD_CONNECTOR_TYPE_COMPOSITE:
+> 		connector_type =3D DRM_MODE_CONNECTOR_Composite;
+> 		break;
+> 	case GUD_CONNECTOR_TYPE_SVIDEO:
+> 		connector_type =3D DRM_MODE_CONNECTOR_SVIDEO;
+> 		break;
+> 	case GUD_CONNECTOR_TYPE_COMPONENT:
+> 		connector_type =3D DRM_MODE_CONNECTOR_Component;
+> 		break;
+> 	case GUD_CONNECTOR_TYPE_DISPLAYPORT:
+> 		connector_type =3D DRM_MODE_CONNECTOR_DisplayPort;
+> 		break;
+> 	case GUD_CONNECTOR_TYPE_HDMI:
+> 		connector_type =3D DRM_MODE_CONNECTOR_HDMIA;
+> 		break;
+> 	default: /* future types */
+> 		connector_type =3D DRM_MODE_CONNECTOR_USB;
+
+The more I look at it the more I think it should be 'Unknown' here.
+
+BTW, can I try this out somehow? I do have an RPi3. Do I need a special=20
+disk image?
+
+Best regards
+Thomas
+
+> 		break;
+> 	};
+>=20
+> Noralf.
+>=20
+>> Best regards
+>> Thomas
+>>
+>>> -Daniel
+>>>
+>>>>
+>>>> Best regards
+>>>> Thomas
+>>>>
+>>>>>
+>>>>> Beware, new connector types have in the past resulted in userspace
+>>>>> burning&crashing. Maybe it's become better ...
+>>>>>
+>>>>> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+>>>>>>
+>>>>>>  =C2=A0=C2=A0 /**
+>>>>>>  =C2=A0=C2=A0=C2=A0 * struct drm_mode_get_connector - Get connecto=
+r metadata.
+>>>>>> --=20
+>>>>>> 2.23.0
+>>>>>>
+>>>>>> _______________________________________________
+>>>>>> dri-devel mailing list
+>>>>>> dri-devel@lists.freedesktop.org
+>>>>>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+>>>>>
+>>>>>
+>>>>>
+>>>>
+>>>> --=20
+>>>> Thomas Zimmermann
+>>>> Graphics Driver Developer
+>>>> SUSE Software Solutions Germany GmbH
+>>>> Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
+>>>> (HRB 36809, AG N=C3=BCrnberg)
+>>>> Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
+>>>>
+>>>
+>>>
+>>
+>>
+>> _______________________________________________
+>> dri-devel mailing list
+>> dri-devel@lists.freedesktop.org
+>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+>>
+> _______________________________________________
+> dri-devel mailing list
+> dri-devel@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+>=20
+
+--=20
+Thomas Zimmermann
+Graphics Driver Developer
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
+(HRB 36809, AG N=C3=BCrnberg)
+Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
+
+
+--nri1PVPucg8bDytObE1K9mkd3ByRXcvQZ--
+
+--epu1D3JI0uBYzAXZ989g1Lya8WJzESvC3
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmAKhLoFAwAAAAAACgkQlh/E3EQov+A5
+7xAAqhWBr/COD3T4aBC2D1ZsrWNEWJbhIWcxqCE2mualwimrYR6Rr77CeZhE3dcdRIZdqUYNZjFI
+mw/nJgx+CcObAfZitEsPqZBLMmkHGrJPUMDH9H6hP296b+aY7E9lzKfHw6CR+yWt1Rm9JnQLPQvn
+pRMUzNoputmDTjibuXrBQWHTSioqbcCJkdJkNHA6J70V8gdN79KX9bb85do7eUie+IP1D1CNNXHY
+7YUEcp2B5K4AYY6p6y37jtx9gR+C/QTRAa6ZVJjKOioOk2nVWDBSqzIk5gD/nETiHxF3krwuQW/k
+CNwtAZ5x13LKNKeF9JwekK1pOAUx2V63NlZMK+ySQezW72W4jCMZsLmI9i0SfaFYc4w8UZ32EcEm
+2GPc9f4kQKpVxQUqJPQbwBqrNqLQ42bb2WphatZrtxn8fa9R89p55YIPpBnxdi4ydMEpwvU77tRc
+HJm8X7rJK8CAiOLnjiap25MnVXJvpJjnOZWhzakf0RCsYGvh8TfCkk8QwTjO3+n8mLvJtIXmUfTl
+SFe8Wyh3Ogz72yBP+GS3I9+HXAKFuG0+xvK+v+77gfT7jOU9K2IWgSjKeeO8HKyt+tQ/ROJ1rLvz
+rsSLNX5n6ZSBcZ2y9Tbc2ucY07ndNjHwtJX0mprprIxdf5s/aruF+XkOadc4inbFg246o7msQ0sO
+FQQ=
+=OFct
+-----END PGP SIGNATURE-----
+
+--epu1D3JI0uBYzAXZ989g1Lya8WJzESvC3--
