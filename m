@@ -2,189 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5672FFDC9
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 09:00:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F952FFDF7
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Jan 2021 09:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727006AbhAVH7x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Jan 2021 02:59:53 -0500
-Received: from mx2.suse.de ([195.135.220.15]:38984 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726351AbhAVH7v (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 22 Jan 2021 02:59:51 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 064E8ADCA;
-        Fri, 22 Jan 2021 07:59:10 +0000 (UTC)
-Subject: Re: [PATCH v4 1/3] drm/uapi: Add USB connector type
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     hudson@trmm.net, markus@raatikainen.cc, peter@stuge.se,
-        USB list <linux-usb@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Tyler Hardin <th020394@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>, pontus.fuchs@gmail.com,
-        Sam Ravnborg <sam@ravnborg.org>
-References: <20210120170033.38468-1-noralf@tronnes.org>
- <20210120170033.38468-2-noralf@tronnes.org>
- <CAKMK7uHoALsGRgJjPzpeAvN10CoBpLsT86=gUm82ki-h2DkPwQ@mail.gmail.com>
- <9660eec0-15b7-ee8b-10ed-c6ceed54a56f@suse.de>
- <CAKMK7uHiQ3i-Rz_y_3joR2Zi3fA=1qp8MdGZ9w9PUcGoWT3urw@mail.gmail.com>
- <1ea4e6e4-0806-dba1-a424-47f178dc882f@suse.de>
- <7f055c8e-4b60-3da5-058e-3991637db37a@tronnes.org>
- <a1de51bf-b602-9ac2-1058-b8ced7c6973e@suse.de>
-Message-ID: <57dab920-1aaf-e009-59c9-38e79b43edb1@suse.de>
-Date:   Fri, 22 Jan 2021 08:59:08 +0100
+        id S1726981AbhAVINo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Jan 2021 03:13:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726586AbhAVINm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Jan 2021 03:13:42 -0500
+Received: from mout1.freenet.de (mout1.freenet.de [IPv6:2001:748:100:40::2:3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87228C0613D6
+        for <linux-usb@vger.kernel.org>; Fri, 22 Jan 2021 00:12:47 -0800 (PST)
+Received: from [195.4.92.119] (helo=sub0.freenet.de)
+        by mout1.freenet.de with esmtpa (ID andihartmann@freenet.de) (port 25) (Exim 4.92 #3)
+        id 1l2rSc-0008SC-JL
+        for linux-usb@vger.kernel.org; Fri, 22 Jan 2021 09:06:26 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=01019freenet.de; s=mjaymdexmjqk; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Date:Message-ID:Subject:To:From:Sender:Reply-To:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=7Le3bgy8fK+Wceq1PyBKMI2IPAr+h4eTPN/iAS5dBK0=; b=SSXV8hbFa9md218r6LJhJXVKbz
+        djcN/nps5j2FCkYZW3FXiR8xw4e2BUKWnw8OwlzmRZkIre3F6DnJ5M/2wL6zwtz8RIYR1Oddyt0xp
+        CttbboPDHGKB09FpSfh8IkJl8aFgzTmRDJlQzSK2AF4JJW8IqPw62BTvQm21EvGL0GdFauuQASsuC
+        5NNfPN6TYWNofVxgB4sZj1AB1btqUm1veGC2g1t4aEZeRK28+uOjYaxpws+7KAmdDSUW+ow3RVdMR
+        U2IbEOzlC/VPO8LHJZU06aYuLTs6JT//45DuwgaOAkWcH12zM8pbuAC6/MDcY5wNBpKZKjPwP+/2i
+        43e+Ws6g==;
+Received: from p200300de573c8400505400fffe15ac42.dip0.t-ipconnect.de ([2003:de:573c:8400:5054:ff:fe15:ac42]:41854 helo=mail.maya.org)
+        by sub0.freenet.de with esmtpsa (ID andihartmann@freenet.de) (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128) (port 465) (Exim 4.92 #3)
+        id 1l2rSc-0006M9-Gt
+        for linux-usb@vger.kernel.org; Fri, 22 Jan 2021 09:06:26 +0100
+Received: internal info suppressed
+From:   Andreas Hartmann <andihartmann@01019freenet.de>
+To:     linux-usb@vger.kernel.org
+Subject: USB2 / USB3 compatibility problems: xhci_hcd 0000:00:06.0: WARN Wrong
+ bounce buffer write length: 0 != 512
+Message-ID: <3b4e35d2-9508-e0aa-eaf8-32e524ad81c4@01019freenet.de>
+Date:   Fri, 22 Jan 2021 09:06:24 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-In-Reply-To: <a1de51bf-b602-9ac2-1058-b8ced7c6973e@suse.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="XpMwuMXaRbcK8D7wMg0ov3pkYTpYUK44g"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originated-At: 2003:de:573c:8400:5054:ff:fe15:ac42!41854
+X-FNSign: v=2 s=058E85E835C9DB31E4A52F08038E3A3A78AEDBC000230AB4E8EB9B4328812318
+X-Scan-TS: Fri, 22 Jan 2021 09:06:26 +0100
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---XpMwuMXaRbcK8D7wMg0ov3pkYTpYUK44g
-Content-Type: multipart/mixed; boundary="7itqifw3deecmn20jACgRoOoGVAmq57oX";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
- Daniel Vetter <daniel@ffwll.ch>
-Cc: hudson@trmm.net, markus@raatikainen.cc, peter@stuge.se,
- USB list <linux-usb@vger.kernel.org>,
- dri-devel <dri-devel@lists.freedesktop.org>,
- Tyler Hardin <th020394@gmail.com>, Lubomir Rintel <lkundrak@v3.sk>,
- pontus.fuchs@gmail.com, Sam Ravnborg <sam@ravnborg.org>
-Message-ID: <57dab920-1aaf-e009-59c9-38e79b43edb1@suse.de>
-Subject: Re: [PATCH v4 1/3] drm/uapi: Add USB connector type
-References: <20210120170033.38468-1-noralf@tronnes.org>
- <20210120170033.38468-2-noralf@tronnes.org>
- <CAKMK7uHoALsGRgJjPzpeAvN10CoBpLsT86=gUm82ki-h2DkPwQ@mail.gmail.com>
- <9660eec0-15b7-ee8b-10ed-c6ceed54a56f@suse.de>
- <CAKMK7uHiQ3i-Rz_y_3joR2Zi3fA=1qp8MdGZ9w9PUcGoWT3urw@mail.gmail.com>
- <1ea4e6e4-0806-dba1-a424-47f178dc882f@suse.de>
- <7f055c8e-4b60-3da5-058e-3991637db37a@tronnes.org>
- <a1de51bf-b602-9ac2-1058-b8ced7c6973e@suse.de>
-In-Reply-To: <a1de51bf-b602-9ac2-1058-b8ced7c6973e@suse.de>
 
---7itqifw3deecmn20jACgRoOoGVAmq57oX
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+Hello!
+
+Since a new Notebook, which sadly only provides USB 3 interfaces, I have a more or 
+less big problem with an old driver (rt5572sta), which not just sometimes produces 
+those warn messages, but even stalls sometimes after those warn messages (e,g, 
+Kernel 5.3.x or 5.10.x or 5.8.x) - see attached log file.
+
+The driver uses the bulk method to communicate with the USB bus. By reducing the 
+max. bulk size from 24 kByte to 12 kByte, I was able to massively reduce those 
+warning messages and now, the USB bus even seldom stalls any more.
+
+I achieved this by changing the building of the bulk package from
+
+if (((ThisBulkSize&0xffff8000) != 0) || ((ThisBulkSize&0x6000) == 0x6000))
+
+to
+
+if (((ThisBulkSize&0xffff8000) != 0) || ((ThisBulkSize&0x3000) == 0x3000))
 
 
+I can see this problem on two different AMD USB 3 controller, e.g. X370 Series 
+Chipset USB 3.1 xHCI Controller [1022:43b9] (rev 02).
 
-Am 22.01.21 um 08:54 schrieb Thomas Zimmermann:
-The more I look at it the more I think it should be 'Unknown' here.
->=20
-> BTW, can I try this out somehow? I do have an RPi3. Do I need a special=
-=20
-> disk image?
+I'm wondering how to solve this problem? But mostly I'm wondering, why a USB 2 
+device is handled by USB 3 code, expecting to follow USB 3 rules at all? Is it 
+possible to bind the driver to the USB 2 code path?
 
-Oh, I saw that wiki url now. I'll check this out.
+At the moment I think, that the attempt to "transfer" a valid USB 2 package to a 
+valid USB 3 package by xhci_hcd seems not always to be transparent to the driver 
+producing and controlling its send packets. Could it be possible, that there are 
+some situations, where the driver can't check the package after manipulation 
+through xhci_hcd any more? Please see the attached log file.
 
->=20
-> Best regards
-> Thomas
->=20
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->> =C2=A0=C2=A0=C2=A0=C2=A0};
->>
->> Noralf.
->>
->>> Best regards
->>> Thomas
->>>
->>>> -Daniel
->>>>
->>>>>
->>>>> Best regards
->>>>> Thomas
->>>>>
->>>>>>
->>>>>> Beware, new connector types have in the past resulted in userspace=
+Or how should I fix the driver to be USB 3 ready? Please take into account, that 
+I'm not an USB protocol specialist and I don't know, at which level or how to 
+build a valid bulk packet which confirms to USB3 rules.
 
->>>>>> burning&crashing. Maybe it's become better ...
->>>>>>
->>>>>> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
->>>>>>>
->>>>>>> =C2=A0=C2=A0=C2=A0 /**
->>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 * struct drm_mode_get_connector - Get co=
-nnector metadata.
->>>>>>> --=20
->>>>>>> 2.23.0
->>>>>>>
->>>>>>> _______________________________________________
->>>>>>> dri-devel mailing list
->>>>>>> dri-devel@lists.freedesktop.org
->>>>>>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
->>>>>>
->>>>>>
->>>>>>
->>>>>
->>>>> --=20
->>>>> Thomas Zimmermann
->>>>> Graphics Driver Developer
->>>>> SUSE Software Solutions Germany GmbH
->>>>> Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
->>>>> (HRB 36809, AG N=C3=BCrnberg)
->>>>> Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
->>>>>
->>>>
->>>>
->>>
->>>
->>> _______________________________________________
->>> dri-devel mailing list
->>> dri-devel@lists.freedesktop.org
->>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
->>>
->> _______________________________________________
->> dri-devel mailing list
->> dri-devel@lists.freedesktop.org
->> https://lists.freedesktop.org/mailman/listinfo/dri-devel
->>
->=20
->=20
-> _______________________________________________
-> dri-devel mailing list
-> dri-devel@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/dri-devel
->=20
-
---=20
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
-(HRB 36809, AG N=C3=BCrnberg)
-Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
+At the time being, I'm debugging on base of the pretty loud debug messages of the 
+rt5572sta driver and the xhci_hcd debug messages (echo "module xhci_hcd =pf" > 
+/sys/kernel/debug/dynamic_debug/control)
 
 
---7itqifw3deecmn20jACgRoOoGVAmq57oX--
-
---XpMwuMXaRbcK8D7wMg0ov3pkYTpYUK44g
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmAKhcwFAwAAAAAACgkQlh/E3EQov+BW
-lxAAp8Cou5KuCVIYp21fZ/yDoA/fC2XnxPjTDiX8arQIv0Eau/d4FJ0vQx8ex5tNeMcwRs56C6Ja
-pOLGdjphfGoOnpYNgDHlKkK2mDFRGwp/rTV2FNb2gRSbKHFKebzACBBIUe/Z01GoBWBLd8kUlj+2
-cOpvHaHK1aioBEYp1bZcOZ/OWjI2zR2Yj3qjaVi3ZR79pDRKVf2H7+QlzubwCSZgGPo+4jApmiBG
-sANTdLVpqZAtRoZ/c4u3ALq3WiZUj4I3T9AV7QE2On1fUJ7KaKh98zRsxH3cqA5I7UiVMA8NB9BO
-X7qfjBXwNgjlOU2+lhkK1wwDPPX87JnbXTO/b1U9GbkKNJNp2TPHeLcy9HRW2iK2tkeDSAwax9uh
-3oeLVz9ucIZ3YizHVf58MTOrM95y/0O/LFSf6Tuadyng0/Hn4psSeaGKHhntXFp9fcY8fIndhPvW
-n4WreDLn4tePKnfCWApEr/CmxDuaxNzDVAMCRhe+Txt+pavFTxW84lO8jsRNbjmq9Y1mn77tRvYF
-jNURnpdGTZONIIIbyEZvTqGzozuEVdgmf/mqCTFZNWC+H13r4YydHhViKhw3nqrsHwmkpB31o64L
-jsrZqgl38YNyKak0jnV4OeV261qxol06jJzM/C2+aPIGLOP2aPu/bKtY8GeWZsZFOG0/a2WCsSFR
-EHU=
-=fl2O
------END PGP SIGNATURE-----
-
---XpMwuMXaRbcK8D7wMg0ov3pkYTpYUK44g--
+Thanks for any idea how to proceed!
+Andreas Hartmann
