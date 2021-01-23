@@ -2,77 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18658301479
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Jan 2021 11:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D0E3014E5
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Jan 2021 12:47:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726858AbhAWKPR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Jan 2021 05:15:17 -0500
-Received: from mx3.wp.pl ([212.77.101.10]:10726 "EHLO mx3.wp.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726699AbhAWKPM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 23 Jan 2021 05:15:12 -0500
-Received: (wp-smtpd smtp.wp.pl 15961 invoked from network); 23 Jan 2021 11:14:19 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1611396859; bh=Izj47kXbtKgPCLKSTYUUa1Qo2RyDIFsf3IrPAR31R/U=;
-          h=From:To:Cc:Subject;
-          b=XnjgXp8SeijAClFNhxUsndJRGNpU55P0i83Iu3D+htF+lg0QF6EcRSSKItmWtkUmp
-           EjqXKMQtRGB7X/BXHjWRYK/vPquEQMan1i3NUEsmxsFjkKy/668qP+AhdYweB0stKs
-           BTuyIGBl3CkxEkuOzbwvx040SZ/00Qx50wzIqf9c=
-Received: from ip4-46-39-164-203.cust.nbox.cz (HELO localhost) (stf_xl@wp.pl@[46.39.164.203])
-          (envelope-sender <stf_xl@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <mathias.nyman@linux.intel.com>; 23 Jan 2021 11:14:19 +0100
-Date:   Sat, 23 Jan 2021 11:14:18 +0100
-From:   Stanislaw Gruszka <stf_xl@wp.pl>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Greg KH <greg@kroah.com>, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Bernhard <bernhard.gebetsberger@gmx.at>
-Subject: Re: [PATCH] usb, xhci, rt2800usb: do not perform Soft Retry
-Message-ID: <20210123101418.GA16688@wp.pl>
-References: <20210122104342.12451-1-stf_xl@wp.pl>
- <YAq9bt6q9dfk4F+F@kroah.com>
- <20210122132650.GA13029@wp.pl>
- <eb37b28d-5046-f0cd-92ee-55af0e350802@linux.intel.com>
+        id S1726613AbhAWLrP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Jan 2021 06:47:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726605AbhAWLrO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Jan 2021 06:47:14 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A33C06174A
+        for <linux-usb@vger.kernel.org>; Sat, 23 Jan 2021 03:46:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=T/0Ps94j/KOyyJDEnwNvRezFOZxbIe2qLXUjzKYzS9g=; b=MklBPW6H42sGNQ6ekwD6GL1UGY
+        jOvcf1/w1j8fTRECSqEs1b8YlJbOl1CoS6OrM5RM+zRut4w/08Icx5zIwObwrjlXGz7E/AKY3Y6Yo
+        COtEaePEoUF4hMTbUgTvOEW2ar313nFKc2Cd4Cok4+lUas+x/OEHk9+Iyqbz3kS+a1vukl+hVnS8A
+        kTGrJcnKLwLz0J5y8LgN5zpvFP4ny9O3r8z2gBe4JSz7OEKAlyR9rMhVPFM7IP32lJ9U38v7GYklW
+        fjhpOIAyQPp53xB9lMINjL6ZSC/wFEJUifhBjC6lYqwSrbJYvBWpgpQFD+77WIEPoIYjeSOjOUeYe
+        G/7L3Ykg==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:64417 helo=[192.168.10.61])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1l3HMo-0007F5-Vt; Sat, 23 Jan 2021 12:46:10 +0100
+Subject: Re: [PATCH v4 0/3] Generic USB Display driver
+To:     Simon Ser <contact@emersion.fr>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     dri-devel@lists.freedesktop.org, hudson@trmm.net,
+        markus@raatikainen.cc, peter@stuge.se, linux-usb@vger.kernel.org,
+        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
+        sam@ravnborg.org
+References: <20210120170033.38468-1-noralf@tronnes.org>
+ <ebda4ea3-3352-f35f-883e-6db751d6ca8b@suse.de>
+ <-aBHMpNW0jmn4TF7fGiParPvZuVdzM0H0UGlmc0KGpZYJlBGkL-xq0ooPGErY0gl9iF9C7Il5jfFApcYHfypL06iv-6knlp7B6D7HfBhANc=@emersion.fr>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <02d5cdbd-44e4-645e-5c91-b2687c91c194@tronnes.org>
+Date:   Sat, 23 Jan 2021 12:46:06 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eb37b28d-5046-f0cd-92ee-55af0e350802@linux.intel.com>
-X-WP-MailID: ab018e1722f58129cd15be8400460f76
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [YfMk]                               
+In-Reply-To: <-aBHMpNW0jmn4TF7fGiParPvZuVdzM0H0UGlmc0KGpZYJlBGkL-xq0ooPGErY0gl9iF9C7Il5jfFApcYHfypL06iv-6knlp7B6D7HfBhANc=@emersion.fr>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 05:00:21PM +0200, Mathias Nyman wrote:
-> >> Or is this due to the specific host controller device hardware?  Should
-> >> this be a xhci quirk for a specific pci device instead?
+
+
+Den 21.01.2021 11.20, skrev Simon Ser:
+> On Thursday, January 21st, 2021 at 10:59 AM, Thomas Zimmermann <tzimmermann@suse.de> wrote:
 > 
-> Exactly, this should be checked.
-> Stanislaw, weren't there a few users already that saw this issue?
+>> Well, I'd strongly ask to not call it "generic", because it isn't. We
+>> have other USB drivers and anyone can make a USB display with these
+>> protocols as well. That doesn't make them generic. A USB-standardized
+>> protocol would be generic. Maybe call it custom, or home-made.
 
-There are 30+ users cc-ed in the bugzilla report. However I think some
-of them are not affected by issue originally reported by Bernhard.
-They just saw "WARN Set TR Deq Ptr cmd failed due to incorrect slot
-or ep state" message caused by different problem and added comment
-to this particular bug report.
+I agree that Generic probably isn't the best term to use here. Naming
+stuff is hard. Maybe: Open USB Display Protocol - oudp?
 
-> Do we know what xHCI controllers they were using?
+> 
+> Maybe rename it to "GUD USB Display driver"? :P
+> 
 
-What I can tell issue was reported mostly on ASMedia and AMD
-controllers. We can ask for exact vendor and device IDs and
-just add xhci->quirks flag.
+Oh that's a recursive acronym :-) That would save me all the work of
+renaming. I think I'll go with that, thanks.
 
-However I'm not entirely sure that xHCI hardware misbehave
-is actual root cause. I think equally probable is that
-connected device do not handle soft retry correctly. In that
-case disabling Soft Retry per device would be actually
-"lightest hammer" since other devices connected to the
-xHCI host could benefit from faster recovery.
-
-Is there way to debug/identify which side: host or device
-hardware misbehave when Soft Retry is performed ?
-
-Stanislaw
+Noralf.
