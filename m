@@ -2,76 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D0E3014E5
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Jan 2021 12:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 554C73015CE
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Jan 2021 15:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726613AbhAWLrP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Jan 2021 06:47:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726605AbhAWLrO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Jan 2021 06:47:14 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A33C06174A
-        for <linux-usb@vger.kernel.org>; Sat, 23 Jan 2021 03:46:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=T/0Ps94j/KOyyJDEnwNvRezFOZxbIe2qLXUjzKYzS9g=; b=MklBPW6H42sGNQ6ekwD6GL1UGY
-        jOvcf1/w1j8fTRECSqEs1b8YlJbOl1CoS6OrM5RM+zRut4w/08Icx5zIwObwrjlXGz7E/AKY3Y6Yo
-        COtEaePEoUF4hMTbUgTvOEW2ar313nFKc2Cd4Cok4+lUas+x/OEHk9+Iyqbz3kS+a1vukl+hVnS8A
-        kTGrJcnKLwLz0J5y8LgN5zpvFP4ny9O3r8z2gBe4JSz7OEKAlyR9rMhVPFM7IP32lJ9U38v7GYklW
-        fjhpOIAyQPp53xB9lMINjL6ZSC/wFEJUifhBjC6lYqwSrbJYvBWpgpQFD+77WIEPoIYjeSOjOUeYe
-        G/7L3Ykg==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:64417 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1l3HMo-0007F5-Vt; Sat, 23 Jan 2021 12:46:10 +0100
-Subject: Re: [PATCH v4 0/3] Generic USB Display driver
-To:     Simon Ser <contact@emersion.fr>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     dri-devel@lists.freedesktop.org, hudson@trmm.net,
-        markus@raatikainen.cc, peter@stuge.se, linux-usb@vger.kernel.org,
-        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
-        sam@ravnborg.org
-References: <20210120170033.38468-1-noralf@tronnes.org>
- <ebda4ea3-3352-f35f-883e-6db751d6ca8b@suse.de>
- <-aBHMpNW0jmn4TF7fGiParPvZuVdzM0H0UGlmc0KGpZYJlBGkL-xq0ooPGErY0gl9iF9C7Il5jfFApcYHfypL06iv-6knlp7B6D7HfBhANc=@emersion.fr>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-Message-ID: <02d5cdbd-44e4-645e-5c91-b2687c91c194@tronnes.org>
-Date:   Sat, 23 Jan 2021 12:46:06 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S1725988AbhAWO0H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Jan 2021 09:26:07 -0500
+Received: from aposti.net ([89.234.176.197]:33652 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725899AbhAWO0F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 23 Jan 2021 09:26:05 -0500
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Tony Lindgren <tony@atomide.com>, od@zcrc.me,
+        linux-mips@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        stable@vger.kernel.org
+Subject: [RE-RESEND PATCH 1/4] usb: musb: Fix runtime PM race in musb_queue_resume_work
+Date:   Sat, 23 Jan 2021 14:24:59 +0000
+Message-Id: <20210123142502.16980-1-paul@crapouillou.net>
 MIME-Version: 1.0
-In-Reply-To: <-aBHMpNW0jmn4TF7fGiParPvZuVdzM0H0UGlmc0KGpZYJlBGkL-xq0ooPGErY0gl9iF9C7Il5jfFApcYHfypL06iv-6knlp7B6D7HfBhANc=@emersion.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+musb_queue_resume_work() would call the provided callback if the runtime
+PM status was 'active'. Otherwise, it would enqueue the request if the
+hardware was still suspended (musb->is_runtime_suspended is true).
 
+This causes a race with the runtime PM handlers, as it is possible to be
+in the case where the runtime PM status is not yet 'active', but the
+hardware has been awaken (PM resume function has been called).
 
-Den 21.01.2021 11.20, skrev Simon Ser:
-> On Thursday, January 21st, 2021 at 10:59 AM, Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> 
->> Well, I'd strongly ask to not call it "generic", because it isn't. We
->> have other USB drivers and anyone can make a USB display with these
->> protocols as well. That doesn't make them generic. A USB-standardized
->> protocol would be generic. Maybe call it custom, or home-made.
+When hitting the race, the resume work was not enqueued, which probably
+triggered other bugs further down the stack. For instance, a telnet
+connection on Ingenic SoCs would result in a 50/50 chance of a
+segmentation fault somewhere in the musb code.
 
-I agree that Generic probably isn't the best term to use here. Naming
-stuff is hard. Maybe: Open USB Display Protocol - oudp?
+Rework the code so that either we call the callback directly if
+(musb->is_runtime_suspended == 0), or enqueue the query otherwise.
 
-> 
-> Maybe rename it to "GUD USB Display driver"? :P
-> 
+Fixes: ea2f35c01d5e ("usb: musb: Fix sleeping function called from invalid context for hdrc glue")
+Cc: stable@vger.kernel.org # v4.9+
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Reviewed-by: Tony Lindgren <tony@atomide.com>
+Tested-by: Tony Lindgren <tony@atomide.com>
+---
+ drivers/usb/musb/musb_core.c | 31 +++++++++++++++++--------------
+ 1 file changed, 17 insertions(+), 14 deletions(-)
 
-Oh that's a recursive acronym :-) That would save me all the work of
-renaming. I think I'll go with that, thanks.
+diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+index 849e0b770130..1cd87729ba60 100644
+--- a/drivers/usb/musb/musb_core.c
++++ b/drivers/usb/musb/musb_core.c
+@@ -2240,32 +2240,35 @@ int musb_queue_resume_work(struct musb *musb,
+ {
+ 	struct musb_pending_work *w;
+ 	unsigned long flags;
++	bool is_suspended;
+ 	int error;
+ 
+ 	if (WARN_ON(!callback))
+ 		return -EINVAL;
+ 
+-	if (pm_runtime_active(musb->controller))
+-		return callback(musb, data);
++	spin_lock_irqsave(&musb->list_lock, flags);
++	is_suspended = musb->is_runtime_suspended;
++
++	if (is_suspended) {
++		w = devm_kzalloc(musb->controller, sizeof(*w), GFP_ATOMIC);
++		if (!w) {
++			error = -ENOMEM;
++			goto out_unlock;
++		}
+ 
+-	w = devm_kzalloc(musb->controller, sizeof(*w), GFP_ATOMIC);
+-	if (!w)
+-		return -ENOMEM;
++		w->callback = callback;
++		w->data = data;
+ 
+-	w->callback = callback;
+-	w->data = data;
+-	spin_lock_irqsave(&musb->list_lock, flags);
+-	if (musb->is_runtime_suspended) {
+ 		list_add_tail(&w->node, &musb->pending_list);
+ 		error = 0;
+-	} else {
+-		dev_err(musb->controller, "could not add resume work %p\n",
+-			callback);
+-		devm_kfree(musb->controller, w);
+-		error = -EINPROGRESS;
+ 	}
++
++out_unlock:
+ 	spin_unlock_irqrestore(&musb->list_lock, flags);
+ 
++	if (!is_suspended)
++		error = callback(musb, data);
++
+ 	return error;
+ }
+ EXPORT_SYMBOL_GPL(musb_queue_resume_work);
+-- 
+2.29.2
 
-Noralf.
