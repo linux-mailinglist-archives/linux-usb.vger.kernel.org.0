@@ -2,96 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C349730132F
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Jan 2021 06:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4559D30136B
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Jan 2021 06:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725932AbhAWFL7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Jan 2021 00:11:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
+        id S1725769AbhAWFlj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Jan 2021 00:41:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725710AbhAWFL6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Jan 2021 00:11:58 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A441C06174A;
-        Fri, 22 Jan 2021 21:11:18 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id m5so5158985pjv.5;
-        Fri, 22 Jan 2021 21:11:18 -0800 (PST)
+        with ESMTP id S1725287AbhAWFli (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Jan 2021 00:41:38 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECEFC06174A;
+        Fri, 22 Jan 2021 21:40:57 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id x6so7677224ybr.1;
+        Fri, 22 Jan 2021 21:40:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=BgyIeh58D93pJvM3haaFS5xnKvaiUdCpe+YJAVdakLQ=;
-        b=bFdHJ27IhGNVLvmyN7ew8pAZGxWjXBtPFmfo7ptvfCZw6K5RMXA9fL+qKm0aLCB2W5
-         1xaGw2Zz5RfOPfoyfU2zPK7aK2oclqFb5wbvrF3v433/I3Hz5JY8ZQjEuQrnXxZMTSI0
-         0cC3u74hDYyusIMYuTUzqy9hCuEv34TuaMwivVc8NQjPiRxuDwCZ9Pkexq4h3tUd+iEM
-         KGSCpx6QicH8KQgkzkAK0AwPO5/F94bDTXHBgJA7iimDuhKdz6qCSOLRyXDvcMuyYQR0
-         HqoFngNyNpOIelzl8t7GfFIS4d9slZL1iFTNZSBwcXEsbJY/vJtH4OsF0XGfUPp5lngY
-         iOjA==
+        bh=03/Y36mzYVxbtK/mFMaH4uFEzgZnAC+URADhOZPlVXk=;
+        b=cDzMt/iorc7NK+p9noSntxgQqgucrYoB4D8MLvvC2cw7BBR0n7giTqtFAjgYUNyuIB
+         1uviCzRakvco06yt87T8e+A+Wbe7pjYQ9mEkwZKXMugNIOsP5zgq9kA8sF/RmfQaKOdD
+         f+z99Mgcg09fzonX11EEAKGDfttSDkBoZ4cCP3lIzPwcRGHPbwlK6li8S5Pb4lDM4ijJ
+         iEazYvFxCa1YMgq0EMt7w/OUdxjPiafIZ7/Q9pJO4JcJfyaGCc8QydPyzSyOznxJApUE
+         e2BeJzxsGw7C6CIiAr/jCl5GVqXSM3ARgk3oOEJiXpLolKTZiBSRIh39XiPkyOyW0Pa0
+         pcoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=BgyIeh58D93pJvM3haaFS5xnKvaiUdCpe+YJAVdakLQ=;
-        b=RphAEv8ab6/t7aFpBn4Wt6oOu4n6RJ1eqrP3zk7I8ROfmT3/VQQ/39SWnjqM1HK2Qp
-         fVqy9FUsDxFy791IHW3jrRDWf/f69ZFVfrX/2Cl3cUfakv4cjOFP9vjms+llLA9Db9OU
-         eeo/TjRIboDKe5cBxJOqa+37hwkxrvFVEyFVTVkB6n4rXN3/6YGXqRj+bCcWZDxTekMx
-         cixFrTU/oD5LX8qpzLvyRvV+jNOeD5EV27NTf70bOklhx3Mn8mib1ceh0h26bsRdOCDn
-         ArAaQOonGOUMIwuksM+ep5z4O5j4HNl5R9gtuh4a46J662D0OT18HSnSSqnwd2X7VEci
-         pEOg==
-X-Gm-Message-State: AOAM533KWVUMS3hDpu9NQ4bLhHWq7RzDuAk7HdCyJCmjQo/5j5jVrg3X
-        sKOxaZq3WtP+cXPcf09Gw9g=
-X-Google-Smtp-Source: ABdhPJwtP0WP4mmJVtoCC8zK1lggz413w13RIGL4R0CuHAbwCbDf/dPIYt+cQpA3gnCEUbPLKozogg==
-X-Received: by 2002:a17:90a:380c:: with SMTP id w12mr9165252pjb.117.1611378678042;
-        Fri, 22 Jan 2021 21:11:18 -0800 (PST)
-Received: from localhost.localdomain ([45.135.186.76])
-        by smtp.gmail.com with ESMTPSA id q9sm10155791pgb.82.2021.01.22.21.11.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jan 2021 21:11:17 -0800 (PST)
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-To:     oneukum@suse.com, davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dongliang Mu <mudongliangabcd@gmail.com>
-Subject: [PATCH] usbnet: fix the indentation of one code snippet
-Date:   Sat, 23 Jan 2021 13:11:02 +0800
-Message-Id: <20210123051102.1091541-1-mudongliangabcd@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=03/Y36mzYVxbtK/mFMaH4uFEzgZnAC+URADhOZPlVXk=;
+        b=GRgoQu922M35SSYAJ7U2J8VsaPDBE3o7+c4grwr/z3BvyVXR0cHFVWnPKYEJk9lpuc
+         K7TZwSdsRSobuTj3b6bo2aJQjX1ITIsEzT7r9B3UfQfJneWOim+D4mfiIo5uufbRDBqL
+         29j/0sW1xmMGS/MSsYSPGgJ4qs+maay/XjI950hM8+8TtvWVXEhr1PMBEYsom/Ww7Hta
+         pLKsKIeImTQufz0msSNzkoFd7M/hxJZhWczBu7Wq/Ii5k2ena1GTwNaNkWzTeBvNjlFz
+         tXXJ3R8xOtSHbOwdkdj5dwBhZh17M43GMMxeKYwFJJ3YYbtRthesTMPR0iL5zVLrjohh
+         w+TQ==
+X-Gm-Message-State: AOAM532HursR7tL+m5UlvnqCw9UxQWCt1wAm5E54Q92w6yhTg1ZZY1dS
+        BgAuEVbWmsdY6cPgJH/APfKsG0IvhAQsm7caHNM=
+X-Google-Smtp-Source: ABdhPJzUjLjUGt+ghARaavXE/vfDAzwC4IkMmm+GlQyG00bio39+Pf78Yh6USxsM0fZvprfT5EOt8RfFxJoPNVHeCmA=
+X-Received: by 2002:a25:c544:: with SMTP id v65mr10612520ybe.167.1611380456246;
+ Fri, 22 Jan 2021 21:40:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   =?UTF-8?B?5oWV5Yas5Lqu?= <mudongliangabcd@gmail.com>
+Date:   Sat, 23 Jan 2021 13:40:30 +0800
+Message-ID: <CAD-N9QUdXFhTqZXpjg02Ya7viR8WmkORbU7pwNTquNg8k_kzMg@mail.gmail.com>
+Subject: Duplicate crash reports related with smsc75xx/smsc95xx and root cause analysis
+To:     davem@davemloft.net, kuba@kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        steve.glendinning@shawell.net, UNGLinuxDriver@microchip.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Every line of code should start with tab (8 characters)
+Dear kernel developers,
 
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
----
- drivers/net/usb/usbnet.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+I found that on the syzbot dashboard, =E2=80=9CKMSAN: uninit-value in
+smsc75xx_read_eeprom (2)=E2=80=9D [1],
+"KMSAN: uninit-value in smsc95xx_read_eeprom (2)" [2], "KMSAN:
+uninit-value in smsc75xx_bind" [3],
+"KMSAN: uninit-value in smsc95xx_reset" [4], "KMSAN: uninit-value in
+smsc95xx_wait_eeprom (2)" [5]
+should share the same root cause.
 
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index 1447da1d5729..305c5f7b9a9b 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1964,12 +1964,12 @@ static int __usbnet_read_cmd(struct usbnet *dev, u8 cmd, u8 reqtype,
- 			      cmd, reqtype, value, index, buf, size,
- 			      USB_CTRL_GET_TIMEOUT);
- 	if (err > 0 && err <= size) {
--        if (data)
--            memcpy(data, buf, err);
--        else
--            netdev_dbg(dev->net,
--                "Huh? Data requested but thrown away.\n");
--    }
-+		if (data)
-+			memcpy(data, buf, err);
-+		else
-+			netdev_dbg(dev->net,
-+				   "Huh? Data requested but thrown away.\n");
-+	}
- 	kfree(buf);
- out:
- 	return err;
--- 
-2.25.1
+## Root Cause Analysis && Different behaviors
 
+The root cause of these crash reports resides in the
+"__smsc75xx_read_reg/__smsc95xx_read_reg". Take __smsc95xx_read_reg as
+an example,
+
+---------------------------------------------------------------------------=
+--------------------------------------
+static int __must_check __smsc95xx_read_reg(struct usbnet *dev, u32 index,
+                                            u32 *data, int in_pm)
+{
+        u32 buf;
+        int ret;
+        int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
+
+        BUG_ON(!dev);
+
+        if (!in_pm)
+                fn =3D usbnet_read_cmd;
+        else
+                fn =3D usbnet_read_cmd_nopm;
+
+        ret =3D fn(dev, USB_VENDOR_REQUEST_READ_REGISTER, USB_DIR_IN
+                 | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+                 0, index, &buf, 4);
+        if (unlikely(ret < 0)) {
+                netdev_warn(dev->net, "Failed to read reg index 0x%08x: %d\=
+n",
+                            index, ret);
+                return ret;
+        }
+
+        le32_to_cpus(&buf);
+        *data =3D buf;
+
+        return ret;
+}
+
+
+static int __must_check smsc95xx_eeprom_confirm_not_busy(struct usbnet *dev=
+)
+{
+        unsigned long start_time =3D jiffies;
+        u32 val;
+        int ret;
+
+        do {
+                ret =3D smsc95xx_read_reg(dev, E2P_CMD, &val);
+                if (ret < 0) {
+                        netdev_warn(dev->net, "Error reading E2P_CMD\n");
+                        return ret;
+                }
+
+                if (!(val & E2P_CMD_BUSY_))
+                        return 0;
+        ......
+}
+---------------------------------------------------------------------------=
+--------------------------------------
+
+In a special situation, local variable "buf" is not initialized with
+"fn" function invocation. And the ret is bigger than zero, and buf is
+assigned to "*data". In its parent function -
+smsc95xx_eeprom_confirm_not_busy, KMSAN reports "uninit-value" when
+accessing variable "val".
+Note, due to the lack of testing environment, I don't know the
+concrete reason for the uninitialization of "buf" local variable.
+
+The reason for such different crash behaviors is that the event -
+"buf" is not initialized is random when
+"__smsc75xx_read_reg/__smsc95xx_read_reg" is invoked.
+
+## Patch
+
+diff --git a/drivers/net/usb/smsc75xx.c b/drivers/net/usb/smsc75xx.c
+index 4353b370249f..a8e500d92285 100644
+--- a/drivers/net/usb/smsc75xx.c
++++ b/drivers/net/usb/smsc75xx.c
+@@ -76,7 +76,7 @@ static int smsc75xx_phy_gig_workaround(struct usbnet *dev=
+);
+ static int __must_check __smsc75xx_read_reg(struct usbnet *dev, u32 index,
+                                            u32 *data, int in_pm)
+ {
+-       u32 buf;
++       u32 buf =3D 0;
+        int ret;
+        int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
+
+diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
+index 4c8ee1cff4d4..dae3be723e0c 100644
+--- a/drivers/net/usb/smsc95xx.c
++++ b/drivers/net/usb/smsc95xx.c
+@@ -70,7 +70,7 @@ MODULE_PARM_DESC(turbo_mode, "Enable multiple frames
+per Rx transaction");
+ static int __must_check __smsc95xx_read_reg(struct usbnet *dev, u32 index,
+                                            u32 *data, int in_pm)
+ {
+-       u32 buf;
++       u32 buf =3D 0;
+        int ret;
+        int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
+
+If you can have any issues with this statement or our information is
+useful to you, please let us know. Thanks very much.
+
+[1] =E2=80=9CKMSAN: uninit-value in smsc75xx_read_eeprom (2)=E2=80=9D - url
+[2] =E2=80=9CKMSAN: uninit-value in smsc95xx_read_eeprom (2)=E2=80=9D - URL
+[3] "KMSAN: uninit-value in smsc75xx_bind" -
+[4] "KMSAN: uninit-value in smsc95xx_reset" -
+[5] "KMSAN: uninit-value in smsc95xx_wait_eeprom (2)" -
+
+--
+My best regards to you.
+
+     No System Is Safe!
+     Dongliang Mu
