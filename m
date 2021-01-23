@@ -2,244 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B493017FB
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Jan 2021 20:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290AD30181B
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Jan 2021 21:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726277AbhAWTPN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Jan 2021 14:15:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
+        id S1726382AbhAWUAe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Jan 2021 15:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725910AbhAWTPE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Jan 2021 14:15:04 -0500
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00F0C061788
-        for <linux-usb@vger.kernel.org>; Sat, 23 Jan 2021 11:14:23 -0800 (PST)
-Received: by mail-wr1-x44a.google.com with SMTP id s15so457054wrt.14
-        for <linux-usb@vger.kernel.org>; Sat, 23 Jan 2021 11:14:23 -0800 (PST)
+        with ESMTP id S1726333AbhAWUAF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Jan 2021 15:00:05 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6582C06174A;
+        Sat, 23 Jan 2021 11:59:24 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id e70so8699684ote.11;
+        Sat, 23 Jan 2021 11:59:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=o1eOFs5oNL2umkEC7rPLLY1ov2RvMZvjKlnj+a/DUFs=;
-        b=ALG4zl7njX5XG2rO3sPLf8UrFLkZVZy+Tw+zgwww3YUd0ny0Z7Aw0LxbRB6HRECAC0
-         obum1wRs5jsWx/dK8tluHgwhl8MFCeX5lrVvfwO7RQ9LuUe1YXuD7hybdTiWFbxlPm5j
-         yOEoMieSX50k3gAQB3zcZnRmrOhRhdOy0Rv6yBNgrFHBxAWTRC+AnSvVOAIzeKR4c/58
-         5e1XBKa+byoqas4J4BBHPwqXNgzEX/J9MKtYC4qad0PUibR14dQNWXCTC5Rst6DNjm0o
-         RBmkyCleqcgpI5zAdgps6VyUoCtfI9LlZwB8XBmGvwQhf4I60GPx3yRsSHSVVGysI7jc
-         fQFw==
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=RKGzAur+y3+nJ5jXzUKb7w9ee7p9f06Xime5DftgMSs=;
+        b=j/wCcZLTM8+WMp2+pNbuJhXeZGrpi8mq3kNzRq9VUMN1EBPyT/DKktj0ZaoJ9h1haC
+         6daMMfhlcmZn4dBqSnG62vdaX4FSVPwneH63O/HnwPUKSswQ1vlJT9atlkQdCFEFFnFe
+         pGndqU6VUIZuiVBmkP42AR4OADWmKGtPKpjkfMgVAJ0dENZHAPVUxO/Rn6krjK9fXNDs
+         2xs3V5xkZt+B4hiK8WMhP5Jis9n+zllEQl0Xzv0bpD/+KuHLqy/TIvDvQZWk8Dlexxm/
+         5/LuUeW7FLcB8EWwzBeyodyZzwKQ7TtfqyDSdZ88p7MrLosC8DgAej0k1i6rx5w5QOWC
+         1F0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=o1eOFs5oNL2umkEC7rPLLY1ov2RvMZvjKlnj+a/DUFs=;
-        b=DRnvmSxvpSJuNIk7j+H+09NU5WBSvA6izLSBeM6sUylD3TUyiJVAmuiabOuCQAde6K
-         3cJbaHfjL+aKVB8vtkeqeFGbqw5B0HOHZbLCIp3abJdk3UTqaHBWGn9PHBCp9oV59T4y
-         qxZkoJe4kyHqr3H1U56+iUg+jRJnCB/F9sRCWoweIFnBiUnjVVmHVai9+47kTbiTEU9y
-         LhcWV13aSZD6mfnCyqYpmhT29RaDNxq/RR8rP9mviyQKM1i4Vcx9TtT/wPh9gNt/UTFs
-         fEtjb+vbwtSYriEV0/VA29va6uXGJd6uZot0r7E6Cwbui/63/j6gsx+eFvqOzRjZc5Ta
-         7YMA==
-X-Gm-Message-State: AOAM5311UlFivyLDjQZ9hdeFtQ/P6mMNPMBqKSZqaGY4fL5l+b9i017q
-        EEZF0qJ2mtYzins6qUWEqvkr/8GpE7CxqUKG
-X-Google-Smtp-Source: ABdhPJxoSNKnuwqqX8UQzjUWtGe+6lTl5my1nsOVcKE4riBQPh95l6NNxvsY7iAR+9UYwvRY+IIxVWoBvTKifte3
-Sender: "andreyknvl via sendgmr" <andreyknvl@andreyknvl3.muc.corp.google.com>
-X-Received: from andreyknvl3.muc.corp.google.com ([2a00:79e0:15:13:7220:84ff:fe09:7e9d])
- (user=andreyknvl job=sendgmr) by 2002:a05:600c:258:: with SMTP id
- 24mr9099807wmj.161.1611429262381; Sat, 23 Jan 2021 11:14:22 -0800 (PST)
-Date:   Sat, 23 Jan 2021 20:14:17 +0100
-In-Reply-To: <c8937266c4a5da073ac81cd471b18d869c984dfe.1611429174.git.andreyknvl@google.com>
-Message-Id: <f4c650c94ae2b910e38819d51109cd5f0b251a2a.1611429174.git.andreyknvl@google.com>
-Mime-Version: 1.0
-References: <c8937266c4a5da073ac81cd471b18d869c984dfe.1611429174.git.andreyknvl@google.com>
-X-Mailer: git-send-email 2.30.0.280.ga3ce27912f-goog
-Subject: [PATCH 2/2] usb: raw-gadget: update documentation and Kconfig
-From:   Andrey Konovalov <andreyknvl@google.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=RKGzAur+y3+nJ5jXzUKb7w9ee7p9f06Xime5DftgMSs=;
+        b=tn3nPKZXOtxSviazV8SABUb50BeMLd6FqKdLcBII85qa9C4ca4Jr3C07YHAHuI6jR9
+         7sxLgZbz+9Z5CGv64s+Lp8TTbpCMMamlG0mBtILVny98PbmLSvalpptyvpzqQ7/jlwuh
+         FLSbqwe+/IEOiqRbHyuC47ICz1XFYIa/UOxYTWzhQ0LUqNklZNyG9+ciEC8uNMEQ65SI
+         6shNXa2P6jWaz2wtp7fesl8qABY4leWuoY6C2b1DFnOVmZDpedcwxz/b5IsE/8OtORsv
+         1nxEr3Nji27yeq3vrkR5tJWrZ5nkUiiLXekEFgoWYpxQxej08FGdK9o0IxRJm41tWZno
+         Ve9w==
+X-Gm-Message-State: AOAM530FvOHKt12fg6oSzvIXhibGoT/hryiBYtafOtXcLEKNgWLw7ARp
+        HMw0QyFsA7ZkJlx53oCaptD38RAktJXI6A==
+X-Google-Smtp-Source: ABdhPJxLmNEcWgjNR4EtnORMpzbRoLzFZ2D5bYXP0FH9yMwJR7kjxXBufJvQtyoTf4jnN6P3IIs7vA==
+X-Received: by 2002:a9d:3bb7:: with SMTP id k52mr7733113otc.251.1611431963846;
+        Sat, 23 Jan 2021 11:59:23 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p11sm2435002oif.55.2021.01.23.11.59.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Jan 2021 11:59:22 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v6 0/3] AMS, Collision Avoidance, and Protocol Error
+To:     Kyle Tso <kyletso@google.com>, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, hdegoede@redhat.com
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210114145053.1952756-1-kyletso@google.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <7b9188ca-4608-c50f-e678-2d175433dfa2@roeck-us.net>
+Date:   Sat, 23 Jan 2021 11:59:21 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20210114145053.1952756-1-kyletso@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Update Raw Gadget documentation and Kconfig. Make the description more
-precise and clear, fix typos and grammar mistakes, and do other cleanups.
+On 1/14/21 6:50 AM, Kyle Tso wrote:
+> v5 https://lore.kernel.org/r/20210105163927.1376770-1-kyletso@google.com
+> 
+> "usb: typec: tcpm: AMS and Collision Avoidance"
+>  - removed the signed-off
+>  - modified the coding style suggested from Heikki
+>  - added FR_SWAP AMS handling
+> 
+> "usb: typec: tcpm: Protocol Error handling"
+>  - removed the signed-off
+>  - modified the coding style suggested from Heikki
+>  - modified more coding style problems (line wrapping limit)
+> 
+> "usb: typec: tcpm: Respond Wait if VDM state machine is running"
+>  - no change
+> 
+> -------------------------------------------------------------------
+> 
+> Kyle Tso (3):
+>   usb: typec: tcpm: AMS and Collision Avoidance
+>   usb: typec: tcpm: Protocol Error handling
+>   usb: typec: tcpm: Respond Wait if VDM state machine is running
+> 
+>  drivers/usb/typec/tcpm/tcpm.c | 1001 +++++++++++++++++++++++++++------
+>  include/linux/usb/pd.h        |    2 +
+>  include/linux/usb/tcpm.h      |    4 +
+>  3 files changed, 829 insertions(+), 178 deletions(-)
+> 
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- Documentation/usb/raw-gadget.rst  | 102 ++++++++++++++++--------------
- drivers/usb/gadget/legacy/Kconfig |  13 ++--
- 2 files changed, 65 insertions(+), 50 deletions(-)
+For the series:
 
-diff --git a/Documentation/usb/raw-gadget.rst b/Documentation/usb/raw-gadget.rst
-index 68d879a8009e..818a1648b387 100644
---- a/Documentation/usb/raw-gadget.rst
-+++ b/Documentation/usb/raw-gadget.rst
-@@ -2,83 +2,93 @@
- USB Raw Gadget
- ==============
- 
--USB Raw Gadget is a kernel module that provides a userspace interface for
--the USB Gadget subsystem. Essentially it allows to emulate USB devices
--from userspace. Enabled with CONFIG_USB_RAW_GADGET. Raw Gadget is
--currently a strictly debugging feature and shouldn't be used in
--production, use GadgetFS instead.
-+USB Raw Gadget is a gadget driver that gives userspace low-level control over
-+the gadget's communication process.
-+
-+Like any other gadget driver, Raw Gadget implements USB devices via the
-+USB gadget API. Unlike most gadget drivers, Raw Gadget does not implement
-+any concrete USB functions itself but requires userspace to do that.
-+
-+Raw Gadget is currently a strictly debugging feature and should not be used
-+in production. Use GadgetFS instead.
-+
-+Enabled with CONFIG_USB_RAW_GADGET.
- 
- Comparison to GadgetFS
- ~~~~~~~~~~~~~~~~~~~~~~
- 
--Raw Gadget is similar to GadgetFS, but provides a more low-level and
--direct access to the USB Gadget layer for the userspace. The key
--differences are:
-+Raw Gadget is similar to GadgetFS but provides more direct access to the
-+USB gadget layer for userspace. The key differences are:
- 
--1. Every USB request is passed to the userspace to get a response, while
-+1. Raw Gadget passes every USB request to userspace to get a response, while
-    GadgetFS responds to some USB requests internally based on the provided
--   descriptors. However note, that the UDC driver might respond to some
--   requests on its own and never forward them to the Gadget layer.
-+   descriptors. Note that the UDC driver might respond to some requests on
-+   its own and never forward them to the gadget layer.
- 
--2. GadgetFS performs some sanity checks on the provided USB descriptors,
--   while Raw Gadget allows you to provide arbitrary data as responses to
--   USB requests.
-+2. Raw Gadget allows providing arbitrary data as responses to USB requests,
-+   while GadgetFS performs sanity checks on the provided USB descriptors.
-+   This makes Raw Gadget suitable for fuzzing by providing malformed data as
-+   responses to USB requests.
- 
- 3. Raw Gadget provides a way to select a UDC device/driver to bind to,
--   while GadgetFS currently binds to the first available UDC.
-+   while GadgetFS currently binds to the first available UDC. This allows
-+   having multiple Raw Gadget instances bound to different UDCs.
- 
- 4. Raw Gadget explicitly exposes information about endpoints addresses and
--   capabilities allowing a user to write UDC-agnostic gadgets.
-+   capabilities. This allows the user to write UDC-agnostic gadgets.
- 
--5. Raw Gadget has ioctl-based interface instead of a filesystem-based one.
-+5. Raw Gadget has an ioctl-based interface instead of a filesystem-based
-+   one.
- 
- Userspace interface
- ~~~~~~~~~~~~~~~~~~~
- 
--To create a Raw Gadget instance open /dev/raw-gadget. Multiple raw-gadget
--instances (bound to different UDCs) can be used at the same time. The
--interaction with the opened file happens through the ioctl() calls, see
--comments in include/uapi/linux/usb/raw_gadget.h for details.
-+The user can interact with Raw Gadget by opening ``/dev/raw-gadget`` and
-+issuing ioctl calls; see the comments in include/uapi/linux/usb/raw_gadget.h
-+for details. Multiple Raw Gadget instances (bound to different UDCs) can be
-+used at the same time.
- 
--The typical usage of Raw Gadget looks like:
-+A typical usage scenario of Raw Gadget:
- 
--1. Open Raw Gadget instance via /dev/raw-gadget.
--2. Initialize the instance via USB_RAW_IOCTL_INIT.
--3. Launch the instance with USB_RAW_IOCTL_RUN.
--4. In a loop issue USB_RAW_IOCTL_EVENT_FETCH calls to receive events from
--   Raw Gadget and react to those depending on what kind of USB device
--   needs to be emulated.
-+1. Create a Raw Gadget instance by opening ``/dev/raw-gadget``.
-+2. Initialize the instance via ``USB_RAW_IOCTL_INIT``.
-+3. Launch the instance with ``USB_RAW_IOCTL_RUN``.
-+4. In a loop issue ``USB_RAW_IOCTL_EVENT_FETCH`` to receive events from
-+   Raw Gadget and react to those depending on what kind of USB gadget must
-+   be implemented.
- 
--Note, that some UDC drivers have fixed addresses assigned to endpoints, and
--therefore arbitrary endpoint addresses can't be used in the descriptors.
--Nevertheles, Raw Gadget provides a UDC-agnostic way to write USB gadgets.
--Once a USB_RAW_EVENT_CONNECT event is received via USB_RAW_IOCTL_EVENT_FETCH,
--the USB_RAW_IOCTL_EPS_INFO ioctl can be used to find out information about
--endpoints that the UDC driver has. Based on that information, the user must
--chose UDC endpoints that will be used for the gadget being emulated, and
--properly assign addresses in endpoint descriptors.
-+Note that some UDC drivers have fixed addresses assigned to endpoints, and
-+therefore arbitrary endpoint addresses cannot be used in the descriptors.
-+Nevertheless, Raw Gadget provides a UDC-agnostic way to write USB gadgets.
-+Once ``USB_RAW_EVENT_CONNECT`` is received via ``USB_RAW_IOCTL_EVENT_FETCH``,
-+``USB_RAW_IOCTL_EPS_INFO`` can be used to find out information about the
-+endpoints that the UDC driver has. Based on that, userspace must choose UDC
-+endpoints for the gadget and assign addresses in the endpoint descriptors
-+correspondingly.
- 
--You can find usage examples (along with a test suite) here:
-+Raw Gadget usage examples and a test suite:
- 
- https://github.com/xairy/raw-gadget
- 
- Internal details
- ~~~~~~~~~~~~~~~~
- 
--Currently every endpoint read/write ioctl submits a USB request and waits until
--its completion. This is the desired mode for coverage-guided fuzzing (as we'd
--like all USB request processing happen during the lifetime of a syscall),
--and must be kept in the implementation. (This might be slow for real world
--applications, thus the O_NONBLOCK improvement suggestion below.)
-+Every Raw Gadget endpoint read/write ioctl submits a USB request and waits
-+until its completion. This is done deliberately to assist with coverage-guided
-+fuzzing by having a single syscall fully process a single USB request. This
-+feature must be kept in the implementation.
- 
- Potential future improvements
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
--- Report more events (suspend, resume, etc.) through USB_RAW_IOCTL_EVENT_FETCH.
-+- Report more events (suspend, resume, etc.) through
-+  ``USB_RAW_IOCTL_EVENT_FETCH``.
- 
--- Support O_NONBLOCK I/O.
-+- Support ``O_NONBLOCK`` I/O. This would be another mode of operation, where
-+  Raw Gadget would not wait until the completion of each USB request.
- 
- - Support USB 3 features (accept SS endpoint companion descriptor when
--  enabling endpoints; allow providing stream_id for bulk transfers).
-+  enabling endpoints; allow providing ``stream_id`` for bulk transfers).
- 
--- Support ISO transfer features (expose frame_number for completed requests).
-+- Support ISO transfer features (expose ``frame_number`` for completed
-+  requests).
-diff --git a/drivers/usb/gadget/legacy/Kconfig b/drivers/usb/gadget/legacy/Kconfig
-index f02c38b32a2b..11dd6e8adc8a 100644
---- a/drivers/usb/gadget/legacy/Kconfig
-+++ b/drivers/usb/gadget/legacy/Kconfig
-@@ -515,10 +515,15 @@ config USB_G_WEBCAM
- config USB_RAW_GADGET
- 	tristate "USB Raw Gadget"
- 	help
--	  USB Raw Gadget is a kernel module that provides a userspace interface
--	  for the USB Gadget subsystem. Essentially it allows to emulate USB
--	  devices from userspace. See Documentation/usb/raw-gadget.rst for
--	  details.
-+	  USB Raw Gadget is a gadget driver that gives userspace low-level
-+	  control over the gadget's communication process.
-+
-+	  Like any other gadget driver, Raw Gadget implements USB devices via
-+	  the USB gadget API. Unlike most gadget drivers, Raw Gadget does not
-+	  implement any concrete USB functions itself but requires userspace
-+	  to do that.
-+
-+	  See Documentation/usb/raw-gadget.rst for details.
- 
- 	  Say "y" to link the driver statically, or "m" to build a
- 	  dynamically linked module called "raw_gadget".
--- 
-2.30.0.280.ga3ce27912f-goog
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
 
