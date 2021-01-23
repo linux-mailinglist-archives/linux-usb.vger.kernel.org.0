@@ -2,60 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 290AD30181B
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Jan 2021 21:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D6A301824
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Jan 2021 21:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726382AbhAWUAe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Jan 2021 15:00:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
+        id S1726484AbhAWUDO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Jan 2021 15:03:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726333AbhAWUAF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Jan 2021 15:00:05 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6582C06174A;
-        Sat, 23 Jan 2021 11:59:24 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id e70so8699684ote.11;
-        Sat, 23 Jan 2021 11:59:24 -0800 (PST)
+        with ESMTP id S1726487AbhAWUCg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Jan 2021 15:02:36 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF5AC06174A;
+        Sat, 23 Jan 2021 12:01:54 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id m13so2281109oig.8;
+        Sat, 23 Jan 2021 12:01:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=RKGzAur+y3+nJ5jXzUKb7w9ee7p9f06Xime5DftgMSs=;
-        b=j/wCcZLTM8+WMp2+pNbuJhXeZGrpi8mq3kNzRq9VUMN1EBPyT/DKktj0ZaoJ9h1haC
-         6daMMfhlcmZn4dBqSnG62vdaX4FSVPwneH63O/HnwPUKSswQ1vlJT9atlkQdCFEFFnFe
-         pGndqU6VUIZuiVBmkP42AR4OADWmKGtPKpjkfMgVAJ0dENZHAPVUxO/Rn6krjK9fXNDs
-         2xs3V5xkZt+B4hiK8WMhP5Jis9n+zllEQl0Xzv0bpD/+KuHLqy/TIvDvQZWk8Dlexxm/
-         5/LuUeW7FLcB8EWwzBeyodyZzwKQ7TtfqyDSdZ88p7MrLosC8DgAej0k1i6rx5w5QOWC
-         1F0A==
+        bh=sSFxrwccIA6nA6eNeAwDwFwmaBJAImwDdSSEc08nxvo=;
+        b=X1OcpTSe4jCAu1BTSEqa/voi3MK8NDHanLQlKLKFyO85c1T51mxMr4qtF2GRHlZuLh
+         68qcsF/b1z3z+MY6x8H9xzdyM/26yAtVBqsTibndgDtonLC8uwhPAQYwsr052jO5nH71
+         X+jLunUSbqwp+IiV4qUd5mZZ66uqcjLuEcFmKKaAtB8ab1c9pVSfYcKeYt0KRn90WVHX
+         gb2SIsrqRPiKvcW7JGZ4Slqvo7EUJiDx3GfrCG6QwMiXG4gfxqv9NVScLuoAfanPSdtq
+         3KMPRRrcAZDpiZBZoVcC989vqOHggxzL90Itl68UU9to2sJs878TgQrd//ItFQzaoSor
+         B9xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=RKGzAur+y3+nJ5jXzUKb7w9ee7p9f06Xime5DftgMSs=;
-        b=tn3nPKZXOtxSviazV8SABUb50BeMLd6FqKdLcBII85qa9C4ca4Jr3C07YHAHuI6jR9
-         7sxLgZbz+9Z5CGv64s+Lp8TTbpCMMamlG0mBtILVny98PbmLSvalpptyvpzqQ7/jlwuh
-         FLSbqwe+/IEOiqRbHyuC47ICz1XFYIa/UOxYTWzhQ0LUqNklZNyG9+ciEC8uNMEQ65SI
-         6shNXa2P6jWaz2wtp7fesl8qABY4leWuoY6C2b1DFnOVmZDpedcwxz/b5IsE/8OtORsv
-         1nxEr3Nji27yeq3vrkR5tJWrZ5nkUiiLXekEFgoWYpxQxej08FGdK9o0IxRJm41tWZno
-         Ve9w==
-X-Gm-Message-State: AOAM530FvOHKt12fg6oSzvIXhibGoT/hryiBYtafOtXcLEKNgWLw7ARp
-        HMw0QyFsA7ZkJlx53oCaptD38RAktJXI6A==
-X-Google-Smtp-Source: ABdhPJxLmNEcWgjNR4EtnORMpzbRoLzFZ2D5bYXP0FH9yMwJR7kjxXBufJvQtyoTf4jnN6P3IIs7vA==
-X-Received: by 2002:a9d:3bb7:: with SMTP id k52mr7733113otc.251.1611431963846;
-        Sat, 23 Jan 2021 11:59:23 -0800 (PST)
+        bh=sSFxrwccIA6nA6eNeAwDwFwmaBJAImwDdSSEc08nxvo=;
+        b=Yhlxx5CAmM4TJIPNUbnysr8djfKOg2mx8i1tfnR21UIbECzGRuiAvnbbquPXsnEM6k
+         +c2I+4Nyoxhpn2F59iDjn/yTUR+CCq4RgW1RE1X5GfdkMWmikVp+GJNulyKiJPS4nFDo
+         7smrTG3MsrpZR9nuUjVT5jgm7E1Lt1RUjMwVAzThen3RkubmVFqxeNbnGuivgopvURMr
+         dnSJ+nWdrrMRq/etbGmBhILs5qZXQ42QimK2AyNfhosbn/AzodZMgpG5Nm9QQFmddTj7
+         V5NRrZkOEAvwhkNDJj+0krhyEjzRUq/ALQnqz53cfW2mxJXyoBR3OQyNzmn3xipBqSOw
+         yU6g==
+X-Gm-Message-State: AOAM533IIKF5U1CkerMU4E/YyS7k7AC2KoHWOCZgM6UrVGo3dvfaexyw
+        kHk8Hxw8xHgkCdew7PPcajvgqGxc+ZGq8g==
+X-Google-Smtp-Source: ABdhPJyJiA0HeIrb7PAbeMUbtKRGXiXVmYZHhZU+fHbgIxgm59dsla1X/VP8F/ISWPiAqOdMcgLa/Q==
+X-Received: by 2002:aca:b909:: with SMTP id j9mr7105871oif.113.1611432113820;
+        Sat, 23 Jan 2021 12:01:53 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p11sm2435002oif.55.2021.01.23.11.59.22
+        by smtp.gmail.com with ESMTPSA id q26sm1022836otg.28.2021.01.23.12.01.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Jan 2021 11:59:22 -0800 (PST)
+        Sat, 23 Jan 2021 12:01:53 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v6 0/3] AMS, Collision Avoidance, and Protocol Error
+Subject: Re: [PATCH] usb: typec: tcpm: Create legacy PDOs for PD2 connection
 To:     Kyle Tso <kyletso@google.com>, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, hdegoede@redhat.com
+        gregkh@linuxfoundation.org
 Cc:     badhri@google.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20210114145053.1952756-1-kyletso@google.com>
+References: <20210115163311.391332-1-kyletso@google.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -100,12 +100,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <7b9188ca-4608-c50f-e678-2d175433dfa2@roeck-us.net>
-Date:   Sat, 23 Jan 2021 11:59:21 -0800
+Message-ID: <6a38dedc-ac11-99db-8b7b-4ef5e5e17780@roeck-us.net>
+Date:   Sat, 23 Jan 2021 12:01:51 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210114145053.1952756-1-kyletso@google.com>
+In-Reply-To: <20210115163311.391332-1-kyletso@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -113,38 +113,139 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 1/14/21 6:50 AM, Kyle Tso wrote:
-> v5 https://lore.kernel.org/r/20210105163927.1376770-1-kyletso@google.com
+On 1/15/21 8:33 AM, Kyle Tso wrote:
+> If the port partner is PD2, the PDOs of the local port should follow the
+> format defined in PD2 Spec. Dynamically modify the pre-defined PD3 PDOs
+> and transform them into PD2 format before sending them to the PD2 port
+> partner.
 > 
-> "usb: typec: tcpm: AMS and Collision Avoidance"
->  - removed the signed-off
->  - modified the coding style suggested from Heikki
->  - added FR_SWAP AMS handling
-> 
-> "usb: typec: tcpm: Protocol Error handling"
->  - removed the signed-off
->  - modified the coding style suggested from Heikki
->  - modified more coding style problems (line wrapping limit)
-> 
-> "usb: typec: tcpm: Respond Wait if VDM state machine is running"
->  - no change
-> 
-> -------------------------------------------------------------------
-> 
-> Kyle Tso (3):
->   usb: typec: tcpm: AMS and Collision Avoidance
->   usb: typec: tcpm: Protocol Error handling
->   usb: typec: tcpm: Respond Wait if VDM state machine is running
-> 
->  drivers/usb/typec/tcpm/tcpm.c | 1001 +++++++++++++++++++++++++++------
->  include/linux/usb/pd.h        |    2 +
->  include/linux/usb/tcpm.h      |    4 +
->  3 files changed, 829 insertions(+), 178 deletions(-)
-> 
+> Signed-off-by: Kyle Tso <kyletso@google.com>
 
-For the series:
+I don't like this too much, but I don't have a better idea. Thus,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Guenter Roeck <linux@roeckus.net>
 
 Guenter
+
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 62 +++++++++++++++++++++++++++++------
+>  include/linux/usb/pd.h        |  1 +
+>  2 files changed, 53 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 22a85b396f69..1220ab1ed47d 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -911,13 +911,47 @@ static int tcpm_set_pwr_role(struct tcpm_port *port, enum typec_role role)
+>  	return 0;
+>  }
+>  
+> +/*
+> + * Transform the PDO to be compliant to PD rev2.0.
+> + * Return 0 if the PDO type is not defined in PD rev2.0.
+> + * Otherwise, return the converted PDO.
+> + */
+> +static u32 tcpm_forge_legacy_pdo(struct tcpm_port *port, u32 pdo, enum typec_role role)
+> +{
+> +	switch (pdo_type(pdo)) {
+> +	case PDO_TYPE_FIXED:
+> +		if (role == TYPEC_SINK)
+> +			return pdo & ~PDO_FIXED_FRS_CURR_MASK;
+> +		else
+> +			return pdo & ~PDO_FIXED_UNCHUNK_EXT;
+> +	case PDO_TYPE_VAR:
+> +	case PDO_TYPE_BATT:
+> +		return pdo;
+> +	case PDO_TYPE_APDO:
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+>  static int tcpm_pd_send_source_caps(struct tcpm_port *port)
+>  {
+>  	struct pd_message msg;
+> -	int i;
+> +	u32 pdo;
+> +	unsigned int i, nr_pdo = 0;
+>  
+>  	memset(&msg, 0, sizeof(msg));
+> -	if (!port->nr_src_pdo) {
+> +
+> +	for (i = 0; i < port->nr_src_pdo; i++) {
+> +		if (port->negotiated_rev >= PD_REV30) {
+> +			msg.payload[nr_pdo++] =	cpu_to_le32(port->src_pdo[i]);
+> +		} else {
+> +			pdo = tcpm_forge_legacy_pdo(port, port->src_pdo[i], TYPEC_SOURCE);
+> +			if (pdo)
+> +				msg.payload[nr_pdo++] = cpu_to_le32(pdo);
+> +		}
+> +	}
+> +
+> +	if (!nr_pdo) {
+>  		/* No source capabilities defined, sink only */
+>  		msg.header = PD_HEADER_LE(PD_CTRL_REJECT,
+>  					  port->pwr_role,
+> @@ -930,10 +964,8 @@ static int tcpm_pd_send_source_caps(struct tcpm_port *port)
+>  					  port->data_role,
+>  					  port->negotiated_rev,
+>  					  port->message_id,
+> -					  port->nr_src_pdo);
+> +					  nr_pdo);
+>  	}
+> -	for (i = 0; i < port->nr_src_pdo; i++)
+> -		msg.payload[i] = cpu_to_le32(port->src_pdo[i]);
+>  
+>  	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
+>  }
+> @@ -941,10 +973,22 @@ static int tcpm_pd_send_source_caps(struct tcpm_port *port)
+>  static int tcpm_pd_send_sink_caps(struct tcpm_port *port)
+>  {
+>  	struct pd_message msg;
+> -	int i;
+> +	u32 pdo;
+> +	unsigned int i, nr_pdo = 0;
+>  
+>  	memset(&msg, 0, sizeof(msg));
+> -	if (!port->nr_snk_pdo) {
+> +
+> +	for (i = 0; i < port->nr_snk_pdo; i++) {
+> +		if (port->negotiated_rev >= PD_REV30) {
+> +			msg.payload[nr_pdo++] =	cpu_to_le32(port->snk_pdo[i]);
+> +		} else {
+> +			pdo = tcpm_forge_legacy_pdo(port, port->snk_pdo[i], TYPEC_SINK);
+> +			if (pdo)
+> +				msg.payload[nr_pdo++] = cpu_to_le32(pdo);
+> +		}
+> +	}
+> +
+> +	if (!nr_pdo) {
+>  		/* No sink capabilities defined, source only */
+>  		msg.header = PD_HEADER_LE(PD_CTRL_REJECT,
+>  					  port->pwr_role,
+> @@ -957,10 +1001,8 @@ static int tcpm_pd_send_sink_caps(struct tcpm_port *port)
+>  					  port->data_role,
+>  					  port->negotiated_rev,
+>  					  port->message_id,
+> -					  port->nr_snk_pdo);
+> +					  nr_pdo);
+>  	}
+> -	for (i = 0; i < port->nr_snk_pdo; i++)
+> -		msg.payload[i] = cpu_to_le32(port->snk_pdo[i]);
+>  
+>  	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
+>  }
+> diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
+> index bb9a782e1411..88f64bce5dea 100644
+> --- a/include/linux/usb/pd.h
+> +++ b/include/linux/usb/pd.h
+> @@ -225,6 +225,7 @@ enum pd_pdo_type {
+>  #define PDO_FIXED_EXTPOWER		BIT(27) /* Externally powered */
+>  #define PDO_FIXED_USB_COMM		BIT(26) /* USB communications capable */
+>  #define PDO_FIXED_DATA_SWAP		BIT(25) /* Data role swap supported */
+> +#define PDO_FIXED_UNCHUNK_EXT		BIT(24) /* Unchunked Extended Message supported (Source) */
+>  #define PDO_FIXED_FRS_CURR_MASK		(BIT(24) | BIT(23)) /* FR_Swap Current (Sink) */
+>  #define PDO_FIXED_FRS_CURR_SHIFT	23
+>  #define PDO_FIXED_VOLT_SHIFT		10	/* 50mV units */
+> 
 
