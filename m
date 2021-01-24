@@ -2,83 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B0E301D39
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Jan 2021 16:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7C7301D46
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Jan 2021 16:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726256AbhAXPcp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 24 Jan 2021 10:32:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38348 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725910AbhAXPcp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 24 Jan 2021 10:32:45 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0B6B422E03;
-        Sun, 24 Jan 2021 15:32:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611502324;
-        bh=PwDoPYgW9LO7FgyOPZr87SZGeRjmGhl4USmSUv2EDqI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=TKCS4nas60Y+YAYAq8P0xAnbR2GMi3WSIPW9J0A1X6QyA1B0RkMjl8eu2szSJNCh/
-         JjsAhxVVDay23vUU/iQM3Pst3Fedc4/9MnRHfZ3MU3XP9UX05gY7z+cPbCKKckIAG+
-         CdNy8Sd/kbsK24jZvcMtqbCfta+q8YcJwsy2khn8bUHmDkd19VwGLK6lNEOADoLyLG
-         YpCPW36VRrvVZMRuHE/sqmIAWybXXVSVMBRFqpz9hyW5XN0c9+IPqP0nzIDnkK5yb3
-         fmNxGV2nYs3ZNAqLL51TpzVDwlDiTREMG8QdtIXMtXiiPDHDHiiigrz5zzonjsD8fO
-         NBYg6uy84pCvg==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Daehwan Jung <dh10.jung@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: usb: dwc3: gadget: skip pullup and set_speed after suspend
-In-Reply-To: <1611113968-102424-1-git-send-email-dh10.jung@samsung.com>
-References: <CGME20210120035123epcas2p2048f6d9896bd21f19d939a56fe0b6610@epcas2p2.samsung.com>
- <1611113968-102424-1-git-send-email-dh10.jung@samsung.com>
-Date:   Sun, 24 Jan 2021 17:31:57 +0200
-Message-ID: <87ft2qgxle.fsf@kernel.org>
+        id S1726428AbhAXPoV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 24 Jan 2021 10:44:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726041AbhAXPoU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Jan 2021 10:44:20 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95408C061574;
+        Sun, 24 Jan 2021 07:43:40 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id 63so10302841oty.0;
+        Sun, 24 Jan 2021 07:43:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=OqwvTJLGtu4pJpQ/5EdykNUW6RSfQ1alfn8/LK/4nB8=;
+        b=WP9QhpLdTwUXVEqqc1dhfhU91+loHYSl6PoX1B/brVPFjQK7TgJsVcYNV15LD0FvRt
+         RJulQpioAZUbVZSXFEoqcBf3KHalFdl1GDH1nVYn5lhZvrKAp2GAokhgFgKK6v3PXzOU
+         xHhN26+EssGrbRaatjD0kvAX53olWc7cczwvxQXBArFPZan3eH0jSJgsXdZ9CffDclrP
+         ZKXXWJYXSsKv1u4RfigDKfBzrBuzFWNNRNAYw2QLA0F9XdRO/nY0IDU+gRj0hEB9aj/G
+         oNYvhNFozcPfdlIAOQMN2luSuXNJ29XyoZjUEqRqymhWrieLk6hmsWJekc044m+7EEW/
+         jXaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=OqwvTJLGtu4pJpQ/5EdykNUW6RSfQ1alfn8/LK/4nB8=;
+        b=KKtxDlG0Yg5HbFk5/7/ay82eK9uhVT51t3HIN2DkB+Dhtq+vo7U/K6ap4Fdf98NqWv
+         EqNymlYb2Ce3IX9BvQ1NA6huybXTTsYiqGUV2RIXxRtZB6fWzKNwXNeINoKYpSdOkTKX
+         Hj/ogOFhiDDoqRdyTYyP3tEwYUpbjI2wGPreblBsKm0MF7+9kE7sGHZcwf0hZ1HePCs5
+         oxdck1LjE8/ZfHLv2klcyJzitNysOHg6KEZdEPMbHfGTymNcdT+Zo39YKI0hcH89IpVq
+         pQ9Jkg4KUCHUKvMI4sDP88s05L8VszWAa/VzfywJXZmSijC9Po64J2IPO1DhOmo+sY2g
+         waxg==
+X-Gm-Message-State: AOAM530braYw5sQV4O6+1Vhrul4TOENQ4SO0sLG7N/wh4UTlz1uhOPO1
+        9GwxKiRwJs2QT1f1VIe42Z8=
+X-Google-Smtp-Source: ABdhPJyCyZ2Ku/WNOwAhTL/IevsEKD5XapdgFZoajoJm7btAi7Gcg55vQrFBpGsPXSFWmNJ6JC6oBw==
+X-Received: by 2002:a05:6830:1f02:: with SMTP id u2mr9895300otg.124.1611503020098;
+        Sun, 24 Jan 2021 07:43:40 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m10sm910815otp.19.2021.01.24.07.43.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 24 Jan 2021 07:43:39 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 24 Jan 2021 07:43:38 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     angkery <angkery@163.com>
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Junlin Yang <yangjunlin@yulong.com>
+Subject: Re: [PATCH v3 1/2] usb: typec: tcpci_maxim: remove redundant
+ assignment
+Message-ID: <20210124154338.GB131753@roeck-us.net>
+References: <20210124143853.1630-1-angkery@163.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210124143853.1630-1-angkery@163.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Sun, Jan 24, 2021 at 10:38:53PM +0800, angkery wrote:
+> From: Junlin Yang <yangjunlin@yulong.com>
+> 
+> PTR_ERR(chip->tcpci) has been used as a return value,
+> it is not necessary to assign it to ret, so remove it.
+> 
+> Signed-off-by: Junlin Yang <yangjunlin@yulong.com>
 
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Hi,
-
-Daehwan Jung <dh10.jung@samsung.com> writes:
-> Sometimes dwc3_gadget_pullup and dwc3_gadget_set_speed are called after
-> entering suspend. That's why it needs to check whether suspend
->
-> 1. dwc3 sends disconnect uevent and turn off. (suspend)
-> 2. Platform side causes pullup or set_speed(e.g., adbd closes ffs node)
-> 3. It causes unexpected behavior like ITMON error.
-
-please collect dwc3 trace events showing this problem.
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmANku0RHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQYN6w//d5LpZhv51FK2WtDCapufYLZnl2Khk4g+
-z4+23MAeN4veZJrVShGxmTbFT1n1sqhhfVLXEFtZhJrKx6HBkWrHsswpSxzUlp6J
-KLhYoh+qs3j1/ZZtxgISSnV/uSMzKbtucmZbumROGG6+EeEU0CAZL4QKzCvXZnbv
-6ikvlrEknbZaE3aEwI29A0PSnzsyB4kMEfEfW/W5msuUj57ZtoTqIdW2SDQdW312
-XquDw+bUS7bIUz2RQ4IdiZRvgVm43BZp4V1P9wXS95omC+3eAoiS/muc2zGxG5Id
-rC5M1aiyJ9zB260yolO9oe88eUIqsxomPdXMXL262icv1vufN4RqpnrURj227+dp
-gV6cp1P8PudgLqsLmDzfb6BmU74IsTFZDx+0YhfUVyvFQJPoogyye7OMRl6fAmE/
-SuabQzSFZ7kqBMGGdJ22v9EZfcT6XFTSTHTeD33zf4OHfcAnCcEenTliMS9p7rGg
-qeSXA6CrYr8S+BFzflOQWyxfbpnU/uOBLo19XY799bUoyALIoSToRR8A3XCnoFqx
-tQqBQi4MkJnVuELW+sQ/VaoFs852fEtgpXUBTrAQkqWEdCWx48akGryHU+C5gBoP
-4Gnge7HA90wgOjCDOufCD9vyn9ggR5z4xSjeWmIl8JoIW2BXKrhAzv4kon4kvVhl
-xExlQxCZZEw=
-=DQQC
------END PGP SIGNATURE-----
---=-=-=--
+> ---
+> v3:remove the newline modification.
+> 
+>  drivers/usb/typec/tcpm/tcpci_maxim.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
+> index 3192663..7f54f51a 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
+> @@ -461,7 +461,6 @@ static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id
+>  	chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
+>  	if (IS_ERR(chip->tcpci)) {
+>  		dev_err(&client->dev, "TCPCI port registration failed");
+> -		ret = PTR_ERR(chip->tcpci);
+>  		return PTR_ERR(chip->tcpci);
+>  	}
+>  	chip->port = tcpci_get_tcpm_port(chip->tcpci);
+> -- 
+> 1.9.1
+> 
