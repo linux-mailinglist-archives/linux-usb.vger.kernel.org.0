@@ -2,120 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 331B7301E30
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Jan 2021 19:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C76301E79
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Jan 2021 20:38:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726206AbhAXSjZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sun, 24 Jan 2021 13:39:25 -0500
-Received: from mail.v3.sk ([167.172.186.51]:49978 "EHLO shell.v3.sk"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726007AbhAXSjY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 24 Jan 2021 13:39:24 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id CB01BDF61F;
-        Sun, 24 Jan 2021 18:34:41 +0000 (UTC)
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Ux9EEQKzQmVj; Sun, 24 Jan 2021 18:34:39 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 53DF7E0AC6;
-        Sun, 24 Jan 2021 18:34:39 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at zimbra.v3.sk
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id joA8Xy5qonPc; Sun, 24 Jan 2021 18:34:39 +0000 (UTC)
-Received: from localhost (unknown [109.183.109.54])
-        by zimbra.v3.sk (Postfix) with ESMTPSA id 169D2DF61F;
-        Sun, 24 Jan 2021 18:34:39 +0000 (UTC)
-Date:   Sun, 24 Jan 2021 19:38:38 +0100
-From:   Lubomir Rintel <lkundrak@v3.sk>
-To:     Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org,
-        sam@ravnborg.org, peter@stuge.se, markus@raatikainen.cc,
-        pontus.fuchs@gmail.com, hudson@trmm.net, th020394@gmail.com
-Subject: Re: [PATCH v4 0/3] Generic USB Display driver
-Message-ID: <20210124183838.GA1873250@demiurge.local>
-References: <20210120170033.38468-1-noralf@tronnes.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <20210120170033.38468-1-noralf@tronnes.org>
-Content-Transfer-Encoding: 8BIT
+        id S1726537AbhAXTfL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 24 Jan 2021 14:35:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41628 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726424AbhAXTea (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 24 Jan 2021 14:34:30 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id B6AA422D50;
+        Sun, 24 Jan 2021 19:33:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611516829;
+        bh=C+y+pezuZ00Ku1JY1auVzje+lmNnVWZFVE/+kO/3Lbs=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=gy8cnYo449QVCPOZ4eFVpgmP2LdR7sfrHDU14IWIyejR9OjWdy4Jtxk7csLa0o4zz
+         AteLOcYsf3vtvSnCs27cgbqn4E9lFR/K7+aIUgOgz3rciUJN7MdyQE8wXwE3mYRPKz
+         CczyXsDeffLj0JC6wk7RubwSvfpgLeOifyQg4UcNanY1gJ1VQLfvy2HZ7AmLhYqLOb
+         rSbaY22e1iW3PxqHWYOkNZkOUOgJxgEZ1McIM9hDaUTXGM24pxBcYFyphXjWBIA9fj
+         tynraL+jZWpAVIpORPft7dIqxf/+EL5NN2PAbWK7KziQaCaBLbtYDR7uA8oALiD+Mc
+         FmCXUVgNYWC0Q==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id B2208652F1;
+        Sun, 24 Jan 2021 19:33:49 +0000 (UTC)
+Subject: Re: [GIT PULL] USB driver fixes for 5.11-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YA1urjFySDgiW7QE@kroah.com>
+References: <YA1urjFySDgiW7QE@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YA1urjFySDgiW7QE@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.11-rc5
+X-PR-Tracked-Commit-Id: ef02684c4e67d8c35ac83083564135bc7b1d3445
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 8f3bfd2181ecb920e5f51e2a16c1ef65d6f50a5f
+Message-Id: <161151682972.23923.7258555399781067077.pr-tracker-bot@kernel.org>
+Date:   Sun, 24 Jan 2021 19:33:49 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 06:00:30PM +0100, Noralf Trønnes wrote:
-> Hi,
-> 
-> A while back I had the idea to turn a Raspberry Pi Zero into a $5
-> USB to HDMI/SDTV/DSI/DPI display adapter.
-> 
-> The reason for calling it 'Generic' is so anyone can make a USB
-> display/adapter against this driver, all that's needed is to add a USB
-> vid:pid.
-> 
-> Unfortunately I've had some compounding health problems that have
-> severally limited the time I can spend in front of a computer. For this
-> reason I've decided to keep the gadget driver out-of-tree and focus on
-> getting the host driver merged first.
-> 
-> See the wiki[1] for more information and images for the Raspberry Pi
-> Zero/4.
-> 
-> One big change this time is that I've followed Peter Stuge's advice to
-> not let DRM stuff leak into the USB protocol. This has made the protocol
-> easier to understand just from reading the header file.
-> 
-> Noralf.
-> 
-> [1] https://github.com/notro/gud/wiki
+The pull request you sent on Sun, 24 Jan 2021 13:57:18 +0100:
 
-The patch set:
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.11-rc5
 
-Tested-by: Lubomir Rintel <lkundrak@v3.sk>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/8f3bfd2181ecb920e5f51e2a16c1ef65d6f50a5f
 
-Works like a charm with this board [1], though it didn't impress the girls
-as much as I hoped. Code here [2], picture here [3].
+Thank you!
 
-[1] https://www.banggood.com/LILYGO-TTGO-T-Display-GD32-RISC-V-32-bit-Core-Minimal-Development-Board-1_14-IPS-p-1652870.html?rmmds=search&cur_warehouse=CN
-[2] https://github.com/hackerspace/libopencm3-gf32v-examples/commit/7ef51b31b9
-[3] https://people.freedesktop.org/~lkundrak/lilygo.jpeg
-
-Had to apply a fix for the drm_connector_enum_list[] ommission I mentioned
-elsewhere, and that I've now noticed you've noted previously.
-
-Take care
-Lubo
-
-> 
-> 
-> Noralf Trønnes (3):
->   drm/uapi: Add USB connector type
->   drm/probe-helper: Check epoch counter in output_poll_execute()
->   drm: Add Generic USB Display driver
-> 
->  MAINTAINERS                         |   8 +
->  drivers/gpu/drm/Kconfig             |   2 +
->  drivers/gpu/drm/Makefile            |   1 +
->  drivers/gpu/drm/drm_probe_helper.c  |   7 +-
->  drivers/gpu/drm/gud/Kconfig         |  14 +
->  drivers/gpu/drm/gud/Makefile        |   4 +
->  drivers/gpu/drm/gud/gud_connector.c | 722 ++++++++++++++++++++++++++++
->  drivers/gpu/drm/gud/gud_drv.c       | 620 ++++++++++++++++++++++++
->  drivers/gpu/drm/gud/gud_internal.h  | 148 ++++++
->  drivers/gpu/drm/gud/gud_pipe.c      | 472 ++++++++++++++++++
->  include/drm/gud.h                   | 356 ++++++++++++++
->  include/uapi/drm/drm_mode.h         |   1 +
->  12 files changed, 2354 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/gpu/drm/gud/Kconfig
->  create mode 100644 drivers/gpu/drm/gud/Makefile
->  create mode 100644 drivers/gpu/drm/gud/gud_connector.c
->  create mode 100644 drivers/gpu/drm/gud/gud_drv.c
->  create mode 100644 drivers/gpu/drm/gud/gud_internal.h
->  create mode 100644 drivers/gpu/drm/gud/gud_pipe.c
->  create mode 100644 include/drm/gud.h
-> 
-> -- 
-> 2.23.0
-> 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
