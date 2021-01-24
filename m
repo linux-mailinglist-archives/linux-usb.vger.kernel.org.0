@@ -2,79 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 587C5301A7B
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Jan 2021 09:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF2B301ACD
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Jan 2021 10:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726651AbhAXIPG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sun, 24 Jan 2021 03:15:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48482 "EHLO mail.kernel.org"
+        id S1726710AbhAXJBM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 24 Jan 2021 04:01:12 -0500
+Received: from aposti.net ([89.234.176.197]:43768 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726551AbhAXIO4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 24 Jan 2021 03:14:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 0497B22CF6
-        for <linux-usb@vger.kernel.org>; Sun, 24 Jan 2021 08:14:17 +0000 (UTC)
-Received: by pdx-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id EB3A182545; Sun, 24 Jan 2021 08:14:16 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 211325] usbhid.mousepoll kernel cmd option not working
-Date:   Sun, 24 Jan 2021 08:14:16 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: greg@kroah.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-211325-208809-hWXY5LcxPV@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-211325-208809@https.bugzilla.kernel.org/>
-References: <bug-211325-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726623AbhAXJBH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 24 Jan 2021 04:01:07 -0500
+Date:   Sun, 24 Jan 2021 08:38:13 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [RE-RESEND PATCH 1/4] usb: musb: Fix runtime PM race
+ =?UTF-8?Q?in=0D=0A?= musb_queue_resume_work
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Cc:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tony Lindgren <tony@atomide.com>, od@zcrc.me,
+        linux-mips@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Message-Id: <PZJFNQ.QM2LFFEGRUXN3@crapouillou.net>
+In-Reply-To: <72e48343-f87e-5fed-809c-41995197019e@gmail.com>
+References: <20210123142502.16980-1-paul@crapouillou.net>
+        <72e48343-f87e-5fed-809c-41995197019e@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=211325
+Hi Sergei,
 
---- Comment #1 from Greg Kroah-Hartman (greg@kroah.com) ---
-On Sun, Jan 24, 2021 at 04:35:13AM +0000, bugzilla-daemon@bugzilla.kernel.org
-wrote:
-> https://bugzilla.kernel.org/show_bug.cgi?id=211325
+
+Le sam. 23 janv. 2021 à 19:41, Sergei Shtylyov 
+<sergei.shtylyov@gmail.com> a écrit :
+> On 1/23/21 5:24 PM, Paul Cercueil wrote:
 > 
->             Bug ID: 211325
->            Summary: usbhid.mousepoll kernel cmd option not working
->            Product: Drivers
->            Version: 2.5
->     Kernel Version: 5.11-rc3
->           Hardware: ARM
->                 OS: Linux
->               Tree: Mainline
->             Status: NEW
->           Severity: low
->           Priority: P1
->          Component: USB
->           Assignee: drivers_usb@kernel-bugs.kernel.org
->           Reporter: mathias.steiger@gmail.com
->         Regression: No
+>>  musb_queue_resume_work() would call the provided callback if the 
+>> runtime
+>>  PM status was 'active'. Otherwise, it would enqueue the request if 
+>> the
+>>  hardware was still suspended (musb->is_runtime_suspended is true).
+>> 
+>>  This causes a race with the runtime PM handlers, as it is possible 
+>> to be
+>>  in the case where the runtime PM status is not yet 'active', but the
+>>  hardware has been awaken (PM resume function has been called).
 > 
-> It doesn't matter what value I use, it is treated as if unset (i.e. "0").
+>    Awakened. :-)
 
-Please email the linux-input@vger.kernel.org list about this.
+Oops. Hopefully Bin or Greg can fix it when merging (if I don't need to 
+v2, that is to say - feedback welcome).
 
--- 
-You may reply to this email to add a comment.
+Cheers,
+-Paul
 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+>>  When hitting the race, the resume work was not enqueued, which 
+>> probably
+>>  triggered other bugs further down the stack. For instance, a telnet
+>>  connection on Ingenic SoCs would result in a 50/50 chance of a
+>>  segmentation fault somewhere in the musb code.
+>> 
+>>  Rework the code so that either we call the callback directly if
+>>  (musb->is_runtime_suspended == 0), or enqueue the query otherwise.
+>> 
+>>  Fixes: ea2f35c01d5e ("usb: musb: Fix sleeping function called from 
+>> invalid context for hdrc glue")
+>>  Cc: stable@vger.kernel.org # v4.9+
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  Reviewed-by: Tony Lindgren <tony@atomide.com>
+>>  Tested-by: Tony Lindgren <tony@atomide.com>
+> [...]
+> 
+> 
+> MBR, Sergei
+
+
