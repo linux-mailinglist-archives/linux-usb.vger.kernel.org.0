@@ -2,126 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6568C301E9D
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Jan 2021 21:08:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D8C301ED2
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Jan 2021 21:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726168AbhAXUHv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 24 Jan 2021 15:07:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
+        id S1726550AbhAXUwY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 24 Jan 2021 15:52:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725986AbhAXUHt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Jan 2021 15:07:49 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C50C061574
-        for <linux-usb@vger.kernel.org>; Sun, 24 Jan 2021 12:07:08 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id s2so8557557otp.5
-        for <linux-usb@vger.kernel.org>; Sun, 24 Jan 2021 12:07:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=+wHtxvtC1jI/nW4txRp0ZVFK13xVD/e5tlgnnpJhrT4=;
-        b=B/QLKbHQOWdsoFbigku1iPJMvRLlLy+1TmxPksBRa+/6POLJXMaf5d5r6YsgrPiEoo
-         7EIQUKkWyEyYrAofrEJUMo5LgTxq9C5ggTi2ZUdomWqah2G2pILJ7/ZzL2SkQHFdnrnU
-         KmJX5+7ArMjRrsVwmpma1f6kpwEADEHM5cZ8vJ2cubwQNRuO9FzRld5NVoZmLl1bx64/
-         4+LvkXd1VFbh979akhsraEnpq25toxFpyGxoDBY2u5lI3qKDo1HcpCV6JHSMffFXw0AI
-         ePvFODKlkCcezc/DrDPL8f1RU+Pn8RU3taLT+iHvlOl4kmH9hcTIBx9Y1iNSMzxrK1/Q
-         RiMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=+wHtxvtC1jI/nW4txRp0ZVFK13xVD/e5tlgnnpJhrT4=;
-        b=LtyiJ9nmJJRKULQrsU4S0b8+Zo2v5aZOwOFQg5iLfKZU+/17flITzKeSz/3rrqKEmj
-         I4ApYH6TkLoB5w+b9jRupMckEGX6HlDMPxeTQRe19E2qaJABzOAfQqYJFse1Bh91nNZ4
-         bXR1z76V44I+rr5o+2z07NU770pL3n0vU/+W0MkojrKaX00fS7+BlKaCYim9eBbmZfu3
-         EpPOqJ85oSNdvMvdjZt/Rfh/SwsrKGha+lT/ZjUrvVfH8mmTUGVfHRKgjFPpwzwyoRw+
-         uDcu6I1IoicJBkeYiFCAgu1RsJkSkDKFkkJZ/2tz3ry7rAUjmbCl+Ry6WQtCkAAwKzb7
-         OQJw==
-X-Gm-Message-State: AOAM533DjXVRsauKsYbxXU8S0XcPG4NyNyBBYbet+i62T10jyGLMfLSc
-        Gwp+gM/nnYqtGauZ/QP1kR+gxw==
-X-Google-Smtp-Source: ABdhPJwkjeguUQQq8ExODbw+xBALYdofTAdvUgePeXABnj2QpaJq5Qo/5Rp/MaDPboyRQtCXP5fbNw==
-X-Received: by 2002:a05:6830:2152:: with SMTP id r18mr10445402otd.296.1611518827927;
-        Sun, 24 Jan 2021 12:07:07 -0800 (PST)
-Received: from eggly.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id k15sm3058068otp.10.2021.01.24.12.07.06
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Sun, 24 Jan 2021 12:07:07 -0800 (PST)
-Date:   Sun, 24 Jan 2021 12:06:54 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@eggly.anvils
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     Hugh Dickins <hughd@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>, Thierry Reding <treding@nvidia.com>,
-        Saravana Kannan <saravanak@google.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: Infinite recursion in device_reorder_to_tail() due to circular
- device links
-In-Reply-To: <YA0sOFj6VjQ8LUL2@kroah.com>
-Message-ID: <alpine.LSU.2.11.2101241205190.2585@eggly.anvils>
-References: <X/ycQpu7NIGI969v@gerhold.net> <CAJZ5v0gAsZ45O8mv-gz0UvbyxnKA6fQBYvambBYEH6OSk3-m3g@mail.gmail.com> <X/3kveeVrb35qsvb@kroah.com> <alpine.LSU.2.11.2101231524290.1540@eggly.anvils> <YA0sOFj6VjQ8LUL2@kroah.com>
-User-Agent: Alpine 2.11 (LSU 23 2013-08-11)
+        with ESMTP id S1726535AbhAXUwP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Jan 2021 15:52:15 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CA0C061573
+        for <linux-usb@vger.kernel.org>; Sun, 24 Jan 2021 12:51:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=rZu2N0bPbN0l5Ml3IhwAB/RSLO7PwqBP9V+cJaEHt6A=; b=EtGLctS+r80RcHPE9ZeG9ZRiV5
+        X7kUTYRyLFXlPHf5oaGpkMrWof3qQgnxqiknkb5TYNesrHA1GZWj3rvt80DNrr1nW3MVZw4INLZM5
+        j/ZThN0VFWy2EmZpoXiCr2p6tvSyzDosN48aifUppiL6W1AZJ66kzTl0StJxmyAhfT/rW4iIQoQAQ
+        ATHdJnhP4rVX/im2AOP1viWmJQ26sjeENxo8H+JI3nVlyY2hUXqLuLYEd8CrCgaw2pNl1GK1rzUnE
+        6pqHQ+JQRt2O219gLaumNxrC88ohZ1ouVlP8WF33X5cxHXFHsrlak0wrV4gnJ6XK/KVxXUeDgYKkG
+        9xHulbJA==;
+Received: from [2a01:799:95f:4600:a14b:28a5:23ac:14a3] (port=59614)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1l3mLn-0002ur-Bu; Sun, 24 Jan 2021 21:51:11 +0100
+Subject: Re: [PATCH v4 0/3] Generic USB Display driver
+To:     Lubomir Rintel <lkundrak@v3.sk>
+Cc:     dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org,
+        sam@ravnborg.org, peter@stuge.se, markus@raatikainen.cc,
+        pontus.fuchs@gmail.com, hudson@trmm.net, th020394@gmail.com
+References: <20210120170033.38468-1-noralf@tronnes.org>
+ <20210124183838.GA1873250@demiurge.local>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <70a91ae8-15eb-e8d8-1ed9-923b09106bfa@tronnes.org>
+Date:   Sun, 24 Jan 2021 21:51:05 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <20210124183838.GA1873250@demiurge.local>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 24 Jan 2021, Greg Kroah-Hartman wrote:
-> On Sat, Jan 23, 2021 at 03:37:30PM -0800, Hugh Dickins wrote:
-> > On Tue, 12 Jan 2021, Greg Kroah-Hartman wrote:
-> > > On Tue, Jan 12, 2021 at 03:32:04PM +0100, Rafael J. Wysocki wrote:
-> > > > On Mon, Jan 11, 2021 at 7:46 PM Stephan Gerhold <stephan@gerhold.net> wrote:
-> > > > >
-> > > > > Hi,
-> > > > >
-> > > > > since 5.11-rc1 I get kernel crashes with infinite recursion in
-> > > > > device_reorder_to_tail() in some situations... It's a bit complicated to
-> > > > > explain so I want to apologize in advance for the long mail. :)
-> > > > >
-> > > > >   Kernel panic - not syncing: kernel stack overflow
-> > > > >   CPU: 1 PID: 33 Comm: kworker/1:1 Not tainted 5.11.0-rc3 #1
-> > > > >   Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-> > > > >   Call trace:
-> > > > >    ...
-> > > > >    device_reorder_to_tail+0x4c/0xf0
-> > > > >    device_reorder_to_tail+0x98/0xf0
-> > > > >    device_reorder_to_tail+0x60/0xf0
-> > > > >    device_reorder_to_tail+0x60/0xf0
-> > > > >    device_reorder_to_tail+0x60/0xf0
-> > > > >    ...
-> > > > >
-> > > > > The crash happens only in 5.11 with commit 5b6164d3465f ("driver core:
-> > > > > Reorder devices on successful probe"). It stops happening when I revert
-> > > > > this commit.
-> > > > 
-> > > > Thanks for the report!
-> > > > 
-> > > > Greg, please revert commit 5b6164d3465f, it clearly is not an
-> > > > improvement, at least at this point.
-> > > 
-> > > Now reverted, thanks.
-> > > 
-> > > greg k-h
-> > 
-> > I think that there has been a misunderstanding here: although
-> > 5b6164d3465f ("driver core: Reorder devices on successful probe")
-> > has been reverted from linux-next (thank you), it has not yet been
-> > reverted from 5.11-rc, and still causing problems there (in my case,
-> > not the infinite recursion Stephan reported in this thread, but the
-> > ThinkPad rmi4 suspend failure that I reported in another thread).
+
+
+Den 24.01.2021 19.38, skrev Lubomir Rintel:
+> On Wed, Jan 20, 2021 at 06:00:30PM +0100, Noralf Trønnes wrote:
+>> Hi,
+>>
+>> A while back I had the idea to turn a Raspberry Pi Zero into a $5
+>> USB to HDMI/SDTV/DSI/DPI display adapter.
+>>
+>> The reason for calling it 'Generic' is so anyone can make a USB
+>> display/adapter against this driver, all that's needed is to add a USB
+>> vid:pid.
+>>
+>> Unfortunately I've had some compounding health problems that have
+>> severally limited the time I can spend in front of a computer. For this
+>> reason I've decided to keep the gadget driver out-of-tree and focus on
+>> getting the host driver merged first.
+>>
+>> See the wiki[1] for more information and images for the Raspberry Pi
+>> Zero/4.
+>>
+>> One big change this time is that I've followed Peter Stuge's advice to
+>> not let DRM stuff leak into the USB protocol. This has made the protocol
+>> easier to understand just from reading the header file.
+>>
+>> Noralf.
+>>
+>> [1] https://github.com/notro/gud/wiki
 > 
-> It will be sent to Linus in a few hours, thanks, so should show up in
-> 5.11-rc5.  I had other patches to go along with this to send him at the
-> same time :)
+> The patch set:
+> 
+> Tested-by: Lubomir Rintel <lkundrak@v3.sk>
+> 
+> Works like a charm with this board [1], though it didn't impress the girls
+> as much as I hoped. Code here [2], picture here [3].
+> 
 
-And indeed it's now in, thanks Greg: I'm sorry for being importunate,
-the misunderstanding was mine.
+I have wondered what color display resolution it is possible to drive
+over USB full speed. I can understand that your PoC wasn't that
+impressive since it doesn't use DMA to drive the SPI bus.
 
-Hugh
+The new $4 Raspberry Pi Pico that came out this week looks interesting
+as a USB interface board for tiny panels. It can drive DPI panels
+directly, has 2 cores @133MHz, 264K SRAM and USB full speed. Maybe lz4
+decompression is even possible. Another good thing is that the board
+will be around for a long time.
+
+Thanks for testing, I have limited bandwith these days so I couldn't do
+a test on an MCU myself.
+
+Noralf.
+
+> [1] https://www.banggood.com/LILYGO-TTGO-T-Display-GD32-RISC-V-32-bit-Core-Minimal-Development-Board-1_14-IPS-p-1652870.html?rmmds=search&cur_warehouse=CN
+> [2] https://github.com/hackerspace/libopencm3-gf32v-examples/commit/7ef51b31b9
+> [3] https://people.freedesktop.org/~lkundrak/lilygo.jpeg
+> 
+> Had to apply a fix for the drm_connector_enum_list[] ommission I mentioned
+> elsewhere, and that I've now noticed you've noted previously.
+> 
+> Take care
+> Lubo
+> 
+>>
+>>
+>> Noralf Trønnes (3):
+>>   drm/uapi: Add USB connector type
+>>   drm/probe-helper: Check epoch counter in output_poll_execute()
+>>   drm: Add Generic USB Display driver
+>>
+>>  MAINTAINERS                         |   8 +
+>>  drivers/gpu/drm/Kconfig             |   2 +
+>>  drivers/gpu/drm/Makefile            |   1 +
+>>  drivers/gpu/drm/drm_probe_helper.c  |   7 +-
+>>  drivers/gpu/drm/gud/Kconfig         |  14 +
+>>  drivers/gpu/drm/gud/Makefile        |   4 +
+>>  drivers/gpu/drm/gud/gud_connector.c | 722 ++++++++++++++++++++++++++++
+>>  drivers/gpu/drm/gud/gud_drv.c       | 620 ++++++++++++++++++++++++
+>>  drivers/gpu/drm/gud/gud_internal.h  | 148 ++++++
+>>  drivers/gpu/drm/gud/gud_pipe.c      | 472 ++++++++++++++++++
+>>  include/drm/gud.h                   | 356 ++++++++++++++
+>>  include/uapi/drm/drm_mode.h         |   1 +
+>>  12 files changed, 2354 insertions(+), 1 deletion(-)
+>>  create mode 100644 drivers/gpu/drm/gud/Kconfig
+>>  create mode 100644 drivers/gpu/drm/gud/Makefile
+>>  create mode 100644 drivers/gpu/drm/gud/gud_connector.c
+>>  create mode 100644 drivers/gpu/drm/gud/gud_drv.c
+>>  create mode 100644 drivers/gpu/drm/gud/gud_internal.h
+>>  create mode 100644 drivers/gpu/drm/gud/gud_pipe.c
+>>  create mode 100644 include/drm/gud.h
+>>
+>> -- 
+>> 2.23.0
+>>
+> 
