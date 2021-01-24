@@ -2,117 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9FA3018F5
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Jan 2021 00:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9A030190E
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Jan 2021 01:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726485AbhAWXjF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Jan 2021 18:39:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726457AbhAWXjB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Jan 2021 18:39:01 -0500
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FBCC061786
-        for <linux-usb@vger.kernel.org>; Sat, 23 Jan 2021 15:38:21 -0800 (PST)
-Received: by mail-oo1-xc2e.google.com with SMTP id o5so2369146oop.12
-        for <linux-usb@vger.kernel.org>; Sat, 23 Jan 2021 15:38:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=Rlm8XFphD/t2Gle5s8Hwr/AAQgG7hLV82Tqn2NZu6Qg=;
-        b=XJqrNgty2eyGWWlLQczKmvOzhfipC+EHiAo88rz+txoH8wuDzBLSGWl+e9Pzvco27P
-         7YWaj3kJ5CbLthO2hM0+G+/lilTXKAObwW1iIhC7VsNFpj0BP4EVpBJe7enRXx8+PZ1k
-         Ws8N6osNrrudSSRCQg/9W0JZeTDTIW43M3l6XZLXpIGEBVArhZuWvWfWTTCQmhkOG0SJ
-         GCrqwF6QgK6a/iGq5SYjew922q9HsjmshqoKEfQ9MbAHiCjr22Pe2CeIq68bBeHXClte
-         xd+r0s6feiHuiGP/XH2PnNzqSUjfQuw6Ecz86UYKfp0xWxk0g2jjgqUAx9Cz9I/pXwz4
-         sxjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=Rlm8XFphD/t2Gle5s8Hwr/AAQgG7hLV82Tqn2NZu6Qg=;
-        b=c1OAXQ0TUBNYtX5AWI2h4j7kTfSYDwsxKH3aTAqTZD7sNL8ZWnxKbO6fuZnAbuUIaQ
-         pKa2MpcCXs0jGOFeMkup2qve5QGoCha/OErDjGuvevg4mcR+TvGeIlX/jFbpmc+fpAtO
-         1tTrq7aZnFPO0k8/HOy7Q4UcfGDREzzNRshKJTVRs9nlylLBmtgjK9PdFQYi/lCI6eyL
-         KqxZ3EbykD07398gQ/xJ6zrI1NBlz4yNAe941ABgN0AZD4LkU8xNxtbyPQckaKCg9i4Y
-         eVH+CAhxau0CFo6I4J/GLWOycy5AK+T/cHes1DT4xM2keKWX2wiqDZIDCoQ3aTacsyGr
-         mtTw==
-X-Gm-Message-State: AOAM533C+dbx/BLbc0QC65jnvg4EolNatkFUNsCrqW0sSEpi30RXrTCK
-        Mj03qzLsaG04WKiApO8wHFx8ng==
-X-Google-Smtp-Source: ABdhPJzGCIfzd8HXcNQwj27/oNpGJb66WYTWgBcl8ogRLmWoXxHlkgNqiRzMdypcuJ2Yb//kU6U1YA==
-X-Received: by 2002:a4a:81:: with SMTP id 123mr8283884ooh.46.1611445100271;
-        Sat, 23 Jan 2021 15:38:20 -0800 (PST)
-Received: from eggly.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id t16sm2583775otq.17.2021.01.23.15.38.18
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Sat, 23 Jan 2021 15:38:19 -0800 (PST)
-Date:   Sat, 23 Jan 2021 15:37:30 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@eggly.anvils
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Stephan Gerhold <stephan@gerhold.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>, Thierry Reding <treding@nvidia.com>,
-        Saravana Kannan <saravanak@google.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: Infinite recursion in device_reorder_to_tail() due to circular
- device links
-In-Reply-To: <X/3kveeVrb35qsvb@kroah.com>
-Message-ID: <alpine.LSU.2.11.2101231524290.1540@eggly.anvils>
-References: <X/ycQpu7NIGI969v@gerhold.net> <CAJZ5v0gAsZ45O8mv-gz0UvbyxnKA6fQBYvambBYEH6OSk3-m3g@mail.gmail.com> <X/3kveeVrb35qsvb@kroah.com>
-User-Agent: Alpine 2.11 (LSU 23 2013-08-11)
+        id S1726439AbhAXAW3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Jan 2021 19:22:29 -0500
+Received: from sender4-of-o53.zoho.com ([136.143.188.53]:21354 "EHLO
+        sender4-of-o53.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726433AbhAXAW2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Jan 2021 19:22:28 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1611447700; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=a1lEF8i8arpFPvQ/zu5SqUeLfiKMfwTJT+PJbQLnD0NjsfcY0F2AS3FlV4C5wZKgdyOsBKZv1HNf7DrhaN7e3u/uT13yJrOSC0eAJv0WAokfQI5mMhsmn1MBEBXQOIYBVvT2T3thnhLXRHJgodpFvTurPfL2CXNBYuAP/RsSNgc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1611447700; h=Content-Type:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=XcMH2Ny66m7Kbn41p5/5n9zui7vrj7HcB4U6PlXOG2o=; 
+        b=QMnzIg0CUl0B6jlMHBTezQF4fa2V7zbbVPh2P+ydpwP9RDso5oaAmj3SUTro8yVZ0urwIiR7NVdNzIYA7YaFGzRvXA0zhziOEtAlGg1kjBsk+coE8V1ChT4lOESx1zgn15JO7cVKIcJQyscdy5MMo7KamTnsQQkSv7eSLKuSowU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=jeremyfiggins.com;
+        spf=pass  smtp.mailfrom=jeremy@jeremyfiggins.com;
+        dmarc=pass header.from=<kernel@jeremyfiggins.com> header.from=<kernel@jeremyfiggins.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1611447700;
+        s=zoho; d=jeremyfiggins.com; i=kernel@jeremyfiggins.com;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        bh=XcMH2Ny66m7Kbn41p5/5n9zui7vrj7HcB4U6PlXOG2o=;
+        b=VZrGqO7GE6P9CpzY6M0lXmueaiHCtTxuh0OANq63ixQdzM5asdxR+rZBn9QE3KTM
+        uubRVx0b7Xz625hSEge9aT36XIK1DKVlaM3KdLlVudTRjYcLLoSOoW2qwaxkw8xygLF
+        KFDVvypS2rBlKyS5qdWxVZVItciUBEDLjbLvhIgQ=
+Received: from watson (cpe-173-174-84-94.austin.res.rr.com [173.174.84.94]) by mx.zohomail.com
+        with SMTPS id 1611447699061331.70404183235314; Sat, 23 Jan 2021 16:21:39 -0800 (PST)
+Date:   Sat, 23 Jan 2021 18:21:36 -0600
+From:   Jeremy Figgins <kernel@jeremyfiggins.com>
+To:     zaitcev@redhat.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stern@rowland.harvard.edu
+Subject: [PATCH] USB: usblp: don't call usb_set_interface if there's a single
+ alt
+Message-ID: <YAy9kJhM/rG8EQXC@watson>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-ZohoMailClient: External
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 12 Jan 2021, Greg Kroah-Hartman wrote:
-> On Tue, Jan 12, 2021 at 03:32:04PM +0100, Rafael J. Wysocki wrote:
-> > On Mon, Jan 11, 2021 at 7:46 PM Stephan Gerhold <stephan@gerhold.net> wrote:
-> > >
-> > > Hi,
-> > >
-> > > since 5.11-rc1 I get kernel crashes with infinite recursion in
-> > > device_reorder_to_tail() in some situations... It's a bit complicated to
-> > > explain so I want to apologize in advance for the long mail. :)
-> > >
-> > >   Kernel panic - not syncing: kernel stack overflow
-> > >   CPU: 1 PID: 33 Comm: kworker/1:1 Not tainted 5.11.0-rc3 #1
-> > >   Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-> > >   Call trace:
-> > >    ...
-> > >    device_reorder_to_tail+0x4c/0xf0
-> > >    device_reorder_to_tail+0x98/0xf0
-> > >    device_reorder_to_tail+0x60/0xf0
-> > >    device_reorder_to_tail+0x60/0xf0
-> > >    device_reorder_to_tail+0x60/0xf0
-> > >    ...
-> > >
-> > > The crash happens only in 5.11 with commit 5b6164d3465f ("driver core:
-> > > Reorder devices on successful probe"). It stops happening when I revert
-> > > this commit.
-> > 
-> > Thanks for the report!
-> > 
-> > Greg, please revert commit 5b6164d3465f, it clearly is not an
-> > improvement, at least at this point.
-> 
-> Now reverted, thanks.
-> 
-> greg k-h
+Some devices, such as the Winbond Electronics Corp. Virtual Com Port
+(Vendor=0416, ProdId=5011), lockup when usb_set_interface() or
+usb_clear_halt() are called. This device has only a single
+altsetting, so it should not be necessary to call usb_set_interface().
 
-I think that there has been a misunderstanding here: although
-5b6164d3465f ("driver core: Reorder devices on successful probe")
-has been reverted from linux-next (thank you), it has not yet been
-reverted from 5.11-rc, and still causing problems there (in my case,
-not the infinite recursion Stephan reported in this thread, but the
-ThinkPad rmi4 suspend failure that I reported in another thread).
+Signed-off-by: Jeremy Figgins <kernel@jeremyfiggins.com>
+---
+An alternative fix was submitted previously as:
 
-Thanks,
-Hugh
+USB: usblp: add USBLP_QUIRK_NO_SETF_INTF flag
+
+and this superscedes that patch. This is a different approach, so
+I submitted it as a new patch, rather than adding a v2 to the first
+one; I hope that was the correct thing to do in this case.
+
+ drivers/usb/class/usblp.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
+index 134dc2005ce9..c9f6e9758288 100644
+--- a/drivers/usb/class/usblp.c
++++ b/drivers/usb/class/usblp.c
+@@ -1329,14 +1329,17 @@ static int usblp_set_protocol(struct usblp *usblp, int protocol)
+ 	if (protocol < USBLP_FIRST_PROTOCOL || protocol > USBLP_LAST_PROTOCOL)
+ 		return -EINVAL;
+ 
+-	alts = usblp->protocol[protocol].alt_setting;
+-	if (alts < 0)
+-		return -EINVAL;
+-	r = usb_set_interface(usblp->dev, usblp->ifnum, alts);
+-	if (r < 0) {
+-		printk(KERN_ERR "usblp: can't set desired altsetting %d on interface %d\n",
+-			alts, usblp->ifnum);
+-		return r;
++	/* Don't unnecessarily set the interface if there's a single alt. */
++	if (usblp->intf->num_altsetting > 1) {
++		alts = usblp->protocol[protocol].alt_setting;
++		if (alts < 0)
++			return -EINVAL;
++		r = usb_set_interface(usblp->dev, usblp->ifnum, alts);
++		if (r < 0) {
++			printk(KERN_ERR "usblp: can't set desired altsetting %d on interface %d\n",
++				alts, usblp->ifnum);
++			return r;
++		}
+ 	}
+ 
+ 	usblp->bidir = (usblp->protocol[protocol].epread != NULL);
+-- 
+2.29.0
+
