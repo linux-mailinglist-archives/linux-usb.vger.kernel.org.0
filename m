@@ -2,37 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9254A303572
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 06:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D778303576
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 06:42:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388289AbhAZFmA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jan 2021 00:42:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48904 "EHLO mail.kernel.org"
+        id S2388339AbhAZFmb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 00:42:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48906 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729033AbhAYNtG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S1729004AbhAYNtG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Mon, 25 Jan 2021 08:49:06 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D050F22240;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E1A552229C;
         Mon, 25 Jan 2021 13:48:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1611582505;
-        bh=+S7YYu4UwJ/+d67bdn3tDZJmcJ+L2q4qiPherOrHwI4=;
+        bh=aM4WEZ4ICrEfWHuqpLjWreQ0Ds/6EnJrDpgFJXbEqQc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BS6Nk75EKakwUxbwZHRj2tjH7BrY8cwmGZA15o60M4Pz6our4NOjF05ytcHnkjA5N
-         isQ0iSlStROkYrYefAwKpFsPb2+z73zmMzEVHAXRy7pckJWrEF+HUZD3WGcXt6iIPj
-         U6wBfQgMKIEG9NsfB5SzA7HcOWLCW1GB3mbG0wKOC7a68AG2NTdVsmytTKLIM5ZBCb
-         avzVbBU+hAFc6En8Vqm3f2yjTrrJWPEjud+zruWEqOVJGvjlrmxnKCIQzNUKfDcHdV
-         lYEdDczvKMiRBikwHYxW3CMrVs05UDBSoBPlYCflaV6uB4EnLssjt/QmeFTF0C+n+a
-         hMUpwTwvLaUJg==
+        b=izVYI39BOonN4h0GibLNCPs2UfWop+zTIvmjeSS1xUyQayPuO+uDSi3CqsYUvz/cX
+         HvFVCjCcG4iyrFgr8+6NCCaIVy+nodqU2KiIAVANwXJaq9d0OLDIOvVY0ylfN3U6wK
+         gI0uBYqqXyOoymZG2by1GJuKiAHL+YJ0Mg9E8ScUWOov7k3nxTNkUDXCkKjS8Djs/y
+         Ijpqpe6qmn3523MiZiLjwuH8LAy5FM6TivRaufw3aMmgF7td8BK74DF1W+75do18Kp
+         43bwNJEFV8D/f64WA6D8NFdlxlJc4NTEOWUg5/eYX8PK2nJ+5G86niR0xlm62nIxrT
+         syWf9QRp1X6Tg==
 Received: from johan by xi.lan with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1l42EL-00034Q-LT; Mon, 25 Jan 2021 14:48:33 +0100
+        id 1l42EL-00034Z-Uq; Mon, 25 Jan 2021 14:48:33 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     linux-usb@vger.kernel.org
 Cc:     Pho Tran <Pho.Tran@silabs.com>, linux-kernel@vger.kernel.org,
         Johan Hovold <johan@kernel.org>
-Subject: [PATCH 2/7] USB: serial: cp210x: fix modem-control handling
-Date:   Mon, 25 Jan 2021 14:48:12 +0100
-Message-Id: <20210125134817.11749-3-johan@kernel.org>
+Subject: [PATCH 5/7] USB: serial: cp210x: clean up printk zero padding
+Date:   Mon, 25 Jan 2021 14:48:15 +0100
+Message-Id: <20210125134817.11749-6-johan@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210125134817.11749-1-johan@kernel.org>
 References: <20210125134817.11749-1-johan@kernel.org>
@@ -42,90 +42,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The vendor request used to set the flow-control settings also sets the
-state of the modem-control lines.
-
-Add state variables to keep track of the modem-control lines to avoid
-always asserting the lines whenever the flow-control settings are
-updated.
-
-This specifically also avoids asserting DTR/RTS when opening a port with
-the line speed set to B0.
+Use the 0-flag and a field width to specify zero-padding consistently in
+printk messages.
 
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/usb/serial/cp210x.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ drivers/usb/serial/cp210x.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index 7e4a09b42c99..9378b4bba34b 100644
+index 36ae44818c13..4ba3fb096bf1 100644
 --- a/drivers/usb/serial/cp210x.c
 +++ b/drivers/usb/serial/cp210x.c
-@@ -269,6 +269,8 @@ struct cp210x_port_private {
+@@ -1319,7 +1319,7 @@ static int cp210x_tiocmset_port(struct usb_serial_port *port,
+ 	if (port_priv->crtscts)
+ 		control &= ~CONTROL_WRITE_RTS;
  
- 	struct mutex		mutex;
- 	bool			crtscts;
-+	bool			dtr;
-+	bool			rts;
- };
+-	dev_dbg(&port->dev, "%s - control = 0x%.4x\n", __func__, control);
++	dev_dbg(&port->dev, "%s - control = 0x%04x\n", __func__, control);
  
- static struct usb_serial_driver cp210x_device = {
-@@ -1162,7 +1164,10 @@ static void cp210x_set_flow_control(struct tty_struct *tty,
- 	ctl_hs &= ~CP210X_SERIAL_DCD_HANDSHAKE;
- 	ctl_hs &= ~CP210X_SERIAL_DSR_SENSITIVITY;
- 	ctl_hs &= ~CP210X_SERIAL_DTR_MASK;
--	ctl_hs |= CP210X_SERIAL_DTR_SHIFT(CP210X_SERIAL_DTR_ACTIVE);
-+	if (port_priv->dtr)
-+		ctl_hs |= CP210X_SERIAL_DTR_SHIFT(CP210X_SERIAL_DTR_ACTIVE);
-+	else
-+		ctl_hs |= CP210X_SERIAL_DTR_SHIFT(CP210X_SERIAL_DTR_INACTIVE);
+ 	ret = cp210x_write_u16_reg(port, CP210X_SET_MHS, control);
  
- 	if (C_CRTSCTS(tty)) {
- 		ctl_hs |= CP210X_SERIAL_CTS_HANDSHAKE;
-@@ -1172,7 +1177,10 @@ static void cp210x_set_flow_control(struct tty_struct *tty,
- 	} else {
- 		ctl_hs &= ~CP210X_SERIAL_CTS_HANDSHAKE;
- 		flow_repl &= ~CP210X_SERIAL_RTS_MASK;
--		flow_repl |= CP210X_SERIAL_RTS_SHIFT(CP210X_SERIAL_RTS_ACTIVE);
-+		if (port_priv->rts)
-+			flow_repl |= CP210X_SERIAL_RTS_SHIFT(CP210X_SERIAL_RTS_ACTIVE);
-+		else
-+			flow_repl |= CP210X_SERIAL_RTS_SHIFT(CP210X_SERIAL_RTS_INACTIVE);
- 		port_priv->crtscts = false;
- 	}
+@@ -1353,7 +1353,7 @@ static int cp210x_tiocmget(struct tty_struct *tty)
+ 		|((control & CONTROL_RING)? TIOCM_RI  : 0)
+ 		|((control & CONTROL_DCD) ? TIOCM_CD  : 0);
  
-@@ -1287,25 +1295,29 @@ static int cp210x_tiocmset_port(struct usb_serial_port *port,
- 	u16 control = 0;
- 	int ret;
+-	dev_dbg(&port->dev, "%s - control = 0x%.2x\n", __func__, control);
++	dev_dbg(&port->dev, "%s - control = 0x%02x\n", __func__, control);
  
-+	mutex_lock(&port_priv->mutex);
-+
- 	if (set & TIOCM_RTS) {
-+		port_priv->rts = true;
- 		control |= CONTROL_RTS;
- 		control |= CONTROL_WRITE_RTS;
- 	}
- 	if (set & TIOCM_DTR) {
-+		port_priv->dtr = true;
- 		control |= CONTROL_DTR;
- 		control |= CONTROL_WRITE_DTR;
- 	}
- 	if (clear & TIOCM_RTS) {
-+		port_priv->rts = false;
- 		control &= ~CONTROL_RTS;
- 		control |= CONTROL_WRITE_RTS;
- 	}
- 	if (clear & TIOCM_DTR) {
-+		port_priv->dtr = false;
- 		control &= ~CONTROL_DTR;
- 		control |= CONTROL_WRITE_DTR;
- 	}
- 
--	mutex_lock(&port_priv->mutex);
--
- 	/*
- 	 * SET_MHS cannot be used to control RTS when auto-RTS is enabled.
- 	 * Note that RTS is still deasserted when disabling the UART on close.
+ 	return result;
+ }
 -- 
 2.26.2
 
