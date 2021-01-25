@@ -2,80 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 650F3302346
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Jan 2021 10:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 414A8302523
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Jan 2021 13:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726896AbhAYJhP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Jan 2021 04:37:15 -0500
-Received: from mga07.intel.com ([134.134.136.100]:24038 "EHLO mga07.intel.com"
+        id S1728089AbhAYMoZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Jan 2021 07:44:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39074 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726877AbhAYJgO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 25 Jan 2021 04:36:14 -0500
-IronPort-SDR: Dn95e+Aoqt+2rOkCCMsRPXYcm5NRPagHtgpvX+E8hpNJd+e6viPw9snJSJ/TYEFISlOmsXRSnm
- IvnDaqKnBdBg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9874"; a="243773061"
-X-IronPort-AV: E=Sophos;i="5.79,373,1602572400"; 
-   d="scan'208";a="243773061"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 01:33:07 -0800
-IronPort-SDR: RxOm6rrh1dDY3i+iQcTZxCM31BRr2g7l8RmphZurkcw7VIoiXSQHW/iHKoaOZoY1JJga1/IB+z
- rWb5F7YleaNw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,373,1602572400"; 
-   d="scan'208";a="471993329"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 25 Jan 2021 01:33:03 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 25 Jan 2021 11:33:02 +0200
-Date:   Mon, 25 Jan 2021 11:33:02 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     angkery <angkery@163.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Junlin Yang <yangjunlin@yulong.com>
-Subject: Re: [PATCH v3 1/2] usb: typec: tcpci_maxim: remove redundant
- assignment
-Message-ID: <20210125093302.GB1720720@kuha.fi.intel.com>
-References: <20210124143853.1630-1-angkery@163.com>
+        id S1728249AbhAYMoB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 25 Jan 2021 07:44:01 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DFAD622A84;
+        Mon, 25 Jan 2021 11:32:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611574372;
+        bh=zvGcvAbZxeaS91GmqlrL8rhrbP5aTskoffAf2GJZ5Y0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kUTFpQYw5TdsBGw4F25VVK/zFKfvZetV3mcOIPt6QI1p+V7aEh/5b3ubkGvpGWZMy
+         WFfX8JT+W7GsvCYdSEdBqvsXu6MZTD2xdSjm1WDsFsc+8dew+lnk6TwHFWNQq+K4qL
+         9BlaR2i02SEHome13p5tbBuDMdqziFKigs15ugFtqTJBT1cMFlRO0S46rk4NZIHwP+
+         066eHnXPJiDiCb/VUwL/QoxLZBZdWXzOmpKGx104PjAHMIytEOkjqFoyHJVnJwvBEz
+         s+rDBzjUQsiGlj4n8ClJis+KbQnF3gaR9+RfYRLEAurKs4XEHauhSG+DOK5oZBM/+w
+         Zjt3NnQJxSfBQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Peter Chen <peter.chen@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <treding@nvidia.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: host: ehci-tegra: fix Kconfig depencies
+Date:   Mon, 25 Jan 2021 12:32:30 +0100
+Message-Id: <20210125113248.2268952-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210124143853.1630-1-angkery@163.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jan 24, 2021 at 10:38:53PM +0800, angkery wrote:
-> From: Junlin Yang <yangjunlin@yulong.com>
-> 
-> PTR_ERR(chip->tcpci) has been used as a return value,
-> it is not necessary to assign it to ret, so remove it.
-> 
-> Signed-off-by: Junlin Yang <yangjunlin@yulong.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Selecting the chipidea driver from the old Kconfig symbol
+can lead to a missing dependency:
 
-> ---
-> v3:remove the newline modification.
-> 
->  drivers/usb/typec/tcpm/tcpci_maxim.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> index 3192663..7f54f51a 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> @@ -461,7 +461,6 @@ static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id
->  	chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
->  	if (IS_ERR(chip->tcpci)) {
->  		dev_err(&client->dev, "TCPCI port registration failed");
-> -		ret = PTR_ERR(chip->tcpci);
->  		return PTR_ERR(chip->tcpci);
->  	}
->  	chip->port = tcpci_get_tcpm_port(chip->tcpci);
-> -- 
-> 1.9.1
+WARNING: unmet direct dependencies detected for USB_CHIPIDEA
+  Depends on [m]: USB_SUPPORT [=y] && (USB_EHCI_HCD [=y] && USB_GADGET [=m] || USB_EHCI_HCD [=y] && !USB_GADGET [=m] || !USB_EHCI_HCD [=y] && USB_GADGET [=m]) && HAS_DMA [=y]
+  Selected by [y]:
+  - USB_EHCI_TEGRA [=y] && USB_SUPPORT [=y] && USB [=y] && USB_EHCI_HCD [=y] && ARCH_TEGRA [=y]
+aarch64-linux-ld: drivers/usb/chipidea/otg.o: in function `ci_handle_vbus_change':
+otg.c:(.text+0x3c8): undefined reference to `usb_gadget_vbus_connect'
+aarch64-linux-ld: otg.c:(.text+0x42c): undefined reference to `usb_gadget_vbus_disconnect'
+aarch64-linux-ld: drivers/usb/chipidea/otg.o: in function `ci_otg_work':
+otg.c:(.text+0x5d4): undefined reference to `usb_gadget_vbus_disconnect'
+...
 
-thanks,
+Duplicate the dependency to ensure that this driver can
+only be a loadable module if one of its dependencies is.
 
+Fixes: c3590c7656fb ("usb: host: ehci-tegra: Remove the driver")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/usb/host/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+index 160e5d3927e2..66b01b619ecd 100644
+--- a/drivers/usb/host/Kconfig
++++ b/drivers/usb/host/Kconfig
+@@ -269,6 +269,7 @@ config USB_EHCI_HCD_AT91
+ config USB_EHCI_TEGRA
+ 	tristate "NVIDIA Tegra HCD support"
+ 	depends on ARCH_TEGRA
++	depends on ((USB_EHCI_HCD && USB_GADGET) || (USB_EHCI_HCD && !USB_GADGET) || (!USB_EHCI_HCD && USB_GADGET)) && HAS_DMA
+ 	select USB_CHIPIDEA
+ 	select USB_CHIPIDEA_HOST
+ 	select USB_CHIPIDEA_TEGRA
 -- 
-heikki
+2.29.2
+
