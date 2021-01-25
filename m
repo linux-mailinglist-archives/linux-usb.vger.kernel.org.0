@@ -2,175 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA4630313D
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 02:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5881E30323D
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 03:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727169AbhAZB2m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Jan 2021 20:28:42 -0500
-Received: from mga12.intel.com ([192.55.52.136]:14024 "EHLO mga12.intel.com"
+        id S1729110AbhAYNvZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Jan 2021 08:51:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48902 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731163AbhAZB0e (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 25 Jan 2021 20:26:34 -0500
-IronPort-SDR: bUENstMRXUoo0jRLvwOkuuIK3bJgHT7hROuMP+4PqbVDlHvNOHEWBSLaelrPnOBDkdoQvP4y2P
- EpAaRpidY+PQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="159004710"
-X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="159004710"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 16:38:55 -0800
-IronPort-SDR: uWMYbV5nACIeJj1SCsWpnWq12M0369wGpWz2R0x70CUaDuLSSQFz3oVqVyXFvMFGi+kZae7iHV
- Oj8KzMOjNXsA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="393570747"
-Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 25 Jan 2021 16:38:54 -0800
-Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1l4CNh-0000Sj-QH; Tue, 26 Jan 2021 00:38:53 +0000
-Date:   Tue, 26 Jan 2021 08:38:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- 1d6a81519d9d27b99bca638d14eca63c31111afd
-Message-ID: <600f647f.2RqKBclKnQ98WMAL%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1729044AbhAYNtG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 25 Jan 2021 08:49:06 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CC0BA2087E;
+        Mon, 25 Jan 2021 13:48:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611582505;
+        bh=M0dDfnchJRBjOZVMlgydXFdaoa8BoZIm9o4O0Wwmktc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KZrmKyWpqu4yPsJZJa0DDJB0x8dhDk8cmzp2889/gVgmeHw7xHxTRfm7G8vCE+e7v
+         UZZ2yLjk+owFZJ8jlHJ+5b3l5pwcEAu4qfQQJPcsPhaeO1Mo5HiYq6O16qJHb+jkmK
+         pkXiLQC0513WO4gOvzgRIvnU30I1/xhTD1jYbsP6L5Uj9v42iSmfX4QygjXonDYlm6
+         8LrDWz9PeLcF6NS7oaVxSopmkycF6CLvfNcaKX7j6A7EQjqv6ivtGSuigU+LpPbpQU
+         m2Mxro9XccJgJo5fjn5ZQRSDTskT5pPVoYw9qSd65WSSgsld886oaAOeZ8h9zfxO5T
+         7wl3De5zKJNww==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1l42EL-00034M-Dh; Mon, 25 Jan 2021 14:48:33 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Pho Tran <Pho.Tran@silabs.com>, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 0/7] USB: serial: cp210x: modem-control fixes
+Date:   Mon, 25 Jan 2021 14:48:10 +0100
+Message-Id: <20210125134817.11749-1-johan@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: 1d6a81519d9d27b99bca638d14eca63c31111afd  Merge v5.11-rc5 into usb-next
+This series fixes the modem-control handling and its interaction with
+hardware flow control in the cp210x driver.
 
-elapsed time: 735m
+Johan
 
-configs tested: 113
-configs skipped: 2
+Johan Hovold (7):
+  USB: serial: cp210x: suppress modem-control errors
+  USB: serial: cp210x: fix modem-control handling
+  USB: serial: cp210x: drop shift macros
+  USB: serial: cp210x: clean up flow-control debug message
+  USB: serial: cp210x: clean up printk zero padding
+  USB: serial: cp210x: fix RTS handling
+  USB: serial: cp210x: clean up auto-RTS handling
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+ drivers/usb/serial/cp210x.c | 113 ++++++++++++++++++++++++++++--------
+ 1 file changed, 89 insertions(+), 24 deletions(-)
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-mips                         rt305x_defconfig
-arm                       mainstone_defconfig
-sh                           se7712_defconfig
-arm                        keystone_defconfig
-powerpc                     ksi8560_defconfig
-sh                          rsk7201_defconfig
-sh                           se7722_defconfig
-powerpc               mpc834x_itxgp_defconfig
-sh                   sh7770_generic_defconfig
-arm                          badge4_defconfig
-sh                        sh7757lcr_defconfig
-c6x                                 defconfig
-mips                         tb0287_defconfig
-arm                         palmz72_defconfig
-arm                         assabet_defconfig
-powerpc                       eiger_defconfig
-sh                           sh2007_defconfig
-powerpc                     stx_gp3_defconfig
-powerpc                   motionpro_defconfig
-i386                             alldefconfig
-mips                  maltasmvp_eva_defconfig
-mips                          ath25_defconfig
-sh                 kfr2r09-romimage_defconfig
-arm                            mmp2_defconfig
-ia64                      gensparse_defconfig
-arm                              alldefconfig
-mips                   sb1250_swarm_defconfig
-arm                     eseries_pxa_defconfig
-m68k                          atari_defconfig
-sh                         ecovec24_defconfig
-arm                          collie_defconfig
-arc                            hsdk_defconfig
-powerpc                     mpc83xx_defconfig
-arm                          imote2_defconfig
-m68k                            q40_defconfig
-mips                malta_qemu_32r6_defconfig
-c6x                              allyesconfig
-arm                        multi_v7_defconfig
-m68k                                defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a003-20210125
-x86_64               randconfig-a002-20210125
-x86_64               randconfig-a001-20210125
-x86_64               randconfig-a005-20210125
-x86_64               randconfig-a006-20210125
-x86_64               randconfig-a004-20210125
-i386                 randconfig-a001-20210125
-i386                 randconfig-a002-20210125
-i386                 randconfig-a004-20210125
-i386                 randconfig-a006-20210125
-i386                 randconfig-a005-20210125
-i386                 randconfig-a003-20210125
-i386                 randconfig-a013-20210125
-i386                 randconfig-a011-20210125
-i386                 randconfig-a012-20210125
-i386                 randconfig-a015-20210125
-i386                 randconfig-a014-20210125
-i386                 randconfig-a016-20210125
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+-- 
+2.26.2
 
-clang tested configs:
-x86_64               randconfig-a012-20210125
-x86_64               randconfig-a016-20210125
-x86_64               randconfig-a015-20210125
-x86_64               randconfig-a011-20210125
-x86_64               randconfig-a013-20210125
-x86_64               randconfig-a014-20210125
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
