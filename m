@@ -2,129 +2,211 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2175F303565
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 06:41:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6CC830356C
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 06:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728329AbhAZFkM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jan 2021 00:40:12 -0500
-Received: from mail-co1nam11on2081.outbound.protection.outlook.com ([40.107.220.81]:24801
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726590AbhAYJ1p (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 25 Jan 2021 04:27:45 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PgR9ZLhrBPsr3W7+qbc6usWr2BdHXd2eVcwInX1Y8oYwzgPW9JUTzRRjyDGqqhmNco8JcTpeELHDSBabfdlQjlhoCfCZhWXGZo4wfL8YQBrdAZEpUBKw7xR4xC3P5nSzbCrJ9iBc0bxFr7GGX3MD4jU3VRZKjNQn9uVx+7fw4ERrneKt3eiI2xaHs2GrGlD7MYkSherIor0NbdR4JRkku6FXB3l19hl9GIjWa2C0qh9rhaQps22xa2bdwVy8IEHn4wTtcEemRtTdEi7f4fNpS82cLAwumtO0sxPdfYGaYF8azuzZI27lXP/Piw7FBFBboZEDu7ufL+YSUYai358ghQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AHECe6md8Uxehyyn2d3+pQ3Z7bNQb0RzNUDb750MxQ8=;
- b=Qoi117YCetzfn2j1Rcy4Pbkq7b13avosuy+YN0Xo8cVikhVOQz8vaG4/Wwcpy34HJpO+7n2d94uU9lfAPPOVDxTCC6uVgsN+laymnbnLCqu22iM9YuKKVxRwXFQ2SkhzU2PEd1+k7lz5I73SWPYZGJ77jxA7EuAjAXlsPoIx1AhQbP2+NBsgWs0X9QP7pO3d5PNYp1wZ4Kv20azAEXxDoYfZb8LaG8e5Fc96jAJb3ZmpEvWpzE0QQYKUnZ3//YqDiZTS6KVv3W/BJ5aFQaDiKM69xFlvosGO37EwqNTHmJ3If13lxQMga4XjYb0eDlfzV66drwsC9oKLA/wveq6ppQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=silabs.com; dmarc=pass action=none header.from=silabs.com;
- dkim=pass header.d=silabs.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=silabs.onmicrosoft.com; s=selector2-silabs-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AHECe6md8Uxehyyn2d3+pQ3Z7bNQb0RzNUDb750MxQ8=;
- b=HpWvsS6bYW5HDLWJPEK1+zw4j4qYUUrkGbIOHtn6VtVlY9VvI7yFjU+Rs7brB6MwiR68R1L4HfFjzVCr9Kx4NkK5my/WxztDRjc3QkqjsrBf2HS/htdZ9eNvr0ojUhndSIwUhbQGxYTk9Gfgdwy9bRBJuEVCnLQNg93MJWkKQYY=
-Received: from SJ0PR11MB5008.namprd11.prod.outlook.com (2603:10b6:a03:2d5::17)
- by BY5PR11MB3910.namprd11.prod.outlook.com (2603:10b6:a03:185::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.17; Mon, 25 Jan
- 2021 09:26:55 +0000
-Received: from SJ0PR11MB5008.namprd11.prod.outlook.com
- ([fe80::589d:3fe7:733c:eb72]) by SJ0PR11MB5008.namprd11.prod.outlook.com
- ([fe80::589d:3fe7:733c:eb72%7]) with mapi id 15.20.3784.019; Mon, 25 Jan 2021
- 09:26:55 +0000
-From:   Pho Tran <Pho.Tran@silabs.com>
-To:     "johan@kernel.org" <johan@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Hung Nguyen <Hung.Nguyen@silabs.com>,
-        Tung Pham <Tung.Pham@silabs.com>
-Subject: [PATCH] USB: serial: cp210x: Add pid/vid for WSDA-200-USB
-Thread-Topic: [PATCH] USB: serial: cp210x: Add pid/vid for WSDA-200-USB
-Thread-Index: AQHW8vw4RSAQ130V60qksyLgAxTkIw==
-Date:   Mon, 25 Jan 2021 09:26:54 +0000
-Message-ID: <C3EAC35C-0CF6-481E-9532-024FFC176991@silabs.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3654.40.0.2.31)
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=silabs.com;
-x-originating-ip: [118.70.199.1]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7cd3c933-db2b-4357-f72e-08d8c1135b2e
-x-ms-traffictypediagnostic: BY5PR11MB3910:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BY5PR11MB3910AFB6D12D3385210D4DDBE3BD9@BY5PR11MB3910.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:324;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cIGp8T2CQWQ3wKdW5LQmyaPa9a9Z3r7cYgN8/VF1/LXs3y9ep2ghdbBTDvSIR7cFisqlNnQ3NfkAG3zsjddYkiq10cuc6tV4nook84Won30IHzjZWc6qh0egy+Q7zsp9AAZnxTFbCk37S18NlkLwPwfgAWF1JQKIiR5Lu8ZLBcVKbVNg43rc4WmWMeK/rshHyaTJdbkV+/ifk7FoCpO8ylJei1Aw0BkL6qPDEmbsV+U1fdUf9JgX0tpYrORw9rm+/k+Vhxh/8Drapj7vpS6IanFaSyQXD1g29nsjVjbbIofO4nx9GDnIV1Z+J087ACEw95I1J/WrMFWIwLKWutx+PgbSlBlLSM4Dqqc5tKi0HOH14X6jBulzMG21F72qBZzOXzqeKG7IEcP8fuMQbhvu+up3kIXATHDiYTT6EPVr2TZbMw0uV/EF2cyFd78jNe7J
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5008.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(376002)(39850400004)(136003)(346002)(366004)(478600001)(33656002)(4744005)(6486002)(2616005)(26005)(6512007)(5660300002)(54906003)(86362001)(186003)(2906002)(83380400001)(316002)(71200400001)(8676002)(36756003)(6506007)(4326008)(66946007)(64756008)(66476007)(66446008)(8936002)(66556008)(91956017)(76116006)(110136005)(107886003)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?JblN+/fQAhw3jL6lU1Et2zkKfR58PBQKx3cKcAJ6M2Tq3cSwT9r3ItM4Caby?=
- =?us-ascii?Q?1lHzRBWvSckEDLGEHLRAB/zX4PZBM1+Q4vVVKMeOXTWgv8cNjzw8RIXI4tJe?=
- =?us-ascii?Q?yDHL+cLeHX+SUA704y5o6fd6WA1dy65icngdJ74Jh3IEPc4jym+p/8g5bdfP?=
- =?us-ascii?Q?sQtArxhhFutxWS5ETjnhharHI7uHh1V8UYBcaGGADoIc+uSmPtsRBxAZl7P/?=
- =?us-ascii?Q?MFYBBrbVr0JIu2igfBnxZN8igo5BzlaHMCw4Ee4QCbtXImVcXplcUHWn+xga?=
- =?us-ascii?Q?NhMSf+PEdu8eYq/2oVyg9pBeSXYb2K/7y/fjl+04VA6caCRTV2cffmJRZ/9U?=
- =?us-ascii?Q?Iz0jp7dPVlfPtZIza6KcyxMT3i9G9jXzuLUevhQXaQ0amyAEg6K1nt/yA3O9?=
- =?us-ascii?Q?VMcx9kTmCyGc3Q0Np7Flhcdwo+9ZAs3ybmscNdi6ie6joO1ZHTWdvs23VRMi?=
- =?us-ascii?Q?OXrGMTX/58KcBjW7n0EV4j4/p4zK/B9wAFwm+5ABX7YyRg+WcQWl1emsjUOZ?=
- =?us-ascii?Q?R41rjvFjxqxsFDy+xrooroEZX0xsmkrOi4oXsEqcEbLbIxJRxGul06+aiAnQ?=
- =?us-ascii?Q?agB+1wV3EqiVmPzVIMl1gmNaz4SWzJWp/0RdJIl1f0dCeIDvAImiSHWVgZqC?=
- =?us-ascii?Q?9l1bny1XBLK+P+g5x7sJqvHQieOznNJhK6m0e3wDN9pZKAZm4KRnGI7DLa4b?=
- =?us-ascii?Q?bbWAzS6EH34FT5GKk9H31y8lpIjjUrsgVMehtLzeEsf9AoYV4PFJQS7NSf89?=
- =?us-ascii?Q?iXJQEgViBr1LvsU7FSyQ3MnwPhPede7skD/zoVzrvWl08sbJLGZHWv/E1/Rb?=
- =?us-ascii?Q?TQvYV+uiHEQlMpNdy6Nka+mdh3z34KhL9ocUXBwJYmENsh2y2vFOAsph5tIg?=
- =?us-ascii?Q?RjHE5czR8OriKTaxWVGd8P76IE68tzfpQYT9m4RcDex/Q64t2zA6psvPGaMQ?=
- =?us-ascii?Q?cxMv6U70UexgWXX9w2yGTMsTpWGkbVkJTGqHUgCwf5js4Wp2IxRaprvyzWaV?=
- =?us-ascii?Q?X8EAgLCtxSAj20mKZG1/e1NDmNrjt8wo4Ro7EWI283EnmN58Q3fFArQtU2uY?=
- =?us-ascii?Q?m2gi6MQX?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <7D8FFD1CD447F74EBADADFC6707A93CE@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1728277AbhAZFlE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 00:41:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727450AbhAYKTb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jan 2021 05:19:31 -0500
+Received: from mout1.freenet.de (mout1.freenet.de [IPv6:2001:748:100:40::2:3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD54C0613ED
+        for <linux-usb@vger.kernel.org>; Mon, 25 Jan 2021 02:18:26 -0800 (PST)
+Received: from [195.4.92.123] (helo=sub4.freenet.de)
+        by mout1.freenet.de with esmtpa (ID andihartmann@freenet.de) (port 25) (Exim 4.92 #3)
+        id 1l3yww-00026z-Sx; Mon, 25 Jan 2021 11:18:22 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=01019freenet.de; s=mjaymdexmjqk; h=Content-Type:In-Reply-To:MIME-Version:
+        Date:Message-ID:Subject:References:To:From:Sender:Reply-To:Cc:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=ulLjty9ZuinLfFXYnoUTiDxgHrddVW2mBXYVrdk3YfQ=; b=yfLKTCGGf49oNXbtbLa/+B5IZ
+        oG5LsAzbYC2xyAuuJYvZ+g0w7K3eePp8QHg7nt9cTazz24AubGu0jYHOzG8XCuZwag3F6008EPqwy
+        n5VR9zthX+SLkdM5F9zdSLemyquiZVGgmAMkVyXhrDUJNAFOhcc2mpesP14KJ/zwykLRRuOAiNZQo
+        zNP33QLmOxUqugIRAW2hTDECga6mW/p4wqJnGW1Lfep4F0PBB/V5EX53IQugKdRAaG6aoFPGbsoiP
+        +BnMq/THGTAwLsmlc78ZAM+GlDvywYtn9MZ6AxQrzw64xZIYoNgSwWeIls02Nt4CaJ+YxtjuF9p4w
+        MREUcxePg==;
+Received: from p200300de573c8400505400fffe15ac42.dip0.t-ipconnect.de ([2003:de:573c:8400:5054:ff:fe15:ac42]:56424 helo=mail.maya.org)
+        by sub4.freenet.de with esmtpsa (ID andihartmann@freenet.de) (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128) (port 465) (Exim 4.92 #3)
+        id 1l3yww-0004h7-Ru; Mon, 25 Jan 2021 11:18:22 +0100
+Received: internal info suppressed
+From:   Andreas Hartmann <andihartmann@01019freenet.de>
+To:     linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com
+References: <3b4e35d2-9508-e0aa-eaf8-32e524ad81c4@01019freenet.de>
+ <756e7b88-1142-4758-b8f7-a8eaf510b422@01019freenet.de>
+ <edc3c7b1-98fa-9062-5c17-426e8ad17370@01019freenet.de>
+Subject: Re: USB2 / USB3 compatibility problems: xhci_hcd 0000:00:06.0: WARN
+ Wrong bounce buffer write length: 0 != 512
+Message-ID: <7e953b15-925a-1512-4d15-c07fc03f9059@01019freenet.de>
+Date:   Mon, 25 Jan 2021 11:18:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-X-OriginatorOrg: silabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5008.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7cd3c933-db2b-4357-f72e-08d8c1135b2e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jan 2021 09:26:54.6500
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 54dbd822-5231-4b20-944d-6f4abcd541fb
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +exnoehvqEw+2tXFNIu1J/cSmtPeoETarE4KjzG/JqNo8djKdPRFXNk5dnCdEZEReXV39kDRQuckx1PyQ5pyUg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB3910
+In-Reply-To: <edc3c7b1-98fa-9062-5c17-426e8ad17370@01019freenet.de>
+Content-Type: multipart/mixed;
+ boundary="------------23D0A518B3314DAAF21E25EB"
+Content-Language: en-US
+X-Originated-At: 2003:de:573c:8400:5054:ff:fe15:ac42!56424
+X-FNSign: v=2 s=D2DB334A4C792FEF5FE966B9B79817808469EA5A167E10F0444C4ECA8938F6C2
+X-Scan-TS: Mon, 25 Jan 2021 11:18:22 +0100
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Information pid/vid of WSDA-200-USB, Lord corporation company:
-vid: 199b
-pid: ba30
+This is a multi-part message in MIME format.
+--------------23D0A518B3314DAAF21E25EB
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Signed-off-by: Pho Tran <pho.tran@silabs.com>
----
- drivers/usb/serial/cp210x.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index fbb10dfc56e3..669f52107f94 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -201,6 +201,7 @@ static const struct usb_device_id id_table[] =3D {
- 	{ USB_DEVICE(0x1901, 0x0194) },	/* GE Healthcare Remote Alarm Box */
- 	{ USB_DEVICE(0x1901, 0x0195) },	/* GE B850/B650/B450 CP2104 DP UART inter=
-face */
- 	{ USB_DEVICE(0x1901, 0x0196) },	/* GE B850 CP2105 DP UART interface */
-+	{ USB_DEVICE(0x199B, 0xBA30) }, /* LORD Corporation */
- 	{ USB_DEVICE(0x19CF, 0x3000) }, /* Parrot NMEA GPS Flight Recorder */
- 	{ USB_DEVICE(0x1ADB, 0x0001) }, /* Schweitzer Engineering C662 Cable */
- 	{ USB_DEVICE(0x1B1C, 0x1C00) }, /* Corsair USB Dongle */
---=20
-2.17.1=
+Hello!
+
+Meanwhile I found the culprit:
+
+https://www.spinics.net/lists/linux-usb/msg141467.html
+and
+https://www.spinics.net/lists/linux-usb/msg141468.html
+
+Especially the last change breaks things here completely. After removing them by 
+the attached patch, problems are gone and device works again as expected (I tested 
+with the original 24 kB bulk size which was horribly broken w/o the attached 
+patch). This means: the additional repair steps are not just breaking things but 
+are even unnecessary (it's working perfectly without those changes) here.
+
+
+I tested with 2 USB 3.1 host controllers:
+
+USB controller: Advanced Micro Devices, Inc. [AMD] Raven USB 3.1 (prog-if 30 [XHCI])
+
+05:00.3 0c03: 1022:15e0 (prog-if 30 [XHCI])
+         Subsystem: 1043:201f
+         Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- 
+Stepping- SERR- FastB2B- DisINTx+
+         Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- 
+<MAbort- >SERR- <PERR- INTx-
+         Latency: 0, Cache Line Size: 64 bytes
+         Interrupt: pin D routed to IRQ 37
+         Region 0: Memory at f7300000 (64-bit, non-prefetchable) [size=1M]
+         Capabilities: [48] Vendor Specific Information: Len=08 <?>
+         Capabilities: [50] Power Management version 3
+                 Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA 
+PME(D0+,D1-,D2-,D3hot+,D3cold+)
+                 Status: D0 NoSoftRst- PME-Enable- DSel=0 DScale=0 PME-
+         Capabilities: [64] Express (v2) Endpoint, MSI 00
+                 DevCap: MaxPayload 256 bytes, PhantFunc 0, Latency L0s <4us, L1 
+unlimited
+                         ExtTag+ AttnBtn- AttnInd- PwrInd- RBE+ FLReset- 
+SlotPowerLimit 0.000W
+                 DevCtl: Report errors: Correctable- Non-Fatal- Fatal- Unsupported-
+                         RlxdOrd+ ExtTag+ PhantFunc- AuxPwr- NoSnoop+
+                         MaxPayload 256 bytes, MaxReadReq 512 bytes
+                 DevSta: CorrErr- UncorrErr- FatalErr- UnsuppReq- AuxPwr- TransPend-
+                 LnkCap: Port #0, Speed 8GT/s, Width x16, ASPM L0s L1, Exit 
+Latency L0s <64ns, L1 <1us
+                         ClockPM- Surprise- LLActRep- BwNot- ASPMOptComp+
+                 LnkCtl: ASPM Disabled; RCB 64 bytes Disabled- CommClk+
+                         ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+                 LnkSta: Speed 8GT/s, Width x16, TrErr- Train- SlotClk+ DLActive- 
+BWMgmt- ABWMgmt-
+                 DevCap2: Completion Timeout: Not Supported, TimeoutDis-, LTR+, 
+OBFF Not Supported
+                          AtomicOpsCap: 32bit- 64bit- 128bitCAS-
+                 DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-, LTR-, 
+OBFF Disabled
+                          AtomicOpsCtl: ReqEn-
+                 LnkSta2: Current De-emphasis Level: -3.5dB, 
+EqualizationComplete-, EqualizationPhase1-
+                          EqualizationPhase2-, EqualizationPhase3-, 
+LinkEqualizationRequest-
+         Capabilities: [a0] MSI: Enable- Count=1/8 Maskable- 64bit+
+                 Address: 0000000000000000  Data: 0000
+         Capabilities: [c0] MSI-X: Enable+ Count=8 Masked-
+                 Vector table: BAR=0 offset=000fe000
+                 PBA: BAR=0 offset=000ff000
+         Capabilities: [100 v1] Vendor Specific Information: ID=0001 Rev=1 Len=010 <?>
+         Kernel driver in use: xhci_hcd
+         Kernel modules: xhci_pci
+
+The 2. device on the same machine has the PCI-ID 1022:15e1
+
+
+Another USB3.1 host device tested with was:
+USB controller: Advanced Micro Devices, Inc. [AMD] X370 Series Chipset USB 3.1 
+xHCI Controller (rev 02) (prog-if 30 [XHCI])
+
+00:06.0 0c03: 1022:43b9 (rev 02) (prog-if 30 [XHCI])
+         Subsystem: 1b21:1142
+         Physical Slot: 6
+         Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- 
+Stepping- SERR+ FastB2B- DisINTx+
+         Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- 
+<MAbort- >SERR- <PERR- INTx-
+         Latency: 0, Cache Line Size: 64 bytes
+         Interrupt: pin A routed to IRQ 29
+         Region 0: Memory at febd0000 (64-bit, non-prefetchable) [size=32K]
+         Capabilities: [50] MSI: Enable+ Count=1/8 Maskable- 64bit+
+                 Address: 00000000fee0e000  Data: 4023
+         Capabilities: [78] Power Management version 3
+                 Flags: PMEClk- DSI- D1- D2- AuxCurrent=55mA 
+PME(D0-,D1-,D2-,D3hot+,D3cold+)
+                 Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
+         Capabilities: [80] Express (v2) Legacy Endpoint, MSI 00
+                 DevCap: MaxPayload 512 bytes, PhantFunc 0, Latency L0s <64ns, L1 <2us
+                         ExtTag+ AttnBtn- AttnInd- PwrInd- RBE+ FLReset-
+                 DevCtl: Report errors: Correctable- Non-Fatal- Fatal- Unsupported-
+                         RlxdOrd+ ExtTag+ PhantFunc- AuxPwr- NoSnoop+
+                         MaxPayload 128 bytes, MaxReadReq 512 bytes
+                 DevSta: CorrErr+ UncorrErr- FatalErr- UnsuppReq+ AuxPwr+ TransPend-
+                 LnkCap: Port #0, Speed 8GT/s, Width x4, ASPM L0s L1, Exit Latency 
+L0s <2us, L1 unlimited
+                         ClockPM- Surprise- LLActRep- BwNot- ASPMOptComp+
+                 LnkCtl: ASPM Disabled; RCB 64 bytes Disabled- CommClk+
+                         ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+                 LnkSta: Speed 8GT/s, Width x4, TrErr- Train- SlotClk+ DLActive- 
+BWMgmt- ABWMgmt-
+                 DevCap2: Completion Timeout: Not Supported, TimeoutDis-, LTR+, 
+OBFF Not Supported
+                          AtomicOpsCap: 32bit- 64bit- 128bitCAS-
+                 DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-, LTR-, 
+OBFF Disabled
+                          AtomicOpsCtl: ReqEn-
+                 LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete+, 
+EqualizationPhase1+
+                          EqualizationPhase2-, EqualizationPhase3-, 
+LinkEqualizationRequest-
+         Kernel driver in use: xhci_hcd
+         Kernel modules: xhci_pci
+
+
+Please fix those changes or disable them for the mentioned devices or add an 
+option to disable this additional alignment feature.
+
+
+Thanks
+Andreas
+
+--------------23D0A518B3314DAAF21E25EB
+Content-Type: text/x-patch; charset=UTF-8;
+ name="xhci-ring-no-alignment.c.diff"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+ filename="xhci-ring-no-alignment.c.diff"
+
+--- 1/drivers/usb/host/xhci-ring.c	2021-01-25 08:57:52.199210954 +0100
++++ 2/drivers/usb/host/xhci-ring.c	2021-01-25 08:59:29.450511420 +0100
+@@ -3250,6 +3250,10 @@ static int xhci_align_td(struct xhci_hcd
+ 	/* we got lucky, last normal TRB data on segment is packet aligned */
+ 	if (unalign =3D=3D 0)
+ 		return 0;
++	else {
++		xhci_dbg(xhci, "unaligned - but ignored\n");
++		return 0;
++	}
+=20
+ 	xhci_dbg(xhci, "Unaligned %d bytes, buff len %d\n",
+ 		 unalign, *trb_buff_len);
+
+--------------23D0A518B3314DAAF21E25EB--
