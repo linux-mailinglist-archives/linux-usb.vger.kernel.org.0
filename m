@@ -2,78 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8941E303570
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 06:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1AB303577
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 06:42:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732305AbhAZFlV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jan 2021 00:41:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39732 "EHLO mail.kernel.org"
+        id S2388348AbhAZFmg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 00:42:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49190 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728292AbhAYMr1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 25 Jan 2021 07:47:27 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B8EB622D04;
-        Mon, 25 Jan 2021 12:46:43 +0000 (UTC)
+        id S1729101AbhAYNvC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 25 Jan 2021 08:51:02 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EA2E622B3B;
+        Mon, 25 Jan 2021 13:48:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611578806;
-        bh=kXFZkQ9+v70aH3YVPuA5/lu+eenOiEeGF4vdN+dLFXQ=;
+        s=k20201202; t=1611582505;
+        bh=rzy6JQ7F/EugWU8tK/NmPdX8jnCIpy4RnsHcMdpnLIo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DXTCMseCI/Zpe+8B3NRpfNUmZER45GKnjtDKktN9SOa5UxRqf7GzeMm26nh7vHuzB
-         a1vxPTVpUEG3IS8mGE/i695PZBWod8q4jJKIcWH5d5wgIPBxbpGTJV/c8Gxh8k9oJR
-         lZGpFG2I1enjOqDI7LYKBuArgdxcJcuN/jhMLEN0qt6b3GVquUJEDWlwQhWxNwIvis
-         bubRTpFAdqO4LuM8OB2fmrZHyuOs4XhU4zCVbDYasw46qtiSq+2SEg3bMvH/5iCX8R
-         ReLQ+Li7judC1UxCNTvdGb97OGiO+bLO1RK4szwMpzgfJULqIM5mYRMY+wUy4YNLgG
-         EoeAvpQdDw+JA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com,
-        Andreas Noever <andreas.noever@gmail.com>,
-        linux-usb@vger.kernel.org
-Subject: [RFC 3/3] thunderbolt: build kunit tests without structleak plugin
-Date:   Mon, 25 Jan 2021 13:45:28 +0100
-Message-Id: <20210125124533.101339-4-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210125124533.101339-1-arnd@kernel.org>
-References: <20210125124533.101339-1-arnd@kernel.org>
+        b=ZuwUtmCe5KLJq5zCG5W2uoP06HZd3dSkSAU2WWCU2R19zcsR3JDZos4Rr42ELlxfY
+         y/0M9RVkVyOftQLxiJhCs0l5WLd3aHqDXQ5/Xt2wr22rPJ1m8RAlXroiNoTl33Vx2o
+         /XFr26yC4sLG9wSxlDdG8i/g8kNUa09jnqCEn1IjFCT9949uw4plNLsFGdu2T1vHDm
+         UI3XDEuka0nOn6T+Yx7OdxM/cSlapf7T7pOpBMgY1dFgTL3/GhBHfZzLcvkh3upzCK
+         BqJu5fgm/2sumL+SGUZonH2gL7J5o0/k/9eFYuZlVDO/OYJBrZcGIGSEzA2/BeMIHJ
+         HLb0CVr1tAxLQ==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1l42EL-00034O-IT; Mon, 25 Jan 2021 14:48:33 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Pho Tran <Pho.Tran@silabs.com>, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>, Pho Tran <pho.tran@silabs.com>
+Subject: [PATCH 1/7] USB: serial: cp210x: suppress modem-control errors
+Date:   Mon, 25 Jan 2021 14:48:11 +0100
+Message-Id: <20210125134817.11749-2-johan@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210125134817.11749-1-johan@kernel.org>
+References: <20210125134817.11749-1-johan@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+The CP210X_SET_MHS request cannot be used to control RTS when hardware
+flow control (auto-RTS) is enabled and instead returns an error which is
+currently logged as:
 
-The structleak plugin causes the stack frame size to grow immensely:
+	cp210x ttyUSB0: failed set request 0x7 status: -32
 
-drivers/thunderbolt/test.c:1529:1: error: the frame size of 1176 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+when opening and closing a port (and on TIOCMSET requests).
 
-Turn it off in this file.
+Add a crtscts flag to keep track of the hardware flow-control setting
+and use it to suppress any request to change RTS when auto-RTS is
+enabled.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Note that RTS is still deasserted when disabling the UART as part of
+close.
+
+Reported-by: Pho Tran <pho.tran@silabs.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/thunderbolt/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/serial/cp210x.c | 33 ++++++++++++++++++++++++++++++---
+ 1 file changed, 30 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/thunderbolt/Makefile b/drivers/thunderbolt/Makefile
-index 7aa48f6c41d9..e571c0495a84 100644
---- a/drivers/thunderbolt/Makefile
-+++ b/drivers/thunderbolt/Makefile
-@@ -7,6 +7,7 @@ thunderbolt-objs += nvm.o retimer.o quirks.o
- thunderbolt-${CONFIG_ACPI} += acpi.o
- thunderbolt-$(CONFIG_DEBUG_FS) += debugfs.o
- thunderbolt-${CONFIG_USB4_KUNIT_TEST} += test.o
-+CFLAGS_REMOVE_test.o += -fplugin-arg-structleak_plugin-byref -fplugin-arg-structleak_plugin-byref-all
+diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+index d813a052738f..7e4a09b42c99 100644
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -21,6 +21,7 @@
+ #include <linux/usb/serial.h>
+ #include <linux/gpio/driver.h>
+ #include <linux/bitops.h>
++#include <linux/mutex.h>
  
- thunderbolt_dma_test-${CONFIG_USB4_DMA_TEST} += dma_test.o
- obj-$(CONFIG_USB4_DMA_TEST) += thunderbolt_dma_test.o
+ #define DRIVER_DESC "Silicon Labs CP210x RS232 serial adaptor driver"
+ 
+@@ -264,7 +265,10 @@ struct cp210x_port_private {
+ 	u8			bInterfaceNumber;
+ 	bool			event_mode;
+ 	enum cp210x_event_state event_state;
+-	u8 lsr;
++	u8			lsr;
++
++	struct mutex		mutex;
++	bool			crtscts;
+ };
+ 
+ static struct usb_serial_driver cp210x_device = {
+@@ -1117,6 +1121,7 @@ static bool cp210x_termios_change(const struct ktermios *a, const struct ktermio
+ static void cp210x_set_flow_control(struct tty_struct *tty,
+ 		struct usb_serial_port *port, struct ktermios *old_termios)
+ {
++	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
+ 	struct cp210x_special_chars chars;
+ 	struct cp210x_flow_ctl flow_ctl;
+ 	u32 flow_repl;
+@@ -1143,10 +1148,12 @@ static void cp210x_set_flow_control(struct tty_struct *tty,
+ 			return;
+ 	}
+ 
++	mutex_lock(&port_priv->mutex);
++
+ 	ret = cp210x_read_reg_block(port, CP210X_GET_FLOW, &flow_ctl,
+ 			sizeof(flow_ctl));
+ 	if (ret)
+-		return;
++		goto out_unlock;
+ 
+ 	ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
+ 	flow_repl = le32_to_cpu(flow_ctl.ulFlowReplace);
+@@ -1161,10 +1168,12 @@ static void cp210x_set_flow_control(struct tty_struct *tty,
+ 		ctl_hs |= CP210X_SERIAL_CTS_HANDSHAKE;
+ 		flow_repl &= ~CP210X_SERIAL_RTS_MASK;
+ 		flow_repl |= CP210X_SERIAL_RTS_SHIFT(CP210X_SERIAL_RTS_FLOW_CTL);
++		port_priv->crtscts = true;
+ 	} else {
+ 		ctl_hs &= ~CP210X_SERIAL_CTS_HANDSHAKE;
+ 		flow_repl &= ~CP210X_SERIAL_RTS_MASK;
+ 		flow_repl |= CP210X_SERIAL_RTS_SHIFT(CP210X_SERIAL_RTS_ACTIVE);
++		port_priv->crtscts = false;
+ 	}
+ 
+ 	if (I_IXOFF(tty))
+@@ -1188,6 +1197,8 @@ static void cp210x_set_flow_control(struct tty_struct *tty,
+ 
+ 	cp210x_write_reg_block(port, CP210X_SET_FLOW, &flow_ctl,
+ 			sizeof(flow_ctl));
++out_unlock:
++	mutex_unlock(&port_priv->mutex);
+ }
+ 
+ static void cp210x_set_termios(struct tty_struct *tty,
+@@ -1272,7 +1283,9 @@ static int cp210x_tiocmset(struct tty_struct *tty,
+ static int cp210x_tiocmset_port(struct usb_serial_port *port,
+ 		unsigned int set, unsigned int clear)
+ {
++	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
+ 	u16 control = 0;
++	int ret;
+ 
+ 	if (set & TIOCM_RTS) {
+ 		control |= CONTROL_RTS;
+@@ -1291,9 +1304,22 @@ static int cp210x_tiocmset_port(struct usb_serial_port *port,
+ 		control |= CONTROL_WRITE_DTR;
+ 	}
+ 
++	mutex_lock(&port_priv->mutex);
++
++	/*
++	 * SET_MHS cannot be used to control RTS when auto-RTS is enabled.
++	 * Note that RTS is still deasserted when disabling the UART on close.
++	 */
++	if (port_priv->crtscts)
++		control &= ~CONTROL_WRITE_RTS;
++
+ 	dev_dbg(&port->dev, "%s - control = 0x%.4x\n", __func__, control);
+ 
+-	return cp210x_write_u16_reg(port, CP210X_SET_MHS, control);
++	ret = cp210x_write_u16_reg(port, CP210X_SET_MHS, control);
++
++	mutex_unlock(&port_priv->mutex);
++
++	return ret;
+ }
+ 
+ static void cp210x_dtr_rts(struct usb_serial_port *port, int on)
+@@ -1770,6 +1796,7 @@ static int cp210x_port_probe(struct usb_serial_port *port)
+ 		return -ENOMEM;
+ 
+ 	port_priv->bInterfaceNumber = cp210x_interface_num(serial);
++	mutex_init(&port_priv->mutex);
+ 
+ 	usb_set_serial_port_data(port, port_priv);
+ 
 -- 
-2.29.2
+2.26.2
 
