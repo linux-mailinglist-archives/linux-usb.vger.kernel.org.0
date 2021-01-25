@@ -2,122 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0AA30488A
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 20:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9030A3048B8
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 20:37:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388459AbhAZFoc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jan 2021 00:44:32 -0500
-Received: from a1.mail.mailgun.net ([198.61.254.60]:56043 "EHLO
-        a1.mail.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726953AbhAZEd7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jan 2021 23:33:59 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1611635616; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=YoZ7b2gqHviotf0RFHsePw2Vtw+XQmyfSKqQucAiqTU=; b=NPA0NozxXTC3Lngu5bdmjCX8CmhhOFJnffv/BwHSuBEMosRVxuySmGVbMs9DPtJHWAtKwXWJ
- kOEOVVphkPHPbly1gD1fOHPGc83B6M9OiGow3x4M5lfT0N4kXGHJnYIFjc86Qrw7ZF7mpN3L
- CvC1Ft2HgQHz72OBtR/IWytsplg=
-X-Mailgun-Sending-Ip: 198.61.254.60
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 600f9b72bdcf468287eeb288 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 26 Jan 2021 04:32:50
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 755FEC43464; Tue, 26 Jan 2021 04:32:49 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [10.110.78.65] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1E8F0C433C6;
-        Tue, 26 Jan 2021 04:32:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1E8F0C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v6 3/4] usb: dwc3: Resize TX FIFOs to meet EP bursting
- requirements
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peter.chen@nxp.com,
-        jackp@codeaurora.org
-References: <1611288100-31118-1-git-send-email-wcheng@codeaurora.org>
- <1611288100-31118-4-git-send-email-wcheng@codeaurora.org>
- <YAsHbj/mITeiY5Cq@builder.lan>
- <724cb274-36ce-fb48-a156-4eaf9e686fdf@codeaurora.org>
- <20210126015543.GB1241218@yoga>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <99dd9419-a8fd-9eb2-9582-d24f865ecf70@codeaurora.org>
-Date:   Mon, 25 Jan 2021 20:32:47 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S1727688AbhAZFkB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 00:40:01 -0500
+Received: from mga09.intel.com ([134.134.136.24]:40319 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726470AbhAYJX6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 25 Jan 2021 04:23:58 -0500
+IronPort-SDR: fL6ScXw1Hp8bLEj59EFm5bfpo8AMBoczSzdx3WYukJOdTBq+UDL3qdzL1A8LRDVXv0d2OraUJO
+ FY66PbeV49MQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9874"; a="179842884"
+X-IronPort-AV: E=Sophos;i="5.79,373,1602572400"; 
+   d="scan'208";a="179842884"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 01:22:00 -0800
+IronPort-SDR: A+6R6t4KFN+e7YYc+geD8CA4cFQ+E9AOnuQE+MgzQsYJHCnyIceMqXckBGSXfWBevySIvu5olx
+ KSclSfI92Czg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,373,1602572400"; 
+   d="scan'208";a="471989144"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 25 Jan 2021 01:21:57 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 25 Jan 2021 11:21:56 +0200
+Date:   Mon, 25 Jan 2021 11:21:56 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Kyle Tso <kyletso@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        USB <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: typec: tcpm: Create legacy PDOs for PD2 connection
+Message-ID: <20210125092156.GA1720720@kuha.fi.intel.com>
+References: <20210115163311.391332-1-kyletso@google.com>
+ <20210121084101.GC423216@kuha.fi.intel.com>
+ <CAGZ6i=0M6=cZpfm=Eu4s4XTjwz5GPbpStNNOdjnPAkJ1y2MRRA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210126015543.GB1241218@yoga>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGZ6i=0M6=cZpfm=Eu4s4XTjwz5GPbpStNNOdjnPAkJ1y2MRRA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
+On Thu, Jan 21, 2021 at 05:48:46PM +0800, Kyle Tso wrote:
+> On Thu, Jan 21, 2021 at 4:41 PM Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
+> >
+> > Hi Kyle,
+> >
+> > On Sat, Jan 16, 2021 at 12:33:11AM +0800, Kyle Tso wrote:
+> > > If the port partner is PD2, the PDOs of the local port should follow the
+> > > format defined in PD2 Spec. Dynamically modify the pre-defined PD3 PDOs
+> > > and transform them into PD2 format before sending them to the PD2 port
+> > > partner.
+> >
+> > I guess it's not possible for the system to supply separate static
+> > PDOs for each PD revision?
+> >
+> We can do that for sure. But a problem is that if there are more PD
+> revisions in the future, we will need to add more PDO arrays.
+> For backward compatibility, the new revision usually uses the
+> previously-reserved bits for the new features.
+> >From my perspective, the better way to achieve the backward
+> compatibility is to just clear the bits if those are reserved in the
+> previous revision.
 
-On 1/25/2021 5:55 PM, Bjorn Andersson wrote:
-> On Mon 25 Jan 19:14 CST 2021, Wesley Cheng wrote:
+I was trying to think of something better for this, but I got nothing.
+I'm not completely comfortable with this, but never mind. Let's just go
+with this.
+
+> I can submit another patch which adds another PDO array for PD2 if you
+> think it is more appropriate.
+
+Not necessary.
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> > > Signed-off-by: Kyle Tso <kyletso@google.com>
+> > > ---
+> > >  drivers/usb/typec/tcpm/tcpm.c | 62 +++++++++++++++++++++++++++++------
+> > >  include/linux/usb/pd.h        |  1 +
+> > >  2 files changed, 53 insertions(+), 10 deletions(-)
+> > >
+> > > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > > index 22a85b396f69..1220ab1ed47d 100644
+> > > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > > @@ -911,13 +911,47 @@ static int tcpm_set_pwr_role(struct tcpm_port *port, enum typec_role role)
+> > >       return 0;
+> > >  }
+> > >
+> > > +/*
+> > > + * Transform the PDO to be compliant to PD rev2.0.
+> > > + * Return 0 if the PDO type is not defined in PD rev2.0.
+> > > + * Otherwise, return the converted PDO.
+> > > + */
+> > > +static u32 tcpm_forge_legacy_pdo(struct tcpm_port *port, u32 pdo, enum typec_role role)
+> > > +{
+> > > +     switch (pdo_type(pdo)) {
+> > > +     case PDO_TYPE_FIXED:
+> > > +             if (role == TYPEC_SINK)
+> > > +                     return pdo & ~PDO_FIXED_FRS_CURR_MASK;
+> > > +             else
+> > > +                     return pdo & ~PDO_FIXED_UNCHUNK_EXT;
+> > > +     case PDO_TYPE_VAR:
+> > > +     case PDO_TYPE_BATT:
+> > > +             return pdo;
+> > > +     case PDO_TYPE_APDO:
+> > > +     default:
+> > > +             return 0;
+> > > +     }
+> > > +}
+> > > +
+> > >  static int tcpm_pd_send_source_caps(struct tcpm_port *port)
+> > >  {
+> > >       struct pd_message msg;
+> > > -     int i;
+> > > +     u32 pdo;
+> > > +     unsigned int i, nr_pdo = 0;
+> >
+> > Side note. I think this driver uses the "reverse christmas tree"
+> > style with the variables.
 > 
->>
->>
->> On 1/22/2021 9:12 AM, Bjorn Andersson wrote:
->>> On Thu 21 Jan 22:01 CST 2021, Wesley Cheng wrote:
->>>
->>
->> Hi Bjorn,
->>>
->>> Under what circumstances should we specify this? And in particular are
->>> there scenarios (in the Qualcomm platforms) where this must not be set?
->>> The TXFIFO dynamic allocation is actually a feature within the DWC3
->> controller, and isn't specifically for QCOM based platforms.  It won't
->> do any harm functionally if this flag is not set, as this is meant for
->> enhancing performance/bandwidth.
->>
->>> In particular, the composition can be changed in runtime, so should we
->>> set this for all Qualcomm platforms?
->>>
->> Ideally yes, if we want to increase bandwith for situations where SS
->> endpoint bursting is set to a higher value.
->>
->>> And if that's the case, can we not just set it from the qcom driver?
->>>
->> Since this is a common DWC3 core feature, I think it would make more
->> sense to have it in DWC3 core instead of a vendor's DWC3 glue driver.
->>
+> I will change the order (if there is a next version)
 > 
-> I don't have any objections to implementing it in the core driver, but
-> my question is can we just skip the DT binding and just enable it from
-> the vendor driver?
-> 
-> Regards,
-> Bjorn
-> 
-
-Hi Bjorn,
-
-I see.  I think there are some designs which don't have a DWC3 glue
-driver, so assuming there may be other platforms using this, there may
-not always be a vendor driver to set this.
-
-Thanks
-Wesley Cheng
+> thanks,
+> Kyle
 
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+heikki
