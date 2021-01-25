@@ -2,148 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D38A430263E
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Jan 2021 15:22:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 618DF3026FE
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Jan 2021 16:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729353AbhAYOWN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Jan 2021 09:22:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53524 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729380AbhAYOVq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 25 Jan 2021 09:21:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4006322D04;
-        Mon, 25 Jan 2021 14:20:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611584431;
-        bh=sEglrBhCkTFr5BdNLgbZgDjh5fXwZi1Z90ubhU0dnxA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YHaee/tFDk2oBtwNZNxOv2toWxPRC7RtqEsPPCqloeARzFvyr6Qc+tnwSnuX7EJWQ
-         Z0rGkfVxMeyBGKtbdpG648HGxwLL8XwQhtIZBsKumPBvYqU8RwhLI/QCtL5zEkUOkr
-         zAaFCXgL+nOmeztOZGp2OuBZL/zpF6+SqNXJ5kC8lFS4rjoqASr8+Ya8y0mzwPDFBD
-         68iNvmmgu4I9M6KOgK96ZGVOG0ZkpFwm5F3QOAd8oyWbAeyJCpqs58/Q0yxLxaXBQZ
-         zUjsfIxSRT7IGzxod+MQZT9hE1E8ee4NbpjqzmqcfWywUuyoWdOP0vEZLAQpZe0pI/
-         jPvVylhfU1ZHQ==
-Received: by pali.im (Postfix)
-        id D08B4768; Mon, 25 Jan 2021 15:20:28 +0100 (CET)
-Date:   Mon, 25 Jan 2021 15:20:28 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Peter Chen <peter.chen@nxp.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jun Li <jun.li@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: Re: [PATCH v2] usb: host: xhci-plat: fix support for
- XHCI_SKIP_PHY_INIT quirk
-Message-ID: <20210125142028.th4sscs27arhihm2@pali>
-References: <20201221150903.26630-1-pali@kernel.org>
- <20201223161847.10811-1-pali@kernel.org>
- <20201224055836.GB27629@b29397-desktop>
- <20210113232057.niqamgsqlaw7gojw@pali>
- <88b48c61-65e4-cc24-d90d-5fba92f05f27@linux.intel.com>
+        id S1729678AbhAYPhV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Jan 2021 10:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729973AbhAYPfk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jan 2021 10:35:40 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9CEC061574
+        for <linux-usb@vger.kernel.org>; Mon, 25 Jan 2021 07:02:43 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1l43Nz-0006BO-TQ; Mon, 25 Jan 2021 16:02:35 +0100
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1l43Nu-0007EN-Tu; Mon, 25 Jan 2021 16:02:30 +0100
+Date:   Mon, 25 Jan 2021 16:02:30 +0100
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Paul Wise <pabs3@bonedaddy.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Karol Lewandowski <k.lewandowsk@samsung.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: proposal: move Linux userspace USB gadget projects to linux-usb
+ GitHub organisation?
+Message-ID: <20210125150230.GA19259@pengutronix.de>
+References: <c38162833d1c8fede734e41eb5ce23cf393d6555.camel@bonedaddy.net>
+ <YAhKAiz2U9KQWQPE@kroah.com>
+ <42c4ad2fa7709312b7ac7bc682f05ed1a3edc9a7.camel@bonedaddy.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ew6BAiZeqk4r7MaW"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <88b48c61-65e4-cc24-d90d-5fba92f05f27@linux.intel.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <42c4ad2fa7709312b7ac7bc682f05ed1a3edc9a7.camel@bonedaddy.net>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 16:01:33 up 54 days,  3:28, 96 users,  load average: 1.05, 0.45,
+ 0.29
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Friday 15 January 2021 15:32:30 Mathias Nyman wrote:
-> On 14.1.2021 1.20, Pali Rohár wrote:
-> > On Thursday 24 December 2020 05:59:05 Peter Chen wrote:
-> >> On 20-12-23 17:18:47, Pali Rohár wrote:
-> >>> Currently init_quirk callbacks for xhci platform drivers are called
-> >>> xhci_plat_setup() function which is called after chip reset completes.
-> >>> It happens in the middle of the usb_add_hcd() function.
-> >>>
-> >>> But XHCI_SKIP_PHY_INIT quirk is checked in the xhci_plat_probe() function
-> >>> prior calling usb_add_hcd() function. Therefore this XHCI_SKIP_PHY_INIT
-> >>> currently does nothing as prior xhci_plat_setup() it is not set.
-> >>>
-> >>> Quirk XHCI_SKIP_PHY_INIT is only setting hcd->skip_phy_initialization value
-> >>> which really needs to be set prior calling usb_add_hcd() as this function
-> >>> at its beginning skips PHY init if this member is set.
-> >>>
-> >>> This patch fixes implementation of the XHCI_SKIP_PHY_INIT quirk by calling
-> >>> init_quirk callbacks (via xhci_priv_init_quirk()) prior checking if
-> >>> XHCI_SKIP_PHY_INIT is set. Also checking if either xhci->quirks or
-> >>> priv->quirks contains this XHCI_SKIP_PHY_INIT quirk.
-> >>>
-> >>> Signed-off-by: Pali Rohár <pali@kernel.org>
-> >>>
-> >>> ---
-> >>> Changes in v2:
-> >>> * Check also xhci->quirks as xhci_priv_init_quirk() callbacks are setting xhci->quirks
-> >>> * Tested with "usb: host: xhci: mvebu: make USB 3.0 PHY optional for Armada 3720" patch
-> >>> * Removed Fixes: line
-> >>> ---
-> >>>  drivers/usb/host/xhci-plat.c | 16 ++++++++--------
-> >>>  1 file changed, 8 insertions(+), 8 deletions(-)
-> >>>
-> >>> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> >>> index 4d34f6005381..0eab7cb5a767 100644
-> >>> --- a/drivers/usb/host/xhci-plat.c
-> >>> +++ b/drivers/usb/host/xhci-plat.c
-> >>> @@ -89,13 +89,6 @@ static void xhci_plat_quirks(struct device *dev, struct xhci_hcd *xhci)
-> >>>  /* called during probe() after chip reset completes */
-> >>>  static int xhci_plat_setup(struct usb_hcd *hcd)
-> >>>  {
-> >>> -	int ret;
-> >>> -
-> >>> -
-> >>> -	ret = xhci_priv_init_quirk(hcd);
-> >>> -	if (ret)
-> >>> -		return ret;
-> >>> -
-> >>>  	return xhci_gen_setup(hcd, xhci_plat_quirks);
-> >>>  }
-> >>>  
-> >>> @@ -330,7 +323,14 @@ static int xhci_plat_probe(struct platform_device *pdev)
-> >>>  
-> >>>  	hcd->tpl_support = of_usb_host_tpl_support(sysdev->of_node);
-> >>>  	xhci->shared_hcd->tpl_support = hcd->tpl_support;
-> >>> -	if (priv && (priv->quirks & XHCI_SKIP_PHY_INIT))
-> >>> +
-> >>> +	if (priv) {
-> >>> +		ret = xhci_priv_init_quirk(hcd);
-> >>> +		if (ret)
-> >>> +			goto disable_usb_phy;
-> >>> +	}
-> >>> +
-> >>> +	if ((xhci->quirks & XHCI_SKIP_PHY_INIT) || (priv && (priv->quirks & XHCI_SKIP_PHY_INIT)))
-> >>>  		hcd->skip_phy_initialization = 1;
-> >>
-> >> I am not sure if others agree with you move the position of
-> >> xhci_priv_init_quirk, Let's see Mathias opinion.
-> > 
-> > Hello! Do you have an opinion how to handle this issue? As currently it
-> > is needed for another patch which is fixing issue/regression in xhci-mvebu:
-> > https://lore.kernel.org/linux-usb/20201223162403.10897-1-pali@kernel.org/
-> > 
-> 
-> I can see the benefit in this. 
-> In the xhci-plat case usb_create_hcd and usb_add_hcd are separate steps, and
-> we could both copy the xhci_plat_priv .quirks and run the .init_qurks before
-> adding the hcd.
-> I guess the current way is inherited from pci case where the earliest place
-> to do this after hcd is created is the hcd->driver->reset callback (which is
-> set to xhci_pci_setup() or xhci_plat_setup()).
-> 
-> xhci-rcar.c is using the .init_quirk to load firmware, we need to check with
-> them if this change is ok. (added Yoshihiro Shimoda to cc)
 
-Yoshihiro, is this change OK?
+--ew6BAiZeqk4r7MaW
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Can we move forward? I really need to now how to handle regression in
-xhci-mvebu driver. And one option is with this patch...
+Hi!
 
-> Their firmware would be loaded before phy parts are initialized, usb bus
-> registered, or roothub device allocated.
-> 
-> Thanks
-> -Mathias
+On Wed, Jan 20, 2021 at 11:39:22PM +0800, Paul Wise wrote:
+>On Wed, 2021-01-20 at 16:19 +0100, Greg Kroah-Hartman wrote:
+>
+>> If you can get the "owners" of these repos to agree, than sure.
+>
+>Excellent, please invite these GitHub users to the linux-usb admin
+>list, so that they can move the projects if they want to.
+>
+>Matt Porter: @ohporter (for libusbg)
+>Krzysztof Opasiak: @kopasiak (for libusbgx, gt)
+>Karol Lewandowski: @lmctl (for gadgetd)
+>Andrzej Pietrasiewicz: @andrzejtp (for cmtp-responder)
+>
+>If you would like to invite me too, I'm @pabs3 on GitHub.
+>
+>I expect some other folks on linux-usb might like to join too.
+
+After the ptp-gadget on git.denx.de is no longer available there,
+I moved the latest stack of the project to my own github account.
+
+https://github.com/mgrzeschik/ptp-gadget
+
+This could be added as well.
+
+Thanks,
+Michael
+
+>> But we should work out the libusbg and libusbx issue, which is really
+>> the "latest" one?
+>
+>libusbgx is a fork of libusbg and is more recently updated.
+>
+>I'd suggest to also move libusbg and archive it (make it read-only).
+>
+>> If you are moving the repos, why do you care about the issue and pull
+>> request database anymore?  Will they just not end up going away?
+>
+>When moving projects (as opposed to forking them), GitHub moves
+>everything along with the git repo, including issues and pull requests.
+>
+>--=20
+>bye,
+>pabs
+>
+>https://bonedaddy.net/pabs3/
+
+
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--ew6BAiZeqk4r7MaW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmAO3YEACgkQC+njFXoe
+LGRlbw/9HcrrsdADLHJuEHwmUzVyxr3i6p5Rx5ARvMa2F6W8MykrJOlRjdeIcxgY
+K5ly2JBnNNLped4wlWYN33N/WXtfIiMzY1QuqC73U1xkJ65RGufV0OVAmLSudUWr
+b5AByzikM62AYDSqpS2n/ieWPoMWhPg25w1OuSnIJbG2LCaKWYM5sMnPu+MKa9uN
+ukOU6Qv+X693xIGjNpQHJZyY18Vv0Dgw//9q0b2IO0PBespflAU27vNAG07AWGSN
+bCATUZlyYAs0eVsx9zy2GuIrkCE5tLVuZX9yRHBo3RqPd5hp7h9NlYFb7uyDslF0
+2IYjqegoVcUSwpCPkdK305uXJohzMU2Ly1FsspCfViC0cYQpdFNUGhGYHWZN3MZb
+dAZLOIONecEE93FLKOUIoQqRKiQ7HCvR9UX9YVwpLF+HNLNCQ456yQvBYkFRhc2L
+E2gNBTvbR62zjoPFWLmB2WsaGeSxoe6MBs6BMVZtXiUl3c5kYO35TvNIFqpn7LVj
+F2YVDZuzQWO/r6sOcDG6SXhz7eEGqMkTkOtIqrLTdg7xQcDmuam8FV7I2omXkWrI
+PwMMCNS0LpWvl2P6av92r4ip+HDFudsY/P0ZemJbcExoGgBEd9456TDjiiKGgM10
+Wf7CDPO4D4TW7NCSzcWwHtLaaLidGg3K5iFOk7w2FIjf7qH5umU=
+=BDvq
+-----END PGP SIGNATURE-----
+
+--ew6BAiZeqk4r7MaW--
