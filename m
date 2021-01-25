@@ -2,134 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEC59304893
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 20:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9275304899
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 20:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388363AbhAZFm5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jan 2021 00:42:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49192 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729103AbhAYNvF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 25 Jan 2021 08:51:05 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 089F222C9E;
-        Mon, 25 Jan 2021 13:48:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611582505;
-        bh=8xzLVqBc4Jci34US4grEu+cGJ0o9R2i13nNACkFy6Uw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dh8ErcIB19k7yiaBeige7PIdnVy8VVUvNQxYDjOyJzpN4pdb0F4CWI0s6Op2DTorV
-         +Yo/siyb/mg3+EGN7gli+8GQcpPS1FPIPS0MGgkZeP7e3fQx8rFV+HsZWDQD3vQlAt
-         7bpTfksWKytTqSK1lGrO8R2cBCv3FPIwoVWRYINoFWqCHDm6fZzfkFM9Ay0DMgmmhq
-         oJJenFniHGbOymYupI7Qn3frFY1BQc1SKu5eq2kinr4F7+2rf7Ydq+c3/UxLz1PuF3
-         yvRLS22Auf6i7ivEfE66f5tUIniio5UnCb4MYbqr6CKdSvPCM5WcB2jLxfvClVwcm8
-         rNSG6O6Lg4tgQ==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1l42EM-00034c-1a; Mon, 25 Jan 2021 14:48:34 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     linux-usb@vger.kernel.org
-Cc:     Pho Tran <Pho.Tran@silabs.com>, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 6/7] USB: serial: cp210x: fix RTS handling
-Date:   Mon, 25 Jan 2021 14:48:16 +0100
-Message-Id: <20210125134817.11749-7-johan@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210125134817.11749-1-johan@kernel.org>
-References: <20210125134817.11749-1-johan@kernel.org>
+        id S1731329AbhAZFnm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 00:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728703AbhAYQAS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jan 2021 11:00:18 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A468C061788
+        for <linux-usb@vger.kernel.org>; Mon, 25 Jan 2021 07:06:16 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id l9so18497704ejx.3
+        for <linux-usb@vger.kernel.org>; Mon, 25 Jan 2021 07:06:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=XHMaKLxeLNrn8A/sCpy0/0lMtZdWQ1dZidHHduxH5Z0=;
+        b=ODBQoxrHe9DW5IHTmXv1ohRgoq0la7t80GVX7UDuunQGm/CmGECo1kovenK+SlXCU+
+         yIKp2j9Ng1cGILySgJ8f0gFwBpBnl+TcbmW+MCyjhp42KGLKJ1vp5tcZHMXQAo0Xo6rw
+         97vrq5j9lriAN22SzsKKkGVQWEckoVOWK/ZqSHbNI3r+3uYBpmAAkRfYi0/PDBZqG4AH
+         Hf5lBK5ImmqYim1h9ia9YYdNwBTb/FZbc8Mbtw/YGy6DnhE2b1pd/5iv7cZjuhTbQ1LU
+         VyKAiKxvbzItnY9jz2fP2+q48ecmYj3dVzd4EdQcEj4K4tTpZdy/WOazDfBspIdc1k/c
+         mViA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=XHMaKLxeLNrn8A/sCpy0/0lMtZdWQ1dZidHHduxH5Z0=;
+        b=nSZQey4lodrGNa+wqKMS7jI5RvXtMrk/SXqhijRwjFmKM3HLX30ExBUymhkrqcstQo
+         6gbloSsR4tgD21xYYhunAxr6Wm1upL80h04eak3CNb1P+iSdN9mB2NpUdlsUnd8+910M
+         cVxlcg5P0HP1R5LGuBe6U8TixcXyy4Xskrt3ancSJxfD2TTz7iMqrKe7jSAIBVO872DF
+         agzrvP+VVdpPUF917+JpKYwAmiMXk6+FMzDcjF37Weuoodn1vScHKGZ/AoRI4np06pms
+         Pg7tuRaBbAEe0r9dh4KaxSz2z6+JLgQxs/owZ0JGaKvPkO0uQ97/EL3X9urHyK5gvlT+
+         8V3w==
+X-Gm-Message-State: AOAM533TNuUd4AYHgjjF3Ec88QUTSvSHKAYyrZvzbLN5xKuULnlvXcsL
+        vd47deVkKKQhAjj3rpdtZeTqgT942jsGC+cuXu0=
+X-Google-Smtp-Source: ABdhPJx/7vh4Q9UgGOqatqGZ9K7f9DFDDsiQVub0V23S0wRSSG5+q2HX9av2E4T65eEAXvCIY3suTIMmB5DoqLk5inM=
+X-Received: by 2002:a17:906:b0c2:: with SMTP id bk2mr656831ejb.223.1611587174625;
+ Mon, 25 Jan 2021 07:06:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a17:906:af13:0:0:0:0 with HTTP; Mon, 25 Jan 2021 07:06:14
+ -0800 (PST)
+Reply-To: hkmohammedh@gmail.com
+From:   Mohammed Hossain <willisonr81@gmail.com>
+Date:   Mon, 25 Jan 2021 15:06:14 +0000
+Message-ID: <CAJmd0eqjGtqNMNAsZpKduVEO+jUg_P7wS1aEaWFeSnNX039D4g@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Clearing TIOCM_RTS should always deassert RTS and setting the same bit
-should enable auto-RTS if hardware flow control is enabled.
-
-This allows user space to throttle input directly at the source also
-when hardware-assisted flow control is enabled and makes dtr_rts()
-always deassert both lines during close (when HUPCL is set).
-
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/cp210x.c | 47 +++++++++++++++++++++++++++++++------
- 1 file changed, 40 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index 4ba3fb096bf1..f00b736f3cd3 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -1166,7 +1166,10 @@ static void cp210x_set_flow_control(struct tty_struct *tty,
- 	if (C_CRTSCTS(tty)) {
- 		ctl_hs |= CP210X_SERIAL_CTS_HANDSHAKE;
- 		flow_repl &= ~CP210X_SERIAL_RTS_MASK;
--		flow_repl |= CP210X_SERIAL_RTS_FLOW_CTL;
-+		if (port_priv->rts)
-+			flow_repl |= CP210X_SERIAL_RTS_FLOW_CTL;
-+		else
-+			flow_repl |= CP210X_SERIAL_RTS_INACTIVE;
- 		port_priv->crtscts = true;
- 	} else {
- 		ctl_hs &= ~CP210X_SERIAL_CTS_HANDSHAKE;
-@@ -1286,6 +1289,8 @@ static int cp210x_tiocmset_port(struct usb_serial_port *port,
- 		unsigned int set, unsigned int clear)
- {
- 	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
-+	struct cp210x_flow_ctl flow_ctl;
-+	u32 ctl_hs, flow_repl;
- 	u16 control = 0;
- 	int ret;
- 
-@@ -1313,16 +1318,44 @@ static int cp210x_tiocmset_port(struct usb_serial_port *port,
- 	}
- 
- 	/*
--	 * SET_MHS cannot be used to control RTS when auto-RTS is enabled.
--	 * Note that RTS is still deasserted when disabling the UART on close.
-+	 * Use SET_FLOW to set DTR and enable/disable auto-RTS when hardware
-+	 * flow control is enabled.
- 	 */
--	if (port_priv->crtscts)
--		control &= ~CONTROL_WRITE_RTS;
-+	if (port_priv->crtscts && control & CONTROL_WRITE_RTS) {
-+		ret = cp210x_read_reg_block(port, CP210X_GET_FLOW, &flow_ctl,
-+				sizeof(flow_ctl));
-+		if (ret)
-+			goto out_unlock;
- 
--	dev_dbg(&port->dev, "%s - control = 0x%04x\n", __func__, control);
-+		ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
-+		flow_repl = le32_to_cpu(flow_ctl.ulFlowReplace);
- 
--	ret = cp210x_write_u16_reg(port, CP210X_SET_MHS, control);
-+		ctl_hs &= ~CP210X_SERIAL_DTR_MASK;
-+		if (port_priv->dtr)
-+			ctl_hs |= CP210X_SERIAL_DTR_ACTIVE;
-+		else
-+			ctl_hs |= CP210X_SERIAL_DTR_INACTIVE;
- 
-+		flow_repl &= ~CP210X_SERIAL_RTS_MASK;
-+		if (port_priv->rts)
-+			flow_repl |= CP210X_SERIAL_RTS_FLOW_CTL;
-+		else
-+			flow_repl |= CP210X_SERIAL_RTS_INACTIVE;
-+
-+		flow_ctl.ulControlHandshake = cpu_to_le32(ctl_hs);
-+		flow_ctl.ulFlowReplace = cpu_to_le32(flow_repl);
-+
-+		dev_dbg(&port->dev, "%s - ctrl = 0x%02x, flow = 0x%02x\n",
-+				__func__, ctl_hs, flow_repl);
-+
-+		ret = cp210x_write_reg_block(port, CP210X_SET_FLOW, &flow_ctl,
-+				sizeof(flow_ctl));
-+	} else {
-+		dev_dbg(&port->dev, "%s - control = 0x%04x\n", __func__, control);
-+
-+		ret = cp210x_write_u16_reg(port, CP210X_SET_MHS, control);
-+	}
-+out_unlock:
- 	mutex_unlock(&port_priv->mutex);
- 
- 	return ret;
 -- 
-2.26.2
-
+I  have an proposal for you get back for more details.
