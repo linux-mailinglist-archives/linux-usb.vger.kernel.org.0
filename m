@@ -2,59 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F389D303FEC
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 15:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C92230402D
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 15:25:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405772AbhAZONr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jan 2021 09:13:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52468 "EHLO mail.kernel.org"
+        id S2403869AbhAZOOn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 09:14:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52806 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405753AbhAZONE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 26 Jan 2021 09:13:04 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3FBBC22B2C;
-        Tue, 26 Jan 2021 14:12:23 +0000 (UTC)
+        id S2405827AbhAZOOR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 Jan 2021 09:14:17 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 803C122B2C;
+        Tue, 26 Jan 2021 14:13:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1611670343;
-        bh=G8RbizNkdNhtYdbjdcp6CKdodVotlaNcKkCrkrgBOM4=;
+        s=korg; t=1611670417;
+        bh=YSv766COdRK+Q4CGhJ/sDz3wlp4qOX56jT9mW35921o=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RebdL0YABKv/TCxvi7C2gTeM2+0QKQEemTQWlYvunvF5ClLDr0dn/6NpKVgViC+yW
-         BEj0iJ9GJRY8O3yXcKbITcIeI/SidE3xJ2cbdiMgzmjbLqYZFxUWAlIvkSMOd96LqI
-         rre5pS6FU1M0YjFBWfPesiGrOCmP9mjr/LE4I8ME=
-Date:   Tue, 26 Jan 2021 15:12:21 +0100
+        b=F7FCjZJHnZTBPMEB26msNAJ7TxSzFLjs5ERZ9VKkLxzMgTsOLNAZbLAKa1//mQdOB
+         PQLMbwLKOY97s3i0PyVSnNweYooJXxoPsJ/oKlJViVAbBSMpLcteifgaXeZY/qV1XB
+         /2aac8JLw5Pp+o/knr8B8TwoifBK26ZyT1XolYMc=
+Date:   Tue, 26 Jan 2021 15:13:34 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Ikjoon Jang <ikjn@chromium.org>,
-        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
+To:     Ikjoon Jang <ikjn@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
         Zhanyong Wang <zhanyong.wang@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Tianping Fang <tianping.fang@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v6] usb: xhci-mtk: fix unreleased bandwidth data
-Message-ID: <YBAjRUSEd/6sCl4O@kroah.com>
+Message-ID: <YBAjjmpc4yPrpmgQ@kroah.com>
 References: <20210113180444.v6.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
- <1611640920.3905.13.camel@mhfsdcap03>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1611640920.3905.13.camel@mhfsdcap03>
+In-Reply-To: <20210113180444.v6.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 02:02:00PM +0800, Chunfeng Yun wrote:
-> Hi Ikjoon,
+On Wed, Jan 13, 2021 at 06:05:11PM +0800, Ikjoon Jang wrote:
+> xhci-mtk needs XHCI_MTK_HOST quirk functions in add_endpoint() and
+> drop_endpoint() to handle its own sw bandwidth management.
 > 
-> Can I put this patch into my patch series about bandwidth scheduler?
-> the series also include "[RFC PATCH v3 1/5] usb: xhci-mtk: improve
-> bandwidth scheduling with multi-TT", put them together will help to fix
-> dependence issue, meanwhile I try to build xhci-mtk-sch.c into
-> xhci-mtk.ko instead of xhci-hcd.ko.
+> It stores bandwidth data into an internal table every time
+> add_endpoint() is called, and drops those in drop_endpoint().
+> But when bandwidth allocation fails at one endpoint, all earlier
+> allocation from the same interface could still remain at the table.
+> 
+> This patch moves bandwidth management codes to check_bandwidth() and
+> reset_bandwidth() path. To do so, this patch also adds those functions
+> to xhci_driver_overrides and lets mtk-xhci to release all failed
+> endpoints in reset_bandwidth() path.
+> 
+> Fixes: 08e469de87a2 ("usb: xhci-mtk: supports bandwidth scheduling with multi-TT")
+> Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
 
-This should probably be merged now, first, as it fixes an issue that
-showed up in 4.20 so this needs to be backported to older kernels.
-
-Please rebase your future patches on top of this.
+Mathias, any objection to me taking this patch, or do you have others
+being queued up for 5.11-final?
 
 thanks,
 
