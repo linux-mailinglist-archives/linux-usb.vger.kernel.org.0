@@ -2,134 +2,218 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CCD305C2E
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 13:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E8D305BFC
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 13:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S313941AbhAZWu3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jan 2021 17:50:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726883AbhAZFPv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jan 2021 00:15:51 -0500
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC3AC061786
-        for <linux-usb@vger.kernel.org>; Mon, 25 Jan 2021 21:15:03 -0800 (PST)
-Received: by mail-oo1-xc29.google.com with SMTP id y14so3845912oom.10
-        for <linux-usb@vger.kernel.org>; Mon, 25 Jan 2021 21:15:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WEj3tmR62zGvDZoGCGiPRerSzNBbdxbd1rRwr/9kJUk=;
-        b=P49sxvgT7xsvQvhm489+UNNHRjydA/7wRy7XhqQbQIEkgQQAJ3Ky16ENSRxcKRMsku
-         k/7TmktrWpSOkzI7k/20H5wHVS2SGi0YbY5HGLE53sqXPhVr2wo/NpOooPbYSQdU34Th
-         VBiPWougzOxqABN3qvXy7YNvpWcY6w7UNtQtxoAoswujsC2EWr3NxiczgXM2u5/HQfUJ
-         LrYERBbGVl9yBkB6uzN0NsKTR4wJpcH5jAlCdV1KToNzMym5qVxYxIbTP3TXsKB3rNPf
-         YAimxbu0HMBI1BBPkEWfvePe+eS4LQX5r7rOmyYjBxH4L8adq6dBB7mzBCOL2xoUrgJN
-         30Kw==
+        id S313127AbhAZWxE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 17:53:04 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:38269 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389919AbhAZS2f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jan 2021 13:28:35 -0500
+Received: by mail-ot1-f43.google.com with SMTP id s2so14980411otp.5;
+        Tue, 26 Jan 2021 10:28:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WEj3tmR62zGvDZoGCGiPRerSzNBbdxbd1rRwr/9kJUk=;
-        b=F1sJ1AHruBgxlg2/vzZQOMSnnHT/+g8qjZm8XpwTPfj2sfy1iilL+KrmDbqOsEaoI4
-         he3p9/cXFTQdrzCEqS9E0Y2U1zYpILM6Ingk8WbrIZ+gQn20MnscMRQblaPXZEnZi+VD
-         2srxYWZWX9Zu0NnMwE4OVZD5WehpEJP7nnTO/kLZk/4Vw7vjSdJ2Bgx6dBSF9TJBsRp+
-         WvpRqVl6BXrOwyxpWVkVgpA1EbIwHHsKnc8uMk292zj2ZMGKRjwrssQdxc46hZ3mmxlK
-         clSxCcaWDAEF6oPGHrtUAUHsr5gB9K1QL7QQYNZmJMSV8IDV+V6rHqMhZEodsZ+1CVsG
-         M1hw==
-X-Gm-Message-State: AOAM533QT0L2+foSu2IP5ee7KM/4VcokYw1vSMH26XzaZw722vt7qltb
-        6/iL6hpHMTeF9cUKXJURb+9Pog==
-X-Google-Smtp-Source: ABdhPJxQy38LYIBO8JfsuhJvZQAab+eu72Dtx+aE1TieErPJ/G0DWwha/Ormwzl0NukmD+JYSYVKPw==
-X-Received: by 2002:a4a:9092:: with SMTP id j18mr1040063oog.19.1611638102791;
-        Mon, 25 Jan 2021 21:15:02 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id f10sm2357672oom.18.2021.01.25.21.15.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jan 2021 21:15:02 -0800 (PST)
-Date:   Mon, 25 Jan 2021 23:15:00 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peter.chen@nxp.com,
-        jackp@codeaurora.org
-Subject: Re: [PATCH v6 3/4] usb: dwc3: Resize TX FIFOs to meet EP bursting
- requirements
-Message-ID: <YA+lVFWlBDvN4MTF@builder.lan>
-References: <1611288100-31118-1-git-send-email-wcheng@codeaurora.org>
- <1611288100-31118-4-git-send-email-wcheng@codeaurora.org>
- <YAsHbj/mITeiY5Cq@builder.lan>
- <724cb274-36ce-fb48-a156-4eaf9e686fdf@codeaurora.org>
- <20210126015543.GB1241218@yoga>
- <99dd9419-a8fd-9eb2-9582-d24f865ecf70@codeaurora.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qvmjRU4vLqrugRhSX00gkIjq8wIoIE/XEIcN8DtiKuE=;
+        b=SAGnkRyXVlf1GZPQKEWnL40rNe90j1c0ewT/y0pGvNGaQ7qbZwv1IqPWRoUHsV0tJO
+         smRhp+FQL5yn+R9V9CeRKFgX4NF2Tqekz5YgyhGMGwrABCnFHKQ2BoenZLHv27fdK83i
+         ni0qihsAIZIBMrdqMIlKLczufKjZdMjR4+dOMB7czsddPBZO2oJL0rV2ksezMEESgkc7
+         4WmRj9fG4XmON1Imd85Ag+Da2sAcDWxwfQjKGuj8xAnMk0ESzYXnmc+q/obYWaQ4FTQe
+         yolY1ososnjh02iBL56TTkjQvNVLTOLmFrD87hcfq/5SYEoxDqmkszloOFJSfVN5xxJL
+         AIUw==
+X-Gm-Message-State: AOAM5317INulFbDe6xhOYb3dD3go47Yw1z57ASUJQbBW8hx+WHDKvPnC
+        DtFk3JOggoCrcEUHEFhBCGIOimkIY+vaQGEuegQ=
+X-Google-Smtp-Source: ABdhPJx9LhMbNU6k3LrL4EYj7kHNDp6IURievBPQQGwcjjjGCzdjHTollhV6O/srU4Q32A0xpH0mQcrpAELah6EDIwA=
+X-Received: by 2002:a9d:1710:: with SMTP id i16mr4839780ota.260.1611685673920;
+ Tue, 26 Jan 2021 10:27:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <99dd9419-a8fd-9eb2-9582-d24f865ecf70@codeaurora.org>
+References: <20210126155723.9388-1-mika.westerberg@linux.intel.com> <20210126155723.9388-6-mika.westerberg@linux.intel.com>
+In-Reply-To: <20210126155723.9388-6-mika.westerberg@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 26 Jan 2021 19:27:42 +0100
+Message-ID: <CAJZ5v0i3b5Ke_a3JEGVaYz6htRvmCPaN2cshB-XiQD2p-iQ+Wg@mail.gmail.com>
+Subject: Re: [PATCH 5/6] ACPI: Add support for native USB4 control _OSC
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Christian Kellner <christian@kellner.me>,
+        Len Brown <lenb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon 25 Jan 22:32 CST 2021, Wesley Cheng wrote:
-> On 1/25/2021 5:55 PM, Bjorn Andersson wrote:
-> > On Mon 25 Jan 19:14 CST 2021, Wesley Cheng wrote:
-> > 
-> >>
-> >>
-> >> On 1/22/2021 9:12 AM, Bjorn Andersson wrote:
-> >>> On Thu 21 Jan 22:01 CST 2021, Wesley Cheng wrote:
-> >>>
-> >>
-> >> Hi Bjorn,
-> >>>
-> >>> Under what circumstances should we specify this? And in particular are
-> >>> there scenarios (in the Qualcomm platforms) where this must not be set?
-> >>> The TXFIFO dynamic allocation is actually a feature within the DWC3
-> >> controller, and isn't specifically for QCOM based platforms.  It won't
-> >> do any harm functionally if this flag is not set, as this is meant for
-> >> enhancing performance/bandwidth.
-> >>
-> >>> In particular, the composition can be changed in runtime, so should we
-> >>> set this for all Qualcomm platforms?
-> >>>
-> >> Ideally yes, if we want to increase bandwith for situations where SS
-> >> endpoint bursting is set to a higher value.
-> >>
-> >>> And if that's the case, can we not just set it from the qcom driver?
-> >>>
-> >> Since this is a common DWC3 core feature, I think it would make more
-> >> sense to have it in DWC3 core instead of a vendor's DWC3 glue driver.
-> >>
-> > 
-> > I don't have any objections to implementing it in the core driver, but
-> > my question is can we just skip the DT binding and just enable it from
-> > the vendor driver?
-> > 
-> > Regards,
-> > Bjorn
-> > 
-> 
-> Hi Bjorn,
-> 
-> I see.  I think there are some designs which don't have a DWC3 glue
-> driver, so assuming there may be other platforms using this, there may
-> not always be a vendor driver to set this.
-> 
+On Tue, Jan 26, 2021 at 5:01 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> ACPI 6.4 introduced a new _OSC capability that is used negotiate native
+> connection manager support. Connection manager is the entity that is
+> responsible for tunneling over the USB4 fabric. If the platform rejects
+> the native access then firmware based connection manager is used.
+>
+> The new _OSC also includes a set of bits that can be used to disable
+> certain tunnel types such as PCIe for security reasons for instance.
+>
+> This implements the new USB4 _OSC so that we try to negotiate native
+> USB4 support if the Thunderbolt/USB4 (CONFIG_USB4) driver is enabled.
+> Drivers can determine what was negotiated by checking two new variables
+> exposed in this patch.
+>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-You mean that there are implementations of dwc3 without an associated
-glue driver that haven't yet realized that they need this feature?
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I would suggest then that we implement the core code necessary, we
-enable it from the Qualcomm glue layer and when someone realize that
-they need this without a glue driver it's going to be trivial to add the
-DT binding.
-
-
-The alternative is that we're lugging around a requirement to specify
-this property in all past, present and future Qualcomm dts files - and
-then we'll need to hard code it for ACPI anyways.
-
-Regards,
-Bjorn
+> ---
+>  drivers/acpi/bus.c   | 76 ++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/acpi.h | 10 ++++++
+>  2 files changed, 86 insertions(+)
+>
+> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+> index ca7c7b2bf56e..f7ad2d283e51 100644
+> --- a/drivers/acpi/bus.c
+> +++ b/drivers/acpi/bus.c
+> @@ -281,6 +281,12 @@ bool osc_sb_apei_support_acked;
+>  bool osc_pc_lpi_support_confirmed;
+>  EXPORT_SYMBOL_GPL(osc_pc_lpi_support_confirmed);
+>
+> +/*
+> + * ACPI 6.4 Operating System Capabilities for USB.
+> + */
+> +bool osc_sb_native_usb4_support_confirmed;
+> +EXPORT_SYMBOL_GPL(osc_sb_native_usb4_support_confirmed);
+> +
+>  static u8 sb_uuid_str[] = "0811B06E-4A27-44F9-8D60-3CBBC22E7B48";
+>  static void acpi_bus_osc_negotiate_platform_control(void)
+>  {
+> @@ -317,6 +323,9 @@ static void acpi_bus_osc_negotiate_platform_control(void)
+>         if (IS_ENABLED(CONFIG_SCHED_MC_PRIO))
+>                 capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_CPC_DIVERSE_HIGH_SUPPORT;
+>
+> +       if (IS_ENABLED(CONFIG_USB4))
+> +               capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_NATIVE_USB4_SUPPORT;
+> +
+>         if (!ghes_disable)
+>                 capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_APEI_SUPPORT;
+>         if (ACPI_FAILURE(acpi_get_handle(NULL, "\\_SB", &handle)))
+> @@ -348,8 +357,74 @@ static void acpi_bus_osc_negotiate_platform_control(void)
+>                         capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_APEI_SUPPORT;
+>                 osc_pc_lpi_support_confirmed =
+>                         capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_PCLPI_SUPPORT;
+> +               osc_sb_native_usb4_support_confirmed =
+> +                       capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_NATIVE_USB4_SUPPORT;
+> +       }
+> +
+> +       kfree(context.ret.pointer);
+> +}
+> +
+> +/*
+> + * Native control of USB4 capabilities. If any of the tunneling bits is
+> + * set it means OS is in control and we use software based connection
+> + * manager.
+> + */
+> +u32 osc_sb_native_usb4_control;
+> +EXPORT_SYMBOL_GPL(osc_sb_native_usb4_control);
+> +
+> +static void acpi_bus_decode_usb_osc(const char *msg, u32 bits)
+> +{
+> +       printk(KERN_INFO PREFIX "%s USB3%c DisplayPort%c PCIe%c XDomain%c\n", msg,
+> +              (bits & OSC_USB_USB3_TUNNELING) ? '+' : '-',
+> +              (bits & OSC_USB_DP_TUNNELING) ? '+' : '-',
+> +              (bits & OSC_USB_PCIE_TUNNELING) ? '+' : '-',
+> +              (bits & OSC_USB_XDOMAIN) ? '+' : '-');
+> +}
+> +
+> +static u8 sb_usb_uuid_str[] = "23A0D13A-26AB-486C-9C5F-0FFA525A575A";
+> +static void acpi_bus_osc_negotiate_usb_control(void)
+> +{
+> +       u32 capbuf[3];
+> +       struct acpi_osc_context context = {
+> +               .uuid_str = sb_usb_uuid_str,
+> +               .rev = 1,
+> +               .cap.length = sizeof(capbuf),
+> +               .cap.pointer = capbuf,
+> +       };
+> +       acpi_handle handle;
+> +       acpi_status status;
+> +       u32 control;
+> +
+> +       if (!osc_sb_native_usb4_support_confirmed)
+> +               return;
+> +
+> +       if (ACPI_FAILURE(acpi_get_handle(NULL, "\\_SB", &handle)))
+> +               return;
+> +
+> +       control = OSC_USB_USB3_TUNNELING | OSC_USB_DP_TUNNELING |
+> +                 OSC_USB_PCIE_TUNNELING | OSC_USB_XDOMAIN;
+> +
+> +       capbuf[OSC_QUERY_DWORD] = 0;
+> +       capbuf[OSC_SUPPORT_DWORD] = 0;
+> +       capbuf[OSC_CONTROL_DWORD] = control;
+> +
+> +       status = acpi_run_osc(handle, &context);
+> +       if (ACPI_FAILURE(status))
+> +               return;
+> +
+> +       if (context.ret.length != sizeof(capbuf)) {
+> +               printk(KERN_INFO PREFIX "USB4 _OSC: returned invalid length buffer\n");
+> +               goto out_free;
+>         }
+>
+> +       osc_sb_native_usb4_control =
+> +               control & ((u32 *)context.ret.pointer)[OSC_CONTROL_DWORD];
+> +
+> +       acpi_bus_decode_usb_osc("USB4 _OSC: OS supports", control);
+> +       acpi_bus_decode_usb_osc("USB4 _OSC: OS controls",
+> +                               osc_sb_native_usb4_control);
+> +
+> +out_free:
+>         kfree(context.ret.pointer);
+>  }
+>
+> @@ -1188,6 +1263,7 @@ static int __init acpi_bus_init(void)
+>          * so it must be run after ACPI_FULL_INITIALIZATION
+>          */
+>         acpi_bus_osc_negotiate_platform_control();
+> +       acpi_bus_osc_negotiate_usb_control();
+>
+>         /*
+>          * _PDC control method may load dynamic SSDT tables,
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index 2630c2e953f7..ac68c2d4e393 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -546,9 +546,19 @@ acpi_status acpi_run_osc(acpi_handle handle, struct acpi_osc_context *context);
+>  #define OSC_SB_OSLPI_SUPPORT                   0x00000100
+>  #define OSC_SB_CPC_DIVERSE_HIGH_SUPPORT                0x00001000
+>  #define OSC_SB_GENERIC_INITIATOR_SUPPORT       0x00002000
+> +#define OSC_SB_NATIVE_USB4_SUPPORT             0x00040000
+>
+>  extern bool osc_sb_apei_support_acked;
+>  extern bool osc_pc_lpi_support_confirmed;
+> +extern bool osc_sb_native_usb4_support_confirmed;
+> +
+> +/* USB4 Capabilities */
+> +#define OSC_USB_USB3_TUNNELING                 0x00000001
+> +#define OSC_USB_DP_TUNNELING                   0x00000002
+> +#define OSC_USB_PCIE_TUNNELING                 0x00000004
+> +#define OSC_USB_XDOMAIN                                0x00000008
+> +
+> +extern u32 osc_sb_native_usb4_control;
+>
+>  /* PCI Host Bridge _OSC: Capabilities DWORD 2: Support Field */
+>  #define OSC_PCI_EXT_CONFIG_SUPPORT             0x00000001
+> --
+> 2.29.2
+>
