@@ -2,69 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD544304CA2
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 23:51:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C84C304CA3
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 23:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730571AbhAZWvL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jan 2021 17:51:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38804 "EHLO mail.kernel.org"
+        id S1730582AbhAZWvO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 17:51:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38964 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392868AbhAZRkK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 26 Jan 2021 12:40:10 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 33994221FB;
-        Tue, 26 Jan 2021 17:39:28 +0000 (UTC)
+        id S2392950AbhAZRkl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 Jan 2021 12:40:41 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2929B22228;
+        Tue, 26 Jan 2021 17:40:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1611682768;
-        bh=4I0wInzR+eOz/jyMqpCBctR9x3WhgHBS66ZyaFP8lZc=;
+        s=korg; t=1611682800;
+        bh=t5FEKloI/6KDyGm6sAJ0H3ldMzvUb5M0dXOLgYL8aOo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wWYiajXUHjDrN4BIxT072VjVgMORHk7wcbIj2uKO/hPZ920SMGPX8KT+7hjWTVr54
-         FNGpdUqC4Ygwd6DgVuDQldmR6g7Uu/YveTMSWm0MGZRza0ig/tuhS09uqBaTUIqvRH
-         +uBw0arnKXKpI1YT7qZofGxpR+idZ0Wdcbt2wYDE=
-Date:   Tue, 26 Jan 2021 18:39:26 +0100
+        b=tHr9IRSqUdTQdutykeZAniX66EyqUCsXr+aKVV05pnC0QWOhwqhMM7FDCElq9cdFa
+         UtNRv9YL+2rOEe/uy1emrn8XfqjDwL8SM6GUvQPDryiM4+iSja7S2Mqk/dj28u0pee
+         EszTIIe1KNAJEEEJdqKz1Mk9Tzv9wj4dkfScFz1Q=
+Date:   Tue, 26 Jan 2021 18:39:58 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Zou Wei <zou_wei@huawei.com>
-Cc:     andreyknvl@google.com, dvyukov@google.com, allen.lkml@gmail.com,
-        stern@rowland.harvard.edu, sashal@kernel.org,
-        gustavoars@kernel.org, a.darwish@linutronix.de,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] usb: core: Remove unused including
+Cc:     balbi@kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        benh@kernel.crashing.org, sashal@kernel.org, rentao.bupt@gmail.com,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] usb: gadget: Remove unused including
  <linux/version.h>
-Message-ID: <YBBTzkPiyMZov9J0@kroah.com>
-References: <1611578688-43256-1-git-send-email-zou_wei@huawei.com>
+Message-ID: <YBBT7gNiKGmM4jjD@kroah.com>
+References: <1611578492-43121-1-git-send-email-zou_wei@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1611578688-43256-1-git-send-email-zou_wei@huawei.com>
+In-Reply-To: <1611578492-43121-1-git-send-email-zou_wei@huawei.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 25, 2021 at 08:44:48PM +0800, Zou Wei wrote:
+On Mon, Jan 25, 2021 at 08:41:32PM +0800, Zou Wei wrote:
 > Fix the following versioncheck warning:
 > 
-> drivers/usb/core/hcd.c:14:1: unused including <linux/version.h>
+> drivers/usb/gadget/udc/aspeed-vhub/hub.c:33:1: unused including <linux/version.h>
 > 
 > Reported-by: Hulk Robot <hulkci@huawei.com>
 > Signed-off-by: Zou Wei <zou_wei@huawei.com>
 > ---
->  drivers/usb/core/hcd.c | 1 -
+>  drivers/usb/gadget/udc/aspeed-vhub/hub.c | 1 -
 >  1 file changed, 1 deletion(-)
 > 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index 3f03813..53bc93d 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -11,7 +11,6 @@
->  
+> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/hub.c b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> index 396a7d8..b192d57 100644
+> --- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> +++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> @@ -30,7 +30,6 @@
+>  #include <linux/regmap.h>
+>  #include <linux/dma-mapping.h>
 >  #include <linux/bcd.h>
->  #include <linux/module.h>
 > -#include <linux/version.h>
->  #include <linux/kernel.h>
->  #include <linux/sched/task_stack.h>
->  #include <linux/slab.h>
+>  #include <linux/usb.h>
+>  #include <linux/usb/hcd.h>
 
-You didn't test this patch, why???
+You didn't test this patch either :(
 
-{sigh}
+Your script is not correct...
 
 greg k-h
