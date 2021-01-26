@@ -2,91 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5C53044F1
+	by mail.lfdr.de (Postfix) with ESMTP id AD5F63044F2
 	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 18:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390355AbhAZRSa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jan 2021 12:18:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55568 "EHLO
+        id S2390510AbhAZRTB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 12:19:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390382AbhAZIql (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jan 2021 03:46:41 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA616C061786
-        for <linux-usb@vger.kernel.org>; Tue, 26 Jan 2021 00:45:53 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id x206so7721158pfc.16
-        for <linux-usb@vger.kernel.org>; Tue, 26 Jan 2021 00:45:53 -0800 (PST)
+        with ESMTP id S1726694AbhAZQi1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jan 2021 11:38:27 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E7FC061574;
+        Tue, 26 Jan 2021 08:37:47 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id g1so20550008edu.4;
+        Tue, 26 Jan 2021 08:37:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=TvDirtp33tQ52/+xfhxSiL9lDOUp03iq0TnEaNmWwQQ=;
-        b=bo/qYJO/oWZGzk/RT0zMkXs3Ry7yVRr04zttXknovn8ZuFXa85/EcnqhgYLpg/kLbC
-         ZWi25BKBWd+66y9XCGYfS6iWMVwQyMFbxQnPtFE8O4lfNB667xGyiY56IChHH5YB/1Nr
-         xVMu7drtb+kPwQrKYh2Sw6cQ9XyZIw3C/RCMG0kob1M7vsf9ESRo+z08g+QqZ2eFABBj
-         z/a75c12n1yZwUHSTUZm5dRT4imd4DyIWQZav4p6wRf1k7jP9DU2GkqN9z+2VY2meGig
-         SYmGDNQNvt73YAgmYVacSqt671mlNnaohCuusHnX1z3PrqM7efAL/R9V5CEAK4bL1z52
-         Mjog==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kK/uDkip+U03fuKdMMMWxAFTK++aFTandJ16wet7eQE=;
+        b=LbIlyXwkci3GYJ9CBAz3Z+vW77MuoErdhYBGoAUYcBJWurTN81UnTPKdvy1y+UTaFU
+         rd2yMYhLeSFHdBIVC+tnIOkqw8W+LtUhXWhHrNnuHNUXBWYN4mA/NegHbxYZvSgBLZNE
+         4tsdTqpZVGWznBJ4g8NJXj2khbqa2JdGZiKET2oQ+6gJEwoJ1RGY21SGBq3weJQdXQni
+         g0C8ZJcs4e9EQ7rhYd/wyxhvxNmQucIl2n/UbPyjVv7rCpgOh8UfFguoAwk3KUP2hIXj
+         NgHR7MAX/JoZFhQTE+EJ67ZrqRGXKgWe+9a3Eg58lOqUe1JJ6Gs1w0HbOKlEbL2/wQH3
+         TcOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=TvDirtp33tQ52/+xfhxSiL9lDOUp03iq0TnEaNmWwQQ=;
-        b=Ld7Ut6laLhmVhphz04454z5FDxsh9kXJWRxBOAbS7Nt3TfIomHShsPxkvnX+j8UkR0
-         bse+ZW25GWOXq+BXlTGk7a19h0n2+VHHOZ9lsYEmGMsw95yOH97lN4adkVYrrQRhDxL2
-         xUt7vFVs1ShUOjdRAn8FOo1SsAignPYnLHG6x3OpUEwRVLWWZDOMP5ron+CrMavTO1Xf
-         zPlCFXPx9R81SVTyonJu3xQi91jsiI2vBK9tYdD3wbHJUGe7/wYo7wBhA+/oRct/HE+Q
-         kAHkVMoLXTU6en42ZQl6Kxwt6nYvFVEgvqs/MGoMWX4USkFsTBC6ZkZkeOY3RUlCs02z
-         tprg==
-X-Gm-Message-State: AOAM532OA9Z0GT/Jj/ib56zlakKPrz3GRau2yx9wBwUBahN2gSrvsrLW
-        s/AB35QOmz9/xxjpBHNDZI/Uyp/sFN0i
-X-Google-Smtp-Source: ABdhPJwpx0HIv3y1JBgyuhRp7JMI+b0CQQDa80hg7y5P3WpuD9CFOIEDueuJD8x6PH4eP17R4/5Rq0r2uH0y
-Sender: "kyletso via sendgmr" <kyletso@kyletso.ntc.corp.google.com>
-X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:4430:c29c:1e76:3e65])
- (user=kyletso job=sendgmr) by 2002:a17:90b:3789:: with SMTP id
- mz9mr5203328pjb.4.1611650753479; Tue, 26 Jan 2021 00:45:53 -0800 (PST)
-Date:   Tue, 26 Jan 2021 16:45:41 +0800
-Message-Id: <20210126084544.682641-1-kyletso@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.30.0.280.ga3ce27912f-goog
-Subject: [PATCH 0/3] common SVDM version and VDO from dt
-From:   Kyle Tso <kyletso@google.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        hdegoede@redhat.com, badhri@google.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Kyle Tso <kyletso@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kK/uDkip+U03fuKdMMMWxAFTK++aFTandJ16wet7eQE=;
+        b=eU8xmL0OxnQrnVR8+AITpwxosHyiaTyZHy+1L6PalN4VIj9/Jn1xXgz8qHT+YJm2ZO
+         9o3RB2B+DkKeQMEx03FEECnpbmh6MWrTg2umYZdazs2/S7uKItH/T+SMRvdGEt/i92/8
+         29UXhiaQLLk5Al76vLdL5GZTA/7IGWcUQZ9GZRYIJNYdMQjS9SBDGBWRPr3E/2d3wlw+
+         AMxv+uqGJ2oZwU2+VTm+QD5cM5rG/eveh53YQZTxg5wi4/pJV7ttJWAgzznWsHHvvjNM
+         FdFBWFXr8OXl0fc3FbeFngaD/E06i113qxCYwRthS5dZfNj+wLfVkTOIkr/dJL1twMSD
+         4M3g==
+X-Gm-Message-State: AOAM532/uMEFUlXVDtN4spB4lhG69gOf7MQqpG2Nia1afYTJLv3s8qDj
+        hq/xUXIqrgFBzb4Gt4MYoLqp6XrRO3ApN8gLvifGWNn98ksGXg==
+X-Google-Smtp-Source: ABdhPJxAcogkmcB6fEeeJ5/Dn7TH8sbXlq4bOcWspsaqW2XLPMPtPd+mALfJbn8VaRNhMehfayx8prjI4U41XLjeH3c=
+X-Received: by 2002:a05:6402:4252:: with SMTP id g18mr5471851edb.231.1611679066212;
+ Tue, 26 Jan 2021 08:37:46 -0800 (PST)
+MIME-Version: 1.0
+References: <20210126155723.9388-1-mika.westerberg@linux.intel.com>
+In-Reply-To: <20210126155723.9388-1-mika.westerberg@linux.intel.com>
+From:   Yehezkel Bernat <yehezkelshb@gmail.com>
+Date:   Tue, 26 Jan 2021 18:37:30 +0200
+Message-ID: <CA+CmpXty1N+0zJoa9vOS6-pr-qQCv11PdtE5yyurEqna3rPkkw@mail.gmail.com>
+Subject: Re: [PATCH 0/6] thunderbolt / ACPI: Add support for USB4 _OSC
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Christian Kellner <christian@kellner.me>,
+        Len Brown <lenb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-acpi@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The correct SVDM version we should use is the lowest common version             
-between the port partners (plug) as stated in the PD3 Spec 6.4.4.2.3.           
-It is determined in the Discovery Identity command so cache it and set          
-the value to the version field of the VDM header in every later SVDM.           
-                                                                                
-Like the previous patch "usb: typec: tcpm: Create legacy PDOs for PD2           
-connection"                                                                     
-(https://lore.kernel.org/linux-usb/20210115163311.391332-1-kyletso@google.com/) 
-The field is changed before sending it out of the port. I know this is          
-not a good idea but at least it works.                                          
-                                                                                
-The other two patches are about to get the VDO from fwnode so as to give         
-more flexibility.
+On Tue, Jan 26, 2021 at 5:57 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> Hi all,
+>
+> The just released ACPI 6.4 spec [1] adds a new _OSC method that is used to
+> negotiate OS support for native USB4 features such as PCIe tunneling. This
+> patch series adds Linux support for the new _OSC and modifies the
+> Thunderbolt/USB4 driver accordingly to enable/disable tunneling of
+> different protocols.
+>
+> There is an additional setting in the firmware connection manager that
+> allows the BIOS to disable PCIe tunneling, so we add support for this and
+> also make the software connection manager to switch to this "nopcie"
+> security level when the _OSC does not allow PCIe tunneling.
+>
+> This applies on top of thunderbolt.git/next.
+>
+> [1] https://uefi.org/sites/default/files/resources/ACPI_Spec_6_4_Jan22.pdf
+>
+> Mario Limonciello (2):
+>   thunderbolt: Fix possible NULL pointer dereference in tb_acpi_add_link()
+>   ACPI: Execute platform _OSC also with query bit clear
+>
+> Mika Westerberg (4):
+>   thunderbolt: Add support for PCIe tunneling disabled (SL5)
+>   thunderbolt: Allow disabling XDomain protocol
+>   ACPI: Add support for native USB4 control _OSC
+>   thunderbolt: Add support for native USB4 _OSC
+>
 
-Kyle Tso (3):
-  usb: typec: Determine common SVDM Versions
-  dt-bindings: connector: Add SVDM VDO properties
-  usb: typec: tcpm: Get Sink VDO from fwnode
+For Thunderbolt parts,
 
- drivers/usb/typec/altmodes/displayport.c |  6 ++-
- drivers/usb/typec/class.c                |  8 ++--
- drivers/usb/typec/tcpm/tcpm.c            | 56 ++++++++++++++++++++----
- drivers/usb/typec/ucsi/displayport.c     | 12 +++--
- include/dt-bindings/usb/pd.h             | 53 +++++++++++++++++++++-
- include/linux/usb/pd_vdo.h               | 40 ++++++++++++-----
- 6 files changed, 147 insertions(+), 28 deletions(-)
-
--- 
-2.30.0.280.ga3ce27912f-goog
-
+    Acked-by: Yehezkel Bernat <YehezkelShB@gmail.com>
