@@ -2,155 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A71D4304CA7
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 23:52:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E52F304CAA
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 23:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730630AbhAZWvl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jan 2021 17:51:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387608AbhAZRte (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jan 2021 12:49:34 -0500
-Received: from mout0.freenet.de (mout0.freenet.de [IPv6:2001:748:100:40::2:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25649C061786
-        for <linux-usb@vger.kernel.org>; Tue, 26 Jan 2021 09:48:39 -0800 (PST)
-Received: from [195.4.92.121] (helo=sub2.freenet.de)
-        by mout0.freenet.de with esmtpa (ID andihartmann@freenet.de) (port 25) (Exim 4.92 #3)
-        id 1l4SSB-0004iX-LS; Tue, 26 Jan 2021 18:48:35 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=01019freenet.de; s=mjaymdexmjqk; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=OzP4itTO16AvZnvr2urYsNT+T4IblfL/SLc5lkWulNc=; b=I5isZUg0RW2JESXPTaRAPUpCU1
-        /T2vA2VPIcm73sTzHd6dudTWWSRI1g8FTmKmNu6R7BFHk3xUhpYBggFtn5i/hlYxziK68sRYC21BN
-        o5E5oUIJl7oysx4b2Lk1ILD1n4zGB2RAo11PBUiZoGuZhmaxees7DhrOiRYxsicrBtzJ8tC0i9BBD
-        um+ISD4QQMYBVMYZn0c77A0FGKdvIKIB2L6Xm03KBWbuVrBK6yH6/zvH6nYtjq1vJNmKg0KJnnfLx
-        1k8ME5iF1ITS2qrOykRvMtoiI6JPIxeZWkLeCp3ZGVXneUU7jyYMbfEMva9soMXA6jXhT6AlBu4bA
-        h3tFd3kw==;
-Received: from p200300de573c8400505400fffe15ac42.dip0.t-ipconnect.de ([2003:de:573c:8400:5054:ff:fe15:ac42]:44250 helo=mail.maya.org)
-        by sub2.freenet.de with esmtpsa (ID andihartmann@freenet.de) (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128) (port 465) (Exim 4.92 #3)
-        id 1l4SSB-0002SL-G8; Tue, 26 Jan 2021 18:48:35 +0100
-Received: internal info suppressed
-Subject: Re: USB2 / USB3 compatibility problems: xhci_hcd 0000:00:06.0: WARN
- Wrong bounce buffer write length: 0 != 512
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        linux-usb@vger.kernel.org
-References: <3b4e35d2-9508-e0aa-eaf8-32e524ad81c4@01019freenet.de>
- <756e7b88-1142-4758-b8f7-a8eaf510b422@01019freenet.de>
- <edc3c7b1-98fa-9062-5c17-426e8ad17370@01019freenet.de>
- <7e953b15-925a-1512-4d15-c07fc03f9059@01019freenet.de>
- <f83677b5-e3d1-afdb-c8d4-f9969fa3fe84@linux.intel.com>
- <a65a9299-1e5b-f15d-2ae7-f0a21938f4fd@01019freenet.de>
- <d9fd7812-43cc-2813-5222-5e39b63fccbc@01019freenet.de>
- <8de6ecb9-4a39-5742-a358-d6965feffc79@linux.intel.com>
- <021e1727-0e2e-0207-ace2-4382489eea1f@linux.intel.com>
-From:   Andreas Hartmann <andihartmann@01019freenet.de>
-Message-ID: <98a22dee-259d-9246-3ca6-862af2bcf62d@01019freenet.de>
-Date:   Tue, 26 Jan 2021 18:48:33 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S1727914AbhAZWwM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 17:52:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47448 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729073AbhAZSV7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 Jan 2021 13:21:59 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7E859207BC;
+        Tue, 26 Jan 2021 18:21:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611685277;
+        bh=MXfhwHib5lhIxe0d2EionO+qD1p7JOcTGIR5T//GcjU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Vyv6zeCgPBGRmLOGE+ZvJN/iEJbaZMbXGNiKs6W7mrLLyXtdvyXRRMjhIUG4flGz0
+         SObPNEWXGHHwcJfUJNuiMDGYMFH/8ozn34f5YEANN+7bqYaurnkm8GG9NwrvNlziq/
+         O+icUTumPpIZFw8RhAofdIEpRpC2YkiAovXOWMQqJg9uQPP3e+v84gtclOugTGmOcV
+         ++aSNFIc4sQpch4zq96vzAnzS+3zaa/mBeaevzYjYP5n9QywZGVOgMQYAiyYmOP+pZ
+         Sq1U3Xwms5ZLaHqaPI4yniW31jcyXpj/T+SM9Ctu5ovfB008PliOds9wV4CCoDyhwc
+         GyVUoh4d1+tyA==
+Received: by mail-ed1-f43.google.com with SMTP id c6so20960185ede.0;
+        Tue, 26 Jan 2021 10:21:17 -0800 (PST)
+X-Gm-Message-State: AOAM531+bSa8/wfSUxTkMkqCWoYP6KAcEK0RB3tUKorghTKbVy0gruDu
+        l16YNSHn7Vbd0RkSMdhlUX5JAJttecisG/5fnw==
+X-Google-Smtp-Source: ABdhPJwqon1vbLCOlmss6J+2GsHVOo4w9BY+GyxQEwzER9kIB9CkFOtLUal0HAuyf9bfo2h5vrYSv5GPYVZbdJOig20=
+X-Received: by 2002:a05:6402:1751:: with SMTP id v17mr5717873edx.289.1611685276124;
+ Tue, 26 Jan 2021 10:21:16 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <021e1727-0e2e-0207-ace2-4382489eea1f@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originated-At: 2003:de:573c:8400:5054:ff:fe15:ac42!44250
-X-FNSign: v=2 s=1ED5436809F8B8FAC5238C28A59F840AAB7718308A174E046D4F99F8A199EE0E
-X-Scan-TS: Tue, 26 Jan 2021 18:48:35 +0100
+References: <20210123034428.2841052-1-swboyd@chromium.org>
+In-Reply-To: <20210123034428.2841052-1-swboyd@chromium.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 26 Jan 2021 12:21:04 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+voSRnHEEkUZSasdKGrXiBs3yCmzHp6Ua4WNuAgnh4AQ@mail.gmail.com>
+Message-ID: <CAL_Jsq+voSRnHEEkUZSasdKGrXiBs3yCmzHp6Ua4WNuAgnh4AQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] Stop NULLifying match pointer in of_match_device()
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jean Delvare <jdelvare@suse.com>, Jiri Slaby <jslaby@suse.com>,
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-omap <linux-omap@vger.kernel.org>,
+        "open list:MEDIA DRIVERS FOR RENESAS - FCP" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Leitner <richard.leitner@skidata.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Mathias,
+On Fri, Jan 22, 2021 at 9:44 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> (This is a continuation of this series[1] per Rob's request. I've picked
+> up the acks, etc. with b4 and compile tested the patches along with an
+> arm64 allmodconfig build. Presumably Rob will pick these up directly.)
+>
+> of_match_device() uses of_match_ptr() to make the match table argument
+> NULL via the pre-processor when CONFIG_OF=n. This makes life harder for
+> compilers who think that match tables are never used and warn about
+> unused variables when CONFIG_OF=n. This series changes various callers
+> to use of_device_get_match_data() instead, which doesn't have this
+> problem, and removes the of_match_ptr() usage from of_match_device() so
+> that the compiler can stop complaining about unused variables. It will
+> do dead code elimination instead and remove the match table if it isn't
+> actually used.
+>
+> [1] https://lore.kernel.org/r/20191004214334.149976-1-swboyd@chromium.org
+>
+> Cc: Alexandre Torgue <alexandre.torgue@st.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Grygorii Strashko <grygorii.strashko@ti.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Jacopo Mondi <jacopo@jmondi.org>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Jiri Slaby <jslaby@suse.com>
+> Cc: <linux-hwmon@vger.kernel.org>
+> Cc: <linux-kernel@vger.kernel.org>,
+> Cc: <linux-media@vger.kernel.org>
+> Cc: <linux-omap@vger.kernel.org>
+> Cc: <linux-renesas-soc@vger.kernel.org>
+> Cc: <linux-serial@vger.kernel.org>
+> Cc: <linux-usb@vger.kernel.org>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+> Cc: Richard Leitner <richard.leitner@skidata.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+>
+> Stephen Boyd (6):
+>   media: renesas-ceu: Use of_device_get_match_data()
+>   drivers: net: davinci_mdio: Use of_device_get_match_data()
+>   serial: stm32: Use of_device_get_match_data()
+>   usb: usb251xb: Use of_device_get_match_data()
+>   hwmon: (lm70) Avoid undefined reference to match table
+>   of/device: Don't NULLify match table in of_match_device() with
+>     CONFIG_OF=n
+>
+>  drivers/hwmon/lm70.c                   |  2 +-
+>  drivers/media/platform/renesas-ceu.c   |  2 +-
+>  drivers/net/ethernet/ti/davinci_mdio.c | 12 ++---
+>  drivers/tty/serial/stm32-usart.c       | 71 ++++++++++++--------------
+>  drivers/tty/serial/stm32-usart.h       |  2 +-
+>  drivers/usb/misc/usb251xb.c            | 12 ++---
+>  include/linux/of_device.h              |  4 +-
+>  7 files changed, 47 insertions(+), 58 deletions(-)
 
-I'll test it ASAP!
+Series applied.
 
-Thanks
-Andreas
 
-On 26.01.21 at 18:29 Mathias Nyman wrote:
-> 
->>> I'm not sure if it's important for you to know: The driver doesn't use struct scatterlist or num_mapped_sgs at all (if it's meant to be used by the sender at all).
->>>
->>> But it sets URB_NO_TRANSFER_DMA_MAP (for data transfer among others).
->>>
->>> Mlme packets are sent w/o bulk and w/o setting URB_NO_TRANSFER_DMA_MAP. All other packets are sent with URB_NO_TRANSFER_DMA_MAP turned on.
->>>
->>
->> Ok, thanks, I see what's going on here.
->>
->> Short recap of xhci alignment requirements.
->> 1. Data pointed to by a transfer request block (TRB) may not span 64k boundary
->> 2. If a transfer contains several TRBs, and spans over two TRB ringbuffer
->>    segments, then the sum of the TRB data in the first segment must be a 
->>    multiple of max packets in size.
->>  
->> Code assumes that if transfer is split into several blocks,(TRBs) and a block
->> in the middle of a transfer is smaller than max packet size, then it must be sg list.
->>
->> But this is not necessarily the case if data was already DMA mapped beforehand.
->> Data might start just before a 64k boundary, causing first TRB to be less than
->> packet size.
->>
->> I'll start implementing a fix for this.
-> 
-> Got a first iteration ready,
-> any change you could try it out?
-> 
-> Thanks
-> -Mathias
-> 
-> 8<---
-> 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 5677b81c0915..8df30618aaf1 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -699,11 +699,16 @@ static void xhci_unmap_td_bounce_buffer(struct xhci_hcd *xhci,
->  	dma_unmap_single(dev, seg->bounce_dma, ring->bounce_buf_len,
->  			 DMA_FROM_DEVICE);
->  	/* for in tranfers we need to copy the data from bounce to sg */
-> -	len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs, seg->bounce_buf,
-> -			     seg->bounce_len, seg->bounce_offs);
-> -	if (len != seg->bounce_len)
-> -		xhci_warn(xhci, "WARN Wrong bounce buffer read length: %zu != %d\n",
-> -				len, seg->bounce_len);
-> +	if (urb->num_sgs) {
-> +		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs, seg->bounce_buf,
-> +					   seg->bounce_len, seg->bounce_offs);
-> +		if (len != seg->bounce_len)
-> +			xhci_warn(xhci, "WARN Wrong bounce buffer read length: %zu != %d\n",
-> +				  len, seg->bounce_len);
-> +	} else {
-> +		memcpy(urb->transfer_buffer + seg->bounce_offs, seg->bounce_buf,
-> +		       seg->bounce_len);
-> +	}
->  	seg->bounce_len = 0;
->  	seg->bounce_offs = 0;
->  }
-> @@ -3275,12 +3280,16 @@ static int xhci_align_td(struct xhci_hcd *xhci, struct urb *urb, u32 enqd_len,
->  
->  	/* create a max max_pkt sized bounce buffer pointed to by last trb */
->  	if (usb_urb_dir_out(urb)) {
-> -		len = sg_pcopy_to_buffer(urb->sg, urb->num_sgs,
-> -				   seg->bounce_buf, new_buff_len, enqd_len);
-> -		if (len != new_buff_len)
-> -			xhci_warn(xhci,
-> -				"WARN Wrong bounce buffer write length: %zu != %d\n",
-> -				len, new_buff_len);
-> +		if (urb->num_sgs) {
-> +			len = sg_pcopy_to_buffer(urb->sg, urb->num_sgs,
-> +						 seg->bounce_buf, new_buff_len, enqd_len);
-> +			if (len != new_buff_len)
-> +				xhci_warn(xhci, "WARN Wrong bounce buffer write length: %zu != %d\n",
-> +					  len, new_buff_len);
-> +		} else {
-> +			memcpy(seg->bounce_buf, urb->transfer_buffer + enqd_len, new_buff_len);
-> +		}
-> +
->  		seg->bounce_dma = dma_map_single(dev, seg->bounce_buf,
->  						 max_pkt, DMA_TO_DEVICE);
->  	} else {
-> 
+Rob
