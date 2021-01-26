@@ -2,138 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B54FE304CB4
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 23:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14711304CB9
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 23:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730658AbhAZWxc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jan 2021 17:53:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42080 "EHLO
+        id S1727774AbhAZWyA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 17:54:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391638AbhAZSfE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jan 2021 13:35:04 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899EDC06174A;
-        Tue, 26 Jan 2021 10:34:24 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id n10so11981696pgl.10;
-        Tue, 26 Jan 2021 10:34:24 -0800 (PST)
+        with ESMTP id S2394767AbhAZSfi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jan 2021 13:35:38 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E250AC061756;
+        Tue, 26 Jan 2021 10:34:57 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id q2so7484423plk.4;
+        Tue, 26 Jan 2021 10:34:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=L3OYVEIwm+T4ixSU3W7nTuuzBIOgDZrgCxBKI23Xg2k=;
-        b=aWqpP/8ZYWxQO2rlpi9fOnuC5FKRWeBOie91OqM77Z3KnNXl/qMnmCpkmXGrOgf+1I
-         FBbZEfzttwMQnY7vVgtQiJ9SBzPZqvBB2sXD7gYcddrD0MqL2rkhP1izJAXo3cG3wWLh
-         LZFiphBSg6bbQ8rcrsQm/AuuUegtZHjS2VCZrWFanbJ1xF2Qpv/ibHb9qq+CMt79ZwO5
-         X1C+wvrW/wjvDWUyaoCsy2udTx+5E84sK9P5tei/SfRhyP7XvR09pHTIokbRiZV5fHuq
-         TOQ/e3wTTTV7fFrjDMUvZb/pGI2Ogx8Csyqpq9embp8rA2IfXsAe2gloKgibspeP5g/a
-         i75A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=OR9wVz2vxGr4uGs0aRUSPWq5Qs/Y5o7RNeRWhP0NrZ0=;
+        b=bx7/Of/QgmIIlJDhv2cIBDHcAMgF2psnNmkAvZ6KbKf80bcchoKgJX3ZDVUNhf5w3r
+         ZSGqDJh2MBJo0oc9E54zWqgaYh8qFRHXV9kSe7uts1BOck7A+8/oWE+vLvH2f1Gvupo6
+         SYOamguevR5Gp3w2Utkivq8XP24pIM3+tQib/1JERwyfbfwda8KjARJoLiAw0qgZUptT
+         EL5H2QSsrn03tgP/YvO3q6ae/NEDMGVuOlj1fB+CvZVTOTjy9BOuVNy654DmlrAXB7yS
+         VN/WA+/DsX47GvvlTWG8xt19RJ0BSxBjLSIVm5W3xBFu4bTxuUuwKWAwFMGAh0/W+BXY
+         fUIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=L3OYVEIwm+T4ixSU3W7nTuuzBIOgDZrgCxBKI23Xg2k=;
-        b=FvF1I/Bn/ExN60P1r/L+I/OcQQYrC4AnbIodGi6LJ6pMElHpE6ANJh8/muyHM4sWSN
-         M7iPFsV6Z2e3Ttf7Hv8dDwGA5SBOiufbyqGhAOoPOtD04SbH4LpHLL7tqzHtpcb7Pc72
-         lMdMlh0PJ7vSJ//pUnK557eRRvZPTTGMio5tE72F5z4FtSpSn9LEWiFI453RAvE7jR+D
-         LLffmhAxKMcxARAIZmVQEPv3/1ZJ/ANcKpWjjp16TfrbAn/ZuNZdtIBmoIRx4A1vz8eR
-         S6x0SL8IRoEU+QgsCazp9edeNm7wSLF44TWF3yBEFofiA08J+N/TAkYrpb+dV/Yogofz
-         RAnw==
-X-Gm-Message-State: AOAM533Sq8Q5WWo1mAVhlzH9VEfYqbLRKPfeH2xoFkVnKKmJCUuYGEs4
-        zewajLKw1unsYnT08gc/8A8=
-X-Google-Smtp-Source: ABdhPJyhDR/U841s6Lt31J2RW54n4sNXu+MSTO3NGOQvGyykBztGypP+Oa6R3w25Y8TQbRQ/ufO7gg==
-X-Received: by 2002:a62:6503:0:b029:1b4:4580:1abd with SMTP id z3-20020a6265030000b02901b445801abdmr6516507pfb.30.1611686063904;
-        Tue, 26 Jan 2021 10:34:23 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=OR9wVz2vxGr4uGs0aRUSPWq5Qs/Y5o7RNeRWhP0NrZ0=;
+        b=CsiXiJUKp+yM7m3lZvKUI4Z31i5D6tLr/4iVXwk43UqSqR1MtoMXmsGm8VE5yXvJW4
+         TXgqJEyHQvHpfAlhKMx6FbVInbOZw3ZPvNl0/7iB1RZWF8TsNJUu3/Of59+DYBJJZiHQ
+         tMjzzljbp9v2/ixFtRvyYJFnQfpkq3/OfKQP3JFn5FFHy6M9XqMKmyYmmexSkotsRS8M
+         3gsO1LyfN7dHt+rwUt503oga6BYZk+A6Ty3hDja3vv51DDFxWv7poj8AZy+BW0Jh2eKV
+         S0x0PIA5U3709BkIGSBdGkWS8GTPjMY33Elp5KUEpe9pN8NKsdg/+SLb4FCQB+9NDCpE
+         9oiw==
+X-Gm-Message-State: AOAM530Gx2eaDRUEtCxUAd3FjdBGF+UvcEHXbsyFiUssHltagierPIdH
+        0O798ueAQxqnQSxaXoGNC3uhU/rwPUw/0eZVMOw=
+X-Google-Smtp-Source: ABdhPJwigx9Ufx12ORwvqE9EwFeEjggnfZabvy73Op19avx0lbykcm49Yndao87OO0FjgGbMT5/2CQ==
+X-Received: by 2002:a17:90a:a508:: with SMTP id a8mr1146415pjq.75.1611686097307;
+        Tue, 26 Jan 2021 10:34:57 -0800 (PST)
 Received: from localhost.localdomain ([49.207.195.86])
-        by smtp.gmail.com with ESMTPSA id y75sm472711pfg.119.2021.01.26.10.34.17
+        by smtp.gmail.com with ESMTPSA id y75sm472711pfg.119.2021.01.26.10.34.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jan 2021 10:34:22 -0800 (PST)
+        Tue, 26 Jan 2021 10:34:56 -0800 (PST)
 From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Xu Wang <vulab@iscas.ac.cn>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Peter Chen <peter.chen@nxp.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Lee Jones <lee.jones@linaro.org>, Tom Rix <trix@redhat.com>,
-        Evgeny Novikov <novikov@ispras.ru>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Bixuan Cui <cuibixuan@huawei.com>,
         Anant Thazhemadam <anant.thazhemadam@gmail.com>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 00/12] drivers: usb: misc: update to use usb_control_msg_{send|recv}() API
-Date:   Wed, 27 Jan 2021 00:03:51 +0530
-Message-Id: <20210126183403.911653-1-anant.thazhemadam@gmail.com>
+Subject: [PATCH v3 02/12] usb: misc: cypress_cy7c63: update to use usb_control_msg_recv()
+Date:   Wed, 27 Jan 2021 00:03:53 +0530
+Message-Id: <20210126183403.911653-3-anant.thazhemadam@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210126183403.911653-1-anant.thazhemadam@gmail.com>
+References: <20210126183403.911653-1-anant.thazhemadam@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The new usb_control_msg_{send|recv}() API provides an improved way of 
-using usb_control_msg(). Using this, short reads/writes are considered
-as errors, data can be used off the stack, and the need for the calling
-function to create a raw usb pipe is eliminated.
-This patch series aims to update existing instances of usb_control_msg() 
-in drivers/usb/misc/* to usb_control_msg_{send|recv}() appropriately, and
-also update the return value checking mechanisms in place (if any), as
-necessary so nothing breaks.
+The newer usb_control_msg_{send|recv}() API are an improvement on the
+existing usb_control_msg() as it ensures that a short read/write is treated
+as an error, data can be used off the stack, and raw usb pipes need not be
+created in the calling functions.
+For this reason, the instance of usb_control_msg() has been replaced with
+usb_control_msg_recv().
 
-Changes in v3:
+Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+---
+ drivers/usb/misc/cypress_cy7c63.c | 21 +++++----------------
+ 1 file changed, 5 insertions(+), 16 deletions(-)
 
-  * idmouse, emi26 and emi62 are left unchanged, and are not updated.
-    -> since control transfers in idmouse are without a data stage, there's no
-       real advantage in using the new helper here.
-    -> in emi26, and emi62, FW_LOAD_SIZE = 1048 (> 1024). Thus, if we try to use the
-       new helpers, it will result in either build warnings, or memory being allocated.
-
-  * Link to v2:
-      https://lore.kernel.org/linux-usb/20201130013103.2580467-1-anant.thazhemadam@gmail.com/T/
-
-
-Changes in v2:
-
-  * Buffer variables that were previously dynamically allocated are no
-    longer dynamically allocated unless they have a variable length
-    (since that threw a warning).
-
-  * Link to v1:
-        https://lore.kernel.org/linux-usb/20201129160612.1908074-1-anant.thazhemadam@gmail.com/ 
-
-
-Anant Thazhemadam (12):
-  usb: misc: appledisplay: update to use the
-    usb_control_msg_{send|recv}() API
-  usb: misc: cypress_cy7c63: update to use usb_control_msg_recv()
-  usb: misc: cytherm: update to use usb_control_msg_recv()
-  usb: misc: ehset: update to use the usb_control_msg_{send|recv}() API
-  usb: misc: ezusb: update to use usb_control_msg_send()
-  usb: misc: iowarrior: update to use the usb_control_msg_{send|recv}()
-    API
-  usb: misc: isight_firmware: update to use usb_control_msg_send()
-  usb: misc: ldusb: update to use usb_control_msg_send()
-  usb: misc: lvstest: update to use the usb_control_msg_{send|recv}()
-    API
-  usb: misc: trancevibrator: update to use usb_control_msg_send()
-  usb: misc: usbsevseg: update to use usb_control_msg_send()
-  usb: misc: usbtest: update to use the usb_control_msg_{send|recv}()
-    API
-
- drivers/usb/misc/appledisplay.c    |  46 +++++------
- drivers/usb/misc/cypress_cy7c63.c  |  21 ++---
- drivers/usb/misc/cytherm.c         | 128 ++++++++++-------------------
- drivers/usb/misc/ehset.c           |  76 ++++++++---------
- drivers/usb/misc/ezusb.c           |  16 +---
- drivers/usb/misc/iowarrior.c       |  34 ++++----
- drivers/usb/misc/isight_firmware.c |  30 +++----
- drivers/usb/misc/ldusb.c           |   8 +-
- drivers/usb/misc/lvstest.c         |  38 ++++-----
- drivers/usb/misc/trancevibrator.c  |   4 +-
- drivers/usb/misc/usbsevseg.c       |  60 ++++----------
- drivers/usb/misc/usbtest.c         |  69 +++++++---------
- 12 files changed, 198 insertions(+), 332 deletions(-)
-
+diff --git a/drivers/usb/misc/cypress_cy7c63.c b/drivers/usb/misc/cypress_cy7c63.c
+index 14faec51d7a5..76a320ef17a7 100644
+--- a/drivers/usb/misc/cypress_cy7c63.c
++++ b/drivers/usb/misc/cypress_cy7c63.c
+@@ -70,24 +70,15 @@ static int vendor_command(struct cypress *dev, unsigned char request,
+ 			  unsigned char address, unsigned char data)
+ {
+ 	int retval = 0;
+-	unsigned int pipe;
+-	unsigned char *iobuf;
+-
+-	/* allocate some memory for the i/o buffer*/
+-	iobuf = kzalloc(CYPRESS_MAX_REQSIZE, GFP_KERNEL);
+-	if (!iobuf) {
+-		retval = -ENOMEM;
+-		goto error;
+-	}
++	u8 iobuf[CYPRESS_MAX_REQSIZE] = {0};
+ 
+ 	dev_dbg(&dev->udev->dev, "Sending usb_control_msg (data: %d)\n", data);
+ 
+ 	/* prepare usb control message and send it upstream */
+-	pipe = usb_rcvctrlpipe(dev->udev, 0);
+-	retval = usb_control_msg(dev->udev, pipe, request,
+-				 USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_OTHER,
+-				 address, data, iobuf, CYPRESS_MAX_REQSIZE,
+-				 USB_CTRL_GET_TIMEOUT);
++	retval = usb_control_msg_recv(dev->udev, 0, request,
++				      USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_OTHER,
++				      address, data, &iobuf, CYPRESS_MAX_REQSIZE,
++				      USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
+ 
+ 	/* store returned data (more READs to be added) */
+ 	switch (request) {
+@@ -107,8 +98,6 @@ static int vendor_command(struct cypress *dev, unsigned char request,
+ 			break;
+ 	}
+ 
+-	kfree(iobuf);
+-error:
+ 	return retval;
+ }
+ 
 -- 
 2.25.1
 
