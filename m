@@ -2,65 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 714BA303FD8
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 15:13:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E21D303FDA
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 15:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392407AbhAZOLk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 26 Jan 2021 09:11:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51876 "EHLO mail.kernel.org"
+        id S2405625AbhAZOMP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 09:12:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52238 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405770AbhAZOKF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 26 Jan 2021 09:10:05 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 39D7F22D04
-        for <linux-usb@vger.kernel.org>; Tue, 26 Jan 2021 14:09:20 +0000 (UTC)
-Received: by pdx-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 2C96986731; Tue, 26 Jan 2021 14:09:20 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
+        id S2392714AbhAZOLs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 Jan 2021 09:11:48 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 73CD322B2C;
+        Tue, 26 Jan 2021 14:11:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611670266;
+        bh=qO17FhbVa3mQXfbFaSTtqkRgjyif4xmgiKHzen6itRo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N+xve1OJpR7HBorZfqUr1945A9NAf59Lvo8Uq7T1lqXBFwT31Pa9jTP+oHJdYXgg/
+         aYOVFbu86zBOF5WBky1usTgRxs2TPN+2wpcklFUA6l6WTWLZ7MKp9jhiotX94PQhnf
+         mgCJV+QKA1rTPB65bcWaWiOHmmI9uwa49eKMslpJHkDQ/D/im6fmPXN2eaSnQV8dXc
+         kiluAp+fKvxGgSxh0nFRRfBwgcYGY8XZJnnZwm20X5tU5bpAXbRanqDksS+i8nDs+W
+         EQg/sIaRA61l3wj/SjTapp1o7D13yN+DE2F8BxyzNyN4Vi2VpALVWBjLgUkCkP+G4z
+         tnyVMc2eP4JKA==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1l4P3r-0004bh-Tj; Tue, 26 Jan 2021 15:11:15 +0100
+Date:   Tue, 26 Jan 2021 15:11:15 +0100
+From:   Johan Hovold <johan@kernel.org>
 To:     linux-usb@vger.kernel.org
-Subject: [Bug 210351] Wrong setting baudrate for FTDI chip FT230X
-Date:   Tue, 26 Jan 2021 14:09:20 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: johan@kernel.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-210351-208809-8KTTIUc3fD@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210351-208809@https.bugzilla.kernel.org/>
-References: <bug-210351-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+Cc:     Johan Hovold <johan@kernel.org>, Vladimir <svv75@mail.ru>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: ftdi_sio: fix FTX sub-integer prescaler
+Message-ID: <YBAjA7rpUzUJrplZ@hovoldconsulting.com>
+References: <20210126135917.17545-1-johan@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210126135917.17545-1-johan@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=210351
+On Tue, Jan 26, 2021 at 02:59:17PM +0100, Johan Hovold wrote:
+> The most-significant bit of the sub-integer-prescaler index is set in
+> the high byte of the baudrate request wIndex also for FTX devices.
+> 
+> This fixes rates like 1152000 which got mapped to 12 MBd.
 
---- Comment #5 from Johan Hovold (johan@kernel.org) ---
-Your reply never made it to the linux-usb list so I didn't see it until
-today when I was preparing the patch I just CCed you on.
-
-I'll queue it up for 5.12, but then I think we can backport it to the
-stable trees as well.
-
-Thanks again for reporting this.
+Hmm. I played around with this using an FT232H which has a 12 MHz clock
+so this example is off for FTX. I'll fix it up before applying.
 
 Johan
-
--- 
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.
