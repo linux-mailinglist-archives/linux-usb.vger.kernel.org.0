@@ -2,106 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 120B33048AC
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 20:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CA4304C9C
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 23:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388428AbhAZFo2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jan 2021 00:44:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731431AbhAZB42 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jan 2021 20:56:28 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B35C0617AB
-        for <linux-usb@vger.kernel.org>; Mon, 25 Jan 2021 17:55:46 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id d7so7098232otf.3
-        for <linux-usb@vger.kernel.org>; Mon, 25 Jan 2021 17:55:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9KzooEzNJudfs8vdN5QNNjT5ojSccFf8tRCUDI4AzCU=;
-        b=DrrZxszCva3FTmhjfGLJzJrc3wB1j9Eo1KC1LtQ1FsXEAot/Ybv1blTIhPyYfOyNgm
-         T+EnnqpzXEgGxvkc5i5z3xWPJFSweRtK1ezOLRhZqB9KkPfVkAJgZe+QbwttIrq6o+KV
-         P037KGFPglzPjXgxTXJS39oLXUzxdz5TXf6EzvuL3hKV7vjf1eejNoUmuw3U2b6RzyQZ
-         L6Q3IVVx+LIhLxC56CMMwW7q/y3HgIeMJ1R3w4HPKVYpiGvapKZzdhqMPfXaWX6WiDuO
-         WGSGo6/tKzYFvFHEgNt/XsbxjzZZ32UPz4bALilazsw8kaZcw0CPfmpBk9M+MS0mnh39
-         dFuw==
+        id S1730449AbhAZWuh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 17:50:37 -0500
+Received: from mail-oo1-f52.google.com ([209.85.161.52]:46116 "EHLO
+        mail-oo1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391180AbhAZRWA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jan 2021 12:22:00 -0500
+Received: by mail-oo1-f52.google.com with SMTP id n127so4293219ooa.13;
+        Tue, 26 Jan 2021 09:21:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9KzooEzNJudfs8vdN5QNNjT5ojSccFf8tRCUDI4AzCU=;
-        b=fHUKjLTPAM+u1epXynptvlnHElvy+yZzyvPmh13uk8q5OE+ie2VHcpbSxio/TS6tvx
-         CG+pR2KMdR+en3ftGddT9MoK/0TLLsHd+qcwIfyBmYZJH5J1WC0iNu8uBcWncbS073fT
-         q9Iui6w2QDnqD88xzjJUlG7Gfc1W7S4Qk4C6vqj91LSGpyIrtn3ir1vt6VNUDNjsQnkf
-         P1igj3skzasK5GgoVRPwR3xYUjvEma6AMBXpZeXiIiYG0f2QtCv63ObtpIP1A3Grwftw
-         mUKYro1cCgUBflhhtFZPVfNo/ZzFxd5ABBR6PeIBlbwi/QsOxQnSmzYFduj1DUIDXpvn
-         hSJw==
-X-Gm-Message-State: AOAM531xGPxo0u3icH9YNv8MWXXO4Yc3F/nfKIl8Y9R+8Bc/eT3KDBHy
-        r6mkGyzTp/zdY1wO7dxw9tE1IA==
-X-Google-Smtp-Source: ABdhPJy0I4DahIrO5X9v/d1v+VookruyQO2N2rKgJW3rTf5Kc3BH3ob0xCJT8rOz43pd7Lzf+gYM+A==
-X-Received: by 2002:a9d:4e89:: with SMTP id v9mr2322939otk.171.1611626146046;
-        Mon, 25 Jan 2021 17:55:46 -0800 (PST)
-Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id d10sm3570160ooh.32.2021.01.25.17.55.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jan 2021 17:55:45 -0800 (PST)
-Date:   Mon, 25 Jan 2021 19:55:43 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peter.chen@nxp.com,
-        jackp@codeaurora.org
-Subject: Re: [PATCH v6 3/4] usb: dwc3: Resize TX FIFOs to meet EP bursting
- requirements
-Message-ID: <20210126015543.GB1241218@yoga>
-References: <1611288100-31118-1-git-send-email-wcheng@codeaurora.org>
- <1611288100-31118-4-git-send-email-wcheng@codeaurora.org>
- <YAsHbj/mITeiY5Cq@builder.lan>
- <724cb274-36ce-fb48-a156-4eaf9e686fdf@codeaurora.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aPQdBJqdYP+qjgNaEERsih40G8gcGBWaXApD47b4ab0=;
+        b=sJeWnktIr47xO0D5JsPzu/8l/za2M+V7XQkb4jKuhAzapyj7hDwoIAy0z+Aq8FVchp
+         ouq2ZHMrZAwj6VRkwDRT3wyg0vFfG9Ty5iObELf13U1yA9YpcIilRkvc1FqXbcL1d3D9
+         8AdQlG3YPlwdhrxoUoK10PgFkmLQRGpxUhGtFNmDw5cGozyaVcEgahFkAE7qmrXXL4uw
+         7NCZIo/aLhGyt+08ny/qmRRbZKn5OlaRj67XAL9L+mRUEKSSzla39NB6XVGORzV9IHN3
+         NK+T3JuAItrvnwlfHV6cVVEKoQBj6vgpCoJK8gQfoNwYkI0BF7brxyZDNxZGZ1io46LB
+         SjvA==
+X-Gm-Message-State: AOAM531fyHEIWaVIPYZTOUTkW8nHVdRDqMGuxBOd6As4pwyRin/L/kU6
+        ioOvaO6Wq3BhYifr3ryF1g+tuLWMOsZMjj+JC9M=
+X-Google-Smtp-Source: ABdhPJxzN3Vcgug7hAy03MdX9gmNg4LeJVwDsLrr/J+QfPOD4Fh1+RoiZaAX+fHDULYI/9pIjb7W32My19sL/x1R3Bc=
+X-Received: by 2002:a4a:cb87:: with SMTP id y7mr4754105ooq.1.1611681679111;
+ Tue, 26 Jan 2021 09:21:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <724cb274-36ce-fb48-a156-4eaf9e686fdf@codeaurora.org>
+References: <20210126155723.9388-1-mika.westerberg@linux.intel.com> <20210126155723.9388-5-mika.westerberg@linux.intel.com>
+In-Reply-To: <20210126155723.9388-5-mika.westerberg@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 26 Jan 2021 18:21:08 +0100
+Message-ID: <CAJZ5v0i+wCOFZOhyx6i=TUGMeWyQR4vXzDN06G6xheFwC66Tuw@mail.gmail.com>
+Subject: Re: [PATCH 4/6] ACPI: Execute platform _OSC also with query bit clear
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Christian Kellner <christian@kellner.me>,
+        Len Brown <lenb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon 25 Jan 19:14 CST 2021, Wesley Cheng wrote:
+On Tue, Jan 26, 2021 at 5:01 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> From: Mario Limonciello <mario.limonciello@dell.com>
+>
+> The platform _OSC can change the hardware state when query bit is not
+> set. According to ACPI spec it is recommended that the OS runs _OSC with
+> query bit set until the platform does not mask any of the capabilities.
+> Then it should run it with query bit clear in order to actually commit
+> the changes. At the moment Linux only runs the _OSC with query bit set
 
-> 
-> 
-> On 1/22/2021 9:12 AM, Bjorn Andersson wrote:
-> > On Thu 21 Jan 22:01 CST 2021, Wesley Cheng wrote:
-> > 
-> 
-> Hi Bjorn,
-> > 
-> > Under what circumstances should we specify this? And in particular are
-> > there scenarios (in the Qualcomm platforms) where this must not be set?
-> >The TXFIFO dynamic allocation is actually a feature within the DWC3
-> controller, and isn't specifically for QCOM based platforms.  It won't
-> do any harm functionally if this flag is not set, as this is meant for
-> enhancing performance/bandwidth.
-> 
-> > In particular, the composition can be changed in runtime, so should we
-> > set this for all Qualcomm platforms?
-> > 
-> Ideally yes, if we want to increase bandwith for situations where SS
-> endpoint bursting is set to a higher value.
-> 
-> > And if that's the case, can we not just set it from the qcom driver?
-> > 
-> Since this is a common DWC3 core feature, I think it would make more
-> sense to have it in DWC3 core instead of a vendor's DWC3 glue driver.
-> 
+And that's because there was nothing it could ask to control using the
+_SB scope _OSC.
 
-I don't have any objections to implementing it in the core driver, but
-my question is can we just skip the DT binding and just enable it from
-the vendor driver?
+Today it is just reporting what features are supported by it.
 
-Regards,
-Bjorn
+However, with the upcoming USB4 CM support it needs to ask for the
+control of that feature and that's why the _SB scope _OSC support
+needs to be extended.  So it is not a fix for a bug or missing spec
+coverage, which this part of the changelog kind of implies, it's just
+enabling a new feature.
+
+> and this is going to cause problems with the USB4 CM (Connection
+> Manager) switch that is going to commit the switch only when the OS
+> requests control over the feature.
+>
+> For this reason modify the _OSC support so that we first execute it with
+> query bit set, then use the returned valu as base of the features we
+
+s/valu/value/
+
+> want to control and run the _OSC again with query bit clear.
+>
+> Also rename the function to better match what it does.
+>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@dell.com>
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>
+> ---
+>  drivers/acpi/bus.c | 43 +++++++++++++++++++++++++++++++------------
+>  1 file changed, 31 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+> index 1682f8b454a2..ca7c7b2bf56e 100644
+> --- a/drivers/acpi/bus.c
+> +++ b/drivers/acpi/bus.c
+> @@ -282,9 +282,9 @@ bool osc_pc_lpi_support_confirmed;
+>  EXPORT_SYMBOL_GPL(osc_pc_lpi_support_confirmed);
+>
+>  static u8 sb_uuid_str[] = "0811B06E-4A27-44F9-8D60-3CBBC22E7B48";
+> -static void acpi_bus_osc_support(void)
+> +static void acpi_bus_osc_negotiate_platform_control(void)
+>  {
+> -       u32 capbuf[2];
+> +       u32 capbuf[2], *capbuf_ret;
+>         struct acpi_osc_context context = {
+>                 .uuid_str = sb_uuid_str,
+>                 .rev = 1,
+> @@ -321,17 +321,36 @@ static void acpi_bus_osc_support(void)
+>                 capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_APEI_SUPPORT;
+>         if (ACPI_FAILURE(acpi_get_handle(NULL, "\\_SB", &handle)))
+>                 return;
+> -       if (ACPI_SUCCESS(acpi_run_osc(handle, &context))) {
+> -               u32 *capbuf_ret = context.ret.pointer;
+> -               if (context.ret.length > OSC_SUPPORT_DWORD) {
+> -                       osc_sb_apei_support_acked =
+> -                               capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_APEI_SUPPORT;
+> -                       osc_pc_lpi_support_confirmed =
+> -                               capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_PCLPI_SUPPORT;
+> -               }
+> +
+> +       if (ACPI_FAILURE(acpi_run_osc(handle, &context)))
+> +               return;
+> +
+> +       capbuf_ret = context.ret.pointer;
+> +       if (context.ret.length <= OSC_SUPPORT_DWORD) {
+>                 kfree(context.ret.pointer);
+> +               return;
+>         }
+> -       /* do we need to check other returned cap? Sounds no */
+> +
+> +       /*
+> +        * Now run _OSC again with query flag clean and with the caps
+
+s/clean/clear/
+
+> +        * both platform and OS supports.
+
+s/both platform and OS supports/supported by both the OS and the platform/
+
+> +        */
+> +       capbuf[OSC_QUERY_DWORD] = 0;
+> +       capbuf[OSC_SUPPORT_DWORD] = capbuf_ret[OSC_SUPPORT_DWORD];
+> +       kfree(context.ret.pointer);
+> +
+> +       if (ACPI_FAILURE(acpi_run_osc(handle, &context)))
+> +               return;
+> +
+> +       capbuf_ret = context.ret.pointer;
+> +       if (context.ret.length > OSC_SUPPORT_DWORD) {
+> +               osc_sb_apei_support_acked =
+> +                       capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_APEI_SUPPORT;
+> +               osc_pc_lpi_support_confirmed =
+> +                       capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_PCLPI_SUPPORT;
+> +       }
+> +
+> +       kfree(context.ret.pointer);
+>  }
+>
+>  /* --------------------------------------------------------------------------
+> @@ -1168,7 +1187,7 @@ static int __init acpi_bus_init(void)
+>          * _OSC method may exist in module level code,
+>          * so it must be run after ACPI_FULL_INITIALIZATION
+>          */
+> -       acpi_bus_osc_support();
+> +       acpi_bus_osc_negotiate_platform_control();
+>
+>         /*
+>          * _PDC control method may load dynamic SSDT tables,
+> --
+> 2.29.2
+>
