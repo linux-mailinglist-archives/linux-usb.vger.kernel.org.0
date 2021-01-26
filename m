@@ -2,104 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F4030489C
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 20:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C368A3048A4
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 20:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732243AbhAZFnv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jan 2021 00:43:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731037AbhAYStQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jan 2021 13:49:16 -0500
-Received: from mout0.freenet.de (mout0.freenet.de [IPv6:2001:748:100:40::2:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75731C061573
-        for <linux-usb@vger.kernel.org>; Mon, 25 Jan 2021 10:48:44 -0800 (PST)
-Received: from [195.4.92.126] (helo=sub7.freenet.de)
-        by mout0.freenet.de with esmtpa (ID andihartmann@freenet.de) (port 25) (Exim 4.92 #3)
-        id 1l46uo-00042W-1k; Mon, 25 Jan 2021 19:48:42 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=01019freenet.de; s=mjaymdexmjqk; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=xqM0IkomII5QgtcP+rHBltCkZhJafwjhf2np7Chpx/g=; b=lq86bCoE7Jkmg3IOwvq3PpoGaM
-        LaiYVzfVRBC6C6lj4d0yx9t12OEMpwpU32BTTY5AldBCNa1xKsWWQJpOtOaP8BdX82dspPwBWXoUe
-        PAi5w3JxkWJRDjJin8rkAFOB/ZRtbmDZV25I83fXTzxEblUDlC7eivxegCrwy9e0ipwgv+evcgXld
-        Q6O/ucEz5nLEcpJe2zPMOGGfR+3hX4fQzT61r/7fAYp2IEWRHzgzfKQAG7QHQefBWxjlgkicwMJjy
-        B4YnnqACzFKrhOKWRpgSrNfXQ0fPWs46vOfYGMg4jbau+bnQTOrQ3fFW7b+DsUXlAOY5+rKoNoIHp
-        toL5fDAA==;
-Received: from p200300de573c8400505400fffe15ac42.dip0.t-ipconnect.de ([2003:de:573c:8400:5054:ff:fe15:ac42]:44038 helo=mail.maya.org)
-        by sub7.freenet.de with esmtpsa (ID andihartmann@freenet.de) (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128) (port 465) (Exim 4.92 #3)
-        id 1l46un-0007nl-W0; Mon, 25 Jan 2021 19:48:42 +0100
-Received: internal info suppressed
-Subject: Re: USB2 / USB3 compatibility problems: xhci_hcd 0000:00:06.0: WARN
- Wrong bounce buffer write length: 0 != 512
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        linux-usb@vger.kernel.org
-References: <3b4e35d2-9508-e0aa-eaf8-32e524ad81c4@01019freenet.de>
- <756e7b88-1142-4758-b8f7-a8eaf510b422@01019freenet.de>
- <edc3c7b1-98fa-9062-5c17-426e8ad17370@01019freenet.de>
- <7e953b15-925a-1512-4d15-c07fc03f9059@01019freenet.de>
- <f83677b5-e3d1-afdb-c8d4-f9969fa3fe84@linux.intel.com>
-From:   Andreas Hartmann <andihartmann@01019freenet.de>
-Message-ID: <f3f85222-0d9d-2f31-0a3e-d1d60ea9d153@01019freenet.de>
-Date:   Mon, 25 Jan 2021 19:48:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S2388398AbhAZFoW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 00:44:22 -0500
+Received: from mga18.intel.com ([134.134.136.126]:57690 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387453AbhAZBYi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 25 Jan 2021 20:24:38 -0500
+IronPort-SDR: 2Vjj3M5UKzoaWn6BuDTxdxLERbq2R+sDPZ2uHCuB7bUefZKBh+ULPhv/T0r2H2XnsZm7rSRMeR
+ Zdzl9JVWn+/Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="167500158"
+X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
+   d="scan'208";a="167500158"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 16:38:55 -0800
+IronPort-SDR: aDIfx3QaYqZw6FqZMwSjO4WtxLoABphh+d6p0kmDRaR5TUAMrM6qOM0xw7d9L/RPBUU3H4cyfK
+ g6Nzxt76kQHQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
+   d="scan'208";a="406503419"
+Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 25 Jan 2021 16:38:54 -0800
+Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1l4CNh-0000Sc-Ki; Tue, 26 Jan 2021 00:38:53 +0000
+Date:   Tue, 26 Jan 2021 08:38:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 7cbcd008e104d16849e5054e69f0a3d55eaeb664
+Message-ID: <600f647a.VOZ3GChKpfXgfbjz%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <f83677b5-e3d1-afdb-c8d4-f9969fa3fe84@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Originated-At: 2003:de:573c:8400:5054:ff:fe15:ac42!44038
-X-FNSign: v=2 s=B2272646190B054E4BB650EE6BDD96CBA26C4F6D9C25825F90CA06DD75D8995F
-X-Scan-TS: Mon, 25 Jan 2021 19:48:42 +0100
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Mathias!
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 7cbcd008e104d16849e5054e69f0a3d55eaeb664  usb: typec: tcpci_maxim: add terminating newlines to logging
 
-On 25.01.21 at 19:28 Mathias Nyman wrote:
-> Hi
-> 
-> On 25.1.2021 12.18, Andreas Hartmann wrote:
->>
->> Hello!
->>
->> Meanwhile I found the culprit:
->>
->> https://www.spinics.net/lists/linux-usb/msg141467.html
->> and
->> https://www.spinics.net/lists/linux-usb/msg141468.html
->>
->> Especially the last change breaks things here completely. After removing them
->> by the attached patch, problems are gone and device works again as expected
->> (I tested with the original 24 kB bulk size which was horribly broken w/o the
->> attached patch). This means: the additional repair steps are not just breaking
->> things but are even unnecessary (it's working perfectly without those changes)
->> here.
-> 
-> Unfortunately this isn't enough to remove the alignment code for those
-> controllers. This is just once specific usecase. We need to figure out what
-> really goes wrong.
-> 
-> Looks like 0 bytes is copied from sg list to bounce buffer when we want 512
-> bytes copied.
+elapsed time: 735m
 
-I don't have only 512 bytes cases, but also 100, 136, 424, 396, 144,
-292. It's working anyway w/o any modifications. Why does it work w/o any
-modification? Do those chips really need any alignment?
+configs tested: 110
+configs skipped: 2
 
-> Just noticed the alignment code assumes sg lists are used without
-> checking it first.
-> 
-> Could you add the below code and test again, it should print more debugging info.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Is there a way to compile this code external - w/o recompiling the whole
-kernel?
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+mips                         rt305x_defconfig
+arm                       mainstone_defconfig
+sh                           se7712_defconfig
+arm                        keystone_defconfig
+powerpc                     ksi8560_defconfig
+sh                          rsk7201_defconfig
+sh                           se7722_defconfig
+powerpc               mpc834x_itxgp_defconfig
+sh                   sh7770_generic_defconfig
+arm                          badge4_defconfig
+sh                        sh7757lcr_defconfig
+c6x                                 defconfig
+mips                         tb0287_defconfig
+arm                         palmz72_defconfig
+arm                         assabet_defconfig
+powerpc                       eiger_defconfig
+sh                           sh2007_defconfig
+powerpc                     stx_gp3_defconfig
+sh                 kfr2r09-romimage_defconfig
+arm                            mmp2_defconfig
+ia64                      gensparse_defconfig
+arm                              alldefconfig
+mips                   sb1250_swarm_defconfig
+arm                     eseries_pxa_defconfig
+m68k                          atari_defconfig
+sh                         ecovec24_defconfig
+arm                          collie_defconfig
+mips                  maltasmvp_eva_defconfig
+arc                            hsdk_defconfig
+powerpc                     mpc83xx_defconfig
+arm                          imote2_defconfig
+m68k                            q40_defconfig
+mips                malta_qemu_32r6_defconfig
+c6x                              allyesconfig
+arm                        multi_v7_defconfig
+m68k                                defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a003-20210125
+x86_64               randconfig-a002-20210125
+x86_64               randconfig-a001-20210125
+x86_64               randconfig-a005-20210125
+x86_64               randconfig-a006-20210125
+x86_64               randconfig-a004-20210125
+i386                 randconfig-a001-20210125
+i386                 randconfig-a002-20210125
+i386                 randconfig-a004-20210125
+i386                 randconfig-a006-20210125
+i386                 randconfig-a005-20210125
+i386                 randconfig-a003-20210125
+i386                 randconfig-a013-20210125
+i386                 randconfig-a011-20210125
+i386                 randconfig-a012-20210125
+i386                 randconfig-a015-20210125
+i386                 randconfig-a014-20210125
+i386                 randconfig-a016-20210125
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
+clang tested configs:
+x86_64               randconfig-a012-20210125
+x86_64               randconfig-a016-20210125
+x86_64               randconfig-a015-20210125
+x86_64               randconfig-a011-20210125
+x86_64               randconfig-a013-20210125
+x86_64               randconfig-a014-20210125
 
-Thanks
-Andreas
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
