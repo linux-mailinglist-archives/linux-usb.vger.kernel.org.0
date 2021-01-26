@@ -2,78 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A065E30404E
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 15:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 966EA3040B7
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 15:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405809AbhAZO2x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jan 2021 09:28:53 -0500
-Received: from mga18.intel.com ([134.134.136.126]:5622 "EHLO mga18.intel.com"
+        id S2390170AbhAZOo3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 09:44:29 -0500
+Received: from mx2.suse.de ([195.135.220.15]:47554 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405550AbhAZO0N (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 26 Jan 2021 09:26:13 -0500
-IronPort-SDR: o68jXiInwOxN9TZsRLyhdk3hAtIkCI+LNTcXnz7iEiAg1lIM3Q76aakp1NoCY8xffL45XatDtb
- 2ceof+v6UqaA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="167578080"
-X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="167578080"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 06:25:28 -0800
-IronPort-SDR: vvt6Adz2BKcGwpgcWYcH6FKlCUOcTI7rq0u1VcZGFWVx6poy2y1ywqfBOwaSS9FpY9mYHyZd7I
- ONPGlqgmDVAg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="350679839"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga007.fm.intel.com with ESMTP; 26 Jan 2021 06:25:26 -0800
-Subject: Re: [PATCH v6] usb: xhci-mtk: fix unreleased bandwidth data
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ikjoon Jang <ikjn@chromium.org>
-Cc:     linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
-        Zhanyong Wang <zhanyong.wang@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20210113180444.v6.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
- <YBAjjmpc4yPrpmgQ@kroah.com>
-From:   Mathias Nyman <mathias.nyman@intel.com>
-Message-ID: <b8a2cd47-ff32-2251-4431-da05a0f038f7@intel.com>
-Date:   Tue, 26 Jan 2021 16:27:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1731103AbhAZJm6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 Jan 2021 04:42:58 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1611654131; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mkHiLfHnIISE4hTYhT0zvaW5h6MozWBuiHpb4OaeraQ=;
+        b=PsUgLd2LQ/Rrp8BLXvX7CymNpx3bzG670Hk4xXHtoW7obtbUUBefTeCv+f+KmMgstZMcnA
+        B0QLmc0909tdwBZyvZsjHJM4Z6CGs5T9QSi5Ci6e3g1U/kIdO968y1stDlFid+/RG+NKCD
+        eBAsct3vGvXUBk5vh4+19aoIhD1ot1c=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id B463BAF7E;
+        Tue, 26 Jan 2021 09:42:11 +0000 (UTC)
+Message-ID: <3da2bd93f8da246d9032f4b07dff53a1b3648ccd.camel@suse.com>
+Subject: Re: [PATCHv2 1/3] usbnet: specify naming of
+ usbnet_set/get_link_ksettings
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     hayeswang@realtek.com, grundler@chromium.org, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Roland Dreier <roland@kernel.org>
+Date:   Tue, 26 Jan 2021 10:42:09 +0100
+In-Reply-To: <YAomCIEWCsquQODX@lunn.ch>
+References: <20210121125731.19425-1-oneukum@suse.com>
+         <20210121125731.19425-2-oneukum@suse.com> <YAomCIEWCsquQODX@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-In-Reply-To: <YBAjjmpc4yPrpmgQ@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 26.1.2021 16.13, Greg Kroah-Hartman wrote:
-> On Wed, Jan 13, 2021 at 06:05:11PM +0800, Ikjoon Jang wrote:
->> xhci-mtk needs XHCI_MTK_HOST quirk functions in add_endpoint() and
->> drop_endpoint() to handle its own sw bandwidth management.
->>
->> It stores bandwidth data into an internal table every time
->> add_endpoint() is called, and drops those in drop_endpoint().
->> But when bandwidth allocation fails at one endpoint, all earlier
->> allocation from the same interface could still remain at the table.
->>
->> This patch moves bandwidth management codes to check_bandwidth() and
->> reset_bandwidth() path. To do so, this patch also adds those functions
->> to xhci_driver_overrides and lets mtk-xhci to release all failed
->> endpoints in reset_bandwidth() path.
->>
->> Fixes: 08e469de87a2 ("usb: xhci-mtk: supports bandwidth scheduling with multi-TT")
->> Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+Am Freitag, den 22.01.2021, 02:10 +0100 schrieb Andrew Lunn:
+> On Thu, Jan 21, 2021 at 01:57:29PM +0100, Oliver Neukum wrote:
+> > The old generic functions assume that the devices includes
+> > an MDIO interface. This is true only for genuine ethernet.
+> > Devices with a higher level of abstraction or based on different
+> > technologies do not have it. So in preparation for
+> > supporting that, we rename the old functions to something specific.
+> > 
+> > v2: adjusted to recent changes
 > 
-> Mathias, any objection to me taking this patch, or do you have others
-> being queued up for 5.11-final?
+> Hi Oliver
 > 
+> It  looks like my comment:
+> 
+> https://www.spinics.net/lists/netdev/msg711869.html
+> 
+> was ignored. Do you not like the name mii?
 
-No objections, haven't tried it out but it looks good to me.
+Hi,
 
-If I finish some additional small fix for 5.11-final I can make it on top of this
+sorry for not replying earlier.
 
--Mathias 
+It was my understanding that on the hardware level of the
+networking devices we are using MII, but to control MII we
+use MDIO, don't we?
+So it seems to me that hardware could use MII but not
+MDIO, yet for this purpose we require MDIO. So could
+you please explain your reasoning about networking stuff?
+
+I do not want to create false impressions in users.
+
+	Regards
+		Oliver
+
+
