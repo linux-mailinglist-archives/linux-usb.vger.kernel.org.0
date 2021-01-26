@@ -2,150 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35262302D56
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Jan 2021 22:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA4630313D
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 02:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732512AbhAYVLk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Jan 2021 16:11:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57976 "EHLO mail.kernel.org"
+        id S1727169AbhAZB2m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Jan 2021 20:28:42 -0500
+Received: from mga12.intel.com ([192.55.52.136]:14024 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732499AbhAYVLY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 25 Jan 2021 16:11:24 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B2D54221E5;
-        Mon, 25 Jan 2021 21:10:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611609041;
-        bh=Or1lBWhIl6RhblDUyDn8EaqaFsiiaspRZSUVLOdK22s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FC9OPJ6fbDxo9sIAGIaqpRzEYEiQYDJWCp094vh/XwDlKFTOKHWwgyOQRALzzdv6l
-         x1ey31edZgpKfRHXMm4wtr2xc0Aig2eATuOC1q26p9lc8sMtxn1b3W14thnXl7c+yo
-         JEyZl6a6+G2pZ2zp0aHXMXi9Oz+NiMJxPvw/enaLKL8vjJgGMt1A3uJfxBufMc8Xh4
-         vfDB0uNWgh+Qjqw9pw0Veg8MGu8x+HUVQoTgIFx4xZJVLeVTudYpF2bAV9q+yK4Naw
-         S7sLx7Qo+6QNkV474fc6gnc2ItjY0Jm0JmiDXqyMpL9J7fkBW4w2FtcTucbf86yIbK
-         YB8ERf9LAC3tA==
-Received: by mail-ot1-f52.google.com with SMTP id h14so14189628otr.4;
-        Mon, 25 Jan 2021 13:10:41 -0800 (PST)
-X-Gm-Message-State: AOAM5324XcoLQyFPxoAL94FdnQo94c2suoK9K1Qp8erG9jLayKyKAyJC
-        jXVfMdBPkrPKh3giWh5Cel5/aUf1ljuJbk8Jo58=
-X-Google-Smtp-Source: ABdhPJx85RBJtKdPvFQbtXYq4Zitdz57yxwULz+I5SV5UoWY2Mu7mKXU8P0C+eO/zadx+uWCAlDypuzteW/fMha1lJc=
-X-Received: by 2002:a05:6830:139a:: with SMTP id d26mr1753457otq.305.1611609040975;
- Mon, 25 Jan 2021 13:10:40 -0800 (PST)
+        id S1731163AbhAZB0e (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 25 Jan 2021 20:26:34 -0500
+IronPort-SDR: bUENstMRXUoo0jRLvwOkuuIK3bJgHT7hROuMP+4PqbVDlHvNOHEWBSLaelrPnOBDkdoQvP4y2P
+ EpAaRpidY+PQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="159004710"
+X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
+   d="scan'208";a="159004710"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 16:38:55 -0800
+IronPort-SDR: uWMYbV5nACIeJj1SCsWpnWq12M0369wGpWz2R0x70CUaDuLSSQFz3oVqVyXFvMFGi+kZae7iHV
+ Oj8KzMOjNXsA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
+   d="scan'208";a="393570747"
+Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 25 Jan 2021 16:38:54 -0800
+Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1l4CNh-0000Sj-QH; Tue, 26 Jan 2021 00:38:53 +0000
+Date:   Tue, 26 Jan 2021 08:38:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-next] BUILD SUCCESS
+ 1d6a81519d9d27b99bca638d14eca63c31111afd
+Message-ID: <600f647f.2RqKBclKnQ98WMAL%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20210125113248.2268952-1-arnd@kernel.org> <20210125162230.GA145777@rowland.harvard.edu>
-In-Reply-To: <20210125162230.GA145777@rowland.harvard.edu>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Mon, 25 Jan 2021 22:10:24 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3YkgW2fk9=YDgcVXgA6WHR9WfRdEPOyMeA1sc_Ck7AOw@mail.gmail.com>
-Message-ID: <CAK8P3a3YkgW2fk9=YDgcVXgA6WHR9WfRdEPOyMeA1sc_Ck7AOw@mail.gmail.com>
-Subject: Re: [PATCH] usb: host: ehci-tegra: fix Kconfig depencies
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 25, 2021 at 5:22 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Mon, Jan 25, 2021 at 12:32:30PM +0100, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > Selecting the chipidea driver from the old Kconfig symbol
-> > can lead to a missing dependency:
->
-> Arnd:
->
-> I found this whole patch a little confusing.  For example, in the
-> sentence above, what does "the old Kconfig symbol" refer to?
->
-> Comparing the various Kconfig files, I see what the problem is.  The
-> commit which this one fixes made CONFIG_EHCI_TEGRA select
-> CONFIG_USB_CHIPIDEA, but it didn't make EHCI_TEGRA depend on the things
-> that USB_CHIPIDEA depends on.  Can you please state this more explicitly
-> in the patch description?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+branch HEAD: 1d6a81519d9d27b99bca638d14eca63c31111afd  Merge v5.11-rc5 into usb-next
 
-Sure, I'll resend in a bit.
+elapsed time: 735m
 
-> > WARNING: unmet direct dependencies detected for USB_CHIPIDEA
-> >   Depends on [m]: USB_SUPPORT [=y] && (USB_EHCI_HCD [=y] && USB_GADGET [=m] || USB_EHCI_HCD [=y] && !USB_GADGET [=m] || !USB_EHCI_HCD [=y] && USB_GADGET [=m]) && HAS_DMA [=y]
-> >   Selected by [y]:
-> >   - USB_EHCI_TEGRA [=y] && USB_SUPPORT [=y] && USB [=y] && USB_EHCI_HCD [=y] && ARCH_TEGRA [=y]
-> > aarch64-linux-ld: drivers/usb/chipidea/otg.o: in function `ci_handle_vbus_change':
-> > otg.c:(.text+0x3c8): undefined reference to `usb_gadget_vbus_connect'
-> > aarch64-linux-ld: otg.c:(.text+0x42c): undefined reference to `usb_gadget_vbus_disconnect'
-> > aarch64-linux-ld: drivers/usb/chipidea/otg.o: in function `ci_otg_work':
-> > otg.c:(.text+0x5d4): undefined reference to `usb_gadget_vbus_disconnect'
-> > ...
-> >
-> > Duplicate the dependency to ensure that this driver can
-> > only be a loadable module if one of its dependencies is.
-> >
-> > Fixes: c3590c7656fb ("usb: host: ehci-tegra: Remove the driver")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  drivers/usb/host/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-> > index 160e5d3927e2..66b01b619ecd 100644
-> > --- a/drivers/usb/host/Kconfig
-> > +++ b/drivers/usb/host/Kconfig
-> > @@ -269,6 +269,7 @@ config USB_EHCI_HCD_AT91
-> >  config USB_EHCI_TEGRA
-> >       tristate "NVIDIA Tegra HCD support"
-> >       depends on ARCH_TEGRA
-> > +     depends on ((USB_EHCI_HCD && USB_GADGET) || (USB_EHCI_HCD && !USB_GADGET) || (!USB_EHCI_HCD && USB_GADGET)) && HAS_DMA
-> >       select USB_CHIPIDEA
-> >       select USB_CHIPIDEA_HOST
-> >       select USB_CHIPIDEA_TEGRA
->
-> Isn't there at least one other missing dependency?  This entry selects
-> USB_CHIPIDEA_TEGRA, which depends on OF.  So shouldn't this entry also
-> depend on OF?  Or does the Kconfig system detect that for us?
+configs tested: 113
+configs skipped: 2
 
-Yes, there is a hard dependency on ARCH_TEGRA, which implies OF.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> Also, while I'm no expert on the Kconfig language, it seems that the new
-> "depends" line could be a lot easier to understand if it was refactored
-> with some comments added.  Yes, I realize you just copied the existing
-> dependency from the USB_CHIPIDEA entry -- that one could stand to be
-> cleaned up as well.
->
-> For instance, how about putting the HAS_DMA part into a separate line,
-> since it's unrelated to the other stuff?
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+mips                         rt305x_defconfig
+arm                       mainstone_defconfig
+sh                           se7712_defconfig
+arm                        keystone_defconfig
+powerpc                     ksi8560_defconfig
+sh                          rsk7201_defconfig
+sh                           se7722_defconfig
+powerpc               mpc834x_itxgp_defconfig
+sh                   sh7770_generic_defconfig
+arm                          badge4_defconfig
+sh                        sh7757lcr_defconfig
+c6x                                 defconfig
+mips                         tb0287_defconfig
+arm                         palmz72_defconfig
+arm                         assabet_defconfig
+powerpc                       eiger_defconfig
+sh                           sh2007_defconfig
+powerpc                     stx_gp3_defconfig
+powerpc                   motionpro_defconfig
+i386                             alldefconfig
+mips                  maltasmvp_eva_defconfig
+mips                          ath25_defconfig
+sh                 kfr2r09-romimage_defconfig
+arm                            mmp2_defconfig
+ia64                      gensparse_defconfig
+arm                              alldefconfig
+mips                   sb1250_swarm_defconfig
+arm                     eseries_pxa_defconfig
+m68k                          atari_defconfig
+sh                         ecovec24_defconfig
+arm                          collie_defconfig
+arc                            hsdk_defconfig
+powerpc                     mpc83xx_defconfig
+arm                          imote2_defconfig
+m68k                            q40_defconfig
+mips                malta_qemu_32r6_defconfig
+c6x                              allyesconfig
+arm                        multi_v7_defconfig
+m68k                                defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a003-20210125
+x86_64               randconfig-a002-20210125
+x86_64               randconfig-a001-20210125
+x86_64               randconfig-a005-20210125
+x86_64               randconfig-a006-20210125
+x86_64               randconfig-a004-20210125
+i386                 randconfig-a001-20210125
+i386                 randconfig-a002-20210125
+i386                 randconfig-a004-20210125
+i386                 randconfig-a006-20210125
+i386                 randconfig-a005-20210125
+i386                 randconfig-a003-20210125
+i386                 randconfig-a013-20210125
+i386                 randconfig-a011-20210125
+i386                 randconfig-a012-20210125
+i386                 randconfig-a015-20210125
+i386                 randconfig-a014-20210125
+i386                 randconfig-a016-20210125
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-Actually it's probably best to just drop the HAS_DMA here, as it is also
-implied by ARCH_TEGRA.
+clang tested configs:
+x86_64               randconfig-a012-20210125
+x86_64               randconfig-a016-20210125
+x86_64               randconfig-a015-20210125
+x86_64               randconfig-a011-20210125
+x86_64               randconfig-a013-20210125
+x86_64               randconfig-a014-20210125
 
->  And the rest looks like it
-> could be changed to:
->
->         depends on USB_EHCI_HCD || USB_GADGET
->
-> although that probably isn't quite valid.  Still, can't it be changed to
-> something simpler than
->
->         (USB_EHCI_HCD && USB_GADGET) || (USB_EHCI_HCD && !USB_GADGET) ||
->                         (!USB_EHCI_HCD && USB_GADGET)
-
-The problem is that if either USB_EHCI_HCD or USB_GADGET are loadable
-modules, then USB_CHIPIDEA must not be built-in, but if one of the two is
-disabled, we must still have a dependency on the other. I guess it could be
-rewritten into
-
-      depends on USB_EHCI_HCD || USB_GADGET  # needs at least one of the two
-      depends on m ||  USB_EHCI_HCD!=m # must be =m if USB_EHCI_HCD=m
-      depends on m ||  USB_GADGET!=m # must be =m if USB_GADGET=m
-
-I see that USB_EHCI_TEGRA already depends on USB_EHCI_HCD,
-so I think this collapses into a much simpler
-
-      depends on USB_GADGET || USB_GADGET=n # for USB_CHIPIDEA
-
-         Arnd
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
