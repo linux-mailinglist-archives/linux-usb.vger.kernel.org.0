@@ -2,91 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1133046F8
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 19:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 979EA3046F3
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 19:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389714AbhAZRRy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jan 2021 12:17:54 -0500
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:20753 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729503AbhAZGDE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jan 2021 01:03:04 -0500
-X-UUID: 2d7ec4f07c9e4302a984a65ee1b9eef6-20210126
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=dKXUzd4QfWfdXhez2qIYlgB4VKFnh57HVcDONeqjh1g=;
-        b=rQLDoUatx8DSmy0gZgxgKWUTTeNxviTVNMYOtDM7g9bP/Zj3nq1UQTczzNNMfNC8SYv3eT5DgZqRkAsFoa2hjj/3zlhcAuPjOtXJ8yGA/qro8bH/MJebXbrRhnq0gqaAw96l5USixpec8JSdWaeQLTXmLDF7h7+pmZTBbQeHgt8=;
-X-UUID: 2d7ec4f07c9e4302a984a65ee1b9eef6-20210126
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 266509547; Tue, 26 Jan 2021 14:02:09 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 26 Jan
- 2021 14:02:00 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 26 Jan 2021 14:02:00 +0800
-Message-ID: <1611640920.3905.13.camel@mhfsdcap03>
-Subject: Re: [PATCH v6] usb: xhci-mtk: fix unreleased bandwidth data
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Ikjoon Jang <ikjn@chromium.org>
-CC:     <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        "Zhanyong Wang" <zhanyong.wang@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Tue, 26 Jan 2021 14:02:00 +0800
-In-Reply-To: <20210113180444.v6.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
-References: <20210113180444.v6.1.Id0d31b5f3ddf5e734d2ab11161ac5821921b1e1e@changeid>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S2390310AbhAZRSO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 12:18:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732542AbhAZHkW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jan 2021 02:40:22 -0500
+Received: from mout3.freenet.de (mout3.freenet.de [IPv6:2001:748:100:40::2:5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88920C061574
+        for <linux-usb@vger.kernel.org>; Mon, 25 Jan 2021 23:26:42 -0800 (PST)
+Received: from [195.4.92.121] (helo=sub2.freenet.de)
+        by mout3.freenet.de with esmtpa (ID andihartmann@freenet.de) (port 25) (Exim 4.92 #3)
+        id 1l4IkJ-0000YQ-4y; Tue, 26 Jan 2021 08:26:39 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=01019freenet.de; s=mjaymdexmjqk; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:Subject:References:To:From:Sender:
+        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Y/2/K+Mo8gjsGCe2xh9w9mn9XgJLC/ALLkIRaoWo6/M=; b=mc576JGWqEdof1thwwq55Ze/KI
+        cTiaZqGZIIip3Q5FJ3mmsxvvyIgaxFA1m4RXnJxriqRI6TsAllMhxABjS8d9jcIhH8iJ0ByMw4hGw
+        UIc0u3pREd+k8mP6TOEFcQzI1C2QRacocqyqtbJfv8orwZ78tq5IT4bFC1cDoCOrSeQSmaIzbbsg0
+        d+oV7tNghliEdF7w5AjMz0IUIkZXxDqNZCcf9VNg3BhDxMV8+axW2W8blJJw1qI5bwgqzH1ZKXBBf
+        gZ1Wo7P+vP62EkbpxCSn373AjAaRZRVd7Fu3icm/DuXfPBnuzBrs26RsvqM9UfpkAz9H0pxM+S/Jq
+        rGdXPGHw==;
+Received: from p200300de573c8400505400fffe15ac42.dip0.t-ipconnect.de ([2003:de:573c:8400:5054:ff:fe15:ac42]:60654 helo=mail.maya.org)
+        by sub2.freenet.de with esmtpsa (ID andihartmann@freenet.de) (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128) (port 465) (Exim 4.92 #3)
+        id 1l4IkI-0007u6-BG; Tue, 26 Jan 2021 08:26:39 +0100
+Received: internal info suppressed
+From:   Andreas Hartmann <andihartmann@01019freenet.de>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org
+References: <3b4e35d2-9508-e0aa-eaf8-32e524ad81c4@01019freenet.de>
+ <756e7b88-1142-4758-b8f7-a8eaf510b422@01019freenet.de>
+ <edc3c7b1-98fa-9062-5c17-426e8ad17370@01019freenet.de>
+ <7e953b15-925a-1512-4d15-c07fc03f9059@01019freenet.de>
+ <f83677b5-e3d1-afdb-c8d4-f9969fa3fe84@linux.intel.com>
+ <a65a9299-1e5b-f15d-2ae7-f0a21938f4fd@01019freenet.de>
+Subject: Re: USB2 / USB3 compatibility problems: xhci_hcd 0000:00:06.0: WARN
+ Wrong bounce buffer write length: 0 != 512
+Message-ID: <d9fd7812-43cc-2813-5222-5e39b63fccbc@01019freenet.de>
+Date:   Tue, 26 Jan 2021 08:26:35 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 5D3DE7CE5C32552355CF39D9DCA8F35668EC69EFD0B94DE935E059906A1B7EA92000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <a65a9299-1e5b-f15d-2ae7-f0a21938f4fd@01019freenet.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originated-At: 2003:de:573c:8400:5054:ff:fe15:ac42!60654
+X-FNSign: v=2 s=53E39A61856A45B557D8576A76806DBD64B6CFD2EF91207B6B5F7CE944740B89
+X-Scan-TS: Tue, 26 Jan 2021 08:26:38 +0100
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgSWtqb29uLA0KDQpDYW4gSSBwdXQgdGhpcyBwYXRjaCBpbnRvIG15IHBhdGNoIHNlcmllcyBh
-Ym91dCBiYW5kd2lkdGggc2NoZWR1bGVyPw0KdGhlIHNlcmllcyBhbHNvIGluY2x1ZGUgIltSRkMg
-UEFUQ0ggdjMgMS81XSB1c2I6IHhoY2ktbXRrOiBpbXByb3ZlDQpiYW5kd2lkdGggc2NoZWR1bGlu
-ZyB3aXRoIG11bHRpLVRUIiwgcHV0IHRoZW0gdG9nZXRoZXIgd2lsbCBoZWxwIHRvIGZpeA0KZGVw
-ZW5kZW5jZSBpc3N1ZSwgbWVhbndoaWxlIEkgdHJ5IHRvIGJ1aWxkIHhoY2ktbXRrLXNjaC5jIGlu
-dG8NCnhoY2ktbXRrLmtvIGluc3RlYWQgb2YgeGhjaS1oY2Qua28uDQoNClRoYW5rcyBhIGxvdA0K
-DQoNCk9uIFdlZCwgMjAyMS0wMS0xMyBhdCAxODowNSArMDgwMCwgSWtqb29uIEphbmcgd3JvdGU6
-DQo+IHhoY2ktbXRrIG5lZWRzIFhIQ0lfTVRLX0hPU1QgcXVpcmsgZnVuY3Rpb25zIGluIGFkZF9l
-bmRwb2ludCgpIGFuZA0KPiBkcm9wX2VuZHBvaW50KCkgdG8gaGFuZGxlIGl0cyBvd24gc3cgYmFu
-ZHdpZHRoIG1hbmFnZW1lbnQuDQo+IA0KPiBJdCBzdG9yZXMgYmFuZHdpZHRoIGRhdGEgaW50byBh
-biBpbnRlcm5hbCB0YWJsZSBldmVyeSB0aW1lDQo+IGFkZF9lbmRwb2ludCgpIGlzIGNhbGxlZCwg
-YW5kIGRyb3BzIHRob3NlIGluIGRyb3BfZW5kcG9pbnQoKS4NCj4gQnV0IHdoZW4gYmFuZHdpZHRo
-IGFsbG9jYXRpb24gZmFpbHMgYXQgb25lIGVuZHBvaW50LCBhbGwgZWFybGllcg0KPiBhbGxvY2F0
-aW9uIGZyb20gdGhlIHNhbWUgaW50ZXJmYWNlIGNvdWxkIHN0aWxsIHJlbWFpbiBhdCB0aGUgdGFi
-bGUuDQo+IA0KPiBUaGlzIHBhdGNoIG1vdmVzIGJhbmR3aWR0aCBtYW5hZ2VtZW50IGNvZGVzIHRv
-IGNoZWNrX2JhbmR3aWR0aCgpIGFuZA0KPiByZXNldF9iYW5kd2lkdGgoKSBwYXRoLiBUbyBkbyBz
-bywgdGhpcyBwYXRjaCBhbHNvIGFkZHMgdGhvc2UgZnVuY3Rpb25zDQo+IHRvIHhoY2lfZHJpdmVy
-X292ZXJyaWRlcyBhbmQgbGV0cyBtdGsteGhjaSB0byByZWxlYXNlIGFsbCBmYWlsZWQNCj4gZW5k
-cG9pbnRzIGluIHJlc2V0X2JhbmR3aWR0aCgpIHBhdGguDQo+IA0KPiBGaXhlczogMDhlNDY5ZGU4
-N2EyICgidXNiOiB4aGNpLW10azogc3VwcG9ydHMgYmFuZHdpZHRoIHNjaGVkdWxpbmcgd2l0aCBt
-dWx0aS1UVCIpDQo+IFNpZ25lZC1vZmYtYnk6IElram9vbiBKYW5nIDxpa2puQGNocm9taXVtLm9y
-Zz4NCj4gDQo+IC0tLQ0KPiANCj4gQ2hhbmdlcyBpbiB2NjoNCj4gLSB1c2UgeGhjaSBvdmVycmlk
-ZXMgaW5zdGVhZCBvZiBxdWlyayBmdW5jdGlvbnMgZm9yDQo+ICAge2NoZWNrfHJlc2V0fV9iYW5k
-d2lkdGgoKS4NCj4gDQo+IENoYW5nZXMgaW4gdjU6DQo+IC0gRml4IGEgd3JvbmcgY29tbWl0IGlk
-IGluIEZpeGVzIHRhZw0KPiANCj4gQ2hhbmdlcyBpbiB2NDoNCj4gLSBidWdmaXggaW4gdjMsIGNo
-ZWNrX2JhbmR3aWR0aCgpIHJldHVybiB1bmluaXRpYWxpemVkIHZhbHVlDQo+ICAgd2hlbiBubyBu
-ZXcgZW5kcG9pbnRzIHdlcmUgYWRkZWQuDQo+IC0gY2hhbmdlIEZpeGVzIHRhZyB0byBrZWVwIGRl
-cGVuZGVuY3kNCj4gDQo+IENoYW5nZXMgaW4gdjM6DQo+IC0gZHJvcCB1bnJlbGF0ZWQgY29kZSBj
-bGVhbnVwcw0KPiAtIGNoYW5nZSBGaXhlcyB0YWcgdG8ga2VlcCBkZXBlbmRlbmN5DQo+IA0KPiBD
-aGFuZ2VzIGluIHYyOg0KPiAtIGZpeCBhIDAtZGF5IHdhcm5pbmcgZnJvbSB1bnVzZWQgdmFyaWFi
-bGUNCj4gLSBzcGxpdCBvbmUgYmlnIHBhdGNoIGludG8gdGhyZWUgcGF0Y2hlcw0KPiAtIGZpeCB3
-cm9uZyBvZmZzZXQgaW4gbWVkaWF0ZWsgaHcgZmxhZ3MNCj4gDQo+ICBkcml2ZXJzL3VzYi9ob3N0
-L3hoY2ktbXRrLXNjaC5jIHwgMTIzICsrKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tDQo+
-ICBkcml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRrLmMgICAgIHwgICAyICsNCj4gIGRyaXZlcnMvdXNi
-L2hvc3QveGhjaS1tdGsuaCAgICAgfCAgMTMgKysrKw0KPiAgZHJpdmVycy91c2IvaG9zdC94aGNp
-LmMgICAgICAgICB8ICAgOCArKy0NCj4gIGRyaXZlcnMvdXNiL2hvc3QveGhjaS5oICAgICAgICAg
-fCAgIDQgKysNCj4gIDUgZmlsZXMgY2hhbmdlZCwgMTExIGluc2VydGlvbnMoKyksIDM5IGRlbGV0
-aW9ucygtKQ0KDQoNCg==
 
+On 25.01.21 at 21:06 Andreas Hartmann wrote:
+> Hello Mathias,
+> 
+> On 25.01.21 at 19:28 Mathias Nyman wrote:
+>> Hi
+>>
+>> On 25.1.2021 12.18, Andreas Hartmann wrote:
+>>>
+>>> Hello!
+>>>
+>>> Meanwhile I found the culprit:
+>>>
+>>> https://www.spinics.net/lists/linux-usb/msg141467.html
+>>> and
+>>> https://www.spinics.net/lists/linux-usb/msg141468.html
+>>>
+>>> Especially the last change breaks things here completely. After removing them
+>>> by the attached patch, problems are gone and device works again as expected
+>>> (I tested with the original 24 kB bulk size which was horribly broken w/o the
+>>> attached patch). This means: the additional repair steps are not just breaking
+>>> things but are even unnecessary (it's working perfectly without those changes)
+>>> here.
+>>
+>> Unfortunately this isn't enough to remove the alignment code for those
+>> controllers. This is just once specific usecase. We need to figure out what
+>> really goes wrong.
+>>
+>> Looks like 0 bytes is copied from sg list to bounce buffer when we want 512
+>> bytes copied. Just noticed the alignment code assumes sg lists are used without
+>> checking it first.
+>>
+>> Could you add the below code and test again, it should print more debugging info.
+> 
+> See the attached file. That's the result of two times coping 1.3 GB via scp.
+> 
+> As the transfer mostly breaks after the wrong alignments and because
+> there isn't any further alignment needed at all, I didn't do more tests.
+> Hope this helps. Most importantly it should be investigated, why there
+> isn't any additional alignment needed at all.
+
+I'm not sure if it's important for you to know: The driver doesn't use struct 
+scatterlist or num_mapped_sgs at all (if it's meant to be used by the sender at all).
+
+But it sets URB_NO_TRANSFER_DMA_MAP (for data transfer among others).
+
+Mlme packets are sent w/o bulk and w/o setting URB_NO_TRANSFER_DMA_MAP. All other 
+packets are sent with URB_NO_TRANSFER_DMA_MAP turned on.
+
+
+
+Thanks
+Andreas
