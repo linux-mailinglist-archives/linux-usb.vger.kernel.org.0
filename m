@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D53C303853
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 09:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF25303856
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jan 2021 09:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390232AbhAZIsY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jan 2021 03:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55770 "EHLO
+        id S2390450AbhAZItQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jan 2021 03:49:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390547AbhAZIr3 (ORCPT
+        with ESMTP id S2390551AbhAZIr3 (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jan 2021 03:47:29 -0500
-Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AF0C061793
-        for <linux-usb@vger.kernel.org>; Tue, 26 Jan 2021 00:46:01 -0800 (PST)
-Received: by mail-qv1-xf4a.google.com with SMTP id z8so8848489qva.23
-        for <linux-usb@vger.kernel.org>; Tue, 26 Jan 2021 00:46:01 -0800 (PST)
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A567EC0617A7
+        for <linux-usb@vger.kernel.org>; Tue, 26 Jan 2021 00:46:05 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id q67so17112670ybg.19
+        for <linux-usb@vger.kernel.org>; Tue, 26 Jan 2021 00:46:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=13RTRRkuJBA1iS7bzOjv8CDTQaS3ruEs+RukYe640Ag=;
-        b=ltdXf/8CWegN4aNEm3Qv64DdKvxQ6NjblvbaRNZOQKTRepQsCCU5pE3q3qDttLI5Hc
-         Bi8armxZm1149Vgs6y2mmLKfa7BjfScoc/3mQGL6n3/tgl9kODx5vLL9ZTMvsLaFevy/
-         zwUTH0y3WjW7Dpa/ZThusgOQFXsEOlDULmL80l00NucCVqixWx1/HWRjblTxSjwhkSnt
-         pl6aEb7cEmL/xWeJwHSzXmTMvFbLpzaD/PLxHeCcjVsnZImyU9gAevj0xUxdQEyOTm0y
-         SzGgYa9lhr9cKZiT79jxlYKIQZFXgs+cu5xnsgrtZoW3sbNq4W/4vx/ssNZ164/Tinw0
-         3f/g==
+        bh=rY9VRGFEnK07xJyRxhqYar0R4BXBdHwAeKiBVE3gLSc=;
+        b=UnAA7x7sisgHljyIT3brf27r5NguPJN6tGOVTmiPo2N2K9j+Gu/JvzvKR+oBXsMm8v
+         2IV3JGec/SjF2E1jp01MTDE6qwsitpCnUfMQDmwpwoxpxc5ozzMDQqPI7gxNUxF/ZK9E
+         ex2NDQh/t613jm0YYS5r9kA7Ylj9HOF5ZXJAtJImG+OI3oMqQ0j45CKotJGFAH1E+wwv
+         HGKvZ69ezcCeX+/DEoWEnHxnpl6eUgottFdSOcYNy9PTbQAOCj+4B43hYfYGLAsOEHQJ
+         x+xbafEeLwoxmI/QC/iSIsV24te9zerIcaN4RlcboxBDlAGq30azKEPBCpucE8Q9kpc2
+         HVUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=13RTRRkuJBA1iS7bzOjv8CDTQaS3ruEs+RukYe640Ag=;
-        b=kjIkaWiD3+vuXAjf1NlbitdQ3esd4w+qbKj204SAdyLFgSHqsZrSmApaBuE/KMssoV
-         AA2ikVOpA50YMpaJtkYtM9uxvX7/4+keFuj+a0gO+YM7HF0JhwgjEne8x2BhUcm0tkVZ
-         9CGTkRnoTHVrVDlSwVpT2IvRpcQObxHZmQHL1OhMsYQ0Ro7Tw+zEpz/tLgV4uHA65wD3
-         tI/SnBrtIClpxGHShRVzexBFlIM4dbA45yId1yD8v0hAgAuJDGSnHAb6YCQIiLqlRoS0
-         dfVL1BMQ/2og+qUCr8MvoAFhnm1bQSH+gLn333dfKQE9toEUXHy6XDc70zFVlzN2ilYg
-         zzdw==
-X-Gm-Message-State: AOAM530oPc+em7gDnaPCtO+4SQ0L/C1Ywmh/GbZE1sQLgI3m7RXdHLGp
-        peUYMKPQEnyI8TjBV7XK+gqg1ZLKse5L
-X-Google-Smtp-Source: ABdhPJwzo95+gApcUFFb4G8JVDYACZBRI9FkC+KW93AO8mtcr584+2UBXFHEMh5J5ITd+wqZt3a63Fu3yDub
+        bh=rY9VRGFEnK07xJyRxhqYar0R4BXBdHwAeKiBVE3gLSc=;
+        b=bEJ3aJ2XI0D902hWG24xQZdwtBrjvoBzeCctfOb4CkvhAcKJl6HW/NihX4k2MRgfWW
+         bLf0o4040IM90MEvQNn4HyNhvmp1rsJvppfLAbqN0TXm3plbgFhQ0CT6/SEg+ZMwNrp0
+         T6pNLjYMoKPULk6Dh+hEKEvG1XzUsAL3KsCwyB2KyRW1HdMRXR29pd3JKbiW8bEfqqfk
+         5dBO3FWx+2hxO3mQH1tpQjSyuXfCsQfsbotCEk1Xe/SJEU9sBMCgS48W/KoExkWMQbTz
+         pqG1pdFPEiP6g0+BXa86WOQGjfpAX27xbqiQP8IUaf5owFVYGAyXX0ZenAVXxI9oK7jh
+         kWQA==
+X-Gm-Message-State: AOAM533QIPgcGQdlkyddD8LuRP0GNtcPjo9M8lbIi+/Vd22hBu3Cqk/G
+        UFv2rEC/wdZnLydZfVuj359CAKKD0Oau
+X-Google-Smtp-Source: ABdhPJx+fjPVUGXGXLaEb5V4RxpTQ3WPXK1uu3IzULxVwMe1ZP0gWXIf/o0pmkLFGK4n8elA+NfVJT/bgeaO
 Sender: "kyletso via sendgmr" <kyletso@kyletso.ntc.corp.google.com>
 X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:4430:c29c:1e76:3e65])
- (user=kyletso job=sendgmr) by 2002:a0c:a8e0:: with SMTP id
- h32mr4572012qvc.30.1611650761077; Tue, 26 Jan 2021 00:46:01 -0800 (PST)
-Date:   Tue, 26 Jan 2021 16:45:43 +0800
+ (user=kyletso job=sendgmr) by 2002:a25:ac5d:: with SMTP id
+ r29mr7223448ybd.446.1611650764837; Tue, 26 Jan 2021 00:46:04 -0800 (PST)
+Date:   Tue, 26 Jan 2021 16:45:44 +0800
 In-Reply-To: <20210126084544.682641-1-kyletso@google.com>
-Message-Id: <20210126084544.682641-3-kyletso@google.com>
+Message-Id: <20210126084544.682641-4-kyletso@google.com>
 Mime-Version: 1.0
 References: <20210126084544.682641-1-kyletso@google.com>
 X-Mailer: git-send-email 2.30.0.280.ga3ce27912f-goog
-Subject: [PATCH 2/3] dt-bindings: connector: Add SVDM VDO properties
+Subject: [PATCH 3/3] usb: typec: tcpm: Get Sink VDO from fwnode
 From:   Kyle Tso <kyletso@google.com>
 To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
         gregkh@linuxfoundation.org, robh+dt@kernel.org,
@@ -63,75 +63,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add bindings of VDO properties of USB PD SVDM so that they can be
-defined in device tree.
+Current design only allows TCPM to get the Sink VDO from TCPC configs.
+Add an additional way from fwnode.
 
 Signed-off-by: Kyle Tso <kyletso@google.com>
 ---
- include/dt-bindings/usb/pd.h | 53 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 52 insertions(+), 1 deletion(-)
+ drivers/usb/typec/tcpm/tcpm.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/include/dt-bindings/usb/pd.h b/include/dt-bindings/usb/pd.h
-index 0352893697f0..b99cb4a0cd12 100644
---- a/include/dt-bindings/usb/pd.h
-+++ b/include/dt-bindings/usb/pd.h
-@@ -93,4 +93,55 @@
- #define FRS_DEFAULT_POWER      1
- #define FRS_5V_1P5A            2
- #define FRS_5V_3A              3
-- #endif /* __DT_POWER_DELIVERY_H */
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index c14cf7842520..7b797d14d9db 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -5673,6 +5673,18 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+ 			port->new_source_frs_current = frs_current;
+ 	}
+ 
++	ret = fwnode_property_read_u32_array(fwnode, "sink-vdos", NULL, 0);
++	if (ret <= 0 && ret != -EINVAL) {
++		return -EINVAL;
++	} else if (ret > 0) {
++		port->nr_snk_vdo = min(ret, VDO_MAX_OBJECTS);
++		ret = fwnode_property_read_u32_array(fwnode, "sink-vdos",
++						     port->snk_vdo,
++						     port->nr_snk_vdo);
++		if (ret < 0)
++			return -EINVAL;
++	}
 +
-+/*
-+ * SVDM Identity Header
-+ * --------------------
-+ * <31>     :: data capable as a USB host
-+ * <30>     :: data capable as a USB device
-+ * <29:27>  :: product type (UFP / Cable / VPD)
-+ * <26>     :: modal operation supported (1b == yes)
-+ * <25:23>  :: product type (DFP) (SVDM version 2.0+ only; set to zero in version 1.0)
-+ * <22:21>  :: connector type (SVDM version 2.0+ only; set to zero in version 1.0)
-+ * <20:16>  :: Reserved, Shall be set to zero
-+ * <15:0>   :: USB-IF assigned VID for this cable vendor
-+ */
-+/* SOP Product Type (UFP) */
-+#define IDH_PTYPE_NOT_UFP       0
-+#define IDH_PTYPE_HUB           1
-+#define IDH_PTYPE_PERIPH        2
-+#define IDH_PTYPE_PSD           3
-+#define IDH_PTYPE_AMA           5
-+
-+/* SOP' Product Type (Cable Plug / VPD) */
-+#define IDH_PTYPE_NOT_CABLE     0
-+#define IDH_PTYPE_PCABLE        3
-+#define IDH_PTYPE_ACABLE        4
-+#define IDH_PTYPE_VPD           6
-+
-+/* SOP Product Type (DFP) */
-+#define IDH_PTYPE_NOT_DFP       0
-+#define IDH_PTYPE_DFP_HUB       1
-+#define IDH_PTYPE_DFP_HOST      2
-+#define IDH_PTYPE_DFP_PB        3
-+
-+#define VDO_IDH(usbh, usbd, ufp_cable, is_modal, dfp, conn, vid)                \
-+	((usbh) << 31 | (usbd) << 30 | ((ufp_cable) & 0x7) << 27                \
-+	 | (is_modal) << 26 | ((dfp) & 0x7) << 23 | ((conn) & 0x3) << 21        \
-+	 | ((vid) & 0xffff))
-+
-+/*
-+ * Cert Stat VDO
-+ * -------------
-+ * <31:0>  : USB-IF assigned XID for this cable
-+ */
-+#define VDO_CERT(xid)		((xid) & 0xffffffff)
-+
-+/*
-+ * Product VDO
-+ * -----------
-+ * <31:16> : USB Product ID
-+ * <15:0>  : USB bcdDevice
-+ */
-+#define VDO_PRODUCT(pid, bcd)   (((pid) & 0xffff) << 16 | ((bcd) & 0xffff))
-+#endif /* __DT_POWER_DELIVERY_H */
+ 	return 0;
+ }
+ 
 -- 
 2.30.0.280.ga3ce27912f-goog
 
