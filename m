@@ -2,120 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E31AA305EA7
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 15:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 939CF305EC2
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 15:55:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234547AbhA0Out (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jan 2021 09:50:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48198 "EHLO mail.kernel.org"
+        id S231628AbhA0OzP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jan 2021 09:55:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51298 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232701AbhA0OuB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Jan 2021 09:50:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C4D6B207E2;
-        Wed, 27 Jan 2021 14:49:20 +0000 (UTC)
+        id S234780AbhA0Ow7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 Jan 2021 09:52:59 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D8F2721534;
+        Wed, 27 Jan 2021 14:52:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611758960;
-        bh=Hz9DGXvQCdiByk6/l51un6j62XKj8MeDDozTnsmWZWA=;
+        s=k20201202; t=1611759125;
+        bh=AmG3QuKIvtBdDVckr6NO8VRq4/4ePsd3kUGMTgQiX/4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GCyJgI7hdzAQ66Rnug7lQlMI046KnUimo4hxkpPd5f2/zDcD9N1qQM5pqfcgOaD42
-         vP+Yk4EMybY5uJni3Iea6fGXin4cE+AIIer6SNmCx1y6lUjjGd4mova6oPZs/KO1El
-         2y7YPJkOkoPJCJ9MKeolllijj32qb9enOjHiP3L1buZR01ptRuhNIzhT0x7ou80Pm6
-         NYP8EaMoIcMOZv1TF6eCSvImVynoXjKecBWEWAq7t/GBST2C38jrlnnbiyxxsNL3IP
-         x0q8vcRvM6S6vb3Q8r/+niOh8fivvC6LlsSZ4y08/GmcLDntNow2HM1drKTxIOZia3
-         a1dmHTeaIyOeQ==
+        b=ekaOUi1CrmD4jzYW6KYfVFaIc3721Y2NuVuS0RZOOQpanaX82efcz8vEVGQmvNboP
+         Mk5T0iN7TwiGFEhCN29jfJGpPOleb+9YVsh8AcRt4T7AjnM87vSqAIYQGFu20phBe1
+         6pwltJN4vOgi2SCWVCsj+nBMLDN6Kc3bz1hibTZkpAckfpDfdlLvs8euF93fIGcaHL
+         20FRDCVlBvT/zWlTxxspmyKgFLHtDSO5eaqdHXz/rFg1aOyf/Ub7bzLxb+rsXlXb+3
+         ZMfgxBAga13d5w4O8WzF1i9pJQMqQRZr7p1TkSNJcKhWF0uyf3nsAeok1TeanVrUbj
+         c8fsal88I8X+A==
 Received: from johan by xi.lan with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1l4m8R-0001v7-NV; Wed, 27 Jan 2021 15:49:32 +0100
-Date:   Wed, 27 Jan 2021 15:49:31 +0100
+        id 1l4mB6-0001ve-Sw; Wed, 27 Jan 2021 15:52:16 +0100
+Date:   Wed, 27 Jan 2021 15:52:16 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@nxp.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 04/12] usb: misc: ehset: update to use the
- usb_control_msg_{send|recv}() API
-Message-ID: <YBF9exziI12OCSuA@hovoldconsulting.com>
+Subject: Re: [PATCH v3 05/12] usb: misc: ezusb: update to use
+ usb_control_msg_send()
+Message-ID: <YBF+IFTNn4KMMVAw@hovoldconsulting.com>
 References: <20210126183403.911653-1-anant.thazhemadam@gmail.com>
- <20210126183403.911653-5-anant.thazhemadam@gmail.com>
+ <20210126183403.911653-6-anant.thazhemadam@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210126183403.911653-5-anant.thazhemadam@gmail.com>
+In-Reply-To: <20210126183403.911653-6-anant.thazhemadam@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 27, 2021 at 12:03:55AM +0530, Anant Thazhemadam wrote:
+On Wed, Jan 27, 2021 at 12:03:56AM +0530, Anant Thazhemadam wrote:
 > The newer usb_control_msg_{send|recv}() API are an improvement on the
 > existing usb_control_msg() as it ensures that a short read/write is treated
 > as an error, data can be used off the stack, and raw usb pipes need not be
 > created in the calling functions.
-> For this reason, instances of usb_control_msg() have been replaced with
-> usb_control_msg_{recv|send}() appropriately.
+> For this reason, the instance of usb_control_msg() has been replaced with
+> usb_control_msg_send() appropriately.
 > 
 > Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
-> Reviewed-by: Peter Chen <peter.chen@nxp.com>
 > ---
->  drivers/usb/misc/ehset.c | 76 +++++++++++++++++-----------------------
->  1 file changed, 32 insertions(+), 44 deletions(-)
+>  drivers/usb/misc/ezusb.c | 16 ++--------------
+>  1 file changed, 2 insertions(+), 14 deletions(-)
 > 
-> diff --git a/drivers/usb/misc/ehset.c b/drivers/usb/misc/ehset.c
-> index 2752e1f4f4d0..f87890f9cd26 100644
-> --- a/drivers/usb/misc/ehset.c
-> +++ b/drivers/usb/misc/ehset.c
-> @@ -24,68 +24,57 @@ static int ehset_probe(struct usb_interface *intf,
->  	int ret = -EINVAL;
->  	struct usb_device *dev = interface_to_usbdev(intf);
->  	struct usb_device *hub_udev = dev->parent;
-> -	struct usb_device_descriptor *buf;
-> +	struct usb_device_descriptor buf;
->  	u8 portnum = dev->portnum;
->  	u16 test_pid = le16_to_cpu(dev->descriptor.idProduct);
+> diff --git a/drivers/usb/misc/ezusb.c b/drivers/usb/misc/ezusb.c
+> index f058d8029761..78aaee56c2b7 100644
+> --- a/drivers/usb/misc/ezusb.c
+> +++ b/drivers/usb/misc/ezusb.c
+> @@ -31,24 +31,12 @@ static const struct ezusb_fx_type ezusb_fx1 = {
+>  static int ezusb_writememory(struct usb_device *dev, int address,
+>  				unsigned char *data, int length, __u8 request)
+>  {
+> -	int result;
+> -	unsigned char *transfer_buffer;
+> -
+>  	if (!dev)
+>  		return -ENODEV;
 >  
->  	switch (test_pid) {
->  	case TEST_SE0_NAK_PID:
-> -		ret = usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev, 0),
-> -					USB_REQ_SET_FEATURE, USB_RT_PORT,
-> -					USB_PORT_FEAT_TEST,
-> -					(USB_TEST_SE0_NAK << 8) | portnum,
-> -					NULL, 0, 1000);
-> +		ret = usb_control_msg_send(hub_udev, 0, USB_REQ_SET_FEATURE,
-> +					   USB_RT_PORT, USB_PORT_FEAT_TEST,
-> +					   (USB_TEST_SE0_NAK << 8) | portnum,
-> +					   NULL, 0, 1000, GFP_KERNEL);
->  		break;
-
->  	case TEST_SINGLE_STEP_GET_DEV_DESC:
->  		/* Test: wait for 15secs -> GetDescriptor request */
->  		msleep(15 * 1000);
-> -		buf = kmalloc(USB_DT_DEVICE_SIZE, GFP_KERNEL);
-> -		if (!buf)
-> -			return -ENOMEM;
+> -	transfer_buffer = kmemdup(data, length, GFP_KERNEL);
+> -	if (!transfer_buffer) {
+> -		dev_err(&dev->dev, "%s - kmalloc(%d) failed.\n",
+> -							__func__, length);
+> -		return -ENOMEM;
+> -	}
+> -	result = usb_control_msg(dev, usb_sndctrlpipe(dev, 0), request,
+> +	return usb_control_msg_send(dev, 0, request,
+>  				 USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+> -				 address, 0, transfer_buffer, length, 3000);
+> -
+> -	kfree(transfer_buffer);
+> -	return result;
+> +				 address, 0, data, length, 3000, GFP_KERNEL);
+>  }
 >  
-> -		ret = usb_control_msg(dev, usb_rcvctrlpipe(dev, 0),
-> -					USB_REQ_GET_DESCRIPTOR, USB_DIR_IN,
-> -					USB_DT_DEVICE << 8, 0,
-> -					buf, USB_DT_DEVICE_SIZE,
-> -					USB_CTRL_GET_TIMEOUT);
-> -		kfree(buf);
-> +		ret = usb_control_msg_recv(dev, 0, USB_REQ_GET_DESCRIPTOR,
-> +					   USB_DIR_IN, USB_DT_DEVICE << 8, 0,
-> +					   &buf, USB_DT_DEVICE_SIZE,
-> +					   USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
+>  static int ezusb_set_reset(struct usb_device *dev, unsigned short cpucs_reg,
 
-Ok, here you now test for a short device descriptor (which USB core
-should already have fetched if you get to probe this driver), but which
-wasn't verified again here before. You may want to mention that in the
-commit message.
+This is a prime example of how the new helpers should be used. 
 
-And the buffer is small enough that moving it to the stack also for the
-other test cases isn't an issue (and the redundant memcpy() introduced
-by the helper is in the noise).
-
-So, this looks ok (with an amended commit message dropping the short
-write bit):
+With the short-write bit dropped from the commit message:
 
 Reviewed-by: Johan Hovold <johan@kernel.org>
 
