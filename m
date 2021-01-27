@@ -2,99 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEDBC305F58
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 16:20:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E03305F5B
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 16:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235565AbhA0PTI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jan 2021 10:19:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59052 "EHLO mail.kernel.org"
+        id S235791AbhA0PT0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jan 2021 10:19:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59920 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235534AbhA0PPc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Jan 2021 10:15:32 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9588C2076E;
-        Wed, 27 Jan 2021 15:14:51 +0000 (UTC)
+        id S1343777AbhA0PSY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 Jan 2021 10:18:24 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EBD4B20771;
+        Wed, 27 Jan 2021 15:17:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611760491;
-        bh=dhQVerM0dJxW7QcpoyXF81wXi+UcsALJRxGRjatx37c=;
+        s=k20201202; t=1611760662;
+        bh=fKQ9phEJBGCKWL5bWxHuJhsxrJRnN4eJ4TrWBGWB0c0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YufKGc/5FJwdePpvyUGT/njPl4oMe7RZLGSEtJzJCIIp3FytvvuV6aPURqURV5KWB
-         2y1AOWyH5l4aQQcmNlQ8dqxRfjAdi6s8NF69klfJnEIAhZX35CzfOYd/zh8wsj+dJJ
-         mXT2Z7cLWFONgy1f6Qmyds9uVbzMZ/o/zgmscIqgJb5Mm6g9DPZ2iYDAJH9QiuLeoI
-         Fk0hx/vFmsRofPvfp/fHNb6KH2HuVEjQAF9VPxYmkwpRJ4bJtISdpLhJj4xWJonOz0
-         +7OySH5lH+9PCUSzYSfvcUIaoGsXmkWP296nUfaizDsWGtP0xCvqdkv5l9quhHBcpW
-         iWbuI86m5Ax5w==
+        b=EfVLvV839/tSKovtaxiEQZDLDimk65/gYoA5RM6kHYjo7QDI8owajO8HLL+sSZO2r
+         F5povjE0De1Z99ESUrIiHrFgSBuBXe3IF34QuET2GuVjgj86gZFuhGDFKG7V8L5pJA
+         d+T+BY2laVfQJ0WpHYy9+fwo0cwmF8NSxJHL1L7aoH6T7d8vNbluT//6vqU8NlWBZX
+         ORid54/S2A/K2sDwePkMJRebOO2wBlBeg7Q0F1LgGnAN+VTFADrL9TIWt1GklHm+tX
+         OdI1BK5Jig4m4zsBZsF++FmEULZqt/FRW67bI38PEAoCM/8BwrUtGxGRkrVG0e6+kk
+         vNVXtof7MI1/A==
 Received: from johan by xi.lan with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1l4mX9-000212-2Q; Wed, 27 Jan 2021 16:15:03 +0100
-Date:   Wed, 27 Jan 2021 16:15:03 +0100
+        id 1l4mZu-00021f-18; Wed, 27 Jan 2021 16:17:54 +0100
+Date:   Wed, 27 Jan 2021 16:17:54 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Evgeny Novikov <novikov@ispras.ru>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 09/12] usb: misc: lvstest: update to use the
- usb_control_msg_{send|recv}() API
-Message-ID: <YBGDdyfVNKOvZPJr@hovoldconsulting.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 10/12] usb: misc: trancevibrator: update to use
+ usb_control_msg_send()
+Message-ID: <YBGEIq/jeqySlfID@hovoldconsulting.com>
 References: <20210126183403.911653-1-anant.thazhemadam@gmail.com>
- <20210126183943.914631-1-anant.thazhemadam@gmail.com>
+ <20210126184010.914841-1-anant.thazhemadam@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210126183943.914631-1-anant.thazhemadam@gmail.com>
+In-Reply-To: <20210126184010.914841-1-anant.thazhemadam@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 27, 2021 at 12:09:43AM +0530, Anant Thazhemadam wrote:
+On Wed, Jan 27, 2021 at 12:10:10AM +0530, Anant Thazhemadam wrote:
 > The newer usb_control_msg_{send|recv}() API are an improvement on the
 > existing usb_control_msg() as it ensures that a short read/write is treated
 > as an error, data can be used off the stack, and raw usb pipes need not be
 > created in the calling functions.
-> For this reason, instances of usb_control_msg() have been replaced with
-> usb_control_msg_{recv|send}() and the return value checking conditions have
-> also been modified appropriately.
+> For this reason, the instance of usb_control_msg() has been replaced with
+> usb_control_msg_send() and the return value checking condition has also
+> been modified appropriately.
 > 
 > Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
 > ---
->  drivers/usb/misc/lvstest.c | 38 ++++++++++++++++----------------------
->  1 file changed, 16 insertions(+), 22 deletions(-)
-
-> @@ -336,10 +330,10 @@ static void lvs_rh_work(struct work_struct *work)
+>  drivers/usb/misc/trancevibrator.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/trancevibrator.c b/drivers/usb/misc/trancevibrator.c
+> index a3dfc77578ea..c50807b4f4ef 100644
+> --- a/drivers/usb/misc/trancevibrator.c
+> +++ b/drivers/usb/misc/trancevibrator.c
+> @@ -59,11 +59,11 @@ static ssize_t speed_store(struct device *dev, struct device_attribute *attr,
+>  	dev_dbg(&tv->udev->dev, "speed = %d\n", tv->speed);
 >  
->  	/* Examine each root port */
->  	for (i = 1; i <= descriptor->bNbrPorts; i++) {
-> -		ret = usb_control_msg(hdev, usb_rcvctrlpipe(hdev, 0),
-> +		ret = usb_control_msg_recv(hdev, 0,
->  			USB_REQ_GET_STATUS, USB_DIR_IN | USB_RT_PORT, 0, i,
-> -			port_status, sizeof(*port_status), 1000);
-> -		if (ret < 4)
-> +			port_status, sizeof(*port_status), 1000, GFP_KERNEL);
-> +		if (ret < 0)
->  			continue;
+>  	/* Set speed */
+> -	retval = usb_control_msg(tv->udev, usb_sndctrlpipe(tv->udev, 0),
+> +	retval = usb_control_msg_send(tv->udev, 0,
+>  				 0x01, /* vendor request: set speed */
+>  				 USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_OTHER,
+>  				 tv->speed, /* speed value */
+> -				 0, NULL, 0, USB_CTRL_GET_TIMEOUT);
+> +				 0, NULL, 0, USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
+>  	if (retval) {
+>  		tv->speed = old;
+>  		dev_dbg(&tv->udev->dev, "retval = %d\n", retval);
 
-I'm afraid this may introduce a regression as well since the
-sizeof(*port_status) is 8 for some devices and the driver only cares
-about the first 4 that all devices use (i.e. it is written to handle
-short reads).
-
->  		portchange = le16_to_cpu(port_status->wPortChange);
-> @@ -420,13 +414,13 @@ static int lvs_rh_probe(struct usb_interface *intf,
->  	usb_set_intfdata(intf, lvs);
->  
->  	/* how many number of ports this root hub has */
-> -	ret = usb_control_msg(hdev, usb_rcvctrlpipe(hdev, 0),
-> +	ret = usb_control_msg_recv(hdev, 0,
->  			USB_REQ_GET_DESCRIPTOR, USB_DIR_IN | USB_RT_HUB,
->  			USB_DT_SS_HUB << 8, 0, &lvs->descriptor,
-> -			USB_DT_SS_HUB_SIZE, USB_CTRL_GET_TIMEOUT);
-> -	if (ret < (USB_DT_HUB_NONVAR_SIZE + 2)) {
-> +			USB_DT_SS_HUB_SIZE, USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
-> +	if (ret < 0) {
->  		dev_err(&hdev->dev, "wrong root hub descriptor read %d\n", ret);
-> -		return ret < 0 ? ret : -EINVAL;
-> +		return ret;
->  	}
-
-This looks like it may break for similar reasons.
+While this patch looks correct, the new helpers doesn't really buy us
+anything for (OUT) control transfers without a data stage.
 
 Johan
