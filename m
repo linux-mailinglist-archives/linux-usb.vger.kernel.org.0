@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF9E305A41
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 12:48:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1BC3059BF
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 12:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236995AbhA0LsI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jan 2021 06:48:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33708 "EHLO
+        id S236694AbhA0Lad (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jan 2021 06:30:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236670AbhA0L2R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jan 2021 06:28:17 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997CCC06178B
-        for <linux-usb@vger.kernel.org>; Wed, 27 Jan 2021 03:26:02 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id s24so3110734wmj.0
-        for <linux-usb@vger.kernel.org>; Wed, 27 Jan 2021 03:26:02 -0800 (PST)
+        with ESMTP id S236691AbhA0L20 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jan 2021 06:28:26 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A85C061793
+        for <linux-usb@vger.kernel.org>; Wed, 27 Jan 2021 03:26:03 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id d16so1484323wro.11
+        for <linux-usb@vger.kernel.org>; Wed, 27 Jan 2021 03:26:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=eaLLflOnKxP3ffgsiKs11jelhSBcLmsQ05hbA36SRWk=;
-        b=mop6sJKsuKx109i4wFRGzFHjuny65TlVpW/7jqa/q7gNTSVaUSOSdZ3d1poYKmgZnZ
-         LFfIDPqBNfwkj809/WBG0/EPIbR91wJ0pZv2VkttW8wfp3PI858ttY5oqYaStU92ulC0
-         DTFAQS/CSfXFPx3pUYfdA93oroFJ1ttmFgdRoW9bZQrTZhyxGjI9zrnMcc1yY12eMlkn
-         JOcrizBGsX3DzwOgb78uWR3SExVaTr0lakUgb/gy63zB7TVQud6x8KwFHTzaHSn2acSB
-         FbMYD/wo0N/kXS+k3zUAEDBJxCJxJGQEeafDMfYrQKBSevW3TQYGo2cD0MkpktIku3mL
-         t+Mg==
+        bh=tS3BpQ7TcxBqrK3CV55kl5AeIBZ9mcF/pZlX65f8Y00=;
+        b=Nu8+n1/ZihhGiy1TfuXunJaZiL8mlLgwXtD+3HKuHzCxGA5KBXuDQx/azGs77uccfH
+         ymALA7L46gPGCSXzr2scD5uHg/vMcJB/W0FV3XSwn+KE+LXkkhQVdMSrpyS/U51C9gBq
+         +ENefxVJsmwGUNg8439/6SfDAMbXQbKdYUeYGialfDkO/93iApVl5adpNukr1BSHHnf0
+         H5pvqFwEnx1LGGY47VMq1zC1gvxtHUG8vW1vRB3VF/04Mg1F8cFv1B2JP2b5/lDWKTm8
+         u/xGaXj6tsV66oW3kNZ/v0nE3TVUef4Hp+V8kSGawP1PGLFaAAqrDzAPe2gEN+l8M8R5
+         LqGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=eaLLflOnKxP3ffgsiKs11jelhSBcLmsQ05hbA36SRWk=;
-        b=qenQxtysGt69JrcH+8cEVsnhglVZEBE6r86NuZylyVgq1SYQ5MlkXVuP/Qfqm9n4uU
-         xsV8uoZ+a496u/7R+K+dR7r4HWf7Rn5TDWaHFqQ4Xg6mvFEyckdCpKV4i/3abxXhveeI
-         6d6xAjzKO+0WWgH7Z4bT+b68fxPeGEOj7mwSoWeFQlt6nTO+d2wK0npzKI6o7Q3QnE2F
-         AFunyVO2Gac7wTDyAgnknK1Z2euZ3AbFe4JNNkIbckSXkC6caqiPrHEB6K0GBVlABLHZ
-         aKawYRpNJdGF2xVEvDkosKoUEbU11VsQZMT1xVKPohZM1aQGCB7ok+fq1HU1aIYHbLP+
-         IKQA==
-X-Gm-Message-State: AOAM530UpdE82fnb8gEEMUzGDPaT4qZhsvBjKHrwt5xkfxUzQuMfG7W3
-        Q33lM1zb63ykBW3TFdDtAdL6rA==
-X-Google-Smtp-Source: ABdhPJxszX1z1YoVOvKrPQMaHwIfewhwrriy4HtebjVjpjgLl2GWclwbcMjFkzPxFOv2GciQaXRU/Q==
-X-Received: by 2002:a1c:6486:: with SMTP id y128mr3965686wmb.12.1611746761314;
-        Wed, 27 Jan 2021 03:26:01 -0800 (PST)
+        bh=tS3BpQ7TcxBqrK3CV55kl5AeIBZ9mcF/pZlX65f8Y00=;
+        b=j5L1+cXd5yk+NEmhY1JBcLW3H1ChB0Y4iEGSjza4AUBl2LddoWLc0t2TL0r7A3u3Fd
+         jeHyVcAOI8/iBhcLfTZU+HPfVNP4TkMPTjRFoUPQktYtdApFmNyUNyT5NQw0Tkkxxs6F
+         iYu4oe0lO2V5jVIW96s5p4KUXrtzNUVpnOW9IA+5TLG0Oz4+1H1wDvWD2YH+9YQrohJc
+         6qlnnGTuLzzmIRDSovDdxKywlM9dyROlLH+bRPd5MOgUir6v6BKRBlHQaq4geYekJgWq
+         20IUk8rzIYM0LrgjwViWe/h11FIKZhEH6Q5jzi6vU9+PeCE4JdxElrej03SlYyF+Ufdt
+         UshQ==
+X-Gm-Message-State: AOAM531RRiM5U3gkfE2uAAJUwGrK1vpi/zXrwXgqqwU2FbHRhfVIQu6q
+        bnWGjjHHyOoS5uaSpL+1OS48Zg==
+X-Google-Smtp-Source: ABdhPJy6nMZ4WLsFP1oo29N2QsZtYnO46W7YC7oIsJ3Gtwq2ZObK+cQFj0glBklo0sMPKTLPLrAv6g==
+X-Received: by 2002:adf:f8c1:: with SMTP id f1mr10663596wrq.76.1611746762542;
+        Wed, 27 Jan 2021 03:26:02 -0800 (PST)
 Received: from dell.default ([91.110.221.188])
-        by smtp.gmail.com with ESMTPSA id m2sm2040065wml.34.2021.01.27.03.26.00
+        by smtp.gmail.com with ESMTPSA id m2sm2040065wml.34.2021.01.27.03.26.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jan 2021 03:26:00 -0800 (PST)
+        Wed, 27 Jan 2021 03:26:01 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Yehezkel Bernat <YehezkelShB@gmail.com>,
         linux-usb@vger.kernel.org
-Subject: [PATCH 02/12] thunderbolt: cap: Fix kernel-doc formatting issue
-Date:   Wed, 27 Jan 2021 11:25:44 +0000
-Message-Id: <20210127112554.3770172-3-lee.jones@linaro.org>
+Subject: [PATCH 03/12] thunderbolt: ctl: Demote non-conformant kernel-doc headers
+Date:   Wed, 27 Jan 2021 11:25:45 +0000
+Message-Id: <20210127112554.3770172-4-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210127112554.3770172-1-lee.jones@linaro.org>
 References: <20210127112554.3770172-1-lee.jones@linaro.org>
@@ -69,7 +69,47 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/thunderbolt/cap.c:189: warning: Function parameter or member 'sw' not described in 'tb_switch_find_cap'
+ drivers/thunderbolt/ctl.c:38: warning: expecting prototype for struct tb_cfg. Prototype was for struct tb_ctl instead
+ drivers/thunderbolt/ctl.c:350: warning: Function parameter or member 'ctl' not described in 'tb_ctl_tx'
+ drivers/thunderbolt/ctl.c:350: warning: Function parameter or member 'data' not described in 'tb_ctl_tx'
+ drivers/thunderbolt/ctl.c:350: warning: Function parameter or member 'len' not described in 'tb_ctl_tx'
+ drivers/thunderbolt/ctl.c:350: warning: Function parameter or member 'type' not described in 'tb_ctl_tx'
+ drivers/thunderbolt/ctl.c:350: warning: expecting prototype for tb_cfg_tx(). Prototype was for tb_ctl_tx() instead
+ drivers/thunderbolt/ctl.c:383: warning: Function parameter or member 'ctl' not described in 'tb_ctl_handle_event'
+ drivers/thunderbolt/ctl.c:383: warning: Function parameter or member 'type' not described in 'tb_ctl_handle_event'
+ drivers/thunderbolt/ctl.c:383: warning: Function parameter or member 'pkg' not described in 'tb_ctl_handle_event'
+ drivers/thunderbolt/ctl.c:383: warning: Function parameter or member 'size' not described in 'tb_ctl_handle_event'
+ drivers/thunderbolt/ctl.c:611: warning: Function parameter or member 'nhi' not described in 'tb_ctl_alloc'
+ drivers/thunderbolt/ctl.c:611: warning: Function parameter or member 'cb' not described in 'tb_ctl_alloc'
+ drivers/thunderbolt/ctl.c:611: warning: Function parameter or member 'cb_data' not described in 'tb_ctl_alloc'
+ drivers/thunderbolt/ctl.c:658: warning: Function parameter or member 'ctl' not described in 'tb_ctl_free'
+ drivers/thunderbolt/ctl.c:682: warning: Function parameter or member 'ctl' not described in 'tb_ctl_start'
+ drivers/thunderbolt/ctl.c:682: warning: expecting prototype for tb_cfg_start(). Prototype was for tb_ctl_start() instead
+ drivers/thunderbolt/ctl.c:702: warning: Function parameter or member 'ctl' not described in 'tb_ctl_stop'
+ drivers/thunderbolt/ctl.c:702: warning: expecting prototype for control(). Prototype was for tb_ctl_stop() instead
+ drivers/thunderbolt/ctl.c:794: warning: Function parameter or member 'ctl' not described in 'tb_cfg_reset'
+ drivers/thunderbolt/ctl.c:794: warning: Function parameter or member 'route' not described in 'tb_cfg_reset'
+ drivers/thunderbolt/ctl.c:794: warning: Function parameter or member 'timeout_msec' not described in 'tb_cfg_reset'
+ drivers/thunderbolt/ctl.c:830: warning: Function parameter or member 'ctl' not described in 'tb_cfg_read_raw'
+ drivers/thunderbolt/ctl.c:830: warning: Function parameter or member 'buffer' not described in 'tb_cfg_read_raw'
+ drivers/thunderbolt/ctl.c:830: warning: Function parameter or member 'route' not described in 'tb_cfg_read_raw'
+ drivers/thunderbolt/ctl.c:830: warning: Function parameter or member 'port' not described in 'tb_cfg_read_raw'
+ drivers/thunderbolt/ctl.c:830: warning: Function parameter or member 'space' not described in 'tb_cfg_read_raw'
+ drivers/thunderbolt/ctl.c:830: warning: Function parameter or member 'offset' not described in 'tb_cfg_read_raw'
+ drivers/thunderbolt/ctl.c:830: warning: Function parameter or member 'length' not described in 'tb_cfg_read_raw'
+ drivers/thunderbolt/ctl.c:830: warning: Function parameter or member 'timeout_msec' not described in 'tb_cfg_read_raw'
+ drivers/thunderbolt/ctl.c:830: warning: expecting prototype for tb_cfg_read(). Prototype was for tb_cfg_read_raw() instead
+ drivers/thunderbolt/ctl.c:893: warning: Function parameter or member 'ctl' not described in 'tb_cfg_write_raw'
+ drivers/thunderbolt/ctl.c:893: warning: Function parameter or member 'buffer' not described in 'tb_cfg_write_raw'
+ drivers/thunderbolt/ctl.c:893: warning: Function parameter or member 'route' not described in 'tb_cfg_write_raw'
+ drivers/thunderbolt/ctl.c:893: warning: Function parameter or member 'port' not described in 'tb_cfg_write_raw'
+ drivers/thunderbolt/ctl.c:893: warning: Function parameter or member 'space' not described in 'tb_cfg_write_raw'
+ drivers/thunderbolt/ctl.c:893: warning: Function parameter or member 'offset' not described in 'tb_cfg_write_raw'
+ drivers/thunderbolt/ctl.c:893: warning: Function parameter or member 'length' not described in 'tb_cfg_write_raw'
+ drivers/thunderbolt/ctl.c:893: warning: Function parameter or member 'timeout_msec' not described in 'tb_cfg_write_raw'
+ drivers/thunderbolt/ctl.c:893: warning: expecting prototype for tb_cfg_write(). Prototype was for tb_cfg_write_raw() instead
+ drivers/thunderbolt/ctl.c:1033: warning: Function parameter or member 'ctl' not described in 'tb_cfg_get_upstream_port'
+ drivers/thunderbolt/ctl.c:1033: warning: Function parameter or member 'route' not described in 'tb_cfg_get_upstream_port'
 
 Cc: Andreas Noever <andreas.noever@gmail.com>
 Cc: Michael Jamet <michael.jamet@intel.com>
@@ -78,22 +118,112 @@ Cc: Yehezkel Bernat <YehezkelShB@gmail.com>
 Cc: linux-usb@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/thunderbolt/cap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thunderbolt/ctl.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/thunderbolt/cap.c b/drivers/thunderbolt/cap.c
-index 6f571e912cf21..8ecd610c62d50 100644
---- a/drivers/thunderbolt/cap.c
-+++ b/drivers/thunderbolt/cap.c
-@@ -178,7 +178,7 @@ int tb_switch_next_cap(struct tb_switch *sw, unsigned int offset)
+diff --git a/drivers/thunderbolt/ctl.c b/drivers/thunderbolt/ctl.c
+index bac08b820015d..e5d7ff6807721 100644
+--- a/drivers/thunderbolt/ctl.c
++++ b/drivers/thunderbolt/ctl.c
+@@ -19,7 +19,7 @@
+ #define TB_CTL_RX_PKG_COUNT	10
+ #define TB_CTL_RETRIES		4
  
- /**
-  * tb_switch_find_cap() - Find switch capability
-- * @sw Switch to find the capability for
-+ * @sw: Switch to find the capability for
-  * @cap: Capability to look
+-/**
++/*
+  * struct tb_cfg - thunderbolt control channel
+  */
+ struct tb_ctl {
+@@ -338,7 +338,7 @@ static void tb_ctl_tx_callback(struct tb_ring *ring, struct ring_frame *frame,
+ 	tb_ctl_pkg_free(pkg);
+ }
+ 
+-/**
++/*
+  * tb_cfg_tx() - transmit a packet on the control channel
   *
-  * Returns offset to start of capability or %-ENOENT if no such
+  * len must be a multiple of four.
+@@ -375,7 +375,7 @@ static int tb_ctl_tx(struct tb_ctl *ctl, const void *data, size_t len,
+ 	return res;
+ }
+ 
+-/**
++/*
+  * tb_ctl_handle_event() - acknowledge a plug event, invoke ctl->callback
+  */
+ static bool tb_ctl_handle_event(struct tb_ctl *ctl, enum tb_cfg_pkg_type type,
+@@ -600,7 +600,7 @@ struct tb_cfg_result tb_cfg_request_sync(struct tb_ctl *ctl,
+ 
+ /* public interface, alloc/start/stop/free */
+ 
+-/**
++/*
+  * tb_ctl_alloc() - allocate a control channel
+  *
+  * cb will be invoked once for every hot plug event.
+@@ -647,7 +647,7 @@ struct tb_ctl *tb_ctl_alloc(struct tb_nhi *nhi, event_cb cb, void *cb_data)
+ 	return NULL;
+ }
+ 
+-/**
++/*
+  * tb_ctl_free() - free a control channel
+  *
+  * Must be called after tb_ctl_stop.
+@@ -675,7 +675,7 @@ void tb_ctl_free(struct tb_ctl *ctl)
+ 	kfree(ctl);
+ }
+ 
+-/**
++/*
+  * tb_cfg_start() - start/resume the control channel
+  */
+ void tb_ctl_start(struct tb_ctl *ctl)
+@@ -690,7 +690,7 @@ void tb_ctl_start(struct tb_ctl *ctl)
+ 	ctl->running = true;
+ }
+ 
+-/**
++/*
+  * control() - pause the control channel
+  *
+  * All invocations of ctl->callback will have finished after this method
+@@ -782,7 +782,7 @@ static bool tb_cfg_copy(struct tb_cfg_request *req, const struct ctl_pkg *pkg)
+ 	return true;
+ }
+ 
+-/**
++/*
+  * tb_cfg_reset() - send a reset packet and wait for a response
+  *
+  * If the switch at route is incorrectly configured then we will not receive a
+@@ -819,7 +819,7 @@ struct tb_cfg_result tb_cfg_reset(struct tb_ctl *ctl, u64 route,
+ 	return res;
+ }
+ 
+-/**
++/*
+  * tb_cfg_read() - read from config space into buffer
+  *
+  * Offset and length are in dwords.
+@@ -882,7 +882,7 @@ struct tb_cfg_result tb_cfg_read_raw(struct tb_ctl *ctl, void *buffer,
+ 	return res;
+ }
+ 
+-/**
++/*
+  * tb_cfg_write() - write from buffer into config space
+  *
+  * Offset and length are in dwords.
+@@ -1020,7 +1020,7 @@ int tb_cfg_write(struct tb_ctl *ctl, const void *buffer, u64 route, u32 port,
+ 	return res.err;
+ }
+ 
+-/**
++/*
+  * tb_cfg_get_upstream_port() - get upstream port number of switch at route
+  *
+  * Reads the first dword from the switches TB_CFG_SWITCH config area and
 -- 
 2.25.1
 
