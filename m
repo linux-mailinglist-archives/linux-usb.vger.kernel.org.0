@@ -2,138 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E35305E20
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 15:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7326C305E83
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 15:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbhA0OWb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jan 2021 09:22:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42832 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229747AbhA0OWW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Jan 2021 09:22:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0075F206C2;
-        Wed, 27 Jan 2021 14:21:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611757299;
-        bh=h4KlcOqVpt+f7NayTo74/7IODdEHC+WplK/87YEXFY4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t+BAR4Z2Pu7DB0HXkvxM8DQQPBVAvjYbjZNjN0spoa7Ztki/hQ424j+lXdArN+uEw
-         BhQ1CNUU3mfWmpwfcUOBE712yPuI85fwfJI5KKgsCtLkRS/e/b2egGbOGR/l2/mCyt
-         Z9SeVCTp7hhFFuFz0IEEbva52Udw6SZkDNeYB+pYsBXFUhaVbPsb3CbPcxTd1aOWJE
-         PKMPVG4hwpC0AI78K8KvRW5DL3WJwMNEykMtAY8Nx3WwpaGejWeQlsrHDJj8kCjGaK
-         C9yOw7ik0PeNrT18U0pg35wBODeNkkyCM2wDOr4x2NsJvNZxxj39MYZQPOXjvgaM3V
-         42+xI7VxayVEQ==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1l4lhe-0001py-TN; Wed, 27 Jan 2021 15:21:50 +0100
-Date:   Wed, 27 Jan 2021 15:21:50 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
+        id S234189AbhA0OmG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jan 2021 09:42:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231883AbhA0Olb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jan 2021 09:41:31 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B46C06178C;
+        Wed, 27 Jan 2021 06:40:51 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id v19so1692038pgj.12;
+        Wed, 27 Jan 2021 06:40:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=WtvFLrTUDDZSQU8DQdUtxH/Jsc8mFdlHHcBvGUXAMiU=;
+        b=PRFM28i75GL4RCeAD1T0mKW8QQBwgTrE7H3QeOOY5AZkpVKocdhgs+gxTwVKsjE/qj
+         VDw5/IA3LJswd9GE4jz8fsl2YoHaOTnujNbqT501mTryj9W06cJLk8ph38KJvK4AlnS6
+         EbCURMkHqY3fbEwVPSUNahUisghDmjb+eZNEBDEYrDguGsBUvIrA0PEban17K7NcrDra
+         5I+MJw5AqoBowpEb8kWOHcxdZp4Qdeu6cgrc7mtA5ncX/GPQvzVf0LIhmBb/Orh8p1oR
+         ERFdLE9sCrKPLbI76NdIpfH076MC5/qaJoWuUwL32VcgWgZ1lAaNt8RF6QCfVrbyH8R0
+         ijbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=WtvFLrTUDDZSQU8DQdUtxH/Jsc8mFdlHHcBvGUXAMiU=;
+        b=iTdeGkST5OR14BRlXKKJID7yDFbFmRNBmQofF+AZ0L/Qs/bWh7g8a4scIJoh8ND+Eb
+         9/QDwJptYALd+ZTxV2Di0pNdHRxQSJ08Qg5fSPTeA9A5yDgo/b21Mc1SPF4GZRMED+dg
+         8zuNWUWfQh1qoVna3g5Qil72/673eE1W8tP5n3/D767BQYHqucKFcKBII2zKDV190hBw
+         YN7CEyaDnY31i1wFYdsmSuqIRBf2tWe2hcmzSp6+N+ZH6m4QR5OyavqBTm9H1wZ+rcA4
+         Ge2tkjzSfk1ovhpBBz7biyoFhiNq9xn3nmemgAN1tDNoFovgqWoVaJJhwJx+0nZFMUau
+         0q0w==
+X-Gm-Message-State: AOAM532phG02po6PdVgjYjZoBWxU9A9atzQAhWjYGgh5HPed3YkA+AnD
+        MIXU9R7hra0cTDfzdGKjrgfSo7Ua7uyovWr6oYU=
+X-Google-Smtp-Source: ABdhPJyRR5geFEqX/wlAu41kzMtW9RZS1sv7mgqpCn8/pfXT9kw3MfB+mxIkOCicOE9YTDbc38eLow==
+X-Received: by 2002:a65:4201:: with SMTP id c1mr9473879pgq.10.1611758450151;
+        Wed, 27 Jan 2021 06:40:50 -0800 (PST)
+Received: from [192.168.0.104] ([49.207.195.86])
+        by smtp.gmail.com with ESMTPSA id x63sm2951384pfc.145.2021.01.27.06.40.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jan 2021 06:40:48 -0800 (PST)
+Subject: Re: [PATCH v3 02/12] usb: misc: cypress_cy7c63: update to use
+ usb_control_msg_recv()
+To:     Johan Hovold <johan@kernel.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 03/12] usb: misc: cytherm: update to use
- usb_control_msg_recv()
-Message-ID: <YBF2/qHqa7+s9+5d@hovoldconsulting.com>
 References: <20210126183403.911653-1-anant.thazhemadam@gmail.com>
- <20210126183403.911653-4-anant.thazhemadam@gmail.com>
+ <20210126183403.911653-3-anant.thazhemadam@gmail.com>
+ <YBF0B50Q9gi/Ezpz@hovoldconsulting.com>
+From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
+Message-ID: <2347687a-d92e-d06e-a8b5-a67a45d5040b@gmail.com>
+Date:   Wed, 27 Jan 2021 20:10:45 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210126183403.911653-4-anant.thazhemadam@gmail.com>
+In-Reply-To: <YBF0B50Q9gi/Ezpz@hovoldconsulting.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 27, 2021 at 12:03:54AM +0530, Anant Thazhemadam wrote:
-> The newer usb_control_msg_{send|recv}() API are an improvement on the
-> existing usb_control_msg() as it ensures that a short read/write is treated
-> as an error, data can be used off the stack, and raw usb pipes need not be
-> created in the calling functions.
-> For this reason, the instance of usb_control_msg() has been replaced with
-> usb_control_msg_recv().
-> 
-> The return value checking enforced by callers of the updated function have
-> also been appropriately updated.
-> 
-> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
-> ---
->  drivers/usb/misc/cytherm.c | 128 +++++++++++++------------------------
->  1 file changed, 43 insertions(+), 85 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/cytherm.c b/drivers/usb/misc/cytherm.c
-> index 3e3802aaefa3..2ca36ea5b76a 100644
-> --- a/drivers/usb/misc/cytherm.c
-> +++ b/drivers/usb/misc/cytherm.c
-> @@ -51,12 +51,12 @@ static int vendor_command(struct usb_device *dev, unsigned char request,
->  			  unsigned char value, unsigned char index,
->  			  void *buf, int size)
->  {
-> -	return usb_control_msg(dev, usb_rcvctrlpipe(dev, 0),
-> -			       request, 
-> -			       USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_OTHER,
-> -			       value, 
-> -			       index, buf, size,
-> -			       USB_CTRL_GET_TIMEOUT);
-> +	return usb_control_msg_recv(dev, 0,
-> +				    request,
-> +				    USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_OTHER,
-> +				    value,
-> +				    index, buf, size,
-> +				    USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
->  }
->  
->  
-> @@ -78,33 +78,27 @@ static ssize_t brightness_store(struct device *dev, struct device_attribute *att
->  	struct usb_interface *intf = to_usb_interface(dev);
->  	struct usb_cytherm *cytherm = usb_get_intfdata(intf);
->  
-> -	unsigned char *buffer;
-> +	unsigned char buffer[8];
->  	int retval;
-> -   
-> -	buffer = kmalloc(8, GFP_KERNEL);
-> -	if (!buffer)
-> -		return 0;
->  
->  	cytherm->brightness = simple_strtoul(buf, NULL, 10);
-> -   
-> +
->  	if (cytherm->brightness > 0xFF)
->  		cytherm->brightness = 0xFF;
->  	else if (cytherm->brightness < 0)
->  		cytherm->brightness = 0;
-> -   
-> +
->  	/* Set brightness */
->  	retval = vendor_command(cytherm->udev, WRITE_RAM, BRIGHTNESS, 
-> -				cytherm->brightness, buffer, 8);
-> -	if (retval)
-> -		dev_dbg(&cytherm->udev->dev, "retval = %d\n", retval);
-> +				cytherm->brightness, &buffer, 8);
-> +	if (!retval)
-> +		dev_dbg(&cytherm->udev->dev, "brightness set correctly\n");
->  	/* Inform µC that we have changed the brightness setting */
->  	retval = vendor_command(cytherm->udev, WRITE_RAM, BRIGHTNESS_SEM,
-> -				0x01, buffer, 8);
-> -	if (retval)
-> -		dev_dbg(&cytherm->udev->dev, "retval = %d\n", retval);
-> -   
-> -	kfree(buffer);
-> -   
-> +				0x01, &buffer, 8);
-> +	if (!retval)
-> +		dev_dbg(&cytherm->udev->dev, "µC informed of change in brightness setting\n");
-> +
->  	return count;
->  }
 
-This driver looks like it could have the same origin as the one touched
-by the previous patch, and likewise this patch suffers from a similar
-problem in that the driver always provides an 8-byte buffer but appears
-to expect short reads (which would no be treated as errors).
+On 27/01/21 7:39 pm, Johan Hovold wrote:
+> On Wed, Jan 27, 2021 at 12:03:53AM +0530, Anant Thazhemadam wrote:
+>> The newer usb_control_msg_{send|recv}() API are an improvement on the
+>> existing usb_control_msg() as it ensures that a short read/write is treated
+> Short write has always been an error (I won't repeat for the remaining
+> patches).
+>
+>> as an error, data can be used off the stack, and raw usb pipes need not be
+>> created in the calling functions.
+>> For this reason, the instance of usb_control_msg() has been replaced with
+>> usb_control_msg_recv().
+>>
+>> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+>> ---
+>>  drivers/usb/misc/cypress_cy7c63.c | 21 +++++----------------
+>>  1 file changed, 5 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/drivers/usb/misc/cypress_cy7c63.c b/drivers/usb/misc/cypress_cy7c63.c
+>> index 14faec51d7a5..76a320ef17a7 100644
+>> --- a/drivers/usb/misc/cypress_cy7c63.c
+>> +++ b/drivers/usb/misc/cypress_cy7c63.c
+>> @@ -70,24 +70,15 @@ static int vendor_command(struct cypress *dev, unsigned char request,
+>>  			  unsigned char address, unsigned char data)
+>>  {
+>>  	int retval = 0;
+>> -	unsigned int pipe;
+>> -	unsigned char *iobuf;
+>> -
+>> -	/* allocate some memory for the i/o buffer*/
+>> -	iobuf = kzalloc(CYPRESS_MAX_REQSIZE, GFP_KERNEL);
+>> -	if (!iobuf) {
+>> -		retval = -ENOMEM;
+>> -		goto error;
+>> -	}
+>> +	u8 iobuf[CYPRESS_MAX_REQSIZE] = {0};
+>>  
+>>  	dev_dbg(&dev->udev->dev, "Sending usb_control_msg (data: %d)\n", data);
+>>  
+>>  	/* prepare usb control message and send it upstream */
+>> -	pipe = usb_rcvctrlpipe(dev->udev, 0);
+>> -	retval = usb_control_msg(dev->udev, pipe, request,
+>> -				 USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_OTHER,
+>> -				 address, data, iobuf, CYPRESS_MAX_REQSIZE,
+>> -				 USB_CTRL_GET_TIMEOUT);
+>> +	retval = usb_control_msg_recv(dev->udev, 0, request,
+>> +				      USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_OTHER,
+>> +				      address, data, &iobuf, CYPRESS_MAX_REQSIZE,
+>> +				      USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
+> Are you sure that the device always returns CYPRESS_MAX_REQSIZE here?
+> Otherwise, this change may break the driver as it currently only uses
+> the first two bytes of the received message, and only for some requests.
+>
+> Note that the driver appears uses the same helper function for
+> CYPRESS_WRITE_PORT commands, which probably doesn't return 8 bytes in a
+> reply.
+>
+> You could possibly add the missing short read check for the
+> CYPRESS_READ_PORT case, but I'm afraid that the new helper are not a
+> good fit here either.
+>
 
-You could consider adding the missing short read sanity checks, but
-I'm afraid the new helpers are not a good fit here either.
+Understood, but I think that change might be better proposed (for this, and cytherm, both)
+separately from this series, so I'll just drop it from this series for now.
 
-Johan
+Thanks,
+Anant
+
