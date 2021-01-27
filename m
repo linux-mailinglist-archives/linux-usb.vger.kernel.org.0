@@ -2,30 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2023305630
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 09:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6462E3058B0
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 11:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232357AbhA0IyX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jan 2021 03:54:23 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:41610 "EHLO gloria.sntech.de"
+        id S236044AbhA0Kmi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jan 2021 05:42:38 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:42078 "EHLO gloria.sntech.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232904AbhA0Ivy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Jan 2021 03:51:54 -0500
+        id S235841AbhA0KkZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 Jan 2021 05:40:25 -0500
 Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=phil.lan)
         by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <heiko@sntech.de>)
-        id 1l4gX6-00007Q-CP; Wed, 27 Jan 2021 09:50:36 +0100
+        id 1l4iEU-0000kX-2Y; Wed, 27 Jan 2021 11:39:30 +0100
 From:   Heiko Stuebner <heiko@sntech.de>
 To:     hminas@synopsys.com, gregkh@linuxfoundation.org
 Cc:     christoph.muellner@theobroma-systems.com, paulz@synopsys.com,
         yousaf.kaukab@intel.com, balbi@ti.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, heiko@sntech.de,
         Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Gerhard Klostermeier <gerhard.klostermeier@syss.de>,
         stable@vger.kernel.org
-Subject: [PATCH v2] usb: dwc2: Fix endpoint direction check in ep_from_windex
-Date:   Wed, 27 Jan 2021 09:50:34 +0100
-Message-Id: <20210127085034.36397-1-heiko@sntech.de>
+Subject: [PATCH v3] usb: dwc2: Fix endpoint direction check in ep_from_windex
+Date:   Wed, 27 Jan 2021 11:39:19 +0100
+Message-Id: <20210127103919.58215-1-heiko@sntech.de>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -67,9 +68,12 @@ is no endpoint for the targeted direction, so the offending check
 can go away completely.
 
 Fixes: c6f5c050e2a7 ("usb: dwc2: gadget: add bi-directional endpoint support")
+Reported-by: Gerhard Klostermeier <gerhard.klostermeier@syss.de>
 Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 Cc: stable@vger.kernel.org
 ---
+changes in v3:
+- added Reported-by tag
 changes in v2:
 - remove unused struct dwc2_hsotg_ep *ep;
 
