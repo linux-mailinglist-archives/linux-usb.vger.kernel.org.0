@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B927E3059E1
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 12:35:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A67305A10
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 12:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236891AbhA0Ld0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jan 2021 06:33:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S237037AbhA0Llg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jan 2021 06:41:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236749AbhA0LbI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jan 2021 06:31:08 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395FAC061221
-        for <linux-usb@vger.kernel.org>; Wed, 27 Jan 2021 03:26:13 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id i9so1317929wmq.1
-        for <linux-usb@vger.kernel.org>; Wed, 27 Jan 2021 03:26:13 -0800 (PST)
+        with ESMTP id S236726AbhA0La6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jan 2021 06:30:58 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6553BC061222
+        for <linux-usb@vger.kernel.org>; Wed, 27 Jan 2021 03:26:14 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id z6so1460838wrq.10
+        for <linux-usb@vger.kernel.org>; Wed, 27 Jan 2021 03:26:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HRGqS1Ub4m0YbvVmKTGmVzBFWciGxN2mIYxOHlmuFFQ=;
-        b=aFxHUHZG0if3sG9m3uw+QqOVHvX6FbbHalFoG7h6dCnk8s42nSq/jKBdsJWQ0Hbq4p
-         Z1SlStAl/veU82UOU+zuLWWwwPLQ3cGM4aWLgam854/2L3ZjWICBDEz8GSvXFWMtWsCw
-         Czr1b/cwT6ymhR4o6GQV05OUSWK+jB0PPmbzyMn97mKM6dRLyTMzBxAm/9pvaE+vm+oV
-         T2X1eeb0gUgd1xgKH2lKqpimfTvBfTzOfy4i8/qK8IEUbSGBt1z/FaOn6uDoIwgZt4sj
-         362O5PTo2SMXRygxmUwFf4dcnefnUgODnQurChgh1grzCXnDzJn5TQwuWRiFYMVZ8Y4k
-         N77g==
+        bh=bv5N/W3oq+FZm8qEBRC53aadCUOUoa7ywZlmGmPMg74=;
+        b=NK2TtYcdpOgyLLkQQic5gvtjp3/8VGKQr5GZThUNTjyAfO1pmjo7MWJNPtXgzp1KIO
+         CH/gxQzwk618UaXMef+p+VpwV1+QCL7qpDSmAyPucEumV1UqiaH7DTDaqgKHXTvsrUuq
+         ZUV2LNHehwRytkJXIroTKPhKVxMIngXvRJfqY/Wrg5MAML2J4nVbAAoxUBrB5mRfqGUS
+         +M5GjKENRT4PYmWk32VwYzjagB4eh9lvBW2p+NjtmmLlIWF1zDnthz+zIGboKEoFARXI
+         H9zMDaWg2I/bBlN5rCXNsQbgDte/Vr1K57tlWuH+JI4XrfgQYSwMz8vPtcQZqu1PXzvf
+         WQTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HRGqS1Ub4m0YbvVmKTGmVzBFWciGxN2mIYxOHlmuFFQ=;
-        b=BwzOdog09/kK6YmQTzkC6jMnXRUa4BvrbQ2BAwuRUd6qd56dQh0Pzm08rq6CEsF1MJ
-         6BmQMXwz4rwXkVEU3ZXA4c12zpmPFk2pvDsiH6b+3Y9r9NIW5gY4IIPZ6i2ltJ4riD21
-         SpNYNMSj6CF8BQ1sqdm5dXBKfxHtp7AxqldO+pLD0mZD80OJaec21V5vlfXMygFS1BLp
-         ykrLhbbqPBAOV/eFBXsC/0G2vtXLZOWszT6SHc2uuZU3gTQF7ISEnf0ZvqkRwjQ13BrQ
-         6TvYC+/Fek10a84s83bayFsuc9j00PQvrZYd2WQv3pstlumXQIRP/Qu8h1vhz902T68c
-         xqNQ==
-X-Gm-Message-State: AOAM533i8ie2NUSutHTz6JU/hdR9BHO5dzgSAMlucNf9rzuOXvO3Eq6e
-        /OIe0L/9MMQ/Uq9/w5F78SyB1w==
-X-Google-Smtp-Source: ABdhPJzG1p4TDwfwkVY8TRuVEWbSgCecvhUfiUzcBZpZEG7669W9TlG+ARfXy+Ebey91FVQPSqnGog==
-X-Received: by 2002:a1c:dd08:: with SMTP id u8mr3766904wmg.121.1611746772007;
-        Wed, 27 Jan 2021 03:26:12 -0800 (PST)
+        bh=bv5N/W3oq+FZm8qEBRC53aadCUOUoa7ywZlmGmPMg74=;
+        b=uCADXv71/7JUgwAenTsOb115cl3z9kWiQOF+U2kw9fxo9JCrdZNrhQEuwg3cHMclYw
+         j5Fr3icq7/5283JwOfJpvag52NnrPXxaw/OWTAn/Wl6KKyC4mbBfhEoitWo6iVapqFke
+         xd1eqA6QHML7113ShX7nwcE/zaUIFRs2DbMkP8BsD4gGcoKpQhrAACZUq+5fTCxKKu2y
+         SzKEbLfI7/M8Sw/+kZvtpy/NyURXxoIGNocDYd5SkbMWsGNRvDLcXXCB97243zZvHqhx
+         rj5mO4X88Ati4fX5bZ2GU5OGtczk9Sf7KgG6xEjl30J9WIRlDz+yIJC10ZC1Emb7qU6G
+         zjqA==
+X-Gm-Message-State: AOAM533vKEjZA1A6Xfhz9Ssd/gIHV8rn9+nxpEgatVepFzXNj8zsJ6xs
+        XNENtzkrdMiqvgrsjDyUzv9lcA==
+X-Google-Smtp-Source: ABdhPJybnAUfr55viAi3nE368goiE4XSTFzPj50nTPATCsP9WDIBu1EsnC6PAvP3slyBbDvstAJUXg==
+X-Received: by 2002:adf:f8c1:: with SMTP id f1mr10664387wrq.76.1611746773216;
+        Wed, 27 Jan 2021 03:26:13 -0800 (PST)
 Received: from dell.default ([91.110.221.188])
-        by smtp.gmail.com with ESMTPSA id m2sm2040065wml.34.2021.01.27.03.26.10
+        by smtp.gmail.com with ESMTPSA id m2sm2040065wml.34.2021.01.27.03.26.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jan 2021 03:26:11 -0800 (PST)
+        Wed, 27 Jan 2021 03:26:12 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Yehezkel Bernat <YehezkelShB@gmail.com>,
         linux-usb@vger.kernel.org
-Subject: [PATCH 11/12] thunderbolt: tunnel: Fix misspelling of 'receive_path'
-Date:   Wed, 27 Jan 2021 11:25:53 +0000
-Message-Id: <20210127112554.3770172-12-lee.jones@linaro.org>
+Subject: [PATCH 12/12] thunderbolt: swit: Fix function name in the header
+Date:   Wed, 27 Jan 2021 11:25:54 +0000
+Message-Id: <20210127112554.3770172-13-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210127112554.3770172-1-lee.jones@linaro.org>
 References: <20210127112554.3770172-1-lee.jones@linaro.org>
@@ -69,8 +69,7 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/thunderbolt/tunnel.c:841: warning: Function parameter or member 'receive_path' not described in 'tb_tunnel_alloc_dma'
- drivers/thunderbolt/tunnel.c:841: warning: Excess function parameter 'reveive_path' description in 'tb_tunnel_alloc_dma'
+ drivers/thunderbolt/switch.c:1322: warning: expecting prototype for reset_switch(). Prototype was for tb_switch_reset() instead
 
 Cc: Andreas Noever <andreas.noever@gmail.com>
 Cc: Michael Jamet <michael.jamet@intel.com>
@@ -79,22 +78,22 @@ Cc: Yehezkel Bernat <YehezkelShB@gmail.com>
 Cc: linux-usb@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/thunderbolt/tunnel.c | 2 +-
+ drivers/thunderbolt/switch.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
-index dcdf9c7a9caed..37943b0379abc 100644
---- a/drivers/thunderbolt/tunnel.c
-+++ b/drivers/thunderbolt/tunnel.c
-@@ -830,7 +830,7 @@ static void tb_dma_init_path(struct tb_path *path, unsigned int isb,
-  * @transmit_path: HopID used for transmitting packets
-  * @receive_ring: NHI ring number used to receive packets from the
-  *		  other domain. Set to %0 if RX path is not needed.
-- * @reveive_path: HopID used for receiving packets
-+ * @receive_path: HopID used for receiving packets
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index ce1b120d1cd46..6a3d5608431f6 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -1313,7 +1313,7 @@ static void tb_dump_switch(const struct tb *tb, const struct tb_switch *sw)
+ }
+ 
+ /**
+- * reset_switch() - reconfigure route, enable and send TB_CFG_PKG_RESET
++ * tb_switch_reset() - reconfigure route, enable and send TB_CFG_PKG_RESET
+  * @sw: Switch to reset
   *
-  * Return: Returns a tb_tunnel on success or NULL on failure.
-  */
+  * Return: Returns 0 on success or an error code on failure.
 -- 
 2.25.1
 
