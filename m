@@ -2,118 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07369305DEF
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 15:11:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E35305E20
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 15:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232674AbhA0OKo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jan 2021 09:10:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38606 "EHLO mail.kernel.org"
+        id S231697AbhA0OWb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jan 2021 09:22:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42832 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232573AbhA0OJk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Jan 2021 09:09:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CEDF3207BC;
-        Wed, 27 Jan 2021 14:08:59 +0000 (UTC)
+        id S229747AbhA0OWW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 Jan 2021 09:22:22 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0075F206C2;
+        Wed, 27 Jan 2021 14:21:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611756540;
-        bh=3ScpTD6tKv1mZ+fpsUgDvc8VLpCDZEGkSyxHTIRPj6k=;
+        s=k20201202; t=1611757299;
+        bh=h4KlcOqVpt+f7NayTo74/7IODdEHC+WplK/87YEXFY4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L9rBnYODziWG/D75MO8s7eHAM/djcmsWQ3pIjliTUsxpGTkW8XRMkJ50LdEALzm2H
-         xHjXY8UbuTuqfFm1LNNZXpchNpX3s6uhOFBDcgXmx1/QbDDCeZg+3oiVz/75bwhRWk
-         g+/HpRD85vmmZMIBQy81MRrP5PUyyHxyV485OL+Bsgg8qAm/9yfYg8YPCzBaw55JST
-         ZPFd0RI61n7UXSn2ncopbpGXmwg3fGoAv//tZC+5mr18KU9Br9wZIG+LnNrzOiY9Uc
-         hUIv07BRG1pYtmDuA33mTzqAuauqbo72nclb94G82MpmIOu44Y56OvNxrZIIF4BPHN
-         +A8kN50JKSgXw==
+        b=t+BAR4Z2Pu7DB0HXkvxM8DQQPBVAvjYbjZNjN0spoa7Ztki/hQ424j+lXdArN+uEw
+         BhQ1CNUU3mfWmpwfcUOBE712yPuI85fwfJI5KKgsCtLkRS/e/b2egGbOGR/l2/mCyt
+         Z9SeVCTp7hhFFuFz0IEEbva52Udw6SZkDNeYB+pYsBXFUhaVbPsb3CbPcxTd1aOWJE
+         PKMPVG4hwpC0AI78K8KvRW5DL3WJwMNEykMtAY8Nx3WwpaGejWeQlsrHDJj8kCjGaK
+         C9yOw7ik0PeNrT18U0pg35wBODeNkkyCM2wDOr4x2NsJvNZxxj39MYZQPOXjvgaM3V
+         42+xI7VxayVEQ==
 Received: from johan by xi.lan with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1l4lVP-0001nZ-SL; Wed, 27 Jan 2021 15:09:11 +0100
-Date:   Wed, 27 Jan 2021 15:09:11 +0100
+        id 1l4lhe-0001py-TN; Wed, 27 Jan 2021 15:21:50 +0100
+Date:   Wed, 27 Jan 2021 15:21:50 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 02/12] usb: misc: cypress_cy7c63: update to use
+Subject: Re: [PATCH v3 03/12] usb: misc: cytherm: update to use
  usb_control_msg_recv()
-Message-ID: <YBF0B50Q9gi/Ezpz@hovoldconsulting.com>
+Message-ID: <YBF2/qHqa7+s9+5d@hovoldconsulting.com>
 References: <20210126183403.911653-1-anant.thazhemadam@gmail.com>
- <20210126183403.911653-3-anant.thazhemadam@gmail.com>
+ <20210126183403.911653-4-anant.thazhemadam@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210126183403.911653-3-anant.thazhemadam@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210126183403.911653-4-anant.thazhemadam@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 27, 2021 at 12:03:53AM +0530, Anant Thazhemadam wrote:
+On Wed, Jan 27, 2021 at 12:03:54AM +0530, Anant Thazhemadam wrote:
 > The newer usb_control_msg_{send|recv}() API are an improvement on the
 > existing usb_control_msg() as it ensures that a short read/write is treated
-
-Short write has always been an error (I won't repeat for the remaining
-patches).
-
 > as an error, data can be used off the stack, and raw usb pipes need not be
 > created in the calling functions.
 > For this reason, the instance of usb_control_msg() has been replaced with
 > usb_control_msg_recv().
 > 
+> The return value checking enforced by callers of the updated function have
+> also been appropriately updated.
+> 
 > Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
 > ---
->  drivers/usb/misc/cypress_cy7c63.c | 21 +++++----------------
->  1 file changed, 5 insertions(+), 16 deletions(-)
+>  drivers/usb/misc/cytherm.c | 128 +++++++++++++------------------------
+>  1 file changed, 43 insertions(+), 85 deletions(-)
 > 
-> diff --git a/drivers/usb/misc/cypress_cy7c63.c b/drivers/usb/misc/cypress_cy7c63.c
-> index 14faec51d7a5..76a320ef17a7 100644
-> --- a/drivers/usb/misc/cypress_cy7c63.c
-> +++ b/drivers/usb/misc/cypress_cy7c63.c
-> @@ -70,24 +70,15 @@ static int vendor_command(struct cypress *dev, unsigned char request,
->  			  unsigned char address, unsigned char data)
+> diff --git a/drivers/usb/misc/cytherm.c b/drivers/usb/misc/cytherm.c
+> index 3e3802aaefa3..2ca36ea5b76a 100644
+> --- a/drivers/usb/misc/cytherm.c
+> +++ b/drivers/usb/misc/cytherm.c
+> @@ -51,12 +51,12 @@ static int vendor_command(struct usb_device *dev, unsigned char request,
+>  			  unsigned char value, unsigned char index,
+>  			  void *buf, int size)
 >  {
->  	int retval = 0;
-> -	unsigned int pipe;
-> -	unsigned char *iobuf;
-> -
-> -	/* allocate some memory for the i/o buffer*/
-> -	iobuf = kzalloc(CYPRESS_MAX_REQSIZE, GFP_KERNEL);
-> -	if (!iobuf) {
-> -		retval = -ENOMEM;
-> -		goto error;
-> -	}
-> +	u8 iobuf[CYPRESS_MAX_REQSIZE] = {0};
->  
->  	dev_dbg(&dev->udev->dev, "Sending usb_control_msg (data: %d)\n", data);
->  
->  	/* prepare usb control message and send it upstream */
-> -	pipe = usb_rcvctrlpipe(dev->udev, 0);
-> -	retval = usb_control_msg(dev->udev, pipe, request,
-> -				 USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_OTHER,
-> -				 address, data, iobuf, CYPRESS_MAX_REQSIZE,
-> -				 USB_CTRL_GET_TIMEOUT);
-> +	retval = usb_control_msg_recv(dev->udev, 0, request,
-> +				      USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_OTHER,
-> +				      address, data, &iobuf, CYPRESS_MAX_REQSIZE,
-> +				      USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
-
-Are you sure that the device always returns CYPRESS_MAX_REQSIZE here?
-Otherwise, this change may break the driver as it currently only uses
-the first two bytes of the received message, and only for some requests.
-
-Note that the driver appears uses the same helper function for
-CYPRESS_WRITE_PORT commands, which probably doesn't return 8 bytes in a
-reply.
-
-You could possibly add the missing short read check for the
-CYPRESS_READ_PORT case, but I'm afraid that the new helper are not a
-good fit here either.
-
->  	/* store returned data (more READs to be added) */
->  	switch (request) {
-> @@ -107,8 +98,6 @@ static int vendor_command(struct cypress *dev, unsigned char request,
->  			break;
->  	}
->  
-> -	kfree(iobuf);
-> -error:
->  	return retval;
+> -	return usb_control_msg(dev, usb_rcvctrlpipe(dev, 0),
+> -			       request, 
+> -			       USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_OTHER,
+> -			       value, 
+> -			       index, buf, size,
+> -			       USB_CTRL_GET_TIMEOUT);
+> +	return usb_control_msg_recv(dev, 0,
+> +				    request,
+> +				    USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_OTHER,
+> +				    value,
+> +				    index, buf, size,
+> +				    USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
 >  }
+>  
+>  
+> @@ -78,33 +78,27 @@ static ssize_t brightness_store(struct device *dev, struct device_attribute *att
+>  	struct usb_interface *intf = to_usb_interface(dev);
+>  	struct usb_cytherm *cytherm = usb_get_intfdata(intf);
+>  
+> -	unsigned char *buffer;
+> +	unsigned char buffer[8];
+>  	int retval;
+> -   
+> -	buffer = kmalloc(8, GFP_KERNEL);
+> -	if (!buffer)
+> -		return 0;
+>  
+>  	cytherm->brightness = simple_strtoul(buf, NULL, 10);
+> -   
+> +
+>  	if (cytherm->brightness > 0xFF)
+>  		cytherm->brightness = 0xFF;
+>  	else if (cytherm->brightness < 0)
+>  		cytherm->brightness = 0;
+> -   
+> +
+>  	/* Set brightness */
+>  	retval = vendor_command(cytherm->udev, WRITE_RAM, BRIGHTNESS, 
+> -				cytherm->brightness, buffer, 8);
+> -	if (retval)
+> -		dev_dbg(&cytherm->udev->dev, "retval = %d\n", retval);
+> +				cytherm->brightness, &buffer, 8);
+> +	if (!retval)
+> +		dev_dbg(&cytherm->udev->dev, "brightness set correctly\n");
+>  	/* Inform µC that we have changed the brightness setting */
+>  	retval = vendor_command(cytherm->udev, WRITE_RAM, BRIGHTNESS_SEM,
+> -				0x01, buffer, 8);
+> -	if (retval)
+> -		dev_dbg(&cytherm->udev->dev, "retval = %d\n", retval);
+> -   
+> -	kfree(buffer);
+> -   
+> +				0x01, &buffer, 8);
+> +	if (!retval)
+> +		dev_dbg(&cytherm->udev->dev, "µC informed of change in brightness setting\n");
+> +
+>  	return count;
+>  }
+
+This driver looks like it could have the same origin as the one touched
+by the previous patch, and likewise this patch suffers from a similar
+problem in that the driver always provides an 8-byte buffer but appears
+to expect short reads (which would no be treated as errors).
+
+You could consider adding the missing short read sanity checks, but
+I'm afraid the new helpers are not a good fit here either.
 
 Johan
