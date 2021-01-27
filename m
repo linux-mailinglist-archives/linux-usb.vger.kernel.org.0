@@ -2,127 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB7F305FBB
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 16:35:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1BB305FD3
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 16:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235688AbhA0Pez (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jan 2021 10:34:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56796 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235734AbhA0PFL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Jan 2021 10:05:11 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C9F492074D;
-        Wed, 27 Jan 2021 15:04:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611759862;
-        bh=peBSpIGr9lJbtDzUREoran2P8gdlv2/I+XI3fRNF8AM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PhNF11zc0S0iEfhm5wBjbDKBbyYv4t27QZoA0w503J43HC36BFo+rurMik8tRBXAu
-         v/SYmVTLpMMy6kzyAXBvNMFVfTMyql3Ku2kALLG6ad9pbqfLnvXS1GEjm6iowZev7d
-         5b/vGJOLq0fEWrBWnCX7NJKcyiRZn9rajGZRBggq/VvFpwNdqZZF6F82tRqi3cdBPX
-         KRehEBV056LAT/axzYsDxgAIElyszaEsk2d+UpWBktmYKMLzk7qUCufVKqbBK69V7q
-         Br9BronrSq3JPFdajad2oJT6aRSFgAmSOaJIvAYVCCMcfLoq3uQQb9evgIwtCaQdEK
-         Yh2PZQs9qB6sw==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1l4mN0-0001xR-UF; Wed, 27 Jan 2021 16:04:35 +0100
-Date:   Wed, 27 Jan 2021 16:04:34 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 07/12] usb: misc: isight_firmware: update to use
- usb_control_msg_send()
-Message-ID: <YBGBAjWNepWNorBO@hovoldconsulting.com>
-References: <20210126183403.911653-1-anant.thazhemadam@gmail.com>
- <20210126183403.911653-8-anant.thazhemadam@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210126183403.911653-8-anant.thazhemadam@gmail.com>
+        id S236186AbhA0Pjo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jan 2021 10:39:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235666AbhA0Pf3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jan 2021 10:35:29 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BFAC061788;
+        Wed, 27 Jan 2021 07:34:49 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id q7so2329039wre.13;
+        Wed, 27 Jan 2021 07:34:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=rTRSEv0yvyo3PPUejUzJ5llScpDRGYrc5zOg/mjz0jE=;
+        b=Kr+HnUanrSYI7TF8hWB9wEyvNO8zvTpwqMTv7HsijAhelbMwbdUZ9W1NjDtVXvQasT
+         YOb+0aTVzN/id4ve7T2GZoxYgQu+Ztua8G36fl+1LSEkC3KLfDipROHq662K33CWOfwW
+         D1L5JYMFj/zZRjASSy17Tt49k+4hoAQT7+QuIgs5Kzv2i3ML5xZjvo9IMO4PGmilx+op
+         0ZLMfd13cZHMCgNN/70NS68zQ8dKf/Gi/Xhb0Dvi2wQqmxsX/pVe5nZHDbGr2KgvdFaG
+         FuClP9aYmsb1NuS3tMI7RXlk2eTYMxu4JYW5tTaK7/Scwz7yi4jD6fZ79oymm1HmSB+h
+         4pgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=rTRSEv0yvyo3PPUejUzJ5llScpDRGYrc5zOg/mjz0jE=;
+        b=NaBQu1N61HZAJilqXhb5feKxyMq7Mz8s/eui2M8qAFgMKUioNCKd+kp4M/NO7bDmBT
+         Jw4uIbiTRMpOKVBuJQYdoCh74TZkWvT2AWzdANWPyeXQMfHCJD04MApWqn1jYvAkVdzH
+         2Z/0DH8kav6Dw1fZMxg66ZNweXrRm5mRzNxraQR9kM/LHNHlbqIHvwEzlLHD+6A7vMGI
+         TiCIcYYpzMxF8ue7L10Mg1ONbASQBA69NAs2u4u9uuwpu7+b6JJQeaYr/a9Hpapd6hXm
+         jpCIIuwet+YHw5oJZSkPTmYoo99Kg5H0vt8dbeCLOWn35LFQ4uMQ7f5X9RL+Y6ROVDxB
+         8/Hg==
+X-Gm-Message-State: AOAM530D1c5iJVl/oJ79tUW0pMI09WCVvDEfEv7Af/VQw1EYCr6sUe38
+        TlJW4N9iF1bZ5dC9q8kgGFE=
+X-Google-Smtp-Source: ABdhPJxEbADSJmI2f+6JbkXwibkiYfDqfXOk/EwuRFc9Pdof6ImhiNR47a1spCUVPw5le7cm6KLA1w==
+X-Received: by 2002:adf:83a6:: with SMTP id 35mr11676078wre.274.1611761687815;
+        Wed, 27 Jan 2021 07:34:47 -0800 (PST)
+Received: from LABNL-ITC-SW01.tmt.telital.com (static-82-85-31-68.clienti.tiscali.it. [82.85.31.68])
+        by smtp.gmail.com with ESMTPSA id m8sm3386132wrv.37.2021.01.27.07.34.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jan 2021 07:34:46 -0800 (PST)
+From:   Daniele Palmas <dnlplm@gmail.com>
+To:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Aleksander Morgado <aleksander@aleksander.es>,
+        Daniele Palmas <dnlplm@gmail.com>
+Subject: [PATCH 0/2] net: usb: qmi_wwan: new mux_id sysfs file
+Date:   Wed, 27 Jan 2021 16:34:31 +0100
+Message-Id: <20210127153433.12237-1-dnlplm@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 27, 2021 at 12:03:58AM +0530, Anant Thazhemadam wrote:
-> The newer usb_control_msg_{send|recv}() API are an improvement on the
-> existing usb_control_msg() as it ensures that a short read/write is treated
-> as an error, data can be used off the stack, and raw usb pipes need not be
-> created in the calling functions.
-> For this reason, the instances of usb_control_msg() have been replaced with
-> usb_control_msg_send(), and return value checking has also been
-> appropriately enforced.
-> 
-> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
-> ---
->  drivers/usb/misc/isight_firmware.c | 30 +++++++++++++-----------------
->  1 file changed, 13 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/isight_firmware.c b/drivers/usb/misc/isight_firmware.c
-> index 4d30095d6ad2..1bd14a431f6c 100644
-> --- a/drivers/usb/misc/isight_firmware.c
-> +++ b/drivers/usb/misc/isight_firmware.c
-> @@ -37,13 +37,10 @@ static int isight_firmware_load(struct usb_interface *intf,
->  	struct usb_device *dev = interface_to_usbdev(intf);
->  	int llen, len, req, ret = 0;
->  	const struct firmware *firmware;
-> -	unsigned char *buf = kmalloc(50, GFP_KERNEL);
-> +	unsigned char buf[50];
+Hello,
 
-This buffer is probably large enough to not want to have it allocated on
-the stack.
+this patch series add a sysfs file to let userspace know which mux
+id has been used to create a qmimux network interface.
 
->  	unsigned char data[4];
->  	const u8 *ptr;
->  
-> -	if (!buf)
-> -		return -ENOMEM;
-> -
->  	if (request_firmware(&firmware, "isight.fw", &dev->dev) != 0) {
->  		printk(KERN_ERR "Unable to load isight firmware\n");
->  		ret = -ENODEV;
-> @@ -53,11 +50,11 @@ static int isight_firmware_load(struct usb_interface *intf,
->  	ptr = firmware->data;
->  
->  	buf[0] = 0x01;
-> -	if (usb_control_msg
-> -	    (dev, usb_sndctrlpipe(dev, 0), 0xa0, 0x40, 0xe600, 0, buf, 1,
-> -	     300) != 1) {
-> +	ret = usb_control_msg_send(dev, 0, 0xa0, 0x40, 0xe600,
-> +				   0, &buf, 1, 300, GFP_KERNEL);
-> +	if (ret != 0) {
->  		printk(KERN_ERR
-> -		       "Failed to initialise isight firmware loader\n");
-> +			"Failed to initialise isight firmware loader\n");
->  		ret = -ENODEV;
->  		goto out;
->  	}
-> @@ -82,15 +79,15 @@ static int isight_firmware_load(struct usb_interface *intf,
->  				ret = -ENODEV;
->  				goto out;
->  			}
-> -			memcpy(buf, ptr, llen);
-> +			memcpy(&buf, ptr, llen);
->  
->  			ptr += llen;
->  
-> -			if (usb_control_msg
-> -			    (dev, usb_sndctrlpipe(dev, 0), 0xa0, 0x40, req, 0,
-> -			     buf, llen, 300) != llen) {
-> +			ret = usb_control_msg_send(dev, 0, 0xa0, 0x40, req, 0,
-> +						   &buf, llen, 300, GFP_KERNEL);
-> +			if (ret != 0) {
->  				printk(KERN_ERR
-> -				       "Failed to load isight firmware\n");
-> +					"Failed to load isight firmware\n");
->  				ret = -ENODEV;
->  				goto out;
->  			}
+I'm aware that adding new sysfs files is not usually the right path,
+but my understanding is that this piece of information can't be
+retrieved in any other way and its absence restricts how
+userspace application (e.g. like libqmi) can take advantage of the
+qmimux implementation in qmi_wwan.
 
-And here the same buffer is reused for each block of data, while the new
-helpers would add an allocation and a redundant memcpy() of the data
-(which was just copied a few lines above) for each iteration.
+Thanks,
+Daniele
 
-So I suggest you drop this one as well.
+v2: used sysfs_emit in mux_id_show
 
-Johan
+Daniele Palmas (2):
+  net: usb: qmi_wwan: add qmap id sysfs file for qmimux interfaces
+  net: qmi_wwan: document qmap/mux_id sysfs file
+
+ Documentation/ABI/testing/sysfs-class-net-qmi | 10 +++++++
+ drivers/net/usb/qmi_wwan.c                    | 27 +++++++++++++++++++
+ 2 files changed, 37 insertions(+)
+
+-- 
+2.17.1
+
