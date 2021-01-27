@@ -2,144 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9303B3060E3
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 17:21:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B863060FB
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 17:27:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343545AbhA0QUq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jan 2021 11:20:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343931AbhA0QUG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jan 2021 11:20:06 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B656CC061573
-        for <linux-usb@vger.kernel.org>; Wed, 27 Jan 2021 08:19:20 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id c128so2182792wme.2
-        for <linux-usb@vger.kernel.org>; Wed, 27 Jan 2021 08:19:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=+s/XXTuz5XeA9DDfXnC/9CAtWS/ZHZWZMgPo4FrMyhg=;
-        b=Qq1twnJ7124IZlB9N1ytiodVfFHYnJz86YvKmIJuGuuxiS6caLVEixK6AEqKw4R59X
-         0d+Hd+24FjDQsouwYWcIm17Cn3OGTs45S9cVgxvO1qU+swRXVpmWxSrf92KY8kHXAr3V
-         VSy0ujH7o7T+vnpPFYeCsQ2aqN8YsPAsBAi/xPIaaOQdAwNAfgJLcFaQUmGglkzXLsZT
-         x36h/SDmTuxw/WmXlD1K2CPWvfl7IMSYuBHONpvP/Z2NgCRd6vX+5BxPBVR6pF/RxfQL
-         stNuBInD0JNvMj/4PV7pgfLMgKgpz0gXI5QSejAHXs+lAk7ZTJWcy8erspbG7MV33x/c
-         4S/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=+s/XXTuz5XeA9DDfXnC/9CAtWS/ZHZWZMgPo4FrMyhg=;
-        b=OpjNAUA7/denB7LqiYadhHjJZsPGS28YZNenUvgb9YZTuf92QYHJkR+UmHu6R5NAq3
-         n3VdGxNaZ//sYbS0QxAaWdjhHnDBBvDe6CbldpLS67m2EdpWaJb7qFPoVDUpv+whIBAu
-         Vnj8bbe4I5JOdIxg7eg8pNRDUVX80ui4zmMI6UXnUApo/kb+LmKhzSlE8X8Gvpqk4Ijk
-         yw90dKjJMDIu6hnRMeVvrsBaMfQ2zgFcQhbCVwhs8dS+4gLk5re5zro7lVlikLaxM0dn
-         UnvljYWAWQ0NufFzOn77Cm/KSBQFLgVYAo7pwHV+dSYShGwCEYijqcEo2yPLWz5li/2Y
-         INYQ==
-X-Gm-Message-State: AOAM533n2VoF3ywOXyca2FbnG0uffBl6rhqFvPrrsoV4XoYs68VL2byu
-        t76GALzJiBnKLVjNS3npEwuBZA==
-X-Google-Smtp-Source: ABdhPJyRzMkY4N21FTxAozFb01rwEKCUtFPql1SmOVEjUr37g82KnWDz+g+pK3VEcauv8gEfnTqi6A==
-X-Received: by 2002:a1c:cc14:: with SMTP id h20mr4882597wmb.14.1611764359458;
-        Wed, 27 Jan 2021 08:19:19 -0800 (PST)
-Received: from dell ([91.110.221.188])
-        by smtp.gmail.com with ESMTPSA id x1sm3136271wmi.14.2021.01.27.08.19.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jan 2021 08:19:18 -0800 (PST)
-Date:   Wed, 27 Jan 2021 16:19:16 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 01/12] thunderbolt: dma_port: Remove unused variable 'ret'
-Message-ID: <20210127161916.GL4903@dell>
-References: <20210127112554.3770172-1-lee.jones@linaro.org>
- <20210127112554.3770172-2-lee.jones@linaro.org>
- <CAHp75VdnvG75bTZ9Zqpn=pm0_KNwK0GGBGGjZv1DpSY-6Ef_Xw@mail.gmail.com>
+        id S1343631AbhA0Q1V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jan 2021 11:27:21 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:35737 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1343542AbhA0Q1T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jan 2021 11:27:19 -0500
+Received: (qmail 227324 invoked by uid 1000); 27 Jan 2021 11:26:34 -0500
+Date:   Wed, 27 Jan 2021 11:26:34 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bixuan Cui <cuibixuan@huawei.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Zqiang <qiang.zhang@windriver.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH v3 12/12] usb: misc: usbtest: update to use the
+ usb_control_msg_{send|recv}() API
+Message-ID: <20210127162634.GA225622@rowland.harvard.edu>
+References: <20210126183403.911653-1-anant.thazhemadam@gmail.com>
+ <20210127121247.9938-1-anant.thazhemadam@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VdnvG75bTZ9Zqpn=pm0_KNwK0GGBGGjZv1DpSY-6Ef_Xw@mail.gmail.com>
+In-Reply-To: <20210127121247.9938-1-anant.thazhemadam@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 27 Jan 2021, Andy Shevchenko wrote:
-
-> On Wednesday, January 27, 2021, Lee Jones <lee.jones@linaro.org> wrote:
+On Wed, Jan 27, 2021 at 05:42:47PM +0530, Anant Thazhemadam wrote:
+> The newer usb_control_msg_{send|recv}() API are an improvement on the
+> existing usb_control_msg() as it ensures that a short read/write is treated
+> as an error, data can be used off the stack, and raw usb pipes need not be
+> created in the calling functions.
+> For this reason, instances of usb_control_msg() have been replaced with
+> usb_control_msg_{recv|send}() and the return value checking conditions have
+> also been modified appropriately.
 > 
-> > Fixes the following W=1 kernel build warning(s):
-> >
-> >  drivers/thunderbolt/dma_port.c: In function ‘dma_port_flash_write_block’:
-> >  drivers/thunderbolt/dma_port.c:331:6: warning: variable ‘ret’ set but
-> > not used [-Wunused-but-set-variable]
-> >
-> >
-> Is it scripted somehow?
+> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+> ---
+> Resending this patch since the subject line for the initial submission 
+> (sent as a part of the patch series) wasn't set correctly.
 
-A script opens up the file on the warning line.
+The benefits of these changes are rather minimal.  In some cases they 
+actually make the code worse (doing an unnecessary allocation in order 
+to copy a buffer that doesn't need to be copied).
 
-The patch is hand-written.
-
-> Because I am not sure we are okay to simply drop the assignment.
-
-I've been careful not to change the semantics of the code.
-
-The return value has never been checked since the driver's inception 4
-years ago.
-
-However, if this is an oversight and the intention was to check the
-value and error-out during a failure condition, I can make that
-happen.
-
-I would need a nod from the author before I make such a change.
-
-> > Cc: Andreas Noever <andreas.noever@gmail.com>
-> > Cc: Michael Jamet <michael.jamet@intel.com>
-> > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Cc: Yehezkel Bernat <YehezkelShB@gmail.com>
-> > Cc: linux-usb@vger.kernel.org
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > ---
-> >  drivers/thunderbolt/dma_port.c | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/thunderbolt/dma_port.c b/drivers/thunderbolt/dma_
-> > port.c
-> > index 847dd07a7b172..5aced91e17dc4 100644
-> > --- a/drivers/thunderbolt/dma_port.c
-> > +++ b/drivers/thunderbolt/dma_port.c
-> > @@ -328,13 +328,12 @@ static int dma_port_flash_write_block(struct
-> > tb_dma_port *dma, u32 address,
-> >  {
-> >         struct tb_switch *sw = dma->sw;
-> >         u32 in, dwaddress, dwords;
-> > -       int ret;
-> >
-> >         dwords = size / 4;
-> >
-> >         /* Write the block to MAIL_DATA registers */
-> > -       ret = dma_port_write(sw->tb->ctl, buf, tb_route(sw), dma->port,
-> > -                           dma->base + MAIL_DATA, dwords,
-> > DMA_PORT_TIMEOUT);
-> > +       dma_port_write(sw->tb->ctl, buf, tb_route(sw), dma->port,
-> > +                      dma->base + MAIL_DATA, dwords, DMA_PORT_TIMEOUT);
-> >
-> >         in = MAIL_IN_CMD_FLASH_WRITE << MAIL_IN_CMD_SHIFT;
-> >
-> >
-> >
+>  drivers/usb/misc/usbtest.c | 69 ++++++++++++++++----------------------
+>  1 file changed, 29 insertions(+), 40 deletions(-)
 > 
+> diff --git a/drivers/usb/misc/usbtest.c b/drivers/usb/misc/usbtest.c
+> index 150090ee4ec1..4337eff2a749 100644
+> --- a/drivers/usb/misc/usbtest.c
+> +++ b/drivers/usb/misc/usbtest.c
+> @@ -672,19 +672,15 @@ static int get_altsetting(struct usbtest_dev *dev)
+>  	struct usb_device	*udev = interface_to_usbdev(iface);
+>  	int			retval;
+>  
+> -	retval = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
+> -			USB_REQ_GET_INTERFACE, USB_DIR_IN|USB_RECIP_INTERFACE,
+> -			0, iface->altsetting[0].desc.bInterfaceNumber,
+> -			dev->buf, 1, USB_CTRL_GET_TIMEOUT);
+> -	switch (retval) {
+> -	case 1:
+> -		return dev->buf[0];
+> -	case 0:
+> -		retval = -ERANGE;
+> -		fallthrough;
+> -	default:
+> +	retval = usb_control_msg_recv(udev, 0, USB_REQ_GET_INTERFACE,
+> +				      USB_DIR_IN|USB_RECIP_INTERFACE,
+> +				      0, iface->altsetting[0].desc.bInterfaceNumber,
+> +				      dev->buf, 1, USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Here dev->buf is aleady DMA-able; there's no need to copy it.  The only 
+advantage is avoiding the short-read check.
+
+> +
+> +	if (retval < 0)
+>  		return retval;
+> -	}
+> +
+> +	return dev->buf[0];
+>  }
+>  
+>  static int set_altsetting(struct usbtest_dev *dev, int alternate)
+> @@ -872,14 +868,15 @@ static int ch9_postconfig(struct usbtest_dev *dev)
+>  		 * ... although some cheap devices (like one TI Hub I've got)
+>  		 * won't return config descriptors except before set_config.
+>  		 */
+> -		retval = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
+> -				USB_REQ_GET_CONFIGURATION,
+> -				USB_DIR_IN | USB_RECIP_DEVICE,
+> -				0, 0, dev->buf, 1, USB_CTRL_GET_TIMEOUT);
+> -		if (retval != 1 || dev->buf[0] != expected) {
+> +		retval = usb_control_msg_recv(udev, 0, USB_REQ_GET_CONFIGURATION,
+> +					      USB_DIR_IN | USB_RECIP_DEVICE,  0,
+> +					      0, dev->buf, 1, USB_CTRL_GET_TIMEOUT,
+> +					      GFP_KERNEL);
+> +
+> +		if (retval != 0 || dev->buf[0] != expected) {
+>  			dev_err(&iface->dev, "get config --> %d %d (1 %d)\n",
+>  				retval, dev->buf[0], expected);
+> -			return (retval < 0) ? retval : -EDOM;
+> +			return retval;
+
+Here again, the advantage is minimal at best.
+
+>  		}
+>  	}
+>  
+> @@ -1683,10 +1680,10 @@ static int test_halt(struct usbtest_dev *tdev, int ep, struct urb *urb)
+>  		return retval;
+>  
+>  	/* set halt (protocol test only), verify it worked */
+> -	retval = usb_control_msg(urb->dev, usb_sndctrlpipe(urb->dev, 0),
+> -			USB_REQ_SET_FEATURE, USB_RECIP_ENDPOINT,
+> -			USB_ENDPOINT_HALT, ep,
+> -			NULL, 0, USB_CTRL_SET_TIMEOUT);
+> +	retval = usb_control_msg_send(urb->dev, 0, USB_REQ_SET_FEATURE,
+> +				      USB_RECIP_ENDPOINT, USB_ENDPOINT_HALT,
+> +				      ep, NULL, 0, USB_CTRL_SET_TIMEOUT,
+> +				      GFP_KERNEL);
+
+Here there is no advantage at all.  There is no buffer to copy and no 
+possibility of a short write.
+
+>  	if (retval < 0) {
+>  		ERROR(tdev, "ep %02x couldn't set halt, %d\n", ep, retval);
+>  		return retval;
+> @@ -1845,30 +1842,22 @@ static int ctrl_out(struct usbtest_dev *dev,
+>  		/* write patterned data */
+>  		for (j = 0; j < len; j++)
+>  			buf[j] = (u8)(i + j);
+> -		retval = usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
+> -				0x5b, USB_DIR_OUT|USB_TYPE_VENDOR,
+> -				0, 0, buf, len, USB_CTRL_SET_TIMEOUT);
+> -		if (retval != len) {
+> +		retval = usb_control_msg_send(udev, 0, 0x5b,
+> +					      USB_DIR_OUT | USB_TYPE_VENDOR, 0,
+> +					      0, buf, len, USB_CTRL_SET_TIMEOUT,
+> +					      GFP_KERNEL);
+> +		if (retval < 0) {
+>  			what = "write";
+> -			if (retval >= 0) {
+> -				ERROR(dev, "ctrl_out, wlen %d (expected %d)\n",
+> -						retval, len);
+> -				retval = -EBADMSG;
+> -			}
+>  			break;
+>  		}
+
+Here buf doesn't need to be copied, and a short write will return an 
+error code anyway.
+
+>  
+>  		/* read it back -- assuming nothing intervened!!  */
+> -		retval = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
+> -				0x5c, USB_DIR_IN|USB_TYPE_VENDOR,
+> -				0, 0, buf, len, USB_CTRL_GET_TIMEOUT);
+> -		if (retval != len) {
+> +		retval = usb_control_msg_recv(udev, 0,
+> +					      0x5c, USB_DIR_IN|USB_TYPE_VENDOR,
+> +					      0, 0, buf, len, USB_CTRL_GET_TIMEOUT,
+> +					      GFP_KERNEL);
+> +		if (retval < 0) {
+>  			what = "read";
+> -			if (retval >= 0) {
+> -				ERROR(dev, "ctrl_out, rlen %d (expected %d)\n",
+> -						retval, len);
+> -				retval = -EBADMSG;
+> -			}
+
+Similar to one of the cases above.
+
+Alan Stern
+
+>  			break;
+>  		}
+>  
+> -- 
+> 2.25.1
+> 
