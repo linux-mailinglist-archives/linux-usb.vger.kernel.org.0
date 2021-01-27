@@ -2,189 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B863060FB
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 17:27:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5506530613A
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 17:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343631AbhA0Q1V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jan 2021 11:27:21 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:35737 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1343542AbhA0Q1T (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jan 2021 11:27:19 -0500
-Received: (qmail 227324 invoked by uid 1000); 27 Jan 2021 11:26:34 -0500
-Date:   Wed, 27 Jan 2021 11:26:34 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
+        id S232132AbhA0Qqv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jan 2021 11:46:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34016 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231258AbhA0Qqp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 Jan 2021 11:46:45 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ED81F60187;
+        Wed, 27 Jan 2021 16:46:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611765965;
+        bh=tQQ1aMFx+Z32YsIj9q7WBQHGMTx/Enh3DKZ90xb1QQM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EoNSHMDbU1bYSlMjVMjYCPjjNv7MFetOLU4OxDzbswODAMqfq2W6uwqbknRQuDp86
+         mtOUsFJq0ldbfJxxoRI3AgzDNNcZ8Hi1p4HDJvyN3uZgteOOwnYmTDEvEAU77ZPa1N
+         QhUNAhtgEesnZ+yGY5TkRPrMne4OdlRIwvowJnMiRdqb1ffqoy8oErgcOs509O58UB
+         8g7wvSsAMegRm5xnksHuH4wRx7PhL4jYHs1t8w+GoxanFoIxBYk3C+KVy+pXiBZegb
+         tv9N1LNEeW4xaDW03oHYZnWhldcwwGy4CiYjjsfMAedXn7Q4xQgJHqtL71ISqJnVqd
+         mvbmm59FEZJFw==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1l4nxQ-0002EP-5w; Wed, 27 Jan 2021 17:46:16 +0100
+Date:   Wed, 27 Jan 2021 17:46:16 +0100
+From:   Johan Hovold <johan@kernel.org>
 To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bixuan Cui <cuibixuan@huawei.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Zqiang <qiang.zhang@windriver.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH v3 12/12] usb: misc: usbtest: update to use the
- usb_control_msg_{send|recv}() API
-Message-ID: <20210127162634.GA225622@rowland.harvard.edu>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 11/12] usb: misc: usbsevseg: update to use
+ usb_control_msg_send()
+Message-ID: <YBGY2HqALY81bzif@hovoldconsulting.com>
 References: <20210126183403.911653-1-anant.thazhemadam@gmail.com>
- <20210127121247.9938-1-anant.thazhemadam@gmail.com>
+ <20210126184030.915039-1-anant.thazhemadam@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210127121247.9938-1-anant.thazhemadam@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210126184030.915039-1-anant.thazhemadam@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 27, 2021 at 05:42:47PM +0530, Anant Thazhemadam wrote:
+On Wed, Jan 27, 2021 at 12:10:30AM +0530, Anant Thazhemadam wrote:
 > The newer usb_control_msg_{send|recv}() API are an improvement on the
 > existing usb_control_msg() as it ensures that a short read/write is treated
 > as an error, data can be used off the stack, and raw usb pipes need not be
 > created in the calling functions.
 > For this reason, instances of usb_control_msg() have been replaced with
-> usb_control_msg_{recv|send}() and the return value checking conditions have
-> also been modified appropriately.
+> usb_control_msg_send() appropriately.
 > 
 > Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
 > ---
-> Resending this patch since the subject line for the initial submission 
-> (sent as a part of the patch series) wasn't set correctly.
-
-The benefits of these changes are rather minimal.  In some cases they 
-actually make the code worse (doing an unnecessary allocation in order 
-to copy a buffer that doesn't need to be copied).
-
->  drivers/usb/misc/usbtest.c | 69 ++++++++++++++++----------------------
->  1 file changed, 29 insertions(+), 40 deletions(-)
+>  drivers/usb/misc/usbsevseg.c | 60 ++++++++++--------------------------
+>  1 file changed, 17 insertions(+), 43 deletions(-)
 > 
-> diff --git a/drivers/usb/misc/usbtest.c b/drivers/usb/misc/usbtest.c
-> index 150090ee4ec1..4337eff2a749 100644
-> --- a/drivers/usb/misc/usbtest.c
-> +++ b/drivers/usb/misc/usbtest.c
-> @@ -672,19 +672,15 @@ static int get_altsetting(struct usbtest_dev *dev)
->  	struct usb_device	*udev = interface_to_usbdev(iface);
->  	int			retval;
+> diff --git a/drivers/usb/misc/usbsevseg.c b/drivers/usb/misc/usbsevseg.c
+ 
+> @@ -99,15 +94,10 @@ static void update_display_mode(struct usb_sevsegdev *mydev)
+>  	if(mydev->shadow_power != 1)
+>  		return;
 >  
-> -	retval = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
-> -			USB_REQ_GET_INTERFACE, USB_DIR_IN|USB_RECIP_INTERFACE,
-> -			0, iface->altsetting[0].desc.bInterfaceNumber,
-> -			dev->buf, 1, USB_CTRL_GET_TIMEOUT);
-> -	switch (retval) {
-> -	case 1:
-> -		return dev->buf[0];
-> -	case 0:
-> -		retval = -ERANGE;
-> -		fallthrough;
-> -	default:
-> +	retval = usb_control_msg_recv(udev, 0, USB_REQ_GET_INTERFACE,
-> +				      USB_DIR_IN|USB_RECIP_INTERFACE,
-> +				      0, iface->altsetting[0].desc.bInterfaceNumber,
-> +				      dev->buf, 1, USB_CTRL_GET_TIMEOUT, GFP_KERNEL);
-
-Here dev->buf is aleady DMA-able; there's no need to copy it.  The only 
-advantage is avoiding the short-read check.
-
-> +
-> +	if (retval < 0)
->  		return retval;
-> -	}
-> +
-> +	return dev->buf[0];
->  }
+> -	rc = usb_control_msg(mydev->udev,
+> -			usb_sndctrlpipe(mydev->udev, 0),
+> -			0x12,
+> -			0x48,
+> -			(82 * 0x100) + 10, /* (set mode) */
+> -			(mydev->mode_msb * 0x100) + mydev->mode_lsb,
+> -			NULL,
+> -			0,
+> -			2000);
+> +	rc = usb_control_msg_send(mydev->udev, 0, 0x12, 0x48,
+> +				  (82 * 0x100) + 10, /* (set mode) */
+> +				  (mydev->mode_msb * 0x100) + mydev->mode_lsb,
+> +				  NULL, 0, 2000, GFP_KERNEL);
 >  
->  static int set_altsetting(struct usbtest_dev *dev, int alternate)
-> @@ -872,14 +868,15 @@ static int ch9_postconfig(struct usbtest_dev *dev)
->  		 * ... although some cheap devices (like one TI Hub I've got)
->  		 * won't return config descriptors except before set_config.
->  		 */
-> -		retval = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
-> -				USB_REQ_GET_CONFIGURATION,
-> -				USB_DIR_IN | USB_RECIP_DEVICE,
-> -				0, 0, dev->buf, 1, USB_CTRL_GET_TIMEOUT);
-> -		if (retval != 1 || dev->buf[0] != expected) {
-> +		retval = usb_control_msg_recv(udev, 0, USB_REQ_GET_CONFIGURATION,
-> +					      USB_DIR_IN | USB_RECIP_DEVICE,  0,
-> +					      0, dev->buf, 1, USB_CTRL_GET_TIMEOUT,
-> +					      GFP_KERNEL);
-> +
-> +		if (retval != 0 || dev->buf[0] != expected) {
->  			dev_err(&iface->dev, "get config --> %d %d (1 %d)\n",
->  				retval, dev->buf[0], expected);
-> -			return (retval < 0) ? retval : -EDOM;
-> +			return retval;
+>  	if (rc < 0)
+>  		dev_dbg(&mydev->udev->dev, "mode retval = %d\n", rc);
 
-Here again, the advantage is minimal at best.
+This function is called from resume() and reset_resume() where GFP_NOIO
+should be used (and is used for update_display_visual()) so I think you
+need to add a GFP flag argument here too.
 
->  		}
->  	}
->  
-> @@ -1683,10 +1680,10 @@ static int test_halt(struct usbtest_dev *tdev, int ep, struct urb *urb)
->  		return retval;
->  
->  	/* set halt (protocol test only), verify it worked */
-> -	retval = usb_control_msg(urb->dev, usb_sndctrlpipe(urb->dev, 0),
-> -			USB_REQ_SET_FEATURE, USB_RECIP_ENDPOINT,
-> -			USB_ENDPOINT_HALT, ep,
-> -			NULL, 0, USB_CTRL_SET_TIMEOUT);
-> +	retval = usb_control_msg_send(urb->dev, 0, USB_REQ_SET_FEATURE,
-> +				      USB_RECIP_ENDPOINT, USB_ENDPOINT_HALT,
-> +				      ep, NULL, 0, USB_CTRL_SET_TIMEOUT,
-> +				      GFP_KERNEL);
+Looks good otherwise.
 
-Here there is no advantage at all.  There is no buffer to copy and no 
-possibility of a short write.
-
->  	if (retval < 0) {
->  		ERROR(tdev, "ep %02x couldn't set halt, %d\n", ep, retval);
->  		return retval;
-> @@ -1845,30 +1842,22 @@ static int ctrl_out(struct usbtest_dev *dev,
->  		/* write patterned data */
->  		for (j = 0; j < len; j++)
->  			buf[j] = (u8)(i + j);
-> -		retval = usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
-> -				0x5b, USB_DIR_OUT|USB_TYPE_VENDOR,
-> -				0, 0, buf, len, USB_CTRL_SET_TIMEOUT);
-> -		if (retval != len) {
-> +		retval = usb_control_msg_send(udev, 0, 0x5b,
-> +					      USB_DIR_OUT | USB_TYPE_VENDOR, 0,
-> +					      0, buf, len, USB_CTRL_SET_TIMEOUT,
-> +					      GFP_KERNEL);
-> +		if (retval < 0) {
->  			what = "write";
-> -			if (retval >= 0) {
-> -				ERROR(dev, "ctrl_out, wlen %d (expected %d)\n",
-> -						retval, len);
-> -				retval = -EBADMSG;
-> -			}
->  			break;
->  		}
-
-Here buf doesn't need to be copied, and a short write will return an 
-error code anyway.
-
->  
->  		/* read it back -- assuming nothing intervened!!  */
-> -		retval = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
-> -				0x5c, USB_DIR_IN|USB_TYPE_VENDOR,
-> -				0, 0, buf, len, USB_CTRL_GET_TIMEOUT);
-> -		if (retval != len) {
-> +		retval = usb_control_msg_recv(udev, 0,
-> +					      0x5c, USB_DIR_IN|USB_TYPE_VENDOR,
-> +					      0, 0, buf, len, USB_CTRL_GET_TIMEOUT,
-> +					      GFP_KERNEL);
-> +		if (retval < 0) {
->  			what = "read";
-> -			if (retval >= 0) {
-> -				ERROR(dev, "ctrl_out, rlen %d (expected %d)\n",
-> -						retval, len);
-> -				retval = -EBADMSG;
-> -			}
-
-Similar to one of the cases above.
-
-Alan Stern
-
->  			break;
->  		}
->  
-> -- 
-> 2.25.1
-> 
+Johan
