@@ -2,97 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7919D30595F
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 12:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9163059BA
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 12:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236068AbhA0LPW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jan 2021 06:15:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57054 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236320AbhA0LBq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Jan 2021 06:01:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 495FB20724;
-        Wed, 27 Jan 2021 11:00:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611745231;
-        bh=RvZ/hYWHT4Qt7ok4a/jx1hiSJ4FokCUwo5Ss7uRODoo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GPDT39TsE0SucD7X8GXoi7FRPdK5bBzVjJlXQPj6TfjWOx65H24B6YyOS3LE0BTge
-         DHG6w9jkm5eaZOCMNxy9MZFPWpbiHnlpeBQ2gEa6pO7+zg4KmuhND1yejmyyjLb8a3
-         wSgjCxJW+hjyA/6JZk7v91Q9xczkLyG+D0myxBAY3olSNi0Aslmg2mUN3H5l3G0TqZ
-         LE0M90Z+bOTqIDrkSCYYyhjWVZHFgoSw3LVGvsX0Proh9XXIgH+COLTxQNDgIIC+Fs
-         zMSqTbw6l2V8YiI6sSse2Ur/+xLm82fV71Jn6OqXwkWzFUV8Slaj8gjoQAemfHtWed
-         H7oY4CYyFB9sg==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1l4iZ0-0001LR-2N; Wed, 27 Jan 2021 12:00:42 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     linux-usb@vger.kernel.org
-Cc:     Johan Hovold <johan@kernel.org>
-Subject: [PATCH] USB: serial: ftdi_sio: restore divisor-encoding comments
-Date:   Wed, 27 Jan 2021 12:00:28 +0100
-Message-Id: <20210127110028.5127-1-johan@kernel.org>
-X-Mailer: git-send-email 2.26.2
+        id S236639AbhA0L2x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jan 2021 06:28:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236638AbhA0L0l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jan 2021 06:26:41 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995FDC061786
+        for <linux-usb@vger.kernel.org>; Wed, 27 Jan 2021 03:26:00 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id d16so1484147wro.11
+        for <linux-usb@vger.kernel.org>; Wed, 27 Jan 2021 03:26:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LiLqga9nREEazATvjCBJkNC1icYQezo71LhHKob0kLY=;
+        b=kF56xyYCkfauVmaBxc5K+9sQQ37BpFYj5rD4ScA/OS+XT1j+vK2c/GYywpC+c/yii4
+         Lki46pU8qF3H+VnsZq2aSJHgFr79DbT3Pgm0/aUY/AAiL0YXgp6oQq07NvxiAWvEgFYp
+         agLNxejdtdzSoxzx4QaaNnfuChUDymwvvdwW2bAK2Ilrj0T08iAwu6rpV/mlkBkunDP6
+         0/mEaxUcvRq4F3aqW3nY2V4D9pLNiS0NWBWNsgLrnJ8lhuv3YaxQ9tb3q1Frhf+t8gdU
+         C/ivHO+6Wmp56PgFHpF/+i3SwAb2Qx9IORdvpss6VeryW9kMDL6U0bzC/Bktv+XJKUII
+         3xBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LiLqga9nREEazATvjCBJkNC1icYQezo71LhHKob0kLY=;
+        b=dQMuoK/YpG71PbyiGiSJWGsthA5nhZleKGRRJWg7uLiegk2Gt5Ot+3uRxFnUUBomrk
+         AD4LNTuNurExDMGnJYSxk962A3bPisKyjTpC7dqtik5bZavIX89OMOyFnrHhIpski9ZQ
+         l6BvifYfHrenkxU00ohuqjnG3Tp5sdwT1y2r7UPjyrSwSATUCl/NRbiIhyNdIzM6OQw8
+         720UIBMR3wncWVvbRSymQCaorruWX2XRmZMpUO5v6SVOr1KUsYTEY9LXhyVmffrOI/4n
+         GJahEt0xh8hkv43RHb3kC3ldKMEBf2RpWFsIrr+nTG3JQGwhvTANAVScG7eAru35v58G
+         fqOA==
+X-Gm-Message-State: AOAM5324+RyoQtHKhWovzjpmS5a/u4NQsuQA7u1p9FVaKB2O/vNc+bUr
+        JT9OIUlXhaKAbX3yBq77os6l+w==
+X-Google-Smtp-Source: ABdhPJwDaSSir3UT2pEhwoTp65Dewf6mydRg2nuo1G79WCsLyrVFiMO30RfEnz3uG/TcyNexFx9tJQ==
+X-Received: by 2002:adf:ffc4:: with SMTP id x4mr10476451wrs.67.1611746759013;
+        Wed, 27 Jan 2021 03:25:59 -0800 (PST)
+Received: from dell.default ([91.110.221.188])
+        by smtp.gmail.com with ESMTPSA id m2sm2040065wml.34.2021.01.27.03.25.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jan 2021 03:25:58 -0800 (PST)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        netdev@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>
+Subject: [PATCH 00/12] Rid W=1 warnings from Thunderbolt
+Date:   Wed, 27 Jan 2021 11:25:42 +0000
+Message-Id: <20210127112554.3770172-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add back a few explanatory comments related to the divisor encoding
-which got lost in a coding-style clean up many years ago.
+This set is part of a larger effort attempting to clean-up W=1
+kernel builds, which are currently overwhelmingly riddled with
+niggly little warnings.
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/ftdi_sio.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+Only 1 small set required for Thunderbolt.  Pretty good!
 
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index 94398f89e600..a6837a60c06a 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -1153,13 +1153,13 @@ static unsigned short int ftdi_232am_baud_base_to_divisor(int baud, int base)
- 	divisor = divisor3 >> 3;
- 	divisor3 &= 0x7;
- 	if (divisor3 == 1)
--		divisor |= 0xc000;
-+		divisor |= 0xc000;	/* +0.125 */
- 	else if (divisor3 >= 4)
--		divisor |= 0x4000;
-+		divisor |= 0x4000;	/* +0.5 */
- 	else if (divisor3 != 0)
--		divisor |= 0x8000;
-+		divisor |= 0x8000;	/* +0.25 */
- 	else if (divisor == 1)
--		divisor = 0;	/* special case for maximum baud rate */
-+		divisor = 0;		/* special case for maximum baud rate */
- 	return divisor;
- }
- 
-@@ -1177,9 +1177,9 @@ static u32 ftdi_232bm_baud_base_to_divisor(int baud, int base)
- 	divisor = divisor3 >> 3;
- 	divisor |= (u32)divfrac[divisor3 & 0x7] << 14;
- 	/* Deal with special cases for highest baud rates. */
--	if (divisor == 1)
-+	if (divisor == 1)		/* 1.0 */
- 		divisor = 0;
--	else if (divisor == 0x4001)
-+	else if (divisor == 0x4001)	/* 1.5 */
- 		divisor = 1;
- 	return divisor;
- }
-@@ -1201,9 +1201,9 @@ static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base)
- 	divisor = divisor3 >> 3;
- 	divisor |= (u32)divfrac[divisor3 & 0x7] << 14;
- 	/* Deal with special cases for highest baud rates. */
--	if (divisor == 1)
-+	if (divisor == 1)		/* 1.0 */
- 		divisor = 0;
--	else if (divisor == 0x4001)
-+	else if (divisor == 0x4001)	/* 1.5 */
- 		divisor = 1;
- 	/*
- 	 * Set this bit to turn off a divide by 2.5 on baud rate generator
+Lee Jones (12):
+  thunderbolt: dma_port: Remove unused variable 'ret'
+  thunderbolt: cap: Fix kernel-doc formatting issue
+  thunderbolt: ctl: Demote non-conformant kernel-doc headers
+  thunderbolt: eeprom: Demote non-conformant kernel-doc headers to
+    standard comment blocks
+  thunderbolt: pa: Demote non-conformant kernel-doc headers
+  thunderbolt: xdomain: Fix 'tb_unregister_service_driver()'s 'drv'
+    param
+  thunderbolt: nhi: Demote some non-conformant kernel-doc headers
+  thunderbolt: tb: Kernel-doc function headers should document their
+    parameters
+  thunderbolt: swit: Demote a bunch of non-conformant kernel-doc headers
+  thunderbolt: icm: Fix a couple of formatting issues
+  thunderbolt: tunnel: Fix misspelling of 'receive_path'
+  thunderbolt: swit: Fix function name in the header
+
+ drivers/thunderbolt/cap.c      |  2 +-
+ drivers/thunderbolt/ctl.c      | 22 +++++++++++-----------
+ drivers/thunderbolt/dma_port.c |  5 ++---
+ drivers/thunderbolt/eeprom.c   | 24 ++++++++++++------------
+ drivers/thunderbolt/icm.c      |  4 ++--
+ drivers/thunderbolt/nhi.c      | 14 +++++++-------
+ drivers/thunderbolt/path.c     |  4 ++--
+ drivers/thunderbolt/switch.c   | 14 +++++++-------
+ drivers/thunderbolt/tb.c       | 12 ++++++------
+ drivers/thunderbolt/tunnel.c   |  2 +-
+ drivers/thunderbolt/xdomain.c  |  2 +-
+ 11 files changed, 52 insertions(+), 53 deletions(-)
+
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andreas Noever <andreas.noever@gmail.com>
+Cc: bpf@vger.kernel.org
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: linux-usb@vger.kernel.org
+Cc: Michael Jamet <michael.jamet@intel.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: netdev@vger.kernel.org
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>
 -- 
-2.26.2
+2.25.1
 
