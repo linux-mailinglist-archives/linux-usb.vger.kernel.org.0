@@ -2,30 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADF330596F
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 12:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E45305979
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 12:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236079AbhA0KnZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jan 2021 05:43:25 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:42116 "EHLO gloria.sntech.de"
+        id S235581AbhA0LUc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jan 2021 06:20:32 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:42148 "EHLO gloria.sntech.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235626AbhA0KlC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Jan 2021 05:41:02 -0500
+        id S235466AbhA0Klg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 Jan 2021 05:41:36 -0500
 Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=diego.localnet)
         by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <heiko@sntech.de>)
-        id 1l4iFD-0000l9-Kn; Wed, 27 Jan 2021 11:40:15 +0100
+        id 1l4iFm-0000lT-8T; Wed, 27 Jan 2021 11:40:50 +0100
 From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
 To:     hminas@synopsys.com, gregkh@linuxfoundation.org
 Cc:     christoph.muellner@theobroma-systems.com, paulz@synopsys.com,
         yousaf.kaukab@intel.com, balbi@ti.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: dwc2: Fix endpoint direction check in ep_from_windex
-Date:   Wed, 27 Jan 2021 11:40:14 +0100
-Message-ID: <1943589.UkFFEUeh36@diego>
-In-Reply-To: <20210127085034.36397-1-heiko@sntech.de>
-References: <20210127085034.36397-1-heiko@sntech.de>
+Subject: Re: [PATCH] usb: dwc2: Fix endpoint direction check in ep_from_windex
+Date:   Wed, 27 Jan 2021 11:40:48 +0100
+Message-ID: <8309688.OUTRe80PYV@diego>
+In-Reply-To: <20210125191324.1981199-1-heiko@sntech.de>
+References: <20210125191324.1981199-1-heiko@sntech.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -33,7 +33,7 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Mittwoch, 27. Januar 2021, 09:50:34 CET schrieb Heiko Stuebner:
+Am Montag, 25. Januar 2021, 20:13:24 CET schrieb Heiko Stuebner:
 > From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 > 
 > dwc2_hsotg_process_req_status uses ep_from_windex() to retrieve
@@ -72,5 +72,6 @@ Am Mittwoch, 27. Januar 2021, 09:50:34 CET schrieb Heiko Stuebner:
 > Cc: stable@vger.kernel.org
 
 superseeded by v3, which includes an appropriate Reported-by tag
+and removes an now unused variable (in v2).
 
 
