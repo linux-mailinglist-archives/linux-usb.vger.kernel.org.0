@@ -2,112 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D36F73061DA
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 18:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE9D306306
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 19:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbhA0RWT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jan 2021 12:22:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40868 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235781AbhA0RUy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Jan 2021 12:20:54 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2C9E664DA6;
-        Wed, 27 Jan 2021 17:20:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611768012;
-        bh=gvWTdwbsA34w2oiAnKEtvNOQz9SrYrz47V3JVa47zt4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sq18ImHitmfm+0oG1JCHOEk1u1hPbC/AFqugtl7jxN0s9nNtrpj3oUQkiL9RV5Duk
-         aotj9inX7f09ZteNIc/gFFcaDv0eOEVIiyTcDAW6q68vC6+J2RsNrEn9QvwvLrt7Xr
-         ojo62GTzgBPV/W/JW8O545dylqANrRJuxGE0OqWgZ2hhiEZix3ZpkhIOLn/hS5hLrD
-         aEf2MyhjyBe+LDZLe1jXAGP9+BpY0Ww/4x2ub4SN5U7IPfYlzHIC53fONMX6huq3mB
-         fuVapvfWciJ6TG19yuHmbKKIVGSQ6lWEcl4f+XYf1JScqDwQ7A6LbLfvoowwa6pGfV
-         ZtRecHX+ClRkg==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1l4oUR-0002M7-5H; Wed, 27 Jan 2021 18:20:23 +0100
-Date:   Wed, 27 Jan 2021 18:20:23 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Xu Wang <vulab@iscas.ac.cn>,
-        Liu Shixin <liushixin2@huawei.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 01/12] usb: misc: appledisplay: update to use the
- usb_control_msg_{send|recv}() API
-Message-ID: <YBGg132/qWaPgjsI@hovoldconsulting.com>
-References: <20210126183403.911653-1-anant.thazhemadam@gmail.com>
- <20210126183403.911653-2-anant.thazhemadam@gmail.com>
- <YBFxkSlWPQRMuaGo@hovoldconsulting.com>
- <f82c8fae-251f-12e9-6e43-28824a5ff3e5@gmail.com>
+        id S1344068AbhA0SJp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jan 2021 13:09:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343941AbhA0SJm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jan 2021 13:09:42 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A163C061574;
+        Wed, 27 Jan 2021 10:09:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EHIvDmsj4Y5VIDXHlhxPxp3i77gwNlMY4UhYupe3QP4=; b=R0ugJu1h3eJyjepFBkG9U0K1fI
+        hLpulWsoEYjLJxERx17/6nHHdf1+BAl5rcl5hbYtam/zjkDf+2ibErfFJEpC9AWp85qY9jUM12vYj
+        YcM1UP36QYVdTjhcy3LyHFJ5GIzqfvw/qu+szVBtIsdOM1+o2u9B11ihHWZcDa1bp6az2S5DUWOQv
+        aQ6oYmSIYL7sZ+MZLULvhebRM2Yzby+dfAWwHGQmwg1H3CmRX34QFOwxpa5XBNx0OFU6Oh/ErH+x+
+        rrY2hCe4iTTtLc5+kM0sdrw6LNioErMN7a5z+1LjP88Z1eXWri352iN7nEfMt9lP0sl7tn8HuRWJP
+        4vMuYV0Q==;
+Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1l4pFE-007Kc7-QW; Wed, 27 Jan 2021 18:08:47 +0000
+Date:   Wed, 27 Jan 2021 18:08:44 +0000
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Ray Chi <raychi@google.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kyletso@google.com
+Subject: Re: [PATCH] usb: dwc3: add EXPORT_SYMBOL_GPL for role init functions
+Message-ID: <20210127180844.GA1747134@infradead.org>
+References: <20210126094913.180945-1-raychi@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f82c8fae-251f-12e9-6e43-28824a5ff3e5@gmail.com>
+In-Reply-To: <20210126094913.180945-1-raychi@google.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 27, 2021 at 08:12:21PM +0530, Anant Thazhemadam wrote:
+On Tue, Jan 26, 2021 at 05:49:13PM +0800, Ray Chi wrote:
+> Currently, role init functions are used in dwc3 driver but
+> can't be called from kernel modules.
+>   dwc3_host_init
+>   dwc3_host_exit
+>   dwc3_gadget_init
+>   dwc3_gadget_exit
+>   dwc3_event_buffers_setup
+>   dwc3_event_buffers_cleanup
 > 
-> On 27/01/21 7:28 pm, Johan Hovold wrote:
-> > On Wed, Jan 27, 2021 at 12:03:52AM +0530, Anant Thazhemadam wrote:
-> >> The newer usb_control_msg_{send|recv}() API are an improvement on the
-> >> existing usb_control_msg() as it ensures that a short read/write is treated
-> > As I mentioned in my comments on v2, a short write has always been
-> > treated as an error so you shouldn't imply that it wasn't here (and in
-> > the other commit messages).
-> 
-> The newer API ensures that a short send/recv is an error, as they
-> either complete the complete translation, or return an error, and
-> remove the need for explicit return value checking that was previously
-> expected to detect the short read/write (which wasn't present in a lot
-> of places).
+> If other kernel modules want to use these functions, it needs
+> EXPORT_SYMBOL_GPL() to get compile pass.
 
-But my point is that this claim isn't factually correct; there has never
-been a need to check for short *writes* (even if a few drivers have such
-redundant checks).
+What "other kernel modules" would want to use it an why?
 
-> That's what I was trying to say. But if the commit message isn't
-> representative of that, I'll try and modify it.
-
-Just drop the bit about "short writes".
-
-> Does this sound like a better commit message?
-> 
-> "The newer usb_control_msg_{send|recv}() API are an improvement on the
-> existing usb_control_msg().
-
-Even this is disputable; in some situations the usb_control_msg() is
-still preferred as I hope my comments have shown.
-
-Perhaps they are better described as "convenience wrappers" or similar
-as the real gain from using these helpers is to replace a pattern like:
-
-	f(data, ...) {
-		buf = malloc(data);
-		usb_control_msg(..., buf, ...);
-		memcpy(data, buf, ...);
-		kfree(buf);
-	}
-
-for when data is on the stack *and* you do not expect variable-length IN
-transfers.
-
-But as soon as a driver is able to reuse a single buffer for multiple
-transfers or the data buffer is already DMA-able, usb_control_msg() may
-still be a better choice.
-
-> The new API ensures either the full translation is completed,
-> or an error is returned. This ensures that all short send/recv are detected as
-
-recv only
-
-> errors even if there is no explicit return value checking performed.
-> 
-> The new API also allows us to use data off the stack, and don't require raw usb
-> pipes to be created in the calling functions."
-
-Johan
+Please specify that in your patch, and only resend it togethe with the
+patches actually adding/modifying those modules.
