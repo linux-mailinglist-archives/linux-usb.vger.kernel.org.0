@@ -2,88 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5506530613A
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 17:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFDC30617D
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 18:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232132AbhA0Qqv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jan 2021 11:46:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34016 "EHLO mail.kernel.org"
+        id S234192AbhA0RCY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jan 2021 12:02:24 -0500
+Received: from mga18.intel.com ([134.134.136.126]:11032 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231258AbhA0Qqp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Jan 2021 11:46:45 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id ED81F60187;
-        Wed, 27 Jan 2021 16:46:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611765965;
-        bh=tQQ1aMFx+Z32YsIj9q7WBQHGMTx/Enh3DKZ90xb1QQM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EoNSHMDbU1bYSlMjVMjYCPjjNv7MFetOLU4OxDzbswODAMqfq2W6uwqbknRQuDp86
-         mtOUsFJq0ldbfJxxoRI3AgzDNNcZ8Hi1p4HDJvyN3uZgteOOwnYmTDEvEAU77ZPa1N
-         QhUNAhtgEesnZ+yGY5TkRPrMne4OdlRIwvowJnMiRdqb1ffqoy8oErgcOs509O58UB
-         8g7wvSsAMegRm5xnksHuH4wRx7PhL4jYHs1t8w+GoxanFoIxBYk3C+KVy+pXiBZegb
-         tv9N1LNEeW4xaDW03oHYZnWhldcwwGy4CiYjjsfMAedXn7Q4xQgJHqtL71ISqJnVqd
-         mvbmm59FEZJFw==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1l4nxQ-0002EP-5w; Wed, 27 Jan 2021 17:46:16 +0100
-Date:   Wed, 27 Jan 2021 17:46:16 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 11/12] usb: misc: usbsevseg: update to use
- usb_control_msg_send()
-Message-ID: <YBGY2HqALY81bzif@hovoldconsulting.com>
-References: <20210126183403.911653-1-anant.thazhemadam@gmail.com>
- <20210126184030.915039-1-anant.thazhemadam@gmail.com>
+        id S235062AbhA0Q7S (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 Jan 2021 11:59:18 -0500
+IronPort-SDR: P9puhb/K0TDbduXQgmWFrOii9AF+U0RT62RCdoKv7xPA9NEZ81e2fK0Am54YW8vreAQ/mEkVf1
+ MO8IUARr+MIw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9877"; a="167772018"
+X-IronPort-AV: E=Sophos;i="5.79,380,1602572400"; 
+   d="scan'208";a="167772018"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 08:57:25 -0800
+IronPort-SDR: I4el8xmHYZELqL1CYc5tt8+nJ6FrWnjMuiNuFsvonPmHzzDhQq1XUrTCFczG/ZO0Av3l9CkMkL
+ 79kpC13/bPAQ==
+X-IronPort-AV: E=Sophos;i="5.79,380,1602572400"; 
+   d="scan'208";a="362493764"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 08:57:22 -0800
+Received: by lahna (sSMTP sendmail emulation); Wed, 27 Jan 2021 18:57:18 +0200
+Date:   Wed, 27 Jan 2021 18:57:18 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 01/12] thunderbolt: dma_port: Remove unused variable 'ret'
+Message-ID: <20210127165718.GF2542@lahna.fi.intel.com>
+References: <20210127112554.3770172-1-lee.jones@linaro.org>
+ <20210127112554.3770172-2-lee.jones@linaro.org>
+ <CAHp75VdnvG75bTZ9Zqpn=pm0_KNwK0GGBGGjZv1DpSY-6Ef_Xw@mail.gmail.com>
+ <20210127161916.GL4903@dell>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210126184030.915039-1-anant.thazhemadam@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210127161916.GL4903@dell>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 27, 2021 at 12:10:30AM +0530, Anant Thazhemadam wrote:
-> The newer usb_control_msg_{send|recv}() API are an improvement on the
-> existing usb_control_msg() as it ensures that a short read/write is treated
-> as an error, data can be used off the stack, and raw usb pipes need not be
-> created in the calling functions.
-> For this reason, instances of usb_control_msg() have been replaced with
-> usb_control_msg_send() appropriately.
+Hi,
+
+On Wed, Jan 27, 2021 at 04:19:16PM +0000, Lee Jones wrote:
+> On Wed, 27 Jan 2021, Andy Shevchenko wrote:
 > 
-> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
-> ---
->  drivers/usb/misc/usbsevseg.c | 60 ++++++++++--------------------------
->  1 file changed, 17 insertions(+), 43 deletions(-)
+> > On Wednesday, January 27, 2021, Lee Jones <lee.jones@linaro.org> wrote:
+> > 
+> > > Fixes the following W=1 kernel build warning(s):
+> > >
+> > >  drivers/thunderbolt/dma_port.c: In function ‘dma_port_flash_write_block’:
+> > >  drivers/thunderbolt/dma_port.c:331:6: warning: variable ‘ret’ set but
+> > > not used [-Wunused-but-set-variable]
+> > >
+> > >
+> > Is it scripted somehow?
 > 
-> diff --git a/drivers/usb/misc/usbsevseg.c b/drivers/usb/misc/usbsevseg.c
- 
-> @@ -99,15 +94,10 @@ static void update_display_mode(struct usb_sevsegdev *mydev)
->  	if(mydev->shadow_power != 1)
->  		return;
->  
-> -	rc = usb_control_msg(mydev->udev,
-> -			usb_sndctrlpipe(mydev->udev, 0),
-> -			0x12,
-> -			0x48,
-> -			(82 * 0x100) + 10, /* (set mode) */
-> -			(mydev->mode_msb * 0x100) + mydev->mode_lsb,
-> -			NULL,
-> -			0,
-> -			2000);
-> +	rc = usb_control_msg_send(mydev->udev, 0, 0x12, 0x48,
-> +				  (82 * 0x100) + 10, /* (set mode) */
-> +				  (mydev->mode_msb * 0x100) + mydev->mode_lsb,
-> +				  NULL, 0, 2000, GFP_KERNEL);
->  
->  	if (rc < 0)
->  		dev_dbg(&mydev->udev->dev, "mode retval = %d\n", rc);
+> A script opens up the file on the warning line.
+> 
+> The patch is hand-written.
+> 
+> > Because I am not sure we are okay to simply drop the assignment.
+> 
+> I've been careful not to change the semantics of the code.
+> 
+> The return value has never been checked since the driver's inception 4
+> years ago.
+> 
+> However, if this is an oversight and the intention was to check the
+> value and error-out during a failure condition, I can make that
+> happen.
+> 
+> I would need a nod from the author before I make such a change.
 
-This function is called from resume() and reset_resume() where GFP_NOIO
-should be used (and is used for update_display_visual()) so I think you
-need to add a GFP flag argument here too.
+It's actually an oversight from my side. It should do something like:
 
-Looks good otherwise.
+  if (ret)
+  	return ret:
 
-Johan
+there. Feel free to fix it up :)
+
+Thanks!
