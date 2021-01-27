@@ -2,112 +2,225 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87BE5305293
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 06:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3755C305294
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jan 2021 06:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbhA0FyT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jan 2021 00:54:19 -0500
-Received: from a1.mail.mailgun.net ([198.61.254.60]:15775 "EHLO
-        a1.mail.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236534AbhA0Dfx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jan 2021 22:35:53 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1611718529; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=TlLlxYx/6jyB4V4uLiJQpaxX4prK2yg62U7jBcs9aNI=; b=S/67KwLQWluHGQwRAM79COm7GtY2DeaovyRsHAsvfyNY6zfxNgKBnWC71EmKmBcbm5LYMykz
- as523PRku3wzEXrCKeJX1P2pbIUGWfWrk7Q/00EsdHmGI8ivdhy3oq3IG/JhKsZ66B7L0A28
- LNfCdWdKmiTe36CcOfzzkf9QSJw=
-X-Mailgun-Sending-Ip: 198.61.254.60
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 6010df642c36b2106d4e4dcf (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 27 Jan 2021 03:35:00
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B6D10C43464; Wed, 27 Jan 2021 03:34:59 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [10.110.78.65] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A00D7C433CA;
-        Wed, 27 Jan 2021 03:34:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A00D7C433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: usb: dwc3: gadget: skip pullup and set_speed after suspend
-To:     eg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        "open list:DESIGNWARE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <CGME20210122065248epcas2p19a972d3a385b91d6e05a16f2ef7b0dd6@epcas2p1.samsung.com>
- <20210122064125.GA121941@ubuntu> <20210122071540.GB121941@ubuntu>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <c658e20c-299f-c748-ca48-e3351dcfffd2@codeaurora.org>
-Date:   Tue, 26 Jan 2021 19:34:57 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S229830AbhA0Fy3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jan 2021 00:54:29 -0500
+Received: from mga09.intel.com ([134.134.136.24]:8093 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236840AbhA0DnQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 Jan 2021 22:43:16 -0500
+IronPort-SDR: KSRzD3HGfg0b2T8gkYFziDogYFpGDa8lEol62/8X5L1ebSOuunQ3lvB5vku/4v/edM6noC4a6w
+ 5u1kwhwGyXpg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9876"; a="180156560"
+X-IronPort-AV: E=Sophos;i="5.79,378,1602572400"; 
+   d="scan'208";a="180156560"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 19:42:31 -0800
+IronPort-SDR: BRQCUEgBoMbKi2UPDB/OB9etq24J5ZaDRmP5zEUdSlN3cskFZX4lf9qeuisXnKGL/STqZEl6sI
+ e4dmu93kZbmA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,378,1602572400"; 
+   d="scan'208";a="406961429"
+Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 26 Jan 2021 19:42:30 -0800
+Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1l4biv-0001IX-Ov; Wed, 27 Jan 2021 03:42:29 +0000
+Date:   Wed, 27 Jan 2021 11:41:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 1d69f9d901ef14d81c3b004e3282b8cc7b456280
+Message-ID: <6010e0f1.IQbdLfBMk7RQ4/Og%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20210122071540.GB121941@ubuntu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 1d69f9d901ef14d81c3b004e3282b8cc7b456280  usb: xhci-mtk: fix unreleased bandwidth data
 
+elapsed time: 724m
 
-On 1/21/2021 11:15 PM, Jung Daehwan wrote:
-> On Fri, Jan 22, 2021 03:32, Wesley cheng wrote:
->> Hi Daehwan,
->>
->> If this is an unexpected event where userspace initiates the UDC bind
->> sequence, then after the above sequence occurs, the DWC3 device should
->> still be able to re-enter runtime suspend after the autosuspend timer
->> expires.  Since the cable is disconnected, the dwc->connected flag would
->> still be false.  Is this not happening in your situation?
->>
->> I'm just trying to understand what issue you're seeing other than the
->> momentary transition from runtime suspend (due to cable disconnect)
->> -->runtime resume (due to unexpected UDC bind) --> runtime  suspend (due
->> to nothing connected).
->>
->> Thanks
->> Wesley cheng
-> 
-> Hi Wesley,
-> 
-> I don't know why but DWC3 device is not re-entering runtime-suspend in
-> my situation. I'm still debugging it.
-> Even if DWC3 re-enter runtime-suspend but it doesn't mean stopping gadget.
-> Are you stopping gadget manually in this case?
+configs tested: 163
+configs skipped: 2
 
-Hi Daehwan,
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Sorry for the late response.  So during the DWC3 runtime suspend path,
-we will execute dwc3_gadget_suspend() which should disable the gadget
-events and disable ep0 then clear RS bit.  Then on runtime resume, the
-DWC3 will be re-enabled, and the RS bit set again.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+sh                          landisk_defconfig
+powerpc                     redwood_defconfig
+m68k                          atari_defconfig
+m68k                             allmodconfig
+powerpc                     tqm8540_defconfig
+mips                 decstation_r4k_defconfig
+powerpc                 mpc832x_mds_defconfig
+powerpc                        warp_defconfig
+powerpc                     tqm8560_defconfig
+powerpc                      ppc44x_defconfig
+powerpc                      ep88xc_defconfig
+sh                          kfr2r09_defconfig
+powerpc                    klondike_defconfig
+powerpc                    mvme5100_defconfig
+mips                           ip22_defconfig
+openrisc                    or1ksim_defconfig
+arm                        clps711x_defconfig
+mips                     decstation_defconfig
+powerpc                  storcenter_defconfig
+arm                          ep93xx_defconfig
+powerpc                         wii_defconfig
+sh                           se7780_defconfig
+powerpc                     tqm8541_defconfig
+arm                            lart_defconfig
+openrisc                            defconfig
+c6x                         dsk6455_defconfig
+powerpc                        cell_defconfig
+xtensa                    xip_kc705_defconfig
+arm                       imx_v6_v7_defconfig
+arm                        realview_defconfig
+arm                         vf610m4_defconfig
+alpha                               defconfig
+mips                           ci20_defconfig
+arm                  colibri_pxa300_defconfig
+c6x                                 defconfig
+powerpc                     taishan_defconfig
+arm                            hisi_defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+um                           x86_64_defconfig
+arm                         lubbock_defconfig
+powerpc                      acadia_defconfig
+sh                        dreamcast_defconfig
+powerpc                 mpc837x_mds_defconfig
+arm                      integrator_defconfig
+powerpc                    adder875_defconfig
+arm                       cns3420vb_defconfig
+um                            kunit_defconfig
+sh                        edosk7705_defconfig
+sh                         ap325rxa_defconfig
+sh                           se7751_defconfig
+arm                           h5000_defconfig
+mips                           ip32_defconfig
+microblaze                          defconfig
+arc                     nsimosci_hs_defconfig
+arm                       aspeed_g4_defconfig
+powerpc                     pq2fads_defconfig
+powerpc                     powernv_defconfig
+arm                          pcm027_defconfig
+mips                       capcella_defconfig
+mips                         tb0287_defconfig
+arm                             pxa_defconfig
+parisc                           alldefconfig
+powerpc                 mpc832x_rdb_defconfig
+arm                        spear6xx_defconfig
+powerpc                           allnoconfig
+arm                        spear3xx_defconfig
+sh                           se7750_defconfig
+sh                          rsk7264_defconfig
+m68k                          amiga_defconfig
+powerpc                     asp8347_defconfig
+powerpc                       ppc64_defconfig
+nds32                               defconfig
+arc                         haps_hs_defconfig
+mips                        nlm_xlr_defconfig
+arm                        neponset_defconfig
+arm                        multi_v7_defconfig
+powerpc                       maple_defconfig
+m68k                        m5307c3_defconfig
+arm                        shmobile_defconfig
+powerpc                   lite5200b_defconfig
+arm                         s3c2410_defconfig
+arm                        oxnas_v6_defconfig
+arm                            qcom_defconfig
+powerpc               mpc834x_itxgp_defconfig
+powerpc                     pseries_defconfig
+arm                          lpd270_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+c6x                              allyesconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+i386                 randconfig-a001-20210126
+i386                 randconfig-a002-20210126
+i386                 randconfig-a004-20210126
+i386                 randconfig-a006-20210126
+i386                 randconfig-a003-20210126
+i386                 randconfig-a005-20210126
+x86_64               randconfig-a012-20210126
+x86_64               randconfig-a016-20210126
+x86_64               randconfig-a015-20210126
+x86_64               randconfig-a011-20210126
+x86_64               randconfig-a013-20210126
+x86_64               randconfig-a014-20210126
+i386                 randconfig-a013-20210127
+i386                 randconfig-a011-20210127
+i386                 randconfig-a012-20210127
+i386                 randconfig-a015-20210127
+i386                 randconfig-a014-20210127
+i386                 randconfig-a016-20210127
+i386                 randconfig-a013-20210126
+i386                 randconfig-a011-20210126
+i386                 randconfig-a012-20210126
+i386                 randconfig-a015-20210126
+i386                 randconfig-a014-20210126
+i386                 randconfig-a016-20210126
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-Thanks
-Wesley Cheng
+clang tested configs:
+x86_64               randconfig-a003-20210126
+x86_64               randconfig-a002-20210126
+x86_64               randconfig-a001-20210126
+x86_64               randconfig-a005-20210126
+x86_64               randconfig-a006-20210126
+x86_64               randconfig-a004-20210126
 
-> 
-> Best Regards,
-> Jung Daehwan
-> 
-> 
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
