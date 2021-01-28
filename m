@@ -2,470 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A286F308049
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Jan 2021 22:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1AA33081B2
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Jan 2021 00:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbhA1VKy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Jan 2021 16:10:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58972 "EHLO mail.kernel.org"
+        id S231633AbhA1XJf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Jan 2021 18:09:35 -0500
+Received: from m42-8.mailgun.net ([69.72.42.8]:26939 "EHLO m42-8.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229595AbhA1VKw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 28 Jan 2021 16:10:52 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 04E7D64D9E;
-        Thu, 28 Jan 2021 21:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611868210;
-        bh=ooiSAea0QPOd1AfSxSbsAPnrr7JSugPcfNr5usJZyVs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=R2GWINlarbUp4rMq2iwRGr7Xd8se8WQvtbwS7nEsNUtEF0vmzOAQj42RQ8n80dAcR
-         b+ETjCeHgU/y6XSOsDCTsMaaMjG8laBExlVkxxP1/MyIciLo/D9ll00YXk+uFaFewB
-         +lSdLk++SzUvm+WInU4ddAU6GTM3geMuLr8rDcKpd9Hpqb2AwnFl6Ej16dOf95UtbV
-         mWuVQRJ8dXDrF6rBWdyE1bGRDIZkHOnr2VW/JIXAE7sN3O8vzNnXHu+4GmWCOfL91x
-         CVCioiupKdxg5ibWsLzOT0STENNtkzkOQt37EHvGyMrphbdILGgmJgCA86YgW4YvjB
-         qFa6qRxOrW8tQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E684B6530E;
-        Thu, 28 Jan 2021 21:10:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S231509AbhA1XJe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 28 Jan 2021 18:09:34 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1611875348; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=O8kFXrZt93Vjk8mo2c8C6NAXhyoA4VuHGdA2XbbyiBY=; b=hVU4Ztka/+5u1Et3chC1ojLzd7LPUv4RlI2LJbIhY1woPOoeNu3RMsB/I7RTEH7O+T2KG4Qg
+ cZwmLqf1cUcY1wuWqYGQDCBcFKHZ9lcAnEIhoeEMi79Adr0FHJGoEOmJ4iBY6mI6djw8gzcH
+ 2CB+9hqfRk24BWpPkZFg2vApryc=
+X-Mailgun-Sending-Ip: 69.72.42.8
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 601343f8bcde412162da6a3a (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 28 Jan 2021 23:08:40
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 97D82C43461; Thu, 28 Jan 2021 23:08:39 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [10.110.127.29] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2A11AC433C6;
+        Thu, 28 Jan 2021 23:08:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2A11AC433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH v6 3/4] usb: dwc3: Resize TX FIFOs to meet EP bursting
+ requirements
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peter.chen@nxp.com,
+        jackp@codeaurora.org
+References: <1611288100-31118-1-git-send-email-wcheng@codeaurora.org>
+ <1611288100-31118-4-git-send-email-wcheng@codeaurora.org>
+ <YAsHbj/mITeiY5Cq@builder.lan>
+ <724cb274-36ce-fb48-a156-4eaf9e686fdf@codeaurora.org>
+ <20210126015543.GB1241218@yoga>
+ <99dd9419-a8fd-9eb2-9582-d24f865ecf70@codeaurora.org>
+ <YA+lVFWlBDvN4MTF@builder.lan>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <dec42f26-6b67-56ec-74a5-feae5e5c5df5@codeaurora.org>
+Date:   Thu, 28 Jan 2021 15:08:37 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: usb: cdc_ether: added support for Thales Cinterion PLSx3
- modem family.
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161186820993.20635.15989337693774271219.git-patchwork-notify@kernel.org>
-Date:   Thu, 28 Jan 2021 21:10:09 +0000
-References: <20210126044245.8455-1-gciofono@gmail.com>
-In-Reply-To: <20210126044245.8455-1-gciofono@gmail.com>
-To:     Giacinto Cifelli <gciofono@gmail.com>
-Cc:     oliver@neukum.org, davem@davemloft.net, kuba@kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+In-Reply-To: <YA+lVFWlBDvN4MTF@builder.lan>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net.git (refs/heads/master):
 
-On Tue, 26 Jan 2021 05:42:45 +0100 you wrote:
-> lsusb -v for this device:
+On 1/25/2021 9:15 PM, Bjorn Andersson wrote:
+> On Mon 25 Jan 22:32 CST 2021, Wesley Cheng wrote:
+>> On 1/25/2021 5:55 PM, Bjorn Andersson wrote:
+>>> On Mon 25 Jan 19:14 CST 2021, Wesley Cheng wrote:
+>>>
+>>>>
+>>>>
+>>>> On 1/22/2021 9:12 AM, Bjorn Andersson wrote:
+>>>>> On Thu 21 Jan 22:01 CST 2021, Wesley Cheng wrote:
+>>>>>
+>>>>
+>>>> Hi Bjorn,
+>>>>>
+>>>>> Under what circumstances should we specify this? And in particular are
+>>>>> there scenarios (in the Qualcomm platforms) where this must not be set?
+>>>>> The TXFIFO dynamic allocation is actually a feature within the DWC3
+>>>> controller, and isn't specifically for QCOM based platforms.  It won't
+>>>> do any harm functionally if this flag is not set, as this is meant for
+>>>> enhancing performance/bandwidth.
+>>>>
+>>>>> In particular, the composition can be changed in runtime, so should we
+>>>>> set this for all Qualcomm platforms?
+>>>>>
+>>>> Ideally yes, if we want to increase bandwith for situations where SS
+>>>> endpoint bursting is set to a higher value.
+>>>>
+>>>>> And if that's the case, can we not just set it from the qcom driver?
+>>>>>
+>>>> Since this is a common DWC3 core feature, I think it would make more
+>>>> sense to have it in DWC3 core instead of a vendor's DWC3 glue driver.
+>>>>
+>>>
+>>> I don't have any objections to implementing it in the core driver, but
+>>> my question is can we just skip the DT binding and just enable it from
+>>> the vendor driver?
+>>>
+>>> Regards,
+>>> Bjorn
+>>>
+>>
+>> Hi Bjorn,
+>>
+>> I see.  I think there are some designs which don't have a DWC3 glue
+>> driver, so assuming there may be other platforms using this, there may
+>> not always be a vendor driver to set this.
+>>
 > 
-> Bus 003 Device 007: ID 1e2d:0069
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               2.00
->   bDeviceClass          239 Miscellaneous Device
->   bDeviceSubClass         2 ?
->   bDeviceProtocol         1 Interface Association
->   bMaxPacketSize0        64
->   idVendor           0x1e2d
->   idProduct          0x0069
->   bcdDevice            0.00
->   iManufacturer           4 Cinterion Wireless Modules
->   iProduct                3 PLSx3
->   iSerial                 5 fa3c1419
->   bNumConfigurations      1
->   Configuration Descriptor:
->     bLength                 9
->     bDescriptorType         2
->     wTotalLength          352
->     bNumInterfaces         10
->     bConfigurationValue     1
->     iConfiguration          2 Cinterion Configuration
->     bmAttributes         0xe0
->       Self Powered
->       Remote Wakeup
->     MaxPower              500mA
->     Interface Association:
->       bLength                 8
->       bDescriptorType        11
->       bFirstInterface         0
->       bInterfaceCount         2
->       bFunctionClass          2 Communications
->       bFunctionSubClass       2 Abstract (modem)
->       bFunctionProtocol       1 AT-commands (v.25ter)
->       iFunction               0
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        0
->       bAlternateSetting       0
->       bNumEndpoints           1
->       bInterfaceClass         2 Communications
->       bInterfaceSubClass      2 Abstract (modem)
->       bInterfaceProtocol      1 AT-commands (v.25ter)
->       iInterface              0
->       CDC Header:
->         bcdCDC               1.10
->       CDC ACM:
->         bmCapabilities       0x02
->           line coding and serial state
->       CDC Call Management:
->         bmCapabilities       0x03
->           call management
->           use DataInterface
->         bDataInterface          1
->       CDC Union:
->         bMasterInterface        0
->         bSlaveInterface         1
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x81  EP 1 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval               5
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        1
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass        10 CDC Data
->       bInterfaceSubClass      0 Unused
->       bInterfaceProtocol      0
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x82  EP 2 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x01  EP 1 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->     Interface Association:
->       bLength                 8
->       bDescriptorType        11
->       bFirstInterface         2
->       bInterfaceCount         2
->       bFunctionClass          2 Communications
->       bFunctionSubClass       2 Abstract (modem)
->       bFunctionProtocol       1 AT-commands (v.25ter)
->       iFunction               0
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        2
->       bAlternateSetting       0
->       bNumEndpoints           1
->       bInterfaceClass         2 Communications
->       bInterfaceSubClass      2 Abstract (modem)
->       bInterfaceProtocol      1 AT-commands (v.25ter)
->       iInterface              0
->       CDC Header:
->         bcdCDC               1.10
->       CDC ACM:
->         bmCapabilities       0x02
->           line coding and serial state
->       CDC Call Management:
->         bmCapabilities       0x03
->           call management
->           use DataInterface
->         bDataInterface          3
->       CDC Union:
->         bMasterInterface        2
->         bSlaveInterface         3
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x83  EP 3 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval               5
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        3
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass        10 CDC Data
->       bInterfaceSubClass      0 Unused
->       bInterfaceProtocol      0
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x84  EP 4 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x02  EP 2 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->     Interface Association:
->       bLength                 8
->       bDescriptorType        11
->       bFirstInterface         4
->       bInterfaceCount         2
->       bFunctionClass          2 Communications
->       bFunctionSubClass       2 Abstract (modem)
->       bFunctionProtocol       1 AT-commands (v.25ter)
->       iFunction               0
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        4
->       bAlternateSetting       0
->       bNumEndpoints           1
->       bInterfaceClass         2 Communications
->       bInterfaceSubClass      2 Abstract (modem)
->       bInterfaceProtocol      1 AT-commands (v.25ter)
->       iInterface              0
->       CDC Header:
->         bcdCDC               1.10
->       CDC ACM:
->         bmCapabilities       0x02
->           line coding and serial state
->       CDC Call Management:
->         bmCapabilities       0x03
->           call management
->           use DataInterface
->         bDataInterface          5
->       CDC Union:
->         bMasterInterface        4
->         bSlaveInterface         5
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x85  EP 5 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval               5
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        5
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass        10 CDC Data
->       bInterfaceSubClass      0 Unused
->       bInterfaceProtocol      0
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x86  EP 6 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x03  EP 3 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->     Interface Association:
->       bLength                 8
->       bDescriptorType        11
->       bFirstInterface         6
->       bInterfaceCount         2
->       bFunctionClass          2 Communications
->       bFunctionSubClass       2 Abstract (modem)
->       bFunctionProtocol       1 AT-commands (v.25ter)
->       iFunction               0
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        6
->       bAlternateSetting       0
->       bNumEndpoints           1
->       bInterfaceClass         2 Communications
->       bInterfaceSubClass      2 Abstract (modem)
->       bInterfaceProtocol      1 AT-commands (v.25ter)
->       iInterface              0
->       CDC Header:
->         bcdCDC               1.10
->       CDC ACM:
->         bmCapabilities       0x02
->           line coding and serial state
->       CDC Call Management:
->         bmCapabilities       0x03
->           call management
->           use DataInterface
->         bDataInterface          7
->       CDC Union:
->         bMasterInterface        6
->         bSlaveInterface         7
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x87  EP 7 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval               5
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        7
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass        10 CDC Data
->       bInterfaceSubClass      0 Unused
->       bInterfaceProtocol      0
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x88  EP 8 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x04  EP 4 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->     Interface Association:
->       bLength                 8
->       bDescriptorType        11
->       bFirstInterface         8
->       bInterfaceCount         2
->       bFunctionClass          2 Communications
->       bFunctionSubClass       0
->       bFunctionProtocol       0
->       iFunction               0
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        8
->       bAlternateSetting       0
->       bNumEndpoints           1
->       bInterfaceClass         2 Communications
->       bInterfaceSubClass      6 Ethernet Networking
->       bInterfaceProtocol      0
->       iInterface              0
->       CDC Header:
->         bcdCDC               1.10
->       CDC Ethernet:
->         iMacAddress                      1 00A0C6C14190
->         bmEthernetStatistics    0x00000000
->         wMaxSegmentSize              16384
->         wNumberMCFilters            0x0001
->         bNumberPowerFilters              0
->       CDC Union:
->         bMasterInterface        8
->         bSlaveInterface         9
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x89  EP 9 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval               5
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        9
->       bAlternateSetting       0
->       bNumEndpoints           0
->       bInterfaceClass        10 CDC Data
->       bInterfaceSubClass      0 Unused
->       bInterfaceProtocol      0
->       iInterface              0
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        9
->       bAlternateSetting       1
->       bNumEndpoints           2
->       bInterfaceClass        10 CDC Data
->       bInterfaceSubClass      0 Unused
->       bInterfaceProtocol      0
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x8a  EP 10 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x05  EP 5 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
-> Device Qualifier (for other device speed):
->   bLength                10
->   bDescriptorType         6
->   bcdUSB               2.00
->   bDeviceClass          239 Miscellaneous Device
->   bDeviceSubClass         2 ?
->   bDeviceProtocol         1 Interface Association
->   bMaxPacketSize0        64
->   bNumConfigurations      1
-> Device Status:     0x0000
->   (Bus Powered)
+> You mean that there are implementations of dwc3 without an associated
+> glue driver that haven't yet realized that they need this feature?
 > 
-> [...]
+> I would suggest then that we implement the core code necessary, we
+> enable it from the Qualcomm glue layer and when someone realize that
+> they need this without a glue driver it's going to be trivial to add the
+> DT binding.
+>>
+> The alternative is that we're lugging around a requirement to specify
+> this property in all past, present and future Qualcomm dts files - and
+> then we'll need to hard code it for ACPI anyways.
+> 
+Hi Bjorn,
 
-Here is the summary with links:
-  - net: usb: cdc_ether: added support for Thales Cinterion PLSx3 modem family.
-    https://git.kernel.org/netdev/net/c/dad3a72f5eec
+Can we utilize the of_add_property() call to add the "tx-fifo-resize"
+property from the dwc3_qcom_register_core() API?  That way at least the
+above concern would be addressed.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I'm not too familiar with the ACPI design, but I do see that the
+dwc3-qcom does have an array carrying some DWC3 core properties.  Looks
+like we can add the tx-fifo-resize property here too.
+
+static const struct property_entry dwc3_qcom_acpi_properties[] = {
+	PROPERTY_ENTRY_STRING("dr_mode", "host"),
+	{}
+};
 
 
+Thanks
+Wesley Cheng
+
+> Regards,
+> Bjorn
+> 
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
