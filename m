@@ -2,86 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3227E30747E
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Jan 2021 12:15:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 426C2307630
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Jan 2021 13:33:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbhA1LLK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Jan 2021 06:11:10 -0500
-Received: from mga06.intel.com ([134.134.136.31]:58317 "EHLO mga06.intel.com"
+        id S231496AbhA1MbY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Jan 2021 07:31:24 -0500
+Received: from mga11.intel.com ([192.55.52.93]:16761 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231156AbhA1LK7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 28 Jan 2021 06:10:59 -0500
-IronPort-SDR: DFQBtcOw5+BAGZfTiQ3jiETQcG5ISXr8zLS69GvPIUtBxm+Yaq2gG4GccZBoX0PXI7vMjtBkaq
- o1+i3iN5PmJQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9877"; a="241742155"
+        id S231465AbhA1MbX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 28 Jan 2021 07:31:23 -0500
+IronPort-SDR: 3AgK2Ypei5yuCjwduD7OmRVTrcgZSxDLiOzDJcqoGl2p69gTOP6cwwgKq8A5CWMdBWMrlRxUBE
+ JMfu8ozNW/hQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9877"; a="176716882"
 X-IronPort-AV: E=Sophos;i="5.79,382,1602572400"; 
-   d="scan'208";a="241742155"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2021 03:09:11 -0800
-IronPort-SDR: oLTOeHJAxZveY+y0cspU8swh3mUykqlmfDB8CBvJ7nLRG4fyjW6mcagPZOo5rs3vUPhbqZP1K6
- kC7ATHgNjRPw==
+   d="scan'208";a="176716882"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2021 04:29:37 -0800
+IronPort-SDR: 8SuM/z3uVyW3Jw2IteuwUqeKHpm7LS0WuvSGMWgQQ3fCMCOF4DAKv6wlOQxzpvF6bksGCcIiqN
+ 57IO+EM61nHg==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.79,382,1602572400"; 
-   d="scan'208";a="473506403"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2021 03:09:07 -0800
-Received: by lahna (sSMTP sendmail emulation); Thu, 28 Jan 2021 13:09:04 +0200
-Date:   Thu, 28 Jan 2021 13:09:04 +0200
+   d="scan'208";a="505283589"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 28 Jan 2021 04:29:35 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id B9F7514F; Thu, 28 Jan 2021 14:29:34 +0200 (EET)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>, bpf@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
-        netdev@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: Re: [PATCH 00/12] Rid W=1 warnings from Thunderbolt
-Message-ID: <20210128110904.GR2542@lahna.fi.intel.com>
-References: <20210127112554.3770172-1-lee.jones@linaro.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 0/5] thunderbolt: Fix kernel-doc descriptions of non-static functions
+Date:   Thu, 28 Jan 2021 15:29:29 +0300
+Message-Id: <20210128122934.36897-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210127112554.3770172-1-lee.jones@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Lee,
+Hi all,
 
-On Wed, Jan 27, 2021 at 11:25:42AM +0000, Lee Jones wrote:
-> This set is part of a larger effort attempting to clean-up W=1
-> kernel builds, which are currently overwhelmingly riddled with
-> niggly little warnings.
-> 
-> Only 1 small set required for Thunderbolt.  Pretty good!
-> 
-> Lee Jones (12):
->   thunderbolt: dma_port: Remove unused variable 'ret'
->   thunderbolt: cap: Fix kernel-doc formatting issue
->   thunderbolt: ctl: Demote non-conformant kernel-doc headers
->   thunderbolt: eeprom: Demote non-conformant kernel-doc headers to
->     standard comment blocks
->   thunderbolt: pa: Demote non-conformant kernel-doc headers
->   thunderbolt: xdomain: Fix 'tb_unregister_service_driver()'s 'drv'
->     param
->   thunderbolt: nhi: Demote some non-conformant kernel-doc headers
->   thunderbolt: tb: Kernel-doc function headers should document their
->     parameters
->   thunderbolt: swit: Demote a bunch of non-conformant kernel-doc headers
->   thunderbolt: icm: Fix a couple of formatting issues
->   thunderbolt: tunnel: Fix misspelling of 'receive_path'
->   thunderbolt: swit: Fix function name in the header
+This series was inspired by the patch series from Lee Jones that fixed a
+bunch of warnings with W=1 build:
 
-I applied all of the changes that touch static functions. For non-static
-functions I will send a patch set shortly that adds the missing bits for
-the kernel-doc descriptions. I also fixed $subject lines of few patches
-("switch:" instead of "swit:").
+  https://lore.kernel.org/linux-usb/20210127112554.3770172-1-lee.jones@linaro.org/
 
-Please check that I got everything correct in
+For non-static functions we fix missing kernel-doc descriptions
+accordingly. This fixes the rest of the warnings with W=1 build.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
+Applies on top of thunderbolt.git/next.
 
-Thanks!
+Mika Westerberg (5):
+  thunderbolt: ctl: Fix kernel-doc descriptions of non-static functions
+  thunderbolt: eeprom: Fix kernel-doc descriptions of non-static functions
+  thunderbolt: path: Fix kernel-doc descriptions of non-static functions
+  thunderbolt: nhi: Fix kernel-doc descriptions of non-static functions
+  thunderbolt: switch: Fix kernel-doc descriptions of non-static functions
+
+ drivers/thunderbolt/ctl.c    | 47 ++++++++++++++++++++++++++++++++----
+ drivers/thunderbolt/eeprom.c | 13 ++++++++--
+ drivers/thunderbolt/nhi.c    |  2 ++
+ drivers/thunderbolt/path.c   |  2 ++
+ drivers/thunderbolt/switch.c |  7 ++++++
+ 5 files changed, 64 insertions(+), 7 deletions(-)
+
+-- 
+2.29.2
+
