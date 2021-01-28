@@ -2,124 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C58B3076F0
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Jan 2021 14:20:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4493077BD
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Jan 2021 15:16:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232294AbhA1NRW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Jan 2021 08:17:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbhA1NRF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Jan 2021 08:17:05 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A13C06178C
-        for <linux-usb@vger.kernel.org>; Thu, 28 Jan 2021 05:16:04 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id s24so5141678wmj.0
-        for <linux-usb@vger.kernel.org>; Thu, 28 Jan 2021 05:16:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=a7Kay7oniLiASWWlX9LUAiXElA2SneepAxnVvZ1j9Bg=;
-        b=wm0m6q9c7pI2ykqugyIea0bijD0AIdx00BSXxbwNf9QgYWvNFw8u7g0iVVYt98tN+R
-         rjUkKmn08QsrSjMYYgeB/BE1Z1aUcapp6QCqdf7hvy5gUsofxEMHByci4Zfw9lL29/yX
-         oERUPPJs1zliyHYpPI9tgDdQ0U+aR/L6LMdXAFCyGjUEwkh375xDDu0Y0Bv4A4fL7iLF
-         WKss8uZbIloYg2uibFiXWPDP07PR9t8pLYs6U7cPey3J49wkb2Z0K5VlUIsjNVzOJEjJ
-         ODqonk+oM9Rgkn7zZM8koJsQ5l0anC8Mqu4tvy1VyRhac92NyvLy31OJvRvDCWk1V+ok
-         /jUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=a7Kay7oniLiASWWlX9LUAiXElA2SneepAxnVvZ1j9Bg=;
-        b=QDdGhcXGXcmT/p4p/Budt/U6MH9JUJPd2NZ/YFBNY6EbnFpfRkj4qfpbGB9zOygdGT
-         lzJh7QBsMH7h/yy8ZiE7DksBq9cRS9GHzUCordim1koLpsEB68Kux4uLIdezXjzkdxTP
-         X5AuNqG3Zh6iP+AWK41zC0/LU0DwYmLOhYxFtP2dke47gRTslg77pEWS2rriNb39TMqJ
-         208b88PTIfTL6q6+9A5C7CF8QTIxw4/CrGk7xqpds6Sgjh2nHMapHc8BqOsejrezTnbm
-         mPCArF7jmUCgrzQquBTwU+s8xcRgzfAKzmPW7mMdvVsumjfOctw8L5ZbqGqoicOBgtII
-         qCJg==
-X-Gm-Message-State: AOAM531dHFN3OUfHK547PlUgE6qi1I/ILtHuLYCyRWpY8aaT/5piK2BL
-        8T7k2F/V4mmbj4eaSPmeW5WZgg==
-X-Google-Smtp-Source: ABdhPJy/2U8YYV4YNHpz7d82RHXpW6/38q6C4Nxk6SHw0fG6egfg8QiynFbs+Y23UmRWLv4Pm6w1rw==
-X-Received: by 2002:a05:600c:19cc:: with SMTP id u12mr8573435wmq.26.1611839763291;
-        Thu, 28 Jan 2021 05:16:03 -0800 (PST)
-Received: from dell ([91.110.221.188])
-        by smtp.gmail.com with ESMTPSA id s25sm5861961wmj.24.2021.01.28.05.16.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jan 2021 05:16:02 -0800 (PST)
-Date:   Thu, 28 Jan 2021 13:16:00 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>, bpf@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
-        netdev@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: Re: [PATCH 00/12] Rid W=1 warnings from Thunderbolt
-Message-ID: <20210128131600.GK4774@dell>
-References: <20210127112554.3770172-1-lee.jones@linaro.org>
- <20210128110904.GR2542@lahna.fi.intel.com>
+        id S231222AbhA1OOa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Jan 2021 09:14:30 -0500
+Received: from mga05.intel.com ([192.55.52.43]:64119 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231160AbhA1OO1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 28 Jan 2021 09:14:27 -0500
+IronPort-SDR: YuAE+pQmA0Q05L345qsGL0IpuuL4d8sNaJVogEGXTFYkwz4ORO/ZmGSPfzzIb1Pw/aG+6d1U3j
+ m+Mw0Zuv276A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9877"; a="265070140"
+X-IronPort-AV: E=Sophos;i="5.79,382,1602572400"; 
+   d="scan'208";a="265070140"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2021 06:12:41 -0800
+IronPort-SDR: SBOYILtEwBDz2zoAPH1EhIlSMU9vgwA85A7VPp0UJZdPwTOk47MkUajuyTh2zgssCzBNM1yg9Y
+ 76v/+aptn/Mw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,382,1602572400"; 
+   d="scan'208";a="354185391"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga003.jf.intel.com with ESMTP; 28 Jan 2021 06:12:40 -0800
+Subject: Re: USB2 / USB3 compatibility problems: xhci_hcd 0000:00:06.0: WARN
+ Wrong bounce buffer write length: 0 != 512
+To:     Andreas Hartmann <andihartmann@01019freenet.de>,
+        linux-usb@vger.kernel.org
+References: <3b4e35d2-9508-e0aa-eaf8-32e524ad81c4@01019freenet.de>
+ <756e7b88-1142-4758-b8f7-a8eaf510b422@01019freenet.de>
+ <edc3c7b1-98fa-9062-5c17-426e8ad17370@01019freenet.de>
+ <7e953b15-925a-1512-4d15-c07fc03f9059@01019freenet.de>
+ <f83677b5-e3d1-afdb-c8d4-f9969fa3fe84@linux.intel.com>
+ <a65a9299-1e5b-f15d-2ae7-f0a21938f4fd@01019freenet.de>
+ <d9fd7812-43cc-2813-5222-5e39b63fccbc@01019freenet.de>
+ <8de6ecb9-4a39-5742-a358-d6965feffc79@linux.intel.com>
+ <021e1727-0e2e-0207-ace2-4382489eea1f@linux.intel.com>
+ <de0cab7e-6e25-fe80-b1d7-d50f63d6e54c@01019freenet.de>
+ <9c3c9dd7-bcfb-785c-8c11-39f78a7fca01@01019freenet.de>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <ab675d28-d80f-ed72-5db0-943cb26819f1@linux.intel.com>
+Date:   Thu, 28 Jan 2021 16:14:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <9c3c9dd7-bcfb-785c-8c11-39f78a7fca01@01019freenet.de>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210128110904.GR2542@lahna.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 28 Jan 2021, Mika Westerberg wrote:
 
-> Hi Lee,
+>> If I'm understanding it correctly, you're always creating a bounce
+>> buffer though it is not necessary (at least in my case - my test patch
+>> proofed, that no changes at all are necessary). Why aren't you checking
+>> for URB_NO_TRANSFER_DMA_MAP at the very beginning? Or is it your purpose
+>> to first basically test your new code path? That would be ok.
+
+Bounce buffer is only used when there is no other way of meeting the xHCI
+alignment requirements. Worst case is once every 255 TRB, and for maximum 1024bytes.
+Each TRB can point to 64K of data.
+
+I can't go against the spec just because it doesn't cause issues in your
+two usecases. The overhead of the bounce buffer usage is so small there's no
+point in that kind of optimization.
+
+URB_NO_TRANSFER_DMA_MAP only indicates the data was DMA mapped before driver 
+submitted the URB, so usb core does not need to map it.
+
+I was speculating that it could be a cause why data is so oddly aligned
+(urbs with data starting at less than 512 bytes from 64k boundary), and
+thus not meeting the xHC boundary and aligment requirements even if data
+is otherwise contiguous.
+
+xHC controller doesn't care who mapped the data, or if data is in a sg list
+or already contiguous in urb->transfer_buffer as long as we follow
+the aligment and boudary rules.
+
+Bug was that driver assumed the data that needed to be bounce
+buffered was in a sg list. Your cased proved it could be in
+urb->tranfer_buffer instead.
+
+>>
+>> I tested with the notebook (in both directions) - it seems to work - I
+>> didn't get any problems though I used 24 kB bulk packets. Throughput was
+>> unaltered high.
+>>
+>> I'm doing the same test tomorrow with the other USB 3.1 controller!
 > 
-> On Wed, Jan 27, 2021 at 11:25:42AM +0000, Lee Jones wrote:
-> > This set is part of a larger effort attempting to clean-up W=1
-> > kernel builds, which are currently overwhelmingly riddled with
-> > niggly little warnings.
-> > 
-> > Only 1 small set required for Thunderbolt.  Pretty good!
-> > 
-> > Lee Jones (12):
-> >   thunderbolt: dma_port: Remove unused variable 'ret'
-> >   thunderbolt: cap: Fix kernel-doc formatting issue
-> >   thunderbolt: ctl: Demote non-conformant kernel-doc headers
-> >   thunderbolt: eeprom: Demote non-conformant kernel-doc headers to
-> >     standard comment blocks
-> >   thunderbolt: pa: Demote non-conformant kernel-doc headers
-> >   thunderbolt: xdomain: Fix 'tb_unregister_service_driver()'s 'drv'
-> >     param
-> >   thunderbolt: nhi: Demote some non-conformant kernel-doc headers
-> >   thunderbolt: tb: Kernel-doc function headers should document their
-> >     parameters
-> >   thunderbolt: swit: Demote a bunch of non-conformant kernel-doc headers
-> >   thunderbolt: icm: Fix a couple of formatting issues
-> >   thunderbolt: tunnel: Fix misspelling of 'receive_path'
-> >   thunderbolt: swit: Fix function name in the header
+> Successfully tested on the other USB 3.1 host.
 > 
-> I applied all of the changes that touch static functions. For non-static
-> functions I will send a patch set shortly that adds the missing bits for
-> the kernel-doc descriptions. I also fixed $subject lines of few patches
-> ("switch:" instead of "swit:").
 
-Oh, that's odd.  This must be a bug in my script.
+Thank you, much appreciated.
 
-As I strip [ch], as in *.c and *.h.
+I think I'll submit this patch as it is (with a proper commit message)
+can I add reported-by: Andreas Hartmann <andihartmann@01019freenet.de>, and
+tested-by: Andreas Hartmann <andihartmann@01019freenet.de> tags to the patch?
 
-Thanks for noticing.
-
-> Please check that I got everything correct in
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
-> 
-> Thanks!
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+-Mathias
