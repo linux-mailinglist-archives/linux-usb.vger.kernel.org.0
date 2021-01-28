@@ -2,123 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD12307C23
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Jan 2021 18:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4820307CB3
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Jan 2021 18:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232982AbhA1RUy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Jan 2021 12:20:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
+        id S233232AbhA1RhV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Jan 2021 12:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232731AbhA1RSp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Jan 2021 12:18:45 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECE1C061756
-        for <linux-usb@vger.kernel.org>; Thu, 28 Jan 2021 09:18:04 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id l9so8946051ejx.3
-        for <linux-usb@vger.kernel.org>; Thu, 28 Jan 2021 09:18:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=plyFjtBhFXFrgELoxz/FHnkMaLH3qrT6mDYclcTh7k0=;
-        b=k+kGgKrLyR04Frv44dbTUsM1YuqhHN9J9mDamP4AjxQa6kD1HY1zQImmECU0xO/xiv
-         6Pm6fUhd9j3J+GUwjGXACpUN/AyMA3FhVAmrNmrhzSsA+BqpCWM+Uk+lS5X2afMuNPRw
-         3LxZMSBIj180IXWhLJ3JKVIScU3GxgTAZZOcUHDT6QGhb6Tml2WHLkLapSIF3K1REa76
-         oeA+o4hJlZ22yBegVbo2mEtkChLdKhwBmwHHxMJ77WDVu0KThHZSbd3SW/ns7I2HtYEU
-         5vtJNlZtyWI+Nxb1AyJIy9KbM6x0UMSk4HRWJErtLAR1iT7uSVkf3R3j28bZPuxVhME9
-         0bhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=plyFjtBhFXFrgELoxz/FHnkMaLH3qrT6mDYclcTh7k0=;
-        b=fRj7OjLY1lAUtouu/EKVR/rj4A8c1tn1GmQNnVoueddujT2OPNvSkth4DYN/j1jcc0
-         fxjA+q1sFgcUGI8RUKjn96xgWO2wB4oDdni+rltu8H6HHlrES7tL0elDHRskpAUJGubS
-         hasc8g1qtEgKBqx9ZpEu7tBfb6byW4qq2m+q/k/RqVAy+N3IpcUN3nifgEoFnZ5XuzZ8
-         TFVF+zrdxP/2R+n16vFmunc2FvZBCSBdWuEuj3JKaglmkz93I3WD/+MJ8G9yaHtfgMEa
-         5FGSzgJCdOmWpqU0sUwekKhdkiAAJWAZao5UWQHgbZeCB7StrSd52/Ldv6firpB8TDoW
-         v/SQ==
-X-Gm-Message-State: AOAM5327C0+hWzuRhy82O+9A/8bDdJcpySrmP0DdLr4E/bD7WWjHaqtT
-        hyAejkuszsapYfjd1FCSthSjxCM7s4tbcSL9OoDXuGQMrH10tA==
-X-Google-Smtp-Source: ABdhPJyKXvpzpdvfHv7mb6Qhz0AcCbG68n5n35NAeJEmziV+cC2i0V9kzmkx05oEUC63BvLBjjpqxKG+/M9iNea8sjo=
-X-Received: by 2002:a17:906:f988:: with SMTP id li8mr443808ejb.84.1611854283487;
- Thu, 28 Jan 2021 09:18:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20210128081259.20940-1-sylvain.pelissier@gmail.com> <YBJ0SQaTSM5PxZom@kroah.com>
-In-Reply-To: <YBJ0SQaTSM5PxZom@kroah.com>
-From:   Sylvain Pelissier <sylvain.pelissier@gmail.com>
-Date:   Thu, 28 Jan 2021 18:17:52 +0100
-Message-ID: <CAOkUe-CJNg2iCZu3528TvsQXTT5-STRauiiDciB_AnbwE8qrHQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: video: fix descriptor structures macros
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     laurent.pinchart@skynet.be, kopiga.rasiah@epfl.ch,
+        with ESMTP id S233178AbhA1RhQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Jan 2021 12:37:16 -0500
+Received: from mout0.freenet.de (mout0.freenet.de [IPv6:2001:748:100:40::2:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B17EC061573
+        for <linux-usb@vger.kernel.org>; Thu, 28 Jan 2021 09:36:20 -0800 (PST)
+Received: from [195.4.92.125] (helo=sub6.freenet.de)
+        by mout0.freenet.de with esmtpa (ID andihartmann@freenet.de) (port 25) (Exim 4.92 #3)
+        id 1l5BDO-0003Im-Et; Thu, 28 Jan 2021 18:36:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=01019freenet.de; s=mjaymdexmjqk; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=p5MvETlHRYRrVpSLYKJJH7EA9ym+lMcWG97Ezj2QDoI=; b=p+mexFkI2lVbE7Q48KDPeoBIL0
+        emMBLUeK/lCafkF/W30DrzkE1PswzROEHZ5Px+SUdgkAGF7RGgWV7xiqfQSySQsBk6CSUhL1T7FKu
+        G0xbWhxCjE3hMCuqqsK3vQgj4qd+SOArAe1ZKXuPOEG5Z4W7/ntwqV/IXfoeIZvLwwNTLsY7Et/Xf
+        PxaF7WKUkCy0RTv93DtlVUdA/emikc/vIU+sc4ktdo1aSnyYj8YqPYy2TqDiSKG++DScTApbMuaC4
+        3wbFIsd5HBiVRXE72ceU65HXWuzoEsWH57CvWk7OqNQYDWrSvrRftGsX1qHqKInkw7cWIXbJBkRII
+        nf0SklGQ==;
+Received: from p200300de573c8400505400fffe15ac42.dip0.t-ipconnect.de ([2003:de:573c:8400:5054:ff:fe15:ac42]:51890 helo=mail.maya.org)
+        by sub6.freenet.de with esmtpsa (ID andihartmann@freenet.de) (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128) (port 465) (Exim 4.92 #3)
+        id 1l5BDO-0001Ry-Cy; Thu, 28 Jan 2021 18:36:18 +0100
+Received: internal info suppressed
+Subject: Re: USB2 / USB3 compatibility problems: xhci_hcd 0000:00:06.0: WARN
+ Wrong bounce buffer write length: 0 != 512
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
         linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+References: <3b4e35d2-9508-e0aa-eaf8-32e524ad81c4@01019freenet.de>
+ <756e7b88-1142-4758-b8f7-a8eaf510b422@01019freenet.de>
+ <edc3c7b1-98fa-9062-5c17-426e8ad17370@01019freenet.de>
+ <7e953b15-925a-1512-4d15-c07fc03f9059@01019freenet.de>
+ <f83677b5-e3d1-afdb-c8d4-f9969fa3fe84@linux.intel.com>
+ <a65a9299-1e5b-f15d-2ae7-f0a21938f4fd@01019freenet.de>
+ <d9fd7812-43cc-2813-5222-5e39b63fccbc@01019freenet.de>
+ <8de6ecb9-4a39-5742-a358-d6965feffc79@linux.intel.com>
+ <021e1727-0e2e-0207-ace2-4382489eea1f@linux.intel.com>
+ <de0cab7e-6e25-fe80-b1d7-d50f63d6e54c@01019freenet.de>
+ <9c3c9dd7-bcfb-785c-8c11-39f78a7fca01@01019freenet.de>
+ <ab675d28-d80f-ed72-5db0-943cb26819f1@linux.intel.com>
+From:   Andreas Hartmann <andihartmann@01019freenet.de>
+Message-ID: <c7c45204-c63e-01c3-4879-7495cbdd1788@01019freenet.de>
+Date:   Thu, 28 Jan 2021 18:36:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+MIME-Version: 1.0
+In-Reply-To: <ab675d28-d80f-ed72-5db0-943cb26819f1@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originated-At: 2003:de:573c:8400:5054:ff:fe15:ac42!51890
+X-FNSign: v=2 s=B19339E32DFCB8DFCDF5DD52A599210473FB11EC0F4CAE25614F701E14B7B77C
+X-Scan-TS: Thu, 28 Jan 2021 18:36:18 +0100
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 28 Jan 2021 at 09:22, Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Jan 28, 2021 at 09:12:59AM +0100, Sylvain Pelissier wrote:
-> > The macros defining structures for descriptors use token
-> > pasting incorrectly. For example, the macro
-> > UVC_EXTENSION_UNIT_DESCRIPTOR(1, 2) defines a structure named
-> > uvc_extension_unit_descriptor_p_2 which should be
-> > uvc_extension_unit_descriptor_1_2 instead.
-> >
-> > Signed-off-by: Sylvain Pelissier <sylvain.pelissier@gmail.com>
-> > ---
-> >  include/uapi/linux/usb/video.h | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/include/uapi/linux/usb/video.h b/include/uapi/linux/usb/video.h
-> > index d854cb19c42c..1eb982df87a0 100644
-> > --- a/include/uapi/linux/usb/video.h
-> > +++ b/include/uapi/linux/usb/video.h
-> > @@ -324,7 +324,7 @@ struct uvc_extension_unit_descriptor {
-> >  #define UVC_DT_EXTENSION_UNIT_SIZE(p, n)             (24+(p)+(n))
-> >
-> >  #define UVC_EXTENSION_UNIT_DESCRIPTOR(p, n) \
-> > -     uvc_extension_unit_descriptor_##p_##n
-> > +     uvc_extension_unit_descriptor_##p##_##n
-> >
-> >  #define DECLARE_UVC_EXTENSION_UNIT_DESCRIPTOR(p, n)  \
-> >  struct UVC_EXTENSION_UNIT_DESCRIPTOR(p, n) {         \
-> > @@ -371,7 +371,7 @@ struct uvc_input_header_descriptor {
-> >  #define UVC_DT_INPUT_HEADER_SIZE(n, p)                       (13+(n*p))
-> >
-> >  #define UVC_INPUT_HEADER_DESCRIPTOR(n, p) \
-> > -     uvc_input_header_descriptor_##n_##p
-> > +     uvc_input_header_descriptor_##n##_##p
-> >
-> >  #define DECLARE_UVC_INPUT_HEADER_DESCRIPTOR(n, p)    \
-> >  struct UVC_INPUT_HEADER_DESCRIPTOR(n, p) {           \
-> > @@ -406,7 +406,7 @@ struct uvc_output_header_descriptor {
-> >  #define UVC_DT_OUTPUT_HEADER_SIZE(n, p)                      (9+(n*p))
-> >
-> >  #define UVC_OUTPUT_HEADER_DESCRIPTOR(n, p) \
-> > -     uvc_output_header_descriptor_##n_##p
-> > +     uvc_output_header_descriptor_##n##_##p
-> >
-> >  #define DECLARE_UVC_OUTPUT_HEADER_DESCRIPTOR(n, p)   \
-> >  struct UVC_OUTPUT_HEADER_DESCRIPTOR(n, p) {          \
-> > --
-> > 2.25.1
-> >
->
-> And no one noticed this?  If not, then why do we have these defines at
-> all, as obviously they are not used :)
+Hello Mathias,
 
-The problem is not detected if you have descriptors with the second
-argument different each time since the structure name will change. It
-is maybe why it was not noticed. Nevertheless, the extension unit, the
-input header and the output header descriptors are part of the USB
-video class specification and are often used by devices. We have
-detected the problem while implementing a usb gadget having such
-descriptors.
+On 28.01.21 at 15:14 Mathias Nyman wrote:
+> 
+> I think I'll submit this patch as it is (with a proper commit message)
+> can I add reported-by: Andreas Hartmann <andihartmann@01019freenet.de>, and
+> tested-by: Andreas Hartmann <andihartmann@01019freenet.de> tags to the patch?
 
->
-> thanks,
->
-> greg k-h
+I forgot:
+Would it be possible to add the warning about wrong bounce buffer write
+length to the transfer_buffer-case, too?
+
+
+Thanks
+Andreas
