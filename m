@@ -2,101 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA69E30849D
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Jan 2021 05:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43C2530858A
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Jan 2021 07:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231907AbhA2Esy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Jan 2021 23:48:54 -0500
-Received: from a1.mail.mailgun.net ([198.61.254.60]:44189 "EHLO
-        a1.mail.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbhA2EsR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Jan 2021 23:48:17 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1611895657; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=ZF8vF2fXsfi0RVA4nhuPT8u9xa7jaAoRy2vf7Vy4rT8=; b=YIrpPbs3EVG1YU+CjRAQknJ9MT75lbq20M+XvI4IpmpE6Zq30JDwFzPYRT1GoxQtsqiluANo
- GHacfmvWxAF7DDX1xR6DCy+YS+mxWbAvYZM6rcEfqDyDP99hDPEeCyj47qJFuck6E7S9xB0E
- ui1RlYhaZyGxEI2TJUAwwohJbIA=
-X-Mailgun-Sending-Ip: 198.61.254.60
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
- 6013934183b274b0af6520d8 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 29 Jan 2021 04:46:57
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id BA6ACC43461; Fri, 29 Jan 2021 04:46:55 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 779F2C43462;
-        Fri, 29 Jan 2021 04:46:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 779F2C43462
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH v7 5/5] dt-bindings: usb: dwc3: Update dwc3 TX fifo properties
-Date:   Thu, 28 Jan 2021 20:46:44 -0800
-Message-Id: <1611895604-4496-6-git-send-email-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1611895604-4496-1-git-send-email-wcheng@codeaurora.org>
-References: <1611895604-4496-1-git-send-email-wcheng@codeaurora.org>
+        id S232091AbhA2GO7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Jan 2021 01:14:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231868AbhA2GO5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Jan 2021 01:14:57 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BA8C061573
+        for <linux-usb@vger.kernel.org>; Thu, 28 Jan 2021 22:14:16 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id kx7so5243440pjb.2
+        for <linux-usb@vger.kernel.org>; Thu, 28 Jan 2021 22:14:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u5XPU2O92MWNnCS3LVkCZpTO8otBVCUVbbrYWvGV4XU=;
+        b=B1d8OMzUWxIcJs3Nh5oCqsfJaWFt4KFNUhkf0zXV53Jm52BfVmRXvqbq8TcRIUM8i8
+         gDPRtWeMChqoYd4SxJwOCATj+9P0/p1lPBJ7rMI3BoxR3OLohzmulkPcRp2a1OeH1Lrj
+         QWu2wxCq9ssjTX7j/KSJYf2AIVvxmTBR/tdS0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u5XPU2O92MWNnCS3LVkCZpTO8otBVCUVbbrYWvGV4XU=;
+        b=Yqwlf7XxufcHD/gHBBqgMWyYuFbc8u7eLluUGtPnqpyUPkwONN8bjHNlZyjYiuK+j0
+         Uj9ki/SUVYtaWwyBm/92+eR0XhGW/UJY0dTCBbA/k/K7ZvqlmxqNJTbjlAqXGO9UYMD5
+         O+Rb74qw+HKdU9JDaV821NMOXqTDduqhRPkPZl9fXBhdmq+pIpfwRDHvlm82VAinRnSo
+         qcWBREgWuLu7O5rEPaOMmjCxyGJmALGCIeN3EMu99N8CXa3nw7I0E+QGZJoAMMKu2oHE
+         NnhcifoDI+IBG1Zjwgyshdo2aW/JCAUZ1B4CK7QKGKMBPbID1W7/o7En8Xh7sj/ONJR/
+         DEOg==
+X-Gm-Message-State: AOAM532aFMIo5Jz0SRW/AqdmjjT3q9EjC0PYxH+S61Kz98ehpL9zcbj8
+        +9vvpt1/4NtnXm5joDfEiRN/LQ==
+X-Google-Smtp-Source: ABdhPJyxB6vx5pQsRDOZMdlIx2/tW7HucM03QMW9SkTmUrh/OcTHy8sq9gjZULItqURsORdeeT/Plw==
+X-Received: by 2002:a17:90b:3c8:: with SMTP id go8mr3103108pjb.105.1611900856579;
+        Thu, 28 Jan 2021 22:14:16 -0800 (PST)
+Received: from bleung.mtv.corp.google.com ([2620:15c:202:201:f693:9fff:fef4:fc72])
+        by smtp.gmail.com with ESMTPSA id 17sm7551013pfv.13.2021.01.28.22.14.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jan 2021 22:14:16 -0800 (PST)
+From:   Benson Leung <bleung@chromium.org>
+To:     heikki.krogerus@linux.intel.com, enric.balletbo@collabora.com,
+        pmalani@chromium.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     groeck@chromium.org, bleung@google.com, bleung@chromium.org
+Subject: [PATCH 0/6] usb: typec: and platform/chrome: Add PD revision numbers
+Date:   Thu, 28 Jan 2021 22:14:00 -0800
+Message-Id: <20210129061406.2680146-1-bleung@chromium.org>
+X-Mailer: git-send-email 2.30.0.365.g02bc693789-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Update the tx-fifo-resize property with a better description, while
-adding the tx-fifo-max-num, which is a new parameter allowing
-adjustments for the maximum number of packets the txfifo resizing logic
-can account for while resizing the endpoints.
+USB Power Delivery has a 3 entity handshake (port, cable, partner), and as
+of USB PD R3.0, each entity may independently support either Revision 2 or
+Revision 3 signaling and protocol. In order for userspace and the kernel
+to properly process the data objects received from a particular SOP*, we
+must know to which revision of the spec each conforms.
 
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
----
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+This series adds individual version numbers for the partner and the cable,
+and exposes them in the appropriate sysfs in /sys/class/typec.
 
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index 2247da7..652b246 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -283,10 +283,21 @@ properties:
-     maximum: 16
- 
-   tx-fifo-resize:
--    description: Determines if the FIFO *has* to be reallocated
--    deprecated: true
-+    description: Determines if the TX fifos can be dynamically resized depending
-+      on the number of IN endpoints used and if bursting is supported.  This
-+      may help improve bandwidth on platforms with higher system latencies, as
-+      increased fifo space allows for the controller to prefetch data into its
-+      internal memory.
-     type: boolean
- 
-+  tx-fifo-max-num:
-+    description: Specifies the max number of packets the txfifo resizing logic
-+      can account for when higher endpoint bursting is used. (bMaxBurst > 6) The
-+      higher the number, the more fifo space the txfifo resizing logic will
-+      allocate for that endpoint.
-+    $ref: /schemas/types.yaml#/definitions/uint8
-+    minimum: 3
-+
-   snps,incr-burst-type-adjustment:
-     description:
-       Value for INCR burst type of GSBUSCFG0 register, undefined length INCR
+I provide as a first implementation of this, platform/chrome's cros_ec_typec
+driver, whose underlying status messages convey the SOP and SOP' revisions
+already.
+
+Thanks,
+Benson
+
+Benson Leung (6):
+  usb: typec: Standardize PD Revision format with Type-C Revision
+  usb: typec: Provide PD Specification Revision for cable and partner
+  usb: typec: Add typec_partner_set_pd_revision
+  platform/chrome: cros_ec_typec: Report SOP' PD revision from status
+  platform/chrome: cros_ec_typec: Set Partner PD revision from status
+  platform/chrome: cros_ec_typec: Set opmode to PD on SOP connected
+
+ Documentation/ABI/testing/sysfs-class-typec | 20 ++++++-
+ drivers/platform/chrome/cros_ec_typec.c     | 26 +++++++--
+ drivers/usb/typec/class.c                   | 59 +++++++++++++++++++--
+ include/linux/usb/typec.h                   | 11 ++++
+ 4 files changed, 108 insertions(+), 8 deletions(-)
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.30.0.365.g02bc693789-goog
 
