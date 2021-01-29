@@ -2,159 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AA33081B2
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Jan 2021 00:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA40E3082C7
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Jan 2021 02:00:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbhA1XJf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Jan 2021 18:09:35 -0500
-Received: from m42-8.mailgun.net ([69.72.42.8]:26939 "EHLO m42-8.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231509AbhA1XJe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 28 Jan 2021 18:09:34 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1611875348; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=O8kFXrZt93Vjk8mo2c8C6NAXhyoA4VuHGdA2XbbyiBY=; b=hVU4Ztka/+5u1Et3chC1ojLzd7LPUv4RlI2LJbIhY1woPOoeNu3RMsB/I7RTEH7O+T2KG4Qg
- cZwmLqf1cUcY1wuWqYGQDCBcFKHZ9lcAnEIhoeEMi79Adr0FHJGoEOmJ4iBY6mI6djw8gzcH
- 2CB+9hqfRk24BWpPkZFg2vApryc=
-X-Mailgun-Sending-Ip: 69.72.42.8
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 601343f8bcde412162da6a3a (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 28 Jan 2021 23:08:40
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 97D82C43461; Thu, 28 Jan 2021 23:08:39 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [10.110.127.29] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2A11AC433C6;
-        Thu, 28 Jan 2021 23:08:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2A11AC433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v6 3/4] usb: dwc3: Resize TX FIFOs to meet EP bursting
- requirements
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peter.chen@nxp.com,
-        jackp@codeaurora.org
-References: <1611288100-31118-1-git-send-email-wcheng@codeaurora.org>
- <1611288100-31118-4-git-send-email-wcheng@codeaurora.org>
- <YAsHbj/mITeiY5Cq@builder.lan>
- <724cb274-36ce-fb48-a156-4eaf9e686fdf@codeaurora.org>
- <20210126015543.GB1241218@yoga>
- <99dd9419-a8fd-9eb2-9582-d24f865ecf70@codeaurora.org>
- <YA+lVFWlBDvN4MTF@builder.lan>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <dec42f26-6b67-56ec-74a5-feae5e5c5df5@codeaurora.org>
-Date:   Thu, 28 Jan 2021 15:08:37 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S231486AbhA2A5t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Jan 2021 19:57:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231127AbhA2A5l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Jan 2021 19:57:41 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2098CC061573
+        for <linux-usb@vger.kernel.org>; Thu, 28 Jan 2021 16:57:01 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id f16so5638674wmq.5
+        for <linux-usb@vger.kernel.org>; Thu, 28 Jan 2021 16:57:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nexus-software-ie.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0EQ8oHxswQLReramq9MegxVqQbGVrPNP9ryMhszFjBk=;
+        b=jwq8M9JUZCx6Pnwz1HkbsBA2fTitT+cg4tdbXBhP45yNzL13pw+G2HWtAFapRoG7SK
+         qyor7CDorsFQsC+9cpI8TPo35+nDzR56NPZukataTMmUNirp+VvY6jYKjZ/dfRWkLwxA
+         B3PkJ/2JCcEvFkfC6POrhHi+IZtEEk8X/AL+cg9NrqVFrPaqifCS5ZEBrOFzClf4oLh6
+         TU1TlxZ4KnDOSZAikzBzfDX3Lv/urkmVwGzy5d3XDyqOe6WuYPLHt+jz6mXmhHx9cpjU
+         PbNW9nlZQbKD9GOABpFXPHlyR/KYPVPI6G5kOOZXxtj3ESCLRjmPAsDsJO0esui+9Rpo
+         2TXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0EQ8oHxswQLReramq9MegxVqQbGVrPNP9ryMhszFjBk=;
+        b=JNufeYKqmQereVApRRqn+94wC/HGbv6dbkH4rCNhVsNFYUniUVQveKe6ovUKYWRSqp
+         dvAQ+CzGR/z2hTYShwjcIf+w5BEESasNS99FpC2HFZ9Sbel1HMLJOVfwgbq/di22MMN0
+         y2UbwxrQqovg1lGXc2OLCnwoIc6CpjQsedSrNumK1HC7PrjXICYFGC1dItPIsLP9mCGQ
+         4c2Irdi/5smZqhyyv1ehS3i7sZkRy4O3X8VSMzJNO3eNxiB+H/CzoO1teauWLZwqHcB7
+         6tMb5SJ6wcAW748tuDQ/2n91TKE6nKv5u51pBN95mrom5M6NGAukLwjqxeGm0oTYlZqp
+         mOrg==
+X-Gm-Message-State: AOAM53117R6S+qOwTYl/dY5JK6pQ3AfNAJkuEAcg/IT2Xf40Mwuii5fY
+        iuPL7ezoRcYJN85u93TeODM18jna4Nfiug==
+X-Google-Smtp-Source: ABdhPJys7hSWhUI0t0CZYBMud1VhQErR8P6z+a5CQRh2QM9TbVxDiCmcvce6I0WEcPAc1wKhdSysNg==
+X-Received: by 2002:a1c:9850:: with SMTP id a77mr1443768wme.163.1611881819906;
+        Thu, 28 Jan 2021 16:56:59 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id z184sm8185018wmg.7.2021.01.28.16.56.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jan 2021 16:56:59 -0800 (PST)
+Subject: Re: [PATCH] usb: dwc3: gadget: Init only available HW eps
+To:     Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Cc:     John Youn <John.Youn@synopsys.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <3080c0452df14d510d24471ce0f9bb7592cdfd4d.1609866964.git.Thinh.Nguyen@synopsys.com>
+ <87eeiycxld.fsf@kernel.org>
+ <75d63bab-1cdc-737e-8ae2-64e0ddeeef75@synopsys.com>
+ <87k0spay6z.fsf@kernel.org>
+ <cacf58e7-e131-2caa-5fb3-1af7db8270b4@synopsys.com>
+ <19b685a9-0c25-9b6c-ecaf-ffca4069182b@synopsys.com>
+ <87eeivwrb9.fsf@kernel.org>
+From:   Bryan O'Donoghue <pure.logic@nexus-software.ie>
+Message-ID: <c322742e-271d-e267-f499-3cc8a2dc7df6@nexus-software.ie>
+Date:   Fri, 29 Jan 2021 00:58:19 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.3
 MIME-Version: 1.0
-In-Reply-To: <YA+lVFWlBDvN4MTF@builder.lan>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <87eeivwrb9.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 1/25/2021 9:15 PM, Bjorn Andersson wrote:
-> On Mon 25 Jan 22:32 CST 2021, Wesley Cheng wrote:
->> On 1/25/2021 5:55 PM, Bjorn Andersson wrote:
->>> On Mon 25 Jan 19:14 CST 2021, Wesley Cheng wrote:
+On 08/01/2021 12:23, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+>>>>>> How have you verified this patch? Did you read Bryan's commit log? This
+>>>>>> is likely to reintroduce the problem raised by Bryan.
+>>>>>>
+>>>>> We verified with our FPGA HAPS with various number of endpoints. No
+>>>>> issue is seen.
+>>>> That's cool. Could you please make sure our understanding of this is
+>>>> sound and won't interfere with any designs? If we modify this part of
+>>>> the code again, I'd like to see a clear reference to a specific section
+>>>> of the databook detailing the expected behavior :-)
+>>>>
+>>>> cheers
+>>>>
+>>> Hm... I didn't consider bidirection endpoint other than control endpoint.
 >>>
->>>>
->>>>
->>>> On 1/22/2021 9:12 AM, Bjorn Andersson wrote:
->>>>> On Thu 21 Jan 22:01 CST 2021, Wesley Cheng wrote:
->>>>>
->>>>
->>>> Hi Bjorn,
->>>>>
->>>>> Under what circumstances should we specify this? And in particular are
->>>>> there scenarios (in the Qualcomm platforms) where this must not be set?
->>>>> The TXFIFO dynamic allocation is actually a feature within the DWC3
->>>> controller, and isn't specifically for QCOM based platforms.  It won't
->>>> do any harm functionally if this flag is not set, as this is meant for
->>>> enhancing performance/bandwidth.
->>>>
->>>>> In particular, the composition can be changed in runtime, so should we
->>>>> set this for all Qualcomm platforms?
->>>>>
->>>> Ideally yes, if we want to increase bandwith for situations where SS
->>>> endpoint bursting is set to a higher value.
->>>>
->>>>> And if that's the case, can we not just set it from the qcom driver?
->>>>>
->>>> Since this is a common DWC3 core feature, I think it would make more
->>>> sense to have it in DWC3 core instead of a vendor's DWC3 glue driver.
->>>>
+>>> DWC3_USB3x_NUM_EPS specifies the number of device mode for single
+>>> directional endpoints. A bidirectional endpoint needs 2 single
+>>> directional endpoints, 1 IN and 1 OUT. So, if your setup uses 3
+>>> bidirection endpoints and only those, DWC3_USB3x_NUM_EPS should be 6.
+>>> DWC3_USB3x_NUM_IN_EPS specifies the maximum number of IN endpoint active
+>>> at any time.
 >>>
->>> I don't have any objections to implementing it in the core driver, but
->>> my question is can we just skip the DT binding and just enable it from
->>> the vendor driver?
+>>> However, I will have to double check and confirm internally regarding
+>>> how to determine many endpoint would be available if bidirection
+>>> endpoints come into play.
 >>>
->>> Regards,
->>> Bjorn
+>>> Thanks for pointing this out. Will get back on this.
+>>>
+>>> Thinh
 >>>
 >>
->> Hi Bjorn,
+>> Ok. Just had some discussion internally. So, like you said, any endpoint
+>> can be configured in either direction. However, we are limited to
+>> configuring up to DWC_USB3x_NUM_IN_EPS because each IN endpoint has its
+>> own TxFIFO while for OUT, they share the same RxFIFO. So we could have
+>> up to DWC_USB3x_NUM_EPS number of OUT endpoints. So, the issue Bryan
+>> attempted to address is still there.
 >>
->> I see.  I think there are some designs which don't have a DWC3 glue
->> driver, so assuming there may be other platforms using this, there may
->> not always be a vendor driver to set this.
->>
+>> However, the current code still has some assumption on the number of IN
+>> and OUT endpoints, I need to think of a better solution.
 > 
-> You mean that there are implementations of dwc3 without an associated
-> glue driver that haven't yet realized that they need this feature?
-> 
-> I would suggest then that we implement the core code necessary, we
-> enable it from the Qualcomm glue layer and when someone realize that
-> they need this without a glue driver it's going to be trivial to add the
-> DT binding.
->>
-> The alternative is that we're lugging around a requirement to specify
-> this property in all past, present and future Qualcomm dts files - and
-> then we'll need to hard code it for ACPI anyways.
-> 
-Hi Bjorn,
-
-Can we utilize the of_add_property() call to add the "tx-fifo-resize"
-property from the dwc3_qcom_register_core() API?  That way at least the
-above concern would be addressed.
-
-I'm not too familiar with the ACPI design, but I do see that the
-dwc3-qcom does have an array carrying some DWC3 core properties.  Looks
-like we can add the tx-fifo-resize property here too.
-
-static const struct property_entry dwc3_qcom_acpi_properties[] = {
-	PROPERTY_ENTRY_STRING("dr_mode", "host"),
-	{}
-};
-
-
-Thanks
-Wesley Cheng
-
-> Regards,
-> Bjorn
+> Yes, the assumption still exists because at the time there was no better
+> solution :-)
 > 
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Just found this now.
+
+The commit log is too wordy. You can configure the RTL so that every 
+endpoint can be either direction.
+
+So DWC_USB3_NUM == DWC_USB3_NUM_IN_EPS
+
+The old code was predicated on the notion the RTL was configured with 
+EP0 IN/OUT basically fixed.
+
+In practice this _should_ be the case but the RTL does not enforce it 
+and yes this appears in a real SoC from Imagination.
+
+---
+bod
