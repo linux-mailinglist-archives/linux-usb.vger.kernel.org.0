@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC3C3098E5
-	for <lists+linux-usb@lfdr.de>; Sun, 31 Jan 2021 00:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7470830993F
+	for <lists+linux-usb@lfdr.de>; Sun, 31 Jan 2021 01:08:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbhA3XtE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 30 Jan 2021 18:49:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
+        id S232369AbhA3Xsn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 Jan 2021 18:48:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbhA3Xsh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 Jan 2021 18:48:37 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A23FC061756;
-        Sat, 30 Jan 2021 15:47:55 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id l9so18613194ejx.3;
-        Sat, 30 Jan 2021 15:47:55 -0800 (PST)
+        with ESMTP id S230517AbhA3Xsd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 Jan 2021 18:48:33 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67945C061574;
+        Sat, 30 Jan 2021 15:47:53 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id d2so14809514edz.3;
+        Sat, 30 Jan 2021 15:47:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=cxSfak/V43jKqWcO6/6SQQ+5yWV+HRDzMcHjvD41g54=;
-        b=uxz6anzkuqOHZ/axAQOWNhrzh3/gFCvhu56kTjpD210Q7s4PpFZ1pSLRyNECjCXTWq
-         r/pgJeBEgw2QLehfInddLOuB0QMBglGV5l/63EIp1uNeTcKuBcBmAQIv4o+XCKfhnbkK
-         0mvMnpaBGPs0lueb8QLC/SakCdoNOldhbY8ok/dnP9iERYVG6gkBxCS526aOUpPhacaP
-         C57EBXxoZWdiLDnm0vbTduo8YO+sAIHVI2f4DH4jWlgJr2OhswCy2L3/g+CkJ9hhbZvs
-         w0JhWpAmQuM3bUM11ztARQh7SkbTzPbEVzb3W6vJaq3pg10sAFOgY3mjFj8ucVx1jI22
-         1kOA==
+        bh=5opFbc9GXOiDzoGX7Mdpij1lxqzsIU+iWus0/IPai1Y=;
+        b=gnPSiUQ7XA1pmo8A9e8MOqyvDfgsVhA9FXF2FnSVF17ljc6WUH8ZRJi8oo4aOGKid+
+         2VLyXXyu0jGAjnfFBj643k5+p5oaeEilaluaze+QZEzYGW7nxMNBmzW7fGG8x6GpA9dO
+         GOUgL81i7pDNxC6id1xoPVpD0RBL5puGy3pr/Z/JxpOR3zwd5TZH98Y2R90qiohx5FlI
+         XOaM0hj1Uy2h5sAAiDIN2b5T0rsXPDw/NgbVFsiwElELsrxx8usEv0rc1ZPfdh6r3t+X
+         xN/erEoOold2UaIaR9fks+Owd5sKmO8eMPGrqIwXF8Qovd2t+5t/QBRdIYsrrPTCSXJr
+         hMXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=cxSfak/V43jKqWcO6/6SQQ+5yWV+HRDzMcHjvD41g54=;
-        b=BoeEeMcKq2+KCgMJgUvxOVVoluTjVkTIpWTLKL7WIE/HsQzGIpPbzUy5gQ5xfn4I6b
-         b9FNZgxTalsHN4CEbt2mgpCcxAIBDDccEHUXKCXvmr5wNR8yQGuicHQsXbReTIKLMfsG
-         jQVDlzc4BTjr6ARBuKQRze4NqIlVnvhBbEyxV2Umsmp0IrcQT9v+Q3KmgUe9Bw669in6
-         jBkvAqrJ05POR6enKL/77l10mAdmDc3mUJNpVm/YttjIJ0+iPaVQ3kCQZqwGC5VcKZUn
-         IN4DmG/lLpyoUKHas9zCCM17wU5RKv0/frEYewiLO/YBvxnszv2jWVNsT2Mlm4Zh0FyW
-         I/oQ==
-X-Gm-Message-State: AOAM531eoo0oSx4ozDdtdT1t8bKaBjE1s2f6PtxT+mdNd8H6oOPlL/0E
-        01cHKst4Mo7paOAhvTcwW/7zlCI6l4xHWJFE
-X-Google-Smtp-Source: ABdhPJzpIZ7klZL3V2lxnJc2o27HrHtk93XeCrArdoVu/g6/UkjAF1Bh0O3bnuTPL2BF7rasRGrkWQ==
-X-Received: by 2002:a17:907:7785:: with SMTP id ky5mr11296923ejc.176.1612050474133;
-        Sat, 30 Jan 2021 15:47:54 -0800 (PST)
+        bh=5opFbc9GXOiDzoGX7Mdpij1lxqzsIU+iWus0/IPai1Y=;
+        b=BAuWxPBaWjnzrRMRJQD7DNWJn5Sj+n/TL+ae9/CIPMNC9Fl++s/lB/FhbVgEaQAue0
+         YTGP5qSNXim707sEDOpJI7X7KkPcQm/Yd61HkwX1lrbI8ZC4L/p344HHCDkceA1NvHGl
+         0LHWgfWn22Y+GJmt4MUTb6ULbGY2v3RNJcq704XXyjhGGk5cCzUtlSMS7YvWjZMqWTIM
+         kHHbzU81FtdyQc4RRgzK28tNBsq4ixDTCWJSpWc9qq9dhEC6vbzytUb8CDCYS/kb3/Z1
+         EvQfnr+8kZxIbi6Bg56ch6Z8/DFDBG3feJFr/MbX7yVvN0Bp5kdPRkNyK1cE434RHSdz
+         KoIQ==
+X-Gm-Message-State: AOAM532gzjDG440Q6LhsX+cHa17FKlivS5OsYzXamaHfMHACYyIHIb/K
+        KTUZCqKcA1w4jT8UP7G5w8pSxZkqF6h9mkWe
+X-Google-Smtp-Source: ABdhPJxT/xoRO4n8PBEt6uAecRXvTXhIeTVTpJIiLGUmKwacac7MDFi4UBTQmzHef6Rfg4Gu6hkjqQ==
+X-Received: by 2002:aa7:c7d8:: with SMTP id o24mr12230542eds.328.1612050472199;
+        Sat, 30 Jan 2021 15:47:52 -0800 (PST)
 Received: from stitch.. ([80.71.140.73])
-        by smtp.gmail.com with ESMTPSA id u17sm6628009edr.0.2021.01.30.15.47.53
+        by smtp.gmail.com with ESMTPSA id u17sm6628009edr.0.2021.01.30.15.47.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Jan 2021 15:47:53 -0800 (PST)
+        Sat, 30 Jan 2021 15:47:51 -0800 (PST)
 Sender: Emil Renner Berthing <emil.renner.berthing@gmail.com>
 From:   Emil Renner Berthing <kernel@esmil.dk>
 To:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
@@ -61,9 +61,9 @@ Cc:     Emil Renner Berthing <kernel@esmil.dk>,
         Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
         Jing Xiangfeng <jingxiangfeng@huawei.com>,
         Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/9] ifb: use new tasklet API
-Date:   Sun, 31 Jan 2021 00:47:24 +0100
-Message-Id: <20210130234730.26565-4-kernel@esmil.dk>
+Subject: [PATCH 1/9] arcnet: use new tasklet API
+Date:   Sun, 31 Jan 2021 00:47:22 +0100
+Message-Id: <20210130234730.26565-2-kernel@esmil.dk>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210130234730.26565-1-kernel@esmil.dk>
 References: <20210130234730.26565-1-kernel@esmil.dk>
@@ -78,35 +78,35 @@ commit 12cc923f1ccc ("tasklet: Introduce new initialization API")
 
 Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
 ---
- drivers/net/ifb.c | 7 +++----
+ drivers/net/arcnet/arcnet.c | 7 +++----
  1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ifb.c b/drivers/net/ifb.c
-index fa63d4dee0ba..ab7022582154 100644
---- a/drivers/net/ifb.c
-+++ b/drivers/net/ifb.c
-@@ -59,9 +59,9 @@ static netdev_tx_t ifb_xmit(struct sk_buff *skb, struct net_device *dev);
- static int ifb_open(struct net_device *dev);
- static int ifb_close(struct net_device *dev);
- 
--static void ifb_ri_tasklet(unsigned long _txp)
-+static void ifb_ri_tasklet(struct tasklet_struct *t)
- {
--	struct ifb_q_private *txp = (struct ifb_q_private *)_txp;
-+	struct ifb_q_private *txp = from_tasklet(txp, t, ifb_tasklet);
- 	struct netdev_queue *txq;
- 	struct sk_buff *skb;
- 
-@@ -170,8 +170,7 @@ static int ifb_dev_init(struct net_device *dev)
- 		__skb_queue_head_init(&txp->tq);
- 		u64_stats_init(&txp->rsync);
- 		u64_stats_init(&txp->tsync);
--		tasklet_init(&txp->ifb_tasklet, ifb_ri_tasklet,
--			     (unsigned long)txp);
-+		tasklet_setup(&txp->ifb_tasklet, ifb_ri_tasklet);
- 		netif_tx_start_queue(netdev_get_tx_queue(dev, i));
+diff --git a/drivers/net/arcnet/arcnet.c b/drivers/net/arcnet/arcnet.c
+index e04efc0a5c97..69d8920e394b 100644
+--- a/drivers/net/arcnet/arcnet.c
++++ b/drivers/net/arcnet/arcnet.c
+@@ -393,9 +393,9 @@ static void arcnet_timer(struct timer_list *t)
  	}
- 	return 0;
+ }
+ 
+-static void arcnet_reply_tasklet(unsigned long data)
++static void arcnet_reply_tasklet(struct tasklet_struct *t)
+ {
+-	struct arcnet_local *lp = (struct arcnet_local *)data;
++	struct arcnet_local *lp = from_tasklet(lp, t, reply_tasklet);
+ 
+ 	struct sk_buff *ackskb, *skb;
+ 	struct sock_exterr_skb *serr;
+@@ -483,8 +483,7 @@ int arcnet_open(struct net_device *dev)
+ 		arc_cont(D_PROTO, "\n");
+ 	}
+ 
+-	tasklet_init(&lp->reply_tasklet, arcnet_reply_tasklet,
+-		     (unsigned long)lp);
++	tasklet_setup(&lp->reply_tasklet, arcnet_reply_tasklet);
+ 
+ 	arc_printk(D_INIT, dev, "arcnet_open: resetting card.\n");
+ 
 -- 
 2.30.0
 
