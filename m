@@ -2,146 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A558F30914F
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Jan 2021 02:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56EE73094E1
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Jan 2021 12:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbhA3Bl0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Jan 2021 20:41:26 -0500
-Received: from mga05.intel.com ([192.55.52.43]:58296 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230525AbhA3BiN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 29 Jan 2021 20:38:13 -0500
-IronPort-SDR: Xqnhs+nU6mfMpMrKfo+FCxRrjUE7yjDDnQzJfUPtJrvC0/F/Ve96KSk3KvRBZcMy9eM2zSwSgn
- vaeaQCS0I6Rw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9879"; a="265337271"
-X-IronPort-AV: E=Sophos;i="5.79,387,1602572400"; 
-   d="scan'208";a="265337271"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2021 17:36:41 -0800
-IronPort-SDR: 9GRqoqAZcf+JAcWZlWWjIG2HivYNkdsyVGP2ptrzgQ6LE3WiFJb7FSncg9ro++l3GQwBtFFELX
- RgCs/3msYqOA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,387,1602572400"; 
-   d="scan'208";a="365569570"
-Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 29 Jan 2021 17:36:39 -0800
-Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1l5fBn-0004CO-3A; Sat, 30 Jan 2021 01:36:39 +0000
-Date:   Sat, 30 Jan 2021 09:36:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 3c648d3deb0f95c360c9b91f49c0f313db0cef31
-Message-ID: <6014b80e.e+fH7W40OU8L+edl%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S230211AbhA3LbG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 Jan 2021 06:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229814AbhA3LbE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 Jan 2021 06:31:04 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3973CC061573
+        for <linux-usb@vger.kernel.org>; Sat, 30 Jan 2021 03:30:24 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id k25so12997364oik.13
+        for <linux-usb@vger.kernel.org>; Sat, 30 Jan 2021 03:30:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rollanet.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=NI8d0bltwLSrZNp2ZdWUEe045QTPOh5t4rEtgYWwbLg=;
+        b=XA97/H+buH7CedfWXhC98cWVV2kJ443hItSNpKayMCU0O7WZRRxnEabh6p0AiDRrKY
+         5UjbrC6YhsUCabGFySnI6Dpwnf3T8h45NYgL8cWKPUlLHbKkQyAJipJDqEOCIzBkScZh
+         ML7c37za37bNH9DNF5EHcGeXwmUtz4EY/r+oE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=NI8d0bltwLSrZNp2ZdWUEe045QTPOh5t4rEtgYWwbLg=;
+        b=UVY4fbZe9YYN3nKRStbZwH4EPYIXX+jgwMiEHITztVuQb65XpYey/jAEGB4qlCAbn7
+         y0twr1/Jc8QRyLb3btrVU5C4G5cbwSdhQvFIaK+ihX6x4YTpr8KSY5GJl3zy3nK/MuiI
+         8Ue3gBiQfW/Fp2204qDbFe791eoOZvlJJ+PaUydpLQBP6gXGPWEbO1nFOcGcqYToQRfZ
+         qWDW9UjtdSm0HOz+CrycA3kKafo13ECCQppH4SNQaR94gzwqYVYDapicj/k0fOItysOn
+         9cgIQvh3GFSRex4eRnZfg//PL9G7Ynri13xeGnJ2ydZti17gmIlllZDuepu1V6v5/2IA
+         DasQ==
+X-Gm-Message-State: AOAM5311FlGvkx56OdRmeXNlxl6+8rbJ0pygdyFHMGl+8TjMre0AoaWs
+        jeFLGy5RcqPJqXCurTlZoNo7qmcR+K0z7LT5mjvNAweteQhw1A==
+X-Google-Smtp-Source: ABdhPJyj0fCzijl0+LTT01gF0uRJh8rsjqvpC2U8EyX5fOgYLp8wU9qTvW5xbhN1HPoYLgbV59QG47PtMMPr8MXqyVw=
+X-Received: by 2002:aca:4257:: with SMTP id p84mr5322079oia.176.1612006223632;
+ Sat, 30 Jan 2021 03:30:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <CADuz4ONmN299aw460r4wXCEK5F1v9kt_cewCCrdg2hb5nJV9uQ@mail.gmail.com>
+ <X/gwVvn09NFiIOWw@hovoldconsulting.com> <CADuz4ONNPq+mADWYPKp8+M2rZtuoMwjO=+HDXfgrO2dQ0S1vQA@mail.gmail.com>
+ <X/htEGiNbjGb2dy8@hovoldconsulting.com> <CADuz4OPCnq_4Xx-sWc-ZijoQRAZR-4+MRvpOx4np2rXifoCL5A@mail.gmail.com>
+ <X/rtPpHMii7AxXPJ@hovoldconsulting.com> <CADuz4OPhcFSdRhw9pmjzhEwaLJMih+X-suZg=NRR-QwOq8410A@mail.gmail.com>
+ <X/waQXmnsYGX3d1b@hovoldconsulting.com> <CADuz4OO9DnauGr5MwMupuZrKOxU7Jrr54-a2_vGGXRQTCxPc1Q@mail.gmail.com>
+In-Reply-To: <CADuz4OO9DnauGr5MwMupuZrKOxU7Jrr54-a2_vGGXRQTCxPc1Q@mail.gmail.com>
+From:   Joe Abbott <jabbott@rollanet.org>
+Date:   Sat, 30 Jan 2021 05:30:15 -0600
+Message-ID: <CADuz4OOVmpZtzjYFK7S=s+csAYnegjGpWE9KMh8enzmzEwn6Nw@mail.gmail.com>
+Subject: Re: pl2303.c 110 baud not working
+To:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 3c648d3deb0f95c360c9b91f49c0f313db0cef31  xhci: handle halting transfer event properly after endpoint stop and halt raced.
+ Sorry it's been so long.  Busy.
+ >
+ > So in any case, we'd need to key this off of the device type.
+ >
+ Yes, key off type as I can't find the relationship.  Windows
+ uses a8 a6 01 80 02 07  for any request near 110  and switches
+ to direct encode for anything near 75 or 150.
 
-elapsed time: 724m
+ > I noticed that
+ >
+ >         12000000 / 0x1a6a8 ~= 110.9
+ >
+ > Possibly just a coincidence, especially as 0x1aa22 would be closer
+ > match. But perhaps you can try a few more rates not in baud_sup and see
+ > if you can figure it out.
 
-configs tested: 86
-configs skipped: 2
+ Coincidence. 0x01aa22 doesn't work. Not even close.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+ I had to give up.  Too many other things to do and hard coding
+ is working for me.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                    adder875_defconfig
-mips                           mtx1_defconfig
-powerpc                      cm5200_defconfig
-xtensa                    smp_lx200_defconfig
-mips                       capcella_defconfig
-powerpc                      ep88xc_defconfig
-powerpc64                        alldefconfig
-powerpc                 mpc85xx_cds_defconfig
-powerpc                  mpc885_ads_defconfig
-powerpc               mpc834x_itxgp_defconfig
-arm                        magician_defconfig
-powerpc                          allmodconfig
-c6x                        evmc6472_defconfig
-arc                     nsimosci_hs_defconfig
-mips                      pic32mzda_defconfig
-mips                          malta_defconfig
-arm                          ep93xx_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20210129
-i386                 randconfig-a002-20210129
-i386                 randconfig-a004-20210129
-i386                 randconfig-a005-20210129
-i386                 randconfig-a003-20210129
-i386                 randconfig-a006-20210129
-x86_64               randconfig-a002-20210129
-x86_64               randconfig-a003-20210129
-x86_64               randconfig-a001-20210129
-x86_64               randconfig-a005-20210129
-x86_64               randconfig-a006-20210129
-x86_64               randconfig-a004-20210129
-i386                 randconfig-a013-20210129
-i386                 randconfig-a011-20210129
-i386                 randconfig-a012-20210129
-i386                 randconfig-a016-20210129
-i386                 randconfig-a014-20210129
-i386                 randconfig-a015-20210129
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+ Thanks for your help anyway.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ Joe
