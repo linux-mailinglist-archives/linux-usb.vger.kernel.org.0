@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C363095AF
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Jan 2021 15:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAC83095B6
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Jan 2021 15:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbhA3OB0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 30 Jan 2021 09:01:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40088 "EHLO mail.kernel.org"
+        id S229763AbhA3OGD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 Jan 2021 09:06:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40246 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229498AbhA3OBW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 30 Jan 2021 09:01:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id A019C61481
-        for <linux-usb@vger.kernel.org>; Sat, 30 Jan 2021 14:00:35 +0000 (UTC)
+        id S229468AbhA3OGC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 30 Jan 2021 09:06:02 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id D504064DDF
+        for <linux-usb@vger.kernel.org>; Sat, 30 Jan 2021 14:05:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612015235;
-        bh=O/Pbq9GISldgsWxk6uqQJw8tEqkRSACaIu4/n7VJNEw=;
+        s=k20201202; t=1612015521;
+        bh=lMjcPeRXy81B/ni7chEefaLiJbM3s4CIr220KT1yNR0=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Hb6tIu0agAJ/sujrayK5mv3BT72ZtzgDX197gEl2JWBs+T1xtkm9ihAJrPR+N7jRX
-         KRv7dYOaOgB+twRsxHGkQug5SnrOLUj++hWzJr2n/78ysMwuhIUqAO/RxD1HzkemgW
-         uOXyCncn8t+1Z198KOsLPOe5coQOWL8T6PSFu0864R1ARFvfyWwU11j0gDHjVbnFf6
-         cU3p1lJT4g0lH3Z9OJJhK8ZFZQxjx+5w7doSi0ot2eEn+w6lUTUP6zGnHLeReqRJCf
-         cmKoGZdXYX8j27Di0XpYTEV4wwNwUuN8mKGv2RE5xY5fDptLe5LWnLHLjDOjVU0yeA
-         7x40RTfUCUj8w==
+        b=WH6mq4LnjLsmB+BWVefvW58QTsCSEwZkVdQvCPikBmhMaZMVucwBx4bJ0vFkc5qEq
+         MrXAmoj8kObnkDQbI4ShayfM1enW/0cDBiaMbs7hqM2PtYG9dKvANrsWBruz5wwZe+
+         Nmc/50udWyr14X12YBc5oMWSgsnxfFvvX5uz7eb5m2cCjBnKyugSuLXwh3KF9Z1cU3
+         beys1BL3IAhL6RpsJekq+ns69n35GXpRlp+QPHfERiCm2dRjRnehor+XJz5GfVC3GW
+         SYfZpek29b8WelPzSuRlZFAklZXlHqqwooMJxVVHOwr4l6hpMsHLLR+p5l99BxSv6c
+         iwrpdSYBmL9bw==
 Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 8A951652F9; Sat, 30 Jan 2021 14:00:35 +0000 (UTC)
+        id C1AF9652F9; Sat, 30 Jan 2021 14:05:21 +0000 (UTC)
 From:   bugzilla-daemon@bugzilla.kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 211479] hid-generic: offset (0) exceeds report_count (0)
-Date:   Sat, 30 Jan 2021 14:00:35 +0000
+Date:   Sat, 30 Jan 2021 14:05:21 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -43,8 +43,8 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-211479-208809-EW938AxyaZ@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-211479-208809-CDxxGVudtw@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-211479-208809@https.bugzilla.kernel.org/>
 References: <bug-211479-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -58,8 +58,10 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D211479
 
---- Comment #1 from Andreas (andreas.thalhammer@linux.com) ---
-I forgot to mention: the keyboard works normally.
+--- Comment #2 from Andreas (andreas.thalhammer@linux.com) ---
+Created attachment 295011
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D295011&action=3Dedit
+output of "lsusb -d 03eb:ff02 -vv"
 
 --=20
 You may reply to this email to add a comment.
