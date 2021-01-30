@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64DB230993C
+	by mail.lfdr.de (Postfix) with ESMTP id D72D130993D
 	for <lists+linux-usb@lfdr.de>; Sun, 31 Jan 2021 01:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232453AbhA3Xsu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 30 Jan 2021 18:48:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
+        id S232434AbhA3Xss (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 Jan 2021 18:48:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231923AbhA3Xse (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 Jan 2021 18:48:34 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D126C06174A;
-        Sat, 30 Jan 2021 15:47:54 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id i8so2120467ejc.7;
-        Sat, 30 Jan 2021 15:47:54 -0800 (PST)
+        with ESMTP id S232321AbhA3Xsh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 Jan 2021 18:48:37 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E9DC0613D6;
+        Sat, 30 Jan 2021 15:47:56 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id n6so14747010edt.10;
+        Sat, 30 Jan 2021 15:47:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0Yo9kNchCDDIWynezRjAttZ2661/CkVAgV5LpPo25MQ=;
-        b=le7TELf5GzAEJhC/2f8Vmt/Yhk547GHEGEl81Tk8hEMQ0V+kTHOFSsuJYT3K12A3dk
-         11nxA//swONE977C+sEUMerqh+MXRl8DkEP0cxkj4ftoKtJPjHtnfCdQEg7AqrgC2nRi
-         Yzh/6j6K6Zdoyg9o7SENkIgwAc541J1rqyKNaSLeImzDsdPeCPuPyN/QBbpdsBR7a/Qx
-         REbrDUtUkWqm4vyxR7Hsl/fzGRB5VDKL2r7M5Dfe1YIbcLKAPG+LwIAuJ/D8G7XJapJD
-         oX4bRJv+0u1BG63evr/wioNd1sTmxrsMM3nCIdIYKysOTQsNTANXblrjUJsJRQLDRCKP
-         mfnA==
+        bh=1zRwD9qdAbO8fK598YRqxgb8mENfF+ajdr9W7w7+HkI=;
+        b=Ohy7riB2thMin4OEstXOEn/eLXtkv998O6y0+FvfpNSYWu+23y99sNMmDhwS78t4Yq
+         NMq7iWUIOsTkKBkCa0h7lRebOEYTeuiG+kvXuoN+GDr39McsTuwlPMHrSSt7Sb4pximB
+         ++asPFQkaDe9WD/3/4PkB9fPGpMpvWOvH9yd4KrcmO/FEwhkBXmWVwfpZt1MqxesqZAK
+         mCpnJqzWEA6vWSgzY1ngEdH+1GI7lA34WEWYeyyJzH531pfrnq8EO95FyAbg4ucjyPPL
+         eDuXhiSdfC7CwdnfrE3Y4uOUQUuBz/neUytCBjmmlXVhyes1YnpbvoYV/yZSNQ6d2mYN
+         WcZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=0Yo9kNchCDDIWynezRjAttZ2661/CkVAgV5LpPo25MQ=;
-        b=QGkjEYAK0HCWwC4ubSPdVd2KMKTjiv3a2TRwdzyeaGItf6PtGerFoOCdo47jqUi5MT
-         NFVu1iZO03I/wMO2Ib6IgOlBg5lTKPn7vr49PBy9pHOZzwyTxcNy9VePW8xUkKJK/W+4
-         I9XT6IJyekeQGTPFJbjKPPhZdowcwc1Q0/Ak1CRskTRYGnXHjQRdrXvJIUlTsdWd8bpb
-         2wQ+8oejU8xpJjXaJyflJ4TLm+DAjvV6yBXuIEn7+zWKJsSu3cThslPG5ShVkxol1MC/
-         2cj9tS/uSrgWQAKTQDblQXAPQlrE4DVD2xys7/nSk3hwaR3teDLK85l3kFGF2Jck8SO9
-         kbLA==
-X-Gm-Message-State: AOAM532iWFBPZFJ3RoQbWxLkpYVsD/+b30HlwFFUpf5l2tEH4U6SaSHc
-        JKJF6JOJkgBkJ923h1wHgzskrkkkJ799UDyR
-X-Google-Smtp-Source: ABdhPJwV3Uo1wvgSQtJ/dCUIGhCjQ3Ee5XDLIEZPsbmU7AH5hLZlhTCA+cCFSauCpTPB7QLIxWJDgw==
-X-Received: by 2002:a17:906:46d3:: with SMTP id k19mr10774940ejs.546.1612050473207;
-        Sat, 30 Jan 2021 15:47:53 -0800 (PST)
+        bh=1zRwD9qdAbO8fK598YRqxgb8mENfF+ajdr9W7w7+HkI=;
+        b=J5H9ZrecplGWFDgizAKH1VvCHdie0VS8hI13gW4WsGu+v8+xQ/0aPbcurwXMPffrZ9
+         a9T5D9Xit+jQq532L9+rvZM0KqmZVLWmdgwyKZDULXrRY0RTCmdoi6SI86Q6Lc36GdUo
+         R0G0y0C4+CuOMsRaDmN7IWsBk9X0LuYbEbEsFSxa6r68KQ0cwykX351F2VwCiNZUBaOi
+         yxLj+Cc1yNUjhAgfIto/1k13zXE9DF6yQdcJLjE2aDqcb6mvSm/66XPWfoH8P2829KRY
+         SFioH9k1j97FWNNINlCozXHuZcAZmFL8YSNG/r5EBX3pPmYR++2Idp//CpxVcfc7H8G6
+         EwIQ==
+X-Gm-Message-State: AOAM533WSFeznIPLQfhCl3GZJwopG1zkJ9xornzDuaYJp7wtNFweAZcm
+        iVbwsqQCYwxNxKfBRijlCze1foLrJY+3Rl24
+X-Google-Smtp-Source: ABdhPJxiIz46Vt1P0xn/IbTDl3Bas4tq2o8OftuhU9qGcPDm2XgWBaZOIX7kG3EQMvyhnncrtuRw2w==
+X-Received: by 2002:aa7:cdc7:: with SMTP id h7mr12234530edw.353.1612050475189;
+        Sat, 30 Jan 2021 15:47:55 -0800 (PST)
 Received: from stitch.. ([80.71.140.73])
-        by smtp.gmail.com with ESMTPSA id u17sm6628009edr.0.2021.01.30.15.47.52
+        by smtp.gmail.com with ESMTPSA id u17sm6628009edr.0.2021.01.30.15.47.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Jan 2021 15:47:52 -0800 (PST)
+        Sat, 30 Jan 2021 15:47:54 -0800 (PST)
 Sender: Emil Renner Berthing <emil.renner.berthing@gmail.com>
 From:   Emil Renner Berthing <kernel@esmil.dk>
 To:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
@@ -61,9 +61,9 @@ Cc:     Emil Renner Berthing <kernel@esmil.dk>,
         Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
         Jing Xiangfeng <jingxiangfeng@huawei.com>,
         Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/9] caif_virtio: use new tasklet API
-Date:   Sun, 31 Jan 2021 00:47:23 +0100
-Message-Id: <20210130234730.26565-3-kernel@esmil.dk>
+Subject: [PATCH 4/9] ppp: use new tasklet API
+Date:   Sun, 31 Jan 2021 00:47:25 +0100
+Message-Id: <20210130234730.26565-5-kernel@esmil.dk>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210130234730.26565-1-kernel@esmil.dk>
 References: <20210130234730.26565-1-kernel@esmil.dk>
@@ -73,41 +73,83 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This converts the driver to use the new tasklet API introduced in
+This converts the async and synctty drivers to use the new tasklet API n
 commit 12cc923f1ccc ("tasklet: Introduce new initialization API")
 
 Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
 ---
- drivers/net/caif/caif_virtio.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/net/ppp/ppp_async.c   | 8 ++++----
+ drivers/net/ppp/ppp_synctty.c | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/caif/caif_virtio.c b/drivers/net/caif/caif_virtio.c
-index 47a6d62b7511..106f089eb2a8 100644
---- a/drivers/net/caif/caif_virtio.c
-+++ b/drivers/net/caif/caif_virtio.c
-@@ -598,9 +598,9 @@ static netdev_tx_t cfv_netdev_tx(struct sk_buff *skb, struct net_device *netdev)
- 	return NETDEV_TX_OK;
- }
+diff --git a/drivers/net/ppp/ppp_async.c b/drivers/net/ppp/ppp_async.c
+index 29a0917a81e6..2b66cf301b0e 100644
+--- a/drivers/net/ppp/ppp_async.c
++++ b/drivers/net/ppp/ppp_async.c
+@@ -101,7 +101,7 @@ static void ppp_async_input(struct asyncppp *ap, const unsigned char *buf,
+ 			    char *flags, int count);
+ static int ppp_async_ioctl(struct ppp_channel *chan, unsigned int cmd,
+ 			   unsigned long arg);
+-static void ppp_async_process(unsigned long arg);
++static void ppp_async_process(struct tasklet_struct *t);
  
--static void cfv_tx_release_tasklet(unsigned long drv)
-+static void cfv_tx_release_tasklet(struct tasklet_struct *t)
+ static void async_lcp_peek(struct asyncppp *ap, unsigned char *data,
+ 			   int len, int inbound);
+@@ -179,7 +179,7 @@ ppp_asynctty_open(struct tty_struct *tty)
+ 	ap->lcp_fcs = -1;
+ 
+ 	skb_queue_head_init(&ap->rqueue);
+-	tasklet_init(&ap->tsk, ppp_async_process, (unsigned long) ap);
++	tasklet_setup(&ap->tsk, ppp_async_process);
+ 
+ 	refcount_set(&ap->refcnt, 1);
+ 	init_completion(&ap->dead);
+@@ -488,9 +488,9 @@ ppp_async_ioctl(struct ppp_channel *chan, unsigned int cmd, unsigned long arg)
+  * to the ppp_generic code, and to tell the ppp_generic code
+  * if we can accept more output now.
+  */
+-static void ppp_async_process(unsigned long arg)
++static void ppp_async_process(struct tasklet_struct *t)
  {
--	struct cfv_info *cfv = (struct cfv_info *)drv;
-+	struct cfv_info *cfv = from_tasklet(cfv, t, tx_release_tasklet);
- 	cfv_release_used_buf(cfv->vq_tx);
- }
+-	struct asyncppp *ap = (struct asyncppp *) arg;
++	struct asyncppp *ap = from_tasklet(ap, t, tsk);
+ 	struct sk_buff *skb;
  
-@@ -716,9 +716,7 @@ static int cfv_probe(struct virtio_device *vdev)
- 	cfv->ctx.head = USHRT_MAX;
- 	netif_napi_add(netdev, &cfv->napi, cfv_rx_poll, CFV_DEFAULT_QUOTA);
+ 	/* process received packets */
+diff --git a/drivers/net/ppp/ppp_synctty.c b/drivers/net/ppp/ppp_synctty.c
+index 0f338752c38b..86ee5149f4f2 100644
+--- a/drivers/net/ppp/ppp_synctty.c
++++ b/drivers/net/ppp/ppp_synctty.c
+@@ -90,7 +90,7 @@ static struct sk_buff* ppp_sync_txmunge(struct syncppp *ap, struct sk_buff *);
+ static int ppp_sync_send(struct ppp_channel *chan, struct sk_buff *skb);
+ static int ppp_sync_ioctl(struct ppp_channel *chan, unsigned int cmd,
+ 			  unsigned long arg);
+-static void ppp_sync_process(unsigned long arg);
++static void ppp_sync_process(struct tasklet_struct *t);
+ static int ppp_sync_push(struct syncppp *ap);
+ static void ppp_sync_flush_output(struct syncppp *ap);
+ static void ppp_sync_input(struct syncppp *ap, const unsigned char *buf,
+@@ -177,7 +177,7 @@ ppp_sync_open(struct tty_struct *tty)
+ 	ap->raccm = ~0U;
  
--	tasklet_init(&cfv->tx_release_tasklet,
--		     cfv_tx_release_tasklet,
--		     (unsigned long)cfv);
-+	tasklet_setup(&cfv->tx_release_tasklet, cfv_tx_release_tasklet);
+ 	skb_queue_head_init(&ap->rqueue);
+-	tasklet_init(&ap->tsk, ppp_sync_process, (unsigned long) ap);
++	tasklet_setup(&ap->tsk, ppp_sync_process);
  
- 	/* Carrier is off until netdevice is opened */
- 	netif_carrier_off(netdev);
+ 	refcount_set(&ap->refcnt, 1);
+ 	init_completion(&ap->dead_cmp);
+@@ -480,9 +480,9 @@ ppp_sync_ioctl(struct ppp_channel *chan, unsigned int cmd, unsigned long arg)
+  * to the ppp_generic code, and to tell the ppp_generic code
+  * if we can accept more output now.
+  */
+-static void ppp_sync_process(unsigned long arg)
++static void ppp_sync_process(struct tasklet_struct *t)
+ {
+-	struct syncppp *ap = (struct syncppp *) arg;
++	struct syncppp *ap = from_tasklet(ap, t, tsk);
+ 	struct sk_buff *skb;
+ 
+ 	/* process received packets */
 -- 
 2.30.0
 
