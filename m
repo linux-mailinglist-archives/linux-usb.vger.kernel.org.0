@@ -2,143 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF4C308E90
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Jan 2021 21:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A558F30914F
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Jan 2021 02:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233024AbhA2Uha (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Jan 2021 15:37:30 -0500
-Received: from so15.mailgun.net ([198.61.254.15]:41731 "EHLO so15.mailgun.net"
+        id S232539AbhA3Bl0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Jan 2021 20:41:26 -0500
+Received: from mga05.intel.com ([192.55.52.43]:58296 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232887AbhA2Uh3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 29 Jan 2021 15:37:29 -0500
-X-Greylist: delayed 356 seconds by postgrey-1.27 at vger.kernel.org; Fri, 29 Jan 2021 15:37:29 EST
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1611952623; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=drmkmIL2SroI4KkHMKq3UPc/T4ZxaQH66OmhxBJF2Rc=; b=cKdYxtn7sy2j3Nz3basdlRGDpJYaA3+zB2GF6ne3Yc3WfRiPKI15/gvrm6+d5IIGErKmEIx/
- /Xg6ewduf9cC1BKxzXBxHdHJDhj9HfFffButb62GoWZymPWPPzV6dqX8V6cxwaY2tjq5+iou
- s6WECv5C0BAOsAqDoPTnGv+vnM8=
-X-Mailgun-Sending-Ip: 198.61.254.15
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 601470547a21b36a9d0347aa (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 29 Jan 2021 20:30:12
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id A74D5C43461; Fri, 29 Jan 2021 20:30:11 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.110.127.29] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 36F25C433C6;
-        Fri, 29 Jan 2021 20:30:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 36F25C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v7 4/5] usb: dwc3: dwc3-qcom: Enable tx-fifo-resize
- property by default
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
-References: <1611895604-4496-1-git-send-email-wcheng@codeaurora.org>
- <1611895604-4496-5-git-send-email-wcheng@codeaurora.org>
- <20210129092418.GA1879@jackp-linux.qualcomm.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <b9143845-0c40-392f-8c36-a11c0074f52e@codeaurora.org>
-Date:   Fri, 29 Jan 2021 12:30:09 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        id S230525AbhA3BiN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 29 Jan 2021 20:38:13 -0500
+IronPort-SDR: Xqnhs+nU6mfMpMrKfo+FCxRrjUE7yjDDnQzJfUPtJrvC0/F/Ve96KSk3KvRBZcMy9eM2zSwSgn
+ vaeaQCS0I6Rw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9879"; a="265337271"
+X-IronPort-AV: E=Sophos;i="5.79,387,1602572400"; 
+   d="scan'208";a="265337271"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2021 17:36:41 -0800
+IronPort-SDR: 9GRqoqAZcf+JAcWZlWWjIG2HivYNkdsyVGP2ptrzgQ6LE3WiFJb7FSncg9ro++l3GQwBtFFELX
+ RgCs/3msYqOA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,387,1602572400"; 
+   d="scan'208";a="365569570"
+Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 29 Jan 2021 17:36:39 -0800
+Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1l5fBn-0004CO-3A; Sat, 30 Jan 2021 01:36:39 +0000
+Date:   Sat, 30 Jan 2021 09:36:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 3c648d3deb0f95c360c9b91f49c0f313db0cef31
+Message-ID: <6014b80e.e+fH7W40OU8L+edl%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20210129092418.GA1879@jackp-linux.qualcomm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 3c648d3deb0f95c360c9b91f49c0f313db0cef31  xhci: handle halting transfer event properly after endpoint stop and halt raced.
 
+elapsed time: 724m
 
-On 1/29/2021 1:24 AM, Jack Pham wrote:
-> Hi Wesley,
-> 
-> On Thu, Jan 28, 2021 at 08:46:43PM -0800, Wesley Cheng wrote:
->> In order to take advantage of the TX fifo resizing logic, manually add
->> these properties to the DWC3 child node by default.  This will allow
->> the DWC3 gadget to resize the TX fifos for the IN endpoints, which
->> help with performance.
->>
->> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->> ---
->>  drivers/usb/dwc3/dwc3-qcom.c | 10 ++++++++++
->>  1 file changed, 10 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
->> index d803ee9..4ea6be3 100644
->> --- a/drivers/usb/dwc3/dwc3-qcom.c
->> +++ b/drivers/usb/dwc3/dwc3-qcom.c
->> @@ -564,6 +564,7 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
->>  
->>  static const struct property_entry dwc3_qcom_acpi_properties[] = {
->>  	PROPERTY_ENTRY_STRING("dr_mode", "host"),
->> +	PROPERTY_ENTRY_BOOL("tx-fifo-resize"),
->>  	{}
->>  };
->>  
->> @@ -634,6 +635,7 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
->>  	struct dwc3_qcom	*qcom = platform_get_drvdata(pdev);
->>  	struct device_node	*np = pdev->dev.of_node, *dwc3_np;
->>  	struct device		*dev = &pdev->dev;
->> +	struct property		*prop;
->>  	int			ret;
->>  
->>  	dwc3_np = of_get_child_by_name(np, "dwc3");
->> @@ -642,6 +644,14 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
->>  		return -ENODEV;
->>  	}
->>  
->> +	prop = kzalloc(sizeof(*prop), GFP_KERNEL);
->> +	if (prop) {
->> +		prop->name = "tx-fifo-resize";
->> +		ret = of_add_property(dwc3_np, prop);
->> +		if (ret < 0)
->> +			dev_info(dev, "unable to add tx-fifo-resize prop\n");
-> 
-> You'll need to kfree(prop) both in case of error here as well as in the
-> driver's .remove() callback. Maybe easier to devm_kzalloc()?
+configs tested: 86
+configs skipped: 2
 
-Hi Jack,
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thanks for the catch, will fix this with the devm variant.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                    adder875_defconfig
+mips                           mtx1_defconfig
+powerpc                      cm5200_defconfig
+xtensa                    smp_lx200_defconfig
+mips                       capcella_defconfig
+powerpc                      ep88xc_defconfig
+powerpc64                        alldefconfig
+powerpc                 mpc85xx_cds_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc               mpc834x_itxgp_defconfig
+arm                        magician_defconfig
+powerpc                          allmodconfig
+c6x                        evmc6472_defconfig
+arc                     nsimosci_hs_defconfig
+mips                      pic32mzda_defconfig
+mips                          malta_defconfig
+arm                          ep93xx_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20210129
+i386                 randconfig-a002-20210129
+i386                 randconfig-a004-20210129
+i386                 randconfig-a005-20210129
+i386                 randconfig-a003-20210129
+i386                 randconfig-a006-20210129
+x86_64               randconfig-a002-20210129
+x86_64               randconfig-a003-20210129
+x86_64               randconfig-a001-20210129
+x86_64               randconfig-a005-20210129
+x86_64               randconfig-a006-20210129
+x86_64               randconfig-a004-20210129
+i386                 randconfig-a013-20210129
+i386                 randconfig-a011-20210129
+i386                 randconfig-a012-20210129
+i386                 randconfig-a016-20210129
+i386                 randconfig-a014-20210129
+i386                 randconfig-a015-20210129
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-Hi Bjorn,
-
-Just wanted to see what you thought about this approach?  This way we
-can just keep the dt binding w/o having to re-add it in the future, as
-well as not needing to enable this property on every qcom platform with
-dwc3.
-
-Tested on my set up, and removed the change which added the property
-from the DTSI node.
-
-Thanks
-Wesley Cheng
-
-> 
-> Jack
-> 
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
