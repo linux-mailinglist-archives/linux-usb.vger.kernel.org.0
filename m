@@ -2,116 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1491309CEC
-	for <lists+linux-usb@lfdr.de>; Sun, 31 Jan 2021 15:36:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0AAF309D68
+	for <lists+linux-usb@lfdr.de>; Sun, 31 Jan 2021 16:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbhAaO3U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 31 Jan 2021 09:29:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
+        id S232360AbhAaPUC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 31 Jan 2021 10:20:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbhAaOOP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 Jan 2021 09:14:15 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55611C061573;
-        Sun, 31 Jan 2021 06:13:32 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id e15so10945879wme.0;
-        Sun, 31 Jan 2021 06:13:32 -0800 (PST)
+        with ESMTP id S231569AbhAaPTg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 Jan 2021 10:19:36 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65E3C061574
+        for <linux-usb@vger.kernel.org>; Sun, 31 Jan 2021 07:18:55 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id 145so363766pgh.2
+        for <linux-usb@vger.kernel.org>; Sun, 31 Jan 2021 07:18:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=UhDv/BYCeM6la1A7sYj3SvVPGnwohy8wVXqenagBans=;
-        b=IXaE/GJvpRoj3dmKrJTG8REL6nbjkc0se/4mqdhaorihgZYPihaN+MahLQMcdjwswc
-         boas0SxnBLVJ8emgsLU2Ld2ignFYbh+D4470J1EurUBEzwy0XSMbRiQXG8BB50acn5fy
-         3scIZYBsw4mJoekdCcbCSm/k7+BGS6qaGPikkdfpYYLitS7ke/iDXlE20DlzQKSRaf6p
-         iYN8VrhGWfvUKnTka97bWIZqgKEpk6lxUaYsGFIJIJBtG2oNBtLqbAU3+++G/EEnPQr/
-         pfK0fRnZvKMGW2PZVxXpqVIYpw44WOUWrxPsMmTRGXzfUD+4Rsa9MOj49WMQMX+9WGjL
-         XT8g==
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=pWaLe0rxHbHoPOLQnEvoezPzhzm6i0a3yIHNzO6Spxk=;
+        b=mDzEma259JaxNYPUJkK9uxCS0LAAZ9LXdKSP3LVU12Vi8V7H6sp0T7rSJv7hryYsJG
+         rwNH94ZeWqUo9blERZI9sZBbyOvPMsCJTLmWAq0TB10TvkpQgpS1do0PXiaAdObX3uh0
+         ykGTav9EiPmQRgEjySssbVR/VdXnw1pKv6y7Xi/OMrCRQaep1RAqszstj7zrcImUntBk
+         oXVqIHptfuWhlTCm3FDLebHEXCRW5OCCA/ft8yTUUVT/1YO8J8n63MV9Kfc8SKIoB48e
+         xQH/QJan5fT3xDlbTzKJr6jMTm/0lbBf4Qcc5p5GbM4wvqd/UDR7cvO70clPJa+pakTC
+         SFoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=UhDv/BYCeM6la1A7sYj3SvVPGnwohy8wVXqenagBans=;
-        b=rTqP667t5gjGmAkECgcSdRQykn5tYreFwb7yQ0FFQDTJaiyjx8Le93FMvN4v/otlNa
-         dkB83SQsWjyodIuX5/KLl0m1auzT3omYd6zFHBvPNihlS3ObybnnJU6jJIqs4RLNTCTL
-         1gyJq5rBOzjzuebj2ijf08wuZrAYqMrBK/+YrWwgfsWVgyTO/KHISw10FnJe6R6V7+Jz
-         t7iw8zyeCeoF1HBwO8jFk14Q5ecuGfmmBUUIc1Stsu2YDLgM/CvQufL+5Vf2xwSShTWw
-         bTUEM7szW/2SyFeBDnezpOmR1+alk1qG+q32F0ifolzWajjacDJI9aaOm80KRdqjAHqW
-         jiZw==
-X-Gm-Message-State: AOAM532rPTTcM1n+yVUkCfW0pL2M0iDDB/DAArOtPY9CVZ+K2rTq/Ln2
-        dNmlKLkZbTqCEHSrSqmYsH67haiZNCNcHzTf
-X-Google-Smtp-Source: ABdhPJzR3F6h7g1CPY7SUlWtIPiSXUVojrCP1HvEZ/3pa3WaNEC5rUvj1nGEdZKG3d5PwFApAajw7Q==
-X-Received: by 2002:a1c:2d8a:: with SMTP id t132mr11011669wmt.119.1612102410914;
-        Sun, 31 Jan 2021 06:13:30 -0800 (PST)
-Received: from ziggy.stardust ([213.195.126.134])
-        by smtp.gmail.com with ESMTPSA id r13sm19349909wmh.9.2021.01.31.06.13.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 31 Jan 2021 06:13:30 -0800 (PST)
-Subject: Re: [PATCH 2/3] usb: xhci-mtk: fix UAS issue by XHCI_BROKEN_STREAMS
- quirk
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Rosen Penev <rosenp@gmail.com>
-Cc:     Nicolas Boichat <drinkcat@chromium.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-References: <20201216115125.5886-1-chunfeng.yun@mediatek.com>
- <20201216115125.5886-2-chunfeng.yun@mediatek.com>
- <CANMq1KDBmuoBNeizm9+f1yJgqF9oMqU5k26KfZrSdjrPQm_LwA@mail.gmail.com>
- <1608171557.23328.53.camel@mhfsdcap03>
- <CAKxU2N8q1XjDbWbv5ksqYr7RMEedV7fng7OUccVggsT89Oyf5w@mail.gmail.com>
- <1608794285.23328.79.camel@mhfsdcap03>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <7ad022d3-ff83-9126-ee74-6d1e4d381366@gmail.com>
-Date:   Sun, 31 Jan 2021 15:13:23 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-MIME-Version: 1.0
-In-Reply-To: <1608794285.23328.79.camel@mhfsdcap03>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=pWaLe0rxHbHoPOLQnEvoezPzhzm6i0a3yIHNzO6Spxk=;
+        b=mqBK3HthjInft20ZHjG2yfzE9YnoWHgnLoYBYVHmB9lAvUjbTrP0wJ7QIqJHroiJmx
+         PKZ2QMBncH2udQGv9KEf6l0X5Lvle5B7qWuDxTgpbsXAtf9BRTQLsamqvbOuwMQV+Zwl
+         9kkWluyXD5mexhRc3v1vUi46to5nFwqZhD3kWWbmzW4VV3Q4Ai8CRQ9sZ74MLkBKJRow
+         FCe5SC0pgmMjmsfjsaeWQIVrAfRoFVwBu5JdsAnuZBHqzR7LZyskCJJIs91x9ZyIHk3s
+         feD9lRbXpp1CZe086l5cuzkqoPexdtty39trN/GYFnJI5Olj4YXkdD3eZhLDFsNDNUNM
+         XPWQ==
+X-Gm-Message-State: AOAM530kOfAhjCRWSgFy9epD8MeXlqr0spxBe4N6dAho2Hi2sI39uNQt
+        ZNpxGfNAgEVcFPNRKYm+GtO3K5WIyRcy
+X-Google-Smtp-Source: ABdhPJywFKKoP2bv0t61mkd7QNeIMNNNaNVtp5gAUYkkOnYtoFhNJw0USKf/elBk7HmgEQqF2OBoi4neN7bE
+Sender: "kyletso via sendgmr" <kyletso@kyletso.ntc.corp.google.com>
+X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:5d70:9e45:7deb:72a7])
+ (user=kyletso job=sendgmr) by 2002:a17:902:26a:b029:da:af47:77c7 with SMTP id
+ 97-20020a170902026ab02900daaf4777c7mr14027694plc.10.1612106335130; Sun, 31
+ Jan 2021 07:18:55 -0800 (PST)
+Date:   Sun, 31 Jan 2021 23:18:29 +0800
+Message-Id: <20210131151832.215931-1-kyletso@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.365.g02bc693789-goog
+Subject: [PATCH v2 0/3] common SVDM version and VDO from dt
+From:   Kyle Tso <kyletso@google.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, hdegoede@redhat.com, robh+dt@kernel.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+patch v1 is here:                                                               
+https://lore.kernel.org/linux-devicetree/20210126084544.682641-1-kyletso@google.com/
+                                                                                
+Changes from v1:                                                                
+=================                                                               
+usb: typec: Determine common SVDM Versions                                      
+- removed the "local" variables (svdm_version) in tcpm.c and                    
+  (altmodes/ucsi)/displayport.c                                                 
+- added a member "svdm_version" in struct typec_capabilities indicating         
+  the default SVDM version of the port                                          
+- added a member "common_svdm_ver" in struct typec_port indicating the          
+  common SVDM version between the port and the partner                          
+- implemented the get/set API of the common_svdm_ver in typec/class.c so        
+  that clients can read/update the common SVDM version                          
+- added more definitions of Product Type VDOs                                   
+                                                                                
+dt-bindings: connector: Add SVDM VDO properties                                 
+- updated the dt-bindings documentations                                        
+- added more definitions of Product Type VDOs                                   
+                                                                                
+usb: typec: tcpm: Get Sink VDO from fwnode                                      
+- updated the commit message
 
+Kyle Tso (3):
+  usb: typec: Determine common SVDM Versions
+  dt-bindings: connector: Add SVDM VDO properties
+  usb: typec: tcpm: Get Sink VDO from fwnode
 
-On 24/12/2020 08:18, Chunfeng Yun wrote:
-> On Wed, 2020-12-16 at 19:43 -0800, Rosen Penev wrote:
->> On Wed, Dec 16, 2020 at 6:29 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
->>>
->>> On Wed, 2020-12-16 at 20:28 +0800, Nicolas Boichat wrote:
->>>> On Wed, Dec 16, 2020 at 7:53 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
-[...]
->>>>>         mtk->lpm_support = of_property_read_bool(node, "usb3-lpm-capable");
->>>>> +       mtk->broken_streams =
->>>>> +               of_property_read_bool(node, "mediatek,broken_streams_quirk");
->>>>
->>>> Would it be better to add a data field to struct of_device_id
->>>> mtk_xhci_of_match, and enable this quirk on mediatek,mt8173-xhci only?
->>> This is the common issue for all SoCs (before 2016.06) with 0.96 xHCI
->>> when the controller don't support bulk stream. If enable this quirk only
->>> for mt8173, then for other SoCs, the compatible need include
->>> "mediatek,mt8173-xhci" in dts, this may be not flexible for some cases,
->>> e.g. a new SoC has the broken stream as mt8173, but also has another
->>> different quirk, the way you suggested will not handle it.
->>> And I plan to remove "mediatek,mt8173-xhci" in mtk_xhci_of_match after
->>> converting the binding to YMAL.
->> I'm guessing this also applies to mt7621?
-> Yes, mt7621 doesn't support bulk stream
-> 
+ .../bindings/connector/usb-connector.yaml     |  11 +
+ drivers/usb/typec/altmodes/displayport.c      |   5 +-
+ drivers/usb/typec/class.c                     |  21 +-
+ drivers/usb/typec/tcpm/tcpm.c                 |  61 +++-
+ drivers/usb/typec/ucsi/displayport.c          |  10 +-
+ drivers/usb/typec/ucsi/ucsi.c                 |   2 +
+ include/dt-bindings/usb/pd.h                  | 311 ++++++++++++++++-
+ include/linux/usb/pd_vdo.h                    | 315 ++++++++++++++----
+ include/linux/usb/typec.h                     |  10 +
+ 9 files changed, 656 insertions(+), 90 deletions(-)
 
-Then please provide patches to the DTSI for all SoCs that have this problem.
-Either as a follow-up or as part of this series, if you need to resubmit.
+-- 
+2.30.0.365.g02bc693789-goog
 
-Regards,
-Matthias
