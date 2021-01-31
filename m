@@ -2,206 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D28F6309D9D
-	for <lists+linux-usb@lfdr.de>; Sun, 31 Jan 2021 16:36:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CB1309DC7
+	for <lists+linux-usb@lfdr.de>; Sun, 31 Jan 2021 17:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231769AbhAaPgv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 31 Jan 2021 10:36:51 -0500
-Received: from wrqvxvhd.outbound-mail.sendgrid.net ([149.72.168.13]:59316 "EHLO
-        wrqvxvhd.outbound-mail.sendgrid.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232058AbhAaM6k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 Jan 2021 07:58:40 -0500
-X-Greylist: delayed 850 seconds by postgrey-1.27 at vger.kernel.org; Sun, 31 Jan 2021 07:58:39 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=northcode.ch;
-        h=subject:references:from:mime-version:in-reply-to:content-type:
-        content-transfer-encoding:to;
-        s=s1; bh=DxlszFhaG6w5KrJW9EoSsk6b/vkeiXZoT0jZNIAwdYo=;
-        b=MMGouxI+jtoWIakk/Xxc9WemQosXSLRmPMhfCRNGN1ZP5fW1b8JNSAqiySXvxLTiVEJv
-        8JTWEBsrywmjNwbw/cjvnFAL8K5RElRVznhDSJkd/iXZ8G8fbmmvtoinzs4FG18/3s1toJ
-        fMYPAKeUaxPQkUwGlgZ17cNM/i6YSY5+E=
-Received: by filterdrecv-p3las1-598b7f99cd-47dqx with SMTP id filterdrecv-p3las1-598b7f99cd-47dqx-17-6016A5C1-1A
-        2021-01-31 12:42:41.74888329 +0000 UTC m=+220142.635623173
-Received: from mail.northcode.ch (unknown)
-        by ismtpd0006p1lon1.sendgrid.net (SG) with ESMTP id v2MCd-ASSP-7lIqvsTVpkg
-        for <linux-usb@vger.kernel.org>; Sun, 31 Jan 2021 12:42:41.475 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1F44F160B14F
-        for <linux-usb@vger.kernel.org>; Sun, 31 Jan 2021 13:42:37 +0100 (CET)
-Subject: Re: RTL8153 1G USB ethernet kernel hang bug
-References: <87129afc5fa1c2dc84a480118b54cb925eefc2f7.camel () suse ! com>
-From:   Jens Vogler <jens@northcode.ch>
-Message-ID: <1e1653c4-b369-8f62-ac6c-a3aed9acef02@northcode.ch>
-Date:   Sun, 31 Jan 2021 12:42:41 +0000 (UTC)
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        id S231274AbhAaQDx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 31 Jan 2021 11:03:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229474AbhAaQDa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 Jan 2021 11:03:30 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19582C061573;
+        Sun, 31 Jan 2021 08:02:46 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id x71so15990859oia.9;
+        Sun, 31 Jan 2021 08:02:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oQ+2ejn58IaNi0MlouEDRv20CpSyRPS7iSs23L+c8cI=;
+        b=tOHyvD+KFtPn0SkNL6yxfETU1l8kjNB0YQveWLFiVbun+vbpFNoP/UNBN+ZGgbOp42
+         NGoH0aFOIrYnrW0Tgeh8eEKGNc/h7YV904UMA0dp/RdafV8fKL8wIwt2Fkwb7UAIvjuu
+         k8iOX7lwLu3DGLbwRfw4sROESBv0/Uvi5kkOBIflUKNnEoX31OisYcE6LdMxEVVE4Gmz
+         k3VDHl9IVflw+n416Rg4mB33aGNp+KqO5aO7WABCZOEMRMgfRizlNz6JL5Fg/WQygkAd
+         +oUAC2rHzQtTb0ZgJGFNq85arRQI9tNud5zAH0PC9OZjFparQo68Ip0lm+0bDr2P6+rN
+         onXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=oQ+2ejn58IaNi0MlouEDRv20CpSyRPS7iSs23L+c8cI=;
+        b=cGenCWa2VnuGX14CjkXFBfOZdlc59n7N6c+jUsbuXJ/JO+y/XD+h/SOWHeGJmnB0zL
+         u5v3o5ZYDWnGNjiYgaIUfv+bDAFGhDWkRghUc+FaiEyx8hE4N/norcWwreEFWJlhDQjG
+         sPC0nsasjnLogRdR3VsUkvzB3PkQBXpdUMFgtCOMDweYfAPeObHC7EsEVdUITKBp+hQ4
+         CTBCNMl9I10e/83Cdr6Fl+2dktLAHXhNKpykESJmTwyJ/pttgwww1GLGran+3nQv1MgC
+         8batuhvgpMQ0iFcj52OjWovY1VM+xc69HZ88c6/8F495HqpC9HXHD7HmVo7YEltjlj4N
+         +jMg==
+X-Gm-Message-State: AOAM533XzwIAT29RV4wXGYNvw32silMoclz2ClKMBuDA+uOSk5GKSRHk
+        4g2UphvZLD+5mchz4kPP4AbPOFRuc7o=
+X-Google-Smtp-Source: ABdhPJzxark+lfhMH04nQ/2Z4ygSqSYh+S69Hb9UkWuyLyiPos+JAb94L0LCfAqQtxvEbWVdnfC7Tg==
+X-Received: by 2002:aca:47ce:: with SMTP id u197mr8208137oia.101.1612108965017;
+        Sun, 31 Jan 2021 08:02:45 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u81sm827643oia.49.2021.01.31.08.02.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 31 Jan 2021 08:02:43 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v2 3/3] usb: typec: tcpm: Get Sink VDO from fwnode
+To:     Kyle Tso <kyletso@google.com>, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, hdegoede@redhat.com, robh+dt@kernel.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20210131151832.215931-1-kyletso@google.com>
+ <20210131151832.215931-4-kyletso@google.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <950a9361-4cc8-5c01-8c3d-80d812fd663d@roeck-us.net>
+Date:   Sun, 31 Jan 2021 08:02:41 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <87129afc5fa1c2dc84a480118b54cb925eefc2f7.camel () suse ! com>
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210131151832.215931-4-kyletso@google.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-Last-TLS-Session-Version: TLSv1.3
-X-SG-EID: =?us-ascii?Q?TT7ouWc0A6VlI77LueNn6f8Q31yyUtpn3u2ArTjkz8ybCfYwnQPFPrFnUv8b=2FN?=
- =?us-ascii?Q?8gKzMVpbvfHmkjcngk7p0HY0ub4HLz8FIm2z63y?=
- =?us-ascii?Q?KskrAHecBoyc2l8tLXY09f1yk=2F2JOzvBklpdMsQ?=
- =?us-ascii?Q?A9GEYx=2FzslqeQ2SbvhDyfXVUJ1D0nEntAgO36Y5?=
- =?us-ascii?Q?3tHKTWYS3ZUZqLT=2Fg5qr7PpCXMJVAcH29=2FKZLVM?=
- =?us-ascii?Q?26itgABK9bbgs+8Gfh0xuRlo3UHJAqMsKuYRrOX?=
- =?us-ascii?Q?u1uDg15IYsQU7Cg1t1sPg=3D=3D?=
-To:     linux-usb@vger.kernel.org
-X-Entity-ID: B8811fCAJqtwkWDxFRzHzA==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I seem to have the same issue with the following hardware configuration:
+On 1/31/21 7:18 AM, Kyle Tso wrote:
+> Commit a079973f462a ("usb: typec: tcpm: Remove tcpc_config
+> configuration mechanism") removed the tcpc_config which includes the
+> Sink VDO and it is not yet added back with fwnode. Add it now.
+> 
+> Signed-off-by: Kyle Tso <kyletso@google.com>
+> ---
+> Changes since v1:
+> - updated the commit message
+> 
+>  drivers/usb/typec/tcpm/tcpm.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 403a483645dd..84c8a52f8af1 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -5677,6 +5677,18 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+>  			port->new_source_frs_current = frs_current;
+>  	}
+>  
+> +	ret = fwnode_property_read_u32_array(fwnode, "sink-vdos", NULL, 0);
 
-Laptop: Lenovo E15
-Dock: Lenovo ThinkPad Dock Hub
+fwnode_property_count_u32(), maybe ?
 
-lsusb output:
+> +	if (ret <= 0 && ret != -EINVAL) {
+> +		return -EINVAL;
 
-Bus 002 Device 003: ID 17ef:1020 Lenovo ThinkPad Dock Hub
-Bus 002 Device 004: ID 17ef:3062 Lenovo ThinkPad Dock Ethernet [Realtek 
-RTL8153B]
-If relevant, the bus? for the Ethernet controller is 2-2.1
+Why return any error except -EINVAL (including return values of 0) as -EINVAL,
+and -EINVAL as no error ?
 
-lsusb -v output: https://u14356439.ct.sendgrid.net/ls/click?upn=pRar9pMC1vFolratsg1s0-2FeInVZDGg-2FcACqM0tswpz99pOjf8bjPgCtR36QcejtFKB-z_6pwKHJ8Ph1XTyv7ONZlOBKhPm-2FqdBrDnSeervB5zzLfRVCpDK7IOLV34dv2avSKDAPt09SLlnol1PqxfBoNSymegnVS7pppyfglTAlk6PoO1qLqLGYQk0eV16iRFuLK-2BwnDTfejC7ZkDtSsoaoe8Pb0FGWMsSBioN-2B6xT6-2FBNG5JAuY7hXR4uDklIN6bxBuq1Xo-2FtwtGVcLNliC9cT6N1EeikQmBTRlm4guTmwMNJb8-3D (includes Hub and Ethernet)
+> +	} else if (ret > 0) {
+> +		port->nr_snk_vdo = min(ret, VDO_MAX_OBJECTS);
+> +		ret = fwnode_property_read_u32_array(fwnode, "sink-vdos",
+> +						     port->snk_vdo,
+> +						     port->nr_snk_vdo);
+> +		if (ret < 0)
+> +			return -EINVAL;
 
-I ran the following commands to get diagnostic data:
+static analyzer code used to complain about overriding error codes.
+Not sure if that is still true. Either case, why not return the
+original error ?
 
-echo 1 > /proc/sys/kernel/hung_task_timeout_secs
-echo 'module usbcore +p' > /sys/kernel/debug/dynamic_debug/control
+Thanks,
+Guenter
 
-I had powertop running in the background and it seems that it hung first 
-which lead to the blocked message in the log output. I have another log 
-dump without the dynamic debug in usbcore enabled where it was a kworker 
-that hung first. Nevertheless the resulting behaviour was the same. Any 
-Network interaction failed and NetworkManager hangs as soon as you try 
-to interact with it. Sudo also doesn't work for some reason.
+> +	}
+> +
+>  	return 0;
+>  }
+>  
+> 
 
-Logs:
-
-https://u14356439.ct.sendgrid.net/ls/click?upn=pRar9pMC1vFolratsg1s0x4KSE-2Fo2YdO9l2KR3HCLpCRdjZt57cJtY2NQ5SiDek-2FTWaW_6pwKHJ8Ph1XTyv7ONZlOBKhPm-2FqdBrDnSeervB5zzLfRVCpDK7IOLV34dv2avSKDAPt09SLlnol1PqxfBoNSyogNiezvm3FEJUgy9DUxVqgpZ6bwuOmPxRLIeXrTbjBNLLLEteqYswBQtVlzBHsMIU-2FPTYtaTCxCnhyNjgwonvn-2BkEt1oLE9PDdzH0iaT-2FAiPK7T2NpPyya0dB6BOLmbegtJtE9KSJU-2Fh46y-2FRDDdg8-3D - dmesg with hung task timeout and usbcore 
-debug
-https://u14356439.ct.sendgrid.net/ls/click?upn=pRar9pMC1vFolratsg1s00lIbb-2FALqvmpxsiExeL0irFXX-2FEjJW8koJnO1i5Jc6iKmYx_6pwKHJ8Ph1XTyv7ONZlOBKhPm-2FqdBrDnSeervB5zzLfRVCpDK7IOLV34dv2avSKDAPt09SLlnol1PqxfBoNSyiI5VX-2BEDYLOFtThYKb1qk10-2FiHAjngVAqyPGWwVLPCeZThfftfsck68iBEYgAiqJllOTabe-2FsBTEDzZTAJYYxx3nZ9Zqn7Fmu0y2Q4DEF-2BvNhNvqfQysRMa8qCQtqXn-2FWY2lezTZ4Cay3nD5J-2FMOXg-3D - journalctl dump, (pretty much the same 
-as the dmesg)
-https://u14356439.ct.sendgrid.net/ls/click?upn=pRar9pMC1vFolratsg1s02I42YHBdpzG3piI7nftF04n2ZUwZCHVT8DTqfh8jiWpxg_g_6pwKHJ8Ph1XTyv7ONZlOBKhPm-2FqdBrDnSeervB5zzLfRVCpDK7IOLV34dv2avSKDAPt09SLlnol1PqxfBoNSyvJB5o8cncMKMT9DPEfqCFfqZkBWg8nJcp7IoHSZOJsRb-2BTP5pzLgtA7fafGGu-2Bc-2B2goZuA9uW8PEvXb3GP58MSQhvcZCg5ZMBXdLEvImO4x7EEJooe5fHc0NGJQXJxo8esdpKkbUnjoosUZF-2FrvEbU-3D - dmesg without usbcore debug. kworker hangs
-
-Possibly relevant log snippet: (right before first hung task)
-
-[19314.449661] usb 2-2.1: usb wakeup-resume
-[19314.449723] usb 2-2.1: Waited 0ms for CONNECT
-[19314.449727] usb 2-2.1: finish resume
-[19314.451065] usb 2-2-port1: resume, status 0
-[19314.451067] usb 2-2-port1: status 0203, change 0000, 5.0 Gb/s
-[19314.451222] hub 2-2:1.0: state 7 ports 4 chg 0000 evt 0000
-[19314.451226] usb usb2-port2: resume, status 0
-[19325.748497] usb 2-2.1: usb auto-suspend, wakeup 1
-[19325.763258] hub 2-2:1.0: hub_suspend
-[19325.769936] usb 2-2: usb auto-suspend, wakeup 1
-[19325.786584] hub 2-0:1.0: hub_suspend
-[19325.786613] usb usb2: bus auto-suspend, wakeup 1
-[19328.126642] usb usb2: usb wakeup-resume
-[19328.126654] usb usb2: usb auto-resume
-[19328.126682] hub 2-0:1.0: hub_resume
-[19328.126763] usb usb2-port2: status 0263 change 0000
-[19328.126861] hub 2-0:1.0: state 7 ports 6 chg 0000 evt 0000
-[19328.127773] hub 2-0:1.0: state 7 ports 6 chg 0000 evt 0000
-[19328.127826] hub 2-2:1.0: state 8 ports 4 chg 0000 evt 0000
-[19328.143038] usb 2-2: Waited 0ms for CONNECT
-[19328.143040] usb 2-2: finish resume
-[19328.143177] hub 2-2:1.0: hub_resume
-[19328.143266] usb 2-2-port1: status 0203 change 0000
-[19328.143423] usb 2-2-port4: status 0263 change 0000
-[19328.159669] usb 2-2.1: usb wakeup-resume
-[19328.159729] usb 2-2.1: Waited 0ms for CONNECT
-[19328.159734] usb 2-2.1: finish resume
-[19328.162261] usb 2-2-port1: resume, status 0
-[19328.162270] usb 2-2-port1: status 0203, change 0000, 5.0 Gb/s
-[19328.162503] hub 2-2:1.0: state 7 ports 4 chg 0000 evt 0000
-[19328.162522] usb usb2-port2: resume, status 0
-[19342.890265] INFO: task powertop:6156 blocked for more than 1 seconds.
-[19342.890278]       Not tainted 5.10.7-3-MANJARO #1
-[19342.890282] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" 
-disables this message.
-[19342.890289] task:powertop        state:D stack:    0 pid: 6156 ppid:  
-6121 flags:0x00000080
-[19342.890300] Call Trace:
-[19342.890322]  __schedule+0x295/0x810
-[19342.890334]  schedule+0x5b/0xc0
-[19342.890343]  rpm_resume+0x18c/0x810
-[19342.890354]  ? wait_woken+0x80/0x80
-[19342.890361]  rpm_resume+0x308/0x810
-[19342.890369]  __pm_runtime_resume+0x3b/0x60
-[19342.890379]  usb_autopm_get_interface+0x18/0x50
-[19342.890395]  rtl8152_get_link_ksettings+0x27/0x80 [r8152]
-[19342.890408]  ethtool_get_settings+0xa7/0x1e0
-[19342.890421]  dev_ethtool+0x10fe/0x2ac0
-[19342.890432]  ? page_counter_try_charge+0x2f/0xb0
-[19342.890440]  ? inet_ioctl+0xdd/0x210
-[19342.890453]  ? netdev_name_node_lookup_rcu+0x68/0x80
-[19342.890461]  dev_ioctl+0x304/0x580
-[19342.890468]  sock_do_ioctl+0xe3/0x180
-[19342.890477]  sock_ioctl+0x272/0x3e0
-[19342.890487]  __x64_sys_ioctl+0x83/0xb0
-[19342.890498]  do_syscall_64+0x33/0x40
-[19342.890506]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-[19342.890515] RIP: 0033:0x7f4a6222cf6b
-[19342.890520] RSP: 002b:00007ffdbfcc64d8 EFLAGS: 00000246 ORIG_RAX: 
-0000000000000010
-[19342.890528] RAX: ffffffffffffffda RBX: 00005578f9b00e60 RCX: 
-00007f4a6222cf6b
-[19342.890532] RDX: 00007ffdbfcc6520 RSI: 0000000000008946 RDI: 
-000000000000007b
-[19342.890536] RBP: 00007ffdbfcc65a0 R08: 0000000000000001 R09: 
-0031753275306630
-[19342.890540] R10: 000000000044c736 R11: 0000000000000246 R12: 
-000000000000007b
-[19342.890543] R13: 00005578f9b03eb0 R14: 00007ffdbfcc6520 R15: 
-0000000000000005
-
-
-I'm happy to provide more info, it does take some time to reproduce 
-though and I'm testing workarounds (e.g. disabling power management). 
-Plus I have no idea about the usb stack so I need some guidance to 
-collect diagnostics.
-
-Regards Jens
-
-
-On 07.01.21 10:38, Oliver Neukum wrote:
-> Am Mittwoch, den 06.01.2021, 17:13 +0000 schrieb David Mytton:
->> I'd like to report a bug in the Realtek driver for a RTL8153 10/100/1000
->> Ethernet adapter built-in to a USB-C connected Philips 272B7QUPBEB 27" QHD LCD
->> Monitor. It is not limited to the monitor as I have seen other similar reports of
->> USB Ethernet adapters with the same issue using the same driver.
->>
->> I have reproduced this on Kernel 5.10.2 and 5.9.11, both Manjaro, but have seen
->> reports across multiple distros.
->>
->> Symptoms:
->>
->> - After a period of time following a reboot, ethernet connectivity suddenly
->>    drops. Wi-Fi might take over, but not reliably.
->> - There is a kernel trace in the journalctl output (see below).
-> The trace indicates that runtime power management is waiting for
-> something, but not for what.
->
->> - Attempting to do anything related to the network causes a hang e.g. running
->>    inxi hangs after CPU output.
->> - The only way to recover is to hard reset. reboot command also hangs.
-> The processes are in state D (uninterruptible wait)
->
->> - Set usbcore.autosuspend=-1 pci_aspm=off kernel params. This has solved the
->>    issue for me; the system has been stable with several days of uptime.
-> That switches off runtime PM.
->
-> The unsolved question is what the kernel is waiting for. Or whether we
-> have a deadlock. Have you tried a kernel with lockdep enabled?
-> Could you try to get a lock with dynamic debugging enabled for
-> the module usbcore?
->
-> In this case I don't think a usbmon trace is going to help much, as
-> the kernel is stuck.
->
-> 	Regards
-> 		Oliver
