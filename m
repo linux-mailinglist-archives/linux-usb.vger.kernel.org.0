@@ -2,233 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 176D730A1C6
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Feb 2021 07:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D58330A1D7
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Feb 2021 07:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231829AbhBAGCs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Feb 2021 01:02:48 -0500
-Received: from mailgw02.mediatek.com ([1.203.163.81]:58450 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231846AbhBAF7E (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Feb 2021 00:59:04 -0500
-X-UUID: 4e8daef9ca0d4d6a939c80119b1f19be-20210201
-X-UUID: 4e8daef9ca0d4d6a939c80119b1f19be-20210201
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1854773642; Mon, 01 Feb 2021 13:58:00 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- MTKMBS31N1.mediatek.inc (172.27.4.69) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 1 Feb 2021 13:57:50 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 1 Feb 2021 13:57:50 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ikjoon Jang <ikjn@chromium.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Zhanyong Wang <zhanyong.wang@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        stable <stable@vger.kernel.org>
-Subject: [next PATCH] usb: xhci-mtk: skip dropping bandwidth of unchecked endpoints
-Date:   Mon, 1 Feb 2021 13:57:44 +0800
-Message-ID: <1612159064-28413-1-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
+        id S231752AbhBAGFP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Feb 2021 01:05:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231792AbhBAGBA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Feb 2021 01:01:00 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672B1C06174A
+        for <linux-usb@vger.kernel.org>; Sun, 31 Jan 2021 22:00:20 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id r77so15179300qka.12
+        for <linux-usb@vger.kernel.org>; Sun, 31 Jan 2021 22:00:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Gww9ka74u4kvqObGYvnFu8233+bsNdvejBWZvAY2OVk=;
+        b=SMSTTSFo3W4aFKjztck/kug4TrYzVMCYewfsVTp80GF4qyGb9t47aJ1MnmDg2QGezN
+         qf1Ckv0SxOseL7AnGW9UrfWsLIInME9T0nI/1l9GipMUIkgmnZY52CjiAqbL13/+NulD
+         8nxeIQHDCJ1dwrjpmJ2wjzoxJKXY48AOFSaSIyGQ2gVtrf4YS82x8whNjrNq80bEfWpZ
+         3O5MKetMAgCj6Oup5gQK/cyUZqvCqkqq5L+vUBasRAZkRRfBWGzGN9g8orukuzF07hcf
+         AmGCJ4JbXsAsCDl4DkyQf1IEgJGbpTBH0MMKP3ir5Ln+Q1HuiibuGasE0VMWUSRCet7d
+         L4Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Gww9ka74u4kvqObGYvnFu8233+bsNdvejBWZvAY2OVk=;
+        b=tFhlNrEuosVZO5R/8MKtH798ksNh5YxK2ZWbsjvV/OBxIwPG8DJymuvhNUViTFmeke
+         QeXY0IHqAoehh8tMIyi/9atizuLdmkurxmRhnaDOqSaAU/TTcLKKvzXo7gW44NcMLNbI
+         AmzeirdnxZGr8bJ6vW3IyxjL3B1OmfilBTfAeXWxHYAkPcw8rK18iJHdP6aINbs2S3aM
+         zsdjVwYFjwO+2nSIWoYyjsNxiNhsmqLNtjdyk/2RApWTrkcD10+b/qM9hCmo8+0ay1nu
+         ErosfE35NkCGK+S2qVlnDkzP3uIZA3t/PUwMaMBCO9k1gB8tb1lgUBFkR69+FshnWR/j
+         Tl1Q==
+X-Gm-Message-State: AOAM530YPZ+l1G3FHyD2P+bDnALzGzeDXLDoUUPhOst+JVx65jU25Xg9
+        neIxQcpdYgRqu6/iXGUBQ7e/9/1HYF72lntvwvnvlQ==
+X-Google-Smtp-Source: ABdhPJw9tFahQET678D6nIg2wA5kAwzyhktFWiBuuAl6OA5T+sax5vsdIdzr+CoceWE770pe376rCA1DZVovhRQTg4c=
+X-Received: by 2002:a37:cd5:: with SMTP id 204mr14265264qkm.410.1612159219027;
+ Sun, 31 Jan 2021 22:00:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 7B8658DABE72D61BB90A22D8DACFB89029C9D3F4800EC3985BB294711E3736262000:8
-X-MTK:  N
+References: <20210131151832.215931-1-kyletso@google.com> <20210131151832.215931-2-kyletso@google.com>
+ <8737f4b9-0202-aaf8-f461-93e82624ef0d@roeck-us.net>
+In-Reply-To: <8737f4b9-0202-aaf8-f461-93e82624ef0d@roeck-us.net>
+From:   Kyle Tso <kyletso@google.com>
+Date:   Mon, 1 Feb 2021 14:00:02 +0800
+Message-ID: <CAGZ6i=0VxkrDFSnUythLziVpRGK9DF96ihAOnCwWtE5TQ8So2g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] usb: typec: Determine common SVDM Versions
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>, robh+dt@kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        USB <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-For those unchecked endpoints, we don't allocate bandwidth for
-them, so no need free the bandwidth, otherwise will decrease
-the allocated bandwidth.
-Meanwhile use xhci_dbg() instead of dev_dbg() to print logs and
-rename bw_ep_list_new as bw_ep_chk_list.
+On Mon, Feb 1, 2021 at 12:21 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 1/31/21 7:18 AM, Kyle Tso wrote:
+> > Changes since v1:
+> > - removed the "local" variables (svdm_version) in tcpm.c and
+> >   (altmodes/ucsi)/displayport.c
+> > - added a member "svdm_version" in struct typec_capabilities indicating
+> >   the default SVDM version of the port
+> > - added a member "common_svdm_ver" in struct typec_port indicating the
+> >   common SVDM version between the port and the partner
+>
+> I personally find the "common" in the variable and function names unnecessary.
+> I would prefer using something like svdm_version instead of common_svdm_ver.
+>
+The reason for the common_ prefix is just for the readability.
+That's totally fine with me to remove the prefix.
+Will fix this in the next version.
 
-Fixes: 1d69f9d901ef ("usb: xhci-mtk: fix unreleased bandwidth data")
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
- drivers/usb/host/xhci-mtk-sch.c | 61 ++++++++++++++++++---------------
- drivers/usb/host/xhci-mtk.h     |  4 ++-
- 2 files changed, 36 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
-index a313e75ff1c6..dee8a329076d 100644
---- a/drivers/usb/host/xhci-mtk-sch.c
-+++ b/drivers/usb/host/xhci-mtk-sch.c
-@@ -200,6 +200,7 @@ static struct mu3h_sch_ep_info *create_sch_ep(struct usb_device *udev,
- 
- 	sch_ep->sch_tt = tt;
- 	sch_ep->ep = ep;
-+	INIT_LIST_HEAD(&sch_ep->endpoint);
- 	INIT_LIST_HEAD(&sch_ep->tt_endpoint);
- 
- 	return sch_ep;
-@@ -374,6 +375,7 @@ static void update_bus_bw(struct mu3h_sch_bw_info *sch_bw,
- 					sch_ep->bw_budget_table[j];
- 		}
- 	}
-+	sch_ep->allocated = used;
- }
- 
- static int check_sch_tt(struct usb_device *udev,
-@@ -542,6 +544,22 @@ static int check_sch_bw(struct usb_device *udev,
- 	return 0;
- }
- 
-+static void destroy_sch_ep(struct usb_device *udev,
-+	struct mu3h_sch_bw_info *sch_bw, struct mu3h_sch_ep_info *sch_ep)
-+{
-+	/* only release ep bw check passed by check_sch_bw() */
-+	if (sch_ep->allocated)
-+		update_bus_bw(sch_bw, sch_ep, 0);
-+
-+	list_del(&sch_ep->endpoint);
-+
-+	if (sch_ep->sch_tt) {
-+		list_del(&sch_ep->tt_endpoint);
-+		drop_tt(udev);
-+	}
-+	kfree(sch_ep);
-+}
-+
- static bool need_bw_sch(struct usb_host_endpoint *ep,
- 	enum usb_device_speed speed, int has_tt)
- {
-@@ -584,7 +602,7 @@ int xhci_mtk_sch_init(struct xhci_hcd_mtk *mtk)
- 
- 	mtk->sch_array = sch_array;
- 
--	INIT_LIST_HEAD(&mtk->bw_ep_list_new);
-+	INIT_LIST_HEAD(&mtk->bw_ep_chk_list);
- 
- 	return 0;
- }
-@@ -636,29 +654,12 @@ int xhci_mtk_add_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
- 
- 	setup_sch_info(udev, ep_ctx, sch_ep);
- 
--	list_add_tail(&sch_ep->endpoint, &mtk->bw_ep_list_new);
-+	list_add_tail(&sch_ep->endpoint, &mtk->bw_ep_chk_list);
- 
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(xhci_mtk_add_ep_quirk);
- 
--static void xhci_mtk_drop_ep(struct xhci_hcd_mtk *mtk, struct usb_device *udev,
--			     struct mu3h_sch_ep_info *sch_ep)
--{
--	struct xhci_hcd *xhci = hcd_to_xhci(mtk->hcd);
--	int bw_index = get_bw_index(xhci, udev, sch_ep->ep);
--	struct mu3h_sch_bw_info *sch_bw = &mtk->sch_array[bw_index];
--
--	update_bus_bw(sch_bw, sch_ep, 0);
--	list_del(&sch_ep->endpoint);
--
--	if (sch_ep->sch_tt) {
--		list_del(&sch_ep->tt_endpoint);
--		drop_tt(udev);
--	}
--	kfree(sch_ep);
--}
--
- void xhci_mtk_drop_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
- 		struct usb_host_endpoint *ep)
- {
-@@ -688,9 +689,8 @@ void xhci_mtk_drop_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
- 	sch_bw = &sch_array[bw_index];
- 
- 	list_for_each_entry_safe(sch_ep, tmp, &sch_bw->bw_ep_list, endpoint) {
--		if (sch_ep->ep == ep) {
--			xhci_mtk_drop_ep(mtk, udev, sch_ep);
--		}
-+		if (sch_ep->ep == ep)
-+			destroy_sch_ep(udev, sch_bw, sch_ep);
- 	}
- }
- EXPORT_SYMBOL_GPL(xhci_mtk_drop_ep_quirk);
-@@ -704,9 +704,9 @@ int xhci_mtk_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
- 	struct mu3h_sch_ep_info *sch_ep, *tmp;
- 	int bw_index, ret;
- 
--	dev_dbg(&udev->dev, "%s\n", __func__);
-+	xhci_dbg(xhci, "%s() udev %s\n", __func__, dev_name(&udev->dev));
- 
--	list_for_each_entry(sch_ep, &mtk->bw_ep_list_new, endpoint) {
-+	list_for_each_entry(sch_ep, &mtk->bw_ep_chk_list, endpoint) {
- 		bw_index = get_bw_index(xhci, udev, sch_ep->ep);
- 		sch_bw = &mtk->sch_array[bw_index];
- 
-@@ -717,7 +717,7 @@ int xhci_mtk_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
- 		}
- 	}
- 
--	list_for_each_entry_safe(sch_ep, tmp, &mtk->bw_ep_list_new, endpoint) {
-+	list_for_each_entry_safe(sch_ep, tmp, &mtk->bw_ep_chk_list, endpoint) {
- 		struct xhci_ep_ctx *ep_ctx;
- 		struct usb_host_endpoint *ep = sch_ep->ep;
- 		unsigned int ep_index = xhci_get_endpoint_index(&ep->desc);
-@@ -746,12 +746,17 @@ EXPORT_SYMBOL_GPL(xhci_mtk_check_bandwidth);
- void xhci_mtk_reset_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
- {
- 	struct xhci_hcd_mtk *mtk = hcd_to_mtk(hcd);
-+	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+	struct mu3h_sch_bw_info *sch_bw;
- 	struct mu3h_sch_ep_info *sch_ep, *tmp;
-+	int bw_index;
- 
--	dev_dbg(&udev->dev, "%s\n", __func__);
-+	xhci_dbg(xhci, "%s() udev %s\n", __func__, dev_name(&udev->dev));
- 
--	list_for_each_entry_safe(sch_ep, tmp, &mtk->bw_ep_list_new, endpoint) {
--		xhci_mtk_drop_ep(mtk, udev, sch_ep);
-+	list_for_each_entry_safe(sch_ep, tmp, &mtk->bw_ep_chk_list, endpoint) {
-+		bw_index = get_bw_index(xhci, udev, sch_ep->ep);
-+		sch_bw = &mtk->sch_array[bw_index];
-+		destroy_sch_ep(udev, sch_bw, sch_ep);
- 	}
- 
- 	xhci_reset_bandwidth(hcd, udev);
-diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
-index 577f431c5c93..cbb09dfea62e 100644
---- a/drivers/usb/host/xhci-mtk.h
-+++ b/drivers/usb/host/xhci-mtk.h
-@@ -59,6 +59,7 @@ struct mu3h_sch_bw_info {
-  * @ep_type: endpoint type
-  * @maxpkt: max packet size of endpoint
-  * @ep: address of usb_host_endpoint struct
-+ * @allocated: the bandwidth is aready allocated from bus_bw
-  * @offset: which uframe of the interval that transfer should be
-  *		scheduled first time within the interval
-  * @repeat: the time gap between two uframes that transfers are
-@@ -86,6 +87,7 @@ struct mu3h_sch_ep_info {
- 	u32 ep_type;
- 	u32 maxpkt;
- 	void *ep;
-+	bool allocated;
- 	/*
- 	 * mtk xHCI scheduling information put into reserved DWs
- 	 * in ep context
-@@ -130,8 +132,8 @@ struct mu3c_ippc_regs {
- struct xhci_hcd_mtk {
- 	struct device *dev;
- 	struct usb_hcd *hcd;
--	struct list_head bw_ep_list_new;
- 	struct mu3h_sch_bw_info *sch_array;
-+	struct list_head bw_ep_chk_list;
- 	struct mu3c_ippc_regs __iomem *ippc_regs;
- 	bool has_ippc;
- 	int num_u2_ports;
--- 
-2.18.0
+> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > index 0afd8ef692e8..403a483645dd 100644
+> > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > @@ -1470,11 +1470,13 @@ static void tcpm_register_partner_altmodes(struct tcpm_port *port)
+> >  }
+> >
+> >  #define supports_modal(port) PD_IDH_MODAL_SUPP((port)->partner_ident.id_header)
+> > +#define common_svdm_ver(typec)       (typec_get_common_svdm_version(typec))
+>
+> I think that is unnecessary and confusing. We now have typec_get_common_svdm_version()
+> as well as common_svdm_ver() and COMMON_SVDM_VER() macros. I would suggest to just use
+> the function name (and maybe drop the 'common_' prefix from it).
+>
+will fix this in the next version.
 
+
+> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> > index ca3f4194ad90..b8d693cc7b77 100644
+> > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > @@ -764,6 +764,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+> >
+> >       if (con->status.change & UCSI_CONSTAT_CONNECT_CHANGE) {
+> >               typec_set_pwr_role(con->port, role);
+> > +             typec_set_common_svdm_version(con->port, con->typec_cap.svdm_version);
+> >
+>
+> I am a bit concerned that svdm_version is added to typec_capabilities but not
+> consistently used by all drivers registering with typec. I am not sure I
+> understand if and how the value in typec_capabilities is used by the typec core.
+>
+I am not sure about it as well :p
+From my POV, that is just the same nature as the "pd_revision" is in
+typec_capabilities which means the capabilities the port has
+regardless of the port partners.
+The port needs to reset the operating mode to it's designed SVDM
+version upon detach. I think typec_capabilities is a good place to
+store this information.
+What do you think?
+
+BTW, the reset value of the variable "negotiated_rev" in tcpm/tcpm.c
+looks weird to me.
+It is reset to "PD_MAX_REV" in SNK_STARTUP and SRC_STARTUP.
+However, the tcpm.c might not always support the max revision of PD.
+IMO, the pd_revision in typec_capabilities is a better choice compared
+to PD_MAX_REV.
+
+> > diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> > index 54475323f83b..df0cb1e595a1 100644
+> > --- a/include/linux/usb/typec.h
+> > +++ b/include/linux/usb/typec.h
+> > @@ -206,12 +206,19 @@ struct typec_operations {
+> >                            enum typec_port_type type);
+> >  };
+> >
+> > +enum usb_pd_svdm_ver {
+> > +     SVDM_VER_1_0 = 0,
+> > +     SVDM_VER_2_0 = 1,
+> > +     SVDM_VER_MAX = SVDM_VER_2_0,
+> > +};
+> > +
+> >  /*
+> >   * struct typec_capability - USB Type-C Port Capabilities
+> >   * @type: Supported power role of the port
+> >   * @data: Supported data role of the port
+> >   * @revision: USB Type-C Specification release. Binary coded decimal
+> >   * @pd_revision: USB Power Delivery Specification revision if supported
+> > + * @svdm_version: USB PD Structured VDM version if supported
+> >   * @prefer_role: Initial role preference (DRP ports).
+> >   * @accessory: Supported Accessory Modes
+> >   * @fwnode: Optional fwnode of the port
+> > @@ -225,6 +232,7 @@ struct typec_capability {
+> >       enum typec_port_data    data;
+> >       u16                     revision; /* 0120H = "1.2" */
+> >       u16                     pd_revision; /* 0300H = "3.0" */
+> > +     enum usb_pd_svdm_ver    svdm_version;
+> >       int                     prefer_role;
+> >       enum typec_accessory    accessory[TYPEC_MAX_ACCESSORY];
+> >       unsigned int            orientation_aware:1;
+> > @@ -275,4 +283,6 @@ int typec_find_orientation(const char *name);
+> >  int typec_find_port_power_role(const char *name);
+> >  int typec_find_power_role(const char *name);
+> >  int typec_find_port_data_role(const char *name);
+> > +void typec_set_common_svdm_version(struct typec_port *port, enum usb_pd_svdm_ver);
+> > +enum usb_pd_svdm_ver typec_get_common_svdm_version(struct typec_port *port);
+> >  #endif /* __LINUX_USB_TYPEC_H */
+> >
+>
+
+Thanks,
+Kyle
