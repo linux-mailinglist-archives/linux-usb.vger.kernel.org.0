@@ -2,897 +2,2487 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3310730AB94
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Feb 2021 16:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 903F430AC26
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Feb 2021 16:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbhBAPhj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Feb 2021 10:37:39 -0500
-Received: from mga01.intel.com ([192.55.52.88]:36552 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229866AbhBAPhe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 1 Feb 2021 10:37:34 -0500
-IronPort-SDR: CgNKwFpTJbFvK7+Rri17o8hDofe81lyI7hQ0vI84LhN7mZh4UPohuwE4FF+yTR8sOB+6qH9NvA
- u3SeyO8tSZZg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="199598477"
-X-IronPort-AV: E=Sophos;i="5.79,392,1602572400"; 
-   d="scan'208";a="199598477"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 07:35:47 -0800
-IronPort-SDR: zR/j3hCCSxrT6JMiieXp6O/aA//xp2psls6jdcozzHwX74kfnrN3I6ILWpC7KI+GSkUqbR8FkT
- nL9xlhead1NA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,392,1602572400"; 
-   d="scan'208";a="479119106"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 01 Feb 2021 07:35:43 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 01 Feb 2021 17:35:42 +0200
-Date:   Mon, 1 Feb 2021 17:35:42 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Kyle Tso <kyletso@google.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
-        hdegoede@redhat.com, robh+dt@kernel.org, badhri@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] usb: typec: Determine common SVDM Versions
-Message-ID: <20210201153542.GH2465@kuha.fi.intel.com>
-References: <20210201133421.408508-1-kyletso@google.com>
- <20210201133421.408508-2-kyletso@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210201133421.408508-2-kyletso@google.com>
+        id S232025AbhBAP7N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Feb 2021 10:59:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231326AbhBAP7B (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Feb 2021 10:59:01 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE76C06174A;
+        Mon,  1 Feb 2021 07:58:21 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id u14so13058363wml.4;
+        Mon, 01 Feb 2021 07:58:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=SqJitjRSJVpBFZKJTWR3FlrFxaC7cjfyLv+bBLmb4dk=;
+        b=f4eZxfTxVUgmrzLIRntnzzOcGjprxGuXJ8f4x4ecQrRXfYiEvHW3+999GJHycj818P
+         gYln+hO/Oqxsm8GFwr3qRLZtO5fQLAUYM4KdYMX5jqcTKH8E32oFoNe1ZP7EkVZNkNby
+         ce5cXdjSJ++N81FhY3oe9KRXq3aeRzrgZxuhN9Wj8EMgqLCTz9AOsdg21EfABtZMRFMU
+         FAATYLYOWoP3Peaxai22JTMFpRFkkUFrFBLAeX4uX/k9expZPZ2+kD5yxhHLE2sQoJc9
+         pQRFGPPlLrd8ZemvyDIEAzRX+jJ3XAsCJn5MDAr5prA5TRErQ1ZeqnVGyaiFP+vH7bw0
+         eIOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=SqJitjRSJVpBFZKJTWR3FlrFxaC7cjfyLv+bBLmb4dk=;
+        b=nI7INniqK4wd69c1/AmXpUTpzT/NpMXe0gx9j4TmwTRFntBaGPHHZlwRcLHIAdjze+
+         cuLm5mse8+1UyC07wFANJdzh4pHPc47R6p6U0PBFerLPsMLbkOLhL0tgKy+bqdGEEq9+
+         Dij3YFSFTcbQe2/I6OOJqDtc0LI24OK9Gh2cash/U1BTxFnHMMTSR3tZJgNhCgTgSE1J
+         FIDagC+shGYllyb6fj+/PyDbN6ZUoqCrvMSMwLWCwcYwuiR0AygNERgQ1cejkHwZEtkp
+         M1zlDIVqt2OuxQGLSn1OSpnto/zTWYeVXsgR1QK/HaIJ+1g6x2NAvRPB/c6xtebCvIiz
+         dzXA==
+X-Gm-Message-State: AOAM533GjbASuQ+8kpREXlJPTqLLFjKwOC5gEq9Y85I9r9YXL2Nz28Pb
+        O7sZ4DCB5dBoS4qqcRJcR6g=
+X-Google-Smtp-Source: ABdhPJytFL/reRP0vnpYIJZTy1wHR4JIfVEIYkl0k8bOJkPN7rllFpe4Ar+eOcH4ctnX04cKzwTyLA==
+X-Received: by 2002:a1c:a90f:: with SMTP id s15mr15960275wme.154.1612195099584;
+        Mon, 01 Feb 2021 07:58:19 -0800 (PST)
+Received: from ruhe.localdomain (89-139-43-22.bb.netvision.net.il. [89.139.43.22])
+        by smtp.gmail.com with ESMTPSA id d3sm30607051wrp.79.2021.02.01.07.58.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Feb 2021 07:58:18 -0800 (PST)
+From:   eli.billauer@gmail.com
+To:     gregkh@linuxfoundation.org, arnd@arndb.de
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Eli Billauer <eli.billauer@gmail.com>
+Subject: [RESEND PATCH v2] char: xillybus: Add driver for XillyUSB (Xillybus variant for USB)
+Date:   Mon,  1 Feb 2021 17:56:19 +0200
+Message-Id: <20210201155619.66960-1-eli.billauer@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 01, 2021 at 09:34:19PM +0800, Kyle Tso wrote:
-> PD Spec Revision 3.0 Version 2.0 + ECNs 2020-12-10
->   6.4.4.2.3 Structured VDM Version
->   "The Structured VDM Version field of the Discover Identity Command
->   sent and received during VDM discovery Shall be used to determine the
->   lowest common Structured VDM Version supported by the Port Partners or
->   Cable Plug and Shall continue to operate using this Specification
->   Revision until they are Detached."
-> 
-> Also clear the fields newly defined in SVDM version 2.0 for
-> compatibilities. And fix some VDO definitions changed in the Spec.
-> 
-> Signed-off-by: Kyle Tso <kyletso@google.com>
-> ---
-> Changes since v2:
-> - rename the variable and the functions (remove the text "common")
-> - remove the macro
-> 
->  drivers/usb/typec/altmodes/displayport.c |   8 +-
->  drivers/usb/typec/class.c                |  21 +-
->  drivers/usb/typec/tcpm/tcpm.c            |  47 +++-
->  drivers/usb/typec/ucsi/displayport.c     |  12 +-
->  drivers/usb/typec/ucsi/ucsi.c            |   2 +
->  include/linux/usb/pd_vdo.h               | 315 +++++++++++++++++------
->  include/linux/usb/typec.h                |  10 +
->  7 files changed, 326 insertions(+), 89 deletions(-)
+From: Eli Billauer <eli.billauer@gmail.com>
 
-I think there is some room to split this one at least a little. The
-changes to the class (so drivers/usb/typec/class.c and
-include/linux/usb/typec.h) could be introduced separately at least.
+The XillyUSB driver is the USB variant for the Xillybus FPGA IP core.
+Even though it presents a nearly identical API on the FPGA and host,
+it's almost a complete rewrite of the driver: The framework for exchanging
+data on a USB bus is fundamentally different from doing the same with a
+PCIe interface, which leaves very little in common between the existing
+driver and the new one for XillyUSB.
 
-So I see there are two changes in this patch. You are modifying the
-class, and then there are the updated PD definitions. Both should be
-introduced in separate patches IMO. I think also each driver (so
-ucsi.c and tcpm.c) can handle the changes to the class in its own
-patch. The modifications to the PD definitions and updated VDO() and
-so on can be handled in a single patch I guess.
+Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
+---
 
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index e62e5e3da01e..7b47dd4ea531 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -15,8 +15,10 @@
->  #include <linux/usb/typec_dp.h>
->  #include "displayport.h"
->  
-> -#define DP_HEADER(_dp, cmd)		(VDO((_dp)->alt->svid, 1, cmd) | \
-> -					 VDO_OPOS(USB_TYPEC_DP_MODE))
-> +#define DP_HEADER(_dp, cmd)		(VDO((_dp)->alt->svid, 1,			\
-> +					     typec_get_svdm_version((_dp)->typec),	\
-> +					     cmd)					\
-> +					 | VDO_OPOS(USB_TYPEC_DP_MODE))
->  
->  enum {
->  	DP_CONF_USB,
-> @@ -62,6 +64,7 @@ struct dp_altmode {
->  	struct work_struct work;
->  	struct typec_altmode *alt;
->  	const struct typec_altmode *port;
-> +	struct typec_port *typec;
->  };
->  
->  static int dp_altmode_notify(struct dp_altmode *dp)
-> @@ -536,6 +539,7 @@ int dp_altmode_probe(struct typec_altmode *alt)
->  	mutex_init(&dp->lock);
->  	dp->port = port;
->  	dp->alt = alt;
-> +	dp->typec = typec_altmode2port(alt);
->  
->  	alt->desc = "DisplayPort";
->  	alt->ops = &dp_altmode_ops;
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 8f77669f9cf4..4cbdb7974b4a 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -49,6 +49,7 @@ struct typec_port {
->  	enum typec_role			vconn_role;
->  	enum typec_pwr_opmode		pwr_opmode;
->  	enum typec_port_type		port_type;
-> +	enum usb_pd_svdm_ver		svdm_version;
->  	struct mutex			port_type_lock;
->  
->  	enum typec_orientation		orientation;
-> @@ -86,7 +87,7 @@ static const char * const typec_accessory_modes[] = {
->  
->  /* Product types defined in USB PD Specification R3.0 V2.0 */
->  static const char * const product_type_ufp[8] = {
-> -	[IDH_PTYPE_UNDEF]		= "undefined",
-> +	[IDH_PTYPE_NOT_UFP]		= "not_ufp",
->  	[IDH_PTYPE_HUB]			= "hub",
->  	[IDH_PTYPE_PERIPH]		= "peripheral",
->  	[IDH_PTYPE_PSD]			= "psd",
-> @@ -94,17 +95,17 @@ static const char * const product_type_ufp[8] = {
->  };
->  
->  static const char * const product_type_dfp[8] = {
-> -	[IDH_PTYPE_DFP_UNDEF]		= "undefined",
-> +	[IDH_PTYPE_NOT_DFP]		= "not_dfp",
->  	[IDH_PTYPE_DFP_HUB]		= "hub",
->  	[IDH_PTYPE_DFP_HOST]		= "host",
->  	[IDH_PTYPE_DFP_PB]		= "power_brick",
-> -	[IDH_PTYPE_DFP_AMC]		= "amc",
->  };
->  
->  static const char * const product_type_cable[8] = {
-> -	[IDH_PTYPE_UNDEF]		= "undefined",
-> +	[IDH_PTYPE_NOT_CABLE]		= "not_cable",
->  	[IDH_PTYPE_PCABLE]		= "passive",
->  	[IDH_PTYPE_ACABLE]		= "active",
-> +	[IDH_PTYPE_VPD]			= "vpd",
->  };
->  
->  static struct usb_pd_identity *get_pd_identity(struct device *dev)
-> @@ -1788,6 +1789,18 @@ int typec_find_port_data_role(const char *name)
->  }
->  EXPORT_SYMBOL_GPL(typec_find_port_data_role);
->  
-> +void typec_set_svdm_version(struct typec_port *port, enum usb_pd_svdm_ver ver)
-> +{
-> +	port->svdm_version = ver;
-> +}
-> +EXPORT_SYMBOL_GPL(typec_set_svdm_version);
-> +
-> +enum usb_pd_svdm_ver typec_get_svdm_version(struct typec_port *port)
-> +{
-> +	return port->svdm_version;
-> +}
-> +EXPORT_SYMBOL_GPL(typec_get_svdm_version);
-> +
->  /* ------------------------------------------ */
->  /* API for Multiplexer/DeMultiplexer Switches */
->  
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 0afd8ef692e8..979b7ee6473c 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1475,6 +1475,7 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  			const u32 *p, int cnt, u32 *response,
->  			enum adev_actions *adev_action)
->  {
-> +	struct typec_port *typec = port->typec_port;
->  	struct typec_altmode *pdev;
->  	struct pd_mode_data *modep;
->  	int rlen = 0;
-> @@ -1500,10 +1501,21 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  			if (PD_VDO_VID(p[0]) != USB_SID_PD)
->  				break;
->  
-> +			if (PD_VDO_SVDM_VER(p[0]) < typec_get_svdm_version(typec))
-> +				typec_set_svdm_version(typec, PD_VDO_SVDM_VER(p[0]));
->  			/* 6.4.4.3.1: Only respond as UFP (device) */
->  			if (port->data_role == TYPEC_DEVICE &&
->  			    port->nr_snk_vdo) {
-> -				for (i = 0; i <  port->nr_snk_vdo; i++)
-> +				/*
-> +				 * Product Type DFP and Connector Type are not defined in SVDM
-> +				 * version 1.0 and shall be set to zero.
-> +				 */
-> +				if (typec_get_svdm_version(typec) < SVDM_VER_2_0)
-> +					response[1] = port->snk_vdo[0] & ~IDH_DFP_MASK
-> +						      & ~IDH_CONN_MASK;
-> +				else
-> +					response[1] = port->snk_vdo[0];
-> +				for (i = 1; i <  port->nr_snk_vdo; i++)
->  					response[i + 1] = port->snk_vdo[i];
->  				rlen = port->nr_snk_vdo + 1;
->  			}
-> @@ -1532,6 +1544,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  			response[0] = p[0] | VDO_CMDT(CMDT_RSP_BUSY);
->  			rlen = 1;
->  		}
-> +		response[0] = (response[0] & ~VDO_SVDM_VERS_MASK) |
-> +			      (VDO_SVDM_VERS(typec_get_svdm_version(typec)));
->  		break;
->  	case CMDT_RSP_ACK:
->  		/* silently drop message if we are not connected */
-> @@ -1542,19 +1556,23 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  
->  		switch (cmd) {
->  		case CMD_DISCOVER_IDENT:
-> +			if (PD_VDO_SVDM_VER(p[0]) < typec_get_svdm_version(typec))
-> +				typec_set_svdm_version(typec, PD_VDO_SVDM_VER(p[0]));
->  			/* 6.4.4.3.1 */
->  			svdm_consume_identity(port, p, cnt);
-> -			response[0] = VDO(USB_SID_PD, 1, CMD_DISCOVER_SVID);
-> +			response[0] = VDO(USB_SID_PD, 1, typec_get_svdm_version(typec),
-> +					  CMD_DISCOVER_SVID);
->  			rlen = 1;
->  			break;
->  		case CMD_DISCOVER_SVID:
->  			/* 6.4.4.3.2 */
->  			if (svdm_consume_svids(port, p, cnt)) {
-> -				response[0] = VDO(USB_SID_PD, 1,
-> +				response[0] = VDO(USB_SID_PD, 1, typec_get_svdm_version(typec),
->  						  CMD_DISCOVER_SVID);
->  				rlen = 1;
->  			} else if (modep->nsvids && supports_modal(port)) {
->  				response[0] = VDO(modep->svids[0], 1,
-> +						  typec_get_svdm_version(typec),
->  						  CMD_DISCOVER_MODES);
->  				rlen = 1;
->  			}
-> @@ -1565,7 +1583,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  			modep->svid_index++;
->  			if (modep->svid_index < modep->nsvids) {
->  				u16 svid = modep->svids[modep->svid_index];
-> -				response[0] = VDO(svid, 1, CMD_DISCOVER_MODES);
-> +				response[0] = VDO(svid, 1, typec_get_svdm_version(typec),
-> +						  CMD_DISCOVER_MODES);
->  				rlen = 1;
->  			} else {
->  				tcpm_register_partner_altmodes(port);
-> @@ -1592,6 +1611,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  			/* Unrecognized SVDM */
->  			response[0] = p[0] | VDO_CMDT(CMDT_RSP_NAK);
->  			rlen = 1;
-> +			response[0] = (response[0] & ~VDO_SVDM_VERS_MASK) |
-> +				      (VDO_SVDM_VERS(typec_get_svdm_version(typec)));
->  			break;
->  		}
->  		break;
-> @@ -1611,6 +1632,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  			/* Unrecognized SVDM */
->  			response[0] = p[0] | VDO_CMDT(CMDT_RSP_NAK);
->  			rlen = 1;
-> +			response[0] = (response[0] & ~VDO_SVDM_VERS_MASK) |
-> +				      (VDO_SVDM_VERS(typec_get_svdm_version(typec)));
->  			break;
->  		}
->  		port->vdm_sm_running = false;
-> @@ -1618,6 +1641,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  	default:
->  		response[0] = p[0] | VDO_CMDT(CMDT_RSP_NAK);
->  		rlen = 1;
-> +		response[0] = (response[0] & ~VDO_SVDM_VERS_MASK) |
-> +			      (VDO_SVDM_VERS(typec_get_svdm_version(typec)));
->  		port->vdm_sm_running = false;
->  		break;
->  	}
-> @@ -1695,7 +1720,9 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
->  			break;
->  		case ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL:
->  			if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
-> -				response[0] = VDO(adev->svid, 1, CMD_EXIT_MODE);
-> +				response[0] = VDO(adev->svid, 1,
-> +						  typec_get_svdm_version(port->typec_port),
-> +						  CMD_EXIT_MODE);
->  				response[0] |= VDO_OPOS(adev->mode);
->  				rlen = 1;
->  			}
-> @@ -1729,7 +1756,8 @@ static void tcpm_send_vdm(struct tcpm_port *port, u32 vid, int cmd,
->  
->  	/* set VDM header with VID & CMD */
->  	header = VDO(vid, ((vid & USB_SID_PD) == USB_SID_PD) ?
-> -			1 : (PD_VDO_CMD(cmd) <= CMD_ATTENTION), cmd);
-> +			1 : (PD_VDO_CMD(cmd) <= CMD_ATTENTION),
-> +			typec_get_svdm_version(port->typec_port), cmd);
->  	tcpm_queue_vdm(port, header, data, count);
->  }
->  
-> @@ -2024,7 +2052,8 @@ static int tcpm_altmode_enter(struct typec_altmode *altmode, u32 *vdo)
->  	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
->  	u32 header;
->  
-> -	header = VDO(altmode->svid, vdo ? 2 : 1, CMD_ENTER_MODE);
-> +	header = VDO(altmode->svid, vdo ? 2 : 1, typec_get_svdm_version(port->typec_port),
-> +		     CMD_ENTER_MODE);
->  	header |= VDO_OPOS(altmode->mode);
->  
->  	tcpm_queue_vdm_unlocked(port, header, vdo, vdo ? 1 : 0);
-> @@ -2036,7 +2065,7 @@ static int tcpm_altmode_exit(struct typec_altmode *altmode)
->  	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
->  	u32 header;
->  
-> -	header = VDO(altmode->svid, 1, CMD_EXIT_MODE);
-> +	header = VDO(altmode->svid, 1, typec_get_svdm_version(port->typec_port), CMD_EXIT_MODE);
->  	header |= VDO_OPOS(altmode->mode);
->  
->  	tcpm_queue_vdm_unlocked(port, header, NULL, 0);
-> @@ -3445,6 +3474,7 @@ static void tcpm_reset_port(struct tcpm_port *port)
->  	port->attached = false;
->  	port->pd_capable = false;
->  	port->pps_data.supported = false;
-> +	typec_set_svdm_version(port->typec_port, port->typec_caps.svdm_version);
->  
->  	/*
->  	 * First Rx ID should be 0; set this to a sentinel of -1 so that
-> @@ -5952,6 +5982,7 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
->  	port->typec_caps.fwnode = tcpc->fwnode;
->  	port->typec_caps.revision = 0x0120;	/* Type-C spec release 1.2 */
->  	port->typec_caps.pd_revision = 0x0300;	/* USB-PD spec release 3.0 */
-> +	port->typec_caps.svdm_version = SVDM_VER_2_0;
->  	port->typec_caps.driver_data = port;
->  	port->typec_caps.ops = &tcpm_ops;
->  	port->typec_caps.orientation_aware = 1;
-> diff --git a/drivers/usb/typec/ucsi/displayport.c b/drivers/usb/typec/ucsi/displayport.c
-> index 261131c9e37c..b58ef26a50e0 100644
-> --- a/drivers/usb/typec/ucsi/displayport.c
-> +++ b/drivers/usb/typec/ucsi/displayport.c
-> @@ -48,6 +48,7 @@ struct ucsi_dp {
->  static int ucsi_displayport_enter(struct typec_altmode *alt, u32 *vdo)
->  {
->  	struct ucsi_dp *dp = typec_altmode_get_drvdata(alt);
-> +	struct typec_port *port = dp->con->port;
->  	struct ucsi *ucsi = dp->con->ucsi;
->  	u64 command;
->  	u8 cur = 0;
-> @@ -83,7 +84,7 @@ static int ucsi_displayport_enter(struct typec_altmode *alt, u32 *vdo)
->  	 * mode, and letting the alt mode driver continue.
->  	 */
->  
-> -	dp->header = VDO(USB_TYPEC_DP_SID, 1, CMD_ENTER_MODE);
-> +	dp->header = VDO(USB_TYPEC_DP_SID, 1, typec_get_svdm_version(port), CMD_ENTER_MODE);
->  	dp->header |= VDO_OPOS(USB_TYPEC_DP_MODE);
->  	dp->header |= VDO_CMDT(CMDT_RSP_ACK);
->  
-> @@ -101,6 +102,7 @@ static int ucsi_displayport_enter(struct typec_altmode *alt, u32 *vdo)
->  static int ucsi_displayport_exit(struct typec_altmode *alt)
->  {
->  	struct ucsi_dp *dp = typec_altmode_get_drvdata(alt);
-> +	struct typec_port *port = dp->con->port;
->  	u64 command;
->  	int ret = 0;
->  
-> @@ -120,7 +122,7 @@ static int ucsi_displayport_exit(struct typec_altmode *alt)
->  	if (ret < 0)
->  		goto out_unlock;
->  
-> -	dp->header = VDO(USB_TYPEC_DP_SID, 1, CMD_EXIT_MODE);
-> +	dp->header = VDO(USB_TYPEC_DP_SID, 1, typec_get_svdm_version(port), CMD_EXIT_MODE);
->  	dp->header |= VDO_OPOS(USB_TYPEC_DP_MODE);
->  	dp->header |= VDO_CMDT(CMDT_RSP_ACK);
->  
-> @@ -184,6 +186,7 @@ static int ucsi_displayport_vdm(struct typec_altmode *alt,
->  				u32 header, const u32 *data, int count)
->  {
->  	struct ucsi_dp *dp = typec_altmode_get_drvdata(alt);
-> +	struct typec_port *port = dp->con->port;
->  	int cmd_type = PD_VDO_CMDT(header);
->  	int cmd = PD_VDO_CMD(header);
->  
-> @@ -200,7 +203,10 @@ static int ucsi_displayport_vdm(struct typec_altmode *alt,
->  
->  	switch (cmd_type) {
->  	case CMDT_INIT:
-> -		dp->header = VDO(USB_TYPEC_DP_SID, 1, cmd);
-> +		if (PD_VDO_SVDM_VER(header) < typec_get_svdm_version(port))
-> +			typec_set_svdm_version(port, PD_VDO_SVDM_VER(header));
-> +
-> +		dp->header = VDO(USB_TYPEC_DP_SID, 1, typec_get_svdm_version(port), cmd);
->  		dp->header |= VDO_OPOS(USB_TYPEC_DP_MODE);
->  
->  		switch (cmd) {
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index ca3f4194ad90..8c4897a7bf75 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -764,6 +764,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->  
->  	if (con->status.change & UCSI_CONSTAT_CONNECT_CHANGE) {
->  		typec_set_pwr_role(con->port, role);
-> +		typec_set_svdm_version(con->port, con->typec_cap.svdm_version);
->  
->  		switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
->  		case UCSI_CONSTAT_PARTNER_TYPE_UFP:
-> @@ -1052,6 +1053,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
->  
->  	cap->revision = ucsi->cap.typec_version;
->  	cap->pd_revision = ucsi->cap.pd_version;
-> +	cap->svdm_version = SVDM_VER_2_0;
->  	cap->prefer_role = TYPEC_NO_PREFERRED_ROLE;
->  
->  	if (con->cap.op_mode & UCSI_CONCAP_OPMODE_AUDIO_ACCESSORY)
-> diff --git a/include/linux/usb/pd_vdo.h b/include/linux/usb/pd_vdo.h
-> index 8c08eeb9a74b..c30d893c9c81 100644
-> --- a/include/linux/usb/pd_vdo.h
-> +++ b/include/linux/usb/pd_vdo.h
-> @@ -21,22 +21,24 @@
->   * ----------
->   * <31:16>  :: SVID
->   * <15>     :: VDM type ( 1b == structured, 0b == unstructured )
-> - * <14:13>  :: Structured VDM version (can only be 00 == 1.0 currently)
-> + * <14:13>  :: Structured VDM version
->   * <12:11>  :: reserved
->   * <10:8>   :: object position (1-7 valid ... used for enter/exit mode only)
->   * <7:6>    :: command type (SVDM only?)
->   * <5>      :: reserved (SVDM), command type (UVDM)
->   * <4:0>    :: command
->   */
-> -#define VDO(vid, type, custom)				\
-> +#define VDO(vid, type, ver, custom)				\
->  	(((vid) << 16) |				\
->  	 ((type) << 15) |				\
-> +	 ((ver) << 13) |				\
->  	 ((custom) & 0x7FFF))
->  
->  #define VDO_SVDM_TYPE		(1 << 15)
->  #define VDO_SVDM_VERS(x)	((x) << 13)
->  #define VDO_OPOS(x)		((x) << 8)
->  #define VDO_CMDT(x)		((x) << 6)
-> +#define VDO_SVDM_VERS_MASK	VDO_SVDM_VERS(0x3)
->  #define VDO_OPOS_MASK		VDO_OPOS(0x7)
->  #define VDO_CMDT_MASK		VDO_CMDT(0x3)
->  
-> @@ -74,6 +76,7 @@
->  
->  #define PD_VDO_VID(vdo)		((vdo) >> 16)
->  #define PD_VDO_SVDM(vdo)	(((vdo) >> 15) & 1)
-> +#define PD_VDO_SVDM_VER(vdo)	(((vdo) >> 13) & 0x3)
->  #define PD_VDO_OPOS(vdo)	(((vdo) >> 8) & 0x7)
->  #define PD_VDO_CMD(vdo)		((vdo) & 0x1f)
->  #define PD_VDO_CMDT(vdo)	(((vdo) >> 6) & 0x3)
-> @@ -103,34 +106,46 @@
->   * --------------------
->   * <31>     :: data capable as a USB host
->   * <30>     :: data capable as a USB device
-> - * <29:27>  :: product type (UFP / Cable)
-> + * <29:27>  :: product type (UFP / Cable / VPD)
->   * <26>     :: modal operation supported (1b == yes)
-> - * <25:16>  :: product type (DFP)
-> + * <25:23>  :: product type (DFP) (SVDM version 2.0+ only; set to zero in version 1.0)
-> + * <22:21>  :: connector type (SVDM version 2.0+ only; set to zero in version 1.0)
-> + * <20:16>  :: Reserved, Shall be set to zero
->   * <15:0>   :: USB-IF assigned VID for this cable vendor
->   */
-> -#define IDH_PTYPE_UNDEF		0
-> +/* SOP Product Type (UFP) */
-> +#define IDH_PTYPE_NOT_UFP	0
->  #define IDH_PTYPE_HUB		1
->  #define IDH_PTYPE_PERIPH	2
->  #define IDH_PTYPE_PSD		3
->  #define IDH_PTYPE_AMA		5
->  
-> +/* SOP' Product Type (Cable Plug / VPD) */
-> +#define IDH_PTYPE_NOT_CABLE	0
->  #define IDH_PTYPE_PCABLE	3
->  #define IDH_PTYPE_ACABLE	4
-> +#define IDH_PTYPE_VPD		6
->  
-> -#define IDH_PTYPE_DFP_UNDEF	0
-> +/* SOP Product Type (DFP) */
-> +#define IDH_PTYPE_NOT_DFP	0
->  #define IDH_PTYPE_DFP_HUB	1
->  #define IDH_PTYPE_DFP_HOST	2
->  #define IDH_PTYPE_DFP_PB	3
-> -#define IDH_PTYPE_DFP_AMC	4
->  
-> -#define VDO_IDH(usbh, usbd, ptype, is_modal, vid)		\
-> -	((usbh) << 31 | (usbd) << 30 | ((ptype) & 0x7) << 27	\
-> -	 | (is_modal) << 26 | ((vid) & 0xffff))
-> +/* ID Header Mask */
-> +#define IDH_DFP_MASK		GENMASK(25, 23)
-> +#define IDH_CONN_MASK		GENMASK(22, 21)
-> +
-> +#define VDO_IDH(usbh, usbd, ufp_cable, is_modal, dfp, conn, vid)		\
-> +	((usbh) << 31 | (usbd) << 30 | ((ufp_cable) & 0x7) << 27		\
-> +	 | (is_modal) << 26 | ((dfp) & 0x7) << 23 | ((conn) & 0x3) << 21	\
-> +	 | ((vid) & 0xffff))
->  
->  #define PD_IDH_PTYPE(vdo)	(((vdo) >> 27) & 0x7)
->  #define PD_IDH_VID(vdo)		((vdo) & 0xffff)
->  #define PD_IDH_MODAL_SUPP(vdo)	((vdo) & (1 << 26))
->  #define PD_IDH_DFP_PTYPE(vdo)	(((vdo) >> 23) & 0x7)
-> +#define PD_IDH_CONN_TYPE(vdo)	(((vdo) >> 21) & 0x3)
->  
->  /*
->   * Cert Stat VDO
-> @@ -138,6 +153,7 @@
->   * <31:0>  : USB-IF assigned XID for this cable
->   */
->  #define PD_CSTAT_XID(vdo)	(vdo)
-> +#define VDO_CERT(xid)		((xid) & 0xffffffff)
->  
->  /*
->   * Product VDO
-> @@ -149,112 +165,267 @@
->  #define PD_PRODUCT_PID(vdo)	(((vdo) >> 16) & 0xffff)
->  
->  /*
-> - * UFP VDO1
-> + * UFP VDO (PD Revision 3.0+ only)
->   * --------
->   * <31:29> :: UFP VDO version
->   * <28>    :: Reserved
->   * <27:24> :: Device capability
-> - * <23:6>  :: Reserved
-> + * <23:22> :: Connector type (10b == receptacle, 11b == captive plug)
-> + * <21:11> :: Reserved
-> + * <10:8>  :: Vconn power (AMA only)
-> + * <7>     :: Vconn required (AMA only, 0b == no, 1b == yes)
-> + * <6>     :: Vbus required (AMA only, 0b == yes, 1b == no)
->   * <5:3>   :: Alternate modes
->   * <2:0>   :: USB highest speed
->   */
-> -#define PD_VDO1_UFP_DEVCAP(vdo)	(((vdo) & GENMASK(27, 24)) >> 24)
-> +#define PD_VDO_UFP_DEVCAP(vdo)	(((vdo) & GENMASK(27, 24)) >> 24)
-> +
-> +/* UFP VDO Version */
-> +#define UFP_VDO_VER1_2		2
->  
-> +/* Device Capability */
->  #define DEV_USB2_CAPABLE	BIT(0)
->  #define DEV_USB2_BILLBOARD	BIT(1)
->  #define DEV_USB3_CAPABLE	BIT(2)
->  #define DEV_USB4_CAPABLE	BIT(3)
->  
-> +/* Connector Type */
-> +#define UFP_RECEPTACLE		2
-> +#define UFP_CAPTIVE		3
-> +
-> +/* Vconn Power (AMA only, set to AMA_VCONN_NOT_REQ if Vconn is not required) */
-> +#define AMA_VCONN_PWR_1W	0
-> +#define AMA_VCONN_PWR_1W5	1
-> +#define AMA_VCONN_PWR_2W	2
-> +#define AMA_VCONN_PWR_3W	3
-> +#define AMA_VCONN_PWR_4W	4
-> +#define AMA_VCONN_PWR_5W	5
-> +#define AMA_VCONN_PWR_6W	6
-> +
-> +/* Vconn Required (AMA only) */
-> +#define AMA_VCONN_NOT_REQ	0
-> +#define AMA_VCONN_REQ		1
-> +
-> +/* Vbus Required (AMA only) */
-> +#define AMA_VBUS_REQ		0
-> +#define AMA_VBUS_NOT_REQ	1
-> +
-> +/* Alternate Modes */
-> +#define UFP_ALTMODE_NOT_SUPP	0
-> +#define UFP_ALTMODE_TBT3	BIT(0)
-> +#define UFP_ALTMODE_RECFG	BIT(1)
-> +#define UFP_ALTMODE_NO_RECFG	BIT(2)
-> +
-> +/* USB Highest Speed */
-> +#define UFP_USB2_ONLY		0
-> +#define UFP_USB32_GEN1		1
-> +#define UFP_USB32_4_GEN2	2
-> +#define UFP_USB4_GEN3		3
-> +
-> +#define VDO_UFP(ver, cap, conn, vcpwr, vcr, vbr, alt, spd)			\
-> +	(((ver) & 0x7) << 29 | ((cap) & 0xf) << 24 | ((conn) & 0x3) << 22	\
-> +	 | ((vcpwr) & 0x7) << 8 | (vcr) << 7 | (vbr) << 6 | ((alt) & 0x7) << 3	\
-> +	 | ((spd) & 0x7))
-> +
->  /*
-> - * DFP VDO
-> + * DFP VDO (PD Revision 3.0+ only)
->   * --------
->   * <31:29> :: DFP VDO version
->   * <28:27> :: Reserved
->   * <26:24> :: Host capability
-> - * <23:5>  :: Reserved
-> + * <23:22> :: Connector type (10b == receptacle, 11b == captive plug)
-> + * <21:5>  :: Reserved
->   * <4:0>   :: Port number
->   */
->  #define PD_VDO_DFP_HOSTCAP(vdo)	(((vdo) & GENMASK(26, 24)) >> 24)
->  
-> +#define DFP_VDO_VER1_1		1
->  #define HOST_USB2_CAPABLE	BIT(0)
->  #define HOST_USB3_CAPABLE	BIT(1)
->  #define HOST_USB4_CAPABLE	BIT(2)
-> +#define DFP_RECEPTACLE		2
-> +#define DFP_CAPTIVE		3
-> +
-> +#define VDO_DFP(ver, cap, conn, pnum)						\
-> +	(((ver) & 0x7) << 29 | ((cap) & 0x7) << 24 | ((conn) & 0x3) << 22	\
-> +	 | ((pnum) & 0x1f))
->  
->  /*
-> - * Cable VDO
-> + * Passive Cable VDO
->   * ---------
->   * <31:28> :: Cable HW version
->   * <27:24> :: Cable FW version
-> - * <23:20> :: Reserved, Shall be set to zero
-> - * <19:18> :: type-C to Type-A/B/C/Captive (00b == A, 01 == B, 10 == C, 11 == Captive)
-> - * <17>    :: Type-C to Plug/Receptacle (0b == plug, 1b == receptacle)
-> + * <23:21> :: VDO version
-> + * <20>    :: Reserved, Shall be set to zero
-> + * <19:18> :: Type-C to Type-C/Captive (10b == C, 11b == Captive)
-> + * <17>    :: Reserved, Shall be set to zero
->   * <16:13> :: cable latency (0001 == <10ns(~1m length))
-> - * <12:11> :: cable termination type (11b == both ends active VCONN req)
-> - * <10>    :: SSTX1 Directionality support (0b == fixed, 1b == cfgable)
-> - * <9>     :: SSTX2 Directionality support
-> - * <8>     :: SSRX1 Directionality support
-> - * <7>     :: SSRX2 Directionality support
-> - * <6:5>   :: Vbus current handling capability
-> + * <12:11> :: cable termination type (10b == Vconn not req, 01b == Vconn req)
-> + * <10:9>  :: Maximum Vbus voltage (00b == 20V, 01b == 30V, 10b == 40V, 11b == 50V)
-> + * <8:7>   :: Reserved, Shall be set to zero
-> + * <6:5>   :: Vbus current handling capability (01b == 3A, 10b == 5A)
-> + * <4:3>   :: Reserved, Shall be set to zero
-> + * <2:0>   :: USB highest speed
-> + *
-> + * Active Cable VDO 1
-> + * ---------
-> + * <31:28> :: Cable HW version
-> + * <27:24> :: Cable FW version
-> + * <23:21> :: VDO version
-> + * <20>    :: Reserved, Shall be set to zero
-> + * <19:18> :: Connector type (10b == C, 11b == Captive)
-> + * <17>    :: Reserved, Shall be set to zero
-> + * <16:13> :: cable latency (0001 == <10ns(~1m length))
-> + * <12:11> :: cable termination type (10b == one end active, 11b == both ends active VCONN req)
-> + * <10:9>  :: Maximum Vbus voltage (00b == 20V, 01b == 30V, 10b == 40V, 11b == 50V)
-> + * <8>     :: SBU supported (0b == supported, 1b == not supported)
-> + * <7>     :: SBU type (0b == passive, 1b == active)
-> + * <6:5>   :: Vbus current handling capability (01b == 3A, 10b == 5A)
->   * <4>     :: Vbus through cable (0b == no, 1b == yes)
->   * <3>     :: SOP" controller present? (0b == no, 1b == yes)
-> - * <2:0>   :: USB SS Signaling support
-> + * <2:0>   :: USB highest speed
->   */
-> -#define CABLE_ATYPE		0
-> -#define CABLE_BTYPE		1
-> +/* Cable VDO Version */
-> +#define CABLE_VDO_VER1_0	0
-> +#define CABLE_VDO_VER1_3	3
-> +
-> +/* Connector Type */
->  #define CABLE_CTYPE		2
->  #define CABLE_CAPTIVE		3
-> -#define CABLE_PLUG		0
-> -#define CABLE_RECEPTACLE	1
-> -#define CABLE_CURR_1A5		0
-> +
-> +/* Cable Latency */
-> +#define CABLE_LATENCY_1M	1
-> +#define CABLE_LATENCY_2M	2
-> +#define CABLE_LATENCY_3M	3
-> +#define CABLE_LATENCY_4M	4
-> +#define CABLE_LATENCY_5M	5
-> +#define CABLE_LATENCY_6M	6
-> +#define CABLE_LATENCY_7M	7
-> +#define CABLE_LATENCY_7M_PLUS	8
-> +
-> +/* Cable Termination Type */
-> +#define PCABLE_VCONN_NOT_REQ	0
-> +#define PCABLE_VCONN_REQ	1
-> +#define ACABLE_ONE_END		2
-> +#define ACABLE_BOTH_END		3
-> +
-> +/* Maximum Vbus Voltage */
-> +#define CABLE_MAX_VBUS_20V	0
-> +#define CABLE_MAX_VBUS_30V	1
-> +#define CABLE_MAX_VBUS_40V	2
-> +#define CABLE_MAX_VBUS_50V	3
-> +
-> +/* Active Cable SBU Supported/Type */
-> +#define ACABLE_SBU_SUPP		0
-> +#define ACABLE_SBU_NOT_SUPP	1
-> +#define ACABLE_SBU_PASSIVE	0
-> +#define ACABLE_SBU_ACTIVE	1
-> +
-> +/* Vbus Current Handling Capability */
-> +#define CABLE_CURR_DEF		0
->  #define CABLE_CURR_3A		1
->  #define CABLE_CURR_5A		2
-> -#define CABLE_USBSS_U2_ONLY	0
-> -#define CABLE_USBSS_U31_GEN1	1
-> -#define CABLE_USBSS_U31_GEN2	2
-> -#define VDO_CABLE(hw, fw, cbl, gdr, lat, term, tx1d, tx2d, rx1d, rx2d, cur,\
-> -		  vps, sopp, usbss) \
-> -	(((hw) & 0x7) << 28 | ((fw) & 0x7) << 24 | ((cbl) & 0x3) << 18	\
-> -	 | (gdr) << 17 | ((lat) & 0x7) << 13 | ((term) & 0x3) << 11	\
-> -	 | (tx1d) << 10 | (tx2d) << 9 | (rx1d) << 8 | (rx2d) << 7	\
-> -	 | ((cur) & 0x3) << 5 | (vps) << 4 | (sopp) << 3		\
-> -	 | ((usbss) & 0x7))
-> +
-> +/* USB Highest Speed */
-> +#define CABLE_USB2_ONLY		0
-> +#define CABLE_USB32_GEN1	1
-> +#define CABLE_USB32_4_GEN2	2
-> +#define CABLE_USB4_GEN3		3
-> +
-> +#define VDO_PCABLE(hw, fw, ver, conn, lat, term, vbm, cur, spd)			\
-> +	(((hw) & 0xf) << 28 | ((fw) & 0xf) << 24 | ((ver) & 0x7) << 21		\
-> +	 | ((conn) & 0x3) << 18 | ((lat) & 0xf) << 13 | ((term) & 0x3) << 11	\
-> +	 | ((vbm) & 0x3) << 9 | ((cur) & 0x3) << 5 | ((spd) & 0x7))
-> +#define VDO_ACABLE1(hw, fw, ver, conn, lat, term, vbm, sbu, sbut, cur, vbt, sopp, spd) \
-> +	(((hw) & 0xf) << 28 | ((fw) & 0xf) << 24 | ((ver) & 0x7) << 21		\
-> +	 | ((conn) & 0x3) << 18	| ((lat) & 0xf) << 13 | ((term) & 0x3) << 11	\
-> +	 | ((vbm) & 0x3) << 9 | (sbu) << 8 | (sbut) << 7 | ((cur) & 0x3) << 5	\
-> +	 | (vbt) << 4 | (sopp) << 3 | ((spd) & 0x7))
-> +
->  #define VDO_TYPEC_CABLE_TYPE(vdo)	(((vdo) >> 18) & 0x3)
->  
->  /*
-> - * AMA VDO
-> + * Active Cable VDO 2
->   * ---------
-> - * <31:28> :: Cable HW version
-> - * <27:24> :: Cable FW version
-> - * <23:12> :: Reserved, Shall be set to zero
-> - * <11>    :: SSTX1 Directionality support (0b == fixed, 1b == cfgable)
-> - * <10>    :: SSTX2 Directionality support
-> - * <9>     :: SSRX1 Directionality support
-> - * <8>     :: SSRX2 Directionality support
-> - * <7:5>   :: Vconn power
-> - * <4>     :: Vconn power required
-> - * <3>     :: Vbus power required
-> - * <2:0>   :: USB SS Signaling support
-> + * <31:24> :: Maximum operating temperature
-> + * <23:16> :: Shutdown temperature
-> + * <15>    :: Reserved, Shall be set to zero
-> + * <14:12> :: U3/CLd power
-> + * <11>    :: U3 to U0 transition mode (0b == direct, 1b == through U3S)
-> + * <10>    :: Physical connection (0b == copper, 1b == optical)
-> + * <9>     :: Active element (0b == redriver, 1b == retimer)
-> + * <8>     :: USB4 supported (0b == yes, 1b == no)
-> + * <7:6>   :: USB2 hub hops consumed
-> + * <5>     :: USB2 supported (0b == yes, 1b == no)
-> + * <4>     :: USB3.2 supported (0b == yes, 1b == no)
-> + * <3>     :: USB lanes supported (0b == one lane, 1b == two lanes)
-> + * <2>     :: Optically isolated active cable (0b == no, 1b == yes)
-> + * <1>     :: Reserved, Shall be set to zero
-> + * <0>     :: USB gen (0b == gen1, 1b == gen2+)
->   */
-> -#define VDO_AMA(hw, fw, tx1d, tx2d, rx1d, rx2d, vcpwr, vcr, vbr, usbss) \
-> -	(((hw) & 0x7) << 28 | ((fw) & 0x7) << 24			\
-> -	 | (tx1d) << 11 | (tx2d) << 10 | (rx1d) << 9 | (rx2d) << 8	\
-> -	 | ((vcpwr) & 0x7) << 5 | (vcr) << 4 | (vbr) << 3		\
-> -	 | ((usbss) & 0x7))
-> -
-> -#define PD_VDO_AMA_VCONN_REQ(vdo)	(((vdo) >> 4) & 1)
-> -#define PD_VDO_AMA_VBUS_REQ(vdo)	(((vdo) >> 3) & 1)
-> +/* U3/CLd Power*/
-> +#define ACAB2_U3_CLD_10MW_PLUS	0
-> +#define ACAB2_U3_CLD_10MW	1
-> +#define ACAB2_U3_CLD_5MW	2
-> +#define ACAB2_U3_CLD_1MW	3
-> +#define ACAB2_U3_CLD_500UW	4
-> +#define ACAB2_U3_CLD_200UW	5
-> +#define ACAB2_U3_CLD_50UW	6
-> +
-> +/* Other Active Cable VDO 2 Fields */
-> +#define ACAB2_U3U0_DIRECT	0
-> +#define ACAB2_U3U0_U3S		1
-> +#define ACAB2_PHY_COPPER	0
-> +#define ACAB2_PHY_OPTICAL	1
-> +#define ACAB2_REDRIVER		0
-> +#define ACAB2_RETIMER		1
-> +#define ACAB2_USB4_SUPP		0
-> +#define ACAB2_USB4_NOT_SUPP	1
-> +#define ACAB2_USB2_SUPP		0
-> +#define ACAB2_USB2_NOT_SUPP	1
-> +#define ACAB2_USB32_SUPP	0
-> +#define ACAB2_USB32_NOT_SUPP	1
-> +#define ACAB2_LANES_ONE		0
-> +#define ACAB2_LANES_TWO		1
-> +#define ACAB2_OPT_ISO_NO	0
-> +#define ACAB2_OPT_ISO_YES	1
-> +#define ACAB2_GEN_1		0
-> +#define ACAB2_GEN_2_PLUS	1
-> +
-> +#define VDO_ACABLE2(mtemp, stemp, u3p, trans, phy, ele, u4, hops, u2, u32, lane, iso, gen)	\
-> +	(((mtemp) & 0xff) << 24 | ((stemp) & 0xff) << 16 | ((u3p) & 0x7) << 12	\
-> +	 | (trans) << 11 | (phy) << 10 | (ele) << 9 | (u4) << 8			\
-> +	 | ((hops) & 0x3) << 6 | (u2) << 5 | (u32) << 4 | (lane) << 3		\
-> +	 | (iso) << 2 | (gen))
->  
-> -#define AMA_VCONN_PWR_1W	0
-> -#define AMA_VCONN_PWR_1W5	1
-> -#define AMA_VCONN_PWR_2W	2
-> -#define AMA_VCONN_PWR_3W	3
-> -#define AMA_VCONN_PWR_4W	4
-> -#define AMA_VCONN_PWR_5W	5
-> -#define AMA_VCONN_PWR_6W	6
-> -#define AMA_USBSS_U2_ONLY	0
-> -#define AMA_USBSS_U31_GEN1	1
-> -#define AMA_USBSS_U31_GEN2	2
-> -#define AMA_USBSS_BBONLY	3
-> +/*
-> + * VPD VDO
-> + * ---------
-> + * <31:28> :: HW version
-> + * <27:24> :: FW version
-> + * <23:21> :: VDO version
-> + * <20:17> :: Reserved, Shall be set to zero
-> + * <16:15> :: Maximum Vbus voltage (00b == 20V, 01b == 30V, 10b == 40V, 11b == 50V)
-> + * <14>    :: Charge through current support (0b == 3A, 1b == 5A)
-> + * <13>    :: Reserved, Shall be set to zero
-> + * <12:7>  :: Vbus impedance
-> + * <6:1>   :: Ground impedance
-> + * <0>     :: Charge through support (0b == no, 1b == yes)
-> + */
-> +#define VPD_VDO_VER1_0		0
-> +#define VPD_MAX_VBUS_20V	0
-> +#define VPD_MAX_VBUS_30V	1
-> +#define VPD_MAX_VBUS_40V	2
-> +#define VPD_MAX_VBUS_50V	3
-> +#define VPDCT_CURR_3A		0
-> +#define VPDCT_CURR_5A		1
-> +#define VPDCT_NOT_SUPP		0
-> +#define VPDCT_SUPP		1
-> +
-> +#define VDO_VPD(hw, fw, ver, vbm, curr, vbi, gi, ct)			\
-> +	(((hw) & 0xf) << 28 | ((fw) & 0xf) << 24 | ((ver) & 0x7) << 21	\
-> +	 | ((vbm) & 0x3) << 15 | (curr) << 14 | ((vbi) & 0x3f) << 7	\
-> +	 | ((gi) & 0x3f) << 1 | (ct))
->  
->  /*
->   * SVDM Discover SVIDs request -> response
-> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> index 54475323f83b..30b640292325 100644
-> --- a/include/linux/usb/typec.h
-> +++ b/include/linux/usb/typec.h
-> @@ -206,12 +206,19 @@ struct typec_operations {
->  			     enum typec_port_type type);
->  };
->  
-> +enum usb_pd_svdm_ver {
-> +	SVDM_VER_1_0 = 0,
-> +	SVDM_VER_2_0 = 1,
-> +	SVDM_VER_MAX = SVDM_VER_2_0,
-> +};
-> +
->  /*
->   * struct typec_capability - USB Type-C Port Capabilities
->   * @type: Supported power role of the port
->   * @data: Supported data role of the port
->   * @revision: USB Type-C Specification release. Binary coded decimal
->   * @pd_revision: USB Power Delivery Specification revision if supported
-> + * @svdm_version: USB PD Structured VDM version if supported
->   * @prefer_role: Initial role preference (DRP ports).
->   * @accessory: Supported Accessory Modes
->   * @fwnode: Optional fwnode of the port
-> @@ -225,6 +232,7 @@ struct typec_capability {
->  	enum typec_port_data	data;
->  	u16			revision; /* 0120H = "1.2" */
->  	u16			pd_revision; /* 0300H = "3.0" */
-> +	enum usb_pd_svdm_ver	svdm_version;
->  	int			prefer_role;
->  	enum typec_accessory	accessory[TYPEC_MAX_ACCESSORY];
->  	unsigned int		orientation_aware:1;
-> @@ -275,4 +283,6 @@ int typec_find_orientation(const char *name);
->  int typec_find_port_power_role(const char *name);
->  int typec_find_power_role(const char *name);
->  int typec_find_port_data_role(const char *name);
-> +void typec_set_svdm_version(struct typec_port *port, enum usb_pd_svdm_ver);
-> +enum usb_pd_svdm_ver typec_get_svdm_version(struct typec_port *port);
->  #endif /* __LINUX_USB_TYPEC_H */
-> -- 
-> 2.30.0.365.g02bc693789-goog
+Notes:
+    Changelog:
+    
+    v2:
+      - Add comment in Kconfig file, saying XILLYUSB really doesn't depend
+        on XILLYBUS (following comment by Randy Dunlap)
+    
+      - Use SEEK_* predefined constants instead of numbers
 
-thanks,
+ drivers/char/xillybus/Kconfig    |   13 +
+ drivers/char/xillybus/Makefile   |    1 +
+ drivers/char/xillybus/xillyusb.c | 2363 ++++++++++++++++++++++++++++++
+ 3 files changed, 2377 insertions(+)
+ create mode 100644 drivers/char/xillybus/xillyusb.c
 
+diff --git a/drivers/char/xillybus/Kconfig b/drivers/char/xillybus/Kconfig
+index 130dbdce858f..2b5192fd22b9 100644
+--- a/drivers/char/xillybus/Kconfig
++++ b/drivers/char/xillybus/Kconfig
+@@ -32,3 +32,16 @@ config XILLYBUS_OF
+ 	  system, say M.
+ 
+ endif # if XILLYBUS
++
++# XILLYUSB doesn't depend on XILLYBUS
++
++config XILLYUSB
++	tristate "XillyUSB: Xillybus generic FPGA interface for USB"
++	depends on USB
++	select CRC32
++	help
++	  XillyUSB is the Xillybus variant which uses USB for communicating
++	  with the FPGA.
++
++	  Set to M if you want Xillybus to use USB for communicating with
++	  the FPGA.
+diff --git a/drivers/char/xillybus/Makefile b/drivers/char/xillybus/Makefile
+index 099e9a3585fc..57471fb61a12 100644
+--- a/drivers/char/xillybus/Makefile
++++ b/drivers/char/xillybus/Makefile
+@@ -6,3 +6,4 @@
+ obj-$(CONFIG_XILLYBUS)		+= xillybus_core.o
+ obj-$(CONFIG_XILLYBUS_PCIE)	+= xillybus_pcie.o
+ obj-$(CONFIG_XILLYBUS_OF)	+= xillybus_of.o
++obj-$(CONFIG_XILLYUSB)		+= xillyusb.o
+diff --git a/drivers/char/xillybus/xillyusb.c b/drivers/char/xillybus/xillyusb.c
+new file mode 100644
+index 000000000000..492f4ee39e78
+--- /dev/null
++++ b/drivers/char/xillybus/xillyusb.c
+@@ -0,0 +1,2363 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright 2020 Xillybus Ltd, http://xillybus.com
++ *
++ * Driver for the XillyUSB FPGA/host framework.
++ *
++ * This driver interfaces with a special IP core in an FPGA, setting up
++ * a pipe between a hardware FIFO in the programmable logic and a device
++ * file in the host. The number of such pipes and their attributes are
++ * set up on the logic. This driver detects these automatically and
++ * creates the device files accordingly.
++ */
++
++#include <linux/types.h>
++#include <linux/slab.h>
++#include <linux/list.h>
++#include <linux/device.h>
++#include <linux/module.h>
++#include <asm/byteorder.h>
++#include <linux/io.h>
++#include <linux/interrupt.h>
++#include <linux/sched.h>
++#include <linux/fs.h>
++#include <linux/cdev.h>
++#include <linux/spinlock.h>
++#include <linux/mutex.h>
++#include <linux/atomic.h>
++#include <linux/workqueue.h>
++#include <linux/crc32.h>
++#include <linux/poll.h>
++#include <linux/delay.h>
++#include <linux/usb.h>
++
++MODULE_DESCRIPTION("Driver for XillyUSB FPGA IP Core");
++MODULE_AUTHOR("Eli Billauer, Xillybus Ltd.");
++MODULE_VERSION("1.0");
++MODULE_ALIAS("xillyusb");
++MODULE_LICENSE("GPL v2");
++
++#define XILLY_RX_TIMEOUT (10 * HZ / 1000)
++#define XILLY_RESPONSE_TIMEOUT (500 * HZ / 1000)
++
++#define MAX_XILLYUSB_DEVS 64
++#define BUF_SIZE_ORDER 4
++#define BUFNUM 8
++#define LOG2_IDT_FIFO_SIZE 16
++#define LOG2_INITIAL_FIFO_BUF_SIZE 16
++
++#define MSG_EP_NUM 1
++#define IN_EP_NUM 1
++
++static const char xillyname[] = "xillyusb";
++/* err_name is used in log messages, where dev_err() might fail */
++static const char *err_name = xillyname;
++
++static struct class *xillyusb_class;
++
++static char xdev_map[MAX_XILLYUSB_DEVS];
++/* xdev_mutex is spinlock style: Taken last and for quick operations. */
++static DEFINE_MUTEX(xdev_mutex);
++static LIST_HEAD(xdev_list);
++
++static unsigned int fifo_buf_order;
++
++#define USB_VENDOR_ID_XILINX		0x03fd
++#define USB_VENDOR_ID_ALTERA		0x09fb
++
++#define USB_PRODUCT_ID_XILLYUSB		0xebbe
++
++static const struct usb_device_id xillyusb_table[] = {
++	{ USB_DEVICE(USB_VENDOR_ID_XILINX, USB_PRODUCT_ID_XILLYUSB) },
++	{ USB_DEVICE(USB_VENDOR_ID_ALTERA, USB_PRODUCT_ID_XILLYUSB) },
++	{ }
++};
++
++MODULE_DEVICE_TABLE(usb, xillyusb_table);
++
++struct xillyusb_dev;
++
++struct xillyfifo {
++	unsigned int bufsize; /* In bytes, always a power of 2 */
++	unsigned int bufnum;
++	unsigned int size; /* Lazy: Equals bufsize * bufnum */
++	unsigned int buf_order;
++	atomic_t fill; /* Number of bytes in the FIFO */
++	wait_queue_head_t waitq;
++	unsigned int readpos;
++	unsigned int readbuf;
++	unsigned int writepos;
++	unsigned int writebuf;
++	void **mem;
++};
++
++struct xillyusb_channel;
++
++struct xillyusb_endpoint {
++	struct xillyusb_dev *xdev;
++
++	struct list_head buffers;
++	struct list_head filled_buffers;
++	spinlock_t buffers_lock; /* protect these two lists */
++
++	unsigned int order;
++	unsigned int buffer_size;
++
++	unsigned int fill_mask;
++
++	int outstanding_urbs;
++
++	struct usb_anchor anchor;
++
++	struct xillyfifo fifo;
++
++	struct work_struct workitem;
++	bool shutting_down;
++
++	u8 ep_num;
++};
++
++struct xillyusb_channel {
++	struct xillyusb_dev *xdev;
++
++	struct xillyfifo *in_fifo;
++	struct xillyusb_endpoint *out_ep;
++	struct mutex lock; /* protect @out_ep and @in_fifo */
++
++	struct mutex in_mutex; /* serialize fops on FPGA to host stream */
++	struct mutex out_mutex; /* serialize fops on host to FPGA stream */
++	wait_queue_head_t flushq;
++
++	int chan_idx;
++
++	u32 in_consumed_bytes;
++	u32 in_current_checkpoint;
++	u32 out_bytes;
++
++	unsigned int in_log2_element_size;
++	unsigned int out_log2_element_size;
++	unsigned int in_log2_fifo_size;
++	unsigned int out_log2_fifo_size;
++
++	unsigned int read_data_ok; /* EOF not arrived (yet) */
++	unsigned int poll_used;
++	unsigned int flushing;
++	unsigned int flushed;
++	unsigned int canceled;
++
++	/* Bit fields protected by xdev_mutex except for initialization */
++	unsigned readable:1;
++	unsigned writable:1;
++	unsigned open_for_read:1;
++	unsigned open_for_write:1;
++	unsigned in_synchronous:1;
++	unsigned out_synchronous:1;
++	unsigned in_seekable:1;
++	unsigned out_seekable:1;
++};
++
++struct xillybuffer {
++	struct list_head entry;
++	struct xillyusb_endpoint *ep;
++	void *buf;
++	unsigned int len;
++};
++
++struct xillyusb_dev {
++	struct xillyusb_channel *channels;
++
++	struct usb_device	*udev;
++	struct usb_interface	*interface;
++	struct kref		kref;
++	struct mutex		io_mutex; /* synchronize I/O with disconnect */
++	struct list_head	list_entry;
++	struct workqueue_struct	*workq;
++
++	int error;
++	spinlock_t error_lock; /* protect @error */
++	struct work_struct wakeup_workitem;
++
++	int index;
++	struct cdev *cdev;
++	int major;
++	int lowest_minor;
++	int num_channels;
++
++	struct xillyusb_endpoint *msg_ep;
++	struct xillyusb_endpoint *in_ep;
++
++	struct mutex msg_mutex; /* serialize opcode transmission */
++	int in_bytes_left;
++	int leftover_chan_num;
++	unsigned int in_counter;
++	struct mutex process_in_mutex; /* synchronize wakeup_all() */
++};
++
++/* FPGA to host opcodes */
++enum {
++	OPCODE_DATA = 0,
++	OPCODE_QUIESCE_ACK = 1,
++	OPCODE_EOF = 2,
++	OPCODE_REACHED_CHECKPOINT = 3,
++	OPCODE_CANCELED_CHECKPOINT = 4,
++};
++
++/* Host to FPGA opcodes */
++enum {
++	OPCODE_QUIESCE = 0,
++	OPCODE_REQ_IDT = 1,
++	OPCODE_SET_CHECKPOINT = 2,
++	OPCODE_CLOSE = 3,
++	OPCODE_SET_PUSH = 4,
++	OPCODE_UPDATE_PUSH = 5,
++	OPCODE_CANCEL_CHECKPOINT = 6,
++	OPCODE_SET_ADDR = 7,
++};
++
++/*
++ * fifo_write() and fifo_read() are NOT reentrant (i.e. concurrent multiple
++ * calls to each on the same FIFO is not allowed) however it's OK to have
++ * threads calling each of the two functions once on the same FIFO, and
++ * at the same time.
++ */
++
++static int fifo_write(struct xillyfifo *fifo,
++		      const void *data, unsigned int len,
++		      int (*copier)(void *, const void *, int))
++{
++	unsigned int done = 0;
++	unsigned int todo = len;
++	unsigned int nmax;
++	unsigned int writepos = fifo->writepos;
++	unsigned int writebuf = fifo->writebuf;
++
++	nmax = fifo->size - atomic_read(&fifo->fill);
++
++	while (1) {
++		unsigned int nrail = fifo->bufsize - writepos;
++		unsigned int n = min(todo, nmax);
++
++		if (n == 0) {
++			/*
++			 * Ensure copied data is visible before
++			 * it's accounted for.
++			 */
++			smp_wmb();
++			atomic_add(done, &fifo->fill);
++
++			fifo->writepos = writepos;
++			fifo->writebuf = writebuf;
++
++			return done;
++		}
++
++		if (n > nrail)
++			n = nrail;
++
++		if ((*copier)(fifo->mem[writebuf] + writepos, data + done, n))
++			return -EFAULT;
++
++		done += n;
++		todo -= n;
++
++		writepos += n;
++		nmax -= n;
++
++		if (writepos == fifo->bufsize) {
++			writepos = 0;
++			writebuf++;
++
++			if (writebuf == fifo->bufnum)
++				writebuf = 0;
++		}
++	}
++}
++
++static unsigned int fifo_read(struct xillyfifo *fifo,
++			      void *data, unsigned int len,
++			      int (*copier)(void *, const void *, int))
++{
++	unsigned int done = 0;
++	unsigned int todo = len;
++	unsigned int fill;
++	unsigned int readpos = fifo->readpos;
++	unsigned int readbuf = fifo->readbuf;
++
++	fill = atomic_read(&fifo->fill);
++
++	/* Ensure that the data accounted for is synchronized in buffer */
++	smp_rmb();
++
++	while (1) {
++		unsigned int nrail = fifo->bufsize - readpos;
++		unsigned int n = min(todo, fill);
++
++		if (n == 0) {
++			atomic_sub(done, &fifo->fill);
++
++			fifo->readpos = readpos;
++			fifo->readbuf = readbuf;
++
++			return done;
++		}
++
++		if (n > nrail)
++			n = nrail;
++
++		if ((*copier)(data + done, fifo->mem[readbuf] + readpos, n))
++			return -EFAULT;
++
++		done += n;
++		todo -= n;
++
++		readpos += n;
++		fill -= n;
++
++		if (readpos == fifo->bufsize) {
++			readpos = 0;
++			readbuf++;
++
++			if (readbuf == fifo->bufnum)
++				readbuf = 0;
++		}
++	}
++}
++
++static int fifo_init(struct xillyfifo *fifo,
++		     unsigned int log2_size)
++{
++	unsigned int log2_bufnum;
++	unsigned int buf_order;
++	int i;
++
++	unsigned int log2_fifo_buf_size;
++
++retry:
++	log2_fifo_buf_size = fifo_buf_order + PAGE_SHIFT;
++
++	if (log2_size > log2_fifo_buf_size) {
++		log2_bufnum = log2_size - log2_fifo_buf_size;
++		buf_order = fifo_buf_order;
++		fifo->bufsize = 1 << log2_fifo_buf_size;
++	} else {
++		log2_bufnum = 0;
++		buf_order = (log2_size > PAGE_SHIFT) ?
++			log2_size - PAGE_SHIFT : 0;
++		fifo->bufsize = 1 << log2_size;
++	}
++
++	fifo->bufnum = 1 << log2_bufnum;
++	fifo->size = fifo->bufnum * fifo->bufsize;
++	fifo->buf_order = buf_order;
++
++	fifo->mem = kmalloc_array(fifo->bufnum, sizeof(void *), GFP_KERNEL);
++
++	if (!fifo->mem)
++		return -ENOMEM;
++
++	for (i = 0; i < fifo->bufnum; i++) {
++		fifo->mem[i] = (void *)
++			__get_free_pages(GFP_KERNEL, buf_order);
++
++		if (!fifo->mem[i])
++			goto memfail;
++	}
++
++	atomic_set(&fifo->fill, 0);
++	fifo->readpos = 0;
++	fifo->readbuf = 0;
++	fifo->writepos = 0;
++	fifo->writebuf = 0;
++	init_waitqueue_head(&fifo->waitq);
++	return 0;
++
++memfail:
++	for (i--; i >= 0; i--)
++		free_pages((unsigned long)fifo->mem[i], buf_order);
++
++	kfree(fifo->mem);
++	fifo->mem = NULL;
++
++	if (fifo_buf_order) {
++		fifo_buf_order--;
++		pr_warn("%s: Trying again to allocate FIFO %d bytes, now with segments of %d bytes each\n",
++			err_name, 1 << log2_size,
++			1 << (fifo_buf_order + PAGE_SHIFT));
++		goto retry;
++	} else {
++		pr_err("%s: Failed to allocate FIFO with %d bytes, despite attepts to chop it into small pieces.\n",
++		       err_name, 1 << log2_size);
++		return -ENOMEM;
++	}
++}
++
++static void fifo_mem_release(struct xillyfifo *fifo)
++{
++	int i;
++
++	if (!fifo->mem)
++		return;
++
++	for (i = 0; i < fifo->bufnum; i++)
++		free_pages((unsigned long)fifo->mem[i], fifo->buf_order);
++
++	kfree(fifo->mem);
++}
++
++/*
++ * Note that endpoint_dealloc() also frees fifo memory (if allocated), even
++ * though endpoint_alloc doesn't allocate that memory.
++ */
++
++static void endpoint_dealloc(struct xillyusb_endpoint *ep)
++{
++	struct list_head *this, *next;
++	struct list_head *buffers = &ep->buffers;
++	unsigned int order = ep->order;
++
++	ep->shutting_down = true;
++
++	/*
++	 * The first cancel_work_sync() doesn't just cancel a possibly running
++	 * work item, but also ensures that if it's re-queued by a URB
++	 * completer in a race condition, the next execution of the work item
++	 * will see the ep->shutting_down as true, and do nothing. Hence we're
++	 * sure all queued URBs are anchored and no new ones will be added
++	 * after cancel_work_sync() returns.
++	 * However a second cancel_work_sync() is still required if such race
++	 * condition would re-queue the work item, since @ep is just about to
++	 * be freed.
++	 */
++
++	cancel_work_sync(&ep->workitem);
++	usb_kill_anchored_urbs(&ep->anchor);
++	cancel_work_sync(&ep->workitem);
++
++	fifo_mem_release(&ep->fifo);
++
++	list_for_each_safe(this, next, buffers) {
++		struct xillybuffer *xb =
++			list_entry(this, struct xillybuffer, entry);
++
++		free_pages((unsigned long)xb->buf, order);
++		kfree(xb);
++	}
++
++	kfree(ep);
++}
++
++static struct xillyusb_endpoint
++*endpoint_alloc(struct xillyusb_dev *xdev,
++		u8 ep_num,
++		void (*work)(struct work_struct *),
++		unsigned int order,
++		int bufnum)
++{
++	int i;
++
++	struct xillyusb_endpoint *ep;
++
++	ep = kzalloc(sizeof(*ep), GFP_KERNEL);
++
++	if (!ep)
++		return NULL;
++
++	INIT_LIST_HEAD(&ep->buffers);
++	INIT_LIST_HEAD(&ep->filled_buffers);
++
++	spin_lock_init(&ep->buffers_lock);
++
++	init_usb_anchor(&ep->anchor);
++	INIT_WORK(&ep->workitem, work);
++
++	ep->order = order;
++	ep->buffer_size =  1 << (PAGE_SHIFT + order);
++	ep->outstanding_urbs = 0;
++	ep->xdev = xdev;
++	ep->ep_num = ep_num;
++	ep->shutting_down = false;
++
++	for (i = 0; i < bufnum; i++) {
++		struct xillybuffer *xb;
++		unsigned long addr;
++
++		xb = kzalloc(sizeof(*xb), GFP_KERNEL);
++
++		if (!xb) {
++			endpoint_dealloc(ep);
++			return NULL;
++		}
++
++		addr = __get_free_pages(GFP_KERNEL, order);
++
++		if (!addr) {
++			kfree(xb);
++			endpoint_dealloc(ep);
++			return NULL;
++		}
++
++		xb->buf = (void *)addr;
++		xb->ep = ep;
++		list_add_tail(&xb->entry, &ep->buffers);
++	}
++	return ep;
++}
++
++static void cleanup_dev(struct kref *kref)
++{
++	struct xillyusb_dev *xdev =
++		container_of(kref, struct xillyusb_dev, kref);
++
++	if (xdev->in_ep)
++		endpoint_dealloc(xdev->in_ep);
++
++	if (xdev->msg_ep)
++		endpoint_dealloc(xdev->msg_ep);
++
++	if (xdev->workq)
++		destroy_workqueue(xdev->workq);
++
++	kfree(xdev->channels); /* Argument may be NULL, and that's fine */
++	kfree(xdev);
++}
++
++/*
++ * wakeup_all() is implemented as a work item, because of the need to be
++ * sure that bulk_in_work() sees xdev->error with a non-zero value if it
++ * runs after all read_data_ok have been cleared. xdev->error is assigned
++ * with this non-zero number prior to queueing the work, but it seems like
++ * only a mutex ensures this correct order of execution.
++ *
++ * In particular, the fact that wakeup_all() and bulk_in_work() are queued on
++ * the same workqueue makes their concurrent execution very unlikely,
++ * however the kernel's API doesn't seem to ensure this strictly.
++ * report_io_error() is possibly called in atomic context and can therefore
++ * not take a mutex.
++ */
++
++static void wakeup_all(struct work_struct *work)
++{
++	int i;
++	struct xillyusb_dev *xdev = container_of(work, struct xillyusb_dev,
++						 wakeup_workitem);
++
++	mutex_lock(&xdev->process_in_mutex);
++
++	for (i = 0; i < xdev->num_channels; i++) {
++		struct xillyusb_channel *chan = &xdev->channels[i];
++
++		mutex_lock(&chan->lock);
++
++		if (chan->in_fifo) {
++			/*
++			 * Fake an EOF: Even if such arrives, it won't be
++			 * processed.
++			 */
++			chan->read_data_ok = 0;
++			wake_up_interruptible(&chan->in_fifo->waitq);
++		}
++
++		if (chan->out_ep)
++			wake_up_interruptible(&chan->out_ep->fifo.waitq);
++
++		mutex_unlock(&chan->lock);
++
++		wake_up_interruptible(&chan->flushq);
++	}
++
++	mutex_unlock(&xdev->process_in_mutex);
++
++	wake_up_interruptible(&xdev->msg_ep->fifo.waitq);
++
++	kref_put(&xdev->kref, cleanup_dev);
++}
++
++static void report_io_error(struct xillyusb_dev *xdev,
++			    int errcode)
++{
++	unsigned long flags;
++	bool do_once = false;
++
++	spin_lock_irqsave(&xdev->error_lock, flags);
++	if (!xdev->error) {
++		xdev->error = errcode;
++		do_once = true;
++	}
++	spin_unlock_irqrestore(&xdev->error_lock, flags);
++
++	if (do_once) {
++		kref_get(&xdev->kref); /* xdev is used by work item */
++		queue_work(xdev->workq, &xdev->wakeup_workitem);
++	}
++}
++
++/*
++ * safely_assign_in_fifo() changes the value of chan->in_fifo and ensures
++ * the previous pointer is never used after its return.
++ */
++
++static void safely_assign_in_fifo(struct xillyusb_channel *chan,
++				  struct xillyfifo *fifo)
++{
++	mutex_lock(&chan->lock);
++	chan->in_fifo = fifo;
++	mutex_unlock(&chan->lock);
++
++	flush_work(&chan->xdev->in_ep->workitem);
++}
++
++static int xilly_memcpy(void *dst, const void *src, int n)
++{
++	memcpy(dst, src, n);
++	return 0;
++}
++
++static void bulk_in_completer(struct urb *urb)
++{
++	struct xillybuffer *xb = urb->context;
++	struct xillyusb_endpoint *ep = xb->ep;
++	unsigned long flags;
++
++	if (urb->status) {
++		if (!(urb->status == -ENOENT ||
++		      urb->status == -ECONNRESET ||
++		      urb->status == -ESHUTDOWN))
++			report_io_error(ep->xdev, -EIO);
++
++		spin_lock_irqsave(&ep->buffers_lock, flags);
++		list_add_tail(&xb->entry, &ep->buffers);
++		ep->outstanding_urbs--;
++		spin_unlock_irqrestore(&ep->buffers_lock, flags);
++
++		return;
++	}
++
++	xb->len = urb->actual_length;
++
++	spin_lock_irqsave(&ep->buffers_lock, flags);
++	list_add_tail(&xb->entry, &ep->filled_buffers);
++	spin_unlock_irqrestore(&ep->buffers_lock, flags);
++
++	if (!ep->shutting_down)
++		queue_work(ep->xdev->workq, &ep->workitem);
++}
++
++static void bulk_out_completer(struct urb *urb)
++{
++	struct xillybuffer *xb = urb->context;
++	struct xillyusb_endpoint *ep = xb->ep;
++	unsigned long flags;
++
++	if (urb->status &&
++	    (!(urb->status == -ENOENT ||
++	       urb->status == -ECONNRESET ||
++	       urb->status == -ESHUTDOWN)))
++		report_io_error(ep->xdev, -EIO);
++
++	spin_lock_irqsave(&ep->buffers_lock, flags);
++	list_add_tail(&xb->entry, &ep->buffers);
++	ep->outstanding_urbs--;
++	spin_unlock_irqrestore(&ep->buffers_lock, flags);
++
++	if (!ep->shutting_down)
++		queue_work(ep->xdev->workq, &ep->workitem);
++}
++
++static void try_queue_bulk_in(struct xillyusb_endpoint *ep)
++{
++	struct xillyusb_dev *xdev = ep->xdev;
++	struct xillybuffer *xb;
++	struct urb *urb;
++
++	int rc;
++	unsigned long flags;
++	unsigned int bufsize = ep->buffer_size;
++
++	if (ep->shutting_down)
++		return;
++
++	mutex_lock(&xdev->io_mutex);
++
++	if (!xdev->interface || xdev->error)
++		goto done;
++
++	while (1) {
++		spin_lock_irqsave(&ep->buffers_lock, flags);
++
++		if (list_empty(&ep->buffers)) {
++			spin_unlock_irqrestore(&ep->buffers_lock, flags);
++			goto done;
++		}
++
++		xb = list_first_entry(&ep->buffers, struct xillybuffer, entry);
++		list_del(&xb->entry);
++		ep->outstanding_urbs++;
++
++		spin_unlock_irqrestore(&ep->buffers_lock, flags);
++
++		urb = usb_alloc_urb(0, GFP_KERNEL);
++		if (!urb) {
++			report_io_error(xdev, -ENOMEM);
++			goto relist;
++		}
++
++		usb_fill_bulk_urb(urb, xdev->udev,
++				  usb_rcvbulkpipe(xdev->udev, ep->ep_num),
++				  xb->buf, bufsize, bulk_in_completer, xb);
++
++		usb_anchor_urb(urb, &ep->anchor);
++
++		rc = usb_submit_urb(urb, GFP_KERNEL);
++
++		if (rc) {
++			report_io_error(xdev, (rc == -ENOMEM) ? -ENOMEM :
++					-EIO);
++			goto unanchor;
++		}
++
++		usb_free_urb(urb); /* This just decrements reference count */
++	}
++
++unanchor:
++	usb_unanchor_urb(urb);
++	usb_free_urb(urb);
++
++relist:
++	spin_lock_irqsave(&ep->buffers_lock, flags);
++	list_add_tail(&xb->entry, &ep->buffers);
++	ep->outstanding_urbs--;
++	spin_unlock_irqrestore(&ep->buffers_lock, flags);
++
++done:
++	mutex_unlock(&xdev->io_mutex);
++}
++
++static void try_queue_bulk_out(struct xillyusb_endpoint *ep)
++{
++	struct xillyfifo *fifo = &ep->fifo;
++	struct xillyusb_dev *xdev = ep->xdev;
++	struct xillybuffer *xb;
++	struct urb *urb;
++
++	int rc;
++	unsigned int fill;
++	unsigned long flags;
++	bool submitted = false;
++
++	if (ep->shutting_down)
++		return;
++
++	mutex_lock(&xdev->io_mutex);
++
++	if (!xdev->interface || xdev->error)
++		goto done;
++
++	fill = atomic_read(&fifo->fill) & ep->fill_mask;
++
++	while (1) {
++		int count;
++		unsigned int max_read;
++
++		if (fill == 0)
++			goto done;
++
++		spin_lock_irqsave(&ep->buffers_lock, flags);
++
++		if ((fill < ep->buffer_size && ep->outstanding_urbs) ||
++		    list_empty(&ep->buffers)) {
++			spin_unlock_irqrestore(&ep->buffers_lock, flags);
++			goto done;
++		}
++
++		xb = list_first_entry(&ep->buffers, struct xillybuffer, entry);
++		list_del(&xb->entry);
++		ep->outstanding_urbs++;
++
++		spin_unlock_irqrestore(&ep->buffers_lock, flags);
++
++		max_read = min(fill, ep->buffer_size);
++
++		count = fifo_read(&ep->fifo, xb->buf, max_read, xilly_memcpy);
++
++		/*
++		 * xilly_memcpy always returns 0 => fifo_read can't fail =>
++		 * count > 0
++		 */
++
++		urb = usb_alloc_urb(0, GFP_KERNEL);
++		if (!urb) {
++			report_io_error(xdev, -ENOMEM);
++			goto relist;
++		}
++
++		usb_fill_bulk_urb(urb, xdev->udev,
++				  usb_sndbulkpipe(xdev->udev, ep->ep_num),
++				  xb->buf, count, bulk_out_completer, xb);
++
++		usb_anchor_urb(urb, &ep->anchor);
++
++		rc = usb_submit_urb(urb, GFP_KERNEL);
++
++		if (rc) {
++			report_io_error(xdev, (rc == -ENOMEM) ? -ENOMEM :
++					-EIO);
++			goto unanchor;
++		}
++
++		usb_free_urb(urb); /* This just decrements reference count */
++
++		fill -= count;
++		submitted = true;
++	}
++
++unanchor:
++	usb_unanchor_urb(urb);
++	usb_free_urb(urb);
++
++relist:
++	spin_lock_irqsave(&ep->buffers_lock, flags);
++	list_add_tail(&xb->entry, &ep->buffers);
++	ep->outstanding_urbs--;
++	spin_unlock_irqrestore(&ep->buffers_lock, flags);
++
++done:
++	mutex_unlock(&xdev->io_mutex);
++
++	if (submitted)
++		wake_up_interruptible(&fifo->waitq);
++}
++
++static void bulk_out_work(struct work_struct *work)
++{
++	struct xillyusb_endpoint *ep = container_of(work,
++						    struct xillyusb_endpoint,
++						    workitem);
++	try_queue_bulk_out(ep);
++}
++
++static int process_in_opcode(struct xillyusb_dev *xdev,
++			     int opcode,
++			     int chan_num)
++{
++	struct xillyusb_channel *chan;
++	int chan_idx = chan_num >> 1;
++
++	if (chan_idx >= xdev->num_channels) {
++		pr_err("%s: Received illegal channel ID %d from FPGA\n",
++		       err_name, chan_num);
++		return -EIO;
++	}
++
++	chan = &xdev->channels[chan_idx];
++
++	switch (opcode) {
++	case OPCODE_EOF:
++		if (!READ_ONCE(chan->read_data_ok)) {
++			pr_err("%s: Received unexpected EOF for channel %d\n",
++			       err_name, chan_num);
++			return -EIO;
++		}
++
++		/*
++		 * A write memory barrier ensures that the FIFO's fill level
++		 * is visible before read_data_ok turns zero, so the data in
++		 * the FIFO isn't missed by the consumer.
++		 */
++		smp_wmb();
++		WRITE_ONCE(chan->read_data_ok, 0);
++		wake_up_interruptible(&chan->in_fifo->waitq);
++		break;
++
++	case OPCODE_REACHED_CHECKPOINT:
++		chan->flushing = 0;
++		wake_up_interruptible(&chan->flushq);
++		break;
++
++	case OPCODE_CANCELED_CHECKPOINT:
++		chan->canceled = 1;
++		wake_up_interruptible(&chan->flushq);
++		break;
++
++	default:
++		pr_err("%s: Received illegal opcode %d from FPGA\n",
++		       err_name, opcode);
++		return -EIO;
++	}
++
++	return 0;
++}
++
++static int process_bulk_in(struct xillybuffer *xb)
++{
++	struct xillyusb_endpoint *ep = xb->ep;
++	struct xillyusb_dev *xdev = ep->xdev;
++	int dws = xb->len >> 2;
++	__le32 *p = xb->buf;
++	u32 ctrlword;
++	struct xillyusb_channel *chan;
++	struct xillyfifo *fifo;
++	int chan_num = 0, opcode;
++	int chan_idx;
++	int bytes, count, dwconsume;
++	int in_bytes_left = 0;
++	int rc;
++
++	if ((dws << 2) != xb->len) {
++		pr_err("%s: Received BULK IN transfer with %d bytes, not a multiple of 4\n",
++		       err_name, xb->len);
++		return -EIO;
++	}
++
++	if (xdev->in_bytes_left) {
++		bytes = min(xdev->in_bytes_left, dws << 2);
++		in_bytes_left = xdev->in_bytes_left - bytes;
++		chan_num = xdev->leftover_chan_num;
++		goto resume_leftovers;
++	}
++
++	while (dws) {
++		ctrlword = le32_to_cpu(*p++);
++		dws--;
++
++		chan_num = ctrlword & 0xfff;
++		count = (ctrlword >> 12) & 0x3ff;
++		opcode = (ctrlword >> 24) & 0xf;
++
++		if (opcode != OPCODE_DATA) {
++			unsigned int in_counter = xdev->in_counter++ & 0x3ff;
++
++			if (count != in_counter) {
++				pr_err("%s: Expected opcode counter %d, got %d\n",
++				       err_name, in_counter, count);
++				return -EIO;
++			}
++
++			rc = process_in_opcode(xdev, opcode, chan_num);
++
++			if (rc)
++				return rc;
++
++			continue;
++		}
++
++		bytes = min(count + 1, dws << 2);
++		in_bytes_left = count + 1 - bytes;
++
++resume_leftovers:
++		chan_idx = chan_num >> 1;
++
++		if (!(chan_num & 1) || chan_idx >= xdev->num_channels ||
++		    !READ_ONCE(xdev->channels[chan_idx].read_data_ok)) {
++			pr_err("%s: Received illegal channel ID %d from FPGA\n",
++			       err_name, chan_num);
++			return -EIO;
++		}
++		chan = &xdev->channels[chan_idx];
++
++		fifo = chan->in_fifo;
++
++		if (unlikely(!fifo))
++			return -EIO; /* We got really unexpected data */
++
++		if (bytes != fifo_write(fifo, p, bytes, xilly_memcpy)) {
++			pr_err("%s: Misbehaving FPGA overflew an upstream FIFO!\n",
++			       err_name);
++			return -EIO;
++		}
++
++		wake_up_interruptible(&fifo->waitq);
++
++		dwconsume = (bytes + 3) >> 2;
++		dws -= dwconsume;
++		p += dwconsume;
++	}
++
++	xdev->in_bytes_left = in_bytes_left;
++	xdev->leftover_chan_num = chan_num;
++	return 0;
++}
++
++static void bulk_in_work(struct work_struct *work)
++{
++	struct xillyusb_endpoint *ep =
++		container_of(work, struct xillyusb_endpoint, workitem);
++	struct xillyusb_dev *xdev = ep->xdev;
++	unsigned long flags;
++	struct xillybuffer *xb;
++	bool consumed = false;
++	int rc = 0;
++
++	mutex_lock(&xdev->process_in_mutex);
++
++	spin_lock_irqsave(&ep->buffers_lock, flags);
++
++	while (1) {
++		if (list_empty(&ep->filled_buffers)) {
++			spin_unlock_irqrestore(&ep->buffers_lock, flags);
++
++			mutex_unlock(&xdev->process_in_mutex);
++
++			if (consumed)
++				try_queue_bulk_in(ep);
++
++			return;
++		}
++
++		xb = list_first_entry(&ep->filled_buffers, struct xillybuffer,
++				      entry);
++		list_del(&xb->entry);
++
++		spin_unlock_irqrestore(&ep->buffers_lock, flags);
++
++		consumed = true;
++
++		if (!xdev->error)
++			rc = process_bulk_in(xb);
++
++		if (rc) {
++			mutex_unlock(&xdev->process_in_mutex);
++			report_io_error(xdev, rc);
++			return;
++		}
++
++		spin_lock_irqsave(&ep->buffers_lock, flags);
++		list_add_tail(&xb->entry, &ep->buffers);
++		ep->outstanding_urbs--;
++	}
++}
++
++static int xillyusb_send_opcode(struct xillyusb_dev *xdev,
++				int chan_num, char opcode, u32 data)
++{
++	struct xillyusb_endpoint *ep = xdev->msg_ep;
++	struct xillyfifo *fifo = &ep->fifo;
++	__le32 msg[2];
++
++	int rc = 0;
++
++	msg[0] = cpu_to_le32((chan_num & 0xfff) |
++			     ((opcode & 0xf) << 24));
++	msg[1] = cpu_to_le32(data);
++
++	mutex_lock(&xdev->msg_mutex);
++
++	/*
++	 * The wait queue is woken with the interruptible variant, so the
++	 * wait function matches, however returning because of an interrupt
++	 * will mess things up considerably, in particular when the caller is
++	 * the release method. And the xdev->error part prevents being stuck
++	 * forever: Just pull the USB plug.
++	 */
++
++	while (wait_event_interruptible(fifo->waitq,
++					((atomic_read(&fifo->fill)
++					  <= (fifo->size - 8)) ||
++					 xdev->error)))
++		; /* Empty loop */
++
++	if (xdev->error) {
++		rc = xdev->error;
++		goto unlock_done;
++	}
++
++	fifo_write(fifo, (void *)msg, 8, xilly_memcpy);
++
++	try_queue_bulk_out(ep);
++
++unlock_done:
++	mutex_unlock(&xdev->msg_mutex);
++
++	return rc;
++}
++
++/*
++ * Note that flush_downstream() merely waits for the data to arrive to
++ * the application logic at the FPGA -- unlike PCIe Xillybus' counterpart,
++ * it does nothing to make it happen (and neither is it necessary).
++ *
++ * This function is not reentrant for the same @chan, but this is covered
++ * by the fact that for any given @chan, it's called either by the open,
++ * write, llseek and flush fops methods, which can't run in parallel (and the
++ * write + flush and llseek method handlers are protected with out_mutex).
++ *
++ * chan->flushed is there to avoid multiple flushes at the same position,
++ * in particular as a result of programs that close the file descriptor
++ * e.g. after a dup2() for redirection.
++ */
++
++static int flush_downstream(struct xillyusb_channel *chan,
++			    long timeout,
++			    bool interruptible)
++{
++	struct xillyusb_dev *xdev = chan->xdev;
++	int chan_num = chan->chan_idx << 1;
++	long deadline, left_to_sleep;
++	int rc;
++
++	if (chan->flushed)
++		return 0;
++
++	deadline = jiffies + 1 + timeout;
++
++	if (chan->flushing) {
++		long cancel_deadline = jiffies + 1 + XILLY_RESPONSE_TIMEOUT;
++
++		chan->canceled = 0;
++		rc = xillyusb_send_opcode(xdev, chan_num,
++					  OPCODE_CANCEL_CHECKPOINT, 0);
++
++		if (rc)
++			return rc; /* Only real error, never -EINTR */
++
++		/* Ignoring interrupts. Cancellation must be handled */
++		while (!chan->canceled) {
++			left_to_sleep = cancel_deadline - ((long)jiffies);
++
++			if (left_to_sleep <= 0) {
++				report_io_error(xdev, -EIO);
++				pr_err("%s: Fatal error: Timed out on flush cancellation request.\n",
++				       err_name);
++				return -EIO;
++			}
++
++			rc = wait_event_interruptible_timeout(chan->flushq,
++							      chan->canceled ||
++							      xdev->error,
++							      left_to_sleep);
++
++			if (xdev->error)
++				return xdev->error;
++		}
++	}
++
++	chan->flushing = 1;
++
++	/*
++	 * The checkpoint is given in terms of data elements, not bytes. As
++	 * a result, if less than an element's worth of data is stored in the
++	 * FIFO, it's not flushed, including the flush before closing, which
++	 * means that such data is lost. This is consistent with PCIe Xillybus.
++	 */
++
++	rc = xillyusb_send_opcode(xdev, chan_num,
++				  OPCODE_SET_CHECKPOINT,
++				  chan->out_bytes >>
++				  chan->out_log2_element_size);
++
++	if (rc)
++		return rc; /* Only real error, never -EINTR */
++
++	if (!timeout) {
++		while (chan->flushing) {
++			rc = wait_event_interruptible(chan->flushq,
++						      !chan->flushing ||
++						      xdev->error);
++			if (xdev->error)
++				return xdev->error;
++
++			if (interruptible && rc)
++				return -EINTR;
++		}
++
++		goto done;
++	}
++
++	while (chan->flushing) {
++		left_to_sleep = deadline - ((long)jiffies);
++
++		if (left_to_sleep <= 0)
++			return -ETIMEDOUT;
++
++		rc = wait_event_interruptible_timeout(chan->flushq,
++						      !chan->flushing ||
++						      xdev->error,
++						      left_to_sleep);
++
++		if (xdev->error)
++			return xdev->error;
++
++		if (interruptible && rc < 0)
++			return -EINTR;
++	}
++
++done:
++	chan->flushed = 1;
++	return 0;
++}
++
++/* request_read_anything(): Ask the FPGA for any little amount of data */
++static int request_read_anything(struct xillyusb_channel *chan,
++				 char opcode)
++{
++	struct xillyusb_dev *xdev = chan->xdev;
++	unsigned int sh = chan->in_log2_element_size;
++	int chan_num = (chan->chan_idx << 1) | 1;
++	u32 mercy = chan->in_consumed_bytes + (2 << sh) - 1;
++
++	return xillyusb_send_opcode(xdev, chan_num, opcode, mercy >> sh);
++}
++
++static int xillyusb_open(struct inode *inode, struct file *filp)
++{
++	int minor = iminor(inode);
++	int major = imajor(inode);
++	struct xillyusb_dev *xdev_iter, *xdev = NULL;
++	struct xillyusb_channel *chan;
++	struct xillyfifo *in_fifo = NULL;
++	struct xillyusb_endpoint *out_ep = NULL;
++
++	int rc = -ENODEV;
++
++	mutex_lock(&xdev_mutex);
++
++	list_for_each_entry(xdev_iter, &xdev_list, list_entry) {
++		if (xdev_iter->major == major &&
++		    minor >= xdev_iter->lowest_minor &&
++		    minor < (xdev_iter->lowest_minor +
++			     xdev_iter->num_channels)) {
++			xdev = xdev_iter;
++			break;
++		}
++	}
++
++	if (!xdev)
++		goto unmutex_fail;
++
++	chan = &xdev->channels[minor - xdev->lowest_minor];
++	filp->private_data = chan;
++
++	if (((filp->f_mode & FMODE_READ) && !chan->readable) ||
++	    ((filp->f_mode & FMODE_WRITE) && !chan->writable))
++		goto unmutex_fail;
++
++	if ((filp->f_flags & O_NONBLOCK) && (filp->f_mode & FMODE_READ) &&
++	    chan->in_synchronous) {
++		pr_err("%s: open() failed: O_NONBLOCK not allowed for read on this device\n",
++		       err_name);
++		goto unmutex_fail;
++	}
++
++	if ((filp->f_flags & O_NONBLOCK) && (filp->f_mode & FMODE_WRITE) &&
++	    chan->out_synchronous) {
++		pr_err("%s: open() failed: O_NONBLOCK not allowed for write on this device\n",
++		       err_name);
++		goto unmutex_fail;
++	}
++
++	rc = -EBUSY;
++
++	if (((filp->f_mode & FMODE_READ) && chan->open_for_read) ||
++	    ((filp->f_mode & FMODE_WRITE) && chan->open_for_write))
++		goto unmutex_fail;
++
++	kref_get(&xdev->kref);
++
++	if (filp->f_mode & FMODE_READ)
++		chan->open_for_read = 1;
++
++	if (filp->f_mode & FMODE_WRITE)
++		chan->open_for_write = 1;
++
++	mutex_unlock(&xdev_mutex);
++
++	if (filp->f_mode & FMODE_WRITE) {
++		out_ep = endpoint_alloc(xdev,
++					(chan->chan_idx + 2) | USB_DIR_OUT,
++					bulk_out_work, BUF_SIZE_ORDER, BUFNUM);
++
++		if (!out_ep) {
++			rc = -ENOMEM;
++			goto unopen;
++		}
++
++		rc = fifo_init(&out_ep->fifo, chan->out_log2_fifo_size);
++
++		if (rc)
++			goto late_unopen;
++
++		out_ep->fill_mask = -(1 << chan->out_log2_element_size);
++		chan->out_bytes = 0;
++		chan->flushed = 0;
++
++		/*
++		 * Sending a flush request to a previously closed stream
++		 * effectively opens it, and also waits until the command is
++		 * confirmed by the FPGA. The latter is necessary because the
++		 * data is sent through a separate BULK OUT endpoint, and the
++		 * xHCI controller is free to reorder transmissions.
++		 *
++		 * This can't go wrong unless there's a serious hardware error
++		 * (or the computer is stuck for 500 ms?)
++		 */
++		rc = flush_downstream(chan, XILLY_RESPONSE_TIMEOUT, false);
++
++		if (rc == -ETIMEDOUT) {
++			rc = -EIO;
++			report_io_error(xdev, rc);
++			pr_err("%s: Fatal error: Hardware timed out to open request.\n",
++			       err_name);
++		}
++
++		if (rc)
++			goto late_unopen;
++	}
++
++	if (filp->f_mode & FMODE_READ) {
++		in_fifo = kzalloc(sizeof(*in_fifo), GFP_KERNEL);
++
++		if (!in_fifo) {
++			rc = -ENOMEM;
++			goto late_unopen;
++		}
++
++		rc = fifo_init(in_fifo, chan->in_log2_fifo_size);
++
++		if (rc) {
++			kfree(in_fifo);
++			goto late_unopen;
++		}
++	}
++
++	mutex_lock(&chan->lock);
++	if (in_fifo) {
++		chan->in_fifo = in_fifo;
++		chan->read_data_ok = 1;
++	}
++	if (out_ep)
++		chan->out_ep = out_ep;
++	mutex_unlock(&chan->lock);
++
++	if (in_fifo) {
++		u32 in_checkpoint = 0;
++
++		if (!chan->in_synchronous)
++			in_checkpoint = in_fifo->size >>
++				chan->in_log2_element_size;
++
++		chan->in_consumed_bytes = 0;
++		chan->poll_used = 0;
++		chan->in_current_checkpoint = in_checkpoint;
++		rc = xillyusb_send_opcode(xdev, (chan->chan_idx << 1) | 1,
++					  OPCODE_SET_CHECKPOINT,
++					  in_checkpoint);
++
++		if (rc) /* Failure guarantees that opcode wasn't sent */
++			goto unfifo;
++
++		/*
++		 * In non-blocking mode, request the FPGA to send any data it
++		 * has right away. Otherwise, the first read() will always
++		 * return -EAGAIN, which is OK strictly speaking, but ugly.
++		 * Checking and unrolling if this fails isn't worth the
++		 * effort -- the error is propagated to the first read()
++		 * anyhow.
++		 */
++		if (filp->f_flags & O_NONBLOCK)
++			request_read_anything(chan, OPCODE_SET_PUSH);
++	}
++
++	return 0;
++
++unfifo:
++	if (in_fifo) {
++		chan->read_data_ok = 0;
++		safely_assign_in_fifo(chan, NULL);
++		fifo_mem_release(in_fifo);
++	}
++
++	if (out_ep) {
++		mutex_lock(&chan->lock);
++		chan->out_ep = NULL;
++		mutex_unlock(&chan->lock);
++	}
++
++late_unopen:
++	if (out_ep)
++		endpoint_dealloc(out_ep);
++
++unopen:
++	mutex_lock(&xdev_mutex);
++
++	if (filp->f_mode & FMODE_READ)
++		chan->open_for_read = 0;
++
++	if (filp->f_mode & FMODE_WRITE)
++		chan->open_for_write = 0;
++
++	mutex_unlock(&xdev_mutex);
++
++	kref_put(&xdev->kref, cleanup_dev);
++
++	return rc;
++
++unmutex_fail:
++	mutex_unlock(&xdev_mutex);
++	return rc;
++}
++
++static int xilly_copy_to_user(void *dst, const void *src, int n)
++{
++	return copy_to_user((void __user *)dst, src, n);
++}
++
++static ssize_t xillyusb_read(struct file *filp, char __user *userbuf,
++			     size_t count, loff_t *f_pos)
++{
++	struct xillyusb_channel *chan = filp->private_data;
++	struct xillyusb_dev *xdev = chan->xdev;
++	struct xillyfifo *fifo = chan->in_fifo;
++	int chan_num = (chan->chan_idx << 1) | 1;
++
++	long deadline, left_to_sleep;
++	int bytes_done = 0;
++	bool sent_set_push = false;
++	int rc;
++
++	deadline = jiffies + 1 + XILLY_RX_TIMEOUT;
++
++	rc = mutex_lock_interruptible(&chan->in_mutex);
++
++	if (rc)
++		return rc;
++
++	while (1) {
++		u32 fifo_checkpoint_bytes, complete_checkpoint_bytes;
++		u32 complete_checkpoint, fifo_checkpoint;
++		u32 checkpoint;
++		s32 diff, leap;
++		unsigned int sh = chan->in_log2_element_size;
++		bool checkpoint_for_complete;
++
++		rc = fifo_read(fifo, (__force void *)userbuf + bytes_done,
++			       count - bytes_done, xilly_copy_to_user);
++
++		if (rc < 0)
++			break;
++
++		bytes_done += rc;
++		chan->in_consumed_bytes += rc;
++
++		left_to_sleep = deadline - ((long)jiffies);
++
++		/*
++		 * Some 32-bit arithmetics that may wrap. Note that
++		 * complete_checkpoint is rounded up to the closest element
++		 * boundary, because the read() can't be completed otherwise.
++		 * fifo_checkpoint_bytes is rounded down, because it protects
++		 * in_fifo from overflowing.
++		 */
++
++		fifo_checkpoint_bytes = chan->in_consumed_bytes + fifo->size;
++		complete_checkpoint_bytes =
++			chan->in_consumed_bytes + count - bytes_done;
++
++		fifo_checkpoint = fifo_checkpoint_bytes >> sh;
++		complete_checkpoint =
++			(complete_checkpoint_bytes + (1 << sh) - 1) >> sh;
++
++		diff = (fifo_checkpoint - complete_checkpoint) << sh;
++
++		if (chan->in_synchronous && diff >= 0) {
++			checkpoint = complete_checkpoint;
++			checkpoint_for_complete = true;
++		} else {
++			checkpoint = fifo_checkpoint;
++			checkpoint_for_complete = false;
++		}
++
++		leap = (checkpoint - chan->in_current_checkpoint) << sh;
++
++		/*
++		 * To prevent flooding of OPCODE_SET_CHECKPOINT commands as
++		 * data is consumed, it's issued only if it moves the
++		 * checkpoint by at least an 8th of the FIFO's size, or if
++		 * it's necessary to complete the number of bytes requested by
++		 * the read() call.
++		 *
++		 * chan->read_data_ok is checked to spare an unnecessary
++		 * submission after receiving EOF, however it's harmless if
++		 * such slips away.
++		 */
++
++		if (chan->read_data_ok &&
++		    (leap > (fifo->size >> 3) ||
++		     (checkpoint_for_complete && leap > 0))) {
++			chan->in_current_checkpoint = checkpoint;
++			rc = xillyusb_send_opcode(xdev, chan_num,
++						  OPCODE_SET_CHECKPOINT,
++						  checkpoint);
++
++			if (rc)
++				break;
++		}
++
++		if (bytes_done == count ||
++		    (left_to_sleep <= 0 && bytes_done))
++			break;
++
++		/*
++		 * Reaching here means that the FIFO was empty at the call to
++		 * fifo_read() above, but not necessarily right now. Error
++		 * and EOF are checked and reported only now, so that no data
++		 * that managed its way to the FIFO is lost.
++		 */
++
++		if (!READ_ONCE(chan->read_data_ok)) { /* FPGA has sent EOF */
++			/* Has data slipped into the FIFO since fifo_read()? */
++			smp_rmb();
++			if (atomic_read(&fifo->fill))
++				continue;
++
++			rc = 0;
++			break;
++		}
++
++		if (xdev->error) {
++			rc = xdev->error;
++			break;
++		}
++
++		if (filp->f_flags & O_NONBLOCK) {
++			rc = -EAGAIN;
++			break;
++		}
++
++		if (left_to_sleep > 0) {
++			if (!sent_set_push) {
++				rc = xillyusb_send_opcode(xdev, chan_num,
++							  OPCODE_SET_PUSH,
++							  complete_checkpoint);
++
++				if (rc)
++					break;
++
++				sent_set_push = true;
++			}
++
++			/*
++			 * Note that when xdev->error is set (e.g. when the
++			 * device is unplugged), read_data_ok turns zero and
++			 * fifo->waitq is awaken.
++			 * Therefore no special attention to xdev->error.
++			 */
++
++			rc = wait_event_interruptible_timeout
++				(fifo->waitq,
++				 atomic_read(&fifo->fill) ||
++				 !chan->read_data_ok,
++				 left_to_sleep);
++		} else { /* bytes_done == 0 */
++			/* Tell FPGA to send anything it has */
++			rc = request_read_anything(chan, OPCODE_UPDATE_PUSH);
++
++			if (rc)
++				break;
++
++			rc = wait_event_interruptible
++				(fifo->waitq,
++				 atomic_read(&fifo->fill) ||
++				 !chan->read_data_ok);
++		}
++
++		if (rc < 0) {
++			rc = -EINTR;
++			break;
++		}
++	}
++
++	if (((filp->f_flags & O_NONBLOCK) || chan->poll_used) &&
++	    !atomic_read(&fifo->fill))
++		request_read_anything(chan, OPCODE_SET_PUSH);
++
++	mutex_unlock(&chan->in_mutex);
++
++	if (bytes_done)
++		return bytes_done;
++
++	return rc;
++}
++
++static int xillyusb_flush(struct file *filp, fl_owner_t id)
++{
++	struct xillyusb_channel *chan = filp->private_data;
++	int rc;
++
++	if (!(filp->f_mode & FMODE_WRITE))
++		return 0;
++
++	rc = mutex_lock_interruptible(&chan->out_mutex);
++
++	if (rc)
++		return rc;
++
++	/*
++	 * One second's timeout on flushing. Interrupts are ignored, because if
++	 * the user pressed CTRL-C, that interrupt will still be in flight by
++	 * the time we reach here, and the opportunity to flush is lost.
++	 */
++	rc = flush_downstream(chan, HZ, false);
++
++	if (rc == -ETIMEDOUT)
++		pr_warn("%s: Timed out while flushing. Output data may be lost.\n",
++			err_name);
++
++	mutex_unlock(&chan->out_mutex);
++
++	return rc;
++}
++
++static int xilly_copy_from_user(void *dst, const void *src, int n)
++{
++	return copy_from_user(dst, (const void __user *)src, n);
++}
++
++static ssize_t xillyusb_write(struct file *filp, const char __user *userbuf,
++			      size_t count, loff_t *f_pos)
++{
++	struct xillyusb_channel *chan = filp->private_data;
++	struct xillyusb_dev *xdev = chan->xdev;
++	struct xillyfifo *fifo = &chan->out_ep->fifo;
++	int rc;
++
++	rc = mutex_lock_interruptible(&chan->out_mutex);
++
++	if (rc)
++		return rc;
++
++	while (1) {
++		if (xdev->error) {
++			rc = xdev->error;
++			break;
++		}
++
++		if (count == 0)
++			break;
++
++		rc = fifo_write(fifo, (__force void *)userbuf, count,
++				xilly_copy_from_user);
++
++		if (rc != 0)
++			break;
++
++		if (filp->f_flags & O_NONBLOCK) {
++			rc = -EAGAIN;
++			break;
++		}
++
++		if (wait_event_interruptible
++		    (fifo->waitq,
++		     (atomic_read(&fifo->fill) != fifo->size) ||
++		     xdev->error)) {
++			rc = -EINTR;
++			break;
++		}
++	}
++
++	if (rc < 0)
++		goto done;
++
++	chan->out_bytes += rc;
++
++	if (rc) {
++		try_queue_bulk_out(chan->out_ep);
++		chan->flushed = 0;
++	}
++
++	if (chan->out_synchronous) {
++		int flush_rc = flush_downstream(chan, 0, true);
++
++		if (flush_rc && !rc)
++			rc = flush_rc;
++	}
++
++done:
++	mutex_unlock(&chan->out_mutex);
++
++	return rc;
++}
++
++static int xillyusb_release(struct inode *inode, struct file *filp)
++{
++	struct xillyusb_channel *chan = filp->private_data;
++	struct xillyusb_dev *xdev = chan->xdev;
++	int rc_read = 0, rc_write = 0;
++
++	if (filp->f_mode & FMODE_READ) {
++		struct xillyfifo *in_fifo = chan->in_fifo;
++
++		rc_read = xillyusb_send_opcode(xdev, (chan->chan_idx << 1) | 1,
++					       OPCODE_CLOSE, 0);
++		/*
++		 * If rc_read is nonzero, xdev->error indicates a global
++		 * device error. The error is reported later, so that
++		 * resources are freed.
++		 *
++		 * Looping on wait_event_interruptible() kinda breaks the idea
++		 * of being interruptible, and this should have been
++		 * wait_event(). Only it's being waken with
++		 * wake_up_interruptible() for the sake of other uses. If
++		 * there's a global device error, chan->read_data_ok is
++		 * deasserted and the wait queue is awaken, so this is covered.
++		 */
++
++		while (wait_event_interruptible(in_fifo->waitq,
++						!chan->read_data_ok))
++			; /* Empty loop */
++
++		safely_assign_in_fifo(chan, NULL);
++		fifo_mem_release(in_fifo);
++
++		mutex_lock(&xdev_mutex);
++		chan->open_for_read = 0;
++		mutex_unlock(&xdev_mutex);
++	}
++
++	if (filp->f_mode & FMODE_WRITE) {
++		struct xillyusb_endpoint *ep = chan->out_ep;
++		/*
++		 * chan->flushing isn't zeroed. If the pre-release flush timed
++		 * out, a cancel request will be sent before the next
++		 * OPCODE_SET_CHECKPOINT (i.e. when the file is opened again).
++		 * This is despite that the FPGA forgets about the checkpoint
++		 * request as the file closes. Still, in an exceptional race
++		 * condition, the FPGA could send an OPCODE_REACHED_CHECKPOINT
++		 * just before closing that would reach the host after the
++		 * file has re-opened.
++		 */
++
++		mutex_lock(&chan->lock);
++		chan->out_ep = NULL;
++		mutex_unlock(&chan->lock);
++
++		endpoint_dealloc(ep);
++
++		/* See comments on rc_read above */
++		rc_write = xillyusb_send_opcode(xdev, chan->chan_idx << 1,
++						OPCODE_CLOSE, 0);
++
++		mutex_lock(&xdev_mutex);
++		chan->open_for_write = 0;
++		mutex_unlock(&xdev_mutex);
++	}
++
++	kref_put(&xdev->kref, cleanup_dev);
++
++	return rc_read ? rc_read : rc_write;
++}
++
++static loff_t xillyusb_llseek(struct file *filp, loff_t offset, int whence)
++{
++	struct xillyusb_channel *chan = filp->private_data;
++	struct xillyusb_dev *xdev = chan->xdev;
++	loff_t pos = filp->f_pos;
++	int rc = 0;
++	unsigned int log2_element_size = chan->readable ?
++		chan->in_log2_element_size : chan->out_log2_element_size;
++
++	/*
++	 * Take both mutexes not allowing interrupts, since it seems like
++	 * common applications don't expect an -EINTR here. Besides, multiple
++	 * access to a single file descriptor on seekable devices is a mess
++	 * anyhow.
++	 */
++
++	mutex_lock(&chan->out_mutex);
++	mutex_lock(&chan->in_mutex);
++
++	switch (whence) {
++	case SEEK_SET:
++		pos = offset;
++		break;
++	case SEEK_CUR:
++		pos += offset;
++		break;
++	case SEEK_END:
++		pos = offset; /* Going to the end => to the beginning */
++		break;
++	default:
++		rc = -EINVAL;
++		goto end;
++	}
++
++	/* In any case, we must finish on an element boundary */
++	if (pos & ((1 << log2_element_size) - 1)) {
++		rc = -EINVAL;
++		goto end;
++	}
++
++	rc = xillyusb_send_opcode(xdev, chan->chan_idx << 1,
++				  OPCODE_SET_ADDR,
++				  pos >> log2_element_size);
++
++	if (rc)
++		goto end;
++
++	/*
++	 * If the stream is writable (it most likely is), a flush request is
++	 * sent to ensure that traffic on the stream's BULK OUT endpoint isn't
++	 * sent before the position is updated on the FPGA -- otherwise that
++	 * data could arrive before the position update. Since only
++	 * synchronous streams can be seekable, flush_downstream() has already
++	 * been called after the last write(), so flushing is completed
++	 * virtually right away. Well, unless the last flush was interrupted,
++	 * in which case we wait for up to 1000 ms, and return -ETIMEDOUT (!)
++	 * if the flush was incomplete. No real-life application should ever
++	 * get to this point.
++	 */
++
++	if (chan->writable) {
++		chan->flushed = 0;
++		rc = flush_downstream(chan, HZ, false);
++	}
++
++end:
++	mutex_unlock(&chan->out_mutex);
++	mutex_unlock(&chan->in_mutex);
++
++	if (rc) /* Return error after releasing mutexes */
++		return rc;
++
++	filp->f_pos = pos;
++
++	return pos;
++}
++
++static __poll_t xillyusb_poll(struct file *filp, poll_table *wait)
++{
++	struct xillyusb_channel *chan = filp->private_data;
++	__poll_t mask = 0;
++
++	if (chan->in_fifo)
++		poll_wait(filp, &chan->in_fifo->waitq, wait);
++
++	if (chan->out_ep)
++		poll_wait(filp, &chan->out_ep->fifo.waitq, wait);
++
++	/*
++	 * If this is the first time poll() is called, and the file is
++	 * readable, set the relevant flag. Also tell the FPGA to send all it
++	 * has, to kickstart the mechanism that ensures there's always some
++	 * data in in_fifo unless the stream is dry end-to-end. Note that the
++	 * first poll() may not return a EPOLLIN, even if there's data on the
++	 * FPGA. Rather, the data will arrive soon, and trigger the relevant
++	 * wait queue.
++	 */
++
++	if (!chan->poll_used && chan->in_fifo) {
++		chan->poll_used = 1;
++		request_read_anything(chan, OPCODE_SET_PUSH);
++	}
++
++	/*
++	 * poll() won't play ball regarding read() channels which
++	 * are synchronous. Allowing that will create situations where data has
++	 * been delivered at the FPGA, and users expecting select() to wake up,
++	 * which it may not. So make it never work.
++	 */
++
++	if (chan->in_fifo && !chan->in_synchronous &&
++	    (atomic_read(&chan->in_fifo->fill) || !chan->read_data_ok))
++		mask |= EPOLLIN | EPOLLRDNORM;
++
++	if (chan->out_ep &&
++	    (atomic_read(&chan->out_ep->fifo.fill) !=
++	     chan->out_ep->fifo.size))
++		mask |= EPOLLOUT | EPOLLWRNORM;
++
++	if (chan->xdev->error)
++		mask |= EPOLLERR;
++
++	return mask;
++}
++
++static const struct file_operations xillyusb_fops = {
++	.owner      = THIS_MODULE,
++	.read       = xillyusb_read,
++	.write      = xillyusb_write,
++	.open       = xillyusb_open,
++	.flush      = xillyusb_flush,
++	.release    = xillyusb_release,
++	.llseek     = xillyusb_llseek,
++	.poll       = xillyusb_poll,
++};
++
++/*
++ * Called from xillyusb_probe() only, hence interface->dev is guaranteed to
++ * be valid.
++ */
++
++static int xillyusb_init_chrdev(struct usb_interface *interface,
++				unsigned char *names,
++				unsigned int len)
++{
++	int rc;
++	dev_t dev;
++	int i;
++	char devname[48];
++	struct device *device;
++	size_t namelen;
++
++	struct xillyusb_dev *xdev = usb_get_intfdata(interface);
++
++	rc = alloc_chrdev_region(&dev, 0, /* minor start */
++				 xdev->num_channels,
++				 xillyname);
++	if (rc) {
++		dev_warn(&interface->dev, "Failed to obtain major/minors");
++		return rc;
++	}
++
++	/* With cdev_alloc(), the allocated memory is freed automatically */
++	xdev->cdev = cdev_alloc();
++	if (!xdev->cdev)
++		goto unregister_chrdev;
++
++	xdev->cdev->ops = &xillyusb_fops;
++	xdev->cdev->owner = THIS_MODULE;
++
++	xdev->major = MAJOR(dev);
++	xdev->lowest_minor = MINOR(dev);
++
++	rc = cdev_add(xdev->cdev, MKDEV(xdev->major, xdev->lowest_minor),
++		      xdev->num_channels);
++	if (rc) {
++		dev_warn(&interface->dev, "Failed to add cdev. Aborting.\n");
++		/* kobject_put() is normally done by cdev_del() */
++		kobject_put(&xdev->cdev->kobj);
++		goto unregister_chrdev;
++	}
++
++	for (i = 0; i < xdev->num_channels; i++) {
++		namelen = strnlen(names, len);
++
++		if (namelen == len) {
++			dev_err(&interface->dev, "IDT's list of names is too short. This is exceptionally weird, because its CRC is OK\n");
++			rc = -ENODEV;
++			goto unroll_device_create;
++		}
++
++		snprintf(devname, sizeof(devname) - 1, "xillyusb_%02d_%s",
++			 xdev->index, names);
++
++		devname[sizeof(devname) - 1] = 0; /* Should never matter */
++
++		len -= namelen + 1;
++		names += namelen + 1;
++
++		device = device_create(xillyusb_class,
++				       NULL,
++				       MKDEV(xdev->major,
++					     i + xdev->lowest_minor),
++				       NULL,
++				       "%s", devname);
++
++		if (IS_ERR(device)) {
++			dev_err(&interface->dev,
++				"Failed to create %s device. Aborting.\n",
++				devname);
++			rc = -ENODEV;
++			goto unroll_device_create;
++		}
++	}
++
++	dev_info(&interface->dev, "Created %d device files.\n",
++		 xdev->num_channels);
++	return 0; /* succeed */
++
++unroll_device_create:
++	for (i--; i >= 0; i--)
++		device_destroy(xillyusb_class, MKDEV(xdev->major,
++						     i + xdev->lowest_minor));
++
++	cdev_del(xdev->cdev);
++unregister_chrdev:
++	unregister_chrdev_region(MKDEV(xdev->major, xdev->lowest_minor),
++				 xdev->num_channels);
++
++	return rc;
++}
++
++/*
++ * Called from xillyusb_disconnect() only, hence interface->dev is
++ * guaranteed to be valid.
++ */
++
++static void xillyusb_cleanup_chrdev(struct usb_interface *interface)
++{
++	int minor;
++	struct xillyusb_dev *xdev = usb_get_intfdata(interface);
++
++	for (minor = xdev->lowest_minor;
++	     minor < (xdev->lowest_minor + xdev->num_channels);
++	     minor++)
++		device_destroy(xillyusb_class, MKDEV(xdev->major, minor));
++	cdev_del(xdev->cdev);
++	unregister_chrdev_region(MKDEV(xdev->major,
++				       xdev->lowest_minor),
++				 xdev->num_channels);
++
++	dev_info(&interface->dev, "Removed %d device files.\n",
++		 xdev->num_channels);
++}
++
++static int xillyusb_setup_base_eps(struct xillyusb_dev *xdev)
++{
++	xdev->msg_ep = endpoint_alloc(xdev, MSG_EP_NUM | USB_DIR_OUT,
++				      bulk_out_work, 1, 2);
++	if (!xdev->msg_ep)
++		return -ENOMEM;
++
++	if (fifo_init(&xdev->msg_ep->fifo, 13)) /* 8 kiB */
++		goto dealloc;
++
++	xdev->msg_ep->fill_mask = -8; /* 8 bytes granularity */
++
++	xdev->in_ep = endpoint_alloc(xdev, IN_EP_NUM | USB_DIR_IN,
++				     bulk_in_work, BUF_SIZE_ORDER, BUFNUM);
++	if (!xdev->in_ep)
++		goto dealloc;
++
++	try_queue_bulk_in(xdev->in_ep);
++
++	return 0;
++
++dealloc:
++	endpoint_dealloc(xdev->msg_ep); /* Also frees FIFO mem if allocated */
++	return -ENOMEM;
++}
++
++static int setup_channels(struct xillyusb_dev *xdev,
++			  __le16 *chandesc)
++{
++	struct xillyusb_channel *chan;
++	int i;
++
++	chan = kcalloc(xdev->num_channels, sizeof(*chan), GFP_KERNEL);
++	if (!chan)
++		return -ENOMEM;
++
++	xdev->channels = chan;
++
++	for (i = 0; i < xdev->num_channels; i++, chan++) {
++		unsigned int in_desc = le16_to_cpu(*chandesc++);
++		unsigned int out_desc = le16_to_cpu(*chandesc++);
++
++		chan->xdev = xdev;
++		mutex_init(&chan->in_mutex);
++		mutex_init(&chan->out_mutex);
++		mutex_init(&chan->lock);
++		init_waitqueue_head(&chan->flushq);
++
++		chan->chan_idx = i;
++
++		if (in_desc & 0x80) { /* Entry is valid */
++			chan->readable = 1;
++			chan->in_synchronous = !!(in_desc & 0x40);
++			chan->in_seekable = !!(in_desc & 0x20);
++			chan->in_log2_element_size = in_desc & 0x0f;
++			chan->in_log2_fifo_size = ((in_desc >> 8) & 0x1f) + 16;
++		}
++
++		if (out_desc & 0x80) { /* Entry is valid */
++			chan->writable = 1;
++			chan->out_synchronous = !!(out_desc & 0x40);
++			chan->out_seekable = !!(out_desc & 0x20);
++			chan->out_log2_element_size = out_desc & 0x0f;
++			chan->out_log2_fifo_size =
++				((out_desc >> 8) & 0x1f) + 16;
++		}
++	}
++
++	return 0;
++}
++
++static int xillyusb_discovery(struct usb_interface *interface)
++{
++	int rc;
++	struct xillyusb_dev *xdev = usb_get_intfdata(interface);
++	__le16 bogus_chandesc[2];
++	struct xillyfifo idt_fifo;
++	struct xillyusb_channel *chan;
++	unsigned int idt_len, names_offset;
++	unsigned char *idt;
++
++	rc = xillyusb_send_opcode(xdev, ~0, OPCODE_QUIESCE, 0);
++
++	if (rc) {
++		dev_err(&interface->dev, "Failed to send quiesce request. Aborting.\n");
++		return rc;
++	}
++
++	/* Phase I: Set up one fake upstream channel and obtain IDT */
++
++	/* Set up a fake IDT with one async IN stream */
++	xdev->num_channels = 1;
++	bogus_chandesc[0] = cpu_to_le16(0x80);
++	bogus_chandesc[1] = cpu_to_le16(0);
++
++	rc = setup_channels(xdev, bogus_chandesc);
++
++	if (rc)
++		return rc;
++
++	rc = fifo_init(&idt_fifo, LOG2_IDT_FIFO_SIZE);
++
++	if (rc)
++		return rc;
++
++	chan = xdev->channels;
++
++	chan->in_fifo = &idt_fifo;
++	chan->read_data_ok = 1;
++
++	rc = xillyusb_send_opcode(xdev, ~0, OPCODE_REQ_IDT, 0);
++
++	if (rc) {
++		dev_err(&interface->dev, "Failed to send IDT request. Aborting.\n");
++		goto unfifo;
++	}
++
++	rc = wait_event_interruptible_timeout(idt_fifo.waitq,
++					      !chan->read_data_ok,
++					      XILLY_RESPONSE_TIMEOUT);
++
++	if (xdev->error) {
++		rc = xdev->error;
++		goto unfifo;
++	}
++
++	if (rc < 0) {
++		rc = -EINTR; /* Interrupt on probe method? Interesting. */
++		goto unfifo;
++	}
++
++	if (chan->read_data_ok) {
++		rc = -ETIMEDOUT;
++		dev_err(&interface->dev, "No response from FPGA. Aborting.\n");
++		goto unfifo;
++	}
++
++	idt_len = atomic_read(&idt_fifo.fill);
++	idt = kmalloc(idt_len, GFP_KERNEL);
++
++	if (!idt)
++		goto unfifo;
++
++	fifo_read(&idt_fifo, idt, idt_len, xilly_memcpy);
++
++	if (crc32_le(~0, idt, idt_len) != 0) {
++		dev_err(&interface->dev, "IDT failed CRC check. Aborting.\n");
++		rc = -ENODEV;
++		goto unidt;
++	}
++
++	if (*idt > 0x90) {
++		dev_err(&interface->dev, "No support for IDT version 0x%02x. Maybe the xillyusb driver needs an upgarde. Aborting.\n",
++			(int)*idt);
++		rc = -ENODEV;
++		goto unidt;
++	}
++
++	/* Phase II: Set up the streams as defined in IDT */
++
++	xdev->num_channels = le16_to_cpu(*((__le16 *)(idt + 1)));
++	names_offset = 3 + xdev->num_channels * 4;
++	idt_len -= 4; /* Exclude CRC */
++
++	if (idt_len < names_offset) {
++		dev_err(&interface->dev, "IDT too short. This is exceptionally weird, because its CRC is OK\n");
++		rc = -ENODEV;
++		goto unidt;
++	}
++
++	rc = setup_channels(xdev, (void *)idt + 3);
++
++	if (rc)
++		goto unidt;
++
++	/*
++	 * Except for wildly misbehaving hardware, or if it was disconnected
++	 * just after responding with the IDT, there is no reason for any
++	 * work item to be running now. To be sure that xdev->channel
++	 * is updated on anything that might run in parallel, flush the
++	 * workqueue, which rarely does anything.
++	 */
++	flush_workqueue(xdev->workq);
++
++	fifo_mem_release(&idt_fifo);
++	kfree(chan);
++
++	rc = xillyusb_init_chrdev(interface, idt + names_offset,
++				  idt_len - names_offset);
++
++	kfree(idt);
++
++	return rc;
++
++unidt:
++	kfree(idt);
++
++unfifo:
++	safely_assign_in_fifo(chan, NULL);
++	fifo_mem_release(&idt_fifo);
++
++	return rc;
++}
++
++static int xillyusb_probe(struct usb_interface *interface,
++			  const struct usb_device_id *id)
++{
++	struct xillyusb_dev *xdev;
++	int rc;
++	int i;
++
++	xdev = kzalloc(sizeof(*xdev), GFP_KERNEL);
++	if (!xdev)
++		return -ENOMEM;
++
++	kref_init(&xdev->kref);
++	mutex_init(&xdev->io_mutex);
++	mutex_init(&xdev->process_in_mutex);
++	mutex_init(&xdev->msg_mutex);
++
++	xdev->udev = usb_get_dev(interface_to_usbdev(interface));
++	xdev->interface = interface;
++	xdev->error = 0;
++	spin_lock_init(&xdev->error_lock);
++	xdev->in_counter = 0;
++	xdev->in_bytes_left = 0;
++	xdev->workq = alloc_workqueue(xillyname, WQ_HIGHPRI, 0);
++
++	if (!xdev->workq) {
++		dev_err(&interface->dev, "Failed to allocate work queue\n");
++		rc = -ENOMEM;
++		goto fail;
++	}
++
++	INIT_WORK(&xdev->wakeup_workitem, wakeup_all);
++
++	usb_set_intfdata(interface, xdev);
++
++	mutex_lock(&xdev_mutex);
++
++	for (i = 0; i < MAX_XILLYUSB_DEVS; i++)
++		if (!xdev_map[i])
++			break;
++
++	if (i == MAX_XILLYUSB_DEVS) {
++		dev_err(&interface->dev,
++			"Reached limit of %d maximal devices. Aborting.\n",
++			MAX_XILLYUSB_DEVS);
++		mutex_unlock(&xdev_mutex);
++		rc = -ENODEV;
++		goto fail;
++	}
++
++	xdev_map[i] = 1;
++
++	mutex_unlock(&xdev_mutex);
++
++	xdev->index = i;
++
++	rc = xillyusb_setup_base_eps(xdev);
++
++	if (rc)
++		goto unindex_fail;
++
++	rc = xillyusb_discovery(interface);
++
++	if (rc)
++		goto unindex_fail;
++
++	mutex_lock(&xdev_mutex);
++	list_add_tail(&xdev->list_entry, &xdev_list);
++	mutex_unlock(&xdev_mutex);
++
++	return 0;
++
++unindex_fail:
++	xdev_map[i] = 0;
++
++fail:
++	usb_set_intfdata(interface, NULL);
++	kref_put(&xdev->kref, cleanup_dev);
++	return rc;
++}
++
++static void xillyusb_disconnect(struct usb_interface *interface)
++{
++	struct xillyusb_dev *xdev;
++
++	xillyusb_cleanup_chrdev(interface);
++
++	xdev = usb_get_intfdata(interface);
++
++	/*
++	 * Try to send OPCODE_QUIESCE, which will fail silently if the device
++	 * was disconnected, but makes sense on module unload.
++	 */
++
++	xillyusb_send_opcode(xdev, ~0, OPCODE_QUIESCE, 0);
++
++	usb_set_intfdata(interface, NULL);
++
++	report_io_error(xdev, -ENODEV);
++
++	mutex_lock(&xdev->io_mutex);
++	xdev->interface = NULL;
++	mutex_unlock(&xdev->io_mutex);
++
++	mutex_lock(&xdev_mutex);
++	xdev_map[xdev->index] = 0;
++	list_del(&xdev->list_entry);
++	mutex_unlock(&xdev_mutex);
++
++	kref_put(&xdev->kref, cleanup_dev);
++}
++
++static struct usb_driver xillyusb_driver = {
++	.name = xillyname,
++	.id_table = xillyusb_table,
++	.probe = xillyusb_probe,
++	.disconnect = xillyusb_disconnect,
++};
++
++static int __init xillyusb_init(void)
++{
++	int rc = 0;
++
++	int i;
++
++	if (LOG2_INITIAL_FIFO_BUF_SIZE > PAGE_SHIFT)
++		fifo_buf_order = LOG2_INITIAL_FIFO_BUF_SIZE - PAGE_SHIFT;
++	else
++		fifo_buf_order = 0;
++
++	for (i = 0; i < MAX_XILLYUSB_DEVS; i++)
++		xdev_map[i] = 0;
++
++	xillyusb_class = class_create(THIS_MODULE, xillyname);
++	if (IS_ERR(xillyusb_class)) {
++		rc = PTR_ERR(xillyusb_class);
++		pr_warn("Failed to register class xillyusb\n");
++
++		return rc;
++	}
++	rc = usb_register(&xillyusb_driver);
++
++	if (rc) {
++		class_destroy(xillyusb_class);
++		return rc;
++	}
++
++	return rc;
++}
++
++static void __exit xillyusb_exit(void)
++{
++	usb_deregister(&xillyusb_driver);
++	class_destroy(xillyusb_class);
++}
++
++module_init(xillyusb_init);
++module_exit(xillyusb_exit);
 -- 
-heikki
+2.17.1
+
