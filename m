@@ -2,125 +2,244 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1745430AA7B
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Feb 2021 16:08:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B3C30AA8D
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Feb 2021 16:10:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbhBAPIQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Feb 2021 10:08:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59602 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231315AbhBAPHv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Feb 2021 10:07:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612191951;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eX0gXpFl1l7y74u4JDLx1FBGVKaeL4IiU69Igj0W6ks=;
-        b=F5iB/qDqmNtxhzvMsVCUcmrAvmh+Ci/WS0/BhuO+T3TrzuheTps1nu+GtUPrPc7JmH/imY
-        mintmdIkWUG0Ro1xJfB+x3pxOAnEHOWf22oh1eRR7ojIAOkf/mHgHLQaQ77Ee6CPc8QbH6
-        acGnXyNw+TyxNuokjJpcRQbwelUaha8=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-377-e4QCKsPPONKJ2KgKG-PK-g-1; Mon, 01 Feb 2021 10:05:50 -0500
-X-MC-Unique: e4QCKsPPONKJ2KgKG-PK-g-1
-Received: by mail-ej1-f70.google.com with SMTP id jg11so8447372ejc.23
-        for <linux-usb@vger.kernel.org>; Mon, 01 Feb 2021 07:05:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=eX0gXpFl1l7y74u4JDLx1FBGVKaeL4IiU69Igj0W6ks=;
-        b=dZ6P0wY3kgxvoeScwE+2sfqbD0vTex5qLdl/12futImwTAFbUvIVSgUHveSdXeEm96
-         wyN9g3YuxrIGzpQlkh1+6L51oonumS0y0J/0+PrS0JgfKAxvYSWfRlN87NNO3uYpX2HX
-         wB7F6YvDqcgFI201eeTkG59amsj5NUwpcUUkxg1M5bAxxpLQN1itVCypZvigw+X4xVXX
-         RI9y8WdGv0cCHrIEdaMQl3W9TvuiEeG4IP0cR/CIQNdi4savSkgB7ElXgFR2wwY2UyZW
-         gZhxymITBoT4C5cg8NPoi9Zn1yV4hLZf3CllZ8w09R299fNUc002L5raBGDKGbznb6Mc
-         VxWw==
-X-Gm-Message-State: AOAM532afyIPbf/yCRwtt3DeH693+PEQtJvesrUQ4HrLJfXtvc0sW9uc
-        gcUC82pGMGg39Jqn0pRHNlIvuImwwvATBp+h23XqEVOSKUzPtKKtPpsASqhC7bNZJkdiuVi8Mc9
-        Ao4XesnEBro/BPTuOXtQl
-X-Received: by 2002:a17:907:f81:: with SMTP id kb1mr11875716ejc.466.1612191948308;
-        Mon, 01 Feb 2021 07:05:48 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzK0jclynZ+MrcrVdO9SPTLfEAUH3rSPQUqH1OjcPu4PcBednTnIh0NLUi+4F/vqxS1P/HaPQ==
-X-Received: by 2002:a17:907:f81:: with SMTP id kb1mr11875699ejc.466.1612191948164;
-        Mon, 01 Feb 2021 07:05:48 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-37a3-353b-be90-1238.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:37a3:353b:be90:1238])
-        by smtp.gmail.com with ESMTPSA id y1sm3026899edq.26.2021.02.01.07.05.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Feb 2021 07:05:47 -0800 (PST)
-Subject: Re: [PATCH v3 0/3] common SVDM version and VDO from dt
-To:     Kyle Tso <kyletso@google.com>, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20210201133421.408508-1-kyletso@google.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <a2f8cdd1-7180-a0af-fadf-b0eae2e117ae@redhat.com>
-Date:   Mon, 1 Feb 2021 16:05:46 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S229534AbhBAPJF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Feb 2021 10:09:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37674 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231362AbhBAPIx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 1 Feb 2021 10:08:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0425E64DA5;
+        Mon,  1 Feb 2021 15:08:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612192091;
+        bh=tCXMXsxrCf3yHE4Kyh5CUR0UJfTh9canQVGIxxaS64Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pEugpGDC/OqN7cdsAqxFa7WiQLAhlfokv80S2T790AhgyS3uACG04m1gU75nkpygA
+         Ikx2tRrJ9cpM3od3rrfuZleG0szjku/NXE1hzzoQB23sntbybQ79YuRX4Ke12HK8Mq
+         gwWFu//UCyFt58baRSaJWs4bgFg42IGL75d6wnMdwXXVvTaECuq/HxWVhckMblyRmD
+         AelP9CukTWcbb43rUGcy7WfM05rbxmVoEXZvCSWmMWHSF/QkMe5utCA9l4urGn6Og5
+         mXOvjpkscu6TADJq8HqGKLFyZBTAcqYHd4zCN2hKUkYfJxX808rf3dkYWI9gRxW9GI
+         6Wl+/rMIvtfhg==
+Received: by pali.im (Postfix)
+        id C1968872; Mon,  1 Feb 2021 16:08:08 +0100 (CET)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Peter Chen <peter.chen@nxp.com>
+Cc:     Tomasz Maciej Nowak <tmn505@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jun Li <jun.li@nxp.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Marek Behun <marek.behun@nic.cz>
+Subject: [PATCH v2] usb: host: xhci: mvebu: make USB 3.0 PHY optional for Armada 3720
+Date:   Mon,  1 Feb 2021 16:08:03 +0100
+Message-Id: <20210201150803.7305-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20201223162403.10897-1-pali@kernel.org>
+References: <20201223162403.10897-1-pali@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20210201133421.408508-1-kyletso@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Older ATF does not provide SMC call for USB 3.0 phy power on functionality
+and therefore initialization of xhci-hcd is failing when older version of
+ATF is used. In this case phy_power_on() function returns -EOPNOTSUPP.
 
-On 2/1/21 2:34 PM, Kyle Tso wrote:
-> patch v2:
-> https://lore.kernel.org/linux-devicetree/20210131151832.215931-1-kyletso@google.com/
-> 
-> Changes since v2:
-> =================
-> usb: typec: Determine common SVDM Versions
-> - rename the variable and the functions (remove the text "common")
-> - remove the macro
-> 
-> dt-bindings: connector: Add SVDM VDO properties
-> - no change
-> 
-> usb: typec: tcpm: Get Sink VDO from fwnode
-> - use fwnode_property_count_u32 instead to get the count
-> - revise the error handling
-> 
-> Kyle Tso (3):
->   usb: typec: Determine common SVDM Versions
->   dt-bindings: connector: Add SVDM VDO properties
->   usb: typec: tcpm: Get Sink VDO from fwnode
+[    3.108467] mvebu-a3700-comphy d0018300.phy: unsupported SMC call, try updating your firmware
+[    3.117250] phy phy-d0018300.phy.0: phy poweron failed --> -95
+[    3.123465] xhci-hcd: probe of d0058000.usb failed with error -95
 
-I wanted to point out that I have a somewhat related series "pending".
+This patch introduces a new plat_setup callback for xhci platform drivers
+which is called prior calling usb_add_hcd() function. This function at its
+beginning skips PHY init if hcd->skip_phy_initialization is set.
 
-I put quotes around pending because it has been reviewed quite a while
-ago and have not managed to make the time to post a new version since then.
+Current init_quirk callback for xhci platform drivers is called from
+xhci_plat_setup() function which is called after chip reset completes.
+It happens in the middle of the usb_add_hcd() function and therefore this
+callback cannot be used for setting if PHY init should be skipped or not.
 
-My series is somewhat/mostly orthogonal, but I think it is good
-to keep it in mind since it also is about specifying VDOs, but then
-for alternate-modes, see:
+For Armada 3720 this patch introduce a new xhci_mvebu_a3700_plat_setup()
+function configured as a xhci platform plat_setup callback. This new
+function calls phy_power_on() and in case it returns -EOPNOTSUPP then
+XHCI_SKIP_PHY_INIT quirk is set to instruct xhci-plat to skip PHY
+initialization.
 
-https://lore.kernel.org/linux-usb/20200714113617.10470-1-hdegoede@redhat.com/
+This patch fixes above failure by ignoring 'not supported' error in
+xhci-hcd driver. In this case it is expected that phy is already power on.
 
-And I think there might be some overlap with the last patch in this series,
-although that does not call typec_port_register_altmode(). 
+It fixes initialization of xhci-hcd on Espressobin boards where is older
+Marvell's Arm Trusted Firmware without SMC call for USB 3.0 phy power.
 
-Regards,
+This is regression introduced in commit bd3d25b07342 ("arm64: dts: marvell:
+armada-37xx: link USB hosts with their PHYs") where USB 3.0 phy was defined
+and therefore xhci-hcd on Espressobin with older ATF started failing.
 
-Hans
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Tested-by: Tomasz Maciej Nowak <tmn505@gmail.com>
+Fixes: bd3d25b07342 ("arm64: dts: marvell: armada-37xx: link USB hosts with their PHYs")
+Cc: <stable@vger.kernel.org> # 5.1+: ea17a0f153af: phy: marvell: comphy: Convert internal SMCC firmware return codes to errno
+Cc: <stable@vger.kernel.org> # 5.1+: f768e718911e: usb: host: xhci-plat: add priv quirk for skip PHY initialization
 
+---
+Changes in v2:
+* Drop dependency on patch "usb: host: xhci-plat: fix support for XHCI_SKIP_PHY_INIT quirk"
+* Introduce a new .plat_setup callback for xhci-plat drivers in this patch (to simplify backporting and review)
+* Move implementation from xhci_mvebu_mbus_init_quirk() into xhci_mvebu_a3700_plat_setup()
+---
+ drivers/usb/host/xhci-mvebu.c | 42 +++++++++++++++++++++++++++++++++++
+ drivers/usb/host/xhci-mvebu.h |  6 +++++
+ drivers/usb/host/xhci-plat.c  | 20 ++++++++++++++++-
+ drivers/usb/host/xhci-plat.h  |  1 +
+ 4 files changed, 68 insertions(+), 1 deletion(-)
 
-
-
-p.s.
-
-I was actually planning on replying to an earlier version of
-this series, *after* I posted a new version of my own series,
-but I'm swamped so it looks like I will not get around to posting
-a new version of my own series anytime soon.
+diff --git a/drivers/usb/host/xhci-mvebu.c b/drivers/usb/host/xhci-mvebu.c
+index 60651a50770f..8ca1a235d164 100644
+--- a/drivers/usb/host/xhci-mvebu.c
++++ b/drivers/usb/host/xhci-mvebu.c
+@@ -8,6 +8,7 @@
+ #include <linux/mbus.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
++#include <linux/phy/phy.h>
+ 
+ #include <linux/usb.h>
+ #include <linux/usb/hcd.h>
+@@ -74,6 +75,47 @@ int xhci_mvebu_mbus_init_quirk(struct usb_hcd *hcd)
+ 	return 0;
+ }
+ 
++int xhci_mvebu_a3700_plat_setup(struct usb_hcd *hcd)
++{
++	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
++	struct device *dev = hcd->self.controller;
++	struct phy *phy;
++	int ret;
++
++	/* Old bindings miss the PHY handle */
++	phy = of_phy_get(dev->of_node, "usb3-phy");
++	if (IS_ERR(phy) && PTR_ERR(phy) == -EPROBE_DEFER)
++		return -EPROBE_DEFER;
++	else if (IS_ERR(phy))
++		goto phy_out;
++
++	ret = phy_init(phy);
++	if (ret)
++		goto phy_put;
++
++	ret = phy_set_mode(phy, PHY_MODE_USB_HOST_SS);
++	if (ret)
++		goto phy_exit;
++
++	ret = phy_power_on(phy);
++	if (ret == -EOPNOTSUPP) {
++		/* Skip initializatin of XHCI PHY when it is unsupported by firmware */
++		dev_warn(dev, "PHY unsupported by firmware\n");
++		xhci->quirks |= XHCI_SKIP_PHY_INIT;
++	}
++	if (ret)
++		goto phy_exit;
++
++	phy_power_off(phy);
++phy_exit:
++	phy_exit(phy);
++phy_put:
++	of_phy_put(phy);
++phy_out:
++
++	return 0;
++}
++
+ int xhci_mvebu_a3700_init_quirk(struct usb_hcd *hcd)
+ {
+ 	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+diff --git a/drivers/usb/host/xhci-mvebu.h b/drivers/usb/host/xhci-mvebu.h
+index 3be021793cc8..01bf3fcb3eca 100644
+--- a/drivers/usb/host/xhci-mvebu.h
++++ b/drivers/usb/host/xhci-mvebu.h
+@@ -12,6 +12,7 @@ struct usb_hcd;
+ 
+ #if IS_ENABLED(CONFIG_USB_XHCI_MVEBU)
+ int xhci_mvebu_mbus_init_quirk(struct usb_hcd *hcd);
++int xhci_mvebu_a3700_plat_setup(struct usb_hcd *hcd);
+ int xhci_mvebu_a3700_init_quirk(struct usb_hcd *hcd);
+ #else
+ static inline int xhci_mvebu_mbus_init_quirk(struct usb_hcd *hcd)
+@@ -19,6 +20,11 @@ static inline int xhci_mvebu_mbus_init_quirk(struct usb_hcd *hcd)
+ 	return 0;
+ }
+ 
++static inline int xhci_mvebu_a3700_plat_setup(struct usb_hcd *hcd)
++{
++	return 0;
++}
++
+ static inline int xhci_mvebu_a3700_init_quirk(struct usb_hcd *hcd)
+ {
+ 	return 0;
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 4d34f6005381..c1edcc9b13ce 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -44,6 +44,16 @@ static void xhci_priv_plat_start(struct usb_hcd *hcd)
+ 		priv->plat_start(hcd);
+ }
+ 
++static int xhci_priv_plat_setup(struct usb_hcd *hcd)
++{
++	struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
++
++	if (!priv->plat_setup)
++		return 0;
++
++	return priv->plat_setup(hcd);
++}
++
+ static int xhci_priv_init_quirk(struct usb_hcd *hcd)
+ {
+ 	struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
+@@ -111,6 +121,7 @@ static const struct xhci_plat_priv xhci_plat_marvell_armada = {
+ };
+ 
+ static const struct xhci_plat_priv xhci_plat_marvell_armada3700 = {
++	.plat_setup = xhci_mvebu_a3700_plat_setup,
+ 	.init_quirk = xhci_mvebu_a3700_init_quirk,
+ };
+ 
+@@ -330,7 +341,14 @@ static int xhci_plat_probe(struct platform_device *pdev)
+ 
+ 	hcd->tpl_support = of_usb_host_tpl_support(sysdev->of_node);
+ 	xhci->shared_hcd->tpl_support = hcd->tpl_support;
+-	if (priv && (priv->quirks & XHCI_SKIP_PHY_INIT))
++
++	if (priv) {
++		ret = xhci_priv_plat_setup(hcd);
++		if (ret)
++			goto disable_usb_phy;
++	}
++
++	if ((xhci->quirks & XHCI_SKIP_PHY_INIT) || (priv && (priv->quirks & XHCI_SKIP_PHY_INIT)))
+ 		hcd->skip_phy_initialization = 1;
+ 
+ 	if (priv && (priv->quirks & XHCI_SG_TRB_CACHE_SIZE_QUIRK))
+diff --git a/drivers/usb/host/xhci-plat.h b/drivers/usb/host/xhci-plat.h
+index 1fb149d1fbce..561d0b7bce09 100644
+--- a/drivers/usb/host/xhci-plat.h
++++ b/drivers/usb/host/xhci-plat.h
+@@ -13,6 +13,7 @@
+ struct xhci_plat_priv {
+ 	const char *firmware_name;
+ 	unsigned long long quirks;
++	int (*plat_setup)(struct usb_hcd *);
+ 	void (*plat_start)(struct usb_hcd *);
+ 	int (*init_quirk)(struct usb_hcd *);
+ 	int (*suspend_quirk)(struct usb_hcd *);
+-- 
+2.20.1
 
