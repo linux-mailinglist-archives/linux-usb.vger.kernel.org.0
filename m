@@ -2,85 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2253530A028
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Feb 2021 03:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7A630A11C
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Feb 2021 06:15:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbhBACFZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 31 Jan 2021 21:05:25 -0500
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:44024 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231136AbhBACFX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 Jan 2021 21:05:23 -0500
-X-UUID: 711aee05963a44df9965c41cfaf1ebac-20210201
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=OSHhhm/W19Y6B56K3//3peDiPN/C9u9TXy7oxQkRT3c=;
-        b=Y3nSgT7MbMlfgRyVFchUbxD5T5BW8J2m1devVqk39MPyT0/YTKuSQVLZqMgN7+3MEbdLFpSo82J17QvQ7Bl5xavwIQ5MY/kc24VgAI3lOtlKfAFGcA3lwXsLMXTBRNlBz5NIVXN1g/D3rtGNIXKOD9ssFxgzE109jNUUGIB+pIM=;
-X-UUID: 711aee05963a44df9965c41cfaf1ebac-20210201
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1282575189; Mon, 01 Feb 2021 10:04:39 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 1 Feb
- 2021 10:04:35 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 1 Feb 2021 10:04:34 +0800
-Message-ID: <1612145075.25113.7.camel@mhfsdcap03>
-Subject: Re: [PATCH v7] usb: xhci-mtk: fix unreleased bandwidth data
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Mathias Nyman <mathias.nyman@intel.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Zhanyong Wang" <zhanyong.wang@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>
-Date:   Mon, 1 Feb 2021 10:04:35 +0800
-In-Reply-To: <YBPjJ8CCLcBjg42S@kroah.com>
-References: <1611913099-25805-1-git-send-email-chunfeng.yun@mediatek.com>
-         <YBPjJ8CCLcBjg42S@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S229590AbhBAFOY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Feb 2021 00:14:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229909AbhBAFM2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Feb 2021 00:12:28 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B265C061788
+        for <linux-usb@vger.kernel.org>; Sun, 31 Jan 2021 21:11:48 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id s77so1728950qke.4
+        for <linux-usb@vger.kernel.org>; Sun, 31 Jan 2021 21:11:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=trNRKF7QOgSxeQPu6x/O8gmSAPcKdJAY3w7IjTKMviQ=;
+        b=VT+Fn+M5fDaUa7hzPwDAxBtqAIdSsPOx6PmsKw/YbQvIDJMZEqmYhV5oZb0sTNk8z7
+         OvqsQ7SlOl4H/GPWPnMOy1jCY/KmJc0mDTNpGJMMHeP/KHDTILPmE2nMd7YvWsqQNcBJ
+         elc9nFo33yT2NLSQ/j/JRwPiWbFcav6NkejzfOOcexbNiWnc87KebStbTa/3j2NnhN5V
+         wlxgfnmow5rR0323TKC/wxydmX6mVtcnWPssa4OffMzezA8nosVClKkBJgvAjrdyoP+f
+         zWMQ9JinY72VqfG/TC77HS3RUwrXsC+Q3xM7pn6aWwH1cpmJFH0AdxUzozKaNsoREPvK
+         HmHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=trNRKF7QOgSxeQPu6x/O8gmSAPcKdJAY3w7IjTKMviQ=;
+        b=gHpdZmLznQVb0mtokGaK0tdx5ycHRBYzwEv7yte+1OcR+YBKWUHc5M7Z4ldCDhjVk3
+         ZxRefV3eTH+oDf3Fuig1Bq1JaQ+oFUXSE2/vA9W+ZFS4ydMllVssZ/nObFvZQS7aImgG
+         daF4jDaDNQUJyxTQ/KE6oP7wHCJxZj/iphYUwLiMfRzR1RgLX7sLuucUxjeqGCtAsORA
+         rXhToqdoAo3QFwKRtVavk9tAX9a9KtJ9wKrm++/5SuOwEPMJcOQ0pxazzrYFZoQbfRQF
+         A8SXWjcT+lDXQex9sPl6O5DLKTdUNUq2KmQujwB8Qomy5Jjtm0TVFAL0cvyypwUTIqJK
+         fuMQ==
+X-Gm-Message-State: AOAM530kT0IoMMS32hdMftcp6T6hVgbseuBJtzv25b29kDTCQhKIEtE+
+        GZoQKh6VtjgpOQ1yXx/Ppw3Uwu0bjUDb5KHSPS1nwA==
+X-Google-Smtp-Source: ABdhPJyswQ45iMOxwGnVC6PENPRcTaQ2sPFXnY1EMzdXGYKyxgIrmOkMZX8sknnF8kHc4a4njCE43xLCgSjPCMYJF/4=
+X-Received: by 2002:a37:b346:: with SMTP id c67mr84406qkf.212.1612156306853;
+ Sun, 31 Jan 2021 21:11:46 -0800 (PST)
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 306A99247371E3F7DA2B90EE49997CA49BA06C6C3336BD45278E03C3B49E59BC2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+References: <20210131151832.215931-1-kyletso@google.com> <20210131151832.215931-4-kyletso@google.com>
+ <950a9361-4cc8-5c01-8c3d-80d812fd663d@roeck-us.net>
+In-Reply-To: <950a9361-4cc8-5c01-8c3d-80d812fd663d@roeck-us.net>
+From:   Kyle Tso <kyletso@google.com>
+Date:   Mon, 1 Feb 2021 13:11:30 +0800
+Message-ID: <CAGZ6i=3uUnPNDd1SbcNWG85Rv+jZqJEdFQ6uW2=_WRrhrJaP6A@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] usb: typec: tcpm: Get Sink VDO from fwnode
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>, robh+dt@kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        USB <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gRnJpLCAyMDIxLTAxLTI5IGF0IDExOjI3ICswMTAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3Jv
-dGU6DQo+IE9uIEZyaSwgSmFuIDI5LCAyMDIxIGF0IDA1OjM4OjE5UE0gKzA4MDAsIENodW5mZW5n
-IFl1biB3cm90ZToNCj4gPiBGcm9tOiBJa2pvb24gSmFuZyA8aWtqbkBjaHJvbWl1bS5vcmc+DQo+
-ID4gDQo+ID4geGhjaS1tdGsgbmVlZHMgWEhDSV9NVEtfSE9TVCBxdWlyayBmdW5jdGlvbnMgaW4g
-YWRkX2VuZHBvaW50KCkgYW5kDQo+ID4gZHJvcF9lbmRwb2ludCgpIHRvIGhhbmRsZSBpdHMgb3du
-IHN3IGJhbmR3aWR0aCBtYW5hZ2VtZW50Lg0KPiA+IA0KPiA+IEl0IHN0b3JlcyBiYW5kd2lkdGgg
-ZGF0YSBpbnRvIGFuIGludGVybmFsIHRhYmxlIGV2ZXJ5IHRpbWUNCj4gPiBhZGRfZW5kcG9pbnQo
-KSBpcyBjYWxsZWQsIGFuZCBkcm9wcyB0aG9zZSBpbiBkcm9wX2VuZHBvaW50KCkuDQo+ID4gQnV0
-IHdoZW4gYmFuZHdpZHRoIGFsbG9jYXRpb24gZmFpbHMgYXQgb25lIGVuZHBvaW50LCBhbGwgZWFy
-bGllcg0KPiA+IGFsbG9jYXRpb24gZnJvbSB0aGUgc2FtZSBpbnRlcmZhY2UgY291bGQgc3RpbGwg
-cmVtYWluIGF0IHRoZSB0YWJsZS4NCj4gPiANCj4gPiBUaGlzIHBhdGNoIG1vdmVzIGJhbmR3aWR0
-aCBtYW5hZ2VtZW50IGNvZGVzIHRvIGNoZWNrX2JhbmR3aWR0aCgpIGFuZA0KPiA+IHJlc2V0X2Jh
-bmR3aWR0aCgpIHBhdGguIFRvIGRvIHNvLCB0aGlzIHBhdGNoIGFsc28gYWRkcyB0aG9zZSBmdW5j
-dGlvbnMNCj4gPiB0byB4aGNpX2RyaXZlcl9vdmVycmlkZXMgYW5kIGxldHMgbXRrLXhoY2kgdG8g
-cmVsZWFzZSBhbGwgZmFpbGVkDQo+ID4gZW5kcG9pbnRzIGluIHJlc2V0X2JhbmR3aWR0aCgpIHBh
-dGguDQo+ID4gDQo+ID4gRml4ZXM6IDA4ZTQ2OWRlODdhMiAoInVzYjogeGhjaS1tdGs6IHN1cHBv
-cnRzIGJhbmR3aWR0aCBzY2hlZHVsaW5nIHdpdGggbXVsdGktVFQiKQ0KPiA+IFNpZ25lZC1vZmYt
-Ynk6IElram9vbiBKYW5nIDxpa2puQGNocm9taXVtLm9yZz4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBD
-aHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRlay5jb20+DQo+ID4gLS0tDQo+ID4gQ2hh
-bmdlcyBpbiB2NyBmcm9tIENodW5mZW5nOg0KPiA+IC0gcmVuYW1lIHhoY2lfbXRrX2Ryb29wX2Vw
-KCkgYXMgZGVzdHJveV9zY2hfZXAoKSwgYW5kIGluY2x1ZGUgcGFyYW1ldGVycw0KPiA+IC0gYWRk
-IG1lbWJlciBAYWxsb2NhdGVkIGluIG11M2hfc2NoX2VwX2luZm8gc3RydWN0DQo+ID4gICB1c2Vk
-IHRvIHNraXAgZW5kcG9pbnQgbm90IGFsbG9jYXRlZCBiYW5kd2lkdGgNCj4gPiAtIHVzZSB4aGNp
-X2RiZygpIGluc3RlYWQgb2YgZGV2X2RiZygpDQo+ID4gLSByZW5hbWUgYndfZXBfbGlzdF9uZXcg
-YXMgYndfZXBfY2hrX2xpc3QNCj4gDQo+IEFzIGEgcHJldmlvdXMgdmVyc2lvbiBvZiB0aGlzIHBh
-dGNoIGlzIGFscmVhZHkgaW4gbXkgcHVibGljIHRyZWUsIGp1c3QNCj4gc2VuZCBhIGZvbGxvdy1v
-biBwYXRjaCB0aGF0IHJlc29sdmVzIHRoZSBpc3N1ZXMgaW4gdGhlIHByZXZpb3VzIG9uZSwgYXMN
-Cj4gSSBjYW4gbm90IGFwcGx5IHRoaXMgb25lLiAgQm9udXMgaXMgdGhhdCB5b3UgZ2V0IHRoZSBj
-cmVkaXQgZm9yIGZpeGluZw0KPiB0aGVzZSBpc3N1ZXMgOikNCk9rLCB0aGFua3MNCg0KPiANCj4g
-dGhhbmtzLA0KPiANCj4gZ3JlZyBrLWgNCg0K
+On Mon, Feb 1, 2021 at 12:02 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 1/31/21 7:18 AM, Kyle Tso wrote:
+> > Commit a079973f462a ("usb: typec: tcpm: Remove tcpc_config
+> > configuration mechanism") removed the tcpc_config which includes the
+> > Sink VDO and it is not yet added back with fwnode. Add it now.
+> >
+> > Signed-off-by: Kyle Tso <kyletso@google.com>
+> > ---
+> > Changes since v1:
+> > - updated the commit message
+> >
+> >  drivers/usb/typec/tcpm/tcpm.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > index 403a483645dd..84c8a52f8af1 100644
+> > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > @@ -5677,6 +5677,18 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+> >                       port->new_source_frs_current = frs_current;
+> >       }
+> >
+> > +     ret = fwnode_property_read_u32_array(fwnode, "sink-vdos", NULL, 0);
+>
+> fwnode_property_count_u32(), maybe ?
+>
+That's the same and looks like fwnode_property_count_u32 is better to read.
+I will revise it in the next version.
 
+> > +     if (ret <= 0 && ret != -EINVAL) {
+> > +             return -EINVAL;
+>
+> Why return any error except -EINVAL (including return values of 0) as -EINVAL,
+> and -EINVAL as no error ?
+>
+sink-vdos is not a mandatory property which means -EINVAL is acceptable.
+
+If the return < 0 and the value is not -EINVAL, it means that the
+error is other than "not present" in the device tree.
+If the return == 0, it means that the sink-vdos is present in the
+device tree but no value inside it.
+Both of the above situations are not acceptable.
+
+> > +     } else if (ret > 0) {
+> > +             port->nr_snk_vdo = min(ret, VDO_MAX_OBJECTS);
+> > +             ret = fwnode_property_read_u32_array(fwnode, "sink-vdos",
+> > +                                                  port->snk_vdo,
+> > +                                                  port->nr_snk_vdo);
+> > +             if (ret < 0)
+> > +                     return -EINVAL;
+>
+> static analyzer code used to complain about overriding error codes.
+> Not sure if that is still true. Either case, why not return the
+> original error ?
+>
+Returning the original error codes is good. I just followed the return
+value of other error handling in this function.
+will revise it in the next version.
+
+Thanks,
+Kyle
+
+
+
+> Thanks,
+> Guenter
+>
+> > +     }
+> > +
+> >       return 0;
+> >  }
+> >
+> >
+>
