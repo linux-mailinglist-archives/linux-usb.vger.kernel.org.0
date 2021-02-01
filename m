@@ -2,86 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 205D430A829
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Feb 2021 13:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 133E930A845
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Feb 2021 14:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231940AbhBAM5a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Feb 2021 07:57:30 -0500
-Received: from mga17.intel.com ([192.55.52.151]:16603 "EHLO mga17.intel.com"
+        id S231737AbhBANGR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Feb 2021 08:06:17 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40656 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231482AbhBAM52 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 1 Feb 2021 07:57:28 -0500
-IronPort-SDR: 3xYD5opazcBhMvMZ6SbBJ3UaLpMQ6Dhj7sKp9Zf3sr+SvqYJzbLPKn/VC2t7BHowH5H9WGTefq
- E3/7rbAvhPdg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9881"; a="160444627"
-X-IronPort-AV: E=Sophos;i="5.79,392,1602572400"; 
-   d="scan'208";a="160444627"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 04:55:42 -0800
-IronPort-SDR: 3UsmtFbxj0oAnbcLa0/rYvgzjTkuLNPHRU96t6Z0hkhblKmousOB6nocmUebKww6X1lOwVi8h3
- LDzZa+fvCeJQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,392,1602572400"; 
-   d="scan'208";a="478950119"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 01 Feb 2021 04:55:39 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 01 Feb 2021 14:55:39 +0200
-Date:   Mon, 1 Feb 2021 14:55:39 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Benson Leung <bleung@chromium.org>
-Cc:     enric.balletbo@collabora.com, pmalani@chromium.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, groeck@chromium.org,
-        bleung@google.com
-Subject: Re: [PATCH 6/6] platform/chrome: cros_ec_typec: Set opmode to PD on
- SOP connected
-Message-ID: <20210201125539.GF2465@kuha.fi.intel.com>
-References: <20210129061406.2680146-1-bleung@chromium.org>
- <20210129061406.2680146-7-bleung@chromium.org>
+        id S229500AbhBANGO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 1 Feb 2021 08:06:14 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A84B164DDD;
+        Mon,  1 Feb 2021 13:05:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1612184733;
+        bh=TJkojB0v62stzt2wuwfUo8DV1SMMHI/iR4Uw2agXmXE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XrtRPKyDsdlqByQ2ZRmq1f6OwuU5BO54tuXJbDiBpONBtzAMDjhUkLDxuNG+QG7fA
+         WYo4jTIyVZSlTlFQbiyvpcHdcTWRm8JMNvFd862pb7J25bqA2d/DpV/OT+j1KDuBCL
+         23DuDJzgaV7sRX0lH8HQ/uPdzfUZ4azkiW7QQ+gE=
+Date:   Mon, 1 Feb 2021 14:05:30 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] Thunderbolt/USB4 fix for v5.11-rc7
+Message-ID: <YBf8mvU+XuPL2zA1@kroah.com>
+References: <20210201124452.GM2542@lahna.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210129061406.2680146-7-bleung@chromium.org>
+In-Reply-To: <20210201124452.GM2542@lahna.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 28, 2021 at 10:14:06PM -0800, Benson Leung wrote:
-> When SOP Discovery is done, set the opmode to PD if status indicates
-> SOP is connected.
+On Mon, Feb 01, 2021 at 02:44:52PM +0200, Mika Westerberg wrote:
+> Hi Greg,
 > 
-> SOP connected indicates a PD contract is in place, and is a solid
-> indication we have transitioned to PD power negotiation, either as
-> source or sink.
+> The following changes since commit 6ee1d745b7c9fd573fba142a2efdad76a9f1cb04:
 > 
-> Signed-off-by: Benson Leung <bleung@chromium.org>
-
-FWIW:
-
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  drivers/platform/chrome/cros_ec_typec.c | 3 +++
->  1 file changed, 3 insertions(+)
+>   Linux 5.11-rc5 (2021-01-24 16:47:14 -0800)
 > 
-> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-> index 6bc6fafd54a4..a7778258d0a0 100644
-> --- a/drivers/platform/chrome/cros_ec_typec.c
-> +++ b/drivers/platform/chrome/cros_ec_typec.c
-> @@ -900,6 +900,9 @@ static void cros_typec_handle_status(struct cros_typec_data *typec, int port_num
->  			dev_err(typec->dev, "Couldn't parse SOP Disc data, port: %d\n", port_num);
->  		else
->  			typec->ports[port_num]->sop_disc_done = true;
-> +
-> +		if (resp.sop_connected)
-> +			typec_set_pwr_opmode(typec->ports[port_num]->port, TYPEC_PWR_MODE_PD);
->  	}
->  
->  	if (resp.events & PD_STATUS_EVENT_SOP_PRIME_DISC_DONE &&
-> -- 
-> 2.30.0.365.g02bc693789-goog
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.11-rc7
 
-thanks,
+Pulled and pushed out, thanks.
 
--- 
-heikki
+greg k-h
