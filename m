@@ -2,57 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C06EB30A4B3
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Feb 2021 10:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 043EF30A4D9
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Feb 2021 11:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232967AbhBAJyB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Feb 2021 04:54:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
+        id S232922AbhBAKDb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Feb 2021 05:03:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232941AbhBAJx7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Feb 2021 04:53:59 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D4AC0613D6
-        for <linux-usb@vger.kernel.org>; Mon,  1 Feb 2021 01:53:19 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id s7so19102992ybj.0
-        for <linux-usb@vger.kernel.org>; Mon, 01 Feb 2021 01:53:19 -0800 (PST)
+        with ESMTP id S232790AbhBAKDb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Feb 2021 05:03:31 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A7DC0613ED
+        for <linux-usb@vger.kernel.org>; Mon,  1 Feb 2021 02:02:16 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id 145so1908858pgh.2
+        for <linux-usb@vger.kernel.org>; Mon, 01 Feb 2021 02:02:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=0uh+WToPVrT5nNi8VVC2Dny5IL46Dl8JAHJqCqtV+0E=;
-        b=JZbMiUywIbtml14aZF5DenFmX8cTfKrnKqlNI3+SQRq+h0S5fF1pWJJNPhvWLEghUs
-         HpeMrYrcFc9aiGhPxytd/CuWAkbV4Y1cUbQ34f7G/BkXprgGOZhNEXf61aFkyWwDqCiX
-         gT1uNnD5uQjTsoKQ4pmx4uI5JiwYFkPyzGQmCH+B2Lca+qhjoXZFnp+cA8BcnFwpIfrl
-         /gsjkXyHugeU0Q+vrgRu11mUCUuHeB1mBAQ35uMd9GPar+GG5YiVrkAts0k6vM8SmRdI
-         BXdJTOdSkXXeF/e5dvNS6h9ci/0CPRMIqhVEQ82qKnFfcvHRRRgFfSh5j3LlAXfULsom
-         uLqA==
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=Og/c9ZLdNwsrZjaKOb5Rw1KYlib1KDQj+P2JjTzCuz0=;
+        b=DmWfY39Wj7fxUx8ibl+Z+al1uxv6KEvvJsECeAKzMQwk0gXAQ/qhPSzhoOXv/sXLIK
+         8H9oT3lTTOlpfoEpIZOsNxCe2A2HMY4dpzwWeAnk5vF03qnv6cOG+gBUBYsCVanFmNxT
+         HdQVFG8EmIEZSo4W4nrOkXpz/36FHTzoDZMMVxoNjuFl3rwmsQ8WwqADYRhD8mOTubIA
+         g2NgHZdjmKLO/9O9QHMcQJNl6JjqrDo7tL1N8B0WD2c2csh4VkRlxUxP9EcNlQgcOpJS
+         Mm8tkLY6ah6k7mBQoYFbRObRud4wqTyg6N/rhUokphC6LUccEjIAdV/R5Dke5GBgFueu
+         iX+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=0uh+WToPVrT5nNi8VVC2Dny5IL46Dl8JAHJqCqtV+0E=;
-        b=P03KHXhYPQOVnCJVOpNiDLDmZyPnH6su0UPQ+RE1lRmNAOFdTcL+jR76Ytz3IrDV1x
-         eajc6rxlxVKYSJjpEE91CsogfI6niv2rauNoRoq3s2TE1BrpJLVzPDL5M2EJTHGZjHwY
-         eodPYHKoDHTwexYbwMHefx34Iox2HNsYHSd9eefQL0rOdEsdDz/7BNgnUQUQdFlkQjDD
-         YNw4L/iHxGYUwxuRwXnVSjKnmvV54m7GIHf+cPNz7oIV8ahukmA2acz3+HTHC2f+M4fc
-         AB/2YXERDQeZjTeTsn6JIIB1URTVDaj0lovDjP3NmogoF6SniOY1baqqzJo/1PH7FCYd
-         ooCw==
-X-Gm-Message-State: AOAM533NAKWro9VKLH7yWs2wA7qsSo8ua151yTlPpoIRoseAXU2GeZKl
-        WnyKb/M390YuZIoGwlJiiQv3hnfzA9U=
-X-Google-Smtp-Source: ABdhPJz7SZNhUVv6lljN4luIrVxqMNv7ABYTMW5J//phP91oa06GazQPxA7gbr4KsZZ405ctyYAxl9pFjs0=
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=Og/c9ZLdNwsrZjaKOb5Rw1KYlib1KDQj+P2JjTzCuz0=;
+        b=ntWmnydEVZ3jtQbwZNPBftnHBs8zDhZ323jfUTrI4wp2vPKeZ0O63qZu45nXLLdma/
+         oQbT/UhgdppbpvACoqcewC/IO68ToaLoYPQIp4r0bPPWSaOPyr9vhcx9pAXYWIHznT7V
+         BgZ1ImZime2wIU9LKeqje+ZNnMHrDeRxvBRUjUjLHE4r6NK2sCed6omdys0w+6sA8biw
+         sYgf4VeJJr+PWnKuM8VqsWvKlTVVAUpXdM4prZuD29ms+tD7GDGWpfhwESLbEX6M4HOt
+         pZoy343x6Xw/2DUzh188xdflt0LzmMJWnXzqaeirAuQ+Dosz2JRPYBhWu4kODP9ERoGa
+         CaCA==
+X-Gm-Message-State: AOAM530wShAecVNpCXoMCui55DH1Fbr77eOnY6XXVlN/gHErMj4PVEcu
+        jpkM3FDmsAOd3RCkrOoc33ldOADtaYs=
+X-Google-Smtp-Source: ABdhPJwuXWe0OtSSniZkbe8CTK0ILYwh7B9NbHem64lmhhBWV3ivpxgrXlz4jQuYO1v6IShRAlkmrZhhGrk=
 Sender: "badhri via sendgmr" <badhri@badhri.mtv.corp.google.com>
 X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:f292:1cff:fee0:66cf])
- (user=badhri job=sendgmr) by 2002:a25:ac94:: with SMTP id x20mr12304706ybi.411.1612173198434;
- Mon, 01 Feb 2021 01:53:18 -0800 (PST)
-Date:   Mon,  1 Feb 2021 01:53:09 -0800
-In-Reply-To: <20210201095309.39486-1-badhri@google.com>
-Message-Id: <20210201095309.39486-3-badhri@google.com>
+ (user=badhri job=sendgmr) by 2002:a17:902:429:b029:de:2bee:150d with SMTP id
+ 38-20020a1709020429b02900de2bee150dmr11263515ple.18.1612173736228; Mon, 01
+ Feb 2021 02:02:16 -0800 (PST)
+Date:   Mon,  1 Feb 2021 02:02:12 -0800
+Message-Id: <20210201100212.49863-1-badhri@google.com>
 Mime-Version: 1.0
-References: <20210201095309.39486-1-badhri@google.com>
 X-Mailer: git-send-email 2.30.0.365.g02bc693789-goog
-Subject: [PATCH v1 3/3] usb: typec: tcpci_maxim: Enable data path when partner
- is USB Comm capable
+Subject: [PATCH v1] usb: typec: tcpm: Handle vbus shutoff when in source mode
 From:   Badhri Jagan Sridharan <badhri@google.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -65,58 +62,38 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Configure USB switches when partner is USB Communication capable.
-The is enabled USB data communication over D+/D- pins.
+While in source mode, vbus could be shutoff by protections
+circuits. TCPM does not move back to toggling state to
+re-initiate connection. Fix this by moving to SRC_UNATTACHED
+state when vbus shuts off while in source mode.
 
 Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 ---
- drivers/usb/typec/tcpm/tcpci_maxim.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/usb/typec/tcpm/tcpm.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-index f1674a611033..041a1c393594 100644
---- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-+++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-@@ -19,6 +19,9 @@
- #define PD_ACTIVITY_TIMEOUT_MS				10000
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 0afd8ef692e8..ff0732c12b8a 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -4897,6 +4897,17 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
+ 		/* Do nothing, waiting for sink detection */
+ 		break;
  
- #define TCPC_VENDOR_ALERT				0x80
-+#define TCPC_VENDOR_USBSW_CTRL				0x93
-+#define TCPC_VENDOR_USBSW_CTRL_ENABLE_USB_DATA		0x9
-+#define TCPC_VENDOR_USBSW_CTRL_DISABLE_USB_DATA		0
- 
- #define TCPC_RECEIVE_BUFFER_COUNT_OFFSET		0
- #define TCPC_RECEIVE_BUFFER_FRAME_TYPE_OFFSET		1
-@@ -274,6 +277,21 @@ static void process_tx(struct max_tcpci_chip *chip, u16 status)
- 		max_tcpci_init_regs(chip);
- }
- 
-+/* Enable USB switches when partner is USB communications capable */
-+static void max_tcpci_set_partner_usb_comm_capable(struct tcpci *tcpci, struct tcpci_data *data,
-+						   bool capable)
-+{
-+	struct max_tcpci_chip *chip = tdata_to_max_tcpci(data);
-+	int ret;
++	case SRC_STARTUP:
++	case SRC_SEND_CAPABILITIES:
++	case SRC_SEND_CAPABILITIES_TIMEOUT:
++	case SRC_NEGOTIATE_CAPABILITIES:
++	case SRC_TRANSITION_SUPPLY:
++	case SRC_READY:
++	case SRC_WAIT_NEW_CAPABILITIES:
++		/* Force to unattached state to re-initiate connection */
++		tcpm_set_state(port, SRC_UNATTACHED, 0);
++		break;
 +
-+	ret = max_tcpci_write8(chip, TCPC_VENDOR_USBSW_CTRL, capable ?
-+			       TCPC_VENDOR_USBSW_CTRL_ENABLE_USB_DATA :
-+			       TCPC_VENDOR_USBSW_CTRL_DISABLE_USB_DATA);
-+
-+	if (ret < 0)
-+		dev_err(chip->dev, "Failed to enable USB switches");
-+}
-+
- static irqreturn_t _max_tcpci_irq(struct max_tcpci_chip *chip, u16 status)
- {
- 	u16 mask;
-@@ -453,6 +471,7 @@ static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id
- 	chip->data.frs_sourcing_vbus = max_tcpci_frs_sourcing_vbus;
- 	chip->data.auto_discharge_disconnect = true;
- 	chip->data.vbus_vsafe0v = true;
-+	chip->data.set_partner_usb_comm_capable = max_tcpci_set_partner_usb_comm_capable;
- 
- 	max_tcpci_init_regs(chip);
- 	chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
+ 	case PORT_RESET:
+ 		/*
+ 		 * State set back to default mode once the timer completes.
 -- 
 2.30.0.365.g02bc693789-goog
 
