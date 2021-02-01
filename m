@@ -2,156 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50778309FEC
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Feb 2021 02:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD5130A017
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Feb 2021 02:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbhBABSC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 31 Jan 2021 20:18:02 -0500
-Received: from mga02.intel.com ([134.134.136.20]:22655 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231142AbhBABRn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 31 Jan 2021 20:17:43 -0500
-IronPort-SDR: gCcKkOYLOXHLG8AFzkkhvodwMJbJU5+aMf6NQA9v4OmR2MgsIxooaFb74QjzD0p5cAkwky8EE0
- c6RUHVUmQFaw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9881"; a="167724297"
-X-IronPort-AV: E=Sophos;i="5.79,391,1602572400"; 
-   d="scan'208";a="167724297"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2021 17:17:00 -0800
-IronPort-SDR: LSCQk7SFT7CNoKRdasr6ikzmGfwO9szHvU7811g/cdmeSusZD9ewaiMG4oiqzDbYCu8exfuE7e
- 46F8cJNL0blw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,391,1602572400"; 
-   d="scan'208";a="368713615"
-Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 31 Jan 2021 17:16:59 -0800
-Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1l6Npq-0006Gm-O3; Mon, 01 Feb 2021 01:16:58 +0000
-Date:   Mon, 01 Feb 2021 09:16:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 3e1f4a2e1184ae6ad7f4caf682ced9554141a0f4
-Message-ID: <60175674.3/6Y5ujNifjX98f4%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231206AbhBABsp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 31 Jan 2021 20:48:45 -0500
+Received: from mailgw02.mediatek.com ([1.203.163.81]:11920 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229765AbhBABsg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 Jan 2021 20:48:36 -0500
+X-UUID: 50cf61722eab4a759cbcf77009172996-20210201
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=cqrms7Ue1/V7oS95GhlRfd1HqRHxwPoPO4V21qXshyk=;
+        b=nAi6dqLoS9jhSl9/cDrzkyXEQmXCt+gNIiBJlXIc180X9tRSSeWnrCnj++Hy/ZnJqlu8cHeErBEbwxg89T8Ir4KvDR3wOqw+TmvIozxiCj72ofmB665V2hyYRWfoC89Vs2aDovBO17hSEpxbkrYkatkxJjNo4YA/jNr6VWjhx3E=;
+X-UUID: 50cf61722eab4a759cbcf77009172996-20210201
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1586998223; Mon, 01 Feb 2021 09:47:47 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
+ (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 1 Feb
+ 2021 09:47:43 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 1 Feb 2021 09:47:42 +0800
+Message-ID: <1612144062.25113.6.camel@mhfsdcap03>
+Subject: Re: [PATCH 2/3] usb: xhci-mtk: fix UAS issue by XHCI_BROKEN_STREAMS
+ quirk
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Rosen Penev <rosenp@gmail.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Ikjoon Jang <ikjn@chromium.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
+Date:   Mon, 1 Feb 2021 09:47:42 +0800
+In-Reply-To: <7ad022d3-ff83-9126-ee74-6d1e4d381366@gmail.com>
+References: <20201216115125.5886-1-chunfeng.yun@mediatek.com>
+         <20201216115125.5886-2-chunfeng.yun@mediatek.com>
+         <CANMq1KDBmuoBNeizm9+f1yJgqF9oMqU5k26KfZrSdjrPQm_LwA@mail.gmail.com>
+         <1608171557.23328.53.camel@mhfsdcap03>
+         <CAKxU2N8q1XjDbWbv5ksqYr7RMEedV7fng7OUccVggsT89Oyf5w@mail.gmail.com>
+         <1608794285.23328.79.camel@mhfsdcap03>
+         <7ad022d3-ff83-9126-ee74-6d1e4d381366@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: A5024271AC4526812F95AD3BC549251504E6929E05351F62AF340B5A5392FFC52000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 3e1f4a2e1184ae6ad7f4caf682ced9554141a0f4  USB: gadget: legacy: fix an error code in eth_bind()
+T24gU3VuLCAyMDIxLTAxLTMxIGF0IDE1OjEzICswMTAwLCBNYXR0aGlhcyBCcnVnZ2VyIHdyb3Rl
+Og0KPiANCj4gT24gMjQvMTIvMjAyMCAwODoxOCwgQ2h1bmZlbmcgWXVuIHdyb3RlOg0KPiA+IE9u
+IFdlZCwgMjAyMC0xMi0xNiBhdCAxOTo0MyAtMDgwMCwgUm9zZW4gUGVuZXYgd3JvdGU6DQo+ID4+
+IE9uIFdlZCwgRGVjIDE2LCAyMDIwIGF0IDY6MjkgUE0gQ2h1bmZlbmcgWXVuIDxjaHVuZmVuZy55
+dW5AbWVkaWF0ZWsuY29tPiB3cm90ZToNCj4gPj4+DQo+ID4+PiBPbiBXZWQsIDIwMjAtMTItMTYg
+YXQgMjA6MjggKzA4MDAsIE5pY29sYXMgQm9pY2hhdCB3cm90ZToNCj4gPj4+PiBPbiBXZWQsIERl
+YyAxNiwgMjAyMCBhdCA3OjUzIFBNIENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVr
+LmNvbT4gd3JvdGU6DQo+IFsuLi5dDQo+ID4+Pj4+ICAgICAgICAgbXRrLT5scG1fc3VwcG9ydCA9
+IG9mX3Byb3BlcnR5X3JlYWRfYm9vbChub2RlLCAidXNiMy1scG0tY2FwYWJsZSIpOw0KPiA+Pj4+
+PiArICAgICAgIG10ay0+YnJva2VuX3N0cmVhbXMgPQ0KPiA+Pj4+PiArICAgICAgICAgICAgICAg
+b2ZfcHJvcGVydHlfcmVhZF9ib29sKG5vZGUsICJtZWRpYXRlayxicm9rZW5fc3RyZWFtc19xdWly
+ayIpOw0KPiA+Pj4+DQo+ID4+Pj4gV291bGQgaXQgYmUgYmV0dGVyIHRvIGFkZCBhIGRhdGEgZmll
+bGQgdG8gc3RydWN0IG9mX2RldmljZV9pZA0KPiA+Pj4+IG10a194aGNpX29mX21hdGNoLCBhbmQg
+ZW5hYmxlIHRoaXMgcXVpcmsgb24gbWVkaWF0ZWssbXQ4MTczLXhoY2kgb25seT8NCj4gPj4+IFRo
+aXMgaXMgdGhlIGNvbW1vbiBpc3N1ZSBmb3IgYWxsIFNvQ3MgKGJlZm9yZSAyMDE2LjA2KSB3aXRo
+IDAuOTYgeEhDSQ0KPiA+Pj4gd2hlbiB0aGUgY29udHJvbGxlciBkb24ndCBzdXBwb3J0IGJ1bGsg
+c3RyZWFtLiBJZiBlbmFibGUgdGhpcyBxdWlyayBvbmx5DQo+ID4+PiBmb3IgbXQ4MTczLCB0aGVu
+IGZvciBvdGhlciBTb0NzLCB0aGUgY29tcGF0aWJsZSBuZWVkIGluY2x1ZGUNCj4gPj4+ICJtZWRp
+YXRlayxtdDgxNzMteGhjaSIgaW4gZHRzLCB0aGlzIG1heSBiZSBub3QgZmxleGlibGUgZm9yIHNv
+bWUgY2FzZXMsDQo+ID4+PiBlLmcuIGEgbmV3IFNvQyBoYXMgdGhlIGJyb2tlbiBzdHJlYW0gYXMg
+bXQ4MTczLCBidXQgYWxzbyBoYXMgYW5vdGhlcg0KPiA+Pj4gZGlmZmVyZW50IHF1aXJrLCB0aGUg
+d2F5IHlvdSBzdWdnZXN0ZWQgd2lsbCBub3QgaGFuZGxlIGl0Lg0KPiA+Pj4gQW5kIEkgcGxhbiB0
+byByZW1vdmUgIm1lZGlhdGVrLG10ODE3My14aGNpIiBpbiBtdGtfeGhjaV9vZl9tYXRjaCBhZnRl
+cg0KPiA+Pj4gY29udmVydGluZyB0aGUgYmluZGluZyB0byBZTUFMLg0KPiA+PiBJJ20gZ3Vlc3Np
+bmcgdGhpcyBhbHNvIGFwcGxpZXMgdG8gbXQ3NjIxPw0KPiA+IFllcywgbXQ3NjIxIGRvZXNuJ3Qg
+c3VwcG9ydCBidWxrIHN0cmVhbQ0KPiA+IA0KPiANCj4gVGhlbiBwbGVhc2UgcHJvdmlkZSBwYXRj
+aGVzIHRvIHRoZSBEVFNJIGZvciBhbGwgU29DcyB0aGF0IGhhdmUgdGhpcyBwcm9ibGVtLg0KPiBF
+aXRoZXIgYXMgYSBmb2xsb3ctdXAgb3IgYXMgcGFydCBvZiB0aGlzIHNlcmllcywgaWYgeW91IG5l
+ZWQgdG8gcmVzdWJtaXQuDQpPaywgSSdsbCBzZW5kIG5ldyB2ZXJzaW9uLCBhbmQgYWxzbyB0cnkg
+b3RoZXIgd2F5IHRvIGZpeCBpdCB3aXRob3V0IGFkZA0KcHJvcGVydHkgaW4gRFRTLCB0aGFua3MN
+Cg0KPiANCj4gUmVnYXJkcywNCj4gTWF0dGhpYXMNCg0K
 
-elapsed time: 725m
-
-configs tested: 94
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-arm                       imx_v4_v5_defconfig
-powerpc                     tqm5200_defconfig
-arm                         palmz72_defconfig
-arm                        oxnas_v6_defconfig
-arm                           sunxi_defconfig
-powerpc                       maple_defconfig
-sh                          sdk7786_defconfig
-arm                       versatile_defconfig
-m68k                        mvme147_defconfig
-m68k                        m5272c3_defconfig
-sh                           se7619_defconfig
-sh                          rsk7201_defconfig
-powerpc                  iss476-smp_defconfig
-mips                     decstation_defconfig
-arm                           sama5_defconfig
-arm                       netwinder_defconfig
-powerpc                    gamecube_defconfig
-m68k                        stmark2_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a005-20210131
-i386                 randconfig-a003-20210131
-i386                 randconfig-a002-20210131
-i386                 randconfig-a001-20210131
-i386                 randconfig-a004-20210131
-i386                 randconfig-a006-20210131
-x86_64               randconfig-a015-20210131
-x86_64               randconfig-a011-20210131
-x86_64               randconfig-a014-20210131
-x86_64               randconfig-a016-20210131
-x86_64               randconfig-a012-20210131
-x86_64               randconfig-a013-20210131
-i386                 randconfig-a013-20210131
-i386                 randconfig-a011-20210131
-i386                 randconfig-a015-20210131
-i386                 randconfig-a012-20210131
-i386                 randconfig-a014-20210131
-i386                 randconfig-a016-20210131
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a004-20210131
-x86_64               randconfig-a002-20210131
-x86_64               randconfig-a001-20210131
-x86_64               randconfig-a005-20210131
-x86_64               randconfig-a006-20210131
-x86_64               randconfig-a003-20210131
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
