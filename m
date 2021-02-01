@@ -2,69 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FFCD30A782
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Feb 2021 13:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F6330A7CA
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Feb 2021 13:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbhBAMXE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Feb 2021 07:23:04 -0500
-Received: from mga14.intel.com ([192.55.52.115]:12018 "EHLO mga14.intel.com"
+        id S229785AbhBAMkq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Feb 2021 07:40:46 -0500
+Received: from mga11.intel.com ([192.55.52.93]:4714 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229500AbhBAMWv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 1 Feb 2021 07:22:51 -0500
-IronPort-SDR: sLlTq2L9Fu6J+DNglEnXnp0Vk2C4r2sbiFPMog59ol9j0R8LOd+ASBheWvOvhjzkcRbC4mStlZ
- FN0lzDhQah8g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9881"; a="179897705"
+        id S229500AbhBAMkp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 1 Feb 2021 07:40:45 -0500
+IronPort-SDR: sOARduTKgxAkJvWAC+9H3aLNqk6LRMuXcTvaSWc2cv79XbghUtep5WLh/w5p/vS5Hn8CJYx8MK
+ +B5u2krkU3Ow==
+X-IronPort-AV: E=McAfee;i="6000,8403,9881"; a="177169993"
 X-IronPort-AV: E=Sophos;i="5.79,392,1602572400"; 
-   d="scan'208";a="179897705"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 04:21:04 -0800
-IronPort-SDR: 55xEm2p+dJSDIQdkomBKhFVOXh3W2hQbIxcGc/xEIbbgrNHxJtSE+R0Z6iONufsNmCBVjunK76
- ncvFyq7BJ4Tw==
+   d="scan'208";a="177169993"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 04:38:57 -0800
+IronPort-SDR: TJuz0phK4oOqIfxePadztRLFArdp9XudFC8zyIRt+0WwiiyPsvdrZZB9jaAK3ekmE4NJk5K/Zi
+ mEqgXqIkqg7w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.79,392,1602572400"; 
-   d="scan'208";a="506831435"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 01 Feb 2021 04:21:01 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 59DA811E; Mon,  1 Feb 2021 14:21:01 +0200 (EET)
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Isaac Hazan <isaac.hazan@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH] thunderbolt: dma_test: Drop unnecessary include
-Date:   Mon,  1 Feb 2021 15:21:01 +0300
-Message-Id: <20210201122101.87783-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.29.2
+   d="scan'208";a="478937475"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 01 Feb 2021 04:38:54 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 01 Feb 2021 14:38:53 +0200
+Date:   Mon, 1 Feb 2021 14:38:53 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Benson Leung <bleung@chromium.org>
+Cc:     enric.balletbo@collabora.com, pmalani@chromium.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, groeck@chromium.org,
+        bleung@google.com
+Subject: Re: [PATCH 1/6] usb: typec: Standardize PD Revision format with
+ Type-C Revision
+Message-ID: <20210201123853.GA2465@kuha.fi.intel.com>
+References: <20210129061406.2680146-1-bleung@chromium.org>
+ <20210129061406.2680146-2-bleung@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210129061406.2680146-2-bleung@chromium.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It seems <linux/acpi.h> is not actually needed in this driver so we can
-drop it.
+On Thu, Jan 28, 2021 at 10:14:01PM -0800, Benson Leung wrote:
+> The Type-C Revision was in a specific BCD format "0120H" for 1.2.
+> USB PD revision numbers follow a similar pattern with "0300H" for 3.0.
+> 
+> Standardizes the sysfs format for usb_power_delivery_revision
+> to align with the BCD format used for usb_typec_revision.
+> 
+> Example values:
+> - "2.0": USB Power Delivery Release 2.0
+> - "3.0": USB Power Delivery Release 3.0
+> - "3.1": USB Power Delivery Release 3.1
+> 
+> Signed-off-by: Benson Leung <bleung@chromium.org>
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/thunderbolt/dma_test.c | 1 -
- 1 file changed, 1 deletion(-)
+I guess it's OK to modify the ABI like this.
 
-diff --git a/drivers/thunderbolt/dma_test.c b/drivers/thunderbolt/dma_test.c
-index 955f980986ca..6debaf5a6604 100644
---- a/drivers/thunderbolt/dma_test.c
-+++ b/drivers/thunderbolt/dma_test.c
-@@ -7,7 +7,6 @@
-  *	    Mika Westerberg <mika.westerberg@linux.intel.com>
-  */
- 
--#include <linux/acpi.h>
- #include <linux/completion.h>
- #include <linux/debugfs.h>
- #include <linux/module.h>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  Documentation/ABI/testing/sysfs-class-typec | 7 ++++++-
+>  drivers/usb/typec/class.c                   | 3 ++-
+>  2 files changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+> index 8eab41e79ce6..b61480535fdc 100644
+> --- a/Documentation/ABI/testing/sysfs-class-typec
+> +++ b/Documentation/ABI/testing/sysfs-class-typec
+> @@ -105,7 +105,12 @@ Date:		April 2017
+>  Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>  Description:
+>  		Revision number of the supported USB Power Delivery
+> -		specification, or 0 when USB Power Delivery is not supported.
+> +		specification, or 0.0 when USB Power Delivery is not supported.
+> +
+> +		Example values:
+> +		- "2.0": USB Power Delivery Release 2.0
+> +		- "3.0": USB Power Delivery Release 3.0
+> +		- "3.1": USB Power Delivery Release 3.1
+>  
+>  What:		/sys/class/typec/<port>/usb_typec_revision
+>  Date:		April 2017
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 8f77669f9cf4..4f60ee7ba76a 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -1500,8 +1500,9 @@ static ssize_t usb_power_delivery_revision_show(struct device *dev,
+>  						char *buf)
+>  {
+>  	struct typec_port *p = to_typec_port(dev);
+> +	u16 rev = p->cap->pd_revision;
+>  
+> -	return sprintf(buf, "%d\n", (p->cap->pd_revision >> 8) & 0xff);
+> +	return sprintf(buf, "%d.%d\n", (rev >> 8) & 0xff, (rev >> 4) & 0xf);
+>  }
+>  static DEVICE_ATTR_RO(usb_power_delivery_revision);
+>  
+> -- 
+> 2.30.0.365.g02bc693789-goog
+
+thanks,
+
 -- 
-2.29.2
-
+heikki
