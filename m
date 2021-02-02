@@ -2,169 +2,206 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D705A30B695
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 05:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F58330B7A9
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 07:11:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231776AbhBBEgM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Feb 2021 23:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231771AbhBBEgG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Feb 2021 23:36:06 -0500
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB730C061756
-        for <linux-usb@vger.kernel.org>; Mon,  1 Feb 2021 20:35:25 -0800 (PST)
-Received: by mail-vk1-xa34.google.com with SMTP id d23so4511751vkf.3
-        for <linux-usb@vger.kernel.org>; Mon, 01 Feb 2021 20:35:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6zW+oK8rbM/GavGAJ5Q7vHYU6QBRDLzYuN7DwE3QzWk=;
-        b=fP7IJz6FtgZOxArADJ6ZEDLa+iycwERa5UmG6elnBSUEw7t/gy5P7Ld/teUE3y/8CH
-         e5+ojPWEpoahB7LxuLmMBYoYEoTs1pyMA4iR+h/nbU21AX+eFb860NYitY4MRbrPakWw
-         mWgqHe1BvfDGbuAXNPZ1Ynr6Cb6K1RZtdAqaT4HKNozpXRQ1Xm3KkrK89q1zkWstDU6u
-         /6PMBcV60JBQP7XSi3Q5VwzQOtMRYcxxOfDo8ElVhH+4aESb8igdbi2HGsUubt/mccK8
-         12ixy0DS2owR+BURdAWeAQ7/8TCf3rFPb5YRazhcoCLLbK+6dPWGDIbzMiKPzJpA/CUH
-         YEyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6zW+oK8rbM/GavGAJ5Q7vHYU6QBRDLzYuN7DwE3QzWk=;
-        b=Bj54ZJJPtLsnxAl6Oq4BX7pYkeEznxTWduUekZC9AkXNBtd1Z5t8vYRgmz6GLAw1NP
-         vTp15Hk/Wt5txIRWFlztFGMuPQ9TGRIOFZJg4zuoRwCyyBvikriZ6GyEV8hvkSQBrNUb
-         +g42hCZaDquHrHMx4gzc+aTCgSsMkAP4tESC3LvA9Bsbv5mx00wtTVkqmU9kJuAA4Fe+
-         2gZVnfMHZFce53oKXwP/ojxHo5D962Ny1LTmdc/x9HAlJGIBYzs2r0zHdg55oyuT++6a
-         sW/nLDR1/KiKeL27pa05dE8hXabSa0BWajqxL5+7i6WCVYfnvZqcishVU2a0R/2WVN6j
-         4Wnw==
-X-Gm-Message-State: AOAM532GR9DNxO2bL80u0N5KgOji+RIrd9lZynZk6VEiLPQ8TtZytDwl
-        lPN8IDJjeaje9RDdo5v+CxVnlvxaMe3WOxTDr7Xuaw==
-X-Google-Smtp-Source: ABdhPJytGVZo8olkvv0ZJKLAvArQ8Xgz0PsZ/u3tEaiPcllYumCERl9uyk0rWtRlurPMEoPuA7nEHbip+6kQeT4BNgk=
-X-Received: by 2002:a1f:9b83:: with SMTP id d125mr11035160vke.14.1612240524542;
- Mon, 01 Feb 2021 20:35:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20210202003101.221145-1-badhri@google.com>
-In-Reply-To: <20210202003101.221145-1-badhri@google.com>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Mon, 1 Feb 2021 20:34:47 -0800
-Message-ID: <CAPTae5J+rpRUs3fQwXqGe+ScSeF=_fTa3JLNRQy8WnCGzGg7kg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] usb: typec: tcpm: Add Callback to Usb
- Communication capable partner
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        id S231600AbhBBGKi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Feb 2021 01:10:38 -0500
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:57361 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231621AbhBBGKi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Feb 2021 01:10:38 -0500
+X-UUID: 3282f37244c44a3e9fbb9cb580d25dc6-20210202
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=Ts8m8akIrVg+91beyBWSOTYxOCqFp6KNdG0km01xgtM=;
+        b=Tn01kXE39tF3rHwubc3PkZ34NN2PNTiXcnyhCDEDs/mqdcLB6smX9LaVjOikBP/tiG8ngU0V+cU0j51i5TstrBfdeoWfKCH0rkizUXe7X5gl0CJyTyx/5i8FBoGNHEknJaoqfDyIDxoVbqlTwnq4gtznKtzIMLl7Hdm0kUSIHik=;
+X-UUID: 3282f37244c44a3e9fbb9cb580d25dc6-20210202
+Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 671492651; Tue, 02 Feb 2021 14:08:28 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 2 Feb
+ 2021 14:08:21 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 2 Feb 2021 14:08:21 +0800
+Message-ID: <1612246101.25113.11.camel@mhfsdcap03>
+Subject: Re: [next PATCH] usb: xhci-mtk: skip dropping bandwidth of
+ unchecked endpoints
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Ikjoon Jang <ikjn@chromium.org>
+CC:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kyle Tso <kyletso@google.com>
-Cc:     USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        Zhanyong Wang <zhanyong.wang@mediatek.com>,
+        <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Tue, 2 Feb 2021 14:08:21 +0800
+In-Reply-To: <CAATdQgCkLxU2ts_dUq5+MnaxQ6RD69zddVKxqPRRZAGG2iq2hA@mail.gmail.com>
+References: <1612159064-28413-1-git-send-email-chunfeng.yun@mediatek.com>
+         <CAATdQgCkLxU2ts_dUq5+MnaxQ6RD69zddVKxqPRRZAGG2iq2hA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+X-TM-SNTS-SMTP: 1F8851F34FEEB5FA0BE1BE46698C9D41F9DC20F3F1155939C75CDABE5000BFC12000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Guenter,
+T24gTW9uLCAyMDIxLTAyLTAxIGF0IDE3OjIwICswODAwLCBJa2pvb24gSmFuZyB3cm90ZToNCj4g
+SEkgQ2h1bmZlbmcsDQo+IA0KPiBPbiBNb24sIEZlYiAxLCAyMDIxIGF0IDE6NTggUE0gQ2h1bmZl
+bmcgWXVuIDxjaHVuZmVuZy55dW5AbWVkaWF0ZWsuY29tPiB3cm90ZToNCj4gPg0KPiA+IEZvciB0
+aG9zZSB1bmNoZWNrZWQgZW5kcG9pbnRzLCB3ZSBkb24ndCBhbGxvY2F0ZSBiYW5kd2lkdGggZm9y
+DQo+ID4gdGhlbSwgc28gbm8gbmVlZCBmcmVlIHRoZSBiYW5kd2lkdGgsIG90aGVyd2lzZSB3aWxs
+IGRlY3JlYXNlDQo+ID4gdGhlIGFsbG9jYXRlZCBiYW5kd2lkdGguDQo+ID4gTWVhbndoaWxlIHVz
+ZSB4aGNpX2RiZygpIGluc3RlYWQgb2YgZGV2X2RiZygpIHRvIHByaW50IGxvZ3MgYW5kDQo+ID4g
+cmVuYW1lIGJ3X2VwX2xpc3RfbmV3IGFzIGJ3X2VwX2Noa19saXN0Lg0KPiA+DQo+ID4gRml4ZXM6
+IDFkNjlmOWQ5MDFlZiAoInVzYjogeGhjaS1tdGs6IGZpeCB1bnJlbGVhc2VkIGJhbmR3aWR0aCBk
+YXRhIikNCj4gPiBDYzogc3RhYmxlIDxzdGFibGVAdmdlci5rZXJuZWwub3JnPg0KPiA+IFNpZ25l
+ZC1vZmYtYnk6IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCj4gDQo+
+IFJldmlld2VkLWFuZC10ZXN0ZWQtYnk6IElram9vbiBKYW5nIDxpa2puQGNocm9taXVtLm9yZz4N
+Cj4gDQo+ID4gLS0tDQo+ID4gIGRyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGstc2NoLmMgfCA2MSAr
+KysrKysrKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0NCj4gPiAgZHJpdmVycy91c2IvaG9zdC94
+aGNpLW10ay5oICAgICB8ICA0ICsrLQ0KPiA+ICAyIGZpbGVzIGNoYW5nZWQsIDM2IGluc2VydGlv
+bnMoKyksIDI5IGRlbGV0aW9ucygtKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNi
+L2hvc3QveGhjaS1tdGstc2NoLmMgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRrLXNjaC5jDQo+
+ID4gaW5kZXggYTMxM2U3NWZmMWM2Li5kZWU4YTMyOTA3NmQgMTAwNjQ0DQo+ID4gLS0tIGEvZHJp
+dmVycy91c2IvaG9zdC94aGNpLW10ay1zY2guYw0KPiA+ICsrKyBiL2RyaXZlcnMvdXNiL2hvc3Qv
+eGhjaS1tdGstc2NoLmMNCj4gPiBAQCAtMjAwLDYgKzIwMCw3IEBAIHN0YXRpYyBzdHJ1Y3QgbXUz
+aF9zY2hfZXBfaW5mbyAqY3JlYXRlX3NjaF9lcChzdHJ1Y3QgdXNiX2RldmljZSAqdWRldiwNCj4g
+Pg0KPiA+ICAgICAgICAgc2NoX2VwLT5zY2hfdHQgPSB0dDsNCj4gPiAgICAgICAgIHNjaF9lcC0+
+ZXAgPSBlcDsNCj4gPiArICAgICAgIElOSVRfTElTVF9IRUFEKCZzY2hfZXAtPmVuZHBvaW50KTsN
+Cj4gPiAgICAgICAgIElOSVRfTElTVF9IRUFEKCZzY2hfZXAtPnR0X2VuZHBvaW50KTsNCj4gPg0K
+PiA+ICAgICAgICAgcmV0dXJuIHNjaF9lcDsNCj4gPiBAQCAtMzc0LDYgKzM3NSw3IEBAIHN0YXRp
+YyB2b2lkIHVwZGF0ZV9idXNfYncoc3RydWN0IG11M2hfc2NoX2J3X2luZm8gKnNjaF9idywNCj4g
+PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc2NoX2VwLT5id19idWRn
+ZXRfdGFibGVbal07DQo+ID4gICAgICAgICAgICAgICAgIH0NCj4gPiAgICAgICAgIH0NCj4gPiAr
+ICAgICAgIHNjaF9lcC0+YWxsb2NhdGVkID0gdXNlZDsNCj4gDQo+IFllcywgdGhpcyBpcyByZWFs
+bHkgbmVlZGVkIQ0KPiANCj4gPiAgfQ0KPiA+DQo+ID4gIHN0YXRpYyBpbnQgY2hlY2tfc2NoX3R0
+KHN0cnVjdCB1c2JfZGV2aWNlICp1ZGV2LA0KPiA+IEBAIC01NDIsNiArNTQ0LDIyIEBAIHN0YXRp
+YyBpbnQgY2hlY2tfc2NoX2J3KHN0cnVjdCB1c2JfZGV2aWNlICp1ZGV2LA0KPiA+ICAgICAgICAg
+cmV0dXJuIDA7DQo+ID4gIH0NCj4gPg0KPiA+ICtzdGF0aWMgdm9pZCBkZXN0cm95X3NjaF9lcChz
+dHJ1Y3QgdXNiX2RldmljZSAqdWRldiwNCj4gPiArICAgICAgIHN0cnVjdCBtdTNoX3NjaF9id19p
+bmZvICpzY2hfYncsIHN0cnVjdCBtdTNoX3NjaF9lcF9pbmZvICpzY2hfZXApDQo+ID4gK3sNCj4g
+PiArICAgICAgIC8qIG9ubHkgcmVsZWFzZSBlcCBidyBjaGVjayBwYXNzZWQgYnkgY2hlY2tfc2No
+X2J3KCkgKi8NCj4gPiArICAgICAgIGlmIChzY2hfZXAtPmFsbG9jYXRlZCkNCj4gPiArICAgICAg
+ICAgICAgICAgdXBkYXRlX2J1c19idyhzY2hfYncsIHNjaF9lcCwgMCk7DQo+IA0KPiBTbyBvbmx5
+IHRoZXNlIHR3byBsaW5lcyByZWFsbHkgbWF0dGVyLg0KPiANCj4gPiArDQo+ID4gKyAgICAgICBs
+aXN0X2RlbCgmc2NoX2VwLT5lbmRwb2ludCk7DQo+ID4gKw0KPiA+ICsgICAgICAgaWYgKHNjaF9l
+cC0+c2NoX3R0KSB7DQo+ID4gKyAgICAgICAgICAgICAgIGxpc3RfZGVsKCZzY2hfZXAtPnR0X2Vu
+ZHBvaW50KTsNCj4gPiArICAgICAgICAgICAgICAgZHJvcF90dCh1ZGV2KTsNCj4gPiArICAgICAg
+IH0NCj4gPiArICAgICAgIGtmcmVlKHNjaF9lcCk7DQo+ID4gK30NCj4gPiArDQo+ID4gIHN0YXRp
+YyBib29sIG5lZWRfYndfc2NoKHN0cnVjdCB1c2JfaG9zdF9lbmRwb2ludCAqZXAsDQo+ID4gICAg
+ICAgICBlbnVtIHVzYl9kZXZpY2Vfc3BlZWQgc3BlZWQsIGludCBoYXNfdHQpDQo+ID4gIHsNCj4g
+PiBAQCAtNTg0LDcgKzYwMiw3IEBAIGludCB4aGNpX210a19zY2hfaW5pdChzdHJ1Y3QgeGhjaV9o
+Y2RfbXRrICptdGspDQo+ID4NCj4gPiAgICAgICAgIG10ay0+c2NoX2FycmF5ID0gc2NoX2FycmF5
+Ow0KPiA+DQo+ID4gLSAgICAgICBJTklUX0xJU1RfSEVBRCgmbXRrLT5id19lcF9saXN0X25ldyk7
+DQo+ID4gKyAgICAgICBJTklUX0xJU1RfSEVBRCgmbXRrLT5id19lcF9jaGtfbGlzdCk7DQo+ID4N
+Cj4gPiAgICAgICAgIHJldHVybiAwOw0KPiA+ICB9DQo+ID4gQEAgLTYzNiwyOSArNjU0LDEyIEBA
+IGludCB4aGNpX210a19hZGRfZXBfcXVpcmsoc3RydWN0IHVzYl9oY2QgKmhjZCwgc3RydWN0IHVz
+Yl9kZXZpY2UgKnVkZXYsDQo+ID4NCj4gPiAgICAgICAgIHNldHVwX3NjaF9pbmZvKHVkZXYsIGVw
+X2N0eCwgc2NoX2VwKTsNCj4gPg0KPiA+IC0gICAgICAgbGlzdF9hZGRfdGFpbCgmc2NoX2VwLT5l
+bmRwb2ludCwgJm10ay0+YndfZXBfbGlzdF9uZXcpOw0KPiA+ICsgICAgICAgbGlzdF9hZGRfdGFp
+bCgmc2NoX2VwLT5lbmRwb2ludCwgJm10ay0+YndfZXBfY2hrX2xpc3QpOw0KPiA+DQo+ID4gICAg
+ICAgICByZXR1cm4gMDsNCj4gPiAgfQ0KPiA+ICBFWFBPUlRfU1lNQk9MX0dQTCh4aGNpX210a19h
+ZGRfZXBfcXVpcmspOw0KPiA+DQo+ID4gLXN0YXRpYyB2b2lkIHhoY2lfbXRrX2Ryb3BfZXAoc3Ry
+dWN0IHhoY2lfaGNkX210ayAqbXRrLCBzdHJ1Y3QgdXNiX2RldmljZSAqdWRldiwNCj4gPiAtICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCBtdTNoX3NjaF9lcF9pbmZvICpzY2hfZXAp
+DQo+ID4gLXsNCj4gPiAtICAgICAgIHN0cnVjdCB4aGNpX2hjZCAqeGhjaSA9IGhjZF90b194aGNp
+KG10ay0+aGNkKTsNCj4gPiAtICAgICAgIGludCBid19pbmRleCA9IGdldF9id19pbmRleCh4aGNp
+LCB1ZGV2LCBzY2hfZXAtPmVwKTsNCj4gPiAtICAgICAgIHN0cnVjdCBtdTNoX3NjaF9id19pbmZv
+ICpzY2hfYncgPSAmbXRrLT5zY2hfYXJyYXlbYndfaW5kZXhdOw0KPiA+IC0NCj4gPiAtICAgICAg
+IHVwZGF0ZV9idXNfYncoc2NoX2J3LCBzY2hfZXAsIDApOw0KPiA+IC0gICAgICAgbGlzdF9kZWwo
+JnNjaF9lcC0+ZW5kcG9pbnQpOw0KPiA+IC0NCj4gPiAtICAgICAgIGlmIChzY2hfZXAtPnNjaF90
+dCkgew0KPiA+IC0gICAgICAgICAgICAgICBsaXN0X2RlbCgmc2NoX2VwLT50dF9lbmRwb2ludCk7
+DQo+ID4gLSAgICAgICAgICAgICAgIGRyb3BfdHQodWRldik7DQo+ID4gLSAgICAgICB9DQo+ID4g
+LSAgICAgICBrZnJlZShzY2hfZXApOw0KPiA+IC19DQo+ID4gLQ0KPiA+ICB2b2lkIHhoY2lfbXRr
+X2Ryb3BfZXBfcXVpcmsoc3RydWN0IHVzYl9oY2QgKmhjZCwgc3RydWN0IHVzYl9kZXZpY2UgKnVk
+ZXYsDQo+ID4gICAgICAgICAgICAgICAgIHN0cnVjdCB1c2JfaG9zdF9lbmRwb2ludCAqZXApDQo+
+ID4gIHsNCj4gPiBAQCAtNjg4LDkgKzY4OSw4IEBAIHZvaWQgeGhjaV9tdGtfZHJvcF9lcF9xdWly
+ayhzdHJ1Y3QgdXNiX2hjZCAqaGNkLCBzdHJ1Y3QgdXNiX2RldmljZSAqdWRldiwNCj4gPiAgICAg
+ICAgIHNjaF9idyA9ICZzY2hfYXJyYXlbYndfaW5kZXhdOw0KPiA+DQo+ID4gICAgICAgICBsaXN0
+X2Zvcl9lYWNoX2VudHJ5X3NhZmUoc2NoX2VwLCB0bXAsICZzY2hfYnctPmJ3X2VwX2xpc3QsIGVu
+ZHBvaW50KSB7DQo+ID4gLSAgICAgICAgICAgICAgIGlmIChzY2hfZXAtPmVwID09IGVwKSB7DQo+
+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgeGhjaV9tdGtfZHJvcF9lcChtdGssIHVkZXYsIHNj
+aF9lcCk7DQo+ID4gLSAgICAgICAgICAgICAgIH0NCj4gPiArICAgICAgICAgICAgICAgaWYgKHNj
+aF9lcC0+ZXAgPT0gZXApDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgZGVzdHJveV9zY2hf
+ZXAodWRldiwgc2NoX2J3LCBzY2hfZXApOw0KPiANCj4gbm90IHNvIGNyaXRpY2FsIGJ1dCBJJ3Zl
+IGFsc28gbWlzc2VkICdicmVhaycgaGVyZS4NCj4gQ2FuIHlvdSBwbGVhc2UgYWRkIGEgYnJlYWsg
+c3RhdGVtZW50IGhlcmU/DQpZZXMsIGl0J3MgYmV0dGVyIHRvIGFkZCAnYnJlYWsnIGhlcmUsIHRo
+YW5rcw0KDQo+IA0KPiA+ICAgICAgICAgfQ0KPiA+ICB9DQo+ID4gIEVYUE9SVF9TWU1CT0xfR1BM
+KHhoY2lfbXRrX2Ryb3BfZXBfcXVpcmspOw0KPiA+IEBAIC03MDQsOSArNzA0LDkgQEAgaW50IHho
+Y2lfbXRrX2NoZWNrX2JhbmR3aWR0aChzdHJ1Y3QgdXNiX2hjZCAqaGNkLCBzdHJ1Y3QgdXNiX2Rl
+dmljZSAqdWRldikNCj4gPiAgICAgICAgIHN0cnVjdCBtdTNoX3NjaF9lcF9pbmZvICpzY2hfZXAs
+ICp0bXA7DQo+ID4gICAgICAgICBpbnQgYndfaW5kZXgsIHJldDsNCj4gPg0KPiA+IC0gICAgICAg
+ZGV2X2RiZygmdWRldi0+ZGV2LCAiJXNcbiIsIF9fZnVuY19fKTsNCj4gPiArICAgICAgIHhoY2lf
+ZGJnKHhoY2ksICIlcygpIHVkZXYgJXNcbiIsIF9fZnVuY19fLCBkZXZfbmFtZSgmdWRldi0+ZGV2
+KSk7DQo+ID4NCj4gPiAtICAgICAgIGxpc3RfZm9yX2VhY2hfZW50cnkoc2NoX2VwLCAmbXRrLT5i
+d19lcF9saXN0X25ldywgZW5kcG9pbnQpIHsNCj4gPiArICAgICAgIGxpc3RfZm9yX2VhY2hfZW50
+cnkoc2NoX2VwLCAmbXRrLT5id19lcF9jaGtfbGlzdCwgZW5kcG9pbnQpIHsNCj4gPiAgICAgICAg
+ICAgICAgICAgYndfaW5kZXggPSBnZXRfYndfaW5kZXgoeGhjaSwgdWRldiwgc2NoX2VwLT5lcCk7
+DQo+ID4gICAgICAgICAgICAgICAgIHNjaF9idyA9ICZtdGstPnNjaF9hcnJheVtid19pbmRleF07
+DQo+ID4NCj4gPiBAQCAtNzE3LDcgKzcxNyw3IEBAIGludCB4aGNpX210a19jaGVja19iYW5kd2lk
+dGgoc3RydWN0IHVzYl9oY2QgKmhjZCwgc3RydWN0IHVzYl9kZXZpY2UgKnVkZXYpDQo+ID4gICAg
+ICAgICAgICAgICAgIH0NCj4gPiAgICAgICAgIH0NCj4gPg0KPiA+IC0gICAgICAgbGlzdF9mb3Jf
+ZWFjaF9lbnRyeV9zYWZlKHNjaF9lcCwgdG1wLCAmbXRrLT5id19lcF9saXN0X25ldywgZW5kcG9p
+bnQpIHsNCj4gPiArICAgICAgIGxpc3RfZm9yX2VhY2hfZW50cnlfc2FmZShzY2hfZXAsIHRtcCwg
+Jm10ay0+YndfZXBfY2hrX2xpc3QsIGVuZHBvaW50KSB7DQo+ID4gICAgICAgICAgICAgICAgIHN0
+cnVjdCB4aGNpX2VwX2N0eCAqZXBfY3R4Ow0KPiA+ICAgICAgICAgICAgICAgICBzdHJ1Y3QgdXNi
+X2hvc3RfZW5kcG9pbnQgKmVwID0gc2NoX2VwLT5lcDsNCj4gPiAgICAgICAgICAgICAgICAgdW5z
+aWduZWQgaW50IGVwX2luZGV4ID0geGhjaV9nZXRfZW5kcG9pbnRfaW5kZXgoJmVwLT5kZXNjKTsN
+Cj4gPiBAQCAtNzQ2LDEyICs3NDYsMTcgQEAgRVhQT1JUX1NZTUJPTF9HUEwoeGhjaV9tdGtfY2hl
+Y2tfYmFuZHdpZHRoKTsNCj4gPiAgdm9pZCB4aGNpX210a19yZXNldF9iYW5kd2lkdGgoc3RydWN0
+IHVzYl9oY2QgKmhjZCwgc3RydWN0IHVzYl9kZXZpY2UgKnVkZXYpDQo+ID4gIHsNCj4gPiAgICAg
+ICAgIHN0cnVjdCB4aGNpX2hjZF9tdGsgKm10ayA9IGhjZF90b19tdGsoaGNkKTsNCj4gPiArICAg
+ICAgIHN0cnVjdCB4aGNpX2hjZCAqeGhjaSA9IGhjZF90b194aGNpKGhjZCk7DQo+ID4gKyAgICAg
+ICBzdHJ1Y3QgbXUzaF9zY2hfYndfaW5mbyAqc2NoX2J3Ow0KPiA+ICAgICAgICAgc3RydWN0IG11
+M2hfc2NoX2VwX2luZm8gKnNjaF9lcCwgKnRtcDsNCj4gPiArICAgICAgIGludCBid19pbmRleDsN
+Cj4gPg0KPiA+IC0gICAgICAgZGV2X2RiZygmdWRldi0+ZGV2LCAiJXNcbiIsIF9fZnVuY19fKTsN
+Cj4gPiArICAgICAgIHhoY2lfZGJnKHhoY2ksICIlcygpIHVkZXYgJXNcbiIsIF9fZnVuY19fLCBk
+ZXZfbmFtZSgmdWRldi0+ZGV2KSk7DQo+ID4NCj4gPiAtICAgICAgIGxpc3RfZm9yX2VhY2hfZW50
+cnlfc2FmZShzY2hfZXAsIHRtcCwgJm10ay0+YndfZXBfbGlzdF9uZXcsIGVuZHBvaW50KSB7DQo+
+ID4gLSAgICAgICAgICAgICAgIHhoY2lfbXRrX2Ryb3BfZXAobXRrLCB1ZGV2LCBzY2hfZXApOw0K
+PiA+ICsgICAgICAgbGlzdF9mb3JfZWFjaF9lbnRyeV9zYWZlKHNjaF9lcCwgdG1wLCAmbXRrLT5i
+d19lcF9jaGtfbGlzdCwgZW5kcG9pbnQpIHsNCj4gPiArICAgICAgICAgICAgICAgYndfaW5kZXgg
+PSBnZXRfYndfaW5kZXgoeGhjaSwgdWRldiwgc2NoX2VwLT5lcCk7DQo+ID4gKyAgICAgICAgICAg
+ICAgIHNjaF9idyA9ICZtdGstPnNjaF9hcnJheVtid19pbmRleF07DQo+ID4gKyAgICAgICAgICAg
+ICAgIGRlc3Ryb3lfc2NoX2VwKHVkZXYsIHNjaF9idywgc2NoX2VwKTsNCj4gPiAgICAgICAgIH0N
+Cj4gPg0KPiA+ICAgICAgICAgeGhjaV9yZXNldF9iYW5kd2lkdGgoaGNkLCB1ZGV2KTsNCj4gPiBk
+aWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay5oIGIvZHJpdmVycy91c2IvaG9z
+dC94aGNpLW10ay5oDQo+ID4gaW5kZXggNTc3ZjQzMWM1YzkzLi5jYmIwOWRmZWE2MmUgMTAwNjQ0
+DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay5oDQo+ID4gKysrIGIvZHJpdmVy
+cy91c2IvaG9zdC94aGNpLW10ay5oDQo+ID4gQEAgLTU5LDYgKzU5LDcgQEAgc3RydWN0IG11M2hf
+c2NoX2J3X2luZm8gew0KPiA+ICAgKiBAZXBfdHlwZTogZW5kcG9pbnQgdHlwZQ0KPiA+ICAgKiBA
+bWF4cGt0OiBtYXggcGFja2V0IHNpemUgb2YgZW5kcG9pbnQNCj4gPiAgICogQGVwOiBhZGRyZXNz
+IG9mIHVzYl9ob3N0X2VuZHBvaW50IHN0cnVjdA0KPiA+ICsgKiBAYWxsb2NhdGVkOiB0aGUgYmFu
+ZHdpZHRoIGlzIGFyZWFkeSBhbGxvY2F0ZWQgZnJvbSBidXNfYncNCj4gPiAgICogQG9mZnNldDog
+d2hpY2ggdWZyYW1lIG9mIHRoZSBpbnRlcnZhbCB0aGF0IHRyYW5zZmVyIHNob3VsZCBiZQ0KPiA+
+ICAgKiAgICAgICAgICAgICBzY2hlZHVsZWQgZmlyc3QgdGltZSB3aXRoaW4gdGhlIGludGVydmFs
+DQo+ID4gICAqIEByZXBlYXQ6IHRoZSB0aW1lIGdhcCBiZXR3ZWVuIHR3byB1ZnJhbWVzIHRoYXQg
+dHJhbnNmZXJzIGFyZQ0KPiA+IEBAIC04Niw2ICs4Nyw3IEBAIHN0cnVjdCBtdTNoX3NjaF9lcF9p
+bmZvIHsNCj4gPiAgICAgICAgIHUzMiBlcF90eXBlOw0KPiA+ICAgICAgICAgdTMyIG1heHBrdDsN
+Cj4gPiAgICAgICAgIHZvaWQgKmVwOw0KPiA+ICsgICAgICAgYm9vbCBhbGxvY2F0ZWQ7DQo+ID4g
+ICAgICAgICAvKg0KPiA+ICAgICAgICAgICogbXRrIHhIQ0kgc2NoZWR1bGluZyBpbmZvcm1hdGlv
+biBwdXQgaW50byByZXNlcnZlZCBEV3MNCj4gPiAgICAgICAgICAqIGluIGVwIGNvbnRleHQNCj4g
+PiBAQCAtMTMwLDggKzEzMiw4IEBAIHN0cnVjdCBtdTNjX2lwcGNfcmVncyB7DQo+ID4gIHN0cnVj
+dCB4aGNpX2hjZF9tdGsgew0KPiA+ICAgICAgICAgc3RydWN0IGRldmljZSAqZGV2Ow0KPiA+ICAg
+ICAgICAgc3RydWN0IHVzYl9oY2QgKmhjZDsNCj4gPiAtICAgICAgIHN0cnVjdCBsaXN0X2hlYWQg
+YndfZXBfbGlzdF9uZXc7DQo+ID4gICAgICAgICBzdHJ1Y3QgbXUzaF9zY2hfYndfaW5mbyAqc2No
+X2FycmF5Ow0KPiA+ICsgICAgICAgc3RydWN0IGxpc3RfaGVhZCBid19lcF9jaGtfbGlzdDsNCj4g
+PiAgICAgICAgIHN0cnVjdCBtdTNjX2lwcGNfcmVncyBfX2lvbWVtICppcHBjX3JlZ3M7DQo+ID4g
+ICAgICAgICBib29sIGhhc19pcHBjOw0KPiA+ICAgICAgICAgaW50IG51bV91Ml9wb3J0czsNCj4g
+PiAtLQ0KPiA+IDIuMTguMA0KPiA+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fDQo+ID4gTGludXgtbWVkaWF0ZWsgbWFpbGluZyBsaXN0DQo+ID4gTGludXgt
+bWVkaWF0ZWtAbGlzdHMuaW5mcmFkZWFkLm9yZw0KPiA+IGh0dHA6Ly9saXN0cy5pbmZyYWRlYWQu
+b3JnL21haWxtYW4vbGlzdGluZm8vbGludXgtbWVkaWF0ZWsNCg0K
 
-Sent V2 version of the patch stack:
-https://patchwork.kernel.org/project/linux-usb/list/?series=425705.
-For me, Gmail is grouping this under v1 version for some reason and
-since you had reviewed one other patch
-which was sent later, I was wondering if you are having similar
-grouping issue as well.
-I am pinging here to make sure that the patch isn't missed.
-
-Thanks,
-Badhri
-
-On Mon, Feb 1, 2021 at 4:31 PM Badhri Jagan Sridharan <badhri@google.com> wrote:
->
-> The USB Communications Capable bit indicates if port
-> partner is capable of communication over the USB data lines
-> (e.g. D+/- or SS Tx/Rx). Notify the status of the bit to low
-> level drivers to perform chip specific operation.
-> For instance, low level driver enables USB switches on D+/D-
-> lines to set up data path when the bit is set.
->
-> Refactored from patch initially authored by
-> Kyle Tso <kyletso@google.com>
->
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
-> Changes since V1:
-> - Removed partner_usb_comm_capable flag.
-> - Fixed capable flag for SNK_NEGOTIATE_CAPABILITIES.
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 13 +++++++++++++
->  include/linux/usb/tcpm.h      |  5 +++++
->  2 files changed, 18 insertions(+)
->
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 0afd8ef692e8..997a1a56c161 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -3429,6 +3429,14 @@ static void tcpm_unregister_altmodes(struct tcpm_port *port)
->         memset(modep, 0, sizeof(*modep));
->  }
->
-> +static void tcpm_set_partner_usb_comm_capable(struct tcpm_port *port, bool capable)
-> +{
-> +       tcpm_log(port, "Setting usb_comm capable %s", capable ? "true" : "false");
-> +
-> +       if (port->tcpc->set_partner_usb_comm_capable)
-> +               port->tcpc->set_partner_usb_comm_capable(port->tcpc, capable);
-> +}
-> +
->  static void tcpm_reset_port(struct tcpm_port *port)
->  {
->         int ret;
-> @@ -3445,6 +3453,7 @@ static void tcpm_reset_port(struct tcpm_port *port)
->         port->attached = false;
->         port->pd_capable = false;
->         port->pps_data.supported = false;
-> +       tcpm_set_partner_usb_comm_capable(port, false);
->
->         /*
->          * First Rx ID should be 0; set this to a sentinel of -1 so that
-> @@ -3785,6 +3794,8 @@ static void run_state_machine(struct tcpm_port *port)
->                         }
->                 } else {
->                         tcpm_pd_send_control(port, PD_CTRL_ACCEPT);
-> +                       tcpm_set_partner_usb_comm_capable(port,
-> +                                                         !!(port->sink_request & RDO_USB_COMM));
->                         tcpm_set_state(port, SRC_TRANSITION_SUPPLY,
->                                        PD_T_SRC_TRANSITION);
->                 }
-> @@ -4004,6 +4015,8 @@ static void run_state_machine(struct tcpm_port *port)
->                 break;
->         case SNK_NEGOTIATE_CAPABILITIES:
->                 port->pd_capable = true;
-> +               tcpm_set_partner_usb_comm_capable(port,
-> +                                                 !!(port->source_caps[0] & PDO_FIXED_USB_COMM));
->                 port->hard_reset_count = 0;
->                 ret = tcpm_pd_send_request(port);
->                 if (ret < 0) {
-> diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
-> index 3af99f85e8b9..42fcfbe10590 100644
-> --- a/include/linux/usb/tcpm.h
-> +++ b/include/linux/usb/tcpm.h
-> @@ -108,6 +108,10 @@ enum tcpm_transmit_type {
->   *             is supported by TCPC, set this callback for TCPM to query
->   *             whether vbus is at VSAFE0V when needed.
->   *             Returns true when vbus is at VSAFE0V, false otherwise.
-> + * @set_partner_usb_comm_capable:
-> + *              Optional; The USB Communications Capable bit indicates if port
-> + *              partner is capable of communication over the USB data lines
-> + *              (e.g. D+/- or SS Tx/Rx). Called to notify the status of the bit.
->   */
->  struct tcpc_dev {
->         struct fwnode_handle *fwnode;
-> @@ -139,6 +143,7 @@ struct tcpc_dev {
->         int (*set_auto_vbus_discharge_threshold)(struct tcpc_dev *dev, enum typec_pwr_opmode mode,
->                                                  bool pps_active, u32 requested_vbus_voltage);
->         bool (*is_vbus_vsafe0v)(struct tcpc_dev *dev);
-> +       void (*set_partner_usb_comm_capable)(struct tcpc_dev *dev, bool enable);
->  };
->
->  struct tcpm_port;
-> --
-> 2.30.0.365.g02bc693789-goog
->
