@@ -2,104 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D8430B9D9
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 09:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D2730B9FE
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 09:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232375AbhBBI1U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Feb 2021 03:27:20 -0500
-Received: from mga17.intel.com ([192.55.52.151]:32311 "EHLO mga17.intel.com"
+        id S232554AbhBBIdN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Feb 2021 03:33:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37530 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232592AbhBBI07 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 2 Feb 2021 03:26:59 -0500
-IronPort-SDR: LXc+73g490csAUslmTaZ8WdeIir4ywLmdZY6Xg7z3XZb00ZIhPSuUk97YMJcO7m745hewhx4zf
- E3BEjP3ZDhcQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="160583550"
-X-IronPort-AV: E=Sophos;i="5.79,394,1602572400"; 
-   d="scan'208";a="160583550"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 00:25:13 -0800
-IronPort-SDR: 9G5TpLdVoAZ64S15wl7c3zTe2XvX6oKeCc4Knq1Nx2aJ3d9E2FnGgtpvTP8nvxzHCktptUvW01
- FqdFW9FLU0ZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,394,1602572400"; 
-   d="scan'208";a="479482501"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 02 Feb 2021 00:25:10 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Feb 2021 10:25:09 +0200
-Date:   Tue, 2 Feb 2021 10:25:09 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kyle Tso <kyletso@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] usb: typec: tcpm: Set in_ams flag when Source caps
- have been received
-Message-ID: <20210202082509.GD1433721@kuha.fi.intel.com>
-References: <20210202033859.258491-1-badhri@google.com>
+        id S232728AbhBBIcq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 2 Feb 2021 03:32:46 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4A7F764DA5;
+        Tue,  2 Feb 2021 08:32:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612254725;
+        bh=1uyTvcbLDGMGSM0vlefyg16XQREFPdHBDTAy83bODaM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SB6V1rPSj1G2U6h4uo/P1o/ykCtRmO71fHEJPuO3O5qIaJrx0ES9ir2yqqHXZUtyH
+         bhdu7XYIj6hkqvcLpGkAbaLMOLTs9c7CfoISpsgg/zY+gEOgrpf9AXcIgPLtbKHEvX
+         6DIWydEbTAUvdIWfeUh1Qz15NIYDZ7iOiPO/YbFEcOA84zeHocKYj1UeqYKuQkcm6q
+         e9tcctcj+x1vxZmc046phayXxc1XMv/n/4xiAvA67yUU48tE3uL0VtSgR+/VV6uZso
+         V1o90rLPgMFKjkUjje/1/sGl/sVP3RYiIjMI32d+HTd4iMUytPpZyxcGSb4zXsfy3n
+         ni213cwxUciLg==
+Received: from johan by xi with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1l6r6e-0007Fo-Gq; Tue, 02 Feb 2021 09:32:17 +0100
+Date:   Tue, 2 Feb 2021 09:32:16 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Tung Pham <Tung.Pham@silabs.com>
+Cc:     Hung Nguyen <Hung.Nguyen@silabs.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Pho Tran <Pho.Tran@silabs.com>
+Subject: Re: Bugs: usb serial crash when close second comport
+Message-ID: <YBkOEHM8/VfK5Gc+@hovoldconsulting.com>
+References: <PU1PR06MB2117988A6B7680CA1806DBE091B69@PU1PR06MB2117.apcprd06.prod.outlook.com>
+ <CO1PR11MB48828958BDC51E796D37D63F81B69@CO1PR11MB4882.namprd11.prod.outlook.com>
+ <YBfVqOwEZfkvX7YA@hovoldconsulting.com>
+ <CO1PR11MB48821E7544DCB4E06665849481B59@CO1PR11MB4882.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210202033859.258491-1-badhri@google.com>
+In-Reply-To: <CO1PR11MB48821E7544DCB4E06665849481B59@CO1PR11MB4882.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 01, 2021 at 07:38:59PM -0800, Badhri Jagan Sridharan wrote:
-> Receiving the first packet in an AMS sequence signals the
-> beginning of AMS. Set in_ams flag to true when SRC_CAPS are
-> received during POWER_NEGOTIATION AMS.
-> This fixes the failure flagged while running TD.PD.SNK.E9
-> compliance test.
+On Tue, Feb 02, 2021 at 03:50:50AM +0000, Tung Pham wrote:
+
+> > Can you reproduce this with a mainline kernel?
+> > 
+> > Otherwise, you may need to bring this up with Ubuntu.
 > 
-> >From Deterministic PD compliance MOI spec:
-> TD.PD.SNK.E9. GetSinkCap in Place of Accept
-> Description:
-> As Provider, the Tester intentionally sends a GetSinkCap message in place
-> of Accept message and verifies the UUT will send a SoftReset and recover
-> from the error.
-> Steps:
-> a) Run PROC.PD.E1 Bring-up according to the UUT role.
-> b) The Tester cycles VBus.
-> c) The Tester sends a Source Capabilities message to the UUT.
-> d) Upon receipt of a Request message from the UUT, the Tester replies with
->    a GoodCRC message.
-> e) The Tester sends a GetSinkCap message to the UUT.
-> f) If a SoftReset is not received within 15 ms after the GetSinkCap EOP was
->    sent, the test fails.
-> g) If a SoftReset is received timely, the Tester replies with an Accept
->    message.
-> h) The Tester sends Source Capabilities message to the UUT repeatedly until
->    nCapsCount reached or a GoodCRC is received. If nCapsCount reached, the
->    test fails.
-> i) If a Request is not received timely within 30 ms after the GoodCRC EOP
->    corresponding to Source Capabilities message was received, the test
->    fails.
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> this bug doesn't occur on Ubuntu running on pc, it only occur on
+> raspberry.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+I understand, but if you can only reproduce this using a Ubuntu kernel
+on the RPi it could be to something that they've put in their kernel's
+(e.g. some out-of-tree driver) which doesn't exist in mainline. That's
+why you need to be able to reproduce it on a mainline kernel.
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 0afd8ef692e8..b3e07d9b7597 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -2243,6 +2243,7 @@ static void tcpm_pd_data_request(struct tcpm_port *port,
->  		 * handled.
->  		 */
->  			port->ams = POWER_NEGOTIATION;
-> +			port->in_ams = true;
->  			tcpm_set_state(port, SNK_NEGOTIATE_CAPABILITIES, 0);
->  		} else {
->  			if (port->ams == GET_SOURCE_CAPABILITIES)
-> -- 
-> 2.30.0.365.g02bc693789-goog
+> One additional thing: the bug doesn't occur with HUB: Orico, model
+> W6ph4-u3-v1, Manufacture: VIA Labs, inc.
+> It only occur with hub: HB-UM43 hub, Genesys Logic, Inc.
 
-thanks,
+Ok, so depending on if the kernel crashes or not, it could still be a
+bug in the hub firmware.
 
--- 
-heikki
+> > This sounds like you could have a problem with the host-controller
+> > driver. What controller is the RPi4 using?
+>  
+> For the Pi 4, a fully-featured host controller drives the downstream
+> USB ports. Downstream USB is provided by a Via Labs VL805 chip - that
+> supports two USB 2.0 ports and two USB 3.0 ports
+
+Which driver does it use? I believe some of the earlier RPi used an
+out-of-tree host-controller driver, but perhaps that's no longer the
+case.
+
+> > As you write above, the usb_serial_generic_close() is needed to
+> > cancel the outstanding URBs during close so you can't remove that.
+> > 
+> > But my guess is that something breaks in the HCD when unlinking
+> > those URBs when connected through the hub. Do you have a stack trace
+> > from an oops? Or do things just lock up?
+>
+> I don't know how to capture stack trace?
+
+If the kernel oopses/crashes (e.g. due to a bug in the driver) you
+should find a stack trace in the kernel log (e.g. run dmesg).
+
+But if the USB bus just locks up (until you disconnect the hub or
+device, or reload the USB serial driver), then this could also be a
+firmware bug in the host-controller or hub.
+
+Johan
