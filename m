@@ -2,103 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22AF330C852
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 18:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E998230C88F
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 18:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237889AbhBBRsB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Feb 2021 12:48:01 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:35386 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237739AbhBBRpi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Feb 2021 12:45:38 -0500
-Received: by mail-ot1-f42.google.com with SMTP id 36so20644024otp.2;
-        Tue, 02 Feb 2021 09:45:22 -0800 (PST)
+        id S234197AbhBBRyu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Feb 2021 12:54:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238004AbhBBRxG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Feb 2021 12:53:06 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F4AC061788
+        for <linux-usb@vger.kernel.org>; Tue,  2 Feb 2021 09:52:26 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id y9so9721372ejp.10
+        for <linux-usb@vger.kernel.org>; Tue, 02 Feb 2021 09:52:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1tB4S5jLhLKvo7gnN06wmykthBef2GlOrD2/xcVl1A4=;
+        b=a7ZnMTm4sWt6fyn+YApSQ0w4EABfeCbs9vFvoF2wWi5tUInQEA9ulPooKhD1GMMVeB
+         TAA+Wt19ay/5u7Ngp3nONfJFLbQ2JuGUBoXoZHeWizvJiRIltrPVcS7RDkYH8EhMGnwT
+         PWRuZXgGETL+EFckEimG550ma+kboXbKPeaxg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=JTlXOdBngJ1YJUbwfAUG7x6kg6XjEmBq9/mlkFXBIug=;
-        b=Kz+SAOpPDF1xLgseQ8HrofURsQGu8MLyoq3Ore5Xrv9EXb1zS6bIF8O+74pWzHckoQ
-         rhiFFNzHJgJo1BrUA0oaRJkV5c4NaORRevwI/Lpv1+RDfW+E+QCuCqyaWTC4OHRnhbXG
-         qDG9uGLlKsxQVpWXvTbdTOjamALKMxZ9PIuOJftvltEJFh0e6K+AH7qg1bgsko278DrP
-         b5hUqsG5crFQ+e8fD6D+ffFhLvYyQ8I6C0mVnvdhmEa8lv0Ryt5WX2lh+yzFRqumPF6c
-         UhfdMN1FPCs1kg0RS1XCzM8E3+xHR3ZxOagbnEx68CQpAw6LKjIZxoIH6of9RApwnGro
-         uITQ==
-X-Gm-Message-State: AOAM5330Wm8y2R6cLuuBk0980h/UZFNa8Uq5rr2nuMW3WqQrzsaq7Riz
-        HkBGXkrw72a9FgOxOVV77g==
-X-Google-Smtp-Source: ABdhPJxG354Fp569hTYJNvqu/3BDjRzPg3XgNq8Y/835+LrvwJGubs6mr2k1CNdj094klpMzHCN7CQ==
-X-Received: by 2002:a05:6830:185:: with SMTP id q5mr16809793ota.359.1612287897139;
-        Tue, 02 Feb 2021 09:44:57 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id y24sm4824050oos.44.2021.02.02.09.44.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Feb 2021 09:44:56 -0800 (PST)
-Received: (nullmailer pid 3887345 invoked by uid 1000);
-        Tue, 02 Feb 2021 17:44:54 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     heiko@sntech.de, linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, balbi@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, gregkh@linuxfoundation.org
-In-Reply-To: <20210201194105.32673-1-jbx6244@gmail.com>
-References: <20210201194105.32673-1-jbx6244@gmail.com>
-Subject: Re: [PATCH v1 1/5] dt-bindings: usb: convert rockchip,dwc3.txt to yaml
-Date:   Tue, 02 Feb 2021 11:44:54 -0600
-Message-Id: <1612287894.993003.3887344.nullmailer@robh.at.kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1tB4S5jLhLKvo7gnN06wmykthBef2GlOrD2/xcVl1A4=;
+        b=qU3HCtNXHUcBabfZCtKGP+Q7OUGlr58PlbDzAG+f9tJMZti6kzESt/NnYyEdfjR5Dm
+         r+KkYl9TljtJ81A9KGYnBjYr9SF4rI15Eyq93ZEg5vwudRtF7QZGhv3JKpvWS2poKuue
+         HnKJ6JJWXxZzGmtp7J/oa7uIQzQL2somJwq1PeAD4Xc0TMJY9Rk8fD3nVes4gOpB830x
+         45CJA//kTNas09U2Vh4NFgfbSYH36fKfT3E6+brRGDTzzW0X7gAl0LUBOb21AXP40nXm
+         6tOdQi7gE6Iqx86Y/DwxQtWWKb0xKcG61H8qwbuEHcBjBURQ1OXrqRnj5GL0iOhxwlzq
+         tbgQ==
+X-Gm-Message-State: AOAM532IVg7HaUZcaK0odvC6IeFbCNZp7JKi3dqWAiF91bfgU0sTUIFO
+        acibY48SHpb/p5Y9C7QWNycRah3JwniMRDLboeNwMA==
+X-Google-Smtp-Source: ABdhPJz9j3bI4orrAdE7VqjHuU+Oh1ba5hhmYn/Zjuu6iN8UHXGhDXjaATmQaFyVUpo5W2FIaguym6nJO9O98UfQMrM=
+X-Received: by 2002:a17:906:2407:: with SMTP id z7mr23893655eja.219.1612288345094;
+ Tue, 02 Feb 2021 09:52:25 -0800 (PST)
+MIME-Version: 1.0
+References: <20210202164531.3982778-1-bleung@chromium.org> <YBmFo5L1eeUwCJ9B@kroah.com>
+In-Reply-To: <YBmFo5L1eeUwCJ9B@kroah.com>
+From:   Benson Leung <bleung@chromium.org>
+Date:   Tue, 2 Feb 2021 09:52:13 -0800
+Message-ID: <CANLzEkuFgLK9saqHhHdrKhOjsiG001d1N9EYXsnohoMPHsAPGg@mail.gmail.com>
+Subject: Re: [PATCH v2] platform/chrome: cros_ec_typec: Fix call to typec_partner_set_pd_revision
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Kyle Tso <kyletso@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 01 Feb 2021 20:41:01 +0100, Johan Jonker wrote:
-> In the past Rockchip dwc3 usb nodes were manually checked.
-> With the conversion of snps,dwc3.yaml as common document
-> we now can convert rockchip,dwc3.txt to yaml as well.
-> 
-> Added properties for rk3399 are:
->   resets
->   reset-names
-> 
-> Generic properties that are now also filtered:
->   "#address-cells"
->   "#size-cells"
->   ranges
-> 
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
->  .../devicetree/bindings/usb/rockchip,dwc3.txt      |  56 -----------
->  .../devicetree/bindings/usb/rockchip,dwc3.yaml     | 107 +++++++++++++++++++++
->  2 files changed, 107 insertions(+), 56 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/rockchip,dwc3.txt
->  create mode 100644 Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-> 
+Hi Greg,
 
-My bot found errors running 'make dt_binding_check' on your patch:
+On Tue, Feb 2, 2021 at 9:02 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Feb 02, 2021 at 08:45:31AM -0800, Benson Leung wrote:
+> > typec_partner_set_pd_revision returns void now.
+> >
+> > Fixes: cefc011f8daf ("platform/chrome: cros_ec_typec: Set Partner PD revision from status")
+> > Signed-off-by: Benson Leung <bleung@chromium.org>
+> > ---
+> >  drivers/platform/chrome/cros_ec_typec.c | 6 +-----
+> >  1 file changed, 1 insertion(+), 5 deletions(-)
+>
+> What changed from "v1"?
+>
 
-yamllint warnings/errors:
+Just the "Fixes" line in the commit message.
 
-dtschema/dtc warnings/errors:
-Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.8/dist-packages/dtschema/schemas/usb/snps,dwc3.yaml'
-xargs: dt-doc-validate: exited with status 255; aborting
-Documentation/devicetree/bindings/usb/rockchip,dwc3.example.dts:31.11-18: Warning (ranges_format): /example-0/usb@fe800000:ranges: empty "ranges" property but its #address-cells (2) differs from /example-0 (1)
-Documentation/devicetree/bindings/usb/rockchip,dwc3.example.dts:31.11-18: Warning (ranges_format): /example-0/usb@fe800000:ranges: empty "ranges" property but its #size-cells (2) differs from /example-0 (1)
-Documentation/devicetree/bindings/usb/rockchip,dwc3.example.dts:21.33-38.11: Warning (unit_address_vs_reg): /example-0/usb@fe800000: node has a unit name, but no reg or ranges property
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/usb/rockchip,dwc3.example.dt.yaml'
-Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.8/dist-packages/dtschema/schemas/usb/snps,dwc3.yaml'
-make[1]: *** [scripts/Makefile.lib:344: Documentation/devicetree/bindings/usb/rockchip,dwc3.example.dt.yaml] Error 255
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1370: dt_binding_check] Error 2
-
-See https://patchwork.ozlabs.org/patch/1434297
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+-- 
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
