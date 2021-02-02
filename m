@@ -2,157 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF8730B564
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 03:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C7A30B56F
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 03:45:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbhBBCmz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Feb 2021 21:42:55 -0500
-Received: from mga06.intel.com ([134.134.136.31]:18518 "EHLO mga06.intel.com"
+        id S231449AbhBBCoa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Feb 2021 21:44:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60074 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231419AbhBBCmx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 1 Feb 2021 21:42:53 -0500
-IronPort-SDR: SHc1IPPCPoBZsyqgd5iNQTurjFvOTnnM5cL1R8IazM5TamOLVyAR//ojvqBn+ECbgZJ+s8S/z5
- SuAR0g4Bw6BA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="242304091"
-X-IronPort-AV: E=Sophos;i="5.79,393,1602572400"; 
-   d="scan'208";a="242304091"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 18:42:11 -0800
-IronPort-SDR: FywkdeHqnMDMETUE1wRIOblnhJioB/spMst21fDZURiIQXRFsbjo5uB69xuiVe0sVyR7f+l+vf
- hqESHmpqP0LQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,393,1602572400"; 
-   d="scan'208";a="581785326"
-Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Feb 2021 18:42:08 -0800
-Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1l6ldn-0008td-CD; Tue, 02 Feb 2021 02:42:07 +0000
-Date:   Tue, 02 Feb 2021 10:41:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 54f6a8af372213a254af6609758d99f7c0b6b5ad
-Message-ID: <6018bbf5.vZCOHLY+JOQw1XkN%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231433AbhBBCo3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 1 Feb 2021 21:44:29 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5085C64E9C;
+        Tue,  2 Feb 2021 02:43:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612233828;
+        bh=yB4dIAgdx6JgqjAQE8EtvwN1FxRmtG5cGe3FVIIhvdI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bfwbWDMdU0ujoNjUeq00mRYjHqVLs+Sjg+OpUdvk7pogUgS0ujJn4UjdZTYKt+0J9
+         nQPjldv3n9cvQYndWiJEq/UZ8j4A0dcnSBZSW1LCXSf00IftBB0TbILg6HqoYrYGox
+         imvs7jVcnyMtpytj/aVQsT8xkqEX9qPz21LJcDnBFcoG0f1exSKFjwsK8vNW1v7g89
+         q/cxF7dmwbNP253YREzYmLtto7eLN6NlH0HdMVTHY1o8EZDqVGtxWI9zHiTxKiABrj
+         5n6w3QPwCMyOaiFOH7imNI3ZZy2+KPC4Bw/q17IrKK0sCVEEAux1owySX6Nc5OOqXR
+         ZToTJ0qHoK3wQ==
+Date:   Mon, 1 Feb 2021 18:43:47 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Christoph Schemmel <christoph.schemmel@gmail.com>
+Cc:     bjorn@mork.no, avem@davemloft.net, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hans-christoph.schemmel@thalesgroup.com
+Subject: Re: [PATCH] NET: usb: qmi_wwan: Adding support for Cinterion MV31
+Message-ID: <20210201184347.5efe7ec2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210129133001.8240-1-christoph.schemmel@gmail.com>
+References: <20210129133001.8240-1-christoph.schemmel@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 54f6a8af372213a254af6609758d99f7c0b6b5ad  usb: xhci-mtk: skip dropping bandwidth of unchecked endpoints
+On Fri, 29 Jan 2021 14:30:01 +0100 Christoph Schemmel wrote:
+> Adding support for Cinterion MV31 with PID 0x00B7.
+> 
+> T:  Bus=04 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 11 Spd=5000 MxCh= 0
+> D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+> P:  Vendor=1e2d ProdID=00b7 Rev=04.14
+> S:  Manufacturer=Cinterion
+> S:  Product=Cinterion PID 0x00B3 USB Mobile Broadband
+> S:  SerialNumber=b3246eed
+> C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=896mA
+> I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+> I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+> 
+> Signed-off-by: Christoph Schemmel <christoph.schemmel@gmail.com>
 
-elapsed time: 726m
+Thanks for the patch, could you repost? We had some issues with the
+mailing list and this patch did not get into patchwork.
 
-configs tested: 95
-configs skipped: 2
+> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+> index cc4819282820..b1784db6b098 100644
+> --- a/drivers/net/usb/qmi_wwan.c
+> +++ b/drivers/net/usb/qmi_wwan.c
+> @@ -1309,6 +1309,7 @@ static const struct usb_device_id products[] = {
+>  	{QMI_FIXED_INTF(0x1e2d, 0x0082, 5)},	/* Cinterion PHxx,PXxx (2 RmNet) */
+>  	{QMI_FIXED_INTF(0x1e2d, 0x0083, 4)},	/* Cinterion PHxx,PXxx (1 RmNet + USB Audio)*/
+>  	{QMI_QUIRK_SET_DTR(0x1e2d, 0x00b0, 4)},	/* Cinterion CLS8 */
+> +	{QMI_FIXED_INTF(0x1e2d, 0x00b7, 0)},	/* Cinterion MV31 RmNet*/
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+nit: missing space before */
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sh                      rts7751r2d1_defconfig
-sh                          polaris_defconfig
-sh                             sh03_defconfig
-arm                       imx_v6_v7_defconfig
-riscv                            alldefconfig
-sh                         apsh4a3a_defconfig
-powerpc                 mpc8560_ads_defconfig
-m68k                         amcore_defconfig
-mips                           ci20_defconfig
-sh                ecovec24-romimage_defconfig
-powerpc                     tqm8555_defconfig
-sh                        dreamcast_defconfig
-xtensa                           alldefconfig
-powerpc                     ppa8548_defconfig
-arm                      jornada720_defconfig
-sh                          rsk7203_defconfig
-arc                      axs103_smp_defconfig
-mips                           mtx1_defconfig
-mips                          malta_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20210201
-x86_64               randconfig-a001-20210201
-x86_64               randconfig-a005-20210201
-x86_64               randconfig-a002-20210201
-x86_64               randconfig-a004-20210201
-x86_64               randconfig-a003-20210201
-i386                 randconfig-a001-20210201
-i386                 randconfig-a005-20210201
-i386                 randconfig-a003-20210201
-i386                 randconfig-a006-20210201
-i386                 randconfig-a002-20210201
-i386                 randconfig-a004-20210201
-i386                 randconfig-a013-20210201
-i386                 randconfig-a016-20210201
-i386                 randconfig-a014-20210201
-i386                 randconfig-a012-20210201
-i386                 randconfig-a015-20210201
-i386                 randconfig-a011-20210201
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a013-20210201
-x86_64               randconfig-a014-20210201
-x86_64               randconfig-a015-20210201
-x86_64               randconfig-a016-20210201
-x86_64               randconfig-a011-20210201
-x86_64               randconfig-a012-20210201
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>  	{QMI_FIXED_INTF(0x413c, 0x81a2, 8)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
+>  	{QMI_FIXED_INTF(0x413c, 0x81a3, 8)},	/* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
+>  	{QMI_FIXED_INTF(0x413c, 0x81a4, 8)},	/* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
