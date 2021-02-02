@@ -2,103 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 378DB30BC44
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 11:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B25D30BC7F
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 12:03:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbhBBKmS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Feb 2021 05:42:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbhBBKmR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Feb 2021 05:42:17 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B9EC061573;
-        Tue,  2 Feb 2021 02:41:37 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id EA9A01F44F9C
-Subject: Re: [GIT PULL] Immutable Branch between platform/chrome and USB for
- v5.12 merge window
-To:     Benson Leung <bleung@google.com>, gregkh@linuxfoundation.org
-Cc:     bleung@chromium.org, bleung@kernel.org, linux-usb@vger.kernel.org,
-        pmalani@chromium.org, linux-kernel@vger.kernel.org
-References: <YBkH6wO07sxRDBDo@google.com>
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Message-ID: <cf566f9b-0405-1d5d-6438-c4cf99453928@collabora.com>
-Date:   Tue, 2 Feb 2021 11:41:32 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S229831AbhBBLDM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Feb 2021 06:03:12 -0500
+Received: from mga12.intel.com ([192.55.52.136]:28194 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229572AbhBBLDL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 2 Feb 2021 06:03:11 -0500
+IronPort-SDR: 5MadFAbVQjMNs1fxS6mULc3SYP2yBplqSqHNv9iJtaBX0tmeIdIIOFCCdm2lSM/nRbzrGIKhpC
+ 5BdLG+Qx1mRA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="160002102"
+X-IronPort-AV: E=Sophos;i="5.79,394,1602572400"; 
+   d="scan'208";a="160002102"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 03:01:22 -0800
+IronPort-SDR: PkTYY1u6sZvV8PxM7NI0JqD60ZSA+0Nh1G1P5p6sgFoyjzwesltb/a4ymTYI3Vt5mO1za2mJDx
+ RDiW9Lr1xFyQ==
+X-IronPort-AV: E=Sophos;i="5.79,394,1602572400"; 
+   d="scan'208";a="479563997"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 03:01:19 -0800
+Received: by lahna (sSMTP sendmail emulation); Tue, 02 Feb 2021 13:01:17 +0200
+Date:   Tue, 2 Feb 2021 13:01:17 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Gil Fine <gil.fine@intel.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org, lukas@wunner.de
+Subject: Re: [PATCH] thunderbolt: debugfs: handle fail reading block
+Message-ID: <20210202110117.GV2542@lahna.fi.intel.com>
+References: <20210201214637.2158-1-gil.fine@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YBkH6wO07sxRDBDo@google.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210201214637.2158-1-gil.fine@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Gil,
 
-On 2/2/21 9:06, Benson Leung wrote:
-> Hi Greg,
-> 
-> The following changes since commit 29b01295a829fba7399ee84afff4e64660e49f04:
-> 
->   usb: typec: Add typec_partner_set_pd_revision (2021-02-01 15:31:34 +0100)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git tags/tag-ib-usb-typec-chrome-platform-cros-ec-typec-changes-for-5.12
-> 
-> for you to fetch changes up to 0371616d8bef6926e9aa05757f35b901268d3724:
-> 
->   platform/chrome: cros_ec_typec: Set opmode to PD on SOP connected (2021-02-01 23:49:54 -0800)
-> 
-> ----------------------------------------------------------------
-> cros-ec-typec changes for usb for v5.12
-> 
-> Chrome OS EC Type-C driver features implemented this round:
-> * Registration of cable plug information
-> * Support for SOP' plug registration and altmodes
-> * Support for reporting number of altmodes supported by partners and plugs
-> * Send mux configuration ack to EC via a new host command
-> * Reporting SOP' and Partner PD revisions
-> 
-> ----------------------------------------------------------------
-> Benson Leung (4):
->       Merge remote-tracking branch 'origin/cros-ec-typec-for-5.12' into ib-usb-typec-chrome-platform-cros-ec-typec-changes-for-5.12
->       platform/chrome: cros_ec_typec: Report SOP' PD revision from status
->       platform/chrome: cros_ec_typec: Set Partner PD revision from status
->       platform/chrome: cros_ec_typec: Set opmode to PD on SOP connected
-> 
-> Prashant Malani (8):
->       platform/chrome: cros_ec_typec: Make disc_done flag partner-only
->       platform/chrome: cros_ec_typec: Factor out PD identity parsing
->       platform/chrome: cros_ec_typec: Rename discovery struct
->       platform/chrome: cros_ec_typec: Register cable
->       platform/chrome: cros_ec_typec: Store cable plug type
->       platform/chrome: cros_ec_typec: Set partner num_altmodes
->       platform/chrome: cros_ec_typec: Register SOP' cable plug
->       platform/chrome: cros_ec_typec: Register plug altmodes
-> 
-> Utkarsh Patel (2):
->       platform/chrome: cros_ec_typec: Parameterize cros_typec_cmds_supported()
->       platform/chrome: cros_ec_typec: Send mux configuration acknowledgment to EC
-> 
->  drivers/platform/chrome/cros_ec_typec.c        | 269 +++++++++++++++++++++----
->  include/linux/platform_data/cros_ec_commands.h |  17 ++
->  2 files changed, 243 insertions(+), 43 deletions(-)
-> 
-> Thanks so much!
-> Benson
-> 
+On Mon, Feb 01, 2021 at 11:46:37PM +0200, Gil Fine wrote:
+> There are cases when reading block of dwords in single transaction fail,
+> for several reasons, mostly if HW publish to implement all of the dwords,
+> while actually it doesn't or if some dwords not accessible for read
+> for security reasons. We handle these cases by trying to read the block,
+> dword-by-dword, one dword per transaction, till we get a failure.
+> We drop the not-used functions:
+> tb_switch_is_tiger_lake() and tb_switch_is_ice_lake()
 
+Can you do this part (dropping the unused functions) in a separate
+patch?
 
-FWIW this looks good to me. It'd make more easy if all this goes through Greg's
-tree instead of our chrome/platform tree. Not sure if is really needed but:
-
-Acked-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-
-Thanks,
-  Enric
-
+Otherwise looks good to me.
