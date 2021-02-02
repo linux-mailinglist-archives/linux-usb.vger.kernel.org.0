@@ -2,115 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE7E30BA10
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 09:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 377AE30BA1E
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 09:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbhBBIiE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Feb 2021 03:38:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbhBBIh6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Feb 2021 03:37:58 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C246C061756
-        for <linux-usb@vger.kernel.org>; Tue,  2 Feb 2021 00:37:17 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id l14so9531639qvp.2
-        for <linux-usb@vger.kernel.org>; Tue, 02 Feb 2021 00:37:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DW6qKjgDaZfg9tmH9Lbh2Y15xJjTza3J0FSZQyXe7e8=;
-        b=TqAUGL6T55G7V7o1ORKbs2CEC5wdY4D9EZvFInzXpo/wwv3c6nrrELMmnPm0RLynnn
-         tgIgB+DfgoH7mli2DcK4HPsKKrlUK2GMpplKwR3a0Espw6sevr+2kbjDgvJUYcUj8tZj
-         Rzynk74eJvVIJkipx2kKDjcj7CeEAsHd/Z21XyhqXb1GIS0ekg3QH+gg2upVpd0OWqJS
-         nepT2AIKgJKezKQNE5vgF+L7samPiae5iwI5E9m497LrmokRG/I8kYLmlSG7Vho3QWXc
-         NdkE/IuB0llrINfMXUKAs/Yy0L6kqp8uJHs2SAFf/eY4CVZb5RMXYGoWydXeBXcrt/ep
-         MUYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DW6qKjgDaZfg9tmH9Lbh2Y15xJjTza3J0FSZQyXe7e8=;
-        b=jf10z52I0P7e64y+D4UxudhUDHwIoE61Bt3VEVbuiCbRFc5XaqFxwv7QBa+h5LN1MO
-         gI/eB7JZVUGjmkJMlPMONoNsySsJFMfKosO95eTLX1gzxPlTNmFpLv9rbU454535zICU
-         /uC4g/w7lT0jsYaqt/AQsoOakDeLnfW45Ln48RnYeNwiXByyZyIhM3a6wsxJ48M6ey3O
-         7OJsATAIHSz6RDf4dwHuQCrkeYwphg/3byN09lQ3cBgbopnphM9chnWVTyTQR5Bt1s6l
-         yqRzfKTGJing+dF1PhLOCGutTtI0nnlLPsCCnKXCAWfLK22NrtWKMEtxG/jKpGwOzvlp
-         oIEg==
-X-Gm-Message-State: AOAM5326RrvpPH3fWiUmhKTSNXpts4W2x4bq57/+YRRYGSWWPyJzpeMI
-        6txbOLelOoYbMUdkLzpJ6WPJ346i8ZFlL+3bAgHeSA==
-X-Google-Smtp-Source: ABdhPJwUb8I/lvLDswXeoeVEnGbBA93DzVcPkMUHyw6Q+mT793xolcnIgTOrdmfsFpDsX8LgZL7vNHpLVmUoy41t7Mg=
-X-Received: by 2002:a0c:b990:: with SMTP id v16mr18963995qvf.16.1612255036209;
- Tue, 02 Feb 2021 00:37:16 -0800 (PST)
-MIME-Version: 1.0
-References: <20210201133421.408508-1-kyletso@google.com> <20210201133421.408508-2-kyletso@google.com>
- <20210201153542.GH2465@kuha.fi.intel.com>
-In-Reply-To: <20210201153542.GH2465@kuha.fi.intel.com>
-From:   Kyle Tso <kyletso@google.com>
-Date:   Tue, 2 Feb 2021 16:37:00 +0800
-Message-ID: <CAGZ6i=0Csdfy0Z-608HsX1YLBPiAz7qindF5SdTXv0yoNu7DYA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] usb: typec: Determine common SVDM Versions
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+        id S232704AbhBBIkJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Feb 2021 03:40:09 -0500
+Received: from mga03.intel.com ([134.134.136.65]:16630 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232615AbhBBIjs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 2 Feb 2021 03:39:48 -0500
+IronPort-SDR: Be285akiY7xZm8LIAWTkmeQtV/9DlAu2ulzCCjE656sGI7dhr0DfsBlDCApiYIPW+hMFPAAM0Y
+ I7E/kS906oWQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="180895945"
+X-IronPort-AV: E=Sophos;i="5.79,394,1602572400"; 
+   d="scan'208";a="180895945"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 00:38:01 -0800
+IronPort-SDR: TnXPoelUMJxQZXtpPVzvl2zGMEQqJ3O2NXLRrsvG9ENL51cfo2rsv5X23Ku/WJhIHDotq+hmYN
+ /xrcbEItkCMQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,394,1602572400"; 
+   d="scan'208";a="479486332"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 02 Feb 2021 00:37:58 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Feb 2021 10:37:57 +0200
+Date:   Tue, 2 Feb 2021 10:37:57 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
 Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>, robh+dt@kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kyle Tso <kyletso@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] usb: typec: tcpm: Add Callback to Usb
+ Communication capable partner
+Message-ID: <20210202083757.GE1433721@kuha.fi.intel.com>
+References: <20210202003101.221145-1-badhri@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210202003101.221145-1-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 1, 2021 at 11:35 PM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> On Mon, Feb 01, 2021 at 09:34:19PM +0800, Kyle Tso wrote:
-> > PD Spec Revision 3.0 Version 2.0 + ECNs 2020-12-10
-> >   6.4.4.2.3 Structured VDM Version
-> >   "The Structured VDM Version field of the Discover Identity Command
-> >   sent and received during VDM discovery Shall be used to determine the
-> >   lowest common Structured VDM Version supported by the Port Partners or
-> >   Cable Plug and Shall continue to operate using this Specification
-> >   Revision until they are Detached."
-> >
-> > Also clear the fields newly defined in SVDM version 2.0 for
-> > compatibilities. And fix some VDO definitions changed in the Spec.
-> >
-> > Signed-off-by: Kyle Tso <kyletso@google.com>
-> > ---
-> > Changes since v2:
-> > - rename the variable and the functions (remove the text "common")
-> > - remove the macro
-> >
-> >  drivers/usb/typec/altmodes/displayport.c |   8 +-
-> >  drivers/usb/typec/class.c                |  21 +-
-> >  drivers/usb/typec/tcpm/tcpm.c            |  47 +++-
-> >  drivers/usb/typec/ucsi/displayport.c     |  12 +-
-> >  drivers/usb/typec/ucsi/ucsi.c            |   2 +
-> >  include/linux/usb/pd_vdo.h               | 315 +++++++++++++++++------
-> >  include/linux/usb/typec.h                |  10 +
-> >  7 files changed, 326 insertions(+), 89 deletions(-)
->
-> I think there is some room to split this one at least a little. The
-> changes to the class (so drivers/usb/typec/class.c and
-> include/linux/usb/typec.h) could be introduced separately at least.
->
-> So I see there are two changes in this patch. You are modifying the
-> class, and then there are the updated PD definitions. Both should be
-> introduced in separate patches IMO. I think also each driver (so
-> ucsi.c and tcpm.c) can handle the changes to the class in its own
-> patch. The modifications to the PD definitions and updated VDO() and
-> so on can be handled in a single patch I guess.
->
-I will separate this patch to different ones.
+On Mon, Feb 01, 2021 at 04:30:59PM -0800, Badhri Jagan Sridharan wrote:
+> The USB Communications Capable bit indicates if port
+> partner is capable of communication over the USB data lines
+> (e.g. D+/- or SS Tx/Rx). Notify the status of the bit to low
+> level drivers to perform chip specific operation.
+> For instance, low level driver enables USB switches on D+/D-
+> lines to set up data path when the bit is set.
+> 
+> Refactored from patch initially authored by
+> Kyle Tso <kyletso@google.com>
+> 
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+> Changes since V1:
+> - Removed partner_usb_comm_capable flag.
+> - Fixed capable flag for SNK_NEGOTIATE_CAPABILITIES.
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 13 +++++++++++++
+>  include/linux/usb/tcpm.h      |  5 +++++
+>  2 files changed, 18 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 0afd8ef692e8..997a1a56c161 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -3429,6 +3429,14 @@ static void tcpm_unregister_altmodes(struct tcpm_port *port)
+>  	memset(modep, 0, sizeof(*modep));
+>  }
+>  
+> +static void tcpm_set_partner_usb_comm_capable(struct tcpm_port *port, bool capable)
+> +{
+> +	tcpm_log(port, "Setting usb_comm capable %s", capable ? "true" : "false");
+> +
+> +	if (port->tcpc->set_partner_usb_comm_capable)
+> +		port->tcpc->set_partner_usb_comm_capable(port->tcpc, capable);
+> +}
+> +
+>  static void tcpm_reset_port(struct tcpm_port *port)
+>  {
+>  	int ret;
+> @@ -3445,6 +3453,7 @@ static void tcpm_reset_port(struct tcpm_port *port)
+>  	port->attached = false;
+>  	port->pd_capable = false;
+>  	port->pps_data.supported = false;
+> +	tcpm_set_partner_usb_comm_capable(port, false);
+>  
+>  	/*
+>  	 * First Rx ID should be 0; set this to a sentinel of -1 so that
+> @@ -3785,6 +3794,8 @@ static void run_state_machine(struct tcpm_port *port)
+>  			}
+>  		} else {
+>  			tcpm_pd_send_control(port, PD_CTRL_ACCEPT);
+> +			tcpm_set_partner_usb_comm_capable(port,
+> +							  !!(port->sink_request & RDO_USB_COMM));
+>  			tcpm_set_state(port, SRC_TRANSITION_SUPPLY,
+>  				       PD_T_SRC_TRANSITION);
+>  		}
+> @@ -4004,6 +4015,8 @@ static void run_state_machine(struct tcpm_port *port)
+>  		break;
+>  	case SNK_NEGOTIATE_CAPABILITIES:
+>  		port->pd_capable = true;
+> +		tcpm_set_partner_usb_comm_capable(port,
+> +						  !!(port->source_caps[0] & PDO_FIXED_USB_COMM));
+>  		port->hard_reset_count = 0;
+>  		ret = tcpm_pd_send_request(port);
+>  		if (ret < 0) {
+> diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+> index 3af99f85e8b9..42fcfbe10590 100644
+> --- a/include/linux/usb/tcpm.h
+> +++ b/include/linux/usb/tcpm.h
+> @@ -108,6 +108,10 @@ enum tcpm_transmit_type {
+>   *		is supported by TCPC, set this callback for TCPM to query
+>   *		whether vbus is at VSAFE0V when needed.
+>   *		Returns true when vbus is at VSAFE0V, false otherwise.
+> + * @set_partner_usb_comm_capable:
+> + *              Optional; The USB Communications Capable bit indicates if port
+> + *              partner is capable of communication over the USB data lines
+> + *              (e.g. D+/- or SS Tx/Rx). Called to notify the status of the bit.
+>   */
+>  struct tcpc_dev {
+>  	struct fwnode_handle *fwnode;
+> @@ -139,6 +143,7 @@ struct tcpc_dev {
+>  	int (*set_auto_vbus_discharge_threshold)(struct tcpc_dev *dev, enum typec_pwr_opmode mode,
+>  						 bool pps_active, u32 requested_vbus_voltage);
+>  	bool (*is_vbus_vsafe0v)(struct tcpc_dev *dev);
+> +	void (*set_partner_usb_comm_capable)(struct tcpc_dev *dev, bool enable);
+>  };
+>  
+>  struct tcpm_port;
+> -- 
+> 2.30.0.365.g02bc693789-goog
 
 thanks,
-Kyle
 
->
-> thanks,
->
-> --
-> heikki
+-- 
+heikki
