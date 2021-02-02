@@ -2,76 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C7A30B56F
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 03:45:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A91D30B5E8
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 04:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbhBBCoa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Feb 2021 21:44:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60074 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231433AbhBBCo3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 1 Feb 2021 21:44:29 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5085C64E9C;
-        Tue,  2 Feb 2021 02:43:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612233828;
-        bh=yB4dIAgdx6JgqjAQE8EtvwN1FxRmtG5cGe3FVIIhvdI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bfwbWDMdU0ujoNjUeq00mRYjHqVLs+Sjg+OpUdvk7pogUgS0ujJn4UjdZTYKt+0J9
-         nQPjldv3n9cvQYndWiJEq/UZ8j4A0dcnSBZSW1LCXSf00IftBB0TbILg6HqoYrYGox
-         imvs7jVcnyMtpytj/aVQsT8xkqEX9qPz21LJcDnBFcoG0f1exSKFjwsK8vNW1v7g89
-         q/cxF7dmwbNP253YREzYmLtto7eLN6NlH0HdMVTHY1o8EZDqVGtxWI9zHiTxKiABrj
-         5n6w3QPwCMyOaiFOH7imNI3ZZy2+KPC4Bw/q17IrKK0sCVEEAux1owySX6Nc5OOqXR
-         ZToTJ0qHoK3wQ==
-Date:   Mon, 1 Feb 2021 18:43:47 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Christoph Schemmel <christoph.schemmel@gmail.com>
-Cc:     bjorn@mork.no, avem@davemloft.net, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hans-christoph.schemmel@thalesgroup.com
-Subject: Re: [PATCH] NET: usb: qmi_wwan: Adding support for Cinterion MV31
-Message-ID: <20210201184347.5efe7ec2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20210129133001.8240-1-christoph.schemmel@gmail.com>
-References: <20210129133001.8240-1-christoph.schemmel@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S231148AbhBBDjp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Feb 2021 22:39:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229819AbhBBDjo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Feb 2021 22:39:44 -0500
+Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49474C061573
+        for <linux-usb@vger.kernel.org>; Mon,  1 Feb 2021 19:39:04 -0800 (PST)
+Received: by mail-qv1-xf4a.google.com with SMTP id dh16so12476222qvb.11
+        for <linux-usb@vger.kernel.org>; Mon, 01 Feb 2021 19:39:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=8YVuxrTBaW2u/EvVshmB1lhIJOhjS6aKrPCo07emghg=;
+        b=Sz7AEELQcZbOmHR4c3XoJoG0B0b9UXp6kt1AxKunbluqicRtEdb0MPrxNytbawaU8j
+         1w1PRgFtMu8NDu7PUo6GquGnAC7AGef4uOwUstOSVOBfvpQa6SYYhqH2J+dvaVCEhspv
+         xyMd/R83xqZmVDHtmLgBuhI+MFTcydHy9h1W78n6eO1iCUI0V5ahSN/E3HNtnRT7ZylP
+         yTpxh+KvuZIwgKUU0nXpV0gbX5IdOlPr8qn0uTuzhvddI6SmJf0LOayy4Z2a9efMnUtx
+         sWnkG2+e9X/mougZZOZkS6hnGc2F8QsooTewfAjFNOAdgehOb0ZB8D9scKoUdsPHYVFa
+         bwcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=8YVuxrTBaW2u/EvVshmB1lhIJOhjS6aKrPCo07emghg=;
+        b=p2xM/SUo7a9vOUuabFLu410cjbT1X3ksT8rKtcaPHxtnturDUTTDBP6WNxgs56JbRk
+         Qg/a2GdK+FRC+f2tBGvKNQDQZKZEE2DpcP2AR1OEJmM1JaQzmRFpp5FBdaP1KJa+ZXaF
+         vRxXlQol9zx/BEWqoZzejMz/Tp2hGo2U3bSS4+VjdEgZu9wszd5aFs0WjATWrdm24w8F
+         r+LyNvuh+wqEQRtzrJY4zIUcvHnQ9Jpr4f6l0aMi8Ks0Q2Ytz3Hx7pZIAH+Xq7J4vQQB
+         2qerzpttUvZbhsQJfuUSbWX7midQOIqiX6PfjIMdwLnHBSIjq+Ncaw8ZKORDAdnmrQ98
+         uc/w==
+X-Gm-Message-State: AOAM530T/mK/DZeMXUJQKfocnuKwCOwyYcyMznAbFAtUMsLWGqQZAwtv
+        uaBwgaee0mM1ORzRsylUVOSIx/xL1eU=
+X-Google-Smtp-Source: ABdhPJx1ybll3gmI/7R+/k9eDmwSM7WJRbyNfJh0JGSdH1WuIM8avnPLBbaoAJayK2oDD6oDsJnPAdbaRms=
+Sender: "badhri via sendgmr" <badhri@badhri.mtv.corp.google.com>
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:d56c:119f:44fb:5da4])
+ (user=badhri job=sendgmr) by 2002:ad4:4c84:: with SMTP id bs4mr18662349qvb.0.1612237143459;
+ Mon, 01 Feb 2021 19:39:03 -0800 (PST)
+Date:   Mon,  1 Feb 2021 19:38:59 -0800
+Message-Id: <20210202033859.258491-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.365.g02bc693789-goog
+Subject: [PATCH v1] usb: typec: tcpm: Set in_ams flag when Source caps have
+ been received
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kyle Tso <kyletso@google.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 29 Jan 2021 14:30:01 +0100 Christoph Schemmel wrote:
-> Adding support for Cinterion MV31 with PID 0x00B7.
-> 
-> T:  Bus=04 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 11 Spd=5000 MxCh= 0
-> D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-> P:  Vendor=1e2d ProdID=00b7 Rev=04.14
-> S:  Manufacturer=Cinterion
-> S:  Product=Cinterion PID 0x00B3 USB Mobile Broadband
-> S:  SerialNumber=b3246eed
-> C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=896mA
-> I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-> I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> 
-> Signed-off-by: Christoph Schemmel <christoph.schemmel@gmail.com>
+Receiving the first packet in an AMS sequence signals the
+beginning of AMS. Set in_ams flag to true when SRC_CAPS are
+received during POWER_NEGOTIATION AMS.
+This fixes the failure flagged while running TD.PD.SNK.E9
+compliance test.
 
-Thanks for the patch, could you repost? We had some issues with the
-mailing list and this patch did not get into patchwork.
+From Deterministic PD compliance MOI spec:
+TD.PD.SNK.E9. GetSinkCap in Place of Accept
+Description:
+As Provider, the Tester intentionally sends a GetSinkCap message in place
+of Accept message and verifies the UUT will send a SoftReset and recover
+from the error.
+Steps:
+a) Run PROC.PD.E1 Bring-up according to the UUT role.
+b) The Tester cycles VBus.
+c) The Tester sends a Source Capabilities message to the UUT.
+d) Upon receipt of a Request message from the UUT, the Tester replies with
+   a GoodCRC message.
+e) The Tester sends a GetSinkCap message to the UUT.
+f) If a SoftReset is not received within 15 ms after the GetSinkCap EOP was
+   sent, the test fails.
+g) If a SoftReset is received timely, the Tester replies with an Accept
+   message.
+h) The Tester sends Source Capabilities message to the UUT repeatedly until
+   nCapsCount reached or a GoodCRC is received. If nCapsCount reached, the
+   test fails.
+i) If a Request is not received timely within 30 ms after the GoodCRC EOP
+   corresponding to Source Capabilities message was received, the test
+   fails.
 
-> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-> index cc4819282820..b1784db6b098 100644
-> --- a/drivers/net/usb/qmi_wwan.c
-> +++ b/drivers/net/usb/qmi_wwan.c
-> @@ -1309,6 +1309,7 @@ static const struct usb_device_id products[] = {
->  	{QMI_FIXED_INTF(0x1e2d, 0x0082, 5)},	/* Cinterion PHxx,PXxx (2 RmNet) */
->  	{QMI_FIXED_INTF(0x1e2d, 0x0083, 4)},	/* Cinterion PHxx,PXxx (1 RmNet + USB Audio)*/
->  	{QMI_QUIRK_SET_DTR(0x1e2d, 0x00b0, 4)},	/* Cinterion CLS8 */
-> +	{QMI_FIXED_INTF(0x1e2d, 0x00b7, 0)},	/* Cinterion MV31 RmNet*/
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-nit: missing space before */
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 0afd8ef692e8..b3e07d9b7597 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -2243,6 +2243,7 @@ static void tcpm_pd_data_request(struct tcpm_port *port,
+ 		 * handled.
+ 		 */
+ 			port->ams = POWER_NEGOTIATION;
++			port->in_ams = true;
+ 			tcpm_set_state(port, SNK_NEGOTIATE_CAPABILITIES, 0);
+ 		} else {
+ 			if (port->ams == GET_SOURCE_CAPABILITIES)
+-- 
+2.30.0.365.g02bc693789-goog
 
->  	{QMI_FIXED_INTF(0x413c, 0x81a2, 8)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
->  	{QMI_FIXED_INTF(0x413c, 0x81a3, 8)},	/* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
->  	{QMI_FIXED_INTF(0x413c, 0x81a4, 8)},	/* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
