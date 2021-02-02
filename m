@@ -2,119 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 021D130CBFD
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 20:45:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE2130C24C
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 15:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232947AbhBBTlf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Feb 2021 14:41:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:36467 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233318AbhBBNym (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Feb 2021 08:54:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612273993;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RXWyGsw/g+kXDg92dby3YWd7Rwh1t4c3WfYN8+M0r30=;
-        b=NOQfMfycVZhtOPr8sVf8d/EZ1ZT5GVL3RHSMEPWh7GFCZ/guVCbsHV5Dpxz07bu1xz46mp
-        grnXxopgUo3daajA9mAVf9uNmwuX1sJXOZk1MHsx/ewZ0Q7iP+KaczVpMH7Fv2TQVi73vm
-        CdOLFDywsr8jcM+nmfcXSqcFDP1Q/d4=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-354-mJJAjyy0NLyiR55smz7OMA-1; Tue, 02 Feb 2021 08:53:11 -0500
-X-MC-Unique: mJJAjyy0NLyiR55smz7OMA-1
-Received: by mail-ej1-f70.google.com with SMTP id n25so9988683ejd.5
-        for <linux-usb@vger.kernel.org>; Tue, 02 Feb 2021 05:53:11 -0800 (PST)
+        id S234639AbhBBOqm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Feb 2021 09:46:42 -0500
+Received: from mail-oo1-f46.google.com ([209.85.161.46]:42139 "EHLO
+        mail-oo1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234569AbhBBOo5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Feb 2021 09:44:57 -0500
+Received: by mail-oo1-f46.google.com with SMTP id g46so5167367ooi.9;
+        Tue, 02 Feb 2021 06:44:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RXWyGsw/g+kXDg92dby3YWd7Rwh1t4c3WfYN8+M0r30=;
-        b=c71bYWeUcHvJ5WHF341/+a9eplkwtdV74a7/cC4Ci64qHkAodKJsLkO1qv3znLUd6Q
-         VGAA0z1rk3Sy1ZqMCl3AIVKfpAoTY8MTqnmyQ/11flnBRi+K2qBn8MKVEECBuhF7d1rS
-         CPEpNtU/M1SFvhnE/uZFQEGgaEJaYM2O8DEOudUZS5fWcMHB8SMlR2GzgOVBBUtjg6gI
-         m42tf/3VwK/dl1b5enmkOmT1XcRdIdvtedZ+IJKuOxYLjGh8TUKJOpJJMbQGCzW/HE8Z
-         CgdJeOYJwyP3BXR4VBGN2fxgq9GOFtJ86LETsTBGXqX/S8tzkbqbiab21cKqAgyZLy3l
-         9prA==
-X-Gm-Message-State: AOAM531h4wcfUVSdioVxO0wLEk7dVF5+B2Orwwq/q48uKOMBRT/iN1as
-        BzfMW5kkwP9YH2VIjn4BL/OeP71/y3tT6oQeF/xSWpA8s1lmLPsdoCHvI+tt/QvH1TRtcuWBBiD
-        1OCY1kmXqkMHunQr7HzYwZxYdPxaSKBR1S2VWqRqLgGiWYHFKBNlfWvMx2KSbg2yppdX1BZe0
-X-Received: by 2002:a05:6402:202a:: with SMTP id ay10mr3009434edb.93.1612273990012;
-        Tue, 02 Feb 2021 05:53:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzQDeS/pPYAoLQFBALZHEC5WdFDmOL6+GAB9vty5Ldgr6v4dvAH9SHZ7dAbwCe4h7PJkiF0kQ==
-X-Received: by 2002:a05:6402:202a:: with SMTP id ay10mr3009417edb.93.1612273989802;
-        Tue, 02 Feb 2021 05:53:09 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-37a3-353b-be90-1238.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:37a3:353b:be90:1238])
-        by smtp.gmail.com with ESMTPSA id s1sm9640961ejx.25.2021.02.02.05.53.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Feb 2021 05:53:09 -0800 (PST)
-Subject: Re: [PATCH 6/6] xhci: ext-caps: Use software node API with the
- properties
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=k/jQlVybev7AS8XByYXCtRCWWc/mZPrcWcS9SplOVXI=;
+        b=uSC5JyOSKpmoQT7USVJmzsc12R9X0hRV9oUg5auK4if6kPe0U4Hp+F+oZ5mzgYa9Ul
+         nX3UIT9KQNvTpYi1u1b7erFBEIbGZ6KZydfgRWdiZFfMPcUWD5/LPGbC+NNslv6CQwcq
+         x4c1++pK8A+Whi3zqW91uEB5xfZU3Pzskh6v41fUAEXdzwU+jqbxyw3+MSHNkwZUIuoB
+         HbMximXXdnduWFQE1+8kTllJHIuD4bSHq19rxi8tNf8BxJVNW4CpltGTfKBqgoOrHHaU
+         SASQ9M7b4po+3+T0Nd2TwUUxi83NAQ3+CdANDoghkT7NosJR5lMIoaUfKQTt3zehNxWj
+         RNkA==
+X-Gm-Message-State: AOAM530kpjmixewzClG/IE5jOcGqqVBffed8qZcTblt0a7g7jdGxc8BM
+        KJUihjedVcjvpP3tHYTXQMO+xpyy1MFZCkT0nj0=
+X-Google-Smtp-Source: ABdhPJyNp6HgZd7qylrM0AlHJLm2D/AGUq/xZy6rpsCfOoDSMj5OpAmclnKRL2X9SzGGGciSrR0dKuGBmy7MmbrTzpg=
+X-Received: by 2002:a4a:d50d:: with SMTP id m13mr6409159oos.2.1612277056134;
+ Tue, 02 Feb 2021 06:44:16 -0800 (PST)
+MIME-Version: 1.0
+References: <20210202125032.64982-1-heikki.krogerus@linux.intel.com> <20210202125032.64982-2-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20210202125032.64982-2-heikki.krogerus@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 2 Feb 2021 15:44:05 +0100
+Message-ID: <CAJZ5v0gMEBV=Gm-R=5zkN-J_p7cMTBwoOJrv=ec1j6SfSYRg_w@mail.gmail.com>
+Subject: Re: [PATCH 1/6] software node: Provide replacement for device_add_properties()
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Felipe Balbi <balbi@kernel.org>,
         Mathias Nyman <mathias.nyman@intel.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20210202125032.64982-1-heikki.krogerus@linux.intel.com>
- <20210202125032.64982-7-heikki.krogerus@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <9ca885a2-4d42-58d8-3724-52c409eecf05@redhat.com>
-Date:   Tue, 2 Feb 2021 14:53:08 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-MIME-Version: 1.0
-In-Reply-To: <20210202125032.64982-7-heikki.krogerus@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 2/2/21 1:50 PM, Heikki Krogerus wrote:
-> This replaces the platform_device_add_properties() call with
-> the safer device_create_managed_software_node() that does
-> exactly the same, but can also guarantee that the lifetime
-> of the node that is created for the device is tied to the
-> lifetime of device itself.
-> 
+On Tue, Feb 2, 2021 at 1:50 PM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Adding function device_create_managed_software_node() that
+> is designed to work as a drop-in replacement for
+> device_add_properties(). The function has one additional
+> feature compared to device_add_properties(). It takes also
+> an optional parent node as parameter, and that way allow the
+> nodes created with it to be part of a node hierarchy.
+>
+> The lifetime of the software nodes created with this
+> function will be tied to the device they are assigned to.
+> The function will therefore behave exactly the same way as
+> device_add_properties() is expected to behave, except that
+> it does not simply assume that the nodes attached to the
+> device are always destroyed in device_del() unconditionally.
+>
+> The nodes created with this function are guaranteed to be
+> removed when the device is removed even after device_del()
+> stops calling device_remove_properties() unconditionally.
+>
 > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-
 > ---
->  drivers/usb/host/xhci-ext-caps.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-ext-caps.c b/drivers/usb/host/xhci-ext-caps.c
-> index 3351d07c431f1..7a4c2c4ad50e8 100644
-> --- a/drivers/usb/host/xhci-ext-caps.c
-> +++ b/drivers/usb/host/xhci-ext-caps.c
-> @@ -54,7 +54,8 @@ static int xhci_create_intel_xhci_sw_pdev(struct xhci_hcd *xhci, u32 cap_offset)
->  	}
->  
->  	if (pci->device == PCI_DEVICE_ID_INTEL_CHERRYVIEW_XHCI) {
-> -		ret = platform_device_add_properties(pdev, role_switch_props);
-> +		ret = device_create_managed_software_node(&pdev->dev, role_switch_props,
-> +							  NULL);
->  		if (ret) {
->  			dev_err(dev, "failed to register device properties\n");
->  			platform_device_put(pdev);
-> 
+>  drivers/base/swnode.c    | 43 ++++++++++++++++++++++++++++++++++++++++
+>  include/linux/property.h |  4 ++++
+>  2 files changed, 47 insertions(+)
+>
+> diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
+> index 20faa9f4f5ed2..37179a8b1ceba 100644
+> --- a/drivers/base/swnode.c
+> +++ b/drivers/base/swnode.c
+> @@ -24,6 +24,7 @@ struct swnode {
+>         struct swnode *parent;
+>
+>         unsigned int allocated:1;
+> +       unsigned int managed:1;
+>  };
+>
+>  static DEFINE_IDA(swnode_root_ids);
+> @@ -1045,6 +1046,43 @@ void device_remove_software_node(struct device *dev)
+>  }
+>  EXPORT_SYMBOL_GPL(device_remove_software_node);
+>
+> +/**
+> + * device_create_managed_software_node - Create a software node for a device
+> + * @dev: The device the software node is assigned to.
+> + * @properties: Device properties for the software node.
+> + * @parent: Parent of the software node.
+> + *
+> + * Creates a software node as a managed resource for @dev, which means the
+> + * lifetime of the newly created software node is tied to the lifetime of @dev.
+> + * Software nodes created with this function should not be reused or shared
+> + * because of that. The function takes a deep copy of @properties for the
+> + * software node.
+> + *
+> + * Since the new software node is assigned directly to @dev, and since it should
+> + * not be shared, it is not returned to the caller. The function returns 0 on
+> + * success, and errno in case of an error.
+> + */
+> +int device_create_managed_software_node(struct device *dev,
+> +                                       const struct property_entry *properties,
+> +                                       const struct software_node *parent)
+> +{
+> +       struct fwnode_handle *p = software_node_fwnode(parent);
+> +       struct fwnode_handle *fwnode;
+> +
+> +       if (parent && !p)
+> +               return -EINVAL;
+> +
+> +       fwnode = fwnode_create_software_node(properties, p);
+> +       if (IS_ERR(fwnode))
+> +               return PTR_ERR(fwnode);
+> +
+> +       to_swnode(fwnode)->managed = true;
+> +       set_secondary_fwnode(dev, fwnode);
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(device_create_managed_software_node);
+> +
+>  int software_node_notify(struct device *dev, unsigned long action)
+>  {
+>         struct swnode *swnode;
+> @@ -1073,6 +1111,11 @@ int software_node_notify(struct device *dev, unsigned long action)
+>                 sysfs_remove_link(&swnode->kobj, dev_name(dev));
+>                 sysfs_remove_link(&dev->kobj, "software_node");
+>                 kobject_put(&swnode->kobj);
+> +
+> +               if (swnode->managed) {
+> +                       set_secondary_fwnode(dev, NULL);
+> +                       kobject_put(&swnode->kobj);
 
+Where does the corresponding kobject_get() get called?
+
+> +               }
+>                 break;
+>         default:
+>                 break;
+> diff --git a/include/linux/property.h b/include/linux/property.h
+> index b0e413dc59271..dafccfce02624 100644
+> --- a/include/linux/property.h
+> +++ b/include/linux/property.h
+> @@ -491,4 +491,8 @@ void fwnode_remove_software_node(struct fwnode_handle *fwnode);
+>  int device_add_software_node(struct device *dev, const struct software_node *swnode);
+>  void device_remove_software_node(struct device *dev);
+>
+> +int device_create_managed_software_node(struct device *dev,
+> +                                       const struct property_entry *properties,
+> +                                       const struct software_node *parent);
+> +
+>  #endif /* _LINUX_PROPERTY_H_ */
+> --
+> 2.30.0
+>
