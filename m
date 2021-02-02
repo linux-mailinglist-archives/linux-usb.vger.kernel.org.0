@@ -2,110 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD8930C8D7
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 19:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC0930C9F3
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 19:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237979AbhBBSBw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Feb 2021 13:01:52 -0500
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:39213 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238014AbhBBRzZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Feb 2021 12:55:25 -0500
-Received: by mail-oi1-f180.google.com with SMTP id w124so23678673oia.6;
-        Tue, 02 Feb 2021 09:55:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PY1eqlCJkvXHbJWD80MmmPmZKyzxd9wr3f3PYIBpUVc=;
-        b=j2A07y3d62hZyuNsSzk8N3+XBzUTeBkTqao3ARvqjHoZyFq9okLRknULxt5PjAyxeK
-         QJvnlVIUlWXrRSscLFXbvnaa+y9HuqqXPTbvJ3LW3sw3srncRt/XrtrihAb0A9wyIdWd
-         m7zNmgTp7JzlMC2GuL39vCzXw9C4tn+H0QoqZ05fW6NTKlCOTkUf6clMN3huyumgQ19a
-         ZSXkTwfn/RDHEHq41UXZBDDaqc+7kj7kd8x/pdL+KSCtbdyvQVrbGxI2eyL0X6AutEpE
-         UI/cSQK7vMkQhYla/vEoVe07bz55bYjQKiqSgANef0FOcRes2U4espQwPxpv2Zs1ymrw
-         oAhA==
-X-Gm-Message-State: AOAM533QoLhfRCBUgEfYYbn5RudnVqgqQAYGVQtR1GndZES6eOtAJSBJ
-        j+fUZKROSzRVi9bV8gCUqSJlRzmuVA==
-X-Google-Smtp-Source: ABdhPJxQVjkQxH7g11QJoQLfO7bARahwERaBawAPzAhaaOebgvT6fKeVG53K1OiEb7+d/ps6f6UBWQ==
-X-Received: by 2002:a05:6808:48e:: with SMTP id z14mr3503610oid.167.1612288484209;
-        Tue, 02 Feb 2021 09:54:44 -0800 (PST)
-Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.googlemail.com with ESMTPSA id l7sm6552otr.81.2021.02.02.09.54.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Feb 2021 09:54:42 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: usb: generic-ohci: Add missing compatible strings
-Date:   Tue,  2 Feb 2021 11:54:39 -0600
-Message-Id: <20210202175439.3904060-2-robh@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210202175439.3904060-1-robh@kernel.org>
-References: <20210202175439.3904060-1-robh@kernel.org>
+        id S238585AbhBBSdv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Feb 2021 13:33:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:32988 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238543AbhBBSat (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 2 Feb 2021 13:30:49 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C9C2F64F72;
+        Tue,  2 Feb 2021 18:30:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1612290609;
+        bh=isI4qMMdTZ51+PpDN64U3sdPAoY1aBox05SjMzT2Ar4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ziof9qrrJkldISTz481eXvOZyN7aTWbQ6HaBVp6R2J5TscGNTbuWTg4WP8P3bSvBW
+         RUd23O6jnC5LDzeEg0tBbeEbcCCwd1omLCDHW423fG9rC5hgcp8iubKzpgCSiFrXEl
+         LzPEXs+u20Ro3dnITWo5Zg+GsVR/NR/Wqju/OBEw=
+Date:   Tue, 2 Feb 2021 19:30:06 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Benson Leung <bleung@chromium.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Kyle Tso <kyletso@google.com>
+Subject: Re: [PATCH v2] platform/chrome: cros_ec_typec: Fix call to
+ typec_partner_set_pd_revision
+Message-ID: <YBmaLi5hhEj1zy8J@kroah.com>
+References: <20210202164531.3982778-1-bleung@chromium.org>
+ <YBmFo5L1eeUwCJ9B@kroah.com>
+ <CANLzEkuFgLK9saqHhHdrKhOjsiG001d1N9EYXsnohoMPHsAPGg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANLzEkuFgLK9saqHhHdrKhOjsiG001d1N9EYXsnohoMPHsAPGg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The generic OHCI binding needs to document all the specific compatible
-strings so we can track undocumented compatible strings. Add all the
-compatible strings from in tree users.
+On Tue, Feb 02, 2021 at 09:52:13AM -0800, Benson Leung wrote:
+> Hi Greg,
+> 
+> On Tue, Feb 2, 2021 at 9:02 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Tue, Feb 02, 2021 at 08:45:31AM -0800, Benson Leung wrote:
+> > > typec_partner_set_pd_revision returns void now.
+> > >
+> > > Fixes: cefc011f8daf ("platform/chrome: cros_ec_typec: Set Partner PD revision from status")
+> > > Signed-off-by: Benson Leung <bleung@chromium.org>
+> > > ---
+> > >  drivers/platform/chrome/cros_ec_typec.c | 6 +-----
+> > >  1 file changed, 1 insertion(+), 5 deletions(-)
+> >
+> > What changed from "v1"?
+> >
+> 
+> Just the "Fixes" line in the commit message.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/usb/generic-ohci.yaml | 34 +++++++++++++++++--
- 1 file changed, 32 insertions(+), 2 deletions(-)
+That should always go below the --- line, remember, some of us deal with
+hundreds of patches a day :)
 
-diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-index 2178bcc401bc..53df281f618c 100644
---- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-+++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-@@ -14,8 +14,38 @@ maintainers:
- 
- properties:
-   compatible:
--    contains:
--      const: generic-ohci
-+    oneOf:
-+      - items:
-+          - enum:
-+              - allwinner,sun4i-a10-ohci
-+              - allwinner,sun50i-a64-ohci
-+              - allwinner,sun50i-h6-ohci
-+              - allwinner,sun5i-a13-ohci
-+              - allwinner,sun6i-a31-ohci
-+              - allwinner,sun7i-a20-ohci
-+              - allwinner,sun8i-a23-ohci
-+              - allwinner,sun8i-h3-ohci
-+              - allwinner,sun8i-r40-ohci
-+              - allwinner,sun9i-a80-ohci
-+              - brcm,bcm3384-ohci
-+              - brcm,bcm63268-ohci
-+              - brcm,bcm6328-ohci
-+              - brcm,bcm6358-ohci
-+              - brcm,bcm6362-ohci
-+              - brcm,bcm6368-ohci
-+              - brcm,bcm7125-ohci
-+              - brcm,bcm7346-ohci
-+              - brcm,bcm7358-ohci
-+              - brcm,bcm7360-ohci
-+              - brcm,bcm7362-ohci
-+              - brcm,bcm7420-ohci
-+              - brcm,bcm7425-ohci
-+              - brcm,bcm7435-ohci
-+              - ibm,476gtr-ohci
-+              - ingenic,jz4740-ohci
-+              - snps,hsdk-v1.0-ohci
-+          - const: generic-ohci
-+      - const: generic-ohci
- 
-   reg:
-     maxItems: 1
--- 
-2.27.0
+I'll go take this...
 
+thanks,
+
+greg k-h
