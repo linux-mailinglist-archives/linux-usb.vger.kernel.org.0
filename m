@@ -2,110 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA73F30BA5F
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 09:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A672030BA9C
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 10:12:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbhBBIxy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Feb 2021 03:53:54 -0500
-Received: from mga05.intel.com ([192.55.52.43]:7656 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229975AbhBBIxx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 2 Feb 2021 03:53:53 -0500
-IronPort-SDR: yoEb/BDw6S5i2WY3kg5rvk5sFMQbg+hruwTKdg2HtSNYXu66eSwzGV2Igq0lB37QrbG5jNYWCC
- iPRdkIcilFAQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="265653130"
-X-IronPort-AV: E=Sophos;i="5.79,394,1602572400"; 
-   d="scan'208";a="265653130"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 00:52:06 -0800
-IronPort-SDR: +22FgflFJPsyFYdAlwZDDYTdCn+5fgEnwlPtNMH/+p0/XiUCDpYw3jE8itXqjD9el5dXBkCG6l
- SpeBKsdJj8LA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,394,1602572400"; 
-   d="scan'208";a="479489771"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 02 Feb 2021 00:52:04 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Feb 2021 10:52:03 +0200
-Date:   Tue, 2 Feb 2021 10:52:03 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+        id S232200AbhBBJLF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Feb 2021 04:11:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232741AbhBBJGY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Feb 2021 04:06:24 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C27C061573
+        for <linux-usb@vger.kernel.org>; Tue,  2 Feb 2021 01:04:56 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id f19so23067082ljn.5
+        for <linux-usb@vger.kernel.org>; Tue, 02 Feb 2021 01:04:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:organization:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ET3h/0LKc4PX9UBa8BxB7vGKwsPnbJ2bqe5OlLlpPi8=;
+        b=mPjWhWpMIPI+SZQa6apBxEpVtNs/6HEwbp2i4ozQ8pXVIymA79TY7OoAguMi3860Q9
+         Ew4cy1rhWnJW3gNoWXNKOD9fmDVZbpPHjYLRtK7UtS2xbBqMCI0WmxNohTYcThFHLnU2
+         Q4/ADR36TtxK2KVmq8CZkDSnzn2SY0rqudb49hz5ca0aeWwF6k/jLmpD60voQBJn/5a8
+         thxj1v5W9znein/4HsaQXpFhWuDYSa0lUjdVLeRr+gP1jqvMDf9kgj8U1IyAZsRG1nG/
+         W3tzoCzFRuvLe3M9La601E/AuoF7N1YheHrtnSeKneIIjff/AnIbKCtVMh9p/aim3qNt
+         1xdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=ET3h/0LKc4PX9UBa8BxB7vGKwsPnbJ2bqe5OlLlpPi8=;
+        b=C6XzgmZ8MGXB7sTtwAnsjQQPY7N85AHPNNLy/bjRHUsJQ1v0WyK6YJQSbN5dz6X7O6
+         CVOcPK7aD+x/9hxcGL3foftDSOY9dOTF1U3TIz/XZWfgoXERkRup+F0sSYLtgutwSIpe
+         3AbUBFURkdbKm0GAKYwRF6TfF5diFT1IkQ1vX6yMTGqBHeA6C69+NYTNm9j/JccojjNn
+         OykkFAXnuOSAmGIVURfGZRVoriqVTo5gX510ilIrjikAsY+/8fihrQAx2YZYvYqXkmHr
+         lqcvcJsaHXHPBOu3CRNlSywAfEKmyh0Nhq/5oeKAqXtqi/kiOVxiaTeKJ1YLYUPSKsQp
+         UxCw==
+X-Gm-Message-State: AOAM5305qI7AWaazdsmayEGh5jrEsd090PHYaqkQFJn8qcr2MNYwrn5A
+        /9KHwf9aBL6WqrxiYLGAAWM=
+X-Google-Smtp-Source: ABdhPJw/QWk5pSl3xfojy0GGD6qTKoXZhVYUxGxJu+saQ04FUrf3bf834l8TQ2fU6fRmGu+LRb4o3Q==
+X-Received: by 2002:a2e:155e:: with SMTP id 30mr12944842ljv.489.1612256694709;
+        Tue, 02 Feb 2021 01:04:54 -0800 (PST)
+Received: from [192.168.1.100] ([31.173.84.55])
+        by smtp.gmail.com with ESMTPSA id i78sm3209032lfi.263.2021.02.02.01.04.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Feb 2021 01:04:54 -0800 (PST)
+Subject: Re: [RFC PATCH 6/8] usb: xhci: Fix port minor revision
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kyle Tso <kyletso@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] usb: typec: tcpci_maxim: Enable data path when
- partner is USB Comm capable
-Message-ID: <20210202085203.GG1433721@kuha.fi.intel.com>
-References: <20210202003101.221145-1-badhri@google.com>
- <20210202003101.221145-3-badhri@google.com>
+        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+References: <cover.1612237179.git.Thinh.Nguyen@synopsys.com>
+ <4627ca7e922019cd9a37073db90e4e9cd585c97e.1612237179.git.Thinh.Nguyen@synopsys.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <90627b9d-9a39-b5ee-4ae3-054764a57faa@gmail.com>
+Date:   Tue, 2 Feb 2021 12:04:33 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210202003101.221145-3-badhri@google.com>
+In-Reply-To: <4627ca7e922019cd9a37073db90e4e9cd585c97e.1612237179.git.Thinh.Nguyen@synopsys.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 01, 2021 at 04:31:01PM -0800, Badhri Jagan Sridharan wrote:
-> Configure USB switches when partner is USB Communication capable.
-> The is enabled USB data communication over D+/D- pins.
+Hello!
+
+On 02.02.2021 6:42, Thinh Nguyen wrote:
+
+> Some hosts incorrectly use sub-minor version for minor version (i.e.
+> 0x02 instead of 0x20 for bcdUSB 0x320 and 0x01 for bcdUSB 0x310).
+> Currently the xHCI driver works around this by just checking for minor
+> revision > 0x01 for USB 3.1 everywhere. With the addition of USB 3.2,
+> checking this gets a bit cumbersome. Since there is no USB release with
+> bcdUSB 0x301 to 0x309, we can assume that sub-minor version 01 to 09 is
+> incorrect. Let's try to fix this and use the minor revision that matches
+> with the USB/xHCI spec to help with the version checking within the
+> driver.
 > 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 > ---
->  drivers/usb/typec/tcpm/tcpci_maxim.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
+>   drivers/usb/host/xhci-mem.c | 9 +++++++++
+>   1 file changed, 9 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> index f1674a611033..041a1c393594 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> @@ -19,6 +19,9 @@
->  #define PD_ACTIVITY_TIMEOUT_MS				10000
->  
->  #define TCPC_VENDOR_ALERT				0x80
-> +#define TCPC_VENDOR_USBSW_CTRL				0x93
-> +#define TCPC_VENDOR_USBSW_CTRL_ENABLE_USB_DATA		0x9
-> +#define TCPC_VENDOR_USBSW_CTRL_DISABLE_USB_DATA		0
->  
->  #define TCPC_RECEIVE_BUFFER_COUNT_OFFSET		0
->  #define TCPC_RECEIVE_BUFFER_FRAME_TYPE_OFFSET		1
-> @@ -274,6 +277,21 @@ static void process_tx(struct max_tcpci_chip *chip, u16 status)
->  		max_tcpci_init_regs(chip);
->  }
->  
-> +/* Enable USB switches when partner is USB communications capable */
-> +static void max_tcpci_set_partner_usb_comm_capable(struct tcpci *tcpci, struct tcpci_data *data,
-> +						   bool capable)
-> +{
-> +	struct max_tcpci_chip *chip = tdata_to_max_tcpci(data);
-> +	int ret;
-> +
-> +	ret = max_tcpci_write8(chip, TCPC_VENDOR_USBSW_CTRL, capable ?
-> +			       TCPC_VENDOR_USBSW_CTRL_ENABLE_USB_DATA :
-> +			       TCPC_VENDOR_USBSW_CTRL_DISABLE_USB_DATA);
-> +
-> +	if (ret < 0)
-> +		dev_err(chip->dev, "Failed to enable USB switches");
-> +}
-> +
->  static irqreturn_t _max_tcpci_irq(struct max_tcpci_chip *chip, u16 status)
->  {
->  	u16 mask;
-> @@ -453,6 +471,7 @@ static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id
->  	chip->data.frs_sourcing_vbus = max_tcpci_frs_sourcing_vbus;
->  	chip->data.auto_discharge_disconnect = true;
->  	chip->data.vbus_vsafe0v = true;
-> +	chip->data.set_partner_usb_comm_capable = max_tcpci_set_partner_usb_comm_capable;
->  
->  	max_tcpci_init_regs(chip);
->  	chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
-> -- 
-> 2.30.0.365.g02bc693789-goog
+> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+> index f2c4ee7c4786..34105b477c62 100644
+> --- a/drivers/usb/host/xhci-mem.c
+> +++ b/drivers/usb/host/xhci-mem.c
+> @@ -2129,6 +2129,15 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+>   
+>   	if (major_revision == 0x03) {
+>   		rhub = &xhci->usb3_rhub;
+> +		/*
+> +		 * Some hosts incorrectly use sub-minor version for minor
+> +		 * version (i.e. 0x02 instead of 0x20 for bcdUSB 0x320 and 0x01
+> +		 * for bcdUSB 0x310). Since there is no USB release with sub
+> +		 * minor version 0x301 to 0x309, we can assume that they are
+> +		 * incorrect and fix it here.
+> +		 */
+> +		if (!(minor_revision & 0xf0) && (minor_revision & 0x0f))
+> +			minor_revision = minor_revision << 4;
 
-thanks,
+    Why not:
 
--- 
-heikki
+			minor_revision <<= 4;
+
+[...]
+
+MBR, Sergei
