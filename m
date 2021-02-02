@@ -2,75 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DC2530BED7
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 13:55:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE47D30BF44
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 14:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232085AbhBBMzJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Feb 2021 07:55:09 -0500
-Received: from mga14.intel.com ([192.55.52.115]:18020 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231440AbhBBMzE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 2 Feb 2021 07:55:04 -0500
-IronPort-SDR: SmiV3Ato3TEnSWhLuFBrbIo3ihCta/3CsGHmJIRH7fQVhsZrzDCuNuE67TESwzjPWiDN/5fOlW
- E/WVzD8U0cXg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="180070681"
-X-IronPort-AV: E=Sophos;i="5.79,395,1602572400"; 
-   d="scan'208";a="180070681"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 04:50:49 -0800
-IronPort-SDR: mGQ99TRADPBJKpiD16D4D0VC5YbOwjnlFe1yUNcWUTJGmLb0Wg+P/8QezN5fD5k+5CU0Tm+s3Z
- 7D08CJ86D3fA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,395,1602572400"; 
-   d="scan'208";a="479741082"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Feb 2021 04:50:47 -0800
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH 6/6] xhci: ext-caps: Use software node API with the properties
-Date:   Tue,  2 Feb 2021 15:50:32 +0300
-Message-Id: <20210202125032.64982-7-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210202125032.64982-1-heikki.krogerus@linux.intel.com>
-References: <20210202125032.64982-1-heikki.krogerus@linux.intel.com>
+        id S232373AbhBBNUt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Feb 2021 08:20:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232380AbhBBNUo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Feb 2021 08:20:44 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4168C06174A
+        for <linux-usb@vger.kernel.org>; Tue,  2 Feb 2021 05:20:03 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id lg21so2588404ejb.3
+        for <linux-usb@vger.kernel.org>; Tue, 02 Feb 2021 05:20:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=F2RBHF5qt6A0GWyiymNHbtTBf3A6mMM9M/VHgcc7by8=;
+        b=fU+rblWcJ4YR0OvHKT5EMjRiDGFQCr6t9k2fDS1F+No4MWcex5cBc682LockKI26te
+         orY8a5KepIoHfr3uiRG+6OJXxKVhBRGNO51eXlXPMwCyprabPQGqJxjq3dxKBvJiOl74
+         ENRJiUYu5nsG7vWgFvfj9mwpiQHdQIO4Hh+d2pCJWP+CmZER5H4pKgldjRmJmxatdQL4
+         SZfyUDvUCwxacLySs+MEB4I69EwhhGsv3Bf/I4tfHvb7uxpJ2oIhvYUQef1UrY7lULqi
+         SgQtJEu2GAgKI0oYTTw9gUpbzpRRMfo5wcDTnYYdSWpt3KNnn7HZ0s1akfdXW6VoKUmn
+         POZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=F2RBHF5qt6A0GWyiymNHbtTBf3A6mMM9M/VHgcc7by8=;
+        b=HxF8YlIKLhmIVGHGjk08vRYYsNlESLEO19kAYmi7rMAMWnmAjMf/yJFHpUnzz3i/Z/
+         Nj2YsEvctEhe7x7l0wbbFFNF7KEaVzAPWZLrmGEcaukaPOXggIm9/i8S9Z1fkMCwX1o6
+         w7mDKbU6l9bFBbObiGFXRlbH3k9E6hk9w+URFaa/K2Ue/tPzKLZqXI40tmCACDS4ERIg
+         UzPJ/9gMypK9h4BMkfzKu+Jebgj724kKd4WNHby3iRyMwDk4XEzFMzZSzEVNWn3mcPLe
+         pyI0AsKv9coFtxGtjpudKzTRaGaNZqX2pz5ZVksjvbFXc6xZADdQGu1kwqVtS8wqEvQQ
+         Um4A==
+X-Gm-Message-State: AOAM531zjrY4rFwtUYFzeZ55JZC/MH9CBRLa+qyvL7nHC0IAgjuHtKoe
+        +yNtBDvSD3CY01wneAGgn7iubX1GejIZFIJf+uc=
+X-Google-Smtp-Source: ABdhPJzxSfISxm5Gyn5rGIZQNoRFd5h4B4qhO7tXxR1lCdQRyN9z3z497d9hxqvGtnxwVNpUEbTe3hwlucYb46wEj1c=
+X-Received: by 2002:a17:907:3da0:: with SMTP id he32mr2214329ejc.265.1612272002549;
+ Tue, 02 Feb 2021 05:20:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Reply-To: mrkabiruwahid47@gmail.com
+Sender: kabiruwahid113@gmail.com
+Received: by 2002:a54:3592:0:0:0:0:0 with HTTP; Tue, 2 Feb 2021 05:20:02 -0800 (PST)
+From:   Mr Kabiru Wahid <mrkabiruwahid47@gmail.com>
+Date:   Tue, 2 Feb 2021 01:20:02 -1200
+X-Google-Sender-Auth: WJZ_ZatsCrzpAh4hygzw-RdvaBE
+Message-ID: <CAOwLuOc0ps99sQf0QcUMJnk9_xcsio-tpoMVhvHfEO=Cm867Tw@mail.gmail.com>
+Subject: PLEASE REPLY ME IMMEDIATELY!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This replaces the platform_device_add_properties() call with
-the safer device_create_managed_software_node() that does
-exactly the same, but can also guarantee that the lifetime
-of the node that is created for the device is tied to the
-lifetime of device itself.
+Hello Dear Friend, I know you will be surprised to receive this mail
+from me, I am contacting you to ask for your assistance to move some
+over invoiced magnitude amount of MILLIONS of US DOLLARS into your
+country through your assistance for security purposes,I will furnish
+you with more details and the amount involved in the transaction and
+procedures to move on with the transaction upon receipt of your
+response. Kindly respond to this mail
+(fromkabiruwahid5@instruction.com)
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Hans de Goede <hdegoede@redhat.com>
----
- drivers/usb/host/xhci-ext-caps.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-ext-caps.c b/drivers/usb/host/xhci-ext-caps.c
-index 3351d07c431f1..7a4c2c4ad50e8 100644
---- a/drivers/usb/host/xhci-ext-caps.c
-+++ b/drivers/usb/host/xhci-ext-caps.c
-@@ -54,7 +54,8 @@ static int xhci_create_intel_xhci_sw_pdev(struct xhci_hcd *xhci, u32 cap_offset)
- 	}
- 
- 	if (pci->device == PCI_DEVICE_ID_INTEL_CHERRYVIEW_XHCI) {
--		ret = platform_device_add_properties(pdev, role_switch_props);
-+		ret = device_create_managed_software_node(&pdev->dev, role_switch_props,
-+							  NULL);
- 		if (ret) {
- 			dev_err(dev, "failed to register device properties\n");
- 			platform_device_put(pdev);
--- 
-2.30.0
-
+My Regards,
+Mr.Kabiru Wahid!
