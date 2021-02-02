@@ -2,114 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A672030BA9C
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 10:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E677330BB07
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 10:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232200AbhBBJLF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Feb 2021 04:11:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42486 "EHLO
+        id S232873AbhBBJe4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Feb 2021 04:34:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232741AbhBBJGY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Feb 2021 04:06:24 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C27C061573
-        for <linux-usb@vger.kernel.org>; Tue,  2 Feb 2021 01:04:56 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id f19so23067082ljn.5
-        for <linux-usb@vger.kernel.org>; Tue, 02 Feb 2021 01:04:56 -0800 (PST)
+        with ESMTP id S231601AbhBBJeb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Feb 2021 04:34:31 -0500
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EFFC061788
+        for <linux-usb@vger.kernel.org>; Tue,  2 Feb 2021 01:33:51 -0800 (PST)
+Received: by mail-qk1-x74a.google.com with SMTP id s66so15458951qkh.10
+        for <linux-usb@vger.kernel.org>; Tue, 02 Feb 2021 01:33:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:organization:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ET3h/0LKc4PX9UBa8BxB7vGKwsPnbJ2bqe5OlLlpPi8=;
-        b=mPjWhWpMIPI+SZQa6apBxEpVtNs/6HEwbp2i4ozQ8pXVIymA79TY7OoAguMi3860Q9
-         Ew4cy1rhWnJW3gNoWXNKOD9fmDVZbpPHjYLRtK7UtS2xbBqMCI0WmxNohTYcThFHLnU2
-         Q4/ADR36TtxK2KVmq8CZkDSnzn2SY0rqudb49hz5ca0aeWwF6k/jLmpD60voQBJn/5a8
-         thxj1v5W9znein/4HsaQXpFhWuDYSa0lUjdVLeRr+gP1jqvMDf9kgj8U1IyAZsRG1nG/
-         W3tzoCzFRuvLe3M9La601E/AuoF7N1YheHrtnSeKneIIjff/AnIbKCtVMh9p/aim3qNt
-         1xdg==
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=a77I7DhRJQNYY3jb5qJsVHRL8/cRpl6u3SuuOOR6Vb0=;
+        b=NXXJVim5+7KVLiKi9gkxZcd1xRLd+tjD8s7+bAvdmde9KDmFN4lTUGaelUuT4TtIJq
+         rZ9AC7oxnEBkA8TumHuyiqbI2m2IOE2q8AjXstWZpPdvpzY5OWEcWQohCk7XVlObLsdt
+         2UezUVCyqvVUrwbBc+fqEDxVz9vMVssmCiZ2Au9eKqnIJ/WjdEWkxRSO1LFM+PVYIx/J
+         MMFYZEss0A3SJ4DSpIlUzG+bIsrBIEPBwKLFJAFR0jAoMfgPHhiatRXDLhYVJeJJZhxR
+         CTsppq64F0L0Crt1uOBWXIEfo4mGZzyv3KF8mUJXpSsJmAy/SC1oK0DFgw3JEYZ/HRsG
+         GLOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=ET3h/0LKc4PX9UBa8BxB7vGKwsPnbJ2bqe5OlLlpPi8=;
-        b=C6XzgmZ8MGXB7sTtwAnsjQQPY7N85AHPNNLy/bjRHUsJQ1v0WyK6YJQSbN5dz6X7O6
-         CVOcPK7aD+x/9hxcGL3foftDSOY9dOTF1U3TIz/XZWfgoXERkRup+F0sSYLtgutwSIpe
-         3AbUBFURkdbKm0GAKYwRF6TfF5diFT1IkQ1vX6yMTGqBHeA6C69+NYTNm9j/JccojjNn
-         OykkFAXnuOSAmGIVURfGZRVoriqVTo5gX510ilIrjikAsY+/8fihrQAx2YZYvYqXkmHr
-         lqcvcJsaHXHPBOu3CRNlSywAfEKmyh0Nhq/5oeKAqXtqi/kiOVxiaTeKJ1YLYUPSKsQp
-         UxCw==
-X-Gm-Message-State: AOAM5305qI7AWaazdsmayEGh5jrEsd090PHYaqkQFJn8qcr2MNYwrn5A
-        /9KHwf9aBL6WqrxiYLGAAWM=
-X-Google-Smtp-Source: ABdhPJw/QWk5pSl3xfojy0GGD6qTKoXZhVYUxGxJu+saQ04FUrf3bf834l8TQ2fU6fRmGu+LRb4o3Q==
-X-Received: by 2002:a2e:155e:: with SMTP id 30mr12944842ljv.489.1612256694709;
-        Tue, 02 Feb 2021 01:04:54 -0800 (PST)
-Received: from [192.168.1.100] ([31.173.84.55])
-        by smtp.gmail.com with ESMTPSA id i78sm3209032lfi.263.2021.02.02.01.04.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Feb 2021 01:04:54 -0800 (PST)
-Subject: Re: [RFC PATCH 6/8] usb: xhci: Fix port minor revision
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
-References: <cover.1612237179.git.Thinh.Nguyen@synopsys.com>
- <4627ca7e922019cd9a37073db90e4e9cd585c97e.1612237179.git.Thinh.Nguyen@synopsys.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-Message-ID: <90627b9d-9a39-b5ee-4ae3-054764a57faa@gmail.com>
-Date:   Tue, 2 Feb 2021 12:04:33 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
-MIME-Version: 1.0
-In-Reply-To: <4627ca7e922019cd9a37073db90e4e9cd585c97e.1612237179.git.Thinh.Nguyen@synopsys.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=a77I7DhRJQNYY3jb5qJsVHRL8/cRpl6u3SuuOOR6Vb0=;
+        b=p52onxQU9+RfZE51Ph1kN1sxY06RlNJ1IgDWdsvKt7kbQhVVFStpw+m3jQ1ix9h684
+         6H1/5v5QRdXuB/XfJzJUjkNU8FYHwiYjYdqk5+NOEYEw0UvkU2SkWABbPathANbp+Boa
+         XSB4K5J/nfX1bQkU6UuJEpb7M1+RGpD2MEUIWHPPU9D+T9e57RJ+71RfyXMRhm219QGt
+         6LyNnSA3hHkdOKiCxpyI+ZPEcHhPH2jfL4uxOlBX2X8TVTfJi7tFjEC58roPatphpg3c
+         5Pa29qQKO7o2wpxPGTbSHtB7aj4XEM+NAUpCezHGC1jQDzCqVyCz59fwqH3oeLn7lqu1
+         ZiJw==
+X-Gm-Message-State: AOAM531jnAal+NaNVeFMARUvTz9m8OG4izSle6E+JwGtT38JHybcsVfA
+        YinXZdpZ+ZQzpptwTHXZw335/GtCDcly
+X-Google-Smtp-Source: ABdhPJyEEXBPYlDd86IJsTbfBdsiMjI5Kd86ouTISlWZ9Sq5V22iEZwZikV7z9AwBr7DU0N/PiimTAPu53ET
+Sender: "kyletso via sendgmr" <kyletso@kyletso.ntc.corp.google.com>
+X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:dd94:c753:a81d:c855])
+ (user=kyletso job=sendgmr) by 2002:a05:6214:9d3:: with SMTP id
+ dp19mr18947783qvb.40.1612258430573; Tue, 02 Feb 2021 01:33:50 -0800 (PST)
+Date:   Tue,  2 Feb 2021 17:33:34 +0800
+Message-Id: <20210202093342.738691-1-kyletso@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.365.g02bc693789-goog
+Subject: [PATCH v4 0/8] common SVDM version and VDO from dt
+From:   Kyle Tso <kyletso@google.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, hdegoede@redhat.com, robh+dt@kernel.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+v3 is here:
+https://patchwork.kernel.org/project/linux-usb/cover/20210201133421.408508-1-kyletso@google.com/
 
-On 02.02.2021 6:42, Thinh Nguyen wrote:
+no changes except for separating the patch 
+"[v3,1/3] usb: typec: Determine common SVDM Versions"
+into the first 6 patches in this patch set.
 
-> Some hosts incorrectly use sub-minor version for minor version (i.e.
-> 0x02 instead of 0x20 for bcdUSB 0x320 and 0x01 for bcdUSB 0x310).
-> Currently the xHCI driver works around this by just checking for minor
-> revision > 0x01 for USB 3.1 everywhere. With the addition of USB 3.2,
-> checking this gets a bit cumbersome. Since there is no USB release with
-> bcdUSB 0x301 to 0x309, we can assume that sub-minor version 01 to 09 is
-> incorrect. Let's try to fix this and use the minor revision that matches
-> with the USB/xHCI spec to help with the version checking within the
-> driver.
-> 
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> ---
->   drivers/usb/host/xhci-mem.c | 9 +++++++++
->   1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index f2c4ee7c4786..34105b477c62 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -2129,6 +2129,15 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
->   
->   	if (major_revision == 0x03) {
->   		rhub = &xhci->usb3_rhub;
-> +		/*
-> +		 * Some hosts incorrectly use sub-minor version for minor
-> +		 * version (i.e. 0x02 instead of 0x20 for bcdUSB 0x320 and 0x01
-> +		 * for bcdUSB 0x310). Since there is no USB release with sub
-> +		 * minor version 0x301 to 0x309, we can assume that they are
-> +		 * incorrect and fix it here.
-> +		 */
-> +		if (!(minor_revision & 0xf0) && (minor_revision & 0x0f))
-> +			minor_revision = minor_revision << 4;
+Kyle Tso (8):
+  usb: typec: Manage SVDM version
+  usb: pd: Update VDO definitions
+  usb: pd: Make SVDM Version configurable in VDM header
+  usb: typec: tcpm: Detemine common SVDM Version
+  usb: typec: ucsi: Detemine common SVDM Version
+  usb: typec: displayport: Fill the negotiated SVDM Version in the header
+  dt-bindings: connector: Add SVDM VDO properties
+  usb: typec: tcpm: Get Sink VDO from fwnode
 
-    Why not:
+ .../bindings/connector/usb-connector.yaml     |  11 +
+ drivers/usb/typec/altmodes/displayport.c      |   8 +-
+ drivers/usb/typec/class.c                     |  21 +-
+ drivers/usb/typec/tcpm/tcpm.c                 |  61 +++-
+ drivers/usb/typec/ucsi/displayport.c          |  12 +-
+ drivers/usb/typec/ucsi/ucsi.c                 |   2 +
+ include/dt-bindings/usb/pd.h                  | 311 ++++++++++++++++-
+ include/linux/usb/pd_vdo.h                    | 315 ++++++++++++++----
+ include/linux/usb/typec.h                     |  10 +
+ 9 files changed, 661 insertions(+), 90 deletions(-)
 
-			minor_revision <<= 4;
+-- 
+2.30.0.365.g02bc693789-goog
 
-[...]
-
-MBR, Sergei
