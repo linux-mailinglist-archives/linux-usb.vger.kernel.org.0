@@ -2,96 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D2730B9FE
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 09:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE7E30BA10
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Feb 2021 09:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232554AbhBBIdN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Feb 2021 03:33:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37530 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232728AbhBBIcq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 2 Feb 2021 03:32:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4A7F764DA5;
-        Tue,  2 Feb 2021 08:32:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612254725;
-        bh=1uyTvcbLDGMGSM0vlefyg16XQREFPdHBDTAy83bODaM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SB6V1rPSj1G2U6h4uo/P1o/ykCtRmO71fHEJPuO3O5qIaJrx0ES9ir2yqqHXZUtyH
-         bhdu7XYIj6hkqvcLpGkAbaLMOLTs9c7CfoISpsgg/zY+gEOgrpf9AXcIgPLtbKHEvX
-         6DIWydEbTAUvdIWfeUh1Qz15NIYDZ7iOiPO/YbFEcOA84zeHocKYj1UeqYKuQkcm6q
-         e9tcctcj+x1vxZmc046phayXxc1XMv/n/4xiAvA67yUU48tE3uL0VtSgR+/VV6uZso
-         V1o90rLPgMFKjkUjje/1/sGl/sVP3RYiIjMI32d+HTd4iMUytPpZyxcGSb4zXsfy3n
-         ni213cwxUciLg==
-Received: from johan by xi with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1l6r6e-0007Fo-Gq; Tue, 02 Feb 2021 09:32:17 +0100
-Date:   Tue, 2 Feb 2021 09:32:16 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Tung Pham <Tung.Pham@silabs.com>
-Cc:     Hung Nguyen <Hung.Nguyen@silabs.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Pho Tran <Pho.Tran@silabs.com>
-Subject: Re: Bugs: usb serial crash when close second comport
-Message-ID: <YBkOEHM8/VfK5Gc+@hovoldconsulting.com>
-References: <PU1PR06MB2117988A6B7680CA1806DBE091B69@PU1PR06MB2117.apcprd06.prod.outlook.com>
- <CO1PR11MB48828958BDC51E796D37D63F81B69@CO1PR11MB4882.namprd11.prod.outlook.com>
- <YBfVqOwEZfkvX7YA@hovoldconsulting.com>
- <CO1PR11MB48821E7544DCB4E06665849481B59@CO1PR11MB4882.namprd11.prod.outlook.com>
+        id S231420AbhBBIiE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Feb 2021 03:38:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230115AbhBBIh6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Feb 2021 03:37:58 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C246C061756
+        for <linux-usb@vger.kernel.org>; Tue,  2 Feb 2021 00:37:17 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id l14so9531639qvp.2
+        for <linux-usb@vger.kernel.org>; Tue, 02 Feb 2021 00:37:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DW6qKjgDaZfg9tmH9Lbh2Y15xJjTza3J0FSZQyXe7e8=;
+        b=TqAUGL6T55G7V7o1ORKbs2CEC5wdY4D9EZvFInzXpo/wwv3c6nrrELMmnPm0RLynnn
+         tgIgB+DfgoH7mli2DcK4HPsKKrlUK2GMpplKwR3a0Espw6sevr+2kbjDgvJUYcUj8tZj
+         Rzynk74eJvVIJkipx2kKDjcj7CeEAsHd/Z21XyhqXb1GIS0ekg3QH+gg2upVpd0OWqJS
+         nepT2AIKgJKezKQNE5vgF+L7samPiae5iwI5E9m497LrmokRG/I8kYLmlSG7Vho3QWXc
+         NdkE/IuB0llrINfMXUKAs/Yy0L6kqp8uJHs2SAFf/eY4CVZb5RMXYGoWydXeBXcrt/ep
+         MUYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DW6qKjgDaZfg9tmH9Lbh2Y15xJjTza3J0FSZQyXe7e8=;
+        b=jf10z52I0P7e64y+D4UxudhUDHwIoE61Bt3VEVbuiCbRFc5XaqFxwv7QBa+h5LN1MO
+         gI/eB7JZVUGjmkJMlPMONoNsySsJFMfKosO95eTLX1gzxPlTNmFpLv9rbU454535zICU
+         /uC4g/w7lT0jsYaqt/AQsoOakDeLnfW45Ln48RnYeNwiXByyZyIhM3a6wsxJ48M6ey3O
+         7OJsATAIHSz6RDf4dwHuQCrkeYwphg/3byN09lQ3cBgbopnphM9chnWVTyTQR5Bt1s6l
+         yqRzfKTGJing+dF1PhLOCGutTtI0nnlLPsCCnKXCAWfLK22NrtWKMEtxG/jKpGwOzvlp
+         oIEg==
+X-Gm-Message-State: AOAM5326RrvpPH3fWiUmhKTSNXpts4W2x4bq57/+YRRYGSWWPyJzpeMI
+        6txbOLelOoYbMUdkLzpJ6WPJ346i8ZFlL+3bAgHeSA==
+X-Google-Smtp-Source: ABdhPJwUb8I/lvLDswXeoeVEnGbBA93DzVcPkMUHyw6Q+mT793xolcnIgTOrdmfsFpDsX8LgZL7vNHpLVmUoy41t7Mg=
+X-Received: by 2002:a0c:b990:: with SMTP id v16mr18963995qvf.16.1612255036209;
+ Tue, 02 Feb 2021 00:37:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CO1PR11MB48821E7544DCB4E06665849481B59@CO1PR11MB4882.namprd11.prod.outlook.com>
+References: <20210201133421.408508-1-kyletso@google.com> <20210201133421.408508-2-kyletso@google.com>
+ <20210201153542.GH2465@kuha.fi.intel.com>
+In-Reply-To: <20210201153542.GH2465@kuha.fi.intel.com>
+From:   Kyle Tso <kyletso@google.com>
+Date:   Tue, 2 Feb 2021 16:37:00 +0800
+Message-ID: <CAGZ6i=0Csdfy0Z-608HsX1YLBPiAz7qindF5SdTXv0yoNu7DYA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] usb: typec: Determine common SVDM Versions
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>, robh+dt@kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        USB <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 02, 2021 at 03:50:50AM +0000, Tung Pham wrote:
-
-> > Can you reproduce this with a mainline kernel?
-> > 
-> > Otherwise, you may need to bring this up with Ubuntu.
-> 
-> this bug doesn't occur on Ubuntu running on pc, it only occur on
-> raspberry.
-
-I understand, but if you can only reproduce this using a Ubuntu kernel
-on the RPi it could be to something that they've put in their kernel's
-(e.g. some out-of-tree driver) which doesn't exist in mainline. That's
-why you need to be able to reproduce it on a mainline kernel.
-
-> One additional thing: the bug doesn't occur with HUB: Orico, model
-> W6ph4-u3-v1, Manufacture: VIA Labs, inc.
-> It only occur with hub: HB-UM43 hub, Genesys Logic, Inc.
-
-Ok, so depending on if the kernel crashes or not, it could still be a
-bug in the hub firmware.
-
-> > This sounds like you could have a problem with the host-controller
-> > driver. What controller is the RPi4 using?
->  
-> For the Pi 4, a fully-featured host controller drives the downstream
-> USB ports. Downstream USB is provided by a Via Labs VL805 chip - that
-> supports two USB 2.0 ports and two USB 3.0 ports
-
-Which driver does it use? I believe some of the earlier RPi used an
-out-of-tree host-controller driver, but perhaps that's no longer the
-case.
-
-> > As you write above, the usb_serial_generic_close() is needed to
-> > cancel the outstanding URBs during close so you can't remove that.
-> > 
-> > But my guess is that something breaks in the HCD when unlinking
-> > those URBs when connected through the hub. Do you have a stack trace
-> > from an oops? Or do things just lock up?
+On Mon, Feb 1, 2021 at 11:35 PM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
 >
-> I don't know how to capture stack trace?
+> On Mon, Feb 01, 2021 at 09:34:19PM +0800, Kyle Tso wrote:
+> > PD Spec Revision 3.0 Version 2.0 + ECNs 2020-12-10
+> >   6.4.4.2.3 Structured VDM Version
+> >   "The Structured VDM Version field of the Discover Identity Command
+> >   sent and received during VDM discovery Shall be used to determine the
+> >   lowest common Structured VDM Version supported by the Port Partners or
+> >   Cable Plug and Shall continue to operate using this Specification
+> >   Revision until they are Detached."
+> >
+> > Also clear the fields newly defined in SVDM version 2.0 for
+> > compatibilities. And fix some VDO definitions changed in the Spec.
+> >
+> > Signed-off-by: Kyle Tso <kyletso@google.com>
+> > ---
+> > Changes since v2:
+> > - rename the variable and the functions (remove the text "common")
+> > - remove the macro
+> >
+> >  drivers/usb/typec/altmodes/displayport.c |   8 +-
+> >  drivers/usb/typec/class.c                |  21 +-
+> >  drivers/usb/typec/tcpm/tcpm.c            |  47 +++-
+> >  drivers/usb/typec/ucsi/displayport.c     |  12 +-
+> >  drivers/usb/typec/ucsi/ucsi.c            |   2 +
+> >  include/linux/usb/pd_vdo.h               | 315 +++++++++++++++++------
+> >  include/linux/usb/typec.h                |  10 +
+> >  7 files changed, 326 insertions(+), 89 deletions(-)
+>
+> I think there is some room to split this one at least a little. The
+> changes to the class (so drivers/usb/typec/class.c and
+> include/linux/usb/typec.h) could be introduced separately at least.
+>
+> So I see there are two changes in this patch. You are modifying the
+> class, and then there are the updated PD definitions. Both should be
+> introduced in separate patches IMO. I think also each driver (so
+> ucsi.c and tcpm.c) can handle the changes to the class in its own
+> patch. The modifications to the PD definitions and updated VDO() and
+> so on can be handled in a single patch I guess.
+>
+I will separate this patch to different ones.
 
-If the kernel oopses/crashes (e.g. due to a bug in the driver) you
-should find a stack trace in the kernel log (e.g. run dmesg).
+thanks,
+Kyle
 
-But if the USB bus just locks up (until you disconnect the hub or
-device, or reload the USB serial driver), then this could also be a
-firmware bug in the host-controller or hub.
-
-Johan
+>
+> thanks,
+>
+> --
+> heikki
