@@ -2,161 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7228230D500
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Feb 2021 09:16:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9020030D58C
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Feb 2021 09:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232619AbhBCIPn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Feb 2021 03:15:43 -0500
-Received: from mga12.intel.com ([192.55.52.136]:59776 "EHLO mga12.intel.com"
+        id S232959AbhBCItz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Feb 2021 03:49:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39536 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232561AbhBCIPm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Feb 2021 03:15:42 -0500
-IronPort-SDR: Gd9tu4MAUgC8SGWBI0N4lyaFdcSDAF5rYK51lePd1emA0ULgab1AoG8l4WAZRQ6B6otdzOz3FL
- qemh3ryCBLbA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9883"; a="160170433"
-X-IronPort-AV: E=Sophos;i="5.79,397,1602572400"; 
-   d="scan'208";a="160170433"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 00:14:21 -0800
-IronPort-SDR: Zz9BsWghIPqPVYqrEjlyGrzbzzZS1dlgETtp7d4ipnswJrLX8SLoV6CuDEgLoVmS2vG2z4itmR
- 1UXIGXYFszDw==
-X-IronPort-AV: E=Sophos;i="5.79,397,1602572400"; 
-   d="scan'208";a="433292573"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 00:14:17 -0800
-Received: by lahna (sSMTP sendmail emulation); Wed, 03 Feb 2021 10:14:15 +0200
-Date:   Wed, 3 Feb 2021 10:14:15 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Christian Kellner <christian@kellner.me>,
-        Len Brown <lenb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] ACPI: Execute platform _OSC also with query bit
- clear
-Message-ID: <20210203081415.GR2542@lahna.fi.intel.com>
-References: <20210129083241.72497-1-mika.westerberg@linux.intel.com>
- <20210129083241.72497-4-mika.westerberg@linux.intel.com>
+        id S232637AbhBCItx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 3 Feb 2021 03:49:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BA21D64F72;
+        Wed,  3 Feb 2021 08:49:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612342152;
+        bh=t8LEVlHH57mxwoR3STzvOjfCNws/wJKkZovrt5JU+bk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=efNym+uPUYYGLDruL2XdoPHaDTpR1Bssch2Y5Vg6U+AkfWoJVzcOIOU8HwZztQrvD
+         6AmCyNPNMRVLg2BuhKnDkT1i1ui9oCwinoYhVgyIEKudpVUJGGRaHuyHxjxGJQwsHn
+         4H1TjAxXE73PHLpaHYa0P8kA+EgjuzSeiZNTS0cfV74IJcfMm+X3HrG0KO5VGwSAQ+
+         GJF8GAzigJRuj9ehTQ+TM5ERAbbSoyFEhBABvlaARJDmY2RwhB8qJ5XBiN+iR+Q1Ym
+         VU1d4+VDn/Ta0w5hDBAkDiPQERb1M3e4ENJrh1eKnAK53qQuIsEDmakbAVxg5b2pV0
+         BsZfS/V0K+nrg==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1l7Dqm-00006P-SA; Wed, 03 Feb 2021 09:49:25 +0100
+Date:   Wed, 3 Feb 2021 09:49:24 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Tung Pham <Tung.Pham@silabs.com>
+Cc:     Hung Nguyen <Hung.Nguyen@silabs.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Pho Tran <Pho.Tran@silabs.com>
+Subject: Re: Bugs: usb serial crash when close second comport
+Message-ID: <YBpjlHNgzFA9aEAN@hovoldconsulting.com>
+References: <PU1PR06MB2117988A6B7680CA1806DBE091B69@PU1PR06MB2117.apcprd06.prod.outlook.com>
+ <CO1PR11MB48828958BDC51E796D37D63F81B69@CO1PR11MB4882.namprd11.prod.outlook.com>
+ <YBfVqOwEZfkvX7YA@hovoldconsulting.com>
+ <CO1PR11MB48821E7544DCB4E06665849481B59@CO1PR11MB4882.namprd11.prod.outlook.com>
+ <YBkOEHM8/VfK5Gc+@hovoldconsulting.com>
+ <CO1PR11MB4882F6F4F085A81470A34EE481B59@CO1PR11MB4882.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210129083241.72497-4-mika.westerberg@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <CO1PR11MB4882F6F4F085A81470A34EE481B59@CO1PR11MB4882.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rafael,
+On Tue, Feb 02, 2021 at 09:48:01AM +0000, Tung Pham wrote:
+> After the bug occur, when open or close device it show on log of system:
+> 
+> failed set request 0x12 status: -110
+> failed set request 0x00 status: -110
+> failed set request 0x00 status: -110
+> 
+> 0x00 = enable or disable serial device USB request.
+> 0x12 = flush serial device USB request.
+> -110 = time out.
+> 
+> it means driver is not crashes but it can't open or close device any more.
 
-I wonder if you are OK with this patch?
+Right, so the device just fails to respond. Can you communicate with
+other devices connected to the same hub when this happens?
 
-Thanks!
+I found this note about "Interoperability between the Raspberry Pi and
+USB 3.0 hubs" which appears to be related:
 
-On Fri, Jan 29, 2021 at 11:32:39AM +0300, Mika Westerberg wrote:
-> From: Mario Limonciello <mario.limonciello@dell.com>
-> 
-> The platform _OSC can change the hardware state when query bit is not
-> set. According to ACPI spec it is recommended that the OS runs _OSC with
-> query bit set until the platform does not mask any of the capabilities.
-> Then it should run it with query bit clear in order to actually commit
-> the changes. Linux has not been doing this for the reasons that there
-> has not been anything to commit, until now.
-> 
-> The ACPI 6.4 introduced _OSC for USB4 to allow the OS to negotiate
-> native control over USB4 tunneling. The platform might implement this so
-> that it only activates the software connection manager path when the OS
-> calls the _OSC with the query bit clear. Otherwise it may default to the
-> firmware connection manager, for instance.
-> 
-> For this reason modify the _OSC support so that we first execute it with
-> query bit set, then use the returned value as base of the features we
-> want to control and run the _OSC again with query bit clear. This also
-> follows what Windows is doing.
-> 
-> Also rename the function to better match what it does.
-> 
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@dell.com>
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> ---
->  drivers/acpi/bus.c | 43 +++++++++++++++++++++++++++++++------------
->  1 file changed, 31 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-> index 1682f8b454a2..a52cb28c40d8 100644
-> --- a/drivers/acpi/bus.c
-> +++ b/drivers/acpi/bus.c
-> @@ -282,9 +282,9 @@ bool osc_pc_lpi_support_confirmed;
->  EXPORT_SYMBOL_GPL(osc_pc_lpi_support_confirmed);
->  
->  static u8 sb_uuid_str[] = "0811B06E-4A27-44F9-8D60-3CBBC22E7B48";
-> -static void acpi_bus_osc_support(void)
-> +static void acpi_bus_osc_negotiate_platform_control(void)
->  {
-> -	u32 capbuf[2];
-> +	u32 capbuf[2], *capbuf_ret;
->  	struct acpi_osc_context context = {
->  		.uuid_str = sb_uuid_str,
->  		.rev = 1,
-> @@ -321,17 +321,36 @@ static void acpi_bus_osc_support(void)
->  		capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_APEI_SUPPORT;
->  	if (ACPI_FAILURE(acpi_get_handle(NULL, "\\_SB", &handle)))
->  		return;
-> -	if (ACPI_SUCCESS(acpi_run_osc(handle, &context))) {
-> -		u32 *capbuf_ret = context.ret.pointer;
-> -		if (context.ret.length > OSC_SUPPORT_DWORD) {
-> -			osc_sb_apei_support_acked =
-> -				capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_APEI_SUPPORT;
-> -			osc_pc_lpi_support_confirmed =
-> -				capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_PCLPI_SUPPORT;
-> -		}
-> +
-> +	if (ACPI_FAILURE(acpi_run_osc(handle, &context)))
-> +		return;
-> +
-> +	capbuf_ret = context.ret.pointer;
-> +	if (context.ret.length <= OSC_SUPPORT_DWORD) {
->  		kfree(context.ret.pointer);
-> +		return;
->  	}
-> -	/* do we need to check other returned cap? Sounds no */
-> +
-> +	/*
-> +	 * Now run _OSC again with query flag clear and with the caps
-> +	 * supported by both the OS and the platform.
-> +	 */
-> +	capbuf[OSC_QUERY_DWORD] = 0;
-> +	capbuf[OSC_SUPPORT_DWORD] = capbuf_ret[OSC_SUPPORT_DWORD];
-> +	kfree(context.ret.pointer);
-> +
-> +	if (ACPI_FAILURE(acpi_run_osc(handle, &context)))
-> +		return;
-> +
-> +	capbuf_ret = context.ret.pointer;
-> +	if (context.ret.length > OSC_SUPPORT_DWORD) {
-> +		osc_sb_apei_support_acked =
-> +			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_APEI_SUPPORT;
-> +		osc_pc_lpi_support_confirmed =
-> +			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_PCLPI_SUPPORT;
-> +	}
-> +
-> +	kfree(context.ret.pointer);
->  }
->  
->  /* --------------------------------------------------------------------------
-> @@ -1168,7 +1187,7 @@ static int __init acpi_bus_init(void)
->  	 * _OSC method may exist in module level code,
->  	 * so it must be run after ACPI_FULL_INITIALIZATION
->  	 */
-> -	acpi_bus_osc_support();
-> +	acpi_bus_osc_negotiate_platform_control();
->  
->  	/*
->  	 * _PDC control method may load dynamic SSDT tables,
-> -- 
-> 2.29.2
+	https://www.raspberrypi.org/documentation/hardware/raspberrypi/usb/README.md
+
+Does connecting the device through an intermediary USB 2.0 hub make the
+problem go away?
+
+> We may find mainline kernel of raspberry if have, and find the driver
+> of USB they use in next days.
+
+Sounds good (even if this is starting to sound like a firmware issue).
+
+Johan
