@@ -2,71 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A28230D869
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Feb 2021 12:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A85C830D8D0
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Feb 2021 12:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234112AbhBCLTX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Feb 2021 06:19:23 -0500
-Received: from mail.baikalelectronics.com ([87.245.175.226]:45358 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233865AbhBCLTV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Feb 2021 06:19:21 -0500
-Date:   Wed, 3 Feb 2021 14:18:32 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 09/10] usb: dwc3: qcom: Detect DWC3 DT-nodes with
- "usb"-prefixed names
-Message-ID: <20210203111832.a7i56dvd3d6iq5je@mobilestation>
-References: <20201205155621.3045-1-Sergey.Semin@baikalelectronics.ru>
- <20201205155621.3045-10-Sergey.Semin@baikalelectronics.ru>
- <YBnZ8O+zI/dzrjDQ@builder.lan>
- <YBpnpj+0KHM1Q8l8@kroah.com>
+        id S234351AbhBCLh2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Feb 2021 06:37:28 -0500
+Received: from mga11.intel.com ([192.55.52.93]:43914 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234349AbhBCLh1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 3 Feb 2021 06:37:27 -0500
+IronPort-SDR: 7WHALRX/Z170qP4xrOnsbsYJu8XyyuE3VbgcYyDHk3o9Z1rUpH6FqHTRzDV8GlpgKNe0CoTVwR
+ uEkhcYrAj2Bg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9883"; a="177518912"
+X-IronPort-AV: E=Sophos;i="5.79,398,1602572400"; 
+   d="scan'208";a="177518912"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 03:35:41 -0800
+IronPort-SDR: G4HY5HVbBrQjgKqBYtC4ZqYxZD970fNAl04crGYZOyojPUQgx1wdWuZrD0HDql1XLp+f6H+a/w
+ 2ywbiNjshKQg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,398,1602572400"; 
+   d="scan'208";a="575866568"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
+  by orsmga005.jf.intel.com with ESMTP; 03 Feb 2021 03:35:39 -0800
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/1] xhci fix for usb-linus 5.11-final
+Date:   Wed,  3 Feb 2021 13:37:01 +0200
+Message-Id: <20210203113702.436762-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YBpnpj+0KHM1Q8l8@kroah.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 03, 2021 at 10:06:46AM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Feb 02, 2021 at 05:02:08PM -0600, Bjorn Andersson wrote:
-> > On Sat 05 Dec 09:56 CST 2020, Serge Semin wrote:
-> > 
-> > > In accordance with the USB HCD/DRD schema all the USB controllers are
-> > > supposed to have DT-nodes named with prefix "^usb(@.*)?".  Since the
-> > > existing DT-nodes will be renamed in a subsequent patch let's first make
-> > > sure the DWC3 Qualcomm driver supports them and second falls back to the
-> > > deprecated naming so not to fail on the legacy DTS-files passed to the
-> > > newer kernels.
-> > > 
-> > 
-> > Felipe, will you merge this, so that I can merge the dts patch depending
-> > on this into the Qualcomm DT tree?
-> 
-> Patches this old are long-gone out of our queues.  If it needs to be
-> applied to a linux-usb tree, please resend.
+Hi Greg
 
-Hello Greg,
-I'll revise the series and resend the patches, which haven't been
-merged in yet, on this week. Sorry for a delay. I should have done
-that earlier, but I have been kind of drown with fixes for DW GMAC
-(stmmac) driver, so couldn't pay much attention to the rest of the
-work.
+One last xhci fix for 5.11-final if it still can make it.
 
--Sergey
+Thanks
+-Mathias
 
-> 
-> thanks,
-> 
-> greg k-h
+Mathias Nyman (1):
+  xhci: fix bounce buffer usage for non-sg list case
+
+ drivers/usb/host/xhci-ring.c | 31 ++++++++++++++++++++-----------
+ 1 file changed, 20 insertions(+), 11 deletions(-)
+
+-- 
+2.25.1
+
