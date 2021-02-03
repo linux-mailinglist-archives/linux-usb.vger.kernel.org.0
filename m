@@ -2,102 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3231930DD4D
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Feb 2021 15:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEEA530DD4A
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Feb 2021 15:55:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233247AbhBCOwz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Feb 2021 09:52:55 -0500
-Received: from mga04.intel.com ([192.55.52.120]:60546 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232528AbhBCOwv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Feb 2021 09:52:51 -0500
-IronPort-SDR: CJxLX73ES43HZ2Y+MnTvjM3bnAmU4kUbEDNsZzjUdDHP7asFuTVO71BkER99x+FuUJrR36nHa+
- GIbCdERxpasg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9884"; a="178489994"
-X-IronPort-AV: E=Sophos;i="5.79,398,1602572400"; 
-   d="scan'208";a="178489994"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 06:51:25 -0800
-IronPort-SDR: wMb7zQMf9oswhoMxeuPLVy8qcLZP1LP//czfvHXWYkHYQu9wuiLEa7+FVbnIKuh3rES4OnRmNF
- r9eZDg04XFqQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,398,1602572400"; 
-   d="scan'208";a="480371552"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 03 Feb 2021 06:51:18 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 03 Feb 2021 16:51:18 +0200
-Date:   Wed, 3 Feb 2021 16:51:18 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 1/6] software node: Provide replacement for
- device_add_properties()
-Message-ID: <20210203145118.GH1687065@kuha.fi.intel.com>
-References: <20210202125032.64982-1-heikki.krogerus@linux.intel.com>
- <20210202125032.64982-2-heikki.krogerus@linux.intel.com>
- <CAJZ5v0gMEBV=Gm-R=5zkN-J_p7cMTBwoOJrv=ec1j6SfSYRg_w@mail.gmail.com>
- <20210202150102.GA1687065@kuha.fi.intel.com>
- <CAJZ5v0hVZBhqzLPGPHDZYPcYyJPfwgYwjzKGYaUMZOBw7Eh7CQ@mail.gmail.com>
- <20210203094535.GC1687065@kuha.fi.intel.com>
- <CAJZ5v0j6oY=hXOJtoJ=_vdWqwLDDAO8SJoG1N3nehaAcAz8G8w@mail.gmail.com>
- <20210203142655.GG1687065@kuha.fi.intel.com>
- <CAJZ5v0hwjxtADph8=R+F0bgzm1q1EMrrzZMhQQUoHG9O-wdTag@mail.gmail.com>
+        id S233269AbhBCOw3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Feb 2021 09:52:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233026AbhBCOw1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Feb 2021 09:52:27 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C859EC061573;
+        Wed,  3 Feb 2021 06:51:46 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id i20so86164otl.7;
+        Wed, 03 Feb 2021 06:51:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=BRejbMppl3GOr40VHRSG/ViReSyva6umu7DgyW7KvL8=;
+        b=I62tbZ/KgBL57yQJJ96NvX5FIBOPy3iM6O9E5607p8fJaxmkSqbIOh2HK4M+Ch0eo2
+         LxEIK76+/MTj4qlPjpX90Za/6ztCnGAN7NQB8xJqiZjE7r/c/dNYMy4nWY1SMyr5qC4O
+         I1fLUe9JuoEET3Ng0wvsnodZB2+TQhQZ/a4Kz8mmtTly82LhYoP3PKWCbtscf6wD1bAv
+         5ihpkm0wF2Je6N6xnkjDlgAOM36N8Ehghi0VArTvhKMPqqellXCw2t0Ugo7dw5Xlzybs
+         5RIY1Araa9+qB3ygG6T/fYqrBndy9BzMNNiPAlsYtRe54Dv/d/Fx4yoY5pdcPG8x4FJH
+         wG/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=BRejbMppl3GOr40VHRSG/ViReSyva6umu7DgyW7KvL8=;
+        b=TNeUP1JQ4Go8meTHw+J33CoJGmvQdWzOojEOMYDxeB17u3aZTDXNpEB3+dcSKJ13Zj
+         +mvJLodDTJpdAe9eeY5voxv6/stRn6Lh2j952q2jaxrTGvwfswoY+ygZDkvW6jEZvjp0
+         QZDURCdGukQNJzxC2mWQtbj59j1Yx8g3Hfp8aH117KYnzrVzuhisU02N/vSmuE+tlvxs
+         zzYV/PUdeODuuHgiMOcQtOQogVXXPY8hnZ6v+em2duSUeoK5R4Oe0EpkdIZ5Fx0fdURg
+         yiuvH4yJnXCrW92QtfTGSPLtYIiTd9lpbVQ1Qaq19NPDvhwEcMrI9phnEwocUxLw4hj4
+         wZUQ==
+X-Gm-Message-State: AOAM533zeSvHUC74b1ou7MVks8h3o1skRyxeFvjHslCBw03YS/GV6WxI
+        hNZ8J3VIZLbAo98flhn5sp0=
+X-Google-Smtp-Source: ABdhPJybpn87WDF/YX1SjCKImWLRZK8nGsvxetJ3HkHDT55b1TINbO5FihfC7//g0Ih5lZ/NrXjscg==
+X-Received: by 2002:a9d:51ca:: with SMTP id d10mr1129574oth.327.1612363906270;
+        Wed, 03 Feb 2021 06:51:46 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z20sm448531oth.55.2021.02.03.06.51.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 03 Feb 2021 06:51:45 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 3 Feb 2021 06:51:43 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Kyle Tso <kyletso@google.com>, gregkh@linuxfoundation.org,
+        hdegoede@redhat.com, robh+dt@kernel.org, badhri@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 1/8] usb: typec: Manage SVDM version
+Message-ID: <20210203145143.GA58095@roeck-us.net>
+References: <20210202161733.932215-1-kyletso@google.com>
+ <20210202161733.932215-2-kyletso@google.com>
+ <20210203124724.GD1687065@kuha.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hwjxtADph8=R+F0bgzm1q1EMrrzZMhQQUoHG9O-wdTag@mail.gmail.com>
+In-Reply-To: <20210203124724.GD1687065@kuha.fi.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 03, 2021 at 03:39:02PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Feb 3, 2021 at 3:27 PM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > On Wed, Feb 03, 2021 at 02:50:24PM +0100, Rafael J. Wysocki wrote:
-> > > On Wed, Feb 3, 2021 at 10:45 AM Heikki Krogerus
-> > > <heikki.krogerus@linux.intel.com> wrote:
-> > > >
-> > > > On Tue, Feb 02, 2021 at 05:08:40PM +0100, Rafael J. Wysocki wrote:
-> > > > > It looks like there is a use case that cannot be addressed by using
-> > > > > device_add_properties() and that's why you need this new function.
-> > > > >
-> > > > > Can you describe that use case, please, and explain what the problem
-> > > > > with using device_add_properties() in it is?
-> > > >
-> > > > The problem with device_add_properties() is that it gives false
-> > > > impression that the device properties are somehow directly attached to
-> > > > the devices, which is not true. Now, that should not be a major issue,
-> > > > but it seems that it is. I think Lee Jones basically used that as an
-> > > > argument to refuse changes (and pretty minor changes) that would have
-> > > > allowed us to use software nodes with the MFD drivers.
-> > > >
-> > > > Nevertheless, I was not planning to provide a replacement for it
-> > > > originally. We do in any case have the real issue caused by that
-> > > > device_remove_properties() call in device_del() which has to be fixed.
-> > >
-> > > What's that issue, specifically?
-> >
-> > The problem is that we can't now reuse or share if necessary, or just
-> > in general be in charge of the lifetime of the software nodes because
-> > that call is in device_del(). Now the lifetime of the software nodes
-> > is always tied to the devices they are attached, no questions asked.
+On Wed, Feb 03, 2021 at 02:47:24PM +0200, Heikki Krogerus wrote:
+> Hi Kyle,
 > 
-> I see and so instead you want the reference counting to trigger the
-> cleanup when the count gets to 0.
+> On Wed, Feb 03, 2021 at 12:17:26AM +0800, Kyle Tso wrote:
+> > PD Spec Revision 3.0 Version 2.0 + ECNs 2020-12-10
+> >   6.4.4.2.3 Structured VDM Version
+> >   "The Structured VDM Version field of the Discover Identity Command
+> >   sent and received during VDM discovery Shall be used to determine the
+> >   lowest common Structured VDM Version supported by the Port Partners or
+> >   Cable Plug and Shall continue to operate using this Specification
+> >   Revision until they are Detached."
+> > 
+> > Add a variable in typec_capability to specify the highest SVDM version
+> > supported by the port and another variable in typec_port to cache the
+> > negotiated SVDM version between the port partners.
+> > 
+> > Also add setter/getter functions for the negotiated SVDM version.
+> > 
+> > Signed-off-by: Kyle Tso <kyletso@google.com>
+> > ---
+> >  drivers/usb/typec/class.c | 13 +++++++++++++
+> >  include/linux/usb/typec.h | 10 ++++++++++
+> >  2 files changed, 23 insertions(+)
+> > 
+> > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> > index b6ceab3dc16b..42d1be1eece9 100644
+> > --- a/drivers/usb/typec/class.c
+> > +++ b/drivers/usb/typec/class.c
+> > @@ -51,6 +51,7 @@ struct typec_port {
+> >  	enum typec_role			vconn_role;
+> >  	enum typec_pwr_opmode		pwr_opmode;
+> >  	enum typec_port_type		port_type;
+> > +	enum usb_pd_svdm_ver		svdm_version;
+> >  	struct mutex			port_type_lock;
 > 
-> Sounds reasonable to me and please put this information into the patch
-> changelog.
+> I just realized that you are storing that in the port object. I guess
+> we don't have to change this right now, but it would have been more
+> clear to store that in the partner object IMO.
+> 
+> >  	enum typec_orientation		orientation;
+> > @@ -1841,6 +1842,18 @@ int typec_find_port_data_role(const char *name)
+> >  }
+> >  EXPORT_SYMBOL_GPL(typec_find_port_data_role);
+> >  
+> > +void typec_set_svdm_version(struct typec_port *port, enum usb_pd_svdm_ver ver)
+> > +{
+> > +	port->svdm_version = ver;
+> > +}
+> > +EXPORT_SYMBOL_GPL(typec_set_svdm_version);
+> > +
+> > +enum usb_pd_svdm_ver typec_get_svdm_version(struct typec_port *port)
+> > +{
+> > +	return port->svdm_version;
+> > +}
+> > +EXPORT_SYMBOL_GPL(typec_get_svdm_version);
+> 
+> You need to document those exported functions! You need to do that in
+> any case, but in this case it's very important, because the purpose of
+> these functions is not clear from the ctx.
 
-Yes. I'll do that.
+Thinking about it, would it make make sense to define the functions as
+static inline ?
 
-thanks,
+Thanks,
+Guenter
 
--- 
-heikki
+> 
+> I'm sorry for noticing that so late. Since you do need to fix that,
+> please see if you can also store that detail in the partner device
+> object instead of the port object.
+> 
+> thanks,
+> 
+> -- 
+> heikki
