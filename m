@@ -2,66 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D4130D5EA
+	by mail.lfdr.de (Postfix) with ESMTP id 7374930D5EB
 	for <lists+linux-usb@lfdr.de>; Wed,  3 Feb 2021 10:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233120AbhBCJJ7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Feb 2021 04:09:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46984 "EHLO mail.kernel.org"
+        id S233206AbhBCJKG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Feb 2021 04:10:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47192 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233222AbhBCJH3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Feb 2021 04:07:29 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1AF9664E36;
-        Wed,  3 Feb 2021 09:06:47 +0000 (UTC)
+        id S233273AbhBCJIb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 3 Feb 2021 04:08:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D37E664F7C;
+        Wed,  3 Feb 2021 09:07:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1612343208;
-        bh=cfXwA5vl+xRuEQ7jto4OYIHNb7RwjaGVIgBR90aVD5o=;
+        s=korg; t=1612343270;
+        bh=jSiB2eh7z20wSqXsrq7i3ztg06W8skYeSe5faR9mkQo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j27MRuHrFC3WmDJ8mJJU5+/F2g6VCEDrTEcon21wZVNNlP9R+QNrcYM51/cjLAfs+
-         Lune3W+vbY0rdHalwdVP+ps3bknb44+7kMzz22NrBnpAjBAZlvsU0xA87J0gTsfpLO
-         KbVUCS+J+Cpm/CfxithtHXt+9piD62q6UyG2vgq4=
-Date:   Wed, 3 Feb 2021 10:06:46 +0100
+        b=hDTzMYVB9PSwUe1cB3XZhfs6cjTIOUyzbcJcrExHbrUuDDU1UEs9Eii/UDV1/jT3q
+         paf13rFn0vIPL7c8QXyivyEU3taUsQCeRJ8eB0JVj0jOs4ooXF2SPa6REhpmSwI2rK
+         rpzYLculsPqRPf/IOyS2b9XzpCJLCdz9ygYYAJMI=
+Date:   Wed, 3 Feb 2021 10:07:47 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 09/10] usb: dwc3: qcom: Detect DWC3 DT-nodes with
- "usb"-prefixed names
-Message-ID: <YBpnpj+0KHM1Q8l8@kroah.com>
-References: <20201205155621.3045-1-Sergey.Semin@baikalelectronics.ru>
- <20201205155621.3045-10-Sergey.Semin@baikalelectronics.ru>
- <YBnZ8O+zI/dzrjDQ@builder.lan>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/2] dt-bindings: usb: generic-ohci: Add missing
+ compatible strings
+Message-ID: <YBpn4zqGk6mV0aII@kroah.com>
+References: <20210202175439.3904060-1-robh@kernel.org>
+ <20210202175439.3904060-2-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YBnZ8O+zI/dzrjDQ@builder.lan>
+In-Reply-To: <20210202175439.3904060-2-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 02, 2021 at 05:02:08PM -0600, Bjorn Andersson wrote:
-> On Sat 05 Dec 09:56 CST 2020, Serge Semin wrote:
+On Tue, Feb 02, 2021 at 11:54:39AM -0600, Rob Herring wrote:
+> The generic OHCI binding needs to document all the specific compatible
+> strings so we can track undocumented compatible strings. Add all the
+> compatible strings from in tree users.
 > 
-> > In accordance with the USB HCD/DRD schema all the USB controllers are
-> > supposed to have DT-nodes named with prefix "^usb(@.*)?".  Since the
-> > existing DT-nodes will be renamed in a subsequent patch let's first make
-> > sure the DWC3 Qualcomm driver supports them and second falls back to the
-> > deprecated naming so not to fail on the legacy DTS-files passed to the
-> > newer kernels.
-> > 
-> 
-> Felipe, will you merge this, so that I can merge the dts patch depending
-> on this into the Qualcomm DT tree?
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/usb/generic-ohci.yaml | 34 +++++++++++++++++--
+>  1 file changed, 32 insertions(+), 2 deletions(-)
 
-Patches this old are long-gone out of our queues.  If it needs to be
-applied to a linux-usb tree, please resend.
+Both look fine to me, do you want me to take this through my trees or
+will you take them?
+
+If you want to, fine with me:
+
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+If not, just let me know and I will pick them up.
 
 thanks,
 
