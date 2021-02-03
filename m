@@ -2,109 +2,252 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 694CD30E003
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Feb 2021 17:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B44930E023
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Feb 2021 17:53:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbhBCQtB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Feb 2021 11:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
+        id S230370AbhBCQxd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Feb 2021 11:53:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbhBCQsx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Feb 2021 11:48:53 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FD3C061788
-        for <linux-usb@vger.kernel.org>; Wed,  3 Feb 2021 08:48:13 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id w11so238718qvz.12
-        for <linux-usb@vger.kernel.org>; Wed, 03 Feb 2021 08:48:13 -0800 (PST)
+        with ESMTP id S230517AbhBCQxX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Feb 2021 11:53:23 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FDEC0613ED;
+        Wed,  3 Feb 2021 08:52:43 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id s3so376619edi.7;
+        Wed, 03 Feb 2021 08:52:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TdLRypbeGjXXiOf7S/sdDE2hMXDyoqKgKIlnvFBt3YE=;
-        b=ibVKF+7YV/3RbXMhmFqIVycw2nb99oWGcdTh0dsAfTdwRwHEAUkyshkEC8yl0a+juQ
-         z4p3DCa7b2Fjm7cg+1ncCazCwInvIh0wwgsCk4R0Wpsde3DTG3g0IYhcMUkCZU3+Ufdv
-         Hiz44Pb2fjhqJNVYUGeiVFgbpKh41MoTdsQfJFrxVoCyKbE5jAwwtg0jMzTRR2DNEsy3
-         odTvfza5wT/BCiEIKRHJ+BrMQit2TW6sPZA1LjXYjHM+ReZcmGgLJAzKcj3yS5mHvLvx
-         jCIU5THbVTeh3OgR6ufiKe2oj23kvcyVRqmpICPfTwYErc6QGkEiXQtOBjM1oyk17T/C
-         UaiQ==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=YTHvbCjsK4omUl0IWdkmKq6VQg+YpFZVHA+6d5ZU9mk=;
+        b=dLlP1Rw8f9InY/ONO5KbGh4Qrp4V9j1Sl6zGeIjzqXvRtN1eIbpWEg6xEXNPo9PXW7
+         eCzVSU9dF+vMckZbQiOV3/HO/jmk2H13S8JkLOFr5iI7E53VDBLKZMzbWBMegh50QdrE
+         +Z5ExbqDh9Wxj+IEi5TOPRlCksfOfI6oS6ysd/T0zK/nkIH6ii1NlGyl2d4nHgFIJ8Wu
+         f9d6CVjAMiPIygI2ZEeZhSuVu0bgT/Tlshb213briU8cnFbdWFagFtL/FpuFfNfxzPmh
+         5OKcsh6MY3m573z+7HMUYv0vgo5P62FkNEg1C2E06tPSme1DqmiQ2YQJSyx7MIgKZtUB
+         e0HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TdLRypbeGjXXiOf7S/sdDE2hMXDyoqKgKIlnvFBt3YE=;
-        b=dGnj6i6VCysXEkt6sgI0Jv+qi8xePGUygRqvt4nB5UL5t9K0j1Ce9us9S2dQtnZk9O
-         9ArBGDVqUy4u0YnEIqqmiT1j7ZVATqW7QZu2ex/A9ou+lkqxAoIigouq4XA+5H8g22+n
-         64fVL4Wabyph/QAC2XX9/Kqf/lOr3z1LiHD1CxYLugQoGNHCszRWSoxHQvSoG3Ac99wV
-         pISAuGCUP/u4cA2+ZaZXhI1DO6NpzdzZQvkvJnkhZZrdQFh95gGFGW4/ioYZkqJctDBZ
-         EuPpLx5j041vR0e/LBMTFRcOcgcmKkpUmRVfOD6fx56J/Acev7CxKuj/OU011USyjrrn
-         L4iA==
-X-Gm-Message-State: AOAM531GXz1LokBsOlDSp9BefkVfiypkQGwoK4Qz/RNyKEoHpoth+Ydk
-        R1REK4IuEsDgdyTIN687B7JggOVNkVq9eI7k22xeDQ==
-X-Google-Smtp-Source: ABdhPJzL9oH1ubILGnrierFSlcwib2CFzLJFILelxX6HwwlG8wHV9L2fDQGAYTUpUHXWONqi/kzrivcT0YHgDlqBR1M=
-X-Received: by 2002:a0c:8365:: with SMTP id j92mr3403716qva.19.1612370892250;
- Wed, 03 Feb 2021 08:48:12 -0800 (PST)
-MIME-Version: 1.0
-References: <202102032303.xnvdBAo2-lkp@intel.com> <CAGZ6i=2RTX3O9pLSt8xrnCmmKbVx26nnRN9h_Ci08dzmuJwJmQ@mail.gmail.com>
- <CANLzEktC3gL9vxsFOmQQ=0ymgPB+0AWQ+NL_tQVB3Jvr4B5LCw@mail.gmail.com>
-In-Reply-To: <CANLzEktC3gL9vxsFOmQQ=0ymgPB+0AWQ+NL_tQVB3Jvr4B5LCw@mail.gmail.com>
-From:   Kyle Tso <kyletso@google.com>
-Date:   Thu, 4 Feb 2021 00:47:56 +0800
-Message-ID: <CAGZ6i=0vdPoFCCJrk0a-ZDk7KaaKzHkv+V65T3RUaAgjAi7ZAg@mail.gmail.com>
-Subject: Re: [usb:usb-testing 155/155] drivers/platform/chrome/cros_ec_typec.c:778:8:
- error: 'CABLE_ATYPE' undeclared; did you mean
-To:     Benson Leung <bleung@google.com>
-Cc:     Prashant Malani <pmalani@google.com>,
-        USB <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=YTHvbCjsK4omUl0IWdkmKq6VQg+YpFZVHA+6d5ZU9mk=;
+        b=SpKYk0euM6BdMySMbCwFvTS8ib1IxyY2WnvsvZF+DGPzjpEOEp/vkavw8yY8XQ3EOq
+         8kg8jMrO6+c8ZcQOxR/6i87+5oBbysLFs6/QZHLfpiK+OSkAVdWI0YVcjZ9acS1uiIRX
+         hgDo+4N+G6jyj6BDMuNQOMKmdN8rabqfZWhVyUTgHujC02BdwBOK7CaV8HLf8u7FRgLH
+         pnMc8AFrX1sYqhL/SBpxG2Stbrkp2B3ajpGP2eYOaed5iOxh+GlP2Cj/KO/UYRsOBoo+
+         Skk+R2KXJPJLmaTg0ZbjkldrfeBd+Erqzf2+FeNYgqm/u/HKC37uMYS6J0j5jdd9ZZWl
+         m8Kg==
+X-Gm-Message-State: AOAM532Bb1E3LHZbit2Rtmt7DshN7U6ZSQzaUamxgnjdCpob3SBKu2sP
+        1WyAri1U0lJIPnAm8MyyZnuR5NxR7do=
+X-Google-Smtp-Source: ABdhPJy20Qd5tp6E67FLuATwBrfP19QrqbJ+90f7gWEVIWsDr5KHgPyNFDX/HfHywdP7MaLXxgJIdw==
+X-Received: by 2002:a05:6402:3510:: with SMTP id b16mr3858988edd.242.1612371162281;
+        Wed, 03 Feb 2021 08:52:42 -0800 (PST)
+Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id a25sm1135471eds.48.2021.02.03.08.52.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 03 Feb 2021 08:52:41 -0800 (PST)
+From:   Johan Jonker <jbx6244@gmail.com>
+To:     heiko@sntech.de
+Cc:     robh+dt@kernel.org, gregkh@linuxfoundation.org, balbi@kernel.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/7] dt-bindings: usb: convert rockchip,dwc3.txt to yaml
+Date:   Wed,  3 Feb 2021 17:52:27 +0100
+Message-Id: <20210203165233.22177-1-jbx6244@gmail.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 4, 2021 at 12:40 AM Benson Leung <bleung@google.com> wrote:
->
-> Hi Kyle,
->
-> On Wed, Feb 3, 2021 at 7:39 AM Kyle Tso <kyletso@google.com> wrote:
-> >
-> > Hi Prashant and Benson,
-> >
-> > I just got this notification that my patch "usb: pd: Update VDO
-> > definitions" caused this build break.
-> > The root cause is that I removed the definitions of Type-A and Type-B
-> > in Product Type VDOs as they have already been deprecated.
-> > And it's my bad that I didn't notice that someone else uses these definitions...
-> >
-> > I can fix it by simply removing them in the switch case but I am not
-> > sure whether they need to be kept for some reason (compatibility ?)
-> > What do you think?
->
-> Strictly speaking, Type-A and Type-B definitions here are deprecated
-> in PD 3.0, but PD 3.0 implementations have to be able to fall back to
-> PD 2.0 protocol when the port partner or cable is PD 2.0 only.
->
-> In the last version of the PD 2.0 specification released, the Type-A
-> and Type-B definitions still remain, so we can't really remove them
-> from the Kernel until all of PD 2.0 is deprecated.
->
-> They're very rare cables, but I have seen a PD 2.0 cable with an
-> e-marker that indicates Type-B here.
->
-> Hope this helps,
-> Benson
->
-> --
-> Benson Leung
-> Staff Software Engineer
-> Chrome OS Kernel
-> Google Inc.
-> bleung@google.com
-> Chromium OS Project
-> bleung@chromium.org
+In the past Rockchip dwc3 usb nodes were manually checked.
+With the conversion of snps,dwc3.yaml as common document
+we now can convert rockchip,dwc3.txt to yaml as well.
+Remove node wrapper.
 
-Thanks for the clarification! makes sense to me.
-I will provide the fix as soon as possible.
+Added properties for rk3399 are:
+  power-domains
+  resets
+  reset-names
 
-thanks,
-Kyle
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
+ .../devicetree/bindings/usb/rockchip,dwc3.txt      |  56 -----------
+ .../devicetree/bindings/usb/rockchip,dwc3.yaml     | 103 +++++++++++++++++++++
+ 2 files changed, 103 insertions(+), 56 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/rockchip,dwc3.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+
+diff --git a/Documentation/devicetree/bindings/usb/rockchip,dwc3.txt b/Documentation/devicetree/bindings/usb/rockchip,dwc3.txt
+deleted file mode 100644
+index 945204932..000000000
+--- a/Documentation/devicetree/bindings/usb/rockchip,dwc3.txt
++++ /dev/null
+@@ -1,56 +0,0 @@
+-Rockchip SuperSpeed DWC3 USB SoC controller
+-
+-Required properties:
+-- compatible:	should contain "rockchip,rk3399-dwc3" for rk3399 SoC
+-- clocks:	A list of phandle + clock-specifier pairs for the
+-		clocks listed in clock-names
+-- clock-names:	Should contain the following:
+-  "ref_clk"	Controller reference clk, have to be 24 MHz
+-  "suspend_clk"	Controller suspend clk, have to be 24 MHz or 32 KHz
+-  "bus_clk"	Master/Core clock, have to be >= 62.5 MHz for SS
+-		operation and >= 30MHz for HS operation
+-  "grf_clk"	Controller grf clk
+-
+-Required child node:
+-A child node must exist to represent the core DWC3 IP block. The name of
+-the node is not important. The content of the node is defined in dwc3.txt.
+-
+-Phy documentation is provided in the following places:
+-Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml - USB2.0 PHY
+-Documentation/devicetree/bindings/phy/phy-rockchip-typec.txt     - Type-C PHY
+-
+-Example device nodes:
+-
+-	usbdrd3_0: usb@fe800000 {
+-		compatible = "rockchip,rk3399-dwc3";
+-		clocks = <&cru SCLK_USB3OTG0_REF>, <&cru SCLK_USB3OTG0_SUSPEND>,
+-			 <&cru ACLK_USB3OTG0>, <&cru ACLK_USB3_GRF>;
+-		clock-names = "ref_clk", "suspend_clk",
+-			      "bus_clk", "grf_clk";
+-		#address-cells = <2>;
+-		#size-cells = <2>;
+-		ranges;
+-		usbdrd_dwc3_0: dwc3@fe800000 {
+-			compatible = "snps,dwc3";
+-			reg = <0x0 0xfe800000 0x0 0x100000>;
+-			interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
+-			dr_mode = "otg";
+-		};
+-	};
+-
+-	usbdrd3_1: usb@fe900000 {
+-		compatible = "rockchip,rk3399-dwc3";
+-		clocks = <&cru SCLK_USB3OTG1_REF>, <&cru SCLK_USB3OTG1_SUSPEND>,
+-			 <&cru ACLK_USB3OTG1>, <&cru ACLK_USB3_GRF>;
+-		clock-names = "ref_clk", "suspend_clk",
+-			      "bus_clk", "grf_clk";
+-		#address-cells = <2>;
+-		#size-cells = <2>;
+-		ranges;
+-		usbdrd_dwc3_1: dwc3@fe900000 {
+-			compatible = "snps,dwc3";
+-			reg = <0x0 0xfe900000 0x0 0x100000>;
+-			interrupts = <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>;
+-			dr_mode = "otg";
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+new file mode 100644
+index 000000000..fdf9497bc
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+@@ -0,0 +1,103 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/rockchip,dwc3.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip SuperSpeed DWC3 USB SoC controller
++
++maintainers:
++  - Heiko Stuebner <heiko@sntech.de>
++
++description:
++      The common content of the node is defined in snps,dwc3.yaml.
++
++      Phy documentation is provided in the following places.
++
++      USB2.0 PHY
++      Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb2.yaml
++
++      Type-C PHY
++      Documentation/devicetree/bindings/phy/phy-rockchip-typec.txt
++
++allOf:
++  - $ref: snps,dwc3.yaml#
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - rockchip,rk3399-dwc3
++      - const: snps,dwc3
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description:
++          Controller reference clock, must to be 24 MHz
++      - description:
++          Controller suspend clock, must to be 24 MHz or 32 KHz
++      - description:
++          Master/Core clock, must to be >= 62.5 MHz for SS
++          operation and >= 30MHz for HS operation
++      - description:
++          Controller aclk_usb3_rksoc_axi_perf clock
++      - description:
++          Controller aclk_usb3 clock
++      - description:
++          Controller grf clock
++
++  clock-names:
++    items:
++      - const: ref_clk
++      - const: suspend_clk
++      - const: bus_clk
++      - const: aclk_usb3_rksoc_axi_perf
++      - const: aclk_usb3
++      - const: grf_clk
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  reset-names:
++    const: usb3-otg
++
++unevaluatedProperties: false
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++examples:
++  - |
++    #include <dt-bindings/clock/rk3399-cru.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    bus {
++      #address-cells = <2>;
++      #size-cells = <2>;
++
++      usbdrd3_0: usb@fe800000 {
++        compatible = "rockchip,rk3399-dwc3", "snps,dwc3";
++        reg = <0x0 0xfe800000 0x0 0x100000>;
++        interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&cru SCLK_USB3OTG0_REF>, <&cru SCLK_USB3OTG0_SUSPEND>,
++                 <&cru ACLK_USB3OTG0>, <&cru ACLK_USB3_RKSOC_AXI_PERF>,
++                 <&cru ACLK_USB3>, <&cru ACLK_USB3_GRF>;
++        clock-names = "ref_clk", "suspend_clk",
++                      "bus_clk", "aclk_usb3_rksoc_axi_perf",
++                      "aclk_usb3", "grf_clk";
++        dr_mode = "otg";
++      };
++    };
+-- 
+2.11.0
+
