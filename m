@@ -2,158 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A5C30DB6C
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Feb 2021 14:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0896130DBD2
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Feb 2021 14:51:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbhBCNge (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Feb 2021 08:36:34 -0500
-Received: from mga12.intel.com ([192.55.52.136]:53857 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232078AbhBCNgH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Feb 2021 08:36:07 -0500
-IronPort-SDR: m+0DYk33G3PA7AxzQNJtvKjsWkYheUFWDbgunej4W4zIKNBup27SVVg9OhsJFc7cSIjMRO/5RW
- VTYeU2k7U28g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9883"; a="160205448"
-X-IronPort-AV: E=Sophos;i="5.79,398,1602572400"; 
-   d="diff'?scan'208";a="160205448"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 05:34:12 -0800
-IronPort-SDR: ebZ4EKkbByu9zyt371NkzmzjxNMJcy6cR2nDbKa+Oj1ilrgll0Rn9FR5xeBc7xilx74s60AuYW
- WilY1Q93q46w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,398,1602572400"; 
-   d="diff'?scan'208";a="480351688"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 03 Feb 2021 05:34:09 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 03 Feb 2021 15:34:08 +0200
-Date:   Wed, 3 Feb 2021 15:34:08 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Kyle Tso <kyletso@google.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
-        hdegoede@redhat.com, robh+dt@kernel.org, badhri@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 1/8] usb: typec: Manage SVDM version
-Message-ID: <20210203133408.GF1687065@kuha.fi.intel.com>
-References: <20210202161733.932215-1-kyletso@google.com>
- <20210202161733.932215-2-kyletso@google.com>
- <20210203124724.GD1687065@kuha.fi.intel.com>
+        id S232322AbhBCNvc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Feb 2021 08:51:32 -0500
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:44260 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232318AbhBCNvS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Feb 2021 08:51:18 -0500
+Received: by mail-ot1-f45.google.com with SMTP id e70so23335942ote.11;
+        Wed, 03 Feb 2021 05:51:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t8HkciKMM6o9dgVPvicJ6NQscrL/NEhPkMR7TexeH8o=;
+        b=Iv8jUhHiFJjOgjVpp2JT/dmqWs/EQx3jNR4zgiATv8y33L1ojJsGNYEmMft4f+wVvq
+         +eRIsz4f9K9KujJMdphSS6cGTgscOKVWY+QzKLkhOK42NMKRvjSRShEMqkIBDdoiKJpz
+         WbCNpOXr8L7AXw4Yz9VMQEIE7cisWEYoE2flgT+slJ4qaWRbF9cUnqyuEyG39M6BFYzS
+         Xn930h9APOYrcbDbjojJzhznby3Cu/GADCxHMNjkkuEClVZHyTRJZGTUxeKt7pLGSCOV
+         /hHBKIErG7spoYtcCkpcj4RCpiyENQHEe9g9PtzuK0aLBm22u64DlTn9YLqx40k366kU
+         /Uag==
+X-Gm-Message-State: AOAM530HiQyCNsOW20LOEPAwubf430jtiezF5ndZxC82rHPK0EEEsbjx
+        ax/97H985/QdNczB0jgA6jc3+LpGWx9A7+4eyxUWaO37
+X-Google-Smtp-Source: ABdhPJy/w6aat1SNPMJE/L6i1l3uurPRYogijtTl2hxq2ZlTgvLCSnwnTz5m6d4DxbBI39pPaNNaOQ8Qz07h19BezGQ=
+X-Received: by 2002:a05:6830:2313:: with SMTP id u19mr2184762ote.321.1612360236609;
+ Wed, 03 Feb 2021 05:50:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="CE+1k2dSO48ffgeK"
-Content-Disposition: inline
-In-Reply-To: <20210203124724.GD1687065@kuha.fi.intel.com>
+References: <20210202125032.64982-1-heikki.krogerus@linux.intel.com>
+ <20210202125032.64982-2-heikki.krogerus@linux.intel.com> <CAJZ5v0gMEBV=Gm-R=5zkN-J_p7cMTBwoOJrv=ec1j6SfSYRg_w@mail.gmail.com>
+ <20210202150102.GA1687065@kuha.fi.intel.com> <CAJZ5v0hVZBhqzLPGPHDZYPcYyJPfwgYwjzKGYaUMZOBw7Eh7CQ@mail.gmail.com>
+ <20210203094535.GC1687065@kuha.fi.intel.com>
+In-Reply-To: <20210203094535.GC1687065@kuha.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 3 Feb 2021 14:50:24 +0100
+Message-ID: <CAJZ5v0j6oY=hXOJtoJ=_vdWqwLDDAO8SJoG1N3nehaAcAz8G8w@mail.gmail.com>
+Subject: Re: [PATCH 1/6] software node: Provide replacement for device_add_properties()
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, Feb 3, 2021 at 10:45 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> On Tue, Feb 02, 2021 at 05:08:40PM +0100, Rafael J. Wysocki wrote:
+> > It looks like there is a use case that cannot be addressed by using
+> > device_add_properties() and that's why you need this new function.
+> >
+> > Can you describe that use case, please, and explain what the problem
+> > with using device_add_properties() in it is?
+>
+> The problem with device_add_properties() is that it gives false
+> impression that the device properties are somehow directly attached to
+> the devices, which is not true. Now, that should not be a major issue,
+> but it seems that it is. I think Lee Jones basically used that as an
+> argument to refuse changes (and pretty minor changes) that would have
+> allowed us to use software nodes with the MFD drivers.
+>
+> Nevertheless, I was not planning to provide a replacement for it
+> originally. We do in any case have the real issue caused by that
+> device_remove_properties() call in device_del() which has to be fixed.
 
---CE+1k2dSO48ffgeK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+What's that issue, specifically?
 
-Hi Kyle,
+> I started to fix that by moving device_add_properties() under
+> drivers/base/swnode.c so I can implement it like I've implemented now
+> that new function, but after that when I started to tackle the second
+> issue by removing the subsystem wrappers like
+> platform_device_add_device_properties() and replacing them with things
+> like platform_device_add_software_node() in order to give the drivers
+> a chance to actually use software nodes, I realised that there isn't
+> much use for device_add_properties() after that.
+>
+> Also, even though I'm not super happy about adding more API to this
+> thing, this function - device_create_managed_software_node() - I do
+> like. Not only is it implemented so that we don't have to rely on
+> anything else in drivers core in order to achieve the lifetime link
+> with the device, it is also much more descriptive. The function name
+> alone does not leave any questions about what is going to happen if
+> that function is called. You'll end up with a software node that just
+> happens to be attached to the device.
+>
+> On top of those two things, by adding the new function it also gives
+> me a nice stepping stone to do these changes in the normal stages:
+>
+>         1. Add feature/modification.
+>         2. Convert users.
+>         3. Cleanup.
+>
+> And finally, even though we may not have any users left for
+> device_add_properties() after I have updated all the subsystems and
+> drivers, this new function will still be useful. That is because, even
+> though it can be used as a drop-in replacement for
+> device_add_properties(), it does add that one small but important
+> change. It allows the nodes created with it to be part of node
+> hierarchy, and that alone is useful to me, and I'm planning on using
+> that feature later.
+>
+> I'm sorry about the long explanation.
 
-On Wed, Feb 03, 2021 at 02:47:28PM +0200, Heikki Krogerus wrote:
-> You need to document those exported functions! You need to do that in
-> any case, but in this case it's very important, because the purpose of
-> these functions is not clear from the ctx.
-> 
-> I'm sorry for noticing that so late. Since you do need to fix that,
-> please see if you can also store that detail in the partner device
-> object instead of the port object.
+No need to be sorry,  now I know what this really is about. :-)
 
-I'm attaching here my (quite crude) proposal how to do this. It should
-give you an idea what I'm after here.
+I'm not against this patch, but I IMO the "motivation" part of the
+changelog needs to be improved.
 
-Br,
-
--- 
-heikki
-
---CE+1k2dSO48ffgeK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="svdm_version_proposal.diff"
-
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 8f77669f9cf4f..04238b0a5d47f 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -36,6 +36,8 @@ struct typec_partner {
- 	enum typec_accessory		accessory;
- 	struct ida			mode_ids;
- 	int				num_altmodes;
-+
-+	enum usb_pd_svdm_ver            svdm_version;
- };
- 
- struct typec_port {
-@@ -792,6 +794,18 @@ typec_partner_register_altmode(struct typec_partner *partner,
- }
- EXPORT_SYMBOL_GPL(typec_partner_register_altmode);
- 
-+/**
-+ * typec_partner_set_svdm_version - Set negotiated SVDM version
-+ * @partner: The partner.
-+ * ...
-+ */
-+void typec_partner_set_svdm_version(struct typec_partner *partner,
-+				   enum usb_pd_svdm_ver svdm_version)
-+{
-+	partner->svdm_version = svdm_version;
-+}
-+EXPORT_SYMBOL_GPL(typec_partner_set_svdm_version);
-+
- /**
-  * typec_register_partner - Register a USB Type-C Partner
-  * @port: The USB Type-C Port the partner is connected to
-@@ -1847,6 +1861,27 @@ EXPORT_SYMBOL_GPL(typec_set_mode);
- 
- /* --------------------------------------- */
- 
-+/**
-+ * typec_get_negotiated_svdm_version - Get negotiated SVDM version
-+ * @port: The port.
-+ * ...
-+ */
-+int typec_get_negotiated_svdm_version(struct typec_port *port)
-+{
-+	enum usb_pd_svdm_ver svdm_version;
-+	struct device *partner_dev;
-+
-+	partner_dev = device_find_child(&port->dev, NULL, partner_match);
-+	if (!partner_dev)
-+		return -ENODEV;
-+
-+	svdm_version = to_typec_partner(partner_dev)->svdm_version;
-+	put_device(partner_dev);
-+
-+	return svdm_version
-+}
-+EXPORT_SYMBOL_GPL(typec_partner_set_svdm_version);
-+
- /**
-  * typec_get_drvdata - Return private driver data pointer
-  * @port: USB Type-C port
-diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
-index 5e0a7b7647c3b..91e119e37ba70 100644
---- a/include/linux/usb/typec_altmode.h
-+++ b/include/linux/usb/typec_altmode.h
-@@ -132,6 +132,16 @@ typec_altmode_get_orientation(struct typec_altmode *altmode)
- 	return typec_get_orientation(typec_altmode2port(altmode));
- }
- 
-+/**
-+ * typec_get_negotiated_svdm_version - Get negotiated SVDM version
-+ * ...
-+ */
-+static inline int
-+typec_altmode_get_svdm_version(struct typec_altmode *altmode)
-+{
-+	return typec_get_negotiated_svdm_version(typec_altmode2port(altmode));
-+}
-+
- /**
-  * struct typec_altmode_driver - USB Type-C alternate mode device driver
-  * @id_table: Null terminated array of SVIDs
-
---CE+1k2dSO48ffgeK--
+If the final goal is to get rid of device_add_properties(), please
+spell it out and say what problems there are with it and why the new
+function will be better.
