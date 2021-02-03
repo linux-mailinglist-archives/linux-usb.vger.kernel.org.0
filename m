@@ -2,173 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E74CC30D618
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Feb 2021 10:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2C230D69A
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Feb 2021 10:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232967AbhBCJRd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Feb 2021 04:17:33 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:44190 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233245AbhBCJPm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Feb 2021 04:15:42 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 1139Ew3J2008969, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexmbs04.realtek.com.tw[172.21.6.97])
-        by rtits2.realtek.com.tw (8.15.2/2.70/5.88) with ESMTPS id 1139Ew3J2008969
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 3 Feb 2021 17:14:58 +0800
-Received: from fc32.localdomain (172.21.177.102) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Wed, 3 Feb 2021
- 17:14:57 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <netdev@vger.kernel.org>
-CC:     <nic_swsd@realtek.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, Hayes Wang <hayeswang@realtek.com>
-Subject: [PATCH net-next 2/2] r8152: adjust the flow of power cut for RTL8153B
-Date:   Wed, 3 Feb 2021 17:14:29 +0800
-Message-ID: <1394712342-15778-400-Taiwan-albertk@realtek.com>
-X-Mailer: Microsoft Office Outlook 11
-In-Reply-To: <1394712342-15778-398-Taiwan-albertk@realtek.com>
-References: <1394712342-15778-398-Taiwan-albertk@realtek.com>
+        id S233405AbhBCJro (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Feb 2021 04:47:44 -0500
+Received: from mga09.intel.com ([134.134.136.24]:2805 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232967AbhBCJrk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 3 Feb 2021 04:47:40 -0500
+IronPort-SDR: zdYSGFiqur8Mkbos/rqEUPOm8jXOXvnO4UeqJjdzEmUGTNFRlkJniEm1N+IrbZRdpVEg/9Hhh+
+ D52PJRy/gjzA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9883"; a="181160480"
+X-IronPort-AV: E=Sophos;i="5.79,398,1602572400"; 
+   d="scan'208";a="181160480"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 01:45:39 -0800
+IronPort-SDR: zESI6Be6g1Qr4aWJMp9MGP2WTezGi8bJymCwpLw3goEi+ZsveB8TGHGqxI3q6N1XmAPcp7X31O
+ QNtcdAgwpn5g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,398,1602572400"; 
+   d="scan'208";a="480285734"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 03 Feb 2021 01:45:36 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 03 Feb 2021 11:45:35 +0200
+Date:   Wed, 3 Feb 2021 11:45:35 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 1/6] software node: Provide replacement for
+ device_add_properties()
+Message-ID: <20210203094535.GC1687065@kuha.fi.intel.com>
+References: <20210202125032.64982-1-heikki.krogerus@linux.intel.com>
+ <20210202125032.64982-2-heikki.krogerus@linux.intel.com>
+ <CAJZ5v0gMEBV=Gm-R=5zkN-J_p7cMTBwoOJrv=ec1j6SfSYRg_w@mail.gmail.com>
+ <20210202150102.GA1687065@kuha.fi.intel.com>
+ <CAJZ5v0hVZBhqzLPGPHDZYPcYyJPfwgYwjzKGYaUMZOBw7Eh7CQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.21.177.102]
-X-ClientProxiedBy: RTEXMBS02.realtek.com.tw (172.21.6.95) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0hVZBhqzLPGPHDZYPcYyJPfwgYwjzKGYaUMZOBw7Eh7CQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-For runtime resuming, the RTL8153B may be resumed from the state
-of power cut, when enabling the feature of UPS. Then, the PHY
-would be reset, so it is necessary to be initailized again.
+On Tue, Feb 02, 2021 at 05:08:40PM +0100, Rafael J. Wysocki wrote:
+> It looks like there is a use case that cannot be addressed by using
+> device_add_properties() and that's why you need this new function.
+> 
+> Can you describe that use case, please, and explain what the problem
+> with using device_add_properties() in it is?
 
-Besides, the USB_U1U2_TIMER also has to be set again, so I move
-it from r8153b_init() to r8153b_hw_phy_cfg().
+The problem with device_add_properties() is that it gives false
+impression that the device properties are somehow directly attached to
+the devices, which is not true. Now, that should not be a major issue,
+but it seems that it is. I think Lee Jones basically used that as an
+argument to refuse changes (and pretty minor changes) that would have
+allowed us to use software nodes with the MFD drivers.
 
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
----
- drivers/net/usb/r8152.c | 68 ++++++++++++++++++++++++-----------------
- 1 file changed, 40 insertions(+), 28 deletions(-)
+Nevertheless, I was not planning to provide a replacement for it
+originally. We do in any case have the real issue caused by that
+device_remove_properties() call in device_del() which has to be fixed.
+I started to fix that by moving device_add_properties() under
+drivers/base/swnode.c so I can implement it like I've implemented now
+that new function, but after that when I started to tackle the second
+issue by removing the subsystem wrappers like
+platform_device_add_device_properties() and replacing them with things
+like platform_device_add_software_node() in order to give the drivers
+a chance to actually use software nodes, I realised that there isn't
+much use for device_add_properties() after that.
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index e792c1c69f14..d0048ebc114a 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -1371,6 +1371,10 @@ void write_mii_word(struct net_device *netdev, int phy_id, int reg, int val)
- static int
- r8152_submit_rx(struct r8152 *tp, struct rx_agg *agg, gfp_t mem_flags);
- 
-+static int
-+rtl8152_set_speed(struct r8152 *tp, u8 autoneg, u32 speed, u8 duplex,
-+		  u32 advertising);
-+
- static int rtl8152_set_mac_address(struct net_device *netdev, void *p)
- {
- 	struct r8152 *tp = netdev_priv(netdev);
-@@ -3207,8 +3211,6 @@ static void r8153b_ups_en(struct r8152 *tp, bool enable)
- 		ocp_data |= BIT(0);
- 		ocp_write_byte(tp, MCU_TYPE_USB, 0xcfff, ocp_data);
- 	} else {
--		u16 data;
--
- 		ocp_data &= ~(UPS_EN | USP_PREWAKE);
- 		ocp_write_byte(tp, MCU_TYPE_USB, USB_POWER_CUT, ocp_data);
- 
-@@ -3216,31 +3218,20 @@ static void r8153b_ups_en(struct r8152 *tp, bool enable)
- 		ocp_data &= ~BIT(0);
- 		ocp_write_byte(tp, MCU_TYPE_USB, 0xcfff, ocp_data);
- 
--		ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_MISC_0);
--		ocp_data &= ~PCUT_STATUS;
--		ocp_write_word(tp, MCU_TYPE_USB, USB_MISC_0, ocp_data);
--
--		data = r8153_phy_status(tp, 0);
--
--		switch (data) {
--		case PHY_STAT_PWRDN:
--		case PHY_STAT_EXT_INIT:
--			r8153b_green_en(tp,
--					test_bit(GREEN_ETHERNET, &tp->flags));
-+		if (ocp_read_word(tp, MCU_TYPE_USB, USB_MISC_0) & PCUT_STATUS) {
-+			int i;
- 
--			data = r8152_mdio_read(tp, MII_BMCR);
--			data &= ~BMCR_PDOWN;
--			data |= BMCR_RESET;
--			r8152_mdio_write(tp, MII_BMCR, data);
-+			for (i = 0; i < 500; i++) {
-+				if (ocp_read_word(tp, MCU_TYPE_PLA, PLA_BOOT_CTRL) &
-+				    AUTOLOAD_DONE)
-+					break;
-+				msleep(20);
-+			}
- 
--			data = r8153_phy_status(tp, PHY_STAT_LAN_ON);
--			fallthrough;
-+			tp->rtl_ops.hw_phy_cfg(tp);
- 
--		default:
--			if (data != PHY_STAT_LAN_ON)
--				netif_warn(tp, link, tp->netdev,
--					   "PHY not ready");
--			break;
-+			rtl8152_set_speed(tp, tp->autoneg, tp->speed,
-+					  tp->duplex, tp->advertising);
- 		}
- 	}
- }
-@@ -4614,13 +4605,37 @@ static void r8153b_hw_phy_cfg(struct r8152 *tp)
- 	u32 ocp_data;
- 	u16 data;
- 
-+	ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_MISC_0);
-+	if (ocp_data & PCUT_STATUS) {
-+		ocp_data &= ~PCUT_STATUS;
-+		ocp_write_word(tp, MCU_TYPE_USB, USB_MISC_0, ocp_data);
-+	}
-+
- 	/* disable ALDPS before updating the PHY parameters */
- 	r8153_aldps_en(tp, false);
- 
- 	/* disable EEE before updating the PHY parameters */
- 	rtl_eee_enable(tp, false);
- 
--	rtl8152_apply_firmware(tp, false);
-+	/* U1/U2/L1 idle timer. 500 us */
-+	ocp_write_word(tp, MCU_TYPE_USB, USB_U1U2_TIMER, 500);
-+
-+	data = r8153_phy_status(tp, 0);
-+
-+	switch (data) {
-+	case PHY_STAT_PWRDN:
-+	case PHY_STAT_EXT_INIT:
-+		rtl8152_apply_firmware(tp, true);
-+
-+		data = r8152_mdio_read(tp, MII_BMCR);
-+		data &= ~BMCR_PDOWN;
-+		r8152_mdio_write(tp, MII_BMCR, data);
-+		break;
-+	case PHY_STAT_LAN_ON:
-+	default:
-+		rtl8152_apply_firmware(tp, false);
-+		break;
-+	}
- 
- 	r8153b_green_en(tp, test_bit(GREEN_ETHERNET, &tp->flags));
- 
-@@ -5546,9 +5561,6 @@ static void r8153b_init(struct r8152 *tp)
- 	/* MSC timer = 0xfff * 8ms = 32760 ms */
- 	ocp_write_word(tp, MCU_TYPE_USB, USB_MSC_TIMER, 0x0fff);
- 
--	/* U1/U2/L1 idle timer. 500 us */
--	ocp_write_word(tp, MCU_TYPE_USB, USB_U1U2_TIMER, 500);
--
- 	r8153b_power_cut_en(tp, false);
- 	r8153b_ups_en(tp, false);
- 	r8153_queue_wake(tp, false);
+Also, even though I'm not super happy about adding more API to this
+thing, this function - device_create_managed_software_node() - I do
+like. Not only is it implemented so that we don't have to rely on
+anything else in drivers core in order to achieve the lifetime link
+with the device, it is also much more descriptive. The function name
+alone does not leave any questions about what is going to happen if
+that function is called. You'll end up with a software node that just
+happens to be attached to the device.
+
+On top of those two things, by adding the new function it also gives
+me a nice stepping stone to do these changes in the normal stages:
+
+        1. Add feature/modification.
+        2. Convert users.
+        3. Cleanup.
+
+And finally, even though we may not have any users left for
+device_add_properties() after I have updated all the subsystems and
+drivers, this new function will still be useful. That is because, even
+though it can be used as a drop-in replacement for
+device_add_properties(), it does add that one small but important
+change. It allows the nodes created with it to be part of node
+hierarchy, and that alone is useful to me, and I'm planning on using
+that feature later.
+
+I'm sorry about the long explanation.
+
+Br,
+
 -- 
-2.26.2
-
+heikki
