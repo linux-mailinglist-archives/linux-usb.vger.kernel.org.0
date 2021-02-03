@@ -2,75 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A586E30E4AD
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Feb 2021 22:09:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFD230E7A1
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Feb 2021 00:41:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbhBCVJS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Feb 2021 16:09:18 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:35467 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231400AbhBCVJR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Feb 2021 16:09:17 -0500
-Received: by mail-ot1-f42.google.com with SMTP id 36so1288967otp.2;
-        Wed, 03 Feb 2021 13:09:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fvoHcHkCk93ZEer9cwtNPDbnksZwvyPINiCKRNMusH0=;
-        b=czH5QdVayf1H4463CCE3ubKr837udMyNswOADH6Uc3jKmtnczL0cnuiK1sg0e3kt3r
-         KKnJ3pR4wOkhDEnre3LqjFaKMi6VLV6b+nPxOAFAlBpsBr2MJ2+h1PX9oKOMIxOtdC3i
-         tn8AypxNp/fB1bd6ojRhW2FV6kiDi7woyvldkqNwQbB3BLiYB9WcCvtd9506YSP1vB9Z
-         adnxydeIfrhMDC6UOAd5aSeATa1op4LWzcwk+p5e7gBuVDBcV3zxupTJFg/1lT8FJb3j
-         XouKlaM/4v/zIFyg3fHsNT4ID+Xa3Hvii+1N8EsLh8T1MT9/L5EMrBs2RSjP4VaXQaMQ
-         I8Lg==
-X-Gm-Message-State: AOAM533Ki86uQySdUZNQKQ9BGsrUBq1C9LFNF/vqGS/qzE2dTjd2nzYu
-        rzVDmE6RYNKnCMlzXYeKcXtXat6eXw==
-X-Google-Smtp-Source: ABdhPJx5OhbJx5YGnt91NiV22Delq1k29Az9wFuKJQ2EtGzv+VDJvA6FK5ECLdI9pD0A8GVoacvMhQ==
-X-Received: by 2002:a9d:73c9:: with SMTP id m9mr1770312otk.75.1612386516510;
-        Wed, 03 Feb 2021 13:08:36 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id g14sm653139oon.23.2021.02.03.13.08.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Feb 2021 13:08:35 -0800 (PST)
-Received: (nullmailer pid 2449721 invoked by uid 1000);
-        Wed, 03 Feb 2021 21:08:34 -0000
-Date:   Wed, 3 Feb 2021 15:08:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: usb: generic-ohci: Add missing
- compatible strings
-Message-ID: <20210203210834.GD3706951@robh.at.kernel.org>
-References: <20210202175439.3904060-1-robh@kernel.org>
- <20210202175439.3904060-2-robh@kernel.org>
- <YBpn4zqGk6mV0aII@kroah.com>
+        id S233888AbhBCXkv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Feb 2021 18:40:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52060 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232990AbhBCXkr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 3 Feb 2021 18:40:47 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id B2EF264F55;
+        Wed,  3 Feb 2021 23:40:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612395606;
+        bh=q/SjSLADoNWAplzXvrqgwGRy2kr6DvzzrzKxS1eFTPg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ZDG4wi/9wSib03XsEWInZnlw0K/yBJUZZ0dMmTc6sL4SN6wBbjp6v6WoXljK+sk5y
+         RF4BmzMDI0iXbccZoiC4jESLGeK10pvt61SoMmlJ6wMniPkAWvlDxrkWCr4mGgjcRi
+         k73/76hOFr7exhrxTJ80MtGtKAc9j+ks17iOdAM0v6YniZxX1O9bl78Re83RJON3i9
+         RL3eHhFVTS4w5qKfnCEBgf7JyG/+6rt5l1BrlM4YVFqRQE2D/XotUafQ9Y76bWNAwM
+         TGjU6yZrNJIbcXIMgYS3wKKiG6dGVSjyoT/wMT7v53FGfNrTa6wotf5MjrwGLhA/es
+         CfmfZ2z+qLSuQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 9DC5F609E5;
+        Wed,  3 Feb 2021 23:40:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YBpn4zqGk6mV0aII@kroah.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] NET: usb: qmi_wwan: Adding support for Cinterion MV31
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161239560664.28685.10189151259787509626.git-patchwork-notify@kernel.org>
+Date:   Wed, 03 Feb 2021 23:40:06 +0000
+References: <20210202084523.4371-1-christoph.schemmel@gmail.com>
+In-Reply-To: <20210202084523.4371-1-christoph.schemmel@gmail.com>
+To:     Christoph Schemmel <christoph.schemmel@gmail.com>
+Cc:     bjorn@mork.no, avem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        hans-christoph.schemmel@thalesgroup.com
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 03, 2021 at 10:07:47AM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Feb 02, 2021 at 11:54:39AM -0600, Rob Herring wrote:
-> > The generic OHCI binding needs to document all the specific compatible
-> > strings so we can track undocumented compatible strings. Add all the
-> > compatible strings from in tree users.
-> > 
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: linux-usb@vger.kernel.org
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  .../devicetree/bindings/usb/generic-ohci.yaml | 34 +++++++++++++++++--
-> >  1 file changed, 32 insertions(+), 2 deletions(-)
+Hello:
+
+This patch was applied to netdev/net.git (refs/heads/master):
+
+On Tue,  2 Feb 2021 09:45:23 +0100 you wrote:
+> Adding support for Cinterion MV31 with PID 0x00B7.
 > 
-> Both look fine to me, do you want me to take this through my trees or
-> will you take them?
+> T:  Bus=04 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 11 Spd=5000 MxCh= 0
+> D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+> P:  Vendor=1e2d ProdID=00b7 Rev=04.14
+> S:  Manufacturer=Cinterion
+> S:  Product=Cinterion USB Mobile Broadband
+> S:  SerialNumber=b3246eed
+> C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=896mA
+> I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+> I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+> 
+> [...]
 
-You'd better take them. I don't think they conflict with any of the 
-other USB binding changes, but there have been a few this cycle IIRC.
+Here is the summary with links:
+  - NET: usb: qmi_wwan: Adding support for Cinterion MV31
+    https://git.kernel.org/netdev/net/c/a4dc7eee9106
 
-Rob
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
