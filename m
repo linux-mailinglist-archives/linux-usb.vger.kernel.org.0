@@ -2,75 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A025930EC7D
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Feb 2021 07:31:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF8B30EC83
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Feb 2021 07:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232375AbhBDG1f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Feb 2021 01:27:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42006 "EHLO mail.kernel.org"
+        id S232632AbhBDGbk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Feb 2021 01:31:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42434 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232327AbhBDG1c (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 4 Feb 2021 01:27:32 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A0EF364DFF;
-        Thu,  4 Feb 2021 06:26:50 +0000 (UTC)
+        id S232623AbhBDGbj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 4 Feb 2021 01:31:39 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E53CC64DFF;
+        Thu,  4 Feb 2021 06:30:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1612420011;
-        bh=DSoG/oJWMOu+0RpOPNhN7HpCx5+rWaZ/ag40G8wz3D4=;
+        s=korg; t=1612420258;
+        bh=KiqsDmwoOQBWMdKETEVcciZtR/5mNdfe3xrYoqgAiew=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vZvcw3PhGDFN5T/fIZQNMsrR36BbQ2XytPNc9vZqn7rwefnl2XKxG2LeWyC+bk7Uc
-         WeoGm0BSfiVZYG7UbpB2bRqnmQYhNHhbTAXClwvG+mSBCcMtH3ZNsn6B34wGgNtU63
-         Bo+ylE+r0z/u/HRG3yKzaJOj3joEoKGqpDfOEmGA=
-Date:   Thu, 4 Feb 2021 07:26:47 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kyle Tso <kyletso@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        pmalani@chromium.org, Benson Leung <bleung@chromium.org>,
-        Benson Leung <bleung@google.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: pd: Reland VDO definitions of PD2.0
-Message-ID: <YBuTp7zIKswiXfWn@kroah.com>
-References: <20210204005036.1555294-1-kyletso@google.com>
- <CAGZ6i=3fdLt=MWZunfRDPpjcxjDO9K+v=64bpadvbpaxCUpHYg@mail.gmail.com>
- <CAGZ6i=3fgda+8brU49qG1pxc=1icM7eeuHx+oH6-bA9oa4qK1Q@mail.gmail.com>
+        b=sXBLYF+4J1h7scQUbCEycVWnDj7dmRPygVWhY8ghGCWTCEBd7RLxBAEpozurtLn+k
+         gRz+moIQpZpbfIGkn6KD5zAtYR/FM6Y8DH7zdehq2QtaRkihnLO0I8bM7Eu+fJD1ai
+         Rot1O8jvr1w+iGzbHvOEPV8g6ZqpuW+UhZF2l4pc=
+Date:   Thu, 4 Feb 2021 07:30:55 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin King <colin.king@canonical.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH][next] usb: cdnsp: Fix spelling mistake "delagete" ->
+ "delegate"
+Message-ID: <YBuUnyFPvPNhkXEu@kroah.com>
+References: <20210203111239.18313-1-colin.king@canonical.com>
+ <20210203130440.GV2696@kadam>
+ <BYAPR07MB5381361C15E436BE54D25C93DDB39@BYAPR07MB5381.namprd07.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGZ6i=3fgda+8brU49qG1pxc=1icM7eeuHx+oH6-bA9oa4qK1Q@mail.gmail.com>
+In-Reply-To: <BYAPR07MB5381361C15E436BE54D25C93DDB39@BYAPR07MB5381.namprd07.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 04, 2021 at 02:17:56PM +0800, Kyle Tso wrote:
-> On Thu, Feb 4, 2021 at 8:55 AM Kyle Tso <kyletso@google.com> wrote:
-> >
-> > Hi, Benson and Prashant,
-> >
-> > On Thu, Feb 4, 2021 at 8:50 AM Kyle Tso <kyletso@google.com> wrote:
-> > >
-> > > Reland VDO definitions of PD Revision 2.0 as they are still used in
-> > > PD2.0 products.
-> > >
-> > > Fixes: 0e1d6f55a12e ("usb: pd: Update VDO definitions")
-> > > Signed-off-by: Kyle Tso <kyletso@google.com>
-> > > ---
-> > >  include/linux/usb/pd_vdo.h | 69 ++++++++++++++++++++++++++++++++++++--
-> > >  1 file changed, 66 insertions(+), 3 deletions(-)
-> > >
-> > Is there any chance that you have free time to verify this patch with
-> > CrOS configuration?
-> >
-> > thanks,
-> > Kyle
-> >
+On Thu, Feb 04, 2021 at 05:07:16AM +0000, Pawel Laszczak wrote:
+> Hi Dan,
 > 
-> Hi,
+> >> From: Colin Ian King <colin.king@canonical.com>
+> >>
+> >> There is a spelling mistake in a literal string. Fix it.
+> >>
+> >> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> >> ---
+> >>  drivers/usb/cdns3/cdnsp-ep0.c | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/usb/cdns3/cdnsp-ep0.c b/drivers/usb/cdns3/cdnsp-ep0.c
+> >> index e2b1bcb3f80e..e30931ebc870 100644
+> >> --- a/drivers/usb/cdns3/cdnsp-ep0.c
+> >> +++ b/drivers/usb/cdns3/cdnsp-ep0.c
+> >> @@ -45,7 +45,7 @@ static int cdnsp_ep0_delegate_req(struct cdnsp_device *pdev,
+> >>  {
+> >>  	int ret;
+> >>
+> >> -	trace_cdnsp_ep0_request("delagete");
+> >> +	trace_cdnsp_ep0_request("delegate");
+> >>
+> >
+> >This printk is useless and should just be deleted.  Use ftrace instead.
 > 
-> I tried to enable the config "CONFIG_CROS_EC_TYPEC=m" and it can make now.
+> Maybe this printk is redundant but it's more comfortable in use.
+> To debug I can simply enable cdns-dev events (echo cdnsp-dev:* > set_event)
+> and I will get the full  picture of what the driver is doing.
+> 
+> Otherwise, I must remember which function I need to add to set_ftrace_filter.
+> Of course, by default I can simply add all cdnsp* functions (echo cdnsp* > set_ftrace_filter) but it
+> increases the trace log and makes it a little more difficult to analyze.
+> 
+> So maybe in some cases we shouldn't complain for such printk ?
+> 
+> It's my private opinion and not necessarily correct :)
 
-Thanks for verifying, I'll go queue this up to keep the tree building
-properly.
+Please don't have duplicate tracepoints for something like "this
+function is now called", it's redundant.
+
+thanks,
 
 greg k-h
