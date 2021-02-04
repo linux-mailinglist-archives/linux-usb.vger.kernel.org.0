@@ -2,87 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF8B30EC83
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Feb 2021 07:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4814430ED4B
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Feb 2021 08:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232632AbhBDGbk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Feb 2021 01:31:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42434 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232623AbhBDGbj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 4 Feb 2021 01:31:39 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E53CC64DFF;
-        Thu,  4 Feb 2021 06:30:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1612420258;
-        bh=KiqsDmwoOQBWMdKETEVcciZtR/5mNdfe3xrYoqgAiew=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sXBLYF+4J1h7scQUbCEycVWnDj7dmRPygVWhY8ghGCWTCEBd7RLxBAEpozurtLn+k
-         gRz+moIQpZpbfIGkn6KD5zAtYR/FM6Y8DH7zdehq2QtaRkihnLO0I8bM7Eu+fJD1ai
-         Rot1O8jvr1w+iGzbHvOEPV8g6ZqpuW+UhZF2l4pc=
-Date:   Thu, 4 Feb 2021 07:30:55 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin King <colin.king@canonical.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH][next] usb: cdnsp: Fix spelling mistake "delagete" ->
- "delegate"
-Message-ID: <YBuUnyFPvPNhkXEu@kroah.com>
-References: <20210203111239.18313-1-colin.king@canonical.com>
- <20210203130440.GV2696@kadam>
- <BYAPR07MB5381361C15E436BE54D25C93DDB39@BYAPR07MB5381.namprd07.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR07MB5381361C15E436BE54D25C93DDB39@BYAPR07MB5381.namprd07.prod.outlook.com>
+        id S233569AbhBDH0b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Feb 2021 02:26:31 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:46816 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230146AbhBDH03 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 4 Feb 2021 02:26:29 -0500
+Received: from localhost.localdomain (unknown [124.16.141.242])
+        by APP-01 (Coremail) with SMTP id qwCowABnbpaVnxtgKuhBAQ--.48462S2;
+        Thu, 04 Feb 2021 15:17:41 +0800 (CST)
+From:   Xu Wang <vulab@iscas.ac.cn>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: host: ehci: remove casting dma_alloc_coherent
+Date:   Thu,  4 Feb 2021 07:17:38 +0000
+Message-Id: <20210204071738.84222-1-vulab@iscas.ac.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: qwCowABnbpaVnxtgKuhBAQ--.48462S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xw15CFWUWFW7uFy3Cr17KFg_yoWxuwc_Cr
+        W5JrsF93srKF1qkryDJFy3ZFZ7tws5XF48Z3WvgryfKa4qqr4rXF93Zr1kJ3W3Cws5JrZ0
+        k3s8XrWSgw4xujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb2AYjsxI4VWkCwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
+        8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8CwCF04k2
+        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
+        AIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j7pnQUUUUU=
+X-Originating-IP: [124.16.141.242]
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiCggCA1z4jWK-QAAAs3
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 04, 2021 at 05:07:16AM +0000, Pawel Laszczak wrote:
-> Hi Dan,
-> 
-> >> From: Colin Ian King <colin.king@canonical.com>
-> >>
-> >> There is a spelling mistake in a literal string. Fix it.
-> >>
-> >> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> >> ---
-> >>  drivers/usb/cdns3/cdnsp-ep0.c | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/usb/cdns3/cdnsp-ep0.c b/drivers/usb/cdns3/cdnsp-ep0.c
-> >> index e2b1bcb3f80e..e30931ebc870 100644
-> >> --- a/drivers/usb/cdns3/cdnsp-ep0.c
-> >> +++ b/drivers/usb/cdns3/cdnsp-ep0.c
-> >> @@ -45,7 +45,7 @@ static int cdnsp_ep0_delegate_req(struct cdnsp_device *pdev,
-> >>  {
-> >>  	int ret;
-> >>
-> >> -	trace_cdnsp_ep0_request("delagete");
-> >> +	trace_cdnsp_ep0_request("delegate");
-> >>
-> >
-> >This printk is useless and should just be deleted.  Use ftrace instead.
-> 
-> Maybe this printk is redundant but it's more comfortable in use.
-> To debug I can simply enable cdns-dev events (echo cdnsp-dev:* > set_event)
-> and I will get the full  picture of what the driver is doing.
-> 
-> Otherwise, I must remember which function I need to add to set_ftrace_filter.
-> Of course, by default I can simply add all cdnsp* functions (echo cdnsp* > set_ftrace_filter) but it
-> increases the trace log and makes it a little more difficult to analyze.
-> 
-> So maybe in some cases we shouldn't complain for such printk ?
-> 
-> It's my private opinion and not necessarily correct :)
+Remove casting the values returned by dma_alloc_coherent.
 
-Please don't have duplicate tracepoints for something like "this
-function is now called", it's redundant.
+Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
+---
+ drivers/usb/host/ehci-mem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-thanks,
+diff --git a/drivers/usb/host/ehci-mem.c b/drivers/usb/host/ehci-mem.c
+index 6361d81272bc..769329032257 100644
+--- a/drivers/usb/host/ehci-mem.c
++++ b/drivers/usb/host/ehci-mem.c
+@@ -185,7 +185,7 @@ static int ehci_mem_init (struct ehci_hcd *ehci, gfp_t flags)
+ 	}
+ 
+ 	/* Hardware periodic table */
+-	ehci->periodic = 
++	ehci->periodic =
+ 		dma_alloc_coherent(ehci_to_hcd(ehci)->self.sysdev,
+ 			ehci->periodic_size * sizeof(__le32),
+ 			&ehci->periodic_dma, flags);
+-- 
+2.17.1
 
-greg k-h
