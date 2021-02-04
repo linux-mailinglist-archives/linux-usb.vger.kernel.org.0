@@ -2,213 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2639830FA20
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Feb 2021 18:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7E230FCA9
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Feb 2021 20:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238522AbhBDRqg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Feb 2021 12:46:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40046 "EHLO
+        id S238312AbhBDTZu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Feb 2021 14:25:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237445AbhBDRqU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Feb 2021 12:46:20 -0500
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07334C0613D6
-        for <linux-usb@vger.kernel.org>; Thu,  4 Feb 2021 09:45:40 -0800 (PST)
-Received: by mail-qv1-xf2e.google.com with SMTP id es14so2121669qvb.3
-        for <linux-usb@vger.kernel.org>; Thu, 04 Feb 2021 09:45:39 -0800 (PST)
+        with ESMTP id S238270AbhBDTZr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Feb 2021 14:25:47 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31378C061786
+        for <linux-usb@vger.kernel.org>; Thu,  4 Feb 2021 11:25:07 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id i63so2728416pfg.7
+        for <linux-usb@vger.kernel.org>; Thu, 04 Feb 2021 11:25:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cqyjoq8OoX0qfgab+vhSM3IoqZR0KCLAhoUlCdPfvrw=;
-        b=F1KC94JxK9vzZOPa4+NiloSSAfW9MmQF9Atq/22yT0gC0Aq20A4lAQm6HJ4v0y99k5
-         bquTdo/F2n6UDSVmhkk6RIeQ4rGIjusFCtsIe8Soj7GImsnjFS5miZMibolVGuudUpL3
-         GBDhDBR/Y8SZo2mneEIoKizdDNwjHTQBnF1J22DyS+uOzRfozlDmsNSXUOk6VY9Yc9WD
-         A2WACyczee7BjlGoJdW5BKY7sp/pCtws6mEQ34m/1UM46Xm1Uu/VP4HrS2XEHcjLeQmC
-         o/7/pnREI6P11P+pMFinGs0IzKUw53F+6dgQz74zGIRsA8q4eC/I06RTwM8HWy8N9PwQ
-         31Wg==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=1GnUxKkhjneeSJIWMbBvJAykBt2ypw4KIhXpEtHr2Dc=;
+        b=Lk/Q2iuq3Jh5IppKh8zwBDaY4bEDz6ah3/EhNzMsSF3MksmjH8TlJXXoYrvn4tikO7
+         pmupq+B/Ud0M67vwtJzL+80Q2c3Lj3YJ0OEWbl8lu2UT7k+Rjr7z9M5FXGJS+4R/+of/
+         tgukUPOQeqi4C1vQuMOnc+NMezJjUkQxhuqx3bah1lAli4csfEJVVveFPJ2lQsoD0qWt
+         XWwtje0yl1zFGzhIpko1YOpkbDgl2Xa3CKkUY1udzNyYVU11MtxCz5phQ/2rr0mHX7DV
+         gunD4IbzXnmfL6ZoaXeB1nHseYh6TkYHmTaV95cFrTtS45PtzJtGhlUWrpsbewZ0eSkO
+         MAOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cqyjoq8OoX0qfgab+vhSM3IoqZR0KCLAhoUlCdPfvrw=;
-        b=fzCRIGPDtrWZVn6MI1P0mNPQ8scgjBvzzKrD2SfLYc3s1vzfAUjErTGDA6jcFq5ool
-         alXkxC6jcY7PzWy+JYTHTXXMG74bIc+RrCcD6kbZjRUIZ/WBK1AlYkag7kfcwE16miOq
-         Cuhg18IiRn48QQTmOWKSvtheEEJClJOD0alZH6iMAnp7ITBiqbTqWZuGB/FtNGHhCYIc
-         fjXtgIdwQcL1AktH7kzG57kALDnNOQCd1YaZsuVOlXPMi31Sa2VHTkovQpCCygmqWkaX
-         I8dr9GdHKDF6/JOZ+aKKB7wKOHvPqpFciZLTgFWpy9d/ySTxUhfjA+SckzvjCCaHoPX+
-         2H9A==
-X-Gm-Message-State: AOAM531of2MZ8oQ7asbZ2TODCELjSkBQZgUZQ70khumO/uzCCSp0lQeJ
-        TKM6PsV/FMbPEados0w9lkiyZhQJw4uIbDKl442RBg==
-X-Google-Smtp-Source: ABdhPJxHGXtirzsrASChTfPQmuAgXzRXrtJ8UDiuhToq3sxfEoNiWOfX5uvsFiKZ401axqx8TRSZ/YlaEk1L+k6oWcg=
-X-Received: by 2002:a05:6214:11ab:: with SMTP id u11mr550555qvv.17.1612460738789;
- Thu, 04 Feb 2021 09:45:38 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=1GnUxKkhjneeSJIWMbBvJAykBt2ypw4KIhXpEtHr2Dc=;
+        b=toDKIPibWoHoxB00h8t0WnhIBN3Dx+vbs///APRehOLe/dQUBj/o20ucbw1hF3gKnX
+         6JGH7aIDE9Yaa8AMEben7Y07+q/Le58uMRErlAEXXzRL1KAnKcUjGFlYGWGeGm/U3qBs
+         xmuROpnxg+7teBzSVRndDx4Vt0aTL26X0VN2bvSeLsMnG3L9CdxZ9AQ04fj6KWZkO6oZ
+         OD+oUARTcCuM4SZVSwnGyOyjGpZ67LaskWee5Rny1dqTd7uOiZ7Cun0W9sTsNEWSkqNB
+         ZNtMaez9LCIuFejm7BapkNwbF8sCs8Z7LKlXBazMu32d1KKzWadpBUIaqFr8geV1za2E
+         rDxg==
+X-Gm-Message-State: AOAM533jVxx1WBvOxxXNGg49rssICVyxagqq9PX7ohC7jxRHMxY/Bu+y
+        NQnRAFokZSF679Sd2JtcnKL7CQ==
+X-Google-Smtp-Source: ABdhPJwFCK+6EOqwTuOitk8H1KkcvY1XU7Yz3d19djjGaNOBZuDGqeEWyl5kUXfKTDYcPpuaaWeRaw==
+X-Received: by 2002:a63:5309:: with SMTP id h9mr495555pgb.19.1612466706158;
+        Thu, 04 Feb 2021 11:25:06 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:5cde:5545:a9de:114f])
+        by smtp.gmail.com with ESMTPSA id i25sm7225284pgb.33.2021.02.04.11.25.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Feb 2021 11:25:04 -0800 (PST)
+Date:   Thu, 4 Feb 2021 11:24:59 -0800
+From:   Benson Leung <bleung@google.com>
+To:     gregkh@linuxfoundation.org
+Cc:     enric.balletbo@collabora.com, bleung@chromium.org,
+        bleung@google.com, bleung@kernel.org, linux-usb@vger.kernel.org,
+        pmalani@chromium.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Fix for cros_ec_typec for USB for v5.12 merge window
+Message-ID: <YBxKC0IeWBJ/X/wJ@google.com>
 MIME-Version: 1.0
-References: <202102050042.DpTJdrHK-lkp@intel.com>
-In-Reply-To: <202102050042.DpTJdrHK-lkp@intel.com>
-From:   Kyle Tso <kyletso@google.com>
-Date:   Fri, 5 Feb 2021 01:45:22 +0800
-Message-ID: <CAGZ6i=0t1W0Qm99b6FO9+F-YQtreNnZuQxF2V_09PMm32uRppw@mail.gmail.com>
-Subject: Re: [usb:usb-testing 155/158] drivers/platform/chrome/cros_ec_typec.c:778:8:
- error: use of undeclared identifier 'CABLE_ATYPE'
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, clang-built-linux@googlegroups.com,
-        USB <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9eWf2OmYOPdG8cOw"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 5, 2021 at 12:24 AM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Kyle,
->
-> FYI, the error/warning still remains.
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> head:   d021e0694d77ee3cdc5d3fca2c8d53ae7575499a
-> commit: 0e1d6f55a12e47942ce207dfb93e23049b454c9e [155/158] usb: pd: Update VDO definitions
 
-Hi,
-This seems to be the old buggy patch.
+--9eWf2OmYOPdG8cOw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-commit: 0e1d6f55a12e47942ce207dfb93e23049b454c9e [155/158] usb: pd:
-Update VDO definitions
+Hi Greg,
 
-thanks,
-Kyle
+I found a bug in the typec driver you pulled earlier this week
+and Prashant developed a fix.
 
-> config: mips-randconfig-r011-20210204 (attached as .config)
-> compiler: clang version 13.0.0 (https://github.com/llvm/llvm-project 275c6af7d7f1ed63a03d05b4484413e447133269)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install mips cross compiling tool for clang build
->         # apt-get install binutils-mips-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=0e1d6f55a12e47942ce207dfb93e23049b454c9e
->         git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
->         git fetch --no-tags usb usb-testing
->         git checkout 0e1d6f55a12e47942ce207dfb93e23049b454c9e
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=mips
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
-> >> drivers/platform/chrome/cros_ec_typec.c:778:8: error: use of undeclared identifier 'CABLE_ATYPE'
->                    case CABLE_ATYPE:
->                         ^
-> >> drivers/platform/chrome/cros_ec_typec.c:781:8: error: use of undeclared identifier 'CABLE_BTYPE'
->                    case CABLE_BTYPE:
->                         ^
->    drivers/platform/chrome/cros_ec_typec.c:1000:3: warning: format specifies type 'unsigned char' but the argument has type 'unsigned int' [-Wformat]
->                    typec->pd_ctrl_ver);
->                    ^~~~~~~~~~~~~~~~~~
->    include/linux/dev_printk.h:123:39: note: expanded from macro 'dev_dbg'
->            dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
->                                         ~~~     ^~~~~~~~~~~
->    include/linux/dynamic_debug.h:162:19: note: expanded from macro 'dynamic_dev_dbg'
->                               dev, fmt, ##__VA_ARGS__)
->                                    ~~~    ^~~~~~~~~~~
->    include/linux/dynamic_debug.h:147:56: note: expanded from macro '_dynamic_func_call'
->            __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
->                                                                  ^~~~~~~~~~~
->    include/linux/dynamic_debug.h:129:15: note: expanded from macro '__dynamic_func_call'
->                    func(&id, ##__VA_ARGS__);               \
->                                ^~~~~~~~~~~
->    1 warning and 2 errors generated.
->
->
-> vim +/CABLE_ATYPE +778 drivers/platform/chrome/cros_ec_typec.c
->
-> 8fab2755191f86 Prashant Malani 2020-11-16  750
-> 3b3dd1f0dbfe92 Benson Leung    2021-01-28  751  static int cros_typec_handle_sop_prime_disc(struct cros_typec_data *typec, int port_num, u16 pd_revision)
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  752  {
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  753          struct cros_typec_port *port = typec->ports[port_num];
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  754          struct ec_response_typec_discovery *disc = port->disc_data;
-> f4edab68e10119 Prashant Malani 2020-11-16  755          struct typec_cable_desc c_desc = {};
-> f4edab68e10119 Prashant Malani 2020-11-16  756          struct typec_plug_desc p_desc;
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  757          struct ec_params_typec_discovery req = {
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  758                  .port = port_num,
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  759                  .partner_type = TYPEC_PARTNER_SOP_PRIME,
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  760          };
-> 72d6e32bd85bd1 Prashant Malani 2020-11-16  761          u32 cable_plug_type;
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  762          int ret = 0;
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  763
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  764          memset(disc, 0, EC_PROTO2_MAX_RESPONSE_SIZE);
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  765          ret = cros_typec_ec_command(typec, 0, EC_CMD_TYPEC_DISCOVERY, &req, sizeof(req),
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  766                                      disc, EC_PROTO2_MAX_RESPONSE_SIZE);
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  767          if (ret < 0) {
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  768                  dev_err(typec->dev, "Failed to get SOP' discovery data for port: %d\n", port_num);
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  769                  goto sop_prime_disc_exit;
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  770          }
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  771
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  772          /* Parse the PD identity data, even if only 0s were returned. */
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  773          cros_typec_parse_pd_identity(&port->c_identity, disc);
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  774
-> 72d6e32bd85bd1 Prashant Malani 2020-11-16  775          if (disc->identity_count != 0) {
-> 72d6e32bd85bd1 Prashant Malani 2020-11-16  776                  cable_plug_type = VDO_TYPEC_CABLE_TYPE(port->c_identity.vdo[0]);
-> 72d6e32bd85bd1 Prashant Malani 2020-11-16  777                  switch (cable_plug_type) {
-> 72d6e32bd85bd1 Prashant Malani 2020-11-16 @778                  case CABLE_ATYPE:
-> f4edab68e10119 Prashant Malani 2020-11-16  779                          c_desc.type = USB_PLUG_TYPE_A;
-> 72d6e32bd85bd1 Prashant Malani 2020-11-16  780                          break;
-> 72d6e32bd85bd1 Prashant Malani 2020-11-16 @781                  case CABLE_BTYPE:
-> f4edab68e10119 Prashant Malani 2020-11-16  782                          c_desc.type = USB_PLUG_TYPE_B;
-> 72d6e32bd85bd1 Prashant Malani 2020-11-16  783                          break;
-> 72d6e32bd85bd1 Prashant Malani 2020-11-16  784                  case CABLE_CTYPE:
-> f4edab68e10119 Prashant Malani 2020-11-16  785                          c_desc.type = USB_PLUG_TYPE_C;
-> 72d6e32bd85bd1 Prashant Malani 2020-11-16  786                          break;
-> 72d6e32bd85bd1 Prashant Malani 2020-11-16  787                  case CABLE_CAPTIVE:
-> f4edab68e10119 Prashant Malani 2020-11-16  788                          c_desc.type = USB_PLUG_CAPTIVE;
-> 72d6e32bd85bd1 Prashant Malani 2020-11-16  789                          break;
-> 72d6e32bd85bd1 Prashant Malani 2020-11-16  790                  default:
-> f4edab68e10119 Prashant Malani 2020-11-16  791                          c_desc.type = USB_PLUG_NONE;
-> 72d6e32bd85bd1 Prashant Malani 2020-11-16  792                  }
-> f4edab68e10119 Prashant Malani 2020-11-16  793                  c_desc.active = PD_IDH_PTYPE(port->c_identity.id_header) == IDH_PTYPE_ACABLE;
-> 72d6e32bd85bd1 Prashant Malani 2020-11-16  794          }
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  795
-> f4edab68e10119 Prashant Malani 2020-11-16  796          c_desc.identity = &port->c_identity;
-> 3b3dd1f0dbfe92 Benson Leung    2021-01-28  797          c_desc.pd_revision = pd_revision;
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  798
-> f4edab68e10119 Prashant Malani 2020-11-16  799          port->cable = typec_register_cable(port->port, &c_desc);
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  800          if (IS_ERR(port->cable)) {
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  801                  ret = PTR_ERR(port->cable);
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  802                  port->cable = NULL;
-> f4edab68e10119 Prashant Malani 2020-11-16  803                  goto sop_prime_disc_exit;
-> f4edab68e10119 Prashant Malani 2020-11-16  804          }
-> f4edab68e10119 Prashant Malani 2020-11-16  805
-> f4edab68e10119 Prashant Malani 2020-11-16  806          p_desc.index = TYPEC_PLUG_SOP_P;
-> f4edab68e10119 Prashant Malani 2020-11-16  807          port->plug = typec_register_plug(port->cable, &p_desc);
-> f4edab68e10119 Prashant Malani 2020-11-16  808          if (IS_ERR(port->plug)) {
-> f4edab68e10119 Prashant Malani 2020-11-16  809                  ret = PTR_ERR(port->plug);
-> f4edab68e10119 Prashant Malani 2020-11-16  810                  port->plug = NULL;
-> f4edab68e10119 Prashant Malani 2020-11-16  811                  goto sop_prime_disc_exit;
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  812          }
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  813
-> 1563090965421f Prashant Malani 2020-11-16  814          ret = cros_typec_register_altmodes(typec, port_num, false);
-> 1563090965421f Prashant Malani 2020-11-16  815          if (ret < 0) {
-> 1563090965421f Prashant Malani 2020-11-16  816                  dev_err(typec->dev, "Failed to register plug altmodes, port: %d\n", port_num);
-> 1563090965421f Prashant Malani 2020-11-16  817                  goto sop_prime_disc_exit;
-> 1563090965421f Prashant Malani 2020-11-16  818          }
-> 1563090965421f Prashant Malani 2020-11-16  819
-> f4edab68e10119 Prashant Malani 2020-11-16  820          return 0;
-> f4edab68e10119 Prashant Malani 2020-11-16  821
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  822  sop_prime_disc_exit:
-> f4edab68e10119 Prashant Malani 2020-11-16  823          cros_typec_remove_cable(typec, port_num);
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  824          return ret;
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  825  }
-> 8b46a212ad11f2 Prashant Malani 2020-11-16  826
->
-> :::::: The code at line 778 was first introduced by commit
-> :::::: 72d6e32bd85bd1e5cb5aa467f4eb5d0a69559953 platform/chrome: cros_ec_typec: Store cable plug type
->
-> :::::: TO: Prashant Malani <pmalani@chromium.org>
-> :::::: CC: Benson Leung <bleung@chromium.org>
->
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+The following changes since commit 64eaa0fa66ac55965f793a8b65730299854e55cd:
+
+  platform/chrome: cros_ec_typec: Fix call to typec_partner_set_pd_revision=
+ (2021-02-02 19:42:52 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git t=
+ags/tag-ib-usb-typec-chrome-platform-cros-ec-typec-clear-pd-discovery-event=
+s-for-5.12
+
+for you to fetch changes up to c8ec21c6d25c2a8895614ea38575dadb8570c2f9:
+
+  platform/chrome: cros_ec_typec: Clear Type C disc events (2021-02-04 10:2=
+9:30 -0800)
+
+----------------------------------------------------------------
+clear-pd-discovery-events
+
+This pair of patches fixes an issue where cros_ec_typec creates stale
+cable nodes on detach because of uncleared pd discovery status events.
+
+----------------------------------------------------------------
+Prashant Malani (2):
+      platform/chrome: cros_ec: Import Type C control command
+      platform/chrome: cros_ec_typec: Clear Type C disc events
+
+ drivers/platform/chrome/cros_ec_typec.c        | 29 ++++++++++++++++++++++=
++---
+ include/linux/platform_data/cros_ec_commands.h | 26 +++++++++++++++++++++++
+ 2 files changed, 52 insertions(+), 3 deletions(-)
+
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
+
+--9eWf2OmYOPdG8cOw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYBxKCwAKCRBzbaomhzOw
+whVGAQCdvLlEyv/Y8YyQlK/Sgp6pLt+0BOWs8+hLyctYyAnZaQD+NgGhIF2+yWaf
+eUvEXs6S0R34UVl1CFgJ1ToVoI9J2go=
+=vQlY
+-----END PGP SIGNATURE-----
+
+--9eWf2OmYOPdG8cOw--
