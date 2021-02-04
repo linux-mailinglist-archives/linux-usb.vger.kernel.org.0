@@ -2,67 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4814430ED4B
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Feb 2021 08:27:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A76830ED7E
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Feb 2021 08:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233569AbhBDH0b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Feb 2021 02:26:31 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:46816 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230146AbhBDH03 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 4 Feb 2021 02:26:29 -0500
-Received: from localhost.localdomain (unknown [124.16.141.242])
-        by APP-01 (Coremail) with SMTP id qwCowABnbpaVnxtgKuhBAQ--.48462S2;
-        Thu, 04 Feb 2021 15:17:41 +0800 (CST)
-From:   Xu Wang <vulab@iscas.ac.cn>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: host: ehci: remove casting dma_alloc_coherent
-Date:   Thu,  4 Feb 2021 07:17:38 +0000
-Message-Id: <20210204071738.84222-1-vulab@iscas.ac.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: qwCowABnbpaVnxtgKuhBAQ--.48462S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Xw15CFWUWFW7uFy3Cr17KFg_yoWxuwc_Cr
-        W5JrsF93srKF1qkryDJFy3ZFZ7tws5XF48Z3WvgryfKa4qqr4rXF93Zr1kJ3W3Cws5JrZ0
-        k3s8XrWSgw4xujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb2AYjsxI4VWkCwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-        8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8CwCF04k2
-        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
-        AIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j7pnQUUUUU=
-X-Originating-IP: [124.16.141.242]
-X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiCggCA1z4jWK-QAAAs3
+        id S234624AbhBDHiC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Feb 2021 02:38:02 -0500
+Received: from mga12.intel.com ([192.55.52.136]:61646 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233516AbhBDHiA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 4 Feb 2021 02:38:00 -0500
+IronPort-SDR: 3YpOSGzAIzevr1DeNg1PwWKElauNL1cmdVf8A3L0TkopclIYNaiJ2p7Y4T8Qltz49IAMDub/Nz
+ NwABROudmJrA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9884"; a="160354500"
+X-IronPort-AV: E=Sophos;i="5.79,400,1602572400"; 
+   d="scan'208";a="160354500"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 23:36:14 -0800
+IronPort-SDR: 1HE0D11MqGxuB/vnTvyxjHd+ignk8EZOayxRZLyOtVDFkMzlY7jUQPJMZyeM6vwRMKAUieXTF5
+ trf1zBjVQfsQ==
+X-IronPort-AV: E=Sophos;i="5.79,400,1602572400"; 
+   d="scan'208";a="357080066"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 23:36:08 -0800
+Received: by lahna (sSMTP sendmail emulation); Thu, 04 Feb 2021 09:36:07 +0200
+Date:   Thu, 4 Feb 2021 09:36:07 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Christian Kellner <christian@kellner.me>,
+        Len Brown <lenb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH v2 3/5] ACPI: Execute platform _OSC also with query bit
+ clear
+Message-ID: <20210204073607.GM2542@lahna.fi.intel.com>
+References: <20210129083241.72497-1-mika.westerberg@linux.intel.com>
+ <20210129083241.72497-4-mika.westerberg@linux.intel.com>
+ <20210203081415.GR2542@lahna.fi.intel.com>
+ <CAJZ5v0jG3abpNjVorHLx5nNt964QNA+v=uBx-M4r_May0ZfEgA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0jG3abpNjVorHLx5nNt964QNA+v=uBx-M4r_May0ZfEgA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Remove casting the values returned by dma_alloc_coherent.
+On Wed, Feb 03, 2021 at 02:56:25PM +0100, Rafael J. Wysocki wrote:
+> On Wed, Feb 3, 2021 at 9:16 AM Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+> >
+> > Hi Rafael,
+> >
+> > I wonder if you are OK with this patch?
+> 
+> It looks good to me now, please feel free to add my ACK to it.
 
-Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
----
- drivers/usb/host/ehci-mem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/ehci-mem.c b/drivers/usb/host/ehci-mem.c
-index 6361d81272bc..769329032257 100644
---- a/drivers/usb/host/ehci-mem.c
-+++ b/drivers/usb/host/ehci-mem.c
-@@ -185,7 +185,7 @@ static int ehci_mem_init (struct ehci_hcd *ehci, gfp_t flags)
- 	}
- 
- 	/* Hardware periodic table */
--	ehci->periodic = 
-+	ehci->periodic =
- 		dma_alloc_coherent(ehci_to_hcd(ehci)->self.sysdev,
- 			ehci->periodic_size * sizeof(__le32),
- 			&ehci->periodic_dma, flags);
--- 
-2.17.1
-
+Thanks!
