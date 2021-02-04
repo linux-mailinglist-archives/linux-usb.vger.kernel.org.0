@@ -2,207 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A94530E901
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Feb 2021 01:56:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D736330E961
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Feb 2021 02:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233918AbhBDA4k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Feb 2021 19:56:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233727AbhBDA4j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Feb 2021 19:56:39 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1585C061573
-        for <linux-usb@vger.kernel.org>; Wed,  3 Feb 2021 16:55:58 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id u16so974947qvo.9
-        for <linux-usb@vger.kernel.org>; Wed, 03 Feb 2021 16:55:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yg2+jEqmcaTcVPRTx8oUm7PKwpuDkoxaGpldMu+rehI=;
-        b=XVhcsBiS6iHdmtG44VFaqppcYvU5Tnte0HOwaFFVd0KocCq4Itoj2oDigFMVYcxbH+
-         8BMtBNsADEW+5sc7A4KH+2jyQhQPzLrpFgL6sOt9d45i1QbLLCijjZ/AhovK7S74AOpa
-         NkfntYjx2hFvAPZZ7Riel53fq3daZRlFnod7EcScZDXlC+D2TxzgWPoaI4GM53PchY7j
-         A673DA2RK7r0MqtVy+9k26EMluE2T0cflr+KfoZUO1LGzgOVcfWMhKQRKWS2J1rQnvuO
-         O/sNndhraoYDz+KaKSYHTNFv52Sq4mg0CXXnRJI8wfJYD+kidZMMqe1UnqKy4uYvAIua
-         Bmag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yg2+jEqmcaTcVPRTx8oUm7PKwpuDkoxaGpldMu+rehI=;
-        b=b4asxQqZXMywmgacDG0H2viU1UG0RL+b5nN4NF7kVH4ZjqtqSoCk0A8iUxrHQP/zh9
-         bCiAxmqH29BddILRY145yh5daCl9smKWqNtQt/uAibMwh/M9qkDs/DZydKmMT1fon6dI
-         ZFtbv4zK/4aWmK7nu6bVpBrTWkxCPrX5zQYQjTdZGi1tn5yXVZSLg9RBNzpid2yhB3ip
-         9707hN5osxcPFuJhSrQ3k346scfDonitmX+gC79b4tPpxh+gp+ERHJ1kIL7zHs4rtKjG
-         H2rU2alqw4T4BZjveay4cKeY9Tr2mIuMnwRDGNg6hpszexQ48EI91LKjG5PozLO79OyE
-         En5g==
-X-Gm-Message-State: AOAM530BkoC32HoG/cXWcloZIiC4N6jVMGl7EmW0GVRJzjVbvi26NzhB
-        5ZbQalbu2ozAWEu+xULL2gOFtosVwmE8wnbBAF15+g==
-X-Google-Smtp-Source: ABdhPJxo1ON5CTtwmHqfOQb/3oNlTJEW9aen4Vt5TKfQiS/67rB7Y1lFa6iDHmiXlLMarnqGXMEIWgItEgpMJE0MHBs=
-X-Received: by 2002:ad4:5887:: with SMTP id dz7mr5560776qvb.44.1612400157748;
- Wed, 03 Feb 2021 16:55:57 -0800 (PST)
+        id S234441AbhBDBTe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Feb 2021 20:19:34 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:12390 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234429AbhBDBTa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Feb 2021 20:19:30 -0500
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DWLJ36j1Pz7gTD;
+        Thu,  4 Feb 2021 09:17:23 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.498.0; Thu, 4 Feb 2021
+ 09:18:32 +0800
+From:   Ye Bin <yebin10@huawei.com>
+To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Ye Bin <yebin10@huawei.com>, Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH] =?UTF-8?q?usb:=20typec:=20remove=20unused=20variable=20?= =?UTF-8?q?=E2=80=98ret=E2=80=99=20in=20typec=5Fpartner=5Fset=5Fpd=5Frevis?= =?UTF-8?q?ion?=
+Date:   Thu, 4 Feb 2021 09:24:30 +0800
+Message-ID: <20210204012430.3686636-1-yebin10@huawei.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-References: <20210204005036.1555294-1-kyletso@google.com>
-In-Reply-To: <20210204005036.1555294-1-kyletso@google.com>
-From:   Kyle Tso <kyletso@google.com>
-Date:   Thu, 4 Feb 2021 08:55:41 +0800
-Message-ID: <CAGZ6i=3fdLt=MWZunfRDPpjcxjDO9K+v=64bpadvbpaxCUpHYg@mail.gmail.com>
-Subject: Re: [PATCH] usb: pd: Reland VDO definitions of PD2.0
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>, pmalani@chromium.org,
-        bleung@chromium.org
-Cc:     Benson Leung <bleung@google.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.127.227]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi, Benson and Prashant,
+Fix follow warning:
+drivers/usb/typec/class.c:763:6: warning: unused variable ‘ret’ [-Wunused-variable]
+  int ret;
+      ^~~
 
-On Thu, Feb 4, 2021 at 8:50 AM Kyle Tso <kyletso@google.com> wrote:
->
-> Reland VDO definitions of PD Revision 2.0 as they are still used in
-> PD2.0 products.
->
-> Fixes: 0e1d6f55a12e ("usb: pd: Update VDO definitions")
-> Signed-off-by: Kyle Tso <kyletso@google.com>
-> ---
->  include/linux/usb/pd_vdo.h | 69 ++++++++++++++++++++++++++++++++++++--
->  1 file changed, 66 insertions(+), 3 deletions(-)
->
-Is there any chance that you have free time to verify this patch with
-CrOS configuration?
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ drivers/usb/typec/class.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-thanks,
-Kyle
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index b6ceab3dc16b..1c2d50e016e2 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -760,8 +760,6 @@ EXPORT_SYMBOL_GPL(typec_partner_set_identity);
+  */
+ int typec_partner_set_pd_revision(struct typec_partner *partner, u16 pd_revision)
+ {
+-	int ret;
+-
+ 	if (partner->pd_revision == pd_revision)
+ 		return 0;
+ 
+-- 
+2.25.4
 
-> diff --git a/include/linux/usb/pd_vdo.h b/include/linux/usb/pd_vdo.h
-> index e9b6822c54c2..5de7f550f93e 100644
-> --- a/include/linux/usb/pd_vdo.h
-> +++ b/include/linux/usb/pd_vdo.h
-> @@ -110,6 +110,10 @@
->   * <20:16>  :: Reserved, Shall be set to zero
->   * <15:0>   :: USB-IF assigned VID for this cable vendor
->   */
-> +
-> +/* PD Rev2.0 definition */
-> +#define IDH_PTYPE_UNDEF                0
-> +
->  /* SOP Product Type (UFP) */
->  #define IDH_PTYPE_NOT_UFP      0
->  #define IDH_PTYPE_HUB          1
-> @@ -248,7 +252,25 @@
->          | ((pnum) & 0x1f))
->
->  /*
-> - * Passive Cable VDO
-> + * Cable VDO (for both Passive and Active Cable VDO in PD Rev2.0)
-> + * ---------
-> + * <31:28> :: Cable HW version
-> + * <27:24> :: Cable FW version
-> + * <23:20> :: Reserved, Shall be set to zero
-> + * <19:18> :: type-C to Type-A/B/C/Captive (00b == A, 01 == B, 10 == C, 11 == Captive)
-> + * <17>    :: Reserved, Shall be set to zero
-> + * <16:13> :: cable latency (0001 == <10ns(~1m length))
-> + * <12:11> :: cable termination type (11b == both ends active VCONN req)
-> + * <10>    :: SSTX1 Directionality support (0b == fixed, 1b == cfgable)
-> + * <9>     :: SSTX2 Directionality support
-> + * <8>     :: SSRX1 Directionality support
-> + * <7>     :: SSRX2 Directionality support
-> + * <6:5>   :: Vbus current handling capability (01b == 3A, 10b == 5A)
-> + * <4>     :: Vbus through cable (0b == no, 1b == yes)
-> + * <3>     :: SOP" controller present? (0b == no, 1b == yes)
-> + * <2:0>   :: USB SS Signaling support
-> + *
-> + * Passive Cable VDO (PD Rev3.0+)
->   * ---------
->   * <31:28> :: Cable HW version
->   * <27:24> :: Cable FW version
-> @@ -264,7 +286,7 @@
->   * <4:3>   :: Reserved, Shall be set to zero
->   * <2:0>   :: USB highest speed
->   *
-> - * Active Cable VDO 1
-> + * Active Cable VDO 1 (PD Rev3.0+)
->   * ---------
->   * <31:28> :: Cable HW version
->   * <27:24> :: Cable FW version
-> @@ -286,7 +308,9 @@
->  #define CABLE_VDO_VER1_0       0
->  #define CABLE_VDO_VER1_3       3
->
-> -/* Connector Type */
-> +/* Connector Type (_ATYPE and _BTYPE are for PD Rev2.0 only) */
-> +#define CABLE_ATYPE            0
-> +#define CABLE_BTYPE            1
->  #define CABLE_CTYPE            2
->  #define CABLE_CAPTIVE          3
->
-> @@ -323,12 +347,22 @@
->  #define CABLE_CURR_3A          1
->  #define CABLE_CURR_5A          2
->
-> +/* USB SuperSpeed Signaling Support (PD Rev2.0) */
-> +#define CABLE_USBSS_U2_ONLY    0
-> +#define CABLE_USBSS_U31_GEN1   1
-> +#define CABLE_USBSS_U31_GEN2   2
-> +
->  /* USB Highest Speed */
->  #define CABLE_USB2_ONLY                0
->  #define CABLE_USB32_GEN1       1
->  #define CABLE_USB32_4_GEN2     2
->  #define CABLE_USB4_GEN3                3
->
-> +#define VDO_CABLE(hw, fw, cbl, lat, term, tx1d, tx2d, rx1d, rx2d, cur, vps, sopp, usbss) \
-> +       (((hw) & 0x7) << 28 | ((fw) & 0x7) << 24 | ((cbl) & 0x3) << 18          \
-> +        | ((lat) & 0x7) << 13 | ((term) & 0x3) << 11 | (tx1d) << 10            \
-> +        | (tx2d) << 9 | (rx1d) << 8 | (rx2d) << 7 | ((cur) & 0x3) << 5         \
-> +        | (vps) << 4 | (sopp) << 3 | ((usbss) & 0x7))
->  #define VDO_PCABLE(hw, fw, ver, conn, lat, term, vbm, cur, spd)                        \
->         (((hw) & 0xf) << 28 | ((fw) & 0xf) << 24 | ((ver) & 0x7) << 21          \
->          | ((conn) & 0x3) << 18 | ((lat) & 0xf) << 13 | ((term) & 0x3) << 11    \
-> @@ -395,6 +429,35 @@
->          | ((hops) & 0x3) << 6 | (u2) << 5 | (u32) << 4 | (lane) << 3           \
->          | (iso) << 2 | (gen))
->
-> +/*
-> + * AMA VDO (PD Rev2.0)
-> + * ---------
-> + * <31:28> :: Cable HW version
-> + * <27:24> :: Cable FW version
-> + * <23:12> :: Reserved, Shall be set to zero
-> + * <11>    :: SSTX1 Directionality support (0b == fixed, 1b == cfgable)
-> + * <10>    :: SSTX2 Directionality support
-> + * <9>     :: SSRX1 Directionality support
-> + * <8>     :: SSRX2 Directionality support
-> + * <7:5>   :: Vconn power
-> + * <4>     :: Vconn power required
-> + * <3>     :: Vbus power required
-> + * <2:0>   :: USB SS Signaling support
-> + */
-> +#define VDO_AMA(hw, fw, tx1d, tx2d, rx1d, rx2d, vcpwr, vcr, vbr, usbss) \
-> +       (((hw) & 0x7) << 28 | ((fw) & 0x7) << 24                        \
-> +        | (tx1d) << 11 | (tx2d) << 10 | (rx1d) << 9 | (rx2d) << 8      \
-> +        | ((vcpwr) & 0x7) << 5 | (vcr) << 4 | (vbr) << 3               \
-> +        | ((usbss) & 0x7))
-> +
-> +#define PD_VDO_AMA_VCONN_REQ(vdo)      (((vdo) >> 4) & 1)
-> +#define PD_VDO_AMA_VBUS_REQ(vdo)       (((vdo) >> 3) & 1)
-> +
-> +#define AMA_USBSS_U2_ONLY      0
-> +#define AMA_USBSS_U31_GEN1     1
-> +#define AMA_USBSS_U31_GEN2     2
-> +#define AMA_USBSS_BBONLY       3
-> +
->  /*
->   * VPD VDO
->   * ---------
-> --
-> 2.30.0.365.g02bc693789-goog
->
