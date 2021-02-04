@@ -2,224 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7AE830E879
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Feb 2021 01:28:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E20E930E8F1
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Feb 2021 01:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233517AbhBDA2k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Feb 2021 19:28:40 -0500
-Received: from mga04.intel.com ([192.55.52.120]:44145 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233392AbhBDA2h (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Feb 2021 19:28:37 -0500
-IronPort-SDR: FE92R87RK84JEHDeffhMnIQ3x0d/nnZWaTws6AvQ1r746f/0SJtrK8O1xo2EvHJycxTgMw3jwZ
- hWGT1tlSYGHg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9884"; a="178582056"
-X-IronPort-AV: E=Sophos;i="5.79,399,1602572400"; 
-   d="scan'208";a="178582056"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 16:27:45 -0800
-IronPort-SDR: POigOynnKPlW2+2erf3/CnjfYL0ccVuxC86nq0GDk9lAf3I3xeAtyX/9NaO5YKnJ8RofL+Uk6+
- /JQg/8u418dw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,399,1602572400"; 
-   d="scan'208";a="583002873"
-Received: from lkp-server02.sh.intel.com (HELO 8b832f01bb9c) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 03 Feb 2021 16:27:44 -0800
-Received: from kbuild by 8b832f01bb9c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1l7SUq-0000ZG-8l; Thu, 04 Feb 2021 00:27:44 +0000
-Date:   Thu, 04 Feb 2021 08:27:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- d4a610635400ccc382792f6be69427078541c678
-Message-ID: <601b3f78.YOUhNkYt2nz5wNVt%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S234312AbhBDAv3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Feb 2021 19:51:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234304AbhBDAvX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Feb 2021 19:51:23 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411A6C061573
+        for <linux-usb@vger.kernel.org>; Wed,  3 Feb 2021 16:50:43 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id l10so1681062ybt.6
+        for <linux-usb@vger.kernel.org>; Wed, 03 Feb 2021 16:50:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=rxB42Ll+u8IgbwodhtThD2OaoS5PPazXcX+y5B+EoiQ=;
+        b=ifzmRU0f1Nd+vOKukp9VSrwPFqL+wGIoJ/H4nOfMeM8ZlLJSbWPAlKUgIEzqv9zboD
+         WAuFxGt19RGWZgUrwT5DlT+fMoR5vTqxRnElPXWs3DkM9l6fyIbwQneTxPUrxTZ2q4gn
+         fwD/mj2Rv3nTr0QKSmS44fplqcPgQF6QueHT8wLoN1778aGnDv/dkmRW2erlPZ9pm/aW
+         h2pTgXuYkO/FfC6gN6ihFnGEVGCz4s7wWzp3M/4rY9Vl8wqsxgeMlkz/wyyIh/UzYpB4
+         fzMgdHC0sK4pj/Ajp2dGVKKgQ8wJ5o9oSuwjgyNuS487o/xQKk6gizcbd9rXfkOQggHU
+         vvrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=rxB42Ll+u8IgbwodhtThD2OaoS5PPazXcX+y5B+EoiQ=;
+        b=H26m2yXSZT2r3kbdWSp4uCW5J0wqk377n1dm1XiJEQPBhIshp5afAulOA3ovJLKw5O
+         UjE5s0IsUViLg7b5t/9MCubU13mPOejvNVNCL0oa/3KZvUeP2WyX8AQ9N6A0VLJT/iTD
+         xbQk2DxUHEl9rijfR1zy+UE/ppou0NHY2AmeUKYg5tbDi/nnJy5Umzq7QdnthwtUvjEv
+         xpA5JzUW9gSUV3zZlEv24SCQYrJJvM27vZoY1Io2eo1Zv/cj86xLxpiFMY+GDuStQ2LH
+         KyQ/IfM2rIcS+FWeVyIKT/0e00CnMADMc/VGDbqtmYTyzJZYkBC3Jj4utnk+EtFkm4WX
+         kBYg==
+X-Gm-Message-State: AOAM530mxOXrD89mKFSTRskl7ZqFtV68V8K89dxCGtsk1PdqJRadVvCl
+        qaJvO5lypkLTHSWHfpQIedWrvmOJA6bo
+X-Google-Smtp-Source: ABdhPJxwXuGI/oGuMILLqqUcY2JXWJumpxnif48T/UVzHP5N3STT/9kP1/FzcpsxKewLlRXkPJc/6h9RIbai
+Sender: "kyletso via sendgmr" <kyletso@kyletso.ntc.corp.google.com>
+X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:dd94:c753:a81d:c855])
+ (user=kyletso job=sendgmr) by 2002:a25:bcb:: with SMTP id 194mr8134302ybl.241.1612399842519;
+ Wed, 03 Feb 2021 16:50:42 -0800 (PST)
+Date:   Thu,  4 Feb 2021 08:50:36 +0800
+Message-Id: <20210204005036.1555294-1-kyletso@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.365.g02bc693789-goog
+Subject: [PATCH] usb: pd: Reland VDO definitions of PD2.0
+From:   Kyle Tso <kyletso@google.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, pmalani@chromium.org,
+        bleung@chromium.org
+Cc:     bleung@google.com, badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: d4a610635400ccc382792f6be69427078541c678  xhci: fix bounce buffer usage for non-sg list case
+Reland VDO definitions of PD Revision 2.0 as they are still used in
+PD2.0 products.
 
-elapsed time: 725m
-
-configs tested: 162
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-c6x                        evmc6457_defconfig
-powerpc                      mgcoge_defconfig
-mips                        qi_lb60_defconfig
-mips                        nlm_xlr_defconfig
-powerpc                     kilauea_defconfig
-sh                          rsk7203_defconfig
-powerpc                    socrates_defconfig
-arm                         mv78xx0_defconfig
-powerpc                     stx_gp3_defconfig
-powerpc                        icon_defconfig
-sh                          polaris_defconfig
-mips                           ip27_defconfig
-ia64                          tiger_defconfig
-mips                       lemote2f_defconfig
-arm                        oxnas_v6_defconfig
-mips                        nlm_xlp_defconfig
-openrisc                            defconfig
-mips                      bmips_stb_defconfig
-arc                           tb10x_defconfig
-sh                          landisk_defconfig
-m68k                            q40_defconfig
-arc                    vdk_hs38_smp_defconfig
-c6x                        evmc6474_defconfig
-openrisc                  or1klitex_defconfig
-powerpc                    klondike_defconfig
-arm                          pcm027_defconfig
-powerpc64                        alldefconfig
-powerpc                    adder875_defconfig
-powerpc                 mpc8313_rdb_defconfig
-mips                           mtx1_defconfig
-riscv                            allyesconfig
-powerpc                 mpc85xx_cds_defconfig
-m68k                       m5208evb_defconfig
-powerpc                        warp_defconfig
-xtensa                  audio_kc705_defconfig
-sh                     magicpanelr2_defconfig
-arm                       omap2plus_defconfig
-powerpc                       holly_defconfig
-mips                       rbtx49xx_defconfig
-mips                           ip32_defconfig
-mips                      maltasmvp_defconfig
-nds32                             allnoconfig
-sh                          sdk7780_defconfig
-sh                         microdev_defconfig
-arm                          pxa168_defconfig
-arc                          axs103_defconfig
-sh                             espt_defconfig
-arm                           stm32_defconfig
-powerpc                     tqm8555_defconfig
-c6x                        evmc6472_defconfig
-c6x                              alldefconfig
-microblaze                      mmu_defconfig
-mips                           ip28_defconfig
-powerpc                     redwood_defconfig
-arm                        shmobile_defconfig
-ia64                            zx1_defconfig
-mips                            e55_defconfig
-arm                       netwinder_defconfig
-xtensa                          iss_defconfig
-arm                         orion5x_defconfig
-arm                          collie_defconfig
-arm                         axm55xx_defconfig
-nios2                         3c120_defconfig
-mips                      fuloong2e_defconfig
-arm                             mxs_defconfig
-arm                      footbridge_defconfig
-powerpc                          allyesconfig
-powerpc                 mpc832x_rdb_defconfig
-powerpc                        fsp2_defconfig
-arm                        keystone_defconfig
-powerpc                      ppc40x_defconfig
-sh                            migor_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20210202
-i386                 randconfig-a005-20210202
-i386                 randconfig-a003-20210202
-i386                 randconfig-a006-20210202
-i386                 randconfig-a002-20210202
-i386                 randconfig-a001-20210203
-i386                 randconfig-a005-20210203
-i386                 randconfig-a003-20210203
-i386                 randconfig-a006-20210203
-i386                 randconfig-a002-20210203
-i386                 randconfig-a004-20210203
-x86_64               randconfig-a013-20210202
-x86_64               randconfig-a014-20210202
-x86_64               randconfig-a015-20210202
-x86_64               randconfig-a016-20210202
-x86_64               randconfig-a011-20210202
-x86_64               randconfig-a012-20210202
-i386                 randconfig-a013-20210202
-i386                 randconfig-a016-20210202
-i386                 randconfig-a014-20210202
-i386                 randconfig-a012-20210202
-i386                 randconfig-a015-20210202
-i386                 randconfig-a011-20210202
-i386                 randconfig-a013-20210203
-i386                 randconfig-a016-20210203
-i386                 randconfig-a014-20210203
-i386                 randconfig-a012-20210203
-i386                 randconfig-a015-20210203
-i386                 randconfig-a011-20210203
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a006-20210202
-x86_64               randconfig-a001-20210202
-x86_64               randconfig-a005-20210202
-x86_64               randconfig-a002-20210202
-x86_64               randconfig-a004-20210202
-x86_64               randconfig-a003-20210202
-x86_64               randconfig-a013-20210203
-x86_64               randconfig-a014-20210203
-x86_64               randconfig-a015-20210203
-x86_64               randconfig-a016-20210203
-x86_64               randconfig-a011-20210203
-x86_64               randconfig-a012-20210203
-
+Fixes: 0e1d6f55a12e ("usb: pd: Update VDO definitions")
+Signed-off-by: Kyle Tso <kyletso@google.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ include/linux/usb/pd_vdo.h | 69 ++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 66 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/usb/pd_vdo.h b/include/linux/usb/pd_vdo.h
+index e9b6822c54c2..5de7f550f93e 100644
+--- a/include/linux/usb/pd_vdo.h
++++ b/include/linux/usb/pd_vdo.h
+@@ -110,6 +110,10 @@
+  * <20:16>  :: Reserved, Shall be set to zero
+  * <15:0>   :: USB-IF assigned VID for this cable vendor
+  */
++
++/* PD Rev2.0 definition */
++#define IDH_PTYPE_UNDEF		0
++
+ /* SOP Product Type (UFP) */
+ #define IDH_PTYPE_NOT_UFP	0
+ #define IDH_PTYPE_HUB		1
+@@ -248,7 +252,25 @@
+ 	 | ((pnum) & 0x1f))
+ 
+ /*
+- * Passive Cable VDO
++ * Cable VDO (for both Passive and Active Cable VDO in PD Rev2.0)
++ * ---------
++ * <31:28> :: Cable HW version
++ * <27:24> :: Cable FW version
++ * <23:20> :: Reserved, Shall be set to zero
++ * <19:18> :: type-C to Type-A/B/C/Captive (00b == A, 01 == B, 10 == C, 11 == Captive)
++ * <17>    :: Reserved, Shall be set to zero
++ * <16:13> :: cable latency (0001 == <10ns(~1m length))
++ * <12:11> :: cable termination type (11b == both ends active VCONN req)
++ * <10>    :: SSTX1 Directionality support (0b == fixed, 1b == cfgable)
++ * <9>     :: SSTX2 Directionality support
++ * <8>     :: SSRX1 Directionality support
++ * <7>     :: SSRX2 Directionality support
++ * <6:5>   :: Vbus current handling capability (01b == 3A, 10b == 5A)
++ * <4>     :: Vbus through cable (0b == no, 1b == yes)
++ * <3>     :: SOP" controller present? (0b == no, 1b == yes)
++ * <2:0>   :: USB SS Signaling support
++ *
++ * Passive Cable VDO (PD Rev3.0+)
+  * ---------
+  * <31:28> :: Cable HW version
+  * <27:24> :: Cable FW version
+@@ -264,7 +286,7 @@
+  * <4:3>   :: Reserved, Shall be set to zero
+  * <2:0>   :: USB highest speed
+  *
+- * Active Cable VDO 1
++ * Active Cable VDO 1 (PD Rev3.0+)
+  * ---------
+  * <31:28> :: Cable HW version
+  * <27:24> :: Cable FW version
+@@ -286,7 +308,9 @@
+ #define CABLE_VDO_VER1_0	0
+ #define CABLE_VDO_VER1_3	3
+ 
+-/* Connector Type */
++/* Connector Type (_ATYPE and _BTYPE are for PD Rev2.0 only) */
++#define CABLE_ATYPE		0
++#define CABLE_BTYPE		1
+ #define CABLE_CTYPE		2
+ #define CABLE_CAPTIVE		3
+ 
+@@ -323,12 +347,22 @@
+ #define CABLE_CURR_3A		1
+ #define CABLE_CURR_5A		2
+ 
++/* USB SuperSpeed Signaling Support (PD Rev2.0) */
++#define CABLE_USBSS_U2_ONLY	0
++#define CABLE_USBSS_U31_GEN1	1
++#define CABLE_USBSS_U31_GEN2	2
++
+ /* USB Highest Speed */
+ #define CABLE_USB2_ONLY		0
+ #define CABLE_USB32_GEN1	1
+ #define CABLE_USB32_4_GEN2	2
+ #define CABLE_USB4_GEN3		3
+ 
++#define VDO_CABLE(hw, fw, cbl, lat, term, tx1d, tx2d, rx1d, rx2d, cur, vps, sopp, usbss) \
++	(((hw) & 0x7) << 28 | ((fw) & 0x7) << 24 | ((cbl) & 0x3) << 18		\
++	 | ((lat) & 0x7) << 13 | ((term) & 0x3) << 11 | (tx1d) << 10		\
++	 | (tx2d) << 9 | (rx1d) << 8 | (rx2d) << 7 | ((cur) & 0x3) << 5		\
++	 | (vps) << 4 | (sopp) << 3 | ((usbss) & 0x7))
+ #define VDO_PCABLE(hw, fw, ver, conn, lat, term, vbm, cur, spd)			\
+ 	(((hw) & 0xf) << 28 | ((fw) & 0xf) << 24 | ((ver) & 0x7) << 21		\
+ 	 | ((conn) & 0x3) << 18 | ((lat) & 0xf) << 13 | ((term) & 0x3) << 11	\
+@@ -395,6 +429,35 @@
+ 	 | ((hops) & 0x3) << 6 | (u2) << 5 | (u32) << 4 | (lane) << 3		\
+ 	 | (iso) << 2 | (gen))
+ 
++/*
++ * AMA VDO (PD Rev2.0)
++ * ---------
++ * <31:28> :: Cable HW version
++ * <27:24> :: Cable FW version
++ * <23:12> :: Reserved, Shall be set to zero
++ * <11>    :: SSTX1 Directionality support (0b == fixed, 1b == cfgable)
++ * <10>    :: SSTX2 Directionality support
++ * <9>     :: SSRX1 Directionality support
++ * <8>     :: SSRX2 Directionality support
++ * <7:5>   :: Vconn power
++ * <4>     :: Vconn power required
++ * <3>     :: Vbus power required
++ * <2:0>   :: USB SS Signaling support
++ */
++#define VDO_AMA(hw, fw, tx1d, tx2d, rx1d, rx2d, vcpwr, vcr, vbr, usbss) \
++	(((hw) & 0x7) << 28 | ((fw) & 0x7) << 24			\
++	 | (tx1d) << 11 | (tx2d) << 10 | (rx1d) << 9 | (rx2d) << 8	\
++	 | ((vcpwr) & 0x7) << 5 | (vcr) << 4 | (vbr) << 3		\
++	 | ((usbss) & 0x7))
++
++#define PD_VDO_AMA_VCONN_REQ(vdo)	(((vdo) >> 4) & 1)
++#define PD_VDO_AMA_VBUS_REQ(vdo)	(((vdo) >> 3) & 1)
++
++#define AMA_USBSS_U2_ONLY	0
++#define AMA_USBSS_U31_GEN1	1
++#define AMA_USBSS_U31_GEN2	2
++#define AMA_USBSS_BBONLY	3
++
+ /*
+  * VPD VDO
+  * ---------
+-- 
+2.30.0.365.g02bc693789-goog
+
