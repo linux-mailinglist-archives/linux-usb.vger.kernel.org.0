@@ -2,65 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D061D310769
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Feb 2021 10:13:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB033107E0
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Feb 2021 10:31:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbhBEJLk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Feb 2021 04:11:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59932 "EHLO mail.kernel.org"
+        id S230355AbhBEJaM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Feb 2021 04:30:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35340 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229669AbhBEJJr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 5 Feb 2021 04:09:47 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4EFB064FBF;
-        Fri,  5 Feb 2021 09:09:31 +0000 (UTC)
+        id S230484AbhBEJ1N (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 5 Feb 2021 04:27:13 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7109E64FBB;
+        Fri,  5 Feb 2021 09:26:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1612516172;
-        bh=JdD0MSkgGiDQgR1RqZMYYZuQVt/HbkXgGJeoHCpYJio=;
+        s=korg; t=1612517192;
+        bh=0oCayZYiMEnz10eSMk33EJVBfDRkEJ/U8AfnlYuWt+Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kmMA0pCiSfbnVQOP9h8OWUUs1gL0W3kE2qPu9+x+tMXmNjuqO/DHFbIepE4bOuxOH
-         GQBcrhUsbX6GyzQt/WPlsYs5a77THjVGJM95iiwKE+V3ETQ+/VZGmRJinOIeJVXMBT
-         +heMmOj2VdzbISIWeHN8fbVnuqzIlYv7PGtKlcpI=
-Date:   Fri, 5 Feb 2021 10:09:29 +0100
+        b=x4/8dWY709bxPYw9fe+YKJBTtmdnMbs58eOV+JlGBw06GKmRX7mOXHhjwVxyqI5oB
+         2sCg4IEktwpDp07qLxoPDSdFEAIXzQk7PynIEHxRpwkcRtixVosm1jSWpJavuug5io
+         sDed1y3x01IZhPCMRqf4dCe9TUQOPkHJetZh4pYk=
+Date:   Fri, 5 Feb 2021 10:26:29 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Nicolas Boichat <drinkcat@chromium.org>
-Subject: Re: [RFC PATCH v2 1/3] dt-bindings: usb: mtk-xhci: add compatible
- for mt8195
-Message-ID: <YB0LSQdCZk3xL+ru@kroah.com>
-References: <20210203102642.7353-1-chunfeng.yun@mediatek.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH] usb: dwc3: gadget: Remove check for bounded driver
+Message-ID: <YB0PRf9H2erqMGB6@kroah.com>
+References: <7077bb0f5691732b9814ea76d38ae8e9312a61f5.1612412038.git.Thinh.Nguyen@synopsys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210203102642.7353-1-chunfeng.yun@mediatek.com>
+In-Reply-To: <7077bb0f5691732b9814ea76d38ae8e9312a61f5.1612412038.git.Thinh.Nguyen@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 03, 2021 at 06:26:40PM +0800, Chunfeng Yun wrote:
-> There are 4 USB controllers on MT8195, the controllers (IP1~IP3,
-> exclude IP0) have a wrong default SOF/ITP interval which is
-> calculated from the frame counter clock 24Mhz by default, but
-> in fact, the frame counter clock is 48Mhz, so we should set
-> the accurate interval according to 48Mhz. Here add a new compatible
-> for MT8195, it's also supported in driver. But the first controller
-> (IP0) has no such issue, we prefer to use generic compatible,
-> e.g. mt8192's compatible.
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> v2: no changes
+On Wed, Feb 03, 2021 at 08:14:37PM -0800, Thinh Nguyen wrote:
+> The check for bounded gadget driver in dwc3_gadget_start() was to
+> prevent going through the initialization again without any cleanup. With
+> a recent update, the UDC framework guarantees this won't happen while
+> the UDC is started. Also, this check doesn't prevent requesting threaded
+> irq to the same dev_id, which will mess up the irq freeing logic. Let's
+> remove it.
 
-Note, I do not apply patches that have "RFC" as that means you do not
-feel comfortable with them being applied.
-
-Please resend without that when you feel they are ready to be merged.
+What "recent update" caused this?  Is this a fix for something that
+needs to be backported?  If so, can you provide a "Fixes:" tag on here?
+Or is this just a general cleanup that is good to do now.
 
 thanks,
 
