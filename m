@@ -2,69 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F80831081C
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Feb 2021 10:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BDCC310885
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Feb 2021 10:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbhBEJoL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Feb 2021 04:44:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44784 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229650AbhBEJmB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 5 Feb 2021 04:42:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4EC5860241;
-        Fri,  5 Feb 2021 09:41:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1612518080;
-        bh=9mxbHfoCH/XKm74XMkUAQ5WTFH7IvxJv0SkLXlLvCd0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=07H82tRrfwXJ7DTQpU9wIyzFIjkK5jaTALiQPiR5Q5F5cd3zrK+DVxOML+UIOuTAu
-         yUNQZMW5LQKrA5M/hl45sPfCbdvF98tpcLQr4vQIGnLsjpk99rWghU7hVC0MAGdDUE
-         Br1RTEMsHeZ4TFFI1fDE5NqqozyI2zGohmFTbTBs=
-Date:   Fri, 5 Feb 2021 10:41:13 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH] usb: dwc3: gadget: Remove check for bounded driver
-Message-ID: <YB0Sudllcc8f4lN+@kroah.com>
-References: <7077bb0f5691732b9814ea76d38ae8e9312a61f5.1612412038.git.Thinh.Nguyen@synopsys.com>
- <YB0PRf9H2erqMGB6@kroah.com>
- <e81699b8-1768-d54c-0419-3cbdf5b84ee8@synopsys.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e81699b8-1768-d54c-0419-3cbdf5b84ee8@synopsys.com>
+        id S229972AbhBEJ4v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Feb 2021 04:56:51 -0500
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:54924 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230263AbhBEJyt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Feb 2021 04:54:49 -0500
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 9D477402A6;
+        Fri,  5 Feb 2021 09:53:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1612518829; bh=ugFrW0wnZy7U60WArYo320RjNLHVD8Ny4534o7jnUg8=;
+        h=Date:From:Subject:To:Cc:From;
+        b=Kx7skKXcr0tJ1LLYjlmMW9E8bi4h+0HcSpXW7wVg8+C7783AewhxxX0m4PXf5HVZg
+         2MmJ7lmWf9bRKezHPdEkcnc8Nmkk/X2M/2Rt/zi3ksn7UcNmdzIC0InRFt0K5HED/z
+         iOSoJmpFMurC+NzYDSLt14UzJcRVeubkGGSNAqCIM7AJlt9mqn8zMc2fBtNzjdgBPr
+         YVwgB/HMhf/MWEenLexPOmQ68FXozwEo9nt0U2Vo4rU/PsQYCjJhWDdhXdIpSZFOmV
+         1zYuMGgjAMDKA6SwslByB/fSkTxQmfqnWHL9p/9NmcJ8thuDaccXJzBUKJ+bW7hvng
+         d4ih8UGkgXASA==
+Received: from te-lab16 (unknown [10.10.52.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 3D3E3A0099;
+        Fri,  5 Feb 2021 09:53:47 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Fri, 05 Feb 2021 01:53:47 -0800
+Date:   Fri, 05 Feb 2021 01:53:47 -0800
+Message-Id: <ccc90f316cf78bb5f7d46d3fd84f4c7f2c3020b1.1612518764.git.Thinh.Nguyen@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH v2] usb: dwc3: gadget: Remove check for bounded driver
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 05, 2021 at 09:39:37AM +0000, Thinh Nguyen wrote:
-> Greg Kroah-Hartman wrote:
-> > On Wed, Feb 03, 2021 at 08:14:37PM -0800, Thinh Nguyen wrote:
-> >> The check for bounded gadget driver in dwc3_gadget_start() was to
-> >> prevent going through the initialization again without any cleanup. With
-> >> a recent update, the UDC framework guarantees this won't happen while
-> >> the UDC is started. Also, this check doesn't prevent requesting threaded
-> >> irq to the same dev_id, which will mess up the irq freeing logic. Let's
-> >> remove it.
-> > What "recent update" caused this?  Is this a fix for something that
-> > needs to be backported?  If so, can you provide a "Fixes:" tag on here?
-> > Or is this just a general cleanup that is good to do now.
-> >
-> > thanks,
-> >
-> > greg k-h
-> 
-> It's general cleanup. The "recent update" is not in mainline yet but on
-> your "usb-next" branch so I'm not sure how to properly reference it.
-> 
-> But here's the commit on your branch I was referring to: 49d08cfc7830
-> ("usb: udc: core: Introduce started state")
+The check for bounded gadget driver in dwc3_gadget_start() was to
+prevent going through the initialization again without any cleanup. The
+recent commit 49d08cfc7830 ("usb: udc: core: Introduce started state")
+updated the UDC framework and guarantees this won't happen while the UDC
+is started. Also, this check doesn't prevent requesting threaded irq to
+the same dev_id, which will mess up the irq freeing logic. Let's remove
+it.
 
-Please refer to this commit just like this, as the id is not going to
-change.  Can you redo this patch with that information in it?
+Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
+Changes in v2:
+- Provide reference to the recent UDC framework update
 
-thanks,
+ drivers/usb/dwc3/gadget.c | 19 ++-----------------
+ 1 file changed, 2 insertions(+), 17 deletions(-)
 
-greg k-h
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 86f257f12d45..6a18e822fa98 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2370,7 +2370,7 @@ static int dwc3_gadget_start(struct usb_gadget *g,
+ {
+ 	struct dwc3		*dwc = gadget_to_dwc(g);
+ 	unsigned long		flags;
+-	int			ret = 0;
++	int			ret;
+ 	int			irq;
+ 
+ 	irq = dwc->irq_gadget;
+@@ -2379,29 +2379,14 @@ static int dwc3_gadget_start(struct usb_gadget *g,
+ 	if (ret) {
+ 		dev_err(dwc->dev, "failed to request irq #%d --> %d\n",
+ 				irq, ret);
+-		goto err0;
++		return ret;
+ 	}
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+-	if (dwc->gadget_driver) {
+-		dev_err(dwc->dev, "%s is already bound to %s\n",
+-				dwc->gadget->name,
+-				dwc->gadget_driver->driver.name);
+-		ret = -EBUSY;
+-		goto err1;
+-	}
+-
+ 	dwc->gadget_driver	= driver;
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
+ 	return 0;
+-
+-err1:
+-	spin_unlock_irqrestore(&dwc->lock, flags);
+-	free_irq(irq, dwc);
+-
+-err0:
+-	return ret;
+ }
+ 
+ static void __dwc3_gadget_stop(struct dwc3 *dwc)
+
+base-commit: 23e32a595e115c09152488aa0508539e6f6a4237
+-- 
+2.28.0
+
