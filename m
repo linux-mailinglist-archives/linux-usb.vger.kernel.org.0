@@ -2,92 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F361310A80
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Feb 2021 12:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD6C310A94
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Feb 2021 12:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbhBELny (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Feb 2021 06:43:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbhBELlS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Feb 2021 06:41:18 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CE9C0617A7;
-        Fri,  5 Feb 2021 03:40:38 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id df22so8509856edb.1;
-        Fri, 05 Feb 2021 03:40:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=VKpw+TGxcSonBmJvYVbjnLKEXkavUls9cDkglgeREzs=;
-        b=O3iPYbX4hg0w4sjb5uql2pazoXLBRhd3nlnGtE0Z6MRxETQ9aAo04oAycLYKf7DxoS
-         Lp5IIHOM4Hs2AzazeNugfLCd7tV6c8IspQyFEHBo2aXNcAaHmC+uPaiF/lqFHN5d4gMc
-         p93QTmDSZNOoPj1Y2B7DoJKkmjV4lYoLxNSJyGBknoswt7ZOs9UQvU8MjyJo2/H24edG
-         NKR/7E29vD4TuX3bKdDJQvqKPD93QFoKUApHc4L20EzqtvScZBvqnaEBiPLeTmR3QprI
-         qXwUdPEBPowIM/FkWCwBSswuoXdKmchZoK3JvYrylAwHdwkYlfVCGrbHPkiHsrnC5ZVf
-         nfUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=VKpw+TGxcSonBmJvYVbjnLKEXkavUls9cDkglgeREzs=;
-        b=KUlJQxrCr2GEubgupV+nPEaCeck6ggS8ud65t6XvB3EmFRBI+ZomwkTogR4YVqGVpu
-         mB1o0UQirmwyv7bBTudRsn1KnmXTbgloSCqighXv3HIKv57lo/LZyohK0RQR3TjkhXN+
-         Jz4rrxaeYA9rrAUVdT9tWIuduNNqfW6MQAnjXhbm/RwAEINkFMUH9BWnQSz1ep2FMArs
-         K2Y14DJs1dOhXLms6EP4YhUU3tAq7ITtjb4wYKytvoj342z/HwUD6IcTL3idGO717ctY
-         sSNZLZ0s/9UuD69g8cI+pUcv3avbILPKscHLngYdULXWkjfaaQ5SUzUhKXDNXu4Zrgmm
-         B0OA==
-X-Gm-Message-State: AOAM530Q8VctpeNwMX8d+uZXvLgfiUM7jDqTgbKv/AXK3zoB+FxROLLB
-        vMr7tNXe2P0DbF6ei4YRkM3UHkBh4+w=
-X-Google-Smtp-Source: ABdhPJxS81UgtOu9TvukRpaKhut4UQ+qD1CMdOAim5WvZkmqsRE4OZy3Di8ETppRgpphBwWKyT4jgA==
-X-Received: by 2002:aa7:c7d8:: with SMTP id o24mr3160923eds.121.1612525237159;
-        Fri, 05 Feb 2021 03:40:37 -0800 (PST)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id o4sm3883476edw.78.2021.02.05.03.40.36
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 05 Feb 2021 03:40:36 -0800 (PST)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, gregkh@linuxfoundation.org, balbi@kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 8/8] dts64: rockchip: enable dwc3 usb for A95X Z2
-Date:   Fri,  5 Feb 2021 12:40:11 +0100
-Message-Id: <20210205114011.10381-8-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20210205114011.10381-1-jbx6244@gmail.com>
-References: <20210205114011.10381-1-jbx6244@gmail.com>
+        id S231972AbhBELrE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Feb 2021 06:47:04 -0500
+Received: from mga04.intel.com ([192.55.52.120]:24544 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231290AbhBELo2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 5 Feb 2021 06:44:28 -0500
+IronPort-SDR: PrhTMBByXsJKyj+XgV7/24vB5Smre3qJ7G562bgwoB4+GJOh5uxHiesNPgtVkHBu9FHTiL0cai
+ 4Xk+y2/JgZOQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9885"; a="178859630"
+X-IronPort-AV: E=Sophos;i="5.81,154,1610438400"; 
+   d="scan'208";a="178859630"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 03:42:37 -0800
+IronPort-SDR: Uue4XEHUmBnkESacLps3AFN5v4NEmkGfMu4v41c9saOAerT1MEAXzEiUAU5nttPq1+yfKM74at
+ YcH7hdXFsnlA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,154,1610438400"; 
+   d="scan'208";a="484104587"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 05 Feb 2021 03:42:34 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Feb 2021 13:42:34 +0200
+Date:   Fri, 5 Feb 2021 13:42:34 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Kyle Tso <kyletso@google.com>
+Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
+        hdegoede@redhat.com, robh+dt@kernel.org, badhri@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 0/7] common SVDM version and VDO from dt
+Message-ID: <20210205114234.GB2476581@kuha.fi.intel.com>
+References: <20210205033415.3320439-1-kyletso@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210205033415.3320439-1-kyletso@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable dwc3 usb for A95X Z2.
+On Fri, Feb 05, 2021 at 11:34:08AM +0800, Kyle Tso wrote:
+> v5 is here:
+> https://patchwork.kernel.org/project/linux-usb/cover/20210202161733.932215-1-kyletso@google.com/
+> 
+> Changes since v5:
+> =================
+> usb: typec: Manage SVDM version
+> - !! most changes are from Heikki
+> - location of the negotiated SVDM version is changed. Now the variable
+>   resides in typec_partner
+> - The setter and getter functions were modified according to the above
+>   changes
+> - the default SVDM version is stored upon calling to
+>   typec_register_partner
+> 
+> usb: pd: Make SVDM Version configurable in VDM header
+> - no change
+> 
+> usb: typec: tcpm: Determine common SVDM Version
+> - follow the changes of "usb: typec: Manage SVDM version"
+> - remove the "reset to default". Now the default SVDM version will be
+>   set when calling to typec_register_partner
+> 
+> usb: typec: ucsi: Determine common SVDM Version
+> - follow the changes of "usb: typec: Manage SVDM version"
+> - remove the "reset to default". Now the default SVDM version will be
+>   set when calling to typec_register_partner
+> 
+> usb: typec: displayport: Fill the negotiated SVDM Version in the header
+> - follow the changes of "usb: typec: Manage SVDM version"
+> 
+> dt-bindings: connector: Add SVDM VDO properties
+> - no change
+> 
+> usb: typec: tcpm: Get Sink VDO from fwnode
+> - no change
+> 
+> Kyle Tso (7):
+>   usb: typec: Manage SVDM version
+>   usb: pd: Make SVDM Version configurable in VDM header
+>   usb: typec: tcpm: Determine common SVDM Version
+>   usb: typec: ucsi: Determine common SVDM Version
+>   usb: typec: displayport: Fill the negotiated SVDM Version in the header
+>   dt-bindings: connector: Add SVDM VDO properties
+>   usb: typec: tcpm: Get Sink VDO from fwnode
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
-Changed V2:
-  remove node wrapper
----
- arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts | 5 +++++
- 1 file changed, 5 insertions(+)
+These are OK by me, but I think it would be great if Guenter could
+give them the once-over, as usual. I hope he has time. FWIW, for all
+of these:
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts b/arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts
-index 30c73ef25..e71870768 100644
---- a/arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts
-@@ -357,6 +357,11 @@
- 	status = "okay";
- };
- 
-+&usbdrd3 {
-+	dr_mode = "host";
-+	status = "okay";
-+};
-+
- &usb_host0_ehci {
- 	status = "okay";
- };
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+thanks,
+
 -- 
-2.11.0
-
+heikki
