@@ -2,96 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC60311038
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Feb 2021 19:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C76C53110F7
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Feb 2021 20:21:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233551AbhBERCU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Feb 2021 12:02:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47880 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233693AbhBERAU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 5 Feb 2021 12:00:20 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 74E7464F19;
-        Fri,  5 Feb 2021 18:42:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612550521;
-        bh=Och95jZSPmS5JZOu3rWCNdzFapqEaxA4bX7uCQJwQso=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IX2kVxDXqUuV7iowgJJWwlByQAXihwSnK8hf2TkQT1LjJOn+hvItadXV2bJyoRau7
-         HOKkWGUOj+U72dTLpf3ngoAqJxxjr7HVVQLOZ3JeSerI0czD9EOtEjff0dN5pwjAzL
-         lHXtfzrHcLi0OEG13gFG+8vkS1XZn7EwSFmEV6Q4u24sKbaLeKU3RydjLgcxSyVqH9
-         o8/POigpER9rYtSUxohfdtok+MTincfAKZNBVtrzVs0qURvp6KhO+I3fVBFRCsQ/aP
-         QPOOkbBMHxXEPzJyBa4FDHBlm1WDl8DvdHUM+I5p77ZkVSZ+QkDIpX6sWoKuZFbqjt
-         APStkyUYfhrCw==
-Received: by mail-ed1-f43.google.com with SMTP id l12so10002193edt.3;
-        Fri, 05 Feb 2021 10:42:01 -0800 (PST)
-X-Gm-Message-State: AOAM530innO9ERQUQ/am41MEWx4Qu/qorp7E0r2caH9R81WGpvfQEKWP
-        sUFaZeUzEZeJ6a1MuJHoNZCVWgMDku+W4FuPKg==
-X-Google-Smtp-Source: ABdhPJwnoYzJJaU11tmANzpBNOiB4Jrz6Z0M34lW0MRbvQXE//h7k1Ng7TT1yLPvbcgMbS512EbgqHcxVP6l+HwWAJM=
-X-Received: by 2002:aa7:c895:: with SMTP id p21mr4907518eds.165.1612550519893;
- Fri, 05 Feb 2021 10:41:59 -0800 (PST)
+        id S233361AbhBERhr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Feb 2021 12:37:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233450AbhBEP5f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Feb 2021 10:57:35 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D200AC061786;
+        Fri,  5 Feb 2021 09:39:42 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id f2so8686072ljp.11;
+        Fri, 05 Feb 2021 09:39:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zq2tq6yHR4pXHFIL3vLqBUHAT4JaMWz+MiyU0v1vu0g=;
+        b=ckxEdHFrze9QuOrIRS+B3/v6N2YraDq30qDnuUaSEdKPKbzDHr5v+Gt+ggms8kDxLb
+         KRM67GI+AlAc0Mt9x3QXeMnLuVERRs3HzqIK1OYS9DWNRSDt8+CE3wu+7+S/y2kCH+ZN
+         vm2jkwZoTwkLSFKNvCIpag+GwrGsqgSkdLzvOjljamTXzVmuCKqyeQ2SDJrakIrbO0Gq
+         iNL+1goLIoCL4vK72mfo4AskKtq8tPdIFU9KeCPLZAqMbqE3ck7e5KVHALAgfByEZmtI
+         sOpY9Z4FpCfRoEvCtAY46x9yZ7244UyytkRl9nU5E36B/ExGPZnsadsvizd1w2jn+6Lv
+         twfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zq2tq6yHR4pXHFIL3vLqBUHAT4JaMWz+MiyU0v1vu0g=;
+        b=aSBWAdr6jXyhAKpKiUEDM3CC2CMy7BO/7bkur5qimc0OnPEfGO/wuUb+LG1ZZBD8CT
+         cPzzi/pR9r1CNNypsTNM8PIR7bfX6w55SbeVHGSxjYe0hcd7dZ8bJ149HVUpVah7KF0l
+         xL3ug1Lduc2s4f8FKUhwtXFxlGdari2PekDYIR3pJnENFZnRDLJNxHYtNUqORgg1+WfX
+         bla234jKA/xmcdeIxhle8GwPKYR0VydD/ZM8VRImQXnRQbtz8J+viQ3Vzgax8+szBQ8P
+         d3UPFay2cri4MAZ1kSfY+SThoNQvW7pzzRAF8G6boGxYCfWL1rPjdc5X36YSN2JUU5MQ
+         +8hQ==
+X-Gm-Message-State: AOAM530ZWBu8XPRXcsuyqHuFFRDIaJOMSrRwQ+isszaQswWCFHU9zz5R
+        W469Ek8/8CXe20nZ3NhAmFyI5mVXECugUQ==
+X-Google-Smtp-Source: ABdhPJye+i4t95Pl5+mUsUtHEvOgzCgVI4mT0d2KP5HJBj+JAKY5Bw2XvHTI2RhQuE/h1RHgd0ZlDQ==
+X-Received: by 2002:a2e:9f06:: with SMTP id u6mr3298965ljk.494.1612546781370;
+        Fri, 05 Feb 2021 09:39:41 -0800 (PST)
+Received: from rafiki.local (user-5-173-242-247.play-internet.pl. [5.173.242.247])
+        by smtp.gmail.com with ESMTPSA id n16sm1053230lfq.301.2021.02.05.09.39.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Feb 2021 09:39:40 -0800 (PST)
+From:   Lech Perczak <lech.perczak@gmail.com>
+To:     linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Lech Perczak <lech.perczak@gmail.com>
+Subject: [PATCH v2 0/2] usb: add full support for ZTE P685M modem
+Date:   Fri,  5 Feb 2021 18:39:02 +0100
+Message-Id: <20210205173904.13916-1-lech.perczak@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20210205114011.10381-1-jbx6244@gmail.com> <20210205114011.10381-6-jbx6244@gmail.com>
-In-Reply-To: <20210205114011.10381-6-jbx6244@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 5 Feb 2021 12:41:45 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJwNdUfoYM8SZmOgMG9iAyZkJ4-kzjjiDDm_mdmghTEOA@mail.gmail.com>
-Message-ID: <CAL_JsqJwNdUfoYM8SZmOgMG9iAyZkJ4-kzjjiDDm_mdmghTEOA@mail.gmail.com>
-Subject: Re: [PATCH v3 6/8] usb: dwc3: of-simple: add compatible for rk3328
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     "heiko@sntech.de" <heiko@sntech.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 5, 2021 at 5:40 AM Johan Jonker <jbx6244@gmail.com> wrote:
->
-> From: Cameron Nemo <cnemo@tutanota.com>
->
-> Add a compatible to be hooked into by the Rockchip rk3328 device tree.
->
-> The rk3399 compatible cannot be reused because the rk3328 SoCs may
-> require a specialized driver in the future and old device trees must
-> remain compatible with newer kernels.
+This modem is used in ZTE MF283+ LTE SOHO router, and carriers usually
+identify it as such. This series is a part of effort to get this router
+fully supported by OpenWrt. With this series, all interfaces of the modem
+are fully supported, and it can establish connection through QMI interface.
 
-Yes that's important, but...
 
-> Signed-off-by: Cameron Nemo <cnemo@tutanota.com>
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
->  drivers/usb/dwc3/dwc3-of-simple.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
-> index e62ecd22b..93bc34328 100644
-> --- a/drivers/usb/dwc3/dwc3-of-simple.c
-> +++ b/drivers/usb/dwc3/dwc3-of-simple.c
-> @@ -171,6 +171,7 @@ static const struct dev_pm_ops dwc3_of_simple_dev_pm_ops = {
->  };
->
->  static const struct of_device_id of_dwc3_simple_match[] = {
-> +       { .compatible = "rockchip,rk3328-dwc3" },
+Lech Perczak (2):
+  net: usb: qmi_wwan: support ZTE P685M modem
+  usb: serial: option: add full support for ZTE P685M
 
-Why does this driver need it? In fact, you don't want this driver to
-bind to the dwc3 node as we're binding to the 'snps,dwc3' driver.
+ drivers/net/usb/qmi_wwan.c  | 1 +
+ drivers/usb/serial/option.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
->         { .compatible = "rockchip,rk3399-dwc3" },
+-- 
+2.20.1
 
-Given the above, you might think we should remove this, but we can't
-since there are old dtb's with the dwc3 child node.
-
-Presumably you are getting lucky here (with link order). The kernel
-has no logic to decide which driver to bind to if there are 2 matching
-drivers. If we did, it would probably be the opposite of what you want
-here as we'd pick the most specific match. This driver should probably
-bail probe if no dwc3 child node.
-
-Rob
