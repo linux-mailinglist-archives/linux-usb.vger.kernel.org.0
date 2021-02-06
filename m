@@ -2,75 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7EB311D5F
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Feb 2021 14:16:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80555311D90
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Feb 2021 15:06:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbhBFNPD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 Feb 2021 08:15:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34348 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229529AbhBFNPB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 6 Feb 2021 08:15:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1863764EAC;
-        Sat,  6 Feb 2021 13:14:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1612617260;
-        bh=98pvPC+Azr05p3eihrb0Y63eV43ReNEUOqKi+rOOMPg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UziOMdcahYVIdrfhU/H+NomAm2KcD5lTICj+G+46FFHiCtCNLQcDhf4NHZ7UtXpmE
-         qu3TRK56l6rBEQT5QzWKbAu9ozsX2Qtwap9hJnPt7jsfOv3G1MbBsKUuP+qZmELBa+
-         UEeSZo9QnZeKUOIJMa/6ILlw7smvGgaZ7UFLB1x4=
-Date:   Sat, 6 Feb 2021 14:14:18 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Paul Wise <pabs3@bonedaddy.net>
-Cc:     Krzysztof Opasiak <k.opasiak@samsung.com>,
-        Matt Porter <mporter@linaro.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Karol Lewandowski <k.lewandowsk@samsung.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: proposal: move Linux userspace USB gadget projects to linux-usb
- GitHub organisation?
-Message-ID: <YB6WKs/6QMWJSS2t@kroah.com>
-References: <c38162833d1c8fede734e41eb5ce23cf393d6555.camel@bonedaddy.net>
- <YAhKAiz2U9KQWQPE@kroah.com>
- <86c0f13b298c8584bc7070543637f424075e526f.camel@bonedaddy.net>
+        id S230027AbhBFOGn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 6 Feb 2021 09:06:43 -0500
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:35253 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230020AbhBFOGm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Feb 2021 09:06:42 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 37C515C00F5;
+        Sat,  6 Feb 2021 09:05:56 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Sat, 06 Feb 2021 09:05:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=rHpjJI6ZDaTXhRGz4gSnpOA+QoM
+        Er7a/xpigfJ/1J3M=; b=wMxQLcf/2TeDHKIizvoUrz/qlmSHEyBdmmCVGyRJcHF
+        GOwj8B5ALogYc32djy6ewk7pq77RPlJX3rGKOTXkzQwdijqiBEcrrZuIppT9OAzM
+        qKus8DLbevORK2dyfKvIM1mF0HjiO2/vWQnZK9QxYDLTvlrXyh9enabgtN/wlrue
+        yQaJWpbtC8ov9JM38lSjpwsQb6E6f9u1fvWKn5KkhmF6ZlPv0RkyUIqQsSdMH8Ti
+        WYzdF71rpX7xY5J7t5AMzcYaIkv0dityHpISOIU0n/YYe3si7P/e+d28d4y7G89h
+        RIAbLV1NRRHUZAOSTOPm7i6CP69XsCUkWkOusO9L+Lg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=rHpjJI
+        6ZDaTXhRGz4gSnpOA+QoMEr7a/xpigfJ/1J3M=; b=wHmpx72mLCMy5naQlgpIF+
+        67sJVu6nFZ9Eu7FV4CFXLmIKp2UVH6tMrqMgzh5PdvWEf6dWOMXTR95z/dEGI4ll
+        R/U/GEjeuZ8ez0azitL4Agc1QgeZnlhjShpNVNHh2JGM/f2Y5BFeHUETaJ7tu37T
+        rEM+ZXOISBxRPhUrEhQMEhIZrfhiTXNXFLANVbxum5La1dJcSp9LuPc8s8icdk5f
+        fdxHklevHgHupCk9qbVxSne7dgJGmcf/HZNXQcMWSMLXVSUPrVslcDQpNg6GpI9y
+        Cs3GMxClBku62fVQlYfWRtHK26eOJXSSn2EvEXBhzFSjHLbCxuD7Zfzb9o48UR/Q
+        ==
+X-ME-Sender: <xms:Q6IeYAF0jEbHs-wnRklLxHupNMEkwJh2llXvYil9rGanfoI_7NQ_7g>
+    <xme:Q6IeYJVm6FDSRn9PA7kv2A7Bk3GQ7rFWIQxAHIv43Jt3ny_J3DWUrCK3TO0OXB8HZ
+    QzXp708MiUzlQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrgeekgdeitdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
+    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecukfhppeekfedr
+    keeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:Q6IeYKLj2f1XFdqP3qkSj_y4EVmOVWHHqQ97xQ3nqW2sNh-IAhRqWg>
+    <xmx:Q6IeYCHkhHJoQIOe0dylWkTjm8d354ydFjzy0ksnvya1f3wpnXG_Fg>
+    <xmx:Q6IeYGWMOlACkAw9Dl-IeTA8cL0Y87PF1IRWG6pndmOK1_9xv99N_g>
+    <xmx:RKIeYEyhGrPtG5qEsU_sPVPecQamoCwhgT327mxoACq7U8xjwc8mKg>
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 6849D24005B;
+        Sat,  6 Feb 2021 09:05:55 -0500 (EST)
+Date:   Sat, 6 Feb 2021 15:05:53 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Prike Liang <Prike.Liang@amd.com>
+Cc:     linux-usb@vger.kernel.org, mathias.nyman@intel.com,
+        Shyam-sundar.S-k@amd.com, Alexander.Deucher@amd.com,
+        Ramakanth.Akkenepalli@amd.com, Jack.Xie@amd.com
+Subject: Re: [PATCH v3] usb: pci-quirks: disable D3cold on xhci suspend for
+ s2idle
+Message-ID: <YB6iQTE059WnBiPB@kroah.com>
+References: <1612527609-7053-1-git-send-email-Prike.Liang@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <86c0f13b298c8584bc7070543637f424075e526f.camel@bonedaddy.net>
+In-Reply-To: <1612527609-7053-1-git-send-email-Prike.Liang@amd.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Feb 06, 2021 at 07:35:00AM +0800, Paul Wise wrote:
-> On Wed, 2021-01-20 at 16:19 +0100, Greg Kroah-Hartman wrote:
+On Fri, Feb 05, 2021 at 08:20:09PM +0800, Prike Liang wrote:
+> The XHCI is required enter D3hot rather than D3cold for AMD s2idle solution.
+> Otherwise, the 'Controller Not Ready' (CNR) bit not being cleared by host
+> in resume and eventually result in xhci resume failed in s2idle wakeup period.
+
+I do not understand this, can you perhaps rephrase it differently?
+
+Also, please mention the specific hardware that has this bug in the
+commit log, or on the subject line, as the subject line is saying that
+this change is needed for all devices, when really only one is broken.
+
 > 
-> > If you can get the "owners" of these repos to agree, than sure.
+> v1 -> v2: drop the XHCI_COMP_MODE_QUIRK quirk and create a new one for handling
+> XHCI D3cold.
 > 
-> A couple of owners of these repos have already agreed.
-> 
-> If you would like me to do the transition, I'm @pabs3 on GitHub.
+> v2 -> v3: correct the quirk name typo XHCI_AMD_S2IDL_SUPPORT_QUIRK -> XHCI_AMD_S2IDLE_SUPPORT_QUIRK
 
-I still don't see the benefit here, what is this going to change?
-
-> Do you think the Linux Foundation, Samsung, Collabora or another
-> company might be interested in investing in maintenance of the Linux
-> userspace USB gadget projects?
-
-I have no idea, sorry.
-
-> If so I would be happy to be paid to do
-> some initial polish on the projects and to shepherd continued community
-> maintenance afterwards as well as package them for Debian and other
-> distributions.
-
-If Debian hasn't already packaged up any of these, that's a huge
-indication that no one actually uses them :)
-
-> If not I'll have less time for that but might at least
-> bring the projects up to where they can be added to Debian.
-
-What projects are not in Debian already that somehow need to be there?
+This goes below the --- line, as the documentation asks for.
 
 thanks,
 
