@@ -2,92 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83061311F84
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Feb 2021 19:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B812311FDE
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Feb 2021 21:14:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbhBFSwe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 Feb 2021 13:52:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbhBFSvy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Feb 2021 13:51:54 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1131C061793;
-        Sat,  6 Feb 2021 10:50:32 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id p20so18291332ejb.6;
-        Sat, 06 Feb 2021 10:50:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=VKpw+TGxcSonBmJvYVbjnLKEXkavUls9cDkglgeREzs=;
-        b=dxnRtsYmoNO08QDTm2EZFmG/T23JMcH5IQolk9/b0IoNtT5EFbyKFtRfgdirtktHdg
-         QS0Kyg6BQoCR6hrtkpphM9v0vA9+KnndfyAs12PitPwIvQl76NNbUMmrti5m84D+KU0+
-         JdYmTqINPLzMqd9tzWVusZHAk3WzHRHVhKksOH5KqJUm6UZv0gzMpng0VWVk7PNEpgr4
-         CHKaU208IpfJjWT+0Yyq0tn6Wucg8O2BLeWn+f49bLU+JDzVkxpMP2xrBQswIQh3OSie
-         VDeEtgHLrIn5nBQsJ+/5eMhJcDVv8hAaRTl4bOrmds9yACjz8CQavz3sX8bAwmbfDQzm
-         ytFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=VKpw+TGxcSonBmJvYVbjnLKEXkavUls9cDkglgeREzs=;
-        b=BmvczFrsjMkaQ2S05p2tW9ek0qIEuLYNDkOUWn+TG+eQaY7wGz9dkICFj0EkxqPpxP
-         KLacbmOUYaCTSwGi/OZvj1Un+jsnpayF/gNjnRq2T/GD3bfxPXul3lc80Aodo6UsAIBu
-         JaSuLauUMdi4GaD3yLiQyio80hCYJn4Ihk/FEok7YsDld/TNxHKl/79ZVy/Fuo7FEh3d
-         u/H7f/GrPueka0kbLwWyVP9oh9MzmerWz+7ptAIUmYqLfdK5HHXmBpWJFyzrnZPdAogh
-         v2hGeLnBw4B4Ra03sh+VH+xYovtbj5Ne5bysYZLUsai6VnY9hFRF8raNQLsZOzHefJ2T
-         rEkA==
-X-Gm-Message-State: AOAM531T7BXzcyESOgyqs6IQ2uHV2/JqR39/bsnHec+pIwkCVTnh41ZH
-        /1tlAhnKhYKjolDcc1iGbWpD8PfClA4=
-X-Google-Smtp-Source: ABdhPJzeqxbxxXcW77TaBb3tEnIZmr97HAxQZzXcFqol723r3W9n0T3CYbLDmWAah/M+tRsSHEZ5Ig==
-X-Received: by 2002:a17:906:f102:: with SMTP id gv2mr9769363ejb.47.1612637431762;
-        Sat, 06 Feb 2021 10:50:31 -0800 (PST)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id cb21sm5890005edb.57.2021.02.06.10.50.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 06 Feb 2021 10:50:31 -0800 (PST)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, gregkh@linuxfoundation.org, balbi@kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 8/8] dts64: rockchip: enable dwc3 usb for A95X Z2
-Date:   Sat,  6 Feb 2021 19:50:17 +0100
-Message-Id: <20210206185017.1817-8-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20210206185017.1817-1-jbx6244@gmail.com>
-References: <20210206185017.1817-1-jbx6244@gmail.com>
+        id S229541AbhBFUOF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 6 Feb 2021 15:14:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49214 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229506AbhBFUOE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 6 Feb 2021 15:14:04 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A0C164E02;
+        Sat,  6 Feb 2021 20:13:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612642404;
+        bh=f8qhTJD7/YtaUs4LthL3OvIjhVnr54iLSmkEkhXsffc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ssXGiEGMXN/CyrtSbqgy7H31M6MViVUzi+fhIppB03f0J2s2Sb4QRS3G5QTrNhl30
+         282cSoVV5P04O8WlffI5b6vRLAhHDuLYUjdH4zBXSEOd6cB3MhXWxx0z0O+EWMM2W0
+         Zhf/kG4GDN/Jc/XGglckrJucEvep5jh+DjIs+6uY1ZdqHbNpKDMWMWPMV8lUEQ7LjK
+         RotzTCbTEmD+dt+A6PxQCedx2QhdiII7gmTfPlALLpz5aVKA4yB+/YBX7GZTn7dL+Q
+         uEtkdwIoEPFzVybpTUVGPh0BVCJ3H8dnZ7ED6NmeQoL6FZI7oQvIih7TXlADl+tEsS
+         HHbhgX3TnkISA==
+Date:   Sat, 6 Feb 2021 12:13:22 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Lech Perczak <lech.perczak@gmail.com>
+Cc:     =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] net: usb: qmi_wwan: support ZTE P685M modem
+Message-ID: <20210206121322.074ddbd3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <0264f3a2-d974-c405-fb08-18e5ca21bf76@gmail.com>
+References: <20210205173904.13916-1-lech.perczak@gmail.com>
+        <20210205173904.13916-2-lech.perczak@gmail.com>
+        <87r1lt1do6.fsf@miraculix.mork.no>
+        <0264f3a2-d974-c405-fb08-18e5ca21bf76@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable dwc3 usb for A95X Z2.
+On Sat, 6 Feb 2021 15:50:41 +0100 Lech Perczak wrote:
+> >> Cc: Bj=C3=B8rn Mork<bjorn@mork.no>
+> >> Signed-off-by: Lech Perczak<lech.perczak@gmail.com> =20
+> > Patch looks fine to me.  But I don't think you can submit a net and usb
+> > serial patch in a series. These are two different subsystems.
+> >
+> > There's no dependency between the patches so you can just submit
+> > them as standalone patches.  I.e. no series. =20
+> Actually, there is, and I just noticed, that patches are in wrong order.
+> Without patch 2/2 for 'option' driver, there is possibility for that=20
+> driver to steal
+> interface 3 from qmi_wwan, as currently it will match interface 3 as=20
+> ff/ff/ff.
+>=20
+> With that in mind I'm not really sure how to proceed.
+>=20
+> What comes to my mind, is either submit this as series again, with=20
+> ordering swapped,
+> or submit 2/2 first, wait for it to become merged, and then submit 1/2.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
-Changed V2:
-  remove node wrapper
----
- arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts b/arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts
-index 30c73ef25..e71870768 100644
---- a/arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts
-@@ -357,6 +357,11 @@
- 	status = "okay";
- };
- 
-+&usbdrd3 {
-+	dr_mode = "host";
-+	status = "okay";
-+};
-+
- &usb_host0_ehci {
- 	status = "okay";
- };
--- 
-2.11.0
-
+Send patch 2, wait for it to hit net, send 1 seems like the safest
+option. If we're lucky Johan can still send patch 2 for 5.11, otherwise
+we'll wait until the merge window - we're at rc7 already, it won't take
+too long.
