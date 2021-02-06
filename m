@@ -2,106 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A101C311D9D
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Feb 2021 15:21:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35724311DA5
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Feb 2021 15:25:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbhBFOUk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 Feb 2021 09:20:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbhBFOUk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Feb 2021 09:20:40 -0500
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623F4C06174A;
-        Sat,  6 Feb 2021 06:19:59 -0800 (PST)
-Received: from miraculix.mork.no (fwa145.mork.no [192.168.9.145])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 116EJsjh025481
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sat, 6 Feb 2021 15:19:54 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1612621194; bh=xDWEM83Qi1MXdyyOBM+i3n05LwuDlQxJCv5yycFe8/I=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=k06qOhlIoBHRZMk6AhB8u28oCZPCmeZpDw6UzCPh+/MkOx5fAsLcRAGa2l6H5Xlid
-         doDyw30X5hFCcWqLlPAhAXArAHfSMnUdk40yNMZnEygCW+qFEutbOSMNHzVr1KkIGO
-         a7aVDA5eoEsxqOy4CnFrug+mAc3aNy1EqGF0NbPw=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94)
-        (envelope-from <bjorn@mork.no>)
-        id 1l8ORF-000JHQ-KJ; Sat, 06 Feb 2021 15:19:53 +0100
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Lech Perczak <lech.perczak@gmail.com>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] net: usb: qmi_wwan: support ZTE P685M modem
-Organization: m
-References: <20210205173904.13916-1-lech.perczak@gmail.com>
-        <20210205173904.13916-2-lech.perczak@gmail.com>
-Date:   Sat, 06 Feb 2021 15:19:53 +0100
-In-Reply-To: <20210205173904.13916-2-lech.perczak@gmail.com> (Lech Perczak's
-        message of "Fri, 5 Feb 2021 18:39:03 +0100")
-Message-ID: <87r1lt1do6.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S229808AbhBFOZ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 6 Feb 2021 09:25:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40364 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229721AbhBFOZ1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 6 Feb 2021 09:25:27 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5DE0F60202;
+        Sat,  6 Feb 2021 14:24:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1612621486;
+        bh=/p4zLyT/sglIdYpclSaSgJPTKSydYopRWQ786pmalgk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DCtcwc3p1UqKmsDttVMygYfzhM8RnjEUI4TyRDpGr6uW8/+wSYjoc4ByOydSC9znI
+         bpiJiIFHFSHFp/ZlWXjxFR12unKI2hUrIAVenRLu03VMO2ERVGjzIuC9acxrQB03cq
+         TmgBooqD15kSPpqHhL46t2MgDswUn3FlWSiGUjGA=
+Date:   Sat, 6 Feb 2021 15:24:44 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 5.11-rc7
+Message-ID: <YB6mrF7MGZ7AsN3m@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.102.4 at canardo
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Lech Perczak <lech.perczak@gmail.com> writes:
+The following changes since commit 6ee1d745b7c9fd573fba142a2efdad76a9f1cb04:
 
-> The modem is used inside ZTE MF283+ router and carriers identify it as
-> such.
-> Interface mapping is:
-> 0: QCDM, 1: AT (PCUI), 2: AT (Modem), 3: QMI, 4: ADB
->
-> T:  Bus=3D02 Lev=3D02 Prnt=3D02 Port=3D05 Cnt=3D01 Dev#=3D  3 Spd=3D480  =
-MxCh=3D 0
-> D:  Ver=3D 2.01 Cls=3D00(>ifc ) Sub=3D00 Prot=3D00 MxPS=3D64 #Cfgs=3D  1
-> P:  Vendor=3D19d2 ProdID=3D1275 Rev=3Df0.00
-> S:  Manufacturer=3DZTE,Incorporated
-> S:  Product=3DZTE Technologies MSM
-> S:  SerialNumber=3DP685M510ZTED0000CP&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&=
-&&&&&&&&&0
+  Linux 5.11-rc5 (2021-01-24 16:47:14 -0800)
 
-This lookes weird.  But I guess that's really the string presented by
-this device?
+are available in the Git repository at:
 
-> C:* #Ifs=3D 5 Cfg#=3D 1 Atr=3Da0 MxPwr=3D500mA
-> I:* If#=3D 0 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Doption
-> E:  Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 1 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
-=3Doption
-> E:  Ad=3D83(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
-> E:  Ad=3D82(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:  Ad=3D02(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
-=3Doption
-> E:  Ad=3D85(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
-> E:  Ad=3D84(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:  Ad=3D03(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 3 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Dqmi_wwan
-> E:  Ad=3D87(I) Atr=3D03(Int.) MxPS=3D   8 Ivl=3D32ms
-> E:  Ad=3D86(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:  Ad=3D04(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 4 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3D42 Prot=3D01 Driver=
-=3D(none)
-> E:  Ad=3D88(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:  Ad=3D05(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
->
-> Cc: Bj=C3=B8rn Mork <bjorn@mork.no>
-> Signed-off-by: Lech Perczak <lech.perczak@gmail.com>
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.11-rc7
 
-Patch looks fine to me.  But I don't think you can submit a net and usb
-serial patch in a series. These are two different subsystems.
+for you to fetch changes up to f670e9f9c8cac716c3506c6bac9e997b27ad441a:
 
-There's no dependency between the patches so you can just submit
-them as standalone patches.  I.e. no series.
+  usb: dwc2: Fix endpoint direction check in ep_from_windex (2021-02-05 10:28:38 +0100)
 
-Feel free to include
+----------------------------------------------------------------
+USB fixes for 5.11-rc7
 
-Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+Here are some small, last-minute, USB driver fixes for 5.11-rc7
+
+They all resolve issues reported, or are a few new device ids for some
+drivers.  They include:
+	- new device ids for some usb-serial drivers
+	- xhci fixes for a variety of reported problems
+	- dwc3 driver bugfixes
+	- dwc2 driver bugfixes
+	- usblp driver bugfix
+	- thunderbolt bugfix
+	- few other tiny fixes
+
+All have been in linux-next with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Chenxin Jin (1):
+      USB: serial: cp210x: add new VID/PID for supporting Teraoka AD2000
+
+Christoph Schemmel (1):
+      USB: serial: option: Adding support for Cinterion MV31
+
+Chunfeng Yun (2):
+      usb: xhci-mtk: skip dropping bandwidth of unchecked endpoints
+      usb: xhci-mtk: break loop when find the endpoint to drop
+
+Dan Carpenter (1):
+      USB: gadget: legacy: fix an error code in eth_bind()
+
+Gary Bisson (1):
+      usb: dwc3: fix clock issue during resume in OTG mode
+
+Greg Kroah-Hartman (2):
+      Merge tag 'usb-serial-5.11-rc6' of https://git.kernel.org/.../johan/usb-serial into usb-linus
+      Merge tag 'thunderbolt-for-v5.11-rc7' of git://git.kernel.org/.../westeri/thunderbolt into usb-linus
+
+Heiko Stuebner (1):
+      usb: dwc2: Fix endpoint direction check in ep_from_windex
+
+Ikjoon Jang (1):
+      usb: xhci-mtk: fix unreleased bandwidth data
+
+Jeremy Figgins (1):
+      USB: usblp: don't call usb_set_interface if there's a single alt
+
+Mario Limonciello (1):
+      thunderbolt: Fix possible NULL pointer dereference in tb_acpi_add_link()
+
+Mathias Nyman (1):
+      xhci: fix bounce buffer usage for non-sg list case
+
+Pali Rohár (1):
+      usb: host: xhci: mvebu: make USB 3.0 PHY optional for Armada 3720
+
+Pho Tran (1):
+      USB: serial: cp210x: add pid/vid for WSDA-200-USB
+
+Yoshihiro Shimoda (1):
+      usb: renesas_usbhs: Clear pipe running flag in usbhs_pkt_pop()
+
+kernel test robot (1):
+      usb: gadget: aspeed: add missing of_node_put
+
+ drivers/thunderbolt/acpi.c               |   2 +-
+ drivers/usb/class/usblp.c                |  19 +++--
+ drivers/usb/dwc2/gadget.c                |   8 +-
+ drivers/usb/dwc3/core.c                  |   2 +-
+ drivers/usb/gadget/legacy/ether.c        |   4 +-
+ drivers/usb/gadget/udc/aspeed-vhub/hub.c |   4 +-
+ drivers/usb/host/xhci-mtk-sch.c          | 130 ++++++++++++++++++++++---------
+ drivers/usb/host/xhci-mtk.c              |   2 +
+ drivers/usb/host/xhci-mtk.h              |  15 ++++
+ drivers/usb/host/xhci-mvebu.c            |  42 ++++++++++
+ drivers/usb/host/xhci-mvebu.h            |   6 ++
+ drivers/usb/host/xhci-plat.c             |  20 ++++-
+ drivers/usb/host/xhci-plat.h             |   1 +
+ drivers/usb/host/xhci-ring.c             |  31 +++++---
+ drivers/usb/host/xhci.c                  |   8 +-
+ drivers/usb/host/xhci.h                  |   4 +
+ drivers/usb/renesas_usbhs/fifo.c         |   1 +
+ drivers/usb/serial/cp210x.c              |   2 +
+ drivers/usb/serial/option.c              |   6 ++
+ 19 files changed, 237 insertions(+), 70 deletions(-)
