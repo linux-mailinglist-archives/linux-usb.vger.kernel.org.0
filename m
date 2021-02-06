@@ -2,29 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE06311C31
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Feb 2021 09:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F3F311D0E
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Feb 2021 13:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbhBFIdk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 Feb 2021 03:33:40 -0500
-Received: from mx2.suse.de ([195.135.220.15]:58314 "EHLO mx2.suse.de"
+        id S229777AbhBFMTz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 6 Feb 2021 07:19:55 -0500
+Received: from mx2.suse.de ([195.135.220.15]:45694 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229684AbhBFIdk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 6 Feb 2021 03:33:40 -0500
+        id S229506AbhBFMTx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 6 Feb 2021 07:19:53 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id C71CBAC43;
-        Sat,  6 Feb 2021 08:32:57 +0000 (UTC)
-Date:   Sat, 06 Feb 2021 09:32:57 +0100
-Message-ID: <s5hk0rl1tqe.wl-tiwai@suse.de>
+        by mx2.suse.de (Postfix) with ESMTP id C3EC0ACB7;
+        Sat,  6 Feb 2021 12:19:11 +0000 (UTC)
+Date:   Sat, 06 Feb 2021 13:19:11 +0100
+Message-ID: <s5hczxd1j9c.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>, zonque@gmail.com,
+To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc:     Hillf Danton <hdanton@sina.com>, zonque@gmail.com,
         LKML <linux-kernel@vger.kernel.org>, alsa-devel@alsa-project.org,
         linux-usb@vger.kernel.org
 Subject: Re: BUG: KASAN: use-after-free in snd_complete_urb+0x109e/0x1740 [snd_usb_audio] (5.11-rc6)
-In-Reply-To: <20210206081333.7472-1-hdanton@sina.com>
-References: <20210206081333.7472-1-hdanton@sina.com>
+In-Reply-To: <s5hlfc11tx8.wl-tiwai@suse.de>
+References: <CABXGCsOposU1A_HavA_jmtkJMKhDZgh5m1b_YJK1Es5wyE-hZw@mail.gmail.com>
+        <20210206054533.120-1-hdanton@sina.com>
+        <s5hpn1d1vt6.wl-tiwai@suse.de>
+        <s5hlfc11tx8.wl-tiwai@suse.de>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
  FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
  (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -34,10 +37,15 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 06 Feb 2021 09:13:33 +0100,
-Hillf Danton wrote:
+On Sat, 06 Feb 2021 09:28:51 +0100,
+Takashi Iwai wrote:
 > 
-> On Sat, 6 Feb 2021 Takashi Iwai wrote:
+> On Sat, 06 Feb 2021 08:48:05 +0100,
+> Takashi Iwai wrote:
+> > 
+> > On Sat, 06 Feb 2021 06:45:32 +0100,
+> > Hillf Danton wrote:
+> > > 
 > > > Due to the reconnecting key word mentioned, no fix to
 > > > d0f09d1e4a88 ("ALSA: usb-audio: Refactoring endpoint URB deactivation")
 > > > will be added.
@@ -49,63 +57,26 @@ Hillf Danton wrote:
 > > If my understanding is right, this won't change.  The problem is
 > > rather the lack of this function call itself, i.e. the missing
 > > synchronization for the stream stop.
-> 
-> Thanks for taking a look at it.
 > > 
 > > It worked casually in the past because the endpoint resource is
 > > released at a later point that is after all streams are really closed.
 > > Now it's released earlier and hitting the UAF.
 > 
-> And add it if I dont misread you.
+> ... and reading the code in a closer look, my guess was also wrong.
+> The sync should have happened in snd_usb_endpoint_release(), and this
+> didn't change for quite some time.  So my previous fix won't be
+> effective, too, I'm afraid.  (And Hilif's patch won't help, either; if
+> it's effective, there must have been a timeout error in the original
+> case.)
 > 
-> Hillf
+> That said, I don't think this is a newly introduced regression, and
+> race the condition could be in a hairy detail.
 > 
-> --- a/sound/usb/endpoint.c
-> +++ b/sound/usb/endpoint.c
-> @@ -832,24 +832,14 @@ void snd_usb_endpoint_suspend(struct snd
->   */
->  static int wait_clear_urbs(struct snd_usb_endpoint *ep)
->  {
-> -	unsigned long end_time = jiffies + msecs_to_jiffies(1000);
-> -	int alive;
-> -
-> -	if (!test_bit(EP_FLAG_STOPPING, &ep->flags))
-> -		return 0;
-> -
-> +	WARN_ON_ONCE(!test_bit(EP_FLAG_STOPPING, &ep->flags));
+> Mikhail, can you reproduce this bug reliably?
 
-EP_FLAG_STOPPING is normally zero, hence putting a WARN_ON() shows
-just a false-positive.
-
->  	do {
-> -		alive = bitmap_weight(&ep->active_mask, ep->nurbs);
-> -		if (!alive)
-> +		if (!bitmap_weight(&ep->active_mask, ep->nurbs))
->  			break;
->  
->  		schedule_timeout_uninterruptible(1);
-> -	} while (time_before(jiffies, end_time));
-> +	} while (1);
->  
-> -	if (alive)
-> -		usb_audio_err(ep->chip,
-> -			"timeout: still %d active urbs on EP #%x\n",
-> -			alive, ep->ep_num);
-
-The original report didn't show the error, so it's not about the
-timeout.  You're likely scratching a wrong surface, I'm afraid.
-
->  	clear_bit(EP_FLAG_STOPPING, &ep->flags);
->  
->  	ep->sync_sink = NULL;
-> @@ -1433,7 +1423,7 @@ void snd_usb_endpoint_stop(struct snd_us
->  		WRITE_ONCE(ep->sync_source->sync_sink, NULL);
->  
->  	if (!atomic_dec_return(&ep->running))
-> -		stop_and_unlink_urbs(ep, false, false);
-> +		stop_and_unlink_urbs(ep, false, true);
-
-Please don't.  This will lead to a sleep-in-atomic Oops.
+And if you can reproduce the problem, please try the
+topic/pcm-sync-stop-fixes branch of my sound git tree
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git
 
 
 Takashi
