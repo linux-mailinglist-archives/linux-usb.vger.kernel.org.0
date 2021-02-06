@@ -2,95 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80555311D90
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Feb 2021 15:06:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A101C311D9D
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Feb 2021 15:21:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbhBFOGn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 Feb 2021 09:06:43 -0500
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:35253 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230020AbhBFOGm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Feb 2021 09:06:42 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 37C515C00F5;
-        Sat,  6 Feb 2021 09:05:56 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Sat, 06 Feb 2021 09:05:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=rHpjJI6ZDaTXhRGz4gSnpOA+QoM
-        Er7a/xpigfJ/1J3M=; b=wMxQLcf/2TeDHKIizvoUrz/qlmSHEyBdmmCVGyRJcHF
-        GOwj8B5ALogYc32djy6ewk7pq77RPlJX3rGKOTXkzQwdijqiBEcrrZuIppT9OAzM
-        qKus8DLbevORK2dyfKvIM1mF0HjiO2/vWQnZK9QxYDLTvlrXyh9enabgtN/wlrue
-        yQaJWpbtC8ov9JM38lSjpwsQb6E6f9u1fvWKn5KkhmF6ZlPv0RkyUIqQsSdMH8Ti
-        WYzdF71rpX7xY5J7t5AMzcYaIkv0dityHpISOIU0n/YYe3si7P/e+d28d4y7G89h
-        RIAbLV1NRRHUZAOSTOPm7i6CP69XsCUkWkOusO9L+Lg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=rHpjJI
-        6ZDaTXhRGz4gSnpOA+QoMEr7a/xpigfJ/1J3M=; b=wHmpx72mLCMy5naQlgpIF+
-        67sJVu6nFZ9Eu7FV4CFXLmIKp2UVH6tMrqMgzh5PdvWEf6dWOMXTR95z/dEGI4ll
-        R/U/GEjeuZ8ez0azitL4Agc1QgeZnlhjShpNVNHh2JGM/f2Y5BFeHUETaJ7tu37T
-        rEM+ZXOISBxRPhUrEhQMEhIZrfhiTXNXFLANVbxum5La1dJcSp9LuPc8s8icdk5f
-        fdxHklevHgHupCk9qbVxSne7dgJGmcf/HZNXQcMWSMLXVSUPrVslcDQpNg6GpI9y
-        Cs3GMxClBku62fVQlYfWRtHK26eOJXSSn2EvEXBhzFSjHLbCxuD7Zfzb9o48UR/Q
-        ==
-X-ME-Sender: <xms:Q6IeYAF0jEbHs-wnRklLxHupNMEkwJh2llXvYil9rGanfoI_7NQ_7g>
-    <xme:Q6IeYJVm6FDSRn9PA7kv2A7Bk3GQ7rFWIQxAHIv43Jt3ny_J3DWUrCK3TO0OXB8HZ
-    QzXp708MiUzlQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrgeekgdeitdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
-    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecukfhppeekfedr
-    keeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:Q6IeYKLj2f1XFdqP3qkSj_y4EVmOVWHHqQ97xQ3nqW2sNh-IAhRqWg>
-    <xmx:Q6IeYCHkhHJoQIOe0dylWkTjm8d354ydFjzy0ksnvya1f3wpnXG_Fg>
-    <xmx:Q6IeYGWMOlACkAw9Dl-IeTA8cL0Y87PF1IRWG6pndmOK1_9xv99N_g>
-    <xmx:RKIeYEyhGrPtG5qEsU_sPVPecQamoCwhgT327mxoACq7U8xjwc8mKg>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 6849D24005B;
-        Sat,  6 Feb 2021 09:05:55 -0500 (EST)
-Date:   Sat, 6 Feb 2021 15:05:53 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Prike Liang <Prike.Liang@amd.com>
-Cc:     linux-usb@vger.kernel.org, mathias.nyman@intel.com,
-        Shyam-sundar.S-k@amd.com, Alexander.Deucher@amd.com,
-        Ramakanth.Akkenepalli@amd.com, Jack.Xie@amd.com
-Subject: Re: [PATCH v3] usb: pci-quirks: disable D3cold on xhci suspend for
- s2idle
-Message-ID: <YB6iQTE059WnBiPB@kroah.com>
-References: <1612527609-7053-1-git-send-email-Prike.Liang@amd.com>
+        id S230020AbhBFOUk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 6 Feb 2021 09:20:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229721AbhBFOUk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Feb 2021 09:20:40 -0500
+Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623F4C06174A;
+        Sat,  6 Feb 2021 06:19:59 -0800 (PST)
+Received: from miraculix.mork.no (fwa145.mork.no [192.168.9.145])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 116EJsjh025481
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Sat, 6 Feb 2021 15:19:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1612621194; bh=xDWEM83Qi1MXdyyOBM+i3n05LwuDlQxJCv5yycFe8/I=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=k06qOhlIoBHRZMk6AhB8u28oCZPCmeZpDw6UzCPh+/MkOx5fAsLcRAGa2l6H5Xlid
+         doDyw30X5hFCcWqLlPAhAXArAHfSMnUdk40yNMZnEygCW+qFEutbOSMNHzVr1KkIGO
+         a7aVDA5eoEsxqOy4CnFrug+mAc3aNy1EqGF0NbPw=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.94)
+        (envelope-from <bjorn@mork.no>)
+        id 1l8ORF-000JHQ-KJ; Sat, 06 Feb 2021 15:19:53 +0100
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Lech Perczak <lech.perczak@gmail.com>
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] net: usb: qmi_wwan: support ZTE P685M modem
+Organization: m
+References: <20210205173904.13916-1-lech.perczak@gmail.com>
+        <20210205173904.13916-2-lech.perczak@gmail.com>
+Date:   Sat, 06 Feb 2021 15:19:53 +0100
+In-Reply-To: <20210205173904.13916-2-lech.perczak@gmail.com> (Lech Perczak's
+        message of "Fri, 5 Feb 2021 18:39:03 +0100")
+Message-ID: <87r1lt1do6.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1612527609-7053-1-git-send-email-Prike.Liang@amd.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.102.4 at canardo
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 05, 2021 at 08:20:09PM +0800, Prike Liang wrote:
-> The XHCI is required enter D3hot rather than D3cold for AMD s2idle solution.
-> Otherwise, the 'Controller Not Ready' (CNR) bit not being cleared by host
-> in resume and eventually result in xhci resume failed in s2idle wakeup period.
+Lech Perczak <lech.perczak@gmail.com> writes:
 
-I do not understand this, can you perhaps rephrase it differently?
+> The modem is used inside ZTE MF283+ router and carriers identify it as
+> such.
+> Interface mapping is:
+> 0: QCDM, 1: AT (PCUI), 2: AT (Modem), 3: QMI, 4: ADB
+>
+> T:  Bus=3D02 Lev=3D02 Prnt=3D02 Port=3D05 Cnt=3D01 Dev#=3D  3 Spd=3D480  =
+MxCh=3D 0
+> D:  Ver=3D 2.01 Cls=3D00(>ifc ) Sub=3D00 Prot=3D00 MxPS=3D64 #Cfgs=3D  1
+> P:  Vendor=3D19d2 ProdID=3D1275 Rev=3Df0.00
+> S:  Manufacturer=3DZTE,Incorporated
+> S:  Product=3DZTE Technologies MSM
+> S:  SerialNumber=3DP685M510ZTED0000CP&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&=
+&&&&&&&&&0
 
-Also, please mention the specific hardware that has this bug in the
-commit log, or on the subject line, as the subject line is saying that
-this change is needed for all devices, when really only one is broken.
+This lookes weird.  But I guess that's really the string presented by
+this device?
 
-> 
-> v1 -> v2: drop the XHCI_COMP_MODE_QUIRK quirk and create a new one for handling
-> XHCI D3cold.
-> 
-> v2 -> v3: correct the quirk name typo XHCI_AMD_S2IDL_SUPPORT_QUIRK -> XHCI_AMD_S2IDLE_SUPPORT_QUIRK
+> C:* #Ifs=3D 5 Cfg#=3D 1 Atr=3Da0 MxPwr=3D500mA
+> I:* If#=3D 0 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
+=3Doption
+> E:  Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> I:* If#=3D 1 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
+=3Doption
+> E:  Ad=3D83(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
+> E:  Ad=3D82(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> E:  Ad=3D02(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> I:* If#=3D 2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
+=3Doption
+> E:  Ad=3D85(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
+> E:  Ad=3D84(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> E:  Ad=3D03(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> I:* If#=3D 3 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
+=3Dqmi_wwan
+> E:  Ad=3D87(I) Atr=3D03(Int.) MxPS=3D   8 Ivl=3D32ms
+> E:  Ad=3D86(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> E:  Ad=3D04(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> I:* If#=3D 4 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3D42 Prot=3D01 Driver=
+=3D(none)
+> E:  Ad=3D88(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> E:  Ad=3D05(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+>
+> Cc: Bj=C3=B8rn Mork <bjorn@mork.no>
+> Signed-off-by: Lech Perczak <lech.perczak@gmail.com>
 
-This goes below the --- line, as the documentation asks for.
+Patch looks fine to me.  But I don't think you can submit a net and usb
+serial patch in a series. These are two different subsystems.
 
-thanks,
+There's no dependency between the patches so you can just submit
+them as standalone patches.  I.e. no series.
 
-greg k-h
+Feel free to include
+
+Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
