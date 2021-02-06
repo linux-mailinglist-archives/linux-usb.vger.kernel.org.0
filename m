@@ -2,67 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B812311FDE
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Feb 2021 21:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E24A131206F
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Feb 2021 00:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbhBFUOF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 Feb 2021 15:14:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49214 "EHLO mail.kernel.org"
+        id S229742AbhBFXVs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 6 Feb 2021 18:21:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50108 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229506AbhBFUOE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 6 Feb 2021 15:14:04 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A0C164E02;
-        Sat,  6 Feb 2021 20:13:23 +0000 (UTC)
+        id S229719AbhBFXVq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 6 Feb 2021 18:21:46 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 753F064E7B;
+        Sat,  6 Feb 2021 23:21:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612642404;
-        bh=f8qhTJD7/YtaUs4LthL3OvIjhVnr54iLSmkEkhXsffc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ssXGiEGMXN/CyrtSbqgy7H31M6MViVUzi+fhIppB03f0J2s2Sb4QRS3G5QTrNhl30
-         282cSoVV5P04O8WlffI5b6vRLAhHDuLYUjdH4zBXSEOd6cB3MhXWxx0z0O+EWMM2W0
-         Zhf/kG4GDN/Jc/XGglckrJucEvep5jh+DjIs+6uY1ZdqHbNpKDMWMWPMV8lUEQ7LjK
-         RotzTCbTEmD+dt+A6PxQCedx2QhdiII7gmTfPlALLpz5aVKA4yB+/YBX7GZTn7dL+Q
-         uEtkdwIoEPFzVybpTUVGPh0BVCJ3H8dnZ7ED6NmeQoL6FZI7oQvIih7TXlADl+tEsS
-         HHbhgX3TnkISA==
-Date:   Sat, 6 Feb 2021 12:13:22 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Lech Perczak <lech.perczak@gmail.com>
-Cc:     =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] net: usb: qmi_wwan: support ZTE P685M modem
-Message-ID: <20210206121322.074ddbd3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <0264f3a2-d974-c405-fb08-18e5ca21bf76@gmail.com>
-References: <20210205173904.13916-1-lech.perczak@gmail.com>
-        <20210205173904.13916-2-lech.perczak@gmail.com>
-        <87r1lt1do6.fsf@miraculix.mork.no>
-        <0264f3a2-d974-c405-fb08-18e5ca21bf76@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+        s=k20201202; t=1612653666;
+        bh=ddaT+pTZgUerdlNaA2IEQQ0AQa0Hl2NVIhvZdN78j/Q=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=NAPjJjNkQo9kp7KmAF4j1+cifOpjL7IFi5FZzd2dYGtUL0drMRTZAltecnl+hNlm+
+         mcZ9XHkZoHRVBBwiqiZQLXa7AILPgcefjnG+y6S1S8nVNwxg2Exr8I0db+kEcZ4QUP
+         QvoCGq8gmhVALe4g8jeq6eps7MOQ+nroOpUr21TbLA4FYlo8gPGxr2Izi9l6XXDBVn
+         O6yqcqXgukhgFH4BUmMlzAC5UasuJJerDXRePwsudN3kxVaJKDVuWq6vDytfZi0Lm3
+         Q2KmDUcnV18DvLyKJnGj5EBFeTHE3W3QyhNURKDiWdTNsrKSBEoeOCeK1C/JlLgYhX
+         ANftvZUVZrbfA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6DE6560978;
+        Sat,  6 Feb 2021 23:21:06 +0000 (UTC)
+Subject: Re: [GIT PULL] USB driver fixes for 5.11-rc7
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YB6mrF7MGZ7AsN3m@kroah.com>
+References: <YB6mrF7MGZ7AsN3m@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YB6mrF7MGZ7AsN3m@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.11-rc7
+X-PR-Tracked-Commit-Id: f670e9f9c8cac716c3506c6bac9e997b27ad441a
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 368afecbfb5e9f590108208ed4491c094945c364
+Message-Id: <161265366644.26028.2680664778459085336.pr-tracker-bot@kernel.org>
+Date:   Sat, 06 Feb 2021 23:21:06 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 6 Feb 2021 15:50:41 +0100 Lech Perczak wrote:
-> >> Cc: Bj=C3=B8rn Mork<bjorn@mork.no>
-> >> Signed-off-by: Lech Perczak<lech.perczak@gmail.com> =20
-> > Patch looks fine to me.  But I don't think you can submit a net and usb
-> > serial patch in a series. These are two different subsystems.
-> >
-> > There's no dependency between the patches so you can just submit
-> > them as standalone patches.  I.e. no series. =20
-> Actually, there is, and I just noticed, that patches are in wrong order.
-> Without patch 2/2 for 'option' driver, there is possibility for that=20
-> driver to steal
-> interface 3 from qmi_wwan, as currently it will match interface 3 as=20
-> ff/ff/ff.
->=20
-> With that in mind I'm not really sure how to proceed.
->=20
-> What comes to my mind, is either submit this as series again, with=20
-> ordering swapped,
-> or submit 2/2 first, wait for it to become merged, and then submit 1/2.
+The pull request you sent on Sat, 6 Feb 2021 15:24:44 +0100:
 
-Send patch 2, wait for it to hit net, send 1 seems like the safest
-option. If we're lucky Johan can still send patch 2 for 5.11, otherwise
-we'll wait until the merge window - we're at rc7 already, it won't take
-too long.
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.11-rc7
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/368afecbfb5e9f590108208ed4491c094945c364
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
