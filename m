@@ -2,123 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1EC31207D
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Feb 2021 00:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A46C131209F
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Feb 2021 01:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbhBFXaC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 Feb 2021 18:30:02 -0500
-Received: from smtp.bonedaddy.net ([45.33.94.42]:53982 "EHLO
-        smtp.bonedaddy.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbhBFXaB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Feb 2021 18:30:01 -0500
-Received: from [192.168.1.209] (unknown [49.190.168.235])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pabs3@bonedaddy.net)
-        by smtp.bonedaddy.net (Postfix) with ESMTPSA id 02DFD180031;
-        Sat,  6 Feb 2021 18:29:25 -0500 (EST)
-Authentication-Results: smtp.bonedaddy.net; dmarc=fail (p=none dis=none) header.from=bonedaddy.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bonedaddy.net;
-        s=mail; t=1612654168;
-        bh=U1KviHR4kz5KFrf2nfsUnLEBwaR8CwmeytPIH989XXg=;
-        h=Subject:From:To:Cc:In-Reply-To:References:Date;
-        b=qVjijkOKiHSOBEAh0LLK/k+2BexO/RYVZBIbN5ujMJxEx9tSOiEVEJ0xWAA+xwi0X
-         vwrvQ9bO3+OuFR2/Gw1zeFx98q96VyRMU2cJuE3r18PbQxwwF11iQlWlbkzS4Uw0L/
-         PrwWX867LY6bYSsJQKAMFWEYYIbva/+D/Qby6TaZ9mXfA6mUBVK1rS2LwF/uF1iIdz
-         rZTJdY6zeAEDQhvaXbUnVW0QQ4s+oYgvb3+/dNlYVKTLafgAu9mHoIDz23dZa+d/8G
-         tyrsM1YxenbJlrIio2T31BEhdewF3RyXttrSDQc8SJv39eYCJAg0FyCtPnzni+TjBM
-         hEoYwBeOGCumQ==
-Message-ID: <ffd238f1787b8e23f974a220e94aa39eb62b2e60.camel@bonedaddy.net>
-Subject: Re: proposal: move Linux userspace USB gadget projects to
- linux-usb GitHub organisation?
-From:   Paul Wise <pabs3@bonedaddy.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Krzysztof Opasiak <k.opasiak@samsung.com>,
-        Matt Porter <mporter@linaro.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Karol Lewandowski <k.lewandowsk@samsung.com>,
-        linux-usb@vger.kernel.org
-In-Reply-To: <YB6WKs/6QMWJSS2t@kroah.com>
-References: <c38162833d1c8fede734e41eb5ce23cf393d6555.camel@bonedaddy.net>
-         <YAhKAiz2U9KQWQPE@kroah.com>
-         <86c0f13b298c8584bc7070543637f424075e526f.camel@bonedaddy.net>
-         <YB6WKs/6QMWJSS2t@kroah.com>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-2PbvljVfGWMGkrIGiwPw"
-Date:   Sun, 07 Feb 2021 07:28:39 +0800
+        id S229587AbhBGAzv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 6 Feb 2021 19:55:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229522AbhBGAzu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Feb 2021 19:55:50 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1017EC06174A;
+        Sat,  6 Feb 2021 16:55:09 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id f1so16663575lfu.3;
+        Sat, 06 Feb 2021 16:55:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6h+heYhygsXnSMC08EOO+2H8p2FaBb1HiQe2ZxTK5YA=;
+        b=bTCXk1xoFTmCOpKiYvpqDfXVGidpvTsbcE2F4/z/p71XFabsKrsNvdBEYAK/+ZsFNo
+         dMO17Prkx1bal2dWhS4riqH5piEKWnfHwrw+EAB16uMAHagTQFmgvSnKaon3DrWfILuA
+         9iKLmeBrIdZLfSbYwGWrMuTVFFgTPMEhiB001HDy5Tb3Uk3q9NzfSH+8fN8o1nMo7kRv
+         n5j7OptfTmBqGr+7ikAjGo5JbI6IkYUO5y/ulZM0+DJAWWkBOC5hhN/ugT6yczk6gIvf
+         kklWLe6KPN4d6Jk23yIK1tXBGQl55GEgLEN3XiX8ymQiMMCBcyVfyIDRsJsDd4lWg3GE
+         yjnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6h+heYhygsXnSMC08EOO+2H8p2FaBb1HiQe2ZxTK5YA=;
+        b=lxCe8pq4sd2jscK3KxaBWftCLT83cFZORAd/rQ8sB0qOhXhi8z4w/ZjLW1fz1WNRVt
+         8JnfAbNECF7Cq7ztbFWpdH3SoTXityKtpwGa4Lx/FgH41MXgzyiX1/KCckC8fdQKolPy
+         BMCcE9mZgR/xwaxiby5s2QOKgHOiLabwvbhcciHoiexHsuEzfCiK4o1P36/sQg7rYeYB
+         PxQAOFgxUX3OYngrw/l+mwQDIRwtpHJmgbPAq1d+Nlbs5z0ZVQe4RoA4OkgEhnvQ3JmI
+         SL/tzT0p8OAlFYIbMX6kPcuYrsNO8/FND0aWeM3w5DtklwlAIqh1TukhTGuqqNYUyydj
+         ZOsg==
+X-Gm-Message-State: AOAM533yx3rcRdtaDjg+yYvD/6dAeRFDyXcR6EFpifqjcCC4QlloRQxa
+        1BGxStMuiSxTVgavueNGgEq8MpNy7UQg5g==
+X-Google-Smtp-Source: ABdhPJwlFcFp0qxdXew8YcOxTtMTXfmVRK97ncXURzwnbIFNZdI+qAB/3UYDIL15bGZtu9MJ68tZ1g==
+X-Received: by 2002:a19:5e1d:: with SMTP id s29mr6788082lfb.440.1612659307586;
+        Sat, 06 Feb 2021 16:55:07 -0800 (PST)
+Received: from rafiki.local (user-5-173-242-247.play-internet.pl. [5.173.242.247])
+        by smtp.gmail.com with ESMTPSA id o14sm1453485ljp.48.2021.02.06.16.55.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Feb 2021 16:55:07 -0800 (PST)
+From:   Lech Perczak <lech.perczak@gmail.com>
+To:     netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Lech Perczak <lech.perczak@gmail.com>,
+        Johan Hovold <johan@kernel.org>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+Subject: [PATCH v3] usb: serial: option: update interface mapping for ZTE P685M
+Date:   Sun,  7 Feb 2021 01:54:43 +0100
+Message-Id: <20210207005443.12936-1-lech.perczak@gmail.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210206121322.074ddbd3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <20210206121322.074ddbd3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-User-Agent: Evolution 3.38.3-1 
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This patch prepares for qmi_wwan driver support for the device.
+Previously "option" driver mapped itself to interfaces 0 and 3 (matching
+ff/ff/ff), while interface 3 is in fact a QMI port.
+Interfaces 1 and 2 (matching ff/00/00) expose AT commands,
+and weren't supported previously at all.
+Without this patch, a possible conflict would exist if device ID was
+added to qmi_wwan driver for interface 3.
 
---=-2PbvljVfGWMGkrIGiwPw
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Update and simplify device ID to match interfaces 0-2 directly,
+to expose QCDM (0), PCUI (1), and modem (2) ports and avoid conflict
+with QMI (3), and ADB (4).
 
-On Sat, 2021-02-06 at 14:14 +0100, Greg Kroah-Hartman wrote:
+The modem is used inside ZTE MF283+ router and carriers identify it as
+such.
+Interface mapping is:
+0: QCDM, 1: AT (PCUI), 2: AT (Modem), 3: QMI, 4: ADB
 
-> I still don't see the benefit here, what is this going to change?
+T:  Bus=02 Lev=02 Prnt=02 Port=05 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
+D:  Ver= 2.01 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=19d2 ProdID=1275 Rev=f0.00
+S:  Manufacturer=ZTE,Incorporated
+S:  Product=ZTE Technologies MSM
+S:  SerialNumber=P685M510ZTED0000CP&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&0
+C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+E:  Ad=87(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-All the standard benefits of the GitHub organisations feature and
-collaborative maintenance in general; a single location for related
-projects, a stable location for projects that doesn't change as people
-come and go, a single location for patches to go rather than a
-collection of different forks, an easy way to continue maintenance when
-people move on, not losing the issue and pull request database every
-time there is a new fork, not having to change project name after forks
-(see libusbg vs libusbgx), a focal point that leads to more usage and
-code review as more people get involved.=20
+Cc: Johan Hovold <johan@kernel.org>
+Cc: Bjørn Mork <bjorn@mork.no>
+Signed-off-by: Lech Perczak <lech.perczak@gmail.com>
+---
+v3: No changes to contents of the patch.
+Resend as separate patch to be merged through USB subsystem, the
+following patch for qmi_wwan will go through netdev tree after this is
+merged.
+Updated commit description, added note about possible qmi_wwan conflict.
 
-> If Debian hasn't already packaged up any of these, that's a huge
-> indication that no one actually uses them :)
+v2: Blacklist ports 3-4 and simplify device ID,
+as suggested by Lars Melin.
 
-I assume Android have their own thing but Samsung use them in Tizen,
-Collabora use them and have a blog series on them. They haven't spread
-outside of that due to poor marketing, every other situation seems to
-use fiddly, manual and non-dynamic poking of files in configfs.
+ drivers/usb/serial/option.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-https://www.collabora.com/news-and-blog/search-results.html?search=3Dgadget=
-&id=3D655&simplesearch_offset=3D0
-
-> What projects are not in Debian already that somehow need to be
-> there?
-
-All the Linux USB gadget stuff is missing from most distributions; the
-core projects libusbg/libusbgx, gt, gadgetd and individual gadgets such
-as cmtp-responder, ptp-gadget etc.
-
-With non-Android Linux based phones (Pinephone & Librem) starting to
-get a bit of traction, packaging the core + gadgets is needed.
-
---=20
-bye,
-pabs
-
-https://bonedaddy.net/pabs3/
-
---=-2PbvljVfGWMGkrIGiwPw
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEYQsotVz8/kXqG1Y7MRa6Xp/6aaMFAmAfJiQACgkQMRa6Xp/6
-aaMfAxAAjU88K7luciBYg6Gyb+MXfGHtFppcnWNoQFQi57IgPf1E56zK8OssVTCw
-YAACMS565XCOGdxpEAKQdUzlgIWvGsXxbvSaGThcku8EhCRNQcrmEhB3jye09tKb
-2doUpwKBOjJrRAbMM+k+KuTBTg4Z1W6JarTC3Mw+Nmj/jFsfM7o3WwzVKFBSqQ2r
-IjMwM4f5PguE6QWgYt54jks6WsYy41Vd6efvslw4XeCY4BnXoBulLuYiV5GGjkP5
-wD28V7YngR3winBRZMlXEfr4SkIyNQmdu1RC+RtiGEMzlfMlI89YKO2uAYx1Vzjm
-bz78ul9K9GEzMM0xYgd77JMwHB6Tmo4Y9qZDAhWG1be5VYisk/ew5MGKD6aUYi9M
-8MfODBAUIE2oAfbBgY53n/7rjhEU4orT+CEVfQb6v/jE3c//qTaONdv+rioBIqVZ
-aoRxM4+LaXSDHfkOLOdiOm67dH2XUkUZKs+sk/06MbfQnR+tjC7Re+qUJvYaDCeh
-GeGo9H4c686fk+sWCYEI28luwTFwvxlJW4MUJ4SbuNdrgPo9He2ayXJNVn3d4fNE
-irLhMQahq7NOFQz+e+iued+E3bifwGFxrNFJtHrriaNiurbU8mZ3nCbqTirwEGam
-ZaxcmfZpJboqD0rpgy4by4itfGLg7KFch0F81ep+w4ubGeGuG2g=
-=FnXP
------END PGP SIGNATURE-----
-
---=-2PbvljVfGWMGkrIGiwPw--
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 3fe959104311..485d07df8f69 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1567,7 +1567,7 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1272, 0xff, 0xff, 0xff) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1273, 0xff, 0xff, 0xff) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1274, 0xff, 0xff, 0xff) },
+-	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1275, 0xff, 0xff, 0xff) },
++	{ USB_DEVICE(ZTE_VENDOR_ID, 0x1275), .driver_info = RSVD(3) | RSVD(4) }, /* ZTE P685M */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1276, 0xff, 0xff, 0xff) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1277, 0xff, 0xff, 0xff) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1278, 0xff, 0xff, 0xff) },
+-- 
+2.20.1
 
