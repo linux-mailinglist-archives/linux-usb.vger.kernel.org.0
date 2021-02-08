@@ -2,89 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3EF313806
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Feb 2021 16:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A662D313876
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Feb 2021 16:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbhBHPfg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Feb 2021 10:35:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38210 "EHLO mail.kernel.org"
+        id S233983AbhBHPtG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Feb 2021 10:49:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42910 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232102AbhBHPdL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 8 Feb 2021 10:33:11 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D260764E30;
-        Mon,  8 Feb 2021 15:28:38 +0000 (UTC)
+        id S232159AbhBHPsq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 8 Feb 2021 10:48:46 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BD09464E60;
+        Mon,  8 Feb 2021 15:48:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612798119;
-        bh=E7hU2wEwkcreSsMPj7hBL43uJ3QeTlwgc/mdeP/tNz0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qwKpXfWlnBjmXoMGfiMTArXWSorGJf4lwq5D3KZk1oYvtxD0whPof+fZ+0UDKbCht
-         2EgEmF+2LB0GHQseKAPlSvUA/u19Scd2N9QHBNVQqw8yoV5EPFBXfETnfbj2LMpwYT
-         TvsQjvB/AA8mo2RNMpLYrxa4zuUJA5l4DzSweJwRs9Wse47/0KwfZapIIGqZp9eSD0
-         2EGdXir1RCmNksgEb/uGw3UNfvp8fdOWYht14dMtE4dUNsDrRkTB/TATWXlkSq0FWq
-         6/posQ67uzYk5Y5EC0WCSDS/TomEIP5IwmaBm6zdn1gMMfEmc0vOQKZu04FxRvYIFu
-         JBMYvCbIf4m9Q==
+        s=k20201202; t=1612799281;
+        bh=PItUJHlIhnMJGEXKGysuzUkGG/a3tdRmx1rjVzOOgPY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UffVNtKu6GgAHOxqgXXxlkscrglVfRMDORXpafN1W+CVZ0JwEAlrQQJ9vfjM+XOxZ
+         QHv/EihI25tpRpywMngSqaDuS0Q3QjIfu8TT1cAunk+8MqbiTEwXkPmfLHfVdv71n3
+         RvYgIYdOd0sLfvP6RlThy7wNMtgYZ4hmaZ56ATjonf6DOUcOQYNAXylGdskZWKQH8M
+         7rjLEdaS14mOMdJrt8yK5FhQz/gYNEaAP3V5iGOD1eC9V0iO2A1e/LWRYzO4NEIV/5
+         nhQfm2bolyJMxSYvCHAV/RiT58yAHFtptTgpbL7c8lOkYpTRFgEKkwC63v0/Y3/UcK
+         IS7WB9z1HbiBQ==
 Received: from johan by xi.lan with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1l98T8-0003zs-1b; Mon, 08 Feb 2021 16:28:54 +0100
-Date:   Mon, 8 Feb 2021 16:28:54 +0100
+        id 1l98lt-0005R4-U1; Mon, 08 Feb 2021 16:48:17 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] USB: serial: Drop if with an always false
- condition
-Message-ID: <YCFYtv/yC124CTaR@hovoldconsulting.com>
-References: <20210208143149.963644-1-uwe@kleine-koenig.org>
+To:     linux-usb@vger.kernel.org
+Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: [PATCH] USB: serial: drop bogus to_usb_serial_port() checks
+Date:   Mon,  8 Feb 2021 16:48:06 +0100
+Message-Id: <20210208154806.20853-1-johan@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210208143149.963644-1-uwe@kleine-koenig.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 08, 2021 at 03:31:48PM +0100, Uwe Kleine-König wrote:
-> In a bus remove function the passed device is always valid, so there is
-> no need to check for it being NULL.
-> 
-> (Side note: The check for port being non-NULL is broken anyhow, because
-> to_usb_serial_port() is a wrapper around container_of() for a member that is
-> not the first one. So port can hardly become NULL.)
+The to_usb_serial_port() macro is implemented using container_of() so
+there's no need to check for NULL.
 
-Right, this check was just broken. I don't think it was even intended to
-catch a NULL struct device pointer. Note that there's two more in
-match() and probe() that I'll remove in a follow up.
+Note that neither bus match() or probe() is ever called with a NULL
+struct device pointer so the checks weren't just misplaced.
 
-> Signed-off-by: Uwe Kleine-König <uwe@kleine-koenig.org>
-> ---
->  drivers/usb/serial/bus.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/serial/bus.c b/drivers/usb/serial/bus.c
-> index eb0195cf37dd..d862ed656414 100644
-> --- a/drivers/usb/serial/bus.c
-> +++ b/drivers/usb/serial/bus.c
-> @@ -87,15 +87,11 @@ static int usb_serial_device_probe(struct device *dev)
->  static int usb_serial_device_remove(struct device *dev)
->  {
->  	struct usb_serial_driver *driver;
-> -	struct usb_serial_port *port;
-> +	struct usb_serial_port *port = to_usb_serial_port(dev);
->  	int retval = 0;
->  	int minor;
->  	int autopm_err;
->  
-> -	port = to_usb_serial_port(dev);
-> -	if (!port)
-> -		return -ENODEV;
-> -
->  	/*
->  	 * Make sure suspend/resume doesn't race against port_remove.
->  	 *
-> 
-> base-commit: 5c8fe583cce542aa0b84adc939ce85293de36e5e
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/serial/bus.c | 16 +++-------------
+ 1 file changed, 3 insertions(+), 13 deletions(-)
 
-Both patches now applied, thanks.
+diff --git a/drivers/usb/serial/bus.c b/drivers/usb/serial/bus.c
+index 1a8c7821d00a..7133818a58b9 100644
+--- a/drivers/usb/serial/bus.c
++++ b/drivers/usb/serial/bus.c
+@@ -16,19 +16,13 @@
+ static int usb_serial_device_match(struct device *dev,
+ 						struct device_driver *drv)
+ {
+-	struct usb_serial_driver *driver;
+-	const struct usb_serial_port *port;
++	const struct usb_serial_port *port = to_usb_serial_port(dev);
++	struct usb_serial_driver *driver = to_usb_serial_driver(drv);
+ 
+ 	/*
+ 	 * drivers are already assigned to ports in serial_probe so it's
+ 	 * a simple check here.
+ 	 */
+-	port = to_usb_serial_port(dev);
+-	if (!port)
+-		return 0;
+-
+-	driver = to_usb_serial_driver(drv);
+-
+ 	if (driver == port->serial->type)
+ 		return 1;
+ 
+@@ -37,16 +31,12 @@ static int usb_serial_device_match(struct device *dev,
+ 
+ static int usb_serial_device_probe(struct device *dev)
+ {
++	struct usb_serial_port *port = to_usb_serial_port(dev);
+ 	struct usb_serial_driver *driver;
+-	struct usb_serial_port *port;
+ 	struct device *tty_dev;
+ 	int retval = 0;
+ 	int minor;
+ 
+-	port = to_usb_serial_port(dev);
+-	if (!port)
+-		return -ENODEV;
+-
+ 	/* make sure suspend/resume doesn't race against port_probe */
+ 	retval = usb_autopm_get_interface(port->serial->interface);
+ 	if (retval)
+-- 
+2.26.2
 
-Johan
