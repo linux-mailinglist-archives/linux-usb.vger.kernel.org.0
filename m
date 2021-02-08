@@ -2,234 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFEB4313D72
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Feb 2021 19:27:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B863B313EFA
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Feb 2021 20:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235335AbhBHS1W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Feb 2021 13:27:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234021AbhBHS04 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Feb 2021 13:26:56 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2252DC061788
-        for <linux-usb@vger.kernel.org>; Mon,  8 Feb 2021 10:26:16 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id v193so11168088oie.8
-        for <linux-usb@vger.kernel.org>; Mon, 08 Feb 2021 10:26:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=w2bs1jNylzHBAeRpSQWmE5k5+qmesQnum/GX7yJm6Do=;
-        b=eC0jYKs11Hzwuqg/IM7punueI3VwBVmIeAz5s/MMxL93H7G/sk6ozb9JLILF8rxS6p
-         cAfx3TcRCB3TOUr09alnw4r3uKzdnj6wvWJ7jnJmttHEZ6NG1CeRer6M9yKagylpSjVC
-         1E+JPJxvXOXj6jbxpTfEpnlXGjonDeX4/nDbbyxIwei9XZj5fp8+e/F+ku+1+UvHIkLp
-         LDyh1MU11nDAjM4x4qKwRdapMJTAAZXZdQGJ1m0MF5gUYyf64VmFNNZ7cB28zzR3RIds
-         ZnSWBnQzv4wOg04aw20dlV16VA4jLg4yKmhzbTCcRKmhlzS84uaLDjlG3HNCEES0yY23
-         6TRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=w2bs1jNylzHBAeRpSQWmE5k5+qmesQnum/GX7yJm6Do=;
-        b=sVK8RprwP+fiRuWSOO85cg54KaO/L18OGjZR63Xx/LbL+QCZwPyxKbHmsmMmO4yH4F
-         h1V4ys5xYV8fSRJA63GVSchvc0PB/BSaF7rk3AcDiA2TX22NE1D2DYaaM+Gc+vlHGHLn
-         d4O//1/Y8kAuPE+gOm1j7VRpCcciKh5aUB+XkaGJhN69aOhZ4RBY7lNhr6lYZRkt8XLB
-         wFd2rjMsT3yqpAkKR3tn/OV/s/FjKItRwe3fPwWPmGgycGN+5DHAsDjNsmYC+GcMfOU3
-         8JZP3SG6x6R2KD3l/9ZthHXgmeGv1icl2aOgdsjZn+BiMnLGHJ7IM71Z/S73iu9STuql
-         61Yw==
-X-Gm-Message-State: AOAM530oNT726HR1p5/F9Se406wfgCRT1JBX12u3MGAhLHVKF4mLWKSX
-        bX8qHzxIRERIw+XAaE+ClZReNg==
-X-Google-Smtp-Source: ABdhPJxlojqvFU7c81BNhmI5mz56dvLqoVVxbKceJGrel8NuoQVVZC0Jf97UResasi5bkkD0bP0Q0Q==
-X-Received: by 2002:aca:72cf:: with SMTP id p198mr38522oic.51.1612808775552;
-        Mon, 08 Feb 2021 10:26:15 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id e6sm2939112otl.63.2021.02.08.10.26.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Feb 2021 10:26:14 -0800 (PST)
-Date:   Mon, 8 Feb 2021 12:26:13 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Baruch Siach <baruch@tkos.co.il>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Kathiravan T <kathirav@codeaurora.org>,
-        Balaji Prakash J <bjagadee@codeaurora.org>
-Subject: Re: [PATCH] usb: dwc3: reference clock configuration
-Message-ID: <YCGCRQpqVNI2KZyi@builder.lan>
-References: <8fc38cb73afd31269f1ea0c28e73604c53cebb17.1612764006.git.baruch@tkos.co.il>
+        id S231178AbhBHT3w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Feb 2021 14:29:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40234 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236292AbhBHT3K (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 8 Feb 2021 14:29:10 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2888F64E85;
+        Mon,  8 Feb 2021 19:28:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612812509;
+        bh=FhPBn+xAIyaRb80jUQ/+VCEBlRmAWGAiuwuWeZKEAw0=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=bvWVE4rMtWiJ+5Ud0GaW89qsRs0OrwsT4pVsImCFxcf+ZGl5xFL/kVQwMynV0/qsn
+         fclR22jSfKUskWjVUh7udHhdDkwgdXdy89bmlwijaMwPyxCB08UA26YfAP+1jjVJ1d
+         lNMa9RrWLGYq8Ymzl+tr4eIxyhSNBAHktbh08HwConCJPU7Y04DyJVYrzOWRNSKADK
+         HajbPDlcsrsFvysMhZ7i0kDiJZfwPVdTtFzG3V7I5v4CPBw352Y4ZhfTlHgbTJPcOo
+         Eo9x8MG7nWkiAgshfrkn4HLquMYyfPKZ0SDOwrg1l1NKibDPlzEAd4eOs4Iy8z0KVY
+         4xfWHl2o4XGrA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8fc38cb73afd31269f1ea0c28e73604c53cebb17.1612764006.git.baruch@tkos.co.il>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210120073414.69208-2-jckuo@nvidia.com>
+References: <20210120073414.69208-1-jckuo@nvidia.com> <20210120073414.69208-2-jckuo@nvidia.com>
+Subject: Re: [PATCH v7 01/14] clk: tegra: Add PLLE HW power sequencer control
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        nkristam@nvidia.com, linux-clk@vger.kernel.org,
+        JC Kuo <jckuo@nvidia.com>, Thierry Reding <treding@nvidia.com>
+To:     JC Kuo <jckuo@nvidia.com>, gregkh@linuxfoundation.org,
+        jonathanh@nvidia.com, kishon@ti.com, mturquette@baylibre.com,
+        robh@kernel.org, thierry.reding@gmail.com
+Date:   Mon, 08 Feb 2021 11:28:27 -0800
+Message-ID: <161281250769.76967.1356115606522577203@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon 08 Feb 00:00 CST 2021, Baruch Siach wrote:
-
-> From: Balaji Prakash J <bjagadee@codeaurora.org>
-> 
-> DWC_USB3_GFLADJ and DWC_USB3_GUCTL registers contain options
-> to control the behavior of controller with respect to SOF and ITP.
-> The reset values of these registers are aligned for 19.2 MHz
-> reference clock source. This change will add option to override
-> these settings for reference clock other than 19.2 MHz
-> 
-> Tested on IPQ6018 SoC based CP01 board with 24MHz reference clock.
-> 
-> Signed-off-by: Balaji Prakash J <bjagadee@codeaurora.org>
-> [ baruch: mention tested hardware ]
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Quoting JC Kuo (2021-01-19 23:34:01)
+> PLLE has a hardware power sequencer logic which is a state machine
+> that can power on/off PLLE without any software intervention. The
+> sequencer has two inputs, one from XUSB UPHY PLL and the other from
+> SATA UPHY PLL. PLLE provides reference clock to XUSB and SATA UPHY
+> PLLs. When both of the downstream PLLs are powered-off, PLLE hardware
+> power sequencer will automatically power off PLLE for power saving.
+>=20
+> XUSB and SATA UPHY PLLs also have their own hardware power sequencer
+> logic. XUSB UPHY PLL is shared between XUSB SuperSpeed ports and PCIE
+> controllers. The XUSB UPHY PLL hardware power sequencer has inputs
+> from XUSB and PCIE. When all of the XUSB SuperSpeed ports and PCIE
+> controllers are in low power state, XUSB UPHY PLL hardware power
+> sequencer automatically power off PLL and flags idle to PLLE hardware
+> power sequencer. Similar applies to SATA UPHY PLL.
+>=20
+> PLLE hardware power sequencer has to be enabled after both downstream
+> sequencers are enabled.
+>=20
+> This commit adds two helper functions:
+> 1. tegra210_plle_hw_sequence_start() for XUSB PADCTL driver to enable
+>    PLLE hardware sequencer at proper time.
+>=20
+> 2. tegra210_plle_hw_sequence_is_enabled() for XUSB PADCTL driver to
+>    check whether PLLE hardware sequencer has been enabled or not.
+>=20
+> Signed-off-by: JC Kuo <jckuo@nvidia.com>
+> Acked-by: Thierry Reding <treding@nvidia.com>
 > ---
->  .../devicetree/bindings/usb/dwc3.txt          |  5 ++
->  drivers/usb/dwc3/core.c                       | 52 +++++++++++++++++++
->  drivers/usb/dwc3/core.h                       | 12 +++++
->  3 files changed, 69 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
-> index 1aae2b6160c1..4ffa87b697dc 100644
-> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
-> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
-> @@ -89,6 +89,11 @@ Optional properties:
->   - snps,quirk-frame-length-adjustment: Value for GFLADJ_30MHZ field of GFLADJ
->  	register for post-silicon frame length adjustment when the
->  	fladj_30mhz_sdbnd signal is invalid or incorrect.
-> + - snps,quirk-ref-clock-adjustment: Value for GFLADJ_REFCLK_* fields of GFLADJ
-> +	register for reference clock other than 19.2 MHz is used.
 
-What are typical values for this property? What unit does it have? How
-does it actually relate to the frequency of the reference clock?
-
-> + - snps,quirk-ref-clock-period: Value for REFCLKPER filed of GUCTL. This field
-> +	indicates in terms of nano seconds the period of ref_clk. To calculate the
-> +	ideal value, REFCLKPER = (1/ref_clk in Hz)*10^9.
-
-Can't we make the dwc3 reference this clock and use clk_get_rate() and
-then do this math in the driver?
-
->   - snps,rx-thr-num-pkt-prd: periodic ESS RX packet threshold count - host mode
->  			only. Set this and rx-max-burst-prd to a valid,
->  			non-zero value 1-16 (DWC_usb31 programming guide
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 841daec70b6e..85e40ec8e23b 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -325,6 +325,48 @@ static void dwc3_frame_length_adjustment(struct dwc3 *dwc)
->  	}
->  }
->  
-> +/**
-> + * dwc3_ref_clk_adjustment - Reference clock settings for SOF and ITP
-> + *		Default reference clock configurations are calculated assuming
-> + *		19.2 MHz clock source. For other clock source, this will set
-> + *		configuration in DWC3_GFLADJ register
-> + * @dwc: Pointer to our controller context structure
-> + */
-> +static void dwc3_ref_clk_adjustment(struct dwc3 *dwc)
-> +{
-> +	u32 reg;
-> +
-> +	if (dwc->ref_clk_adj == 0)
-> +		return;
-> +
-> +	reg = dwc3_readl(dwc->regs, DWC3_GFLADJ);
-> +	reg &= ~DWC3_GFLADJ_REFCLK_MASK;
-> +	reg |=  (dwc->ref_clk_adj << DWC3_GFLADJ_REFCLK_SEL);
-
-	reg = FIELD_SET(DWC3_GFLADJ_REFCLK_MASK, adj, reg);
-
-Regards,
-Bjorn
-
-> +	dwc3_writel(dwc->regs, DWC3_GFLADJ, reg);
-> +}
-> +
-> +/**
-> + * dwc3_ref_clk_period - Reference clock period configuration
-> + *		Default reference clock period is calculated assuming
-> + *		19.2 MHz as clock source. For other clock source, this
-> + *		will set clock period in DWC3_GUCTL register
-> + * @dwc: Pointer to our controller context structure
-> + * @ref_clk_per: reference clock period in ns
-> + */
-> +static void dwc3_ref_clk_period(struct dwc3 *dwc)
-> +{
-> +	u32 reg;
-> +
-> +	if (dwc->ref_clk_per == 0)
-> +		return;
-> +
-> +	reg = dwc3_readl(dwc->regs, DWC3_GUCTL);
-> +	reg &= ~DWC3_GUCTL_REFCLKPER_MASK;
-> +	reg |=  (dwc->ref_clk_per << DWC3_GUCTL_REFCLKPER_SEL);
-> +	dwc3_writel(dwc->regs, DWC3_GUCTL, reg);
-> +}
-> +
-> +
->  /**
->   * dwc3_free_one_event_buffer - Frees one event buffer
->   * @dwc: Pointer to our controller context structure
-> @@ -982,6 +1024,12 @@ static int dwc3_core_init(struct dwc3 *dwc)
->  	/* Adjust Frame Length */
->  	dwc3_frame_length_adjustment(dwc);
->  
-> +	/* Adjust Reference Clock Settings */
-> +	dwc3_ref_clk_adjustment(dwc);
-> +
-> +	/* Adjust Reference Clock Period */
-> +	dwc3_ref_clk_period(dwc);
-> +
->  	dwc3_set_incr_burst_type(dwc);
->  
->  	usb_phy_set_suspend(dwc->usb2_phy, 0);
-> @@ -1351,6 +1399,10 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->  				    &dwc->hsphy_interface);
->  	device_property_read_u32(dev, "snps,quirk-frame-length-adjustment",
->  				 &dwc->fladj);
-> +	device_property_read_u32(dev, "snps,quirk-ref-clock-adjustment",
-> +				 &dwc->ref_clk_adj);
-> +	device_property_read_u32(dev, "snps,quirk-ref-clock-period",
-> +				 &dwc->ref_clk_per);
->  
->  	dwc->dis_metastability_quirk = device_property_read_bool(dev,
->  				"snps,dis_metastability_quirk");
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index 1b241f937d8f..469e94512414 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -379,6 +379,14 @@
->  #define DWC3_GFLADJ_30MHZ_SDBND_SEL		BIT(7)
->  #define DWC3_GFLADJ_30MHZ_MASK			0x3f
->  
-> +/* Global User Control Register*/
-> +#define DWC3_GUCTL_REFCLKPER_MASK		0xffc00000
-> +#define DWC3_GUCTL_REFCLKPER_SEL		22
-> +
-> +/* Global reference clock Adjustment Register */
-> +#define DWC3_GFLADJ_REFCLK_MASK			0xffffff00
-> +#define DWC3_GFLADJ_REFCLK_SEL			8
-> +
->  /* Global User Control Register 2 */
->  #define DWC3_GUCTL2_RST_ACTBITLATER		BIT(14)
->  
-> @@ -956,6 +964,8 @@ struct dwc3_scratchpad_array {
->   * @regs: base address for our registers
->   * @regs_size: address space size
->   * @fladj: frame length adjustment
-> + * @ref_clk_adj: reference clock adjustment
-> + * @ref_clk_per: reference clock period configuration
->   * @irq_gadget: peripheral controller's IRQ number
->   * @otg_irq: IRQ number for OTG IRQs
->   * @current_otg_role: current role of operation while using the OTG block
-> @@ -1118,6 +1128,8 @@ struct dwc3 {
->  	enum usb_dr_mode	role_switch_default_mode;
->  
->  	u32			fladj;
-> +	u32			ref_clk_adj;
-> +	u32			ref_clk_per;
->  	u32			irq_gadget;
->  	u32			otg_irq;
->  	u32			current_otg_role;
-> -- 
-> 2.30.0
-> 
+Acked-by: Stephen Boyd <sboyd@kernel.org>
