@@ -2,56 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 608F5313F00
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Feb 2021 20:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAED7314258
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Feb 2021 22:54:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235581AbhBHTau (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Feb 2021 14:30:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40288 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236308AbhBHT3Y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 8 Feb 2021 14:29:24 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B27B264DC3;
-        Mon,  8 Feb 2021 19:28:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612812521;
-        bh=s0JgrqQa+G0wPRwnpZnlE2dShxRomBj4t2pW7KWbP8I=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=JrUylQRrCmKmeeyowwSWrB44pt/GZjlrckJ/eNmUN1WqDzWej39YLeb+wAurhdk+R
-         43QBk4f3OnrR0dX7CBEbYxjycsk3VFd9x6yNZUip8ymVL3qimGTQZ4KL36GQxltJb+
-         IvV0heaGQ8w+fTMMsU5yt6Gp2MdcgLkCAQemUymwus547COdfzsANHY0/khGTc1v7F
-         AbdR8oCs30javFffP7icwC9HQZrasdv2g197sZdygVrS3b8ohpi3b6tei9vdTiaZiB
-         /S59GseQJuyqH8U/4lOT50dXeTamRjw4vq6gMVcmLjbwSAMnScQZPlU4//LPhZzk/E
-         ISJRe6gMoyWbw==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20210120073414.69208-3-jckuo@nvidia.com>
-References: <20210120073414.69208-1-jckuo@nvidia.com> <20210120073414.69208-3-jckuo@nvidia.com>
-Subject: Re: [PATCH v7 02/14] clk: tegra: Don't enable PLLE HW sequencer at init
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        nkristam@nvidia.com, linux-clk@vger.kernel.org,
-        JC Kuo <jckuo@nvidia.com>, Thierry Reding <treding@nvidia.com>
-To:     JC Kuo <jckuo@nvidia.com>, gregkh@linuxfoundation.org,
-        jonathanh@nvidia.com, kishon@ti.com, mturquette@baylibre.com,
-        robh@kernel.org, thierry.reding@gmail.com
-Date:   Mon, 08 Feb 2021 11:28:40 -0800
-Message-ID: <161281252000.76967.4881086496669699756@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+        id S236934AbhBHVy2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Feb 2021 16:54:28 -0500
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:57226 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235391AbhBHVyV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Feb 2021 16:54:21 -0500
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id BD613C008C;
+        Mon,  8 Feb 2021 21:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1612821186; bh=YnF05UT6ySVr61Zj+a+THpPVOUiQjkWAD0CpyRmmRso=;
+        h=Date:From:Subject:To:Cc:From;
+        b=PLKQ6/D+mu1FHqgTVFjVFE+p2wQffGjs03Pmx5jUuSsdB7o16ZvH8AWoZ0piN1Gq4
+         9D21j7fJTt5HbFwQ6xguVJ/GK3w93dt9eIXLx7G9gEWx4H00j6DKGg4nanYDu1PRNZ
+         KQFKHoN276deO07bZIYQaFLdxjPN7y+ZpWFD+Dw1W5lhCsHuJLGzj9LklS0xs7s1Uz
+         XxmRRWJ+JtM0cAyarPeN5eKWqYysyWU1fKj9C7FJPtF/WhzQlTC4FRVDQcoq3F4cPY
+         T8W6esdAWQaxEKA4G3H+ve23ukkOlaenlI7LKKgiJcCiXJdxrfe+eQWoKr2D1LC5Ng
+         DCiDhVw4u17uA==
+Received: from te-lab16 (unknown [10.10.52.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 5C102A024E;
+        Mon,  8 Feb 2021 21:53:04 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Mon, 08 Feb 2021 13:53:03 -0800
+Date:   Mon, 08 Feb 2021 13:53:03 -0800
+Message-Id: <cover.1612820995.git.Thinh.Nguyen@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH 0/2] usb: dwc3: gadget: Fix fullspeed interval setting
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>, <stable@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting JC Kuo (2021-01-19 23:34:02)
-> PLLE hardware power sequencer references PEX/SATA UPHY PLL hardware
-> power sequencers' output to enable/disable PLLE. PLLE hardware power
-> sequencer has to be enabled only after PEX/SATA UPHY PLL's sequencers
-> are enabled.
->=20
-> Signed-off-by: JC Kuo <jckuo@nvidia.com>
-> Acked-by: Thierry Reding <treding@nvidia.com>
-> ---
+The dwc3 driver did not account for operating in fullspeed when setting
+DEPCFG.bInterval_m1. This series fixes it.
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+Note that for some bInterval, some IP versions may not exhibit invalid behavior
+from the invalid DEPCFG.bInterval_m1 setting, which may mask this issue.
+
+
+Thinh Nguyen (2):
+  usb: dwc3: gadget: Fix setting of DEPCFG.bInterval_m1
+  usb: dwc3: gadget: Fix dep->interval for fullspeed interrupt
+
+ drivers/usb/dwc3/gadget.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
+
+
+base-commit: d8c849037d9398abe6a5f5d065eafc777eb3bdaf
+-- 
+2.28.0
+
