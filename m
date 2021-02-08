@@ -2,82 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A347A31425D
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Feb 2021 22:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D13314260
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Feb 2021 22:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236830AbhBHVyf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Feb 2021 16:54:35 -0500
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:57250 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235345AbhBHVyV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Feb 2021 16:54:21 -0500
-Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id D7AE1C0096;
-        Mon,  8 Feb 2021 21:53:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1612821198; bh=ozkQo3B++EYfECFvGM89waDABpZFRTmfbTdPMBiW3AU=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=eKxsEwCJ4no0dPV9cCQZkctnqjg3l/E9CRBKgW/PjtMPQKDjcr7LCaeHtPCh22bqk
-         VLLNn1bVATtgZKB2I24MuhPAT1nw4WnVPv+YQVlagLMFhyaYG+EkoN9jzgFzX05K2D
-         kVPiTrdQM2ySmw+H+aMgjXLSHFqJUQtE+qxp/XNPNg3VY4xAoKuh/Fk31Xo7HRAOql
-         kfg7gP/Oa6pPfuZpp1Ln75RGuj4kTC2vKOo+edFEpFHdmGODZRcpX07dGZ3oqPbs40
-         lKBHwsKkCFQ6wQAJQvoI3wc4dcnlUGHI8oVvylrMc//5vh9MIF1yujeKULJMZ+IPUg
-         LGr3x990CRDWA==
-Received: from te-lab16 (unknown [10.10.52.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 533B0A007C;
-        Mon,  8 Feb 2021 21:53:17 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Mon, 08 Feb 2021 13:53:16 -0800
-Date:   Mon, 08 Feb 2021 13:53:16 -0800
-Message-Id: <1263b563dedc4ab8b0fb854fba06ce4bc56bd495.1612820995.git.Thinh.Nguyen@synopsys.com>
-In-Reply-To: <cover.1612820995.git.Thinh.Nguyen@synopsys.com>
-References: <cover.1612820995.git.Thinh.Nguyen@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH 2/2] usb: dwc3: gadget: Fix dep->interval for fullspeed interrupt
-To:     Felipe Balbi <balbi@kernel.org>,
+        id S235200AbhBHV4E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Feb 2021 16:56:04 -0500
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:41002 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230344AbhBHV4A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Feb 2021 16:56:00 -0500
+Received: by mail-ot1-f46.google.com with SMTP id s107so15615438otb.8;
+        Mon, 08 Feb 2021 13:55:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eqlb8C0ETOy8SvYjIiHc1NLlXDk6F0aQYo/gB9v56Ho=;
+        b=SHX38zG6p+tiPRvtNbC+icHT6LOC/GVuBOpKInsso7QYj/hoLaDc/ZcxOKydEJxQyf
+         ZLKa5dnUyOx1RmH4UFD374LrhN58c7K4Lpc47WL8IxlmJnvM6Qi+eFXIAcTDFEc3VG4p
+         b+e/FkRf0sDL8oP2hCLnhfkKVT+7MK4gxxmqmhkuNfABQ/P+GFT/cNZZ/lI65dKSnjiI
+         nfxs/24sSkDJV4sdy8w9/Znm+4yy7phDhJ4MjPtRBmKU7OeWJ2rBHqQYgF9n9q81Kovz
+         0V+dI+QQTXcAs5rvIIRWkLXmnSzsmrd00kCdDbvjkxF1Zm39qw3BJuXq6rVktwhMrmaW
+         P8GA==
+X-Gm-Message-State: AOAM530EWubpk3/bDiDkL4p9ooB3Jo4ou3LW6esHgzWoaK6wzvh4v6F8
+        sRwHd3vF/PCmNGV3WB8B7Q==
+X-Google-Smtp-Source: ABdhPJy+1GSfNEePnj5f9FpSkMeneRbLS+/hOm1zO1Clyf8W5YTWYvvJRQSNZbhhoca9Gmc9USaCMQ==
+X-Received: by 2002:a9d:701c:: with SMTP id k28mr4166128otj.79.1612821319407;
+        Mon, 08 Feb 2021 13:55:19 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id z8sm3801754oon.10.2021.02.08.13.55.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Feb 2021 13:55:18 -0800 (PST)
+Received: (nullmailer pid 2090093 invoked by uid 1000);
+        Mon, 08 Feb 2021 21:55:17 -0000
+Date:   Mon, 8 Feb 2021 15:55:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>, <stable@vger.kernel.org>
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Min Guo <min.guo@mediatek.com>, Vinod Koul <vkoul@kernel.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH next 06/15] dt-bindings: usb: mtk-xhci: add support
+ mt2701 and mt7623
+Message-ID: <20210208215517.GA2090042@robh.at.kernel.org>
+References: <20210116090656.11752-1-chunfeng.yun@mediatek.com>
+ <20210116090656.11752-6-chunfeng.yun@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210116090656.11752-6-chunfeng.yun@mediatek.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The dep->interval captures the number of frames/microframes per interval
-from bInterval. Fullspeed interrupt endpoint bInterval is the number of
-frames per interval and not 2^(bInterval - 1). So fix it here. This
-change is only for debugging purpose and should not affect the interrupt
-endpoint operation.
+On Sat, 16 Jan 2021 17:06:47 +0800, Chunfeng Yun wrote:
+> Add two compatible for mt2701 and mt7623;
+> add property "assigned-clock" and "assigned-clock-parents"
+> used by mt7629.
+> 
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+>  .../devicetree/bindings/usb/mediatek,mtk-xhci.yaml     | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
 
-Cc: <stable@vger.kernel.org>
-Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
- drivers/usb/dwc3/gadget.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index d0f8d3ec855f..aebcf8ec0716 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -615,8 +615,13 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
- 		if (dwc->gadget->speed == USB_SPEED_FULL)
- 			bInterval_m1 = 0;
- 
-+		if (usb_endpoint_type(desc) == USB_ENDPOINT_XFER_INT &&
-+		    dwc->gadget->speed == USB_SPEED_FULL)
-+			dep->interval = desc->bInterval;
-+		else
-+			dep->interval = 1 << (desc->bInterval - 1);
-+
- 		params.param1 |= DWC3_DEPCFG_BINTERVAL_M1(bInterval_m1);
--		dep->interval = 1 << (desc->bInterval - 1);
- 	}
- 
- 	return dwc3_send_gadget_ep_cmd(dep, DWC3_DEPCMD_SETEPCONFIG, &params);
--- 
-2.28.0
-
+Reviewed-by: Rob Herring <robh@kernel.org>
