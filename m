@@ -2,57 +2,234 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D01313BAE
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Feb 2021 18:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFEB4313D72
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Feb 2021 19:27:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235098AbhBHRz2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Feb 2021 12:55:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44436 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233914AbhBHRxk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 8 Feb 2021 12:53:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A278764E28;
-        Mon,  8 Feb 2021 17:52:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612806773;
-        bh=nzY8lVhO7mU4bKq3ecM4t/jmDUrV5N1r0oZ3vfvzuYE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=V+e71ec/P8FoXECn2W17Thfk0Oiri+rrpm2djKqlPG1z5bM0J9/cIs9GLzlABQnek
-         Iocsk7QMbkeqUVuVg0LCkpLht5udcibOnAhpcc6+ohY3SxOHCbbSLWTXTnJ0kTeuBC
-         DvAJkUP+80JlfF5vyW315xRnDXSWjkjz0SYP1Y3Mbz/sh2qerhnzovxEENndfafdnX
-         0efz0Go6OdV2itF8e+O3QnHBl7YzRBtyavsprZSDoSe+CxiKOwW+bTtckSm24ru9xD
-         nuWZyQTdg5g3AsfHfj3JikHdZUy9ld+dfDYccdfT3voG5brU756loDZ242Xb7OfJol
-         xblZ/Gq+9CQ4w==
-Date:   Mon, 8 Feb 2021 09:52:52 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Lech Perczak <lech.perczak@gmail.com>,
-        =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] net: usb: qmi_wwan: support ZTE P685M modem
-Message-ID: <20210208095252.51c0a738@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <YCEF3MY5Mau9TPvK@hovoldconsulting.com>
-References: <20210205173904.13916-1-lech.perczak@gmail.com>
-        <20210205173904.13916-2-lech.perczak@gmail.com>
-        <87r1lt1do6.fsf@miraculix.mork.no>
-        <0264f3a2-d974-c405-fb08-18e5ca21bf76@gmail.com>
-        <20210206121322.074ddbd3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <YCEF3MY5Mau9TPvK@hovoldconsulting.com>
+        id S235335AbhBHS1W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Feb 2021 13:27:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234021AbhBHS04 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Feb 2021 13:26:56 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2252DC061788
+        for <linux-usb@vger.kernel.org>; Mon,  8 Feb 2021 10:26:16 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id v193so11168088oie.8
+        for <linux-usb@vger.kernel.org>; Mon, 08 Feb 2021 10:26:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=w2bs1jNylzHBAeRpSQWmE5k5+qmesQnum/GX7yJm6Do=;
+        b=eC0jYKs11Hzwuqg/IM7punueI3VwBVmIeAz5s/MMxL93H7G/sk6ozb9JLILF8rxS6p
+         cAfx3TcRCB3TOUr09alnw4r3uKzdnj6wvWJ7jnJmttHEZ6NG1CeRer6M9yKagylpSjVC
+         1E+JPJxvXOXj6jbxpTfEpnlXGjonDeX4/nDbbyxIwei9XZj5fp8+e/F+ku+1+UvHIkLp
+         LDyh1MU11nDAjM4x4qKwRdapMJTAAZXZdQGJ1m0MF5gUYyf64VmFNNZ7cB28zzR3RIds
+         ZnSWBnQzv4wOg04aw20dlV16VA4jLg4yKmhzbTCcRKmhlzS84uaLDjlG3HNCEES0yY23
+         6TRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=w2bs1jNylzHBAeRpSQWmE5k5+qmesQnum/GX7yJm6Do=;
+        b=sVK8RprwP+fiRuWSOO85cg54KaO/L18OGjZR63Xx/LbL+QCZwPyxKbHmsmMmO4yH4F
+         h1V4ys5xYV8fSRJA63GVSchvc0PB/BSaF7rk3AcDiA2TX22NE1D2DYaaM+Gc+vlHGHLn
+         d4O//1/Y8kAuPE+gOm1j7VRpCcciKh5aUB+XkaGJhN69aOhZ4RBY7lNhr6lYZRkt8XLB
+         wFd2rjMsT3yqpAkKR3tn/OV/s/FjKItRwe3fPwWPmGgycGN+5DHAsDjNsmYC+GcMfOU3
+         8JZP3SG6x6R2KD3l/9ZthHXgmeGv1icl2aOgdsjZn+BiMnLGHJ7IM71Z/S73iu9STuql
+         61Yw==
+X-Gm-Message-State: AOAM530oNT726HR1p5/F9Se406wfgCRT1JBX12u3MGAhLHVKF4mLWKSX
+        bX8qHzxIRERIw+XAaE+ClZReNg==
+X-Google-Smtp-Source: ABdhPJxlojqvFU7c81BNhmI5mz56dvLqoVVxbKceJGrel8NuoQVVZC0Jf97UResasi5bkkD0bP0Q0Q==
+X-Received: by 2002:aca:72cf:: with SMTP id p198mr38522oic.51.1612808775552;
+        Mon, 08 Feb 2021 10:26:15 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id e6sm2939112otl.63.2021.02.08.10.26.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Feb 2021 10:26:14 -0800 (PST)
+Date:   Mon, 8 Feb 2021 12:26:13 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Baruch Siach <baruch@tkos.co.il>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Kathiravan T <kathirav@codeaurora.org>,
+        Balaji Prakash J <bjagadee@codeaurora.org>
+Subject: Re: [PATCH] usb: dwc3: reference clock configuration
+Message-ID: <YCGCRQpqVNI2KZyi@builder.lan>
+References: <8fc38cb73afd31269f1ea0c28e73604c53cebb17.1612764006.git.baruch@tkos.co.il>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8fc38cb73afd31269f1ea0c28e73604c53cebb17.1612764006.git.baruch@tkos.co.il>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 8 Feb 2021 10:35:24 +0100 Johan Hovold wrote:
-> > Send patch 2, wait for it to hit net, send 1 seems like the safest
-> > option. If we're lucky Johan can still send patch 2 for 5.11, otherwise
-> > we'll wait until the merge window - we're at rc7 already, it won't take
-> > too long.  
-> 
-> I usually don't send on new device-ids this late in the release cycle,
-> so I'll queue the USB-serial one up for 5.12-rc1 and you can take this
-> one through net-next.
+On Mon 08 Feb 00:00 CST 2021, Baruch Siach wrote:
 
-s/net-next/net/  Sound like a plan, thanks!
+> From: Balaji Prakash J <bjagadee@codeaurora.org>
+> 
+> DWC_USB3_GFLADJ and DWC_USB3_GUCTL registers contain options
+> to control the behavior of controller with respect to SOF and ITP.
+> The reset values of these registers are aligned for 19.2 MHz
+> reference clock source. This change will add option to override
+> these settings for reference clock other than 19.2 MHz
+> 
+> Tested on IPQ6018 SoC based CP01 board with 24MHz reference clock.
+> 
+> Signed-off-by: Balaji Prakash J <bjagadee@codeaurora.org>
+> [ baruch: mention tested hardware ]
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  .../devicetree/bindings/usb/dwc3.txt          |  5 ++
+>  drivers/usb/dwc3/core.c                       | 52 +++++++++++++++++++
+>  drivers/usb/dwc3/core.h                       | 12 +++++
+>  3 files changed, 69 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
+> index 1aae2b6160c1..4ffa87b697dc 100644
+> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
+> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+> @@ -89,6 +89,11 @@ Optional properties:
+>   - snps,quirk-frame-length-adjustment: Value for GFLADJ_30MHZ field of GFLADJ
+>  	register for post-silicon frame length adjustment when the
+>  	fladj_30mhz_sdbnd signal is invalid or incorrect.
+> + - snps,quirk-ref-clock-adjustment: Value for GFLADJ_REFCLK_* fields of GFLADJ
+> +	register for reference clock other than 19.2 MHz is used.
+
+What are typical values for this property? What unit does it have? How
+does it actually relate to the frequency of the reference clock?
+
+> + - snps,quirk-ref-clock-period: Value for REFCLKPER filed of GUCTL. This field
+> +	indicates in terms of nano seconds the period of ref_clk. To calculate the
+> +	ideal value, REFCLKPER = (1/ref_clk in Hz)*10^9.
+
+Can't we make the dwc3 reference this clock and use clk_get_rate() and
+then do this math in the driver?
+
+>   - snps,rx-thr-num-pkt-prd: periodic ESS RX packet threshold count - host mode
+>  			only. Set this and rx-max-burst-prd to a valid,
+>  			non-zero value 1-16 (DWC_usb31 programming guide
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 841daec70b6e..85e40ec8e23b 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -325,6 +325,48 @@ static void dwc3_frame_length_adjustment(struct dwc3 *dwc)
+>  	}
+>  }
+>  
+> +/**
+> + * dwc3_ref_clk_adjustment - Reference clock settings for SOF and ITP
+> + *		Default reference clock configurations are calculated assuming
+> + *		19.2 MHz clock source. For other clock source, this will set
+> + *		configuration in DWC3_GFLADJ register
+> + * @dwc: Pointer to our controller context structure
+> + */
+> +static void dwc3_ref_clk_adjustment(struct dwc3 *dwc)
+> +{
+> +	u32 reg;
+> +
+> +	if (dwc->ref_clk_adj == 0)
+> +		return;
+> +
+> +	reg = dwc3_readl(dwc->regs, DWC3_GFLADJ);
+> +	reg &= ~DWC3_GFLADJ_REFCLK_MASK;
+> +	reg |=  (dwc->ref_clk_adj << DWC3_GFLADJ_REFCLK_SEL);
+
+	reg = FIELD_SET(DWC3_GFLADJ_REFCLK_MASK, adj, reg);
+
+Regards,
+Bjorn
+
+> +	dwc3_writel(dwc->regs, DWC3_GFLADJ, reg);
+> +}
+> +
+> +/**
+> + * dwc3_ref_clk_period - Reference clock period configuration
+> + *		Default reference clock period is calculated assuming
+> + *		19.2 MHz as clock source. For other clock source, this
+> + *		will set clock period in DWC3_GUCTL register
+> + * @dwc: Pointer to our controller context structure
+> + * @ref_clk_per: reference clock period in ns
+> + */
+> +static void dwc3_ref_clk_period(struct dwc3 *dwc)
+> +{
+> +	u32 reg;
+> +
+> +	if (dwc->ref_clk_per == 0)
+> +		return;
+> +
+> +	reg = dwc3_readl(dwc->regs, DWC3_GUCTL);
+> +	reg &= ~DWC3_GUCTL_REFCLKPER_MASK;
+> +	reg |=  (dwc->ref_clk_per << DWC3_GUCTL_REFCLKPER_SEL);
+> +	dwc3_writel(dwc->regs, DWC3_GUCTL, reg);
+> +}
+> +
+> +
+>  /**
+>   * dwc3_free_one_event_buffer - Frees one event buffer
+>   * @dwc: Pointer to our controller context structure
+> @@ -982,6 +1024,12 @@ static int dwc3_core_init(struct dwc3 *dwc)
+>  	/* Adjust Frame Length */
+>  	dwc3_frame_length_adjustment(dwc);
+>  
+> +	/* Adjust Reference Clock Settings */
+> +	dwc3_ref_clk_adjustment(dwc);
+> +
+> +	/* Adjust Reference Clock Period */
+> +	dwc3_ref_clk_period(dwc);
+> +
+>  	dwc3_set_incr_burst_type(dwc);
+>  
+>  	usb_phy_set_suspend(dwc->usb2_phy, 0);
+> @@ -1351,6 +1399,10 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>  				    &dwc->hsphy_interface);
+>  	device_property_read_u32(dev, "snps,quirk-frame-length-adjustment",
+>  				 &dwc->fladj);
+> +	device_property_read_u32(dev, "snps,quirk-ref-clock-adjustment",
+> +				 &dwc->ref_clk_adj);
+> +	device_property_read_u32(dev, "snps,quirk-ref-clock-period",
+> +				 &dwc->ref_clk_per);
+>  
+>  	dwc->dis_metastability_quirk = device_property_read_bool(dev,
+>  				"snps,dis_metastability_quirk");
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index 1b241f937d8f..469e94512414 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -379,6 +379,14 @@
+>  #define DWC3_GFLADJ_30MHZ_SDBND_SEL		BIT(7)
+>  #define DWC3_GFLADJ_30MHZ_MASK			0x3f
+>  
+> +/* Global User Control Register*/
+> +#define DWC3_GUCTL_REFCLKPER_MASK		0xffc00000
+> +#define DWC3_GUCTL_REFCLKPER_SEL		22
+> +
+> +/* Global reference clock Adjustment Register */
+> +#define DWC3_GFLADJ_REFCLK_MASK			0xffffff00
+> +#define DWC3_GFLADJ_REFCLK_SEL			8
+> +
+>  /* Global User Control Register 2 */
+>  #define DWC3_GUCTL2_RST_ACTBITLATER		BIT(14)
+>  
+> @@ -956,6 +964,8 @@ struct dwc3_scratchpad_array {
+>   * @regs: base address for our registers
+>   * @regs_size: address space size
+>   * @fladj: frame length adjustment
+> + * @ref_clk_adj: reference clock adjustment
+> + * @ref_clk_per: reference clock period configuration
+>   * @irq_gadget: peripheral controller's IRQ number
+>   * @otg_irq: IRQ number for OTG IRQs
+>   * @current_otg_role: current role of operation while using the OTG block
+> @@ -1118,6 +1128,8 @@ struct dwc3 {
+>  	enum usb_dr_mode	role_switch_default_mode;
+>  
+>  	u32			fladj;
+> +	u32			ref_clk_adj;
+> +	u32			ref_clk_per;
+>  	u32			irq_gadget;
+>  	u32			otg_irq;
+>  	u32			current_otg_role;
+> -- 
+> 2.30.0
+> 
