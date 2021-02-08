@@ -2,87 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4DB31260F
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Feb 2021 17:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5978312A9E
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Feb 2021 07:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbhBGQhP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 7 Feb 2021 11:37:15 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:50429 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229537AbhBGQhO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Feb 2021 11:37:14 -0500
-Received: (qmail 666614 invoked by uid 1000); 7 Feb 2021 11:36:32 -0500
-Date:   Sun, 7 Feb 2021 11:36:32 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+d4ebc877b1223f20d5a0@syzkaller.appspotmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     andreyknvl@google.com, andriy.shevchenko@linux.intel.com,
-        gregkh@linuxfoundation.org, johan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, mathias.nyman@linux.intel.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: WARNING in go7007_usb_onboard_write_interrupt/usb_submit_urb
-Message-ID: <20210207163632.GA666362@rowland.harvard.edu>
-References: <000000000000ef60e905baba29d0@google.com>
+        id S229526AbhBHGRr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Feb 2021 01:17:47 -0500
+Received: from guitar.tcltek.co.il ([192.115.133.116]:46224 "EHLO
+        mx.tkos.co.il" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229650AbhBHGRn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 8 Feb 2021 01:17:43 -0500
+Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mx.tkos.co.il (Postfix) with ESMTPS id C918F440836;
+        Mon,  8 Feb 2021 08:16:58 +0200 (IST)
+From:   Baruch Siach <baruch@tkos.co.il>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Kathiravan T <kathirav@codeaurora.org>,
+        Balaji Prakash J <bjagadee@codeaurora.org>,
+        Baruch Siach <baruch@tkos.co.il>
+Subject: [PATCH] usb: dwc3: reference clock configuration
+Date:   Mon,  8 Feb 2021 08:00:06 +0200
+Message-Id: <8fc38cb73afd31269f1ea0c28e73604c53cebb17.1612764006.git.baruch@tkos.co.il>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000ef60e905baba29d0@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hans:
+From: Balaji Prakash J <bjagadee@codeaurora.org>
 
-On Sat, Feb 06, 2021 at 11:40:13PM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    64eaa0fa platform/chrome: cros_ec_typec: Fix call to typec..
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=12d5c090d00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=29ec25b819cb42f3
-> dashboard link: https://syzkaller.appspot.com/bug?extid=d4ebc877b1223f20d5a0
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16b47dd8d00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=164896c4d00000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+d4ebc877b1223f20d5a0@syzkaller.appspotmail.com
-> 
-> usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> usb 1-1: SerialNumber: syz
-> usb 1-1: config 0 descriptor??
-> ------------[ cut here ]------------
-> usb 1-1: BOGUS urb xfer, pipe 2 != type 3
-> WARNING: CPU: 0 PID: 2608 at drivers/usb/core/urb.c:493 usb_submit_urb+0xd27/0x1540 drivers/usb/core/urb.c:493
-> Modules linked in:
-> CPU: 0 PID: 2608 Comm: kworker/0:2 Not tainted 5.11.0-rc5-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> RIP: 0010:usb_submit_urb+0xd27/0x1540 drivers/usb/core/urb.c:493
-> Code: 84 d4 02 00 00 e8 e9 e9 ba fd 4c 89 ef e8 f1 3d 1d ff 41 89 d8 44 89 e1 4c 89 f2 48 89 c6 48 c7 c7 00 6a 61 86 e8 31 ee f9 01 <0f> 0b e9 81 f8 ff ff e8 bd e9 ba fd 48 81 c5 30 06 00 00 e9 ad f7
-> RSP: 0018:ffffc90006cf6c70 EFLAGS: 00010286
-> RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-> RDX: ffff88810a895040 RSI: ffffffff81299db3 RDI: fffff52000d9ed80
-> RBP: ffff88810155f8a0 R08: 0000000000000001 R09: 0000000000000000
-> R10: ffffffff8149c4ab R11: 0000000000000000 R12: 0000000000000002
-> R13: ffff8881121670a0 R14: ffff8881031c06e0 R15: ffff888102b46f00
-> FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000055bfb7b520d0 CR3: 000000010a1f1000 CR4: 00000000001506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  usb_start_wait_urb+0x101/0x4c0 drivers/usb/core/message.c:58
->  usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
->  usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
->  go7007_usb_onboard_write_interrupt+0x26a/0x340 drivers/media/usb/go7007/go7007-usb.c:735
+DWC_USB3_GFLADJ and DWC_USB3_GUCTL registers contain options
+to control the behavior of controller with respect to SOF and ITP.
+The reset values of these registers are aligned for 19.2 MHz
+reference clock source. This change will add option to override
+these settings for reference clock other than 19.2 MHz
 
-It looks like the go7007 driver isn't very careful about checking that 
-the endpoints it uses have the right types.  In particular, this bug was 
-caused by not checking that ep2 is a control endpoint (highly unusual to 
-have a control endpoint other than 0, but allowed).
+Tested on IPQ6018 SoC based CP01 board with 24MHz reference clock.
 
-Alan Stern
+Signed-off-by: Balaji Prakash J <bjagadee@codeaurora.org>
+[ baruch: mention tested hardware ]
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ .../devicetree/bindings/usb/dwc3.txt          |  5 ++
+ drivers/usb/dwc3/core.c                       | 52 +++++++++++++++++++
+ drivers/usb/dwc3/core.h                       | 12 +++++
+ 3 files changed, 69 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
+index 1aae2b6160c1..4ffa87b697dc 100644
+--- a/Documentation/devicetree/bindings/usb/dwc3.txt
++++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+@@ -89,6 +89,11 @@ Optional properties:
+  - snps,quirk-frame-length-adjustment: Value for GFLADJ_30MHZ field of GFLADJ
+ 	register for post-silicon frame length adjustment when the
+ 	fladj_30mhz_sdbnd signal is invalid or incorrect.
++ - snps,quirk-ref-clock-adjustment: Value for GFLADJ_REFCLK_* fields of GFLADJ
++	register for reference clock other than 19.2 MHz is used.
++ - snps,quirk-ref-clock-period: Value for REFCLKPER filed of GUCTL. This field
++	indicates in terms of nano seconds the period of ref_clk. To calculate the
++	ideal value, REFCLKPER = (1/ref_clk in Hz)*10^9.
+  - snps,rx-thr-num-pkt-prd: periodic ESS RX packet threshold count - host mode
+ 			only. Set this and rx-max-burst-prd to a valid,
+ 			non-zero value 1-16 (DWC_usb31 programming guide
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 841daec70b6e..85e40ec8e23b 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -325,6 +325,48 @@ static void dwc3_frame_length_adjustment(struct dwc3 *dwc)
+ 	}
+ }
+ 
++/**
++ * dwc3_ref_clk_adjustment - Reference clock settings for SOF and ITP
++ *		Default reference clock configurations are calculated assuming
++ *		19.2 MHz clock source. For other clock source, this will set
++ *		configuration in DWC3_GFLADJ register
++ * @dwc: Pointer to our controller context structure
++ */
++static void dwc3_ref_clk_adjustment(struct dwc3 *dwc)
++{
++	u32 reg;
++
++	if (dwc->ref_clk_adj == 0)
++		return;
++
++	reg = dwc3_readl(dwc->regs, DWC3_GFLADJ);
++	reg &= ~DWC3_GFLADJ_REFCLK_MASK;
++	reg |=  (dwc->ref_clk_adj << DWC3_GFLADJ_REFCLK_SEL);
++	dwc3_writel(dwc->regs, DWC3_GFLADJ, reg);
++}
++
++/**
++ * dwc3_ref_clk_period - Reference clock period configuration
++ *		Default reference clock period is calculated assuming
++ *		19.2 MHz as clock source. For other clock source, this
++ *		will set clock period in DWC3_GUCTL register
++ * @dwc: Pointer to our controller context structure
++ * @ref_clk_per: reference clock period in ns
++ */
++static void dwc3_ref_clk_period(struct dwc3 *dwc)
++{
++	u32 reg;
++
++	if (dwc->ref_clk_per == 0)
++		return;
++
++	reg = dwc3_readl(dwc->regs, DWC3_GUCTL);
++	reg &= ~DWC3_GUCTL_REFCLKPER_MASK;
++	reg |=  (dwc->ref_clk_per << DWC3_GUCTL_REFCLKPER_SEL);
++	dwc3_writel(dwc->regs, DWC3_GUCTL, reg);
++}
++
++
+ /**
+  * dwc3_free_one_event_buffer - Frees one event buffer
+  * @dwc: Pointer to our controller context structure
+@@ -982,6 +1024,12 @@ static int dwc3_core_init(struct dwc3 *dwc)
+ 	/* Adjust Frame Length */
+ 	dwc3_frame_length_adjustment(dwc);
+ 
++	/* Adjust Reference Clock Settings */
++	dwc3_ref_clk_adjustment(dwc);
++
++	/* Adjust Reference Clock Period */
++	dwc3_ref_clk_period(dwc);
++
+ 	dwc3_set_incr_burst_type(dwc);
+ 
+ 	usb_phy_set_suspend(dwc->usb2_phy, 0);
+@@ -1351,6 +1399,10 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+ 				    &dwc->hsphy_interface);
+ 	device_property_read_u32(dev, "snps,quirk-frame-length-adjustment",
+ 				 &dwc->fladj);
++	device_property_read_u32(dev, "snps,quirk-ref-clock-adjustment",
++				 &dwc->ref_clk_adj);
++	device_property_read_u32(dev, "snps,quirk-ref-clock-period",
++				 &dwc->ref_clk_per);
+ 
+ 	dwc->dis_metastability_quirk = device_property_read_bool(dev,
+ 				"snps,dis_metastability_quirk");
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 1b241f937d8f..469e94512414 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -379,6 +379,14 @@
+ #define DWC3_GFLADJ_30MHZ_SDBND_SEL		BIT(7)
+ #define DWC3_GFLADJ_30MHZ_MASK			0x3f
+ 
++/* Global User Control Register*/
++#define DWC3_GUCTL_REFCLKPER_MASK		0xffc00000
++#define DWC3_GUCTL_REFCLKPER_SEL		22
++
++/* Global reference clock Adjustment Register */
++#define DWC3_GFLADJ_REFCLK_MASK			0xffffff00
++#define DWC3_GFLADJ_REFCLK_SEL			8
++
+ /* Global User Control Register 2 */
+ #define DWC3_GUCTL2_RST_ACTBITLATER		BIT(14)
+ 
+@@ -956,6 +964,8 @@ struct dwc3_scratchpad_array {
+  * @regs: base address for our registers
+  * @regs_size: address space size
+  * @fladj: frame length adjustment
++ * @ref_clk_adj: reference clock adjustment
++ * @ref_clk_per: reference clock period configuration
+  * @irq_gadget: peripheral controller's IRQ number
+  * @otg_irq: IRQ number for OTG IRQs
+  * @current_otg_role: current role of operation while using the OTG block
+@@ -1118,6 +1128,8 @@ struct dwc3 {
+ 	enum usb_dr_mode	role_switch_default_mode;
+ 
+ 	u32			fladj;
++	u32			ref_clk_adj;
++	u32			ref_clk_per;
+ 	u32			irq_gadget;
+ 	u32			otg_irq;
+ 	u32			current_otg_role;
+-- 
+2.30.0
+
