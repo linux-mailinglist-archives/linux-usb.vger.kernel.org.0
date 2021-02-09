@@ -2,80 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FF0314ED0
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Feb 2021 13:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7331C314EEF
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Feb 2021 13:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbhBIMRN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Feb 2021 07:17:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55358 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229638AbhBIMRC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 9 Feb 2021 07:17:02 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 28D5D64E28;
-        Tue,  9 Feb 2021 12:16:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612872981;
-        bh=tbfL8g0UWBEILy7472DR/DOMnrufN5HfdOYSoxqI7EM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IWFQubJFMGmdTmG4mzOZgVU8YhFhlVFrYi9UC64LKagKi2Q24AULqwVRENyU0KT3E
-         42mPDA85UhsgIOp42b/EIDgm/tRrGst5Z8+w/lt3Qe8Es56d6OOTQFLp+PujzUd1KO
-         HcLS3DowQVwS1QLSZyKCRuLCseyMChhIafuFzeeQ2NUJBt2MfC5vVRnyNP6Db0buZB
-         YerUcfe4jByFaGEVRm8jPo0Xum78C/UEf5AR6t9oC/6qdiadvILGEerPEEBAmF9lC5
-         K7csb0DvvNdfM3TX4fwv5NjujpVC6iYh4qBj9wjDga/1Hkb1LeqDYqeG/j1SbVgtJL
-         THu7wc7qeh4JA==
-Received: from johan by xi with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1l9RwY-0002Ge-HA; Tue, 09 Feb 2021 13:16:34 +0100
-Date:   Tue, 9 Feb 2021 13:16:34 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: drop bogus to_usb_serial_port() checks
-Message-ID: <YCJ9IgwSLyNmPq5B@hovoldconsulting.com>
-References: <20210208154806.20853-1-johan@kernel.org>
- <9306d82c-d030-1243-1079-1ff5339f6cc5@kleine-koenig.org>
+        id S229984AbhBIMdD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Feb 2021 07:33:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229917AbhBIMdD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Feb 2021 07:33:03 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7829C061786
+        for <linux-usb@vger.kernel.org>; Tue,  9 Feb 2021 04:32:22 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id y9so30962149ejp.10
+        for <linux-usb@vger.kernel.org>; Tue, 09 Feb 2021 04:32:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1CWVbWMy02aiBxLkPLcMyfNOVERNn6cRPM0WaMpYN58=;
+        b=ZkeuW7GCbZb+mqOTc1rDs0fFr192DetmmFEuKYFD1Sg7O4oYHIAiXM/OQHDvIQicuq
+         Ug7fChg1iqXrDKH2mwUxxYXG6ITnT3ZxE7nwTAfW2s77eFTSw+hymgmj23bfADAExKQ9
+         +teoZeE0l4Sp7FUBQzg12CtP3FVKtQktx5bQMkopngVR7BNeCCvWZb7zwq1CH8QBLwBT
+         xqux0qv8UhUS0kBkyXIx79XaPTUCi2wKnDt5+6RmH41n7GrE28u/Wrt/uJdiLS6ii3Uv
+         ci4AnJin+8dK+18oKnmm8F3QA80itqebNDXAgEhjJb0TdOE7NmvbGOd/g0OUKX2Jyzke
+         cvcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=1CWVbWMy02aiBxLkPLcMyfNOVERNn6cRPM0WaMpYN58=;
+        b=g800BlUFL4b9lrup+QfcxfjoO3u3wn12PsZ9BoBeOVMfVXY1TIq7XqJnR7opXZBu3l
+         NHL1ot3eZXwjjsuVbTwZDMGuunmABmEi4XBtlOP089cA2I1303aAiLyP8rezZEFISmf/
+         eAUasz+pfLbW8ORwPqM7nGPYvF0E1lQcdbAhAaSlxsiKj5JHqLK8GK+6SHIoRPY3VZV+
+         exLI8SiWIbhjxZ0lg3jgyEfN77P6ERpjDRjaL9fZLmIKfx41aONL9xrxwXxFseF+VTSc
+         KTF2ZiyHcqECQUkzya4kGEsuDhI5gWD5cXzrUEy+fAMgwNrTh9H3O0NA0nBqacoxJa+A
+         jLiw==
+X-Gm-Message-State: AOAM532/KYW3P/cDFsbsnGev3FSr/Oueq93Xsw2JYhup7ANYKQ2a/HY/
+        GdNV4joEHaELmNamQEIHeooUbQ==
+X-Google-Smtp-Source: ABdhPJxrml0k+smViydxGYN1l4mfREZt00owdYjiBWzlGWr0xpLAVoXDqabbN1aAB7c7SPB5bX3olQ==
+X-Received: by 2002:a17:907:2130:: with SMTP id qo16mr21250551ejb.537.1612873941381;
+        Tue, 09 Feb 2021 04:32:21 -0800 (PST)
+Received: from localhost (nat-35.starnet.cz. [178.255.168.35])
+        by smtp.gmail.com with ESMTPSA id a25sm8522252edt.16.2021.02.09.04.32.20
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 09 Feb 2021 04:32:20 -0800 (PST)
+Sender: Michal Simek <monstr@monstr.eu>
+From:   Michal Simek <michal.simek@xilinx.com>
+To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com,
+        Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Cercueil <paul@crapouillou.net>, linux-usb@vger.kernel.org
+Subject: [PATCH v2] usb: misc: usb3503: Fix logic in usb3503_init()
+Date:   Tue,  9 Feb 2021 13:32:19 +0100
+Message-Id: <a8547f6fe698014df08cad3bcc9c5d9a7137d8b8.1612873935.git.michal.simek@xilinx.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="k6LeVVzb1Npc5CPz"
-Content-Disposition: inline
-In-Reply-To: <9306d82c-d030-1243-1079-1ff5339f6cc5@kleine-koenig.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Based on
+https://lore.kernel.org/linux-arm-kernel/YCJv59g3Tq2haDSa@kroah.com/
+initialization should fail if any registration fails.
 
---k6LeVVzb1Npc5CPz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+---
 
-On Mon, Feb 08, 2021 at 06:06:38PM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> On 2/8/21 4:48 PM, Johan Hovold wrote:
-> > The to_usb_serial_port() macro is implemented using container_of() so
-> > there's no need to check for NULL.
-> >=20
-> > Note that neither bus match() or probe() is ever called with a NULL
-> > struct device pointer so the checks weren't just misplaced.
-> >=20
-> > Signed-off-by: Johan Hovold <johan@kernel.org>
->=20
-> Reviewed-by: Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.org>
+Changes in v2:
+- Also remove i2c driver when platform driver registration failed.
 
-Thanks Uwe and Greg for reviewing. Now applied.
+ drivers/usb/misc/usb3503.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-Johan
+diff --git a/drivers/usb/misc/usb3503.c b/drivers/usb/misc/usb3503.c
+index 48099c6bf04c..330f494cd158 100644
+--- a/drivers/usb/misc/usb3503.c
++++ b/drivers/usb/misc/usb3503.c
+@@ -409,13 +409,18 @@ static int __init usb3503_init(void)
+ 	int err;
+ 
+ 	err = i2c_add_driver(&usb3503_i2c_driver);
+-	if (err != 0)
++	if (err) {
+ 		pr_err("usb3503: Failed to register I2C driver: %d\n", err);
++		return err;
++	}
+ 
+ 	err = platform_driver_register(&usb3503_platform_driver);
+-	if (err != 0)
++	if (err) {
+ 		pr_err("usb3503: Failed to register platform driver: %d\n",
+ 		       err);
++		i2c_del_driver(&usb3503_i2c_driver);
++		return err;
++	}
+ 
+ 	return 0;
+ }
+-- 
+2.30.0
 
---k6LeVVzb1Npc5CPz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQQHbPq+cpGvN/peuzMLxc3C7H1lCAUCYCJ9GwAKCRALxc3C7H1l
-CLvkAQDfo3I5Ca+zcyx/jKOy+aFv30HBYqCsfn4Sani21GgCMAD/YZZQv75/d6T2
-9xLd5NB4u4snbqgW698u4Fo+33d59Ak=
-=VW1p
------END PGP SIGNATURE-----
-
---k6LeVVzb1Npc5CPz--
