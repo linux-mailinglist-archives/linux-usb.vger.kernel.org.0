@@ -2,159 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FDD8314C4A
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Feb 2021 11:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1D3314C90
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Feb 2021 11:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbhBIJ5A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Feb 2021 04:57:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbhBIJyy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Feb 2021 04:54:54 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF73CC061221
-        for <linux-usb@vger.kernel.org>; Tue,  9 Feb 2021 01:53:27 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id hs11so30331907ejc.1
-        for <linux-usb@vger.kernel.org>; Tue, 09 Feb 2021 01:53:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kH2IpWZSoU7LW6R55FxG2fdVhcdDOZnt8IKAlaXn2Os=;
-        b=jZukgeg/LBUT2AFJCMDjAdquPLJG9ll9QRW80i5PgBJgg0QuhC5KrKrmM52fQ7tLPU
-         hjPZPeQeZf29nSwCJc6/nOmNPpAmaNGPr0+8KAjifuIIbGdPQXV5homhK38I3LFH1x08
-         ESh9Ss+Ov26bPlWYFbqu7anFCl/n5/LacIQaBITUtzcbr4vMX0pYTQ9uvpK8dF8sWYUh
-         zABcT3AqeopL2Ahx0APjilN0MXrFHw5O/IMOXNAsPNy7fkzC0MhX2rAbVLo68+4CmB0z
-         Ogxn6nk2eVQGMoDvpg+fFShRkwr/pSWeMG0Ercob3Ni+w/py+MGriWPWKb9yvnNPDrZv
-         jFsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=kH2IpWZSoU7LW6R55FxG2fdVhcdDOZnt8IKAlaXn2Os=;
-        b=ibN5SB88LfvH+fMUJoQU68NTZ8iepYsKFYkMTZrTlhDjMZiAsRSQBqtaxEnB/WM578
-         iZ6ejWnTN/IFY94UsxclNF/gkcrW59OSMIrlIxe7jNbjxaj6meIZ70Hf6s5Z+1a9j1wy
-         wE4+KlT9KU/b1WjHCsRJR4AZncP9iAK+AyFGXbSAT7ooH5nctjehi8JwyOulD1RyndjC
-         WNreXoxbW8+/FmAL0GyeYx4+FkUf99iSg3y5KjlrepL3OXwFf4bWh8udJKr1LCwl0MHx
-         gAuOK2OJwGqVMsMPNKG5+00zADAYdaq88S3FeFkJ6/TnMz2caa4F3MR4CGBe+6Q/Acfy
-         6Hqw==
-X-Gm-Message-State: AOAM530r8kF52L3QR+th6AGAh9UoLFokKYPG5mjEHrj6e3AG3T7boMhd
-        DmLVvmKdwzE2uRtBKFi/EZFwqA==
-X-Google-Smtp-Source: ABdhPJyNdJEyeK6H4oxf1gdNfOAMY6MonFBUSvcYuEIE0IV+c0h6Yyl6X354S2mwVRxbgf44CNlXsA==
-X-Received: by 2002:a17:907:20c4:: with SMTP id qq4mr20479872ejb.495.1612864406681;
-        Tue, 09 Feb 2021 01:53:26 -0800 (PST)
-Received: from localhost (nat-35.starnet.cz. [178.255.168.35])
-        by smtp.gmail.com with ESMTPSA id v26sm11457148edw.23.2021.02.09.01.53.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 09 Feb 2021 01:53:26 -0800 (PST)
-Sender: Michal Simek <monstr@monstr.eu>
-From:   Michal Simek <michal.simek@xilinx.com>
-To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com
-Cc:     Piyush Mehta <piyush.mehta@xilinx.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        id S231215AbhBIKJW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Feb 2021 05:09:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33840 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229832AbhBIKEB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 9 Feb 2021 05:04:01 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C94CB64E8C;
+        Tue,  9 Feb 2021 10:03:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1612865000;
+        bh=z36ahgoDNjt4eqkLM3JHC7wNd0Gg4IfsdF0dpkgwrck=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KzOiFsSaXyBtCV+2uQEVyZM2GHgHRcLBpnrGBJVjG2KamWgpk2Q3SqZXQRCSYlu/V
+         kck/Z/DIERZ5spkkgT5Zm539UHgloZX/kdbAg+AZ1LqOiyVPzahRIbNJb3wahby3zP
+         Pzgv1yYRhLpMcb9eTI8N6OpQMcX6qOWd4IL6o86E=
+Date:   Tue, 9 Feb 2021 11:03:17 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu, git@xilinx.com,
+        Piyush Mehta <piyush.mehta@xilinx.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        Bastien Nocera <hadess@hadess.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
-Subject: [PATCH 1/2] dt-bindings: usb: misc: Add binding for Microchip usb5744 hub
-Date:   Tue,  9 Feb 2021 10:53:19 +0100
-Message-Id: <076994fc051e9230a3fef9e3eb5ec932104ef16a.1612864393.git.michal.simek@xilinx.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <cover.1612864393.git.michal.simek@xilinx.com>
+Subject: Re: [PATCH 2/2] usb: misc: usb5744: Add support for USB hub
+ controller
+Message-ID: <YCJd5Xoy1cT6bCIB@kroah.com>
 References: <cover.1612864393.git.michal.simek@xilinx.com>
+ <e1e1d47982018ccd5a763f199680babc0df848c8.1612864393.git.michal.simek@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e1e1d47982018ccd5a763f199680babc0df848c8.1612864393.git.michal.simek@xilinx.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Piyush Mehta <piyush.mehta@xilinx.com>
+On Tue, Feb 09, 2021 at 10:53:20AM +0100, Michal Simek wrote:
+> From: Piyush Mehta <piyush.mehta@xilinx.com>
+> 
+> This patch adds a USB GPIO based hub reset for USB5744 hub. This usb5744
+> driver trigger hub reset signal after soft reset or core Reset. The HUB
+> needs to be resetted after completion of phy initialization. After the
+> toggling of gpio, hub configure using i2c usb attached command.
+> 
+> USB5744 hub can be used without any I2C connection, is handled by a
+> simple platform device driver.
+> 
+> As part of the reset, sets the direction of the pin to output before
+> toggling the pin. Delay of millisecond is added in between low and
+> high to meet the setup and hold time requirement of the reset.
+> 
+> Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
+> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+> ---
+> 
+>  MAINTAINERS                |   1 +
+>  drivers/usb/misc/Kconfig   |   9 +++
+>  drivers/usb/misc/Makefile  |   1 +
+>  drivers/usb/misc/usb5744.c | 115 +++++++++++++++++++++++++++++++++++++
+>  4 files changed, 126 insertions(+)
+>  create mode 100644 drivers/usb/misc/usb5744.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7439471b5d37..56d1fcdd24f6 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2706,6 +2706,7 @@ F:	drivers/edac/synopsys_edac.c
+>  F:	drivers/i2c/busses/i2c-cadence.c
+>  F:	drivers/i2c/busses/i2c-xiic.c
+>  F:	drivers/mmc/host/sdhci-of-arasan.c
+> +F:	drivers/usb/misc/usb5744.c
+>  N:	zynq
+>  N:	xilinx
+>  
+> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+> index 8f1144359012..30335b5c4f88 100644
+> --- a/drivers/usb/misc/Kconfig
+> +++ b/drivers/usb/misc/Kconfig
+> @@ -242,6 +242,15 @@ config USB_HUB_USB251XB
+>  	  parameters may be set in devicetree or platform data.
+>  	  Say Y or M here if you need to configure such a device via SMBus.
+>  
+> +config USB_USB5744
+> +	tristate "Microchip USB5744 Hub driver"
+> +	depends on I2C
+> +	depends on GPIOLIB
+> +	help
+> +	  This option enables support for Microchip USB5744 Hub. This driver
+> +	  optionally reset the hub using gpio pin and configure hub via i2c if
+> +	  connected.
+> +
+>  config USB_HSIC_USB3503
+>  	tristate "USB3503 HSIC to USB20 Driver"
+>  	depends on I2C
+> diff --git a/drivers/usb/misc/Makefile b/drivers/usb/misc/Makefile
+> index 5f4e598573ab..5920146a506a 100644
+> --- a/drivers/usb/misc/Makefile
+> +++ b/drivers/usb/misc/Makefile
+> @@ -25,6 +25,7 @@ obj-$(CONFIG_USB_USS720)		+= uss720.o
+>  obj-$(CONFIG_USB_SEVSEG)		+= usbsevseg.o
+>  obj-$(CONFIG_USB_YUREX)			+= yurex.o
+>  obj-$(CONFIG_USB_HUB_USB251XB)		+= usb251xb.o
+> +obj-$(CONFIG_USB_USB5744)		+= usb5744.o
 
-Added dt binding for usb5744 driver.
+Can you follow the convention of the config options we have already, and
+make this USB_HUB_USB5744 please?
 
-Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
-Signed-off-by: Michal Simek <michal.simek@xilinx.com>
----
+>  obj-$(CONFIG_USB_HSIC_USB3503)		+= usb3503.o
+>  obj-$(CONFIG_USB_HSIC_USB4604)		+= usb4604.o
 
- .../bindings/usb/microchip,usb5744.yaml       | 56 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 57 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+And then put it in sorted order :)
 
-diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-new file mode 100644
-index 000000000000..fe222f6db81d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-@@ -0,0 +1,56 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/usb/microchip,usb5744.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Bindings for the Microchip USB5744 4-port Hub Controller
-+
-+description:
-+  Microchip’s USB5744 SmartHub™ IC is a 4 port, SuperSpeed (SS)/Hi-Speed (HS),
-+  low power, low pin count configurable and fully compliant with the USB 3.1
-+  Gen 1 specification. The USB5744 also supports Full Speed (FS) and Low Speed
-+  (LS) USB signaling, offering complete coverage of all defined USB operating
-+  speeds. The new SuperSpeed hubs operate in parallel with the USB 2.0
-+  controller, so 5 Gbps SuperSpeed data transfers are not affected by slower
-+  USB 2.0 traffic.
-+
-+maintainers:
-+  - Piyush Mehta <piyush.mehta@xilinx.com>
-+  - Michal Simek <michal.simek@xilinx.com>
-+
-+properties:
-+  compatible:
-+    const: microchip,usb5744
-+
-+  reg:
-+    maxItems: 1
-+    description: |
-+      Specifies the i2c slave address, it is required and should be 0x2d
-+      if I2C is used.
-+
-+  reset-gpios:
-+    maxItems: 1
-+    description:
-+      The phandle and specifier for the GPIO that controls the RESET line of
-+      USB hub.
-+
-+required:
-+  - compatible
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        usb5744@2d {
-+            compatible = "microchip,usb5744";
-+            reg = <0x2d>;
-+            reset-gpios = <&gpio 44 GPIO_ACTIVE_HIGH>;
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 41e8d3d7faec..7439471b5d37 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2697,6 +2697,7 @@ W:	http://wiki.xilinx.com
- T:	git https://github.com/Xilinx/linux-xlnx.git
- F:	Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
- F:	Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
-+F:	Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
- F:	arch/arm/mach-zynq/
- F:	drivers/block/xsysace.c
- F:	drivers/clocksource/timer-cadence-ttc.c
--- 
-2.30.0
+thanks,
 
+greg k-h
