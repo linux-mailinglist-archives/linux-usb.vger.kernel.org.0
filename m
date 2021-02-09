@@ -2,80 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06A9B31584D
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Feb 2021 22:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B63315852
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Feb 2021 22:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233964AbhBIVHq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Feb 2021 16:07:46 -0500
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:46233 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234023AbhBIUtQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Feb 2021 15:49:16 -0500
-Received: by mail-ot1-f44.google.com with SMTP id r21so10265420otk.13;
-        Tue, 09 Feb 2021 12:48:00 -0800 (PST)
+        id S233373AbhBIVII (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Feb 2021 16:08:08 -0500
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:41349 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233895AbhBIUtR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Feb 2021 15:49:17 -0500
+Received: by mail-ot1-f52.google.com with SMTP id s107so18740457otb.8;
+        Tue, 09 Feb 2021 12:48:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=5HDCmk8HBTM9QYaMpmV4OtJzJOSSem/5EjbeVWW3FGw=;
-        b=J8208Vn0GI73IWGFs9CKccDW3UyGWqbuowNVGpQjtz8dG43vNt8THgzxMx/ow21aTv
-         nNsfapXw/tFjGh3TXmf8ZxDvwgTav4jJFgdYN2MSF+Yj4u4n42KQep9hZFMUOZvNfdDk
-         +IgkW3+Yy33dggG6wObXKtSBgswpmvzBqSyA0KnpXllwZNAjNZk7osZDsRdlu8SJJJuZ
-         aPNWrOMqPSv/rKl22XtN9eleq/1fqmfMyASxWNOfkGtOa/sMAfi6YVHoW5m7ANwgkxdZ
-         QRzbR9UnMoSwGe5yNu07aN//EYT80yj2WR5xMcJnZ0sCjnN+tkx4NuWPQg+NfZ2tVON/
-         0pUw==
-X-Gm-Message-State: AOAM533uN4o8LGPrZLfKwgrVr+j2B2+cSNIgUxS4uMNK13pghV44nzMe
-        i7OhBpRbn7wKR4hbZYY4Sg==
-X-Google-Smtp-Source: ABdhPJxkotZonO+874h4WPiv2w64CIW3eRlhi0d7O06Ay6TB0wtv2vO2vPPy61Xz3lTrRWMgINfgxw==
-X-Received: by 2002:a9d:191:: with SMTP id e17mr871646ote.127.1612903655607;
-        Tue, 09 Feb 2021 12:47:35 -0800 (PST)
+        bh=6GfRCsmy7FJEj63mhoY+V+O3PvN7JiICzZ8IwcVEyCU=;
+        b=j8k6xngKhUU4RUGH3d5ZS8tHa3cCe+uJSp4zZYPvAxeY6mJ7dhNv0aHCz2hP67yVSq
+         +4pdx8V3wSQ2RDZvBQd173lEysRlSnPxrba4fi00XJODQ/IKM+jsl+0Hk1NTZs6UZ1JQ
+         m7JDvKkrydK2bq8ac7Q1GMKWa8abKZtyiFxliY8mqsZyvekjYMFZZBT/Vd2BHP63wUZ0
+         tKNiQLMEuiu7EQHzg8t2+cbXa9EYJoRAsUnwPQ02eyDpQNUS33vSK5uvJ8LrlspQEyfq
+         L1VMH1Ybz/ZfZqnodh+M792SWPmK2dMFAHl4w57dhlcuqji7Oy4DfsQTxRzo9NFQT06h
+         lfjQ==
+X-Gm-Message-State: AOAM532PDynB+WBqmPVdFEO2wHkZ3tcv2JyCLeQ17QinT+9kxA2z3lHG
+        I/L8yi81k0EeV104xUybtA==
+X-Google-Smtp-Source: ABdhPJxhyGab36VocoyC8HQ3QP0wYUMPGADBulPSTA+DfJ3gz0WxubjQ1ZAnu7tf9zmm5qDOSlcdVw==
+X-Received: by 2002:a9d:65d4:: with SMTP id z20mr17893027oth.349.1612903709536;
+        Tue, 09 Feb 2021 12:48:29 -0800 (PST)
 Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id l4sm4384051oou.8.2021.02.09.12.47.32
+        by smtp.gmail.com with ESMTPSA id z30sm1043647otj.61.2021.02.09.12.48.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Feb 2021 12:47:33 -0800 (PST)
-Received: (nullmailer pid 149246 invoked by uid 1000);
-        Tue, 09 Feb 2021 20:47:32 -0000
-Date:   Tue, 9 Feb 2021 14:47:32 -0600
+        Tue, 09 Feb 2021 12:48:28 -0800 (PST)
+Received: (nullmailer pid 150932 invoked by uid 1000);
+        Tue, 09 Feb 2021 20:48:27 -0000
+Date:   Tue, 9 Feb 2021 14:48:27 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Min Guo <min.guo@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
         Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        linux-usb@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH next v3 03/16] dt-bindings: phy: mediatek: dsi-phy:
- modify compatible dependence
-Message-ID: <20210209204732.GA149190@robh.at.kernel.org>
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mediatek@lists.infradead.org, Min Guo <min.guo@mediatek.com>
+Subject: Re: [PATCH next v3 04/16] dt-bindings: phy: mediatek: hdmi-phy:
+ modify compatible items
+Message-ID: <20210209204827.GA150874@robh.at.kernel.org>
 References: <20210201070016.41721-1-chunfeng.yun@mediatek.com>
- <20210201070016.41721-3-chunfeng.yun@mediatek.com>
+ <20210201070016.41721-4-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210201070016.41721-3-chunfeng.yun@mediatek.com>
+In-Reply-To: <20210201070016.41721-4-chunfeng.yun@mediatek.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 01 Feb 2021 15:00:03 +0800, Chunfeng Yun wrote:
-> mt7623-mipi-tx is compatible to mt2701-mipi-tx, and use
-> "mediatek,mt2701-mipi-tx" instead on MT7623, so modify
-> the compatible items to make dependence clear.
+On Mon, 01 Feb 2021 15:00:04 +0800, Chunfeng Yun wrote:
+> mt7623-hdmi-tx is compatible to mt2701-hdmi-tx, and the compatible
+> "mediatek,mt7623-hdmi-tx" is not supported in driver, in fact uses
+> "mediatek,mt2701-hdmi-tx" instead on MT7623, so changes the
+> compatible items to make dependence clear.
 > 
 > Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 > Cc: Philipp Zabel <p.zabel@pengutronix.de>
 > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 > ---
-> v3: modify commit message suggested by CK
-> v2: separate two patches suggested by CK
+> v3: modify commit message
+> v2: no changes
 > ---
->  .../devicetree/bindings/phy/mediatek,dsi-phy.yaml   | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
+>  .../devicetree/bindings/phy/mediatek,hdmi-phy.yaml    | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
