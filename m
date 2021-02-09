@@ -2,75 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A5731585A
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Feb 2021 22:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDDF315B15
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 01:25:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234332AbhBIVJY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Feb 2021 16:09:24 -0500
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:46690 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbhBIUv5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Feb 2021 15:51:57 -0500
-Received: by mail-ot1-f51.google.com with SMTP id r21so10275490otk.13;
-        Tue, 09 Feb 2021 12:51:41 -0800 (PST)
+        id S234072AbhBJAYy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Feb 2021 19:24:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234571AbhBIXsh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Feb 2021 18:48:37 -0500
+Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA988C061574
+        for <linux-usb@vger.kernel.org>; Tue,  9 Feb 2021 15:47:46 -0800 (PST)
+Received: by mail-vk1-xa30.google.com with SMTP id w140so107289vkw.0
+        for <linux-usb@vger.kernel.org>; Tue, 09 Feb 2021 15:47:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WZJZ7c+5yTH+OoovuAuE2pVfxu47aSKzlNQXDtyZ89s=;
+        b=TtAC8SFgKhEvLX0dcTvHXnd8o3UsWyJ1HvBTHSBWM03YTb862tvFoD3BP9RP1FuHoX
+         FN+uL9eiWlH/xyTv/Ud1njg2DBSjHiLtZZ/zrtQX92yKE4r3IYwm71GPo0h24eLkG917
+         2JykkZqZmgmcrVrefVnj1+5ynWO7Cj8HFEHnY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8m1+OgRyr53v1HGSskPz0Nyj8c/qtTFjxOdWIMe9bVw=;
-        b=pyAnk1K3JZUWvyintPxJDfNBhb1nBmzfcQFFB9BLMLNbcjzycREjcF3B1N/Q4YMFp1
-         MAz/htsoEcDBqeBibhWn/mejJoIfx9jkJraadthHBq2rbRI+uuxuO7WrkIQzNB5zHnZ/
-         hq3KbDA+nQ9eIahV6rNAQPwv/+6e+9YNyEXeuhN3djeRNgBWY3rCs2frCRM754AP7rIs
-         +x79eMR79HvyA/qRqe6li6JXhAYABD3gRjdYwRrlmYEd/FqpUZ1F5MN/frS1GM2ZWX85
-         h30vdoOoVctbZ0ZXebx4+4VQCCHx2pbR+jG9oMFvlX+1P+W8xkd8zXWOXWBoWf/9clXQ
-         7ppw==
-X-Gm-Message-State: AOAM533X4pu76dOQj4OUVV5ZK0VUrSrzRifTHDTQqnaQYGw9vEJzpcME
-        Bgi9YKZwrKbHWHWfPEdfvg==
-X-Google-Smtp-Source: ABdhPJzBwihGqDNgY5q95zRe7VNuHJ4OLfOa1P8N6a/5hKGLICUgZC2r6d6cjGp3m+YcW9Yie4SS6A==
-X-Received: by 2002:a05:6830:1e8b:: with SMTP id n11mr17405462otr.360.1612903876064;
-        Tue, 09 Feb 2021 12:51:16 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id b7sm4526303oib.53.2021.02.09.12.51.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Feb 2021 12:51:14 -0800 (PST)
-Received: (nullmailer pid 156352 invoked by uid 1000);
-        Tue, 09 Feb 2021 20:51:13 -0000
-Date:   Tue, 9 Feb 2021 14:51:13 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     devicetree@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
-        Min Guo <min.guo@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Subject: Re: [PATCH next v3 08/16] dt-bindings: usb: mediatek: musb: add
- mt8516 compatbile
-Message-ID: <20210209205113.GA156297@robh.at.kernel.org>
-References: <20210201070016.41721-1-chunfeng.yun@mediatek.com>
- <20210201070016.41721-8-chunfeng.yun@mediatek.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WZJZ7c+5yTH+OoovuAuE2pVfxu47aSKzlNQXDtyZ89s=;
+        b=jMy/ViyqHxfERcbvYBiy808lMRQnANk+TYfSwajo0Rx3vD1qnsL5FR/5sePsr7ArS7
+         mad6juUa/+cw1yZAcofO/rCCMILQPJCtzlrvnAT8vb5gMu8qsiZQVFvdNkhkVU1TdCNm
+         5sJNPUa0czAiSbwtJMjikC0oKLttT+fPO9LkKVIVjkspwmbpCbiP/vAW8nzTg3q+BqeJ
+         kt2/laPEAJ8mxu7rItnz4vPDs/cgkEYpObmf7jimk5t43Th8Br+cbhJIM2K9q0sXQB0M
+         HdFtX23B/CMyp7zGi1+Nb4QXyVGZhSbehs4KcP+mKUx4oxKDvoZy5pID1B9OTJWqUKvm
+         DJ3A==
+X-Gm-Message-State: AOAM533tQOtEzwEZjljKXpXFN3RTF6SAREltDn2Zqok7hDw284LxmYpA
+        mMZk9NCDEQZJnI43jEbGr9DcZZSl2OHOqcPG0qQbeQ==
+X-Google-Smtp-Source: ABdhPJw8kgfCY05OTr7HXAAlmYjhvKpnSWhxzNi2guh3xKgqHzBslovQWm57U2E6PYZhcXC+PP7r71P0CkZ9/PYcz9s=
+X-Received: by 2002:a1f:9004:: with SMTP id s4mr188156vkd.6.1612914465800;
+ Tue, 09 Feb 2021 15:47:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210201070016.41721-8-chunfeng.yun@mediatek.com>
+References: <20210121125731.19425-1-oneukum@suse.com> <YAoqXZJVhRDiRI+9@lunn.ch>
+ <CANEJEGs7VQ4N9OgtDJ0k7DqgqruwpEm7LZ07UUdD3PGepLeLHg@mail.gmail.com>
+In-Reply-To: <CANEJEGs7VQ4N9OgtDJ0k7DqgqruwpEm7LZ07UUdD3PGepLeLHg@mail.gmail.com>
+From:   Grant Grundler <grundler@chromium.org>
+Date:   Tue, 9 Feb 2021 23:47:34 +0000
+Message-ID: <CANEJEGuXmBwYdb3Vr7QhwEUFNXyLgQ0PkqP+H1Qya+Kceh7G7w@mail.gmail.com>
+Subject: Re: [PATCHv2 0/3] usbnet: speed reporting for devices without MDIO
+To:     Grant Grundler <grundler@chromium.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Oliver Neukum <oneukum@suse.com>,
+        Hayes Wang <hayeswang@realtek.com>,
+        David Miller <davem@davemloft.net>,
+        netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 01 Feb 2021 15:00:08 +0800, Chunfeng Yun wrote:
-> Add support mt8516 compatbile
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> v2~v3: no changes
-> ---
->  Documentation/devicetree/bindings/usb/mediatek,musb.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Oliver,
+it's been a few weeks, do you have time to post an updated patchset or
+is there someone else you would trust to help land this series?
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+cheers,
+grant
+
+On Fri, Jan 22, 2021 at 2:10 AM Grant Grundler <grundler@chromium.org> wrote:
+>
+> On Fri, Jan 22, 2021 at 1:29 AM Andrew Lunn <andrew@lunn.ch> wrote:
+> >
+> > On Thu, Jan 21, 2021 at 01:57:28PM +0100, Oliver Neukum wrote:
+> > > This series introduces support for USB network devices that report
+> > > speed as a part of their protocol, not emulating an MII to be accessed
+> > > over MDIO.
+> > >
+> > > v2: adjusted to recent changes
+> >
+> > Hi Oliver
+> >
+> > Please give more details what actually changed.  Does this mean you
+> > just rebased it on net-next? Or have you made real changes?
+>
+> My apologies to Oliver - the changes he's referring to are the ones I submitted:
+>    https://www.spinics.net/lists/netdev/msg715248.html
+>
+> which is related to this series:
+>    https://www.spinics.net/lists/netdev/msg714493.html
+>
+> I wasn't aware of and didn't look for the series Oliver had previously
+> posted. *sigh*  I have been talking to Realtek about getting the issue
+> of RTL8156 spewing notifications every 32ms fixed (thinking a FW
+> change could fix it) for nearly three months.  It is unfortunate
+> timing that Roland Dreier decided to do something about it in December
+> - which I didn't expect to happen given this problem was reported
+> nearly two years ago.
+>
+> > The discussion with v1 suggested that this framework should also be
+> > used by anything which gets notified in CDC style. So i was expecting
+> > to see cdc_ether.c also use this.
+>
+> Agreed. That's a two lines change to cdc_ether.c. I can submit this if
+> Oliver doesn't want to spin the series.
+>
+> I've reviewed all three patches and besides one nit (which could be
+> ignored or fixed later), I'm offering my
+>    Reviewed-by: Grant Grundler <grundler@chromium.org>
+>
+> in the off chance that helps get this accepted into net-next (and/or
+> 5.11 RC release).
+>
+> cheers,
+> grant
+>
+> >
+> >             Andrew
