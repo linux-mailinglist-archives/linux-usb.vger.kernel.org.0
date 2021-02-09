@@ -2,106 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7331C314EEF
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Feb 2021 13:33:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F37531502B
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Feb 2021 14:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbhBIMdD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Feb 2021 07:33:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
+        id S230401AbhBIN3X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Feb 2021 08:29:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbhBIMdD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Feb 2021 07:33:03 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7829C061786
-        for <linux-usb@vger.kernel.org>; Tue,  9 Feb 2021 04:32:22 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id y9so30962149ejp.10
-        for <linux-usb@vger.kernel.org>; Tue, 09 Feb 2021 04:32:22 -0800 (PST)
+        with ESMTP id S230286AbhBIN3N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Feb 2021 08:29:13 -0500
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C407C06178A
+        for <linux-usb@vger.kernel.org>; Tue,  9 Feb 2021 05:28:32 -0800 (PST)
+Received: by mail-qt1-x841.google.com with SMTP id x3so10976852qti.5
+        for <linux-usb@vger.kernel.org>; Tue, 09 Feb 2021 05:28:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1CWVbWMy02aiBxLkPLcMyfNOVERNn6cRPM0WaMpYN58=;
-        b=ZkeuW7GCbZb+mqOTc1rDs0fFr192DetmmFEuKYFD1Sg7O4oYHIAiXM/OQHDvIQicuq
-         Ug7fChg1iqXrDKH2mwUxxYXG6ITnT3ZxE7nwTAfW2s77eFTSw+hymgmj23bfADAExKQ9
-         +teoZeE0l4Sp7FUBQzg12CtP3FVKtQktx5bQMkopngVR7BNeCCvWZb7zwq1CH8QBLwBT
-         xqux0qv8UhUS0kBkyXIx79XaPTUCi2wKnDt5+6RmH41n7GrE28u/Wrt/uJdiLS6ii3Uv
-         ci4AnJin+8dK+18oKnmm8F3QA80itqebNDXAgEhjJb0TdOE7NmvbGOd/g0OUKX2Jyzke
-         cvcw==
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=aixkCWk7IZwnn+KMBVR51D4f627eXwhSfGhxRlFtEfU=;
+        b=BcFNtR+zRVJsPPX/5KpwvqNZ9RXNzS0OmxDhUUyQB8BK8/LnXBi52HTS3aSix5h2al
+         MlAXGt8plujEuvlChgYmG6mQz8pKdY/jh57QzCmlr8ZvLU8ARH9fwkIW5fc/vjPIDALq
+         m1xtocx65KMFpOK4s6cz2DPrSuVuiEPhS+EoPXMcB5qSvr7/4kS3EYHHtZ2ncsovZaCU
+         aBZsHPxzLsPAf6M6HhwbSSlfs72j2BM5gdkgIBUAi3ryND6kHrwa0MlIVbyC04B0B84w
+         SGunWIiUqzCgUsXo2KJmsuriME8+OB8mLvjxeKYEi9WUm0YANpja9VQiHqR50Qivzf4l
+         G6tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=1CWVbWMy02aiBxLkPLcMyfNOVERNn6cRPM0WaMpYN58=;
-        b=g800BlUFL4b9lrup+QfcxfjoO3u3wn12PsZ9BoBeOVMfVXY1TIq7XqJnR7opXZBu3l
-         NHL1ot3eZXwjjsuVbTwZDMGuunmABmEi4XBtlOP089cA2I1303aAiLyP8rezZEFISmf/
-         eAUasz+pfLbW8ORwPqM7nGPYvF0E1lQcdbAhAaSlxsiKj5JHqLK8GK+6SHIoRPY3VZV+
-         exLI8SiWIbhjxZ0lg3jgyEfN77P6ERpjDRjaL9fZLmIKfx41aONL9xrxwXxFseF+VTSc
-         KTF2ZiyHcqECQUkzya4kGEsuDhI5gWD5cXzrUEy+fAMgwNrTh9H3O0NA0nBqacoxJa+A
-         jLiw==
-X-Gm-Message-State: AOAM532/KYW3P/cDFsbsnGev3FSr/Oueq93Xsw2JYhup7ANYKQ2a/HY/
-        GdNV4joEHaELmNamQEIHeooUbQ==
-X-Google-Smtp-Source: ABdhPJxrml0k+smViydxGYN1l4mfREZt00owdYjiBWzlGWr0xpLAVoXDqabbN1aAB7c7SPB5bX3olQ==
-X-Received: by 2002:a17:907:2130:: with SMTP id qo16mr21250551ejb.537.1612873941381;
-        Tue, 09 Feb 2021 04:32:21 -0800 (PST)
-Received: from localhost (nat-35.starnet.cz. [178.255.168.35])
-        by smtp.gmail.com with ESMTPSA id a25sm8522252edt.16.2021.02.09.04.32.20
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 09 Feb 2021 04:32:20 -0800 (PST)
-Sender: Michal Simek <monstr@monstr.eu>
-From:   Michal Simek <michal.simek@xilinx.com>
-To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com,
-        Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Cercueil <paul@crapouillou.net>, linux-usb@vger.kernel.org
-Subject: [PATCH v2] usb: misc: usb3503: Fix logic in usb3503_init()
-Date:   Tue,  9 Feb 2021 13:32:19 +0100
-Message-Id: <a8547f6fe698014df08cad3bcc9c5d9a7137d8b8.1612873935.git.michal.simek@xilinx.com>
-X-Mailer: git-send-email 2.30.0
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=aixkCWk7IZwnn+KMBVR51D4f627eXwhSfGhxRlFtEfU=;
+        b=tYmhTByLbABRTjb4Qp9t6bAcMupOVEQaeF0FrVwBj1qP7b+CVyP8glWi2q8tLGgghh
+         FiG/xFfntKs3gg1lq2RVp21f0o1FXStO3SCYGIlP9OYFWNFJJslwp4tCcfjQ7++RBpFE
+         PZGhQ+7JabJDEIsaXDqoFSAH7iIEAsZvyN1Ol+zx3/2xlczIXzdICbMRUAhh0pKLMcbb
+         TGEfOxhY6ZK469bOsZhFo7R+thohnFSqPtCxAojCwNUI/NukgIpIqC5CDKOfaJP5nfOH
+         Sebi4FpjFaE5Au+K6gpry09SLuiV3EWTYLzYmOjVAVGaQePhIuy1wNxpdXLHOhK30epX
+         f0KA==
+X-Gm-Message-State: AOAM531gPhAsaBYK8mi9nUqkH06Uggyxci4WkzXPXfVckAMu5yoIjF6r
+        DrSkaawy49v+YqCOHua8ZBaaY/9h4kBUWg51Pug=
+X-Google-Smtp-Source: ABdhPJy/+nyYLnHlmyb3/WLZ18Thc9IsBQxgzC1zyRzMf+h3flQwTKOGhknAnqU4YTHHjAQIVYnseVUFcCO7yxrdCeY=
+X-Received: by 2002:ac8:58c5:: with SMTP id u5mr19595915qta.94.1612877311790;
+ Tue, 09 Feb 2021 05:28:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a0c:ba0e:0:0:0:0:0 with HTTP; Tue, 9 Feb 2021 05:28:31 -0800 (PST)
+From:   lisa hugh <lisa.hugh39@gmail.com>
+Date:   Tue, 9 Feb 2021 14:28:31 +0100
+Message-ID: <CACL9SgkXXQQR41mF+p9P=S+vJbB+JxoG00wL6TxfM2oSBBOZ6w@mail.gmail.com>
+Subject: BUSINESS INTEREST OPPORTUNITY.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Based on
-https://lore.kernel.org/linux-arm-kernel/YCJv59g3Tq2haDSa@kroah.com/
-initialization should fail if any registration fails.
+Dear Friend,
 
-Signed-off-by: Michal Simek <michal.simek@xilinx.com>
----
+I am Ms Lisa Hugh, work in the department of Audit and accounting
+manager here in the Bank.
 
-Changes in v2:
-- Also remove i2c driver when platform driver registration failed.
+Please i need your assistance for the transferring of this fund to
+your bank account for both of us benefit for life time investment,
 
- drivers/usb/misc/usb3503.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+I have every inquiry details to make the bank believe you and release
+the fund in within 5 banking working days with your full co-operation
+with me for success.
 
-diff --git a/drivers/usb/misc/usb3503.c b/drivers/usb/misc/usb3503.c
-index 48099c6bf04c..330f494cd158 100644
---- a/drivers/usb/misc/usb3503.c
-+++ b/drivers/usb/misc/usb3503.c
-@@ -409,13 +409,18 @@ static int __init usb3503_init(void)
- 	int err;
- 
- 	err = i2c_add_driver(&usb3503_i2c_driver);
--	if (err != 0)
-+	if (err) {
- 		pr_err("usb3503: Failed to register I2C driver: %d\n", err);
-+		return err;
-+	}
- 
- 	err = platform_driver_register(&usb3503_platform_driver);
--	if (err != 0)
-+	if (err) {
- 		pr_err("usb3503: Failed to register platform driver: %d\n",
- 		       err);
-+		i2c_del_driver(&usb3503_i2c_driver);
-+		return err;
-+	}
- 
- 	return 0;
- }
--- 
-2.30.0
+Below information is what i need from you so will can be reaching each other
 
+1)Private telephone number for communication
+2)Age
+3)Country
+
+Note. reply me with this email as usual for quick check and reply back
+without delay (        ms.lisahugh000@gmail.com        )
+
+Thanks.
+
+Ms Lisa Hugh,
