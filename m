@@ -2,92 +2,324 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9566531570B
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Feb 2021 20:46:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF96315849
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Feb 2021 22:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233672AbhBITns (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Feb 2021 14:43:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48730 "EHLO
+        id S233522AbhBIVET (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Feb 2021 16:04:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233669AbhBIT0F (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Feb 2021 14:26:05 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1404FC0611BE;
-        Tue,  9 Feb 2021 11:24:06 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id b9so33558851ejy.12;
-        Tue, 09 Feb 2021 11:24:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=VKpw+TGxcSonBmJvYVbjnLKEXkavUls9cDkglgeREzs=;
-        b=HO1rEER2rQ/ib60OX4LykRzzHUV7TK6M7FXnGi0rK0kf7M3lRCrxd5vuud4Y69slyc
-         gcJcjDFwAEKBdd+CV7Gdib0WaDgHMbaLMAOqwcG29CQeTgTSv609bh1St5YhZ6hOsqqF
-         dDW3AWzG1b8Qti44pryaVZ/3AdrFfSX9D6q0kPADnuf3JVyEBXU0hpDflZXLPyS8FBmP
-         HWCk8sOTr0s4EiNvcw9auqxdZnmoi0Qh+y3CnG4UVM7wkkvzxIRJedjelEyYsRDqxzro
-         U2O0iq8BSbNG3VEySL8f/ZrCDoLuvevjlzBFvHyeSwKavRzoA4RxaSDNIne33B53yQCr
-         U/EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=VKpw+TGxcSonBmJvYVbjnLKEXkavUls9cDkglgeREzs=;
-        b=hQ7m9XAUVD3VuNfag27wGegY1qKXHDErsiJf8lRXycKD2ShMh5CqT6maGFGVVpUMLS
-         mPhKfmJ/KGXY9prfFZUbI84sbb5Ms+r2N2sC1wD5abbtwWWKeQQm81W7P0aQDJciQ2t9
-         nErtn8AEQMFLzJXUn1tqOR9Fb8ZiXw2UQJXyhxL9qJxJEV5zFIINvaccyDYHBbo1pemN
-         /KxEMLc0lbJDGP2mLczlYpx+S0rZhq97ex7RzkG4FBEbuJ9ZKfAPiGKW2mB6MOLbjNk9
-         cJw1FkYFFB4Rruwn6Qxux/Ewz8jlLS++BePDan9CuQbEV+Jp5jdErzKshH8lkVwKGBaf
-         5A6Q==
-X-Gm-Message-State: AOAM533mHRuDCIct3LnhIJmIF3sc4JEZtB3P4I5swfHXyw1iP4JhOg8Y
-        sFYH58kZrn/9VRqR5nCwiUw=
-X-Google-Smtp-Source: ABdhPJw9959wQBn5cvY2Fqpt5Xz+QaWW6YioQ2FYuvburiVrHGpT8oFcjVbVZLt3nDg+4Z/13u4xQA==
-X-Received: by 2002:a17:906:b752:: with SMTP id fx18mr24723372ejb.17.1612898644828;
-        Tue, 09 Feb 2021 11:24:04 -0800 (PST)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id w3sm11075779eja.52.2021.02.09.11.24.04
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Feb 2021 11:24:04 -0800 (PST)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, gregkh@linuxfoundation.org, balbi@kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 8/8] dts64: rockchip: enable dwc3 usb for A95X Z2
-Date:   Tue,  9 Feb 2021 20:23:50 +0100
-Message-Id: <20210209192350.7130-8-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20210209192350.7130-1-jbx6244@gmail.com>
-References: <20210209192350.7130-1-jbx6244@gmail.com>
+        with ESMTP id S233831AbhBIUjr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Feb 2021 15:39:47 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3E1C061D73
+        for <linux-usb@vger.kernel.org>; Tue,  9 Feb 2021 12:02:11 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1l9ZCz-0002oH-VN; Tue, 09 Feb 2021 21:02:01 +0100
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1l9ZCy-0002PZ-SO; Tue, 09 Feb 2021 21:02:00 +0100
+Date:   Tue, 9 Feb 2021 21:02:00 +0100
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Manish Narani <MNARANI@xilinx.com>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Michal Simek <michals@xilinx.com>, git <git@xilinx.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [RESEND PATCH v3 2/2] usb: dwc3: Add driver for Xilinx platforms
+Message-ID: <20210209200200.GE8982@pengutronix.de>
+References: <1608015291-52007-1-git-send-email-manish.narani@xilinx.com>
+ <1608015291-52007-3-git-send-email-manish.narani@xilinx.com>
+ <20210118134223.GE12316@pengutronix.de>
+ <20210122080846.GI12316@pengutronix.de>
+ <BYAPR02MB589689FC1EAE48B5D2213E96C1A09@BYAPR02MB5896.namprd02.prod.outlook.com>
+ <20210122133452.GK12316@pengutronix.de>
+ <20210127233607.GG19259@pengutronix.de>
+ <20210208235606.GA8982@pengutronix.de>
+ <BYAPR02MB58965858F51B613965B83192C18E9@BYAPR02MB5896.namprd02.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Qz2CZ664xQdCRdPu"
+Content-Disposition: inline
+In-Reply-To: <BYAPR02MB58965858F51B613965B83192C18E9@BYAPR02MB5896.namprd02.prod.outlook.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 21:00:20 up 69 days,  8:27, 97 users,  load average: 0.63, 0.24,
+ 0.18
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable dwc3 usb for A95X Z2.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
-Changed V2:
-  remove node wrapper
----
- arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts | 5 +++++
- 1 file changed, 5 insertions(+)
+--Qz2CZ664xQdCRdPu
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts b/arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts
-index 30c73ef25..e71870768 100644
---- a/arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts
-@@ -357,6 +357,11 @@
- 	status = "okay";
- };
- 
-+&usbdrd3 {
-+	dr_mode = "host";
-+	status = "okay";
-+};
-+
- &usb_host0_ehci {
- 	status = "okay";
- };
--- 
-2.11.0
+Hi Manish,
 
+On Tue, Feb 09, 2021 at 06:01:58AM +0000, Manish Narani wrote:
+>Hi Michael,
+>
+>> -----Original Message-----
+>> From: Michael Grzeschik <mgr@pengutronix.de>
+>> Sent: Tuesday, February 9, 2021 5:26 AM
+>> To: Manish Narani <MNARANI@xilinx.com>
+>> Cc: devicetree@vger.kernel.org; p.zabel@pengutronix.de; balbi@kernel.org;
+>> gregkh@linuxfoundation.org; linux-usb@vger.kernel.org; linux-
+>> kernel@vger.kernel.org; robh+dt@kernel.org; Michal Simek
+>> <michals@xilinx.com>; git <git@xilinx.com>; kernel@pengutronix.de; linux-
+>> arm-kernel@lists.infradead.org
+>> Subject: Re: [RESEND PATCH v3 2/2] usb: dwc3: Add driver for Xilinx
+>> platforms
+>>
+>> Hi Manish!
+>>
+>> On Thu, Jan 28, 2021 at 12:36:07AM +0100, Michael Grzeschik wrote:
+>> >On Fri, Jan 22, 2021 at 02:34:52PM +0100, Michael Grzeschik wrote:
+>> >>On Fri, Jan 22, 2021 at 01:06:22PM +0000, Manish Narani wrote:
+>> >>>Hi Michael,
+>> >>>
+>> >>>>-----Original Message-----
+>> >>>>From: Michael Grzeschik <mgr@pengutronix.de>
+>> >>>>Sent: Friday, January 22, 2021 1:39 PM
+>> >>>>To: Manish Narani <MNARANI@xilinx.com>
+>> >>>>Cc: devicetree@vger.kernel.org; kernel@pengutronix.de;
+>> balbi@kernel.org;
+>> >>>>gregkh@linuxfoundation.org; linux-usb@vger.kernel.org; Michal Simek
+>> >>>><michals@xilinx.com>; linux-kernel@vger.kernel.org;
+>> robh+dt@kernel.org;
+>> >>>>git <git@xilinx.com>; p.zabel@pengutronix.de; linux-arm-
+>> >>>>kernel@lists.infradead.org
+>> >>>>Subject: Re: [RESEND PATCH v3 2/2] usb: dwc3: Add driver for Xilinx
+>> >>>>platforms
+>> >>>>
+>> >>>>Hello!
+>> >>>>
+>> >>>>On Mon, Jan 18, 2021 at 02:42:24PM +0100, Michael Grzeschik wrote:
+>> >>>>>Hi!
+>> >>>>>
+>> >>>>>On Tue, Dec 15, 2020 at 12:24:51PM +0530, Manish Narani wrote:
+>> >>>>>>Add a new driver for supporting Xilinx platforms. This driver is u=
+sed
+>> >>>>>>for some sequence of operations required for Xilinx USB controller=
+s.
+>> >>>>>>This driver is also used to choose between PIPE clock coming from
+>> SerDes
+>> >>>>>>and the Suspend Clock. Before the controller is out of reset, the =
+clock
+>> >>>>>>selection should be changed to PIPE clock in order to make the USB
+>> >>>>>>controller work. There is a register added in Xilinx USB controller
+>> >>>>>>register space for the same.
+>> >>>>>
+>> >>>>>I tried out this driver with the vanilla kernel on an zynqmp. Witho=
+ut
+>> >>>>>this patch the USB-Gadget is already acting buggy. In the gadget mo=
+de,
+>> >>>>>some iterations of plug/unplug results to an stalled gadget which w=
+ill
+>> >>>>>never come back without a reboot.
+>> >>>>>
+>> >>>>>With the corresponding code of this driver (reset assert, clk modif=
+y,
+>> >>>>>reset deassert) in the downstream kernels phy driver we found out i=
+t is
+>> >>>>>totaly stable. But using this exact glue driver which should do the=
+ same
+>> >>>>>as the downstream code, the gadget still was buggy the way described
+>> >>>>>above.
+>> >>>>>
+>> >>>>>I suspect the difference lays in the different order of operations.
+>> >>>>>While the downstream code is runing the resets inside the phy driver
+>> >>>>>which is powered and initialized in the dwc3-core itself. With this=
+ glue
+>> >>>>>layser approach of this patch the whole phy init is done before even
+>> >>>>>touching dwc3-core in any way. It seems not to have the same effect,
+>> >>>>>though.
+>> >>>>>
+>> >>>>>If really the order of operations is limiting us, we probably need
+>> >>>>>another solution than this glue layer. Any Ideas?
+>> >>>>
+>> >>>>I found out what the difference between the Downstream and this
+>> >>>>Glue is. When using vanilla with this Glue code we may not set
+>> >>>>the following bit:
+>> >>>>
+>> >>>>https://www.xilinx.com/html_docs/registers/ug1087/ug1087-zynq-
+>> >>>>ultrascale-registers.html#usb3_regs___fpd_power_prsnt.html
+>> >>>>
+>> >>>>>>+	/* Set PIPE Power Present signal in FPD Power Present
+>> Register*/
+>> >>>>>>+	writel(PIPE_POWER_ON, priv_data->regs +
+>> >>>>XLNX_USB_FPD_POWER_PRSNT);
+>> >>>>
+>> >>>>When I comment this out, the link stays stable. This is different in
+>> >>>>the Downstream Xilinx Kernel, where the bit is also set but has no
+>> >>>>negativ effect.
+>> >>>>
+>> >>>>Manish, can you give me a pointer what to look for?
+>> >>>>So setting this will also work with mainline?
+>> >>>I am looking further on this but from what I see here is that,
+>> >>>In order to make USB function properly, there are some dt changes
+>> needed in mainline for
+>> >>>USB node which include defining clocks coming from serdes.
+>> >>>The DT changes are pending to be sent to mainline.
+>> >>
+>> >>Can you push that state somewhere, so I could test it?
+>> >>Or is in the downstream kernel some things to copy?
+>> >>
+>> >>>Can you share the DT settings for USB node on your side?
+>> >>
+>> >>Here is my current configuration for the device node at usb0:
+>> >>
+>> >>zynqmp.dtsi
+>> >>
+>> >>zynqmp_reset: reset-controller {
+>> >>	compatible =3D "xlnx,zynqmp-reset";
+>> >>	#reset-cells =3D <1>;
+>> >>};
+>> >>
+>> >>usb0: usb@ff9d0000 {
+>> >>	#address-cells =3D <2>;
+>> >>	#size-cells =3D <2>;
+>> >>	status =3D "disabled";
+>> >>	compatible =3D "xlnx,zynqmp-dwc3";
+>> >>	reg =3D <0x0 0xff9d0000 0x0 0x100>;
+>> >>	clock-names =3D "bus_clk", "ref_clk";
+>> >>	power-domains =3D <&zynqmp_firmware PD_USB_0>;
+>> >>	ranges;
+>> >>	resets =3D <&zynqmp_reset ZYNQMP_RESET_USB0_CORERESET>,
+>> >>		<&zynqmp_reset ZYNQMP_RESET_USB0_HIBERRESET>,
+>> >>		<&zynqmp_reset ZYNQMP_RESET_USB0_APB>;
+>> >>	reset-names =3D "usb_crst", "usb_hibrst", "usb_apbrst";
+>> >>	phy-names =3D "usb3-phy";
+>> >>	phys =3D <&psgtr 2 PHY_TYPE_USB3 0 2>;
+>> >>
+>> >>	usb0_dwc3: dwc3@fe200000 {
+>> >>		compatible =3D "snps,dwc3";
+>> >>		interrupt-parent =3D <&gic>;
+>> >>		interrupts =3D <0 65 4>;
+>> >>		clock-names =3D "ref", "bus_early", "suspend";
+>> >>		reg =3D <0x0 0xfe200000 0x0 0x40000>;
+>> >>	};
+>> >>};
+>> >>
+>> >>platform.dts
+>> >>
+>> >>&usb0 {
+>> >>	status =3D "okay";
+>> >>	phy-names =3D "usb3-phy";
+>> >>	phys =3D <&psgtr 2 PHY_TYPE_USB3 0 2>;
+>> >>};
+>> >>
+>> >>&usb0_dwc3 {
+>> >>	dr_mode =3D "peripheral";
+>> >>
+>> >>	/* The following quirks are required, since the bInterval is 1 and we
+>> >>	 * handle steady ISOC streaming. See Usecase 3 in commit
+>> 729dcffd1ed3
+>> >>	 * ("usb: dwc3: gadget: Add support for disabling U1 and U2
+>> entries").
+>> >>	 */
+>> >>	snps,dis-u1-entry-quirk;
+>> >>	snps,dis-u2-entry-quirk;
+>> >>};
+>> >>
+>> >>
+>> >>>Meanwhile I will keep updating on the same.
+>> >>
+>> >>Thanks, that sounds great!
+>> >
+>> >I have more feedback regarding this issues. As we saw new uncommon
+>> >effects, when using the glue. Regarding to get the plug/unplug behaviour
+>> >stable, we sticked with leaving out the setting of PIPE_POWER_ON in that
+>> >driver. Unfortunately, with that change, the dwc3 is not only not
+>> >sending any Erratic Errors any more, but also is lacking to send
+>> >disconnect interrupts.
+>> >
+>> >Double checking with downstream shows that disconnects are working
+>> >completely fine in your downstream stack.
+>> >
+>> >I think we should really need to know why PIPE_POWER_ON is making
+>> >a difference before we can say the dwc3 is stable with that glue.
+>>
+>> After bisecting your v5.4 and mainline we found out that this all is
+>> working fine, when setting "snps,dis_u3_susphy_quirk" in the zynqmp.dtsi
+>> dwc3 node.
+>>
+>> The code handling this quirk was introduced after v5.4, so this was
+>> never an issue with your downstream stack.
+>>
+>> "9ba3aca8 usb: dwc3: Disable phy suspend after power-on reset"
+>>
+>> We need to know if adding snps,dis_u3_susphy_quirk to the dwc nodes
+>> is generally necessary for zynqmp, so we can fix for everyone.
+>
+>Yes, it is necessary for DWC3 on ZynqMP platform. This property should be
+>added to the DT node.
+
+For now this quirk does solve the issues regarding the pluging
+behaviour. But we would like to know why?
+
+Is the phy not properly configured/connected to serve the phy
+suspend as intended for the dwc3 stack? Is this a real Hardware issue,
+or does this quirk only disable the suspend behaviour even though it
+would work properly when configured correctly in software.
+
+
+The second question is addressing the dwc3 xilinx glue driver
+you are trying to mainline. We found that the driver is pulling and
+releasing some resets before and after changing the pll frequency
+comming from the reference clk lines. After that the undocumented
+registers XLNX_USB_FPD_POWER_PRSNT and XLNX_USB_FPD_PIPE_CLK are changed
+according to the updated pll frequency. What do these bit change?
+Is this an internal configuration every dwc3 user on the zynqmp has
+to do or does this differ from user to user?
+
+Regards,
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--Qz2CZ664xQdCRdPu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmAi6jgACgkQC+njFXoe
+LGTznQ/+Id166mvGiPXXcOVRAcg2z5cj/2I0OEOSR+mS0oTUZMNXXRk0oLCoxWS6
+IkSpkA7D0GBejMauHLJ+Hmb8M/fuLQUjSwRNi62otX4t5+mABiXxlCXW5JTyrRc9
+mHOweD3Vokz1T//n3oGD4wsBqML444doj8vVTXixi7qac9I2jRkYtVpkLn7JSNpf
+fAgDS42ndxGWGsk99ZU+wrtBVibVhRGpP0mplvkYaGplgztZ1By072fjBNdGjM9j
+us8iavcqB8TC2N6+/QdNb45EhgpjR4FMEVxcFF/CBbMb3UYgK4OKZMOOFiGAqgbO
+eWXoLxuQb9obKmCqvuZUC1NrnWEo4n/8VYXZF1h1J5X7GlIyQgvnSXpR1lYI8szr
+l5YmPki87DbKzTyMLkfvQ+JG7VhkWOcCGu2YEVKEEwCZAw4Mk19zi2UGEKA47FIm
+ztfeIYkbveUpMxMc7XwcA3EkTAIuPQEBKbRLtEq8/wRhJUN9zxzJmtC8RRhxhM3E
+MqZaLrcroL74PTN3zRx6MkMOB0U2bUym5hhUQH8j4j42KVgmQuhau1joJNa244jU
+UJxiIGYwAvY6N0BHdX6fA0ZQVpvV1crz+M2iMAB0YoGKHPlEP0GWh0v3pHGaTAWY
+id5nrY32xl3uDnjK9f4lbKcx+jRp20iaDeGhevbn5mggrhXpMcs=
+=jPjB
+-----END PGP SIGNATURE-----
+
+--Qz2CZ664xQdCRdPu--
