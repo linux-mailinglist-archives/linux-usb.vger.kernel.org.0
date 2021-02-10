@@ -2,64 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DDDC316E5E
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 19:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BBE316E63
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 19:21:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233932AbhBJSTg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Feb 2021 13:19:36 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:60026 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232750AbhBJSRx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Feb 2021 13:17:53 -0500
-Received: from fsav106.sakura.ne.jp (fsav106.sakura.ne.jp [27.133.134.233])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 11AIGZYR080890;
-        Thu, 11 Feb 2021 03:16:35 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav106.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav106.sakura.ne.jp);
- Thu, 11 Feb 2021 03:16:35 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav106.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 11AIGZ2c080887
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 11 Feb 2021 03:16:35 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [PATCH] usb: usbip: fix error handling of kthread_get_run()
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Hillf Danton <hdanton@sina.com>, linux-usb@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-References: <000000000000414db905b6e9bae8@google.com>
- <20210205135707.4574-1-penguin-kernel@I-love.SAKURA.ne.jp>
- <6b2b9f7c-a412-0f52-3373-bc58d1e95ad9@linuxfoundation.org>
- <ee936421-66ea-c6a7-fa1e-d4077ab28ed0@i-love.sakura.ne.jp>
- <1f4b36a1-460e-1154-b46c-32ba72b88205@linuxfoundation.org>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <dffdefc9-9499-2cd0-fce9-b084df1511af@i-love.sakura.ne.jp>
-Date:   Thu, 11 Feb 2021 03:16:29 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        id S233571AbhBJSUG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Feb 2021 13:20:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57822 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233809AbhBJSSB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 10 Feb 2021 13:18:01 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ADAE064EE9;
+        Wed, 10 Feb 2021 18:16:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612981009;
+        bh=Y3M41xwZVH3Dio4o/VsIyICva0DpELAmRG0OwZz7C1Y=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=QM7pBvQZXERvSGVgvVQf7/8bIgSjJ1LFA/QqdCKHjseU3TJdXhwdyRqlAohdiep5Y
+         ccCj9qMxQ00ZZL5/zdNDgyrMtC/uJJIhU5zT90AAT5gh5E4CRD8NIo1utDowjzRE6L
+         RSXQIstLwQh+q983wgmIG69dRBcZICctI9Yzzh3HjAaHF+YoO5+HRfkGDbOcKLs4E9
+         KmnqwHD8vgvZxBhHsjXiByuC4u7CiPVwRyCqEFr3QEl6GQNSQjLhqYUpPGV0xpLPoM
+         BBAx3oxFCcyYCN/7z2GTGIwbl0dJb3vp85lJkX6pplDCGq8WX8xOn88uv8E/euu1+9
+         i/DEf4jgqEj1g==
+Received: by mail-qv1-f46.google.com with SMTP id ew18so1303424qvb.4;
+        Wed, 10 Feb 2021 10:16:49 -0800 (PST)
+X-Gm-Message-State: AOAM530v2gKJZGkjfatpIhCp8IVAGpWyVOgwFT2G+TuN5S0RqlG1+2j+
+        YjxpUjcmE01LVVG8GgpeQxf1ARBQ0jAsU2ngNA==
+X-Google-Smtp-Source: ABdhPJxvrP8Mx1Q6brlIT04YJdW8GZAt91MQw70k4YzGnJ4FdepboyPbcyxHhdadzSfGAHVYcBki3D4fuCUyMhVxlvI=
+X-Received: by 2002:ad4:45ca:: with SMTP id v10mr4316438qvt.11.1612981008833;
+ Wed, 10 Feb 2021 10:16:48 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1f4b36a1-460e-1154-b46c-32ba72b88205@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20201205155621.3045-1-Sergey.Semin@baikalelectronics.ru> <20201205155621.3045-10-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20201205155621.3045-10-Sergey.Semin@baikalelectronics.ru>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 10 Feb 2021 12:16:37 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+0iZC5NcXkn9K+yPZ+7-j-Ee6n-teitrUjSkOYo=3MLQ@mail.gmail.com>
+Message-ID: <CAL_Jsq+0iZC5NcXkn9K+yPZ+7-j-Ee6n-teitrUjSkOYo=3MLQ@mail.gmail.com>
+Subject: Re: [PATCH v3 09/10] usb: dwc3: qcom: Detect DWC3 DT-nodes with
+ "usb"-prefixed names
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/02/11 3:11, Shuah Khan wrote:
-> I would like to see to see a complete fix. This patch changes
-> kthread_get_run() to return NULL. Without adding handling for
-> NULL in the callers of kthread_get_run(), we will start seeing
-> problems.
+On Sat, Dec 5, 2020 at 9:56 AM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
+>
+> In accordance with the USB HCD/DRD schema all the USB controllers are
+> supposed to have DT-nodes named with prefix "^usb(@.*)?".  Since the
+> existing DT-nodes will be renamed in a subsequent patch let's first make
+> sure the DWC3 Qualcomm driver supports them and second falls back to the
+> deprecated naming so not to fail on the legacy DTS-files passed to the
+> newer kernels.
+>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index c703d552bbcf..49ad8d507d37 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -630,7 +630,8 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
+>         struct device           *dev = &pdev->dev;
+>         int                     ret;
+>
+> -       dwc3_np = of_get_child_by_name(np, "dwc3");
+> +       dwc3_np = of_get_child_by_name(np, "usb") ?:
+> +                 of_get_child_by_name(np, "dwc3");
 
-What problems are you aware of?
+Is there some reason using compatible instead wouldn't work here?
 
-> 
-> Does this patch fix the problem syzbot found?
-
-Yes, this patch as-is avoids the crash syzbot found.
+>         if (!dwc3_np) {
+>                 dev_err(dev, "failed to find dwc3 core child\n");
+>                 return -ENODEV;
+> --
+> 2.29.2
+>
