@@ -2,36 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF09316727
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 13:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AAE53167A7
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 14:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbhBJMyX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Feb 2021 07:54:23 -0500
-Received: from mga05.intel.com ([192.55.52.43]:16939 "EHLO mga05.intel.com"
+        id S231373AbhBJNNw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Feb 2021 08:13:52 -0500
+Received: from mga04.intel.com ([192.55.52.120]:33979 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229465AbhBJMyS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 10 Feb 2021 07:54:18 -0500
-IronPort-SDR: Vjy6cgPp7w43Lk6qWAk2dpyNGpZu0qW23GUPP5yRp0Qd4rpn8D9NXly7At2w2WlnpBMx43PUTU
- pHDlJsGUz1PA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9890"; a="266904600"
+        id S231274AbhBJNNt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 10 Feb 2021 08:13:49 -0500
+IronPort-SDR: k64Vw1m3Gjdq3el6FPWMrDO34lazzhBSDnZ+7AUrEBYyOMSfRjFkyH70+NbZlMSWkzbQEzvgsg
+ Tt5WvNrsyqRw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9890"; a="179511408"
 X-IronPort-AV: E=Sophos;i="5.81,168,1610438400"; 
-   d="scan'208";a="266904600"
+   d="scan'208";a="179511408"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 04:52:24 -0800
-IronPort-SDR: qvvr77V5IPdqhPA4w5KfK9Vw7kQTfYXQKB+yJpKknKC7aRy3R+P8fsTAiVrlZ7kkQ4eDT/M1kc
- fJq+kxQ8moXA==
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 05:11:59 -0800
+IronPort-SDR: BL9+1nmLci4/8MMUJ/aw/lReQKu2LIjbjH8kyvz/4Hu4ctBi9HZOAlvhvVB8B2OqfjcyHVQ+zz
+ FCH/Dy9b97lg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,168,1610438400"; 
-   d="scan'208";a="488740911"
+   d="scan'208";a="488745370"
 Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Feb 2021 04:52:23 -0800
-Subject: Re: [PATCH v2] usb: xhci: do not perform Soft Retry for some xHCI
- hosts
-To:     stf_xl@wp.pl, linux-usb@vger.kernel.org
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Bernhard <bernhard.gebetsberger@gmx.at>,
-        Michael <ZeroBeat@gmx.de>, Greg KH <greg@kroah.com>
-References: <20210210081254.33734-1-stf_xl@wp.pl>
+  by fmsmga001.fm.intel.com with ESMTP; 10 Feb 2021 05:11:56 -0800
+Subject: Re: [PATCH] xhci-pci: Set AMD Renoir USB controller to D3 when
+ shutdown
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Aaron Ma <aaron.ma@canonical.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Lee Jones <lee.jones@linaro.org>, peter.chen@nxp.com,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PCI <linux-pci@vger.kernel.org>
+References: <20210204051850.64857-1-aaron.ma@canonical.com>
+ <CAAd53p4euFiw7pfDnD2H8oMVeeTqQ_c+wOFDLM2xPccn5MewiA@mail.gmail.com>
+ <cd4595e6-67da-885c-1a67-6dfd71425b8c@canonical.com>
+ <CAAd53p4z1ydFi5pwOZJnsrBDPNVLKU0ygqa0+kdZdXWYocPLgQ@mail.gmail.com>
+ <YCJJrVp2DvCzigCw@kroah.com>
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
  mQINBFMB0ccBEADd+nZnZrFDsIjQtclVz6OsqFOQ6k0nQdveiDNeBuwyFYykkBpaGekoHZ6f
@@ -75,55 +84,52 @@ Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
  Gjynb3sXforM/GVbr4mnuxTdLXQYlj2EJ4O4f0tkLlADT7podzKSlSuZsLi2D+ohKxtP3U/r
  42i8PBnX2oAV0UIkYk7Oel/3hr0+BP666SnTls9RJuoXc7R5XQVsomqXID6GmjwFQR5Wh/RE
  IJtkiDAsk37cfZ9d1kZ2gCQryTV9lmflSOB6AFZkOLuEVSC5qW8M/s6IGDfYXN12YJaZPptJ fiD/
-Message-ID: <a722793b-520d-8037-4423-8da4a294f355@linux.intel.com>
-Date:   Wed, 10 Feb 2021 14:53:56 +0200
+Message-ID: <00de6927-3fa6-a9a3-2d65-2b4d4e8f0012@linux.intel.com>
+Date:   Wed, 10 Feb 2021 15:13:30 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210210081254.33734-1-stf_xl@wp.pl>
+In-Reply-To: <YCJJrVp2DvCzigCw@kroah.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10.2.2021 10.12, stf_xl@wp.pl wrote:
-> From: Stanislaw Gruszka <stf_xl@wp.pl>
+On 9.2.2021 10.37, Greg Kroah-Hartman wrote:
+> On Fri, Feb 05, 2021 at 02:50:15PM +0800, Kai-Heng Feng wrote:
+>> On Fri, Feb 5, 2021 at 2:45 PM Aaron Ma <aaron.ma@canonical.com> wrote:
+>>>
+>>>
+>>> On 2/5/21 12:27 PM, Kai-Heng Feng wrote:
+>>>> Can you please test the following patch, which should address the root cause:
+>>>> https://lore.kernel.org/linux-acpi/20201201213019.1558738-1-furquan@google.com/
+>>>>
+>>>> It also helps another AMD laptop on S5:
+>>>> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1912935
+>>>>
+>>>
+>>> No, this patch doesn't help on ThinkPad AMD platform.
+>>
+>> Thanks for the confirmation!
+>>
+>> Acked-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 > 
-> Since f8f80be501aa ("xhci: Use soft retry to recover faster from
-> transaction errors") on some systems rt2800usb and mt7601u devices
-> are unable to operate. Possible reason is that some xHCI hardware
-> can not perform Soft Retry for those devices correctly.
-> 
-> To avoid the problem add xhci->quirks flag that restore pre f8f80be501aa
-> xhci behaviour for affected xHCI controllers. Currently those are
-> AMD_PROMONTORYA_4 and AMD_PROMONTORYA_2, since it was confirmed
-> by the users: on those xHCI hosts issue happen and is gone after
-> disabling Soft Retry.
-> 
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=202541
-> Fixes: f8f80be501aa ("xhci: Use soft retry to recover faster from transaction errors")
-> Reported-and-tested-by: Bernhard <bernhard.gebetsberger@gmx.at>
-> Bisected-by: Bernhard <bernhard.gebetsberger@gmx.at>
-> Signed-off-by: Stanislaw Gruszka <stf_xl@wp.pl>
-> ---
-> v1 -> v2:
-> compared to previous patch:
-> https://lore.kernel.org/linux-usb/20210122104342.12451-1-stf_xl@wp.pl/t/#u
-> now we use xhci->quirks to disable Soft Retry (I also changed topic
-> to reflect the change).
-> 
->  drivers/usb/host/xhci-pci.c  | 5 +++++
->  drivers/usb/host/xhci-ring.c | 3 ++-
->  drivers/usb/host/xhci.h      | 1 +
->  3 files changed, 8 insertions(+), 1 deletion(-)
+> Mathias, want me to take this in my tree now, or are you going to send
+> me more patches for 5.12-rc1?
 > 
 
+Nothing more for 5.12-rc1 from me.
 
-Thanks.
+Could this be a PCI quirk instead of xhci?
+Maybe there is some PCI flag for this already, haven't checked yet.
 
-Checkpatch complains about some minor things, I'll fix those while applying.
-Will send forward after 5.12-rc1 is out, and add stable tag.
+We want a specific PCI device to go to PCI D3cold at PCI shutdown...
 
--Mathias
+If not, then adding this to xhci is fine for me as well
+
+Thanks
+-Mathias 
+
+
