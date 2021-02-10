@@ -2,124 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E4C316960
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 15:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B18BE31697E
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 15:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbhBJOrd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Feb 2021 09:47:33 -0500
-Received: from mail-am6eur05on2084.outbound.protection.outlook.com ([40.107.22.84]:19489
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229888AbhBJOrb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 10 Feb 2021 09:47:31 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D4PmcVmH4PTaKVZabba/UkFmqRYcPoTeJ+qHgBrUpHkanoGMqWpJZvaZLuS7EB6dDULxxqSyYEdQMoRLFs2+8QlbwCXMComC5VqCZGbqOLcjUWrSfjI94qbZWEgJpe3KeFu+Nr8ot1S+BslK8UY3OeyVQ12BpBdMI9zsgb3gmXyLP7da8BhmnvAeDRGqVwk88voUpYj0mkuDg12sw5tQBI9jw7CUli+hKjnCn3qnqrvbJ6vWKLcoBw9wbxLH8ff+jwjJHj4YQbK+54voKncYVkQOVizDTZL/2+FJgBz3xJtRVCsODwxfzkKc4q/EMERG14RefBLuxmRx4Q33NmEgCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oLT8wE4t28/AtEksVp6qiVvnQHx3eLWekzipsAgorsI=;
- b=Qhc9RK+CTQy4iwsqA6xPh/u98sJuxlfPbbmPuG+Ne18OuDfauI85DknQLI9pnXJnMBsnyhFhmMPQRSduiodsxeriCN/EchpHNR/6unM8Dvv1SNEGz5E7ZdJMvpJW77Hm6IbYwlRF47YS0ogjHuBe3iN2NQk+g0n4tyXLLBl3LvfWpigofLPotrIgP3fJN2zCtsa5QHrhBa1f5+QU1/jgFAfL2TDjSs33D2QXK0mhLELp2q/brTbyK/tPVXHG6br6FURBYDg7FyXCvwT9CpsCMD05Yf2WFZEHGzlQcVnTQxDOzYl721zEu8uRVTlXkJ7nUuF25RflAyCdP2vRHcAieA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none (sender ip is
- 91.118.163.37) smtp.rcpttodomain=vger.kernel.org
- smtp.mailfrom=wvls01.wolfvision.net; dmarc=fail (p=quarantine sp=quarantine
- pct=100) action=quarantine header.from=wolfvision.net; dkim=none (message not
- signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oLT8wE4t28/AtEksVp6qiVvnQHx3eLWekzipsAgorsI=;
- b=GsCImwnU/832X4g4ePeOSkC7PfRe+DjFZY4Rv+nRP28DUJcdUrxHVCA+PV4gyc65lchDxwZoPfUSKTg0qFoyQfsVqer3WintgbU/Iz56q65vvJvy0bVsKMo9PvmtAz51a97m0qadf2/aw3kRlCVeoflWQYPamK9nA6ztyBJGczs=
-Received: from DBBPR09CA0015.eurprd09.prod.outlook.com (2603:10a6:10:c0::27)
- by DBBPR08MB4556.eurprd08.prod.outlook.com (2603:10a6:10:c8::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.23; Wed, 10 Feb
- 2021 14:46:38 +0000
-Received: from DB3EUR04FT049.eop-eur04.prod.protection.outlook.com
- (2603:10a6:10:c0:cafe::c) by DBBPR09CA0015.outlook.office365.com
- (2603:10a6:10:c0::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.25 via Frontend
- Transport; Wed, 10 Feb 2021 14:46:38 +0000
-X-MS-Exchange-Authentication-Results: spf=none (sender IP is 91.118.163.37)
- smtp.mailfrom=wvls01.wolfvision.net; vger.kernel.org; dkim=none (message not
- signed) header.d=none;vger.kernel.org; dmarc=fail action=quarantine
- header.from=wolfvision.net;
-Received-SPF: None (protection.outlook.com: wvls01.wolfvision.net does not
- designate permitted sender hosts)
-Received: from wvls01.wolfvision.net (91.118.163.37) by
- DB3EUR04FT049.mail.protection.outlook.com (10.152.25.39) with Microsoft SMTP
- Server id 15.20.3846.25 via Frontend Transport; Wed, 10 Feb 2021 14:46:37
- +0000
-Received: by wvls01.wolfvision.net (Postfix, from userid 1008)
-        id 1798C4A4037; Wed, 10 Feb 2021 15:08:31 +0100 (CET)
-From:   Stefan Ursella <stefan.ursella@wolfvision.net>
-Cc:     stefan.ursella@wolfvision.net,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        =?UTF-8?q?Tomasz=20Meresi=C5=84ski?= <tomasz@meresinski.eu>,
-        Kars Mulder <kerneldev@karsmulder.nl>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] usb: quirks: add quirk to start video capture on ELMO L-12F document camera reliable
-Date:   Wed, 10 Feb 2021 15:07:11 +0100
-Message-Id: <20210210140713.18711-1-stefan.ursella@wolfvision.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210210102821.31779-1-stefan.ursella@wolfvision.net>
-References: <20210210102821.31779-1-stefan.ursella@wolfvision.net>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
+        id S230419AbhBJOyM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Feb 2021 09:54:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41914 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231801AbhBJOyI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 10 Feb 2021 09:54:08 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6825064E70;
+        Wed, 10 Feb 2021 14:53:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612968806;
+        bh=krjMNhlxh4nujdfU5LpPBQzF+MQjR3wrzFBwvG0We08=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XPbHcYJOxfAZxG24Whp4/PJIPFjllBiEvHqPTv7JBB9QoxXgQPbzzvj8dMhZGW/Mh
+         D+CC3QgW7fXStF2IdCfiIn28neF0RJMpRqi/Dkif+nBiEO0XRdduEMtcC0AsVA3F2m
+         0TRNamFRGEHhFFkcW83mWlPJI6tn9ucT+VEB0fufH9sBoNf0PGJBlN2XudIr/+s8GB
+         qIZ1K6hLFNs0ai3l11vZqSP7astkwFZLjixhFEaEMASez7rW6CPf8A6WDAf8LpwxGz
+         X7FgW6T50kuRw1adKr0ofmC42m9VFis9rmJ+HftvSZwyaIgKAuq4OkEKboclnRqlpF
+         PBwTeO8LT9rXQ==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1l9qs7-0003u9-Kn; Wed, 10 Feb 2021 15:53:41 +0100
+Date:   Wed, 10 Feb 2021 15:53:39 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB-serial updates for 5.12-rc1
+Message-ID: <YCPzc8F35NMwRKQu@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: e7a829d1-166a-462c-f8c7-08d8cdd2abad
-X-MS-TrafficTypeDiagnostic: DBBPR08MB4556:
-X-Microsoft-Antispam-PRVS: <DBBPR08MB45567239C5C43668E4BC8A89878D9@DBBPR08MB4556.eurprd08.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3826;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: N5K1YIA2cxTarE08g1CVscZsmk1sJEvvcC2GtP3/Jx8faPD3P6UvCgTU29ye5WAx2CJ2MTMrQLMw2kDBx4Tk/127u+Y7/tMLfngeJm5xMnW6qn3/tQMWGFuvBYzOghlu/AqvU+Fu0/gxUCU8qcU/6lEBsEVwvCg24MRAchKI7O+Zd5OdjK0o72wcq3k8gLYM93MrZz2vwoLzDP5TUDfJJt7MB8H52x87vRo43YDLsKe9gu+9MPEqCtDxz7OHSun69I3M8Ew9IAza2U05Jl9qHgSjJV6IxHJgnNEUGN8EHU217vgwuhsRAqxig0A3TYsfCx9cBrGYvP3P7nA+KfGNIYuD3+YF1ssy6FotSPiw9u17poMwDo/l7KiBcufp2tUA/d1CmczSW+mumxHDK5aY11tFkK1Ng3iKMDu8O4uFXs6L9hydQLMUmpUZNNKItAq+tmV7TydmMT0wbgfiQ3898wf+giyUaJtURFUogabj7C46t8wvhHwXoaJ9oEzNJAVOjmLh8wOdCufX9TMIMmCfCGM1vSFy9FPoaWzAj9kvqZNJvmAI4no++tyeBbpKwXp9isBu26mxpDqMT/S6pobgSN1gQsakGVs9uTeQ3jiJnYVsoqi4zid4oZebXu+pFMAvSVT2YXGJWmQFCH9ROcW6D3X4pRRatMIVknYt/LLkC/Dqpvt++iFr5B7VvE02eMda
-X-Forefront-Antispam-Report: CIP:91.118.163.37;CTRY:AT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:wvls01.wolfvision.net;PTR:91-118-163-37.static.upcbusiness.at;CAT:NONE;SFS:(4636009)(39840400004)(396003)(376002)(346002)(136003)(46966006)(5660300002)(26005)(498600001)(336012)(1076003)(2616005)(4744005)(426003)(36756003)(82310400003)(8936002)(42186006)(70586007)(316002)(54906003)(44832011)(450100002)(6666004)(6266002)(4326008)(8676002)(2906002)(109986005)(47076005)(35950700001)(83170400001)(356005)(70206006)(81166007)(266003)(75936004)(14776007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2021 14:46:37.8767
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e7a829d1-166a-462c-f8c7-08d8cdd2abad
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e94ec9da-9183-471e-83b3-51baa8eb804f;Ip=[91.118.163.37];Helo=[wvls01.wolfvision.net]
-X-MS-Exchange-CrossTenant-AuthSource: DB3EUR04FT049.eop-eur04.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR08MB4556
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Without this quirk starting a video capture from the device often fails with
+Hi Greg,
 
-kernel: uvcvideo: Failed to set UVC probe control : -110 (exp. 34).
+Here are the USB-serial updates for 5.12-rc1.
 
-Signed-off-by: Stefan Ursella <stefan.ursella@wolfvision.net>
----
-Changes in v2:
-  - Add empty line before signed-off-by
-  - Sort entry by VID/PID
+Note that the new MaxLinear/Exar driver can also be used (with fewer features)
+in ACM-mode so this pull-request includes a commit to prevent cdc-acm from
+binding when the new driver is enabled.
 
- drivers/usb/core/quirks.c | 3 +++
- 1 file changed, 3 insertions(+)
+Johan
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 84b5da0a26a5..270ad082d3ba 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -381,6 +381,9 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	/* X-Rite/Gretag-Macbeth Eye-One Pro display colorimeter */
- 	{ USB_DEVICE(0x0971, 0x2000), .driver_info = USB_QUIRK_NO_SET_INTF },
- 
-+	/* ELMO L-12F document camera */
-+	{ USB_DEVICE(0x09a1, 0x0028), .driver_info = USB_QUIRK_DELAY_CTRL_MSG },
-+
- 	/* Broadcom BCM92035DGROM BT dongle */
- 	{ USB_DEVICE(0x0a5c, 0x2021), .driver_info = USB_QUIRK_RESET_RESUME },
- 
--- 
-2.17.1
 
+The following changes since commit 7c53f6b671f4aba70ff15e1b05148b10d58c2837:
+
+  Linux 5.11-rc3 (2021-01-10 14:34:50 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.12-rc1
+
+for you to fetch changes up to 1542d1324be1191d970f69c55e885af5dd810b84:
+
+  USB: serial: drop bogus to_usb_serial_port() checks (2021-02-09 13:14:30 +0100)
+
+----------------------------------------------------------------
+USB-serial updates for 5.12-rc1
+
+Here are the USB-serial updates for 5.12-rc1, including:
+
+ - a line-speed fix for newer pl2303 devices
+ - a line-speed fix for FTDI FT-X devices
+ - a new xr_serial driver for MaxLinear/Exar devices (non-ACM mode)
+ - a cdc-acm blacklist entry for when the xr_serial driver is enabled
+ - cp210x support for software flow control
+ - various cp210x modem-control fixes
+ - an updated ZTE P685M modem entry to stop claiming the QMI interface
+ - an update to drop the port_remove() driver-callback return value
+
+Included are also various clean ups.
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Dan Carpenter (2):
+      USB: serial: mos7840: fix error code in mos7840_write()
+      USB: serial: mos7720: fix error code in mos7720_write()
+
+Johan Hovold (32):
+      USB: serial: pl2303: fix line-speed handling on newer chips
+      USB: serial: cp210x: set IXOFF thresholds
+      USB: serial: cp210x: update control-characters on every change
+      USB: serial: cp210x: drop short control-transfer checks
+      USB: serial: cp210x: drop unused includes
+      USB: serial: cp210x: add copyright notice
+      USB: serial: mxuport: drop short control-transfer check
+      USB: serial: upd78f0730: drop short control-transfer check
+      USB: serial: io_ti: drop short control-transfer check
+      USB: serial: io_ti: fix a debug-message copy-paste error
+      USB: serial: f81232: drop short control-transfer checks
+      USB: serial: f81534: drop short control-transfer check
+      USB: serial: xr: fix NULL-deref at probe
+      USB: serial: xr: fix interface leak at disconnect
+      USB: serial: xr: use subsystem usb_device at probe
+      USB: serial: xr: use termios flag helpers
+      USB: serial: xr: document vendor-request recipient
+      USB: serial: xr: clean up line-settings handling
+      USB: serial: xr: simplify line-speed logic
+      USB: serial: xr: fix gpio-mode handling
+      USB: serial: xr: fix pin configuration
+      USB: serial: xr: fix B0 handling
+      USB: serial: cp210x: suppress modem-control errors
+      USB: serial: cp210x: fix modem-control handling
+      USB: serial: cp210x: drop shift macros
+      USB: serial: cp210x: clean up flow-control debug message
+      USB: serial: cp210x: clean up printk zero padding
+      USB: serial: cp210x: fix RTS handling
+      USB: serial: cp210x: clean up auto-RTS handling
+      USB: serial: ftdi_sio: fix FTX sub-integer prescaler
+      USB: serial: ftdi_sio: restore divisor-encoding comments
+      USB: serial: drop bogus to_usb_serial_port() checks
+
+Lech Perczak (1):
+      USB: serial: option: update interface mapping for ZTE P685M
+
+Manivannan Sadhasivam (1):
+      USB: serial: add MaxLinear/Exar USB to Serial driver
+
+Mauro Carvalho Chehab (1):
+      USB: cdc-acm: ignore Exar XR21V141X when serial driver is built
+
+Tom Rix (1):
+      USB: serial: mos7720: improve OOM-handling in read_mos_reg()
+
+Uwe Kleine-König (2):
+      USB: serial: drop if with an always false condition
+      USB: serial: make remove callback return void
+
+Wang Sheng Long (1):
+      USB: serial: cp210x: add support for software flow control
+
+ drivers/usb/class/cdc-acm.c           |   6 +
+ drivers/usb/serial/Kconfig            |   9 +
+ drivers/usb/serial/Makefile           |   1 +
+ drivers/usb/serial/ark3116.c          |   4 +-
+ drivers/usb/serial/belkin_sa.c        |   6 +-
+ drivers/usb/serial/bus.c              |  27 +-
+ drivers/usb/serial/ch341.c            |   4 +-
+ drivers/usb/serial/cp210x.c           | 217 +++++++++---
+ drivers/usb/serial/cyberjack.c        |   6 +-
+ drivers/usb/serial/cypress_m8.c       |   6 +-
+ drivers/usb/serial/digi_acceleport.c  |   6 +-
+ drivers/usb/serial/f81232.c           |  12 +-
+ drivers/usb/serial/f81534.c           |   7 +-
+ drivers/usb/serial/ftdi_sio.c         |  27 +-
+ drivers/usb/serial/garmin_gps.c       |   3 +-
+ drivers/usb/serial/io_edgeport.c      |   6 +-
+ drivers/usb/serial/io_ti.c            |  12 +-
+ drivers/usb/serial/iuu_phoenix.c      |   4 +-
+ drivers/usb/serial/keyspan.c          |   6 +-
+ drivers/usb/serial/keyspan_pda.c      |   4 +-
+ drivers/usb/serial/kl5kusb105.c       |   6 +-
+ drivers/usb/serial/kobil_sct.c        |   6 +-
+ drivers/usb/serial/mct_u232.c         |   6 +-
+ drivers/usb/serial/metro-usb.c        |   4 +-
+ drivers/usb/serial/mos7720.c          |  12 +-
+ drivers/usb/serial/mos7840.c          |   8 +-
+ drivers/usb/serial/mxuport.c          |   7 -
+ drivers/usb/serial/omninet.c          |   6 +-
+ drivers/usb/serial/opticon.c          |   4 +-
+ drivers/usb/serial/option.c           |   3 +-
+ drivers/usb/serial/oti6858.c          |   6 +-
+ drivers/usb/serial/pl2303.c           |  12 +-
+ drivers/usb/serial/quatech2.c         |   4 +-
+ drivers/usb/serial/sierra.c           |   4 +-
+ drivers/usb/serial/spcp8x5.c          |   4 +-
+ drivers/usb/serial/ssu100.c           |   4 +-
+ drivers/usb/serial/symbolserial.c     |   4 +-
+ drivers/usb/serial/ti_usb_3410_5052.c |   6 +-
+ drivers/usb/serial/upd78f0730.c       |   9 +-
+ drivers/usb/serial/usb-wwan.h         |   2 +-
+ drivers/usb/serial/usb_wwan.c         |   4 +-
+ drivers/usb/serial/whiteheat.c        |   6 +-
+ drivers/usb/serial/xr_serial.c        | 611 ++++++++++++++++++++++++++++++++++
+ include/linux/usb/serial.h            |   2 +-
+ 44 files changed, 888 insertions(+), 225 deletions(-)
+ create mode 100644 drivers/usb/serial/xr_serial.c
