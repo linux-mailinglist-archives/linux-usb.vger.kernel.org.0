@@ -2,221 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACBD1316CC3
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 18:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6B7316E3D
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 19:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232869AbhBJRbM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Feb 2021 12:31:12 -0500
-Received: from mail.baikalelectronics.com ([87.245.175.226]:34914 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232754AbhBJRai (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Feb 2021 12:30:38 -0500
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        id S233527AbhBJSOq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Feb 2021 13:14:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233545AbhBJSMc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Feb 2021 13:12:32 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62390C061756
+        for <linux-usb@vger.kernel.org>; Wed, 10 Feb 2021 10:11:52 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id s24so2881007iob.6
+        for <linux-usb@vger.kernel.org>; Wed, 10 Feb 2021 10:11:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=q4mUa7k5MLEJr5RJa0R4jnsvw+Ac9MUmELVVT4WwOSQ=;
+        b=Lysg3WfI6NNP28jF+vNLnR8yCJw9p0REJLFVbVzp0wUrAll/8Jl0n+a5EM1PErXBf5
+         j5Z6oSnv546UVwfNdT1PGpmmluHoL10HvKJYoXJGQrADS+la6CMcZMmcxCIvNAu9O7Nw
+         lHS0Mz5RipXkJuYojf452sqMzBgbqio9eMFis=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=q4mUa7k5MLEJr5RJa0R4jnsvw+Ac9MUmELVVT4WwOSQ=;
+        b=F8UGgf4M7+Z+LNJXDLp1j8LG8hEyaMxjUu3paLQte5RQH/MoNO/Dz5sBOvMTjapH2e
+         Auzzk+MNAZQbdlv4YDniPgquoz/5HJaERegFRvWCxWxNwV434rxzDsX/8k6LPlT/JVC3
+         ctZjOQ/Ca6pI6zTq9MhIQZWylCNPPAoEcvyNV4fV7m+Hy5Hmxysyj777LNGabl55EdRb
+         bmXsFDompWZksd8YA+zVVDZwf0u35WPmhd5GA139nnjbLAHHasysfKUuEvisEwqthZHc
+         qKumu5BNKRBVhKZCaG9v6amtm9pLF0cGCV5nMj5xGlPLzbIvqLgsT3Vfwak2DzHwMfeH
+         2mCg==
+X-Gm-Message-State: AOAM5300nQaNCk8rKUI1D7rdLR8kd71BnCYKIeb7fbDUYaqWBPmESuIh
+        IiEI41vIoK090fdiuHiE3xVivg==
+X-Google-Smtp-Source: ABdhPJztrKXzzER4bktr+C2ysd8blOry5LkVOT2urldPVKqMQUvVfTuVOXiULo5SeRNEUuM3/2m3Kg==
+X-Received: by 2002:a05:6638:d8a:: with SMTP id l10mr4665562jaj.2.1612980711890;
+        Wed, 10 Feb 2021 10:11:51 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id 4sm1380767ilj.22.2021.02.10.10.11.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Feb 2021 10:11:31 -0800 (PST)
+Subject: Re: [PATCH] usb: usbip: fix error handling of kthread_get_run()
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 10/10] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
-Date:   Wed, 10 Feb 2021 20:28:50 +0300
-Message-ID: <20210210172850.20849-11-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20210210172850.20849-1-Sergey.Semin@baikalelectronics.ru>
-References: <20210210172850.20849-1-Sergey.Semin@baikalelectronics.ru>
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Hillf Danton <hdanton@sina.com>, linux-usb@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+References: <000000000000414db905b6e9bae8@google.com>
+ <20210205135707.4574-1-penguin-kernel@I-love.SAKURA.ne.jp>
+ <6b2b9f7c-a412-0f52-3373-bc58d1e95ad9@linuxfoundation.org>
+ <ee936421-66ea-c6a7-fa1e-d4077ab28ed0@i-love.sakura.ne.jp>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <1f4b36a1-460e-1154-b46c-32ba72b88205@linuxfoundation.org>
+Date:   Wed, 10 Feb 2021 11:11:17 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <ee936421-66ea-c6a7-fa1e-d4077ab28ed0@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In accordance with the DWC USB3 bindings the corresponding node
-name is suppose to comply with the Generic USB HCD DT schema, which
-requires the USB nodes to have the name acceptable by the regexp:
-"^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
-named.
+On 2/5/21 6:08 PM, Tetsuo Handa wrote:
+> On 2021/02/06 1:27, Shuah Khan wrote:
+>> Good find. For this fix to be complete, you will have to add checks
+>> for kthread_get_run() NULL return in attach_store() and
+>> usbip_sockfd_store() routines in stub_dev.c and vudc_sysfs.c
+> 
+> Initially I thought that the cleaner fix is to get kthread_create() out of kthread_get_run()
+> ( the drivers/usb/usbip/vhci_sysfs.c portion in
+> https://syzkaller.appspot.com/x/patch.diff?x=16c3c090d00000 ) so that we can undo
+> kthread_create() via kthread_stop(). But I found that such fix makes little sense because
+> it is possible that SIGKILL is delivered between vhci_rx_loop() and vhci_tx_loop() have
+> started and before leaving attach_store().
+> 
+> Since the code prior to "staging/usbip: convert to kthread" was already capable of surviving
+> such race condition, this patch should be already good enough for sending to stable kernels.
+> Of course, since kthread_create() may return -ENOMEM without being SIGKILLed, we could update
+> attach_store() to report kthread_get_run() failure to the caller, but that will be a separate
+> patch. This patch alone avoids the crash although there is a hung task problem similar to
+> https://syzkaller.appspot.com/bug?id=5677eeeb83e5d47ef2b04e9bd68f5ff4c7e572ab remains
+> ( https://syzkaller.appspot.com/text?tag=CrashReport&x=17aa3f78d00000 ). The cause of hung
+> task is currently unknown; maybe too much printk() messages.
+> 
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi | 4 ++--
- arch/arm64/boot/dts/qcom/ipq8074.dtsi        | 4 ++--
- arch/arm64/boot/dts/qcom/msm8996.dtsi        | 4 ++--
- arch/arm64/boot/dts/qcom/msm8998.dtsi        | 2 +-
- arch/arm64/boot/dts/qcom/qcs404-evb.dtsi     | 2 +-
- arch/arm64/boot/dts/qcom/qcs404.dtsi         | 4 ++--
- arch/arm64/boot/dts/qcom/sc7180.dtsi         | 2 +-
- arch/arm64/boot/dts/qcom/sdm845.dtsi         | 4 ++--
- arch/arm64/boot/dts/qcom/sm8150.dtsi         | 2 +-
- 9 files changed, 14 insertions(+), 14 deletions(-)
+I would like to see to see a complete fix. This patch changes
+kthread_get_run() to return NULL. Without adding handling for
+NULL in the callers of kthread_get_run(), we will start seeing
+problems.
 
-diff --git a/arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi b/arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi
-index defcbd15edf9..34e97da98270 100644
---- a/arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi
-+++ b/arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi
-@@ -1064,7 +1064,7 @@ &usb2 {
- 	status = "okay";
- 	extcon = <&usb2_id>;
- 
--	dwc3@7600000 {
-+	usb@7600000 {
- 		extcon = <&usb2_id>;
- 		dr_mode = "otg";
- 		maximum-speed = "high-speed";
-@@ -1075,7 +1075,7 @@ &usb3 {
- 	status = "okay";
- 	extcon = <&usb3_id>;
- 
--	dwc3@6a00000 {
-+	usb@6a00000 {
- 		extcon = <&usb3_id>;
- 		dr_mode = "otg";
- 	};
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index a32e5e79ab0b..7df4eb710aae 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -427,7 +427,7 @@ usb_0: usb@8af8800 {
- 			resets = <&gcc GCC_USB0_BCR>;
- 			status = "disabled";
- 
--			dwc_0: dwc3@8a00000 {
-+			dwc_0: usb@8a00000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x8a00000 0xcd00>;
- 				interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-@@ -468,7 +468,7 @@ usb_1: usb@8cf8800 {
- 			resets = <&gcc GCC_USB1_BCR>;
- 			status = "disabled";
- 
--			dwc_1: dwc3@8c00000 {
-+			dwc_1: usb@8c00000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x8c00000 0xcd00>;
- 				interrupts = <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index 7eef07e73e25..374bb7b557e4 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -1768,7 +1768,7 @@ usb3: usb@6af8800 {
- 			power-domains = <&gcc USB30_GDSC>;
- 			status = "disabled";
- 
--			dwc3@6a00000 {
-+			usb@6a00000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x06a00000 0xcc00>;
- 				interrupts = <0 131 IRQ_TYPE_LEVEL_HIGH>;
-@@ -1979,7 +1979,7 @@ usb2: usb@76f8800 {
- 			power-domains = <&gcc USB30_GDSC>;
- 			status = "disabled";
- 
--			dwc3@7600000 {
-+			usb@7600000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x07600000 0xcc00>;
- 				interrupts = <0 138 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-index ebdaaf1dfca4..1a7fb9d3ccab 100644
---- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-@@ -1678,7 +1678,7 @@ usb3: usb@a8f8800 {
- 
- 			resets = <&gcc GCC_USB_30_BCR>;
- 
--			usb3_dwc3: dwc3@a800000 {
-+			usb3_dwc3: usb@a800000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x0a800000 0xcd00>;
- 				interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi b/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-index a80c578484ba..f8a55307b855 100644
---- a/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-@@ -337,7 +337,7 @@ &usb2_phy_sec {
- &usb3 {
- 	status = "okay";
- 
--	dwc3@7580000 {
-+	usb@7580000 {
- 		dr_mode = "host";
- 	};
- };
-diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-index 339790ba585d..9c4be020d568 100644
---- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-@@ -544,7 +544,7 @@ usb3: usb@7678800 {
- 			assigned-clock-rates = <19200000>, <200000000>;
- 			status = "disabled";
- 
--			dwc3@7580000 {
-+			usb@7580000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x07580000 0xcd00>;
- 				interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-@@ -573,7 +573,7 @@ usb2: usb@79b8800 {
- 			assigned-clock-rates = <19200000>, <133333333>;
- 			status = "disabled";
- 
--			dwc3@78c0000 {
-+			usb@78c0000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x078c0000 0xcc00>;
- 				interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 22b832fc62e3..347a98ba12e0 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -2855,7 +2855,7 @@ usb_1: usb@a6f8800 {
- 					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3 0>;
- 			interconnect-names = "usb-ddr", "apps-usb";
- 
--			usb_1_dwc3: dwc3@a600000 {
-+			usb_1_dwc3: usb@a600000 {
- 				compatible = "snps,dwc3";
- 				reg = <0 0x0a600000 0 0xe000>;
- 				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index bcf888381f14..2133e58776d1 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -3771,7 +3771,7 @@ usb_1: usb@a6f8800 {
- 					<&gladiator_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_0 0>;
- 			interconnect-names = "usb-ddr", "apps-usb";
- 
--			usb_1_dwc3: dwc3@a600000 {
-+			usb_1_dwc3: usb@a600000 {
- 				compatible = "snps,dwc3";
- 				reg = <0 0x0a600000 0 0xcd00>;
- 				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-@@ -3819,7 +3819,7 @@ usb_2: usb@a8f8800 {
- 					<&gladiator_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_1 0>;
- 			interconnect-names = "usb-ddr", "apps-usb";
- 
--			usb_2_dwc3: dwc3@a800000 {
-+			usb_2_dwc3: usb@a800000 {
- 				compatible = "snps,dwc3";
- 				reg = <0 0x0a800000 0 0xcd00>;
- 				interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-index 5270bda7418f..45007621e09c 100644
---- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-@@ -1562,7 +1562,7 @@ usb_1: usb@a6f8800 {
- 
- 			resets = <&gcc GCC_USB30_PRIM_BCR>;
- 
--			usb_1_dwc3: dwc3@a600000 {
-+			usb_1_dwc3: usb@a600000 {
- 				compatible = "snps,dwc3";
- 				reg = <0 0x0a600000 0 0xcd00>;
- 				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
--- 
-2.30.0
+Does this patch fix the problem syzbot found?
 
+thanks,
+-- Shuah
