@@ -2,120 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C613166D6
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 13:35:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF09316727
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 13:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231496AbhBJMei (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Feb 2021 07:34:38 -0500
-Received: from mail-eopbgr130047.outbound.protection.outlook.com ([40.107.13.47]:63322
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231891AbhBJMc2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 10 Feb 2021 07:32:28 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZA/eRqoSwk1OMkCoyGIVWxnG1ZqYFaihhFzhmOpA4dG0UsQnQ3Xu/W+e0CAslvSo6zHbNBVSuIuua1y1QsfKWUE9mQR5S+/+iCWXZIcfGlA6DNNEXni3UbyeuCzuPgx3Z1Etp7XvVBHCKfqbxbWBdvPrv94++ZwuphMCNBtPE5VCwdNEmoKPBd5oFf0yDy5b0s69zDTCF2VvManpHG+i11EwTwYpQTg/FeEuv2hi4C7pT7oHPAQp9mrruvwJWCVxfFDZt3WyZhiSxtxy4EBWmFsITMgZcX2IC9gDPhp7hiiK4p0InWqFqgiq/E2vu/NNaa8lw99pnYfC/WostQAQ2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f3pp63NBq62z2yG3MivNKg/YIlE+0MdkAK+CszzhYD0=;
- b=Lo2ZmURC2KxG0cP8W/vpgLmqSbOmxLW7aOZRtpyzheNrvMEyVKVLYAO19FY3NjNwv6ZVCDlywEMy50Nbju0gmHiEDBz9oPHsLIE0Uz744O10FA5/El7UlAPc9ppjNOm0G1pnQvxHDGjfKoE4tIskRjSTD2iqfALykg+zDIdlJ30YzIRIWTywiQKNlSEC03zfkv1OpoAOu2VlzJOWaYjBJ6qpCRbUV7bpmO8l1rJAy7dpHqJ39slCpipOAHmTUMeytd4ha440xUXAV2xktmUIT8IQOIKI5ZHFzIA+hIDMYzG0vnpZBVa4K656Mi5aTv5D+KuMt0g6/uhZCV7Kn3K/qg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none (sender ip is
- 91.118.163.37) smtp.rcpttodomain=vger.kernel.org
- smtp.mailfrom=wvls01.wolfvision.net; dmarc=fail (p=quarantine sp=quarantine
- pct=100) action=quarantine header.from=wolfvision.net; dkim=none (message not
- signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f3pp63NBq62z2yG3MivNKg/YIlE+0MdkAK+CszzhYD0=;
- b=p8i9c5+K6JnoiIF/k4fzdRFKjQDrSPO7xEi2dORD6ug201DHdb1HP8ttBS9ulz9GjRm0gqS6F110J2fKYsGYz9vvTn0ZXxfmDqjGm4VkS+//mX3b7tqKimfyytb8qIOp9sMHqbcsznRY0KchaUdfvg8iuXZrtoZ5xCl4bfuTfzM=
-Received: from AM5PR0301CA0034.eurprd03.prod.outlook.com
- (2603:10a6:206:14::47) by AM0PR08MB4371.eurprd08.prod.outlook.com
- (2603:10a6:208:13f::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.30; Wed, 10 Feb
- 2021 12:31:38 +0000
-Received: from HE1EUR04FT013.eop-eur04.prod.protection.outlook.com
- (2603:10a6:206:14:cafe::e3) by AM5PR0301CA0034.outlook.office365.com
- (2603:10a6:206:14::47) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.27 via Frontend
- Transport; Wed, 10 Feb 2021 12:31:37 +0000
-X-MS-Exchange-Authentication-Results: spf=none (sender IP is 91.118.163.37)
- smtp.mailfrom=wvls01.wolfvision.net; vger.kernel.org; dkim=none (message not
- signed) header.d=none;vger.kernel.org; dmarc=fail action=quarantine
- header.from=wolfvision.net;
-Received-SPF: None (protection.outlook.com: wvls01.wolfvision.net does not
- designate permitted sender hosts)
-Received: from wvls01.wolfvision.net (91.118.163.37) by
- HE1EUR04FT013.mail.protection.outlook.com (10.152.26.126) with Microsoft SMTP
- Server id 15.20.3846.25 via Frontend Transport; Wed, 10 Feb 2021 12:31:37
- +0000
-Received: by wvls01.wolfvision.net (Postfix, from userid 1008)
-        id CF3644A4037; Wed, 10 Feb 2021 12:51:47 +0100 (CET)
-From:   Stefan Ursella <stefan.ursella@wolfvision.net>
-Cc:     stefan.ursella@wolfvision.net,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Kars Mulder <kerneldev@karsmulder.nl>,
-        =?UTF-8?q?Tomasz=20Meresi=C5=84ski?= <tomasz@meresinski.eu>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] usb: quirks: add quirk to start video capture on ELMO L-12F document camera reliable
-Date:   Wed, 10 Feb 2021 12:51:43 +0100
-Message-Id: <20210210115144.17014-1-stefan.ursella@wolfvision.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210210102821.31779-1-stefan.ursella@wolfvision.net>
-References: <20210210102821.31779-1-stefan.ursella@wolfvision.net>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
+        id S229944AbhBJMyX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Feb 2021 07:54:23 -0500
+Received: from mga05.intel.com ([192.55.52.43]:16939 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229465AbhBJMyS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 10 Feb 2021 07:54:18 -0500
+IronPort-SDR: Vjy6cgPp7w43Lk6qWAk2dpyNGpZu0qW23GUPP5yRp0Qd4rpn8D9NXly7At2w2WlnpBMx43PUTU
+ pHDlJsGUz1PA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9890"; a="266904600"
+X-IronPort-AV: E=Sophos;i="5.81,168,1610438400"; 
+   d="scan'208";a="266904600"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 04:52:24 -0800
+IronPort-SDR: qvvr77V5IPdqhPA4w5KfK9Vw7kQTfYXQKB+yJpKknKC7aRy3R+P8fsTAiVrlZ7kkQ4eDT/M1kc
+ fJq+kxQ8moXA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,168,1610438400"; 
+   d="scan'208";a="488740911"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Feb 2021 04:52:23 -0800
+Subject: Re: [PATCH v2] usb: xhci: do not perform Soft Retry for some xHCI
+ hosts
+To:     stf_xl@wp.pl, linux-usb@vger.kernel.org
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Bernhard <bernhard.gebetsberger@gmx.at>,
+        Michael <ZeroBeat@gmx.de>, Greg KH <greg@kroah.com>
+References: <20210210081254.33734-1-stf_xl@wp.pl>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <a722793b-520d-8037-4423-8da4a294f355@linux.intel.com>
+Date:   Wed, 10 Feb 2021 14:53:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 6be17388-33fe-41d9-3057-08d8cdbfcf5d
-X-MS-TrafficTypeDiagnostic: AM0PR08MB4371:
-X-Microsoft-Antispam-PRVS: <AM0PR08MB43718DD43DC46DD79B5A8200878D9@AM0PR08MB4371.eurprd08.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1169;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Iwk5EpciA1IGnqAgn4auk+Tn1POxMvt2cpDWtXh8BfqaWV+rmBZedKdtQQt8H1Ek5f+IWxGYwlBD7UrHgaOd6oMp5GTiz4yq5Kzs4yITHpwKR0pv/AIgK6H3KNgu2GgL5AdlQEheS74xnJb1dpAfzPVigccx6lTXsFfmAwGbjXi/lgNA44yDYs7VSUZkA7FIeBHu8XQ6bUl8K7X7+uk4xBVz4YJm6Qwe4qCVrJS1pdJ5P5e7TU9w23uijhWMUT9aiV3RvOiYQkTPWh6qd4vkd2exbPx9qzXj/lQGwIH0Gc3zyGOf1J35kuz6k8da+8uyKpAUHfL+WE+RDYuWZ19ZXoIj0rtTgKda2v3HekLQdsMrwuD3DzxiWUNPcG8umtEY3z7HSmwo3erxj4td5Fyr0LcnpjaKeBCTQ4wglC/f/dMjjNTBMqwkKwPQlM89ntCNnB91XU7IwDE0pbKt6FcIH0K/f4xHUSMZkEKqaHqhCGJckIMoQ5oFhGlAA6c4LfZ+ZlI/nFfFCFIPhFQJl7+Sv61vL1xg79FOo5CbWwfRuOjrFD07jHY75MfdLWpHOsFutGKICwBFw+9jI/IUhu5UVlTwnxJaoTQ+pbX4JS8H8fAKR99b69DWshw0crXEItJlXHJSVJCpJE4kfwMbGikjaNah3wQa5yi/gVru/BRyvGn9BjzOGxxnfasjv99TMEol
-X-Forefront-Antispam-Report: CIP:91.118.163.37;CTRY:AT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:wvls01.wolfvision.net;PTR:91-118-163-37.static.upcbusiness.at;CAT:NONE;SFS:(4636009)(136003)(396003)(376002)(346002)(39830400003)(46966006)(5660300002)(6666004)(70206006)(4326008)(44832011)(83170400001)(109986005)(1076003)(26005)(70586007)(450100002)(54906003)(6266002)(42186006)(356005)(2906002)(316002)(2616005)(35950700001)(8936002)(47076005)(82310400003)(336012)(498600001)(8676002)(426003)(4744005)(36756003)(81166007)(266003)(14776007)(75936004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2021 12:31:37.2734
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6be17388-33fe-41d9-3057-08d8cdbfcf5d
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e94ec9da-9183-471e-83b3-51baa8eb804f;Ip=[91.118.163.37];Helo=[wvls01.wolfvision.net]
-X-MS-Exchange-CrossTenant-AuthSource: HE1EUR04FT013.eop-eur04.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR08MB4371
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20210210081254.33734-1-stf_xl@wp.pl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Without this quirk starting a video capture from the device often fails with
+On 10.2.2021 10.12, stf_xl@wp.pl wrote:
+> From: Stanislaw Gruszka <stf_xl@wp.pl>
+> 
+> Since f8f80be501aa ("xhci: Use soft retry to recover faster from
+> transaction errors") on some systems rt2800usb and mt7601u devices
+> are unable to operate. Possible reason is that some xHCI hardware
+> can not perform Soft Retry for those devices correctly.
+> 
+> To avoid the problem add xhci->quirks flag that restore pre f8f80be501aa
+> xhci behaviour for affected xHCI controllers. Currently those are
+> AMD_PROMONTORYA_4 and AMD_PROMONTORYA_2, since it was confirmed
+> by the users: on those xHCI hosts issue happen and is gone after
+> disabling Soft Retry.
+> 
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=202541
+> Fixes: f8f80be501aa ("xhci: Use soft retry to recover faster from transaction errors")
+> Reported-and-tested-by: Bernhard <bernhard.gebetsberger@gmx.at>
+> Bisected-by: Bernhard <bernhard.gebetsberger@gmx.at>
+> Signed-off-by: Stanislaw Gruszka <stf_xl@wp.pl>
+> ---
+> v1 -> v2:
+> compared to previous patch:
+> https://lore.kernel.org/linux-usb/20210122104342.12451-1-stf_xl@wp.pl/t/#u
+> now we use xhci->quirks to disable Soft Retry (I also changed topic
+> to reflect the change).
+> 
+>  drivers/usb/host/xhci-pci.c  | 5 +++++
+>  drivers/usb/host/xhci-ring.c | 3 ++-
+>  drivers/usb/host/xhci.h      | 1 +
+>  3 files changed, 8 insertions(+), 1 deletion(-)
+> 
 
-kernel: uvcvideo: Failed to set UVC probe control : -110 (exp. 34).
 
-Signed-off-by: Stefan Ursella <stefan.ursella@wolfvision.net>
----
- drivers/usb/core/quirks.c | 3 +++
- 1 file changed, 3 insertions(+)
+Thanks.
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 84b5da0a26a5..270ad082d3ba 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -381,6 +381,9 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	/* X-Rite/Gretag-Macbeth Eye-One Pro display colorimeter */
- 	{ USB_DEVICE(0x0971, 0x2000), .driver_info = USB_QUIRK_NO_SET_INTF },
- 
-+	/* ELMO L-12F document camera */
-+	{ USB_DEVICE(0x09a1, 0x0028), .driver_info = USB_QUIRK_DELAY_CTRL_MSG },
-+
- 	/* Broadcom BCM92035DGROM BT dongle */
- 	{ USB_DEVICE(0x0a5c, 0x2021), .driver_info = USB_QUIRK_RESET_RESUME },
- 
--- 
-2.17.1
+Checkpatch complains about some minor things, I'll fix those while applying.
+Will send forward after 5.12-rc1 is out, and add stable tag.
 
+-Mathias
