@@ -2,113 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74833317041
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 20:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A14FD317106
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 21:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232798AbhBJTfC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Feb 2021 14:35:02 -0500
-Received: from mail.baikalelectronics.com ([87.245.175.226]:35216 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232103AbhBJTe2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Feb 2021 14:34:28 -0500
-Date:   Wed, 10 Feb 2021 22:33:25 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        id S232936AbhBJUQG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Feb 2021 15:16:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232180AbhBJUPx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Feb 2021 15:15:53 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4122C061574
+        for <linux-usb@vger.kernel.org>; Wed, 10 Feb 2021 12:15:13 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id y5so3081645ilg.4
+        for <linux-usb@vger.kernel.org>; Wed, 10 Feb 2021 12:15:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=J1a6cDUzXWVuASWBrVI4K9cZLXxGUovrDwHhTgPAC7k=;
+        b=GKXFivfVvv6Yl40FDF1Z5LhWIJ6gxuHQrSsVVo1+sSsHjbc7vSVr///0bOKRX/dzwz
+         iPirUogC6LyOUgyLj5KYl2OMhwcr5moIEUJr5zF1bHkMvcvkTJjA5WmTO4ghQppqK3sh
+         6lO9AFmZQiJbamcyZLV4P65LrajWEVv8OctSc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=J1a6cDUzXWVuASWBrVI4K9cZLXxGUovrDwHhTgPAC7k=;
+        b=PU8hhVvBfHl7SSyZ709/yJmEWgivWl29K2umE5Cu9p3IXFYYwuHPs0zSES2NrP6mbA
+         ZKuSJ+Yq4n+G7WEJNqfqUl+6e8zACDkAkMI49QlqIe+gBl66L1+t1qJn2625VrcvnPDY
+         vv8tkXvnZqvSbjpGcBhOPWsCz1skbv4UNzOwOtDXd8CTq0Sddbx+Fa1GC+46u58a7n1Y
+         7WBzZGP5wNf8Acjiw4YhhS8TKjzUAfRqSMcvQUgzTy7uCjDbMfby6n8FCJSqjIKTQuEb
+         Upo6XIsr4QEsWBjZyg1q9d9ISWOXpDuKqLt1hN/aqIjr48AtBlo/RgxuA29vNcOEwbqC
+         5CKA==
+X-Gm-Message-State: AOAM532OhjYqAJqG873m9zunycTC5ihYY8J+IK/btPKYYOJTGYXM1nQ1
+        FF5c6dmYkNlEU+3FbglttSlapw==
+X-Google-Smtp-Source: ABdhPJw0/kFJnIStKyO8WVO0eFrfq2j/vYHKEyYBkCheGxOVOLaX2yhK0tqOp67NQ+SCnL7cGar0kQ==
+X-Received: by 2002:a92:c907:: with SMTP id t7mr2699585ilp.87.1612988113249;
+        Wed, 10 Feb 2021 12:15:13 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id g6sm1483527ilf.3.2021.02.10.12.15.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Feb 2021 12:15:12 -0800 (PST)
+Subject: Re: [PATCH] usb: usbip: fix error handling of kthread_get_run()
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 09/10] usb: dwc3: qcom: Detect DWC3 DT-nodes with
- "usb"-prefixed names
-Message-ID: <20210210193325.inp7rgpsfr624zhd@mobilestation>
-References: <20210210172850.20849-1-Sergey.Semin@baikalelectronics.ru>
- <20210210172850.20849-10-Sergey.Semin@baikalelectronics.ru>
- <CAL_JsqJBknqhCSUOdpZVbtmp6TYetBQPLoQUCT6DTFajpChaSA@mail.gmail.com>
- <20210210184051.ncvvs5xgyo7o3uzq@mobilestation>
- <YCQse9EtEHtLVe9A@builder.lan>
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Hillf Danton <hdanton@sina.com>, linux-usb@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <000000000000414db905b6e9bae8@google.com>
+ <20210205135707.4574-1-penguin-kernel@I-love.SAKURA.ne.jp>
+ <6b2b9f7c-a412-0f52-3373-bc58d1e95ad9@linuxfoundation.org>
+ <ee936421-66ea-c6a7-fa1e-d4077ab28ed0@i-love.sakura.ne.jp>
+ <1f4b36a1-460e-1154-b46c-32ba72b88205@linuxfoundation.org>
+ <dffdefc9-9499-2cd0-fce9-b084df1511af@i-love.sakura.ne.jp>
+ <2f922e76-623e-1d87-17a5-c4a87dc8f2fc@linuxfoundation.org>
+ <bb8f438f-8a77-2aac-cb2b-b2551f6a64b0@i-love.sakura.ne.jp>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f97b85c7-d319-0897-e0f1-29c4154ca060@linuxfoundation.org>
+Date:   Wed, 10 Feb 2021 13:15:11 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YCQse9EtEHtLVe9A@builder.lan>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <bb8f438f-8a77-2aac-cb2b-b2551f6a64b0@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 12:56:59PM -0600, Bjorn Andersson wrote:
-> On Wed 10 Feb 12:40 CST 2021, Serge Semin wrote:
+On 2/10/21 11:43 AM, Tetsuo Handa wrote:
+> On 2021/02/11 3:20, Shuah Khan wrote:
+>> On 2/10/21 11:16 AM, Tetsuo Handa wrote:
+>>> On 2021/02/11 3:11, Shuah Khan wrote:
+>>>> I would like to see to see a complete fix. This patch changes
+>>>> kthread_get_run() to return NULL. Without adding handling for
+>>>> NULL in the callers of kthread_get_run(), we will start seeing
+>>>> problems.
+>>>
+>>> What problems are you aware of?
+>>>
+>>
+>> The fact that driver doesn't cleanup after failing to create
+>> the thread is a problem.
 > 
-> > On Wed, Feb 10, 2021 at 12:17:27PM -0600, Rob Herring wrote:
-> > > On Wed, Feb 10, 2021 at 11:29 AM Serge Semin
-> > > <Sergey.Semin@baikalelectronics.ru> wrote:
-> > > >
-> > > > In accordance with the USB HCD/DRD schema all the USB controllers are
-> > > > supposed to have DT-nodes named with prefix "^usb(@.*)?".  Since the
-> > > > existing DT-nodes will be renamed in a subsequent patch let's first make
-> > > > sure the DWC3 Qualcomm driver supports them and second falls back to the
-> > > > deprecated naming so not to fail on the legacy DTS-files passed to the
-> > > > newer kernels.
-> > > >
-> > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > > Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > > ---
-> > > >  drivers/usb/dwc3/dwc3-qcom.c | 3 ++-
-> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > > > index c703d552bbcf..49ad8d507d37 100644
-> > > > --- a/drivers/usb/dwc3/dwc3-qcom.c
-> > > > +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> > > > @@ -630,7 +630,8 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
-> > > >         struct device           *dev = &pdev->dev;
-> > > >         int                     ret;
-> > > >
-> > > > -       dwc3_np = of_get_child_by_name(np, "dwc3");
-> > > > +       dwc3_np = of_get_child_by_name(np, "usb") ?:
-> > > > +                 of_get_child_by_name(np, "dwc3");
-> > > 
-> > 
-> > > Is there some reason using compatible instead wouldn't work here?
-> > 
-> > I don't know for sure. The fix has been requested in the framework of
-> > this discussion:
-> > https://lore.kernel.org/linux-usb/20201020115959.2658-30-Sergey.Semin@baikalelectronics.ru/#t
-> > by the driver maintainer Bjorn. To get a firm answer it's better to
-> > have him asked.
+> What are the cleanup functions?
 > 
-> My feedback was simply that it has to catch both cases, I didn't
-> consider the fact that we have a compatible to match against.
-> 
-> > As I see it having of_get_compatible_child() utilized
-> > here would also work. At least for the available in kernel dt-files.
-> > See the affected dts-es in:
-> > https://lore.kernel.org/linux-usb/20210210172850.20849-11-Sergey.Semin@baikalelectronics.ru/
-> > 
-> > A problem may happen if some older versions of DTS-es had another
-> > compatible string in the dwc3 sub-node...
-> > 
-> 
-> Afaict all Qualcomm dts files has "snps,dwc3", so you can match against
-> that instead.
 
-Ok then. I'll replace of_get_child_by_name() here with
-of_get_compatible_child() matching just against "snps,dwc3" in v7. Can you
-confirm that noone ever had a Qcom-based hardware described with dts having
-the "synopsys,dwc3" compatible used as the DWC USB3 sub-node here? That
-string has been marked as deprecated recently because the vendor-prefix
-was changed sometime ago, but the original driver still accept it.
+When user-space requests attaching to a device, attach_store()
+tries to attach the requested device. When kthread_get_run()
+failure is ignored silently, and continue with call to
+rh_port_connect(), user-space assumes attach is successful.
+User thinks attach is successful.
 
-Alternatively to be on a safe side we could match against both
-compatibles here as Rob suggests. What do you think?
+When and how will this attach failure gets reported to the
+in this scenario?
 
--Sergey
+Error handling for this case is no different from other error
+paths in attach_store().
 
-> 
-> Regards,
-> Bjorn
+Please see error handling for other errors in attach_store().
+In this case the right error handling is to rewind the vdev
+init and bail out returning error. This would include setting
+vdev->ud.status to VDEV_ST_NULL.
+
+I found the following reproducer that tells me how attach
+is triggered.
+https://syzkaller.appspot.com/text?tag=ReproC&x=128506e4d00000
+
+syzbot is helping us harden these paths, which is awesome.
+Fixing these have to consider user api.
+
+I you would like to fix this, please send me a complete fix.
+
+thanks,
+-- Shuah
