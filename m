@@ -2,113 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0530D3171F4
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 22:07:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E37A3172C4
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 22:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232658AbhBJVHc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Feb 2021 16:07:32 -0500
-Received: from mail-wm1-f46.google.com ([209.85.128.46]:37002 "EHLO
-        mail-wm1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbhBJVHa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Feb 2021 16:07:30 -0500
-Received: by mail-wm1-f46.google.com with SMTP id m1so3169765wml.2;
-        Wed, 10 Feb 2021 13:07:13 -0800 (PST)
+        id S232726AbhBJV7X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Feb 2021 16:59:23 -0500
+Received: from mail-ot1-f49.google.com ([209.85.210.49]:39908 "EHLO
+        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231642AbhBJV7N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Feb 2021 16:59:13 -0500
+Received: by mail-ot1-f49.google.com with SMTP id d7so3322015otq.6;
+        Wed, 10 Feb 2021 13:58:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=QxVKcMPVlZSU1s6PYt/R8Rb76zHOdHRNUhzAj/OgexQ=;
-        b=XjdJ0yIMtJ+ym7Zg5enTlyvGJyTMmAI5WygJ3wkc/aZe+yJbgU5XeB+TCQmRHvo7jd
-         FW2OOFN9IvFKAAjDzp9fA8pU9PUspp4vhuhcU09LVH2fiqAJuUQq2WyMgw4hlohp/ir+
-         mqpscOKHsko2J35sNdiB1vG+GDEN87Lx2Ib36Ih4LI9LRsyyE67OxqZKrMutDVxBlduK
-         u8rt8ggW1t7ZKVYoZIhsDVtPkOjSmMg6DeCVtcRWuFNJ3SGj3y9zNBYPkx/rqjnbZ2wJ
-         mzmCi+JTpM1QqS9/th9xi4oi2Av+tahkiajraBrncuhZO2ZqjrJ3peclPBGbPhX9eDif
-         v/0w==
-X-Gm-Message-State: AOAM531Ctyi533uW6qnQBoV3/8YPF/SkUwof1f7piegirz1J2aV0ztVG
-        747QmnsRNK3yb+NdPR6+dXc=
-X-Google-Smtp-Source: ABdhPJyutwczC6gENkSYbGydAjbEIfbr8/xDGH+x6zloSJ2vMT8py8hwsZqxN/svIs773XJbJ72Wlg==
-X-Received: by 2002:a05:600c:2d44:: with SMTP id a4mr890464wmg.95.1612991207591;
-        Wed, 10 Feb 2021 13:06:47 -0800 (PST)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id w2sm4826858wmg.27.2021.02.10.13.06.46
+        bh=uzz9hxfNfUAHoY/3tRRT+kBu3++kIrVwo6Tu0JjVTOA=;
+        b=rhuD4PL9+RPWZbo3CMq2DdPFEEDwQ82RQpenRSqQPziH5RY0xUvVAepeFiCkwLZzjA
+         kRN7LZTXCScD28Okqz2o4B6UvA1Kt6Wsf9ps+Y2ZLU76uypIoTlw3ELlUx1OtW+UpGOP
+         NDbZ6IVv9sAegcVVRhVVb5PII9J52Cy6aV4WhPowZb58edumb8hqn93yZVyFBHoavi5a
+         s1yuNUpcUNw73gHUEDgkxlfvEC7dw35jSC4Z7oai+PPtMYxhudDvmlAdaKGrJRFbDmO+
+         8n9QwWHIIjxzLN/Ps2xAm8iORIWtYlSDd7W2Z8A3NMHIHv8e1gsKLk6EdGusax9jlZQ2
+         Nfqw==
+X-Gm-Message-State: AOAM533Upo8T4N8vPonLox7zVlLMHUgimS+91dsguPY9VnAxqoXTLI7z
+        s9kRmzYwVmnnUGQw9KtfFw==
+X-Google-Smtp-Source: ABdhPJxrVr6ixP0bO6YSUh9lvjgUA5Iqr/sRXpCaKJSQpamuci/ExTOUwsJzIsx7P+OBLu+LBfKdWw==
+X-Received: by 2002:a9d:7997:: with SMTP id h23mr3754841otm.296.1612994312037;
+        Wed, 10 Feb 2021 13:58:32 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id o20sm608285oor.14.2021.02.10.13.58.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Feb 2021 13:06:46 -0800 (PST)
-Date:   Wed, 10 Feb 2021 22:06:45 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wed, 10 Feb 2021 13:58:31 -0800 (PST)
+Received: (nullmailer pid 2868209 invoked by uid 1000);
+        Wed, 10 Feb 2021 21:58:29 -0000
+Date:   Wed, 10 Feb 2021 15:58:29 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+        Ikjoon Jang <ikjn@chromium.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
-Subject: Re: [PATCH v5 3/4] usb: host: xhci-plat: Create platform device for
- onboard hubs in probe()
-Message-ID: <20210210210645.xapaua7djdsvr3ca@kozik-lap>
-References: <20210210171040.684659-1-mka@chromium.org>
- <20210210091015.v5.3.I7a3a7d9d2126c34079b1cab87aa0b2ec3030f9b7@changeid>
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 1/3] dt-bindings: usb: mtk-xhci: add compatible
+ for mt8195
+Message-ID: <20210210215829.GA2868150@robh.at.kernel.org>
+References: <20210203102642.7353-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210210091015.v5.3.I7a3a7d9d2126c34079b1cab87aa0b2ec3030f9b7@changeid>
+In-Reply-To: <20210203102642.7353-1-chunfeng.yun@mediatek.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 09:10:38AM -0800, Matthias Kaehlcke wrote:
-> Check during probe() if a hub supported by the onboard_usb_hub
-> driver is connected to the controller. If such a hub is found
-> create the corresponding platform device. This requires the
-> device tree to have a node for the hub with its vendor and
-> product id (which is not common for USB devices). Further the
-> platform device is only created when CONFIG_USB_ONBOARD_HUB=y/m.
+On Wed, 03 Feb 2021 18:26:40 +0800, Chunfeng Yun wrote:
+> There are 4 USB controllers on MT8195, the controllers (IP1~IP3,
+> exclude IP0) have a wrong default SOF/ITP interval which is
+> calculated from the frame counter clock 24Mhz by default, but
+> in fact, the frame counter clock is 48Mhz, so we should set
+> the accurate interval according to 48Mhz. Here add a new compatible
+> for MT8195, it's also supported in driver. But the first controller
+> (IP0) has no such issue, we prefer to use generic compatible,
+> e.g. mt8192's compatible.
 > 
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 > ---
+> v2: no changes
+> ---
+>  Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Changes in v5:
-> - patch added to the series
-> 
->  drivers/usb/host/xhci-plat.c | 16 ++++++++++++++++
->  include/linux/usb/hcd.h      |  2 ++
->  2 files changed, 18 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> index 4d34f6005381..e785fa109eea 100644
-> --- a/drivers/usb/host/xhci-plat.c
-> +++ b/drivers/usb/host/xhci-plat.c
-> @@ -15,6 +15,7 @@
->  #include <linux/of.h>
->  #include <linux/of_device.h>
->  #include <linux/platform_device.h>
-> +#include <linux/usb/onboard_hub.h>
->  #include <linux/usb/phy.h>
->  #include <linux/slab.h>
->  #include <linux/acpi.h>
-> @@ -184,6 +185,7 @@ static int xhci_plat_probe(struct platform_device *pdev)
->  	int			ret;
->  	int			irq;
->  	struct xhci_plat_priv	*priv = NULL;
-> +	struct device_node	*np;
->  
->  
->  	if (usb_disabled())
-> @@ -356,6 +358,17 @@ static int xhci_plat_probe(struct platform_device *pdev)
->  	 */
->  	pm_runtime_forbid(&pdev->dev);
->  
-> +	np = usb_of_get_device_node(hcd->self.root_hub, hcd->self.busnum);
-> +	if (np && of_is_onboard_usb_hub(np)) {
 
-This looks hackish... what if later we have something else than hub?
-Another if()?
-
-What if hub could be connected to something else than XHCI controller?
-
-Best regards,
-Krzysztof
+Acked-by: Rob Herring <robh@kernel.org>
