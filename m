@@ -2,91 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC1B316F1E
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 19:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CB7316F1B
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Feb 2021 19:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234318AbhBJSqs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Feb 2021 13:46:48 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:51010 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234372AbhBJSo3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Feb 2021 13:44:29 -0500
-Received: from fsav401.sakura.ne.jp (fsav401.sakura.ne.jp [133.242.250.100])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 11AIhVMe090924;
-        Thu, 11 Feb 2021 03:43:31 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav401.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav401.sakura.ne.jp);
- Thu, 11 Feb 2021 03:43:31 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav401.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 11AIhVKQ090918
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 11 Feb 2021 03:43:31 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [PATCH] usb: usbip: fix error handling of kthread_get_run()
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Hillf Danton <hdanton@sina.com>, linux-usb@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-References: <000000000000414db905b6e9bae8@google.com>
- <20210205135707.4574-1-penguin-kernel@I-love.SAKURA.ne.jp>
- <6b2b9f7c-a412-0f52-3373-bc58d1e95ad9@linuxfoundation.org>
- <ee936421-66ea-c6a7-fa1e-d4077ab28ed0@i-love.sakura.ne.jp>
- <1f4b36a1-460e-1154-b46c-32ba72b88205@linuxfoundation.org>
- <dffdefc9-9499-2cd0-fce9-b084df1511af@i-love.sakura.ne.jp>
- <2f922e76-623e-1d87-17a5-c4a87dc8f2fc@linuxfoundation.org>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <bb8f438f-8a77-2aac-cb2b-b2551f6a64b0@i-love.sakura.ne.jp>
-Date:   Thu, 11 Feb 2021 03:43:25 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        id S234323AbhBJSqf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Feb 2021 13:46:35 -0500
+Received: from mail-oi1-f173.google.com ([209.85.167.173]:35256 "EHLO
+        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234329AbhBJSoR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Feb 2021 13:44:17 -0500
+Received: by mail-oi1-f173.google.com with SMTP id l3so3177777oii.2;
+        Wed, 10 Feb 2021 10:44:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+I9yJIL4KQm5Wx44PMzjcCtAomnWnzNWkCxOGux9jys=;
+        b=ivTru8WtY9FiRw8H4BBFxBgL80tf+u1z/WTIxlOs7O1H9GrAn1GWFh3V+KyDt8ow8S
+         rhrWH9V+1tASISTSXNZcwRV60nHu7BzJolYHQnWMcTxxJN0V0KZfa82J+h+aQy+QbL4m
+         Ydf1OxUoetiQ871NnjlqtjEVBqqpJbxecyr6pXPt2/jTRoc/GBJvKM9cBMvF22TO5Pay
+         3PU4DcPrEkqptsFwsHy846J+rzcnqukfzfy9QlzjAqARlA+Dzg8VYN+Yt+2RQaRGEgIB
+         4FvY7JIJb4TKhPIe3x1A0lKdSCZfvBa1Cuykd9Lg8/tdfdrAJ504snHEg/24xSqcUaDX
+         Joug==
+X-Gm-Message-State: AOAM533t0X40GpxoZogV60/I4VOGiGVkDqbnyJNPKSrK8CAtHugf+ZaJ
+        gHVFsdSC+D4ACTUMm/zFoA==
+X-Google-Smtp-Source: ABdhPJyfbAunYXL98GGmqi1N5eZneUtqnS/9idmsDqgvl9PyHkMNV568YQbcdgYoOgzKG8DJNP9Amg==
+X-Received: by 2002:aca:da83:: with SMTP id r125mr214368oig.127.1612982616148;
+        Wed, 10 Feb 2021 10:43:36 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id v67sm545918otb.43.2021.02.10.10.43.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Feb 2021 10:43:35 -0800 (PST)
+Received: (nullmailer pid 2520189 invoked by uid 1000);
+        Wed, 10 Feb 2021 18:43:34 -0000
+Date:   Wed, 10 Feb 2021 12:43:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     linux-rockchip@lists.infradead.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        balbi@kernel.org, linux-usb@vger.kernel.org, heiko@sntech.de
+Subject: Re: [PATCH v5 1/8] dt-bindings: usb: convert rockchip,dwc3.txt to
+ yaml
+Message-ID: <20210210184334.GA2520125@robh.at.kernel.org>
+References: <20210209192350.7130-1-jbx6244@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <2f922e76-623e-1d87-17a5-c4a87dc8f2fc@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210209192350.7130-1-jbx6244@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/02/11 3:20, Shuah Khan wrote:
-> On 2/10/21 11:16 AM, Tetsuo Handa wrote:
->> On 2021/02/11 3:11, Shuah Khan wrote:
->>> I would like to see to see a complete fix. This patch changes
->>> kthread_get_run() to return NULL. Without adding handling for
->>> NULL in the callers of kthread_get_run(), we will start seeing
->>> problems.
->>
->> What problems are you aware of?
->>
+On Tue, 09 Feb 2021 20:23:43 +0100, Johan Jonker wrote:
+> In the past Rockchip dwc3 usb nodes were manually checked.
+> With the conversion of snps,dwc3.yaml as common document
+> we now can convert rockchip,dwc3.txt to yaml as well.
+> Remove node wrapper.
 > 
-> The fact that driver doesn't cleanup after failing to create
-> the thread is a problem.
-
-What are the cleanup functions?
-
-Future attach_store() will succeed if cleanup operation (which does
-vdev->ud.status = VDEV_ST_NULL;) is done, doesn't it?
-
-And vhci_device_reset() and/or vhci_device_init() involves cleanup
-operation (which does vdev->ud.status = VDEV_ST_NULL;), doesn't it?
-
+> Added properties for rk3399 are:
+>   power-domains
+>   resets
+>   reset-names
 > 
->>>
->>> Does this patch fix the problem syzbot found?
->>
->> Yes, this patch as-is avoids the crash syzbot found.
->>
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+> Changed V5:
+>   add select
 > 
-> Good to know. Please add handling for kthread_get_run() return
-> in the places I suggested in you next version of this patch.
+> Changed V3:
+>   remove aclk_usb3_rksoc_axi_perf
+>   remove aclk_usb3
+> 
+> Changed V2:
+>   remove node wrapper
+> ---
+>  .../devicetree/bindings/usb/rockchip,dwc3.txt      |  56 -----------
+>  .../devicetree/bindings/usb/rockchip,dwc3.yaml     | 104 +++++++++++++++++++++
+>  2 files changed, 104 insertions(+), 56 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/rockchip,dwc3.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+> 
 
-Since vhci_{rx,tx}_loop() do not involve cleanup operation (they simply
-terminate upon kthread_should_stop() == true), I don't understand why
-failing to start vhci_{rx,tx}_loop() makes difference. Cleanup will be
-done by functions other than vhci_{rx,tx}_loop(), won't it?
-
+Reviewed-by: Rob Herring <robh@kernel.org>
