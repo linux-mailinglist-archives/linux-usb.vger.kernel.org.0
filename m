@@ -2,130 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A53F2317441
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 00:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 435BD3174C9
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 00:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233992AbhBJXWs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Feb 2021 18:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
+        id S233753AbhBJXyS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Feb 2021 18:54:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233984AbhBJXWr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Feb 2021 18:22:47 -0500
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC17DC061574;
-        Wed, 10 Feb 2021 15:22:06 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id p6so1743350qvm.12;
-        Wed, 10 Feb 2021 15:22:06 -0800 (PST)
+        with ESMTP id S233785AbhBJXyN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Feb 2021 18:54:13 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96572C06174A
+        for <linux-usb@vger.kernel.org>; Wed, 10 Feb 2021 15:53:33 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id z7so2152248plk.7
+        for <linux-usb@vger.kernel.org>; Wed, 10 Feb 2021 15:53:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nrUwWEHtkuETZV80esS2kI6jyeXCjRYa+pWFfOnoHMQ=;
-        b=S6VcGeoRuNxVgTDgb7qo+VlP2X9I29WrAqKilHb8NyYJO6VezPjxNV5nG3vLZWVbld
-         yqVffHgwNfq4FYNJedL5cGbtfhdbBiFLXl+JvZkIxEWueD/fZfNE6oQPhLHw0mvJI2q2
-         vbK5RID98rgPz+yqFV1XAxw5aPtuNLQngPIy0T5dfm8K2nfyJDYneV+r+m+FMfngiyGx
-         KeHiWl3WHYuI5OXmr6ciUMqQrSy8uNIFE/Q62CxPe9YfNgdj40XKxKIXw5lLNfxQ5S1M
-         2/GpA+AB701c9+pO6fAIUsFoFjg6cnP/G86Q4u80hMoTar1ynuKPWJ3m0sH6+EzqiDP+
-         vRaQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zj5l2TaWH01pVxKiROmW9tqp3Gf3tRU4tqswJVkyijs=;
+        b=LUu2Ql3S3LZ6KRQdIRM44fZdlo9FETEcPbpWfwzfWP/OwB2kfGhk0NBQZ444Y6gS84
+         cqqRyzWrA01gsetE2YnXTYM25dF340zx9L4r0rMEqS6FXzVh7ZPSlX9j3AdbC/MEDIai
+         +6zU4S0K5cbNDo9xidyAHRDKZc7J+1uFcCg8s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=nrUwWEHtkuETZV80esS2kI6jyeXCjRYa+pWFfOnoHMQ=;
-        b=ArBthpM4Instz0E3ssnlFrCS2o7HbaMXM2SkURG4JpMI1PjQlFO3abFxke+t+gJUj/
-         swfVowGlQrDdXgnP0aAC+iNsmj+8wc13Iykp54OkSAmrJ+HiB5gYIIxmTSLQAFe8Ni+Y
-         ltfeRfdHoEPgh8xgJUJBspK1lmunJvrHCUFUWijdXD1O3KMAIE5DMVOh+jDQoWL4Ajiy
-         oonMp2nrTt7wI2hyg0lZfEamwcdgW+iWsCu3oVGc0rEWO9RYaK3UT1OJzNMRX49P2MYN
-         3/Mk/EBncLYgdj4ayVeHJzp2nBq+EAoWUOy99XZ+qmy1zsT5cpvyAwt8/VVEwru+kSAB
-         glYw==
-X-Gm-Message-State: AOAM533xrnAasxVfBK2AG4QWMzSYs8g81ltVODphfqcbB655iCFsCdpS
-        F5vsU/Xt0n2HXOPJK1jHKvI=
-X-Google-Smtp-Source: ABdhPJxRfLxqLOz33phCpwNdYguRGdgXK3/L0y68IbdhfSshfgLwTs0zd+mlms9zytO8fXrFr1w96Q==
-X-Received: by 2002:a05:6214:2d4:: with SMTP id g20mr5345799qvu.23.1612999325965;
-        Wed, 10 Feb 2021 15:22:05 -0800 (PST)
-Received: from OpenSuse ([156.146.36.180])
-        by smtp.gmail.com with ESMTPSA id x62sm2629181qkd.1.2021.02.10.15.22.01
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zj5l2TaWH01pVxKiROmW9tqp3Gf3tRU4tqswJVkyijs=;
+        b=Tixe/dP5dfQoUYMa++4N6QhYgtGQRy98O75xufpmi5DLmWaXKzDhOBd7YTxDqXPcQ7
+         dXu/ZBH3fv9k7r96AHR9GLLegkxHrjQHq0n1GEWjcd/MzBThQ8Eezr9jWle/zvsVrsRX
+         WWSWs7DuhNnzewK3HPPIJHfNfL/5QhEBaERjbqTPTxFgGjyQ1iz4bu3X16/rGSvQQq/X
+         BpV0l/gDp3t2PTrWLtOZTvMUwKMapppNBa5wd0jsma7tpMNzcxbkoXoLGHeFU93EdXo5
+         2NsLjbIw0xnvInA9s9ybjw+ecegfWaYmk/KWNt5xvP4HuFWU/8/QgoqkM+ao26BqDnV/
+         8XVQ==
+X-Gm-Message-State: AOAM530Lp8+uWgn+YTlYdzqH6fGs+DkUYX0ZJ6ptxf1jSAFkKgmm9KGV
+        V308nmOpMth8Xjq2p+O5IZVC0ITGfZr3IA==
+X-Google-Smtp-Source: ABdhPJxn6d4HljoUCZrvAdpCoL1DwQblJ3hzAj4YtXGibEqSQ9vSwDUtsmWUD2TANhfUPPfmDuB62A==
+X-Received: by 2002:a17:90a:80c5:: with SMTP id k5mr1260909pjw.217.1613001213199;
+        Wed, 10 Feb 2021 15:53:33 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 9sm3463308pgw.61.2021.02.10.15.53.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Feb 2021 15:22:05 -0800 (PST)
-Date:   Thu, 11 Feb 2021 04:51:56 +0530
-From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     gregkh@linuxfoundation.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, rdunlap@infradead.org
-Subject: Re: [PATCH] doc: devicetree: bindings: usb:  Chnage descibe to
- describe in usbmisc-imx.txt
-Message-ID: <YCRqlBxKwqdH0Z+q@OpenSuse>
-Mail-Followup-To: Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        Rob Herring <robh@kernel.org>, gregkh@linuxfoundation.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, rdunlap@infradead.org
-References: <20210203153315.15170-1-unixbhaskar@gmail.com>
- <20210210225536.GA2968213@robh.at.kernel.org>
+        Wed, 10 Feb 2021 15:53:32 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kees Cook <keescook@chromium.org>, Joe Perches <joe@perches.com>,
+        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH] usb: Replace lkml.org links with lore
+Date:   Wed, 10 Feb 2021 15:53:30 -0800
+Message-Id: <20210210235330.3292719-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="p4xMcFQQKtUQrHm9"
-Content-Disposition: inline
-In-Reply-To: <20210210225536.GA2968213@robh.at.kernel.org>
+X-Patch-Hashes: v=1; h=sha256; g=d9c7823dad2ef78111b271ca0324a207be917bb3; i=D9zEhuNzLfa2liVytchUXDtYkln8bkxLBm379ZBYaEE=; m=kc8NgBcNkR1FdAUFoBcecPqIFWVDlhJwDI99K+gzg58=; p=UFVmbKtTxGlQA7W+7EMSXF0tvEoDMPhJZjpruI0gZTk=
+X-Patch-Sig: m=pgp; i=keescook@chromium.org; s=0x0x8972F4DFDC6DC026; b=iQIzBAABCgAdFiEEpcP2jyKd1g9yPm4TiXL039xtwCYFAmAkcfkACgkQiXL039xtwCYb+Q//Z9j +9FVgqmMRXE4nuTCPZfOr+xm1NHy0g6uanlaeK6qSazb/6IlwHZJEyBqFa9QEJTiCnqCbroi8hZuM hUHjYDbLzVynrDOVtIbWtWBaAEzZg/bMnwVDgz/PTTPrXRQUgqgDF21GHB+UCq6DM8UhOXwicSCQq GoawUmcNITtl5UDK8yEni6DLOgazLzoMH7/kecxCBFpKsJqNXzxb9a70GD8o8Q1QxWk1Co8bZlMss x2oCqS83UfLDe19pJGkfXyVT9auobZmfKss4THh9Qh2Fh+4zLjU/646T75LnxbloVSSEaPuMdtMxJ QGM4XX7cnXjO6umi/g+spE7/9mnJpuhDoBI977KfkTNHy8eEqUy5WPBfgtPdo8aBJh0WnJX/4niDe h+hjwzF56BibI2XW3fh2nDPX9r9KJN4/1QL00m18wxAue2W1DK4EVHpnWvN/EhRCvP2UPdCHjlwvD dSZmFFWa2fleEjwefhAstayJygRdE+BJeC7EgrZ1MTvD0O4Zt/jcbscDn6TYwkd4IpPZrqiFlfdVH MXRFJbd4ojlnfB6Y7NRI/h8nl8E+cgsJmodAcJ09kAvOcAXwu+TyAYFvso8czBnwxrzaVIENaHYbO bRZsiLjgoAS8tP+pUfKAqbX7oyYbRSpTWxcZavfd+jmdzuF/O9MpUh71azfOUOXY=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+As started by commit 05a5f51ca566 ("Documentation: Replace lkml.org
+links with lore"), replace lkml.org links with lore to better use a
+single source that's more likely to stay available long-term.
 
---p4xMcFQQKtUQrHm9
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/usb/serial/ark3116.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-On 16:55 Wed 10 Feb 2021, Rob Herring wrote:
->On Wed, Feb 03, 2021 at 09:03:15PM +0530, Bhaskar Chowdhury wrote:
->>
->
->Ironically, a typo in the subject. Will fix when applying.
->
-My bad...thanks, Rob.
+diff --git a/drivers/usb/serial/ark3116.c b/drivers/usb/serial/ark3116.c
+index f0ac7bb07ac1..b9bedfe9bd09 100644
+--- a/drivers/usb/serial/ark3116.c
++++ b/drivers/usb/serial/ark3116.c
+@@ -717,9 +717,10 @@ MODULE_DESCRIPTION(DRIVER_DESC);
+  * hardware bug or something.
+  *
+  * According to a patch provided here
+- * (http://lkml.org/lkml/2009/7/26/56), the ARK3116 can also be used
+- * as an IrDA dongle. Since I do not have such a thing, I could not
+- * investigate that aspect. However, I can speculate ;-).
++ * https://lore.kernel.org/lkml/200907261419.50702.linux@rainbow-software.org
++ * the ARK3116 can also be used as an IrDA dongle. Since I do not have
++ * such a thing, I could not investigate that aspect. However, I can
++ * speculate ;-).
+  *
+  * - IrDA encodes data differently than RS232. Most likely, one of
+  *   the bits in registers 9..E enables the IR ENDEC (encoder/decoder).
+-- 
+2.25.1
 
->> s/descibe/describe/
->>
->> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
->> ---
->>  Documentation/devicetree/bindings/usb/usbmisc-imx.txt | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/usbmisc-imx.txt b/Documentation/devicetree/bindings/usb/usbmisc-imx.txt
->> index b353b9816487..b796836d2ce7 100644
->> --- a/Documentation/devicetree/bindings/usb/usbmisc-imx.txt
->> +++ b/Documentation/devicetree/bindings/usb/usbmisc-imx.txt
->> @@ -1,7 +1,7 @@
->>  * Freescale i.MX non-core registers
->>
->>  Required properties:
->> -- #index-cells: Cells used to descibe usb controller index. Should be <1>
->> +- #index-cells: Cells used to describe usb controller index. Should be <1>
->>  - compatible: Should be one of below:
->>  	"fsl,imx6q-usbmisc" for imx6q
->>  	"fsl,vf610-usbmisc" for Vybrid vf610
->> --
->> 2.26.2
->>
-
---p4xMcFQQKtUQrHm9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEEnwF+nWawchZUPOuwsjqdtxFLKRUFAmAkapAACgkQsjqdtxFL
-KRUOIwgAh5jPY2t3CnUWX5nywlWkDOMsJa1xJXQfgAPwP4m+HmC9NI2WE6DF0JlW
-pf3G72cGE4JH4qxBuKRSJHHSjKAyUMTBFsIpxjMKg4EPEuaDNsMhaVYku82VBrE2
-s8mP+gUlrX3S1F1jpG6KrYe90Ep/Ra0uwg0gZerKaSvJzep7hKe1D0K8CN+TdEE0
-MBbDcpwRFFtPs6axb3VYLP+Sl86d2XJovFbFEyFMg6n604F3hP7FbTi7ePEYTHKe
-PjhaZcmI384jJE0LHMoa+LJ2xUacCmysY/j5QC+85Vp1OQE5Eq2ZRChpeGmeOCBQ
-lUe9qXWBHsM9YKeUz/Tlv/TC6FpNgQ==
-=WBnP
------END PGP SIGNATURE-----
-
---p4xMcFQQKtUQrHm9--
