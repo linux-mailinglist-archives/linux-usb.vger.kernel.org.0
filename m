@@ -2,63 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8775319518
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 22:24:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B76319584
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 23:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbhBKVXv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Feb 2021 16:23:51 -0500
-Received: from mga01.intel.com ([192.55.52.88]:61449 "EHLO mga01.intel.com"
+        id S229882AbhBKWDH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Feb 2021 17:03:07 -0500
+Received: from mga09.intel.com ([134.134.136.24]:54119 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230050AbhBKVXR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Feb 2021 16:23:17 -0500
-IronPort-SDR: m/Es4Py3j0S5puu/HFcgnz+qIonms0cv0y4Bh8eCHZp8jYe3UeXdAWbpsD6uMnWTqEFY7zva4y
- 7DDl6UKdC0qw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9892"; a="201458381"
+        id S229809AbhBKWDG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 11 Feb 2021 17:03:06 -0500
+IronPort-SDR: gZ7rlwvtwhnzem/gDktJSC1Sgn/m8wfVIe/3BqTBHTEFoBs7amaHArPS70AvgHy4QRV8jiQjMk
+ 8T3n9zipDnEg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9892"; a="182457854"
 X-IronPort-AV: E=Sophos;i="5.81,171,1610438400"; 
-   d="gz'50?scan'50,208,50";a="201458381"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2021 13:22:19 -0800
-IronPort-SDR: oTM9xbInknRRJFp7ldAF0TodNzft1xotCyKCO67Sq7ZG4KiVEvc41AIUb4GS9yqotS6wz9XH64
- PHgkSstycumg==
+   d="gz'50?scan'50,208,50";a="182457854"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2021 14:02:22 -0800
+IronPort-SDR: sAH/dJSzvkvbZAtUeHREuuW+mrn9utcWOObzXwtKP3/yBwPdAhFzGNkKE/V+w1CaHygoOzpTfw
+ 4fS5CegkuW2w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,171,1610438400"; 
-   d="gz'50?scan'50,208,50";a="437319250"
+   d="gz'50?scan'50,208,50";a="415597434"
 Received: from lkp-server02.sh.intel.com (HELO cd560a204411) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 11 Feb 2021 13:22:16 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 11 Feb 2021 14:02:19 -0800
 Received: from kbuild by cd560a204411 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1lAJPj-00046z-P6; Thu, 11 Feb 2021 21:22:15 +0000
-Date:   Fri, 12 Feb 2021 05:21:32 +0800
+        id 1lAK2U-00048y-Or; Thu, 11 Feb 2021 22:02:18 +0000
+Date:   Fri, 12 Feb 2021 06:02:10 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Cc:     kbuild-all@lists.01.org, clang-built-linux@googlegroups.com
-Subject: Re: [PATCH v1 1/4] usb: typec: tps6598x: Add trace event for IRQ
- events
-Message-ID: <202102120538.pduPlrRc-lkp@intel.com>
-References: <1a430ea9630fefbcdf9628c4b64fe5366ed4a6df.1613058605.git.agx@sigxcpu.org>
+Subject: Re: [PATCH v1 2/4] usb: typec: tps6598x: Add trace event for status
+ register
+Message-ID: <202102120534.MfcaZmCg-lkp@intel.com>
+References: <c9a7ddc23cbf5a5315c011dcfda85eca00a7cbe8.1613058605.git.agx@sigxcpu.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="EeQfGwPcQSOJBaQU"
+Content-Type: multipart/mixed; boundary="LZvS9be/3tNcYl/X"
 Content-Disposition: inline
-In-Reply-To: <1a430ea9630fefbcdf9628c4b64fe5366ed4a6df.1613058605.git.agx@sigxcpu.org>
+In-Reply-To: <c9a7ddc23cbf5a5315c011dcfda85eca00a7cbe8.1613058605.git.agx@sigxcpu.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---EeQfGwPcQSOJBaQU
+--LZvS9be/3tNcYl/X
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hi "Guido,
 
-I love your patch! Perhaps something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on v5.11-rc7 next-20210211]
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on v5.11-rc7 next-20210211]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
@@ -72,393 +72,21 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install mips cross compiling tool for clang build
         # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/bb7c40815d7d301dc6d52b1213d82b18696abf14
+        # https://github.com/0day-ci/linux/commit/17785e43289bc7b92db7b401cd53a37c7a9faed2
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Guido-G-nther/usb-typec-tps6598x-Add-IRQ-flag-and-register-tracing/20210212-001108
-        git checkout bb7c40815d7d301dc6d52b1213d82b18696abf14
+        git checkout 17785e43289bc7b92db7b401cd53a37c7a9faed2
         # save the attached .config to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=mips 
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:51:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_ERROR_DEVICE_INCOMPATIBLE,        "ERROR_DEVICE_INCOMPATIBLE" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:31:48: note: expanded from macro 'TPS_REG_INT_ERROR_DEVICE_INCOMPATIBLE'
-   #define TPS_REG_INT_ERROR_DEVICE_INCOMPATIBLE           BIT(0+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
-   In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:52:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_ERROR_CANNOT_PROVIDE_PWR,         "ERROR_CANNOT_PROVIDE_PWR" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:30:47: note: expanded from macro 'TPS_REG_INT_ERROR_CANNOT_PROVIDE_PWR'
-   #define TPS_REG_INT_ERROR_CANNOT_PROVIDE_PWR            BIT(1+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
-   In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:53:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_ERROR_CAN_PROVIDE_PWR_LATER,      "ERROR_CAN_PROVIDE_PWR_LATER" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:29:50: note: expanded from macro 'TPS_REG_INT_ERROR_CAN_PROVIDE_PWR_LATER'
-   #define TPS_REG_INT_ERROR_CAN_PROVIDE_PWR_LATER         BIT(2+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
-   In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:54:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_ERROR_POWER_EVENT_OCCURRED,       "ERROR_POWER_EVENT_OCCURRED" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:28:49: note: expanded from macro 'TPS_REG_INT_ERROR_POWER_EVENT_OCCURRED'
-   #define TPS_REG_INT_ERROR_POWER_EVENT_OCCURRED          BIT(3+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
-   In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:55:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_ERROR_MISSING_GET_CAP_MESSAGE,    "ERROR_MISSING_GET_CAP_MESSAGE" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:27:51: note: expanded from macro 'TPS_REG_INT_ERROR_MISSING_GET_CAP_MESSAGE'
-   #define TPS_REG_INT_ERROR_MISSING_GET_CAP_MESSAGE       BIT(4+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
-   In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:56:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_ERROR_PROTOCOL_ERROR,             "ERROR_PROTOCOL_ERROR" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:26:43: note: expanded from macro 'TPS_REG_INT_ERROR_PROTOCOL_ERROR'
-   #define TPS_REG_INT_ERROR_PROTOCOL_ERROR                BIT(6+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
-   In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:57:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_ERROR_MESSAGE_DATA,               "ERROR_MESSAGE_DATA" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:25:42: note: expanded from macro 'TPS_REG_INT_ERROR_MESSAGE_DATA'
-   #define TPS_REG_INT_ERROR_MESSAGE_DATA                  BIT(7+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
-   In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:58:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_ERROR_DISCHARGE_FAILED,           "ERROR_DISCHARGE_FAILED" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:24:45: note: expanded from macro 'TPS_REG_INT_ERROR_DISCHARGE_FAILED'
-   #define TPS_REG_INT_ERROR_DISCHARGE_FAILED              BIT(9+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
-   In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:59:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_SRC_TRANSITION,                   "SRC_TRANSITION" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:23:38: note: expanded from macro 'TPS_REG_INT_SRC_TRANSITION'
-   #define TPS_REG_INT_SRC_TRANSITION                      BIT(10+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
-   In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:60:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_ERROR_UNABLE_TO_SOURCE,           "ERROR_UNABLE_TO_SOURCE" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:22:45: note: expanded from macro 'TPS_REG_INT_ERROR_UNABLE_TO_SOURCE'
-   #define TPS_REG_INT_ERROR_UNABLE_TO_SOURCE              BIT(14+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
-   In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:61:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_VDM_ENTERED_MODE,                 "VDM_ENTERED_MODE" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:21:40: note: expanded from macro 'TPS_REG_INT_VDM_ENTERED_MODE'
-   #define TPS_REG_INT_VDM_ENTERED_MODE                    BIT(17+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
-   In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:62:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_VDM_MSG_SENT,                     "VDM_MSG_SENT" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:20:36: note: expanded from macro 'TPS_REG_INT_VDM_MSG_SENT'
-   #define TPS_REG_INT_VDM_MSG_SENT                        BIT(18+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
-   In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:63:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_DISCOVER_MODES_COMPLETE,          "DISCOVER_MODES_COMPLETE" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:19:46: note: expanded from macro 'TPS_REG_INT_DISCOVER_MODES_COMPLETE'
-   #define TPS_REG_INT_DISCOVER_MODES_COMPLETE             BIT(19+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
-   In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:64:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_EXIT_MODES_COMPLETE,              "EXIT_MODES_COMPLETE" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:18:43: note: expanded from macro 'TPS_REG_INT_EXIT_MODES_COMPLETE'
-   #define TPS_REG_INT_EXIT_MODES_COMPLETE                 BIT(20+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
-   In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:65:5: note: expanded from macro 'show_irq_flags'
                    { TPS_REG_INT_USER_VID_ALT_MODE_ENTERED,        "USER_VID_ALT_MODE_ENTERED" }, \
                      ^
-   drivers/usb/typec/tps6598x.h:17:48: note: expanded from macro 'TPS_REG_INT_USER_VID_ALT_MODE_ENTERED'
+   drivers/usb/typec/tps6598x.h:83:48: note: expanded from macro 'TPS_REG_INT_USER_VID_ALT_MODE_ENTERED'
    #define TPS_REG_INT_USER_VID_ALT_MODE_ENTERED           BIT(24+32)
                                                            ^
    include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
@@ -475,16 +103,16 @@ All warnings (new ones prefixed by >>):
            trace_seq_printf(s, print);                                     \
                                ^~~~~
    In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
+   In file included from drivers/usb/typec/./tps6598x_trace.h:191:
    In file included from include/trace/define_trace.h:102:
    In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
+   drivers/usb/typec/./tps6598x_trace.h:154:9: warning: shift count >= width of type [-Wshift-count-overflow]
+                         show_irq_flags(__entry->event2))
                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    drivers/usb/typec/./tps6598x_trace.h:66:5: note: expanded from macro 'show_irq_flags'
                    { TPS_REG_INT_USER_VID_ALT_MODE_EXIT,           "USER_VID_ALT_MODE_EXIT" }, \
                      ^
-   drivers/usb/typec/tps6598x.h:16:45: note: expanded from macro 'TPS_REG_INT_USER_VID_ALT_MODE_EXIT'
+   drivers/usb/typec/tps6598x.h:82:45: note: expanded from macro 'TPS_REG_INT_USER_VID_ALT_MODE_EXIT'
    #define TPS_REG_INT_USER_VID_ALT_MODE_EXIT              BIT(25+32)
                                                            ^
    include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
@@ -501,16 +129,16 @@ All warnings (new ones prefixed by >>):
            trace_seq_printf(s, print);                                     \
                                ^~~~~
    In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
+   In file included from drivers/usb/typec/./tps6598x_trace.h:191:
    In file included from include/trace/define_trace.h:102:
    In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
+   drivers/usb/typec/./tps6598x_trace.h:154:9: warning: shift count >= width of type [-Wshift-count-overflow]
+                         show_irq_flags(__entry->event2))
                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    drivers/usb/typec/./tps6598x_trace.h:67:5: note: expanded from macro 'show_irq_flags'
                    { TPS_REG_INT_USER_VID_ALT_MODE_ATTN_VDM,       "USER_VID_ALT_MODE_ATTN_VDM" }, \
                      ^
-   drivers/usb/typec/tps6598x.h:15:49: note: expanded from macro 'TPS_REG_INT_USER_VID_ALT_MODE_ATTN_VDM'
+   drivers/usb/typec/tps6598x.h:81:49: note: expanded from macro 'TPS_REG_INT_USER_VID_ALT_MODE_ATTN_VDM'
    #define TPS_REG_INT_USER_VID_ALT_MODE_ATTN_VDM          BIT(26+32)
                                                            ^
    include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
@@ -527,16 +155,16 @@ All warnings (new ones prefixed by >>):
            trace_seq_printf(s, print);                                     \
                                ^~~~~
    In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
+   In file included from drivers/usb/typec/./tps6598x_trace.h:191:
    In file included from include/trace/define_trace.h:102:
    In file included from include/trace/trace_events.h:401:
->> drivers/usb/typec/./tps6598x_trace.h:86:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event1),
+   drivers/usb/typec/./tps6598x_trace.h:154:9: warning: shift count >= width of type [-Wshift-count-overflow]
+                         show_irq_flags(__entry->event2))
                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    drivers/usb/typec/./tps6598x_trace.h:68:5: note: expanded from macro 'show_irq_flags'
                    { TPS_REG_INT_USER_VID_ALT_MODE_OTHER_VDM,      "USER_VID_ALT_MODE_OTHER_VDM" })
                      ^
-   drivers/usb/typec/tps6598x.h:14:50: note: expanded from macro 'TPS_REG_INT_USER_VID_ALT_MODE_OTHER_VDM'
+   drivers/usb/typec/tps6598x.h:80:50: note: expanded from macro 'TPS_REG_INT_USER_VID_ALT_MODE_OTHER_VDM'
    #define TPS_REG_INT_USER_VID_ALT_MODE_OTHER_VDM         BIT(27+32)
                                                            ^
    include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
@@ -553,84 +181,110 @@ All warnings (new ones prefixed by >>):
            trace_seq_printf(s, print);                                     \
                                ^~~~~
    In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
+   In file included from drivers/usb/typec/./tps6598x_trace.h:191:
    In file included from include/trace/define_trace.h:102:
    In file included from include/trace/trace_events.h:401:
-   drivers/usb/typec/./tps6598x_trace.h:87:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event2))
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:51:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_ERROR_DEVICE_INCOMPATIBLE,        "ERROR_DEVICE_INCOMPATIBLE" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:31:48: note: expanded from macro 'TPS_REG_INT_ERROR_DEVICE_INCOMPATIBLE'
-   #define TPS_REG_INT_ERROR_DEVICE_INCOMPATIBLE           BIT(0+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
+>> drivers/usb/typec/./tps6598x_trace.h:171:9: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+                         show_status_conn_state(__entry->status),
+                         ^
+   drivers/usb/typec/./tps6598x_trace.h:81:19: note: expanded from macro 'show_status_conn_state'
+           __print_symbolic(TPS_STATUS_CONN_STATE((status)), \
+                            ^
+   drivers/usb/typec/tps6598x.h:28:35: note: expanded from macro 'TPS_STATUS_CONN_STATE'
+   #define TPS_STATUS_CONN_STATE(x)                FIELD_GET(TPS_STATUS_CONN_STATE_MASK, (x))
+                                                   ^
    In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
+   In file included from drivers/usb/typec/./tps6598x_trace.h:191:
    In file included from include/trace/define_trace.h:102:
    In file included from include/trace/trace_events.h:401:
-   drivers/usb/typec/./tps6598x_trace.h:87:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event2))
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:52:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_ERROR_CANNOT_PROVIDE_PWR,         "ERROR_CANNOT_PROVIDE_PWR" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:30:47: note: expanded from macro 'TPS_REG_INT_ERROR_CANNOT_PROVIDE_PWR'
-   #define TPS_REG_INT_ERROR_CANNOT_PROVIDE_PWR            BIT(1+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
+   drivers/usb/typec/./tps6598x_trace.h:172:37: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+                         show_status_pp_switch_state(TPS_STATUS_PP_5V0_SWITCH(__entry->status)),
+                                                     ^
+   drivers/usb/typec/tps6598x.h:30:38: note: expanded from macro 'TPS_STATUS_PP_5V0_SWITCH'
+   #define TPS_STATUS_PP_5V0_SWITCH(x)             FIELD_GET(TPS_STATUS_PP_5V0_SWITCH_MASK, (x))
+                                                   ^
    In file included from drivers/usb/typec/tps6598x.c:21:
-   In file included from drivers/usb/typec/./tps6598x_trace.h:97:
+   In file included from drivers/usb/typec/./tps6598x_trace.h:191:
    In file included from include/trace/define_trace.h:102:
    In file included from include/trace/trace_events.h:401:
-   drivers/usb/typec/./tps6598x_trace.h:87:9: warning: shift count >= width of type [-Wshift-count-overflow]
-                         show_irq_flags(__entry->event2))
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/./tps6598x_trace.h:53:5: note: expanded from macro 'show_irq_flags'
-                   { TPS_REG_INT_ERROR_CAN_PROVIDE_PWR_LATER,      "ERROR_CAN_PROVIDE_PWR_LATER" }, \
-                     ^
-   drivers/usb/typec/tps6598x.h:29:50: note: expanded from macro 'TPS_REG_INT_ERROR_CAN_PROVIDE_PWR_LATER'
-   #define TPS_REG_INT_ERROR_CAN_PROVIDE_PWR_LATER         BIT(2+32)
-                                                           ^
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/trace_events.h:80:16: note: expanded from macro 'TRACE_EVENT'
-                                PARAMS(print));                   \
-                                ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:97:25: note: expanded from macro 'PARAMS'
-   #define PARAMS(args...) args
-                           ^
-   include/trace/trace_events.h:367:22: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_seq_printf(s, print);                                     \
-                               ^~~~~
+   drivers/usb/typec/./tps6598x_trace.h:173:37: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+                         show_status_pp_switch_state(TPS_STATUS_PP_HV_SWITCH(__entry->status)),
+                                                     ^
+   drivers/usb/typec/tps6598x.h:32:37: note: expanded from macro 'TPS_STATUS_PP_HV_SWITCH'
+   #define TPS_STATUS_PP_HV_SWITCH(x)              FIELD_GET(TPS_STATUS_PP_HV_SWITCH_MASK, (x))
+                                                   ^
    In file included from drivers/usb/typec/tps6598x.c:21:
+   In file included from drivers/usb/typec/./tps6598x_trace.h:191:
+   In file included from include/trace/define_trace.h:102:
+   In file included from include/trace/trace_events.h:401:
+   drivers/usb/typec/./tps6598x_trace.h:174:37: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+                         show_status_pp_switch_state(TPS_STATUS_PP_EXT_SWITCH(__entry->status)),
+                                                     ^
+   drivers/usb/typec/tps6598x.h:34:38: note: expanded from macro 'TPS_STATUS_PP_EXT_SWITCH'
+   #define TPS_STATUS_PP_EXT_SWITCH(x)             FIELD_GET(TPS_STATUS_PP_EXT_SWITCH_MASK, (x))
+                                                   ^
+   In file included from drivers/usb/typec/tps6598x.c:21:
+   In file included from drivers/usb/typec/./tps6598x_trace.h:191:
+   In file included from include/trace/define_trace.h:102:
+   In file included from include/trace/trace_events.h:401:
+   drivers/usb/typec/./tps6598x_trace.h:175:37: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+                         show_status_pp_switch_state(TPS_STATUS_PP_CABLE_SWITCH(__entry->status)),
+                                                     ^
+   drivers/usb/typec/tps6598x.h:36:40: note: expanded from macro 'TPS_STATUS_PP_CABLE_SWITCH'
+   #define TPS_STATUS_PP_CABLE_SWITCH(x)           FIELD_GET(TPS_STATUS_PP_CABLE_SWITCH_MASK, (x))
+                                                   ^
+   In file included from drivers/usb/typec/tps6598x.c:21:
+   In file included from drivers/usb/typec/./tps6598x_trace.h:191:
+   In file included from include/trace/define_trace.h:102:
+   In file included from include/trace/trace_events.h:401:
+   drivers/usb/typec/./tps6598x_trace.h:176:9: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+                         show_status_power_sources(__entry->status),
+                         ^
+   drivers/usb/typec/./tps6598x_trace.h:98:19: note: expanded from macro 'show_status_power_sources'
+           __print_symbolic(TPS_STATUS_POWER_SOURCE(status), \
+                            ^
+   drivers/usb/typec/tps6598x.h:38:37: note: expanded from macro 'TPS_STATUS_POWER_SOURCE'
+   #define TPS_STATUS_POWER_SOURCE(x)              FIELD_GET(TPS_STATUS_POWER_SOURCE_MASK, (x))
+                                                   ^
+   In file included from drivers/usb/typec/tps6598x.c:21:
+   In file included from drivers/usb/typec/./tps6598x_trace.h:191:
+   In file included from include/trace/define_trace.h:102:
+   In file included from include/trace/trace_events.h:401:
+   drivers/usb/typec/./tps6598x_trace.h:177:9: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+                         show_status_vbus_status(__entry->status),
+                         ^
+   drivers/usb/typec/./tps6598x_trace.h:105:19: note: expanded from macro 'show_status_vbus_status'
+           __print_symbolic(TPS_STATUS_VBUS_STATUS(status), \
+                            ^
+   drivers/usb/typec/tps6598x.h:40:36: note: expanded from macro 'TPS_STATUS_VBUS_STATUS'
+   #define TPS_STATUS_VBUS_STATUS(x)               FIELD_GET(TPS_STATUS_VBUS_STATUS_MASK, (x))
+                                                   ^
+   In file included from drivers/usb/typec/tps6598x.c:21:
+   In file included from drivers/usb/typec/./tps6598x_trace.h:191:
+   In file included from include/trace/define_trace.h:102:
+   In file included from include/trace/trace_events.h:401:
+   drivers/usb/typec/./tps6598x_trace.h:178:9: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+                         show_status_usb_host_present(__entry->status),
+                         ^
+   drivers/usb/typec/./tps6598x_trace.h:112:19: note: expanded from macro 'show_status_usb_host_present'
+           __print_symbolic(TPS_STATUS_USB_HOST_PRESENT(status), \
+                            ^
+   drivers/usb/typec/tps6598x.h:42:41: note: expanded from macro 'TPS_STATUS_USB_HOST_PRESENT'
+   #define TPS_STATUS_USB_HOST_PRESENT(x)          FIELD_GET(TPS_STATUS_USB_HOST_PRESENT_MASK, (x))
+                                                   ^
+   In file included from drivers/usb/typec/tps6598x.c:21:
+   In file included from drivers/usb/typec/./tps6598x_trace.h:191:
+   In file included from include/trace/define_trace.h:102:
+   In file included from include/trace/trace_events.h:401:
+   drivers/usb/typec/./tps6598x_trace.h:179:9: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+                         show_status_legacy(__entry->status),
+                         ^
+   drivers/usb/typec/./tps6598x_trace.h:119:19: note: expanded from macro 'show_status_legacy'
+           __print_symbolic(TPS_STATUS_LEGACY(status),          \
+                            ^
+   drivers/usb/typec/tps6598x.h:44:32: note: expanded from macro 'TPS_STATUS_LEGACY'
+   #define TPS_STATUS_LEGACY(x)                    FIELD_GET(TPS_STATUS_LEGACY_MASK, (x))
+                                                   ^
 
 Kconfig warnings: (for reference only)
    WARNING: unmet direct dependencies detected for SSB_EMBEDDED
@@ -639,89 +293,47 @@ Kconfig warnings: (for reference only)
    - BCM47XX_SSB && BCM47XX
 
 
-vim +86 drivers/usb/typec/./tps6598x_trace.h
+vim +/FIELD_GET +171 drivers/usb/typec/./tps6598x_trace.h
 
-    20	
-    21	#define show_irq_flags(flags) \
-    22		__print_flags(flags, "|", \
-    23			{ TPS_REG_INT_PD_SOFT_RESET,			"PD_SOFT_RESET" }, \
-    24			{ TPS_REG_INT_HARD_RESET,			"HARD_RESET" }, \
-    25			{ TPS_REG_INT_PLUG_EVENT,			"PLUG_EVENT" }, \
-    26			{ TPS_REG_INT_PR_SWAP_COMPLETE,			"PR_SWAP_COMPLETE" }, \
-    27			{ TPS_REG_INT_DR_SWAP_COMPLETE,			"DR_SWAP_COMPLETE" }, \
-    28			{ TPS_REG_INT_RDO_RECEIVED_FROM_SINK,		"RDO_RECEIVED_FROM_SINK" }, \
-    29			{ TPS_REG_INT_BIST,				"BIST" }, \
-    30			{ TPS_REG_INT_OVERCURRENT,			"OVERCURRENT" }, \
-    31			{ TPS_REG_INT_ATTENTION_RECEIVED,		"ATTENTION_RECEIVED" }, \
-    32			{ TPS_REG_INT_VDM_RECEIVED,			"VDM_RECEIVED" }, \
-    33			{ TPS_REG_INT_NEW_CONTRACT_AS_CONSUMER,		"NEW_CONTRACT_AS_CONSUMER" }, \
-    34			{ TPS_REG_INT_NEW_CONTRACT_AS_PROVIDER,		"NEW_CONTRACT_AS_PROVIDER" }, \
-    35			{ TPS_REG_INT_SOURCE_CAP_MESSAGE_READY,		"SOURCE_CAP_MESSAGE_READY" }, \
-    36			{ TPS_REG_INT_SINK_CAP_MESSAGE_READY,		"SINK_CAP_MESSAGE_READY" }, \
-    37			{ TPS_REG_INT_PR_SWAP_REQUESTED,		"PR_SWAP_REQUESTED" }, \
-    38			{ TPS_REG_INT_GOTO_MIN_RECEIVED,		"GOTO_MIN_RECEIVED" }, \
-    39			{ TPS_REG_INT_USB_HOST_PRESENT,			"USB_HOST_PRESENT" }, \
-    40			{ TPS_REG_INT_USB_HOST_PRESENT_NO_LONGER,	"USB_HOST_PRESENT_NO_LONGER" }, \
-    41			{ TPS_REG_INT_HIGH_VOLTAGE_WARNING,		"HIGH_VOLTAGE_WARNING" }, \
-    42			{ TPS_REG_INT_PP_SWITCH_CHANGED,		"PP_SWITCH_CHANGED" }, \
-    43			{ TPS_REG_INT_POWER_STATUS_UPDATE,		"POWER_STATUS_UPDATE" }, \
-    44			{ TPS_REG_INT_DATA_STATUS_UPDATE,		"DATA_STATUS_UPDATE" }, \
-    45			{ TPS_REG_INT_STATUS_UPDATE,			"STATUS_UPDATE" }, \
-    46			{ TPS_REG_INT_PD_STATUS_UPDATE,			"PD_STATUS_UPDATE" }, \
-    47			{ TPS_REG_INT_ADC_LOW_THRESHOLD,		"ADC_LOW_THRESHOLD" }, \
-    48			{ TPS_REG_INT_ADC_HIGH_THRESHOLD,		"ADC_HIGH_THRESHOLD" }, \
-    49			{ TPS_REG_INT_CMD1_COMPLETE,			"CMD1_COMPLETE" }, \
-    50			{ TPS_REG_INT_CMD2_COMPLETE,			"CMD2_COMPLETE" }, \
-    51			{ TPS_REG_INT_ERROR_DEVICE_INCOMPATIBLE,	"ERROR_DEVICE_INCOMPATIBLE" }, \
-    52			{ TPS_REG_INT_ERROR_CANNOT_PROVIDE_PWR,		"ERROR_CANNOT_PROVIDE_PWR" }, \
-    53			{ TPS_REG_INT_ERROR_CAN_PROVIDE_PWR_LATER,	"ERROR_CAN_PROVIDE_PWR_LATER" }, \
-    54			{ TPS_REG_INT_ERROR_POWER_EVENT_OCCURRED,	"ERROR_POWER_EVENT_OCCURRED" }, \
-    55			{ TPS_REG_INT_ERROR_MISSING_GET_CAP_MESSAGE,	"ERROR_MISSING_GET_CAP_MESSAGE" }, \
-    56			{ TPS_REG_INT_ERROR_PROTOCOL_ERROR,		"ERROR_PROTOCOL_ERROR" }, \
-    57			{ TPS_REG_INT_ERROR_MESSAGE_DATA,		"ERROR_MESSAGE_DATA" }, \
-    58			{ TPS_REG_INT_ERROR_DISCHARGE_FAILED,		"ERROR_DISCHARGE_FAILED" }, \
-    59			{ TPS_REG_INT_SRC_TRANSITION,			"SRC_TRANSITION" }, \
-    60			{ TPS_REG_INT_ERROR_UNABLE_TO_SOURCE,		"ERROR_UNABLE_TO_SOURCE" }, \
-    61			{ TPS_REG_INT_VDM_ENTERED_MODE,			"VDM_ENTERED_MODE" }, \
-    62			{ TPS_REG_INT_VDM_MSG_SENT,			"VDM_MSG_SENT" }, \
-    63			{ TPS_REG_INT_DISCOVER_MODES_COMPLETE,		"DISCOVER_MODES_COMPLETE" }, \
-    64			{ TPS_REG_INT_EXIT_MODES_COMPLETE,		"EXIT_MODES_COMPLETE" }, \
-    65			{ TPS_REG_INT_USER_VID_ALT_MODE_ENTERED,	"USER_VID_ALT_MODE_ENTERED" }, \
-    66			{ TPS_REG_INT_USER_VID_ALT_MODE_EXIT,		"USER_VID_ALT_MODE_EXIT" }, \
-    67			{ TPS_REG_INT_USER_VID_ALT_MODE_ATTN_VDM,	"USER_VID_ALT_MODE_ATTN_VDM" }, \
-    68			{ TPS_REG_INT_USER_VID_ALT_MODE_OTHER_VDM,	"USER_VID_ALT_MODE_OTHER_VDM" })
-    69	
-    70	TRACE_EVENT(tps6598x_irq,
-    71		    TP_PROTO(u64 event1,
-    72			     u64 event2),
-    73		    TP_ARGS(event1, event2),
-    74	
-    75		    TP_STRUCT__entry(
-    76				     __field(u64, event1)
-    77				     __field(u64, event2)
-    78				     ),
-    79	
-    80		    TP_fast_assign(
-    81				   __entry->event1 = event1;
-    82				   __entry->event2 = event2;
-    83				   ),
-    84	
-    85		    TP_printk("event1=%s, event2=%s",
-  > 86			      show_irq_flags(__entry->event1),
-    87			      show_irq_flags(__entry->event2))
-    88	);
-    89	
+   156	
+   157	TRACE_EVENT(tps6598x_status,
+   158		    TP_PROTO(u32 status),
+   159		    TP_ARGS(status),
+   160	
+   161		    TP_STRUCT__entry(
+   162				     __field(u32, status)
+   163				     ),
+   164	
+   165		    TP_fast_assign(
+   166				   __entry->status = status;
+   167				   ),
+   168	
+   169		    TP_printk("conn: %s, pp_5v0: %s, pp_hv: %s, pp_ext: %s, pp_cable: %s, "
+   170			      "pwr-src: %s, vbus: %s, usb-host: %s, legacy: %s, flags: %s",
+ > 171			      show_status_conn_state(__entry->status),
+   172			      show_status_pp_switch_state(TPS_STATUS_PP_5V0_SWITCH(__entry->status)),
+   173			      show_status_pp_switch_state(TPS_STATUS_PP_HV_SWITCH(__entry->status)),
+   174			      show_status_pp_switch_state(TPS_STATUS_PP_EXT_SWITCH(__entry->status)),
+   175			      show_status_pp_switch_state(TPS_STATUS_PP_CABLE_SWITCH(__entry->status)),
+   176			      show_status_power_sources(__entry->status),
+   177			      show_status_vbus_status(__entry->status),
+   178			      show_status_usb_host_present(__entry->status),
+   179			      show_status_legacy(__entry->status),
+   180			      show_status_flags(__entry->status)
+   181			    )
+   182	);
+   183	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---EeQfGwPcQSOJBaQU
+--LZvS9be/3tNcYl/X
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICFKRJWAAAy5jb25maWcAjDxdc+O2ru/9FZ7tS89MuxsnTnb33skDRVE215KokJRj54Xj
+H4sICAmkJWAAAy5jb25maWcAjDxdc+O2ru/9FZ7tS89MuxsnTnb33skDRVE215KokJRj54Xj
 Zp1tbvOx4zht9/z6C1BfpEQ57UOzAkAQJEEQAEH//NPPE/J6eH7cHu5vtw8PPybfdk+7/faw
 +zq5u3/Y/e8kFpNc6AmLuX4PxOn90+s/Hx7vv79Mzt9Pp+9Pftvffpwsd/un3cOEPj/d3X97
 heb3z08//fwTFXnC54ZSs2JScZEbzdb68t3tw/bp2+Sv3f4F6CbT0/cn708mv3y7P/zPhw/w
@@ -1395,4 +1007,4 @@ Kow1EF45yAh11KQm/zJyiuByYBmb5bIVKlpze74IaHjwSzXGdDB6A9zH2LoR0TYRHIcRiKWc
 0UItPn3H6pSMlozEYx8yI6hNTcGDFERsNhFog1e0p06ewQ6CZgh6fQmD3oqozVyhThkqZoni
 3vzjOM4t6/8Bh4BYRtYvAgA=
 
---EeQfGwPcQSOJBaQU--
+--LZvS9be/3tNcYl/X--
