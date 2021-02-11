@@ -2,93 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E458318E04
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 16:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2DBE318F7F
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 17:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbhBKPTa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Feb 2021 10:19:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbhBKPNI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Feb 2021 10:13:08 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE7AC061786
-        for <linux-usb@vger.kernel.org>; Thu, 11 Feb 2021 07:04:53 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1lADWQ-0003e7-Lg; Thu, 11 Feb 2021 16:04:46 +0100
-Received: from mtr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1lADWP-0000h5-Af; Thu, 11 Feb 2021 16:04:45 +0100
-Date:   Thu, 11 Feb 2021 16:04:45 +0100
-From:   Michael Tretter <m.tretter@pengutronix.de>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Thomas Haemmerle <thomas.haemmerle@wolfvision.net>,
-        laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
-        hverkuil@xs4all.nl, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v4] usb: gadget: uvc: fix multiple opens
-Message-ID: <20210211150445.GM30300@pengutronix.de>
-Mail-Followup-To: Michael Tretter <m.tretter@pengutronix.de>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thomas Haemmerle <thomas.haemmerle@wolfvision.net>,
-        laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
-        hverkuil@xs4all.nl, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org
-References: <2920c6ea-d191-a6cb-ec90-dda22bb9df55@wolfvision.net>
- <20201201192730.5633-1-thomas.haemmerle@wolfvision.net>
- <87pn261h4c.fsf@kernel.org>
+        id S231831AbhBKQGe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Feb 2021 11:06:34 -0500
+Received: from honk.sigxcpu.org ([24.134.29.49]:40406 "EHLO honk.sigxcpu.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231697AbhBKQCl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 11 Feb 2021 11:02:41 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by honk.sigxcpu.org (Postfix) with ESMTP id 66AE2FB07;
+        Thu, 11 Feb 2021 16:51:09 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
+Received: from honk.sigxcpu.org ([127.0.0.1])
+        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id EccKblzD4Y8j; Thu, 11 Feb 2021 16:51:05 +0100 (CET)
+Received: by bogon.sigxcpu.org (Postfix, from userid 1000)
+        id 279B14188A; Thu, 11 Feb 2021 16:51:05 +0100 (CET)
+From:   =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH v1 0/4] usb: typec: tps6598x: Add IRQ flag and register tracing
+Date:   Thu, 11 Feb 2021 16:51:01 +0100
+Message-Id: <cover.1613058605.git.agx@sigxcpu.org>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87pn261h4c.fsf@kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 16:04:17 up 71 days,  3:31, 111 users,  load average: 0.18, 0.29,
- 0.18
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mtr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 15 Jan 2021 15:09:39 +0200, Felipe Balbi wrote:
-> Thomas Haemmerle <thomas.haemmerle@wolfvision.net> writes:
-> > Currently, the UVC function is activated when open on the corresponding
-> > v4l2 device is called.
-> > On another open the activation of the function fails since the
-> > deactivation counter in `usb_function_activate` equals 0. However the
-> > error is not returned to userspace since the open of the v4l2 device is
-> > successful.
-> >
-> > On a close the function is deactivated (since deactivation counter still
-> > equals 0) and the video is disabled in `uvc_v4l2_release`, although the
-> > UVC application potentially is streaming.
-> >
-> > Move activation of UVC function to subscription on UVC_EVENT_SETUP
-> > because there we can guarantee for a userspace application utilizing
-> > UVC.
-> > Block subscription on UVC_EVENT_SETUP while another application already
-> > is subscribed to it, indicated by `bool func_connected` in
-> > `struct uvc_device`.
-> > Extend the `struct uvc_file_handle` with member `bool is_uvc_app_handle`
-> > to tag it as the handle used by the userspace UVC application.
-> >
-> > With this a process is able to check capabilities of the v4l2 device
-> > without deactivating the function for the actual UVC application.
-> >
-> > Signed-off-by: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
-> 
-> Laurent, do you agree with the change?
 
-Gentle ping.
+This series adds tracing events for the chips IRQ and registers that are useful
+to figure out the current data and power status. This came about since
+diagnosing why a certain usb-c hub or dp-alt-mode adapter fails is hard with
+the information in /sys/class/typec alone since this does not have a timeline
+of events (and we don't want every typec user having to also buy a PD
+analyzer). With this series debugging these kinds of things starts to become
+fun:
 
-Michael
+   # echo 1 > /sys/kernel/debug/tracing/events/tps6598x/enable
+   # cat /sys/kernel/debug/tracing/trace_pipe
+   irq/79-0-003f-526     [003] ....   512.717871: tps6598x_irq: event1=PLUG_EVENT|DATA_STATUS_UPDATE|STATUS_UPDATE, event2=
+   irq/79-0-003f-526     [003] ....   512.722408: tps6598x_status: conn: conn-Ra, pp_5v0: off, pp_hv: off, pp_ext: off, pp_cable: off, pwr-src: vin-3p3, vbus: vSafe0V, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE
+   irq/79-0-003f-526     [003] ....   512.727127: tps6598x_data_status: DATA_CONNECTION|USB2_CONNECTION|USB3_CONNECTION
+   irq/79-0-003f-526     [003] ....   512.769571: tps6598x_irq: event1=PP_SWITCH_CHANGED|STATUS_UPDATE, event2=
+   irq/79-0-003f-526     [003] ....   512.773380: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: vSafe0V, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   512.872450: tps6598x_irq: event1=POWER_STATUS_UPDATE|PD_STATUS_UPDATE, event2=
+   irq/79-0-003f-526     [003] ....   512.876311: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: vSafe0V, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   512.880237: tps6598x_power_status: conn: 1, pwr-role: source, typec: usb, bc: sdp
+   irq/79-0-003f-526     [003] ....   513.072682: tps6598x_irq: event1=STATUS_UPDATE, event2=
+   irq/79-0-003f-526     [003] ....   513.076390: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: vSafe5V, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.090676: tps6598x_irq: event1=ERROR_CANNOT_PROVIDE_PWR, event2=
+   irq/79-0-003f-526     [003] ....   513.094368: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: vSafe5V, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.109606: tps6598x_irq: event1=NEW_CONTRACT_AS_PROVIDER|POWER_STATUS_UPDATE|STATUS_UPDATE|SRC_TRANSITION, event2=
+   irq/79-0-003f-526     [003] ....   513.113777: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: pd, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.117475: tps6598x_power_status: conn: 1, pwr-role: source, typec: pd, bc: sdp
+   irq/79-0-003f-526     [003] ....   513.137469: tps6598x_irq: event1=VDM_RECEIVED, event2=
+   irq/79-0-003f-526     [003] ....   513.141570: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: pd, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.281926: tps6598x_irq: event1=VDM_RECEIVED, event2=
+   irq/79-0-003f-526     [003] ....   513.285638: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: pd, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.300515: tps6598x_irq: event1=VDM_RECEIVED|DATA_STATUS_UPDATE, event2=
+   irq/79-0-003f-526     [003] ....   513.304226: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: pd, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.308302: tps6598x_data_status: DATA_CONNECTION|USB2_CONNECTION|USB3_CONNECTION|DP_CONNECTION, DP pinout D
+
+It should not impose any problems for firmwares that don't have IRQs for the
+registers enabled. The trace will then just be missing those events.
+
+Patch is against next-20210210.
+
+
+
+Guido Günther (4):
+  usb: typec: tps6598x: Add trace event for IRQ events
+  usb: typec: tps6598x: Add trace event for status register
+  usb: typec: tps6598x: Add trace event for power status register
+  usb: typec: tps6598x: Add trace event for data status
+
+ drivers/usb/typec/Makefile         |   3 +
+ drivers/usb/typec/tps6598x.c       |  66 ++++---
+ drivers/usb/typec/tps6598x.h       | 182 +++++++++++++++++++
+ drivers/usb/typec/tps6598x_trace.h | 283 +++++++++++++++++++++++++++++
+ 4 files changed, 508 insertions(+), 26 deletions(-)
+ create mode 100644 drivers/usb/typec/tps6598x.h
+ create mode 100644 drivers/usb/typec/tps6598x_trace.h
+
+-- 
+2.30.0
+
