@@ -2,47 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D65953195F5
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 23:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4125C319601
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 23:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbhBKWlS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Feb 2021 17:41:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43760 "EHLO mail.kernel.org"
+        id S230019AbhBKWry (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Feb 2021 17:47:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44656 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229907AbhBKWlN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Feb 2021 17:41:13 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5035764E57;
-        Thu, 11 Feb 2021 22:40:32 +0000 (UTC)
+        id S229903AbhBKWru (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 11 Feb 2021 17:47:50 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E5DD864E4B;
+        Thu, 11 Feb 2021 22:47:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613083232;
-        bh=8IaBx6200CR5VJbEUK0yZ2/gA5Be2yye2+JFWZpaRN4=;
+        s=k20201202; t=1613083630;
+        bh=ksI7x+CFHJSMWyftjpURxC87NwW7uxJrVV7hwvTi/WU=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YjH153+T24737wK5scfdcPYfh5XydxNmbAzAYG8DhvjXaxuvt6c1S6l9emEu0iLzn
-         i4SiuNarDaGCwSLYWgb8Xtj6hf8kJjZ1eK+CeSaVvNA9epzvN2U5aOIiUOiZ4rK13C
-         Xt4RU/okHVOYY/k7zZtLafvuv7Pyt8WQMtal8REthmytdRXfKr4Aj+L9u52H1IUcuW
-         nuu1Pxqs3wgg+2GP+pXN/J4V5+8YNGippxXNSelWvdIERUwR921udXA0/zovhfZ/BH
-         sGoFfZZO7d8kJ2HVV7krDqwrtMrDWYbIUHmZZQ5MolsAmxDAXktYroplx1mBvG0fw3
-         WxGV5MRClhwMA==
-Received: by mail-ej1-f42.google.com with SMTP id p20so12559041ejb.6;
-        Thu, 11 Feb 2021 14:40:32 -0800 (PST)
-X-Gm-Message-State: AOAM533BXZdCFp7asMtMyVYc8YvADhpxOUepoI8E+SWShZ4toGUQcb0i
-        nxoBIqnu9CdTsyyPIfgPs/C1sZlestT3r3Qu+g==
-X-Google-Smtp-Source: ABdhPJy/tXsuWi2sVSL420n1VWn35elaOLSkUJLWGUKyIVhfyygASwyoBm7zsKZoDDuVuAb0cWG3qFM10Tkh4q5KN/w=
-X-Received: by 2002:a17:906:f85:: with SMTP id q5mr10524066ejj.108.1613083230827;
- Thu, 11 Feb 2021 14:40:30 -0800 (PST)
+        b=JAc42ynMvOjdRi8uxYEX3CMxlMCEw+e5PRVj+/w+GfiJcwT1Tjnjk9rnpvrEMldeX
+         snqOgJ6MWXw3+L4DCihgsBE5TZuYBQx9eVLIzBzBhTXE3oy+tinhI2rv/xUe+mXklL
+         AdgKvd6ugsfooOQEUZkh7phiG1UynUotYXKaCenSQEbrgnB3rA3F/vP12o1nCzIOmp
+         F2gO4dFoVEzwnf39kH9UJLxT8AgFNhRGBv9h391lXDFW7AXPpFBWLnoHoTldx5cbSF
+         mi2zgOlZOxlMUIIyVQxq/VRKoCZHyiKr8ZUeqJTetPzTFigyGE0BTbpA1efwpVT6UZ
+         vNJtAa7j1QsRQ==
+Received: by mail-ej1-f50.google.com with SMTP id sa23so12616597ejb.0;
+        Thu, 11 Feb 2021 14:47:09 -0800 (PST)
+X-Gm-Message-State: AOAM532N6ShNxQ2+x2Ch8OMY2+2XxBPM0gyT6MwgE+JyTXxokiDtvKDb
+        HL/svyG1CCTYyEKIRHSy9f9WtSbj7EpE+EH5cw==
+X-Google-Smtp-Source: ABdhPJx8frNq1hOIUUTp4W0tz6HdiEqWhVCjFLmewCa0h36/gkIU+r+6ht8N+8b/IGr+JJVYwzALpuc0/hY1xnX0mo8=
+X-Received: by 2002:a17:906:af41:: with SMTP id ly1mr10307309ejb.525.1613083628399;
+ Thu, 11 Feb 2021 14:47:08 -0800 (PST)
 MIME-Version: 1.0
 References: <20210210171040.684659-1-mka@chromium.org> <20210210091015.v5.3.I7a3a7d9d2126c34079b1cab87aa0b2ec3030f9b7@changeid>
- <20210210210645.xapaua7djdsvr3ca@kozik-lap> <YCRcIuCxB8nYi7/e@google.com> <161307087919.1254594.11784819060723374369@swboyd.mtv.corp.google.com>
-In-Reply-To: <161307087919.1254594.11784819060723374369@swboyd.mtv.corp.google.com>
+ <20210210210645.xapaua7djdsvr3ca@kozik-lap> <YCRcIuCxB8nYi7/e@google.com>
+ <161307087919.1254594.11784819060723374369@swboyd.mtv.corp.google.com>
+ <YCWVU7YCE+WzRx9v@google.com> <161307633188.1254594.14761449293146776857@swboyd.mtv.corp.google.com>
+In-Reply-To: <161307633188.1254594.14761449293146776857@swboyd.mtv.corp.google.com>
 From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 11 Feb 2021 16:40:19 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+A5YpF9ySzmL+G1g=ca4926vpPOpA71hB37p+FZ-=tWQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+A5YpF9ySzmL+G1g=ca4926vpPOpA71hB37p+FZ-=tWQ@mail.gmail.com>
+Date:   Thu, 11 Feb 2021 16:46:56 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJR5DUiDJ-fkrGbM0M2Lm5S4xQH2dhV9oi9UMhBuiVVrA@mail.gmail.com>
+Message-ID: <CAL_JsqJR5DUiDJ-fkrGbM0M2Lm5S4xQH2dhV9oi9UMhBuiVVrA@mail.gmail.com>
 Subject: Re: [PATCH v5 3/4] usb: host: xhci-plat: Create platform device for
  onboard hubs in probe()
 To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Frank Rowand <frowand.list@gmail.com>,
         devicetree@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
@@ -54,53 +56,107 @@ Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
         Linux USB List <linux-usb@vger.kernel.org>,
         Mathias Nyman <mathias.nyman@intel.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 11, 2021 at 1:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
+On Thu, Feb 11, 2021 at 2:45 PM Stephen Boyd <swboyd@chromium.org> wrote:
 >
-> Quoting Matthias Kaehlcke (2021-02-10 14:20:18)
+> Quoting Matthias Kaehlcke (2021-02-11 12:36:35)
+> > Hi Stephen,
 > >
-> > On Wed, Feb 10, 2021 at 10:06:45PM +0100, Krzysztof Kozlowski wrote:
+> > On Thu, Feb 11, 2021 at 11:14:39AM -0800, Stephen Boyd wrote:
 > > >
-> > > This looks hackish... what if later we have something else than hub?
-> > > Another if()?
-> > >
-> > > What if hub could be connected to something else than XHCI controller?
+> > > Is it possible to use the graph binding to connect the USB controller=
+ on
+> > > the SoC to the port on the hub? Then the hub would be a standalone no=
+de
+> > > at the root of DT connected to the USB controller (or phy) and xhci c=
+ode
+> > > could probe the firmware to see if there's a graph connection downstr=
+eam
+> > > that is a powered hub like this. I didn't see this idea mentioned in =
+the
+> > > previous discussions, but maybe I missed it.
 > >
-> > In earlier versions this was standalone driver, which was more flexible and
-> > didn't require cooperation from the XHCI driver:
-> >
-> > https://lore.kernel.org/patchwork/patch/1313001/
-> >
-> > Rob Herring raised objections about the DT bindings, since the USB hub would be
-> > represented twice in the DT, once in the USB hierachry (with an explicit node or
-> > implicitly) plus a node for the platform device for the new driver:
-> >
-> > https://lore.kernel.org/patchwork/patch/1305395/
-> > https://lore.kernel.org/patchwork/patch/1313000/
-> >
-> > Alan Stern suggested to create the platform device in the XHCI platform driver:
-> >
-> > https://lore.kernel.org/patchwork/patch/1313000/#1510227
-> >
-> > I wasn't super happy about involving xhci-plat, but at least the code is minimal
-> > and all the device specific stuff is handled by the onboard_usb_hub driver.
-> >
-> > If you have better suggestions that might satisfy all parties please let us
-> > know :)
-> >
+> > Thanks for bringing this up. I'm not sure I completely understand your
+> > suggestion, but in general it seems a direction that could be worth
+> > exploring.
 >
-> Is it possible to use the graph binding to connect the USB controller on
-> the SoC to the port on the hub? Then the hub would be a standalone node
-> at the root of DT connected to the USB controller (or phy) and xhci code
-> could probe the firmware to see if there's a graph connection downstream
-> that is a powered hub like this. I didn't see this idea mentioned in the
-> previous discussions, but maybe I missed it.
+> Cool.
+>
+> >
+> > I think something like the following should work even without requiring
+> > cooperation from the XHCI code:
+> >
+> > onboard-usb-hub {
+> >     compatible =3D =E2=80=9Crealtek,rts5411=E2=80=9D, =E2=80=9Conboard_=
+usb_hub=E2=80=9D;
+> >     #address-cells =3D <1>;
+> >     #size-cells =3D <0>;
+> >
+> >     vdd-supply =3D <&pp3300_hub>;
+> >
+> >     port@0 {
+> >         reg =3D <0>;
+> >
+> >         rts5411_3_0: endpoint {
+> >             // should not be needed
+> >             remote-endpoint =3D <&usb_1_dwc3_port1>;
+> >         };
+> >     };
+> >
+> >     port@1 {
+> >         reg =3D <1>;
+> >
+> >         rts5411_2_0: endpoint {
+> >             // should not be needed
+> >             remote-endpoint =3D <&usb_1_dwc3_port2>;
+> >         };
+> >     };
+> > };
+> >
+> > &usb_1_dwc3 {
+> >     dr_mode =3D "host";
+> >     #address-cells =3D <1>;
+> >     #size-cells =3D <0>;
+> >
+> >     port@1 {
+> >         reg =3D <1>;
+> >
+> >         usb_1_dwc3_port1: endpoint {
+> >             remote-endpoint =3D <&rts5411_3_0>;
+> >         };
+> >     };
+> >
+> >     port@2 {
+> >         reg =3D <2>;
+> >
+> >         usb_1_dwc3_port2: endpoint {
+> >             remote-endpoint =3D <&rts5411_2_0>;
+> >         };
+> >     };
+> > };
+> >
+> > That looks like an actual description of the hardware, without multiple=
+ DT
+> > nodes for the hub.
+> >
+> > The USB part of the onboard_hub driver could determine the platform dev=
+ice
+> > from the remote endpoint and register the USB device with it.
+>
+> Yeah you got it, this is what I'm suggesting. I'd like to go even
+> further and also describe the ports on "the other side" or "downstream
+> facing side" of the USB hub that go to things like type-c ports or
+> type-a ports. This would allow us to describe the USB topology and how
+> it is physically connected to ports on the device that humans see. But
+> that's mostly a job for the type-c subsystem, so it's a parallel
+> discussion that's only related because of the graph binding.
 
-An orphan at the root node is exactly what I don't want to see here.
-I'm happy with the binding now from a skim of it. The kernel support
-does seem kind of hacky though.
+I'd like to see a complete case that includes connectors. I really
+need someone to worry about USB bindings with a view on the big
+picture. The piecemeal additions don't result in the best design.
 
 Rob
