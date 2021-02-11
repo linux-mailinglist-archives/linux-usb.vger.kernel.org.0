@@ -2,116 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0E7318DC9
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 16:04:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E458318E04
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 16:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbhBKPCY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Feb 2021 10:02:24 -0500
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:43868 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbhBKO5H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Feb 2021 09:57:07 -0500
-Received: by mail-oi1-f173.google.com with SMTP id d20so6327544oiw.10;
-        Thu, 11 Feb 2021 06:56:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=ZSBE8OrnBCLoband96iararV+OGia8GbEuLjNGcSNuQ=;
-        b=lRvl2mR/szs2L5nutS+E6boqRlSvBI+Z5C0xEXEdEOnar54Xjb7SN1JWm73bi4CfhZ
-         ZhlNisgf5emSX6jUkru/Gk4KBzDV5SbpeaNCisfA683YC7ODFlu9sWm/BSYcVCvhWwJR
-         +M9Pl8l/e16rJza3WU0SteNGus1MUhUO8SBxtb0krWJ1DuLhDn9G3Di+9gv53frlpEsn
-         NHcPDTZs9kTwO/WAcu6dCTPfbknJFXrE33OhM0yGOmjfGsE9uLvTXkVxHSfRmCbmDoNo
-         7bGjhOlAfZiVE/pGafUBdYOGxJFRtxPhx1qsdcjGVglDJvlxvUO461pp6MlKng7PLBdC
-         NmRg==
-X-Gm-Message-State: AOAM5316D/PQ8HpSYali78l9Jp2NjQ79I3g/mBQz8uDtM408XTn2RZbV
-        QJ/7/7qQpIp3/BPLcdji1w==
-X-Google-Smtp-Source: ABdhPJw5esQJRHPAqK32bAwOjgAKr+dsJzP6O7vNUJAokj+oH0iJolY7KBln+P2dMeQum1Dz5zzHYA==
-X-Received: by 2002:aca:f12:: with SMTP id 18mr3010740oip.106.1613055383043;
-        Thu, 11 Feb 2021 06:56:23 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id o98sm1054759ota.0.2021.02.11.06.56.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Feb 2021 06:56:22 -0800 (PST)
-Received: (nullmailer pid 519682 invoked by uid 1000);
-        Thu, 11 Feb 2021 14:56:20 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Peter Chen <peter.chen@nxp.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20210210091015.v5.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
-References: <20210210171040.684659-1-mka@chromium.org> <20210210091015.v5.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
-Subject: Re: [PATCH v5 1/4] dt-bindings: usb: Add binding for discrete onboard USB hubs
-Date:   Thu, 11 Feb 2021 08:56:20 -0600
-Message-Id: <1613055380.685661.519681.nullmailer@robh.at.kernel.org>
+        id S230198AbhBKPTa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Feb 2021 10:19:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229961AbhBKPNI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Feb 2021 10:13:08 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE7AC061786
+        for <linux-usb@vger.kernel.org>; Thu, 11 Feb 2021 07:04:53 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1lADWQ-0003e7-Lg; Thu, 11 Feb 2021 16:04:46 +0100
+Received: from mtr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1lADWP-0000h5-Af; Thu, 11 Feb 2021 16:04:45 +0100
+Date:   Thu, 11 Feb 2021 16:04:45 +0100
+From:   Michael Tretter <m.tretter@pengutronix.de>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Thomas Haemmerle <thomas.haemmerle@wolfvision.net>,
+        laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
+        hverkuil@xs4all.nl, linux-usb@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v4] usb: gadget: uvc: fix multiple opens
+Message-ID: <20210211150445.GM30300@pengutronix.de>
+Mail-Followup-To: Michael Tretter <m.tretter@pengutronix.de>,
+        Felipe Balbi <balbi@kernel.org>,
+        Thomas Haemmerle <thomas.haemmerle@wolfvision.net>,
+        laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
+        hverkuil@xs4all.nl, linux-usb@vger.kernel.org,
+        linux-media@vger.kernel.org
+References: <2920c6ea-d191-a6cb-ec90-dda22bb9df55@wolfvision.net>
+ <20201201192730.5633-1-thomas.haemmerle@wolfvision.net>
+ <87pn261h4c.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87pn261h4c.fsf@kernel.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 16:04:17 up 71 days,  3:31, 111 users,  load average: 0.18, 0.29,
+ 0.18
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mtr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 10 Feb 2021 09:10:36 -0800, Matthias Kaehlcke wrote:
-> Discrete onboard USB hubs (an example for such a hub is the Realtek
-> RTS5411) need to be powered and may require initialization of other
-> resources (like GPIOs or clocks) to work properly. This adds a device
-> tree binding for these hubs.
+On Fri, 15 Jan 2021 15:09:39 +0200, Felipe Balbi wrote:
+> Thomas Haemmerle <thomas.haemmerle@wolfvision.net> writes:
+> > Currently, the UVC function is activated when open on the corresponding
+> > v4l2 device is called.
+> > On another open the activation of the function fails since the
+> > deactivation counter in `usb_function_activate` equals 0. However the
+> > error is not returned to userspace since the open of the v4l2 device is
+> > successful.
+> >
+> > On a close the function is deactivated (since deactivation counter still
+> > equals 0) and the video is disabled in `uvc_v4l2_release`, although the
+> > UVC application potentially is streaming.
+> >
+> > Move activation of UVC function to subscription on UVC_EVENT_SETUP
+> > because there we can guarantee for a userspace application utilizing
+> > UVC.
+> > Block subscription on UVC_EVENT_SETUP while another application already
+> > is subscribed to it, indicated by `bool func_connected` in
+> > `struct uvc_device`.
+> > Extend the `struct uvc_file_handle` with member `bool is_uvc_app_handle`
+> > to tag it as the handle used by the userspace UVC application.
+> >
+> > With this a process is able to check capabilities of the v4l2 device
+> > without deactivating the function for the actual UVC application.
+> >
+> > Signed-off-by: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
 > 
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
-> 
-> Changes in v5:
-> - updated 'title'
-> - only use standard USB compatible strings
-> - deleted 'usb_hub' node
-> - renamed 'usb_controller' node to 'usb-controller'
-> - removed labels from USB nodes
-> - added 'vdd-supply' to USB nodes
-> 
-> Changes in v4:
-> - none
-> 
-> Changes in v3:
-> - updated commit message
-> - removed recursive reference to $self
-> - adjusted 'compatible' definition to support multiple entries
-> - changed USB controller phandle to be a node
-> 
-> Changes in v2:
-> - removed 'wakeup-source' and 'power-off-in-suspend' properties
-> - consistently use spaces for indentation in example
-> 
->  .../bindings/usb/onboard_usb_hub.yaml         | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-> 
+> Laurent, do you agree with the change?
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Gentle ping.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml:16:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml: 'additionalProperties' is a required property
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml: ignoring, error in schema: 
-warning: no schema found in file: ./Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-
-See https://patchwork.ozlabs.org/patch/1439137
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Michael
