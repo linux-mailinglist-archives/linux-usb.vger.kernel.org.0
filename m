@@ -2,120 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D533195D3
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 23:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D65953195F5
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 23:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbhBKW0W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Feb 2021 17:26:22 -0500
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:37775 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbhBKW0P (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Feb 2021 17:26:15 -0500
-Received: by mail-ot1-f45.google.com with SMTP id a5so5543912otq.4;
-        Thu, 11 Feb 2021 14:25:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=59hf+6O4K21P81t02yR2JJsizjTVRLh6ZVSrQljA/sc=;
-        b=PzeLWQRKM5kVo8msW/nlweGOtaCQktFulmgltCVNpy/Ty6+hE70jqhjM7KQ9cCG24W
-         OqtQupMTrOnCzUNpu3aoIAT75z9ugth1irgQgkh1HG0Pc+zAsoY4AvRHZIcm9uD3brOc
-         qd0z+W7xzpFHLHnSa+dwFreKoR6LIuUoZ+zXNq+ZuLZwtxiBanYFcmWC5B1kgN8X80CQ
-         85ZmHNal9LfELmtxUezz6qAGKSS76Zr/jo1KIbsXVeSbdF+rGgXBZHzVcAaOgbCEJHN5
-         244x4Egh8bpwwOLcxszeUCJvVDciM26KEeJkW8VA4+3s3WA3UyEQtqWtEnajnYrq3X0Y
-         YSZA==
-X-Gm-Message-State: AOAM532xjRPyDILmadSj6dkPhmunrHaZ24dO+J+SkH8XSI+6tWFx/9it
-        T1cDfFCJ+UmaFADbSkYPAQ==
-X-Google-Smtp-Source: ABdhPJyoVcKGRF5I+pIki+Oo8A5jCC9o1Ifs/C5d7kBMPZRLIA+fMwLf/LFw7mtzzAZNV7Q3EHU3YQ==
-X-Received: by 2002:a9d:605a:: with SMTP id v26mr136880otj.275.1613082333675;
-        Thu, 11 Feb 2021 14:25:33 -0800 (PST)
-Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.googlemail.com with ESMTPSA id j25sm978030otn.55.2021.02.11.14.25.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Feb 2021 14:25:32 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org
-Cc:     Paul Mackerras <paulus@samba.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Gilles Muller <Gilles.Muller@inria.fr>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Michal Marek <michal.lkml@markovi.net>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-usb@vger.kernel.org, cocci@systeme.lip6.fr,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Subject: [PATCH 2/2] driver core: platform: Drop of_device_node_put() wrapper
-Date:   Thu, 11 Feb 2021 16:25:26 -0600
-Message-Id: <20210211222526.1318236-3-robh@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210211222526.1318236-1-robh@kernel.org>
-References: <20210211222526.1318236-1-robh@kernel.org>
+        id S230027AbhBKWlS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Feb 2021 17:41:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43760 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229907AbhBKWlN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 11 Feb 2021 17:41:13 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5035764E57;
+        Thu, 11 Feb 2021 22:40:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613083232;
+        bh=8IaBx6200CR5VJbEUK0yZ2/gA5Be2yye2+JFWZpaRN4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YjH153+T24737wK5scfdcPYfh5XydxNmbAzAYG8DhvjXaxuvt6c1S6l9emEu0iLzn
+         i4SiuNarDaGCwSLYWgb8Xtj6hf8kJjZ1eK+CeSaVvNA9epzvN2U5aOIiUOiZ4rK13C
+         Xt4RU/okHVOYY/k7zZtLafvuv7Pyt8WQMtal8REthmytdRXfKr4Aj+L9u52H1IUcuW
+         nuu1Pxqs3wgg+2GP+pXN/J4V5+8YNGippxXNSelWvdIERUwR921udXA0/zovhfZ/BH
+         sGoFfZZO7d8kJ2HVV7krDqwrtMrDWYbIUHmZZQ5MolsAmxDAXktYroplx1mBvG0fw3
+         WxGV5MRClhwMA==
+Received: by mail-ej1-f42.google.com with SMTP id p20so12559041ejb.6;
+        Thu, 11 Feb 2021 14:40:32 -0800 (PST)
+X-Gm-Message-State: AOAM533BXZdCFp7asMtMyVYc8YvADhpxOUepoI8E+SWShZ4toGUQcb0i
+        nxoBIqnu9CdTsyyPIfgPs/C1sZlestT3r3Qu+g==
+X-Google-Smtp-Source: ABdhPJy/tXsuWi2sVSL420n1VWn35elaOLSkUJLWGUKyIVhfyygASwyoBm7zsKZoDDuVuAb0cWG3qFM10Tkh4q5KN/w=
+X-Received: by 2002:a17:906:f85:: with SMTP id q5mr10524066ejj.108.1613083230827;
+ Thu, 11 Feb 2021 14:40:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210210171040.684659-1-mka@chromium.org> <20210210091015.v5.3.I7a3a7d9d2126c34079b1cab87aa0b2ec3030f9b7@changeid>
+ <20210210210645.xapaua7djdsvr3ca@kozik-lap> <YCRcIuCxB8nYi7/e@google.com> <161307087919.1254594.11784819060723374369@swboyd.mtv.corp.google.com>
+In-Reply-To: <161307087919.1254594.11784819060723374369@swboyd.mtv.corp.google.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 11 Feb 2021 16:40:19 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+A5YpF9ySzmL+G1g=ca4926vpPOpA71hB37p+FZ-=tWQ@mail.gmail.com>
+Message-ID: <CAL_Jsq+A5YpF9ySzmL+G1g=ca4926vpPOpA71hB37p+FZ-=tWQ@mail.gmail.com>
+Subject: Re: [PATCH v5 3/4] usb: host: xhci-plat: Create platform device for
+ onboard hubs in probe()
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-of_device_node_put() is just a wrapper for of_node_put(). The platform
-driver core is already polluted with of_node pointers and the only 'get'
-already uses of_node_get() (though typically the get would happen in
-of_device_alloc()).
+On Thu, Feb 11, 2021 at 1:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Matthias Kaehlcke (2021-02-10 14:20:18)
+> >
+> > On Wed, Feb 10, 2021 at 10:06:45PM +0100, Krzysztof Kozlowski wrote:
+> > >
+> > > This looks hackish... what if later we have something else than hub?
+> > > Another if()?
+> > >
+> > > What if hub could be connected to something else than XHCI controller?
+> >
+> > In earlier versions this was standalone driver, which was more flexible and
+> > didn't require cooperation from the XHCI driver:
+> >
+> > https://lore.kernel.org/patchwork/patch/1313001/
+> >
+> > Rob Herring raised objections about the DT bindings, since the USB hub would be
+> > represented twice in the DT, once in the USB hierachry (with an explicit node or
+> > implicitly) plus a node for the platform device for the new driver:
+> >
+> > https://lore.kernel.org/patchwork/patch/1305395/
+> > https://lore.kernel.org/patchwork/patch/1313000/
+> >
+> > Alan Stern suggested to create the platform device in the XHCI platform driver:
+> >
+> > https://lore.kernel.org/patchwork/patch/1313000/#1510227
+> >
+> > I wasn't super happy about involving xhci-plat, but at least the code is minimal
+> > and all the device specific stuff is handled by the onboard_usb_hub driver.
+> >
+> > If you have better suggestions that might satisfy all parties please let us
+> > know :)
+> >
+>
+> Is it possible to use the graph binding to connect the USB controller on
+> the SoC to the port on the hub? Then the hub would be a standalone node
+> at the root of DT connected to the USB controller (or phy) and xhci code
+> could probe the firmware to see if there's a graph connection downstream
+> that is a powered hub like this. I didn't see this idea mentioned in the
+> previous discussions, but maybe I missed it.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Frank Rowand <frowand.list@gmail.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- drivers/base/platform.c   | 2 +-
- include/linux/of_device.h | 7 -------
- 2 files changed, 1 insertion(+), 8 deletions(-)
+An orphan at the root node is exactly what I don't want to see here.
+I'm happy with the binding now from a skim of it. The kernel support
+does seem kind of hacky though.
 
-diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-index 95fd1549f87d..c31bc9e92dd1 100644
---- a/drivers/base/platform.c
-+++ b/drivers/base/platform.c
-@@ -571,7 +571,7 @@ static void platform_device_release(struct device *dev)
- 	struct platform_object *pa = container_of(dev, struct platform_object,
- 						  pdev.dev);
- 
--	of_device_node_put(&pa->pdev.dev);
-+	of_node_put(&pa->pdev.dev->of_node);
- 	kfree(pa->pdev.dev.platform_data);
- 	kfree(pa->pdev.mfd_cell);
- 	kfree(pa->pdev.resource);
-diff --git a/include/linux/of_device.h b/include/linux/of_device.h
-index d7a407dfeecb..1d7992a02e36 100644
---- a/include/linux/of_device.h
-+++ b/include/linux/of_device.h
-@@ -38,11 +38,6 @@ extern int of_device_request_module(struct device *dev);
- extern void of_device_uevent(struct device *dev, struct kobj_uevent_env *env);
- extern int of_device_uevent_modalias(struct device *dev, struct kobj_uevent_env *env);
- 
--static inline void of_device_node_put(struct device *dev)
--{
--	of_node_put(dev->of_node);
--}
--
- static inline struct device_node *of_cpu_device_node_get(int cpu)
- {
- 	struct device *cpu_dev;
-@@ -94,8 +89,6 @@ static inline int of_device_uevent_modalias(struct device *dev,
- 	return -ENODEV;
- }
- 
--static inline void of_device_node_put(struct device *dev) { }
--
- static inline const struct of_device_id *of_match_device(
- 		const struct of_device_id *matches, const struct device *dev)
- {
--- 
-2.27.0
-
+Rob
