@@ -2,208 +2,347 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6FA31874E
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 10:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 798FD3187D9
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 11:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbhBKJpq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Feb 2021 04:45:46 -0500
-Received: from mail-co1nam11on2063.outbound.protection.outlook.com ([40.107.220.63]:49973
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230107AbhBKJgo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Feb 2021 04:36:44 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MryZT4oGS4lI0R6+iv5HCvskulfZMedWnl75m1r5K/8IBb+VQZTRJRABS5o56nZGore6kZ36WeGqyCJCs5t2E6eC/XFS9lvcXr7MteNupsMhM7cIWEywLtP/7Uy9vah0saTzCkbciMIVt35Kwn20M1NNab9btX73dsrdiNy7VyXLts073QHrnh3E3oDqFVWmQG7QIMwxvi9SXbYbL7ZHvmoq+zL9ReQFdh0d3mR9Y9qGc0fqoiPwz64Vlv6kqs+B7g2s/Jl7kH45o3WoWuyRz/varl2S1oI4DAoiweNjgESUQ8w8hVNLSSSm9l6vquVPshaw7kCGQ0CSGhbIMkqrqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1r+jM2FE1fpl/Af6Gg0W6TeIMckZ5z0YAY8gpYSiPJQ=;
- b=HUR0dBORUnr4hqJRo5OIVL48nl/G/2y3dBW9N5TT4JNyLQxz0UrhsQtCCuWksrwd7R/wmSPpDS49oddVwI96rPuOhKBIs+bSB87+e3548AV6D3MXFl3Qo+vd3vqtvPUXGCP11qu2zbawXqV18jJ9PryT6zmQLeEBVl6trWq6oOu2TXEIiB8nc4SDEUfcS9Ifs+fIF+eI3+ssXYm5u58wLpXyEmTFTBmcHxSM4KkbGsnHI4PC2bFFWqU+8tNo81AjaGcQctgv4Ik8oi2RVRqJcGRoTUPLv/pJYI33TJ5uQC0OpbQUq1CjFaiJsL4g9Sll21pTTiV8KGX0rqeXK2TxbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
- not signed); arc=none
+        id S229952AbhBKKN5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Feb 2021 05:13:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229577AbhBKKLt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Feb 2021 05:11:49 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C44C061788
+        for <linux-usb@vger.kernel.org>; Thu, 11 Feb 2021 02:11:08 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id ew18so2279893qvb.4
+        for <linux-usb@vger.kernel.org>; Thu, 11 Feb 2021 02:11:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1r+jM2FE1fpl/Af6Gg0W6TeIMckZ5z0YAY8gpYSiPJQ=;
- b=sWrJPUgUJDQZwmjpDuDlVfyHmSnAPSzXq2r8BzDleLw8cGYlIqbUAZYj7il0sopHX2OiKWxOC2cPEtJlQmwT1eTITowJR3Ihx+cZYfsh+Ki1J+z6adL+05IyPTEgyHJjwKdGEvyK1FeZalRSs4faNzQc4XU4qFGwRDJv+NoZiZI=
-Received: from SN1PR12CA0097.namprd12.prod.outlook.com (2603:10b6:802:21::32)
- by BN6PR02MB2578.namprd02.prod.outlook.com (2603:10b6:404:5e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.30; Thu, 11 Feb
- 2021 09:35:43 +0000
-Received: from SN1NAM02FT016.eop-nam02.prod.protection.outlook.com
- (2603:10b6:802:21:cafe::ca) by SN1PR12CA0097.outlook.office365.com
- (2603:10b6:802:21::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.25 via Frontend
- Transport; Thu, 11 Feb 2021 09:35:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT016.mail.protection.outlook.com (10.152.72.113) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3846.25 via Frontend Transport; Thu, 11 Feb 2021 09:35:42 +0000
-Received: from xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Thu, 11 Feb 2021 01:35:24 -0800
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server id
- 15.1.1913.5 via Frontend Transport; Thu, 11 Feb 2021 01:35:24 -0800
-Envelope-to: git@xilinx.com,
- michal.simek@xilinx.com,
- linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org,
- gregkh@linuxfoundation.org,
- monstr@monstr.eu,
- linux-kernel@vger.kernel.org,
- robh@kernel.org
-Received: from [172.30.17.109] (port=60730)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1lA8Nf-0003Jy-OY; Thu, 11 Feb 2021 01:35:23 -0800
-To:     Rob Herring <robh@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
-CC:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-        <git@xilinx.com>, Piyush Mehta <piyush.mehta@xilinx.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-usb@vger.kernel.org>
-References: <cover.1612867682.git.michal.simek@xilinx.com>
- <076994fc051e9230a3fef9e3eb5ec932104ef16a.1612867682.git.michal.simek@xilinx.com>
- <20210210222241.GA2901449@robh.at.kernel.org>
-From:   Michal Simek <michal.simek@xilinx.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: misc: Add binding for Microchip
- usb5744 hub
-Message-ID: <584bfee2-17a6-5935-b61c-b49824bcf857@xilinx.com>
-Date:   Thu, 11 Feb 2021 10:35:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vYZG/sPwUqkCFvVYR2/kUJ3FARSZtepvfTjPt/Beshc=;
+        b=u3otwpfY5qCjuIHPosLpIgfDDw/iDWtGQWKreLWscsD4hf9BET3AyNUfzRttBs8bVr
+         hHeaVOCrEakMtubbvZk63TeI0qTLAfgJan0tQd+1dLfubJgQYB+k3AUn3PJYnopvPRNd
+         Lh7CefmNqySuMwEd2DqmW3EWuMos9O0De4bi5/Jreo+Tt5VGqqtWCX/9qQS+vM23VIQ9
+         gFkKtueeORpZdatU6dOqoiexXAoQnRrujBM6AAdBY7TJilLIJoKLAKZdCb4LSRVnwlEs
+         1i0TPzTxRYFE5N1zvbyloxGhUNxeyYdGSSLuFQ5AfLi8NKXseTMbOJQRR/oi90UpAtyg
+         iIRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vYZG/sPwUqkCFvVYR2/kUJ3FARSZtepvfTjPt/Beshc=;
+        b=eOROnJnZrZ75lRRBzqK+djcVf+OdaLGgtnAIc26IOI2kCAOdgb+Kyxsh59aVlr/FnP
+         DoaqMw72UkwUiSn8EPrMLufu33XeTnKPRXDEDm23yF/i2bsmEwP2FSb11IVdZhWj4d9B
+         S8tf3AMuzBkyBhNH2oomJYTtx47oENtFNmrWTxx6x4euxg71+Tr7nC26EcrMzf7XgwdB
+         L6S/nK5vYlsYC1Ef1RfdECbhxmwJUdIMnPwIOJbT5WlxcrrPACgP80OLxzN61T/h+c52
+         uHHiq1yZuN/ODVbMoE/T+zpj1pIb8N9bO9N2NkuV63P5KVNTiZROUNBJPJGamGQSMTyx
+         aPEQ==
+X-Gm-Message-State: AOAM530zy7g7XzWY345hHCJ5QaYxCv79icrHMYJZArgCdcB2WeL1Yi5u
+        OYVS5sY3MleojnYS4W3nAJHovg92XOTg9xx9XEMv4jAkxb0frQ==
+X-Google-Smtp-Source: ABdhPJzY9jx74buA8CidiHXESIgSayFxn/qFWfH8dHB7TsyUJ7MB7S5jTiAqhKb5Av7p/ARwsMYxMXbp4AbXPYOPtFo=
+X-Received: by 2002:a05:6214:118e:: with SMTP id t14mr7088660qvv.50.1613038267793;
+ Thu, 11 Feb 2021 02:11:07 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210210222241.GA2901449@robh.at.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bedae879-77f8-4285-35ba-08d8ce7066c8
-X-MS-TrafficTypeDiagnostic: BN6PR02MB2578:
-X-LD-Processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
-X-Microsoft-Antispam-PRVS: <BN6PR02MB2578D7E821382BBF92CC858AC68C9@BN6PR02MB2578.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9r5yNa4I/xy+fSZMQIL1pDFT2SrOXo2Ggoy6FGITqGqCYS7MT9xiwL9SsIRzQg0zvsozO571SaJ+2JdEbdllqkRD+KaZ1FYQ2rXN8li8k9gL8c2tk3exnkvSRuUf6nuFyzpXx4LN2CLNrg1az9a37OACm+03lR2v32k4yqhwG+aJP21+7qxJtLOby0r2K66CPHBSeYyUnjWqhL3qbff0vTdkPjbrrpdNg0te6RNBOpw/zNGalKqlvwHKbL9BhVdUO48guf/YYiayxyAx7UU1iI23x7B8b7xZnz7A6ZD3rwnKm+WRzxloXeR+3sR3hy1VLNmHIaUxPwM97pQ5Eo/YpZhMRplk+O7FXu6N/JQWmfEE5QV6ZiTt+IOyr6RpuhbmmIu0pjk+l+euJrt0POGP/z+mVFUSyT5KTJ+9pmb0u5QO3TXWUwS3ZXPIpkeTMTijCpIli/tXveTDKj/ApaqqA9xoqre0QWMMFWXsA8KmKWS/7E2NlBGiAzNUyk+hKcDSOguIOZ8Y7Ov+MU96z0FWgTXzG3EE7xqiSRYtlT6tJPWAqhzz6QNadD8fgD6qLKLFTUdPlBcVYNO/MWDTpyW7OHH2T8uPLo1iSnKmPEZgurU2R4Q7LVJMWy1ktFqI7VrkTwhMvNW7bfyBxpN7BzFq8tyWvzapDiG8EFr1K3wH5/nOkfxMXqxJxWTItmLzWqVgVWh8EXHsZr52/55fMdmgvy3EWeAHKruZ6wYIgKXOEXUGbDKfCTEMUZjZOA1vAO4FPDzK9Ct5FdZ1yimjtWCUwpNRqtZOnOweO/h+0kwWcYs=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(346002)(136003)(39860400002)(396003)(36840700001)(46966006)(8676002)(36860700001)(2906002)(7636003)(426003)(336012)(82740400003)(47076005)(4326008)(31696002)(83380400001)(70586007)(5660300002)(186003)(8936002)(54906003)(110136005)(2616005)(44832011)(26005)(9786002)(53546011)(36756003)(356005)(478600001)(31686004)(70206006)(316002)(6666004)(36906005)(82310400003)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2021 09:35:42.8167
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bedae879-77f8-4285-35ba-08d8ce7066c8
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT016.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB2578
+References: <CAGv7gkgb12vGPvZcSE0aVOpu32zSgxaayYreLvWs+vJc5EkQrA@mail.gmail.com>
+ <YCTS9I5xTVBDvwax@kroah.com>
+In-Reply-To: <YCTS9I5xTVBDvwax@kroah.com>
+From:   Yiyu Zhu <danielzeltar@gmail.com>
+Date:   Thu, 11 Feb 2021 02:10:53 -0800
+Message-ID: <CAGv7gkjoNt9gx_VPfEj=tauKAOcnOd+-2pCXyCoR=GPcHj7jxw@mail.gmail.com>
+Subject: Re: kworker takes 100% core after unplugging usb c hub
+To:     Greg KH <greg@kroah.com>
+Cc:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
+Hi Greg,
 
-On 2/10/21 11:22 PM, Rob Herring wrote:
-> On Tue, Feb 09, 2021 at 11:48:09AM +0100, Michal Simek wrote:
->> From: Piyush Mehta <piyush.mehta@xilinx.com>
->>
->> Added dt binding for usb5744 driver.
->>
->> Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
->> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
->> ---
->>
->> Changes in v2: None
->>
->>  .../bindings/usb/microchip,usb5744.yaml       | 56 +++++++++++++++++++
->>  MAINTAINERS                                   |  1 +
->>  2 files changed, 57 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
->> new file mode 100644
->> index 000000000000..fe222f6db81d
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
->> @@ -0,0 +1,56 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: "http://devicetree.org/schemas/usb/microchip,usb5744.yaml#"
->> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->> +
->> +title: Bindings for the Microchip USB5744 4-port Hub Controller
->> +
->> +description:
->> +  Microchip’s USB5744 SmartHub™ IC is a 4 port, SuperSpeed (SS)/Hi-Speed (HS),
->> +  low power, low pin count configurable and fully compliant with the USB 3.1
->> +  Gen 1 specification. The USB5744 also supports Full Speed (FS) and Low Speed
->> +  (LS) USB signaling, offering complete coverage of all defined USB operating
->> +  speeds. The new SuperSpeed hubs operate in parallel with the USB 2.0
->> +  controller, so 5 Gbps SuperSpeed data transfers are not affected by slower
->> +  USB 2.0 traffic.
->> +
->> +maintainers:
->> +  - Piyush Mehta <piyush.mehta@xilinx.com>
->> +  - Michal Simek <michal.simek@xilinx.com>
->> +
->> +properties:
->> +  compatible:
->> +    const: microchip,usb5744
->> +
->> +  reg:
->> +    maxItems: 1
->> +    description: |
->> +      Specifies the i2c slave address, it is required and should be 0x2d
->> +      if I2C is used.
-> 
-> If I2C is not used, then this should be underneath the USB host as a USB 
-> device. That also implies a different compatible string. I'd suggest you 
-> just say I2C is required if that's your use.
+I just updated the kernel to 5.10.15-051015-generic. (It is the
+ubuntu's mainline build. I am not sure if that matters.)
 
-We can't say that i2c is required because we have both cases. One is
-really usb hub connected over i2c which at least requires to send one
-smbus command to start operate. But it can be extended to add more
-features - limit speeds, disable ports, etc.
+The issue is still there but with a slightly different behavior. There
+is still high cpu usage but the two kworkers seem to take turns.
 
-And the second is really the same usb hub without i2c connected which
-runs in default mode. But reset is required to ensure proper reset
-sequence.
-Hub also have external clock chip which is not handled now because it is
-just crystal on the board but if you want I can also model it via fixed
-clock and call clock enable for it.
+01:18:49 AM     0       117    0.00   87.00    0.00   13.00   87.00
+ 2  kworker/2:1+usb_hub_wq
+01:18:50 AM     0       117    0.00   87.00    0.00   12.00   87.00
+ 2  kworker/2:1+pm
 
-It is the same use case as is with
-Documentation/devicetree/bindings/usb/usb3503.txt
+The trace is now filled with:
 
-Can you please elaborate why different compatible string should be used?
-It is still the same device and not quite sure why different compatible
-string should be used.
+     kworker/2:1-117     [002] d...   450.048063:
+workqueue_queue_work: work struct=00000000573429cf function=hub_event
+workqueue=000000007b72f8bb req_cpu=8192 cpu=2
+     kworker/2:1-117     [002] d...   450.048097:
+workqueue_queue_work: work struct=000000005facda71 function=hub_event
+workqueue=000000007b72f8bb req_cpu=8192 cpu=2
+     kworker/2:1-117     [002] d...   450.048104:
+workqueue_queue_work: work struct=0000000053de14fd
+function=pm_runtime_work workqueue=00000000a24828a0 req_cpu=8192 cpu=2
+     kworker/2:1-117     [002] d...   450.048110:
+workqueue_queue_work: work struct=00000000ffe78fd2
+function=pm_runtime_work workqueue=00000000a24828a0 req_cpu=8192 cpu=2
+     kworker/2:1-117     [002] d...   450.048123:
+workqueue_queue_work: work struct=00000000573429cf function=hub_event
+workqueue=000000007b72f8bb req_cpu=8192 cpu=2
+     kworker/2:1-117     [002] d...   450.048157:
+workqueue_queue_work: work struct=000000005facda71 function=hub_event
+workqueue=000000007b72f8bb req_cpu=8192 cpu=2
+     kworker/2:1-117     [002] d...   450.048162:
+workqueue_queue_work: work struct=0000000053de14fd
+function=pm_runtime_work workqueue=00000000a24828a0 req_cpu=8192 cpu=2
+     kworker/2:1-117     [002] d...   450.048166:
+workqueue_queue_work: work struct=00000000ffe78fd2
+function=pm_runtime_work workqueue=00000000a24828a0 req_cpu=8192 cpu=2
 
-Do you also want to example where this node is the part of usb node?
+The dmesg is similar:
 
-> 
-> 'const: 0x2d' instead of maxItems is the schema to express the address 
-> if fixed.
+[ 2798.450977] usb 1-3: USB disconnect, device number 25
+[ 2798.450984] usb 1-3.1: USB disconnect, device number 26
+[ 2798.452218] usb 1-3.5: USB disconnect, device number 27
+[ 2798.521539] r8152 4-2.1.3:1.0 enx00e04cb5877c: Stop submitting
+intr, status -71
+[ 2798.587510] usb 4-2.1.4: Failed to set U1 timeout to 0x0,error code -71
+[ 2798.594506] usb 4-2.1.4: Set SEL for device-initiated U1 failed.
+[ 2798.601497] usb 4-2.1.4: Set SEL for device-initiated U2 failed.
+[ 2798.601504] usb 4-2.1.4: usb_reset_and_verify_device Failed to disable LPM
+[ 2798.677498] usb usb3-port2: over-current condition
+[ 2799.209385] usb 4-2: USB disconnect, device number 2
+[ 2799.209392] usb 4-2.1: USB disconnect, device number 3
+[ 2799.209396] usb 4-2.1.3: USB disconnect, device number 4
+[ 2799.302548] usb 4-2.1.4: USB disconnect, device number 5
+[ 2799.633505] usb 4-2.1-port4: cannot disable (err = -110)
+[ 2800.181325] usb usb4-port2: over-current condition
+[ 2818.993944] xhci_hcd 0000:38:00.0: xHCI host controller not
+responding, assume dead
+[ 2818.993956] xhci_hcd 0000:38:00.0: HC died; cleaning up
+[ 2819.126421] xhci_hcd 0000:38:00.0: remove, state 1
+[ 2819.126431] usb usb4: USB disconnect, device number 1
+[ 2819.154189] xhci_hcd 0000:38:00.0: USB bus 4 deregistered
+[ 2819.154206] xhci_hcd 0000:38:00.0: remove, state 1
+[ 2819.154211] usb usb3: USB disconnect, device number 1
+[ 2819.154684] xhci_hcd 0000:38:00.0: Host halt failed, -19
+[ 2819.154689] xhci_hcd 0000:38:00.0: Host not accessible, reset failed.
+[ 2819.154900] xhci_hcd 0000:38:00.0: USB bus 3 deregistered
+[ 2819.156059] pcieport 0000:03:00.0: can't change power state from
+D3cold to D0 (config space inaccessible)
+[ 2819.156709] pci_bus 0000:04: busn_res: [bus 04] is released
+[ 2819.156776] pci_bus 0000:05: busn_res: [bus 05-37] is released
+[ 2819.169419] pci_bus 0000:38: busn_res: [bus 38] is released
+[ 2819.169491] pci_bus 0000:39: busn_res: [bus 39-6c] is released
+[ 2819.169533] pci_bus 0000:03: busn_res: [bus 03-6c] is released
+[ 2820.557517] usb 1-3: new high-speed USB device number 28 using xhci_hcd
+[ 2820.708869] usb 1-3: New USB device found, idVendor=291a,
+idProduct=5423, bcdDevice= 1.0a
+[ 2820.708874] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[ 2820.708876] usb 1-3: Product: 4-Port USB 2.0 Hub
+[ 2820.708878] usb 1-3: Manufacturer: Generic
+[ 2820.710578] hub 1-3:1.0: USB hub found
+[ 2820.710816] hub 1-3:1.0: 5 ports detected
+[ 2821.001436] usb 1-3.1: new high-speed USB device number 29 using xhci_hcd
+[ 2821.104284] usb 1-3.1: New USB device found, idVendor=05e3,
+idProduct=0610, bcdDevice= 6.55
+[ 2821.104290] usb 1-3.1: New USB device strings: Mfr=1, Product=2,
+SerialNumber=0
+[ 2821.104294] usb 1-3.1: Product: USB2.1 Hub
+[ 2821.104296] usb 1-3.1: Manufacturer: GenesysLogic
+[ 2821.108236] hub 1-3.1:1.0: USB hub found
+[ 2821.108521] hub 1-3.1:1.0: 4 ports detected
+[ 2821.637686] hp_wmi: Unknown event_id - 131073 - 0x0
+[ 2821.693397] usb 1-3.5: new high-speed USB device number 30 using xhci_hcd
+[ 2821.796169] usb 1-3.5: New USB device found, idVendor=0bda,
+idProduct=5450, bcdDevice= 1.01
+[ 2821.796176] usb 1-3.5: New USB device strings: Mfr=1, Product=2,
+SerialNumber=0
+[ 2821.796179] usb 1-3.5: Product: BillBoard Device
+[ 2821.796182] usb 1-3.5: Manufacturer: Realtek
+[ 2822.157917] hp_wmi: Unknown event_id - 131073 - 0x0
+[ 2829.665791] pci 0000:02:00.0: [8086:15d3] type 01 class 0x060400
+[ 2829.665874] pci 0000:02:00.0: enabling Extended Tags
+[ 2829.666011] pci 0000:02:00.0: supports D1 D2
+[ 2829.666012] pci 0000:02:00.0: PME# supported from D0 D1 D2 D3hot D3cold
+[ 2829.666391] pci 0000:03:00.0: [8086:15d3] type 01 class 0x060400
+[ 2829.666458] pci 0000:03:00.0: enabling Extended Tags
+[ 2829.666613] pci 0000:03:00.0: supports D1 D2
+[ 2829.666613] pci 0000:03:00.0: PME# supported from D0 D1 D2 D3hot D3cold
+[ 2829.666806] pci 0000:03:01.0: [8086:15d3] type 01 class 0x060400
+[ 2829.666875] pci 0000:03:01.0: enabling Extended Tags
+[ 2829.667024] pci 0000:03:01.0: supports D1 D2
+[ 2829.667025] pci 0000:03:01.0: PME# supported from D0 D1 D2 D3hot D3cold
+[ 2829.667211] pci 0000:03:02.0: [8086:15d3] type 01 class 0x060400
+[ 2829.667295] pci 0000:03:02.0: enabling Extended Tags
+[ 2829.667422] pci 0000:03:02.0: supports D1 D2
+[ 2829.667423] pci 0000:03:02.0: PME# supported from D0 D1 D2 D3hot D3cold
+[ 2829.667655] pci 0000:03:04.0: [8086:15d3] type 01 class 0x060400
+[ 2829.667722] pci 0000:03:04.0: enabling Extended Tags
+[ 2829.667868] pci 0000:03:04.0: supports D1 D2
+[ 2829.667869] pci 0000:03:04.0: PME# supported from D0 D1 D2 D3hot D3cold
+[ 2829.668067] pci 0000:02:00.0: PCI bridge to [bus 03-6c]
+[ 2829.668078] pci 0000:02:00.0:   bridge window [mem 0xb0000000-0xde0fffff]
+[ 2829.668108] pci 0000:02:00.0:   bridge window [mem
+0x2f90000000-0x2fd9ffffff 64bit pref]
+[ 2829.668156] pci 0000:03:00.0: PCI bridge to [bus 04]
+[ 2829.668184] pci 0000:03:00.0:   bridge window [mem 0xde000000-0xde0fffff]
+[ 2829.668241] pci 0000:03:01.0: PCI bridge to [bus 05-37]
+[ 2829.668251] pci 0000:03:01.0:   bridge window [mem 0xb0000000-0xc7efffff]
+[ 2829.668258] pci 0000:03:01.0:   bridge window [mem
+0x2f90000000-0x2fafffffff 64bit pref]
+[ 2829.668352] pci 0000:38:00.0: [8086:15d4] type 00 class 0x0c0330
+[ 2829.668372] pci 0000:38:00.0: reg 0x10: [mem 0xc7f00000-0xc7f0ffff]
+[ 2829.668444] pci 0000:38:00.0: enabling Extended Tags
+[ 2829.668578] pci 0000:38:00.0: supports D1 D2
+[ 2829.668579] pci 0000:38:00.0: PME# supported from D0 D1 D2 D3hot D3cold
+[ 2829.668699] pci 0000:38:00.0: 8.000 Gb/s available PCIe bandwidth,
+limited by 2.5 GT/s PCIe x4 link at 0000:03:02.0 (capable of 31
+.504 Gb/s with 8.0 GT/s PCIe x4 link)
+[ 2829.668804] pci 0000:03:02.0: PCI bridge to [bus 38]
+[ 2829.668815] pci 0000:03:02.0:   bridge window [mem 0xc7f00000-0xc7ffffff]
+[ 2829.668874] pci 0000:03:04.0: PCI bridge to [bus 39-6c]
+[ 2829.668884] pci 0000:03:04.0:   bridge window [mem 0xc8000000-0xddffffff]
+[ 2829.668891] pci 0000:03:04.0:   bridge window [mem
+0x2fb0000000-0x2fd9ffffff 64bit pref]
+[ 2829.668925] pci_bus 0000:03: Allocating resources
+[ 2829.668942] pci 0000:03:01.0: bridge window [io  0x1000-0x0fff] to
+[bus 05-37] add_size 1000
+[ 2829.668943] pci 0000:03:02.0: bridge window [io  0x1000-0x0fff] to
+[bus 38] add_size 1000
+[ 2829.668945] pci 0000:03:02.0: bridge window [mem
+0x00100000-0x000fffff 64bit pref] to [bus 38] add_size 200000
+add_align 100000
+[ 2829.668946] pci 0000:03:04.0: bridge window [io  0x1000-0x0fff] to
+[bus 39-6c] add_size 1000
+[ 2829.668947] pci 0000:02:00.0: bridge window [io  0x1000-0x0fff] to
+[bus 03-6c] add_size 4000
+[ 2829.668949] pci 0000:02:00.0: BAR 13: no space for [io  size 0x4000]
+[ 2829.668950] pci 0000:02:00.0: BAR 13: failed to assign [io  size 0x4000]
+[ 2829.668951] pci 0000:02:00.0: BAR 13: no space for [io  size 0x4000]
+[ 2829.668952] pci 0000:02:00.0: BAR 13: failed to assign [io  size 0x4000]
+[ 2829.668955] pci 0000:03:02.0: BAR 15: no space for [mem size
+0x00200000 64bit pref]
+[ 2829.668955] pci 0000:03:02.0: BAR 15: failed to assign [mem size
+0x00200000 64bit pref]
+[ 2829.668956] pci 0000:03:01.0: BAR 13: no space for [io  size 0x1000]
+[ 2829.668957] pci 0000:03:01.0: BAR 13: failed to assign [io  size 0x1000]
+[ 2829.668957] pci 0000:03:02.0: BAR 13: no space for [io  size 0x1000]
+[ 2829.668958] pci 0000:03:02.0: BAR 13: failed to assign [io  size 0x1000]
+[ 2829.668959] pci 0000:03:04.0: BAR 13: no space for [io  size 0x1000]
+[ 2829.668960] pci 0000:03:04.0: BAR 13: failed to assign [io  size 0x1000]
+[ 2829.668961] pci 0000:03:04.0: BAR 13: no space for [io  size 0x1000]
+[ 2829.668961] pci 0000:03:04.0: BAR 13: failed to assign [io  size 0x1000]
+[ 2829.668963] pci 0000:03:02.0: BAR 15: no space for [mem size
+0x00200000 64bit pref]
+[ 2829.668963] pci 0000:03:02.0: BAR 15: failed to assign [mem size
+0x00200000 64bit pref]
+[ 2829.668964] pci 0000:03:02.0: BAR 13: no space for [io  size 0x1000]
+[ 2829.668965] pci 0000:03:02.0: BAR 13: failed to assign [io  size 0x1000]
+[ 2829.668966] pci 0000:03:01.0: BAR 13: no space for [io  size 0x1000]
+[ 2829.668966] pci 0000:03:01.0: BAR 13: failed to assign [io  size 0x1000]
+[ 2829.668967] pci 0000:03:00.0: PCI bridge to [bus 04]
+[ 2829.668973] pci 0000:03:00.0:   bridge window [mem 0xde000000-0xde0fffff]
+[ 2829.668996] pci 0000:03:01.0: PCI bridge to [bus 05-37]
+[ 2829.669001] pci 0000:03:01.0:   bridge window [mem 0xb0000000-0xc7efffff]
+[ 2829.669005] pci 0000:03:01.0:   bridge window [mem
+0x2f90000000-0x2fafffffff 64bit pref]
+[ 2829.669012] pci 0000:03:02.0: PCI bridge to [bus 38]
+[ 2829.669017] pci 0000:03:02.0:   bridge window [mem 0xc7f00000-0xc7ffffff]
+[ 2829.669026] pci 0000:03:04.0: PCI bridge to [bus 39-6c]
+[ 2829.669031] pci 0000:03:04.0:   bridge window [mem 0xc8000000-0xddffffff]
+[ 2829.669035] pci 0000:03:04.0:   bridge window [mem
+0x2fb0000000-0x2fd9ffffff 64bit pref]
+[ 2829.669041] pci 0000:02:00.0: PCI bridge to [bus 03-6c]
+[ 2829.669046] pci 0000:02:00.0:   bridge window [mem 0xb0000000-0xde0fffff]
+[ 2829.669050] pci 0000:02:00.0:   bridge window [mem
+0x2f90000000-0x2fd9ffffff 64bit pref]
+[ 2829.670507] xhci_hcd 0000:38:00.0: xHCI Host Controller
+[ 2829.670512] xhci_hcd 0000:38:00.0: new USB bus registered, assigned
+bus number 3
+[ 2829.671664] xhci_hcd 0000:38:00.0: hcc params 0x200077c1 hci
+version 0x110 quirks 0x0000000200009810
+[ 2829.671920] usb usb3: New USB device found, idVendor=1d6b,
+idProduct=0002, bcdDevice= 5.10
+[ 2829.671922] usb usb3: New USB device strings: Mfr=3, Product=2,
+SerialNumber=1
+[ 2829.671923] usb usb3: Product: xHCI Host Controller
+[ 2829.671924] usb usb3: Manufacturer: Linux 5.10.15-051015-generic xhci-hcd
+[ 2829.671925] usb usb3: SerialNumber: 0000:38:00.0
+[ 2829.672067] hub 3-0:1.0: USB hub found
+[ 2829.672077] hub 3-0:1.0: 2 ports detected
+[ 2829.672818] xhci_hcd 0000:38:00.0: xHCI Host Controller
+[ 2829.672822] xhci_hcd 0000:38:00.0: new USB bus registered, assigned
+bus number 4
+[ 2829.672824] xhci_hcd 0000:38:00.0: Host supports USB 3.1 Enhanced SuperSpeed
+[ 2829.672850] usb usb4: New USB device found, idVendor=1d6b,
+idProduct=0003, bcdDevice= 5.10
+[ 2829.672851] usb usb4: New USB device strings: Mfr=3, Product=2,
+SerialNumber=1
+[ 2829.672851] usb usb4: Product: xHCI Host Controller
+[ 2829.672852] usb usb4: Manufacturer: Linux 5.10.15-051015-generic xhci-hcd
+[ 2829.672853] usb usb4: SerialNumber: 0000:38:00.0
+[ 2829.672977] hub 4-0:1.0: USB hub found
+[ 2829.672985] hub 4-0:1.0: 2 ports detected
+[ 2830.113812] usb 4-2: new SuperSpeedPlus Gen 2 USB device number 2
+using xhci_hcd
+[ 2830.137150] usb 4-2: New USB device found, idVendor=2900,
+idProduct=8383, bcdDevice= 1.0a
+[ 2830.137159] usb 4-2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[ 2830.137165] usb 4-2: Product: 4-Port USB 3.0 Hub
+[ 2830.137170] usb 4-2: Manufacturer: Generic
+[ 2830.139872] hub 4-2:1.0: USB hub found
+[ 2830.140153] hub 4-2:1.0: 4 ports detected
+[ 2830.429717] usb 4-2.1: new SuperSpeed Gen 1 USB device number 3
+using xhci_hcd
+[ 2830.453599] usb 4-2.1: New USB device found, idVendor=05e3,
+idProduct=0626, bcdDevice= 6.55
+[ 2830.453606] usb 4-2.1: New USB device strings: Mfr=1, Product=2,
+SerialNumber=0
+[ 2830.453610] usb 4-2.1: Product: USB3.1 Hub
+[ 2830.453613] usb 4-2.1: Manufacturer: GenesysLogic
+[ 2830.456109] hub 4-2.1:1.0: USB hub found
+[ 2830.456457] hub 4-2.1:1.0: 4 ports detected
+[ 2830.745598] usb 4-2.1.4: new SuperSpeed Gen 1 USB device number 4
+using xhci_hcd
+[ 2830.767264] usb 4-2.1.4: New USB device found, idVendor=058f,
+idProduct=8468, bcdDevice= 1.00
+[ 2830.767266] usb 4-2.1.4: New USB device strings: Mfr=1, Product=2,
+SerialNumber=3
+[ 2830.767267] usb 4-2.1.4: Product: Mass Storage Device
+[ 2830.767267] usb 4-2.1.4: Manufacturer: Generic
+[ 2830.767268] usb 4-2.1.4: SerialNumber: 058F84688461
+[ 2830.769494] usb-storage 4-2.1.4:1.0: USB Mass Storage device detected
+[ 2830.769683] scsi host4: usb-storage 4-2.1.4:1.0
+[ 2831.794370] scsi 4:0:0:0: Direct-Access     Generic- SD/MMC
+  1.00 PQ: 0 ANSI: 6
+[ 2831.794831] scsi 4:0:0:1: Direct-Access     Generic- Micro SD/M2
+  1.08 PQ: 0 ANSI: 6
+[ 2831.795344] sd 4:0:0:0: Attached scsi generic sg0 type 0
+[ 2831.795741] sd 4:0:0:1: Attached scsi generic sg1 type 0
+[ 2831.846323] sd 4:0:0:0: [sda] Attached SCSI removable disk
+[ 2831.847114] sd 4:0:0:1: [sdb] Attached SCSI removable disk
 
-Will fix.
+Thanks
+Yiyu Zhu
 
-Thanks,
-Michal
+
+On Wed, Feb 10, 2021 at 10:47 PM Greg KH <greg@kroah.com> wrote:
+>
+> On Wed, Feb 10, 2021 at 06:31:56PM -0800, Yiyu Zhu wrote:
+> > Hi,
+> >
+> > I have an Anker A8383 USB C hub with power delivery. I use the hub for
+> > both charging and connecting to network. But when I unplug the hub, it
+> > sometimes causes two kworker processes to occupy 100 % cpu time.
+> > The issue will go away if I plug something back into the usbc port.
+> > And the issue seems to persist through reboot.
+> >
+> > I am running kernel version 5.8.0-43-generic #49~20.04.1-Ubuntu SMP
+>
+> That is a very old kernel, and a distro-specific one.  Please try the
+> latest 5.10.y release, or report the problem to Ubuntu as they are the
+> only ones that can support that unknown kernel.
+>
+> good luck!
+>
+> greg k-h
