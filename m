@@ -2,152 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA013192C6
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 20:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26BF13192E4
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 20:16:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbhBKTD6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Feb 2021 14:03:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42028 "EHLO
+        id S230019AbhBKTP0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Feb 2021 14:15:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231490AbhBKTBr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Feb 2021 14:01:47 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16CCC061788
-        for <linux-usb@vger.kernel.org>; Thu, 11 Feb 2021 11:01:06 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id d26so4274331pfn.5
-        for <linux-usb@vger.kernel.org>; Thu, 11 Feb 2021 11:01:06 -0800 (PST)
+        with ESMTP id S229886AbhBKTPX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Feb 2021 14:15:23 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09A0C061756
+        for <linux-usb@vger.kernel.org>; Thu, 11 Feb 2021 11:14:42 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id o63so4582290pgo.6
+        for <linux-usb@vger.kernel.org>; Thu, 11 Feb 2021 11:14:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=38z+MQX41khqI4CrfgsdKCbVUZuEtmzm0vpGYv2oT/g=;
-        b=P1Z9ylhoK6aFfRrdpwiLZS0OMGndod97oFC7yb3dqZvLg8Gx9QYB5OA2npK10G3+RR
-         HkRwR4kDaLOHc+i+OOoqADEaeU/NtIUC8trKUbXNr4B0nVfwzzr5gjEuK5AQLfdmCLxD
-         ln1JifQ5EgUk0XAuMpl7m4gSTEaWhoNvQWqp0=
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=qqEry60T4DmTyCAXWg4gMVAOjQbNyth0ovp4BVqxCc8=;
+        b=UnD7UfzYJXS9wCo8RcNk2NVDC0RL2SLfwid1NILUmfiMlyGyHHPF2HoFUXvjv1h3y8
+         nyYd3031FB5XuwbTMIWp+2C7dPZ+sPJN7vq3FHxvZ3595t0tSOR0uvkvB/SRTNZhTsfa
+         uTwOFWatxO8GhXs47gLTt8iYdWhCLLKQb40/M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=38z+MQX41khqI4CrfgsdKCbVUZuEtmzm0vpGYv2oT/g=;
-        b=awDO1jyyC/5kEs6qpTAjPvwdOmH313FNYFExuOsdwmzKvSDK1RfdewbohVEQFtZQY+
-         X2lTYyzdqmb1LOnSIuQuM3st2nYxCN2MMWEFIJNNDCYvFE+1xyGP5gReCcvbDDhm3ABH
-         SJ2g8XUrxq/Qr+ccKQiKQ7RTp8+Iz5pwQZ24zKkx8sIxEKdYNnPHYkT//cIT9onpCppJ
-         Pz1UVJbkot3EX1wi16tVBPe+YRdY+/htxDtpmXWisWoqnzh2ZjBEYtqkXI45QeS4h227
-         sex9lJSQ60sR25G17nXi6tPsj5YO9v8+rC0Y8lwrbjkDZ22mX2KX0qEwXF7LVR7aMXxw
-         u1tA==
-X-Gm-Message-State: AOAM530iCtTzRrOYmro0JGC+wz4BHmi33N+5MbzufdxDgSBNoyzldgEK
-        LyX/yse0X5gYiecp/SGY2Exl/Q==
-X-Google-Smtp-Source: ABdhPJwUJi9shALaYdk06rsyxl0whyeAsF17SGdQZ6EWt5HbYkjEqoshMB5Iyt3Fo0kD28w5VX6qpQ==
-X-Received: by 2002:a62:5a45:0:b029:1e5:4c81:c59 with SMTP id o66-20020a625a450000b02901e54c810c59mr9388889pfb.51.1613070066195;
-        Thu, 11 Feb 2021 11:01:06 -0800 (PST)
-Received: from localhost ([2620:15c:202:1:fc92:99c:fc2f:8603])
-        by smtp.gmail.com with UTF8SMTPSA id a37sm6555705pgm.79.2021.02.11.11.01.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Feb 2021 11:01:05 -0800 (PST)
-Date:   Thu, 11 Feb 2021 11:01:03 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=qqEry60T4DmTyCAXWg4gMVAOjQbNyth0ovp4BVqxCc8=;
+        b=XJlKv2Jj9TqW+N7x6qyDbZ7L73MqSyGZvbeHd9r005DTwC5/7MZoMtiwlximYOIak+
+         BfJcGJ941MALK1nFnpmFWa6DTmIPmkMBbAQPC6B39DXzkoWOWKwRw/4d8XM9TUi8TUxm
+         9PgeaaY/TLmBP+SnW59/JMqYQbKtWuV4ribMgIMawxdbVgNfpRIjYSYcR24fGFCT/v1v
+         tE5gb7bW52tCbrqfmW+CY8Gt+m5UROULiuUO6IH+PE8d6WnMUoQ7EZKp+ZODMRMJOl9U
+         MsYfmTHU/UMgQnIhpcVCZtEXDTTtMCTMXxzdv/GOhbmegWfxCb3/Qo+bcLixdBzejej1
+         tjHw==
+X-Gm-Message-State: AOAM530DOs+9eBoGotRpAmYtBvyCeakZzYSQeGgpqiumXjcegv+ba4Z+
+        oIrDAjhDoIC6hMrJvtyVCILc3A==
+X-Google-Smtp-Source: ABdhPJxaHXPT1uNqwUJY66FnRWUqcI1rm9E9OacVvqIg74qBdRv36OEYX0LSltX6WM39oME+ct7jqQ==
+X-Received: by 2002:a62:1708:0:b029:1da:2f7a:3639 with SMTP id 8-20020a6217080000b02901da2f7a3639mr8920114pfx.78.1613070881351;
+        Thu, 11 Feb 2021 11:14:41 -0800 (PST)
+Received: from chromium.org ([2620:15c:202:201:f038:5688:cf3c:eca2])
+        by smtp.gmail.com with ESMTPSA id y24sm6307848pfr.152.2021.02.11.11.14.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Feb 2021 11:14:40 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YCRcIuCxB8nYi7/e@google.com>
+References: <20210210171040.684659-1-mka@chromium.org> <20210210091015.v5.3.I7a3a7d9d2126c34079b1cab87aa0b2ec3030f9b7@changeid> <20210210210645.xapaua7djdsvr3ca@kozik-lap> <YCRcIuCxB8nYi7/e@google.com>
+Subject: Re: [PATCH v5 3/4] usb: host: xhci-plat: Create platform device for onboard hubs in probe()
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
         devicetree@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
-        Stephen Boyd <swboyd@chromium.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         Ravi Chandra Sadineni <ravisadineni@chromium.org>,
         Bastien Nocera <hadess@hadess.net>,
         linux-kernel@vger.kernel.org,
         Douglas Anderson <dianders@chromium.org>,
-        linux-usb@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Subject: Re: [PATCH v5 3/4] usb: host: xhci-plat: Create platform device for
- onboard hubs in probe()
-Message-ID: <YCV+7z8Y/l0eyse9@google.com>
-References: <20210210171040.684659-1-mka@chromium.org>
- <20210210091015.v5.3.I7a3a7d9d2126c34079b1cab87aa0b2ec3030f9b7@changeid>
- <YCTVjx480BzT+saO@kroah.com>
- <YCV7XGloQIjtFAqf@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YCV7XGloQIjtFAqf@google.com>
+        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Date:   Thu, 11 Feb 2021 11:14:39 -0800
+Message-ID: <161307087919.1254594.11784819060723374369@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 11, 2021 at 10:45:48AM -0800, Matthias Kaehlcke wrote:
-> Hi Greg,
-> 
-> On Thu, Feb 11, 2021 at 07:58:23AM +0100, Greg Kroah-Hartman wrote:
-> > On Wed, Feb 10, 2021 at 09:10:38AM -0800, Matthias Kaehlcke wrote:
-> > > Check during probe() if a hub supported by the onboard_usb_hub
-> > > driver is connected to the controller. If such a hub is found
-> > > create the corresponding platform device. This requires the
-> > > device tree to have a node for the hub with its vendor and
-> > > product id (which is not common for USB devices). Further the
-> > > platform device is only created when CONFIG_USB_ONBOARD_HUB=y/m.
-> > > 
-> > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> > > ---
-> > > 
-> > > Changes in v5:
-> > > - patch added to the series
-> > > 
-> > >  drivers/usb/host/xhci-plat.c | 16 ++++++++++++++++
-> > >  include/linux/usb/hcd.h      |  2 ++
-> > >  2 files changed, 18 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> > > index 4d34f6005381..e785fa109eea 100644
-> > > --- a/drivers/usb/host/xhci-plat.c
-> > > +++ b/drivers/usb/host/xhci-plat.c
-> > > @@ -15,6 +15,7 @@
-> > >  #include <linux/of.h>
-> > >  #include <linux/of_device.h>
-> > >  #include <linux/platform_device.h>
-> > > +#include <linux/usb/onboard_hub.h>
-> > >  #include <linux/usb/phy.h>
-> > >  #include <linux/slab.h>
-> > >  #include <linux/acpi.h>
-> > > @@ -184,6 +185,7 @@ static int xhci_plat_probe(struct platform_device *pdev)
-> > >  	int			ret;
-> > >  	int			irq;
-> > >  	struct xhci_plat_priv	*priv = NULL;
-> > > +	struct device_node	*np;
-> > >  
-> > >  
-> > >  	if (usb_disabled())
-> > > @@ -356,6 +358,17 @@ static int xhci_plat_probe(struct platform_device *pdev)
-> > >  	 */
-> > >  	pm_runtime_forbid(&pdev->dev);
-> > >  
-> > > +	np = usb_of_get_device_node(hcd->self.root_hub, hcd->self.busnum);
-> > > +	if (np && of_is_onboard_usb_hub(np)) {
-> > > +		struct platform_device *pdev;
-> > > +
-> > > +		pdev = of_platform_device_create(np, NULL, NULL);
-> > 
-> > A platform device is a child of another platform device?  Ok, but
-> > really, why?  What uses this device?
-> 
-> In earlier versions there was a standalone platform device:
+Quoting Matthias Kaehlcke (2021-02-10 14:20:18)
+>=20
+> On Wed, Feb 10, 2021 at 10:06:45PM +0100, Krzysztof Kozlowski wrote:
+> >=20
+> > This looks hackish... what if later we have something else than hub?
+> > Another if()?
+> >=20
+> > What if hub could be connected to something else than XHCI controller?
+>=20
+> In earlier versions this was standalone driver, which was more flexible a=
+nd
+> didn't require cooperation from the XHCI driver:
+>=20
 > https://lore.kernel.org/patchwork/patch/1313001/
-> 
-> However this was rejected by Rob, since the DT would require a node for the
-> platform device and (implicit or explicit) nodes for the USB devices,
-> representing the same physical device:
-> 
+>=20
+> Rob Herring raised objections about the DT bindings, since the USB hub wo=
+uld be
+> represented twice in the DT, once in the USB hierachry (with an explicit =
+node or
+> implicitly) plus a node for the platform device for the new driver:
+>=20
 > https://lore.kernel.org/patchwork/patch/1305395/
 > https://lore.kernel.org/patchwork/patch/1313000/
-> 
-> Both Doug Anderson and myself argued that it seems legitimate to distinguish
-> between the devices connected to the USB bus, and the chip which might have
-> GPIOs, regulators, clocks, ... but apparently our arguments were not
-> convincing enough.
+>=20
+> Alan Stern suggested to create the platform device in the XHCI platform d=
+river:
+>=20
+> https://lore.kernel.org/patchwork/patch/1313000/#1510227
+>=20
+> I wasn't super happy about involving xhci-plat, but at least the code is =
+minimal
+> and all the device specific stuff is handled by the onboard_usb_hub drive=
+r.
+>=20
+> If you have better suggestions that might satisfy all parties please let =
+us
+> know :)
+>=20
 
-To let the xhci-plat driver create the platform device was suggested by Alan:
-
-https://lore.kernel.org/patchwork/patch/1313000/#1510227
-
-Personally I would favor a standalone platform device, since it provides more
-flexiblity (also works for hubs connected to a non-root hub) and doesn't require
-cooperation from other driver, however I doubt I could convince Rob of the
-corresponding DT bindings.
+Is it possible to use the graph binding to connect the USB controller on
+the SoC to the port on the hub? Then the hub would be a standalone node
+at the root of DT connected to the USB controller (or phy) and xhci code
+could probe the firmware to see if there's a graph connection downstream
+that is a powered hub like this. I didn't see this idea mentioned in the
+previous discussions, but maybe I missed it.
