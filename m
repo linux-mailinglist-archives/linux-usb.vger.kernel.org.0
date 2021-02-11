@@ -2,130 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2417318B97
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 14:11:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F804318C22
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Feb 2021 14:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbhBKNHs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Feb 2021 08:07:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59318 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230394AbhBKNFY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Feb 2021 08:05:24 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7D45764E08;
-        Thu, 11 Feb 2021 13:04:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1613048683;
-        bh=jK0NGxlElbE5VyNPYQUpDRF9ymi9Qy0NANIFxdScjjA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zVff6b9KHJ9aF6aMWYNSIiteqeS1UC7v2lA6u/Rrhg0gbhSz5V1zVacniJyflr8mk
-         lvSVy1ukCg1Bw+7zmEryKzP06VHZoe7DRzY78PZkg9Mp8QFVEMcATtTrJsJQdX4chi
-         kFkydEWLK54mR48mR6Ngq+Kl31+0vBJYiyWkjs68=
-Date:   Thu, 11 Feb 2021 14:04:40 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sylvain Pelissier <sylvain.pelissier@gmail.com>
-Cc:     kopiga.rasiah@epfl.ch, linux-usb@vger.kernel.org,
-        laurent.pinchart@ideasonboard.com
-Subject: Re: [PATCH] usb: video: fix descriptor structures macros
-Message-ID: <YCUraOy1Zdoi1kh7@kroah.com>
-References: <20210128081259.20940-1-sylvain.pelissier@gmail.com>
- <YBJ0SQaTSM5PxZom@kroah.com>
- <CAOkUe-CJNg2iCZu3528TvsQXTT5-STRauiiDciB_AnbwE8qrHQ@mail.gmail.com>
- <CAOkUe-AV22j07eAY6N0_2x3_9Ogo3GSX=UW0p1qbXTsyf=oV9w@mail.gmail.com>
- <YCUnr0cJC3GKIdof@kroah.com>
- <CAOkUe-D2vCFiCp6qqvTTxgi5it+W2rEeXzf3-zu4rji7Cc106w@mail.gmail.com>
+        id S231216AbhBKNd1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 11 Feb 2021 08:33:27 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:47571 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231169AbhBKNa3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Feb 2021 08:30:29 -0500
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-13-swhvU-StNEyBgOa2ePf8zg-1; Thu, 11 Feb 2021 13:28:43 +0000
+X-MC-Unique: swhvU-StNEyBgOa2ePf8zg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Thu, 11 Feb 2021 13:28:41 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Thu, 11 Feb 2021 13:28:41 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Amey Narkhede' <ameynarkhede03@gmail.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>
+CC:     "devel@driverdev.osuosl.org" <devel@driverdev.osuosl.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v4] staging: gdm724x: Fix DMA from stack
+Thread-Topic: [PATCH v4] staging: gdm724x: Fix DMA from stack
+Thread-Index: AQHXADh2uOSDdqHkV0CFTPfMMb6Y/6pS8lIg
+Date:   Thu, 11 Feb 2021 13:28:41 +0000
+Message-ID: <500e7317567548b48604ed9972062da2@AcuMS.aculab.com>
+References: <20210211053819.34858-1-ameynarkhede03@gmail.com>
+In-Reply-To: <20210211053819.34858-1-ameynarkhede03@gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOkUe-D2vCFiCp6qqvTTxgi5it+W2rEeXzf3-zu4rji7Cc106w@mail.gmail.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 11, 2021 at 01:55:21PM +0100, Sylvain Pelissier wrote:
-> Le jeu. 11 févr. 2021 à 13:48, Greg KH <gregkh@linuxfoundation.org> a
-> écrit :
-> 
-> > On Tue, Feb 09, 2021 at 05:16:45PM +0100, Sylvain Pelissier wrote:
-> > > On Thu, 28 Jan 2021 at 18:17, Sylvain Pelissier
-> > > <sylvain.pelissier@gmail.com> wrote:
-> > > >
-> > > > On Thu, 28 Jan 2021 at 09:22, Greg KH <gregkh@linuxfoundation.org>
-> > wrote:
-> > > > >
-> > > > > On Thu, Jan 28, 2021 at 09:12:59AM +0100, Sylvain Pelissier wrote:
-> > > > > > The macros defining structures for descriptors use token
-> > > > > > pasting incorrectly. For example, the macro
-> > > > > > UVC_EXTENSION_UNIT_DESCRIPTOR(1, 2) defines a structure named
-> > > > > > uvc_extension_unit_descriptor_p_2 which should be
-> > > > > > uvc_extension_unit_descriptor_1_2 instead.
-> > > > > >
-> > > > > > Signed-off-by: Sylvain Pelissier <sylvain.pelissier@gmail.com>
-> > > > > > ---
-> > > > > >  include/uapi/linux/usb/video.h | 6 +++---
-> > > > > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > > > > >
-> > > > > > diff --git a/include/uapi/linux/usb/video.h
-> > b/include/uapi/linux/usb/video.h
-> > > > > > index d854cb19c42c..1eb982df87a0 100644
-> > > > > > --- a/include/uapi/linux/usb/video.h
-> > > > > > +++ b/include/uapi/linux/usb/video.h
-> > > > > > @@ -324,7 +324,7 @@ struct uvc_extension_unit_descriptor {
-> > > > > >  #define UVC_DT_EXTENSION_UNIT_SIZE(p, n)             (24+(p)+(n))
-> > > > > >
-> > > > > >  #define UVC_EXTENSION_UNIT_DESCRIPTOR(p, n) \
-> > > > > > -     uvc_extension_unit_descriptor_##p_##n
-> > > > > > +     uvc_extension_unit_descriptor_##p##_##n
-> > > > > >
-> > > > > >  #define DECLARE_UVC_EXTENSION_UNIT_DESCRIPTOR(p, n)  \
-> > > > > >  struct UVC_EXTENSION_UNIT_DESCRIPTOR(p, n) {         \
-> > > > > > @@ -371,7 +371,7 @@ struct uvc_input_header_descriptor {
-> > > > > >  #define UVC_DT_INPUT_HEADER_SIZE(n, p)
-> >  (13+(n*p))
-> > > > > >
-> > > > > >  #define UVC_INPUT_HEADER_DESCRIPTOR(n, p) \
-> > > > > > -     uvc_input_header_descriptor_##n_##p
-> > > > > > +     uvc_input_header_descriptor_##n##_##p
-> > > > > >
-> > > > > >  #define DECLARE_UVC_INPUT_HEADER_DESCRIPTOR(n, p)    \
-> > > > > >  struct UVC_INPUT_HEADER_DESCRIPTOR(n, p) {           \
-> > > > > > @@ -406,7 +406,7 @@ struct uvc_output_header_descriptor {
-> > > > > >  #define UVC_DT_OUTPUT_HEADER_SIZE(n, p)
-> > (9+(n*p))
-> > > > > >
-> > > > > >  #define UVC_OUTPUT_HEADER_DESCRIPTOR(n, p) \
-> > > > > > -     uvc_output_header_descriptor_##n_##p
-> > > > > > +     uvc_output_header_descriptor_##n##_##p
-> > > > > >
-> > > > > >  #define DECLARE_UVC_OUTPUT_HEADER_DESCRIPTOR(n, p)   \
-> > > > > >  struct UVC_OUTPUT_HEADER_DESCRIPTOR(n, p) {          \
-> > > > > > --
-> > > > > > 2.25.1
-> > > > > >
-> > > > >
-> > > > > And no one noticed this?  If not, then why do we have these defines
-> > at
-> > > > > all, as obviously they are not used :)
-> > > >
-> > > > The problem is not detected if you have descriptors with the second
-> > > > argument different each time since the structure name will change. It
-> > > > is maybe why it was not noticed. Nevertheless, the extension unit, the
-> > > > input header and the output header descriptors are part of the USB
-> > > > video class specification and are often used by devices. We have
-> > > > detected the problem while implementing a usb gadget having such
-> > > > descriptors.
-> > > >
-> > > Hi,
-> > > Do I need to change something for this patch ?
-> >
-> > I need an ack from the v4l maintainers before I can take it...
-> >
-> 
-> Do I need to add someone in cc in particular?
+> Stack allocated buffers cannot be used for DMA
+> on all architectures so allocate hci_packet buffer
+> using kmalloc.
 
-I think Laurent is the proper one here as he's the maintainer for the
-usb v4l driver, right?
+I wonder if the usb stack ought/could support a short bounce
+buffer within the memory is already has to allocate?
 
-thanks,
+For hci and lengths less than 8 the immediate data can be
+placed directly in the ring structure replacing the data
+pointer itself.
 
-greg k-h
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
