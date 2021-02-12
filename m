@@ -2,210 +2,243 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C8B319893
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Feb 2021 04:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDF13198FA
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Feb 2021 05:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbhBLDG1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Feb 2021 22:06:27 -0500
-Received: from mga03.intel.com ([134.134.136.65]:19703 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229575AbhBLDG0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Feb 2021 22:06:26 -0500
-IronPort-SDR: Zm6BAwK55tYs3aW3X0djFsfFFEKjqXfuanljis4Ws2uD5i+FKQszpnA89GzOMI+D1eg1aqQVIa
- WJOZ3FBBtUmQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9892"; a="182429487"
-X-IronPort-AV: E=Sophos;i="5.81,172,1610438400"; 
-   d="scan'208";a="182429487"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2021 19:05:43 -0800
-IronPort-SDR: XjCfJJL05U3bdqBK/vmLsOvfD2550Pesxaf0rio59YCPah2lfUEXkj0hLU7XEvPaB5yj9aZ/nh
- NMq06EBVNZ4g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,172,1610438400"; 
-   d="scan'208";a="422315905"
-Received: from lkp-server02.sh.intel.com (HELO cd560a204411) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 11 Feb 2021 19:05:41 -0800
-Received: from kbuild by cd560a204411 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lAOm4-0004JZ-KV; Fri, 12 Feb 2021 03:05:40 +0000
-Date:   Fri, 12 Feb 2021 11:05:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 7a1e838d0cdce7d09a0bd81d45c7b5a660e71ac7
-Message-ID: <6025f081.9HL6VlbFC0f2MEdi%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229647AbhBLEJx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Feb 2021 23:09:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229573AbhBLEJs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Feb 2021 23:09:48 -0500
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC48C061574;
+        Thu, 11 Feb 2021 20:09:08 -0800 (PST)
+Received: by mail-oo1-xc2f.google.com with SMTP id f1so1816822oou.0;
+        Thu, 11 Feb 2021 20:09:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=7W3mRwT9grc4RGioubCtLHsQp5n6wdQDrRVup7k8z+A=;
+        b=RoAB0/pnbw20TvgTsr/NWXsrlyf1wj2iLrjP1LDWjYfb0ulfgD2OYqtCLLVF6KWBGj
+         IXVfkYqHOV2ctX0CWy5g6ZgDmPKiu4w4NMIC0ZX4v0PXJSgGQxfYznhs1vLLGS5tGSx+
+         dmyMvRLisIqk/7LPo4+d1QeGspwVV6Ezo6klZM95T3zwskzVpYTqrJxnCHHtgttwh6Lp
+         ayk0/6zxL2XxUw/TXRS4R4pYJpJPicerneDhK9xIntMX67ZkGQF6ocBKmHIVcIwWvrzF
+         UddGEq1PnF8zPPuW/2XmZW+NXraROvVLFZ5yf+BLl8sg+TIM7s5rtqc+qVT/J8twWKcp
+         aKDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7W3mRwT9grc4RGioubCtLHsQp5n6wdQDrRVup7k8z+A=;
+        b=b1D5H666JlwNT1vtBBG86MEBb7Lw7sl5wQ4NK7fVyKFPLteVJGqhFU46E8M1VY77Jj
+         Z7AQ6KK+gIcDAT0ZjH+Z06Ipw702UIkcosYBvKNCfetbecGUsXPJODGQJYnbWTH/Yj/J
+         OT5+m7pTZsEOZMOTh1BbTjvGnSgFw5XqrJzzr5kbkBmo2pV5DJKPEDQs1XAVuR0RtxNH
+         dQgt/bBaZ5KduRyRDgHApRy4dtPo5iGXnyExSy3syx3ExAR02InNjvC0nqKH0ZdGrDju
+         ie3Mtk0U7yl4SwM1cJEBo7OyDQkpoK4Dl1fktT7PMoVQuQoxjcSq6r870r1kupYL34OJ
+         j66A==
+X-Gm-Message-State: AOAM532NloXGsAetTEk0T6+I5MbDIqsed/gMezY65+hx67d/FUXz4hZV
+        LBb2g5JpEXImBmVIXUmtIB8=
+X-Google-Smtp-Source: ABdhPJwEEODRxUzSr9sTbfq+pfS8Cw9FUR1XCuSoEJV0NxDd7Q7Y+aZip70rzjdRmXqV85EVV/0Qjw==
+X-Received: by 2002:a4a:de94:: with SMTP id v20mr719711oou.90.1613102946497;
+        Thu, 11 Feb 2021 20:09:06 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g14sm1346481oon.23.2021.02.11.20.09.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 11 Feb 2021 20:09:05 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 11 Feb 2021 20:09:04 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Kyle Tso <kyletso@google.com>
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        hdegoede@redhat.com, robh+dt@kernel.org, badhri@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCHi v6 1/7] usb: typec: Manage SVDM version
+Message-ID: <20210212040904.GA103223@roeck-us.net>
+References: <20210205033415.3320439-1-kyletso@google.com>
+ <20210205033415.3320439-2-kyletso@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20210205033415.3320439-2-kyletso@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 7a1e838d0cdce7d09a0bd81d45c7b5a660e71ac7  usb: misc: usb3503: Fix logic in usb3503_init()
+On Fri, Feb 05, 2021 at 11:34:09AM +0800, Kyle Tso wrote:
+> PD Spec Revision 3.0 Version 2.0 + ECNs 2020-12-10
+>   6.4.4.2.3 Structured VDM Version
+>   "The Structured VDM Version field of the Discover Identity Command
+>   sent and received during VDM discovery Shall be used to determine the
+>   lowest common Structured VDM Version supported by the Port Partners or
+>   Cable Plug and Shall continue to operate using this Specification
+>   Revision until they are Detached."
+> 
+> Add a variable in typec_capability to specify the highest SVDM version
+> supported by the port and another variable in typec_partner to cache the
+> negotiated SVDM version between the port and the partner.
+> 
+> Also add setter/getter functions for the negotiated SVDM version.
+> 
+> Signed-off-by: Kyle Tso <kyletso@google.com>
 
-elapsed time: 730m
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-configs tested: 148
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-alpha                            alldefconfig
-arc                     haps_hs_smp_defconfig
-sh                               j2_defconfig
-powerpc                      ppc64e_defconfig
-arm                       netwinder_defconfig
-powerpc                         ps3_defconfig
-h8300                     edosk2674_defconfig
-arm                          moxart_defconfig
-arm                             rpc_defconfig
-mips                         mpc30x_defconfig
-arm                  colibri_pxa300_defconfig
-powerpc                    ge_imp3a_defconfig
-m68k                          atari_defconfig
-mips                      bmips_stb_defconfig
-powerpc                     stx_gp3_defconfig
-arm                           sunxi_defconfig
-sh                           se7705_defconfig
-m68k                          hp300_defconfig
-powerpc                 linkstation_defconfig
-sh                            migor_defconfig
-mips                      maltasmvp_defconfig
-mips                     cu1830-neo_defconfig
-mips                         tb0219_defconfig
-sh                          rsk7264_defconfig
-arm                            u300_defconfig
-mips                         rt305x_defconfig
-xtensa                    xip_kc705_defconfig
-powerpc                     tqm5200_defconfig
-sh                     sh7710voipgw_defconfig
-mips                      maltaaprp_defconfig
-powerpc                     redwood_defconfig
-arm                          exynos_defconfig
-arc                          axs101_defconfig
-powerpc                 mpc8540_ads_defconfig
-mips                      malta_kvm_defconfig
-s390                          debug_defconfig
-powerpc                 xes_mpc85xx_defconfig
-powerpc                       holly_defconfig
-powerpc                     kmeter1_defconfig
-sh                                  defconfig
-powerpc                     taishan_defconfig
-powerpc                       eiger_defconfig
-arm                          pxa910_defconfig
-powerpc                    sam440ep_defconfig
-powerpc                  mpc885_ads_defconfig
-c6x                        evmc6457_defconfig
-openrisc                            defconfig
-arm                           omap1_defconfig
-arm                         shannon_defconfig
-powerpc                      chrp32_defconfig
-arc                        vdk_hs38_defconfig
-arm                         vf610m4_defconfig
-sparc                       sparc32_defconfig
-mips                            e55_defconfig
-powerpc                      pcm030_defconfig
-mips                    maltaup_xpa_defconfig
-arm                         palmz72_defconfig
-powerpc                     tqm8548_defconfig
-microblaze                          defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20210209
-x86_64               randconfig-a001-20210209
-x86_64               randconfig-a005-20210209
-x86_64               randconfig-a004-20210209
-x86_64               randconfig-a002-20210209
-x86_64               randconfig-a003-20210209
-i386                 randconfig-a001-20210209
-i386                 randconfig-a005-20210209
-i386                 randconfig-a003-20210209
-i386                 randconfig-a002-20210209
-i386                 randconfig-a006-20210209
-i386                 randconfig-a004-20210209
-x86_64               randconfig-a016-20210211
-x86_64               randconfig-a013-20210211
-x86_64               randconfig-a012-20210211
-x86_64               randconfig-a015-20210211
-x86_64               randconfig-a014-20210211
-x86_64               randconfig-a011-20210211
-i386                 randconfig-a016-20210209
-i386                 randconfig-a013-20210209
-i386                 randconfig-a012-20210209
-i386                 randconfig-a014-20210209
-i386                 randconfig-a011-20210209
-i386                 randconfig-a015-20210209
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a003-20210211
-x86_64               randconfig-a002-20210211
-x86_64               randconfig-a001-20210211
-x86_64               randconfig-a004-20210211
-x86_64               randconfig-a005-20210211
-x86_64               randconfig-a006-20210211
-x86_64               randconfig-a013-20210209
-x86_64               randconfig-a014-20210209
-x86_64               randconfig-a015-20210209
-x86_64               randconfig-a012-20210209
-x86_64               randconfig-a016-20210209
-x86_64               randconfig-a011-20210209
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+> Changes since v5
+> - !! most changes are from Heikki
+> - location of the negotiated SVDM version is changed. Now the variable
+>   resides in typec_partner
+> - The setter and getter functions were modified according to the above
+>   changes
+> - the default SVDM version is stored upon calling to
+>   typec_register_partner
+> 
+>  drivers/usb/typec/class.c         | 43 +++++++++++++++++++++++++++++++
+>  include/linux/usb/typec.h         | 12 +++++++++
+>  include/linux/usb/typec_altmode.h | 10 +++++++
+>  3 files changed, 65 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index b4a5d9d4564f..45f0bf65e9ab 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -38,6 +38,7 @@ struct typec_partner {
+>  	struct ida			mode_ids;
+>  	int				num_altmodes;
+>  	u16				pd_revision; /* 0300H = "3.0" */
+> +	enum usb_pd_svdm_ver		svdm_version;
+>  };
+>  
+>  struct typec_port {
+> @@ -824,6 +825,20 @@ typec_partner_register_altmode(struct typec_partner *partner,
+>  }
+>  EXPORT_SYMBOL_GPL(typec_partner_register_altmode);
+>  
+> +/**
+> + * typec_partner_set_svdm_version - Set negotiated Structured VDM (SVDM) Version
+> + * @partner: USB Type-C Partner that supports SVDM
+> + * @svdm_version: Negotiated SVDM Version
+> + *
+> + * This routine is used to save the negotiated SVDM Version.
+> + */
+> +void typec_partner_set_svdm_version(struct typec_partner *partner,
+> +				   enum usb_pd_svdm_ver svdm_version)
+> +{
+> +	partner->svdm_version = svdm_version;
+> +}
+> +EXPORT_SYMBOL_GPL(typec_partner_set_svdm_version);
+> +
+>  /**
+>   * typec_register_partner - Register a USB Type-C Partner
+>   * @port: The USB Type-C Port the partner is connected to
+> @@ -848,6 +863,7 @@ struct typec_partner *typec_register_partner(struct typec_port *port,
+>  	partner->accessory = desc->accessory;
+>  	partner->num_altmodes = -1;
+>  	partner->pd_revision = desc->pd_revision;
+> +	partner->svdm_version = port->cap->svdm_version;
+>  
+>  	if (desc->identity) {
+>  		/*
+> @@ -1894,6 +1910,33 @@ EXPORT_SYMBOL_GPL(typec_set_mode);
+>  
+>  /* --------------------------------------- */
+>  
+> +/**
+> + * typec_get_negotiated_svdm_version - Get negotiated SVDM Version
+> + * @port: USB Type-C Port.
+> + *
+> + * Get the negotiated SVDM Version. The Version is set to the port default
+> + * value stored in typec_capability on partner registration, and updated after
+> + * a successful Discover Identity if the negotiated value is less than the
+> + * default value.
+> + *
+> + * Returns usb_pd_svdm_ver if the partner has been registered otherwise -ENODEV.
+> + */
+> +int typec_get_negotiated_svdm_version(struct typec_port *port)
+> +{
+> +	enum usb_pd_svdm_ver svdm_version;
+> +	struct device *partner_dev;
+> +
+> +	partner_dev = device_find_child(&port->dev, NULL, partner_match);
+> +	if (!partner_dev)
+> +		return -ENODEV;
+> +
+> +	svdm_version = to_typec_partner(partner_dev)->svdm_version;
+> +	put_device(partner_dev);
+> +
+> +	return svdm_version;
+> +}
+> +EXPORT_SYMBOL_GPL(typec_get_negotiated_svdm_version);
+> +
+>  /**
+>   * typec_get_drvdata - Return private driver data pointer
+>   * @port: USB Type-C port
+> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> index a94df82ab62f..91b4303ca305 100644
+> --- a/include/linux/usb/typec.h
+> +++ b/include/linux/usb/typec.h
+> @@ -217,12 +217,19 @@ struct typec_operations {
+>  			     enum typec_port_type type);
+>  };
+>  
+> +enum usb_pd_svdm_ver {
+> +	SVDM_VER_1_0 = 0,
+> +	SVDM_VER_2_0 = 1,
+> +	SVDM_VER_MAX = SVDM_VER_2_0,
+> +};
+> +
+>  /*
+>   * struct typec_capability - USB Type-C Port Capabilities
+>   * @type: Supported power role of the port
+>   * @data: Supported data role of the port
+>   * @revision: USB Type-C Specification release. Binary coded decimal
+>   * @pd_revision: USB Power Delivery Specification revision if supported
+> + * @svdm_version: USB PD Structured VDM version if supported
+>   * @prefer_role: Initial role preference (DRP ports).
+>   * @accessory: Supported Accessory Modes
+>   * @fwnode: Optional fwnode of the port
+> @@ -236,6 +243,7 @@ struct typec_capability {
+>  	enum typec_port_data	data;
+>  	u16			revision; /* 0120H = "1.2" */
+>  	u16			pd_revision; /* 0300H = "3.0" */
+> +	enum usb_pd_svdm_ver	svdm_version;
+>  	int			prefer_role;
+>  	enum typec_accessory	accessory[TYPEC_MAX_ACCESSORY];
+>  	unsigned int		orientation_aware:1;
+> @@ -286,4 +294,8 @@ int typec_find_orientation(const char *name);
+>  int typec_find_port_power_role(const char *name);
+>  int typec_find_power_role(const char *name);
+>  int typec_find_port_data_role(const char *name);
+> +
+> +void typec_partner_set_svdm_version(struct typec_partner *partner,
+> +				    enum usb_pd_svdm_ver svdm_version);
+> +int typec_get_negotiated_svdm_version(struct typec_port *port);
+>  #endif /* __LINUX_USB_TYPEC_H */
+> diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
+> index 5e0a7b7647c3..65933cbe9129 100644
+> --- a/include/linux/usb/typec_altmode.h
+> +++ b/include/linux/usb/typec_altmode.h
+> @@ -132,6 +132,16 @@ typec_altmode_get_orientation(struct typec_altmode *altmode)
+>  	return typec_get_orientation(typec_altmode2port(altmode));
+>  }
+>  
+> +/**
+> + * typec_altmode_get_svdm_version - Get negotiated SVDM version
+> + * @altmode: Handle to the alternate mode
+> + */
+> +static inline int
+> +typec_altmode_get_svdm_version(struct typec_altmode *altmode)
+> +{
+> +	return typec_get_negotiated_svdm_version(typec_altmode2port(altmode));
+> +}
+> +
+>  /**
+>   * struct typec_altmode_driver - USB Type-C alternate mode device driver
+>   * @id_table: Null terminated array of SVIDs
+> -- 
+> 2.30.0.365.g02bc693789-goog
+> 
