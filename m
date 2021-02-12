@@ -2,55 +2,19 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3976331A425
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Feb 2021 19:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08CA131A5A3
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Feb 2021 20:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbhBLSBy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Feb 2021 13:01:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbhBLSBw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Feb 2021 13:01:52 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960C8C0613D6
-        for <linux-usb@vger.kernel.org>; Fri, 12 Feb 2021 10:01:13 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id 100so9179757otg.3
-        for <linux-usb@vger.kernel.org>; Fri, 12 Feb 2021 10:01:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DgDULeiKflVFwoR6BsGB3cUqPpNxfkBwuzxZxXpXoLY=;
-        b=DCzDEBVjLIaaQd57q6fVH1cUKOsUzde77Y6qiR5L/k48zTlVtQYI7DtAlnEuHF9q0X
-         57rDgE3EcctbG+Jjyd+60Xa5CgCSRK1FuwvPs9VyBfXVKDLM67rJPYdyWPy19b9xMWBO
-         QSR459ll+V93R4uNHr4h0eO5o3QUfjngs5f5dPrkNeivbE3YQCBNlmQAy1dDZosVX3EL
-         6D1Xz5zusS+1ld+MGkk3JmZ2ySbbSANFUOOXxCVgZq+JEZ3YP9okvyOPuFhS+4Oe7XD6
-         56tb6NsTZPbt4iLyids3gREv+ebIoulLV0KlupwbKepL8afknT8QgtgpkI/JAdCsWg9C
-         fOBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DgDULeiKflVFwoR6BsGB3cUqPpNxfkBwuzxZxXpXoLY=;
-        b=avz8ch6W3mClNdBxTcDx/eeKsBwil053RHBoemuYM5GY1cW2VLqqelaZgf58jxMwgO
-         N9tZ9sYvdhViZ4vyZcuNzjXO/gpVVmsUV5CzRrtdRzdv1Q6HGs/u8K03BSJ3Z56bulzt
-         G2J/QSFkBd/IzZMGouoxmRalxMLtzspKW4Go2XERG2E+PFnimktp53bXlvbEi8pem2x/
-         jvuLrJatY3el3PuUQq9OvdPO+MHohvSQy/ZXfoEqBy9rddw8tWM4gph8+9rSCsb0H7nX
-         2feCMtbC3KXGNLtIohG6Fja1nVnf6c4rnG9eJPUwtEwt337Fo8iUTMRp+mbQlLKwksTX
-         bB5w==
-X-Gm-Message-State: AOAM530ombF3/xqz93TdkeHUapjGcvOjKZCuGRXKfEymSkS2ND6OE5p2
-        RmNl25qcxL2/Ir+nOF32PClg4A==
-X-Google-Smtp-Source: ABdhPJyniCmu8jCeQK56LqSsb0pYBEXvHH0wktvHQXkTlk5uyu8JEP55tx/ozoDyxTZNRcxrBKdOug==
-X-Received: by 2002:a9d:8f2:: with SMTP id 105mr2836518otf.64.1613152872844;
-        Fri, 12 Feb 2021 10:01:12 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id e14sm1684583oou.19.2021.02.12.10.01.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Feb 2021 10:01:12 -0800 (PST)
-Date:   Fri, 12 Feb 2021 12:01:10 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        id S231513AbhBLTwE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Feb 2021 14:52:04 -0500
+Received: from mail.baikalelectronics.com ([87.245.175.226]:40446 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229451AbhBLTwC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Feb 2021 14:52:02 -0500
+Date:   Fri, 12 Feb 2021 22:51:19 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Felipe Balbi <balbi@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
@@ -62,25 +26,26 @@ Cc:     Serge Semin <fancer.lancer@gmail.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH v6 09/10] usb: dwc3: qcom: Detect DWC3 DT-nodes with
  "usb"-prefixed names
-Message-ID: <YCbCZuaO9ryAzxzy@builder.lan>
+Message-ID: <20210212195119.f55q7mcmfcsqna5s@mobilestation>
 References: <20210210172850.20849-1-Sergey.Semin@baikalelectronics.ru>
  <20210210172850.20849-10-Sergey.Semin@baikalelectronics.ru>
  <CAL_JsqJBknqhCSUOdpZVbtmp6TYetBQPLoQUCT6DTFajpChaSA@mail.gmail.com>
  <20210210184051.ncvvs5xgyo7o3uzq@mobilestation>
  <YCQse9EtEHtLVe9A@builder.lan>
  <20210210193325.inp7rgpsfr624zhd@mobilestation>
- <20210212173315.jgr6kata2yxrbkuu@mobilestation>
+ <YCa/m4qfT1T4e6CW@builder.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20210212173315.jgr6kata2yxrbkuu@mobilestation>
+In-Reply-To: <YCa/m4qfT1T4e6CW@builder.lan>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri 12 Feb 11:33 CST 2021, Serge Semin wrote:
-
-> On Wed, Feb 10, 2021 at 10:33:26PM +0300, Serge Semin wrote:
+On Fri, Feb 12, 2021 at 11:49:15AM -0600, Bjorn Andersson wrote:
+> On Wed 10 Feb 13:33 CST 2021, Serge Semin wrote:
+> 
 > > On Wed, Feb 10, 2021 at 12:56:59PM -0600, Bjorn Andersson wrote:
 > > > On Wed 10 Feb 12:40 CST 2021, Serge Semin wrote:
 > > > 
@@ -144,21 +109,19 @@ On Fri 12 Feb 11:33 CST 2021, Serge Semin wrote:
 > > string has been marked as deprecated recently because the vendor-prefix
 > > was changed sometime ago, but the original driver still accept it.
 > > 
+> 
+> I don't see any Qualcomm users of "synopsys,dwc3", past or present.
+> 
 > > Alternatively to be on a safe side we could match against both
 > > compatibles here as Rob suggests. What do you think?
+> > 
 > 
-> Bjorn, any comment on the question above? So I could respin the series
-> with this patch updated.
+> Let's go with only "snps,dwc3".
+
+Ok. Thanks. I'll resend just two patches in ten minutes.
+
+-Sergey
+
 > 
-> Also note, since the patch's gonna be changed I'll have to remove your
-> Reviewed-by tag unless u explicitly say I shouldn't.
-> 
-
-Sounds good, I'd be happy to review the new patch.
-
-PS. As this only affect the Qualcomm part of the series I would suggest
-that you send these patches off separate and don't send all 10 patches
-together.
-
-Thanks,
-Bjorn
+> Regards,
+> Bjorn
