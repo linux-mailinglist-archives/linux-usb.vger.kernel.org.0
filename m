@@ -2,43 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C16D31A0C9
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Feb 2021 15:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B44F031A0D0
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Feb 2021 15:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbhBLOlf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Feb 2021 09:41:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47744 "EHLO mail.kernel.org"
+        id S230249AbhBLOmU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Feb 2021 09:42:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47984 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229611AbhBLOld (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 12 Feb 2021 09:41:33 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7573A64E6C;
-        Fri, 12 Feb 2021 14:40:52 +0000 (UTC)
+        id S229917AbhBLOmS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 12 Feb 2021 09:42:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D917B64E7A;
+        Fri, 12 Feb 2021 14:41:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613140852;
-        bh=lNmf+KonFuMPi+dCFqb4apHvIFyN63ZqhEuNvuAJZJU=;
+        s=k20201202; t=1613140897;
+        bh=w41GzsJk0Vogbh4l71xjGxLnYcjpT88j2ABTUyR0CPA=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=td5au61zw+FH83RNa8thtPObsVAI3458852CvKpchSTdCb59iljNK91+7ECh7e/jg
-         brNylOPY9rhazfPz5HfUtkgLYLr+4iD2qjjm85S23sSu8QamwRhRy9hqw4j596QHsk
-         GQBnjoYAelq9h2WyRYvO4c+4rMyGmJCOF283ctuNGrnn0i9f+4NkcLMTyvABsZ8O9j
-         wOkBodRWHRpTeGzaFOsm9BO80z7Xj9CTt2FwudCt3JpWieXsBsjobjBhCw8IgSkdw9
-         rgBHPvGWerc0LdUgYLHZEelv5aPoesfeKzX1KF7I/7Y1Dtr7cblt5zr7Iv+fMooY2c
-         z381YVLqhw/4w==
-Received: by mail-wr1-f51.google.com with SMTP id t15so5897605wrx.13;
-        Fri, 12 Feb 2021 06:40:52 -0800 (PST)
-X-Gm-Message-State: AOAM531xkT/y9DUZLilfwPQ+62PC8vXdJoKqnKhT5u7NhRCrbbxO9C0W
-        Xqbp01xHHghI0uStpS9UvBTpjxgCST1ed1v6Fg==
-X-Google-Smtp-Source: ABdhPJwlgv4RWqsDiLaeTsG54Sh0GpBHZUBUqDQ3pj4i+G7BzdkEZweyl6jsXPlPJ0Trb4kAvI8JnfP3v+LhWsbBKNY=
-X-Received: by 2002:a5d:6783:: with SMTP id v3mr3814242wru.394.1613140851043;
- Fri, 12 Feb 2021 06:40:51 -0800 (PST)
+        b=CMJycKMceiGxoVjgh66jMjcZGvF/VK0b5CQPBqftuYsiYWCVToXNfbG4tzSjxa45T
+         820jRA1mpFm2F6XQLAZQ+YNjN6CR48/YM7qEYXZ0zA73VLCLS2hEldmADLAo9crSCo
+         Fypz0aHib4ZJ1dUeK1BX1iMHA/DamncbRbNsxEXOtfZmnDvQVacS93v6JcaA6IoBma
+         FDvCISxq9JB0n+ZCz3Df3KFhH4X6lLv2hhMCJPDDKi40FfdnnV/v0Ijx5b0gGGLDOr
+         z+JbUd2J5mE1STVwthrR/nDJwnlk7bW6X4M6vCDnvM5YcIykZZXFwX61UYSleHHj9E
+         YXt6C3hKpaq2Q==
+Received: by mail-wm1-f48.google.com with SMTP id y134so1232790wmd.3;
+        Fri, 12 Feb 2021 06:41:36 -0800 (PST)
+X-Gm-Message-State: AOAM533uVMTtzbFkdCSykAAzdXPbfMnhuc2DU93pSQXrsogqeF/sI2IH
+        BR8NiEAzPyMbGFUXKumsduLJ93qlg7273a84jQ==
+X-Google-Smtp-Source: ABdhPJzdFy4n8dWcKUYHoVq6+dVbyp7JXRlajzvwa8pvXT90zRWzOYhLksxIrD/3To51pG8WvOViuzKeUWRQtAPU1Qc=
+X-Received: by 2002:a1c:5f82:: with SMTP id t124mr2937914wmb.55.1613140895464;
+ Fri, 12 Feb 2021 06:41:35 -0800 (PST)
 MIME-Version: 1.0
-References: <20210201070016.41721-1-chunfeng.yun@mediatek.com> <20210201070016.41721-3-chunfeng.yun@mediatek.com>
-In-Reply-To: <20210201070016.41721-3-chunfeng.yun@mediatek.com>
+References: <20210201070016.41721-1-chunfeng.yun@mediatek.com> <20210201070016.41721-4-chunfeng.yun@mediatek.com>
+In-Reply-To: <20210201070016.41721-4-chunfeng.yun@mediatek.com>
 From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Fri, 12 Feb 2021 22:40:39 +0800
-X-Gmail-Original-Message-ID: <CAAOTY__QS8USVB3ZZ_a9t8VvOEZvnLCpdVxPtwgG0m9__p+fMQ@mail.gmail.com>
-Message-ID: <CAAOTY__QS8USVB3ZZ_a9t8VvOEZvnLCpdVxPtwgG0m9__p+fMQ@mail.gmail.com>
-Subject: Re: [PATCH next v3 03/16] dt-bindings: phy: mediatek: dsi-phy: modify
- compatible dependence
+Date:   Fri, 12 Feb 2021 22:41:24 +0800
+X-Gmail-Original-Message-ID: <CAAOTY__G=+8q=8WiRsh4Qvfk5GQz3D4iFTBecWXGq7hX_7_m_g@mail.gmail.com>
+Message-ID: <CAAOTY__G=+8q=8WiRsh4Qvfk5GQz3D4iFTBecWXGq7hX_7_m_g@mail.gmail.com>
+Subject: Re: [PATCH next v3 04/16] dt-bindings: phy: mediatek: hdmi-phy:
+ modify compatible items
 To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -65,9 +65,10 @@ Chunfeng Yun <chunfeng.yun@mediatek.com> =E6=96=BC 2021=E5=B9=B42=E6=9C=881=
 =E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=883:00=E5=AF=AB=E9=81=93=EF=BC=
 =9A
 >
-> mt7623-mipi-tx is compatible to mt2701-mipi-tx, and use
-> "mediatek,mt2701-mipi-tx" instead on MT7623, so modify
-> the compatible items to make dependence clear.
+> mt7623-hdmi-tx is compatible to mt2701-hdmi-tx, and the compatible
+> "mediatek,mt7623-hdmi-tx" is not supported in driver, in fact uses
+> "mediatek,mt2701-hdmi-tx" instead on MT7623, so changes the
+> compatible items to make dependence clear.
 
 Acked-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 
@@ -76,34 +77,32 @@ Acked-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 > Cc: Philipp Zabel <p.zabel@pengutronix.de>
 > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 > ---
-> v3: modify commit message suggested by CK
-> v2: separate two patches suggested by CK
+> v3: modify commit message
+> v2: no changes
 > ---
->  .../devicetree/bindings/phy/mediatek,dsi-phy.yaml   | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
+>  .../devicetree/bindings/phy/mediatek,hdmi-phy.yaml    | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
 >
-> diff --git a/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml =
-b/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
-> index 71d4acea1f66..6e4d795f9b02 100644
-> --- a/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
-> @@ -19,11 +19,14 @@ properties:
->      pattern: "^dsi-phy@[0-9a-f]+$"
+> diff --git a/Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml=
+ b/Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml
+> index 4752517a1446..0d94950b84ca 100644
+> --- a/Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml
+> @@ -21,10 +21,13 @@ properties:
+>      pattern: "^hdmi-phy@[0-9a-f]+$"
 >
 >    compatible:
 > -    enum:
-> -      - mediatek,mt2701-mipi-tx
-> -      - mediatek,mt7623-mipi-tx
-> -      - mediatek,mt8173-mipi-tx
-> -      - mediatek,mt8183-mipi-tx
+> -      - mediatek,mt2701-hdmi-phy
+> -      - mediatek,mt7623-hdmi-phy
+> -      - mediatek,mt8173-hdmi-phy
 > +    oneOf:
 > +      - items:
 > +          - enum:
-> +              - mediatek,mt7623-mipi-tx
-> +          - const: mediatek,mt2701-mipi-tx
-> +      - const: mediatek,mt2701-mipi-tx
-> +      - const: mediatek,mt8173-mipi-tx
-> +      - const: mediatek,mt8183-mipi-tx
+> +              - mediatek,mt7623-hdmi-phy
+> +          - const: mediatek,mt2701-hdmi-phy
+> +      - const: mediatek,mt2701-hdmi-phy
+> +      - const: mediatek,mt8173-hdmi-phy
 >
 >    reg:
 >      maxItems: 1
