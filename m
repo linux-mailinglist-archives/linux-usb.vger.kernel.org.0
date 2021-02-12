@@ -2,89 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F73D31A3FE
+	by mail.lfdr.de (Postfix) with ESMTP id DFE0331A3FF
 	for <lists+linux-usb@lfdr.de>; Fri, 12 Feb 2021 18:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231293AbhBLRr3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Feb 2021 12:47:29 -0500
-Received: from asav21.altibox.net ([109.247.116.8]:36906 "EHLO
+        id S231397AbhBLRrc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Feb 2021 12:47:32 -0500
+Received: from asav21.altibox.net ([109.247.116.8]:36920 "EHLO
         asav21.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbhBLRr2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Feb 2021 12:47:28 -0500
+        with ESMTP id S231406AbhBLRr3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Feb 2021 12:47:29 -0500
 Received: from localhost.localdomain (unknown [81.166.168.211])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: noralf.tronnes@ebnett.no)
-        by asav21.altibox.net (Postfix) with ESMTPSA id AED6980380;
-        Fri, 12 Feb 2021 18:46:23 +0100 (CET)
+        by asav21.altibox.net (Postfix) with ESMTPSA id 6C60980399;
+        Fri, 12 Feb 2021 18:46:24 +0100 (CET)
 From:   =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
 To:     dri-devel@lists.freedesktop.org
 Cc:     linux-usb@vger.kernel.org, sam@ravnborg.org, peter@stuge.se,
         lkundrak@v3.sk, markus@raatikainen.cc, pontus.fuchs@gmail.com,
         hudson@trmm.net, th020394@gmail.com,
-        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
-Subject: [PATCH v5 0/3] GUD USB Display driver
-Date:   Fri, 12 Feb 2021 18:46:06 +0100
-Message-Id: <20210212174609.58977-1-noralf@tronnes.org>
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: [PATCH v5 1/3] drm/uapi: Add USB connector type
+Date:   Fri, 12 Feb 2021 18:46:07 +0100
+Message-Id: <20210212174609.58977-2-noralf@tronnes.org>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20210212174609.58977-1-noralf@tronnes.org>
+References: <20210212174609.58977-1-noralf@tronnes.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-CMAE-Score: 0
 X-CMAE-Analysis: v=2.3 cv=Kb38TzQD c=1 sm=1 tr=0
         a=OYZzhG0JTxDrWp/F2OJbnw==:117 a=OYZzhG0JTxDrWp/F2OJbnw==:17
-        a=IkcTkHD0fZMA:10 a=M51BFTxLslgA:10 a=gAmX6pxEAAAA:20
-        a=bKmTZf8EAmjS18ln50IA:9 a=QEXdDO2ut3YA:10 a=7zwkRhCwzGnCyznlyk9i:22
-        a=Z5ABNNGmrOfJ6cZ5bIyy:22 a=jd6J4Gguk5HxikPWLKER:22
+        a=IkcTkHD0fZMA:10 a=M51BFTxLslgA:10 a=SJz97ENfAAAA:8
+        a=sSyzFPz0vM96QvMiUssA:9 a=QEXdDO2ut3YA:10 a=vFet0B0WnEQeilDPIY6i:22
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Add a connector type for USB connected display panels.
 
-A while back I had the idea to turn a Raspberry Pi Zero into a $5
-USB to HDMI/SDTV/DPI display adapter.
+Some examples of what current userspace will name the connector:
+- Weston: "UNNAMED-%d"
+- Mutter: "Unknown20-%d"
+- X: "Unknown20-%d"
 
-The protocol is open so people are free to make displays implementing it and
-use this driver, all that's needed is to add a USB vid:pid to the driver for
-the display.
+v2:
+- Update drm_connector_enum_list
+- Add examples to commit message
 
-See the wiki[1] for more information and images for the Raspberry Pi Zero/4.
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
+---
+ drivers/gpu/drm/drm_connector.c | 1 +
+ include/uapi/drm/drm_mode.h     | 1 +
+ 2 files changed, 2 insertions(+)
 
-Minor changes this time, no protocol changes.
-
-Noralf.
-
-[1] https://github.com/notro/gud/wiki
-
-
-Noralf Trønnes (3):
-  drm/uapi: Add USB connector type
-  drm/probe-helper: Check epoch counter in output_poll_execute()
-  drm: Add Generic USB Display driver
-
- MAINTAINERS                         |   8 +
- drivers/gpu/drm/Kconfig             |   2 +
- drivers/gpu/drm/Makefile            |   1 +
- drivers/gpu/drm/drm_connector.c     |   1 +
- drivers/gpu/drm/drm_probe_helper.c  |   7 +-
- drivers/gpu/drm/gud/Kconfig         |  14 +
- drivers/gpu/drm/gud/Makefile        |   4 +
- drivers/gpu/drm/gud/gud_connector.c | 737 ++++++++++++++++++++++++++++
- drivers/gpu/drm/gud/gud_drv.c       | 625 +++++++++++++++++++++++
- drivers/gpu/drm/gud/gud_internal.h  | 149 ++++++
- drivers/gpu/drm/gud/gud_pipe.c      | 475 ++++++++++++++++++
- include/drm/gud.h                   | 356 ++++++++++++++
- include/uapi/drm/drm_mode.h         |   1 +
- 13 files changed, 2379 insertions(+), 1 deletion(-)
- create mode 100644 drivers/gpu/drm/gud/Kconfig
- create mode 100644 drivers/gpu/drm/gud/Makefile
- create mode 100644 drivers/gpu/drm/gud/gud_connector.c
- create mode 100644 drivers/gpu/drm/gud/gud_drv.c
- create mode 100644 drivers/gpu/drm/gud/gud_internal.h
- create mode 100644 drivers/gpu/drm/gud/gud_pipe.c
- create mode 100644 include/drm/gud.h
-
+diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
+index 717c4e7271b0..52712daed3bc 100644
+--- a/drivers/gpu/drm/drm_connector.c
++++ b/drivers/gpu/drm/drm_connector.c
+@@ -94,6 +94,7 @@ static struct drm_conn_prop_enum_list drm_connector_enum_list[] = {
+ 	{ DRM_MODE_CONNECTOR_DPI, "DPI" },
+ 	{ DRM_MODE_CONNECTOR_WRITEBACK, "Writeback" },
+ 	{ DRM_MODE_CONNECTOR_SPI, "SPI" },
++	{ DRM_MODE_CONNECTOR_USB, "USB" },
+ };
+ 
+ void drm_connector_ida_init(void)
+diff --git a/include/uapi/drm/drm_mode.h b/include/uapi/drm/drm_mode.h
+index fed66a03c7ae..33024cc5d26e 100644
+--- a/include/uapi/drm/drm_mode.h
++++ b/include/uapi/drm/drm_mode.h
+@@ -367,6 +367,7 @@ enum drm_mode_subconnector {
+ #define DRM_MODE_CONNECTOR_DPI		17
+ #define DRM_MODE_CONNECTOR_WRITEBACK	18
+ #define DRM_MODE_CONNECTOR_SPI		19
++#define DRM_MODE_CONNECTOR_USB		20
+ 
+ /**
+  * struct drm_mode_get_connector - Get connector metadata.
 -- 
 2.23.0
 
