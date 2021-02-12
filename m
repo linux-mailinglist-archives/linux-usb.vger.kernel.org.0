@@ -2,84 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13517319DCD
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Feb 2021 13:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70381319DDB
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Feb 2021 13:08:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbhBLMBl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Feb 2021 07:01:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbhBLMAQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Feb 2021 07:00:16 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA99C061756
-        for <linux-usb@vger.kernel.org>; Fri, 12 Feb 2021 03:59:36 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id u14so699401wmq.4
-        for <linux-usb@vger.kernel.org>; Fri, 12 Feb 2021 03:59:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2/O2+yGZT3dlZkoYb3t6s2sashcYjFfo5PgmQZA4ci4=;
-        b=O7jG6N4xXeInCuTzuYFbUULeb++dWhK95wxcFuGMx7bjGtzz0sVTl7QX3PxsT3/RX5
-         IKDeq0nGGbSZNOqbz+oWGuHLfOiswNnFtgbnQ6GIJxVeVg2447G+5fVMgIbUGa4d4s4G
-         TAqpCjzEJ7So3yGjMVGfdeAyikeO9LYIBI/FlFNPh4sTfrIhehl79ouOvCxieAMgzIos
-         Ih07l9+OqEjQgbsxoaZy978U9r6TJbgnZYVHKGkQ/8GrynEGzYUpRQ/ZfzLiRBjj51aX
-         iFmfz0GrJPbgFC8KgjogfYbOe1sZj6Cic5cMbcuUOVK/fG8+meW9c2lXrCQ5MQC8S3mH
-         dy8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2/O2+yGZT3dlZkoYb3t6s2sashcYjFfo5PgmQZA4ci4=;
-        b=EW10O68r+QzhEiWBvAKC6V90SobchcafCRYTUQx/S6i87r1CB5L9Y+BOprkp7+utVB
-         26baEzwIAk+cH0kQbae69fnTfns60hqLadmeiykNEueYCy5l80MBbH/O/VOiHyDQSWlw
-         0yk6Ya5SNre+egCZZETm3458QwAikT8oczNiAxNu4tegFKlGgXDR6xSUQHtbQaWVMegp
-         0ecRiVnVj4SYOpdAzDPtFZXeo42wwUU3vn/ST0bIuUIAIE6WQxBNcxwmAz5q65Q+5YrG
-         UGJPE/991DDb0ZFNP9j6flzRKd+OrFjoqy+LSOhTxawSlYREzcjmo5GBHCj457A3eX+m
-         Y2ug==
-X-Gm-Message-State: AOAM531Kzbmi6lDr63P/eZt7FhqBLFnClYJ7QZ81jgH0U6iLegOVvxW0
-        iej5v06RQKFNuskBD/ZBy5eFctflTZNUoSLF7kI=
-X-Google-Smtp-Source: ABdhPJzPYdM26oL1Mc2zA6Xr4FMF12p/zwkDq7ANw2qVLZH/Q2cYfnuhFO5CTFYp+Awm2tdLFDfT8sBsYx8doPfxRbk=
-X-Received: by 2002:a1c:e309:: with SMTP id a9mr2340184wmh.99.1613131174853;
- Fri, 12 Feb 2021 03:59:34 -0800 (PST)
+        id S229497AbhBLMFg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Feb 2021 07:05:36 -0500
+Received: from honk.sigxcpu.org ([24.134.29.49]:47052 "EHLO honk.sigxcpu.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230510AbhBLMFV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 12 Feb 2021 07:05:21 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by honk.sigxcpu.org (Postfix) with ESMTP id 903B0FB03;
+        Fri, 12 Feb 2021 13:04:38 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
+Received: from honk.sigxcpu.org ([127.0.0.1])
+        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id tTQevExgCqMb; Fri, 12 Feb 2021 13:04:34 +0100 (CET)
+Received: by bogon.sigxcpu.org (Postfix, from userid 1000)
+        id 866B14188B; Fri, 12 Feb 2021 13:04:33 +0100 (CET)
+From:   =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH v2 0/4] usb: typec: tps6598x: Add IRQ flag and register tracing
+Date:   Fri, 12 Feb 2021 13:04:29 +0100
+Message-Id: <cover.1613131413.git.agx@sigxcpu.org>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-References: <20210212110738.169808-1-ydewid@gmail.com> <20210212111046.170342-1-ydewid@gmail.com>
- <88cbbc09e998761097677111b9d166fc1f677026.camel@suse.com>
-In-Reply-To: <88cbbc09e998761097677111b9d166fc1f677026.camel@suse.com>
-From:   Yorick de Wid <ydewid@gmail.com>
-Date:   Fri, 12 Feb 2021 12:59:05 +0100
-Message-ID: <CAGDk_A8kZZiGTdx+JGZDRu5ibOcy8VPYDaqeQtbHfc3wCsjG4A@mail.gmail.com>
-Subject: Re: [PATCH v3] Goodix Fingerprint device is not a modem
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> what else is it?
+This series adds tracing events for the chips IRQ and registers that are useful
+to figure out the current data and power status. This came about since
+diagnosing why a certain usb-c hub or dp-alt-mode adapter fails is hard with
+the information in /sys/class/typec alone since this does not have a timeline
+of events (and we don't want every typec user having to also buy a PD
+analyzer). With this series debugging these kinds of things starts to become
+fun:
 
-It's a fingerprint device/biometrics that should be handled by the
-Goodix MOC driver in libfprint. libfprint supports some Goodix devices
-but not all. I _suspect_ that other PID's from the same VID and
-class/subclass/protocol will also match the ACM driver.
+   # echo 1 > /sys/kernel/debug/tracing/events/tps6598x/enable
+   # cat /sys/kernel/debug/tracing/trace_pipe
+   irq/79-0-003f-526     [003] ....   512.717871: tps6598x_irq: event1=PLUG_EVENT|DATA_STATUS_UPDATE|STATUS_UPDATE, event2=
+   irq/79-0-003f-526     [003] ....   512.722408: tps6598x_status: conn: conn-Ra, pp_5v0: off, pp_hv: off, pp_ext: off, pp_cable: off, pwr-src: vin-3p3, vbus: vSafe0V, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE
+   irq/79-0-003f-526     [003] ....   512.727127: tps6598x_data_status: DATA_CONNECTION|USB2_CONNECTION|USB3_CONNECTION
+   irq/79-0-003f-526     [003] ....   512.769571: tps6598x_irq: event1=PP_SWITCH_CHANGED|STATUS_UPDATE, event2=
+   irq/79-0-003f-526     [003] ....   512.773380: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: vSafe0V, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   512.872450: tps6598x_irq: event1=POWER_STATUS_UPDATE|PD_STATUS_UPDATE, event2=
+   irq/79-0-003f-526     [003] ....   512.876311: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: vSafe0V, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   512.880237: tps6598x_power_status: conn: 1, pwr-role: source, typec: usb, bc: sdp
+   irq/79-0-003f-526     [003] ....   513.072682: tps6598x_irq: event1=STATUS_UPDATE, event2=
+   irq/79-0-003f-526     [003] ....   513.076390: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: vSafe5V, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.090676: tps6598x_irq: event1=ERROR_CANNOT_PROVIDE_PWR, event2=
+   irq/79-0-003f-526     [003] ....   513.094368: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: vSafe5V, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.109606: tps6598x_irq: event1=NEW_CONTRACT_AS_PROVIDER|POWER_STATUS_UPDATE|STATUS_UPDATE|SRC_TRANSITION, event2=
+   irq/79-0-003f-526     [003] ....   513.113777: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: pd, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.117475: tps6598x_power_status: conn: 1, pwr-role: source, typec: pd, bc: sdp
+   irq/79-0-003f-526     [003] ....   513.137469: tps6598x_irq: event1=VDM_RECEIVED, event2=
+   irq/79-0-003f-526     [003] ....   513.141570: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: pd, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.281926: tps6598x_irq: event1=VDM_RECEIVED, event2=
+   irq/79-0-003f-526     [003] ....   513.285638: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: pd, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.300515: tps6598x_irq: event1=VDM_RECEIVED|DATA_STATUS_UPDATE, event2=
+   irq/79-0-003f-526     [003] ....   513.304226: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: pd, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.308302: tps6598x_data_status: DATA_CONNECTION|USB2_CONNECTION|USB3_CONNECTION|DP_CONNECTION, DP pinout D
 
-Y.
+It should not impose any problems for firmwares that don't have IRQs for the
+registers enabled. The trace will then just be missing those events.
 
-On Fri, Feb 12, 2021 at 12:43 PM Oliver Neukum <oneukum@suse.com> wrote:
->
-> Am Freitag, den 12.02.2021, 12:10 +0100 schrieb Yorick de Wid:
-> > The CDC ACM driver is false matching the Goodix Fingerprint device against
-> > the USB_CDC_ACM_PROTO_AT_V25TER.
->
-> Hi,
->
-> what else is it? Which driver should be used or is it to be handled
-> in user space? That needs to go into the change log. Otherwise
-> this patch just looks like it drops every access to the device.
->
->         Regards
->                 Oliver
->
->
+Patch is against next-20210210.
+
+changes from v1:
+- Fix issues on 32bit arches and missing include spotted by kbuild
+  (build testes on mips)
+
+
+
+Guido Günther (4):
+  usb: typec: tps6598x: Add trace event for IRQ events
+  usb: typec: tps6598x: Add trace event for status register
+  usb: typec: tps6598x: Add trace event for power status register
+  usb: typec: tps6598x: Add trace event for data status
+
+ drivers/usb/typec/Makefile         |   3 +
+ drivers/usb/typec/tps6598x.c       |  66 ++++---
+ drivers/usb/typec/tps6598x.h       | 185 +++++++++++++++++++
+ drivers/usb/typec/tps6598x_trace.h | 283 +++++++++++++++++++++++++++++
+ 4 files changed, 511 insertions(+), 26 deletions(-)
+ create mode 100644 drivers/usb/typec/tps6598x.h
+ create mode 100644 drivers/usb/typec/tps6598x_trace.h
+
+-- 
+2.30.0
+
