@@ -2,99 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEFAC31A092
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Feb 2021 15:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C16D31A0C9
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Feb 2021 15:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbhBLOXI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Feb 2021 09:23:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbhBLOXG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Feb 2021 09:23:06 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F454C061574
-        for <linux-usb@vger.kernel.org>; Fri, 12 Feb 2021 06:22:24 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id jt13so3307041ejb.0
-        for <linux-usb@vger.kernel.org>; Fri, 12 Feb 2021 06:22:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8b8NtLpJGyjdMRkb8/Shw7wCZj+nOJ2H7WyC/FalLEs=;
-        b=ZFadcQCPcIerg/2ABu8yc05hfJExteVvAi+UVpPKvpx2Lcg3n3Ud6F5rXj+eBYFEB1
-         Tn4glzuhXV1/WJ5nJK4j+F52VlwvQ8YqR+UrTBOnV3UZvVQ9ZbsI0SnBNVLf4ChVb0Yl
-         gSZULK/0oCnBKEYQSJ+hEpmA5cEaOQviAsEpNgyvR81LWOrGgBuZ8TC6ABHjb1fUxKC9
-         zavmBE+GOM5LwfptJcapaI6N4wdFyVy4JKrbsWgF87V2BaOHfaMl2LaqsJX/cme5wa0f
-         xrFj8seB3yZdcmp2PsfirCr5c/hs3tWeIZ9M/nmiEOm071FYcfa3r51Aeg1xRmTBZBwY
-         ZJNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8b8NtLpJGyjdMRkb8/Shw7wCZj+nOJ2H7WyC/FalLEs=;
-        b=Y2kHvE8LPkLyCPs0T1i9hDgAwRSfsyKHhYQFvU7fkyeUYXQEaQK00zjOrVrvlvSzrp
-         A6Cft7+1P4JD83/gc2de0uniQ5IKFrtP8zLrGUSCihv2tff6L96z2JeoOIWJnUWvM7iO
-         nfz16npAtCeHepSQwgm/b751geh+BL36iRENTwlspIBFKLjQXFXFfUG9prkFDI1tSdD5
-         l/DdFfQufLASdnRKTYKIi3xN7nVekg3B1YFVSUPH4WaXw9Td8bPByHFWwZD/yRph3fj8
-         jHHmZjgx7foQkS1DBSlbQc5S6RqZ2rH3CrvoTN8q9XRs26TiOwhkZYI1Exw3upgSr1cQ
-         dY0g==
-X-Gm-Message-State: AOAM531xrrNU7GyGuWTN7CWGX9LInBxJ96L76I2Lx61VMnz+jJ+Z9Gkd
-        UomBHs4UWOeStpKpvohQQr+QUEsRyUVERA==
-X-Google-Smtp-Source: ABdhPJyvOtAogGV4XXIJpyByDBg3mXcxn9hM6T4R3ngoWSuAaH/PnfzrGY80JvFmdfIVCtbGlmi1/w==
-X-Received: by 2002:a17:906:fc5:: with SMTP id c5mr3171754ejk.538.1613139743101;
-        Fri, 12 Feb 2021 06:22:23 -0800 (PST)
-Received: from dell-xps159570.domain_not_set.invalid (129-228-158-163.dynamic.caiway.nl. [163.158.228.129])
-        by smtp.gmail.com with ESMTPSA id s16sm786798edr.14.2021.02.12.06.22.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Feb 2021 06:22:22 -0800 (PST)
-From:   Yorick de Wid <ydewid@gmail.com>
-To:     linux-usb@vger.kernel.org, Oliver Neukum <oneukum@suse.com>
-Cc:     Yorick de Wid <ydewid@gmail.com>
-Subject: [PATCH v4] Goodix Fingerprint device is not a modem
-Date:   Fri, 12 Feb 2021 15:08:39 +0100
-Message-Id: <20210212140838.196763-1-ydewid@gmail.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <6da4b774afccbd0ad2f9727800164728130a67f6.camel@suse.com>
-References: <6da4b774afccbd0ad2f9727800164728130a67f6.camel@suse.com>
+        id S229844AbhBLOlf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Feb 2021 09:41:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47744 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229611AbhBLOld (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 12 Feb 2021 09:41:33 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7573A64E6C;
+        Fri, 12 Feb 2021 14:40:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613140852;
+        bh=lNmf+KonFuMPi+dCFqb4apHvIFyN63ZqhEuNvuAJZJU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=td5au61zw+FH83RNa8thtPObsVAI3458852CvKpchSTdCb59iljNK91+7ECh7e/jg
+         brNylOPY9rhazfPz5HfUtkgLYLr+4iD2qjjm85S23sSu8QamwRhRy9hqw4j596QHsk
+         GQBnjoYAelq9h2WyRYvO4c+4rMyGmJCOF283ctuNGrnn0i9f+4NkcLMTyvABsZ8O9j
+         wOkBodRWHRpTeGzaFOsm9BO80z7Xj9CTt2FwudCt3JpWieXsBsjobjBhCw8IgSkdw9
+         rgBHPvGWerc0LdUgYLHZEelv5aPoesfeKzX1KF7I/7Y1Dtr7cblt5zr7Iv+fMooY2c
+         z381YVLqhw/4w==
+Received: by mail-wr1-f51.google.com with SMTP id t15so5897605wrx.13;
+        Fri, 12 Feb 2021 06:40:52 -0800 (PST)
+X-Gm-Message-State: AOAM531xkT/y9DUZLilfwPQ+62PC8vXdJoKqnKhT5u7NhRCrbbxO9C0W
+        Xqbp01xHHghI0uStpS9UvBTpjxgCST1ed1v6Fg==
+X-Google-Smtp-Source: ABdhPJwlgv4RWqsDiLaeTsG54Sh0GpBHZUBUqDQ3pj4i+G7BzdkEZweyl6jsXPlPJ0Trb4kAvI8JnfP3v+LhWsbBKNY=
+X-Received: by 2002:a5d:6783:: with SMTP id v3mr3814242wru.394.1613140851043;
+ Fri, 12 Feb 2021 06:40:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210201070016.41721-1-chunfeng.yun@mediatek.com> <20210201070016.41721-3-chunfeng.yun@mediatek.com>
+In-Reply-To: <20210201070016.41721-3-chunfeng.yun@mediatek.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Fri, 12 Feb 2021 22:40:39 +0800
+X-Gmail-Original-Message-ID: <CAAOTY__QS8USVB3ZZ_a9t8VvOEZvnLCpdVxPtwgG0m9__p+fMQ@mail.gmail.com>
+Message-ID: <CAAOTY__QS8USVB3ZZ_a9t8VvOEZvnLCpdVxPtwgG0m9__p+fMQ@mail.gmail.com>
+Subject: Re: [PATCH next v3 03/16] dt-bindings: phy: mediatek: dsi-phy: modify
+ compatible dependence
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Min Guo <min.guo@mediatek.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The CDC ACM driver is false matching the Goodix Fingerprint device against the USB_CDC_ACM_PROTO_AT_V25TER.
+Hi, Chunfeng:
 
-The Goodix Fingerprint device is a biometrics sensor that should be handled in user-space.
-libfprint has some support for Goodix fingerprint sensors, although not for this particular one.
-It is possible that the vendor allocates a PID per OEM (Lenovo, Dell etc).
-If this happens to be the case then more devices from the same vendor could potentially match the ACM modem module table.
+Chunfeng Yun <chunfeng.yun@mediatek.com> =E6=96=BC 2021=E5=B9=B42=E6=9C=881=
+=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=883:00=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> mt7623-mipi-tx is compatible to mt2701-mipi-tx, and use
+> "mediatek,mt2701-mipi-tx" instead on MT7623, so modify
+> the compatible items to make dependence clear.
 
-Signed-off-by: Yorick de Wid <ydewid@gmail.com>
----
-v1 -> v3:
-Moved the entry down to keep the VID/PID order.
-v3 -> v4:
-Patch description of device in question
+Acked-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 
- drivers/usb/class/cdc-acm.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index 78190574581..2f4e5174e78 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -1929,6 +1929,11 @@ static const struct usb_device_id acm_ids[] = {
- 	.driver_info = SEND_ZERO_PACKET,
- 	},
- 
-+	/* Exclude Goodix Fingerprint Reader */
-+	{ USB_DEVICE(0x27c6, 0x5395),
-+	.driver_info = IGNORE_DEVICE,
-+	},
-+
- 	/* control interfaces without any protocol set */
- 	{ USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_ACM,
- 		USB_CDC_PROTO_NONE) },
--- 
-2.30.0
-
+>
+> Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v3: modify commit message suggested by CK
+> v2: separate two patches suggested by CK
+> ---
+>  .../devicetree/bindings/phy/mediatek,dsi-phy.yaml   | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml =
+b/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
+> index 71d4acea1f66..6e4d795f9b02 100644
+> --- a/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
+> @@ -19,11 +19,14 @@ properties:
+>      pattern: "^dsi-phy@[0-9a-f]+$"
+>
+>    compatible:
+> -    enum:
+> -      - mediatek,mt2701-mipi-tx
+> -      - mediatek,mt7623-mipi-tx
+> -      - mediatek,mt8173-mipi-tx
+> -      - mediatek,mt8183-mipi-tx
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt7623-mipi-tx
+> +          - const: mediatek,mt2701-mipi-tx
+> +      - const: mediatek,mt2701-mipi-tx
+> +      - const: mediatek,mt8173-mipi-tx
+> +      - const: mediatek,mt8183-mipi-tx
+>
+>    reg:
+>      maxItems: 1
+> --
+> 2.18.0
