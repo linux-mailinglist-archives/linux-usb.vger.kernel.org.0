@@ -2,126 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08CA131A5A3
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Feb 2021 20:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA9A31A5B3
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Feb 2021 20:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbhBLTwE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Feb 2021 14:52:04 -0500
-Received: from mail.baikalelectronics.com ([87.245.175.226]:40446 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbhBLTwC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Feb 2021 14:52:02 -0500
-Date:   Fri, 12 Feb 2021 22:51:19 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        id S230170AbhBLT6c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Feb 2021 14:58:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51838 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229660AbhBLT6a (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Feb 2021 14:58:30 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3E5C061574;
+        Fri, 12 Feb 2021 11:57:50 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id o63so362380pgo.6;
+        Fri, 12 Feb 2021 11:57:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=x0lAXp3U/g0l3OJrFf2vZ9CuZA+kZKT7TY6/m3gZV8g=;
+        b=WPlnAWDts8qNdBgjoZyOVL7Agv+5C28OhkgbPV3F8Yk51n1a0Z7PxswJD3beYsH9iH
+         bc86/OmNTRcKQEP4wMY46jV3SAk/PFWeGAkNcvpXNgtw3AmVjAdFLTkPosar4CSw7nOE
+         qhNfR9qZ5Z0LRT/490Bn7ij8K10jNY84DJw+MRwvvP/gd8v+BBvyY2CZEzeBJIw2QajY
+         1s77ptJHXVPVqLNKoYQ7cgRrqBYJCc3qgrTMD5XtcrWVNNkIWQ6IYRRbvU7jGyC6SfC1
+         p9DR9PbFUSQN2B8/SRCAI1rGzs5GOEDMQmVbc3xiwhbJ/iGqoUqgBVTDQmrFQ8tZ3sIn
+         wesQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=x0lAXp3U/g0l3OJrFf2vZ9CuZA+kZKT7TY6/m3gZV8g=;
+        b=LXJbr5Zdvzn8sDzQKSyQjHH+Y7z7pdAu271d4GTO/nCFko8e0x72wfDq9ZUAweiF9D
+         xSEzJ1dqGFWp3qEN+JKB7s9g9OvF+5zD5c384PfkftdlbyrJRq8nUald8JCDkzGrDHlS
+         x2C//89K4NAYCRnPFD723UmaPCbP3JaTylGJrYot6KGcvxJ6+bur5slopcAFgxE5PAu9
+         HyBXRQspGg9wNGthXTBLUhJoknlRp0m0f0CHC21L5ND83/JKeZo41DuAKLJo5lBwHcoI
+         YumyXaqIseFagZYEog7/j3kOZnOaCTUdmMzbTHbl7ZnPnKmsLbemfM+JlavKsS0c4et4
+         Fl0A==
+X-Gm-Message-State: AOAM531MHaGUw+uBrkrUZo6mPcVaens5meuHdSkzGmSkC+KrjnQmygRv
+        WYeoPqSB5RJml0erSkbdNNvyNpr7jeY=
+X-Google-Smtp-Source: ABdhPJzgXmnV6GTKNCYNE5+/45uPJlRehFyW77kFWMvvRlfz6UX51akptA/xe1Lou7+k46JXh7uV+A==
+X-Received: by 2002:aa7:9a46:0:b029:1db:57ba:5e2 with SMTP id x6-20020aa79a460000b02901db57ba05e2mr4255277pfj.5.1613159869674;
+        Fri, 12 Feb 2021 11:57:49 -0800 (PST)
+Received: from stbsrv-and-01.and.broadcom.net ([192.19.231.250])
+        by smtp.gmail.com with ESMTPSA id t25sm10003819pgo.87.2021.02.12.11.57.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Feb 2021 11:57:49 -0800 (PST)
+From:   Al Cooper <alcooperx@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Al Cooper <alcooperx@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 09/10] usb: dwc3: qcom: Detect DWC3 DT-nodes with
- "usb"-prefixed names
-Message-ID: <20210212195119.f55q7mcmfcsqna5s@mobilestation>
-References: <20210210172850.20849-1-Sergey.Semin@baikalelectronics.ru>
- <20210210172850.20849-10-Sergey.Semin@baikalelectronics.ru>
- <CAL_JsqJBknqhCSUOdpZVbtmp6TYetBQPLoQUCT6DTFajpChaSA@mail.gmail.com>
- <20210210184051.ncvvs5xgyo7o3uzq@mobilestation>
- <YCQse9EtEHtLVe9A@builder.lan>
- <20210210193325.inp7rgpsfr624zhd@mobilestation>
- <YCa/m4qfT1T4e6CW@builder.lan>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YCa/m4qfT1T4e6CW@builder.lan>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH v3 0/2] serial: 8250: Add driver for Broadcom UART
+Date:   Fri, 12 Feb 2021 14:57:34 -0500
+Message-Id: <20210212195736.45328-1-alcooperx@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 12, 2021 at 11:49:15AM -0600, Bjorn Andersson wrote:
-> On Wed 10 Feb 13:33 CST 2021, Serge Semin wrote:
-> 
-> > On Wed, Feb 10, 2021 at 12:56:59PM -0600, Bjorn Andersson wrote:
-> > > On Wed 10 Feb 12:40 CST 2021, Serge Semin wrote:
-> > > 
-> > > > On Wed, Feb 10, 2021 at 12:17:27PM -0600, Rob Herring wrote:
-> > > > > On Wed, Feb 10, 2021 at 11:29 AM Serge Semin
-> > > > > <Sergey.Semin@baikalelectronics.ru> wrote:
-> > > > > >
-> > > > > > In accordance with the USB HCD/DRD schema all the USB controllers are
-> > > > > > supposed to have DT-nodes named with prefix "^usb(@.*)?".  Since the
-> > > > > > existing DT-nodes will be renamed in a subsequent patch let's first make
-> > > > > > sure the DWC3 Qualcomm driver supports them and second falls back to the
-> > > > > > deprecated naming so not to fail on the legacy DTS-files passed to the
-> > > > > > newer kernels.
-> > > > > >
-> > > > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > > > > Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > > > > ---
-> > > > > >  drivers/usb/dwc3/dwc3-qcom.c | 3 ++-
-> > > > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > > > > > index c703d552bbcf..49ad8d507d37 100644
-> > > > > > --- a/drivers/usb/dwc3/dwc3-qcom.c
-> > > > > > +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> > > > > > @@ -630,7 +630,8 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
-> > > > > >         struct device           *dev = &pdev->dev;
-> > > > > >         int                     ret;
-> > > > > >
-> > > > > > -       dwc3_np = of_get_child_by_name(np, "dwc3");
-> > > > > > +       dwc3_np = of_get_child_by_name(np, "usb") ?:
-> > > > > > +                 of_get_child_by_name(np, "dwc3");
-> > > > > 
-> > > > 
-> > > > > Is there some reason using compatible instead wouldn't work here?
-> > > > 
-> > > > I don't know for sure. The fix has been requested in the framework of
-> > > > this discussion:
-> > > > https://lore.kernel.org/linux-usb/20201020115959.2658-30-Sergey.Semin@baikalelectronics.ru/#t
-> > > > by the driver maintainer Bjorn. To get a firm answer it's better to
-> > > > have him asked.
-> > > 
-> > > My feedback was simply that it has to catch both cases, I didn't
-> > > consider the fact that we have a compatible to match against.
-> > > 
-> > > > As I see it having of_get_compatible_child() utilized
-> > > > here would also work. At least for the available in kernel dt-files.
-> > > > See the affected dts-es in:
-> > > > https://lore.kernel.org/linux-usb/20210210172850.20849-11-Sergey.Semin@baikalelectronics.ru/
-> > > > 
-> > > > A problem may happen if some older versions of DTS-es had another
-> > > > compatible string in the dwc3 sub-node...
-> > > > 
-> > > 
-> > > Afaict all Qualcomm dts files has "snps,dwc3", so you can match against
-> > > that instead.
-> > 
-> > Ok then. I'll replace of_get_child_by_name() here with
-> > of_get_compatible_child() matching just against "snps,dwc3" in v7. Can you
-> > confirm that noone ever had a Qcom-based hardware described with dts having
-> > the "synopsys,dwc3" compatible used as the DWC USB3 sub-node here? That
-> > string has been marked as deprecated recently because the vendor-prefix
-> > was changed sometime ago, but the original driver still accept it.
-> > 
-> 
-> I don't see any Qualcomm users of "synopsys,dwc3", past or present.
-> 
-> > Alternatively to be on a safe side we could match against both
-> > compatibles here as Rob suggests. What do you think?
-> > 
-> 
-> Let's go with only "snps,dwc3".
+v3 - remove "disable_dma" module param because it can be done
+     by modifying the device tree node instead. Reduce size by
+     removing some debug fuctionality that was no longer used.
+   - Fix error from yaml compiler in bindings
 
-Ok. Thanks. I'll resend just two patches in ten minutes.
+v2 - remove the patch that modified 8250_of.c to keep it from
+     registering before this driver when this driver was deferred
+     as it was getting it's "clocks". This was fixed by changing
+     the Device Tree entry to remove "clock-frequency". This results
+     in both drivers getting "clocks" and getting same the deferral.
 
--Sergey
+Al Cooper (2):
+  dt-bindings: Add support for the Broadcom UART driver
+  serial: 8250: Add new 8250-core based Broadcom STB driver
 
-> 
-> Regards,
-> Bjorn
+ .../bindings/serial/brcm,bcm7271-uart.yaml    |   96 ++
+ MAINTAINERS                                   |    8 +
+ drivers/tty/serial/8250/8250_bcm7271.c        | 1099 +++++++++++++++++
+ drivers/tty/serial/8250/Kconfig               |   11 +
+ drivers/tty/serial/8250/Makefile              |    1 +
+ drivers/tty/serial/8250/bcm7271_uart.h        |  158 +++
+ 6 files changed, 1373 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/serial/brcm,bcm7271-uart.yaml
+ create mode 100644 drivers/tty/serial/8250/8250_bcm7271.c
+ create mode 100644 drivers/tty/serial/8250/bcm7271_uart.h
+
+-- 
+2.17.1
+
