@@ -2,142 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE1E31A633
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Feb 2021 21:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AFF31A64E
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Feb 2021 21:58:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbhBLUr4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Feb 2021 15:47:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbhBLUrw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Feb 2021 15:47:52 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34341C061574;
-        Fri, 12 Feb 2021 12:47:10 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id s15so454977plr.9;
-        Fri, 12 Feb 2021 12:47:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9nlPrdgdpUhBT4OqPIpJHurxob/WSRTldRiaZgCuebA=;
-        b=mEalseKMxInqyKHV7UpFcJBMqxSyFknnSvj7smKWsPgaa04masHhh4Nf9nN3eNhjPG
-         zzzwGLnVafIckFzjBfsEgDgibHfhSz1I47NzHWqMrUX/HbhBoGUFRJ8xzmtpykyQiRQW
-         CNwu0Ki4ybC8HpTAeLxosIa6MyIqwnRjMs2n/oNdVu1YhGpy8tXPJzYd08EoqwWzTcIq
-         ArAZatvCv4/bAcEFQFIEz5PXhFQI4t4C36gEN82yxrOVDPzumFN2viNJuB690YirePqK
-         /6J+GXoQqPFwfdBOVDV+yqPUBOI33H5nobS4jsj+yM5wCTYyPLMzaY9TxsIQlsB4WTwe
-         dHgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9nlPrdgdpUhBT4OqPIpJHurxob/WSRTldRiaZgCuebA=;
-        b=r3fK26H+WO3CRLnPIZq4ey5col9N556jo05gpIG+pIuiMIlt0IhxRlyct/jWmUQEsn
-         rI547Z87gFzum7ZKh9T7QgQ2DQWb/Vgff1xQIyWzw5rRkOjNMr1UFwz/2w5YaMd5QQnn
-         ghMp0+a4dwPqJKBZO4BoPYqBkOqyzD07yYlmmWbeyqnbpGegAtYhRmrkufSujMScQZwM
-         a390v7DTQpCCHxH/mpE+Zc1LlRxS5wRZpIviCJLD+wbzVyKk8xKfyhkGHCD4taAVsIxe
-         /gWR/ZNdGc5CPNYdlQJM6+OpBnyueOA41JvYZH71KTvLPU2iNhGrfXZdiFKGua5IF6It
-         aF3g==
-X-Gm-Message-State: AOAM530dyH0Q6OnIkOGUhSsrzm+THpp0A3jXRRAA0A3CxxPjPBkB5nWs
-        aBVMaohqx2/d8eiRfDDhzZI=
-X-Google-Smtp-Source: ABdhPJzS5Lrk7YliIkxbQhanWAw0UsFKk7hCmMvP3GxFB0VhGdCErkgqFxJLgLSLeik+D9D4ORGB9g==
-X-Received: by 2002:a17:90a:ce03:: with SMTP id f3mr4230246pju.44.1613162829402;
-        Fri, 12 Feb 2021 12:47:09 -0800 (PST)
-Received: from [10.230.29.30] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id t22sm10659579pgm.18.2021.02.12.12.47.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Feb 2021 12:47:08 -0800 (PST)
-Subject: Re: [PATCH v3 2/2] serial: 8250: Add new 8250-core based Broadcom STB
- driver
-To:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        id S231611AbhBLU4W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Feb 2021 15:56:22 -0500
+Received: from mail.baikalelectronics.com ([87.245.175.226]:40504 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231445AbhBLU4M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Feb 2021 15:56:12 -0500
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Rob Herring <robh+dt@kernel.org>
-References: <20210212195736.45328-1-alcooperx@gmail.com>
- <20210212195736.45328-3-alcooperx@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <8cb4bae6-5617-8dd5-4c0f-4c81cb4d741b@gmail.com>
-Date:   Fri, 12 Feb 2021 12:47:02 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.7.1
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v7 1/3] usb: dwc3: qcom: Add missing DWC3 OF node refcount decrement
+Date:   Fri, 12 Feb 2021 23:55:19 +0300
+Message-ID: <20210212205521.14280-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-In-Reply-To: <20210212195736.45328-3-alcooperx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+of_get_child_by_name() increments the reference counter of the OF node it
+managed to find. So after the code is done using the device node, the
+refcount must be decremented. Add missing of_node_put() invocation then
+to the dwc3_qcom_of_register_core() method, since DWC3 OF node is being
+used only there.
 
+Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver")
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-On 2/12/2021 11:57 AM, Al Cooper wrote:
-> Add a UART driver for the new Broadcom 8250 based STB UART. The new
-> UART is backward compatible with the standard 8250, but has some
-> additional features. The new features include a high accuracy baud
-> rate clock system and DMA support.
-> 
-> The driver will use the new optional BAUD MUX clock to select the best
-> one of the four master clocks (81MHz, 108MHz, 64MHz and 48MHz) to feed
-> the baud rate selection logic for any requested baud rate.  This allows
-> for more accurate BAUD rates when high speed baud rates are selected.
-> 
-> The driver will use the new UART DMA hardware if the UART DMA registers
-> are specified in Device Tree "reg" property.
-> 
-> The driver also sets the UPSTAT_AUTOCTS flag when hardware flow control
-> is enabled. This flag is needed for UARTs that don't assert a CTS
-> changed interrupt when CTS changes and AFE (Hardware Flow Control) is
-> enabled.
-> 
-> The driver also contains a workaround for a bug in the Synopsis 8250
-> core. The problem is that at high baud rates, the RX partial FIFO
-> timeout interrupt can occur but there is no RX data (DR not set in
-> the LSR register). In this case the driver will not read the Receive
-> Buffer Register, which clears the interrupt, and the system will get
-> continuous UART interrupts until the next RX character arrives. The
-> fix originally suggested by Synopsis was to read the Receive Buffer
-> Register and discard the character when the DR bit in the LSR was
-> not set, to clear the interrupt. The problem was that occasionally
-> a character would arrive just after the DR bit check and a valid
-> character would be discarded. The fix that was added will clear
-> receive interrupts to stop the interrupt, deassert RTS to insure
-> that no new data can arrive, wait for 1.5 character times for the
-> sender to react to RTS and then check for data and either do a dummy
-> read or a valid read. Sysfs error counters were also added and were
-> used to help create test software that would cause the error condition.
-> The counters can be found at:
-> /sys/devices/platform/rdb/*serial/rx_bad_timeout_late_char
-> /sys/devices/platform/rdb/*serial/rx_bad_timeout_no_char
-> 
-> Signed-off-by: Al Cooper <alcooperx@gmail.com>
-> ---
->  MAINTAINERS                            |    8 +
->  drivers/tty/serial/8250/8250_bcm7271.c | 1099 ++++++++++++++++++++++++
->  drivers/tty/serial/8250/Kconfig        |   11 +
->  drivers/tty/serial/8250/Makefile       |    1 +
->  drivers/tty/serial/8250/bcm7271_uart.h |  158 ++++
->  5 files changed, 1277 insertions(+)
->  create mode 100644 drivers/tty/serial/8250/8250_bcm7271.c
->  create mode 100644 drivers/tty/serial/8250/bcm7271_uart.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 64c7169db617..bb6ad2fc4376 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -3582,6 +3582,14 @@ S:	Supported
->  F:	Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml
->  F:	drivers/i2c/busses/i2c-brcmstb.c
->  
-> +BROADCOM BRCMSTB UART DRIVER
-> +M:	Al Cooper <alcooperx@gmail.com>
-> +L:	linux-usb@vger.kernel.org
+---
 
-This should probably be linux-serial, copy pasted from the USB entry
-down below presumably.
+Note the patch will get cleanly applied on the commit 2bc02355f8ba ("usb:
+dwc3: qcom: Add support for booting with ACPI"), while the bug has been
+there since the Qualcomm DWC3 glue driver was submitted.
+
+Changelog v7:
+- This is a new patch. Please drop it If I missed something and the OF
+  node refcount decrement wasn't supposed to be there.
+---
+ drivers/usb/dwc3/dwc3-qcom.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index c703d552bbcf..3564d00cdce3 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -639,16 +639,19 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
+ 	ret = of_platform_populate(np, NULL, NULL, dev);
+ 	if (ret) {
+ 		dev_err(dev, "failed to register dwc3 core - %d\n", ret);
+-		return ret;
++		goto node_put;
+ 	}
+ 
+ 	qcom->dwc3 = of_find_device_by_node(dwc3_np);
+ 	if (!qcom->dwc3) {
++		ret = -ENODEV;
+ 		dev_err(dev, "failed to get dwc3 platform device\n");
+-		return -ENODEV;
+ 	}
+ 
+-	return 0;
++node_put:
++	of_node_put(dwc3_np);
++
++	return ret;
+ }
+ 
+ static int dwc3_qcom_probe(struct platform_device *pdev)
 -- 
-Florian
+2.30.0
+
