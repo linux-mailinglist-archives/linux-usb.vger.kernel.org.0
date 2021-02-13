@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9E831ABE2
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Feb 2021 14:36:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E3431ABDF
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Feb 2021 14:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbhBMNfe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 13 Feb 2021 08:35:34 -0500
-Received: from mga09.intel.com ([134.134.136.24]:26194 "EHLO mga09.intel.com"
+        id S229712AbhBMNf3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 13 Feb 2021 08:35:29 -0500
+Received: from mga02.intel.com ([134.134.136.20]:56085 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229625AbhBMNfV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 13 Feb 2021 08:35:21 -0500
-IronPort-SDR: On+Rpc9sPKL6SICyyWHgqonqNQnM2w7CNqxKfthM2wV4y19cEsUwcUzI6dcWa/LgYCUV8yDFpN
- asITeAB8jXEw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9893"; a="182656652"
+        id S229617AbhBMNfU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 13 Feb 2021 08:35:20 -0500
+IronPort-SDR: 95smrL+FHRLZN19EkwsU161Z3BojrOweywHMr44YHX9yziG6e7MFBk95HyLxAlpeszlpWtYBzY
+ PUQWyyCQT0iA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9893"; a="169656061"
 X-IronPort-AV: E=Sophos;i="5.81,176,1610438400"; 
-   d="scan'208";a="182656652"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2021 05:34:38 -0800
-IronPort-SDR: h9G7t47udPZZF2LZ4mDv/gaP0xCoIB8SkleE1xe+dCFQUaztm7rewwewToAwifaajdtA/N3v+6
- ACH02JGftyMA==
+   d="scan'208";a="169656061"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2021 05:34:37 -0800
+IronPort-SDR: YbQvhNEKJ7ZahO/DOXPiMaty2TywWmrpg2/RNvY91gXUFcKhSb6lQjk2bj/srx7/GwhK4Elx+D
+ RnO2MlCTbuMQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,176,1610438400"; 
-   d="scan'208";a="416571690"
+   d="scan'208";a="360748023"
 Received: from lkp-server02.sh.intel.com (HELO cd560a204411) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Feb 2021 05:34:36 -0800
+  by orsmga003.jf.intel.com with ESMTP; 13 Feb 2021 05:34:36 -0800
 Received: from kbuild by cd560a204411 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1lAv4G-0005Sx-2A; Sat, 13 Feb 2021 13:34:36 +0000
-Date:   Sat, 13 Feb 2021 21:33:43 +0800
+        id 1lAv4F-0005Ss-PZ; Sat, 13 Feb 2021 13:34:35 +0000
+Date:   Sat, 13 Feb 2021 21:33:46 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- b5a12546e779d4f5586f58e60e0ef5070a833a64
-Message-ID: <6027d537.MQ26Ca6BCXQ7lSLj%lkp@intel.com>
+Subject: [usb:usb-next] BUILD SUCCESS
+ 4b59b60d896f3ed94921974e916db091bc3a9ba8
+Message-ID: <6027d53a.qEtlaQnkP+iilaTe%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -43,8 +43,8 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: b5a12546e779d4f5586f58e60e0ef5070a833a64  dt-bindings: usb: mediatek: musb: add mt8516 compatbile
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+branch HEAD: 4b59b60d896f3ed94921974e916db091bc3a9ba8  Documentation: connector: Update the description of sink-vdos
 
 elapsed time: 728m
 
