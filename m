@@ -2,130 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC4C31AFE2
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Feb 2021 10:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E32031B030
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Feb 2021 12:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbhBNJse (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 14 Feb 2021 04:48:34 -0500
-Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:50595 "EHLO
-        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229528AbhBNJsd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 Feb 2021 04:48:33 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id D4C6E9BB;
-        Sun, 14 Feb 2021 04:47:25 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Sun, 14 Feb 2021 04:47:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=N/OF9Dq+2/vds7umAQJyb4qdd/D
-        R0TApev4VFEX8LFA=; b=QH3LN7KICOY4b/aOOMahfVLr0pXEgLWKk/VqMGlzxKf
-        gOmm+RWmBM0gd7V2eUZu1WrBDgjV6s+vEWJIDTOggvTeOC3aM0YQaItedbMJjPxe
-        r8VLR5+mX4TefLKllcJYJJsK2zOHyVQKVgXfXzcFNwglTkGe67lteOqF0xzZ4ms1
-        FyJzTo8ofN7scN11PVxQAKLIOQ3njtw9zPe1aVaZztEZLjrpMs+MtJ0+Wu6IxPuh
-        qcbqRpfwRbXow3PNawIbZnjn/jvxfu54tJENT+emwCM2z2d52gI3D9vAvWQ7KUjI
-        EYKtKyHNybWzH/OFNoO0Ucz2ZrFQ5ZqUDRK0jjtlTrQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=N/OF9D
-        q+2/vds7umAQJyb4qdd/DR0TApev4VFEX8LFA=; b=Nm2ZQS8KpeojaphzU+RuS/
-        98UdDBEAxBgFzr8kjzzH8g2JE0GBgLOk5gMbZML+FpdE+d4LLnIyZNNHQNcxmsHu
-        fsD9spTjmvQVoWQe+OLUYNV4kedF/JMfIRvHqn+Bl1vRZ9mAjh6uLiGSPHq6WrAK
-        7OQE7JUQAZYe0PLE0LOwoEk+BlsJTqKdh7iWZschvlKDIbZlE0Hy6O3trUJty7RR
-        cgoISWMk95rZZGSoZGFNTOEuEtYqAxmCUYQnW7MgQH5t1YRBglF/7WJg86EjyVYr
-        Meulio/MmUbf8OqX30Cpu8oATSX7u3DU7f5yqFhz8RLCnQ2gFlKr5EmlgjrYiB0g
-        ==
-X-ME-Sender: <xms:rfEoYP-_CN3ZDykdiYRhhDaT5QxqNK8ZxzzBLgMBVazQHUGradbDmg>
-    <xme:rfEoYLv1QmLcJOPBGJ2JKtsQCl39R8v2jPSIfse_vS4sAinvZKQ2ng7LdEZyFpVwC
-    ogkoXBBdiUwkQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrieehgddtkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvffukfhfgggtuggjsehttdertd
-    dttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeen
-    ucggtffrrghtthgvrhhnpeevueehjefgfffgiedvudekvdektdelleelgefhleejieeuge
-    egveeuuddukedvteenucfkphepkeefrdekiedrjeegrdeigeenucevlhhushhtvghrufhi
-    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:rfEoYND6DKkWXfMZSVGuBft1U8fxjIUAJnTpsChuz1mmCHm_90XthQ>
-    <xmx:rfEoYLcWgYAMS7d4cSGAW9HDtbd-awGBe_yUpSjroLYOumMxk_50yQ>
-    <xmx:rfEoYEPaVpA7elp9XwLuuI1liP2oXCCIesFfOWW9aNtykQWX8yo4yA>
-    <xmx:rfEoYO2hicoJ0bLDgf5esD75NFqi7cwGnxi0ORvd6mBsZ7fGomT-hA>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id EF26D240057;
-        Sun, 14 Feb 2021 04:47:24 -0500 (EST)
-Date:   Sun, 14 Feb 2021 10:47:22 +0100
-From:   Greg KH <greg@kroah.com>
-To:     AristoChen <jj251510319013@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, balbi@kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] Fix typo in f_printer.c
-Message-ID: <YCjxqontDxHYq+cH@kroah.com>
-References: <20210214094025.7380-1-jj251510319013@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210214094025.7380-1-jj251510319013@gmail.com>
+        id S229813AbhBNLSR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 14 Feb 2021 06:18:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229759AbhBNLSQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 Feb 2021 06:18:16 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D611C061574
+        for <linux-usb@vger.kernel.org>; Sun, 14 Feb 2021 03:17:36 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id 127so5887643ybc.19
+        for <linux-usb@vger.kernel.org>; Sun, 14 Feb 2021 03:17:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=SGmWA9oI5nZQdHI5sNTZ3umBqHnrYt7Efta3S6WPUxc=;
+        b=gJkjWnPLpTrexdnGdMPJ6dT4iFPbc3lzvISJTZ6a2HqE362PfR2zuqGQEAPlf/wGOf
+         0AkyWeW9buwkW2FzTs5YOjs54UUHlglLHq61JfVON776EKo7AUIfevbVHEIHDfxixloD
+         JxwPHm+GeKnp0wNioWzTVS4/FymIQUpzybP60M5GVEXc8lulrIlWcAzca8w1quwanee3
+         ps4et42Sy8pVUkj9RR7F4p0b5QL2DkfO/A1rDy/SSxbCY09Ol6sl8zyxuXe9+Mg9Xpd1
+         YVb+/FHFKO9QOMbQxcOTGnEbzcnwrCaVKsaQeIuJWM4SrhrmDQvpBg687DD4fAKtRLHa
+         BNAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=SGmWA9oI5nZQdHI5sNTZ3umBqHnrYt7Efta3S6WPUxc=;
+        b=XztKGE4gMUkG/B6f7SVrtAVqGt2n6esTgHb7CIiSn4EC9miagy7CIxIrDDbeUCZxFb
+         /faE/9YKwWFOzh+SSvnESWKPBw+9JxTCoifMYg/KbWMF1aJteUoBy8q4hCpWpATD4SLx
+         OHYdNlBkhp061KpwpUm0NX9WAIfYjeXR+rLYgVt89d3MVUTYXIzLzznm+c7nOiB15yEY
+         R6avxyzVMJJFRyH2PifAE3kfZmTCVos3952YMfKC7TUTkRTHp4EnvRmRdCvh/M436Q/r
+         KwGyi4ZZBv1xIMRhjnR2lh3GLaOtwddOy3bkm0IEPpM7UywP9BWAPgmUZkqmR0bx9SXD
+         KFPQ==
+X-Gm-Message-State: AOAM531Nihst5XqfWQ6QhU3l0N3ic3rWl1YsAGu0VaAne5o9NXLjK3Bo
+        B5qiaKZqYDtxAcYYUYWkn7ilKejc3lH0
+X-Google-Smtp-Source: ABdhPJwaoUK3VVdfbpMNN8A/i+sUORwPfXJusAy2uS2dzKtFS6qwjq3vCw6xjtRfvFCL7i1nqI4jk4lUbZ4q
+Sender: "kyletso via sendgmr" <kyletso@kyletso.ntc.corp.google.com>
+X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:943b:acd7:4add:2791])
+ (user=kyletso job=sendgmr) by 2002:a25:260b:: with SMTP id
+ m11mr16897330ybm.231.1613301455619; Sun, 14 Feb 2021 03:17:35 -0800 (PST)
+Date:   Sun, 14 Feb 2021 19:17:30 +0800
+Message-Id: <20210214111730.1436506-1-kyletso@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
+Subject: [PATCH v3] usb: typec: tcpm: Export partner Source Capabilities
+From:   Kyle Tso <kyletso@google.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Feb 14, 2021 at 05:40:25PM +0800, AristoChen wrote:
-> In line 824, it is trying to open `out_ep`, so
-> I believe in line 826, it should print `out_ep`
-> instead of `in_ep`
-> 
-> Signed-off-by: AristoChen <jj251510319013@gmail.com>
-> ---
->  drivers/usb/gadget/function/f_printer.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-> index 2f1eb2e81d30..a3b17ec00bf0 100644
-> --- a/drivers/usb/gadget/function/f_printer.c
-> +++ b/drivers/usb/gadget/function/f_printer.c
-> @@ -823,7 +823,7 @@ set_printer_interface(struct printer_dev *dev)
->  
->  	result = usb_ep_enable(dev->out_ep);
->  	if (result != 0) {
-> -		DBG(dev, "enable %s --> %d\n", dev->in_ep->name, result);
-> +		DBG(dev, "enable %s --> %d\n", dev->out_ep->name, result);
->  		goto done;
->  	}
->  
-> -- 
-> 2.25.1
-> 
+Export a function for other drivers to get the partner Source
+Capabilities.
 
-Hi,
+Signed-off-by: Kyle Tso <kyletso@google.com>
+---
+Changes since v1:
+- add a put function to free the memory
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Changes since v2:
+- bring back the function tcpm_copy_pdos
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+ drivers/usb/typec/tcpm/tcpm.c | 47 +++++++++++++++++++++++++++++++++++
+ include/linux/usb/tcpm.h      |  2 ++
+ 2 files changed, 49 insertions(+)
 
-- You did not write a descriptive Subject: for the patch, allowing Greg,
-  and everyone else, to know what this patch is all about.  Please read
-  the section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what a proper Subject: line should
-  look like.
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index be0b6469dd3d..1679c75e5a3d 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -5739,6 +5739,53 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+ 	return 0;
+ }
+ 
++static int tcpm_copy_pdos(u32 *dest_pdo, const u32 *src_pdo, unsigned int nr_pdo)
++{
++	unsigned int i;
++
++	if (nr_pdo > PDO_MAX_OBJECTS)
++		nr_pdo = PDO_MAX_OBJECTS;
++
++	for (i = 0; i < nr_pdo; i++)
++		dest_pdo[i] = src_pdo[i];
++
++	return nr_pdo;
++}
++
++/*
++ * Don't call this function in interrupt context. Caller needs to free the
++ * memory by calling tcpm_put_partner_src_caps.
++ */
++int tcpm_get_partner_src_caps(struct tcpm_port *port, u32 **src_pdo)
++{
++	unsigned int nr_pdo;
++
++	mutex_lock(&port->lock);
++	if (port->nr_source_caps == 0) {
++		mutex_unlock(&port->lock);
++		return -ENODATA;
++	}
++
++	*src_pdo = kcalloc(port->nr_source_caps, sizeof(u32), GFP_KERNEL);
++	if (!src_pdo) {
++		mutex_unlock(&port->lock);
++		return -ENOMEM;
++	}
++
++	nr_pdo = tcpm_copy_pdos(*src_pdo, port->source_caps,
++				port->nr_source_caps);
++	mutex_unlock(&port->lock);
++	return nr_pdo;
++}
++EXPORT_SYMBOL_GPL(tcpm_get_partner_src_caps);
++
++void tcpm_put_partner_src_caps(u32 **src_pdo)
++{
++	kfree(*src_pdo);
++	*src_pdo = NULL;
++}
++EXPORT_SYMBOL_GPL(tcpm_put_partner_src_caps);
++
+ /* Power Supply access to expose source power information */
+ enum tcpm_psy_online_states {
+ 	TCPM_PSY_OFFLINE = 0,
+diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+index 42fcfbe10590..f83d9ff89a13 100644
+--- a/include/linux/usb/tcpm.h
++++ b/include/linux/usb/tcpm.h
+@@ -161,5 +161,7 @@ void tcpm_pd_transmit_complete(struct tcpm_port *port,
+ 			       enum tcpm_transmit_status status);
+ void tcpm_pd_hard_reset(struct tcpm_port *port);
+ void tcpm_tcpc_reset(struct tcpm_port *port);
++int tcpm_get_partner_src_caps(struct tcpm_port *port, u32 **pdo);
++void tcpm_put_partner_src_caps(u32 **pdo);
+ 
+ #endif /* __LINUX_USB_TCPM_H */
+-- 
+2.30.0.478.g8a0d178c01-goog
 
-- It looks like you did not use your "real" name for the patch on either
-  the Signed-off-by: line, or the From: line (both of which have to
-  match).  Please read the kernel file, Documentation/SubmittingPatches
-  for how to do this correctly.
-
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
