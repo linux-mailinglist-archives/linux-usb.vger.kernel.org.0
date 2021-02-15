@@ -2,102 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3984631B5C2
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 08:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D59931B6C4
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 10:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbhBOHzi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Feb 2021 02:55:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
+        id S230005AbhBOJyD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Feb 2021 04:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbhBOHzg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Feb 2021 02:55:36 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFA9C061756;
-        Sun, 14 Feb 2021 23:54:55 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id p21so8708417lfu.11;
-        Sun, 14 Feb 2021 23:54:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:organization:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WDFAfN0/BngAiZ8QhhfDwFmcBbrp6aqzidWsx+GK2iQ=;
-        b=HFne1yf8n/jjGu79UZRlMh3uu5FpXp8TMGHkMHNxCxgXRklLbNHiNooISp0Gd/5TSj
-         iLcz3Ed78Ea1lI5Uc52qo6TlDm9egiUn1H01qCMfZLGWat4jqyoJh0gRzs6sPVZeNnNQ
-         xdcUMDLYkxv5pMgIlqa4y40xaEBGLPZ4uB1g0vF7sxSbQLJjMA1bMmips3tc8Ge3RGTs
-         6rpf0l7DXUo5ltB2qYHtwvfvyKC0tp+OxEGFfvfatS0xc/bHwV19NJCvWew/bEX7CLy2
-         tkjmdJvRYtW9dEguJoR8QUPzzgxq+biSK/zFHqBevbGA0+rXwiN2Zx0He7cdhilEOpXd
-         CgJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=WDFAfN0/BngAiZ8QhhfDwFmcBbrp6aqzidWsx+GK2iQ=;
-        b=rd68AQCZZOIiAjwnuiX++hH7EqbA7LmtBbuM3wa7PRpd9S/V5lEl7VT87m11ZMowlL
-         ykgMxFkMWOHSPLosDFwzIy2DJ48Cuq6hh/yo28GlusG2GYJ6XKOr9n6XLJbKtku6mbth
-         Rn5m/w6vat1kMqnXMlzJWQbEoQOnO98Bctwkypryg2maRUtMUzOkCvf24AbW0PjqZsdB
-         38sVgxhQeQltIQDDQT+hJ2w+ojrQnLe7ehE+MieX6EKZ/ZoHbL5n5T9g5d9v3aMZ22BC
-         lo8PoO195MnAjt7aJJvPtSHUqqiVDgzAXGfc0D+PDrEE0UZgdsH0i42O85keC17Z9Oy6
-         AZFg==
-X-Gm-Message-State: AOAM530pyS3bVA0099Fy8T993b07zmQ/sjijsPfiYCbTlYexA8g79dES
-        BUTcFXi6WiEnfii2YGrU8ttU6TP7Gyw=
-X-Google-Smtp-Source: ABdhPJwTfhmk4JzCVUk+MR8xpBkDuTn9R7ByQ7WSf/HZho0kteDRwV18WM+GiiAv2ypJ7Pgzr1T/kQ==
-X-Received: by 2002:ac2:43d2:: with SMTP id u18mr7881922lfl.439.1613375694123;
-        Sun, 14 Feb 2021 23:54:54 -0800 (PST)
-Received: from [192.168.1.100] ([178.176.74.220])
-        by smtp.gmail.com with ESMTPSA id u23sm522525ljd.28.2021.02.14.23.54.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Feb 2021 23:54:53 -0800 (PST)
-Subject: Re: usb: dwc3: gadget: Change runtime pm function for DWC3 runtime
- suspend
-To:     Daehwan Jung <dh10.jung@samsung.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CGME20210215025057epcas2p205c3c283a8806d818d71f90c872c6e51@epcas2p2.samsung.com>
- <1613356739-91734-1-git-send-email-dh10.jung@samsung.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-Message-ID: <b7d4174f-e441-58a6-25ee-fb89dd78844f@gmail.com>
-Date:   Mon, 15 Feb 2021 10:54:48 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        with ESMTP id S229951AbhBOJyC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Feb 2021 04:54:02 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959CEC061574
+        for <linux-usb@vger.kernel.org>; Mon, 15 Feb 2021 01:53:22 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 129AE1F44C46
+Subject: Re: proposal: move Linux userspace USB gadget projects to linux-usb
+ GitHub organisation?
+To:     Paul Wise <pabs3@bonedaddy.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Karol Lewandowski <k.lewandowsk@samsung.com>,
+        linux-usb@vger.kernel.org
+References: <c38162833d1c8fede734e41eb5ce23cf393d6555.camel@bonedaddy.net>
+ <YAhKAiz2U9KQWQPE@kroah.com>
+ <86c0f13b298c8584bc7070543637f424075e526f.camel@bonedaddy.net>
+ <YB6WKs/6QMWJSS2t@kroah.com>
+ <ffd238f1787b8e23f974a220e94aa39eb62b2e60.camel@bonedaddy.net>
+ <8f31baea8cad893f416fac972a3a64922c97bcc5.camel@bonedaddy.net>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Message-ID: <e80a776a-5d05-8936-82c9-21180cd87e22@collabora.com>
+Date:   Mon, 15 Feb 2021 10:53:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <1613356739-91734-1-git-send-email-dh10.jung@samsung.com>
+In-Reply-To: <8f31baea8cad893f416fac972a3a64922c97bcc5.camel@bonedaddy.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
-
-On 15.02.2021 5:38, Daehwan Jung wrote:
-
-> It seems pm_runtime_put calls runtime_idle callback not runtime_suspend callback.
-> It's better to use pm_runtime_put_sync_suspend to allow DWC3 runtime suspend.
+W dniu 14.02.2021 o 03:17, Paul Wise pisze:
+> On Sun, 2021-02-07 at 07:28 +0800, Paul Wise wrote:
 > 
-> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> ---
->   drivers/usb/dwc3/gadget.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>> All the standard benefits of the GitHub organisations feature and
+>> collaborative maintenance in general
 > 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index aebcf8e..4a4b93b 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -2229,7 +2229,7 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->   	 */
->   	ret = pm_runtime_get_sync(dwc->dev);
->   	if (!ret || ret < 0) {
+> Since the linux-usb GitHub organisation isn't yet available for
+> collaborative maintenance of Linux userspace USB gadget projects on
+> GitHub, we will create a linux-usb-gadgets GitHub organisation and can
+> move gadget projects to the linux-usb org when it becomes available.
+> 
 
-    BTW, this can be shortened to (ret <= 0)...
+Any prospects of it "becoming available"?
 
-> -		pm_runtime_put(dwc->dev);
-> +		pm_runtime_put_sync_suspend(dwc->dev);
->   		return 0;
->   	}
->   
-
-MBR, Sergei
+Andrzej
