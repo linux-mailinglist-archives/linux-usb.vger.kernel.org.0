@@ -2,118 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E1031B27C
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Feb 2021 21:44:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DBFC31B421
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 03:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbhBNUma (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 14 Feb 2021 15:42:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbhBNUmN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 Feb 2021 15:42:13 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7904C061574;
-        Sun, 14 Feb 2021 12:41:29 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id v9so1494864edw.8;
-        Sun, 14 Feb 2021 12:41:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KDcTJbYVBqjxtWBYJMrAm8lX3M9uPlglIDxfV1YFvj8=;
-        b=JZhXGU7P/V1+TT/yLZELapCCPW4GQMsCAHhqsmDr+uHyw7GjSd81Rd8W96blnCNozm
-         V1FDtM5ZkM+aRAvAyEHyNllsrlKIVu2UPQUpmVjUyQsrgWLKduKLUf4S2UPK92Fasqo1
-         wV02AoChHhlYWVkGQ4UKt3lMp/D8yisjxIrEls6JEB1yJhuA6b0gV5zxEwDOb4IQubp9
-         /lFfYzhv6oUGfVApr2O516sTUQr81FvfKdsZdhao4VMM6x8ayCg4lLs+i2mJaZDBdHWw
-         sZguvPKpV8poFLNSitfO2p1D+jxW2aJEEa0uShXmxcbR5qJTJVkIjpe3qHkw2w+3rB1e
-         ppzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KDcTJbYVBqjxtWBYJMrAm8lX3M9uPlglIDxfV1YFvj8=;
-        b=b/f0YWB3AP8SiUsiL69idgRsK+e8vi9sdnlNqRUInaMFPdavHpVMjWwTPrlWTHxKCg
-         PNV/sbEqCxVS8eDu93/kMBEPdmls8fJy4Nkg0IyyPHL0OmvnqiJ9w5rI5SfYaQJxzQ7+
-         Z21QTg6h/vPVjD9Ndl1ezeyEto0Uw2EG+j/vRQx+k92EGZu3r9Z/cAEYUiixsgke65KD
-         SfWw460ZKOCzgaxCCC7hHlqwi7kHHFmJUOarEhxi8s3M4Q9aO2qcWE0LXMSSTEa7xPol
-         44/8QGN9trCi4yFNc9ckRW3HrFNnv44+SApeOn0HqAWGtPr4w/3216C/U+Q1yutOZCEp
-         emhQ==
-X-Gm-Message-State: AOAM5332OiflNyBKjJkRll+fc3tEXU/UMPSLf6UE7LVIWerwbQwH1lxC
-        +ra7aU3Qu9YXyC41UDQ+v5HzipO5+Ko=
-X-Google-Smtp-Source: ABdhPJxd+6/th/057yvcsS26fXVMGOYRmLKwBeP/WHRtVNjcXteOrgShvw42vCiZRH9A3CROb2D22w==
-X-Received: by 2002:a05:6402:558:: with SMTP id i24mr12807371edx.190.1613335288737;
-        Sun, 14 Feb 2021 12:41:28 -0800 (PST)
-Received: from mail ([2a02:a03f:b7fe:f700:8c5d:a37a:9f02:aeed])
-        by smtp.gmail.com with ESMTPSA id z13sm8876848edc.73.2021.02.14.12.41.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Feb 2021 12:41:28 -0800 (PST)
-Date:   Sun, 14 Feb 2021 21:41:27 +0100
-From:   Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ramsay Jones <ramsay@ramsayjones.plus.com>,
+        id S229821AbhBOCvs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 14 Feb 2021 21:51:48 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:27471 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229809AbhBOCvr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 Feb 2021 21:51:47 -0500
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20210215025103epoutp03471256e4663319d4ca00c9592cad9f47~jzBCjCnEk1488014880epoutp03D
+        for <linux-usb@vger.kernel.org>; Mon, 15 Feb 2021 02:51:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20210215025103epoutp03471256e4663319d4ca00c9592cad9f47~jzBCjCnEk1488014880epoutp03D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1613357463;
+        bh=+905rnpExaSEIB0z9tacFt0nF/ZDpIdUxOWkCA8hliA=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=vNYZ2GV7mAnNYqJ3SFHNbWnblE2TC7R9qXPyxiCC5kgKgJlrkrfqNtEPnAUnKNzWJ
+         pPKeE3MYgc4KDtRlDlkPV1FO4zstLSuGpOWn6JSwliV2mhM/vwXEPMDL5tpuD8QnJN
+         KEV9iQQLu7frBB0NbvHJnmvdRMSCs3slMnLz+mCU=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20210215025101epcas2p1cb16f5a1a72873bd258d677321c4364e~jzBAYm1Q81698816988epcas2p1L;
+        Mon, 15 Feb 2021 02:51:01 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.40.188]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Df7ry4WXTz4x9Q0; Mon, 15 Feb
+        2021 02:50:58 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1B.10.52511.291E9206; Mon, 15 Feb 2021 11:50:58 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20210215025057epcas2p205c3c283a8806d818d71f90c872c6e51~jzA9jDafX1884918849epcas2p2g;
+        Mon, 15 Feb 2021 02:50:57 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20210215025057epsmtrp2c8cfd5011ae64f72d0c7f7be0dcf27b5~jzA9flRse2781327813epsmtrp2B;
+        Mon, 15 Feb 2021 02:50:57 +0000 (GMT)
+X-AuditID: b6c32a48-50fff7000000cd1f-d5-6029e19211d3
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        16.2F.08745.191E9206; Mon, 15 Feb 2021 11:50:57 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20210215025057epsmtip24ca856563703f651421535082eb5d723~jzA9PCBrG1014210142epsmtip2k;
+        Mon, 15 Feb 2021 02:50:57 +0000 (GMT)
+From:   Daehwan Jung <dh10.jung@samsung.com>
+To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org,
-        Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>,
-        Sparse Mailing-list <linux-sparse@vger.kernel.org>
-Subject: Re: [PATCH v2 2/4] usb: typec: tps6598x: Add trace event for status
- register
-Message-ID: <20210214204127.ezrlr4u76onqcxl7@mail>
-References: <651ac50b9ff6ed3db8cab9f176514900f6a02a0c.1613131413.git.agx@sigxcpu.org>
- <20210213031237.GP219708@shao2-debian>
- <YClYh7pqDlbXy8qh@bogon.m.sigxcpu.org>
- <6a8eb07f-16d5-f461-cf0b-6c4aaf93b014@ramsayjones.plus.com>
- <CAHk-=wjCAVj7J+KAC1pvtdeM-c76oXZq7k=v40-maKjTo6qfVw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjCAVj7J+KAC1pvtdeM-c76oXZq7k=v40-maKjTo6qfVw@mail.gmail.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Daehwan Jung <dh10.jung@samsung.com>
+Subject: usb: dwc3: gadget: Change runtime pm function for DWC3 runtime
+ suspend
+Date:   Mon, 15 Feb 2021 11:38:58 +0900
+Message-Id: <1613356739-91734-1-git-send-email-dh10.jung@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPKsWRmVeSWpSXmKPExsWy7bCmme6kh5oJBqceKlkca3vCbnFnwTQm
+        i+bF69ksLu+aw2axaFkrswOrx6ZVnWwe++euYffo27KK0ePzJrkAlqgcm4zUxJTUIoXUvOT8
+        lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE3FRbJRefAF23zBygvUoKZYk5pUChgMTiYiV9O5ui
+        /NKSVIWM/OISW6XUgpScAkPDAr3ixNzi0rx0veT8XCtDAwMjU6DKhJyMyzc3shQ8Ya340rmJ
+        rYHxJUsXIyeHhICJxO7l81i7GLk4hAR2MEr0L33PAuF8YpT43jYNyvnMKDGtcQYbTMuPLasZ
+        IRK7GCXazu1ih3B+MErcP7mKuYuRg4NNQEvi+0KwIhGBiYwSrU+OAI1i52AW0JD4EgkyR1gg
+        UGLdmy52EJtFQFVi6pGpTCA2r4CrxI2HJ5kgdslJ3DzXyQwyRkJgOrvEv555UAkXiX2fZzFD
+        2MISr45vYYewpSQ+v9vLBnKChEC5xKL5dhC9HYwSaz6dZYSoMZaY9aydEaSGWUBTYv0ufYhy
+        ZYkjt8ChwizAJ9Fx+C87RJhXoqNNCKJRWWL65QmsELakxMHX56AO8JA4t+0dWFxIIFbizYo9
+        bBMYZWchzF/AyLiKUSy1oDg3PbXYqMAEOYo2MYJTkpbHDsbZbz/oHWJk4mA8xCjBwawkwntV
+        QiNBiDclsbIqtSg/vqg0J7X4EKMpMLgmMkuJJucDk2JeSbyhqZGZmYGlqYWpmZGFkjhvkcGD
+        eCGB9MSS1OzU1ILUIpg+Jg5OqQYmhXpGu+UHG7J1eeUtwj6vsNm+sFDo4N1MlXxd4aZ9z49a
+        euSVnlrNc+CTxNzvLEzVFfbHwuMqVu81U77yQewo4+XpVyK2ru9KPdfx1eByhfYL978GRRcY
+        df+mPNeL41WtLbrncY1devu+jq6yw08SrrafXDT7WfWj+3ELFnJ5fG7l5511bc7FKCehKxef
+        CJ3//NVvI7OWteKCuHWbn1pOjOD/xiuYM+1C9MQfB9byzhTRmLNlDWuQ+vUzXAk3XleHcWts
+        eDJl26/bQWJR9wputqmtutV77ngPb1pQ+KlH6dqlV6wuTzISMYv4k2zYkTSLr3p/eKlpMfun
+        x5VXarKU8jdtzai9prp8X4PnosrDSizFGYmGWsxFxYkAV0uaMNIDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrHJMWRmVeSWpSXmKPExsWy7bCSvO7Eh5oJBud26Vsca3vCbnFnwTQm
+        i+bF69ksLu+aw2axaFkrswOrx6ZVnWwe++euYffo27KK0ePzJrkAligum5TUnMyy1CJ9uwSu
+        jMs3N7IUPGGt+NK5ia2B8SVLFyMnh4SAicSPLasZuxi5OIQEdjBK3OrqZ4ZISEosnXuDHcIW
+        lrjfcoQVougbo8SR6fuZuhg5ONgEtCS+LwRrFhGYzCjR9G830FR2DmYBDYkvkSCtwgL+EgdP
+        dILtYhFQlZh6ZCoTiM0r4Cpx4+FJJojxchI3z3UyT2DkWcDIsIpRMrWgODc9t9iwwCgvtVyv
+        ODG3uDQvXS85P3cTIzhItLR2MO5Z9UHvECMTB+MhRgkOZiUR3qsSGglCvCmJlVWpRfnxRaU5
+        qcWHGKU5WJTEeS90nYwXEkhPLEnNTk0tSC2CyTJxcEo1MMmFOxzSL7zJ1bJs4Vq+9y+MXyx+
+        8/bn88QorhP7IicdO/ti5uHGKTay2/Ns9n0vZFxqsX6SaPjnLC4+6wQ5pTMPrHef69minyDa
+        z9K3njWxeKfCzQ0rt6zOPSZlEmSoZH686f1/wRs8a0RsXSbeUDmyOPvX72tROop1/Uma1o4W
+        Zx9qdFiqOmgeC3KLkwnYfCzdUs1NZ9nGQLmN/HYRgRJP8hlZpl2NiVlQZevxJeAbZ9fG1Gem
+        cXIrc/0UuC+bz/oe/KB/9s5dD7+KStfLPi6YOyNMklmpcPcfDtu63zNTNshf3FLa4bNN6r9I
+        j+Ylvl1ab+bKfirqefO2/IG1qtisvlbD2iXt+2dO+9qlqMRSnJFoqMVcVJwIAGjkVPyBAgAA
+X-CMS-MailID: 20210215025057epcas2p205c3c283a8806d818d71f90c872c6e51
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210215025057epcas2p205c3c283a8806d818d71f90c872c6e51
+References: <CGME20210215025057epcas2p205c3c283a8806d818d71f90c872c6e51@epcas2p2.samsung.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Feb 14, 2021 at 11:00:48AM -0800, Linus Torvalds wrote:
-> On Sun, Feb 14, 2021 at 10:42 AM Ramsay Jones
-> <ramsay@ramsayjones.plus.com> wrote:
-> >
-> > >
-> > > I looked around but didn't find any hints how to fix this. Any pointers
-> > > I missed (added the sparse list to cc:)?
-> >
-> > This is a limitation of sparse; when using the 'stringize' pre-processor
-> > operator #, the maximum size of the resulting string is about 8k (if I
-> > remember correctly).
-> 
-> Well, yes and no.
-> 
-> The C89 standard actually says that a string literal can be at most
-> 509 characters to be portable. C99 increased it to 4095 characters.
-> 
-> Sparse makes the limit higher, and the limit could easily be expanded
-> way past 8kB - but the point is that large string literals are
-> actually not guaranteed to be valid C.
-> 
-> So honestly, it really sounds like that TRACE_EVENT() thing is doing
-> something it shouldn't be doing.
+It seems pm_runtime_put calls runtime_idle callback not runtime_suspend callback.
+It's better to use pm_runtime_put_sync_suspend to allow DWC3 runtime suspend.
 
-In itself, it's OKish but it does a lot of macro expansions and most
-arguments are macros of macros of ... but the problem seems to be
-limited to TP_printk().
+Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+---
+ drivers/usb/dwc3/gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In the current case, the offender is the string 'print_fmt_tps6598x_status'
-which is just under 26K long especially because it expand
-TPS6598X_STATUS_FLAGS_MASK but also because the arguments use FIELD_GET()
-and thus __BF_FIELD_CHECK().
-> 
-> I don't think there's any fundamental limit why sparse does 8kB as a
-> limit (just a few random buffers). Making sparse accept larger ones
-> should be as simple as just increasing MAX_STRING, but I really don't
-> think the kernel should encourage that kind of excessive string sizes.
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index aebcf8e..4a4b93b 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2229,7 +2229,7 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 	 */
+ 	ret = pm_runtime_get_sync(dwc->dev);
+ 	if (!ret || ret < 0) {
+-		pm_runtime_put(dwc->dev);
++		pm_runtime_put_sync_suspend(dwc->dev);
+ 		return 0;
+ 	}
+ 
+-- 
+2.7.4
 
-Like you noted, there are just a few cases in the kernel and IIRC
-there is or was one case in it too.
-I would tend to increase MAX_STRING to something like 32 or 64K,
-in order to keep it reasonable but let sparse to continue its processing,
-but add a warning when the string/token is bigger than the current 8K.
-
--- Luc
