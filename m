@@ -2,207 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A3531B852
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 12:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4860E31B85E
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 12:51:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbhBOLsI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Feb 2021 06:48:08 -0500
-Received: from honk.sigxcpu.org ([24.134.29.49]:51172 "EHLO honk.sigxcpu.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229925AbhBOLrq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Feb 2021 06:47:46 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by honk.sigxcpu.org (Postfix) with ESMTP id 224BFFB04;
-        Mon, 15 Feb 2021 12:46:54 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
-Received: from honk.sigxcpu.org ([127.0.0.1])
-        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id witfILfWZ_2L; Mon, 15 Feb 2021 12:46:51 +0100 (CET)
-Received: by bogon.sigxcpu.org (Postfix, from userid 1000)
-        id 9C07B4188D; Mon, 15 Feb 2021 12:46:45 +0100 (CET)
-From:   =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH v3 4/4] usb: typec: tps6598x: Add trace event for data status
-Date:   Mon, 15 Feb 2021 12:46:45 +0100
-Message-Id: <1125497fb83eac13fa1ee532759b91ce03770572.1613389531.git.agx@sigxcpu.org>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <cover.1613389531.git.agx@sigxcpu.org>
-References: <cover.1613389531.git.agx@sigxcpu.org>
+        id S229931AbhBOLuQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Feb 2021 06:50:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229989AbhBOLuC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Feb 2021 06:50:02 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E480AC061574
+        for <linux-usb@vger.kernel.org>; Mon, 15 Feb 2021 03:49:19 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id g11so7336203ljj.7
+        for <linux-usb@vger.kernel.org>; Mon, 15 Feb 2021 03:49:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=o3tN68c/WexQZKsdiJaGwAWvYGkPDKgyq0ihT8HyNw4=;
+        b=B99TMqJPpdzqMc585scsuEA3Sq7SByRhQQGrS9QoYJ4mi41jv/l0n9uTeiwhzPhqXa
+         /H2MgJ6P3AVvAtjGk5g4S+ze5b98RmkXsIEfduVkozs//dECpW+YBb3bLf150yccFQxk
+         Fre150WSHnK189SzCuBv5mkb8c79ZWmQSddqD6DlvhO+Pj39G1T5psrba6k90wf81jUL
+         4dEwUbbvgGwlc1c2nTChnkV0vcZUShVrGqIcltCbXp/YCg+1OtkD/u6Gwd0iP/CAt5C7
+         0q5zXvaFYNV2LrDXjQeatien8v8ZPF5nnxTxiwV/b9Y4YOVtauLQwLXw4VvanfFyovUN
+         wigg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=o3tN68c/WexQZKsdiJaGwAWvYGkPDKgyq0ihT8HyNw4=;
+        b=G50Om6G9xDvwbWRKItjAyjkfvsdcYgoo0mjR7Gryef3tQlDeLfWKQ1V/AztjTtN/br
+         Pg9pNzmc5rfFEkxbve7lho1FLQ+sN99aW2eArkowIRD97on3fC+3PTDoJD8kKNLahBW0
+         Q5vdHX3CQeXsmodHN4EkVOhyMNg+kYcByOxb6b2xIYfFs3Ekh5VWDxx/LiUxv+qiTPI9
+         ZkMtv9bMRPtiXFev/u+6bhhFTKpDSGRPEzi9/bZLWXn5nxDuP6fgqYbHUAFca/Gxt4gz
+         BPYO9+fT2EQ4DaPU6cT10R7y4r2eaoRQp0QIqfkSfp7SGIyjdnBWJL/aCJXHPoWF2F5J
+         amjA==
+X-Gm-Message-State: AOAM532c3bP+n2IgjjHjf7UxTPRjpjaKjoUfpfzljEjL8ciLIcumo5WB
+        wunKXuyJf6bZvO1djXi3+9GFwomO7vlDzG12kMk=
+X-Google-Smtp-Source: ABdhPJwoWp8wzPh1g4jtfpvatoxGFqWaURKiZOjun7wa50tevhJYXYKVA3W8yniv42zcOmeCGTw7jrPlOHb2dWKuKK8=
+X-Received: by 2002:a2e:a54d:: with SMTP id e13mr9132834ljn.45.1613389757928;
+ Mon, 15 Feb 2021 03:49:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:651c:145:0:0:0:0 with HTTP; Mon, 15 Feb 2021 03:49:17
+ -0800 (PST)
+Reply-To: susanwilliam1502@citromail.hu
+From:   "Elaina S. William" <annagege1967@gmail.com>
+Date:   Mon, 15 Feb 2021 12:49:17 +0100
+Message-ID: <CADvfdVxTKovWhk4+kfda+WRRW2Kk02Hs0h35UXXQNSRvHbii2Q@mail.gmail.com>
+Subject: Good Morning Sir,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is useful to debug DP negotiation and pin assignment even
-when the firmware does all the work.
+Good Morning Sir,
 
-Signed-off-by: Guido Günther <agx@sigxcpu.org>
----
- drivers/usb/typec/tps6598x.c       | 12 ++++++-
- drivers/usb/typec/tps6598x.h       | 38 +++++++++++++++++++++
- drivers/usb/typec/tps6598x_trace.h | 54 ++++++++++++++++++++++++++++++
- 3 files changed, 103 insertions(+), 1 deletion(-)
+Did you receive the letter I sent to you since last week in regards to
+late Michael?
 
-diff --git a/drivers/usb/typec/tps6598x.c b/drivers/usb/typec/tps6598x.c
-index 3e6ad3ba7fc8..a4ec8e56c2b9 100644
---- a/drivers/usb/typec/tps6598x.c
-+++ b/drivers/usb/typec/tps6598x.c
-@@ -36,6 +36,7 @@
- #define TPS_REG_CTRL_CONF		0x29
- #define TPS_REG_POWER_STATUS		0x3f
- #define TPS_REG_RX_IDENTITY_SOP		0x48
-+#define TPS_REG_DATA_STATUS		0x5f
- 
- /* TPS_REG_SYSTEM_CONF bits */
- #define TPS_SYSCONF_PORTINFO(c)		((c) & 7)
-@@ -408,7 +409,7 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
- 	struct tps6598x *tps = data;
- 	u64 event1;
- 	u64 event2;
--	u32 status;
-+	u32 status, data_status;
- 	u16 pwr_status;
- 	int ret;
- 
-@@ -438,6 +439,15 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
- 		trace_tps6598x_power_status(pwr_status);
- 	}
- 
-+	if ((event1 | event2) & TPS_REG_INT_DATA_STATUS_UPDATE) {
-+		ret = tps6598x_read32(tps, TPS_REG_DATA_STATUS, &data_status);
-+		if (ret < 0) {
-+			dev_err(tps->dev, "failed to read data status: %d\n", ret);
-+			goto err_clear_ints;
-+		}
-+		trace_tps6598x_data_status(data_status);
-+	}
-+
- 	/* Handle plug insert or removal */
- 	if ((event1 | event2) & TPS_REG_INT_PLUG_EVENT) {
- 		if (status & TPS_STATUS_PLUG_PRESENT) {
-diff --git a/drivers/usb/typec/tps6598x.h b/drivers/usb/typec/tps6598x.h
-index 9a34c020f3e5..003a577be216 100644
---- a/drivers/usb/typec/tps6598x.h
-+++ b/drivers/usb/typec/tps6598x.h
-@@ -148,4 +148,42 @@
- #define TPS_POWER_STATUS_BC12_STATUS_CDP 2
- #define TPS_POWER_STATUS_BC12_STATUS_DCP 3
- 
-+/* TPS_REG_DATA_STATUS bits */
-+#define TPS_DATA_STATUS_DATA_CONNECTION	     BIT(0)
-+#define TPS_DATA_STATUS_UPSIDE_DOWN	     BIT(1)
-+#define TPS_DATA_STATUS_ACTIVE_CABLE	     BIT(2)
-+#define TPS_DATA_STATUS_USB2_CONNECTION	     BIT(4)
-+#define TPS_DATA_STATUS_USB3_CONNECTION	     BIT(5)
-+#define TPS_DATA_STATUS_USB3_GEN2	     BIT(6)
-+#define TPS_DATA_STATUS_USB_DATA_ROLE	     BIT(7)
-+#define TPS_DATA_STATUS_DP_CONNECTION	     BIT(8)
-+#define TPS_DATA_STATUS_DP_SINK		     BIT(9)
-+#define TPS_DATA_STATUS_TBT_CONNECTION	     BIT(16)
-+#define TPS_DATA_STATUS_TBT_TYPE	     BIT(17)
-+#define TPS_DATA_STATUS_OPTICAL_CABLE	     BIT(18)
-+#define TPS_DATA_STATUS_ACTIVE_LINK_TRAIN    BIT(20)
-+#define TPS_DATA_STATUS_FORCE_LSX	     BIT(23)
-+#define TPS_DATA_STATUS_POWER_MISMATCH	     BIT(24)
-+
-+#define TPS_DATA_STATUS_DP_PIN_ASSIGNMENT_MASK GENMASK(11, 10)
-+#define TPS_DATA_STATUS_DP_PIN_ASSIGNMENT(x) \
-+	TPS_FIELD_GET(TPS_DATA_STATUS_DP_PIN_ASSIGNMENT_MASK, (x))
-+#define TPS_DATA_STATUS_TBT_CABLE_SPEED_MASK   GENMASK(27, 25)
-+#define TPS_DATA_STATUS_TBT_CABLE_SPEED \
-+	TPS_FIELD_GET(TPS_DATA_STATUS_TBT_CABLE_SPEED_MASK, (x))
-+#define TPS_DATA_STATUS_TBT_CABLE_GEN_MASK     GENMASK(29, 28)
-+#define TPS_DATA_STATUS_TBT_CABLE_GEN \
-+	TPS_FIELD_GET(TPS_DATA_STATUS_TBT_CABLE_GEN_MASK, (x))
-+
-+/* Map data status to DP spec assignments */
-+#define TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT(x) \
-+	((TPS_DATA_STATUS_DP_PIN_ASSIGNMENT(x) << 1) | \
-+		TPS_FIELD_GET(TPS_DATA_STATUS_USB3_CONNECTION, (x)))
-+#define TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_E    0
-+#define TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_F    BIT(0)
-+#define TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_C    BIT(1)
-+#define TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_D    (BIT(1) | BIT(0))
-+#define TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_A    BIT(2)
-+#define TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_B    (BIT(2) | BIT(1))
-+
- #endif /* __TPS6598X_H__ */
-diff --git a/drivers/usb/typec/tps6598x_trace.h b/drivers/usb/typec/tps6598x_trace.h
-index 78a5a6ca337b..38bfb2f04e46 100644
---- a/drivers/usb/typec/tps6598x_trace.h
-+++ b/drivers/usb/typec/tps6598x_trace.h
-@@ -152,6 +152,41 @@
- 		{ TPS_POWER_STATUS_BC12_STATUS_CDP, "cdp" }, \
- 		{ TPS_POWER_STATUS_BC12_STATUS_SDP, "sdp" })
- 
-+#define TPS_DATA_STATUS_FLAGS_MASK (GENMASK(31, 0) ^ (TPS_DATA_STATUS_DP_PIN_ASSIGNMENT_MASK | \
-+						      TPS_DATA_STATUS_TBT_CABLE_SPEED_MASK | \
-+						      TPS_DATA_STATUS_TBT_CABLE_GEN_MASK))
-+
-+#define show_data_status_flags(data_status) \
-+	__print_flags(data_status & TPS_DATA_STATUS_FLAGS_MASK, "|", \
-+		{ TPS_DATA_STATUS_DATA_CONNECTION,	"DATA_CONNECTION" }, \
-+		{ TPS_DATA_STATUS_UPSIDE_DOWN,		"DATA_UPSIDE_DOWN" }, \
-+		{ TPS_DATA_STATUS_ACTIVE_CABLE,		"ACTIVE_CABLE" }, \
-+		{ TPS_DATA_STATUS_USB2_CONNECTION,	"USB2_CONNECTION" }, \
-+		{ TPS_DATA_STATUS_USB3_CONNECTION,	"USB3_CONNECTION" }, \
-+		{ TPS_DATA_STATUS_USB3_GEN2,		"USB3_GEN2" }, \
-+		{ TPS_DATA_STATUS_USB_DATA_ROLE,	"USB_DATA_ROLE" }, \
-+		{ TPS_DATA_STATUS_DP_CONNECTION,	"DP_CONNECTION" }, \
-+		{ TPS_DATA_STATUS_DP_SINK,		"DP_SINK" }, \
-+		{ TPS_DATA_STATUS_TBT_CONNECTION,	"TBT_CONNECTION" }, \
-+		{ TPS_DATA_STATUS_TBT_TYPE,		"TBT_TYPE" }, \
-+		{ TPS_DATA_STATUS_OPTICAL_CABLE,	"OPTICAL_CABLE" }, \
-+		{ TPS_DATA_STATUS_ACTIVE_LINK_TRAIN,	"ACTIVE_LINK_TRAIN" }, \
-+		{ TPS_DATA_STATUS_FORCE_LSX,		"FORCE_LSX" }, \
-+		{ TPS_DATA_STATUS_POWER_MISMATCH,	"POWER_MISMATCH" })
-+
-+#define show_data_status_dp_pin_assignment(data_status) \
-+	__print_symbolic(TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT(data_status), \
-+		{ TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_E, "E" }, \
-+		{ TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_F, "F" }, \
-+		{ TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_C, "C" }, \
-+		{ TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_D, "D" }, \
-+		{ TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_A, "A" }, \
-+		{ TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_B, "B" })
-+
-+#define maybe_show_data_status_dp_pin_assignment(data_status) \
-+	(data_status & TPS_DATA_STATUS_DP_CONNECTION ? \
-+	 show_data_status_dp_pin_assignment(data_status) : "")
-+
- TRACE_EVENT(tps6598x_irq,
- 	    TP_PROTO(u64 event1,
- 		     u64 event2),
-@@ -219,6 +254,25 @@ TRACE_EVENT(tps6598x_power_status,
- 		    )
- );
- 
-+TRACE_EVENT(tps6598x_data_status,
-+	    TP_PROTO(u32 data_status),
-+	    TP_ARGS(data_status),
-+
-+	    TP_STRUCT__entry(
-+			     __field(u32, data_status)
-+			     ),
-+
-+	    TP_fast_assign(
-+			   __entry->data_status = data_status;
-+			   ),
-+
-+	    TP_printk("%s%s%s",
-+		      show_data_status_flags(__entry->data_status),
-+		      __entry->data_status & TPS_DATA_STATUS_DP_CONNECTION ? ", DP pinout " : "",
-+		      maybe_show_data_status_dp_pin_assignment(__entry->data_status)
-+		    )
-+);
-+
- #endif /* _TPS6598X_TRACE_H_ */
- 
- /* This part must be outside protection */
--- 
-2.30.0
+Please confirm because the Bank wants to confiscate his Bank account.
 
+I look forward to your immediate response.
+
+From Elaina S. William.
