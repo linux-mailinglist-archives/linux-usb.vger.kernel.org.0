@@ -2,99 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B4F631B807
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 12:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9321631B84D
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 12:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbhBOLc4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Feb 2021 06:32:56 -0500
-Received: from honk.sigxcpu.org ([24.134.29.49]:50534 "EHLO honk.sigxcpu.org"
+        id S230021AbhBOLrv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Feb 2021 06:47:51 -0500
+Received: from honk.sigxcpu.org ([24.134.29.49]:51146 "EHLO honk.sigxcpu.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229805AbhBOLcu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Feb 2021 06:32:50 -0500
+        id S229870AbhBOLrl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Feb 2021 06:47:41 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by honk.sigxcpu.org (Postfix) with ESMTP id 28D97FB03;
-        Mon, 15 Feb 2021 12:32:08 +0100 (CET)
+        by honk.sigxcpu.org (Postfix) with ESMTP id 3B4ABFB07;
+        Mon, 15 Feb 2021 12:46:49 +0100 (CET)
 X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
 Received: from honk.sigxcpu.org ([127.0.0.1])
         by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id JGyDCSRY25EI; Mon, 15 Feb 2021 12:32:06 +0100 (CET)
-Date:   Mon, 15 Feb 2021 12:32:05 +0100
-From:   Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>
-To:     Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ramsay Jones <ramsay@ramsayjones.plus.com>,
+        with ESMTP id 9X14l09HXFNo; Mon, 15 Feb 2021 12:46:46 +0100 (CET)
+Received: by bogon.sigxcpu.org (Postfix, from userid 1000)
+        id 6EF8A4188A; Mon, 15 Feb 2021 12:46:45 +0100 (CET)
+From:   =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org,
-        Sparse Mailing-list <linux-sparse@vger.kernel.org>
-Subject: Re: [PATCH v2 2/4] usb: typec: tps6598x: Add trace event for status
- register
-Message-ID: <YCpbtV8TyIuCmy+4@bogon.m.sigxcpu.org>
-References: <651ac50b9ff6ed3db8cab9f176514900f6a02a0c.1613131413.git.agx@sigxcpu.org>
- <20210213031237.GP219708@shao2-debian>
- <YClYh7pqDlbXy8qh@bogon.m.sigxcpu.org>
- <6a8eb07f-16d5-f461-cf0b-6c4aaf93b014@ramsayjones.plus.com>
- <CAHk-=wjCAVj7J+KAC1pvtdeM-c76oXZq7k=v40-maKjTo6qfVw@mail.gmail.com>
- <20210214204127.ezrlr4u76onqcxl7@mail>
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH v3 0/4] usb: typec: tps6598x: Add IRQ flag and register tracing
+Date:   Mon, 15 Feb 2021 12:46:41 +0100
+Message-Id: <cover.1613389531.git.agx@sigxcpu.org>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210214204127.ezrlr4u76onqcxl7@mail>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-On Sun, Feb 14, 2021 at 09:41:27PM +0100, Luc Van Oostenryck wrote:
-> On Sun, Feb 14, 2021 at 11:00:48AM -0800, Linus Torvalds wrote:
-> > On Sun, Feb 14, 2021 at 10:42 AM Ramsay Jones
-> > <ramsay@ramsayjones.plus.com> wrote:
-> > >
-> > > >
-> > > > I looked around but didn't find any hints how to fix this. Any pointers
-> > > > I missed (added the sparse list to cc:)?
-> > >
-> > > This is a limitation of sparse; when using the 'stringize' pre-processor
-> > > operator #, the maximum size of the resulting string is about 8k (if I
-> > > remember correctly).
-> > 
-> > Well, yes and no.
-> > 
-> > The C89 standard actually says that a string literal can be at most
-> > 509 characters to be portable. C99 increased it to 4095 characters.
-> > 
-> > Sparse makes the limit higher, and the limit could easily be expanded
-> > way past 8kB - but the point is that large string literals are
-> > actually not guaranteed to be valid C.
-> > 
-> > So honestly, it really sounds like that TRACE_EVENT() thing is doing
-> > something it shouldn't be doing.
-> 
-> In itself, it's OKish but it does a lot of macro expansions and most
-> arguments are macros of macros of ... but the problem seems to be
-> limited to TP_printk().
-> 
-> In the current case, the offender is the string 'print_fmt_tps6598x_status'
-> which is just under 26K long especially because it expand
-> TPS6598X_STATUS_FLAGS_MASK but also because the arguments use FIELD_GET()
-> and thus __BF_FIELD_CHECK().
 
-That was a great hint! Using a custom FIELD_GET() that drops the
-__BF_FIELD_CHECK() makes things fit.
-Cheers,
- -- Guido
+This series adds tracing events for the chips IRQ and registers that are useful
+to figure out the current data and power status. This came about since
+diagnosing why a certain usb-c hub or dp-alt-mode adapter fails is hard with
+the information in /sys/class/typec alone since this does not have a timeline
+of events (and we don't want every typec user having to also buy a PD
+analyzer). With this series debugging these kinds of things starts to become
+fun:
 
-> > 
-> > I don't think there's any fundamental limit why sparse does 8kB as a
-> > limit (just a few random buffers). Making sparse accept larger ones
-> > should be as simple as just increasing MAX_STRING, but I really don't
-> > think the kernel should encourage that kind of excessive string sizes.
-> 
-> Like you noted, there are just a few cases in the kernel and IIRC
-> there is or was one case in it too.
-> I would tend to increase MAX_STRING to something like 32 or 64K,
-> in order to keep it reasonable but let sparse to continue its processing,
-> but add a warning when the string/token is bigger than the current 8K.
-> 
-> -- Luc
-> 
+   # echo 1 > /sys/kernel/debug/tracing/events/tps6598x/enable
+   # cat /sys/kernel/debug/tracing/trace_pipe
+   irq/79-0-003f-526     [003] ....   512.717871: tps6598x_irq: event1=PLUG_EVENT|DATA_STATUS_UPDATE|STATUS_UPDATE, event2=
+   irq/79-0-003f-526     [003] ....   512.722408: tps6598x_status: conn: conn-Ra, pp_5v0: off, pp_hv: off, pp_ext: off, pp_cable: off, pwr-src: vin-3p3, vbus: vSafe0V, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE
+   irq/79-0-003f-526     [003] ....   512.727127: tps6598x_data_status: DATA_CONNECTION|USB2_CONNECTION|USB3_CONNECTION
+   irq/79-0-003f-526     [003] ....   512.769571: tps6598x_irq: event1=PP_SWITCH_CHANGED|STATUS_UPDATE, event2=
+   irq/79-0-003f-526     [003] ....   512.773380: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: vSafe0V, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   512.872450: tps6598x_irq: event1=POWER_STATUS_UPDATE|PD_STATUS_UPDATE, event2=
+   irq/79-0-003f-526     [003] ....   512.876311: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: vSafe0V, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   512.880237: tps6598x_power_status: conn: 1, pwr-role: source, typec: usb, bc: sdp
+   irq/79-0-003f-526     [003] ....   513.072682: tps6598x_irq: event1=STATUS_UPDATE, event2=
+   irq/79-0-003f-526     [003] ....   513.076390: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: vSafe5V, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.090676: tps6598x_irq: event1=ERROR_CANNOT_PROVIDE_PWR, event2=
+   irq/79-0-003f-526     [003] ....   513.094368: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: vSafe5V, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.109606: tps6598x_irq: event1=NEW_CONTRACT_AS_PROVIDER|POWER_STATUS_UPDATE|STATUS_UPDATE|SRC_TRANSITION, event2=
+   irq/79-0-003f-526     [003] ....   513.113777: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: pd, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.117475: tps6598x_power_status: conn: 1, pwr-role: source, typec: pd, bc: sdp
+   irq/79-0-003f-526     [003] ....   513.137469: tps6598x_irq: event1=VDM_RECEIVED, event2=
+   irq/79-0-003f-526     [003] ....   513.141570: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: pd, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.281926: tps6598x_irq: event1=VDM_RECEIVED, event2=
+   irq/79-0-003f-526     [003] ....   513.285638: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: pd, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.300515: tps6598x_irq: event1=VDM_RECEIVED|DATA_STATUS_UPDATE, event2=
+   irq/79-0-003f-526     [003] ....   513.304226: tps6598x_status: conn: conn-Ra, pp_5v0: out, pp_hv: off, pp_ext: off, pp_cable: in, pwr-src: vin-3p3, vbus: pd, usb-host: no, legacy: no, flags: PLUG_PRESENT|PORTROLE|DATAROLE|VCONN
+   irq/79-0-003f-526     [003] ....   513.308302: tps6598x_data_status: DATA_CONNECTION|USB2_CONNECTION|USB3_CONNECTION|DP_CONNECTION, DP pinout D
+
+It should not impose any problems for firmwares that don't have IRQs for the
+registers enabled. The trace will then just be missing those events.
+
+Patch is against next-20210210.
+
+changes from v1:
+- Fix issues on 32bit arches and missing include spotted by kbuild
+  (build testes on mips)
+  https://lore.kernel.org/linux-usb/202102120644.IXu75GmJ-lkp@intel.com/
+  https://lore.kernel.org/linux-usb/202102120159.Lyh8AGhQ-lkp@intel.com/
+
+changes from v2:
+- Reduce macro expansion size by using a custom FIELD_GET. This
+  avoids a sparse warning.
+  https://lore.kernel.org/linux-usb/20210213031237.GP219708@shao2-debian/
+
+Guido Günther (4):
+  usb: typec: tps6598x: Add trace event for IRQ events
+  usb: typec: tps6598x: Add trace event for status register
+  usb: typec: tps6598x: Add trace event for power status register
+  usb: typec: tps6598x: Add trace event for data status
+
+ drivers/usb/typec/Makefile         |   3 +
+ drivers/usb/typec/tps6598x.c       |  66 ++++---
+ drivers/usb/typec/tps6598x.h       | 189 +++++++++++++++++++
+ drivers/usb/typec/tps6598x_trace.h | 283 +++++++++++++++++++++++++++++
+ 4 files changed, 515 insertions(+), 26 deletions(-)
+ create mode 100644 drivers/usb/typec/tps6598x.h
+ create mode 100644 drivers/usb/typec/tps6598x_trace.h
+
+-- 
+2.30.0
+
