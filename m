@@ -2,68 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA85E31BAC6
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 15:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A9C31BEBC
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 17:19:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbhBOOK0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Feb 2021 09:10:26 -0500
-Received: from m12-12.163.com ([220.181.12.12]:47968 "EHLO m12-12.163.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230410AbhBOOKJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Feb 2021 09:10:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=16B0TKSp4VuKrzbX5F
-        LXQVCjxLhrmDPq1Zobmwb0iMc=; b=Tii0gi/WnQzFRa6ldoBcqX7NWzNHNbdtb7
-        phOHkHNzHUbGRKQl2gKxXT++aFQ9SZigk+/f+KLm/h0K/qLjCZfwsY8ozqaIaKfe
-        EaysgdXCnq4nJ6MBvH0QJ82kq5MekiJahCDLFXCAoh4t7Zn+TQPmbbeBOjl4dqdE
-        QqrH8KqGU=
-Received: from localhost.localdomain (unknown [125.70.196.55])
-        by smtp8 (Coremail) with SMTP id DMCowAAXb+_WSSpgRDr7Qg--.51259S2;
-        Mon, 15 Feb 2021 18:15:55 +0800 (CST)
-From:   Chen Lin <chen45464546@163.com>
-To:     balbi@kernel.org
-Cc:     gregkh@linuxfoundation.org, gustavoars@kernel.org,
-        martin.petersen@oracle.com, bvanassche@acm.org,
+        id S231976AbhBOQRJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Feb 2021 11:17:09 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:40832 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232574AbhBOP7D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Feb 2021 10:59:03 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 11FFoBbm121923;
+        Mon, 15 Feb 2021 15:57:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=DgV2X2itjEB7vni0gXukDnNbihcxKMHYwvnAV8Y5ZW8=;
+ b=EL0iVfkq1vNYRZFLSUH2rjenEeqBfKzNfUxXiC/06vxI6qTYBHz9uH1jdyRZ1z4d+3oj
+ 0nvSeEKZRNzN7K+Pl9ILwppJuOcxGwkCBFgujG41f7Uf+CbdIbat0PQ8DRwagP+yYVxU
+ uIHoX6IvB2UB7ybh8+9edGcShCzJx1IKaWoiuIfzhHZ1LjO654yK3/bxqiMP6itrqbju
+ A97eYzH4gcHcFOrZQ/Ltsp3nhnnfRH1SqYeize2t4gUFl/i0soE6kIaHG9qA5/mXHg2q
+ xD5Neo5cW3zbymz/zOxbjtcVkZz3TKpozZ//NqYkB4UOwNdeE8ZFztbB4HL2yuUFDosx vA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 36p7dnccjg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 Feb 2021 15:57:30 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 11FFnv1M009643;
+        Mon, 15 Feb 2021 15:57:28 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 36prpvsdnm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 Feb 2021 15:57:28 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 11FFvQmt002562;
+        Mon, 15 Feb 2021 15:57:26 GMT
+Received: from mwanda (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 15 Feb 2021 07:57:25 -0800
+Date:   Mon, 15 Feb 2021 18:57:16 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Nishad Kamdar <nishadkamdar@gmail.com>,
+        Lorenzo Colitti <lorenzo@google.com>,
+        David Lechner <david@lechnology.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chen Lin <chen.lin5@zte.com.cn>
-Subject: [PATCH] usb: gadget: storage: Remove unused function pointer typedef fsg_routine_t
-Date:   Mon, 15 Feb 2021 18:15:30 +0800
-Message-Id: <1613384130-3028-1-git-send-email-chen45464546@163.com>
-X-Mailer: git-send-email 1.7.9.5
-X-CM-TRANSID: DMCowAAXb+_WSSpgRDr7Qg--.51259S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKr1DXF1kKF1kAw15Xr18Zrb_yoW3KFgEkr
-        1jvr1xJr1qga9xKw1Yg3y3ZrW8u3WUZr4kW3Wvvr93Ca4q9w4kuw4jyrn5CFyUuryxGFsI
-        y3s8XFs7Ww1xXjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU0ROJUUUUUU==
-X-Originating-IP: [125.70.196.55]
-X-CM-SenderInfo: hfkh0kqvuwkkiuw6il2tof0z/xtbBzhs6nlQHLo-5+AAAsC
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] USB: gadget: Fix a configfs return code
+Message-ID: <YCqZ3P53yyIg5cn7@mwanda>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-IMR: 1
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9896 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=994
+ phishscore=0 adultscore=0 mlxscore=0 suspectscore=0 malwarescore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102150125
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9896 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 mlxscore=0
+ phishscore=0 spamscore=0 adultscore=0 clxscore=1011 impostorscore=0
+ priorityscore=1501 lowpriorityscore=0 malwarescore=0 mlxlogscore=931
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2102150125
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Chen Lin <chen.lin5@zte.com.cn>
+If the string is invalid, this should return -EINVAL instead of 0.
 
-Remove the 'fsg_routine_t' typedef as it is not used.
-
-Signed-off-by: Chen Lin <chen.lin5@zte.com.cn>
+Fixes: 73517cf49bd4 ("usb: gadget: add RNDIS configfs options for class/subclass/protocol")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 ---
- drivers/usb/gadget/function/f_mass_storage.c |    2 --
- 1 file changed, 2 deletions(-)
+ drivers/usb/gadget/function/u_ether_configfs.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-index 950c943..4a47036 100644
---- a/drivers/usb/gadget/function/f_mass_storage.c
-+++ b/drivers/usb/gadget/function/f_mass_storage.c
-@@ -351,8 +351,6 @@ static inline struct fsg_dev *fsg_from_func(struct usb_function *f)
- 	return container_of(f, struct fsg_dev, function);
- }
- 
--typedef void (*fsg_routine_t)(struct fsg_dev *);
--
- static int exception_in_progress(struct fsg_common *common)
- {
- 	return common->state > FSG_STATE_NORMAL;
+diff --git a/drivers/usb/gadget/function/u_ether_configfs.h b/drivers/usb/gadget/function/u_ether_configfs.h
+index 3dfb460908fa..f558c3139ebe 100644
+--- a/drivers/usb/gadget/function/u_ether_configfs.h
++++ b/drivers/usb/gadget/function/u_ether_configfs.h
+@@ -182,12 +182,11 @@ out:									\
+ 						size_t len)		\
+ 	{								\
+ 		struct f_##_f_##_opts *opts = to_f_##_f_##_opts(item);	\
+-		int ret;						\
++		int ret = -EINVAL;					\
+ 		u8 val;							\
+ 									\
+ 		mutex_lock(&opts->lock);				\
+-		ret = sscanf(page, "%02hhx", &val);			\
+-		if (ret > 0) {						\
++		if (sscanf(page, "%02hhx", &val) > 0) {			\
+ 			opts->_n_ = val;				\
+ 			ret = len;					\
+ 		}							\
 -- 
-1.7.9.5
-
+2.30.0
 
