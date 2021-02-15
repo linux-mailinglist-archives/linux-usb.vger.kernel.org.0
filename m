@@ -2,39 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E09531C19A
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 19:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F70431C1AC
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 19:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbhBOShg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Feb 2021 13:37:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33762 "EHLO mail.kernel.org"
+        id S231130AbhBOSim (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Feb 2021 13:38:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34098 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230015AbhBOShf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Feb 2021 13:37:35 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C965664E05;
-        Mon, 15 Feb 2021 18:36:53 +0000 (UTC)
+        id S229933AbhBOSiP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Feb 2021 13:38:15 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C00864E16;
+        Mon, 15 Feb 2021 18:37:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613414214;
-        bh=fCAN+h/NbCmdQzE9+XALKEyd32GFbAckkQ2+ot+svxg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ENeECle2CTCNhXHig52ZY+rf85C8KSAq0Sd7Ff8O4AFZNx4qHhj/Qo5cMD97yy664
-         eOSX1u4iDM2TeBQa4wpPx2crsU32bOPOIeHh933D5iXRrgMiyPe4D2ZNggluaa/h7z
-         TabLUPBrJEBmOXMPN0K8b/DcGGZzE8Ql7OW+2s3mNy2QQTMoTINr3vq7XbuIF1YwN3
-         gTmq1FGDDkHGdvR5oED8pE07WLxMzNGEysojkq/q0aA/110JwrMa222dBuH5KA9OIr
-         omKQtuDdujmq69vuK+V7YpbglOncnhGUcO3MIdVmw84TOFgcy1rnJj8JpIa5b+i92Y
-         dLG+vsAOoK/1Q==
+        s=k20201202; t=1613414222;
+        bh=x6XvB23IQab9b3isI6TjOs/bqmDheSeclHNpSdO9LWE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZwmVNlUcyyEfNJtBCRUNMF7YsPRkQyMGzDdUhCORVVmE4a5QhZNh2G5IRzg6AVMEk
+         GWfvXOvXX3B2jaAM3YYe6wx6mJdiwPSxyhFJockeZJZ0FKZ6l0fzBx7suox2G1Z+uv
+         wRZeEjckgYQEHjIYks8/ztGkZwECGMz+hZtzHfBv3cnDFXF/dXML/o5qX/uSqgZZCb
+         gXDOl8Vyle5qutM1bLCA5TdsUUxQWJ0KTxItdpJM6QUkTnVwUH6ZZSnw67hz7tacec
+         Z6DWgmnUxl846VrSC96yEhOVhprY9GqCe4c/AsB3qxP8GD6xe3DWzMQ0viREDZCObs
+         jgMZ2C1F5KoQQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Christoph Schemmel <christoph.schemmel@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 2/6] NET: usb: qmi_wwan: Adding support for Cinterion MV31
-Date:   Mon, 15 Feb 2021 13:36:47 -0500
-Message-Id: <20210215183651.122001-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 1/4] NET: usb: qmi_wwan: Adding support for Cinterion MV31
+Date:   Mon, 15 Feb 2021 13:36:57 -0500
+Message-Id: <20210215183700.122100-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210215183651.122001-1-sashal@kernel.org>
-References: <20210215183651.122001-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -70,10 +68,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index ce73df4c137ea..b223536e07bed 100644
+index 72a3a5dc51319..5a1d21aae2a9e 100644
 --- a/drivers/net/usb/qmi_wwan.c
 +++ b/drivers/net/usb/qmi_wwan.c
-@@ -1332,6 +1332,7 @@ static const struct usb_device_id products[] = {
+@@ -1354,6 +1354,7 @@ static const struct usb_device_id products[] = {
  	{QMI_FIXED_INTF(0x1e2d, 0x0082, 5)},	/* Cinterion PHxx,PXxx (2 RmNet) */
  	{QMI_FIXED_INTF(0x1e2d, 0x0083, 4)},	/* Cinterion PHxx,PXxx (1 RmNet + USB Audio)*/
  	{QMI_QUIRK_SET_DTR(0x1e2d, 0x00b0, 4)},	/* Cinterion CLS8 */
