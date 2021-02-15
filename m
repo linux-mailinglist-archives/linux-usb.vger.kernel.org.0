@@ -2,67 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C142A31C0D9
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 18:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E09531C19A
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 19:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232069AbhBORmp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Feb 2021 12:42:45 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:54581 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231132AbhBORmg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Feb 2021 12:42:36 -0500
-Received: (qmail 961148 invoked by uid 1000); 15 Feb 2021 12:41:45 -0500
-Date:   Mon, 15 Feb 2021 12:41:45 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: usb: dwc3: gadget: Change runtime pm function for DWC3 runtime
- suspend
-Message-ID: <20210215174145.GA960831@rowland.harvard.edu>
-References: <CGME20210215025057epcas2p205c3c283a8806d818d71f90c872c6e51@epcas2p2.samsung.com>
- <1613356739-91734-1-git-send-email-dh10.jung@samsung.com>
+        id S230232AbhBOShg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Feb 2021 13:37:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33762 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230015AbhBOShf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Feb 2021 13:37:35 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C965664E05;
+        Mon, 15 Feb 2021 18:36:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613414214;
+        bh=fCAN+h/NbCmdQzE9+XALKEyd32GFbAckkQ2+ot+svxg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ENeECle2CTCNhXHig52ZY+rf85C8KSAq0Sd7Ff8O4AFZNx4qHhj/Qo5cMD97yy664
+         eOSX1u4iDM2TeBQa4wpPx2crsU32bOPOIeHh933D5iXRrgMiyPe4D2ZNggluaa/h7z
+         TabLUPBrJEBmOXMPN0K8b/DcGGZzE8Ql7OW+2s3mNy2QQTMoTINr3vq7XbuIF1YwN3
+         gTmq1FGDDkHGdvR5oED8pE07WLxMzNGEysojkq/q0aA/110JwrMa222dBuH5KA9OIr
+         omKQtuDdujmq69vuK+V7YpbglOncnhGUcO3MIdVmw84TOFgcy1rnJj8JpIa5b+i92Y
+         dLG+vsAOoK/1Q==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Christoph Schemmel <christoph.schemmel@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 2/6] NET: usb: qmi_wwan: Adding support for Cinterion MV31
+Date:   Mon, 15 Feb 2021 13:36:47 -0500
+Message-Id: <20210215183651.122001-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210215183651.122001-1-sashal@kernel.org>
+References: <20210215183651.122001-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1613356739-91734-1-git-send-email-dh10.jung@samsung.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 15, 2021 at 11:38:58AM +0900, Daehwan Jung wrote:
-> It seems pm_runtime_put calls runtime_idle callback not runtime_suspend callback.
+From: Christoph Schemmel <christoph.schemmel@gmail.com>
 
-How is this fact related to your patch?
+[ Upstream commit a4dc7eee9106a9d2a6e08b442db19677aa9699c7 ]
 
-> It's better to use pm_runtime_put_sync_suspend to allow DWC3 runtime suspend.
+Adding support for Cinterion MV31 with PID 0x00B7.
 
-Why do you think it is better?  The advantage of pm_runtime_put is that 
-it allows the suspend to occur at a later time in a workqueue thread, so 
-the caller doesn't have to wait for the device to go into suspend.
+T:  Bus=04 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 11 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+P:  Vendor=1e2d ProdID=00b7 Rev=04.14
+S:  Manufacturer=Cinterion
+S:  Product=Cinterion USB Mobile Broadband
+S:  SerialNumber=b3246eed
+C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
 
-Alan Stern
+Signed-off-by: Christoph Schemmel <christoph.schemmel@gmail.com>
+Link: https://lore.kernel.org/r/20210202084523.4371-1-christoph.schemmel@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> ---
->  drivers/usb/dwc3/gadget.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index aebcf8e..4a4b93b 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -2229,7 +2229,7 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->  	 */
->  	ret = pm_runtime_get_sync(dwc->dev);
->  	if (!ret || ret < 0) {
-> -		pm_runtime_put(dwc->dev);
-> +		pm_runtime_put_sync_suspend(dwc->dev);
->  		return 0;
->  	}
->  
-> -- 
-> 2.7.4
-> 
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index ce73df4c137ea..b223536e07bed 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1332,6 +1332,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x1e2d, 0x0082, 5)},	/* Cinterion PHxx,PXxx (2 RmNet) */
+ 	{QMI_FIXED_INTF(0x1e2d, 0x0083, 4)},	/* Cinterion PHxx,PXxx (1 RmNet + USB Audio)*/
+ 	{QMI_QUIRK_SET_DTR(0x1e2d, 0x00b0, 4)},	/* Cinterion CLS8 */
++	{QMI_FIXED_INTF(0x1e2d, 0x00b7, 0)},	/* Cinterion MV31 RmNet */
+ 	{QMI_FIXED_INTF(0x413c, 0x81a2, 8)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
+ 	{QMI_FIXED_INTF(0x413c, 0x81a3, 8)},	/* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
+ 	{QMI_FIXED_INTF(0x413c, 0x81a4, 8)},	/* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
+-- 
+2.27.0
+
