@@ -2,67 +2,242 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4860E31B85E
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 12:51:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A384E31B8B5
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 13:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbhBOLuQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Feb 2021 06:50:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47746 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbhBOLuC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Feb 2021 06:50:02 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E480AC061574
-        for <linux-usb@vger.kernel.org>; Mon, 15 Feb 2021 03:49:19 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id g11so7336203ljj.7
-        for <linux-usb@vger.kernel.org>; Mon, 15 Feb 2021 03:49:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=o3tN68c/WexQZKsdiJaGwAWvYGkPDKgyq0ihT8HyNw4=;
-        b=B99TMqJPpdzqMc585scsuEA3Sq7SByRhQQGrS9QoYJ4mi41jv/l0n9uTeiwhzPhqXa
-         /H2MgJ6P3AVvAtjGk5g4S+ze5b98RmkXsIEfduVkozs//dECpW+YBb3bLf150yccFQxk
-         Fre150WSHnK189SzCuBv5mkb8c79ZWmQSddqD6DlvhO+Pj39G1T5psrba6k90wf81jUL
-         4dEwUbbvgGwlc1c2nTChnkV0vcZUShVrGqIcltCbXp/YCg+1OtkD/u6Gwd0iP/CAt5C7
-         0q5zXvaFYNV2LrDXjQeatien8v8ZPF5nnxTxiwV/b9Y4YOVtauLQwLXw4VvanfFyovUN
-         wigg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=o3tN68c/WexQZKsdiJaGwAWvYGkPDKgyq0ihT8HyNw4=;
-        b=G50Om6G9xDvwbWRKItjAyjkfvsdcYgoo0mjR7Gryef3tQlDeLfWKQ1V/AztjTtN/br
-         Pg9pNzmc5rfFEkxbve7lho1FLQ+sN99aW2eArkowIRD97on3fC+3PTDoJD8kKNLahBW0
-         Q5vdHX3CQeXsmodHN4EkVOhyMNg+kYcByOxb6b2xIYfFs3Ekh5VWDxx/LiUxv+qiTPI9
-         ZkMtv9bMRPtiXFev/u+6bhhFTKpDSGRPEzi9/bZLWXn5nxDuP6fgqYbHUAFca/Gxt4gz
-         BPYO9+fT2EQ4DaPU6cT10R7y4r2eaoRQp0QIqfkSfp7SGIyjdnBWJL/aCJXHPoWF2F5J
-         amjA==
-X-Gm-Message-State: AOAM532c3bP+n2IgjjHjf7UxTPRjpjaKjoUfpfzljEjL8ciLIcumo5WB
-        wunKXuyJf6bZvO1djXi3+9GFwomO7vlDzG12kMk=
-X-Google-Smtp-Source: ABdhPJwoWp8wzPh1g4jtfpvatoxGFqWaURKiZOjun7wa50tevhJYXYKVA3W8yniv42zcOmeCGTw7jrPlOHb2dWKuKK8=
-X-Received: by 2002:a2e:a54d:: with SMTP id e13mr9132834ljn.45.1613389757928;
- Mon, 15 Feb 2021 03:49:17 -0800 (PST)
+        id S230059AbhBOMGO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Feb 2021 07:06:14 -0500
+Received: from foo.stuge.se ([212.116.89.98]:35878 "EHLO foo.stuge.se"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229968AbhBOMGJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Feb 2021 07:06:09 -0500
+X-Greylist: delayed 398 seconds by postgrey-1.27 at vger.kernel.org; Mon, 15 Feb 2021 07:06:08 EST
+Received: (qmail 18304 invoked by uid 1000); 15 Feb 2021 11:58:44 -0000
+Message-ID: <20210215115844.18303.qmail@stuge.se>
+Date:   Mon, 15 Feb 2021 11:58:44 +0000
+From:   Peter Stuge <peter@stuge.se>
+To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org,
+        sam@ravnborg.org, lkundrak@v3.sk, markus@raatikainen.cc,
+        pontus.fuchs@gmail.com, hudson@trmm.net, th020394@gmail.com,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: Re: [PATCH v5 3/3] drm: Add Generic USB Display driver
+References: <20210212174609.58977-1-noralf@tronnes.org>
+ <20210212174609.58977-4-noralf@tronnes.org>
 MIME-Version: 1.0
-Received: by 2002:a05:651c:145:0:0:0:0 with HTTP; Mon, 15 Feb 2021 03:49:17
- -0800 (PST)
-Reply-To: susanwilliam1502@citromail.hu
-From:   "Elaina S. William" <annagege1967@gmail.com>
-Date:   Mon, 15 Feb 2021 12:49:17 +0100
-Message-ID: <CADvfdVxTKovWhk4+kfda+WRRW2Kk02Hs0h35UXXQNSRvHbii2Q@mail.gmail.com>
-Subject: Good Morning Sir,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210212174609.58977-4-noralf@tronnes.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Good Morning Sir,
+Hi Noralf,
 
-Did you receive the letter I sent to you since last week in regards to
-late Michael?
+I was happy to see v4 - thanks for accepting so much of my feedback -
+and I have to say that the new recursive acronym makes me smile! :)
 
-Please confirm because the Bank wants to confiscate his Bank account.
 
-I look forward to your immediate response.
+Noralf Trønnes wrote:
+> +++ b/drivers/gpu/drm/gud/Kconfig
+> @@ -0,0 +1,14 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +config DRM_GUD
+> +	tristate "GUD USB Display"
+> +	depends on DRM && USB
+> +	select LZ4_COMPRESS
 
-From Elaina S. William.
+Just a thought: Maybe LZ4_COMPRESS should be optional also on the host?
+
+Ie. not select it here and make lz4 code conditional on CONFIG_LZ4_COMPRESS?
+
+
+> +++ b/drivers/gpu/drm/gud/Makefile
+> @@ -0,0 +1,4 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +gud-objs			:= gud_drv.o gud_pipe.o gud_connector.o
+
+Should this be gud-y instead, like in other drm/*/Makefile ?
+
+
+> +++ b/drivers/gpu/drm/gud/gud_connector.c
+..
+> +static int gud_connector_atomic_check(struct drm_connector *connector,
+> +				      struct drm_atomic_state *state)
+> +{
+
+This always returns 0, so could be void?
+
+
+> +int gud_connector_create(struct gud_device *gdrm, unsigned int index)
+> +{
+> +	struct gud_connector_descriptor_req desc;
+> +	struct drm_device *drm = &gdrm->drm;
+> +	struct gud_connector *gconn;
+> +	struct drm_connector *connector;
+> +	struct drm_encoder *encoder;
+> +	int ret, connector_type;
+> +	u32 flags;
+> +
+> +	ret = gud_usb_get(gdrm, GUD_REQ_GET_CONNECTOR, index, &desc, sizeof(desc));
+
+Watch out for endianness bugs.
+
+I'd suggest to stay with the pattern "little-endian on wire" and add
+complexity on the host to deserialize/convert transfered data to native,
+but perhaps with some generic method that scales better than explicitly
+converting values on every use.
+
+
+> +++ b/drivers/gpu/drm/gud/gud_drv.c
+..
+> +static int gud_usb_control_msg(struct usb_device *usb, u8 ifnum, bool in,
+> +			       u8 request, u16 value, void *buf, size_t len)
+> +{
+> +	u8 requesttype = USB_TYPE_VENDOR | USB_RECIP_INTERFACE;
+> +	unsigned int pipe;
+> +	int ret;
+> +
+> +	if (in) {
+> +		pipe = usb_rcvctrlpipe(usb, 0);
+> +		requesttype |= USB_DIR_IN;
+> +	} else {
+> +		pipe = usb_sndctrlpipe(usb, 0);
+> +		requesttype |= USB_DIR_OUT;
+
+The above line seems unneccessary since USB_DIR_OUT is 0 by spec.
+
+
+> +static int gud_get_display_descriptor(struct usb_interface *interface,
+> +				      struct gud_display_descriptor_req *desc)
+> +{
+> +	u8 ifnum = interface->cur_altsetting->desc.bInterfaceNumber;
+> +	struct usb_device *usb = interface_to_usbdev(interface);
+> +	void *buf;
+> +	int ret;
+> +
+> +	buf = kmalloc(sizeof(*desc), GFP_KERNEL);
+> +	if (!buf)
+> +		return -ENOMEM;
+> +
+> +	ret = gud_usb_control_msg(usb, ifnum, true, GUD_REQ_GET_DESCRIPTOR, 0, buf, sizeof(*desc));
+> +	memcpy(desc, buf, sizeof(*desc));
+> +	kfree(buf);
+
+Is buf neccessary here? This isn't the hot path, but less dynamic memory
+and copying is always nicer.
+
+
+> +	if (desc->magic != GUD_DISPLAY_MAGIC)
+> +		return -ENODATA;
+
+It seems like this checks overlooks endianness, which happens very easily.
+
+Maybe it's a good idea to create a function to fix endianness directly
+after data transfers?
+
+Such a function could take a pointer to memory and a kind of format
+string made up of 'b', 'w', 'l' and 'q' or '1', '2', '4' and '8' to
+describe field sizes, and would then convert wlq fields to native
+endianness in-place.
+
+Or are there some parts of the code that could really benefit from
+keeping wire-endian values in host memory?
+
+
+> +static int gud_usb_get_status(struct usb_device *usb, u8 ifnum, u8 *status)
+> +{
+> +	u8 *buf;
+> +	int ret;
+> +
+> +	buf = kmalloc(sizeof(*buf), GFP_KERNEL);
+> +	if (!buf)
+> +		return -ENOMEM;
+> +
+> +	ret = gud_usb_control_msg(usb, ifnum, true, GUD_REQ_GET_STATUS, 0, buf, sizeof(*buf));
+> +	*status = *buf;
+> +	kfree(buf);
+
+Ouch, kmalloc for a single byte here, this is the extreme case! :)
+
+If it's not cool to transfer data directly through to the provided pointer
+then how about bouncing onto a stack variable rather than kmalloc memory?
+
+Ie:
+
+u8 val;
+
+gud_usb_control_msg(.. GUD_REQ_GET_STATUS, 0, &val, sizeof val)
+
+
+> +static int gud_usb_transfer(struct gud_device *gdrm, bool in, u8 request, u16 index,
+> +			    void *buf, size_t len)
+> +{
+> +	struct usb_device *usb = gud_to_usb_device(gdrm);
+> +	void *trbuf = NULL;
+> +	int idx, ret;
+> +
+> +	drm_dbg(&gdrm->drm, "%s: request=0x%x index=%u len=%zu\n",
+> +		in ? "get" : "set", request, index, len);
+> +
+> +	if (!drm_dev_enter(&gdrm->drm, &idx))
+> +		return -ENODEV;
+> +
+> +	mutex_lock(&gdrm->ctrl_lock);
+> +
+> +	if (buf) {
+> +		if (in)
+> +			trbuf = kmalloc(len, GFP_KERNEL);
+> +		else
+> +			trbuf = kmemdup(buf, len, GFP_KERNEL);
+
+Also not the hot path, but is there no way to avoid copying memory around?
+
+
+> +static int gud_set_version(struct usb_device *usb, u8 ifnum, u32 flags, u8 version)
+> +{
+> +	u8 *buf;
+> +	int ret;
+> +
+> +	buf = kmalloc(sizeof(*buf), GFP_KERNEL);
+> +	if (!buf)
+> +		return -ENOMEM;
+> +
+> +	*buf = version;
+> +	ret = gud_usb_control_msg(usb, ifnum, false, GUD_REQ_SET_VERSION, 0, buf, sizeof(*buf));
+
+USB devices are usually expected to only support one protocol as advertised
+by the device using some combination of bcdDevice in the device descriptor
+and bInterfaceProtocol in interface descriptor(s), while the host is expected
+to handle the complexities of different versions - so something like this
+where the host instructs the device about versions isn't typical for USB.
+
+The motivation behind that split is that USB devices are typically
+simpler and lower cost than USB hosts, so devices should try to be
+trivial to implement.
+
+You can of course keep it anyway if you really want, I'm just letting
+you know about the common pattern.
+
+
+> +static int gud_probe(struct usb_interface *interface, const struct usb_device_id *id)
+..
+> +retry:
+> +	/*
+> +	 * Use plain kmalloc here since devm_kmalloc() places struct devres at the beginning
+> +	 * of the buffer it allocates. This wastes a lot of memory when allocating big buffers.
+> +	 * Asking for 2M would actually allocate 4M. This would also prevent getting the biggest
+> +	 * possible buffer potentially leading to split transfers.
+> +	 */
+
+Just a note here that split transfers are not per se a big problem if
+they are all submitted at once, since the USB host controller is able
+to schedule different transfers back-to-back on the wire.
+
+
+Kind regards
+
+//Peter
