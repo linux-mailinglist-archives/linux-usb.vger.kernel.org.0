@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F70431C1AC
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 19:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74FCB31C1B9
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 19:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbhBOSim (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Feb 2021 13:38:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34098 "EHLO mail.kernel.org"
+        id S231197AbhBOSiv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Feb 2021 13:38:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34134 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229933AbhBOSiP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Feb 2021 13:38:15 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C00864E16;
-        Mon, 15 Feb 2021 18:37:01 +0000 (UTC)
+        id S230484AbhBOSia (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Feb 2021 13:38:30 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B6BC564E2B;
+        Mon, 15 Feb 2021 18:37:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613414222;
-        bh=x6XvB23IQab9b3isI6TjOs/bqmDheSeclHNpSdO9LWE=;
+        s=k20201202; t=1613414228;
+        bh=ZsYaZWVoy3Thd1L18Ga6lVGL/f6RrZzh2j1/jf5iUUM=;
         h=From:To:Cc:Subject:Date:From;
-        b=ZwmVNlUcyyEfNJtBCRUNMF7YsPRkQyMGzDdUhCORVVmE4a5QhZNh2G5IRzg6AVMEk
-         GWfvXOvXX3B2jaAM3YYe6wx6mJdiwPSxyhFJockeZJZ0FKZ6l0fzBx7suox2G1Z+uv
-         wRZeEjckgYQEHjIYks8/ztGkZwECGMz+hZtzHfBv3cnDFXF/dXML/o5qX/uSqgZZCb
-         gXDOl8Vyle5qutM1bLCA5TdsUUxQWJ0KTxItdpJM6QUkTnVwUH6ZZSnw67hz7tacec
-         Z6DWgmnUxl846VrSC96yEhOVhprY9GqCe4c/AsB3qxP8GD6xe3DWzMQ0viREDZCObs
-         jgMZ2C1F5KoQQ==
+        b=emrERkTj2xQav1e1mex9k++TBWWZAaCASWW88L1Vtd0IJoOxbezZ9F3EwriRTKqM/
+         WkVYNzw2MrkMdk0JoiUtQLBrGqNlIJ7aqSXp//JAKiAEyX8puEUbG4DKstnUi6RwNn
+         7fqMFQ88pewjycwr+7QNM1V0+my83ds/W2yRKTgyltH58/0wc0yGGTEhLpsZCQ5Jgg
+         w9xB/xTrmt9LK+gSgJhG0oXEILpI2rNRymnQInhBomt1nHN+bb/KmBY8vzcFqJzr6c
+         pU8p8dNGDwU6NJLWBY+GqvYoCsDqWPgl5g7CVAJJYIj2oiMS3Fk6N7UJUhnyKkSK1m
+         4rp8nOZfB1xMQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Christoph Schemmel <christoph.schemmel@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 1/4] NET: usb: qmi_wwan: Adding support for Cinterion MV31
-Date:   Mon, 15 Feb 2021 13:36:57 -0500
-Message-Id: <20210215183700.122100-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 1/3] NET: usb: qmi_wwan: Adding support for Cinterion MV31
+Date:   Mon, 15 Feb 2021 13:37:04 -0500
+Message-Id: <20210215183706.122183-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 X-stable: review
@@ -68,10 +68,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 72a3a5dc51319..5a1d21aae2a9e 100644
+index bdfe88c754dfe..d2e5f5b7adf18 100644
 --- a/drivers/net/usb/qmi_wwan.c
 +++ b/drivers/net/usb/qmi_wwan.c
-@@ -1354,6 +1354,7 @@ static const struct usb_device_id products[] = {
+@@ -1291,6 +1291,7 @@ static const struct usb_device_id products[] = {
  	{QMI_FIXED_INTF(0x1e2d, 0x0082, 5)},	/* Cinterion PHxx,PXxx (2 RmNet) */
  	{QMI_FIXED_INTF(0x1e2d, 0x0083, 4)},	/* Cinterion PHxx,PXxx (1 RmNet + USB Audio)*/
  	{QMI_QUIRK_SET_DTR(0x1e2d, 0x00b0, 4)},	/* Cinterion CLS8 */
