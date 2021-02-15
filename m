@@ -2,45 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA1131B95D
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 13:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA85E31BAC6
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 15:11:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbhBOMg4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Feb 2021 07:36:56 -0500
-Received: from m12-14.163.com ([220.181.12.14]:47252 "EHLO m12-14.163.com"
+        id S230425AbhBOOK0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Feb 2021 09:10:26 -0500
+Received: from m12-12.163.com ([220.181.12.12]:47968 "EHLO m12-12.163.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230090AbhBOMgz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Feb 2021 07:36:55 -0500
+        id S230410AbhBOOKJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Feb 2021 09:10:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=BfrXPQ2i0LKTFeJkWi
-        8u/4OhhnLAlxqSd0QYpk+AWAM=; b=LY62XCJ/d2aZiQFPguOmw+sSxKQ7c7Vr4A
-        Vpx6hqP5uK+CLEIyGavZ6Rsom+MmfFts8T7QRekBmAjR7axXNRNfwpA3gFY/ry0O
-        HLByAqcXY18cPHyN4PpAm9QylFMlOmBY3TsRYvWfm7tVljp0JbzCGQoXWqPCsG/S
-        OHn0mt2+U=
+        s=s110527; h=From:Subject:Date:Message-Id; bh=16B0TKSp4VuKrzbX5F
+        LXQVCjxLhrmDPq1Zobmwb0iMc=; b=Tii0gi/WnQzFRa6ldoBcqX7NWzNHNbdtb7
+        phOHkHNzHUbGRKQl2gKxXT++aFQ9SZigk+/f+KLm/h0K/qLjCZfwsY8ozqaIaKfe
+        EaysgdXCnq4nJ6MBvH0QJ82kq5MekiJahCDLFXCAoh4t7Zn+TQPmbbeBOjl4dqdE
+        QqrH8KqGU=
 Received: from localhost.localdomain (unknown [125.70.196.55])
-        by smtp10 (Coremail) with SMTP id DsCowABXlrJMRSpgRqr9kw--.59310S2;
-        Mon, 15 Feb 2021 17:57:33 +0800 (CST)
+        by smtp8 (Coremail) with SMTP id DMCowAAXb+_WSSpgRDr7Qg--.51259S2;
+        Mon, 15 Feb 2021 18:15:55 +0800 (CST)
 From:   Chen Lin <chen45464546@163.com>
 To:     balbi@kernel.org
 Cc:     gregkh@linuxfoundation.org, gustavoars@kernel.org,
         martin.petersen@oracle.com, bvanassche@acm.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chen Lin <chen45464546@163.com>,
         Chen Lin <chen.lin5@zte.com.cn>
 Subject: [PATCH] usb: gadget: storage: Remove unused function pointer typedef fsg_routine_t
-Date:   Mon, 15 Feb 2021 17:56:07 +0800
-Message-Id: <1613382967-2850-1-git-send-email-chen45464546@163.com>
+Date:   Mon, 15 Feb 2021 18:15:30 +0800
+Message-Id: <1613384130-3028-1-git-send-email-chen45464546@163.com>
 X-Mailer: git-send-email 1.7.9.5
-X-CM-TRANSID: DsCowABXlrJMRSpgRqr9kw--.59310S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKF4xAFy8Cry5Kr1UuF43Awb_yoW3ZrgEkr
-        1jvr1xJryqga9Ikr1Yg3y3ZrW8u3WUZr4kW3Wv9r93Ca4q9w4kuw4UZrn5AFyUuryxGFZI
-        y3s8XF97Ww1xXjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUWv37UUUUU==
+X-CM-TRANSID: DMCowAAXb+_WSSpgRDr7Qg--.51259S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKr1DXF1kKF1kAw15Xr18Zrb_yoW3KFgEkr
+        1jvr1xJr1qga9xKw1Yg3y3ZrW8u3WUZr4kW3Wvvr93Ca4q9w4kuw4jyrn5CFyUuryxGFsI
+        y3s8XFs7Ww1xXjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU0ROJUUUUUU==
 X-Originating-IP: [125.70.196.55]
-X-CM-SenderInfo: hfkh0kqvuwkkiuw6il2tof0z/1tbiGg06nlaD822+8wAAs1
+X-CM-SenderInfo: hfkh0kqvuwkkiuw6il2tof0z/xtbBzhs6nlQHLo-5+AAAsC
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
+
+From: Chen Lin <chen.lin5@zte.com.cn>
 
 Remove the 'fsg_routine_t' typedef as it is not used.
 
