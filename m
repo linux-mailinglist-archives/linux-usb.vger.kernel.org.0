@@ -2,71 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CDE31C88E
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Feb 2021 11:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F24C531CADA
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Feb 2021 14:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbhBPKPT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Feb 2021 05:15:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56044 "EHLO mail.kernel.org"
+        id S229803AbhBPNFY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Feb 2021 08:05:24 -0500
+Received: from mga03.intel.com ([134.134.136.65]:42238 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229912AbhBPKPQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 16 Feb 2021 05:15:16 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C5BFD64D9E;
-        Tue, 16 Feb 2021 10:14:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1613470475;
-        bh=O2Q27hr6Q2tu0G17tEJuGJHERt9K3knkkXeOktXAfwk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rq+FOR4tpAi54PAjrDtBB8HMXJZjFJAvf93AwJ2ej414Fuj74SKhcUl87ZiNO0h2u
-         Kb1u2ErgSpRtSTXREJUKYMYQUn0zVBGotZN+jkSkg8bKnObdffMm34RQc/zhwi3t4e
-         m79KK9VAje/FbLQTSUU6eLbEJUMF6HPra14fbL+k=
-Date:   Tue, 16 Feb 2021 11:14:32 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: core: no need to save usb_devices_root
-Message-ID: <YCubCA/trHAF7PtF@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+        id S229796AbhBPNFY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 16 Feb 2021 08:05:24 -0500
+IronPort-SDR: GmboY/7kGYQgZtdRvNHjjwqNlDc4WuY86rjotox27vBFE5ryvSJl/po1ecfwenNN9W7y8ZV7/c
+ 4lP2EU4ldV3w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9896"; a="182951201"
+X-IronPort-AV: E=Sophos;i="5.81,183,1610438400"; 
+   d="scan'208";a="182951201"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2021 05:04:40 -0800
+IronPort-SDR: U1uP5EoziXkGXGI7CdUKreczvobXUrO5ngD5PJzoF+Bd2KDDTxdn7NWcl+87S/yZFGxx3iQAJ3
+ JdoCR1D55V/g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,183,1610438400"; 
+   d="scan'208";a="512524003"
+Received: from ccdtglu46.jer.intel.com ([10.12.50.142])
+  by orsmga004.jf.intel.com with ESMTP; 16 Feb 2021 05:04:38 -0800
+From:   Gil Fine <gil.fine@intel.com>
+To:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
+Cc:     gil.fine@intel.com, linux-usb@vger.kernel.org, lukas@wunner.de
+Subject: [PATCH v2 0/2] thunderbolt: debugfs: handle fail reading block 
+Date:   Tue, 16 Feb 2021 15:04:25 +0200
+Message-Id: <20210216130427.7317-1-gil.fine@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is no need to save the usb_devices debugfs file as we only need it
-when removing it, so have the debugfs code look it up when it is needed
-instead, saving the storage.
+Applies on top of thunderbolt.git/next.
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/usb/core/usb.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+v1 can be found here:
 
-diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-index 8f07b0516100..829dc8e85b00 100644
---- a/drivers/usb/core/usb.c
-+++ b/drivers/usb/core/usb.c
-@@ -950,17 +950,15 @@ static struct notifier_block usb_bus_nb = {
- 	.notifier_call = usb_bus_notify,
- };
- 
--static struct dentry *usb_devices_root;
--
- static void usb_debugfs_init(void)
- {
--	usb_devices_root = debugfs_create_file("devices", 0444, usb_debug_root,
--					       NULL, &usbfs_devices_fops);
-+	debugfs_create_file("devices", 0444, usb_debug_root, NULL,
-+			    &usbfs_devices_fops);
- }
- 
- static void usb_debugfs_cleanup(void)
- {
--	debugfs_remove(usb_devices_root);
-+	debugfs_remove(debugfs_lookup("devices", usb_debug_root));
- }
- 
- /*
+  https://lore.kernel.org/linux-usb/20210201214637.2158-1-gil.fine@intel.com/
+
+Changes from v1:
+
+  * Split the previous patch into two patches so that
+    dropping of the unused functions reside in a separate patch
+
+Gil Fine (2):
+  thunderbolt: debugfs: handle fail reading block
+  thunderbolt: drop unused functions for TGL and ICL
+
+ drivers/thunderbolt/debugfs.c | 38 +++++++++++++++++++++++------------
+ drivers/thunderbolt/tb.h      | 26 ------------------------
+ 2 files changed, 25 insertions(+), 39 deletions(-)
+
 -- 
-2.30.1
+2.17.1
+
+---------------------------------------------------------------------
+Intel Israel (74) Limited
+
+This e-mail and any attachments may contain confidential material for
+the sole use of the intended recipient(s). Any review or distribution
+by others is strictly prohibited. If you are not the intended
+recipient, please contact the sender and delete all copies.
 
