@@ -2,87 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA0631CE52
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Feb 2021 17:45:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB7F31D295
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Feb 2021 23:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbhBPQoj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Feb 2021 11:44:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
+        id S230446AbhBPW0N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Feb 2021 17:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbhBPQoi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Feb 2021 11:44:38 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B41C061574
-        for <linux-usb@vger.kernel.org>; Tue, 16 Feb 2021 08:43:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:References:Cc:To:From:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=sC3sO/bS72AtEqP90G5x7VExQuWQRyOINPX4+6P8VmY=; b=EYHxHxCTeHbl7b3fL2i2hxMZaZ
-        O3mB4XYP84ABXfBGIFE52Istlt/BdDekT14IumA2bJPsBLeKzwDV5LyJfgSX1QQDfPqv9WnRNrz06
-        rT7ri+AIN6zCPlNgEudgi6gPl/IZzQoUqa/kejnB2uGCmRU7gWPeSF6QCaT8xjguyjC+sgzRduvU3
-        twKgdkdN60cTtIGtm7meCXhiZNhv6Dg4BVRsW+Sn07AsjFSmwvku6lYxAdWeZvMTvSozr75H0E5ww
-        SSaM4SZd7J64KXYgrWGG1nafw66yX2UHnDZrncn/thIwdYEUNMXk8GlUKh1H2zoS9W/sKKKxVUITe
-        GiDLksQQ==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:49315 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1lC3Ro-0005BE-9F; Tue, 16 Feb 2021 17:43:36 +0100
-Subject: Re: [PATCH v5 3/3] drm: Add Generic USB Display driver
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-To:     Oliver Neukum <oneukum@suse.de>, dri-devel@lists.freedesktop.org
-Cc:     hudson@trmm.net, markus@raatikainen.cc, sam@ravnborg.org,
-        linux-usb@vger.kernel.org, th020394@gmail.com, lkundrak@v3.sk,
-        pontus.fuchs@gmail.com, Daniel Vetter <daniel.vetter@ffwll.ch>,
-        peter@stuge.se
-References: <20210212174609.58977-1-noralf@tronnes.org>
- <20210212174609.58977-4-noralf@tronnes.org>
- <5164bb01b7f3cf71926109a37b9e3957cfb630ba.camel@suse.de>
- <316502da-218e-3837-d356-79a7b5dce7ae@tronnes.org>
-Message-ID: <d89c375e-3dea-89a3-2315-65ee91fd17f0@tronnes.org>
-Date:   Tue, 16 Feb 2021 17:43:33 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
-MIME-Version: 1.0
-In-Reply-To: <316502da-218e-3837-d356-79a7b5dce7ae@tronnes.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S229655AbhBPW0M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Feb 2021 17:26:12 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F2CC061756;
+        Tue, 16 Feb 2021 14:25:31 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id b16so13739452lji.13;
+        Tue, 16 Feb 2021 14:25:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=K98hVeDcDZJxSZfWfbNxqH8J1cAFlmmfibl33bktYFY=;
+        b=UPfvyzuIdkAQ9Ywk7shP2hbJY+ignE0bW7f9vkrr66daK+qbwcpwabsiJIxfJbpMNz
+         O7VdKdukhL8S+JCuVVoMGLocXH/AiDqMX5CM9VthHxD3jkh1QYL8QC0wWa7CE/As10cw
+         dQgyvvKfa6rjtYr+haFeOqnyAbUDQuWatIYIwEMAGAbP8hBgL6AeRSQseVAECL43lror
+         IOf+XbwOStJF+lAXVAcc1viIVvkL0LLstL7w+7lbxwZzxbrFfww9K5O+t1vu2TBtjcGp
+         INlOn0ZzIzv/HpxciPM9pbPHCMrWIA8dnbHoK271vzIq+cOxPqElQoPOGNpwYUhXEizp
+         cUow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=K98hVeDcDZJxSZfWfbNxqH8J1cAFlmmfibl33bktYFY=;
+        b=k82WXllZDGwHSL5CG7a2An4EMYf6AZn9tem4yF7VhmHGNtcUgrRtsWFIsl3J7LXwMM
+         gl4lb+4fl+8ChdK8w0vBtQu8m5cNovHAb+XLdq3cl4igYWUADh+lbuvQMYmI3z1xSSWY
+         p4i/OmD0NhiVVI9qS/MzizXRypBvzN4w07jlIvvybY11BfOiMP6VU4w+y+1+sbe/RqYi
+         22YnbKh/aHDh6XAm3CS/NFcVPJB/Q8ieiJSKoVK6sQ0I6XIxYB6BuAtZ7fEMljPLsHvc
+         AtVLRsbehtmpJyA2TBLpSHCbhdVzdtAeMhK1pPPO3/yKF2wDUDr7sGuRolXaw2ecDbT6
+         wzNQ==
+X-Gm-Message-State: AOAM530g23h+TPOEw8h2kjTuizAtqK/IS+FTiaTlcL4NBUTQ8RfQ6Zx/
+        DrN30rAdDJvySnfMhz3BfRE=
+X-Google-Smtp-Source: ABdhPJyWNyeY5rVkSELx/u4xd7HRY3mMPtlpggKEB6qcERexs+/KAJbJ1k6iUufraeRbXAsqAXrjKQ==
+X-Received: by 2002:a2e:900c:: with SMTP id h12mr13165698ljg.219.1613514330017;
+        Tue, 16 Feb 2021 14:25:30 -0800 (PST)
+Received: from localhost (crossness-hoof.volia.net. [93.72.107.198])
+        by smtp.gmail.com with ESMTPSA id j18sm20971lfe.145.2021.02.16.14.25.28
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 16 Feb 2021 14:25:28 -0800 (PST)
+From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Peter Chen <peter.chen@freescale.com>,
+        Daniel Mack <zonque@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Subject: [PATCH 0/5] USB Audio Gadget part 1: misc fixes and improvements
+Date:   Wed, 17 Feb 2021 00:24:54 +0200
+Message-Id: <1613514299-20668-1-git-send-email-ruslan.bilovol@gmail.com>
+X-Mailer: git-send-email 1.9.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Here are some bug fixes and improvements to
+USB Audio Gadget drivers which I made during
+my work on a new UAC features like feedback endpoint
+implementation and Volume/Mute controls.
 
+The new UAC features will be sent as a separate
+patch set (aka 'part 2') on top of these changes
+later this week
 
-Den 16.02.2021 17.40, skrev Noralf Trønnes:
-> 
-> 
-> Den 16.02.2021 14.36, skrev Oliver Neukum:
->> Am Freitag, den 12.02.2021, 18:46 +0100 schrieb Noralf Trønnes:
->>> +static void gud_connector_early_unregister(struct drm_connector *connector)
->>> +{
->>> +       struct gud_connector *gconn = to_gud_connector(connector);
->>> +
->>> +       backlight_device_unregister(gconn->backlight);
->>> +       cancel_work_sync(&gconn->backlight_work);
->>> +}
->>
->> Hi,
->>
->> this looks like you are creating a race condition where the queued work
->> may operate on an already unregistered backlight.
->>
-> 
-> backlight_device_unregister() sets bd->ops = NULL. This means that
-> userspace can't update brightness anymore, and thus won't call into this
-> driver. After that it should be safe to flush/cancel the workqueue.
-> 
-> Unless I'm missing something here.
-> 
+Ruslan Bilovol (5):
+  usb: gadget: f_uac2: always increase endpoint max_packet_size by one
+    audio slot
+  usb: gadget: f_uac1: stop playback on function disable
+  usb: gadget: f_uac2: validate input parameters
+  usb: gadget: f_uac1: validate input parameters
+  usb: gadget: f_uac1: disable IN/OUT ep if unused
 
-And it's ok for the worker to operate on an unregistered backlight, the
-memory is still available. It's freed when the connector goes away.
+ drivers/usb/gadget/function/f_uac1.c | 273 ++++++++++++++++++++++++++---------
+ drivers/usb/gadget/function/f_uac2.c |  42 +++++-
+ 2 files changed, 246 insertions(+), 69 deletions(-)
 
-Noralf.
+-- 
+1.9.1
+
