@@ -2,61 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9732131CCE0
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Feb 2021 16:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02BD131CCE7
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Feb 2021 16:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbhBPPW4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Feb 2021 10:22:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
+        id S229628AbhBPPZA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Feb 2021 10:25:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbhBPPWw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Feb 2021 10:22:52 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCD9C0613D6
-        for <linux-usb@vger.kernel.org>; Tue, 16 Feb 2021 07:22:11 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id s107so9266025otb.8
-        for <linux-usb@vger.kernel.org>; Tue, 16 Feb 2021 07:22:11 -0800 (PST)
+        with ESMTP id S229916AbhBPPY5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Feb 2021 10:24:57 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C409C061574
+        for <linux-usb@vger.kernel.org>; Tue, 16 Feb 2021 07:24:17 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id v16so923011ote.12
+        for <linux-usb@vger.kernel.org>; Tue, 16 Feb 2021 07:24:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=6YPOEJUbxKb/aX0//jY2Y3DtkZnnbju1QjBw9A+bNcE=;
-        b=SN7ST4T6PNQgP7m4E1OLYn2Ux4bqVmCIjoj+D0CZpohDWAbnxD1Zbhr4kiCEc+ytFp
-         lqM9CrThWlzYl2YiDYtlRYcwcTczlc+PbfxHnOaPFZ1YT5P+sJBkySS+2W20I+RyEm42
-         nobMuC5c56KLXhgwIY8BbeRrNetVXQMyxOZeB+CLDp5VFPjKR69HsmMWHiEcum//tPr4
-         u+IXR6ES/peY8VtU8qN3BYvZYvb/ZSRJWR5zRvFvpND4c4puH4JPpZreFuI+bulOeUkT
-         FE7SPzyRWte1aS8Q9rLqXBqjAnZJgl5WaHLpMsfTTDW959gHclmgUZrukv6ULXnXAoLE
-         bafQ==
+        bh=GQgze0gzSLrNUNtJ8yF91CHQI87PYIdc5JpUp7/Sh2k=;
+        b=jynlTHAujnS8zZn+6VSbT1lrjW2D06ghpvvrtPOGyqK3u3HsfNGobNj4la2WL2G2M9
+         aR7RNTELpx5q5bGXJ9t8pB/G6y17kwpFzongifqEtpChF/8ZvLDAtMepA++RNPW8MmpI
+         Bgv04wyWwt4XpA7i2eAZRZ4pTp8SNMmUmjUGfG4EuU4GUsA4rH6hbx7RvMSvO4IZoIbY
+         qbe0mj4YSf4SpA9qDeqif6/7GzSHYpaKG3gAufw95IRZIi1mkZHUHfw/J+/iqI2hCqUX
+         mD4YnFm7AbJGeEON/CztWTI+N7zLToj1Kzo4XDkvYngQ6PXNNrJLT4j5ZKYEfMOdsfIN
+         aSoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=6YPOEJUbxKb/aX0//jY2Y3DtkZnnbju1QjBw9A+bNcE=;
-        b=l6UaXZvn2z9RxVgO09iCEUYZZdnmQOqM9yDXffUIEe3EuhOvfwDuIT1FC6JIoD5ZgM
-         D2sRrIYHDKnCgW9Jz4WkaCV7kq61gjf7vFh13oSYfuw9HXF3gLZONfQbw0rkXFlSprES
-         arpPcP9caoGMWnj2FPxCRNdvtE93PpuZ15q/48kGW1WsCU+m4ZWOFK2Q7QYm5sVvGVT3
-         5aK7V+H+61hAhMfb21bKvHSrmico6ZQ/TnHJlGgm2tTaLZFxxkTTM0N0TXdypoOH4elO
-         MTBeu82S/c/jxesP8EEg2/fs4zAgJoH+h9vy3MFkI207bbH5s1Ex1Zp95Bmak/802AU7
-         rBPw==
-X-Gm-Message-State: AOAM531goNPLzl8AKP7gtLSkG6nFNvwVLy1JlJ9w9K4MuvUlWG4dvveY
-        jcMCyUBOlREA+9dBiUn383LmTxSdPBI=
-X-Google-Smtp-Source: ABdhPJwzMdpWgx6qNYVSiTLy2t+9F9A84HXcQsdRVa2C4tacibQhv5nxvLD+xuqOFr9BN4U0G/vC1A==
-X-Received: by 2002:a9d:684f:: with SMTP id c15mr14249436oto.40.1613488931375;
-        Tue, 16 Feb 2021 07:22:11 -0800 (PST)
+        bh=GQgze0gzSLrNUNtJ8yF91CHQI87PYIdc5JpUp7/Sh2k=;
+        b=KfGk+7pyaCxnyDeDrv86ASxsNEcEW6kVefRdFhDeHkHq8rMyHnA15b/mdQV+DACvma
+         ZZDDNk/zFdBqDOB+U5sbLYownn+ok47Dv6UVlt1lvj46qrKG+LFUfuP1X5PeWlYNmDh3
+         NndfI47Of2GTn4rCRlgK2iMWEbtBSznzluza3y9BpzxNP+5F1iVP4dmzsNcneyGNCGkK
+         CRGAMVvZ4mKefv268sPOU3kZoQ7ID9YVgjqcZiLBrJ5ZUSZYvA2LvH9/SLxT/4i7Ussk
+         P/RV+AspmK3dS8G/lUJtI8d8GlvTyXfmsNQIW4GZYZGfDqjmVLo02PsL4xZsN04xqxxH
+         E+vA==
+X-Gm-Message-State: AOAM530y0bxr0DAokOabWsr/hMGqCmHdiDK255uPQ7PX9A+AYOVu+Shi
+        ISUTFWWWqy6J97okzX5f2lE=
+X-Google-Smtp-Source: ABdhPJwGqMgCJ0pnhsC7+gaXQ7zfZDTHSAcNWAcHkDYyU1SW4QCgl16VKIw2jffSVTzS3+9A/Guq9w==
+X-Received: by 2002:a9d:4506:: with SMTP id w6mr3777995ote.261.1613489056535;
+        Tue, 16 Feb 2021 07:24:16 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o20sm4266817otp.20.2021.02.16.07.22.10
+        by smtp.gmail.com with ESMTPSA id g11sm4728604oif.9.2021.02.16.07.24.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Feb 2021 07:22:10 -0800 (PST)
+        Tue, 16 Feb 2021 07:24:16 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 6/6] USB: typec: tcpm: create debugfs subdir for the
+Subject: Re: [PATCH 5/6] USB: typec: fusb302: create debugfs subdir for the
  driver
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
 Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
 References: <20210216144645.3813043-1-gregkh@linuxfoundation.org>
- <20210216144645.3813043-6-gregkh@linuxfoundation.org>
+ <20210216144645.3813043-5-gregkh@linuxfoundation.org>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -101,12 +101,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <d217c6af-46c2-79ac-2ec9-b4b1572b331f@roeck-us.net>
-Date:   Tue, 16 Feb 2021 07:22:09 -0800
+Message-ID: <46f9d74a-85a5-835b-208a-c612e2c56199@roeck-us.net>
+Date:   Tue, 16 Feb 2021 07:24:14 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210216144645.3813043-6-gregkh@linuxfoundation.org>
+In-Reply-To: <20210216144645.3813043-5-gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -127,25 +127,31 @@ On 2/16/21 6:46 AM, Greg Kroah-Hartman wrote:
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
+I'd probably have explored the possibility to group files like this
+under the newly created tcpm debugfs directory, but that is really
+a nitpick.
+
+Guenter
+
 > ---
->  drivers/usb/typec/tcpm/tcpm.c | 5 +++--
+>  drivers/usb/typec/tcpm/fusb302.c | 5 +++--
 >  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 22a85b396f69..d4dd40c95a56 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -636,8 +636,9 @@ static void tcpm_debugfs_init(struct tcpm_port *port)
+> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+> index ebc46b9f776c..7a2a17866a82 100644
+> --- a/drivers/usb/typec/tcpm/fusb302.c
+> +++ b/drivers/usb/typec/tcpm/fusb302.c
+> @@ -213,8 +213,9 @@ static void fusb302_debugfs_init(struct fusb302_chip *chip)
 >  
->  	mutex_init(&port->logbuffer_lock);
->  	snprintf(name, NAME_MAX, "tcpm-%s", dev_name(port->dev));
-> -	port->dentry = debugfs_create_file(name, S_IFREG | 0444, usb_debug_root,
-> -					   port, &tcpm_debug_fops);
-> +	port->dentry = debugfs_create_dir(name, usb_debug_root);
-> +	debugfs_create_file("log", S_IFREG | 0444, port->dentry, port,
-> +			    &tcpm_debug_fops);
+>  	mutex_init(&chip->logbuffer_lock);
+>  	snprintf(name, NAME_MAX, "fusb302-%s", dev_name(chip->dev));
+> -	chip->dentry = debugfs_create_file(name, S_IFREG | 0444, usb_debug_root,
+> -					   chip, &fusb302_debug_fops);
+> +	chip->dentry = debugfs_create_dir(name, usb_debug_root);
+> +	debugfs_create_file("log", S_IFREG | 0444, chip->dentry, chip,
+> +			    &fusb302_debug_fops);
 >  }
 >  
->  static void tcpm_debugfs_exit(struct tcpm_port *port)
+>  static void fusb302_debugfs_exit(struct fusb302_chip *chip)
 > 
 
