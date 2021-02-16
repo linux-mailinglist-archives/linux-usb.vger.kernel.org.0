@@ -2,142 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 634E331CC98
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Feb 2021 16:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9732131CCE0
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Feb 2021 16:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbhBPPFR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Feb 2021 10:05:17 -0500
-Received: from mx0a-002ab301.pphosted.com ([148.163.150.161]:51226 "EHLO
-        mx0a-002ab301.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229946AbhBPPFO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Feb 2021 10:05:14 -0500
-X-Greylist: delayed 1448 seconds by postgrey-1.27 at vger.kernel.org; Tue, 16 Feb 2021 10:05:13 EST
-Received: from pps.filterd (m0118790.ppops.net [127.0.0.1])
-        by mx0a-002ab301.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11GEasH5021663;
-        Tue, 16 Feb 2021 09:40:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acuitybrands.com; h=from : to : cc
- : subject : date : message-id : content-type : mime-version;
- s=pps-01232019; bh=dhZsQTawFfeyWmJtSbfRZs1hqZoOZg8C/iQ63+D91Gg=;
- b=shJnDycsgXjSv8eJACxoSw9rhQwyoGrSODG2OMx+UwNi6sh4oZlHrAKhlfwItMKGYnpe
- pJVdr3WF8u/p89+sctdFB+ojFgHFismXQLQ0hT/2ohr4lVhCkzAoThQ4NyY+HHRky5yM
- yfBFusFZdvqZCyGK+OgpUCzzT10rhVHo260HNk9fP+VvKpEhlBpAwuPMDxNJQH9Q1MpG
- +KTPLntFh+OxCWPg+TAsxEE69NWDjZuwd56ktwVy/SM4ZdJDgm8hxvTHgjvZYGr67jwB
- Sy2YIAHBnxxFeTymCa+wpBLea0YKz8FsPmNemG8AudoSpsB0gTx2L4sIS+OIf2D//DZq hw== 
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2045.outbound.protection.outlook.com [104.47.66.45])
-        by mx0a-002ab301.pphosted.com with ESMTP id 36pb4ctpfj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Feb 2021 09:40:18 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=doykzWKh49M/BMWEzJ8Q5BUCIcQiE35sZQz8yOrDK+skHP+R4KtFqdoKDk3Nrz9gR96nKmf5VLCFsKh5yOQGJ1koZlCZ3qPnx+N2nuC141tr67ZyM+KpycEezZlAmfdUphDF6aVE2WFNrjNWwGksBLNWB4oZsBNu15XuyEgsrgeraIwdojtsalQ5dvKvZTcP259ce11+Klk9aVex0ut8aSE7OQU9FqwEHLU1T64FAvvxLtI9LpxHxQr4kDtcKb+lsmz/UxUsPQ8CLmcIE5QFbajfpZKzwQavumpumlm25O6OfmVwN80ZMEwknts+mXHxoPBytP7N8MjuZSTrGou3cA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dhZsQTawFfeyWmJtSbfRZs1hqZoOZg8C/iQ63+D91Gg=;
- b=kQuTqYN7OCmLgBxLrir/NV9e5NtpLWturyBYfmpS7JL48TI7ra1AViyUY7IqdcOs4NkaEhSlPoi3ARLKiqqfYH8s52y3TtWEC1f7/z+yEy8kzWn5qq2uQQjdkNFjXQ4kpRfu+iM4YFWU65S9QwrRQPPD35vaLbaDqxNn3liP7FkGAiu2cfZCkYCJ1lQyR4uuHOnedz9jgNXV+oOy8LayQlznVggcy0zOIYODzarOywkvwrElMwmzC5BZz/OyjyUmWI74kfjBZQtt/6PAFEJjQY1TLecSxnozrqe+o2UX/Nd8G6ASjee5yDN6mbeMlvkka9fhW8+4v1Zph2EUEZIaWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=acuitybrands.com; dmarc=pass action=none
- header.from=acuitybrands.com; dkim=pass header.d=acuitybrands.com; arc=none
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none
- header.from=acuitybrands.com;
-Received: from BN6PR0101MB2995.prod.exchangelabs.com (2603:10b6:405:30::10) by
- BN6PR01MB2467.prod.exchangelabs.com (2603:10b6:404:51::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3846.25; Tue, 16 Feb 2021 14:40:15 +0000
-Received: from BN6PR0101MB2995.prod.exchangelabs.com
- ([fe80::8040:b823:92b7:aa14]) by BN6PR0101MB2995.prod.exchangelabs.com
- ([fe80::8040:b823:92b7:aa14%7]) with mapi id 15.20.3805.033; Tue, 16 Feb 2021
- 14:40:15 +0000
-From:   Karan Singhal <karan.singhal@acuitybrands.com>
-To:     johan@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Karan Singhal <karan.singhal@acuitybrands.com>
-Subject: [PATCH] USB: serial: cp210x: add IDs for nLight Air Adapter, Acuity Brands, Inc.
-Date:   Tue, 16 Feb 2021 09:43:33 -0500
-Message-Id: <20210216144333.29262-1-karan.singhal@acuitybrands.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-Originating-IP: [24.98.66.87]
-X-ClientProxiedBy: BN6PR18CA0022.namprd18.prod.outlook.com
- (2603:10b6:404:121::32) To BN6PR0101MB2995.prod.exchangelabs.com
- (2603:10b6:405:30::10)
+        id S230200AbhBPPW4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Feb 2021 10:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230163AbhBPPWw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Feb 2021 10:22:52 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCD9C0613D6
+        for <linux-usb@vger.kernel.org>; Tue, 16 Feb 2021 07:22:11 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id s107so9266025otb.8
+        for <linux-usb@vger.kernel.org>; Tue, 16 Feb 2021 07:22:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6YPOEJUbxKb/aX0//jY2Y3DtkZnnbju1QjBw9A+bNcE=;
+        b=SN7ST4T6PNQgP7m4E1OLYn2Ux4bqVmCIjoj+D0CZpohDWAbnxD1Zbhr4kiCEc+ytFp
+         lqM9CrThWlzYl2YiDYtlRYcwcTczlc+PbfxHnOaPFZ1YT5P+sJBkySS+2W20I+RyEm42
+         nobMuC5c56KLXhgwIY8BbeRrNetVXQMyxOZeB+CLDp5VFPjKR69HsmMWHiEcum//tPr4
+         u+IXR6ES/peY8VtU8qN3BYvZYvb/ZSRJWR5zRvFvpND4c4puH4JPpZreFuI+bulOeUkT
+         FE7SPzyRWte1aS8Q9rLqXBqjAnZJgl5WaHLpMsfTTDW959gHclmgUZrukv6ULXnXAoLE
+         bafQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=6YPOEJUbxKb/aX0//jY2Y3DtkZnnbju1QjBw9A+bNcE=;
+        b=l6UaXZvn2z9RxVgO09iCEUYZZdnmQOqM9yDXffUIEe3EuhOvfwDuIT1FC6JIoD5ZgM
+         D2sRrIYHDKnCgW9Jz4WkaCV7kq61gjf7vFh13oSYfuw9HXF3gLZONfQbw0rkXFlSprES
+         arpPcP9caoGMWnj2FPxCRNdvtE93PpuZ15q/48kGW1WsCU+m4ZWOFK2Q7QYm5sVvGVT3
+         5aK7V+H+61hAhMfb21bKvHSrmico6ZQ/TnHJlGgm2tTaLZFxxkTTM0N0TXdypoOH4elO
+         MTBeu82S/c/jxesP8EEg2/fs4zAgJoH+h9vy3MFkI207bbH5s1Ex1Zp95Bmak/802AU7
+         rBPw==
+X-Gm-Message-State: AOAM531goNPLzl8AKP7gtLSkG6nFNvwVLy1JlJ9w9K4MuvUlWG4dvveY
+        jcMCyUBOlREA+9dBiUn383LmTxSdPBI=
+X-Google-Smtp-Source: ABdhPJwzMdpWgx6qNYVSiTLy2t+9F9A84HXcQsdRVa2C4tacibQhv5nxvLD+xuqOFr9BN4U0G/vC1A==
+X-Received: by 2002:a9d:684f:: with SMTP id c15mr14249436oto.40.1613488931375;
+        Tue, 16 Feb 2021 07:22:11 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o20sm4266817otp.20.2021.02.16.07.22.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Feb 2021 07:22:10 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH 6/6] USB: typec: tcpm: create debugfs subdir for the
+ driver
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+References: <20210216144645.3813043-1-gregkh@linuxfoundation.org>
+ <20210216144645.3813043-6-gregkh@linuxfoundation.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <d217c6af-46c2-79ac-2ec9-b4b1572b331f@roeck-us.net>
+Date:   Tue, 16 Feb 2021 07:22:09 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (24.98.66.87) by BN6PR18CA0022.namprd18.prod.outlook.com (2603:10b6:404:121::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.27 via Frontend Transport; Tue, 16 Feb 2021 14:40:15 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: c227187b-56ca-4ad9-8a3c-08d8d288c622
-X-MS-TrafficTypeDiagnostic: BN6PR01MB2467:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BN6PR01MB24676DBDE625D4AA9CBC25DF81879@BN6PR01MB2467.prod.exchangelabs.com>
-x-pp-identifier: acuityo365
-X-MS-Oob-TLC-OOBClassifiers: OLM:296;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9qZoNIiIhTELuOLBwwLa1uadulCRaWd+EnORUwKcEgPOuCXELy5vbItZeqzONNs+1Gm/iXMC6WOWi2tZ1U/umkQk/j5AQzBh3br2NvXNURxautln9/m7QnRWgRqcnwQPPDp+jAiKHSEN0iz1AWFm20Pwa0UdwxIsbPXFWqrXgsjDXyXe+HwuE+MjCEMzXLTcd9bjR65KqtwD4to8aYgSK+0Zmmm9CAT4m+xCBN0dttj77HIzAfxtU1xPChi4n1BxHY3AKhpEOK2tBHoJs7+m372aRxQFmoAqs6iTPX1xrqE4P0KurRqWtBybsQwudLRGN052Fz0DZCWrooxJd9qO8afElKxXt0fg6/oHERu0v2hrIvpAtxxwui9lm74102wccg3MqDUnkmHYIwVYRmEdtU7EWwCqpC4bo4xhbp0x5x1oNDp47XoxTgTYurXf4YULGY39IyOWYhUynQ4L4Uo4tEyODhv19P0ntQzfTK7/PQdEERc2yVhiBFzpg3VMFgfxAeTBkm0vW1DDZkLS3ZG+oMk+47EsBwxoz6G/aJhj4un7sxx5VHSAA97a/hauZbx+QulF7e8ZxAjmoV5nOLgyFg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR0101MB2995.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(396003)(39860400002)(366004)(376002)(346002)(86362001)(66556008)(52116002)(69590400012)(66476007)(26005)(6486002)(66946007)(107886003)(6916009)(6666004)(6512007)(8936002)(4744005)(478600001)(2906002)(16526019)(4326008)(8676002)(186003)(956004)(2616005)(5660300002)(36756003)(44832011)(316002)(1076003)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?51qOAxFZkDRWym9qjETxE43z3JfkiFYEO4nLlidLEhbqEFrYcSkjE4HdafDD?=
- =?us-ascii?Q?57j7yxZ0pVE5Y+Wfi45bglZovjhZ0BoCpII9UREE9l2xAbgMFrjATHGXkpOH?=
- =?us-ascii?Q?ytPzCxXYBoyHFuxLa+h4tWvq8xiaHHUnifIHKxm1RZJFXSX32TiHrLxqbCxd?=
- =?us-ascii?Q?CHgk/J127CcN2/vyerwax8YysrhVPtaMtXZWL2vCqWtHgiPTNQx7oy6towYS?=
- =?us-ascii?Q?oRKiiAI0Q7mrCn6p2G7gTxAq+xHcGthG+gXN9gZWBHvRCfg7h6zq14XvNweB?=
- =?us-ascii?Q?P+llAMfOq70Jj/Qcyqm/9Z55rkUEpCd1hX0PFLru6lgBvgwDSo28uixD69WM?=
- =?us-ascii?Q?vvit2AOjwbZpXzgjBWRtYIvvxCQrTQf4Qqd+Lfmo8xKdP6v8CG21lT7zdTdg?=
- =?us-ascii?Q?fIbgiZLVyRZSke33k1YLfPmI0lZOCPATzju16udpsoIQu95t4U5BqL31AzDI?=
- =?us-ascii?Q?iLDRuKeCBhp+D8stDmo/bRj3X11KeWZR1OSciv/qqPnst4BNyagU2Ud9S8OV?=
- =?us-ascii?Q?nI6iq7rsB4tssM6dqnUHB8vTHRS63yE5fVVG4wcj2HZdTL2PzKdf1WZkgm3I?=
- =?us-ascii?Q?ztfbfBE4JuWSZJC1H4JZxx6rQHwMGkjFcbeDifPQ445IT17h0HInI+vcGAf7?=
- =?us-ascii?Q?hThV1/MmmvsHOFB8Dw8OoEuLtIS/I6YjfPGfq5WWb1uUbudXuHJSq9VMZsJq?=
- =?us-ascii?Q?Iq55E8YIKB1ZHoKtUywOvDsCTE9KND59HSfgVKVKdWT7RLi6xF66nBRIYifI?=
- =?us-ascii?Q?+6HSpFG6lCmYttkToX5umNkK5wXlQeFrcf+1Fb4QUphy3itUytqTqPhkKdZn?=
- =?us-ascii?Q?sXXG8bxbBu4DG2ppBq7yNSvNCBhQmv3dnYrAf74gljnXOAOG7TUovZFnVC2X?=
- =?us-ascii?Q?UULx+A6BLoJ7fTDrSk6XK/Wxg6HvTeOsykQf8+GTvu6TRoUFuTiO/XkmvDLH?=
- =?us-ascii?Q?eqzVa15ofJWvLAcfD05cJPtDvSPts7FXyyRuc59KO0TgSXLy3P80v4azBprp?=
- =?us-ascii?Q?BxUo3K4hV+jDIm5LO9qn0rh9n+lgR1jx44Pmrt+AJR+1LAPAFJYJ0t2Wj1LB?=
- =?us-ascii?Q?OmN+KcPGtYMoAIQYkQJ66yvXcGUkXp/q0qWi61Ic01QaEVx0JeTJZg8qQogJ?=
- =?us-ascii?Q?SwQifmGBalN0YnQo5hTXX9gWDTVIPjUJ9XQJVM9Ihr9fJQL6EE92FMV0DYUz?=
- =?us-ascii?Q?36qBCUevFHo6q0e9Zp0ZEgBLNSED7JZ7hcxl3Y5sN0tCjNebL6U6vOMU65+S?=
- =?us-ascii?Q?8ttiWEQ95eG1bztzGnJ3Eh540zO0axiWf3BUtRBnpBi1kZzxbXo4HNGR7c/M?=
- =?us-ascii?Q?tPp379GKq0V8AP1hfXb6TkFH?=
-X-OriginatorOrg: acuitybrands.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c227187b-56ca-4ad9-8a3c-08d8d288c622
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR0101MB2995.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2021 14:40:15.6821
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: caadbe96-024e-4f67-82ec-fb28ff53d16d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ize1GxpVYtI2cmIGSA25D7NdABhDQH/qVJPgA4qQzmOqlHmPN1U00eGiMTitGKkekWD6Xghk/bEsstmUQuvlPg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR01MB2467
-X-Proofpoint-Processed: True
-X-Proofpoint-Spam-Details: rule=outbound_spam_notspam policy=outbound_spam score=0 phishscore=0
- malwarescore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
- suspectscore=0 adultscore=0 clxscore=1011 mlxscore=0 impostorscore=0
- spamscore=0 mlxlogscore=619 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2102160135
+In-Reply-To: <20210216144645.3813043-6-gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Signed-off-by: Karan Singhal <karan.singhal@acuitybrands.com>
----
- drivers/usb/serial/cp210x.c | 1 +
- 1 file changed, 1 insertion(+)
+On 2/16/21 6:46 AM, Greg Kroah-Hartman wrote:
+> The single debugfs file for this driver really is a log file, so make a
+> subdir and call it "log" to make it obvious this is what it is for.
+> This makes cleanup simpler as we just remove the whole directory, no
+> need to handle individual files anymore.
+> 
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index 7bec1e730b20..b82bb130710d 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -146,6 +146,7 @@ static const struct usb_device_id id_table[] = {
- 	{ USB_DEVICE(0x10C4, 0x8857) },	/* CEL EM357 ZigBee USB Stick */
- 	{ USB_DEVICE(0x10C4, 0x88A4) }, /* MMB Networks ZigBee USB Device */
- 	{ USB_DEVICE(0x10C4, 0x88A5) }, /* Planet Innovation Ingeni ZigBee USB Device */
-+	{ USB_DEVICE(0x10C4, 0x88D8) }, /* Acuity Brands nLight Air Adapter */
- 	{ USB_DEVICE(0x10C4, 0x88FB) }, /* CESINEL MEDCAL STII Network Analyzer */
- 	{ USB_DEVICE(0x10C4, 0x8938) }, /* CESINEL MEDCAL S II Network Analyzer */
- 	{ USB_DEVICE(0x10C4, 0x8946) }, /* Ketra N1 Wireless Interface */
--- 
-2.17.1
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 22a85b396f69..d4dd40c95a56 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -636,8 +636,9 @@ static void tcpm_debugfs_init(struct tcpm_port *port)
+>  
+>  	mutex_init(&port->logbuffer_lock);
+>  	snprintf(name, NAME_MAX, "tcpm-%s", dev_name(port->dev));
+> -	port->dentry = debugfs_create_file(name, S_IFREG | 0444, usb_debug_root,
+> -					   port, &tcpm_debug_fops);
+> +	port->dentry = debugfs_create_dir(name, usb_debug_root);
+> +	debugfs_create_file("log", S_IFREG | 0444, port->dentry, port,
+> +			    &tcpm_debug_fops);
+>  }
+>  
+>  static void tcpm_debugfs_exit(struct tcpm_port *port)
+> 
 
