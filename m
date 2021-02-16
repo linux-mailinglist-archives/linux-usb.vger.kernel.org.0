@@ -2,83 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3933631C1C4
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Feb 2021 19:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ADFE31C4F3
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Feb 2021 02:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbhBOSjk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Feb 2021 13:39:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34096 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231206AbhBOSiz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Feb 2021 13:38:55 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 90D5A64E34;
-        Mon, 15 Feb 2021 18:37:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613414238;
-        bh=pmEBOFyomu5S/7UCnFycGFNmxZ/6kEMqpsiu1N9k864=;
-        h=From:To:Cc:Subject:Date:From;
-        b=u0fCV/BKRohhk5zjaNTKXe7um2DbWs4FJO8cIVqztd/SoqU0Tys0zk504WWGTSv2l
-         JGVu/H+6mhoy03tI+eVSXQOBfmgK68WuaQz2Qh5EfVvdRg4vKJ7ZmGoUzf/tj9sulT
-         PuAsVL25y0FXCFRQkorb8umcSZ5RPf0n24cygqbO5D8i3Watg9147xuiHTAxUxC1kY
-         +E34maGlkdPLGgOe/XozRpvbqBz/GvfNPsEK3RA/U358VkOQThjHFXgNxEm/LzCsrx
-         J7g5LkAcqqcvlXad6GbAs9Ms/LDwHhZnJjhuHkl6GJN2h+cXkf2PhCPGA58xvsjVSU
-         OwYzq6XfsctrA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Christoph Schemmel <christoph.schemmel@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 1/3] NET: usb: qmi_wwan: Adding support for Cinterion MV31
-Date:   Mon, 15 Feb 2021 13:37:14 -0500
-Message-Id: <20210215183716.122333-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.27.0
+        id S229764AbhBPBYv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Feb 2021 20:24:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229708AbhBPBYp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Feb 2021 20:24:45 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B10C061756
+        for <linux-usb@vger.kernel.org>; Mon, 15 Feb 2021 17:24:04 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id f20so8573161ioo.10
+        for <linux-usb@vger.kernel.org>; Mon, 15 Feb 2021 17:24:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PJye+kSqwOydCXOrUXNte65cKiZnVuosg0HZqWH3+fk=;
+        b=Z6to2lyDuRB0FdW0XxBmvurM//wT02lgv7/r0jT3SZT8EoPCTJbQbu+21VSGtSFtnH
+         f/1ZTL1soBUcwgxsnwyw9E9bOw+XPNRw7+WQydmwJvkO6vMhJnSDbmxLGOdgo+HgOJGm
+         iTCONinJWFfd5/8g4wN2JvKprciXK1rqs+CeLZyHH/NYkfOtiT/r6Jut6Jl+Yx4pdle0
+         I2UuvvHMKbTyPXo1BGr6kg6XaZA8559c7j7pRqWYlnMAoa/M3O5JIMy3xsjzAl4HxkaQ
+         vKYKSR2g7om/Y1GK8W6j7oFr4ISm7mpYQr6qki4RexrpRuzJj5DWnota8scYukdXz68Y
+         rxtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PJye+kSqwOydCXOrUXNte65cKiZnVuosg0HZqWH3+fk=;
+        b=rUoaq6QNSSSuF5npMHtbgRlzaClBBZgHHYfNp/OZbiy6nF9/bIKaBMRkhxZYVRZKvM
+         0NSUabfvUbaqr54boNKSmUAKDdk52b8JqPfEMaB74XUre9IsuFYNyyqFRcbqmjpWY3bx
+         B8ayeOJqSV6mOtG6MJIvCzPJNhZATxxsDfN7XHDvZre1UoWJrXBOhvu+tf7PCiTa+f9d
+         TSfYs3aywO7IMRdtDZx8rzCxtgs1nmfB1xWcWXKPRRQvwcCJRqmyX3Zaa/kXrJQaJCOa
+         l2ZSi4gnJbsX94lO3kPk1wrEpsFM9IkV+izfTxMTEmjE23ZH3QyDo5CwlhJ2KXMjx8cU
+         ZhtA==
+X-Gm-Message-State: AOAM532Y+k1FvS0RUF32T3yG9AWZhVaLiDcLe9BiMI4phHt43fA9k7mq
+        w4i0zIgo55zDByzHQSpi7LcL6wo3lZPDC7Vz5ylNdg==
+X-Google-Smtp-Source: ABdhPJxDD54VyBmmZk6hcwEaZpNgzwqtUXGhXQLDibQ32pTyRaCu4xXKAaLhN53SGJR9MGA2MDvqZyppcJER56VW1rI=
+X-Received: by 2002:a5d:93c2:: with SMTP id j2mr15222418ioo.166.1613438643994;
+ Mon, 15 Feb 2021 17:24:03 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <YCqZ3P53yyIg5cn7@mwanda>
+In-Reply-To: <YCqZ3P53yyIg5cn7@mwanda>
+From:   Lorenzo Colitti <lorenzo@google.com>
+Date:   Tue, 16 Feb 2021 10:23:52 +0900
+Message-ID: <CAKD1Yr3Gpa4KZXzWDMO4-V-+16FCYPb4nUZMLde+cQLk+zRxaQ@mail.gmail.com>
+Subject: Re: [PATCH] USB: gadget: Fix a configfs return code
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nishad Kamdar <nishadkamdar@gmail.com>,
+        David Lechner <david@lechnology.com>,
+        linux-usb@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Christoph Schemmel <christoph.schemmel@gmail.com>
+On Tue, Feb 16, 2021 at 12:57 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>         {                                                               \
+>                 struct f_##_f_##_opts *opts = to_f_##_f_##_opts(item);  \
+> -               int ret;                                                \
+> +               int ret = -EINVAL;                                      \
+>                 u8 val;                                                 \
+>                                                                         \
+>                 mutex_lock(&opts->lock);                                \
+> -               ret = sscanf(page, "%02hhx", &val);                     \
+> -               if (ret > 0) {                                          \
+> +               if (sscanf(page, "%02hhx", &val) > 0) {                 \
+>                         opts->_n_ = val;                                \
+>                         ret = len;                                      \
+>                 }                                                       \
 
-[ Upstream commit a4dc7eee9106a9d2a6e08b442db19677aa9699c7 ]
-
-Adding support for Cinterion MV31 with PID 0x00B7.
-
-T:  Bus=04 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 11 Spd=5000 MxCh= 0
-D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=1e2d ProdID=00b7 Rev=04.14
-S:  Manufacturer=Cinterion
-S:  Product=Cinterion USB Mobile Broadband
-S:  SerialNumber=b3246eed
-C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-
-Signed-off-by: Christoph Schemmel <christoph.schemmel@gmail.com>
-Link: https://lore.kernel.org/r/20210202084523.4371-1-christoph.schemmel@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 1c0aec70ee5d2..f9e57405b167b 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -949,6 +949,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x1e2d, 0x0082, 5)},	/* Cinterion PHxx,PXxx (2 RmNet) */
- 	{QMI_FIXED_INTF(0x1e2d, 0x0083, 4)},	/* Cinterion PHxx,PXxx (1 RmNet + USB Audio)*/
- 	{QMI_QUIRK_SET_DTR(0x1e2d, 0x00b0, 4)},	/* Cinterion CLS8 */
-+	{QMI_FIXED_INTF(0x1e2d, 0x00b7, 0)},	/* Cinterion MV31 RmNet */
- 	{QMI_FIXED_INTF(0x413c, 0x81a2, 8)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
- 	{QMI_FIXED_INTF(0x413c, 0x81a3, 8)},	/* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
- 	{QMI_FIXED_INTF(0x413c, 0x81a4, 8)},	/* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
--- 
-2.27.0
-
+Acked-by: Lorenzo Colitti <lorenzo@google.com>
