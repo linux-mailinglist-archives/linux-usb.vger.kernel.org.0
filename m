@@ -2,433 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB4531D29F
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Feb 2021 23:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE3431D33B
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Feb 2021 01:14:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbhBPW0d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Feb 2021 17:26:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbhBPW00 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Feb 2021 17:26:26 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AABC06178B;
-        Tue, 16 Feb 2021 14:25:43 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id j6so13805650ljo.5;
-        Tue, 16 Feb 2021 14:25:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=IZIKjZvRH0JG0Lcg6AA2/6CX7djFn2ikcnR41OtsUZ0=;
-        b=SfyqlzOlCnjdHlwpFpzGA0bJKp/ekbetn95nPb4avPLGO0KH6dU46xKl7VEBkBnT+n
-         0LKpBqyKEGC27IsdtwrCPht++vjz1BqKmYfRifpASYjCIl1PGytcxgsSTds02tLMdxbg
-         SyUeNTwzhaqloE9DByWjxH0VUR+mp3YwoDl/da8RMYj9rHKSnLV03TBHwSHSCaSDV3zH
-         QEqQ1MWg36DleeVrSldh60of0jyukwscn7pS+Aw+66yM2QnPH5pI/Rv2dKxPdFohyE2o
-         G//OL+EaojlcA3DWbB9NwGeSqtXs2f88WaHsqGR7JQhL3lwXh5beLxK6BiGvOoXABN+Q
-         MaFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=IZIKjZvRH0JG0Lcg6AA2/6CX7djFn2ikcnR41OtsUZ0=;
-        b=arTw70l7FJwCBRmdKH7GaWby+MNRH4SyxQEX/OjWDVV3WZ6Yzoj4EI+QDTDuDz2Txa
-         NVkA3MsHBA1CVa+ZSVU6RrjmgoXN/3+n7rrMRBuoTOGC5CtCMdmZ5O13ZdD+6dmN4AaV
-         iHokvCa1egL6P6hH4uBEXQbNyUW7Yd8RQOgqHVS49S+lfNvTuMkYmnx60KG9K3pHJmIc
-         8M3rx8JnJCMBmLzQhLFu6QHNnQkDi8FiuVT0EQkSQXQzv3AiSomkHyMaGEvan4xzBiBR
-         KX9h/KN2wn5WsedU9gz3vQpPOpoPmCqQCplO/XD5vo0dahVZc6o6TwudRhU2Z5Av0sg7
-         sFcw==
-X-Gm-Message-State: AOAM533O1v0ey3gCvQAxFeQinS5mvD2nLHNX+CkeWKz6RluVA/w1f6YP
-        N7iSsmcrw56Ty9hCQQuee3M=
-X-Google-Smtp-Source: ABdhPJx6Bna1JOCqVOTG12ETQwwsa2+M9SDMx3Rw/2BGBPZETrJKqpzXyahb3RZlsZm8o1ioHx9Xcw==
-X-Received: by 2002:a2e:9d8a:: with SMTP id c10mr7946785ljj.394.1613514341794;
-        Tue, 16 Feb 2021 14:25:41 -0800 (PST)
-Received: from localhost (crossness-hoof.volia.net. [93.72.107.198])
-        by smtp.gmail.com with ESMTPSA id u10sm22394lfq.73.2021.02.16.14.25.40
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 16 Feb 2021 14:25:40 -0800 (PST)
-From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Peter Chen <peter.chen@freescale.com>,
-        Daniel Mack <zonque@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Subject: [PATCH 5/5] usb: gadget: f_uac1: disable IN/OUT ep if unused
-Date:   Wed, 17 Feb 2021 00:24:59 +0200
-Message-Id: <1613514299-20668-6-git-send-email-ruslan.bilovol@gmail.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1613514299-20668-1-git-send-email-ruslan.bilovol@gmail.com>
-References: <1613514299-20668-1-git-send-email-ruslan.bilovol@gmail.com>
+        id S231276AbhBQAIe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Feb 2021 19:08:34 -0500
+Received: from z11.mailgun.us ([104.130.96.11]:39624 "EHLO z11.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229876AbhBQAId (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 16 Feb 2021 19:08:33 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1613520492; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=sOL58otYVbO9KpkCVWoE3Hr3GQzXRXCnoq1WEZdF9WM=; b=XvG8WjwYqj1IuY1B/S+C/YA9SGS5VOtzfR/gAFGyZJlpfmArC2BQN8r4SBuvfcR7OaQy8WR9
+ 9AGJa5s7TNBlKl+fllm1MXaC5QUPlXPWOF/Eane1QKA50lw7F9IpLRBKFEyhFuke6ugFujqR
+ PWZlSQ5Q56MEeBedGyEt4HcNv34=
+X-Mailgun-Sending-Ip: 104.130.96.11
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 602c5e4d24187d7bf210de3d (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 17 Feb 2021 00:07:41
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 83620C43461; Wed, 17 Feb 2021 00:07:40 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [10.110.74.71] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id ED0FAC433C6;
+        Wed, 17 Feb 2021 00:07:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org ED0FAC433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: usb: dwc3: gadget: Change runtime pm function for DWC3 runtime
+ suspend
+To:     eg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        "open list:DESIGNWARE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <CGME20210215025057epcas2p205c3c283a8806d818d71f90c872c6e51@epcas2p2.samsung.com>
+ <1613356739-91734-1-git-send-email-dh10.jung@samsung.com>
+ <20210215174145.GA960831@rowland.harvard.edu> <20210216013052.GA37172@ubuntu>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <d725315a-de98-aa77-fb81-65df19757954@codeaurora.org>
+Date:   Tue, 16 Feb 2021 16:07:37 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
+MIME-Version: 1.0
+In-Reply-To: <20210216013052.GA37172@ubuntu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-User can configure f_uac1 function via p_chmask/c_chmask
-whether uac1 shall support playback and/or capture,
-but it has only effect on the created ALSA device,
-but not on the USB descriptor.
 
-This patch adds playback/capture descriptors
-dependent on that parameter. It is similar to
-the same conversion done earlier for f_uac2
 
-Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
----
- drivers/usb/gadget/function/f_uac1.c | 229 +++++++++++++++++++++++++----------
- 1 file changed, 163 insertions(+), 66 deletions(-)
+On 2/15/2021 5:30 PM, Jung Daehwan wrote:
+> Hello, Alan
+> 
+> On Mon, Feb 15, 2021 at 12:41:45PM -0500, Alan Stern wrote:
+>> On Mon, Feb 15, 2021 at 11:38:58AM +0900, Daehwan Jung wrote:
+>>> It seems pm_runtime_put calls runtime_idle callback not runtime_suspend callback.
+>>
+>> How is this fact related to your patch?
+> 
+> I think we should cause dwc3_runtime_suspend at the time.
+> That's why I use pm_runtime_put_sync_suspend.
+> 
+>>
+>>> It's better to use pm_runtime_put_sync_suspend to allow DWC3 runtime suspend.
+>>
+>> Why do you think it is better?  The advantage of pm_runtime_put is that 
+>> it allows the suspend to occur at a later time in a workqueue thread, so 
+>> the caller doesn't have to wait for the device to go into suspend.
+>>
+> 
+> We can assume DWC3 was already in suspend state if pm_runtime_get_sync
+> returns 0. DWC3 resumes due to pm_rumtime_get_sync but it doesn't
+> re-enter runtime_suspend but runtime_idle. pm_runtime_put decreases
+> usage_count but doesn't cause runtime_suspend.
+> 
+> 1. USB disconnected
+> 2. UDC unbinded
+> 3. DWC3 runtime suspend
+> 4. UDC binded unexpectedly
+> 5. DWC3 runtime resume (pm_runtime_get_sync)
+> 6. DWC3 runtime idle (pm_runtime_put)
+>    -> DWC3 runtime suspend again (pm_runtime_put_sync_suspend)
+> 
+> I've talked with Wesley in other patch.
+> 
+> usbb: dwc3: gadget: skip pullup and set_speed after suspend
+> patchwork.kernel.org/project/linux-usb/patch/1611113968-102424-1-git-send-email-dh10.jung@samsung.com
+> 
+> @ Wesley
+> 
+> I think We should guarantee DWC3 enters suspend again at the time.
+> How do you think?
+> 
+Hi Daehwan,
 
-diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-index cce9478f..b535407 100644
---- a/drivers/usb/gadget/function/f_uac1.c
-+++ b/drivers/usb/gadget/function/f_uac1.c
-@@ -22,6 +22,9 @@
- /* UAC1 spec: 3.7.2.3 Audio Channel Cluster Format */
- #define UAC1_CHANNEL_MASK 0x0FFF
- 
-+#define EPIN_EN(_opts) ((_opts)->p_chmask != 0)
-+#define EPOUT_EN(_opts) ((_opts)->c_chmask != 0)
-+
- struct f_uac1 {
- 	struct g_audio g_audio;
- 	u8 ac_intf, as_in_intf, as_out_intf;
-@@ -50,11 +53,6 @@ static inline struct f_uac1_opts *g_audio_to_uac1_opts(struct g_audio *audio)
-  * USB-OUT -> IT_1 -> OT_2 -> ALSA_Capture
-  * ALSA_Playback -> IT_3 -> OT_4 -> USB-IN
-  */
--#define F_AUDIO_AC_INTERFACE		0
--#define F_AUDIO_AS_OUT_INTERFACE	1
--#define F_AUDIO_AS_IN_INTERFACE		2
--/* Number of streaming interfaces */
--#define F_AUDIO_NUM_INTERFACES		2
- 
- /* B.3.1  Standard AC Interface Descriptor */
- static struct usb_interface_descriptor ac_interface_desc = {
-@@ -65,73 +63,47 @@ static inline struct f_uac1_opts *g_audio_to_uac1_opts(struct g_audio *audio)
- 	.bInterfaceSubClass =	USB_SUBCLASS_AUDIOCONTROL,
- };
- 
--/*
-- * The number of AudioStreaming and MIDIStreaming interfaces
-- * in the Audio Interface Collection
-- */
--DECLARE_UAC_AC_HEADER_DESCRIPTOR(2);
--
--#define UAC_DT_AC_HEADER_LENGTH	UAC_DT_AC_HEADER_SIZE(F_AUDIO_NUM_INTERFACES)
--/* 2 input terminals and 2 output terminals */
--#define UAC_DT_TOTAL_LENGTH (UAC_DT_AC_HEADER_LENGTH \
--	+ 2*UAC_DT_INPUT_TERMINAL_SIZE + 2*UAC_DT_OUTPUT_TERMINAL_SIZE)
- /* B.3.2  Class-Specific AC Interface Descriptor */
--static struct uac1_ac_header_descriptor_2 ac_header_desc = {
--	.bLength =		UAC_DT_AC_HEADER_LENGTH,
--	.bDescriptorType =	USB_DT_CS_INTERFACE,
--	.bDescriptorSubtype =	UAC_HEADER,
--	.bcdADC =		cpu_to_le16(0x0100),
--	.wTotalLength =		cpu_to_le16(UAC_DT_TOTAL_LENGTH),
--	.bInCollection =	F_AUDIO_NUM_INTERFACES,
--	.baInterfaceNr = {
--	/* Interface number of the AudioStream interfaces */
--		[0] =		1,
--		[1] =		2,
--	}
--};
-+static struct uac1_ac_header_descriptor *ac_header_desc;
- 
--#define USB_OUT_IT_ID	1
- static struct uac_input_terminal_descriptor usb_out_it_desc = {
- 	.bLength =		UAC_DT_INPUT_TERMINAL_SIZE,
- 	.bDescriptorType =	USB_DT_CS_INTERFACE,
- 	.bDescriptorSubtype =	UAC_INPUT_TERMINAL,
--	.bTerminalID =		USB_OUT_IT_ID,
-+	/* .bTerminalID =	DYNAMIC */
- 	.wTerminalType =	cpu_to_le16(UAC_TERMINAL_STREAMING),
- 	.bAssocTerminal =	0,
- 	.wChannelConfig =	cpu_to_le16(0x3),
- };
- 
--#define IO_OUT_OT_ID	2
- static struct uac1_output_terminal_descriptor io_out_ot_desc = {
- 	.bLength		= UAC_DT_OUTPUT_TERMINAL_SIZE,
- 	.bDescriptorType	= USB_DT_CS_INTERFACE,
- 	.bDescriptorSubtype	= UAC_OUTPUT_TERMINAL,
--	.bTerminalID		= IO_OUT_OT_ID,
-+	/* .bTerminalID =	DYNAMIC */
- 	.wTerminalType		= cpu_to_le16(UAC_OUTPUT_TERMINAL_SPEAKER),
- 	.bAssocTerminal		= 0,
--	.bSourceID		= USB_OUT_IT_ID,
-+	/* .bSourceID =		DYNAMIC */
- };
- 
--#define IO_IN_IT_ID	3
- static struct uac_input_terminal_descriptor io_in_it_desc = {
- 	.bLength		= UAC_DT_INPUT_TERMINAL_SIZE,
- 	.bDescriptorType	= USB_DT_CS_INTERFACE,
- 	.bDescriptorSubtype	= UAC_INPUT_TERMINAL,
--	.bTerminalID		= IO_IN_IT_ID,
-+	/* .bTerminalID		= DYNAMIC */
- 	.wTerminalType		= cpu_to_le16(UAC_INPUT_TERMINAL_MICROPHONE),
- 	.bAssocTerminal		= 0,
- 	.wChannelConfig		= cpu_to_le16(0x3),
- };
- 
--#define USB_IN_OT_ID	4
- static struct uac1_output_terminal_descriptor usb_in_ot_desc = {
- 	.bLength =		UAC_DT_OUTPUT_TERMINAL_SIZE,
- 	.bDescriptorType =	USB_DT_CS_INTERFACE,
- 	.bDescriptorSubtype =	UAC_OUTPUT_TERMINAL,
--	.bTerminalID =		USB_IN_OT_ID,
-+	/* .bTerminalID =	DYNAMIC */
- 	.wTerminalType =	cpu_to_le16(UAC_TERMINAL_STREAMING),
- 	.bAssocTerminal =	0,
--	.bSourceID =		IO_IN_IT_ID,
-+	/* .bSourceID =		DYNAMIC */
- };
- 
- /* B.4.1  Standard AS Interface Descriptor */
-@@ -176,7 +148,7 @@ static inline struct f_uac1_opts *g_audio_to_uac1_opts(struct g_audio *audio)
- 	.bLength =		UAC_DT_AS_HEADER_SIZE,
- 	.bDescriptorType =	USB_DT_CS_INTERFACE,
- 	.bDescriptorSubtype =	UAC_AS_GENERAL,
--	.bTerminalLink =	USB_OUT_IT_ID,
-+	/* .bTerminalLink =	DYNAMIC */
- 	.bDelay =		1,
- 	.wFormatTag =		cpu_to_le16(UAC_FORMAT_TYPE_I_PCM),
- };
-@@ -185,7 +157,7 @@ static inline struct f_uac1_opts *g_audio_to_uac1_opts(struct g_audio *audio)
- 	.bLength =		UAC_DT_AS_HEADER_SIZE,
- 	.bDescriptorType =	USB_DT_CS_INTERFACE,
- 	.bDescriptorSubtype =	UAC_AS_GENERAL,
--	.bTerminalLink =	USB_IN_OT_ID,
-+	/* .bTerminalLink =	DYNAMIC */
- 	.bDelay =		1,
- 	.wFormatTag =		cpu_to_le16(UAC_FORMAT_TYPE_I_PCM),
- };
-@@ -513,6 +485,108 @@ static void f_audio_disable(struct usb_function *f)
- 
- /*-------------------------------------------------------------------------*/
- 
-+static struct
-+uac1_ac_header_descriptor *build_ac_header_desc(struct f_uac1_opts *opts)
-+{
-+	struct uac1_ac_header_descriptor *ac_desc;
-+	int ac_header_desc_size;
-+	int num_ifaces = 0;
-+
-+	if (EPOUT_EN(opts))
-+		num_ifaces++;
-+	if (EPIN_EN(opts))
-+		num_ifaces++;
-+
-+	ac_header_desc_size = UAC_DT_AC_HEADER_SIZE(num_ifaces);
-+
-+	ac_desc = kzalloc(ac_header_desc_size, GFP_KERNEL);
-+	if (!ac_desc)
-+		return NULL;
-+
-+	ac_desc->bLength = ac_header_desc_size;
-+	ac_desc->bDescriptorType = USB_DT_CS_INTERFACE;
-+	ac_desc->bDescriptorSubtype = UAC_HEADER;
-+	ac_desc->bcdADC = cpu_to_le16(0x0100);
-+	ac_desc->bInCollection = num_ifaces;
-+
-+	/* wTotalLength and baInterfaceNr will be defined later */
-+
-+	return ac_desc;
-+}
-+
-+/* Use macro to overcome line length limitation */
-+#define USBDHDR(p) (struct usb_descriptor_header *)(p)
-+
-+static void setup_descriptor(struct f_uac1_opts *opts)
-+{
-+	/* patch descriptors */
-+	int i = 1; /* ID's start with 1 */
-+
-+	if (EPOUT_EN(opts))
-+		usb_out_it_desc.bTerminalID = i++;
-+	if (EPIN_EN(opts))
-+		io_in_it_desc.bTerminalID = i++;
-+	if (EPOUT_EN(opts))
-+		io_out_ot_desc.bTerminalID = i++;
-+	if (EPIN_EN(opts))
-+		usb_in_ot_desc.bTerminalID = i++;
-+
-+	usb_in_ot_desc.bSourceID = io_in_it_desc.bTerminalID;
-+	io_out_ot_desc.bSourceID = usb_out_it_desc.bTerminalID;
-+
-+	as_out_header_desc.bTerminalLink = usb_out_it_desc.bTerminalID;
-+	as_in_header_desc.bTerminalLink = usb_in_ot_desc.bTerminalID;
-+
-+	ac_header_desc->wTotalLength = cpu_to_le16(ac_header_desc->bLength);
-+
-+	if (EPIN_EN(opts)) {
-+		u16 len = le16_to_cpu(ac_header_desc->wTotalLength);
-+
-+		len += sizeof(usb_in_ot_desc);
-+		len += sizeof(io_in_it_desc);
-+		ac_header_desc->wTotalLength = cpu_to_le16(len);
-+	}
-+	if (EPOUT_EN(opts)) {
-+		u16 len = le16_to_cpu(ac_header_desc->wTotalLength);
-+
-+		len += sizeof(usb_out_it_desc);
-+		len += sizeof(io_out_ot_desc);
-+		ac_header_desc->wTotalLength = cpu_to_le16(len);
-+	}
-+
-+	i = 0;
-+	f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
-+	f_audio_desc[i++] = USBDHDR(ac_header_desc);
-+
-+	if (EPOUT_EN(opts)) {
-+		f_audio_desc[i++] = USBDHDR(&usb_out_it_desc);
-+		f_audio_desc[i++] = USBDHDR(&io_out_ot_desc);
-+	}
-+
-+	if (EPIN_EN(opts)) {
-+		f_audio_desc[i++] = USBDHDR(&io_in_it_desc);
-+		f_audio_desc[i++] = USBDHDR(&usb_in_ot_desc);
-+	}
-+
-+	if (EPOUT_EN(opts)) {
-+		f_audio_desc[i++] = USBDHDR(&as_out_interface_alt_0_desc);
-+		f_audio_desc[i++] = USBDHDR(&as_out_interface_alt_1_desc);
-+		f_audio_desc[i++] = USBDHDR(&as_out_header_desc);
-+		f_audio_desc[i++] = USBDHDR(&as_out_type_i_desc);
-+		f_audio_desc[i++] = USBDHDR(&as_out_ep_desc);
-+		f_audio_desc[i++] = USBDHDR(&as_iso_out_desc);
-+	}
-+	if (EPIN_EN(opts)) {
-+		f_audio_desc[i++] = USBDHDR(&as_in_interface_alt_0_desc);
-+		f_audio_desc[i++] = USBDHDR(&as_in_interface_alt_1_desc);
-+		f_audio_desc[i++] = USBDHDR(&as_in_header_desc);
-+		f_audio_desc[i++] = USBDHDR(&as_in_type_i_desc);
-+		f_audio_desc[i++] = USBDHDR(&as_in_ep_desc);
-+		f_audio_desc[i++] = USBDHDR(&as_iso_in_desc);
-+	}
-+	f_audio_desc[i] = NULL;
-+}
-+
- static int f_audio_validate_opts(struct g_audio *audio)
- {
- 	struct f_uac1_opts *opts = g_audio_to_uac1_opts(audio);
-@@ -556,6 +630,7 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- 	struct usb_string		*us;
- 	u8				*sam_freq;
- 	int				rate;
-+	int				ba_iface_id;
- 	int				status;
- 
- 	status = f_audio_validate_opts(audio);
-@@ -567,6 +642,11 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- 	us = usb_gstrings_attach(cdev, uac1_strings, ARRAY_SIZE(strings_uac1));
- 	if (IS_ERR(us))
- 		return PTR_ERR(us);
-+
-+	ac_header_desc = build_ac_header_desc(audio_opts);
-+	if (!ac_header_desc)
-+		return -ENOMEM;
-+
- 	ac_interface_desc.iInterface = us[STR_AC_IF].id;
- 	usb_out_it_desc.iTerminal = us[STR_USB_OUT_IT].id;
- 	usb_out_it_desc.iChannelNames = us[STR_USB_OUT_IT_CH_NAMES].id;
-@@ -607,40 +687,52 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- 	uac1->ac_intf = status;
- 	uac1->ac_alt = 0;
- 
--	status = usb_interface_id(c, f);
--	if (status < 0)
--		goto fail;
--	as_out_interface_alt_0_desc.bInterfaceNumber = status;
--	as_out_interface_alt_1_desc.bInterfaceNumber = status;
--	ac_header_desc.baInterfaceNr[0] = status;
--	uac1->as_out_intf = status;
--	uac1->as_out_alt = 0;
-+	ba_iface_id = 0;
-+
-+	if (EPOUT_EN(audio_opts)) {
-+		status = usb_interface_id(c, f);
-+		if (status < 0)
-+			goto fail;
-+		as_out_interface_alt_0_desc.bInterfaceNumber = status;
-+		as_out_interface_alt_1_desc.bInterfaceNumber = status;
-+		ac_header_desc->baInterfaceNr[ba_iface_id++] = status;
-+		uac1->as_out_intf = status;
-+		uac1->as_out_alt = 0;
-+	}
- 
--	status = usb_interface_id(c, f);
--	if (status < 0)
--		goto fail;
--	as_in_interface_alt_0_desc.bInterfaceNumber = status;
--	as_in_interface_alt_1_desc.bInterfaceNumber = status;
--	ac_header_desc.baInterfaceNr[1] = status;
--	uac1->as_in_intf = status;
--	uac1->as_in_alt = 0;
-+	if (EPIN_EN(audio_opts)) {
-+		status = usb_interface_id(c, f);
-+		if (status < 0)
-+			goto fail;
-+		as_in_interface_alt_0_desc.bInterfaceNumber = status;
-+		as_in_interface_alt_1_desc.bInterfaceNumber = status;
-+		ac_header_desc->baInterfaceNr[ba_iface_id++] = status;
-+		uac1->as_in_intf = status;
-+		uac1->as_in_alt = 0;
-+	}
- 
- 	audio->gadget = gadget;
- 
- 	status = -ENODEV;
- 
- 	/* allocate instance-specific endpoints */
--	ep = usb_ep_autoconfig(cdev->gadget, &as_out_ep_desc);
--	if (!ep)
--		goto fail;
--	audio->out_ep = ep;
--	audio->out_ep->desc = &as_out_ep_desc;
-+	if (EPOUT_EN(audio_opts)) {
-+		ep = usb_ep_autoconfig(cdev->gadget, &as_out_ep_desc);
-+		if (!ep)
-+			goto fail;
-+		audio->out_ep = ep;
-+		audio->out_ep->desc = &as_out_ep_desc;
-+	}
- 
--	ep = usb_ep_autoconfig(cdev->gadget, &as_in_ep_desc);
--	if (!ep)
--		goto fail;
--	audio->in_ep = ep;
--	audio->in_ep->desc = &as_in_ep_desc;
-+	if (EPIN_EN(audio_opts)) {
-+		ep = usb_ep_autoconfig(cdev->gadget, &as_in_ep_desc);
-+		if (!ep)
-+			goto fail;
-+		audio->in_ep = ep;
-+		audio->in_ep->desc = &as_in_ep_desc;
-+	}
-+
-+	setup_descriptor(audio_opts);
- 
- 	/* copy descriptors, and track endpoint copies */
- 	status = usb_assign_descriptors(f, f_audio_desc, f_audio_desc, NULL,
-@@ -667,6 +759,8 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- err_card_register:
- 	usb_free_all_descriptors(f);
- fail:
-+	kfree(ac_header_desc);
-+	ac_header_desc = NULL;
- 	return status;
- }
- 
-@@ -809,6 +903,9 @@ static void f_audio_unbind(struct usb_configuration *c, struct usb_function *f)
- 	g_audio_cleanup(audio);
- 	usb_free_all_descriptors(f);
- 
-+	kfree(ac_header_desc);
-+	ac_header_desc = NULL;
-+
- 	audio->gadget = NULL;
- }
- 
+Even if we call runtime idle versus suspend, if the device is still in
+the disconnected state, it should call the runtime PM suspend routine
+after the autosuspend timer expires.  As Alan mentioned already, this
+allows not blocking the caller for the entire DWC3 suspend sequence to
+execute. (DWC3 core will suspend other components as well, such as PHYs)
+
+Also, for legitimate cases where pullup is actually called to start
+enumeration from a suspended state, I'm not sure if the short duration
+between RS set and re-suspend (due to your patch) is enough time for the
+host to actually detect the device connected.
+
+Thanks
+Wesley Cheng
+
+> Best Regards,
+> Jung Daehwan
+> 
+>> Alan Stern
+>>
+> 
+> 
+>>> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+>>> ---
+>>>  drivers/usb/dwc3/gadget.c | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>> index aebcf8e..4a4b93b 100644
+>>> --- a/drivers/usb/dwc3/gadget.c
+>>> +++ b/drivers/usb/dwc3/gadget.c
+>>> @@ -2229,7 +2229,7 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>>  	 */
+>>>  	ret = pm_runtime_get_sync(dwc->dev);
+>>>  	if (!ret || ret < 0) {
+>>> -		pm_runtime_put(dwc->dev);
+>>> +		pm_runtime_put_sync_suspend(dwc->dev);
+>>>  		return 0;
+>>>  	}
+>>>  
+>>> -- 
+>>> 2.7.4
+>>>
+>>
+>>
+
 -- 
-1.9.1
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
