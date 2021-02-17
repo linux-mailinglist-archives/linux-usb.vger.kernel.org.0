@@ -2,274 +2,204 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13DC331D79F
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Feb 2021 11:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E3731DC28
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Feb 2021 16:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbhBQKk3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Feb 2021 05:40:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59810 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229953AbhBQKkY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 17 Feb 2021 05:40:24 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5F33A64E24;
-        Wed, 17 Feb 2021 10:39:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613558382;
-        bh=iK22VCAfzy2/8scOE9xyat4rBgd68SJ5k9nwJPhHmAU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fcytcU2A9WrkgcOefNMAApXI3fsNETMMRF1Y8mrPkqM2syCgVBvy+4qDpP/t7NSfI
-         U5cHPmVKufA+B1W4rLpNId1fHLVsGNiiWUlfk/1nH3otVz6vW5bBRn+i3+1tNXgvyj
-         c6zna9qIvu/6WlwqGzVADFlT0gNRCjkQHjAB4oILjK2LAPZ0EAYBWnGcs7NqsGcWuO
-         dEx08Bl1VH8VL4X0xrRWP3u0Wkg7/tAHcb1MUd+oUyVG06Zz9aH8S0YwmZlceFwVIR
-         3D9yFgCEjgJFLYt+x1djpbiW22yuOP5e7d452RuVkS6Dw3VZ7vm4c9oZSfPL/I9xmz
-         sjmZ5TS3uUoyQ==
-Date:   Wed, 17 Feb 2021 18:39:38 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     pawell@cadence.com, a-govindraju@ti.com, linux-imx@nxp.com,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        lznuaa@gmail.com
-Subject: Re: [PATCH v3 1/1] usb: cdns3: add power lost support for system
- resume
-Message-ID: <20210217103938.GA5107@b29397-desktop>
-References: <20210208174820.31182-1-Frank.Li@nxp.com>
+        id S233677AbhBQPbU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Feb 2021 10:31:20 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:17154 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233760AbhBQP3m (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Feb 2021 10:29:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1613575781; x=1645111781;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=cj7uMCOb+rvSrtBSQD/OLqQ9h597gQoYCSbzH6e1ID4=;
+  b=DYkETINTcMjzpJpcCvp/QZ95vYGb0r9C9wiuOPy2IGTDKcn/H+9IOYg8
+   f2wkzvegPp3BwP5Uc3lAr1IS2nn4USGj5WmVR/DtB9UikYw4gKDvxA9Kb
+   fcVIWOxhTMsxNLCksPG/SQiZ9FhdhpyL2rnGXtjv7Gc4D6ot39mhWsjJT
+   1TWOZKtLWGhWVbODAesWzEVvQqLP8rKfaUd117OoNZqn3NfKrJXxRdM4y
+   ev7ilqb2mrUsv4kuPvkODiWyxT5FIcn5cRgShaN/vtPugzkKH90v549Da
+   6O79hvvnWik2NZ7+44Uob/79XKxEv7bOwoyP/c+ppY3zqOQhDSlE9XQz7
+   Q==;
+IronPort-SDR: gmZ85s28ZVFhSPsD+nk9WJJTAi2eWCYuEl9LZj1Pnx7P4efQ+cbeSsnMBxTkv4A0VivAGsywWp
+ u2quR5CIYlsdcX2BVQr//cC/dRnmpzpM9vuYf406Xy5jbPVVppU5fiJRoHLwDMkhkYDkvTN/VR
+ G6NlyuQIwL1Hl7ONxsbcP5/EY4/Amds+ZwhnRLf00EAzmDDFyKYDKpy2lT1h+dc/4ZmdjQ9e3F
+ y3PDUm3UOBxBkpLhLRbW3STNS2uvRcz+8smXpl7DDb7HMRcnIVou30Mu3fNNki9CBivL1fS8ok
+ t+M=
+X-IronPort-AV: E=Sophos;i="5.81,184,1610434800"; 
+   d="scan'208";a="115476095"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Feb 2021 08:28:20 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 17 Feb 2021 08:28:19 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3 via Frontend
+ Transport; Wed, 17 Feb 2021 08:28:19 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X1gY5G4Z8Gabk/tpSrvjck3CCgM2o9nqQLXjPRg1qwv9cQp19ksico8xV7YWRfjiNhO6Y4zsr8nJ0thJzOP2/1bepVV/ZSTvJ/G3hT4Uv+jCm+2sZFqHLIQO+DUPcFV3Kqr4RaJ1HGNxR2nrPkYLYXnmW4ZwzjFzUKIEpPq7h5jxPg9SQuw3DLCKLITPvnZD+xFJ1W80yt2xS0iI8glgC0OPnDRAcs1U6v+a+7bZrNYKKPm+iG/h9FBVHV/hTIW17ig0dNFll92Zvwl8oddXTIfdWoJ3Vn0drVBx2soWp972FDkVGWmJDw0CASybi0AXW5R5p+U6dKrvxYFhhTuvvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cj7uMCOb+rvSrtBSQD/OLqQ9h597gQoYCSbzH6e1ID4=;
+ b=WTZ1ZYZZtJCu5NJJ715FQ7hUMBjjVpRmAkGb00oVP5SNvzk49zy48VM5LegoZr3ivM1r0D/3S7R3vBtauqRUnk23VcP+bU0EBzksmlNJBxPS8Wj5gesLUpwmQDvaJTAvF1JIBIG4CsriNnQeMFUXfSRiiP64gmU1jT/52yXLF4k1xgfMt58bpRTck7iICUc/VsoA9pq1T7ZRmGu5sD2RqCbx1EtJ87CNd6Ljkl/DQta8MlzhR72H+SkypT2yUMujfPQBSkur9GiJbPzgGXQGnGCW3cmYLXaiFiMDoa4Pg5VvQAHnnujlL2Xyl6PYbFGdACXM/w65v2fpZQoL6rcaQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cj7uMCOb+rvSrtBSQD/OLqQ9h597gQoYCSbzH6e1ID4=;
+ b=NXDrRbM+V4c/x6h+Y+QITr4mgcyFg17HWtXptaFkfFKxjagzg5sURgTXOLpwsAxLX4Erhapymujmt0WUlfRc2oNKnZpXW2p6KGIRdGE3dN1kFSlXa29FD0gqLyQrl42UoCH+P0T+8jPTDyuRPR+gpNXHNadnRgG3csCmWfL8Lwc=
+Received: from MWHPR1101MB2288.namprd11.prod.outlook.com
+ (2603:10b6:301:53::11) by CO1PR11MB5105.namprd11.prod.outlook.com
+ (2603:10b6:303:9f::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.27; Wed, 17 Feb
+ 2021 15:28:18 +0000
+Received: from MWHPR1101MB2288.namprd11.prod.outlook.com
+ ([fe80::7894:25ca:9c09:23a9]) by MWHPR1101MB2288.namprd11.prod.outlook.com
+ ([fe80::7894:25ca:9c09:23a9%6]) with mapi id 15.20.3846.041; Wed, 17 Feb 2021
+ 15:28:18 +0000
+From:   <Cristian.Birsan@microchip.com>
+To:     <heikki.krogerus@linux.intel.com>
+CC:     <linux@roeck-us.net>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: Using TCPM for ports without Power Delivery support
+Thread-Topic: Using TCPM for ports without Power Delivery support
+Thread-Index: AQHXA7+OKoygPd4GXEGTVNQ1L/OawKpagC+AgAH7WYA=
+Date:   Wed, 17 Feb 2021 15:28:17 +0000
+Message-ID: <5c2e12ff-5a48-1f2a-2f72-77d257f97c1b@microchip.com>
+References: <6cf411e1-8234-d1ca-541d-067665620945@microchip.com>
+ <YCuMeW6lbaSq8CIM@kuha.fi.intel.com>
+In-Reply-To: <YCuMeW6lbaSq8CIM@kuha.fi.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+authentication-results: linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=none action=none
+ header.from=microchip.com;
+x-originating-ip: [2a02:2f01:5e02:3600::92e]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7e5e131c-0967-44cd-3e54-08d8d358a6c0
+x-ms-traffictypediagnostic: CO1PR11MB5105:
+x-microsoft-antispam-prvs: <CO1PR11MB510500CCD5A2D0A31F5056D5EF869@CO1PR11MB5105.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3NUPzHPlU4dUvJ3DGRXcvf9MEr+sr8QoFvafCdtpn1z+qYewHxrapBLLloglchYgwh8WUtHVrrC9xZZefGOvqCBEuN91RZai4ep9pp0z42b9q5lkq5NOGb8M+nn/V7VD2ZehkwzqADPJp5usG69D3hGZd4yqxXrqFbeDof6BOjB7xb2d4yembEiu8B05JQN5YmhxeGr4vD9uFNHhfb42chp0HklGPhcHEJEVrIaaOXzBlylbpbIQprrBYMgWSXVxtyGHqWTLWwv5hVYmnBuFMbg2NvV4SPrdyLf9Hd55F3wHrwplvuCB33rsSpmtXLsHg62bhxzXu8RUhGPW1yrmu3H9dNN3e4QdNFfddIB3oaOmXiPauNFgGJ6d/CCnlpEl1EjoS4hdcQfxJ+uDefP05qYhQ7J7Du6K0wP/HoEwouFcod0bAsNr0hxezvMhj0WikTxLjIEf2n7IY8iVApbST0XR2Ipq1+ywmiPJxuL5WV2uA0aEXniwlZg2PTiJTWbhyOZcX7WAbEXTndJ72JNpjvcdB/ebONTaxhxWsM1qV1bfSa1NYys0IQ2w8PG2BN9zdszb5leqBSGdz1NJfu86QwvyoItIS3f75CaVeQfa2sTHa6sXDwplqP5rzBG482Ng+VCwA8iphdX6gqgKGP46N8u9gi6+DC4UwPK+ruRF7pOq2azHp9v2UCYBNy/QqsHG
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2288.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(396003)(39860400002)(136003)(366004)(376002)(8936002)(6512007)(478600001)(86362001)(83380400001)(5660300002)(71200400001)(6506007)(66446008)(66476007)(66556008)(64756008)(6486002)(2616005)(66946007)(4326008)(91956017)(36756003)(53546011)(76116006)(316002)(6916009)(31686004)(8676002)(31696002)(2906002)(966005)(186003)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?MW53Y3d6aUoyYkd5Q1VYamhYZkxHcXBYd3FUbGlkWU9sa1B0VFVCTktvY3U3?=
+ =?utf-8?B?dlFwajd0NTVmYjRHWnVib3JWV1M3RGZORXFEL3Z5K2hpN3NpVzJsR2oyVlB0?=
+ =?utf-8?B?TExZZkkrOWpHTHFpam5UZTE0YXNacFVWNUpRZi9LcGRVTWZjYS9pTWNuVEtk?=
+ =?utf-8?B?Skd1THkwMndROHN5SFdYWTh6Y1NhakRmWTNrSEVrd0FBM0pROHk2SlVZVlZT?=
+ =?utf-8?B?Rm1qMnB4QjhXL1VOY1dBOXZ3bGhISmdTbEVwUHFXTHkvYTZxZldDRnJsSUZh?=
+ =?utf-8?B?V2NHaytaNVd5WjRRQjFIR1IydFN0ZmVKOHlyUTI0MUJYRmF3M3pkL3JvQUJm?=
+ =?utf-8?B?bkozaDlFQkNZbUpmK1JWSlkwVVBJb3Q2MS9NSjFFYTFvbE5ZZitPLzZGV2Zh?=
+ =?utf-8?B?SlFGOVNYZ1ZxZnVUbllHVU5sMUtURmR1SnpxVU9VWDVFa1NPZTAwTWZUekto?=
+ =?utf-8?B?T0ZoWGdiOG5yMzdINUpDc3ZFdUtVdTNCRWp1ZGY5bkFTbDdPWm9ESTk1VmNX?=
+ =?utf-8?B?VXdHUE9XODYyWkNpMVJhNkdRRFpQbFVJcXpYcmRXL3kyeWNFeHBneXZZL2Ew?=
+ =?utf-8?B?QnRoU0ttQWZHNmRhamVCcWNqUnF0YVpCMkhyVmFJVUxaZEIycjFMeWhkK1dt?=
+ =?utf-8?B?bGd1TXlya0F2ZGFseHdnbFdWSjQ3cXRiTmFmVkpvcG8zdlpOZENGd0xwbEFu?=
+ =?utf-8?B?bTg4SGd6M0lsQWJLdXlMUVNmTThMcFE1UW9SM1dMWHRYUEx5R3NLSEc1UTVm?=
+ =?utf-8?B?WGlmTE4yN2NSSmRMUkYrQjJtSFZib295dGhNY1VNaTN4b08vYTJpOFZlOFBm?=
+ =?utf-8?B?Wm9WOW1HNEY3V21aSjZFMlV2RnlXUzRqOVhiNGdHTjlSQVE4L0ZLWDVJcDNF?=
+ =?utf-8?B?T0x6VHNhZW5jLzdGblB3NGlLM0NKQ3l2Q0pIQnJTS0NmOE52SU9sSTRXbUZM?=
+ =?utf-8?B?emsvVUY0M1dORzZpT044WEp0c2NpY1kyaUxDbVVSNWZlY2VuMVBvZjBJOEJ1?=
+ =?utf-8?B?clZmS3pRdENkcjFKdW8xcDhkRGhRWDZXMEVyMGFGa0dZaVcwaC9JeXhCWEY2?=
+ =?utf-8?B?QXNTQ2paNThUL2pHN1lhbURiZTY2bzVmYmhaVmhxbDVORkNPR29OSm0ra0li?=
+ =?utf-8?B?aDQzZzk1K0dqaXBocjY4MTJTL2syaGlwS2EzTUZJRXhnVHlkMnRxQW5Pd1BW?=
+ =?utf-8?B?UDZldUxzaDNtNVRpdk9EckRTU0o0a1JQMUQrbDNOMVdYYWN2Q3dTaG5CY084?=
+ =?utf-8?B?YWhaVjh4QmJ0MFI0L0dGMGw2cnVEWDBJMkRId0dXOWFmYnl2VVlQeDB4eUkw?=
+ =?utf-8?B?YllzTVlwaGFHaXI3Yk5vcTBmU1Y3ZnB5Zi9LWmxwTHVzY3IyNWt4TEhGemF1?=
+ =?utf-8?B?dGJXdmtVZ0k4VE1HMVZnRXAzR3hQVGl6a3FuS0o1anBFVmttekpQVkZWVXk3?=
+ =?utf-8?B?b0lhdGpCYU1MZTM5NnpNQi80SnE4Ky9oMDF3cnFVTHFUTFFzZkN1NmgvbTli?=
+ =?utf-8?B?VEtka0ZzK3JhbDg1ditudzRyRjdCRm92VGpiU0JGRlhMeDl2RlFadnErUldD?=
+ =?utf-8?B?V29URXVMQXlxN2ZzWTlvVFFpUEtRR2h2UUN1VUU2dlhtMFUxbG1LcXVNWm01?=
+ =?utf-8?B?SDdwR1BBT1hKRnZQYlQ5dnArZG1LTDBycmRUSnFaWTkxTFNkbWZXVVpzbDFP?=
+ =?utf-8?B?VFFmekdHbU0yTUJtYXhIZlorNzN2Z2trOXoyQndNRWRPaFBBZk5TeG1Tb2xh?=
+ =?utf-8?B?R2RWNURDRHJGZFR1U3lEZVk4aVNKSjlWandEeHlyeERudXloSjN0ZEZKOHJW?=
+ =?utf-8?B?M3p2RU1UaW4xM053aWcrQT09?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1310F973DA9EF940B2121583EA31B04F@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210208174820.31182-1-Frank.Li@nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2288.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e5e131c-0967-44cd-3e54-08d8d358a6c0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Feb 2021 15:28:18.0175
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MEa9ddAQjYQFxPLNQcy4JrPP0MO/9TOb3aYIcy10MHg1xwcNXuKzlFOTpOyGxBcMzwZzeP0va0Ok6YETo8CFXSL48pzCFHlCjc+RNHMQsH0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5105
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-02-08 11:48:20, Frank Li wrote:
-> If the controller lost its power during the system suspend, we need
-> to do all initialiation operations.
-> 
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
-> 
-> Change from v1 to v3. 
->  - fix build error
->  - remove ret variable at cdns_is_power_lost
-> 
->  drivers/usb/cdns3/cdns3-gadget.c |  2 ++
->  drivers/usb/cdns3/cdns3-imx.c    | 34 ++++++++++++++++++++++++++++++++
-
-Please split imx part from this patch, and as a separate patch.
-Pawel, please check if it will affect cdns3 ssp part, if not, I will
-queue it.
-
->  drivers/usb/cdns3/cdns3-plat.c   | 22 ++++++++++++++++++++-
->  drivers/usb/cdns3/core.c         | 29 ++++++++++++++++++++++++++-
->  drivers/usb/cdns3/drd.c          | 16 +++++++++++++++
->  drivers/usb/cdns3/drd.h          |  2 +-
->  6 files changed, 102 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> index 582bfeceedb4..44b7301b1888 100644
-> --- a/drivers/usb/cdns3/cdns3-gadget.c
-> +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> @@ -3304,6 +3304,8 @@ static int cdns3_gadget_resume(struct cdns *cdns, bool hibernated)
->  		return 0;
->  
->  	cdns3_gadget_config(priv_dev);
-> +	if (hibernated)
-> +		writel(USB_CONF_DEVEN, &priv_dev->regs->usb_conf);
->  
->  	return 0;
->  }
-> diff --git a/drivers/usb/cdns3/cdns3-imx.c b/drivers/usb/cdns3/cdns3-imx.c
-> index 8f88eec0b0ea..708b51cc5844 100644
-> --- a/drivers/usb/cdns3/cdns3-imx.c
-> +++ b/drivers/usb/cdns3/cdns3-imx.c
-> @@ -361,6 +361,39 @@ static int cdns_imx_suspend(struct device *dev)
->  
->  	return 0;
->  }
-> +
-> +
-> +/* Indicate if the controller was power lost before */
-> +static inline bool cdns_imx_is_power_lost(struct cdns_imx *data)
-> +{
-> +	u32 value;
-> +
-> +	value = cdns_imx_readl(data, USB3_CORE_CTRL1);
-> +	if ((value & SW_RESET_MASK) == ALL_SW_RESET)
-> +		return true;
-> +	else
-> +		return false;
-> +}
-> +
-> +static int cdns_imx_system_resume(struct device *dev)
-> +{
-> +	struct cdns_imx *data = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	ret = cdns_imx_resume(dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (cdns_imx_is_power_lost(data)) {
-> +		dev_dbg(dev, "resume from power lost\n");
-> +		ret = cdns_imx_noncore_init(data);
-> +		if (ret)
-> +			cdns_imx_suspend(dev);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  #else
->  static int cdns_imx_platform_suspend(struct device *dev,
->  	bool suspend, bool wakeup)
-> @@ -372,6 +405,7 @@ static int cdns_imx_platform_suspend(struct device *dev,
->  
->  static const struct dev_pm_ops cdns_imx_pm_ops = {
->  	SET_RUNTIME_PM_OPS(cdns_imx_suspend, cdns_imx_resume, NULL)
-> +	SET_SYSTEM_SLEEP_PM_OPS(cdns_imx_suspend, cdns_imx_system_resume)
->  };
->  
->  static const struct of_device_id cdns_imx_of_match[] = {
-> diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
-> index 4b18e1c6a4bb..e61da57fe31a 100644
-> --- a/drivers/usb/cdns3/cdns3-plat.c
-> +++ b/drivers/usb/cdns3/cdns3-plat.c
-> @@ -19,6 +19,7 @@
->  
->  #include "core.h"
->  #include "gadget-export.h"
-> +#include "drd.h"
->  
->  static int set_phy_power_on(struct cdns *cdns)
->  {
-> @@ -236,6 +237,17 @@ static int cdns3_controller_resume(struct device *dev, pm_message_t msg)
->  	if (!cdns->in_lpm)
->  		return 0;
->  
-> +	if (cdns_power_is_lost(cdns)) {
-> +		phy_exit(cdns->usb2_phy);
-> +		ret = phy_init(cdns->usb2_phy);
-> +		if (ret)
-> +			return ret;
-
-Add one blank line
-
-Peter
-
-> +		phy_exit(cdns->usb3_phy);
-> +		ret = phy_init(cdns->usb3_phy);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->  	ret = set_phy_power_on(cdns);
->  	if (ret)
->  		return ret;
-> @@ -270,10 +282,18 @@ static int cdns3_plat_runtime_resume(struct device *dev)
->  static int cdns3_plat_suspend(struct device *dev)
->  {
->  	struct cdns *cdns = dev_get_drvdata(dev);
-> +	int ret;
->  
->  	cdns_suspend(cdns);
->  
-> -	return cdns3_controller_suspend(dev, PMSG_SUSPEND);
-> +	ret = cdns3_controller_suspend(dev, PMSG_SUSPEND);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (device_may_wakeup(dev) && cdns->wakeup_irq)
-> +		enable_irq_wake(cdns->wakeup_irq);
-> +
-> +	return ret;
->  }
->  
->  static int cdns3_plat_resume(struct device *dev)
-> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> index 199713769289..5d486c8a9d99 100644
-> --- a/drivers/usb/cdns3/core.c
-> +++ b/drivers/usb/cdns3/core.c
-> @@ -525,9 +525,36 @@ EXPORT_SYMBOL_GPL(cdns_suspend);
->  int cdns_resume(struct cdns *cdns, u8 set_active)
->  {
->  	struct device *dev = cdns->dev;
-> +	enum usb_role real_role;
-> +	bool role_changed = false;
-> +	int ret;
-> +
-> +	if (cdns_power_is_lost(cdns)) {
-> +		if (cdns->role_sw) {
-> +			cdns->role = cdns_role_get(cdns->role_sw);
-> +		} else {
-> +			real_role = cdns_hw_role_state_machine(cdns);
-> +			if (real_role != cdns->role) {
-> +				ret = cdns_hw_role_switch(cdns);
-> +				if (ret)
-> +					return ret;
-> +				role_changed = true;
-> +			}
-> +		}
-> +
-> +		if (!role_changed) {
-> +			if (cdns->role == USB_ROLE_HOST)
-> +				ret = cdns_drd_host_on(cdns);
-> +			else if (cdns->role == USB_ROLE_DEVICE)
-> +				ret = cdns_drd_gadget_on(cdns);
-> +
-> +			if (ret)
-> +				return ret;
-> +		}
-> +	}
->  
->  	if (cdns->roles[cdns->role]->resume)
-> -		cdns->roles[cdns->role]->resume(cdns, false);
-> +		cdns->roles[cdns->role]->resume(cdns, cdns_power_is_lost(cdns));
->  
->  	if (set_active) {
->  		pm_runtime_disable(dev);
-> diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
-> index 605a413db727..1213c540deb3 100644
-> --- a/drivers/usb/cdns3/drd.c
-> +++ b/drivers/usb/cdns3/drd.c
-> @@ -478,3 +478,19 @@ int cdns_drd_exit(struct cdns *cdns)
->  
->  	return 0;
->  }
-> +
-> +
-> +/* Indicate the cdns3 core was power lost before */
-> +bool cdns_power_is_lost(struct cdns *cdns)
-> +{
-> +	if (cdns->version == CDNS3_CONTROLLER_V1) {
-> +		if (!(readl(&cdns->otg_v1_regs->simulate) & BIT(0)))
-> +			return true;
-> +	} else {
-> +		if (!(readl(&cdns->otg_v0_regs->simulate) & BIT(0)))
-> +			return true;
-> +	}
-> +	return false;
-> +}
-> +
-> +EXPORT_SYMBOL_GPL(cdns_power_is_lost);
-> diff --git a/drivers/usb/cdns3/drd.h b/drivers/usb/cdns3/drd.h
-> index 9724acdecbbb..cbdf94f73ed9 100644
-> --- a/drivers/usb/cdns3/drd.h
-> +++ b/drivers/usb/cdns3/drd.h
-> @@ -215,5 +215,5 @@ int cdns_drd_gadget_on(struct cdns *cdns);
->  void cdns_drd_gadget_off(struct cdns *cdns);
->  int cdns_drd_host_on(struct cdns *cdns);
->  void cdns_drd_host_off(struct cdns *cdns);
-> -
-> +bool cdns_power_is_lost(struct cdns *cdns);
->  #endif /* __LINUX_CDNS3_DRD */
-> -- 
-> 2.24.0.rc1
-> 
-
--- 
-
-Thanks,
-Peter Chen
-
+SGkgSGVpa2tpLA0KDQpPbiAyLzE2LzIxIDExOjEyIEFNLCBIZWlra2kgS3JvZ2VydXMgd3JvdGU6
+DQo+IA0KPiBIaSBDcmlzdGlhbiwNCj4gDQo+IE9uIE1vbiwgRmViIDE1LCAyMDIxIGF0IDA1OjI1
+OjI5UE0gKzAwMDAsIENyaXN0aWFuLkJpcnNhbkBtaWNyb2NoaXAuY29tIHdyb3RlOg0KPj4gTXkg
+bmFtZSBpcyBDcmlzdGlhbiBhbmQgSSdtIHdvcmtpbmcgb24gYnJpbmdpbmcgdXAgYSBVU0IgVHlw
+ZS1DIFBvcnQgQ29udHJvbGxlcg0KPj4gKFRDUEMpIHdpdGhvdXQgUG93ZXIgRGVsaXZlcnkgc3Vw
+cG9ydCB3aGljaCBpcyBpbnRlbmRlZCB0byB3b3JrIHdpdGggVVNCIDIuMA0KPj4gSG9zdC9EZXZp
+Y2UuDQo+Pg0KPj4gVGhlIElQIGlzIGludGVncmF0ZWQgaW50byBvbmUgb2YgTWljcm9jaGlwJ3Mg
+U29DcywgaXQgaXMgbWVtb3J5LW1hcHBlZCBhbmQgaXQNCj4+IHdhcyBkZXNpZ25lZCBiYXNlZCBv
+biBVU0IgVHlwZS1DIENhYmxlIGFuZCBDb25uZWN0b3Igc3BlY2lmaWNhdGlvbiByZXZpc2lvbiAx
+LjIuDQo+Pg0KPj4gSW4gYnJpZWYsIGl0IGhhcyBzdXBwb3J0IGZvciBkZXRlY3RpbmcgdGhlIHRo
+cmVzaG9sZCB2b2x0YWdlcyBvbiBDQzEsIENDMiBsaW5lcywNCj4+IGNvbnRyb2wgb2YgdGhlIGN1
+cnJlbnQgc291cmNlIChJcCksIGFuZCBwdWxsLWRvd24gcmVzaXN0b3JzIChSZCkuIFRoZSBtYW5h
+Z2VtZW50DQo+PiBvZiB0aGUgY29udHJvbGxlciBpcyB0byBiZSBpbXBsZW1lbnRlZCBpbiBzb2Z0
+d2FyZSAoaXQgaXMgbm90IGF1dG9ub21vdXMpLg0KPj4NCj4+IEhhdmluZyBpbiBtaW5kIHRoYXQg
+dGhlIGNvbnRyb2xsZXIgdXNlcyBwcm9wcmlldGFyeSByZWdpc3RlcnMsIEkgY2hvc2UgdG8NCj4+
+IGltcGxlbWVudCBpdCB1c2luZyBUQ1BNIGRpcmVjdGx5IGFuZCBza2lwIHRoZSBUQ1BDIEludGVy
+ZmFjZS4NCj4+DQo+PiBGb3IgdGhlIGJlZ2lubmluZywgSSB3b3VsZCBsaWtlIHRvIGVuYWJsZSBz
+aW1wbGUgdXNlIGNhc2VzIGxpa2UgdGhlIG9uZXMNCj4+IGRlc2NyaWJlZCBpbiBDb25uZWN0aW9u
+IFN0YXRlIERpYWdyYW06IFNvdXJjZSBhbmQgQ29ubmVjdGlvbiBTdGF0ZSBEaWFncmFtOiBTaW5r
+DQo+PiBmcm9tIFVTQiBUeXBlLUMgQ2FibGUgYW5kIENvbm5lY3RvciBTcGVjaWZpY2F0aW9uLg0K
+Pj4NCj4+IFNvbWUgb2YgdGhlIHByb2JsZW1zIHRoYXQgSSBlbmNvdW50ZXJlZCB1bnRpbCBub3cg
+YXJlOg0KPj4NCj4+IDEuIHRjcG1fcmVnaXN0ZXJfcG9ydCgpIGZhaWxzIGlmIHNldF9wZF9yeCgp
+LCBwZF90cmFuc21pdCgpIG9yIHNldF92Y29ubigpDQo+PiBmdW5jdGlvbnMgYXJlIG1pc3Npbmcu
+DQo+Pg0KPj4gMi4gdGhlIHBvcnQgY2FwYWJpbGl0aWVzIGFyZSBzcGVjaWZpZWQgaW4gdGhlIGNv
+bm5lY3RvciBEVCBiaW5kaW5ncyBvbmx5IHRocm91Z2gNCj4+IFBET3MsIGV2ZW4gdGhvdWdoIFBE
+T3MgYXJlIHNwZWNpZmljIHRvIFBEIG1vZGUuDQo+Pg0KPj4gMy4gb25jZSBJIHdhcyBhYmxlIHRv
+IHN0YXJ0IHRoZSBUQ1BNIHN0YXRlIG1hY2hpbmUsIGl0IGNhbGxlZCBwZF90cmFuc21pdCgpIGlu
+DQo+PiB0aGUgcHJvY2VzcyB0byBuZWdvdGlhdGUgdGhlIGNhcGFiaWxpdGllcy4gRm9yIG15IGNh
+c2UgSSB1c2VkIGEgZHVtbXkgZnVuY3Rpb24NCj4+IGp1c3QgdG8gYmUgYWJsZSB0byByZWdpc3Rl
+ciB0aGUgcG9ydC4NCj4+DQo+PiBQbGVhc2UgbGV0IG1lIGtub3cgd2hhdCB5b3UgdGhpbmsgYW5k
+IGlmIHlvdSBoYXZlIGFueSBhZHZpY2UuIEFtIEkgZ29pbmcgaW4gdGhlDQo+PiByaWdodCBkaXJl
+Y3Rpb24gb3IgaXMgdGhlcmUgYSBiZXR0ZXIgd2F5IHRvIGltcGxlbWVudCB0aGlzPw0KPiANCj4g
+RG9uJ3QgYm90aGVyIHdpdGggdGNwbSBpZiB5b3UgZG9uJ3QgaGF2ZSBQRCBzdXBwb3J0LiBKdXN0
+IHJlZ2lzdGVyDQo+IHlvdXIgcG9ydChzKSBhbmQgdGhlIHBhcnRuZXJzIGRpcmVjdGx5IHdpdGgg
+dGhlIGNvbm5lY3RvciBjbGFzczoNCj4gaHR0cHM6Ly93d3cua2VybmVsLm9yZy9kb2MvaHRtbC9s
+YXRlc3QvZHJpdmVyLWFwaS91c2IvdHlwZWMuaHRtbA0KPiANCj4gWW91IGNhbiB1c2UgdGhlIGRy
+aXZlciBmb3IgdGhlIFRJIEhEM1NTMzIyMCBjb250cm9sbGVyIGFzIGFuIGV4YW1wbGUNCj4gaG93
+IHRvIGRvIHRoYXQgKGRyaXZlcnMvdXNiL3R5cGVjL2hkM3NzMzIyMC5jKS4gVGhhdCB0aGluZyBp
+cyBhbHNvDQo+IGp1c3QgVVNCIFR5cGUtQyBQSFkgd2l0aG91dCBQRCBzdXBwb3J0IGp1c3QgbGlr
+ZSB5b3VyIHBvcnQgY29udHJvbGxlci4NCj4gDQoNClRoYW5rIHlvdSBmb3IgdGhlIHN1Z2dlc3Rp
+b24uIEkgaGFkIGEgbG9vayBhdCB0aGUgZHJpdmVyIHlvdSBtZW50aW9uZWQgYW5kIGFsc28NCm90
+aGVyIGRyaXZlcnMgZnJvbSB0aGUgc2FtZSBmb2xkZXIuIFRoZSBjaGlwcyBoYXZlIGxvZ2ljIGVt
+YmVkZGVkIGludG8NCnRoZW0gdG8gaGFuZGxlIENDIGxpbmVzIGFuZCBWQlVTIHdoaWxlIHRoZSBj
+b250cm9sbGVyIG9uIHdoaWNoIEknbSB3b3JraW5nDQpwcm92aWRlcyBiYXNpYyBhY2Nlc3MgdG8g
+Q0MgbGluZXMgYW5kIGl0IGlzIHVwIHRvIHRoZSBzb2Z0d2FyZSB0byBkcml2ZSBpdC4NClZCVVMg
+aXMgdG8gYmUgZGV0ZWN0ZWQvZW5hYmxlZCB0aHJvdWdoIGEgc3RhbmRhcmQgR1BJTy4NCg0KVGhl
+IHJlYXNvbiBmb3Igd2hpY2ggSSB0cmllZCB0byB1c2UgVENQTSBpcyB0aGF0IEkgbmVlZCB0byBp
+bXBsZW1lbnQgaW4gc29mdHdhcmUNCnRoZSBTaW5rL1NvdXJjZSBDb25uZWN0aW9uIFN0YXRlIERp
+YWdyYW1zLCBDQyBkZWJvdW5jZSwgYW5kIFZCVVMgbWFuYWdlbWVudC4NCkkgdHJpZWQgdG8gYXZv
+aWQgY29kZSBkdXBsaWNhdGlvbiBidXQgb24gdGhlIG90aGVyIGhhbmQsIG15IHVzZSBjYXNlIGRv
+ZXMgbm90DQppbnZvbHZlIFBELg0KDQpJZiB0aGVyZSBhcmUgYmV0dGVyIGNoYW5jZXMgdG8gdXBz
+dHJlYW0gdGhlIGRyaXZlciB1c2luZyBqdXN0IHRoZSBjb25uZWN0b3INCmNsYXNzLCBJJ2xsIG1v
+dmUgZm9yd2FyZCB3aXRoIHRoaXMgZGlyZWN0aW9uLiBJIGp1c3Qgd2FudGVkIHRvIG1ha2Ugc3Vy
+ZSBJDQpleHBsYWluZWQgY29ycmVjdGx5IG1heSB1c2UgY2FzZSBiZWZvcmUgaW1wbGVtZW50aW5n
+IGl0Lg0KDQpDcmlzdGlhbg0KDQo+IA0KPiBCciwNCj4gDQo+IC0tDQo+IGhlaWtraQ0KPiANCg==
