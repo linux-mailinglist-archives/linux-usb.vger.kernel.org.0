@@ -2,172 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCC231E0FF
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Feb 2021 22:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 306D331E38E
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Feb 2021 01:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233311AbhBQVFi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Feb 2021 16:05:38 -0500
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:33881 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234709AbhBQVFZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Feb 2021 16:05:25 -0500
-Received: by mail-oi1-f173.google.com with SMTP id j5so4276788oie.1;
-        Wed, 17 Feb 2021 13:05:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QKAFux8XcEkNyoW3lOTVnQo4Rj14jUDRtsW9J/H/LJg=;
-        b=KJjk4+ST/0u1awn7YEo3bjd+H0pIXykUUaQbfzRUI9UROPMmylwX+fFuzdROBLSpaW
-         O3LI8vExRvOmYdaMbd/Md76YlUImRp+ehyWDu2I7kbfkcbXKI8T5BJQbeG7XVyjXZfXj
-         u1KkOQQu9RkH5ubKgjGgavQNWbbZXaOi598En+fsid8ksbCP7SKQHHpjqFJISOL6JGBZ
-         W2uEdpMOizS4w4KIhtcRAJOBMlLrHUC6v7pcgaTr1H6BfECKWnxbPL0cZ5TLXnkLa3Zi
-         yKlh+3Du94lXbTD/JTYySxRGY6pIMaaCvwDvj2nYggtR5EBXj1zlAQUKYza2IueI4rk2
-         7pKw==
-X-Gm-Message-State: AOAM5316oagBCBLkQ43fY/EhMutv4R+WKTb/v2Y2E4QBb6cuhGFKWHrP
-        Z7uEtjxnTuGA5L/BQO6fsg==
-X-Google-Smtp-Source: ABdhPJxh3dS23qtLfh7ls7pqVObEW5PGwbQ5egZFAPvIdN9ALx8kFVv2h6t+P8NvUL6Sf6mmMyx8oA==
-X-Received: by 2002:a05:6808:115:: with SMTP id b21mr476463oie.110.1613595883842;
-        Wed, 17 Feb 2021 13:04:43 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 7sm622099oth.38.2021.02.17.13.04.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Feb 2021 13:04:43 -0800 (PST)
-Received: (nullmailer pid 2752193 invoked by uid 1000);
-        Wed, 17 Feb 2021 21:04:41 -0000
-Date:   Wed, 17 Feb 2021 15:04:41 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-usb@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v5 1/4] dt-bindings: usb: Add binding for discrete
- onboard USB hubs
-Message-ID: <20210217210441.GA2709172@robh.at.kernel.org>
-References: <20210210171040.684659-1-mka@chromium.org>
- <20210210091015.v5.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+        id S229812AbhBRAuq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Feb 2021 19:50:46 -0500
+Received: from m42-2.mailgun.net ([69.72.42.2]:57239 "EHLO m42-2.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229803AbhBRAuo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 17 Feb 2021 19:50:44 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1613609421; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=FnKVk3kaZBaRiyYEVXIKZGXX4o/DMyHVFd+yjupU7+g=; b=u89B55/yhX9sbaXTa4rBUbQX337w/u/+7YT9DcRznQp/xI4mdYQRGqN07R4qR8mzdrcwX9uK
+ wH/aODQq5+S0FnstbrsvgVDsCBz27Zt29ssPreS8ag8cp4wGW9bgfqWUhmT0JHEhCgkN95GH
+ pInEPDZ6JnvREhvGbIpVZ9PaFAQ=
+X-Mailgun-Sending-Ip: 69.72.42.2
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 602db9ab666e232b38d48496 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 18 Feb 2021 00:49:47
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 96A70C43462; Thu, 18 Feb 2021 00:49:47 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.110.74.71] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 126B3C433CA;
+        Thu, 18 Feb 2021 00:49:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 126B3C433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH v7 4/5] usb: dwc3: dwc3-qcom: Enable tx-fifo-resize
+ property by default
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     agross@kernel.org, balbi@kernel.org, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <1611895604-4496-1-git-send-email-wcheng@codeaurora.org>
+ <1611895604-4496-5-git-send-email-wcheng@codeaurora.org>
+ <YBl8aszdk1xgbg1i@builder.lan>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <cd0b5e53-af48-3fd6-bad6-1e165a4f8fb8@codeaurora.org>
+Date:   Wed, 17 Feb 2021 16:49:44 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210210091015.v5.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+In-Reply-To: <YBl8aszdk1xgbg1i@builder.lan>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 09:10:36AM -0800, Matthias Kaehlcke wrote:
-> Discrete onboard USB hubs (an example for such a hub is the Realtek
-> RTS5411) need to be powered and may require initialization of other
-> resources (like GPIOs or clocks) to work properly. This adds a device
-> tree binding for these hubs.
-> 
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
-> 
-> Changes in v5:
-> - updated 'title'
-> - only use standard USB compatible strings
-> - deleted 'usb_hub' node
-> - renamed 'usb_controller' node to 'usb-controller'
-> - removed labels from USB nodes
-> - added 'vdd-supply' to USB nodes
-> 
-> Changes in v4:
-> - none
-> 
-> Changes in v3:
-> - updated commit message
-> - removed recursive reference to $self
-> - adjusted 'compatible' definition to support multiple entries
-> - changed USB controller phandle to be a node
-> 
-> Changes in v2:
-> - removed 'wakeup-source' and 'power-off-in-suspend' properties
-> - consistently use spaces for indentation in example
-> 
->  .../bindings/usb/onboard_usb_hub.yaml         | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-> new file mode 100644
-> index 000000000000..bf4ec52e6c7b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-> @@ -0,0 +1,49 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/onboard_usb_hub.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Binding for discrete onboard USB hubs
 
-This isn't really generic. Maybe there's a set of hubs with only a 
-single supply much like 'simple-panel', but I kind of doubt that here. 
-There aren't hundreds of hub chips like panels. Though, we should put 
-this into bindings/usb/hub/ so we start collecting hub bindings in one 
-place.
 
-A generic driver doesn't have to have a generic binding. You can have a 
-specific device binding which is handled by a generic driver. Or not. 
-Who knows. Maybe a simple user like u-boot has a generic driver while 
-something more feature rich has a device specific binding.
-
-> +
-> +maintainers:
-> +  - Matthias Kaehlcke <mka@chromium.org>
-
-Now we have usb-device.yaml, you need:
-
-allOf:
-  - $ref: usb-device.yaml#
-
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +        - usbbda,5411
-> +        - usbbda,411
-> +
-> +  vdd-supply:
-> +    description:
-> +      phandle to the regulator that provides power to the hub.
-> +
-> +required:
-> +  - compatible
-> +  - vdd-supply
-> +
-> +examples:
-> +  - |
-> +    usb-controller {
-> +        dr_mode = "host";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        /* 2.0 hub on port 1 */
-> +        hub_2_0: hub@1 {
-> +            compatible = "usbbda,5411";
-> +            reg = <1>;
-> +            vdd-supply = <&pp3300_hub>;
-> +        };
-> +
-> +        /* 3.0 hub on port 2 */
-> +        hub_3_0: hub@2 {
-> +            compatible = "usbbda,411";
-> +            reg = <2>;
-> +            vdd-supply = <&pp3300_hub>;
-> +        };
-> +    };
-> +
-> +...
-> -- 
-> 2.30.0.478.g8a0d178c01-goog
+On 2/2/2021 8:23 AM, Bjorn Andersson wrote:
+> On Thu 28 Jan 22:46 CST 2021, Wesley Cheng wrote:
 > 
+>> In order to take advantage of the TX fifo resizing logic, manually add
+>> these properties to the DWC3 child node by default.  This will allow
+>> the DWC3 gadget to resize the TX fifos for the IN endpoints, which
+>> help with performance.
+>>
+>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>> ---
+>>  drivers/usb/dwc3/dwc3-qcom.c | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+>> index d803ee9..4ea6be3 100644
+>> --- a/drivers/usb/dwc3/dwc3-qcom.c
+>> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+>> @@ -564,6 +564,7 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
+>>  
+>>  static const struct property_entry dwc3_qcom_acpi_properties[] = {
+>>  	PROPERTY_ENTRY_STRING("dr_mode", "host"),
+>> +	PROPERTY_ENTRY_BOOL("tx-fifo-resize"),
+> 
+> I checked the ACPI tables for Lenovo Miix 630, Yoga C630 and Flex 5G and
+> neither one has this property specified. So while we could just add this
+> here, it would have to be done in collaboration with the people who
+> actually define these. And as said before, I believe we want this to
+> always be enabled.
+> 
+>>  	{}
+>>  };
+>>  
+>> @@ -634,6 +635,7 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
+>>  	struct dwc3_qcom	*qcom = platform_get_drvdata(pdev);
+>>  	struct device_node	*np = pdev->dev.of_node, *dwc3_np;
+>>  	struct device		*dev = &pdev->dev;
+>> +	struct property		*prop;
+>>  	int			ret;
+>>  
+>>  	dwc3_np = of_get_child_by_name(np, "dwc3");
+>> @@ -642,6 +644,14 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
+>>  		return -ENODEV;
+>>  	}
+>>  
+>> +	prop = kzalloc(sizeof(*prop), GFP_KERNEL);
+>> +	if (prop) {
+>> +		prop->name = "tx-fifo-resize";
+>> +		ret = of_add_property(dwc3_np, prop);
+> 
+> Can't we come up with a way where the platform driver enables this on
+> the core driver without modifying DT?
+> 
+> Regards,
+> Bjorn
+
+Hi Bjorn,
+
+Sorry for the late response.  As you know, its a little difficult to
+access the DWC3 core device during DWC3 qcom probe time, as the DWC3
+core will likely return deferred probe due to the PHY devices not being
+ready.
+
+This is why I went with the approach to modify the DWC3 node here, so
+that when the DWC3 core is eventually probed, it wouldn't miss this
+property setting.  If I tried to set this dynamically, say in
+dwc3_qcom_vbus_override() (with proper NULL checks), then I'd miss this
+setting for the first enumeration, but if cable plug out/in logic is
+present, the setting would kick in on subsequent cable events.
+
+Thanks
+Wesley Cheng
+
+> 
+>> +		if (ret < 0)
+>> +			dev_info(dev, "unable to add tx-fifo-resize prop\n");
+>> +	}
+>> +
+>>  	ret = of_platform_populate(np, NULL, NULL, dev);
+>>  	if (ret) {
+>>  		dev_err(dev, "failed to register dwc3 core - %d\n", ret);
+>> -- 
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+>>
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
