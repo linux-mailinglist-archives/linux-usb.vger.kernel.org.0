@@ -2,158 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 306D331E38E
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Feb 2021 01:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 137FB31E3F0
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Feb 2021 02:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbhBRAuq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Feb 2021 19:50:46 -0500
-Received: from m42-2.mailgun.net ([69.72.42.2]:57239 "EHLO m42-2.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229803AbhBRAuo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 17 Feb 2021 19:50:44 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1613609421; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=FnKVk3kaZBaRiyYEVXIKZGXX4o/DMyHVFd+yjupU7+g=; b=u89B55/yhX9sbaXTa4rBUbQX337w/u/+7YT9DcRznQp/xI4mdYQRGqN07R4qR8mzdrcwX9uK
- wH/aODQq5+S0FnstbrsvgVDsCBz27Zt29ssPreS8ag8cp4wGW9bgfqWUhmT0JHEhCgkN95GH
- pInEPDZ6JnvREhvGbIpVZ9PaFAQ=
-X-Mailgun-Sending-Ip: 69.72.42.2
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
- 602db9ab666e232b38d48496 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 18 Feb 2021 00:49:47
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 96A70C43462; Thu, 18 Feb 2021 00:49:47 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.110.74.71] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 126B3C433CA;
-        Thu, 18 Feb 2021 00:49:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 126B3C433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v7 4/5] usb: dwc3: dwc3-qcom: Enable tx-fifo-resize
- property by default
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     agross@kernel.org, balbi@kernel.org, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <1611895604-4496-1-git-send-email-wcheng@codeaurora.org>
- <1611895604-4496-5-git-send-email-wcheng@codeaurora.org>
- <YBl8aszdk1xgbg1i@builder.lan>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <cd0b5e53-af48-3fd6-bad6-1e165a4f8fb8@codeaurora.org>
-Date:   Wed, 17 Feb 2021 16:49:44 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S229553AbhBRBei (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Feb 2021 20:34:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229708AbhBRBee (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Feb 2021 20:34:34 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5446C061786
+        for <linux-usb@vger.kernel.org>; Wed, 17 Feb 2021 17:33:54 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id o7so154584pgl.1
+        for <linux-usb@vger.kernel.org>; Wed, 17 Feb 2021 17:33:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dUsBWQzF1UbVO9gyssWKwqqPVsKjGpept75e76+NY0M=;
+        b=EZHD4RD3r4NKtFFy935jOG74x1G/fHK0FvKypFAEuwvgsB3OP7Hx18MH03NP1FvPDt
+         zajQZzChWcMNM5uQdx/jPC8kt3rdBiIs9HjUBWeHeSkPLM7itoLY9RCDLDfZ0FVAWAHB
+         b0wa0hYd4V3K1DQH2ZSgeVOr7bXqrFSn9ZYwk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dUsBWQzF1UbVO9gyssWKwqqPVsKjGpept75e76+NY0M=;
+        b=DoLxhYi0vaw8Zhg5uvCVAEtNGC/tA2cv9dinikFYJWwaeKG3diV/K4CR2hcXGPbcOJ
+         l698TCDmOThC2rG1xjispicL7UTD9wnu7MQ0Zyw9LrBqUKMMHcFK8Ap/MHtVa+0pPzqH
+         EjkkycgVLOuh7me2HiYyv/z4crao3hVT0nCvoAoUHuVdVcTAXW08dBTWBFrN/qQr7uu7
+         06U6qJW/bSE/ivOhVDxJg+8ne+U3IClDwhy5fauDUygNNtpREbBi3YgBjGQLef5OKG4h
+         EtLe9oGNcb9OVJwufj3Ocb/xKMAJQGcYqnlvztB7j6pNICrhds5sfehuHy6WH51lE94a
+         jDRg==
+X-Gm-Message-State: AOAM530HFsodTiHfcqKOc1bBqO5y6OoX1Qb/rtUg/S9rodKYyvNZjPxA
+        pCTkwr4EIstz75OIVwuxaDIhFA==
+X-Google-Smtp-Source: ABdhPJw+nTaOYmXY/x13PkwgxLt2ZLMLPhZCaxh1HTdKP2UH6d2hM/Apww8jOCygDt9J0fGF0so9sQ==
+X-Received: by 2002:a63:e20b:: with SMTP id q11mr1912141pgh.396.1613612034389;
+        Wed, 17 Feb 2021 17:33:54 -0800 (PST)
+Received: from localhost ([2620:15c:202:1:1984:e79:81e:1101])
+        by smtp.gmail.com with UTF8SMTPSA id c69sm3706117pfb.88.2021.02.17.17.33.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Feb 2021 17:33:53 -0800 (PST)
+Date:   Wed, 17 Feb 2021 17:33:51 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-usb@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v5 1/4] dt-bindings: usb: Add binding for discrete
+ onboard USB hubs
+Message-ID: <YC3D/+DZYFjgHQ3H@google.com>
+References: <20210210171040.684659-1-mka@chromium.org>
+ <20210210091015.v5.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+ <20210217210441.GA2709172@robh.at.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <YBl8aszdk1xgbg1i@builder.lan>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20210217210441.GA2709172@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Rob,
 
+thanks for your review!
 
-On 2/2/2021 8:23 AM, Bjorn Andersson wrote:
-> On Thu 28 Jan 22:46 CST 2021, Wesley Cheng wrote:
+On Wed, Feb 17, 2021 at 03:04:41PM -0600, Rob Herring wrote:
+> On Wed, Feb 10, 2021 at 09:10:36AM -0800, Matthias Kaehlcke wrote:
+> > Discrete onboard USB hubs (an example for such a hub is the Realtek
+> > RTS5411) need to be powered and may require initialization of other
+> > resources (like GPIOs or clocks) to work properly. This adds a device
+> > tree binding for these hubs.
+> > 
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
+> > 
+> > Changes in v5:
+> > - updated 'title'
+> > - only use standard USB compatible strings
+> > - deleted 'usb_hub' node
+> > - renamed 'usb_controller' node to 'usb-controller'
+> > - removed labels from USB nodes
+> > - added 'vdd-supply' to USB nodes
+> > 
+> > Changes in v4:
+> > - none
+> > 
+> > Changes in v3:
+> > - updated commit message
+> > - removed recursive reference to $self
+> > - adjusted 'compatible' definition to support multiple entries
+> > - changed USB controller phandle to be a node
+> > 
+> > Changes in v2:
+> > - removed 'wakeup-source' and 'power-off-in-suspend' properties
+> > - consistently use spaces for indentation in example
+> > 
+> >  .../bindings/usb/onboard_usb_hub.yaml         | 49 +++++++++++++++++++
+> >  1 file changed, 49 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
+> > new file mode 100644
+> > index 000000000000..bf4ec52e6c7b
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
+> > @@ -0,0 +1,49 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/usb/onboard_usb_hub.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Binding for discrete onboard USB hubs
 > 
->> In order to take advantage of the TX fifo resizing logic, manually add
->> these properties to the DWC3 child node by default.  This will allow
->> the DWC3 gadget to resize the TX fifos for the IN endpoints, which
->> help with performance.
->>
->> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->> ---
->>  drivers/usb/dwc3/dwc3-qcom.c | 10 ++++++++++
->>  1 file changed, 10 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
->> index d803ee9..4ea6be3 100644
->> --- a/drivers/usb/dwc3/dwc3-qcom.c
->> +++ b/drivers/usb/dwc3/dwc3-qcom.c
->> @@ -564,6 +564,7 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
->>  
->>  static const struct property_entry dwc3_qcom_acpi_properties[] = {
->>  	PROPERTY_ENTRY_STRING("dr_mode", "host"),
->> +	PROPERTY_ENTRY_BOOL("tx-fifo-resize"),
+> This isn't really generic. Maybe there's a set of hubs with only a 
+> single supply much like 'simple-panel', but I kind of doubt that here.
+> There aren't hundreds of hub chips like panels. Though, we should put 
+> this into bindings/usb/hub/ so we start collecting hub bindings in one 
+> place.
+
+Ok, I agree that the name of the binding is too generic, I anticipated that
+the power supply section would need to be extended to support other hub
+chips.
+
+> A generic driver doesn't have to have a generic binding.
+
+That's a good point, it seems to make sense to have separate bindings in
+this case.
+
+> You can have a specific device binding which is handled by a generic
+> driver. Or not. Who knows. Maybe a simple user like u-boot has a generic
+> driver while something more feature rich has a device specific binding.
 > 
-> I checked the ACPI tables for Lenovo Miix 630, Yoga C630 and Flex 5G and
-> neither one has this property specified. So while we could just add this
-> here, it would have to be done in collaboration with the people who
-> actually define these. And as said before, I believe we want this to
-> always be enabled.
+> > +
+> > +maintainers:
+> > +  - Matthias Kaehlcke <mka@chromium.org>
 > 
->>  	{}
->>  };
->>  
->> @@ -634,6 +635,7 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
->>  	struct dwc3_qcom	*qcom = platform_get_drvdata(pdev);
->>  	struct device_node	*np = pdev->dev.of_node, *dwc3_np;
->>  	struct device		*dev = &pdev->dev;
->> +	struct property		*prop;
->>  	int			ret;
->>  
->>  	dwc3_np = of_get_child_by_name(np, "dwc3");
->> @@ -642,6 +644,14 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
->>  		return -ENODEV;
->>  	}
->>  
->> +	prop = kzalloc(sizeof(*prop), GFP_KERNEL);
->> +	if (prop) {
->> +		prop->name = "tx-fifo-resize";
->> +		ret = of_add_property(dwc3_np, prop);
+> Now we have usb-device.yaml, you need:
 > 
-> Can't we come up with a way where the platform driver enables this on
-> the core driver without modifying DT?
-> 
-> Regards,
-> Bjorn
+> allOf:
+>   - $ref: usb-device.yaml#
 
-Hi Bjorn,
+ok
 
-Sorry for the late response.  As you know, its a little difficult to
-access the DWC3 core device during DWC3 qcom probe time, as the DWC3
-core will likely return deferred probe due to the PHY devices not being
-ready.
+So with your comments addressed it seems we have a binding that could be
+acceptable. I'll still hold back a bit to see if we can make progress with
+the discussion about using the 'graph' binding (https://lore.kernel.org/patchwork/patch/1379002/#1578294).
+The one thing I don't like about the current binding is that it wouldn't
+work out of the box with a hierarchy of hubs. To make that work on the
+driver side an additional property would be needed to indicate that two
+(or more) USB hub devices are related (i.e. are provided by the same
+chip). This is needed to be able to decide whether the hub should be
+powered down during system suspend.
 
-This is why I went with the approach to modify the DWC3 node here, so
-that when the DWC3 core is eventually probed, it wouldn't miss this
-property setting.  If I tried to set this dynamically, say in
-dwc3_qcom_vbus_override() (with proper NULL checks), then I'd miss this
-setting for the first enumeration, but if cable plug out/in logic is
-present, the setting would kick in on subsequent cable events.
 
-Thanks
-Wesley Cheng
-
-> 
->> +		if (ret < 0)
->> +			dev_info(dev, "unable to add tx-fifo-resize prop\n");
->> +	}
->> +
->>  	ret = of_platform_populate(np, NULL, NULL, dev);
->>  	if (ret) {
->>  		dev_err(dev, "failed to register dwc3 core - %d\n", ret);
->> -- 
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> a Linux Foundation Collaborative Project
->>
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
