@@ -2,73 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B96A31F54C
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Feb 2021 08:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0021E31F5A2
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Feb 2021 09:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbhBSHJr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Feb 2021 02:09:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbhBSHJq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Feb 2021 02:09:46 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E64C061574
-        for <linux-usb@vger.kernel.org>; Thu, 18 Feb 2021 23:09:05 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id i3so1554199uai.3
-        for <linux-usb@vger.kernel.org>; Thu, 18 Feb 2021 23:09:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=XxmJEA/crZVuEajSxtwqhBIe+fwIB7452blH1p6H+JI=;
-        b=Ew5CUOLZ3yFPpPVeXsYCvU79MZG+NbBc628XBRD2MM3Uowz09F8/UB4xbpkMWg7qWP
-         jwoDdwzsOFuas/bp/F+sylkmKIfVbRcYkbfjJy8RMACClM0Bm9szAgt+Nsuzh28/JzWP
-         ytDrxF2XgbUuuI8OTFHVhUp8kLg2KHhOFOreEqbUv09Bxxfx3/13REBWmpEK7UeLtqFN
-         +8EAC11ZBoDqB5pYv7JAHcTR4Gw0iGoQcMKRLLzGEnrTHYI9OJPR6X1zO4q73b1Ji+wu
-         HjKkzX1gfxP75ed1MpNV2wpAU2C2q1E7ZUIRXHb8nBbUGBe8dMK3TvWqjq7oD/Monfi/
-         dXtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=XxmJEA/crZVuEajSxtwqhBIe+fwIB7452blH1p6H+JI=;
-        b=QQ+CMM7+vPipI2v4RkrjogL/tjiU0L+hgZCcWQ2Ri5bWKkLlcGA0j2Ku5lAgnnSWjP
-         x68SlHScgu7G8IHf8rWEz6/trpnSLphiZ8dKjlQicqEnC2QHuytNpJadR7ln1SR8Qw7d
-         h94YxL1YMKuHZRx2cgYKb37ekk/L7WaQp+inpzIV3+Gnyj2qm9VDLJJdz/N0OOxyf/MG
-         RaEFDZMYRBsyTTWBkB6MnHOOWatfcNWkxkFdMdkevesBzMtC+7iLc6Ftbba8Xrib8Y1a
-         tu6rAgpzS1zPFxGqbto+UAOdj4hj72BZE1uHXD2QH8XdiigM/pVJ20X/2pai1MXptRId
-         rhNw==
-X-Gm-Message-State: AOAM530SbXFIxMXw6YyqHuZCsluIBH00wXwUyw7z6b5ZDZGirBxY368U
-        Lmte3cbgEhYx0pcGmvile3IpeyPDPYJ3Fx8Asog=
-X-Google-Smtp-Source: ABdhPJxZOhM7AeKc6IEahxSmv29aJt72/H67YeDfT9TNDloM28Ucxpzu+yvpzdLQpsETf3Sks4RFMf3N0IQlrlkGbpk=
-X-Received: by 2002:ab0:3314:: with SMTP id r20mr6211535uao.54.1613718544634;
- Thu, 18 Feb 2021 23:09:04 -0800 (PST)
+        id S229555AbhBSIH5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Feb 2021 03:07:57 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:60356 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229481AbhBSIH4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Feb 2021 03:07:56 -0500
+Received: from [222.129.38.131] (helo=[192.168.1.10])
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <aaron.ma@canonical.com>)
+        id 1lD0oi-0002Jz-VN; Fri, 19 Feb 2021 08:07:13 +0000
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Lee Jones <lee.jones@linaro.org>, peter.chen@nxp.com,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PCI <linux-pci@vger.kernel.org>
+References: <20210204051850.64857-1-aaron.ma@canonical.com>
+ <CAAd53p4euFiw7pfDnD2H8oMVeeTqQ_c+wOFDLM2xPccn5MewiA@mail.gmail.com>
+ <cd4595e6-67da-885c-1a67-6dfd71425b8c@canonical.com>
+ <CAAd53p4z1ydFi5pwOZJnsrBDPNVLKU0ygqa0+kdZdXWYocPLgQ@mail.gmail.com>
+ <YCJJrVp2DvCzigCw@kroah.com>
+ <00de6927-3fa6-a9a3-2d65-2b4d4e8f0012@linux.intel.com>
+ <YCUoBP4GUrGL0J3J@kroah.com>
+From:   Aaron Ma <aaron.ma@canonical.com>
+Subject: Re: [PATCH] xhci-pci: Set AMD Renoir USB controller to D3 when
+ shutdown
+Message-ID: <a93e3039-c910-4bf5-0e8a-ffdd74b983d0@canonical.com>
+Date:   Fri, 19 Feb 2021 16:07:04 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Received: by 2002:ab0:356c:0:0:0:0:0 with HTTP; Thu, 18 Feb 2021 23:09:03
- -0800 (PST)
-Reply-To: susanwilliam1502@citromail.hu
-From:   "Elaina Susan. William." <susanwiliam772@gmail.com>
-Date:   Fri, 19 Feb 2021 08:09:03 +0100
-Message-ID: <CAOzg2W6HxSEZi3rTcGoiBBD3Z356a1_2dLfm=PAzdPui6fKh4w@mail.gmail.com>
-Subject: Good Morning,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YCUoBP4GUrGL0J3J@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Good Morning,
 
-This letter is highly privileged and it requires your immediate
-attention because we lost one of our customer who happen to be from
-your country and he had a fixed-term Deposit $4.7 Million  with our
-Bank before his death.
 
-Given to your nationality with our late Customer, I want to present
-you to the bank as the beneficiary for the inheritance fund and both
-of us will divide  the funds 50% 50% once the money is transferred
-into your account.
+On 2/11/21 8:50 PM, Greg Kroah-Hartman wrote:
+> On Wed, Feb 10, 2021 at 03:13:30PM +0200, Mathias Nyman wrote:
+>> On 9.2.2021 10.37, Greg Kroah-Hartman wrote:
+>>> On Fri, Feb 05, 2021 at 02:50:15PM +0800, Kai-Heng Feng wrote:
+>>>> On Fri, Feb 5, 2021 at 2:45 PM Aaron Ma <aaron.ma@canonical.com> wrote:
+>>>>>
+>>>>>
+>>>>> On 2/5/21 12:27 PM, Kai-Heng Feng wrote:
+>>>>>> Can you please test the following patch, which should address the root cause:
+>>>>>> https://lore.kernel.org/linux-acpi/20201201213019.1558738-1-furquan@google.com/
+>>>>>>
+>>>>>> It also helps another AMD laptop on S5:
+>>>>>> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1912935
+>>>>>>
+>>>>>
+>>>>> No, this patch doesn't help on ThinkPad AMD platform.
+>>>>
+>>>> Thanks for the confirmation!
+>>>>
+>>>> Acked-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>>>
+>>> Mathias, want me to take this in my tree now, or are you going to send
+>>> me more patches for 5.12-rc1?
+>>>
+>>
+>> Nothing more for 5.12-rc1 from me.
+>>
+>> Could this be a PCI quirk instead of xhci?
+>> Maybe there is some PCI flag for this already, haven't checked yet.
+>>
+>> We want a specific PCI device to go to PCI D3cold at PCI shutdown...
+> 
+> There probably is.  Kay-Heng, can you look into doing that instead?
+> 
 
-I look forward to your immediate response.
+There is no such PCI quirk, usually it calls driver to shutdown.
 
-Kind Regards,
-Elaina Susan William.
+Regards,
+Aaron
+
+> thanks,
+> 
+> greg k-h
+> 
