@@ -2,596 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9578031F35C
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Feb 2021 01:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D32D131F508
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Feb 2021 07:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbhBSAfF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Feb 2021 19:35:05 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:63509 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbhBSAfD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Feb 2021 19:35:03 -0500
-Received: from fsav109.sakura.ne.jp (fsav109.sakura.ne.jp [27.133.134.236])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 11J0Xpv4044780;
-        Fri, 19 Feb 2021 09:33:51 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav109.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav109.sakura.ne.jp);
- Fri, 19 Feb 2021 09:33:51 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav109.sakura.ne.jp)
-Received: from localhost.localdomain (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 11J0Xib9044579
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 19 Feb 2021 09:33:51 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH] usb: usbip: serialize attach/detach operations
-Date:   Fri, 19 Feb 2021 09:33:46 +0900
-Message-Id: <20210219003346.4404-1-penguin-kernel@I-love.SAKURA.ne.jp>
-X-Mailer: git-send-email 2.18.4
-In-Reply-To: <000000000000647eff05b3f7e0d4@google.com>
-References: <000000000000647eff05b3f7e0d4@google.com>
+        id S229873AbhBSGNQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Feb 2021 01:13:16 -0500
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:56404 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229689AbhBSGNO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Feb 2021 01:13:14 -0500
+Received: from mailhost.synopsys.com (badc-mailhost2.synopsys.com [10.192.0.18])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 358144004D;
+        Fri, 19 Feb 2021 06:12:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1613715133; bh=BOJvWSVg9VOpfMJ96LhQUhrE/9ErJWlvIQoMjR3MKX8=;
+        h=From:To:Subject:Date:References:In-Reply-To:From;
+        b=DMjSaXJvL3qEWHvHLHz3UvFOOsk4MgLomrNmkTknmE6wZpghPxPFOeLXIPeWXqKuh
+         gLEJIEBAyePIPBivr0W3GoUr5ESK5ZnHfdaGmHl5YLz3E16nzO4OlPqTO33fJDAtpJ
+         DXxi/VGuCJwFxQkypBoNBkNGK/mO8Mhmc6cyV0JV+wGvXtZHhjSm2Pwo5WKr7vB8dL
+         5F0ArKxmk/hQ0EGPHQAGXdfqSx66/d0zVp0W5hXwurJzQntdXu0zzcB613xSUaYPTg
+         46MfpmjmG0H+OY9gVV8ApRiY4RyBfiUkLUXVHnSC69jIVTWji10VPRt3ZH8kUpK59r
+         pXZRhsTM7L5xQ==
+Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com [10.4.161.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id F1F2DA0069;
+        Fri, 19 Feb 2021 06:12:12 +0000 (UTC)
+Received: from NAM02-CY1-obe.outbound.protection.outlook.com (mail-cys01nam02lp2052.outbound.protection.outlook.com [104.47.37.52])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 7FDBA800C6;
+        Fri, 19 Feb 2021 06:12:12 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=hminas@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="docDafwP";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YS6EXamwzETH//EMll10/UofpHPtMQDksqzEP5GAavS2hazmA6k9ywsoxe90K1e+nemftQIaE2MHAI7IdhM+Jl4emlPvpe1/+GLyvPKBf/a/DYNU77zlLgV0IKptE5ZqlYcIRKloSRqstm/CGwIGGd2fCVXItTa6f0BCgUsYoHTxIHcSHr4/uqs7Jg0pLNLluoGdkDbHSLZ09dMLNn/bjjyhQLgPRfaYSeAQmpfruNGutUKdPTOKybOUfH8I0MsLvQIHG4uo65P6RqpIrLvZgWdBNk/J6RH6K8kUh/PHbf1op5sOCZFgOmrnVErelyQcZoZlwJQMCKcwwaIG3jEXng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BOJvWSVg9VOpfMJ96LhQUhrE/9ErJWlvIQoMjR3MKX8=;
+ b=nMIFYvNkkZf80Lig2yfTMh/B5nZjuqm/DKpS+AXpoCtRO8KgrB2uZ+nKasYJ7Dwe12/ilO5ULjABYHi98t1wbQ1oO++mKQF+8R1EcT7U82pYyzYrMs8TfeeV6ZjZAxLPyfrLvj88unYFMebXLlPDsqpVzYQ1Cfa2Z3bxHzAEZCci3Lfr0uecYJistogJYW3NjAE4sLbiGuKbMHkdQv8xL8ooURoeLJFPDwlF+hib4ufnPTzxE/N+1YvRcl7S1EcKZ76OzmEqCPktN5Cd+wnMsJ9a8Y5VhSVSrPE8Ox4etpRmkUSi1nmz4NhM3NKT3z9deb7ljyXRdnrpBbSBTApylg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BOJvWSVg9VOpfMJ96LhQUhrE/9ErJWlvIQoMjR3MKX8=;
+ b=docDafwPCkhXMjdXrVZCSVAcBmeg2RsXCPZ9U+dlV7vcVmuhHJ4K7fDmt2kmsifuDAkOzBJSjEFTHfQjmtD0SG49rq0A8NfQ10FUok8jt3fLHho/OUV2dKnhlHjqRBqgiY5DWf5MnczaE3GgxMuxSnLnPaELCaGaJG6bAvw7gdg=
+Received: from BY5PR12MB3777.namprd12.prod.outlook.com (2603:10b6:a03:1a9::14)
+ by BY5PR12MB3796.namprd12.prod.outlook.com (2603:10b6:a03:1ae::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.25; Fri, 19 Feb
+ 2021 06:12:10 +0000
+Received: from BY5PR12MB3777.namprd12.prod.outlook.com
+ ([fe80::e9e5:66f2:5a15:8c1c]) by BY5PR12MB3777.namprd12.prod.outlook.com
+ ([fe80::e9e5:66f2:5a15:8c1c%7]) with mapi id 15.20.3846.039; Fri, 19 Feb 2021
+ 06:12:10 +0000
+X-SNPS-Relay: synopsys.com
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+To:     Christopher Morgan <macromorgan@hotmail.com>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+Subject: Re: dwc2 Resume From Suspend Devices Not Working
+Thread-Topic: dwc2 Resume From Suspend Devices Not Working
+Thread-Index: AQHW/8G5S/5Vy/RWk0CnibCOl0UnxapSztwAgABMACCAACiWAIAAMR5AgArHnd+AANCfAA==
+Date:   Fri, 19 Feb 2021 06:12:10 +0000
+Message-ID: <9f251e7a-4072-05fd-da58-082cbb056e97@synopsys.com>
+References: <SN6PR06MB53423E9042B01FFF2531D47FA58D9@SN6PR06MB5342.namprd06.prod.outlook.com>
+ <5b0b7237-1bd3-d712-5e76-c877b2a2a91c@synopsys.com>
+ <SN6PR06MB5342386D6344C41076C0B119A58C9@SN6PR06MB5342.namprd06.prod.outlook.com>
+ <33cf1dbf-5e0e-a936-9c89-1f05774de979@synopsys.com>
+ <SN6PR06MB5342E45F59EA7E94B9DE82DFA58C9@SN6PR06MB5342.namprd06.prod.outlook.com>
+ <SN6PR06MB5342730D33FF3BBF0DD5ED79A5859@SN6PR06MB5342.namprd06.prod.outlook.com>
+In-Reply-To: <SN6PR06MB5342730D33FF3BBF0DD5ED79A5859@SN6PR06MB5342.namprd06.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
+authentication-results: hotmail.com; dkim=none (message not signed)
+ header.d=none;hotmail.com; dmarc=none action=none header.from=synopsys.com;
+x-originating-ip: [37.252.95.223]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c6241e8d-1a26-444c-f7d0-08d8d49d4b2e
+x-ms-traffictypediagnostic: BY5PR12MB3796:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BY5PR12MB379657CBA70D2E5858F09E89A7849@BY5PR12MB3796.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1850;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 4ATolMNyxDJFmsTu1zQu4ybzobjPaXTP5i+MLyfq3aFUJ0RD94CozEy5mGBdO4fa91lFjzZ4H5INahMxHuQRO5O3DXCsHWKKCSmFOFdvuvHh/rOOoKLY5xRlrKt9SUQJ+8jBrEUOqPs0S8CuJdMcUO4Y2+MMyVyeJauXbQn7Av2/SF2HHZvkA6vrCxthXoi7RldKhnUEAudIq2sQgnDg7E379WGRf203jz2ggr+oLs+JdiyoE1jq43P/gMoSESgeTRe9/59sUhFQgHmnE0pmARgdNv3CLkTNCRM2w7SpCnROWwgCUBFS8NGY3ES6GjbcSojFmcX9rAg3KL60gfd5OOq9RRrERO5wtMKaZNaP5bI1Ntf68zIC1iY4vldF+b0k/dw/nmBIBQwc+sNk4SdeIrOTLURFxMmdffqrk1uA3veyPknERpNyb06uMVtSVL6Ni9oNhf30zrZMBHIvXpVEIG1ks/JEyqm9QKBkWbfs5qc4fbqeuEGfzQlgFF6LYJaOal6Cxf1PMCicumUpSvfNr07DalTyJXe6PWCG9M4Evck3H3AxANVFjU65+kI0AFD28X2Z9LePjIdHFjs6LAaVOGRCBMxXQgsbbkiSOeBmt7Fad06/mAxhB9TOmJyZ+Z59lKUHrNKLOOsXmrvWAn1rmYBT9vNYreFTZbZud+J427gJYbsCr/oFXHZGfUW5aNQp
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3777.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(396003)(136003)(39860400002)(376002)(366004)(8676002)(31686004)(66446008)(36756003)(31696002)(15650500001)(86362001)(66556008)(2906002)(110136005)(83380400001)(71200400001)(6636002)(26005)(76116006)(8936002)(66476007)(6512007)(91956017)(2616005)(64756008)(53546011)(6486002)(6506007)(478600001)(316002)(5660300002)(66946007)(4744005)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?Windows-1252?Q?nuzwJnpdwNZHnXENja69MeFaK6NC6jDA2wzAgxAN3i2JsB8IK9HQzsj+?=
+ =?Windows-1252?Q?9mOC6PMMoQORTRfTqPnCSHkfL0G7HJ0CmrJh+aYW0W46NR8x92U0h1YE?=
+ =?Windows-1252?Q?QityoMi4SlS3FBw45CDvae6i10qZspmVaRPCndttW12RDJh2yCVUmJ1z?=
+ =?Windows-1252?Q?I6MBqk2lMyng1G9aojXklzXHFA9nRzjBJDAYACgz8QybNwXlS5LPVaeX?=
+ =?Windows-1252?Q?JuMgXkzS0PxnUT9l/QdoCmid+jzpjEuDGdm8zxG1OwSC/Iph+T9n4K5P?=
+ =?Windows-1252?Q?TEPJgHT6ZlOj7KBH3UnXKiUXxcZGRJybsXDy2py5AKoj9x5j9nSrgM4n?=
+ =?Windows-1252?Q?o1qkpRkFy2JQGD/8kULkzoAzdN9sB1XBDbf2D7EKxMYNPd3rbqGu6Ih0?=
+ =?Windows-1252?Q?p6GGcWb9F+D35Fqjd2FUXH3zXrdR5TQSSjZ5BKWPEJcfVn+mcLA5D7aj?=
+ =?Windows-1252?Q?yGL0wRVl4YWAa6Bug+oXsDC6tWt33BlJdYXuPGQC9fI8n/XkzJkSH1Wy?=
+ =?Windows-1252?Q?mcPSaxmFj+BjzN/D+V07xO3tBQp/i7SOgZdfioUxVrI9JoR9PlfK2aSQ?=
+ =?Windows-1252?Q?UtuJB0CTGUvkfKL7vsUEe6ZkXTzBiFwtL8Xo44JPP8cRYZHzSnDbylla?=
+ =?Windows-1252?Q?Nn9apIWaDtIJmPtMEZlr0KN8Z7s8JBXxOS89mvILrvaf7CdeL3XWX61L?=
+ =?Windows-1252?Q?TJXOJ/Nmp2Ck80ngfVmW43wJpT5uoX4wthS9+wvnRTdC9lpZtD8dWjNr?=
+ =?Windows-1252?Q?rOEVdSm1zR5UX/U/gNOJIbDsRZU7N/PcjlXbjqW6AzONY7apGr+IClD4?=
+ =?Windows-1252?Q?DIMejsWtWQfZWN+O1VX1gNtEl6p+C0Q8fxi00vzJLNoREwEkqeGq6Fht?=
+ =?Windows-1252?Q?SJGIBSwpJInT1boE3e+MH3ON2+VrOkGq8vHa6qQapS/TNPLGEwAN+21a?=
+ =?Windows-1252?Q?WthOWbzIQ6yj9Zj6M9Z8It8hlJ/XBhCYXQodJ5fSnkTS2f9U9WjnT6N6?=
+ =?Windows-1252?Q?L+6YLywqfEdLxX4ewgFc2wtxDbkA49tKtAntc32scnU/cb3bcJBZhINT?=
+ =?Windows-1252?Q?ECe5CEUxbCA8KNoKdan+mCDHgIKI55x3/vYJ3vnXzplsBLd8egO7xOKt?=
+ =?Windows-1252?Q?xLugwNqHWnru4u4BmAZ9XeFXWUgSOeN2tbeFQDW/bk8DhYjnmjtC2AaJ?=
+ =?Windows-1252?Q?wFFkNo1t3M6bG/o+LMdJ7feY0CnRWC9YCDy7tyTYDry9/mH/Vigw1sP0?=
+ =?Windows-1252?Q?BdVEqGM2qNuXwGl5AtOq4ujViL9NU/VHXKKd4EBYkokiXrRdkxRmE2KP?=
+ =?Windows-1252?Q?azzmOQD14LvpVnmIuF/BxfYgZJK6zTaocQm+mksw4ghRR5j2u49MKZ0a?=
+ =?Windows-1252?Q?T0WkO8CLlZ2/FsfOxtqAmuqWXsMkKgzVNNc=3D?=
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <575CBB82D4F55D4CBB4298D7DDB9DCA4@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3777.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6241e8d-1a26-444c-f7d0-08d8d49d4b2e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Feb 2021 06:12:10.8878
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bQNf8h1MRSFwis686O6tXvfk0PMWSHfrh4ojL8kMJrB5uQLWJaUjyZmKIKHpVuHclm2007RUTwYJeRwyf5aE6w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3796
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot is reporting an ERR_PTR(-EINTR) pointer dereference at
-vhci_shutdown_connection() [1], for kthread_create() became killable due
-to commit 786235eeba0e1e85 ("kthread: make kthread_create() killable").
+We was able to repoduce issue on our side and prepare fix. Currently it=20
+passing internal review and testing. Soon Artur will submit it to lkml.
 
-When SIGKILLed while attach_store() is calling kthread_get_run(),
-ERR_PTR(-EINTR) is stored into vdev->ud.tcp_{rx,tx}, and then
-kthread_stop_put() is called on vdev->ud.tcp_{rx,tx} from
-vhci_shutdown_connection() because vdev->ud.tcp_{rx,tx} != NULL.
+Thanks,
+Minas
 
-Prior to commit 9720b4bc76a83807 ("staging/usbip: convert to kthread"),
-"current" pointer is assigned to vdev->ud.tcp_{rx,tx} by usbip_thread()
-kernel thread, and hence vdev->ud.tcp_{rx,tx} != NULL means a valid task
-pointer. However, this patch does not make kthread_get_run() return NULL
-when kthread_create() failed, for this patch removes kthread_get_run() in
-order to fix the other bug described below.
 
-syzbot is also reporting a NULL pointer dereference at sock_sendmsg() [2],
-for lack of serialization between attach_store() and event_handler()
-causes vhci_shutdown_connection() to observe vdev->ud.tcp_tx == NULL while
-vdev->ud.tcp_socket != NULL. Please read the reference link for details of
-this race window.
-
-Therefore, this patch does the following things in order to fix reported
-bugs and other possible bugs.
-
-(1) Handle kthread_create() failure (which fixes [1]) by grouping socket
-    lookup, kthread_create() and get_task_struct() into
-    usbip_prepare_threads() function.
-
-(2) Serialize usbip_sockfd_store(), detach_store(), attach_store() and
-    ud->eh_ops.{shutdown,reset,unusable}() operations using
-    usbip_event_mutex mutex (which fixes [2]). Introducing such large
-    mutex should be safe because tx_thread/rx_thread must not wait for
-    event_handler() to flush because event_handler() is processed by a
-    singlethreaded workqueue.
-
-(3) Add SOCK_STREAM check into usbip_prepare_threads(), for current code
-    is not verifying that a file descriptor passed is actually a stream
-    socket. If the file descriptor passed was a SOCK_DGRAM socket,
-    sock_recvmsg() can't detect end of stream.
-
-(4) Don't perform tcp_socket = NULL in vhci_device_reset().
-    Since tx_thread/rx_thread depends on tcp_socket != NULL whereas
-    tcp_socket and tx_thread/rx_thread are assigned at the same time,
-    it is never safe to reset tcp_socket from vhci_device_reset() without
-    calling kthread_stop_put() from vhci_shutdown_connection().
-
-(5) usbip_sockfd_store() must perform
-
-      if ({sdev,udc}->ud.status != SDEV_ST_AVAILABLE) {
-        /* misc assignments for attach operation */
-        {sdev,udc}->ud.status = SDEV_ST_USED;
-      }
-
-    atomically, or multiple tx_thread/rx_thread can be created (which will
-    later cause a crash like [2]) and socket's refcount is leaked when
-    usbip_sockfd_store() is concurrently called.
-
-[1] https://syzkaller.appspot.com/bug?extid=a93fba6d384346a761e3
-[2] https://syzkaller.appspot.com/bug?extid=95ce4b142579611ef0a9
-
-Reported-and-tested-by: syzbot <syzbot+a93fba6d384346a761e3@syzkaller.appspotmail.com>
-Reported-by: syzbot <syzbot+bf1a360e305ee719e364@syzkaller.appspotmail.com>
-Reported-by: syzbot <syzbot+95ce4b142579611ef0a9@syzkaller.appspotmail.com>
-References: https://lkml.kernel.org/r/676d4518-0faa-9fab-15db-0db8d216d7fb@i-love.sakura.ne.jp
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Fixes: 9720b4bc76a83807 ("staging/usbip: convert to kthread")
----
- drivers/usb/usbip/stub_dev.c     | 56 ++++++++++++++++++--------------
- drivers/usb/usbip/usbip_common.c | 55 +++++++++++++++++++++++++++++++
- drivers/usb/usbip/usbip_common.h | 25 +++++++-------
- drivers/usb/usbip/usbip_event.c  | 15 +++++++++
- drivers/usb/usbip/vhci_hcd.c     |  6 ----
- drivers/usb/usbip/vhci_sysfs.c   | 50 ++++++++++++++++++++--------
- drivers/usb/usbip/vudc_sysfs.c   | 50 ++++++++++++++++------------
- 7 files changed, 181 insertions(+), 76 deletions(-)
-
-diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
-index 2305d425e6c9..f63a22562ead 100644
---- a/drivers/usb/usbip/stub_dev.c
-+++ b/drivers/usb/usbip/stub_dev.c
-@@ -39,12 +39,11 @@ static DEVICE_ATTR_RO(usbip_status);
-  * is used to transfer usbip requests by kernel threads. -1 is a magic number
-  * by which usbip connection is finished.
-  */
--static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *attr,
--			    const char *buf, size_t count)
-+static ssize_t __usbip_sockfd_store(struct device *dev, struct device_attribute *attr,
-+				    const char *buf, size_t count)
- {
- 	struct stub_device *sdev = dev_get_drvdata(dev);
- 	int sockfd = 0;
--	struct socket *socket;
- 	int rv;
- 
- 	if (!sdev) {
-@@ -57,7 +56,12 @@ static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *a
- 		return -EINVAL;
- 
- 	if (sockfd != -1) {
--		int err;
-+		struct usbip_thread_info uti;
-+		int err = usbip_prepare_threads(&uti, &sdev->ud, sockfd,
-+						stub_tx_loop, "stub_tx", stub_rx_loop, "stub_rx");
-+
-+		if (err)
-+			return err;
- 
- 		dev_info(dev, "stub up\n");
- 
-@@ -65,44 +69,46 @@ static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *a
- 
- 		if (sdev->ud.status != SDEV_ST_AVAILABLE) {
- 			dev_err(dev, "not ready\n");
--			goto err;
-+			spin_unlock_irq(&sdev->ud.lock);
-+			usbip_unprepare_threads(&uti);
-+			return -EINVAL;
- 		}
- 
--		socket = sockfd_lookup(sockfd, &err);
--		if (!socket)
--			goto err;
--
--		sdev->ud.tcp_socket = socket;
-+		sdev->ud.tcp_socket = uti.tcp_socket;
- 		sdev->ud.sockfd = sockfd;
--
--		spin_unlock_irq(&sdev->ud.lock);
--
--		sdev->ud.tcp_rx = kthread_get_run(stub_rx_loop, &sdev->ud,
--						  "stub_rx");
--		sdev->ud.tcp_tx = kthread_get_run(stub_tx_loop, &sdev->ud,
--						  "stub_tx");
--
--		spin_lock_irq(&sdev->ud.lock);
-+		sdev->ud.tcp_rx = uti.tcp_rx;
-+		sdev->ud.tcp_tx = uti.tcp_tx;
- 		sdev->ud.status = SDEV_ST_USED;
- 		spin_unlock_irq(&sdev->ud.lock);
- 
-+		wake_up_process(sdev->ud.tcp_rx);
-+		wake_up_process(sdev->ud.tcp_tx);
- 	} else {
- 		dev_info(dev, "stub down\n");
- 
- 		spin_lock_irq(&sdev->ud.lock);
--		if (sdev->ud.status != SDEV_ST_USED)
--			goto err;
--
-+		if (sdev->ud.status != SDEV_ST_USED) {
-+			spin_unlock_irq(&sdev->ud.lock);
-+			return -EINVAL;
-+		}
- 		spin_unlock_irq(&sdev->ud.lock);
- 
- 		usbip_event_add(&sdev->ud, SDEV_EVENT_DOWN);
- 	}
- 
- 	return count;
-+}
- 
--err:
--	spin_unlock_irq(&sdev->ud.lock);
--	return -EINVAL;
-+static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *attr,
-+				  const char *buf, size_t count)
-+{
-+	ssize_t ret = usbip_event_lock_killable();
-+
-+	if (ret)
-+		return ret;
-+	ret = __usbip_sockfd_store(dev, attr, buf, count);
-+	usbip_event_unlock();
-+	return ret;
- }
- static DEVICE_ATTR_WO(usbip_sockfd);
- 
-diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
-index 2ab99244bc31..88d893063001 100644
---- a/drivers/usb/usbip/usbip_common.c
-+++ b/drivers/usb/usbip/usbip_common.c
-@@ -748,6 +748,61 @@ int usbip_recv_xbuff(struct usbip_device *ud, struct urb *urb)
- }
- EXPORT_SYMBOL_GPL(usbip_recv_xbuff);
- 
-+int usbip_prepare_threads(struct usbip_thread_info *uti,
-+			  struct usbip_device *ud, int sockfd,
-+			  int (*tx_fn)(void *data), const char *tx_name,
-+			  int (*rx_fn)(void *data), const char *rx_name)
-+{
-+	int err;
-+	struct socket *socket;
-+	struct task_struct *tx;
-+	struct task_struct *rx;
-+
-+	/* Extract socket from fd. */
-+	socket = sockfd_lookup(sockfd, &err);
-+	if (!socket)
-+		return -EINVAL;
-+	/* Verify that this is a stream socket. */
-+	if (socket->type != SOCK_STREAM) {
-+		err = -EINVAL;
-+		goto out_socket;
-+	}
-+	/* Create threads for this socket. */
-+	rx = kthread_create(rx_fn, ud, rx_name);
-+	if (IS_ERR(rx)) {
-+		err = PTR_ERR(rx);
-+		goto out_socket;
-+	}
-+	tx = kthread_create(tx_fn, ud, tx_name);
-+	if (IS_ERR(tx)) {
-+		err = PTR_ERR(rx);
-+		goto out_rx;
-+	}
-+	uti->tcp_socket = socket;
-+	get_task_struct(rx);
-+	uti->tcp_rx = rx;
-+	get_task_struct(tx);
-+	uti->tcp_tx = tx;
-+	return 0;
-+ out_rx:
-+	kthread_stop(rx);
-+ out_socket:
-+	sockfd_put(socket);
-+	return err;
-+}
-+EXPORT_SYMBOL_GPL(usbip_prepare_threads);
-+
-+void usbip_unprepare_threads(struct usbip_thread_info *uti)
-+{
-+	kthread_stop_put(uti->tcp_tx);
-+	uti->tcp_tx = NULL;
-+	kthread_stop_put(uti->tcp_rx);
-+	uti->tcp_rx = NULL;
-+	sockfd_put(uti->tcp_socket);
-+	uti->tcp_socket = NULL;
-+}
-+EXPORT_SYMBOL_GPL(usbip_unprepare_threads);
-+
- static int __init usbip_core_init(void)
- {
- 	return usbip_init_eh();
-diff --git a/drivers/usb/usbip/usbip_common.h b/drivers/usb/usbip/usbip_common.h
-index 8be857a4fa13..c5e8e61ddf91 100644
---- a/drivers/usb/usbip/usbip_common.h
-+++ b/drivers/usb/usbip/usbip_common.h
-@@ -279,17 +279,6 @@ struct usbip_device {
- 	} eh_ops;
- };
- 
--#define kthread_get_run(threadfn, data, namefmt, ...)			   \
--({									   \
--	struct task_struct *__k						   \
--		= kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
--	if (!IS_ERR(__k)) {						   \
--		get_task_struct(__k);					   \
--		wake_up_process(__k);					   \
--	}								   \
--	__k;								   \
--})
--
- #define kthread_stop_put(k)		\
- 	do {				\
- 		kthread_stop(k);	\
-@@ -309,6 +298,18 @@ void usbip_header_correct_endian(struct usbip_header *pdu, int send);
- struct usbip_iso_packet_descriptor*
- usbip_alloc_iso_desc_pdu(struct urb *urb, ssize_t *bufflen);
- 
-+struct usbip_thread_info {
-+	struct socket *tcp_socket;
-+	struct task_struct *tcp_tx;
-+	struct task_struct *tcp_rx;
-+};
-+
-+int usbip_prepare_threads(struct usbip_thread_info *uti,
-+			  struct usbip_device *ud, int sockfd,
-+			  int (*tx_fn)(void *data), const char *tx_name,
-+			  int (*rx_fn)(void *data), const char *rx_name);
-+void usbip_unprepare_threads(struct usbip_thread_info *uti);
-+
- /* some members of urb must be substituted before. */
- int usbip_recv_iso(struct usbip_device *ud, struct urb *urb);
- void usbip_pad_iso(struct usbip_device *ud, struct urb *urb);
-@@ -322,6 +323,8 @@ void usbip_stop_eh(struct usbip_device *ud);
- void usbip_event_add(struct usbip_device *ud, unsigned long event);
- int usbip_event_happened(struct usbip_device *ud);
- int usbip_in_eh(struct task_struct *task);
-+int usbip_event_lock_killable(void);
-+void usbip_event_unlock(void);
- 
- static inline int interface_to_busnum(struct usb_interface *interface)
- {
-diff --git a/drivers/usb/usbip/usbip_event.c b/drivers/usb/usbip/usbip_event.c
-index 5d88917c9631..e05b858f346d 100644
---- a/drivers/usb/usbip/usbip_event.c
-+++ b/drivers/usb/usbip/usbip_event.c
-@@ -58,6 +58,19 @@ static struct usbip_device *get_event(void)
- }
- 
- static struct task_struct *worker_context;
-+static DEFINE_MUTEX(usbip_event_mutex);
-+
-+int usbip_event_lock_killable(void)
-+{
-+	return mutex_lock_killable(&usbip_event_mutex);
-+}
-+EXPORT_SYMBOL_GPL(usbip_event_lock_killable);
-+
-+void usbip_event_unlock(void)
-+{
-+	mutex_unlock(&usbip_event_mutex);
-+}
-+EXPORT_SYMBOL_GPL(usbip_event_unlock);
- 
- static void event_handler(struct work_struct *work)
- {
-@@ -68,6 +81,7 @@ static void event_handler(struct work_struct *work)
- 	}
- 
- 	while ((ud = get_event()) != NULL) {
-+		mutex_lock(&usbip_event_mutex);
- 		usbip_dbg_eh("pending event %lx\n", ud->event);
- 
- 		/*
-@@ -91,6 +105,7 @@ static void event_handler(struct work_struct *work)
- 			unset_event(ud, USBIP_EH_UNUSABLE);
- 		}
- 
-+		mutex_unlock(&usbip_event_mutex);
- 		wake_up(&ud->eh_waitq);
- 	}
- }
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index 3209b5ddd30c..326182bf062d 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -1072,12 +1072,6 @@ static void vhci_device_reset(struct usbip_device *ud)
- 
- 	usb_put_dev(vdev->udev);
- 	vdev->udev = NULL;
--
--	if (ud->tcp_socket) {
--		sockfd_put(ud->tcp_socket);
--		ud->tcp_socket = NULL;
--		ud->sockfd = -1;
--	}
- 	ud->status = VDEV_ST_NULL;
- 
- 	spin_unlock_irqrestore(&ud->lock, flags);
-diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
-index be37aec250c2..4d7afd1bf890 100644
---- a/drivers/usb/usbip/vhci_sysfs.c
-+++ b/drivers/usb/usbip/vhci_sysfs.c
-@@ -225,8 +225,8 @@ static int valid_port(__u32 *pdev_nr, __u32 *rhport)
- 	return 1;
- }
- 
--static ssize_t detach_store(struct device *dev, struct device_attribute *attr,
--			    const char *buf, size_t count)
-+static ssize_t __detach_store(struct device *dev, struct device_attribute *attr,
-+			      const char *buf, size_t count)
- {
- 	__u32 port = 0, pdev_nr = 0, rhport = 0;
- 	struct usb_hcd *hcd;
-@@ -263,6 +263,17 @@ static ssize_t detach_store(struct device *dev, struct device_attribute *attr,
- 
- 	return count;
- }
-+static ssize_t detach_store(struct device *dev, struct device_attribute *attr,
-+			    const char *buf, size_t count)
-+{
-+	ssize_t ret = usbip_event_lock_killable();
-+
-+	if (ret)
-+		return ret;
-+	ret = __detach_store(dev, attr, buf, count);
-+	usbip_event_unlock();
-+	return ret;
-+}
- static DEVICE_ATTR_WO(detach);
- 
- static int valid_args(__u32 *pdev_nr, __u32 *rhport,
-@@ -300,10 +311,10 @@ static int valid_args(__u32 *pdev_nr, __u32 *rhport,
-  *
-  * write() returns 0 on success, else negative errno.
-  */
--static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
--			    const char *buf, size_t count)
-+static ssize_t __attach_store(struct device *dev, struct device_attribute *attr,
-+			      const char *buf, size_t count)
- {
--	struct socket *socket;
-+	struct usbip_thread_info uti;
- 	int sockfd = 0;
- 	__u32 port = 0, pdev_nr = 0, rhport = 0, devid = 0, speed = 0;
- 	struct usb_hcd *hcd;
-@@ -347,10 +358,10 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
- 	else
- 		vdev = &vhci->vhci_hcd_hs->vdev[rhport];
- 
--	/* Extract socket from fd. */
--	socket = sockfd_lookup(sockfd, &err);
--	if (!socket)
--		return -EINVAL;
-+	err = usbip_prepare_threads(&uti, &vdev->ud, sockfd,
-+				    vhci_tx_loop, "vhci_tx", vhci_rx_loop, "vhci_rx");
-+	if (err)
-+		return err;
- 
- 	/* now need lock until setting vdev status as used */
- 
-@@ -363,7 +374,7 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
- 		spin_unlock(&vdev->ud.lock);
- 		spin_unlock_irqrestore(&vhci->lock, flags);
- 
--		sockfd_put(socket);
-+		usbip_unprepare_threads(&uti);
- 
- 		dev_err(dev, "port %d already used\n", rhport);
- 		/*
-@@ -381,20 +392,33 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
- 	vdev->devid         = devid;
- 	vdev->speed         = speed;
- 	vdev->ud.sockfd     = sockfd;
--	vdev->ud.tcp_socket = socket;
-+	vdev->ud.tcp_socket = uti.tcp_socket;
-+	vdev->ud.tcp_rx     = uti.tcp_rx;
-+	vdev->ud.tcp_tx     = uti.tcp_tx;
- 	vdev->ud.status     = VDEV_ST_NOTASSIGNED;
- 
- 	spin_unlock(&vdev->ud.lock);
- 	spin_unlock_irqrestore(&vhci->lock, flags);
- 	/* end the lock */
- 
--	vdev->ud.tcp_rx = kthread_get_run(vhci_rx_loop, &vdev->ud, "vhci_rx");
--	vdev->ud.tcp_tx = kthread_get_run(vhci_tx_loop, &vdev->ud, "vhci_tx");
-+	wake_up_process(vdev->ud.tcp_rx);
-+	wake_up_process(vdev->ud.tcp_tx);
- 
- 	rh_port_connect(vdev, speed);
- 
- 	return count;
- }
-+static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
-+			    const char *buf, size_t count)
-+{
-+	ssize_t ret = usbip_event_lock_killable();
-+
-+	if (ret)
-+		return ret;
-+	ret = __attach_store(dev, attr, buf, count);
-+	usbip_event_unlock();
-+	return ret;
-+}
- static DEVICE_ATTR_WO(attach);
- 
- #define MAX_STATUS_NAME 16
-diff --git a/drivers/usb/usbip/vudc_sysfs.c b/drivers/usb/usbip/vudc_sysfs.c
-index 100f680c572a..ff3cf225a4fa 100644
---- a/drivers/usb/usbip/vudc_sysfs.c
-+++ b/drivers/usb/usbip/vudc_sysfs.c
-@@ -90,14 +90,13 @@ static ssize_t dev_desc_read(struct file *file, struct kobject *kobj,
- }
- static BIN_ATTR_RO(dev_desc, sizeof(struct usb_device_descriptor));
- 
--static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *attr,
--		     const char *in, size_t count)
-+static ssize_t __usbip_sockfd_store(struct device *dev, struct device_attribute *attr,
-+				    const char *in, size_t count)
- {
- 	struct vudc *udc = (struct vudc *) dev_get_drvdata(dev);
- 	int rv;
- 	int sockfd = 0;
--	int err;
--	struct socket *socket;
-+	struct usbip_thread_info uti = { };
- 	unsigned long flags;
- 	int ret;
- 
-@@ -109,6 +108,14 @@ static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *a
- 		dev_err(dev, "no device");
- 		return -ENODEV;
- 	}
-+
-+	if (sockfd != -1) {
-+		ret = usbip_prepare_threads(&uti, &udc->ud, sockfd,
-+					    v_tx_loop, "vudc_tx", v_rx_loop, "vudc_rx");
-+		if (ret)
-+			return ret;
-+	}
-+
- 	spin_lock_irqsave(&udc->lock, flags);
- 	/* Don't export what we don't have */
- 	if (!udc->driver || !udc->pullup) {
-@@ -130,28 +137,17 @@ static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *a
- 			ret = -EINVAL;
- 			goto unlock_ud;
- 		}
--
--		socket = sockfd_lookup(sockfd, &err);
--		if (!socket) {
--			dev_err(dev, "failed to lookup sock");
--			ret = -EINVAL;
--			goto unlock_ud;
--		}
--
--		udc->ud.tcp_socket = socket;
--
-+		udc->ud.tcp_socket = uti.tcp_socket;
-+		udc->ud.tcp_rx = uti.tcp_rx;
-+		udc->ud.tcp_tx = uti.tcp_tx;
-+		udc->ud.status = SDEV_ST_USED;
- 		spin_unlock_irq(&udc->ud.lock);
- 		spin_unlock_irqrestore(&udc->lock, flags);
- 
--		udc->ud.tcp_rx = kthread_get_run(&v_rx_loop,
--						    &udc->ud, "vudc_rx");
--		udc->ud.tcp_tx = kthread_get_run(&v_tx_loop,
--						    &udc->ud, "vudc_tx");
-+		wake_up_process(udc->ud.tcp_rx);
-+		wake_up_process(udc->ud.tcp_tx);
- 
- 		spin_lock_irqsave(&udc->lock, flags);
--		spin_lock_irq(&udc->ud.lock);
--		udc->ud.status = SDEV_ST_USED;
--		spin_unlock_irq(&udc->ud.lock);
- 
- 		ktime_get_ts64(&udc->start_time);
- 		v_start_timer(udc);
-@@ -181,7 +177,19 @@ static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *a
- 	spin_unlock_irq(&udc->ud.lock);
- unlock:
- 	spin_unlock_irqrestore(&udc->lock, flags);
-+	if (uti.tcp_socket)
-+		usbip_unprepare_threads(&uti);
-+	return ret;
-+}
-+static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *attr,
-+				  const char *in, size_t count)
-+{
-+	ssize_t ret = usbip_event_lock_killable();
- 
-+	if (ret)
-+		return ret;
-+	ret = __usbip_sockfd_store(dev, attr, in, count);
-+	usbip_event_unlock();
- 	return ret;
- }
- static DEVICE_ATTR_WO(usbip_sockfd);
--- 
-2.18.4
-
+On 2/18/2021 9:46 PM, Christopher Morgan wrote:
+> I found this patch (a hack) and applied it to my local branch.=A0 For=20
+> whatever reason suspend/resume works now.=A0 I don=92t fully understand w=
+hy=20
+> though, but it looks like maybe it disconnects the device before=20
+> suspend/reconnects the device after suspend?
+>=20
+> Original Patch Found: dwc2 suspend fix =B7 valadaa48/linux@8548753=20
+> (github.com)=20
+> <https://urldefense.com/v3/__https://github.com/valadaa48/linux/commit/85=
+4875353930acbeed806b289e3933d38f436807__;!!A4F2R9G_pg!KPXHhAI2GMs2_WpEWgkxB=
+U-ZtW0qIckCagmXZwKSLxOuaSIar5CQtht4Z7i4F3rvvlKw7iUY$>
+>=20
+> My application against 5.10: Fix suspend issues for USB. =B7=20
+> macromorgan/odroid_go_advance_linux_android@f780117 (github.com)=20
+> <https://urldefense.com/v3/__https://github.com/macromorgan/odroid_go_adv=
+ance_linux_android/commit/f7801176f76bdb140b24605c9f19419a31c9d348__;!!A4F2=
+R9G_pg!KPXHhAI2GMs2_WpEWgkxBU-ZtW0qIckCagmXZwKSLxOuaSIar5CQtht4Z7i4F3rvvhjC=
+qmi5$>
+>=20
+> *From: *Christopher Morgan <mailto:macromorgan@hotmail.com>
+> *Sent: *Thursday, February 11, 2021 3:31 PM
+> *To: *Minas Harutyunyan <mailto:Minas.Harutyunyan@synopsys.com>;=20
+> linux-usb@vger.kernel.org <mailto:linux-usb@vger.kernel.org>
+> *Subject: *RE: dwc2 Resume From Suspend Devices Not Working
+>=20
