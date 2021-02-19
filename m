@@ -2,256 +2,596 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB28231F6B0
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Feb 2021 10:46:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B614231F6C3
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Feb 2021 10:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbhBSJp2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Feb 2021 04:45:28 -0500
-Received: from mga18.intel.com ([134.134.136.126]:7245 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229828AbhBSJpS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 19 Feb 2021 04:45:18 -0500
-IronPort-SDR: G3aNhRo9sXpN6TeXeyyO33zZ/74vPqXThSl/wl1HkIx+rhnzsPpgFdePPk0JKoAD7tzf1OOv5u
- mqx/bh27PngQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9899"; a="171469139"
-X-IronPort-AV: E=Sophos;i="5.81,189,1610438400"; 
-   d="scan'208";a="171469139"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2021 01:43:09 -0800
-IronPort-SDR: XSOZzK99CgwH2xX6xI6i4HtOwP13c7oD148TC/mWSBULLTwARE9vNehDMOFBst9hOaOklYpzbJ
- d+sou3uuKhOg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,189,1610438400"; 
-   d="scan'208";a="362898649"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga003.jf.intel.com with ESMTP; 19 Feb 2021 01:43:01 -0800
-Subject: Re: kworker takes 100% core after unplugging usb c hub
-To:     Yiyu Zhu <danielzeltar@gmail.com>
-Cc:     Greg KH <greg@kroah.com>, linux-usb@vger.kernel.org,
-        mathias.nyman@linux.intel.com
-References: <CAGv7gkgb12vGPvZcSE0aVOpu32zSgxaayYreLvWs+vJc5EkQrA@mail.gmail.com>
- <YCTS9I5xTVBDvwax@kroah.com>
- <CAGv7gkjoNt9gx_VPfEj=tauKAOcnOd+-2pCXyCoR=GPcHj7jxw@mail.gmail.com>
- <YCUI0h7qkY2PuJcT@kroah.com>
- <CAGv7gki7J1NVX3ti6Qhe9AFLp0JYRTRsT35zpDBTxxQ=te7-sQ@mail.gmail.com>
- <b4ae0847-23a2-c3e3-3ef2-17efdfc792ba@linux.intel.com>
- <CAGv7gkgLVTvBaGTUFd00daN0PBoqj2MbFk0dwnWKRL2odzD-8g@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <5d3c5b2d-4752-7253-66f3-945c06f8a980@linux.intel.com>
-Date:   Fri, 19 Feb 2021 11:44:37 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <CAGv7gkgLVTvBaGTUFd00daN0PBoqj2MbFk0dwnWKRL2odzD-8g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S230121AbhBSJtL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Feb 2021 04:49:11 -0500
+Received: from www262.sakura.ne.jp ([202.181.97.72]:59840 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229726AbhBSJs6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Feb 2021 04:48:58 -0500
+Received: from fsav109.sakura.ne.jp (fsav109.sakura.ne.jp [27.133.134.236])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 11J9lkvn094137;
+        Fri, 19 Feb 2021 18:47:46 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav109.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav109.sakura.ne.jp);
+ Fri, 19 Feb 2021 18:47:46 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav109.sakura.ne.jp)
+Received: from localhost.localdomain (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 11J9leER094116
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 19 Feb 2021 18:47:45 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+To:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Subject: [PATCH (repost)] usb: usbip: serialize attach/detach operations
+Date:   Fri, 19 Feb 2021 18:47:44 +0900
+Message-Id: <20210219094744.3577-1-penguin-kernel@I-love.SAKURA.ne.jp>
+X-Mailer: git-send-email 2.18.4
+In-Reply-To: <20210219003346.4404-1-penguin-kernel@I-love.SAKURA.ne.jp>
+References: <20210219003346.4404-1-penguin-kernel@I-love.SAKURA.ne.jp>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Yiyu Zhu
+syzbot is reporting an ERR_PTR(-EINTR) pointer dereference at
+vhci_shutdown_connection() [1], for kthread_create() became killable due
+to commit 786235eeba0e1e85 ("kthread: make kthread_create() killable").
 
-On 17.2.2021 10.50, Yiyu Zhu wrote:
-> Hi Mathias,
-> 
-> Hi
-> 
->>
->> Could you add usbcore dynamic debug, it should show more details about hub activity.
->>
->> mount -t debugfs none /sys/kernel/debug
->> echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
->>
-> Here are the dmesg after I enabled dynamic debug.
-> 
+When SIGKILLed while attach_store() is calling kthread_get_run(),
+ERR_PTR(-EINTR) is stored into vdev->ud.tcp_{rx,tx}, and then
+kthread_stop_put() is called on vdev->ud.tcp_{rx,tx} from
+vhci_shutdown_connection() because vdev->ud.tcp_{rx,tx} != NULL.
 
-...
+Prior to commit 9720b4bc76a83807 ("staging/usbip: convert to kthread"),
+"current" pointer is assigned to vdev->ud.tcp_{rx,tx} by usbip_thread()
+kernel thread, and hence vdev->ud.tcp_{rx,tx} != NULL means a valid task
+pointer. However, this patch does not make kthread_get_run() return NULL
+when kthread_create() failed, for this patch removes kthread_get_run() in
+order to fix the other bug described below.
 
-> (at hub disconnection)
-> [18848.819858] [drm] PCIE GART of 256M enabled (table at 0x000000F400000000).
-> [18848.999416] [drm] UVD and UVD ENC initialized successfully.
-> [18849.100370] [drm] VCE initialized successfully.
-> [18946.839352] usb 1-3: USB disconnect, device number 8
-> [18946.839373] usb 1-3.1: USB disconnect, device number 9
-> [18946.840644] usb 1-3.5: USB disconnect, device number 10
-> [18946.890865] r8152 4-2.1.3:1.0 enx00e04cb5877c: Tx status -71
-> [18946.916623] r8152 4-2.1.3:1.0 enx00e04cb5877c: Stop submitting
-> intr, status -71
-> [18947.068201] usb usb3-port2: over-current condition
-> [18947.604290] usb 4-2: USB disconnect, device number 2
-> [18947.604307] usb 4-2.1: USB disconnect, device number 3
-> [18947.604315] usb 4-2.1.3: USB disconnect, device number 4
-> [18947.604721] r8152 4-2.1.3:1.0 enx00e04cb5877c: Tx status -108
-> [18947.604748] r8152 4-2.1.3:1.0 enx00e04cb5877c: Tx status -108
-> [18947.604756] r8152 4-2.1.3:1.0 enx00e04cb5877c: Tx status -108
-> [18947.604763] r8152 4-2.1.3:1.0 enx00e04cb5877c: Tx status -108
-> [18947.685529] usb 4-2.1.4: USB disconnect, device number 5
-> [18948.304163] usb usb4-port2: over-current condition
-> 
+syzbot is also reporting a NULL pointer dereference at sock_sendmsg() [2],
+for lack of serialization between attach_store() and event_handler()
+causes vhci_shutdown_connection() to observe vdev->ud.tcp_tx == NULL while
+vdev->ud.tcp_socket != NULL. Please read the reference link for details of
+this race window.
 
-Hmm, I think something went wrong when enabling usbcore dynamic degug.
-I was expecting more hub messages.
-Is CONFIG_DYNAMIC_DEBUG set?
-Is this a snippet from console or dmesg? maybe some issues with log level
-(/proc/sys/kernel/printk)?
+Therefore, this patch does the following things in order to fix reported
+bugs and other possible bugs.
 
-The other cpu hogging worker was related to pm, maybe adding initcall_debug
-boot option to the kernel cmdline could reveal something. 
+(1) Handle kthread_create() failure (which fixes [1]) by grouping socket
+    lookup, kthread_create() and get_task_struct() into
+    usbip_prepare_threads() function.
 
->>
->> hub reports overcurrent condition, worth keeping in mind.
->>
-> This condition can actually persist through reboot. Which causes the
-> kworker to spawn immediately after boot.
-> 
->>
->> Is this xHC contoller in a Alpine Ridge/Titan Ridge/Maple Ridge based system
->> that has runtime PM enabled by default, and whole xHC controller
->> disappears from PCI bus when last device is disconnected?
->> (check with lspci -nn)
->>
-> It is an Alpine Ridge controller. Here is the `lspci -nn` output
-> 
-> 00:00.0 Host bridge [0600]: Intel Corporation Xeon E3-1200 v6/7th Gen
-> Core Processor Host Bridge/DRAM Registers [8086:5910] (rev 05)
-> 00:01.0 PCI bridge [0604]: Intel Corporation Xeon E3-1200 v5/E3-1500
-> v5/6th Gen Core Processor PCIe Controller (x16) [8086:1901] (rev 05)
-> 00:02.0 VGA compatible controller [0300]: Intel Corporation Device
-> [8086:591b] (rev 04)
-> 00:04.0 Signal processing controller [1180]: Intel Corporation Xeon
-> E3-1200 v5/E3-1500 v5/6th Gen Core Processor Thermal Subsystem
-> [8086:1903] (rev 05)
-> 00:13.0 Non-VGA unclassified device [0000]: Intel Corporation 100
-> Series/C230 Series Chipset Family Integrated Sensor Hub [8086:a135]
-> (rev 31)
-> 00:14.0 USB controller [0c03]: Intel Corporation 100 Series/C230
-> Series Chipset Family USB 3.0 xHCI Controller [8086:a12f] (rev 31)
-> 00:14.2 Signal processing controller [1180]: Intel Corporation 100
-> Series/C230 Series Chipset Family Thermal Subsystem [8086:a131] (rev
-> 31)
-> 00:15.0 Signal processing controller [1180]: Intel Corporation 100
-> Series/C230 Series Chipset Family Serial IO I2C Controller #0
-> [8086:a160] (rev 31)
-> 00:16.0 Communication controller [0780]: Intel Corporation 100
-> Series/C230 Series Chipset Family MEI Controller #1 [8086:a13a] (rev
-> 31)
-> 00:17.0 SATA controller [0106]: Intel Corporation HM170/QM170 Chipset
-> SATA Controller [AHCI Mode] [8086:a103] (rev 31)
-> 00:1c.0 PCI bridge [0604]: Intel Corporation 100 Series/C230 Series
-> Chipset Family PCI Express Root Port #1 [8086:a110] (rev f1)
-> 00:1c.4 PCI bridge [0604]: Intel Corporation 100 Series/C230 Series
-> Chipset Family PCI Express Root Port #5 [8086:a114] (rev f1)
-> 00:1c.5 PCI bridge [0604]: Intel Corporation 100 Series/C230 Series
-> Chipset Family PCI Express Root Port #6 [8086:a115] (rev f1)
-> 00:1d.0 PCI bridge [0604]: Intel Corporation 100 Series/C230 Series
-> Chipset Family PCI Express Root Port #9 [8086:a118] (rev f1)
-> 00:1e.0 Signal processing controller [1180]: Intel Corporation 100
-> Series/C230 Series Chipset Family Serial IO UART #0 [8086:a127] (rev
-> 31)
-> 00:1e.2 Signal processing controller [1180]: Intel Corporation 100
-> Series/C230 Series Chipset Family Serial IO GSPI #0 [8086:a129] (rev
-> 31)
-> 00:1f.0 ISA bridge [0601]: Intel Corporation HM175 Chipset LPC/eSPI
-> Controller [8086:a152] (rev 31)
-> 00:1f.2 Memory controller [0580]: Intel Corporation 100 Series/C230
-> Series Chipset Family Power Management Controller [8086:a121] (rev 31)
-> 00:1f.3 Audio device [0403]: Intel Corporation CM238 HD Audio
-> Controller [8086:a171] (rev 31)
-> 00:1f.4 SMBus [0c05]: Intel Corporation 100 Series/C230 Series Chipset
-> Family SMBus [8086:a123] (rev 31)
-> 01:00.0 Display controller [0380]: Advanced Micro Devices, Inc.
-> [AMD/ATI] Polaris 22 [Radeon RX Vega M GL] [1002:694e] (rev c0)
-> 02:00.0 PCI bridge [0604]: Intel Corporation JHL6540 Thunderbolt 3
-> Bridge (C step) [Alpine Ridge 4C 2016] [8086:15d3] (rev 02)
-> 03:00.0 PCI bridge [0604]: Intel Corporation JHL6540 Thunderbolt 3
-> Bridge (C step) [Alpine Ridge 4C 2016] [8086:15d3] (rev 02)
-> 03:01.0 PCI bridge [0604]: Intel Corporation JHL6540 Thunderbolt 3
-> Bridge (C step) [Alpine Ridge 4C 2016] [8086:15d3] (rev 02)
-> 03:02.0 PCI bridge [0604]: Intel Corporation JHL6540 Thunderbolt 3
-> Bridge (C step) [Alpine Ridge 4C 2016] [8086:15d3] (rev 02)
-> 03:04.0 PCI bridge [0604]: Intel Corporation JHL6540 Thunderbolt 3
-> Bridge (C step) [Alpine Ridge 4C 2016] [8086:15d3] (rev 02)
-> 38:00.0 USB controller [0c03]: Intel Corporation JHL6540 Thunderbolt 3
-> USB Controller (C step) [Alpine Ridge 4C 2016] [8086:15d4] (rev 02)
-> 6d:00.0 Unassigned class [ff00]: Realtek Semiconductor Co., Ltd.
-> RTS525A PCI Express Card Reader [10ec:525a] (rev 01)
-> 6e:00.0 Network controller [0280]: Intel Corporation Wireless 8265 /
-> 8275 [8086:24fd] (rev 78)
-> 6f:00.0 Non-Volatile memory controller [0108]: Sandisk Corp Device [15b7:5002]
-> 
-> One thing I notice is that when the hub is disconnected, the USB
-> controller is still there.
-> It will remain there until I plug and unplug another device. After
-> that, the following section will be gone.
-> 
-> 02:00.0 PCI bridge [0604]: Intel Corporation JHL6540 Thunderbolt 3
-> Bridge (C step) [Alpine Ridge 4C 2016] [8086:15d3] (rev 02)
-> 03:00.0 PCI bridge [0604]: Intel Corporation JHL6540 Thunderbolt 3
-> Bridge (C step) [Alpine Ridge 4C 2016] [8086:15d3] (rev 02)
-> 03:01.0 PCI bridge [0604]: Intel Corporation JHL6540 Thunderbolt 3
-> Bridge (C step) [Alpine Ridge 4C 2016] [8086:15d3] (rev 02)
-> 03:02.0 PCI bridge [0604]: Intel Corporation JHL6540 Thunderbolt 3
-> Bridge (C step) [Alpine Ridge 4C 2016] [8086:15d3] (rev 02)
-> 03:04.0 PCI bridge [0604]: Intel Corporation JHL6540 Thunderbolt 3
-> Bridge (C step) [Alpine Ridge 4C 2016] [8086:15d3] (rev 02)
-> 38:00.0 USB controller [0c03]: Intel Corporation JHL6540 Thunderbolt 3
-> USB Controller (C step) [Alpine Ridge 4C 2016] [8086:15d4] (rev 02)
-> 
->> Does it help if another USB device is connected to a different
->> roothub port of this xHC while disconnecting the hub?
->> Or does just disabling runtime PM for this xhci help?
->>
-> I tried with another usb device on the root hub port. But it does not help.
-> I am not sure about how to disable runtime PM. I tried to use `echo on
->> .../0000:38:00.0/power/control` (its value was auto). But it also
-> does not help.
-> 
-> Thanks
-> Yiyu Zhu
-> 
+(2) Serialize usbip_sockfd_store(), detach_store(), attach_store() and
+    ud->eh_ops.{shutdown,reset,unusable}() operations using
+    usbip_event_mutex mutex (which fixes [2]). Introducing such large
+    mutex should be safe because ud->tcp_{tx,rx} must not wait for
+    event_handler() to flush because event_handler() is processed by a
+    singlethreaded workqueue.
 
-Ok, thanks for the info
--Mathias
+(3) Add SOCK_STREAM check into usbip_prepare_threads(), for current code
+    is not verifying that a file descriptor passed is actually a stream
+    socket. If the file descriptor passed was a SOCK_DGRAM socket,
+    sock_recvmsg() can't detect end of stream.
+
+(4) Don't perform ud->tcp_socket = NULL in vhci_device_reset().
+    Since ud->tcp_{tx,rx} depend on ud->tcp_socket != NULL whereas
+    ud->tcp_socket and ud->tcp_{tx,rx} are assigned at the same time,
+    it is never safe to reset ud->tcp_socket from vhci_device_reset()
+    without calling kthread_stop_put() from vhci_shutdown_connection().
+
+(5) usbip_sockfd_store() must perform
+
+      if ({sdev,udc}->ud.status != SDEV_ST_AVAILABLE) {
+        /* misc assignments for attach operation */
+        {sdev,udc}->ud.status = SDEV_ST_USED;
+      }
+
+    atomically, or multiple ud->tcp_{tx,rx} are created (which will later
+    cause a crash like [2]) and refcount on ud->tcp_socket is leaked when
+    usbip_sockfd_store() is concurrently called.
+
+[1] https://syzkaller.appspot.com/bug?extid=a93fba6d384346a761e3
+[2] https://syzkaller.appspot.com/bug?extid=95ce4b142579611ef0a9
+
+Reported-and-tested-by: syzbot <syzbot+a93fba6d384346a761e3@syzkaller.appspotmail.com>
+Reported-by: syzbot <syzbot+bf1a360e305ee719e364@syzkaller.appspotmail.com>
+Reported-by: syzbot <syzbot+95ce4b142579611ef0a9@syzkaller.appspotmail.com>
+References: https://lkml.kernel.org/r/676d4518-0faa-9fab-15db-0db8d216d7fb@i-love.sakura.ne.jp
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Fixes: 9720b4bc76a83807 ("staging/usbip: convert to kthread")
+---
+ drivers/usb/usbip/stub_dev.c     | 56 ++++++++++++++++++--------------
+ drivers/usb/usbip/usbip_common.c | 55 +++++++++++++++++++++++++++++++
+ drivers/usb/usbip/usbip_common.h | 25 +++++++-------
+ drivers/usb/usbip/usbip_event.c  | 15 +++++++++
+ drivers/usb/usbip/vhci_hcd.c     |  6 ----
+ drivers/usb/usbip/vhci_sysfs.c   | 50 ++++++++++++++++++++--------
+ drivers/usb/usbip/vudc_sysfs.c   | 50 ++++++++++++++++------------
+ 7 files changed, 181 insertions(+), 76 deletions(-)
+
+diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
+index 2305d425e6c9..f63a22562ead 100644
+--- a/drivers/usb/usbip/stub_dev.c
++++ b/drivers/usb/usbip/stub_dev.c
+@@ -39,12 +39,11 @@ static DEVICE_ATTR_RO(usbip_status);
+  * is used to transfer usbip requests by kernel threads. -1 is a magic number
+  * by which usbip connection is finished.
+  */
+-static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *attr,
+-			    const char *buf, size_t count)
++static ssize_t __usbip_sockfd_store(struct device *dev, struct device_attribute *attr,
++				    const char *buf, size_t count)
+ {
+ 	struct stub_device *sdev = dev_get_drvdata(dev);
+ 	int sockfd = 0;
+-	struct socket *socket;
+ 	int rv;
+ 
+ 	if (!sdev) {
+@@ -57,7 +56,12 @@ static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *a
+ 		return -EINVAL;
+ 
+ 	if (sockfd != -1) {
+-		int err;
++		struct usbip_thread_info uti;
++		int err = usbip_prepare_threads(&uti, &sdev->ud, sockfd,
++						stub_tx_loop, "stub_tx", stub_rx_loop, "stub_rx");
++
++		if (err)
++			return err;
+ 
+ 		dev_info(dev, "stub up\n");
+ 
+@@ -65,44 +69,46 @@ static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *a
+ 
+ 		if (sdev->ud.status != SDEV_ST_AVAILABLE) {
+ 			dev_err(dev, "not ready\n");
+-			goto err;
++			spin_unlock_irq(&sdev->ud.lock);
++			usbip_unprepare_threads(&uti);
++			return -EINVAL;
+ 		}
+ 
+-		socket = sockfd_lookup(sockfd, &err);
+-		if (!socket)
+-			goto err;
+-
+-		sdev->ud.tcp_socket = socket;
++		sdev->ud.tcp_socket = uti.tcp_socket;
+ 		sdev->ud.sockfd = sockfd;
+-
+-		spin_unlock_irq(&sdev->ud.lock);
+-
+-		sdev->ud.tcp_rx = kthread_get_run(stub_rx_loop, &sdev->ud,
+-						  "stub_rx");
+-		sdev->ud.tcp_tx = kthread_get_run(stub_tx_loop, &sdev->ud,
+-						  "stub_tx");
+-
+-		spin_lock_irq(&sdev->ud.lock);
++		sdev->ud.tcp_rx = uti.tcp_rx;
++		sdev->ud.tcp_tx = uti.tcp_tx;
+ 		sdev->ud.status = SDEV_ST_USED;
+ 		spin_unlock_irq(&sdev->ud.lock);
+ 
++		wake_up_process(sdev->ud.tcp_rx);
++		wake_up_process(sdev->ud.tcp_tx);
+ 	} else {
+ 		dev_info(dev, "stub down\n");
+ 
+ 		spin_lock_irq(&sdev->ud.lock);
+-		if (sdev->ud.status != SDEV_ST_USED)
+-			goto err;
+-
++		if (sdev->ud.status != SDEV_ST_USED) {
++			spin_unlock_irq(&sdev->ud.lock);
++			return -EINVAL;
++		}
+ 		spin_unlock_irq(&sdev->ud.lock);
+ 
+ 		usbip_event_add(&sdev->ud, SDEV_EVENT_DOWN);
+ 	}
+ 
+ 	return count;
++}
+ 
+-err:
+-	spin_unlock_irq(&sdev->ud.lock);
+-	return -EINVAL;
++static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *attr,
++				  const char *buf, size_t count)
++{
++	ssize_t ret = usbip_event_lock_killable();
++
++	if (ret)
++		return ret;
++	ret = __usbip_sockfd_store(dev, attr, buf, count);
++	usbip_event_unlock();
++	return ret;
+ }
+ static DEVICE_ATTR_WO(usbip_sockfd);
+ 
+diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
+index 2ab99244bc31..88d893063001 100644
+--- a/drivers/usb/usbip/usbip_common.c
++++ b/drivers/usb/usbip/usbip_common.c
+@@ -748,6 +748,61 @@ int usbip_recv_xbuff(struct usbip_device *ud, struct urb *urb)
+ }
+ EXPORT_SYMBOL_GPL(usbip_recv_xbuff);
+ 
++int usbip_prepare_threads(struct usbip_thread_info *uti,
++			  struct usbip_device *ud, int sockfd,
++			  int (*tx_fn)(void *data), const char *tx_name,
++			  int (*rx_fn)(void *data), const char *rx_name)
++{
++	int err;
++	struct socket *socket;
++	struct task_struct *tx;
++	struct task_struct *rx;
++
++	/* Extract socket from fd. */
++	socket = sockfd_lookup(sockfd, &err);
++	if (!socket)
++		return -EINVAL;
++	/* Verify that this is a stream socket. */
++	if (socket->type != SOCK_STREAM) {
++		err = -EINVAL;
++		goto out_socket;
++	}
++	/* Create threads for this socket. */
++	rx = kthread_create(rx_fn, ud, rx_name);
++	if (IS_ERR(rx)) {
++		err = PTR_ERR(rx);
++		goto out_socket;
++	}
++	tx = kthread_create(tx_fn, ud, tx_name);
++	if (IS_ERR(tx)) {
++		err = PTR_ERR(rx);
++		goto out_rx;
++	}
++	uti->tcp_socket = socket;
++	get_task_struct(rx);
++	uti->tcp_rx = rx;
++	get_task_struct(tx);
++	uti->tcp_tx = tx;
++	return 0;
++ out_rx:
++	kthread_stop(rx);
++ out_socket:
++	sockfd_put(socket);
++	return err;
++}
++EXPORT_SYMBOL_GPL(usbip_prepare_threads);
++
++void usbip_unprepare_threads(struct usbip_thread_info *uti)
++{
++	kthread_stop_put(uti->tcp_tx);
++	uti->tcp_tx = NULL;
++	kthread_stop_put(uti->tcp_rx);
++	uti->tcp_rx = NULL;
++	sockfd_put(uti->tcp_socket);
++	uti->tcp_socket = NULL;
++}
++EXPORT_SYMBOL_GPL(usbip_unprepare_threads);
++
+ static int __init usbip_core_init(void)
+ {
+ 	return usbip_init_eh();
+diff --git a/drivers/usb/usbip/usbip_common.h b/drivers/usb/usbip/usbip_common.h
+index 8be857a4fa13..c5e8e61ddf91 100644
+--- a/drivers/usb/usbip/usbip_common.h
++++ b/drivers/usb/usbip/usbip_common.h
+@@ -279,17 +279,6 @@ struct usbip_device {
+ 	} eh_ops;
+ };
+ 
+-#define kthread_get_run(threadfn, data, namefmt, ...)			   \
+-({									   \
+-	struct task_struct *__k						   \
+-		= kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+-	if (!IS_ERR(__k)) {						   \
+-		get_task_struct(__k);					   \
+-		wake_up_process(__k);					   \
+-	}								   \
+-	__k;								   \
+-})
+-
+ #define kthread_stop_put(k)		\
+ 	do {				\
+ 		kthread_stop(k);	\
+@@ -309,6 +298,18 @@ void usbip_header_correct_endian(struct usbip_header *pdu, int send);
+ struct usbip_iso_packet_descriptor*
+ usbip_alloc_iso_desc_pdu(struct urb *urb, ssize_t *bufflen);
+ 
++struct usbip_thread_info {
++	struct socket *tcp_socket;
++	struct task_struct *tcp_tx;
++	struct task_struct *tcp_rx;
++};
++
++int usbip_prepare_threads(struct usbip_thread_info *uti,
++			  struct usbip_device *ud, int sockfd,
++			  int (*tx_fn)(void *data), const char *tx_name,
++			  int (*rx_fn)(void *data), const char *rx_name);
++void usbip_unprepare_threads(struct usbip_thread_info *uti);
++
+ /* some members of urb must be substituted before. */
+ int usbip_recv_iso(struct usbip_device *ud, struct urb *urb);
+ void usbip_pad_iso(struct usbip_device *ud, struct urb *urb);
+@@ -322,6 +323,8 @@ void usbip_stop_eh(struct usbip_device *ud);
+ void usbip_event_add(struct usbip_device *ud, unsigned long event);
+ int usbip_event_happened(struct usbip_device *ud);
+ int usbip_in_eh(struct task_struct *task);
++int usbip_event_lock_killable(void);
++void usbip_event_unlock(void);
+ 
+ static inline int interface_to_busnum(struct usb_interface *interface)
+ {
+diff --git a/drivers/usb/usbip/usbip_event.c b/drivers/usb/usbip/usbip_event.c
+index 5d88917c9631..e05b858f346d 100644
+--- a/drivers/usb/usbip/usbip_event.c
++++ b/drivers/usb/usbip/usbip_event.c
+@@ -58,6 +58,19 @@ static struct usbip_device *get_event(void)
+ }
+ 
+ static struct task_struct *worker_context;
++static DEFINE_MUTEX(usbip_event_mutex);
++
++int usbip_event_lock_killable(void)
++{
++	return mutex_lock_killable(&usbip_event_mutex);
++}
++EXPORT_SYMBOL_GPL(usbip_event_lock_killable);
++
++void usbip_event_unlock(void)
++{
++	mutex_unlock(&usbip_event_mutex);
++}
++EXPORT_SYMBOL_GPL(usbip_event_unlock);
+ 
+ static void event_handler(struct work_struct *work)
+ {
+@@ -68,6 +81,7 @@ static void event_handler(struct work_struct *work)
+ 	}
+ 
+ 	while ((ud = get_event()) != NULL) {
++		mutex_lock(&usbip_event_mutex);
+ 		usbip_dbg_eh("pending event %lx\n", ud->event);
+ 
+ 		/*
+@@ -91,6 +105,7 @@ static void event_handler(struct work_struct *work)
+ 			unset_event(ud, USBIP_EH_UNUSABLE);
+ 		}
+ 
++		mutex_unlock(&usbip_event_mutex);
+ 		wake_up(&ud->eh_waitq);
+ 	}
+ }
+diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+index 3209b5ddd30c..326182bf062d 100644
+--- a/drivers/usb/usbip/vhci_hcd.c
++++ b/drivers/usb/usbip/vhci_hcd.c
+@@ -1072,12 +1072,6 @@ static void vhci_device_reset(struct usbip_device *ud)
+ 
+ 	usb_put_dev(vdev->udev);
+ 	vdev->udev = NULL;
+-
+-	if (ud->tcp_socket) {
+-		sockfd_put(ud->tcp_socket);
+-		ud->tcp_socket = NULL;
+-		ud->sockfd = -1;
+-	}
+ 	ud->status = VDEV_ST_NULL;
+ 
+ 	spin_unlock_irqrestore(&ud->lock, flags);
+diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
+index be37aec250c2..4d7afd1bf890 100644
+--- a/drivers/usb/usbip/vhci_sysfs.c
++++ b/drivers/usb/usbip/vhci_sysfs.c
+@@ -225,8 +225,8 @@ static int valid_port(__u32 *pdev_nr, __u32 *rhport)
+ 	return 1;
+ }
+ 
+-static ssize_t detach_store(struct device *dev, struct device_attribute *attr,
+-			    const char *buf, size_t count)
++static ssize_t __detach_store(struct device *dev, struct device_attribute *attr,
++			      const char *buf, size_t count)
+ {
+ 	__u32 port = 0, pdev_nr = 0, rhport = 0;
+ 	struct usb_hcd *hcd;
+@@ -263,6 +263,17 @@ static ssize_t detach_store(struct device *dev, struct device_attribute *attr,
+ 
+ 	return count;
+ }
++static ssize_t detach_store(struct device *dev, struct device_attribute *attr,
++			    const char *buf, size_t count)
++{
++	ssize_t ret = usbip_event_lock_killable();
++
++	if (ret)
++		return ret;
++	ret = __detach_store(dev, attr, buf, count);
++	usbip_event_unlock();
++	return ret;
++}
+ static DEVICE_ATTR_WO(detach);
+ 
+ static int valid_args(__u32 *pdev_nr, __u32 *rhport,
+@@ -300,10 +311,10 @@ static int valid_args(__u32 *pdev_nr, __u32 *rhport,
+  *
+  * write() returns 0 on success, else negative errno.
+  */
+-static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
+-			    const char *buf, size_t count)
++static ssize_t __attach_store(struct device *dev, struct device_attribute *attr,
++			      const char *buf, size_t count)
+ {
+-	struct socket *socket;
++	struct usbip_thread_info uti;
+ 	int sockfd = 0;
+ 	__u32 port = 0, pdev_nr = 0, rhport = 0, devid = 0, speed = 0;
+ 	struct usb_hcd *hcd;
+@@ -347,10 +358,10 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
+ 	else
+ 		vdev = &vhci->vhci_hcd_hs->vdev[rhport];
+ 
+-	/* Extract socket from fd. */
+-	socket = sockfd_lookup(sockfd, &err);
+-	if (!socket)
+-		return -EINVAL;
++	err = usbip_prepare_threads(&uti, &vdev->ud, sockfd,
++				    vhci_tx_loop, "vhci_tx", vhci_rx_loop, "vhci_rx");
++	if (err)
++		return err;
+ 
+ 	/* now need lock until setting vdev status as used */
+ 
+@@ -363,7 +374,7 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
+ 		spin_unlock(&vdev->ud.lock);
+ 		spin_unlock_irqrestore(&vhci->lock, flags);
+ 
+-		sockfd_put(socket);
++		usbip_unprepare_threads(&uti);
+ 
+ 		dev_err(dev, "port %d already used\n", rhport);
+ 		/*
+@@ -381,20 +392,33 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
+ 	vdev->devid         = devid;
+ 	vdev->speed         = speed;
+ 	vdev->ud.sockfd     = sockfd;
+-	vdev->ud.tcp_socket = socket;
++	vdev->ud.tcp_socket = uti.tcp_socket;
++	vdev->ud.tcp_rx     = uti.tcp_rx;
++	vdev->ud.tcp_tx     = uti.tcp_tx;
+ 	vdev->ud.status     = VDEV_ST_NOTASSIGNED;
+ 
+ 	spin_unlock(&vdev->ud.lock);
+ 	spin_unlock_irqrestore(&vhci->lock, flags);
+ 	/* end the lock */
+ 
+-	vdev->ud.tcp_rx = kthread_get_run(vhci_rx_loop, &vdev->ud, "vhci_rx");
+-	vdev->ud.tcp_tx = kthread_get_run(vhci_tx_loop, &vdev->ud, "vhci_tx");
++	wake_up_process(vdev->ud.tcp_rx);
++	wake_up_process(vdev->ud.tcp_tx);
+ 
+ 	rh_port_connect(vdev, speed);
+ 
+ 	return count;
+ }
++static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
++			    const char *buf, size_t count)
++{
++	ssize_t ret = usbip_event_lock_killable();
++
++	if (ret)
++		return ret;
++	ret = __attach_store(dev, attr, buf, count);
++	usbip_event_unlock();
++	return ret;
++}
+ static DEVICE_ATTR_WO(attach);
+ 
+ #define MAX_STATUS_NAME 16
+diff --git a/drivers/usb/usbip/vudc_sysfs.c b/drivers/usb/usbip/vudc_sysfs.c
+index 100f680c572a..ff3cf225a4fa 100644
+--- a/drivers/usb/usbip/vudc_sysfs.c
++++ b/drivers/usb/usbip/vudc_sysfs.c
+@@ -90,14 +90,13 @@ static ssize_t dev_desc_read(struct file *file, struct kobject *kobj,
+ }
+ static BIN_ATTR_RO(dev_desc, sizeof(struct usb_device_descriptor));
+ 
+-static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *attr,
+-		     const char *in, size_t count)
++static ssize_t __usbip_sockfd_store(struct device *dev, struct device_attribute *attr,
++				    const char *in, size_t count)
+ {
+ 	struct vudc *udc = (struct vudc *) dev_get_drvdata(dev);
+ 	int rv;
+ 	int sockfd = 0;
+-	int err;
+-	struct socket *socket;
++	struct usbip_thread_info uti = { };
+ 	unsigned long flags;
+ 	int ret;
+ 
+@@ -109,6 +108,14 @@ static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *a
+ 		dev_err(dev, "no device");
+ 		return -ENODEV;
+ 	}
++
++	if (sockfd != -1) {
++		ret = usbip_prepare_threads(&uti, &udc->ud, sockfd,
++					    v_tx_loop, "vudc_tx", v_rx_loop, "vudc_rx");
++		if (ret)
++			return ret;
++	}
++
+ 	spin_lock_irqsave(&udc->lock, flags);
+ 	/* Don't export what we don't have */
+ 	if (!udc->driver || !udc->pullup) {
+@@ -130,28 +137,17 @@ static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *a
+ 			ret = -EINVAL;
+ 			goto unlock_ud;
+ 		}
+-
+-		socket = sockfd_lookup(sockfd, &err);
+-		if (!socket) {
+-			dev_err(dev, "failed to lookup sock");
+-			ret = -EINVAL;
+-			goto unlock_ud;
+-		}
+-
+-		udc->ud.tcp_socket = socket;
+-
++		udc->ud.tcp_socket = uti.tcp_socket;
++		udc->ud.tcp_rx = uti.tcp_rx;
++		udc->ud.tcp_tx = uti.tcp_tx;
++		udc->ud.status = SDEV_ST_USED;
+ 		spin_unlock_irq(&udc->ud.lock);
+ 		spin_unlock_irqrestore(&udc->lock, flags);
+ 
+-		udc->ud.tcp_rx = kthread_get_run(&v_rx_loop,
+-						    &udc->ud, "vudc_rx");
+-		udc->ud.tcp_tx = kthread_get_run(&v_tx_loop,
+-						    &udc->ud, "vudc_tx");
++		wake_up_process(udc->ud.tcp_rx);
++		wake_up_process(udc->ud.tcp_tx);
+ 
+ 		spin_lock_irqsave(&udc->lock, flags);
+-		spin_lock_irq(&udc->ud.lock);
+-		udc->ud.status = SDEV_ST_USED;
+-		spin_unlock_irq(&udc->ud.lock);
+ 
+ 		ktime_get_ts64(&udc->start_time);
+ 		v_start_timer(udc);
+@@ -181,7 +177,19 @@ static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *a
+ 	spin_unlock_irq(&udc->ud.lock);
+ unlock:
+ 	spin_unlock_irqrestore(&udc->lock, flags);
++	if (uti.tcp_socket)
++		usbip_unprepare_threads(&uti);
++	return ret;
++}
++static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *attr,
++				  const char *in, size_t count)
++{
++	ssize_t ret = usbip_event_lock_killable();
+ 
++	if (ret)
++		return ret;
++	ret = __usbip_sockfd_store(dev, attr, in, count);
++	usbip_event_unlock();
+ 	return ret;
+ }
+ static DEVICE_ATTR_WO(usbip_sockfd);
+-- 
+2.18.4
+
