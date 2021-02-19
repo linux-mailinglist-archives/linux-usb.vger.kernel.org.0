@@ -2,45 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 652F631F871
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Feb 2021 12:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0366931F952
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Feb 2021 13:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbhBSLa0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Feb 2021 06:30:26 -0500
-Received: from mail.jvpinto.com ([65.49.11.60]:2198 "EHLO mail.JVPinto.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230264AbhBSLaR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 19 Feb 2021 06:30:17 -0500
-Received: from RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) by
- RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) with Microsoft SMTP Server
- (TLS) id 15.0.1497.2; Fri, 19 Feb 2021 03:28:26 -0800
-Received: from User (40.74.78.211) by RW-EXC1.JVPinto.com (172.32.1.13) with
- Microsoft SMTP Server id 15.0.1497.2 via Frontend Transport; Fri, 19 Feb 2021
- 03:28:12 -0800
-Reply-To: <ms.reem@yandex.com>
-From:   "Ms. Reem" <johnpinto@jvpinto.com>
-Subject: Re:waiting on you
-Date:   Fri, 19 Feb 2021 11:28:25 +0000
+        id S230223AbhBSMSQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Feb 2021 07:18:16 -0500
+Received: from asav21.altibox.net ([109.247.116.8]:50372 "EHLO
+        asav21.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230170AbhBSMSN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Feb 2021 07:18:13 -0500
+Received: from localhost.localdomain (unknown [81.166.168.211])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: noralf.tronnes@ebnett.no)
+        by asav21.altibox.net (Postfix) with ESMTPSA id 6E45680173;
+        Fri, 19 Feb 2021 13:17:08 +0100 (CET)
+From:   =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
+To:     dri-devel@lists.freedesktop.org
+Cc:     linux-usb@vger.kernel.org, sam@ravnborg.org, peter@stuge.se,
+        lkundrak@v3.sk, markus@raatikainen.cc, pontus.fuchs@gmail.com,
+        hudson@trmm.net, th020394@gmail.com,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
+Subject: [PATCH v6 0/3] GUD USB Display driver
+Date:   Fri, 19 Feb 2021 13:16:59 +0100
+Message-Id: <20210219121702.50964-1-noralf@tronnes.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <e9afaca6b240467db47e8bb605374750@RW-EXC1.JVPinto.com>
-To:     Undisclosed recipients:;
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=Kb38TzQD c=1 sm=1 tr=0
+        a=OYZzhG0JTxDrWp/F2OJbnw==:117 a=OYZzhG0JTxDrWp/F2OJbnw==:17
+        a=IkcTkHD0fZMA:10 a=M51BFTxLslgA:10 a=gAmX6pxEAAAA:20
+        a=hV_BJ6Dg7UyOQLaYyLEA:9 a=QEXdDO2ut3YA:10 a=7zwkRhCwzGnCyznlyk9i:22
+        a=Z5ABNNGmrOfJ6cZ5bIyy:22 a=jd6J4Gguk5HxikPWLKER:22
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello, 
+Hi,
 
-My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state and Petroleum" also "Minister of State for International Cooperation" in UAE. 
+A while back I had the idea to turn a Raspberry Pi Zero into a $5
+USB to HDMI/SDTV/DPI display adapter.
 
-I write to you on behalf of my other "three (3) colleagues" who has approved me to solicit for your "partnership in claiming of {us$47=Million}" from a Financial Home in Cambodia on their behalf and for our "Mutual Benefits". The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas deal with Cambodian/Vietnam Government within 2013/2014, however, we don't want our government to know about the fund. 
+The protocol is open so people are free to make displays implementing it and
+use this driver, all that's needed is to add a USB vid:pid to the driver for
+the display.
 
-If this proposal interests you, let me know, by sending me an email and I will send to you detailed information on how this business would be successfully transacted. Be informed that nobody knows about the secret of this fund except us, and we know how to carry out the entire transaction. So I am compelled to ask, that you will stand on our behalf and receive this fund into any account that is solely controlled by you. We will compensate you with 15% of the total amount involved as gratification for being our partner in this transaction. Reply to: ms.reem@yandex.com
+See the wiki[1] for more information and images for the Raspberry Pi Zero/4.
 
-Regards,
-Ms. Reem
+Changes in this version:
+- Use obj-y in Makefile (Peter)
+- Fix missing le32_to_cpu() when using GUD_DISPLAY_MAGIC (Peter)
+- Set initial brightness on backlight device
+
+
+Noralf.
+
+[1] https://github.com/notro/gud/wiki
+
+
+Noralf Trønnes (3):
+  drm/uapi: Add USB connector type
+  drm/probe-helper: Check epoch counter in output_poll_execute()
+  drm: Add GUD USB Display driver
+
+ MAINTAINERS                         |   8 +
+ drivers/gpu/drm/Kconfig             |   2 +
+ drivers/gpu/drm/Makefile            |   1 +
+ drivers/gpu/drm/drm_connector.c     |   1 +
+ drivers/gpu/drm/drm_probe_helper.c  |   7 +-
+ drivers/gpu/drm/gud/Kconfig         |  14 +
+ drivers/gpu/drm/gud/Makefile        |   4 +
+ drivers/gpu/drm/gud/gud_connector.c | 738 ++++++++++++++++++++++++++++
+ drivers/gpu/drm/gud/gud_drv.c       | 625 +++++++++++++++++++++++
+ drivers/gpu/drm/gud/gud_internal.h  | 149 ++++++
+ drivers/gpu/drm/gud/gud_pipe.c      | 475 ++++++++++++++++++
+ include/drm/gud.h                   | 356 ++++++++++++++
+ include/uapi/drm/drm_mode.h         |   1 +
+ 13 files changed, 2380 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/gpu/drm/gud/Kconfig
+ create mode 100644 drivers/gpu/drm/gud/Makefile
+ create mode 100644 drivers/gpu/drm/gud/gud_connector.c
+ create mode 100644 drivers/gpu/drm/gud/gud_drv.c
+ create mode 100644 drivers/gpu/drm/gud/gud_internal.h
+ create mode 100644 drivers/gpu/drm/gud/gud_pipe.c
+ create mode 100644 include/drm/gud.h
+
+-- 
+2.23.0
+
