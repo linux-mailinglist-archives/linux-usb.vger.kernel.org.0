@@ -2,100 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C16320262
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Feb 2021 02:12:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4C7320445
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Feb 2021 08:00:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbhBTBK4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Feb 2021 20:10:56 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:64391 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbhBTBKz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Feb 2021 20:10:55 -0500
-Received: from fsav403.sakura.ne.jp (fsav403.sakura.ne.jp [133.242.250.102])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 11K1A3pn054545;
-        Sat, 20 Feb 2021 10:10:03 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav403.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav403.sakura.ne.jp);
- Sat, 20 Feb 2021 10:10:03 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav403.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 11K1A2p6054428
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 20 Feb 2021 10:10:03 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Subject: Re: [PATCH v2] usb: usbip: serialize attach/detach operations
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
+        id S229771AbhBTG7r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 20 Feb 2021 01:59:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58336 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229667AbhBTG7m (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 20 Feb 2021 01:59:42 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2058264EB4;
+        Sat, 20 Feb 2021 06:58:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1613804336;
+        bh=W1cYIHNaXh/nr20qqfSDTfd2Iv4fCjT8Ss8/4lE3VYs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KZdXA18y/2OWnEKXxLWXpb5jSa1YHTvtdYLj6n+4diBQd/bxBiubSY6eL4+mcGfsU
+         eZuVh60YqLRnMqVNf7EGSi69oAr8wxc+2EwP/TMC6eMeReYVkIm95vcsbQsxl26APE
+         LmNvXe/TlxHiOTdvL/8Bna44ewttdgJB2R6CqmoU=
+Date:   Sat, 20 Feb 2021 07:58:53 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
         Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: usbip: serialize attach/detach operations
+Message-ID: <YDCzLfhawx4u28dd@kroah.com>
 References: <20210219094744.3577-1-penguin-kernel@I-love.SAKURA.ne.jp>
  <20210219150832.4701-1-penguin-kernel@I-love.SAKURA.ne.jp>
  <YC/fF0c7PA3ndTPv@kroah.com>
  <68fe3981-27d2-1f8d-17c6-9cb773382e66@linuxfoundation.org>
-Message-ID: <f8110365-767d-6aa4-ff9e-3ab8380c0919@i-love.sakura.ne.jp>
-Date:   Sat, 20 Feb 2021 10:10:03 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+ <f8110365-767d-6aa4-ff9e-3ab8380c0919@i-love.sakura.ne.jp>
 MIME-Version: 1.0
-In-Reply-To: <68fe3981-27d2-1f8d-17c6-9cb773382e66@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f8110365-767d-6aa4-ff9e-3ab8380c0919@i-love.sakura.ne.jp>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/02/20 1:00, Shuah Khan wrote:
-> On 2/19/21 8:53 AM, Greg Kroah-Hartman wrote:
->> What changed from v1?  Why isn't that info below the --- line?
->>
->> Please do a v3 with that fixed up.
->>
+On Sat, Feb 20, 2021 at 10:10:03AM +0900, Tetsuo Handa wrote:
+> On 2021/02/20 1:00, Shuah Khan wrote:
+> > On 2/19/21 8:53 AM, Greg Kroah-Hartman wrote:
+> >> What changed from v1?  Why isn't that info below the --- line?
+> >>
+> >> Please do a v3 with that fixed up.
+> >>
+> > 
+> > +1 on this.
 > 
-> +1 on this.
+> v2 fixed the PTR_ERR() access which was reported in v1 as below.
 
-v2 fixed the PTR_ERR() access which was reported in v1 as below.
+<snip>
 
-  On 2021/02/20 2:10, Julia Lawall wrote:
-  > From: kernel test robot <lkp@intel.com>
-  > 
-  > PTR_ERR should access the value just tested by IS_ERR
-  > 
-  > Generated by: scripts/coccinelle/tests/odd_ptr_err.cocci
-  > 
-  > CC: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-  > Reported-by: kernel test robot <lkp@intel.com>
-  > Signed-off-by: kernel test robot <lkp@intel.com>
-  > Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
+Great, please add that to the v3 patch when you resubmit it.
 
 > 
-> Also please run the usbip test on your changes:
-> tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
+>   On 2021/02/20 2:10, Julia Lawall wrote:
+>   > From: kernel test robot <lkp@intel.com>
+>   > 
+>   > PTR_ERR should access the value just tested by IS_ERR
+>   > 
+>   > Generated by: scripts/coccinelle/tests/odd_ptr_err.cocci
+>   > 
+>   > CC: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+>   > Reported-by: kernel test robot <lkp@intel.com>
+>   > Signed-off-by: kernel test robot <lkp@intel.com>
+>   > Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
+> 
+> > 
+> > Also please run the usbip test on your changes:
+> > tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
+> 
+> Too much requirements for me to run that test. I'm not a user of your module.
 
-Too much requirements for me to run that test. I'm not a user of your module.
-Please run that test on v2 using your environment.
+It should be self-contained, what requirements do you see that you do
+not have?
 
-  root@fuzz:~/usbip-utils# ~/usbip-utils/src/usbip list -l
-   - busid 3-1 (0e0f:0003)
-     VMware, Inc. : Virtual Mouse (0e0f:0003)
-  
-  root@fuzz:~/usbip-utils# ~/usbip-utils/src/usbipd -D
-  root@fuzz:~/usbip-utils# pidof usbipd
-  11191
-  root@fuzz:~/usbip-utils# ~/usbip-utils/src/usbip list -l
-   - busid 3-1 (0e0f:0003)
-     VMware, Inc. : Virtual Mouse (0e0f:0003)
-  
-  root@fuzz:~/usbip-utils# ~/usbip-utils/src/usbip list --remote 127.0.0.1
-  Exportable USB devices
-  ======================
-   - 127.0.0.1
-          3-1: VMware, Inc. : Virtual Mouse (0e0f:0003)
-             : /sys/devices/pci0000:00/0000:00:15.0/0000:03:00.0/usb3/3-1
-             : (Defined at Interface level) (00/00/00)
-  
-  root@fuzz:~/usbip-utils#
+thanks,
+
+greg k-h
