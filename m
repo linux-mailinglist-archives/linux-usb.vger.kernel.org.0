@@ -2,414 +2,355 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EA33204DA
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Feb 2021 10:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46AF932066A
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Feb 2021 18:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbhBTJwl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 20 Feb 2021 04:52:41 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:61345 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbhBTJwd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 Feb 2021 04:52:33 -0500
-Received: from fsav110.sakura.ne.jp (fsav110.sakura.ne.jp [27.133.134.237])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 11K9pZWh013673;
-        Sat, 20 Feb 2021 18:51:36 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav110.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav110.sakura.ne.jp);
- Sat, 20 Feb 2021 18:51:35 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav110.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 11K9pYhD013668
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 20 Feb 2021 18:51:35 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [PATCH v2] usb: usbip: serialize attach/detach operations
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-usb@vger.kernel.org
-References: <20210219094744.3577-1-penguin-kernel@I-love.SAKURA.ne.jp>
- <20210219150832.4701-1-penguin-kernel@I-love.SAKURA.ne.jp>
- <YC/fF0c7PA3ndTPv@kroah.com>
- <68fe3981-27d2-1f8d-17c6-9cb773382e66@linuxfoundation.org>
- <f8110365-767d-6aa4-ff9e-3ab8380c0919@i-love.sakura.ne.jp>
- <YDCzLfhawx4u28dd@kroah.com>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <e1fe719d-35df-3898-33dd-f8bfc6d10b5d@i-love.sakura.ne.jp>
-Date:   Sat, 20 Feb 2021 18:51:37 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+        id S229824AbhBTR3F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 20 Feb 2021 12:29:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229804AbhBTR3E (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 Feb 2021 12:29:04 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC09C061786
+        for <linux-usb@vger.kernel.org>; Sat, 20 Feb 2021 09:28:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=pMXAH8nHleBFkBRH8croATWiV4JZzCIFeooqoN2mEpM=; b=GLzEB3pXZtivp/fdElB6tWN7RX
+        Q0yDMQ90Ee+MzuVgYinPJ4rCe0JUtoPewzg3LikpEhl7Qw9mYqiToLSpuVcj1RnJiDhz6GKHSFmmX
+        oefCwouFptJLjG/VDeu2UbaiA8HqZLTkumERwp0aYiV3qlIDYcz2/oyLcOJSRqZKd29Uw5R/b82HI
+        SXxXbaSHXx+pNxEOjtwPjBkpJ8ugC0iHs8+zFDooBoTUstOVxCtrVuKTtNfghcKahGwTtRtWU/pYt
+        U6ud/V+2dPOoe2Zy2RBJbyySq1gU3eLpk4BS/ANVdjGiQ/LoNCwmxDMIEOqk3BcHGbk44qew0wfSP
+        RPGUt75g==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:63552 helo=[192.168.10.61])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1lDW2z-0005jP-I1; Sat, 20 Feb 2021 18:28:01 +0100
+Subject: Re: [PATCH v6 3/3] drm: Add GUD USB Display driver
+To:     Peter Stuge <peter@stuge.se>
+Cc:     dri-devel@lists.freedesktop.org, hudson@trmm.net,
+        markus@raatikainen.cc, sam@ravnborg.org, linux-usb@vger.kernel.org,
+        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+References: <20210219121702.50964-1-noralf@tronnes.org>
+ <20210219121702.50964-4-noralf@tronnes.org>
+ <20210219214243.11330.qmail@stuge.se>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <5c00a868-3a2f-438b-3670-ee86caef4d2a@tronnes.org>
+Date:   Sat, 20 Feb 2021 18:27:55 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <YDCzLfhawx4u28dd@kroah.com>
+In-Reply-To: <20210219214243.11330.qmail@stuge.se>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/02/20 15:58, Greg Kroah-Hartman wrote:
->>> Also please run the usbip test on your changes:
->>> tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
->>
->> Too much requirements for me to run that test. I'm not a user of your module.
+
+
+Den 19.02.2021 22.42, skrev Peter Stuge:
+> Hi Noralf,
 > 
-> It should be self-contained, what requirements do you see that you do
-> not have?
+> Noralf Trønnes wrote:
+>> +++ b/drivers/gpu/drm/gud/gud_connector.c
+> ..
+>> +static int gud_connector_get_edid_block(void *data, u8 *buf, unsigned int block, size_t len)
+> ..
+>> +	struct gud_connector *gconn = ctx->gconn;
+>> +	size_t start = block * EDID_LENGTH;
+>> +
+>> +	if (start + len > gconn->edid_len)
+>> +		return -1;
+>> +
+>> +	if (!block) {
+>> +		struct gud_device *gdrm = to_gud_device(gconn->connector.dev);
+>> +		int ret;
+>> +
+>> +		/* Check because drm_do_get_edid() will retry on failure */
+>> +		if (!ctx->buf)
+>> +			ctx->buf = kmalloc(gconn->edid_len, GFP_KERNEL);
+>> +		if (!ctx->buf)
+>> +			return -1;
+>> +
+>> +		ret = gud_usb_get(gdrm, GUD_REQ_GET_CONNECTOR_EDID, gconn->connector.index,
+>> +				  ctx->buf, gconn->edid_len);
+> ..
+>> +	memcpy(buf, ctx->buf + start, len);
+> 
+> Danger, danger?
+> 
+> gconn->edid_len in this call to gud_usb_get() comes from the device in
+> gud_connector_status_request() where the only validation is that
+> edid_len % EDID_LENGTH == 0, so a device could write past the buffer
+> if drm_do_get_edid() passes a buffer smaller than edid_len.
+> 
+> I guess the buffer passed is just 128, EDID_LENGTH, so a malicious
+> or buggy device could overwrite 64k-128 kernel memory? Ouch!
+> 
 
-It asks me to build usbip tools from source code. I took source code from
-https://github.com/lucianm/usbip-utils , but I couldn't rebuild without
-removing -Werror from Makefile . Where is maintained source code?
-Please embed appropriate URL into usbip_test.sh .
+The result goes into ctx->buf which is big enough. Then each edid block
+is copied from that buffer as the parser runs the callback.
 
-Too many error messages to convince that the test succeeded. The only device listed
-in my environment is a Virtual Mouse, which makes me wonder if the test did work.
-Therefore, I think I should wait for your test result in your environment which
-would list appropriate devices.
+Maybe I should add a cap on ->edid_len, but I don't know how big it
+should be. There's no danger as such not having a cap, the host will
+either fail to allocate memory (max 4MB usually) or do a very big
+transfer and error out in the edid parser.
 
------ console output -----
+> 
+> More generally it's not very typical in USB to report the data size
+> separately from the data itself, if reporting size explicitly at all.
+> 
+> Sizes can be part of the data structure itself (like in descriptors) but
+> on the application layer (like here) it's convenient to just decide a
+> sensible fixed maximum size and let the host try to always transfer
+> that size while accepting short transfers. Unlike read() a short
+> transfer only ever happens if and when a device intends for it,
+> so that's like an in-band handshake but "for free".
+> 
+> Oh, and does/should the GUD EDID change if the panel "behind" the device
+> CPU on a hotpluggable connector changes? It wouldn't be great to require
+> GUD driver reprobe in that case. But maybe DRM requires that anyway?
+> 
 
-root@fuzz:~# linux/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
-usbip_test.sh -b <busid> -p <usbip tools path>
-root@fuzz:~# ~/usbip-utils/src/usbip list -l
- - busid 3-1 (0e0f:0003)
-   VMware, Inc. : Virtual Mouse (0e0f:0003)
+If gud_connector_status_req.status has changed since last poll or
+GUD_CONNECTOR_STATUS_CHANGED is set, DRM will notify userspace which
+will reprobe the connector. connector->epoch_counter++ in
+gud_connector_status_request() triggers that.
 
-root@fuzz:~# linux/tools/testing/selftests/drivers/usb/usbip/usbip_test.sh -b 3-1 -p ~/usbip-utils/
-Running USB over IP Testing on 3-1
-Load usbip_host module
-usbip_test: module usbip_host is loaded [OK]
-Load vhci_hcd module
-usbip_test: module vhci_hcd is loaded [OK]
-==============================================================
-Expect to see export-able devices
- - busid 3-1 (0e0f:0003)
-   VMware, Inc. : Virtual Mouse (0e0f:0003)
+> 
+> I'm sorry I didn't spot this pattern earlier, I understand that it's late
+> in the game and that changing it needs the gadget to change as well, but I
+> do really think this is a worthwhile change throughout the protocol.
+> 
 
-==============================================================
-Run lsusb to see all usb devices
-/:  Bus 37.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 36.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 35.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 34.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 33.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 32.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 31.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 30.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 29.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 28.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 27.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 26.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 25.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 24.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 23.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 22.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 21.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 20.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 19.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 18.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 17.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 16.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 15.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 14.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 13.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 12.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 11.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 10.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 09.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 08.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 07.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 06.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 05.Port 1: Dev 1, Class=root_hub, Driver=dummy_hcd/1p, 480M
-/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 5000M
-/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 480M
-    |__ Port 1: Dev 2, If 0, Class=Human Interface Device, Driver=usbhid, 12M
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=uhci_hcd/2p, 12M
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/6p, 480M
-==============================================================
-Get exported devices from localhost - expect to see none
-usbip: info: no exportable devices found on localhost
-==============================================================
-bind devices
-bind device on busid 3-1: complete
-==============================================================
-Run lsusb - bound devices should be under usbip_host control
-/:  Bus 37.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 36.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 35.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 34.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 33.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 32.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 31.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 30.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 29.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 28.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 27.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 26.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 25.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 24.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 23.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 22.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 21.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 20.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 19.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 18.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 17.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 16.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 15.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 14.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 13.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 12.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 11.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 10.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 09.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 08.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 07.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 06.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 05.Port 1: Dev 1, Class=root_hub, Driver=dummy_hcd/1p, 480M
-/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 5000M
-/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 480M
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=uhci_hcd/2p, 12M
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/6p, 480M
-==============================================================
-bind devices - expect already bound messages
-usbip: error: device on busid 3-1 is already bound to usbip-host
-==============================================================
-Get exported devices from localhost - expect to see exported devices
-Exportable USB devices
-======================
- - localhost
-        3-1: VMware, Inc. : Virtual Mouse (0e0f:0003)
-           : /sys/devices/pci0000:00/0000:00:15.0/0000:03:00.0/usb3/3-1
-           : (Defined at Interface level) (00/00/00)
+I see what you mean, I'll give it a try.
 
-==============================================================
-unbind devices
-unbind device on busid 3-1: complete
-==============================================================
-Run lsusb - bound devices should be rebound to original drivers
-/:  Bus 37.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 36.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 35.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 34.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 33.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 32.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 31.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 30.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 29.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 28.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 27.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 26.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 25.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 24.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 23.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 22.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 21.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 20.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 19.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 18.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 17.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 16.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 15.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 14.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 13.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 12.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 11.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 10.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 09.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 08.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 07.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 06.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 05.Port 1: Dev 1, Class=root_hub, Driver=dummy_hcd/1p, 480M
-/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 5000M
-/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 480M
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=uhci_hcd/2p, 12M
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/6p, 480M
-==============================================================
-unbind devices - expect no devices bound message
-usbip: error: Device is not bound to usbip-host driver.
-==============================================================
-Get exported devices from localhost - expect to see none
-usbip: error: failed to get device list from localhost
-==============================================================
-List imported devices - expect to see none
-usbip: error: open vhci_driver
-usbip: error: list imported devices
-==============================================================
-Import devices from localhost - should fail with no devices
-usbip: error: recv op_common
-usbip: error: query
-==============================================================
-bind devices
-bind device on busid 3-1: complete
-==============================================================
-List imported devices - expect to see exported devices
-Exportable USB devices
-======================
- - localhost
-        3-1: VMware, Inc. : Virtual Mouse (0e0f:0003)
-           : /sys/devices/pci0000:00/0000:00:15.0/0000:03:00.0/usb3/3-1
-           : (Defined at Interface level) (00/00/00)
+> And I think it applies to more than EDID, e.g. both GUD and connector
+> properties, maybe formats, something else?
+> 
+> 
+> Unfortunately, the gud_usb_control_msg() check (ret != len) creates a
+> requirement to know in advance how much data will be transfered.
+> 
+> That could be revised at least for the general case, even if not used
+> everywhere; maybe something like adding a size_t required_min_len
+> parameter to gud_usb_control_msg()?
+> 
+> 
+>> +static int gud_connector_get_modes(struct drm_connector *connector)
+>> +{
+>> +	struct gud_connector *gconn = to_gud_connector(connector);
+>> +	struct gud_device *gdrm = to_gud_device(connector->dev);
+>> +	struct gud_connector_get_edid_ctx edid_ctx = {
+>> +		.gconn = gconn,
+>> +	};
+>> +	struct gud_display_mode_req *reqmodes = NULL;
+>> +	unsigned int i, num_modes = 0;
+> 
+> The error path of this function executes "return num_modes" with num_modes
+> unmodified; ie. 0. Is that intentional?
+> 
 
-==============================================================
-List imported devices - expect to see none
-usbip: error: open vhci_driver
-usbip: error: list imported devices
-==============================================================
-Import devices from localhost - should work
-usbip: error: open vhci_driver
-usbip: error: query
-==============================================================
-List imported devices - expect to see imported devices
-usbip: error: open vhci_driver
-usbip: error: list imported devices
-==============================================================
-Import devices from localhost - expect already imported messages
-usbip: error: open vhci_driver
-usbip: error: query
-==============================================================
-Un-import devices
-usbip: error: open vhci_driver
-usbip: error: open vhci_driver
-==============================================================
-List imported devices - expect to see none
-usbip: error: open vhci_driver
-usbip: error: list imported devices
-==============================================================
-Un-import devices - expect no devices to detach messages
-usbip: error: open vhci_driver
-usbip: error: open vhci_driver
-==============================================================
-Detach invalid port tests - expect invalid port error message
-usbip: error: open vhci_driver
-==============================================================
-Expect to see export-able devices
- - busid 3-1 (0e0f:0003)
-   VMware, Inc. : Virtual Mouse (0e0f:0003)
+It's not allowed to return an error code so 0 is the only option. The
+caller drm_helper_probe_single_connector_modes() adds a fallback
+1024x768 mode in that case which probably won't fit for a display panel,
+but the device should reject an illegal mode on GUD_REQ_SET_STATE_CHECK
+so we're fine.
 
-==============================================================
-Remove usbip_host module
-rmmod: ERROR: Module usbip_host is builtin.
-Run lsusb - bound devices should be rebound to original drivers
-/:  Bus 37.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 36.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 35.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 34.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 33.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 32.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 31.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 30.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 29.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 28.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 27.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 26.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 25.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 24.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 23.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 22.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 21.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 20.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 19.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 18.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 17.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 16.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 15.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 14.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 13.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 12.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 11.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 10.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 09.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 08.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 07.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 06.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 05.Port 1: Dev 1, Class=root_hub, Driver=dummy_hcd/1p, 480M
-/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 5000M
-/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 480M
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=uhci_hcd/2p, 12M
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/6p, 480M
-==============================================================
-Run bind without usbip_host - expect fail
-usbip: error: device on busid 3-1 is already bound to usbip-host
-==============================================================
-Run lsusb - devices that failed to bind aren't bound to any driver
-/:  Bus 37.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 36.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 35.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 34.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 33.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 32.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 31.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 30.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 29.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 28.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 27.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 26.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 25.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 24.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 23.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 22.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 21.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 20.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 19.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 18.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 17.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 16.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 15.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 14.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 13.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 12.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 11.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 10.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 09.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 08.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 07.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 5000M
-/:  Bus 06.Port 1: Dev 1, Class=root_hub, Driver=vhci_hcd/8p, 480M
-/:  Bus 05.Port 1: Dev 1, Class=root_hub, Driver=dummy_hcd/1p, 480M
-/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 5000M
-/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 480M
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=uhci_hcd/2p, 12M
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/6p, 480M
-==============================================================
-modprobe usbip_host - does it work?
-Should see -busid- is not in match_busid table... skip! dmesg
-==============================================================
-==============================================================
-End of USB over IP Testing on 3-1
-root@fuzz:~# echo $?
-0
+> 
+>> +static int gud_connector_add_tv_mode(struct gud_device *gdrm,
+> ..
+>> +	buf_len = num_modes * GUD_CONNECTOR_TV_MODE_NAME_LEN;
+>> +	modes = kmalloc_array(num_modes, sizeof(*modes), GFP_KERNEL);
+>> +	buf = kmalloc(buf_len, GFP_KERNEL);
+> 
+> Maybe moving the buf assignment immediately following the buf_len assignment
+> would help readability? This is quite minor.
+> 
+> 
+>> +static int gud_connector_add_properties(struct gud_device *gdrm, struct gud_connector *gconn,
+>> +					unsigned int num_properties)
+>> +{
+>> +	struct drm_device *drm = &gdrm->drm;
+>> +	struct drm_connector *connector = &gconn->connector;
+>> +	struct gud_property_req *properties;
+>> +	unsigned int i;
+>> +	int ret;
+>> +
+>> +	gconn->properties = kcalloc(num_properties, sizeof(*gconn->properties), GFP_KERNEL);
+>> +	if (!gconn->properties)
+>> +		return -ENOMEM;
+>> +
+>> +	properties = kcalloc(num_properties, sizeof(*properties), GFP_KERNEL);
+>> +	if (!properties)
+>> +		return -ENOMEM;
+> 
+> I think this error path leaks gconn->properties?
+> 
 
+It's freed in gud_connector_destroy() which will be called on error at
+this stage.
 
+> 
+>> +int gud_connector_create(struct gud_device *gdrm, unsigned int index)
+> 
+> Most error paths in this function seem to leak both gconn and connector?
+> 
 
------ dmesg output -----
+Everything that happens after the drm_connector_init() call is cleaned
+up automatically when the DRM device is torn down.
+devm_drm_dev_alloc() and drmm_mode_config_init() sets this up.
 
-[   95.256736] usbip-host 3-1: usbip-host: register new device (bus 3 dev 2)
-[   95.897937] usbipd[1202]: segfault at 0 ip 00007f9eebe2d4c2 sp 00007ffc4ecd52f0 error 4 in libusbip.so.0.0.1[7f9eebe2b000+7000]
-[   95.902053] Code: 64 e2 ff ff 49 8b 7d 00 48 89 c6 48 89 c3 e8 75 e0 ff ff 48 89 c7 e8 cd e1 ff ff b9 0b 00 00 00 48 8d 3d 49 4f 00 00 48 89 c6 <f3> a6 0f 97 c1 80 d9 00 44 0f be f1 45 85 f6 75 ad be 58 01 00 00
-[   97.102442] usbipd[1234]: segfault at 0 ip 00007f9eebe2d4c2 sp 00007ffc4ecd52f0 error 4 in libusbip.so.0.0.1[7f9eebe2b000+7000]
-[   97.106679] Code: 64 e2 ff ff 49 8b 7d 00 48 89 c6 48 89 c3 e8 75 e0 ff ff 48 89 c7 e8 cd e1 ff ff b9 0b 00 00 00 48 8d 3d 49 4f 00 00 48 89 c6 <f3> a6 0f 97 c1 80 d9 00 44 0f be f1 45 85 f6 75 ad be 58 01 00 00
-[   97.462294] usbip-host 3-1: usbip-host: register new device (bus 3 dev 2)
-[   97.816252] usbip-host 3-1: stub up
-[   97.818997] usbip-host 3-1: recv a header, 0
-[   97.969602] usbip-host 3-1: reset full-speed USB device number 2 using xhci_hcd
-[  113.280217] usbip-host 3-1: device descriptor read/64, error -110
-[  128.702195] usbip-host 3-1: device descriptor read/64, error -110
-[  128.999228] usbip-host 3-1: reset full-speed USB device number 2 using xhci_hcd
-[  144.311886] usbip-host 3-1: device descriptor read/64, error -110
-[  159.749491] usbip-host 3-1: device descriptor read/64, error -110
-[  160.062046] usbip-host 3-1: reset full-speed USB device number 2 using xhci_hcd
-[  160.110668] usbip-host 3-1: device reset
-[  160.159742] usbip-host 3-1: stub up
-[  160.164251] usbip-host 3-1: recv a header, 0
-[  160.318951] usbip-host 3-1: reset full-speed USB device number 2 using xhci_hcd
-[  175.575825] usbip-host 3-1: device descriptor read/64, error -110
-[  191.029443] usbip-host 3-1: device descriptor read/64, error -110
-[  191.326302] usbip-host 3-1: reset full-speed USB device number 2 using xhci_hcd
-[  206.638840] usbip-host 3-1: device descriptor read/64, error -110
-[  222.061243] usbip-host 3-1: device descriptor read/64, error -110
-[  222.358197] usbip-host 3-1: reset full-speed USB device number 2 using xhci_hcd
-[  222.406409] usbip-host 3-1: device reset
+> 
+>> +++ b/drivers/gpu/drm/gud/gud_drv.c
+> ..
+>> +static int gud_usb_get_status(struct usb_device *usb, u8 ifnum, u8 *status)
+> ..
+>> +	ret = gud_usb_control_msg(usb, ifnum, true, GUD_REQ_GET_STATUS, 0, buf, sizeof(*buf));
+>> +	*status = *buf;
+> 
+> Maybe make this conditional on 0 == ret.
+> 
+> 
+>> +static int gud_set_version(struct usb_device *usb, u8 ifnum, u32 flags, u8 version)
+> ..
+>> +	if (ret == -EPIPE)
+>> +		return -EPROTONOSUPPORT;
+> 
+> So yeah, this isn't typical, devices usually describe optional things that
+> the driver may need to know about, unless it's something that can change
+> during operation.
+> 
+> Arguably mildly contradictory to the short transfer pattern, but one is
+> capability and the other is "runtime" data.
+> 
+> 
+>> +static int gud_get_properties(struct gud_device *gdrm, unsigned int num_properties)
+>> +{
+>> +	struct gud_property_req *properties;
+>> +	unsigned int i;
+>> +	int ret;
+>> +
+>> +	if (!num_properties)
+>> +		return 0;
+>> +
+>> +	gdrm->properties = drmm_kcalloc(&gdrm->drm, num_properties, sizeof(*gdrm->properties),
+>> +					GFP_KERNEL);
+>> +	if (!gdrm->properties)
+>> +		return -ENOMEM;
+>> +
+>> +	properties = kcalloc(num_properties, sizeof(*properties), GFP_KERNEL);
+>> +	if (!properties)
+>> +		return -ENOMEM;
+> 
+> It looks like this function leaks gdrm->properties in all error paths?
+> 
 
+drmm_kcalloc() is the DRM version of devm_kcalloc() which frees the
+memory when the last DRM fd is closed. There might be open fd's when the
+device goes away so the devm_ versions can't be used.
+
+> 
+>> +		default:
+>> +			/* New ones might show up in future devices, skip those we don't know. */
+>> +			drm_dbg(&gdrm->drm, "Unknown property: %u\n", prop);
+> 
+> Maybe "Ignoring unknown property: %u\n" would be a little more clear?
+> 
+
+Sure.
+
+> 
+>> +static int gud_stats_debugfs(struct seq_file *m, void *data)
+> ..
+>> +	seq_puts(m, "Compression:      ");
+>> +	if (gdrm->compression & GUD_COMPRESSION_LZ4)
+>> +		seq_puts(m, " lz4");
+>> +	seq_puts(m, "\n");
+> 
+> Maybe an explicit seq_puts(m, " none") if there are none?
+> 
+
+That makes sense.
+
+> 
+>> +	if (gdrm->compression) {
+>> +		u64 remainder;
+>> +		u64 ratio = div64_u64_rem(gdrm->stats_length, gdrm->stats_actual_length,
+>> +					  &remainder);
+>> +		u64 ratio_frac = div64_u64(remainder * 10, gdrm->stats_actual_length);
+>> +
+>> +		seq_printf(m, "Compression ratio: %llu.%llu\n", ratio, ratio_frac);
+>> +	}
+> 
+> Will the fraction ever need zero padding?
+> 
+
+No, I don't see why.
+
+> 
+>> +static int gud_probe(struct usb_interface *interface, const struct usb_device_id *id)
+> 
+> I appreciate very much that GUD works on interface level, so that it
+> can also be used in composite devices at some point. Thanks a lot! \o/
+> 
+
+This was a design requirement since I wanted to make room for at least
+HID touch and maybe audio. It will also tolerate other vendor class
+interfaces and just silently ignore them.
+
+The Pi images on the wiki has the ability to add a serial console USB
+interface for debugging.
+
+> 
+>> +++ b/drivers/gpu/drm/gud/gud_pipe.c
+> ..
+>> +int gud_pipe_check(struct drm_simple_display_pipe *pipe,
+> ..
+>> +	req = kzalloc(len, GFP_KERNEL);
+>> +	if (!req)
+>> +		return -ENOMEM;
+>> +
+>> +	gud_from_display_mode(&req->mode, mode);
+>> +
+>> +	req->format = gud_from_fourcc(format->format);
+>> +	if (WARN_ON_ONCE(!req->format))
+>> +		return -EINVAL;
+> 
+> req leaks?
+> 
+
+Yep, you're right.
+
+> 
+>> +	req->connector = drm_connector_index(connector);
+>> +	req->num_properties = num_properties;
+>> +
+>> +	num_properties = gud_connector_fill_properties(connector, connector_state,
+>> +						       req->properties);
+> 
+> Following this new assignment to num_properties the new value is used
+> to (hopefully!) append at the first req->properties[] index after the
+> old value was used as index, that doesn't feel great..
+> 
+> I mean, it's harmless as long as gud_connector_fill_properties() is
+> sure to return the same value, but, well, maybe sometime later it
+> doesn't, or is that guaranteed if there is no error? Then maybe at
+> least document that requirement by the function. What do you think?
+> 
+
+The number of properties doesn't change, it is returned by
+GUD_REQ_GET_CONNECTOR during probe.
+There is a small comment in gud_connector_fill_properties() but I can
+expand on that and put it before the function definition.
+
+Thanks for your scrutiny.
+
+Noralf.
