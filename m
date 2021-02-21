@@ -2,140 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD5A3209CB
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Feb 2021 12:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7351B320A8A
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Feb 2021 14:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbhBULQC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Feb 2021 06:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbhBULQA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Feb 2021 06:16:00 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85127C061574
-        for <linux-usb@vger.kernel.org>; Sun, 21 Feb 2021 03:15:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:References:Cc:To:From:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Q/EsuBx2rpbF4bTNqafbctKSjGqSih9PCFZcmYvOH/Y=; b=JXgiS5WmDnJkDp9xgNRqCRk3Nh
-        70/dl7sfXsyq2ockxkR7//xjYkK59E9kace1M1wqdyiEwVD1VAajGj/xtled7xIW+dfCjj7Lijws3
-        nXnw0dETs/DSObvBFE0nXUEeqGeOW1JaekITwbMTU48uYISZs3A5PDVnlQKidlC6N4hizkEV7ydvu
-        fKLTzRI3bQ1V43bGDUgYcyngBi/F8wf6IdrFnEkvcN/FuH2SgsRD6Fple99vK6CFc1dvx+ySalnhW
-        iknbqefCLrpIXSukpGaG3r+2ityISNl+Z46S3x+MzOiC14LDkcPutLpMyOXlsWkWcWXdpMF/LxZE3
-        1aJEDSPg==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:49463 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1lDmhV-00050B-Qw; Sun, 21 Feb 2021 12:14:57 +0100
-Subject: Re: [PATCH v4 0/3] Generic USB Display driver
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     hudson@trmm.net, markus@raatikainen.cc, sam@ravnborg.org,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        th020394@gmail.com, pontus.fuchs@gmail.com, peter@stuge.se
-References: <20210120170033.38468-1-noralf@tronnes.org>
- <20210124183838.GA1873250@demiurge.local>
- <70a91ae8-15eb-e8d8-1ed9-923b09106bfa@tronnes.org>
-Message-ID: <1c182bf1-41d7-49e7-f15e-e8d9ad6386a2@tronnes.org>
-Date:   Sun, 21 Feb 2021 12:14:53 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S229663AbhBUNYM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Feb 2021 08:24:12 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:34486 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229588AbhBUNYH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Feb 2021 08:24:07 -0500
+Received: from [123.112.65.49] (helo=[192.168.0.106])
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <hui.wang@canonical.com>)
+        id 1lDoho-0007C0-Fm; Sun, 21 Feb 2021 13:23:24 +0000
+Subject: Re: [PATCH] USB: UAS: don't unbind and rebind the driver during
+ usb_reset_device
+To:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
+        oneukum@suse.com, gregkh@linuxfoundation.org
+References: <20210221085100.4297-1-hui.wang@canonical.com>
+ <b1fe6cf4-b48f-c7e6-17c0-2ed04d8f3aa1@redhat.com>
+From:   Hui Wang <hui.wang@canonical.com>
+Message-ID: <b4e51bb9-8717-979b-1060-2d821b3c4e23@canonical.com>
+Date:   Sun, 21 Feb 2021 21:23:17 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-In-Reply-To: <70a91ae8-15eb-e8d8-1ed9-923b09106bfa@tronnes.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <b1fe6cf4-b48f-c7e6-17c0-2ed04d8f3aa1@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-
-Den 24.01.2021 21.51, skrev Noralf Trønnes:
-> 
-> 
-> Den 24.01.2021 19.38, skrev Lubomir Rintel:
->> On Wed, Jan 20, 2021 at 06:00:30PM +0100, Noralf Trønnes wrote:
->>> Hi,
->>>
->>> A while back I had the idea to turn a Raspberry Pi Zero into a $5
->>> USB to HDMI/SDTV/DSI/DPI display adapter.
->>>
->>> The reason for calling it 'Generic' is so anyone can make a USB
->>> display/adapter against this driver, all that's needed is to add a USB
->>> vid:pid.
->>>
->>> Unfortunately I've had some compounding health problems that have
->>> severally limited the time I can spend in front of a computer. For this
->>> reason I've decided to keep the gadget driver out-of-tree and focus on
->>> getting the host driver merged first.
->>>
->>> See the wiki[1] for more information and images for the Raspberry Pi
->>> Zero/4.
->>>
->>> One big change this time is that I've followed Peter Stuge's advice to
->>> not let DRM stuff leak into the USB protocol. This has made the protocol
->>> easier to understand just from reading the header file.
->>>
->>> Noralf.
->>>
->>> [1] https://github.com/notro/gud/wiki
+On 2/21/21 6:20 PM, Hans de Goede wrote:
+> Hi,
+>
+> On 2/21/21 9:51 AM, Hui Wang wrote:
+>> Once pre_reset() or post_reset() returns non-zero, the disconnect()
+>> and probe() of the usb_driver will be called. In the disconnect(),
+>> the scsi_host will be removed and be freed after scsi_host_put(), in
+>> the probe(), the new scsi_host and uas_dev_info will be created.
 >>
->> The patch set:
+>> If the usb_reset_device() is triggered by eh_device_reset_handler(),
+>> and pre_reset()/post_reset() returns non-zero, the disconnect() and
+>> probe() will be called, then returns to the eh_device_reset_handler(),
+>> it still accesses old scsi related variables and uas_dev_info, and so
+>> do its caller functions.
 >>
->> Tested-by: Lubomir Rintel <lkundrak@v3.sk>
+>> Here change the pre_reset() and post_reset() to let them only return
+>> 0, after this change, the usb_reset_device() will only reset this
+>> usb devcie from its hub port, will not execute unbind and rebind
+>> usb_driver during reset.
+> We only return non 0 from the pre/post reset handles if we failed
+> to ensure the device is in a known state.
+>
+> E.g. in uas_post_reset() we only fail if we failed to switch the
+> device from the good old usb-storage protocol back to the UAS mode
+> which it was in before.
+>
+> Continuing with the UAS driver bound, as if everything is fine,
+> while the device is actually in longer in UAS mode is a bad idea.
+>
+> Summarizing this patch is wrong: NACK.
+>
+> ###
+>
+> I assume that you wrote this patch because of some bug report ?
+>
+> In such a case please always include a link to the bug (or forum
+> discussion) in the commit message.
+
+OK, got it, so far there is no bug about it. I just wrote some code and 
+called usb_reset_device(), found it will trigger to call disconnect() 
+and probe() in some cases. I found uas.c could trigger to call 
+disconnect() and probe() in eh_device_reset_handler(), and could 
+possibility introduce use-after-free issue. I thought resetting the 
+device from the hub port is enough to let it back to normal work mode, 
+if it doesn't, calling disconnect() and probe() will not help either. 
+And I checked some eh_device_reset_handler callback in other drivers, 
+looks like they don't trigger unbind and rebind, then I wrote this patch.
+
+Thanks,
+
+Hui.
+
+>
+> UAS problems typically are caused by people shoving a 2.5 inch
+> or m2 SSD in an USB enclosure which is powered from the USB bus
+> only. SSD-s can cause pretty hefty power-consumption peaks when
+> high queue depts are used; and these bus powered devices typically
+> cannot handle these peaks. Either because the port they are
+> plugged in does not deliver enough current; and/or because they
+> don't have enough buffering (capacitors) on the enclosure's PCB
+> to deal with short but quite large consumption peaks.
+>
+> Regards,
+>
+> Hans
+>
+>
+>
+>
+>
+>
+>
+>
+>> Signed-off-by: Hui Wang <hui.wang@canonical.com>
+>> ---
+>>   drivers/usb/storage/uas.c | 3 +--
+>>   1 file changed, 1 insertion(+), 2 deletions(-)
 >>
->> Works like a charm with this board [1], though it didn't impress the girls
->> as much as I hoped. Code here [2], picture here [3].
->>
-> 
-> I have wondered what color display resolution it is possible to drive
-> over USB full speed. I can understand that your PoC wasn't that
-> impressive since it doesn't use DMA to drive the SPI bus.
-> 
-
-I have now done a Raspberry Pi Pico implementation and driving SPI using
-DMA was just marginally faster than letting the CPU fill the FIFO. Maybe
-I shouldn't be so suprised since the CPU has nothing else to do, but
-even so I didn't expect this. But then again I have very little
-experience with microcontrollers.
-
-I have the same size display[1] as you 240x135 and my display was quite
-snappy (using X windows!), I even added lz4 decompression support. I
-haven't done much testing so I can't say how much the actual improvement
-is with the compression. The USB double buffering I was hoping for
-didn't pan out, the bulk endpoint can only do 64 byte packest (ISO is
-512), so I ended up storing the packets and then push the frame in its
-entirety to the display. The Pico has 264kB of ram so I can afford to
-have a framebuffer and a decompression buffer for this tiny display. My
-target display is 320x240 and that means I can't use 2 buffers, so not
-sure how that goes.
-
-[1] https://shop.pimoroni.com/products/pico-display-pack
-
-Noralf.
-
-> The new $4 Raspberry Pi Pico that came out this week looks interesting
-> as a USB interface board for tiny panels. It can drive DPI panels
-> directly, has 2 cores @133MHz, 264K SRAM and USB full speed. Maybe lz4
-> decompression is even possible. Another good thing is that the board
-> will be around for a long time.
-> 
-> Thanks for testing, I have limited bandwith these days so I couldn't do
-> a test on an MCU myself.
-> 
-> Noralf.
-> 
->> [1] https://www.banggood.com/LILYGO-TTGO-T-Display-GD32-RISC-V-32-bit-Core-Minimal-Development-Board-1_14-IPS-p-1652870.html?rmmds=search&cur_warehouse=CN
->> [2] https://github.com/hackerspace/libopencm3-gf32v-examples/commit/7ef51b31b9
->> [3] https://people.freedesktop.org/~lkundrak/lilygo.jpeg
->>
->> Had to apply a fix for the drm_connector_enum_list[] ommission I mentioned
->> elsewhere, and that I've now noticed you've noted previously.
->>
->> Take care
->> Lubo
+>> diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+>> index bef89c6bd1d7..c66287448e34 100644
+>> --- a/drivers/usb/storage/uas.c
+>> +++ b/drivers/usb/storage/uas.c
+>> @@ -1121,7 +1121,6 @@ static int uas_pre_reset(struct usb_interface *intf)
+>>   	if (uas_wait_for_pending_cmnds(devinfo) != 0) {
+>>   		shost_printk(KERN_ERR, shost, "%s: timed out\n", __func__);
+>>   		scsi_unblock_requests(shost);
+>> -		return 1;
+>>   	}
+>>   
+>>   	uas_free_streams(devinfo);
+>> @@ -1152,7 +1151,7 @@ static int uas_post_reset(struct usb_interface *intf)
+>>   
+>>   	scsi_unblock_requests(shost);
+>>   
+>> -	return err ? 1 : 0;
+>> +	return 0;
+>>   }
+>>   
+>>   static int uas_suspend(struct usb_interface *intf, pm_message_t message)
 >>
