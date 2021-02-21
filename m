@@ -2,103 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 507CF320915
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Feb 2021 08:43:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6FCA32093F
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Feb 2021 09:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbhBUHnS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Feb 2021 02:43:18 -0500
-Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:56282 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbhBUHnS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Feb 2021 02:43:18 -0500
-Received: from localhost.localdomain ([90.126.17.6])
-        by mwinf5d65 with ME
-        id Xjhb2400607rLVE03jhbrF; Sun, 21 Feb 2021 08:41:36 +0100
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 21 Feb 2021 08:41:36 +0100
-X-ME-IP: 90.126.17.6
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org, krzk@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, arnd@arndb.de,
-        gustavoars@kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 2/2] usb: gadget: s3c: Fix the error handling path in 's3c2410_udc_probe()'
-Date:   Sun, 21 Feb 2021 08:41:33 +0100
-Message-Id: <20210221074133.938017-1-christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.27.0
+        id S229831AbhBUIwl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Feb 2021 03:52:41 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:58687 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229502AbhBUIwk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Feb 2021 03:52:40 -0500
+Received: from [123.112.65.49] (helo=localhost.localdomain)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <hui.wang@canonical.com>)
+        id 1lDkT6-0000TV-Gq; Sun, 21 Feb 2021 08:51:57 +0000
+From:   Hui Wang <hui.wang@canonical.com>
+To:     linux-usb@vger.kernel.org, hdegoede@redhat.com, oneukum@suse.com,
+        gregkh@linuxfoundation.org
+Cc:     hui.wang@canonical.com
+Subject: [PATCH] USB: UAS: don't unbind and rebind the driver during usb_reset_device
+Date:   Sun, 21 Feb 2021 16:51:00 +0800
+Message-Id: <20210221085100.4297-1-hui.wang@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some 'clk_prepare_enable()' and 'clk_get()' must be undone in the error
-handling path of the probe function, as already done in the remove
-function.
+Once pre_reset() or post_reset() returns non-zero, the disconnect()
+and probe() of the usb_driver will be called. In the disconnect(),
+the scsi_host will be removed and be freed after scsi_host_put(), in
+the probe(), the new scsi_host and uas_dev_info will be created.
 
-Fixes: 1c6d47aa4f4b ("USB Gadget driver for Samsung s3c2410 ARM SoC")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-checkpatch reports:
-WARNING: Unknown commit id '1c6d47aa4f4b', maybe rebased or not pulled?
-According to https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/usb/gadget/s3c2410_udc.c?id=3fc154b6b8134b98bb94d60cad9a46ec1ffbe372
-the commit ID looks correct to me. Maybe something should be tweaked somewhere
-before applying, but I don't know what!
----
- drivers/usb/gadget/udc/s3c2410_udc.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+If the usb_reset_device() is triggered by eh_device_reset_handler(),
+and pre_reset()/post_reset() returns non-zero, the disconnect() and
+probe() will be called, then returns to the eh_device_reset_handler(),
+it still accesses old scsi related variables and uas_dev_info, and so
+do its caller functions.
 
-diff --git a/drivers/usb/gadget/udc/s3c2410_udc.c b/drivers/usb/gadget/udc/s3c2410_udc.c
-index 3fc436286bad..146250e93412 100644
---- a/drivers/usb/gadget/udc/s3c2410_udc.c
-+++ b/drivers/usb/gadget/udc/s3c2410_udc.c
-@@ -1750,7 +1750,8 @@ static int s3c2410_udc_probe(struct platform_device *pdev)
- 	udc_clock = clk_get(NULL, "usb-device");
- 	if (IS_ERR(udc_clock)) {
- 		dev_err(dev, "failed to get udc clock source\n");
--		return PTR_ERR(udc_clock);
-+		retval = PTR_ERR(udc_clock);
-+		goto err_usb_bus_clk;
+Here change the pre_reset() and post_reset() to let them only return
+0, after this change, the usb_reset_device() will only reset this
+usb devcie from its hub port, will not execute unbind and rebind
+usb_driver during reset.
+
+Signed-off-by: Hui Wang <hui.wang@canonical.com>
+---
+ drivers/usb/storage/uas.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index bef89c6bd1d7..c66287448e34 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -1121,7 +1121,6 @@ static int uas_pre_reset(struct usb_interface *intf)
+ 	if (uas_wait_for_pending_cmnds(devinfo) != 0) {
+ 		shost_printk(KERN_ERR, shost, "%s: timed out\n", __func__);
+ 		scsi_unblock_requests(shost);
+-		return 1;
  	}
  
- 	clk_prepare_enable(udc_clock);
-@@ -1773,7 +1774,7 @@ static int s3c2410_udc_probe(struct platform_device *pdev)
- 	base_addr = devm_platform_ioremap_resource(pdev, 0);
- 	if (!base_addr) {
- 		retval = -ENOMEM;
--		goto err;
-+		goto err_udc_clk;
- 	}
+ 	uas_free_streams(devinfo);
+@@ -1152,7 +1151,7 @@ static int uas_post_reset(struct usb_interface *intf)
  
- 	the_controller = udc;
-@@ -1791,7 +1792,7 @@ static int s3c2410_udc_probe(struct platform_device *pdev)
- 	if (retval != 0) {
- 		dev_err(dev, "cannot get irq %i, err %d\n", irq_usbd, retval);
- 		retval = -EBUSY;
--		goto err;
-+		goto err_udc_clk;
- 	}
+ 	scsi_unblock_requests(shost);
  
- 	dev_dbg(dev, "got irq %i\n", irq_usbd);
-@@ -1862,7 +1863,14 @@ static int s3c2410_udc_probe(struct platform_device *pdev)
- 		gpio_free(udc_info->vbus_pin);
- err_int:
- 	free_irq(irq_usbd, udc);
--err:
-+err_udc_clk:
-+	clk_disable_unprepare(udc_clock);
-+	clk_put(udc_clock);
-+	udc_clock = NULL;
-+err_usb_bus_clk:
-+	clk_disable_unprepare(usb_bus_clock);
-+	clk_put(usb_bus_clock);
-+	usb_bus_clock = NULL;
- 
- 	return retval;
+-	return err ? 1 : 0;
++	return 0;
  }
+ 
+ static int uas_suspend(struct usb_interface *intf, pm_message_t message)
 -- 
-2.27.0
+2.25.1
 
