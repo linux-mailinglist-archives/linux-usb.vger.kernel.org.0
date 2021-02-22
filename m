@@ -2,118 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0CF8321094
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 06:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D83AD3210AA
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 07:04:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbhBVF5K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Feb 2021 00:57:10 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:51742 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbhBVF5I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 00:57:08 -0500
-Received: from mail-lj1-f199.google.com ([209.85.208.199])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1lE4Cn-0001T5-Kk
-        for linux-usb@vger.kernel.org; Mon, 22 Feb 2021 05:56:25 +0000
-Received: by mail-lj1-f199.google.com with SMTP id h28so4881628lji.20
-        for <linux-usb@vger.kernel.org>; Sun, 21 Feb 2021 21:56:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=09TBSZdzgSpuE3f9Hl1jIn/cAfTfLAwweu2DXussM2s=;
-        b=J8CfvISaCZdu5sfnQW3+GJUmjlDwDfXZbZ9SsZxHIIATF2RDQ0SFKqbUJBvR/ORDwP
-         rBvhFrYmiqEdR+lJHJnfG80PLyfwvlAZaXNnxqclEMaOf55+AuLzn+wWFZJduBEwqYG7
-         DHRZyJ4t6rzWdYqwH0C1Dimw1HBKU/k23qhfRtAmr/Ss+50zM7OFmMv9OgxEsrZFKIp9
-         Jb9MxC9JDqF08aNjsH8Ck/fZMHQnwLEETMQ4V0yvUcasux+DbtdRziszpCY5GjMhb73N
-         cnKZNm/tHQmUj4+OM9xD9jcAn+wkKcj25HFaxAja+lyHNxhvOVVXY8Y+BQ5QE5Lpv3xv
-         XTAg==
-X-Gm-Message-State: AOAM531ENN2WvXeh5eGxqdfw+0eKX1QmwSvpdWE/Bu0FALVqvrJxJ+o/
-        8DvDHRLNjmh4JuGgYeezjcZhkhfS6PFG3Aa6Il5J0fUgLJwoBK9RaL+RxAwzDZ94eHxR6WaMutj
-        wDdaCQDl43NuYAfVb9nnJOFJgTQMfEyP737BWKgpicU5wqqIDGYWkAw==
-X-Received: by 2002:a2e:9a96:: with SMTP id p22mr13528691lji.403.1613973385071;
-        Sun, 21 Feb 2021 21:56:25 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxWNeNRC/yWtaEtvz78Am2bIIhPnfcUtPdVQVFyvqNtuGwayp0LN0mDZLTOW9y0RnEATPXJUlTFbSkkllKQi+c=
-X-Received: by 2002:a2e:9a96:: with SMTP id p22mr13528679lji.403.1613973384871;
- Sun, 21 Feb 2021 21:56:24 -0800 (PST)
+        id S229961AbhBVGEV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Feb 2021 01:04:21 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:45006 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229953AbhBVGER (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 01:04:17 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 11M5wOq3147408;
+        Mon, 22 Feb 2021 06:03:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=A1UELqL1BspiLQToozAhp0VlUUTUJUEMj22TOJGavrI=;
+ b=NU20WW8JxBpeGanOVSdifZkKjLNYWZQKkddVfOcjf6oMmZUDqAvCFu5s3s0Pb1xAGZ2N
+ vyTlN+6WWAh45UJg8J1zOeXVcKSULMT9Pb3+j41AE76vhrjtzDHQVEVFtEwKaiWS/V0f
+ 9FmIqW5hmeY9UIOUjMhFPdkDcDtkxQg64D/UCmxnGnUgSR0QTlzLERfSWDsq2C/FGvYI
+ 7B6neYhbGlNMa9lK72QP1iBUVbV1B9PZbayuTHmrkdKt64wHKuBm7iZyw7liwbmzA3ow
+ YbDj87VsAjRS7MRuty8QvkJygaB7G+nZgSOygWQCeSGacNMkBG6QdQ+tSGtur/fhiPLK fA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 36ugq39a1v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 Feb 2021 06:03:21 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 11M5sd9C049366;
+        Mon, 22 Feb 2021 06:03:19 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 36uc0kusj0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 Feb 2021 06:03:19 +0000
+Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 11M63C8J010574;
+        Mon, 22 Feb 2021 06:03:12 GMT
+Received: from kadam (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Sun, 21 Feb 2021 22:03:12 -0800
+Date:   Mon, 22 Feb 2021 09:03:03 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, krzk@kernel.org,
+        nathan@kernel.org, ndesaulniers@google.com, arnd@arndb.de,
+        gustavoars@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: gadget: s3c: Fix incorrect resources releasing
+Message-ID: <20210222060302.GI2087@kadam>
+References: <20210221074117.937965-1-christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-References: <20210204051850.64857-1-aaron.ma@canonical.com>
- <CAAd53p4euFiw7pfDnD2H8oMVeeTqQ_c+wOFDLM2xPccn5MewiA@mail.gmail.com>
- <cd4595e6-67da-885c-1a67-6dfd71425b8c@canonical.com> <CAAd53p4z1ydFi5pwOZJnsrBDPNVLKU0ygqa0+kdZdXWYocPLgQ@mail.gmail.com>
- <YCJJrVp2DvCzigCw@kroah.com> <00de6927-3fa6-a9a3-2d65-2b4d4e8f0012@linux.intel.com>
- <YCUoBP4GUrGL0J3J@kroah.com> <a93e3039-c910-4bf5-0e8a-ffdd74b983d0@canonical.com>
-In-Reply-To: <a93e3039-c910-4bf5-0e8a-ffdd74b983d0@canonical.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Mon, 22 Feb 2021 13:56:13 +0800
-Message-ID: <CAAd53p7Zzcny277JQe2oZ3R5xwm=dyUtY6bdoEesRycbFh_hbg@mail.gmail.com>
-Subject: Re: [PATCH] xhci-pci: Set AMD Renoir USB controller to D3 when shutdown
-To:     Aaron Ma <aaron.ma@canonical.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Lee Jones <lee.jones@linaro.org>, peter.chen@nxp.com,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210221074117.937965-1-christophe.jaillet@wanadoo.fr>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-IMR: 1
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9902 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 adultscore=0
+ mlxscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2102220054
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9902 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
+ malwarescore=0 spamscore=0 mlxscore=0 suspectscore=0 priorityscore=1501
+ clxscore=1011 impostorscore=0 lowpriorityscore=0 mlxlogscore=999
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102220054
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 19, 2021 at 4:07 PM Aaron Ma <aaron.ma@canonical.com> wrote:
->
->
->
-> On 2/11/21 8:50 PM, Greg Kroah-Hartman wrote:
-> > On Wed, Feb 10, 2021 at 03:13:30PM +0200, Mathias Nyman wrote:
-> >> On 9.2.2021 10.37, Greg Kroah-Hartman wrote:
-> >>> On Fri, Feb 05, 2021 at 02:50:15PM +0800, Kai-Heng Feng wrote:
-> >>>> On Fri, Feb 5, 2021 at 2:45 PM Aaron Ma <aaron.ma@canonical.com> wrote:
-> >>>>>
-> >>>>>
-> >>>>> On 2/5/21 12:27 PM, Kai-Heng Feng wrote:
-> >>>>>> Can you please test the following patch, which should address the root cause:
-> >>>>>> https://lore.kernel.org/linux-acpi/20201201213019.1558738-1-furquan@google.com/
-> >>>>>>
-> >>>>>> It also helps another AMD laptop on S5:
-> >>>>>> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1912935
-> >>>>>>
-> >>>>>
-> >>>>> No, this patch doesn't help on ThinkPad AMD platform.
-> >>>>
-> >>>> Thanks for the confirmation!
-> >>>>
-> >>>> Acked-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> >>>
-> >>> Mathias, want me to take this in my tree now, or are you going to send
-> >>> me more patches for 5.12-rc1?
-> >>>
-> >>
-> >> Nothing more for 5.12-rc1 from me.
-> >>
-> >> Could this be a PCI quirk instead of xhci?
-> >> Maybe there is some PCI flag for this already, haven't checked yet.
-> >>
-> >> We want a specific PCI device to go to PCI D3cold at PCI shutdown...
-> >
-> > There probably is.  Kay-Heng, can you look into doing that instead?
-> >
->
-> There is no such PCI quirk, usually it calls driver to shutdown.
+On Sun, Feb 21, 2021 at 08:41:17AM +0100, Christophe JAILLET wrote:
+> Since commit fe0f8e5c9ba8 ("usb: gadget: s3c: use platform resources"),
 
-Let me work on it. There are other devices need to be in D3 for
-shutdown, a generic approach across all devices will be better.
+This the wrong hash.  It should be 188db4435ac6 from the URL you posted
+below.
 
-Kai-Heng
+regards,
+dan carpenter
 
->
-> Regards,
-> Aaron
->
-> > thanks,
-> >
-> > greg k-h
-> >
