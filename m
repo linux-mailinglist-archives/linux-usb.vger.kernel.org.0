@@ -2,67 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 114F23215D5
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 13:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB36132177F
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 13:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbhBVMKh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Feb 2021 07:10:37 -0500
-Received: from mx2.suse.de ([195.135.220.15]:56192 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230090AbhBVMKc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 22 Feb 2021 07:10:32 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1613995783; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yLeSjdAn6ytvvSZ7l1bruf6v0eYDWUB2oiRB+v/1EnM=;
-        b=e/nAV+MYeJjAgiyPTwc40OITAzxjyTJR6GKilTsxVYuBh8sK8jo7wYdB+AV3weQEJR4YWY
-        hZ3CT15WUxeCSGnV7dmKjSzHJx4w88Ebamntg49TLET0SNTdnFQFE3G4pHu6cTJbJv4N10
-        aTyCPn+8FaTPp1cVYwCPRJ4lpv4xDYY=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 1FB54AD5C;
-        Mon, 22 Feb 2021 12:09:43 +0000 (UTC)
-Message-ID: <d61ad9565e29a07086e52bc984e8e629285ff8cf.camel@suse.com>
-Subject: Re: [PATCH] usbnet: ipheth: fix connectivity with iOS 14
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Sam Bingner <sam@bingner.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Martin Habets <mhabets@solarflare.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Shannon Nelson <snelson@pensando.io>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Matti Vuorela <matti.vuorela@bitfactor.fi>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yves-Alexis Perez <corsac@corsac.net>
-Date:   Mon, 22 Feb 2021 13:09:38 +0100
-In-Reply-To: <370902e520c44890a44cb5dd0cb1595f@bingner.com>
-References: <370902e520c44890a44cb5dd0cb1595f@bingner.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S231603AbhBVMtS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 22 Feb 2021 07:49:18 -0500
+Received: from beige.elm.relay.mailchannels.net ([23.83.212.16]:16638 "EHLO
+        beige.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231293AbhBVMsq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 07:48:46 -0500
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 2FDF1101F76;
+        Mon, 22 Feb 2021 12:39:47 +0000 (UTC)
+Received: from pdx1-sub0-mail-a46.g.dreamhost.com (100-98-118-117.trex.outbound.svc.cluster.local [100.98.118.117])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id A8D15101A4D;
+        Mon, 22 Feb 2021 12:39:46 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from pdx1-sub0-mail-a46.g.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
+        by 100.98.118.117 (trex/6.0.2);
+        Mon, 22 Feb 2021 12:39:47 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|smtp@contentfirst.com
+X-MailChannels-Auth-Id: dreamhost
+X-Spot-Chief: 77190bf72eb2d824_1613997586973_340005202
+X-MC-Loop-Signature: 1613997586973:2902972099
+X-MC-Ingress-Time: 1613997586973
+Received: from pdx1-sub0-mail-a46.g.dreamhost.com (localhost [127.0.0.1])
+        by pdx1-sub0-mail-a46.g.dreamhost.com (Postfix) with ESMTP id 7169F88D85;
+        Mon, 22 Feb 2021 04:39:46 -0800 (PST)
+Received: from industrynumbers.com (pool-100-15-209-187.washdc.fios.verizon.net [100.15.209.187])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: smtp@contentfirst.com)
+        by pdx1-sub0-mail-a46.g.dreamhost.com (Postfix) with ESMTPSA id 0E3E17FDDB;
+        Mon, 22 Feb 2021 04:39:44 -0800 (PST)
+Received: from industrynumbers.com (localhost [127.0.0.1])
+        by industrynumbers.com (Postfix) with ESMTP id 776F5282D7A;
+        Mon, 22 Feb 2021 07:39:42 -0500 (EST)
+To:     Johan Hovold <johan@kernel.org>, charles-yeh@prolific.com.tw
+Cc:     linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        Charles Yeh <charlesyeh522@gmail.com>,
+        Joe Abbott <jabbott@rollanet.org>
+References: <3aee5708-7961-f464-8c5f-6685d96920d6@IEEE.org>
+ <dc3458f1-830b-284b-3464-20124dc3900a@IEEE.org>
+ <YDNwxtDxd7JntAXt@hovoldconsulting.com>
+X-DH-BACKEND: pdx1-sub0-mail-a46
+From:   "Michael G. Katzmann" <michaelk@IEEE.org>
+Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+Message-ID: <e2dcc839-3b43-2c80-6ad1-2d97e639b46a@IEEE.org>
+Date:   Mon, 22 Feb 2021 07:39:42 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <YDNwxtDxd7JntAXt@hovoldconsulting.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Sonntag, den 21.02.2021, 10:42 +0000 schrieb Sam Bingner:
-> There seems to be a problem with this patch:
-> 
-> Whenever the iPhone sends a packet to the tethered device that is 1500 bytes long, it gets the error "ipheth 1-1:4.2: ipheth_rcvbulk_callback: urb status: -79" on the connected device and stops passing traffic.  I am able to bring it back up by shutting and unshutting the interface, but the same thing happens very quickly.   I noticed that this patch dropped the max USB packet size from 1516 to 1514 bytes, so I decided to try lowering the MTU to 1498; this made the connection reliable and no more errors occurred.
-> 
-> It appears to me that the iPhone is still sending out 1516 bytes over USB for a 1500 byte packet and this patch makes USB abort when that happens?  I could duplicate reliably by sending a ping from the iphone (ping -s 1472) to the connected device, or vice versa as the reply would then break it.
-> 
-> I apologize if this reply doesn't end up where it should - I tried to reply to the last message in this thread but I wasn't actually *on* the thread so I had to just build it as much as possible myself.
+On 2/22/21 3:52 AM, Johan Hovold wrote:
+> Does your updated algorithm also result in 110 baud (8n1) being encoded
+> as:
+>
+> 	a8 a6 01 80 00 02 07
+>
+> And are you using some official Prolific Windows driver or something
+> that came with the device?
 
-Is this a regression? Does it work after reverting the patch? Which
-version of iOS?
+Johan,
 
-	Regards
-		Oliver
+  On Windows I did not install a new driver. It was recognized by the system and uses the Microsoft provided Prolific driver Ver 3.8.38.2.
+
+On windows everything looks fine (no sign of distress (i.e. no yellow caution triangle)).
+
+Where should I look for the encoding (a8 a6 01 80 00 02 07) ? (110bd encodes as 80 00 C3 54 using the algorithm I described))
+
+cheers,
+
+   Michael
+
+> I tried asking Prolific about this but I'm still not sure whether these
+> are official chips or counterfeit. 0x0300 is supposed to be a PL2303TA
+> and Prolific claims that the current driver is working fine with these
+> so we'd need to key off something more than just bcdDevice.
 
 
