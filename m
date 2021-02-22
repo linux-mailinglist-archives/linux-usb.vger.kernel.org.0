@@ -2,85 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D90321B1E
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 16:18:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F8F321B6D
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 16:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbhBVPQy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Feb 2021 10:16:54 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:38997 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbhBVPPV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 10:15:21 -0500
-Received: from [123.112.65.49] (helo=[192.168.0.106])
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <hui.wang@canonical.com>)
-        id 1lECuw-0007bc-Bw; Mon, 22 Feb 2021 15:14:34 +0000
-Subject: Re: [PATCH] USB: UAS: don't unbind and rebind the driver during
- usb_reset_device
-To:     Oliver Neukum <oneukum@suse.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
-References: <20210221085100.4297-1-hui.wang@canonical.com>
- <b1fe6cf4-b48f-c7e6-17c0-2ed04d8f3aa1@redhat.com>
- <ad6601a93f8fc4ec4d1451df5457e51aadf37301.camel@suse.com>
- <b28b38fa-3d19-3251-e576-38bd4d828ac1@canonical.com>
- <aba904f15b0bd07592ad59c00c07f6472c8d9663.camel@suse.com>
- <e7064799-0320-d662-47de-11181074130b@canonical.com>
- <9fd28086226b7b8b49ac9047a06e92e4da154f73.camel@suse.com>
-From:   Hui Wang <hui.wang@canonical.com>
-Message-ID: <2b6d426d-068e-a66f-b3e2-9c8f2de9b8d0@canonical.com>
-Date:   Mon, 22 Feb 2021 23:14:15 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S231148AbhBVP3U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Feb 2021 10:29:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57588 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230084AbhBVP21 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 22 Feb 2021 10:28:27 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 721A764E24;
+        Mon, 22 Feb 2021 15:27:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614007659;
+        bh=q9Estwy8/COuQq0gmoB1jzKJT7r7o9dG+aiZnsncBrg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eO1cGdcxtFayjKzpEuEQAoVVTsItSUTEV7Zy90sBssqe1fe7c30+88S3SWP65BeDs
+         FaHGPdT3U8a7aP7pRsA7q6p+TNwGwnECaS16uEc45HOhNWAKSYkPUIwQ4y7/I6159k
+         aa5tobVGnUsBHPNsdZ6cdBlE0cTaAXvhlHGdZEwnDs/IKpG8/3TPNUoQvxi56QmEUV
+         AV0U3YIDdm4Y+23rTwqPIsAw/dvmWGITbs5/PWRYNVrv16OO96gidoq/ZXluQsy80m
+         zxHbatbyHLtk1CPI8XO2thrkz/+FnfPTVpGiFu3wEvyJJssDHfJfMR7+Li7Lft1Y11
+         wxRteMPpsHt7w==
+Date:   Mon, 22 Feb 2021 16:27:34 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patong.mxl@gmail.com,
+        linus.walleij@linaro.org, angelo.dureghello@timesys.com
+Subject: Re: [PATCH v5 1/3] usb: serial: Add MaxLinear/Exar USB to Serial
+ driver
+Message-ID: <20210222161119.0bd70a2b@coco.lan>
+In-Reply-To: <YBBCvHvduivta07b@hovoldconsulting.com>
+References: <20201122170822.21715-1-mani@kernel.org>
+        <20201122170822.21715-2-mani@kernel.org>
+        <YAlVLOqzx8otPgOg@hovoldconsulting.com>
+        <20210126154604.GC29751@thinkpad>
+        <YBBCvHvduivta07b@hovoldconsulting.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <9fd28086226b7b8b49ac9047a06e92e4da154f73.camel@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Johan,
 
-On 2/22/21 9:50 PM, Oliver Neukum wrote:
-> Am Montag, den 22.02.2021, 21:02 +0800 schrieb Hui Wang:
->> On 2/22/21 8:51 PM, Oliver Neukum wrote:
->>> Am Montag, den 22.02.2021, 20:40 +0800 schrieb Hui Wang:
->>>> On 2/22/21 3:59 PM, Oliver Neukum wrote:
->>>> OK, will find a UAS device to do the test.
->>> Hi,
->>>
->>> do you have a design at all?
->> No, so far what I could find is all driven by usb-storage, I tested a
->> couple of usb-sdcard-readers and usb-scsi/ata disk adapters, they all
->> belong to USB_INTERFACE_INFO(USB_CLASS_MASS_STORAGE, USB_SC_SCSI,
->> USB_PR_BULK) instead of USB_INTERFACE_INFO(USB_CLASS_MASS_STORAGE,
->> USB_SC_SCSI, USB_PR_UAS). I plan to go to the office to find some usb
->> storage devices to test.
-> Hi,
->
-> please wait.  First of all, you are making the assumption that all
-> resets originate from the SCSI layer. You cannot make that assumption.
->
-> Secondly, yes, ideally we should not pretend that a disconnect has
-> happened, when it hasn't happened, but what is your alternative.
-> What exactly do you want to test? You have not even defined the
-> desirable behavior and the problem you are seeing with the current
-> behavior.
+Em Tue, 26 Jan 2021 17:26:36 +0100
+Johan Hovold <johan@kernel.org> escreveu:
 
-I planed to forcibly (simulate) trigger calling 
-eh_device_reset_handler() from scsi layer and let pre_reset() or 
-post_reset() return a non-zero, and test if there is use-after-free 
-issue in the rest part of eh_device_reset_handler() and its callers. But 
-after thinking of your comment, looks like I was wrong. Thanks for your 
-instructions on this issue.
+> On Tue, Jan 26, 2021 at 09:16:04PM +0530, Manivannan Sadhasivam wrote:
+> > On Thu, Jan 21, 2021 at 11:19:24AM +0100, Johan Hovold wrote:  
+> > > On Sun, Nov 22, 2020 at 10:38:20PM +0530, Manivannan Sadhasivam wrote:  
+> > > > Add support for MaxLinear/Exar USB to Serial converters. This driver
+> > > > only supports XR21V141X series but it can be extended to other series
+> > > > from Exar as well in future.  
+> > > 
+> > > There are still a few issues with this driver, but I really don't want
+> > > to have to review it again in a couple of months so I've fixed it up
+> > > myself this time.
+> > > 
+> > > The trivial stuff I folded into this patch, and I'll submit a follow-on
+> > > series for the rest.
+> > >   
+> > 
+> > Many thanks for doing this! These days it is really difficult to find
+> > time for spare time stuffs.
+> > 
+> > And all of your fixes makes sense to me.  
+> 
+> Thanks for taking a look!
 
-Thanks,
+Thanks for merging it!
 
-Hui.
+-
 
-> 	Regards
-> 		Oliver
->
->
+I'm now facing an issue with this driver. I have here two different
+boards with those USB UART from MaxLinear/Exar.
+
+The first one is identical to Mani's one:
+	USB_DEVICE(0x04e2, 0x1411)
+The second one is a different version of it:
+	USB_DEVICE(0x04e2, 0x1424)
+
+By looking at the final driver merged at linux-next, it sounds that
+somewhere during the review of this series, it lost the priv struct,
+and the xr_probe function. It also lost support for all MaxLinear/Exar
+devices, except for just one model (04e2:1411).
+
+The original submission:
+
+	https://lore.kernel.org/linux-usb/20180404070634.nhspvmxcjwfgjkcv@advantechmxl-desktop
+
+And the manufacturer's Linux driver on their website:
+
+	https://www.maxlinear.com/support/design-tools/software-drivers
+
+Had support for other 12 different models of the MaxLinear/Exar USB
+UART. 
+
+Those are grouped into 5 different major types:
+
+	+	init_xr2280x_reg_map();
+	+	init_xr21b142x_reg_map();
+	+	init_xr21b1411_reg_map();
+	+	init_xr21v141x_reg_map();
+	+
+	+	if ((xrusb->DeviceProduct & 0xfff0) == 0x1400)
+	+		memcpy(&(xrusb->reg_map), &xr2280x_reg_map,
+	+			sizeof(struct reg_addr_map));
+	+	else if ((xrusb->DeviceProduct & 0xFFF0) == 0x1420)
+	+		memcpy(&(xrusb->reg_map), &xr21b142x_reg_map,
+	+			sizeof(struct reg_addr_map));
+	+	else if (xrusb->DeviceProduct == 0x1411)
+	+		memcpy(&(xrusb->reg_map), &xr21b1411_reg_map,
+	+			sizeof(struct reg_addr_map));
+	+	else if ((xrusb->DeviceProduct & 0xfff0) == 0x1410)
+	+		memcpy(&(xrusb->reg_map), &xr21v141x_reg_map,
+	+			sizeof(struct reg_addr_map));
+	+	else
+	+		rv = -1;
+
+Note: Please don't be confused by "reg_map" name. This has nothing
+      to do with Linux regmap API ;-)
+
+What happens is that different USB IDs have different values for
+each register. So, for instance, the UART enable register is set to
+either one of the following values, depending on the value of
+udev->descriptor.idProduct:
+
+	xr21b140x_reg_map.uart_enable_addr = 0x00;
+	xr21b1411_reg_map.uart_enable_addr = 0xc00;
+	xr21v141x_reg_map.uart_enable_addr = 0x03;
+	xr21b142x_reg_map.uart_enable_addr = 0x00;
+
+There are other values that depend on the probing time detection,
+based on other USB descriptors. Those set several fields at the
+priv data that would allow to properly map the registers.
+
+Also, there are 4 models that support multiple channels. On those,
+there are one pair of register get/set for each channel.
+
+-
+
+In summary, while supporting just 04e2:1411 there's no need for
+a private struct, in order to properly support the other models,
+some autodetection is needed. The best way of doing that is to
+re-add the .probe method and adding a priv struct.
+
+As I dunno why this was dropped in the first place, I'm wondering
+if it would be ok to re-introduce them.
+
+To be clear: my main focus here is just to avoid needing to use 
+Windows in order to use the serial console of the hardware with
+the 0x1424 variant ;-)
+
+I can't test the driver with the other hardware, but, IMHO, instead
+of adding a hack to support 0x1424, the better (but more painful)
+would be to re-add the auto-detection part and support for the
+other models.
+
+Thanks!
+Mauro
