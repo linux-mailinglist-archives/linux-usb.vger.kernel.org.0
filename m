@@ -2,111 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30170321B28
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 16:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D90321B1E
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 16:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbhBVPRq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Feb 2021 10:17:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbhBVPPX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 10:15:23 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A47CC061A31;
-        Mon, 22 Feb 2021 07:13:06 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id b3so19449630wrj.5;
-        Mon, 22 Feb 2021 07:13:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xsehZqvcvtb4tCCQoqeDviKqU/Y1YzBUUFjUVz3pAZk=;
-        b=rncFZJGMNdZtNXBSacAVdgQBb0oGFNyf4Hdrl4WXvGfYPpXc/Yp5sNVXRPxebcNuHS
-         7IwEN7oQqyGVvRqs7xITRH9BrQFVeMl9spTlXJbuc9zRHDrvQyCLU3I7tFJ1PyS/4HNJ
-         fzRC7nyB+goax8BUDRiSpHvvPl5rliAh3rGz2sJefngJxqQ91KSDr12SCvrRitANW/hI
-         0ZEPXb2d75NN21G4Mk1zMcEiEFxGfPE1x4YqmFFkLRQzfM4WHTL3WWIWjUQbfKTCBMaK
-         sivFSnlzPOUjk7O8xk+5jDWF/7ksajmmcO15qtMvYQi3A8BDvi2F/SkrsWH3iGHIEm/5
-         DhaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xsehZqvcvtb4tCCQoqeDviKqU/Y1YzBUUFjUVz3pAZk=;
-        b=IH6RySdRHvgOxuNtgtYPGTaJNrSBByIg+uwQNjs/TI51syOaXzvhOS+2H3k3I/6jaa
-         DOvdY1XkxlO3lMSQIB7sugWTf5YD7h3Rxi+IMCpRLN7c+peZs104KMr4uT0vlNlDYsqv
-         VDeHPj8DNCT9kMA021f4SSzTtXnutorxGzXETaSFN/b2b9+uz2/NIt6KeuQXoWinaPyP
-         bShDUMRHgWi0/NvPQ0ol6wnYoHTN0OOcIu2xyqo74AMShZuNmKwS5KdUib/CXAHR9luk
-         FL4xXW78JesCqbkaWb3PpSqDI1zVb4kQyPqCnmf/q3yxxolwHGWSuPJlIQ9QV6ihI2RS
-         hVmQ==
-X-Gm-Message-State: AOAM532HoYEiFyFAGLYgG+UHONFZnAAiuwOJ39Y5Xd4fb0oS/TSPHxEh
-        bjoG7EL0x4yE0nOCJByQH2VbbH6A2cpUdqe0pfE=
-X-Google-Smtp-Source: ABdhPJxRYTjEd7nsbxeIKUmEpWw/94Nm1leoqbaxX1B5ddNqok4WzlYQVzm9GVfAfVRtD+2oslhAOw==
-X-Received: by 2002:a5d:55d2:: with SMTP id i18mr5005134wrw.221.1614006784971;
-        Mon, 22 Feb 2021 07:13:04 -0800 (PST)
-Received: from debby (176-141-241-253.abo.bbox.fr. [176.141.241.253])
-        by smtp.gmail.com with ESMTPSA id h13sm29117488wrv.20.2021.02.22.07.13.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Feb 2021 07:13:04 -0800 (PST)
-From:   Romain Perier <romain.perier@gmail.com>
-To:     Kees Cook <keescook@chromium.org>,
-        kernel-hardening@lists.openwall.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Romain Perier <romain.perier@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 19/20] usbip: usbip_host: Manual replacement of the deprecated strlcpy() with return values
-Date:   Mon, 22 Feb 2021 16:12:30 +0100
-Message-Id: <20210222151231.22572-20-romain.perier@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210222151231.22572-1-romain.perier@gmail.com>
-References: <20210222151231.22572-1-romain.perier@gmail.com>
+        id S230313AbhBVPQy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Feb 2021 10:16:54 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:38997 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231397AbhBVPPV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 10:15:21 -0500
+Received: from [123.112.65.49] (helo=[192.168.0.106])
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <hui.wang@canonical.com>)
+        id 1lECuw-0007bc-Bw; Mon, 22 Feb 2021 15:14:34 +0000
+Subject: Re: [PATCH] USB: UAS: don't unbind and rebind the driver during
+ usb_reset_device
+To:     Oliver Neukum <oneukum@suse.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
+References: <20210221085100.4297-1-hui.wang@canonical.com>
+ <b1fe6cf4-b48f-c7e6-17c0-2ed04d8f3aa1@redhat.com>
+ <ad6601a93f8fc4ec4d1451df5457e51aadf37301.camel@suse.com>
+ <b28b38fa-3d19-3251-e576-38bd4d828ac1@canonical.com>
+ <aba904f15b0bd07592ad59c00c07f6472c8d9663.camel@suse.com>
+ <e7064799-0320-d662-47de-11181074130b@canonical.com>
+ <9fd28086226b7b8b49ac9047a06e92e4da154f73.camel@suse.com>
+From:   Hui Wang <hui.wang@canonical.com>
+Message-ID: <2b6d426d-068e-a66f-b3e2-9c8f2de9b8d0@canonical.com>
+Date:   Mon, 22 Feb 2021 23:14:15 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <9fd28086226b7b8b49ac9047a06e92e4da154f73.camel@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The strlcpy() reads the entire source buffer first, it is dangerous if
-the source buffer lenght is unbounded or possibility non NULL-terminated.
-It can lead to linear read overflows, crashes, etc...
 
-As recommended in the deprecated interfaces [1], it should be replaced
-by strscpy.
+On 2/22/21 9:50 PM, Oliver Neukum wrote:
+> Am Montag, den 22.02.2021, 21:02 +0800 schrieb Hui Wang:
+>> On 2/22/21 8:51 PM, Oliver Neukum wrote:
+>>> Am Montag, den 22.02.2021, 20:40 +0800 schrieb Hui Wang:
+>>>> On 2/22/21 3:59 PM, Oliver Neukum wrote:
+>>>> OK, will find a UAS device to do the test.
+>>> Hi,
+>>>
+>>> do you have a design at all?
+>> No, so far what I could find is all driven by usb-storage, I tested a
+>> couple of usb-sdcard-readers and usb-scsi/ata disk adapters, they all
+>> belong to USB_INTERFACE_INFO(USB_CLASS_MASS_STORAGE, USB_SC_SCSI,
+>> USB_PR_BULK) instead of USB_INTERFACE_INFO(USB_CLASS_MASS_STORAGE,
+>> USB_SC_SCSI, USB_PR_UAS). I plan to go to the office to find some usb
+>> storage devices to test.
+> Hi,
+>
+> please wait.  First of all, you are making the assumption that all
+> resets originate from the SCSI layer. You cannot make that assumption.
+>
+> Secondly, yes, ideally we should not pretend that a disconnect has
+> happened, when it hasn't happened, but what is your alternative.
+> What exactly do you want to test? You have not even defined the
+> desirable behavior and the problem you are seeing with the current
+> behavior.
 
-This commit replaces all calls to strlcpy that handle the return values
-by the corresponding strscpy calls with new handling of the return
-values (as it is quite different between the two functions).
+I planed to forcibly (simulate) trigger calling 
+eh_device_reset_handler() from scsi layer and let pre_reset() or 
+post_reset() return a non-zero, and test if there is use-after-free 
+issue in the rest part of eh_device_reset_handler() and its callers. But 
+after thinking of your comment, looks like I was wrong. Thanks for your 
+instructions on this issue.
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+Thanks,
 
-Signed-off-by: Romain Perier <romain.perier@gmail.com>
----
- drivers/usb/usbip/stub_main.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Hui.
 
-diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
-index 77a5b3f8736a..5bc2c09c0d10 100644
---- a/drivers/usb/usbip/stub_main.c
-+++ b/drivers/usb/usbip/stub_main.c
-@@ -167,15 +167,15 @@ static ssize_t match_busid_show(struct device_driver *drv, char *buf)
- static ssize_t match_busid_store(struct device_driver *dev, const char *buf,
- 				 size_t count)
- {
--	int len;
-+	ssize_t len;
- 	char busid[BUSID_SIZE];
- 
- 	if (count < 5)
- 		return -EINVAL;
- 
- 	/* busid needs to include \0 termination */
--	len = strlcpy(busid, buf + 4, BUSID_SIZE);
--	if (sizeof(busid) <= len)
-+	len = strscpy(busid, buf + 4, BUSID_SIZE);
-+	if (len == -E2BIG)
- 		return -EINVAL;
- 
- 	if (!strncmp(buf, "add ", 4)) {
-
+> 	Regards
+> 		Oliver
+>
+>
