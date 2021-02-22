@@ -2,59 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D1B3217AA
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 13:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 486B63217F5
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 14:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbhBVMwm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Feb 2021 07:52:42 -0500
-Received: from mx2.suse.de ([195.135.220.15]:45002 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231506AbhBVMw1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 22 Feb 2021 07:52:27 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1613998301; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zvm6jo+J9hfErKITCznhLHhQAVhT5BAOBIzvmZ0Q3/0=;
-        b=NrkuYwblsIKOdLE1sB88iOg6wjNPdGoaqEWEubW8ecKQ10LZfbYQQglpNDuUVFrM0PRK2J
-        uBIC2PHIYbb6lHypa93B8VyXqqNB65YwJZnkXt8sFzJf50MrKSdgN0HiW8oycmol2eEmHr
-        dlVSmJtJfyyqCGQLCddYlHupnah4f6g=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id BC53BAE5C;
-        Mon, 22 Feb 2021 12:51:41 +0000 (UTC)
-Message-ID: <aba904f15b0bd07592ad59c00c07f6472c8d9663.camel@suse.com>
+        id S231312AbhBVNE4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Feb 2021 08:04:56 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:34965 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230185AbhBVNDb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 08:03:31 -0500
+Received: from [123.112.65.49] (helo=[192.168.0.106])
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <hui.wang@canonical.com>)
+        id 1lEArR-0006QT-MR; Mon, 22 Feb 2021 13:02:50 +0000
 Subject: Re: [PATCH] USB: UAS: don't unbind and rebind the driver during
  usb_reset_device
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Hui Wang <hui.wang@canonical.com>,
+To:     Oliver Neukum <oneukum@suse.com>,
         Hans de Goede <hdegoede@redhat.com>,
         linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
-Date:   Mon, 22 Feb 2021 13:51:38 +0100
-In-Reply-To: <b28b38fa-3d19-3251-e576-38bd4d828ac1@canonical.com>
 References: <20210221085100.4297-1-hui.wang@canonical.com>
-         <b1fe6cf4-b48f-c7e6-17c0-2ed04d8f3aa1@redhat.com>
-         <ad6601a93f8fc4ec4d1451df5457e51aadf37301.camel@suse.com>
-         <b28b38fa-3d19-3251-e576-38bd4d828ac1@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+ <b1fe6cf4-b48f-c7e6-17c0-2ed04d8f3aa1@redhat.com>
+ <ad6601a93f8fc4ec4d1451df5457e51aadf37301.camel@suse.com>
+ <b28b38fa-3d19-3251-e576-38bd4d828ac1@canonical.com>
+ <aba904f15b0bd07592ad59c00c07f6472c8d9663.camel@suse.com>
+From:   Hui Wang <hui.wang@canonical.com>
+Message-ID: <e7064799-0320-d662-47de-11181074130b@canonical.com>
+Date:   Mon, 22 Feb 2021 21:02:43 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
+In-Reply-To: <aba904f15b0bd07592ad59c00c07f6472c8d9663.camel@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 22.02.2021, 20:40 +0800 schrieb Hui Wang:
-> On 2/22/21 3:59 PM, Oliver Neukum wrote:
-> > 
-> OK, will find a UAS device to do the test.
 
-Hi,
+On 2/22/21 8:51 PM, Oliver Neukum wrote:
+> Am Montag, den 22.02.2021, 20:40 +0800 schrieb Hui Wang:
+>> On 2/22/21 3:59 PM, Oliver Neukum wrote:
+>> OK, will find a UAS device to do the test.
+> Hi,
+>
+> do you have a design at all?
 
-do you have a design at all?
+No, so far what I could find is all driven by usb-storage, I tested a 
+couple of usb-sdcard-readers and usb-scsi/ata disk adapters, they all 
+belong to USB_INTERFACE_INFO(USB_CLASS_MASS_STORAGE, USB_SC_SCSI, 
+USB_PR_BULK) instead of USB_INTERFACE_INFO(USB_CLASS_MASS_STORAGE, 
+USB_SC_SCSI, USB_PR_UAS). I plan to go to the office to find some usb 
+storage devices to test.
 
-	Regards
-		Oliver
+Regards,
 
+Hui.
 
+>
+> 	Regards
+> 		Oliver
+>
+>
