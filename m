@@ -2,86 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8817321BDD
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 16:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27781321CC8
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 17:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbhBVPvU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Feb 2021 10:51:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32876 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230425AbhBVPvT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 22 Feb 2021 10:51:19 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0545464DAF;
-        Mon, 22 Feb 2021 15:50:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614009036;
-        bh=V6jqKt0LOcFxkEOD3N1TIJAk0oUlGSIXrXDWTYmEP58=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mCx4nFWy5l+mBS6PsXfKNqvYMppOZbZJaN/Dh8Ngu6daajHG1BPD/KTjoDMK76Wv9
-         NVYJN8b0aojELAptxfYB8357V3piaz1EQHnBlEYjpJv3yTS7DYoO6Q6JXiQx13on7/
-         g7N+CxD2vok2V83qqUS+n3mfWCbRKsMmbVKt3MKC6PS7hzCb1AGsPkEEf+j0OH3Rbx
-         TOFDpo6XyT92AqoR3Hv6ZqRCAfyZPDGNw6LDUwjipqpey5KH+StapOgHynKA5mejq0
-         5cevxIgos0rAyhU71tUanSPhGyT2fgyzoGtn7d0cv5rOx5L2DEmbK9jLYav1wYuQcB
-         k14GZiKtx28Ug==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lEDU4-00064X-QC; Mon, 22 Feb 2021 16:50:52 +0100
-Date:   Mon, 22 Feb 2021 16:50:52 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     "Michael G. Katzmann" <michaelk@IEEE.org>
-Cc:     charles-yeh@prolific.com.tw, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>,
-        Joe Abbott <jabbott@rollanet.org>
-Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
-Message-ID: <YDPS3AP63/PwmwJU@hovoldconsulting.com>
-References: <3aee5708-7961-f464-8c5f-6685d96920d6@IEEE.org>
- <dc3458f1-830b-284b-3464-20124dc3900a@IEEE.org>
- <YDNwxtDxd7JntAXt@hovoldconsulting.com>
- <e2dcc839-3b43-2c80-6ad1-2d97e639b46a@IEEE.org>
- <YDOvLseYXaUHs0lS@hovoldconsulting.com>
- <fb1489c2-b972-619b-b7ce-4ae8e1d2cc0f@IEEE.org>
- <YDPO/JprcDTaPmR4@hovoldconsulting.com>
- <0f9caf26-af58-13a9-9947-47bb646f505e@IEEE.org>
+        id S230457AbhBVQW7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Feb 2021 11:22:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231644AbhBVQWd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 11:22:33 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E2CC06174A
+        for <linux-usb@vger.kernel.org>; Mon, 22 Feb 2021 08:21:51 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id k2so3345664ili.4
+        for <linux-usb@vger.kernel.org>; Mon, 22 Feb 2021 08:21:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=O2UdjypR4W3iDVOy5hnKP5de6BTPFEvlQ6oGQr/tzUY=;
+        b=QWYr4qA6Wc1K2uzDRbRDKEFJU9VggdyiFbE9noSMExFmpSB/WSH/g2hR2wobF0KpKU
+         aVmWFkaH9gj8GcMoYdDsRvYawy/kizivt/PojhfqMjCVxWyJwyMAmuZjBr0OPFcPerai
+         XoppCFZUi/lHoq1JIO0Y7Bw+vx/Vb9gdiubmc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=O2UdjypR4W3iDVOy5hnKP5de6BTPFEvlQ6oGQr/tzUY=;
+        b=X3Zw3xetALAQvrFzFeXfUJJAWs3jdE9rpuvru3sKTqifMkJlBGnc1x9tYuXYE9CqOu
+         +KfRvZCMxjareR4nT7M1WGwHtZAJgtTOGQaRcMCpZCKfNZGwc46LFesLppSF/Y9P5IiE
+         ABU5i0DDjm6dS8MhIo0uQRb8EKjFc9zZgGdxBP0I6wYXxH2u2ZX2Vnvf/K1SDvGwcNmd
+         jPLCP5y3rcIhaYKg6Bj4ttsVpwSk6mlO5kMrh5Z/AjE20UrKGbojP7xAsVI2uS1Z8+0L
+         0S3oYGQdsqkA/1hW8TJwt++y4e5SSgFsxuphpayQ1pMdQwEcY/5wglCIR7K90CHGXSaY
+         cZfA==
+X-Gm-Message-State: AOAM533H5T+QwiBvD2HWx/8RCstEFk1ZtpPd8AKaUp0lQOHLba7QXqMn
+        bnF4DuQvEVGzwCxOSRlqxLa4UA==
+X-Google-Smtp-Source: ABdhPJwFg4oQJS2b8UUSE1H4Y8Chs7Kox5qlda5aF9f45HJogdaR2sWCL7VTfnIvoEcooK4vehk05A==
+X-Received: by 2002:a92:1312:: with SMTP id 18mr15099286ilt.92.1614010911339;
+        Mon, 22 Feb 2021 08:21:51 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id b16sm5383378ilq.49.2021.02.22.08.21.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Feb 2021 08:21:51 -0800 (PST)
+Subject: Re: [PATCH 19/20] usbip: usbip_host: Manual replacement of the
+ deprecated strlcpy() with return values
+To:     Romain Perier <romain.perier@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        kernel-hardening@lists.openwall.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210222151231.22572-1-romain.perier@gmail.com>
+ <20210222151231.22572-20-romain.perier@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <0323dcb2-726c-7ea2-8e8b-dba81090b571@linuxfoundation.org>
+Date:   Mon, 22 Feb 2021 09:21:50 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0f9caf26-af58-13a9-9947-47bb646f505e@IEEE.org>
+In-Reply-To: <20210222151231.22572-20-romain.perier@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[ Please try to avoid top posting to the lists. ]
+On 2/22/21 8:12 AM, Romain Perier wrote:
+> The strlcpy() reads the entire source buffer first, it is dangerous if
+> the source buffer lenght is unbounded or possibility non NULL-terminated.
+> It can lead to linear read overflows, crashes, etc...
+> 
+> As recommended in the deprecated interfaces [1], it should be replaced
+> by strscpy.
+> 
+> This commit replaces all calls to strlcpy that handle the return values
+> by the corresponding strscpy calls with new handling of the return
+> values (as it is quite different between the two functions).
+> 
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+> 
+> Signed-off-by: Romain Perier <romain.perier@gmail.com>
+> ---
+>   drivers/usb/usbip/stub_main.c |    6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
+> index 77a5b3f8736a..5bc2c09c0d10 100644
+> --- a/drivers/usb/usbip/stub_main.c
+> +++ b/drivers/usb/usbip/stub_main.c
+> @@ -167,15 +167,15 @@ static ssize_t match_busid_show(struct device_driver *drv, char *buf)
+>   static ssize_t match_busid_store(struct device_driver *dev, const char *buf,
+>   				 size_t count)
+>   {
+> -	int len;
+> +	ssize_t len;
+>   	char busid[BUSID_SIZE];
+>   
+>   	if (count < 5)
+>   		return -EINVAL;
+>   
+>   	/* busid needs to include \0 termination */
+> -	len = strlcpy(busid, buf + 4, BUSID_SIZE);
+> -	if (sizeof(busid) <= len)
+> +	len = strscpy(busid, buf + 4, BUSID_SIZE);
+> +	if (len == -E2BIG)
+>   		return -EINVAL;
+>   
+>   	if (!strncmp(buf, "add ", 4)) {
+> 
 
-On Mon, Feb 22, 2021 at 10:42:25AM -0500, Michael G. Katzmann wrote:
-> Sorry, my mistake .. when I put it in the right order it does indeed
-> also give 110Bd !
 
-Heh, thanks for verifying that. So two ways of encoding the divisors
-then. :)
+Looks good to me. Thank you.
 
-> On 2/22/21 10:34 AM, Johan Hovold wrote:
-> > On Mon, Feb 22, 2021 at 09:53:39AM -0500, Michael G. Katzmann wrote:
-> >> On 2/22/21 8:18 AM, Johan Hovold wrote:
-> >>
-> >> I tried hardcoding buf[6-0] in pl2303_set_termios as
-> >>
-> >> a8 a6 01 80 00 02 07 and got a bitrate of ~200kb 
-> >>
-> >> so, no these settings do not work in my case (or I missunderstood your
-> >> instructions 8-))
-> > Thanks for testing (and that was with 0xa8 in byte 0, right?)
-> >
-> > So it seems we have three devices with bcdDevice 0x0300 encoding the
-> > divisors in slightly different ways and that are all still supported by
-> > the vendor's Windows driver.
-> >
-> > Unless Prolific are willing to shed some light on this, I guess someone
-> > needs to try to figure out how the Windows driver determines which
-> > encoding to use.
-> >
-> > Is your device supposedly also a PL2303 TA? Could you post the output of
-> > lsusb -v for completeness?
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Was your device also a TA?
-
-Johan
+thanks,
+-- Shuah
