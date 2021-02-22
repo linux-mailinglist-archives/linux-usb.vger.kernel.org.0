@@ -2,98 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC254321576
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 12:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 114F23215D5
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 13:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbhBVLxX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Feb 2021 06:53:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbhBVLxJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 06:53:09 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F62C06178B
-        for <linux-usb@vger.kernel.org>; Mon, 22 Feb 2021 03:52:29 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id u1so16331579ybu.14
-        for <linux-usb@vger.kernel.org>; Mon, 22 Feb 2021 03:52:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=hkg7l7k09gSiXsklT0wb4ODJUDwROgdzJX4zhRCopXs=;
-        b=nC+u7LeskQ5PqB96K0OZyaNc5ayCBRcJoQcjFlQGLUBQN68ZJ+WtC1kx4BONX0iQ0R
-         ji7fGuiW2STK+GA8Bw93wQ+9HOmy+PU+Teo1jHk31GAYhYGXV8Ul+aDZF34A4Cxc+VND
-         yN0VnmLXH15c3fcfSsgr92GMOuDnzVhhyX5HpCQpCPpEJqAlYIdt8/lNNd0hstbDMoaz
-         J4x5ZxHco6+X+yirJB9XDwK5+4Ie1bjIRTdrJYarEirRxhmTGsi+ggnMqbmtoG+EdG2/
-         wmfbKlutlC77dWk3XkkR6g0sd6ROp8GxHnk8SvUbTBRV/RODgXh9bJPQK3FnoO2i+rdR
-         HgnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=hkg7l7k09gSiXsklT0wb4ODJUDwROgdzJX4zhRCopXs=;
-        b=KmAlZQyvfqBfbL47FFPdq/ydEnLcdoS1bl/VwQHW57SqYZllGRzLPlVHoqVFKjLSXv
-         OYD8/rkqZuNNw+1zV7yn+Nl0NCahaWbsiuvNZW+5oOWlvbzWPu0aOwPGXxeBb2Cu9cIL
-         OmNT/AQdbUkaNMnuBHIbnnDRpCdZd2RYPDXX6YAWKyvdmDaGe9A/2I2GOFSskzgA0MW+
-         itJvgkXKHW9G6wNYb+uBK+EyP++mfpAehp6K3tEjsbvoDZFXzEScKNgSxYJkfTj2utnz
-         YyLyuJuDXEIOYAyX4uRWKgdszFrIF4/aJRAgOsymu1KyI/vs6y/AxvNLZ1AITGT2uQVN
-         Ag8Q==
-X-Gm-Message-State: AOAM532KGkdxI6CbG8Uk/71ixslEs4iaol3blPjt9uhnolG+spu7oqym
-        QlaIcjL9Kd2igqSibyD4Q9rJLFqH2Uc=
-X-Google-Smtp-Source: ABdhPJwClJrjWHmfghcvmp5t/JdruNppK7yh4zkWeNZm8ur+iROqDeX8KnFGgrNGmFFqE/GYTbCRvtFja3s=
-Sender: "raychi via sendgmr" <raychi@raychi.tao.corp.google.com>
-X-Received: from raychi.tao.corp.google.com ([2401:fa00:fc:202:9c8c:8669:7daa:43ff])
- (user=raychi job=sendgmr) by 2002:a25:9902:: with SMTP id z2mr30927267ybn.339.1613994748863;
- Mon, 22 Feb 2021 03:52:28 -0800 (PST)
-Date:   Mon, 22 Feb 2021 19:51:49 +0800
-In-Reply-To: <20210222115149.3606776-1-raychi@google.com>
-Message-Id: <20210222115149.3606776-3-raychi@google.com>
-Mime-Version: 1.0
-References: <20210222115149.3606776-1-raychi@google.com>
-X-Mailer: git-send-email 2.30.0.617.g56c4b15f3c-goog
-Subject: [PATCH 2/2] usb: dwc3: add an alternate path in vbus_draw callback
-From:   Ray Chi <raychi@google.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kyletso@google.com, badhri@google.com, Ray Chi <raychi@google.com>
+        id S229780AbhBVMKh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Feb 2021 07:10:37 -0500
+Received: from mx2.suse.de ([195.135.220.15]:56192 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230090AbhBVMKc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 22 Feb 2021 07:10:32 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1613995783; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yLeSjdAn6ytvvSZ7l1bruf6v0eYDWUB2oiRB+v/1EnM=;
+        b=e/nAV+MYeJjAgiyPTwc40OITAzxjyTJR6GKilTsxVYuBh8sK8jo7wYdB+AV3weQEJR4YWY
+        hZ3CT15WUxeCSGnV7dmKjSzHJx4w88Ebamntg49TLET0SNTdnFQFE3G4pHu6cTJbJv4N10
+        aTyCPn+8FaTPp1cVYwCPRJ4lpv4xDYY=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 1FB54AD5C;
+        Mon, 22 Feb 2021 12:09:43 +0000 (UTC)
+Message-ID: <d61ad9565e29a07086e52bc984e8e629285ff8cf.camel@suse.com>
+Subject: Re: [PATCH] usbnet: ipheth: fix connectivity with iOS 14
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Sam Bingner <sam@bingner.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Martin Habets <mhabets@solarflare.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Shannon Nelson <snelson@pensando.io>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Matti Vuorela <matti.vuorela@bitfactor.fi>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yves-Alexis Perez <corsac@corsac.net>
+Date:   Mon, 22 Feb 2021 13:09:38 +0100
+In-Reply-To: <370902e520c44890a44cb5dd0cb1595f@bingner.com>
+References: <370902e520c44890a44cb5dd0cb1595f@bingner.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds an alternate path in vbus_draw callback through
-power supply property POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT.
+Am Sonntag, den 21.02.2021, 10:42 +0000 schrieb Sam Bingner:
+> There seems to be a problem with this patch:
+> 
+> Whenever the iPhone sends a packet to the tethered device that is 1500 bytes long, it gets the error "ipheth 1-1:4.2: ipheth_rcvbulk_callback: urb status: -79" on the connected device and stops passing traffic.  I am able to bring it back up by shutting and unshutting the interface, but the same thing happens very quickly.   I noticed that this patch dropped the max USB packet size from 1516 to 1514 bytes, so I decided to try lowering the MTU to 1498; this made the connection reliable and no more errors occurred.
+> 
+> It appears to me that the iPhone is still sending out 1516 bytes over USB for a 1500 byte packet and this patch makes USB abort when that happens?  I could duplicate reliably by sending a ping from the iphone (ping -s 1472) to the connected device, or vice versa as the reply would then break it.
+> 
+> I apologize if this reply doesn't end up where it should - I tried to reply to the last message in this thread but I wasn't actually *on* the thread so I had to just build it as much as possible myself.
 
-Signed-off-by: Ray Chi <raychi@google.com>
----
- drivers/usb/dwc3/gadget.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+Is this a regression? Does it work after reverting the patch? Which
+version of iOS?
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index aebcf8ec0716..47809835e163 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2530,11 +2530,19 @@ static void dwc3_gadget_set_ssp_rate(struct usb_gadget *g,
- static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
- {
- 	struct dwc3		*dwc = gadget_to_dwc(g);
-+	union power_supply_propval	val = {0};
-+	int				ret;
- 
- 	if (dwc->usb2_phy)
- 		return usb_phy_set_power(dwc->usb2_phy, mA);
- 
--	return 0;
-+	if (!dwc->usb_psy)
-+		return -EOPNOTSUPP;
-+
-+	val.intval = mA;
-+	ret = power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT, &val);
-+
-+	return ret;
- }
- 
- static const struct usb_gadget_ops dwc3_gadget_ops = {
--- 
-2.30.0.617.g56c4b15f3c-goog
+	Regards
+		Oliver
+
 
