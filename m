@@ -2,138 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7351B320A8A
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Feb 2021 14:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 428C0320ED6
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 02:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbhBUNYM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Feb 2021 08:24:12 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:34486 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbhBUNYH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Feb 2021 08:24:07 -0500
-Received: from [123.112.65.49] (helo=[192.168.0.106])
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <hui.wang@canonical.com>)
-        id 1lDoho-0007C0-Fm; Sun, 21 Feb 2021 13:23:24 +0000
-Subject: Re: [PATCH] USB: UAS: don't unbind and rebind the driver during
- usb_reset_device
-To:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
-        oneukum@suse.com, gregkh@linuxfoundation.org
-References: <20210221085100.4297-1-hui.wang@canonical.com>
- <b1fe6cf4-b48f-c7e6-17c0-2ed04d8f3aa1@redhat.com>
-From:   Hui Wang <hui.wang@canonical.com>
-Message-ID: <b4e51bb9-8717-979b-1060-2d821b3c4e23@canonical.com>
-Date:   Sun, 21 Feb 2021 21:23:17 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S230153AbhBVA7f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Feb 2021 19:59:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230140AbhBVA7c (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Feb 2021 19:59:32 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9066C061574;
+        Sun, 21 Feb 2021 16:58:51 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id f3so12352653oiw.13;
+        Sun, 21 Feb 2021 16:58:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=plm+Gqqif0nFmrHo7nyrM26fSa+6xQh6uBWBUDQ738w=;
+        b=vS8uaQWR+01p0sDbKpunLTnIicqRfc2ldhcDcz7Gj//0kps2TdFb5bCJ2FaGhFUlun
+         VPzHAacM8FBeLQ7tXVO9MAbHtZchak397POEBH2E2a/+hsy8u3D3vy46oLjTWY0DWRmQ
+         ZH21NFk2f/JdRUCzn9Lpu5YE9JIkQLmrBv2pQ7P1wOS2IuIlyG9cpCvKpi1q6n/PRvN/
+         XvatSqkKSunuGZ9Ig+6aLJjMJcSaNbFYhe5Bu/a3P+YU5QbQWwKYyy9kO3FmSXGwkN66
+         B5Hwx8yREAfn2pb8rvSPfmhpZ0xvRkahE5ff0nPMgh8YFaiNBDDlPpBnKmkZe/LlSD+6
+         2aew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=plm+Gqqif0nFmrHo7nyrM26fSa+6xQh6uBWBUDQ738w=;
+        b=qEpSAzEAQY5wwHYGk2ZUckqGUten9nyNSk8bFQPwZFWPWSU6aSDClC4LEWfUSqIdCh
+         466mrETsmwMDxOk7tXQdiR1Ri+N4WQFhYHjrU83UlfAMKiJQtXfS+cO+r2orTLQIpXjN
+         dlMb1azYGeNbvqdOX3od2HVjSslskaWimUAdsX6+iq1umFhWE7UNzdoIQDjSBJE9lr0V
+         FPQZes8dLqOTMcWdKUaoN+8CnBD6M4A5eBPpujV07GXXxR33alrNX3dGuhH7ceBQmOJU
+         kGy7bx8x7D+uo1X0YJhqJ05lIBrFlbWWLQSNRWxSW9bmLHMOwppPVhU6FWfTaMWyKQNn
+         O3aw==
+X-Gm-Message-State: AOAM533kvFLwocx9q8lbMzIFyMzI9CqAKsO4kYJpK0jwVNaagZEr0hVg
+        USuNIVLoCpsIjSwDh9u9bo792m6AEagUy22k
+X-Google-Smtp-Source: ABdhPJwhQwMyR/GSjk5Jd6qKD0etUhUwiEkRjenpPURrS0rU5yYRi4Ja7VuaAP/Anri2IGPNaQVmbg==
+X-Received: by 2002:aca:1907:: with SMTP id l7mr10194690oii.28.1613955531031;
+        Sun, 21 Feb 2021 16:58:51 -0800 (PST)
+Received: from localhost.localdomain ([194.110.112.30])
+        by smtp.gmail.com with ESMTPSA id f15sm3359956oti.74.2021.02.21.16.58.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Feb 2021 16:58:50 -0800 (PST)
+From:   Forest Crossman <cyrozap@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Forest Crossman <cyrozap@gmail.com>, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: xhci: Fix ASMedia ASM1042A and ASM3242 DMA addressing
+Date:   Sun, 21 Feb 2021 18:58:29 -0600
+Message-Id: <20210222005829.396968-1-cyrozap@gmail.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-In-Reply-To: <b1fe6cf4-b48f-c7e6-17c0-2ed04d8f3aa1@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+I've confirmed that both the ASMedia ASM1042A and ASM3242 have the same
+problem as the ASM1142 and ASM2142/ASM3142, where they lose some of the
+upper bits of 64-bit DMA addresses. As with the other chips, this can
+cause problems on systems where the upper bits matter, and adding the
+XHCI_NO_64BIT_SUPPORT quirk completely fixes the issue.
 
-On 2/21/21 6:20 PM, Hans de Goede wrote:
-> Hi,
->
-> On 2/21/21 9:51 AM, Hui Wang wrote:
->> Once pre_reset() or post_reset() returns non-zero, the disconnect()
->> and probe() of the usb_driver will be called. In the disconnect(),
->> the scsi_host will be removed and be freed after scsi_host_put(), in
->> the probe(), the new scsi_host and uas_dev_info will be created.
->>
->> If the usb_reset_device() is triggered by eh_device_reset_handler(),
->> and pre_reset()/post_reset() returns non-zero, the disconnect() and
->> probe() will be called, then returns to the eh_device_reset_handler(),
->> it still accesses old scsi related variables and uas_dev_info, and so
->> do its caller functions.
->>
->> Here change the pre_reset() and post_reset() to let them only return
->> 0, after this change, the usb_reset_device() will only reset this
->> usb devcie from its hub port, will not execute unbind and rebind
->> usb_driver during reset.
-> We only return non 0 from the pre/post reset handles if we failed
-> to ensure the device is in a known state.
->
-> E.g. in uas_post_reset() we only fail if we failed to switch the
-> device from the good old usb-storage protocol back to the UAS mode
-> which it was in before.
->
-> Continuing with the UAS driver bound, as if everything is fine,
-> while the device is actually in longer in UAS mode is a bad idea.
->
-> Summarizing this patch is wrong: NACK.
->
-> ###
->
-> I assume that you wrote this patch because of some bug report ?
->
-> In such a case please always include a link to the bug (or forum
-> discussion) in the commit message.
+Signed-off-by: Forest Crossman <cyrozap@gmail.com>
+---
+ drivers/usb/host/xhci-pci.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-OK, got it, so far there is no bug about it. I just wrote some code and 
-called usb_reset_device(), found it will trigger to call disconnect() 
-and probe() in some cases. I found uas.c could trigger to call 
-disconnect() and probe() in eh_device_reset_handler(), and could 
-possibility introduce use-after-free issue. I thought resetting the 
-device from the hub port is enough to let it back to normal work mode, 
-if it doesn't, calling disconnect() and probe() will not help either. 
-And I checked some eh_device_reset_handler callback in other drivers, 
-looks like they don't trigger unbind and rebind, then I wrote this patch.
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 84da8406d5b4..c1694fc5f890 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -66,6 +66,7 @@
+ #define PCI_DEVICE_ID_ASMEDIA_1042A_XHCI		0x1142
+ #define PCI_DEVICE_ID_ASMEDIA_1142_XHCI			0x1242
+ #define PCI_DEVICE_ID_ASMEDIA_2142_XHCI			0x2142
++#define PCI_DEVICE_ID_ASMEDIA_3242_XHCI			0x3242
+ 
+ static const char hcd_name[] = "xhci_hcd";
+ 
+@@ -276,11 +277,14 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI)
+ 		xhci->quirks |= XHCI_BROKEN_STREAMS;
+ 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+-		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI)
++		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI) {
+ 		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
++		xhci->quirks |= XHCI_NO_64BIT_SUPPORT;
++	}
+ 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+ 	    (pdev->device == PCI_DEVICE_ID_ASMEDIA_1142_XHCI ||
+-	     pdev->device == PCI_DEVICE_ID_ASMEDIA_2142_XHCI))
++	     pdev->device == PCI_DEVICE_ID_ASMEDIA_2142_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_ASMEDIA_3242_XHCI))
+ 		xhci->quirks |= XHCI_NO_64BIT_SUPPORT;
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+-- 
+2.20.1
 
-Thanks,
-
-Hui.
-
->
-> UAS problems typically are caused by people shoving a 2.5 inch
-> or m2 SSD in an USB enclosure which is powered from the USB bus
-> only. SSD-s can cause pretty hefty power-consumption peaks when
-> high queue depts are used; and these bus powered devices typically
-> cannot handle these peaks. Either because the port they are
-> plugged in does not deliver enough current; and/or because they
-> don't have enough buffering (capacitors) on the enclosure's PCB
-> to deal with short but quite large consumption peaks.
->
-> Regards,
->
-> Hans
->
->
->
->
->
->
->
->
->> Signed-off-by: Hui Wang <hui.wang@canonical.com>
->> ---
->>   drivers/usb/storage/uas.c | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
->> index bef89c6bd1d7..c66287448e34 100644
->> --- a/drivers/usb/storage/uas.c
->> +++ b/drivers/usb/storage/uas.c
->> @@ -1121,7 +1121,6 @@ static int uas_pre_reset(struct usb_interface *intf)
->>   	if (uas_wait_for_pending_cmnds(devinfo) != 0) {
->>   		shost_printk(KERN_ERR, shost, "%s: timed out\n", __func__);
->>   		scsi_unblock_requests(shost);
->> -		return 1;
->>   	}
->>   
->>   	uas_free_streams(devinfo);
->> @@ -1152,7 +1151,7 @@ static int uas_post_reset(struct usb_interface *intf)
->>   
->>   	scsi_unblock_requests(shost);
->>   
->> -	return err ? 1 : 0;
->> +	return 0;
->>   }
->>   
->>   static int uas_suspend(struct usb_interface *intf, pm_message_t message)
->>
