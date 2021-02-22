@@ -2,178 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8F5321E4C
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 18:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D1253222C5
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 00:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbhBVRkC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Feb 2021 12:40:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbhBVRj6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 12:39:58 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12791C061574
-        for <linux-usb@vger.kernel.org>; Mon, 22 Feb 2021 09:39:18 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id m6so7055044pfk.1
-        for <linux-usb@vger.kernel.org>; Mon, 22 Feb 2021 09:39:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MF4APfFlsanpI0r4zsRHCQLQgfReqF48Ze/kE7l1vkE=;
-        b=ElFKTM8eUw2BY9ppbokoLTTd00JRQei2N5HBMaXvoy866vTrLd+ZryHOS5tT1lHkmM
-         6sBJCbbiOZ2buOZF4WFU7ulZmfuFjZ8SwYOEym0G/+yOwwm2Y+4n3FprefgkLZdWkI5K
-         0lSchaoEx05aKUYyJOkAHrmPY0p1N9ZFI76DA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MF4APfFlsanpI0r4zsRHCQLQgfReqF48Ze/kE7l1vkE=;
-        b=gj7I32Mjj8D1iomXDw6jYcGdJSObJptNWoWYokb+oLw0NVq18VeypVDQN6sA5bVwUt
-         MWcDzjX53xk9AbJ23FYIx63O8efxFc/5rQuw28napMFZ6q0ELt8HCZriMKol8EVFctxu
-         /ZqBXX/WhocgdZddkPyHaahJpyMPjX/3RePEXyB4sgYk+s9i+MR/4w/q3khA2xWu+rpo
-         GkAnP+/PhZhqxv1zo9wBe1aXbSVVQLTuQMYyVpgZviW18VGgjtbyCNapr2hMQAvZCZ32
-         bNPgetkohux/xv/jBe2xJ0quqSCho4m763GPsmGlt6pmdcIOYBti5zgJZ5Tq/GiafP14
-         waUQ==
-X-Gm-Message-State: AOAM530kAua7pMLDMYTogRu2uRuURiEly68jf31mQN0CM33rH1cz3u2W
-        lyv4tsjMZT7kFvmZqZMnbLUCNg==
-X-Google-Smtp-Source: ABdhPJzxxps/L0tFLihFXaGaCOzegV5h5itBz+sA8whlMY95Fx09Bei5MVSeuNsqyFKXgtKrX71Zfg==
-X-Received: by 2002:a62:83ca:0:b029:1ed:78d1:531a with SMTP id h193-20020a6283ca0000b02901ed78d1531amr9730539pfe.56.1614015555373;
-        Mon, 22 Feb 2021 09:39:15 -0800 (PST)
-Received: from localhost ([2620:15c:202:1:61bd:1a6e:a387:22f0])
-        by smtp.gmail.com with UTF8SMTPSA id o18sm3927pjq.44.2021.02.22.09.39.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Feb 2021 09:39:14 -0800 (PST)
-Date:   Mon, 22 Feb 2021 09:39:12 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v5 1/4] dt-bindings: usb: Add binding for discrete
- onboard USB hubs
-Message-ID: <YDPsQNm95Zpm+cjl@google.com>
-References: <20210210171040.684659-1-mka@chromium.org>
- <20210210091015.v5.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
- <20210217210441.GA2709172@robh.at.kernel.org>
- <YC3D/+DZYFjgHQ3H@google.com>
- <CAL_Jsq+=LOwOiorpR85UYwYgXCGT-Ai2MbBPWNf+t3X0tLYhqA@mail.gmail.com>
+        id S231582AbhBVXsU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Feb 2021 18:48:20 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:52774 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230125AbhBVXsR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 18:48:17 -0500
+Received: from 1.general.cascardo.us.vpn ([10.172.70.58] helo=mussarela)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <cascardo@canonical.com>)
+        id 1lEKvL-0000qH-TA; Mon, 22 Feb 2021 23:47:32 +0000
+Date:   Mon, 22 Feb 2021 20:47:26 -0300
+From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Jim Lin <jilin@nvidia.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] usb: gadget: configfs: Fix KASAN use-after-free
+Message-ID: <20210222234726.GA166848@mussarela>
+References: <1484647168-30135-1-git-send-email-jilin@nvidia.com>
+ <878tqakmiy.fsf@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAL_Jsq+=LOwOiorpR85UYwYgXCGT-Ai2MbBPWNf+t3X0tLYhqA@mail.gmail.com>
+In-Reply-To: <878tqakmiy.fsf@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 19, 2021 at 09:05:32AM -0600, Rob Herring wrote:
-> On Wed, Feb 17, 2021 at 7:33 PM Matthias Kaehlcke <mka@chromium.org> wrote:
-> >
-> > Hi Rob,
-> >
-> > thanks for your review!
-> >
-> > On Wed, Feb 17, 2021 at 03:04:41PM -0600, Rob Herring wrote:
-> > > On Wed, Feb 10, 2021 at 09:10:36AM -0800, Matthias Kaehlcke wrote:
-> > > > Discrete onboard USB hubs (an example for such a hub is the Realtek
-> > > > RTS5411) need to be powered and may require initialization of other
-> > > > resources (like GPIOs or clocks) to work properly. This adds a device
-> > > > tree binding for these hubs.
-> > > >
-> > > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> > > > ---
-> > > >
-> > > > Changes in v5:
-> > > > - updated 'title'
-> > > > - only use standard USB compatible strings
-> > > > - deleted 'usb_hub' node
-> > > > - renamed 'usb_controller' node to 'usb-controller'
-> > > > - removed labels from USB nodes
-> > > > - added 'vdd-supply' to USB nodes
-> > > >
-> > > > Changes in v4:
-> > > > - none
-> > > >
-> > > > Changes in v3:
-> > > > - updated commit message
-> > > > - removed recursive reference to $self
-> > > > - adjusted 'compatible' definition to support multiple entries
-> > > > - changed USB controller phandle to be a node
-> > > >
-> > > > Changes in v2:
-> > > > - removed 'wakeup-source' and 'power-off-in-suspend' properties
-> > > > - consistently use spaces for indentation in example
-> > > >
-> > > >  .../bindings/usb/onboard_usb_hub.yaml         | 49 +++++++++++++++++++
-> > > >  1 file changed, 49 insertions(+)
-> > > >  create mode 100644 Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..bf4ec52e6c7b
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
-> > > > @@ -0,0 +1,49 @@
-> > > > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/usb/onboard_usb_hub.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: Binding for discrete onboard USB hubs
-> > >
-> > > This isn't really generic. Maybe there's a set of hubs with only a
-> > > single supply much like 'simple-panel', but I kind of doubt that here.
-> > > There aren't hundreds of hub chips like panels. Though, we should put
-> > > this into bindings/usb/hub/ so we start collecting hub bindings in one
-> > > place.
-> >
-> > Ok, I agree that the name of the binding is too generic, I anticipated that
-> > the power supply section would need to be extended to support other hub
-> > chips.
-> >
-> > > A generic driver doesn't have to have a generic binding.
-> >
-> > That's a good point, it seems to make sense to have separate bindings in
-> > this case.
-> >
-> > > You can have a specific device binding which is handled by a generic
-> > > driver. Or not. Who knows. Maybe a simple user like u-boot has a generic
-> > > driver while something more feature rich has a device specific binding.
-> > >
-> > > > +
-> > > > +maintainers:
-> > > > +  - Matthias Kaehlcke <mka@chromium.org>
-> > >
-> > > Now we have usb-device.yaml, you need:
-> > >
-> > > allOf:
-> > >   - $ref: usb-device.yaml#
-> >
-> > ok
-> >
-> > So with your comments addressed it seems we have a binding that could be
-> > acceptable. I'll still hold back a bit to see if we can make progress with
-> > the discussion about using the 'graph' binding (https://lore.kernel.org/patchwork/patch/1379002/#1578294).
-> > The one thing I don't like about the current binding is that it wouldn't
-> > work out of the box with a hierarchy of hubs. To make that work on the
-> > driver side an additional property would be needed to indicate that two
-> > (or more) USB hub devices are related (i.e. are provided by the same
-> > chip). This is needed to be able to decide whether the hub should be
-> > powered down during system suspend.
+On Tue, Jan 17, 2017 at 12:29:09PM +0200, Felipe Balbi wrote:
 > 
-> How about a 'hub-companion' property or similar?
+> Hi,
+> 
+> Jim Lin <jilin@nvidia.com> writes:
+> > When gadget is disconnected, running sequence is like this.
+> > . composite_disconnect
+> > . Call trace:
+> >   usb_string_copy+0xd0/0x128
+> >   gadget_config_name_configuration_store+0x4
+> >   gadget_config_name_attr_store+0x40/0x50
+> >   configfs_write_file+0x198/0x1f4
+> >   vfs_write+0x100/0x220
+> >   SyS_write+0x58/0xa8
+> > . configfs_composite_unbind
+> > . configfs_composite_bind
+> >
+> > In configfs_composite_bind, it has
+> > "cn->strings.s = cn->configuration;"
+> >
+> > When usb_string_copy is invoked. it would
+> > allocate memory, copy input string, release previous pointed memory space,
+> > and use new allocated memory.
+> >
+> > When gadget is connected, host sends down request to get information.
+> > Call trace:
+> >   usb_gadget_get_string+0xec/0x168
+> >   lookup_string+0x64/0x98
+> >   composite_setup+0xa34/0x1ee8
+> >
+> > If gadget is disconnected and connected quickly, in the failed case,
+> > cn->configuration memory has been released by usb_string_copy kfree but
+> > configfs_composite_bind hasn't been run in time to assign new allocated
+> > "cn->configuration" pointer to "cn->strings.s".
+> >
+> > When "strlen(s->s) of usb_gadget_get_string is being executed, the dangling
+> > memory is accessed, "BUG: KASAN: use-after-free" error occurs.
+> >
+> > Signed-off-by: Jim Lin <jilin@nvidia.com>
+> > ---
+> > Changes in v2:
+> > Changes in v3:
+> >  Change commit description
+> 
+> well, I need to be sure you tested this with Linus' tree. The reason I'm
+> asking is because this could be a bug caused by Android changes. From
+> your previous patch, the problem started with android_setup().
+> 
+> Please test with v4.10-rc4 and any configfs-based gadget.
+> 
+> -- 
+> balbi
 
-Yes, something like that is what I had in mind.
+I tested this with dummy_hcd on top of a 5.8 kernel and I got lsusb to respond
+with an error instead of the right manufacturer string, after overwriting such
+a string after binding.
 
-Another inconvenient is that collaboration from the controller /
-generic hub driver is needed, however it seems at least Alan would be
-ok with that.
+With the patch applied, after the string is overwritten, lsusb will show the
+updated string.
+
+Because of commit 81c7462883b0cc0a4eeef0687f80ad5b5baee5f6 ("USB: replace
+hardcode maximum usb string length by definition"), the patch will need a
+fixup. Should I send a v2 with my sign-off?
+
+Thanks.
+Cascardo.
