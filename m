@@ -2,128 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B520321D25
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 17:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD7E321D53
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 17:45:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbhBVQhk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Feb 2021 11:37:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbhBVQhg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 11:37:36 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE17C06178A
-        for <linux-usb@vger.kernel.org>; Mon, 22 Feb 2021 08:36:55 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id s6so12546392otk.4
-        for <linux-usb@vger.kernel.org>; Mon, 22 Feb 2021 08:36:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=CQtzj2ET+OspvcT7VasFUJh31XI2DgueE7K7chQefu0=;
-        b=JgIAcXbmqnUtAzeQggrQMFDw+iRD7712f5b6XLlsNpGFq/2OH71ZR8eVPcYSvV8O9Z
-         Q4ZFhr/HY3qIL2VVw5am2ZXMqQjcHv6oQm57icBzxpF2r/H6pUN28Ic0UVcMNAWR0oM3
-         Nk4pk+06r39DoxUQo5VbU8V6VX0ewSDT/6fu0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CQtzj2ET+OspvcT7VasFUJh31XI2DgueE7K7chQefu0=;
-        b=Vhfl4qoANKji+DMC9FEERFmgNECKNrPaL6UtbtNJaZqfsjWaKs+8iK5Mr01Aymcwco
-         bZotEtk2I7DTRhF/rwtERvNX23JGoBDf/ZNxWj5v9+5yVfnyFwkKam6rA69RMvY1LIr/
-         tm1Eq0B+HTTIN8tdoKbRcOW2p2Rr4GcB2JTwri6p5EmlVsaA1X4ivDUmWTCRfr8gW/1p
-         vPERop5mIWSNklsWxHgD2EIhCElIOQgoat0gSC14T8B1015cpR/4RsWvyC39wxFd6J1y
-         4If7oT1YglJN5wJOrcMm1jzhp52Did9aGCpvr0tORzbFMqaqBGWiQ/WJ0KzlPBPMVpdO
-         cftg==
-X-Gm-Message-State: AOAM531Axx5CXIKPNK3JWxbyChLXoKdZ4UiAlZJRWN9EpCJ+Ll0Qj7XP
-        zFUPMrC+2VPdwFyl095v2FQJPg==
-X-Google-Smtp-Source: ABdhPJyA692d/UkhfnySsVsus41uILuIidqyduT1DxwFO8wUlVI27VDOIjP5WOhWxUUsjwOOYq7M6Q==
-X-Received: by 2002:a05:6830:314d:: with SMTP id c13mr16134049ots.124.1614011814286;
-        Mon, 22 Feb 2021 08:36:54 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 7sm3712035oth.38.2021.02.22.08.36.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Feb 2021 08:36:53 -0800 (PST)
-Subject: Re: [PATCH 00/20] Manual replacement of all strlcpy in favor of
- strscpy
-To:     Romain Perier <romain.perier@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        kernel-hardening@lists.openwall.com, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Steffen Maier <maier@linux.ibm.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     cgroups@vger.kernel.org, linux-crypto@vger.kernel.org,
-        netdev@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-integrity@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-hwmon@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210222151231.22572-1-romain.perier@gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <936bcf5e-2006-7643-7804-9efa318b3e2b@linuxfoundation.org>
-Date:   Mon, 22 Feb 2021 09:36:51 -0700
+        id S231226AbhBVQpC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 22 Feb 2021 11:45:02 -0500
+Received: from bee.birch.relay.mailchannels.net ([23.83.209.14]:11910 "EHLO
+        bee.birch.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230045AbhBVQok (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 11:44:40 -0500
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id B820322BC9;
+        Mon, 22 Feb 2021 16:37:34 +0000 (UTC)
+Received: from pdx1-sub0-mail-a46.g.dreamhost.com (100-96-18-24.trex.outbound.svc.cluster.local [100.96.18.24])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 3C734217D6;
+        Mon, 22 Feb 2021 16:37:34 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from pdx1-sub0-mail-a46.g.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
+        by 100.96.18.24 (trex/6.0.2);
+        Mon, 22 Feb 2021 16:37:34 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|smtp@contentfirst.com
+X-MailChannels-Auth-Id: dreamhost
+X-Cure-Trail: 5ae797573eea060c_1614011854547_2206438733
+X-MC-Loop-Signature: 1614011854547:3164117220
+X-MC-Ingress-Time: 1614011854546
+Received: from pdx1-sub0-mail-a46.g.dreamhost.com (localhost [127.0.0.1])
+        by pdx1-sub0-mail-a46.g.dreamhost.com (Postfix) with ESMTP id DE0987EF36;
+        Mon, 22 Feb 2021 08:37:33 -0800 (PST)
+Received: from industrynumbers.com (pool-100-15-209-187.washdc.fios.verizon.net [100.15.209.187])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: smtp@contentfirst.com)
+        by pdx1-sub0-mail-a46.g.dreamhost.com (Postfix) with ESMTPSA id A417D7FDDB;
+        Mon, 22 Feb 2021 08:37:31 -0800 (PST)
+Received: from industrynumbers.com (localhost [127.0.0.1])
+        by industrynumbers.com (Postfix) with ESMTP id 5A01B282D7A;
+        Mon, 22 Feb 2021 11:37:30 -0500 (EST)
+Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+To:     Johan Hovold <johan@kernel.org>
+Cc:     charles-yeh@prolific.com.tw, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>,
+        Joe Abbott <jabbott@rollanet.org>
+References: <3aee5708-7961-f464-8c5f-6685d96920d6@IEEE.org>
+ <dc3458f1-830b-284b-3464-20124dc3900a@IEEE.org>
+ <YDNwxtDxd7JntAXt@hovoldconsulting.com>
+ <e2dcc839-3b43-2c80-6ad1-2d97e639b46a@IEEE.org>
+ <YDOvLseYXaUHs0lS@hovoldconsulting.com>
+ <fb1489c2-b972-619b-b7ce-4ae8e1d2cc0f@IEEE.org>
+ <YDPO/JprcDTaPmR4@hovoldconsulting.com>
+ <0f9caf26-af58-13a9-9947-47bb646f505e@IEEE.org>
+ <YDPS3AP63/PwmwJU@hovoldconsulting.com>
+X-DH-BACKEND: pdx1-sub0-mail-a46
+From:   "Michael G. Katzmann" <michaelk@IEEE.org>
+Message-ID: <cd92ea17-4e0a-2b6c-1032-9a81727841c9@IEEE.org>
+Date:   Mon, 22 Feb 2021 11:37:30 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-In-Reply-To: <20210222151231.22572-1-romain.perier@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <YDPS3AP63/PwmwJU@hovoldconsulting.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2/22/21 8:12 AM, Romain Perier wrote:
-> strlcpy() copy a C-String into a sized buffer, the result is always a
-> valid NULL-terminated that fits in the buffer, howerver it has severals
-> issues. It reads the source buffer first, which is dangerous if it is non
-> NULL-terminated or if the corresponding buffer is unbounded. Its safe
-> replacement is strscpy(), as suggested in the deprecated interface [1].
-> 
-> We plan to make this contribution in two steps:
-> - Firsly all cases of strlcpy's return value are manually replaced by the
->    corresponding calls of strscpy() with the new handling of the return
->    value (as the return code is different in case of error).
-> - Then all other cases are automatically replaced by using coccinelle.
-> 
+On 2/22/21 10:50 AM, Johan Hovold wrote:
+> [ Please try to avoid top posting to the lists. ]
+>
+> On Mon, Feb 22, 2021 at 10:42:25AM -0500, Michael G. Katzmann wrote:
+>> Sorry, my mistake .. when I put it in the right order it does indeed
+>> also give 110Bd !
 
-Cool. A quick check shows me 1031 strscpy() calls with no return
-checks. All or some of these probably need to be reviewed and add
-return checks. Is this something that is in the plan to address as
-part of this work?
+For reference this is the device I have ...
 
-thanks,
--- Shuah
+Bus 001 Device 011: ID 067b:2303 Prolific Technology, Inc. PL2303 Serial Port
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            0
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x067b Prolific Technology, Inc.
+  idProduct          0x2303 PL2303 Serial Port
+  bcdDevice            3.00
+  iManufacturer           1
+  iProduct                2
+  iSerial                 0
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0027
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xa0
+      (Bus Powered)
+      Remote Wakeup
+    MaxPower              100mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           3
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x000a  1x 10 bytes
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+
