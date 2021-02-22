@@ -2,73 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C81321B89
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 16:35:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B336321B8B
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 16:35:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbhBVPfI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Feb 2021 10:35:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58782 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230308AbhBVPes (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 22 Feb 2021 10:34:48 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E3E3564E15;
-        Mon, 22 Feb 2021 15:34:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614008045;
-        bh=PLUfrsiT9LoAuts3la+Ahf95p3/mGYFq6w0gm3p1IFc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ei1+fIXqC4GMoOkPfJQnXIeXDu5tv0qTfsWXVxOV5atyN2wagYcBMyHepnIRNOTzk
-         xxj8Nf6xZpYSzeRZco98zZKdMDrX1aq6qHpUCs9Hjj+CGJbkJXU1GCq5HToftfYsuj
-         WPcw7klEnC20qHBpbmUourlwv9jEiJhzvmU8HB96LA3GrZEQ2GgoHS86TD2AkU/Llm
-         8IfhdvibUAvssVr+gqxKG+kALB+J2xyNvrv9R6G+FmV/mNDYU0cQ1O75eepmh4NKDa
-         8PaJl7jkL3Jwveygi2x1pM7hAPwHwtw8BgPDAJ6sNM5/TvJDBzt9DyCY/bgkDCk/07
-         TUpncDdiQH+rA==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lEDE4-00061D-U1; Mon, 22 Feb 2021 16:34:21 +0100
-Date:   Mon, 22 Feb 2021 16:34:20 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     "Michael G. Katzmann" <michaelk@IEEE.org>
-Cc:     charles-yeh@prolific.com.tw, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>,
-        Joe Abbott <jabbott@rollanet.org>
-Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
-Message-ID: <YDPO/JprcDTaPmR4@hovoldconsulting.com>
-References: <3aee5708-7961-f464-8c5f-6685d96920d6@IEEE.org>
- <dc3458f1-830b-284b-3464-20124dc3900a@IEEE.org>
- <YDNwxtDxd7JntAXt@hovoldconsulting.com>
- <e2dcc839-3b43-2c80-6ad1-2d97e639b46a@IEEE.org>
- <YDOvLseYXaUHs0lS@hovoldconsulting.com>
- <fb1489c2-b972-619b-b7ce-4ae8e1d2cc0f@IEEE.org>
+        id S231491AbhBVPfW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Feb 2021 10:35:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230302AbhBVPfO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 10:35:14 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E0EC06174A
+        for <linux-usb@vger.kernel.org>; Mon, 22 Feb 2021 07:34:30 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id s24so13622295iob.6
+        for <linux-usb@vger.kernel.org>; Mon, 22 Feb 2021 07:34:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7msZ9xj22dqXGIzjQ9fBlLW6jqLzXdmQWLiCiQMfGHk=;
+        b=VwDuBsrOdGnaQkdVTbZ0sucgDtVCvYOJG71c84MH0nQtKdH9Jz1KF7RKcVeoFQa0iE
+         Q/4XFyvgQKWZ8obuYgWTJvUulyHSIE8ExfDEhLsQtXeYSf995T9FZmrmVe4s73wgFaGQ
+         qxU7dlSrET2H7uglR8BW4N6H4T9iy0kEriiQM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7msZ9xj22dqXGIzjQ9fBlLW6jqLzXdmQWLiCiQMfGHk=;
+        b=LjiOkMiHcTtK3W6x6fjdkXLbekIdBvCU1HHSMiaSGQK8a4PoBcyWt02P81keQcGU8l
+         y634rIwuCqsj0/T//uN7QO3SsF5WCgFQxhp7MQ2hnWU6mJWVdVQv63JpBH56q8PH20ut
+         DHINkuQhzbn+CsE2wqk44TFnog6QyOLuMAeworcj+VJ9/x6vDx3WtAxVz7ARCm4U5Dw/
+         caWVNOwUVP0OoVnMTKexGYtw3u02Q7fAgMqd9YdGG7xyWV8HUkj5ZtbpeBmwaPLd0HO2
+         hBBdFHRJ7vDgEyzZQkyHYID5mShPSxNO13l/j5saTwF/wFO6lWLYW+ufsg2yx/Pqi355
+         7bHg==
+X-Gm-Message-State: AOAM53349l15H07GdNTrs0X1VBvb/2fP0+UeOgex5Hi8sHUADb82+kJu
+        3lQa5RQBSDr+0pQITLe6ZH3biQ==
+X-Google-Smtp-Source: ABdhPJxhrm5cyMgKyMbXRykf4cdUQOSindjUfW490dgbHSWivSzWhBOldzvuFOnKNFgyyI6jgLlM+g==
+X-Received: by 2002:a05:6638:2721:: with SMTP id m33mr22884265jav.59.1614008070287;
+        Mon, 22 Feb 2021 07:34:30 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id w1sm11510123ilv.52.2021.02.22.07.34.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Feb 2021 07:34:29 -0800 (PST)
+Subject: Re: [PATCH v2] usb: usbip: serialize attach/detach operations
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-usb@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20210219094744.3577-1-penguin-kernel@I-love.SAKURA.ne.jp>
+ <20210219150832.4701-1-penguin-kernel@I-love.SAKURA.ne.jp>
+ <YC/fF0c7PA3ndTPv@kroah.com>
+ <68fe3981-27d2-1f8d-17c6-9cb773382e66@linuxfoundation.org>
+ <f8110365-767d-6aa4-ff9e-3ab8380c0919@i-love.sakura.ne.jp>
+ <YDCzLfhawx4u28dd@kroah.com>
+ <e1fe719d-35df-3898-33dd-f8bfc6d10b5d@i-love.sakura.ne.jp>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <50126879-0095-b556-308f-36d5c75c2db0@linuxfoundation.org>
+Date:   Mon, 22 Feb 2021 08:34:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fb1489c2-b972-619b-b7ce-4ae8e1d2cc0f@IEEE.org>
+In-Reply-To: <e1fe719d-35df-3898-33dd-f8bfc6d10b5d@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 22, 2021 at 09:53:39AM -0500, Michael G. Katzmann wrote:
-> On 2/22/21 8:18 AM, Johan Hovold wrote:
+On 2/20/21 2:51 AM, Tetsuo Handa wrote:
+> On 2021/02/20 15:58, Greg Kroah-Hartman wrote:
+>>>> Also please run the usbip test on your changes:
+>>>> tools/testing/selftests/drivers/usb/usbip/usbip_test.sh
+>>>
+>>> Too much requirements for me to run that test. I'm not a user of your module.
+>>
+>> It should be self-contained, what requirements do you see that you do
+>> not have?
 > 
-> I tried hardcoding buf[6-0] in pl2303_set_termios as
+> It asks me to build usbip tools from source code. I took source code from
+> https://github.com/lucianm/usbip-utils , but I couldn't rebuild without
+> removing -Werror from Makefile . Where is maintained source code?
+> Please embed appropriate URL into usbip_test.sh .
 > 
-> a8 a6 01 80 00 02 07 and got a bitrate of ~200kb 
+
+usbip tools are part of the kernel source. Please look under:
+
+tools/usb/usbip
+
+> Too many error messages to convince that the test succeeded. The only device listed
+> in my environment is a Virtual Mouse, which makes me wonder if the test did work.
+> Therefore, I think I should wait for your test result in your environment which
+> would list appropriate devices.
 > 
-> so, no these settings do not work in my case (or I missunderstood your
-> instructions 8-))
 
-Thanks for testing (and that was with 0xa8 in byte 0, right?)
+Please use the right tool version from the kernel sources. I usually
+run with server and client running on the same system, client going
+over the loopback interface. Server exports any input devices mouse
+or keyboard.
 
-So it seems we have three devices with bcdDevice 0x0300 encoding the
-divisors in slightly different ways and that are all still supported by
-the vendor's Windows driver.
+I will run the test on your v3.
 
-Unless Prolific are willing to shed some light on this, I guess someone
-needs to try to figure out how the Windows driver determines which
-encoding to use.
-
-Is your device supposedly also a PL2303 TA? Could you post the output of
-lsusb -v for completeness?
-
-Johan
+thanks,
+-- Shuah
