@@ -2,105 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 428C0320ED6
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 02:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1622532108C
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 06:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbhBVA7f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Feb 2021 19:59:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbhBVA7c (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Feb 2021 19:59:32 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9066C061574;
-        Sun, 21 Feb 2021 16:58:51 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id f3so12352653oiw.13;
-        Sun, 21 Feb 2021 16:58:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=plm+Gqqif0nFmrHo7nyrM26fSa+6xQh6uBWBUDQ738w=;
-        b=vS8uaQWR+01p0sDbKpunLTnIicqRfc2ldhcDcz7Gj//0kps2TdFb5bCJ2FaGhFUlun
-         VPzHAacM8FBeLQ7tXVO9MAbHtZchak397POEBH2E2a/+hsy8u3D3vy46oLjTWY0DWRmQ
-         ZH21NFk2f/JdRUCzn9Lpu5YE9JIkQLmrBv2pQ7P1wOS2IuIlyG9cpCvKpi1q6n/PRvN/
-         XvatSqkKSunuGZ9Ig+6aLJjMJcSaNbFYhe5Bu/a3P+YU5QbQWwKYyy9kO3FmSXGwkN66
-         B5Hwx8yREAfn2pb8rvSPfmhpZ0xvRkahE5ff0nPMgh8YFaiNBDDlPpBnKmkZe/LlSD+6
-         2aew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=plm+Gqqif0nFmrHo7nyrM26fSa+6xQh6uBWBUDQ738w=;
-        b=qEpSAzEAQY5wwHYGk2ZUckqGUten9nyNSk8bFQPwZFWPWSU6aSDClC4LEWfUSqIdCh
-         466mrETsmwMDxOk7tXQdiR1Ri+N4WQFhYHjrU83UlfAMKiJQtXfS+cO+r2orTLQIpXjN
-         dlMb1azYGeNbvqdOX3od2HVjSslskaWimUAdsX6+iq1umFhWE7UNzdoIQDjSBJE9lr0V
-         FPQZes8dLqOTMcWdKUaoN+8CnBD6M4A5eBPpujV07GXXxR33alrNX3dGuhH7ceBQmOJU
-         kGy7bx8x7D+uo1X0YJhqJ05lIBrFlbWWLQSNRWxSW9bmLHMOwppPVhU6FWfTaMWyKQNn
-         O3aw==
-X-Gm-Message-State: AOAM533kvFLwocx9q8lbMzIFyMzI9CqAKsO4kYJpK0jwVNaagZEr0hVg
-        USuNIVLoCpsIjSwDh9u9bo792m6AEagUy22k
-X-Google-Smtp-Source: ABdhPJwhQwMyR/GSjk5Jd6qKD0etUhUwiEkRjenpPURrS0rU5yYRi4Ja7VuaAP/Anri2IGPNaQVmbg==
-X-Received: by 2002:aca:1907:: with SMTP id l7mr10194690oii.28.1613955531031;
-        Sun, 21 Feb 2021 16:58:51 -0800 (PST)
-Received: from localhost.localdomain ([194.110.112.30])
-        by smtp.gmail.com with ESMTPSA id f15sm3359956oti.74.2021.02.21.16.58.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Feb 2021 16:58:50 -0800 (PST)
-From:   Forest Crossman <cyrozap@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Forest Crossman <cyrozap@gmail.com>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: xhci: Fix ASMedia ASM1042A and ASM3242 DMA addressing
-Date:   Sun, 21 Feb 2021 18:58:29 -0600
-Message-Id: <20210222005829.396968-1-cyrozap@gmail.com>
-X-Mailer: git-send-email 2.30.0
+        id S229567AbhBVFvN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Feb 2021 00:51:13 -0500
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:31650 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229487AbhBVFvM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 00:51:12 -0500
+X-UUID: 38c129b314da4a69957d86c22d7d5fe2-20210222
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=nqKImsvcZdKwTXpwc5QzWpqx3pFjWlmpqLQWHoUe6n8=;
+        b=Hhvx7Zpn5gNnuT+99B7xw9lsgH6AMGaf9kkrw9bRJHrNGwv+F8WWg43jARh0UUcGSej5WOjGlkiWrh/m+VtOLdi+4wF2MEZgS3aJdgyNaR1dlgakSXbJIVe++pRAa15hRKNV1WenUwzHFOMf40bS7Qg8MG6n3v3EHbO8MKjt4iI=;
+X-UUID: 38c129b314da4a69957d86c22d7d5fe2-20210222
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 378039218; Mon, 22 Feb 2021 13:50:20 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS32N1.mediatek.inc
+ (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 22 Feb
+ 2021 13:50:18 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 22 Feb 2021 13:50:17 +0800
+Message-ID: <1613973017.31669.5.camel@mhfsdcap03>
+Subject: Re: [RFC PATCH v2 2/3] usb: xhci-mtk: modify the SOF/ITP interval
+ for mt8195
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+CC:     Mathias Nyman <mathias.nyman@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, "Ikjoon Jang" <ikjn@chromium.org>,
+        Nicolas Boichat <drinkcat@chromium.org>
+Date:   Mon, 22 Feb 2021 13:50:17 +0800
+In-Reply-To: <c0a65a3b-aec9-e27e-9110-9713596b9ecd@linux.intel.com>
+References: <20210203102642.7353-1-chunfeng.yun@mediatek.com>
+         <20210203102642.7353-2-chunfeng.yun@mediatek.com>
+         <1612664833.5147.30.camel@mhfsdcap03>
+         <c0a65a3b-aec9-e27e-9110-9713596b9ecd@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-TM-SNTS-SMTP: FAE0441427E52403E8BEE5458F274B90BF2277165CA50BE675B433B94E9E2C372000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I've confirmed that both the ASMedia ASM1042A and ASM3242 have the same
-problem as the ASM1142 and ASM2142/ASM3142, where they lose some of the
-upper bits of 64-bit DMA addresses. As with the other chips, this can
-cause problems on systems where the upper bits matter, and adding the
-XHCI_NO_64BIT_SUPPORT quirk completely fixes the issue.
-
-Signed-off-by: Forest Crossman <cyrozap@gmail.com>
----
- drivers/usb/host/xhci-pci.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 84da8406d5b4..c1694fc5f890 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -66,6 +66,7 @@
- #define PCI_DEVICE_ID_ASMEDIA_1042A_XHCI		0x1142
- #define PCI_DEVICE_ID_ASMEDIA_1142_XHCI			0x1242
- #define PCI_DEVICE_ID_ASMEDIA_2142_XHCI			0x2142
-+#define PCI_DEVICE_ID_ASMEDIA_3242_XHCI			0x3242
- 
- static const char hcd_name[] = "xhci_hcd";
- 
-@@ -276,11 +277,14 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI)
- 		xhci->quirks |= XHCI_BROKEN_STREAMS;
- 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
--		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI)
-+		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI) {
- 		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
-+		xhci->quirks |= XHCI_NO_64BIT_SUPPORT;
-+	}
- 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
- 	    (pdev->device == PCI_DEVICE_ID_ASMEDIA_1142_XHCI ||
--	     pdev->device == PCI_DEVICE_ID_ASMEDIA_2142_XHCI))
-+	     pdev->device == PCI_DEVICE_ID_ASMEDIA_2142_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_ASMEDIA_3242_XHCI))
- 		xhci->quirks |= XHCI_NO_64BIT_SUPPORT;
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
--- 
-2.20.1
+T24gTW9uLCAyMDIxLTAyLTA4IGF0IDEzOjQzICswMjAwLCBNYXRoaWFzIE55bWFuIHdyb3RlOg0K
+PiBPbiA3LjIuMjAyMSA0LjI3LCBDaHVuZmVuZyBZdW4gd3JvdGU6DQo+ID4gSGkgTWF0aGlhcywN
+Cj4gPiANCj4gPiBPbiBXZWQsIDIwMjEtMDItMDMgYXQgMTg6MjYgKzA4MDAsIENodW5mZW5nIFl1
+biB3cm90ZToNCj4gPj4gVGhlcmUgYXJlIDQgVVNCIGNvbnRyb2xsZXJzIG9uIE1UODE5NSwgdGhl
+IGNvbnRyb2xsZXJzIChJUDF+SVAzLA0KPiA+PiBleGNsdWRlIElQMCkgaGF2ZSBhIHdyb25nIGRl
+ZmF1bHQgU09GL0lUUCBpbnRlcnZhbCB3aGljaCBpcw0KPiA+PiBjYWxjdWxhdGVkIGZyb20gdGhl
+IGZyYW1lIGNvdW50ZXIgY2xvY2sgMjRNaHogYnkgZGVmYXVsdCwgYnV0DQo+ID4+IGluIGZhY3Qs
+IHRoZSBmcmFtZSBjb3VudGVyIGNsb2NrIGlzIDQ4TWh6LCBzbyB3ZSBzaG91bGQgc2V0DQo+ID4+
+IHRoZSBhY2N1cmF0ZSBpbnRlcnZhbCBhY2NvcmRpbmcgdG8gNDhNaHogZm9yIHRob3NlIGNvbnRy
+b2xsZXJzLg0KPiA+PiBOb3RlOiB0aGUgZmlyc3QgY29udHJvbGxlciBubyBuZWVkIHNldCBpdC4N
+Cj4gPj4NCj4gPj4gU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVuZy55dW5AbWVk
+aWF0ZWsuY29tPg0KPiA+PiAtLS0NCj4gPj4gdjI6IGZpeCB0eXBvIG9mIGNvbWFwdGlibGUNCj4g
+Pj4gLS0tDQo+ID4+ICBkcml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRrLmMgfCA2MyArKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ID4+ICAxIGZpbGUgY2hhbmdlZCwgNjMgaW5z
+ZXJ0aW9ucygrKQ0KPiA+Pg0KPiA+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvaG9zdC94aGNp
+LW10ay5jIGIvZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay5jDQo+ID4+IGluZGV4IDhmMzIxZjM5
+YWI5Ni4uMGE2OGM0YWM4YjQ4IDEwMDY0NA0KPiA+PiAtLS0gYS9kcml2ZXJzL3VzYi9ob3N0L3ho
+Y2ktbXRrLmMNCj4gPj4gKysrIGIvZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay5jDQo+ID4+IEBA
+IC02OCwxMSArNjgsNzEgQEANCj4gPj4gICNkZWZpbmUgU1NDX0lQX1NMRUVQX0VOCUJJVCg0KQ0K
+PiA+PiAgI2RlZmluZSBTU0NfU1BNX0lOVF9FTgkJQklUKDEpDQo+ID4+ICANCj4gPiBDYW4gSSBS
+ZWFkL1dyaXRlIHRoZSBmb2xsb3dpbmcgeEhDSSBjb250cm9sbGVyJ3MgcmVnaXN0ZXJzICBpbg0K
+PiA+IHhoY2ktbXRrLmM/DQo+ID4gDQo+ID4gSWRlYWxseSwgeGhjaS1tdGsuYyBzaG91bGQgbm90
+IGFjY2VzcyB0aGVtLCBiZWNhdXNlIHhoY2ktbXRrIGlzIG9ubHkgYQ0KPiA+IGdsdWUgZHJpdmVy
+IHVzZWQgdG8gaW5pdGlhbGl6ZSBjbG9ja3MvcG93ZXIgYW5kIElQUEMgcmVnaXN0ZXJzIHdoaWNo
+DQo+ID4gZG9uJ3QgYmVsb25nIHRvIHhIQ0kgY29udHJvbGxlci4NCj4gPiANCj4gDQo+IFRoZXNl
+ICpfRU9GIHJlZ2lzdGVycyBsb29rIGxpa2UgdGhleSBhcmUgTWVkaWF0ZWsgdmVuZG9yIHNwZWNp
+ZmljIHJlZ2lzdGVycw0KPiBhbmQgbm90IHBhcnQgb2YgcHVibGljIHhIQ0kgcmVnaXN0ZXItbGV2
+ZWwgc3BlYy4gDQo+IFNvIEkgdGhpbmsgYWNjZXNzaW5nIHRoZW0gZnJvbSB4aGNpLW10ay5jIG1h
+a2VzIHNlbnNlLg0KPiANCj4gSWYgdGhvc2UgcmVnaXN0ZXIgb2Zmc2V0cyBhcmUgaGFyZGNvZGVk
+IGxpa2UgdGhpcyBpbiB0aGUgTWVkaWF0ZWsgc3BlYyB0aGVuDQo+IHRoaXMgaXMgZmluZSwgDQpD
+aGVjayBpdCB3aXRoIG91ciBERSwgaXQncyB0aGlzIGNhc2UuDQo+IGJ1dCBpZiB0aG9zZSBvZmZz
+ZXRzIGFyZSBmb3VuZCBmcm9tIGEgdmVuZG9yIHNwZWNpZmljIHhIQ0kNCj4gZXh0ZW5kZWQgY2Fw
+YWJpbGl0eSBlbnRyeSAoc2VlIHhoY2kgc3BlYyBzZWN0aW9uIDcpIHRoZW4gd2Ugc2hvdWxkIGRp
+ZyB0aGVtIG91dA0KPiBmcm9tIHRoZXJlLiANCj4gPj4gKy8qIHhIQ0kgY3NyICovDQo+ID4+ICsj
+ZGVmaW5lIExTX0VPRgkJCTB4OTMwDQo+ID4+ICsjZGVmaW5lIExTX0VPRl9PRkZTRVQJCTB4ODkN
+Cj4gPj4gKw0KPiA+PiArI2RlZmluZSBGU19FT0YJCQkweDkzNA0KPiA+PiArI2RlZmluZSBGU19F
+T0ZfT0ZGU0VUCQkweDJlDQo+ID4+ICsNCj4gPj4gKyNkZWZpbmUgU1NfR0VOMV9FT0YJCTB4OTNj
+DQo+ID4+ICsjZGVmaW5lIFNTX0dFTjFfRU9GX09GRlNFVAkweDc4DQo+ID4+ICsNCj4gPj4gKyNk
+ZWZpbmUgSEZDTlRSX0NGRwkJMHg5NDQNCj4gPj4gKyNkZWZpbmUgSVRQX0RFTFRBX0NMSwkJKDB4
+YSA8PCAxKQ0KPiA+PiArI2RlZmluZSBJVFBfREVMVEFfQ0xLX01BU0sJR0VOTUFTSyg1LCAxKQ0K
+PiA+PiArI2RlZmluZSBGUk1DTlRfTEVWMV9SQU5HCSgweDEyYiA8PCA4KQ0KPiA+PiArI2RlZmlu
+ZSBGUk1DTlRfTEVWMV9SQU5HX01BU0sJR0VOTUFTSygxOSwgOCkNCj4gPj4gKw0KPiA+PiArI2Rl
+ZmluZSBTU19HRU4yX0VPRgkJMHg5OTANCj4gPj4gKyNkZWZpbmUgU1NfR0VOMl9FT0ZfT0ZGU0VU
+CTB4M2MNCj4gPj4gKyNkZWZpbmUgRU9GX09GRlNFVF9NQVNLCQlHRU5NQVNLKDExLCAwKQ0KPiA+
+PiArDQo+ID4+ICBlbnVtIHNzdXNiX3V3a192ZXJzIHsNCj4gPj4gIAlTU1VTQl9VV0tfVjEgPSAx
+LA0KPiA+PiAgCVNTVVNCX1VXS19WMiwNCj4gPj4gIH07DQo+ID4+ICANCj4gPj4gKy8qDQo+ID4+
+ICsgKiBNVDgxOTUgaGFzIDQgY29udHJvbGxlcnMsIHRoZSBjb250cm9sbGVyMX4zJ3MgZGVmYXVs
+dCBTT0YvSVRQIGludGVydmFsDQo+ID4+ICsgKiBpcyBjYWxjdWxhdGVkIGZyb20gdGhlIGZyYW1l
+IGNvdW50ZXIgY2xvY2sgMjRNLCBidXQgaW4gZmFjdCwgdGhlIGNsb2NrDQo+ID4+ICsgKiBpcyA0
+OE0sIHNvIG5lZWQgY2hhbmdlIHRoZSBpbnRlcnZhbC4NCj4gPj4gKyAqLw0KPiA+PiArc3RhdGlj
+IHZvaWQgeGhjaV9tdGtfc2V0X2ZyYW1lX2ludGVydmFsKHN0cnVjdCB4aGNpX2hjZF9tdGsgKm10
+aykNCj4gPj4gK3sNCj4gPj4gKwlzdHJ1Y3QgZGV2aWNlICpkZXYgPSBtdGstPmRldjsNCj4gPj4g
+KwlzdHJ1Y3QgdXNiX2hjZCAqaGNkID0gbXRrLT5oY2Q7DQo+ID4+ICsJdTMyIHZhbHVlOw0KPiA+
+PiArDQo+ID4+ICsJaWYgKCFvZl9kZXZpY2VfaXNfY29tcGF0aWJsZShkZXYtPm9mX25vZGUsICJt
+ZWRpYXRlayxtdDgxOTUteGhjaSIpKQ0KPiA+PiArCQlyZXR1cm47DQo+ID4+ICsNCj4gPj4gKwl2
+YWx1ZSA9IHJlYWRsKGhjZC0+cmVncyArIEhGQ05UUl9DRkcpOw0KPiA+PiArCXZhbHVlICY9IH4o
+SVRQX0RFTFRBX0NMS19NQVNLIHwgRlJNQ05UX0xFVjFfUkFOR19NQVNLKTsNCj4gPj4gKwl2YWx1
+ZSB8PSAoSVRQX0RFTFRBX0NMSyB8IEZSTUNOVF9MRVYxX1JBTkcpOw0KPiA+PiArCXdyaXRlbCh2
+YWx1ZSwgaGNkLT5yZWdzICsgSEZDTlRSX0NGRyk7DQo+ID4+ICsNCj4gPj4gKwl2YWx1ZSA9IHJl
+YWRsKGhjZC0+cmVncyArIExTX0VPRik7DQo+ID4+ICsJdmFsdWUgJj0gfkVPRl9PRkZTRVRfTUFT
+SzsNCj4gPj4gKwl2YWx1ZSB8PSBMU19FT0ZfT0ZGU0VUOw0KPiA+PiArCXdyaXRlbCh2YWx1ZSwg
+aGNkLT5yZWdzICsgTFNfRU9GKTsNCj4gPj4gKw0KPiA+PiArCXZhbHVlID0gcmVhZGwoaGNkLT5y
+ZWdzICsgRlNfRU9GKTsNCj4gPj4gKwl2YWx1ZSAmPSB+RU9GX09GRlNFVF9NQVNLOw0KPiA+PiAr
+CXZhbHVlIHw9IEZTX0VPRl9PRkZTRVQ7DQo+ID4+ICsJd3JpdGVsKHZhbHVlLCBoY2QtPnJlZ3Mg
+KyBGU19FT0YpOw0KPiA+PiArDQo+ID4+ICsJdmFsdWUgPSByZWFkbChoY2QtPnJlZ3MgKyBTU19H
+RU4xX0VPRik7DQo+ID4+ICsJdmFsdWUgJj0gfkVPRl9PRkZTRVRfTUFTSzsNCj4gPj4gKwl2YWx1
+ZSB8PSBTU19HRU4xX0VPRl9PRkZTRVQ7DQo+ID4+ICsJd3JpdGVsKHZhbHVlLCBoY2QtPnJlZ3Mg
+KyBTU19HRU4xX0VPRik7DQo+ID4+ICsNCj4gPj4gKwl2YWx1ZSA9IHJlYWRsKGhjZC0+cmVncyAr
+IFNTX0dFTjJfRU9GKTsNCj4gPj4gKwl2YWx1ZSAmPSB+RU9GX09GRlNFVF9NQVNLOw0KPiA+PiAr
+CXZhbHVlIHw9IFNTX0dFTjJfRU9GX09GRlNFVDsNCj4gPj4gKwl3cml0ZWwodmFsdWUsIGhjZC0+
+cmVncyArIFNTX0dFTjJfRU9GKTsNCj4gDQo+IE1pbm9yIG5pdCBhYm91dCBuYW1lcywNCj4gUmVn
+aXN0ZXIgb2Zmc2V0cyBmcm9tIE1NSU8gc3RhcnQgYXJlIG5hbWVkICpfRU9GIHdoaWxlIGNsb2Nr
+IG11bHRpcGxpZXJzPyBhcmUgbmFtZWQgKl9FT0ZfT0ZGU0VULg0KPiBUaGlzIHdhcyBhIGJpdCBj
+b25mdXNpbmcNCkdvb2QgcG9pbnQsIHRoZSBuYW1lcyBjb21lIGZyb20gcmVnaXN0ZXIgbWFwIGRv
+Y3MsIEknbGwgbW9kaWZ5IGl0LA0KdGhhbmtzIGEgbG90DQo+IA0KPiBUaGFua3MNCj4gLU1hdGhp
+YXMNCg0K
 
