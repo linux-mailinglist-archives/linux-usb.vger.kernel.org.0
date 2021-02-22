@@ -2,68 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27781321CC8
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 17:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B520321D25
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 17:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbhBVQW7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Feb 2021 11:22:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
+        id S231443AbhBVQhk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Feb 2021 11:37:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231644AbhBVQWd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 11:22:33 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E2CC06174A
-        for <linux-usb@vger.kernel.org>; Mon, 22 Feb 2021 08:21:51 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id k2so3345664ili.4
-        for <linux-usb@vger.kernel.org>; Mon, 22 Feb 2021 08:21:51 -0800 (PST)
+        with ESMTP id S230457AbhBVQhg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 11:37:36 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE17C06178A
+        for <linux-usb@vger.kernel.org>; Mon, 22 Feb 2021 08:36:55 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id s6so12546392otk.4
+        for <linux-usb@vger.kernel.org>; Mon, 22 Feb 2021 08:36:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=O2UdjypR4W3iDVOy5hnKP5de6BTPFEvlQ6oGQr/tzUY=;
-        b=QWYr4qA6Wc1K2uzDRbRDKEFJU9VggdyiFbE9noSMExFmpSB/WSH/g2hR2wobF0KpKU
-         aVmWFkaH9gj8GcMoYdDsRvYawy/kizivt/PojhfqMjCVxWyJwyMAmuZjBr0OPFcPerai
-         XoppCFZUi/lHoq1JIO0Y7Bw+vx/Vb9gdiubmc=
+        bh=CQtzj2ET+OspvcT7VasFUJh31XI2DgueE7K7chQefu0=;
+        b=JgIAcXbmqnUtAzeQggrQMFDw+iRD7712f5b6XLlsNpGFq/2OH71ZR8eVPcYSvV8O9Z
+         Q4ZFhr/HY3qIL2VVw5am2ZXMqQjcHv6oQm57icBzxpF2r/H6pUN28Ic0UVcMNAWR0oM3
+         Nk4pk+06r39DoxUQo5VbU8V6VX0ewSDT/6fu0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=O2UdjypR4W3iDVOy5hnKP5de6BTPFEvlQ6oGQr/tzUY=;
-        b=X3Zw3xetALAQvrFzFeXfUJJAWs3jdE9rpuvru3sKTqifMkJlBGnc1x9tYuXYE9CqOu
-         +KfRvZCMxjareR4nT7M1WGwHtZAJgtTOGQaRcMCpZCKfNZGwc46LFesLppSF/Y9P5IiE
-         ABU5i0DDjm6dS8MhIo0uQRb8EKjFc9zZgGdxBP0I6wYXxH2u2ZX2Vnvf/K1SDvGwcNmd
-         jPLCP5y3rcIhaYKg6Bj4ttsVpwSk6mlO5kMrh5Z/AjE20UrKGbojP7xAsVI2uS1Z8+0L
-         0S3oYGQdsqkA/1hW8TJwt++y4e5SSgFsxuphpayQ1pMdQwEcY/5wglCIR7K90CHGXSaY
-         cZfA==
-X-Gm-Message-State: AOAM533H5T+QwiBvD2HWx/8RCstEFk1ZtpPd8AKaUp0lQOHLba7QXqMn
-        bnF4DuQvEVGzwCxOSRlqxLa4UA==
-X-Google-Smtp-Source: ABdhPJwFg4oQJS2b8UUSE1H4Y8Chs7Kox5qlda5aF9f45HJogdaR2sWCL7VTfnIvoEcooK4vehk05A==
-X-Received: by 2002:a92:1312:: with SMTP id 18mr15099286ilt.92.1614010911339;
-        Mon, 22 Feb 2021 08:21:51 -0800 (PST)
+        bh=CQtzj2ET+OspvcT7VasFUJh31XI2DgueE7K7chQefu0=;
+        b=Vhfl4qoANKji+DMC9FEERFmgNECKNrPaL6UtbtNJaZqfsjWaKs+8iK5Mr01Aymcwco
+         bZotEtk2I7DTRhF/rwtERvNX23JGoBDf/ZNxWj5v9+5yVfnyFwkKam6rA69RMvY1LIr/
+         tm1Eq0B+HTTIN8tdoKbRcOW2p2Rr4GcB2JTwri6p5EmlVsaA1X4ivDUmWTCRfr8gW/1p
+         vPERop5mIWSNklsWxHgD2EIhCElIOQgoat0gSC14T8B1015cpR/4RsWvyC39wxFd6J1y
+         4If7oT1YglJN5wJOrcMm1jzhp52Did9aGCpvr0tORzbFMqaqBGWiQ/WJ0KzlPBPMVpdO
+         cftg==
+X-Gm-Message-State: AOAM531Axx5CXIKPNK3JWxbyChLXoKdZ4UiAlZJRWN9EpCJ+Ll0Qj7XP
+        zFUPMrC+2VPdwFyl095v2FQJPg==
+X-Google-Smtp-Source: ABdhPJyA692d/UkhfnySsVsus41uILuIidqyduT1DxwFO8wUlVI27VDOIjP5WOhWxUUsjwOOYq7M6Q==
+X-Received: by 2002:a05:6830:314d:: with SMTP id c13mr16134049ots.124.1614011814286;
+        Mon, 22 Feb 2021 08:36:54 -0800 (PST)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id b16sm5383378ilq.49.2021.02.22.08.21.50
+        by smtp.gmail.com with ESMTPSA id 7sm3712035oth.38.2021.02.22.08.36.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Feb 2021 08:21:51 -0800 (PST)
-Subject: Re: [PATCH 19/20] usbip: usbip_host: Manual replacement of the
- deprecated strlcpy() with return values
+        Mon, 22 Feb 2021 08:36:53 -0800 (PST)
+Subject: Re: [PATCH 00/20] Manual replacement of all strlcpy in favor of
+ strscpy
 To:     Romain Perier <romain.perier@gmail.com>,
         Kees Cook <keescook@chromium.org>,
-        kernel-hardening@lists.openwall.com,
+        kernel-hardening@lists.openwall.com, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jessica Yu <jeyu@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Steffen Maier <maier@linux.ibm.com>,
+        Benjamin Block <bblock@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
         Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     cgroups@vger.kernel.org, linux-crypto@vger.kernel.org,
+        netdev@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-integrity@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-hwmon@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20210222151231.22572-1-romain.perier@gmail.com>
- <20210222151231.22572-20-romain.perier@gmail.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <0323dcb2-726c-7ea2-8e8b-dba81090b571@linuxfoundation.org>
-Date:   Mon, 22 Feb 2021 09:21:50 -0700
+Message-ID: <936bcf5e-2006-7643-7804-9efa318b3e2b@linuxfoundation.org>
+Date:   Mon, 22 Feb 2021 09:36:51 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.1
 MIME-Version: 1.0
-In-Reply-To: <20210222151231.22572-20-romain.perier@gmail.com>
+In-Reply-To: <20210222151231.22572-1-romain.perier@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -72,53 +107,23 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On 2/22/21 8:12 AM, Romain Perier wrote:
-> The strlcpy() reads the entire source buffer first, it is dangerous if
-> the source buffer lenght is unbounded or possibility non NULL-terminated.
-> It can lead to linear read overflows, crashes, etc...
+> strlcpy() copy a C-String into a sized buffer, the result is always a
+> valid NULL-terminated that fits in the buffer, howerver it has severals
+> issues. It reads the source buffer first, which is dangerous if it is non
+> NULL-terminated or if the corresponding buffer is unbounded. Its safe
+> replacement is strscpy(), as suggested in the deprecated interface [1].
 > 
-> As recommended in the deprecated interfaces [1], it should be replaced
-> by strscpy.
-> 
-> This commit replaces all calls to strlcpy that handle the return values
-> by the corresponding strscpy calls with new handling of the return
-> values (as it is quite different between the two functions).
-> 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-> 
-> Signed-off-by: Romain Perier <romain.perier@gmail.com>
-> ---
->   drivers/usb/usbip/stub_main.c |    6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
-> index 77a5b3f8736a..5bc2c09c0d10 100644
-> --- a/drivers/usb/usbip/stub_main.c
-> +++ b/drivers/usb/usbip/stub_main.c
-> @@ -167,15 +167,15 @@ static ssize_t match_busid_show(struct device_driver *drv, char *buf)
->   static ssize_t match_busid_store(struct device_driver *dev, const char *buf,
->   				 size_t count)
->   {
-> -	int len;
-> +	ssize_t len;
->   	char busid[BUSID_SIZE];
->   
->   	if (count < 5)
->   		return -EINVAL;
->   
->   	/* busid needs to include \0 termination */
-> -	len = strlcpy(busid, buf + 4, BUSID_SIZE);
-> -	if (sizeof(busid) <= len)
-> +	len = strscpy(busid, buf + 4, BUSID_SIZE);
-> +	if (len == -E2BIG)
->   		return -EINVAL;
->   
->   	if (!strncmp(buf, "add ", 4)) {
+> We plan to make this contribution in two steps:
+> - Firsly all cases of strlcpy's return value are manually replaced by the
+>    corresponding calls of strscpy() with the new handling of the return
+>    value (as the return code is different in case of error).
+> - Then all other cases are automatically replaced by using coccinelle.
 > 
 
-
-Looks good to me. Thank you.
-
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+Cool. A quick check shows me 1031 strscpy() calls with no return
+checks. All or some of these probably need to be reviewed and add
+return checks. Is this something that is in the plan to address as
+part of this work?
 
 thanks,
 -- Shuah
