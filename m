@@ -2,93 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66AF3321D61
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 17:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8F5321E4C
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Feb 2021 18:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbhBVQst (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Feb 2021 11:48:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42944 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230306AbhBVQsq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 22 Feb 2021 11:48:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C688F64ED6;
-        Mon, 22 Feb 2021 16:48:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614012484;
-        bh=MXWBO5J/B4ehCuAjOGHLdM4atFpj8B3PWrif6H43n14=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qeKbyy0tmr3l0m6/IBkrwfcG7tjyEq2wSF8ie468m4y5KvNxwCCzqjaHX0Jciyhue
-         rPzAXXPqXtiKbDy5viGuPNVVFH4dz71XzyrEEsh6YF9NuFL6eLuUEcYBWt/DVRiKjY
-         AlFIE6zFtkBJPtyOtPFhvh+rGnF/CKQBH9/81d3LE0mep8tDV8oh56A2geWPhn40ug
-         zFO2zf9ECtLYcVK3xsI18i0k5eeLPbUWJy3qCrwW6AQqcWWZeLUPSG+5frOC2bIYoo
-         88Z1WVWc2pzK25Y7Yrn/TM0fZOOSrCQ2wgGhLim5hQdOj6ZyqI5/6IWbeEKgK1armG
-         Sse9t4ZjZTqpg==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lEENh-0006BJ-OF; Mon, 22 Feb 2021 17:48:21 +0100
-Date:   Mon, 22 Feb 2021 17:48:21 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     "Michael G. Katzmann" <michaelk@IEEE.org>
-Cc:     charles-yeh@prolific.com.tw, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>,
-        Joe Abbott <jabbott@rollanet.org>
-Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
-Message-ID: <YDPgVZ4GbNq6cGDP@hovoldconsulting.com>
-References: <3aee5708-7961-f464-8c5f-6685d96920d6@IEEE.org>
- <dc3458f1-830b-284b-3464-20124dc3900a@IEEE.org>
- <YDNwxtDxd7JntAXt@hovoldconsulting.com>
- <e2dcc839-3b43-2c80-6ad1-2d97e639b46a@IEEE.org>
- <YDOvLseYXaUHs0lS@hovoldconsulting.com>
- <fb1489c2-b972-619b-b7ce-4ae8e1d2cc0f@IEEE.org>
- <YDPO/JprcDTaPmR4@hovoldconsulting.com>
- <0f9caf26-af58-13a9-9947-47bb646f505e@IEEE.org>
- <YDPS3AP63/PwmwJU@hovoldconsulting.com>
- <cd92ea17-4e0a-2b6c-1032-9a81727841c9@IEEE.org>
+        id S231276AbhBVRkC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Feb 2021 12:40:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230284AbhBVRj6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Feb 2021 12:39:58 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12791C061574
+        for <linux-usb@vger.kernel.org>; Mon, 22 Feb 2021 09:39:18 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id m6so7055044pfk.1
+        for <linux-usb@vger.kernel.org>; Mon, 22 Feb 2021 09:39:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MF4APfFlsanpI0r4zsRHCQLQgfReqF48Ze/kE7l1vkE=;
+        b=ElFKTM8eUw2BY9ppbokoLTTd00JRQei2N5HBMaXvoy866vTrLd+ZryHOS5tT1lHkmM
+         6sBJCbbiOZ2buOZF4WFU7ulZmfuFjZ8SwYOEym0G/+yOwwm2Y+4n3FprefgkLZdWkI5K
+         0lSchaoEx05aKUYyJOkAHrmPY0p1N9ZFI76DA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MF4APfFlsanpI0r4zsRHCQLQgfReqF48Ze/kE7l1vkE=;
+        b=gj7I32Mjj8D1iomXDw6jYcGdJSObJptNWoWYokb+oLw0NVq18VeypVDQN6sA5bVwUt
+         MWcDzjX53xk9AbJ23FYIx63O8efxFc/5rQuw28napMFZ6q0ELt8HCZriMKol8EVFctxu
+         /ZqBXX/WhocgdZddkPyHaahJpyMPjX/3RePEXyB4sgYk+s9i+MR/4w/q3khA2xWu+rpo
+         GkAnP+/PhZhqxv1zo9wBe1aXbSVVQLTuQMYyVpgZviW18VGgjtbyCNapr2hMQAvZCZ32
+         bNPgetkohux/xv/jBe2xJ0quqSCho4m763GPsmGlt6pmdcIOYBti5zgJZ5Tq/GiafP14
+         waUQ==
+X-Gm-Message-State: AOAM530kAua7pMLDMYTogRu2uRuURiEly68jf31mQN0CM33rH1cz3u2W
+        lyv4tsjMZT7kFvmZqZMnbLUCNg==
+X-Google-Smtp-Source: ABdhPJzxxps/L0tFLihFXaGaCOzegV5h5itBz+sA8whlMY95Fx09Bei5MVSeuNsqyFKXgtKrX71Zfg==
+X-Received: by 2002:a62:83ca:0:b029:1ed:78d1:531a with SMTP id h193-20020a6283ca0000b02901ed78d1531amr9730539pfe.56.1614015555373;
+        Mon, 22 Feb 2021 09:39:15 -0800 (PST)
+Received: from localhost ([2620:15c:202:1:61bd:1a6e:a387:22f0])
+        by smtp.gmail.com with UTF8SMTPSA id o18sm3927pjq.44.2021.02.22.09.39.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Feb 2021 09:39:14 -0800 (PST)
+Date:   Mon, 22 Feb 2021 09:39:12 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v5 1/4] dt-bindings: usb: Add binding for discrete
+ onboard USB hubs
+Message-ID: <YDPsQNm95Zpm+cjl@google.com>
+References: <20210210171040.684659-1-mka@chromium.org>
+ <20210210091015.v5.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+ <20210217210441.GA2709172@robh.at.kernel.org>
+ <YC3D/+DZYFjgHQ3H@google.com>
+ <CAL_Jsq+=LOwOiorpR85UYwYgXCGT-Ai2MbBPWNf+t3X0tLYhqA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cd92ea17-4e0a-2b6c-1032-9a81727841c9@IEEE.org>
+In-Reply-To: <CAL_Jsq+=LOwOiorpR85UYwYgXCGT-Ai2MbBPWNf+t3X0tLYhqA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 22, 2021 at 11:37:30AM -0500, Michael G. Katzmann wrote:
-
-> For reference this is the device I have ...
+On Fri, Feb 19, 2021 at 09:05:32AM -0600, Rob Herring wrote:
+> On Wed, Feb 17, 2021 at 7:33 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+> >
+> > Hi Rob,
+> >
+> > thanks for your review!
+> >
+> > On Wed, Feb 17, 2021 at 03:04:41PM -0600, Rob Herring wrote:
+> > > On Wed, Feb 10, 2021 at 09:10:36AM -0800, Matthias Kaehlcke wrote:
+> > > > Discrete onboard USB hubs (an example for such a hub is the Realtek
+> > > > RTS5411) need to be powered and may require initialization of other
+> > > > resources (like GPIOs or clocks) to work properly. This adds a device
+> > > > tree binding for these hubs.
+> > > >
+> > > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > > > ---
+> > > >
+> > > > Changes in v5:
+> > > > - updated 'title'
+> > > > - only use standard USB compatible strings
+> > > > - deleted 'usb_hub' node
+> > > > - renamed 'usb_controller' node to 'usb-controller'
+> > > > - removed labels from USB nodes
+> > > > - added 'vdd-supply' to USB nodes
+> > > >
+> > > > Changes in v4:
+> > > > - none
+> > > >
+> > > > Changes in v3:
+> > > > - updated commit message
+> > > > - removed recursive reference to $self
+> > > > - adjusted 'compatible' definition to support multiple entries
+> > > > - changed USB controller phandle to be a node
+> > > >
+> > > > Changes in v2:
+> > > > - removed 'wakeup-source' and 'power-off-in-suspend' properties
+> > > > - consistently use spaces for indentation in example
+> > > >
+> > > >  .../bindings/usb/onboard_usb_hub.yaml         | 49 +++++++++++++++++++
+> > > >  1 file changed, 49 insertions(+)
+> > > >  create mode 100644 Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..bf4ec52e6c7b
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/usb/onboard_usb_hub.yaml
+> > > > @@ -0,0 +1,49 @@
+> > > > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/usb/onboard_usb_hub.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: Binding for discrete onboard USB hubs
+> > >
+> > > This isn't really generic. Maybe there's a set of hubs with only a
+> > > single supply much like 'simple-panel', but I kind of doubt that here.
+> > > There aren't hundreds of hub chips like panels. Though, we should put
+> > > this into bindings/usb/hub/ so we start collecting hub bindings in one
+> > > place.
+> >
+> > Ok, I agree that the name of the binding is too generic, I anticipated that
+> > the power supply section would need to be extended to support other hub
+> > chips.
+> >
+> > > A generic driver doesn't have to have a generic binding.
+> >
+> > That's a good point, it seems to make sense to have separate bindings in
+> > this case.
+> >
+> > > You can have a specific device binding which is handled by a generic
+> > > driver. Or not. Who knows. Maybe a simple user like u-boot has a generic
+> > > driver while something more feature rich has a device specific binding.
+> > >
+> > > > +
+> > > > +maintainers:
+> > > > +  - Matthias Kaehlcke <mka@chromium.org>
+> > >
+> > > Now we have usb-device.yaml, you need:
+> > >
+> > > allOf:
+> > >   - $ref: usb-device.yaml#
+> >
+> > ok
+> >
+> > So with your comments addressed it seems we have a binding that could be
+> > acceptable. I'll still hold back a bit to see if we can make progress with
+> > the discussion about using the 'graph' binding (https://lore.kernel.org/patchwork/patch/1379002/#1578294).
+> > The one thing I don't like about the current binding is that it wouldn't
+> > work out of the box with a hierarchy of hubs. To make that work on the
+> > driver side an additional property would be needed to indicate that two
+> > (or more) USB hub devices are related (i.e. are provided by the same
+> > chip). This is needed to be able to decide whether the hub should be
+> > powered down during system suspend.
 > 
-> Bus 001 Device 011: ID 067b:2303 Prolific Technology, Inc. PL2303 Serial Port
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               2.00
->   bDeviceClass            0
->   bDeviceSubClass         0
->   bDeviceProtocol         0
->   bMaxPacketSize0        64
->   idVendor           0x067b Prolific Technology, Inc.
->   idProduct          0x2303 PL2303 Serial Port
->   bcdDevice            3.00
->   iManufacturer           1
->   iProduct                2
+> How about a 'hub-companion' property or similar?
 
-Would be interesting to compare with a real TA in case this one happens
-to be a clone after all.
+Yes, something like that is what I had in mind.
 
-My HXD has
-
-  bcdDevice            4.00
-  iManufacturer           1 Prolific Technology Inc. 
-  iProduct                2 USB-Serial Controller D
-
-here.
-
->   iSerial                 0
->   bNumConfigurations      1
-
-Thanks!
-
-Joe, would you mind posting the output of "lsusb -v" for your device as
-well?
-
-Johan
+Another inconvenient is that collaboration from the controller /
+generic hub driver is needed, however it seems at least Alan would be
+ok with that.
