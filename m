@@ -2,71 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A1B3322F17
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 17:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4E6322F2C
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 17:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233466AbhBWQw1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Feb 2021 11:52:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42524 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231915AbhBWQw0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Feb 2021 11:52:26 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D1D3F64E61;
-        Tue, 23 Feb 2021 16:51:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614099105;
-        bh=eMrPfZ45f1kslps9cQ6Pq/QDF0YNzTrMUdC1uyr4tw8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J7EjFxOCV/leUi57VQwGwr54yFXYE+0gfeqzucZDHiMTYt3rJptJ2s9o21yPw7MAd
-         zpE0LxE58ZsR2dhta9c2tj9Rt0+jqI0s5ogTfZbVB8H3igF07w55gpo6W0OPJVmona
-         aoQk/cPvGdzJNSv/4kYBItJUZEtI/OTTaiUfGm4LWsZlc/n211zemSz2dpFBZTe4aG
-         lC04WJHISMOiLHsbaNeA6GIplnUn1ZIg/l8qUHuxWNUweHii1dltXwy5Ozn54yVKL4
-         NIqZwo30jB8PxsSvEFJ8HjHn22jW/O75ZRQ0cHnsePLBsTNkTgnp/FWpyobrPkweFG
-         xSqd3QZMgvUQg==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lEaun-0006iZ-0s; Tue, 23 Feb 2021 17:52:01 +0100
-Date:   Tue, 23 Feb 2021 17:52:01 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     "Michael G. Katzmann" <michaelk@IEEE.org>
-Cc:     charles-yeh@prolific.com.tw, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>,
-        Joe Abbott <jabbott@rollanet.org>
-Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
-Message-ID: <YDUysZY90FfVhrHK@hovoldconsulting.com>
-References: <YDOvLseYXaUHs0lS@hovoldconsulting.com>
- <fb1489c2-b972-619b-b7ce-4ae8e1d2cc0f@IEEE.org>
- <YDPO/JprcDTaPmR4@hovoldconsulting.com>
- <0f9caf26-af58-13a9-9947-47bb646f505e@IEEE.org>
- <YDPS3AP63/PwmwJU@hovoldconsulting.com>
- <780b9aa6-890d-47fd-d6b2-cd9a39f7634a@IEEE.org>
- <YDUiuLtwRkZ0D0Mi@hovoldconsulting.com>
- <f63df659-6cdf-bba6-f892-1012b98f82e2@IEEE.org>
- <YDUp0tIThOZSTHJt@hovoldconsulting.com>
- <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
+        id S233641AbhBWQ4L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Feb 2021 11:56:11 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:45293 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S233637AbhBWQ4E (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Feb 2021 11:56:04 -0500
+Received: (qmail 1267268 invoked by uid 1000); 23 Feb 2021 11:55:21 -0500
+Date:   Tue, 23 Feb 2021 11:55:21 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>
+Cc:     f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tony Prisk <linux@prisktech.co.nz>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/2] usb: host: ehci-platform: add ignore_oc DT support
+Message-ID: <20210223165521.GE1261797@rowland.harvard.edu>
+References: <20210223155005.21712-1-noltari@gmail.com>
+ <20210223161644.6095-1-noltari@gmail.com>
+ <20210223161644.6095-3-noltari@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210223161644.6095-3-noltari@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 23, 2021 at 11:30:41AM -0500, Michael G. Katzmann wrote:
-> On 2/23/21 11:14 AM, Johan Hovold wrote:
-> > I only have an HXD (and a GC) here.
-> >
-> > The HXD has bcdUSB as 1.10 unlike your TA with 2.00, but not sure that
-> > helps.
+On Tue, Feb 23, 2021 at 05:16:44PM +0100, Álvaro Fernández Rojas wrote:
+> Over-current reporting isn't supported on some platforms such as bcm63xx.
+> These devices will incorrectly report over-current if this flag isn't properly
+> activated.
 > 
-> Sound promising .. why do you think this is this not reliable?
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> ---
+>  v2: change flag name and improve documentation as suggested by Alan Stern.
+> 
+>  drivers/usb/host/ehci-platform.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
+> index a48dd3fac153..2c587e31d010 100644
+> --- a/drivers/usb/host/ehci-platform.c
+> +++ b/drivers/usb/host/ehci-platform.c
+> @@ -286,6 +286,9 @@ static int ehci_platform_probe(struct platform_device *dev)
+>  		if (of_property_read_bool(dev->dev.of_node, "big-endian"))
+>  			ehci->big_endian_mmio = ehci->big_endian_desc = 1;
+>  
+> +		if (of_property_read_bool(dev->dev.of_node, "spurious-oc"))
+> +			ehci->ignore_oc = 1;
+> +
+>  		if (of_property_read_bool(dev->dev.of_node,
+>  					  "needs-reset-on-resume"))
+>  			priv->reset_on_resume = true;
 
-Perhaps it is. Perhaps even bcdDevice of 3.00 is enough (includes some
-older variants that the TA replaced supposedly). Not sure anyone ever
-tried the current scheme on those older models.
-
-Charles, could you post the output of "lsusb -v" for your PL2303TA? And
-did you verify that you actually got 110 Bd with the current Linux
-driver?
-
-Johan
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
