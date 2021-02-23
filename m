@@ -2,74 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B17E1323239
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 21:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9146532334A
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 22:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233249AbhBWUl3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Feb 2021 15:41:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46348 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233000AbhBWUl2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Feb 2021 15:41:28 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 9D17A601FF;
-        Tue, 23 Feb 2021 20:40:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614112847;
-        bh=EhsjYflepxvLPaDKg0JeKxmmcf4dLCs3KSfAzkJsDag=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=kgkxaskucG5+1PhbJaqRGCR2SQc4tgrSC347tCkxVw13pS93ZMDVg39o4iCMwGL1R
-         hvV5P69RUNschpznfQWCbtmObmF1RF8Qv4fK5xk9eiNFuYLsV0vOZYIl3i8t1ko7ms
-         DA0ofpsC1y6UFPBbm+vCw2bYAog3+caMrt6PiRd4OVZgDwGJmYaRDBdNPd1b8lI8Pf
-         VYpK0yskE/tnZNIEeezK3NMeGx7fTFFO2TXJyVfg9JtIv0ZFGYFu4j0uzO1Gnk0EL0
-         iqvM4q5vmuGH1pWKX3cUp0isabJRUq5sJWZAhWCy4dny89zIGoUoVOf/Nr7gPuQ6DP
-         dpjWRvoTVgPTA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 958946096F;
-        Tue, 23 Feb 2021 20:40:47 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S233875AbhBWV32 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Feb 2021 16:29:28 -0500
+Received: from smtp12.smtpout.orange.fr ([80.12.242.134]:51622 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234048AbhBWV3S (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Feb 2021 16:29:18 -0500
+Received: from [192.168.1.18] ([90.126.17.6])
+        by mwinf5d35 with ME
+        id YlTY2400B07rLVE03lTZkE; Tue, 23 Feb 2021 22:27:36 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 23 Feb 2021 22:27:36 +0100
+X-ME-IP: 90.126.17.6
+Subject: Re: [PATCH 1/2] usb: gadget: s3c: Fix incorrect resources releasing
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, krzk@kernel.org,
+        nathan@kernel.org, ndesaulniers@google.com, arnd@arndb.de,
+        gustavoars@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Newsgroups: gmane.linux.kernel.samsung-soc,gmane.linux.ports.arm.kernel,gmane.linux.usb.general,gmane.linux.kernel,gmane.linux.kernel.janitors
+References: <20210221074117.937965-1-christophe.jaillet@wanadoo.fr>
+ <20210222060302.GI2087@kadam>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Message-ID: <6135522c-11e9-a2ba-2d5e-b46068aa6d3f@wanadoo.fr>
+Date:   Tue, 23 Feb 2021 22:27:30 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
+In-Reply-To: <20210222060302.GI2087@kadam>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/4] r8152: minor adjustments
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161411284760.849.519084672823492074.git-patchwork-notify@kernel.org>
-Date:   Tue, 23 Feb 2021 20:40:47 +0000
-References: <1394712342-15778-341-Taiwan-albertk@realtek.com>
-In-Reply-To: <1394712342-15778-341-Taiwan-albertk@realtek.com>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     netdev@vger.kernel.org, nic_swsd@realtek.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net.git (refs/heads/master):
-
-On Fri, 19 Feb 2021 17:04:39 +0800 you wrote:
-> These patches are used to adjust the code.
+Le 22/02/2021 à 07:03, Dan Carpenter a écrit :
+> On Sun, Feb 21, 2021 at 08:41:17AM +0100, Christophe JAILLET wrote:
+>> Since commit fe0f8e5c9ba8 ("usb: gadget: s3c: use platform resources"),
 > 
-> Hayes Wang (4):
->   r8152: enable U1/U2 for USB_SPEED_SUPER
->   r8152: check if the pointer of the function exists
->   r8152: replace netif_err with dev_err
->   r8152: spilt rtl_set_eee_plus and r8153b_green_en
+> This the wrong hash.  It should be 188db4435ac6 from the URL you posted
+> below.
 > 
-> [...]
+> regards,
+> dan carpenter
+> 
+> 
+Ouch!
 
-Here is the summary with links:
-  - [net-next,1/4] r8152: enable U1/U2 for USB_SPEED_SUPER
-    https://git.kernel.org/netdev/net/c/7a0ae61acde2
-  - [net-next,2/4] r8152: check if the pointer of the function exists
-    https://git.kernel.org/netdev/net/c/c79515e47935
-  - [net-next,3/4] r8152: replace netif_err with dev_err
-    https://git.kernel.org/netdev/net/c/156c32076112
-  - [net-next,4/4] r8152: spilt rtl_set_eee_plus and r8153b_green_en
-    https://git.kernel.org/netdev/net/c/40fa7568ac23
+Thx for spotting this so stupid and so trivial little error!
+I'll send a v2 when -rc1 is out.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+CJ
