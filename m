@@ -2,60 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAD7322EFE
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 17:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1B3322F17
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 17:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233381AbhBWQpM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Feb 2021 11:45:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233331AbhBWQpL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Feb 2021 11:45:11 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F89C061574;
-        Tue, 23 Feb 2021 08:44:30 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 6BC2B1F41126
-Received: by jupiter.universe (Postfix, from userid 1000)
-        id C7A7F4800C3; Tue, 23 Feb 2021 17:44:20 +0100 (CET)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: [PATCH] USB: serial: cp210x: add some more GE USB IDs
-Date:   Tue, 23 Feb 2021 17:44:18 +0100
-Message-Id: <20210223164418.118135-1-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.30.0
+        id S233466AbhBWQw1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Feb 2021 11:52:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42524 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231915AbhBWQw0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Feb 2021 11:52:26 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D1D3F64E61;
+        Tue, 23 Feb 2021 16:51:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614099105;
+        bh=eMrPfZ45f1kslps9cQ6Pq/QDF0YNzTrMUdC1uyr4tw8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J7EjFxOCV/leUi57VQwGwr54yFXYE+0gfeqzucZDHiMTYt3rJptJ2s9o21yPw7MAd
+         zpE0LxE58ZsR2dhta9c2tj9Rt0+jqI0s5ogTfZbVB8H3igF07w55gpo6W0OPJVmona
+         aoQk/cPvGdzJNSv/4kYBItJUZEtI/OTTaiUfGm4LWsZlc/n211zemSz2dpFBZTe4aG
+         lC04WJHISMOiLHsbaNeA6GIplnUn1ZIg/l8qUHuxWNUweHii1dltXwy5Ozn54yVKL4
+         NIqZwo30jB8PxsSvEFJ8HjHn22jW/O75ZRQ0cHnsePLBsTNkTgnp/FWpyobrPkweFG
+         xSqd3QZMgvUQg==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lEaun-0006iZ-0s; Tue, 23 Feb 2021 17:52:01 +0100
+Date:   Tue, 23 Feb 2021 17:52:01 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     "Michael G. Katzmann" <michaelk@IEEE.org>
+Cc:     charles-yeh@prolific.com.tw, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>,
+        Joe Abbott <jabbott@rollanet.org>
+Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+Message-ID: <YDUysZY90FfVhrHK@hovoldconsulting.com>
+References: <YDOvLseYXaUHs0lS@hovoldconsulting.com>
+ <fb1489c2-b972-619b-b7ce-4ae8e1d2cc0f@IEEE.org>
+ <YDPO/JprcDTaPmR4@hovoldconsulting.com>
+ <0f9caf26-af58-13a9-9947-47bb646f505e@IEEE.org>
+ <YDPS3AP63/PwmwJU@hovoldconsulting.com>
+ <780b9aa6-890d-47fd-d6b2-cd9a39f7634a@IEEE.org>
+ <YDUiuLtwRkZ0D0Mi@hovoldconsulting.com>
+ <f63df659-6cdf-bba6-f892-1012b98f82e2@IEEE.org>
+ <YDUp0tIThOZSTHJt@hovoldconsulting.com>
+ <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-GE CS1000 has some more custom USB IDs for CP2102N; add them
-to the driver to have working auto-probing.
+On Tue, Feb 23, 2021 at 11:30:41AM -0500, Michael G. Katzmann wrote:
+> On 2/23/21 11:14 AM, Johan Hovold wrote:
+> > I only have an HXD (and a GC) here.
+> >
+> > The HXD has bcdUSB as 1.10 unlike your TA with 2.00, but not sure that
+> > helps.
+> 
+> Sound promising .. why do you think this is this not reliable?
 
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
- drivers/usb/serial/cp210x.c | 2 ++
- 1 file changed, 2 insertions(+)
+Perhaps it is. Perhaps even bcdDevice of 3.00 is enough (includes some
+older variants that the TA replaced supposedly). Not sure anyone ever
+tried the current scheme on those older models.
 
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index 9e1c609792fb..0d2d2a3baa07 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -201,6 +201,8 @@ static const struct usb_device_id id_table[] = {
- 	{ USB_DEVICE(0x1901, 0x0194) },	/* GE Healthcare Remote Alarm Box */
- 	{ USB_DEVICE(0x1901, 0x0195) },	/* GE B850/B650/B450 CP2104 DP UART interface */
- 	{ USB_DEVICE(0x1901, 0x0196) },	/* GE B850 CP2105 DP UART interface */
-+	{ USB_DEVICE(0x1901, 0x0197) }, /* GE CS1000 Display serial interface */
-+	{ USB_DEVICE(0x1901, 0x0198) }, /* GE CS1000 M.2 Key E serial interface */
- 	{ USB_DEVICE(0x199B, 0xBA30) }, /* LORD WSDA-200-USB */
- 	{ USB_DEVICE(0x19CF, 0x3000) }, /* Parrot NMEA GPS Flight Recorder */
- 	{ USB_DEVICE(0x1ADB, 0x0001) }, /* Schweitzer Engineering C662 Cable */
--- 
-2.30.0
+Charles, could you post the output of "lsusb -v" for your PL2303TA? And
+did you verify that you actually got 110 Bd with the current Linux
+driver?
 
+Johan
