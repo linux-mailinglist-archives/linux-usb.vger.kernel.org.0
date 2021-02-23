@@ -2,45 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F534322A48
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 13:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73714322B6E
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 14:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbhBWMHO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Feb 2021 07:07:14 -0500
-Received: from mail.jvpinto.com ([65.49.11.60]:28956 "EHLO mail.JVPinto.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232540AbhBWME7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Feb 2021 07:04:59 -0500
-Received: from RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) by
- RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) with Microsoft SMTP Server
- (TLS) id 15.0.1497.2; Tue, 23 Feb 2021 04:03:58 -0800
-Received: from User (40.74.76.79) by RW-EXC1.JVPinto.com (172.32.1.13) with
- Microsoft SMTP Server id 15.0.1497.2 via Frontend Transport; Tue, 23 Feb 2021
- 04:03:46 -0800
-Reply-To: <marlowguttridge@gmail.com>
-From:   "Ms. Reem" <johnpinto@jvpinto.com>
-Subject: Re:reply
-Date:   Tue, 23 Feb 2021 12:03:57 +0000
+        id S232859AbhBWN0M convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 23 Feb 2021 08:26:12 -0500
+Received: from beige.elm.relay.mailchannels.net ([23.83.212.16]:5214 "EHLO
+        beige.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232853AbhBWN0L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Feb 2021 08:26:11 -0500
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 1659E7E31C8;
+        Tue, 23 Feb 2021 13:25:29 +0000 (UTC)
+Received: from pdx1-sub0-mail-a45.g.dreamhost.com (100-96-13-41.trex.outbound.svc.cluster.local [100.96.13.41])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 8AA677E2B6B;
+        Tue, 23 Feb 2021 13:25:28 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from pdx1-sub0-mail-a45.g.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
+        by 100.96.13.41 (trex/6.0.2);
+        Tue, 23 Feb 2021 13:25:28 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|smtp@contentfirst.com
+X-MailChannels-Auth-Id: dreamhost
+X-Suffer-Vacuous: 3b89499900c11f82_1614086728848_406775145
+X-MC-Loop-Signature: 1614086728848:1177074307
+X-MC-Ingress-Time: 1614086728848
+Received: from pdx1-sub0-mail-a45.g.dreamhost.com (localhost [127.0.0.1])
+        by pdx1-sub0-mail-a45.g.dreamhost.com (Postfix) with ESMTP id 548897F11C;
+        Tue, 23 Feb 2021 05:25:28 -0800 (PST)
+Received: from industrynumbers.com (pool-100-15-209-187.washdc.fios.verizon.net [100.15.209.187])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: smtp@contentfirst.com)
+        by pdx1-sub0-mail-a45.g.dreamhost.com (Postfix) with ESMTPSA id 958747F13C;
+        Tue, 23 Feb 2021 05:25:24 -0800 (PST)
+Received: from industrynumbers.com (localhost [127.0.0.1])
+        by industrynumbers.com (Postfix) with ESMTP id 68CC3282D7A;
+        Tue, 23 Feb 2021 08:25:23 -0500 (EST)
+Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+To:     =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>, Johan Hovold <johan@kernel.org>
+Cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Charles Yeh <charlesyeh522@gmail.com>,
+        Joe Abbott <jabbott@rollanet.org>
+References: <3aee5708-7961-f464-8c5f-6685d96920d6@IEEE.org>
+ <dc3458f1-830b-284b-3464-20124dc3900a@IEEE.org>
+ <YDNwxtDxd7JntAXt@hovoldconsulting.com>
+ <e2dcc839-3b43-2c80-6ad1-2d97e639b46a@IEEE.org>
+ <YDOvLseYXaUHs0lS@hovoldconsulting.com>
+ <fb1489c2-b972-619b-b7ce-4ae8e1d2cc0f@IEEE.org>
+ <YDPO/JprcDTaPmR4@hovoldconsulting.com>
+ <0f9caf26-af58-13a9-9947-47bb646f505e@IEEE.org>
+ <YDPS3AP63/PwmwJU@hovoldconsulting.com>
+ <cd92ea17-4e0a-2b6c-1032-9a81727841c9@IEEE.org>
+ <43da22ced8e14442bbc8babea77e4ed7@MailHC2.prolific.com.tw>
+X-DH-BACKEND: pdx1-sub0-mail-a45
+From:   "Michael G. Katzmann" <michaelk@IEEE.org>
+Message-ID: <f91e9f1b-affc-8b13-19eb-a1ab19771032@IEEE.org>
+Date:   Tue, 23 Feb 2021 08:25:23 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <a2677d1e184e4ffc991055aa213412c9@RW-EXC1.JVPinto.com>
-To:     Undisclosed recipients:;
+In-Reply-To: <43da22ced8e14442bbc8babea77e4ed7@MailHC2.prolific.com.tw>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello, 
+The markings on the device I have are
+PL2303TA
+G19101E
+CDH81920
 
-My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state and Petroleum" also "Minister of State for International Cooperation" in UAE. 
+... and yes I had to destroy it to open it 8-(
 
-I write to you on behalf of my other "three (3) colleagues" who has approved me to solicit for your "partnership in claiming of {us$47=Million}" from a Financial Home in Cambodia on their behalf and for our "Mutual Benefits". The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas deal with Cambodian/Vietnam Government within 2013/2014, however, we don't want our government to know about the fund. 
+Photo here..... https://photos.app.goo.gl/ontHBzGBbaDV6FWu6
 
-If this proposal interests you, let me know, by sending me an email and I will send to you detailed information on how this business would be successfully transacted. Be informed that nobody knows about the secret of this fund except us, and we know how to carry out the entire transaction. So I am compelled to ask, that you will stand on our behalf and receive this fund into any account that is solely controlled by you. We will compensate you with 15% of the total amount involved as gratification for being our partner in this transaction. Reply to: marlowguttridge@gmail.com
+Michael.  
 
-Regards,
-Ms. Reem
+
+On 2/23/21 5:14 AM, Yeh.Charles [葉榮鑫] wrote:
+> I set 110 bps / 8 data bits/ none parity / 1 stop bit.
+> I used PL2303TA , I got the data is d5 0e 00 80 00 00 08 on 5.8.0-41 kernel.
+> Please refer to attached file : PL2303TA.png.
+>
+> The divider algorithm is OK on Linux for my test.
+>
+> Can you use you PL2303TA board to print log?
+> What are the differences between the log you printed and the log printed in the attachment?
