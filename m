@@ -2,127 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D793230DD
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 19:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8966C323139
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 20:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233814AbhBWSf4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Feb 2021 13:35:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233982AbhBWSfq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Feb 2021 13:35:46 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAC3C061574;
-        Tue, 23 Feb 2021 10:35:05 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id u20so35361512ejb.7;
-        Tue, 23 Feb 2021 10:35:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=lnwVFFQQDuYoLD4H/4zwU5IDIG9Pt3VM/f+MXHjJNnM=;
-        b=Ll09qTFdS+Hxo6fHCqFEvJ2u+puEasSIs+hvAXqUA4VQBrAKQOKRpgBEXcWhizMqn8
-         27e9yVGkFjqWfZ01gVERGeUAsU0Issw7ALDh8J1wOjMQBeuZJacyJQlsQlRU2Ly7w40n
-         6jUH8e/2P7v7eP05+oLHOEL2MLAxajCIyLcyI7/TxxXHMKK/F4Q1JClHxAYioSboClks
-         +jttXcYBiC6Eqwc2LgSnotjOIJDmFzbc6O/Sh5pcRjcxJcceGf2jvQkCEXtif4S+p8Np
-         d7/RENEdotSXoQQNN8ofJsLbp84AkTVWxY7IpfQCt9FJJp9yyhfTeqABafLE5CraG6/j
-         8bmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=lnwVFFQQDuYoLD4H/4zwU5IDIG9Pt3VM/f+MXHjJNnM=;
-        b=VSRFdKUBV4iMwsDRcp7nU8i0Gu4dL8+a3+QDYw2egx9zhkBZGafcrQSaXSJHUqy/kV
-         v3HEkxUgc1mBpOtTBCo2h+J8G1nIl1RxdY56Es2GIAjkWVoj5U+m7j0xyXIhb23Z7HmV
-         EYDHpupHZ1KZsHZ2sLl5bcIV8UIo/Q1GhzLFZ8B1kp3oo1pDKIk9A1VLkKFb7nTMsHXd
-         t4DCRiurHRw7pWECIigOthu3FA7VAtsWfqZENhKVD4n58jenyhFrljk9qPmPE7N2zxSz
-         l9OfntG59UaDxwCBaWA7r0zwQqbp0p8iLJjrcefagS7Tfj7RB1iGjlOozXvZbnpX/H4X
-         Pb3w==
-X-Gm-Message-State: AOAM533vNqiFi0NlqmvBMTMh7gkKPHd1s+DaNTqqRiiNz1dFS6pd6aRD
-        qfzp6tysmiyks2Imc5q0D59dZtbdOY+GUA==
-X-Google-Smtp-Source: ABdhPJz475EqJ9KOiG3vxE8jY7mRrBpm6fbFOT3z2PV3z7qQmFiD86l03TnATPgjg9DqHuQRBnOktQ==
-X-Received: by 2002:a17:906:bc84:: with SMTP id lv4mr28113127ejb.136.1614105304615;
-        Tue, 23 Feb 2021 10:35:04 -0800 (PST)
-Received: from rafiki.local (user-5-173-242-247.play-internet.pl. [5.173.242.247])
-        by smtp.gmail.com with ESMTPSA id hq14sm2617242ejc.30.2021.02.23.10.35.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Feb 2021 10:35:03 -0800 (PST)
-From:   Lech Perczak <lech.perczak@gmail.com>
-To:     netdev@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Lech Perczak <lech.perczak@gmail.com>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-Subject: [PATCH v3] net: usb: qmi_wwan: support ZTE P685M modem
-Date:   Tue, 23 Feb 2021 19:34:56 +0100
-Message-Id: <20210223183456.6377-1-lech.perczak@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210206121322.074ddbd3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20210206121322.074ddbd3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        id S233627AbhBWTP4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Feb 2021 14:15:56 -0500
+Received: from bee.birch.relay.mailchannels.net ([23.83.209.14]:54334 "EHLO
+        bee.birch.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233602AbhBWTPz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Feb 2021 14:15:55 -0500
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id DAE4722569;
+        Tue, 23 Feb 2021 19:15:12 +0000 (UTC)
+Received: from pdx1-sub0-mail-a45.g.dreamhost.com (100-96-133-21.trex.outbound.svc.cluster.local [100.96.133.21])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 4F0BE205ED;
+        Tue, 23 Feb 2021 19:15:12 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from pdx1-sub0-mail-a45.g.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
+        by 100.96.133.21 (trex/6.0.2);
+        Tue, 23 Feb 2021 19:15:12 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|smtp@contentfirst.com
+X-MailChannels-Auth-Id: dreamhost
+X-Stop-Eight: 3256f254205c773f_1614107712625_1346096189
+X-MC-Loop-Signature: 1614107712622:1926028336
+X-MC-Ingress-Time: 1614107712622
+Received: from pdx1-sub0-mail-a45.g.dreamhost.com (localhost [127.0.0.1])
+        by pdx1-sub0-mail-a45.g.dreamhost.com (Postfix) with ESMTP id B35B37F04B;
+        Tue, 23 Feb 2021 11:15:11 -0800 (PST)
+Received: from industrynumbers.com (pool-100-15-209-187.washdc.fios.verizon.net [100.15.209.187])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: smtp@contentfirst.com)
+        by pdx1-sub0-mail-a45.g.dreamhost.com (Postfix) with ESMTPSA id 103907F03D;
+        Tue, 23 Feb 2021 11:15:08 -0800 (PST)
+Received: from industrynumbers.com (localhost [127.0.0.1])
+        by industrynumbers.com (Postfix) with ESMTP id BE266282D7A;
+        Tue, 23 Feb 2021 14:15:06 -0500 (EST)
+Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+To:     Johan Hovold <johan@kernel.org>
+Cc:     charles-yeh@prolific.com.tw, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>,
+        Joe Abbott <jabbott@rollanet.org>
+References: <YDOvLseYXaUHs0lS@hovoldconsulting.com>
+ <fb1489c2-b972-619b-b7ce-4ae8e1d2cc0f@IEEE.org>
+ <YDPO/JprcDTaPmR4@hovoldconsulting.com>
+ <0f9caf26-af58-13a9-9947-47bb646f505e@IEEE.org>
+ <YDPS3AP63/PwmwJU@hovoldconsulting.com>
+ <780b9aa6-890d-47fd-d6b2-cd9a39f7634a@IEEE.org>
+ <YDUiuLtwRkZ0D0Mi@hovoldconsulting.com>
+ <f63df659-6cdf-bba6-f892-1012b98f82e2@IEEE.org>
+ <YDUp0tIThOZSTHJt@hovoldconsulting.com>
+ <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
+ <YDUysZY90FfVhrHK@hovoldconsulting.com>
+X-DH-BACKEND: pdx1-sub0-mail-a45
+From:   "Michael G. Katzmann" <michaelk@IEEE.org>
+Message-ID: <4edfb35f-ed81-bade-daee-38a1d7a60a7d@IEEE.org>
+Date:   Tue, 23 Feb 2021 14:15:06 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YDUysZY90FfVhrHK@hovoldconsulting.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Now that interface 3 in "option" driver is no longer mapped, add device
-ID matching it to qmi_wwan.
+On 2/23/21 11:52 AM, Johan Hovold wrote:
+> On Tue, Feb 23, 2021 at 11:30:41AM -0500, Michael G. Katzmann wrote:
+>> On 2/23/21 11:14 AM, Johan Hovold wrote:
+>>> I only have an HXD (and a GC) here.
+>>>
+>>> The HXD has bcdUSB as 1.10 unlike your TA with 2.00, but not sure that
+>>> helps.
+>> Sound promising .. why do you think this is this not reliable?
+> Perhaps it is. Perhaps even bcdDevice of 3.00 is enough (includes some
+> older variants that the TA replaced supposedly). Not sure anyone ever
+> tried the current scheme on those older models.
+>
+> Charles, could you post the output of "lsusb -v" for your PL2303TA? And
+> did you verify that you actually got 110 Bd with the current Linux
+> driver?
+>
+> Johan
 
-The modem is used inside ZTE MF283+ router and carriers identify it as
-such.
-Interface mapping is:
-0: QCDM, 1: AT (PCUI), 2: AT (Modem), 3: QMI, 4: ADB
+Here is the USB packet capture from Wireshark oon Windows 10 when:
 
-T:  Bus=02 Lev=02 Prnt=02 Port=05 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
-D:  Ver= 2.01 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=19d2 ProdID=1275 Rev=f0.00
-S:  Manufacturer=ZTE,Incorporated
-S:  Product=ZTE Technologies MSM
-S:  SerialNumber=P685M510ZTED0000CP&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&0
-C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-E:  Ad=87(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+1) plugging in pl2303 (packets 18-393)
 
-Acked-by: Bjørn Mork <bjorn@mork.no>
-Signed-off-by: Lech Perczak <lech.perczak@gmail.com>
----
-Now that patch for "option" has landed in 'master' and 'net', resend the second part.
+2) setting the device wia cmd line to 110/even/7 bits/2 stop (packets 393-690)
 
-v3: no changes, resend separately again, add Acked-by from Bjørn Mork.
+(device is on port 1.7)
 
-v2: no changes to this patch, resend as series.
+https://drive.google.com/file/d/17TkV9JB2iFNdr4LvRftBnV3_DgITGvUH/view?usp=sharing
 
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
+There are orders of magnitude more traffic than in Linux!
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 6c3d8c2abd38..17a050521b86 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1318,6 +1318,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x19d2, 0x1255, 4)},
- 	{QMI_FIXED_INTF(0x19d2, 0x1256, 4)},
- 	{QMI_FIXED_INTF(0x19d2, 0x1270, 5)},	/* ZTE MF667 */
-+	{QMI_FIXED_INTF(0x19d2, 0x1275, 3)},	/* ZTE P685M */
- 	{QMI_FIXED_INTF(0x19d2, 0x1401, 2)},
- 	{QMI_FIXED_INTF(0x19d2, 0x1402, 2)},	/* ZTE MF60 */
- 	{QMI_FIXED_INTF(0x19d2, 0x1424, 2)},
+
 -- 
-2.20.1
+   |\      _,,,---,,_             Michael Katzmann
+   /,`.-'`'    -.  ;-;;,_         NV3Z / VK2BEA / G4NYV
+  |,4-  ) )-,_. ,\ (  `'-' 
+ '---''(_/--'  `-'\_)             MichaelK@IEEE.org
 
