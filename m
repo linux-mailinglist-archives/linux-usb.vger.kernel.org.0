@@ -2,53 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73714322B6E
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 14:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5869C322D09
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 16:01:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232859AbhBWN0M convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 23 Feb 2021 08:26:12 -0500
-Received: from beige.elm.relay.mailchannels.net ([23.83.212.16]:5214 "EHLO
+        id S231818AbhBWPAd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Feb 2021 10:00:33 -0500
+Received: from beige.elm.relay.mailchannels.net ([23.83.212.16]:10415 "EHLO
         beige.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232853AbhBWN0L (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Feb 2021 08:26:11 -0500
+        by vger.kernel.org with ESMTP id S230291AbhBWPAb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Feb 2021 10:00:31 -0500
 X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 1659E7E31C8;
-        Tue, 23 Feb 2021 13:25:29 +0000 (UTC)
-Received: from pdx1-sub0-mail-a45.g.dreamhost.com (100-96-13-41.trex.outbound.svc.cluster.local [100.96.13.41])
+        by relay.mailchannels.net (Postfix) with ESMTP id 9C63D781D33;
+        Tue, 23 Feb 2021 14:58:53 +0000 (UTC)
+Received: from pdx1-sub0-mail-a45.g.dreamhost.com (100-96-17-34.trex.outbound.svc.cluster.local [100.96.17.34])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 8AA677E2B6B;
-        Tue, 23 Feb 2021 13:25:28 +0000 (UTC)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 23839782449;
+        Tue, 23 Feb 2021 14:58:53 +0000 (UTC)
 X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
 Received: from pdx1-sub0-mail-a45.g.dreamhost.com (pop.dreamhost.com
  [64.90.62.162])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
-        by 100.96.13.41 (trex/6.0.2);
-        Tue, 23 Feb 2021 13:25:28 +0000
+        by 100.96.17.34 (trex/6.0.2);
+        Tue, 23 Feb 2021 14:58:53 +0000
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|smtp@contentfirst.com
 X-MailChannels-Auth-Id: dreamhost
-X-Suffer-Vacuous: 3b89499900c11f82_1614086728848_406775145
-X-MC-Loop-Signature: 1614086728848:1177074307
-X-MC-Ingress-Time: 1614086728848
+X-Arch-Army: 17f04f6537bef379_1614092333452_3684474540
+X-MC-Loop-Signature: 1614092333452:1392463749
+X-MC-Ingress-Time: 1614092333452
 Received: from pdx1-sub0-mail-a45.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a45.g.dreamhost.com (Postfix) with ESMTP id 548897F11C;
-        Tue, 23 Feb 2021 05:25:28 -0800 (PST)
+        by pdx1-sub0-mail-a45.g.dreamhost.com (Postfix) with ESMTP id D5E457F057;
+        Tue, 23 Feb 2021 06:58:52 -0800 (PST)
 Received: from industrynumbers.com (pool-100-15-209-187.washdc.fios.verizon.net [100.15.209.187])
         (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: smtp@contentfirst.com)
-        by pdx1-sub0-mail-a45.g.dreamhost.com (Postfix) with ESMTPSA id 958747F13C;
-        Tue, 23 Feb 2021 05:25:24 -0800 (PST)
+        by pdx1-sub0-mail-a45.g.dreamhost.com (Postfix) with ESMTPSA id 3DC7D7F03D;
+        Tue, 23 Feb 2021 06:58:49 -0800 (PST)
 Received: from industrynumbers.com (localhost [127.0.0.1])
-        by industrynumbers.com (Postfix) with ESMTP id 68CC3282D7A;
-        Tue, 23 Feb 2021 08:25:23 -0500 (EST)
-Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
-To:     =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>, Johan Hovold <johan@kernel.org>
-Cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Charles Yeh <charlesyeh522@gmail.com>,
+        by industrynumbers.com (Postfix) with ESMTP id 6C66F282D7A;
+        Tue, 23 Feb 2021 09:58:47 -0500 (EST)
+To:     Johan Hovold <johan@kernel.org>
+Cc:     charles-yeh@prolific.com.tw, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>,
         Joe Abbott <jabbott@rollanet.org>
 References: <3aee5708-7961-f464-8c5f-6685d96920d6@IEEE.org>
  <dc3458f1-830b-284b-3464-20124dc3900a@IEEE.org>
@@ -59,41 +56,95 @@ References: <3aee5708-7961-f464-8c5f-6685d96920d6@IEEE.org>
  <YDPO/JprcDTaPmR4@hovoldconsulting.com>
  <0f9caf26-af58-13a9-9947-47bb646f505e@IEEE.org>
  <YDPS3AP63/PwmwJU@hovoldconsulting.com>
- <cd92ea17-4e0a-2b6c-1032-9a81727841c9@IEEE.org>
- <43da22ced8e14442bbc8babea77e4ed7@MailHC2.prolific.com.tw>
 X-DH-BACKEND: pdx1-sub0-mail-a45
 From:   "Michael G. Katzmann" <michaelk@IEEE.org>
-Message-ID: <f91e9f1b-affc-8b13-19eb-a1ab19771032@IEEE.org>
-Date:   Tue, 23 Feb 2021 08:25:23 -0500
+Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+Message-ID: <780b9aa6-890d-47fd-d6b2-cd9a39f7634a@IEEE.org>
+Date:   Tue, 23 Feb 2021 09:58:47 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.0
 MIME-Version: 1.0
-In-Reply-To: <43da22ced8e14442bbc8babea77e4ed7@MailHC2.prolific.com.tw>
+In-Reply-To: <YDPS3AP63/PwmwJU@hovoldconsulting.com>
 Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
 Content-Language: en-US
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The markings on the device I have are
-PL2303TA
-G19101E
-CDH81920
-
-... and yes I had to destroy it to open it 8-(
-
-Photo here..... https://photos.app.goo.gl/ontHBzGBbaDV6FWu6
-
-Michael.  
-
-
-On 2/23/21 5:14 AM, Yeh.Charles [葉榮鑫] wrote:
-> I set 110 bps / 8 data bits/ none parity / 1 stop bit.
-> I used PL2303TA , I got the data is d5 0e 00 80 00 00 08 on 5.8.0-41 kernel.
-> Please refer to attached file : PL2303TA.png.
->
-> The divider algorithm is OK on Linux for my test.
->
-> Can you use you PL2303TA board to print log?
-> What are the differences between the log you printed and the log printed in the attachment?
+T24gMi8yMi8yMSAxMDo1MCBBTSwgSm9oYW4gSG92b2xkIHdyb3RlOgoKCldlbGwgSSBmb3Vu
+ZCBJIGhhdmUgYW5vdGhlciBQcm9saWZpYyBkZXZpY2UgaGVyZSB0aGF0IEkgZ290IGZyb20g
+QWRhZnJ1aXQgKGh0dHBzOi8vd3d3LmFkYWZydWl0LmNvbS9wcm9kdWN0Lzk1NCkKCkl0IGFs
+c28gaGFzIGEgUHJvbGlmaWMgMjMwMyBhbmQgYmVoYXZlcyBleGFjdGx5IGxpa2UgdGhlIG90
+aGVyIG9uZS4gaS5lLiB3aXRoIHRoZSBjdXJyZW50IExpbnV4IGRyaXZlciBpdCBnaXZlcyBh
+IHZlcnkgaGlnaCBiYXVkcmF0ZSB3aGVuIHNldCB0byAxMTAgYmQgYW5kIGdpdmVzIDExMGJk
+IHdoZW4gdGhlIG1vZGlmaWNhdGlvbnMgYXJlIG1hZGUgdG8gdGhlIGRyaXZlciB0aGF0IEkg
+Zm91bmQuCgpJcyBpdCB0aGF0IHdlIGFyZSBwcmVzdW1pbmcgdGhhdCB3aGF0IFByb2xpZmlj
+IGlzIHRlbGxpbmcgdXMgaXMgdHJ1ZSBhbmQgb25seSBKb2UgYW5kIEkgYXJlIGFjdHVhbGx5
+IG1lYXN1cmluZyB0aGUgZGF0YSByYXRlP8KgIChpLmUuIHdoeSBkb2VzIHRoZSBQcm9saWZp
+YyBXaW5kb3dzIGRyaXZlciBzZXQgdGhlIHZhbHVlcyBhcyBKb2UgZm91bmQgPz8/KQoKQWRh
+ZnJ1aXQgZGV2aWNlOgoKQnVzIDAwMSBEZXZpY2UgMDEzOiBJRCAwNjdiOjIzMDMgUHJvbGlm
+aWMgVGVjaG5vbG9neSwgSW5jLiBQTDIzMDMgU2VyaWFsIFBvcnQKRGV2aWNlIERlc2NyaXB0
+b3I6CsKgIGJMZW5ndGjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMTgKwqAgYkRl
+c2NyaXB0b3JUeXBlwqDCoMKgwqDCoMKgwqDCoCAxCsKgIGJjZFVTQsKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgMi4wMArCoCBiRGV2aWNlQ2xhc3PCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIDAKwqAgYkRldmljZVN1YkNsYXNzwqDCoMKgwqDCoMKgwqDCoCAwCsKgIGJEZXZpY2VQ
+cm90b2NvbMKgwqDCoMKgwqDCoMKgwqAgMArCoCBiTWF4UGFja2V0U2l6ZTDCoMKgwqDCoMKg
+wqDCoCA2NArCoCBpZFZlbmRvcsKgwqDCoMKgwqDCoMKgwqDCoMKgIDB4MDY3YiBQcm9saWZp
+YyBUZWNobm9sb2d5LCBJbmMuCsKgIGlkUHJvZHVjdMKgwqDCoMKgwqDCoMKgwqDCoCAweDIz
+MDMgUEwyMzAzIFNlcmlhbCBQb3J0CsKgIGJjZERldmljZcKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgMy4wMArCoCBpTWFudWZhY3R1cmVywqDCoMKgwqDCoMKgwqDCoMKgwqAgMSBQcm9saWZp
+YyBUZWNobm9sb2d5IEluYy4KwqAgaVByb2R1Y3TCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgMiBVU0ItU2VyaWFsIENvbnRyb2xsZXIKwqAgaVNlcmlhbMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIDAKwqAgYk51bUNvbmZpZ3VyYXRpb25zwqDCoMKgwqDCoCAx
+CsKgIENvbmZpZ3VyYXRpb24gRGVzY3JpcHRvcjoKwqDCoMKgIGJMZW5ndGjCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA5CsKgwqDCoCBiRGVzY3JpcHRvclR5cGXCoMKgwqDC
+oMKgwqDCoMKgIDIKwqDCoMKgIHdUb3RhbExlbmd0aMKgwqDCoMKgwqDCoCAweDAwMjcKwqDC
+oMKgIGJOdW1JbnRlcmZhY2VzwqDCoMKgwqDCoMKgwqDCoMKgIDEKwqDCoMKgIGJDb25maWd1
+cmF0aW9uVmFsdWXCoMKgwqDCoCAxCsKgwqDCoCBpQ29uZmlndXJhdGlvbsKgwqDCoMKgwqDC
+oMKgwqDCoCAwCsKgwqDCoCBibUF0dHJpYnV0ZXPCoMKgwqDCoMKgwqDCoMKgIDB4YTAKwqDC
+oMKgwqDCoCAoQnVzIFBvd2VyZWQpCsKgwqDCoMKgwqAgUmVtb3RlIFdha2V1cArCoMKgwqAg
+TWF4UG93ZXLCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAxMDBtQQrCoMKgwqAgSW50ZXJm
+YWNlIERlc2NyaXB0b3I6CsKgwqDCoMKgwqAgYkxlbmd0aMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIDkKwqDCoMKgwqDCoCBiRGVzY3JpcHRvclR5cGXCoMKgwqDCoMKgwqDC
+oMKgIDQKwqDCoMKgwqDCoCBiSW50ZXJmYWNlTnVtYmVywqDCoMKgwqDCoMKgwqAgMArCoMKg
+wqDCoMKgIGJBbHRlcm5hdGVTZXR0aW5nwqDCoMKgwqDCoMKgIDAKwqDCoMKgwqDCoCBiTnVt
+RW5kcG9pbnRzwqDCoMKgwqDCoMKgwqDCoMKgwqAgMwrCoMKgwqDCoMKgIGJJbnRlcmZhY2VD
+bGFzc8KgwqDCoMKgwqDCoCAyNTUgVmVuZG9yIFNwZWNpZmljIENsYXNzCsKgwqDCoMKgwqAg
+YkludGVyZmFjZVN1YkNsYXNzwqDCoMKgwqDCoCAwCsKgwqDCoMKgwqAgYkludGVyZmFjZVBy
+b3RvY29swqDCoMKgwqDCoCAwCsKgwqDCoMKgwqAgaUludGVyZmFjZcKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIDAKwqDCoMKgwqDCoCBFbmRwb2ludCBEZXNjcmlwdG9yOgrCoMKgwqDC
+oMKgwqDCoCBiTGVuZ3RowqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgNwrCoMKg
+wqDCoMKgwqDCoCBiRGVzY3JpcHRvclR5cGXCoMKgwqDCoMKgwqDCoMKgIDUKwqDCoMKgwqDC
+oMKgwqAgYkVuZHBvaW50QWRkcmVzc8KgwqDCoMKgIDB4ODHCoCBFUCAxIElOCsKgwqDCoMKg
+wqDCoMKgIGJtQXR0cmlidXRlc8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMwrCoMKgwqDCoMKg
+wqDCoMKgwqAgVHJhbnNmZXIgVHlwZcKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgSW50ZXJydXB0
+CsKgwqDCoMKgwqDCoMKgwqDCoCBTeW5jaCBUeXBlwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCBOb25lCsKgwqDCoMKgwqDCoMKgwqDCoCBVc2FnZSBUeXBlwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCBEYXRhCsKgwqDCoMKgwqDCoMKgIHdNYXhQYWNrZXRTaXplwqDCoMKg
+wqAgMHgwMDBhwqAgMXggMTAgYnl0ZXMKwqDCoMKgwqDCoMKgwqAgYkludGVydmFswqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAxCsKgwqDCoMKgwqAgRW5kcG9pbnQgRGVzY3JpcHRv
+cjoKwqDCoMKgwqDCoMKgwqAgYkxlbmd0aMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIDcKwqDCoMKgwqDCoMKgwqAgYkRlc2NyaXB0b3JUeXBlwqDCoMKgwqDCoMKgwqDCoCA1
+CsKgwqDCoMKgwqDCoMKgIGJFbmRwb2ludEFkZHJlc3PCoMKgwqDCoCAweDAywqAgRVAgMiBP
+VVQKwqDCoMKgwqDCoMKgwqAgYm1BdHRyaWJ1dGVzwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAy
+CsKgwqDCoMKgwqDCoMKgwqDCoCBUcmFuc2ZlciBUeXBlwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCBCdWxrCsKgwqDCoMKgwqDCoMKgwqDCoCBTeW5jaCBUeXBlwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCBOb25lCsKgwqDCoMKgwqDCoMKgwqDCoCBVc2FnZSBUeXBlwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCBEYXRhCsKgwqDCoMKgwqDCoMKgIHdNYXhQYWNrZXRTaXpl
+wqDCoMKgwqAgMHgwMDQwwqAgMXggNjQgYnl0ZXMKwqDCoMKgwqDCoMKgwqAgYkludGVydmFs
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAwCsKgwqDCoMKgwqAgRW5kcG9pbnQgRGVz
+Y3JpcHRvcjoKwqDCoMKgwqDCoMKgwqAgYkxlbmd0aMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIDcKwqDCoMKgwqDCoMKgwqAgYkRlc2NyaXB0b3JUeXBlwqDCoMKgwqDCoMKg
+wqDCoCA1CsKgwqDCoMKgwqDCoMKgIGJFbmRwb2ludEFkZHJlc3PCoMKgwqDCoCAweDgzwqAg
+RVAgMyBJTgrCoMKgwqDCoMKgwqDCoCBibUF0dHJpYnV0ZXPCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIDIKwqDCoMKgwqDCoMKgwqDCoMKgIFRyYW5zZmVyIFR5cGXCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIEJ1bGsKwqDCoMKgwqDCoMKgwqDCoMKgIFN5bmNoIFR5cGXCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIE5vbmUKwqDCoMKgwqDCoMKgwqDCoMKgIFVzYWdlIFR5cGXCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIERhdGEKwqDCoMKgwqDCoMKgwqAgd01heFBhY2tl
+dFNpemXCoMKgwqDCoCAweDAwNDDCoCAxeCA2NCBieXRlcwrCoMKgwqDCoMKgwqDCoCBiSW50
+ZXJ2YWzCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDAKCgotLSAKICAgfFwgICAgICBf
+LCwsLS0tLCxfICAgICAgICAgICAgIE1pY2hhZWwgS2F0em1hbm4KICAgLyxgLi0nYCcgICAg
+LS4gIDstOzssXyAgICAgICAgIE5WM1ogLyBWSzJCRUEgLyBHNE5ZVgogIHwsNC0gICkgKS0s
+Xy4gLFwgKCAgYCctJyAKICctLS0nJyhfLy0tJyAgYC0nXF8pICAgICAgICAgICAgIE1pY2hh
+ZWxLQElFRUUub3JnCgo=
