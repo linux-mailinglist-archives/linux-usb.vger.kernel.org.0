@@ -2,137 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6E41322E53
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 17:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71952322E81
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 17:14:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233312AbhBWQFw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Feb 2021 11:05:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233510AbhBWQFm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Feb 2021 11:05:42 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08C7C06174A;
-        Tue, 23 Feb 2021 08:05:00 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id w11so442635wrr.10;
-        Tue, 23 Feb 2021 08:05:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=gqqpVSIfzMUpEjdo3rT3BHRB1xjS3NCoeNfVT3jZ/3k=;
-        b=srIK3J2VaZWAPEZ5x2atrT0bobMk18EaEV0jlmo7YNv6JR2qZM0AMo+Jx9jrAJTYxQ
-         vbnnc/2Rt+3vy3M2RR2skZCei+Wq3vy+Il7K19MRbL7oyKfUtXn7XV6Ik8XYzvzJFkr3
-         H9M7FfuglsBPd+xCGUkgjeKuZ93eJ+T9bM4mea4SPebbRrMPF76u2/nuLXDZnHvv5soJ
-         Cthl48RL17hvPGQKNpZKLuaSo/kZv0to+EnTLnb/ZP+IcUYfA8MjtgxFbslR2rAFiALW
-         UUIBup1WG54gfwf223mXE0twz/8a84WanG7pNYMWK5WR4JT5DFapLTAONa2/gtYCiZxV
-         GmPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=gqqpVSIfzMUpEjdo3rT3BHRB1xjS3NCoeNfVT3jZ/3k=;
-        b=ucldUkLny3ovG6W2s/KP9l3v52RfUPdxxfbjjLUx1oMPDy3O4n66BbatCoRgSx94vZ
-         64sSJjxFDvF48nH/6u3jk42W7C0YCl4NVjJRmZdDa0F45iBsUmEhCqIyhZwmy8vlZIdG
-         LvmKibJ9gHqniRIPaM/VJgBdPjr9ugXkaa8zIF3sbyipoIvpQ4xrb1PGoX0zoyXvcB5J
-         un1vOy0dM1t/zlZb8K2C+6cdH2ijdY6mHUnMhf1UeTKlTBWW4+RuVNfXTnIOlWglLdtI
-         UBvsYrDxPLvT07tUtq2r4gIdQoA6iL6dk9onKv8qbCmUk9nmvlGQW5bkxj1AsbS+iQf/
-         P80w==
-X-Gm-Message-State: AOAM5312JcuXs2IqpjO01Wg/ysKF53PcmBGGsemq5hnqwxX0nSOWRwKj
-        MszQwURf61PF/WO8mktalv4=
-X-Google-Smtp-Source: ABdhPJy+VT6aKJoDs2liqCvfi0G35SBrbSbkQVM3FqvqO4h+wbaZ6m1kEsxdK+8O6XLX55k4J4Ns1g==
-X-Received: by 2002:adf:b313:: with SMTP id j19mr3837144wrd.188.1614096299576;
-        Tue, 23 Feb 2021 08:04:59 -0800 (PST)
-Received: from macbook-pro-alvaro.lan (170.red-88-1-105.dynamicip.rima-tde.net. [88.1.105.170])
-        by smtp.gmail.com with ESMTPSA id r17sm33312349wrx.82.2021.02.23.08.04.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 23 Feb 2021 08:04:58 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.60.0.2.21\))
-Subject: Re: [PATCH 1/2] dt-bindings: usb: generic-ehci: document ignore-oc
- flag
-From:   =?utf-8?Q?=C3=81lvaro_Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>
-In-Reply-To: <20210223155443.GB1261797@rowland.harvard.edu>
-Date:   Tue, 23 Feb 2021 17:04:57 +0100
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tony Prisk <linux@prisktech.co.nz>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <54E1894F-C8D8-4E2F-92DF-DC891153BAAB@gmail.com>
-References: <20210223155005.21712-1-noltari@gmail.com>
- <20210223155005.21712-2-noltari@gmail.com>
- <20210223155443.GB1261797@rowland.harvard.edu>
-To:     Alan Stern <stern@rowland.harvard.edu>
-X-Mailer: Apple Mail (2.3654.60.0.2.21)
+        id S233546AbhBWQOl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Feb 2021 11:14:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37772 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233514AbhBWQOi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Feb 2021 11:14:38 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9F96A64E3F;
+        Tue, 23 Feb 2021 16:13:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614096835;
+        bh=X7jJSpYpIlmkfxxrNGHU1k1r6tFSjeHHP8+BtWzUXaY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=feJp0gYxZDo2vBkRN0r6Dqj9Dk9nlfO27Ma13juDpnrsuPO4pqtbmuCRviXqkEez+
+         QxDEQ7ttSJABwoFHEOiv5XNnwtFIHrvVfFPKBGmQgNo8j7jUe85SuiFpszowetbrd7
+         qgQtassVtDNXY0GQOHQOXH1SrdDqDIA8B4N3VtbJlgGiNWC2MDWufxuhbwVxvMM1B5
+         jLfYKMOLp27EByAOvFb5AvNspmQTbUf8FSfv7/N7ryKzDLLR7MeIvKvjRRq3nb4TEX
+         tiDry/j3pUfbFf/rJL29mNTXCGmZoDGFOCtk7WP5Nl+OQIPswTtEXyOtAEBOo6J5kY
+         4NjYOXugbnOIw==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lEaKA-0004gN-DC; Tue, 23 Feb 2021 17:14:11 +0100
+Date:   Tue, 23 Feb 2021 17:14:10 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     "Michael G. Katzmann" <michaelk@IEEE.org>
+Cc:     charles-yeh@prolific.com.tw, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>,
+        Joe Abbott <jabbott@rollanet.org>
+Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+Message-ID: <YDUp0tIThOZSTHJt@hovoldconsulting.com>
+References: <YDNwxtDxd7JntAXt@hovoldconsulting.com>
+ <e2dcc839-3b43-2c80-6ad1-2d97e639b46a@IEEE.org>
+ <YDOvLseYXaUHs0lS@hovoldconsulting.com>
+ <fb1489c2-b972-619b-b7ce-4ae8e1d2cc0f@IEEE.org>
+ <YDPO/JprcDTaPmR4@hovoldconsulting.com>
+ <0f9caf26-af58-13a9-9947-47bb646f505e@IEEE.org>
+ <YDPS3AP63/PwmwJU@hovoldconsulting.com>
+ <780b9aa6-890d-47fd-d6b2-cd9a39f7634a@IEEE.org>
+ <YDUiuLtwRkZ0D0Mi@hovoldconsulting.com>
+ <f63df659-6cdf-bba6-f892-1012b98f82e2@IEEE.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f63df659-6cdf-bba6-f892-1012b98f82e2@IEEE.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+On Tue, Feb 23, 2021 at 10:57:09AM -0500, Michael G. Katzmann wrote:
+> On 2/23/21 10:43 AM, Johan Hovold wrote:
+> > On Tue, Feb 23, 2021 at 09:58:47AM -0500, Michael G. Katzmann wrote:
+> >> Is it that we are presuming that what Prolific is telling us is true
+> >> and only Joe and I are actually measuring the data rate?  (i.e. why
+> >> does the Prolific Windows driver set the values as Joe found ???)
+> > I'm starting to think they've added some alternate baud rate encoding in
+> > order to make life harder for the people pushing (or unknowingly buying)
+> > counterfeit devices.
+> >
+> > As you say, why else would the Windows driver support this encoding?
+> 
+> I find that  'Halon;'s razor' is helpful in these situations...  I
+> can't think that messing with people who use old teleprinters would be
+> useful in protecting one's products 8-)
 
-> El 23 feb 2021, a las 16:54, Alan Stern <stern@rowland.harvard.edu> =
-escribi=C3=B3:
->=20
-> On Tue, Feb 23, 2021 at 04:50:04PM +0100, =C3=81lvaro Fern=C3=A1ndez =
-Rojas wrote:
->> Over-current reporting isn't supported on some platforms such as =
-bcm63xx.
->> These devices will incorrectly report over-current if this flag isn't =
-properly
->> activated.
->>=20
->> Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
->> ---
->> Documentation/devicetree/bindings/usb/generic-ehci.yaml | 5 +++++
->> 1 file changed, 5 insertions(+)
->>=20
->> diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml =
-b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
->> index cf83f2d9afac..294bbf02399e 100644
->> --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
->> +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
->> @@ -117,6 +117,11 @@ properties:
->>       Set this flag if EHCI has a Transaction Translator built into
->>       the root hub.
->>=20
->> +  ignore-oc:
->> +    $ref: /schemas/types.yaml#/definitions/flag
->> +    description:
->> +      Set this flag for HCDs without over-current reporting support.
->=20
-> This is not a good description of a device property.  DT entries are=20=
+Heh, guess you're right.
 
-> supposed to described the hardware, not talk about how to use it.
+> If Joe has some wireshark traces we can see if there are any vendor
+> specific USB packets. If not I can try it (I'd be starting from
+> scratch as I've only use wireshark on Linux).
+> 
+> I presume you can't see any differentiators in the normal USB
+> identifiers that we can use. 
 
-Any suggestions on a proper description?
+I only have an HXD (and a GC) here.
 
->=20
-> When you say that the bcm63xx doesn't support over-current reporting,=20=
+The HXD has bcdUSB as 1.10 unlike your TA with 2.00, but not sure that
+helps.
 
-> what exactly do you mean?  Do you mean that sometimes the hardware =
-turns=20
-> on the over-current bit when an over-current isn't actually present?  =
-Or=20
-> do you mean something else?
+> If someone has a device that works under the existing driver, it would
+> be helpful to see if the modified scheme also works on those devices?
+ 
+I tried with both of mine when Joe reported this and neither works with
+the alternate scheme (and the GC turned out not to even support divisor
+encoding).
 
-Yes, the hardware turns on the over-current bit with no over-current =
-present.
-
->=20
-> Alan Stern
->=20
->> +
->>   needs-reset-on-resume:
->>     $ref: /schemas/types.yaml#/definitions/flag
->>     description:
->> --=20
->> 2.20.1
-
-Best regards,
-=C3=81lvaro.
-
+Johan
