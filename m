@@ -2,69 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B534C322FDE
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 18:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D793230DD
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 19:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233789AbhBWRpw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Feb 2021 12:45:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
+        id S233814AbhBWSf4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Feb 2021 13:35:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233765AbhBWRpn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Feb 2021 12:45:43 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7968DC06178A;
-        Tue, 23 Feb 2021 09:45:03 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id v21so3237205wml.4;
-        Tue, 23 Feb 2021 09:45:03 -0800 (PST)
+        with ESMTP id S233982AbhBWSfq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Feb 2021 13:35:46 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAC3C061574;
+        Tue, 23 Feb 2021 10:35:05 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id u20so35361512ejb.7;
+        Tue, 23 Feb 2021 10:35:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=YCOFQSDEe/3sfY1ZtH3CdhiCYHMFhIU+OK5qjpWOXbw=;
-        b=Iay8qIdKim0AaBvFytQmd2LztS7tKQoPDdMD2n9uQvjsYM2Se/agQnN/BA9j+p39AM
-         TeI4ZcoRBcRYQsMbXUiywTJwmPKB1jm8v6OktshpBpSHwlFOV+TRU6MekAH2puAHhV3/
-         MG8sET4lkGQFXC6O8V49XMgz0NXAkhLIFnHAzNdlp0KNAOEAlrUp+IoLXHQlVnSmK6cJ
-         qCqm/7kaoIVVqxp6EzYXVlSN6FDz+4rCT30Q65yD8xhoh1eguIL4cA2UjHMDbtC6K8n/
-         K4rn3UL9h/aT6PXTEgjJu1nCGX6nyzl1mGMjxz8nfKjqS0F9NPx2xAKVFA/H/C2urt0a
-         CpCQ==
+        bh=lnwVFFQQDuYoLD4H/4zwU5IDIG9Pt3VM/f+MXHjJNnM=;
+        b=Ll09qTFdS+Hxo6fHCqFEvJ2u+puEasSIs+hvAXqUA4VQBrAKQOKRpgBEXcWhizMqn8
+         27e9yVGkFjqWfZ01gVERGeUAsU0Issw7ALDh8J1wOjMQBeuZJacyJQlsQlRU2Ly7w40n
+         6jUH8e/2P7v7eP05+oLHOEL2MLAxajCIyLcyI7/TxxXHMKK/F4Q1JClHxAYioSboClks
+         +jttXcYBiC6Eqwc2LgSnotjOIJDmFzbc6O/Sh5pcRjcxJcceGf2jvQkCEXtif4S+p8Np
+         d7/RENEdotSXoQQNN8ofJsLbp84AkTVWxY7IpfQCt9FJJp9yyhfTeqABafLE5CraG6/j
+         8bmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=YCOFQSDEe/3sfY1ZtH3CdhiCYHMFhIU+OK5qjpWOXbw=;
-        b=EyuvpksujLpIPz4a87U1j/z9SgRWW1sGAlN9VxR+YWqXSaiCgOvt7C/iuLtjokvAo2
-         +MbadLPaPNcqm/5HpPyWXPYylMVDtZ7bR/dwos2aaF2ShruCGxPy+psb3Hqwqy2AxLF2
-         P3ycagxSeJc9YXTn0FXmTp7KNY1QqDHhBJ3Hpn+6qCob0HtlpA0sosIG/bC5tW+GJWMj
-         LLaVi+z5YpTpzeDtG0BQi6l1RpUSwVgNnkls2AhgGkseq0VHvij7PYUFwrkHmAOqz0dg
-         fSCSOaU88bUaPYpDrn/wXHdYeJ+16DuV55a9J6YZLG/V6BuXX7KsapwkcM5rZTkcAB6G
-         JkAg==
-X-Gm-Message-State: AOAM532/3IleEXOPIUEtrBuDSv8IbwpGBjSEZIY3nMn5dzcIllOdDhDl
-        xggvBUOJ0IOJNPA29oRQrdM=
-X-Google-Smtp-Source: ABdhPJzwLEfBk1TtTHISe2r3iq6YoGW0Nct69tWU2II6kIvPJhlAmm8KgAmFL+Yt+cpws7PCCqYCDw==
-X-Received: by 2002:a1c:f312:: with SMTP id q18mr26018356wmq.79.1614102302274;
-        Tue, 23 Feb 2021 09:45:02 -0800 (PST)
-Received: from skynet.lan (170.red-88-1-105.dynamicip.rima-tde.net. [88.1.105.170])
-        by smtp.gmail.com with ESMTPSA id u7sm32408428wrt.67.2021.02.23.09.45.00
+        bh=lnwVFFQQDuYoLD4H/4zwU5IDIG9Pt3VM/f+MXHjJNnM=;
+        b=VSRFdKUBV4iMwsDRcp7nU8i0Gu4dL8+a3+QDYw2egx9zhkBZGafcrQSaXSJHUqy/kV
+         v3HEkxUgc1mBpOtTBCo2h+J8G1nIl1RxdY56Es2GIAjkWVoj5U+m7j0xyXIhb23Z7HmV
+         EYDHpupHZ1KZsHZ2sLl5bcIV8UIo/Q1GhzLFZ8B1kp3oo1pDKIk9A1VLkKFb7nTMsHXd
+         t4DCRiurHRw7pWECIigOthu3FA7VAtsWfqZENhKVD4n58jenyhFrljk9qPmPE7N2zxSz
+         l9OfntG59UaDxwCBaWA7r0zwQqbp0p8iLJjrcefagS7Tfj7RB1iGjlOozXvZbnpX/H4X
+         Pb3w==
+X-Gm-Message-State: AOAM533vNqiFi0NlqmvBMTMh7gkKPHd1s+DaNTqqRiiNz1dFS6pd6aRD
+        qfzp6tysmiyks2Imc5q0D59dZtbdOY+GUA==
+X-Google-Smtp-Source: ABdhPJz475EqJ9KOiG3vxE8jY7mRrBpm6fbFOT3z2PV3z7qQmFiD86l03TnATPgjg9DqHuQRBnOktQ==
+X-Received: by 2002:a17:906:bc84:: with SMTP id lv4mr28113127ejb.136.1614105304615;
+        Tue, 23 Feb 2021 10:35:04 -0800 (PST)
+Received: from rafiki.local (user-5-173-242-247.play-internet.pl. [5.173.242.247])
+        by smtp.gmail.com with ESMTPSA id hq14sm2617242ejc.30.2021.02.23.10.35.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Feb 2021 09:45:01 -0800 (PST)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Tony Prisk <linux@prisktech.co.nz>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH v3 3/3] usb: host: ehci-platform: add spurious_oc DT support
-Date:   Tue, 23 Feb 2021 18:44:55 +0100
-Message-Id: <20210223174455.1378-4-noltari@gmail.com>
+        Tue, 23 Feb 2021 10:35:03 -0800 (PST)
+From:   Lech Perczak <lech.perczak@gmail.com>
+To:     netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Lech Perczak <lech.perczak@gmail.com>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+Subject: [PATCH v3] net: usb: qmi_wwan: support ZTE P685M modem
+Date:   Tue, 23 Feb 2021 19:34:56 +0100
+Message-Id: <20210223183456.6377-1-lech.perczak@gmail.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210223174455.1378-1-noltari@gmail.com>
-References: <20210223155005.21712-1-noltari@gmail.com>
- <20210223174455.1378-1-noltari@gmail.com>
+In-Reply-To: <20210206121322.074ddbd3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <20210206121322.074ddbd3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -72,31 +65,64 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Over-current reporting isn't supported on some platforms such as bcm63xx.
-These devices will incorrectly report over-current if this flag isn't properly
-activated.
+Now that interface 3 in "option" driver is no longer mapped, add device
+ID matching it to qmi_wwan.
 
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+The modem is used inside ZTE MF283+ router and carriers identify it as
+such.
+Interface mapping is:
+0: QCDM, 1: AT (PCUI), 2: AT (Modem), 3: QMI, 4: ADB
+
+T:  Bus=02 Lev=02 Prnt=02 Port=05 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
+D:  Ver= 2.01 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=19d2 ProdID=1275 Rev=f0.00
+S:  Manufacturer=ZTE,Incorporated
+S:  Product=ZTE Technologies MSM
+S:  SerialNumber=P685M510ZTED0000CP&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&0
+C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+E:  Ad=87(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+Acked-by: Bjørn Mork <bjorn@mork.no>
+Signed-off-by: Lech Perczak <lech.perczak@gmail.com>
 ---
- v3: no changes.
+Now that patch for "option" has landed in 'master' and 'net', resend the second part.
 
- drivers/usb/host/ehci-platform.c | 3 +++
- 1 file changed, 3 insertions(+)
+v3: no changes, resend separately again, add Acked-by from Bjørn Mork.
 
-diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
-index 4d7b17f4f82b..c70f2d0b4aaf 100644
---- a/drivers/usb/host/ehci-platform.c
-+++ b/drivers/usb/host/ehci-platform.c
-@@ -286,6 +286,9 @@ static int ehci_platform_probe(struct platform_device *dev)
- 		if (of_property_read_bool(dev->dev.of_node, "big-endian"))
- 			ehci->big_endian_mmio = ehci->big_endian_desc = 1;
- 
-+		if (of_property_read_bool(dev->dev.of_node, "spurious-oc"))
-+			ehci->spurious_oc = 1;
-+
- 		if (of_property_read_bool(dev->dev.of_node,
- 					  "needs-reset-on-resume"))
- 			priv->reset_on_resume = true;
+v2: no changes to this patch, resend as series.
+
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 6c3d8c2abd38..17a050521b86 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1318,6 +1318,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x19d2, 0x1255, 4)},
+ 	{QMI_FIXED_INTF(0x19d2, 0x1256, 4)},
+ 	{QMI_FIXED_INTF(0x19d2, 0x1270, 5)},	/* ZTE MF667 */
++	{QMI_FIXED_INTF(0x19d2, 0x1275, 3)},	/* ZTE P685M */
+ 	{QMI_FIXED_INTF(0x19d2, 0x1401, 2)},
+ 	{QMI_FIXED_INTF(0x19d2, 0x1402, 2)},	/* ZTE MF60 */
+ 	{QMI_FIXED_INTF(0x19d2, 0x1424, 2)},
 -- 
 2.20.1
 
