@@ -2,60 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9146532334A
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Feb 2021 22:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AFA73237D7
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Feb 2021 08:22:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233875AbhBWV32 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Feb 2021 16:29:28 -0500
-Received: from smtp12.smtpout.orange.fr ([80.12.242.134]:51622 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234048AbhBWV3S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Feb 2021 16:29:18 -0500
-Received: from [192.168.1.18] ([90.126.17.6])
-        by mwinf5d35 with ME
-        id YlTY2400B07rLVE03lTZkE; Tue, 23 Feb 2021 22:27:36 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 23 Feb 2021 22:27:36 +0100
-X-ME-IP: 90.126.17.6
-Subject: Re: [PATCH 1/2] usb: gadget: s3c: Fix incorrect resources releasing
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, krzk@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, arnd@arndb.de,
-        gustavoars@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Newsgroups: gmane.linux.kernel.samsung-soc,gmane.linux.ports.arm.kernel,gmane.linux.usb.general,gmane.linux.kernel,gmane.linux.kernel.janitors
-References: <20210221074117.937965-1-christophe.jaillet@wanadoo.fr>
- <20210222060302.GI2087@kadam>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Message-ID: <6135522c-11e9-a2ba-2d5e-b46068aa6d3f@wanadoo.fr>
-Date:   Tue, 23 Feb 2021 22:27:30 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
-MIME-Version: 1.0
-In-Reply-To: <20210222060302.GI2087@kadam>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S233096AbhBXHV1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Feb 2021 02:21:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232329AbhBXHVZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Feb 2021 02:21:25 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FCEC061574;
+        Tue, 23 Feb 2021 23:20:45 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id o16so904693wmh.0;
+        Tue, 23 Feb 2021 23:20:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:content-transfer-encoding:mime-version:subject:date:references
+         :to:in-reply-to:message-id;
+        bh=ZQJKsaY21XjjcT1M+qVN1VwATGUDt68e4WwQtZfPm0E=;
+        b=gA2c6Bp4NDKDJm8M3Z3ClmKgjlnP8k2VNsKduoQCq8+j5l5IaCO6O8o6cYFAsUyjX3
+         e85FLUCj2d9v5e1dnB37qdawdlbg2p4lUyEbS2Amn4V2g58aOytJ1ggUmc99RXqnqNFh
+         k9t33TrqQGBiO0YalYInRqR7LieA2oHNIU651XGhoKgVGXE9kmK2ADe+rYHG6GtNnSVr
+         SXT6QN2Ga/DBM+cQjsM142PfTUCOk2HMllr54GdIZAp78lIrNJ2Dr+18zBlKtFiIW1RC
+         uEtm2jhr4oBMZqxW3ee1ML9U5Of7KZXabgZWYfJXYPaXi2W9TuU0TDRBdGLwiXyxi1j9
+         R0+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:content-transfer-encoding:mime-version
+         :subject:date:references:to:in-reply-to:message-id;
+        bh=ZQJKsaY21XjjcT1M+qVN1VwATGUDt68e4WwQtZfPm0E=;
+        b=qDl3wwTFsekFwoAjGcQkLF/+ELPhNujsIQREanc+pMr33tJEoyidBCOFkgChi371gm
+         pQGWodQO6Gs56k5AAnQn0d+GMonLqn4L1/JhQnrIl3/77gBtqCpO1KGNvyzzNRqFpU9S
+         pRYJGfc16h1S/ox700txsZTbw7EqKsPaoTbCCd6LE4aeyg5WT8ggO4wFopPeOOqtJteb
+         yWyWxmlLH1mYxZ8Li+5/bytEqT16G/ELnSkRYzOHv3MvNLcKQizdFayNp3FNQdQ8a6vb
+         61J9rrmNbbyrW0sRwMWuVZZt9HRKCj7RV14f4GWOQTPUvzXMNjkGLR/HPlmKIR3jpD9G
+         O5zA==
+X-Gm-Message-State: AOAM530ESVV5L1oiOKtxSYRUUmgH0GV52xGqndlJ8/Y+LiAb1wbrEb/Y
+        Cj6iL2FmkvR24paXydKNayc=
+X-Google-Smtp-Source: ABdhPJwBpEv0pTMBXffRL7705an0dyB9mIksTWZA/whPkMmA6NlvPDpbiHoMAWtuV3t9SShkk9fT5A==
+X-Received: by 2002:a7b:c04c:: with SMTP id u12mr2362830wmc.9.1614151244257;
+        Tue, 23 Feb 2021 23:20:44 -0800 (PST)
+Received: from macbook-pro-alvaro.lan (170.red-88-1-105.dynamicip.rima-tde.net. [88.1.105.170])
+        by smtp.gmail.com with ESMTPSA id p13sm1872032wrj.52.2021.02.23.23.20.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Feb 2021 23:20:43 -0800 (PST)
+From:   =?utf-8?Q?=C3=81lvaro_Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>
+Content-Type: text/plain;
+        charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.60.0.2.21\))
+Subject: Re: [PATCH v3 2/3] dt-bindings: usb: generic-ehci: document
+ spurious-oc flag
+Date:   Wed, 24 Feb 2021 08:20:41 +0100
+References: <20210223155005.21712-1-noltari@gmail.com>
+ <20210223174455.1378-1-noltari@gmail.com>
+ <20210223174455.1378-3-noltari@gmail.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Tony Prisk <linux@prisktech.co.nz>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20210223174455.1378-3-noltari@gmail.com>
+Message-Id: <880F72F4-82DF-4738-A8F1-D5528AA3FC9E@gmail.com>
+X-Mailer: Apple Mail (2.3654.60.0.2.21)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Le 22/02/2021 à 07:03, Dan Carpenter a écrit :
-> On Sun, Feb 21, 2021 at 08:41:17AM +0100, Christophe JAILLET wrote:
->> Since commit fe0f8e5c9ba8 ("usb: gadget: s3c: use platform resources"),
-> 
-> This the wrong hash.  It should be 188db4435ac6 from the URL you posted
-> below.
-> 
-> regards,
-> dan carpenter
-> 
-> 
-Ouch!
+I didn=E2=80=99t change this, but I missed Alan=E2=80=99s Acked-by, so:
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Thx for spotting this so stupid and so trivial little error!
-I'll send a v2 when -rc1 is out.
+> El 23 feb 2021, a las 18:44, =C3=81lvaro Fern=C3=A1ndez Rojas =
+<noltari@gmail.com> escribi=C3=B3:
+>=20
+> Over-current reporting isn't supported on some platforms such as =
+bcm63xx.
+> These devices will incorrectly report over-current if this flag isn't =
+properly
+> activated.
+>=20
+> Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
+> ---
+> v3: no changes.
+> v2: change flag name and improve documentation as suggested by Alan =
+Stern.
+>=20
+> Documentation/devicetree/bindings/usb/generic-ehci.yaml | 6 ++++++
+> 1 file changed, 6 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml =
+b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> index cf83f2d9afac..8089dc956ba3 100644
+> --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> @@ -122,6 +122,12 @@ properties:
+>     description:
+>       Set this flag to force EHCI reset after resume.
+>=20
+> +  spurious-oc:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      Set this flag to indicate that the hardware sometimes turns on
+> +      the OC bit when an over-current isn't actually present.
+> +
+>   companion:
+>     $ref: /schemas/types.yaml#/definitions/phandle
+>     description:
+> --=20
+> 2.20.1
+>=20
 
-CJ
