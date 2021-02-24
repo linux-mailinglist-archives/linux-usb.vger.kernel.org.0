@@ -2,68 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C669324395
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Feb 2021 19:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2D63243A1
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Feb 2021 19:15:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234356AbhBXSKu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Feb 2021 13:10:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57254 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233640AbhBXSKr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 24 Feb 2021 13:10:47 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id A912464EDD;
-        Wed, 24 Feb 2021 18:10:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614190206;
-        bh=b+WIdwoBXt51nyx55PsJVStpyMc267xQ6NDo88idvqA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=a8RCZnBBuh9YCVpxetAsJcDIaV3wzsV1WqFBvFC304HmkxpxDz3ctVrBT/WNJOcaz
-         YS585g2GsIfwfvykiMgql7vyWY0enypLVBaE7jUrBN7CI6wYsVrTPEwTK5HBdg8yQf
-         2UVfdRhGAxnn2VuS3BJB4qlhYM+EmCA43Mo6FyqSTeNJunPyseZ1I+8WDKBeaSwH0X
-         XJat3u2C28seDRfN1Y/XhRWHUqj6FYxFihHiH3H15KFawIaWMKp8fwHcr18pAPoINx
-         hOMpsRdGZeKn17AFmduZGZl6U7kRPS7ocRix1Ywn+nEUV/1XxwGKgYmA/8RVrA5wKL
-         kOplinPFG4+ug==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 9725160176;
-        Wed, 24 Feb 2021 18:10:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S234468AbhBXSOa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Feb 2021 13:14:30 -0500
+Received: from beige.elm.relay.mailchannels.net ([23.83.212.16]:49620 "EHLO
+        beige.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233896AbhBXSO0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Feb 2021 13:14:26 -0500
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 5D904481576;
+        Wed, 24 Feb 2021 18:13:45 +0000 (UTC)
+Received: from pdx1-sub0-mail-a34.g.dreamhost.com (100-96-27-123.trex.outbound.svc.cluster.local [100.96.27.123])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id E90974814BC;
+        Wed, 24 Feb 2021 18:13:44 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from pdx1-sub0-mail-a34.g.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
+        by 100.96.27.123 (trex/6.0.2);
+        Wed, 24 Feb 2021 18:13:45 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|smtp@contentfirst.com
+X-MailChannels-Auth-Id: dreamhost
+X-Invention-Arch: 0ff916461e74ed27_1614190425247_808837541
+X-MC-Loop-Signature: 1614190425246:141840329
+X-MC-Ingress-Time: 1614190425246
+Received: from pdx1-sub0-mail-a34.g.dreamhost.com (localhost [127.0.0.1])
+        by pdx1-sub0-mail-a34.g.dreamhost.com (Postfix) with ESMTP id A2CE68B8E0;
+        Wed, 24 Feb 2021 10:13:44 -0800 (PST)
+Received: from industrynumbers.com (pool-100-15-209-187.washdc.fios.verizon.net [100.15.209.187])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: smtp@contentfirst.com)
+        by pdx1-sub0-mail-a34.g.dreamhost.com (Postfix) with ESMTPSA id B22088B601;
+        Wed, 24 Feb 2021 10:13:40 -0800 (PST)
+Received: from industrynumbers.com (localhost [127.0.0.1])
+        by industrynumbers.com (Postfix) with ESMTP id 5F099282D7A;
+        Wed, 24 Feb 2021 13:13:39 -0500 (EST)
+To:     Johan Hovold <johan@kernel.org>
+Cc:     charles-yeh@prolific.com.tw, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>,
+        Joe Abbott <jabbott@rollanet.org>
+References: <YDPO/JprcDTaPmR4@hovoldconsulting.com>
+ <0f9caf26-af58-13a9-9947-47bb646f505e@IEEE.org>
+ <YDPS3AP63/PwmwJU@hovoldconsulting.com>
+ <780b9aa6-890d-47fd-d6b2-cd9a39f7634a@IEEE.org>
+ <YDUiuLtwRkZ0D0Mi@hovoldconsulting.com>
+ <f63df659-6cdf-bba6-f892-1012b98f82e2@IEEE.org>
+ <YDUp0tIThOZSTHJt@hovoldconsulting.com>
+ <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
+ <YDUysZY90FfVhrHK@hovoldconsulting.com>
+ <4edfb35f-ed81-bade-daee-38a1d7a60a7d@IEEE.org>
+ <YDaHEtQCGkiM/pad@hovoldconsulting.com>
+X-DH-BACKEND: pdx1-sub0-mail-a34
+From:   "Michael G. Katzmann" <michaelk@IEEE.org>
+Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+Message-ID: <2162ce18-32e9-e54c-f266-47febdea11f1@IEEE.org>
+Date:   Wed, 24 Feb 2021 13:13:39 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] net: usb: qmi_wwan: support ZTE P685M modem
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161419020661.3818.15606819052802011752.git-patchwork-notify@kernel.org>
-Date:   Wed, 24 Feb 2021 18:10:06 +0000
-References: <20210223183456.6377-1-lech.perczak@gmail.com>
-In-Reply-To: <20210223183456.6377-1-lech.perczak@gmail.com>
-To:     Lech Perczak <lech.perczak@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org, kuba@kernel.org,
-        bjorn@mork.no
+In-Reply-To: <YDaHEtQCGkiM/pad@hovoldconsulting.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (refs/heads/master):
-
-On Tue, 23 Feb 2021 19:34:56 +0100 you wrote:
-> Now that interface 3 in "option" driver is no longer mapped, add device
-> ID matching it to qmi_wwan.
-> 
-> The modem is used inside ZTE MF283+ router and carriers identify it as
-> such.
-> Interface mapping is:
-> 0: QCDM, 1: AT (PCUI), 2: AT (Modem), 3: QMI, 4: ADB
-> 
-> [...]
-
-Here is the summary with links:
-  - [v3] net: usb: qmi_wwan: support ZTE P685M modem
-    https://git.kernel.org/netdev/net/c/88eee9b7b42e
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+T24gMi8yNC8yMSAxMjowNCBQTSwgSm9oYW4gSG92b2xkIHdyb3RlOgo+IFBlcmhhcHMgeW91
+IGNhbiBldmVuIGZpZ3VyZSBvdXQgaG93IHRvIHBvbGwgZm9yIGFuIGVtcHR5IFRYIEZJRk8g
+ZnJvbQo+IGl0LCB1bmxlc3MgQ2hhcmxlcyBpcyBhYmxlIHRvIHByb3ZpZGUgc29tZSBkZXRh
+aWxzIG9uIHRoYXQgc2VwYXJhdGUKPiBtYXR0ZXI/Cj4KSSBwcmVzdW1lIGZyb20gdGhlIGNv
+ZGUgYmVsb3csIHRoYXQgd2hlbiB0aGUgZGV2aWNlIGlzIGNsb3NlZCwgYWxsIGRhdGEgd2Fp
+dGluZyB0byBzZW5kIGlzIGNsb2JiZXJlZCAoaWYgc28sIHNvIHRoZSBwcm9ibGVtIGlzIHRo
+ZSBkcml2ZXIgYW5kIG5vdCB0aGUgZGV2aWNlKQoKSSB3b3VsZCBoYXZlIHRob3VnaHQgdGhh
+dCB0aGUgZHJpdmVyIHNob3VsZCBkcmFpbiB0aGUgYnVmZmVycy4gSSBjYW4gc2VlIHRoYXQg
+dGhpcyBtaWdodCBiZSBhIHByb2JsZW0gaWYgdGhlcmUgaXMgZmxvdyBjb250cm9sIChpdCBt
+YXkgbmV2ZXIgZHJhaW4pIGJ1dCB0aGUgY3VycmVudCBtZXRob2Qgc2VlbXMgcHJldHR5IGJy
+dXRhbC4KCgoxMTkgdm9pZCB1c2Jfc2VyaWFsX2dlbmVyaWNfY2xvc2Uoc3RydWN0IHVzYl9z
+ZXJpYWxfcG9ydCAqcG9ydCkKMTIwIHsKMTIxwqDCoMKgwqDCoMKgwqDCoCB1bnNpZ25lZCBs
+b25nIGZsYWdzOwoxMjLCoMKgwqDCoMKgwqDCoMKgIGludCBpOwoxMjMKMTI0wqDCoMKgwqDC
+oMKgwqDCoCBpZiAocG9ydC0+YnVsa19vdXRfc2l6ZSkgewoxMjXCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCBmb3IgKGkgPSAwOyBpIDwgQVJSQVlfU0laRShwb3J0LT53cml0
+ZV91cmJzKTsgKytpKQoxMjbCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgdXNiX2tpbGxfdXJiKHBvcnQtPndyaXRlX3VyYnNbaV0pOwoxMjcKMTI4
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3Bpbl9sb2NrX2lycXNhdmUoJnBv
+cnQtPmxvY2ssIGZsYWdzKTsKMTI5wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+a2ZpZm9fcmVzZXRfb3V0KCZwb3J0LT53cml0ZV9maWZvKTsKMTMwwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmcG9ydC0+bG9jaywg
+ZmxhZ3MpOwoxMzHCoMKgwqDCoMKgwqDCoMKgIH0KMTMywqDCoMKgwqDCoMKgwqDCoCBpZiAo
+cG9ydC0+YnVsa19pbl9zaXplKSB7CjEzM8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIGZvciAoaSA9IDA7IGkgPCBBUlJBWV9TSVpFKHBvcnQtPnJlYWRfdXJicyk7ICsraSkK
+MTM0wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHVz
+Yl9raWxsX3VyYihwb3J0LT5yZWFkX3VyYnNbaV0pOwoxMzXCoMKgwqDCoMKgwqDCoMKgIH0K
+MTM2IH0KCg==
