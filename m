@@ -2,98 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B602832417E
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Feb 2021 17:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC693242B7
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Feb 2021 17:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233445AbhBXP6t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Feb 2021 10:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38700 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235540AbhBXPWI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Feb 2021 10:22:08 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5761DC06174A;
-        Wed, 24 Feb 2021 07:21:25 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id s8so2999417edd.5;
-        Wed, 24 Feb 2021 07:21:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XLYDyAsA5UUZQt9Fovct9QetXnZJ6EON0SAynzEMdE0=;
-        b=TEk6zj0ZKSOENCRiJumILsizH4xt5iHOkT5+P7sGwbi4i8XqrNklBwYQOpu4ggsZjN
-         BbImWPDVUNSdzz+kAbfioZazKTaC3ByapAdufUS1DjMCf/pUoOaALu+B0BsZhCaMWRR2
-         HKdlI6U+s3QJTp3Jsyg4rkdttWIiLOjrdL6VRxxyALE29EPYQCve1fayGyKNtQw7cx3q
-         orqy4gR9JfsJNNw0bqnfTdTxJ6x6rn22kT+aeQXqxELvARCGu+VmjUINDw/qpO0lOwtp
-         beVHqRYB0Y7BD5ehPJg268c2er7riQujpgn/guq2q2sY52LIKyO4PVCUGS77GFql1Fqv
-         SqYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XLYDyAsA5UUZQt9Fovct9QetXnZJ6EON0SAynzEMdE0=;
-        b=X0hIh74gzN4hTTAdSG3bgxzp1MZHpiqUtS5sGRy9sf8X3J3yUeRsDKMkcqoT7wP2IC
-         se9vIjScpBk7N/em0VARrCFvMER8gIH0XrrOf8M9mw6OrpSVAl4wRcv6CotnVHgtlc+y
-         bWOXZvu9E4LHtNcOUu0oEFq/g+ztmnZBcvZaIj6QWLjKTyAKO0KJwFkaTqFduXuFxFAM
-         b8cmmKv2pWVFWUleT3AzqWjZVsgLB//QUSQc8gdiD0555mnVgAtPDvOpP+YHlAvec2l3
-         4n7PNR4IaMScLGuve7AujXW+8ofEl1yWFLGHvDJkKm1gJeknvakLPp6MLqS2EYRPYvqu
-         GmVA==
-X-Gm-Message-State: AOAM532dwPiA9q+bEb9OQjeb3gB65glrCqPDH3dm4M9qGWYSRZWwTZvj
-        Fw+yAN2kaWCAl5cXV+yxdJ8eNMcboGAL6f1yfTs=
-X-Google-Smtp-Source: ABdhPJwVd4KUvTK7Qd8oZspTB1wgzkrXb9nE+BFniIE+ByTQWhinjzN8fjZfnMLBsmmeVs1ki88Up8MMElmmftm4XDA=
-X-Received: by 2002:a05:6402:270d:: with SMTP id y13mr33669546edd.149.1614180084062;
- Wed, 24 Feb 2021 07:21:24 -0800 (PST)
+        id S235897AbhBXQ6g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Feb 2021 11:58:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46812 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236047AbhBXQ6J (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 24 Feb 2021 11:58:09 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B55A64F04;
+        Wed, 24 Feb 2021 16:57:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614185847;
+        bh=Hy5dPjf0+Vk3tQipNAqBIMu+GJJIqEe1zsbcDtM0J40=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iCWReqDv90DST5/wTV96RP88hQyun59V6pAd1BBrNrlgvsb+KXjLtGN8uDbaq1m37
+         NEZ3DyGp1/0puv+0GaP62+TSJLcVAvtTFsjWatiC1OpbINopBH35akPn7NoyfVI/tF
+         vzNv9YYjYQuQ5qZy69mpyDhPuh8pw32YFN4okMHJvNoQzooZjwtQVkljNKlq21cwit
+         SyVc+h+PKyXC45v7HxLVkMGA8ufKJaplUg8UDwcNm5FolHZH4LmLU0NGBTXa7Gvea/
+         +VUPPKA/vkIo1NBC7XLwi1pw6m5+YwhEmszohIdrWA33t5Xs0NaC9VjiySEMYN0Vkm
+         zG37wUoYQ24Rg==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lExTu-0006k2-B7; Wed, 24 Feb 2021 17:57:47 +0100
+Date:   Wed, 24 Feb 2021 17:57:46 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     "Michael G. Katzmann" <michaelk@IEEE.org>
+Cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: closing serial device dumps data in buffer
+Message-ID: <YDaFiotE0OxCE4JF@hovoldconsulting.com>
+References: <23e9e8aa-1f6f-47d3-6ad4-97057e4975f1@IEEE.org>
 MIME-Version: 1.0
-References: <CAH+2xPCmZNW0ct8XoBmAnd0QK53guv2e4HLn40NvWrEA7pj3qw@mail.gmail.com>
- <CAH+2xPCkKRhXJSqMx7kzsO53JwXbrmYPLLL-_ANO9waNJREDWA@mail.gmail.com> <777991bb72f8842e3e730f9b600b2086478f5d36.camel@suse.com>
-In-Reply-To: <777991bb72f8842e3e730f9b600b2086478f5d36.camel@suse.com>
-From:   Bruno Thomsen <bruno.thomsen@gmail.com>
-Date:   Wed, 24 Feb 2021 16:21:08 +0100
-Message-ID: <CAH+2xPAB4bWN9NiTQr4WggUX6eDXzMikzYJySx3sAj3Ho3AdxA@mail.gmail.com>
-Subject: Re: usb: cdc-acm: BUG kmalloc-128 Poison overwritten
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     linux-usb@vger.kernel.org,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Bruno Thomsen <bth@kamstrup.com>,
-        Lars Alex Pedersen <laa@kamstrup.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <23e9e8aa-1f6f-47d3-6ad4-97057e4975f1@IEEE.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Den man. 22. feb. 2021 kl. 10.36 skrev Oliver Neukum <oneukum@suse.com>:
->
-> Am Donnerstag, den 18.02.2021, 16:52 +0100 schrieb Bruno Thomsen:
-> > Den fre. 12. feb. 2021 kl. 16.33 skrev Bruno Thomsen <bruno.thomsen@gmail.com>:
-> > > Hi,
-> > >
-> > > I have been experience random kernel oops in the cdc-acm driver on
-> > > imx7 (arm arch). Normally it happens during the first 1-3min runtime
-> > > after power-on. Below oops is from 5.8.17 mainline kernel with an
-> > > extra patch back-ported in an attempt to fix it:
-> > > 38203b8385 ("usb: cdc-acm: fix cooldown mechanism")
-> >
-> > I can now boot board with 5.11 kernel without any extra patches and
-> > it produce similar issue. Hopefully that make the oops more useful.
-> > Issue has been seen on multiple devices, so I don't think it's a bad
-> > hardware issue.
->
-> is this a regression from 5.10?
+On Wed, Feb 24, 2021 at 09:23:45AM -0500, Michael G. Katzmann wrote:
+> I've noticed that when the serial device is closed, the USB serial
+> device dumps any buffered data. Is this expected behavior?
+> 
+> i.e ls -l >/dev/ttyUSB0 will not print everything (I'm missing some at
+> the end) but
+> 
+> (ls -l; sleep 30) >/de/ttyUSB0 will print everything.
+> 
+> (this is at 110bd so it's probably longer than most people will see to
+> drain the buffer)
 
-Hi Oliver
+Depends on the driver unfortunately. I guess this is with your PL2303
+for which we don't know how to determine when the FIFO has emptied.
 
-No, this is not a regression from 5.10. It seems that many attempts to
-fix cdc-acm in the 5.x kernel series have failed to fix the root cause of
-these oops. I have not seen this on 4.14 and 4.19, but I have observed
-it on at least 5.3 and newer kernels in slight variations.
-I guess this is because cdc-acm is very common in the embedded
-ARM world and rarely used on servers or laptops. Combined with
-ARM devices still commonly use 4.x LTS kernels. Not sure if
-hardening options on the kernel has increased change of reproducing
-oops.
+For speeds >1200 Bd we instead wait for the full 256 bytes to clear, but
+we don't add 23 seconds to every close at 110 Bd for example and instead
+cap the drain delay at 2 s (see tty_port_drain_delay()).
 
-I am ready to test new patches and will continue to report oops
-
-/Bruno
+Johan
