@@ -2,106 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DC1324326
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Feb 2021 18:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C669324395
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Feb 2021 19:12:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233399AbhBXR0p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Feb 2021 12:26:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231517AbhBXR0o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Feb 2021 12:26:44 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F13AC061574;
-        Wed, 24 Feb 2021 09:26:03 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id e2so2425355ilu.0;
-        Wed, 24 Feb 2021 09:26:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=e80EQh7hVv+4c3U/7UtIpUX2KwAr6+TQZag1c7eN4zA=;
-        b=FvzQ+JB179Yf31qs/ZBHBls9pKBNan7wR8sb25MswGs7Wm+oO7nHby+0aRWb7qCT5l
-         fhbUGYoGXNym+eIGN2gRpVHWkXTgTsicMtq2jH8llTElVxXfLnueIpJGVSp7uQbi3QNd
-         2cliS6W9SvnfRAqa7BdfkijMuXOekcd9msQR2xmR/EdXYvbfm9uWsxX22/mzKrGzAkDp
-         XxgOmhOz5SrvED1P8JRQgkmQp3JKzfaBAUiYsIEU2F5dtcR1piL0Vo9YDfcR1NPDeTt2
-         mswfW3tMc/TU5A/JZY+1jQ9lfFj7hmrn5TBt7rxYpn91JP09Gu9qD6/VokdaEKA6Fzg0
-         sg1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=e80EQh7hVv+4c3U/7UtIpUX2KwAr6+TQZag1c7eN4zA=;
-        b=MiWX7EcG0CRta9Rc7t9vzEm1Dn4DKc4d3mbbqJzcL87P3S5pxxLrAMCPhyHwfrd5mF
-         qtnMSjRSMzfnPVwAmyT19YDFb3VvA2qNQBpSEzxMTzmqpwhAgsH0ztLE9tNh1d0dkADU
-         +qESIZKINEfo3brWmKafYoR5zKHwLW6C4V060wzTCvBLoWkDWNiTaG63LyFkwtlLm/zY
-         Y9QnUIdh9g026pXBn4HnqFm3tkr1sLlHtvEMVfQnEtT2kGWTuwrbm2x/JFAu51jcm7/2
-         fEplnv0JwOLKw7YXliPZmPEw51VGGhN8FZq4W8ihngQfYTDz5U12IKSZhGkLYAITIF/7
-         dXRQ==
-X-Gm-Message-State: AOAM532cWy69Gb8A3olNT7TxGba3jxPG5wY9TF/So23uT7NXCQOUdpw1
-        g13Q9oZCvvlvyIoGxuVsekeZ7gRbDrhOovDTcxU=
-X-Google-Smtp-Source: ABdhPJyGDBXg6O3yHls+OEsO/pBKYQ2vawP6waasNSPBgPD5qbUdhgotxtNVAugF8AdmfjvH056/5KyEKZpQM51S/OM=
-X-Received: by 2002:a92:c145:: with SMTP id b5mr19129663ilh.186.1614187561973;
- Wed, 24 Feb 2021 09:26:01 -0800 (PST)
+        id S234356AbhBXSKu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Feb 2021 13:10:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57254 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233640AbhBXSKr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 24 Feb 2021 13:10:47 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id A912464EDD;
+        Wed, 24 Feb 2021 18:10:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614190206;
+        bh=b+WIdwoBXt51nyx55PsJVStpyMc267xQ6NDo88idvqA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=a8RCZnBBuh9YCVpxetAsJcDIaV3wzsV1WqFBvFC304HmkxpxDz3ctVrBT/WNJOcaz
+         YS585g2GsIfwfvykiMgql7vyWY0enypLVBaE7jUrBN7CI6wYsVrTPEwTK5HBdg8yQf
+         2UVfdRhGAxnn2VuS3BJB4qlhYM+EmCA43Mo6FyqSTeNJunPyseZ1I+8WDKBeaSwH0X
+         XJat3u2C28seDRfN1Y/XhRWHUqj6FYxFihHiH3H15KFawIaWMKp8fwHcr18pAPoINx
+         hOMpsRdGZeKn17AFmduZGZl6U7kRPS7ocRix1Ywn+nEUV/1XxwGKgYmA/8RVrA5wKL
+         kOplinPFG4+ug==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 9725160176;
+        Wed, 24 Feb 2021 18:10:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <CA+icZUWJyPTefHkGEgQtDO9TOM4CN_b2qPJGQVF7NE=Q=fGAEQ@mail.gmail.com>
-In-Reply-To: <CA+icZUWJyPTefHkGEgQtDO9TOM4CN_b2qPJGQVF7NE=Q=fGAEQ@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Wed, 24 Feb 2021 18:25:51 +0100
-Message-ID: <CA+icZUUzBvmi9SvJ4Bh8ER_+Rkm9vv9FkKwoS8ofmRsko_fJhg@mail.gmail.com>
-Subject: Re: [xhci] usb 4-1: reset SuperSpeed Gen 1 USB device number 2 using xhci_hcd
-To:     Mathias Nyman <mathias.nyman@intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3] net: usb: qmi_wwan: support ZTE P685M modem
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161419020661.3818.15606819052802011752.git-patchwork-notify@kernel.org>
+Date:   Wed, 24 Feb 2021 18:10:06 +0000
+References: <20210223183456.6377-1-lech.perczak@gmail.com>
+In-Reply-To: <20210223183456.6377-1-lech.perczak@gmail.com>
+To:     Lech Perczak <lech.perczak@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org, kuba@kernel.org,
+        bjorn@mork.no
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 24, 2021 at 2:44 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> Hi Mathias,
->
-> I am here on Linux-v5.11-10201-gc03c21ba6f4e.
->
-> I see a lot xhci-resets in my dmesg-log:
->
-> root# LC_ALL=C dmesg -T | grep 'usb 4-1: reset SuperSpeed Gen 1 USB
-> device number 2 using xhci_hcd' | wc -l
-> 75
->
-> This is what I have:
->
-> root# lsusb -s 004:001
-> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
->
-> root# lsusb -s 004:002
-> Bus 004 Device 002: ID 174c:55aa ASMedia Technology Inc. ASM1051E SATA
-> 6Gb/s bridge, ASM1053E SATA 6Gb/s bridge, ASM1153 SATA 3Gb/s bridge,
-> ASM1153E SATA 6Gb/s bridge
->
-> My external USB 3.0 HDD contains the partition with my Debian-system
-> and is attached to the above xhci bus/device.
->
-> Can you enlighten what this means?
-> Is this a known issue?
-> Is there a fix around?
->
-> BTW, in which Git tree is the xhci development happening?
-> Can you point me to it?
->
-> I am attaching my linux-config and full dmesg-log.
->
-> Also I have attached outputs of:
->
-> $ sudo lsusb -vvv -d 1d6b:0003
-> $ sudo lsusb -vvv -d 174c:55aa
->
-> If you need further information, please let me know.
->
-> Thanks.
->
+Hello:
 
-Looks like that xhci-reset happens here every 10min.
+This patch was applied to netdev/net.git (refs/heads/master):
 
-- Sedat -
+On Tue, 23 Feb 2021 19:34:56 +0100 you wrote:
+> Now that interface 3 in "option" driver is no longer mapped, add device
+> ID matching it to qmi_wwan.
+> 
+> The modem is used inside ZTE MF283+ router and carriers identify it as
+> such.
+> Interface mapping is:
+> 0: QCDM, 1: AT (PCUI), 2: AT (Modem), 3: QMI, 4: ADB
+> 
+> [...]
+
+Here is the summary with links:
+  - [v3] net: usb: qmi_wwan: support ZTE P685M modem
+    https://git.kernel.org/netdev/net/c/88eee9b7b42e
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
