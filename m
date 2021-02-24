@@ -2,164 +2,227 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC8732390E
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Feb 2021 09:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B05C1323D65
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Feb 2021 14:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234497AbhBXIxO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Feb 2021 03:53:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37320 "EHLO mail.kernel.org"
+        id S234450AbhBXNJo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Feb 2021 08:09:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50206 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234418AbhBXIwU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 24 Feb 2021 03:52:20 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 05B1E64EBB;
-        Wed, 24 Feb 2021 08:51:36 +0000 (UTC)
+        id S235318AbhBXMx2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 24 Feb 2021 07:53:28 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2E02B64E6F;
+        Wed, 24 Feb 2021 12:51:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614156699;
-        bh=ApfbHB2qC+9W8gkFZzi1EMHLQDNZW7djtBwM2yXucQo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gaZC/S8Xdz3Iia9lvr4QZhifs7RPjJe5Il3t0MLfX2Ce2lqboqB3ZFbzlTZOQpf9H
-         daBJwxc+amVDJh80ikpZv/dMf/+/c4L+7fAzrrNPYdRf4iTTx6im7nnauu+/VGbFF7
-         iFST3spW1WbeXL9ry6DtQXWDfXb/s0kmUbS7hPUpcrQURB8ZtWJI/roq1R5viDLYlK
-         e0sZMYdVmhJMoDVuq8PQbg9g53fBGTnO9Y8qOzJu5r4dUzl53OuoQERryCuCqi0zFD
-         Nixtnuv4UbCB0r1QUZFptIg/CvJp9i8iAp+vCvmBjNDRvbxbIVjpTQwDrrTMsATSSb
-         ZgiEjrx73FcMQ==
-Date:   Wed, 24 Feb 2021 09:51:33 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patong.mxl@gmail.com,
-        linus.walleij@linaro.org, angelo.dureghello@timesys.com
-Subject: Re: [PATCH v5 1/3] usb: serial: Add MaxLinear/Exar USB to Serial
- driver
-Message-ID: <20210224095133.3b1533fc@coco.lan>
-In-Reply-To: <YDPSGE5vLphfFNJn@hovoldconsulting.com>
-References: <20201122170822.21715-1-mani@kernel.org>
-        <20201122170822.21715-2-mani@kernel.org>
-        <YAlVLOqzx8otPgOg@hovoldconsulting.com>
-        <20210126154604.GC29751@thinkpad>
-        <YBBCvHvduivta07b@hovoldconsulting.com>
-        <20210222161119.0bd70a2b@coco.lan>
-        <YDPSGE5vLphfFNJn@hovoldconsulting.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        s=k20201202; t=1614171080;
+        bh=5FRFP9k1Mntu5LWmW8GwmTW4VHnH0q5xY7ZN85ANt3A=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DekUo6Kjm9CId33VdXndc9qlGZNnK/ND0cq8ouZkEElOzIEGN7GKlgFR+KhL5bciX
+         6CQfVBivwBS9dlyTmvPFPQbQbVMzKQz6Eao31lQm4kOgTAQUbdpw+fDz2JOYW95TNH
+         ergV4r4t8xoNfT+8m+6XY8JHlFzxrNrpHN519srQax3RIx7l8LB9SWkmL1EHWkmvXi
+         8ZzxgJVmj/c2QAk4z4EsKJQR4s77LLxxkCm6T7dG/IktRf2ftIWB3Yk6ZvZ4vVBcEB
+         bxNSe9/hMnf0VazWAoz3g1vjqMnG8frtlHGK6q9igUKwPXneaIyfe2TSa5xTLEc6Xg
+         /soCgRHPV+Z8g==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.11 39/67] media: zr364xx: fix memory leaks in probe()
+Date:   Wed, 24 Feb 2021 07:49:57 -0500
+Message-Id: <20210224125026.481804-39-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210224125026.481804-1-sashal@kernel.org>
+References: <20210224125026.481804-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Em Mon, 22 Feb 2021 16:47:36 +0100
-Johan Hovold <johan@kernel.org> escreveu:
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-> On Mon, Feb 22, 2021 at 04:27:34PM +0100, Mauro Carvalho Chehab wrote:
-> > Hi Johan,
-> > 
-> > Em Tue, 26 Jan 2021 17:26:36 +0100
-> > Johan Hovold <johan@kernel.org> escreveu:
-> >   
-> > > On Tue, Jan 26, 2021 at 09:16:04PM +0530, Manivannan Sadhasivam wrote:  
-> > > > On Thu, Jan 21, 2021 at 11:19:24AM +0100, Johan Hovold wrote:    
-> > > > > On Sun, Nov 22, 2020 at 10:38:20PM +0530, Manivannan Sadhasivam wrote:    
-> > > > > > Add support for MaxLinear/Exar USB to Serial converters. This driver
-> > > > > > only supports XR21V141X series but it can be extended to other series
-> > > > > > from Exar as well in future.    
-> 
-> > I'm now facing an issue with this driver. I have here two different
-> > boards with those USB UART from MaxLinear/Exar.
-> > 
-> > The first one is identical to Mani's one:
-> > 	USB_DEVICE(0x04e2, 0x1411)
-> > The second one is a different version of it:
-> > 	USB_DEVICE(0x04e2, 0x1424)
-> > 
-> > By looking at the final driver merged at linux-next, it sounds that
-> > somewhere during the review of this series, it lost the priv struct,
-> > and the xr_probe function. It also lost support for all MaxLinear/Exar
-> > devices, except for just one model (04e2:1411).
-> > 
-> > The original submission:
-> > 
-> > 	https://lore.kernel.org/linux-usb/20180404070634.nhspvmxcjwfgjkcv@advantechmxl-desktop
-> > 
-> > And the manufacturer's Linux driver on their website:
-> > 
-> > 	https://www.maxlinear.com/support/design-tools/software-drivers
-> > 
-> > Had support for other 12 different models of the MaxLinear/Exar USB
-> > UART.   
-> 
-> IIRC Manivannan only had access to one of these models and his original
-> submission (based on the patch you link to above) didn't include support
-> for the others. And keeping the type abstraction didn't make sense for
-> just one model.
-> 
-> > Those are grouped into 5 different major types:
-> > 
-> > 	+	init_xr2280x_reg_map();
-> > 	+	init_xr21b142x_reg_map();
-> > 	+	init_xr21b1411_reg_map();
-> > 	+	init_xr21v141x_reg_map();
-> > 	+
-> > 	+	if ((xrusb->DeviceProduct & 0xfff0) == 0x1400)
-> > 	+		memcpy(&(xrusb->reg_map), &xr2280x_reg_map,
-> > 	+			sizeof(struct reg_addr_map));
-> > 	+	else if ((xrusb->DeviceProduct & 0xFFF0) == 0x1420)
-> > 	+		memcpy(&(xrusb->reg_map), &xr21b142x_reg_map,
-> > 	+			sizeof(struct reg_addr_map));
-> > 	+	else if (xrusb->DeviceProduct == 0x1411)
-> > 	+		memcpy(&(xrusb->reg_map), &xr21b1411_reg_map,
-> > 	+			sizeof(struct reg_addr_map));
-> > 	+	else if ((xrusb->DeviceProduct & 0xfff0) == 0x1410)
-> > 	+		memcpy(&(xrusb->reg_map), &xr21v141x_reg_map,
-> > 	+			sizeof(struct reg_addr_map));
-> > 	+	else
-> > 	+		rv = -1;
-> > 
-> > Note: Please don't be confused by "reg_map" name. This has nothing
-> >       to do with Linux regmap API ;-)
-> > 
-> > What happens is that different USB IDs have different values for
-> > each register. So, for instance, the UART enable register is set to
-> > either one of the following values, depending on the value of
-> > udev->descriptor.idProduct:
-> > 
-> > 	xr21b140x_reg_map.uart_enable_addr = 0x00;
-> > 	xr21b1411_reg_map.uart_enable_addr = 0xc00;
-> > 	xr21v141x_reg_map.uart_enable_addr = 0x03;
-> > 	xr21b142x_reg_map.uart_enable_addr = 0x00;
-> > 
-> > There are other values that depend on the probing time detection,
-> > based on other USB descriptors. Those set several fields at the
-> > priv data that would allow to properly map the registers.
-> > 
-> > Also, there are 4 models that support multiple channels. On those,
-> > there are one pair of register get/set for each channel.
-> > 
-> > -
-> > 
-> > In summary, while supporting just 04e2:1411 there's no need for
-> > a private struct, in order to properly support the other models,
-> > some autodetection is needed. The best way of doing that is to
-> > re-add the .probe method and adding a priv struct.
-> > 
-> > As I dunno why this was dropped in the first place, I'm wondering
-> > if it would be ok to re-introduce them.  
-> 
-> Sure. It was just not needed if we were only going to support one model.
-> 
-> > To be clear: my main focus here is just to avoid needing to use 
-> > Windows in order to use the serial console of the hardware with
-> > the 0x1424 variant ;-)
-> > 
-> > I can't test the driver with the other hardware, but, IMHO, instead
-> > of adding a hack to support 0x1424, the better (but more painful)
-> > would be to re-add the auto-detection part and support for the
-> > other models.  
-> 
-> Sounds good to me. 
+[ Upstream commit ea354b6ddd6f09be29424f41fa75a3e637fea234 ]
 
-Great! I'll work on a patch and submit when done.
+Syzbot discovered that the probe error handling doesn't clean up the
+resources allocated in zr364xx_board_init().  There are several
+related bugs in this code so I have re-written the error handling.
 
-Thanks!
-Mauro
+1)  Introduce a new function zr364xx_board_uninit() which cleans up
+    the resources in zr364xx_board_init().
+2)  In zr364xx_board_init() if the call to zr364xx_start_readpipe()
+    fails then release the "cam->buffer.frame[i].lpvbits" memory
+    before returning.  This way every function either allocates
+    everything successfully or it cleans up after itself.
+3)  Re-write the probe function so that each failure path goto frees
+    the most recent allocation.  That way we don't free anything
+    before it has been allocated and we can also verify that
+    everything is freed.
+4)  Originally, in the probe function the "cam->v4l2_dev.release"
+    pointer was set to "zr364xx_release" near the start but I moved
+    that assignment to the end, after everything had succeeded.  The
+    release function was never actually called during the probe cleanup
+    process, but with this change I wanted to make it clear that we
+    don't want to call zr364xx_release() until everything is
+    allocated successfully.
+
+Next I re-wrote the zr364xx_release() function.  Ideally this would
+have been a simple matter of copy and pasting the cleanup code from
+probe and adding an additional call to video_unregister_device().  But
+there are a couple quirks to note.
+
+1)  The probe function does not call videobuf_mmap_free() and I don't
+    know where the videobuf_mmap is allocated.  I left the code as-is to
+    avoid introducing a bug in code I don't understand.
+2)  The zr364xx_board_uninit() has a call to zr364xx_stop_readpipe()
+    which is a change from the original behavior with regards to
+    unloading the driver.  Calling zr364xx_stop_readpipe() on a stopped
+    pipe is not a problem so this is safe and is potentially a bugfix.
+
+Reported-by: syzbot+b4d54814b339b5c6bbd4@syzkaller.appspotmail.com
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/media/usb/zr364xx/zr364xx.c | 49 ++++++++++++++++++-----------
+ 1 file changed, 31 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
+index 1e1c6b4d1874b..d29b861367ea7 100644
+--- a/drivers/media/usb/zr364xx/zr364xx.c
++++ b/drivers/media/usb/zr364xx/zr364xx.c
+@@ -1181,15 +1181,11 @@ static int zr364xx_open(struct file *file)
+ 	return err;
+ }
+ 
+-static void zr364xx_release(struct v4l2_device *v4l2_dev)
++static void zr364xx_board_uninit(struct zr364xx_camera *cam)
+ {
+-	struct zr364xx_camera *cam =
+-		container_of(v4l2_dev, struct zr364xx_camera, v4l2_dev);
+ 	unsigned long i;
+ 
+-	v4l2_device_unregister(&cam->v4l2_dev);
+-
+-	videobuf_mmap_free(&cam->vb_vidq);
++	zr364xx_stop_readpipe(cam);
+ 
+ 	/* release sys buffers */
+ 	for (i = 0; i < FRAMES; i++) {
+@@ -1200,9 +1196,19 @@ static void zr364xx_release(struct v4l2_device *v4l2_dev)
+ 		cam->buffer.frame[i].lpvbits = NULL;
+ 	}
+ 
+-	v4l2_ctrl_handler_free(&cam->ctrl_handler);
+ 	/* release transfer buffer */
+ 	kfree(cam->pipe->transfer_buffer);
++}
++
++static void zr364xx_release(struct v4l2_device *v4l2_dev)
++{
++	struct zr364xx_camera *cam =
++		container_of(v4l2_dev, struct zr364xx_camera, v4l2_dev);
++
++	videobuf_mmap_free(&cam->vb_vidq);
++	v4l2_ctrl_handler_free(&cam->ctrl_handler);
++	zr364xx_board_uninit(cam);
++	v4l2_device_unregister(&cam->v4l2_dev);
+ 	kfree(cam);
+ }
+ 
+@@ -1376,11 +1382,14 @@ static int zr364xx_board_init(struct zr364xx_camera *cam)
+ 	/* start read pipe */
+ 	err = zr364xx_start_readpipe(cam);
+ 	if (err)
+-		goto err_free;
++		goto err_free_frames;
+ 
+ 	DBG(": board initialized\n");
+ 	return 0;
+ 
++err_free_frames:
++	for (i = 0; i < FRAMES; i++)
++		vfree(cam->buffer.frame[i].lpvbits);
+ err_free:
+ 	kfree(cam->pipe->transfer_buffer);
+ 	cam->pipe->transfer_buffer = NULL;
+@@ -1409,12 +1418,10 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	if (!cam)
+ 		return -ENOMEM;
+ 
+-	cam->v4l2_dev.release = zr364xx_release;
+ 	err = v4l2_device_register(&intf->dev, &cam->v4l2_dev);
+ 	if (err < 0) {
+ 		dev_err(&udev->dev, "couldn't register v4l2_device\n");
+-		kfree(cam);
+-		return err;
++		goto free_cam;
+ 	}
+ 	hdl = &cam->ctrl_handler;
+ 	v4l2_ctrl_handler_init(hdl, 1);
+@@ -1423,7 +1430,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	if (hdl->error) {
+ 		err = hdl->error;
+ 		dev_err(&udev->dev, "couldn't register control\n");
+-		goto fail;
++		goto unregister;
+ 	}
+ 	/* save the init method used by this camera */
+ 	cam->method = id->driver_info;
+@@ -1496,7 +1503,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	if (!cam->read_endpoint) {
+ 		err = -ENOMEM;
+ 		dev_err(&intf->dev, "Could not find bulk-in endpoint\n");
+-		goto fail;
++		goto unregister;
+ 	}
+ 
+ 	/* v4l */
+@@ -1507,10 +1514,11 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 
+ 	/* load zr364xx board specific */
+ 	err = zr364xx_board_init(cam);
+-	if (!err)
+-		err = v4l2_ctrl_handler_setup(hdl);
+ 	if (err)
+-		goto fail;
++		goto unregister;
++	err = v4l2_ctrl_handler_setup(hdl);
++	if (err)
++		goto board_uninit;
+ 
+ 	spin_lock_init(&cam->slock);
+ 
+@@ -1525,16 +1533,21 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	err = video_register_device(&cam->vdev, VFL_TYPE_VIDEO, -1);
+ 	if (err) {
+ 		dev_err(&udev->dev, "video_register_device failed\n");
+-		goto fail;
++		goto free_handler;
+ 	}
++	cam->v4l2_dev.release = zr364xx_release;
+ 
+ 	dev_info(&udev->dev, DRIVER_DESC " controlling device %s\n",
+ 		 video_device_node_name(&cam->vdev));
+ 	return 0;
+ 
+-fail:
++free_handler:
+ 	v4l2_ctrl_handler_free(hdl);
++board_uninit:
++	zr364xx_board_uninit(cam);
++unregister:
+ 	v4l2_device_unregister(&cam->v4l2_dev);
++free_cam:
+ 	kfree(cam);
+ 	return err;
+ }
+-- 
+2.27.0
+
