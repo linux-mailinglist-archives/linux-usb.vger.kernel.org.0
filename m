@@ -2,117 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AFA73237D7
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Feb 2021 08:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8EB3237FB
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Feb 2021 08:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233096AbhBXHV1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Feb 2021 02:21:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
+        id S232343AbhBXHgC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Feb 2021 02:36:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232329AbhBXHVZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Feb 2021 02:21:25 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FCEC061574;
-        Tue, 23 Feb 2021 23:20:45 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id o16so904693wmh.0;
-        Tue, 23 Feb 2021 23:20:45 -0800 (PST)
+        with ESMTP id S232262AbhBXHff (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Feb 2021 02:35:35 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BFFC061574;
+        Tue, 23 Feb 2021 23:34:55 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id c10so910332ilo.8;
+        Tue, 23 Feb 2021 23:34:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:content-transfer-encoding:mime-version:subject:date:references
-         :to:in-reply-to:message-id;
-        bh=ZQJKsaY21XjjcT1M+qVN1VwATGUDt68e4WwQtZfPm0E=;
-        b=gA2c6Bp4NDKDJm8M3Z3ClmKgjlnP8k2VNsKduoQCq8+j5l5IaCO6O8o6cYFAsUyjX3
-         e85FLUCj2d9v5e1dnB37qdawdlbg2p4lUyEbS2Amn4V2g58aOytJ1ggUmc99RXqnqNFh
-         k9t33TrqQGBiO0YalYInRqR7LieA2oHNIU651XGhoKgVGXE9kmK2ADe+rYHG6GtNnSVr
-         SXT6QN2Ga/DBM+cQjsM142PfTUCOk2HMllr54GdIZAp78lIrNJ2Dr+18zBlKtFiIW1RC
-         uEtm2jhr4oBMZqxW3ee1ML9U5Of7KZXabgZWYfJXYPaXi2W9TuU0TDRBdGLwiXyxi1j9
-         R0+g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=PmXp0hCJjxr+GbIpkblU7x66szvTmFkmNMuldYojcdk=;
+        b=G2T5kekjhIrkyj6YcR8ZhQLfFiapMvHkrYw1yC42mKYe+vgTxn3W2WVheWVAI4vWk2
+         T+e2hBT06jjnzFmcx3G5cUjB9arL9c7ciThohH+0UCSRgxo9QUirVTuLr8vcwSl/R949
+         8vn188c83AfMrSL/MT0O/I66Lmvi88gdkp4GfqsGfzZBNRD8iXRbKJHTnub66YqZnYy7
+         3TqYrp/jBb0AYv160UNChlvUfIHgSrk9TqJWHS7C+G20okZGnNL7Ua7XAwRdKcUP9Wx6
+         BaXOGp/adphrL8OS7TX1jjsOMLzy46wgoLYMBVV3nK3GJ+05KVqSzlhHFg6BtSVOxsyI
+         fDcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:content-transfer-encoding:mime-version
-         :subject:date:references:to:in-reply-to:message-id;
-        bh=ZQJKsaY21XjjcT1M+qVN1VwATGUDt68e4WwQtZfPm0E=;
-        b=qDl3wwTFsekFwoAjGcQkLF/+ELPhNujsIQREanc+pMr33tJEoyidBCOFkgChi371gm
-         pQGWodQO6Gs56k5AAnQn0d+GMonLqn4L1/JhQnrIl3/77gBtqCpO1KGNvyzzNRqFpU9S
-         pRYJGfc16h1S/ox700txsZTbw7EqKsPaoTbCCd6LE4aeyg5WT8ggO4wFopPeOOqtJteb
-         yWyWxmlLH1mYxZ8Li+5/bytEqT16G/ELnSkRYzOHv3MvNLcKQizdFayNp3FNQdQ8a6vb
-         61J9rrmNbbyrW0sRwMWuVZZt9HRKCj7RV14f4GWOQTPUvzXMNjkGLR/HPlmKIR3jpD9G
-         O5zA==
-X-Gm-Message-State: AOAM530ESVV5L1oiOKtxSYRUUmgH0GV52xGqndlJ8/Y+LiAb1wbrEb/Y
-        Cj6iL2FmkvR24paXydKNayc=
-X-Google-Smtp-Source: ABdhPJwBpEv0pTMBXffRL7705an0dyB9mIksTWZA/whPkMmA6NlvPDpbiHoMAWtuV3t9SShkk9fT5A==
-X-Received: by 2002:a7b:c04c:: with SMTP id u12mr2362830wmc.9.1614151244257;
-        Tue, 23 Feb 2021 23:20:44 -0800 (PST)
-Received: from macbook-pro-alvaro.lan (170.red-88-1-105.dynamicip.rima-tde.net. [88.1.105.170])
-        by smtp.gmail.com with ESMTPSA id p13sm1872032wrj.52.2021.02.23.23.20.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 23 Feb 2021 23:20:43 -0800 (PST)
-From:   =?utf-8?Q?=C3=81lvaro_Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>
-Content-Type: text/plain;
-        charset=utf-8
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PmXp0hCJjxr+GbIpkblU7x66szvTmFkmNMuldYojcdk=;
+        b=MO5EtMYaKHmM872kQNo49UJip+04d7VzbJPNm3fXPNmKrTC08hMTa9Wx08DdVznWP6
+         VSTBDDPkLoJW+8GVNgculhQByDM9stLA639baRJLKOKnG8qeWHyYf12/1JcYIEvekQcO
+         5w1IQ4QhHFjZlajEOlBtPFy96f2/D5/nB4FmkdgH/Jk6bRiRorUTBQnLbHOjZK2ZiulU
+         Y6UponB/gkfDQVwAQIMoG52o/Olv+71UechS5Dlzo2fyLc9SibCwFjLZZuVYw2qWaGVT
+         LFZjdwemh5JrusCM94ydxHRRV19OoEV+xrGAPXHvjtwzTp4UWjYYQqDlID4WFG9XR4+6
+         1vng==
+X-Gm-Message-State: AOAM530UP8z9bTz2eH7pDtj8OScjM/5/SAkx/bCgiEzPqlDUCbprXJdh
+        /nhYriPEvWCJhr0jaBfayR4Ivptfbneg3Lpnb0c=
+X-Google-Smtp-Source: ABdhPJxgvvLwYE2z5ygYN516JxKOuJbilOtcZ1+GMjfYyXr92Gxsc6pxA+t3p7mHxUscWceFC4y4RxgFFOAr9WmqHEA=
+X-Received: by 2002:a92:cda6:: with SMTP id g6mr23381816ild.274.1614152094608;
+ Tue, 23 Feb 2021 23:34:54 -0800 (PST)
+MIME-Version: 1.0
+References: <YDOvLseYXaUHs0lS@hovoldconsulting.com> <fb1489c2-b972-619b-b7ce-4ae8e1d2cc0f@IEEE.org>
+ <YDPO/JprcDTaPmR4@hovoldconsulting.com> <0f9caf26-af58-13a9-9947-47bb646f505e@IEEE.org>
+ <YDPS3AP63/PwmwJU@hovoldconsulting.com> <780b9aa6-890d-47fd-d6b2-cd9a39f7634a@IEEE.org>
+ <YDUiuLtwRkZ0D0Mi@hovoldconsulting.com> <f63df659-6cdf-bba6-f892-1012b98f82e2@IEEE.org>
+ <YDUp0tIThOZSTHJt@hovoldconsulting.com> <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
+ <YDUysZY90FfVhrHK@hovoldconsulting.com>
+In-Reply-To: <YDUysZY90FfVhrHK@hovoldconsulting.com>
+From:   Charles Yeh <charlesyeh522@gmail.com>
+Date:   Wed, 24 Feb 2021 15:34:43 +0800
+Message-ID: <CAAZvQQ6F=cQ-EhC0kgeTVM3GrtBWR+HfM6UJWj2AEF1NYZ-vAQ@mail.gmail.com>
+Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+To:     Johan Hovold <johan@kernel.org>
+Cc:     "Michael G. Katzmann" <michaelk@ieee.org>,
+        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Joe Abbott <jabbott@rollanet.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.60.0.2.21\))
-Subject: Re: [PATCH v3 2/3] dt-bindings: usb: generic-ehci: document
- spurious-oc flag
-Date:   Wed, 24 Feb 2021 08:20:41 +0100
-References: <20210223155005.21712-1-noltari@gmail.com>
- <20210223174455.1378-1-noltari@gmail.com>
- <20210223174455.1378-3-noltari@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Tony Prisk <linux@prisktech.co.nz>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20210223174455.1378-3-noltari@gmail.com>
-Message-Id: <880F72F4-82DF-4738-A8F1-D5528AA3FC9E@gmail.com>
-X-Mailer: Apple Mail (2.3654.60.0.2.21)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I didn=E2=80=99t change this, but I missed Alan=E2=80=99s Acked-by, so:
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+PL2303HXD
+          =3D=3D=3D>Device Descriptor<=3D=3D=3D
+bLength:                           0x12
+bDescriptorType:                   0x01
+bcdUSB:                          0x0110
+bDeviceClass:                      0x00  -> This is an Interface Class
+Defined Device
+bDeviceSubClass:                   0x00
+bDeviceProtocol:                   0x00
+bMaxPacketSize0:                   0x40 =3D (64) Bytes
+idVendor:                        0x067B =3D Prolific Technology, Inc.
+idProduct:                       0x2303
+bcdDevice:                       0x0400
 
-> El 23 feb 2021, a las 18:44, =C3=81lvaro Fern=C3=A1ndez Rojas =
-<noltari@gmail.com> escribi=C3=B3:
->=20
-> Over-current reporting isn't supported on some platforms such as =
-bcm63xx.
-> These devices will incorrectly report over-current if this flag isn't =
-properly
-> activated.
->=20
-> Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
-> ---
-> v3: no changes.
-> v2: change flag name and improve documentation as suggested by Alan =
-Stern.
->=20
-> Documentation/devicetree/bindings/usb/generic-ehci.yaml | 6 ++++++
-> 1 file changed, 6 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml =
-b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> index cf83f2d9afac..8089dc956ba3 100644
-> --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> @@ -122,6 +122,12 @@ properties:
->     description:
->       Set this flag to force EHCI reset after resume.
->=20
-> +  spurious-oc:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description:
-> +      Set this flag to indicate that the hardware sometimes turns on
-> +      the OC bit when an over-current isn't actually present.
-> +
->   companion:
->     $ref: /schemas/types.yaml#/definitions/phandle
->     description:
-> --=20
-> 2.20.1
->=20
 
+
+PL2303TA
+          =3D=3D=3D>Device Descriptor<=3D=3D=3D
+bLength:                           0x12
+bDescriptorType:                   0x01
+bcdUSB:                          0x0200
+bDeviceClass:                      0x00  -> This is an Interface Class
+Defined Device
+bDeviceSubClass:                   0x00
+bDeviceProtocol:                   0x00
+bMaxPacketSize0:                   0x40 =3D (64) Bytes
+idVendor:                        0x067B =3D Prolific Technology, Inc.
+idProduct:                       0x2303
+bcdDevice:                       0x0300
+
+
+PL2303HX(A)/XA ( EOL : PHASED OUT SINCE 2012 )
+          =3D=3D=3D>Device Descriptor<=3D=3D=3D
+bLength:                           0x12
+bDescriptorType:                   0x01
+bcdUSB:                          0x0110
+bDeviceClass:                      0x00  -> This is an Interface Class
+Defined Device
+bDeviceSubClass:                   0x00
+bDeviceProtocol:                   0x00
+bMaxPacketSize0:                   0x40 =3D (64) Bytes
+idVendor:                        0x067B =3D Prolific Technology, Inc.
+idProduct:                       0x2303
+bcdDevice:                       0x0300
+
+
+You can use the two fields bcdUSB & bcdDevice to distinguish PL2303HXD
+/ PL2303TA / PL2303HX(A)/XA
+
+Johan Hovold <johan@kernel.org> =E6=96=BC 2021=E5=B9=B42=E6=9C=8824=E6=97=
+=A5 =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=8812:51=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Tue, Feb 23, 2021 at 11:30:41AM -0500, Michael G. Katzmann wrote:
+> > On 2/23/21 11:14 AM, Johan Hovold wrote:
+> > > I only have an HXD (and a GC) here.
+> > >
+> > > The HXD has bcdUSB as 1.10 unlike your TA with 2.00, but not sure tha=
+t
+> > > helps.
+> >
+> > Sound promising .. why do you think this is this not reliable?
+>
+> Perhaps it is. Perhaps even bcdDevice of 3.00 is enough (includes some
+> older variants that the TA replaced supposedly). Not sure anyone ever
+> tried the current scheme on those older models.
+>
+> Charles, could you post the output of "lsusb -v" for your PL2303TA? And
+> did you verify that you actually got 110 Bd with the current Linux
+> driver?
+>
+> Johan
