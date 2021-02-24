@@ -2,138 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A8EB3237FB
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Feb 2021 08:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC8732390E
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Feb 2021 09:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232343AbhBXHgC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Feb 2021 02:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232262AbhBXHff (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Feb 2021 02:35:35 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BFFC061574;
-        Tue, 23 Feb 2021 23:34:55 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id c10so910332ilo.8;
-        Tue, 23 Feb 2021 23:34:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PmXp0hCJjxr+GbIpkblU7x66szvTmFkmNMuldYojcdk=;
-        b=G2T5kekjhIrkyj6YcR8ZhQLfFiapMvHkrYw1yC42mKYe+vgTxn3W2WVheWVAI4vWk2
-         T+e2hBT06jjnzFmcx3G5cUjB9arL9c7ciThohH+0UCSRgxo9QUirVTuLr8vcwSl/R949
-         8vn188c83AfMrSL/MT0O/I66Lmvi88gdkp4GfqsGfzZBNRD8iXRbKJHTnub66YqZnYy7
-         3TqYrp/jBb0AYv160UNChlvUfIHgSrk9TqJWHS7C+G20okZGnNL7Ua7XAwRdKcUP9Wx6
-         BaXOGp/adphrL8OS7TX1jjsOMLzy46wgoLYMBVV3nK3GJ+05KVqSzlhHFg6BtSVOxsyI
-         fDcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PmXp0hCJjxr+GbIpkblU7x66szvTmFkmNMuldYojcdk=;
-        b=MO5EtMYaKHmM872kQNo49UJip+04d7VzbJPNm3fXPNmKrTC08hMTa9Wx08DdVznWP6
-         VSTBDDPkLoJW+8GVNgculhQByDM9stLA639baRJLKOKnG8qeWHyYf12/1JcYIEvekQcO
-         5w1IQ4QhHFjZlajEOlBtPFy96f2/D5/nB4FmkdgH/Jk6bRiRorUTBQnLbHOjZK2ZiulU
-         Y6UponB/gkfDQVwAQIMoG52o/Olv+71UechS5Dlzo2fyLc9SibCwFjLZZuVYw2qWaGVT
-         LFZjdwemh5JrusCM94ydxHRRV19OoEV+xrGAPXHvjtwzTp4UWjYYQqDlID4WFG9XR4+6
-         1vng==
-X-Gm-Message-State: AOAM530UP8z9bTz2eH7pDtj8OScjM/5/SAkx/bCgiEzPqlDUCbprXJdh
-        /nhYriPEvWCJhr0jaBfayR4Ivptfbneg3Lpnb0c=
-X-Google-Smtp-Source: ABdhPJxgvvLwYE2z5ygYN516JxKOuJbilOtcZ1+GMjfYyXr92Gxsc6pxA+t3p7mHxUscWceFC4y4RxgFFOAr9WmqHEA=
-X-Received: by 2002:a92:cda6:: with SMTP id g6mr23381816ild.274.1614152094608;
- Tue, 23 Feb 2021 23:34:54 -0800 (PST)
-MIME-Version: 1.0
-References: <YDOvLseYXaUHs0lS@hovoldconsulting.com> <fb1489c2-b972-619b-b7ce-4ae8e1d2cc0f@IEEE.org>
- <YDPO/JprcDTaPmR4@hovoldconsulting.com> <0f9caf26-af58-13a9-9947-47bb646f505e@IEEE.org>
- <YDPS3AP63/PwmwJU@hovoldconsulting.com> <780b9aa6-890d-47fd-d6b2-cd9a39f7634a@IEEE.org>
- <YDUiuLtwRkZ0D0Mi@hovoldconsulting.com> <f63df659-6cdf-bba6-f892-1012b98f82e2@IEEE.org>
- <YDUp0tIThOZSTHJt@hovoldconsulting.com> <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
- <YDUysZY90FfVhrHK@hovoldconsulting.com>
-In-Reply-To: <YDUysZY90FfVhrHK@hovoldconsulting.com>
-From:   Charles Yeh <charlesyeh522@gmail.com>
-Date:   Wed, 24 Feb 2021 15:34:43 +0800
-Message-ID: <CAAZvQQ6F=cQ-EhC0kgeTVM3GrtBWR+HfM6UJWj2AEF1NYZ-vAQ@mail.gmail.com>
-Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+        id S234497AbhBXIxO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Feb 2021 03:53:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37320 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234418AbhBXIwU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 24 Feb 2021 03:52:20 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 05B1E64EBB;
+        Wed, 24 Feb 2021 08:51:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614156699;
+        bh=ApfbHB2qC+9W8gkFZzi1EMHLQDNZW7djtBwM2yXucQo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gaZC/S8Xdz3Iia9lvr4QZhifs7RPjJe5Il3t0MLfX2Ce2lqboqB3ZFbzlTZOQpf9H
+         daBJwxc+amVDJh80ikpZv/dMf/+/c4L+7fAzrrNPYdRf4iTTx6im7nnauu+/VGbFF7
+         iFST3spW1WbeXL9ry6DtQXWDfXb/s0kmUbS7hPUpcrQURB8ZtWJI/roq1R5viDLYlK
+         e0sZMYdVmhJMoDVuq8PQbg9g53fBGTnO9Y8qOzJu5r4dUzl53OuoQERryCuCqi0zFD
+         Nixtnuv4UbCB0r1QUZFptIg/CvJp9i8iAp+vCvmBjNDRvbxbIVjpTQwDrrTMsATSSb
+         ZgiEjrx73FcMQ==
+Date:   Wed, 24 Feb 2021 09:51:33 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Johan Hovold <johan@kernel.org>
-Cc:     "Michael G. Katzmann" <michaelk@ieee.org>,
-        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Joe Abbott <jabbott@rollanet.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patong.mxl@gmail.com,
+        linus.walleij@linaro.org, angelo.dureghello@timesys.com
+Subject: Re: [PATCH v5 1/3] usb: serial: Add MaxLinear/Exar USB to Serial
+ driver
+Message-ID: <20210224095133.3b1533fc@coco.lan>
+In-Reply-To: <YDPSGE5vLphfFNJn@hovoldconsulting.com>
+References: <20201122170822.21715-1-mani@kernel.org>
+        <20201122170822.21715-2-mani@kernel.org>
+        <YAlVLOqzx8otPgOg@hovoldconsulting.com>
+        <20210126154604.GC29751@thinkpad>
+        <YBBCvHvduivta07b@hovoldconsulting.com>
+        <20210222161119.0bd70a2b@coco.lan>
+        <YDPSGE5vLphfFNJn@hovoldconsulting.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PL2303HXD
-          =3D=3D=3D>Device Descriptor<=3D=3D=3D
-bLength:                           0x12
-bDescriptorType:                   0x01
-bcdUSB:                          0x0110
-bDeviceClass:                      0x00  -> This is an Interface Class
-Defined Device
-bDeviceSubClass:                   0x00
-bDeviceProtocol:                   0x00
-bMaxPacketSize0:                   0x40 =3D (64) Bytes
-idVendor:                        0x067B =3D Prolific Technology, Inc.
-idProduct:                       0x2303
-bcdDevice:                       0x0400
+Em Mon, 22 Feb 2021 16:47:36 +0100
+Johan Hovold <johan@kernel.org> escreveu:
 
+> On Mon, Feb 22, 2021 at 04:27:34PM +0100, Mauro Carvalho Chehab wrote:
+> > Hi Johan,
+> > 
+> > Em Tue, 26 Jan 2021 17:26:36 +0100
+> > Johan Hovold <johan@kernel.org> escreveu:
+> >   
+> > > On Tue, Jan 26, 2021 at 09:16:04PM +0530, Manivannan Sadhasivam wrote:  
+> > > > On Thu, Jan 21, 2021 at 11:19:24AM +0100, Johan Hovold wrote:    
+> > > > > On Sun, Nov 22, 2020 at 10:38:20PM +0530, Manivannan Sadhasivam wrote:    
+> > > > > > Add support for MaxLinear/Exar USB to Serial converters. This driver
+> > > > > > only supports XR21V141X series but it can be extended to other series
+> > > > > > from Exar as well in future.    
+> 
+> > I'm now facing an issue with this driver. I have here two different
+> > boards with those USB UART from MaxLinear/Exar.
+> > 
+> > The first one is identical to Mani's one:
+> > 	USB_DEVICE(0x04e2, 0x1411)
+> > The second one is a different version of it:
+> > 	USB_DEVICE(0x04e2, 0x1424)
+> > 
+> > By looking at the final driver merged at linux-next, it sounds that
+> > somewhere during the review of this series, it lost the priv struct,
+> > and the xr_probe function. It also lost support for all MaxLinear/Exar
+> > devices, except for just one model (04e2:1411).
+> > 
+> > The original submission:
+> > 
+> > 	https://lore.kernel.org/linux-usb/20180404070634.nhspvmxcjwfgjkcv@advantechmxl-desktop
+> > 
+> > And the manufacturer's Linux driver on their website:
+> > 
+> > 	https://www.maxlinear.com/support/design-tools/software-drivers
+> > 
+> > Had support for other 12 different models of the MaxLinear/Exar USB
+> > UART.   
+> 
+> IIRC Manivannan only had access to one of these models and his original
+> submission (based on the patch you link to above) didn't include support
+> for the others. And keeping the type abstraction didn't make sense for
+> just one model.
+> 
+> > Those are grouped into 5 different major types:
+> > 
+> > 	+	init_xr2280x_reg_map();
+> > 	+	init_xr21b142x_reg_map();
+> > 	+	init_xr21b1411_reg_map();
+> > 	+	init_xr21v141x_reg_map();
+> > 	+
+> > 	+	if ((xrusb->DeviceProduct & 0xfff0) == 0x1400)
+> > 	+		memcpy(&(xrusb->reg_map), &xr2280x_reg_map,
+> > 	+			sizeof(struct reg_addr_map));
+> > 	+	else if ((xrusb->DeviceProduct & 0xFFF0) == 0x1420)
+> > 	+		memcpy(&(xrusb->reg_map), &xr21b142x_reg_map,
+> > 	+			sizeof(struct reg_addr_map));
+> > 	+	else if (xrusb->DeviceProduct == 0x1411)
+> > 	+		memcpy(&(xrusb->reg_map), &xr21b1411_reg_map,
+> > 	+			sizeof(struct reg_addr_map));
+> > 	+	else if ((xrusb->DeviceProduct & 0xfff0) == 0x1410)
+> > 	+		memcpy(&(xrusb->reg_map), &xr21v141x_reg_map,
+> > 	+			sizeof(struct reg_addr_map));
+> > 	+	else
+> > 	+		rv = -1;
+> > 
+> > Note: Please don't be confused by "reg_map" name. This has nothing
+> >       to do with Linux regmap API ;-)
+> > 
+> > What happens is that different USB IDs have different values for
+> > each register. So, for instance, the UART enable register is set to
+> > either one of the following values, depending on the value of
+> > udev->descriptor.idProduct:
+> > 
+> > 	xr21b140x_reg_map.uart_enable_addr = 0x00;
+> > 	xr21b1411_reg_map.uart_enable_addr = 0xc00;
+> > 	xr21v141x_reg_map.uart_enable_addr = 0x03;
+> > 	xr21b142x_reg_map.uart_enable_addr = 0x00;
+> > 
+> > There are other values that depend on the probing time detection,
+> > based on other USB descriptors. Those set several fields at the
+> > priv data that would allow to properly map the registers.
+> > 
+> > Also, there are 4 models that support multiple channels. On those,
+> > there are one pair of register get/set for each channel.
+> > 
+> > -
+> > 
+> > In summary, while supporting just 04e2:1411 there's no need for
+> > a private struct, in order to properly support the other models,
+> > some autodetection is needed. The best way of doing that is to
+> > re-add the .probe method and adding a priv struct.
+> > 
+> > As I dunno why this was dropped in the first place, I'm wondering
+> > if it would be ok to re-introduce them.  
+> 
+> Sure. It was just not needed if we were only going to support one model.
+> 
+> > To be clear: my main focus here is just to avoid needing to use 
+> > Windows in order to use the serial console of the hardware with
+> > the 0x1424 variant ;-)
+> > 
+> > I can't test the driver with the other hardware, but, IMHO, instead
+> > of adding a hack to support 0x1424, the better (but more painful)
+> > would be to re-add the auto-detection part and support for the
+> > other models.  
+> 
+> Sounds good to me. 
 
+Great! I'll work on a patch and submit when done.
 
-PL2303TA
-          =3D=3D=3D>Device Descriptor<=3D=3D=3D
-bLength:                           0x12
-bDescriptorType:                   0x01
-bcdUSB:                          0x0200
-bDeviceClass:                      0x00  -> This is an Interface Class
-Defined Device
-bDeviceSubClass:                   0x00
-bDeviceProtocol:                   0x00
-bMaxPacketSize0:                   0x40 =3D (64) Bytes
-idVendor:                        0x067B =3D Prolific Technology, Inc.
-idProduct:                       0x2303
-bcdDevice:                       0x0300
-
-
-PL2303HX(A)/XA ( EOL : PHASED OUT SINCE 2012 )
-          =3D=3D=3D>Device Descriptor<=3D=3D=3D
-bLength:                           0x12
-bDescriptorType:                   0x01
-bcdUSB:                          0x0110
-bDeviceClass:                      0x00  -> This is an Interface Class
-Defined Device
-bDeviceSubClass:                   0x00
-bDeviceProtocol:                   0x00
-bMaxPacketSize0:                   0x40 =3D (64) Bytes
-idVendor:                        0x067B =3D Prolific Technology, Inc.
-idProduct:                       0x2303
-bcdDevice:                       0x0300
-
-
-You can use the two fields bcdUSB & bcdDevice to distinguish PL2303HXD
-/ PL2303TA / PL2303HX(A)/XA
-
-Johan Hovold <johan@kernel.org> =E6=96=BC 2021=E5=B9=B42=E6=9C=8824=E6=97=
-=A5 =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=8812:51=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Tue, Feb 23, 2021 at 11:30:41AM -0500, Michael G. Katzmann wrote:
-> > On 2/23/21 11:14 AM, Johan Hovold wrote:
-> > > I only have an HXD (and a GC) here.
-> > >
-> > > The HXD has bcdUSB as 1.10 unlike your TA with 2.00, but not sure tha=
-t
-> > > helps.
-> >
-> > Sound promising .. why do you think this is this not reliable?
->
-> Perhaps it is. Perhaps even bcdDevice of 3.00 is enough (includes some
-> older variants that the TA replaced supposedly). Not sure anyone ever
-> tried the current scheme on those older models.
->
-> Charles, could you post the output of "lsusb -v" for your PL2303TA? And
-> did you verify that you actually got 110 Bd with the current Linux
-> driver?
->
-> Johan
+Thanks!
+Mauro
