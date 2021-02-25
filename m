@@ -2,204 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C17325537
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Feb 2021 19:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE01F325553
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Feb 2021 19:17:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233204AbhBYSJU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Feb 2021 13:09:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43840 "EHLO
+        id S232495AbhBYSQh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Feb 2021 13:16:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233007AbhBYSHn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Feb 2021 13:07:43 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7C4C061574
-        for <linux-usb@vger.kernel.org>; Thu, 25 Feb 2021 10:06:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=DX60RB6KmgJHGc7SEXuVw8LZv6BoOlMx0I0YVqIYzdw=; b=d0Uyb9tujVFA6G3qvRKVbmAiOW
-        YQfF8fiaEf05dDxIabpRCSj2vF+BT5xoPyN0nf26bs+Cx/zVbNKUvlj/VPHWy5I0ud/X7AjiTXmnL
-        zOyRQfoIGzqNucGasVEKyrjklrNCWPdfdcRdhxVK1oVeU4R7UEVo4+nJgbQ7iZfzPqJmANXk/uJxR
-        YneiRWUg+OkPQ4fyageXBSTCBAHA8qLel3U3fS6mnR8qetVJvBlR6x0Px8/7tbscQKN95YVzGWczs
-        tpjQdob4vChsiXfIy87El5EFIu24cYX4zFIttZ9bxpOSNy7gFcc3vHgyloOyXuU62rN/gdec6WV4P
-        OP+6EMfA==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:63061 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1lFL2D-0004iG-4j; Thu, 25 Feb 2021 19:06:45 +0100
-Subject: Re: [PATCH v6 3/3] drm: Add GUD USB Display driver
-To:     Peter Stuge <peter@stuge.se>
-Cc:     dri-devel@lists.freedesktop.org, hudson@trmm.net,
-        markus@raatikainen.cc, sam@ravnborg.org, linux-usb@vger.kernel.org,
-        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-References: <20210219121702.50964-1-noralf@tronnes.org>
- <20210219121702.50964-4-noralf@tronnes.org>
- <20210225095825.6196.qmail@stuge.se>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-Message-ID: <ecd868f9-5877-63ea-7d3b-504147489b61@tronnes.org>
-Date:   Thu, 25 Feb 2021 19:06:40 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        with ESMTP id S232412AbhBYSQ3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Feb 2021 13:16:29 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D4BC061788
+        for <linux-usb@vger.kernel.org>; Thu, 25 Feb 2021 10:15:49 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id b3so4766479qtj.10
+        for <linux-usb@vger.kernel.org>; Thu, 25 Feb 2021 10:15:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h3fwbXygeyIRtetl3DiiCp4YUNibdxC6uA+4PbTm8ew=;
+        b=iFa/j1SpISBk8SXub5LbKDZPN1y0LW0+uOxFmZ6XWwz/fGZFn//8rKYRpWk2HOdpw9
+         CUGvDRRDG+IRLZNpCBqP2Lzn4dv3Mgzx+3EvFFodEb9qD8B64OOpQ2taYkxeSueXJ2BE
+         aBHZkEiP6O471okysrdPd1mwM/fmzy2oGdons=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h3fwbXygeyIRtetl3DiiCp4YUNibdxC6uA+4PbTm8ew=;
+        b=kAhWfZxZcyV7h2sXLUYh63qUMsmS21KvvNyYgida6y42A8IKWuRnOWHPvczGAbrJk+
+         XlEa5XM3wDqIIdYL7NfDUWrFWalqK4xz6n2cat3KHzE6KV7yeE4dzpRoEjxDwPbfK9lz
+         nUpX4DGMCUTRLPzrWJ+94yTSvFpN0R19uEBY+sQX+02NlDhwZSpoPcTzLyGkOTtYLxme
+         xNjQ/Qz3bDzug8r6qQTB974iTnpjPC5nGXI/0o9w4c+OumNJgJsJONnUwt4XTEoJOM1R
+         iqFFi30SiwpqD1hSEaU1o5Atspr0C5XaNcf7uCL0kKh54Tb+2qkvvdINpn8vdA42bUbX
+         ClYw==
+X-Gm-Message-State: AOAM5330g7yfiXE4GwMJzplPd3QKv9impNksMts4rgHm8WSVXp7xdRVm
+        5lRcxhIEkWBqKullQCTeruyPL0jEDLL/Dg==
+X-Google-Smtp-Source: ABdhPJwC2ZaG74+qofZmozprBrSYxXI1QbZcgxrkCZWPJ/JT0z9o6WOjqiuPW2ELw8sIrvJqRtDGpw==
+X-Received: by 2002:ac8:37c1:: with SMTP id e1mr3582117qtc.280.1614276948476;
+        Thu, 25 Feb 2021 10:15:48 -0800 (PST)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id a34sm4095153qtc.97.2021.02.25.10.15.45
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Feb 2021 10:15:47 -0800 (PST)
+Received: by mail-yb1-f172.google.com with SMTP id d9so6353204ybq.1
+        for <linux-usb@vger.kernel.org>; Thu, 25 Feb 2021 10:15:45 -0800 (PST)
+X-Received: by 2002:a25:d3c5:: with SMTP id e188mr5897553ybf.345.1614276945234;
+ Thu, 25 Feb 2021 10:15:45 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210225095825.6196.qmail@stuge.se>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+References: <1603831083-2025-1-git-send-email-sanm@codeaurora.org> <1603831083-2025-5-git-send-email-sanm@codeaurora.org>
+In-Reply-To: <1603831083-2025-5-git-send-email-sanm@codeaurora.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 25 Feb 2021 10:15:33 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=VFtWkfP30bPZB9SO5KLX_OLVNw0Fv3efZMHEzRg7PtVQ@mail.gmail.com>
+Message-ID: <CAD=FV=VFtWkfP30bPZB9SO5KLX_OLVNw0Fv3efZMHEzRg7PtVQ@mail.gmail.com>
+Subject: Re: [PATCH v4 4/5] arm64: dts: qcom: sc7180: Use pdc interrupts for
+ USB instead of GIC interrupts
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Manu Gautam <mgautam@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
+On Tue, Oct 27, 2020 at 1:38 PM Sandeep Maheswaram <sanm@codeaurora.org> wrote:
+>
+> Using pdc interrupts for USB instead of GIC interrupts to
+> support wake up in case of XO shutdown.
+>
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7180.dtsi | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> index a02776c..a2c56528 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> @@ -2687,10 +2687,10 @@
+>                                           <&gcc GCC_USB30_PRIM_MASTER_CLK>;
+>                         assigned-clock-rates = <19200000>, <150000000>;
+>
+> -                       interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 486 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 488 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 489 IRQ_TYPE_LEVEL_HIGH>;
+> +                       interrupts-extended = <&intc GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
+> +                                             <&pdc 6 IRQ_TYPE_LEVEL_HIGH>,
+> +                                             <&pdc 8 IRQ_TYPE_LEVEL_HIGH>,
+> +                                             <&pdc 9 IRQ_TYPE_LEVEL_HIGH>;
 
-Den 25.02.2021 10.58, skrev Peter Stuge:
-> Hi Noralf,
-> 
-> Noralf Trønnes wrote:
->> The driver supports a one bit monochrome transfer format: R1. This is not
->> implemented in the gadget driver. It is added in preparation for future
->> monochrome e-ink displays.
-> 
-> I forgot, but I have a two-tone (black/red) e-ink display here, and I
-> also have a 3-bpp RGB TFT display.
-> 
-> Should we add maybe R2 and R3? (or R3/R8 for number of colours?)
-> 
-> I'm particularly considering the 3-bpp RGB panel for GUD use now, and
-> while it will surely work with say a 16-bit RGB mode many bits will
-> be wasted in the process.
-> 
-> What are your thoughts? Would you take a patch for that now, later, never?
-> 
+Is there any reason that this patch can't land?  I'm not sure what the
+current status of everything is, but it should be fine to go through
+the PDC anyway, right?
 
-I've been anticipating the need for more formats, but I didn't want to
-add them without having a user. Otherwise I could end up adding stuff
-that would never be used. If you can test, there's no problem adding
-support for more formats now.
-
-The R1 name is derived from DRM_FORMAT_R8 which is a 8 bit monochrome
-(or one color channel) format.
-
-Linux has these one byte color pixel formats currently defined:
-
-/* color index */
-#define DRM_FORMAT_C8		fourcc_code('C', '8', ' ', ' ') /* [7:0] C */
-
-/* 8 bpp Red */
-#define DRM_FORMAT_R8		fourcc_code('R', '8', ' ', ' ') /* [7:0] R */
-
-/* 8 bpp RGB */
-#define DRM_FORMAT_RGB332	fourcc_code('R', 'G', 'B', '8') /* [7:0] R:G:B
-3:3:2 */
-#define DRM_FORMAT_BGR233	fourcc_code('B', 'G', 'R', '8') /* [7:0] B:G:R
-2:3:3 */
-
-And these two color formats:
-
-/* 16 bpp RG */
-#define DRM_FORMAT_RG88		fourcc_code('R', 'G', '8', '8') /* [15:0] R:G
-8:8 little endian */
-#define DRM_FORMAT_GR88		fourcc_code('G', 'R', '8', '8') /* [15:0] G:R
-8:8 little endian */
-
-/* 32 bpp RG */
-#define DRM_FORMAT_RG1616	fourcc_code('R', 'G', '3', '2') /* [31:0] R:G
-16:16 little endian */
-#define DRM_FORMAT_GR1616	fourcc_code('G', 'R', '3', '2') /* [31:0] G:R
-16:16 little endian */
-
-
-Building on that I would define a 2 bpp RG format like this in the driver:
-
-static const struct drm_format_info gud_drm_format_rg11 = {
-	.format = GUD_DRM_FORMAT_RG11,
-	.num_planes = 1,
-	.char_per_block = { 1, 0, 0 },
-	.block_w = { 4, 0, 0 }, /* 4 pixels per block/byte */
-	.block_h = { 1, 0, 0 },
-	.hsub = 1,
-	.vsub = 1,
-};
-
-And a 3 bpp RGB format like this:
-
-static const struct drm_format_info gud_drm_format_rgb111 = {
-	.format = GUD_DRM_FORMAT_RGB111,
-	.num_planes = 1,
-	.char_per_block = { 1, 0, 0 },
-	.block_w = { 2, 0, 0 }, /* 2 pixels per block/byte */
-	.block_h = { 1, 0, 0 },
-	.hsub = 1,
-	.vsub = 1,
-};
-
-The MIPI DBI standard defines 2 ways to transmit 2x 3-bpp pixels in one
-byte (X=pad bit):
-- Option 1: X  X  R1 G1 B1 R2 G2 B2
-- Option 2: X  R1 G1 B1 X  R2 G2 B2
-
-So maybe we should have GUD_DRM_FORMAT_RGB111_OPTION1 and
-GUD_DRM_FORMAT_RGB111_OPTION2?
-Or just use option 2 and let the display fix it up if needed?
-
-What format does your 3 bpp display use?
-
-And then something like this for the conversion function:
-
-static size_t gud_xrgb8888_to_color(u8 *dst, const struct
-drm_format_info *format,
-				    u32 *src, struct drm_framebuffer *fb,
-				    struct drm_rect *rect)
-{
-	unsigned int block_width = drm_format_info_block_width(format, 0);
-	unsigned int x, y, width, height;
-	u8 r, g, b, *block = dst; /* Assign to silence compiler warning */
-	size_t len;
-
-	WARN_ON_ONCE(format->char_per_block[0] != 1);
-
-	/* Start on a byte boundary */
-	rect->x1 = ALIGN_DOWN(rect->x1, block_width);
-	width = drm_rect_width(rect);
-	height = drm_rect_height(rect);
-	len = drm_format_info_min_pitch(format, 0, width) * height;
-
-	for (y = 0; y < height; y++) {
-		for (x = 0; x < width; x++) {
-			if (!(x % block_width)) {
-				block = dst++;
-				*block = 0;
-			}
-
-			/* r,g,b are bytes so no need to mask out anything explicitly */
-			r = *src >> 16;
-			g = *src >> 8;
-			b = *src++;
-
-			switch (format->format) {
-			case GUD_DRM_FORMAT_RG11:
-				*block <<= 2;
-				*block |= ((r >> 7) << 1) | (g >> 7);
-				break;
-			case GUD_DRM_FORMAT_RGB111_OPTION1:
-				*block <<= 3;
-				*block |= ((r >> 7) << 2) | ((g >> 7) << 1) | (b >> 7);
-				break;
-			case GUD_DRM_FORMAT_RGB111_OPTION2:
-				*block <<= 4;
-				*block |= ((r >> 7) << 2) | ((g >> 7) << 1) | (b >> 7);
-				break;
-			default:
-				WARN_ON_ONCE(1);
-				return len;
-			};
-		}
-	}
-
-	return len;
-}
-
-Noralf.
+-Doug
