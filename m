@@ -2,118 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3C53252E5
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Feb 2021 17:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B75013253A3
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Feb 2021 17:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbhBYP77 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Feb 2021 10:59:59 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:36725 "HELO
+        id S233243AbhBYQgs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Feb 2021 11:36:48 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:33529 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231843AbhBYP75 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Feb 2021 10:59:57 -0500
-Received: (qmail 1351795 invoked by uid 1000); 25 Feb 2021 10:59:14 -0500
-Date:   Thu, 25 Feb 2021 10:59:14 -0500
+        with SMTP id S233234AbhBYQgj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Feb 2021 11:36:39 -0500
+Received: (qmail 1353759 invoked by uid 1000); 25 Feb 2021 11:35:57 -0500
+Date:   Thu, 25 Feb 2021 11:35:57 -0500
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+ab02336a647181a886a6@syzkaller.appspotmail.com
-Subject: Re: [PATCH] drivers/hid: fix for the big hid report length
-Message-ID: <20210225155914.GA1350993@rowland.harvard.edu>
-References: <20210225145215.3438202-1-snovitoll@gmail.com>
+To:     Tom Yan <tom.ty89@gmail.com>, Hans de Goede <hdegoede@redhat.com>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     linux-usb <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH 2/2] usb-storage: revert from scsi_add_host_with_dma() to
+ scsi_add_host()
+Message-ID: <20210225163557.GC1350993@rowland.harvard.edu>
+References: <5e62c383-22ea-6df6-5acc-5e9f381d4632@redhat.com>
+ <CAGnHSEnetAJNqUEW-iuq7eVyU6VnP84cv9+OVL4C5Z2ZK_eM0A@mail.gmail.com>
+ <186eb035-4bc4-ff72-ee41-aeb6d81888e3@redhat.com>
+ <X8T0E2qvF2cgADl+@kroah.com>
+ <dd557c38-a919-5e5e-ab3b-17a235f17139@redhat.com>
+ <20201130172004.GA966032@rowland.harvard.edu>
+ <abb0a79d-63a0-6f3d-4812-f828283cd47c@redhat.com>
+ <CAGnHSEk1GixNK71CJMymwLE=MyedjCkiG5Ubq1=O_wFxBBM0GQ@mail.gmail.com>
+ <CAGnHSEmPpbDokAfGkeCkvo3JuYfnosVt8H+TK7ZWFNsdyWAfYQ@mail.gmail.com>
+ <20201130203618.GB975529@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210225145215.3438202-1-snovitoll@gmail.com>
+In-Reply-To: <20201130203618.GB975529@rowland.harvard.edu>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 25, 2021 at 08:52:15PM +0600, Sabyrzhan Tasbolatov wrote:
-> syzbot found WARNING in hid_alloc_report_buf[1] when the raw buffer for
-> report is kmalloc() allocated with length > KMALLOC_MAX_SIZE, causing
-> order >= MAX_ORDER condition:
-> 
-> u8 *hid_alloc_report_buf(struct hid_report *report, gfp_t flags)
-> {
-> 	/*
-> 	 * 7 extra bytes are necessary to achieve proper functionality
-> 	 * of implement() working on 8 byte chunks
-> 	 */
-> 
-> 	u32 len = hid_report_len(report) + 7;
-> 
-> 	return kmalloc(len, flags);
-> 
-> The restriction with HID_MAX_BUFFER_SIZE (16kb) is, seems, a valid max
-> limit. I've come up with this in all hid_report_len() xrefs.
-> 
-> The fix inside hid_report_len(), not in *hid_alloc_report_buf() is also
-> fixing out-of-bounds here in memcpy():
-> 
-> statc int hid_submit_ctrl(..)
-> {
-> ..
-> 	len = hid_report_len(report);
-> 	if (dir == USB_DIR_OUT) {
-> 		..
-> 		if (raw_report) {
-> 			memcpy(usbhid->ctrlbuf, raw_report, len);
-> ..
-> 
-> So I've decided to return HID_MAX_BUFFER_SIZE if it the report length is
-> bigger than limit, otherwise the return the report length.
-> 
-> [1]
-> Call Trace:
->  alloc_pages include/linux/gfp.h:547 [inline]
->  kmalloc_order+0x40/0x130 mm/slab_common.c:837
->  kmalloc_order_trace+0x15/0x70 mm/slab_common.c:853
->  kmalloc_large include/linux/slab.h:481 [inline]
->  __kmalloc+0x257/0x330 mm/slub.c:3974
->  kmalloc include/linux/slab.h:557 [inline]
->  hid_alloc_report_buf+0x70/0xa0 drivers/hid/hid-core.c:1648
->  __usbhid_submit_report drivers/hid/usbhid/hid-core.c:590 [inline]
-> 
-> Reported-by: syzbot+ab02336a647181a886a6@syzkaller.appspotmail.com
-> Signed-off-by: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-> ---
->  drivers/hid/usbhid/hid-core.c | 2 +-
->  include/linux/hid.h           | 4 +++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-> index 86257ce6d619..4e9077363c96 100644
-> --- a/drivers/hid/usbhid/hid-core.c
-> +++ b/drivers/hid/usbhid/hid-core.c
-> @@ -374,7 +374,7 @@ static int hid_submit_ctrl(struct hid_device *hid)
->  	raw_report = usbhid->ctrl[usbhid->ctrltail].raw_report;
->  	dir = usbhid->ctrl[usbhid->ctrltail].dir;
->  
-> -	len = ((report->size - 1) >> 3) + 1 + (report->id > 0);
-> +	len = hid_report_len(report);
->  	if (dir == USB_DIR_OUT) {
->  		usbhid->urbctrl->pipe = usb_sndctrlpipe(hid_to_usb_dev(hid), 0);
->  		usbhid->urbctrl->transfer_buffer_length = len;
-> diff --git a/include/linux/hid.h b/include/linux/hid.h
-> index c39d71eb1fd0..509a6ffdca00 100644
-> --- a/include/linux/hid.h
-> +++ b/include/linux/hid.h
-> @@ -1156,7 +1156,9 @@ static inline void hid_hw_wait(struct hid_device *hdev)
->  static inline u32 hid_report_len(struct hid_report *report)
->  {
->  	/* equivalent to DIV_ROUND_UP(report->size, 8) + !!(report->id > 0) */
-> -	return ((report->size - 1) >> 3) + 1 + (report->id > 0);
-> +	u32 len = ((report->size - 1) >> 3) + 1 + (report->id > 0);
-> +
-> +	return len > HID_MAX_BUFFER_SIZE ? HID_MAX_BUFFER_SIZE : len;
+This thread seems to have fallen through the cracks.  Maybe now would be 
+a good time to address the problem (since we originally planned to fix 
+it in 5.11!).
 
-Won't this cause silent errors?
-
-How about instead just rejecting any device which includes a report 
-whose length is too big (along with an line in the system log explaining 
-what's wrong)?
+The questions listed below are pretty self-contained, although the rest
+of the discussion isn't.  But I never received any answers.
 
 Alan Stern
+
+On Mon, Nov 30, 2020 at 03:36:18PM -0500, Alan Stern wrote:
+> [Added linux-scsi to CC: list.  When discussing code in a particular 
+> subsystem, it's a good idea to include that subsystem's mailing list in 
+> the CC:.]
+> 
+> On Tue, Dec 01, 2020 at 03:01:56AM +0800, Tom Yan wrote:
+> > For the record,
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/scsi/scsi_host.h?h=v5.10-rc6#n753
+> > 
+> > On Tue, 1 Dec 2020 at 02:57, Tom Yan <tom.ty89@gmail.com> wrote:
+> > >
+> > > This maybe? https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/scsi_lib.c?h=v5.10-rc6#n1816
+> > >
+> > > UAS:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/storage/uas.c?h=v5.10-rc6#n918
+> > > BOT (AFAICT):
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/hosts.c?h=v5.10-rc6#n466
+> > >
+> > > It would explain why the issue is only triggered with UAS drives.
+> 
+> In brief, a recent change -- calling scsi_add_host_with_dma rather than 
+> scsi_add_host -- in the USB uas driver has caused a regression in 
+> performance.  (Note that the shost->dma_dev value is set differently as 
+> a result of this change.)  Hans has determined that the problem seems 
+> to be related to permanent changes in the dma_dev's settings caused by 
+> scsi_add_host_with_dma.
+> 
+> Tom pointed out that __scsi_init_queue contains a couple of questionable 
+> assignments:
+> 
+> 	dma_set_seg_boundary(dev, shost->dma_boundary);
+> 
+> and
+> 
+> 	dma_set_max_seg_size(dev, queue_max_segment_size(q));
+> 
+> where dev = shost->dma_dev -- in this case, a USB host controller.
+> 
+> So an important question is why decisions related to a particular SCSI 
+> host should affect the DMA settings of a device somewhere else in the 
+> heirarchy?  Sure, the properties of the USB controller should constrain 
+> the settings available to the SCSI host, but there doesn't seem to be 
+> any good reason for restrictions to go in the other direction.
+> 
+> Doesn't the way we handle DMA permit a child device to impose additional 
+> restrictions (such as a smaller max segment size) beyond those of the 
+> parent device which actually performs the DMA transfer?
+> 
+> > > The questions (from me) are:
+> > > 1. From the scsi layer POV (as per what __scsi_init_queue() does),
+> > > what/which should we use as dma_dev?
+> 
+> We should be using the USB host controller, because it is the device 
+> which actually performs the DMA transfers.
+> 
+> > > 2. Do we really need to set dma_boundary in the UAS host template (to
+> > > PAGE_SIZE - 1)?
+> 
+> I don't know.  But in theory it should be possible to have settings 
+> (like this one) which affect only the transfers carried out by the SCSI 
+> host, not the transfers carred out by other drivers which might use the 
+> same USB controller.
+> 
+> > > 3. Kind of the same question as #1: when we clamp hw_max_sectors to
+> > > dma max mapping size, should the size actually be "the smaller one
+> > > among dev and sysdev"? Or is one of the two sizes *always* the smaller
+> > > one?
+> 
+> I assume you're referring to code in the uas driver.  There the value of 
+> dev is meaningless as far as DMA is concerned.  Only sysdev matters.
+> 
+> Alan Stern
+> 
+> > > On Tue, 1 Dec 2020 at 02:19, Hans de Goede <hdegoede@redhat.com> wrote:
+> > > >
+> > > > Hi,
+> > > >
+> > > > On 11/30/20 6:20 PM, Alan Stern wrote:
+> > > > > On Mon, Nov 30, 2020 at 02:36:38PM +0100, Hans de Goede wrote:
+> > > > >> Hi,
+> > > > >>
+> > > > >> On 11/30/20 2:30 PM, Greg KH wrote:
+> > > > >>> On Mon, Nov 30, 2020 at 02:23:48PM +0100, Hans de Goede wrote:
+> > > > >>>> Hi,
+> > > > >>>>
+> > > > >>>> On 11/30/20 1:58 PM, Tom Yan wrote:
+> > > > >>>>> It's merely a moving of comment moving for/and a no-behavioral-change
+> > > > >>>>> adaptation for the reversion.>
+> > > > >>>>
+> > > > >>>> IMHO the revert of the troublesome commit and the other/new changes really
+> > > > >>>> should be 2 separate commits. But I will let Alan and Greg have the final
+> > > > >>>> verdict on this.
+> > > > >>>
+> > > > >>> I would prefer to just revert the commits and not do anything
+> > > > >>> different/special here so late in the release cycle.
+> > > > >>>
+> > > > >>> So, if Alan agrees, I'll be glad to do them on my end, I just need the
+> > > > >>> commit ids for them.
+> > > > >>
+> > > > >> The troublesome commit are (in reverse, so revert, order):
+> > > > >>
+> > > > >> 5df7ef7d32fe ("uas: bump hw_max_sectors to 2048 blocks for SS or faster drives")
+> > > > >> 558033c2828f ("uas: fix sdev->host->dma_dev")
+> > > > >> 0154012f8018 ("usb-storage: fix sdev->host->dma_dev")
+> > > > >>
+> > > > >> Alan, the reason for reverting these is that using scsi_add_host_with_dma() as the
+> > > > >> last 2 patches do, with the dmadev argument of that call pointing to the device
+> > > > >> for the XHCI controller is causing changes to the DMA settings of the XHCI controller
+> > > > >> itself which is causing regressions in 5.10, see this email thread:
+> > > > >>
+> > > > >> https://lore.kernel.org/linux-usb/fde7e11f-5dfc-8348-c134-a21cb1116285@redhat.com/T/#t
+> > > > >
+> > > > > It's hard to go wrong with reverting, so it's okay with me.
+> > > > >
+> > > > > Still, Hans, have you checked out the difference between the
+> > > > > scsi_add_host() and scsi_add_host_with_dma() calls?  It's just a matter
+> > > > > of using dev vs. sysdev.  In particular, have you checked to see what
+> > > > > those two devices are on your system?
+> > > >
+> > > > Its not just dev vs sysdev, its iface->dev vs bus->sysdev, and I assume
+> > > > that the latter is actually the XHCI controller.
+> > > >
+> > > > my vote goes to reverting to avoid the regression for 5.10, esp. since
+> > > > this is a clean revert of 3 patches with nothing depending / building
+> > > > on top of the reverted commits.
+> > > >
+> > > > Then for 5.11 we can retry to introduce similar changes. I would be happy
+> > > > to try a new patch-set for 5.11.
+> > > >
+> > > > > It seems likely that if one of those calls messes up some DMA settings,
+> > > > > the other one does too -- just maybe not settings that matter much.
+> > > >
+> > > > I'm not very familiar with all the DMA mapping / mask code, but AFAIK making
+> > > > changes to the DMA settings of a child will not influence the parent.
+> > > >
+> > > > Where as when passing bus->sysdev, then changes are made to a device
+> > > > which is shared with other devices on the bus, which is why we see
+> > > > a regression in an USB NIC driver being triggered by the UAS driver
+> > > > binding to a device (on the same bus).
+> > > >
+> > > > At least that is my interpretation of this. I bisected the regression
+> > > > and that pointed at the UAS DMA change and reverting it fixes things,
+> > > > confirming that I did not make any mistakes during the bisect.
+> > > >
+> > > > Regards,
+> > > >
+> > > > Hans
+> > > >
