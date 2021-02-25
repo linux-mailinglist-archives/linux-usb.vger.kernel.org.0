@@ -2,157 +2,235 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18618325406
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Feb 2021 17:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A52832550D
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Feb 2021 19:01:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233956AbhBYQu7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Feb 2021 11:50:59 -0500
-Received: from z11.mailgun.us ([104.130.96.11]:17419 "EHLO z11.mailgun.us"
+        id S233902AbhBYSAy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Feb 2021 13:00:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50790 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233452AbhBYQsx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Feb 2021 11:48:53 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1614271709; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=+1ixlHj72t50Ofz0NKo88ClFGujBsx/XqwRkFyfoCTU=;
- b=VVdt6AbYh9CXqnxWcwZbnntWHq1CZW5AukSpZQj/xvaZKgORYJ9qMjd3/mZGoQ6DIZNvMXXE
- X+ishpRfs1kcLNHZXoUAD2vY7Izy/B16tjcMNWfWbohlnk65vTsJtLqsLjaVsX3xKW3065iw
- BFfyIHaHTi+ifHkQLxnH4SPw6nw=
-X-Mailgun-Sending-Ip: 104.130.96.11
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
- 6037d4b76bec4e44c65f6641 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 25 Feb 2021 16:47:51
- GMT
-Sender: kathirav=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 05D01C433ED; Thu, 25 Feb 2021 16:47:51 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: kathirav)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B6286C433C6;
-        Thu, 25 Feb 2021 16:47:49 +0000 (UTC)
+        id S230166AbhBYR7I (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Feb 2021 12:59:08 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 315EC64F17;
+        Thu, 25 Feb 2021 17:58:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614275907;
+        bh=xDZceeQA1NAlQH8JdMQwUD7m0tY3mbBOAz+whYWC4i0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cukmr9/ywxxCpfGnLqWm227fn3ZRrG5BxZIm7bUDyoTy7qYqWGFTufV8Df6DwHNc3
+         lhpNwZWfgofiaunv/2TMmkbxaK56SEpnnOTdYTt0gvysJ8OgiOcunNJtFAGfBKC+pP
+         eNH6++OxFfGJu59eRO1eQmjTy485uNDQ3tMyPgsBx2L3xAnI2+ptFETYor9Na/83Vx
+         zTAJmHCGE615l91hMoqLsa9R9fNDFHep44HBqeDHYz3ZHTZaUFwPhLF3/hVZpFWPFG
+         k2/89nISL0BQ5QTJfwbejjwELFvUViSNC8zrLVy+KxjtSmncuHdYzaiFwU5Fyef3we
+         kwM32d5/51u0g==
+Date:   Thu, 25 Feb 2021 18:58:20 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patong.mxl@gmail.com,
+        linus.walleij@linaro.org, angelo.dureghello@timesys.com
+Subject: Re: [PATCH v5 1/3] usb: serial: Add MaxLinear/Exar USB to Serial
+ driver
+Message-ID: <20210225185820.0ae38ca6@coco.lan>
+In-Reply-To: <YDPSGE5vLphfFNJn@hovoldconsulting.com>
+References: <20201122170822.21715-1-mani@kernel.org>
+        <20201122170822.21715-2-mani@kernel.org>
+        <YAlVLOqzx8otPgOg@hovoldconsulting.com>
+        <20210126154604.GC29751@thinkpad>
+        <YBBCvHvduivta07b@hovoldconsulting.com>
+        <20210222161119.0bd70a2b@coco.lan>
+        <YDPSGE5vLphfFNJn@hovoldconsulting.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Date:   Thu, 25 Feb 2021 22:17:49 +0530
-From:   Kathiravan T <kathirav@codeaurora.org>
-To:     Baruch Siach <baruch@tkos.co.il>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Balaji Prakash J <bjagadee@codeaurora.org>,
-        kathirav=codeaurora.org@codeaurora.org
-Subject: Re: [PATCH] usb: dwc3: reference clock configuration
-In-Reply-To: <e1a05b5c6bf70e62b526a7a7d70b1a12@codeaurora.org>
-References: <8fc38cb73afd31269f1ea0c28e73604c53cebb17.1612764006.git.baruch@tkos.co.il>
- <YCGCRQpqVNI2KZyi@builder.lan> <87sg64wj01.fsf@tarshish>
- <e1a05b5c6bf70e62b526a7a7d70b1a12@codeaurora.org>
-Message-ID: <e460e5afb0661b5867ee089b3efb0bc5@codeaurora.org>
-X-Sender: kathirav@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-02-15 22:28, Kathiravan T wrote:
-> On 2021-02-10 11:40, Baruch Siach wrote:
->> Hi Bjorn,
->> 
->> Thanks for your review comments.
->> 
->> On Mon, Feb 08 2021, Bjorn Andersson wrote:
->>> On Mon 08 Feb 00:00 CST 2021, Baruch Siach wrote:
->>>> From: Balaji Prakash J <bjagadee@codeaurora.org>
->>>> 
->>>> DWC_USB3_GFLADJ and DWC_USB3_GUCTL registers contain options
->>>> to control the behavior of controller with respect to SOF and ITP.
->>>> The reset values of these registers are aligned for 19.2 MHz
->>>> reference clock source. This change will add option to override
->>>> these settings for reference clock other than 19.2 MHz
->>>> 
->>>> Tested on IPQ6018 SoC based CP01 board with 24MHz reference clock.
->>>> 
->>>> Signed-off-by: Balaji Prakash J <bjagadee@codeaurora.org>
->>>> [ baruch: mention tested hardware ]
->>>> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->>>> ---
->>>>  .../devicetree/bindings/usb/dwc3.txt          |  5 ++
->>>>  drivers/usb/dwc3/core.c                       | 52 
->>>> +++++++++++++++++++
->>>>  drivers/usb/dwc3/core.h                       | 12 +++++
->>>>  3 files changed, 69 insertions(+)
->>>> 
->>>> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt 
->>>> b/Documentation/devicetree/bindings/usb/dwc3.txt
->>>> index 1aae2b6160c1..4ffa87b697dc 100644
->>>> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
->>>> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
->>>> @@ -89,6 +89,11 @@ Optional properties:
->>>>   - snps,quirk-frame-length-adjustment: Value for GFLADJ_30MHZ field 
->>>> of GFLADJ
->>>>  	register for post-silicon frame length adjustment when the
->>>>  	fladj_30mhz_sdbnd signal is invalid or incorrect.
->>>> + - snps,quirk-ref-clock-adjustment: Value for GFLADJ_REFCLK_* 
->>>> fields of GFLADJ
->>>> +	register for reference clock other than 19.2 MHz is used.
->>> 
->>> What are typical values for this property? What unit does it have? 
->>> How
->>> does it actually relate to the frequency of the reference clock?
->> 
->> Downstream codeaurora kernel (fig branch) sets 0xA87F0 for IPQ6018
->> (24MHz reference clock), and 0x49459 for IPQ5018 (60MHz). So this 
->> value
->> appears to correlates with clock rate. I have no access to DWC3
->> documentation. I only tested IPQ6018 hardware.
->> 
-> 
-> It will be written as (0xA87F0 << 7) retaining the 0-7 LSB value.
-> I could see, BIT(23) of GFLADJ register enables the functionality of
-> running SOF/ITP counters based on the reference clock. Since this bit
-> is set, we need to
-> compute the other fields as well i.e., from 8th bit to 31st bit.
-> Finally it is derived to
-> 0xA87F0 for IPQ6018.
-> 
+Em Mon, 22 Feb 2021 16:47:36 +0100
+Johan Hovold <johan@kernel.org> escreveu:
 
-Bjorn / All,
-
-Any comments on this? Please do suggest if this can be handled in a 
-better way.
-
-
+> On Mon, Feb 22, 2021 at 04:27:34PM +0100, Mauro Carvalho Chehab wrote:
+> > Hi Johan,
+> > 
+> > Em Tue, 26 Jan 2021 17:26:36 +0100
+> > Johan Hovold <johan@kernel.org> escreveu:
+> >   
+> > > On Tue, Jan 26, 2021 at 09:16:04PM +0530, Manivannan Sadhasivam wrote:  
+> > > > On Thu, Jan 21, 2021 at 11:19:24AM +0100, Johan Hovold wrote:    
+> > > > > On Sun, Nov 22, 2020 at 10:38:20PM +0530, Manivannan Sadhasivam wrote:    
+> > > > > > Add support for MaxLinear/Exar USB to Serial converters. This driver
+> > > > > > only supports XR21V141X series but it can be extended to other series
+> > > > > > from Exar as well in future.    
 > 
->>>> + - snps,quirk-ref-clock-period: Value for REFCLKPER filed of GUCTL. 
->>>> This field
->>>> +	indicates in terms of nano seconds the period of ref_clk. To 
->>>> calculate the
->>>> +	ideal value, REFCLKPER = (1/ref_clk in Hz)*10^9.
->>> 
->>> Can't we make the dwc3 reference this clock and use clk_get_rate() 
->>> and
->>> then do this math in the driver?
->> 
->> This is doable, I believe. Though current code does not identify
->> specific clocks, as far as I can see.
->> 
->> baruch
+> > I'm now facing an issue with this driver. I have here two different
+> > boards with those USB UART from MaxLinear/Exar.
+> > 
+> > The first one is identical to Mani's one:
+> > 	USB_DEVICE(0x04e2, 0x1411)
+> > The second one is a different version of it:
+> > 	USB_DEVICE(0x04e2, 0x1424)
+> > 
+> > By looking at the final driver merged at linux-next, it sounds that
+> > somewhere during the review of this series, it lost the priv struct,
+> > and the xr_probe function. It also lost support for all MaxLinear/Exar
+> > devices, except for just one model (04e2:1411).
+> > 
+> > The original submission:
+> > 
+> > 	https://lore.kernel.org/linux-usb/20180404070634.nhspvmxcjwfgjkcv@advantechmxl-desktop
+> > 
+> > And the manufacturer's Linux driver on their website:
+> > 
+> > 	https://www.maxlinear.com/support/design-tools/software-drivers
+> > 
+> > Had support for other 12 different models of the MaxLinear/Exar USB
+> > UART.   
 > 
-> We can mention one more clock(ref) in the USB device node and do the
-> math (NSEC_PER_SEC / clk_get_rate()) in dwc3 driver.
+> IIRC Manivannan only had access to one of these models and his original
+> submission (based on the patch you link to above) didn't include support
+> for the others. And keeping the type abstraction didn't make sense for
+> just one model.
+> 
+> > Those are grouped into 5 different major types:
+> > 
+> > 	+	init_xr2280x_reg_map();
+> > 	+	init_xr21b142x_reg_map();
+> > 	+	init_xr21b1411_reg_map();
+> > 	+	init_xr21v141x_reg_map();
+> > 	+
+> > 	+	if ((xrusb->DeviceProduct & 0xfff0) == 0x1400)
+> > 	+		memcpy(&(xrusb->reg_map), &xr2280x_reg_map,
+> > 	+			sizeof(struct reg_addr_map));
+> > 	+	else if ((xrusb->DeviceProduct & 0xFFF0) == 0x1420)
+> > 	+		memcpy(&(xrusb->reg_map), &xr21b142x_reg_map,
+> > 	+			sizeof(struct reg_addr_map));
+> > 	+	else if (xrusb->DeviceProduct == 0x1411)
+> > 	+		memcpy(&(xrusb->reg_map), &xr21b1411_reg_map,
+> > 	+			sizeof(struct reg_addr_map));
+> > 	+	else if ((xrusb->DeviceProduct & 0xfff0) == 0x1410)
+> > 	+		memcpy(&(xrusb->reg_map), &xr21v141x_reg_map,
+> > 	+			sizeof(struct reg_addr_map));
+> > 	+	else
+> > 	+		rv = -1;
+> > 
+> > Note: Please don't be confused by "reg_map" name. This has nothing
+> >       to do with Linux regmap API ;-)
+> > 
+> > What happens is that different USB IDs have different values for
+> > each register. So, for instance, the UART enable register is set to
+> > either one of the following values, depending on the value of
+> > udev->descriptor.idProduct:
+> > 
+> > 	xr21b140x_reg_map.uart_enable_addr = 0x00;
+> > 	xr21b1411_reg_map.uart_enable_addr = 0xc00;
+> > 	xr21v141x_reg_map.uart_enable_addr = 0x03;
+> > 	xr21b142x_reg_map.uart_enable_addr = 0x00;
+> > 
+> > There are other values that depend on the probing time detection,
+> > based on other USB descriptors. Those set several fields at the
+> > priv data that would allow to properly map the registers.
+> > 
+> > Also, there are 4 models that support multiple channels. On those,
+> > there are one pair of register get/set for each channel.
+> > 
+> > -
+> > 
+> > In summary, while supporting just 04e2:1411 there's no need for
+> > a private struct, in order to properly support the other models,
+> > some autodetection is needed. The best way of doing that is to
+> > re-add the .probe method and adding a priv struct.
+> > 
+> > As I dunno why this was dropped in the first place, I'm wondering
+> > if it would be ok to re-introduce them.  
+> 
+> Sure. It was just not needed if we were only going to support one model.
+> 
+> > To be clear: my main focus here is just to avoid needing to use 
+> > Windows in order to use the serial console of the hardware with
+> > the 0x1424 variant ;-)
+> > 
+> > I can't test the driver with the other hardware, but, IMHO, instead
+> > of adding a hack to support 0x1424, the better (but more painful)
+> > would be to re-add the auto-detection part and support for the
+> > other models.  
+> 
+> Sounds good to me. 
+
+While testing the xr_serial (as currently merged), I opted to apply
+the patches on the top of vanilla Kernel 5.11 - as it sounds too risky
+to use linux-next so early on a new development cycle :-)
+
+There, I'm getting an OOPS:
+
+	[   30.261291] BUG: kernel NULL pointer dereference, address: 00000000000000a8
+	[   30.261375] #PF: supervisor write access in kernel mode
+	[   30.261438] #PF: error_code(0x0002) - not-present page
+	[   30.261500] PGD 0 P4D 0 
+	[   30.261539] Oops: 0002 [#1] SMP PTI
+	[   30.261586] CPU: 2 PID: 686 Comm: kworker/2:3 Not tainted 5.11.0+ #14
+	[   30.261666] Hardware name:  /NUC5i7RYB, BIOS RYBDWi35.86A.0380.2019.0517.1530 05/17/2019
+	[   30.261757] Workqueue: usb_hub_wq hub_event
+	[   30.261816] RIP: 0010:mutex_lock+0x1e/0x40
+	[   30.261875] Code: c3 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 55 48 89 e5 41 54 49 89 fc e8 8d dd ff ff 31 c0 65 48 8b 14 25 c0 7b 01 00 <f0> 49 0f b1 14 24 75 04 41 5c 5d c3 4c 89 e7 e8 ae ff ff ff 41 5c
+	[   30.262076] RSP: 0018:ffffb937c0767b70 EFLAGS: 00010246
+	[   30.262140] RAX: 0000000000000000 RBX: ffff95e71ef75430 RCX: 0000000000000027
+	[   30.262223] RDX: ffff95e70597b000 RSI: 00000000ffffdfff RDI: 00000000000000a8
+	[   30.262305] RBP: ffffb937c0767b78 R08: ffff95ea76d18ac0 R09: ffffb937c0767948
+	[   30.262387] R10: 0000000000000001 R11: 0000000000000001 R12: 00000000000000a8
+	[   30.262469] R13: 0000000000000000 R14: ffff95e71ef75400 R15: 0000000000000000
+	[   30.262551] FS:  0000000000000000(0000) GS:ffff95ea76d00000(0000) knlGS:0000000000000000
+	[   30.262645] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+	[   30.262713] CR2: 00000000000000a8 CR3: 000000042be0a002 CR4: 00000000003706e0
+	[   30.262796] Call Trace:
+	[   30.262832]  usb_serial_disconnect+0x33/0x140
+	[   30.262897]  usb_unbind_interface+0x8c/0x260
+	[   30.262957]  device_release_driver_internal+0x103/0x1d0
+	[   30.263026]  device_release_driver+0x12/0x20
+	[   30.263083]  bus_remove_device+0xe1/0x150
+	[   30.263140]  device_del+0x192/0x3f0
+	[   30.263188]  ? usb_remove_ep_devs+0x1f/0x30
+	[   30.263244]  usb_disable_device+0x95/0x1c0
+	[   30.263300]  usb_disconnect+0xc0/0x270
+	[   30.263350]  hub_event+0xa2e/0x1620
+
+After adding this hack:
+
+<snip>
+--- a/drivers/usb/serial/usb-serial.c
++++ b/drivers/usb/serial/usb-serial.c
+@@ -1081,6 +1081,11 @@ static void usb_serial_disconnect(struct usb_interface *interface)
+        struct usb_serial_port *port;
+        struct tty_struct *tty;
+ 
++       if (!serial) {
++               dev_err(dev, "%s: Serial pointer is NULL!!!\n", __func__);
++               return;
++       }
++
+        usb_serial_console_disconnect(serial);
+ 
+        mutex_lock(&serial->disc_mutex);
+</snip>
+
+It works fine:
+
+	[  283.005625] xr_serial 2-1:1.1: xr_serial converter detected
+	[  283.005868] usb 2-1: xr_serial converter now attached to ttyUSB0
+	[  283.007284] printk: console [ttyUSB0] enabled
+	[  284.444419] usb 2-1: USB disconnect, device number 5
+	[  284.444520] xr_serial 2-1:1.0: usb_serial_disconnect: Serial pointer is NULL!!!
+	[  284.444894] printk: console [ttyUSB0] disabled
+	[  284.445091] xr_serial ttyUSB0: xr_serial converter now disconnected from ttyUSB0
+	[  284.445141] xr_disconnect
+	[  284.445156] xr_serial 2-1:1.1: device disconnected
+
+I'm not sure if the bug is at xr_serial or if it is inside usb-serial.c.
+
+Any ideas?
+
 
 Thanks,
-Kathiravan T.
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
-member of Code Aurora Forum, hosted by The Linux Foundation
+Mauro
