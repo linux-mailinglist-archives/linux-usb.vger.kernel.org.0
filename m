@@ -2,287 +2,593 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D290F324DDE
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Feb 2021 11:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 947D9324F58
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Feb 2021 12:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233001AbhBYKRg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Feb 2021 05:17:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55602 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234250AbhBYKPa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Feb 2021 05:15:30 -0500
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AE9C0617AA
-        for <linux-usb@vger.kernel.org>; Thu, 25 Feb 2021 02:13:39 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id c22so1707892uap.10
-        for <linux-usb@vger.kernel.org>; Thu, 25 Feb 2021 02:13:39 -0800 (PST)
+        id S234123AbhBYLmr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Feb 2021 06:42:47 -0500
+Received: from mail-bn8nam11on2070.outbound.protection.outlook.com ([40.107.236.70]:20065
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233961AbhBYLmm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Feb 2021 06:42:42 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aNCVrC+RyMf7IAEzxk8+3wPMTXnJRq2OZfsln8mngVSBYRH2FnWSVrtMN6r6v7AG7CjoMQrFebpHnBPuiASfUvalYm2aokvqTX311A+nuAJpqH6tJOSSsMMRp97ivD/Y3aJcsmH3CywdRgOJo8VMnKND8tZI+YF03TL8Lp6//tFY4zFRHnjxcpU6cpo7qVRKnqw0ZxQkmAl28LPVEK6FSi5Fa864ux9V28zOjh0zsJBI4mMwME+ygy7fTjIHFA5jD2NnB5h4XAy5lm1rSWKekcl0akKlKL/lJH9HRlsdklLCCTStH/DrlJTqDEQb80/wfcTvB76JU38Rlb1M4QkLWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZGvhhmYn52e732jEJoMHhEVXD6+Lpa4aM7SoM4JXsD0=;
+ b=VMYJXER25hggpedttipwps97QxU5zqxTjcqVSvbRVP4LgIEUaIRtDwkTr/zjPLebALXPgXuk/PksaOHzK8Yb//MH8jlwpkCR1LDoNkohO8wh0M0P6KuSFD77ZJ3pTQ51dWJqqQQAkPgFhggHlBl+ASjYJvKrHdEcfSkb1jnNjq7eKba/5e3jj4/t6+MY/lcKbDBbsPo5Q24eFiUEpcwfOkUvgehxvy5U6e4xMdMT0ZsI7LpiQkEjoKRJXtOrT/UbTnuURGdBcaI+TkX0oF5GfvHowtbINfNSDJGVnCSv281w3ptimBbjMZ08yiW0u2FkqmpnNPMfZN9go3V72WMYfw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1rwdBW0LAuJT29U18RbZg+7dDhrtIMwM8XGpp8ROhvA=;
-        b=FU6ytM8QB25u4uEGM3w/0vqufiuzVnkI06gj4bOLXkPmRSvcYJSzU5MzEMUQd0Uf3Y
-         xO6a/BnYszCWKNkC0i62ttuzeeWgCvBO4UewkIk7X6+kB2LnaIe97VC34H/Cba1HhbES
-         hkoAw1pqXkUppF3K7zV3KDfwU6oxNfbvpQTyjsN9Xc7OuYjvSl0lT4oPDOF49b2Plrhg
-         HFv/FO/IrST6F+GRW9Z/zQDWPfm7PNcr7FCTDuJM/qZuUZptF7wUQk3+lyjIswYGL+K8
-         D+RTxerH34BL1ZeXQaQA8xgpfAxaPtVDLiXm/8WdcJxsRWLVtbahz1we5RaI/WsUPNCM
-         s6eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1rwdBW0LAuJT29U18RbZg+7dDhrtIMwM8XGpp8ROhvA=;
-        b=J/032iKnddyMDf/CgqJWyohEQpfe+orzBDgQuzfxeGnGG5ywJ2QqQsEI4aeBYAbpWB
-         8yf9AgzXMsmyntji6BpHY2zL0rVMAeiygMSSkvKpjO/SoxMcFw8QPMGn5g9RVS4ZFiL7
-         2sY+Ee++eRcvFqnOlfh3NBopB0Y5JqMOVMrPEk8kjrktwrSXqthB6DxUfAYb+duRS9Or
-         dsPEgObuHRQMKqdQlSkanFP7a9a2aY0NpxlMPvYIFd3Cti4u4gpzoZbL0OBuj5BTWS/C
-         q3IQPMyIQkmhg3lu4rwaRrEoyj9dNBHybUwhEBGCMl2Q5bvItc4Ps063yVSUEnsSmBwf
-         neAQ==
-X-Gm-Message-State: AOAM532uQ/LnA8G3rxBHXMehA8b4nZP6/8dinOxuVOdGJboaJsDhRrRA
-        jDa3VDt1Emkj36+ze8nI90V4UfSXrwZavHEGKiOxZgLqNr4=
-X-Google-Smtp-Source: ABdhPJwJozf9VE/9g7E7vKLycikS7uqN3OXoyJk6oVUQSwSe8WrSJ2f9m+onS8ieEf4pWVssO6bQ8OAgvC3t7H1wL3k=
-X-Received: by 2002:ab0:1d11:: with SMTP id j17mr1144266uak.99.1614248018333;
- Thu, 25 Feb 2021 02:13:38 -0800 (PST)
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZGvhhmYn52e732jEJoMHhEVXD6+Lpa4aM7SoM4JXsD0=;
+ b=rt6Ko7sFhsfE/rwakX1t7XKQu+YhmhFS5vYK1IkPmRwOH8Jn9VZELX4lMoUhRlbOAFpJmMyz5qT+Ax/EpwfWFjiAi/W799AIgNwGTXr2kFAC8I7+YbuWC3/pZGJtDRGOzqpDknIynU1aYsJC3Y3dFGB1IyjtEWN8YE0II5+ts5Q=
+Received: from BYAPR02MB5896.namprd02.prod.outlook.com (2603:10b6:a03:122::10)
+ by BYAPR02MB5655.namprd02.prod.outlook.com (2603:10b6:a03:a0::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.33; Thu, 25 Feb
+ 2021 11:41:42 +0000
+Received: from BYAPR02MB5896.namprd02.prod.outlook.com
+ ([fe80::c4f1:e969:f8d2:20b4]) by BYAPR02MB5896.namprd02.prod.outlook.com
+ ([fe80::c4f1:e969:f8d2:20b4%3]) with mapi id 15.20.3846.049; Thu, 25 Feb 2021
+ 11:41:42 +0000
+From:   Manish Narani <MNARANI@xilinx.com>
+To:     Michael Grzeschik <mgr@pengutronix.de>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Michal Simek <michals@xilinx.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [RESEND PATCH v3 2/2] usb: dwc3: Add driver for Xilinx platforms
+Thread-Topic: [RESEND PATCH v3 2/2] usb: dwc3: Add driver for Xilinx platforms
+Thread-Index: AQHW0q9EwtT3SEPXrk68pgN7S+dn2KpkuhmAgAR2jtA=
+Date:   Thu, 25 Feb 2021 11:41:42 +0000
+Message-ID: <BYAPR02MB5896566D19BADC73FEA9A65DC19E9@BYAPR02MB5896.namprd02.prod.outlook.com>
+References: <1608015291-52007-1-git-send-email-manish.narani@xilinx.com>
+ <1608015291-52007-3-git-send-email-manish.narani@xilinx.com>
+ <20210222153105.GD4544@pengutronix.de>
+In-Reply-To: <20210222153105.GD4544@pengutronix.de>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: pengutronix.de; dkim=none (message not signed)
+ header.d=none;pengutronix.de; dmarc=none action=none header.from=xilinx.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [183.83.140.151]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: fcfb7ed1-907a-4aea-219c-08d8d9825275
+x-ms-traffictypediagnostic: BYAPR02MB5655:
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR02MB5655D7A18B0CE67619CB8B6AC19E9@BYAPR02MB5655.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 9lCYYIMjbsJlSM5VWUWp+O/DwnLrXrjcESc49HPzRRRIUbtV/DGrUPvLk36Bh6hUNqxTok57QQ4cf0CXrt/No9+DD3eoIE5DTetNqXv8SpsxJ80MI5/3LUDBlaIJmq/8CE36IxYgh5eErpDm7HL3vv3UzcmjFT8y4plW8b2KhuaYzm52i7I2bYtqmN9MDbUhEZatq0rR2TSIa9JDBzULqX2KRzUxlTXRLe++bajDnt2BY+wSp3bmM/prCZxCybr5BHHcQAUaS+SxaTANpVlpsXctbG8qUPE5uj8dIMYPQ/zp35fGlX/dVZMvz1cKtFoX2qg7GM49JR5a+qgCR58/+zJTkwEyAgwTp8cUabIWU2isgQpSwO4i5k/DXb0z3AfV3c3OIXPhE42+DXrYWfy5Ea1bEtg1znH2iMIE2pxL8bi2QfKpvx5BnuBZnuJN4UqkdjMP5TDoOpRjo78Fy9MAUHJvD5r4nXi+BHUOFX4ocFNknbRcYPEICtSdNwxwc4lYzzK0ya9JrRoJ2j8geqt/CC+cVCvhpABFs2+Gvy5ZIM7t//gQNd0mPimlx1ZgmDkP+fE3HkRreLzEarV8MjNk4cUmMN0IPBHFitD1V4/jmdm1pdHcDv+Mbf+ohMdQ3TUFm5Ke3UGAGwwj2w5ioBcMIHyF3sAxg0C0OcdIatL32wM=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR02MB5896.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(346002)(376002)(396003)(136003)(366004)(2906002)(66476007)(66946007)(66556008)(33656002)(76116006)(71200400001)(64756008)(66446008)(26005)(9686003)(83080400002)(186003)(8936002)(4326008)(55016002)(54906003)(7696005)(8676002)(966005)(7416002)(5660300002)(316002)(30864003)(83380400001)(6916009)(53546011)(44832011)(478600001)(52536014)(6506007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?3u3h1VyeejtmxpzvWOIuahKOfgg/1u0dshlfT8yOUhU8uQ8HzZtFbhSElGq9?=
+ =?us-ascii?Q?0+sXpkE0YGwCKl/tO4TaOJ2mJYwmS1Rd6Oxs1HM2UGxqKJr+H/RfNj1MW90/?=
+ =?us-ascii?Q?8Ict7i815r8eInTeeGdhoOwFBJVQAUjWCW+r7f6dZ4Pp3wvWQF419jUDu28N?=
+ =?us-ascii?Q?UYuNG9SK0dDZsxfrcYJTcBq4z6s5Tto9yrTlVGcbJ+ZKxXj3EF2/c+XFmP5x?=
+ =?us-ascii?Q?1w/HeIWSwZd9lmEExDohv56miZMFRBOxYjBPvukkgaIPd6KTjxGcZwjFZITs?=
+ =?us-ascii?Q?bEaaWMtdohl4CFwYPqaN9s15/nyw7qMrodhZt5ttq8xJR3/RgqKSJQOKIU+U?=
+ =?us-ascii?Q?vRJLZ8aMQ/cDg+YxmN7BPoOqqu9v6ICnoKuzzRat+dq7SD0r0JqP9J2g4U+6?=
+ =?us-ascii?Q?F2fwNuFqB16Ws4bLkXNjYrFbtWEbyzRomul/hcbKBsGnnzaN1QjIyhJn1GO1?=
+ =?us-ascii?Q?Lza1Utt+SUWvYs3aSvRicEvnMSEnfg2XPPRNXWBA4aZ4OYZ8s2T0gPAIE3F7?=
+ =?us-ascii?Q?PslLaguzP1KlPKui1ETz1CUAVCp99G9O/cUpvVeUmgyz822hTZV59URkDPoF?=
+ =?us-ascii?Q?E4A3GycHIssweuBZHaYwEVHouEw01uhPgELt42+YrZ7vYadZ97/QHY2XV2eK?=
+ =?us-ascii?Q?oGugpF89eJo7iQfhtj7/nc43CS0Ym/aqr2YmgPQVDwURASjFTe2a8WvVrgN1?=
+ =?us-ascii?Q?CXo9NgAXOxwUQsZPIuqnkKW5DDAgMqTddK3u5jrl/n/lZmUFjo+gRbPnqoZV?=
+ =?us-ascii?Q?7EbujKVEGu8F0rV8hHK80Y319Fp5Na8j8JYF5eIcOpep//D60h1Nb39dBT+E?=
+ =?us-ascii?Q?/PfqrhXrcmuyeq9jDMO5EjhcsUPTrvBwFUPB+PfW14AXnSXByeWH1rv13KRJ?=
+ =?us-ascii?Q?onM/9X4/qbkEl4C8pi8TyRID5ktrt/XqEJxvjmEy83P3036ilV+9lQg5P/NM?=
+ =?us-ascii?Q?5aHW05AoEtCSsXZ9z87cD4Fg/DKkxSq66ZsX3mfrTaMaUTFTbo4qBqzCoYvH?=
+ =?us-ascii?Q?L0QlpfNSt5DEfiXKTGrnDiMEU/5Gm6azdz+67q8znQ4ld7tf+ORHv7zlt4B5?=
+ =?us-ascii?Q?GGF0gP+WlRWqJ8CU9yRXyJcaC8QhU9e2YKu3GqFFeaK2MXCHdQELyEIUWm6T?=
+ =?us-ascii?Q?65EpHJL8d5faROkRoYh55FYkf2mKMPIdI9NGNmUoDc8jRZEA8mCBWqbUgpzk?=
+ =?us-ascii?Q?XYd7+FlNzkROLdVxHmQT3loz7UD50iluMTLXctVocvtp1xZckNP/6gJa2swo?=
+ =?us-ascii?Q?OHz4iRayr48hq2qvKrkfBaoJrPUCjOiV42ysM2DlcKMZfymj8H9p/Qpb0gmC?=
+ =?us-ascii?Q?AwsqNwgeXU3yzXxOvOvnrkvE?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20210219090409.325492-1-badhri@google.com> <c0fbb198-a905-cdd0-3c6e-6af484512a5b@roeck-us.net>
- <CAPTae5LMQQHkvWqcOC7D93kEJ4uJQuUu9Aq_RWTgiBfV74UC+g@mail.gmail.com>
-In-Reply-To: <CAPTae5LMQQHkvWqcOC7D93kEJ4uJQuUu9Aq_RWTgiBfV74UC+g@mail.gmail.com>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Thu, 25 Feb 2021 02:13:01 -0800
-Message-ID: <CAPTae5KHy5jfiSnfD9oNjC5Gf_-R-WWHmvRHC1KVs1WKzH4oKA@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: typec: tcpm: Wait for vbus discharge to VSAFE0V
- before toggling
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kyle Tso <kyletso@google.com>, USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR02MB5896.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fcfb7ed1-907a-4aea-219c-08d8d9825275
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Feb 2021 11:41:42.3650
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mk7WvsudkjXdg9/Dml8TzelO3JHmnWG8bp19OiVAp0IuY/xtw5vkU6VhWctRs88qzv6B35TsUMUGO+1ZKu7JaQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5655
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 24, 2021 at 9:46 PM Badhri Jagan Sridharan
-<badhri@google.com> wrote:
->
-> On Fri, Feb 19, 2021 at 7:56 AM Guenter Roeck <linux@roeck-us.net> wrote:
+HI Michael,
+
+> -----Original Message-----
+> From: Michael Grzeschik <mgr@pengutronix.de>
+> Sent: Monday, February 22, 2021 9:01 PM
+> To: Manish Narani <MNARANI@xilinx.com>
+> Cc: gregkh@linuxfoundation.org; robh+dt@kernel.org; Michal Simek
+> <michals@xilinx.com>; balbi@kernel.org; p.zabel@pengutronix.de;
+> devicetree@vger.kernel.org; linux-usb@vger.kernel.org; linux-
+> kernel@vger.kernel.org; git <git@xilinx.com>; linux-arm-
+> kernel@lists.infradead.org
+> Subject: Re: [RESEND PATCH v3 2/2] usb: dwc3: Add driver for Xilinx
+> platforms
+>=20
+> Hi Manish!
+>=20
+> On Tue, Dec 15, 2020 at 12:24:51PM +0530, Manish Narani wrote:
+> >Add a new driver for supporting Xilinx platforms. This driver is used
+> >for some sequence of operations required for Xilinx USB controllers.
+> >This driver is also used to choose between PIPE clock coming from SerDes
+> >and the Suspend Clock. Before the controller is out of reset, the clock
+> >selection should be changed to PIPE clock in order to make the USB
+> >controller work. There is a register added in Xilinx USB controller
+> >register space for the same.
 > >
-> > On 2/19/21 1:04 AM, Badhri Jagan Sridharan wrote:
-> > > When vbus auto discharge is enabled, TCPM can sometimes be faster than
-> > > the TCPC i.e. TCPM can go ahead and move the port to unattached state
-> > > (involves disabling vbus auto discharge) before TCPC could effectively
-> > > discharge vbus to VSAFE0V. This leaves vbus with residual charge and
-> > > increases the decay time which prevents tsafe0v from being met.
-> > > This change introduces a new state VBUS_DISCHARGE where the TCPM waits
-> > > for a maximum of tSafe0V(max) for vbus to discharge to VSAFE0V before
-> > > transitioning to unattached state and re-enable toggling. If vbus
-> > > discharges to vsafe0v sooner, then, transition to unattached state
-> > > happens right away.
-> > >
-> > > Also, while in SNK_READY, when auto discharge is enabled, drive
-> > > disconnect based on vbus turning off instead of Rp disappearing on
-> > > CC pins. Rp disappearing on CC pins is almost instanteous compared
-> > > to vbus decay.
-> > >
-> > > Fixes: f321a02caebd ("usb: typec: tcpm: Implement enabling Auto
-> > > Discharge disconnect support")
-> > > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > > ---
-> > > Changes since V1:
-> > > - Add Fixes tag
-> > > ---
-> > >  drivers/usb/typec/tcpm/tcpm.c | 60 +++++++++++++++++++++++++++++++----
-> > >  1 file changed, 53 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> > > index be0b6469dd3d..0ed71725980f 100644
-> > > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > > @@ -62,6 +62,8 @@
-> > >       S(SNK_TRANSITION_SINK_VBUS),            \
-> > >       S(SNK_READY),                           \
-> > >                                               \
-> > > +     S(VBUS_DISCHARGE),                      \
-> > > +                                             \
-> > >       S(ACC_UNATTACHED),                      \
-> > >       S(DEBUG_ACC_ATTACHED),                  \
-> > >       S(AUDIO_ACC_ATTACHED),                  \
-> > > @@ -438,6 +440,9 @@ struct tcpm_port {
-> > >       enum tcpm_ams next_ams;
-> > >       bool in_ams;
-> > >
-> > > +     /* Auto vbus discharge state */
-> > > +     bool auto_vbus_discharge_enabled;
-> > > +
-> > >  #ifdef CONFIG_DEBUG_FS
-> > >       struct dentry *dentry;
-> > >       struct mutex logbuffer_lock;    /* log buffer access lock */
-> > > @@ -3413,6 +3418,8 @@ static int tcpm_src_attach(struct tcpm_port *port)
-> > >       if (port->tcpc->enable_auto_vbus_discharge) {
-> > >               ret = port->tcpc->enable_auto_vbus_discharge(port->tcpc, true);
-> > >               tcpm_log_force(port, "enable vbus discharge ret:%d", ret);
-> > > +             if (!ret)
-> > > +                     port->auto_vbus_discharge_enabled = true;
-> > >       }
-> > >
-> > >       ret = tcpm_set_roles(port, true, TYPEC_SOURCE, tcpm_data_role_for_source(port));
-> > > @@ -3495,6 +3502,8 @@ static void tcpm_reset_port(struct tcpm_port *port)
-> > >       if (port->tcpc->enable_auto_vbus_discharge) {
-> > >               ret = port->tcpc->enable_auto_vbus_discharge(port->tcpc, false);
-> > >               tcpm_log_force(port, "Disable vbus discharge ret:%d", ret);
-> > > +             if (!ret)
-> > > +                     port->auto_vbus_discharge_enabled = false;
-> > >       }
-> > >       port->in_ams = false;
-> > >       port->ams = NONE_AMS;
-> > > @@ -3568,6 +3577,8 @@ static int tcpm_snk_attach(struct tcpm_port *port)
-> > >               tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_USB, false, VSAFE5V);
-> > >               ret = port->tcpc->enable_auto_vbus_discharge(port->tcpc, true);
-> > >               tcpm_log_force(port, "enable vbus discharge ret:%d", ret);
-> > > +             if (!ret)
-> > > +                     port->auto_vbus_discharge_enabled = true;
-> > >       }
-> > >
-> > >       ret = tcpm_set_roles(port, true, TYPEC_SINK, tcpm_data_role_for_sink(port));
-> > > @@ -3684,6 +3695,12 @@ static void run_state_machine(struct tcpm_port *port)
-> > >       switch (port->state) {
-> > >       case TOGGLING:
-> > >               break;
-> > > +     case VBUS_DISCHARGE:
-> > > +             if (port->port_type == TYPEC_PORT_SRC)
-> > > +                     tcpm_set_state(port, SRC_UNATTACHED, PD_T_SAFE_0V);
-> > > +             else
-> > > +                     tcpm_set_state(port, SNK_UNATTACHED, PD_T_SAFE_0V);
-> > > +             break;
-> > >       /* SRC states */
-> > >       case SRC_UNATTACHED:
-> > >               if (!port->non_pd_role_swap)
-> > > @@ -4669,7 +4686,9 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
-> > >       case SRC_READY:
-> > >               if (tcpm_port_is_disconnected(port) ||
-> > >                   !tcpm_port_is_source(port)) {
-> > > -                     if (port->port_type == TYPEC_PORT_SRC)
-> > > +                     if (port->auto_vbus_discharge_enabled && !port->vbus_vsafe0v)
-> > > +                             tcpm_set_state(port, VBUS_DISCHARGE, 0);
-> > > +                     else if (port->port_type == TYPEC_PORT_SRC)
-> > >                               tcpm_set_state(port, SRC_UNATTACHED, 0);
-> > >                       else
-> > >                               tcpm_set_state(port, SNK_UNATTACHED, 0);
+> >Signed-off-by: Manish Narani <manish.narani@xilinx.com>
+> >---
+> > drivers/usb/dwc3/Kconfig          |   9 +
+> > drivers/usb/dwc3/Makefile         |   1 +
+> > drivers/usb/dwc3/dwc3-of-simple.c |   1 -
+> > drivers/usb/dwc3/dwc3-xilinx.c    | 334
+> ++++++++++++++++++++++++++++++
+> > 4 files changed, 344 insertions(+), 1 deletion(-)
+> > create mode 100644 drivers/usb/dwc3/dwc3-xilinx.c
 > >
-> > Unless I am missing something, the new state is only used to set the
-> > PD_T_SAFE_0V timeout. Is it really necessary/useful to add a new state
-> > just for that, while keeping the rest of if/else statements ?
-> > Personally I would prefer something like
-> >                         timeout = (port->auto_vbus_discharge_enabled && !port->vbus_vsafe0v) ? PD_T_SAFE_0V : 0;
-> >                         if (port->port_type == TYPEC_PORT_SRC)
-> >                                 tcpm_set_state(port, SRC_UNATTACHED, timeout);
-> >                         else
-> >                                 tcpm_set_state(port, SNK_UNATTACHED, timeout);
+> >diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+> >index 7a2304565a73..0e00e6dfccd8 100644
+> >--- a/drivers/usb/dwc3/Kconfig
+> >+++ b/drivers/usb/dwc3/Kconfig
+> >@@ -139,4 +139,13 @@ config USB_DWC3_QCOM
+> > 	  for peripheral mode support.
+> > 	  Say 'Y' or 'M' if you have one such device.
 > >
-> Yes this should be OK as well. I was thinking  it would be more
-> clearer during debug if there
-> was a separate state altogether, but, looks like we should be fine.
-> Implementing/Validating it now. Will send a follow up version today.
+> >+config USB_DWC3_XILINX
+> >+	tristate "Xilinx Platforms"
+> >+	depends on (ARCH_ZYNQMP || ARCH_VERSAL) && OF
+> >+	default USB_DWC3
+> >+	help
+> >+	  Support Xilinx SoCs with DesignWare Core USB3 IP.
+> >+	  This driver handles both ZynqMP and Versal SoC operations.
+> >+	  Say 'Y' or 'M' if you have one such device.
+> >+
+> > endif
+> >diff --git a/drivers/usb/dwc3/Makefile b/drivers/usb/dwc3/Makefile
+> >index ae86da0dc5bd..add567578b1f 100644
+> >--- a/drivers/usb/dwc3/Makefile
+> >+++ b/drivers/usb/dwc3/Makefile
+> >@@ -51,3 +51,4 @@ obj-$(CONFIG_USB_DWC3_MESON_G12A)	+=3D
+> dwc3-meson-g12a.o
+> > obj-$(CONFIG_USB_DWC3_OF_SIMPLE)	+=3D dwc3-of-simple.o
+> > obj-$(CONFIG_USB_DWC3_ST)		+=3D dwc3-st.o
+> > obj-$(CONFIG_USB_DWC3_QCOM)		+=3D dwc3-qcom.o
+> >+obj-$(CONFIG_USB_DWC3_XILINX)		+=3D dwc3-xilinx.o
+> >diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-
+> of-simple.c
+> >index e62ecd22b3ed..71fd620c5161 100644
+> >--- a/drivers/usb/dwc3/dwc3-of-simple.c
+> >+++ b/drivers/usb/dwc3/dwc3-of-simple.c
+> >@@ -172,7 +172,6 @@ static const struct dev_pm_ops
+> dwc3_of_simple_dev_pm_ops =3D {
+> >
+> > static const struct of_device_id of_dwc3_simple_match[] =3D {
+> > 	{ .compatible =3D "rockchip,rk3399-dwc3" },
+> >-	{ .compatible =3D "xlnx,zynqmp-dwc3" },
+> > 	{ .compatible =3D "cavium,octeon-7130-usb-uctl" },
+> > 	{ .compatible =3D "sprd,sc9860-dwc3" },
+> > 	{ .compatible =3D "allwinner,sun50i-h6-dwc3" },
+> >diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-
+> xilinx.c
+> >new file mode 100644
+> >index 000000000000..7e485951d2f7
+> >--- /dev/null
+> >+++ b/drivers/usb/dwc3/dwc3-xilinx.c
+> >@@ -0,0 +1,334 @@
+> >+// SPDX-License-Identifier: GPL-2.0
+> >+/**
+> >+ * dwc3-xilinx.c - Xilinx DWC3 controller specific glue driver
+> >+ *
+> >+ * Authors: Manish Narani <manish.narani@xilinx.com>
+> >+ *          Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+> >+ */
+> >+
+> >+#include <linux/module.h>
+> >+#include <linux/kernel.h>
+> >+#include <linux/slab.h>
+> >+#include <linux/clk.h>
+> >+#include <linux/of.h>
+> >+#include <linux/platform_device.h>
+> >+#include <linux/dma-mapping.h>
+> >+#include <linux/of_platform.h>
+> >+#include <linux/pm_runtime.h>
+> >+#include <linux/reset.h>
+> >+#include <linux/of_address.h>
+> >+#include <linux/delay.h>
+> >+#include <linux/firmware/xlnx-zynqmp.h>
+> >+#include <linux/io.h>
+> >+
+> >+#include <linux/phy/phy.h>
+> >+
+> >+/* USB phy reset mask register */
+> >+#define XLNX_USB_PHY_RST_EN			0x001C
+> >+#define XLNX_PHY_RST_MASK			0x1
+> >+
+> >+/* Xilinx USB 3.0 IP Register */
+> >+#define XLNX_USB_TRAFFIC_ROUTE_CONFIG		0x005C
+> >+#define XLNX_USB_TRAFFIC_ROUTE_FPD		0x1
+> >+
+> >+/* Versal USB Reset ID */
+> >+#define VERSAL_USB_RESET_ID			0xC104036
+> >+
+> >+#define XLNX_USB_FPD_PIPE_CLK			0x7c
+> >+#define PIPE_CLK_DESELECT			1
+> >+#define PIPE_CLK_SELECT				0
+> >+#define XLNX_USB_FPD_POWER_PRSNT		0x80
+> >+#define PIPE_POWER_ON				1
+> >+#define PIPE_POWER_OFF				0
+> >+
+> >+struct dwc3_xlnx {
+> >+	int				num_clocks;
+> >+	struct clk_bulk_data		*clks;
+> >+	struct device			*dev;
+> >+	void __iomem			*regs;
+> >+	int				(*pltfm_init)(struct dwc3_xlnx *data);
+> >+};
+> >+
+> >+static void dwc3_xlnx_mask_phy_rst(struct dwc3_xlnx *priv_data, bool
+> mask)
+> >+{
+> >+	u32 reg;
+> >+
+> >+	/*
+> >+	 * Enable or disable ULPI PHY reset from USB Controller.
+> >+	 * This does not actually reset the phy, but just controls
+> >+	 * whether USB controller can or cannot reset ULPI PHY.
+> >+	 */
+> >+	reg =3D readl(priv_data->regs + XLNX_USB_PHY_RST_EN);
+> >+
+> >+	if (mask)
+> >+		reg &=3D ~XLNX_PHY_RST_MASK;
+> >+	else
+> >+		reg |=3D XLNX_PHY_RST_MASK;
+> >+
+> >+	writel(reg, priv_data->regs + XLNX_USB_PHY_RST_EN);
+> >+}
+> >+
+> >+static int dwc3_xlnx_init_versal(struct dwc3_xlnx *priv_data)
+> >+{
+> >+	struct device		*dev =3D priv_data->dev;
+> >+	int			ret;
+> >+
+> >+	dwc3_xlnx_mask_phy_rst(priv_data, false);
+> >+
+> >+	/* Assert and De-assert reset */
+> >+	ret =3D zynqmp_pm_reset_assert(VERSAL_USB_RESET_ID,
+> >+				     PM_RESET_ACTION_ASSERT);
+> >+	if (ret < 0) {
+> >+		dev_err_probe(dev, ret, "failed to assert Reset\n");
+> >+		return ret;
+> >+	}
+> >+
+> >+	ret =3D zynqmp_pm_reset_assert(VERSAL_USB_RESET_ID,
+> >+				     PM_RESET_ACTION_RELEASE);
+> >+	if (ret < 0) {
+> >+		dev_err_probe(dev, ret, "failed to De-assert Reset\n");
+> >+		return ret;
+> >+	}
+> >+
+> >+	dwc3_xlnx_mask_phy_rst(priv_data, true);
+> >+
+> >+	return 0;
+> >+}
+> >+
+> >+static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv_data)
+> >+{
+> >+	struct device		*dev =3D priv_data->dev;
+> >+	struct reset_control	*crst, *hibrst, *apbrst;
+> >+	struct phy		*usb3_phy;
+> >+	int			ret;
+> >+	u32			reg;
+> >+
+> >+	crst =3D devm_reset_control_get_exclusive(dev, "usb_crst");
+> >+	if (IS_ERR(crst)) {
+> >+		ret =3D PTR_ERR(crst);
+> >+		dev_err_probe(dev, ret,
+> >+			      "failed to get core reset signal\n");
+> >+		goto err;
+> >+	}
+> >+
+> >+	hibrst =3D devm_reset_control_get_exclusive(dev, "usb_hibrst");
+> >+	if (IS_ERR(hibrst)) {
+> >+		ret =3D PTR_ERR(hibrst);
+> >+		dev_err_probe(dev, ret,
+> >+			      "failed to get hibernation reset signal\n");
+> >+		goto err;
+> >+	}
+> >+
+> >+	apbrst =3D devm_reset_control_get_exclusive(dev, "usb_apbrst");
+> >+	if (IS_ERR(apbrst)) {
+> >+		ret =3D PTR_ERR(apbrst);
+> >+		dev_err_probe(dev, ret,
+> >+			      "failed to get APB reset signal\n");
+> >+		goto err;
+> >+	}
+> >+
+> >+	ret =3D reset_control_assert(crst);
+> >+	if (ret < 0) {
+> >+		dev_err(dev, "Failed to assert core reset\n");
+> >+		goto err;
+> >+	}
+> >+
+> >+	ret =3D reset_control_assert(hibrst);
+> >+	if (ret < 0) {
+> >+		dev_err(dev, "Failed to assert hibernation reset\n");
+> >+		goto err;
+> >+	}
+> >+
+> >+	ret =3D reset_control_assert(apbrst);
+> >+	if (ret < 0) {
+> >+		dev_err(dev, "Failed to assert APB reset\n");
+> >+		goto err;
+> >+	}
+> >+
+> >+	usb3_phy =3D devm_phy_get(dev, "usb3-phy");
+>=20
+> You should move this phy get to probe code and skip the call of
+> pltfm_init if no phy was found.
+>=20
+> As I understand this glue now, you will set an defined fixed-clock
+> frequency from dts in the ps-gtr phy. If no phy and therefor also no
+> clock is defined, the call of dwc3_xlnx_init_zynqmp can be skipped, as
+> you will not need to switch the clocks to an external lane source.
+>=20
+> For example for the host case with node option dr_mode =3D "host" set and
+> no external physical external clksrc connected, this glue still needs to
+> be used. The current version would break this case.
 
-Just sent out the V3 version of the patch.
+OK Michael. I will take care of the same in the next version of the driver.
 
+Thanks,
+Manish
 
-
->
-> > In this context, any idea why port_type==TYPEC_PORT_DRP results in
-> > SNK_UNATTACHED state ? That seems a bit odd.
->
-> This comes from the patch here:
-> https://lore.kernel.org/r/1582128343-22438-1-git-send-email-jun.li@nxp.com
->
-> Looks reasonable to me as tcpm_*_detach functions call  tcpm_detach so
-> teardown should
-> happen anyways.
->
-> static void tcpm_snk_detach(struct tcpm_port *port)
-> {
->         tcpm_detach(port);
-> }
->
->
-> static void tcpm_src_detach(struct tcpm_port *port)
-> {
->         tcpm_detach(port);
-> }
->
+>=20
 > Thanks,
-> Badhri
->
+> Michael
+>=20
+> >+	ret =3D phy_init(usb3_phy);
+> >+	if (ret < 0) {
+> >+		phy_exit(usb3_phy);
+> >+		goto err;
+> >+	}
+> >+
+> >+	ret =3D reset_control_deassert(apbrst);
+> >+	if (ret < 0) {
+> >+		dev_err(dev, "Failed to release APB reset\n");
+> >+		goto err;
+> >+	}
+> >+
+> >+	/* Set PIPE Power Present signal in FPD Power Present Register*/
+> >+	writel(PIPE_POWER_ON, priv_data->regs +
+> XLNX_USB_FPD_POWER_PRSNT);
+> >+
+> >+	/* Set the PIPE Clock Select bit in FPD PIPE Clock register */
+> >+	writel(PIPE_CLK_SELECT, priv_data->regs +
+> XLNX_USB_FPD_PIPE_CLK);
+> >+
+> >+	ret =3D reset_control_deassert(crst);
+> >+	if (ret < 0) {
+> >+		dev_err(dev, "Failed to release core reset\n");
+> >+		goto err;
+> >+	}
+> >+
+> >+	ret =3D reset_control_deassert(hibrst);
+> >+	if (ret < 0) {
+> >+		dev_err(dev, "Failed to release hibernation reset\n");
+> >+		goto err;
+> >+	}
+> >+
+> >+	ret =3D phy_power_on(usb3_phy);
+> >+	if (ret < 0) {
+> >+		phy_exit(usb3_phy);
+> >+		goto err;
+> >+	}
+> >+
+> >+	/*
+> >+	 * This routes the USB DMA traffic to go through FPD path instead
+> >+	 * of reaching DDR directly. This traffic routing is needed to
+> >+	 * make SMMU and CCI work with USB DMA.
+> >+	 */
+> >+	if (of_dma_is_coherent(dev->of_node) ||
+> device_iommu_mapped(dev)) {
+> >+		reg =3D readl(priv_data->regs +
+> XLNX_USB_TRAFFIC_ROUTE_CONFIG);
+> >+		reg |=3D XLNX_USB_TRAFFIC_ROUTE_FPD;
+> >+		writel(reg, priv_data->regs +
+> XLNX_USB_TRAFFIC_ROUTE_CONFIG);
+> >+	}
+> >+
+> >+err:
+> >+	return ret;
+> >+}
+> >+
+> >+static const struct of_device_id dwc3_xlnx_of_match[] =3D {
+> >+	{
+> >+		.compatible =3D "xlnx,zynqmp-dwc3",
+> >+		.data =3D &dwc3_xlnx_init_zynqmp,
+> >+	},
+> >+	{
+> >+		.compatible =3D "xlnx,versal-dwc3",
+> >+		.data =3D &dwc3_xlnx_init_versal,
+> >+	},
+> >+	{ /* Sentinel */ }
+> >+};
+> >+MODULE_DEVICE_TABLE(of, dwc3_xlnx_of_match);
+> >+
+> >+static int dwc3_xlnx_probe(struct platform_device *pdev)
+> >+{
+> >+	struct dwc3_xlnx		*priv_data;
+> >+	struct device			*dev =3D &pdev->dev;
+> >+	struct device_node		*np =3D dev->of_node;
+> >+	const struct of_device_id	*match;
+> >+	void __iomem			*regs;
+> >+	int				ret;
+> >+
+> >+	priv_data =3D devm_kzalloc(dev, sizeof(*priv_data), GFP_KERNEL);
+> >+	if (!priv_data)
+> >+		return -ENOMEM;
+> >+
+> >+	regs =3D devm_platform_ioremap_resource(pdev, 0);
+> >+	if (IS_ERR(regs)) {
+> >+		ret =3D PTR_ERR(regs);
+> >+		dev_err_probe(dev, ret, "failed to map registers\n");
+> >+		return ret;
+> >+	}
+> >+
+> >+	match =3D of_match_node(dwc3_xlnx_of_match, pdev->dev.of_node);
+> >+
+> >+	priv_data->pltfm_init =3D match->data;
+> >+	priv_data->regs =3D regs;
+> >+	priv_data->dev =3D dev;
+> >+
+> >+	platform_set_drvdata(pdev, priv_data);
+> >+
+> >+	ret =3D devm_clk_bulk_get_all(priv_data->dev, &priv_data->clks);
+> >+	if (ret < 0)
+> >+		return ret;
+> >+
+> >+	priv_data->num_clocks =3D ret;
+> >+
+> >+	ret =3D clk_bulk_prepare_enable(priv_data->num_clocks, priv_data-
+> >clks);
+> >+	if (ret)
+> >+		return ret;
+> >+
+> >+	ret =3D priv_data->pltfm_init(priv_data);
+> >+	if (ret)
+> >+		goto err_clk_put;
+> >+
+> >+	ret =3D of_platform_populate(np, NULL, NULL, dev);
+> >+	if (ret)
+> >+		goto err_clk_put;
+> >+
+> >+	pm_runtime_set_active(dev);
+> >+	pm_runtime_enable(dev);
+> >+	pm_suspend_ignore_children(dev, false);
+> >+	pm_runtime_get_sync(dev);
+> >+
+> >+	return 0;
+> >+
+> >+err_clk_put:
+> >+	clk_bulk_disable_unprepare(priv_data->num_clocks, priv_data-
+> >clks);
+> >+	clk_bulk_put_all(priv_data->num_clocks, priv_data->clks);
+> >+
+> >+	return ret;
+> >+}
+> >+
+> >+static int dwc3_xlnx_remove(struct platform_device *pdev)
+> >+{
+> >+	struct dwc3_xlnx	*priv_data =3D platform_get_drvdata(pdev);
+> >+	struct device		*dev =3D &pdev->dev;
+> >+
+> >+	of_platform_depopulate(dev);
+> >+
+> >+	clk_bulk_disable_unprepare(priv_data->num_clocks, priv_data-
+> >clks);
+> >+	clk_bulk_put_all(priv_data->num_clocks, priv_data->clks);
+> >+	priv_data->num_clocks =3D 0;
+> >+
+> >+	pm_runtime_disable(dev);
+> >+	pm_runtime_put_noidle(dev);
+> >+	pm_runtime_set_suspended(dev);
+> >+
+> >+	return 0;
+> >+}
+> >+
+> >+static int __maybe_unused dwc3_xlnx_suspend_common(struct device
+> *dev)
+> >+{
+> >+	struct dwc3_xlnx *priv_data =3D dev_get_drvdata(dev);
+> >+
+> >+	clk_bulk_disable(priv_data->num_clocks, priv_data->clks);
+> >+
+> >+	return 0;
+> >+}
+> >+
+> >+static int __maybe_unused dwc3_xlnx_resume_common(struct device
+> *dev)
+> >+{
+> >+	struct dwc3_xlnx *priv_data =3D dev_get_drvdata(dev);
+> >+
+> >+	return clk_bulk_enable(priv_data->num_clocks, priv_data->clks);
+> >+}
+> >+
+> >+static int __maybe_unused dwc3_xlnx_runtime_idle(struct device *dev)
+> >+{
+> >+	pm_runtime_mark_last_busy(dev);
+> >+	pm_runtime_autosuspend(dev);
+> >+
+> >+	return 0;
+> >+}
+> >+
+> >+static UNIVERSAL_DEV_PM_OPS(dwc3_xlnx_dev_pm_ops,
+> dwc3_xlnx_suspend_common,
+> >+			    dwc3_xlnx_resume_common,
+> dwc3_xlnx_runtime_idle);
+> >+
+> >+static struct platform_driver dwc3_xlnx_driver =3D {
+> >+	.probe		=3D dwc3_xlnx_probe,
+> >+	.remove		=3D dwc3_xlnx_remove,
+> >+	.driver		=3D {
+> >+		.name		=3D "dwc3-xilinx",
+> >+		.of_match_table	=3D dwc3_xlnx_of_match,
+> >+		.pm		=3D &dwc3_xlnx_dev_pm_ops,
+> >+	},
+> >+};
+> >+
+> >+module_platform_driver(dwc3_xlnx_driver);
+> >+
+> >+MODULE_LICENSE("GPL v2");
+> >+MODULE_DESCRIPTION("Xilinx DWC3 controller specific glue driver");
+> >+MODULE_AUTHOR("Manish Narani <manish.narani@xilinx.com>");
+> >+MODULE_AUTHOR("Anurag Kumar Vulisha
+> <anurag.kumar.vulisha@xilinx.com>");
+> >--
+> >2.17.1
 > >
-> > Guenter
 > >
-> > > @@ -4703,7 +4722,18 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
-> > >                       tcpm_set_state(port, SNK_DEBOUNCED, 0);
-> > >               break;
-> > >       case SNK_READY:
-> > > -             if (tcpm_port_is_disconnected(port))
-> > > +             /*
-> > > +              * When set_auto_vbus_discharge_threshold is enabled, CC pins go
-> > > +              * away before vbus decays to disconnect threshold. Allow
-> > > +              * disconnect to be driven by vbus disconnect when auto vbus
-> > > +              * discharge is enabled.
-> > > +              *
-> > > +              * EXIT condition is based primarily on vbus disconnect and CC is secondary.
-> > > +              * "A port that has entered into USB PD communications with the Source and
-> > > +              * has seen the CC voltage exceed vRd-USB may monitor the CC pin to detect
-> > > +              * cable disconnect in addition to monitoring VBUS.
-> > > +              */
-> > > +             if (!port->auto_vbus_discharge_enabled && tcpm_port_is_disconnected(port))
-> > >                       tcpm_set_state(port, unattached_state(port), 0);
-> > >               else if (!port->pd_capable &&
-> > >                        (cc1 != old_cc1 || cc2 != old_cc2))
-> > > @@ -4803,9 +4833,16 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
-> > >                */
-> > >               break;
-> > >
-> > > +     case VBUS_DISCHARGE:
-> > > +             /* Do nothing. Waiting for vsafe0v signal */
-> > > +             break;
-> > >       default:
-> > > -             if (tcpm_port_is_disconnected(port))
-> > > -                     tcpm_set_state(port, unattached_state(port), 0);
-> > > +             if (tcpm_port_is_disconnected(port)) {
-> > > +                     if (port->auto_vbus_discharge_enabled && !port->vbus_vsafe0v)
-> > > +                             tcpm_set_state(port, VBUS_DISCHARGE, 0);
-> > > +                     else
-> > > +                             tcpm_set_state(port, unattached_state(port), 0);
-> > > +             }
-> > >               break;
-> > >       }
-> > >  }
-> > > @@ -4988,9 +5025,12 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
-> > >               break;
-> > >
-> > >       default:
-> > > -             if (port->pwr_role == TYPEC_SINK &&
-> > > -                 port->attached)
-> > > -                     tcpm_set_state(port, SNK_UNATTACHED, 0);
-> > > +             if (port->pwr_role == TYPEC_SINK && port->attached) {
-> > > +                     if (port->auto_vbus_discharge_enabled && !port->vbus_vsafe0v)
-> > > +                             tcpm_set_state(port, VBUS_DISCHARGE, 0);
-> > > +                     else
-> > > +                             tcpm_set_state(port, SNK_UNATTACHED, 0);
-> > > +             }
-> > >               break;
-> > >       }
-> > >  }
-> > > @@ -5012,6 +5052,12 @@ static void _tcpm_pd_vbus_vsafe0v(struct tcpm_port *port)
-> > >                       tcpm_set_state(port, tcpm_try_snk(port) ? SNK_TRY : SRC_ATTACHED,
-> > >                                      PD_T_CC_DEBOUNCE);
-> > >               break;
-> > > +     case VBUS_DISCHARGE:
-> > > +             if (port->port_type == TYPEC_PORT_SRC)
-> > > +                     tcpm_set_state(port, SRC_UNATTACHED, 0);
-> > > +             else
-> > > +                     tcpm_set_state(port, SNK_UNATTACHED, 0);
-> > > +             break;
-> > >       default:
-> > >               break;
-> > >       }
-> > >
+> >_______________________________________________
+> >linux-arm-kernel mailing list
+> >linux-arm-kernel@lists.infradead.org
+> >http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 > >
+>=20
+> --
+> Pengutronix e.K.                           |                             =
+|
+> Steuerwalder Str. 21                       | http://www.pengutronix.de/  =
+|
+> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    =
+|
+> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 =
+|
