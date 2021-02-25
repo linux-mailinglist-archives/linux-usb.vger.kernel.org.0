@@ -2,199 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B75013253A3
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Feb 2021 17:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18618325406
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Feb 2021 17:52:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233243AbhBYQgs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Feb 2021 11:36:48 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:33529 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S233234AbhBYQgj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Feb 2021 11:36:39 -0500
-Received: (qmail 1353759 invoked by uid 1000); 25 Feb 2021 11:35:57 -0500
-Date:   Thu, 25 Feb 2021 11:35:57 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Tom Yan <tom.ty89@gmail.com>, Hans de Goede <hdegoede@redhat.com>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux-usb <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>
-Subject: Re: [PATCH 2/2] usb-storage: revert from scsi_add_host_with_dma() to
- scsi_add_host()
-Message-ID: <20210225163557.GC1350993@rowland.harvard.edu>
-References: <5e62c383-22ea-6df6-5acc-5e9f381d4632@redhat.com>
- <CAGnHSEnetAJNqUEW-iuq7eVyU6VnP84cv9+OVL4C5Z2ZK_eM0A@mail.gmail.com>
- <186eb035-4bc4-ff72-ee41-aeb6d81888e3@redhat.com>
- <X8T0E2qvF2cgADl+@kroah.com>
- <dd557c38-a919-5e5e-ab3b-17a235f17139@redhat.com>
- <20201130172004.GA966032@rowland.harvard.edu>
- <abb0a79d-63a0-6f3d-4812-f828283cd47c@redhat.com>
- <CAGnHSEk1GixNK71CJMymwLE=MyedjCkiG5Ubq1=O_wFxBBM0GQ@mail.gmail.com>
- <CAGnHSEmPpbDokAfGkeCkvo3JuYfnosVt8H+TK7ZWFNsdyWAfYQ@mail.gmail.com>
- <20201130203618.GB975529@rowland.harvard.edu>
+        id S233956AbhBYQu7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Feb 2021 11:50:59 -0500
+Received: from z11.mailgun.us ([104.130.96.11]:17419 "EHLO z11.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233452AbhBYQsx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Feb 2021 11:48:53 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1614271709; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=+1ixlHj72t50Ofz0NKo88ClFGujBsx/XqwRkFyfoCTU=;
+ b=VVdt6AbYh9CXqnxWcwZbnntWHq1CZW5AukSpZQj/xvaZKgORYJ9qMjd3/mZGoQ6DIZNvMXXE
+ X+ishpRfs1kcLNHZXoUAD2vY7Izy/B16tjcMNWfWbohlnk65vTsJtLqsLjaVsX3xKW3065iw
+ BFfyIHaHTi+ifHkQLxnH4SPw6nw=
+X-Mailgun-Sending-Ip: 104.130.96.11
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 6037d4b76bec4e44c65f6641 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 25 Feb 2021 16:47:51
+ GMT
+Sender: kathirav=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 05D01C433ED; Thu, 25 Feb 2021 16:47:51 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: kathirav)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B6286C433C6;
+        Thu, 25 Feb 2021 16:47:49 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201130203618.GB975529@rowland.harvard.edu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 25 Feb 2021 22:17:49 +0530
+From:   Kathiravan T <kathirav@codeaurora.org>
+To:     Baruch Siach <baruch@tkos.co.il>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Balaji Prakash J <bjagadee@codeaurora.org>,
+        kathirav=codeaurora.org@codeaurora.org
+Subject: Re: [PATCH] usb: dwc3: reference clock configuration
+In-Reply-To: <e1a05b5c6bf70e62b526a7a7d70b1a12@codeaurora.org>
+References: <8fc38cb73afd31269f1ea0c28e73604c53cebb17.1612764006.git.baruch@tkos.co.il>
+ <YCGCRQpqVNI2KZyi@builder.lan> <87sg64wj01.fsf@tarshish>
+ <e1a05b5c6bf70e62b526a7a7d70b1a12@codeaurora.org>
+Message-ID: <e460e5afb0661b5867ee089b3efb0bc5@codeaurora.org>
+X-Sender: kathirav@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This thread seems to have fallen through the cracks.  Maybe now would be 
-a good time to address the problem (since we originally planned to fix 
-it in 5.11!).
+On 2021-02-15 22:28, Kathiravan T wrote:
+> On 2021-02-10 11:40, Baruch Siach wrote:
+>> Hi Bjorn,
+>> 
+>> Thanks for your review comments.
+>> 
+>> On Mon, Feb 08 2021, Bjorn Andersson wrote:
+>>> On Mon 08 Feb 00:00 CST 2021, Baruch Siach wrote:
+>>>> From: Balaji Prakash J <bjagadee@codeaurora.org>
+>>>> 
+>>>> DWC_USB3_GFLADJ and DWC_USB3_GUCTL registers contain options
+>>>> to control the behavior of controller with respect to SOF and ITP.
+>>>> The reset values of these registers are aligned for 19.2 MHz
+>>>> reference clock source. This change will add option to override
+>>>> these settings for reference clock other than 19.2 MHz
+>>>> 
+>>>> Tested on IPQ6018 SoC based CP01 board with 24MHz reference clock.
+>>>> 
+>>>> Signed-off-by: Balaji Prakash J <bjagadee@codeaurora.org>
+>>>> [ baruch: mention tested hardware ]
+>>>> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>>>> ---
+>>>>  .../devicetree/bindings/usb/dwc3.txt          |  5 ++
+>>>>  drivers/usb/dwc3/core.c                       | 52 
+>>>> +++++++++++++++++++
+>>>>  drivers/usb/dwc3/core.h                       | 12 +++++
+>>>>  3 files changed, 69 insertions(+)
+>>>> 
+>>>> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt 
+>>>> b/Documentation/devicetree/bindings/usb/dwc3.txt
+>>>> index 1aae2b6160c1..4ffa87b697dc 100644
+>>>> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
+>>>> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+>>>> @@ -89,6 +89,11 @@ Optional properties:
+>>>>   - snps,quirk-frame-length-adjustment: Value for GFLADJ_30MHZ field 
+>>>> of GFLADJ
+>>>>  	register for post-silicon frame length adjustment when the
+>>>>  	fladj_30mhz_sdbnd signal is invalid or incorrect.
+>>>> + - snps,quirk-ref-clock-adjustment: Value for GFLADJ_REFCLK_* 
+>>>> fields of GFLADJ
+>>>> +	register for reference clock other than 19.2 MHz is used.
+>>> 
+>>> What are typical values for this property? What unit does it have? 
+>>> How
+>>> does it actually relate to the frequency of the reference clock?
+>> 
+>> Downstream codeaurora kernel (fig branch) sets 0xA87F0 for IPQ6018
+>> (24MHz reference clock), and 0x49459 for IPQ5018 (60MHz). So this 
+>> value
+>> appears to correlates with clock rate. I have no access to DWC3
+>> documentation. I only tested IPQ6018 hardware.
+>> 
+> 
+> It will be written as (0xA87F0 << 7) retaining the 0-7 LSB value.
+> I could see, BIT(23) of GFLADJ register enables the functionality of
+> running SOF/ITP counters based on the reference clock. Since this bit
+> is set, we need to
+> compute the other fields as well i.e., from 8th bit to 31st bit.
+> Finally it is derived to
+> 0xA87F0 for IPQ6018.
+> 
 
-The questions listed below are pretty self-contained, although the rest
-of the discussion isn't.  But I never received any answers.
+Bjorn / All,
 
-Alan Stern
+Any comments on this? Please do suggest if this can be handled in a 
+better way.
 
-On Mon, Nov 30, 2020 at 03:36:18PM -0500, Alan Stern wrote:
-> [Added linux-scsi to CC: list.  When discussing code in a particular 
-> subsystem, it's a good idea to include that subsystem's mailing list in 
-> the CC:.]
+
 > 
-> On Tue, Dec 01, 2020 at 03:01:56AM +0800, Tom Yan wrote:
-> > For the record,
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/scsi/scsi_host.h?h=v5.10-rc6#n753
-> > 
-> > On Tue, 1 Dec 2020 at 02:57, Tom Yan <tom.ty89@gmail.com> wrote:
-> > >
-> > > This maybe? https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/scsi_lib.c?h=v5.10-rc6#n1816
-> > >
-> > > UAS:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/storage/uas.c?h=v5.10-rc6#n918
-> > > BOT (AFAICT):
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/hosts.c?h=v5.10-rc6#n466
-> > >
-> > > It would explain why the issue is only triggered with UAS drives.
+>>>> + - snps,quirk-ref-clock-period: Value for REFCLKPER filed of GUCTL. 
+>>>> This field
+>>>> +	indicates in terms of nano seconds the period of ref_clk. To 
+>>>> calculate the
+>>>> +	ideal value, REFCLKPER = (1/ref_clk in Hz)*10^9.
+>>> 
+>>> Can't we make the dwc3 reference this clock and use clk_get_rate() 
+>>> and
+>>> then do this math in the driver?
+>> 
+>> This is doable, I believe. Though current code does not identify
+>> specific clocks, as far as I can see.
+>> 
+>> baruch
 > 
-> In brief, a recent change -- calling scsi_add_host_with_dma rather than 
-> scsi_add_host -- in the USB uas driver has caused a regression in 
-> performance.  (Note that the shost->dma_dev value is set differently as 
-> a result of this change.)  Hans has determined that the problem seems 
-> to be related to permanent changes in the dma_dev's settings caused by 
-> scsi_add_host_with_dma.
-> 
-> Tom pointed out that __scsi_init_queue contains a couple of questionable 
-> assignments:
-> 
-> 	dma_set_seg_boundary(dev, shost->dma_boundary);
-> 
-> and
-> 
-> 	dma_set_max_seg_size(dev, queue_max_segment_size(q));
-> 
-> where dev = shost->dma_dev -- in this case, a USB host controller.
-> 
-> So an important question is why decisions related to a particular SCSI 
-> host should affect the DMA settings of a device somewhere else in the 
-> heirarchy?  Sure, the properties of the USB controller should constrain 
-> the settings available to the SCSI host, but there doesn't seem to be 
-> any good reason for restrictions to go in the other direction.
-> 
-> Doesn't the way we handle DMA permit a child device to impose additional 
-> restrictions (such as a smaller max segment size) beyond those of the 
-> parent device which actually performs the DMA transfer?
-> 
-> > > The questions (from me) are:
-> > > 1. From the scsi layer POV (as per what __scsi_init_queue() does),
-> > > what/which should we use as dma_dev?
-> 
-> We should be using the USB host controller, because it is the device 
-> which actually performs the DMA transfers.
-> 
-> > > 2. Do we really need to set dma_boundary in the UAS host template (to
-> > > PAGE_SIZE - 1)?
-> 
-> I don't know.  But in theory it should be possible to have settings 
-> (like this one) which affect only the transfers carried out by the SCSI 
-> host, not the transfers carred out by other drivers which might use the 
-> same USB controller.
-> 
-> > > 3. Kind of the same question as #1: when we clamp hw_max_sectors to
-> > > dma max mapping size, should the size actually be "the smaller one
-> > > among dev and sysdev"? Or is one of the two sizes *always* the smaller
-> > > one?
-> 
-> I assume you're referring to code in the uas driver.  There the value of 
-> dev is meaningless as far as DMA is concerned.  Only sysdev matters.
-> 
-> Alan Stern
-> 
-> > > On Tue, 1 Dec 2020 at 02:19, Hans de Goede <hdegoede@redhat.com> wrote:
-> > > >
-> > > > Hi,
-> > > >
-> > > > On 11/30/20 6:20 PM, Alan Stern wrote:
-> > > > > On Mon, Nov 30, 2020 at 02:36:38PM +0100, Hans de Goede wrote:
-> > > > >> Hi,
-> > > > >>
-> > > > >> On 11/30/20 2:30 PM, Greg KH wrote:
-> > > > >>> On Mon, Nov 30, 2020 at 02:23:48PM +0100, Hans de Goede wrote:
-> > > > >>>> Hi,
-> > > > >>>>
-> > > > >>>> On 11/30/20 1:58 PM, Tom Yan wrote:
-> > > > >>>>> It's merely a moving of comment moving for/and a no-behavioral-change
-> > > > >>>>> adaptation for the reversion.>
-> > > > >>>>
-> > > > >>>> IMHO the revert of the troublesome commit and the other/new changes really
-> > > > >>>> should be 2 separate commits. But I will let Alan and Greg have the final
-> > > > >>>> verdict on this.
-> > > > >>>
-> > > > >>> I would prefer to just revert the commits and not do anything
-> > > > >>> different/special here so late in the release cycle.
-> > > > >>>
-> > > > >>> So, if Alan agrees, I'll be glad to do them on my end, I just need the
-> > > > >>> commit ids for them.
-> > > > >>
-> > > > >> The troublesome commit are (in reverse, so revert, order):
-> > > > >>
-> > > > >> 5df7ef7d32fe ("uas: bump hw_max_sectors to 2048 blocks for SS or faster drives")
-> > > > >> 558033c2828f ("uas: fix sdev->host->dma_dev")
-> > > > >> 0154012f8018 ("usb-storage: fix sdev->host->dma_dev")
-> > > > >>
-> > > > >> Alan, the reason for reverting these is that using scsi_add_host_with_dma() as the
-> > > > >> last 2 patches do, with the dmadev argument of that call pointing to the device
-> > > > >> for the XHCI controller is causing changes to the DMA settings of the XHCI controller
-> > > > >> itself which is causing regressions in 5.10, see this email thread:
-> > > > >>
-> > > > >> https://lore.kernel.org/linux-usb/fde7e11f-5dfc-8348-c134-a21cb1116285@redhat.com/T/#t
-> > > > >
-> > > > > It's hard to go wrong with reverting, so it's okay with me.
-> > > > >
-> > > > > Still, Hans, have you checked out the difference between the
-> > > > > scsi_add_host() and scsi_add_host_with_dma() calls?  It's just a matter
-> > > > > of using dev vs. sysdev.  In particular, have you checked to see what
-> > > > > those two devices are on your system?
-> > > >
-> > > > Its not just dev vs sysdev, its iface->dev vs bus->sysdev, and I assume
-> > > > that the latter is actually the XHCI controller.
-> > > >
-> > > > my vote goes to reverting to avoid the regression for 5.10, esp. since
-> > > > this is a clean revert of 3 patches with nothing depending / building
-> > > > on top of the reverted commits.
-> > > >
-> > > > Then for 5.11 we can retry to introduce similar changes. I would be happy
-> > > > to try a new patch-set for 5.11.
-> > > >
-> > > > > It seems likely that if one of those calls messes up some DMA settings,
-> > > > > the other one does too -- just maybe not settings that matter much.
-> > > >
-> > > > I'm not very familiar with all the DMA mapping / mask code, but AFAIK making
-> > > > changes to the DMA settings of a child will not influence the parent.
-> > > >
-> > > > Where as when passing bus->sysdev, then changes are made to a device
-> > > > which is shared with other devices on the bus, which is why we see
-> > > > a regression in an USB NIC driver being triggered by the UAS driver
-> > > > binding to a device (on the same bus).
-> > > >
-> > > > At least that is my interpretation of this. I bisected the regression
-> > > > and that pointed at the UAS DMA change and reverting it fixes things,
-> > > > confirming that I did not make any mistakes during the bisect.
-> > > >
-> > > > Regards,
-> > > >
-> > > > Hans
-> > > >
+> We can mention one more clock(ref) in the USB device node and do the
+> math (NSEC_PER_SEC / clk_get_rate()) in dwc3 driver.
+
+Thanks,
+Kathiravan T.
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
+member of Code Aurora Forum, hosted by The Linux Foundation
