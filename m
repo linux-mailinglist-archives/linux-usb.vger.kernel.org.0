@@ -2,142 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2814132475F
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Feb 2021 00:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB208324A2F
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Feb 2021 06:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235541AbhBXXJW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Feb 2021 18:09:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
+        id S234345AbhBYFZh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Feb 2021 00:25:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236007AbhBXXJV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Feb 2021 18:09:21 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EA1C06174A
-        for <linux-usb@vger.kernel.org>; Wed, 24 Feb 2021 15:08:41 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id l64so4201687oig.9
-        for <linux-usb@vger.kernel.org>; Wed, 24 Feb 2021 15:08:41 -0800 (PST)
+        with ESMTP id S234107AbhBYFYo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Feb 2021 00:24:44 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B68C061574;
+        Wed, 24 Feb 2021 21:24:04 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id f1so6738929lfu.3;
+        Wed, 24 Feb 2021 21:24:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rollanet.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Wpj+a9V2DGnr0WTvH1xhbbreuTOrd8eGzy9YprlAGH4=;
-        b=XZI8d2HAG+PXl7FXfcDlt5TQpLFgtPQetHTJfI6IpBsL/c8Rf8jUVT/rNIWvpSw/aJ
-         zd7LIOJIxH1GQTasUEOQHY+vaPowcb3zW67jkoHUr0/s1LBNkT/pGyuDKXqTLPtR7ZUq
-         QH115lVITHW2rNwKBRRvd+IbbPhAOu+Rprud4=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=yWXS2HkM8xLGWtpmEak7G4owDTjliw1WPvOt21FIkbU=;
+        b=M5ez5k7LGBR/QZvgoVygoUpkYl4gHnC4rC4JK2e4TB/yCBnajciDNauG+bknnMnBd1
+         iCAD2UsMUnaGOYrnJ+77+kCyDfqf+HKj3kqQEKgg/BHBww9YMJGtZZC7VAXVHz54U/vC
+         ZUtjGDJRmcE2WTUE1I3xpcVzpMfnEiKzO8+23lh6ZPjLXYecEq582J71jwwpG0Ea+HRq
+         pzdFEZ4eBHKP55JfMBmwabw8aCvo8K82cx53galu/l24kdMBTmddbia5pINw/fC7c8fC
+         vynwV0Vn5kAZX3KwSKBND/6HmvbeqYq2OuNVAl+7ddw2oq9lKnZEvimJncPBRrmmc1P1
+         +ynA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wpj+a9V2DGnr0WTvH1xhbbreuTOrd8eGzy9YprlAGH4=;
-        b=pECLjlrC5ecDZWr7wZ505M8dnzN+d3qwSo+KXTyl/qtaHi1szKxNFGzTBUn5K0Wamn
-         XWtras0iypkUX6EjZ/z+6nHkxmOYYOKU37eouavJOiMPi4Ng6crV6RKE6nxaDMHH1Tex
-         xQ6nk3rg9kB2Em8zm/HdJ9VhYTfhs2YlQrxzADfAwcrCAm996+gElsrOXUYVP9qaRsNg
-         O2cZXkYQKkdEufwO0G5ybpyO5NBfjROHZ3RnHSDWmGilnR14YlwnSMS3M4BQlZNoP1Hv
-         owvXK2RNLpAtPcNAWT4nhbBbVnljtG5na/VAHnkDXYsVxxMYL7MD0uLdRxvXbcM6xiWn
-         pe0g==
-X-Gm-Message-State: AOAM532g4s49DnUWfaxysHl/DeM9ottmuDR5x9hTQTWHXek+ok84SgFz
-        Rz/A3+Z2DNCdKD/0faPBWR6IjbgYxNLaD3QaSG0/mQ==
-X-Google-Smtp-Source: ABdhPJya/F7ZAHjdEhuzxI9gop64Kvg2YCTi/GZAPPQH+qO1s6iohv/sozlJb/Tenm6AHlcLKegsn5QwvcjJehxIrvg=
-X-Received: by 2002:aca:1113:: with SMTP id 19mr4277792oir.32.1614208120498;
- Wed, 24 Feb 2021 15:08:40 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=yWXS2HkM8xLGWtpmEak7G4owDTjliw1WPvOt21FIkbU=;
+        b=EawR/0YtpV1A3qFjOiN1jTRcdSHk42YIkSndwRqAP7viuaMzwBP3Av+yTkWmFEQ8Pe
+         rvOJZ+XHFYnfv3uoJMELJam1JZ8DHgHiSqhUV1W6cOh7nfpXC0e6H2eHrd5hwRRdmGyX
+         /HT/AY3Kpf63laaON2JI69LYgKhOpxusdC9JNO+t/MRvVivBhsChD+SOCg4j08EnxRRu
+         CSXVG6tmw4+fINQ9t7iVPK9JF8zSpkqcuBkAVjYRn48oz+Q64GkWbTNdTfsE0hAtsann
+         Kp/CANbE0LHjSPOB+UgNjvIlocQJvXDfIdTTbjtQMYzDSxicwJy/T9Pikq6j05AZVK+E
+         9ETg==
+X-Gm-Message-State: AOAM530OjAd9mmzoGaM4ZllG5mg4dkWPci1bNddtx85lXGHah/w9cuwW
+        kE+kKECM+qA7oyjryRisj2M=
+X-Google-Smtp-Source: ABdhPJw1tmQuThcSV+p/pyc+f+G2QaF/UdGurxwD2JSxe/gZIL0JZ3YPXIBM+FzJqvUMyrvZs1QShQ==
+X-Received: by 2002:ac2:4d99:: with SMTP id g25mr856788lfe.107.1614230642630;
+        Wed, 24 Feb 2021 21:24:02 -0800 (PST)
+Received: from [192.168.2.145] (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
+        by smtp.googlemail.com with ESMTPSA id k9sm928719ljg.59.2021.02.24.21.24.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Feb 2021 21:24:02 -0800 (PST)
+Subject: Re: [PATCH] usb: chipidea: tegra: fix flexible_array.cocci warnings
+To:     Julia Lawall <julia.lawall@inria.fr>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <Peter.Chen@nxp.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org
+References: <alpine.DEB.2.22.394.2102132108040.2720@hadrien>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <040ff9fe-ceb2-b1f8-b01f-1d71a70a1c71@gmail.com>
+Date:   Thu, 25 Feb 2021 08:24:01 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-References: <3aee5708-7961-f464-8c5f-6685d96920d6@IEEE.org>
- <dc3458f1-830b-284b-3464-20124dc3900a@IEEE.org> <YDNwxtDxd7JntAXt@hovoldconsulting.com>
- <e2dcc839-3b43-2c80-6ad1-2d97e639b46a@IEEE.org> <YDOvLseYXaUHs0lS@hovoldconsulting.com>
- <fb1489c2-b972-619b-b7ce-4ae8e1d2cc0f@IEEE.org> <YDPO/JprcDTaPmR4@hovoldconsulting.com>
- <0f9caf26-af58-13a9-9947-47bb646f505e@IEEE.org> <YDPS3AP63/PwmwJU@hovoldconsulting.com>
- <cd92ea17-4e0a-2b6c-1032-9a81727841c9@IEEE.org> <YDPgVZ4GbNq6cGDP@hovoldconsulting.com>
-In-Reply-To: <YDPgVZ4GbNq6cGDP@hovoldconsulting.com>
-From:   Joe Abbott <jabbott@rollanet.org>
-Date:   Wed, 24 Feb 2021 17:08:28 -0600
-Message-ID: <CADuz4ON8Jj5unz_eeD--7n5kp2uQmqeyM_2-DTrTFKFwFtoudw@mail.gmail.com>
-Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
-To:     Johan Hovold <johan@kernel.org>
-Cc:     "Michael G. Katzmann" <michaelk@ieee.org>,
-        charles-yeh@prolific.com.tw, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <alpine.DEB.2.22.394.2102132108040.2720@hadrien>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 22, 2021 at 10:48 AM Johan Hovold <johan@kernel.org> wrote:
+13.02.2021 23:09, Julia Lawall пишет:
+> From: kernel test robot <lkp@intel.com>
+> 
+> Zero-length and one-element arrays are deprecated, see
+> Documentation/process/deprecated.rst
+> Flexible-array members should be used instead.
+> 
+> Generated by: scripts/coccinelle/misc/flexible_array.cocci
+> 
+> Fixes: fc53d5279094 ("usb: chipidea: tegra: Support host mode")
+> CC: Peter Geis <pgwipeout@gmail.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
+> 
+> ---
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+> head:   7a1e838d0cdce7d09a0bd81d45c7b5a660e71ac7
+> commit: fc53d5279094e38e6363506339772a7021da2df8 [64/198] usb: chipidea: tegra: Support host mode
+> :::::: branch date: 19 hours ago
+> :::::: commit date: 4 weeks ago
+> 
+>  host.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- a/drivers/usb/chipidea/host.c
+> +++ b/drivers/usb/chipidea/host.c
+> @@ -32,7 +32,7 @@ struct ehci_ci_priv {
+>  struct ci_hdrc_dma_aligned_buffer {
+>  	void *kmalloc_ptr;
+>  	void *old_xfer_buffer;
+> -	u8 data[0];
+> +	u8 data[];
+>  };
+> 
+>  static int ehci_ci_portpower(struct usb_hcd *hcd, int portnum, bool enable)
+> 
 
->
-> Joe, would you mind posting the output of "lsusb -v" for your device as
-> well?
->
-Bus 007 Device 002: ID 067b:2303 Prolific Technology, Inc. PL2303 Serial Port
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass            0 (Defined at Interface level)
-  bDeviceSubClass         0
-  bDeviceProtocol         0
-  bMaxPacketSize0        64
-  idVendor           0x067b Prolific Technology, Inc.
-  idProduct          0x2303 PL2303 Serial Port
-  bcdDevice            3.00
-  iManufacturer           1 Prolific Technology Inc.
-  iProduct                2 USB-Serial Controller
-  iSerial                 0
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength           39
-    bNumInterfaces          1
-    bConfigurationValue     1
-    iConfiguration          0
-    bmAttributes         0xa0
-      (Bus Powered)
-      Remote Wakeup
-    MaxPower              100mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x000a  1x 10 bytes
-        bInterval               1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-Device Status:     0x0000
-  (Bus Powered)
-
-Also, here's the 110b windows wireshark capture
-https://drive.google.com/file/d/1HP5RMRtP11zm4uQNzqlcbILGwebDJaOz/view?usp=sharing
-
-Joe
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
