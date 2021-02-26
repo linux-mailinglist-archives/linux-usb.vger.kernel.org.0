@@ -2,68 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A52B7326720
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 19:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACF4326778
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 20:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbhBZSt6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Feb 2021 13:49:58 -0500
-Received: from xaiki.net ([108.166.209.89]:42658 "EHLO mail.xaiki.net"
+        id S229571AbhBZTgS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 26 Feb 2021 14:36:18 -0500
+Received: from mail.msweet.org ([173.255.209.91]:53066 "EHLO mail.msweet.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229949AbhBZStz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Feb 2021 13:49:55 -0500
-X-Greylist: delayed 577 seconds by postgrey-1.27 at vger.kernel.org; Fri, 26 Feb 2021 13:49:55 EST
-Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by mail.xaiki.net (Postfix) with ESMTPA id 18912EBCB;
-        Fri, 26 Feb 2021 18:39:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=evilgiggle.com;
-        s=dkim; t=1614364776;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=2S3IvyZivRinvEYg67JK//ykGifEzYQqMHzoN27TnFI=;
-        b=N7WtcGFAJurIteSoG3Ypfj4Ts4GWwbp7n13ZcBlF9CL9KlxdGfVxZzKE1CXwvoOfm0Lw65
-        pQrhTeL9VYKlQNs5FJOeRslDYoOtpkpBipYYpjsRMqIvUImv/BYyFJZoiQ4V083uTxyzHF
-        PDc9ZwsD6mTksiqiuvIjuLGf+LzmTk5xB96iW3q9YNV/moMJNXjUf7jj7p0HpUH8edhpS8
-        3lAWAPYLfVeVL6t6JwMnZiyZUhYTh1pgrlVSVW0RJZ5F//ryLTGeVUYMIiR/6z7X6ILn9p
-        Nw1yEHAw4pyTs/Qi/IpVSHXrvjqeS5FF5WfFWNdRw/bYMkwTzaDLU5DXwi9XSw==
-From:   Niv Sardi <xaiki@evilgiggle.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Niv Sardi <xaiki@evilgiggle.com>
-Subject: [PATCH fixed 1/1] USB: serial: ch341: add new Product ID
-Date:   Fri, 26 Feb 2021 15:38:36 -0300
-Message-Id: <20210226183836.20840-1-xaiki@evilgiggle.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Authentication-Results: mail.xaiki.net;
-        auth=pass smtp.auth=x@btn.sh smtp.mailfrom=xaiki@evilgiggle.com
-X-Spam-Level: ****
-X-Spamd-Bar: ++++
+        id S229545AbhBZTgR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Feb 2021 14:36:17 -0500
+X-Greylist: delayed 645 seconds by postgrey-1.27 at vger.kernel.org; Fri, 26 Feb 2021 14:36:17 EST
+Received: from [100.102.51.44] (unknown [67.69.69.155])
+        by mail.msweet.org (Postfix) with ESMTPSA id A0E0D80628;
+        Fri, 26 Feb 2021 19:24:51 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+Mime-Version: 1.0 (1.0)
+Subject: Re: proposal: move Linux userspace USB gadget projects to linux-usb GitHub organisation?
+From:   Mike Sweet <msweet@msweet.org>
+In-Reply-To: <e6e918148b817e88efff77d3366cde057924fb45.camel@bonedaddy.net>
+Date:   Fri, 26 Feb 2021 14:24:50 -0500
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Karol Lewandowski <k.lewandowsk@samsung.com>,
+        linux-usb@vger.kernel.org
+Message-Id: <DEA8D27F-3313-4457-A2F8-66B09CF392A7@msweet.org>
+References: <e6e918148b817e88efff77d3366cde057924fb45.camel@bonedaddy.net>
+To:     Paul Wise <pabs3@bonedaddy.net>
+X-Mailer: iPhone Mail (18D52)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add PID for CH340 that's found on cheap programers. They are sometimes refered to as ANU232MI like in this one:
-https://www.nordfield.com/downloads/anu232mi/ANU232MI-datasheet.pdf
+Paul, please add me (GitHub user michaelrsweet) - I’m gearing up to work on the USB gadget documentation, with a goal of having it all up-to-date with many examples. Implementing IPP-USB has been an interesting challenge and I feel like I should do something to make the next developer’s life easier...
 
-The driver works flawlessly as soon as the new PID (0x9986) is added to it.
+Sent from my iPhone
 
-Signed-off-by: Niv Sardi <xaiki@evilgiggle.com>
----
- drivers/usb/serial/ch341.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-index 28deaaec581f..f26861246f65 100644
---- a/drivers/usb/serial/ch341.c
-+++ b/drivers/usb/serial/ch341.c
-@@ -86,6 +86,7 @@ static const struct usb_device_id id_table[] = {
- 	{ USB_DEVICE(0x1a86, 0x7522) },
- 	{ USB_DEVICE(0x1a86, 0x7523) },
- 	{ USB_DEVICE(0x4348, 0x5523) },
-+	{ USB_DEVICE(0x9986, 0x7523) },
- 	{ },
- };
- MODULE_DEVICE_TABLE(usb, id_table);
--- 
-2.30.1
+> On Feb 25, 2021, at 8:28 AM, Paul Wise <pabs3@bonedaddy.net> wrote:
+> 
+> ﻿On Sun, 2021-02-14 at 10:17 +0800, Paul Wise wrote:
+> 
+>> Since the linux-usb GitHub organisation isn't yet available for
+>> collaborative maintenance of Linux userspace USB gadget projects on
+>> GitHub, we will create a linux-usb-gadgets GitHub organisation and can
+>> move gadget projects to the linux-usb org when it becomes available.
+> 
+> I have now created the linux-usb-gadgets GitHub organisation and
+> invited everyone who owns or committed to one of the relevant GitHub
+> repositories or otherwise might be interested in participating. If you
+> are one of the repository owners, please transfer it to the new org. If
+> there is anyone else interested in joining the org, please let us know.
+> 
+> https://github.com/linux-usb-gadgets
+> 
+> -- 
+> bye,
+> pabs
+> 
+> https://bonedaddy.net/pabs3/
 
