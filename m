@@ -2,25 +2,25 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A1C326002
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 10:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB68A326018
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 10:33:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbhBZJ1x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Feb 2021 04:27:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42306 "EHLO mail.kernel.org"
+        id S230164AbhBZJdP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Feb 2021 04:33:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44650 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230416AbhBZJZi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Feb 2021 04:25:38 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6AF8764F3B;
-        Fri, 26 Feb 2021 09:24:56 +0000 (UTC)
+        id S230406AbhBZJcV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Feb 2021 04:32:21 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8E99864ED5;
+        Fri, 26 Feb 2021 09:31:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1614331497;
-        bh=nCtH3BlN7/0k3eh6WNHHrnSaaqBcXlvynYDx+WKTIpk=;
+        s=korg; t=1614331900;
+        bh=CyXWD5LrZck3yEqxzTXhr0oQtIwdrRJ8pEYe2Zj1HiI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=z+2NS/Fn4NwLiTwoJaeAZgi5cQxU1K0CDXHj9oilmAUM/50cqi1ZeTLgBnfg5JUBi
-         tP8GsYhqWlM0idKm5K3D/IyK5NEjLA3UfSNhraGE+irhHp/hCu0gGJ7a2ERTzS81ML
-         wJRy1qtCmoIsViqGLAB/GUyDVrIV8UhfkjjR8VyQ=
-Date:   Fri, 26 Feb 2021 10:24:54 +0100
+        b=uj4UsTGRQ20WVGooVvPPNxZ5VOkM+Qn4Fv1jW/NMeUO+uFgXKsMny5UO6oQG+tlQ8
+         Mqyf8y9gwUDJBD/H+QhvKhI3HY7JN85UYGYBs059YEu2Ao/KT+jWSnCq0LUBwfLQYB
+         8XnD3Uwd75t0oCFyNb0vyVwxRiopM9j6n8kShlxQ=
+Date:   Fri, 26 Feb 2021 10:31:37 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Ricky Niu <rickyniu@google.com>
 Cc:     stern@rowland.harvard.edu, erosca@de.adit-jv.com,
@@ -29,7 +29,7 @@ Cc:     stern@rowland.harvard.edu, erosca@de.adit-jv.com,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] ANDROID: usb: core: Send uevent when USB TOPO layer over
  6
-Message-ID: <YDi+Zug0t6lgn+ER@kroah.com>
+Message-ID: <YDi/+TN6AYXropf7@kroah.com>
 References: <20210226091612.508639-1-rickyniu@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -60,57 +60,57 @@ On Fri, Feb 26, 2021 at 05:16:12PM +0800, Ricky Niu wrote:
 > +/* struct to notify userspace of hub events */
 > +static struct class *hub_class;
 > +static struct device *hub_device;
-> +
->  /* synchronize hub-port add/remove and peering operations */
->  DEFINE_MUTEX(usb_port_peer_mutex);
->  
-> @@ -1764,6 +1768,13 @@ static bool hub_descriptor_is_sane(struct usb_host_interface *desc)
->          return true;
->  }
->  
-> +static void hub_over_tier(void)
-> +{
-> +	char *envp[2] = { "HUB=OVERTIER", NULL };
-> +
-> +	kobject_uevent_env(&hub_device->kobj, KOBJ_CHANGE, envp);
 
-Where have you now documented this odd uevent that is never sent by
-anything else?
+Wait, how did you even test this code?  This will not work if you have
+more than one hub in the system at a single time, right?
 
-What tool will "catch" this?  Where is that code located at?
+That's going to be really rough, given here's the output of just my
+desktop system, count the number of hubs in it:rdevmgmt.msc
 
-uevents are not for stuff like this, you are trying to send "error
-conditions" to userspace, please use the "proper" interfaces like this
-and not abuse existing ones.
+$ lsusb -t
+/:  Bus 10.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 10000M
+/:  Bus 09.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 480M
+    |__ Port 5: Dev 2, If 0, Class=Wireless, Driver=btusb, 12M
+    |__ Port 5: Dev 2, If 1, Class=Wireless, Driver=btusb, 12M
+    |__ Port 6: Dev 3, If 0, Class=Hub, Driver=hub/4p, 480M
+/:  Bus 08.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 10000M
+    |__ Port 2: Dev 2, If 0, Class=Hub, Driver=hub/4p, 5000M
+    |__ Port 3: Dev 3, If 0, Class=Mass Storage, Driver=uas, 10000M
+/:  Bus 07.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 480M
+    |__ Port 2: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 2: Dev 4, If 0, Class=Hub, Driver=hub/2p, 12M
+            |__ Port 2: Dev 5, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+            |__ Port 2: Dev 5, If 1, Class=Human Interface Device, Driver=usbhid, 12M
+            |__ Port 2: Dev 5, If 2, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 5: Dev 3, If 3, Class=Audio, Driver=snd-usb-audio, 480M
+    |__ Port 5: Dev 3, If 1, Class=Audio, Driver=snd-usb-audio, 480M
+    |__ Port 5: Dev 3, If 6, Class=Audio, Driver=snd-usb-audio, 480M
+    |__ Port 5: Dev 3, If 4, Class=Audio, Driver=snd-usb-audio, 480M
+    |__ Port 5: Dev 3, If 2, Class=Audio, Driver=snd-usb-audio, 480M
+    |__ Port 5: Dev 3, If 0, Class=Audio, Driver=snd-usb-audio, 480M
+    |__ Port 5: Dev 3, If 7, Class=Human Interface Device, Driver=usbhid, 480M
+    |__ Port 5: Dev 3, If 5, Class=Audio, Driver=snd-usb-audio, 480M
+    |__ Port 6: Dev 6, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+/:  Bus 06.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/1p, 10000M/x2
+/:  Bus 05.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/1p, 480M
+/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 10000M
+    |__ Port 1: Dev 11, If 0, Class=Hub, Driver=hub/3p, 5000M
+        |__ Port 3: Dev 12, If 0, Class=Hub, Driver=hub/3p, 5000M
+            |__ Port 1: Dev 13, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
+/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 480M
+    |__ Port 1: Dev 14, If 0, Class=Hub, Driver=hub/3p, 480M
+        |__ Port 3: Dev 15, If 0, Class=Hub, Driver=hub/3p, 480M
+            |__ Port 2: Dev 17, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+            |__ Port 3: Dev 18, If 3, Class=Human Interface Device, Driver=usbhid, 12M
+            |__ Port 3: Dev 18, If 1, Class=Audio, Driver=snd-usb-audio, 12M
+            |__ Port 3: Dev 18, If 2, Class=Audio, Driver=snd-usb-audio, 12M
+            |__ Port 3: Dev 18, If 0, Class=Audio, Driver=snd-usb-audio, 12M
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 10000M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 480M
 
 
-> +}
-> +
->  static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
->  {
->  	struct usb_host_interface *desc;
-> @@ -1831,6 +1842,7 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
->  	if (hdev->level == MAX_TOPO_LEVEL) {
->  		dev_err(&intf->dev,
->  			"Unsupported bus topology: hub nested too deep\n");
-> +		hub_over_tier();
->  		return -E2BIG;
->  	}
->  
-> @@ -5680,6 +5692,13 @@ int usb_hub_init(void)
->  		return -1;
->  	}
->  
-> +	hub_class = class_create(THIS_MODULE, "usb_hub");
-> +	if (IS_ERR(hub_class))
-> +		return PTR_ERR(hub_class);
-> +
-> +	hub_device =
-> +		device_create(hub_class, NULL, MKDEV(0, 0), NULL, "usb_hub");
+So, proof that this works?  How did you test this?
 
-You just created a whole new sysfs class with no Documentation/ABI/
-update?
-
-{sigh}
+Also, you have a memory leak in this submission :(
 
 greg k-h
