@@ -2,49 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB46325D55
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 06:54:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7875325E0F
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 08:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbhBZFyg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Feb 2021 00:54:36 -0500
-Received: from verein.lst.de ([213.95.11.211]:44552 "EHLO verein.lst.de"
+        id S229537AbhBZHNS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Feb 2021 02:13:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53490 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229586AbhBZFyg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Feb 2021 00:54:36 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id EDBE568BEB; Fri, 26 Feb 2021 06:53:52 +0100 (CET)
-Date:   Fri, 26 Feb 2021 06:53:52 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Tom Yan <tom.ty89@gmail.com>, Hans de Goede <hdegoede@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>
-Subject: Re: [PATCH 2/2] usb-storage: revert from scsi_add_host_with_dma()
- to scsi_add_host()
-Message-ID: <20210226055352.GA2996@lst.de>
-References: <CAGnHSEnetAJNqUEW-iuq7eVyU6VnP84cv9+OVL4C5Z2ZK_eM0A@mail.gmail.com> <186eb035-4bc4-ff72-ee41-aeb6d81888e3@redhat.com> <X8T0E2qvF2cgADl+@kroah.com> <dd557c38-a919-5e5e-ab3b-17a235f17139@redhat.com> <20201130172004.GA966032@rowland.harvard.edu> <abb0a79d-63a0-6f3d-4812-f828283cd47c@redhat.com> <CAGnHSEk1GixNK71CJMymwLE=MyedjCkiG5Ubq1=O_wFxBBM0GQ@mail.gmail.com> <CAGnHSEmPpbDokAfGkeCkvo3JuYfnosVt8H+TK7ZWFNsdyWAfYQ@mail.gmail.com> <20201130203618.GB975529@rowland.harvard.edu> <20210225163557.GC1350993@rowland.harvard.edu>
+        id S229990AbhBZHMx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Feb 2021 02:12:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E47DE64EDC;
+        Fri, 26 Feb 2021 07:12:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1614323532;
+        bh=5QhbTMZNOiRno7ZjVt70Tu+vlYuEGqVbyD/ft/j1iYM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LIngDpq7ynZqD2HR4TM6r1X8aox5+XdTPSj/rJAHdo9Q+Kh0yiDeDqk05zJ1lDj1z
+         dZEkK5sGDchDVJelVbE4Z//HbzfBIiuJlcTUuQshMNQSKdgn2Sv97AhwA+GU5vauS+
+         MJbJlkh3LTt8+qAnplfskx//XlZku+TTKEtuY5fA=
+Date:   Fri, 26 Feb 2021 08:12:09 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     x@btn.sh
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: ch341: add new Product ID
+Message-ID: <YDifSUcS4CYd8e2s@kroah.com>
+References: <0562cd59f06031d676dd314dbada7371@btn.sh>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210225163557.GC1350993@rowland.harvard.edu>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <0562cd59f06031d676dd314dbada7371@btn.sh>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 25, 2021 at 11:35:57AM -0500, Alan Stern wrote:
-> This thread seems to have fallen through the cracks.  Maybe now would be 
-> a good time to address the problem (since we originally planned to fix 
-> it in 5.11!).
+On Thu, Feb 25, 2021 at 07:33:14PM +0000, x@btn.sh wrote:
+> Add PID for CH340 that's found on cheap programers. They are sometimes refered to as ANU232MI like
+> in this one:
+> https://www.nordfield.com/downloads/anu232mi/ANU232MI-datasheet.pdf
 > 
-> The questions listed below are pretty self-contained, although the rest
-> of the discussion isn't.  But I never received any answers.
+> The driver works flawlessly as soon as the new PID (0x9986) is added to it.
+> 
+> Signed-off-by: Niv Sardi <xaiki@evilgiggle.com>
 
-usb-storage must use scsi_add_host_with_dma to use the right device
-for DMA mapping and parameters.  The calls to set the DMA options
-on the device are needed so that IOMMU merging doesn't change the
-imposed requirements.  If these requirements slow you down you need
-to relax them, as apparently the hardware is able to handle bigger
-limits.
+This name doesn't match your "From:" line in your email :(
+
+> ---
+> drivers/usb/serial/ch341.c | 1 +
+> 1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+> index 28deaaec581f..f26861246f65 100644
+> --- a/drivers/usb/serial/ch341.c
+> +++ b/drivers/usb/serial/ch341.c
+> @@ -86,6 +86,7 @@ static const struct usb_device_id id_table[] = {
+> { USB_DEVICE(0x1a86, 0x7522) },
+> { USB_DEVICE(0x1a86, 0x7523) },
+> { USB_DEVICE(0x4348, 0x5523) },
+> + { USB_DEVICE(0x9986, 0x7523) },
+> { },
+> };
+> MODULE_DEVICE_TABLE(usb, id_table);
+
+Your patch is corrupted and can not be applied :(
+
+Please fix up your email client and try again.
+
+thanks,
+
+greg k-h
