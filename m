@@ -2,68 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 109B4325A97
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 01:11:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A35E325B5F
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 02:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbhBZALQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Feb 2021 19:11:16 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:63152 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbhBZALQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Feb 2021 19:11:16 -0500
-Received: from fsav301.sakura.ne.jp (fsav301.sakura.ne.jp [153.120.85.132])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 11Q0AXsq010767;
-        Fri, 26 Feb 2021 09:10:33 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav301.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav301.sakura.ne.jp);
- Fri, 26 Feb 2021 09:10:33 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav301.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 11Q0AXQ9010763
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 26 Feb 2021 09:10:33 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [PATCH v3] usb: usbip: serialize attach/detach operations
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org,
-        Julia Lawall <julia.lawall@inria.fr>,
-        The kernel test robot <lkp@intel.com>
-References: <YDCzLfhawx4u28dd@kroah.com>
- <20210223015907.3506-1-penguin-kernel@I-love.SAKURA.ne.jp>
- <95d1398b-6b95-2da4-43f7-7a6b0c87c4f8@linuxfoundation.org>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <53dfc860-e118-4aac-8afd-80ea3fa2f4ce@i-love.sakura.ne.jp>
-Date:   Fri, 26 Feb 2021 09:10:30 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S229571AbhBZBob (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Feb 2021 20:44:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37910 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229498AbhBZBo3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Feb 2021 20:44:29 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 51B0464EE3
+        for <linux-usb@vger.kernel.org>; Fri, 26 Feb 2021 01:43:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614303829;
+        bh=/xHtpymWyb01V0tdbQ7A4NZn8pwFjnEJRN9iAzrrUBc=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=atkVl0tX36yxZA2PwVo4DtiElWf5wPrKxHOha3Or6TbnA71FHM1kSAjE1qoi4aDdS
+         b41ApAONmoaiO+TRo61OC1csuBbrCXaW6uJwVa0AEDEsxHx/75yrlCWOeLLf98vv8a
+         4qDcGM0Xz2H5sJ3ZCaiRDlr5zMnyFdQnx3Zpap+cEK/MDi+wZjDUMLkVvfIOAYhbd7
+         BEpRw96Ctaxw8QUztSSmMdyGOTipMiLv+g14tCR9aONnXjHP6vhbXBUrg6wiabeodV
+         Thz1W4m9yc8wD6nVzuDjuuju+3KZiSvMm+qOH8Gj5eo8vx20ghNE9GA2ZZFSxbtesn
+         KLszXVHiFnbRA==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 3D19361490; Fri, 26 Feb 2021 01:43:49 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 209555] dwc2 driver stops working after sudden disconnect
+Date:   Fri, 26 Feb 2021 01:43:49 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: tomasz@grobelny.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-209555-208809-GX7U73deTj@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-209555-208809@https.bugzilla.kernel.org/>
+References: <bug-209555-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <95d1398b-6b95-2da4-43f7-7a6b0c87c4f8@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/02/26 9:00, Shuah Khan wrote:
-> This patch makes changes to 3 different drivers. Please split these
-> patches. Makes it easier to revert or fix them.
-> 
-> Patch1 could add common routines and use them in stud_dev and vudc
-> Same for usbip_event_lock_killable() and usbip_event_unlock().
-> Introduce them in a separate patch.
-> 
-> __usbip_sockfd_store() could be made common to stub_dev and vudc
-> similar to usbip_prepare_threads() and usbip_unprepare_threads()
-> 
-> It will lot easier to review if this large patch is split into
-> smaller patches.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D209555
 
-Then, can we apply
-https://lkml.kernel.org/r/20210205135707.4574-1-penguin-kernel@I-love.SAKURA.ne.jp
-as the first patch? It is very easy to review and apply and backport to stable.
+--- Comment #5 from Tomasz Grobelny (tomasz@grobelny.net) ---
+Any news about this one?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
