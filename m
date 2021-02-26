@@ -2,121 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F056332619E
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 11:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6A6326254
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 13:10:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbhBZK6R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Feb 2021 05:58:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59620 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229556AbhBZK6P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Feb 2021 05:58:15 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3816964EE1;
-        Fri, 26 Feb 2021 10:57:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614337055;
-        bh=00rc4RUiQWZ4q7RnENrzGetH5T02eUu9IMxTo8Kdgjc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hhWtCujebkitKYQm4YIa58nOtrACAyc9BbCc1w2h0yDcL2d13EEzOFfpAIFu4dIRw
-         FTJlZH7w2jAFCIEnHlCPMV8sdAkEilYJOHZbA3tbIcOabDiOW36q0MwSOqMeUvL1hO
-         i+LNzo/q1Cr7iVXU+KNY/pSInllfNGhY2RXyuy6SJptZmngwN5Ry7kxYim0eKGsMAp
-         8t9t5akqw8O75pi/Mofs/2GKA0BunbsUssMKq3riNLxwoEKxDSqKnV6yoVxtmXHC4o
-         BY/aikGhGgLfPYgjfXhk45kfODtG9UaE3eti+sPXoanpqfNFHJXS0KWp/rSm8K9msU
-         wQne/sl5YNdqw==
-Date:   Fri, 26 Feb 2021 16:27:29 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: xr: fix NULL-deref on disconnect
-Message-ID: <20210226105729.GA7069@work>
-References: <20210226100826.18987-1-johan@kernel.org>
+        id S229545AbhBZMKR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Feb 2021 07:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229526AbhBZMKR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Feb 2021 07:10:17 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3D6C061574
+        for <linux-usb@vger.kernel.org>; Fri, 26 Feb 2021 04:09:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:References:Cc:To:From:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=069mkm7tqItUG64Ib7wUtneTZFgWoa3IFZJXAvEdDLw=; b=dLfKwVJh7zQUEaYCNBkkubHqqr
+        ktYyAfOJhtunI4nYnifVe4V5LgzTWkZeQujkEhMpOcxOyUh5aL2E9H4UNKk5yz3bzJKG/KAgB0djH
+        3T4oB1NeEpJDYReVt0iDNm4AY8cqyt4TF1ePmSlTA/kJ+aovs8QSAOIGx1o2/57qoWw0+zlZZse2R
+        vsg4BPJbhQc5PojOwsbvPt0/FdWRe4TuAC1HzrULRL1qzWYkNNDW6mkAjFHUJ7DUZk6SgXn4ZiwDp
+        M41saTuaKFIz575OJcR6ILGnZxsWyH0uG/6vV2+dRrWxObfNjPfHScffIPcTsmFrcM8/+OQpu+kZl
+        0PkEbyig==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:65161 helo=[192.168.10.61])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1lFbvr-0007hf-M6; Fri, 26 Feb 2021 13:09:19 +0100
+Subject: Re: [PATCH v6 3/3] drm: Add GUD USB Display driver
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+To:     Peter Stuge <peter@stuge.se>
+Cc:     hudson@trmm.net, markus@raatikainen.cc,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
+        sam@ravnborg.org
+References: <20210219121702.50964-1-noralf@tronnes.org>
+ <20210219121702.50964-4-noralf@tronnes.org>
+ <20210219214243.11330.qmail@stuge.se>
+ <5c00a868-3a2f-438b-3670-ee86caef4d2a@tronnes.org>
+Message-ID: <3ee3fad6-61be-b848-a68f-df7c2e0001f9@tronnes.org>
+Date:   Fri, 26 Feb 2021 13:09:15 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210226100826.18987-1-johan@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <5c00a868-3a2f-438b-3670-ee86caef4d2a@tronnes.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 26, 2021 at 11:08:26AM +0100, Johan Hovold wrote:
-> Claiming the sibling control interface is a bit more involved and
-> specifically requires adding support to USB-serial core for managing
-> either interface being unbound first, something which could otherwise
-> lead to a NULL-pointer dereference.
-> 
-> Similarly, additional infrastructure is also needed to handle suspend
-> properly.
-> 
-> Since the driver currently isn't actually using the control interface,
-> we can defer this for now by simply not claiming the control interface.
-> 
-> Fixes: c2d405aa86b4 ("USB: serial: add MaxLinear/Exar USB to Serial driver")
-> Reported-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> Cc: Manivannan Sadhasivam <mani@kernel.org>
-> Signed-off-by: Johan Hovold <johan@kernel.org>
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
 
-Thanks,
-Mani
+Den 20.02.2021 18.27, skrev Noralf Trønnes:
+> 
+> 
+> Den 19.02.2021 22.42, skrev Peter Stuge:
 
-> ---
->  drivers/usb/serial/xr_serial.c | 25 -------------------------
->  1 file changed, 25 deletions(-)
+>>
+>> More generally it's not very typical in USB to report the data size
+>> separately from the data itself, if reporting size explicitly at all.
+>>
+>> Sizes can be part of the data structure itself (like in descriptors) but
+>> on the application layer (like here) it's convenient to just decide a
+>> sensible fixed maximum size and let the host try to always transfer
+>> that size while accepting short transfers. Unlike read() a short
+>> transfer only ever happens if and when a device intends for it,
+>> so that's like an in-band handshake but "for free".
+>>
+>> Oh, and does/should the GUD EDID change if the panel "behind" the device
+>> CPU on a hotpluggable connector changes? It wouldn't be great to require
+>> GUD driver reprobe in that case. But maybe DRM requires that anyway?
+>>
 > 
-> diff --git a/drivers/usb/serial/xr_serial.c b/drivers/usb/serial/xr_serial.c
-> index 483d07dee19d..0ca04906da4b 100644
-> --- a/drivers/usb/serial/xr_serial.c
-> +++ b/drivers/usb/serial/xr_serial.c
-> @@ -545,37 +545,13 @@ static void xr_close(struct usb_serial_port *port)
->  
->  static int xr_probe(struct usb_serial *serial, const struct usb_device_id *id)
->  {
-> -	struct usb_driver *driver = serial->type->usb_driver;
-> -	struct usb_interface *control_interface;
-> -	int ret;
-> -
->  	/* Don't bind to control interface */
->  	if (serial->interface->cur_altsetting->desc.bInterfaceNumber == 0)
->  		return -ENODEV;
->  
-> -	/* But claim the control interface during data interface probe */
-> -	control_interface = usb_ifnum_to_if(serial->dev, 0);
-> -	if (!control_interface)
-> -		return -ENODEV;
-> -
-> -	ret = usb_driver_claim_interface(driver, control_interface, NULL);
-> -	if (ret) {
-> -		dev_err(&serial->interface->dev, "Failed to claim control interface\n");
-> -		return ret;
-> -	}
-> -
->  	return 0;
->  }
->  
-> -static void xr_disconnect(struct usb_serial *serial)
-> -{
-> -	struct usb_driver *driver = serial->type->usb_driver;
-> -	struct usb_interface *control_interface;
-> -
-> -	control_interface = usb_ifnum_to_if(serial->dev, 0);
-> -	usb_driver_release_interface(driver, control_interface);
-> -}
-> -
->  static const struct usb_device_id id_table[] = {
->  	{ USB_DEVICE(0x04e2, 0x1410) }, /* XR21V141X */
->  	{ }
-> @@ -590,7 +566,6 @@ static struct usb_serial_driver xr_device = {
->  	.id_table		= id_table,
->  	.num_ports		= 1,
->  	.probe			= xr_probe,
-> -	.disconnect		= xr_disconnect,
->  	.open			= xr_open,
->  	.close			= xr_close,
->  	.break_ctl		= xr_break_ctl,
-> -- 
-> 2.26.2
+> If gud_connector_status_req.status has changed since last poll or
+> GUD_CONNECTOR_STATUS_CHANGED is set, DRM will notify userspace which
+> will reprobe the connector. connector->epoch_counter++ in
+> gud_connector_status_request() triggers that.
 > 
+>>
+>> I'm sorry I didn't spot this pattern earlier, I understand that it's late
+>> in the game and that changing it needs the gadget to change as well, but I
+>> do really think this is a worthwhile change throughout the protocol.
+>>
+> 
+> I see what you mean, I'll give it a try.
+> 
+
+Peter, please have a look at this diff and see if I'm on the right track
+here: https://gist.github.com/notro/a43a93a3aa0cc75d930890b7b254fc0a
+
+I want to avoid waisting a patch version cycle by being way off.
+
+Noralf.
