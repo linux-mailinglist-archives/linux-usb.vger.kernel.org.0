@@ -2,61 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB333262C5
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 13:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9D132634F
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 14:30:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbhBZMdk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Feb 2021 07:33:40 -0500
-Received: from server.atrad.com.au ([150.101.241.2]:35540 "EHLO
-        server.atrad.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbhBZMdj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Feb 2021 07:33:39 -0500
-Received: from marvin.atrad.com.au (IDENT:1008@marvin.atrad.com.au [192.168.0.2])
-        by server.atrad.com.au (8.15.2/8.15.2) with ESMTPS id 11QCWX3F003084
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 26 Feb 2021 23:02:34 +1030
-Date:   Fri, 26 Feb 2021 23:02:33 +1030
-From:   Jonathan Woithe <jwoithe@just42.net>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     linux-usb@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: Samsung T5 500 GB USB3.1 SSD fails with ASMedia ASM1142, 250 GB
- version works
-Message-ID: <20210226123232.GA26589@marvin.atrad.com.au>
-References: <20210219102218.GA29156@marvin.atrad.com.au>
- <cdb0ab8e14de5f93dfae2164f18d9d1703b3fc36.camel@suse.com>
- <20210222111707.GA26487@marvin.atrad.com.au>
+        id S230041AbhBZN3Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Feb 2021 08:29:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53012 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229886AbhBZN3S (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Feb 2021 08:29:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4873F64F03;
+        Fri, 26 Feb 2021 13:28:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614346117;
+        bh=kFtDE0hhRB3jqoqlNzIz1b+FRsGJSaHnpl8grjpv4OM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=G9PLcAvUfrIZyYu9DiM6E3kapgitVkf2Sd932NaAmV793P/IwYcDgEPmMGHf5JxdX
+         8qLqD9dLEf57P4/BByUKBjD4NiRXSc9X5A88bVbd/hFgX7LmhtZxIGO49zQXpLv9B7
+         nFAY36LiBN8aUUaveSSnKstR8HSkEy9u+mIhYX3B208XdqmhJqwpXmuMpBWKNxywcU
+         HAWQEwHCQWT3pqxWfVayeWfYq0dOWlUP/oEnubHzZCZ6j8V8M3MHQ3sQlBt2pCo8G1
+         12DEKRZdxfKhwAkgE7AeiBa9yandFEWuBDt1j/55++mh7SZCTazLIYstLV/x0Rmz11
+         kMLueMMZW45Kg==
+Received: by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1lFdAY-002nbo-GZ; Fri, 26 Feb 2021 14:28:34 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 0/7] Add support for the other MaxLinear/Exar UARTs
+Date:   Fri, 26 Feb 2021 14:28:26 +0100
+Message-Id: <cover.1614345081.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210222111707.GA26487@marvin.atrad.com.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-MIMEDefang-action: accept
-X-Scanned-By: MIMEDefang 2.79 on 192.168.0.1
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 22, 2021 at 09:47:07PM +1030, Jonathan Woithe wrote:
-> On Mon, Feb 22, 2021 at 11:24:18AM +0100, Oliver Neukum wrote:
-> > It is possible that the other machine can just supply more power.
-> 
-> On the machine with the ASMedia controller (where the problem occurs), the
-> 500 GB SSD works perfectly well when connected to USB2 sockets.  If a USB2
-> socket can supply sufficient power, wouldn't a USB3 port be more than
-> capable?
-> 
-> The specifications for both the 250 GB (working) and 500 GB (not working)
-> are 5V at 0.8A.  I'm guessing this is a worst-case scenario.  In any case,
-> this is well within the capabilities of a USB3 port.  If there was a power
-> issue with one of these drives it's surprising it's not seen in both -
-> unless the 250 GB is just under the critical power threshold and the 500 GB
-> is just above it.  Is there an easy way to tell if this is indeed the case?
+The current version of the xr_serial driver handles one one of the several
+MaxLinear/Exar UARTs and UART bridges. There are currently 12 such
+models. Only one is currently supported.
 
-Another datapoint: on the system with the ASMedia controller where the 250
-GB T5 SSD works but the 500 GB T5 SSD does not, the same USB3 socket is able
-to power a traditional 2.5" spinning rust hard drive without any obvious
-problems.
+This series apply on the top of linux-next + the bug fix patch sent
+today:
+	
+	https://lore.kernel.org/lkml/20210226100826.18987-1-johan@kernel.org/
 
-Regards
-  jonathan
+They were tested only on  XR21B1410 and  XR21B1424 models,
+although I'm pretty much confident that the other models will also
+work, as they're very close to either one of those.
+
+Patch 1 is just a cleanup for the registers namespace. It removes
+the model number from registers that are used on multiple versions
+of the chipset.
+
+Patch 2 adds a table to be used to map the register for each specific
+variant of this chipset;
+
+Patch 3 adds support for XR21B1412 and XR21B1414. The only
+difference on those devices is that they support multiple UART ports.
+
+Patch 4 adds support for  XR21B142X, which uses a mix of data and
+control interfaces to setup the line discipline.
+
+Patch 5 adds support for  XR21B1410 variant. This one is identical
+to  XR21B1411, except that it uses a different register set;
+
+Patch 6 adds support for XR2280X devices:
+	https://www.maxlinear.com/product/interface/bridges/usb-ethernet-bridges/xr22800
+
+Such devices are compound devices that are similar to the USB
+UARTs from programming PoV. The only difference is the register
+set.
+
+Patch 7 updates the CDC ignore list.
+
+After this series, all MaxLinear USB UARTs described at:
+	https://www.maxlinear.com/products/interface/uarts/usb-uarts
+
+Should be supported, except for XR21B1421. This one have just a control
+interface, and uses standard HID protocol. No idea how to support it. Also,
+I don't have such device to test ;-)
+
+In order to write this patch series, I used the datasheets, plus the Linux
+driver source code, available at MaxLinear, and a previous port made by
+Patong Yang:
+
+   https://lore.kernel.org/linux-usb/20180404070634.nhspvmxcjwfgjkcv@advantechmxl-desktop
+
+Regards,
+Mauro
+
+Mauro Carvalho Chehab (7):
+  USB: serial: xr: simplify its namespace
+  USB: serial: xr: use a table for device-specific settings
+  USB: serial: xr: add support for multi-port XR21V141X variants
+  USB: serial: xr: add support for XR21B142X devices
+  USB: serial: xr: add support for 
+  USB: serial: xr: add support for XR2280X devices
+  USB: cdc-acm: add other non-standard xr_serial models to ignore list
+
+ drivers/usb/class/cdc-acm.c    |  17 +-
+ drivers/usb/serial/xr_serial.c | 694 +++++++++++++++++++++++++--------
+ 2 files changed, 556 insertions(+), 155 deletions(-)
+
+-- 
+2.29.2
+
+
