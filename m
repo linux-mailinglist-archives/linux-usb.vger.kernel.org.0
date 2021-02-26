@@ -2,103 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6FF32647A
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 16:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D44732658C
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 17:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbhBZPEu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Feb 2021 10:04:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbhBZPEt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Feb 2021 10:04:49 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC7BC061574
-        for <linux-usb@vger.kernel.org>; Fri, 26 Feb 2021 07:04:09 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id n14so9919043iog.3
-        for <linux-usb@vger.kernel.org>; Fri, 26 Feb 2021 07:04:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=HjfzUZHoKqfvc2I8SUsOTPs5AXbC4GDdKq1dwPKUckQ=;
-        b=SBRPLUOcL6tfBgOfs/kUKD0DdEEkGTREzI0xkgvlyAvq8Szef/tub0dercRWjem3tC
-         8VzMHoE9WQxy3pto4ocNMJwvwaztfYAHAFK+03dmjmiJ9zdu0iqtyz6uX2dQQ6NOHlp7
-         5Ta0epil1ay3O6XqcBAfv+0AfYcRgo9cUAxvA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=HjfzUZHoKqfvc2I8SUsOTPs5AXbC4GDdKq1dwPKUckQ=;
-        b=eq41aEgPpZl5w7WMtejfyxbMC6SZ+fG4v46gwkhL4fFfq8pRiijEp1VwuEM0wIU604
-         MRz62O0PfXeJb17aQ3g9duUgLzGOAy/Xe89PhnxKGPeBSf6sLuRLyweI1b7Rve4jghUD
-         R1HpUyDMD4o3XHVh5iDGjRR6pgQJw4EueqSkrf8G5Qacbj9QZpFYEp07bG4EWlNImNVT
-         LcpEhLx5NAmKuvwY+2/t4F0M1aekJG0Qu+jek6IypJyGwOKhfMGdkVoyCd8pXLHjjJMf
-         gabvADlmnyguUTPQrGqDUT0wqpd1te7iB3c8yyD8etSF5y64zPVGZHUw2uZBvCpl0ZGr
-         O6/g==
-X-Gm-Message-State: AOAM533QQg8i9+3ybHlzAcw51Vxf9vNScMkjQ5Yy1cl9AAE95/Z5LBbS
-        gTJ/Eh/QzPLxDm5LZtJnA1tFymSxjdC+2A==
-X-Google-Smtp-Source: ABdhPJwq7Uss5cey4W0yYLgL0fVpm67BXXpIqMMNmni5EMlIA78X2Usbf6mFVOomtGUPdn35nkUr0Q==
-X-Received: by 2002:a5e:870f:: with SMTP id y15mr3186612ioj.68.1614351848568;
-        Fri, 26 Feb 2021 07:04:08 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id c19sm4818224ile.17.2021.02.26.07.04.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Feb 2021 07:04:08 -0800 (PST)
-Subject: Re: [PATCH v3] usb: usbip: serialize attach/detach operations
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org,
-        Julia Lawall <julia.lawall@inria.fr>,
-        The kernel test robot <lkp@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <YDCzLfhawx4u28dd@kroah.com>
- <20210223015907.3506-1-penguin-kernel@I-love.SAKURA.ne.jp>
- <95d1398b-6b95-2da4-43f7-7a6b0c87c4f8@linuxfoundation.org>
- <53dfc860-e118-4aac-8afd-80ea3fa2f4ce@i-love.sakura.ne.jp>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <df337d16-2a6e-f671-7134-449d7da6a9cb@linuxfoundation.org>
-Date:   Fri, 26 Feb 2021 08:04:07 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S229727AbhBZQ3K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Feb 2021 11:29:10 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:36575 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S229698AbhBZQ3I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Feb 2021 11:29:08 -0500
+Received: (qmail 1393709 invoked by uid 1000); 26 Feb 2021 11:28:21 -0500
+Date:   Fri, 26 Feb 2021 11:28:21 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+Cc:     benjamin.tissoires@redhat.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        syzbot+ab02336a647181a886a6@syzkaller.appspotmail.com
+Subject: Re: [PATCH] drivers/hid: fix for the big hid report length
+Message-ID: <20210226162821.GA1392547@rowland.harvard.edu>
+References: <20210225155914.GA1350993@rowland.harvard.edu>
+ <20210226081336.3475085-1-snovitoll@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <53dfc860-e118-4aac-8afd-80ea3fa2f4ce@i-love.sakura.ne.jp>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210226081336.3475085-1-snovitoll@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2/25/21 5:10 PM, Tetsuo Handa wrote:
-> On 2021/02/26 9:00, Shuah Khan wrote:
->> This patch makes changes to 3 different drivers. Please split these
->> patches. Makes it easier to revert or fix them.
->>
->> Patch1 could add common routines and use them in stud_dev and vudc
->> Same for usbip_event_lock_killable() and usbip_event_unlock().
->> Introduce them in a separate patch.
->>
->> __usbip_sockfd_store() could be made common to stub_dev and vudc
->> similar to usbip_prepare_threads() and usbip_unprepare_threads()
->>
->> It will lot easier to review if this large patch is split into
->> smaller patches.
+On Fri, Feb 26, 2021 at 02:13:36PM +0600, Sabyrzhan Tasbolatov wrote:
+> On Thu, 25 Feb 2021 10:59:14 -0500, Alan Stern wrote:
+> > Won't this cause silent errors?
 > 
-> Then, can we apply
-> https://lkml.kernel.org/r/20210205135707.4574-1-penguin-kernel@I-love.SAKURA.ne.jp
-> as the first patch? It is very easy to review and apply and backport to stable.
+> Agree. But there are already such as cases like in:
 > 
+> // net/bluetooth/hidp/core.c
+> static void hidp_process_report(..)
+> {
+> 	..
+> 	if (len > HID_MAX_BUFFER_SIZE)
+> 		len = HID_MAX_BUFFER_SIZE;
+> 	..
+> 
+> // drivers/hid/hid-core.c
+> int hid_report_raw_event(..)
+> {
+> 	..
+> 	rsize = hid_compute_report_size(report);
+> 
+> 	if (report_enum->numbered && rsize >= HID_MAX_BUFFER_SIZE)
+> 		rsize = HID_MAX_BUFFER_SIZE - 1;
+> 	else if (rsize > HID_MAX_BUFFER_SIZE)
+> 		rsize = HID_MAX_BUFFER_SIZE;
+> 	..
+> 
+> // drivers/staging/greybus/hid.c
+> static int gb_hid_start(..)
+> {
+> 	..
+> 	if (bufsize > HID_MAX_BUFFER_SIZE)
+> 		bufsize = HID_MAX_BUFFER_SIZE;
+> 	..
+> 
+> > How about instead just rejecting any device which includes a report 
+> > whose length is too big (along with an line in the system log explaining 
+> > what's wrong)?
+> 
+> Not everywhere, but there are already such as logs when > HID_MAX_BUFFER_SIZE
+> 
+> // drivers/hid/hidraw.c
+> static ssize_t hidraw_send_report(..)
+> {
+> 	..
+> 	if (count > HID_MAX_BUFFER_SIZE) {
+> 		hid_warn(dev, "pid %d passed too large report\n",
+> 			 task_pid_nr(current));
+> 		ret = -EINVAL;
+> 		goto out;
+> 	}
+> 
+> 
+> I've just noticed that hid_compute_report_size() doing the same thing as
+> hid_report_len(). So I will replace it with latter one with length check.
+> 
+> So in [PATCH v2] I will do following:
+> 
+>  1. replace hid_compute_report_size() with hid_report_len()
+> 
+>  2. in hid_report_len() we can hid_warn() if length > HID_MAX_BUFFER_SIZE,
+> and return HID_MAX_BUFFER_SIZE. Or we can return 0 in hid_report_len() to let
+> functions like hid_hw_raw_request(), hid_hw_output_report() to validate
+> invalid report length and return -EINVAL. Though I'll need to add !length
+> missing checks in other places.
+> 
+> Please let me know what it's preferred way in 2nd step.
 
-Same concerns as before about error path handling.
+It's been too long since I worked on this stuff; you should check with 
+the maintainers.
 
-I have a patch in the works that is simpler and solves the crashes
-you are seeing and addresses my error path concerns.
+Another thing to consider: There probably are devices with multiple 
+reports, where one of the reports is too big but people only want to use 
+the other, smaller reports.  For situations like that, we don't want to 
+reject the entire device.
 
-I will send it out later on today. Thanks for all the heavy lifting.
-Much appreciated.
+I don't know if parsing a partiall part is a good thing to do.
 
-thanks,
--- Shuah
+Alan Stern
