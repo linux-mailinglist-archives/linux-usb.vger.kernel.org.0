@@ -2,67 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A35E325B5F
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 02:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB46325D55
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 06:54:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbhBZBob (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Feb 2021 20:44:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37910 "EHLO mail.kernel.org"
+        id S229769AbhBZFyg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Feb 2021 00:54:36 -0500
+Received: from verein.lst.de ([213.95.11.211]:44552 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229498AbhBZBo3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Feb 2021 20:44:29 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 51B0464EE3
-        for <linux-usb@vger.kernel.org>; Fri, 26 Feb 2021 01:43:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614303829;
-        bh=/xHtpymWyb01V0tdbQ7A4NZn8pwFjnEJRN9iAzrrUBc=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=atkVl0tX36yxZA2PwVo4DtiElWf5wPrKxHOha3Or6TbnA71FHM1kSAjE1qoi4aDdS
-         b41ApAONmoaiO+TRo61OC1csuBbrCXaW6uJwVa0AEDEsxHx/75yrlCWOeLLf98vv8a
-         4qDcGM0Xz2H5sJ3ZCaiRDlr5zMnyFdQnx3Zpap+cEK/MDi+wZjDUMLkVvfIOAYhbd7
-         BEpRw96Ctaxw8QUztSSmMdyGOTipMiLv+g14tCR9aONnXjHP6vhbXBUrg6wiabeodV
-         Thz1W4m9yc8wD6nVzuDjuuju+3KZiSvMm+qOH8Gj5eo8vx20ghNE9GA2ZZFSxbtesn
-         KLszXVHiFnbRA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 3D19361490; Fri, 26 Feb 2021 01:43:49 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 209555] dwc2 driver stops working after sudden disconnect
-Date:   Fri, 26 Feb 2021 01:43:49 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: tomasz@grobelny.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-209555-208809-GX7U73deTj@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-209555-208809@https.bugzilla.kernel.org/>
-References: <bug-209555-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S229586AbhBZFyg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Feb 2021 00:54:36 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id EDBE568BEB; Fri, 26 Feb 2021 06:53:52 +0100 (CET)
+Date:   Fri, 26 Feb 2021 06:53:52 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Tom Yan <tom.ty89@gmail.com>, Hans de Goede <hdegoede@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH 2/2] usb-storage: revert from scsi_add_host_with_dma()
+ to scsi_add_host()
+Message-ID: <20210226055352.GA2996@lst.de>
+References: <CAGnHSEnetAJNqUEW-iuq7eVyU6VnP84cv9+OVL4C5Z2ZK_eM0A@mail.gmail.com> <186eb035-4bc4-ff72-ee41-aeb6d81888e3@redhat.com> <X8T0E2qvF2cgADl+@kroah.com> <dd557c38-a919-5e5e-ab3b-17a235f17139@redhat.com> <20201130172004.GA966032@rowland.harvard.edu> <abb0a79d-63a0-6f3d-4812-f828283cd47c@redhat.com> <CAGnHSEk1GixNK71CJMymwLE=MyedjCkiG5Ubq1=O_wFxBBM0GQ@mail.gmail.com> <CAGnHSEmPpbDokAfGkeCkvo3JuYfnosVt8H+TK7ZWFNsdyWAfYQ@mail.gmail.com> <20201130203618.GB975529@rowland.harvard.edu> <20210225163557.GC1350993@rowland.harvard.edu>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210225163557.GC1350993@rowland.harvard.edu>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D209555
+On Thu, Feb 25, 2021 at 11:35:57AM -0500, Alan Stern wrote:
+> This thread seems to have fallen through the cracks.  Maybe now would be 
+> a good time to address the problem (since we originally planned to fix 
+> it in 5.11!).
+> 
+> The questions listed below are pretty self-contained, although the rest
+> of the discussion isn't.  But I never received any answers.
 
---- Comment #5 from Tomasz Grobelny (tomasz@grobelny.net) ---
-Any news about this one?
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+usb-storage must use scsi_add_host_with_dma to use the right device
+for DMA mapping and parameters.  The calls to set the DMA options
+on the device are needed so that IOMMU merging doesn't change the
+imposed requirements.  If these requirements slow you down you need
+to relax them, as apparently the hardware is able to handle bigger
+limits.
