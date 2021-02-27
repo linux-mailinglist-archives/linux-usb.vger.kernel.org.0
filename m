@@ -2,65 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44CDB326DD6
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Feb 2021 17:27:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EF34326F2C
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Feb 2021 23:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbhB0Q1u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 27 Feb 2021 11:27:50 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:33323 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230175AbhB0Q1q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 27 Feb 2021 11:27:46 -0500
-Received: (qmail 1429364 invoked by uid 1000); 27 Feb 2021 11:27:03 -0500
-Date:   Sat, 27 Feb 2021 11:27:03 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     liulongfang <liulongfang@huawei.com>
-Cc:     gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        linux-usb@vger.kernel.org, yisen.zhuang@huawei.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] USB:XHCI:Modify XHCI driver for USB2.0 controller
-Message-ID: <20210227162703.GA1429200@rowland.harvard.edu>
-References: <1614327697-1021-1-git-send-email-liulongfang@huawei.com>
- <20210226163004.GB1392547@rowland.harvard.edu>
- <acfdf816-e295-df1d-4039-784fb0d417c4@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <acfdf816-e295-df1d-4039-784fb0d417c4@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S230090AbhB0Was (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 27 Feb 2021 17:30:48 -0500
+Received: from ms9.eaxlabs.cz ([147.135.177.209]:34372 "EHLO ms9.eaxlabs.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230086AbhB0Wao (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 27 Feb 2021 17:30:44 -0500
+X-Greylist: delayed 2062 seconds by postgrey-1.27 at vger.kernel.org; Sat, 27 Feb 2021 17:30:44 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=eaxlabs.cz; s=mail;
+        h=Message-Id:Date:Subject:Cc:To:From; bh=iSTG0geJy4jh7GW2AvwR7jsaRm906Tp0l7rHRny74TY=;
+        b=YwCBminN/mNtii/3jmJASEuyRy/FKls6gBobTHgkVEDiUBCFmI78mShqitiCxizdD9/WtRjcWHFTfNsQbGE9YezYj9KPgVg5+kuNN7P/7Q21v2dGMUTSok1LeiFEJTsrxyRQxaAsKOlSNIFMDSIDEGYMW7YfwXe+QMCX+4/qWrw=;
+Received: from [82.99.129.6] (helo=localhost.localdomain)
+        by ms9.eaxlabs.cz with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.84_2)
+        (envelope-from <devik@eaxlabs.cz>)
+        id 1lG7Yn-0007Tv-4R; Sat, 27 Feb 2021 22:55:39 +0100
+From:   Martin Devera <devik@eaxlabs.cz>
+To:     linux-kernel@vger.kernel.org
+Cc:     Martin Devera <devik@eaxlabs.cz>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Amelie Delaunay <amelie.delaunay@st.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] usb: dwc2: Add STM32 related debugfs entries
+Date:   Sat, 27 Feb 2021 22:55:28 +0100
+Message-Id: <20210227215528.12752-1-devik@eaxlabs.cz>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Feb 27, 2021 at 11:38:08AM +0800, liulongfang wrote:
-> On 2021/2/27 0:30, Alan Stern wrote:
-> > On Fri, Feb 26, 2021 at 04:21:37PM +0800, Longfang Liu wrote:
-> >> Our current XHCI hardware controller has been customized to only
-> >> support USB 2.0 ports. When using the current xhci driver, an xhci
-> >> controller device and an ehci controller device will be created
-> >> automatically.
-> > 
-> > That sentence makes no sense at all.  An EHCI controller device is a 
-> > piece of hardware.  How can an xHCI driver, which is a piece of 
-> > software, create a piece of hardware?
-> > 
-> > Alan Stern
-> > .
-> > 
-> The hardware device is a complete USB3.0 controller,
-> but I hope to support a USB2.0-only mode through software configuration.
+These are entries related to STM32MP1 PHY control.
 
-Even if it only supports USB-2.0 connections, an xHCI controller is 
-still an xHCI controller.  It doesn't magically transform into an EHCI 
-controller.
+Signed-off-by: Martin Devera <devik@eaxlabs.cz>
+---
+ drivers/usb/dwc2/debugfs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-You are not creating an EHCI controller device.  Rather, you are trying 
-to restrict an xHCI controller device to make it handle only USB-2.0 
-connections.  If you run lsusb on a system that has an xHCI controller, 
-you'll see that the controller is bound to two USB buses: a USB-2 bus 
-and a USB-3 bus.  But for both buses, the controller is xHCI -- not 
-EHCI.
+diff --git a/drivers/usb/dwc2/debugfs.c b/drivers/usb/dwc2/debugfs.c
+index aaafd463d72a..f13eed4231e1 100644
+--- a/drivers/usb/dwc2/debugfs.c
++++ b/drivers/usb/dwc2/debugfs.c
+@@ -691,6 +691,8 @@ static int params_show(struct seq_file *seq, void *v)
+ 	print_param(seq, p, ulpi_fs_ls);
+ 	print_param(seq, p, host_support_fs_ls_low_power);
+ 	print_param(seq, p, host_ls_low_power_phy_clk);
++	print_param(seq, p, activate_stm_fs_transceiver);
++	print_param(seq, p, activate_stm_id_vb_detection);
+ 	print_param(seq, p, ts_dline);
+ 	print_param(seq, p, reload_ctl);
+ 	print_param_hex(seq, p, ahbcfg);
+-- 
+2.11.0
 
-Your patch description is inaccurate.
-
-Alan Stern
