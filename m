@@ -2,65 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 385D0326B15
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Feb 2021 02:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A2D326B5B
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Feb 2021 04:36:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbhB0Bz2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 26 Feb 2021 20:55:28 -0500
-Received: from mail.msweet.org ([173.255.209.91]:53292 "EHLO mail.msweet.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229864AbhB0Bz1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Feb 2021 20:55:27 -0500
-Received: from [172.20.10.13] (unknown [67.69.69.155])
-        by mail.msweet.org (Postfix) with ESMTPSA id 11F3880858;
-        Sat, 27 Feb 2021 01:54:47 +0000 (UTC)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-Mime-Version: 1.0 (1.0)
-Subject: Re: proposal: move Linux userspace USB gadget projects to linux-usb GitHub organisation?
-From:   Michael Sweet <msweet@msweet.org>
-In-Reply-To: <f89e3e5b5e25b89a603e2d97542d60461b429910.camel@bonedaddy.net>
-Date:   Fri, 26 Feb 2021 20:54:45 -0500
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Krzysztof Opasiak <k.opasiak@samsung.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Karol Lewandowski <k.lewandowsk@samsung.com>,
-        linux-usb@vger.kernel.org
-Message-Id: <07846969-5243-4272-B27A-F821E8810856@msweet.org>
-References: <f89e3e5b5e25b89a603e2d97542d60461b429910.camel@bonedaddy.net>
-To:     Paul Wise <pabs3@bonedaddy.net>
-X-Mailer: iPad Mail (18D52)
+        id S230063AbhB0Dbx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Feb 2021 22:31:53 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:12957 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229915AbhB0Dbw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Feb 2021 22:31:52 -0500
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4DnX8D4n0szjRwh;
+        Sat, 27 Feb 2021 11:29:48 +0800 (CST)
+Received: from [10.67.102.118] (10.67.102.118) by
+ DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
+ 14.3.498.0; Sat, 27 Feb 2021 11:31:00 +0800
+Subject: Re: [RFC PATCH] USB:XHCI:Modify XHCI driver for USB2.0 controller
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>,
+        <yisen.zhuang@huawei.com>, <linux-kernel@vger.kernel.org>
+References: <1614327697-1021-1-git-send-email-liulongfang@huawei.com>
+ <YDizmDmu6Kh264Pv@kroah.com>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <87cc8b54-f530-cce0-3ea2-f879436ff5f7@huawei.com>
+Date:   Sat, 27 Feb 2021 11:31:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <YDizmDmu6Kh264Pv@kroah.com>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.118]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Paul,
-
-> On Feb 26, 2021, at 8:08 PM, Paul Wise <pabs3@bonedaddy.net> wrote:
+On 2021/2/26 16:38, Greg KH wrote:
+> On Fri, Feb 26, 2021 at 04:21:37PM +0800, Longfang Liu wrote:
+>> Our current XHCI hardware controller has been customized to only
+>> support USB 2.0 ports.
 > 
-> ﻿On Fri, 2021-02-26 at 14:24 -0500, Mike Sweet wrote:
+> That sounds like a spec violation, right?  Why do you want to do this?
 > 
->> Paul, please add me (GitHub user michaelrsweet)
+> greg k-h
+> .
 > 
-> Invited, you should get an email about it.
-
-Yes, thank you!
-
->> I’m gearing up to work on the USB gadget documentation
-> 
-> I guess you mean the documentation in the Linux kernel repository,
-> I assume that the libusbgx/gt/gadgetd docs could use some work too.
-
-Primarily the first, but I’ll likely create libusbgx examples.
-
->> Implementing IPP-USB has been an interesting challenge
-> 
-> Are talking about a IPP-USB device implementation?
-> I can't find your implementation on your GitHub account,
-> could you provide a link, or is the code proprietary?
-
-It will soon show up in the PAPPL project alongside the other USB gadget bits. I’ve been prototyping in a private repo in preparation for adding it to PAPPL...
-
-____________________
-Michael Sweet
+I hope to support a USB2.0-only mode on the XHCI controller
+through software configuration.
+Thanks.
+Longfang Liu
