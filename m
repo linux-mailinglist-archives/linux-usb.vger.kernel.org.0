@@ -2,59 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF34326F2C
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Feb 2021 23:31:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 552FB326F6D
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Feb 2021 23:36:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbhB0Was (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 27 Feb 2021 17:30:48 -0500
-Received: from ms9.eaxlabs.cz ([147.135.177.209]:34372 "EHLO ms9.eaxlabs.cz"
+        id S230295AbhB0WfO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 27 Feb 2021 17:35:14 -0500
+Received: from mail.jvpinto.com ([65.49.11.60]:42077 "EHLO mail.JVPinto.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230086AbhB0Wao (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 27 Feb 2021 17:30:44 -0500
-X-Greylist: delayed 2062 seconds by postgrey-1.27 at vger.kernel.org; Sat, 27 Feb 2021 17:30:44 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=eaxlabs.cz; s=mail;
-        h=Message-Id:Date:Subject:Cc:To:From; bh=iSTG0geJy4jh7GW2AvwR7jsaRm906Tp0l7rHRny74TY=;
-        b=YwCBminN/mNtii/3jmJASEuyRy/FKls6gBobTHgkVEDiUBCFmI78mShqitiCxizdD9/WtRjcWHFTfNsQbGE9YezYj9KPgVg5+kuNN7P/7Q21v2dGMUTSok1LeiFEJTsrxyRQxaAsKOlSNIFMDSIDEGYMW7YfwXe+QMCX+4/qWrw=;
-Received: from [82.99.129.6] (helo=localhost.localdomain)
-        by ms9.eaxlabs.cz with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.84_2)
-        (envelope-from <devik@eaxlabs.cz>)
-        id 1lG7Yn-0007Tv-4R; Sat, 27 Feb 2021 22:55:39 +0100
-From:   Martin Devera <devik@eaxlabs.cz>
-To:     linux-kernel@vger.kernel.org
-Cc:     Martin Devera <devik@eaxlabs.cz>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] usb: dwc2: Add STM32 related debugfs entries
-Date:   Sat, 27 Feb 2021 22:55:28 +0100
-Message-Id: <20210227215528.12752-1-devik@eaxlabs.cz>
-X-Mailer: git-send-email 2.11.0
+        id S230001AbhB0We7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 27 Feb 2021 17:34:59 -0500
+Received: from RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) by
+ RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Sat, 27 Feb 2021 14:33:46 -0800
+Received: from User (52.231.198.195) by RW-EXC1.JVPinto.com (172.32.1.13) with
+ Microsoft SMTP Server id 15.0.1497.2 via Frontend Transport; Sat, 27 Feb 2021
+ 14:33:32 -0800
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <johnpinto@jvpinto.com>
+Subject: Hello okay
+Date:   Sat, 27 Feb 2021 22:33:46 +0000
+MIME-Version: 1.0
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <837a988e66554c5d95b18ae85648d3d7@RW-EXC1.JVPinto.com>
+To:     Undisclosed recipients:;
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-These are entries related to STM32MP1 PHY control.
+Hello,
 
-Signed-off-by: Martin Devera <devik@eaxlabs.cz>
----
- drivers/usb/dwc2/debugfs.c | 2 ++
- 1 file changed, 2 insertions(+)
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-diff --git a/drivers/usb/dwc2/debugfs.c b/drivers/usb/dwc2/debugfs.c
-index aaafd463d72a..f13eed4231e1 100644
---- a/drivers/usb/dwc2/debugfs.c
-+++ b/drivers/usb/dwc2/debugfs.c
-@@ -691,6 +691,8 @@ static int params_show(struct seq_file *seq, void *v)
- 	print_param(seq, p, ulpi_fs_ls);
- 	print_param(seq, p, host_support_fs_ls_low_power);
- 	print_param(seq, p, host_ls_low_power_phy_clk);
-+	print_param(seq, p, activate_stm_fs_transceiver);
-+	print_param(seq, p, activate_stm_id_vb_detection);
- 	print_param(seq, p, ts_dline);
- 	print_param(seq, p, reload_ctl);
- 	print_param_hex(seq, p, ahbcfg);
--- 
-2.11.0
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
+
+Regards,
+Ms. Reem.
