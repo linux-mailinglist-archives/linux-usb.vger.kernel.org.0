@@ -2,82 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8FE5326926
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Feb 2021 22:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3A3326AF0
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Feb 2021 02:09:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbhBZVHh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Feb 2021 16:07:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52176 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbhBZVHf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Feb 2021 16:07:35 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150C9C06174A
-        for <linux-usb@vger.kernel.org>; Fri, 26 Feb 2021 13:06:55 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id m1so8924207wml.2
-        for <linux-usb@vger.kernel.org>; Fri, 26 Feb 2021 13:06:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=4YoSdm1oq7pZ9SWUTs03pmy+FFIeYuVC1lSLrRDUq4w=;
-        b=tbqquS2/20kcvklz577EBt42YtZWDq5De1QLRTwqRwnaM/dIocD36J0MGOfgT+9ZJ1
-         on8GuMyTGL2XK4CCPjNjvaRHqp74erxRxZip50uz+V8c2lhuW8ozrg3FwR4HRY2K91Li
-         zbu6qK7h/YpZ6xJpE8Xeh6NYEsMIGdYZe66K3hVLWMTHZT/OvGeTTFlbt9zhClI39gZH
-         K4TqlMBSm5wrHhtgaBz9zJ+qSRuGpfJzjbkdlLhvo3gHXsZEYtIk30UYMgcZNretNFH0
-         xp2VWzG5VFfF7T3pjFfEK2esij5ifCipVA9X1Zu6FcwTw5vJ4HP77/GUiaxbTPSe78iN
-         FnCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=4YoSdm1oq7pZ9SWUTs03pmy+FFIeYuVC1lSLrRDUq4w=;
-        b=t8H/0ycWxtoMPQqkTxFEB4UyMeMuvRMIyaWHzy5imFGHlhqix5kJAq7z3bcl3NQKZH
-         /TwGmMD5PAU3eTz6JS7FbParkyEhE6qqq4pnPaAoX2rM4aBv28bjAYZ+E+apTetFRmw+
-         OUjygffxewQOPmLHNdFWJTcl581hI28zzgF/t3NuGr3zTmUBp2nVDAsQfHjg/zHS1fMv
-         EI5vYk73MrNu0eukU/IKtnXRtEWiPPqK1ChkLfcMpIXO3BqLWoSZr0Kk+DTyFSJLvkE8
-         1Xn13O3VT2Mo/h9Ic5sNPoG8j4XkHMCQEH7BfOkykOzRH0nKNyL2yK/UNBDNprpCvy85
-         0M0w==
-X-Gm-Message-State: AOAM531mR6DT9DiwJKksXe/MZb+lUNFwdaGg9KWihwKZovx0rtl1RAim
-        pMnvOoeI3sMIY3q+Jmcx7/KDvCuIjCniXCZ3quw=
-X-Google-Smtp-Source: ABdhPJxWpe+uWQx1ibXdarzhnc7TmZxMW0v7cpzwZGxc+CjA75wSlTjs32QhnP3FrIXuXbVAcMor40edO9ZUA5t+Wvg=
-X-Received: by 2002:a7b:cc1a:: with SMTP id f26mr4510142wmh.19.1614373613686;
- Fri, 26 Feb 2021 13:06:53 -0800 (PST)
+        id S229745AbhB0BI6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Feb 2021 20:08:58 -0500
+Received: from smtp.bonedaddy.net ([45.33.94.42]:37376 "EHLO
+        smtp.bonedaddy.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229618AbhB0BI6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Feb 2021 20:08:58 -0500
+Received: from [192.168.1.209] (unknown [49.190.168.235])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pabs3@bonedaddy.net)
+        by smtp.bonedaddy.net (Postfix) with ESMTPSA id B6B27180031;
+        Fri, 26 Feb 2021 20:08:28 -0500 (EST)
+Authentication-Results: smtp.bonedaddy.net; dmarc=fail (p=none dis=none) header.from=bonedaddy.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bonedaddy.net;
+        s=mail; t=1614388111;
+        bh=9ktoKNol23wyRJqjD73sAMsbRp3gtWVfZoW5SAwsV4g=;
+        h=Subject:From:To:Cc:In-Reply-To:References:Date;
+        b=kY/wqk7lkBq1pn1eFPPORM3ERpccds3mHfeJQ76un75Wv41I2L39hioiQOr1ULdzb
+         EI1kmkuK6KOed4rCPXAquqyRxJlDGjYqUYLgZRdFZAjXYLxtDC1YavrpxxOCBRzhkc
+         pW3S2pYtE7VAoj9UOxH3NRkCRVICEZUEJyngcVQYUZYWcbyH8OWDLoL91oSK20lFHd
+         hompFHsVRLgFjfJi7bvRxN5FVGZw9RfZdsmFv2gr4wIgNwYjJCqEKWEWQW/2L95PUY
+         AeC4sn60oTUEl1Yndd+aMVOLz1pIhLTqzOLQcF0FCuEC+IX+F5Ax51FW7RHeMyK1ew
+         kqzdaupA65YEQ==
+Message-ID: <f89e3e5b5e25b89a603e2d97542d60461b429910.camel@bonedaddy.net>
+Subject: Re: proposal: move Linux userspace USB gadget projects to
+ linux-usb GitHub organisation?
+From:   Paul Wise <pabs3@bonedaddy.net>
+To:     Mike Sweet <msweet@msweet.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Karol Lewandowski <k.lewandowsk@samsung.com>,
+        linux-usb@vger.kernel.org
+In-Reply-To: <DEA8D27F-3313-4457-A2F8-66B09CF392A7@msweet.org>
+References: <e6e918148b817e88efff77d3366cde057924fb45.camel@bonedaddy.net>
+         <DEA8D27F-3313-4457-A2F8-66B09CF392A7@msweet.org>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="=-R4bSRAWtLMqLjOX5wK66"
+Date:   Sat, 27 Feb 2021 09:08:02 +0800
 MIME-Version: 1.0
-Sender: bipingameti7@gmail.com
-Received: by 2002:a1c:de87:0:0:0:0:0 with HTTP; Fri, 26 Feb 2021 13:06:53
- -0800 (PST)
-From:   "Mr. Dabire Basole" <mrdabirebasole@gmail.com>
-Date:   Fri, 26 Feb 2021 21:06:53 +0000
-X-Google-Sender-Auth: RJdJv5kSK52HWFIemkeKIepbfDY
-Message-ID: <CAFw7CDgbCrkAzjaP+ztJ+pWek42vRb0UVsgi86hUc398eaSiLw@mail.gmail.com>
-Subject: TREAT AND REPLY URGENTLY.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Friend,
 
-Greetings!
+--=-R4bSRAWtLMqLjOX5wK66
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-How are you with your family today? I hope both of you are in good
-health decently, I know that this message might meet you in utmost
-surprise as we never know each other before. I am Mr. Dabire Basole a
-banker by profession, I need your urgent assist in transferring the
-sum of $10.5 Million U.S Dollars into your account. It is 100% risk
-free and under this achievement you are entitled to receive 40% of the
-total cash. More details will be sent to you on confirmation of your interest.
-Please if you are real interest on my proposer, just providing me your
-following information details such as:
+On Fri, 2021-02-26 at 14:24 -0500, Mike Sweet wrote:
 
-(1)NAME..............
-(2)AGE:................
-(3)SEX:.....................
-(4)PHONE NUMBER:.................
-(5)OCCUPATION:................ .....
-(6)YOUR COUNTRY:.....................
+> Paul, please add me (GitHub user michaelrsweet)
 
-Yours sincerely,
+Invited, you should get an email about it.
 
-Mr.  Dabire Basole.
+> I=E2=80=99m gearing up to work on the USB gadget documentation
+
+I guess you mean the documentation in the Linux kernel repository,
+I assume that the libusbgx/gt/gadgetd docs could use some work too.
+
+> Implementing IPP-USB has been an interesting challenge
+
+Are talking about a IPP-USB device implementation?
+I can't find your implementation on your GitHub account,
+could you provide a link, or is the code proprietary?
+
+--=20
+bye,
+pabs
+
+https://bonedaddy.net/pabs3/
+
+--=-R4bSRAWtLMqLjOX5wK66
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEYQsotVz8/kXqG1Y7MRa6Xp/6aaMFAmA5m24ACgkQMRa6Xp/6
+aaOjow/+NQ0pxM5aPN5Y/FmHK0U48Xsxe3HM5wbsrA4ISDcCM2becknCN7fa5qtn
+XyB19X7Lg5JoE/jxY361ewCvogrwr7t3TFwYw/VgLYKH/nq2A2gYTLOFfi4TdWyp
+HKbZeqMPvg7oGYcre2zAnV5o5LXf80trsnzub95Muhz9c9WwGe69k5sE4UMshz0m
+ieGpNsFBpzHQercCJbPWQ1PfHl0r7FwmWcJHIA+tEhkuovOMRcYMFENRCr41yiNZ
+b4WJs6Jbf0dqRFy/42UaFwYCSGmKoKPpyhUKTx/jv503dqaF3uTO+hohEin88VlL
+Ih5C/YqWukgSQ00dq7HQaxWdhBePSQgL3Ww2CEnrfZXVGOtP5PgHeGITLAea2L1I
+ehFomRtJHDtgXLaN+4TSGjO96W39gt0eTKlOwr3XFlTzivf+oCGwWvjnPOSEW/fZ
+jnDArvjVMhLd/DFqcP1gxfh6zd0bPWhleSHOr9/ItwyTqHVcmGuHwrDJWsUCoQRd
+vBcPomALSKFCyArTMmry8fL26sodbzln9jnTrE9iGAK8JSr2NrUSxycMt4le4ykC
+RyCH+wvsUVneMLlsQh+yQjE4QkKWaLhQLGl/KYPfY4p7a+dOp9JJ+HONn0jXP+/P
+sBgVnS94xO8D7jZF3v4CCziVE6pn9qbO/jkVHsfQw32ld21AJDU=
+=bktf
+-----END PGP SIGNATURE-----
+
+--=-R4bSRAWtLMqLjOX5wK66--
+
