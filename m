@@ -2,60 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 552FB326F6D
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Feb 2021 23:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0834A327003
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Feb 2021 02:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbhB0WfO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 27 Feb 2021 17:35:14 -0500
-Received: from mail.jvpinto.com ([65.49.11.60]:42077 "EHLO mail.JVPinto.com"
+        id S230079AbhB1Bw6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 27 Feb 2021 20:52:58 -0500
+Received: from foo.stuge.se ([212.116.89.98]:48062 "EHLO foo.stuge.se"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230001AbhB0We7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 27 Feb 2021 17:34:59 -0500
-Received: from RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) by
- RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) with Microsoft SMTP Server
- (TLS) id 15.0.1497.2; Sat, 27 Feb 2021 14:33:46 -0800
-Received: from User (52.231.198.195) by RW-EXC1.JVPinto.com (172.32.1.13) with
- Microsoft SMTP Server id 15.0.1497.2 via Frontend Transport; Sat, 27 Feb 2021
- 14:33:32 -0800
-Reply-To: <ms.reem@yandex.com>
-From:   "Ms. Reem" <johnpinto@jvpinto.com>
-Subject: Hello okay
-Date:   Sat, 27 Feb 2021 22:33:46 +0000
+        id S229640AbhB1Bw5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 27 Feb 2021 20:52:57 -0500
+Received: (qmail 3253 invoked by uid 1000); 28 Feb 2021 01:52:09 -0000
+Message-ID: <20210228015209.3252.qmail@stuge.se>
+Date:   Sun, 28 Feb 2021 01:52:09 +0000
+From:   Peter Stuge <peter@stuge.se>
+To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     hudson@trmm.net, markus@raatikainen.cc,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
+        sam@ravnborg.org
+Subject: Re: [PATCH v6 3/3] drm: Add GUD USB Display driver
+References: <20210219121702.50964-1-noralf@tronnes.org>
+ <20210219121702.50964-4-noralf@tronnes.org>
+ <20210219214243.11330.qmail@stuge.se>
+ <5c00a868-3a2f-438b-3670-ee86caef4d2a@tronnes.org>
+ <3ee3fad6-61be-b848-a68f-df7c2e0001f9@tronnes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <837a988e66554c5d95b18ae85648d3d7@RW-EXC1.JVPinto.com>
-To:     Undisclosed recipients:;
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3ee3fad6-61be-b848-a68f-df7c2e0001f9@tronnes.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Noralf Trønnes wrote:
+> Peter, please have a look at this diff and see if I'm on the right track
+> here: https://gist.github.com/notro/a43a93a3aa0cc75d930890b7b254fc0a
 
-My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
-and Petroleum" also "Minister of State for International Cooperation"
-in UAE. I write to you on behalf of my other "three (3) colleagues"
-who has approved me to solicit for your "partnership in claiming of
-{us$47=Million}" from a Financial Home in Cambodia on their behalf and
-for our "Mutual Benefits".
+Yes that's exactly what I meant; this way the possibility for contradicting
+sizes is eliminated by protocol and not just by implementation - very nice!
 
-The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
-deal with Cambodian/Vietnam Government within 2013/2014, however, we
-don't want our government to know about the fund. If this proposal
-interests you, let me know, by sending me an email and I will send to
-you detailed information on how this business would be successfully
-transacted. Be informed that nobody knows about the secret of this
-fund except us, and we know how to carry out the entire transaction.
-So I am compelled to ask, that you will stand on our behalf and
-receive this fund into any account that is solely controlled by you.
+Some more comments, sorry if this is just because of ongoing work:
 
-We will compensate you with 15% of the total amount involved as
-gratification for being our partner in this transaction. Reply to:
-ms.reem@yandex.com
+Perhaps the functions taking usb_device + ifnum could take usb_interface
+instead - but I don't know if that would simplify or complicate things.
+Alan mentioned this idea in similar circumstances in another thread.
+I don't feel strongly, but perhaps it's cleaner.
 
-Regards,
-Ms. Reem.
+gud_usb_control_msg() now seems almost redundant, maybe it could be removed.
+
+In gud_usb_set() if NULL == buf then that's passed to usb_control_msg()
+along with len, which likely crashes if len > 0, so it may be good to
+check or enforce that, maybe with else len=0; before the gud_usb_transfer()
+call.
+
+Finally a small style note that I'd personally change a few if (ret > 0) {
+blocks to have one indent level less and do each check right away, e.g. in
+gud_connector_get_modes():
+
+ret = gud_usb_get()
+if (ret % EDID_LENGTH) {
+	drm_err();
+} else if (ret > 0) {
+	edid_ctx.len = ret;
+	edid = drm_do_get_edid();
+}
+
+and later on in the function by the display modes one indent level
+could be saved with a goto:
+
+if (ret <= 0)
+	goto out;
+
+but obviously no huge deal.
+
+
+In general it's really helpful for device development to see error messages
+when the device behaves incorrectly, the "Invalid .. size" errors are great
+examples of this, but e.g. gud_get_display_descriptor() returns -EIO without
+a message. Maybe there are opportunities for further helpful error messages?
+
+
+Thanks a lot and kind regards
+
+//Peter
