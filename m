@@ -2,83 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E21B23275F5
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Mar 2021 02:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92473327608
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Mar 2021 03:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbhCAB7g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 28 Feb 2021 20:59:36 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:13023 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbhCAB7f (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 Feb 2021 20:59:35 -0500
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Dpjzt5SxTzMSfq;
-        Mon,  1 Mar 2021 09:56:42 +0800 (CST)
-Received: from [10.67.102.118] (10.67.102.118) by
- DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.498.0; Mon, 1 Mar 2021 09:58:42 +0800
-Subject: Re: [RFC PATCH] USB:XHCI:Modify XHCI driver for USB2.0 controller
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
-        <linux-usb@vger.kernel.org>, <yisen.zhuang@huawei.com>,
-        <linux-kernel@vger.kernel.org>
-References: <1614327697-1021-1-git-send-email-liulongfang@huawei.com>
- <20210226163004.GB1392547@rowland.harvard.edu>
- <acfdf816-e295-df1d-4039-784fb0d417c4@huawei.com>
- <20210227162703.GA1429200@rowland.harvard.edu>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <770f03f2-0df2-1821-0f7e-9f27145c8c6b@huawei.com>
-Date:   Mon, 1 Mar 2021 09:58:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S231669AbhCACQ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 28 Feb 2021 21:16:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231318AbhCACQY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 Feb 2021 21:16:24 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EF3C061756;
+        Sun, 28 Feb 2021 18:15:43 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id h98so14423826wrh.11;
+        Sun, 28 Feb 2021 18:15:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=p197FIWEaE2McEUmDO7vulDyQknp7Y0aXGmXiZoR9gk=;
+        b=jLRR1icqICKQsq+XZpogC7opN84/0i92ESwpne6yNIZC0SC35y2EfTeV2mgpE6u9I0
+         4OtA81d07GV4pNYkbGT28lxW59QNF7Z18jmdCaPMm0FQVK+U16hpu0Us2+5pJz6JOZL8
+         Ky5493qF0mFbg069mGFhGPlu6opp9kgXdp5XRWmkt0SZd8l7DSLm158BJvSzKuimmu28
+         qN6NIECnZ+IGhR72MpapLBz0sxSCTVeG64HjijZ75pczBj8EcwVcrCH6YlP2zh7o2UXf
+         7A/5l0oX9o/cFmIiaGdMN25SEp0DdZ+BLGhTAicMtSJAeFWnL5gBk+JhgJtu0yaqEQ7p
+         Axiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=p197FIWEaE2McEUmDO7vulDyQknp7Y0aXGmXiZoR9gk=;
+        b=O2jYjp+jmAokrHMKW8bZlcFYLADGmfurgMbrWxB+n8dmYVtnb6z5c7eFsO9tftWiCu
+         2rgghDP1Jlg1UNPgkqYjftUzLW5trKuXDqkWplJu4JMbbFMbH8QkMJBX19d8UUiJluHZ
+         /KNV/hVpEQMMybQcVi34rl6E49cjCWLgxqaOjtYoO7h/A2k/aThLYCecp6DwG7YwX4kN
+         1miiCCYfqaYsC2upNh0cf2Gt9R4QpTE62gvNYjZZt0fkD1bwlddBinxc+c1fNP5qmhUa
+         Z2ytG0cwW/eOn7H3OEccTwG7A6LALpR8EDpY7UmbcovXqeiCRICM67mh/j3DlB77tHCY
+         IMTQ==
+X-Gm-Message-State: AOAM531LHRB+1LZxZaHWlUPxszS3GcnCGe6VOT729QZttniJRsOOqeXZ
+        Due/mo82tdOybXaer2gvXso=
+X-Google-Smtp-Source: ABdhPJzwWmbsIJ7ZKuo+lg9CYdVq/bJlW06zI+kKbGMQW/y3AVVOQ+egxJpvP0DYc0v4rdi5BwL7Yg==
+X-Received: by 2002:a5d:4743:: with SMTP id o3mr486957wrs.108.1614564942279;
+        Sun, 28 Feb 2021 18:15:42 -0800 (PST)
+Received: from [192.168.1.5] ([41.83.217.193])
+        by smtp.gmail.com with ESMTPSA id f17sm23026870wru.31.2021.02.28.18.15.39
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sun, 28 Feb 2021 18:15:41 -0800 (PST)
+Message-ID: <603c4e4d.1c69fb81.5dc9a.152c@mx.google.com>
+From:   Calantha Camara <amadouneymar794@gmail.com>
+X-Google-Original-From: Calantha Camara
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <20210227162703.GA1429200@rowland.harvard.edu>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.118]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Hi Dear
+To:     Recipients <Calantha@vger.kernel.org>
+Date:   Mon, 01 Mar 2021 02:15:37 +0000
+Reply-To: calanthac20@gmail.com
+X-Mailer: cdcaafe51be8cdb99a1c85906066cad3d0e60e273541515a58395093a7c4e1f0eefb01d7fc4e6278706e9fb8c4dad093c3263345202970888b6b4d817f9e998c032e7d59
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/2/28 0:27, Alan Stern Wrote:
-> On Sat, Feb 27, 2021 at 11:38:08AM +0800, liulongfang wrote:
->> On 2021/2/27 0:30, Alan Stern wrote:
->>> On Fri, Feb 26, 2021 at 04:21:37PM +0800, Longfang Liu wrote:
->>>> Our current XHCI hardware controller has been customized to only
->>>> support USB 2.0 ports. When using the current xhci driver, an xhci
->>>> controller device and an ehci controller device will be created
->>>> automatically.
->>>
->>> That sentence makes no sense at all.  An EHCI controller device is a 
->>> piece of hardware.  How can an xHCI driver, which is a piece of 
->>> software, create a piece of hardware?
->>>
->>> Alan Stern
->>> .
->>>
->> The hardware device is a complete USB3.0 controller,
->> but I hope to support a USB2.0-only mode through software configuration.
-> 
-> Even if it only supports USB-2.0 connections, an xHCI controller is 
-> still an xHCI controller.  It doesn't magically transform into an EHCI 
-> controller.
-> 
-> You are not creating an EHCI controller device.  Rather, you are trying 
-> to restrict an xHCI controller device to make it handle only USB-2.0 
-> connections.  If you run lsusb on a system that has an xHCI controller, 
-> you'll see that the controller is bound to two USB buses: a USB-2 bus 
-> and a USB-3 bus.  But for both buses, the controller is xHCI -- not 
-> EHCI.
-> 
-> Your patch description is inaccurate.
-> 
-> Alan Stern
-> .
-> 
-Yes, you are right.
-when I run lsusb on a system that has this xHCI hardware,
-the system displays two USB buses: a USB-2 bus and a USB-3 bus.
-Both of these are xHCI host controllers, but USB-3 bus's roothub is zero.
-Thanks.
-Longfang Liu.
+this is about me
+
+My name is Miss Calantha Camara, i was born on 22 -- 3 -- 1992,  never marr=
+ied, l am from Somalia in Africa, =
+
+
+I'M presently residing in a refugee camp in Dakar Senegal as a result of th=
+e political / religious crisis that has been causing problems in my country=
+. Because of this problem I lost my mother and my father during this deadly=
+ Political War. That Damaged Thousands of innocent Souls in my country Soma=
+lia.
+
+My Late father was a Successful businessman and also a politician supportin=
+g the Present Government, During this problem  all the members of my family=
+ were Murdered in a cold Blood and our family house was set blazed. =
+
+
+But I thank God I was in boarding school when this deadly incident took pla=
+ce. It is only myself who is alive  but i don't have a home right now, I ma=
+naged to make my way to another country Senegal where I am staying now and =
+never pray to go back to my country  Somalia Again.
+
+Please, I have a reason why I contacted you but before that i would like to=
+ know about you what you are doing presently. I will tell you more about my=
+self and the reason why I contacted you in my next mail. =
+
+thanks and God bless
+yours calantha
