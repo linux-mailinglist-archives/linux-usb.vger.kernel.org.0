@@ -2,84 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB183327A92
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Mar 2021 10:19:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8366327AB2
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Mar 2021 10:27:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233827AbhCAJTF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Mar 2021 04:19:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42678 "EHLO mail.kernel.org"
+        id S233883AbhCAJ06 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Mar 2021 04:26:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44124 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233751AbhCAJTF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 1 Mar 2021 04:19:05 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 61AFF64E01;
-        Mon,  1 Mar 2021 09:18:24 +0000 (UTC)
+        id S233844AbhCAJ0z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 1 Mar 2021 04:26:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DF75B64E40;
+        Mon,  1 Mar 2021 09:26:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614590304;
-        bh=gVfBaC9t4lrXYWRSjC58vVIt9/hAhY6mrbALiLX78AI=;
+        s=k20201202; t=1614590772;
+        bh=t2rPw5p0VPwZA8X8TeF+do9ilRi6+KfeveO328khngA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ATP+2R9F4edZqLGKdjeEQQ1gGWuAM5vuZtw2Hx0SPgfcONLwBb+wtGGjqm56RNsTn
-         sN6cg03B9gblos0R7mEJ7FtRUd8OTXWIuM9nyIlKQxYrJ6BSD+5I6SuR72XWPewoo+
-         Q6FkQk6aj81uuwwe8Ho9L6KMEMsWX2gXiZ/3L05Qh0HQ9hxAQiP3ZoqkkqF8IaIaIK
-         vgVqkKjHa6AdL2AK72Wox+2PgepVvV1wEXEwmvYar9Pus6Cv+Zv6v7H0AKe53ND6SW
-         x8BQ6nwzgClOk4k10xyLjlrcrBExrJl/HC/+EPcIcwXld/vY7qqZAocEjjI5U1/uZs
-         AlJC1gLTjzdIQ==
+        b=PuCw7nD9IRmUQo2IBcEYyBMpAa/OvBCJR0ZDLuttMLBq+cq3BbTIYSGkN3wKgzEIw
+         LXya1eJJUzJutZyTqMqYIrSqkHIIPW+0NSiRsYdnwrGr3B47xjVcQCYzDvoFF9lq+K
+         Kw7qjBBDI1YiSUR9tGj/8zbSXGXFrZFeJMO7OCaDgEAqbQLM5rYl93wvzBv5YVbdEI
+         pO/ThGO6YJ3xWFH8Js5aLv+8YmC+/GtaX/U2ky4Jfai3YGtQcb/xqjoIBCwRZIeaOL
+         wFu63uH4twDHUoohYwhTjWgoDpbbItKH+xhujtZUuf0Mvar91890Y+eHEmmJVE0+Ym
+         m+ccr//6l3wUQ==
 Received: from johan by xi.lan with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1lGehN-0007sg-TM; Mon, 01 Mar 2021 10:18:41 +0100
-Date:   Mon, 1 Mar 2021 10:18:41 +0100
+        id 1lGeov-00086U-NB; Mon, 01 Mar 2021 10:26:29 +0100
+Date:   Mon, 1 Mar 2021 10:26:29 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] USB: serial: xr: fix NULL-deref on disconnect
-Message-ID: <YDyxcQfUabhJruuA@hovoldconsulting.com>
-References: <20210226100826.18987-1-johan@kernel.org>
- <20210226115447.6ace5490@coco.lan>
+To:     Niv Sardi <xaiki@evilgiggle.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH fixed 1/1] USB: serial: ch341: add new Product ID
+Message-ID: <YDyzRaMYarsHqDjJ@hovoldconsulting.com>
+References: <20210226183836.20840-1-xaiki@evilgiggle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210226115447.6ace5490@coco.lan>
+In-Reply-To: <20210226183836.20840-1-xaiki@evilgiggle.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 26, 2021 at 11:54:47AM +0100, Mauro Carvalho Chehab wrote:
-> Em Fri, 26 Feb 2021 11:08:26 +0100
-> Johan Hovold <johan@kernel.org> escreveu:
-> 
-> > Claiming the sibling control interface is a bit more involved and
-> > specifically requires adding support to USB-serial core for managing
-> > either interface being unbound first, something which could otherwise
-> > lead to a NULL-pointer dereference.
-> > 
-> > Similarly, additional infrastructure is also needed to handle suspend
-> > properly.
-> > 
-> > Since the driver currently isn't actually using the control interface,
-> > we can defer this for now by simply not claiming the control interface.
-> > 
-> > Fixes: c2d405aa86b4 ("USB: serial: add MaxLinear/Exar USB to Serial driver")
-> > Reported-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> > Cc: Manivannan Sadhasivam <mani@kernel.org>
-> > Signed-off-by: Johan Hovold <johan@kernel.org>
-> 
-> That solved the issue with XR21V1410:
-> 
-> 	[ 8176.265862] usbcore: registered new interface driver xr_serial
-> 	[ 8176.265885] usbserial: USB Serial support registered for xr_serial
-> 	[ 8176.265921] xr_serial 2-1:1.1: xr_serial converter detected
-> 	[ 8176.266041] usb 2-1: xr_serial converter now attached to ttyUSB0
-> 	[ 8176.268023] printk: console [ttyUSB0] enabled
-> 	[ 8186.512841] usb 2-1: USB disconnect, device number 5
-> 	[ 8186.513131] printk: console [ttyUSB0] disabled
-> 	[ 8186.513340] xr_serial ttyUSB0: xr_serial converter now disconnected from ttyUSB0
-> 	[ 8186.513376] xr_serial 2-1:1.1: device disconnected
-> 
-> Tested-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+On Fri, Feb 26, 2021 at 03:38:36PM -0300, Niv Sardi wrote:
+> Add PID for CH340 that's found on cheap programers. They are sometimes refered to as ANU232MI like in this one:
+> https://www.nordfield.com/downloads/anu232mi/ANU232MI-datasheet.pdf
 
-Thanks for testing, and thanks to Greg and Manivannan for the review.
+That datasheet clearly states that it uses a PL2303 which is a
+different chip.
 
-Now applied.
+Sure, the id looks like they could be for a CH341, but please clear up
+this apparent confusion (i.e. explain it).
+
+And include the output of 'lsusb -v' for reference.
+
+> The driver works flawlessly as soon as the new PID (0x9986) is added to it.
+> 
+> Signed-off-by: Niv Sardi <xaiki@evilgiggle.com>
+> ---
+
+Please get into the custom of running scripts/checkpatch.pl on your
+patches before submission, which would have let you know about some
+spelling errors and unbroken lines.
+
+And add a patch revision to your subject prefix (e.g. PATCH v2) when
+resending and include a short changelog here so we know what changes
+since previous versions.
 
 Johan
