@@ -2,193 +2,372 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4620032940E
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Mar 2021 22:46:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 840343294BF
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Mar 2021 23:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240553AbhCAVqB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Mar 2021 16:46:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244387AbhCAVn0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Mar 2021 16:43:26 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E422C06178C
-        for <linux-usb@vger.kernel.org>; Mon,  1 Mar 2021 13:41:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=oIEioxonGdYkFJL2jpzvEspFQ4lE+vhMcySaclXKTGg=; b=gKWmdv6CAnsHi3rB6LBqmrXmeD
-        5RUpndMmgfbZqlrPlGKpQmfuperzX7g8ZTOf2+RZj7n9SGnZjTUJ9lC97K4Z+qx/6JZp8MOgSsJ6x
-        mflDGXFjf96b2mM0kUNDZYzmdMAMsSSib0Z366QgomtAm9MJkVwImYLgTOFHfXjgld2V3fNi9ziD5
-        HlqLaRDa/orh0+zimHsvwRh0fI5wIfL4+Sbi//FZ1vKDm8Y0WSApTC5YooiJoM8Q8CjkBsoYOOQOy
-        s0T//ndVSGGUAzpUF9vrfL8BPYr5Dcv6Jn75AfE3PL0Rd4tALlR1FW/slCnfORi/z/+7OzvM83Civ
-        nx03HqZw==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:60058 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1lGqIS-0006Q1-Vh; Mon, 01 Mar 2021 22:41:45 +0100
-Subject: Re: [PATCH v6 3/3] drm: Add GUD USB Display driver
-To:     Peter Stuge <peter@stuge.se>
-Cc:     hudson@trmm.net, markus@raatikainen.cc,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
-        sam@ravnborg.org
-References: <20210219121702.50964-1-noralf@tronnes.org>
- <20210219121702.50964-4-noralf@tronnes.org>
- <20210225095825.6196.qmail@stuge.se>
- <ecd868f9-5877-63ea-7d3b-504147489b61@tronnes.org>
- <20210225213729.GG20076@stuge.se> <20210301183158.6090.qmail@stuge.se>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-Message-ID: <14e6587d-5efc-4b90-6f0e-793c721997b5@tronnes.org>
-Date:   Mon, 1 Mar 2021 22:41:40 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S237630AbhCAWQe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 1 Mar 2021 17:16:34 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:60769 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235886AbhCAWOM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Mar 2021 17:14:12 -0500
+Received: from FRIBB15 ([84.62.17.44]) by mrelayeu.kundenserver.de (mreue107
+ [212.227.15.183]) with ESMTPSA (Nemesis) id 1MjSwu-1lfhvj1GA6-00ktqf; Mon, 01
+ Mar 2021 23:11:17 +0100
+From:   "Johannes Freyberger" <Johannes@Freyberger.de>
+To:     "'Ruslan Bilovol'" <ruslan.bilovol@gmail.com>
+Cc:     "'Felipe Balbi'" <balbi@kernel.org>,
+        "'Jonathan Corbet'" <corbet@lwn.net>,
+        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
+        "'Glenn Schmottlach'" <gschmottlach@gmail.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "'Linux USB'" <linux-usb@vger.kernel.org>
+References: <002f01d70eba$d1b365a0$751a30e0$@Freyberger.de> <CAB=otbQLO451REYQg3ZAR+bwAFaX5VFfz9_fVGvY3yGGxEWsaA@mail.gmail.com>
+In-Reply-To: <CAB=otbQLO451REYQg3ZAR+bwAFaX5VFfz9_fVGvY3yGGxEWsaA@mail.gmail.com>
+Subject: AW: [PATCH 0/8] USB Audio Gadget part 2: Feedback endpoint, Volume/Mute support
+Date:   Mon, 1 Mar 2021 23:11:16 +0100
+Message-ID: <003801d70ee7$cd1504e0$673f0ea0$@Freyberger.de>
 MIME-Version: 1.0
-In-Reply-To: <20210301183158.6090.qmail@stuge.se>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQGFXHO3TXrQzcL2BMtuE/hHhswd6wGYK5GrqwZQaqA=
+Content-Language: de
+X-Provags-ID: V03:K1:UYkqifTYWpQ/uzm/bkAUa37QQ9Gf63Bhc+fGv3h19S3P6Zhd3A4
+ wxZ6P37WTJ2j/xawsZfUp1+IbdQgFH1/o0XC1eXq/ln3OCY2TW67Ae9TiqKU/6xLD90+DKp
+ 6z7EDou7BLZj+1r/Qhftn1My9JDVx2Bv+diva0hfwvyeQb6xPSBFlcsQVCuM41gRCPgYm0D
+ pW3Wt68RQyQT9WlGvy2ZA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:pn564xEqm58=:9+LQZRztMvShkSA72rg6hz
+ 8gNIruxa044OXjkp02f+1S0myF0nbb0UTuEf6QdMps1zAObhSGfVqIyWvYaP1S9C/+Jk4jYdE
+ OwC6HwMHE+/kSvRLrzx5q9/OOx5VAe2osJjS2KOJazuPVsT4zvRQbd/+lZsDRWSgqLuOzni2T
+ F8l/ruEad/yfWIHmQqmlkhjKi3TpCIabFYgK8ziXNtut24VVmGgKw0+1N4zqt/Ka9QZKrfQce
+ Wb0h0ChJMZvpbVQdRc4/uAgtGbjVZODZWSArtc5VaY9SlAVaAyd17ckhAz0evG4E44L4CVWoK
+ TIt93p+t6rKLxGMg/X1QeVOyTaj9l37swDL728sS0W7emUkycBKywBxO3OG/DVzu+HtdKIOA6
+ VHZELqom7BLsD9JuY/BE9BLICz6PIWLsFCk53qdToavacNygaIKfg4Ck3Tx+As9rErgQhFOYs
+ aFBo6r+85Q==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Ruslan,
 
+thanks a lot for your quick answer.
 
-Den 01.03.2021 19.31, skrev Peter Stuge:
-> Hi Noralf,
+> -----Ursprüngliche Nachricht-----
+> Von: Ruslan Bilovol
+> Gesendet: Montag, 1. März 2021 22:34
+> An: Johannes Freyberger <Johannes@freyberger.de>
+> Cc: Felipe Balbi <balbi@kernel.org>; Jonathan Corbet <corbet@lwn.net>;
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Glenn Schmottlach
+> <gschmottlach@gmail.com>; linux-doc@vger.kernel.org; linux-
+> kernel@vger.kernel.org; Linux USB <linux-usb@vger.kernel.org>
+> Betreff: Re: [PATCH 0/8] USB Audio Gadget part 2: Feedback endpoint,
+> Volume/Mute support
 > 
-> Peter Stuge wrote:
->> I'll prepare a test setup for the RGB-TFT on the weekend.
+> Hi Johannes,
 > 
-> So implementing a GUD and looking at the protocol from yet another
-> angle gives more new insights - surprise. :)
+> On Mon, Mar 1, 2021 at 6:49 PM Johannes Freyberger
+> <Johannes@freyberger.de> wrote:
+> >
+> > Hi Ruslan,
+> >
+> > thanks for all your efforts to make the USB Audio Gadget work in Win10
+> > using UAC2. Meanwhile I managed to apply and compile your previous
+> > modifications and now my Raspberry PI shows up in the Windows Device
+> > Manager as a valid
+> > UAC2 audio device. Unfortunately it still doesn't work to transfer any
+> > audio as it seems the audio endpoints or the topology is not working.
 > 
-
-Yep, my Raspberry Pi Pico implementation discovered a bug in the
-compression code. Running X on a 240x135 display produced some 2x2
-buffer rectangles which was so small that they failed to compress.
-
-> Here are some thoughts so far:
+> Are you testing my previous version of the patches on some older kernel?
 > 
-> * GUD_REQ_SET_VERSION does still rub me wrong; it seems potentially
->   quite complex to maintain compatibility in two places; both for host
->   and device. I don't want to insist on removing it, but at a minimum
->   it's quite unusual.
->   Part of the idea in USB is that host software updates are easy if
->   not fully automated but device firmware updates less so, thus
->   complexity is rather placed in the host.
+> Just for records - these two patch sets (part 1 and part 2) are based on Greg's
+> usb-next branch (commit b5a12546e779d4f5586f58e60e0ef5070a833a64
+> which is based on v5.11-rc5 tag). I retested them today with a BBB board and
+> it works fine under Win 10. Also I rebased these two patchsets today against
+> latest Greg's usb-next branch which is now Linus's v5.12-rc1 tag and again it
+> works fine under Win10 - both Volume/Mute controls and audio streaming.
 > 
-
-Alright, I'll remove it :) This can also be accomplished in the device
-by having a switch that turns it into a version 1 device.
-
-> * It's unclear to me from reading the header files in this v6 patch set
->   which GUD_REQ:s and which properties are actually mandatory in devices.
->   I'm getting hints from your STM32 device and reading the driver code in
->   detail, but what do you think is a good way to document what's required
->   vs. optional?
+> These patches have been tested previously on Raspberry PI 4 running v5.9
+> and v5.10 stable kernels. The only issues I've seen were because of
+> Raspberry's DWC2 DMA issue in the driver that I described in this cover
+> letter.
+> However if you disable volume/mute controls, it won't affect you.
 > 
-
-The device must respond to all requests, but can return zero on some
-like the property requests. I intend to do a writeup on the wiki later
-with some more details around the protocol and how DRM works for this
-usecase.
-
-My RPi Pico implementation will also serve as a guide. I've put the
-protocol handling in one file for possible reuse:
-- gud.h: https://gist.github.com/notro/26bbf918fa59fb89caf155d51d57a40f
-- gud.c: https://gist.github.com/notro/c1b32cea591f84d3d1c94f30812c1ba6
-
-I will publish it when I have cleaned up the rest of the code.
-
-> * GUD_REQ_SET_BUFFER my old nemesis. :) It's great that it's optional!
->   But do you see any way to turn it into a bulk message, in order to
->   remove the memory barrier effect of a control transfer before bulk?
+> > I checked it
+> > with some tools and found one providing some information on the USB
+> > part (it's called UVCview.exe and is part of the Windows Driver Kit).
+> > Here's the output which I hope can give some hints on the problems
+> > still existing in this driver:
 > 
-
-On a 1920x1080 RGB565 full update (4MB), the control request is
-negligible. I did measure it (USB 2.0), but I don't remember the
-numbers, a few milliseconds.
-
-> I think it would be possible to noticeably improve performance later,
-> by changing the host driver to submit asynchronous bulk transfers for
-> frame data rather than waiting for each transfer to finish; bulk
-> transfers will then pack optimally on the wire - but with a control
-> transfer in between there's no chance of achieving that.
-> 
-> Having only one kind of transfer in the hot path would also simplify
-> canceling still pending transfers (when using async later) if new data
-> gets flushed before the previous frame is completely transfered.
+> From the output below I see UAC2 descriptors are completely screwed up
+> (or UVCview.exe doesn't show them correctly). Windows is very strict to the
+> descriptors and doesn't allow devices to start in case of any issues.
+> So if it appears as a valid UAC2 device in Device Manager, most likely
+> UVCview.exe doesn't decode UAC2 descriptors well.
 > 
 
-The device is the bottle neck (unless it's powerful like a Pi4):
+You are right, they really look screwed up. Meanwhile I found another similar tool which also knows Audio 2.0 and here everything looks fine ( https://www.uwe-sieber.de/usbtreeview.html#download )
 
-Host: compresses buffer
-Host: sends ctrl transfer
-Host: sends bulk transfer
-Device: Decompresses buffer, much slower than a desktop CPU
-Host: compresses buffer
-Host: sends ctrl transfer, waits for device to respond
-Device: Has decompressed, and is ready
-Host: sends bulk transfer
+> Could you please also apply these patches to the latest kernel (v5.12-rc1) and
+> test?
 
-I would have preferred to do a test on a USB 3.0 device which would put
-more stress on the host, but I couldn't find an affordable one with
-mainline Linux support.
+Yes, I'd like to do this and I want to apologize for my newbie questions in advance. But I have to admit I'm rather new to Linux, Kernel compiling etc. and I followed the description on https://www.raspberrypi.org/documentation/linux/kernel/building.md and then applied your patches - partially I had to do some modifications by hand as the sources had changed. The version I downloaded via "git clone --depth=1 https://github.com/raspberrypi/linux" seems to be Linux 5.10.17-v7l. And I cannot see the version you mention at https://github.com/raspberrypi/linux/branches . Where can I get the version v5.12-rc1 for these tests?
 
-As you say this can be optimized later. By using double buffering it's
-possible to compress the next buffer while the previous is in transit.
-
-lz4 compression has worked really well in my testing, always 2x or better.
-
-I will reconsider the ctrl req if you provide me with numbers that show
-it's a performance problem.
-
-> * A fair bit of the EDID isn't used or has dummy values. Have you already
->   considered and dismissed some other ways of accomplishing the same?
+> 
+> Thanks,
+> Ruslan
 > 
 
-EDID is optional (return zero in v7), but useful if you want userspace
-to give a name to the monitor in the GUI for instance.
+Thanks to you for helping beginners like me,
+best regards,
+Johannes
 
-This comment will be present in version 7:
+> >
+> >           ---===>Device Information<===--- English product name:
+> > "Linux USB Audio Gadget"
+> >
+> > ConnectionStatus:
+> > Current Config Value:              0x01  -> Device Bus Speed: High
+> > Device Address:                    0x0F
+> > Open Pipes:                           0
+> > *!*ERROR:  No open pipes!
+> >
+> >           ===>Device Descriptor<===
+> > bLength:                           0x12
+> > bDescriptorType:                   0x01
+> > bcdUSB:                          0x0200
+> > bDeviceClass:                      0xEF  -> This is a Multi-interface
+> > Function Code Device
+> > bDeviceSubClass:                   0x02  -> This is the Common Class Sub
+> > Class
+> > bDeviceProtocol:                   0x01  -> This is the Interface
+> > Association Descriptor protocol
+> > bMaxPacketSize0:                   0x40 = (64) Bytes
+> > idVendor:                        0x1D6B = The Linux Foundation
+> > idProduct:                       0x0101
+> > bcdDevice:                       0x0510
+> > iManufacturer:                     0x01
+> >      English (United States)  "Linux 5.10.17-v7l-R3LAY_TEST+ with
+> > fe980000.usb"
+> > iProduct:                          0x02
+> >      English (United States)  "Linux USB Audio Gadget"
+> > iSerialNumber:                     0x00
+> > bNumConfigurations:                0x01
+> >
+> >           ===>Configuration Descriptor<===
+> > bLength:                           0x09
+> > bDescriptorType:                   0x02
+> > wTotalLength:                    0x00E2  -> Validated
+> > bNumInterfaces:                    0x03
+> > bConfigurationValue:               0x01
+> > iConfiguration:                    0x00
+> > bmAttributes:                      0xC0  -> Bus Powered
+> > MaxPower:                          0x01 =   2 mA
+> >
+> >           ===>IAD Descriptor<===
+> > bLength:                           0x08
+> > bDescriptorType:                   0x0B
+> > bFirstInterface:                   0x00
+> > bInterfaceCount:                   0x03
+> > bFunctionClass:                    0x01  -> Audio Interface Class
+> > bFunctionSubClass:                 0x00
+> > *!*CAUTION:    This appears to be an invalid bFunctionSubClass
+> > bFunctionProtocol:                 0x20
+> > iFunction:                         0x04
+> >      English (United States)  "R3lay PI"
+> >
+> >           ===>Interface Descriptor<===
+> > bLength:                           0x09
+> > bDescriptorType:                   0x04
+> > bInterfaceNumber:                  0x00
+> > bAlternateSetting:                 0x00
+> > bNumEndpoints:                     0x00
+> > bInterfaceClass:                   0x01  -> Audio Interface Class
+> > bInterfaceSubClass:                0x01  -> Audio Control Interface SubClass
+> > bInterfaceProtocol:                0x20
+> > CAUTION:  This may be an invalid bInterfaceProtocol
+> > iInterface:                        0x05
+> >      English (United States)  "Topology Control"
+> >
+> >           ===>Audio Control Interface Header Descriptor<===
+> > bLength:                           0x09
+> > bDescriptorType:                   0x24
+> > bDescriptorSubtype:                0x01
+> > bcdADC:                          0x0200
+> > wTotalLength:                    0x5308
+> > bInCollection:                     0x00
+> >
+> >           ===>Descriptor Hex Dump<===
+> > bLength:                           0x08
+> > bDescriptorType:                   0x24
+> > 08 24 0A 06 01 01 00 06
+> >
+> >           ===>Descriptor Hex Dump<===
+> > bLength:                           0x08
+> > bDescriptorType:                   0x24
+> > 08 24 0A 05 01 01 00 07
+> >
+> >           ===>Descriptor Hex Dump<===
+> > bLength:                           0x11
+> > bDescriptorType:                   0x24
+> > 11 24 02 01 01 01 00 05 02 03 00 00 00 00 03 00
+> > 08
+> >
+> >           ===>Descriptor Hex Dump<===
+> > bLength:                           0x11
+> > bDescriptorType:                   0x24
+> > 11 24 02 02 00 02 00 06 02 03 00 00 00 00 03 00
+> > 09
+> >
+> >           ===>Descriptor Hex Dump<===
+> > bLength:                           0x0C
+> > bDescriptorType:                   0x24
+> > 0C 24 03 04 01 01 00 02 06 03 00 0A
+> >
+> >           ===>Descriptor Hex Dump<===
+> > bLength:                           0x0C
+> > bDescriptorType:                   0x24
+> > 0C 24 03 03 00 03 00 01 05 03 00 0B
+> >
+> >           ===>Interface Descriptor<===
+> > bLength:                           0x09
+> > bDescriptorType:                   0x04
+> > bInterfaceNumber:                  0x01
+> > bAlternateSetting:                 0x00
+> > bNumEndpoints:                     0x00
+> > bInterfaceClass:                   0x01  -> Audio Interface Class
+> > bInterfaceSubClass:                0x02  -> Audio Streaming Interface
+> > SubClass
+> > bInterfaceProtocol:                0x20
+> > CAUTION:  This may be an invalid bInterfaceProtocol
+> > iInterface:                        0x0C
+> >      English (United States)  "Playback Inactive"
+> >
+> >           ===>Interface Descriptor<===
+> > bLength:                           0x09
+> > bDescriptorType:                   0x04
+> > bInterfaceNumber:                  0x01
+> > bAlternateSetting:                 0x01
+> > bNumEndpoints:                     0x02
+> > bInterfaceClass:                   0x01  -> Audio Interface Class
+> > bInterfaceSubClass:                0x02  -> Audio Streaming Interface
+> > SubClass
+> > bInterfaceProtocol:                0x20
+> > CAUTION:  This may be an invalid bInterfaceProtocol
+> > iInterface:                        0x0D
+> >      English (United States)  "Playback Active"
+> >
+> >           ===>Descriptor Hex Dump<===
+> > bLength:                           0x10
+> > bDescriptorType:                   0x24
+> > 10 24 01 01 00 01 01 00 00 00 02 03 00 00 00 00
+> >
+> >           ===>Audio Streaming Format Type Descriptor<===
+> > bLength:                           0x06
+> > bDescriptorType:                   0x24
+> > bDescriptorSubtype:                0x02
+> > bFormatType:                       0x01
+> > bNrChannels:                       0x02
+> > bSubframeSize:                     0x10
+> > bBitResolution:                    0x07
+> > bSamFreqType:                      0x05
+> > tSamFreq[1]:                   0x380501 (3671297 Hz)
+> > tSamFreq[2]:                   0x080401 (525313 Hz)
+> > tSamFreq[3]:                   0x000125 (293 Hz)
+> > tSamFreq[4]:                   0x000000 (0 Hz)
+> > tSamFreq[5]:                   0x050700 (329472 Hz)
+> >
+> >           ===>Endpoint Descriptor<===
+> > bLength:                           0x07
+> > bDescriptorType:                   0x05
+> > bEndpointAddress:                  0x01  -> Direction: OUT - EndpointID: 1
+> > bmAttributes:                      0x05  -> Isochronous Transfer Type
+> >                    Synchronization Type = Asynchronous Bulk Transfer
+> > Type
+> > wMaxPacketSize:                  0x0138 = 1 transactions per microframe,
+> > 0x138 max bytes
+> > bInterval:                         0x04
+> >
+> >           ===>Descriptor Hex Dump<===
+> > bLength:                           0x08
+> > bDescriptorType:                   0x25
+> > 08 25 01 00 00 00 00 00
+> >
+> >           ===>Endpoint Descriptor<===
+> > bLength:                           0x07
+> > bDescriptorType:                   0x05
+> > bEndpointAddress:                  0x81  -> Direction: IN - EndpointID: 1
+> > bmAttributes:                      0x11  -> Isochronous Transfer Type
+> >                    Synchronization Type = No Synchronization Bulk
+> > Transfer Type
+> > wMaxPacketSize:                  0x0004 = 1 transactions per microframe,
+> > 0x04 max bytes
+> > bInterval:                         0x04
+> >
+> >           ===>Interface Descriptor<===
+> > bLength:                           0x09
+> > bDescriptorType:                   0x04
+> > bInterfaceNumber:                  0x02
+> > bAlternateSetting:                 0x00
+> > bNumEndpoints:                     0x00
+> > bInterfaceClass:                   0x01  -> Audio Interface Class
+> > bInterfaceSubClass:                0x02  -> Audio Streaming Interface
+> > SubClass
+> > bInterfaceProtocol:                0x20
+> > CAUTION:  This may be an invalid bInterfaceProtocol
+> > iInterface:                        0x0E
+> >      English (United States)  "Capture Inactive"
+> >
+> >           ===>Interface Descriptor<===
+> > bLength:                           0x09
+> > bDescriptorType:                   0x04
+> > bInterfaceNumber:                  0x02
+> > bAlternateSetting:                 0x01
+> > bNumEndpoints:                     0x01
+> > bInterfaceClass:                   0x01  -> Audio Interface Class
+> > bInterfaceSubClass:                0x02  -> Audio Streaming Interface
+> > SubClass
+> > bInterfaceProtocol:                0x20
+> > CAUTION:  This may be an invalid bInterfaceProtocol
+> > iInterface:                        0x0F
+> >      English (United States)  "Capture Active"
+> >
+> >           ===>Descriptor Hex Dump<===
+> > bLength:                           0x10
+> > bDescriptorType:                   0x24
+> > 10 24 01 04 00 01 01 00 00 00 02 03 00 00 00 00
+> >
+> >           ===>Audio Streaming Format Type Descriptor<===
+> > bLength:                           0x06
+> > bDescriptorType:                   0x24
+> > bDescriptorSubtype:                0x02
+> > bFormatType:                       0x01
+> > bNrChannels:                       0x02
+> > bSubframeSize:                     0x10
+> > bBitResolution:                    0x07
+> > bSamFreqType:                      0x05
+> > tSamFreq[1]:                   0xC40582 (12846466 Hz)
+> > tSamFreq[2]:                   0x080400 (525312 Hz)
+> > tSamFreq[3]:                   0x000125 (293 Hz)
+> > tSamFreq[4]:                   0x000000 (0 Hz)
+> > tSamFreq[5]:                   0x000000 (0 Hz)
+> >
+> >           ===>Endpoint Descriptor<===
+> > bLength:                           0x07
+> > bDescriptorType:                   0x05
+> > bEndpointAddress:                  0x82  -> Direction: IN - EndpointID: 2
+> > bmAttributes:                      0x05  -> Isochronous Transfer Type
+> >                    Synchronization Type = Asynchronous Bulk Transfer
+> > Type
+> > wMaxPacketSize:                  0x00C4 = 1 transactions per microframe,
+> > 0xC4 max bytes
+> > bInterval:                         0x04
+> >
+> >           ===>Descriptor Hex Dump<===
+> > bLength:                           0x08
+> > bDescriptorType:                   0x25
+> > 08 25 01 00 00 00 00 00
+> >
 
-/*
- * Display modes can be fetched as either EDID data or an array of
-&gud_display_mode_req.
- *
- * If GUD_REQ_GET_CONNECTOR_MODES returns zero, EDID is used to create
-display modes.
- * If both display modes and EDID are returned, EDID is just passed on
-to userspace
- * in the EDID connector property.
- */
-
-> * Sorry if I've asked before - but what's the purpose of
->   GUD_REQ_SET_STATE_CHECK and GUD_REQ_SET_STATE_COMMIT? Why/when does
->   drm do pipe check vs. update?
-> 
-
-DRM atomic mode setting has 2 stages:
-- Check to see if the mode is supported, return -EINVAL if not
-- Commit the mode, this is not allowed to fail.
-
-Userspace can also do just the check phase when figuring out which
-combination of options that is supported.
-
-> * How do you feel about passing the parameters for
->   GUD_REQ_SET_CONTROLLER_ENABLE and GUD_REQ_SET_DISPLAY_ENABLE in wValue?
->   It would save the transfer data stage.
-> 
-
-That would make the request different form the others, wValue is only
-used by the connector requests for the index. I prefer to use the data
-stage for data. If there was any performance gain I would have looked
-into it, but these requests are only used on init and when turning
-on/off the display.
-
-Noralf.
