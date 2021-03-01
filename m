@@ -2,141 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D00329129
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Mar 2021 21:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 033E0329277
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Mar 2021 21:46:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240988AbhCAUUX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Mar 2021 15:20:23 -0500
-Received: from xaiki.net ([108.166.209.89]:50270 "EHLO mail.xaiki.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242958AbhCAURN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 1 Mar 2021 15:17:13 -0500
-Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by mail.xaiki.net (Postfix) with ESMTPA id 91C06F28C;
-        Mon,  1 Mar 2021 20:16:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=evilgiggle.com;
-        s=dkim; t=1614629789;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xLOw4Q3Qa7JTB1sLEwcin/l5p95uru24aOeG1MxV2Ws=;
-        b=pOQWaEH3Rc3R7cV5QEqZG+GGGTbnHl0z7TPgyRaNmToBNCvkXwMf6vkdJrvv5QcdrKDI3o
-        6rmRzL0WxanbcjNcepqelNT3zbSNhW97re8RDbEDRKVwQ0BLlZUjlqNS7Qh6DCIXKEMhZr
-        Jol6t8BR7bxZ3jC5N4dHQ4aFTas4qDJXj221Ts/Lmiy6NY8imTJbz5QQxG6bTUUu48yrpz
-        WoMZk8KOIqGl8GMp64nC2LjI3o1UzTiniDCp/frjCSR6R6vKXZjCXa371lA1dw8x4Au2Xj
-        TIfVppOR6RIoJpIh0CwJFPb/yz5G+jw7s77BL/qOzeXGrR1uJnb7i1XOI48FWg==
-From:   Niv Sardi <xaiki@evilgiggle.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Niv Sardi <xaiki@evilgiggle.com>
-Subject: [PATCH v3] USB: serial: ch341: add new Product ID
-Date:   Mon,  1 Mar 2021 17:16:12 -0300
-Message-Id: <20210301201612.10867-2-xaiki@evilgiggle.com>
-In-Reply-To: <20210301201612.10867-1-xaiki@evilgiggle.com>
-References: <20210301201612.10867-1-xaiki@evilgiggle.com>
+        id S243553AbhCAUqD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Mar 2021 15:46:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243549AbhCAUmo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Mar 2021 15:42:44 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664ECC061788;
+        Mon,  1 Mar 2021 12:41:54 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id q25so7456661lfc.8;
+        Mon, 01 Mar 2021 12:41:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=U8ckhY23O0No17m/JvuHL31BFYtBvGOi+OkwRIXziEU=;
+        b=T+Vv7hKlov5Vu4PtyeJpSz5nT3nmwNG8uBUCcMyEXFKLfd1vCsS3CtZBsm26bGahIQ
+         7MU5HXg9yifj+/LFUg10NhRoZ3gM9dNZZiWQ7Cqf7FdLpJz5tT3YUmiRLrS5XsgzDn28
+         A049wJD6VsLsBN7igQiEO6tEFORDaGgw5T2m083gw7eTxTYw+od4hzEyCjmHFu5eOW6f
+         aBdM45CBWdFk2yd/ebPhhgHjFhogoPWPxlvDSeIkIKHSrSQxR9Z5wHQDkw68eqUbNkZk
+         Q3Mf82/ykuzRkY8Y3Kqdliq6crCcmS4nUEGVzG6oUzGEPXfsZaoawuwt1zMO9UhyuApm
+         Ha5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=U8ckhY23O0No17m/JvuHL31BFYtBvGOi+OkwRIXziEU=;
+        b=GOo3OriMJkcheEhnu5YBOy5Fuch8csQLJp+aP2W2n3m5IkprVU2kIubs9rdX6PYXMs
+         3QufPQYYzYiZ/4BPa4l+BCXcZOC541PL6jUcB8kMnGJlfcwRpMHi3GaXJ+yZdpn3fjw6
+         /yypdPZ10TcuN7DaBpJX6N3WzoGfL7wamrMemWM16a6Ui53F7o6PFWtwaSf/P0UWQMHe
+         PAIRygvfQ8FSA8WzmVNL03N0AfUAAdblz9EZWMq2vTFphX5Of3WpjriLfnDA+6LfxsdV
+         GirQ0PggBi8F7OYDcG/zUEB3XIe1aKLU4nMkjVhWYv8FyxfwWTJJr2tzQwg2TSEWICjq
+         wmng==
+X-Gm-Message-State: AOAM530PudgTxPnsUs4mG/EswGw5UER6Cfu0Je8hKBz85NdTBUlVQZUC
+        L/O8E27RQWfQBBdV7xwSHYA=
+X-Google-Smtp-Source: ABdhPJxNlsRw++jCuURHS8Ft1igh71j4HocCMoabTMh9Hk/u15uuR7zQ5SGcoC5RVWhEMxD7RNVzUA==
+X-Received: by 2002:a05:6512:159:: with SMTP id m25mr3434328lfo.296.1614631312876;
+        Mon, 01 Mar 2021 12:41:52 -0800 (PST)
+Received: from localhost.localdomain ([94.103.235.167])
+        by smtp.gmail.com with ESMTPSA id z129sm1661392lfa.127.2021.03.01.12.41.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Mar 2021 12:41:52 -0800 (PST)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     royale@zerezo.com, mchehab@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+efe9aefc31ae1e6f7675@syzkaller.appspotmail.com
+Subject: [PATCH] drivers/media/usb: fix memory leak in zr364xx_probe
+Date:   Mon,  1 Mar 2021 23:38:26 +0300
+Message-Id: <20210301203829.345527-1-paskripkin@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Authentication-Results: mail.xaiki.net;
-        auth=pass smtp.auth=x@btn.sh smtp.mailfrom=xaiki@evilgiggle.com
-X-Spam-Level: ****
-X-Spamd-Bar: ++++
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add PID for CH340 that's found on cheap programmers.
+syzbot reported memory leak in zr364xx_probe()[1].
+The problem was in invalid error handling order.
+All error conditions rigth after v4l2_ctrl_handler_init()
+must call v4l2_ctrl_handler_free().
 
-The driver works flawlessly as soon as the new PID (0x9986) is added to it.
-These look like ANU232MI but ship with a ch341 inside. They have no special
-identifiers (mine only has the string "DB9D20130716" printed on the PCB and
-nothing identifiable on the packaging. The merchant i bought it from 
-doesn't sell these anymore).
-
-the lsusb -v output is:
-Bus 001 Device 009: ID 9986:7523  
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               1.10
-  bDeviceClass          255 Vendor Specific Class
-  bDeviceSubClass         0 
-  bDeviceProtocol         0 
-  bMaxPacketSize0         8
-  idVendor           0x9986 
-  idProduct          0x7523 
-  bcdDevice            2.54
-  iManufacturer           0 
-  iProduct                0 
-  iSerial                 0 
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0027
-    bNumInterfaces          1
-    bConfigurationValue     1
-    iConfiguration          0 
-    bmAttributes         0x80
-      (Bus Powered)
-    MaxPower               96mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass      1 
-      bInterfaceProtocol      2 
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0020  1x 32 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0020  1x 32 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0008  1x 8 bytes
-        bInterval               1
-
-Signed-off-by: Niv Sardi <xaiki@evilgiggle.com>
+Reported-by: syzbot+efe9aefc31ae1e6f7675@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
 ---
- drivers/usb/serial/ch341.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/usb/zr364xx/zr364xx.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-index 28deaaec581f..f26861246f65 100644
---- a/drivers/usb/serial/ch341.c
-+++ b/drivers/usb/serial/ch341.c
-@@ -86,6 +86,7 @@ static const struct usb_device_id id_table[] = {
- 	{ USB_DEVICE(0x1a86, 0x7522) },
- 	{ USB_DEVICE(0x1a86, 0x7523) },
- 	{ USB_DEVICE(0x4348, 0x5523) },
-+	{ USB_DEVICE(0x9986, 0x7523) },
- 	{ },
- };
- MODULE_DEVICE_TABLE(usb, id_table);
+diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
+index d29b861367ea..1ef611e08323 100644
+--- a/drivers/media/usb/zr364xx/zr364xx.c
++++ b/drivers/media/usb/zr364xx/zr364xx.c
+@@ -1430,7 +1430,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	if (hdl->error) {
+ 		err = hdl->error;
+ 		dev_err(&udev->dev, "couldn't register control\n");
+-		goto unregister;
++		goto free_hdlr_and_unreg_dev;
+ 	}
+ 	/* save the init method used by this camera */
+ 	cam->method = id->driver_info;
+@@ -1503,7 +1503,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	if (!cam->read_endpoint) {
+ 		err = -ENOMEM;
+ 		dev_err(&intf->dev, "Could not find bulk-in endpoint\n");
+-		goto unregister;
++		goto free_hdlr_and_unreg_dev;
+ 	}
+ 
+ 	/* v4l */
+@@ -1515,7 +1515,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	/* load zr364xx board specific */
+ 	err = zr364xx_board_init(cam);
+ 	if (err)
+-		goto unregister;
++		goto free_hdlr_and_unreg_dev;
+ 	err = v4l2_ctrl_handler_setup(hdl);
+ 	if (err)
+ 		goto board_uninit;
+@@ -1533,7 +1533,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	err = video_register_device(&cam->vdev, VFL_TYPE_VIDEO, -1);
+ 	if (err) {
+ 		dev_err(&udev->dev, "video_register_device failed\n");
+-		goto free_handler;
++		goto board_uninit;
+ 	}
+ 	cam->v4l2_dev.release = zr364xx_release;
+ 
+@@ -1541,11 +1541,10 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 		 video_device_node_name(&cam->vdev));
+ 	return 0;
+ 
+-free_handler:
+-	v4l2_ctrl_handler_free(hdl);
+ board_uninit:
+ 	zr364xx_board_uninit(cam);
+-unregister:
++free_hdlr_and_unreg_dev:
++	v4l2_ctrl_handler_free(hdl);
+ 	v4l2_device_unregister(&cam->v4l2_dev);
+ free_cam:
+ 	kfree(cam);
 -- 
-2.30.1
+2.25.1
 
