@@ -2,71 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2BF327A41
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Mar 2021 10:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9CD327A84
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Mar 2021 10:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233687AbhCAI7C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Mar 2021 03:59:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59464 "EHLO mail.kernel.org"
+        id S233795AbhCAJN3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Mar 2021 04:13:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40610 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233709AbhCAI4O (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 1 Mar 2021 03:56:14 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BE27A6148E;
-        Mon,  1 Mar 2021 08:55:32 +0000 (UTC)
+        id S233360AbhCAJN3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 1 Mar 2021 04:13:29 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F2B464DD0;
+        Mon,  1 Mar 2021 09:12:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614588932;
-        bh=1Lj3nNR9NY5QBEvwcUxtfqmYoLwL0qm3v3ID+sTuq6Q=;
+        s=k20201202; t=1614589968;
+        bh=tjkiVI3A2xFgGl10IYM9My8bIQDSmWhGcqwupcCBLZs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DJYAIlkCN4p0WxB/8R8oNXUUCM9KOLmVOPkojRWgZSjI6M8vPZWRfSYFN4zH64I7n
-         Ln1mUvO/5ETHCibW1oI8zbKrQhFMft9W8ZANJBLYhrexeH0r41u26Xk+Rbx7pdiWgM
-         /otkm6vIPfb7bpnZVlzVJR5CoK2K17RjUVUncAt2BiNwSzfMfT10330QaE+YCsAFa2
-         2vVtbI02rBqTSFJPmsKpO4IL1v0kXAZap0Xyx7XR1XzRVvECsT9VoZdnhwTUck8200
-         OgNVvySX+zRrLIQ+detvuyfYWcAsxlPmWh57tGI5XIVaXpwZco6jeq6hYLKnC3/IEe
-         K1O/GoXbssvgw==
+        b=KpRyLJX904gVPbkb9OPq4D7rLPnXwN7CCokueIjgnPV9eOuINJFzE5wdKAdb7elm4
+         TLlsCMvA4JLzD4tQxC37Oo5NmsQsQnGz1dVPwsl+HQGCnHzNi4g624llR51RdVwWu6
+         o7gJVmk5W7trKXGdSvrWtlh3IgppHwSIT9FNkkOVYIfs65t3p/ZOp/Eq2+Ne1tckmo
+         m/iDXwuq8WzCeyIF8IGZPM4AHu748X68tKt/sTrnLdymlZemkzEgNaGGwWA8FEZXXj
+         FOF5GIrWPECsf0tT88pdz/a/yeCEjBzLkyMlm9pfI2JJsQvYyLnAHOWwJiHMrmNxWA
+         9rqrjB/NUg81Q==
 Received: from johan by xi.lan with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1lGeLG-0003sV-8A; Mon, 01 Mar 2021 09:55:50 +0100
-Date:   Mon, 1 Mar 2021 09:55:50 +0100
+        id 1lGebx-0006tK-6u; Mon, 01 Mar 2021 10:13:05 +0100
+Date:   Mon, 1 Mar 2021 10:13:05 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Pho Tran <Pho.Tran@silabs.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Hung Nguyen <Hung.Nguyen@silabs.com>
-Subject: Re: [PATCH] USB: serial: cp210x: Make the CP210x driver work with
- GPIOs of CP2108
-Message-ID: <YDysFn8RgBKV7iCV@hovoldconsulting.com>
-References: <5F0FCC57-86C5-4FF2-AE75-C2DDC748901A@silabs.com>
+To:     Karan Singhal <karan.singhal@acuitybrands.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] USB: serial: cp210x: add IDs for nLight Air Adapter,
+ Acuity Brands, Inc.
+Message-ID: <YDywIaupI5YRLw8/@hovoldconsulting.com>
+References: <20210216160310.6144-1-karan.singhal@acuitybrands.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5F0FCC57-86C5-4FF2-AE75-C2DDC748901A@silabs.com>
+In-Reply-To: <20210216160310.6144-1-karan.singhal@acuitybrands.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 01, 2021 at 08:13:46AM +0000, Pho Tran wrote:
-> Similar to other CP210x devices, GPIO interfaces (gpiochip) should be supported for CP2108.
+On Tue, Feb 16, 2021 at 11:03:10AM -0500, Karan Singhal wrote:
+> IDs of nLight Air Adapter, Acuity Brands, Inc.:
+> vid: 10c4
+> pid: 88d8
 > 
-> CP2108 has 4 serial interfaces but only 1 set of GPIO pins are shared to all of those interfaces.
-> So, just need to initialize GPIOs of CP2108 with only one interface (I use interface 0).
-> It means just only 1 gpiochip device file will be created for CP2108.
-> 
-> CP2108 has 16 GPIOs, So data types of several variables need to be is u16
-> instead of u8(in struct cp210x_serial_private). This doesn't affect other CP210x devices.
-> 
-> Because CP2108 has 16 GPIO pins, the parameter which is passed by cp210x functions
-> will be different from other CP210x devices. So need to check part number of the device to use correct data format  before sending commands to devices.
-> 
-> Like CP2104, CP2108 have GPIO pins with configurable options. Therefore, in cp2108_gpio_init() function,
-> Should be mask all pins which are not in GPIO mode.
+> Signed-off-by: Karan Singhal <karan.singhal@acuitybrands.com>
+> ---
 
-Please break commit message lines at 72 cols or so (and try to keep code
-< 80 cols).
+Next time when amending a patch, please include a changelog here so we
+know what changes between revisions.
 
-There are still a few checkpatch.pl warnings on this one that look
-legitimate, please fix those up (e.g. spaces at start of lines).
-
-Also use the kernel u8 and u16 types instead of the c99 ones.
+Now applied, thanks.
 
 Johan
