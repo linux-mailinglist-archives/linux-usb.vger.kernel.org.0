@@ -2,108 +2,354 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D739329358
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Mar 2021 22:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED843293CE
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Mar 2021 22:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239808AbhCAVPf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Mar 2021 16:15:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
+        id S238035AbhCAVhY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Mar 2021 16:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239703AbhCAVNw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Mar 2021 16:13:52 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0251DC06178A;
-        Mon,  1 Mar 2021 13:13:12 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id 18so19247664lff.6;
-        Mon, 01 Mar 2021 13:13:11 -0800 (PST)
+        with ESMTP id S237993AbhCAVfE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Mar 2021 16:35:04 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AF9C061756;
+        Mon,  1 Mar 2021 13:34:23 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id h10so7310950otm.1;
+        Mon, 01 Mar 2021 13:34:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=m/w3adjNG8HK/lwcehQkIZJzhEHTTJ//E8WwZiuEcSQ=;
-        b=R1t9AhgQK/oPN6o22dRudRMAbs/tbTJyw2LdgFgUyY5F+1cVAGLFI6FOI3a9mfiM8T
-         CfGuNk09TkCDIQJjRQaz47UUTcLwcOW8wdOiNDxXRgCDo1B8SZ8qILF45znr0ajmXazQ
-         0gsMoB3fYE2J2DcDSgw/C26OQf7ZCz7PNM/usPSDaPD/pNnTiWFiVW1TTCbm9yZsjbnY
-         d2gDYDGZGINUheWw3cac8Iigd1mSum5XCQAOzZbZwUw3KgMZBd4FSbBlLLcfUzsQ4zUI
-         ZOwuZTJqvKIpfxioOpJyPVlGcKvoCGh2dkI1VT365ocmgGBkslKmMad7TCOZzeGd9Cdb
-         9NRA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HhG4rx0c+91LEIH+qR6RUNaHVNddgYArf242XPm3m3I=;
+        b=TLPlCvv7mipFOgDdtuQYva3KVH/7Nyr7w5kNK0kqoF62qjVBG2oYj9l42gJkPUgSCg
+         QZvX/gxXVXjEATlE1XdZn0rRcNBDF4SDqpbbf7UqgwAdeHxKsWtreNyF+5V3A2WUWxpc
+         q9yUx0GTuuRbwgz7WfMDDtN3ZGmGhs3H6y2cu9pPgr6TK6GrQ0Sb3VjGMfB349z078kn
+         sBUCghaYrk1edGmiRBKUNhchjd/285xwUmcsP+Qup6gPZkB4uhmpHkLvPDBSCdtjh4sF
+         j4KLG+bvmPykP7N3TPAjZ7oJdR0w2jZhJscEML34odvoO+oV/8oYDn71fwHZpcyYtdcz
+         Xjnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=m/w3adjNG8HK/lwcehQkIZJzhEHTTJ//E8WwZiuEcSQ=;
-        b=e2b0l393B1fTfuxlJxILzfcJptIwe8FutcHZ250PX4QO4VLkYb86OzIFQP4L4mwmbW
-         VZrFkXVTV56+ZhnJ2XAdBBTbet5vaaINbh/w8UNj7YCKAsM7vMNehPvVn2JRl1H4LwkS
-         viD9P6qC7JdOavvNIsuwG5oQ03v9H/rtJSBDSXqHnugysft5xvYHHwCgsNt9VrIlnvbH
-         35gBEaTGejQHIN39B7Y3ywP71e/GCW0r4PHhhusVtRXjTL501MuzgA+lUXvAuSx8VV3K
-         qRldzBrtH1Kknp+Xaeu0gpkLdYOR6fJKEDgqf2JSCBLI1C9tpjF01b/4+jfyWzPtNUHT
-         cAZA==
-X-Gm-Message-State: AOAM532C3iRAnNjMYVw1CreW9tQI1zIEETfcvf7mOLj3HuQB37epZJfz
-        fxA8hMaRD3Z/XZD/iXGQO98=
-X-Google-Smtp-Source: ABdhPJzNNmfQZEMPpLna52PhyJPzbd6jWac0WJZYj2+xt0+OEhUkv8M8RuqWrVNenAMToFs8wAgZ7g==
-X-Received: by 2002:ac2:51ac:: with SMTP id f12mr10248660lfk.605.1614633190552;
-        Mon, 01 Mar 2021 13:13:10 -0800 (PST)
-Received: from [10.0.0.11] (user-5-173-242-247.play-internet.pl. [5.173.242.247])
-        by smtp.googlemail.com with ESMTPSA id p9sm2260752ljn.16.2021.03.01.13.13.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Mar 2021 13:13:09 -0800 (PST)
-Subject: Re: [PATCH v3] net: usb: qmi_wwan: support ZTE P685M modem
-To:     netdev@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, kuba@kernel.org, bjorn@mork.no
-References: <20210223183456.6377-1-lech.perczak@gmail.com>
- <161419020661.3818.15606819052802011752.git-patchwork-notify@kernel.org>
-From:   Lech Perczak <lech.perczak@gmail.com>
-Message-ID: <bb636575-e32d-5d6f-16d1-dc75ce4f4f84@gmail.com>
-Date:   Mon, 1 Mar 2021 22:13:08 +0100
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HhG4rx0c+91LEIH+qR6RUNaHVNddgYArf242XPm3m3I=;
+        b=FpwAecnfdd366Gm40rw94u49FdXqbv4pVOZFxqo/i2vb6y95HTK9B2vjzTHSVUexve
+         ETBvD0jkBIVc9czhBHxf78Dw+gN9ocOKMz2vcdo+M4yK9xKv0Bl4JRGETEHsnNLl4kth
+         ZuSw5iZt1KqXNNJXy4kbw3zE1nMXtEatfyrpFvGGuTXsYyAYO9sCej+z5bgE7dKByg12
+         zHdXQY/nEs0edCpbRsA8bZugf4e30hFqgXYtf1lKjpeCyiTsz/Su8ezYsJoUopQcM3MO
+         TFwLsATmIjkmddlc6N0pq10oBDkNy4LZ4u82aRkLGT+XOWbvfzecnws7emYgb3BYfRBd
+         +IRg==
+X-Gm-Message-State: AOAM531EWyH5kiarmpZrSXcpQPIthYzmt/GbpUoZdcYomqkHf+062SuO
+        CKNumhfB8JA+O5SXlpHI8m8iufHWnWH7aVE8+LYYMw9JWRi/xwkE
+X-Google-Smtp-Source: ABdhPJyydZtffSv5+Wnv+dZFJc+0pWvWdVBBAHhFflSlXJ0QmxYPBVWgWsjiAjNpGuURs4rjqTKR28eWoDIKLZ1ik+E=
+X-Received: by 2002:a9d:6012:: with SMTP id h18mr15104225otj.336.1614634462595;
+ Mon, 01 Mar 2021 13:34:22 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <161419020661.3818.15606819052802011752.git-patchwork-notify@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-GB
+References: <002f01d70eba$d1b365a0$751a30e0$@Freyberger.de>
+In-Reply-To: <002f01d70eba$d1b365a0$751a30e0$@Freyberger.de>
+From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Date:   Mon, 1 Mar 2021 23:34:09 +0200
+Message-ID: <CAB=otbQLO451REYQg3ZAR+bwAFaX5VFfz9_fVGvY3yGGxEWsaA@mail.gmail.com>
+Subject: Re: [PATCH 0/8] USB Audio Gadget part 2: Feedback endpoint,
+ Volume/Mute support
+To:     Johannes Freyberger <Johannes@freyberger.de>
+Cc:     Felipe Balbi <balbi@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Glenn Schmottlach <gschmottlach@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux USB <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-02-24 at 19:10, patchwork-bot+netdevbpf@kernel.org wrote:
-> Hello:
->
-> This patch was applied to netdev/net.git (refs/heads/master):
->
-> On Tue, 23 Feb 2021 19:34:56 +0100 you wrote:
->> Now that interface 3 in "option" driver is no longer mapped, add device
->> ID matching it to qmi_wwan.
->>
->> The modem is used inside ZTE MF283+ router and carriers identify it as
->> such.
->> Interface mapping is:
->> 0: QCDM, 1: AT (PCUI), 2: AT (Modem), 3: QMI, 4: ADB
->>
->> [...]
-> Here is the summary with links:
->    - [v3] net: usb: qmi_wwan: support ZTE P685M modem
->      https://git.kernel.org/netdev/net/c/88eee9b7b42e
->
-> You are awesome, thank you!
-> --
-> Deet-doot-dot, I am a bot.
-> https://korg.docs.kernel.org/patchwork/pwbot.html
->
-I see that the usb-serial counterpart of this patch was queued up for 
-stable [1], so just for the sake of completeness, it might be worthy to 
-consider this one too. This would likely make OpenWrt folks happy -  I 
-think that going for 5.4.y and upper would suffice, as 5.4 is currently 
-used as stable kernel there, and most of targets are switching to 5.10 
-right now.
+Hi Johannes,
 
-Upstream commit is 88eee9b7b42e69fb622ddb3ff6f37e8e4347f5b2.
+On Mon, Mar 1, 2021 at 6:49 PM Johannes Freyberger
+<Johannes@freyberger.de> wrote:
+>
+> Hi Ruslan,
+>
+> thanks for all your efforts to make the USB Audio Gadget work in Win10 using
+> UAC2. Meanwhile I managed to apply and compile your previous modifications
+> and now my Raspberry PI shows up in the Windows Device Manager as a valid
+> UAC2 audio device. Unfortunately it still doesn't work to transfer any audio
+> as it seems the audio endpoints or the topology is not working.
 
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/queue-5.11/usb-serial-option-update-interface-mapping-for-zte-p685m.patch?id=a15ddfc3cd600b31862fdde91f8988e1cfc7bffe
+Are you testing my previous version of the patches on some older kernel?
 
---
-With kind regards,
-Lech
+Just for records - these two patch sets (part 1 and part 2) are based on Greg's
+usb-next branch (commit b5a12546e779d4f5586f58e60e0ef5070a833a64 which
+is based on v5.11-rc5 tag). I retested them today with a BBB board and it works
+fine under Win 10. Also I rebased these two patchsets today against latest
+Greg's usb-next branch which is now Linus's v5.12-rc1 tag and again it works
+fine under Win10 - both Volume/Mute controls and audio streaming.
 
+These patches have been tested previously on Raspberry PI 4 running v5.9
+and v5.10 stable kernels. The only issues I've seen were because of
+Raspberry's DWC2 DMA issue in the driver that I described in this cover letter.
+However if you disable volume/mute controls, it won't affect you.
+
+> I checked it
+> with some tools and found one providing some information on the USB part
+> (it's called UVCview.exe and is part of the Windows Driver Kit). Here's the
+> output which I hope can give some hints on the problems still existing in
+> this driver:
+
+From the output below I see UAC2 descriptors are completely screwed up
+(or UVCview.exe doesn't show them correctly). Windows is very strict to
+the descriptors and doesn't allow devices to start in case of any issues.
+So if it appears as a valid UAC2 device in Device Manager, most likely
+UVCview.exe doesn't decode UAC2 descriptors well.
+
+Could you please also apply these patches to the latest kernel (v5.12-rc1)
+and test?
+
+Thanks,
+Ruslan
+
+>
+>           ---===>Device Information<===---
+> English product name: "Linux USB Audio Gadget"
+>
+> ConnectionStatus:
+> Current Config Value:              0x01  -> Device Bus Speed: High
+> Device Address:                    0x0F
+> Open Pipes:                           0
+> *!*ERROR:  No open pipes!
+>
+>           ===>Device Descriptor<===
+> bLength:                           0x12
+> bDescriptorType:                   0x01
+> bcdUSB:                          0x0200
+> bDeviceClass:                      0xEF  -> This is a Multi-interface
+> Function Code Device
+> bDeviceSubClass:                   0x02  -> This is the Common Class Sub
+> Class
+> bDeviceProtocol:                   0x01  -> This is the Interface
+> Association Descriptor protocol
+> bMaxPacketSize0:                   0x40 = (64) Bytes
+> idVendor:                        0x1D6B = The Linux Foundation
+> idProduct:                       0x0101
+> bcdDevice:                       0x0510
+> iManufacturer:                     0x01
+>      English (United States)  "Linux 5.10.17-v7l-R3LAY_TEST+ with
+> fe980000.usb"
+> iProduct:                          0x02
+>      English (United States)  "Linux USB Audio Gadget"
+> iSerialNumber:                     0x00
+> bNumConfigurations:                0x01
+>
+>           ===>Configuration Descriptor<===
+> bLength:                           0x09
+> bDescriptorType:                   0x02
+> wTotalLength:                    0x00E2  -> Validated
+> bNumInterfaces:                    0x03
+> bConfigurationValue:               0x01
+> iConfiguration:                    0x00
+> bmAttributes:                      0xC0  -> Bus Powered
+> MaxPower:                          0x01 =   2 mA
+>
+>           ===>IAD Descriptor<===
+> bLength:                           0x08
+> bDescriptorType:                   0x0B
+> bFirstInterface:                   0x00
+> bInterfaceCount:                   0x03
+> bFunctionClass:                    0x01  -> Audio Interface Class
+> bFunctionSubClass:                 0x00
+> *!*CAUTION:    This appears to be an invalid bFunctionSubClass
+> bFunctionProtocol:                 0x20
+> iFunction:                         0x04
+>      English (United States)  "R3lay PI"
+>
+>           ===>Interface Descriptor<===
+> bLength:                           0x09
+> bDescriptorType:                   0x04
+> bInterfaceNumber:                  0x00
+> bAlternateSetting:                 0x00
+> bNumEndpoints:                     0x00
+> bInterfaceClass:                   0x01  -> Audio Interface Class
+> bInterfaceSubClass:                0x01  -> Audio Control Interface SubClass
+> bInterfaceProtocol:                0x20
+> CAUTION:  This may be an invalid bInterfaceProtocol
+> iInterface:                        0x05
+>      English (United States)  "Topology Control"
+>
+>           ===>Audio Control Interface Header Descriptor<===
+> bLength:                           0x09
+> bDescriptorType:                   0x24
+> bDescriptorSubtype:                0x01
+> bcdADC:                          0x0200
+> wTotalLength:                    0x5308
+> bInCollection:                     0x00
+>
+>           ===>Descriptor Hex Dump<===
+> bLength:                           0x08
+> bDescriptorType:                   0x24
+> 08 24 0A 06 01 01 00 06
+>
+>           ===>Descriptor Hex Dump<===
+> bLength:                           0x08
+> bDescriptorType:                   0x24
+> 08 24 0A 05 01 01 00 07
+>
+>           ===>Descriptor Hex Dump<===
+> bLength:                           0x11
+> bDescriptorType:                   0x24
+> 11 24 02 01 01 01 00 05 02 03 00 00 00 00 03 00
+> 08
+>
+>           ===>Descriptor Hex Dump<===
+> bLength:                           0x11
+> bDescriptorType:                   0x24
+> 11 24 02 02 00 02 00 06 02 03 00 00 00 00 03 00
+> 09
+>
+>           ===>Descriptor Hex Dump<===
+> bLength:                           0x0C
+> bDescriptorType:                   0x24
+> 0C 24 03 04 01 01 00 02 06 03 00 0A
+>
+>           ===>Descriptor Hex Dump<===
+> bLength:                           0x0C
+> bDescriptorType:                   0x24
+> 0C 24 03 03 00 03 00 01 05 03 00 0B
+>
+>           ===>Interface Descriptor<===
+> bLength:                           0x09
+> bDescriptorType:                   0x04
+> bInterfaceNumber:                  0x01
+> bAlternateSetting:                 0x00
+> bNumEndpoints:                     0x00
+> bInterfaceClass:                   0x01  -> Audio Interface Class
+> bInterfaceSubClass:                0x02  -> Audio Streaming Interface
+> SubClass
+> bInterfaceProtocol:                0x20
+> CAUTION:  This may be an invalid bInterfaceProtocol
+> iInterface:                        0x0C
+>      English (United States)  "Playback Inactive"
+>
+>           ===>Interface Descriptor<===
+> bLength:                           0x09
+> bDescriptorType:                   0x04
+> bInterfaceNumber:                  0x01
+> bAlternateSetting:                 0x01
+> bNumEndpoints:                     0x02
+> bInterfaceClass:                   0x01  -> Audio Interface Class
+> bInterfaceSubClass:                0x02  -> Audio Streaming Interface
+> SubClass
+> bInterfaceProtocol:                0x20
+> CAUTION:  This may be an invalid bInterfaceProtocol
+> iInterface:                        0x0D
+>      English (United States)  "Playback Active"
+>
+>           ===>Descriptor Hex Dump<===
+> bLength:                           0x10
+> bDescriptorType:                   0x24
+> 10 24 01 01 00 01 01 00 00 00 02 03 00 00 00 00
+>
+>           ===>Audio Streaming Format Type Descriptor<===
+> bLength:                           0x06
+> bDescriptorType:                   0x24
+> bDescriptorSubtype:                0x02
+> bFormatType:                       0x01
+> bNrChannels:                       0x02
+> bSubframeSize:                     0x10
+> bBitResolution:                    0x07
+> bSamFreqType:                      0x05
+> tSamFreq[1]:                   0x380501 (3671297 Hz)
+> tSamFreq[2]:                   0x080401 (525313 Hz)
+> tSamFreq[3]:                   0x000125 (293 Hz)
+> tSamFreq[4]:                   0x000000 (0 Hz)
+> tSamFreq[5]:                   0x050700 (329472 Hz)
+>
+>           ===>Endpoint Descriptor<===
+> bLength:                           0x07
+> bDescriptorType:                   0x05
+> bEndpointAddress:                  0x01  -> Direction: OUT - EndpointID: 1
+> bmAttributes:                      0x05  -> Isochronous Transfer Type
+>                    Synchronization Type = Asynchronous
+> Bulk Transfer Type
+> wMaxPacketSize:                  0x0138 = 1 transactions per microframe,
+> 0x138 max bytes
+> bInterval:                         0x04
+>
+>           ===>Descriptor Hex Dump<===
+> bLength:                           0x08
+> bDescriptorType:                   0x25
+> 08 25 01 00 00 00 00 00
+>
+>           ===>Endpoint Descriptor<===
+> bLength:                           0x07
+> bDescriptorType:                   0x05
+> bEndpointAddress:                  0x81  -> Direction: IN - EndpointID: 1
+> bmAttributes:                      0x11  -> Isochronous Transfer Type
+>                    Synchronization Type = No Synchronization
+> Bulk Transfer Type
+> wMaxPacketSize:                  0x0004 = 1 transactions per microframe,
+> 0x04 max bytes
+> bInterval:                         0x04
+>
+>           ===>Interface Descriptor<===
+> bLength:                           0x09
+> bDescriptorType:                   0x04
+> bInterfaceNumber:                  0x02
+> bAlternateSetting:                 0x00
+> bNumEndpoints:                     0x00
+> bInterfaceClass:                   0x01  -> Audio Interface Class
+> bInterfaceSubClass:                0x02  -> Audio Streaming Interface
+> SubClass
+> bInterfaceProtocol:                0x20
+> CAUTION:  This may be an invalid bInterfaceProtocol
+> iInterface:                        0x0E
+>      English (United States)  "Capture Inactive"
+>
+>           ===>Interface Descriptor<===
+> bLength:                           0x09
+> bDescriptorType:                   0x04
+> bInterfaceNumber:                  0x02
+> bAlternateSetting:                 0x01
+> bNumEndpoints:                     0x01
+> bInterfaceClass:                   0x01  -> Audio Interface Class
+> bInterfaceSubClass:                0x02  -> Audio Streaming Interface
+> SubClass
+> bInterfaceProtocol:                0x20
+> CAUTION:  This may be an invalid bInterfaceProtocol
+> iInterface:                        0x0F
+>      English (United States)  "Capture Active"
+>
+>           ===>Descriptor Hex Dump<===
+> bLength:                           0x10
+> bDescriptorType:                   0x24
+> 10 24 01 04 00 01 01 00 00 00 02 03 00 00 00 00
+>
+>           ===>Audio Streaming Format Type Descriptor<===
+> bLength:                           0x06
+> bDescriptorType:                   0x24
+> bDescriptorSubtype:                0x02
+> bFormatType:                       0x01
+> bNrChannels:                       0x02
+> bSubframeSize:                     0x10
+> bBitResolution:                    0x07
+> bSamFreqType:                      0x05
+> tSamFreq[1]:                   0xC40582 (12846466 Hz)
+> tSamFreq[2]:                   0x080400 (525312 Hz)
+> tSamFreq[3]:                   0x000125 (293 Hz)
+> tSamFreq[4]:                   0x000000 (0 Hz)
+> tSamFreq[5]:                   0x000000 (0 Hz)
+>
+>           ===>Endpoint Descriptor<===
+> bLength:                           0x07
+> bDescriptorType:                   0x05
+> bEndpointAddress:                  0x82  -> Direction: IN - EndpointID: 2
+> bmAttributes:                      0x05  -> Isochronous Transfer Type
+>                    Synchronization Type = Asynchronous
+> Bulk Transfer Type
+> wMaxPacketSize:                  0x00C4 = 1 transactions per microframe,
+> 0xC4 max bytes
+> bInterval:                         0x04
+>
+>           ===>Descriptor Hex Dump<===
+> bLength:                           0x08
+> bDescriptorType:                   0x25
+> 08 25 01 00 00 00 00 00
+>
