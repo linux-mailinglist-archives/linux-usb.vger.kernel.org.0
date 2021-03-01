@@ -2,138 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8157C327486
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Feb 2021 22:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E21B23275F5
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Mar 2021 02:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbhB1VFo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 28 Feb 2021 16:05:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbhB1VFo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 Feb 2021 16:05:44 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC62DC06174A
-        for <linux-usb@vger.kernel.org>; Sun, 28 Feb 2021 13:04:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=X0MXwH6FHHu6zd6OcezB6lg1gPu4rqv9Y1Ez4KIqcvM=; b=lWtyJwv06uXOWNBKwdnnrr35lT
-        CtGGQA4Z/WoCalxGRwoouw9lHBH5U3xa5lzeX5M2vBCgWJPsWV5WLL29a1rByMTZlEKBtBPdAKxKn
-        0nhowNW3jQWYiLHxSqVTUwbZ2XawtDQxZAeVnJ0dIgUMWY7bNI+p//ZYtUbVSF01nl0iKnXHhOZoe
-        1R928Mgyea+YsrYxnjyBF2Nkq4qP9Wk66Wp13LyG/7cu7gbpUw9qLMqm6t7CTClEtoIAoQLdzIM7T
-        g8Hyzvd8DWLjybPfbMbpg+WHGN7q683uP+ud1e/0OjMB70FbI/hUpYd7FLHALn94L2VvvoEYkDACL
-        LeYkEaDw==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:56877 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1lGTF6-000554-Hl; Sun, 28 Feb 2021 22:04:44 +0100
-Subject: Re: [PATCH v6 3/3] drm: Add GUD USB Display driver
-To:     Peter Stuge <peter@stuge.se>
-Cc:     hudson@trmm.net, markus@raatikainen.cc,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
-        sam@ravnborg.org
-References: <20210219121702.50964-1-noralf@tronnes.org>
- <20210219121702.50964-4-noralf@tronnes.org>
- <20210219214243.11330.qmail@stuge.se>
- <5c00a868-3a2f-438b-3670-ee86caef4d2a@tronnes.org>
- <3ee3fad6-61be-b848-a68f-df7c2e0001f9@tronnes.org>
- <20210228015209.3252.qmail@stuge.se>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-Message-ID: <230829ee-4bf1-7211-d0a3-2ec07fdcd1c1@tronnes.org>
-Date:   Sun, 28 Feb 2021 22:04:38 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S231473AbhCAB7g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 28 Feb 2021 20:59:36 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:13023 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230437AbhCAB7f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 Feb 2021 20:59:35 -0500
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Dpjzt5SxTzMSfq;
+        Mon,  1 Mar 2021 09:56:42 +0800 (CST)
+Received: from [10.67.102.118] (10.67.102.118) by
+ DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
+ 14.3.498.0; Mon, 1 Mar 2021 09:58:42 +0800
+Subject: Re: [RFC PATCH] USB:XHCI:Modify XHCI driver for USB2.0 controller
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <yisen.zhuang@huawei.com>,
+        <linux-kernel@vger.kernel.org>
+References: <1614327697-1021-1-git-send-email-liulongfang@huawei.com>
+ <20210226163004.GB1392547@rowland.harvard.edu>
+ <acfdf816-e295-df1d-4039-784fb0d417c4@huawei.com>
+ <20210227162703.GA1429200@rowland.harvard.edu>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <770f03f2-0df2-1821-0f7e-9f27145c8c6b@huawei.com>
+Date:   Mon, 1 Mar 2021 09:58:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20210228015209.3252.qmail@stuge.se>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210227162703.GA1429200@rowland.harvard.edu>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.118]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-Den 28.02.2021 02.52, skrev Peter Stuge:
-> Noralf Trønnes wrote:
->> Peter, please have a look at this diff and see if I'm on the right track
->> here: https://gist.github.com/notro/a43a93a3aa0cc75d930890b7b254fc0a
+On 2021/2/28 0:27, Alan Stern Wrote:
+> On Sat, Feb 27, 2021 at 11:38:08AM +0800, liulongfang wrote:
+>> On 2021/2/27 0:30, Alan Stern wrote:
+>>> On Fri, Feb 26, 2021 at 04:21:37PM +0800, Longfang Liu wrote:
+>>>> Our current XHCI hardware controller has been customized to only
+>>>> support USB 2.0 ports. When using the current xhci driver, an xhci
+>>>> controller device and an ehci controller device will be created
+>>>> automatically.
+>>>
+>>> That sentence makes no sense at all.  An EHCI controller device is a 
+>>> piece of hardware.  How can an xHCI driver, which is a piece of 
+>>> software, create a piece of hardware?
+>>>
+>>> Alan Stern
+>>> .
+>>>
+>> The hardware device is a complete USB3.0 controller,
+>> but I hope to support a USB2.0-only mode through software configuration.
 > 
-> Yes that's exactly what I meant; this way the possibility for contradicting
-> sizes is eliminated by protocol and not just by implementation - very nice!
+> Even if it only supports USB-2.0 connections, an xHCI controller is 
+> still an xHCI controller.  It doesn't magically transform into an EHCI 
+> controller.
 > 
-> Some more comments, sorry if this is just because of ongoing work:
+> You are not creating an EHCI controller device.  Rather, you are trying 
+> to restrict an xHCI controller device to make it handle only USB-2.0 
+> connections.  If you run lsusb on a system that has an xHCI controller, 
+> you'll see that the controller is bound to two USB buses: a USB-2 bus 
+> and a USB-3 bus.  But for both buses, the controller is xHCI -- not 
+> EHCI.
 > 
-> Perhaps the functions taking usb_device + ifnum could take usb_interface
-> instead - but I don't know if that would simplify or complicate things.
-> Alan mentioned this idea in similar circumstances in another thread.
-> I don't feel strongly, but perhaps it's cleaner.
+> Your patch description is inaccurate.
 > 
-
-I agree it's cleaner, this way I don't have to store the interface
-number in gdrm.
-
-> gud_usb_control_msg() now seems almost redundant, maybe it could be removed.
+> Alan Stern
+> .
 > 
-
-There are 4 callers so I think it makes sense still.
-
-> In gud_usb_set() if NULL == buf then that's passed to usb_control_msg()
-> along with len, which likely crashes if len > 0, so it may be good to
-> check or enforce that, maybe with else len=0; before the gud_usb_transfer()
-> call.
-> 
-
-Ok.
-
-> Finally a small style note that I'd personally change a few if (ret > 0) {
-> blocks to have one indent level less and do each check right away, e.g. in
-> gud_connector_get_modes():
-> 
-> ret = gud_usb_get()
-> if (ret % EDID_LENGTH) {
-> 	drm_err();
-> } else if (ret > 0) {
-> 	edid_ctx.len = ret;
-> 	edid = drm_do_get_edid();
-> }
-> 
-> and later on in the function by the display modes one indent level
-> could be saved with a goto:
-> 
-> if (ret <= 0)
-> 	goto out;
-> 
-> but obviously no huge deal.
-> 
-
-It makes for a better read so I'll do that.
-
-> 
-> In general it's really helpful for device development to see error messages
-> when the device behaves incorrectly, the "Invalid .. size" errors are great
-> examples of this, but e.g. gud_get_display_descriptor() returns -EIO without
-> a message. Maybe there are opportunities for further helpful error messages?
-> 
-
-The message is printed by the caller:
-
-	ret = gud_get_display_descriptor(intf, &desc);
-	if (ret) {
-		DRM_DEV_DEBUG_DRIVER(dev, "Not a display interface: ret=%d\n", ret);
-		return -ENODEV;
-	}
-
-It's a debug message enabled by writing to /sys/module/drm/parameters/debug.
-The reason for not making it an error message, is that I want the driver
-to just ignore non-display vendor class interfaces so they can co-exist
-on the device. Someone might make an open protocol gpio (vendor class)
-interface driver some day, or adc, i2c, spi, rtc, or...
-
-Thanks,
-Noralf.
+Yes, you are right.
+when I run lsusb on a system that has this xHCI hardware,
+the system displays two USB buses: a USB-2 bus and a USB-3 bus.
+Both of these are xHCI host controllers, but USB-3 bus's roothub is zero.
+Thanks.
+Longfang Liu.
