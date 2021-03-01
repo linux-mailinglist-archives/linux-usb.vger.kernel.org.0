@@ -2,109 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADBD13282D9
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Mar 2021 16:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20B43282EA
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Mar 2021 17:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236987AbhCAPyO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Mar 2021 10:54:14 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:35057 "HELO
+        id S237470AbhCAQAK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Mar 2021 11:00:10 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:50797 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S236969AbhCAPyI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Mar 2021 10:54:08 -0500
-Received: (qmail 1490473 invoked by uid 1000); 1 Mar 2021 10:53:21 -0500
-Date:   Mon, 1 Mar 2021 10:53:21 -0500
+        with SMTP id S237135AbhCAQAI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Mar 2021 11:00:08 -0500
+Received: (qmail 1490911 invoked by uid 1000); 1 Mar 2021 10:59:27 -0500
+Date:   Mon, 1 Mar 2021 10:59:27 -0500
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [xhci] usb 4-1: reset SuperSpeed Gen 1 USB device number 2 using
- xhci_hcd
-Message-ID: <20210301155321.GA1490228@rowland.harvard.edu>
-References: <CA+icZUWJyPTefHkGEgQtDO9TOM4CN_b2qPJGQVF7NE=Q=fGAEQ@mail.gmail.com>
- <CA+icZUUzBvmi9SvJ4Bh8ER_+Rkm9vv9FkKwoS8ofmRsko_fJhg@mail.gmail.com>
- <CA+icZUXCgW0bPcqNf+DSubBciQeBMbNX5zbjkMXinqRdkE1PfA@mail.gmail.com>
+To:     Christoph Hellwig <hch@lst.de>, Hans de Goede <hdegoede@redhat.com>
+Cc:     Tom Yan <tom.ty89@gmail.com>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH 2/2] usb-storage: revert from scsi_add_host_with_dma() to
+ scsi_add_host()
+Message-ID: <20210301155927.GB1490228@rowland.harvard.edu>
+References: <186eb035-4bc4-ff72-ee41-aeb6d81888e3@redhat.com>
+ <X8T0E2qvF2cgADl+@kroah.com>
+ <dd557c38-a919-5e5e-ab3b-17a235f17139@redhat.com>
+ <20201130172004.GA966032@rowland.harvard.edu>
+ <abb0a79d-63a0-6f3d-4812-f828283cd47c@redhat.com>
+ <CAGnHSEk1GixNK71CJMymwLE=MyedjCkiG5Ubq1=O_wFxBBM0GQ@mail.gmail.com>
+ <CAGnHSEmPpbDokAfGkeCkvo3JuYfnosVt8H+TK7ZWFNsdyWAfYQ@mail.gmail.com>
+ <20201130203618.GB975529@rowland.harvard.edu>
+ <20210225163557.GC1350993@rowland.harvard.edu>
+ <20210226055352.GA2996@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+icZUXCgW0bPcqNf+DSubBciQeBMbNX5zbjkMXinqRdkE1PfA@mail.gmail.com>
+In-Reply-To: <20210226055352.GA2996@lst.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 01, 2021 at 09:54:38AM +0100, Sedat Dilek wrote:
-> On Wed, Feb 24, 2021 at 6:25 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >
-> > On Wed, Feb 24, 2021 at 2:44 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > >
-> > > Hi Mathias,
-> > >
-> > > I am here on Linux-v5.11-10201-gc03c21ba6f4e.
-> > >
-> > > I see a lot xhci-resets in my dmesg-log:
-> > >
-> > > root# LC_ALL=C dmesg -T | grep 'usb 4-1: reset SuperSpeed Gen 1 USB
-> > > device number 2 using xhci_hcd' | wc -l
-> > > 75
-> > >
-> > > This is what I have:
-> > >
-> > > root# lsusb -s 004:001
-> > > Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-> > >
-> > > root# lsusb -s 004:002
-> > > Bus 004 Device 002: ID 174c:55aa ASMedia Technology Inc. ASM1051E SATA
-> > > 6Gb/s bridge, ASM1053E SATA 6Gb/s bridge, ASM1153 SATA 3Gb/s bridge,
-> > > ASM1153E SATA 6Gb/s bridge
-> > >
-> > > My external USB 3.0 HDD contains the partition with my Debian-system
-> > > and is attached to the above xhci bus/device.
-> > >
-> > > Can you enlighten what this means?
-> > > Is this a known issue?
-> > > Is there a fix around?
-> > >
-> > > BTW, in which Git tree is the xhci development happening?
-> > > Can you point me to it?
-> > >
-> > > I am attaching my linux-config and full dmesg-log.
-> > >
-> > > Also I have attached outputs of:
-> > >
-> > > $ sudo lsusb -vvv -d 1d6b:0003
-> > > $ sudo lsusb -vvv -d 174c:55aa
-> > >
-> > > If you need further information, please let me know.
-> > >
-> > > Thanks.
-> > >
-> >
-> > Looks like that xhci-reset happens here every 10min.
-> >
+On Fri, Feb 26, 2021 at 06:53:52AM +0100, Christoph Hellwig wrote:
+> On Thu, Feb 25, 2021 at 11:35:57AM -0500, Alan Stern wrote:
+> > This thread seems to have fallen through the cracks.  Maybe now would be 
+> > a good time to address the problem (since we originally planned to fix 
+> > it in 5.11!).
+> > 
+> > The questions listed below are pretty self-contained, although the rest
+> > of the discussion isn't.  But I never received any answers.
 > 
-> [ To Greg ]
-> 
-> The problem still remains with Linux v5.12-rc1 (see [1]).
-> 
-> Yesterday, I ran some disk-health checks with smartctl and gsmartcontrol.
-> All good.
-> 
-> For the first time I used badblocks from e2fsprogs Debian package:
-> 
-> root# LC_ALL=C badblocks -v -p 1 -s /dev/sdc -o
-> badblocks-v-p-1-s_dev-sdc_$(uname -r).txt
-> Checking blocks 0 to 976762583
-> Checking for bad blocks (read-only test): done
-> Pass completed, 0 bad blocks found. (0/0/0 errors)
-> 
-> Good, there is no file-system corruption or badblocks or even a hardware damage.
-> 
-> Anyway, feedback is much appreciated.
-> 
-> Thanks.
+> usb-storage must use scsi_add_host_with_dma to use the right device
+> for DMA mapping and parameters.  The calls to set the DMA options
+> on the device are needed so that IOMMU merging doesn't change the
+> imposed requirements.  If these requirements slow you down you need
+> to relax them, as apparently the hardware is able to handle bigger
+> limits.
 
-You can use usbmon on bus 4 to record the USB traffic.  It may indicate 
-why the resets occur.
+Hans, don't you have the right equipment to test this approach?
 
 Alan Stern
