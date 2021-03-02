@@ -2,144 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32EC832A485
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Mar 2021 16:41:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4A332B508
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Mar 2021 07:04:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383203AbhCBKuu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Mar 2021 05:50:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237875AbhCBIve (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Mar 2021 03:51:34 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA44EC061797
-        for <linux-usb@vger.kernel.org>; Tue,  2 Mar 2021 00:50:12 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id d20so18501903qkc.2
-        for <linux-usb@vger.kernel.org>; Tue, 02 Mar 2021 00:50:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WhtnmggMNcdYdbu676s9iSifWjSdNBtSBANUCU9HTLA=;
-        b=HWdhC6Gb3dHIkUWX1ekPGLN1ZDPAROMX2a6PxRqnebUcn3vfawQWV6gLkU3LrryQyg
-         q3Ud9lCNthE1x5qsk0KPBq2H+T4buEZCsNfCEVAgQRQXsmquvAJ2u8QhCv6/dCldlXQY
-         Xl5AJvS1dsWl78BXWH+n0T7+lUSj9zRM0ri9S/Sclpz2MYc1ZbL6wk9X3cUnBS5Hnux9
-         0PwJrihWHSrA6jNEIjtbVvd39JsHWSEIKYDLmnsvSlFbcZQSvX5KATCEKECXUcVf8lBX
-         xZaPZxN95ZtKLGrhh0KuZRd7dl+iR0t1w6xVqXbAOICi8+zrCfQE10QgfaCRUIGcxtiI
-         Ru0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WhtnmggMNcdYdbu676s9iSifWjSdNBtSBANUCU9HTLA=;
-        b=KGn+vTxisefUgyu2T/rxFhvuic7bnIgsjrDBrLdmpWq6tVTQuQMvPs6+PVT3upXbpo
-         epxzQjQziIUiy8cK0bS8YKAePxR0L9qmHRLfcgAwQEWKQqduhi6GMmFc6v4sXUzl9KWL
-         6MXAZZPEoLWzhVZ8IUQT6VFMGD8PB7lrXeoi+0xbdqZLNG9uo0bXx61Ut3n7lQmGiN1v
-         T3NSlnA2nsyHvYJe2oEnW72Vh2YnYv8wKJqW4GcvWWCZgXzKZ9uOJNFkODj5UePlka9J
-         HQzHwB1lkhWJjtFUDBnkTOAebnd3NbxbrO6arLNEnb5Fjd8b6uPBhYrd53JkQETvbqae
-         YJwA==
-X-Gm-Message-State: AOAM5311dBo3Fqc1OVYPyEzOLWVtPcSsyDwxz2An5OXIJIuDw9EHOCrK
-        Kb7Ixb8U5sVaFA2hqmNt3AKY7I5KFEKnyPpjJ+asIA==
-X-Google-Smtp-Source: ABdhPJxFaxzrqAzbQS0vDkDeFyvwPT2hM88tfon15RBo8eyUGj0oyV4bEeTzIjyDoDyB0NvJCCnWMKmiX1k0txeEB94=
-X-Received: by 2002:a37:96c4:: with SMTP id y187mr19600645qkd.231.1614675011769;
- Tue, 02 Mar 2021 00:50:11 -0800 (PST)
-MIME-Version: 1.0
-References: <00000000000036bf3f05bc7ea28a@google.com> <20210302084313.1520-1-hdanton@sina.com>
-In-Reply-To: <20210302084313.1520-1-hdanton@sina.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 2 Mar 2021 09:50:00 +0100
-Message-ID: <CACT4Y+ZRivn84J08sYqOSWhsX1HzCp2ZTYX8ZKwtGndDJKJmDw@mail.gmail.com>
-Subject: Re: memory leak in edge_startup
-To:     Hillf Danton <hdanton@sina.com>, paskripkin@gmail.com
-Cc:     syzbot <syzbot+59f777bdcbdd7eea5305@syzkaller.appspotmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+        id S237918AbhCCF4L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Mar 2021 00:56:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33138 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1448615AbhCBPHa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 2 Mar 2021 10:07:30 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id E126F64F35
+        for <linux-usb@vger.kernel.org>; Tue,  2 Mar 2021 14:58:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614697122;
+        bh=SL8sLQIvC8XQqqE8oQkd41rsqDOUFYIT4m422LGgHlU=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=Cg4BiMzyXBwc2UfXyR11atSP8xAgmwgCC6X04qV/eDTIVZvgZPV8HzYo5EIgOQLSd
+         EcFGE4CkiDyMQxePchnP64o6aRC6kmxSTdH9fHOixrgMFjjxUajpO2YcuN+1NqbMkb
+         BcrOgc7aQYEA8q8nUyCx/Ruj9myNu7fvCNVT9Vh2lWXgfOCG7FIyGV7jKtS005Brvo
+         dXmnnQHMm3Q72/gbtr6P5MpwXFhopod4DX8uqXECoaXPixx8Weif05IygbVqTTz0Th
+         +fFYHtxRQW27+91onWQbF35yL9PI6Qzj33Q72biOrt33ifrJp0pFLL0nMc18FGewdd
+         cVVApiHhhgcYw==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id D00C865356; Tue,  2 Mar 2021 14:58:42 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 207045] uvcvideo: properly handle UVC payloads that occur in
+ the middle of bulk URBs
+Date:   Tue, 02 Mar 2021 14:58:42 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: luciomf@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-207045-208809-NXhgBrxEdU@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-207045-208809@https.bugzilla.kernel.org/>
+References: <bug-207045-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 2, 2021 at 9:43 AM Hillf Danton <hdanton@sina.com> wrote:
->
-> Mon, 01 Mar 2021 11:29:16 -0800
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    29c395c7 Merge tag 'x86-entry-2021-02-24' of git://git.ker..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=10d694dad00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=66b7497b2c5acd67
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=59f777bdcbdd7eea5305
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=162940dad00000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1650737ad00000
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+59f777bdcbdd7eea5305@syzkaller.appspotmail.com
-> >
-> > BUG: memory leak
-> > unreferenced object 0xffff88810dc5a800 (size 2048):
-> >   comm "kworker/1:3", pid 4818, jiffies 4294960503 (age 15.050s)
-> >   hex dump (first 32 bytes):
-> >     20 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ...............
-> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-> >   backtrace:
-> >     [<00000000153c6b11>] kmalloc include/linux/slab.h:554 [inline]
-> >     [<00000000153c6b11>] kzalloc include/linux/slab.h:684 [inline]
-> >     [<00000000153c6b11>] edge_startup+0x3f/0x11f0 drivers/usb/serial/io_edgeport.c:2833
-> >     [<000000007c25fa28>] usb_serial_probe.cold+0x6ab/0xb84 drivers/usb/serial/usb-serial.c:1027
-> >     [<0000000050250e6f>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
-> >     [<00000000f10f144c>] really_probe+0x159/0x4a0 drivers/base/dd.c:554
-> >     [<0000000036a9ab90>] driver_probe_device+0x84/0x100 drivers/base/dd.c:740
-> >     [<00000000a08d4f3b>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:846
-> >     [<000000009356c1ed>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
-> >     [<00000000aa8a21fd>] __device_attach+0x122/0x250 drivers/base/dd.c:914
-> >     [<00000000ee865ab7>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
-> >     [<000000005ea173b6>] device_add+0x5d5/0xc40 drivers/base/core.c:3242
-> >     [<000000003faa2805>] usb_set_configuration+0x9d9/0xb90 drivers/usb/core/message.c:2164
-> >     [<0000000099ff1454>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
-> >     [<00000000a57fa7c3>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
-> >     [<00000000f10f144c>] really_probe+0x159/0x4a0 drivers/base/dd.c:554
-> >     [<0000000036a9ab90>] driver_probe_device+0x84/0x100 drivers/base/dd.c:740
-> >     [<00000000a08d4f3b>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:846
->
-> Fix mm leak by rolling back in case of error.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D207045
 
-I think paskripkin is already fixing this, you can see a patch testing request:
+--- Comment #9 from Lucio MF (luciomf@gmail.com) ---
+Hi Julian,
 
-https://syzkaller.appspot.com/bug?extid=59f777bdcbdd7eea5305
-https://groups.google.com/g/syzkaller-bugs/c/PlE-vZm0YJU/m/gzlYOh63BQAJ
+I keep using this patch almost everyday and it mostly works fine. Although I
+find out that there are still some "stress" situations where it freezes the
+whole system. One can almost "force" the freeze in three situations:
+- Using camera filters in Google Meets for longs periods.
+- Closing a call and starting one right away
+- Opening two programs that requires the camera
 
+Let me know if you're interested in me running some specific test to help s=
+olve
+this situation.
 
+--=20
+You may reply to this email to add a comment.
 
-> --- x/drivers/usb/serial/io_edgeport.c
-> +++ y/drivers/usb/serial/io_edgeport.c
-> @@ -3003,6 +3003,7 @@ static int edge_startup(struct usb_seria
->                                 response = -ENODEV;
->                         }
->
-> +error_rsp:
->                         usb_free_urb(edge_serial->interrupt_read_urb);
->                         kfree(edge_serial->interrupt_in_buffer);
->
-> @@ -3018,9 +3019,11 @@ static int edge_startup(struct usb_seria
->                  * continue as long as the edgeport is connected */
->                 response = usb_submit_urb(edge_serial->interrupt_read_urb,
->                                                                 GFP_KERNEL);
-> -               if (response)
-> +               if (response) {
->                         dev_err(ddev, "%s - Error %d submitting control urb\n",
->                                 __func__, response);
-> +                       goto error_rsp;
-> +               }
->         }
->         return response;
->  }
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/20210302084313.1520-1-hdanton%40sina.com.
+You are receiving this mail because:
+You are watching the assignee of the bug.=
