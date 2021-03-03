@@ -2,135 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F259C32C60B
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 02:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 083BB32C611
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 02:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239467AbhCDA1W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Mar 2021 19:27:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
+        id S239791AbhCDA1X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Mar 2021 19:27:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244845AbhCCO7G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Mar 2021 09:59:06 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB423C0613E7;
-        Wed,  3 Mar 2021 06:56:41 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id m25so13216731oie.12;
-        Wed, 03 Mar 2021 06:56:41 -0800 (PST)
+        with ESMTP id S1446220AbhCCPCT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Mar 2021 10:02:19 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2801BC06175F;
+        Wed,  3 Mar 2021 07:01:29 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id v15so24036642wrx.4;
+        Wed, 03 Mar 2021 07:01:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=BAFNf7u4g/updqCE5R79LcxmBHPpxDhfj1zvOwKaLUU=;
-        b=ZmCbnzNijMgGw40EBbDLjgzFX0MG1V9Fovq6yzpTxVj1+hdLy6Jpi9PYxyRG8eJJ/R
-         QkflgMqBCmfypnj51FFp2RMx06qd4R1P4/B5augsq6Zn3/RhcD9vqNpJiG9XzqxzXZ0C
-         ElDS6TJ6nb2zLeWwfolbWesdOnWjXm15d0XYEDfMY+5ReOYEU0T9OM7aEN+8EYUCxm2s
-         a0UqPb5IYYKeUcLACd6aqDOPoN64pNT5pxkXn70+yyaRjRpMz/45RBkK1ff1QUoZr4lP
-         Xk6hSZxPMT1HVu8Ehl269vdy9nAjbLGxXek1u/4J/I9YDcyzZCWl4xF2+GZ9Jo94A+pW
-         o34w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=9CF3Q09wjNuQhvOn0CaAMRIF/QXPL5/05Pa3kXq1aDY=;
+        b=QBf5WO2hq5679ykZq2r9+u1JEzp0TNABpyxBmd7mJv6VlLOEYeyH73Le+xipIPo6dB
+         0VaW03ZoWNTppmTqeqiiLOGVKBrXX4FQnBG3Jtz4o0Z5n7yEfer8IhqzF0hQ7avic/Wc
+         LGeCTw0/k4u6phTTJe0jlb6WWe6XWrInuGnqEfTZ+GM9PC3q70DLYyat9VOYp2WgG2bM
+         +ZRfcXk3tP/uks/h/b1Tjm838AWv0rtsl09OY3z/rUVoBniAeKcQ945/Imn2/2/y2qrQ
+         Q8B60EAqSgAO+YUIsa9nu1LYefJPbErIk6irRCWQS8wjJPxaRWfaVP9c9qtGr5IcFrdy
+         Epmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=BAFNf7u4g/updqCE5R79LcxmBHPpxDhfj1zvOwKaLUU=;
-        b=TdV2XMJvBC5fTFhxaJmqqtRGztfs/DhcF76mZKby8Erg9Ee5YXagCi4SJAd8Zk7gq0
-         9qYQRKzkHchftOrcqalZ6PStLTdzjews+EH+JNsfQHFzevQQ69KG1SQLYcI/UPtfugk7
-         q4BGPemJgYITZZkbmPjdBLLoCC31ror0cPIA525EPIRfIOAtzSqJUyjUdINKJGul+HAO
-         TPV1ojGwudg7w4tCydZ7aSuQc+KQkhUDf2/9DhOgDEeSG8+HbJc8UMAR2BnGvRsC1bn6
-         j4ioFBKfeYj4OEA77vH3hsiK6t5yGrduuLJ1iVXP6ynUpewnaAcvv0LxgZs/oEGomsGS
-         4eWg==
-X-Gm-Message-State: AOAM533zHArbDUL+gN3H0NGHkXnc3Sv2mnYMco26XVXvOIYZ8tSwVRHE
-        rb8JWYXKMbov3pgZO1RMl62xnJQZPrY=
-X-Google-Smtp-Source: ABdhPJzlVsXtqQq1WzlXQqqu8H3DXm+gZvnTq9bISbBjiFU4cykHVHUgsOGbEwnSVnHCViw7XKyN3w==
-X-Received: by 2002:aca:3c87:: with SMTP id j129mr7524326oia.4.1614783400898;
-        Wed, 03 Mar 2021 06:56:40 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e13sm689708otj.64.2021.03.03.06.56.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Mar 2021 06:56:40 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] usb: dwc3: make USB_DWC3_EXYNOS independent
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        taehyun cho <taehyun.cho@samsung.com>, balbi@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CGME20210303022537epcas2p1b85ab825ceca3a411a177cc1af8a2c7b@epcas2p1.samsung.com>
- <20210303022628.6540-1-taehyun.cho@samsung.com>
- <c9ac155c-56c2-4025-d1ae-d0c6c95533b8@kernel.org>
- <YD9lTjWc25Nn7jAR@kroah.com> <20210303103839.it7grj3vtrdmngbd@kozik-lap>
- <YD+XkFAfoKpSsea3@kroah.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <cf330a12-82b9-3d6a-eeeb-28630e0a5f2b@roeck-us.net>
-Date:   Wed, 3 Mar 2021 06:56:38 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=9CF3Q09wjNuQhvOn0CaAMRIF/QXPL5/05Pa3kXq1aDY=;
+        b=DXI6DNdIwrCs/sCezP/b+/W//x+J7N9QUSrHE5V62QUi0M3t+o8ustS33NShPJS+r4
+         uYBtb3/IS5rG3ZZz0Df0e0zG3aSfb1PN71qDNSBYEwUWHwdlohYNmVb4ORVcYnvEiwaC
+         RmdaUXbtybBuUTLaXdgr9fKuFeGgesd/Gyaa35TYSvQWhkc4YDk+VWrFLtDbAkV1n+rs
+         wLZrwkllJ4dmk0RWnIsqQNJ1j5md2W/V2ZIyL6N6gSQF5FxJM4ANXQV3NbvUA1oFAGqM
+         bjoqIOE0Qky3QarmfE5ffAJDrh/lb0S4Fx7pWPzDZVbFb8peJ2J0USk3ElN1Ywmq3fCi
+         XF/Q==
+X-Gm-Message-State: AOAM531V+tejsRZ88fFDPi656ye2wOW0mR0aEIddwDlBa76OKIolfEWx
+        JRdUiwln0QLhFJWkC3LTp7o=
+X-Google-Smtp-Source: ABdhPJytVFDSRfrCJqMawLitCkYAqJYItMJitsr9gAHWxSz3n+RknsQV75F+b1X5fU/jkcGIMLi52Q==
+X-Received: by 2002:a5d:6809:: with SMTP id w9mr26273461wru.376.1614783687761;
+        Wed, 03 Mar 2021 07:01:27 -0800 (PST)
+Received: from hthiery.fritz.box (ip1f1322f8.dynamic.kabel-deutschland.de. [31.19.34.248])
+        by smtp.gmail.com with ESMTPSA id i10sm20988874wrs.11.2021.03.03.07.01.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Mar 2021 07:01:27 -0800 (PST)
+From:   Heiko Thiery <heiko.thiery@gmail.com>
+To:     raychi@google.com
+Cc:     badhri@google.com, balbi@kernel.org, gregkh@linuxfoundation.org,
+        kyletso@google.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Heiko Thiery <heiko.thiery@gmail.com>
+Subject: Re: [PATCH 0/2] an additional path to control charging current
+Date:   Wed,  3 Mar 2021 16:01:26 +0100
+Message-Id: <20210303150126.24538-1-heiko.thiery@gmail.com>
+X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20210222115149.3606776-1-raychi@google.com>
+References: <20210222115149.3606776-1-raychi@google.com>
 MIME-Version: 1.0
-In-Reply-To: <YD+XkFAfoKpSsea3@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/3/21 6:05 AM, Greg Kroah-Hartman wrote:
-[ ... ]
->> Anyway, that's the convention or consensus so far for entire SoC. If we
->> want to change it - sure, but let's make it for everyone, not for just
->> this one USB driver.
-> 
-> Great, let's change it for everyone, I don't see a need for ARCH_*
-> symbols except for people who want to make it simpler for their one
-> board type.  And for that, use a defconfig.
-> 
+Hi Ray,
 
-I don't think that will work in practice. Many ARCH_ symbols for various
-architectures contradict with each other. Almost all watchdog drivers
-only _build_ for specific platforms/architectures.
 
-Guenter
+> Currently, VBUS draw callback does no action when the
+> generic PHYs are used. The patches add an additional path
+> to control charging current through power supply property
+> POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT.
+> 
+> Ray Chi (2):
+>   usb: dwc3: add a power supply for current control
+>   usb: dwc3: add an alternate path in vbus_draw callback
+
+While using next-20210303 this patchset leads to the following kernel crash on my board:
+
+---- 8< ----
+
+[    1.392084] VFIO - User Level meta-driver version: 0.3
+[    1.398370] Unable to handle kernel NULL pointer dereference at virtual address 00000000000003a0
+[    1.407552] Mem abort info:
+[    1.410479]   ESR = 0x96000004
+[    1.413668]   EC = 0x25: DABT (current EL), IL = 32 bits
+[    1.419217]   SET = 0, FnV = 0
+[    1.422413]   EA = 0, S1PTW = 0
+[    1.425690] Data abort info:
+[    1.428705]   ISV = 0, ISS = 0x00000004
+[    1.432715]   CM = 0, WnR = 0
+[    1.435821] [00000000000003a0] user address but active_mm is swapper
+[    1.442458] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+[    1.448274] Modules linked in:
+[    1.451469] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.12.0-rc1-next-20210303-00005-g090e892099db #126
+[    1.461269] Hardware name: Kontron pITX-imx8m (DT)
+[    1.466268] pstate: 60000005 (nZCv daif -PAN -UAO -TCO BTYPE=--)
+[    1.472538] pc : devm_power_supply_get_by_phandle+0xe4/0x148
+[    1.478455] lr : dwc3_probe+0xbac/0xfa0
+[    1.482462] sp : ffff800011f1bb00
+[    1.485918] x29: ffff800011f1bb00 x28: 0000000000000000 
+[    1.491467] x27: ffff800011681078 x26: ffff8000115d048c 
+[    1.497016] x25: ffff0000c089ea00 x24: 0000000000000003 
+[    1.502564] x23: ffff0000c089ea00 x22: ffff800011b89948 
+[    1.508112] x21: 0000000000000003 x20: 00000000fffffdfb 
+[    1.513660] x19: ffff0000c03f1080 x18: 00000000000000c0 
+[    1.519209] x17: 0000000000000000 x16: 0000000000000000 
+[    1.524757] x15: fffffc0000001000 x14: 0000000000000000 
+[    1.530306] x13: 0000000000000000 x12: 0000000000000030 
+[    1.535853] x11: 0101010101010101 x10: ffff800011f1ba50 
+[    1.541402] x9 : ffff0000ff784c70 x8 : 0000000000000010 
+[    1.546950] x7 : ffff0000c03a5590 x6 : 0000000000000080 
+[    1.552498] x5 : ffff0000c0098000 x4 : 00000000000003a0 
+[    1.558047] x3 : ffff800011cb2dc8 x2 : 0000000000000000 
+[    1.563596] x1 : 0000000000000001 x0 : 0000000000000000 
+[    1.569146] Call trace:
+[    1.571700]  devm_power_supply_get_by_phandle+0xe4/0x148
+[    1.577248]  dwc3_probe+0xbac/0xfa0
+[    1.580890]  platform_probe+0x68/0xd8
+[    1.584719]  really_probe+0xe4/0x3c0
+[    1.588454]  driver_probe_device+0x58/0xb8
+[    1.592733]  device_driver_attach+0x74/0x80
+[    1.597100]  __driver_attach+0x58/0xe0
+[    1.601016]  bus_for_each_dev+0x74/0xc8
+[    1.605020]  driver_attach+0x24/0x30
+[    1.608753]  bus_add_driver+0x184/0x1e8
+[    1.612758]  driver_register+0x64/0x120
+[    1.616764]  __platform_driver_register+0x28/0x38
+[    1.621675]  dwc3_driver_init+0x1c/0x28
+[    1.625684]  do_one_initcall+0x74/0x1d0
+[    1.629691]  kernel_init_freeable+0x1d4/0x23c
+[    1.634240]  kernel_init+0x14/0x118
+[    1.637885]  ret_from_fork+0x10/0x30
+[    1.641624] Code: 88027c01 35ffffa2 17fffe96 f9800091 (885f7c82) 
+[    1.647992] ---[ end trace c6e48cea897d0b0d ]---
+[    1.652833] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+[    1.660822] SMP: stopping secondary CPUs
+[    1.664921] Kernel Offset: disabled
+[    1.668560] CPU features: 0x00240002,2000200c
+[    1.673106] Memory Limit: none
+[    1.676296] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
+
+
+---- 8< ----
+
+After reverting these 2 patches the problem is gone.
+
+-- 
+Heiko
