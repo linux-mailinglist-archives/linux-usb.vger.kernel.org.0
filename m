@@ -2,122 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F1732B6A7
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Mar 2021 11:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B3132B6BA
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Mar 2021 11:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241459AbhCCKcW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Mar 2021 05:32:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44826 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241117AbhCCK1F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Mar 2021 05:27:05 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E402164EE1;
-        Wed,  3 Mar 2021 09:09:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1614762597;
-        bh=rKzQViVrLLM19qCh+ONNHy/Oc+g0iNNTWOurFX2lbRo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1IXpJQOnfIK9q+KHPeVPXtBrzKMVOQlB+wYpdid+B3vrLVuSL0an9+eFh6aA5Dh/l
-         Xpuk53Fx+aEU5TKSb/ad0qMLX/1W/FlqE3nVJL3wtfhEHpW6eFgjav0Q8+z0jipVeb
-         8xF12EplSBIFay0t2kUI5UyWb1J/TWhxYOiDmVUo=
-Date:   Wed, 3 Mar 2021 10:09:54 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Chien Kun Niu <rickyniu@google.com>
-Cc:     stern@rowland.harvard.edu, erosca@de.adit-jv.com,
-        gustavoars@kernel.org, a.darwish@linutronix.de, oneukum@suse.com,
-        Kyle Tso <kyletso@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, James Wei <jameswei@google.com>
-Subject: Re: [PATCH] ANDROID: usb: core: Send uevent when USB TOPO layer over
- 6
-Message-ID: <YD9SYklmQq5amDA7@kroah.com>
-References: <20210226091612.508639-1-rickyniu@google.com>
- <YDi/+TN6AYXropf7@kroah.com>
- <CADRPvQubTEjKeJc=+LQ2jb0L=N4mxY8n21Bf8U-tS1stpB_eGw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADRPvQubTEjKeJc=+LQ2jb0L=N4mxY8n21Bf8U-tS1stpB_eGw@mail.gmail.com>
+        id S240860AbhCCKby (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Mar 2021 05:31:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1842994AbhCCKXa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Mar 2021 05:23:30 -0500
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382B7C08ECB1
+        for <linux-usb@vger.kernel.org>; Wed,  3 Mar 2021 01:58:08 -0800 (PST)
+Received: by mail-qv1-xf49.google.com with SMTP id h10so17167181qvf.19
+        for <linux-usb@vger.kernel.org>; Wed, 03 Mar 2021 01:58:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=TSFbiHk2wopoWX9vUZpzk37wo66kS5QquU8TlUFLvVA=;
+        b=hofwvEuISaHVnfbjMGuHJ9z12jtJGJ3Qy9uq05ohrB0MDYJXYafKi++1Qxyxw9tnUK
+         T0w6CvVIxYCR/JnYnB8TG1CFQ8H/dgeA99w2Rl3VgEbRR3skZh6TM6nM/Ouz2IqpL+db
+         YjhUjEnIratoU1YqSvxjY0g4y2fsPNVbY639UNLr6L0wVCWMtlBT2C5G6sPEjl0mPd1z
+         tX+eRyddDHFQ/E+63L6shixo/RVUzPmMxYVT3mHORVtjd0Dg5OpL3n87f2SfyTcrhZMx
+         lgW8i4RMvFPDaeEOyzMHSmgg2c14etouW3WigfUhGa0tGM7OeeNOwhUhRw5gRv7PzoSy
+         Jcgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=TSFbiHk2wopoWX9vUZpzk37wo66kS5QquU8TlUFLvVA=;
+        b=AQJtuSQjz/it2++T8R9A41Q3slVjiJchFyz9TP4wsWzQpEdOxYhxeXb5mLfpvKXL5X
+         v7pAGcNVIXwvQ+v2opVFDoNmHAmP+G7juDNCw7R5CbOlgsKj6A9KTLxjA5FD/DZ4ri/Y
+         mF6HWw8raQs7gbGlFpP25Gcnfl4kqi479Xk6mUdzHz5UuTGBAShsR7aO8pInnRNy3oYP
+         okhK+p9uDh4dE9RPlx7aiHEpXwXzgeeojIdTJ59PuDvioiwBtxU2/DOqF8/DbyDmgLhm
+         pIj54qqEa16K5NUT45NmXADJDWeIwHuiOynqS6S7DLDw4qWIpSY0hBMVGR0sMIHgtQuP
+         IdiQ==
+X-Gm-Message-State: AOAM53016jWp/bNBDzQOXiivb/Y4fE14jtbk1XFsK89OY98tYadGuAdl
+        i9nxN8Kdgp7HXNDX+gLc8HHpZ4Nzo0E=
+X-Google-Smtp-Source: ABdhPJwQ/JiIgEDiPOARa1Nh5v97jWzDrd/L0iXI4ma6Im+lmhmIb9PjN2A2XnITINs7yMYi/Pvw8OA21pY=
+Sender: "raychi via sendgmr" <raychi@raychi.tao.corp.google.com>
+X-Received: from raychi.tao.corp.google.com ([2401:fa00:fc:202:d0b:ce1b:8f7e:f53a])
+ (user=raychi job=sendgmr) by 2002:a0c:e788:: with SMTP id x8mr7735388qvn.48.1614765487321;
+ Wed, 03 Mar 2021 01:58:07 -0800 (PST)
+Date:   Wed,  3 Mar 2021 17:58:02 +0800
+Message-Id: <20210303095802.2801733-1-raychi@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
+Subject: [Patch v3] usb: dwc3: document usb_psy in struct dwc3
+From:   Ray Chi <raychi@google.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kyletso@google.com, Ray Chi <raychi@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 03, 2021 at 05:03:25PM +0800, Chien Kun Niu wrote:
-> Hi , Greg
-> 
-> What tool will "catch" this?  Where is that code located at?
-> => I prepare merge the code to Android phone , so I used Android HLOS
-> to catch this uevent.
+The new struct member was added to struct dwc3, but
+a documentation was missing:
 
-Very odd quoting style, perhaps you might want to read up on how to do
-this properly at:
-	https://en.wikipedia.org/wiki/Posting_style#Interleaved_style
+drivers/usb/dwc3/core.h:1273: warning: Function parameter or member 'usb_psy' not described in 'dwc3'
 
-> uevents are not for stuff like this, you are trying to send "error
-> conditions" to userspace, please use the "proper" interfaces like this
-> and not abuse existing ones.
-> => Sorry , I am not sure what is the "proper" interfaces your mean.
->      Could you please give me more description?
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Ray Chi <raychi@google.com>
+---
+Changelog since v2:
+- move Signed-off-by to the bottom
 
-How does the kernel normally send error conditions that it detects in
-hardware to userspace?
+Changelog since v1:
+(reported-by Stephen Rothwell <sfr@canb.auug.org.au>)
+- added Reported-by line.
 
-> You just created a whole new sysfs class with no Documentation/ABI/
-> update?
-> => Yes, I will add it.
-> 
-> Wait, how did you even test this code?  This will not work if you have
-> more than one hub in the system at a single time, right?
-> => I build the test build which flash in Android phone and connect
-> several hubs to try it.
->      When the new hub which met MAX_TOPO_LEVEL connected , it sent
-> notify to user space.
-> 
-> Phone ------↓
->                  hub ------↓
->                              hub ------↓
->                                            ...------↓
->                                                     hub
-> 
->      if (hdev->level == MAX_TOPO_LEVEL) {
->                 dev_err(&intf->dev,
->                         "Unsupported bus topology: hub nested too deep\n");
->                 hub_over_tier();
->                 return -E2BIG;
->      }
-> 
+ drivers/usb/dwc3/core.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-But you only have a single hub variable, and a huge memory leak, did you
-not detect that in your testing?
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 6708fdf358b3..ce6bd84e2b39 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -988,6 +988,7 @@ struct dwc3_scratchpad_array {
+  * @role_sw: usb_role_switch handle
+  * @role_switch_default_mode: default operation mode of controller while
+  *			usb role is USB_ROLE_NONE.
++ * @usb_psy: pointer to power supply interface.
+  * @usb2_phy: pointer to USB2 PHY
+  * @usb3_phy: pointer to USB3 PHY
+  * @usb2_generic_phy: pointer to USB2 PHY
+-- 
+2.30.1.766.gb4fecdf3b7-goog
 
-> So, proof that this works?  How did you test this?
-> => I use the Pixel phone to verify the code , the framework received
-> the uevent when the last connected hub over "MAX_TOPO_LEVEL".
-
-Try it on a desktop as well, with many hubs and see what happens :(
-
-> Also, you have a memory leak in this submission :(
-> => Do you mean I should add device_destroy here ?
-
-What do you think should be done?
-
-> 
-> hub_device =
-> device_create(hub_class, NULL, MKDEV(0, 0), NULL, "usb_hub");
-> +if (IS_ERR(hub_device))
-> +               return PTR_ERR(hub_device);
-> 
-> void usb_hub_cleanup(void)
-> {
-> +if (!IS_ERR(hub_device))
-> +device_destroy(hub_class, hub_device->devt);
-> 
-> if (!IS_ERR(hub_class))
-> class_destroy(hub_class);
-
-I don't think you are understanding that you can have multiple hubs in
-the system at the same time :(
-
-thanks,
-
-greg k-h
