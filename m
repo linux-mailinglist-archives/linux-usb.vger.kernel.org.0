@@ -2,75 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 352DA32B6B6
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Mar 2021 11:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA16032B714
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Mar 2021 12:03:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245468AbhCCKe3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Mar 2021 05:34:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47032 "EHLO mail.kernel.org"
+        id S238170AbhCCKbq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Mar 2021 05:31:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58282 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229756AbhCCKbZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Mar 2021 05:31:25 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F376164EE1;
-        Wed,  3 Mar 2021 10:30:40 +0000 (UTC)
+        id S1842195AbhCCG5f (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 3 Mar 2021 01:57:35 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6B6FF64ECE;
+        Wed,  3 Mar 2021 06:56:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1614767441;
-        bh=YkUt7e1p9mMc+VuaDIEttpy+Wk4e/s1d1rMVjVEMx7U=;
+        s=korg; t=1614754613;
+        bh=I6l92LzMh5YUaseZIvqu7vZ5CAdgxdLLuRuet+wabjU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WKDnFaWQR2efae0gE0M3Yb0vTthj+v6Ocf1f1nJhU1Y5ryNg8VWgsHwu2ja6+TNhU
-         i9GeAlHOsyTURts43rdIYnq2R+2GOFYBxKSFEYvzng5UdxxzEaaJSbfEzgmHrDaI+l
-         RFNHsVAAjJr4EtdHxHVCCingTonARplZYRFbV9QI=
-Date:   Wed, 3 Mar 2021 11:30:38 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     taehyun cho <taehyun.cho@samsung.com>, balbi@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: make USB_DWC3_EXYNOS independent
-Message-ID: <YD9lTjWc25Nn7jAR@kroah.com>
-References: <CGME20210303022537epcas2p1b85ab825ceca3a411a177cc1af8a2c7b@epcas2p1.samsung.com>
- <20210303022628.6540-1-taehyun.cho@samsung.com>
- <c9ac155c-56c2-4025-d1ae-d0c6c95533b8@kernel.org>
+        b=n5XtWpOdCLjo9xQEIOkXYdz0HUIOkHRqqW6pJajsAkJQTkioiRhyLE+2u/ZoX9Zty
+         LIQ2OSqWbBW+mNbTW8N282ZKHIQJPrLfuzZ32VT/Wxuthk6FUOyZY/ph08F6byunZs
+         pChJcojalVI+L7zZftlukisSeQzkBxwCLCtJjDtU=
+Date:   Wed, 3 Mar 2021 07:56:49 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Zhang, Qiang" <Qiang.Zhang@windriver.com>
+Cc:     Pete Zaitcev <zaitcev@redhat.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: =?utf-8?B?5Zue5aSNOiBbUEFUQ0g=?= =?utf-8?Q?=5D?= USB: usblp: Add
+ device status detection in usblp_poll()
+Message-ID: <YD8zMaqC489jOGir@kroah.com>
+References: <20210301040300.20834-1-qiang.zhang@windriver.com>
+ <YDyfL/yg9QNM4nku@kroah.com>
+ <BYAPR11MB263268B5FD6EB3C3B80B63FBFF9A9@BYAPR11MB2632.namprd11.prod.outlook.com>
+ <YDymu1AlS+8UjdXG@kroah.com>
+ <BYAPR11MB2632AE1A6D78903112F86062FF9A9@BYAPR11MB2632.namprd11.prod.outlook.com>
+ <YD3jlIR7UJjXT6Se@kroah.com>
+ <BYAPR11MB263258B4BD102A08BF454D82FF999@BYAPR11MB2632.namprd11.prod.outlook.com>
+ <20210302231254.7a0e32cb@suzdal.zaitcev.lan>
+ <BYAPR11MB2632C3C64F5B9116E0D074E4FF989@BYAPR11MB2632.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c9ac155c-56c2-4025-d1ae-d0c6c95533b8@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <BYAPR11MB2632C3C64F5B9116E0D074E4FF989@BYAPR11MB2632.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 03, 2021 at 11:24:01AM +0100, Krzysztof Kozlowski wrote:
-> On 03/03/2021 03:26, taehyun cho wrote:
-> > 'ARCH_EXYNOS' is not suitable for DWC3_EXYNOS config.
-> > 'USB_DWC3_EXYNOS' is glue layer which can be used with
-> > Synopsys DWC3 controller on Exynos SoCs. USB_DWC3_EXYNOS'
-> > can be used from Exynos5 to Exynos9.
-> > 
-> > Signed-off-by: taehyun cho <taehyun.cho@samsung.com>
+On Wed, Mar 03, 2021 at 06:12:47AM +0000, Zhang, Qiang wrote:
 > 
-> NACK because you ignored comments from March. Please respond to them instead
-> of resending the same patch.
 > 
-> Anyway, when resending you need to version your patches and explain the
-> differences. Please also Cc reviewers and other maintainers. I pointed out
-> this before:
-> scripts/get_maintainer.pl -f drivers/usb/dwc3/dwc3-exynos.c
+> >________________________________________
+> >发件人: Pete Zaitcev <zaitcev@redhat.com>
+> >发送时间: 2021年3月3日 13:12
+> >收件人: Zhang, Qiang
+> >抄送: Greg KH; linux-usb@vger.kernel.org; zaitcev@redhat.com
+> >主题: Re: [PATCH] USB: usblp: Add device status detection in >usblp_poll()
+> >
+> >[Please note: This e-mail is from an EXTERNAL e-mail address]
+> >
+> >On Tue, 2 Mar 2021 07:41:07 +0000
+> >"Zhang, Qiang" <Qiang.Zhang@windriver.com> wrote:
 > 
-> The driver - in current form - should not be available for other
-> architectures. It would clutter other platforms and kernel config selection.
-> If you want to change this, you need to provide rationale (usually by adding
-> support to new non-Exynos platform).
+> > and also I find  similar usage in usb/class/usbtmc.c
+> 
+> >Seems like a bug indeed, but I don't like the example in usbtmc.c.
+> >Please let me know if the following is acceptable:
+>  
+> I agree with this change .
 
-No, these crazy "ARCH_FOO" things need to go away.  For systems that
-want to build "universal" kernels, why are they being forced to enable
-"ARCH_*" just so they can pick specific drivers?  That is not done on
-other architectures, why is ARM64 so "special" in this regard.
-
-How do you "know" that these cores/devices are tied to specific ARCH_
-platforms?  We don't, so that dependency should not be there.
-
-Just let any arch pick any driver if it can be built, you never know
-what it might be run on.  Removing ARCH_ dependencies in Kconfig files
-is a good thing, please do not discourage that from happening.
+Great, can I get a "Reviewed-by:" line from you then?
 
 thanks,
 
