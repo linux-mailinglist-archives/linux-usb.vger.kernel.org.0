@@ -2,99 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 475A532C632
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 02:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941C832C635
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 02:02:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1450989AbhCDA16 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Mar 2021 19:27:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234702AbhCCTZp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Mar 2021 14:25:45 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1335C061760
-        for <linux-usb@vger.kernel.org>; Wed,  3 Mar 2021 11:25:01 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id m25so14218744oie.12
-        for <linux-usb@vger.kernel.org>; Wed, 03 Mar 2021 11:25:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CpnUMvWVOJdi34gV5Xr4CO6KXX8Go12ukZ8hFpNKPao=;
-        b=RT6QttOzOrQM2tUqzZTRK1txLRiMMB/svOEsSWmZ+y7f7nABd0aMhQkUI8GYStp298
-         EAmOSPeAWegHzMOAiTV524x+Ez6TIeFsukC5qZO1kY48OhJNl2AIcfGvJRhVyn+NPc+s
-         9H+pyZuoslkMUlyTSPRhsN5YPyo4YYD67s9A9dbMX7xja4ntGeyJTKSv9erHMtBiW41A
-         gtxrY2AhPRo/2eU+9fuIlthySu43aGBHs9nXclRlpdL2qfqADr3bNY6wvSBv6IHMDHVM
-         31kS/5z3hVXbF2tL3w3ZhS7RCQh3nXq5/Ojtm9nDKI7EAL8U57gVW2SprC7wEShI1qhf
-         bZ+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CpnUMvWVOJdi34gV5Xr4CO6KXX8Go12ukZ8hFpNKPao=;
-        b=NmhmPmTOkUN8A2kcLzGhHWzOzS17wiielRzB4vQf7YsDZx3kxOZqq8Zs+wEXNtkS1S
-         oXY8g2Ow336AYoSp1Yxp+0CnLbofrDl+EEfQxkWzleKlAfpsmyEiCVLxp1TIIR6K6WFL
-         1gNqWQMt7WIXWMNLx545cWfhHHQ3rYkG0G7k38ADvbHvD9SttAKGhyDcyG9Yp3TLXfq7
-         Aev6yDNkQnQvPX5J9mV6tt28tpmpA7yJcsk7SdBv5OOEzJjHt95XJurOOR1XTwUBfNG/
-         UmHBbVxHZGPShrAZvVFoFX0Ue7SoFr2rxYjeXs2tFOX5WugMNGWZOLBOkE/RE4MnETBi
-         Chmg==
-X-Gm-Message-State: AOAM530OGLYiLCKeTWjS+o48KO5OKc0luTKlujDab3Dz40EqYlQXFXrU
-        /oESm9eW7uRQAmv11l9JDuTCeg==
-X-Google-Smtp-Source: ABdhPJwlg1YhN8VRFvG9rWwHEDXIDusrKVuVtKQaPnftr+rfmHZMu26YwK+2LetpsUVN1U8gM3DGaw==
-X-Received: by 2002:aca:683:: with SMTP id 125mr304319oig.172.1614799500958;
-        Wed, 03 Mar 2021 11:25:00 -0800 (PST)
-Received: from localhost.localdomain (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id n17sm2965762oos.20.2021.03.03.11.25.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 11:25:00 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ray Chi <raychi@google.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH] usb: dwc3: Flip condition guarding power_supply_put()
-Date:   Wed,  3 Mar 2021 11:26:14 -0800
-Message-Id: <20210303192614.759729-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.29.2
+        id S1351470AbhCDA17 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Mar 2021 19:27:59 -0500
+Received: from mout.kundenserver.de ([212.227.126.133]:51931 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376952AbhCCTnv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Mar 2021 14:43:51 -0500
+Received: from mail-oi1-f174.google.com ([209.85.167.174]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1My2pz-1lzclI09iJ-00zZYU; Wed, 03 Mar 2021 20:40:27 +0100
+Received: by mail-oi1-f174.google.com with SMTP id f3so27268160oiw.13;
+        Wed, 03 Mar 2021 11:40:26 -0800 (PST)
+X-Gm-Message-State: AOAM533s2niafG6HZGnI5/zGikXBUPvNqOQxyU95D1HPpD0/9681G+Fh
+        tB8187U1tQBCliz+Bx2U2N09rG4rFlG2XQOUcwg=
+X-Google-Smtp-Source: ABdhPJzn3Q499PVsI9fue4JXopGo7Jot+WRlXZuMu9dMyxd/+iuVPnM+k2Lyu54W16vUNKI5PzbS2+wPDBpoflHkL00=
+X-Received: by 2002:aca:4fd3:: with SMTP id d202mr343594oib.11.1614800425710;
+ Wed, 03 Mar 2021 11:40:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CGME20210303022537epcas2p1b85ab825ceca3a411a177cc1af8a2c7b@epcas2p1.samsung.com>
+ <20210303022628.6540-1-taehyun.cho@samsung.com> <c9ac155c-56c2-4025-d1ae-d0c6c95533b8@kernel.org>
+ <YD9lTjWc25Nn7jAR@kroah.com> <20210303103839.it7grj3vtrdmngbd@kozik-lap>
+ <YD+XkFAfoKpSsea3@kroah.com> <cf330a12-82b9-3d6a-eeeb-28630e0a5f2b@roeck-us.net>
+ <YD+mkse29UwwYbFB@kroah.com> <6e9d6831-f88e-477f-6256-7ab155bfa7ac@kernel.org>
+ <CAK8P3a2TAZELiqzy8Xv8hKvZwM6_+rF5OW9_AkP2TBoDRS3skQ@mail.gmail.com> <YD+8q/hSWNKQS1tE@kroah.com>
+In-Reply-To: <YD+8q/hSWNKQS1tE@kroah.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 3 Mar 2021 20:40:08 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3_u-FdPKNtAZdZHKY2EAk+qhg1GQHV4dsnuGV4+LawgQ@mail.gmail.com>
+Message-ID: <CAK8P3a3_u-FdPKNtAZdZHKY2EAk+qhg1GQHV4dsnuGV4+LawgQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc3: make USB_DWC3_EXYNOS independent
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        taehyun cho <taehyun.cho@samsung.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:irQ9Y8hDCfeUHTK7SbkRdDLoBO8Uq+AB9S6IUXcUUPd29CetD8n
+ DDOk2fRuSsSPNQkTl/PhpY0nZcEDftn9TQRcVDd8gYnMKT9XlCC/lligLZ0PjhyKpgHn0MI
+ FglGW5oaJjCXdwZFNYNmfmYU2A0rwMotWxh+3NgmD48EpIljOz2Cj5J0CQ3ZStYKiVDHxPn
+ u7h1amwEaDsLvsnsZ/Z5Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YaQBB56KKM8=:7xYZZ8e5QttoWoYrmiquhT
+ d2YUfXZj+iRbSfEUhgsq76sbNWYYi3k4ZWRTYzBaZo6BrWAkmTdci06tZNwV78wbgub4gQj78
+ pXIIOrqTQRfJyWcjZ8+UigqPrcmQJDCUwvkcEO2IO7CqUqe4PihAzyFADFPq/CXFrkX85ZIYt
+ Ku8LAzKP0KoCH4eI40CPWHsKqDVcGnfzK9Dm7LIiFL0YRtIX2tRi8cBNEUtfy5jxQOd/mSxWt
+ ePvE1JUTKmihsa1UkTNyD19sdhj5ETCQfCaE9Q4cqp6xzYP/nVk2Y2OTm9mJw1qrlRMwLqoVd
+ WBds5+bTBRJNERQs915+zWVRGhG7pT0zR9taG3z9NPZLh5MYHCAnlA1kctcYEn21n9icmQdIv
+ vvYBj0ggNWWOV1CA0ugcchLJE5T7y+iAvzssvahV/l/ygwv8Cmt4+pShif6ZC
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The condition guarding the power_supply_put() calls in error and
-removal paths are backwards, resulting in a guaranteed NULL pointer
-dereference if no power supply was acquired.
+On Wed, Mar 3, 2021 at 5:43 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> On Wed, Mar 03, 2021 at 05:33:46PM +0100, Arnd Bergmann wrote:
+> > > > On Wed, Mar 03, 2021 at 06:56:38AM -0800, Guenter Roeck wrote:
+> > > >
+> > > >> I don't think that will work in practice. Many ARCH_ symbols for various
+> > > >> architectures contradict with each other. Almost all watchdog drivers
+> > > >> only _build_ for specific platforms/architectures.
+>
+> That's fine, drivers are easy, but when I see comments like "ARCH_
+> symbols contradict" that means that we can not make a generic kernel
+> image.  Otherwise there's no contradiction :)
 
-Fixes: 59fa3def35de ("usb: dwc3: add a power supply for current control")
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- drivers/usb/dwc3/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I think the key part of Guenter's sentence above was 'for various
+architectures', which does not include arm64 or modern arm32 (armv6
+or higher). On arm64 specifically, there is no platform specific code at
+all that is not "just a driver".
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index d15f065849cd..94fdbe502ce9 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1628,7 +1628,7 @@ static int dwc3_probe(struct platform_device *pdev)
- assert_reset:
- 	reset_control_assert(dwc->reset);
- 
--	if (!dwc->usb_psy)
-+	if (dwc->usb_psy)
- 		power_supply_put(dwc->usb_psy);
- 
- 	return ret;
-@@ -1653,7 +1653,7 @@ static int dwc3_remove(struct platform_device *pdev)
- 	dwc3_free_event_buffers(dwc);
- 	dwc3_free_scratch_buffers(dwc);
- 
--	if (!dwc->usb_psy)
-+	if (dwc->usb_psy)
- 		power_supply_put(dwc->usb_psy);
- 
- 	return 0;
--- 
-2.29.2
+32-bit ARM was in that category, and is mostly converted now to allow
+combining arbitrary platforms within each of the three sets of slightly
+incompatible CPUs (armv4/v4t/v5 vs armv6/v6k/v7/v7ve/v8 vs nommu
+armv7-m).
 
+powerpc did this first, but still has at least five groups of incompatible
+CPU cores (8xx, 6xx, 4xx, e500 and everything 64-bit) with one or
+more platforms in each.
+
+mips is mostly incompatible between platforms, though there has been
+some progress in the past few years to make some of the common ones
+coexist.
+
+m68k can have all mmu-based platforms (mac, atari, amiga, ...) coexist,
+but the nommu platforms are all mutually exclusive. This is probably
+not a problem because they are also highly resource constrained.
+
+> And "new drivers" are almost always not really "new" as everyone uses
+> much the same IP blocks.  As proof of this patch where the DWC3 IP block
+> is being used by multiple SoC vendors.  To handle that, you split out
+> the SoC-specific portions into sub-drivers, so that you can build a
+> single image of the driver that works on multiple platforms.  Nothing
+> new, we've been doing this for years, it's just that out-of-mainline SoC
+> trees that think they can touch "core IP block code" break this all the
+> time, which is what I am pushing back on.
+
+In those cases where more than one or two platforms share an identical
+driver, I agree we should just remove those dependencies. Across
+subsystems, I think those are a small minority, but they are more common
+in certain areas (usb, pci, networking) than others (clk, pinctrl, gpio).
+
+I did find it very helpful to have the dependencies when I removed a
+number of ARM platforms for linux-5.12 that had no remaining users ,
+and I could just remove all the drivers along with those platforms.
+
+I found one networking driver in that set that was a generic licensed
+IP block that was probably shared by other platforms, but none of
+those had upstream Linux support, so I removed it as well.
+
+     Arnd
