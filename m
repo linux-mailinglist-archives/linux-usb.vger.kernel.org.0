@@ -2,139 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABB732B6AD
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Mar 2021 11:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F1732B6A7
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Mar 2021 11:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241284AbhCCKcq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Mar 2021 05:32:46 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:59074 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240080AbhCCK2I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Mar 2021 05:28:08 -0500
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 1238eOTu9009089, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexmbs04.realtek.com.tw[172.21.6.97])
-        by rtits2.realtek.com.tw (8.15.2/2.70/5.88) with ESMTPS id 1238eOTu9009089
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 3 Mar 2021 16:40:24 +0800
-Received: from fc32.localdomain (172.21.177.102) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Wed, 3 Mar 2021
- 16:40:24 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <netdev@vger.kernel.org>
-CC:     <nic_swsd@realtek.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, Hayes Wang <hayeswang@realtek.com>
-Subject: [PATCH net] Revert "r8152: adjust the settings about MAC clock speed down for RTL8153"
-Date:   Wed, 3 Mar 2021 16:39:47 +0800
-Message-ID: <1394712342-15778-347-Taiwan-albertk@realtek.com>
-X-Mailer: Microsoft Office Outlook 11
+        id S241459AbhCCKcW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Mar 2021 05:32:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44826 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241117AbhCCK1F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 3 Mar 2021 05:27:05 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E402164EE1;
+        Wed,  3 Mar 2021 09:09:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1614762597;
+        bh=rKzQViVrLLM19qCh+ONNHy/Oc+g0iNNTWOurFX2lbRo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1IXpJQOnfIK9q+KHPeVPXtBrzKMVOQlB+wYpdid+B3vrLVuSL0an9+eFh6aA5Dh/l
+         Xpuk53Fx+aEU5TKSb/ad0qMLX/1W/FlqE3nVJL3wtfhEHpW6eFgjav0Q8+z0jipVeb
+         8xF12EplSBIFay0t2kUI5UyWb1J/TWhxYOiDmVUo=
+Date:   Wed, 3 Mar 2021 10:09:54 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Chien Kun Niu <rickyniu@google.com>
+Cc:     stern@rowland.harvard.edu, erosca@de.adit-jv.com,
+        gustavoars@kernel.org, a.darwish@linutronix.de, oneukum@suse.com,
+        Kyle Tso <kyletso@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, James Wei <jameswei@google.com>
+Subject: Re: [PATCH] ANDROID: usb: core: Send uevent when USB TOPO layer over
+ 6
+Message-ID: <YD9SYklmQq5amDA7@kroah.com>
+References: <20210226091612.508639-1-rickyniu@google.com>
+ <YDi/+TN6AYXropf7@kroah.com>
+ <CADRPvQubTEjKeJc=+LQ2jb0L=N4mxY8n21Bf8U-tS1stpB_eGw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.21.177.102]
-X-ClientProxiedBy: RTEXMBS02.realtek.com.tw (172.21.6.95) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADRPvQubTEjKeJc=+LQ2jb0L=N4mxY8n21Bf8U-tS1stpB_eGw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This reverts commit 134f98bcf1b898fb9d6f2b91bc85dd2e5478b4b8.
+On Wed, Mar 03, 2021 at 05:03:25PM +0800, Chien Kun Niu wrote:
+> Hi , Greg
+> 
+> What tool will "catch" this?  Where is that code located at?
+> => I prepare merge the code to Android phone , so I used Android HLOS
+> to catch this uevent.
 
-The r8153_mac_clk_spd() is used for RTL8153A only, because the register
-table of RTL8153B is different from RTL8153A. However, this function would
-be called when RTL8153B calls r8153_first_init() and r8153_enter_oob().
-That causes RTL8153B becomes unstable when suspending and resuming. The
-worst case may let the device stop working.
+Very odd quoting style, perhaps you might want to read up on how to do
+this properly at:
+	https://en.wikipedia.org/wiki/Posting_style#Interleaved_style
 
-Besides, revert this commit to disable MAC clock speed down for RTL8153A.
-It would avoid the known issue when enabling U1. The data of the first
-control transfer may be wrong when exiting U1.
+> uevents are not for stuff like this, you are trying to send "error
+> conditions" to userspace, please use the "proper" interfaces like this
+> and not abuse existing ones.
+> => Sorry , I am not sure what is the "proper" interfaces your mean.
+>      Could you please give me more description?
 
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
----
- drivers/net/usb/r8152.c | 35 ++++++-----------------------------
- 1 file changed, 6 insertions(+), 29 deletions(-)
+How does the kernel normally send error conditions that it detects in
+hardware to userspace?
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index b246817f3405..90f1c0200042 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -3021,29 +3021,6 @@ static void __rtl_set_wol(struct r8152 *tp, u32 wolopts)
- 		device_set_wakeup_enable(&tp->udev->dev, false);
- }
- 
--static void r8153_mac_clk_spd(struct r8152 *tp, bool enable)
--{
--	/* MAC clock speed down */
--	if (enable) {
--		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL,
--			       ALDPS_SPDWN_RATIO);
--		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL2,
--			       EEE_SPDWN_RATIO);
--		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3,
--			       PKT_AVAIL_SPDWN_EN | SUSPEND_SPDWN_EN |
--			       U1U2_SPDWN_EN | L1_SPDWN_EN);
--		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL4,
--			       PWRSAVE_SPDWN_EN | RXDV_SPDWN_EN | TX10MIDLE_EN |
--			       TP100_SPDWN_EN | TP500_SPDWN_EN | EEE_SPDWN_EN |
--			       TP1000_SPDWN_EN);
--	} else {
--		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL, 0);
--		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL2, 0);
--		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3, 0);
--		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL4, 0);
--	}
--}
--
- static void r8153_u1u2en(struct r8152 *tp, bool enable)
- {
- 	u8 u1u2[8];
-@@ -3338,11 +3315,9 @@ static void rtl8153_runtime_enable(struct r8152 *tp, bool enable)
- 	if (enable) {
- 		r8153_u1u2en(tp, false);
- 		r8153_u2p3en(tp, false);
--		r8153_mac_clk_spd(tp, true);
- 		rtl_runtime_suspend_enable(tp, true);
- 	} else {
- 		rtl_runtime_suspend_enable(tp, false);
--		r8153_mac_clk_spd(tp, false);
- 
- 		switch (tp->version) {
- 		case RTL_VER_03:
-@@ -4718,7 +4693,6 @@ static void r8153_first_init(struct r8152 *tp)
- {
- 	u32 ocp_data;
- 
--	r8153_mac_clk_spd(tp, false);
- 	rxdy_gated_en(tp, true);
- 	r8153_teredo_off(tp);
- 
-@@ -4769,8 +4743,6 @@ static void r8153_enter_oob(struct r8152 *tp)
- {
- 	u32 ocp_data;
- 
--	r8153_mac_clk_spd(tp, true);
--
- 	ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL);
- 	ocp_data &= ~NOW_IS_OOB;
- 	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL, ocp_data);
-@@ -5496,10 +5468,15 @@ static void r8153_init(struct r8152 *tp)
- 
- 	ocp_write_word(tp, MCU_TYPE_USB, USB_CONNECT_TIMER, 0x0001);
- 
-+	/* MAC clock speed down */
-+	ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL, 0);
-+	ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL2, 0);
-+	ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3, 0);
-+	ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL4, 0);
-+
- 	r8153_power_cut_en(tp, false);
- 	rtl_runtime_suspend_enable(tp, false);
- 	r8153_u1u2en(tp, true);
--	r8153_mac_clk_spd(tp, false);
- 	usb_enable_lpm(tp->udev);
- 
- 	ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_CONFIG6);
--- 
-2.26.2
+> You just created a whole new sysfs class with no Documentation/ABI/
+> update?
+> => Yes, I will add it.
+> 
+> Wait, how did you even test this code?  This will not work if you have
+> more than one hub in the system at a single time, right?
+> => I build the test build which flash in Android phone and connect
+> several hubs to try it.
+>      When the new hub which met MAX_TOPO_LEVEL connected , it sent
+> notify to user space.
+> 
+> Phone ------↓
+>                  hub ------↓
+>                              hub ------↓
+>                                            ...------↓
+>                                                     hub
+> 
+>      if (hdev->level == MAX_TOPO_LEVEL) {
+>                 dev_err(&intf->dev,
+>                         "Unsupported bus topology: hub nested too deep\n");
+>                 hub_over_tier();
+>                 return -E2BIG;
+>      }
+> 
 
+But you only have a single hub variable, and a huge memory leak, did you
+not detect that in your testing?
+
+> So, proof that this works?  How did you test this?
+> => I use the Pixel phone to verify the code , the framework received
+> the uevent when the last connected hub over "MAX_TOPO_LEVEL".
+
+Try it on a desktop as well, with many hubs and see what happens :(
+
+> Also, you have a memory leak in this submission :(
+> => Do you mean I should add device_destroy here ?
+
+What do you think should be done?
+
+> 
+> hub_device =
+> device_create(hub_class, NULL, MKDEV(0, 0), NULL, "usb_hub");
+> +if (IS_ERR(hub_device))
+> +               return PTR_ERR(hub_device);
+> 
+> void usb_hub_cleanup(void)
+> {
+> +if (!IS_ERR(hub_device))
+> +device_destroy(hub_class, hub_device->devt);
+> 
+> if (!IS_ERR(hub_class))
+> class_destroy(hub_class);
+
+I don't think you are understanding that you can have multiple hubs in
+the system at the same time :(
+
+thanks,
+
+greg k-h
