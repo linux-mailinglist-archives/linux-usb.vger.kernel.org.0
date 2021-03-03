@@ -2,84 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A9032B6A1
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Mar 2021 11:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ABB732B6AD
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Mar 2021 11:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237647AbhCCKbe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Mar 2021 05:31:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1842079AbhCCGt3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Mar 2021 01:49:29 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0C5C061756
-        for <linux-usb@vger.kernel.org>; Tue,  2 Mar 2021 22:48:48 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id a18so1006978pfi.17
-        for <linux-usb@vger.kernel.org>; Tue, 02 Mar 2021 22:48:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=sJTPRU61wkj/8X18GE/NltaTHGeTbWKgfmwT64xhMDQ=;
-        b=K9JfA9BK6FN2k9nXLrdM+xjKw8Sud8sJ/ELtXv1L6e0JEJbjuKTF0ZVgqhyVSlxbYe
-         eoJ+/a3MRLCTZlVgcmaCm6W2BwNePxRqZnCczMzqfdGxYJ4yPt1h8zCikgnu0retndpL
-         VPaCrxawW4gXOB2VR9kqP1jxcp3yRC73mJIDCniUgHFBDvYhmXTqye3FwGcG/kSdJkaC
-         xWSXDHGucG3zlsXKuB96qplAjzt2nOg6ib2lhAPRSFX4IVRcZ7kBqPTMFKXE9+SlpGcY
-         z6gS6X1ZOkNlivb4LMk+KaB7CH/LLExiZBIDU0vjxzDGsBfzHwmUKWmOzZBFkxMAvw4m
-         Wl0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=sJTPRU61wkj/8X18GE/NltaTHGeTbWKgfmwT64xhMDQ=;
-        b=m3F5YahAehLrOAa6+k6KgDq+J8JKntpc0+9hK2zkL8IZw/IXGLv9lPFI0t3mW+I5Z2
-         Sa2wNnZ1jTytHLFwB2/iv+t3LtglTErbytIY7Bm+7DpxPLtI+Q0Y7JSmliEQZUXJW4nV
-         nOeDNvSUEr5fLlK8/dcEtWWkp3QVSTQmG6JlonqC0sspJ1944kdkfUccDa2iIdSSSBep
-         fXqnqChNUR+lwgZf0eA9O1sIYc41lFuCZrdtyQYrMSeLdF2PJ0AfEXNIDfaRFJoXlo4u
-         zyaMLwM4dVA2EqiCe9zj+Bh1qW22z2iliWCX6Dqe84kaVtIBcb9UsGy/74fdmkaBnkDA
-         QRpA==
-X-Gm-Message-State: AOAM532XW9k9p3yt4xXTXhSaOv+HLGTBeF3CAmgT4oChEzY3E/RDcdmr
-        1OIoHtAM/GShDtipXugEVeCBSGx9rYY=
-X-Google-Smtp-Source: ABdhPJzPojQhHpe4rIz4wxHM+lTnZFzyssypBGlR4STg1VbckYy/M0hFkIt72SYsxLCslygwj5TISWTzlS0=
-Sender: "raychi via sendgmr" <raychi@raychi.tao.corp.google.com>
-X-Received: from raychi.tao.corp.google.com ([2401:fa00:fc:202:d0b:ce1b:8f7e:f53a])
- (user=raychi job=sendgmr) by 2002:a17:90a:8d83:: with SMTP id
- d3mr775606pjo.0.1614754127807; Tue, 02 Mar 2021 22:48:47 -0800 (PST)
-Date:   Wed,  3 Mar 2021 14:48:42 +0800
-Message-Id: <20210303064842.2723785-1-raychi@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
-Subject: [PATCH] usb: dwc3: document usb_psy in struct dwc3
-From:   Ray Chi <raychi@google.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kyletso@google.com, Ray Chi <raychi@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S241284AbhCCKcq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Mar 2021 05:32:46 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:59074 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240080AbhCCK2I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Mar 2021 05:28:08 -0500
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 1238eOTu9009089, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexmbs04.realtek.com.tw[172.21.6.97])
+        by rtits2.realtek.com.tw (8.15.2/2.70/5.88) with ESMTPS id 1238eOTu9009089
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 3 Mar 2021 16:40:24 +0800
+Received: from fc32.localdomain (172.21.177.102) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Wed, 3 Mar 2021
+ 16:40:24 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     <netdev@vger.kernel.org>
+CC:     <nic_swsd@realtek.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, Hayes Wang <hayeswang@realtek.com>
+Subject: [PATCH net] Revert "r8152: adjust the settings about MAC clock speed down for RTL8153"
+Date:   Wed, 3 Mar 2021 16:39:47 +0800
+Message-ID: <1394712342-15778-347-Taiwan-albertk@realtek.com>
+X-Mailer: Microsoft Office Outlook 11
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.21.177.102]
+X-ClientProxiedBy: RTEXMBS02.realtek.com.tw (172.21.6.95) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The new struct member was added to struct dwc3, but
-a documentation was missing:
+This reverts commit 134f98bcf1b898fb9d6f2b91bc85dd2e5478b4b8.
 
-drivers/usb/dwc3/core.h:1273: warning: Function parameter or member 'usb_psy' not described in 'dwc3'
+The r8153_mac_clk_spd() is used for RTL8153A only, because the register
+table of RTL8153B is different from RTL8153A. However, this function would
+be called when RTL8153B calls r8153_first_init() and r8153_enter_oob().
+That causes RTL8153B becomes unstable when suspending and resuming. The
+worst case may let the device stop working.
 
-Signed-off-by: Ray Chi <raychi@google.com>
+Besides, revert this commit to disable MAC clock speed down for RTL8153A.
+It would avoid the known issue when enabling U1. The data of the first
+control transfer may be wrong when exiting U1.
+
+Signed-off-by: Hayes Wang <hayeswang@realtek.com>
 ---
- drivers/usb/dwc3/core.h | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/usb/r8152.c | 35 ++++++-----------------------------
+ 1 file changed, 6 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 6708fdf358b3..ce6bd84e2b39 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -988,6 +988,7 @@ struct dwc3_scratchpad_array {
-  * @role_sw: usb_role_switch handle
-  * @role_switch_default_mode: default operation mode of controller while
-  *			usb role is USB_ROLE_NONE.
-+ * @usb_psy: pointer to power supply interface.
-  * @usb2_phy: pointer to USB2 PHY
-  * @usb3_phy: pointer to USB3 PHY
-  * @usb2_generic_phy: pointer to USB2 PHY
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index b246817f3405..90f1c0200042 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -3021,29 +3021,6 @@ static void __rtl_set_wol(struct r8152 *tp, u32 wolopts)
+ 		device_set_wakeup_enable(&tp->udev->dev, false);
+ }
+ 
+-static void r8153_mac_clk_spd(struct r8152 *tp, bool enable)
+-{
+-	/* MAC clock speed down */
+-	if (enable) {
+-		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL,
+-			       ALDPS_SPDWN_RATIO);
+-		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL2,
+-			       EEE_SPDWN_RATIO);
+-		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3,
+-			       PKT_AVAIL_SPDWN_EN | SUSPEND_SPDWN_EN |
+-			       U1U2_SPDWN_EN | L1_SPDWN_EN);
+-		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL4,
+-			       PWRSAVE_SPDWN_EN | RXDV_SPDWN_EN | TX10MIDLE_EN |
+-			       TP100_SPDWN_EN | TP500_SPDWN_EN | EEE_SPDWN_EN |
+-			       TP1000_SPDWN_EN);
+-	} else {
+-		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL, 0);
+-		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL2, 0);
+-		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3, 0);
+-		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL4, 0);
+-	}
+-}
+-
+ static void r8153_u1u2en(struct r8152 *tp, bool enable)
+ {
+ 	u8 u1u2[8];
+@@ -3338,11 +3315,9 @@ static void rtl8153_runtime_enable(struct r8152 *tp, bool enable)
+ 	if (enable) {
+ 		r8153_u1u2en(tp, false);
+ 		r8153_u2p3en(tp, false);
+-		r8153_mac_clk_spd(tp, true);
+ 		rtl_runtime_suspend_enable(tp, true);
+ 	} else {
+ 		rtl_runtime_suspend_enable(tp, false);
+-		r8153_mac_clk_spd(tp, false);
+ 
+ 		switch (tp->version) {
+ 		case RTL_VER_03:
+@@ -4718,7 +4693,6 @@ static void r8153_first_init(struct r8152 *tp)
+ {
+ 	u32 ocp_data;
+ 
+-	r8153_mac_clk_spd(tp, false);
+ 	rxdy_gated_en(tp, true);
+ 	r8153_teredo_off(tp);
+ 
+@@ -4769,8 +4743,6 @@ static void r8153_enter_oob(struct r8152 *tp)
+ {
+ 	u32 ocp_data;
+ 
+-	r8153_mac_clk_spd(tp, true);
+-
+ 	ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL);
+ 	ocp_data &= ~NOW_IS_OOB;
+ 	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL, ocp_data);
+@@ -5496,10 +5468,15 @@ static void r8153_init(struct r8152 *tp)
+ 
+ 	ocp_write_word(tp, MCU_TYPE_USB, USB_CONNECT_TIMER, 0x0001);
+ 
++	/* MAC clock speed down */
++	ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL, 0);
++	ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL2, 0);
++	ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3, 0);
++	ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL4, 0);
++
+ 	r8153_power_cut_en(tp, false);
+ 	rtl_runtime_suspend_enable(tp, false);
+ 	r8153_u1u2en(tp, true);
+-	r8153_mac_clk_spd(tp, false);
+ 	usb_enable_lpm(tp->udev);
+ 
+ 	ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_CONFIG6);
 -- 
-2.30.1.766.gb4fecdf3b7-goog
+2.26.2
 
