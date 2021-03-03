@@ -2,107 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AAE32C62A
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 02:02:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B02A032C62D
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 02:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449400AbhCDA1x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Mar 2021 19:27:53 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:53623 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S239240AbhCCROD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Mar 2021 12:14:03 -0500
-Received: (qmail 1576814 invoked by uid 1000); 3 Mar 2021 12:13:15 -0500
-Date:   Wed, 3 Mar 2021 12:13:15 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Pete Zaitcev <zaitcev@redhat.com>
-Cc:     "Zhang, Qiang" <Qiang.Zhang@windriver.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] USB: usblp: Add device status detection in usblp_poll()
-Message-ID: <20210303171315.GB1574518@rowland.harvard.edu>
-References: <20210301040300.20834-1-qiang.zhang@windriver.com>
- <YDyfL/yg9QNM4nku@kroah.com>
- <BYAPR11MB263268B5FD6EB3C3B80B63FBFF9A9@BYAPR11MB2632.namprd11.prod.outlook.com>
- <YDymu1AlS+8UjdXG@kroah.com>
- <BYAPR11MB2632AE1A6D78903112F86062FF9A9@BYAPR11MB2632.namprd11.prod.outlook.com>
- <YD3jlIR7UJjXT6Se@kroah.com>
- <BYAPR11MB263258B4BD102A08BF454D82FF999@BYAPR11MB2632.namprd11.prod.outlook.com>
- <20210302231254.7a0e32cb@suzdal.zaitcev.lan>
+        id S1351456AbhCDA1z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Mar 2021 19:27:55 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:41745 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236477AbhCCSIN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Mar 2021 13:08:13 -0500
+Received: from mail-ot1-f52.google.com ([209.85.210.52]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MWhxY-1lJgSG3ouu-00X4M5; Wed, 03 Mar 2021 18:52:01 +0100
+Received: by mail-ot1-f52.google.com with SMTP id e45so24373157ote.9;
+        Wed, 03 Mar 2021 09:52:00 -0800 (PST)
+X-Gm-Message-State: AOAM532iIqwn/5Jd4IbaN/F8hhMqgD2ZsOGmGVFLdX7Oyn11ptroFLBE
+        nti+jyAH987ZUo+osdYFI6iudyxMAtLP4kGZ9JU=
+X-Google-Smtp-Source: ABdhPJyZgFHUFofWUTXeg3MMV6dTME4mgPmK7Qu2uOA2JDhmP2sb3P0PM0oD4uxx9M963W2C6eq2lvdKqMI/0mYWmok=
+X-Received: by 2002:a9d:7f11:: with SMTP id j17mr152425otq.251.1614793919578;
+ Wed, 03 Mar 2021 09:51:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210302231254.7a0e32cb@suzdal.zaitcev.lan>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <CGME20210303022537epcas2p1b85ab825ceca3a411a177cc1af8a2c7b@epcas2p1.samsung.com>
+ <20210303022628.6540-1-taehyun.cho@samsung.com> <c9ac155c-56c2-4025-d1ae-d0c6c95533b8@kernel.org>
+ <YD9lTjWc25Nn7jAR@kroah.com> <20210303103839.it7grj3vtrdmngbd@kozik-lap> <YD+XkFAfoKpSsea3@kroah.com>
+In-Reply-To: <YD+XkFAfoKpSsea3@kroah.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 3 Mar 2021 18:51:42 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1GN-g07hi8xCQ8AcTk1Cioj=ro6oqQFa844OnmFQ0MEQ@mail.gmail.com>
+Message-ID: <CAK8P3a1GN-g07hi8xCQ8AcTk1Cioj=ro6oqQFa844OnmFQ0MEQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc3: make USB_DWC3_EXYNOS independent
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        taehyun cho <taehyun.cho@samsung.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:+betIC5tW5QZLNZtTZm60dhIJMGOOeTkC0zt6RZZcK0WFzr7/2C
+ avnORCt4Lbf4XFYJGGUTsHDDjnNObX9IkThsIg4/bl0B6TLbbKvMvSKZlfAPW2UpIpb9Xxz
+ D9HfeA7ItE5F6pUErxeJWOK5P1IaAfw+jr8P4N6GJyL5tQD9DQa1CmHGziF/JglVpoY6we/
+ EC9xNgKuSx5GhC0CJAr0A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:hRqmoWF4L1k=:etCBzdVpxQgfNxO+Nm1+iR
+ kRiBbw4HXXJBHk8j9WNtQzlnUHiZc2qVpVb9/55bbz5C0GcejILlPJTY4ulNOruQ0lT+NUrqn
+ 0yKMYgrjGpq1q9rgDjI6yejL0ny/7GKKAErgCBD2yg7gU5KYQE75SPxUHUkhxc8vqBAAd0Xl+
+ 8Z9/80C95o0nfyvaN1VF2vIWtUpuZuUOdHeFzBeQGujyo1o6Hj3PaN/v13Xb7iBtEEtBe6Mwr
+ cznr567eoVjxi08+owimMG4TxuWOy+r+BFxqY2xUdOV4rB8xg+/iNxFbi9s9N+OtYl3US7beR
+ 3MnTtAcZyGh8Bd7/VRsF66vkv3B6WtAo2pvFSkxOS/4PDs7popy6SagUJl924RRII/ab9ob6v
+ Bk8Wn55HyX1nCwj2Na0iolWvCQ8NuIe6fgJ0a1/jTXXTXHTDPWptPC6HmS4bp
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 02, 2021 at 11:12:54PM -0600, Pete Zaitcev wrote:
-> On Tue, 2 Mar 2021 07:41:07 +0000
-> "Zhang, Qiang" <Qiang.Zhang@windriver.com> wrote:
-> 
-> > and also I find  similar usage in usb/class/usbtmc.c
-> 
-> Seems like a bug indeed, but I don't like the example in usbtmc.c.
-> Please let me know if the following is acceptable:
-> 
-> commit 83591ac63bc666a44f250b43af6c0f5a1e001841
-> Author: Pete Zaitcev <zaitcev@kotori.zaitcev.us>
-> Date:   Tue Mar 2 23:00:28 2021 -0600
-> 
->     usblp: fix a hang in poll() if disconnected
->     
->     Apparently an application that opens a device and calls select()
->     on it, will hang if the decice is disconnected. It's a little
->     surprising that we had this bug for 15 years, but apparently
->     nobody ever uses select() with a printer: only write() and read(),
->     and those work fine. Well, you can also select() with a timeout.
->     
->     The fix is modeled after devio.c. A few drivers check the
->     condition first, then do not add the wait queue in case the
->     device is disconnected. We doubt that's completely race-free.
->     So, this patch adds the process first, then locks properly
->     and checks for the disconnect.
->     
->     Reported-by: Zqiang <qiang.zhang@windriver.com>
->     Signed-off-by: Pete Zaitcev <zaitcev@redhat.com>
-> 
-> diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
-> index fd87405adbed..5733a0067f5b 100644
-> --- a/drivers/usb/class/usblp.c
-> +++ b/drivers/usb/class/usblp.c
-> @@ -494,16 +494,24 @@ static int usblp_release(struct inode *inode, struct file *file)
->  /* No kernel lock - fine */
->  static __poll_t usblp_poll(struct file *file, struct poll_table_struct *wait)
->  {
-> -	__poll_t ret;
-> +	struct usblp *usblp = file->private_data;
-> +	__poll_t ret = 0;
->  	unsigned long flags;
->  
-> -	struct usblp *usblp = file->private_data;
->  	/* Should we check file->f_mode & FMODE_WRITE before poll_wait()? */
->  	poll_wait(file, &usblp->rwait, wait);
->  	poll_wait(file, &usblp->wwait, wait);
-> +
-> +	mutex_lock(&usblp->mut);
-> +	if (!usblp->present)
-> +		ret != EPOLLHUP;
+On Wed, Mar 3, 2021 at 3:05 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> On Wed, Mar 03, 2021 at 11:38:39AM +0100, Krzysztof Kozlowski wrote:
+> > On Wed, Mar 03, 2021 at 11:30:38AM +0100, Greg Kroah-Hartman wrote: >
+> > It's getting more generic topic, so let me Cc Arnd and Guenter (I think
+> > once I discussed this with Guenter around watchdog).
+> >
+> > This is so far component of a SoC, so it cannot be re-used outside of
+> > SoC. Unless it appears in a new SoC (just like recent re-use of Samsung
+> > serial driver for Apple M1). Because of the architecture, you cannot
+> > build universal kernel without ARCH_EXYNOS. You need it. Otherwise the
+> > kernel won't boot on hardware with DWC Exynos.
+>
+> So, to create a "generic" arm64 kernel, I need to go enable all of the
+> ARCH_* variants as well?  I thought we were trying to NOT do the same
+> mess that arm32 had for this type of thing.
 
-Typo: ! instead of |.  You have to look closely to see the difference.
+Yes, same as on any other architecture that supports more than one
+platform at a time.
 
-alan Stern
+> > Since DWC Exynos won't work without ARCH_EXYNOS - the user will not get
+> > any usable binary - I think all, or almost all, SoC specific drivers are
+> > limited per ARCH. This limits the amount of choices for distro people
+> > and other kernel configuring folks, so they won't have to consider
+> > useless options.
+>
+> Why do we have ARCH_EXYNOS at all?  x86-64 doesn't have this, why is
+> arm64 somehow special here?
 
-> +	mutex_unlock(&usblp->mut);
-> +
->  	spin_lock_irqsave(&usblp->lock, flags);
-> -	ret = ((usblp->bidir && usblp->rcomplete) ? EPOLLIN  | EPOLLRDNORM : 0) |
-> -	   ((usblp->no_paper || usblp->wcomplete) ? EPOLLOUT | EPOLLWRNORM : 0);
-> +	if (usblp->bidir && usblp->rcomplete)
-> +		ret |= EPOLLIN  | EPOLLRDNORM;
-> +	if (usblp->no_paper || usblp->wcomplete)
-> +		ret |= EPOLLOUT | EPOLLWRNORM;
->  	spin_unlock_irqrestore(&usblp->lock, flags);
->  	return ret;
->  }
-> 
+There are only about five chip vendors for x86-64, and they largely
+just use the same drivers. You still have platform support that you need to
+enable to run on all machines, see:
+
+CONFIG_X86_NUMACHIP
+CONFIG_X86_VSMP
+CONFIG_X86_UV
+CONFIG_X86_GOLDFISH
+CONFIG_X86_INTEL_CE
+CONFIG_X86_INTEL_MID
+CONFIG_X86_AMD_PLATFORM_DEVICE
+CONFIG_KVM_GUEST
+CONFIG_JAILHOUSE_GUEST
+CONFIG_ACRN_GUEST
+CONFIG_CHROME_PLATFORMS
+CONFIG_MELLANOX_PLATFORM
+CONFIG_SURFACE_PLATFORMS
+laptop vendors in drivers/platform/x86/Kconfig
+
+Most of these have only a few drivers, while none of the interesting
+x86 platforms that modified from ARM or MIPS SoCs
+(Allwinner/Rockchip Sofia, Unisoc SC9861G-IA, Maxlinear
+XWAY, MobilEye EyeQ6) made it upstream so far, and probably
+never will.
+
+> That's my complaint, it feels wrong that I have to go and enable all
+> different ARCH_ symbols just to build these drivers.  If people want
+> 'default' configurations, then provide an exynos default config file,
+> right?
+
+It is very intentional that there is only one defconfig, this helps ensure
+that none of the platform specific drivers conflicts with other platforms.
+
+> I've complained about this before, from a driver subsystem maintainer
+> point of view, this is crazy, drivers should be building and working on
+> everything.  Worst case, it's a cpu-type issue, to build or not build a
+> driver (i.e. s390, i386), best case it's a feature-type issue to depend
+> on (i.e. USB, TTY, etc.).  But never a "this one sub-architecture of
+> this one cpu"-type issue.  That feels crazy to me...
+
+Basing on the CPU type seems way crazier to me, these have
+almost nothing to do with what kind of drivers one gets to use.
+
+SoC designers rarely care much about the CPU core they put
+in a SoC, they just license a part fits their needs.
+At the moment everyone is using ARM, but before that they had
+the same platforms on powerpc, mips, sh, or their own custom
+architecture. Some get acquired by Intel and start using x86
+cores, and some others move to RISC-V.
+
+       Arnd
