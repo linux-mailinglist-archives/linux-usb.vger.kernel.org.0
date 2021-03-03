@@ -2,152 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2816B32C604
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 02:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EEF32C608
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 02:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238372AbhCDA1U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Mar 2021 19:27:20 -0500
-Received: from mout.kundenserver.de ([212.227.126.130]:38951 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343905AbhCCM5W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Mar 2021 07:57:22 -0500
-Received: from mail-oo1-f42.google.com ([209.85.161.42]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MScHp-1lNs1p3eaf-00SySq; Wed, 03 Mar 2021 13:54:33 +0100
-Received: by mail-oo1-f42.google.com with SMTP id n19so5629513ooj.11;
-        Wed, 03 Mar 2021 04:54:32 -0800 (PST)
-X-Gm-Message-State: AOAM531NGPkJYWb1ZEFu6XbsC7YVWOmvzrRqhXBN6CfZkYA6PIa3yx1G
-        EScro9i4TbX7aw+6NikJzdSa+eL2n42XAXAJiM4=
-X-Google-Smtp-Source: ABdhPJwXgFWFO3RYa/2UyhwtfbPkpNjFdncGZfT0/SZ2aliOLqtfzNqIP0coHL8oImAR6W0F/2R4YD7CufcYWXAMvuE=
-X-Received: by 2002:a4a:304a:: with SMTP id z10mr21215393ooz.26.1614776071464;
- Wed, 03 Mar 2021 04:54:31 -0800 (PST)
-MIME-Version: 1.0
-References: <CGME20210303022537epcas2p1b85ab825ceca3a411a177cc1af8a2c7b@epcas2p1.samsung.com>
- <20210303022628.6540-1-taehyun.cho@samsung.com> <c9ac155c-56c2-4025-d1ae-d0c6c95533b8@kernel.org>
- <YD9lTjWc25Nn7jAR@kroah.com> <20210303103839.it7grj3vtrdmngbd@kozik-lap>
-In-Reply-To: <20210303103839.it7grj3vtrdmngbd@kozik-lap>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 3 Mar 2021 13:54:14 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3Hyc9yCvi=htGdpHbYy-XWxPXOyEQSYxFXtLTpqYsD_A@mail.gmail.com>
-Message-ID: <CAK8P3a3Hyc9yCvi=htGdpHbYy-XWxPXOyEQSYxFXtLTpqYsD_A@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: make USB_DWC3_EXYNOS independent
+        id S238729AbhCDA1V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Mar 2021 19:27:21 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:33885 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238173AbhCCNNK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Mar 2021 08:13:10 -0500
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20210303131123epoutp020f39f8ae5d56914c1c92e2b642748ef0~o1zPSvUlk1532615326epoutp02m
+        for <linux-usb@vger.kernel.org>; Wed,  3 Mar 2021 13:11:23 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20210303131123epoutp020f39f8ae5d56914c1c92e2b642748ef0~o1zPSvUlk1532615326epoutp02m
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1614777084;
+        bh=HqLEP19uy6vF36GMHGn6NYmT2QcSQq+jD8KnFUHdYAY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mp1ftS5rP4GmAmjY1JKWBl7nzpVvUGgKDTx2Z1/qYomNdaGvupwEB/Hv6vosVLlJq
+         uG9rAe527k9sJlr+9U/cQxOfA2eyavKE0A4WjfGbKzwit92+64n+T5oV57ER0sa5vI
+         JZV3pyI+e1teqmEuDVM5go79LQ8YrQtuKo+yigjA=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20210303131123epcas2p27be3be0c47e7a303171f9e652aea71c3~o1zPE-v-X1862418624epcas2p2T;
+        Wed,  3 Mar 2021 13:11:23 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.40.185]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4DrDsQ4KVZz4x9Pt; Wed,  3 Mar
+        2021 13:11:22 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1E.36.56312.AFA8F306; Wed,  3 Mar 2021 22:11:22 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20210303131121epcas2p4c878cc671f2b0f2114b83a73328877d7~o1zNFMwvy2430724307epcas2p4S;
+        Wed,  3 Mar 2021 13:11:21 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20210303131121epsmtrp22233c306f1416892556941834891ede6~o1zNB-weW1070310703epsmtrp2T;
+        Wed,  3 Mar 2021 13:11:21 +0000 (GMT)
+X-AuditID: b6c32a46-1d9ff7000000dbf8-c2-603f8afa502a
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7D.E0.08745.9FA8F306; Wed,  3 Mar 2021 22:11:21 +0900 (KST)
+Received: from rack03 (unknown [12.36.155.109]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20210303131121epsmtip2ae8e1afcf08f36cd063563f0942e49ae~o1zM28lDv0357003570epsmtip2L;
+        Wed,  3 Mar 2021 13:11:21 +0000 (GMT)
+Date:   Wed, 3 Mar 2021 22:12:16 +0900
+From:   taehyun cho <taehyun.cho@samsung.com>
 To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        taehyun cho <taehyun.cho@samsung.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:/fY+IC7sdXVEt5DfeSZdLHFlKw5bjgFa/KafvJ86l5IJUoHp3ZD
- Bu/WIRlIqig8NWh/Pcrp1AOHsrPePzPe0O0Vmwd0PhqYhQVnUfV2S4WAN6Ls0rT5NQqassk
- B5MUqkJUjesuWPdRNeDqjnioP8FxUw7X0J34tvZvS5pCMuj8E+Vh0vonGdYW2ZG6qkIva5z
- kUheakM7t0ZskNq/v/H9A==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mHeJUIhFkBQ=:7NK8Cc66O4L35N29NC8jfp
- JplUWfG4ssECEkk6BhTiA9aJW3/0UQXO2eE64N+OuuKLZhLEQm5KfqXNJhsBcxSvDP9VGxKAb
- 2bVdXlTeZIFee18bVjpcVXQAChGB2EaIamooFelFLf/RFxSUllOxf5DhCuInwu2P5NTOQIT+I
- Y1/+MGg4ScFr8OoJ8stLXvG0ihXj+XeTy70vVxygPIYCebhN1J8JigJCzeRrKMlqFI+StowB9
- h573BE54OtZJa8MfF1saf1fGnuD2fPbgdO4/VqFSNC30GdNWBuyJSsKeDhY5+/oR75HEsTnQF
- gSiP6niITpG894AoZx0GvQTO0ru2tMkeFg1UPopSzLrEsEUclQTBVCEbDITfVIwPWhSJG16Ei
- 2mkMOx7VWXCfe5WWpDOeDL/8iiptVyGaIBRhOWPjVNSxu3nK4u9bkllCWyDQG
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: make USB_DWC3_EXYNOS independent
+Message-ID: <20210303131216.GA136468@rack03>
+MIME-Version: 1.0
+In-Reply-To: <c9ac155c-56c2-4025-d1ae-d0c6c95533b8@kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrOKsWRmVeSWpSXmKPExsWy7bCmme6vLvsEg3nz5C2OtT1htzh/fgO7
+        xaJlrcwOzB6bVnWyeXzeJBfAFJVjk5GamJJapJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6k
+        kJeYm2qr5OIToOuWmQO0Q0mhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYGhYoFec
+        mFtcmpeul5yfa2VoYGBkClSZkJMx6+Na5oJ7vBW7z/xhbWDcw93FyMkhIWAice75ddYuRi4O
+        IYEdjBIvjhxnhnA+MUosmvKdHcL5zCixeU0LK0xL/4vlbBCJXYwSp4+uZ4RwnjBKTJt9jR2k
+        ikVAReL18VuMIDabgLbE/uabYN0iApoS1/9+B7OZBfQlVtybwwJiCws4SHw+tw8sziugI3H3
+        4A92CFtQ4uTMJ2A1nAJ2Ei/39QNt5uAQBZr/6mA9yF4JgWPsEm/WfGGBuM5F4mrrNnYIW1ji
+        1fEtULaUxOd3e9kgGtoZJX6dWMMK4UxhlPiw7hQjRJWxxKxn7YwQ12VKrHzRBrZNQkBZ4sgt
+        Fogwn0TH4b/sEGFeiY42IYhOVYn2i/fZIGxpiUubb0LZHhJ9y1dBg/Ewo0TXsYuMExjlZyH5
+        bRaSbRC2jsSC3Z+AbA4gW1pi+T8OCFNTYv0u/QWMrKsYxVILinPTU4uNCoyQo3sTIzgFarnt
+        YJzy9oPeIUYmDsZDjBIczEoivOIvbROEeFMSK6tSi/Lji0pzUosPMZoCI2ois5Rocj4wCeeV
+        xBuaGpmZGViaWpiaGVkoifMWGzyIFxJITyxJzU5NLUgtgulj4uCUamCq/x7Rd8tQrNxE1mPF
+        5dCCtZV77PfHyc4pmf+rsL3O+uHjznQ+l7mWK3Yuf1fV9z6+kHXN/XOrwq70/wwyST7dkqUT
+        P4mDsc2SLyveRlBHbZJvUlYR690FvxZMSL4Sz+70ifPuEonWhJOrN7DtmP/a4Yz84kJpT7fP
+        Ya7qiS/0BVb5HD1qaf3daGKHVcp8vgOhQVKFiu+P/dsSdsjWpPbV84dfvCITW9w0VZlZk8PL
+        rTITvYKMlrElb55Wdllo91/Okh+RtTLywTfucm/++pPbNttzX4rr3f+T83iUWAtFNVNlWjbz
+        Z85hN7k36UJCfFqzyIpTWp9XfTzXGG96qym6efu9dlfTBJXZL2dIKrEUZyQaajEXFScCAKvx
+        myQKBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJLMWRmVeSWpSXmKPExsWy7bCSvO7PLvsEg1vHpS2OtT1htzh/fgO7
+        xaJlrcwOzB6bVnWyeXzeJBfAFMVlk5Kak1mWWqRvl8CVsWj5acaC2dwV7x7lNzBO4uxi5OSQ
+        EDCR6H+xnK2LkYtDSGAHo8Sl8/0sEAlpiVOPFzBD2MIS91uOsEIUPWKUeHpmPhtIgkVAReL1
+        8VuMIDabgLbE/uabrCC2iICmxPW/38FsZgF9iRX35oANFRZwkPh8bh9YnFdAR+LuwR/sEEMP
+        M0p8bzkFlRCUODnzCQtEs5bEjX8vmboYOYBsaYnl/zhAwpwCdhIv9/WzgYRFgW54dbB+AqPg
+        LCTNs5A0z0JoXsDIvIpRMrWgODc9t9iwwCgvtVyvODG3uDQvXS85P3cTIzh0tbR2MO5Z9UHv
+        ECMTB+MhRgkOZiURXvGXtglCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeS90nYwXEkhPLEnNTk0t
+        SC2CyTJxcEo1MNky6y0MerUhVsyQRfWK7mO++zcfvN7zcadH9ZEKVt7/9pY6vCpfKzdPXPVj
+        0md5o/I7E552ck3Y1hCmWOmV/S2hssDlWOeVvv0r2k6uNpPfzFnjlH//K/Pe+hU+cyMWHOHo
+        n6ogPZHHTf7h1eUWnzXPTyufybwrOV6g4F7kN67Tsmf1NdfJhtU3cfcum/pok0NFqwHHlnn6
+        /65Ei53hVj7ut7hjrseW/24bPlfZvdNbKfw+5t06ScOvMw5ImKvM7jwk/e1K+GRO9+7QldYx
+        62TfLa/6IPBQdz7Pjxevfj16f/FDxHztkH+/HnzduEWjvilU67iaTIDKDVmxjaEte9WnM7We
+        UlkR1bP1uZBN7RklluKMREMt5qLiRADzDtypzAIAAA==
+X-CMS-MailID: 20210303131121epcas2p4c878cc671f2b0f2114b83a73328877d7
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----WZLI4USkVYiVjVtGawWGutc5pNztY3GR2qy8kqsclN4GFAmP=_1a2651_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210303022537epcas2p1b85ab825ceca3a411a177cc1af8a2c7b
+References: <CGME20210303022537epcas2p1b85ab825ceca3a411a177cc1af8a2c7b@epcas2p1.samsung.com>
+        <20210303022628.6540-1-taehyun.cho@samsung.com>
+        <c9ac155c-56c2-4025-d1ae-d0c6c95533b8@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 3, 2021 at 11:38 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> On Wed, Mar 03, 2021 at 11:30:38AM +0100, Greg Kroah-Hartman wrote:
-> > On Wed, Mar 03, 2021 at 11:24:01AM +0100, Krzysztof Kozlowski wrote:
-> > > On 03/03/2021 03:26, taehyun cho wrote:
-> > > > 'ARCH_EXYNOS' is not suitable for DWC3_EXYNOS config.
-> > > > 'USB_DWC3_EXYNOS' is glue layer which can be used with
-> > > > Synopsys DWC3 controller on Exynos SoCs. USB_DWC3_EXYNOS'
-> > > > can be used from Exynos5 to Exynos9.
-> > > >
-> > > > Signed-off-by: taehyun cho <taehyun.cho@samsung.com>
-> > >
-> > > NACK because you ignored comments from March. Please respond to them instead
-> > > of resending the same patch.
-> > >
-> > > Anyway, when resending you need to version your patches and explain the
-> > > differences. Please also Cc reviewers and other maintainers. I pointed out
-> > > this before:
-> > > scripts/get_maintainer.pl -f drivers/usb/dwc3/dwc3-exynos.c
-> > >
-> > > The driver - in current form - should not be available for other
-> > > architectures. It would clutter other platforms and kernel config selection.
-> > > If you want to change this, you need to provide rationale (usually by adding
-> > > support to new non-Exynos platform).
+------WZLI4USkVYiVjVtGawWGutc5pNztY3GR2qy8kqsclN4GFAmP=_1a2651_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+
+On Wed, Mar 03, 2021 at 11:24:01AM +0100, Krzysztof Kozlowski wrote:
+> On 03/03/2021 03:26, taehyun cho wrote:
+> >'ARCH_EXYNOS' is not suitable for DWC3_EXYNOS config.
+> >'USB_DWC3_EXYNOS' is glue layer which can be used with
+> >Synopsys DWC3 controller on Exynos SoCs. USB_DWC3_EXYNOS'
+> >can be used from Exynos5 to Exynos9.
 > >
-> > No, these crazy "ARCH_FOO" things need to go away.  For systems that
-> > want to build "universal" kernels, why are they being forced to enable
-> > "ARCH_*" just so they can pick specific drivers?  That is not done on
-> > other architectures, why is ARM64 so "special" in this regard.
-> >
-> > How do you "know" that these cores/devices are tied to specific ARCH_
-> > platforms?  We don't, so that dependency should not be there.
-> >
-> > Just let any arch pick any driver if it can be built, you never know
-> > what it might be run on.  Removing ARCH_ dependencies in Kconfig files
-> > is a good thing, please do not discourage that from happening.
+> >Signed-off-by: taehyun cho <taehyun.cho@samsung.com>
+> 
+> NACK because you ignored comments from March. Please respond to them instead
+> of resending the same patch.
+> 
+> Anyway, when resending you need to version your patches and explain the
+> differences. Please also Cc reviewers and other maintainers. I pointed out
+> this before:
+> scripts/get_maintainer.pl -f drivers/usb/dwc3/dwc3-exynos.c
+> 
+> The driver - in current form - should not be available for other
+> architectures. It would clutter other platforms and kernel config selection.
+> If you want to change this, you need to provide rationale (usually by adding
+> support to new non-Exynos platform).
+> 
+> Best regards,
+> Krzysztof
 >
-> It's getting more generic topic, so let me Cc Arnd and Guenter (I think
-> once I discussed this with Guenter around watchdog).
->
-> This is so far component of a SoC, so it cannot be re-used outside of
-> SoC. Unless it appears in a new SoC (just like recent re-use of Samsung
-> serial driver for Apple M1). Because of the architecture, you cannot
-> build universal kernel without ARCH_EXYNOS. You need it. Otherwise the
-> kernel won't boot on hardware with DWC Exynos.
->
-> Since DWC Exynos won't work without ARCH_EXYNOS - the user will not get
-> any usable binary - I think all, or almost all, SoC specific drivers are
-> limited per ARCH. This limits the amount of choices for distro people
-> and other kernel configuring folks, so they won't have to consider
-> useless options.
->
-> Anyway, that's the convention or consensus so far for entire SoC. If we
-> want to change it - sure, but let's make it for everyone, not for just
-> this one USB driver.
 
-I think we should keep it like this, and have most platform specific
-drivers be guarded in Kconfig like this. There are two main advantages
-for this:
+Sorry for not answering the comments previously. I was confused with the policy.
+I couldn't use 'USB_DWC3_EXYNOS' when 'ARCH_EXYNOS' was not defined. That's why
+I changed 'ARCH_EXYNOS' to 'USB_DWC3'. I modified changelog text from previous
+commit. I saw some more discussion was done about 'ARCH_XX'. I will wait for
+the decision.
 
-- Linus has mentioned several times that he does not want to
-  be asked about new drivers that cannot run on x86 when doing
-  'make oldconfig', and I'm fairly sure this applies to other users
-  as well. Life is too short to know 19000 Kconfig symbols and
-  whether you should enable them or not.
-  Drivers tend to not be tied to an instruction set, so if a driver
-  is used on mips32, arm32 and arm64, but is tied to a particular
-  SoC manufacturer, it should only need to depend on that platform
-  (|| COMPILE_TEST).
+Thanks.
 
-- A default config enables tons of device drivers, most of which
-  are only ever used on a small number of SoCs. I like the convenience
-  of being able to turn a generic config into one for my particular SoC
-  by turning off all other platforms, and letting the platform specific
-  drivers disappear because of the dependency.
+Best Regards,
+Taehyun Cho
 
-There are two related points:
+------WZLI4USkVYiVjVtGawWGutc5pNztY3GR2qy8kqsclN4GFAmP=_1a2651_
+Content-Type: text/plain; charset="utf-8"
 
-- For the specific question of drivers like DWC3_EXYNOS, I
-  would indeed like to see fewer questions asked, and more
-  of the customization done in a generic driver. The same is
-  true for a lot of designware drivers (ethernet, pci, mmc, ...)
-  and similar IP blocks from other vendors. We know these are
-  all the same hardware design, just wired up in slightly different
-  ways, but without help from the hardware designers we have
-  no good way to come up with a generic driver that understands
-  all the possible ways it can be wired up.
 
-- I don't like the way we deal with a lot of platform specific irqchip
-  and clocksource drivers. Unlike most other subsystems, these
-  drivers just get selected implicitly from a platform specific
-  Kconfig symbol. The main disadvantage is that this is inconsistent
-  with the rest of the kernel, but there is also a more general
-  problem with the use of 'select' that causes a couple of issues
-  when used too much.
-
-       Arnd
+------WZLI4USkVYiVjVtGawWGutc5pNztY3GR2qy8kqsclN4GFAmP=_1a2651_--
