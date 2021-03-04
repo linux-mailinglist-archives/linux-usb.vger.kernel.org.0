@@ -2,148 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D142032CD59
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 08:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9449132CE50
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 09:23:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236027AbhCDHKV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Mar 2021 02:10:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236034AbhCDHKQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Mar 2021 02:10:16 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFC6C061756
-        for <linux-usb@vger.kernel.org>; Wed,  3 Mar 2021 23:09:35 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id l3so29856637ybf.17
-        for <linux-usb@vger.kernel.org>; Wed, 03 Mar 2021 23:09:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=6SYKOly+jweugIylMFB95EbkQpY3TPkXyF08BjG+EYk=;
-        b=pir1oZAyUls7R39beNX8rUtSrLX+skRk3aAi9rhfDi6PNKwuxwKaRzM0Ya1ou874d+
-         IyYZK/KjNBF0Hnqi+7bLNQRLxdcBm8x9+sJ0tSrz+HNiBzSRrUrWYWufOi6eGzpqN7Jl
-         d61BDFGS84Cbr8fIHfU9IxEkb8EUYDY1PXna0XKvZXmmauWLVeJjcxXr7xqT8/T7C7vK
-         TFQf9LzKiVsBxALCf1XZcuAWWLzpATs1YEU0VgFkmA408cuHQMAb3yOOPTo9vWWSzpUs
-         8nxpwlmRGU+NNMnJbWz4fdykIPQjo5yOCdz+uCEGrxfALeSO7CpWEmA2S71q2pqDi1hq
-         d96w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=6SYKOly+jweugIylMFB95EbkQpY3TPkXyF08BjG+EYk=;
-        b=d6uobZC4kt7o27aFcBl5j/kyXdNitbKyERURolIiD1WkorveGZsfuM6ecXWJ+rhobz
-         TF69NbhIwe6S0x2lXXFl7RrSMWSlbCxVYVqIxfkR+qXFYGCMOeTbtFVdfvWeShNBpR3F
-         EP3IRUS+tGwip2pZmsBxzC6aZUY7y4SIiLZQJYdZb61xL/XJG9R6eT5M0Cno2BYCh2Xj
-         Jjq258KsHR4Pb+OofdInPkX/K5mZJizQx1lIhdLtKuzdFnbrlXMGDOI6qgd/Es2SpVoz
-         jgoBWLU0ewCCeqoqEzc9sEvjuyWoAdqxS6EAESbAlKlhFTdWVyOzIFtMLBGkDLS7Q1MU
-         CIOw==
-X-Gm-Message-State: AOAM53388FoPZJsZZGAUDwneVOzy0IYir98tT1kXcKW45BT/SxPYeQtB
-        4zTAM61yGkZo82SUNSJje3Iq/iwlnJs=
-X-Google-Smtp-Source: ABdhPJwz9/qlY/4sHrDsgAhu1Tjex6y12rlx/rEieWUpOFcszT7Bqn0mNl1TPE0F5Xsf6YGYIDDa7h2Saps=
-Sender: "badhri via sendgmr" <badhri@badhri.mtv.corp.google.com>
-X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:543f:67ae:599c:e076])
- (user=badhri job=sendgmr) by 2002:a25:c006:: with SMTP id c6mr4556819ybf.353.1614841775027;
- Wed, 03 Mar 2021 23:09:35 -0800 (PST)
-Date:   Wed,  3 Mar 2021 23:09:31 -0800
-Message-Id: <20210304070931.1947316-1-badhri@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
-Subject: [PATCH v1] usb: typec: tcpci: Check ROLE_CONTROL while interpreting CC_STATUS
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S236580AbhCDIWV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Mar 2021 03:22:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48170 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236574AbhCDIWM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 4 Mar 2021 03:22:12 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 95B5564EEC;
+        Thu,  4 Mar 2021 08:21:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1614846092;
+        bh=pBHgX8QmYMcAWzPINfXUjSXKbqcV1ueKgf8HCzd+kIM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jyBz5m94PwDjhRy95q5Zp4Zs6HSh73VjC77ZBZIf8FpxDBG0CYW/hgtRe8QHjrry9
+         iH5tR3twom96CxIVVvaDnMTvWQqCM0UXp6pSAz1/rMcSfWuFUHYDXXxEbDsVNJVeHz
+         YokhyIi7CGD0+rau64aCoh66iaOFVOA3rP0zZ8tI=
+Date:   Thu, 4 Mar 2021 09:21:28 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Heiko Thiery <heiko.thiery@gmail.com>
+Cc:     raychi@google.com, badhri@google.com, balbi@kernel.org,
+        kyletso@google.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/2] an additional path to control charging current
+Message-ID: <YECYiL0F/Odqz91g@kroah.com>
+References: <20210222115149.3606776-1-raychi@google.com>
+ <20210303150126.24538-1-heiko.thiery@gmail.com>
+ <CAEyMn7bc8F940WZc0Xf-p9Ri6K4sKcLvG-VfYh2o+bjuhT82NQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEyMn7bc8F940WZc0Xf-p9Ri6K4sKcLvG-VfYh2o+bjuhT82NQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-While interpreting CC_STATUS, ROLE_CONTROL has to be read to make
-sure that CC1/CC2 is not forced presenting Rp/Rd.
+On Wed, Mar 03, 2021 at 04:26:38PM +0100, Heiko Thiery wrote:
+> Hi,
+> 
+> Am Mi., 3. März 2021 um 16:01 Uhr schrieb Heiko Thiery <heiko.thiery@gmail.com>:
+> >
+> > Hi Ray,
+> >
+> >
+> > > Currently, VBUS draw callback does no action when the
+> > > generic PHYs are used. The patches add an additional path
+> > > to control charging current through power supply property
+> > > POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT.
+> > >
+> > > Ray Chi (2):
+> > >   usb: dwc3: add a power supply for current control
+> > >   usb: dwc3: add an alternate path in vbus_draw callback
+> >
+> > While using next-20210303 this patchset leads to the following kernel crash on my board:
+> >
+> > ---- 8< ----
+> >
+> > [    1.392084] VFIO - User Level meta-driver version: 0.3
+> > [    1.398370] Unable to handle kernel NULL pointer dereference at virtual address 00000000000003a0
+> > [    1.407552] Mem abort info:
+> > [    1.410479]   ESR = 0x96000004
+> > [    1.413668]   EC = 0x25: DABT (current EL), IL = 32 bits
+> > [    1.419217]   SET = 0, FnV = 0
+> > [    1.422413]   EA = 0, S1PTW = 0
+> > [    1.425690] Data abort info:
+> > [    1.428705]   ISV = 0, ISS = 0x00000004
+> > [    1.432715]   CM = 0, WnR = 0
+> > [    1.435821] [00000000000003a0] user address but active_mm is swapper
+> > [    1.442458] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+> > [    1.448274] Modules linked in:
+> > [    1.451469] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.12.0-rc1-next-20210303-00005-g090e892099db #126
+> > [    1.461269] Hardware name: Kontron pITX-imx8m (DT)
+> > [    1.466268] pstate: 60000005 (nZCv daif -PAN -UAO -TCO BTYPE=--)
+> > [    1.472538] pc : devm_power_supply_get_by_phandle+0xe4/0x148
+> > [    1.478455] lr : dwc3_probe+0xbac/0xfa0
+> > [    1.482462] sp : ffff800011f1bb00
+> > [    1.485918] x29: ffff800011f1bb00 x28: 0000000000000000
+> > [    1.491467] x27: ffff800011681078 x26: ffff8000115d048c
+> > [    1.497016] x25: ffff0000c089ea00 x24: 0000000000000003
+> > [    1.502564] x23: ffff0000c089ea00 x22: ffff800011b89948
+> > [    1.508112] x21: 0000000000000003 x20: 00000000fffffdfb
+> > [    1.513660] x19: ffff0000c03f1080 x18: 00000000000000c0
+> > [    1.519209] x17: 0000000000000000 x16: 0000000000000000
+> > [    1.524757] x15: fffffc0000001000 x14: 0000000000000000
+> > [    1.530306] x13: 0000000000000000 x12: 0000000000000030
+> > [    1.535853] x11: 0101010101010101 x10: ffff800011f1ba50
+> > [    1.541402] x9 : ffff0000ff784c70 x8 : 0000000000000010
+> > [    1.546950] x7 : ffff0000c03a5590 x6 : 0000000000000080
+> > [    1.552498] x5 : ffff0000c0098000 x4 : 00000000000003a0
+> > [    1.558047] x3 : ffff800011cb2dc8 x2 : 0000000000000000
+> > [    1.563596] x1 : 0000000000000001 x0 : 0000000000000000
+> > [    1.569146] Call trace:
+> > [    1.571700]  devm_power_supply_get_by_phandle+0xe4/0x148
+> > [    1.577248]  dwc3_probe+0xbac/0xfa0
+> > [    1.580890]  platform_probe+0x68/0xd8
+> > [    1.584719]  really_probe+0xe4/0x3c0
+> > [    1.588454]  driver_probe_device+0x58/0xb8
+> > [    1.592733]  device_driver_attach+0x74/0x80
+> > [    1.597100]  __driver_attach+0x58/0xe0
+> > [    1.601016]  bus_for_each_dev+0x74/0xc8
+> > [    1.605020]  driver_attach+0x24/0x30
+> > [    1.608753]  bus_add_driver+0x184/0x1e8
+> > [    1.612758]  driver_register+0x64/0x120
+> > [    1.616764]  __platform_driver_register+0x28/0x38
+> > [    1.621675]  dwc3_driver_init+0x1c/0x28
+> > [    1.625684]  do_one_initcall+0x74/0x1d0
+> > [    1.629691]  kernel_init_freeable+0x1d4/0x23c
+> > [    1.634240]  kernel_init+0x14/0x118
+> > [    1.637885]  ret_from_fork+0x10/0x30
+> > [    1.641624] Code: 88027c01 35ffffa2 17fffe96 f9800091 (885f7c82)
+> > [    1.647992] ---[ end trace c6e48cea897d0b0d ]---
+> > [    1.652833] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+> > [    1.660822] SMP: stopping secondary CPUs
+> > [    1.664921] Kernel Offset: disabled
+> > [    1.668560] CPU features: 0x00240002,2000200c
+> > [    1.673106] Memory Limit: none
+> > [    1.676296] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
+> >
+> >
+> > ---- 8< ----
+> 
+> This fixes the crash.
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index d15f065849cd..94fdbe502ce9 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1628,7 +1628,7 @@ static int dwc3_probe(struct platform_device *pdev)
+>  assert_reset:
+>         reset_control_assert(dwc->reset);
+> 
+> -       if (!dwc->usb_psy)
+> +       if (dwc->usb_psy)
+>                 power_supply_put(dwc->usb_psy);
+> 
+>         return ret;
+> @@ -1653,7 +1653,7 @@ static int dwc3_remove(struct platform_device *pdev)
+>         dwc3_free_event_buffers(dwc);
+>         dwc3_free_scratch_buffers(dwc);
+> 
+> -       if (!dwc->usb_psy)
+> +       if (dwc->usb_psy)
+>                 power_supply_put(dwc->usb_psy);
+> 
+>         return 0;
+> 
 
-From the TCPCI spec:
+Fixed with d05a12f0478c ("usb: dwc3: Fix dereferencing of null
+dwc->usb_psy") in my tree and should show up in the next linux-next.
 
-4.4.5.2 ROLE_CONTROL (Normative):
-The TCPM shall write B6 (DRP) = 0b and B3..0 (CC1/CC2) if it wishes
-to control the Rp/Rd directly instead of having the TCPC perform
-DRP toggling autonomously. When controlling Rp/Rd directly, the
-TCPM writes to B3..0 (CC1/CC2) each time it wishes to change the
-CC1/CC2 values. This control is used for TCPM-TCPC implementing
-Source or Sink only as well as when a connection has been detected
-via DRP toggling but the TCPM wishes to attempt Try.Src or Try.Snk.
+thanks,
 
-Table 4-22. CC_STATUS Register Definition:
-If (ROLE_CONTROL.CC1 = Rd) or ConnectResult=1)
-00b: SNK.Open (Below maximum vRa)
-01b: SNK.Default (Above minimum vRd-Connect)
-10b: SNK.Power1.5 (Above minimum vRd-Connect) Detects Rp-1.5A
-11b: SNK.Power3.0 (Above minimum vRd-Connect) Detects Rp-3.0A
-
-If (ROLE_CONTROL.CC2=Rd) or (ConnectResult=1)
-00b: SNK.Open (Below maximum vRa)
-01b: SNK.Default (Above minimum vRd-Connect)
-10b: SNK.Power1.5 (Above minimum vRd-Connect) Detects Rp 1.5A
-11b: SNK.Power3.0 (Above minimum vRd-Connect) Detects Rp 3.0A
-
-Fixes: 74e656d6b0551 ("staging: typec: Type-C Port Controller
-Interface driver (tcpci)")
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
- drivers/usb/typec/tcpm/tcpci.c | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index a27deb0b5f03..027afd7dfdce 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -24,6 +24,15 @@
- #define	AUTO_DISCHARGE_PD_HEADROOM_MV		850
- #define	AUTO_DISCHARGE_PPS_HEADROOM_MV		1250
- 
-+#define tcpc_presenting_cc1_rd(reg) \
-+	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
-+	 (((reg) & (TCPC_ROLE_CTRL_CC1_MASK << TCPC_ROLE_CTRL_CC1_SHIFT)) == \
-+	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC1_SHIFT)))
-+#define tcpc_presenting_cc2_rd(reg) \
-+	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
-+	 (((reg) & (TCPC_ROLE_CTRL_CC2_MASK << TCPC_ROLE_CTRL_CC2_SHIFT)) == \
-+	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC2_SHIFT)))
-+
- struct tcpci {
- 	struct device *dev;
- 
-@@ -178,19 +187,25 @@ static int tcpci_get_cc(struct tcpc_dev *tcpc,
- 			enum typec_cc_status *cc1, enum typec_cc_status *cc2)
- {
- 	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
--	unsigned int reg;
-+	unsigned int reg, role_control;
- 	int ret;
- 
-+	ret = regmap_read(tcpci->regmap, TCPC_ROLE_CTRL, &role_control);
-+	if (ret < 0)
-+		return ret;
-+
- 	ret = regmap_read(tcpci->regmap, TCPC_CC_STATUS, &reg);
- 	if (ret < 0)
- 		return ret;
- 
- 	*cc1 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC1_SHIFT) &
- 				 TCPC_CC_STATUS_CC1_MASK,
--				 reg & TCPC_CC_STATUS_TERM);
-+				 reg & TCPC_CC_STATUS_TERM ||
-+				 tcpc_presenting_cc1_rd(role_control));
- 	*cc2 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC2_SHIFT) &
- 				 TCPC_CC_STATUS_CC2_MASK,
--				 reg & TCPC_CC_STATUS_TERM);
-+				 reg & TCPC_CC_STATUS_TERM ||
-+				 tcpc_presenting_cc2_rd(role_control));
- 
- 	return 0;
- }
--- 
-2.30.1.766.gb4fecdf3b7-goog
-
+greg k-h
