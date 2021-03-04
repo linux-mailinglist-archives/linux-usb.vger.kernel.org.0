@@ -2,72 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0596132D548
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 15:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F079F32D69C
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 16:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbhCDOaN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Mar 2021 09:30:13 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:44308 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231846AbhCDO3r (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Mar 2021 09:29:47 -0500
-Received: by mail-il1-f197.google.com with SMTP id c11so10799648ilq.11
-        for <linux-usb@vger.kernel.org>; Thu, 04 Mar 2021 06:29:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=+kcrwDzNNHcCwSp7vaCGNHpSpPV6e8DUvjBhwiEP8pU=;
-        b=hwHoY+t1NNGcyHcPP4yG/FImyvOi14c+NVD29jyYSvpMFXWW+X2dP+4FTglcrXZXbv
-         k9Ptfp+dMebXAHBSDhhLb+ggDzNfiKHSU9HTQztS8z3fZxap0gEwfN0qaT/g1c0OVgMr
-         ntT9TsqnprQPktE1AKH9yk4nOrkKpn5g0qWs/bkM0iWJwHygDYGEkac1h81AJB2QTLsx
-         vSJ2/VClwUOF8n6MRAeBout0UhXja3DF9zqCX62bkzhTh7kV21fgmMnq/J42kASmVSfV
-         btQ5jTsYFMKWjgxypyOM8sZa2PcL5Fy9GUi09T4ZDPNlq9jQjavMIuWNwdZFIovSkhn0
-         r9rw==
-X-Gm-Message-State: AOAM533HzLOYQUIL3ZdwedNZ83UJrDXRisKdYHjPqSzvI1r4tO5+NJLO
-        rwyVfjEEhZ35/T7n1Jfl2fU9AWkhrLNQEifT1SB5Udn9O0XG
-X-Google-Smtp-Source: ABdhPJzJnSKr1pWXAFbJrRBB8V9CltBDMNX/c17YuUTYDXIwLV1cTTAvSc+KIpn15cTGHwMS5UEGEbdw2dURRxZ9663vlJyC/w8d
-MIME-Version: 1.0
-X-Received: by 2002:a5d:818b:: with SMTP id u11mr3615979ion.59.1614868146643;
- Thu, 04 Mar 2021 06:29:06 -0800 (PST)
-Date:   Thu, 04 Mar 2021 06:29:06 -0800
-In-Reply-To: <0000000000004dbaa505a5a165f7@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003d692a05bcb6ca26@google.com>
-Subject: Re: WARNING in carl9170_usb_submit_cmd_urb/usb_submit_urb
-From:   syzbot <syzbot+9468df99cb63a4a4c4e1@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, brookebasile@gmail.com,
-        chunkeey@googlemail.com, davem@davemloft.net,
-        gregkh@linuxfoundation.org, ingrassia@epigenesys.com, jack@suse.cz,
-        kuba@kernel.org, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu, yi.zhang@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+        id S234796AbhCDP0r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Mar 2021 10:26:47 -0500
+Received: from www262.sakura.ne.jp ([202.181.97.72]:62157 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234111AbhCDP0Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Mar 2021 10:26:24 -0500
+Received: from fsav302.sakura.ne.jp (fsav302.sakura.ne.jp [153.120.85.133])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 124FP2XR030900;
+        Fri, 5 Mar 2021 00:25:02 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav302.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav302.sakura.ne.jp);
+ Fri, 05 Mar 2021 00:25:02 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav302.sakura.ne.jp)
+Received: from localhost.localdomain (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 124FOtn0030882
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 5 Mar 2021 00:25:02 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+To:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Subject: [PATCH v4 00/12] usb: usbip: serialize attach/detach operations
+Date:   Fri,  5 Mar 2021 00:24:43 +0900
+Message-Id: <20210304152455.3685-1-penguin-kernel@I-love.SAKURA.ne.jp>
+X-Mailer: git-send-email 2.18.4
+In-Reply-To: <df337d16-2a6e-f671-7134-449d7da6a9cb@linuxfoundation.org>
+References: <df337d16-2a6e-f671-7134-449d7da6a9cb@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has bisected this issue to:
+On 2021/02/27 0:04, Shuah Khan wrote:
+> I will send it out later on today.
 
-commit 6a66a7ded12baa6ebbb2e3e82f8cb91382814839
-Author: zhangyi (F) <yi.zhang@huawei.com>
-Date:   Thu Feb 13 06:38:20 2020 +0000
+Since I haven't received it, here comes an update.
 
-    jbd2: move the clearing of b_modified flag to the journal_unmap_buffer()
+Changes since v1:
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14bd498ed00000
-start commit:   f69d02e3 Merge tag 'misc-5.12-2021-03-02' of git://git.ker..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=16bd498ed00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=12bd498ed00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e0da2d01cc636e2c
-dashboard link: https://syzkaller.appspot.com/bug?extid=9468df99cb63a4a4c4e1
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11770346d00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17be69ccd00000
+  Tetsuo Handa found that the PTR_ERR() access in usbip_prepare_threads()
+  in v1 was wrong, and fixed it in v2.
 
-Reported-by: syzbot+9468df99cb63a4a4c4e1@syzkaller.appspotmail.com
-Fixes: 6a66a7ded12b ("jbd2: move the clearing of b_modified flag to the journal_unmap_buffer()")
+Changes since v2:
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+  The kernel test robot <lkp@intel.com> found the same error using
+  scripts/coccinelle/tests/odd_ptr_err.cocci and
+  Julia Lawall <julia.lawall@inria.fr> sent us a patch, but nothing
+  changed because that error was already fixed in v2.
+
+Changes since v3:
+
+  Reduce lines changed in drivers/usb/usbip/stub_dev.c .
+  Split into 12 patches.
+
+Tetsuo Handa (12):
+  usb: usbip: introduce usbip_event_mutex for serialization
+  usb: usbip: vhci: serialize attach_store()/detach_store() against event_handler()
+  usb: usbip: vudc: serialize usbip_sockfd_store() against event_handler()
+  usb: usbip: stub: serialize usbip_sockfd_store() against event_handler()
+  usb: usbip: don't reset tcp_socket at vhci_device_reset()
+  usb: usbip: fix error handling of kthread_get_run()
+  usb: usbip: preallocate kernel threads for consistent attach operation
+  usb: usbip: check that stream socket is used
+  usb: usbip: vhci: add automatic recovery to attach_store()
+  usb: usbip: vudc: add automatic recovery to usbip_sockfd_store()
+  usb: usbip: stub: add automatic recovery to usbip_sockfd_store()
+  usb: usbip: remove unused kthread_get_run()
+
+ drivers/usb/usbip/stub_dev.c     | 44 ++++++++++++++-----------
+ drivers/usb/usbip/usbip_common.c | 55 ++++++++++++++++++++++++++++++++
+ drivers/usb/usbip/usbip_common.h | 25 ++++++++-------
+ drivers/usb/usbip/usbip_event.c  | 15 +++++++++
+ drivers/usb/usbip/vhci_hcd.c     |  6 ----
+ drivers/usb/usbip/vhci_sysfs.c   | 50 +++++++++++++++++++++--------
+ drivers/usb/usbip/vudc_sysfs.c   | 50 +++++++++++++++++------------
+ 7 files changed, 176 insertions(+), 69 deletions(-)
+
+-- 
+2.18.4
+
