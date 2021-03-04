@@ -2,163 +2,232 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E03B932D1FD
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 12:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C2132D2C8
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 13:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237500AbhCDLti (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Mar 2021 06:49:38 -0500
-Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:35970 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237029AbhCDLtK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Mar 2021 06:49:10 -0500
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 124Bh3fM029251;
-        Thu, 4 Mar 2021 03:48:23 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type :
- content-transfer-encoding; s=proofpoint;
- bh=UkXjoKEoaVzCCUHn4x8DW/mGeN7Tt6I+eYBJINtHIDE=;
- b=J5ylxdm9F5VP6R1OPyV0qaX74X5q6G/0Wi2x+uAW3yA4TLvvkzEqP+7gYiOXshydZHWm
- rAsBKsTvvEkhJLKRtzG9BCyN9NsuEJ7GWy8+jPOkx4zob1ORP2C7CbTJZ9uGGzcqTpMT
- 4syCdgc6PVqlCJ9+WgNWtWTUk9Oc4hYa7hTtrLjErtzjy9xda8W7PuPkvsfBwk0JjwUP
- r6dZKUN0EBKERre1ryAidrr/K9bsQViQaNS45ZWSOzd08f6W7fd+1TzkLb8gQdTkB9Wj
- Ay4R3+5XAi94beVIRduEpNTeqXcqsKA0UaWXbI3gG54FNmBq046qmcJfOiEH7nbhG4dw Sw== 
-Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam08lp2045.outbound.protection.outlook.com [104.47.74.45])
-        by mx0a-0014ca01.pphosted.com with ESMTP id 372bvqknqh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 Mar 2021 03:48:23 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ixIA6KvGQEiG1tQz9hui6J9SpNyR89yOU7VRVqHwcVK8k2utxvIbMDXvr6gfxBvXfWJYJeYmnGFUBN0UH2M/4WnBqeoo+L9wO3ukaERmOhQ6r+hURNI8bsAHVKqcGY1x2tNKVLXLGvcP6uTdsvOWafJk7kQI8htGV3f6olU46N79CayQhz6bjcw0e/CXdW3A33SQSELdygTCsz4Jox39SyDN8SRUp1s+ks+dUgRcL1CrmTdT/EoedtWwFENCUIREb8BYCxTU8c730rVg0t46bhOchDvZH9knc4YiP+3dGOApoKNwNnxAnJ0SlVXjOgzaToAJ40J9uQy4/uAx9n8yvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UkXjoKEoaVzCCUHn4x8DW/mGeN7Tt6I+eYBJINtHIDE=;
- b=UCmmareOIMN+4ygJ3ifZj08H4QI6zZxJOCOmSYDykrbc8tHmWlm3VuCU7VU3T0BC4FXKExpdHAwEtYLCkfSb7HpZtUFh64FpcyM+JBWe9eajWzpx3YpjGqZUL0a9sHoPoq8NoMgyI6210Ym8op57bhVTRUBxX0QR9Mjk+zpio5Ozws/fhq8t+RB4u2TRSJaVuHVzK5+jdiAf8BU3KcvhWPLrezth8KZgf3lYawT390SneQQ4FabtZXssb/ney0wyd8kQBUoTHnWLTHk9/iIaMIrNoApZxhFjH344Bcr1F5M1rxnScA40Bs5wEJWWX2WkXh86sOzJnsKQBcFJFvIktQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 158.140.1.148) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=cadence.com; dmarc=pass (p=none sp=none pct=100) action=none
- header.from=cadence.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UkXjoKEoaVzCCUHn4x8DW/mGeN7Tt6I+eYBJINtHIDE=;
- b=bvsJJrASlh7vmmZlVkzTK9Vor0yTakPAVPEwrsM8J4kaVbo2FqvPOCEk3dJcwBMzfhD8sbW2OY2xSj/8k1VXMAyavcEf4IRbkU52cb9/y1S1s+8u8jTKNCeH3MJf1TEDEfAhZD13fz6/4nEyHi1c6rlkkukhQz0qadtBA/f59QA=
-Received: from BN6PR19CA0080.namprd19.prod.outlook.com (2603:10b6:404:133::18)
- by MWHPR0701MB3802.namprd07.prod.outlook.com (2603:10b6:301:79::36) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.23; Thu, 4 Mar
- 2021 11:48:20 +0000
-Received: from BN8NAM12FT036.eop-nam12.prod.protection.outlook.com
- (2603:10b6:404:133:cafe::7) by BN6PR19CA0080.outlook.office365.com
- (2603:10b6:404:133::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.17 via Frontend
- Transport; Thu, 4 Mar 2021 11:48:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.148)
- smtp.mailfrom=cadence.com; linuxfoundation.org; dkim=none (message not
- signed) header.d=none;linuxfoundation.org; dmarc=pass action=none
- header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 158.140.1.148 as permitted sender) receiver=protection.outlook.com;
- client-ip=158.140.1.148; helo=sjmaillnx2.cadence.com;
-Received: from sjmaillnx2.cadence.com (158.140.1.148) by
- BN8NAM12FT036.mail.protection.outlook.com (10.13.182.224) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3912.9 via Frontend Transport; Thu, 4 Mar 2021 11:48:20 +0000
-Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
-        by sjmaillnx2.cadence.com (8.14.4/8.14.4) with ESMTP id 124BmHpn026746
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 4 Mar 2021 03:48:18 -0800
-X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
-Received: from maileu3.global.cadence.com (10.160.88.99) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1367.3; Thu, 4 Mar 2021 12:48:16 +0100
-Received: from gli-login.cadence.com (10.187.128.100) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1367.3 via Frontend Transport; Thu, 4 Mar 2021 12:48:16 +0100
-Received: from gli-login.cadence.com (localhost [127.0.0.1])
-        by gli-login.cadence.com (8.14.4/8.14.4) with ESMTP id 124BmGvl008470;
-        Thu, 4 Mar 2021 12:48:16 +0100
-Received: (from pawell@localhost)
-        by gli-login.cadence.com (8.14.4/8.14.4/Submit) id 124BmFhs008401;
-        Thu, 4 Mar 2021 12:48:15 +0100
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <laurent.pinchart@ideasonboard.com>,
-        Pawel Laszczak <pawell@cadence.com>
-Subject: [PATCH] usb: gadget: uvc: add bInterval checking for HS mode
-Date:   Thu, 4 Mar 2021 11:45:15 +0100
-Message-ID: <20210304104515.35933-1-pawell@gli-login.cadence.com>
-X-Mailer: git-send-email 2.18.0
+        id S240439AbhCDMXN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Mar 2021 07:23:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240387AbhCDMWr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Mar 2021 07:22:47 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662F1C06175F;
+        Thu,  4 Mar 2021 04:22:07 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: gtucker)
+        with ESMTPSA id 90ED01F462F8
+Subject: Re: next/master bisection: baseline.login on rk3399-gru-kevin
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ray Chi <raychi@google.com>
+References: <6040cc3b.1c69fb81.cba3d.5b5c@mx.google.com>
+Cc:     "kernelci-results@groups.io" <kernelci-results@groups.io>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+Message-ID: <9ada6ed0-eef0-407b-cf9b-22d077cee578@collabora.com>
+Date:   Thu, 4 Mar 2021 12:22:02 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-OrganizationHeadersPreserved: maileu3.global.cadence.com
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 97bb7d0e-f59f-4816-7fa3-08d8df036872
-X-MS-TrafficTypeDiagnostic: MWHPR0701MB3802:
-X-Microsoft-Antispam-PRVS: <MWHPR0701MB3802D59C41B4F1E71CC8EE92DD979@MWHPR0701MB3802.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3631;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: i74mhc81W6WzaTd+CZRQLVfMorrOBSRZh4DeT0C4j5V09HwJbGdkM3DGnsSpqqvkTPPUSY4TK+7ALavAr0MKNXUMBLMsePXOtjht+KvxBUSTB8ZHf854vgA8HUCGuWqpMUg558irnjdKqrCsAgXRlfhrN/d0FoUYsy9bkTd2XaIrH6XjygUFsykYulOgUSXsEUCO64+y5MRb7xaWS2nFC3ligVWubSbQlxvm+5OlGqQkkoHpMWXIGcG0akME8gpXzgpI9IuH1SK9MBP0Walh6/JjU0g/oQun6Q/R46YdHP1aWatN6wHT190hArISpHjx/LFrdG1Mm3sQ+2m6ddayikYWrAnjqktIwMYc/2Ocgsa9S8gA49OyTH27nTj1rtMkV08g284ev91Q0FLjXmf48SprCwF84KA5Opd8fyL4n6wAyf2wr9Oh/PKGFfPowOsBwhmC/PVpvnHYAdlKkQ8jqZx8M+XldTzN+myh2SSMXa2p7HhxkKDdxYNDvgkydr6XmP+Weh5+eVBL88KJR7p6XNzJh7t80BnTeZ34/fs36B7DG6O030pyE+36/QKejBUKTbaT/Pjej6J1oOBPukfrjYrAxHiF3fFHIQYYJVddsE10GJeKxbu842tfCQoTrQ1hwinUPHHN/9yI20i8Bqk6bbcdPTtj1F/8bx8USVGpAa/8hHDiOpFKP38Sb2uAamXT
-X-Forefront-Antispam-Report: CIP:158.140.1.148;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx2.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(4636009)(376002)(39860400002)(346002)(396003)(136003)(36092001)(46966006)(36840700001)(42186006)(47076005)(70586007)(1076003)(107886003)(336012)(54906003)(8676002)(426003)(82310400003)(4326008)(82740400003)(26005)(36906005)(110136005)(70206006)(186003)(478600001)(316002)(356005)(86362001)(5660300002)(7636003)(8936002)(36860700001)(2906002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2021 11:48:20.1836
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97bb7d0e-f59f-4816-7fa3-08d8df036872
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.148];Helo=[sjmaillnx2.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM12FT036.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR0701MB3802
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-04_03:2021-03-03,2021-03-04 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
- lowpriorityscore=0 impostorscore=0 mlxscore=0 suspectscore=0
- mlxlogscore=656 bulkscore=0 adultscore=0 phishscore=0 malwarescore=0
- spamscore=0 clxscore=1011 priorityscore=1501 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2103040055
+In-Reply-To: <6040cc3b.1c69fb81.cba3d.5b5c@mx.google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Pawel Laszczak <pawell@cadence.com>
+Hi Ray,
 
-Patch adds extra checking for bInterval passed by configfs.
-The 5.6.4 chapter of USB Specification (rev. 2.0) say:
-"A high-bandwidth endpoint must specify a period of 1x125 µs
-(i.e., a bInterval value of 1)."
+Please see the bisection report below about a boot failure on
+rk3399-gru-kevin on linux-next.
 
-The issue was observed during testing UVC class on CV.
-I treat this change as improvement because we can control
-bInterval by configfs.
+Reports aren't automatically sent to the public while we're
+trialing new bisection features on kernelci.org but this one
+looks valid.
 
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
----
- drivers/usb/gadget/function/f_uvc.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+The boot log shows a kernel panic with a NULL pointer
+dereference:
 
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 44b4352a2676..5d62720bb9e1 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -631,6 +631,12 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 		cpu_to_le16(min(opts->streaming_maxpacket, 1023U));
- 	uvc_fs_streaming_ep.bInterval = opts->streaming_interval;
- 
-+	/* A high-bandwidth endpoint must specify a bInterval value of 1 */
-+	if (max_packet_mult > 1)
-+		uvc_hs_streaming_ep.bInterval = 1;
-+	else
-+		uvc_hs_streaming_ep.bInterval = opts->streaming_interval;
-+
- 	uvc_hs_streaming_ep.wMaxPacketSize =
- 		cpu_to_le16(max_packet_size | ((max_packet_mult - 1) << 11));
- 	uvc_hs_streaming_ep.bInterval = opts->streaming_interval;
--- 
-2.25.1
+  https://storage.kernelci.org/next/master/next-20210304/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.html#L673
+
+Some more details can be found here:
+
+  https://kernelci.org/test/case/id/60405c6fa031a93136addcc0/
+
+
+Please let us know if you need any help with debugging the issue
+or trying a fix on this platform.
+
+Thanks,
+Guillaume
+
+On 04/03/2021 12:02, KernelCI bot wrote:
+> * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+> * This automated bisection report was sent to you on the basis  *
+> * that you may be involved with the breaking commit it has      *
+> * found.  No manual investigation has been done to verify it,   *
+> * and the root cause of the problem may be somewhere else.      *
+> *                                                               *
+> * If you do send a fix, please include this trailer:            *
+> *   Reported-by: "kernelci.org bot" <bot@kernelci.org>          *
+> *                                                               *
+> * Hope this helps!                                              *
+> * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+> 
+> next/master bisection: baseline.login on rk3399-gru-kevin
+> 
+> Summary:
+>   Start:      f5427c2460eb Add linux-next specific files for 20210304
+>   Plain log:  https://storage.kernelci.org/next/master/next-20210304/arm64/defconfig+CONFIG_RANDOMIZE_BASE=y/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.txt
+>   HTML log:   https://storage.kernelci.org/next/master/next-20210304/arm64/defconfig+CONFIG_RANDOMIZE_BASE=y/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.html
+>   Result:     59fa3def35de usb: dwc3: add a power supply for current control
+> 
+> Checks:
+>   revert:     PASS
+>   verify:     PASS
+> 
+> Parameters:
+>   Tree:       next
+>   URL:        https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>   Branch:     master
+>   Target:     rk3399-gru-kevin
+>   CPU arch:   arm64
+>   Lab:        lab-collabora
+>   Compiler:   gcc-8
+>   Config:     defconfig+CONFIG_RANDOMIZE_BASE=y
+>   Test case:  baseline.login
+> 
+> Breaking commit found:
+> 
+> -------------------------------------------------------------------------------
+> commit 59fa3def35de957881ac142a384487e27e8fe527
+> Author: Ray Chi <raychi@google.com>
+> Date:   Mon Feb 22 19:51:48 2021 +0800
+> 
+>     usb: dwc3: add a power supply for current control
+>     
+>     Currently, VBUS draw callback does no action when the
+>     generic PHYs are used. This patch adds an additional
+>     path to control charging current through power supply
+>     interface.
+>     
+>     Signed-off-by: Ray Chi <raychi@google.com>
+>     Link: https://lore.kernel.org/r/20210222115149.3606776-2-raychi@google.com
+>     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index f2448d0a9d39..d15f065849cd 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1238,6 +1238,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>  	u8			rx_max_burst_prd;
+>  	u8			tx_thr_num_pkt_prd;
+>  	u8			tx_max_burst_prd;
+> +	const char		*usb_psy_name;
+> +	int			ret;
+>  
+>  	/* default to highest possible threshold */
+>  	lpm_nyet_threshold = 0xf;
+> @@ -1263,6 +1265,13 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>  	else
+>  		dwc->sysdev = dwc->dev;
+>  
+> +	ret = device_property_read_string(dev, "usb-psy-name", &usb_psy_name);
+> +	if (ret >= 0) {
+> +		dwc->usb_psy = power_supply_get_by_name(usb_psy_name);
+> +		if (!dwc->usb_psy)
+> +			dev_err(dev, "couldn't get usb power supply\n");
+> +	}
+> +
+>  	dwc->has_lpm_erratum = device_property_read_bool(dev,
+>  				"snps,has-lpm-erratum");
+>  	device_property_read_u8(dev, "snps,lpm-nyet-threshold",
+> @@ -1619,6 +1628,9 @@ static int dwc3_probe(struct platform_device *pdev)
+>  assert_reset:
+>  	reset_control_assert(dwc->reset);
+>  
+> +	if (!dwc->usb_psy)
+> +		power_supply_put(dwc->usb_psy);
+> +
+>  	return ret;
+>  }
+>  
+> @@ -1641,6 +1653,9 @@ static int dwc3_remove(struct platform_device *pdev)
+>  	dwc3_free_event_buffers(dwc);
+>  	dwc3_free_scratch_buffers(dwc);
+>  
+> +	if (!dwc->usb_psy)
+> +		power_supply_put(dwc->usb_psy);
+> +
+>  	return 0;
+>  }
+>  
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index 052b20d52651..6708fdf358b3 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -30,6 +30,8 @@
+>  
+>  #include <linux/phy/phy.h>
+>  
+> +#include <linux/power_supply.h>
+> +
+>  #define DWC3_MSG_MAX	500
+>  
+>  /* Global constants */
+> @@ -1125,6 +1127,8 @@ struct dwc3 {
+>  	struct usb_role_switch	*role_sw;
+>  	enum usb_dr_mode	role_switch_default_mode;
+>  
+> +	struct power_supply	*usb_psy;
+> +
+>  	u32			fladj;
+>  	u32			irq_gadget;
+>  	u32			otg_irq;
+> -------------------------------------------------------------------------------
+> 
+> 
+> Git bisection log:
+> 
+> -------------------------------------------------------------------------------
+> git bisect start
+> # good: [f69d02e37a85645aa90d18cacfff36dba370f797] Merge tag 'misc-5.12-2021-03-02' of git://git.kernel.dk/linux-block
+> git bisect good f69d02e37a85645aa90d18cacfff36dba370f797
+> # bad: [f5427c2460ebc11b1a66c1742d41077ae5b99796] Add linux-next specific files for 20210304
+> git bisect bad f5427c2460ebc11b1a66c1742d41077ae5b99796
+> # good: [10dde63b6343e57cdaf20c7a7f62ea66a45bb437] Merge remote-tracking branch 'bluetooth/master'
+> git bisect good 10dde63b6343e57cdaf20c7a7f62ea66a45bb437
+> # good: [266b341281956da101598f2bc3435ecda7a41f25] Merge remote-tracking branch 'irqchip/irq/irqchip-next'
+> git bisect good 266b341281956da101598f2bc3435ecda7a41f25
+> # bad: [2024dc5b38616653e9223479c425c4c79028f2ba] Merge remote-tracking branch 'thunderbolt/next'
+> git bisect bad 2024dc5b38616653e9223479c425c4c79028f2ba
+> # good: [034fb9700e21a140656a0c5f22c4c740194a8c85] torture: Rename SRCU-t and SRCU-u to avoid lowercase characters
+> git bisect good 034fb9700e21a140656a0c5f22c4c740194a8c85
+> # good: [4ed7b3163ff5061eef889d1722953389eff021f2] Merge remote-tracking branch 'kvm-arm/next'
+> git bisect good 4ed7b3163ff5061eef889d1722953389eff021f2
+> # bad: [5bb9cdb320a5ca631b584a9aa1ba472eb14705af] USB: remove usb_bus_type from usb.h
+> git bisect bad 5bb9cdb320a5ca631b584a9aa1ba472eb14705af
+> # bad: [5410c878cc60bd73a045ba25982a1bad1bd85241] USB: core: no need to save usb_devices_root
+> git bisect bad 5410c878cc60bd73a045ba25982a1bad1bd85241
+> # bad: [76813aabd81ffe8ef9a084faf6d66233cf013357] usb: typec: tps6598x: Add trace event for power status register
+> git bisect bad 76813aabd81ffe8ef9a084faf6d66233cf013357
+> # bad: [effcaf3f59b5557b0423f4b0d64df49658a9ec64] usb: dwc3: add an alternate path in vbus_draw callback
+> git bisect bad effcaf3f59b5557b0423f4b0d64df49658a9ec64
+> # bad: [59fa3def35de957881ac142a384487e27e8fe527] usb: dwc3: add a power supply for current control
+> git bisect bad 59fa3def35de957881ac142a384487e27e8fe527
+> # first bad commit: [59fa3def35de957881ac142a384487e27e8fe527] usb: dwc3: add a power supply for current control
+> -------------------------------------------------------------------------------
+> 
+> 
+> -=-=-=-=-=-=-=-=-=-=-=-
+> Groups.io Links: You receive all messages sent to this group.
+> View/Reply Online (#7723): https://groups.io/g/kernelci-results/message/7723
+> Mute This Topic: https://groups.io/mt/81049198/924702
+> Group Owner: kernelci-results+owner@groups.io
+> Unsubscribe: https://groups.io/g/kernelci-results/unsub [guillaume.tucker@collabora.com]
+> -=-=-=-=-=-=-=-=-=-=-=-
+> 
+> 
 
