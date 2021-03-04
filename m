@@ -2,100 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2C132CB3A
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 05:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D142032CD59
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 08:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233192AbhCDEM4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Mar 2021 23:12:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42156 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232952AbhCDEMX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Mar 2021 23:12:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1614831057;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=IXs3zF75SzOR3sX6dltuZ3LkzNt/Igst3EtKMWfws+M=;
-        b=a0+SGkM7PGR4cG7SSg/hprFe0aM7/maS5dj6kEsbKsCRq1wK2+VuZRWnizHehXqkQuVcTp
-        yat7yWhsu3t11rPiFxzIH/6BMs+KXtGk4lPkBSsP3YVgjCf/SdZ10N0g4T1kEi/wYtZpRM
-        5cnfBiwmEhXzmOwyHy3Sy7qzEy3Pjwc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-112-C_sMAQWXPqqKw81VtdMo7A-1; Wed, 03 Mar 2021 23:10:55 -0500
-X-MC-Unique: C_sMAQWXPqqKw81VtdMo7A-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1DE57801980;
-        Thu,  4 Mar 2021 04:10:54 +0000 (UTC)
-Received: from suzdal.zaitcev.lan (ovpn-114-139.phx2.redhat.com [10.3.114.139])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B4B526A8E4;
-        Thu,  4 Mar 2021 04:10:53 +0000 (UTC)
-Date:   Wed, 3 Mar 2021 22:10:53 -0600
-From:   Pete Zaitcev <zaitcev@redhat.com>
-To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Cc:     Pete Zaitcev <zaitcev@redhat.com>, qiang.zhang@windriver.com
-Subject: [PATCH] USB: usblp: fix a hang in poll() if disconnected
-Message-ID: <20210303221053.1cf3313e@suzdal.zaitcev.lan>
-Organization: Red Hat, Inc.
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+        id S236027AbhCDHKV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Mar 2021 02:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236034AbhCDHKQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Mar 2021 02:10:16 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFC6C061756
+        for <linux-usb@vger.kernel.org>; Wed,  3 Mar 2021 23:09:35 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id l3so29856637ybf.17
+        for <linux-usb@vger.kernel.org>; Wed, 03 Mar 2021 23:09:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=6SYKOly+jweugIylMFB95EbkQpY3TPkXyF08BjG+EYk=;
+        b=pir1oZAyUls7R39beNX8rUtSrLX+skRk3aAi9rhfDi6PNKwuxwKaRzM0Ya1ou874d+
+         IyYZK/KjNBF0Hnqi+7bLNQRLxdcBm8x9+sJ0tSrz+HNiBzSRrUrWYWufOi6eGzpqN7Jl
+         d61BDFGS84Cbr8fIHfU9IxEkb8EUYDY1PXna0XKvZXmmauWLVeJjcxXr7xqT8/T7C7vK
+         TFQf9LzKiVsBxALCf1XZcuAWWLzpATs1YEU0VgFkmA408cuHQMAb3yOOPTo9vWWSzpUs
+         8nxpwlmRGU+NNMnJbWz4fdykIPQjo5yOCdz+uCEGrxfALeSO7CpWEmA2S71q2pqDi1hq
+         d96w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=6SYKOly+jweugIylMFB95EbkQpY3TPkXyF08BjG+EYk=;
+        b=d6uobZC4kt7o27aFcBl5j/kyXdNitbKyERURolIiD1WkorveGZsfuM6ecXWJ+rhobz
+         TF69NbhIwe6S0x2lXXFl7RrSMWSlbCxVYVqIxfkR+qXFYGCMOeTbtFVdfvWeShNBpR3F
+         EP3IRUS+tGwip2pZmsBxzC6aZUY7y4SIiLZQJYdZb61xL/XJG9R6eT5M0Cno2BYCh2Xj
+         Jjq258KsHR4Pb+OofdInPkX/K5mZJizQx1lIhdLtKuzdFnbrlXMGDOI6qgd/Es2SpVoz
+         jgoBWLU0ewCCeqoqEzc9sEvjuyWoAdqxS6EAESbAlKlhFTdWVyOzIFtMLBGkDLS7Q1MU
+         CIOw==
+X-Gm-Message-State: AOAM53388FoPZJsZZGAUDwneVOzy0IYir98tT1kXcKW45BT/SxPYeQtB
+        4zTAM61yGkZo82SUNSJje3Iq/iwlnJs=
+X-Google-Smtp-Source: ABdhPJwz9/qlY/4sHrDsgAhu1Tjex6y12rlx/rEieWUpOFcszT7Bqn0mNl1TPE0F5Xsf6YGYIDDa7h2Saps=
+Sender: "badhri via sendgmr" <badhri@badhri.mtv.corp.google.com>
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:543f:67ae:599c:e076])
+ (user=badhri job=sendgmr) by 2002:a25:c006:: with SMTP id c6mr4556819ybf.353.1614841775027;
+ Wed, 03 Mar 2021 23:09:35 -0800 (PST)
+Date:   Wed,  3 Mar 2021 23:09:31 -0800
+Message-Id: <20210304070931.1947316-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
+Subject: [PATCH v1] usb: typec: tcpci: Check ROLE_CONTROL while interpreting CC_STATUS
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Apparently an application that opens a device and calls select()
-on it, will hang if the decice is disconnected. It's a little
-surprising that we had this bug for 15 years, but apparently
-nobody ever uses select() with a printer: only write() and read(),
-and those work fine. Well, you can also select() with a timeout.
+While interpreting CC_STATUS, ROLE_CONTROL has to be read to make
+sure that CC1/CC2 is not forced presenting Rp/Rd.
 
-The fix is modeled after devio.c. A few other drivers check the
-condition first, then do not add the wait queue in case the
-device is disconnected. We doubt that's completely race-free.
-So, this patch adds the process first, then locks properly
-and checks for the disconnect.
+From the TCPCI spec:
 
-Reviewed-by: Zqiang <qiang.zhang@windriver.com>
-Signed-off-by: Pete Zaitcev <zaitcev@redhat.com>
+4.4.5.2 ROLE_CONTROL (Normative):
+The TCPM shall write B6 (DRP) = 0b and B3..0 (CC1/CC2) if it wishes
+to control the Rp/Rd directly instead of having the TCPC perform
+DRP toggling autonomously. When controlling Rp/Rd directly, the
+TCPM writes to B3..0 (CC1/CC2) each time it wishes to change the
+CC1/CC2 values. This control is used for TCPM-TCPC implementing
+Source or Sink only as well as when a connection has been detected
+via DRP toggling but the TCPM wishes to attempt Try.Src or Try.Snk.
+
+Table 4-22. CC_STATUS Register Definition:
+If (ROLE_CONTROL.CC1 = Rd) or ConnectResult=1)
+00b: SNK.Open (Below maximum vRa)
+01b: SNK.Default (Above minimum vRd-Connect)
+10b: SNK.Power1.5 (Above minimum vRd-Connect) Detects Rp-1.5A
+11b: SNK.Power3.0 (Above minimum vRd-Connect) Detects Rp-3.0A
+
+If (ROLE_CONTROL.CC2=Rd) or (ConnectResult=1)
+00b: SNK.Open (Below maximum vRa)
+01b: SNK.Default (Above minimum vRd-Connect)
+10b: SNK.Power1.5 (Above minimum vRd-Connect) Detects Rp 1.5A
+11b: SNK.Power3.0 (Above minimum vRd-Connect) Detects Rp 3.0A
+
+Fixes: 74e656d6b0551 ("staging: typec: Type-C Port Controller
+Interface driver (tcpci)")
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 ---
- drivers/usb/class/usblp.c |   16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ drivers/usb/typec/tcpm/tcpci.c | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
-index fd87405adbed..9596e4279294 100644
---- a/drivers/usb/class/usblp.c
-+++ b/drivers/usb/class/usblp.c
-@@ -494,16 +494,24 @@ static int usblp_release(struct inode *inode, struct file *file)
- /* No kernel lock - fine */
- static __poll_t usblp_poll(struct file *file, struct poll_table_struct *wait)
- {
--	__poll_t ret;
-+	struct usblp *usblp = file->private_data;
-+	__poll_t ret = 0;
- 	unsigned long flags;
+diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+index a27deb0b5f03..027afd7dfdce 100644
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -24,6 +24,15 @@
+ #define	AUTO_DISCHARGE_PD_HEADROOM_MV		850
+ #define	AUTO_DISCHARGE_PPS_HEADROOM_MV		1250
  
--	struct usblp *usblp = file->private_data;
- 	/* Should we check file->f_mode & FMODE_WRITE before poll_wait()? */
- 	poll_wait(file, &usblp->rwait, wait);
- 	poll_wait(file, &usblp->wwait, wait);
++#define tcpc_presenting_cc1_rd(reg) \
++	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
++	 (((reg) & (TCPC_ROLE_CTRL_CC1_MASK << TCPC_ROLE_CTRL_CC1_SHIFT)) == \
++	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC1_SHIFT)))
++#define tcpc_presenting_cc2_rd(reg) \
++	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
++	 (((reg) & (TCPC_ROLE_CTRL_CC2_MASK << TCPC_ROLE_CTRL_CC2_SHIFT)) == \
++	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC2_SHIFT)))
 +
-+	mutex_lock(&usblp->mut);
-+	if (!usblp->present)
-+		ret |= EPOLLHUP;
-+	mutex_unlock(&usblp->mut);
+ struct tcpci {
+ 	struct device *dev;
+ 
+@@ -178,19 +187,25 @@ static int tcpci_get_cc(struct tcpc_dev *tcpc,
+ 			enum typec_cc_status *cc1, enum typec_cc_status *cc2)
+ {
+ 	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
+-	unsigned int reg;
++	unsigned int reg, role_control;
+ 	int ret;
+ 
++	ret = regmap_read(tcpci->regmap, TCPC_ROLE_CTRL, &role_control);
++	if (ret < 0)
++		return ret;
 +
- 	spin_lock_irqsave(&usblp->lock, flags);
--	ret = ((usblp->bidir && usblp->rcomplete) ? EPOLLIN  | EPOLLRDNORM : 0) |
--	   ((usblp->no_paper || usblp->wcomplete) ? EPOLLOUT | EPOLLWRNORM : 0);
-+	if (usblp->bidir && usblp->rcomplete)
-+		ret |= EPOLLIN  | EPOLLRDNORM;
-+	if (usblp->no_paper || usblp->wcomplete)
-+		ret |= EPOLLOUT | EPOLLWRNORM;
- 	spin_unlock_irqrestore(&usblp->lock, flags);
- 	return ret;
+ 	ret = regmap_read(tcpci->regmap, TCPC_CC_STATUS, &reg);
+ 	if (ret < 0)
+ 		return ret;
+ 
+ 	*cc1 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC1_SHIFT) &
+ 				 TCPC_CC_STATUS_CC1_MASK,
+-				 reg & TCPC_CC_STATUS_TERM);
++				 reg & TCPC_CC_STATUS_TERM ||
++				 tcpc_presenting_cc1_rd(role_control));
+ 	*cc2 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC2_SHIFT) &
+ 				 TCPC_CC_STATUS_CC2_MASK,
+-				 reg & TCPC_CC_STATUS_TERM);
++				 reg & TCPC_CC_STATUS_TERM ||
++				 tcpc_presenting_cc2_rd(role_control));
+ 
+ 	return 0;
  }
+-- 
+2.30.1.766.gb4fecdf3b7-goog
 
