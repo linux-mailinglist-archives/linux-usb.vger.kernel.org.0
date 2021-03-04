@@ -2,111 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1E432D3FF
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 14:17:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0596132D548
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 15:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbhCDNQf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Mar 2021 08:16:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241204AbhCDNQN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Mar 2021 08:16:13 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB40C061574;
-        Thu,  4 Mar 2021 05:15:33 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id e10so27361894wro.12;
-        Thu, 04 Mar 2021 05:15:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=lbLQAj1l1KBb5Mb5KKbveCqfWlhpna65plxQzaLC+VM=;
-        b=Hh0oiY3+21qTAGApm81uCftDnwItsMwLPjnO8r2wyX2xDBZWdT/tYnrqpmyK6t8H7y
-         vVr9B+9xpOyWUhgE33nt8h3Iay/MnTwoL5WrGkKmLdWUlec7opTiHJevUHC5w8HFprcT
-         Vt0QYv7geI93jXYJRvBUFRTDYFi9lbyjV0mgjEr8cyQrSexv1qjDyzMnK0Xezuq9OSDH
-         buABrvEFTOYJC0HiDKhZitZw7ydf7VfEH9HVitJtOWsYoRZpxuaDjVy3kieIvPVkEbmV
-         n6DrKkNjaJe9WaG58egSqScQYKXwNf1ftCi7LIXbDW9un/pMg/OarNfT3KrALhOByPNI
-         gTog==
+        id S231903AbhCDOaN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Mar 2021 09:30:13 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:44308 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231846AbhCDO3r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Mar 2021 09:29:47 -0500
+Received: by mail-il1-f197.google.com with SMTP id c11so10799648ilq.11
+        for <linux-usb@vger.kernel.org>; Thu, 04 Mar 2021 06:29:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=lbLQAj1l1KBb5Mb5KKbveCqfWlhpna65plxQzaLC+VM=;
-        b=KOO4GG3JUgypGvFERFDk7rcPgfVhNlREpjpPkz6xf7/AD+4q6QfDIun69042TA2nrK
-         u+Q1bxTHAcHmN6m9XgyCcgOdzltoQsDwTdSrDxhSz4OeHBjwVPG0ctn4X2LsGPbxOBE5
-         0YWrSIc0IW+wtjb8reU5dmFmNJ6lUxc2Aqe+lKcG7JiA4DdWAdzq2rcVw9AYV9kj6uGJ
-         HEylTV881wfWeqivdnPzXUoAALdtWY7FFskHsoVn6SoRdh2e83oVDTvjOGeMIHewUvCV
-         hZI8+UECjL0wlNBX1GZ7itgLd0Eqp6a1xsMjlvJt+a/R2dv/M/oMnxaG2vPDqBt5b1cl
-         VDaA==
-X-Gm-Message-State: AOAM533YDqv6sb6mLFEwAV8HXk9XWhclWiLRdYVM/2ChedWA5/yORd0L
-        QZeu8iLsJEov3WIjlGQqsSc=
-X-Google-Smtp-Source: ABdhPJzafVEvpDp33dSIi5+gqz3ksEeDDkj8r7OBAwyiK9in+lUgMP+OyhuvUNlgiPMistgAglJ0Fw==
-X-Received: by 2002:adf:82af:: with SMTP id 44mr3813323wrc.279.1614863731974;
-        Thu, 04 Mar 2021 05:15:31 -0800 (PST)
-Received: from LABNL-ITC-SW01.tmt.telital.com (static-82-85-31-68.clienti.tiscali.it. [82.85.31.68])
-        by smtp.gmail.com with ESMTPSA id r26sm6103687wmn.28.2021.03.04.05.15.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Mar 2021 05:15:31 -0800 (PST)
-From:   Daniele Palmas <dnlplm@gmail.com>
-To:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Aleksander Morgado <aleksander@aleksander.es>,
-        Daniele Palmas <dnlplm@gmail.com>
-Subject: [PATCH 1/1] net: usb: qmi_wwan: allow qmimux add/del with master up
-Date:   Thu,  4 Mar 2021 14:15:13 +0100
-Message-Id: <20210304131513.3052-1-dnlplm@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=+kcrwDzNNHcCwSp7vaCGNHpSpPV6e8DUvjBhwiEP8pU=;
+        b=hwHoY+t1NNGcyHcPP4yG/FImyvOi14c+NVD29jyYSvpMFXWW+X2dP+4FTglcrXZXbv
+         k9Ptfp+dMebXAHBSDhhLb+ggDzNfiKHSU9HTQztS8z3fZxap0gEwfN0qaT/g1c0OVgMr
+         ntT9TsqnprQPktE1AKH9yk4nOrkKpn5g0qWs/bkM0iWJwHygDYGEkac1h81AJB2QTLsx
+         vSJ2/VClwUOF8n6MRAeBout0UhXja3DF9zqCX62bkzhTh7kV21fgmMnq/J42kASmVSfV
+         btQ5jTsYFMKWjgxypyOM8sZa2PcL5Fy9GUi09T4ZDPNlq9jQjavMIuWNwdZFIovSkhn0
+         r9rw==
+X-Gm-Message-State: AOAM533HzLOYQUIL3ZdwedNZ83UJrDXRisKdYHjPqSzvI1r4tO5+NJLO
+        rwyVfjEEhZ35/T7n1Jfl2fU9AWkhrLNQEifT1SB5Udn9O0XG
+X-Google-Smtp-Source: ABdhPJzJnSKr1pWXAFbJrRBB8V9CltBDMNX/c17YuUTYDXIwLV1cTTAvSc+KIpn15cTGHwMS5UEGEbdw2dURRxZ9663vlJyC/w8d
+MIME-Version: 1.0
+X-Received: by 2002:a5d:818b:: with SMTP id u11mr3615979ion.59.1614868146643;
+ Thu, 04 Mar 2021 06:29:06 -0800 (PST)
+Date:   Thu, 04 Mar 2021 06:29:06 -0800
+In-Reply-To: <0000000000004dbaa505a5a165f7@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003d692a05bcb6ca26@google.com>
+Subject: Re: WARNING in carl9170_usb_submit_cmd_urb/usb_submit_urb
+From:   syzbot <syzbot+9468df99cb63a4a4c4e1@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, brookebasile@gmail.com,
+        chunkeey@googlemail.com, davem@davemloft.net,
+        gregkh@linuxfoundation.org, ingrassia@epigenesys.com, jack@suse.cz,
+        kuba@kernel.org, kvalo@codeaurora.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu, yi.zhang@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There's no reason for preventing the creation and removal
-of qmimux network interfaces when the underlying interface
-is up.
+syzbot has bisected this issue to:
 
-This makes qmi_wwan mux implementation more similar to the
-rmnet one, simplifying userspace management of the same
-logical interfaces.
+commit 6a66a7ded12baa6ebbb2e3e82f8cb91382814839
+Author: zhangyi (F) <yi.zhang@huawei.com>
+Date:   Thu Feb 13 06:38:20 2020 +0000
 
-Fixes: c6adf77953bc ("net: usb: qmi_wwan: add qmap mux protocol support")
-Reported-by: Aleksander Morgado <aleksander@aleksander.es>
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
----
- drivers/net/usb/qmi_wwan.c | 14 --------------
- 1 file changed, 14 deletions(-)
+    jbd2: move the clearing of b_modified flag to the journal_unmap_buffer()
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 17a050521b86..6700f1970b24 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -429,13 +429,6 @@ static ssize_t add_mux_store(struct device *d,  struct device_attribute *attr, c
- 		goto err;
- 	}
- 
--	/* we don't want to modify a running netdev */
--	if (netif_running(dev->net)) {
--		netdev_err(dev->net, "Cannot change a running device\n");
--		ret = -EBUSY;
--		goto err;
--	}
--
- 	ret = qmimux_register_device(dev->net, mux_id);
- 	if (!ret) {
- 		info->flags |= QMI_WWAN_FLAG_MUX;
-@@ -465,13 +458,6 @@ static ssize_t del_mux_store(struct device *d,  struct device_attribute *attr, c
- 	if (!rtnl_trylock())
- 		return restart_syscall();
- 
--	/* we don't want to modify a running netdev */
--	if (netif_running(dev->net)) {
--		netdev_err(dev->net, "Cannot change a running device\n");
--		ret = -EBUSY;
--		goto err;
--	}
--
- 	del_dev = qmimux_find_dev(dev, mux_id);
- 	if (!del_dev) {
- 		netdev_err(dev->net, "mux_id not present\n");
--- 
-2.17.1
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14bd498ed00000
+start commit:   f69d02e3 Merge tag 'misc-5.12-2021-03-02' of git://git.ker..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=16bd498ed00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12bd498ed00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e0da2d01cc636e2c
+dashboard link: https://syzkaller.appspot.com/bug?extid=9468df99cb63a4a4c4e1
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11770346d00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17be69ccd00000
 
+Reported-by: syzbot+9468df99cb63a4a4c4e1@syzkaller.appspotmail.com
+Fixes: 6a66a7ded12b ("jbd2: move the clearing of b_modified flag to the journal_unmap_buffer()")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
