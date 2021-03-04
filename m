@@ -2,96 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B18632DA1C
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 20:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A53332DACA
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Mar 2021 21:04:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232578AbhCDTLr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Mar 2021 14:11:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbhCDTLV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Mar 2021 14:11:21 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD78C061756
-        for <linux-usb@vger.kernel.org>; Thu,  4 Mar 2021 11:10:40 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id v123so10989639vsv.9
-        for <linux-usb@vger.kernel.org>; Thu, 04 Mar 2021 11:10:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rhbazE44Fq5VfyWjKwf9zuQsAn8On7g+SsZ62Ovv5F8=;
-        b=C+c/9+vwbzsfKbij8AjOmUq58ukoKryzZ43Oi4y+MSpEXBwS2iKiuF+8DoMQ+gzvEP
-         J4mgYFdtljDghVEszECgjhT1F+i0bS/c/Jz8FGOfU9RvZcFXCjjeVCiYP5J440IBAC+Q
-         ztcBQwtSlOe8xzxT8QjD/N7PtwkjqCCJ37ZG4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rhbazE44Fq5VfyWjKwf9zuQsAn8On7g+SsZ62Ovv5F8=;
-        b=XTqGSTRS5Hb2+GHBSdqHBcv9AzQcZyRL9eraQhDxyyBoyeBBqfwMbyM+Q/axXv9msS
-         /FEmrNs1j17GGZvYZpxDD189DvqPKr8LoLdj1hURvrECH3dSegjAN5xv2vtuhXj3rWuQ
-         23ddM6EDlh4qJ9MjsXZyTr5mtuwihGfQcJTWyG8NBrhlDr+ctw6Gg43Eam5V9tZ3F6e1
-         RIZv8Jvujqjnvg1v1307ouNs48J45M9j/pUykhdlGgNWF4LQAhK2Bak3lpEzPjEZw0ev
-         MzDOHiWAnGaW/mwKIhuc/0x5FUiGCT/7apQt7X7e0PrN+NVF00yuR33ODiYsiofIiWF7
-         m1ZQ==
-X-Gm-Message-State: AOAM532mAqL1ejApAD3CFxf8xwU1yYo3RqQHvqnPVWc4gFE+yJRp+hiQ
-        /8thTZblRigv8EWL9ljYSFSE7tdwzBhNY0XTeXoefw==
-X-Google-Smtp-Source: ABdhPJzOfYmlSd897wkaIlC3GKlPTrkwUgr/BtnE3lesEsza2dlfKCvpLHqpP58/+PghdbiU/GxyNp1kUjFuDYhiKL0=
-X-Received: by 2002:a05:6102:ac2:: with SMTP id m2mr3757112vsh.52.1614885039545;
- Thu, 04 Mar 2021 11:10:39 -0800 (PST)
+        id S237541AbhCDUDb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Mar 2021 15:03:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50376 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236804AbhCDUD1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 4 Mar 2021 15:03:27 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 66CCC64F45;
+        Thu,  4 Mar 2021 20:02:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614888166;
+        bh=bruc6SY11nBgSItW59izSH7Jt5Lb6PEf73rKiiR9gvQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YC7vXYrbKSlpqOHrmatgu1RESLRfZElZ3V56ybqaWC5SfA1KiPowSDQxgypsgc5P1
+         z2sbEMYvJ5Pd+br9iNppsr8ly6dwSMlUD4HWYfB44oWHCIJnIyRaUUxGeeRb3OwkwX
+         gjv98iBw5dwRAULA6y5q0hm1fdDBpKHYyeE3lvLFrIflYTcL+hp005jV1QBVLd2BzM
+         LHkpMP5ryg0pAw7e4XM0UVjhD5TNJSHi0A7cAwemVz68YbMNGLGzklyEBSomKWxgbe
+         jJVQ8CyAdUOpcEkAOZZa04YdR3FaC2L3c8RDpi+TB7VBfnxPpJ1CUb5mJ/fB1JjKHq
+         Dek2GogjvrvqA==
+Received: by mail-ej1-f45.google.com with SMTP id p8so25533102ejb.10;
+        Thu, 04 Mar 2021 12:02:46 -0800 (PST)
+X-Gm-Message-State: AOAM530xa6QkWIyv9KCVggQSl2slaXawQlsuoOs1ugM7VEV7itn0oJWz
+        iAMo7NQP8iA0qSkf+vjnTN2GJrQWDaJExnAk0Q==
+X-Google-Smtp-Source: ABdhPJzwjPqB5mqgjUm8IO6F5PFehRlUl9DieoKYxQUK9v3daKrCxnAREqPHnHBfcmjiHKHpDPpZeGLj6ie+eG05LAg=
+X-Received: by 2002:a17:906:25c4:: with SMTP id n4mr6218826ejb.359.1614888165006;
+ Thu, 04 Mar 2021 12:02:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20210120011208.3768105-1-grundler@chromium.org>
- <0a5e1dad04494f16869b44b8457f0980@realtek.com> <20210120090438.0f5bba6e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20210120090438.0f5bba6e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Grant Grundler <grundler@chromium.org>
-Date:   Thu, 4 Mar 2021 19:10:28 +0000
-Message-ID: <CANEJEGuBe3pN_erZZhNjfS+zP-qQnz=TaNO2jWkGhD3jUx0fOg@mail.gmail.com>
-Subject: Re: [PATCH net] net: usb: cdc_ncm: don't spew notifications
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Hayes Wang <hayeswang@realtek.com>,
-        Grant Grundler <grundler@chromium.org>,
-        Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        nic_swsd <nic_swsd@realtek.com>,
+References: <cover.1612867682.git.michal.simek@xilinx.com> <076994fc051e9230a3fef9e3eb5ec932104ef16a.1612867682.git.michal.simek@xilinx.com>
+ <20210210222241.GA2901449@robh.at.kernel.org> <584bfee2-17a6-5935-b61c-b49824bcf857@xilinx.com>
+ <CAL_JsqJedhX6typpUKbnzV7CLK6UZVjq3CyG9iY_j5DLPqvVdw@mail.gmail.com> <2f0f4e86-cf9d-03d7-a3a6-8f2284facaaa@xilinx.com>
+In-Reply-To: <2f0f4e86-cf9d-03d7-a3a6-8f2284facaaa@xilinx.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 4 Mar 2021 14:02:23 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com>
+Message-ID: <CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: misc: Add binding for Microchip
+ usb5744 hub
+To:     Michal Simek <michal.simek@xilinx.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michal Simek <monstr@monstr.eu>, git <git@xilinx.com>,
+        Piyush Mehta <piyush.mehta@xilinx.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        devicetree@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 5:04 PM Jakub Kicinski <kuba@kernel.org> wrote:
+On Wed, Feb 24, 2021 at 7:38 AM Michal Simek <michal.simek@xilinx.com> wrot=
+e:
 >
-> On Wed, 20 Jan 2021 03:38:32 +0000 Hayes Wang wrote:
-> > Grant Grundler <grundler@chromium.org>
-> > > Sent: Wednesday, January 20, 2021 9:12 AM
-> > > Subject: [PATCH net] net: usb: cdc_ncm: don't spew notifications
-> > >
-> > > RTL8156 sends notifications about every 32ms.
-> > > Only display/log notifications when something changes.
-> > >
-> > > This issue has been reported by others:
-> > >     https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1832472
-> > >     https://lkml.org/lkml/2020/8/27/1083
-> > >
-> > > Chrome OS cannot support RTL8156 until this is fixed.
-> > >
-> > > Signed-off-by: Grant Grundler <grundler@chromium.org>
+> Hi Rob,
+>
+> On 2/11/21 3:42 PM, Rob Herring wrote:
+> > On Thu, Feb 11, 2021 at 3:35 AM Michal Simek <michal.simek@xilinx.com> =
+wrote:
+> >>
+> >> Hi Rob,
+> >>
+> >> On 2/10/21 11:22 PM, Rob Herring wrote:
+> >>> On Tue, Feb 09, 2021 at 11:48:09AM +0100, Michal Simek wrote:
+> >>>> From: Piyush Mehta <piyush.mehta@xilinx.com>
+> >>>>
+> >>>> Added dt binding for usb5744 driver.
+> >>>>
+> >>>> Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
+> >>>> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+> >>>> ---
+> >>>>
+> >>>> Changes in v2: None
+> >>>>
+> >>>>  .../bindings/usb/microchip,usb5744.yaml       | 56 ++++++++++++++++=
++++
+> >>>>  MAINTAINERS                                   |  1 +
+> >>>>  2 files changed, 57 insertions(+)
+> >>>>  create mode 100644 Documentation/devicetree/bindings/usb/microchip,=
+usb5744.yaml
+> >>>>
+> >>>> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744=
+.yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+> >>>> new file mode 100644
+> >>>> index 000000000000..fe222f6db81d
+> >>>> --- /dev/null
+> >>>> +++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+> >>>> @@ -0,0 +1,56 @@
+> >>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>>> +%YAML 1.2
+> >>>> +---
+> >>>> +$id: "http://devicetree.org/schemas/usb/microchip,usb5744.yaml#"
+> >>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> >>>> +
+> >>>> +title: Bindings for the Microchip USB5744 4-port Hub Controller
+> >>>> +
+> >>>> +description:
+> >>>> +  Microchip=E2=80=99s USB5744 SmartHub=E2=84=A2 IC is a 4 port, Sup=
+erSpeed (SS)/Hi-Speed (HS),
+> >>>> +  low power, low pin count configurable and fully compliant with th=
+e USB 3.1
+> >>>> +  Gen 1 specification. The USB5744 also supports Full Speed (FS) an=
+d Low Speed
+> >>>> +  (LS) USB signaling, offering complete coverage of all defined USB=
+ operating
+> >>>> +  speeds. The new SuperSpeed hubs operate in parallel with the USB =
+2.0
+> >>>> +  controller, so 5 Gbps SuperSpeed data transfers are not affected =
+by slower
+> >>>> +  USB 2.0 traffic.
+> >>>> +
+> >>>> +maintainers:
+> >>>> +  - Piyush Mehta <piyush.mehta@xilinx.com>
+> >>>> +  - Michal Simek <michal.simek@xilinx.com>
+> >>>> +
+> >>>> +properties:
+> >>>> +  compatible:
+> >>>> +    const: microchip,usb5744
+> >>>> +
+> >>>> +  reg:
+> >>>> +    maxItems: 1
+> >>>> +    description: |
+> >>>> +      Specifies the i2c slave address, it is required and should be=
+ 0x2d
+> >>>> +      if I2C is used.
+> >>>
+> >>> If I2C is not used, then this should be underneath the USB host as a =
+USB
+> >>> device. That also implies a different compatible string. I'd suggest =
+you
+> >>> just say I2C is required if that's your use.
+> >>
+> >> We can't say that i2c is required because we have both cases. One is
+> >> really usb hub connected over i2c which at least requires to send one
+> >> smbus command to start operate. But it can be extended to add more
+> >> features - limit speeds, disable ports, etc.
+> >>
+> >> And the second is really the same usb hub without i2c connected which
+> >> runs in default mode. But reset is required to ensure proper reset
+> >> sequence.
+> >> Hub also have external clock chip which is not handled now because it =
+is
+> >> just crystal on the board but if you want I can also model it via fixe=
+d
+> >> clock and call clock enable for it.
+> >>
+> >> It is the same use case as is with
+> >> Documentation/devicetree/bindings/usb/usb3503.txt
 > >
-> > Reviewed-by: Hayes Wang <hayeswang@realtek.com>
+> > Yes, there are examples of how we don't want to do it.
 >
-> Applied, thanks!
+> ok.
 >
-> net should be merged back into net-next by the end of the day, so
-> if the other patches depend on this one to apply cleanly please keep
-> an eye and post after that happens. If there is no conflict you can
-> just post them with [PATCH net-next] now.
+> >
+> >> Can you please elaborate why different compatible string should be use=
+d?
+> >> It is still the same device and not quite sure why different compatibl=
+e
+> >> string should be used.
+> >>
+> >> Do you also want to example where this node is the part of usb node?
+> >
+> > See usb/usb-device.txt. And there is this[1] under review.
+> >
+> > For these cases with I2C, I'd really rather see the hub always under
+> > the USB bus with a link to the I2C bus when connected.
+>
+> I read that thread and also looked at his device and it is very similar
+> to this one. Binding should also have information about i2c or spi. It
+> is the same case here that you can use this hub without any bus
+> connected which works in default mode. Or when i2c/smbus is connected
+> and the hub is waiting for initialization sequence. And I expect spi
+> behaves very similarly but don't have this setup here.
+>
+> Do we have any binding doc which is using suggested bus link?
 
-Jakub, sorry, I "dropped the ball" on this one. I'll repost with
-"net-next" a bit later today.
+'i2c-bus' or 'ddc-i2c-bus' properties for I2C. Don't think we have
+anything for SPI, but I'd expect it would be similar though we'd need
+a cell for the chip-select.
 
-cheers,
-grant
+Rob
