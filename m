@@ -2,93 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBE332EFAA
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 17:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E1C32F01B
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 17:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbhCEQH4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Mar 2021 11:07:56 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:35623 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230139AbhCEQH3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Mar 2021 11:07:29 -0500
-Received: (qmail 41316 invoked by uid 1000); 5 Mar 2021 11:07:28 -0500
-Date:   Fri, 5 Mar 2021 11:07:28 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [xhci] usb 4-1: reset SuperSpeed Gen 1 USB device number 2 using
- xhci_hcd
-Message-ID: <20210305160728.GE38200@rowland.harvard.edu>
-References: <CA+icZUWJyPTefHkGEgQtDO9TOM4CN_b2qPJGQVF7NE=Q=fGAEQ@mail.gmail.com>
- <CA+icZUUzBvmi9SvJ4Bh8ER_+Rkm9vv9FkKwoS8ofmRsko_fJhg@mail.gmail.com>
- <CA+icZUXCgW0bPcqNf+DSubBciQeBMbNX5zbjkMXinqRdkE1PfA@mail.gmail.com>
- <20210301155321.GA1490228@rowland.harvard.edu>
- <CA+icZUVpQtsq8y=rjR3Ad_G1VXWpR4D4xao8DGUkRiuxoT+cPA@mail.gmail.com>
+        id S229682AbhCEQbk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Mar 2021 11:31:40 -0500
+Received: from asav21.altibox.net ([109.247.116.8]:37690 "EHLO
+        asav21.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231124AbhCEQbY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Mar 2021 11:31:24 -0500
+Received: from localhost.localdomain (unknown [81.166.168.211])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: noralf.tronnes@ebnett.no)
+        by asav21.altibox.net (Postfix) with ESMTPSA id 3F3268016B;
+        Fri,  5 Mar 2021 17:31:12 +0100 (CET)
+From:   =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
+To:     dri-devel@lists.freedesktop.org
+Cc:     linux-usb@vger.kernel.org, sam@ravnborg.org, peter@stuge.se,
+        lkundrak@v3.sk, markus@raatikainen.cc, pontus.fuchs@gmail.com,
+        hudson@trmm.net, th020394@gmail.com,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
+Subject: [PATCH v7 0/3] GUD USB Display driver
+Date:   Fri,  5 Mar 2021 17:31:01 +0100
+Message-Id: <20210305163104.30756-1-noralf@tronnes.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+icZUVpQtsq8y=rjR3Ad_G1VXWpR4D4xao8DGUkRiuxoT+cPA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=PJ4hB8iC c=1 sm=1 tr=0
+        a=OYZzhG0JTxDrWp/F2OJbnw==:117 a=OYZzhG0JTxDrWp/F2OJbnw==:17
+        a=IkcTkHD0fZMA:10 a=M51BFTxLslgA:10 a=gAmX6pxEAAAA:20 a=e5mUnYsNAAAA:8
+        a=YwjdnX4TFwikY6-GU-cA:9 a=QEXdDO2ut3YA:10 a=Vxmtnl_E_bksehYqCbjh:22
+        a=BPzZvq435JnGatEyYwdK:22 a=pHzHmUro8NiASowvMSCR:22
+        a=Ew2E2A-JSTLzCXPT_086:22
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 05, 2021 at 01:09:16PM +0100, Sedat Dilek wrote:
-> On Mon, Mar 1, 2021 at 4:53 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> [ ... ]
-> > You can use usbmon on bus 4 to record the USB traffic.  It may indicate
-> > why the resets occur.
-> >
-> 
-> Hi Alan,
-> 
-> I followed the instructions in [1].
-> 
-> root# modprobe -v usbmon
-> 
-> root# ls /sys/kernel/debug/usb/usbmon
-> 0s  0u  1s  1t  1u  2s  2t  2u  3s  3t  3u  4s  4t  4u
-> 
-> root# cat /sys/kernel/debug/usb/usbmon/4u > /tmp/usbmon-log_4u.txt
-> [ Ctrl+C ]
-> 
-> I recorded 13:03 - 13:04 (one minute).
-> 
-> So these xhci-resets should be included:
-> 
-> [Fri Mar  5 13:03:07 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> number 2 using xhci_hcd
-> [Fri Mar  5 13:03:07 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> number 2 using xhci_hcd
-> [Fri Mar  5 13:03:27 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> number 2 using xhci_hcd
-> [Fri Mar  5 13:03:27 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> number 2 using xhci_hcd
-> [Fri Mar  5 13:03:27 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> number 2 using xhci_hcd
-> [Fri Mar  5 13:03:28 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> number 2 using xhci_hcd
-> [Fri Mar  5 13:03:28 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> number 2 using xhci_hcd
-> 
-> The usbmon-log is attached.
-> 
-> Unsure how to interpret the log - the kernel-doc says `raw data`.
-> How can I bring this into a human-readable format?
-> Can you give me a hand?
+Hi,
 
-Don't worry about trying to decode the output.  To me it looks like the 
-drive crashes and needs to be reset at times when the computer sends it 
-an ATA command.  (Not all ATA commands, but some.)  You can prevent this 
-by setting the following module parameter for the usb-storage driver:
+A while back I had the idea to turn a Raspberry Pi Zero into a $5
+USB to HDMI/SDTV/DPI display adapter.
 
-	quirks=174c:55aa:t
+The protocol is open so people are free to make displays implementing it and
+use this driver, all that's needed is to add a USB vid:pid to the driver for
+the display.
 
-where the two numbers are the Vendor and Product IDs for the external 
-drive, and the 't' is a quirks flag saying not to use any ATA commands.  
-If this module parameter fixes the problem, we can add a permanent quirk 
-setting to the kernel.
+See the wiki[1] for more information and images for the Raspberry Pi Zero/4.
 
-Alan Stern
+Changes in this version:
+- LZ4_compress_default() can return zero, check for that
+- Fix memory leak in gud_pipe_check() error path (Peter)
+- Improve debug and error messages (Peter)
+- Don't pass length in protocol structs (Peter)
+- Pass USB interface to gud_usb_control_msg() et al. (Peter)
+- Improve gud_connector_fill_properties() (Peter)
+- Add GUD_PIXEL_FORMAT_RGB111 (Peter)
+- Remove GUD_REQ_SET_VERSION (Peter)
+- Fix DRM_IOCTL_MODE_OBJ_SETPROPERTY and the rotation property
+- Fix dma-buf import (Thomas)
+
+Note: There are several changes to the protocol.
+
+I plan to apply the patches in a week or so unless something turns out to be
+broken.
+
+Dependency:
+drm: Use USB controller's DMA mask when importing dmabufs[2]
+(currently in drm-misc-fixes but not in drm-misc-next yet, also present in
+drm-tip and linux-next)
+
+Noralf.
+
+[1] https://github.com/notro/gud/wiki
+[2] https://patchwork.freedesktop.org/patch/msgid/20210303133229.3288-1-tzimmermann@suse.de
+
+
+Noralf Trønnes (3):
+  drm/uapi: Add USB connector type
+  drm/probe-helper: Check epoch counter in output_poll_execute()
+  drm: Add GUD USB Display driver
+
+ MAINTAINERS                         |   8 +
+ drivers/gpu/drm/Kconfig             |   2 +
+ drivers/gpu/drm/Makefile            |   1 +
+ drivers/gpu/drm/drm_connector.c     |   1 +
+ drivers/gpu/drm/drm_probe_helper.c  |   7 +-
+ drivers/gpu/drm/gud/Kconfig         |  14 +
+ drivers/gpu/drm/gud/Makefile        |   4 +
+ drivers/gpu/drm/gud/gud_connector.c | 729 ++++++++++++++++++++++++++++
+ drivers/gpu/drm/gud/gud_drv.c       | 659 +++++++++++++++++++++++++
+ drivers/gpu/drm/gud/gud_internal.h  | 154 ++++++
+ drivers/gpu/drm/gud/gud_pipe.c      | 535 ++++++++++++++++++++
+ include/drm/gud.h                   | 333 +++++++++++++
+ include/uapi/drm/drm_mode.h         |   1 +
+ 13 files changed, 2447 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/gpu/drm/gud/Kconfig
+ create mode 100644 drivers/gpu/drm/gud/Makefile
+ create mode 100644 drivers/gpu/drm/gud/gud_connector.c
+ create mode 100644 drivers/gpu/drm/gud/gud_drv.c
+ create mode 100644 drivers/gpu/drm/gud/gud_internal.h
+ create mode 100644 drivers/gpu/drm/gud/gud_pipe.c
+ create mode 100644 include/drm/gud.h
+
+-- 
+2.23.0
+
