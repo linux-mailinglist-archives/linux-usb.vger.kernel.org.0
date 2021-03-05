@@ -2,77 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 092E632E356
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 09:07:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B56032E422
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 10:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbhCEIHj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Mar 2021 03:07:39 -0500
-Received: from mout.kundenserver.de ([217.72.192.73]:42201 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbhCEIH1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Mar 2021 03:07:27 -0500
-Received: from mail-ot1-f51.google.com ([209.85.210.51]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N2E9Y-1lm63n2Iuc-013cng; Fri, 05 Mar 2021 09:07:25 +0100
-Received: by mail-ot1-f51.google.com with SMTP id a17so1005485oto.5;
-        Fri, 05 Mar 2021 00:07:25 -0800 (PST)
-X-Gm-Message-State: AOAM533vRXAxoUPaBgl0HS7R4QeB7HkjE4SSbsD5JQGn+Ai7Q32FV/Jr
-        VTKktjB1597AN30P4meFPhnnclGiSeaf6scfXj8=
-X-Google-Smtp-Source: ABdhPJxqYuCXgKHG79cARIlIIknf25ifduq2VjGAMPfck87tlTFpc5wPGypB2miMGioSDWeCxnxnQNvQKnonMZbh/Ag=
-X-Received: by 2002:a9d:7f11:: with SMTP id j17mr7135133otq.251.1614931644090;
- Fri, 05 Mar 2021 00:07:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20210305034927.3232386-1-weiyongjun1@huawei.com>
-In-Reply-To: <20210305034927.3232386-1-weiyongjun1@huawei.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 5 Mar 2021 09:07:07 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a23Ww39hxmhTCwgZUr1LWO1trj_Dijq1YXGyg0Z1mOCcQ@mail.gmail.com>
-Message-ID: <CAK8P3a23Ww39hxmhTCwgZUr1LWO1trj_Dijq1YXGyg0Z1mOCcQ@mail.gmail.com>
-Subject: Re: [PATCH -next] USB: gadget: udc: s3c2410_udc: fix return value
- check in s3c2410_udc_probe()
-To:     "'Wei Yongjun" <weiyongjun1@huawei.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+        id S229582AbhCEJDb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Mar 2021 04:03:31 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:44130 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229674AbhCEJDU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Mar 2021 04:03:20 -0500
+X-UUID: a1e477d3cc52436eaddd3ad09e6bf530-20210305
+X-UUID: a1e477d3cc52436eaddd3ad09e6bf530-20210305
+Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 322041104; Fri, 05 Mar 2021 17:03:16 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 5 Mar 2021 17:03:14 +0800
+Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 5 Mar 2021 17:03:13 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org, Hulk Robot <hulkci@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:CHaEdIqKwG3T/zUOLoGwZ+zqo2NWAkLmBho1rTOPqdisV4PiNP+
- p2BGL6Q3j4YElrJqtgJ0o+1tGRMu8oUgm/3q2ZwfdvGNdm1Je991tSuA6vtAXxLadkSn3+n
- TDeIbKI8GghsJ8E+CASotghhBdxVV5DNk25IdsXCY0Gy7eMWszfT/87jIszIV5Q4ddxxJfr
- Of4cRQmKPi1MOkGbYkZ+A==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:7k9th40rb8E=:MQtw6gUY57uOyLuH0qWkNF
- dPl9Agm9R6lbXDEFuWukb4gGg2zYEOJCSJe4cNKq/9oB9N0y8i/o1OZi0TK+4sZT2al0ka9my
- /nfWdxpRpiclWz/usb14gkbBtKnsqezHe1W44tMlE7a48LPokBpWeQz2Upr2pLslsujrWEEgz
- AOJMqvujkTBkOluSxrVLw1Cu6IDTTAJq5wgFaY6b0+jOHs2gu0ZXzy/6JrCkWHYZWuOnOT8J+
- 8KbfLEwdoy/9XaC//8J6RkWlqYTsSJwkDUduksZn0oX+C1AaXmgzq/dOl85KjEpiXLdb/3kWL
- unlMUMg/TZKp9LCsVoqxxc6BtGOZXlT/G+zdhTa3o8/1zPaFV6xPodN8O8o4pCcAmXmOQGGsg
- fKM21bYLumKTLw2F1tPcn3obW2HlES2Qay5peToR1P3NbZ4kOwCbk4Kg/tmrKTAYuxA7/CuXT
- ynRj/JyD1Hh5oize37vVhh4m4LVla0yiomQwL1GyK1udOn2P5+YCHqaIQQLran5SDafm76VyV
- M5Vjcp06TwEaplNVrcI8SgAfP1cFkgM6NwUTBBxrRQi
+        Ikjoon Jang <ikjn@chromium.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        stable <stable@vger.kernel.org>
+Subject: [PATCH 01/17] usb: xhci-mtk: remove or operator for setting schedule parameters
+Date:   Fri, 5 Mar 2021 17:02:39 +0800
+Message-ID: <1614934975-15188-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 5, 2021 at 4:49 AM 'Wei Yongjun <weiyongjun1@huawei.com> wrote:
->
-> From: Wei Yongjun <weiyongjun1@huawei.com>
->
-> In case of error, the function devm_platform_ioremap_resource()
-> returns ERR_PTR() and never returns NULL. The NULL test in the
-> return value check should be replaced with IS_ERR().
->
-> Fixes: 188db4435ac6 ("usb: gadget: s3c: use platform resources")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Side effect may happen if use or operator to set schedule parameters
+when the parameters are already set before. Set them directly due to
+other bits are reserved.
 
-Nice find, thanks for fixing it!
+Fixes: 54f6a8af3722 ("usb: xhci-mtk: skip dropping bandwidth of unchecked endpoints")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+ drivers/usb/host/xhci-mtk-sch.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+index b45e5bf08997..5891f56c64da 100644
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -643,7 +643,7 @@ int xhci_mtk_add_ep_quirk(struct usb_hcd *hcd, struct usb_device *udev,
+ 		 */
+ 		if (usb_endpoint_xfer_int(&ep->desc)
+ 			|| usb_endpoint_xfer_isoc(&ep->desc))
+-			ep_ctx->reserved[0] |= cpu_to_le32(EP_BPKTS(1));
++			ep_ctx->reserved[0] = cpu_to_le32(EP_BPKTS(1));
+ 
+ 		return 0;
+ 	}
+@@ -730,10 +730,10 @@ int xhci_mtk_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
+ 		list_move_tail(&sch_ep->endpoint, &sch_bw->bw_ep_list);
+ 
+ 		ep_ctx = xhci_get_ep_ctx(xhci, virt_dev->in_ctx, ep_index);
+-		ep_ctx->reserved[0] |= cpu_to_le32(EP_BPKTS(sch_ep->pkts)
++		ep_ctx->reserved[0] = cpu_to_le32(EP_BPKTS(sch_ep->pkts)
+ 			| EP_BCSCOUNT(sch_ep->cs_count)
+ 			| EP_BBM(sch_ep->burst_mode));
+-		ep_ctx->reserved[1] |= cpu_to_le32(EP_BOFFSET(sch_ep->offset)
++		ep_ctx->reserved[1] = cpu_to_le32(EP_BOFFSET(sch_ep->offset)
+ 			| EP_BREPEAT(sch_ep->repeat));
+ 
+ 		xhci_dbg(xhci, " PKTS:%x, CSCOUNT:%x, BM:%x, OFFSET:%x, REPEAT:%x\n",
+-- 
+2.18.0
+
