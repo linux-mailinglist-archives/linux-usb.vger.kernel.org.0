@@ -2,91 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B7B32E68C
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 11:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE4C32E6BB
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 11:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbhCEKiF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Mar 2021 05:38:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58286 "EHLO mail.kernel.org"
+        id S229701AbhCEKvZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Mar 2021 05:51:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33034 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229497AbhCEKhv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 5 Mar 2021 05:37:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id D695164FD3
-        for <linux-usb@vger.kernel.org>; Fri,  5 Mar 2021 10:37:50 +0000 (UTC)
+        id S229608AbhCEKvA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 5 Mar 2021 05:51:00 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A8AB764F69;
+        Fri,  5 Mar 2021 10:50:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614940670;
-        bh=v5rJSakz/k9Lp/bx7m/Tti6G5FEfjAD64CD/4WEKd9Y=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=gHWe5EGkXmwumawUt4vFtE+w1cdPto/+1cIX//13NpJKyxOlh/LHBVcI4lBaZRoYS
-         OIil84lTPVRuBEu2xa1K7jFZ4XyDAqHMIBocMMnH3Mpam3b3+SYYikG4Kn7f+du2Qs
-         ntmp/3xx0M1TEcQ334z5PqAyO5xPJh5Nn6l1f7OjmJDYhYH4z1vJIwToyAznVasCHL
-         zLBJfFqxJQPo4ZugXinw+2usEdrkuRpxgRxquDP8cA4coyvxiIUZm9AZDEBiqJank+
-         2xXa1zer6l9j3XNbYcF+wKqurLIIA0yBPwL1P4S0cj4/Mrgntw4tFlFWp/Ld59DBb8
-         Ojbr9ayQVTHoQ==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id C408A65307; Fri,  5 Mar 2021 10:37:50 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 212045] dwc2 gadget mode read call blocks
-Date:   Fri, 05 Mar 2021 10:37:50 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: tomasz@grobelny.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-212045-208809-ZiNUZNm0g9@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-212045-208809@https.bugzilla.kernel.org/>
-References: <bug-212045-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        s=k20201202; t=1614941459;
+        bh=Ae5vOsGvJPMG1k1VK0GXA5F3+ig3MBmLu+NTQt/lJQQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j2l5AF5itVzeiKVooVGgXSxLJ8fFAGZISH3YAadrWVigS47+QR5vFd1wcFf68Grp6
+         Zr9bzC+oOjZYRRbfLz3/HN23aMKZ6bbHXKEU1r7Ry/uZIGa8gyb2Lw2p2Qf7+QFhJd
+         1Nr84JhmH79dssrR2Wc/5rfmF1iqZpPpK144mawn6+TqblCTFlkMRm7X2MJ+hYwFch
+         K37y3gfrcSZlji94OHI4XcfJkwqJeUp3j/yT4cmUTuvXv08nmD5riQ5ypfHOvfJ+sy
+         kFJAvsXCn5ie83CNFH9cw1EWP/zQ00A+8vZkr/u/8cFYzUpgxA6ENXwkMUBtCYCOR9
+         racOS98SxFR+g==
+Received: from johan by xi with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lI838-0001YK-7s; Fri, 05 Mar 2021 11:51:14 +0100
+Date:   Fri, 5 Mar 2021 11:51:14 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Pho Tran <Pho.Tran@silabs.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Hung Nguyen <Hung.Nguyen@silabs.com>
+Subject: Re: [PATCH v2] USB: serial: cp210x: Make the CP210x driver work with
+ GPIOs  of CP2108
+Message-ID: <YEINIu+kFsNCHP7J@hovoldconsulting.com>
+References: <5F0FCC57-86C5-4FF2-AE75-C2DDC748901A@silabs.com>
+ <3734B8C1-9AFA-494E-9C5B-433219D1F55A@silabs.com>
+ <71DBC945-FBA0-4FDF-8167-95697A5AFF44@silabs.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <71DBC945-FBA0-4FDF-8167-95697A5AFF44@silabs.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D212045
+On Fri, Mar 05, 2021 at 10:44:07AM +0000, Pho Tran wrote:
+> Similar to other CP210x devices, GPIO interfaces (gpiochip) should be supported for CP2108.
+> 
+> CP2108 has 4 serial interfaces but only 1 set of GPIO pins are shared to all of those interfaces. So, just need to initialize GPIOs of CP2108 with only one interface (I use interface 0). It means just only 1 gpiochip device file will be created for CP2108.
+> 
+> CP2108 has 16 GPIOs, So data types of several variables need to be is u16 instead of u8(in struct cp210x_serial_private). This doesn't affect other CP210x devices.
+> 
+> Because CP2108 has 16 GPIO pins, the parameter passed by cp210x functions will be different from other CP210x devices. So need to check part number of the device to use correct data format  before sending commands to devices.
+> 
+> Like CP2104, CP2108 have GPIO pins with configurable options. Therefore, should be mask all pins which are not in GPIO mode in cp2108_gpio_init() function.
+> 
+> Signed-off-by: Pho Tran <pho.tran@silabs.com<mailto:pho.tran@silabs.com>>
+> ---
 
---- Comment #5 from Tomasz Grobelny (tomasz@grobelny.net) ---
-The files that functionfs exposes are ep0 (for reading, events), ep1 (for
-writing, direction: to host) and ep2 (for reading, direction: to gadget). N=
-ot
-sure how and why they are named in dmesg. You can find the gadget configura=
-tion
-here:
-https://github.com/tomasz-grobelny/AACS/blob/master/AAServer/src/descriptor=
-s.cpp
-- line 75 and 84:
-                    .bEndpointAddress =3D 1 | USB_DIR_IN,
-                    .bEndpointAddress =3D 2 | USB_DIR_OUT,
+This patch is whitespace corrupt.
 
-The code that fails/hangs is readWraper function here:
-https://github.com/tomasz-grobelny/AACS/blob/master/AAServer/src/AaCommunic=
-ator.cpp:493
+And the changelog should go here (after the '---', not after the diff).
 
-select succeeds for ep2 and the read blocks. Exactly same function works ok=
- for
-ep0 for all 3 hosts that I tested on and the code works fully ok for 2 out =
-of 3
-hosts that I tested on. I also know that in principle the 3rd host also sho=
-uld
-work because it works with other devices.
+> 3/4/2021: Patch v2 Modify format patch as comment form Johan Hovold
+> <johan@kernel.org<mailto:johan@kernel.org>>
 
-Maybe lack of ep2 in the logs is something interesting?
+As I told when you submitted a previous patch; you need to be more
+specific in your changelog. This doesn't say *what* has changed.
 
---=20
-You may reply to this email to add a comment.
+> 3/1/2021: Initial submission of patch " Make the CP210x driver work
+> with GPIOs  of CP2108 "
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Johan
