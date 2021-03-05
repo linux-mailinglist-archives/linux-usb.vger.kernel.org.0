@@ -2,106 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 212EE32EEE4
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 16:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE9C32EEEE
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 16:35:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbhCEPdd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Mar 2021 10:33:33 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:40669 "HELO
+        id S229517AbhCEPfJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Mar 2021 10:35:09 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:55201 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230116AbhCEPdN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Mar 2021 10:33:13 -0500
-Received: (qmail 39139 invoked by uid 1000); 5 Mar 2021 10:33:12 -0500
-Date:   Fri, 5 Mar 2021 10:33:12 -0500
+        with SMTP id S229563AbhCEPfD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Mar 2021 10:35:03 -0500
+Received: (qmail 39359 invoked by uid 1000); 5 Mar 2021 10:35:01 -0500
+Date:   Fri, 5 Mar 2021 10:35:01 -0500
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: Re: [PATCH 16/17] usb: common: add function to get interval
- expressed in us unit
-Message-ID: <20210305153312.GA38200@rowland.harvard.edu>
-References: <1614934975-15188-1-git-send-email-chunfeng.yun@mediatek.com>
- <1614934975-15188-16-git-send-email-chunfeng.yun@mediatek.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Yiyu Zhu <danielzeltar@gmail.com>, Greg KH <greg@kroah.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: kworker takes 100% core after unplugging usb c hub
+Message-ID: <20210305153501.GB38200@rowland.harvard.edu>
+References: <CAGv7gkjoNt9gx_VPfEj=tauKAOcnOd+-2pCXyCoR=GPcHj7jxw@mail.gmail.com>
+ <YCUI0h7qkY2PuJcT@kroah.com>
+ <CAGv7gki7J1NVX3ti6Qhe9AFLp0JYRTRsT35zpDBTxxQ=te7-sQ@mail.gmail.com>
+ <b4ae0847-23a2-c3e3-3ef2-17efdfc792ba@linux.intel.com>
+ <CAGv7gkgLVTvBaGTUFd00daN0PBoqj2MbFk0dwnWKRL2odzD-8g@mail.gmail.com>
+ <5d3c5b2d-4752-7253-66f3-945c06f8a980@linux.intel.com>
+ <CAGv7gkigBrghpO9gETuGBLf=Go3RCA4dU6Z4NRjfTMLUn-Cxgw@mail.gmail.com>
+ <546b9137-3054-4cb3-b085-e0ea32885e8a@linux.intel.com>
+ <20210304163349.GC1612307@rowland.harvard.edu>
+ <f2457ae4-40a9-873f-1520-cb90c851a386@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1614934975-15188-16-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <f2457ae4-40a9-873f-1520-cb90c851a386@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 05, 2021 at 05:02:54PM +0800, Chunfeng Yun wrote:
-> Add a new function to convert bInterval into the time expressed
-> in 1us unit.
+On Fri, Mar 05, 2021 at 11:04:52AM +0200, Mathias Nyman wrote:
+> On 4.3.2021 18.33, Alan Stern wrote:
+> > On Thu, Mar 04, 2021 at 06:31:47PM +0200, Mathias Nyman wrote:
+> >> Hi
+> >>
+> >> On 2.3.2021 8.25, Yiyu Zhu wrote:
+> >>> Hi Mathias,
+> >>>
+> >>> I did not set the correct printk value. Here is a recent dmesg showing
+> >>> the hub connection and disconnection on Linux 5.11.0.
+> >>>
+> >> ...
+> >>> [ 1662.620564] usb usb3: usb wakeup-resume
+> >>> [ 1662.620570] usb usb3: usb auto-resume
+> >>> [ 1662.620585] hub 3-0:1.0: hub_resume
+> >>> [ 1662.620607] hub 3-0:1.0: state 7 ports 2 chg 0002 evt 0000
+> >>> [ 1662.620637] usb usb3-port1: over-current change #1
+> >>> [ 1662.724578] hub 3-0:1.0: trying to enable port power on non-switchable hub
+> >>> [ 1662.832221] usb usb3-port1: over-current condition
+> >>> [ 1662.832237] usb usb3-port1: status 0008, change 0008, 12 Mb/s
+> >>> [ 1662.832262] hub 3-0:1.0: state 7 ports 2 chg 0000 evt 0000
+> >>> [ 1662.832277] hub 3-0:1.0: hub_suspend
+> >>> [ 1662.832297] usb usb3: bus auto-suspend, wakeup 1
+> >>> [ 1662.832307] usb usb3: bus suspend fail, err -16
+> >>> [ 1662.832313] hub 3-0:1.0: hub_resume
+> >>> [ 1662.832344] hub 3-0:1.0: state 7 ports 2 chg 0002 evt 0000
+> >>> [ 1662.832363] usb usb3-port1: status 0008, change 0000, 12 Mb/s
+> >>> [ 1662.832375] hub 3-0:1.0: hub_suspend
+> >>> [ 1662.832388] usb usb3: bus auto-suspend, wakeup 1
+> >>> [ 1662.832397] usb usb3: bus suspend fail, err -16
+> >>> [ 1662.832402] hub 3-0:1.0: hub_resume
+> >> (removed some messages from other buses from above snippet)
+> >>
+> >> Looks like the suspend/resume loop is triggered by an over-current event.
+> >> hub wq notices there is a over-current change, and an over-current status (two separate bits)
+> >> hub wq clears the change bit, tries to resolve the over-current, fails, and continues.
+> >>
+> >> This hub (roothub) has no other children or activity so it runtime suspends.
+> >> After this the bus tries to suspend, but it fails as xhci bus_suspend() 
+> >> returns -EBUSY if a port is in over-current state.
+> >>
+> >> Hub is woken up. hub wq runs, this time there is no over-current change
+> >> bit set as it was cleared earlier. The over-current status is still active. 
+> >> Hub wq doesn't see any activity, hub is suspended -> try to suspend bus -> fail...
+> >>
+> >> Solution is still unclear, maybe hub wq should react to over-current states,
+> >> not just changes?
+> > 
+> > Your analysis seems to point to a hardware problem.  If nothing is 
+> > plugged into the root hub, it should not report an over-current state.
+> > 
+> > Alan Stern
 > 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
+> Hmm, true, logs doesn't show anything connected to usb 3 (HS) bus roothub, but on
+> the usb4 (SS) bus roothub there is a USB 3.0 external hub connected.
+> 
+> [ 1650.115544] usb 4-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+> [ 1650.115545] usb 4-1: Product: 4-Port USB 3.0 Hub
+> [ 1650.115547] usb 4-1: Manufacturer: Generic
+> 
+> So there should be a HS hub on usb 3-1, (same connector as the SS side usb 4-1)
+> but instead we just see the over-current error. 
+> 
+> xHCI will set a HS port that has an over-current condition to a powered-off state with 
+> link state to Disabled, and port powered off, so no device will appear connected.
+> 
+> Maybe the enumerated SS HUB on usb 4-1 is draining more power from the connector than the
+> un-enumerated HS hub is allowed, causing the the over-current for HS the port?
 
-> --- a/drivers/usb/common/common.c
-> +++ b/drivers/usb/common/common.c
-> @@ -165,6 +165,39 @@ enum usb_dr_mode usb_get_dr_mode(struct device *dev)
->  }
->  EXPORT_SYMBOL_GPL(usb_get_dr_mode);
->  
-> +unsigned int usb_decode_interval(const struct usb_endpoint_descriptor *epd,
-> +				 enum usb_device_speed speed)
-> +{
-> +	unsigned int interval = 0;
-> +
-> +	switch (usb_endpoint_type(epd)) {
-> +	case USB_ENDPOINT_XFER_CONTROL:
-> +		/* uframes per NAK */
-> +		if (speed == USB_SPEED_HIGH)
-> +			interval = epd->bInterval;
-> +		break;
-> +	case USB_ENDPOINT_XFER_ISOC:
-> +		interval = 1 << (epd->bInterval - 1);
-> +		break;
-> +	case USB_ENDPOINT_XFER_BULK:
-> +		/* uframes per NAK */
-> +		if (speed == USB_SPEED_HIGH && usb_endpoint_dir_out(epd))
-> +			interval = epd->bInterval;
-> +		break;
-> +	case USB_ENDPOINT_XFER_INT:
-> +		if (speed >= USB_SPEED_HIGH)
-> +			interval = 1 << (epd->bInterval - 1);
-> +		else
-> +			interval = epd->bInterval;
-> +		break;
-> +	}
-> +
-> +	interval *= (speed >= USB_SPEED_HIGH) ? 125 : 1000;
-> +
-> +	return interval;
-> +}
-> +EXPORT_SYMBOL_GPL(usb_decode_interval);
+Or perhaps the hub communicates okay over the SS wires but causes an 
+overcurrent on the USB-2 D+/D- wires.
 
-> --- a/include/linux/usb/ch9.h
-> +++ b/include/linux/usb/ch9.h
-> @@ -90,6 +90,17 @@ extern enum usb_ssp_rate usb_get_maximum_ssp_rate(struct device *dev);
->   */
->  extern const char *usb_state_string(enum usb_device_state state);
->  
-> +/**
-> + * usb_decode_interval - Decode bInterval into the time expressed in 1us unit
-> + * @epd: The descriptor of the endpoint
-> + * @speed: The speed that the endpoint works as
-> + *
-> + * Function returns the interval expressed in 1us unit for servicing
-> + * endpoint for data transfers.
-> + */
-> +unsigned int usb_decode_interval(const struct usb_endpoint_descriptor *epd,
-> +				 enum usb_device_speed speed);
-
-As a general rule, I believe people expect to find the kerneldoc for a 
-function next to the function's definition, not next to the declaration 
-in a header file.
+Either way, it sounds like a hardware problem in that hub.
 
 Alan Stern
