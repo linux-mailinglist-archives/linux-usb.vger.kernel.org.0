@@ -2,130 +2,297 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE0A32F3A2
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 20:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD7332F3C0
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 20:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbhCETPD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Mar 2021 14:15:03 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:59619 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230054AbhCETOi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Mar 2021 14:14:38 -0500
-Received: (qmail 49193 invoked by uid 1000); 5 Mar 2021 14:14:37 -0500
-Date:   Fri, 5 Mar 2021 14:14:37 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Matthias Schwarzott <zzam@gentoo.org>
-Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        hirofumi@mail.parknet.co.jp
-Subject: Re: Amazon Kindle disconnect after Synchronize Cache
-Message-ID: <20210305191437.GC48113@rowland.harvard.edu>
-References: <9f57532f-1fb7-0fdd-b91c-2dfecef5aff3@gentoo.org>
+        id S229597AbhCETX0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Mar 2021 14:23:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229446AbhCETW7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Mar 2021 14:22:59 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93762C061574;
+        Fri,  5 Mar 2021 11:22:59 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id o9so3170668iow.6;
+        Fri, 05 Mar 2021 11:22:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=yF8EgpFfFBjawtii+lk6KkLM9nijvdEea1xbqL6g9/g=;
+        b=JIFAU9065pdD7Usa/GKyrrPKSsOw4kYG5IFYXWVyMz3VAfNEq1qbKgZfIMx/YJm+CE
+         5JesmlrhcT8perj7SLJloWi+3VMHQIhXjd9tbvyv2yNNr7fsW3+5qMPzuIWMNqOH5fPY
+         Ecr1slyEY8QEq4Dp0M9JXJgj8dWACBlci/gtm9DnxhU2jMASW1agi9lGp5mfINIXeCzb
+         GaZhPt01I6DilwQltRjlCRwqx3qIOC/+BEs+EMX6u3RtOJMRxw0Bn3V0KGhOFB+CEweL
+         M/Jm4fRK5C0gGlPm+cFvYIazjJtNmihBHrd2O2RU9esedx8CX0ZvkyhTX1xIpu/9W2p7
+         fzSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=yF8EgpFfFBjawtii+lk6KkLM9nijvdEea1xbqL6g9/g=;
+        b=QSc48hXctW5zUTdWoaNAXODhzODPlcgn/H7gWTx1NRPbSTcXnA5J16ZUoyt1lEvpBA
+         nZ+cq3AzHrPJrCv8TDSKVPPZMlsm7muIfnlPQ/4cTh7adpO2NSAncZWmT3h99hj2XbHM
+         wRsjDKnr7zzIT/x/HUMOyKpw11jc+cHb8mf6aYC7aLrruESZ2JeKSnjhodgfzm1Ke/d6
+         FrmLQVXepu0MDXnCanyHaGJMGqdR0l3jBenp7Q2TY4nEbf7SvGOGjNvKSummV/o06PIP
+         9pvsW9V4wrD7ewVAQj14pUFkMJSYf1GFXrm5FVpyE3uAH7lYpHYt4tq/OOXTtDIHhill
+         /PsA==
+X-Gm-Message-State: AOAM5302eipbLE1abZPBCjfX2OqHCobH1S17QvfFFmzcDv+Y/C9xKAVw
+        oHIDzBXFVslT07Qb72Y1RzO/VduVWnce/BQ5Ci8=
+X-Google-Smtp-Source: ABdhPJy7QconJtlnVT5IV6PNTNYgzhds96/3IvjMCfVIVS/uTVhUiW+FB+GrAvZLIN3HX71zcm5X12GGe75CEBtOdLA=
+X-Received: by 2002:a05:6602:1689:: with SMTP id s9mr9079201iow.171.1614972178707;
+ Fri, 05 Mar 2021 11:22:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9f57532f-1fb7-0fdd-b91c-2dfecef5aff3@gentoo.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <CA+icZUWJyPTefHkGEgQtDO9TOM4CN_b2qPJGQVF7NE=Q=fGAEQ@mail.gmail.com>
+ <CA+icZUUzBvmi9SvJ4Bh8ER_+Rkm9vv9FkKwoS8ofmRsko_fJhg@mail.gmail.com>
+ <CA+icZUXCgW0bPcqNf+DSubBciQeBMbNX5zbjkMXinqRdkE1PfA@mail.gmail.com>
+ <20210301155321.GA1490228@rowland.harvard.edu> <CA+icZUVpQtsq8y=rjR3Ad_G1VXWpR4D4xao8DGUkRiuxoT+cPA@mail.gmail.com>
+ <20210305160728.GE38200@rowland.harvard.edu> <CA+icZUXnjDwyKEoX_7KOaVd=PpvEQhpJRvwZbW_xocDfXZpUzQ@mail.gmail.com>
+In-Reply-To: <CA+icZUXnjDwyKEoX_7KOaVd=PpvEQhpJRvwZbW_xocDfXZpUzQ@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 5 Mar 2021 20:22:22 +0100
+Message-ID: <CA+icZUUFGh5CWH-UJK4T-h_Qd2KNnOCrGuT8fg0+Fvjm0C2kbg@mail.gmail.com>
+Subject: Re: [xhci] usb 4-1: reset SuperSpeed Gen 1 USB device number 2 using xhci_hcd
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 05, 2021 at 05:54:43PM +0100, Matthias Schwarzott wrote:
-> Hi folks,
-> 
-> I have an issue with my Amazon Kindle. Since some time the device
-> disconnects 2 seconds after a sync command sent via USB.
-> 
-> See also this matching bug report:
-> https://bugzilla.kernel.org/show_bug.cgi?id=203973
-> 
-> My current workaround is this udev-rule:
-> 	SUBSYSTEM=="block", ACTION=="add", ENV{DEVTYPE}=="disk",
-> ENV{ID_VENDOR}=="Kindle", RUN+="/bin/bash -c 'echo write\ through >
-> /sys/block/%k/queue/write_cache'"
-> 
-> But I like to find a proper solution.
-> 
-> I did various recordings of usb-traffic with wireshark on linux and windows.
-> 
-> On windows, the device does not disconnect after the "Synchronize Cache"
-> command.
-> 
-> One major difference I noticed looking at service answer time statistics:
-> Windows sends a lot more requests of type "Test Unit Ready".
-> * Windows: 6385 calls
-> * linux: 71 calls
+On Fri, Mar 5, 2021 at 8:05 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Fri, Mar 5, 2021 at 5:07 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Fri, Mar 05, 2021 at 01:09:16PM +0100, Sedat Dilek wrote:
+> > > On Mon, Mar 1, 2021 at 4:53 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > [ ... ]
+> > > > You can use usbmon on bus 4 to record the USB traffic.  It may indicate
+> > > > why the resets occur.
+> > > >
+> > >
+> > > Hi Alan,
+> > >
+> > > I followed the instructions in [1].
+> > >
+> > > root# modprobe -v usbmon
+> > >
+> > > root# ls /sys/kernel/debug/usb/usbmon
+> > > 0s  0u  1s  1t  1u  2s  2t  2u  3s  3t  3u  4s  4t  4u
+> > >
+> > > root# cat /sys/kernel/debug/usb/usbmon/4u > /tmp/usbmon-log_4u.txt
+> > > [ Ctrl+C ]
+> > >
+> > > I recorded 13:03 - 13:04 (one minute).
+> > >
+> > > So these xhci-resets should be included:
+> > >
+> > > [Fri Mar  5 13:03:07 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+> > > number 2 using xhci_hcd
+> > > [Fri Mar  5 13:03:07 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+> > > number 2 using xhci_hcd
+> > > [Fri Mar  5 13:03:27 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+> > > number 2 using xhci_hcd
+> > > [Fri Mar  5 13:03:27 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+> > > number 2 using xhci_hcd
+> > > [Fri Mar  5 13:03:27 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+> > > number 2 using xhci_hcd
+> > > [Fri Mar  5 13:03:28 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+> > > number 2 using xhci_hcd
+> > > [Fri Mar  5 13:03:28 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+> > > number 2 using xhci_hcd
+> > >
+> > > The usbmon-log is attached.
+> > >
+> > > Unsure how to interpret the log - the kernel-doc says `raw data`.
+> > > How can I bring this into a human-readable format?
+> > > Can you give me a hand?
+> >
+> > Don't worry about trying to decode the output.  To me it looks like the
+> > drive crashes and needs to be reset at times when the computer sends it
+> > an ATA command.  (Not all ATA commands, but some.)  You can prevent this
+> > by setting the following module parameter for the usb-storage driver:
+> >
+> >         quirks=174c:55aa:t
+> >
+> > where the two numbers are the Vendor and Product IDs for the external
+> > drive, and the 't' is a quirks flag saying not to use any ATA commands.
+> > If this module parameter fixes the problem, we can add a permanent quirk
+> > setting to the kernel.
+> >
+>
+> Thanks Alan.
+>
+> I did:
+>
+> [ /etc/modules-load.d/usb-storage.conf ]
+>
+> # Add quirks for ATA commands for usb-storage devices connected to
+> ASMedia M1042 USB-3.0 controller
+> options usb-storage quirks=174c:55aa:t
+> - EOF -
+>
+> It is:
+>
+> /lib/modules/5.12.0-rc1-11-amd64-clang13-cfi/kernel/drivers/usb/storage/usb-storage.ko
+>
+> But:
+>
+> root# lsmod | grep usb | grep storage
+> usb_storage            90112  2 uas
+> scsi_mod              307200  6 sd_mod,usb_storage,uas,libata,sg,sr_mod
+> usbcore               385024  14
+> usbserial,xhci_hcd,ehci_pci,usbnet,usbhid,usb_storage,usb_wwan,uvcvideo,ehci_hcd,btusb,xhci_pci,cdc_ether,uas,option
+>
+> I have not rebooted yet.
+>
+> Interferences with PowerTop?
+>
+> These xhci-resets happen every 10mins in a sequence of 4.
+>
+> I have here a powertop.service (systemd) with passing --auto-tune option.
+> That was not a problem with previous Linux-kernels >= v5.12-rc1, so.
+>
+> Alan, what do you think?
+>
 
-It's generally well known that Windows issues lots and lots of redundant 
-commands to USB storage drives.
+The quirks match:
 
-> After most of the "Synchronize Cache" commands on windows there was directly
-> a following "WRITE" command. It seems WRITE commands avoid the disconnect.
-> 
-> But sending a plain "Synchronize Cache" under windows (8.1 and 10) does not
-> trigger the disconnect.
-> 
-> Windows:
-> 1583	14.891478	host	1.6.1	USBMS	58	SCSI: Synchronize Cache(10) LUN: 0x00
-> (LBA: 0x00000000, Len: 0)
-> 1584	14.891595	1.6.1	host	USB	27	URB_BULK out
-> 1585	14.891613	host	1.6.1	USB	27	URB_BULK in
-> 1586	14.896866	1.6.1	host	USBMS	40	SCSI: Response LUN: 0x00 (Synchronize
-> Cache(10)) (Good)
-> 1589	15.687209	host	1.6.1	USBMS	58	SCSI: Test Unit Ready LUN: 0x00
-> 1590	15.687353	1.6.1	host	USB	27	URB_BULK out
-> 1591	15.687358	host	1.6.1	USB	27	URB_BULK in
-> 1592	15.687405	1.6.1	host	USBMS	40	SCSI: Response LUN: 0x00 (Test Unit
-> Ready) (Good)
-> 1713	16.699689	host	1.6.1	USBMS	58	SCSI: Test Unit Ready LUN: 0x00
-> 1714	16.699820	1.6.1	host	USB	27	URB_BULK out
-> 1715	16.699825	host	1.6.1	USB	27	URB_BULK in
-> 1716	16.699915	1.6.1	host	USBMS	40	SCSI: Response LUN: 0x00 (Test Unit
-> Ready) (Good)
-> 1717	17.709334	host	1.6.1	USBMS	58	SCSI: Test Unit Ready LUN: 0x00
-> 1718	17.709547	1.6.1	host	USB	27	URB_BULK out
-> 1719	17.709552	host	1.6.1	USB	27	URB_BULK in
-> 1720	17.709586	1.6.1	host	USBMS	40	SCSI: Response LUN: 0x00 (Test Unit
-> Ready) (Good)
-> 1721	18.712864	host	1.6.1	USBMS	58	SCSI: Test Unit Ready LUN: 0x00
-> 1722	18.713081	1.6.1	host	USB	27	URB_BULK out
-> 1723	18.713086	host	1.6.1	USB	27	URB_BULK in
-> 1724	18.713148	1.6.1	host	USBMS	40	SCSI: Response LUN: 0x00 (Test Unit
-> Ready) (Good)
-> 1741	19.735245	host	1.6.1	USBMS	58	SCSI: Test Unit Ready LUN: 0x00
-> 1742	19.735410	1.6.1	host	USB	27	URB_BULK out
-> 1743	19.735415	host	1.6.1	USB	27	URB_BULK in
-> 1744	19.735474	1.6.1	host	USBMS	40	SCSI: Response LUN: 0x00 (Test Unit
-> Ready) (Good)
-> 1811	20.747477	host	1.6.1	USBMS	58	SCSI: Test Unit Ready LUN: 0x00
-> 1812	20.747699	1.6.1	host	USB	27	URB_BULK out
-> 1813	20.747704	host	1.6.1	USB	27	URB_BULK in
-> 1814	20.747766	1.6.1	host	USBMS	40	SCSI: Response LUN: 0x00 (Test Unit
-> Ready) (Good)
-> 1905	21.755419	host	1.6.1	USBMS	58	SCSI: Test Unit Ready LUN: 0x00
-> 1906	21.755579	1.6.1	host	USB	27	URB_BULK out
-> 1907	21.755584	host	1.6.1	USB	27	URB_BULK in
-> 1908	21.755674	1.6.1	host	USBMS	40	SCSI: Response LUN: 0x00 (Test Unit
-> Ready) (Good)
-> 1911	22.769205	host	1.6.1	USBMS	58	SCSI: Test Unit Ready LUN: 0x00
-> 1912	22.769355	1.6.1	host	USB	27	URB_BULK out
-> 1913	22.769360	host	1.6.1	USB	27	URB_BULK in
-> 1914	22.769415	1.6.1	host	USBMS	40	SCSI: Response LUN: 0x00 (Test Unit
-> Ready) (Good)
+[Fri Mar  5 20:06:56 2021] usb-storage 4-1:1.0: USB Mass Storage device detected
+[Fri Mar  5 20:06:56 2021] usb-storage 4-1:1.0: Quirks match for vid
+174c pid 55aa: 400000
 
-Unless the Kindle advertises removable media, there doesn't seem to be 
-any real point to all those TEST UNIT READY commands.  Unless they are 
-what prevents the disconnections...
+That seems not to be the trick:
 
-> How can I get further on this topic?
+root# LC_ALL=C dmesg -T | grep 'usb 4-1:'
+[Fri Mar  5 20:06:55 2021] usb 4-1: new SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:06:55 2021] usb 4-1: New USB device found,
+idVendor=174c, idProduct=55aa, bcdDevice= 1.00
+[Fri Mar  5 20:06:55 2021] usb 4-1: New USB device strings: Mfr=2,
+Product=3, SerialNumber=1
+[Fri Mar  5 20:06:55 2021] usb 4-1: Product: MEDION HDDrive-n-GO
+[Fri Mar  5 20:06:55 2021] usb 4-1: Manufacturer: MEDION
+[Fri Mar  5 20:06:55 2021] usb 4-1: SerialNumber: 3180000000000000092C
+[Fri Mar  5 20:06:57 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:06:57 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:06:57 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:06:58 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:06:58 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:06:58 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:06:58 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:06:58 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:06:59 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:06:59 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:06:59 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:06:59 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:00 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:00 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:00 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:00 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:00 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:01 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:01 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:01 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:01 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:02 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:02 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:02 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:02 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:28 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:30 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:37 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:37 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:38 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:39 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:39 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:39 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:46 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:47 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:48 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:49 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:52 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:52 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:52 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:52 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:53 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:53 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:54 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:54 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:55 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:55 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:55 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:55 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:56 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:56 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:07:56 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:09:09 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:17:56 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:17:56 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:17:56 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:17:57 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
+[Fri Mar  5 20:17:57 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+number 2 using xhci_hcd
 
-Is runtime power management enabled?  Maybe the Kindle disconnects 
-whenever the computer tries to suspend it.  This typically happens 2 
-seconds after the last command was issued, which matches your 
-observations.  If runtime PM is enabled, you can try disabling it.
-
-Alternatively, a number of Linux kernel developers work for Amazon (or 
-at least, use email addresses ending in "@amazon.com"), as shown by the 
-MAINTAINERS file.  Maybe one of them can get in touch with the Kindle 
-software development people and find the actual answer.
-
-Alan Stern
+- Sedat -
