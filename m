@@ -2,107 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D48D32ECF0
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 15:17:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF2232ED5D
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 15:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbhCEOQt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Mar 2021 09:16:49 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:54511 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbhCEOQS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Mar 2021 09:16:18 -0500
-Received: by mail-io1-f72.google.com with SMTP id n15so2008734ioh.21
-        for <linux-usb@vger.kernel.org>; Fri, 05 Mar 2021 06:16:17 -0800 (PST)
+        id S229589AbhCEOoy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Mar 2021 09:44:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229558AbhCEOov (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Mar 2021 09:44:51 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9F7C061574
+        for <linux-usb@vger.kernel.org>; Fri,  5 Mar 2021 06:44:51 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id k2so2251116ioh.5
+        for <linux-usb@vger.kernel.org>; Fri, 05 Mar 2021 06:44:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=g9WR5LUcVIgFW7g2wnr5Zp2huJ5WAnqnH0Z1U5EpqdI=;
+        b=A1kK1MxeRSv4PdUhjPsEU8dc6F2RJZAlt2I2PGlLaFBdZFlgIKIMggz4RQQIVRU3+p
+         G05xG8SjW67zLzOlHXAuCqtM6tITwcJZRb6mCI2NCRCLteLxv01uAlqtwwJ9/8tGO2W7
+         X4Y/6IxkXlr9Vv7HAmqZuo6JgC9XJ4mF20J9E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=mfuOjp5Z/tGbKX0ZKWisF3TPUViTIoNQsTJvHl29QCM=;
-        b=txqCq+umb0EUkr3GYoyswVYQ1ykEtM4B54aCDG4zT362xxKaudes2FrJgzix+cN29U
-         /wZ9jGwFTkvuRooxpzMhiXXs5SPBr83K/fN/Nz4C07LeWPlA19idYH3+cVz3y4OXRvUz
-         6IOHNyuBJCqsuB+7X9EjEh3Qt76z6AuHAElvKn4xLzm2WsA9Ho9yKmFJd1UEi2t8RtbX
-         +/sx2VGr0zh7KDQmjsMnOA+I22/J6Rq/LM1PWCROgOYcEAIp7T3G55cmGJcDS2reeLQe
-         TQuAqaAzDGdS3dMTWPBlxUehWlHucjsy7Hou92uyDlKpO1Vl6ru8hKJTqYYwqLOtVH66
-         JJCQ==
-X-Gm-Message-State: AOAM5307rHp+hBBdu/ZeUXPZNIP2EbXTWdF8YlAT9cZdCP0K8hFColvp
-        AR0t9cf+l3/lfxW2NFgbLwFPRK3oMNR9VWeid0KdqHd0nBOt
-X-Google-Smtp-Source: ABdhPJzhdCq+OH0uPbJie7DVKf0NBMi9zf6Wfy1m090wcIwuVEoGT7KE2S/Eu7tE0V4njvSY+0tij0PUmqywZ+ENf9/nEVi5HfOf
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=g9WR5LUcVIgFW7g2wnr5Zp2huJ5WAnqnH0Z1U5EpqdI=;
+        b=Qemsdx7D45/yXQJKaDupwZzVwYTU427iJWV7cWwylGLXuoYW/2F+E+CxupSk5MEBg+
+         1Y11sJa4flbTw2ghCoAk9qZMPk+RWd5zK7z/yNLW6UpeTgnPbWfkLGwD/9H0EpNemHHY
+         xBSssMp6Tm4jMrmkdMXaloZp69eYbMhEYS4GMoyPra8VD39j+JTOMFTyCcpW92fVpJXz
+         O8u8SLehHFTTxgMOew9XvUzthT0rWNZpPKAHsCFQBAmm4dZk/6tAQk/4jfvE4SGpfTii
+         EJGsNX2ZU3U13z8VR8yXWAITWigDby+oXJchQ6VGUmWEA0fbzjK0Qrlh8/dvsDPK0Ue5
+         TdeA==
+X-Gm-Message-State: AOAM532SC8QBQle7T56Ri9BbCY1p9zC/tCmi1HhwrtpHmr7DPWcLw6a3
+        r5UVR3jAhb92kgIf0Fa6wzOi2A==
+X-Google-Smtp-Source: ABdhPJz8sXdnCFm77LRjCdP2fJ8szFTOQ5cggcbsM2VIxbUk49edcPBYIi/17aoxTT/l+q8pHvsiQw==
+X-Received: by 2002:a05:6602:14cb:: with SMTP id b11mr8651790iow.175.1614955490407;
+        Fri, 05 Mar 2021 06:44:50 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id q4sm1389207iob.52.2021.03.05.06.44.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Mar 2021 06:44:50 -0800 (PST)
+Subject: Re: [PATCH v4 00/12] usb: usbip: serialize attach/detach operations
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <df337d16-2a6e-f671-7134-449d7da6a9cb@linuxfoundation.org>
+ <20210304152455.3685-1-penguin-kernel@I-love.SAKURA.ne.jp>
+ <353d42fe-d730-63bb-7d40-33ee67d20411@linuxfoundation.org>
+ <54519d84-9173-21d4-8347-d53500b32092@i-love.sakura.ne.jp>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <673ee78e-d70c-84d7-e4b5-919d17ecc5c9@linuxfoundation.org>
+Date:   Fri, 5 Mar 2021 07:44:49 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:7f8c:: with SMTP id r134mr10057299jac.95.1614953775992;
- Fri, 05 Mar 2021 06:16:15 -0800 (PST)
-Date:   Fri, 05 Mar 2021 06:16:15 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002592aa05bccabae5@google.com>
-Subject: [syzbot] WARNING in carl9170_usb_send_rx_irq_urb/usb_submit_urb
-From:   syzbot <syzbot+0ae4804973be759fa420@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, chunkeey@googlemail.com,
-        davem@davemloft.net, kuba@kernel.org, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <54519d84-9173-21d4-8347-d53500b32092@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On 3/5/21 3:06 AM, Tetsuo Handa wrote:
+> On 2021/03/05 0:52, Shuah Khan wrote:
+>> As I said, it uses a simpler approach and reduces the number
+>> of changes. I would rather go with what I am working on.
+> 
+> Will you post it to ML so that people can review?
+> 
 
-syzbot found the following issue on:
+Yes. All my patches go through mailing lists. :)
 
-HEAD commit:    fe07bfda Linux 5.12-rc1
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=12020056d00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fd36f4f4a84d245c
-dashboard link: https://syzkaller.appspot.com/bug?extid=0ae4804973be759fa420
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=111b8c42d00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=131dcb7f500000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0ae4804973be759fa420@syzkaller.appspotmail.com
-
-usb 1-1: reset high-speed USB device number 2 using dummy_hcd
-usb 1-1: device descriptor read/64, error -71
-usb 1-1: Using ep0 maxpacket: 8
-usb 1-1: driver   API: 1.9.9 2016-02-15 [1-1]
-usb 1-1: firmware API: 1.9.6 2012-07-07
-------------[ cut here ]------------
-usb 1-1: BOGUS urb xfer, pipe 1 != type 3
-WARNING: CPU: 1 PID: 32 at drivers/usb/core/urb.c:493 usb_submit_urb+0xd27/0x1540 drivers/usb/core/urb.c:493
-Modules linked in:
-CPU: 1 PID: 32 Comm: kworker/1:1 Not tainted 5.12.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events request_firmware_work_func
-RIP: 0010:usb_submit_urb+0xd27/0x1540 drivers/usb/core/urb.c:493
-Code: 84 d4 02 00 00 e8 69 99 b8 fd 4c 89 ef e8 d1 cd 1c ff 41 89 d8 44 89 e1 4c 89 f2 48 89 c6 48 c7 c7 00 02 62 86 e8 39 e9 fa 01 <0f> 0b e9 81 f8 ff ff e8 3d 99 b8 fd 48 81 c5 30 06 00 00 e9 ad f7
-RSP: 0018:ffffc900001f7bb0 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-RDX: ffff8881008e0000 RSI: ffffffff812964e3 RDI: fffff5200003ef68
-RBP: ffff888116f510a0 R08: 0000000000000001 R09: 0000000000000000
-R10: ffffffff8149dffb R11: 0000000000000000 R12: 0000000000000001
-R13: ffff888116f500a0 R14: ffff8881057a4000 R15: ffff88810256d300
-FS:  0000000000000000(0000) GS:ffff8881f6b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fb73282f000 CR3: 0000000105642000 CR4: 00000000001506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- carl9170_usb_send_rx_irq_urb+0x273/0x340 drivers/net/wireless/ath/carl9170/usb.c:504
- carl9170_usb_init_device drivers/net/wireless/ath/carl9170/usb.c:939 [inline]
- carl9170_usb_firmware_finish drivers/net/wireless/ath/carl9170/usb.c:999 [inline]
- carl9170_usb_firmware_step2+0x1b9/0x290 drivers/net/wireless/ath/carl9170/usb.c:1028
- request_firmware_work_func+0x12c/0x230 drivers/base/firmware_loader/main.c:1079
- process_one_work+0x98d/0x1580 kernel/workqueue.c:2275
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2421
- kthread+0x38c/0x460 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+thanks,
+-- Shuah
