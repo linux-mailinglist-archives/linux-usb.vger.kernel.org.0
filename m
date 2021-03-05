@@ -2,246 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 727DB32F135
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 18:31:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 461B332F373
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 20:07:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbhCERa5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Mar 2021 12:30:57 -0500
-Received: from vps.xff.cz ([195.181.215.36]:34908 "EHLO vps.xff.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229558AbhCERao (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 5 Mar 2021 12:30:44 -0500
-X-Greylist: delayed 365 seconds by postgrey-1.27 at vger.kernel.org; Fri, 05 Mar 2021 12:30:44 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1614965077; bh=5Y+9PdnDq+BMTwfZCHboxIyKzCWxFiVB0rNq3zU7Vbk=;
-        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-        b=UbOJJomFwtAtzPxgqchpo3YN54Agn9GrD/hgCsktzFSqUirjtbFS8wKbe3AaLMkh2
-         bpmkZzvWfDfXupyxlwE2QFCQvUG2chxyqYekMPJMWcmhG3WVMvooX0KwcgQNf2dkia
-         pR5kGj0wHHeSUDxF6pH88CHsZBQB1VGnyY2oow24=
-Date:   Fri, 5 Mar 2021 18:24:37 +0100
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, a.hajda@samsung.com,
-        narmstrong@baylibre.com, jonas@kwiboo.se, jernej.skrabec@siol.net,
-        airlied@linux.ie, daniel@ffwll.ch, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, enric.balletbo@collabora.com,
-        drinkcat@chromium.org, hsinyi@chromium.org, kernel@collabora.com,
-        dafna3@gmail.com, robh+dt@kernel.org
-Subject: Re: [PATCH v5 1/2] dt-bindings: usb: add analogix,anx7688.yaml
-Message-ID: <20210305172437.meu45ol7d4c3w2lr@core.my.home>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20210305124351.15079-1-dafna.hirschfeld@collabora.com>
- <20210305124351.15079-2-dafna.hirschfeld@collabora.com>
- <YEJBgEPO4J5+/HhD@pendragon.ideasonboard.com>
- <35f505ee-d939-4b42-490b-321b961bdec3@collabora.com>
+        id S229709AbhCETG4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Mar 2021 14:06:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229601AbhCETGZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Mar 2021 14:06:25 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A440AC061574;
+        Fri,  5 Mar 2021 11:06:25 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id z13so3121092iox.8;
+        Fri, 05 Mar 2021 11:06:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=ephVPlQPJmmPgwhZ2BDumy4J7FYaDt1vhPn9UDOeoJo=;
+        b=kojJFOK8wEx+Qt0aJW+eosn5VciYXvhfgX7yNDY76O61WB28CtLFCegC5mXJnPupea
+         4tC1hE5pd+2gzZ2O1oqu8C8KxO+BI8qRjqFtbhUvvk8/46XDZOW7BkcLw9VaKPzjYfju
+         jgJUbcYqFdZRQ8C5J/QrB6qT2/L+FPVkq9qR4vjcEt//m2dQW/ezz4jf18LOsOtgyb2P
+         yn4mLiUTdgWY7yCy/2LETIg1Cnt/xpRjp/t6ShJ+JahHSeWjCBfeHLjdj1+lZBQdLR6P
+         mAHBTpgbQzJN9rr2Aw2rEP851YTtQLXqOMHJXXB7fhiFF9+JvSKaXwWY7R0NSiy6fw1q
+         Qwiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=ephVPlQPJmmPgwhZ2BDumy4J7FYaDt1vhPn9UDOeoJo=;
+        b=V1rLD8DS1h4j+kb0RzLnzJEWGfu0tAOVis4hNLovW3XnOQoTd4EHW7qt9U9m3kPCTi
+         IkXnTVweMth7MH/vfHImXXmAOaqRRVGH/3lzecKb3XOIt1VBwDE5ywZ24jwas19lES1H
+         PW74M8Uw1LVHo7Gvt29TA8Bm2w8C787D9wmK3CZ5ND4Z82haCIZ8sjom9MQQW/GjY1M5
+         0GgZ2WHMbngWWXXeR84qqVgTle9pq5Zf0jIomea6S9VdyFIay86DHOKRQZTCOu1g/VK8
+         5S+iE/+ZjWCqWU/KDWzO8rXqc/axIxqtAuGK6PoVXfuvrbz6flzDZukPgEwQXWlQVZtS
+         DcKQ==
+X-Gm-Message-State: AOAM532GnkGMhkaxmBCzC8ni+ZYOhDv3zJsNzorOJA546shVhtNd5UgT
+        xGTyRn92hmvoU5G2hyIoa/kRp7AI1I5DFWhY1+L16+COB7nI7w==
+X-Google-Smtp-Source: ABdhPJzKdMf1mIFrNmr97CtuPmXnIqCEzovVEwqThK1uBKchst6MkQlpqyIFkZrOUZzZP5fVGWprg8vJpiXN5fFL/YU=
+X-Received: by 2002:a02:7822:: with SMTP id p34mr11371391jac.65.1614971185085;
+ Fri, 05 Mar 2021 11:06:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <35f505ee-d939-4b42-490b-321b961bdec3@collabora.com>
+References: <CA+icZUWJyPTefHkGEgQtDO9TOM4CN_b2qPJGQVF7NE=Q=fGAEQ@mail.gmail.com>
+ <CA+icZUUzBvmi9SvJ4Bh8ER_+Rkm9vv9FkKwoS8ofmRsko_fJhg@mail.gmail.com>
+ <CA+icZUXCgW0bPcqNf+DSubBciQeBMbNX5zbjkMXinqRdkE1PfA@mail.gmail.com>
+ <20210301155321.GA1490228@rowland.harvard.edu> <CA+icZUVpQtsq8y=rjR3Ad_G1VXWpR4D4xao8DGUkRiuxoT+cPA@mail.gmail.com>
+ <20210305160728.GE38200@rowland.harvard.edu>
+In-Reply-To: <20210305160728.GE38200@rowland.harvard.edu>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 5 Mar 2021 20:05:49 +0100
+Message-ID: <CA+icZUXnjDwyKEoX_7KOaVd=PpvEQhpJRvwZbW_xocDfXZpUzQ@mail.gmail.com>
+Subject: Re: [xhci] usb 4-1: reset SuperSpeed Gen 1 USB device number 2 using xhci_hcd
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Dafna,
+On Fri, Mar 5, 2021 at 5:07 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Fri, Mar 05, 2021 at 01:09:16PM +0100, Sedat Dilek wrote:
+> > On Mon, Mar 1, 2021 at 4:53 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > [ ... ]
+> > > You can use usbmon on bus 4 to record the USB traffic.  It may indicate
+> > > why the resets occur.
+> > >
+> >
+> > Hi Alan,
+> >
+> > I followed the instructions in [1].
+> >
+> > root# modprobe -v usbmon
+> >
+> > root# ls /sys/kernel/debug/usb/usbmon
+> > 0s  0u  1s  1t  1u  2s  2t  2u  3s  3t  3u  4s  4t  4u
+> >
+> > root# cat /sys/kernel/debug/usb/usbmon/4u > /tmp/usbmon-log_4u.txt
+> > [ Ctrl+C ]
+> >
+> > I recorded 13:03 - 13:04 (one minute).
+> >
+> > So these xhci-resets should be included:
+> >
+> > [Fri Mar  5 13:03:07 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+> > number 2 using xhci_hcd
+> > [Fri Mar  5 13:03:07 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+> > number 2 using xhci_hcd
+> > [Fri Mar  5 13:03:27 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+> > number 2 using xhci_hcd
+> > [Fri Mar  5 13:03:27 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+> > number 2 using xhci_hcd
+> > [Fri Mar  5 13:03:27 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+> > number 2 using xhci_hcd
+> > [Fri Mar  5 13:03:28 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+> > number 2 using xhci_hcd
+> > [Fri Mar  5 13:03:28 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+> > number 2 using xhci_hcd
+> >
+> > The usbmon-log is attached.
+> >
+> > Unsure how to interpret the log - the kernel-doc says `raw data`.
+> > How can I bring this into a human-readable format?
+> > Can you give me a hand?
+>
+> Don't worry about trying to decode the output.  To me it looks like the
+> drive crashes and needs to be reset at times when the computer sends it
+> an ATA command.  (Not all ATA commands, but some.)  You can prevent this
+> by setting the following module parameter for the usb-storage driver:
+>
+>         quirks=174c:55aa:t
+>
+> where the two numbers are the Vendor and Product IDs for the external
+> drive, and the 't' is a quirks flag saying not to use any ATA commands.
+> If this module parameter fixes the problem, we can add a permanent quirk
+> setting to the kernel.
+>
 
-On Fri, Mar 05, 2021 at 04:14:03PM +0100, Dafna Hirschfeld wrote:
-> Hi
-> 
-> On 05.03.21 15:34, Laurent Pinchart wrote:
-> > Hi Dafna,
-> > 
-> > Thank you for the patch.
-> > 
-> > On Fri, Mar 05, 2021 at 01:43:50PM +0100, Dafna Hirschfeld wrote:
-> > > ANX7688 is a USB Type-C port controller with a MUX. It converts HDMI 2.0 to
-> > > DisplayPort 1.3 Ultra-HDi (4096x2160p60).
-> > > The integrated crosspoint switch (the MUX) supports USB 3.1 data transfer
-> > > along with the DisplayPort Alternate Mode signaling over USB Type-C.
-> > > Additionally, an on-chip microcontroller (OCM) is available to manage the
-> > > signal switching, Channel Configuration (CC) detection, USB Power
-> > > Delivery (USB-PD), Vendor Defined Message (VDM) protocol support and other
-> > > functions as defined in the USB TypeC and USB Power Delivery
-> > > specifications.
-> > > 
-> > > ANX7688 is found on Acer Chromebook R13 (elm) and on
-> > > Pine64 PinePhone.
+Thanks Alan.
 
-Thanks for your work on the bindings. :) It would be great to find something
-acceptable for mainlining.
+I did:
 
-A few comments based on my experience implementing the USB-PD part for PinePhone
-are bellow.
+[ /etc/modules-load.d/usb-storage.conf ]
 
-> > > +properties:
-> > > +  compatible:
-> > > +    const: analogix,anx7688
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  avdd33-supply:
-> > > +    description: 3.3V Analog core supply voltage.
-> > > +
-> > > +  dvdd18-supply:
-> > > +    description: 1.8V Digital I/O supply voltage.
-> > > +
-> > > +  avdd18-supply:
-> > > +    description: 1.8V Analog core power supply voltage.
-> > > +
-> > > +  avdd10-supply:
-> > > +    description: 1.0V Analog core power supply voltage.
-> > > +
-> > > +  dvdd10-supply:
-> > > +    description: 1.0V Digital core supply voltage.
-> > > +
-> > 
-> > That's lots of supplies. If there's a reasonable chance that some of
-> > them will always be driven by the same regulator (especially if the
-> > ANX7688 documentation requires that), then they could be grouped. For
-> > instance dvdd18-supply and avdd18-supply could be grouped into
-> > vdd18-supply. It would still allow us to extend the bindings in a
-> > backward compatible way later if a system uses different regulators. You
-> > have more information about the hardware than I do, so it's your call.
+# Add quirks for ATA commands for usb-storage devices connected to
+ASMedia M1042 USB-3.0 controller
+options usb-storage quirks=174c:55aa:t
+- EOF -
 
-On PinePhone, AVDD and DVDD for 1.0V are just separately fitlered outputs
-from the same regulator. So it would work there to just use vdd18 and
-vdd10. The same is true for reference design, so it's probably safe
-to assume this can be simplified.
+It is:
 
-> > > +  hdmi5v-supply:
-> > > +    description: 5V power supply for the HDMI.
-> > > +
-> > > +  hdmi_vt-supply:
-> > > +    description: Termination voltage for HDMI input.
-> > 
-> > Maybe hdmi-vt-supply ?
-> > 
-> > > +
-> > > +  clocks:
-> > > +    description: The input clock specifier.
-> > > +    maxItems: 1
-> > 
-> > How about
-> > 
-> >      items:
-> >        - description: The input clock specifier.
-> > 
-> > > +
-> > > +  clock-names:
-> > > +    items:
-> > > +      - const: xtal
-> > > +
-> > > +  hpd-gpios:
-> > > +    description: |
-> > > +      In USB Type-C applications, DP_HPD has no use. In standard DisplayPort
-> > > +      applications, DP_HPD is used as DP hot-plug.
-> > > +    maxItems: 1
+/lib/modules/5.12.0-rc1-11-amd64-clang13-cfi/kernel/drivers/usb/storage/usb-storage.ko
 
-On PinePhone this is wired to a HDMI port on the SoC, and HPD is handled by the
-sun4i HDMI DRM driver. Seems like HPD will be handled by HDMI controller on
-many/all? other platforms too. Why have it here?
+But:
 
-> > > +  enable-gpios:
-> > > +    description: Chip power down control. No internal pull-down or pull-up resistor.
-> > > +    maxItems: 1
-> > > +
-> > > +  reset-gpios:
-> > > +    description: Reset input signal. Active low.
-> > > +    maxItems: 1
-> > > +
-> > > +  vbus-det-gpios:
-> > > +    description: |
-> > > +      An input gpio for VBUS detection and high voltage detection,
-> > > +      external resistance divide VBUS voltage to 1/8.
-> > > +    maxItems: 1
+root# lsmod | grep usb | grep storage
+usb_storage            90112  2 uas
+scsi_mod              307200  6 sd_mod,usb_storage,uas,libata,sg,sr_mod
+usbcore               385024  14
+usbserial,xhci_hcd,ehci_pci,usbnet,usbhid,usb_storage,usb_wwan,uvcvideo,ehci_hcd,btusb,xhci_pci,cdc_ether,uas,option
 
-Why have this in the bindings? It seems that this is handled internally by the
-ANX7688 via OCM firmware. And it's not really gpio either, it's an analog input
-with AD converter hooked to it internally.
+I have not rebooted yet.
 
-> > > +  interrupts:
-> > > +    description: |
-> > > +      The interrupt notifies 4 possible events - TCPC ALERT int, PD int, DP int, HDMI int.
-> > > +    maxItems: 1
-> > > +
-> > > +  cabledet-gpios:
-> > > +    description: An output gpio, indicates by the device that a cable is plugged.
-> > > +    maxItems: 1
-> > > +
-> > > +  vbus-ctrl-gpios:
-> > > +    description:
-> > > +      External VBUS power path. Enable VBUS source and disable VBUS sink or vice versa.
-> > > +    maxItems: 1
+Interferences with PowerTop?
 
-VBUS control seems to be already modelled by the usb-connector bindings. Why
-have this here?
+These xhci-resets happen every 10mins in a sequence of 4.
 
-> > > +  vconn-en1-gpios:
-> > > +    description: Controls the VCONN switch on the CC1 pin.
-> > > +    maxItems: 1
-> > > +
-> > > +  vconn-en2-gpios:
-> > > +    description: Controls the VCONN switch on the CC2 pin.
-> > > +    maxItems: 1
+I have here a powertop.service (systemd) with passing --auto-tune option.
+That was not a problem with previous Linux-kernels >= v5.12-rc1, so.
 
-VCONN is a voltage regulator that can be enabled either on CC1 or CC2
-pin, or disabled completely. This control is *partially* performed in reference
-design directly by the OCM. OCM only decides which CC pin to switch
-the VCONN regulator to, and informs the SoC when the base VCONN regulator
-for the switches needs to be enabled.
+Alan, what do you think?
 
-So vconn-en1/2 gpios are irrelevant to the driver, but the driver needs
-to control VCONN power supply somehow and defer control over it to the OCM.
-
-I don't know how to express it in the bindings. Maybe a vconn-supply here
-on the anx7688 node?
-
-It may also be part of the usb-connector binding, but this is really when it
-comes to anx7688 a parent regulator for the switches, and switches are not
-controlled by this driver, just their parent regulator is.
-
-Any ideas?
-
-kind regards,
-	o.
-
-> > > +  ports:
-> > > +    $ref: /schemas/graph.yaml#/properties/ports
-> > > +
-> > > +    properties:
-> > > +      port@0:
-> > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > +        description: Video port for HDMI input.
-> > > +
-> > > +      port@1:
-> > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > +        description: USB port for the USB3 input.
-> > > +
-> > > +      port@2:
-> > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > +        description: USB Type-c connector, see connector/usb-connector.yaml.
-> > > +
-> > > +    required:
-> > > +      - port@0
-> > 
-> > As all the ports exist at the hardware level, should they always be
-> > present ? The endpoints are optional of course, in case a port isn't
-> > connected on a particular system.
-> > 
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > 
-> > Shouldn't clocks and regulators be also required ?
-> 
-> hmm, theoretically yes. Practically, in the case of Acer R13 (mediatek elm) device,
-> the ANX7688 is powered up and controlled by the Embedded Controller. The kernel only
-> needs to read few registers from that device for the drm bridge driver.
-> (also mentioned that in the cover letter).
-> 
-> Thanks,
-> Dafna
+- Sedat -
