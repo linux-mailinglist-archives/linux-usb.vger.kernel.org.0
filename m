@@ -2,76 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E45AA32E4D1
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 10:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B2932E4EB
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 10:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbhCEJa0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Mar 2021 04:30:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38580 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229494AbhCEJaQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 5 Mar 2021 04:30:16 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 3260E64F53
-        for <linux-usb@vger.kernel.org>; Fri,  5 Mar 2021 09:30:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614936616;
-        bh=f7DvF+Pr9QWPnXCL9TORwgNs7EEC8qOb95s7zBsmi0Q=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=FknOgsOiE2Z5/AgoRlOabGRUt7NQpOpjvqGzXu4S0kCQtG3o20Y/lMqvDJnbqXEFq
-         jyoEU04hUxIbGXuc8lhyshF4H/WLDj9vOGAgGyJ2o8k811HS8HbhhA6FBLlx1M+Eml
-         4bmK9jiJ1CEfjJLkMvZWmUBH/0Fi62SJR/CEjG5/7LHUNtEwFQ84n2gNNBDDda5tJa
-         tSYFcEsomM/FLQclvrc1OxMyVnI4Q+/lJxSCcyXGoQ9eBaS0Krvlm7PcB/X0O1xKQ5
-         c9Q5vulpXXAtr2ESYC3vmgE86h5Y5diQ1pOTggB2tnB4Q9oJS1QaM1JBmHGLAPqJ+a
-         JHTYx7JWtQX9A==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 2598261484; Fri,  5 Mar 2021 09:30:16 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 212045] dwc2 gadget mode read call blocks
-Date:   Fri, 05 Mar 2021 09:30:15 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: Minas.Harutyunyan@synopsys.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-212045-208809-e4wS8Cbq6K@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-212045-208809@https.bugzilla.kernel.org/>
-References: <bug-212045-208809@https.bugzilla.kernel.org/>
+        id S229608AbhCEJdH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Mar 2021 04:33:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229660AbhCEJcf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Mar 2021 04:32:35 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CB4C061574;
+        Fri,  5 Mar 2021 01:32:35 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id f20so1271659ioo.10;
+        Fri, 05 Mar 2021 01:32:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Jw0JfBHB7mCavf0o1VSw42/OmHMIkBLhJKIKaZgO2sY=;
+        b=CEXliW8d9PXq9LU4kq6kWjGFQt4JTn0towAV0HBSPjci5aGZ6yckckUpXTTUCx/egW
+         t8UueiEaZYYTYZKUq9O6i8GCzHHCPXY/zD6XJs6t1CJAyzOSb6xSWADbuAjfhKc42IX5
+         jc7yP5Iinl+g3AsSM4QGValjGNSk3d/XsVufRvwbU2Q1kZz/LfQL4EuvUUz8KwtzyqI4
+         r3GBxHMD1Ax1g/i3m3hMbnvjpnpgbj872SZ3oiX4RdrizPQvB1ybbIGzE4OWDCtsTZS0
+         ZuIk06KZxo7p1EGBXVkm+uYpaStctimdONIvz/qR6MgjFMvAGskQOShvC7TbspsGjx5h
+         s7yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Jw0JfBHB7mCavf0o1VSw42/OmHMIkBLhJKIKaZgO2sY=;
+        b=X2uK8mjqcZC5xsVFF9Ctq7FA89AdBqrMT5DYxtOnry1nY4vjvmxgidxcPF2xiizxlh
+         GXrhMkHv8c1JIEH4tIgYMgco9nK0JjFZ5OnDN/YQamIR9PvgOjbFepj0Jx+FkT4AOOit
+         VMzFJ/Oti8hXTmmSlWKQnG3Dsz8h16BWPgdnI2n9YHgtfqRwrmgxOIok8Elt2ZoBL0pV
+         4bOmfcUf+3Tg0Larjh2Wo4M1+EGiWUEohDPEk4K5R30TWLb5WFfUpEyjpcVOPaceXnrC
+         KESGHNx3dimmxPqgb7KV3UMal+OrBVNUrldyVpaYl1bEf0L14i5QeR/9ggBJzv/Jr8zu
+         fhKg==
+X-Gm-Message-State: AOAM531q0zAInD64IPXqs1GvbA+BRPipZ1RYeA0D/TIBziIyMMg+cdHq
+        07qZZBSe/lG3r0t7fDEIIuljO7S4Q3OADJMRzzkf7Sv6O/JHqA==
+X-Google-Smtp-Source: ABdhPJyvqlEyXuCteyoxkDh20LSr7aDK6V25HlwavDrKebzZWyL/h5qKCOdIAcgvBSkLfAbmMpQRHKzG75Ow9HL8Dxo=
+X-Received: by 2002:a5d:9e03:: with SMTP id h3mr7450905ioh.94.1614936755055;
+ Fri, 05 Mar 2021 01:32:35 -0800 (PST)
+MIME-Version: 1.0
+References: <YDPO/JprcDTaPmR4@hovoldconsulting.com> <0f9caf26-af58-13a9-9947-47bb646f505e@IEEE.org>
+ <YDPS3AP63/PwmwJU@hovoldconsulting.com> <780b9aa6-890d-47fd-d6b2-cd9a39f7634a@IEEE.org>
+ <YDUiuLtwRkZ0D0Mi@hovoldconsulting.com> <f63df659-6cdf-bba6-f892-1012b98f82e2@IEEE.org>
+ <YDUp0tIThOZSTHJt@hovoldconsulting.com> <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
+ <YDUysZY90FfVhrHK@hovoldconsulting.com> <CAAZvQQ6F=cQ-EhC0kgeTVM3GrtBWR+HfM6UJWj2AEF1NYZ-vAQ@mail.gmail.com>
+ <YDaGRRYrEO5BEJv0@hovoldconsulting.com>
+In-Reply-To: <YDaGRRYrEO5BEJv0@hovoldconsulting.com>
+From:   Charles Yeh <charlesyeh522@gmail.com>
+Date:   Fri, 5 Mar 2021 17:32:23 +0800
+Message-ID: <CAAZvQQ7+b9=DKqPxgsXxS7Lhqj=QTzKHCMarSbsQkAnYqdO1GA@mail.gmail.com>
+Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+To:     Johan Hovold <johan@kernel.org>
+Cc:     "Michael G. Katzmann" <michaelk@ieee.org>,
+        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Joe Abbott <jabbott@rollanet.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D212045
+110 bps is not the standard Baud rate,
+PL2303TA don't work with the current Linux driver (d5 0e 00 80), It
+needs to "a8 a6 01 80"
 
-Minas Harutyunyan (Minas.Harutyunyan@synopsys.com) changed:
+Charles.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |Minas.Harutyunyan@synopsys.
-                   |                            |com
+Johan Hovold <johan@kernel.org> =E6=96=BC 2021=E5=B9=B42=E6=9C=8825=E6=97=
+=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=881:00=E5=AF=AB=E9=81=93=EF=BC=9A
 
---- Comment #4 from Minas Harutyunyan (Minas.Harutyunyan@synopsys.com) ---
-According to dmesg, you use follow EP's: ep0in, ep0out, ep1in and ep1out. W=
-hy
-you refer to not used ep2?
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+> But can you confirm that your PL2303TA works with the current Linux
+> driver at 110 Bd (and doesn't need the alternate divisor encoding)?
+>
