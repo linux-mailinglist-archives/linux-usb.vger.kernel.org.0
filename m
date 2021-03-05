@@ -2,222 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5907032F41C
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 20:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8E332F429
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 20:42:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbhCETjn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Mar 2021 14:39:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44790 "EHLO
+        id S229851AbhCETmW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Mar 2021 14:42:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbhCETjL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Mar 2021 14:39:11 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F423C061760
-        for <linux-usb@vger.kernel.org>; Fri,  5 Mar 2021 11:39:11 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id e6so2058925pgk.5
-        for <linux-usb@vger.kernel.org>; Fri, 05 Mar 2021 11:39:11 -0800 (PST)
+        with ESMTP id S230112AbhCETmR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Mar 2021 14:42:17 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EE6C06175F;
+        Fri,  5 Mar 2021 11:42:17 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id g27so3256334iox.2;
+        Fri, 05 Mar 2021 11:42:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UgCr6hdRLCVnDw3Q+MRjSwBH3PsB9lFsx9LsyPbCsmE=;
-        b=IoBNiMoJa19UOncWGIfHbZu7h5Zy6Ebgro4l98OELahd5jTNQ3PUtEsQdWXOqB9To3
-         qklHz1vaK5rFfsES+PxkjDRy/QNnLm+ggu4+TUxAA0bN/JnipZOt5oaL6O6FUHsIwah+
-         smlRYLi9OJZaDA/bXD0za4xYwUuOSq48tR8kI=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=nt32QhVHzb3AENSb5YIy5UA4K+u/RYIwLbCnQB1uC4Q=;
+        b=cN6sWaGUr7uk5054iUQya5vyfzhWjihiu9zHJixqNTx+519hMe0GIVJpQ03aebfcLX
+         OXjfPzZKOBACLFgu+N1y+PzR5mqiyOV4UmlkpP3HL2zbykb4Eg1uWUndqaGR1aIJQeoM
+         xfDsdZIDmhrtxStve4B+yZ+kRkijzgzJwX496jFvjUPGcSRfx4zwNLaWogxESSV9LGXt
+         r8ZjCZJPDsDa+a0b23ebjmfUb1Hb3YyBVHX/I2PVM3P3SRhjQyT7/J1FtfwORo+EyvwT
+         1whISDx+BMTNGnbRN1Z/HMfHDKAG1jWRydHnRw5Da9ub6DsAJebqRzfGO85ZV/bN7yO6
+         lPMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UgCr6hdRLCVnDw3Q+MRjSwBH3PsB9lFsx9LsyPbCsmE=;
-        b=Poz0QhSajSC6ic2OQNWWkHoVMHYanYCkB+37cV0hGtVNcMGlWuzb8JcuNtkQivLaJz
-         lpKomleuz0hn+Q4KcYdhdkbaWaSc3y/o78ThvPZYqzXpA0Z7Ojfl3lyIjDZZPTfo7MbW
-         YEJc+/WkWsgh4peYk5SwlzRpB50LslRRyeVBpHo1MM0LS+cb1rcl/KhxNFZ0/QLZuLG5
-         JtI/8fAghsEyVpmorU9cb0rsF89hu26Dc7Z/Cz06OAMp0A9HCD/ST8NM4qVxTKY80lnR
-         ie7HTQG5MLQoHNq8SJ97gGOyQAnexQMmQDGaUXBWjYAkBAK2m9WMpqtk5UXN5ZjG8Vf4
-         3v3A==
-X-Gm-Message-State: AOAM533F9hSVTiyPXEXwdMGkvXLyrCOWzLtUJf3gI3wHWeV03Uq1NFWe
-        sW2EUicc2CfF/B79FDT7WkTVWw==
-X-Google-Smtp-Source: ABdhPJwmwZnPQYA4i3pVXq1Hsdaw4WiLUNjOJz7X/E1kRuc4REike/TqcoBoKpuhS0dTeeaylFVKAw==
-X-Received: by 2002:a63:4343:: with SMTP id q64mr9838961pga.109.1614973151233;
-        Fri, 05 Mar 2021 11:39:11 -0800 (PST)
-Received: from localhost ([2620:15c:202:1:2878:25d1:94cb:a547])
-        by smtp.gmail.com with UTF8SMTPSA id b3sm3116567pjg.41.2021.03.05.11.39.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Mar 2021 11:39:10 -0800 (PST)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Peter Chen <peter.chen@nxp.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-kernel@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
-        linux-usb@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v6 5/5] arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
-Date:   Fri,  5 Mar 2021 11:38:53 -0800
-Message-Id: <20210305113832.v6.5.Ie0d2c1214b767bb5551dd4cad38398bd40e4466f@changeid>
-X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
-In-Reply-To: <20210305193853.2040456-1-mka@chromium.org>
-References: <20210305193853.2040456-1-mka@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=nt32QhVHzb3AENSb5YIy5UA4K+u/RYIwLbCnQB1uC4Q=;
+        b=ive7mP+kY+LEwfdWeAQGO4jCpFGFY9izn+6GHCu499/kk7CDRoBHWMYKwcq9tLXJsu
+         qVdrvvtIiQRONcmUXsl7nHQc7ruaTjsXXQ9bbBSLDuRDEqWYL0MaZU+Hblzn4r+QhDcm
+         YCOLVNb2mwJiiDekAUl+M/55CKnBw/UVi0YBuhlTy5BBvIei7bL3Cm70RVcCG62QPhOe
+         S/zRgLtFL4FHSdGEBzRwI6Vo2iZSgZC+qEtutiQhE7iamiXMZNtZHUfK8tTr77inOb7p
+         f4sDk15MQjlTMsUoRIrf0wGt7YzPfuOjANi+ItKCatH2cXIm1f4ooguqRbEGB1iZFEYR
+         jyGw==
+X-Gm-Message-State: AOAM532TLwxD+PZ+V5AXOgtv0IM17X6SqAoLHiazyStAqZ9do22Rtvbx
+        kkjn2MWRsQpsEKEeqKqSqY6xnyLAQR7Y0EQA5fABZQuqbAO63g==
+X-Google-Smtp-Source: ABdhPJxZISgEXK/GkurIncyKWx/JpMQGogEABHu8j6Ql6/X3NDp+W67mWZNUAZ3SnOsWwNabIRjCPi+aXkOqniG+Y5I=
+X-Received: by 2002:a02:b890:: with SMTP id p16mr11266473jam.138.1614973336876;
+ Fri, 05 Mar 2021 11:42:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CA+icZUWJyPTefHkGEgQtDO9TOM4CN_b2qPJGQVF7NE=Q=fGAEQ@mail.gmail.com>
+ <CA+icZUUzBvmi9SvJ4Bh8ER_+Rkm9vv9FkKwoS8ofmRsko_fJhg@mail.gmail.com>
+ <CA+icZUXCgW0bPcqNf+DSubBciQeBMbNX5zbjkMXinqRdkE1PfA@mail.gmail.com>
+ <20210301155321.GA1490228@rowland.harvard.edu> <CA+icZUVpQtsq8y=rjR3Ad_G1VXWpR4D4xao8DGUkRiuxoT+cPA@mail.gmail.com>
+ <20210305160728.GE38200@rowland.harvard.edu> <CA+icZUXnjDwyKEoX_7KOaVd=PpvEQhpJRvwZbW_xocDfXZpUzQ@mail.gmail.com>
+ <CA+icZUUFGh5CWH-UJK4T-h_Qd2KNnOCrGuT8fg0+Fvjm0C2kbg@mail.gmail.com> <20210305193003.GE48113@rowland.harvard.edu>
+In-Reply-To: <20210305193003.GE48113@rowland.harvard.edu>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 5 Mar 2021 20:41:40 +0100
+Message-ID: <CA+icZUXUAVAusGBKSAtUEN1kH2PLchpi0cU+w-m67QznA7+F4A@mail.gmail.com>
+Subject: Re: [xhci] usb 4-1: reset SuperSpeed Gen 1 USB device number 2 using xhci_hcd
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add nodes for the onboard USB hub on trogdor devices. Remove the
-'always-on' and 'boot-on' properties from the hub regulator, since
-the regulator is now managed by the onboard_usb_hub driver.
+On Fri, Mar 5, 2021 at 8:30 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Fri, Mar 05, 2021 at 08:22:22PM +0100, Sedat Dilek wrote:
+> > The quirks match:
+> >
+> > [Fri Mar  5 20:06:56 2021] usb-storage 4-1:1.0: USB Mass Storage device detected
+> > [Fri Mar  5 20:06:56 2021] usb-storage 4-1:1.0: Quirks match for vid
+> > 174c pid 55aa: 400000
+> >
+> > That seems not to be the trick:
+> >
+> > root# LC_ALL=C dmesg -T | grep 'usb 4-1:'
+> > [Fri Mar  5 20:06:55 2021] usb 4-1: new SuperSpeed Gen 1 USB device
+> > number 2 using xhci_hcd
+> > [Fri Mar  5 20:06:55 2021] usb 4-1: New USB device found,
+> > idVendor=174c, idProduct=55aa, bcdDevice= 1.00
+> > [Fri Mar  5 20:06:55 2021] usb 4-1: New USB device strings: Mfr=2,
+> > Product=3, SerialNumber=1
+> > [Fri Mar  5 20:06:55 2021] usb 4-1: Product: MEDION HDDrive-n-GO
+> > [Fri Mar  5 20:06:55 2021] usb 4-1: Manufacturer: MEDION
+> > [Fri Mar  5 20:06:55 2021] usb 4-1: SerialNumber: 3180000000000000092C
+> > [Fri Mar  5 20:06:57 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
+> > number 2 using xhci_hcd
+>
+> Okay, that indicates the ATA commands are being sent not by the kernel
+> but by some program.  I'm not sure how you can easily find out which
+> program; probably the best thing to do is turn them off one by one until
+> you find the one responsible.
+>
 
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
----
+I can hardly imagine which user-space tools other than powertop can
+interfere here.
+Any ideas?
 
-Changes in v6:
-- added 'companion-hub' entry to both USB devices
-- added 'vdd-supply' also to hub@2
+I will remove or better comment the quirks in
+/etc/modules-load.d/usb-storage.conf for now.
 
-Changes in v5:
-- patch added to the series
-
- .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts | 19 +++++++----------
- .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts | 11 ++++------
- .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts | 15 ++++++-------
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 21 ++++++++++++++++---
- 4 files changed, 36 insertions(+), 30 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-index 30e3e769d2b4..5fb8e12af1a0 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-@@ -14,17 +14,6 @@ / {
- 	compatible = "google,lazor-rev0", "qcom,sc7180";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
--};
--
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
--};
--
- &sn65dsi86_out {
- 	/*
- 	 * Lane 0 was incorrectly mapped on the cable, but we've now decided
-@@ -33,3 +22,11 @@ &sn65dsi86_out {
- 	 */
- 	lane-polarities = <1 0>;
- };
-+
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-index c2ef06367baf..a8c23dddf25b 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-@@ -14,13 +14,10 @@ / {
- 	compatible = "google,lazor-rev1", "google,lazor-rev2", "qcom,sc7180";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
- 
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-index 2cb522d6962e..689c569872f1 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-@@ -53,19 +53,16 @@ ap_ts: touchscreen@10 {
- 	};
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
-+&sdhc_2 {
-+	status = "okay";
- };
- 
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
- 
--&sdhc_2 {
--	status = "okay";
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
- 
- /* PINCTRL - board-specific pinctrl */
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index 07c8b2c926c0..ebff7aca4f51 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -203,9 +203,6 @@ pp3300_hub: pp3300-hub {
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&en_pp3300_hub>;
- 
--		regulator-always-on;
--		regulator-boot-on;
--
- 		vin-supply = <&pp3300_a>;
- 	};
- 
-@@ -826,6 +823,24 @@ &usb_1 {
- 
- &usb_1_dwc3 {
- 	dr_mode = "host";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	/* 2.0 hub on port 1 */
-+	usb_hub_2_0: hub@1 {
-+		compatible = "usbbda,5411";
-+		reg = <1>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_3_0>;
-+	};
-+
-+	/* 3.0 hub on port 2 */
-+	usb_hub_3_0: hub@2 {
-+		compatible = "usbbda,411";
-+		reg = <2>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_2_0>;
-+	};
- };
- 
- &usb_1_hsphy {
--- 
-2.30.1.766.gb4fecdf3b7-goog
-
+- Sedat -
