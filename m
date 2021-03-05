@@ -2,81 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F86C32E30A
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 08:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 092E632E356
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 09:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbhCEHhc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Mar 2021 02:37:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35884 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229616AbhCEHhb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 5 Mar 2021 02:37:31 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D83CF64F59;
-        Fri,  5 Mar 2021 07:37:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1614929851;
-        bh=bvUeCgMjKXHMnR9wZzhu5hhG5YUMC0Dr0Im0Q7UCMbU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2ME6LsTuSFPZ6hKMAHos4aDNqZdYlA+yV1W605eGsrMCjan1eedf9MSPak5MD3ecX
-         F/PD3E8Uk7jz2GTaDk+7IrDYapQmscvuBY8+u1G4nevAti8EM7AMB84EdZP+OX2EnY
-         2r8PrzcfJN5W1CTAHEBbYI5M5m4h3F+F5xxxW9WA=
-Date:   Fri, 5 Mar 2021 08:37:28 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Chien Kun Niu <rickyniu@google.com>
-Cc:     stern@rowland.harvard.edu, erosca@de.adit-jv.com,
-        gustavoars@kernel.org, a.darwish@linutronix.de, oneukum@suse.com,
-        Kyle Tso <kyletso@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, James Wei <jameswei@google.com>
-Subject: Re: [PATCH] ANDROID: usb: core: Send uevent when USB TOPO layer over
- 6
-Message-ID: <YEHfuCFGSpm5ldl0@kroah.com>
-References: <20210226091612.508639-1-rickyniu@google.com>
- <YDi/+TN6AYXropf7@kroah.com>
- <CADRPvQubTEjKeJc=+LQ2jb0L=N4mxY8n21Bf8U-tS1stpB_eGw@mail.gmail.com>
- <YD9SYklmQq5amDA7@kroah.com>
- <CADRPvQtbbxKhvmE1OZ=GRSmfejk5tXYADo=jw52EQdkj1nN78w@mail.gmail.com>
+        id S229601AbhCEIHj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Mar 2021 03:07:39 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:42201 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229489AbhCEIH1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Mar 2021 03:07:27 -0500
+Received: from mail-ot1-f51.google.com ([209.85.210.51]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N2E9Y-1lm63n2Iuc-013cng; Fri, 05 Mar 2021 09:07:25 +0100
+Received: by mail-ot1-f51.google.com with SMTP id a17so1005485oto.5;
+        Fri, 05 Mar 2021 00:07:25 -0800 (PST)
+X-Gm-Message-State: AOAM533vRXAxoUPaBgl0HS7R4QeB7HkjE4SSbsD5JQGn+Ai7Q32FV/Jr
+        VTKktjB1597AN30P4meFPhnnclGiSeaf6scfXj8=
+X-Google-Smtp-Source: ABdhPJxqYuCXgKHG79cARIlIIknf25ifduq2VjGAMPfck87tlTFpc5wPGypB2miMGioSDWeCxnxnQNvQKnonMZbh/Ag=
+X-Received: by 2002:a9d:7f11:: with SMTP id j17mr7135133otq.251.1614931644090;
+ Fri, 05 Mar 2021 00:07:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADRPvQtbbxKhvmE1OZ=GRSmfejk5tXYADo=jw52EQdkj1nN78w@mail.gmail.com>
+References: <20210305034927.3232386-1-weiyongjun1@huawei.com>
+In-Reply-To: <20210305034927.3232386-1-weiyongjun1@huawei.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 5 Mar 2021 09:07:07 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a23Ww39hxmhTCwgZUr1LWO1trj_Dijq1YXGyg0Z1mOCcQ@mail.gmail.com>
+Message-ID: <CAK8P3a23Ww39hxmhTCwgZUr1LWO1trj_Dijq1YXGyg0Z1mOCcQ@mail.gmail.com>
+Subject: Re: [PATCH -next] USB: gadget: udc: s3c2410_udc: fix return value
+ check in s3c2410_udc_probe()
+To:     "'Wei Yongjun" <weiyongjun1@huawei.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org, Hulk Robot <hulkci@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:CHaEdIqKwG3T/zUOLoGwZ+zqo2NWAkLmBho1rTOPqdisV4PiNP+
+ p2BGL6Q3j4YElrJqtgJ0o+1tGRMu8oUgm/3q2ZwfdvGNdm1Je991tSuA6vtAXxLadkSn3+n
+ TDeIbKI8GghsJ8E+CASotghhBdxVV5DNk25IdsXCY0Gy7eMWszfT/87jIszIV5Q4ddxxJfr
+ Of4cRQmKPi1MOkGbYkZ+A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:7k9th40rb8E=:MQtw6gUY57uOyLuH0qWkNF
+ dPl9Agm9R6lbXDEFuWukb4gGg2zYEOJCSJe4cNKq/9oB9N0y8i/o1OZi0TK+4sZT2al0ka9my
+ /nfWdxpRpiclWz/usb14gkbBtKnsqezHe1W44tMlE7a48LPokBpWeQz2Upr2pLslsujrWEEgz
+ AOJMqvujkTBkOluSxrVLw1Cu6IDTTAJq5wgFaY6b0+jOHs2gu0ZXzy/6JrCkWHYZWuOnOT8J+
+ 8KbfLEwdoy/9XaC//8J6RkWlqYTsSJwkDUduksZn0oX+C1AaXmgzq/dOl85KjEpiXLdb/3kWL
+ unlMUMg/TZKp9LCsVoqxxc6BtGOZXlT/G+zdhTa3o8/1zPaFV6xPodN8O8o4pCcAmXmOQGGsg
+ fKM21bYLumKTLw2F1tPcn3obW2HlES2Qay5peToR1P3NbZ4kOwCbk4Kg/tmrKTAYuxA7/CuXT
+ ynRj/JyD1Hh5oize37vVhh4m4LVla0yiomQwL1GyK1udOn2P5+YCHqaIQQLran5SDafm76VyV
+ M5Vjcp06TwEaplNVrcI8SgAfP1cFkgM6NwUTBBxrRQi
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 05, 2021 at 03:17:37PM +0800, Chien Kun Niu wrote:
-> Greg KH <gregkh@linuxfoundation.org> 於 2021年3月3日 週三 下午5:10寫道：
-> >
-> > On Wed, Mar 03, 2021 at 05:03:25PM +0800, Chien Kun Niu wrote:
-> > > Hi , Greg
-> > >
-> > > What tool will "catch" this?  Where is that code located at?
-> > > => I prepare merge the code to Android phone , so I used Android HLOS
-> > > to catch this uevent.
-> >
-> > Very odd quoting style, perhaps you might want to read up on how to do
-> > this properly at:
-> >         https://en.wikipedia.org/wiki/Posting_style#Interleaved_style
-> >
-> > > uevents are not for stuff like this, you are trying to send "error
-> > > conditions" to userspace, please use the "proper" interfaces like this
-> > > and not abuse existing ones.
-> > > => Sorry , I am not sure what is the "proper" interfaces your mean.
-> > >      Could you please give me more description?
-> >
-> > How does the kernel normally send error conditions that it detects in
-> > hardware to userspace?
-> >
-> 
-> I will create a sysfs attribute to record the hub status.
-> If there is a new hub with over 6 USB TOPO layer connected, I will use
-> the sysfs_notify to send the "error conditions" to userspace.
-> Is it a proper interfaces to delivery "error conditions"?
+On Fri, Mar 5, 2021 at 4:49 AM 'Wei Yongjun <weiyongjun1@huawei.com> wrote:
+>
+> From: Wei Yongjun <weiyongjun1@huawei.com>
+>
+> In case of error, the function devm_platform_ioremap_resource()
+> returns ERR_PTR() and never returns NULL. The NULL test in the
+> return value check should be replaced with IS_ERR().
+>
+> Fixes: 188db4435ac6 ("usb: gadget: s3c: use platform resources")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 
-Maybe, it all depends on what you are wanting to show here.  Try it out
-and see, it's easier to review patches that you have shown work properly
-for your use case than it is to try to discuss general issues.
+Nice find, thanks for fixing it!
 
-thanks,
-
-greg k-h
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
