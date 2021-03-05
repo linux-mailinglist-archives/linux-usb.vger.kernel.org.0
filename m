@@ -2,156 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7081632E2D7
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 08:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F86C32E30A
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Mar 2021 08:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbhCEHRv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Mar 2021 02:17:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229465AbhCEHRu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Mar 2021 02:17:50 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABBAC061756
-        for <linux-usb@vger.kernel.org>; Thu,  4 Mar 2021 23:17:50 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id w9so1136221edc.11
-        for <linux-usb@vger.kernel.org>; Thu, 04 Mar 2021 23:17:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QLJ12ANC/PP7G33YJ0w0xUrmaXTmSNmRKBIydpJYLC4=;
-        b=rPB8B2QY3c/gbtUBH3Px9N+1U3JGDARPA9G1v28xS5xrkqVxm94N4iCUUE22PA6azW
-         HjNjBFGwXe7JhURhaiGlBEC5IJxcX43ldg76S+KNlPOCMiZszLjo+r4VprmkqZvRFJVS
-         wNKnB37CGMZL5jTECpPslQDaK9uFKiBlBAoyhAyd5mzh4QTOEmJQl8THPuC8wFEkDOMI
-         nfYXmbVI6CmShKupl0a8QID2HY81Ia3ElcQbTzMZD0xpuxSrRLu+lRCoAc5Ky7fAMYdx
-         pKFTCQORfPwsq4OdrynIUSX8M8Qw/9yHhhiixARWjepWJck2V/9xRiHVazZ3CsUAVlZh
-         80Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QLJ12ANC/PP7G33YJ0w0xUrmaXTmSNmRKBIydpJYLC4=;
-        b=CZONUYW5UXkib9D4L3cEsGfeRkR5zuxempOQ2eBtFPPCiwdhnbI+mMP+/gsXQX3tA9
-         8TYhOEVAnRhs6OdgKNoxM98RdqHhin5dQnJA4cIsCYKLAK5zS3xJY285QnYsKKIBq8m9
-         nBkqH9WrXaW6L6K1iMQwvDcEgtkR22307xRBvxo2XqX7daYusfEfTsU4pTGQdRT1HQMQ
-         +SXmbGvbToONxiU/U+a9p2aoHonhmDNOPd5rjOogWd8eGIQigO5N2h/0B0w735GnIxvJ
-         EXXZ+CnhsMijTSn2xy5/nYRaXb4Jw3y6x75gaM6iXN/m/8x9Do1V314LLaCYtIgOYV4i
-         OXhw==
-X-Gm-Message-State: AOAM532QhykhxxffiaGaHWHw5hmG8CU6twSBGIeXH0H1j7AqWm/eV7fO
-        8B0J2SlzR2M/VS5gFPAL3ch9r7AksD0zHfobIsYckg==
-X-Google-Smtp-Source: ABdhPJzxJTRIoEpkX5faeWURqXqG0yeZXi3wHPUCvf14krGAcSWmk1f3Skge8emQM8fpv47b9OVzyM4VkfvYAsAt2zU=
-X-Received: by 2002:a05:6402:3552:: with SMTP id f18mr6482783edd.240.1614928668820;
- Thu, 04 Mar 2021 23:17:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20210226091612.508639-1-rickyniu@google.com> <YDi/+TN6AYXropf7@kroah.com>
- <CADRPvQubTEjKeJc=+LQ2jb0L=N4mxY8n21Bf8U-tS1stpB_eGw@mail.gmail.com> <YD9SYklmQq5amDA7@kroah.com>
-In-Reply-To: <YD9SYklmQq5amDA7@kroah.com>
-From:   Chien Kun Niu <rickyniu@google.com>
-Date:   Fri, 5 Mar 2021 15:17:37 +0800
-Message-ID: <CADRPvQtbbxKhvmE1OZ=GRSmfejk5tXYADo=jw52EQdkj1nN78w@mail.gmail.com>
-Subject: Re: [PATCH] ANDROID: usb: core: Send uevent when USB TOPO layer over 6
-To:     Greg KH <gregkh@linuxfoundation.org>
+        id S229458AbhCEHhc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Mar 2021 02:37:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35884 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229616AbhCEHhb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 5 Mar 2021 02:37:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D83CF64F59;
+        Fri,  5 Mar 2021 07:37:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1614929851;
+        bh=bvUeCgMjKXHMnR9wZzhu5hhG5YUMC0Dr0Im0Q7UCMbU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2ME6LsTuSFPZ6hKMAHos4aDNqZdYlA+yV1W605eGsrMCjan1eedf9MSPak5MD3ecX
+         F/PD3E8Uk7jz2GTaDk+7IrDYapQmscvuBY8+u1G4nevAti8EM7AMB84EdZP+OX2EnY
+         2r8PrzcfJN5W1CTAHEBbYI5M5m4h3F+F5xxxW9WA=
+Date:   Fri, 5 Mar 2021 08:37:28 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Chien Kun Niu <rickyniu@google.com>
 Cc:     stern@rowland.harvard.edu, erosca@de.adit-jv.com,
         gustavoars@kernel.org, a.darwish@linutronix.de, oneukum@suse.com,
         Kyle Tso <kyletso@google.com>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, James Wei <jameswei@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] ANDROID: usb: core: Send uevent when USB TOPO layer over
+ 6
+Message-ID: <YEHfuCFGSpm5ldl0@kroah.com>
+References: <20210226091612.508639-1-rickyniu@google.com>
+ <YDi/+TN6AYXropf7@kroah.com>
+ <CADRPvQubTEjKeJc=+LQ2jb0L=N4mxY8n21Bf8U-tS1stpB_eGw@mail.gmail.com>
+ <YD9SYklmQq5amDA7@kroah.com>
+ <CADRPvQtbbxKhvmE1OZ=GRSmfejk5tXYADo=jw52EQdkj1nN78w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADRPvQtbbxKhvmE1OZ=GRSmfejk5tXYADo=jw52EQdkj1nN78w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greg KH <gregkh@linuxfoundation.org> =E6=96=BC 2021=E5=B9=B43=E6=9C=883=E6=
-=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=885:10=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Wed, Mar 03, 2021 at 05:03:25PM +0800, Chien Kun Niu wrote:
-> > Hi , Greg
+On Fri, Mar 05, 2021 at 03:17:37PM +0800, Chien Kun Niu wrote:
+> Greg KH <gregkh@linuxfoundation.org> 於 2021年3月3日 週三 下午5:10寫道：
 > >
-> > What tool will "catch" this?  Where is that code located at?
-> > =3D> I prepare merge the code to Android phone , so I used Android HLOS
-> > to catch this uevent.
->
-> Very odd quoting style, perhaps you might want to read up on how to do
-> this properly at:
->         https://en.wikipedia.org/wiki/Posting_style#Interleaved_style
->
-> > uevents are not for stuff like this, you are trying to send "error
-> > conditions" to userspace, please use the "proper" interfaces like this
-> > and not abuse existing ones.
-> > =3D> Sorry , I am not sure what is the "proper" interfaces your mean.
-> >      Could you please give me more description?
->
-> How does the kernel normally send error conditions that it detects in
-> hardware to userspace?
->
+> > On Wed, Mar 03, 2021 at 05:03:25PM +0800, Chien Kun Niu wrote:
+> > > Hi , Greg
+> > >
+> > > What tool will "catch" this?  Where is that code located at?
+> > > => I prepare merge the code to Android phone , so I used Android HLOS
+> > > to catch this uevent.
+> >
+> > Very odd quoting style, perhaps you might want to read up on how to do
+> > this properly at:
+> >         https://en.wikipedia.org/wiki/Posting_style#Interleaved_style
+> >
+> > > uevents are not for stuff like this, you are trying to send "error
+> > > conditions" to userspace, please use the "proper" interfaces like this
+> > > and not abuse existing ones.
+> > > => Sorry , I am not sure what is the "proper" interfaces your mean.
+> > >      Could you please give me more description?
+> >
+> > How does the kernel normally send error conditions that it detects in
+> > hardware to userspace?
+> >
+> 
+> I will create a sysfs attribute to record the hub status.
+> If there is a new hub with over 6 USB TOPO layer connected, I will use
+> the sysfs_notify to send the "error conditions" to userspace.
+> Is it a proper interfaces to delivery "error conditions"?
 
-I will create a sysfs attribute to record the hub status.
-If there is a new hub with over 6 USB TOPO layer connected, I will use
-the sysfs_notify to send the "error conditions" to userspace.
-Is it a proper interfaces to delivery "error conditions"?
+Maybe, it all depends on what you are wanting to show here.  Try it out
+and see, it's easier to review patches that you have shown work properly
+for your use case than it is to try to discuss general issues.
 
-> > You just created a whole new sysfs class with no Documentation/ABI/
-> > update?
-> > =3D> Yes, I will add it.
-> >
-> > Wait, how did you even test this code?  This will not work if you have
-> > more than one hub in the system at a single time, right?
-> > =3D> I build the test build which flash in Android phone and connect
-> > several hubs to try it.
-> >      When the new hub which met MAX_TOPO_LEVEL connected , it sent
-> > notify to user space.
-> >
-> > Phone ------=E2=86=93
-> >                  hub ------=E2=86=93
-> >                              hub ------=E2=86=93
-> >                                            ...------=E2=86=93
-> >                                                     hub
-> >
-> >      if (hdev->level =3D=3D MAX_TOPO_LEVEL) {
-> >                 dev_err(&intf->dev,
-> >                         "Unsupported bus topology: hub nested too deep\=
-n");
-> >                 hub_over_tier();
-> >                 return -E2BIG;
-> >      }
-> >
->
-> But you only have a single hub variable, and a huge memory leak, did you
-> not detect that in your testing?
->
-> > So, proof that this works?  How did you test this?
-> > =3D> I use the Pixel phone to verify the code , the framework received
-> > the uevent when the last connected hub over "MAX_TOPO_LEVEL".
->
-> Try it on a desktop as well, with many hubs and see what happens :(
->
-> > Also, you have a memory leak in this submission :(
-> > =3D> Do you mean I should add device_destroy here ?
->
-> What do you think should be done?
->
-> >
-> > hub_device =3D
-> > device_create(hub_class, NULL, MKDEV(0, 0), NULL, "usb_hub");
-> > +if (IS_ERR(hub_device))
-> > +               return PTR_ERR(hub_device);
-> >
-> > void usb_hub_cleanup(void)
-> > {
-> > +if (!IS_ERR(hub_device))
-> > +device_destroy(hub_class, hub_device->devt);
-> >
-> > if (!IS_ERR(hub_class))
-> > class_destroy(hub_class);
->
-> I don't think you are understanding that you can have multiple hubs in
-> the system at the same time :(
->
-> thanks,
->
-> greg k-h
+thanks,
 
-Thanks,
-
-Chien Kun Niu
+greg k-h
