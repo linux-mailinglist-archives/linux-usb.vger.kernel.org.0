@@ -2,60 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC2432FC3D
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Mar 2021 18:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF6C32FC42
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Mar 2021 18:23:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbhCFRUd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 Mar 2021 12:20:33 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:48579 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231256AbhCFRUO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Mar 2021 12:20:14 -0500
-Received: (qmail 76022 invoked by uid 1000); 6 Mar 2021 12:20:13 -0500
-Date:   Sat, 6 Mar 2021 12:20:13 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Aaron Dewes <aaron.dewes@web.de>, linux-usb@vger.kernel.org
-Subject: Re: A question about UAS
-Message-ID: <20210306172013.GE74411@rowland.harvard.edu>
-References: <2ad0d2f9-0ef1-05b5-76db-b178107bfccb@web.de>
- <YEO1t63SQw1Ui4ce@kroah.com>
+        id S231164AbhCFRXM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 6 Mar 2021 12:23:12 -0500
+Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:29407 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230329AbhCFRW4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Mar 2021 12:22:56 -0500
+Received: from [192.168.1.18] ([90.126.17.6])
+        by mwinf5d66 with ME
+        id d5No2400U07rLVE035NpjZ; Sat, 06 Mar 2021 18:22:53 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 06 Mar 2021 18:22:53 +0100
+X-ME-IP: 90.126.17.6
+Subject: Re: [PATCH 2/2 v2] usb: gadget: s3c: Fix the error handling path in
+ 's3c2410_udc_probe()'
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        balbi@kernel.org, gregkh@linuxfoundation.org, nathan@kernel.org,
+        gustavoars@kernel.org, arnd@arndb.de, ben-linux@fluff.org
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <20210306142145.3490-1-christophe.jaillet@wanadoo.fr>
+ <64c3ca58-639f-95af-35e1-7d5ba240a7c9@canonical.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Message-ID: <1fb088c0-c94c-908e-e607-796f834f45f3@wanadoo.fr>
+Date:   Sat, 6 Mar 2021 18:22:48 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YEO1t63SQw1Ui4ce@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <64c3ca58-639f-95af-35e1-7d5ba240a7c9@canonical.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Mar 06, 2021 at 06:02:47PM +0100, Greg KH wrote:
-> On Sat, Mar 06, 2021 at 05:34:32PM +0100, Aaron Dewes wrote:
-> > Hello!
-> > 
-> > Sorry if this suggestion/question sounds stupid, I don't have experience
-> > with the kernel code and this mailing list.
-> > 
-> > I'm a contributor to Umbrel (getumbrel.com), and we provide a software
-> > that allows to run a bitcoin node easily, and we've run into many people
-> > having UAS issues
+Le 06/03/2021 à 17:16, Krzysztof Kozlowski a écrit :
+> On 06/03/2021 15:21, Christophe JAILLET wrote:
+>> Some 'clk_prepare_enable()' and 'clk_get()' must be undone in the error
+>> handling path of the probe function, as already done in the remove
+>> function.
+>>
+>> Fixes: 3fc154b6b813 ("USB Gadget driver for Samsung s3c2410 ARM SoC")
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>> v2: Fix a stupid error in the hash in Fixes:
+>> ---
+>>   drivers/usb/gadget/udc/s3c2410_udc.c | 16 ++++++++++++----
+>>   1 file changed, 12 insertions(+), 4 deletions(-)
+>>
 > 
-> What specific UAS issues?  And why not just fix those instead?
-
-Indeed.  It's always better to fix a problem than to cover it up.
-
-> > , and we were manually adding quirks in this case. Now
-> > I'm wondering if it is possible to disable UAS for all devices in the
-> > kernel cmdline.
+> Do not ignore received tags but add them before sending a new version of patch.
+> https://lore.kernel.org/linux-samsung-soc/36ef897b-aedc-fcc3-89c8-c602d9733a9b@canonical.com/T/#t
 > 
-> Sure, just blacklist the uas kernel module, that prevents it from being
-> loaded and hopefully the device will degrade to the
-> old-school-and-dirt-slow usb-storage protocol.
+> Also somehow your 2nd patch is not in-reply to first one. Don't change
+> the settings of sending patches. git format-patch and
+> git send-email default settings are correct. Look here:
+> https://lore.kernel.org/linux-samsung-soc/
+> Only your patches are not threaded.
+> 
+> Best regards,
+> Krzysztof
+> 
+Hi,
 
-In fact it won't.  The usb-storage driver will see that the device can 
-be managed by the uas driver, so it won't bind.  Then nothing will 
-manage the device.
+sorry for missing the typo in the first patch.
 
-You actually have to turn off CONFIG_USB_UAS when the kernel is built.
+For your other comments above, however, I use standard settings only.
+My patches are generated by commands like:
+    git format-patch -2
 
-Alan Stern
+I use cover letter only if it looks useful. In such a case, I use:
+    git format-patch --thread --cover-letter -2
+
+I've never seen that threading series was the rule and/or that cover 
+letters were a must have. If I'm wrong, sorry, I was not aware of that.
+
+I'll also add the "Reviewed-by:" tag.
+
+
+Thx for the review and explanations.
+
+CJ
