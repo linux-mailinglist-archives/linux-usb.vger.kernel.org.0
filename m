@@ -2,126 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C000F32FCC3
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Mar 2021 20:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4AE32FCC9
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Mar 2021 20:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231350AbhCFT24 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 Mar 2021 14:28:56 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:38752 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbhCFT2a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Mar 2021 14:28:30 -0500
-Received: by mail-ot1-f43.google.com with SMTP id a17so5287791oto.5;
-        Sat, 06 Mar 2021 11:28:30 -0800 (PST)
+        id S231451AbhCFTbG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 6 Mar 2021 14:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231417AbhCFTbE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Mar 2021 14:31:04 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D967C06174A;
+        Sat,  6 Mar 2021 11:31:04 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id e2so5263444ilu.0;
+        Sat, 06 Mar 2021 11:31:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=2lh9+dUR8kVgvf+4hcHiRqiDmfQ8HmE46F/fM16hxVQ=;
+        b=bav/D0rcQqutO1YZNXtcpUEzITsezhHmyAfADOF+++WKuQxQVBA34z8fcIhihZmlD6
+         rXtm2gxPinRBx2kAQed40SzlUic/YDWn31hhStdl6q15wOODx+BwTAgNlfvGsLXDpMPR
+         TodaalRuO6R0nQ0RQvCySe/9fDEXEg/GrOuAPW11Zq0eRRHn472n1+1dXiBkt8kC8Qws
+         b7X7tNmOhioEXDlS7RBFGISeD7Qz9VANwz/2CNcdbvnPrChkxqAaeoswiDjqmuHldpAm
+         FLCLhcsY0YN98AB6FQ3y4MA/IiB7sUkmvDmAwJdS+fU6+kFOJtAsQ2LUP0gIhfREa5RS
+         KHMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=xyiAtqGUhm5WhvdlXAu5lc9wGfvlbIWFApl+PBFJsB0=;
-        b=cD39bHbu6s3gn66EC/pWfX+/cdbbVFDDlhlA6dujQEaOTA08KWySoQezJgxJVWHRcB
-         8nQDJFDSxgSTI+lB8GRyPZhDV3GPSvT5G1p/TkWjJLZ+cPDafgecFRGaBGuyRibHl/7z
-         6kYYwe1Si2uVcRkBT3YLc8gQfLnYry3FtWAOlqVNOwIIrqjMl9Ok81eYXJJVb/zyakZx
-         kHzVSAlj6PSadGhwvTbzvu8ojVOrGcus5PjI3SItvYTrfxBxrU9+M55yOzmFR6HwdoAd
-         UDrOIpDBqhwWyeZFk0+b8Y46YIwKvwIr9DnniBySrYtUAEat701CgS+NIRV6ska/LL89
-         13AQ==
-X-Gm-Message-State: AOAM530+G2TpPebDi7CDFMyMfh3AtySmZnp0HzBsWGzk0FXBLEn6MH2Q
-        4WC+3a7RUMkV6ULQr0NXnw==
-X-Google-Smtp-Source: ABdhPJwliZEDkh8g1tf3lNuUwvOd7FUyIQvQzTzQg1LkJx1/NvzE8AidrB2JtWyHP199xv56OzK8ew==
-X-Received: by 2002:a9d:503:: with SMTP id 3mr3855401otw.77.1615058910377;
-        Sat, 06 Mar 2021 11:28:30 -0800 (PST)
-Received: from robh.at.kernel.org ([172.58.102.249])
-        by smtp.gmail.com with ESMTPSA id w11sm1349866ooc.35.2021.03.06.11.28.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Mar 2021 11:28:29 -0800 (PST)
-Received: (nullmailer pid 1058184 invoked by uid 1000);
-        Sat, 06 Mar 2021 19:28:21 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Bastien Nocera <hadess@hadess.net>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=2lh9+dUR8kVgvf+4hcHiRqiDmfQ8HmE46F/fM16hxVQ=;
+        b=g1qzbMrnk6pTQi0VBLWsnq1y5YmbqgtkZzMC7flpMVOyrmNqMVmLz/PpV8DCG5t9pu
+         iYHLl+FOakgV0y3JVC+c3d/KfDnztCtrG8W9pdhnLXZJFN5+8kGIMrZN4C4UmAjFK123
+         DluVVdyfpkiureyPNXXw6XhzqezP8hjaNCaDc1ygr14Izz0ctB87qZqA+rzrK9slY6uw
+         UWb29RoUNzdD5ADCmlMzDKOBavDInvQW8qpClUqJB2XAO/G5NMH7TlUvqSRA7Zjnndki
+         /GjXaR76SNuWma9cpPdBJdZB2+Z+feCqI2to+SvKF8ZBjdzWNNi0hVzdp9WOGZ3xsf7V
+         qr+A==
+X-Gm-Message-State: AOAM533gGXHbtSBrlwfJCWo/n+4pR9IuBLGHicaMwVhXT/uQHfuxNNyh
+        d38tDeaMDMm/IvfBR0rMK6quZ6VkfnsyWtnz1cAL47ypUHI=
+X-Google-Smtp-Source: ABdhPJxMNTytnXFRmnFIxWtt/BY1W0K+wRvlHPyORrPVvzw6j47ot6IMx+h4E2WngpcUCWgNWEl7kFAchkVqv36u+sE=
+X-Received: by 2002:a05:6e02:13a6:: with SMTP id h6mr14773241ilo.10.1615059063453;
+ Sat, 06 Mar 2021 11:31:03 -0800 (PST)
+MIME-Version: 1.0
+References: <20210301155321.GA1490228@rowland.harvard.edu> <CA+icZUVpQtsq8y=rjR3Ad_G1VXWpR4D4xao8DGUkRiuxoT+cPA@mail.gmail.com>
+ <20210305160728.GE38200@rowland.harvard.edu> <CA+icZUXnjDwyKEoX_7KOaVd=PpvEQhpJRvwZbW_xocDfXZpUzQ@mail.gmail.com>
+ <CA+icZUUFGh5CWH-UJK4T-h_Qd2KNnOCrGuT8fg0+Fvjm0C2kbg@mail.gmail.com>
+ <20210305193003.GE48113@rowland.harvard.edu> <CA+icZUXUAVAusGBKSAtUEN1kH2PLchpi0cU+w-m67QznA7+F4A@mail.gmail.com>
+ <20210305194745.GF48113@rowland.harvard.edu> <CA+icZUXEWh6G-Bm9-2F1X=S=ZYog37PiaMWHUjZWs1g-KDOqJg@mail.gmail.com>
+ <CA+icZUUBpB9UFEypCFmCYc2grUC11QESNwj0_cXfut9fx0JOQA@mail.gmail.com> <20210306165808.GD74411@rowland.harvard.edu>
+In-Reply-To: <20210306165808.GD74411@rowland.harvard.edu>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sat, 6 Mar 2021 20:30:27 +0100
+Message-ID: <CA+icZUVfDvAnHucYtGC3J6OXyFAZ-c9DU0z8s6iqK_g4Y=Nckw@mail.gmail.com>
+Subject: Re: [xhci] usb 4-1: reset SuperSpeed Gen 1 USB device number 2 using xhci_hcd
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        devicetree@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20210305113832.v6.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
-References: <20210305193853.2040456-1-mka@chromium.org> <20210305113832.v6.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
-Subject: Re: [PATCH v6 1/5] dt-bindings: usb: Add binding for Realtek RTS5411 hub controller
-Date:   Sat, 06 Mar 2021 12:28:21 -0700
-Message-Id: <1615058901.081592.1058183.nullmailer@robh.at.kernel.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 05 Mar 2021 11:38:49 -0800, Matthias Kaehlcke wrote:
-> The Realtek RTS5411 is a USB 3.0 hub controller with 4 ports.
-> 
-> This initial version of the binding only describes USB related
-> aspects of the RTS5411, it does not cover the option of
-> connecting the controller as an i2c slave.
-> 
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
-> 
-> Changes in v6:
-> - Realtek binding instead of generic onboard_usb_hub
-> - added 'companion-hub' property
-> - added reference to 'usb-device.yaml'
-> - 'fixed' indentation of compatible entries to keep yamllint happy
-> - added 'additionalProperties' entry
-> - updated commit message
-> 
-> Changes in v5:
-> - updated 'title'
-> - only use standard USB compatible strings
-> - deleted 'usb_hub' node
-> - renamed 'usb_controller' node to 'usb-controller'
-> - removed labels from USB nodes
-> - added 'vdd-supply' to USB nodes
-> 
-> Changes in v4:
-> - none
-> 
-> Changes in v3:
-> - updated commit message
-> - removed recursive reference to $self
-> - adjusted 'compatible' definition to support multiple entries
-> - changed USB controller phandle to be a node
-> 
-> Changes in v2:
-> - removed 'wakeup-source' and 'power-off-in-suspend' properties
-> - consistently use spaces for indentation in example
-> 
->  .../bindings/usb/realtek,rts5411.yaml         | 58 +++++++++++++++++++
->  1 file changed, 58 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
-> 
+On Sat, Mar 6, 2021 at 5:58 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Sat, Mar 06, 2021 at 07:42:30AM +0100, Sedat Dilek wrote:
+> > No, with Debian-Kernel 5.10.19-1 there are no xhci-resets:
+>
+> Is the kernel the only thing that is different?  The rest of the
+> operating system and environment is exactly the same?
+>
 
-My bot found errors running 'make dt_binding_check' on your patch:
+The kernel is the only change.
 
-yamllint warnings/errors:
+> > But I see there is already a quirk enabled and matches my ASmedia USB
+> > 3.0 controller (as I have *no* usb-storage-quirks enabled):
+> >
+> > root# LC_ALL=C dmesg -T | grep -i quirks | egrep '174c|55aa'
+> > [Sat Mar  6 06:52:41 2021] usb-storage 4-1:1.0: Quirks match for vid
+> > 174c pid 55aa: 400000
+>
+> Yes, this is because that type of device already has a quirk entry built
+> into the kernel.  You can find it by searching for "174c" in the kernel
+> source file drivers/usb/storage/unusual_devs.h.
+>
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/realtek,rts5411.example.dt.yaml: hub@1: 'reg' does not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/realtek,rts5411.example.dt.yaml: hub@2: 'reg' does not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
+OK, will look into it.
 
-See https://patchwork.ozlabs.org/patch/1448184
+> > Thanks Alan for all the hints and tips in the topic "usb-storage and
+> > quirks" and your patience.
+>
+> You can try building a 5.11 kernel with the patch below.  I don't know
+> whether it will show anything in the dmesg log when one of these resets
+> occurs, but it might.
+>
+> If that doesn't work out, another possibility is to use git bisect to
+> find the commit between 5.10 and 5.11 which caused the problem to start.
+>
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+This is with Linux v5.12-rc2 - not v5.11.y.
+I look if I can apply the patch.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+- Sedat -
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+>
+>
+> --- usb-devel.orig/block/scsi_ioctl.c
+> +++ usb-devel/block/scsi_ioctl.c
+> @@ -258,8 +258,11 @@ static int blk_complete_sghdr_rq(struct
+>         hdr->host_status = host_byte(req->result);
+>         hdr->driver_status = driver_byte(req->result);
+>         hdr->info = 0;
+> -       if (hdr->masked_status || hdr->host_status || hdr->driver_status)
+> +       if (hdr->masked_status || hdr->host_status || hdr->driver_status) {
+>                 hdr->info |= SG_INFO_CHECK;
+> +               printk(KERN_INFO "SCSI ioctl error, cmd %02X, prog %s\n",
+> +                               req->cmd[0], current->comm);
+> +       }
+>         hdr->resid = req->resid_len;
+>         hdr->sb_len_wr = 0;
+>
+>
