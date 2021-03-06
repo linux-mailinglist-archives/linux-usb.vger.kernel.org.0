@@ -2,181 +2,215 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D7F32FD12
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Mar 2021 21:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C326832FD30
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Mar 2021 21:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbhCFUS5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sat, 6 Mar 2021 15:18:57 -0500
-Received: from beige.elm.relay.mailchannels.net ([23.83.212.16]:9683 "EHLO
-        beige.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230521AbhCFUSw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Mar 2021 15:18:52 -0500
-X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 0952392236A;
-        Sat,  6 Mar 2021 20:18:50 +0000 (UTC)
-Received: from pdx1-sub0-mail-a68.g.dreamhost.com (100-96-10-164.trex.outbound.svc.cluster.local [100.96.10.164])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 090059222C4;
-        Sat,  6 Mar 2021 20:18:49 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
-Received: from pdx1-sub0-mail-a68.g.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
-        by 100.96.10.164 (trex/6.0.2);
-        Sat, 06 Mar 2021 20:18:49 +0000
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|smtp@contentfirst.com
-X-MailChannels-Auth-Id: dreamhost
-X-Illegal-Abortive: 289620ce064447ef_1615061929782_2774275084
-X-MC-Loop-Signature: 1615061929782:3515771775
-X-MC-Ingress-Time: 1615061929781
-Received: from pdx1-sub0-mail-a68.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a68.g.dreamhost.com (Postfix) with ESMTP id BDB627E4B5;
-        Sat,  6 Mar 2021 12:18:48 -0800 (PST)
-Received: from industrynumbers.com (pool-100-15-209-187.washdc.fios.verizon.net [100.15.209.187])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: smtp@contentfirst.com)
-        by pdx1-sub0-mail-a68.g.dreamhost.com (Postfix) with ESMTPSA id C672F7E457;
-        Sat,  6 Mar 2021 12:18:46 -0800 (PST)
-Received: from industrynumbers.com (localhost [127.0.0.1])
-        by industrynumbers.com (Postfix) with ESMTP id 82050282D7A;
-        Sat,  6 Mar 2021 15:18:45 -0500 (EST)
-Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
-X-DH-BACKEND: pdx1-sub0-mail-a68
-From:   "Michael G. Katzmann" <michaelk@IEEE.org>
-To:     Johan Hovold <johan@kernel.org>,
-        Charles Yeh <charlesyeh522@gmail.com>
-Cc:     =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Joe Abbott <jabbott@rollanet.org>
-References: <YDPS3AP63/PwmwJU@hovoldconsulting.com>
- <780b9aa6-890d-47fd-d6b2-cd9a39f7634a@IEEE.org>
- <YDUiuLtwRkZ0D0Mi@hovoldconsulting.com>
- <f63df659-6cdf-bba6-f892-1012b98f82e2@IEEE.org>
- <YDUp0tIThOZSTHJt@hovoldconsulting.com>
- <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
- <YDUysZY90FfVhrHK@hovoldconsulting.com>
- <CAAZvQQ6F=cQ-EhC0kgeTVM3GrtBWR+HfM6UJWj2AEF1NYZ-vAQ@mail.gmail.com>
- <YDaGRRYrEO5BEJv0@hovoldconsulting.com>
- <CAAZvQQ7+b9=DKqPxgsXxS7Lhqj=QTzKHCMarSbsQkAnYqdO1GA@mail.gmail.com>
- <YEH7okblCx8+Odxn@hovoldconsulting.com>
-Message-ID: <3c8b6bca-4f8f-f537-7f88-9815715a7b14@IEEE.org>
-Date:   Sat, 6 Mar 2021 15:18:45 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S229651AbhCFUjJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 6 Mar 2021 15:39:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229461AbhCFUiw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Mar 2021 15:38:52 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D464C06174A;
+        Sat,  6 Mar 2021 12:38:52 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id d5so5316620iln.6;
+        Sat, 06 Mar 2021 12:38:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=QyhZhhyCKzCTzQTQrak6BPr24chz1Q/z60GqPQNGxv8=;
+        b=CFaDEzMvMflwW2NS2IlYegNNGCSw8/FkGYACoMzPNz3JMbAc6VlCYwaTsrLJnhFXWM
+         QLuH9cWNun8mJQqf6co8V74Y24GUyleEe/Y1qAIkLE926E2qPEF1PJEg0YoOt4sjWt1x
+         PXN7ristt5+8amStc63nfO4MKQRLIhJRonaUpG4dIcXeChkMy7fHjjuzWjqZZlHCVxvb
+         OF4Gd8guRfU+q18gOcpIY+0UzRhqfgixdi5HNRiH+ko7uvInb3kpu3NhsHLlehQIFPBA
+         B+PX70/VtKY57fuJ/24GyvbtlWTcPxsKxPmQUBkP1bJXVfG6rqzuxkHN8iLpb6qd3P9j
+         /Q9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=QyhZhhyCKzCTzQTQrak6BPr24chz1Q/z60GqPQNGxv8=;
+        b=JcjH2yBlPGjFDvswsK0dBbVk2H9Ep5LAs+HnCdPalXfGWNZwYF1lfpWmsmqnAC9XHq
+         ES7HZ8ro9gNQZcLmlM8/870QvgL0MRzu7WgJyUt6iBMHaj320xOsF45r513mP8u/JU7s
+         avIA6rzznF4bBWieQDWTQlgrEW/jRlLrr+tmRd6RfhRUCLyBFjatz7WKdy/0KJJrYLQB
+         5u/SPMMMGWf4TVO8M+Jdvp7Kcx5ZH6znyGNDV5CZ4wbX08aYSIaBAwQ11/XnyAQQbbHT
+         /DJxu53uWTHqArHDPYkktmdTWEUl8/hM4EVu/KkECB25U48xkMQI1gzwtFytxM0ZQukC
+         EXhg==
+X-Gm-Message-State: AOAM533RSoiGuzmpZv2qawCKspTuuNklLlByNICAS8t2x5veDU0AeeU/
+        ieEtgaHhnYF5wamT09Sh71oUYLTcMz3ywgtRw0lT1AzuJ2ZxMw==
+X-Google-Smtp-Source: ABdhPJxRRuEDbdoZ/3RyY4N83HyWJXqfR6cC3oK3vTOk1VE2RW+ze8B4j2lISnHtXa5f7lonpx2A5vRnL0OTRaOm7qw=
+X-Received: by 2002:a92:c145:: with SMTP id b5mr13634241ilh.186.1615063131944;
+ Sat, 06 Mar 2021 12:38:51 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YEH7okblCx8+Odxn@hovoldconsulting.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8BIT
+References: <20210301155321.GA1490228@rowland.harvard.edu> <CA+icZUVpQtsq8y=rjR3Ad_G1VXWpR4D4xao8DGUkRiuxoT+cPA@mail.gmail.com>
+ <20210305160728.GE38200@rowland.harvard.edu> <CA+icZUXnjDwyKEoX_7KOaVd=PpvEQhpJRvwZbW_xocDfXZpUzQ@mail.gmail.com>
+ <CA+icZUUFGh5CWH-UJK4T-h_Qd2KNnOCrGuT8fg0+Fvjm0C2kbg@mail.gmail.com>
+ <20210305193003.GE48113@rowland.harvard.edu> <CA+icZUXUAVAusGBKSAtUEN1kH2PLchpi0cU+w-m67QznA7+F4A@mail.gmail.com>
+ <20210305194745.GF48113@rowland.harvard.edu> <CA+icZUXEWh6G-Bm9-2F1X=S=ZYog37PiaMWHUjZWs1g-KDOqJg@mail.gmail.com>
+ <CA+icZUUBpB9UFEypCFmCYc2grUC11QESNwj0_cXfut9fx0JOQA@mail.gmail.com>
+ <20210306165808.GD74411@rowland.harvard.edu> <CA+icZUWXBtOo+7TBGHFA=aKBs5o9hy3Po6NM0EPssu6y4SOZsQ@mail.gmail.com>
+In-Reply-To: <CA+icZUWXBtOo+7TBGHFA=aKBs5o9hy3Po6NM0EPssu6y4SOZsQ@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sat, 6 Mar 2021 21:38:15 +0100
+Message-ID: <CA+icZUXcYY53DxpMRQmveuwUv0QVV7rtRorbxWUaVujJZuCB-A@mail.gmail.com>
+Subject: Re: [xhci] usb 4-1: reset SuperSpeed Gen 1 USB device number 2 using xhci_hcd
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/5/21 4:36 AM, Johan Hovold wrote:
-> On Fri, Mar 05, 2021 at 05:32:23PM +0800, Charles Yeh wrote:
->> 110 bps is not the standard Baud rate,
->> PL2303TA don't work with the current Linux driver (d5 0e 00 80), It
->> needs to "a8 a6 01 80"
-> 
-> Ok, thanks for confirming. Then we should be able to fix this up based
-> on Michael's findings.
-> 
->> Johan Hovold <johan@kernel.org> 於 2021年2月25日 週四 上午1:00寫道：
->>
->>> But can you confirm that your PL2303TA works with the current Linux
->>> driver at 110 Bd (and doesn't need the alternate divisor encoding)?
-> 
-> Johan
-> 
+On Sat, Mar 6, 2021 at 9:26 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Sat, Mar 6, 2021 at 5:58 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Sat, Mar 06, 2021 at 07:42:30AM +0100, Sedat Dilek wrote:
+> > > No, with Debian-Kernel 5.10.19-1 there are no xhci-resets:
+> >
+> > Is the kernel the only thing that is different?  The rest of the
+> > operating system and environment is exactly the same?
+> >
+> > > But I see there is already a quirk enabled and matches my ASmedia USB
+> > > 3.0 controller (as I have *no* usb-storage-quirks enabled):
+> > >
+> > > root# LC_ALL=C dmesg -T | grep -i quirks | egrep '174c|55aa'
+> > > [Sat Mar  6 06:52:41 2021] usb-storage 4-1:1.0: Quirks match for vid
+> > > 174c pid 55aa: 400000
+> >
+> > Yes, this is because that type of device already has a quirk entry built
+> > into the kernel.  You can find it by searching for "174c" in the kernel
+> > source file drivers/usb/storage/unusual_devs.h.
+> >
+> > > Thanks Alan for all the hints and tips in the topic "usb-storage and
+> > > quirks" and your patience.
+> >
+> > You can try building a 5.11 kernel with the patch below.  I don't know
+> > whether it will show anything in the dmesg log when one of these resets
+> > occurs, but it might.
+> >
+> > If that doesn't work out, another possibility is to use git bisect to
+> > find the commit between 5.10 and 5.11 which caused the problem to start.
+> >
+> > Alan Stern
+> >
+> >
+> > --- usb-devel.orig/block/scsi_ioctl.c
+> > +++ usb-devel/block/scsi_ioctl.c
+> > @@ -258,8 +258,11 @@ static int blk_complete_sghdr_rq(struct
+> >         hdr->host_status = host_byte(req->result);
+> >         hdr->driver_status = driver_byte(req->result);
+> >         hdr->info = 0;
+> > -       if (hdr->masked_status || hdr->host_status || hdr->driver_status)
+> > +       if (hdr->masked_status || hdr->host_status || hdr->driver_status) {
+> >                 hdr->info |= SG_INFO_CHECK;
+> > +               printk(KERN_INFO "SCSI ioctl error, cmd %02X, prog %s\n",
+> > +                               req->cmd[0], current->comm);
+> > +       }
+> >         hdr->resid = req->resid_len;
+> >         hdr->sb_len_wr = 0;
+> >
+> >
+>
+> Thanks for the diff, Alan.
+>
+> With an adapted version to fit Linux v5.12-rc2 (see attachment) I see:
+>
+> root@iniza:~# LC_ALL=C dmesg -T | grep 'SCSI ioctl error'
+> [Sat Mar  6 21:16:42 2021] SCSI ioctl error, cmd A1, prog ata_id
+> [Sat Mar  6 21:16:42 2021] SCSI ioctl error, cmd A1, prog ata_id
+> [Sat Mar  6 21:16:45 2021] SCSI ioctl error, cmd A1, prog ata_id
+> [Sat Mar  6 21:17:07 2021] SCSI ioctl error, cmd A1, prog ata_id
+> [Sat Mar  6 21:17:07 2021] SCSI ioctl error, cmd A1, prog ata_id
+> [Sat Mar  6 21:17:12 2021] SCSI ioctl error, cmd 85, prog hdparm
+> [Sat Mar  6 21:17:12 2021] SCSI ioctl error, cmd 85, prog hdparm
+> [Sat Mar  6 21:17:13 2021] SCSI ioctl error, cmd 85, prog hdparm
+> [Sat Mar  6 21:17:13 2021] SCSI ioctl error, cmd 85, prog hdparm
+> [Sat Mar  6 21:17:13 2021] SCSI ioctl error, cmd 85, prog hdparm
+> [Sat Mar  6 21:17:14 2021] SCSI ioctl error, cmd 85, prog smartd
+> [Sat Mar  6 21:17:14 2021] SCSI ioctl error, cmd 85, prog smartd
+> [Sat Mar  6 21:17:14 2021] SCSI ioctl error, cmd A1, prog ata_id
+> [Sat Mar  6 21:17:14 2021] SCSI ioctl error, cmd 85, prog smartd
+> [Sat Mar  6 21:17:15 2021] SCSI ioctl error, cmd 85, prog smartd
+> [Sat Mar  6 21:17:16 2021] SCSI ioctl error, cmd 85, prog smartd
+> [Sat Mar  6 21:17:18 2021] SCSI ioctl error, cmd 85, prog smartd
+> [Sat Mar  6 21:17:18 2021] SCSI ioctl error, cmd 85, prog smartd
+> [Sat Mar  6 21:17:18 2021] SCSI ioctl error, cmd 85, prog smartd
+> [Sat Mar  6 21:17:18 2021] SCSI ioctl error, cmd 85, prog smartd
+> [Sat Mar  6 21:17:18 2021] SCSI ioctl error, cmd 85, prog smartd
+> [Sat Mar  6 21:17:19 2021] SCSI ioctl error, cmd 85, prog smartd
+> [Sat Mar  6 21:17:19 2021] SCSI ioctl error, cmd 85, prog smartd
+> [Sat Mar  6 21:17:21 2021] SCSI ioctl error, cmd A1, prog ata_id
+> [Sat Mar  6 21:17:21 2021] SCSI ioctl error, cmd A1, prog ata_id
+> [Sat Mar  6 21:17:22 2021] SCSI ioctl error, cmd 85, prog hdparm
+> [Sat Mar  6 21:17:22 2021] SCSI ioctl error, cmd 85, prog hdparm
+> [Sat Mar  6 21:17:22 2021] SCSI ioctl error, cmd A1, prog ata_id
+> [Sat Mar  6 21:17:22 2021] SCSI ioctl error, cmd 85, prog hdparm
+> [Sat Mar  6 21:17:22 2021] SCSI ioctl error, cmd 85, prog hdparm
+> [Sat Mar  6 21:17:22 2021] SCSI ioctl error, cmd 85, prog hdparm
+> [Sat Mar  6 21:17:28 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:28 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:28 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:28 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:28 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:28 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:28 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:28 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:28 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:28 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:28 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:28 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:30 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:30 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:34 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:35 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:35 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:35 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:36 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:36 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:36 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:36 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:36 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:37 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:37 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:37 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:38 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:38 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
+> [Sat Mar  6 21:17:38 2021] SCSI ioctl error, cmd 85, prog udisksd
+> [Sat Mar  6 21:17:39 2021] SCSI ioctl error, cmd A1, prog pool-udisksd
+> [Sat Mar  6 21:17:39 2021] SCSI ioctl error, cmd A1, prog pool-udisksd
+> [Sat Mar  6 21:17:39 2021] SCSI ioctl error, cmd A1, prog pool-udisksd
+> [Sat Mar  6 21:17:40 2021] SCSI ioctl error, cmd A1, prog pool-udisksd
+> [Sat Mar  6 21:17:40 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
+> [Sat Mar  6 21:17:40 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
+> [Sat Mar  6 21:17:40 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
+> [Sat Mar  6 21:17:40 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
+> [Sat Mar  6 21:17:40 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
+> [Sat Mar  6 21:17:40 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
+> [Sat Mar  6 21:17:40 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
+> [Sat Mar  6 21:17:40 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
+> [Sat Mar  6 21:17:40 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
+> [Sat Mar  6 21:17:40 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
+> [Sat Mar  6 21:18:55 2021] SCSI ioctl error, cmd 85, prog smartctl
+> [Sat Mar  6 21:18:56 2021] SCSI ioctl error, cmd 85, prog smartctl
+> [Sat Mar  6 21:18:56 2021] SCSI ioctl error, cmd 85, prog smartctl
+>
+> My linux-config and full dmesg-log are attached.
+>
 
-How about... altering the call to pl2303_encode_baud_rate_divisor (adding 'port')
-       baud = pl2303_encode_baud_rate_divisor(port, buf, baud);
+Checking dmesg again...
 
-and checking for model and altering algorithm as below.
+So, this is pool-udisksd (cmd A1 and 85) and smartctl (cmd 85) causing
+regular xhci-resets.
 
-I've tested this on the TA version.
+SCSI ioctl error, cmd 85, prog smartctl
 
-Michael
+SCSI ioctl error, cmd A1, prog pool-udisksd
+SCSI ioctl error, cmd 85, prog pool-udisksd
 
-
-
-static speed_t pl2303_encode_baud_rate_divisor(struct usb_serial_port *port, unsigned char buf[4],
-                                speed_t baud)
-{
-    unsigned int baseline, mantissa, exponent;
-        unsigned int bcdDevice = port->serial->dev->descriptor.bcdDevice;
-        unsigned int bcdUSB = port->serial->dev->descriptor.bcdUSB;
-
-        enum model { eUNKNOWN, eHXD, eHXA, eTA } model;
-
-   if ( bcdUSB == 0x0110 ) {
-       if( bcdDevice == 0x0400 )
-           model = eHXD;
-       else if ( bcdDevice == 0x0300 )
-           model = eHXA; // PL2303HX(A)/XA ( EOL : PHASED OUT SINCE 2012 )
-       else
-          model = eUNKNOWN;
-    } else if( bcdUSB == 0x200 && bcdDevice == 0x0300 ) {
-        model = eTA;
-    }
-    /*
-     * Apparently the formula is:
-     *   baudrate = 12M * 32 / (mantissa * 4^exponent)
-     * where
-     *   mantissa = buf[8:0]
-     *   exponent = buf[11:9]
-         *
-         * TA version has more precision
-         *      uses mantissa = buf[bits 10:0 ]
-     *           exponent = buf[bits 15:13]
-     *  and x2 prescaler enable by buf[bit 16]
-     */
-    baseline = 12000000 * 32;
-    mantissa = baseline / baud;
-    if (mantissa == 0)
-        mantissa = 1;    /* Avoid dividing by zero if baud > 32*12M. */
-    exponent = 0;
-
-    if ( model == eTA ) {
-        while (mantissa >= 2048) {
-            // n.b. below is speculative for the TA chip and is based on original code
-            if (exponent < 15) {   // we are going to divide this by 2 later
-                mantissa >>= 1;    // divide by 2
-                exponent++;        // currently log2 ... will become log4
-            } else {
-                /* Exponent is maxed. Trim mantissa and leave. */
-                mantissa = 2047 ;
-                break;
-            }
-        }
-        buf[2] = exponent & 0x01;  // activate x2 prescaler if needed
-        exponent >>= 1;            // now log base 4 (losing LSB)
-        buf[1] = (exponent << 5) | (mantissa >> 8);
-    } else {
-        while (mantissa >= 512) {
-            if (exponent < 7) {
-                mantissa >>= 2; /* divide by 4 */
-                exponent++;
-            } else {
-                /* Exponent is maxed. Trim mantissa and leave. */
-                mantissa = 511;
-                break;
-           }
-        }
-        buf[2] = 0;
-        buf[1] = exponent << 1 | mantissa >> 8;
-    }
-
-    buf[3] = 0x80;
-    buf[0] = mantissa & 0xff;
-
-    /* Calculate and return the exact baud rate. */
-    baud = (baseline / mantissa / (buf[2] == 0x01 ? 2:1)) >> (exponent << 1);
-    return baud;
-}
-
-
-
+- Sedat -
