@@ -2,76 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD42E32FCFB
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Mar 2021 21:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D7F32FD12
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Mar 2021 21:19:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbhCFUDG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 Mar 2021 15:03:06 -0500
-Received: from mail-pj1-f47.google.com ([209.85.216.47]:54885 "EHLO
-        mail-pj1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbhCFUCf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Mar 2021 15:02:35 -0500
-Received: by mail-pj1-f47.google.com with SMTP id i14so1011925pjz.4;
-        Sat, 06 Mar 2021 12:02:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=cbbHIxEsNw57fJN13JTZ3OV6pXh3aK0TMuJ9YIkxYTg=;
-        b=FQELXK/SjmTen/RkJvfk6BP3GKKmiCVyIR9Aslr/iTzL9SX9U1G8S13uqaDE9UN/td
-         waBQsITVriHFdagi+8lV2Ge3w2P5ByIzwyiAZPe8lm08FNgBN7wjMS6dWpfQL6K6MpQx
-         5hicOBrSi8ZkkU60VU5UN8OqV5pupuwQEJQiIId6i9nVn3FnHDSx2OEJidUO9oNC2WB+
-         mDk6s3smGOjBV+hOAKtbFwItXHPXHlkBMFPi3URiGPPr0/yXQ5mrnEHnZ/K9juH4IX/3
-         fl5g5fQQL9wkfYfEJD4QeR6PtXWVLPB7f/wZDlPnS8L+YNlUMqtAP6PKGuN/ZaRhr9YM
-         xgkw==
-X-Gm-Message-State: AOAM532u1yRDlZb98C6zC5WrcqqZmhxWYw8ozxOtJplzZYKkgMt5T51X
-        u06WecnPyi3vVsyJbpR29A==
-X-Google-Smtp-Source: ABdhPJzGIMsI/Q88OhPbDheIL7OjSGvCNegORha0U/xeVNFIQ56hnLttSULrFk+QHQex2UC1z3oyfQ==
-X-Received: by 2002:a17:90b:228c:: with SMTP id kx12mr14994095pjb.7.1615060954653;
-        Sat, 06 Mar 2021 12:02:34 -0800 (PST)
-Received: from robh.at.kernel.org ([172.58.27.98])
-        by smtp.gmail.com with ESMTPSA id r2sm5789597pgv.50.2021.03.06.12.02.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Mar 2021 12:02:33 -0800 (PST)
-Received: (nullmailer pid 1127562 invoked by uid 1000);
-        Sat, 06 Mar 2021 20:02:27 -0000
-Date:   Sat, 6 Mar 2021 12:02:27 -0800
-From:   Rob Herring <robh@kernel.org>
-To:     =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jonas.gorski@gmail.com, f.fainelli@gmail.com,
-        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Tony Prisk <linux@prisktech.co.nz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v3 2/3] dt-bindings: usb: generic-ehci: document
- spurious-oc flag
-Message-ID: <20210306200227.GA1127510@robh.at.kernel.org>
-References: <20210223155005.21712-1-noltari@gmail.com>
- <20210223174455.1378-1-noltari@gmail.com>
- <20210223174455.1378-3-noltari@gmail.com>
+        id S230449AbhCFUS5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sat, 6 Mar 2021 15:18:57 -0500
+Received: from beige.elm.relay.mailchannels.net ([23.83.212.16]:9683 "EHLO
+        beige.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230521AbhCFUSw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Mar 2021 15:18:52 -0500
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 0952392236A;
+        Sat,  6 Mar 2021 20:18:50 +0000 (UTC)
+Received: from pdx1-sub0-mail-a68.g.dreamhost.com (100-96-10-164.trex.outbound.svc.cluster.local [100.96.10.164])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 090059222C4;
+        Sat,  6 Mar 2021 20:18:49 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from pdx1-sub0-mail-a68.g.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
+        by 100.96.10.164 (trex/6.0.2);
+        Sat, 06 Mar 2021 20:18:49 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|smtp@contentfirst.com
+X-MailChannels-Auth-Id: dreamhost
+X-Illegal-Abortive: 289620ce064447ef_1615061929782_2774275084
+X-MC-Loop-Signature: 1615061929782:3515771775
+X-MC-Ingress-Time: 1615061929781
+Received: from pdx1-sub0-mail-a68.g.dreamhost.com (localhost [127.0.0.1])
+        by pdx1-sub0-mail-a68.g.dreamhost.com (Postfix) with ESMTP id BDB627E4B5;
+        Sat,  6 Mar 2021 12:18:48 -0800 (PST)
+Received: from industrynumbers.com (pool-100-15-209-187.washdc.fios.verizon.net [100.15.209.187])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: smtp@contentfirst.com)
+        by pdx1-sub0-mail-a68.g.dreamhost.com (Postfix) with ESMTPSA id C672F7E457;
+        Sat,  6 Mar 2021 12:18:46 -0800 (PST)
+Received: from industrynumbers.com (localhost [127.0.0.1])
+        by industrynumbers.com (Postfix) with ESMTP id 82050282D7A;
+        Sat,  6 Mar 2021 15:18:45 -0500 (EST)
+Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+X-DH-BACKEND: pdx1-sub0-mail-a68
+From:   "Michael G. Katzmann" <michaelk@IEEE.org>
+To:     Johan Hovold <johan@kernel.org>,
+        Charles Yeh <charlesyeh522@gmail.com>
+Cc:     =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Joe Abbott <jabbott@rollanet.org>
+References: <YDPS3AP63/PwmwJU@hovoldconsulting.com>
+ <780b9aa6-890d-47fd-d6b2-cd9a39f7634a@IEEE.org>
+ <YDUiuLtwRkZ0D0Mi@hovoldconsulting.com>
+ <f63df659-6cdf-bba6-f892-1012b98f82e2@IEEE.org>
+ <YDUp0tIThOZSTHJt@hovoldconsulting.com>
+ <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
+ <YDUysZY90FfVhrHK@hovoldconsulting.com>
+ <CAAZvQQ6F=cQ-EhC0kgeTVM3GrtBWR+HfM6UJWj2AEF1NYZ-vAQ@mail.gmail.com>
+ <YDaGRRYrEO5BEJv0@hovoldconsulting.com>
+ <CAAZvQQ7+b9=DKqPxgsXxS7Lhqj=QTzKHCMarSbsQkAnYqdO1GA@mail.gmail.com>
+ <YEH7okblCx8+Odxn@hovoldconsulting.com>
+Message-ID: <3c8b6bca-4f8f-f537-7f88-9815715a7b14@IEEE.org>
+Date:   Sat, 6 Mar 2021 15:18:45 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210223174455.1378-3-noltari@gmail.com>
+In-Reply-To: <YEH7okblCx8+Odxn@hovoldconsulting.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 23 Feb 2021 18:44:54 +0100, �lvaro Fern�ndez Rojas wrote:
-> Over-current reporting isn't supported on some platforms such as bcm63xx.
-> These devices will incorrectly report over-current if this flag isn't properly
-> activated.
+On 3/5/21 4:36 AM, Johan Hovold wrote:
+> On Fri, Mar 05, 2021 at 05:32:23PM +0800, Charles Yeh wrote:
+>> 110 bps is not the standard Baud rate,
+>> PL2303TA don't work with the current Linux driver (d5 0e 00 80), It
+>> needs to "a8 a6 01 80"
 > 
-> Signed-off-by: �lvaro Fern�ndez Rojas <noltari@gmail.com>
-> ---
->  v3: no changes.
->  v2: change flag name and improve documentation as suggested by Alan Stern.
+> Ok, thanks for confirming. Then we should be able to fix this up based
+> on Michael's findings.
 > 
->  Documentation/devicetree/bindings/usb/generic-ehci.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
+>> Johan Hovold <johan@kernel.org> 於 2021年2月25日 週四 上午1:00寫道：
+>>
+>>> But can you confirm that your PL2303TA works with the current Linux
+>>> driver at 110 Bd (and doesn't need the alternate divisor encoding)?
+> 
+> Johan
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+How about... altering the call to pl2303_encode_baud_rate_divisor (adding 'port')
+       baud = pl2303_encode_baud_rate_divisor(port, buf, baud);
+
+and checking for model and altering algorithm as below.
+
+I've tested this on the TA version.
+
+Michael
+
+
+
+static speed_t pl2303_encode_baud_rate_divisor(struct usb_serial_port *port, unsigned char buf[4],
+                                speed_t baud)
+{
+    unsigned int baseline, mantissa, exponent;
+        unsigned int bcdDevice = port->serial->dev->descriptor.bcdDevice;
+        unsigned int bcdUSB = port->serial->dev->descriptor.bcdUSB;
+
+        enum model { eUNKNOWN, eHXD, eHXA, eTA } model;
+
+   if ( bcdUSB == 0x0110 ) {
+       if( bcdDevice == 0x0400 )
+           model = eHXD;
+       else if ( bcdDevice == 0x0300 )
+           model = eHXA; // PL2303HX(A)/XA ( EOL : PHASED OUT SINCE 2012 )
+       else
+          model = eUNKNOWN;
+    } else if( bcdUSB == 0x200 && bcdDevice == 0x0300 ) {
+        model = eTA;
+    }
+    /*
+     * Apparently the formula is:
+     *   baudrate = 12M * 32 / (mantissa * 4^exponent)
+     * where
+     *   mantissa = buf[8:0]
+     *   exponent = buf[11:9]
+         *
+         * TA version has more precision
+         *      uses mantissa = buf[bits 10:0 ]
+     *           exponent = buf[bits 15:13]
+     *  and x2 prescaler enable by buf[bit 16]
+     */
+    baseline = 12000000 * 32;
+    mantissa = baseline / baud;
+    if (mantissa == 0)
+        mantissa = 1;    /* Avoid dividing by zero if baud > 32*12M. */
+    exponent = 0;
+
+    if ( model == eTA ) {
+        while (mantissa >= 2048) {
+            // n.b. below is speculative for the TA chip and is based on original code
+            if (exponent < 15) {   // we are going to divide this by 2 later
+                mantissa >>= 1;    // divide by 2
+                exponent++;        // currently log2 ... will become log4
+            } else {
+                /* Exponent is maxed. Trim mantissa and leave. */
+                mantissa = 2047 ;
+                break;
+            }
+        }
+        buf[2] = exponent & 0x01;  // activate x2 prescaler if needed
+        exponent >>= 1;            // now log base 4 (losing LSB)
+        buf[1] = (exponent << 5) | (mantissa >> 8);
+    } else {
+        while (mantissa >= 512) {
+            if (exponent < 7) {
+                mantissa >>= 2; /* divide by 4 */
+                exponent++;
+            } else {
+                /* Exponent is maxed. Trim mantissa and leave. */
+                mantissa = 511;
+                break;
+           }
+        }
+        buf[2] = 0;
+        buf[1] = exponent << 1 | mantissa >> 8;
+    }
+
+    buf[3] = 0x80;
+    buf[0] = mantissa & 0xff;
+
+    /* Calculate and return the exact baud rate. */
+    baud = (baseline / mantissa / (buf[2] == 0x01 ? 2:1)) >> (exponent << 1);
+    return baud;
+}
+
+
+
