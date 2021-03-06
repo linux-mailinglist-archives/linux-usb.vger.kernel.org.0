@@ -2,76 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A76032FA6A
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Mar 2021 13:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0EB32FB22
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Mar 2021 15:22:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbhCFMId (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 Mar 2021 07:08:33 -0500
-Received: from m12-18.163.com ([220.181.12.18]:59979 "EHLO m12-18.163.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229969AbhCFMIG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 6 Mar 2021 07:08:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=G1CefTDUOphs/ju8OA
-        6vyhQmbezCTp81UWY6mcWD6gQ=; b=mjwnRbe+WDUGtNAbQWTX+J8i/F5lFCJAzp
-        N9qSPWCeEFdtZPUPNAsxa240gwQk0ev4bIGpYm1D/7vy1dsNdWSJ00F2WtTeKLMX
-        L6yte7D/eDFhnv7ub1GUEFSDPRV36C762BZ4UUHvu4uX/FaRORoROnu+VeasZVnM
-        NjQd2Bv1E=
-Received: from localhost.localdomain (unknown [36.170.36.204])
-        by smtp14 (Coremail) with SMTP id EsCowADX0vB9cENg7OF3XQ--.29206S2;
-        Sat, 06 Mar 2021 20:07:26 +0800 (CST)
-From:   zhangkun4jr@163.com
-To:     Mathias Nyman <mathias.nyman@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhang Kun <zhangkun@cdjrlc.com>
-Subject: [PATCH] xhci: Remove unused value len from xhci_unmap_temp_buf
-Date:   Sat,  6 Mar 2021 20:06:44 +0800
-Message-Id: <20210306120644.74406-1-zhangkun4jr@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: EsCowADX0vB9cENg7OF3XQ--.29206S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKrWkZrWxXryUGw4DXryxKrg_yoWDGFc_Cr
-        93Ar1kC3yDGw1qvr12yanFv3yqka18Xrs7WFs2vF15ua4Utas8ZF1rAFykXa4rGF48JFsI
-        qw15WrW8tr10vjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU5Ta0JUUUUU==
-X-Originating-IP: [36.170.36.204]
-X-CM-SenderInfo: x2kd0whnxqkyru6rljoofrz/1tbiqh1NtVr7sWPVMgAAsb
+        id S230435AbhCFOVg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 6 Mar 2021 09:21:36 -0500
+Received: from smtp05.smtpout.orange.fr ([80.12.242.127]:57176 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230409AbhCFOVT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Mar 2021 09:21:19 -0500
+Received: from localhost.localdomain ([90.126.17.6])
+        by mwinf5d10 with ME
+        id d2MA2400207rLVE032MAlN; Sat, 06 Mar 2021 15:21:17 +0100
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 06 Mar 2021 15:21:17 +0100
+X-ME-IP: 90.126.17.6
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org, krzk@kernel.org,
+        nathan@kernel.org, gustavoars@kernel.org, arnd@arndb.de,
+        ben-linux@fluff.org
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH 1/2 V2] usb: gadget: s3c: Fix incorrect resources releasing
+Date:   Sat,  6 Mar 2021 15:21:08 +0100
+Message-Id: <20210306142108.3429-1-christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Zhang Kun <zhangkun@cdjrlc.com>
+Since commit 188db4435ac6 ("usb: gadget: s3c: use platform resources"),
+'request_mem_region()' and 'ioremap()' are no more used, so they don't need
+to be undone in the error handling path of the probe and in the removre
+function.
 
-The value assigned to len by sg_pcopy_from_buffer() never used for
-anything, so remove it.
+Remove these calls and the unneeded 'rsrc_start' and 'rsrc_len' global
+variables.
 
-Signed-off-by: Zhang Kun <zhangkun@cdjrlc.com>
+Fixes: 188db4435ac6 ("usb: gadget: s3c: use platform resources")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/usb/host/xhci.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+the 'err' label is used only to reduce the diff size of this patch. It is
+removed in the following patch.
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index bd27bd670104..6ebda89d476c 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1335,7 +1335,6 @@ static bool xhci_urb_temp_buffer_required(struct usb_hcd *hcd,
+v2: Fix a stupid error in the hash in Fixes:
+---
+ drivers/usb/gadget/udc/s3c2410_udc.c | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/s3c2410_udc.c b/drivers/usb/gadget/udc/s3c2410_udc.c
+index f1ea51476add..3fc436286bad 100644
+--- a/drivers/usb/gadget/udc/s3c2410_udc.c
++++ b/drivers/usb/gadget/udc/s3c2410_udc.c
+@@ -54,8 +54,6 @@ static struct clk		*udc_clock;
+ static struct clk		*usb_bus_clock;
+ static void __iomem		*base_addr;
+ static int			irq_usbd;
+-static u64			rsrc_start;
+-static u64			rsrc_len;
+ static struct dentry		*s3c2410_udc_debugfs_root;
  
- static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
- {
--	unsigned int len;
- 	unsigned int buf_len;
- 	enum dma_data_direction dir;
+ static inline u32 udc_read(u32 reg)
+@@ -1775,7 +1773,7 @@ static int s3c2410_udc_probe(struct platform_device *pdev)
+ 	base_addr = devm_platform_ioremap_resource(pdev, 0);
+ 	if (!base_addr) {
+ 		retval = -ENOMEM;
+-		goto err_mem;
++		goto err;
+ 	}
  
-@@ -1351,7 +1350,7 @@ static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
- 				 dir);
+ 	the_controller = udc;
+@@ -1793,7 +1791,7 @@ static int s3c2410_udc_probe(struct platform_device *pdev)
+ 	if (retval != 0) {
+ 		dev_err(dev, "cannot get irq %i, err %d\n", irq_usbd, retval);
+ 		retval = -EBUSY;
+-		goto err_map;
++		goto err;
+ 	}
  
- 	if (usb_urb_dir_in(urb))
--		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
-+		sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
- 					   urb->transfer_buffer,
- 					   buf_len,
- 					   0);
+ 	dev_dbg(dev, "got irq %i\n", irq_usbd);
+@@ -1864,10 +1862,7 @@ static int s3c2410_udc_probe(struct platform_device *pdev)
+ 		gpio_free(udc_info->vbus_pin);
+ err_int:
+ 	free_irq(irq_usbd, udc);
+-err_map:
+-	iounmap(base_addr);
+-err_mem:
+-	release_mem_region(rsrc_start, rsrc_len);
++err:
+ 
+ 	return retval;
+ }
+@@ -1899,9 +1894,6 @@ static int s3c2410_udc_remove(struct platform_device *pdev)
+ 
+ 	free_irq(irq_usbd, udc);
+ 
+-	iounmap(base_addr);
+-	release_mem_region(rsrc_start, rsrc_len);
+-
+ 	if (!IS_ERR(udc_clock) && udc_clock != NULL) {
+ 		clk_disable_unprepare(udc_clock);
+ 		clk_put(udc_clock);
 -- 
-2.17.1
-
+2.27.0
 
