@@ -2,85 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A37A433000B
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Mar 2021 11:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7763300D4
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Mar 2021 13:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbhCGKNF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 7 Mar 2021 05:13:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51628 "EHLO mail.kernel.org"
+        id S230184AbhCGM2e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 7 Mar 2021 07:28:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43266 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231571AbhCGKNB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 7 Mar 2021 05:13:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AA6D365134;
-        Sun,  7 Mar 2021 10:12:59 +0000 (UTC)
+        id S230039AbhCGM2I (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 7 Mar 2021 07:28:08 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 96AD464DA3
+        for <linux-usb@vger.kernel.org>; Sun,  7 Mar 2021 12:28:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615111981;
-        bh=tIc/2N64eY8KnqMMTNJqlX9sQMIABmR3U+HS3rV6unY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bqy5rDjLERG7EAxenNgRNVpRe9fvdmd6DKfLZyzVmXS1FAnJbmt50a7PLaEdQX0Vm
-         tVfTJ+9uS0wX7CahuxJ7f12YI2ZmMt6THh7m6LHOBbpKhVZyd4jPM7dTsJ5wFQ0J0J
-         Q6buDA82Oo0Hb4xvSWr9OpVH/y+tceeR3+GYaI4Wu/58v2MbWO+gHSOJrnF/mLss72
-         Fjfc3R/vnSj/bA0AM58u2Ec4hrdXp+4dh9t4R0rC7YTbOm5wJZsOh4sIzqXZ4UmfAQ
-         PIhf9mFEMTLedmkfVwqZE7lYBpTqAUogwxDIPEd99ScWv7I3FeQXSfq9LsTD3IdUsh
-         LNrZZoeil284Q==
-From:   Peter Chen <peter.chen@kernel.org>
-To:     pawell@cadence.com
-Cc:     linux-usb@vger.kernel.org, rogerq@kernel.org, frank.li@nxp.com,
-        a-govindraju@ti.com, Peter Chen <peter.chen@kernel.org>
-Subject: [PATCH 1/1] usb: cdns3: trace: delete the trace parameter for request->trb
-Date:   Sun,  7 Mar 2021 18:12:55 +0800
-Message-Id: <20210307101255.26760-1-peter.chen@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        s=k20201202; t=1615120088;
+        bh=TfGGg+fS82eaWk3E/uczVBc9eDFWzru8DlPjIen65Nc=;
+        h=From:To:Subject:Date:From;
+        b=k9ctuyykwqbSCNVHkZIuDTa5MLLp1FHrRWXDpWj4uyLsi7T9v+N+QfczLRnfY+7Rb
+         QDW0Of3/sk5ojJGTMIQmS8FBC+x8Ylv6WfASRVyt36f7wj3SCPkERLTZthyoNLD1Px
+         aWL1P2FuATzv+9ML5MGWDvtE5zkuGyFYRStgZUK8vG6XSUDtY7PS7ONSDAIyfEzVMP
+         kgS3b4KnN5AXFMf0w8t01qpswhqg8O8GNrsTxdzCIsjJuVr79hZiVnp49qdwvBDpXI
+         jEZxgBVR4ohbe8TGCYAmP+s9g8Gk8Oz4dRz1oZpM7re2mQ7vzQaHSE6jUNH9GVRa14
+         LtCtx5nCaRgOw==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 7F49665348; Sun,  7 Mar 2021 12:28:08 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 212101] New: xhci_hcd cant setup
+Date:   Sun, 07 Mar 2021 12:28:08 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: low
+X-Bugzilla-Who: hose@posteo.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-212101-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It is not correct using %pa to print virtual address of request->trb, and
-it is hard to print its physical address due to the virtual address is
-zero before using. It could use index (start_trb/end_trb) to know the
-current trb position, so no matter virtual address or physical address
-for request-trb is not so meaningful.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D212101
 
-Reported-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Peter Chen <peter.chen@kernel.org>
----
- drivers/usb/cdns3/cdns3-trace.h | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+            Bug ID: 212101
+           Summary: xhci_hcd cant setup
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.8.0-44-generic #50~20.04.1-Ubuntu
+          Hardware: x86-64
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: low
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: hose@posteo.net
+        Regression: No
 
-diff --git a/drivers/usb/cdns3/cdns3-trace.h b/drivers/usb/cdns3/cdns3-trace.h
-index 8648c7a7a9dd..7574b4a62813 100644
---- a/drivers/usb/cdns3/cdns3-trace.h
-+++ b/drivers/usb/cdns3/cdns3-trace.h
-@@ -214,7 +214,6 @@ DECLARE_EVENT_CLASS(cdns3_log_request,
- 		__field(int, no_interrupt)
- 		__field(int, start_trb)
- 		__field(int, end_trb)
--		__field(struct cdns3_trb *, start_trb_addr)
- 		__field(int, flags)
- 		__field(unsigned int, stream_id)
- 	),
-@@ -230,12 +229,11 @@ DECLARE_EVENT_CLASS(cdns3_log_request,
- 		__entry->no_interrupt = req->request.no_interrupt;
- 		__entry->start_trb = req->start_trb;
- 		__entry->end_trb = req->end_trb;
--		__entry->start_trb_addr = req->trb;
- 		__entry->flags = req->flags;
- 		__entry->stream_id = req->request.stream_id;
- 	),
- 	TP_printk("%s: req: %p, req buff %p, length: %u/%u %s%s%s, status: %d,"
--		  " trb: [start:%d, end:%d: virt addr %pa], flags:%x SID: %u",
-+		  " trb: [start:%d, end:%d], flags:%x SID: %u",
- 		__get_str(name), __entry->req, __entry->buf, __entry->actual,
- 		__entry->length,
- 		__entry->zero ? "Z" : "z",
-@@ -244,7 +242,6 @@ DECLARE_EVENT_CLASS(cdns3_log_request,
- 		__entry->status,
- 		__entry->start_trb,
- 		__entry->end_trb,
--		__entry->start_trb_addr,
- 		__entry->flags,
- 		__entry->stream_id
- 	)
--- 
-2.17.1
+Hi,
 
+I plugged a USB 3.1 card into a PCIexpress slot and couldnt get resonable
+speeds with it. lsusb refers to it a USB 3.0 root hub, not usb 3.1. So look
+into dmesq and found an error.=20
+
+As dont no nothing on driver and kernel it might be a totally misplaced tic=
+ket.
+But maybe its not, so give it a try.
+
+pikab
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
