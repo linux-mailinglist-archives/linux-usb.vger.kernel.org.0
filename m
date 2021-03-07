@@ -2,98 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B005632FE48
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Mar 2021 02:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E0A32FEA6
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Mar 2021 05:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbhCGBPh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 Mar 2021 20:15:37 -0500
-Received: from m12-16.163.com ([220.181.12.16]:52614 "EHLO m12-16.163.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229801AbhCGBPZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 6 Mar 2021 20:15:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Subject:From:Message-ID:Date:MIME-Version; bh=0PQOv
-        2/hQx64gECYG05guj9Z2VJN6/F73EZBhLsxdYQ=; b=ma60aVLE7woVTmjlokm8V
-        Usq2vijoW7yYkjAqyPaVvyNRHsoZ0wUuhaGyOto2SAV40b2sK66yfCIfCWBB5OuX
-        vyg8pMrYBLbefbixCHhkirzvPuoCDrgslsmzbyhgJjbd1LT4wj2fj/msHWiDfaoU
-        8yYYCmGr0n2EWtvkJGFETE=
-Received: from [192.168.31.187] (unknown [36.170.36.204])
-        by smtp12 (Coremail) with SMTP id EMCowAAnKk7yKERgk+T+fA--.43990S2;
-        Sun, 07 Mar 2021 09:14:27 +0800 (CST)
-Subject: Re: [PATCH] xhci: Remove unused value len from xhci_unmap_temp_buf
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhang Kun <zhangkun@cdjrlc.com>
-References: <20210306120644.74406-1-zhangkun4jr@163.com>
- <YEOs5w8AYutM27/u@kroah.com>
-From:   Zhangkun <zhangkun4jr@163.com>
-Message-ID: <3ad81fd6-e88e-f55b-fe82-ac7804bc354c@163.com>
-Date:   Sun, 7 Mar 2021 09:14:26 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S230134AbhCGEQL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sat, 6 Mar 2021 23:16:11 -0500
+Received: from bee.birch.relay.mailchannels.net ([23.83.209.14]:8389 "EHLO
+        bee.birch.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230007AbhCGEQJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Mar 2021 23:16:09 -0500
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id CCBE612247B;
+        Sun,  7 Mar 2021 04:15:56 +0000 (UTC)
+Received: from pdx1-sub0-mail-a68.g.dreamhost.com (100-96-133-25.trex.outbound.svc.cluster.local [100.96.133.25])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 3DD0712237A;
+        Sun,  7 Mar 2021 04:15:56 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from pdx1-sub0-mail-a68.g.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
+        by 100.96.133.25 (trex/6.0.2);
+        Sun, 07 Mar 2021 04:15:56 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|smtp@contentfirst.com
+X-MailChannels-Auth-Id: dreamhost
+X-Chief-Rock: 14f2022a585118b3_1615090556533_933235603
+X-MC-Loop-Signature: 1615090556533:4150557902
+X-MC-Ingress-Time: 1615090556533
+Received: from pdx1-sub0-mail-a68.g.dreamhost.com (localhost [127.0.0.1])
+        by pdx1-sub0-mail-a68.g.dreamhost.com (Postfix) with ESMTP id 03C227E4B7;
+        Sat,  6 Mar 2021 20:15:56 -0800 (PST)
+Received: from industrynumbers.com (pool-100-15-209-187.washdc.fios.verizon.net [100.15.209.187])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: smtp@contentfirst.com)
+        by pdx1-sub0-mail-a68.g.dreamhost.com (Postfix) with ESMTPSA id 0D1A77E4B5;
+        Sat,  6 Mar 2021 20:15:54 -0800 (PST)
+Received: from industrynumbers.com (localhost [127.0.0.1])
+        by industrynumbers.com (Postfix) with ESMTP id E0F4E282D7A;
+        Sat,  6 Mar 2021 23:15:52 -0500 (EST)
+X-DH-BACKEND: pdx1-sub0-mail-a68
+From:   "Michael G. Katzmann" <michaelk@IEEE.org>
+To:     Johan Hovold <johan@kernel.org>,
+        Charles Yeh <charlesyeh522@gmail.com>
+Cc:     =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Joe Abbott <jabbott@rollanet.org>
+References: <YDPS3AP63/PwmwJU@hovoldconsulting.com>
+ <780b9aa6-890d-47fd-d6b2-cd9a39f7634a@IEEE.org>
+ <YDUiuLtwRkZ0D0Mi@hovoldconsulting.com>
+ <f63df659-6cdf-bba6-f892-1012b98f82e2@IEEE.org>
+ <YDUp0tIThOZSTHJt@hovoldconsulting.com>
+ <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
+ <YDUysZY90FfVhrHK@hovoldconsulting.com>
+ <CAAZvQQ6F=cQ-EhC0kgeTVM3GrtBWR+HfM6UJWj2AEF1NYZ-vAQ@mail.gmail.com>
+ <YDaGRRYrEO5BEJv0@hovoldconsulting.com>
+ <CAAZvQQ7+b9=DKqPxgsXxS7Lhqj=QTzKHCMarSbsQkAnYqdO1GA@mail.gmail.com>
+ <YEH7okblCx8+Odxn@hovoldconsulting.com>
+Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+Message-ID: <ddc0e424-21c2-b8f4-1b00-f589267d2b51@IEEE.org>
+Date:   Sat, 6 Mar 2021 23:15:52 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-In-Reply-To: <YEOs5w8AYutM27/u@kroah.com>
+In-Reply-To: <YEH7okblCx8+Odxn@hovoldconsulting.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: EMCowAAnKk7yKERgk+T+fA--.43990S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zr48KFWUKryruFy3GF18AFb_yoW8Wr47pF
-        s8Ka1YkFs5trZFkasrZanavFyrta1xJrykKrWIya45XFZxCFnIqF97WFyfKrnxWr4fGr1I
-        vF4UXayrWw1Dua7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bc4EiUUUUU=
-X-Originating-IP: [36.170.36.204]
-X-CM-SenderInfo: x2kd0whnxqkyru6rljoofrz/1tbirAVOtVr7sfJfFgAAs5
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/7/21 12:25 AM, Greg Kroah-Hartman wrote:
-> On Sat, Mar 06, 2021 at 08:06:44PM +0800, zhangkun4jr@163.com wrote:
->> From: Zhang Kun <zhangkun@cdjrlc.com>
->>
->> The value assigned to len by sg_pcopy_from_buffer() never used for
->> anything, so remove it.
->>
->> Signed-off-by: Zhang Kun <zhangkun@cdjrlc.com>
->> ---
->>  drivers/usb/host/xhci.c | 3 +--
->>  1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
->> index bd27bd670104..6ebda89d476c 100644
->> --- a/drivers/usb/host/xhci.c
->> +++ b/drivers/usb/host/xhci.c
->> @@ -1335,7 +1335,6 @@ static bool xhci_urb_temp_buffer_required(struct usb_hcd *hcd,
->>  
->>  static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
->>  {
->> -	unsigned int len;
->>  	unsigned int buf_len;
->>  	enum dma_data_direction dir;
->>  
->> @@ -1351,7 +1350,7 @@ static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
->>  				 dir);
->>  
->>  	if (usb_urb_dir_in(urb))
->> -		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
->> +		sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
->>  					   urb->transfer_buffer,
->>  					   buf_len,
->>  					   0);
-> 
-> SHouldn't this be checked instead of ignored?
->
 
-Hi, Greg.
-Considering your tips I checked sg_pcopy_from_buffer(). it copys data
-from urb->transfer_buffer to urb->sg, and only returns 0 or the 
-'number of copied bytes', and seems to has no other exception branchs
-that need to be checked. So I think it should be ingnored.
+On 3/5/21 4:36 AM, Johan Hovold wrote:
 
-It may also be that I missed something, if that's the case, please
-correct me.
+oops I should have looked at the previous code determining variants...
 
-Thanks,
+take 2...
 
-Zhang
 
+#define PL2303_QUIRK_DIVISOR_TA                 BIT(3)
+
+enum pl2303_type {
+	TYPE_01,	/* Type 0 and 1 (difference unknown) */
+	TYPE_HX,	/* HX version of the pl2303 chip */
+	TYPE_HXN,	/* HXN version of the pl2303 chip */
+	TYPE_TA,	/* TA version of the pl2303 chip */
+	TYPE_COUNT
+};
+
+
+static const struct pl2303_type_data pl2303_type_data[TYPE_COUNT] =
+....
+        [TYPE_TA] = {
+                .max_baud_rate          = 6000000,
+                .quirks                 = PL2303_QUIRK_DIVISOR_TA,
+        },
+};
+
+static int pl2303_startup(struct usb_serial *serial)
+{
+....
+	if ( serial->dev->descriptor.bcdDevice == 0x0300 && serial->dev->descriptor.bcdUSB == 0x0200 )
+		type = TYPE_TA;
+	else if (serial->dev->descriptor.bDeviceClass == 0x02)
+....
+}
+
+static speed_t pl2303_encode_baud_rate_divisor( struct usb_serial_port *port,
+							unsigned char buf[4],
+								speed_t baud)
+{
+	unsigned int baseline, mantissa, exponent;
+	struct usb_serial *serial = port->serial;
+	struct pl2303_serial_private *spriv = usb_get_serial_data(serial);
+
+	/*
+	 * Apparently the formula is:
+	 * baudrate = 12M * 32 / (mantissa * 4^exponent)
+	 * where
+	 *   mantissa = buf[8:0]
+	 *   exponent = buf[11:9]
+	 *
+	 * TA version has more precision
+	 *      uses mantissa = buf[bits 10:0 ]
+	 *           exponent = buf[bits 15:13]
+	 *  and x2 prescaler enable by buf[bit 16]
+	 */
+	baseline = 12000000 * 32;
+	mantissa = baseline / baud;
+	if (mantissa == 0)
+		mantissa = 1;    /* Avoid dividing by zero if baud > 32*12M. */
+	exponent = 0;
+
+	if (spriv->quirks & PL2303_QUIRK_DIVISOR_TA) {
+		while (mantissa >= 2048) {
+			// exponent is three bits (after shifting right)
+			if (exponent < 15) {   // we are going to divide this by 2 later
+				mantissa >>= 1;    // divide by 2
+				exponent++;        // currently log2 ... will become log4
+			} else {
+				/* Exponent is maxed. Trim mantissa and leave. */
+				mantissa = 2047 ;
+				break;
+			}
+		}
+		buf[2] = exponent & 0x01;  // activate x2 prescaler if needed
+		exponent >>= 1;            // now log base 4 (losing LSB)
+		buf[1] = (exponent << 5) | (mantissa >> 8);
+	} else {
+		while (mantissa >= 512) {
+			if (exponent < 7) {
+				mantissa >>= 2; /* divide by 4 */
+				exponent++;
+			} else {
+				/* Exponent is maxed. Trim mantissa and leave. */
+				mantissa = 511;
+				break;
+			}
+		}
+		buf[2] = 0;
+		buf[1] = exponent << 1 | mantissa >> 8;
+	}
+
+	buf[3] = 0x80;
+	buf[0] = mantissa & 0xff;
+
+	/* Calculate and return the exact baud rate. */
+	baud = (baseline / mantissa / (buf[2] == 0x01 ? 2:1)) >> (exponent << 1);
+	return baud;
+}
+
+static void pl2303_encode_baud_rate(struct tty_struct *tty,
+					struct usb_serial_port *port,
+					u8 buf[4])
+{
+....
+	else
+		baud = pl2303_encode_baud_rate_divisor(port, buf, baud);
+....
+}
