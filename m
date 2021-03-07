@@ -2,62 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19CB53302BD
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Mar 2021 16:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC0A3302C4
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Mar 2021 16:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbhCGPq4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 7 Mar 2021 10:46:56 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:34931 "HELO
+        id S232105AbhCGPxU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 7 Mar 2021 10:53:20 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:40257 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231533AbhCGPqq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Mar 2021 10:46:46 -0500
-Received: (qmail 103982 invoked by uid 1000); 7 Mar 2021 10:46:45 -0500
-Date:   Sun, 7 Mar 2021 10:46:45 -0500
+        with SMTP id S232084AbhCGPwh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Mar 2021 10:52:37 -0500
+Received: (qmail 104104 invoked by uid 1000); 7 Mar 2021 10:52:36 -0500
+Date:   Sun, 7 Mar 2021 10:52:36 -0500
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [xhci] usb 4-1: reset SuperSpeed Gen 1 USB device number 2 using
- xhci_hcd
-Message-ID: <20210307154645.GA103559@rowland.harvard.edu>
-References: <CA+icZUUFGh5CWH-UJK4T-h_Qd2KNnOCrGuT8fg0+Fvjm0C2kbg@mail.gmail.com>
- <20210305193003.GE48113@rowland.harvard.edu>
- <CA+icZUXUAVAusGBKSAtUEN1kH2PLchpi0cU+w-m67QznA7+F4A@mail.gmail.com>
- <20210305194745.GF48113@rowland.harvard.edu>
- <CA+icZUXEWh6G-Bm9-2F1X=S=ZYog37PiaMWHUjZWs1g-KDOqJg@mail.gmail.com>
- <CA+icZUUBpB9UFEypCFmCYc2grUC11QESNwj0_cXfut9fx0JOQA@mail.gmail.com>
- <20210306165808.GD74411@rowland.harvard.edu>
- <CA+icZUWXBtOo+7TBGHFA=aKBs5o9hy3Po6NM0EPssu6y4SOZsQ@mail.gmail.com>
- <CA+icZUXcYY53DxpMRQmveuwUv0QVV7rtRorbxWUaVujJZuCB-A@mail.gmail.com>
- <CA+icZUUyNQN_CEwJcTY887GOeWknz4h29b+XdY0FqUKVJD7cfQ@mail.gmail.com>
+To:     Matthias Schwarzott <zzam@gentoo.org>
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        hirofumi@mail.parknet.co.jp
+Subject: Re: Amazon Kindle disconnect after Synchronize Cache
+Message-ID: <20210307155236.GB103559@rowland.harvard.edu>
+References: <9f57532f-1fb7-0fdd-b91c-2dfecef5aff3@gentoo.org>
+ <20210305191437.GC48113@rowland.harvard.edu>
+ <2a1f6636-6b57-ccc5-76b3-7eae5e80e7d3@gentoo.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+icZUUyNQN_CEwJcTY887GOeWknz4h29b+XdY0FqUKVJD7cfQ@mail.gmail.com>
+In-Reply-To: <2a1f6636-6b57-ccc5-76b3-7eae5e80e7d3@gentoo.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Mar 06, 2021 at 09:49:00PM +0100, Sedat Dilek wrote:
+On Sun, Mar 07, 2021 at 06:58:10AM +0100, Matthias Schwarzott wrote:
+> Am 05.03.21 um 20:14 schrieb Alan Stern:
+> > On Fri, Mar 05, 2021 at 05:54:43PM +0100, Matthias Schwarzott wrote:
+> > > One major difference I noticed looking at service answer time statistics:
+> > > Windows sends a lot more requests of type "Test Unit Ready".
+> > > * Windows: 6385 calls
+> > > * linux: 71 calls
+> > 
+> > It's generally well known that Windows issues lots and lots of redundant
+> > commands to USB storage drives.
+> > 
+> > 
+> > Unless the Kindle advertises removable media, there doesn't seem to be
+> > any real point to all those TEST UNIT READY commands.  Unless they are
+> > what prevents the disconnections...
+> > 
+> This is kernel log from connecting:
+> [41709.248006] usb 3-4: new high-speed USB device number 6 using xhci_hcd
+> [41709.380015] usb 3-4: New USB device found, idVendor=1949, idProduct=0004,
+> bcdDevice= 1.00
+> [41709.380019] usb 3-4: New USB device strings: Mfr=1, Product=2,
+> SerialNumber=3
+> [41709.380021] usb 3-4: Product: Amazon Kindle
+> [41709.380022] usb 3-4: Manufacturer: Amazon
+> [41709.380023] usb 3-4: SerialNumber: REMOVED
+> [41709.493988] usb-storage 3-4:1.0: USB Mass Storage device detected
+> [41709.494080] scsi host6: usb-storage 3-4:1.0
+> [41710.510122] scsi 6:0:0:0: Direct-Access     Kindle   Internal Storage
+> 0100 PQ: 0 ANSI: 2
+> [41710.510245] sd 6:0:0:0: Attached scsi generic sg3 type 0
+> [41710.513059] sd 6:0:0:0: Power-on or device reset occurred
+> [41710.526331] sd 6:0:0:0: [sdc] Attached SCSI removable disk
+> [41712.629152] sd 6:0:0:0: [sdc] 6688768 512-byte logical blocks: (3.42
+> GB/3.19 GiB)
+> [41712.846353] sd 6:0:0:0: [sdc] Write cache: enabled, read cache: enabled,
+> doesn't support DPO or FUA
+> [41712.846357] sdc: detected capacity change from 0 to 6688768
+> [41712.849499]  sdc: sdc1
+> 
+> As it prints "Attached SCSI removable disk" the device advertises removable
+> media.
 
-> For testing purposes, I stopped these systemd services:
-> 
-> 1. systemctl stop smartmontools.service
-> 
-> 2. systemctl stop udisks2.service
-> 
-> Last seen xhci-reset:
-> 
-> [Sat Mar  6 21:37:40 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> 
-> So, that every 10min xhci-reset was caused by pool-udisksd from udisks2.service.
+Yes.
 
-You have found the cause of your problem!  Great!
+> > > How can I get further on this topic?
+> > 
+> > Is runtime power management enabled?  Maybe the Kindle disconnects
+> > whenever the computer tries to suspend it.  This typically happens 2
+> > seconds after the last command was issued, which matches your
+> > observations.  If runtime PM is enabled, you can try disabling it.
+> > 
+> I assume this means autosuspend is not used:
+> 
+> # cat /sys/block/sde/device/power/control
+> on
 
-And now, obviously order to fix the problem, you'll have to look into 
-the udisks2 service.  Maybe you can configure it so that it won't send 
-the problem-causing commands.
+This means autosuspend isn't used for the sde drive.  But the log 
+extract above shows that the Kindle is sdc, not sde.
 
 Alan Stern
