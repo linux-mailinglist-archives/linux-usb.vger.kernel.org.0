@@ -2,66 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E41553302C6
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Mar 2021 16:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8723302C8
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Mar 2021 16:55:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbhCGPyC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 7 Mar 2021 10:54:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52548 "EHLO
+        id S231981AbhCGPzH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 7 Mar 2021 10:55:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:31798 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230460AbhCGPxU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Mar 2021 10:53:20 -0500
+        by vger.kernel.org with ESMTP id S232049AbhCGPyz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Mar 2021 10:54:55 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615132399;
+        s=mimecast20190719; t=1615132495;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2E9HR/8SE8nfv2QApREdLqcMX48ExNvPHTTBJrV6T/Q=;
-        b=V2/j7ntCk7C+x+t0aiHNIjX/O+H87sqX4bRLcXcCYRVQUEGjHOgRzW/fntYvGMrx3si79l
-        3AXE6AOU0EWldZV4dDdD4YNOduM4HHDg9ywmhRnSNce3scq+vh1RfiE7Cc7BvBHnX9WQjk
-        jBWUYspWebkvkMu2sSe//CohymxTByA=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-179-x9iBJjjdMhmzFA-kX4OtAQ-1; Sun, 07 Mar 2021 10:53:17 -0500
-X-MC-Unique: x9iBJjjdMhmzFA-kX4OtAQ-1
-Received: by mail-ed1-f72.google.com with SMTP id o15so3846323edv.7
-        for <linux-usb@vger.kernel.org>; Sun, 07 Mar 2021 07:53:17 -0800 (PST)
+        bh=EFGDhzS5rcqOc3RM9clVoGZ0o3uhf02wOPFwu2P4VbY=;
+        b=iTYAdP8TneNwKDZil6CZ0Qkn4JcFcUGYZMqEqEa4e6SWbE8MlgZAhSRNvwRb3S1F7TDPKa
+        dWYG8FMwvyXvlUGka+s5qdCkIS6Ge3+UgW0Y6ugu2gGioZV04NPuVEIrnx4R/dXt6e/D4P
+        05H0zLx7cUJoRxJZ9y6KgVxTEm1x0Nc=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-538-i7Mw-5mzN1mQUYaEuKLK1Q-1; Sun, 07 Mar 2021 10:54:53 -0500
+X-MC-Unique: i7Mw-5mzN1mQUYaEuKLK1Q-1
+Received: by mail-ed1-f71.google.com with SMTP id p12so3827460edw.9
+        for <linux-usb@vger.kernel.org>; Sun, 07 Mar 2021 07:54:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=2E9HR/8SE8nfv2QApREdLqcMX48ExNvPHTTBJrV6T/Q=;
-        b=EbN9UkSx3Nn+3hSeQ27U3yUPVpz/ZAwv1dCUYEnlzIBs17PSdmfXStIGDPBx11o3LO
-         VUK5s/4VaMxUiM29Hy5n0FN3TuEGMNRXyj65QmH3Oe0tTb1vzYumsjQN17f7bbYoP8gp
-         1gZGe03IxI4v8Bwlseh6U2f9VefUgMnie09lU7YtxQvoE+TL7Ap6eMgwDMo7lJUoZN5n
-         tPbNdklh7RPwUdoqHYBXB+N78WwGBe3Qgcio4/g1TBD1he0OMbpQxwk/vXqAz2lH6Rmo
-         5R2c6c59Mc5gLMe4niPHjyvazCaFq44UjHoQW4EttIpoR6+69V0zEU+6CmjCllPHzrxX
-         0SMQ==
-X-Gm-Message-State: AOAM530p/RRf1B1sm9CB2xDA0UgJnfiPTerQTFaFla3bLSS29GHwnQ27
-        SBj8AMGLFv0vAw7eTJ/oxjmqZwQhbD84ByqEW0DDjoCxkcktMzKxpiXj04Xea1smHugG358ECMC
-        PRk13gwOuHqv8zvukNYeNva7Elth5Loyvk2UKFt5wZdmjhXDADUYl8djknPytsEmrKTewa2sb
-X-Received: by 2002:a05:6402:3096:: with SMTP id de22mr18181529edb.141.1615132396064;
-        Sun, 07 Mar 2021 07:53:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwP5p69RzMCXKSg36ruW8Av63862LYZpkJMpWBWfgGP/6ddMiTAtbSNvNSQisCnP/mqNV3vOQ==
-X-Received: by 2002:a05:6402:3096:: with SMTP id de22mr18181520edb.141.1615132395867;
-        Sun, 07 Mar 2021 07:53:15 -0800 (PST)
+        bh=EFGDhzS5rcqOc3RM9clVoGZ0o3uhf02wOPFwu2P4VbY=;
+        b=iptG0kvrydQHfrIhqMwDyllpo05M4v++jMWSUz3JjzjYcecbUYRroBchS3H5jEd5Ce
+         /3uO48yq0yNcqS/om0t6WFdXG7TRVlqLe7DWqjN/xk/R8qQfeZw2Qx2yGRkjs0wU4MEB
+         v7f1U5YjStUYHhwoHajLSoLzNvnMZ8nlR0BjKkvfSe1g9HP36alH93WBvT7CWMAkYdun
+         lp1LJGZFrpVb/P1pWGCaxuqJlj0ZCmbhsbcli2qwh1YAzCv5IZDoNEaTUCXQYSnA0Tw2
+         7qcAu7g7WoDL97vYEpdoU3PH3c6vt9j2r8Dw0pWrWSXwOUDwQSU3iCJpuVHe40aBcMjg
+         pMLw==
+X-Gm-Message-State: AOAM533dsGrcgpWc4IHH0Gkvz9lnU+QxCNMsntrxsKoqYsS9zYVjmUQp
+        hTtuMRxP+ZT9fXmtHbnhN/nRmjhzZR6ct3OgC0e7faqbyyVZ/97d1nu+UZlQNPiET2VSjUkUZ3m
+        RQe4lZeStmwqslUlmnBSdxtPJLnMGEZmO6WuwYiSIoE81Y0V3S75tsgEO34IjuZ/1mUDmidAs
+X-Received: by 2002:a17:906:ac6:: with SMTP id z6mr11015003ejf.505.1615132491870;
+        Sun, 07 Mar 2021 07:54:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzCPc/tRqZeR89amek2ObgHnLwoBXBRZi+misOF82ceJTg/ZR+fbf7YDeQCeSqqKf5VK4F9Lg==
+X-Received: by 2002:a17:906:ac6:: with SMTP id z6mr11014991ejf.505.1615132491729;
+        Sun, 07 Mar 2021 07:54:51 -0800 (PST)
 Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id y17sm5148199ejf.116.2021.03.07.07.53.15
+        by smtp.gmail.com with ESMTPSA id bw22sm5137990ejb.78.2021.03.07.07.54.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 Mar 2021 07:53:15 -0800 (PST)
-Subject: Re: [PATCH] Add unusal uas devices reported by Umbrel users
+        Sun, 07 Mar 2021 07:54:51 -0800 (PST)
+Subject: Re: [PATCH v2] Add unusal uas devices reported by Umbrel users
 To:     Aaron Dewes <aaron.dewes@web.de>
 Cc:     linux-usb@vger.kernel.org
-References: <aaron.dewes@web.de> <20210307151830.38070-1-aaron.dewes@web.de>
+References: <20210307154124.41651-1-aaron.dewes@web.de>
 From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <a8c2e4b2-ef9b-2eef-d76f-1dd304bd49b4@redhat.com>
-Date:   Sun, 7 Mar 2021 16:53:14 +0100
+Message-ID: <e09744c3-ca34-025d-0a83-96c4ce9a46d0@redhat.com>
+Date:   Sun, 7 Mar 2021 16:54:50 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.0
 MIME-Version: 1.0
-In-Reply-To: <20210307151830.38070-1-aaron.dewes@web.de>
+In-Reply-To: <20210307154124.41651-1-aaron.dewes@web.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -71,62 +71,18 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
 
-First of all I'm not the maintainer of this file, to find the
-right email address to submit patches to see:
+On 3/7/21 4:41 PM, Aaron Dewes wrote:
+> This patch adds more unusual UAS devices.
+> All these devices were reported by users of Umbrel,
+> and applying this patch fixed the issues.
+> 
+> Signed-off-by: Aaron Dewes <aaron.dewes@web.de>
 
+NACK, see my reply to v1 of the patch.
 
-[hans@x1 linux]$ scripts/get_maintainer.pl -f drivers/usb/storage/uas.c 
-Oliver Neukum <oneukum@suse.com> (maintainer:USB ATTACHED SCSI)
-Alan Stern <stern@rowland.harvard.edu> (maintainer:USB MASS STORAGE DRIVER)
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
-linux-usb@vger.kernel.org (open list:USB ATTACHED SCSI)
-linux-scsi@vger.kernel.org (open list:USB ATTACHED SCSI)
-usb-storage@lists.one-eyed-alien.net (open list:USB MASS STORAGE DRIVER)
-linux-kernel@vger.kernel.org (open list)
+Regards,
 
-
-On 3/7/21 4:18 PM, Aaron Dewes wrote:
-
-No commit message ? No explanation, just disable UAS on a long list
-of devices, including several very popular devices such as various
-Samsung models, without any explanation at all ?
-
-Sorry, but in that case all I can do is NACK this patch.
-
-Please split this into a series with one patch per model, while
-explaining for each mode what the problem is, including links to
-bug-reports or forum discussions.
-
-Disabling UAS is a big hammer and severely limits performance,
-as it also disables all forms of NCQ which is a must have
-feature to get decent performance from SSDs.
-
-And often UAS is not the problem, disabling UAS simply papers
-over the problem, e.g.:
-
-1. Disabling it either hides issue with the XHCI bulk-streams
-handling (could be a bug in the XHCI controller, or in the kernel's
-XHCI code).
-
-2. Disabling it makes the SSD use much less power since it now
-cannot multi-task, so often it is hiding problems with the
-power-supplied to the disk.
-
-I see at https://github.com/getumbrel/umbrel that the recommended
-platform for Umbrel is a Raspberry Pi 4. Which certainly explains
-the long list of UAS problems. Pi-s are famous for their USB
-problems. I don't know if the Pi 4 suffers from 1. above, but I
-would not be surprised if does; and the Pi certainly suffers from 2.
-https://www.raspberrypi.org/forums/viewtopic.php?p=1507278 is an
-interesting read here. The USB-3 spec says that USB-3 ports must
-be capable of 0.9 A per port, the R-Pi 4 maxes out at 1.2A
-for all 4 ports combined.. And then only if its own power-supply
-is capable enough; and nothing is said there about how low the
-voltage drops when actually drawing 1.2A and any voltage drop
-itself might also be an issue.
-
-Also see below for some inline comments.
-
+Hans
 
 
 > ---
@@ -147,10 +103,6 @@ Also see below for some inline comments.
 > +		"SSD",
 > +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
 > +		US_FL_NO_REPORT_OPCODES | US_FL_IGNORE_UAS),
-
-There is no need to specify US_FL_NO_REPORT_OPCODES if you are
-disabling UAS, same for all the other entries.
-
 > +
 > +/* Reported-by: Aaron Dewes <aaron.dewes@web.de */
 > +UNUSUAL_DEV(0x04e8, 0x61b6, 0x0000, 0x9999,
@@ -166,11 +118,6 @@ disabling UAS, same for all the other entries.
 > +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
 > +		US_FL_NO_REPORT_OPCODES | US_FL_IGNORE_UAS),
 > +
-
-These are very popular drives if these really had broken
-UAS support then we would already have a ton of reports
-about these.
-
 >  /* Reported-by: Till Dörges <doerges@pre-sense.de> */
 >  UNUSUAL_DEV(0x054c, 0x087d, 0x0000, 0x9999,
 >  		"Sony",
@@ -184,9 +131,6 @@ about these.
 > +		"SSD",
 > +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
 > +		US_FL_NO_REPORT_OPCODES | US_FL_IGNORE_UAS),
-
-Idem.
-
 > +
 > +/* Reported-by: Aaron Dewes <aaron.dewes@web.de */
 > +UNUSUAL_DEV(0x125f, 0xa76a, 0x0000, 0x9999,
@@ -209,11 +153,6 @@ Idem.
 > +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
 > +		US_FL_NO_REPORT_OPCODES | US_FL_IGNORE_UAS),
 > +
-
-These are very popular chipsets if these really had broken
-UAS support then we would already have a ton of reports
-about these.
-
 >  /* Reported-by: Claudio Bizzarri <claudio.bizzarri@gmail.com> */
 >  UNUSUAL_DEV(0x152d, 0x0567, 0x0000, 0x9999,
 >  		"JMicron",
@@ -235,9 +174,6 @@ about these.
 > +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
 > +		US_FL_NO_REPORT_OPCODES | US_FL_IGNORE_UAS),
 > +
-
-Idem.
-
 >  /* Reported-by: Thinh Nguyen <thinhn@synopsys.com> */
 >  UNUSUAL_DEV(0x154b, 0xf00b, 0x0000, 0x9999,
 >  		"PNY",
@@ -252,43 +188,21 @@ Idem.
 > +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
 > +		US_FL_NO_REPORT_OPCODES | US_FL_IGNORE_UAS),
 > +
-
-Another very popular chipsets, some older versions of these
-indeed have some issues, we have special code handling these
-with chipset version specific behavior, see:
-
-drivers/usb/storage/uas-detect.h
-
-Which also means that UAS is actually know to work fine
-on the newer models and it should not be outright disabled
-on them as you are doing here!
-
-Together with the samsung drivers + jmicron bridge chipsets you
-are disabling UAS on what is probably 50% of all capable UAS
-drives out there (if not 70% or more).
-
-Did I already say: NACK ?
-
-
-At the top I indicated that you should split this in per
-model patches, but that was before I figured out most of
-these problems are beeing seen on Raspberry Pi-s (and likely
-on Raspberry Pi-s only).
-
-What might be worth considering is disabling bulk-stream support
-on the Pi-s XHCI controller by setting the  XHCI_BROKEN_STREAMS
-flag in xhci->quirks for that controller.  This will disable UAS
-at least when the drivers are plugged into the USB3 / superspeed
-ports of the Pi.  This might still be a too big hammer though.
-since with a powered-hub, or with a proper power-supply feeding
-the Pi 4 (and not using the other ports) UAS might still work
-and you are now taking away those options from users.
-
-But setting the XHCI_BROKEN_STREAMS flag on the Pi 4 and only
-on the Pi 4 would definitely be closer to acceptable then disabling
-UAS for, well everyone, because it is causing issues on the Pi.
-
-Regards,
-
-Hans
+>  /* Reported-by: Hans de Goede <hdegoede@redhat.com> */
+>  UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
+>  		"VIA",
+> @@ -150,3 +213,10 @@ UNUSUAL_DEV(0x4971, 0x8024, 0x0000, 0x9999,
+>  		"External HDD",
+>  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>  		US_FL_ALWAYS_SYNC),
+> +
+> +/* Reported-by: Aaron Dewes <aaron.dewes@web.de */
+> +UNUSUAL_DEV(0x7825, 0xa2a4, 0x0000, 0x9999,
+> +		"Other World Computing",
+> +		"PA023U3",
+> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> +		US_FL_NO_REPORT_OPCODES | US_FL_IGNORE_UAS),
+> --
+> 2.30.1
+> 
 
