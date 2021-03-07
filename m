@@ -2,61 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 991253302D4
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Mar 2021 17:01:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 510083302DC
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Mar 2021 17:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbhCGQA6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 7 Mar 2021 11:00:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39056 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231222AbhCGQAm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 7 Mar 2021 11:00:42 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5421A650A0;
-        Sun,  7 Mar 2021 16:00:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1615132841;
-        bh=nNt0pGGU/ofH/w83o0mxL+LLmwH6VXk5fV0QcqBwQRU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rL9HRj44aSg3k3DeEU5GvPgAptNE450cjqhSUK2IBxODcJXJOPc7oja1T43QY03+m
-         tX7q1zeigSb1HPyVwzMpZTrM99FbFNo70jaeRVHHtG6vssQ2mceZDH9VtNBTV5QOuc
-         Ghky4a8nLtcwu3cME5/NEhR47dZQCI3FK0f6brnw=
-Date:   Sun, 7 Mar 2021 17:00:39 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: Re: [PATCH 15/17] usb: xhci-mtk: support to build xhci-mtk-hcd.ko
-Message-ID: <YET4p6rKSynLGEUv@kroah.com>
-References: <1614934975-15188-1-git-send-email-chunfeng.yun@mediatek.com>
- <1614934975-15188-15-git-send-email-chunfeng.yun@mediatek.com>
+        id S231807AbhCGQCk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 7 Mar 2021 11:02:40 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:37741 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S232390AbhCGQC3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Mar 2021 11:02:29 -0500
+Received: (qmail 104315 invoked by uid 1000); 7 Mar 2021 11:02:28 -0500
+Date:   Sun, 7 Mar 2021 11:02:28 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Aaron Dewes <aaron.dewes@web.de>
+Cc:     hdegoede@redhat.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] Add unusal uas devices reported by Umbrel users
+Message-ID: <20210307160228.GC103559@rowland.harvard.edu>
+References: <20210307154124.41651-1-aaron.dewes@web.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1614934975-15188-15-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <20210307154124.41651-1-aaron.dewes@web.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 05, 2021 at 05:02:53PM +0800, Chunfeng Yun wrote:
-> Currently xhci-hcd.ko building depends on USB_XHCI_MTK, this
-> is not flexible for some cases. For example:
-> USB_XHCI_HCD is y, and USB_XHCI_MTK is m, then we can't
-> implement extended functions if only update xhci-mtk.ko
-> This patch is used to remove the dependence.
+On Sun, Mar 07, 2021 at 04:41:24PM +0100, Aaron Dewes wrote:
+> This patch adds more unusual UAS devices.
+> All these devices were reported by users of Umbrel,
+> and applying this patch fixed the issues.
 > 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Signed-off-by: Aaron Dewes <aaron.dewes@web.de>
+> ---
+>  drivers/usb/storage/unusual_uas.h | 70 +++++++++++++++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+> 
+> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+> index f9677a5ec31b..a67ed2b527fa 100644
+> --- a/drivers/usb/storage/unusual_uas.h
+> +++ b/drivers/usb/storage/unusual_uas.h
+> @@ -28,6 +28,27 @@
+>   * and don't forget to CC: the USB development list <linux-usb@vger.kernel.org>
+>   */
+> 
+> +/* Reported-by: Aaron Dewes <aaron.dewes@web.de */
+> +UNUSUAL_DEV(0x04e8, 0x4001, 0x0000, 0x9999,
+> +		"Samsung",
+> +		"SSD",
+> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> +		US_FL_NO_REPORT_OPCODES | US_FL_IGNORE_UAS),
 
-Oh nice, I tried to unwind this once, but did not succeed.
+With the IGNORE_UAS flag set, the uas driver will ignore these
+devices.  In particular, it will ignore the NO_REPORT_OPCODES flag.
+So there's no reason to put that flag in these new entries.
 
-Mathias, any objection to this?  I think this is the only patch in this
-series that touches the non-mtk code, want me to just queue it up in my
-tree, or are you going to send it to me through your patches?
-
-thanks,
-g
-reg k-h
+Alan Stern
