@@ -2,185 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E0A32FEA6
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Mar 2021 05:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7299B32FF36
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Mar 2021 07:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbhCGEQL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sat, 6 Mar 2021 23:16:11 -0500
-Received: from bee.birch.relay.mailchannels.net ([23.83.209.14]:8389 "EHLO
-        bee.birch.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230007AbhCGEQJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Mar 2021 23:16:09 -0500
-X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id CCBE612247B;
-        Sun,  7 Mar 2021 04:15:56 +0000 (UTC)
-Received: from pdx1-sub0-mail-a68.g.dreamhost.com (100-96-133-25.trex.outbound.svc.cluster.local [100.96.133.25])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 3DD0712237A;
-        Sun,  7 Mar 2021 04:15:56 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
-Received: from pdx1-sub0-mail-a68.g.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
-        by 100.96.133.25 (trex/6.0.2);
-        Sun, 07 Mar 2021 04:15:56 +0000
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|smtp@contentfirst.com
-X-MailChannels-Auth-Id: dreamhost
-X-Chief-Rock: 14f2022a585118b3_1615090556533_933235603
-X-MC-Loop-Signature: 1615090556533:4150557902
-X-MC-Ingress-Time: 1615090556533
-Received: from pdx1-sub0-mail-a68.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a68.g.dreamhost.com (Postfix) with ESMTP id 03C227E4B7;
-        Sat,  6 Mar 2021 20:15:56 -0800 (PST)
-Received: from industrynumbers.com (pool-100-15-209-187.washdc.fios.verizon.net [100.15.209.187])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: smtp@contentfirst.com)
-        by pdx1-sub0-mail-a68.g.dreamhost.com (Postfix) with ESMTPSA id 0D1A77E4B5;
-        Sat,  6 Mar 2021 20:15:54 -0800 (PST)
-Received: from industrynumbers.com (localhost [127.0.0.1])
-        by industrynumbers.com (Postfix) with ESMTP id E0F4E282D7A;
-        Sat,  6 Mar 2021 23:15:52 -0500 (EST)
-X-DH-BACKEND: pdx1-sub0-mail-a68
-From:   "Michael G. Katzmann" <michaelk@IEEE.org>
-To:     Johan Hovold <johan@kernel.org>,
-        Charles Yeh <charlesyeh522@gmail.com>
-Cc:     =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Joe Abbott <jabbott@rollanet.org>
-References: <YDPS3AP63/PwmwJU@hovoldconsulting.com>
- <780b9aa6-890d-47fd-d6b2-cd9a39f7634a@IEEE.org>
- <YDUiuLtwRkZ0D0Mi@hovoldconsulting.com>
- <f63df659-6cdf-bba6-f892-1012b98f82e2@IEEE.org>
- <YDUp0tIThOZSTHJt@hovoldconsulting.com>
- <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
- <YDUysZY90FfVhrHK@hovoldconsulting.com>
- <CAAZvQQ6F=cQ-EhC0kgeTVM3GrtBWR+HfM6UJWj2AEF1NYZ-vAQ@mail.gmail.com>
- <YDaGRRYrEO5BEJv0@hovoldconsulting.com>
- <CAAZvQQ7+b9=DKqPxgsXxS7Lhqj=QTzKHCMarSbsQkAnYqdO1GA@mail.gmail.com>
- <YEH7okblCx8+Odxn@hovoldconsulting.com>
-Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
-Message-ID: <ddc0e424-21c2-b8f4-1b00-f589267d2b51@IEEE.org>
-Date:   Sat, 6 Mar 2021 23:15:52 -0500
+        id S229814AbhCGF6k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 7 Mar 2021 00:58:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229619AbhCGF6T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Mar 2021 00:58:19 -0500
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64542C06174A
+        for <linux-usb@vger.kernel.org>; Sat,  6 Mar 2021 21:58:19 -0800 (PST)
+From:   Matthias Schwarzott <zzam@gentoo.org>
+Subject: Re: Amazon Kindle disconnect after Synchronize Cache
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        hirofumi@mail.parknet.co.jp
+References: <9f57532f-1fb7-0fdd-b91c-2dfecef5aff3@gentoo.org>
+ <20210305191437.GC48113@rowland.harvard.edu>
+Message-ID: <2a1f6636-6b57-ccc5-76b3-7eae5e80e7d3@gentoo.org>
+Date:   Sun, 7 Mar 2021 06:58:10 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.0
 MIME-Version: 1.0
-In-Reply-To: <YEH7okblCx8+Odxn@hovoldconsulting.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20210305191437.GC48113@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Am 05.03.21 um 20:14 schrieb Alan Stern:
+> On Fri, Mar 05, 2021 at 05:54:43PM +0100, Matthias Schwarzott wrote:
+>> One major difference I noticed looking at service answer time statistics:
+>> Windows sends a lot more requests of type "Test Unit Ready".
+>> * Windows: 6385 calls
+>> * linux: 71 calls
+> 
+> It's generally well known that Windows issues lots and lots of redundant
+> commands to USB storage drives.
+> 
+> 
+> Unless the Kindle advertises removable media, there doesn't seem to be
+> any real point to all those TEST UNIT READY commands.  Unless they are
+> what prevents the disconnections...
+> 
+This is kernel log from connecting:
+[41709.248006] usb 3-4: new high-speed USB device number 6 using xhci_hcd
+[41709.380015] usb 3-4: New USB device found, idVendor=1949, 
+idProduct=0004, bcdDevice= 1.00
+[41709.380019] usb 3-4: New USB device strings: Mfr=1, Product=2, 
+SerialNumber=3
+[41709.380021] usb 3-4: Product: Amazon Kindle
+[41709.380022] usb 3-4: Manufacturer: Amazon
+[41709.380023] usb 3-4: SerialNumber: REMOVED
+[41709.493988] usb-storage 3-4:1.0: USB Mass Storage device detected
+[41709.494080] scsi host6: usb-storage 3-4:1.0
+[41710.510122] scsi 6:0:0:0: Direct-Access     Kindle   Internal Storage 
+0100 PQ: 0 ANSI: 2
+[41710.510245] sd 6:0:0:0: Attached scsi generic sg3 type 0
+[41710.513059] sd 6:0:0:0: Power-on or device reset occurred
+[41710.526331] sd 6:0:0:0: [sdc] Attached SCSI removable disk
+[41712.629152] sd 6:0:0:0: [sdc] 6688768 512-byte logical blocks: (3.42 
+GB/3.19 GiB)
+[41712.846353] sd 6:0:0:0: [sdc] Write cache: enabled, read cache: 
+enabled, doesn't support DPO or FUA
+[41712.846357] sdc: detected capacity change from 0 to 6688768
+[41712.849499]  sdc: sdc1
 
-On 3/5/21 4:36 AM, Johan Hovold wrote:
+As it prints "Attached SCSI removable disk" the device advertises 
+removable media.
 
-oops I should have looked at the previous code determining variants...
+>> How can I get further on this topic?
+> 
+> Is runtime power management enabled?  Maybe the Kindle disconnects
+> whenever the computer tries to suspend it.  This typically happens 2
+> seconds after the last command was issued, which matches your
+> observations.  If runtime PM is enabled, you can try disabling it.
+> 
+I assume this means autosuspend is not used:
 
-take 2...
+# cat /sys/block/sde/device/power/control
+on
 
+# lsusb:
+[...]
+Bus 003 Device 017: ID 1949:0004 Lab126, Inc. Amazon Kindle 3/4/Paperwhite
+Device Descriptor:
+   bLength                18
+   bDescriptorType         1
+   bcdUSB               2.00
+   bDeviceClass            0
+   bDeviceSubClass         0
+   bDeviceProtocol         0
+   bMaxPacketSize0        64
+   idVendor           0x1949 Lab126, Inc.
+   idProduct          0x0004 Amazon Kindle 3/4/Paperwhite
+   bcdDevice            1.00
+   iManufacturer           1 Amazon
+   iProduct                2 Amazon Kindle
+   iSerial                 3 REMOVED....
+   bNumConfigurations      1
+OTG Descriptor:
+   bLength                 3
+   bDescriptorType         9
+   bmAttributes         0x03
+     SRP (Session Request Protocol)
+     HNP (Host Negotiation Protocol)
+   Configuration Descriptor:
+     bLength                 9
+     bDescriptorType         2
+     wTotalLength       0x0023
+     bNumInterfaces          1
+     bConfigurationValue     1
+     iConfiguration          4 Self-powered
+     bmAttributes         0xc0
+       Self Powered
+     MaxPower                2mA
+     Interface Descriptor:
+       bLength                 9
+       bDescriptorType         4
+       bInterfaceNumber        0
+       bAlternateSetting       0
+       bNumEndpoints           2
+       bInterfaceClass         8 Mass Storage
+       bInterfaceSubClass      6 SCSI
+       bInterfaceProtocol     80 Bulk-Only
+       iInterface              5 Mass Storage
+       Endpoint Descriptor:
+         bLength                 7
+         bDescriptorType         5
+         bEndpointAddress     0x81  EP 1 IN
+         bmAttributes            2
+           Transfer Type            Bulk
+           Synch Type               None
+           Usage Type               Data
+         wMaxPacketSize     0x0200  1x 512 bytes
+         bInterval               0
+       Endpoint Descriptor:
+         bLength                 7
+         bDescriptorType         5
+         bEndpointAddress     0x01  EP 1 OUT
+         bmAttributes            2
+           Transfer Type            Bulk
+           Synch Type               None
+           Usage Type               Data
+         wMaxPacketSize     0x0200  1x 512 bytes
+         bInterval               1
+Device Qualifier (for other device speed):
+   bLength                10
+   bDescriptorType         6
+   bcdUSB               2.00
+   bDeviceClass            0
+   bDeviceSubClass         0
+   bDeviceProtocol         0
+   bMaxPacketSize0        64
+   bNumConfigurations      1
+Device Status:     0x0001
+   Self Powered
 
-#define PL2303_QUIRK_DIVISOR_TA                 BIT(3)
-
-enum pl2303_type {
-	TYPE_01,	/* Type 0 and 1 (difference unknown) */
-	TYPE_HX,	/* HX version of the pl2303 chip */
-	TYPE_HXN,	/* HXN version of the pl2303 chip */
-	TYPE_TA,	/* TA version of the pl2303 chip */
-	TYPE_COUNT
-};
-
-
-static const struct pl2303_type_data pl2303_type_data[TYPE_COUNT] =
-....
-        [TYPE_TA] = {
-                .max_baud_rate          = 6000000,
-                .quirks                 = PL2303_QUIRK_DIVISOR_TA,
-        },
-};
-
-static int pl2303_startup(struct usb_serial *serial)
-{
-....
-	if ( serial->dev->descriptor.bcdDevice == 0x0300 && serial->dev->descriptor.bcdUSB == 0x0200 )
-		type = TYPE_TA;
-	else if (serial->dev->descriptor.bDeviceClass == 0x02)
-....
-}
-
-static speed_t pl2303_encode_baud_rate_divisor( struct usb_serial_port *port,
-							unsigned char buf[4],
-								speed_t baud)
-{
-	unsigned int baseline, mantissa, exponent;
-	struct usb_serial *serial = port->serial;
-	struct pl2303_serial_private *spriv = usb_get_serial_data(serial);
-
-	/*
-	 * Apparently the formula is:
-	 * baudrate = 12M * 32 / (mantissa * 4^exponent)
-	 * where
-	 *   mantissa = buf[8:0]
-	 *   exponent = buf[11:9]
-	 *
-	 * TA version has more precision
-	 *      uses mantissa = buf[bits 10:0 ]
-	 *           exponent = buf[bits 15:13]
-	 *  and x2 prescaler enable by buf[bit 16]
-	 */
-	baseline = 12000000 * 32;
-	mantissa = baseline / baud;
-	if (mantissa == 0)
-		mantissa = 1;    /* Avoid dividing by zero if baud > 32*12M. */
-	exponent = 0;
-
-	if (spriv->quirks & PL2303_QUIRK_DIVISOR_TA) {
-		while (mantissa >= 2048) {
-			// exponent is three bits (after shifting right)
-			if (exponent < 15) {   // we are going to divide this by 2 later
-				mantissa >>= 1;    // divide by 2
-				exponent++;        // currently log2 ... will become log4
-			} else {
-				/* Exponent is maxed. Trim mantissa and leave. */
-				mantissa = 2047 ;
-				break;
-			}
-		}
-		buf[2] = exponent & 0x01;  // activate x2 prescaler if needed
-		exponent >>= 1;            // now log base 4 (losing LSB)
-		buf[1] = (exponent << 5) | (mantissa >> 8);
-	} else {
-		while (mantissa >= 512) {
-			if (exponent < 7) {
-				mantissa >>= 2; /* divide by 4 */
-				exponent++;
-			} else {
-				/* Exponent is maxed. Trim mantissa and leave. */
-				mantissa = 511;
-				break;
-			}
-		}
-		buf[2] = 0;
-		buf[1] = exponent << 1 | mantissa >> 8;
-	}
-
-	buf[3] = 0x80;
-	buf[0] = mantissa & 0xff;
-
-	/* Calculate and return the exact baud rate. */
-	baud = (baseline / mantissa / (buf[2] == 0x01 ? 2:1)) >> (exponent << 1);
-	return baud;
-}
-
-static void pl2303_encode_baud_rate(struct tty_struct *tty,
-					struct usb_serial_port *port,
-					u8 buf[4])
-{
-....
-	else
-		baud = pl2303_encode_baud_rate_divisor(port, buf, baud);
-....
-}
+Regards
+Matthias
