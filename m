@@ -2,87 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0D332FFC7
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Mar 2021 10:01:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A37A433000B
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Mar 2021 11:13:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbhCGJBI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 7 Mar 2021 04:01:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbhCGJAk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Mar 2021 04:00:40 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B630C06174A;
-        Sun,  7 Mar 2021 01:00:40 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id z7so3450196plk.7;
-        Sun, 07 Mar 2021 01:00:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=s4gFl7SGAYFTP4ZBTRFs+Ij/virx6YISf2jqubAENRM=;
-        b=RL1FOIOroOB3CihKg27Uggf5JY4Y/Df3UKpX2AWC4ZRv7a0+0J+HbNb+dZzAhsUJa4
-         MVw+gfEUHuOdwUf1HuLCO6FUsLdrTOszycBUKls8jtwNkm4Txb8NOaSBcIAm5C8vaFfp
-         BcDsLvXEGr5jNMrUUWiltsRtc4EDZeKAGnhJNtih8RL6QiQxPHmtQbTf8xAhvqZ7X210
-         53RILUWkcdVm7/UAZwHi03mIz7c4gOzJJ74zwRLKAktrt/NLrNtKHq4tDfQQCYK1750/
-         Ecw09KtTUkrGgej3tdotQtvnWtT/yTrQR9+x+Ys5Ezp+7ujBcbMpSSB00dy17i7/8RFE
-         92Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=s4gFl7SGAYFTP4ZBTRFs+Ij/virx6YISf2jqubAENRM=;
-        b=oNMpiK3mfXkN287KbWKOZV26LvmRbIgptMzQGQclZEGl4n+mDANzGC4azaoQbkX33I
-         OEmMF4x1p2VZ4B1aOM0JqhpPEi1IezNmj+t2ozY8gd1yGOcN2tLYPy+X/IZH50S1+6a/
-         zR7wEYb/iYulhlvZAvM6RbE26tXhDoHJRyRJUsS2Ys5T6oqzfvv4IlJ2PSi9ZkWwXGdP
-         keXQqyQW6GEq2thP098+50YkqKqQctY8WEKA7xKtltxZ+zXKnDH6b4dMr0QuBbsJmAol
-         Id8azD5X43VZQ3MT2W7Hez6rAq/ZSYg723WAK7YD750WYAuhVEns4O8+kThZ0Chj/+aW
-         1YBQ==
-X-Gm-Message-State: AOAM532DXS2/BINMFcMxzwzjYzGr0F0z05L503r7bAXGr9AkexMotV9g
-        hk3ZPJF1XO4FhKfYlEOKGtmb3vc7fdDADuOZ
-X-Google-Smtp-Source: ABdhPJwq3W3JzapllBN/oSvIHMGdK565ofiqya4NtR/HRfOGq2gH5ZoPE+7jtEujxr4xw1oKLe6q+Q==
-X-Received: by 2002:a17:902:6b02:b029:da:c6c0:d650 with SMTP id o2-20020a1709026b02b02900dac6c0d650mr16454723plk.74.1615107639705;
-        Sun, 07 Mar 2021 01:00:39 -0800 (PST)
-Received: from localhost.localdomain ([45.135.186.66])
-        by smtp.gmail.com with ESMTPSA id ch15sm7281858pjb.46.2021.03.07.01.00.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Mar 2021 01:00:39 -0800 (PST)
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-To:     gregkh@linuxfoundation.org, yoshihiro.shimoda.uh@renesas.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [PATCH] usb: renesas_usbhs: fix error return code of usbhsf_pkt_handler()
-Date:   Sun,  7 Mar 2021 01:00:30 -0800
-Message-Id: <20210307090030.22369-1-baijiaju1990@gmail.com>
+        id S231582AbhCGKNF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 7 Mar 2021 05:13:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51628 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231571AbhCGKNB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 7 Mar 2021 05:13:01 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AA6D365134;
+        Sun,  7 Mar 2021 10:12:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615111981;
+        bh=tIc/2N64eY8KnqMMTNJqlX9sQMIABmR3U+HS3rV6unY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bqy5rDjLERG7EAxenNgRNVpRe9fvdmd6DKfLZyzVmXS1FAnJbmt50a7PLaEdQX0Vm
+         tVfTJ+9uS0wX7CahuxJ7f12YI2ZmMt6THh7m6LHOBbpKhVZyd4jPM7dTsJ5wFQ0J0J
+         Q6buDA82Oo0Hb4xvSWr9OpVH/y+tceeR3+GYaI4Wu/58v2MbWO+gHSOJrnF/mLss72
+         Fjfc3R/vnSj/bA0AM58u2Ec4hrdXp+4dh9t4R0rC7YTbOm5wJZsOh4sIzqXZ4UmfAQ
+         PIhf9mFEMTLedmkfVwqZE7lYBpTqAUogwxDIPEd99ScWv7I3FeQXSfq9LsTD3IdUsh
+         LNrZZoeil284Q==
+From:   Peter Chen <peter.chen@kernel.org>
+To:     pawell@cadence.com
+Cc:     linux-usb@vger.kernel.org, rogerq@kernel.org, frank.li@nxp.com,
+        a-govindraju@ti.com, Peter Chen <peter.chen@kernel.org>
+Subject: [PATCH 1/1] usb: cdns3: trace: delete the trace parameter for request->trb
+Date:   Sun,  7 Mar 2021 18:12:55 +0800
+Message-Id: <20210307101255.26760-1-peter.chen@kernel.org>
 X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When __usbhsf_pkt_get() returns NULL to pkt, no error return code of
-usbhsf_pkt_handler() is assigned.
-To fix this bug, ret is assigned with -EINVAL in this case.
+It is not correct using %pa to print virtual address of request->trb, and
+it is hard to print its physical address due to the virtual address is
+zero before using. It could use index (start_trb/end_trb) to know the
+current trb position, so no matter virtual address or physical address
+for request-trb is not so meaningful.
 
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+Reported-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Peter Chen <peter.chen@kernel.org>
 ---
- drivers/usb/renesas_usbhs/fifo.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/usb/cdns3/cdns3-trace.h | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/usb/renesas_usbhs/fifo.c b/drivers/usb/renesas_usbhs/fifo.c
-index e6fa13701808..b5e7991dc7d9 100644
---- a/drivers/usb/renesas_usbhs/fifo.c
-+++ b/drivers/usb/renesas_usbhs/fifo.c
-@@ -160,8 +160,10 @@ static int usbhsf_pkt_handler(struct usbhs_pipe *pipe, int type)
- 	usbhs_lock(priv, flags);
- 
- 	pkt = __usbhsf_pkt_get(pipe);
--	if (!pkt)
-+	if (!pkt) {
-+		ret = -EINVAL;
- 		goto __usbhs_pkt_handler_end;
-+	}
- 
- 	switch (type) {
- 	case USBHSF_PKT_PREPARE:
+diff --git a/drivers/usb/cdns3/cdns3-trace.h b/drivers/usb/cdns3/cdns3-trace.h
+index 8648c7a7a9dd..7574b4a62813 100644
+--- a/drivers/usb/cdns3/cdns3-trace.h
++++ b/drivers/usb/cdns3/cdns3-trace.h
+@@ -214,7 +214,6 @@ DECLARE_EVENT_CLASS(cdns3_log_request,
+ 		__field(int, no_interrupt)
+ 		__field(int, start_trb)
+ 		__field(int, end_trb)
+-		__field(struct cdns3_trb *, start_trb_addr)
+ 		__field(int, flags)
+ 		__field(unsigned int, stream_id)
+ 	),
+@@ -230,12 +229,11 @@ DECLARE_EVENT_CLASS(cdns3_log_request,
+ 		__entry->no_interrupt = req->request.no_interrupt;
+ 		__entry->start_trb = req->start_trb;
+ 		__entry->end_trb = req->end_trb;
+-		__entry->start_trb_addr = req->trb;
+ 		__entry->flags = req->flags;
+ 		__entry->stream_id = req->request.stream_id;
+ 	),
+ 	TP_printk("%s: req: %p, req buff %p, length: %u/%u %s%s%s, status: %d,"
+-		  " trb: [start:%d, end:%d: virt addr %pa], flags:%x SID: %u",
++		  " trb: [start:%d, end:%d], flags:%x SID: %u",
+ 		__get_str(name), __entry->req, __entry->buf, __entry->actual,
+ 		__entry->length,
+ 		__entry->zero ? "Z" : "z",
+@@ -244,7 +242,6 @@ DECLARE_EVENT_CLASS(cdns3_log_request,
+ 		__entry->status,
+ 		__entry->start_trb,
+ 		__entry->end_trb,
+-		__entry->start_trb_addr,
+ 		__entry->flags,
+ 		__entry->stream_id
+ 	)
 -- 
 2.17.1
 
