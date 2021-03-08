@@ -2,122 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C988A33159F
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 19:13:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D45331606
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 19:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbhCHSNR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Mar 2021 13:13:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
+        id S231156AbhCHS2Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Mar 2021 13:28:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbhCHSNK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Mar 2021 13:13:10 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DFDC06174A
-        for <linux-usb@vger.kernel.org>; Mon,  8 Mar 2021 10:13:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=KwYAVxQ8Xu/wb34tkAmEqFZ19a36NBCgir10GRki8Qs=; b=vcV1ZpPJMU9M7k+rEGYIR+UEDi
-        jKoba5vA0uhkn/ojw3rNFGlQ9OuZKr2ICUNFJs2Fo/ft5IVuitlhfrRO8y785onYWhrSwh5y7hZWl
-        ku44Mbo/t71KPd3ue0CrpwMHcJZHnb62vJAG369U3Yovtz3VYXF49EB+Dpj1x/+dt6upg8XrVXNNx
-        4slTPtKxf0Hk7f4SUDhQPwyMUsao8mzMZnGgXVbDxRVlwfCttd5oih+2fB5QcjSa+WPChgKbDMLPy
-        +gviMedSSTHDfStX46XMjHQVV2X8JoKT+q8KUZyHldfDLZlW4tJztu6pZERNyTahZWepA/S8L5D/F
-        YoGoqdkw==;
-Received: from [2a01:799:95f:4600:cca0:57ac:c55d:a485] (port=56906)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1lJKNN-0006wf-7l; Mon, 08 Mar 2021 19:13:05 +0100
-Subject: Re: [PATCH v7 3/3] drm: Add GUD USB Display driver
-To:     dri-devel@lists.freedesktop.org
-Cc:     linux-usb@vger.kernel.org, sam@ravnborg.org, peter@stuge.se,
-        lkundrak@v3.sk, markus@raatikainen.cc, pontus.fuchs@gmail.com,
-        hudson@trmm.net, th020394@gmail.com,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-References: <20210305163104.30756-1-noralf@tronnes.org>
- <20210305163104.30756-4-noralf@tronnes.org>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-Message-ID: <e22eca11-6758-fb1b-5b36-0182bcf16574@tronnes.org>
-Date:   Mon, 8 Mar 2021 19:13:00 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        with ESMTP id S230050AbhCHS2F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Mar 2021 13:28:05 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028DEC06174A;
+        Mon,  8 Mar 2021 10:28:05 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id r24so2053332otp.12;
+        Mon, 08 Mar 2021 10:28:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ZYeDqqz9KrmiEcAGJt+n9VTedd2rQHNdQORQqGYHMxE=;
+        b=Wbe4xb7OkQgloKbgMu5V7fGmgMxtRdWlRSjAqgcnhVBRX5QJtmwBjcbezt9yRGLHJg
+         MuzBbayZKZR7Bon5zUiq20BAXlgsp/mRg/AO9E/6dZP01MPutkme/N5tHsGKKQBGSuhc
+         oL9wIgpXgPlgSYt4c84+/P+VA9euPJjOZAvE73vB8J+L/uUcV9f9O4DtszeHQ4wzq7Rn
+         Md8hiZ2lPmXndpRScAYWiXwz9o/aRafhRxefo9PeKbrdK14wzBhTzZaS4DwTwVSrJ8DW
+         /1uzwx9MvJMBw2OJQgAoYfvdwyKspW874Kbjc4RQoJUyODC5hErZ38MaOD7fJ20jbWg2
+         G84Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ZYeDqqz9KrmiEcAGJt+n9VTedd2rQHNdQORQqGYHMxE=;
+        b=c7TfBhYUUm56wfwbiyJ6PdObzlS6QPEobEf1ntjk7CHB/LiVsJCbV4mggcXeF/Vpaj
+         Zc2VAZKsqk6TFa6FF0HbxsR97OvW5sm1jmtbgAMD6fXTKO0XYxoqaB12uHSJ7vJ3Qh3O
+         7ccsYV4zq9+4zh1qsnfKQz/Kubhs7Lme+H8Nm1Z6a+dgbjou0so+l7msIMzpTqHxLKFv
+         TFHA8Hd3tgmvRQWASFlNO/hTQhpV+CaYvsCYMU9q5i9YC9b8rBqvaf5det0UtnAjohFj
+         BgNwLkFTzjf+CK5Cgy/K5APiFats84wQ/T0rVBFJRqDRDJazQD/+r37wXwfNx/S8/3ok
+         u7QQ==
+X-Gm-Message-State: AOAM5338pKxvz72ERWuvC5drhk0mPFvTRd76QP06eDGguya7DVSMqDN7
+        VpSzYOegUbwA2Ylr5B0wsJr4SPRRIFE=
+X-Google-Smtp-Source: ABdhPJx6oU7X51l7s+KsY5TPRrP8STZHMX9TOtA9mNH/p7G+r6nwUxn9VGd8Stx4fego3ImFkm8bdQ==
+X-Received: by 2002:a9d:1ca1:: with SMTP id l33mr19879167ota.368.1615228084433;
+        Mon, 08 Mar 2021 10:28:04 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f29sm2901108ots.22.2021.03.08.10.28.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 08 Mar 2021 10:28:03 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 8 Mar 2021 10:28:01 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: tcpci: Check ROLE_CONTROL while
+ interpreting CC_STATUS
+Message-ID: <20210308182801.GA225316@roeck-us.net>
+References: <20210304070931.1947316-1-badhri@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20210305163104.30756-4-noralf@tronnes.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210304070931.1947316-1-badhri@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-Den 05.03.2021 17.31, skrev Noralf Trønnes:
-> This adds a USB display driver with the intention that it can be
-> used with future USB interfaced low end displays/adapters. The Linux
-> gadget device driver will serve as the canonical device implementation.
+On Wed, Mar 03, 2021 at 11:09:31PM -0800, Badhri Jagan Sridharan wrote:
+> While interpreting CC_STATUS, ROLE_CONTROL has to be read to make
+> sure that CC1/CC2 is not forced presenting Rp/Rd.
 > 
+> From the TCPCI spec:
+> 
+> 4.4.5.2 ROLE_CONTROL (Normative):
+> The TCPM shall write B6 (DRP) = 0b and B3..0 (CC1/CC2) if it wishes
+> to control the Rp/Rd directly instead of having the TCPC perform
+> DRP toggling autonomously. When controlling Rp/Rd directly, the
+> TCPM writes to B3..0 (CC1/CC2) each time it wishes to change the
+> CC1/CC2 values. This control is used for TCPM-TCPC implementing
+> Source or Sink only as well as when a connection has been detected
+> via DRP toggling but the TCPM wishes to attempt Try.Src or Try.Snk.
+> 
+> Table 4-22. CC_STATUS Register Definition:
+> If (ROLE_CONTROL.CC1 = Rd) or ConnectResult=1)
+> 00b: SNK.Open (Below maximum vRa)
+> 01b: SNK.Default (Above minimum vRd-Connect)
+> 10b: SNK.Power1.5 (Above minimum vRd-Connect) Detects Rp-1.5A
+> 11b: SNK.Power3.0 (Above minimum vRd-Connect) Detects Rp-3.0A
+> 
+> If (ROLE_CONTROL.CC2=Rd) or (ConnectResult=1)
+> 00b: SNK.Open (Below maximum vRa)
+> 01b: SNK.Default (Above minimum vRd-Connect)
+> 10b: SNK.Power1.5 (Above minimum vRd-Connect) Detects Rp 1.5A
+> 11b: SNK.Power3.0 (Above minimum vRd-Connect) Detects Rp 3.0A
+> 
+> Fixes: 74e656d6b0551 ("staging: typec: Type-C Port Controller
+> Interface driver (tcpci)")
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
-> diff --git a/drivers/gpu/drm/gud/gud_drv.c b/drivers/gpu/drm/gud/gud_drv.c
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-> +static int gud_probe(struct usb_interface *intf, const struct usb_device_id *id)
-> +{
-
-> +	num_formats_dev = ret;
-> +	for (i = 0; i < num_formats_dev; i++) {
-> +		const struct drm_format_info *info;
-> +		size_t fmt_buf_size;
-> +		u32 format;
+> ---
+>  drivers/usb/typec/tcpm/tcpci.c | 21 ++++++++++++++++++---
+>  1 file changed, 18 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index a27deb0b5f03..027afd7dfdce 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -24,6 +24,15 @@
+>  #define	AUTO_DISCHARGE_PD_HEADROOM_MV		850
+>  #define	AUTO_DISCHARGE_PPS_HEADROOM_MV		1250
+>  
+> +#define tcpc_presenting_cc1_rd(reg) \
+> +	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
+> +	 (((reg) & (TCPC_ROLE_CTRL_CC1_MASK << TCPC_ROLE_CTRL_CC1_SHIFT)) == \
+> +	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC1_SHIFT)))
+> +#define tcpc_presenting_cc2_rd(reg) \
+> +	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
+> +	 (((reg) & (TCPC_ROLE_CTRL_CC2_MASK << TCPC_ROLE_CTRL_CC2_SHIFT)) == \
+> +	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC2_SHIFT)))
 > +
-> +		format = gud_to_fourcc(formats_dev[i]);
-> +		if (!format) {
-> +			drm_dbg(drm, "Unsupported format: 0x%02x\n", formats_dev[i]);
-> +			continue;
-> +		}
+>  struct tcpci {
+>  	struct device *dev;
+>  
+> @@ -178,19 +187,25 @@ static int tcpci_get_cc(struct tcpc_dev *tcpc,
+>  			enum typec_cc_status *cc1, enum typec_cc_status *cc2)
+>  {
+>  	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
+> -	unsigned int reg;
+> +	unsigned int reg, role_control;
+>  	int ret;
+>  
+> +	ret = regmap_read(tcpci->regmap, TCPC_ROLE_CTRL, &role_control);
+> +	if (ret < 0)
+> +		return ret;
 > +
-> +		if (format == GUD_DRM_FORMAT_R1)
-> +			info = &gud_drm_format_r1;
-> +		else if (format == GUD_DRM_FORMAT_RGB111)
-> +			info = &gud_drm_format_rgb111;
-> +		else
-> +			info = drm_format_info(format);
-> +
-> +		switch (format) {
-> +		case GUD_DRM_FORMAT_R1:
-> +			fallthrough;
-> +		case GUD_DRM_FORMAT_RGB111:
-> +			xrgb8888_emulation_format = info;
-> +			break;
-> +		case DRM_FORMAT_RGB565:
-> +			rgb565_supported = true;
-> +			if (!xrgb8888_emulation_format)
-> +				xrgb8888_emulation_format = info;
-> +			break;
-> +		case DRM_FORMAT_XRGB8888:
-> +			xrgb8888_supported = true;
-> +			break;
-> +		};
-> +
-> +		fmt_buf_size = drm_format_info_min_pitch(info, 0, drm->mode_config.max_width) *
-> +			       drm->mode_config.max_height;
-> +		max_buffer_size = max(max_buffer_size, fmt_buf_size);
-> +
-> +		if (format == GUD_DRM_FORMAT_R1)
-
-This line should be:
-
-		if (format == GUD_DRM_FORMAT_R1 || format == GUD_DRM_FORMAT_RGB111)
-
-There's also a bug in the format conversion functions that shows up on
-transfers with widths that are not pixels per byte aligned. I've fixed
-R1, I'll look at RGB111 tomorrow.
-
-Noralf.
-
-> +			continue; /* Internal not for userspace */
-> +
-> +		formats[num_formats++] = format;
-> +	}
-
+>  	ret = regmap_read(tcpci->regmap, TCPC_CC_STATUS, &reg);
+>  	if (ret < 0)
+>  		return ret;
+>  
+>  	*cc1 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC1_SHIFT) &
+>  				 TCPC_CC_STATUS_CC1_MASK,
+> -				 reg & TCPC_CC_STATUS_TERM);
+> +				 reg & TCPC_CC_STATUS_TERM ||
+> +				 tcpc_presenting_cc1_rd(role_control));
+>  	*cc2 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC2_SHIFT) &
+>  				 TCPC_CC_STATUS_CC2_MASK,
+> -				 reg & TCPC_CC_STATUS_TERM);
+> +				 reg & TCPC_CC_STATUS_TERM ||
+> +				 tcpc_presenting_cc2_rd(role_control));
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.30.1.766.gb4fecdf3b7-goog
+> 
