@@ -2,71 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D167F3305B6
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 02:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0173305B8
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 02:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233573AbhCHB4F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 7 Mar 2021 20:56:05 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:8779 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232302AbhCHBzo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Mar 2021 20:55:44 -0500
-X-IronPort-AV: E=Sophos;i="5.81,231,1610377200"; 
-   d="scan'208";a="74141289"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 08 Mar 2021 10:55:42 +0900
-Received: from localhost.localdomain (unknown [10.166.252.89])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 3D2E34009BE9;
-        Mon,  8 Mar 2021 10:55:42 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH] usb: renesas_usbhs: Clear PIPECFG for re-enabling pipe with other EPNUM
-Date:   Mon,  8 Mar 2021 10:55:38 +0900
-Message-Id: <1615168538-26101-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
+        id S233577AbhCHB6z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 7 Mar 2021 20:58:55 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:55443 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232256AbhCHB6X (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Mar 2021 20:58:23 -0500
+X-UUID: d60b31b2753342e0b1392b49f9dfce48-20210308
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=cAEtYNvirduPPDmsHCYYxu63PGqbUKC1f0wMKO0QDrs=;
+        b=REl9V3YbBf/A4lRXnkgcZqm+QVDdesTHipweNyXp2EXxBxQmM6R0PEqwA2apt66PAJLfST7iSUURsBdJDEjgH5NVFej8gwkHYLOkOnfv50fVDMRlf2UNuRceWY//zmlEQmSzRVsoHAfllrBuDKkvuSO2uWAtkScsBL85+9Es7P0=;
+X-UUID: d60b31b2753342e0b1392b49f9dfce48-20210308
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1846003065; Mon, 08 Mar 2021 09:58:04 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by mtkmbs06n1.mediatek.inc
+ (172.21.101.129) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 8 Mar
+ 2021 09:57:46 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 8 Mar 2021 09:57:43 +0800
+Message-ID: <1615168663.32109.5.camel@mhfsdcap03>
+Subject: Re: [PATCH 03/17] usb: xhci-mtk: get the microframe boundary for
+ ESIT
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
+CC:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ikjoon Jang <ikjn@chromium.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Date:   Mon, 8 Mar 2021 09:57:43 +0800
+In-Reply-To: <cfa6dccb-d784-06fd-e5bc-0b53d105b7f6@gmail.com>
+References: <1614934975-15188-1-git-send-email-chunfeng.yun@mediatek.com>
+         <1614934975-15188-3-git-send-email-chunfeng.yun@mediatek.com>
+         <cfa6dccb-d784-06fd-e5bc-0b53d105b7f6@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-According to the datasheet, this controller has a restriction
-which "set an endpoint number so that combinations of the DIR bit and
-the EPNUM bits do not overlap.". However, since the udc core driver is
-possible to assign a bulk pipe as an interrupt endpoint, an endpoint
-number may not match the pipe number. After that, when user rebinds
-another gadget driver, this driver broke the restriction because
-the driver didn't clear any configuration in usb_ep_disable().
-
-Example:
- # modprobe g_ncm
- Then, EP3 = pipe 3, EP4 = pipe 4, EP5 = pipe 6
- # rmmod g_ncm
- # modprobe g_hid
- Then, EP3 = pipe 6, EP4 = pipe 7.
- So, pipe 3 and pipe 6 are set as EP3.
-
-So, clear PIPECFG register in usbhs_pipe_free().
-
-Fixes: dfb87b8bfe09 ("usb: renesas_usbhs: gadget: fix re-enabling pipe without re-connecting")
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
----
- drivers/usb/renesas_usbhs/pipe.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/renesas_usbhs/pipe.c b/drivers/usb/renesas_usbhs/pipe.c
-index e7334b7..75fff2e 100644
---- a/drivers/usb/renesas_usbhs/pipe.c
-+++ b/drivers/usb/renesas_usbhs/pipe.c
-@@ -746,6 +746,8 @@ struct usbhs_pipe *usbhs_pipe_malloc(struct usbhs_priv *priv,
- 
- void usbhs_pipe_free(struct usbhs_pipe *pipe)
- {
-+	usbhsp_pipe_select(pipe);
-+	usbhsp_pipe_cfg_set(pipe, 0xFFFF, 0);
- 	usbhsp_put_pipe(pipe);
- }
- 
--- 
-2.7.4
+T24gRnJpLCAyMDIxLTAzLTA1IGF0IDEyOjEzICswMzAwLCBTZXJnZWkgU2h0eWx5b3Ygd3JvdGU6
+DQo+IEhlbGxvIQ0KPiANCj4gT24gMDUuMDMuMjAyMSAxMjowMiwgQ2h1bmZlbmcgWXVuIHdyb3Rl
+Og0KPiANCj4gPiBUdW5lIHRoZSBib3VuZGFyeSBmb3IgRlMvTFMgRVNJVCBkdWUgdG8gQ1M6DQo+
+ID4gRm9yIElTT0Mgb3V0LWVwLCB0aGUgY29udHJvbGxlciBzdGFydHMgdHJhbnNmZXIgZGF0YSBh
+ZnRlcg0KPiA+IHRoZSBmaXJzdCBTUzsgZm9yIG90aGVycywgdGhlIGRhdGEgaXMgYWxyZWFkeSB0
+cmFuc2ZlcmVkDQo+IA0KPiAgICAgVHJhbnNmZXJyZWQuDQpPaw0KPiANCj4gPiBiZWZvcmUgdGhl
+IGxhc3QgQ1MuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVu
+Zy55dW5AbWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+ICAgZHJpdmVycy91c2IvaG9zdC94aGNp
+LW10ay1zY2guYyB8IDI0ICsrKysrKysrKysrKysrKysrKystLS0tLQ0KPiA+ICAgMSBmaWxlIGNo
+YW5nZWQsIDE5IGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pDQo+ID4gDQo+ID4gZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGstc2NoLmMgYi9kcml2ZXJzL3VzYi9ob3N0
+L3hoY2ktbXRrLXNjaC5jDQo+ID4gaW5kZXggODk1MGQxZjEwYTdmLi5lM2IxOGRmY2E4NzQgMTAw
+NjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay1zY2guYw0KPiA+ICsrKyBi
+L2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGstc2NoLmMNCj4gPiBAQCAtNTEzLDIyICs1MTMsMzUg
+QEAgc3RhdGljIHZvaWQgdXBkYXRlX3NjaF90dChzdHJ1Y3QgdXNiX2RldmljZSAqdWRldiwNCj4g
+PiAgIAkJbGlzdF9kZWwoJnNjaF9lcC0+dHRfZW5kcG9pbnQpOw0KPiA+ICAgfQ0KPiA+ICAgDQo+
+ID4gK3N0YXRpYyB1MzIgZ2V0X2VzaXRfYm91bmRhcnkoc3RydWN0IG11M2hfc2NoX2VwX2luZm8g
+KnNjaF9lcCkNCj4gPiArew0KPiA+ICsJdTMyIGJvdW5kYXJ5ID0gc2NoX2VwLT5lc2l0Ow0KPiA+
+ICsNCj4gPiArCWlmIChzY2hfZXAtPnNjaF90dCkgeyAvKiBMUy9GUyB3aXRoIFRUICovDQo+ID4g
+KwkJLyogdHVuZSBmb3IgQ1MgKi8NCj4gPiArCQlpZiAoc2NoX2VwLT5lcF90eXBlICE9IElTT0Nf
+T1VUX0VQKQ0KPiA+ICsJCQlib3VuZGFyeSArPSAxOw0KPiANCj4gICAgIFdoeSBub3Q6DQo+IA0K
+PiAJCQlib3VuZGFyeSsrOw0KRm9yZ290IGl0LCBpdCdzIG1vZGlmaWVkIGZyb20gImJvdW5kYXJ5
+ID0gc2NoX2VwLT5lc2l0ICsgMTsiDQoNClRoYW5rcw0KPiANCj4gPiArCQllbHNlIGlmIChib3Vu
+ZGFyeSA+IDEpIC8qIG5vcm1hbGx5IGVzaXQgPj0gOCBmb3IgRlMvTFMgKi8NCj4gPiArCQkJYm91
+bmRhcnkgLT0gMTsNCj4gDQo+IAkJCWJvdW5kYXJ5LS07DQo+IA0KPiBbLi4uXQ0KPiANCj4gTUJS
+LCBTZXJnZWkNCg0K
 
