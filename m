@@ -2,114 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22DB23309BB
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 09:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1AAB3309D6
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 10:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbhCHIuo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Mar 2021 03:50:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
+        id S229446AbhCHI76 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Mar 2021 03:59:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbhCHIuo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Mar 2021 03:50:44 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F8EC06174A;
-        Mon,  8 Mar 2021 00:50:43 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id lr13so18656087ejb.8;
-        Mon, 08 Mar 2021 00:50:43 -0800 (PST)
+        with ESMTP id S229458AbhCHI7w (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Mar 2021 03:59:52 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494D2C06174A;
+        Mon,  8 Mar 2021 00:59:52 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id q14so15097196ljp.4;
+        Mon, 08 Mar 2021 00:59:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=32H/9kq3kkSKIKkC6rU2T+kJc+RIITmk29bb5zIT9oI=;
-        b=KIaCm3pHjqR7urou0oY5u7V1njgbFztsypDixLXkQI0JsQeGbPNrSN9X3vPk6QOuNx
-         VnsX5BVJBzcjB/2khvP8baPNXzjMoieUTFr/P2U+WyBfDWu5N/IHG8UvVv380/RBTTSw
-         mP5VN/RZ/0RK257r2w9XCeY4z2t4Ejpc/WLTROXxjeXtoaDP5tY6OoAq2xGQ2OKtFXGQ
-         4OvA+tokBNZTusVVIugxkDg6+nzwCsmXnoeUqlf3UKUDCHsgiHGkkJpQ6FbnFYOqpHzM
-         YHBOFYssopaaPZweAVzoIm5mvgNAb4w65I3WauIoi2XUCIIP6LKwdPyY5XM/Sy6DkWg+
-         I1hw==
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Dgyrcw/8dyMayFCPFJVLLcZhdVekLb7dMhsjcprcSec=;
+        b=ao9aCzKSRVE3lehtYAAEJN1xg9IRGEmRWsmnuJ9GZ7DA6RtdR6i0OfQZA3zyq3KY1K
+         1jyyCIsf8/NA9N9kXFWSL8O7mVPqyDwaDMgc2hpVUgLF46I+/QJRgdKQJsNSYAeDYFEM
+         LsWwCSMlNIq16SQg+ZK1KlMhpy9hczAM7P+pA+PB0m04VxZov1m97sciYHMJf2fGED2c
+         gV8PoaVz5EuavxU08+94dNymrzYj68KCPN2ZMo1JawcMQLZcT4GeHN+dtx+ubEs6i2RV
+         iugCy0Ex71jBYg4eTY5gBFuH2eNhQdTfOhv47i/AAfAhUmlV+2WFbsqF8+pzy4VNJY4N
+         CyrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=32H/9kq3kkSKIKkC6rU2T+kJc+RIITmk29bb5zIT9oI=;
-        b=ax0gO7ncexZycw2CKzY02egWGylYcAQNmdnuMfKNANa2h78CtGcnZaESxXuV7BRrux
-         ISJG/K4dvp/krdHMd6HUWDHP91byKvbWtp3u1f4ZkTNJdyoKOcciHVjpgouRZTJ5vkEO
-         HS4YL+j79V7WCHwnj789nJiYSamwze+Ad3W3jT/UMg/5J7AJSFZ29G6TScce+YzuzLXk
-         KZmV0S/iTxOEmYLIIO4cMQTunMBeDQdZmAXKbPfLeSSBMBnYl9KHDDDF7g8guFGJkRkp
-         DgYFPd4MdhpE4oZNk/d8Jsm8+DknFzdPvTPs/SnYMST4OYQRwN9muL5wndEowtHhdx+m
-         Iklw==
-X-Gm-Message-State: AOAM533P1pvpfRIEt2cpjnSpRQrd7NzI8n7zhqIO+ri2eVh/CkDSBRbR
-        +bF9/i3lyfBcVv9/7KhK3Pnk3WgqaCRF1x7aBww=
-X-Google-Smtp-Source: ABdhPJyHK1zsY+M9ptcXWeAhgfGYn+JUy3cLX12D8KVwzBqaClqjEVyBfEFjDKMY5XH78exAfT4lMM1YQvXeu4+xjMg=
-X-Received: by 2002:a17:906:b80c:: with SMTP id dv12mr14187321ejb.110.1615193442483;
- Mon, 08 Mar 2021 00:50:42 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=Dgyrcw/8dyMayFCPFJVLLcZhdVekLb7dMhsjcprcSec=;
+        b=ZuIHv4N90Wzx+Mc7kdHGsXl+Cdsm7ByOhELKoh9EmqVAV65juHliAmKx2u1T03OeOW
+         bp9LSxirWCFcEzpf7lo9MkiE94ZNoTQiEkipe4Y4SdCOvBIFtwmy8ZfxoUb1074GaNaQ
+         NjeCWHjJ2r35Pohj+wEUBmPrATMtVumTfUnIR7Zoh9IdRgyQMPAWqEqwvDPykGwfxazB
+         bbTPmsFoPY9r3aMBLyV59HQulLL7L+ECgoNsjhEoIapghESTihtUwZj3wzKnWY5jGEt5
+         ShZPnBAUBA0DW2TrZvJLb128Ko1aELqDBK/RHkQZdvDbsUzcXWP+bd2/DVrjUVk0u0mT
+         a4vQ==
+X-Gm-Message-State: AOAM532wnUD0qmTUTWUWfjlELwqaLX3ezJPdDL01Eq9kFUuXjjeaPRsV
+        gHx0/NTbpC0v955C/iGFS7IHhy6ffss=
+X-Google-Smtp-Source: ABdhPJzSPAtgnX514PvrGmlruGtmFh0ng/yM3Bk+k4gt0bTOQewgPsKG8nE2P2MCyRi7u7KtV8GfXw==
+X-Received: by 2002:a2e:87c6:: with SMTP id v6mr13297799ljj.490.1615193990398;
+        Mon, 08 Mar 2021 00:59:50 -0800 (PST)
+Received: from [192.168.1.100] ([31.173.86.76])
+        by smtp.gmail.com with ESMTPSA id y23sm1412493ljm.53.2021.03.08.00.59.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Mar 2021 00:59:50 -0800 (PST)
+Subject: Re: [PATCH] usb: typec: tcpm: turn tcpm_ams_finish into void function
+To:     Yang Li <yang.lee@linux.alibaba.com>, linux@roeck-us.net
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1615184481-102148-1-git-send-email-yang.lee@linux.alibaba.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <0a15af59-2c28-e278-0127-ba76dd3cc2e6@gmail.com>
+Date:   Mon, 8 Mar 2021 11:59:43 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-References: <CAH+2xPCmZNW0ct8XoBmAnd0QK53guv2e4HLn40NvWrEA7pj3qw@mail.gmail.com>
- <CAH+2xPCkKRhXJSqMx7kzsO53JwXbrmYPLLL-_ANO9waNJREDWA@mail.gmail.com>
- <777991bb72f8842e3e730f9b600b2086478f5d36.camel@suse.com> <CAH+2xPAB4bWN9NiTQr4WggUX6eDXzMikzYJySx3sAj3Ho3AdxA@mail.gmail.com>
- <b71b85a588c3e27d2de129723468263d932ab435.camel@suse.com> <CAH+2xPA4yUwbcOaO4OH-LaAwC820ZoFmAf_eUdf6+xgiTPWz8g@mail.gmail.com>
-In-Reply-To: <CAH+2xPA4yUwbcOaO4OH-LaAwC820ZoFmAf_eUdf6+xgiTPWz8g@mail.gmail.com>
-From:   Bruno Thomsen <bruno.thomsen@gmail.com>
-Date:   Mon, 8 Mar 2021 09:50:26 +0100
-Message-ID: <CAH+2xPC0sbqvsiBgsemHxrmE=JgnuOK6mzJ6pQ_G-ihqswAvPQ@mail.gmail.com>
-Subject: Re: usb: cdc-acm: BUG kmalloc-128 Poison overwritten
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     linux-usb@vger.kernel.org,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Bruno Thomsen <bth@kamstrup.com>,
-        Lars Alex Pedersen <laa@kamstrup.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1615184481-102148-1-git-send-email-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Den fre. 26. feb. 2021 kl. 15.14 skrev Bruno Thomsen <bruno.thomsen@gmail.com>:
->
-> Den tor. 25. feb. 2021 kl. 10.57 skrev Oliver Neukum <oneukum@suse.com>:
-> >
-> > Am Mittwoch, den 24.02.2021, 16:21 +0100 schrieb Bruno Thomsen:
-> >
-> > Hi,
-> >
-> > > No, this is not a regression from 5.10. It seems that many attempts to
-> > > fix cdc-acm in the 5.x kernel series have failed to fix the root cause of
-> > > these oops. I have not seen this on 4.14 and 4.19, but I have observed
-> > > it on at least 5.3 and newer kernels in slight variations.
-> > > I guess this is because cdc-acm is very common in the embedded
-> > > ARM world and rarely used on servers or laptops. Combined with
-> > > ARM devices still commonly use 4.x LTS kernels. Not sure if
-> > > hardening options on the kernel has increased change of reproducing
-> > > oops.
-> >
-> > OK, so this is not an additional problem.
-> > According to your logs, an URB that should have been killed wasn't.
->
-> Thanks for looking into this bug rapport.
->
-> > > I am ready to test new patches and will continue to report oops
-> >
-> > Could you test the attached patches?
->
-> Yes, I am already running tests on the patches.
-> I have not seen any oops yet and it seems the USB cdc-acm driver is still
-> working as intended.
->
-> The only notable trace I have seen is this new error from the cdc-acm driver
-> but everything kept on working.
-> kernel: cdc_acm 1-1.1:1.7: acm_start_wb - usb_submit_urb(write bulk) failed: -19
->
-> Other then that I see this common error (should probably be a warning) during
-> device enumeration:
-> kernel: cdc_acm 1-1.2:1.0: failed to set dtr/rts
->
-> I will post an update next week when the patches have survived some
-> more runtime.
+Hello!
 
-Tested-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+On 08.03.2021 9:21, Yang Li wrote:
 
-I have not observed any oops with patches applied. Patches have seen
-more than 10 weeks of runtime testing across multiple devices.
+> This function always return '0' and no callers use the return value.
 
-/Bruno
+    Returns.
+
+> So make it a void function.
+> 
+> This eliminates the following coccicheck warning:
+> ./drivers/usb/typec/tcpm/tcpm.c:778:5-8: Unneeded variable: "ret".
+> Return "0" on line 794
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>   drivers/usb/typec/tcpm/tcpm.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index be0b646..6ee984e 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -773,10 +773,8 @@ static enum typec_cc_status tcpm_rp_cc(struct tcpm_port *port)
+>   	return TYPEC_CC_RP_DEF;
+>   }
+>   
+> -static int tcpm_ams_finish(struct tcpm_port *port)
+> +static void tcpm_ams_finish(struct tcpm_port *port)
+>   {
+> -	int ret = 0;
+> -
+>   	tcpm_log(port, "AMS %s finished", tcpm_ams_str[port->ams]);
+>   
+>   	if (port->pd_capable && port->pwr_role == TYPEC_SOURCE) {
+> @@ -791,7 +789,7 @@ static int tcpm_ams_finish(struct tcpm_port *port)
+>   	port->in_ams = false;
+>   	port->ams = NONE_AMS;
+>   
+> -	return ret;
+> +	return;
+
+    Just remove that *return*.
+
+>   }
+[...]
+
+MBR, Sergei
