@@ -2,106 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD67833069E
+	by mail.lfdr.de (Postfix) with ESMTP id 3484333069C
 	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 04:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234030AbhCHDx7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 7 Mar 2021 22:53:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
+        id S234043AbhCHDyA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 7 Mar 2021 22:54:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234025AbhCHDxp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Mar 2021 22:53:45 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD60CC06174A
-        for <linux-usb@vger.kernel.org>; Sun,  7 Mar 2021 19:53:34 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id h18so7650037ils.2
-        for <linux-usb@vger.kernel.org>; Sun, 07 Mar 2021 19:53:34 -0800 (PST)
+        with ESMTP id S234027AbhCHDxq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Mar 2021 22:53:46 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83ACBC06175F
+        for <linux-usb@vger.kernel.org>; Sun,  7 Mar 2021 19:53:35 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id u20so8500127iot.9
+        for <linux-usb@vger.kernel.org>; Sun, 07 Mar 2021 19:53:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q8TGG0UKWkmYFGc7Y9qbb22HolcuSRxUaKR8Lr9SYoU=;
-        b=XrlwGLOTGlOrwE/OianPDHrFLL7/Cb32+e6rmT/iNTgYljC02P2XJwdVnleaPhM5px
-         w60mJWPg66F9rZvs34l+toJQqhkt06PtqaIzikzPCfB5Xip7RX8l5hkXG/rfJAHTYr9o
-         srbyuAsYMupT8MhS5PzbUUuHbwOu2oFkvywN4=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=pjP5jnpjOCAAGVvM2wgeXDUNlH+i430AZmhAaZRiAsc=;
+        b=P4mqjVrcRIoZvnHBTs8vz2AUyZS7YuVUCwejYaWNBf4NufH7g4nOfO+8f3VQfc/YZm
+         /NlPoAUgCXi/BAClLpBTF4RLHxJ2QfM0Zmvl7aWFuEANkE36YyI0GzWgX2Tio0kMbtQL
+         3TKnbCnjucceTqy/R2jBSMlh519RWcZ5aE88s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q8TGG0UKWkmYFGc7Y9qbb22HolcuSRxUaKR8Lr9SYoU=;
-        b=FappkiswU9EQDcJf25SIY+LgaRot+6OFM6L10Moh/hdYejw8h1H18qyzUqjvXJ02pG
-         JtlDTM6KIFcXsd1+jcU3oPmoGvnqB1BGrdKcstAhwGNmna21pqxWR6kwNBczP2lF1b1n
-         1v2oh2lgtJ0MfObnOZQSzi9lk1DMWCUkepJ1XOZTsHuCQvEz046y9FZEtuQW3ktGWp+n
-         wgOpH5PfeoCdl688wrWE1lZuzo1vdJXrA0tNtAvYuiK2a6LZ8qzNYIEJ7oL1d7Keqadi
-         1ptXZb8MUNKUk6cJXRzQhOryuy3Ev6NOHOny+kaQB5AvUX6lziLfPfjJocB+GUVquM1t
-         tTGA==
-X-Gm-Message-State: AOAM5313FsNis+FXSF5Gm4KibgtNMDH6YxJ9YPIHk6zBTC9j6s4Gdqje
-        JAGxDJJRC1mdl6nLJbz0laiAhw==
-X-Google-Smtp-Source: ABdhPJwYlHGYO4AuJPejd8Arn60zVOYCjtVbUL6XST51uH/KjScwnd/9G11bnY3q39IAZlZ71sVb/A==
-X-Received: by 2002:a92:c248:: with SMTP id k8mr18868269ilo.141.1615175614166;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=pjP5jnpjOCAAGVvM2wgeXDUNlH+i430AZmhAaZRiAsc=;
+        b=M4Jdv4VqpPxgO1XvNoAOnc9zHU1Ak8cmHyJ+jAfE3lpnWG7ZvZ4wwwXw/+iQ3w9yoX
+         3ev9P05ETeAO+XeK5jugvlCO5FKXsL3rLt1y4bSDOpAO16N399KIva4si0VMDFC9qxHK
+         fuNezP8qF4YJhkaZL9d3Z58CshpylOWqHqKX5jOlfn5IT0KB8BbfMzba5MXzO46CejTt
+         rcbMD/DrFUBwXHXnQJWBH5JW8L7DcVTTbg0ZhtX7QXJdm15gajT14TiLejWMRLKeM0E5
+         xI43j8NpqaQ7BFzPv/c3aqJPpQAS9mnD4iw6ZjD8q6Dolf1Dsi5hKtoD74mmbJQGxeEB
+         qZIg==
+X-Gm-Message-State: AOAM533/JnnZyKMG3rLU5hZY0CAj4Qx84cZ3edwlKc1HRvrPRyZzt3ha
+        mjsxkh7P+N8f5a+XMfAMAL9pHA==
+X-Google-Smtp-Source: ABdhPJzDImSLEVxZQblxYwCjtei3KT0UduOf/H0kLlvtdtz8OHNNv1wqu3/i06fuhwpTUDy0ndyp8A==
+X-Received: by 2002:a02:9986:: with SMTP id a6mr21528852jal.46.1615175614977;
         Sun, 07 Mar 2021 19:53:34 -0800 (PST)
 Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id g6sm5605242ilj.28.2021.03.07.19.53.33
+        by smtp.gmail.com with ESMTPSA id g6sm5605242ilj.28.2021.03.07.19.53.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Mar 2021 19:53:33 -0800 (PST)
+        Sun, 07 Mar 2021 19:53:34 -0800 (PST)
 From:   Shuah Khan <skhan@linuxfoundation.org>
 To:     shuah@kernel.org, valentina.manea.m@gmail.com,
         gregkh@linuxfoundation.org
 Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, penguin-kernel@I-love.SAKURA.ne.jp
-Subject: [PATCH 0/6] usbip fixes to crashes found by syzbot
-Date:   Sun,  7 Mar 2021 20:53:25 -0700
-Message-Id: <cover.1615171203.git.skhan@linuxfoundation.org>
+        linux-kernel@vger.kernel.org, penguin-kernel@I-love.SAKURA.ne.jp,
+        stable@vger.kernel.org
+Subject: [PATCH 1/6] usbip: fix stub_dev to check for stream socket
+Date:   Sun,  7 Mar 2021 20:53:26 -0700
+Message-Id: <e942d2bd03afb8e8552bd2a5d84e18d17670d521.1615171203.git.skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <cover.1615171203.git.skhan@linuxfoundation.org>
+References: <cover.1615171203.git.skhan@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch series fixes the following problems founds in syzbot
-fuzzing.
+Fix usbip_sockfd_store() to validate the passed in file descriptor is
+a stream socket. If the file descriptor passed was a SOCK_DGRAM socket,
+sock_recvmsg() can't detect end of stream.
 
-1. The first 3 patches fix usbip-host, vhci_hcd, vudc sub-drivers to
-   validate the passed in file descriptor is a stream socket. If the
-   file descriptor passed was a SOCK_DGRAM socket, sock_recvmsg()
-   can't detect end of stream. Reported and fix suggested by Tetsuo Handa
-2. All 3 sub-drivers use a common kthread_get_run() to create and 
-   start threads. There are races in updating the local and shared status
-   in the current stub-up (usbip-host, vudc) and attach (vhci) sequences
-   resulting in crashes. These stem from starting rx and tx threads before
-   local and shared state is updated correctly to be in sync.
-    
-    1. Doesn't handle kthread_create() error and saves invalid ptr in local
-       state that drives rx and tx threads. Reported and fix suggested by
-       Tetsuo Handa.
-    2. Updates tcp_socket and sockfd,  starts stub_rx and stub_tx threads
-       before updating usbip_device status to correct state. This opens up
-       a race condition between the threads and tear down sequences.
+Cc: stable@vger.kernel.org
+Suggested-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ drivers/usb/usbip/stub_dev.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-TODO: Once these fixes are in, kthread_get_run() macro can be removed
-      in a cleanup patch.
-
-Credit goes to syzbot and Tetsuo Handa for finding and root-causing the
-kthread_get_run() improper error handling problem and others. This is a
-hard problem to find and debug since the races aren't seen in a normal
-case. Fuzzing forces the race window to be small enough for the
-kthread_get_run() error path bug and starting threads before updating the
-local and shared state bug in the stub-up sequence.
-
-Shuah Khan (6):
-  usbip: fix stub_dev to check for stream socket
-  usbip: fix vhci_hcd to check for stream socket
-  usbip: fix vudc to check for stream socket
-  usbip: fix stub_dev usbip_sockfd_store() races leading to gpf
-  usbip: fix vhci_hcd attach_store() races leading to gpf
-  usbip: fix vudc usbip_sockfd_store races leading to gpf
-
- drivers/usb/usbip/stub_dev.c   | 42 ++++++++++++++++++++++++-----
- drivers/usb/usbip/vhci_sysfs.c | 39 +++++++++++++++++++++++----
- drivers/usb/usbip/vudc_sysfs.c | 49 +++++++++++++++++++++++++++++-----
- 3 files changed, 111 insertions(+), 19 deletions(-)
-
+diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
+index 2305d425e6c9..90c105469a07 100644
+--- a/drivers/usb/usbip/stub_dev.c
++++ b/drivers/usb/usbip/stub_dev.c
+@@ -69,8 +69,16 @@ static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *a
+ 		}
+ 
+ 		socket = sockfd_lookup(sockfd, &err);
+-		if (!socket)
++		if (!socket) {
++			dev_err(dev, "failed to lookup sock");
+ 			goto err;
++		}
++
++		if (socket->type != SOCK_STREAM) {
++			dev_err(dev, "Expecting SOCK_STREAM - found %d",
++				socket->type);
++			goto sock_err;
++		}
+ 
+ 		sdev->ud.tcp_socket = socket;
+ 		sdev->ud.sockfd = sockfd;
+@@ -100,6 +108,8 @@ static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *a
+ 
+ 	return count;
+ 
++sock_err:
++	sockfd_put(socket);
+ err:
+ 	spin_unlock_irq(&sdev->ud.lock);
+ 	return -EINVAL;
 -- 
 2.27.0
 
