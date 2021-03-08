@@ -2,119 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1AAB3309D6
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 10:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6B3330A6A
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 10:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229446AbhCHI76 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Mar 2021 03:59:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbhCHI7w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Mar 2021 03:59:52 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494D2C06174A;
-        Mon,  8 Mar 2021 00:59:52 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id q14so15097196ljp.4;
-        Mon, 08 Mar 2021 00:59:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Dgyrcw/8dyMayFCPFJVLLcZhdVekLb7dMhsjcprcSec=;
-        b=ao9aCzKSRVE3lehtYAAEJN1xg9IRGEmRWsmnuJ9GZ7DA6RtdR6i0OfQZA3zyq3KY1K
-         1jyyCIsf8/NA9N9kXFWSL8O7mVPqyDwaDMgc2hpVUgLF46I+/QJRgdKQJsNSYAeDYFEM
-         LsWwCSMlNIq16SQg+ZK1KlMhpy9hczAM7P+pA+PB0m04VxZov1m97sciYHMJf2fGED2c
-         gV8PoaVz5EuavxU08+94dNymrzYj68KCPN2ZMo1JawcMQLZcT4GeHN+dtx+ubEs6i2RV
-         iugCy0Ex71jBYg4eTY5gBFuH2eNhQdTfOhv47i/AAfAhUmlV+2WFbsqF8+pzy4VNJY4N
-         CyrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=Dgyrcw/8dyMayFCPFJVLLcZhdVekLb7dMhsjcprcSec=;
-        b=ZuIHv4N90Wzx+Mc7kdHGsXl+Cdsm7ByOhELKoh9EmqVAV65juHliAmKx2u1T03OeOW
-         bp9LSxirWCFcEzpf7lo9MkiE94ZNoTQiEkipe4Y4SdCOvBIFtwmy8ZfxoUb1074GaNaQ
-         NjeCWHjJ2r35Pohj+wEUBmPrATMtVumTfUnIR7Zoh9IdRgyQMPAWqEqwvDPykGwfxazB
-         bbTPmsFoPY9r3aMBLyV59HQulLL7L+ECgoNsjhEoIapghESTihtUwZj3wzKnWY5jGEt5
-         ShZPnBAUBA0DW2TrZvJLb128Ko1aELqDBK/RHkQZdvDbsUzcXWP+bd2/DVrjUVk0u0mT
-         a4vQ==
-X-Gm-Message-State: AOAM532wnUD0qmTUTWUWfjlELwqaLX3ezJPdDL01Eq9kFUuXjjeaPRsV
-        gHx0/NTbpC0v955C/iGFS7IHhy6ffss=
-X-Google-Smtp-Source: ABdhPJzSPAtgnX514PvrGmlruGtmFh0ng/yM3Bk+k4gt0bTOQewgPsKG8nE2P2MCyRi7u7KtV8GfXw==
-X-Received: by 2002:a2e:87c6:: with SMTP id v6mr13297799ljj.490.1615193990398;
-        Mon, 08 Mar 2021 00:59:50 -0800 (PST)
-Received: from [192.168.1.100] ([31.173.86.76])
-        by smtp.gmail.com with ESMTPSA id y23sm1412493ljm.53.2021.03.08.00.59.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Mar 2021 00:59:50 -0800 (PST)
-Subject: Re: [PATCH] usb: typec: tcpm: turn tcpm_ams_finish into void function
-To:     Yang Li <yang.lee@linux.alibaba.com>, linux@roeck-us.net
-Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1615184481-102148-1-git-send-email-yang.lee@linux.alibaba.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-Message-ID: <0a15af59-2c28-e278-0127-ba76dd3cc2e6@gmail.com>
-Date:   Mon, 8 Mar 2021 11:59:43 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S230142AbhCHJkJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Mar 2021 04:40:09 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:13448 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229971AbhCHJkD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Mar 2021 04:40:03 -0500
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4DvCvY5MFJzjWcR;
+        Mon,  8 Mar 2021 17:38:33 +0800 (CST)
+Received: from localhost.localdomain (10.175.102.38) by
+ DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server id
+ 14.3.498.0; Mon, 8 Mar 2021 17:39:49 +0800
+From:   'Wei Yongjun <weiyongjun1@huawei.com>
+To:     <weiyongjun1@huawei.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Amelie Delaunay <amelie.delaunay@st.com>
+CC:     <linux-usb@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH -next] usb: typec: stusb160x: fix return value check in stusb160x_probe()
+Date:   Mon, 8 Mar 2021 09:48:39 +0000
+Message-ID: <20210308094839.3586773-1-weiyongjun1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <1615184481-102148-1-git-send-email-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Originating-IP: [10.175.102.38]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-On 08.03.2021 9:21, Yang Li wrote:
+In case of error, the function device_get_named_child_node() returns
+NULL pointer not ERR_PTR(). The IS_ERR() test in the return value check
+should be replaced with NULL test.
 
-> This function always return '0' and no callers use the return value.
+Fixes: da0cb6310094 ("usb: typec: add support for STUSB160x Type-C controller family")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+---
+ drivers/usb/typec/stusb160x.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-    Returns.
+diff --git a/drivers/usb/typec/stusb160x.c b/drivers/usb/typec/stusb160x.c
+index d21750bbbb44..6eaeba9b096e 100644
+--- a/drivers/usb/typec/stusb160x.c
++++ b/drivers/usb/typec/stusb160x.c
+@@ -682,8 +682,8 @@ static int stusb160x_probe(struct i2c_client *client)
+ 	}
+ 
+ 	fwnode = device_get_named_child_node(chip->dev, "connector");
+-	if (IS_ERR(fwnode))
+-		return PTR_ERR(fwnode);
++	if (!fwnode)
++		return -ENODEV;
+ 
+ 	/*
+ 	 * When both VDD and VSYS power supplies are present, the low power
 
-> So make it a void function.
-> 
-> This eliminates the following coccicheck warning:
-> ./drivers/usb/typec/tcpm/tcpm.c:778:5-8: Unneeded variable: "ret".
-> Return "0" on line 794
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->   drivers/usb/typec/tcpm/tcpm.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index be0b646..6ee984e 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -773,10 +773,8 @@ static enum typec_cc_status tcpm_rp_cc(struct tcpm_port *port)
->   	return TYPEC_CC_RP_DEF;
->   }
->   
-> -static int tcpm_ams_finish(struct tcpm_port *port)
-> +static void tcpm_ams_finish(struct tcpm_port *port)
->   {
-> -	int ret = 0;
-> -
->   	tcpm_log(port, "AMS %s finished", tcpm_ams_str[port->ams]);
->   
->   	if (port->pd_capable && port->pwr_role == TYPEC_SOURCE) {
-> @@ -791,7 +789,7 @@ static int tcpm_ams_finish(struct tcpm_port *port)
->   	port->in_ams = false;
->   	port->ams = NONE_AMS;
->   
-> -	return ret;
-> +	return;
-
-    Just remove that *return*.
-
->   }
-[...]
-
-MBR, Sergei
