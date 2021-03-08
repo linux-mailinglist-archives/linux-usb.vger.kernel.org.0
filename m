@@ -2,67 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73617330A68
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 10:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E372330AAE
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 10:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbhCHJkK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Mar 2021 04:40:10 -0500
-Received: from szxga06-in.huawei.com ([45.249.212.32]:13449 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbhCHJkE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Mar 2021 04:40:04 -0500
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4DvCvb0LFzzjWdq;
-        Mon,  8 Mar 2021 17:38:35 +0800 (CST)
-Received: from localhost.localdomain (10.175.102.38) by
- DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
- 14.3.498.0; Mon, 8 Mar 2021 17:39:50 +0800
-From:   'Wei Yongjun <weiyongjun1@huawei.com>
-To:     <weiyongjun1@huawei.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-CC:     <linux-usb@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH -next] usb: typec: tps6598x: Fix return value check in tps6598x_probe()
-Date:   Mon, 8 Mar 2021 09:48:41 +0000
-Message-ID: <20210308094841.3587751-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S231490AbhCHJ53 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Mar 2021 04:57:29 -0500
+Received: from mx2.suse.de ([195.135.220.15]:53636 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231479AbhCHJ5U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 8 Mar 2021 04:57:20 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1615197438; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ox9pnNjIVFkayHN1+11ut1Jk/mZ9ayYn7+APO2/2Yos=;
+        b=o+CCEZBUDxcQn0LkP3HHn6segidLYcBjRSZHuJZh7akDY3GA2dXo5d/QwG0Z9iWgwX0tf2
+        I9ai6RmvXk5qwhE45U0kC/XrEncKmg9gSwLI6c88aZj47GUm0OL5VML+RdtKU2ntY3A6i/
+        syDURdCGc3hd2fYQn+piRGwUeGuYEPc=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 755EAACBF;
+        Mon,  8 Mar 2021 09:57:18 +0000 (UTC)
+Message-ID: <7ea20413bdb68f98430b3cfc8ac5824be26781af.camel@suse.com>
+Subject: Re: usb: cdc-acm: BUG kmalloc-128 Poison overwritten
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Bruno Thomsen <bruno.thomsen@gmail.com>
+Cc:     linux-usb@vger.kernel.org,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Bruno Thomsen <bth@kamstrup.com>,
+        Lars Alex Pedersen <laa@kamstrup.com>
+Date:   Mon, 08 Mar 2021 10:57:14 +0100
+In-Reply-To: <CAH+2xPC0sbqvsiBgsemHxrmE=JgnuOK6mzJ6pQ_G-ihqswAvPQ@mail.gmail.com>
+References: <CAH+2xPCmZNW0ct8XoBmAnd0QK53guv2e4HLn40NvWrEA7pj3qw@mail.gmail.com>
+         <CAH+2xPCkKRhXJSqMx7kzsO53JwXbrmYPLLL-_ANO9waNJREDWA@mail.gmail.com>
+         <777991bb72f8842e3e730f9b600b2086478f5d36.camel@suse.com>
+         <CAH+2xPAB4bWN9NiTQr4WggUX6eDXzMikzYJySx3sAj3Ho3AdxA@mail.gmail.com>
+         <b71b85a588c3e27d2de129723468263d932ab435.camel@suse.com>
+         <CAH+2xPA4yUwbcOaO4OH-LaAwC820ZoFmAf_eUdf6+xgiTPWz8g@mail.gmail.com>
+         <CAH+2xPC0sbqvsiBgsemHxrmE=JgnuOK6mzJ6pQ_G-ihqswAvPQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Originating-IP: [10.175.102.38]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Wei Yongjun <weiyongjun1@huawei.com>
+Am Montag, den 08.03.2021, 09:50 +0100 schrieb Bruno Thomsen:
+> 
+> Tested-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+> 
+> I have not observed any oops with patches applied. Patches have seen
+> more than 10 weeks of runtime testing across multiple devices.
 
-In case of error, the function device_get_named_child_node() returns
-NULL pointer not ERR_PTR(). The IS_ERR() test in the return value check
-should be replaced with NULL test.
+Hi,
 
-Fixes: 18a6c866bb19 ("usb: typec: tps6598x: Add USB role switching logic")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- drivers/usb/typec/tps6598x.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+that is good news. I shall send them upstream.
 
-diff --git a/drivers/usb/typec/tps6598x.c b/drivers/usb/typec/tps6598x.c
-index a4ec8e56c2b9..2c4ab90e16e7 100644
---- a/drivers/usb/typec/tps6598x.c
-+++ b/drivers/usb/typec/tps6598x.c
-@@ -629,8 +629,8 @@ static int tps6598x_probe(struct i2c_client *client)
- 		return ret;
- 
- 	fwnode = device_get_named_child_node(&client->dev, "connector");
--	if (IS_ERR(fwnode))
--		return PTR_ERR(fwnode);
-+	if (!fwnode)
-+		return -ENODEV;
- 
- 	tps->role_sw = fwnode_usb_role_switch_get(fwnode);
- 	if (IS_ERR(tps->role_sw)) {
+	Regards
+		Oliver
+
 
