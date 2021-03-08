@@ -2,54 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E26833134A
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 17:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D368331359
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 17:27:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbhCHQXE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Mar 2021 11:23:04 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:41223 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230385AbhCHQW7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Mar 2021 11:22:59 -0500
-Received: (qmail 139795 invoked by uid 1000); 8 Mar 2021 11:22:58 -0500
-Date:   Mon, 8 Mar 2021 11:22:58 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Subject: Re: [PATCH v2 16/18] usb: common: add function to get interval
- expressed in us unit
-Message-ID: <20210308162258.GA138835@rowland.harvard.edu>
-References: <d287899e6beb2fc1bfb8900c75a872f628ecde55.1615170625.git.chunfeng.yun@mediatek.com>
- <25c8a09b055f716c1e5bf11fea72c3418f844482.1615170625.git.chunfeng.yun@mediatek.com>
+        id S229757AbhCHQ1V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Mar 2021 11:27:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229701AbhCHQ1S (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Mar 2021 11:27:18 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDDCC06174A
+        for <linux-usb@vger.kernel.org>; Mon,  8 Mar 2021 08:27:18 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id z9so9377312iln.1
+        for <linux-usb@vger.kernel.org>; Mon, 08 Mar 2021 08:27:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JRMFyvWsK326XROtMjVgRQc/GT1YZgVjHNIUKIRbU1Q=;
+        b=eimpjFYfwHTvy07x1K9maDWHzk/Mks/mcVOotfR7pABG/QF+npXH9oLLjH9GBkikba
+         CfcuWPIIi81rdi0mXSKa70q7NjRPTosiabGeRsKH9vOI2Nn0tQyxyk7nKiO4oX5pvz8n
+         sBCJTHnPvQ/9oTOBX1IdII4KricHpkoOqGdN0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JRMFyvWsK326XROtMjVgRQc/GT1YZgVjHNIUKIRbU1Q=;
+        b=t8pR8lHbXPcVOqL6n7VcjbrlM5KHzUHwc0Rk3GS3MaJSij8tR0hjlYMFVkIPOUM/Hs
+         BlAHfIhLrQGbiXKAdNUjpQ2z2qjbvTRYVrDQynCglPXIN+BGAjRpbd4X6qimGStQJSwj
+         WZag7tewc10klaVTgrkoSGBJ+Hs1jlefETPOv82XWeN0ehfOLXggSP23q9nFe4PMO1vc
+         1A5c0WN/5+fpoP6xVFHh/dJ5fKr3Zzo4FIP/akynJM+nSlyG1FaH/+Ycg9jT7YS6UnIH
+         mLMz5aGsjwgHiTQ4fJbLPGmIgp4c7gGBYxAfEBdO18QOIsWWmWRyE5ALb6bFvOfqkhBU
+         iLKQ==
+X-Gm-Message-State: AOAM533JtZWfYE7p4pisFwZaH2W7oa8RXav3Q0/eL57lkdfxJ2HsU4Wh
+        jiiHPHX18yvrXOLWIExJrFoTVg==
+X-Google-Smtp-Source: ABdhPJyaBZmlpfiav4NXmFc48hDNUbR2vMrZtGzLkyRzKKuD3qkYWhEYV9wstLqosZQjdi9g1AZbEw==
+X-Received: by 2002:a05:6e02:1a4d:: with SMTP id u13mr20889621ilv.176.1615220838051;
+        Mon, 08 Mar 2021 08:27:18 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id h13sm6092603ioe.40.2021.03.08.08.27.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Mar 2021 08:27:17 -0800 (PST)
+Subject: Re: [PATCH 4/6] usbip: fix stub_dev usbip_sockfd_store() races
+ leading to gpf
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        shuah@kernel.org, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <cover.1615171203.git.skhan@linuxfoundation.org>
+ <268a0668144d5ff36ec7d87fdfa90faf583b7ccc.1615171203.git.skhan@linuxfoundation.org>
+ <05aed75a-4a81-ef59-fc4f-6007f18e7839@i-love.sakura.ne.jp>
+ <5df3d221-9e78-4cbe-826b-81cbfc4d5888@i-love.sakura.ne.jp>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <3305d1a1-12e2-087b-30f5-10f4bf8eaf83@linuxfoundation.org>
+Date:   Mon, 8 Mar 2021 09:27:17 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <25c8a09b055f716c1e5bf11fea72c3418f844482.1615170625.git.chunfeng.yun@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <5df3d221-9e78-4cbe-826b-81cbfc4d5888@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 08, 2021 at 10:52:05AM +0800, Chunfeng Yun wrote:
-> Add a new function to convert bInterval into the time expressed
-> in 1us unit.
+On 3/8/21 3:10 AM, Tetsuo Handa wrote:
+> On 2021/03/08 16:35, Tetsuo Handa wrote:
+>> On 2021/03/08 12:53, Shuah Khan wrote:
+>>> Fix the above problems:
+>>> - Stop using kthread_get_run() macro to create/start threads.
+>>> - Create threads and get task struct reference.
+>>> - Add kthread_create() failure handling and bail out.
+>>> - Hold usbip_device lock to update local and shared states after
+>>>    creating rx and tx threads.
+>>> - Update usbip_device status to SDEV_ST_USED.
+>>> - Update usbip_device tcp_socket, sockfd, tcp_rx, and tcp_tx
+>>> - Start threads after usbip_device (tcp_socket, sockfd, tcp_rx, tcp_tx,
+>>>    and status) is complete.
+>>
+>> No, the whole usbip_sockfd_store() etc. should be serialized using a mutex,
+>> for two different threads can open same file and write the same content at
+>> the same moment. This results in seeing SDEV_ST_AVAILABLE and creating two
+>> threads and overwiting global variables and setting SDEV_ST_USED and starting
+>> two threads by each of two thread, which will later fail to call kthread_stop()
+>> on one of two thread because global variables are overwritten.
+>>
+>> kthread_crate() (which involves GFP_KERNEL allocation) can take long time
+>> enough to hit
+>>
+>>    usbip_sockfd_store() must perform
+>>
+>>        if (sdev->ud.status != SDEV_ST_AVAILABLE) {
 > 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> v2: move kerneldoc next to function's definition suggested by Alan
-> ---
->  drivers/usb/common/common.c | 41 +++++++++++++++++++++++++++++++++++++
->  drivers/usb/core/devices.c  | 21 ++++---------------
->  drivers/usb/core/endpoint.c | 35 ++++---------------------------
->  include/linux/usb/ch9.h     |  3 +++
->  4 files changed, 52 insertions(+), 48 deletions(-)
+> Oops. This is
+> 
+> 	if (sdev->ud.status == SDEV_ST_AVAILABLE) {
+> 
+> of course.
+> 
+>>          /* misc assignments for attach operation */
+>>          sdev->ud.status = SDEV_ST_USED;
+>>        }
+>>
+>>    under a lock, or multiple ud->tcp_{tx,rx} are created (which will later
+>>    cause a crash like [1]) and refcount on ud->tcp_socket is leaked when
+>>    usbip_sockfd_store() is concurrently called.
+>>
+>> problem. That's why my patch introduced usbip_event_mutex lock.
+>>
+> 
+> And I think that same serialization is required between "rh_port_connect() from attach_store()" and
+> "rh_port_disconnect() from vhci_shutdown_connection() via usbip_event_add(&vdev->ud, VDEV_EVENT_DOWN)
+>   from vhci_port_disconnect() from detach_store()", for both vhci_rx_pdu() from vhci_rx_loop() and
+> vhci_port_disconnect() from detach_store() can queue VDEV_EVENT_DOWN event which can be processed
+> without waiting for attach_store() to complete.
+> 
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Yes. We might need synchronization between events, threads, and shutdown
+in usbip_host side and in connection polling and threads in vhci.
+
+I am also looking at the shutdown sequences closely as well since the
+local state is referenced without usbip_device lock in these paths.
+
+I am approaching these problems as peeling the onion an expression so
+we can limit the changes and take a spot fix approach. We have the
+goal to address these crashes and not introduce regressions.
+
+I don't seem to be able to reproduce these problems consistently in my
+env. with the reproducer. I couldn't reproduce them in normal case at
+all. Hence, the this cautious approach that reduces the chance of
+regressions and if we see regressions, they can fixed easily.
+
+https://syzkaller.appspot.com/text?tag=ReproC&x=14801034d00000
+
+If this patch series fixes the problems you are seeing, I would like
+get these fixes in and address the other two potential race conditions
+in another round of patches. I also want to soak these in the next
+for a few weeks.
+
+Please let me know if these patches fix the problems you are seeing in 
+your env.
+
+thanks,
+-- Shuah
+
+
