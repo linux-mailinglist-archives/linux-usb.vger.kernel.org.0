@@ -2,80 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81907330C6B
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 12:31:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2B4330E90
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 13:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbhCHLa6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Mar 2021 06:30:58 -0500
-Received: from mga12.intel.com ([192.55.52.136]:49487 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231922AbhCHLa4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 8 Mar 2021 06:30:56 -0500
-IronPort-SDR: VHqa5eTGAHlyyRLJt5jinovZl0bhaJX0OAi3p8JHQeGHMRnuazilZ2dvl6EpaX7VsMgefwl5bq
- UOFS3H2sIJyg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9916"; a="167282079"
-X-IronPort-AV: E=Sophos;i="5.81,232,1610438400"; 
-   d="scan'208";a="167282079"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2021 03:30:55 -0800
-IronPort-SDR: lrdjbC+6g+EgiBCcxoAK+MUjSRWozglawC+ih1yx2IHrL530+06Ep+Ys8kBvjGoz3NdaldV7fN
- ljJB3lO+JpEA==
-X-IronPort-AV: E=Sophos;i="5.81,232,1610438400"; 
-   d="scan'208";a="402790084"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2021 03:30:52 -0800
-Received: by lahna (sSMTP sendmail emulation); Mon, 08 Mar 2021 13:30:50 +0200
-Date:   Mon, 8 Mar 2021 13:30:50 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Lukas Wunner <lukas@wunner.de>
-Subject: Re: [PATCH 1/2] thunderbolt: Initialize HopID IDAs in
- tb_switch_alloc()
-Message-ID: <20210308113050.GF2542@lahna.fi.intel.com>
-References: <20210303121310.80937-1-mika.westerberg@linux.intel.com>
+        id S231393AbhCHMmT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Mar 2021 07:42:19 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:51814 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230412AbhCHMmH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Mar 2021 07:42:07 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 128CQ37u015281;
+        Mon, 8 Mar 2021 13:41:50 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=q4Og1DTuj4AmqoLOPeO+Mv8KCeiKCxD1plojT8t5syw=;
+ b=IotTJR0pmh87F3YLviwE+/CkomaqbKYV9eORHK8aWOmfeSdngAtZ20Vsi838WURr9+X8
+ 08kkYDklhdrjlya59u7H5AKEgakCmZAsnmESGZDZ0zGdWksfo0wAewNR+XSLF41EWzxT
+ Mx15ADOFPDdQEJc+bdwgur042Z1tjqeLfIqVkHq2ZKJgRzLbgAKtSB4IaMHW02bMvYMa
+ PIRp6KXuPMpWmTcQB8FucLpvHj+Gy/MM2B8AS5cXZFG3T8ktphlKzYeZx2pQ2FZTBJAE
+ OvcgQw82z21Uj3c6tnZr+Ssvl30EbkY7ZT3i4uHU3JGqX1wT7azQwolUcjpywQWqp9/O TQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 3741y6jh8g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 Mar 2021 13:41:50 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D67B9100038;
+        Mon,  8 Mar 2021 13:41:48 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C6799271189;
+        Mon,  8 Mar 2021 13:41:48 +0100 (CET)
+Received: from lmecxl0995.lme.st.com (10.75.127.48) by SFHDAG2NODE3.st.com
+ (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 8 Mar
+ 2021 13:41:27 +0100
+Subject: Re: [PATCH -next] usb: typec: stusb160x: fix return value check in
+ stusb160x_probe()
+To:     'Wei Yongjun <weiyongjun1@huawei.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Amelie Delaunay <amelie.delaunay@st.com>
+CC:     <linux-usb@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        Hulk Robot <hulkci@huawei.com>
+References: <20210308094839.3586773-1-weiyongjun1@huawei.com>
+From:   Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Message-ID: <9810d761-5ce2-79f5-7956-d9d650fe7210@foss.st.com>
+Date:   Mon, 8 Mar 2021 13:41:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210303121310.80937-1-mika.westerberg@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20210308094839.3586773-1-weiyongjun1@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG3NODE2.st.com (10.75.127.8) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-08_07:2021-03-08,2021-03-08 signatures=0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 03, 2021 at 03:13:09PM +0300, Mika Westerberg wrote:
-> If there is a failure before the tb_switch_add() is called the switch
-> object is released by tb_switch_release() but at that point HopID IDAs
-> have not yet been initialized. So we see splat like this:
-> 
-> BUG: spinlock bad magic on CPU#2, kworker/u8:5/115
-> ...
-> Workqueue: thunderbolt0 tb_handle_hotplug
-> Call Trace:
->  dump_stack+0x97/0xdc
->  ? spin_bug+0x9a/0xa7
->  do_raw_spin_lock+0x68/0x98
->  _raw_spin_lock_irqsave+0x3f/0x5d
->  ida_destroy+0x4f/0x127
->  tb_switch_release+0x6d/0xfd
->  device_release+0x2c/0x7d
->  kobject_put+0x9b/0xbc
->  tb_handle_hotplug+0x278/0x452
->  process_one_work+0x1db/0x396
->  worker_thread+0x216/0x375
->  kthread+0x14d/0x155
->  ? pr_cont_work+0x58/0x58
->  ? kthread_blkcg+0x2e/0x2e
->  ret_from_fork+0x1f/0x40
-> 
-> Fix this by always initializing HopID IDAs in tb_switch_alloc().
-> 
-> Fixes: 0b2863ac3cfd ("thunderbolt: Add functions for allocating and releasing HopIDs")
-> Cc: stable@vger.kernel.org
-> Reported-by: Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Applied this and the 2/2 to thunderbolt.git/fixes.
+On 3/8/21 10:48 AM, 'Wei Yongjun wrote:
+> From: Wei Yongjun <weiyongjun1@huawei.com>
+> 
+> In case of error, the function device_get_named_child_node() returns
+> NULL pointer not ERR_PTR(). The IS_ERR() test in the return value check
+> should be replaced with NULL test.
+> 
+> Fixes: da0cb6310094 ("usb: typec: add support for STUSB160x Type-C controller family")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+
+Thanks for the patch,
+Reviewed-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+
+> ---
+>   drivers/usb/typec/stusb160x.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/stusb160x.c b/drivers/usb/typec/stusb160x.c
+> index d21750bbbb44..6eaeba9b096e 100644
+> --- a/drivers/usb/typec/stusb160x.c
+> +++ b/drivers/usb/typec/stusb160x.c
+> @@ -682,8 +682,8 @@ static int stusb160x_probe(struct i2c_client *client)
+>   	}
+>   
+>   	fwnode = device_get_named_child_node(chip->dev, "connector");
+> -	if (IS_ERR(fwnode))
+> -		return PTR_ERR(fwnode);
+> +	if (!fwnode)
+> +		return -ENODEV;
+>   
+>   	/*
+>   	 * When both VDD and VSYS power supplies are present, the low power
+> 
