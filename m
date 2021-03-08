@@ -2,43 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CDF330BEE
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 12:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E4A330BFF
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Mar 2021 12:12:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbhCHLFY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Mar 2021 06:05:24 -0500
-Received: from mga11.intel.com ([192.55.52.93]:28111 "EHLO mga11.intel.com"
+        id S231215AbhCHLL4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Mar 2021 06:11:56 -0500
+Received: from mga12.intel.com ([192.55.52.136]:48311 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230047AbhCHLFO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 8 Mar 2021 06:05:14 -0500
-IronPort-SDR: Fqprw9Mv1j6QzpaVrZ4BvdFhZrBqsViOWmnrglTkm3G+Co0qS+XdwolRcYXqKgjxls9d1uFCvS
- j7uGoVWKrxxQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9916"; a="184643396"
+        id S230519AbhCHLLp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 8 Mar 2021 06:11:45 -0500
+IronPort-SDR: QDfhxlL/cjHCF5p8rSgFJq+KH4/m65X2oCgn3OKVRKDj/wDklYAXQQ5Eark+K78jSSMoN346P5
+ yYZWux0LSfpQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9916"; a="167280218"
 X-IronPort-AV: E=Sophos;i="5.81,232,1610438400"; 
-   d="scan'208";a="184643396"
+   d="scan'208";a="167280218"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2021 03:05:14 -0800
-IronPort-SDR: i2X8XhwgsJcAg+nJru1HlkVr87ml+n+2W5uEPZVmr39LQtBDbGOw5lB4NsFcbPzSfarw8+seg3
- YNsgX4P0eDPg==
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2021 03:11:29 -0800
+IronPort-SDR: m47PT7iZpxIoRyxOSCbEpqMM4o/H1zm1nhEEPvIISZiMMvV/aRQ0GvAtISupTx8TB7PVH1H9yf
+ Mw5zX+hHttBQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,232,1610438400"; 
-   d="scan'208";a="385814129"
+   d="scan'208";a="385815280"
 Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga002.jf.intel.com with ESMTP; 08 Mar 2021 03:05:10 -0800
-Subject: Re: [PATCH v2 15/18] usb: xhci-mtk: support to build xhci-mtk-hcd.ko
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ikjoon Jang <ikjn@chromium.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+  by orsmga002.jf.intel.com with ESMTP; 08 Mar 2021 03:11:27 -0800
+Subject: Re: [PATCH 15/17] usb: xhci-mtk: support to build xhci-mtk-hcd.ko
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Ikjoon Jang <ikjn@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         Nicolas Boichat <drinkcat@chromium.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-References: <d287899e6beb2fc1bfb8900c75a872f628ecde55.1615170625.git.chunfeng.yun@mediatek.com>
- <0b62e21ddfacc1c2874726dd27ccab80c993f303.1615170625.git.chunfeng.yun@mediatek.com>
+        Eddie Hung <eddie.hung@mediatek.com>
+References: <1614934975-15188-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1614934975-15188-15-git-send-email-chunfeng.yun@mediatek.com>
+ <YET4p6rKSynLGEUv@kroah.com>
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
  mQINBFMB0ccBEADd+nZnZrFDsIjQtclVz6OsqFOQ6k0nQdveiDNeBuwyFYykkBpaGekoHZ6f
@@ -82,39 +81,39 @@ Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
  Gjynb3sXforM/GVbr4mnuxTdLXQYlj2EJ4O4f0tkLlADT7podzKSlSuZsLi2D+ohKxtP3U/r
  42i8PBnX2oAV0UIkYk7Oel/3hr0+BP666SnTls9RJuoXc7R5XQVsomqXID6GmjwFQR5Wh/RE
  IJtkiDAsk37cfZ9d1kZ2gCQryTV9lmflSOB6AFZkOLuEVSC5qW8M/s6IGDfYXN12YJaZPptJ fiD/
-Message-ID: <39a2edfb-f761-fc13-ee20-20f15b00af5d@linux.intel.com>
-Date:   Mon, 8 Mar 2021 13:06:53 +0200
+Message-ID: <58d87a5d-aee5-df37-6d58-bd5dd4948dee@linux.intel.com>
+Date:   Mon, 8 Mar 2021 13:13:10 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <0b62e21ddfacc1c2874726dd27ccab80c993f303.1615170625.git.chunfeng.yun@mediatek.com>
+In-Reply-To: <YET4p6rKSynLGEUv@kroah.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8.3.2021 4.52, Chunfeng Yun wrote:
-> Currently xhci-hcd.ko building depends on USB_XHCI_MTK, this
-> is not flexible for some cases. For example:
-> USB_XHCI_HCD is y, and USB_XHCI_MTK is m, then we can't
-> implement extended functions if only update xhci-mtk.ko
-> This patch is used to remove the dependence.
+On 7.3.2021 18.00, Greg Kroah-Hartman wrote:
+> On Fri, Mar 05, 2021 at 05:02:53PM +0800, Chunfeng Yun wrote:
+>> Currently xhci-hcd.ko building depends on USB_XHCI_MTK, this
+>> is not flexible for some cases. For example:
+>> USB_XHCI_HCD is y, and USB_XHCI_MTK is m, then we can't
+>> implement extended functions if only update xhci-mtk.ko
+>> This patch is used to remove the dependence.
+>>
+>> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 > 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> v2: no changes
-> ---
->  drivers/usb/host/Makefile       |  6 ++---
->  drivers/usb/host/xhci-mem.c     |  2 +-
->  drivers/usb/host/xhci-mtk-sch.c | 48 +++++++++++++++++++++++----------
->  drivers/usb/host/xhci-mtk.c     |  2 ++
->  drivers/usb/host/xhci-mtk.h     | 33 +++--------------------
->  drivers/usb/host/xhci-ring.c    |  1 -
->  drivers/usb/host/xhci.c         | 30 +++++++++------------
->  drivers/usb/host/xhci.h         |  8 ++++++
->  8 files changed, 64 insertions(+), 66 deletions(-)
+> Oh nice, I tried to unwind this once, but did not succeed.
+> 
+> Mathias, any objection to this?  I think this is the only patch in this
+> series that touches the non-mtk code, want me to just queue it up in my
+> tree, or are you going to send it to me through your patches?
 > 
 
-Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+No objection, Chunfeng Yun sent v2 already, it looks good to me.
+Easier (for me) if you queue up the whole series directly
+
+Thanks
+- Mathias
+
