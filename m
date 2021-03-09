@@ -2,73 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14570332618
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Mar 2021 14:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8D93326E1
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Mar 2021 14:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbhCINGr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Mar 2021 08:06:47 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:13589 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbhCINGW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Mar 2021 08:06:22 -0500
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DvwQm2Rllz17Htr;
-        Tue,  9 Mar 2021 21:04:32 +0800 (CST)
-Received: from localhost.localdomain (10.175.102.38) by
- DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 9 Mar 2021 21:06:08 +0800
-From:   'Wei Yongjun <weiyongjun1@huawei.com>
-To:     <weiyongjun1@huawei.com>, Peter Chen <peter.chen@kernel.org>,
-        "Pawel Laszczak" <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Frank Li <frank.li@nxp.com>
-CC:     <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <kernel-janitors@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH -next] usb: cdns3: imx: mark cdns_imx_resume as __maybe_unused
-Date:   Tue, 9 Mar 2021 13:14:57 +0000
-Message-ID: <20210309131457.1884112-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S231387AbhCINXD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Mar 2021 08:23:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46582 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231781AbhCINWi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 9 Mar 2021 08:22:38 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 935E564EBB;
+        Tue,  9 Mar 2021 13:22:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1615296158;
+        bh=1EFXFdWdy9jqGH7GztwPtxJl3Ik8XXMI2QnXDTM9ISY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p9883S8OhLtd2nNUeWjXlmOAJIH1xYbsN6y0lLnOBZukEeVnRGU9B14EuFaiDUpXa
+         i9A9K+mLRYxj9K9DJqehHGrPur6wyRRr3ERnw3TxSw2EfP6jWbqzeuxR+ekWoeOHAy
+         9RrR2ajS788+BsBkHKfmBNtdDF42d+jI5r0mIhRw=
+Date:   Tue, 9 Mar 2021 14:22:35 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Zhangkun <zhangkun4jr@163.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zhang Kun <zhangkun@cdjrlc.com>
+Subject: Re: [PATCH] xhci: Remove unused value len from xhci_unmap_temp_buf
+Message-ID: <YEd2m3shhzq+Ihh9@kroah.com>
+References: <20210306120644.74406-1-zhangkun4jr@163.com>
+ <YEOs5w8AYutM27/u@kroah.com>
+ <3ad81fd6-e88e-f55b-fe82-ac7804bc354c@163.com>
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Originating-IP: [10.175.102.38]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3ad81fd6-e88e-f55b-fe82-ac7804bc354c@163.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Wei Yongjun <weiyongjun1@huawei.com>
+On Sun, Mar 07, 2021 at 09:14:26AM +0800, Zhangkun wrote:
+> On 3/7/21 12:25 AM, Greg Kroah-Hartman wrote:
+> > On Sat, Mar 06, 2021 at 08:06:44PM +0800, zhangkun4jr@163.com wrote:
+> >> From: Zhang Kun <zhangkun@cdjrlc.com>
+> >>
+> >> The value assigned to len by sg_pcopy_from_buffer() never used for
+> >> anything, so remove it.
+> >>
+> >> Signed-off-by: Zhang Kun <zhangkun@cdjrlc.com>
+> >> ---
+> >>  drivers/usb/host/xhci.c | 3 +--
+> >>  1 file changed, 1 insertion(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> >> index bd27bd670104..6ebda89d476c 100644
+> >> --- a/drivers/usb/host/xhci.c
+> >> +++ b/drivers/usb/host/xhci.c
+> >> @@ -1335,7 +1335,6 @@ static bool xhci_urb_temp_buffer_required(struct usb_hcd *hcd,
+> >>  
+> >>  static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
+> >>  {
+> >> -	unsigned int len;
+> >>  	unsigned int buf_len;
+> >>  	enum dma_data_direction dir;
+> >>  
+> >> @@ -1351,7 +1350,7 @@ static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
+> >>  				 dir);
+> >>  
+> >>  	if (usb_urb_dir_in(urb))
+> >> -		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
+> >> +		sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
+> >>  					   urb->transfer_buffer,
+> >>  					   buf_len,
+> >>  					   0);
+> > 
+> > SHouldn't this be checked instead of ignored?
+> >
+> 
+> Hi, Greg.
+> Considering your tips I checked sg_pcopy_from_buffer(). it copys data
+> from urb->transfer_buffer to urb->sg, and only returns 0 or the 
+> 'number of copied bytes', and seems to has no other exception branchs
+> that need to be checked. So I think it should be ingnored.
 
-The function cdns_imx_resume() may have no callers depending
-on configuration, so it must be marked __maybe_unused to avoid
-harmless warning:
+Why should you not check that the number of bytes was copied properly?
 
-drivers/usb/cdns3/cdns3-imx.c:378:12: warning:
- 'cdns_imx_system_resume' defined but not used [-Wunused-function]
-  378 | static int cdns_imx_system_resume(struct device *dev)
-      |            ^~~~~~~~~~~~~~~~~~
+thanks,
 
-Fixes: 67982dfa59de ("usb: cdns3: imx: add power lost support for system resume")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- drivers/usb/cdns3/cdns3-imx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/cdns3/cdns3-imx.c b/drivers/usb/cdns3/cdns3-imx.c
-index 708b51cc5844..96fff823a594 100644
---- a/drivers/usb/cdns3/cdns3-imx.c
-+++ b/drivers/usb/cdns3/cdns3-imx.c
-@@ -346,7 +346,7 @@ static int cdns_imx_platform_suspend(struct device *dev,
- 
- }
- 
--static int cdns_imx_resume(struct device *dev)
-+static int __maybe_unused cdns_imx_resume(struct device *dev)
- {
- 	struct cdns_imx *data = dev_get_drvdata(dev);
- 
-
+greg k-h
