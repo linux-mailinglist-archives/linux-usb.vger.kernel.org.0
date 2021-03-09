@@ -2,209 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D94FB331F4C
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Mar 2021 07:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 903E8331F77
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Mar 2021 07:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbhCIGd0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Mar 2021 01:33:26 -0500
-Received: from m42-2.mailgun.net ([69.72.42.2]:44928 "EHLO m42-2.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229546AbhCIGdV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 9 Mar 2021 01:33:21 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1615271601; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=afPnO9CK9L08xTR5B8jAfqmQQdcIctt7DT1nHJBd/7U=; b=I3JtECr6S6Qag6ZKTA3aueaa6m7cMWGotY1vhjjRpyeqVzfl+wEjCN8VGlmmlKjyD5LU9pUO
- uHGGYAFQc6T5X6uGDq9lIatQOrG9LP7Q07O4N9aiXvWAsmfdsV+d5x3b/OpESLrroHsClso+
- LUdLq8Q62D4uCKJkCA7Neo6p2xE=
-X-Mailgun-Sending-Ip: 69.72.42.2
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
- 604716b0c862e1b9fdef180f (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 09 Mar 2021 06:33:20
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 74FCDC433ED; Tue,  9 Mar 2021 06:33:20 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [10.110.90.255] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 97E0BC433CA;
-        Tue,  9 Mar 2021 06:33:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 97E0BC433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v3 1/2] usb: dwc3: Trigger a GCTL soft reset when
- switching modes in DRD
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
-        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        Yang Fei <fei.yang@intel.com>,
-        YongQin Liu <yongqin.liu@linaro.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Roger Quadros <rogerq@ti.com>
-References: <20210108015115.27920-1-john.stultz@linaro.org>
- <87bldzwr6x.fsf@kernel.org>
- <CALAqxLWdWj9=a-7NGDzJyrfyRABwKnJM7EQo3Zm+k9JqAhPz+g@mail.gmail.com>
- <d95d0971-624e-a0e6-ac72-6ee3b1fb1106@synopsys.com>
- <06a44245-4f2f-69ba-fe46-b88a19f585c2@codeaurora.org>
- <a33f7c33-f95d-60c3-70f2-4b37fcf8bac5@synopsys.com>
- <fa5cc67e-3873-e6d9-8727-d160740b027e@codeaurora.org>
- <3db531c4-7058-68ec-8d4b-ff122c307697@synopsys.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <8b5f7348-66d7-4902-eac8-593ab503db96@codeaurora.org>
-Date:   Mon, 8 Mar 2021 22:33:16 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S229530AbhCIGlo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Mar 2021 01:41:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229480AbhCIGli (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Mar 2021 01:41:38 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B01C06174A
+        for <linux-usb@vger.kernel.org>; Mon,  8 Mar 2021 22:41:37 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id q25so25216957lfc.8
+        for <linux-usb@vger.kernel.org>; Mon, 08 Mar 2021 22:41:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=OSpVNFxuMZA8hZpCpR/ByJiv8QeJ9sr2+PvYkDfjhto=;
+        b=bA1vz76qmM3TldC20SucBRGYbC/8DCzeYuELc/x59tbwGYLaPp23/ucvjxvmCLfQBA
+         kXX7vyznypOE9WSHMW4rqRlr9N6q4yrLemClFburlePbisHR78Rg+XM2JlnDT/MjrEsl
+         ytrXIprDv+FwR0pzuKYLaoUCFBe4w4nm81OBZ3K5zcR7gWhqsAJffXJGDV3+xyu/LJJs
+         saYgoFo2duXiedUcnqLHIrY8XYU/8iyUVl7RyVhg+fdXgiPtuEXOPnEnk3EJQQlH6ovi
+         KxcvDHkfBJg5RW+jqZaVhreCA8fZYEJ3Ue7yGDRtjLAkS4VeQajJLgS8bXAHVOloDs/1
+         Q2nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=OSpVNFxuMZA8hZpCpR/ByJiv8QeJ9sr2+PvYkDfjhto=;
+        b=sAcYRthmWblfMDkoS+y24h8yBY7eqcQrtlLIo0aP1qFSw+dsdJ6Xnb9Tc7L127hiZ/
+         vHEgGP5TySQD0F3L9Zed+5NnWUNYlh3nUe+KcbWp77Wm96XmS+aasDzS42Gb1f9ndGTu
+         vLkJn1zO7A28Pcr6n2VckN3+SmOzeyRuL7cGLf138L7WlCzAjtLbVesUQbvzvTuoCW0N
+         BKliLDAdNr6ylBmUss4tjwm3vFoaJT67EIMglRtJJk/LAyqwzvlQiAQFDOzcJtbatCbW
+         i0c8i7ZJk251VqmJrrkqR00zi5g8gkLy2erNxMfgCTvA0JJ1Jx7awFakuzWPg+A87S4e
+         U0Yg==
+X-Gm-Message-State: AOAM5327uerZ1dk/skpE+jp7fKX9JQgjgWMJ4TIHuR/nS1eFAk8RFiUT
+        mXWkOgnHZaAsq+LrKRYpdPUFRzWxXco5P7ercBqdLvPvdIvUkw==
+X-Google-Smtp-Source: ABdhPJyTkOn4byqccTLK9VmOobwKWKwFhhlNWPgWxAaBrM2q3sba9EnyFJloigxlCDnjgtApjj24dEjaDAfAYQsK044=
+X-Received: by 2002:a19:3fca:: with SMTP id m193mr13247098lfa.609.1615272095840;
+ Mon, 08 Mar 2021 22:41:35 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <3db531c4-7058-68ec-8d4b-ff122c307697@synopsys.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   William Allen <william.allentx@gmail.com>
+Date:   Tue, 9 Mar 2021 00:41:25 -0600
+Message-ID: <CAKRa1U6rukBBwWx0vN2wqiHMbUH9zWsc-y1wknOCvhueqWsT7w@mail.gmail.com>
+Subject: USB 3.2 Gen 2x2 "Superspeed+20GBps" support for ASM3242
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+I've never submitted to the mailing list before, so please excuse any
+formalities that I may not be observing.
+I would like to be able to use USB 3.2 Gen2x2 "SuperSpeed+=C2=B2=E2=81=B0Gb=
+ps"
+under Linux. I've tried several different kernel versions, and have
+built the kernel from the usb-next tree. All without finding proper
+functionality.
 
+I have an Ableconn PEX-UB159 USB 3.2 Gen 2x2 PCIe expansion card, with
+the ASM3242 controller. This controller appears to be the only Gen2x2
+capable controller that exists in commercial products- so far as I've
+found. Everything appears to work, except for "SuperSpeed+=C2=B2=E2=81=B0Gb=
+ps" when
+I plug in a capable device.
+Here is the dmesg output as soon as I plug in a Gen2x2 WD P50 Black
+External NVMe SSD, using an appropriate SuperSpeed+=C2=B2=E2=81=B0Gbps cert=
+ified
+cable:
+5.11.2-arch1-1
+--------------------
+usb 7-2: new SuperSpeedPlus Gen 2 USB device number 3 using xhci_hcd
+usb 7-2: New USB device found, idVendor=3D1058, idProduct=3D2642, bcdDevice=
+=3D10.03
+usb 7-2: New USB device strings: Mfr=3D2, Product=3D3, SerialNumber=3D1
+usb 7-2: Product: Game Drive
+usb 7-2: Manufacturer: Western Digital
+usb 7-2: SerialNumber: 323130334431343030303736
+scsi host11: uas
+scsi 11:0:0:0: Direct-Access     WD       Game Drive       1003 PQ: 0 ANSI:=
+ 6
+scsi 11:0:0:1: Enclosure         WD       SES Device       1003 PQ: 0 ANSI:=
+ 6
+sd 11:0:0:0: [sdf] 3907029168 512-byte logical blocks: (2.00 TB/1.82 TiB)
+sd 11:0:0:0: [sdf] Write Protect is off
+sd 11:0:0:0: [sdf] Mode Sense: 57 00 10 00
+sd 11:0:0:0: [sdf] Write cache: enabled, read cache: enabled, supports
+DPO and FUA
+sd 11:0:0:0: [sdf] Optimal transfer size 33553920 bytes
+sd 11:0:0:0: [sdf] Attached SCSI disk
 
-On 3/8/2021 7:05 PM, Thinh Nguyen wrote:
-> Wesley Cheng wrote:
->>
->> On 3/6/2021 3:41 PM, Thinh Nguyen wrote:
->>> Wesley Cheng wrote:
->>>> On 1/8/2021 4:44 PM, Thinh Nguyen wrote:
->>>>> Hi,
->>>>>
->>>>> John Stultz wrote:
->>>>>> On Fri, Jan 8, 2021 at 4:26 AM Felipe Balbi <balbi@kernel.org> wrote:
->>>>>>> Hi,
->>>>>>>
->>>>>>> John Stultz <john.stultz@linaro.org> writes:
->>>>>>>> From: Yu Chen <chenyu56@huawei.com>
->>>>>>>>
->>>>>>>> Just resending this, as discussion died out a bit and I'm not
->>>>>>>> sure how to make further progress. See here for debug data that
->>>>>>>> was requested last time around:
->>>>>>>>   https://urldefense.com/v3/__https://lore.kernel.org/lkml/CALAqxLXdnaUfJKx0aN9xWwtfWVjMWigPpy2aqsNj56yvnbU80g@mail.gmail.com/__;!!A4F2R9G_pg!LNzuprAeg-O80SgolYkIkW4-ne-M-yLWCDUY9MygAIrQC398Z6gRJ9wnsnlqd3w$ 
->>>>>>>>
->>>>>>>> With the current dwc3 code on the HiKey960 we often see the
->>>>>>>> COREIDLE flag get stuck off in __dwc3_gadget_start(), which
->>>>>>>> seems to prevent the reset irq and causes the USB gadget to
->>>>>>>> fail to initialize.
->>>>>>>>
->>>>>>>> We had seen occasional initialization failures with older
->>>>>>>> kernels but with recent 5.x era kernels it seemed to be becoming
->>>>>>>> much more common, so I dug back through some older trees and
->>>>>>>> realized I dropped this quirk from Yu Chen during upstreaming
->>>>>>>> as I couldn't provide a proper rational for it and it didn't
->>>>>>>> seem to be necessary. I now realize I was wrong.
->>>>>>>>
->>>>>>>> After resubmitting the quirk, Thinh Nguyen pointed out that it
->>>>>>>> shouldn't be a quirk at all and it is actually mentioned in the
->>>>>>>> programming guide that it should be done when switching modes
->>>>>>>> in DRD.
->>>>>>>>
->>>>>>>> So, to avoid these !COREIDLE lockups seen on HiKey960, this
->>>>>>>> patch issues GCTL soft reset when switching modes if the
->>>>>>>> controller is in DRD mode.
->>>>>>>>
->>>>>>>> Cc: Felipe Balbi <balbi@kernel.org>
->>>>>>>> Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
->>>>>>>> Cc: Yang Fei <fei.yang@intel.com>
->>>>>>>> Cc: YongQin Liu <yongqin.liu@linaro.org>
->>>>>>>> Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
->>>>>>>> Cc: Thinh Nguyen <thinhn@synopsys.com>
->>>>>>>> Cc: Jun Li <lijun.kernel@gmail.com>
->>>>>>>> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
->>>>>>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>>>>>>> Cc: linux-usb@vger.kernel.org
->>>>>>>> Signed-off-by: Yu Chen <chenyu56@huawei.com>
->>>>>>>> Signed-off-by: John Stultz <john.stultz@linaro.org>
->>>>>>>> ---
->>>>>>>> v2:
->>>>>>>> * Rework to always call the GCTL soft reset in DRD mode,
->>>>>>>>   rather then using a quirk as suggested by Thinh Nguyen
->>>>>>>>
->>>>>>>> v3:
->>>>>>>> * Move GCTL soft reset under the spinlock as suggested by
->>>>>>>>   Thinh Nguyen
->>>>>>> Because this is such an invasive change, I would prefer that we get
->>>>>>> Tested-By tags from a good fraction of the users before applying these
->>>>>>> two changes.
->>>>>> I'm happy to reach out to folks to try to get that. Though I'm
->>>>>> wondering if it would be better to put it behind a dts quirk flag, as
->>>>>> originally proposed?
->>>>>>    https://urldefense.com/v3/__https://lore.kernel.org/lkml/20201021181803.79650-1-john.stultz@linaro.org/__;!!A4F2R9G_pg!LNzuprAeg-O80SgolYkIkW4-ne-M-yLWCDUY9MygAIrQC398Z6gRJ9wnRWITZfc$ 
->>>>>>
->>>>>> That way folks can enable it for devices as they need?
->>>>>>
->>>>>> Again, I'm not trying to force this in as-is, just mostly sending it
->>>>>> out again for discussion to understand what other approach might work.
->>>>>>
->>>>>> thanks
->>>>>> -john
->>>>> A quirk would imply something is broken/diverged from the design right?
->>>>> But it's not the case here, and at least this is needed for HiKey960.
->>>>> Also, I think Rob will be ok with not adding 1 more quirk to the dwc3
->>>>> devicetree. :)
->>>>>
->>>>> BR,
->>>>> Thinh
->>>>>
->>>> Hi All,
->>>>
->>>> Sorry for jumping in, but I checked the SNPS v1.90a databook, and that
->>>> seemed to remove the requirement for the GCTL.softreset before writing
->>>> to PRTCAPDIR.  Should we consider adding a controller version/IP check?
->>>>
->>> Hi Wesley,
->>>
->>> From what I see in the v1.90a databook and others, the flow remains the
->>> same. I need to check internally, but I'm not aware of the change.
->>>
->> Hi Thinh,
->>
->> Hmmm, can you help check the register description for the PRTCAPDIR on
->> your v1.90a databook?  (Table 1-19 Fields for Register: GCTL (Continued)
->> Pg73)  When we compared the sequence in the description there to the
->> previous versions it removed the GCTL.softreset.  If it still shows up
->> on yours, then maybe my v1.90a isn't the final version?
->>
->> Thanks
->> Wesley Cheng
->>
-> 
-> Hi Wesley,
-> 
-> Actually your IP version type may use the newer flow. Can you print your
-> DWC3_VER_TYPE? I still need to verify internally to know which versions
-> need the update if any.
-> 
-> Thanks,
-> Thinh
-> 
-Hi Thinh,
+ When I saw commits referring to Gen2x2 in the usb-next repo, I built
+off that, and also ran linux-next-git.r0.gabaf6f60176f-1 from AUR,
+both giving me the same results/output:
+linux-next-git.r0.gabaf6f60176f-1
+----------------------------------------------
+usb 5-1: new SuperSpeed Gen 1x2 USB device number 3 using xhci_hcd
+usb 5-1: New USB device found, idVendor=3D1058, idProduct=3D2642, bcdDevice=
+=3D10.03
+usb 5-1: New USB device strings: Mfr=3D2, Product=3D3, SerialNumber=3D1
+usb 5-1: Product: Game Drive
+usb 5-1: Manufacturer: Western Digital
+usb 5-1: SerialNumber: 323130334431343030303736
+scsi host7: uas
+scsi 7:0:0:0: Direct-Access     WD       Game Drive       1003 PQ: 0 ANSI: =
+6
+scsi 7:0:0:1: Enclosure         WD       SES Device       1003 PQ: 0 ANSI: =
+6
+ses 7:0:0:1: Attached Enclosure device
+ses 7:0:0:1: Failed to get diagnostic page 0x1
+ses 7:0:0:1: Failed to bind enclosure -19
+sd 7:0:0:0: [sdf] 3907029168 512-byte logical blocks: (2.00 TB/1.82 TiB)
+sd 7:0:0:0: [sdf] Write Protect is off
+sd 7:0:0:0: [sdf] Mode Sense: 57 00 10 00
+sd 7:0:0:0: [sdf] Write cache: enabled, read cache: enabled, supports
+DPO and FUA
+sd 7:0:0:0: [sdf] Optimal transfer size 33553920 bytes
+sd 7:0:0:0: [sdf] Attached SCSI disk
 
-Sure, my DWC3_VER_TYPE output = 0x67612A2A
+See that it's detecting it as Gen 1x2.
+The output of lsusb -t shows that it is connected at 5000M using the
+uas driver. Even my much slower USB 3.1 SSDs connect at 10000M on the
+exact same port.
+When I attach the Gen2x2 NVMe SSD to my other 3.2 Gen2 card, it
+connects at 10000M, so It seems to be directly related to a
+mishandling when the Gen2x2 device gets recognized by the Gen2x2 card.
 
-Thanks
-Wesley Cheng
+lspci output from 5.11.2-arch1-1:
+-------------------------------------------
+USB controller: ASMedia Technology Inc. ASM3242 USB 3.2 Host
+Controller (prog-if 30 [XHCI])
+Subsystem: ASMedia Technology Inc. ASM3242 USB 3.2 Host Controller
+Physical Slot: 1
+Flags: bus master, fast devsel, latency 0, IRQ 62, NUMA node 0
+Memory at f7df0000 (64-bit, non-prefetchable) [size=3D32K]
+Capabilities: [50] MSI: Enable- Count=3D1/8 Maskable- 64bit+
+Capabilities: [68] MSI-X: Enable+ Count=3D8 Masked-
+Capabilities: [78] Power Management version 3
+Capabilities: [80] Express Legacy Endpoint, MSI 00
+Capabilities: [c0] Subsystem: ASMedia Technology Inc. Device 0201
+Capabilities: [100] Advanced Error Reporting
+Capabilities: [200] Secondary PCI Express
+Capabilities: [300] Latency Tolerance Reporting
+Capabilities: [400] L1 PM Substates
+Kernel driver in use: xhci_hcd
+Kernel modules: xhci_pci
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+I'm happy to test anything, or file this somewhere more appropriate if
+you could point me in the right direction.
