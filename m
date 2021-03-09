@@ -2,253 +2,255 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 928F2331D4B
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Mar 2021 04:05:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CD3331E45
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Mar 2021 06:21:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbhCIDFX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Mar 2021 22:05:23 -0500
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:36198 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229694AbhCIDFU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Mar 2021 22:05:20 -0500
-Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 5AAE240391;
-        Tue,  9 Mar 2021 03:05:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1615259119; bh=b7Cc6rPPfBJoWKTLbfEFer6NKO6WbDDsAm6Jr5JmVbo=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=cEEtvfFAuutwXBEdl20bL5NBKKsYZbPqSlEkTLze0pmor8R/8XmPAylpU97Nl/vT6
-         cqfkJIROyV+4rAo1+jnGJemcC0mkRa6S/TBv4jUVRGWumSeCLplj0q79O8h2ERXejz
-         npdRHcHp4e2oDOQOizCAuLFV4OJEu+xE3LM5JWmpH/Y4OPVhDCvPUK2uJeb825cXwy
-         5GuY28qei8hL/Djeinq6RAfn3yDU+3XmjsMA0H0MrGomCDtSAziNaq7++8fcrT4YrI
-         lmAoSmL9tRNMUjRbxP95KKYzliwmdk7ZiCLiOw2neu3V80bUvEOBQz9Y3S4nZQPdeo
-         fJQeu+/7EbMVw==
-Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id AD99DA007C;
-        Tue,  9 Mar 2021 03:05:17 +0000 (UTC)
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2049.outbound.protection.outlook.com [104.47.66.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 7A474800C2;
-        Tue,  9 Mar 2021 03:05:15 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="gi4ckrAJ";
-        dkim-atps=neutral
+        id S229495AbhCIFUL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Mar 2021 00:20:11 -0500
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:37106 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229701AbhCIFUK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Mar 2021 00:20:10 -0500
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1295E6Bb006926;
+        Mon, 8 Mar 2021 21:20:05 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=proofpoint;
+ bh=D2PSS1ZwpURnnl0IyYxuoCJHHE6C+J6jH3fo9oXVanc=;
+ b=Ykp1woVYv+cI9gEaBrjs6PxAlbjOGgTATdI0bIwp9H5eSi6VH5c/s1gNU0sNB7jP0rvB
+ rtr5fj7gh8kQbQMVhjpMJ81XXaVX+h8roCWYmzfT8Hd2DtFbaHqdToz91TqcOAefyJu5
+ fev/3oZZf0IaadZm0KAmTd1uooezHnSOmvoHgTRadYM2Xv3uvIBR+l/xCRCOFMOE7MLC
+ 4ozVCgtK5p6sAgiS4a+AaF1VJzg47Vip7k+KONITsZLVsiQSR2fuCu3l+e+qYlfJr86W
+ 33AjHbOyUFfofqJ+w+SyxH03FKJew62QFFYl6HO0HtkOv4WmA9+8LpbJTy0pRGOCofAe +g== 
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2044.outbound.protection.outlook.com [104.47.66.44])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 374674ynh5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 Mar 2021 21:20:05 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jZVLsQJnRM+McNHnAYTHvJO9s6Fj7MoGF9zge2liz9dvOjFAm7FfC1DAnhuq9yQRNjYq00vOs3VX4ddW3B7eFVDNH0a3VMcjLCufY17UqUA5AvTP/6NtzlC3NvZqBERxNCnaTHv7e8Bw6mhMeRnAyUS7t25QOl+kMmAbci6Jst7VJOMl4ZLsL8NeLoq9i4rOQZY9aGMRlkVaC9XXh5oJDJm6iW0OxSvHT17BhEHAigYvHsM0478S9oasfvUpOzTM2pYSXv8dKlf+OrCb8k1EEjfB1Qi1fa3d2I0S8knqpZcStVVGqnWQDTPWXXD4TkMYdLmSNS+vV6kiyoxFmyxKIw==
+ b=VNPBeD7z4Kltd9WA66YtV9dIpgGC2U6OrQtaxQb3gIMoeBZHvbf/wl/IJducX0bUkkRSgfigQL1gQujchU/RL01x8RBgvr8Eieba+/YgLkCE1V+lFboC8uQybXNJF00srogyA0wcdihqnVlL+gOkjpmvmmbwYb2netK7b5INloU16XzCjMzfaMSIytR5Mise/A7TUIf5TEvAZcNxubLFBE/sYFoxNlAOYwLK74BZ3N5qfhXNoyWP7i5AXwwCZ7z15WufUmuq3qpKbBf+e3OMjwEfftrtlWPbQroyElEuUOdKvzUKCvjpc3LMW8EcCwj7l0FgLEY7UrDWRTFp+WRZJA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b7Cc6rPPfBJoWKTLbfEFer6NKO6WbDDsAm6Jr5JmVbo=;
- b=SqN7zUxKmcF7Gs805Wsv7dT8boe8hAbxwAh64GX5YOL32AGrmvITQUoZKE5ZKUjf0QhsTGKEO10hP+RUIyjRrQUMuW9S8EpxUKUXaXKh81BYkbK+OXES8ciLsBHF9s8ylsK9pIXPhSLj6OU1IZipu8OaPvSaqZi9XwcyonV0wy6rRHjftLtZtbX0jHc6H3b9dKlfFbsbna6GKpFrCesAyRfqBDUAgGleiln+8AaHtoKdX4+NIEOW45Obny3KCYRGW5GCurKO5AGw9mBXihFmI4yp1ZWHeUfoJ3fOg7KUZqdJqa6HoQUS9CCWkXt6Z6Gu8BwSFxJ/4wvCtQ2pKHnf0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
+ bh=D2PSS1ZwpURnnl0IyYxuoCJHHE6C+J6jH3fo9oXVanc=;
+ b=PyjPerdhGCMIOyBnWIgRoYZrUQfMl7wgXA+/wwlhxH2BZEC+rd0t3FcZVAiWlL3DJYSwCVu8GTY+0LGf3KEBjxjz16ZeqrXt6vML17hZpSWSICCjJzz64aJZKmpliFV2Kjpr1Rl9AJCmkLJcaAjrSGGZGvNmOei/UgJ0CHFwmhYspMHf/Eo83M6u83HXM+mKcoxZTHQZTtwtknGGhKY02bbQS1V5ahtmDukp+Ozm/XiF2wILnzuJMtZrQtTqvcvhJlIZsOf3ka2+9keHHoLgD3JY80ED6iUSAofRhtTyY/M08nqwMcxjouqUois7klWF4APYfsibtEkrYn+U0oVUWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 199.43.4.23) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b7Cc6rPPfBJoWKTLbfEFer6NKO6WbDDsAm6Jr5JmVbo=;
- b=gi4ckrAJ/Nnsi6AGhqDyVWWvXkKG/gTMEUzrTa03X6YNmRcvfCRxXcFMYGDkfCdNYwNfPPIfOIukIxxpHzFrwwBz3JdDFK72AhGcn9lksMP0LtTeXh0lgZi3TU3dq+CCauaexli4zgGMyaxxDFfQDNcv6v2VRbBcv3aBFWiCreU=
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
- by BY5PR12MB4019.namprd12.prod.outlook.com (2603:10b6:a03:1a8::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.17; Tue, 9 Mar
- 2021 03:05:13 +0000
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::895b:620d:8f20:c4d6]) by BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::895b:620d:8f20:c4d6%6]) with mapi id 15.20.3912.027; Tue, 9 Mar 2021
- 03:05:13 +0000
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Wesley Cheng <wcheng@codeaurora.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
-        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        Yang Fei <fei.yang@intel.com>,
-        YongQin Liu <yongqin.liu@linaro.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Roger Quadros <rogerq@ti.com>
-Subject: Re: [PATCH v3 1/2] usb: dwc3: Trigger a GCTL soft reset when
- switching modes in DRD
-Thread-Topic: [PATCH v3 1/2] usb: dwc3: Trigger a GCTL soft reset when
- switching modes in DRD
-Thread-Index: AQHW5WDHaQXdezZAr06Yos1UmLp1A6odqBQAgABzRQCAAFsegIBYjhOAgAD1JgCAAVXNgIACB8sA
-Date:   Tue, 9 Mar 2021 03:05:13 +0000
-Message-ID: <3db531c4-7058-68ec-8d4b-ff122c307697@synopsys.com>
-References: <20210108015115.27920-1-john.stultz@linaro.org>
- <87bldzwr6x.fsf@kernel.org>
- <CALAqxLWdWj9=a-7NGDzJyrfyRABwKnJM7EQo3Zm+k9JqAhPz+g@mail.gmail.com>
- <d95d0971-624e-a0e6-ac72-6ee3b1fb1106@synopsys.com>
- <06a44245-4f2f-69ba-fe46-b88a19f585c2@codeaurora.org>
- <a33f7c33-f95d-60c3-70f2-4b37fcf8bac5@synopsys.com>
- <fa5cc67e-3873-e6d9-8727-d160740b027e@codeaurora.org>
-In-Reply-To: <fa5cc67e-3873-e6d9-8727-d160740b027e@codeaurora.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
-authentication-results: codeaurora.org; dkim=none (message not signed)
- header.d=none;codeaurora.org; dmarc=none action=none
- header.from=synopsys.com;
-x-originating-ip: [98.248.94.126]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d83275e3-1827-4a1c-1447-08d8e2a82878
-x-ms-traffictypediagnostic: BY5PR12MB4019:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BY5PR12MB4019E1BDE7652A718B353AD3AA929@BY5PR12MB4019.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: oUg1brzLnDXdyFRP+uMcrBjpNT1UgEgxC3b0rIq9W7rX8/DlIxXciTYEhUslx0KgxZ61OvJHCfvbL1N8TWnstAublBvgP0Yq2fBDzAAvlLoYz1jeI6fmDs4Y4dOYP27lSSUwclaRLgmYu2MJa3JnPHjpNSXynqeyhC5oVkL+Hg4MqR3TtT263Y0tFY6Zi4D2WzxXIdPvc5TLZdtZhk5Kjc/I9KXjJ15PLTrRHho+9V0eL4EGvq2vchQxlenUhCAATOLU03pdAReF0/51Dbn5TirI+5MNjT9/hP/JcJzgxPhWPtLPZMYhusCF4QB0KQpmf27mGov63x3fj7sOHbAFyndk8zwRFszTocligdJLPnYgEL79AcxImMbHkDPulwuS6ZWQFXKrz+849Q0zhYYHIe4xGoGBGcCSF1dKoNdtrnXUX2URDG9EOAJrCEGF2ZnLN7vgskpJJt9wQxETGFw/BTJFWkNNEZvI3FU09Je3b3a6n/PUFW9wlYpktCgceSTPPOstlSrclBT/NYcT4rTzsblC5eYHNSBCbdGSplOEMz9T0hdLwEkj5vQhGwNVfRXzqlFkl3M5YWgQRfNBoJ7fz4ATyDDRzPpiTQ1dWRsxllUH7a+8IMGLANQzpUz9yG5BXWQWffxWdYCAtwN/IWk12LKzeRF3WJ1Moomp365VKCDL+GE3Rzr9+zbeIC+jcgUR
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(396003)(136003)(346002)(366004)(376002)(66556008)(66446008)(2616005)(31686004)(966005)(26005)(83380400001)(4326008)(186003)(478600001)(76116006)(64756008)(53546011)(6506007)(66946007)(316002)(110136005)(7416002)(66476007)(8676002)(54906003)(36756003)(2906002)(6486002)(86362001)(5660300002)(8936002)(84040400003)(31696002)(6512007)(71200400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?bDBuKzFWRzVDbyt1UG1CdmxkRFFYbVJVaUVYVTVBNGlkZzZ0Z0VPQzdOYmFN?=
- =?utf-8?B?UGpuRHRqUmdyYll2NmhhcTN6QTNFTkQ0ZkZmWnJPdEtZVUZBeFFMMThaTEJu?=
- =?utf-8?B?ck1vVGVKcjZJK296WmVadmxaL1NWblJ5NmFaMU5aeWJqNEQxYlRrcU03RHFz?=
- =?utf-8?B?VUROckxlam9qQWpjSjY2NGZSbnFEZVpkSjRRMzF3Y0xhaVUyWFdrV29pVzdP?=
- =?utf-8?B?VUg1a2U0MlNYY1ZDNWhUODR0L2E4bUZmOTgwTGRZNFVYaFllVTNsRUVJN1Nh?=
- =?utf-8?B?aWNhWFNPV0JJbEM0NllkU2NST3ptVmFPeG16bHUvYlNyY2VkZTdQeHlXQU95?=
- =?utf-8?B?bHRpTUtYV2N5OHFSdGN5cEpaSTI4a01QbGFXNmE5dUh2NHd1b3J4QzhBOW9t?=
- =?utf-8?B?bUdob0RMZE91NHQ3NDNDeGVKQ0NtT3VGTVRyQ0NCYUFwTXNSNkhmNmJuajg0?=
- =?utf-8?B?eHc0TzNBd3QyWTMrUTB3VGN4ZndCQlJQcUlYRUppOVVrejd5dUNJQ2k0SkhZ?=
- =?utf-8?B?azZlRyt1ZGxzQXhXOE01TVVuRWxKMENLaXNjVVBQS2VzU01RMUFKc1IrT0I2?=
- =?utf-8?B?VmFteU1rTUh1a3p2dHh3SG5jYUtrbmRPMldYWEJZSXZxWFJ0MS8yUm5HVlR0?=
- =?utf-8?B?MCs2VUplWEo4YkR3aFNFRXNwNkI0NFVkTXU4d2x3TmJjcUNjQnhwS1hUNkJ0?=
- =?utf-8?B?MEVSci9qSnN6UnlBUTBBVnNPaCtIVFlaVGFUVUt2VG81amo3ejJaT09mY3RS?=
- =?utf-8?B?aW10aWtOaWtVa1JrYnU2aGZUV1h2UFd0Sm9BZ2gzQjMxTDVPSFh3Nm1KVFNn?=
- =?utf-8?B?cXhsKzlRbGx5ZlZpaE5rV1dFUjRCM0JsMnVkSDd2TSt1WDdKYkxXWmx2U2VT?=
- =?utf-8?B?YmVlTDJpTGZpeWpZSE4rT1hOUnZGMFp6Um83eCtOSkNmaEswTDAyTGhwY1lV?=
- =?utf-8?B?RXgzVVdUUmF4TUlZRjdwWngxcWs5WkQyTk5jNVdGM29wdjVkMjRLQjcvcmxy?=
- =?utf-8?B?MVpNUlJPYWxsd2p5VjlZbEN2eHVEUnRMT2NjZko5SFRWbDlOSVpubWozamNh?=
- =?utf-8?B?Qm5DL2hSTzNOcWhUZXVwVEZRQ0t3NDdHMjNyWWQyeUlsZXRlenhtUFpFajJu?=
- =?utf-8?B?Z0lRMklBbFo1L0t3T0lVc2xHWjl5RktUUmxvakkxVml6a1lNZU82cm5OS2U1?=
- =?utf-8?B?elQrbkEva3hya0E4SHRkNWVEYlNMSmhCeE5WZE9US2Q1UGx1YUxQSC9ZUVVr?=
- =?utf-8?B?WWUrZGdEVjJ6M2lBMlROQXlRcUoxUjhXVHN2WVRLd0F1MjduUEhoS00wQWtC?=
- =?utf-8?B?aVZOOUQ4eVYxOVROOTJ3N2JXajNpQkpWbzBGbWxSTU1uRGJtY0p4OUVlQ2dl?=
- =?utf-8?B?b0V0MVRUNDI5ZDJQdkxUK1dzSWEzKytwaytIbTFRYjR0N2JUdkMwMWdJckh6?=
- =?utf-8?B?NW9WUnBvejRJWmVYV1M0RzBOMDUvNG5qOGVxa3owbnQyWnJXQnJmWGRuMVJN?=
- =?utf-8?B?aEFWd0RTRDh4TzNSMzBIakVFYXpCdmgrckhaRkNkZnZmaXQ3Y2dJajdpY0tj?=
- =?utf-8?B?R1lXSG5PM2lEMGZWTndUMXRZMWhvNldYK1ZCbE03MUZPY2laWTRzak91bVd2?=
- =?utf-8?B?UG9wSGNJc0hzTkxVWE40K3hIbVhFZWZnWTVJOHJaR1o3Q1ZudUp2OTJkckdv?=
- =?utf-8?B?dnBZeGxZTm9ocmFKemhtRDA2Q05sa0FaWDNiOVVPWm1QQlhZSVFVdUMyOXFk?=
- =?utf-8?Q?G5Udy+bef5I5YpB+mg=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A677F7D2701DF741B32697C1524E97C9@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ bh=D2PSS1ZwpURnnl0IyYxuoCJHHE6C+J6jH3fo9oXVanc=;
+ b=Wal0VdwIhVQiMN8cgKSYsFcTe76eWx/kzQJVlH3hub5IeaoQcxmCM8O+hYXTpSyctlNjs4PPt/UoqO7g64zN6y91p8yPVVaRU5kSD8WKnlYgISWcp5LpsxvfTkKttWUeNEBM9pwof0GbWADp56HFN457rYfVpbTvPY5+VdjvCdY=
+Received: from DM5PR15CA0066.namprd15.prod.outlook.com (2603:10b6:3:ae::28) by
+ BN8PR07MB8002.namprd07.prod.outlook.com (2603:10b6:408:aa::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3912.17; Tue, 9 Mar 2021 05:20:03 +0000
+Received: from DM6NAM12FT039.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:3:ae:cafe::54) by DM5PR15CA0066.outlook.office365.com
+ (2603:10b6:3:ae::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.17 via Frontend
+ Transport; Tue, 9 Mar 2021 05:20:03 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 199.43.4.23)
+ smtp.mailfrom=cadence.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=pass action=none
+ header.from=cadence.com;
+Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
+ 199.43.4.23 as permitted sender) receiver=protection.outlook.com;
+ client-ip=199.43.4.23; helo=rmmaillnx1.cadence.com;
+Received: from rmmaillnx1.cadence.com (199.43.4.23) by
+ DM6NAM12FT039.mail.protection.outlook.com (10.13.179.59) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3933.16 via Frontend Transport; Tue, 9 Mar 2021 05:20:02 +0000
+Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
+        by rmmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 1295K08A026646
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 9 Mar 2021 00:20:01 -0500
+X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
+Received: from maileu3.global.cadence.com (10.160.88.99) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 9 Mar 2021 06:19:59 +0100
+Received: from vleu-orange.cadence.com (10.160.88.83) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2 via Frontend Transport; Tue, 9 Mar 2021 06:19:59 +0100
+Received: from vleu-orange.cadence.com (localhost.localdomain [127.0.0.1])
+        by vleu-orange.cadence.com (8.14.4/8.14.4) with ESMTP id 1295JxET009441;
+        Tue, 9 Mar 2021 06:19:59 +0100
+Received: (from sparmar@localhost)
+        by vleu-orange.cadence.com (8.14.4/8.14.4/Submit) id 1295JwO0009434;
+        Tue, 9 Mar 2021 06:19:58 +0100
+From:   Sanket Parmar <sparmar@cadence.com>
+To:     <peter.chen@kernel.org>
+CC:     <pawell@cadence.com>, <a-govindraju@ti.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kurahul@cadence.com>, <gregkh@linuxfoundation.org>,
+        <kishon@ti.com>, Sanket Parmar <sparmar@cadence.com>
+Subject: [PATCH 1/2] usb: cdns3: Use dma_pool_* api to alloc trb pool
+Date:   Tue, 9 Mar 2021 06:19:39 +0100
+Message-ID: <1615267180-9289-1-git-send-email-sparmar@cadence.com>
+X-Mailer: git-send-email 2.4.5
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d83275e3-1827-4a1c-1447-08d8e2a82878
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Mar 2021 03:05:13.3546
+Content-Type: text/plain
+X-OrganizationHeadersPreserved: maileu3.global.cadence.com
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6d55e154-4901-41dc-362d-08d8e2bafe2f
+X-MS-TrafficTypeDiagnostic: BN8PR07MB8002:
+X-Microsoft-Antispam-PRVS: <BN8PR07MB800275DAF323524E74FFBBA8B0929@BN8PR07MB8002.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1360;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: X0N51G08uKLzsOazHvcGwsqKzATdjrxE1GX7xIYILK4FfzB+P5mvcSKvg4/+FEiGVjFsy1ZhvrgWKHE7KSgdhds3aYNaOX/VzPnjX1/rN+wgTdDX6MWb5HhIEiy2l0/igEhsfIDpEahm2UaimwSD9OG6UCAxihGvOqjjRDOM76XimZwlXg6lQBPXscW69HQPgvDMV9vTQNBlHQxDOWsAZf7FQze7NOQLftB1xQvsC2E7TdUqAFTzYBS33GEym2sitz6zIK4EMN1CYanKG3l2gyg4+z+8xyWUSYZRfz+t3Y8R2GivgEJWooyRfiloHuA1SkP3Dn7lgX6XkdWY2B8aIoQf/0jT3OP+HraXmWXRDN9i47vBDdnGHnnamu4ldymXdc+qbxJsiPKG1O7D0DW7+BOJ9cYbAATO49tOvcy6xQPV6uVG3dP4BDIO1R/m16H1C5NulWaFnQcHdmCRbiyW1KKwRmrvF3iqi/ZcMcBx83lltW2aTwDh0/czVXURcgc+yWt3eAhmE3rd7d32whAyC/BiEajow5fb1CpUZPCDNnRiTEyr37wl/6mSvP5339bF8UKMnre00nZnn7cFbvd0u1NjAt0UOBw1SHpBR3hkDKTA2vFEKD0S5Ay2dSjYIortFFNQJpotLRFnH9lBQLLdJPXvyOnSInyRqXVtotoMfQGIJYG7RZNvbn0+54UHmfrn4lE1CQ44yageGj4MKomwgw==
+X-Forefront-Antispam-Report: CIP:199.43.4.23;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:rmmaillnx1.cadence.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(136003)(39860400002)(346002)(376002)(396003)(36092001)(36840700001)(46966006)(83380400001)(70586007)(2616005)(336012)(36906005)(5660300002)(36860700001)(82740400003)(86362001)(81166007)(82310400003)(478600001)(107886003)(47076005)(54906003)(4326008)(356005)(42186006)(186003)(26005)(36756003)(2906002)(6916009)(8936002)(70206006)(8676002)(6666004)(426003)(316002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2021 05:20:02.8267
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jowUh0AwMNUEZ9L0wqUr0teXyi0igz0M9Ipz+8SEKym+tO0+dQoE3bMd1HAojfESX+R2xV4CjSkX/HmYakAdDg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4019
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d55e154-4901-41dc-362d-08d8e2bafe2f
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[199.43.4.23];Helo=[rmmaillnx1.cadence.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM12FT039.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR07MB8002
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-09_03:2021-03-08,2021-03-09 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 suspectscore=0
+ phishscore=0 clxscore=1015 bulkscore=0 impostorscore=0 priorityscore=1501
+ spamscore=0 malwarescore=0 lowpriorityscore=0 mlxlogscore=955 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103090025
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-V2VzbGV5IENoZW5nIHdyb3RlOg0KPg0KPiBPbiAzLzYvMjAyMSAzOjQxIFBNLCBUaGluaCBOZ3V5
-ZW4gd3JvdGU6DQo+PiBXZXNsZXkgQ2hlbmcgd3JvdGU6DQo+Pj4gT24gMS84LzIwMjEgNDo0NCBQ
-TSwgVGhpbmggTmd1eWVuIHdyb3RlOg0KPj4+PiBIaSwNCj4+Pj4NCj4+Pj4gSm9obiBTdHVsdHog
-d3JvdGU6DQo+Pj4+PiBPbiBGcmksIEphbiA4LCAyMDIxIGF0IDQ6MjYgQU0gRmVsaXBlIEJhbGJp
-IDxiYWxiaUBrZXJuZWwub3JnPiB3cm90ZToNCj4+Pj4+PiBIaSwNCj4+Pj4+Pg0KPj4+Pj4+IEpv
-aG4gU3R1bHR6IDxqb2huLnN0dWx0ekBsaW5hcm8ub3JnPiB3cml0ZXM6DQo+Pj4+Pj4+IEZyb206
-IFl1IENoZW4gPGNoZW55dTU2QGh1YXdlaS5jb20+DQo+Pj4+Pj4+DQo+Pj4+Pj4+IEp1c3QgcmVz
-ZW5kaW5nIHRoaXMsIGFzIGRpc2N1c3Npb24gZGllZCBvdXQgYSBiaXQgYW5kIEknbSBub3QNCj4+
-Pj4+Pj4gc3VyZSBob3cgdG8gbWFrZSBmdXJ0aGVyIHByb2dyZXNzLiBTZWUgaGVyZSBmb3IgZGVi
-dWcgZGF0YSB0aGF0DQo+Pj4+Pj4+IHdhcyByZXF1ZXN0ZWQgbGFzdCB0aW1lIGFyb3VuZDoNCj4+
-Pj4+Pj4gICBodHRwczovL3VybGRlZmVuc2UuY29tL3YzL19faHR0cHM6Ly9sb3JlLmtlcm5lbC5v
-cmcvbGttbC9DQUxBcXhMWGRuYVVmSkt4MGFOOXhXd3RmV1ZqTVdpZ1BweTJhcXNOajU2eXZuYlU4
-MGdAbWFpbC5nbWFpbC5jb20vX187ISFBNEYyUjlHX3BnIUxOenVwckFlZy1PODBTZ29sWWtJa1c0
-LW5lLU0teUxXQ0RVWTlNeWdBSXJRQzM5OFo2Z1JKOXduc25scWQzdyQgDQo+Pj4+Pj4+DQo+Pj4+
-Pj4+IFdpdGggdGhlIGN1cnJlbnQgZHdjMyBjb2RlIG9uIHRoZSBIaUtleTk2MCB3ZSBvZnRlbiBz
-ZWUgdGhlDQo+Pj4+Pj4+IENPUkVJRExFIGZsYWcgZ2V0IHN0dWNrIG9mZiBpbiBfX2R3YzNfZ2Fk
-Z2V0X3N0YXJ0KCksIHdoaWNoDQo+Pj4+Pj4+IHNlZW1zIHRvIHByZXZlbnQgdGhlIHJlc2V0IGly
-cSBhbmQgY2F1c2VzIHRoZSBVU0IgZ2FkZ2V0IHRvDQo+Pj4+Pj4+IGZhaWwgdG8gaW5pdGlhbGl6
-ZS4NCj4+Pj4+Pj4NCj4+Pj4+Pj4gV2UgaGFkIHNlZW4gb2NjYXNpb25hbCBpbml0aWFsaXphdGlv
-biBmYWlsdXJlcyB3aXRoIG9sZGVyDQo+Pj4+Pj4+IGtlcm5lbHMgYnV0IHdpdGggcmVjZW50IDUu
-eCBlcmEga2VybmVscyBpdCBzZWVtZWQgdG8gYmUgYmVjb21pbmcNCj4+Pj4+Pj4gbXVjaCBtb3Jl
-IGNvbW1vbiwgc28gSSBkdWcgYmFjayB0aHJvdWdoIHNvbWUgb2xkZXIgdHJlZXMgYW5kDQo+Pj4+
-Pj4+IHJlYWxpemVkIEkgZHJvcHBlZCB0aGlzIHF1aXJrIGZyb20gWXUgQ2hlbiBkdXJpbmcgdXBz
-dHJlYW1pbmcNCj4+Pj4+Pj4gYXMgSSBjb3VsZG4ndCBwcm92aWRlIGEgcHJvcGVyIHJhdGlvbmFs
-IGZvciBpdCBhbmQgaXQgZGlkbid0DQo+Pj4+Pj4+IHNlZW0gdG8gYmUgbmVjZXNzYXJ5LiBJIG5v
-dyByZWFsaXplIEkgd2FzIHdyb25nLg0KPj4+Pj4+Pg0KPj4+Pj4+PiBBZnRlciByZXN1Ym1pdHRp
-bmcgdGhlIHF1aXJrLCBUaGluaCBOZ3V5ZW4gcG9pbnRlZCBvdXQgdGhhdCBpdA0KPj4+Pj4+PiBz
-aG91bGRuJ3QgYmUgYSBxdWlyayBhdCBhbGwgYW5kIGl0IGlzIGFjdHVhbGx5IG1lbnRpb25lZCBp
-biB0aGUNCj4+Pj4+Pj4gcHJvZ3JhbW1pbmcgZ3VpZGUgdGhhdCBpdCBzaG91bGQgYmUgZG9uZSB3
-aGVuIHN3aXRjaGluZyBtb2Rlcw0KPj4+Pj4+PiBpbiBEUkQuDQo+Pj4+Pj4+DQo+Pj4+Pj4+IFNv
-LCB0byBhdm9pZCB0aGVzZSAhQ09SRUlETEUgbG9ja3VwcyBzZWVuIG9uIEhpS2V5OTYwLCB0aGlz
-DQo+Pj4+Pj4+IHBhdGNoIGlzc3VlcyBHQ1RMIHNvZnQgcmVzZXQgd2hlbiBzd2l0Y2hpbmcgbW9k
-ZXMgaWYgdGhlDQo+Pj4+Pj4+IGNvbnRyb2xsZXIgaXMgaW4gRFJEIG1vZGUuDQo+Pj4+Pj4+DQo+
-Pj4+Pj4+IENjOiBGZWxpcGUgQmFsYmkgPGJhbGJpQGtlcm5lbC5vcmc+DQo+Pj4+Pj4+IENjOiBU
-ZWphcyBKb2dsZWthciA8dGVqYXMuam9nbGVrYXJAc3lub3BzeXMuY29tPg0KPj4+Pj4+PiBDYzog
-WWFuZyBGZWkgPGZlaS55YW5nQGludGVsLmNvbT4NCj4+Pj4+Pj4gQ2M6IFlvbmdRaW4gTGl1IDx5
-b25ncWluLmxpdUBsaW5hcm8ub3JnPg0KPj4+Pj4+PiBDYzogQW5kcnplaiBQaWV0cmFzaWV3aWN6
-IDxhbmRyemVqLnBAY29sbGFib3JhLmNvbT4NCj4+Pj4+Pj4gQ2M6IFRoaW5oIE5ndXllbiA8dGhp
-bmhuQHN5bm9wc3lzLmNvbT4NCj4+Pj4+Pj4gQ2M6IEp1biBMaSA8bGlqdW4ua2VybmVsQGdtYWls
-LmNvbT4NCj4+Pj4+Pj4gQ2M6IE1hdXJvIENhcnZhbGhvIENoZWhhYiA8bWNoZWhhYitodWF3ZWlA
-a2VybmVsLm9yZz4NCj4+Pj4+Pj4gQ2M6IEdyZWcgS3JvYWgtSGFydG1hbiA8Z3JlZ2toQGxpbnV4
-Zm91bmRhdGlvbi5vcmc+DQo+Pj4+Pj4+IENjOiBsaW51eC11c2JAdmdlci5rZXJuZWwub3JnDQo+
-Pj4+Pj4+IFNpZ25lZC1vZmYtYnk6IFl1IENoZW4gPGNoZW55dTU2QGh1YXdlaS5jb20+DQo+Pj4+
-Pj4+IFNpZ25lZC1vZmYtYnk6IEpvaG4gU3R1bHR6IDxqb2huLnN0dWx0ekBsaW5hcm8ub3JnPg0K
-Pj4+Pj4+PiAtLS0NCj4+Pj4+Pj4gdjI6DQo+Pj4+Pj4+ICogUmV3b3JrIHRvIGFsd2F5cyBjYWxs
-IHRoZSBHQ1RMIHNvZnQgcmVzZXQgaW4gRFJEIG1vZGUsDQo+Pj4+Pj4+ICAgcmF0aGVyIHRoZW4g
-dXNpbmcgYSBxdWlyayBhcyBzdWdnZXN0ZWQgYnkgVGhpbmggTmd1eWVuDQo+Pj4+Pj4+DQo+Pj4+
-Pj4+IHYzOg0KPj4+Pj4+PiAqIE1vdmUgR0NUTCBzb2Z0IHJlc2V0IHVuZGVyIHRoZSBzcGlubG9j
-ayBhcyBzdWdnZXN0ZWQgYnkNCj4+Pj4+Pj4gICBUaGluaCBOZ3V5ZW4NCj4+Pj4+PiBCZWNhdXNl
-IHRoaXMgaXMgc3VjaCBhbiBpbnZhc2l2ZSBjaGFuZ2UsIEkgd291bGQgcHJlZmVyIHRoYXQgd2Ug
-Z2V0DQo+Pj4+Pj4gVGVzdGVkLUJ5IHRhZ3MgZnJvbSBhIGdvb2QgZnJhY3Rpb24gb2YgdGhlIHVz
-ZXJzIGJlZm9yZSBhcHBseWluZyB0aGVzZQ0KPj4+Pj4+IHR3byBjaGFuZ2VzLg0KPj4+Pj4gSSdt
-IGhhcHB5IHRvIHJlYWNoIG91dCB0byBmb2xrcyB0byB0cnkgdG8gZ2V0IHRoYXQuIFRob3VnaCBJ
-J20NCj4+Pj4+IHdvbmRlcmluZyBpZiBpdCB3b3VsZCBiZSBiZXR0ZXIgdG8gcHV0IGl0IGJlaGlu
-ZCBhIGR0cyBxdWlyayBmbGFnLCBhcw0KPj4+Pj4gb3JpZ2luYWxseSBwcm9wb3NlZD8NCj4+Pj4+
-ICAgIGh0dHBzOi8vdXJsZGVmZW5zZS5jb20vdjMvX19odHRwczovL2xvcmUua2VybmVsLm9yZy9s
-a21sLzIwMjAxMDIxMTgxODAzLjc5NjUwLTEtam9obi5zdHVsdHpAbGluYXJvLm9yZy9fXzshIUE0
-RjJSOUdfcGchTE56dXByQWVnLU84MFNnb2xZa0lrVzQtbmUtTS15TFdDRFVZOU15Z0FJclFDMzk4
-WjZnUko5d25SV0lUWmZjJCANCj4+Pj4+DQo+Pj4+PiBUaGF0IHdheSBmb2xrcyBjYW4gZW5hYmxl
-IGl0IGZvciBkZXZpY2VzIGFzIHRoZXkgbmVlZD8NCj4+Pj4+DQo+Pj4+PiBBZ2FpbiwgSSdtIG5v
-dCB0cnlpbmcgdG8gZm9yY2UgdGhpcyBpbiBhcy1pcywganVzdCBtb3N0bHkgc2VuZGluZyBpdA0K
-Pj4+Pj4gb3V0IGFnYWluIGZvciBkaXNjdXNzaW9uIHRvIHVuZGVyc3RhbmQgd2hhdCBvdGhlciBh
-cHByb2FjaCBtaWdodCB3b3JrLg0KPj4+Pj4NCj4+Pj4+IHRoYW5rcw0KPj4+Pj4gLWpvaG4NCj4+
-Pj4gQSBxdWlyayB3b3VsZCBpbXBseSBzb21ldGhpbmcgaXMgYnJva2VuL2RpdmVyZ2VkIGZyb20g
-dGhlIGRlc2lnbiByaWdodD8NCj4+Pj4gQnV0IGl0J3Mgbm90IHRoZSBjYXNlIGhlcmUsIGFuZCBh
-dCBsZWFzdCB0aGlzIGlzIG5lZWRlZCBmb3IgSGlLZXk5NjAuDQo+Pj4+IEFsc28sIEkgdGhpbmsg
-Um9iIHdpbGwgYmUgb2sgd2l0aCBub3QgYWRkaW5nIDEgbW9yZSBxdWlyayB0byB0aGUgZHdjMw0K
-Pj4+PiBkZXZpY2V0cmVlLiA6KQ0KPj4+Pg0KPj4+PiBCUiwNCj4+Pj4gVGhpbmgNCj4+Pj4NCj4+
-PiBIaSBBbGwsDQo+Pj4NCj4+PiBTb3JyeSBmb3IganVtcGluZyBpbiwgYnV0IEkgY2hlY2tlZCB0
-aGUgU05QUyB2MS45MGEgZGF0YWJvb2ssIGFuZCB0aGF0DQo+Pj4gc2VlbWVkIHRvIHJlbW92ZSB0
-aGUgcmVxdWlyZW1lbnQgZm9yIHRoZSBHQ1RMLnNvZnRyZXNldCBiZWZvcmUgd3JpdGluZw0KPj4+
-IHRvIFBSVENBUERJUi4gIFNob3VsZCB3ZSBjb25zaWRlciBhZGRpbmcgYSBjb250cm9sbGVyIHZl
-cnNpb24vSVAgY2hlY2s/DQo+Pj4NCj4+IEhpIFdlc2xleSwNCj4+DQo+PiBGcm9tIHdoYXQgSSBz
-ZWUgaW4gdGhlIHYxLjkwYSBkYXRhYm9vayBhbmQgb3RoZXJzLCB0aGUgZmxvdyByZW1haW5zIHRo
-ZQ0KPj4gc2FtZS4gSSBuZWVkIHRvIGNoZWNrIGludGVybmFsbHksIGJ1dCBJJ20gbm90IGF3YXJl
-IG9mIHRoZSBjaGFuZ2UuDQo+Pg0KPiBIaSBUaGluaCwNCj4NCj4gSG1tbSwgY2FuIHlvdSBoZWxw
-IGNoZWNrIHRoZSByZWdpc3RlciBkZXNjcmlwdGlvbiBmb3IgdGhlIFBSVENBUERJUiBvbg0KPiB5
-b3VyIHYxLjkwYSBkYXRhYm9vaz8gIChUYWJsZSAxLTE5IEZpZWxkcyBmb3IgUmVnaXN0ZXI6IEdD
-VEwgKENvbnRpbnVlZCkNCj4gUGc3MykgIFdoZW4gd2UgY29tcGFyZWQgdGhlIHNlcXVlbmNlIGlu
-IHRoZSBkZXNjcmlwdGlvbiB0aGVyZSB0byB0aGUNCj4gcHJldmlvdXMgdmVyc2lvbnMgaXQgcmVt
-b3ZlZCB0aGUgR0NUTC5zb2Z0cmVzZXQuICBJZiBpdCBzdGlsbCBzaG93cyB1cA0KPiBvbiB5b3Vy
-cywgdGhlbiBtYXliZSBteSB2MS45MGEgaXNuJ3QgdGhlIGZpbmFsIHZlcnNpb24/DQo+DQo+IFRo
-YW5rcw0KPiBXZXNsZXkgQ2hlbmcNCj4NCg0KSGkgV2VzbGV5LA0KDQpBY3R1YWxseSB5b3VyIElQ
-IHZlcnNpb24gdHlwZSBtYXkgdXNlIHRoZSBuZXdlciBmbG93LiBDYW4geW91IHByaW50IHlvdXIN
-CkRXQzNfVkVSX1RZUEU/IEkgc3RpbGwgbmVlZCB0byB2ZXJpZnkgaW50ZXJuYWxseSB0byBrbm93
-IHdoaWNoIHZlcnNpb25zDQpuZWVkIHRoZSB1cGRhdGUgaWYgYW55Lg0KDQpUaGFua3MsDQpUaGlu
-aA0K
+Allocation of DMA coherent memory in atomic context using
+dma_alloc_coherent() might fail on platforms with smaller
+DMA region.
+
+To fix it, dma_alloc_coherent() is replaced with dma_pool
+API to allocate a smaller chunk of DMA coherent memory for
+TRB rings.
+
+Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+Reported-by: Aswath Govindraju <a-govindraju@ti.com>
+Signed-off-by: Sanket Parmar <sparmar@cadence.com>
+---
+ drivers/usb/cdns3/cdns3-gadget.c |   42 +++++++++++++++++--------------------
+ drivers/usb/cdns3/cdns3-gadget.h |    1 +
+ 2 files changed, 20 insertions(+), 23 deletions(-)
+
+diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+index 582bfec..5f51215 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.c
++++ b/drivers/usb/cdns3/cdns3-gadget.c
+@@ -59,6 +59,7 @@
+ #include <linux/dma-mapping.h>
+ #include <linux/usb/gadget.h>
+ #include <linux/module.h>
++#include <linux/dmapool.h>
+ #include <linux/iopoll.h>
+ 
+ #include "core.h"
+@@ -190,29 +191,13 @@ dma_addr_t cdns3_trb_virt_to_dma(struct cdns3_endpoint *priv_ep,
+ 	return priv_ep->trb_pool_dma + offset;
+ }
+ 
+-static int cdns3_ring_size(struct cdns3_endpoint *priv_ep)
+-{
+-	switch (priv_ep->type) {
+-	case USB_ENDPOINT_XFER_ISOC:
+-		return TRB_ISO_RING_SIZE;
+-	case USB_ENDPOINT_XFER_CONTROL:
+-		return TRB_CTRL_RING_SIZE;
+-	default:
+-		if (priv_ep->use_streams)
+-			return TRB_STREAM_RING_SIZE;
+-		else
+-			return TRB_RING_SIZE;
+-	}
+-}
+-
+ static void cdns3_free_trb_pool(struct cdns3_endpoint *priv_ep)
+ {
+ 	struct cdns3_device *priv_dev = priv_ep->cdns3_dev;
+ 
+ 	if (priv_ep->trb_pool) {
+-		dma_free_coherent(priv_dev->sysdev,
+-				  cdns3_ring_size(priv_ep),
+-				  priv_ep->trb_pool, priv_ep->trb_pool_dma);
++		dma_pool_free(priv_dev->eps_dma_pool,
++			      priv_ep->trb_pool, priv_ep->trb_pool_dma);
+ 		priv_ep->trb_pool = NULL;
+ 	}
+ }
+@@ -226,7 +211,7 @@ static void cdns3_free_trb_pool(struct cdns3_endpoint *priv_ep)
+ int cdns3_allocate_trb_pool(struct cdns3_endpoint *priv_ep)
+ {
+ 	struct cdns3_device *priv_dev = priv_ep->cdns3_dev;
+-	int ring_size = cdns3_ring_size(priv_ep);
++	int ring_size = TRB_RING_SIZE;
+ 	int num_trbs = ring_size / TRB_SIZE;
+ 	struct cdns3_trb *link_trb;
+ 
+@@ -234,10 +219,10 @@ int cdns3_allocate_trb_pool(struct cdns3_endpoint *priv_ep)
+ 		cdns3_free_trb_pool(priv_ep);
+ 
+ 	if (!priv_ep->trb_pool) {
+-		priv_ep->trb_pool = dma_alloc_coherent(priv_dev->sysdev,
+-						       ring_size,
+-						       &priv_ep->trb_pool_dma,
+-						       GFP_DMA32 | GFP_ATOMIC);
++		priv_ep->trb_pool = dma_pool_alloc(priv_dev->eps_dma_pool,
++						   GFP_DMA32 | GFP_ATOMIC,
++						   &priv_ep->trb_pool_dma);
++
+ 		if (!priv_ep->trb_pool)
+ 			return -ENOMEM;
+ 
+@@ -3113,6 +3098,7 @@ static void cdns3_gadget_exit(struct cdns *cdns)
+ 
+ 	dma_free_coherent(priv_dev->sysdev, 8, priv_dev->setup_buf,
+ 			  priv_dev->setup_dma);
++	dma_pool_destroy(priv_dev->eps_dma_pool);
+ 
+ 	kfree(priv_dev->zlp_buf);
+ 	usb_put_gadget(&priv_dev->gadget);
+@@ -3185,6 +3171,14 @@ static int cdns3_gadget_start(struct cdns *cdns)
+ 	/* initialize endpoint container */
+ 	INIT_LIST_HEAD(&priv_dev->gadget.ep_list);
+ 	INIT_LIST_HEAD(&priv_dev->aligned_buf_list);
++	priv_dev->eps_dma_pool = dma_pool_create("cdns3_eps_dma_pool",
++						 priv_dev->sysdev,
++						 TRB_RING_SIZE, 8, 0);
++	if (!priv_dev->eps_dma_pool) {
++		dev_err(priv_dev->dev, "Failed to create TRB dma pool\n");
++		ret = -ENOMEM;
++		goto err1;
++	}
+ 
+ 	ret = cdns3_init_eps(priv_dev);
+ 	if (ret) {
+@@ -3235,6 +3229,8 @@ static int cdns3_gadget_start(struct cdns *cdns)
+ err2:
+ 	cdns3_free_all_eps(priv_dev);
+ err1:
++	dma_pool_destroy(priv_dev->eps_dma_pool);
++
+ 	usb_put_gadget(&priv_dev->gadget);
+ 	cdns->gadget_dev = NULL;
+ 	return ret;
+diff --git a/drivers/usb/cdns3/cdns3-gadget.h b/drivers/usb/cdns3/cdns3-gadget.h
+index 21fa461..ecf9b91 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.h
++++ b/drivers/usb/cdns3/cdns3-gadget.h
+@@ -1298,6 +1298,7 @@ struct cdns3_device {
+ 
+ 	struct cdns3_usb_regs		__iomem *regs;
+ 
++	struct dma_pool			*eps_dma_pool;
+ 	struct usb_ctrlrequest		*setup_buf;
+ 	dma_addr_t			setup_dma;
+ 	void				*zlp_buf;
+-- 
+1.7.1
+
