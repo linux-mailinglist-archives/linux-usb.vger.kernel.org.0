@@ -2,152 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47CA733250E
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Mar 2021 13:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F53F3325D7
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Mar 2021 13:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbhCIMOa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Mar 2021 07:14:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbhCIMOF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Mar 2021 07:14:05 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109FBC06174A;
-        Tue,  9 Mar 2021 04:14:05 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id u4so26725613lfs.0;
-        Tue, 09 Mar 2021 04:14:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TJrXfS7Tr1d3xV4PIT0xg70kR2pU0ho6aOnS9OMYEk8=;
-        b=oejj2O7VEyKJ2VNIkcdrFSWH0PppqtbgvH7cOUP0/16W9+9Qze3bj/mqUN4nP/OO5f
-         fU4Ksz33Z7GrkT//ZN95amU/SR+bMwyT//05joIoyQJusG6JbTYyfmoHEBo08i1ObQ4S
-         S+UUAKzgv85yMPAaAyK62Cp7Y9xNnV0+iZIr/hCf7afUGEAH9wC8qNM8i0QR4zU1fLB5
-         SGGEn750fpg0VRm+V1Ru5SHr1m2fwXb1VVEQl1rxDV+UgTPgTXttLJ9x4LiLBi9hF9pw
-         zmKcRjht0HfhU6z+dVeX8P9lAD7MdQAGc0sYg5/2oeqQ59++hX+13Z3QOZeiDVRvt7No
-         u0qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TJrXfS7Tr1d3xV4PIT0xg70kR2pU0ho6aOnS9OMYEk8=;
-        b=AFRlUpEjxpoZ3Ik7SVSkNZcVEHoHYvPB92YlZjlPahVpVfgsQfYNbDI0Ax/jrNDy1r
-         /M/mCkjmmJS8AbB0TTpTKvpvp8U2TsvsHxt6Jvbg2xeuLBmkbTC5kmHec3ShZf9c9nOD
-         sjPn5aaR5gIw3ojhilkAgsj2CjHKYkRcyidqFBhevEbXxS9OVR0vBaH5872goYp1rr9Y
-         xUfSm7HRlB5dd7zmrVdjgAnunSXsHvXrn47upjt74O6vWt/J3BCLW0qzlpFJHWxTDMS/
-         lrXHy8WVLiG2k1RH1td5CCqCNJhaUrus53d2m8fIGn7DAQieZFN637qeNUE+6Sg9quTJ
-         Bd5Q==
-X-Gm-Message-State: AOAM5339+jw/iagipbKPcTiH8wdSKMjwtUx464HZvyPuPycKnUzZhTUW
-        20QPbpK0QNH6EPqcOqvd71M=
-X-Google-Smtp-Source: ABdhPJyhl0dy1nrHRh0FBKdIQp2WgS+HtiR62tJG5W5Sxo9kS1ZDYzv27UBuK3g33W/eF6wL2KZmIg==
-X-Received: by 2002:a05:6512:22c8:: with SMTP id g8mr17479557lfu.388.1615292043308;
-        Tue, 09 Mar 2021 04:14:03 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id v129sm1755991lfa.43.2021.03.09.04.14.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Mar 2021 04:14:02 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH robh next] dt-bindings: usb: add USB controller port
-Date:   Tue,  9 Mar 2021 13:13:11 +0100
-Message-Id: <20210309121311.7263-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.26.2
+        id S230183AbhCIMwl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Mar 2021 07:52:41 -0500
+Received: from mx2.suse.de ([195.135.220.15]:41548 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231402AbhCIMw0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 9 Mar 2021 07:52:26 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1615294345; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3e7zEs/QQMUc5tW9t1Wbe0GFyZ6tye9OfoKMfJIyfyY=;
+        b=plMOsnwQu2lV4G9w5qN4L9D2AX+KzcU39mDYqH2D1Rc0aR8zKEhdGb6nJ69d21lVJ1d7px
+        Ji/vN0fQzny3tJt3vePgnKbNogDzc3XiRcSPcJ5b0NTnLHfwIjLzJMAcO0U9kKzcLmvS1e
+        SyFFcXWtrXqG9lzKt0Fkgyd/x5K7+44=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id E684DAB8C;
+        Tue,  9 Mar 2021 12:52:24 +0000 (UTC)
+Message-ID: <395fc28de485f33071d358abf74b70ed1bcbbbad.camel@suse.com>
+Subject: Re: cdc-acm cooldown + Cisco 2960-X = kernel warning + dead USB
+From:   Oliver Neukum <oneukum@suse.com>
+To:     "Ramsay, Lincoln" <Lincoln.Ramsay@digi.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Date:   Tue, 09 Mar 2021 13:52:23 +0100
+In-Reply-To: <BN8PR10MB36989D7DC6402FDB1256ADAAE8979@BN8PR10MB3698.namprd10.prod.outlook.com>
+References: <BN8PR10MB36989D7DC6402FDB1256ADAAE8979@BN8PR10MB3698.namprd10.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+Am Donnerstag, den 04.03.2021, 22:59 +0000 schrieb Ramsay, Lincoln:
+> Hi folks,
+> 
+> Opengear makes a device (OM2200) that you're supposed to plug into consoles in order to access them remotely but the Cisco 2960-X is causing us grief. We can trivially break our device in just 3 steps.
+> 
+> 1. Connect the Cisco 2960-X console.
+> 2. (Re)boot our device.
+> 3. Open the Cisco's console device (/dev/ttyACM0) and write to it.
 
-USB bindings already allow specifying USB device hard wired to a
-specific controller port but they don't allow describing port on its
-own.
+What exactly happens after that?
 
-This fixes:
-arch/arm/boot/dts/bcm4708-buffalo-wzr-1750dhp.dt.yaml: usb@23000: port@1: 'compatible' is a required property
-        From schema: Documentation/devicetree/bindings/usb/generic-xhci.yaml
+> When we were using Linux 5.2.32 this wasn't fatal. It was possible to disconnect and reconnect the Cisco and it would work as expected. The same was observed on our older devices that run Linux 3.10 on ARM and on a laptop running macOS 10.13. But we upgraded to Linux 5.4.61 and it got much worse. I did some digging and it seems that the cdc-acm cooldown commit (f4d1cf2ef83caeab212e842fd238cb8353f59fa2) is the cause.
+> 
+> Before I continue, I need to acknowledge that the Cisco 2960-X is really broken. Unlike every other Cisco console I could find to test with, it shows up as USB 2 rather than USB 1, causes warnings to be printed and sends corrupt identity strings.
+> 
+>     usb 2-1.1: new high-speed USB device number 6 using ehci-pci
+>     usb 2-1.1: config 1 interface 0 altsetting 0 endpoint 0x82 has an invalid bInterval 255, changing to 11
+>     usb 2-1.1: config 1 interface 1 altsetting 0 bulk endpoint 0x1 has invalid maxpacket 64
+>     usb 2-1.1: config 1 interface 1 altsetting 0 bulk endpoint 0x81 has invalid maxpacket 64
+>     usb 2-1.1: New USB device found, idVendor=05a6, idProduct=0009, bcdDevice= 0.00
+>     usb 2-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+>     usb 2-1.1: Product: C�~B�~@~@ल^D
+>     usb 2-1.1: Manufacturer: C�~B�~@~@ल^D
+>     usb 2-1.1: SerialNumber: C�~B�~@~@ल^D�~@�~B
+>     cdc_acm 2-1.1:1.0: ttyACM0: USB ACM device
+> 
+> Despite this though, it does seem to work, except when it is connected during boot. In that case, we get this kernel warning:
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
-Please check if I got the $nodename part right. Somehow I don't see any
-errors / warnings when using:
+Did your test kernel contain 38203b8385bf6283537162bde7d499f83096471 ?
 
-something@1 {
-	reg = <1>;
-};
----
- .../devicetree/bindings/usb/usb-hcd.yaml      |  4 +-
- .../devicetree/bindings/usb/usb-port.yaml     | 39 +++++++++++++++++++
- 2 files changed, 42 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/usb/usb-port.yaml
+	Regards
+		Oliver
 
-diff --git a/Documentation/devicetree/bindings/usb/usb-hcd.yaml b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-index 56853c17af66..b0c6a79cad57 100644
---- a/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-+++ b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
-@@ -33,7 +33,9 @@ patternProperties:
-   "^.*@[0-9a-f]{1,2}$":
-     description: The hard wired USB devices
-     type: object
--    $ref: /usb/usb-device.yaml
-+    oneOf:
-+      - $ref: /usb/usb-port.yaml
-+      - $ref: /usb/usb-device.yaml
- 
- additionalProperties: true
- 
-diff --git a/Documentation/devicetree/bindings/usb/usb-port.yaml b/Documentation/devicetree/bindings/usb/usb-port.yaml
-new file mode 100644
-index 000000000000..68fe16c8703e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/usb-port.yaml
-@@ -0,0 +1,39 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/usb-port.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: USB port on USB controller
-+
-+maintainers:
-+  - Rafał Miłecki <rafal@milecki.pl>
-+
-+description: |
-+  This binding describes a single USB controller port that doesn't have any
-+  device hard wired.
-+
-+properties:
-+  $nodename:
-+    pattern: "^port@[0-9a-f]{1,2}$"
-+
-+  reg:
-+    description: number of USB controller port
-+    maxItems: 1
-+
-+required:
-+  - reg
-+
-+additionalProperties: true
-+
-+examples:
-+  - |
-+    usb@11270000 {
-+        reg = <0x11270000 0x1000>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        port@1 {
-+            reg = <1>;
-+        };
-+    };
--- 
-2.26.2
 
