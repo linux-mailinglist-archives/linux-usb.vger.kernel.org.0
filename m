@@ -2,131 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4419333AEB
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 12:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3AF333BAC
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 12:44:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbhCJLCr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Mar 2021 06:02:47 -0500
-Received: from m42-2.mailgun.net ([69.72.42.2]:23795 "EHLO m42-2.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232007AbhCJLCY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 10 Mar 2021 06:02:24 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1615374144; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=jI/ErXJ/bj/7OZg8pXEpxdgJW4e8YopJ7lQRgZC5Q9c=; b=DqP/0qydHE/6mzStQ6ZucJSYkyjeujJjGhp+4jRPnu11AXW4RF1FzQ0JDhlYCFd102AMMFaa
- +mYFAemId++7DI6i4lVWtPMAsPEFrHV1TQxDCLFV90Kq79J2sboTko+s+gJMGGkCTfjDHQ6W
- B1bcK2teFTofgB/1ZsFCO1eCHgI=
-X-Mailgun-Sending-Ip: 69.72.42.2
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
- 6048a739fa6ebd85e8833e9e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 10 Mar 2021 11:02:17
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 21BECC43464; Wed, 10 Mar 2021 11:02:17 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E2F6DC433C6;
-        Wed, 10 Mar 2021 11:02:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E2F6DC433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH] usb: dwc3: gadget: Prevent EP queuing while stopping transfers
-Date:   Wed, 10 Mar 2021 03:02:10 -0800
-Message-Id: <1615374130-28353-1-git-send-email-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S231781AbhCJLoD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Mar 2021 06:44:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231265AbhCJLnf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Mar 2021 06:43:35 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E288DC06174A
+        for <linux-usb@vger.kernel.org>; Wed, 10 Mar 2021 03:43:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=tfJDUOuq/G8lxislJkZy1H7BcYxByC3tcxXQy85SnCQ=; b=u7CH8ZdFu2RTVQtiS8divD21SU
+        Vc4ld70dFLaILkHo5wVa/yi4mXf1DH9VnuIG+tEufN/AjNK59XfatUebVOBKr3KR1PdS/w32alo9V
+        5DZOAl4XQg1V4wl/Poawdb4jvgPN11H0EobTSTMU5MpMjNu5hWhowfQLpfxjNPLGbFi5YLKNTMrep
+        IrLbspO/8WusGvlXWuFmgIpzc3GxGh38X13541vDZXaaQfEwoWlwx/nwej1VEhIFkbwY1yJZLCiqR
+        w4i5sTFwhmojMg99QotLvllEy7deolQJcSLhMm+mty8FzujkQ/WyvLXg7NgSsICp71AH0zxFpLrBp
+        c6c6BJqQ==;
+Received: from [2a01:799:95f:4600:2010:7a82:9a7a:175c] (port=64334)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1lJxFS-00027Y-O6; Wed, 10 Mar 2021 12:43:30 +0100
+Subject: Re: [PATCH v7 3/3] drm: Add GUD USB Display driver
+To:     Peter Stuge <peter@stuge.se>
+Cc:     hudson@trmm.net, markus@raatikainen.cc,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
+        sam@ravnborg.org
+References: <20210310045544.28961.qmail@stuge.se>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <1894f3f7-bd1d-493e-8d7f-8c10917da51b@tronnes.org>
+Date:   Wed, 10 Mar 2021 12:43:26 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20210310045544.28961.qmail@stuge.se>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In the situations where the DWC3 gadget stops active transfers, once
-calling the dwc3_gadget_giveback(), there is a chance where a function
-driver can queue a new USB request in between the time where the dwc3
-lock has been released and re-aquired.  This occurs after we've already
-issued an ENDXFER command.  When the stop active transfers continues
-to remove USB requests from all dep lists, the newly added request will
-also be removed, while controller still has an active TRB for it.
-This can lead to the controller accessing an unmapped memory address.
 
-Fix this by ensuring parameters to prevent EP queuing are set before
-calling the stop active transfers API.
 
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
----
- drivers/usb/dwc3/gadget.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Den 10.03.2021 05.55, skrev Peter Stuge:
+> Noralf Trønnes wrote:
+>>> Depending on how long it takes for the DMA mask dependency patch to show
+>>> up in drm-misc-next, I will either publish a new version or apply the
+>>> current and provide patches with the necessary fixes. 
+>>
+>> In case I apply this version, are you happy enough with it that you want
+>> to give an ack or r-b?
+> 
+> I've now tested R1 and RGB111 and I think I've found two more things:
+> 
+> I didn't receive the expected bits/bytes for RGB111 on the bulk endpoint,
+> I think because of how components were extracted in gud_xrgb8888_to_color().
+> 
+> Changing to the following gets me the expected (X R1 G1 B1 X R2 G2 B2) bytes:
+> 
+> 			r = (*pix32 >> 8) & 0xff;
+> 			g = (*pix32 >> 16) & 0xff;
+> 			b = (*pix32++ >> 24) & 0xff;
+> 
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 4780983..4d98fbf 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -783,8 +783,6 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
- 
- 	trace_dwc3_gadget_ep_disable(dep);
- 
--	dwc3_remove_requests(dwc, dep);
--
- 	/* make sure HW endpoint isn't stalled */
- 	if (dep->flags & DWC3_EP_STALL)
- 		__dwc3_gadget_ep_set_halt(dep, 0, false);
-@@ -803,6 +801,8 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
- 		dep->endpoint.desc = NULL;
- 	}
- 
-+	dwc3_remove_requests(dwc, dep);
-+
- 	return 0;
- }
- 
-@@ -1617,7 +1617,7 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
- {
- 	struct dwc3		*dwc = dep->dwc;
- 
--	if (!dep->endpoint.desc || !dwc->pullups_connected) {
-+	if (!dep->endpoint.desc || !dwc->pullups_connected || !dwc->connected) {
- 		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
- 				dep->name);
- 		return -ESHUTDOWN;
-@@ -2247,6 +2247,7 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- 	if (!is_on) {
- 		u32 count;
- 
-+		dwc->connected = false;
- 		/*
- 		 * In the Synopsis DesignWare Cores USB3 Databook Rev. 3.30a
- 		 * Section 4.1.8 Table 4-7, it states that for a device-initiated
-@@ -3329,8 +3330,6 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
- {
- 	u32			reg;
- 
--	dwc->connected = true;
--
- 	/*
- 	 * WORKAROUND: DWC3 revisions <1.88a have an issue which
- 	 * would cause a missing Disconnect Event if there's a
-@@ -3370,6 +3369,7 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
- 	 * transfers."
- 	 */
- 	dwc3_stop_active_transfers(dwc);
-+	dwc->connected = true;
- 
- 	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
- 	reg &= ~DWC3_DCTL_TSTCTRL_MASK;
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+We're accessing the whole word here through pix32, no byte access, so
+endianess doesn't come into play. This change will flip r and b, which
+gives: XRGB8888 -> XBGR1111
 
+BGR is a common thing on controllers, are you sure yours are set to RGB
+and not BGR?
+
+And the 0xff masking isn't necessary since we're assigning to a byte, right?
+
+I haven't got a native R1G1B1 display so I have emulated and I do get
+the expected colors. This is the conversion function I use on the device
+which I think is correct:
+
+static size_t rgb111_to_rgb565(uint16_t *dst, uint8_t *src,
+                               uint16_t src_width, uint16_t src_height)
+{
+    uint8_t rgb111, val = 0;
+    size_t len = 0;
+
+    for (uint16_t y = 0; y < src_height; y++) {
+        for (uint16_t x = 0; x < src_width; x++) {
+            if (!(x % 2))
+                val = *src++;
+            rgb111 = val >> 4;
+            *dst++ = ((rgb111 & 0x04) << 13) | ((rgb111 & 0x02) << 9) |
+                     ((rgb111 & 0x01) << 4);
+            len += sizeof(*dst);
+            val <<= 4;
+        }
+    }
+
+   return len;
+}
+
+> 
+> Then, gud_xrgb8888_to_color() and maybe even gud_xrgb8888_to_r124() seem
+> to be host endian dependent, at least because of that pix32, but maybe more?
+> I don't know whether drm guarantees "native" XRGB byte sequence in memory,
+> then I guess the pix32 is okay? Please take a look?
+> 
+> 
+> Finally my very last ask: Please consider renaming GUD_PIXEL_FORMAT_RGB111
+> to GUD_PIXEL_FORMAT_XRGB1111?
+> 
+
+It has crossed my mind, I'll change it.
+
+Noralf.
