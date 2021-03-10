@@ -2,196 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB263332F6
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 03:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE5E3332F7
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 03:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbhCJCG2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Mar 2021 21:06:28 -0500
-Received: from mga02.intel.com ([134.134.136.20]:45087 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230325AbhCJCGB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 9 Mar 2021 21:06:01 -0500
-IronPort-SDR: kBVORm+/P/5fLdTYSyUXQKYxqgybBaWO8y3IHAydJ8Y+05/1okN6YU12PZD+f0RRv1L28rZIQ+
- UqcUa55mMGOA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9917"; a="175471226"
-X-IronPort-AV: E=Sophos;i="5.81,236,1610438400"; 
-   d="scan'208";a="175471226"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2021 18:06:00 -0800
-IronPort-SDR: Mka2UvyyMJEj+VelRpDvm7ZRssqTBNelxfL0YNVRQd3rIm1v5QBNgHDWnHzhJ+F6XIeZQ0wcir
- 6C2GQ+w1Vl2w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,236,1610438400"; 
-   d="scan'208";a="431004678"
-Received: from lkp-server01.sh.intel.com (HELO 3e992a48ca98) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Mar 2021 18:05:58 -0800
-Received: from kbuild by 3e992a48ca98 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lJoEX-0001wu-Vs; Wed, 10 Mar 2021 02:05:57 +0000
-Date:   Wed, 10 Mar 2021 10:05:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 58f3367b2359e88b83bcfca5b77d48b609eb2123
-Message-ID: <6048296d.xVxOYVlffvLSOLFF%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231252AbhCJCIF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Mar 2021 21:08:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230325AbhCJCHu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Mar 2021 21:07:50 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE555C06174A
+        for <linux-usb@vger.kernel.org>; Tue,  9 Mar 2021 18:07:39 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id k2so14086437ili.4
+        for <linux-usb@vger.kernel.org>; Tue, 09 Mar 2021 18:07:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=i5b/iy0A4Dj0bqvDcrMMLPgadLbrgb3seHckWJMKqm0=;
+        b=KzR4vCG8NRwxSNzo8g6kvruQE8lyfuW08waAiJ89v3xf9FYQmb5VOryQe++msbPfaW
+         OS6WxyRroFYgC1zSNhpQrKleyV4Vye1VQ1dYJQzIlnCEYpNNCO6D0VPgZH5K7SOoyMTb
+         PizakQnwXbFB1xrAx2S8FxoMB77UdXvz0USdI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=i5b/iy0A4Dj0bqvDcrMMLPgadLbrgb3seHckWJMKqm0=;
+        b=nbf+Ep/Naz5Ip5NGVKwmz+Ef0Rfg6JBVpi3WL4sj16PU5AXdi0pKDb88vlwhWSzI0M
+         JzX6m7Pg5bXKZwTYOgqFjSvhsMH9JZwjhxJwqPGghK7Bm8RhF4yUht2xYabYEZSIfMw4
+         B1VXfW7/hx3FkUvtZhuqkOz/4CGLgUgBdKQhbx2ZHmjdcE677FnoXi44NmdDujJBXMVQ
+         l9zQ+uVMSMDA4dE+PZUKAb8yqUHfSgzdrwoJx9lq9vbPcHSCciXg6cltQBJxkv1Cverx
+         Ov79Zm2gp2uFt2yjbGQOhoM3REYi/xC2waJduUjDOwDFxzSMXa4J3TvlzVgdFfm2Q9MA
+         ZEew==
+X-Gm-Message-State: AOAM5307BCNutFtYohjn0hrQYFl3OZE8KgJxpVUQSqenkg/EbPZHYgWX
+        UcEk3vJ4JMY9Bb3AnwRoek70VA==
+X-Google-Smtp-Source: ABdhPJyGmrp1G6U2w1WoD09LPitrttQNiyAlbEYLIY8mhEYBNna9x7jbu0PhU4afFf4y0AbUmIxicQ==
+X-Received: by 2002:a05:6e02:19c5:: with SMTP id r5mr904694ill.171.1615342059015;
+        Tue, 09 Mar 2021 18:07:39 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id k3sm8375059ioj.35.2021.03.09.18.07.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Mar 2021 18:07:38 -0800 (PST)
+Subject: Re: [PATCH 4/6] usbip: fix stub_dev usbip_sockfd_store() races
+ leading to gpf
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        shuah@kernel.org, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <cover.1615171203.git.skhan@linuxfoundation.org>
+ <268a0668144d5ff36ec7d87fdfa90faf583b7ccc.1615171203.git.skhan@linuxfoundation.org>
+ <05aed75a-4a81-ef59-fc4f-6007f18e7839@i-love.sakura.ne.jp>
+ <5df3d221-9e78-4cbe-826b-81cbfc4d5888@i-love.sakura.ne.jp>
+ <3305d1a1-12e2-087b-30f5-10f4bf8eaf83@linuxfoundation.org>
+ <f8f5e763-da2d-b26f-c6a5-d345bbe55448@i-love.sakura.ne.jp>
+ <30a1afb2-d5a4-40b2-385d-24a2bf110e92@linuxfoundation.org>
+ <7b9465aa-213e-a513-d033-12c048df15d6@i-love.sakura.ne.jp>
+ <05e8e744-0847-cde2-b978-0bfd7ef93a9f@linuxfoundation.org>
+ <9653ae69-86f4-7608-ce97-4ec39b063ed2@i-love.sakura.ne.jp>
+ <1edb9542-59c9-bbf6-9f16-99614605a800@linuxfoundation.org>
+ <47dbbf10-368c-6e45-5eac-c57b75f7ae9c@i-love.sakura.ne.jp>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <0e8d26dc-d99c-bcaa-1e95-0b5d0e0e535b@linuxfoundation.org>
+Date:   Tue, 9 Mar 2021 19:07:37 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <47dbbf10-368c-6e45-5eac-c57b75f7ae9c@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 58f3367b2359e88b83bcfca5b77d48b609eb2123  usb: dwc3: qcom: Add missing DWC3 OF node refcount decrement
+On 3/9/21 6:02 PM, Tetsuo Handa wrote:
+> On 2021/03/10 9:29, Shuah Khan wrote:
+>>> It is not a large grain lock. Since event_handler() is exclusively executed, this lock
+>>> does _NOT_ block event_handler() unless attach/detach operations run concurrently.
+>>>
+>>>>
+>>
+>> event handler queues the events. It shouldn't be blocked by attach
+>> and detach. The events could originate for various reasons during
+>> the host and vhci operations. I don't like using this lock for
+>> attach and detach.
+> 
+> How can attach/detach deadlock event_handler()?
+> event_handler() calls e.g. vhci_shutdown_connection() via ud->eh_ops.shutdown(ud).
+> vhci_shutdown_connection() e.g. waits for termination of tx/rx threads via kthread_stop_put().
+> event_handler() is already blocked by detach operation.
+> How it can make situation worse to wait for creation of tx/rx threads in attach operation?
+> 
 
-elapsed time: 727m
+event_lock shouldn't be held during event ops. usbip_event_add()
+uses it to add events. Protecting shutdown path needs a different
+approach.
 
-configs tested: 134
-configs skipped: 2
+In any case, do you have comments on this patch which doesn't even
+touch vhci driver?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I understand you are identifying additional race condition that
+the vhci patches in this series might not fix. That doesn't mean
+that these patches aren't valid.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-mips                        workpad_defconfig
-sh                           se7724_defconfig
-mips                         bigsur_defconfig
-mips                          ath25_defconfig
-m68k                           sun3_defconfig
-arm                          pxa3xx_defconfig
-m68k                             alldefconfig
-arm                          moxart_defconfig
-powerpc                  storcenter_defconfig
-arm                             ezx_defconfig
-mips                       lemote2f_defconfig
-powerpc                     tqm8541_defconfig
-powerpc                     pq2fads_defconfig
-arm                           stm32_defconfig
-mips                 decstation_r4k_defconfig
-m68k                        m5307c3_defconfig
-powerpc                      arches_defconfig
-sh                           se7343_defconfig
-arm                              alldefconfig
-arm                         socfpga_defconfig
-arm                          pcm027_defconfig
-powerpc                     pseries_defconfig
-arm                         s5pv210_defconfig
-mips                    maltaup_xpa_defconfig
-mips                        vocore2_defconfig
-arm                            hisi_defconfig
-riscv             nommu_k210_sdcard_defconfig
-xtensa                          iss_defconfig
-powerpc                     kmeter1_defconfig
-sh                   rts7751r2dplus_defconfig
-mips                        jmr3927_defconfig
-arm                       netwinder_defconfig
-arm                           viper_defconfig
-sh                      rts7751r2d1_defconfig
-powerpc                    ge_imp3a_defconfig
-arm                         hackkit_defconfig
-mips                     loongson1b_defconfig
-h8300                            alldefconfig
-arm                            xcep_defconfig
-arc                           tb10x_defconfig
-arm                          ep93xx_defconfig
-powerpc                     stx_gp3_defconfig
-arm                          pxa910_defconfig
-powerpc                        icon_defconfig
-sh                           se7722_defconfig
-m68k                          amiga_defconfig
-powerpc                    mvme5100_defconfig
-alpha                            allyesconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a005-20210309
-i386                 randconfig-a003-20210309
-i386                 randconfig-a002-20210309
-i386                 randconfig-a006-20210309
-i386                 randconfig-a004-20210309
-i386                 randconfig-a001-20210309
-x86_64               randconfig-a013-20210309
-x86_64               randconfig-a016-20210309
-x86_64               randconfig-a015-20210309
-x86_64               randconfig-a014-20210309
-x86_64               randconfig-a011-20210309
-x86_64               randconfig-a012-20210309
-x86_64               randconfig-a006-20210308
-x86_64               randconfig-a001-20210308
-x86_64               randconfig-a004-20210308
-x86_64               randconfig-a002-20210308
-x86_64               randconfig-a005-20210308
-x86_64               randconfig-a003-20210308
-i386                 randconfig-a016-20210309
-i386                 randconfig-a012-20210309
-i386                 randconfig-a014-20210309
-i386                 randconfig-a013-20210309
-i386                 randconfig-a011-20210309
-i386                 randconfig-a015-20210309
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+Do you have any comments specific to the patches in this series?
 
-clang tested configs:
-x86_64               randconfig-a006-20210309
-x86_64               randconfig-a001-20210309
-x86_64               randconfig-a004-20210309
-x86_64               randconfig-a002-20210309
-x86_64               randconfig-a005-20210309
-x86_64               randconfig-a003-20210309
-x86_64               randconfig-a013-20210308
-x86_64               randconfig-a016-20210308
-x86_64               randconfig-a015-20210308
-x86_64               randconfig-a014-20210308
-x86_64               randconfig-a011-20210308
-x86_64               randconfig-a012-20210308
+thanks,
+-- Shuah
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+
