@@ -2,116 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE5E3332F7
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 03:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC6E33331E
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 03:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbhCJCIF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Mar 2021 21:08:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbhCJCHu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Mar 2021 21:07:50 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE555C06174A
-        for <linux-usb@vger.kernel.org>; Tue,  9 Mar 2021 18:07:39 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id k2so14086437ili.4
-        for <linux-usb@vger.kernel.org>; Tue, 09 Mar 2021 18:07:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=i5b/iy0A4Dj0bqvDcrMMLPgadLbrgb3seHckWJMKqm0=;
-        b=KzR4vCG8NRwxSNzo8g6kvruQE8lyfuW08waAiJ89v3xf9FYQmb5VOryQe++msbPfaW
-         OS6WxyRroFYgC1zSNhpQrKleyV4Vye1VQ1dYJQzIlnCEYpNNCO6D0VPgZH5K7SOoyMTb
-         PizakQnwXbFB1xrAx2S8FxoMB77UdXvz0USdI=
+        id S231607AbhCJC2Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Mar 2021 21:28:16 -0500
+Received: from mail-il1-f170.google.com ([209.85.166.170]:36609 "EHLO
+        mail-il1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231299AbhCJC2P (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Mar 2021 21:28:15 -0500
+Received: by mail-il1-f170.google.com with SMTP id g9so14122519ilc.3;
+        Tue, 09 Mar 2021 18:28:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=i5b/iy0A4Dj0bqvDcrMMLPgadLbrgb3seHckWJMKqm0=;
-        b=nbf+Ep/Naz5Ip5NGVKwmz+Ef0Rfg6JBVpi3WL4sj16PU5AXdi0pKDb88vlwhWSzI0M
-         JzX6m7Pg5bXKZwTYOgqFjSvhsMH9JZwjhxJwqPGghK7Bm8RhF4yUht2xYabYEZSIfMw4
-         B1VXfW7/hx3FkUvtZhuqkOz/4CGLgUgBdKQhbx2ZHmjdcE677FnoXi44NmdDujJBXMVQ
-         l9zQ+uVMSMDA4dE+PZUKAb8yqUHfSgzdrwoJx9lq9vbPcHSCciXg6cltQBJxkv1Cverx
-         Ov79Zm2gp2uFt2yjbGQOhoM3REYi/xC2waJduUjDOwDFxzSMXa4J3TvlzVgdFfm2Q9MA
-         ZEew==
-X-Gm-Message-State: AOAM5307BCNutFtYohjn0hrQYFl3OZE8KgJxpVUQSqenkg/EbPZHYgWX
-        UcEk3vJ4JMY9Bb3AnwRoek70VA==
-X-Google-Smtp-Source: ABdhPJyGmrp1G6U2w1WoD09LPitrttQNiyAlbEYLIY8mhEYBNna9x7jbu0PhU4afFf4y0AbUmIxicQ==
-X-Received: by 2002:a05:6e02:19c5:: with SMTP id r5mr904694ill.171.1615342059015;
-        Tue, 09 Mar 2021 18:07:39 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id k3sm8375059ioj.35.2021.03.09.18.07.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Mar 2021 18:07:38 -0800 (PST)
-Subject: Re: [PATCH 4/6] usbip: fix stub_dev usbip_sockfd_store() races
- leading to gpf
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        shuah@kernel.org, valentina.manea.m@gmail.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1615171203.git.skhan@linuxfoundation.org>
- <268a0668144d5ff36ec7d87fdfa90faf583b7ccc.1615171203.git.skhan@linuxfoundation.org>
- <05aed75a-4a81-ef59-fc4f-6007f18e7839@i-love.sakura.ne.jp>
- <5df3d221-9e78-4cbe-826b-81cbfc4d5888@i-love.sakura.ne.jp>
- <3305d1a1-12e2-087b-30f5-10f4bf8eaf83@linuxfoundation.org>
- <f8f5e763-da2d-b26f-c6a5-d345bbe55448@i-love.sakura.ne.jp>
- <30a1afb2-d5a4-40b2-385d-24a2bf110e92@linuxfoundation.org>
- <7b9465aa-213e-a513-d033-12c048df15d6@i-love.sakura.ne.jp>
- <05e8e744-0847-cde2-b978-0bfd7ef93a9f@linuxfoundation.org>
- <9653ae69-86f4-7608-ce97-4ec39b063ed2@i-love.sakura.ne.jp>
- <1edb9542-59c9-bbf6-9f16-99614605a800@linuxfoundation.org>
- <47dbbf10-368c-6e45-5eac-c57b75f7ae9c@i-love.sakura.ne.jp>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <0e8d26dc-d99c-bcaa-1e95-0b5d0e0e535b@linuxfoundation.org>
-Date:   Tue, 9 Mar 2021 19:07:37 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=H/PbJJ+B+OfvmyZFpcyfF/sjb4tA6E0cFD7ESjMM+e0=;
+        b=E124yc9puClWVoIgYcMGg/BGRueIAGEnlszL/tXvYy2M7KizwCgduTRuP9lu4FRItn
+         42oCo6JbTpBn0MSgqezbSNMQONCDp4huqot15OJDM77kqdyGZYthyKHPaPR6Off0x2E2
+         2Sp7fHmnhjris/1r3PqL4G6Z+GEAAebpAbqZGNedj7Fc2hEAzu6Pn9XU5hBqlF/kvDPX
+         D3+FAeFQe778KspuikHaNMmxWK0iIvCeF84qdnYRqCjS6leL+y3z9OopfXdu9oDmequl
+         JomNpgexuiCa79HKGdfRcKJGL5SgkvoaxGaWeRmTGVlAMGGKYrQPDlwq4qmg9ZDqN09r
+         8Lcg==
+X-Gm-Message-State: AOAM532PREabYSkqyE/hDib7rOz7gHor9FrGS+I9InsQVTXQYmsQrU6Q
+        n3uzf2yF9rterLtIKYobuw==
+X-Google-Smtp-Source: ABdhPJxaBqWxJBySm+R6hLqmNeaFC9yTJW09h+zTC0LttNCVmJdKatSxs4V8sNf0p307tRVKiggTJw==
+X-Received: by 2002:a92:6510:: with SMTP id z16mr1137919ilb.88.1615343294967;
+        Tue, 09 Mar 2021 18:28:14 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id j12sm8238945ila.75.2021.03.09.18.28.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Mar 2021 18:28:14 -0800 (PST)
+Received: (nullmailer pid 1613968 invoked by uid 1000);
+        Wed, 10 Mar 2021 02:28:11 -0000
+Date:   Tue, 9 Mar 2021 19:28:11 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4 01/12] dt-bindings: usb: fix yamllint check warning
+Message-ID: <20210310022811.GA1612587@robh.at.kernel.org>
+References: <20210308053745.25697-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
-In-Reply-To: <47dbbf10-368c-6e45-5eac-c57b75f7ae9c@i-love.sakura.ne.jp>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210308053745.25697-1-chunfeng.yun@mediatek.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/9/21 6:02 PM, Tetsuo Handa wrote:
-> On 2021/03/10 9:29, Shuah Khan wrote:
->>> It is not a large grain lock. Since event_handler() is exclusively executed, this lock
->>> does _NOT_ block event_handler() unless attach/detach operations run concurrently.
->>>
->>>>
->>
->> event handler queues the events. It shouldn't be blocked by attach
->> and detach. The events could originate for various reasons during
->> the host and vhci operations. I don't like using this lock for
->> attach and detach.
+On Mon, Mar 08, 2021 at 01:37:34PM +0800, Chunfeng Yun wrote:
+> Fix warning: "missing starting space in comment"
+
+What tree is this in because I don't see it.
+
 > 
-> How can attach/detach deadlock event_handler()?
-> event_handler() calls e.g. vhci_shutdown_connection() via ud->eh_ops.shutdown(ud).
-> vhci_shutdown_connection() e.g. waits for termination of tx/rx threads via kthread_stop_put().
-> event_handler() is already blocked by detach operation.
-> How it can make situation worse to wait for creation of tx/rx threads in attach operation?
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v2~v4: no changes
+> ---
+>  Documentation/devicetree/bindings/usb/usb-device.yaml | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-
-event_lock shouldn't be held during event ops. usbip_event_add()
-uses it to add events. Protecting shutdown path needs a different
-approach.
-
-In any case, do you have comments on this patch which doesn't even
-touch vhci driver?
-
-I understand you are identifying additional race condition that
-the vhci patches in this series might not fix. That doesn't mean
-that these patches aren't valid.
-
-Do you have any comments specific to the patches in this series?
-
-thanks,
--- Shuah
-
-
-
+> diff --git a/Documentation/devicetree/bindings/usb/usb-device.yaml b/Documentation/devicetree/bindings/usb/usb-device.yaml
+> index d4c99809ee9a..b77960a7a37b 100644
+> --- a/Documentation/devicetree/bindings/usb/usb-device.yaml
+> +++ b/Documentation/devicetree/bindings/usb/usb-device.yaml
+> @@ -82,9 +82,9 @@ required:
+>  additionalProperties: true
+>  
+>  examples:
+> -  #hub connected to port 1
+> -  #device connected to port 2
+> -  #device connected to port 3
+> +  # hub connected to port 1
+> +  # device connected to port 2
+> +  # device connected to port 3
+>    #    interface 0 of configuration 1
+>    #    interface 0 of configuration 2
+>    - |
+> -- 
+> 2.18.0
