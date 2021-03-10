@@ -2,162 +2,226 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8DD333485
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 05:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 452AC33349C
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 05:56:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbhCJErK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Mar 2021 23:47:10 -0500
-Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:4816 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230198AbhCJEqy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Mar 2021 23:46:54 -0500
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12A4iKa9027090;
-        Tue, 9 Mar 2021 20:46:44 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=proofpoint;
- bh=pZnA7WSOuV0jUYGP53mm6b4vhFrmY5biDNstAinwM+w=;
- b=PxYIkSUykDWLqfLcV46rhzaePC7DtRpSocFqt14TqQU/tXc6SoARH20pQCingAISMHoP
- BJnOMsm47DOo0gK/e/oBPC+SwbFdjff9O8oK4lZKt1xCdK/5XjPfDdvNMu1D+eOuv1XN
- RyZHgm+KUGZSm50GnVtQozU08CZkw3agMIqJdpHzriPOmrWheCbwuDuucoIP2aUS2EXY
- Snpu0/C75Q1ilqmhwJmwZ+t4854s4SPi+p/yIRwuPWxwUn8ag+L9lRqvNXsHF6jGFa6V
- SRAtkD9x86bIgJt9f1Cj+pJofxLIJq1JDLVMI0b4/04BA7RJr5L1GTvcGQxfQLYK92oS EA== 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
-        by mx0b-0014ca01.pphosted.com with ESMTP id 3746753etu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 Mar 2021 20:46:44 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OdPTxoHDGPPGQESdyLpTSKbWtgkn+PeCrJwxMQX20NPw9ViDImO1sUClp+7koLASj7yGfKBn0uEPhUXNWWMwvzr+AtnPC33BtMCGh3fnXNIgFIMzHWRKaZ0DBeeXXWNT/tANEL51AaeXpxb8f6qKl4NDwx0mtSWjEI//JOOgcchcSrW9BHFMRU4S+wwhfJ77te1K2O80TiRfTSepR+WU/NeuzLd9KTHDrTyIEkyzA6DvMws+zhjEB9JLWtqG+SfjvxpZcUMuPcWAlq0JtRpL2lXCIFxM8DYHIERtoZlTQNbeKBym3Z5Nrtobf7wMjY9LQipqUtemjo+dwcZ9mnHw0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pZnA7WSOuV0jUYGP53mm6b4vhFrmY5biDNstAinwM+w=;
- b=LKoDkDVfymaUshy3i7J203guGy6/ZVVc3ZL+ReneyTrrz4KalPTGJkQjVOxlPwB97FSWX3JWc3xkIwPBrFd2ZoFidnL99R1Ywuq7dHud2THYZci0Leyr5IF3CJ9EQKQ+WeQKlAX90LIZuk28C+04f+zPCnon8HJccEs0jYM7uGHoKUldEuoVxVZ2qfvRYgly4ZlHm4lf7iVn3YXiLzbnB3y95lVM1pg9CqDpV+kL7Xaetyr4BPy+KxGd0rTe51MO+6uoQ+YVQQPiezHjNgkAOoZUUD5yx92+QejEtYWJb8MaXPQ2k+n7yAtNOFSK0nRO87RDeQ8nV+okTzT42qQw2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 199.43.4.23) smtp.rcpttodomain=kernel.org smtp.mailfrom=cadence.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pZnA7WSOuV0jUYGP53mm6b4vhFrmY5biDNstAinwM+w=;
- b=JKt044vhSiXtpLVZYA5rRuOazi7mRkBoHmyWR6PPMxCXkxB+faG4Fj9V19KARvlLsjB0bAXgFtWiHzLoAfETH9iwisHzWMCFF34RZODrHbmkjCxsyjzmgNECf8mTMoXfgypGjYSdHi11c3jmLKM7joDGUG8Ktoaiul/bbFf4tPU=
-Received: from DM6PR07CA0102.namprd07.prod.outlook.com (2603:10b6:5:337::35)
- by SN6PR07MB4958.namprd07.prod.outlook.com (2603:10b6:805:a4::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.19; Wed, 10 Mar
- 2021 04:46:41 +0000
-Received: from DM6NAM12FT019.eop-nam12.prod.protection.outlook.com
- (2603:10b6:5:337:cafe::e8) by DM6PR07CA0102.outlook.office365.com
- (2603:10b6:5:337::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.17 via Frontend
- Transport; Wed, 10 Mar 2021 04:46:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 199.43.4.23)
- smtp.mailfrom=cadence.com; kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=pass action=none header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 199.43.4.23 as permitted sender) receiver=protection.outlook.com;
- client-ip=199.43.4.23; helo=rmmaillnx1.cadence.com;
-Received: from rmmaillnx1.cadence.com (199.43.4.23) by
- DM6NAM12FT019.mail.protection.outlook.com (10.13.178.84) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3933.16 via Frontend Transport; Wed, 10 Mar 2021 04:46:41 +0000
-Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
-        by rmmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 12A4kcgG025556
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 9 Mar 2021 23:46:40 -0500
-X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
-Received: from maileu3.global.cadence.com (10.160.88.99) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 10 Mar 2021 05:46:25 +0100
-Received: from gli-login.cadence.com (10.187.128.100) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Wed, 10 Mar 2021 05:46:25 +0100
-Received: from gli-login.cadence.com (localhost [127.0.0.1])
-        by gli-login.cadence.com (8.14.4/8.14.4) with ESMTP id 12A4kPcJ006026;
-        Wed, 10 Mar 2021 05:46:25 +0100
-Received: (from pawell@localhost)
-        by gli-login.cadence.com (8.14.4/8.14.4/Submit) id 12A4kOBC005936;
-        Wed, 10 Mar 2021 05:46:24 +0100
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     <linux-api@vger.kernel.org>, <gregkh@linuxfoundation.org>
-CC:     <balbi@kernel.org>, <laurent.pinchart@ideasonboard.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <peter.chen@kernel.org>, <kurahul@cadence.com>,
-        Pawel Laszczak <pawell@cadence.com>
-Subject: [PATCH v2 2/2] usb: webcam: Invalid size of Processing Unit Descriptor
-Date:   Wed, 10 Mar 2021 05:45:40 +0100
-Message-ID: <20210310044540.4088-1-pawell@gli-login.cadence.com>
-X-Mailer: git-send-email 2.18.0
+        id S231163AbhCJE4I convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 9 Mar 2021 23:56:08 -0500
+Received: from foo.stuge.se ([212.116.89.98]:38048 "EHLO foo.stuge.se"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232400AbhCJEzu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 9 Mar 2021 23:55:50 -0500
+Received: (qmail 28962 invoked by uid 1000); 10 Mar 2021 04:55:44 -0000
+Message-ID: <20210310045544.28961.qmail@stuge.se>
+Date:   Wed, 10 Mar 2021 04:55:44 +0000
+From:   Peter Stuge <peter@stuge.se>
+To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     hudson@trmm.net, markus@raatikainen.cc,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
+        sam@ravnborg.org
+Subject: Re: [PATCH v7 3/3] drm: Add GUD USB Display driver
 MIME-Version: 1.0
-Content-Type: text/plain
-X-OrganizationHeadersPreserved: maileu3.global.cadence.com
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4e431c9d-f30d-4e27-3aad-08d8e37f7faa
-X-MS-TrafficTypeDiagnostic: SN6PR07MB4958:
-X-Microsoft-Antispam-PRVS: <SN6PR07MB49581A2CEA7E64BAB4C3630FDD919@SN6PR07MB4958.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PVGetPBVGXtWQkoiZXsd+3K7TKN4v1gcFo9umS3pWR0T5Oc0itc408LEAZABQXiFCxCIYSzKXc66zBJqSo1/JtCQClLoDzUbinGxDbWvMRG2dINrBJZSlLBVJOwXpt+8EZ36L14+Nss2kLt6+ByHAW6jYg6pezTxrtKBlsy0nUAQlm2Hk3BQU+C2taFIouaQOSpna1o9c+Za7dRboW7id3V5U/TDyyjFER5mGnNxJmxYrOTz4IW3XlFjuTFkN6+gHbFSpn9moMuUilKURrtovaEkV2Lghdrm2Gd0nCWztDCW81r3jTW2IucA8Xw1feT4tLckEPI9qg4qMFTznIfSjtw8Guozi/y6dpfb5XzXVmub0JlN3rniHY0PxfmgpULAWaXLt3w6yinVXRXJ7RuJfUeK8kk74+aaKjp+N7dMJYgN/YPjqZWHMS0pb+QiAHk4YqvR88IH2mGl71QiK7kigqvYmGKBbK/JfM3ZkHYbgdDPGsu4Lm/g8Kh62H/1kBK2NIGPn+8AszSeIo2prHvMoUPXjkn2+anrWBPq0TxZvyJlAz7s1XNPTYMigu8gx0Ta4drKWFuq6h26148/S1nwJCsKyxtKPwtyyWEgmr2zmoCQgcyQRi4QIKmUv4Jgyc8a55QpYbVf5k2omL4weXKpo50il4L6kaAv7tjDiLly0AUqVBo4fzuNE0b3ie47zm8dIgywHqZQbn9OMLJX4nXCHg==
-X-Forefront-Antispam-Report: CIP:199.43.4.23;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:rmmaillnx1.cadence.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(346002)(136003)(39860400002)(376002)(396003)(36092001)(36840700001)(46966006)(8676002)(86362001)(5660300002)(426003)(81166007)(316002)(70586007)(42186006)(2906002)(47076005)(6666004)(110136005)(54906003)(186003)(8936002)(336012)(478600001)(4326008)(70206006)(36906005)(1076003)(26005)(356005)(36860700001)(82310400003)(83380400001)(82740400003)(107886003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2021 04:46:41.4299
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e431c9d-f30d-4e27-3aad-08d8e37f7faa
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[199.43.4.23];Helo=[rmmaillnx1.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM12FT019.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR07MB4958
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-10_03:2021-03-09,2021-03-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 suspectscore=0
- phishscore=0 clxscore=1015 bulkscore=0 impostorscore=0 priorityscore=1501
- spamscore=0 malwarescore=0 lowpriorityscore=0 mlxlogscore=762 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103100022
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <330c580d-de8f-7362-211b-eaf80b166421@tronnes.org>
+ <59bf10c7-91aa-ba09-7128-91e87272e29e@tronnes.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Pawel Laszczak <pawell@cadence.com>
+Noralf Trønnes wrote:
+> > The u16 index parameter to gud_usb_transfer() and at least also 
+> > gud_usb_{get,set,get_u8,set_u8}() is eventually passed in u16 value
+> > in the call to gud_usb_control_msg(), which had me confused for a bit.
+> > 
+> > What do you think about renaming all of those parameters to wValue,
+> 
+> Only connector requests use this value and in that case it's the
+> connector index. I need to get this driver applied now, and can't
+> spend more time polishing it, so I'll just keep it as-is.
 
-According with USB Device Class Definition for Video Device the
-Processing Unit Descriptor bLength should be 12 (10 + bmControlSize),
-but it has 11.
+Okay.
 
-Invalid length caused that Processing Unit Descriptor Test Video form
-CV tool failed. To fix this issue patch adds bmVideoStandards into
-uvc_processing_unit_descriptor structure.
 
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
----
-Changelog:
-v2:
-- updated UVC_DT_PROCESSING_UNIT_SIZE macro
+> > I found this because I can't get my device to send 0 bytes IN when
+> > the host requests more, if I provide no data the request STALLs. This
+> > is for sure a bug in my device
+..
+> > What do you think about formalizing this, adding an actual dummy property?
+> 
+> I want to avoid that.
 
- include/uapi/linux/usb/video.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Ack. I too prefer not adding workarounds, this needs to be fixed in
+my device, but I wanted to bring it up.
 
-diff --git a/include/uapi/linux/usb/video.h b/include/uapi/linux/usb/video.h
-index d854cb19c42c..bfdae12cdacf 100644
---- a/include/uapi/linux/usb/video.h
-+++ b/include/uapi/linux/usb/video.h
-@@ -302,9 +302,10 @@ struct uvc_processing_unit_descriptor {
- 	__u8   bControlSize;
- 	__u8   bmControls[2];
- 	__u8   iProcessing;
-+	__u8   bmVideoStandards;
- } __attribute__((__packed__));
- 
--#define UVC_DT_PROCESSING_UNIT_SIZE(n)			(9+(n))
-+#define UVC_DT_PROCESSING_UNIT_SIZE(n)			(10+(n))
- 
- /* 3.7.2.6. Extension Unit Descriptor */
- struct uvc_extension_unit_descriptor {
--- 
-2.25.1
 
+> I'd rather add a descriptor flag GUD_DISPLAY_FLAG_CANT_RETURN_ZERO or
+> something for such devices.
+> Also this property warning is just a debug message so not a very big
+> problem.
+
+I'd rather not squat a currently-unused property that may be allocated
+later.
+
+
+> Worse is EDID if you don't want to support that since it prints
+> an error in that case.
+
+I'll fix my device. If that proves impossible I can still add EDID bytes.
+
+
+> > Or maybe adding flags to the display descriptor for "I have properties",
+> > "I have connector properties" and "I have EDID" ?
+> 
+> Then I might as well go back to the previous version and have count in
+> the structs won't I ;)
+
+That's true. Forget the workarounds.
+
+
+> gud_xrgb8888_to_color() handles that, although broken in this version
+> for partial updates. Here's the fix:
+> https://gist.github.com/notro/a94d381cf98b7e15fcddbc90e4af0a21
+
+Thanks.
+
+
+> I've chosen to only print probe errors, flush errors and devices
+> returning incorrect reply lengths. I hate drivers that fill the logs
+> with errors, but I might have gone to far on the silent side, I don't
+> know. But one nice thing about DRM is that debug is always builtin and
+> can be enabled.
+
+I think you've struck a good balance. The error messages I've seen were
+all unique and immediately led me to the right place in the driver.
+That's really helpful.
+
+
+> > Finally, here's the drm debug output when I connect my device:
+..
+> > It looks good, I think? However, neither GUD_REQ_SET_CONTROLLER_ENABLE
+> > nor GUD_REQ_SET_DISPLAY_ENABLE is ever called, and there is no bulk
+> > output if I write to /dev/fb0.
+> > 
+> > Can you tell what's missing?
+> 
+> IIRC you need ioctl FBIOPUT_VSCREENINFO to enable the pipeline. You can
+> use 'con2fbmap' to put a console on the fbdev or use 'fbi' to show an
+> image. They will do the necessary ioctls.
+
+Thanks for the hints! I've used fbi, but remembered writing directly
+to /dev/fb0 without ioctl:s. I think that must have been after the
+console had already been moved to the framebuffer and thus activated
+the pipe. I dug up a version of fbset which calls that ioctl.
+
+
+> I use modetest for simple testing:
+> https://github.com/notro/tinydrm/wiki/Development#modetest
+
+Ack, libdrm just has an inconveniently long dependency tail for my
+test environment. But fbset + dd works.
+
+
+> I have made tool that employs usbmon to show what happens just outside
+> the wire (runs on the host):
+> https://github.com/notro/gud/blob/master/tools/monitor.py
+> I haven't got a proper USB analyser, so this was second best.
+
+Nice idea! I've been using usbmon as well during development, it's great.
+I find a hardware analyzer is only really neccessary for lowlevel problems
+like my no-0-bytes bug.
+
+
+> Depending on how long it takes for the DMA mask dependency patch to show
+> up in drm-misc-next, I will either publish a new version or apply the
+> current and provide patches with the necessary fixes.
+
+I look forward to it landing.
+
+
+> This is one of those things that would never have happened if I knew
+> how long it would take :)
+
+Thanks again for working on this great idea! I'm happy that I can help.
+
+
+Noralf Trønnes wrote:
+> > Depending on how long it takes for the DMA mask dependency patch to show
+> > up in drm-misc-next, I will either publish a new version or apply the
+> > current and provide patches with the necessary fixes. 
+> 
+> In case I apply this version, are you happy enough with it that you want
+> to give an ack or r-b?
+
+I've now tested R1 and RGB111 and I think I've found two more things:
+
+I didn't receive the expected bits/bytes for RGB111 on the bulk endpoint,
+I think because of how components were extracted in gud_xrgb8888_to_color().
+
+Changing to the following gets me the expected (X R1 G1 B1 X R2 G2 B2) bytes:
+
+			r = (*pix32 >> 8) & 0xff;
+			g = (*pix32 >> 16) & 0xff;
+			b = (*pix32++ >> 24) & 0xff;
+
+
+Then, gud_xrgb8888_to_color() and maybe even gud_xrgb8888_to_r124() seem
+to be host endian dependent, at least because of that pix32, but maybe more?
+I don't know whether drm guarantees "native" XRGB byte sequence in memory,
+then I guess the pix32 is okay? Please take a look?
+
+
+Finally my very last ask: Please consider renaming GUD_PIXEL_FORMAT_RGB111
+to GUD_PIXEL_FORMAT_XRGB1111?
+
+Someone may want to add the bit fiddling to output actual RGB111 data
+later, then that name would be occupied, and XRGB1111 would describe
+the current data format more accurately.
+
+
+With the two ret=0 fixes, your gist and the three things above addressed
+I'm happy to say:
+
+Reviewed-By: Peter Stuge <peter@stuge.se>
+
+
+R1 and RGB111 are: (if v8 perhaps for a separate RGB commit)
+
+Tested-By: Peter Stuge <peter@stuge.se>
+
+
+
+Later I think there's good potential for performance optimization. I
+noticed that the drm pipe flush submits the frame as 64 byte bulk
+transfers, which becomes slow. The USB stack can take at least 16kb
+if not far more and will split as needed. The split into single
+64-byte bulk packets is even done by the host controller hardware
+if it is given the chance. Some numbers:
+
+usbmon during drm flush of 400x240 RGB111 (48000 byte) shows 750ms
+from first submit to last complete:
+
+c1b883c0 0.503674 S Bo:4:022:1 - 64 =
+4f7f2900 1.254213 C Bo:4:022:1 0 64 >
+
+A simple userspace program with one libusb_bulk_transfer() call needs
+just 300ms for the same data (libusb splits it into 3x16kb transfers):
+
+$ time ./bo < test266.xrgb1111
+will output 48000 bytes
+
+real    0m0.298s
+user    0m0.002s
+sys     0m0.008s
+
+$ 
+
+The display is slow, but the difference is noticeable. Something for later.
+
+
+Kind regards
+
+//Peter
