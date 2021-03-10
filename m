@@ -2,34 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 995C7333228
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 01:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EDDA333255
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 01:30:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbhCJADy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Mar 2021 19:03:54 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:56444 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbhCJADo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Mar 2021 19:03:44 -0500
-Received: from fsav107.sakura.ne.jp (fsav107.sakura.ne.jp [27.133.134.234])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 12A03ckb041003;
-        Wed, 10 Mar 2021 09:03:38 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav107.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav107.sakura.ne.jp);
- Wed, 10 Mar 2021 09:03:38 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav107.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 12A03c8u040996
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 10 Mar 2021 09:03:38 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+        id S231152AbhCJA3d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Mar 2021 19:29:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230183AbhCJA3E (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Mar 2021 19:29:04 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C140C06174A
+        for <linux-usb@vger.kernel.org>; Tue,  9 Mar 2021 16:29:04 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id j22so8878250otp.2
+        for <linux-usb@vger.kernel.org>; Tue, 09 Mar 2021 16:29:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=YCFqenVwgnCmAUoeefLo2iVv6XxOeskoCaYYAzv0TRA=;
+        b=gIkwjcO/KoP+cwZtxXlX5WIlpIpsCBmYJyT7yi+Wk58xdUnKN9E/uYybEjSsdRVOiS
+         30YeghMqtLpBhy0Ni52K/+iabei4ZEzECEGl4UHJ2NkwPcA7q3XGe3yUTMIoZxEWckef
+         79fCtCVcDZYjkSH4nHWfocrayc5VSJDCu7SHE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=YCFqenVwgnCmAUoeefLo2iVv6XxOeskoCaYYAzv0TRA=;
+        b=LUwAUiW46ivzMmKyTYakosq5057eSDPZbgrHqS/S5TtXbKMehqm4JctJDUMmYrWf8C
+         CepyqQmwFHJwzTSj/nz1eaHuOuhWapzEh6wQIhTKeCxxuEJvPiHxRAe7YiVIg8j5a9Rc
+         axO28hhjKZa1W1S86UaVXmz2Ia9eHklbkCF86XwyVOkG3AUhdG2Qtq9SbtZm9DA9QGG4
+         au/TiN7f+BLxJhDdf2Y48lfKKYelabYsJC54LD9ouPMwi9PlZXLKyneSIMyyKXWOZ2pA
+         9ylHeoKqBRMu+rXNS+0KglLN9vNYxRutMC+TSlPa6elRv3sPND/xNcSgLxe9A3/ifiXq
+         LOvQ==
+X-Gm-Message-State: AOAM530pYVsk2M6SeDzK+XW1zyO9wONJnmiAcNr3eba74IGfphJAMPmH
+        m9vOyVF3NI7fK/HnBLBbIQqUIA==
+X-Google-Smtp-Source: ABdhPJw7TybX5+FL0pbTYdm39ZmmBuRtKJBvI5JnKZpZOuJeir3SGXJKLHPRdCGCKsjetEDFFQBC1Q==
+X-Received: by 2002:a9d:640b:: with SMTP id h11mr614458otl.224.1615336144055;
+        Tue, 09 Mar 2021 16:29:04 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id s21sm3319980oos.5.2021.03.09.16.29.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Mar 2021 16:29:03 -0800 (PST)
 Subject: Re: [PATCH 4/6] usbip: fix stub_dev usbip_sockfd_store() races
  leading to gpf
-To:     Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org,
-        valentina.manea.m@gmail.com, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        shuah@kernel.org, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
 References: <cover.1615171203.git.skhan@linuxfoundation.org>
  <268a0668144d5ff36ec7d87fdfa90faf583b7ccc.1615171203.git.skhan@linuxfoundation.org>
  <05aed75a-4a81-ef59-fc4f-6007f18e7839@i-love.sakura.ne.jp>
@@ -39,60 +61,71 @@ References: <cover.1615171203.git.skhan@linuxfoundation.org>
  <30a1afb2-d5a4-40b2-385d-24a2bf110e92@linuxfoundation.org>
  <7b9465aa-213e-a513-d033-12c048df15d6@i-love.sakura.ne.jp>
  <05e8e744-0847-cde2-b978-0bfd7ef93a9f@linuxfoundation.org>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <9653ae69-86f4-7608-ce97-4ec39b063ed2@i-love.sakura.ne.jp>
-Date:   Wed, 10 Mar 2021 09:03:35 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+ <9653ae69-86f4-7608-ce97-4ec39b063ed2@i-love.sakura.ne.jp>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <1edb9542-59c9-bbf6-9f16-99614605a800@linuxfoundation.org>
+Date:   Tue, 9 Mar 2021 17:29:02 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <05e8e744-0847-cde2-b978-0bfd7ef93a9f@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <9653ae69-86f4-7608-ce97-4ec39b063ed2@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/03/10 8:52, Shuah Khan wrote:
-> On 3/9/21 4:40 PM, Tetsuo Handa wrote:
->> On 2021/03/10 4:50, Shuah Khan wrote:
->>> On 3/9/21 4:04 AM, Tetsuo Handa wrote:
->>>> On 2021/03/09 1:27, Shuah Khan wrote:
->>>>> Yes. We might need synchronization between events, threads, and shutdown
->>>>> in usbip_host side and in connection polling and threads in vhci.
+On 3/9/21 5:03 PM, Tetsuo Handa wrote:
+> On 2021/03/10 8:52, Shuah Khan wrote:
+>> On 3/9/21 4:40 PM, Tetsuo Handa wrote:
+>>> On 2021/03/10 4:50, Shuah Khan wrote:
+>>>> On 3/9/21 4:04 AM, Tetsuo Handa wrote:
+>>>>> On 2021/03/09 1:27, Shuah Khan wrote:
+>>>>>> Yes. We might need synchronization between events, threads, and shutdown
+>>>>>> in usbip_host side and in connection polling and threads in vhci.
+>>>>>>
+>>>>>> I am also looking at the shutdown sequences closely as well since the
+>>>>>> local state is referenced without usbip_device lock in these paths.
+>>>>>>
+>>>>>> I am approaching these problems as peeling the onion an expression so
+>>>>>> we can limit the changes and take a spot fix approach. We have the
+>>>>>> goal to address these crashes and not introduce regressions.
 >>>>>
->>>>> I am also looking at the shutdown sequences closely as well since the
->>>>> local state is referenced without usbip_device lock in these paths.
+>>>>> I think my [PATCH v4 01/12]-[PATCH v4 06/12] simplify your further changes
+>>>>> without introducing regressions. While ud->lock is held when checking ud->status,
+>>>>> current attach/detach code is racy about read/update of ud->status . I think we
+>>>>> can close race in attach/detach code via a simple usbip_event_mutex serialization.
 >>>>>
->>>>> I am approaching these problems as peeling the onion an expression so
->>>>> we can limit the changes and take a spot fix approach. We have the
->>>>> goal to address these crashes and not introduce regressions.
 >>>>
->>>> I think my [PATCH v4 01/12]-[PATCH v4 06/12] simplify your further changes
->>>> without introducing regressions. While ud->lock is held when checking ud->status,
->>>> current attach/detach code is racy about read/update of ud->status . I think we
->>>> can close race in attach/detach code via a simple usbip_event_mutex serialization.
->>>>
+>>>> Do you mean patches 1,2,3,3,4,5,6?
 >>>
->>> Do you mean patches 1,2,3,3,4,5,6?
+>>> Yes, my 1,2,3,4,5,6.
+>>>
+>>> Since you think that usbip_prepare_threads() does not worth introducing, I'm fine with
+>>> replacing my 7,8,9,10,11,12 with your "[PATCH 0/6] usbip fixes to crashes found by syzbot".
+>>>
 >>
->> Yes, my 1,2,3,4,5,6.
->>
->> Since you think that usbip_prepare_threads() does not worth introducing, I'm fine with
->> replacing my 7,8,9,10,11,12 with your "[PATCH 0/6] usbip fixes to crashes found by syzbot".
->>
+>> Using event lock isn't the right approach to solve the race. It is a
+>> large grain lock. I am not looking to replace patches.
 > 
-> Using event lock isn't the right approach to solve the race. It is a
-> large grain lock. I am not looking to replace patches.
-
-It is not a large grain lock. Since event_handler() is exclusively executed, this lock
-does _NOT_ block event_handler() unless attach/detach operations run concurrently.
-
+> It is not a large grain lock. Since event_handler() is exclusively executed, this lock
+> does _NOT_ block event_handler() unless attach/detach operations run concurrently.
 > 
-> I still haven't seen any response from you about if you were able to
-> verify the fixes I sent in fix the problem you are seeing.
+>>
 
-I won't be able to verify your fixes, for it is syzbot who is seeing the problem.
-But I can see that your patch description is wrong because you are ignoring what I'm commenting.
+event handler queues the events. It shouldn't be blocked by attach
+and detach. The events could originate for various reasons during
+the host and vhci operations. I don't like using this lock for
+attach and detach.
 
-Global serialization had better come first. Your patch description depends on global serialization.
+>> I still haven't seen any response from you about if you were able to
+>> verify the fixes I sent in fix the problem you are seeing.
+>  > I won't be able to verify your fixes, for it is syzbot who is seeing 
+the problem.
+
+Thank you for letting me know.
+
+thanks,
+-- Shuah
+
