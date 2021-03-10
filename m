@@ -2,226 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 452AC33349C
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 05:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9CF3334CA
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 06:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbhCJE4I convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 9 Mar 2021 23:56:08 -0500
-Received: from foo.stuge.se ([212.116.89.98]:38048 "EHLO foo.stuge.se"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232400AbhCJEzu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 9 Mar 2021 23:55:50 -0500
-Received: (qmail 28962 invoked by uid 1000); 10 Mar 2021 04:55:44 -0000
-Message-ID: <20210310045544.28961.qmail@stuge.se>
-Date:   Wed, 10 Mar 2021 04:55:44 +0000
-From:   Peter Stuge <peter@stuge.se>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     hudson@trmm.net, markus@raatikainen.cc,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
-        sam@ravnborg.org
-Subject: Re: [PATCH v7 3/3] drm: Add GUD USB Display driver
+        id S229544AbhCJFTR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Mar 2021 00:19:17 -0500
+Received: from mail-eopbgr1310129.outbound.protection.outlook.com ([40.107.131.129]:60380
+        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229441AbhCJFTE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 10 Mar 2021 00:19:04 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j8pkzSY2sJDttkvIADrnKL9MRu03Ckfre3of3zdqTIZEEgBfmY78KHI22gDrNwaU1DxXW+cdogxwY5S0uFoDNNzBog/58fbsS53h7LfbbDt49AwXS+yHdFycEsAsHbRsz893V4DoCTEfeXw/g4rsogFS29hzgVfUbgjgcstlSPiUFDeCrh5YiB6Mpm5f/Jh0UggtZ/kHhnkkzRH7oDvbUavDESS/5j+HHBCwr/zL8HaO5H88EIElmPWLwuTHmMCAzxaT9ijT654X5Jro/WBj0A8dcuXA2HBMJKLy/eVVZG43znYqZt/89K1yu6Gngmp2O6i2efV3qwGrfqQiJzWMzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OHbHgKToNZplQ/M8Y+9O3OBI3UkcVzq0PCTQzJFSwKQ=;
+ b=oDfFXzXWUCe5OSY2azLVw1cIIm1ReNFBcT8lIMsriqius1+avqUoHW8Ug6FLG8NCjbr1be0dJKc9qXAkDfYK2rHIIg2SWQaTFq0/dmnZf63CoYZyGoge64fpV2pVv1XxjboxkrwsJbd7HjsdY0yPKkef43xtNHCp3OoNGr43U+TWhxUSoHsEq8tmLxfGW6yEc90O6yGqJHn65oOz3csu94B5eLI14r54lNTYPaIAYtnrGwFCq9cDMnFlhXR8RR72zB9o6q7FINeSVbj5ut+3ve4YyUcrPi+VI/p7teaQNIOT1AxH/OB5fPxz6UOEqZf6NWinj2vRJhR9xxqX1unMjg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OHbHgKToNZplQ/M8Y+9O3OBI3UkcVzq0PCTQzJFSwKQ=;
+ b=DaAxPg1297/L7xoT+nbd8PON4fJoQ3HuZiiiKTzHKQrbI+Yjrpvf3S5Kw2i7+Izplgc55K+fxqLb9+cG3LOJl3VwXKloq5IXBatBhgqkH5gZMuIeBbPMRjY1E5SCc5nwW2m+zZtQ/LiF1/8q3mE02Sdt1U65AM4z3EFtNyOjVNI=
+Received: from TY2PR01MB3692.jpnprd01.prod.outlook.com (2603:1096:404:d5::22)
+ by TY2PR01MB4300.jpnprd01.prod.outlook.com (2603:1096:404:10b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.20; Wed, 10 Mar
+ 2021 05:18:57 +0000
+Received: from TY2PR01MB3692.jpnprd01.prod.outlook.com
+ ([fe80::cb4:9680:bb26:8f3f]) by TY2PR01MB3692.jpnprd01.prod.outlook.com
+ ([fe80::cb4:9680:bb26:8f3f%4]) with mapi id 15.20.3912.027; Wed, 10 Mar 2021
+ 05:18:57 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Subject: RE: [PATCH] usb: renesas_usbhs: fix error return code of
+ usbhsf_pkt_handler()
+Thread-Topic: [PATCH] usb: renesas_usbhs: fix error return code of
+ usbhsf_pkt_handler()
+Thread-Index: AQHXEzBZLDVGGgTzcUG+Bf2pWnAADap7i1zwgAAhSACAAN054IAACGcAgAAg54A=
+Date:   Wed, 10 Mar 2021 05:18:57 +0000
+Message-ID: <TY2PR01MB3692BBC4B8231F254981FD7ED8919@TY2PR01MB3692.jpnprd01.prod.outlook.com>
+References: <20210307090030.22369-1-baijiaju1990@gmail.com>
+ <TY2PR01MB36929E9390A48F6FC7042AF8D8929@TY2PR01MB3692.jpnprd01.prod.outlook.com>
+ <255bce3c-1680-593d-9083-6635e1a57b63@gmail.com>
+ <TY2PR01MB3692E5843AC864F7F549927AD8919@TY2PR01MB3692.jpnprd01.prod.outlook.com>
+ <05aecdb3-23f5-54aa-c396-bff7f1624899@gmail.com>
+In-Reply-To: <05aecdb3-23f5-54aa-c396-bff7f1624899@gmail.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=renesas.com;
+x-originating-ip: [124.210.22.195]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: cd7b4f84-888e-4b87-b5bf-08d8e3840188
+x-ms-traffictypediagnostic: TY2PR01MB4300:
+x-microsoft-antispam-prvs: <TY2PR01MB430057D23942AFFF8F27AFB2D8919@TY2PR01MB4300.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FP1S7Z7K+2DL2mAlgyW6a/rdYP/HiqrQ1odqPgbf8yvdDKaRJQ03Sq3DfcQKPKR+KYtkROhxylgNAWpqB70BppNS9KJJ3r01xP3eQlEd42vhOLwvdhsNSVU0sdfSmLujUhk4w8ocDHvud7DkvBGLTrIFyVkdry68M4ASsYkQJ/bfDBTaCUDoZ1++aksq64CWCf1QjvE4XdOBVf5JJLjU5ecNBpPwAmtE0nW5gfmnKGEXQaPh5wEHXGIYhNZv5+KIVUwjLfTbQTHyRShcmxJUAH/+Qkt3pfPaf/iIso+Ih4hQVFYysiBF2IgOJD20aNii+5z0XNWjmTbmEJ+eNrc8DvlRIPbm5iZD92JqYn65P0vlAvVyVBbKT8Beul0We58NEou4Hq+KqhYR0cMLTrydsZM6Q+9lXiBHPiGS0yelNNkgz7CU2t2so3kE1wdH2B9OpiTKHHe6oLq/BbeTN77ohkSWn9kUUjyK6nbqW7fE4R5Fz7WuVV2wnMjBUubMRxNOVUbabyCdJDXJMddd82669A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3692.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(396003)(366004)(39860400002)(376002)(346002)(2906002)(4326008)(53546011)(4744005)(66946007)(66446008)(66476007)(186003)(71200400001)(55016002)(76116006)(6506007)(8936002)(52536014)(9686003)(316002)(64756008)(6916009)(54906003)(33656002)(26005)(55236004)(66556008)(8676002)(478600001)(5660300002)(7696005)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?SXJlNEZpTVl5czJSVzVqSDFoT0FvaU1xdTJSclFmUUFVemM5ZGp5SUNKRG9L?=
+ =?utf-8?B?OXJoRG82ZWRKcDFobUtSYUJLZUZuZFM5Uk94QWxocU5ONnB3ZFQzRVBmVHF6?=
+ =?utf-8?B?YW51Nnd3VWxhajlLUmc4ODdadk5pMXN3MmtSL2JlQ3J5c3NxcXhNZjExQzNy?=
+ =?utf-8?B?WTJGVGtCc1RuZkpmOVhUWTlndnBvTVZNVzNaeWliTDJOckxMMTBvaENySkNK?=
+ =?utf-8?B?OHdlS09jYTJ1NWlLcFJ1Wmh2ODVkWmxXb083UGJSUkFMZlpjNDVQS21iWkM2?=
+ =?utf-8?B?azJGUE5OY1JlZHdNU1BNb2dtanlGTDViUHN6dXQ3UldwN2RmNUZnNkFHWUJQ?=
+ =?utf-8?B?OWg3M3FrV1ZuQ0RHKzQ2NmN2UkMxL1NIMStIQlhlSW9HUGNjTk80Z3dpTDA1?=
+ =?utf-8?B?YzJjSUtha3RHQUY5Q29pbmhVMWE3d3hFeFpNeExSRXhhZDdVcGxCMjQ4bk5E?=
+ =?utf-8?B?a0VjL0JkZnJ1K0o2a1BZdnFtcjZPWVM5U0FGWTBSVTN4bVBUZjViVktUYnBq?=
+ =?utf-8?B?UVRVNjVYTVR3RVZiY2VyS1FNR1J5dS9TQXJ2YS8vdUFtdnFWUDBBdmVkVGU0?=
+ =?utf-8?B?T0FDbDcwVHBoVzZNQ1k3R213MkpIK3ZJeHhPQkl3aGtseFIwZVBMTVVLNHZY?=
+ =?utf-8?B?bWlCc202RmxBOVdaYmUwSnJ3QTdoVDAva2RIZzdkRmtjTCtXQU4xcXA4c1Vx?=
+ =?utf-8?B?RjZxWkRMbEdxV1RaSWUwNGdTTC8veDkweExZTzRhd21KVEY2enhPNlI3Z2dO?=
+ =?utf-8?B?RDVXV084QXk3REJVeUN2T3ZtK0VYT0NyMS9lL3F3QkpZVWk3SU5DKzBWSEpT?=
+ =?utf-8?B?ZEwyRnozdDJQSHpMTTZUTkNVaXk0djRxUjRCSGFHbXhkVFlpeVNJZGhxMm9L?=
+ =?utf-8?B?cnI2Ri9zcFk2YWJLRERuQWNMZlMvR0Q5Y3FjNTBzMTk1RjJJUGtVVUd0VXJi?=
+ =?utf-8?B?aENVV2E0Wk13THVETXIybGlldTNiSHBJdngzUnRDWnE5V2ZYS0gzVzVNS1pJ?=
+ =?utf-8?B?cmxFYUZwSWpNcVQybjJwdXVHeEJwd3ZWZlFkZDVDSXlDMEo4Rk8zUThIV01R?=
+ =?utf-8?B?YU00dEdQZnQwWHNPcXhQbksrSXpJZ05qcG9CaWNYWjlTcGFrcDFrZms3emdq?=
+ =?utf-8?B?VmhWbUxtUUhBRHJpQXNIWnhKODJPRjFua0xKSnh2Umt6ZXo1R0tOaEsrTzlX?=
+ =?utf-8?B?bkxKY3RTazZzYVBOK3ZjblgvRVNqWmJMMWpkL0k0eWU5cm9GRXhJeHhGdUJj?=
+ =?utf-8?B?L3FjZDlWRVZzSzVqUFl5ZC9BWDhoQXhTYkxndVBBZ2ZqeVYzcnE2eDVLc2Rl?=
+ =?utf-8?B?d2drUm9RbUNiY2NoN2huTlhFNk9sa05Bb3c5bFhqS3gvMVg4YXdDL3F0ZUNh?=
+ =?utf-8?B?U0tNSDU0eVZZS1VhZWRSSXJSckJrcHFaTTlQWXhDMFlJb1EzYlU2SERralht?=
+ =?utf-8?B?T1ZacWJUMi8vN0dJRW9hL3ZFd3NKODNVQUthTmxPUml6OWdLU2NMYlBUbG9Z?=
+ =?utf-8?B?VnIzeHBrck5hTEsyT1ZJTG41a092bm9UZmhlRUVYcGMzZWQ2bVhkMmZiVDZH?=
+ =?utf-8?B?U2MwUERvSTByUDRjZjhQMmhqelJFRXI1OWZSVFRqd2NmVE9SS0FNZE5zOG10?=
+ =?utf-8?B?VS9ONWtSQnNjK1N6ZU05WUxWYmRSaXZodk5XcmxFUUNrQWRaR2wrY1VyaVh1?=
+ =?utf-8?B?a01kWU0wOWQwQ3lnbUIvbk5BSjRtR05EWmx5OGRQL0hwb1FtR0ZoSlliQmQw?=
+ =?utf-8?Q?iGP95JuFr5nYD6q+103ad2pArt1W6cWNg7bEZjz?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <330c580d-de8f-7362-211b-eaf80b166421@tronnes.org>
- <59bf10c7-91aa-ba09-7128-91e87272e29e@tronnes.org>
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3692.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd7b4f84-888e-4b87-b5bf-08d8e3840188
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2021 05:18:57.2330
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JwY6TWnL1kcMJZnwc2DIbl3UFwUTnXEsoYtaDeCtvj8Bfn3kL5x5OoGhnPdq1LHRk19qFnRr7jM2AC7V6imzgRF8TKNcgxA+gJsVRyrmdWx6wwXNLv3l4YVoy5jF5WQt
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB4300
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Noralf Trønnes wrote:
-> > The u16 index parameter to gud_usb_transfer() and at least also 
-> > gud_usb_{get,set,get_u8,set_u8}() is eventually passed in u16 value
-> > in the call to gud_usb_control_msg(), which had me confused for a bit.
-> > 
-> > What do you think about renaming all of those parameters to wValue,
-> 
-> Only connector requests use this value and in that case it's the
-> connector index. I need to get this driver applied now, and can't
-> spend more time polishing it, so I'll just keep it as-is.
-
-Okay.
-
-
-> > I found this because I can't get my device to send 0 bytes IN when
-> > the host requests more, if I provide no data the request STALLs. This
-> > is for sure a bug in my device
-..
-> > What do you think about formalizing this, adding an actual dummy property?
-> 
-> I want to avoid that.
-
-Ack. I too prefer not adding workarounds, this needs to be fixed in
-my device, but I wanted to bring it up.
-
-
-> I'd rather add a descriptor flag GUD_DISPLAY_FLAG_CANT_RETURN_ZERO or
-> something for such devices.
-> Also this property warning is just a debug message so not a very big
-> problem.
-
-I'd rather not squat a currently-unused property that may be allocated
-later.
-
-
-> Worse is EDID if you don't want to support that since it prints
-> an error in that case.
-
-I'll fix my device. If that proves impossible I can still add EDID bytes.
-
-
-> > Or maybe adding flags to the display descriptor for "I have properties",
-> > "I have connector properties" and "I have EDID" ?
-> 
-> Then I might as well go back to the previous version and have count in
-> the structs won't I ;)
-
-That's true. Forget the workarounds.
-
-
-> gud_xrgb8888_to_color() handles that, although broken in this version
-> for partial updates. Here's the fix:
-> https://gist.github.com/notro/a94d381cf98b7e15fcddbc90e4af0a21
-
-Thanks.
-
-
-> I've chosen to only print probe errors, flush errors and devices
-> returning incorrect reply lengths. I hate drivers that fill the logs
-> with errors, but I might have gone to far on the silent side, I don't
-> know. But one nice thing about DRM is that debug is always builtin and
-> can be enabled.
-
-I think you've struck a good balance. The error messages I've seen were
-all unique and immediately led me to the right place in the driver.
-That's really helpful.
-
-
-> > Finally, here's the drm debug output when I connect my device:
-..
-> > It looks good, I think? However, neither GUD_REQ_SET_CONTROLLER_ENABLE
-> > nor GUD_REQ_SET_DISPLAY_ENABLE is ever called, and there is no bulk
-> > output if I write to /dev/fb0.
-> > 
-> > Can you tell what's missing?
-> 
-> IIRC you need ioctl FBIOPUT_VSCREENINFO to enable the pipeline. You can
-> use 'con2fbmap' to put a console on the fbdev or use 'fbi' to show an
-> image. They will do the necessary ioctls.
-
-Thanks for the hints! I've used fbi, but remembered writing directly
-to /dev/fb0 without ioctl:s. I think that must have been after the
-console had already been moved to the framebuffer and thus activated
-the pipe. I dug up a version of fbset which calls that ioctl.
-
-
-> I use modetest for simple testing:
-> https://github.com/notro/tinydrm/wiki/Development#modetest
-
-Ack, libdrm just has an inconveniently long dependency tail for my
-test environment. But fbset + dd works.
-
-
-> I have made tool that employs usbmon to show what happens just outside
-> the wire (runs on the host):
-> https://github.com/notro/gud/blob/master/tools/monitor.py
-> I haven't got a proper USB analyser, so this was second best.
-
-Nice idea! I've been using usbmon as well during development, it's great.
-I find a hardware analyzer is only really neccessary for lowlevel problems
-like my no-0-bytes bug.
-
-
-> Depending on how long it takes for the DMA mask dependency patch to show
-> up in drm-misc-next, I will either publish a new version or apply the
-> current and provide patches with the necessary fixes.
-
-I look forward to it landing.
-
-
-> This is one of those things that would never have happened if I knew
-> how long it would take :)
-
-Thanks again for working on this great idea! I'm happy that I can help.
-
-
-Noralf Trønnes wrote:
-> > Depending on how long it takes for the DMA mask dependency patch to show
-> > up in drm-misc-next, I will either publish a new version or apply the
-> > current and provide patches with the necessary fixes. 
-> 
-> In case I apply this version, are you happy enough with it that you want
-> to give an ack or r-b?
-
-I've now tested R1 and RGB111 and I think I've found two more things:
-
-I didn't receive the expected bits/bytes for RGB111 on the bulk endpoint,
-I think because of how components were extracted in gud_xrgb8888_to_color().
-
-Changing to the following gets me the expected (X R1 G1 B1 X R2 G2 B2) bytes:
-
-			r = (*pix32 >> 8) & 0xff;
-			g = (*pix32 >> 16) & 0xff;
-			b = (*pix32++ >> 24) & 0xff;
-
-
-Then, gud_xrgb8888_to_color() and maybe even gud_xrgb8888_to_r124() seem
-to be host endian dependent, at least because of that pix32, but maybe more?
-I don't know whether drm guarantees "native" XRGB byte sequence in memory,
-then I guess the pix32 is okay? Please take a look?
-
-
-Finally my very last ask: Please consider renaming GUD_PIXEL_FORMAT_RGB111
-to GUD_PIXEL_FORMAT_XRGB1111?
-
-Someone may want to add the bit fiddling to output actual RGB111 data
-later, then that name would be occupied, and XRGB1111 would describe
-the current data format more accurately.
-
-
-With the two ret=0 fixes, your gist and the three things above addressed
-I'm happy to say:
-
-Reviewed-By: Peter Stuge <peter@stuge.se>
-
-
-R1 and RGB111 are: (if v8 perhaps for a separate RGB commit)
-
-Tested-By: Peter Stuge <peter@stuge.se>
-
-
-
-Later I think there's good potential for performance optimization. I
-noticed that the drm pipe flush submits the frame as 64 byte bulk
-transfers, which becomes slow. The USB stack can take at least 16kb
-if not far more and will split as needed. The split into single
-64-byte bulk packets is even done by the host controller hardware
-if it is given the chance. Some numbers:
-
-usbmon during drm flush of 400x240 RGB111 (48000 byte) shows 750ms
-from first submit to last complete:
-
-c1b883c0 0.503674 S Bo:4:022:1 - 64 =
-4f7f2900 1.254213 C Bo:4:022:1 0 64 >
-
-A simple userspace program with one libusb_bulk_transfer() call needs
-just 300ms for the same data (libusb splits it into 3x16kb transfers):
-
-$ time ./bo < test266.xrgb1111
-will output 48000 bytes
-
-real    0m0.298s
-user    0m0.002s
-sys     0m0.008s
-
-$ 
-
-The display is slow, but the difference is noticeable. Something for later.
-
-
-Kind regards
-
-//Peter
+PiBGcm9tOiBKaWEtSnUgQmFpLCBPbiAyMDIxLzMvMTAgMTA6NTQsIFlvc2hpaGlybyBTaGltb2Rh
+IHdyb3RlOg0KPiA+PiBGcm9tOiBKaWEtSnUgQmFpLCBTZW50OiBUdWVzZGF5LCBNYXJjaCA5LCAy
+MDIxIDEwOjM5IFBNDQo+ID4+IE9uIDIwMjEvMy85IDE5OjU5LCBZb3NoaWhpcm8gU2hpbW9kYSB3
+cm90ZToNCj4gPj4+PiBGcm9tOiBKaWEtSnUgQmFpLCBTZW50OiBTdW5kYXksIE1hcmNoIDcsIDIw
+MjEgNjowMSBQTQ0KPiA+Pj4+DQo+ID4+Pj4gV2hlbiBfX3VzYmhzZl9wa3RfZ2V0KCkgcmV0dXJu
+cyBOVUxMIHRvIHBrdCwgbm8gZXJyb3IgcmV0dXJuIGNvZGUgb2YNCj4gPj4+PiB1c2Joc2ZfcGt0
+X2hhbmRsZXIoKSBpcyBhc3NpZ25lZC4NCj4gPj4+IFllcy4gQWxzbyBJIHJlYWxpemVkIHRoYXQg
+bm8gZXJyb3IgcmV0dXJuIGNvZGUgb2YgdXNiaHNmX3BrdF9oYW5kbGVyKCkNCj4gPj4+IHdhcyBh
+c3NpZ25lZCBpZiB0aGUgdHlwZSB2YWx1ZSB3YXMgdW5leHBlY3RlZCB2YWx1ZS4gU28sIEknbSB0
+aGlua2luZw0KPiA+Pj4gaW5pdGlhbCB2YWx1ZSBvZiByZXQgc2hvdWxkIGJlIC1FSU5WQUwgaW5z
+dGVhZCBvZiAwLg0KPiA+PiBUaGlzIGlzIG9rYXkgdG8gbWUuDQo+ID4+IE5lZWQgSSB3cml0ZSBh
+IG5ldyBwYXRjaCBmb3IgdGhpcz8NCj4gPiBUaGFuayB5b3UgZm9yIHlvdXIgcmVwbHkuIEkgY2Fu
+IHdyaXRlIHN1Y2ggYSBuZXcgcGF0Y2ggd2l0aCB5b3VyDQo+ID4gUmVwb3J0ZWQtYnkgZm9yIHRo
+aXMgYXMgbWlub3IgcmVmYWN0b3Jpbmcgb2YgdGhlIHVzYmhzZl9wa3RfaGFuZGxlcigpLg0KPiA+
+IE1heSBJIHdyaXRlIHN1Y2ggYSBwYXRjaD8NCj4gDQo+IE9rYXksIHN1cmUgOikNCg0KSSBnb3Qg
+aXQgOikNCg0KQmVzdCByZWdhcmRzLA0KWW9zaGloaXJvIFNoaW1vZGENCg0K
