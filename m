@@ -2,45 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6103346DC
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 19:34:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8FB334725
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 19:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232734AbhCJSdj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Mar 2021 13:33:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39686 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230522AbhCJSdJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 10 Mar 2021 13:33:09 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6434064FB6;
-        Wed, 10 Mar 2021 18:33:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1615401188;
-        bh=Z2CaGn5K4ZujfVdcG3V5xCYiua3qUd3h5K8dQBTWztQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lxc7N9+hK61zL3fhfqOyAMT/tKekugOhkimkHCeOKztpqxPXEf1+VKiAdLnzxsFiZ
-         LCkrtRnar+ELpgeaY/rCqhe6MFatEx+V1XZuYidJarYdwp25YNrBOSjAwwOOopAOf9
-         ttjxyrItVL9J8J6hdgnaQ8Gmp1SwAOLndwh3uINI=
-Date:   Wed, 10 Mar 2021 19:33:06 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah@kernel.org, valentina.manea.m@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        penguin-kernel@i-love.sakura.ne.jp
-Subject: Re: [PATCH 0/6] usbip fixes to crashes found by syzbot
-Message-ID: <YEkQ4qS7tkwmjzDn@kroah.com>
-References: <cover.1615171203.git.skhan@linuxfoundation.org>
+        id S232948AbhCJSuV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Mar 2021 13:50:21 -0500
+Received: from bmailout3.hostsharing.net ([176.9.242.62]:57611 "EHLO
+        bmailout3.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233250AbhCJSuE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Mar 2021 13:50:04 -0500
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 79645100D9417;
+        Wed, 10 Mar 2021 19:49:56 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 2BDBB24817C; Wed, 10 Mar 2021 19:49:56 +0100 (CET)
+Date:   Wed, 10 Mar 2021 19:49:56 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     "Limonciello, Mario" <Mario.Limonciello@dell.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Christian Kellner <christian@kellner.me>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@google.com>,
+        Diego Rivas <diegorivas@google.com>
+Subject: Re: [PATCH 3/3] thunderbolt: Expose more details about USB 3.x and
+ DisplayPort tunnels
+Message-ID: <20210310184956.GA1438@wunner.de>
+References: <20210309134818.63118-1-mika.westerberg@linux.intel.com>
+ <20210309134818.63118-4-mika.westerberg@linux.intel.com>
+ <YEeBt+fHt1MdyEBz@kroah.com>
+ <20210310075444.GB2542@lahna.fi.intel.com>
+ <YEiJC/oZ2ZasVtvf@kroah.com>
+ <20210310092155.GC2542@lahna.fi.intel.com>
+ <YEiSrgziexV4SNdf@kroah.com>
+ <20210310093942.GD2542@lahna.fi.intel.com>
+ <SA1PR19MB492655CA54780348D70BB863FA919@SA1PR19MB4926.namprd19.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1615171203.git.skhan@linuxfoundation.org>
+In-Reply-To: <SA1PR19MB492655CA54780348D70BB863FA919@SA1PR19MB4926.namprd19.prod.outlook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Mar 07, 2021 at 08:53:25PM -0700, Shuah Khan wrote:
-> This patch series fixes the following problems founds in syzbot
-> fuzzing.
+On Wed, Mar 10, 2021 at 04:24:20PM +0000, Limonciello, Mario wrote:
+> In practice software based connection manager isn't in any production
+> system in the field today
 
-Thanks for these, all now queued up.
-
-greg k-h
+... except everything Apple.
