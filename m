@@ -2,124 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3AF333BAC
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 12:44:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9406C334258
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 17:02:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231781AbhCJLoD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Mar 2021 06:44:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
+        id S229790AbhCJQBr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Mar 2021 11:01:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbhCJLnf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Mar 2021 06:43:35 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E288DC06174A
-        for <linux-usb@vger.kernel.org>; Wed, 10 Mar 2021 03:43:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tfJDUOuq/G8lxislJkZy1H7BcYxByC3tcxXQy85SnCQ=; b=u7CH8ZdFu2RTVQtiS8divD21SU
-        Vc4ld70dFLaILkHo5wVa/yi4mXf1DH9VnuIG+tEufN/AjNK59XfatUebVOBKr3KR1PdS/w32alo9V
-        5DZOAl4XQg1V4wl/Poawdb4jvgPN11H0EobTSTMU5MpMjNu5hWhowfQLpfxjNPLGbFi5YLKNTMrep
-        IrLbspO/8WusGvlXWuFmgIpzc3GxGh38X13541vDZXaaQfEwoWlwx/nwej1VEhIFkbwY1yJZLCiqR
-        w4i5sTFwhmojMg99QotLvllEy7deolQJcSLhMm+mty8FzujkQ/WyvLXg7NgSsICp71AH0zxFpLrBp
-        c6c6BJqQ==;
-Received: from [2a01:799:95f:4600:2010:7a82:9a7a:175c] (port=64334)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1lJxFS-00027Y-O6; Wed, 10 Mar 2021 12:43:30 +0100
-Subject: Re: [PATCH v7 3/3] drm: Add GUD USB Display driver
-To:     Peter Stuge <peter@stuge.se>
-Cc:     hudson@trmm.net, markus@raatikainen.cc,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
-        sam@ravnborg.org
-References: <20210310045544.28961.qmail@stuge.se>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-Message-ID: <1894f3f7-bd1d-493e-8d7f-8c10917da51b@tronnes.org>
-Date:   Wed, 10 Mar 2021 12:43:26 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        with ESMTP id S229851AbhCJQB2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Mar 2021 11:01:28 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27542C061760
+        for <linux-usb@vger.kernel.org>; Wed, 10 Mar 2021 08:01:28 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id j8so16875415otc.0
+        for <linux-usb@vger.kernel.org>; Wed, 10 Mar 2021 08:01:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=71Szmz88lWkywP/rY1VQkY3dGVzVAAC4awFIIbB0qVU=;
+        b=DBMZmzT8UUJ4RgXCy/finQ46AwfEskP1MX+gjjw936NOKTsK4pp6mdHezya/F/MLqY
+         RkjToRBf1/mOa0RYdpYKsZ5T6nE2DWfmq1nfYXDv1vfRV3WRuue3vdBXkMY8IJhMvwa5
+         e2X5sGNumxHIPxjiowzMhqbaXUFbuyuSH+SSLpZ1MjujarAod6t7nH2osbx2BRo/7oWr
+         KOLxl9oycJcsava3CM5D+tMhXSqoRAuHdnioK7+zUZ1tyELPxThrIxZuJ39D/fvRKKMa
+         Yc2XHCQgTLdabjmWE2hMzKRyvIaTA3nEv5igpinhc2OPM1YklCPlQAk7cmH8ux5juQPr
+         f4Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=71Szmz88lWkywP/rY1VQkY3dGVzVAAC4awFIIbB0qVU=;
+        b=H2J0DKM5RJeK3yA706HK9bDhU8WTW3cs8nE+FticAdo/zOein0CUBgt7Yfr91MH7rt
+         zixJg3aLMK4CrBSU+r3ILiYFmkVxdRn/MhKT7/ZcgCCkAjeok3lbGDBEDluTSYeIFOKv
+         2Yoczjp4VdHY2fHpcuZhVtg2XUmx7ODTFHsWRaXIzq2Rvqsr5RegezLQcxne9p+cmYR/
+         Pp7diUeVrxmINwilL1bUxrUO70XQn+2aLVuOY2Fa/+z7rzwqJXe8XWcnbiTV33PFxE/+
+         CHXNyBlr8YlkopfEcpK0Z8iVqRRKjmkia6pbfpcrDsetSyzAfh+TpLRwWHDmkp7YCYou
+         tVWQ==
+X-Gm-Message-State: AOAM531jnH7Jog23TCXvNzUC/Xge3ReMLJf6xGacDyKRm9jHL/1z/ZCK
+        pIvM03/QkoEukOooj6DCIqw=
+X-Google-Smtp-Source: ABdhPJyyavsJ//LpaGkss3IbKK1FWHD8GXkkwHAc6PNsZroUvFSescEi7YXPF9FufJ8Jx+eFZg1irA==
+X-Received: by 2002:a9d:6a9:: with SMTP id 38mr3109447otx.365.1615392087111;
+        Wed, 10 Mar 2021 08:01:27 -0800 (PST)
+Received: from ruiqi-desktop.lan (072-177-087-193.res.spectrum.com. [72.177.87.193])
+        by smtp.gmail.com with ESMTPSA id y11sm3614811oov.9.2021.03.10.08.01.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Mar 2021 08:01:26 -0800 (PST)
+From:   Frank Li <lznuaa@gmail.com>
+X-Google-Original-From: Frank Li <Frank.Li@nxp.com>
+To:     peter.chen@kernel.org, pawell@cadence.com, a-govindraju@ti.com,
+        linux-imx@nxp.com, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, lznuaa@gmail.com,
+        dan.carpenter@oracle.com
+Subject: [PATCH 1/1] usb: cdns3: fix static checker warning.
+Date:   Wed, 10 Mar 2021 10:01:25 -0600
+Message-Id: <20210310160125.810157-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20210310045544.28961.qmail@stuge.se>
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The patch c450e48eb570: "usb: cdns3: add power lost support for
+system resume" from Feb 18, 2021, leads to the following static
+checker warning:
 
+        drivers/usb/cdns3/core.c:551 cdns_resume()
+        error: uninitialized symbol 'ret'.
 
-Den 10.03.2021 05.55, skrev Peter Stuge:
-> Noralf Trønnes wrote:
->>> Depending on how long it takes for the DMA mask dependency patch to show
->>> up in drm-misc-next, I will either publish a new version or apply the
->>> current and provide patches with the necessary fixes. 
->>
->> In case I apply this version, are you happy enough with it that you want
->> to give an ack or r-b?
-> 
-> I've now tested R1 and RGB111 and I think I've found two more things:
-> 
-> I didn't receive the expected bits/bytes for RGB111 on the bulk endpoint,
-> I think because of how components were extracted in gud_xrgb8888_to_color().
-> 
-> Changing to the following gets me the expected (X R1 G1 B1 X R2 G2 B2) bytes:
-> 
-> 			r = (*pix32 >> 8) & 0xff;
-> 			g = (*pix32 >> 16) & 0xff;
-> 			b = (*pix32++ >> 24) & 0xff;
-> 
+drivers/usb/cdns3/core.c
+544
+545     if (!role_changed) {
+546            if (cdns->role == USB_ROLE_HOST)
+547                  ret = cdns_drd_host_on(cdns);
+548     else if (cdns->role == USB_ROLE_DEVICE)
+549            ret = cdns_drd_gadget_on(cdns);
 
-We're accessing the whole word here through pix32, no byte access, so
-endianess doesn't come into play. This change will flip r and b, which
-gives: XRGB8888 -> XBGR1111
+"ret" is uninitialized at else branch.
 
-BGR is a common thing on controllers, are you sure yours are set to RGB
-and not BGR?
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+ drivers/usb/cdns3/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-And the 0xff masking isn't necessary since we're assigning to a byte, right?
+diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+index 5d486c8a9d99..bb739d88179f 100644
+--- a/drivers/usb/cdns3/core.c
++++ b/drivers/usb/cdns3/core.c
+@@ -527,7 +527,7 @@ int cdns_resume(struct cdns *cdns, u8 set_active)
+ 	struct device *dev = cdns->dev;
+ 	enum usb_role real_role;
+ 	bool role_changed = false;
+-	int ret;
++	int ret = 0;
+ 
+ 	if (cdns_power_is_lost(cdns)) {
+ 		if (cdns->role_sw) {
+-- 
+2.25.1
 
-I haven't got a native R1G1B1 display so I have emulated and I do get
-the expected colors. This is the conversion function I use on the device
-which I think is correct:
-
-static size_t rgb111_to_rgb565(uint16_t *dst, uint8_t *src,
-                               uint16_t src_width, uint16_t src_height)
-{
-    uint8_t rgb111, val = 0;
-    size_t len = 0;
-
-    for (uint16_t y = 0; y < src_height; y++) {
-        for (uint16_t x = 0; x < src_width; x++) {
-            if (!(x % 2))
-                val = *src++;
-            rgb111 = val >> 4;
-            *dst++ = ((rgb111 & 0x04) << 13) | ((rgb111 & 0x02) << 9) |
-                     ((rgb111 & 0x01) << 4);
-            len += sizeof(*dst);
-            val <<= 4;
-        }
-    }
-
-   return len;
-}
-
-> 
-> Then, gud_xrgb8888_to_color() and maybe even gud_xrgb8888_to_r124() seem
-> to be host endian dependent, at least because of that pix32, but maybe more?
-> I don't know whether drm guarantees "native" XRGB byte sequence in memory,
-> then I guess the pix32 is okay? Please take a look?
-> 
-> 
-> Finally my very last ask: Please consider renaming GUD_PIXEL_FORMAT_RGB111
-> to GUD_PIXEL_FORMAT_XRGB1111?
-> 
-
-It has crossed my mind, I'll change it.
-
-Noralf.
