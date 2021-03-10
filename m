@@ -2,230 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC46334AF7
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 23:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 755B7334BA2
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Mar 2021 23:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbhCJWFx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Mar 2021 17:05:53 -0500
-Received: from mga09.intel.com ([134.134.136.24]:59433 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232250AbhCJWFm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 10 Mar 2021 17:05:42 -0500
-IronPort-SDR: v6DLYXuRb+zhn3zd9bVA/Hf9ScCRt2xIL61RRyHw5acEmi8CPsVjPqea2pOuoRsHuZJit3ySAN
- 2klUNVXSab5w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9919"; a="188670651"
-X-IronPort-AV: E=Sophos;i="5.81,238,1610438400"; 
-   d="scan'208";a="188670651"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2021 14:05:37 -0800
-IronPort-SDR: CF1M1ukyq3+m2AcOsGddnInsyz2ZhezcCMrD/j3edePMx4g3byPQ4s0Pe3WDzWd5wluZXZjZr7
- LHrIx9dpLapg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,238,1610438400"; 
-   d="scan'208";a="372107326"
-Received: from lkp-server02.sh.intel.com (HELO ce64c092ff93) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 10 Mar 2021 14:05:36 -0800
-Received: from kbuild by ce64c092ff93 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lK6xT-0000PC-Hl; Wed, 10 Mar 2021 22:05:35 +0000
-Date:   Thu, 11 Mar 2021 06:05:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 60a35ba9141f06b67150ce3544bc595d049b0d83
-Message-ID: <604942a5.PwhfZ5pYE4ZwHP80%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S232257AbhCJWfy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Mar 2021 17:35:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231221AbhCJWfm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Mar 2021 17:35:42 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97923C061760
+        for <linux-usb@vger.kernel.org>; Wed, 10 Mar 2021 14:35:42 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id y7so23034594ybh.20
+        for <linux-usb@vger.kernel.org>; Wed, 10 Mar 2021 14:35:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=jKCctkp41npEmYGaMid+GoHQ1jboW5jXBjadu8S78Eg=;
+        b=LNGAhwSaw+X7d35VBWAjBBhYgWQxaoIreiUusF3wljDUXwaQSD3Kdh2rOH6ugzGF1E
+         2N5Lfbn2T4/c+IZP00FN0s1qE/6royVKd9Qdad8D8sUgaI9xO6zjtqwK3/2Uvk132Fa6
+         7qBjUIRMUiTbzSAx66IAmEWwuPrQe8gAdeu8F6n1MiIU4LrqioS1vebuBPcK0fj6RS3y
+         NUnvBa9VgJa1lEVFD3LyDBWOTRVcUh2fUyhAnfSfVEu2rMu+0iurdu/QMK83xiibq78H
+         G26419f/Snj4St0ElyzYbG6VYnkyo6MkTLdG/mD6ZIYNqoQ/rePRQdavVqENgthCzKp+
+         HJXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=jKCctkp41npEmYGaMid+GoHQ1jboW5jXBjadu8S78Eg=;
+        b=nGCUNxGTX/OrgcALnYB4P+tjbTcXSHipCKgv8pKR5sVeJI6QwINSUCgGUV1qMFuQbR
+         lvtUOA/y34wiwiJyV2NzLI6ZhFC5yOf/gBtje3IDjbkP7HiyEL8HTpR2BXkC63VjEYV1
+         sblA6AKD3FC0Yya9V7MUpH7s3KHrnFfAeqFefqNnEcm4Kacj0FXFKvRyBaw8GshZhiz9
+         0lzEA7N4eKHtGcj5cfCg+pZf+aqoYHvafkTzNZEzI5CSFqBGmw1SLKBYnSgG2US5NUMX
+         qmiBebmQZgAJmrbvfiJxUJL6yuc7Xeacpzo7nLvEjjPaPWJO/zL06dqCESox1wv+q3Xj
+         sKWQ==
+X-Gm-Message-State: AOAM532gVzy2+loQuThwdITeDNr2i69YTlbJQ77VUNVUVLgM4AiC3cJ3
+        jqZnFd/2Gu+F1btMKB1QmtKbr2ackbc=
+X-Google-Smtp-Source: ABdhPJyQ7u+fzmbXi6rfMy5j8lYrt73ZjOUT0h2uqvs591Ag0EQiSa4ISiokH8Sa5djFnlC8GlEoFqJip/Y=
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:2879:299f:c377:83c9])
+ (user=badhri job=sendgmr) by 2002:a25:d1ca:: with SMTP id i193mr5335984ybg.355.1615415741693;
+ Wed, 10 Mar 2021 14:35:41 -0800 (PST)
+Date:   Wed, 10 Mar 2021 14:35:36 -0800
+Message-Id: <20210310223536.3471243-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.0.rc1.246.gcd05c9c855-goog
+Subject: [PATCH v1] usb: typec: tcpci: Refactor tcpc_presenting_cc1_rd macro
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 60a35ba9141f06b67150ce3544bc595d049b0d83  usb: usb-mx2: Remove unused file
+Defining one macro instead of two for tcpc_presenting_*_rd.
+This is a follow up of the comment left by Heikki Krogerus.
 
-elapsed time: 728m
+https://patchwork.kernel.org/project/linux-usb/patch/
+20210304070931.1947316-1-badhri@google.com/
 
-configs tested: 168
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sparc                            allyesconfig
-mips                         db1xxx_defconfig
-powerpc                     tqm8540_defconfig
-powerpc                      ppc44x_defconfig
-mips                         tb0287_defconfig
-mips                     cu1830-neo_defconfig
-powerpc                 mpc8540_ads_defconfig
-mips                           jazz_defconfig
-sh                          r7785rp_defconfig
-m68k                          hp300_defconfig
-powerpc                    adder875_defconfig
-powerpc                 mpc8313_rdb_defconfig
-powerpc                      ppc40x_defconfig
-mips                      pistachio_defconfig
-powerpc                 mpc837x_rdb_defconfig
-sh                          landisk_defconfig
-sh                          rsk7264_defconfig
-sh                          r7780mp_defconfig
-m68k                        mvme16x_defconfig
-powerpc                    mvme5100_defconfig
-sh                   sh7770_generic_defconfig
-arm                             ezx_defconfig
-powerpc                       eiger_defconfig
-ia64                            zx1_defconfig
-sh                                  defconfig
-powerpc                 mpc832x_rdb_defconfig
-arm                       cns3420vb_defconfig
-m68k                       m5275evb_defconfig
-h8300                               defconfig
-mips                        bcm63xx_defconfig
-mips                  maltasmvp_eva_defconfig
-h8300                    h8300h-sim_defconfig
-mips                            gpr_defconfig
-powerpc64                        alldefconfig
-h8300                       h8s-sim_defconfig
-arm                          moxart_defconfig
-arm                           tegra_defconfig
-sh                              ul2_defconfig
-arm                        multi_v7_defconfig
-powerpc                     tqm8541_defconfig
-sh                          urquell_defconfig
-arc                    vdk_hs38_smp_defconfig
-m68k                       bvme6000_defconfig
-x86_64                              defconfig
-arm                        spear3xx_defconfig
-sh                      rts7751r2d1_defconfig
-powerpc                    ge_imp3a_defconfig
-arm                         hackkit_defconfig
-mips                     loongson1b_defconfig
-h8300                            alldefconfig
-arm                       omap2plus_defconfig
-arm                      tct_hammer_defconfig
-arm                         lubbock_defconfig
-arm                            hisi_defconfig
-mips                           ip32_defconfig
-sh                          lboxre2_defconfig
-powerpc                 mpc832x_mds_defconfig
-arm                         s3c2410_defconfig
-mips                          ath79_defconfig
-riscv                               defconfig
-mips                             allyesconfig
-arm                            xcep_defconfig
-arc                           tb10x_defconfig
-arm                          ep93xx_defconfig
-powerpc                     stx_gp3_defconfig
-arm                          pxa910_defconfig
-powerpc                        icon_defconfig
-m68k                        m5307c3_defconfig
-powerpc                     tqm5200_defconfig
-xtensa                          iss_defconfig
-sh                         ap325rxa_defconfig
-arm                        multi_v5_defconfig
-m68k                        m5272c3_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20210308
-x86_64               randconfig-a001-20210308
-x86_64               randconfig-a004-20210308
-x86_64               randconfig-a002-20210308
-x86_64               randconfig-a005-20210308
-x86_64               randconfig-a003-20210308
-i386                 randconfig-a005-20210309
-i386                 randconfig-a003-20210309
-i386                 randconfig-a002-20210309
-i386                 randconfig-a006-20210309
-i386                 randconfig-a004-20210309
-i386                 randconfig-a001-20210309
-x86_64               randconfig-a013-20210309
-x86_64               randconfig-a016-20210309
-x86_64               randconfig-a015-20210309
-x86_64               randconfig-a014-20210309
-x86_64               randconfig-a011-20210309
-x86_64               randconfig-a012-20210309
-x86_64               randconfig-a011-20210310
-x86_64               randconfig-a016-20210310
-x86_64               randconfig-a013-20210310
-x86_64               randconfig-a015-20210310
-x86_64               randconfig-a014-20210310
-x86_64               randconfig-a012-20210310
-i386                 randconfig-a016-20210309
-i386                 randconfig-a012-20210309
-i386                 randconfig-a014-20210309
-i386                 randconfig-a013-20210309
-i386                 randconfig-a011-20210309
-i386                 randconfig-a015-20210309
-i386                 randconfig-a016-20210308
-i386                 randconfig-a012-20210308
-i386                 randconfig-a014-20210308
-i386                 randconfig-a013-20210308
-i386                 randconfig-a011-20210308
-i386                 randconfig-a015-20210308
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a006-20210309
-x86_64               randconfig-a001-20210309
-x86_64               randconfig-a004-20210309
-x86_64               randconfig-a002-20210309
-x86_64               randconfig-a005-20210309
-x86_64               randconfig-a003-20210309
-x86_64               randconfig-a013-20210308
-x86_64               randconfig-a016-20210308
-x86_64               randconfig-a015-20210308
-x86_64               randconfig-a014-20210308
-x86_64               randconfig-a011-20210308
-x86_64               randconfig-a012-20210308
-
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/usb/typec/tcpm/tcpci.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+index 027afd7dfdce..25b480752266 100644
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -24,14 +24,10 @@
+ #define	AUTO_DISCHARGE_PD_HEADROOM_MV		850
+ #define	AUTO_DISCHARGE_PPS_HEADROOM_MV		1250
+ 
+-#define tcpc_presenting_cc1_rd(reg) \
++#define tcpc_presenting_rd(reg, cc) \
+ 	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
+-	 (((reg) & (TCPC_ROLE_CTRL_CC1_MASK << TCPC_ROLE_CTRL_CC1_SHIFT)) == \
+-	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC1_SHIFT)))
+-#define tcpc_presenting_cc2_rd(reg) \
+-	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
+-	 (((reg) & (TCPC_ROLE_CTRL_CC2_MASK << TCPC_ROLE_CTRL_CC2_SHIFT)) == \
+-	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC2_SHIFT)))
++	 (((reg) & (TCPC_ROLE_CTRL_## cc ##_MASK << TCPC_ROLE_CTRL_## cc ##_SHIFT)) == \
++	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_## cc ##_SHIFT)))
+ 
+ struct tcpci {
+ 	struct device *dev;
+@@ -201,11 +197,11 @@ static int tcpci_get_cc(struct tcpc_dev *tcpc,
+ 	*cc1 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC1_SHIFT) &
+ 				 TCPC_CC_STATUS_CC1_MASK,
+ 				 reg & TCPC_CC_STATUS_TERM ||
+-				 tcpc_presenting_cc1_rd(role_control));
++				 tcpc_presenting_rd(role_control, CC1));
+ 	*cc2 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC2_SHIFT) &
+ 				 TCPC_CC_STATUS_CC2_MASK,
+ 				 reg & TCPC_CC_STATUS_TERM ||
+-				 tcpc_presenting_cc2_rd(role_control));
++				 tcpc_presenting_rd(role_control, CC2));
+ 
+ 	return 0;
+ }
+-- 
+2.31.0.rc1.246.gcd05c9c855-goog
+
