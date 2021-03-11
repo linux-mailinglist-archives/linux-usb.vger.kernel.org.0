@@ -2,243 +2,234 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3AA337990
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 17:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E677337A98
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 18:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbhCKQij (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Mar 2021 11:38:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56676 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229648AbhCKQiW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Mar 2021 11:38:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 882CA64F9C;
-        Thu, 11 Mar 2021 16:38:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615480701;
-        bh=ONI/ckA6aWPXLx0KjR37fD6v5gXf2UsZV26wXnrMXVE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WBoy4ZOF08n/ctZERUedxAkNzc2mDjP3Adzuw9zipxUHhywJwvBgB3hIYRL609ZG/
-         ydPLkEDT1q2DXogqS9AT2XT6ZrMVwH628oae8GoAAsEEJVZLfX/1/N3x1iNpYEmBm3
-         BoVmsFaC+HdaN+u4pGE8M2LO8kBVHOVe4CjnQGP0vfJxH2Zl822ix2CcJVs2DBUxkB
-         T9ccmK/PauoF1E4CV0gxSuVjOgfcJ3kOATNpCtPOe7RHSOm2LS4ExWodTcqo4TsAqK
-         gIxMDaYNQM1Fzn+YUVoDV3xce+T83O4LWqPEyAR8ruBjWIGhg/akkVdlior7HsRXvt
-         qm7vYKbLZZbxQ==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lKOKW-0000Wy-8R; Thu, 11 Mar 2021 17:38:33 +0100
-Date:   Thu, 11 Mar 2021 17:38:32 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Klemen =?utf-8?B?S2/FoWly?= <klemen.kosir@kream.io>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: cp210x: Improve wording in some comments
-Message-ID: <YEpHiP3ASiojtBRR@hovoldconsulting.com>
-References: <20210311131435.293910-1-klemen.kosir@kream.io>
+        id S229705AbhCKRQg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Mar 2021 12:16:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229706AbhCKRQ2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 12:16:28 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7678FC061574
+        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 09:16:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=j1FzFZM9+A16MgEux0f22T9rdxqzQ+p4UFH4JwhMF2w=; b=n3ZFeSD2rrBzDpAWHUHOhL0SHa
+        rszfiDx9KcaDStlTXvsBHgy+Gr+Iu/ofzFGBBcakELMYsmsFpAuwT0EmYfHLDTdjvez9sNM9kxP2S
+        L2bPlqlIDy5zqajlumeChfL6UOcEHmjAaaBJMDy6BDVG1Urm0sfL0PfgT29zhyxQzoCooV6596yIE
+        Opu/AUOXHS4o8IK/QbVqwsIhyLhiF5Eevn0l1wM0pqraeJr91v560Gp6Mb/kyuuHFCVSVq+xtyr59
+        MrPJ0vlmH8ZAjTv4T+xo4Y+7PPf2I9q9e8aLISoA5ctsUc+vpFNP/n4x8boy1+RsfalOe6sdIoeRu
+        QkjeTGCQ==;
+Received: from [2a01:799:95f:4600:cca0:57ac:c55d:a485] (port=49992)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1lKOvB-0007gW-Q4; Thu, 11 Mar 2021 18:16:25 +0100
+Subject: Re: [PATCH v7 3/3] drm: Add GUD USB Display driver
+To:     Peter Stuge <peter@stuge.se>
+Cc:     hudson@trmm.net, markus@raatikainen.cc,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
+        sam@ravnborg.org
+References: <20210310045544.28961.qmail@stuge.se>
+ <1894f3f7-bd1d-493e-8d7f-8c10917da51b@tronnes.org>
+ <20210311144839.29454.qmail@stuge.se>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <04a86207-325c-8170-6692-a87ec3b0fe4c@tronnes.org>
+Date:   Thu, 11 Mar 2021 18:16:21 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <20210311144839.29454.qmail@stuge.se>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210311131435.293910-1-klemen.kosir@kream.io>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 11, 2021 at 10:14:35PM +0900, Klemen Košir wrote:
-> This patch fixes some spelling mistakes and improves wording in some
-> comments. It also renames one variable to unify naming with others.
 
-It sounds like you're trying to do too many things at once, and I'm not
-sure this kind of changes are worth it unless also doing some "real"
-changes to the code in question.
 
-> Signed-off-by: Klemen Košir <klemen.kosir@kream.io>
-> ---
->  drivers/usb/serial/cp210x.c | 34 +++++++++++++++++-----------------
->  1 file changed, 17 insertions(+), 17 deletions(-)
+Den 11.03.2021 15.48, skrev Peter Stuge:
+> Noralf Trønnes wrote:
+>>> I didn't receive the expected bits/bytes for RGB111 on the bulk endpoint,
+>>> I think because of how components were extracted in gud_xrgb8888_to_color().
+>>>
+>>> Changing to the following gets me the expected (X R1 G1 B1 X R2 G2 B2) bytes:
+>>>
+>>> 			r = (*pix32 >> 8) & 0xff;
+>>> 			g = (*pix32 >> 16) & 0xff;
+>>> 			b = (*pix32++ >> 24) & 0xff;
+>>
+>> We're accessing the whole word here through pix32, no byte access, so
+>> endianess doesn't come into play.
 > 
-> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-> index a373cd63b3a4..7bcc253143a5 100644
-> --- a/drivers/usb/serial/cp210x.c
-> +++ b/drivers/usb/serial/cp210x.c
-> @@ -430,8 +430,8 @@ struct cp210x_comm_status {
->  /*
->   * CP210X_PURGE - 16 bits passed in wValue of USB request.
->   * SiLabs app note AN571 gives a strange description of the 4 bits:
-> - * bit 0 or bit 2 clears the transmit queue and 1 or 3 receive.
-> - * writing 1 to all, however, purges cp2108 well enough to avoid the hang.
-> + * bit 0 or bit 2 clears the transmit queue and 1 or 3 clears the receive queue.
-
-Maybe, but probably not worth it. Doesn't the line creep above 80
-columns here now too?
-
-> + * Writing 1 to all, however, purges CP2108 well enough to avoid the hang.
-
-Hmm...
-
->   */
->  #define PURGE_ALL		0x000f
+> Endianness matters because parts of pix32 are used.
 > 
-> @@ -443,7 +443,6 @@ struct cp210x_comm_status {
->  #define CP210X_LSR_FRAME	BIT(3)
->  #define CP210X_LSR_BREAK	BIT(4)
+
+This code:
+
+#include <stdio.h>
+#include <stdint.h>
+
+void main()
+{
+	volatile uint32_t endian = 0x01234567;
+	uint32_t v = 0xaabbccdd;
+	uint32_t *pix32 = &v;
+	uint8_t r, g, b, *p;
+
+	r = *pix32 >> 16;
+	g = *pix32 >> 8;
+	b = *pix32++;
+
+	printf("xrgb8888=%08x\n", v);
+
+	printf("32-bit access:\n");
+	printf("r=%02x\n", r);
+	printf("g=%02x\n", g);
+	printf("b=%02x\n", b);
+
+	printf("Byte access on %s:\n", (*((uint8_t*)(&endian))) == 0x67 ? "LE"
+: "BE");
+	p = (uint8_t *)&v;
+	printf("r=%02x\n", p[1]);
+	printf("g=%02x\n", p[2]);
+	printf("b=%02x\n", p[3]);
+}
+
+prints:
+
+xrgb8888=aabbccdd
+32-bit access:
+r=bb
+g=cc
+b=dd
+Byte access on LE:
+r=cc
+g=bb
+b=aa
+
+> Software only sees bytes (or larger) because addresses are byte granular,
+> but must pay attention to the bit order when dealing with smaller values
+> inside larger memory accesses.
 > 
-> -
-
-Random whitespace change.
-
->  /* CP210X_GET_FLOW/CP210X_SET_FLOW read/write these 0x10 bytes */
->  struct cp210x_flow_ctl {
->  	__le32	ulControlHandshake;
-> @@ -764,7 +763,7 @@ static void cp210x_close(struct usb_serial_port *port)
+> Given 4 bytes of memory {0x11, 0x22, 0x33, 0x44} at address A, both LE
+> and BE machines appear the same when accessing individual bytes, but with
+> uint32_t *a32 = A then a32[0] is 0x44332211 on LE and 0x11223344 on BE.
 > 
->  	usb_serial_generic_close(port);
 > 
-> -	/* Clear both queues; cp2108 needs this to avoid an occasional hang */
-> +	/* Clear both queues; CP2108 needs this to avoid an occasional hang. */
->  	cp210x_write_u16_reg(port, CP210X_PURGE, PURGE_ALL);
+> Hence the question: What does DRM promise about the XRGB8888 mode?
 > 
->  	cp210x_write_u16_reg(port, CP210X_IFC_ENABLE, UART_DISABLE);
-> @@ -1009,9 +1008,9 @@ static speed_t cp210x_get_actual_rate(speed_t baud)
->   *	div = round(freq / (2 x prescale x request))
->   *	actual = freq / (2 x prescale x div)
->   *
-> - * For CP2104 and CP2105 freq is 48Mhz and prescale is 4 for request <= 365bps
-> + * For CP2104 and CP2105 freq is 48MHz and prescale is 4 for request <= 365bps
->   * or 1 otherwise.
-> - * For CP2110 freq is 24Mhz and prescale is 4 for request <= 300bps or 1
-> + * For CP2110 freq is 24MHz and prescale is 4 for request <= 300bps or 1
 
-Almost couldn't tell what changed, but ok.
+That it's a 32-bit value. From include/uapi/drm/drm_fourcc.h:
 
->   * otherwise.
->   */
->  static void cp210x_change_speed(struct tty_struct *tty,
-> @@ -1023,7 +1022,7 @@ static void cp210x_change_speed(struct tty_struct *tty,
+/* 32 bpp RGB */
+#define DRM_FORMAT_XRGB8888	fourcc_code('X', 'R', '2', '4') /* [31:0]
+x:R:G:B 8:8:8:8 little endian */
+
+If a raw buffer was passed from a BE to an LE machine, there would be
+problems because of how the value is stored, but here it's the same
+endianness in userspace and kernel space.
+
+There is code in gud_prep_flush() that handles a BE host with a
+multibyte format:
+
+	} else if (gud_is_big_endian() && format->cpp[0] > 1) {
+		drm_fb_swab(buf, vaddr, fb, rect, !import_attach);
+
+In this case we can't just pass on the raw buffer to the device since
+the protocol is LE, and thus have to swap the bytes to match up how
+they're stored in memory on the device.
+
+I'm not loosing any of the colors when running modetest. This is the
+test image that modetest uses and it comes through just like that:
+https://commons.wikimedia.org/wiki/File:SMPTE_Color_Bars.svg
+
+Noralf.
+
+> Is it guaranteed that the first byte in memory is always unused, the second
+> represents red, the third green and the fourth blue (endianess agnostic)?
+> I'd expect this and I guess that it is the case, but I don't know DRM?
 > 
->  	/*
->  	 * This maps the requested rate to the actual rate, a valid rate on
-> -	 * cp2102 or cp2103, or to an arbitrary rate in [1M, max_speed].
-> +	 * CP2102 or CP2103, or to an arbitrary rate in [1M, max_speed].
-
-So driver isn't consistent in how it refers to the various types. Just
-leave it.
-
->  	 *
->  	 * NOTE: B0 is not implemented.
->  	 */
-> @@ -1286,6 +1285,7 @@ static int cp210x_tiocmset(struct tty_struct *tty,
->  		unsigned int set, unsigned int clear)
->  {
->  	struct usb_serial_port *port = tty->driver_data;
-> +
-
-Not needed.
-
->  	return cp210x_tiocmset_port(port, set, clear);
->  }
+> Or is it instead guaranteed that when accessed natively as one 32-bit
+> value the blue component is always in the most significant byte (endianess
+> abstracted, always LE in memory) or always in the least significant byte
+> (endianess abstracted, always BE in memory)?
+> This would be annoying for userspace, but well, it's possible.
 > 
-> @@ -1552,7 +1552,7 @@ static int cp210x_gpio_set_config(struct gpio_chip *gc, unsigned int gpio,
->  /*
->   * This function is for configuring GPIO using shared pins, where other signals
->   * are made unavailable by configuring the use of GPIO. This is believed to be
-> - * only applicable to the cp2105 at this point, the other devices supported by
-> + * only applicable to the CP2105 at this point, the other devices supported by
->   * this driver that provide GPIO do so in a way that does not impact other
->   * signals and are thus expected to have very different initialisation.
->   */
-> @@ -1561,7 +1561,7 @@ static int cp2105_gpioconf_init(struct usb_serial *serial)
->  	struct cp210x_serial_private *priv = usb_get_serial_data(serial);
->  	struct cp210x_pin_mode mode;
->  	struct cp210x_dual_port_config config;
-> -	u8 intf_num = cp210x_interface_num(serial);
-> +	u8 iface_num = cp210x_interface_num(serial);
-
-Not worth it.
-
->  	u8 iface_config;
->  	int result;
+> In the abstracted (latter) case pix32 would work, but could still be
+> questioned on style, and in fact, pix32 didn't work for me, so at a
+> minimum the byte order would be the reverse.
 > 
-> @@ -1577,8 +1577,8 @@ static int cp2105_gpioconf_init(struct usb_serial *serial)
->  	if (result < 0)
->  		return result;
 > 
-> -	/*  2 banks of GPIO - One for the pins taken from each serial port */
-> -	if (intf_num == 0) {
-> +	/* 2 banks of GPIO - One for the pins taken from each serial port */
-
-Sure...but no.
-
-> +	if (iface_num == 0) {
->  		if (mode.eci == CP210X_PIN_MODE_MODEM) {
->  			/* mark all GPIOs of this interface as reserved */
->  			priv->gpio_altfunc = 0xff;
-> @@ -1590,7 +1590,7 @@ static int cp2105_gpioconf_init(struct usb_serial *serial)
->  						CP210X_ECI_GPIO_MODE_MASK) >>
->  						CP210X_ECI_GPIO_MODE_OFFSET);
->  		priv->gc.ngpio = 2;
-> -	} else if (intf_num == 1) {
-> +	} else if (iface_num == 1) {
->  		if (mode.sci == CP210X_PIN_MODE_MODEM) {
->  			/* mark all GPIOs of this interface as reserved */
->  			priv->gpio_altfunc = 0xff;
-> @@ -1659,7 +1659,7 @@ static int cp2104_gpioconf_init(struct usb_serial *serial)
->  	 */
->  	for (i = 0; i < priv->gc.ngpio; ++i) {
->  		/*
-> -		 * Set direction to "input" iff pin is open-drain and reset
-> +		 * Set direction to "input" if pin is open-drain and reset
-
-"iff" means "if and only if" so you're changing the meaning here.
-
->  		 * value is 1.
->  		 */
->  		if (!(priv->gpio_pushpull & BIT(i)) && (gpio_latch & BIT(i)))
-> @@ -1733,7 +1733,7 @@ static int cp2102n_gpioconf_init(struct usb_serial *serial)
->  		 * For the QFN28 package, GPIO4-6 are controlled by
->  		 * the low three bits of the mode/latch fields.
->  		 * Contrary to the document linked above, the bits for
-> -		 * the SUSPEND pins are elsewhere.  No alternate
-> +		 * the SUSPEND pins are elsewhere. No alternate
-
-Come on.
-
->  		 * function is available for these pins.
->  		 */
->  		priv->gc.ngpio = 7;
-> @@ -1742,16 +1742,16 @@ static int cp2102n_gpioconf_init(struct usb_serial *serial)
->  	}
+> In the agnostic (former) case your code was correct for BE and mine
+> for LE, but I'd then suggest using a u8 * to both work correctly
+> everywhere and be obvious.
 > 
->  	/*
-> -	 * The CP2102N does not strictly has input and output pin modes,
-> +	 * The CP2102N does not strictly have input and output pin modes,
-
-This is a good one.
-
->  	 * it only knows open-drain and push-pull modes which is set at
-> -	 * factory. An open-drain pin can function both as an
-> +	 * the factory. An open-drain pin can function both as an
-
-And this one perhaps.
-
->  	 * input or an output. We emulate input mode for open-drain pins
->  	 * by making sure they are not driven low, and we do not allow
->  	 * push-pull pins to be set as an input.
->  	 */
->  	for (i = 0; i < priv->gc.ngpio; ++i) {
->  		/*
-> -		 * Set direction to "input" iff pin is open-drain and reset
-> +		 * Set direction to "input" if pin is open-drain and reset
-
-Again, you're actually breaking comments by replacing "iff" like this.
-
->  		 * value is 1.
->  		 */
->  		if (!(priv->gpio_pushpull & BIT(i)) && (gpio_latch & BIT(i)))
-
-If you want you can submit a v2 which fixes the two obvious
-spelling/grammar mistakes and the Hz capitalisation that you found.
-
-But I strongly recommend you stop submitting patches like this. We have
-a ton of real issues that needs tending too if you're looking for
-something to work on.
-
-Johan
+> 
+>> This change will flip r and b, which gives: XRGB8888 -> XBGR1111
+> 
+> The old code was:
+> 			r = *pix32 >> 16;
+> 			g = *pix32 >> 8;
+> 			b = *pix32++;
+> 
+> On my LE machine this set r to the third byte (G), g to the second (R)
+> and b to the first (X), explaining the color confusion that I saw.
+> 
+> 
+>> BGR is a common thing on controllers, are you sure yours are set to RGB
+>> and not BGR?
+> 
+> Yes; I've verified that my display takes red in MSB both in its data
+> sheet and by writing raw bits to it on a system without the gud driver.
+> 
+> 
+>> And the 0xff masking isn't necessary since we're assigning to a byte, right?
+> 
+> Not strictly neccessary but I like to do it anyway, both to be explicit
+> and also to ensure that the compiler will never sign extend, if types
+> are changed or if values become treated as signed and/or larger by the
+> compiler because the code is changed.
+> 
+> It's frustrating to debug such unexpected changes in behavior due to
+> a type change or calculation change, but if you find it too defensive
+> then go ahead and remove it, if pix32 does stay.
+> 
+> 
+>> I haven't got a native R1G1B1 display so I have emulated and I do get
+>> the expected colors. This is the conversion function I use on the device
+>> which I think is correct:
+>>
+>> static size_t rgb111_to_rgb565(uint16_t *dst, uint8_t *src,
+>>                                uint16_t src_width, uint16_t src_height)
+>> {
+>>     uint8_t rgb111, val = 0;
+>>     size_t len = 0;
+>>
+>>     for (uint16_t y = 0; y < src_height; y++) {
+>>         for (uint16_t x = 0; x < src_width; x++) {
+>>             if (!(x % 2))
+>>                 val = *src++;
+>>             rgb111 = val >> 4;
+>>             *dst++ = ((rgb111 & 0x04) << 13) | ((rgb111 & 0x02) << 9) |
+>>                      ((rgb111 & 0x01) << 4);
+> 
+> I'm afraid this isn't correct. Two wrongs end up cancelling each other
+> out and it's not so obvious because the destination has symmetric (565)
+> components.
+> 
+> If you were to convert to xrgb8888 in the same way I think you'd also
+> see some color confusion, and in any case blue is getting lost already
+> in gud_xrgb8888_to_color() on LE.
+> 
+> 
+> //Peter
+> 
