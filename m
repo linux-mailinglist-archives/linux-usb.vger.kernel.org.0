@@ -2,66 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C42337352
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 14:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7246533735C
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 14:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233389AbhCKNCC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Mar 2021 08:02:02 -0500
-Received: from mx2.suse.de ([195.135.220.15]:59804 "EHLO mx2.suse.de"
+        id S233294AbhCKNEn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Mar 2021 08:04:43 -0500
+Received: from mga06.intel.com ([134.134.136.31]:48651 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233326AbhCKNBi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Mar 2021 08:01:38 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1615467697; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iYWa67bnLBkGw/alCLVwpKiXakCsiwfOiELqJkl29H4=;
-        b=qw0Lgq9lPWSRMWT94bFYNnN3NVivK/IXWtp4C6asL+Te8mHdHcidpSHCUfSOeUfHw4n9iR
-        f9ey71+N9iFuGTBPV7eaBhiGihhq3q7qRuRT90znbhlxnh3YdG651C+FJT+QDhThx1z1w5
-        xDJX9xlLem9I/8e3HoSjfAzax7GbH5U=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id B60C7AC17;
-        Thu, 11 Mar 2021 13:01:37 +0000 (UTC)
-From:   Oliver Neukum <oneukum@suse.com>
-To:     bruno.thomsen@gmail.com, gregKH@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH 2/2] CDC-ACM: downgrade message to debug
-Date:   Thu, 11 Mar 2021 14:01:26 +0100
-Message-Id: <20210311130126.15972-2-oneukum@suse.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210311130126.15972-1-oneukum@suse.com>
-References: <20210311130126.15972-1-oneukum@suse.com>
+        id S233327AbhCKNEN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 11 Mar 2021 08:04:13 -0500
+IronPort-SDR: BMRgbCc0VAjRihMzagcET0Eej1BO9Y6DWznHrdaPpq8R/+G7FWC+HuyS5sE32cytT+aUe+A+3U
+ tUrwUi5Wiz/g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9919"; a="250027065"
+X-IronPort-AV: E=Sophos;i="5.81,240,1610438400"; 
+   d="scan'208";a="250027065"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2021 05:04:12 -0800
+IronPort-SDR: TmfHUPnjbs5QPu42p34JwvdXfFQ97eibbpOkzNkFESsP/nxTaC2MJD4NtrP7C0BRZPPVWuUpa1
+ qf7+tH38ib6g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,240,1610438400"; 
+   d="scan'208";a="510010207"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 11 Mar 2021 05:04:10 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 11 Mar 2021 15:04:09 +0200
+Date:   Thu, 11 Mar 2021 15:04:09 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Elias Rudberg <mail@eliasrudberg.se>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: Remove vdo[3] part of
+ tps6598x_rx_identity_reg struct
+Message-ID: <YEoVSRfVaGr6uxXe@kuha.fi.intel.com>
+References: <20210311124710.6563-1-mail@eliasrudberg.se>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210311124710.6563-1-mail@eliasrudberg.se>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This failure is so common that logging an error here amounts
-to spamming log files.
+Hi,
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/usb/class/cdc-acm.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Thu, Mar 11, 2021 at 01:47:10PM +0100, Elias Rudberg wrote:
+> Remove the unused "u32 vdo[3]" part in the tps6598x_rx_identity_reg
+> struct. This helps avoid "failed to register partner" errors which
+> happen when tps6598x_read_partner_identity() fails because the
+> amount of data read is 12 bytes smaller than the struct size.
+> Note that vdo[3] is already in usb_pd_identity and hence
+> shouldn't be added to tps6598x_rx_identity_reg as well.
+> 
+> Fixes: f6c56ca91b92 ("usb: typec: Add the Product Type VDOs to struct usb_pd_identity")
+> 
+> Signed-off-by: Elias Rudberg <mail@eliasrudberg.se>
 
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index d684cf94b1c0..fd2fce072985 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -659,7 +659,8 @@ static void acm_port_dtr_rts(struct tty_port *port, int raise)
- 
- 	res = acm_set_control(acm, val);
- 	if (res && (acm->ctrl_caps & USB_CDC_CAP_LINE))
--		dev_err(&acm->control->dev, "failed to set dtr/rts\n");
-+		/* This is broken in too many devices to spam the logs */
-+		dev_dbg(&acm->control->dev, "failed to set dtr/rts\n");
- }
- 
- static int acm_port_activate(struct tty_port *port, struct tty_struct *tty)
+This needs to go to the stable kernels as well. Please resend with the
+appropriate "Cc: stable@vger.kernel.org" tag. Please also include my
+reviewed-by tag:
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  drivers/usb/typec/tps6598x.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tps6598x.c b/drivers/usb/typec/tps6598x.c
+> index 6e6ef6317523..29bd1c5a283c 100644
+> --- a/drivers/usb/typec/tps6598x.c
+> +++ b/drivers/usb/typec/tps6598x.c
+> @@ -64,7 +64,6 @@ enum {
+>  struct tps6598x_rx_identity_reg {
+>  	u8 status;
+>  	struct usb_pd_identity identity;
+> -	u32 vdo[3];
+>  } __packed;
+>  
+>  /* Standard Task return codes */
+> -- 
+> 2.25.1
+
+thanks,
+
 -- 
-2.26.2
-
+heikki
