@@ -2,104 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 059BF336DD1
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 09:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AEE4336DDC
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 09:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbhCKI1x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Mar 2021 03:27:53 -0500
-Received: from mga02.intel.com ([134.134.136.20]:50994 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231394AbhCKI1c (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Mar 2021 03:27:32 -0500
-IronPort-SDR: nsN+Jwgzo9vKGf/76IbnYy/VGzjLyTdQyVk0OXYFMI67YQUEVFEMVpDjYGCfhVAcFxQHZKf7CT
- IDUETTq4vEWQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9919"; a="175744168"
-X-IronPort-AV: E=Sophos;i="5.81,239,1610438400"; 
-   d="scan'208";a="175744168"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2021 00:27:31 -0800
-IronPort-SDR: pJTjStgHCnmv5a1kWffP+57JbDpIvmrdwDCAF6kvP/wMpFTNU3qOkaI8NObhjmdaZAjYTGEE8y
- xnriS9luJGow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,239,1610438400"; 
-   d="scan'208";a="509955082"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 11 Mar 2021 00:27:28 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 11 Mar 2021 10:27:27 +0200
-Date:   Thu, 11 Mar 2021 10:27:27 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v1] usb: typec: tcpci: Refactor tcpc_presenting_cc1_rd
- macro
-Message-ID: <YEnUb/hBh63Bql76@kuha.fi.intel.com>
-References: <20210310223536.3471243-1-badhri@google.com>
+        id S230448AbhCKIcl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Mar 2021 03:32:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230290AbhCKIcR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 03:32:17 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107E0C061574;
+        Thu, 11 Mar 2021 00:32:17 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id d3so38287856lfg.10;
+        Thu, 11 Mar 2021 00:32:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=XBrCYPbxmHSRsQpecyUBPGXT5bPuh1fsbvmZotyc0Vc=;
+        b=mmtaOXBdHANgTwP+IKodN60KEM+ilDF/ob8aXHSK1l8sCVUdrM3QG58YcRCfv+Ag95
+         ywMVOF7HhXsKCK/UX0RGBTgHI+xaRTBsSGKziZ26wg6WwgEJOU1gGiKSznuz43W3AzH0
+         Sg3jSsov+JlpqeRrMMwz8CM/u6LsOplQ5cr0f5R3G72uBwrWUxcfqXo+zp98iUEMK5iV
+         5yI03LvZWAQcW1byzVfA24zDi8qiW34RPef4rRHN0PFV+8SOnPvVBoKQg5tUxkn/7dQG
+         QIaS/5vADeqYH2jLJLQ+Nv6uv3LFjPq9KBiU7+CItIbbQDoc2jdPbVTVjWCkY+Fxilkj
+         qZCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=XBrCYPbxmHSRsQpecyUBPGXT5bPuh1fsbvmZotyc0Vc=;
+        b=gydNDXbtdEOl9ogBnbSdbRBDnu1yHDTkEgYUj+Ta7smNDepH26Krn4JqF9vDkBXo/D
+         HrIMYsu9UxUTVhCRMp5VWDP9rMLxNb0FBCxN+9Jhh7BriPN0M9j2IusLwBToqjhbVQjv
+         Bau23N98nvfsHXiza5t3M3YTtAORxu0ld0RihSwUxvH2R8BZyVL8uxHs5leUy2B1buYv
+         VpgCb9vJLFBvVldL+awWqKih0ZI1ry1decRzZrhn9s39kO+T6AcxThWuJ3dDoJk/jbqx
+         amyygI8mAJjBVeOPVel36iJRPddzBRk8eLezLcWQwXkxxulj1xRNoA0oH8UAKSIXK2pD
+         axog==
+X-Gm-Message-State: AOAM531qnCcSTK3YCgG06i7vPUqoZ/TiaV9e3SSePRgqujad/bdZM5FX
+        xMwftqAoqOdDoI0M9vbqaNn5sUKTN/U=
+X-Google-Smtp-Source: ABdhPJyu64nFTRHlN+O0NcHcwzG8gnhzFp06tXnfw4YjvZmMGMlY02ZHY7bDC745jtPxQMW6GG1Rlw==
+X-Received: by 2002:a05:6512:3a8c:: with SMTP id q12mr1594058lfu.213.1615451535395;
+        Thu, 11 Mar 2021 00:32:15 -0800 (PST)
+Received: from [192.168.1.100] ([178.176.72.229])
+        by smtp.gmail.com with ESMTPSA id l29sm619170lfp.63.2021.03.11.00.32.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Mar 2021 00:32:15 -0800 (PST)
+Subject: Re: [PATCH] usb: dwc3: qcom: skip interconnect init for ACPI probe
+To:     Shawn Guo <shawn.guo@linaro.org>, Felipe Balbi <balbi@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20210311060318.25418-1-shawn.guo@linaro.org>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <94984a60-444f-a2f5-1928-3eeba2342f2e@gmail.com>
+Date:   Thu, 11 Mar 2021 11:32:01 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210310223536.3471243-1-badhri@google.com>
+In-Reply-To: <20210311060318.25418-1-shawn.guo@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 10, 2021 at 02:35:36PM -0800, Badhri Jagan Sridharan wrote:
-> Defining one macro instead of two for tcpc_presenting_*_rd.
-> This is a follow up of the comment left by Heikki Krogerus.
+Hello!
+
+On 11.03.2021 9:03, Shawn Guo wrote:
+
+> The ACPI probe starts failing since commit bea46b981515 ("usb: dwc3:
+> qcom: Add interconnect support in dwc3 driver"), because there is no
+> interconnect support for ACPI, and of_icc_get() call in
+> dwc3_qcom_interconnect_init() will just return -EINVAL.
 > 
-> https://patchwork.kernel.org/project/linux-usb/patch/
-> 20210304070931.1947316-1-badhri@google.com/
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> Fix the problem by skipping interconnect init for ACPI probe, and then
+> the NULL icc_path_ddr will simply just scheild all ICC calls.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+    Scheild?
 
-> ---
->  drivers/usb/typec/tcpm/tcpci.c | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index 027afd7dfdce..25b480752266 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -24,14 +24,10 @@
->  #define	AUTO_DISCHARGE_PD_HEADROOM_MV		850
->  #define	AUTO_DISCHARGE_PPS_HEADROOM_MV		1250
->  
-> -#define tcpc_presenting_cc1_rd(reg) \
-> +#define tcpc_presenting_rd(reg, cc) \
->  	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
-> -	 (((reg) & (TCPC_ROLE_CTRL_CC1_MASK << TCPC_ROLE_CTRL_CC1_SHIFT)) == \
-> -	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC1_SHIFT)))
-> -#define tcpc_presenting_cc2_rd(reg) \
-> -	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
-> -	 (((reg) & (TCPC_ROLE_CTRL_CC2_MASK << TCPC_ROLE_CTRL_CC2_SHIFT)) == \
-> -	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC2_SHIFT)))
-> +	 (((reg) & (TCPC_ROLE_CTRL_## cc ##_MASK << TCPC_ROLE_CTRL_## cc ##_SHIFT)) == \
-> +	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_## cc ##_SHIFT)))
->  
->  struct tcpci {
->  	struct device *dev;
-> @@ -201,11 +197,11 @@ static int tcpci_get_cc(struct tcpc_dev *tcpc,
->  	*cc1 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC1_SHIFT) &
->  				 TCPC_CC_STATUS_CC1_MASK,
->  				 reg & TCPC_CC_STATUS_TERM ||
-> -				 tcpc_presenting_cc1_rd(role_control));
-> +				 tcpc_presenting_rd(role_control, CC1));
->  	*cc2 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC2_SHIFT) &
->  				 TCPC_CC_STATUS_CC2_MASK,
->  				 reg & TCPC_CC_STATUS_TERM ||
-> -				 tcpc_presenting_cc2_rd(role_control));
-> +				 tcpc_presenting_rd(role_control, CC2));
->  
->  	return 0;
->  }
-> -- 
-> 2.31.0.rc1.246.gcd05c9c855-goog
+> Fixes: bea46b981515 ("usb: dwc3: qcom: Add interconnect support in dwc3 driver")
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+[...]
 
-thanks,
-
--- 
-heikki
+MBR, Sergei
