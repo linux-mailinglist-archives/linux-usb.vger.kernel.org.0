@@ -2,227 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE60336AE1
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 04:44:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88326336AE7
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 04:46:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbhCKDni (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Mar 2021 22:43:38 -0500
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:50246 "EHLO
+        id S231171AbhCKDqW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Mar 2021 22:46:22 -0500
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:50344 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230052AbhCKDng (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Mar 2021 22:43:36 -0500
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
+        by vger.kernel.org with ESMTP id S231169AbhCKDqQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Mar 2021 22:46:16 -0500
+Received: from mailhost.synopsys.com (us03-mailhost1.synopsys.com [10.4.17.17])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id C6C04C0A3B;
-        Thu, 11 Mar 2021 03:43:35 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 80C91C0A42;
+        Thu, 11 Mar 2021 03:46:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1615434215; bh=iwmDQ2nikjZvptdzPW0+FAypfhypJN38hHSubHSyhrA=;
-        h=Date:In-Reply-To:References:From:Subject:To:From;
-        b=V6BwwexaZl5grdURj+uOy5V2D6pOS34sFKYhvc6to+1hw6TWZqYKiDrzD6dwD/oPb
-         wTezYsQ8et4XW8GhcTvgI1eb5jTDdTAbER7cJsGF0syjdwTuiJdlv6Vg6GGTUawP0w
-         ISUfd3SshBsQxifOxTiRFhdbJObAdalxEPcbxxkU5Ulgsa4UQMxzKE4qzj9pXzM0lk
-         Ef4EvZQHxGcBTgPlaVkHKYw/pZPeiPQxI9HzTu6EYMILSdB8Y0p4o213xBJ2QWN7bc
-         xNRXOHZqL/5hnEMATvY9Oprz8jPpt9S+P5Wh4JyuItvyvKGxBBQ2o16yv7MVBqkvPn
-         572cdJqyG20lg==
-Received: from lab-vbox (unknown [10.205.137.201])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        t=1615434376; bh=+sQS3E+iE3HCGqRcWo6Wyx0IYhbghuJ8oz/nEhFMJ9c=;
+        h=From:To:Subject:Date:References:In-Reply-To:From;
+        b=JKQuCQ59NQNT54tCT7pGGMw+mk4kUGAQAmIh3qKglUoeGfbiozaOAf/swV2Tcv1ui
+         9uVA4i5L9st+lcai9guYY9KEuDiHze5wnewtb0UMuifCAS3LpXsP4M4JXB6nxdo9a5
+         mqLrgTVbRbu8JGvH0QkiG+fes7o6XI9xO7ax5MxNTyNuRuw50/vGG5M6SRjefDUVD5
+         1s0IJy6WVwZ+yRGqrpI8mYCU8hA0PV1DVR5LnSkSOI3lEhLqbuC6qbMxSNfZC+fW/d
+         08bGBjG+licccyxLiye0s41sJWmC/N99o81PO9fa2krNYH0d2ajZ06bqSfZSAtazSq
+         e0dyQgZdmEMhg==
+Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com [10.4.161.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 8BB49A006F;
-        Thu, 11 Mar 2021 03:43:34 +0000 (UTC)
-Received: by lab-vbox (sSMTP sendmail emulation); Wed, 10 Mar 2021 19:43:34 -0800
-Date:   Wed, 10 Mar 2021 19:43:34 -0800
-Message-Id: <ce0acbbd0bd3c3c3a08e6418ab3bdb431a44bbfd.1615432770.git.Thinh.Nguyen@synopsys.com>
-In-Reply-To: <cover.1615432770.git.Thinh.Nguyen@synopsys.com>
-References: <cover.1615432770.git.Thinh.Nguyen@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPS id ECE19A0082;
+        Thu, 11 Mar 2021 03:46:14 +0000 (UTC)
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2174.outbound.protection.outlook.com [104.47.55.174])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 703EB80021;
+        Thu, 11 Mar 2021 03:46:12 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="TjnLl9QW";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QakSgELHy04r9rZj8aoSOLwS+Qg+om5Uqt1bVen0u72g0A2wEmwxjhPiu+dsgujdtP8zoudOzVYuWm6qOjXp7NGNXc1NaXkiPzmeI9FpODjkE/lEe65CF2W6Z+NFdNkRFQdm98cJKJCm37GMR564VkX29waZMI+f7GtgIyu/kC+HiSm3sv9ZUnPh6W6jMKsiOFCcmzeJqEq21oirpgh7brA4gAM3aD42O73QaYHmwsSIZbteE/iKLrw5NSppbVSz4zn8QS/a3PLXEs+pLVg+3WIwQp1Asox+zq6V1J+itmUyw8YOx401AfRcKppfH5nN9PpVJUj2T/OFSq0zsNiWFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+sQS3E+iE3HCGqRcWo6Wyx0IYhbghuJ8oz/nEhFMJ9c=;
+ b=b+Fs/TUsxmRobqSItj82eAOsvyhPe/55ZQFOLfx8SUXFNmc7Kc+/BwWjJ7pykkL2W4rm9ttVY2erE1MMEnVBcaNmDNwqIY78/MudD9V5kaLGjzgYdE7udY3NKV3T45H7pcvPs1VIAmJ+rApyWwaIjTNLT+cfmNPoTLKC6eM+lAddfdArTYoWq1h6BhiPD5HR2BRdnsqVD3k/OURyBsL7DNiTh6dVwnmTCpMS2Cn44TrA0+UkORlumCLMFyrawAeX+626r/oYf4qVBAHthztwaX4MfixJQRO7rWeN4ylCmiFULvufQwTSo+is3YXmqqy1WEpDMSCbjDAhAfpSQ0+Gew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+sQS3E+iE3HCGqRcWo6Wyx0IYhbghuJ8oz/nEhFMJ9c=;
+ b=TjnLl9QWfPUgkv3ixDmcb1uAbjvPKhA9xYQOqK68+jBXvKgbcYyCJ4gb/1457OtbyJGcMLGAfF8edxgQhJ2XYIEzFNbHeLwprXX46yW1z5LKsfPjdcwp39CV2mLrnXGCBjiXG6NrRjTubfHidtNRJn7nZ5bceK9w9sc9wmjsslU=
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
+ by BY5PR12MB4209.namprd12.prod.outlook.com (2603:10b6:a03:20d::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.29; Thu, 11 Mar
+ 2021 03:46:10 +0000
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::895b:620d:8f20:c4d6]) by BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::895b:620d:8f20:c4d6%6]) with mapi id 15.20.3912.030; Thu, 11 Mar 2021
+ 03:46:10 +0000
 X-SNPS-Relay: synopsys.com
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v3 8/8] usb: xhci: Remove unused function
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@intel.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Hardik Gajjar <hgajjar@de.adit-jv.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH v2 3/8] usb: core: hub: Print speed name based on ssp rate
+Thread-Topic: [PATCH v2 3/8] usb: core: hub: Print speed name based on ssp
+ rate
+Thread-Index: AQHW+qu6nRjYR2B3aEeaFwa6rz369ap9G/+AgAFAzoA=
+Date:   Thu, 11 Mar 2021 03:46:10 +0000
+Message-ID: <d134c2fb-9bed-cd4f-fb9d-24b0aac4b510@synopsys.com>
+References: <cover.1612410491.git.Thinh.Nguyen@synopsys.com>
+ <d7049743924adf82f93ddfe403a5ebb9ac06e49b.1612410491.git.Thinh.Nguyen@synopsys.com>
+ <dca3aff0-793f-394b-1ded-47140f0c8a30@linux.intel.com>
+In-Reply-To: <dca3aff0-793f-394b-1ded-47140f0c8a30@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
+authentication-results: linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=none action=none
+ header.from=synopsys.com;
+x-originating-ip: [98.248.94.126]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d13a6362-d61f-4357-cc03-08d8e4403598
+x-ms-traffictypediagnostic: BY5PR12MB4209:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BY5PR12MB42099FE908EAE941F15F3D42AA909@BY5PR12MB4209.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1122;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: br6mK2WmNYE84QnTrLKW0CDHjjpxG1Tng4jWn1RZte3Kfam7wcRN/SGtwJ85xN+yYxQE51fzod2qrv8UQzHH2kjAiw5To2+JY8Q0vYvQWkCG9UWKu8+cxNM7y2JggPRtzRFJ3KkKsNUQpm2LtJjRqljvarkGcmvl/MzM6+qgSyZO8pi4dV1QWrtvSPUbbEWWemQDa2RRWWq8v8E0TsTht0jhEX95kDg+0EyeE8kjB+3o16IlsqnLwlxipp3HBA5uJa23MCQ7cYvFpPbQ4tb3Fj3DQDKbTAE5HcfUcsb5+INmqp7I+TO1T6qdLhBweAaAhpemW5ZB6/lGsxrcoxjjknx9Zw7hltwzjfzNhxVVXkFSsBI4KQwiki9VJs5+lRo4O+0rO8L25YcOOln69CvHuKQuQn0B1RaaB8iqpA5OpiFTUoGj2qhuc0kKDhFvNvJkPQpoZZNBaciIWpSsuzqYwqXI7MJmZmNyhq9fPURajtSgw6C0iJH++96V8PpTDu/VcSG0iFdVZKUGuScK8xhPiezKWE/WBURjgPopgJIP34KMM0x6knazjaDvMwOFHhNN8SOHPthki4tqOnRcrmBu6re2LDNnB5Bt7nir+mxSsH8=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(366004)(136003)(39860400002)(376002)(396003)(186003)(31686004)(36756003)(2616005)(26005)(6512007)(6486002)(83380400001)(478600001)(66446008)(110136005)(76116006)(64756008)(31696002)(5660300002)(316002)(66556008)(66476007)(66946007)(86362001)(2906002)(8936002)(71200400001)(8676002)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?NVFyYnJISjNpZDlxLzNXMXpKRXpYWlVvSGRrNHd0eVNVTG5Ra0JIZ1hnRElt?=
+ =?utf-8?B?bFJtOXZpUkI5bGNLZzZ1Q0FJRWJ0TzRlci80ekxVV2RERks4cFBwUVF1WWFr?=
+ =?utf-8?B?by8vMkZGWEQwQXh1L0pJR0hIWU1FMk42bVY0VlpGcmc2UEFEVVhLT0duMUoz?=
+ =?utf-8?B?RDdHcExrVXVObURHWFFPMHlOWkx2d1pIbThWdDlFbXBHcVZZMGljWXlmTERG?=
+ =?utf-8?B?ZU0xZUlzRmlXMGVZUWdkYTA3QURUUUdQOEt4TWRteGRxcDFzY0k4V1JzanNv?=
+ =?utf-8?B?Sm1VUG5QS3FzdmRMY2N3K1U3M0FIS1NZci9GRXFXOFovOGxOcXhQN21FS0tU?=
+ =?utf-8?B?RlFteUh5WlFUUEZZQVpsUGdMQlAwajVJcFB0SnhDdFhtTElRVGJybWh1bEFm?=
+ =?utf-8?B?bEhWNHEvSWhPQ1pzSU5sK1BrWXRqNWtDVjRhdzI5SVpWUXNYVy85eUk0Skkw?=
+ =?utf-8?B?bThuWmlsUXRrN05JVC9OUzV3SHlOWVEvYkZWeXM1ODYrZHBQN2VSdFlncWpX?=
+ =?utf-8?B?ckQwd21QMXVBZTZnSUNqMnAyV3pFU1BUbW9CQ0NRMk04ZWlTQk9jY0Qrc091?=
+ =?utf-8?B?QkhYZmpGcERnaHo3ZWtRbTR2cXZOWE1wR1VidGIvQk53Q3hpNUQ1Qmc0K1Bo?=
+ =?utf-8?B?RURuSVZXRWJFbFdBRjhFbkthNmRmQllmZmhpV01ocHYxYWpaLys2Zkt3YXVH?=
+ =?utf-8?B?YWt1anR4Y3ZZalQ3dDgrRWRXQWtpWmhXSkFWaGs4OVh4NjVsbFdRSkE3S1Rm?=
+ =?utf-8?B?aU5rclV4cVdibDhwdW5CWmRCY2hsL2tWK2NPamZvSFZkYXZUaFRSaGk5VDFD?=
+ =?utf-8?B?VVZhWnZ2UmJQZzUyRnRSQ09pWXJUWEUyaGJrZWo2N0k0cDYvZzgvTThncW5K?=
+ =?utf-8?B?WGY2bFY4Nzh0WkkvK1BtbHArZVhvSXhuMXEyaGZ6ai9ZbnIxeWZydmRLYkJG?=
+ =?utf-8?B?YTlmb2pkMlZNczVBbENSOFdrRTF3dkprNWIxQkRyMkdMK3ZIWHFUc2dhNU1S?=
+ =?utf-8?B?YjJYOGVWMHRiS1lUNGNiOFE2MUE2MU5QL0xVWUY0Z0pVWkt6cC96TVh2WFFD?=
+ =?utf-8?B?REZac2NQQ1BFem8xYy83dWFMOWhBWDROUWo2TjBjakpuOXU5UStNWFFXRWEr?=
+ =?utf-8?B?Z1NFN0VxQjFFUUZLNFhsRUl3L0dYcitNL0xTeUVVVTZPUHNZeFNQS3RLcUVT?=
+ =?utf-8?B?Sm8xNkxuMGNXZEZVNm9yTUV6SUF4WmxFWkorckpwdjRzWC9ncGpkcm42T3dT?=
+ =?utf-8?B?VGRaS1ZEOUNJS0pTeWlvWjNVVmYzQkpENHp3L1NxeXFkemFCMWQ1NzZTREhK?=
+ =?utf-8?B?S0t3YWp3L3B5NEZTUkthcDRvbHQ0MVRIcE5mejFaZUtOSUZBemlkMVJEa3VU?=
+ =?utf-8?B?ZWhVblVyOVRmVWNwaHErZU9VRy96WVNwbGkwNkhOeUF6Tm51NmRpcFNUUTRv?=
+ =?utf-8?B?TmJIWjc3SVJsTGdYaHFIS3h4NGp4S21xRWNZdm9CVTlNejl0em1SbEZyTjhY?=
+ =?utf-8?B?VmdFWW0xNTBWTkF4aXlQeEVaQm1mblQ5RFNRRjE4YzZhTllHK25lNDdsZWxo?=
+ =?utf-8?B?UHp0TkgyUlA4QmpUY1ZxaWgyQVh5V00xTDdZdlAzekFFYm1DeG0vODV1K3lP?=
+ =?utf-8?B?WUx1ckNkODZTWm9aRElpL0hJRVNNR1JIWGVHL1hFeVh0TUVkZk1ZU0hSZGdv?=
+ =?utf-8?B?Ykl1WFg3NkF2c3BPU05GdHFRNWV5Qm1pZWx5UUNiTkhrZDJ1eVpsTDF3K21Q?=
+ =?utf-8?Q?xZdIe6vZxV+IEUw1QY=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <438667E34CF10249AC2F26232EC1511C@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d13a6362-d61f-4357-cc03-08d8e4403598
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Mar 2021 03:46:10.0541
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bvh9CDiOxbrTRCtKlZeELqPFhyMRlsbVhkoCpOCZW6BaeYnI5GgBw/DSaZl3Pn06JVsyVsylgJMB/ZLCpyzVDA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4209
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Now that we replaced the xhci_create_usb3_bos_desc() function. We can
-remove it along with the static usb_bos_descriptor structure.
-
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
- Changes in v3:
- - None
- Changes in v2:
- - None
-
- drivers/usb/host/xhci-hub.c | 147 ------------------------------------
- 1 file changed, 147 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index eddd139c2260..e9b18fc17617 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -20,39 +20,6 @@
- #define	PORT_RWC_BITS	(PORT_CSC | PORT_PEC | PORT_WRC | PORT_OCC | \
- 			 PORT_RC | PORT_PLC | PORT_PE)
- 
--/* USB 3 BOS descriptor and a capability descriptors, combined.
-- * Fields will be adjusted and added later in xhci_create_usb3_bos_desc()
-- */
--static u8 usb_bos_descriptor [] = {
--	USB_DT_BOS_SIZE,		/*  __u8 bLength, 5 bytes */
--	USB_DT_BOS,			/*  __u8 bDescriptorType */
--	0x0F, 0x00,			/*  __le16 wTotalLength, 15 bytes */
--	0x1,				/*  __u8 bNumDeviceCaps */
--	/* First device capability, SuperSpeed */
--	USB_DT_USB_SS_CAP_SIZE,		/*  __u8 bLength, 10 bytes */
--	USB_DT_DEVICE_CAPABILITY,	/* Device Capability */
--	USB_SS_CAP_TYPE,		/* bDevCapabilityType, SUPERSPEED_USB */
--	0x00,				/* bmAttributes, LTM off by default */
--	USB_5GBPS_OPERATION, 0x00,	/* wSpeedsSupported, 5Gbps only */
--	0x03,				/* bFunctionalitySupport,
--					   USB 3.0 speed only */
--	0x00,				/* bU1DevExitLat, set later. */
--	0x00, 0x00,			/* __le16 bU2DevExitLat, set later. */
--	/* Second device capability, SuperSpeedPlus */
--	0x1c,				/* bLength 28, will be adjusted later */
--	USB_DT_DEVICE_CAPABILITY,	/* Device Capability */
--	USB_SSP_CAP_TYPE,		/* bDevCapabilityType SUPERSPEED_PLUS */
--	0x00,				/* bReserved 0 */
--	0x23, 0x00, 0x00, 0x00,		/* bmAttributes, SSAC=3 SSIC=1 */
--	0x01, 0x00,			/* wFunctionalitySupport */
--	0x00, 0x00,			/* wReserved 0 */
--	/* Default Sublink Speed Attributes, overwrite if custom PSI exists */
--	0x34, 0x00, 0x05, 0x00,		/* 5Gbps, symmetric, rx, ID = 4 */
--	0xb4, 0x00, 0x05, 0x00,		/* 5Gbps, symmetric, tx, ID = 4 */
--	0x35, 0x40, 0x0a, 0x00,		/* 10Gbps, SSP, symmetric, rx, ID = 5 */
--	0xb5, 0x40, 0x0a, 0x00,		/* 10Gbps, SSP, symmetric, tx, ID = 5 */
--};
--
- /* Default sublink speed attribute of each lane */
- static u32 ssp_cap_default_ssa[] = {
- 	0x00050034, /* USB 3.0 SS Gen1x1 id:4 symmetric rx 5Gbps */
-@@ -285,120 +252,6 @@ static int xhci_create_usb3x_bos_desc(struct xhci_hcd *xhci, char *buf,
- 	return le16_to_cpu(bos->wTotalLength);
- }
- 
--static __maybe_unused int xhci_create_usb3_bos_desc(struct xhci_hcd *xhci, char *buf,
--				     u16 wLength)
--{
--	struct xhci_port_cap *port_cap = NULL;
--	int i, ssa_count;
--	u32 temp;
--	u16 desc_size, ssp_cap_size, ssa_size = 0;
--	bool usb3_1 = false;
--
--	desc_size = USB_DT_BOS_SIZE + USB_DT_USB_SS_CAP_SIZE;
--	ssp_cap_size = sizeof(usb_bos_descriptor) - desc_size;
--
--	/* does xhci support USB 3.1 Enhanced SuperSpeed */
--	for (i = 0; i < xhci->num_port_caps; i++) {
--		if (xhci->port_caps[i].maj_rev == 0x03 &&
--		    xhci->port_caps[i].min_rev >= 0x01) {
--			usb3_1 = true;
--			port_cap = &xhci->port_caps[i];
--			break;
--		}
--	}
--
--	if (usb3_1) {
--		/* does xhci provide a PSI table for SSA speed attributes? */
--		if (port_cap->psi_count) {
--			/* two SSA entries for each unique PSI ID, RX and TX */
--			ssa_count = port_cap->psi_uid_count * 2;
--			ssa_size = ssa_count * sizeof(u32);
--			ssp_cap_size -= 16; /* skip copying the default SSA */
--		}
--		desc_size += ssp_cap_size;
--	}
--	memcpy(buf, &usb_bos_descriptor, min(desc_size, wLength));
--
--	if (usb3_1) {
--		/* modify bos descriptor bNumDeviceCaps and wTotalLength */
--		buf[4] += 1;
--		put_unaligned_le16(desc_size + ssa_size, &buf[2]);
--	}
--
--	if (wLength < USB_DT_BOS_SIZE + USB_DT_USB_SS_CAP_SIZE)
--		return wLength;
--
--	/* Indicate whether the host has LTM support. */
--	temp = readl(&xhci->cap_regs->hcc_params);
--	if (HCC_LTC(temp))
--		buf[8] |= USB_LTM_SUPPORT;
--
--	/* Set the U1 and U2 exit latencies. */
--	if ((xhci->quirks & XHCI_LPM_SUPPORT)) {
--		temp = readl(&xhci->cap_regs->hcs_params3);
--		buf[12] = HCS_U1_LATENCY(temp);
--		put_unaligned_le16(HCS_U2_LATENCY(temp), &buf[13]);
--	}
--
--	/* If PSI table exists, add the custom speed attributes from it */
--	if (usb3_1 && port_cap->psi_count) {
--		u32 ssp_cap_base, bm_attrib, psi, psi_mant, psi_exp;
--		int offset;
--
--		ssp_cap_base = USB_DT_BOS_SIZE + USB_DT_USB_SS_CAP_SIZE;
--
--		if (wLength < desc_size)
--			return wLength;
--		buf[ssp_cap_base] = ssp_cap_size + ssa_size;
--
--		/* attribute count SSAC bits 4:0 and ID count SSIC bits 8:5 */
--		bm_attrib = (ssa_count - 1) & 0x1f;
--		bm_attrib |= (port_cap->psi_uid_count - 1) << 5;
--		put_unaligned_le32(bm_attrib, &buf[ssp_cap_base + 4]);
--
--		if (wLength < desc_size + ssa_size)
--			return wLength;
--		/*
--		 * Create the Sublink Speed Attributes (SSA) array.
--		 * The xhci PSI field and USB 3.1 SSA fields are very similar,
--		 * but link type bits 7:6 differ for values 01b and 10b.
--		 * xhci has also only one PSI entry for a symmetric link when
--		 * USB 3.1 requires two SSA entries (RX and TX) for every link
--		 */
--		offset = desc_size;
--		for (i = 0; i < port_cap->psi_count; i++) {
--			psi = port_cap->psi[i];
--			psi &= ~USB_SSP_SUBLINK_SPEED_RSVD;
--			psi_exp = XHCI_EXT_PORT_PSIE(psi);
--			psi_mant = XHCI_EXT_PORT_PSIM(psi);
--
--			/* Shift to Gbps and set SSP Link BIT(14) if 10Gpbs */
--			for (; psi_exp < 3; psi_exp++)
--				psi_mant /= 1000;
--			if (psi_mant >= 10)
--				psi |= BIT(14);
--
--			if ((psi & PLT_MASK) == PLT_SYM) {
--			/* Symmetric, create SSA RX and TX from one PSI entry */
--				put_unaligned_le32(psi, &buf[offset]);
--				psi |= 1 << 7;  /* turn entry to TX */
--				offset += 4;
--				if (offset >= desc_size + ssa_size)
--					return desc_size + ssa_size;
--			} else if ((psi & PLT_MASK) == PLT_ASYM_RX) {
--				/* Asymetric RX, flip bits 7:6 for SSA */
--				psi ^= PLT_MASK;
--			}
--			put_unaligned_le32(psi, &buf[offset]);
--			offset += 4;
--			if (offset >= desc_size + ssa_size)
--				return desc_size + ssa_size;
--		}
--	}
--	/* ssa_size is 0 for other than usb 3.1 hosts */
--	return desc_size + ssa_size;
--}
--
- static void xhci_common_hub_descriptor(struct xhci_hcd *xhci,
- 		struct usb_hub_descriptor *desc, int ports)
- {
--- 
-2.28.0
-
+TWF0aGlhcyBOeW1hbiB3cm90ZToNCj4gT24gNC4yLjIwMjEgNi4xMCwgVGhpbmggTmd1eWVuIHdy
+b3RlOg0KPj4gQ2hlY2sgZm9yIHVzYl9kZXZpY2UtPnNzcF9yYXRlIHRvIHByaW50IHRoZSBTdXBl
+clNwZWVkIFBsdXMgc2lnbmFsaW5nDQo+PiByYXRlIGdlbmVyYXRpb24gYW5kIGxhbmUgY291bnQu
+DQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogVGhpbmggTmd1eWVuIDxUaGluaC5OZ3V5ZW5Ac3lub3Bz
+eXMuY29tPg0KPj4gLS0tDQo+PiAgQ2hhbmdlcyBpbiB2MjoNCj4+ICAtIE5vbmUNCj4+DQo+PiAg
+ZHJpdmVycy91c2IvY29yZS9odWIuYyB8IDEwICsrKysrKystLS0NCj4+ICAxIGZpbGUgY2hhbmdl
+ZCwgNyBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9k
+cml2ZXJzL3VzYi9jb3JlL2h1Yi5jIGIvZHJpdmVycy91c2IvY29yZS9odWIuYw0KPj4gaW5kZXgg
+ODIzNDcwNjA3ZDU4Li42ZGM0ZTczODVlNzUgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL3VzYi9j
+b3JlL2h1Yi5jDQo+PiArKysgYi9kcml2ZXJzL3VzYi9jb3JlL2h1Yi5jDQo+PiBAQCAtNDgzMCw5
+ICs0ODMwLDEzIEBAIGh1Yl9wb3J0X2luaXQoc3RydWN0IHVzYl9odWIgKmh1Yiwgc3RydWN0IHVz
+Yl9kZXZpY2UgKnVkZXYsIGludCBwb3J0MSwNCj4+ICAJCQkJCQkiJXMgU3VwZXJTcGVlZCVzJXMg
+VVNCIGRldmljZSBudW1iZXIgJWQgdXNpbmcgJXNcbiIsDQo+PiAgCQkJCQkJKHVkZXYtPmNvbmZp
+ZykgPyAicmVzZXQiIDogIm5ldyIsDQo+PiAgCQkJCQkgKHVkZXYtPnNwZWVkID09IFVTQl9TUEVF
+RF9TVVBFUl9QTFVTKSA/DQo+PiAtCQkJCQkJCSJQbHVzIEdlbiAyIiA6ICIgR2VuIDEiLA0KPj4g
+LQkJCQkJICh1ZGV2LT5yeF9sYW5lcyA9PSAyICYmIHVkZXYtPnR4X2xhbmVzID09IDIpID8NCj4+
+IC0JCQkJCQkJIngyIiA6ICIiLA0KPj4gKwkJCQkJCQkiIFBsdXMiIDogIiIsDQo+PiArCQkJCQkg
+KHVkZXYtPnNzcF9yYXRlID09IFVTQl9TU1BfR0VOXzJ4MikgPw0KPj4gKwkJCQkJCQkiIGdlbjJ4
+MiIgOg0KPj4gKwkJCQkJICh1ZGV2LT5zc3BfcmF0ZSA9PSBVU0JfU1NQX0dFTl8yeDEpID8NCj4+
+ICsJCQkJCQkJIiBnZW4yeDEiIDoNCj4+ICsJCQkJCSAodWRldi0+c3NwX3JhdGUgPT0gVVNCX1NT
+UF9HRU5fMXgyKSA/DQo+PiArCQkJCQkJCSIgZ2VuMXgyIiA6ICIiLA0KPiBNaW5vciBuaXQ6DQo+
+IFNob3VsZCB3ZSBrZWVwIHRoZSAiR2VuIFh4WSIgZm9ybWF0IHVzZWQgaW4gc3BlYyBhbmQgZHJp
+dmVyLCBpbnN0ZWFkIG9mIHRoaXMgImdlblh4WSINCj4NCg0KT2suIEkndmUgbWFkZSB0aGUgZml4
+Lg0KDQpUaGFua3MsDQpUaGluaA0K
