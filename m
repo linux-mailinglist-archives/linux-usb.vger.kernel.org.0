@@ -2,89 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A792336F5A
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 10:55:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7986336F84
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 11:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232249AbhCKJyd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Mar 2021 04:54:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
+        id S232194AbhCKKDj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Mar 2021 05:03:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232110AbhCKJy3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 04:54:29 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A08DC061760
-        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 01:54:29 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id q5so696540pgk.5
-        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 01:54:29 -0800 (PST)
+        with ESMTP id S232203AbhCKKDU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 05:03:20 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09BA3C061574
+        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 02:03:20 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id n10so24839383ybb.12
+        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 02:03:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=WEr1z9TXHKDpHaWl7p8IM2JmOkgWmJSPfC6MYuXysQk=;
-        b=Fj6U/++g1RAISV6DwXWpxHaHxTJPQYvciSvMPIzV5pUt5IjQtwEOHmskU9KJ02KV/T
-         CZjDDGupljwEb0eM707gQxnt/8D/enGVmaLyQsWeRCbICgQqJoB5iUgq676NQAN2VuAt
-         NX8WUIikEOnPiK5Lz7t/8ziXxuDN1d362C4yo2+HABOugPabXtCMvjUf7Og17BQ57/N7
-         wuO1OpH2UwGSiBss85DdJjiKRzHEJ19ftjbC2uuo0F85yddxbuyv7JFb8GmTJEB3AByE
-         CclEnnfv9XtCr1VixQ0hYx1BaVpuHnzng62iUkBd5xGS+q0xuucR9z0+OsK06Jot8v+N
-         NENw==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=CRNU10dE7NxeMKiM3/VubFTm8e+uK3lL18S+85iKjKQ=;
+        b=cafRhH+x5rWf2c1lFP7ECa+O9orzzMObUYfuqhXIXmH/8sFQniXUbst9qKGfCtmEWf
+         a9HNw1JscmQ7zirvQHuy7/A5M/a+rLhr07xMt9dmJDG4OK0TLgR5HmRA7qBh0HjY07Mh
+         q03Fwg+iXTz69Mf6m41BA+jhYp8iwfdFtTyA+q1/7qiG9Sl+swDTU/XVbIz4Dvognkfc
+         rzt7za27zMn5qPrM1MOH/XnXChWw/uZixXNV00YsupuR9FLiucwlPXcZjYwWbf+wC+A2
+         VXVfct/++arONw8a01nW1ZovtwIKf855RZXOs5D0q5kh52MzzTpevn7fLLikbo/H/Mc2
+         8+dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WEr1z9TXHKDpHaWl7p8IM2JmOkgWmJSPfC6MYuXysQk=;
-        b=ftav5RXYsjaO48gRN0u5Clb+k44AfePqLVOAAHYWuG8n4RrkhsaGf3YUMEL1DkhzTL
-         qlX9MY0fpPRKtyTDutldK6FLZ8BxB2KOk+akPCS1h9wmuxGLUuQOjWBPNq8DXIkLRVN+
-         ZGUpYm7OzCGKv99anYqB1VL/YvNpVmp87dVXO9l9KbshRS+2SDgdi5BIjmv3sXN/QyU1
-         4LWdW1PKRzB6t8DPCRhxll4sxRUVsG1VlCo+ZkiC0I2X+seneH01QpS5DM++KDajzpjx
-         mxK7JXEl4Uy1g2chRGBou6QIu/YzMQ9TqqPZS4gVA8NlL9HBbPQij/zXhFoZ9YVnB4LT
-         g5WA==
-X-Gm-Message-State: AOAM532JY6kpOIFZeAdSCTP4vhK/KU7SKvceCT55Fzom4AVqGtLsP/cp
-        w7Pzdc4aBTG84fIQeCmgfENJ2p4NdCLVJw==
-X-Google-Smtp-Source: ABdhPJxl+IwSc/J2mLN0SD9lXuWJK4iMpEApevg4CsIzin73s4QAkdSTQHk4jcCNVjD3jBdTEkvenw==
-X-Received: by 2002:a63:2009:: with SMTP id g9mr6572975pgg.219.1615456469056;
-        Thu, 11 Mar 2021 01:54:29 -0800 (PST)
-Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id s4sm1788735pji.2.2021.03.11.01.54.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 11 Mar 2021 01:54:28 -0800 (PST)
-Date:   Thu, 11 Mar 2021 17:54:23 +0800
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=CRNU10dE7NxeMKiM3/VubFTm8e+uK3lL18S+85iKjKQ=;
+        b=O53PfDtoIF7vow11eS863QA100ICS06RAgbZU5HKQSNVpYCaYFfJUY5yzvv7Qld3rD
+         Wup+Ocgwaqsj7IBnhFpeI3NhrpHLy5BeLXZdjMNxxqXZxRMYar35lwejHCwXntKJqWdo
+         sB7/N5anxjRkbJmtvx8mqGYRKTuYS5KoikRBopE/uvloz96rNdM278gucsvmxxAEIPXU
+         GCtioRoYLs28xxmAExKOTyp3WKMD4gF/HohX6YsLnAeE9J84cOoJnt6oTeHFMsSZtInX
+         Kles+ivvH5QeDMN4CcHJYwNQ42uJdnkSMp1RDdrd9d6Ux/knnBX1eCwqVrHAYuqVpvr7
+         HI6g==
+X-Gm-Message-State: AOAM532ko5uNa91yCKbsxRAwBZu98VIAdUW8YUjWau3BlLaH1sFmM2IZ
+        OC3rhIUAJM+Rw3clc6i/ZeybXgk/b1E=
+X-Google-Smtp-Source: ABdhPJwGroWnEcfRIYk/XLlG3oXkauoNAbxeMmveVpOyyWibs3L0OWadMvmEoy35hkvGkUbumZvPAc/9EI4=
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:39e6:8b30:8665:4bec])
+ (user=badhri job=sendgmr) by 2002:a5b:690:: with SMTP id j16mr10696794ybq.251.1615456999256;
+ Thu, 11 Mar 2021 02:03:19 -0800 (PST)
+Date:   Thu, 11 Mar 2021 02:03:10 -0800
+Message-Id: <20210311100313.3591254-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
+Subject: [PATCH 1/4] usb: typec: tcpm: Add callback to notify pd_capable partner
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] Revert "usb: dwc3: qcom: Constify the software node"
-Message-ID: <20210311095422.GW17424@dragon>
-References: <20210311090049.7354-1-shawn.guo@linaro.org>
- <YEnez7CuR4YW8AVA@kuha.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YEnez7CuR4YW8AVA@kuha.fi.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>, devicetree@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 11, 2021 at 11:11:43AM +0200, Heikki Krogerus wrote:
-> On Thu, Mar 11, 2021 at 05:00:49PM +0800, Shawn Guo wrote:
-> > This reverts commit 8dc6e6dd1bee39cd65a232a17d51240fc65a0f4a.
-> > 
-> > The commit causes an regression for ACPI probe on Lenovo Yoga C630
-> > laptop.  platform_device_add_properties() will fail with -EEXIST for the
-> > second USB instance, because of the software_node_to_swnode() check in
-> > function software_node_register().
-> 
-> I think you mean device_add_software_node() fails with -EEXIST, no?
+This change informs lower level tcpc drivers of pd_capable
+partner. This is useful while setting current limit for the
+charging path.
 
-Yeah, I was looking at the wrong line.
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 20 +++++++++++++++-----
+ include/linux/usb/tcpm.h      |  3 +++
+ 2 files changed, 18 insertions(+), 5 deletions(-)
 
-> 
-> There should be already a fix for that:
-> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=linux-next&id=2a92c90f2ecca4475d6050f2f93
-> +8a1755a8954cc
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 11d0c40bc47d..e9886e850b84 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -952,6 +952,16 @@ static int tcpm_set_current_limit(struct tcpm_port *port, u32 max_ma, u32 mv)
+ 	return ret;
+ }
+ 
++static void tcpm_set_pd_capable(struct tcpm_port *port, bool capable)
++{
++	tcpm_log(port, "Partner pd capable %s", capable ? "true" : "false");
++
++	if (port->tcpc->set_pd_capable)
++		port->tcpc->set_pd_capable(port->tcpc, capable);
++
++	port->pd_capable = capable;
++}
++
+ static int tcpm_set_attached_state(struct tcpm_port *port, bool attached)
+ {
+ 	return port->tcpc->set_roles(port->tcpc, attached, port->pwr_role,
+@@ -3444,7 +3454,7 @@ static int tcpm_src_attach(struct tcpm_port *port)
+ 	if (ret < 0)
+ 		goto out_disable_vconn;
+ 
+-	port->pd_capable = false;
++	tcpm_set_pd_capable(port, false);
+ 
+ 	port->partner = NULL;
+ 
+@@ -3509,7 +3519,7 @@ static void tcpm_reset_port(struct tcpm_port *port)
+ 	tcpm_unregister_altmodes(port);
+ 	tcpm_typec_disconnect(port);
+ 	port->attached = false;
+-	port->pd_capable = false;
++	tcpm_set_pd_capable(port, false);
+ 	port->pps_data.supported = false;
+ 	tcpm_set_partner_usb_comm_capable(port, false);
+ 
+@@ -3583,7 +3593,7 @@ static int tcpm_snk_attach(struct tcpm_port *port)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	port->pd_capable = false;
++	tcpm_set_pd_capable(port, false);
+ 
+ 	port->partner = NULL;
+ 
+@@ -3813,7 +3823,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 			 */
+ 			/* port->hard_reset_count = 0; */
+ 			port->caps_count = 0;
+-			port->pd_capable = true;
++			tcpm_set_pd_capable(port, true);
+ 			tcpm_set_state_cond(port, SRC_SEND_CAPABILITIES_TIMEOUT,
+ 					    PD_T_SEND_SOURCE_CAP);
+ 		}
+@@ -4074,7 +4084,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 		}
+ 		break;
+ 	case SNK_NEGOTIATE_CAPABILITIES:
+-		port->pd_capable = true;
++		tcpm_set_pd_capable(port, true);
+ 		tcpm_set_partner_usb_comm_capable(port,
+ 						  !!(port->source_caps[0] & PDO_FIXED_USB_COMM));
+ 		port->hard_reset_count = 0;
+diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+index 42fcfbe10590..d5d7293bc34d 100644
+--- a/include/linux/usb/tcpm.h
++++ b/include/linux/usb/tcpm.h
+@@ -112,6 +112,8 @@ enum tcpm_transmit_type {
+  *              Optional; The USB Communications Capable bit indicates if port
+  *              partner is capable of communication over the USB data lines
+  *              (e.g. D+/- or SS Tx/Rx). Called to notify the status of the bit.
++ * @set_pd_capable:
++ *		Optional; Called to notify if the partner is pd capable.
+  */
+ struct tcpc_dev {
+ 	struct fwnode_handle *fwnode;
+@@ -144,6 +146,7 @@ struct tcpc_dev {
+ 						 bool pps_active, u32 requested_vbus_voltage);
+ 	bool (*is_vbus_vsafe0v)(struct tcpc_dev *dev);
+ 	void (*set_partner_usb_comm_capable)(struct tcpc_dev *dev, bool enable);
++	void (*set_pd_capable)(struct tcpc_dev *dev, bool enable);
+ };
+ 
+ struct tcpm_port;
+-- 
+2.31.0.rc2.261.g7f71774620-goog
 
-Cool!  It fixes my problem.  Hope it will land 5.12-rc soon.
-
-Shawn
