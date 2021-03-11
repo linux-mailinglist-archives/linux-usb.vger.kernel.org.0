@@ -2,96 +2,206 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3909D337672
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 16:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFCA3378C9
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 17:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233692AbhCKPEC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Mar 2021 10:04:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233985AbhCKPEB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 10:04:01 -0500
-Received: from ustc.edu.cn (email6.ustc.edu.cn [IPv6:2001:da8:d800::8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFAC3C061574;
-        Thu, 11 Mar 2021 07:03:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=z9RQwR+u8Z
-        1vrbiS9Q7LDRwA1h5csTWHrA1fRIMw1Go=; b=hvSHT87I1FPtk2iWcD3SSd0FxT
-        ZCl+8DAjhhwKFMgyEeVu3QUaEr9vZyNj9YvEl3WX0/0X2NTbHTfxeEvzb9ImKDid
-        KoUJMw5d6wE5Je1BsyolbUUU7coKHQm3P30dWM2L7lCD5bGFWAVnHgCp2/F9rPOE
-        kmC0xvZtpAlSJ0TNU=
-Received: from ubuntu.localdomain (unknown [114.214.226.60])
-        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygCXmxtcMUpgKCYNAA--.5291S4;
-        Thu, 11 Mar 2021 23:03:56 +0800 (CST)
-From:   Lv Yunlong <lyl2019@mail.ustc.edu.cn>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lv Yunlong <lyl2019@mail.ustc.edu.cn>
-Subject: [PATCH] usb/usbtmc: Remove a redundant kref_put in usbtmc_disconnect
-Date:   Thu, 11 Mar 2021 07:03:54 -0800
-Message-Id: <20210311150354.8723-1-lyl2019@mail.ustc.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        id S234426AbhCKQIL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Mar 2021 11:08:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49668 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234341AbhCKQH6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 11 Mar 2021 11:07:58 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6528664FE0;
+        Thu, 11 Mar 2021 16:07:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615478878;
+        bh=yQO2qA6ynCpFOZDqh7h1C+h3mQy2cJ0rnqM4e3ve240=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VnF4G6sGNVWtPWVzFozfHr7JU4dSVAxi+FajS5uTcPe1Ff6mnjkLAGnoxw5tV2Wsh
+         zXn2v6sgpdu+h1w404MTEiJMNPi9PpKIclqqronbohbRRHVrArWANpnuLisdx1d58p
+         K6CwHX2s66kuEV2p32klm9mYS/VG6G7uibqlYPwGxMrbkULInd6qrfkI7AtmCoMSUT
+         yO9ubRxHzCob9ZN4P8pn6a6ErEw9DZk5t00QdXvPM5nuHan+P2iB4H+xzyHlHQO0i3
+         jZnTjUWHKEmXSbD4JLFDiY+JLbI6PNZr+VDcOreZHAByQPtGdZsNEzsuToe21pvmwW
+         RSwRMvq/z9bHg==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lKNr6-0000I2-VL; Thu, 11 Mar 2021 17:08:09 +0100
+Date:   Thu, 11 Mar 2021 17:08:08 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     "Michael G. Katzmann" <michaelk@IEEE.org>
+Cc:     Charles Yeh <charlesyeh522@gmail.com>,
+        =?utf-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Joe Abbott <jabbott@rollanet.org>
+Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+Message-ID: <YEpAaL9QtVMduEpi@hovoldconsulting.com>
+References: <YDUiuLtwRkZ0D0Mi@hovoldconsulting.com>
+ <f63df659-6cdf-bba6-f892-1012b98f82e2@IEEE.org>
+ <YDUp0tIThOZSTHJt@hovoldconsulting.com>
+ <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
+ <YDUysZY90FfVhrHK@hovoldconsulting.com>
+ <CAAZvQQ6F=cQ-EhC0kgeTVM3GrtBWR+HfM6UJWj2AEF1NYZ-vAQ@mail.gmail.com>
+ <YDaGRRYrEO5BEJv0@hovoldconsulting.com>
+ <CAAZvQQ7+b9=DKqPxgsXxS7Lhqj=QTzKHCMarSbsQkAnYqdO1GA@mail.gmail.com>
+ <YEH7okblCx8+Odxn@hovoldconsulting.com>
+ <ddc0e424-21c2-b8f4-1b00-f589267d2b51@IEEE.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LkAmygCXmxtcMUpgKCYNAA--.5291S4
-X-Coremail-Antispam: 1UD129KBjvdXoWrKrWDKF18Kry7tw48Aw43KFg_yoWkGFb_ua
-        yUCFsrtr4YkasrCF47Jr1rZw4fta1Fqr4xXF4kt34fZ3Wjgw4qyr1IvrZ5J397Ww4UtFyD
-        Zrn2qr98uay8ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb4AFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
-        YxC7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Gr0_
-        Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUj3fH7
-        UUUUU==
-X-CM-SenderInfo: ho1ojiyrz6zt1loo32lwfovvfxof0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ddc0e424-21c2-b8f4-1b00-f589267d2b51@IEEE.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In the implementation of usbtmc_free_int(), it already calls
-kref_put() to free the data as shown below. So, in
-usbtmc_disconnect, call an extra kref_put() is redundant.
+On Sat, Mar 06, 2021 at 11:15:52PM -0500, Michael G. Katzmann wrote:
+> 
+> On 3/5/21 4:36 AM, Johan Hovold wrote:
+> 
+> oops I should have looked at the previous code determining variants...
+> 
+> take 2...
+>
+> #define PL2303_QUIRK_DIVISOR_TA                 BIT(3)
+> 
+> enum pl2303_type {
+> 	TYPE_01,	/* Type 0 and 1 (difference unknown) */
+> 	TYPE_HX,	/* HX version of the pl2303 chip */
+> 	TYPE_HXN,	/* HXN version of the pl2303 chip */
+> 	TYPE_TA,	/* TA version of the pl2303 chip */
+> 	TYPE_COUNT
+> };
+> 
+> 
+> static const struct pl2303_type_data pl2303_type_data[TYPE_COUNT] =
+> ....
+>         [TYPE_TA] = {
+>                 .max_baud_rate          = 6000000,
+>                 .quirks                 = PL2303_QUIRK_DIVISOR_TA,
 
-"""
-static void usbtmc_free_int(struct usbtmc_device_data *data)
-{
-	if (!data->iin_ep_present || !data->iin_urb)
-		return;
-	usb_kill_urb(data->iin_urb);
-	kfree(data->iin_buffer);
-	data->iin_buffer = NULL;
-	usb_free_urb(data->iin_urb);
-	data->iin_urb = NULL;
-	kref_put(&data->kref, usbtmc_delete);
-}
-"""
+I think we should just a new flag for the alternate divisor encoding
+named "alt_divisors" (cf. no_divisors).
 
-Signed-off-by: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
----
- drivers/usb/class/usbtmc.c | 1 -
- 1 file changed, 1 deletion(-)
+Chances are this encoding is used for other types as well.
 
-diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
-index 74d5a9c5238a..adcdd2df1949 100644
---- a/drivers/usb/class/usbtmc.c
-+++ b/drivers/usb/class/usbtmc.c
-@@ -2494,7 +2494,6 @@ static void usbtmc_disconnect(struct usb_interface *intf)
- 	}
- 	mutex_unlock(&data->io_mutex);
- 	usbtmc_free_int(data);
--	kref_put(&data->kref, usbtmc_delete);
- }
- 
- static void usbtmc_draw_down(struct usbtmc_file_data *file_data)
--- 
-2.25.1
+>         },
+> };
+> 
+> static int pl2303_startup(struct usb_serial *serial)
+> {
+> ....
+> 	if ( serial->dev->descriptor.bcdDevice == 0x0300 && serial->dev->descriptor.bcdUSB == 0x0200 )
+> 		type = TYPE_TA;
 
+This needs to go after the bDeviceClass == 0x02 check, and the 
+descriptor fields need to be accessed using le16_to_cpu().
 
+I've prepared a patch series that clean up and tighten the type
+detection which I suggest you built upon instead.
+
+I'll post the series after replying here.
+
+> 	else if (serial->dev->descriptor.bDeviceClass == 0x02)
+> ....
+> }
+> 
+> static speed_t pl2303_encode_baud_rate_divisor( struct usb_serial_port *port,
+> 							unsigned char buf[4],
+> 								speed_t baud)
+> {
+> 	unsigned int baseline, mantissa, exponent;
+> 	struct usb_serial *serial = port->serial;
+> 	struct pl2303_serial_private *spriv = usb_get_serial_data(serial);
+> 
+> 	/*
+> 	 * Apparently the formula is:
+> 	 * baudrate = 12M * 32 / (mantissa * 4^exponent)
+> 	 * where
+> 	 *   mantissa = buf[8:0]
+> 	 *   exponent = buf[11:9]
+> 	 *
+> 	 * TA version has more precision
+> 	 *      uses mantissa = buf[bits 10:0 ]
+
+So you discovered that there were even more bits here? Your first
+version used ten bits, I believe.
+
+I got an offline mail from a third person having problems with the TA
+and who had also verified eleven bits here.
+
+> 	 *           exponent = buf[bits 15:13]
+> 	 *  and x2 prescaler enable by buf[bit 16]
+> 	 */
+> 	baseline = 12000000 * 32;
+> 	mantissa = baseline / baud;
+> 	if (mantissa == 0)
+> 		mantissa = 1;    /* Avoid dividing by zero if baud > 32*12M. */
+> 	exponent = 0;
+> 
+> 	if (spriv->quirks & PL2303_QUIRK_DIVISOR_TA) {
+> 		while (mantissa >= 2048) {
+> 			// exponent is three bits (after shifting right)
+> 			if (exponent < 15) {   // we are going to divide this by 2 later
+> 				mantissa >>= 1;    // divide by 2
+> 				exponent++;        // currently log2 ... will become log4
+> 			} else {
+> 				/* Exponent is maxed. Trim mantissa and leave. */
+> 				mantissa = 2047 ;
+> 				break;
+> 			}
+> 		}
+> 		buf[2] = exponent & 0x01;  // activate x2 prescaler if needed
+> 		exponent >>= 1;            // now log base 4 (losing LSB)
+> 		buf[1] = (exponent << 5) | (mantissa >> 8);
+
+Again, this is really nice work.
+
+But it seems to me that we should simply think about the encoding as
+using base-2 with the LSB of the exponent in bit 16. That should make it
+easier to follow what's going on here.
+
+I've been thinking about ways of merging the two schemes (both using
+base 2), and I even checked if my HXD happened to have a 2-prescaler bit
+somewhere as well but I couldn't find one.
+
+It's probably not worth it at this point (and may not end up being more
+readable anyway) so I therefore suggest adding a separate function for
+the alternate scheme for now. You can just call it at the start of the
+"default" function:
+
+	if (spriv->type->alt_divisors)
+		return pl2303_encode_baud_rate_divisor_alt(buf, baud);
+
+> 	} else {
+> 		while (mantissa >= 512) {
+> 			if (exponent < 7) {
+> 				mantissa >>= 2; /* divide by 4 */
+> 				exponent++;
+> 			} else {
+> 				/* Exponent is maxed. Trim mantissa and leave. */
+> 				mantissa = 511;
+> 				break;
+> 			}
+> 		}
+> 		buf[2] = 0;
+> 		buf[1] = exponent << 1 | mantissa >> 8;
+> 	}
+> 
+> 	buf[3] = 0x80;
+> 	buf[0] = mantissa & 0xff;
+> 
+> 	/* Calculate and return the exact baud rate. */
+> 	baud = (baseline / mantissa / (buf[2] == 0x01 ? 2:1)) >> (exponent << 1);
+> 	return baud;
+> }
+> 
+> static void pl2303_encode_baud_rate(struct tty_struct *tty,
+> 					struct usb_serial_port *port,
+> 					u8 buf[4])
+> {
+> ....
+> 	else
+> 		baud = pl2303_encode_baud_rate_divisor(port, buf, baud);
+> ....
+> }
+
+Johan
