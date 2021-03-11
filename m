@@ -2,82 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 100333373CA
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 14:25:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 002B2337410
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 14:34:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233527AbhCKNZF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Mar 2021 08:25:05 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:56134 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233285AbhCKNYx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 08:24:53 -0500
-Received: from fsav403.sakura.ne.jp (fsav403.sakura.ne.jp [133.242.250.102])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 12BDOkql055153;
-        Thu, 11 Mar 2021 22:24:46 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav403.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav403.sakura.ne.jp);
- Thu, 11 Mar 2021 22:24:46 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav403.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 12BDOjbO055145
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 11 Mar 2021 22:24:46 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [PATCH 0/6] usbip fixes to crashes found by syzbot
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org,
-        valentina.manea.m@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1615171203.git.skhan@linuxfoundation.org>
- <YEkQ4qS7tkwmjzDn@kroah.com>
- <5baf6b94-72c4-6e69-65a5-35c5cfb8ca0e@i-love.sakura.ne.jp>
- <YEoTw7CoK7Ob0YR+@kroah.com>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <8dc1e893-4338-90ff-ea61-de727cad1d11@i-love.sakura.ne.jp>
-Date:   Thu, 11 Mar 2021 22:24:43 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S233468AbhCKNeK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Mar 2021 08:34:10 -0500
+Received: from mga18.intel.com ([134.134.136.126]:63661 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233141AbhCKNdk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 11 Mar 2021 08:33:40 -0500
+IronPort-SDR: j5rnmEWxdYfscKoQWBNQv/yPmvssziPkS4AMX2OAZ+xFvlwMF8zpT4eionkptcY0ZdKMPP9iGp
+ KFHCpLJNKYpw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9919"; a="176259745"
+X-IronPort-AV: E=Sophos;i="5.81,240,1610438400"; 
+   d="scan'208";a="176259745"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2021 05:33:40 -0800
+IronPort-SDR: xB56w9PhDRnuDJ7f4Gg+yUIN1KI6NhLjx7ddXPmme6K+6CnoR3ZXXNPFSsBVclTvTijXxh3Le8
+ ZHKshZq4ZIKw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,240,1610438400"; 
+   d="scan'208";a="510015485"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 11 Mar 2021 05:33:36 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 11 Mar 2021 15:33:36 +0200
+Date:   Thu, 11 Mar 2021 15:33:36 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 3/4] usb: typec: tcpci_maxim: configure charging & data
+ paths
+Message-ID: <YEocMN1aSdDZ2dl/@kuha.fi.intel.com>
+References: <20210311100313.3591254-1-badhri@google.com>
+ <20210311100313.3591254-3-badhri@google.com>
 MIME-Version: 1.0
-In-Reply-To: <YEoTw7CoK7Ob0YR+@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210311100313.3591254-3-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/03/11 21:57, Greg KH wrote:
-> On Thu, Mar 11, 2021 at 09:34:38PM +0900, Tetsuo Handa wrote:
->> On 2021/03/11 3:33, Greg KH wrote:
->>> On Sun, Mar 07, 2021 at 08:53:25PM -0700, Shuah Khan wrote:
->>>> This patch series fixes the following problems founds in syzbot
->>>> fuzzing.
->>>
->>> Thanks for these, all now queued up.
->>
->> I send SIGSTOP to
->>
->>   [PATCH 4/6] usbip: fix stub_dev usbip_sockfd_store() races leading to gpf
->>   [PATCH 5/6] usbip: fix vhci_hcd attach_store() races leading to gpf
->>   [PATCH 6/6] usbip: fix vudc usbip_sockfd_store races leading to gpf
->>
->> because these patches merely converted NULL pointer dererefence bug to use-after-free bug
->> by breaking kthread_get_run() into kthread_create()/get_task_struct()/wake_up_process().
+Hi,
+
+On Thu, Mar 11, 2021 at 02:03:12AM -0800, Badhri Jagan Sridharan wrote:
+> This change allows the driver to configure input current/voltage
+> limit for the charging path. The driver sets current_max and voltage_max
+> values of the power supply identified through chg-psy-name.
 > 
-> I'll take follow-on patches to fix that other issue, if it's proven to
-> be valid.  It's nice to fix up NULL dereference issues as soon as
-> possible :)
+> The change also exposes the data_role and the orientation as a extcon
+> interface for configuring the USB data controller.
 
-Not an "other issue". Shuah's [PATCH 4,5,6/6] is failing to fix NULL pointer dereference issue.
-These patches simply replaces NULL pointer dereference issue (caused by preemption) with
-use after free issue (caused by exactly same preemption) issue. Shuah has to understand
-the consequence of calling wake_up_process() on rx thread in order to fix this NULL pointer
-dereference issue.
+This looks wrong to me. Why wouldn't you just register your device as
+a separate psy that supplies your charger (which is also a psy, right)?
 
-The only fix we can safely apply now is
-https://lkml.kernel.org/r/20210205135707.4574-1-penguin-kernel@I-love.SAKURA.ne.jp .
-Since I and Shuah agreed that we will remove kthread_get_run(), it is nice to fix up
-frequently happening -EINTR pointer dereference issue as soon as possible.
+thanks,
 
+-- 
+heikki
