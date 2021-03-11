@@ -2,59 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5383337D21
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 20:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE94337D3F
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 20:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbhCKTBd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Mar 2021 14:01:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
+        id S230231AbhCKTJm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Mar 2021 14:09:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbhCKTBI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 14:01:08 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3928C061574;
-        Thu, 11 Mar 2021 11:01:08 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id s21so195936pfm.1;
-        Thu, 11 Mar 2021 11:01:08 -0800 (PST)
+        with ESMTP id S229826AbhCKTJF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 14:09:05 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CA1C061574;
+        Thu, 11 Mar 2021 11:09:05 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id bt4so3935557pjb.5;
+        Thu, 11 Mar 2021 11:09:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition
          :user-agent;
-        bh=69zbOE+eDJpfPRJTGrLZEh6ILNupyF57QQ2VfeIJuqc=;
-        b=QQw6XDQYIL0OSH/oaqIEm6igMR8UWHIsqP0ZtYCiIOTBxOrijypvw3LppvNKxhNPfK
-         lCAez1ke/u8a5EHDlcDe2PCB6KRMPTwARJ5s3SZC81bYuDcoO3fqpqCrVoTE9J9aWCVh
-         jYEfqsxeMxkp7/OrT5/r1heFJsaMt2+rTzG1J2gEYQnf+Kb+O6G5P/QOb5cf+IIRt3Mj
-         fsc2M1k4pgXUGKT4GVl8r3A/8iolKPrUXdgfJ5E1Nw6DyI/1GPeGC0kz4islZ6rn1qYZ
-         9q3ReUiHK5MLrIj+YDy6YFjW54lRmIwlM0PBC9dsetByRfjgjEh6ql1W4zz7zC+QTsVB
-         MAZg==
+        bh=KVD/yX0YVXjpbZWf4Wsmpu6bg5NBDiXGNWUgz0L2nkM=;
+        b=nU++/H2VZmR0Q80Vg/vwaGppBKK9HLgOm5KAAzU6IcBIU9pTnk8eWuOdaZhZ4hkEVt
+         stcsNzC4bXWCxqBlYCLc2kJY5wO2Vb4VPbxw6TLRJk1Vz6j7Kr0kp9kDgDfz6TXE/d9f
+         GcpS4p/mcmPipiAc2mO3fv/csZL6dlklII/1sQVQGUrUjAEJ8Q6rv98PXdURqtZtSsVQ
+         D9Sn3eXTZrtIgkiehxgUWkGN/EWp6bXtGixxfZg7ZbjsaU8d/+J5dm7HxwFOn1Dy8kP5
+         Maqc2fpWhqF9VXG4Ld/8QNUCU4mHQARibH4+5oLGqCdrOU7knkocP1MfTjrOXH9QgmGB
+         2GVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition:user-agent;
-        bh=69zbOE+eDJpfPRJTGrLZEh6ILNupyF57QQ2VfeIJuqc=;
-        b=bvC2ScEangorex6XVUvZTEYi2Svsh8jI2qyoUGSCEG/iXrKoGVXL6638anDD+KaxoZ
-         J+63odqA2dXB1QeYh2/00GT13QK9St+DoSEy96nJV1h3Pgk00L746a4fk0r152A3R+6U
-         j9fug3fd3lJvFV+otTNn9C//CEyeA49fRlmYP/KdRuUVhfUlUi+LJH4v2wK2OI5tBQCB
-         3+wiCZPH80OGwdIDOdwEnT5lCSEVEYT6jLiJXJzyNd4JF/e1crihJOCIereETUYf4smM
-         lYdyi2YTV0EmrRD3/GVKgtN+FiUPQ0v4ZXyaUqpyFQ5o8gVZA90Qv0C2WIh2OzWNRaRW
-         Yi1Q==
-X-Gm-Message-State: AOAM533unTEhXb3iePRZW8s5IJ+yBf6nierI/c5ieRH3qGBiqMxmKjuI
-        jxyO2JXY2y1Euk2zFzuD8oM=
-X-Google-Smtp-Source: ABdhPJxwc1mtWuzDozMhXzdZBmp02LTYEOBFbN/P8884bL3q0tdx6swf8Abt9Jeq73jFqFIw66DMNQ==
-X-Received: by 2002:a62:7d14:0:b029:1f6:18a1:6b98 with SMTP id y20-20020a627d140000b02901f618a16b98mr8692614pfc.15.1615489268085;
-        Thu, 11 Mar 2021 11:01:08 -0800 (PST)
+        bh=KVD/yX0YVXjpbZWf4Wsmpu6bg5NBDiXGNWUgz0L2nkM=;
+        b=PvoVfT1U2k6yvwLPMMBaDURZYen3DIMnbQ72O6H6LFQf6MxZvTcYNu6KBWf2BQ2oqi
+         RWG9R1saqJpkgSuLIHyf/OE7B+1JogAn+XCWfJu3oce+S0d/N5X8rXk8+0Qssw9V4Yli
+         IPcfGUNkpOka6Kww3+XuaHCLdqAhyabRa4jgjcLEIpUJpI5ywTdQjxaNjbosJeBZ7Xdn
+         ZPOxRi7xIet/DepehdxlTHo1WYVHs8CBrukoVVk20panzo7foFcc6NhmIY45QFdSIMkP
+         iaGkE9RktEgEVCzCq9cv0NzAYfRmi6enqYP579+xNc6eUcjYijhhRSXaYnTZFLNSR7u4
+         36DA==
+X-Gm-Message-State: AOAM530LFBUauCJTphrQgiwVQ5w0NYIV0Yla5RYl32QdSZLE4bkZw900
+        EzHv9h0JH+Xhrn5oX5p+dxfxVVyzqzcgHa7e
+X-Google-Smtp-Source: ABdhPJxMpW7+8b3Kyapq0+kjxpRHhJwvARg1L9EumKyIfJy1NAyfoXNnqM3STGrn6khWudB/GWe4vw==
+X-Received: by 2002:a17:902:ac82:b029:e3:bca2:cca7 with SMTP id h2-20020a170902ac82b02900e3bca2cca7mr9365484plr.43.1615489745172;
+        Thu, 11 Mar 2021 11:09:05 -0800 (PST)
 Received: from localhost ([122.167.149.62])
-        by smtp.gmail.com with ESMTPSA id v185sm3034637pfb.125.2021.03.11.11.01.06
+        by smtp.gmail.com with ESMTPSA id s62sm3193981pfb.148.2021.03.11.11.09.04
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 11 Mar 2021 11:01:07 -0800 (PST)
-Date:   Fri, 12 Mar 2021 00:30:58 +0530
+        Thu, 11 Mar 2021 11:09:04 -0800 (PST)
+Date:   Fri, 12 Mar 2021 00:39:01 +0530
 From:   Shubhankar Kuranagatti <shubhankarvk@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     gustavoars@kernel.org, lee.jones@linaro.org, vulab@iscas.ac.cn,
         chunfeng.yun@mediatek.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] drivers: usb: host: fotg210-hcd.c: Fix indentation error
-Message-ID: <20210311190058.yudmivcbok56itay@kewl-virtual-machine>
+Subject: [PATCH 2/2] drivers: usb: host: fotg210-hcd.c: Fix alignment of
+ comment
+Message-ID: <20210311190901.gaw7m7ndib3uzakm@kewl-virtual-machine>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -63,41 +64,26 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A space was given after tab key. The extra space has been removed.
-This is done to maintain uniformity in the code.
+The * has been aligned on each line for block comment.
 
 Signed-off-by: Shubhankar Kuranagatti <shubhankarvk@gmail.com>
 ---
- drivers/usb/host/fotg210-hcd.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/usb/host/fotg210-hcd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/usb/host/fotg210-hcd.c b/drivers/usb/host/fotg210-hcd.c
-index 5617ef30530a..b20898dda1f3 100644
+index b20898dda1f3..6cac642520fc 100644
 --- a/drivers/usb/host/fotg210-hcd.c
 +++ b/drivers/usb/host/fotg210-hcd.c
-@@ -408,17 +408,17 @@ static void qh_lines(struct fotg210_hcd *fotg210, struct fotg210_qh *qh,
- 		temp = snprintf(next, size,
- 				"\n\t%p%c%s len=%d %08x urb %p",
- 				td, mark, ({ char *tmp;
--				 switch ((scratch>>8)&0x03) {
--				 case 0:
-+				switch ((scratch>>8)&0x03) {
-+				case 0:
- 					tmp = "out";
- 					break;
--				 case 1:
-+				case 1:
- 					tmp = "in";
- 					break;
--				 case 2:
-+				case 2:
- 					tmp = "setup";
- 					break;
--				 default:
-+				default:
- 					tmp = "?";
- 					break;
- 				 } tmp; }),
+@@ -2699,7 +2699,7 @@ static struct list_head *qh_urb_transaction(struct fotg210_hcd *fotg210,
+  * any previous qh and cancel its urbs first; endpoints are
+  * implicitly reset then (data toggle too).
+  * That'd mean updating how usbcore talks to HCDs. (2.7?)
+-*/
++ */
+ 
+ 
+ /* Each QH holds a qtd list; a QH is used for everything except iso.
 -- 
 2.17.1
 
