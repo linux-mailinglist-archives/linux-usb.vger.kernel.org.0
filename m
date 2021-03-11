@@ -2,84 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E97B4336DF4
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 09:40:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F354336E2B
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 09:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbhCKIkJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Mar 2021 03:40:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39076 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231517AbhCKIjv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Mar 2021 03:39:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B9FDE64F9F;
-        Thu, 11 Mar 2021 08:39:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615451990;
-        bh=HCqecz1lS3f45612837ihs7asLjFXsiNQHQv1wNOL88=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BqD6QXeyHEFw2XEMBcUD4p7dRuYLcZgvicujXMqVIQLDap3lNqxrePuD+1uVgGOtp
-         uNzl9G3aOjWoQ+7agauWSUzgAJE60lF33EnSuBrUxGxVy/siTQosWTBss/qGbcUOeM
-         o+G4YoSgyvP2g4GS+VsBQHwMjUhZ17vIxpW5iSvl7iayanImy2sjtf8E6IsnKhV2Jl
-         5gp6r04MO6VQBKm3jnFPdt6i9QM+IARApmPexOOtzpKe+kijdQ5vq97vHVVk0PfKGj
-         8rmT+fqxH9d8Wcx3XdjSaSYza9fSRKYXyFcuY0E+yTmznFL6igAiBCngefg8D673e/
-         rC2jP6C9CrskQ==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lKGrR-0002jM-An; Thu, 11 Mar 2021 09:40:01 +0100
-Date:   Thu, 11 Mar 2021 09:40:01 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB-serial fixes for 5.12-rc3
-Message-ID: <YEnXYe6HUrK+mysK@hovoldconsulting.com>
+        id S231661AbhCKIsn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Mar 2021 03:48:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42598 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231629AbhCKIsf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 03:48:35 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F553C061574
+        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 00:48:35 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id s7so9866484plg.5
+        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 00:48:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=9ipk2X1DXQbAZMqLuc39QzOVpw53dOdrjEf9bVo9r78=;
+        b=ysKzyEa9LkPeHGGfGDHaoKtD/NlsHHOKvYlLFOKUXSvAfQW8DJQ7oRoJ5mHzhiJrPi
+         MaZTx31QzpMbeix9zjzzSzaM5OYtnXvtlGJsF0qsG4NtrdhMwy2yHRB6sCfMBb11/WM8
+         HfLMotmU7nLxgLKBGFNTsDQ6jB8J8xcbgcMN2jxNck9pQIknJ0ToJFOlDVzO0VOyzkSI
+         oUAWEiO5KylOAw538KAF5shZ7yzl3A/nSO9IpLmtQP/RXEvUrlyNmANX+xVJL2QFb2BY
+         PlcKSiiKtOBkxK+Q21EmTKdK2EbNr86XYxaOUIxXYboJlnTjh9Q2QPLA+cI9CLtpCteU
+         bCIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9ipk2X1DXQbAZMqLuc39QzOVpw53dOdrjEf9bVo9r78=;
+        b=VRn8jG8a5TF0nlXxBLU8IjDkd3V6xLoh6dkVCiLieb+Ig4lFVRIpFstWEXmmuddd9F
+         XS1i2aqv215VBYLHldDyB6Ki3birp2gCi6Y9t84UXcSoo9/Wdmj/PgIyzf1BNmb/ZRjW
+         aDER03DAaKp+WjvsHp4WNiftrQoUzgd8r12NyX9wvKrKEhrCTay0cGDn/yEhrNkg83l3
+         /d6v2UCPa2EG53Oo8Yz7iyhQ/oHBASZ9RPk7FiYM5P5qTBtx6NhFicPp/5IKLW0xw7Mg
+         ru9en4nJZn1JxuUWaOtxpVtAYTsCyXNMzjk+LLbfOvjNhxYCg3pta7EH1rBxHejT9do7
+         c+rg==
+X-Gm-Message-State: AOAM533KoCLCOSuMZW4q7uzPZ+B9NRED+fhdI6dyIBGtx6xYJ0a7yJJT
+        /j8nQx7nkKS86LALtL+Sio0lWg==
+X-Google-Smtp-Source: ABdhPJyahd78ops5WrqbAEWWT6uaYEfmCV/g97/NAiieFbMByIyXE+cKLHlvjji6+BamNcpHjYFlMw==
+X-Received: by 2002:a17:90a:f28e:: with SMTP id fs14mr7799886pjb.100.1615452514661;
+        Thu, 11 Mar 2021 00:48:34 -0800 (PST)
+Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id na8sm1519663pjb.2.2021.03.11.00.48.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 11 Mar 2021 00:48:34 -0800 (PST)
+Date:   Thu, 11 Mar 2021 16:48:29 +0800
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: qcom: skip interconnect init for ACPI probe
+Message-ID: <20210311084828.GV17424@dragon>
+References: <20210311060318.25418-1-shawn.guo@linaro.org>
+ <94984a60-444f-a2f5-1928-3eeba2342f2e@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <94984a60-444f-a2f5-1928-3eeba2342f2e@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+On Thu, Mar 11, 2021 at 11:32:01AM +0300, Sergei Shtylyov wrote:
+> Hello!
+> 
+> On 11.03.2021 9:03, Shawn Guo wrote:
+> 
+> > The ACPI probe starts failing since commit bea46b981515 ("usb: dwc3:
+> > qcom: Add interconnect support in dwc3 driver"), because there is no
+> > interconnect support for ACPI, and of_icc_get() call in
+> > dwc3_qcom_interconnect_init() will just return -EINVAL.
+> > 
+> > Fix the problem by skipping interconnect init for ACPI probe, and then
+> > the NULL icc_path_ddr will simply just scheild all ICC calls.
+> 
+>    Scheild?
 
-  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+s/scheild/shield
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.12-rc3
-
-for you to fetch changes up to cfdc67acc785e01a8719eeb7012709d245564701:
-
-  USB: serial: io_edgeport: fix memory leak in edge_startup (2021-03-09 09:05:37 +0100)
-
-----------------------------------------------------------------
-USB-serial fixes for 5.12-rc3
-
-Here's a fix for a long-standing memory leak after probe failure in
-io_edgeport and a fix for a NULL-deref on disconnect in the new xr
-driver.
-
-Included are also some new device ids.
-
-All have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Johan Hovold (1):
-      USB: serial: xr: fix NULL-deref on disconnect
-
-Karan Singhal (1):
-      USB: serial: cp210x: add ID for Acuity Brands nLight Air Adapter
-
-Niv Sardi (1):
-      USB: serial: ch341: add new Product ID
-
-Pavel Skripkin (1):
-      USB: serial: io_edgeport: fix memory leak in edge_startup
-
-Sebastian Reichel (1):
-      USB: serial: cp210x: add some more GE USB IDs
-
- drivers/usb/serial/ch341.c       |  1 +
- drivers/usb/serial/cp210x.c      |  3 +++
- drivers/usb/serial/io_edgeport.c | 26 ++++++++++++++++----------
- drivers/usb/serial/xr_serial.c   | 25 -------------------------
- 4 files changed, 20 insertions(+), 35 deletions(-)
+Shawn
