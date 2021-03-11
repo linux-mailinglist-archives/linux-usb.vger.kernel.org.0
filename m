@@ -2,146 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A7D336C63
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 07:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 427BA336C8B
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 07:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbhCKGn3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Mar 2021 01:43:29 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:54241 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230290AbhCKGnF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 01:43:05 -0500
-X-UUID: 9775fa7397f5439dbf3453bf1e23d5cb-20210311
-X-UUID: 9775fa7397f5439dbf3453bf1e23d5cb-20210311
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        id S231235AbhCKGyN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Mar 2021 01:54:13 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:51427 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230435AbhCKGyB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 01:54:01 -0500
+X-UUID: 18f687241c5745ffae71f379279041dc-20210311
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=HXvdSSzvJwcQp7ImGoV9GE6S8/ULPWjlIYaMv49d5ww=;
+        b=mwWehAuu50llSWl9rhY4UGPEw/phO7v9eV+XYfWvje1f1tZN84LEkMxc8L0ERbvUaPy5YksIfNhIjdyxWXio4EwKj8XrYWXrGPqCXaUxcmFOfVQMchHrEFxelb+OXRjTp7NZhKGM9TMteO3kWcs7pmDCCkpu86uRsAnNoLt5fDg=;
+X-UUID: 18f687241c5745ffae71f379279041dc-20210311
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
         (envelope-from <macpaul.lin@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 543715440; Thu, 11 Mar 2021 14:42:53 +0800
+        with ESMTP id 734091626; Thu, 11 Mar 2021 14:53:55 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 11 Mar 2021 14:42:51 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas07.mediatek.inc
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 11 Mar 2021 14:53:52 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 11 Mar 2021 14:42:51 +0800
+ Transport; Thu, 11 Mar 2021 14:53:52 +0800
+Message-ID: <1615445632.13420.2.camel@mtkswgap22>
+Subject: Re: [PATCH v4] usb: gadget: configfs: Fix KASAN use-after-free
 From:   Macpaul Lin <macpaul.lin@mediatek.com>
 To:     Jim Lin <jilin@nvidia.com>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+CC:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
         Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-CC:     Ainge Hsu <ainge.hsu@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        Ainge Hsu <ainge.hsu@mediatek.com>,
         Eddie Hung <eddie.hung@mediatek.com>,
         Kuohong Wang <kuohong.wang@mediatek.com>,
         Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
         Macpaul Lin <macpaul@gmail.com>, <stable@vger.kernel.org>
-Subject: [PATCH v4] usb: gadget: configfs: Fix KASAN use-after-free
-Date:   Thu, 11 Mar 2021 14:42:41 +0800
-Message-ID: <1615444961-13376-1-git-send-email-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1484647168-30135-1-git-send-email-jilin@nvidia.com>
+Date:   Thu, 11 Mar 2021 14:53:52 +0800
+In-Reply-To: <1615444961-13376-1-git-send-email-macpaul.lin@mediatek.com>
 References: <1484647168-30135-1-git-send-email-jilin@nvidia.com>
+         <1615444961-13376-1-git-send-email-macpaul.lin@mediatek.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-Content-Type: text/plain
+X-TM-SNTS-SMTP: 1AFDD4A18497C1AB79C36991DF15FA0620D45CD5E2DE115D246BC0D32C71F9902000:8
 X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jim Lin <jilin@nvidia.com>
-
-When gadget is disconnected, running sequence is like this.
-. composite_disconnect
-. Call trace:
-  usb_string_copy+0xd0/0x128
-  gadget_config_name_configuration_store+0x4
-  gadget_config_name_attr_store+0x40/0x50
-  configfs_write_file+0x198/0x1f4
-  vfs_write+0x100/0x220
-  SyS_write+0x58/0xa8
-. configfs_composite_unbind
-. configfs_composite_bind
-
-In configfs_composite_bind, it has
-"cn->strings.s = cn->configuration;"
-
-When usb_string_copy is invoked. it would
-allocate memory, copy input string, release previous pointed memory space,
-and use new allocated memory.
-
-When gadget is connected, host sends down request to get information.
-Call trace:
-  usb_gadget_get_string+0xec/0x168
-  lookup_string+0x64/0x98
-  composite_setup+0xa34/0x1ee8
-
-If gadget is disconnected and connected quickly, in the failed case,
-cn->configuration memory has been released by usb_string_copy kfree but
-configfs_composite_bind hasn't been run in time to assign new allocated
-"cn->configuration" pointer to "cn->strings.s".
-
-When "strlen(s->s) of usb_gadget_get_string is being executed, the dangling
-memory is accessed, "BUG: KASAN: use-after-free" error occurs.
-
-Signed-off-by: Jim Lin <jilin@nvidia.com>
-Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-Cc: stable@vger.kernel.org
----
-Changes in v2:
-Changes in v3:
- - Change commit description
-Changes in v4:
- - Fix build error and adapt patch to kernel-5.12-rc1.
-   Replace definition "MAX_USB_STRING_WITH_NULL_LEN" with
-   "USB_MAX_STRING_WITH_NULL_LEN".
- - Note: The patch v2 and v3 has been verified by
-   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-   http://spinics.net/lists/kernel/msg3840792.html
-   and
-   Macpaul Lin <macpaul.lin@mediatek.com> on Android kernels.
-   http://lkml.org/lkml/2020/6/11/8
- - The patch is suggested to be applied to LTS versions.
-
- drivers/usb/gadget/configfs.c |   14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index 0d56f33..15a607c 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -97,6 +97,8 @@ struct gadget_config_name {
- 	struct list_head list;
- };
- 
-+#define USB_MAX_STRING_WITH_NULL_LEN	(USB_MAX_STRING_LEN+1)
-+
- static int usb_string_copy(const char *s, char **s_copy)
- {
- 	int ret;
-@@ -106,12 +108,16 @@ static int usb_string_copy(const char *s, char **s_copy)
- 	if (ret > USB_MAX_STRING_LEN)
- 		return -EOVERFLOW;
- 
--	str = kstrdup(s, GFP_KERNEL);
--	if (!str)
--		return -ENOMEM;
-+	if (copy) {
-+		str = copy;
-+	} else {
-+		str = kmalloc(USB_MAX_STRING_WITH_NULL_LEN, GFP_KERNEL);
-+		if (!str)
-+			return -ENOMEM;
-+	}
-+	strcpy(str, s);
- 	if (str[ret - 1] == '\n')
- 		str[ret - 1] = '\0';
--	kfree(copy);
- 	*s_copy = str;
- 	return 0;
- }
--- 
-1.7.9.5
+T24gVGh1LCAyMDIxLTAzLTExIGF0IDE0OjQyICswODAwLCBNYWNwYXVsIExpbiB3cm90ZToNCj4g
+RnJvbTogSmltIExpbiA8amlsaW5AbnZpZGlhLmNvbT4NCj4gDQo+IFdoZW4gZ2FkZ2V0IGlzIGRp
+c2Nvbm5lY3RlZCwgcnVubmluZyBzZXF1ZW5jZSBpcyBsaWtlIHRoaXMuDQo+IC4gY29tcG9zaXRl
+X2Rpc2Nvbm5lY3QNCj4gLiBDYWxsIHRyYWNlOg0KPiAgIHVzYl9zdHJpbmdfY29weSsweGQwLzB4
+MTI4DQo+ICAgZ2FkZ2V0X2NvbmZpZ19uYW1lX2NvbmZpZ3VyYXRpb25fc3RvcmUrMHg0DQo+ICAg
+Z2FkZ2V0X2NvbmZpZ19uYW1lX2F0dHJfc3RvcmUrMHg0MC8weDUwDQo+ICAgY29uZmlnZnNfd3Jp
+dGVfZmlsZSsweDE5OC8weDFmNA0KPiAgIHZmc193cml0ZSsweDEwMC8weDIyMA0KPiAgIFN5U193
+cml0ZSsweDU4LzB4YTgNCj4gLiBjb25maWdmc19jb21wb3NpdGVfdW5iaW5kDQo+IC4gY29uZmln
+ZnNfY29tcG9zaXRlX2JpbmQNCj4gDQo+IEluIGNvbmZpZ2ZzX2NvbXBvc2l0ZV9iaW5kLCBpdCBo
+YXMNCj4gImNuLT5zdHJpbmdzLnMgPSBjbi0+Y29uZmlndXJhdGlvbjsiDQo+IA0KPiBXaGVuIHVz
+Yl9zdHJpbmdfY29weSBpcyBpbnZva2VkLiBpdCB3b3VsZA0KPiBhbGxvY2F0ZSBtZW1vcnksIGNv
+cHkgaW5wdXQgc3RyaW5nLCByZWxlYXNlIHByZXZpb3VzIHBvaW50ZWQgbWVtb3J5IHNwYWNlLA0K
+PiBhbmQgdXNlIG5ldyBhbGxvY2F0ZWQgbWVtb3J5Lg0KPiANCj4gV2hlbiBnYWRnZXQgaXMgY29u
+bmVjdGVkLCBob3N0IHNlbmRzIGRvd24gcmVxdWVzdCB0byBnZXQgaW5mb3JtYXRpb24uDQo+IENh
+bGwgdHJhY2U6DQo+ICAgdXNiX2dhZGdldF9nZXRfc3RyaW5nKzB4ZWMvMHgxNjgNCj4gICBsb29r
+dXBfc3RyaW5nKzB4NjQvMHg5OA0KPiAgIGNvbXBvc2l0ZV9zZXR1cCsweGEzNC8weDFlZTgNCj4g
+DQo+IElmIGdhZGdldCBpcyBkaXNjb25uZWN0ZWQgYW5kIGNvbm5lY3RlZCBxdWlja2x5LCBpbiB0
+aGUgZmFpbGVkIGNhc2UsDQo+IGNuLT5jb25maWd1cmF0aW9uIG1lbW9yeSBoYXMgYmVlbiByZWxl
+YXNlZCBieSB1c2Jfc3RyaW5nX2NvcHkga2ZyZWUgYnV0DQo+IGNvbmZpZ2ZzX2NvbXBvc2l0ZV9i
+aW5kIGhhc24ndCBiZWVuIHJ1biBpbiB0aW1lIHRvIGFzc2lnbiBuZXcgYWxsb2NhdGVkDQo+ICJj
+bi0+Y29uZmlndXJhdGlvbiIgcG9pbnRlciB0byAiY24tPnN0cmluZ3MucyIuDQo+IA0KPiBXaGVu
+ICJzdHJsZW4ocy0+cykgb2YgdXNiX2dhZGdldF9nZXRfc3RyaW5nIGlzIGJlaW5nIGV4ZWN1dGVk
+LCB0aGUgZGFuZ2xpbmcNCj4gbWVtb3J5IGlzIGFjY2Vzc2VkLCAiQlVHOiBLQVNBTjogdXNlLWFm
+dGVyLWZyZWUiIGVycm9yIG9jY3Vycy4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEppbSBMaW4gPGpp
+bGluQG52aWRpYS5jb20+DQo+IFNpZ25lZC1vZmYtYnk6IE1hY3BhdWwgTGluIDxtYWNwYXVsLmxp
+bkBtZWRpYXRlay5jb20+DQo+IENjOiBzdGFibGVAdmdlci5rZXJuZWwub3JnDQo+IC0tLQ0KPiBD
+aGFuZ2VzIGluIHYyOg0KPiBDaGFuZ2VzIGluIHYzOg0KPiAgLSBDaGFuZ2UgY29tbWl0IGRlc2Ny
+aXB0aW9uDQo+IENoYW5nZXMgaW4gdjQ6DQo+ICAtIEZpeCBidWlsZCBlcnJvciBhbmQgYWRhcHQg
+cGF0Y2ggdG8ga2VybmVsLTUuMTItcmMxLg0KPiAgICBSZXBsYWNlIGRlZmluaXRpb24gIk1BWF9V
+U0JfU1RSSU5HX1dJVEhfTlVMTF9MRU4iIHdpdGgNCj4gICAgIlVTQl9NQVhfU1RSSU5HX1dJVEhf
+TlVMTF9MRU4iLg0KPiAgLSBOb3RlOiBUaGUgcGF0Y2ggdjIgYW5kIHYzIGhhcyBiZWVuIHZlcmlm
+aWVkIGJ5DQo+ICAgIFRoYWRldSBMaW1hIGRlIFNvdXphIENhc2NhcmRvIDxjYXNjYXJkb0BjYW5v
+bmljYWwuY29tPg0KPiAgICBodHRwOi8vc3Bpbmljcy5uZXQvbGlzdHMva2VybmVsL21zZzM4NDA3
+OTIuaHRtbA0KDQpEZWFyIENhc2NhcmRvLA0KDQpXb3VsZCB5b3UgcGxlYXNlIGhlbHAgdG8gY29u
+ZmlybSBpZiB5b3UndmUgdGVzdGVkIGl0IG9uIExpbnV4IFBDLA0KQ2hyb21lIE9TLCBvciBhbiBB
+bmRyb2lkIE9TPw0KDQpUaGFua3MhDQpNYWNwYXVsIExpbg0KDQo+ICAgIGFuZA0KPiAgICBNYWNw
+YXVsIExpbiA8bWFjcGF1bC5saW5AbWVkaWF0ZWsuY29tPiBvbiBBbmRyb2lkIGtlcm5lbHMuDQo+
+ICAgIGh0dHA6Ly9sa21sLm9yZy9sa21sLzIwMjAvNi8xMS84DQo+ICAtIFRoZSBwYXRjaCBpcyBz
+dWdnZXN0ZWQgdG8gYmUgYXBwbGllZCB0byBMVFMgdmVyc2lvbnMuDQo+IA0KPiAgZHJpdmVycy91
+c2IvZ2FkZ2V0L2NvbmZpZ2ZzLmMgfCAgIDE0ICsrKysrKysrKystLS0tDQo+ICAxIGZpbGUgY2hh
+bmdlZCwgMTAgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQg
+YS9kcml2ZXJzL3VzYi9nYWRnZXQvY29uZmlnZnMuYyBiL2RyaXZlcnMvdXNiL2dhZGdldC9jb25m
+aWdmcy5jDQo+IGluZGV4IDBkNTZmMzMuLjE1YTYwN2MgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMv
+dXNiL2dhZGdldC9jb25maWdmcy5jDQo+ICsrKyBiL2RyaXZlcnMvdXNiL2dhZGdldC9jb25maWdm
+cy5jDQo+IEBAIC05Nyw2ICs5Nyw4IEBAIHN0cnVjdCBnYWRnZXRfY29uZmlnX25hbWUgew0KPiAg
+CXN0cnVjdCBsaXN0X2hlYWQgbGlzdDsNCj4gIH07DQo+ICANCj4gKyNkZWZpbmUgVVNCX01BWF9T
+VFJJTkdfV0lUSF9OVUxMX0xFTgkoVVNCX01BWF9TVFJJTkdfTEVOKzEpDQo+ICsNCj4gIHN0YXRp
+YyBpbnQgdXNiX3N0cmluZ19jb3B5KGNvbnN0IGNoYXIgKnMsIGNoYXIgKipzX2NvcHkpDQo+ICB7
+DQo+ICAJaW50IHJldDsNCj4gQEAgLTEwNiwxMiArMTA4LDE2IEBAIHN0YXRpYyBpbnQgdXNiX3N0
+cmluZ19jb3B5KGNvbnN0IGNoYXIgKnMsIGNoYXIgKipzX2NvcHkpDQo+ICAJaWYgKHJldCA+IFVT
+Ql9NQVhfU1RSSU5HX0xFTikNCj4gIAkJcmV0dXJuIC1FT1ZFUkZMT1c7DQo+ICANCj4gLQlzdHIg
+PSBrc3RyZHVwKHMsIEdGUF9LRVJORUwpOw0KPiAtCWlmICghc3RyKQ0KPiAtCQlyZXR1cm4gLUVO
+T01FTTsNCj4gKwlpZiAoY29weSkgew0KPiArCQlzdHIgPSBjb3B5Ow0KPiArCX0gZWxzZSB7DQo+
+ICsJCXN0ciA9IGttYWxsb2MoVVNCX01BWF9TVFJJTkdfV0lUSF9OVUxMX0xFTiwgR0ZQX0tFUk5F
+TCk7DQo+ICsJCWlmICghc3RyKQ0KPiArCQkJcmV0dXJuIC1FTk9NRU07DQo+ICsJfQ0KPiArCXN0
+cmNweShzdHIsIHMpOw0KPiAgCWlmIChzdHJbcmV0IC0gMV0gPT0gJ1xuJykNCj4gIAkJc3RyW3Jl
+dCAtIDFdID0gJ1wwJzsNCj4gLQlrZnJlZShjb3B5KTsNCj4gIAkqc19jb3B5ID0gc3RyOw0KPiAg
+CXJldHVybiAwOw0KPiAgfQ0KDQo=
 
