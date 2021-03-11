@@ -2,95 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4DE336D6A
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 09:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 059BF336DD1
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 09:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbhCKIAF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Mar 2021 03:00:05 -0500
-Received: from mga11.intel.com ([192.55.52.93]:50134 "EHLO mga11.intel.com"
+        id S231301AbhCKI1x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Mar 2021 03:27:53 -0500
+Received: from mga02.intel.com ([134.134.136.20]:50994 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230011AbhCKIAA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Mar 2021 03:00:00 -0500
-IronPort-SDR: fi61dXtj4bgzTdP4R17f8cjN2UwawJBylwzpLd4mEAYV/5bgqQ/CQqLInbnvaychOvddjOZX7g
- PilY/Whr0hlg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9919"; a="185273331"
+        id S231394AbhCKI1c (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 11 Mar 2021 03:27:32 -0500
+IronPort-SDR: nsN+Jwgzo9vKGf/76IbnYy/VGzjLyTdQyVk0OXYFMI67YQUEVFEMVpDjYGCfhVAcFxQHZKf7CT
+ IDUETTq4vEWQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9919"; a="175744168"
 X-IronPort-AV: E=Sophos;i="5.81,239,1610438400"; 
-   d="scan'208";a="185273331"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2021 23:59:59 -0800
-IronPort-SDR: O5ijGuoUwidjBHXGs4bL1X5GMC7WbFrhhNuqEMxL4GSm6weT4RsBpBi/cxGninzimXtIH69EBw
- rO+JRk+PSADw==
+   d="scan'208";a="175744168"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2021 00:27:31 -0800
+IronPort-SDR: pJTjStgHCnmv5a1kWffP+57JbDpIvmrdwDCAF6kvP/wMpFTNU3qOkaI8NObhjmdaZAjYTGEE8y
+ xnriS9luJGow==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,239,1610438400"; 
-   d="scan'208";a="386927623"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2021 23:59:55 -0800
-Received: by lahna (sSMTP sendmail emulation); Thu, 11 Mar 2021 09:59:52 +0200
-Date:   Thu, 11 Mar 2021 09:59:52 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Limonciello, Mario" <Mario.Limonciello@dell.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Christian Kellner <christian@kellner.me>,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@google.com>,
-        Diego Rivas <diegorivas@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 1/3] thunderbolt: Add details to router uevent
-Message-ID: <20210311075952.GJ2542@lahna.fi.intel.com>
-References: <20210309134818.63118-1-mika.westerberg@linux.intel.com>
- <20210309134818.63118-2-mika.westerberg@linux.intel.com>
- <SA1PR19MB492689B6C9A525CF47DF742DFA919@SA1PR19MB4926.namprd19.prod.outlook.com>
+   d="scan'208";a="509955082"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 11 Mar 2021 00:27:28 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 11 Mar 2021 10:27:27 +0200
+Date:   Thu, 11 Mar 2021 10:27:27 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: tcpci: Refactor tcpc_presenting_cc1_rd
+ macro
+Message-ID: <YEnUb/hBh63Bql76@kuha.fi.intel.com>
+References: <20210310223536.3471243-1-badhri@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <SA1PR19MB492689B6C9A525CF47DF742DFA919@SA1PR19MB4926.namprd19.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20210310223536.3471243-1-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mario,
+On Wed, Mar 10, 2021 at 02:35:36PM -0800, Badhri Jagan Sridharan wrote:
+> Defining one macro instead of two for tcpc_presenting_*_rd.
+> This is a follow up of the comment left by Heikki Krogerus.
+> 
+> https://patchwork.kernel.org/project/linux-usb/patch/
+> 20210304070931.1947316-1-badhri@google.com/
+> 
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
-On Wed, Mar 10, 2021 at 05:28:19PM +0000, Limonciello, Mario wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Sent: Tuesday, March 9, 2021 7:48
-> > To: linux-usb@vger.kernel.org
-> > Cc: Michael Jamet; Yehezkel Bernat; Andreas Noever; Lukas Wunner; Limonciello,
-> > Mario; Christian Kellner; Benson Leung; Prashant Malani; Diego Rivas; Greg
-> > Kroah-Hartman; Mika Westerberg
-> > Subject: [PATCH 1/3] thunderbolt: Add details to router uevent
-> > 
-> > 
-> > [EXTERNAL EMAIL]
-> > 
-> > Expose two environment variables for routers as part of the initial
-> > uevent:
-> > 
-> >   USB4_VERSION=1.0
-> >   USB4_TYPE=host|device|hub
-> 
-> Presumably this will then show up in the uevent like this for a host controller:
-> DEVTYPE=thunderbolt_device
-> USB4_VERSION=1.0
-> USB4_TYPE=host
-> 
-> Since it's specifically for USB4, how about if you instead have new devtypes?
-> TBT3:
-> DEVTYPE=thunderbolt_device
-> 
-> USB4:
-> DEVTYPE=usb4_host|usb4_device|usb4_hub
-> 
-> That would at least make it clearer to userspace to make a delineation if it's
-> legacy device or not.   I don't know if that's actually valuable information however.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Unfortunately we can't do that. DEVTYPE is generated by the driver core
-based on the struct device_type we register for routers (switches). Also
-bolt, and I think fwupd too, already use DEVTYPE to distinguish routers
-from other devices (like XDomains etc).
+> ---
+>  drivers/usb/typec/tcpm/tcpci.c | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index 027afd7dfdce..25b480752266 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -24,14 +24,10 @@
+>  #define	AUTO_DISCHARGE_PD_HEADROOM_MV		850
+>  #define	AUTO_DISCHARGE_PPS_HEADROOM_MV		1250
+>  
+> -#define tcpc_presenting_cc1_rd(reg) \
+> +#define tcpc_presenting_rd(reg, cc) \
+>  	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
+> -	 (((reg) & (TCPC_ROLE_CTRL_CC1_MASK << TCPC_ROLE_CTRL_CC1_SHIFT)) == \
+> -	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC1_SHIFT)))
+> -#define tcpc_presenting_cc2_rd(reg) \
+> -	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
+> -	 (((reg) & (TCPC_ROLE_CTRL_CC2_MASK << TCPC_ROLE_CTRL_CC2_SHIFT)) == \
+> -	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC2_SHIFT)))
+> +	 (((reg) & (TCPC_ROLE_CTRL_## cc ##_MASK << TCPC_ROLE_CTRL_## cc ##_SHIFT)) == \
+> +	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_## cc ##_SHIFT)))
+>  
+>  struct tcpci {
+>  	struct device *dev;
+> @@ -201,11 +197,11 @@ static int tcpci_get_cc(struct tcpc_dev *tcpc,
+>  	*cc1 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC1_SHIFT) &
+>  				 TCPC_CC_STATUS_CC1_MASK,
+>  				 reg & TCPC_CC_STATUS_TERM ||
+> -				 tcpc_presenting_cc1_rd(role_control));
+> +				 tcpc_presenting_rd(role_control, CC1));
+>  	*cc2 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC2_SHIFT) &
+>  				 TCPC_CC_STATUS_CC2_MASK,
+>  				 reg & TCPC_CC_STATUS_TERM ||
+> -				 tcpc_presenting_cc2_rd(role_control));
+> +				 tcpc_presenting_rd(role_control, CC2));
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.31.0.rc1.246.gcd05c9c855-goog
+
+thanks,
+
+-- 
+heikki
