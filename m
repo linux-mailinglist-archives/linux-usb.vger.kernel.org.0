@@ -2,138 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2175233761B
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 15:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3909D337672
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 16:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233894AbhCKOtD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Mar 2021 09:49:03 -0500
-Received: from foo.stuge.se ([212.116.89.98]:41048 "EHLO foo.stuge.se"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233698AbhCKOsp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Mar 2021 09:48:45 -0500
-Received: (qmail 29455 invoked by uid 1000); 11 Mar 2021 14:48:39 -0000
-Message-ID: <20210311144839.29454.qmail@stuge.se>
-Date:   Thu, 11 Mar 2021 14:48:38 +0000
-From:   Peter Stuge <peter@stuge.se>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     hudson@trmm.net, markus@raatikainen.cc,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
-        sam@ravnborg.org
-Subject: Re: [PATCH v7 3/3] drm: Add GUD USB Display driver
-References: <20210310045544.28961.qmail@stuge.se>
- <1894f3f7-bd1d-493e-8d7f-8c10917da51b@tronnes.org>
+        id S233692AbhCKPEC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Mar 2021 10:04:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233985AbhCKPEB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 10:04:01 -0500
+Received: from ustc.edu.cn (email6.ustc.edu.cn [IPv6:2001:da8:d800::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFAC3C061574;
+        Thu, 11 Mar 2021 07:03:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=z9RQwR+u8Z
+        1vrbiS9Q7LDRwA1h5csTWHrA1fRIMw1Go=; b=hvSHT87I1FPtk2iWcD3SSd0FxT
+        ZCl+8DAjhhwKFMgyEeVu3QUaEr9vZyNj9YvEl3WX0/0X2NTbHTfxeEvzb9ImKDid
+        KoUJMw5d6wE5Je1BsyolbUUU7coKHQm3P30dWM2L7lCD5bGFWAVnHgCp2/F9rPOE
+        kmC0xvZtpAlSJ0TNU=
+Received: from ubuntu.localdomain (unknown [114.214.226.60])
+        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygCXmxtcMUpgKCYNAA--.5291S4;
+        Thu, 11 Mar 2021 23:03:56 +0800 (CST)
+From:   Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+Subject: [PATCH] usb/usbtmc: Remove a redundant kref_put in usbtmc_disconnect
+Date:   Thu, 11 Mar 2021 07:03:54 -0800
+Message-Id: <20210311150354.8723-1-lyl2019@mail.ustc.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1894f3f7-bd1d-493e-8d7f-8c10917da51b@tronnes.org>
+X-CM-TRANSID: LkAmygCXmxtcMUpgKCYNAA--.5291S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrKrWDKF18Kry7tw48Aw43KFg_yoWkGFb_ua
+        yUCFsrtr4YkasrCF47Jr1rZw4fta1Fqr4xXF4kt34fZ3Wjgw4qyr1IvrZ5J397Ww4UtFyD
+        Zrn2qr98uay8ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb4AFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
+        YxC7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
+        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y
+        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
+        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Gr0_
+        Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUj3fH7
+        UUUUU==
+X-CM-SenderInfo: ho1ojiyrz6zt1loo32lwfovvfxof0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Noralf Trønnes wrote:
-> > I didn't receive the expected bits/bytes for RGB111 on the bulk endpoint,
-> > I think because of how components were extracted in gud_xrgb8888_to_color().
-> > 
-> > Changing to the following gets me the expected (X R1 G1 B1 X R2 G2 B2) bytes:
-> > 
-> > 			r = (*pix32 >> 8) & 0xff;
-> > 			g = (*pix32 >> 16) & 0xff;
-> > 			b = (*pix32++ >> 24) & 0xff;
-> 
-> We're accessing the whole word here through pix32, no byte access, so
-> endianess doesn't come into play.
+In the implementation of usbtmc_free_int(), it already calls
+kref_put() to free the data as shown below. So, in
+usbtmc_disconnect, call an extra kref_put() is redundant.
 
-Endianness matters because parts of pix32 are used.
+"""
+static void usbtmc_free_int(struct usbtmc_device_data *data)
+{
+	if (!data->iin_ep_present || !data->iin_urb)
+		return;
+	usb_kill_urb(data->iin_urb);
+	kfree(data->iin_buffer);
+	data->iin_buffer = NULL;
+	usb_free_urb(data->iin_urb);
+	data->iin_urb = NULL;
+	kref_put(&data->kref, usbtmc_delete);
+}
+"""
 
-Software only sees bytes (or larger) because addresses are byte granular,
-but must pay attention to the bit order when dealing with smaller values
-inside larger memory accesses.
+Signed-off-by: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+---
+ drivers/usb/class/usbtmc.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Given 4 bytes of memory {0x11, 0x22, 0x33, 0x44} at address A, both LE
-and BE machines appear the same when accessing individual bytes, but with
-uint32_t *a32 = A then a32[0] is 0x44332211 on LE and 0x11223344 on BE.
-
-
-Hence the question: What does DRM promise about the XRGB8888 mode?
-
-Is it guaranteed that the first byte in memory is always unused, the second
-represents red, the third green and the fourth blue (endianess agnostic)?
-I'd expect this and I guess that it is the case, but I don't know DRM?
-
-Or is it instead guaranteed that when accessed natively as one 32-bit
-value the blue component is always in the most significant byte (endianess
-abstracted, always LE in memory) or always in the least significant byte
-(endianess abstracted, always BE in memory)?
-This would be annoying for userspace, but well, it's possible.
-
-In the abstracted (latter) case pix32 would work, but could still be
-questioned on style, and in fact, pix32 didn't work for me, so at a
-minimum the byte order would be the reverse.
+diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
+index 74d5a9c5238a..adcdd2df1949 100644
+--- a/drivers/usb/class/usbtmc.c
++++ b/drivers/usb/class/usbtmc.c
+@@ -2494,7 +2494,6 @@ static void usbtmc_disconnect(struct usb_interface *intf)
+ 	}
+ 	mutex_unlock(&data->io_mutex);
+ 	usbtmc_free_int(data);
+-	kref_put(&data->kref, usbtmc_delete);
+ }
+ 
+ static void usbtmc_draw_down(struct usbtmc_file_data *file_data)
+-- 
+2.25.1
 
 
-In the agnostic (former) case your code was correct for BE and mine
-for LE, but I'd then suggest using a u8 * to both work correctly
-everywhere and be obvious.
-
-
-> This change will flip r and b, which gives: XRGB8888 -> XBGR1111
-
-The old code was:
-			r = *pix32 >> 16;
-			g = *pix32 >> 8;
-			b = *pix32++;
-
-On my LE machine this set r to the third byte (G), g to the second (R)
-and b to the first (X), explaining the color confusion that I saw.
-
-
-> BGR is a common thing on controllers, are you sure yours are set to RGB
-> and not BGR?
-
-Yes; I've verified that my display takes red in MSB both in its data
-sheet and by writing raw bits to it on a system without the gud driver.
-
-
-> And the 0xff masking isn't necessary since we're assigning to a byte, right?
-
-Not strictly neccessary but I like to do it anyway, both to be explicit
-and also to ensure that the compiler will never sign extend, if types
-are changed or if values become treated as signed and/or larger by the
-compiler because the code is changed.
-
-It's frustrating to debug such unexpected changes in behavior due to
-a type change or calculation change, but if you find it too defensive
-then go ahead and remove it, if pix32 does stay.
-
-
-> I haven't got a native R1G1B1 display so I have emulated and I do get
-> the expected colors. This is the conversion function I use on the device
-> which I think is correct:
-> 
-> static size_t rgb111_to_rgb565(uint16_t *dst, uint8_t *src,
->                                uint16_t src_width, uint16_t src_height)
-> {
->     uint8_t rgb111, val = 0;
->     size_t len = 0;
-> 
->     for (uint16_t y = 0; y < src_height; y++) {
->         for (uint16_t x = 0; x < src_width; x++) {
->             if (!(x % 2))
->                 val = *src++;
->             rgb111 = val >> 4;
->             *dst++ = ((rgb111 & 0x04) << 13) | ((rgb111 & 0x02) << 9) |
->                      ((rgb111 & 0x01) << 4);
-
-I'm afraid this isn't correct. Two wrongs end up cancelling each other
-out and it's not so obvious because the destination has symmetric (565)
-components.
-
-If you were to convert to xrgb8888 in the same way I think you'd also
-see some color confusion, and in any case blue is getting lost already
-in gud_xrgb8888_to_color() on LE.
-
-
-//Peter
