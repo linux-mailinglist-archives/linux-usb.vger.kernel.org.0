@@ -2,144 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCD49337EA5
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 21:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4076D337FBB
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 22:38:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbhCKUCp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Mar 2021 15:02:45 -0500
-Received: from foo.stuge.se ([212.116.89.98]:41366 "EHLO foo.stuge.se"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229674AbhCKUCd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Mar 2021 15:02:33 -0500
-Received: (qmail 1167 invoked by uid 1000); 11 Mar 2021 20:02:26 -0000
-Message-ID: <20210311200226.1166.qmail@stuge.se>
-Date:   Thu, 11 Mar 2021 20:02:26 +0000
-From:   Peter Stuge <peter@stuge.se>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     hudson@trmm.net, markus@raatikainen.cc,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
-        sam@ravnborg.org
-Subject: Re: [PATCH v7 3/3] drm: Add GUD USB Display driver
-References: <20210310045544.28961.qmail@stuge.se>
- <1894f3f7-bd1d-493e-8d7f-8c10917da51b@tronnes.org>
- <20210311144839.29454.qmail@stuge.se>
- <04a86207-325c-8170-6692-a87ec3b0fe4c@tronnes.org>
+        id S230520AbhCKVhg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Mar 2021 16:37:36 -0500
+Received: from mail-io1-f44.google.com ([209.85.166.44]:44763 "EHLO
+        mail-io1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230516AbhCKVhH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 16:37:07 -0500
+Received: by mail-io1-f44.google.com with SMTP id 81so23528019iou.11
+        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 13:37:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=88YoBu3IChQNr/V3l4UggEOXALs8K2tk4zELlhVMgFY=;
+        b=Le+FAwcpdwzlVoAx2dH9QBpkC9YEwdht0HZpCnUR0D7TNpciwbILHb9nxU1h9RsMdJ
+         0TRw6Lg7k519et4pVljrvOnXiFpxJrrOjt+aozM7kK26AbXoZJHTHeOS2cjtSMWx4nh4
+         H/cIrIa2gOgG2uyUHYBbJDJ/mQBodIuH6rqtxDS0rROGxyKSKR7embNXx4CxcBB8Q1ZC
+         u0VUWnEyClH5atWmIL9H3Xil8q2prsrmnR6k9Cnnu3YowAjHirdfwRQGeGcdIQnebeRu
+         86Lq0rV5pQPx6rYJ2x7mZCeEXwL2shTbW+M3Poz668xpCTReKkR3YhywNlDgMV8OB3lS
+         Q3Rg==
+X-Gm-Message-State: AOAM5301WiHB5x7QZ9kW9ylFNj48pptblMSMEbm1xSGlC8ACcwLZEcnW
+        dxPCxvLp0iKp4FZ0VtwBdisOo6j5tDvS24xDE8c=
+X-Google-Smtp-Source: ABdhPJw+YTm5PRWrc1GuPKUsimfEN4Wp8nCWrWwvqjSef29BAoUxRTJMC+nYrrWkOEw2ou0D9TVZCg7ED8EPPW+sLhE=
+X-Received: by 2002:a02:7419:: with SMTP id o25mr5589952jac.100.1615498627003;
+ Thu, 11 Mar 2021 13:37:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <04a86207-325c-8170-6692-a87ec3b0fe4c@tronnes.org>
+References: <20210310045544.28961.qmail@stuge.se> <1894f3f7-bd1d-493e-8d7f-8c10917da51b@tronnes.org>
+ <20210311144839.29454.qmail@stuge.se> <04a86207-325c-8170-6692-a87ec3b0fe4c@tronnes.org>
+ <20210311200226.1166.qmail@stuge.se>
+In-Reply-To: <20210311200226.1166.qmail@stuge.se>
+From:   Ilia Mirkin <imirkin@alum.mit.edu>
+Date:   Thu, 11 Mar 2021 16:36:56 -0500
+Message-ID: <CAKb7UvihLX0hgBOP3VBG7O+atwZcUVCPVuBdfmDMpg0NjXe-cQ@mail.gmail.com>
+Subject: Re: [PATCH v7 3/3] drm: Add GUD USB Display driver
+To:     Peter Stuge <peter@stuge.se>
+Cc:     =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        hudson@trmm.net, markus@raatikainen.cc,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-usb@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>, th020394@gmail.com,
+        lkundrak@v3.sk, pontus.fuchs@gmail.com,
+        Sam Ravnborg <sam@ravnborg.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Noralf Trønnes wrote:
-> > Endianness matters because parts of pix32 are used.
-> 
-> This code:
-..
-> prints:
-> 
-> xrgb8888=aabbccdd
-> 32-bit access:
-> r=bb
-> g=cc
-> b=dd
-> Byte access on LE:
-> r=cc
-> g=bb
-> b=aa
+On Thu, Mar 11, 2021 at 3:02 PM Peter Stuge <peter@stuge.se> wrote:
+> > > Hence the question: What does DRM promise about the XRGB8888 mode?
+> >
+> > That it's a 32-bit value. From include/uapi/drm/drm_fourcc.h:
+> >
+> > /* 32 bpp RGB */
+> > #define DRM_FORMAT_XRGB8888   fourcc_code('X', 'R', '2', '4') /* [31:0]
+> > x:R:G:B 8:8:8:8 little endian */
+>
+> Okay, "[31:0] x:R:G:B 8:8:8:8" can certainly mean
+> [31:24]=x [23:16]=R [15:8]=G [7:0]=B, which when stored "little endian"
+> becomes B G R X in memory, for which your pix32 code is correct.
+>
+> That's the reverse *memory* layout of what the name says :) but yes,
+> the name then matches the representation seen by software. That's the
+> "abstracted" case that I didn't expect, because I thought the name was
+> refering to memory layout and because I was thinking about how traditional
+> graphics adapter video memory has the R component at the lower
+> address, at least in early linear modes.
 
-As expected, and:
+The definition of the formats is memory layout in little endian. The
+definition you see is of a 32-bit packed little-endian integer, which
+is a fixed memory layout.
 
-xrgb8888=aabbccdd
-32-bit access:
-r=bb
-g=cc
-b=dd
-Byte access on BE:
-r=bb
-g=cc
-b=dd
+Now, if you're on an actual big-endian platform, and you want to
+accept big-endian-packed formats, there's a bit of unpleasantness that
+goes on. Basically there are two options:
 
-I've done similar tests in the past and did another before my last mail.
+1. Ignore the above definition and interpret the formats as
+*big-endian* layouts. This is what nouveau and radeon do. They also
+don't support AddFB2 (which is what allows supplying a format) -- only
+AddFB which just has depth (and bpp). That's fine for nouveau and
+radeon because the relevant userspace just uses AddFB, and knows what
+the drivers want, so it all works out.
 
-We agree about endian effects. Apologies if I came across as overbearing!
+2. Comply with the above definition and set
+dev->mode_config.quirk_addfb_prefer_host_byte_order to false. This
+loses you native host packing of RGB565/etc, since they're just not
+defined as formats. There's a DRM_FORMAT_BIG_ENDIAN bit but it's not
+properly supported for anything but the 8888 formats.
 
+I'm not sure why you guys were talking about BE in the first place,
+but since this is a topic I've looked into (in the context of moving
+nouveau from 1 to 2 - but that can't happen due to the reduced format
+availability), figured I'd share some of the current sad state.
 
-> > Hence the question: What does DRM promise about the XRGB8888 mode?
-> 
-> That it's a 32-bit value. From include/uapi/drm/drm_fourcc.h:
-> 
-> /* 32 bpp RGB */
-> #define DRM_FORMAT_XRGB8888	fourcc_code('X', 'R', '2', '4') /* [31:0]
-> x:R:G:B 8:8:8:8 little endian */
+Cheers,
 
-Okay, "[31:0] x:R:G:B 8:8:8:8" can certainly mean
-[31:24]=x [23:16]=R [15:8]=G [7:0]=B, which when stored "little endian"
-becomes B G R X in memory, for which your pix32 code is correct.
-
-That's the reverse *memory* layout of what the name says :) but yes,
-the name then matches the representation seen by software. That's the
-"abstracted" case that I didn't expect, because I thought the name was
-refering to memory layout and because I was thinking about how traditional
-graphics adapter video memory has the R component at the lower
-address, at least in early linear modes.
-
-I also didn't pay attention to the fbset output:
-
-    rgba 8/16,8/8,8/0,0/0
-
-
-With drm format describing software pixel representation and per the
-fbset rgba description my test file was incorrect. I've recreated it
-with B G R X bytes and it shows correctly with your pix32 code.
-
-Sending data directly to the device without the gud driver uses
-different data, so isn't actually a fair comparison, but I didn't
-change the device at all now, and that still works.
-
-
-> If a raw buffer was passed from a BE to an LE machine, there would be
-> problems because of how the value is stored,
-
-And swab would be required on a LE machine with a graphics adapter in
-a mode with X R G B memory layout, or that system would just never
-present XRGB8888 for that adapter/mode but perhaps something called
-BGRX8888 instead? I see.
-
-
-> but here it's the same endianness in userspace and kernel space.
-
-Ack.
-
-
-> There is code in gud_prep_flush() that handles a BE host with a
-> multibyte format:
-> 
-> 	} else if (gud_is_big_endian() && format->cpp[0] > 1) {
-> 		drm_fb_swab(buf, vaddr, fb, rect, !import_attach);
-> 
-> In this case we can't just pass on the raw buffer to the device since
-> the protocol is LE, and thus have to swap the bytes to match up how
-> they're stored in memory on the device.
-
-Ack.
-
-
-> I'm not loosing any of the colors when running modetest. This is the
-> test image that modetest uses and it comes through just like that:
-> https://commons.wikimedia.org/wiki/File:SMPTE_Color_Bars.svg
-
-So your destination rgb565 buffer has a [15:11]=R [10:5]=G [4:0]=B
-pixel format, which stores as B+G G+R in memory, as opposed to R+G G+B.
-All right.
-
-
-Thanks a lot for clearing up my misunderstanding of drm format names
-and my endianess concerns!
-
-
-//Peter
+  -ilia
