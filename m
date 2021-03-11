@@ -2,125 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B88336830
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 00:55:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 213043369E4
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 02:51:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231998AbhCJXym (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Mar 2021 18:54:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234166AbhCJXy0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Mar 2021 18:54:26 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92371C061574;
-        Wed, 10 Mar 2021 15:54:26 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id w195so14539623oif.11;
-        Wed, 10 Mar 2021 15:54:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=JuK/sN4ilqsFYnA0CHr8J6wR9fQZpX7FXlX6y+oCGXE=;
-        b=kJd7FVEmctmtg1zxQTcC3h7PiO18ucOaPjAhDH4Qeye20ivrqEj31Cd7BRFgVx+YvY
-         iR/0WZqMOnNBDh4rhbq5hBYc6lPPni0BHD6p8KSaJxVZ5fdpTodxYfriFPuvyNlNCyMD
-         G4Co90qjHgNPwh8U4L/w9aQlU2jtCFBcAKoosSPR8W29qx3jADXmpaM7TNqWGwuuPL/W
-         kyZp+V8C8JMgOhYs+/m8HEUUBtwPXgPmY5XzJApeTU7inl8n9CqMl9G/pfVvpJTEtPgi
-         jmyX9qcPyWkcnmn8Y0FvBrqdjW1omVwVZYlKC0E5XyC9x5gW3C/oH3EmYTNaY/f347Ca
-         dKGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JuK/sN4ilqsFYnA0CHr8J6wR9fQZpX7FXlX6y+oCGXE=;
-        b=p+ayWGYV584ODQn7lgZsV58FU6/prFowIRxf4EBVyL8gG5G9x8h4/NjRsc3XCwjWcl
-         tk94E/TB5I1Ixd9rKUiJbvTfqaL8bmAKyTMDdaLzL00KfgX1Nc7dcD7glskpeOJuDvMP
-         GWyScCdxeMj7oCyajYALWcM3fRsVI69O2oSDaha0w/vbSlq1YqiDpd2+Uc8ra58hDfOC
-         5+TKfHAh74zP83eOPtqlnX10kEtzoXKl8fk1EdAvIiTIgr7Agx6v9MVmuDIZoV0+n2tn
-         rz71tzE6KTsYBeIhuM29Fo46vft0NY6j+aScRHcEiX6b1U7UCIBmKBIlncHU0tHL/RKf
-         xjOQ==
-X-Gm-Message-State: AOAM533qVtPeV44f9QuYdssweoEBXG1bIZa7N1qZqSh/Ocf9suS7SvnB
-        5hUEDEP2xb1cp+2jrw8EoaU=
-X-Google-Smtp-Source: ABdhPJxXn35OQUolMNep0R7ZJGDC3u+UhiWGWSaakVI/RUOJEzIcn8UDnoOwQKwNVgumUnd64HjqMw==
-X-Received: by 2002:aca:4a95:: with SMTP id x143mr4162701oia.59.1615420466059;
-        Wed, 10 Mar 2021 15:54:26 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y11sm181212oov.9.2021.03.10.15.54.25
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 10 Mar 2021 15:54:25 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 10 Mar 2021 15:54:24 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v1] usb: typec: tcpci: Refactor tcpc_presenting_cc1_rd
- macro
-Message-ID: <20210310235424.GH195769@roeck-us.net>
-References: <20210310223536.3471243-1-badhri@google.com>
+        id S229608AbhCKBvZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Mar 2021 20:51:25 -0500
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:59766 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229599AbhCKBvN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Mar 2021 20:51:13 -0500
+X-UUID: 9403a0f406ca4eadbf09e32e5f0979e8-20210311
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=MyXaycwMY+zGNWOh2kpZh2m5IO5LDfniUPRstEyFC2o=;
+        b=nxQwklIMmZ14ITRW+pt5xNSsAI9r1soTlXxLzsJM6J+UdqatiBUVGzdz9M9vUhTy4DQ/thad6tuzVj1PxQrOYMDDvG7Ov70sJxbd7JvMM5MsUTk8UL6dDDLYjSeB0DsWLUDH2kL2/ZUn5NSbFmi6EAoF/2IfJ3z/4rTWfl2aJZc=;
+X-UUID: 9403a0f406ca4eadbf09e32e5f0979e8-20210311
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1116286509; Thu, 11 Mar 2021 09:51:10 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS32N1.mediatek.inc
+ (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 11 Mar
+ 2021 09:51:08 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 11 Mar 2021 09:51:08 +0800
+Message-ID: <1615427467.26498.6.camel@mhfsdcap03>
+Subject: Re: [PATCH v4 01/12] dt-bindings: usb: fix yamllint check warning
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>
+CC:     Vinod Koul <vkoul@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Date:   Thu, 11 Mar 2021 09:51:07 +0800
+In-Reply-To: <YEiJS0fPCOPOdlIq@kroah.com>
+References: <20210308053745.25697-1-chunfeng.yun@mediatek.com>
+         <20210310022811.GA1612587@robh.at.kernel.org>
+         <1615346469.26498.1.camel@mhfsdcap03> <YEiJS0fPCOPOdlIq@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210310223536.3471243-1-badhri@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-TM-SNTS-SMTP: 70009717DE06A89F05E205A0054F956C3D78377B9B4219CCCC6C498156C87FC12000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 10, 2021 at 02:35:36PM -0800, Badhri Jagan Sridharan wrote:
-> Defining one macro instead of two for tcpc_presenting_*_rd.
-> This is a follow up of the comment left by Heikki Krogerus.
-> 
-> https://patchwork.kernel.org/project/linux-usb/patch/
-> 20210304070931.1947316-1-badhri@google.com/
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+T24gV2VkLCAyMDIxLTAzLTEwIGF0IDA5OjU0ICswMTAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3Jv
+dGU6DQo+IE9uIFdlZCwgTWFyIDEwLCAyMDIxIGF0IDExOjIxOjA5QU0gKzA4MDAsIENodW5mZW5n
+IFl1biB3cm90ZToNCj4gPiBPbiBUdWUsIDIwMjEtMDMtMDkgYXQgMTk6MjggLTA3MDAsIFJvYiBI
+ZXJyaW5nIHdyb3RlOg0KPiA+ID4gT24gTW9uLCBNYXIgMDgsIDIwMjEgYXQgMDE6Mzc6MzRQTSAr
+MDgwMCwgQ2h1bmZlbmcgWXVuIHdyb3RlOg0KPiA+ID4gPiBGaXggd2FybmluZzogIm1pc3Npbmcg
+c3RhcnRpbmcgc3BhY2UgaW4gY29tbWVudCINCj4gPiA+IA0KPiA+ID4gV2hhdCB0cmVlIGlzIHRo
+aXMgaW4gYmVjYXVzZSBJIGRvbid0IHNlZSBpdC4NCj4gPiBUaGUgcGF0Y2ggaXMgYmFzZWQga2Vy
+bmVsIDUuMTItcmMxLCBhbHNvIGhhcHBlbnMgb24NCj4gPiBnaXQ6Ly9naXQua2VybmVsLm9yZy9w
+dWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvZ3JlZ2toL3VzYi5naXQgdXNiLW5leHQNCj4gDQo+IE15
+IGJyYW5jaGVzIGFyZSBub3cgcmViYXNlZCB0byBub3QgYmUgb24gNS4xMi1yYzEgYmVjYXVzZSBv
+ZiB0aGUNCj4gcHJvYmxlbXMgd2l0aCBpdCwgc28gcGxlYXNlIHJlZnJlc2ggYW5kIHByb3ZpZGUg
+YSAiRml4ZXM6ICIgdGFnIGluIHlvdXINCj4gdXBkYXRlZCBwYXRjaC4NClN0aWxsIHJlcHJvZHVj
+ZWQgb24gNS4xMi1yYzINCg0KPiANCj4gdGhhbmtzLA0KPiANCj4gZ3JlZyBrLWgNCg0K
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
-
-> ---
->  drivers/usb/typec/tcpm/tcpci.c | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index 027afd7dfdce..25b480752266 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -24,14 +24,10 @@
->  #define	AUTO_DISCHARGE_PD_HEADROOM_MV		850
->  #define	AUTO_DISCHARGE_PPS_HEADROOM_MV		1250
->  
-> -#define tcpc_presenting_cc1_rd(reg) \
-> +#define tcpc_presenting_rd(reg, cc) \
->  	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
-> -	 (((reg) & (TCPC_ROLE_CTRL_CC1_MASK << TCPC_ROLE_CTRL_CC1_SHIFT)) == \
-> -	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC1_SHIFT)))
-> -#define tcpc_presenting_cc2_rd(reg) \
-> -	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
-> -	 (((reg) & (TCPC_ROLE_CTRL_CC2_MASK << TCPC_ROLE_CTRL_CC2_SHIFT)) == \
-> -	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC2_SHIFT)))
-> +	 (((reg) & (TCPC_ROLE_CTRL_## cc ##_MASK << TCPC_ROLE_CTRL_## cc ##_SHIFT)) == \
-> +	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_## cc ##_SHIFT)))
->  
->  struct tcpci {
->  	struct device *dev;
-> @@ -201,11 +197,11 @@ static int tcpci_get_cc(struct tcpc_dev *tcpc,
->  	*cc1 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC1_SHIFT) &
->  				 TCPC_CC_STATUS_CC1_MASK,
->  				 reg & TCPC_CC_STATUS_TERM ||
-> -				 tcpc_presenting_cc1_rd(role_control));
-> +				 tcpc_presenting_rd(role_control, CC1));
->  	*cc2 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC2_SHIFT) &
->  				 TCPC_CC_STATUS_CC2_MASK,
->  				 reg & TCPC_CC_STATUS_TERM ||
-> -				 tcpc_presenting_cc2_rd(role_control));
-> +				 tcpc_presenting_rd(role_control, CC2));
->  
->  	return 0;
->  }
-> -- 
-> 2.31.0.rc1.246.gcd05c9c855-goog
-> 
