@@ -2,90 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 051D7336BDB
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 07:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C98336BDE
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Mar 2021 07:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbhCKGDv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Mar 2021 01:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
+        id S229802AbhCKGF1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Mar 2021 01:05:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbhCKGDa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 01:03:30 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCA6C061574
-        for <linux-usb@vger.kernel.org>; Wed, 10 Mar 2021 22:03:30 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id j6so9683454plx.6
-        for <linux-usb@vger.kernel.org>; Wed, 10 Mar 2021 22:03:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=HNPx2DSIhBecIZB40xNyDRpcDC3Xc50l5VqlNf/nUH8=;
-        b=WV9lUW4MPtNCnOkJPaRPRTV+2s5GRwpU8BwS9IJjuhVsz0btlHgEcwtqTtjpyjS/Tn
-         oUP0PJHF2PqXZl0C/ZzM9mfgB5xJEp3KYPbTny/VCt/HtA+B5F1LdzPFTM7ZHhAIzN73
-         UJXzVpm9x/AIUR4m2I5uXPzzkmgrc9pwJUeLZ/8o7IUobMqqFWXuUfoA4bFbKsWL+Mof
-         q+/gsW6DxQ2LZx3c5pd5YKSw0CgjS7Fo8F9w3l41UqS3dcRr9uMjHyw2yzypW0KZHxt4
-         5Kw9Q4gpk/62/D47X3et8OXPykvMFBbdr6yMHY5Kctq38BPlmdqs9U1LbAeHZq/blJMU
-         oiRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=HNPx2DSIhBecIZB40xNyDRpcDC3Xc50l5VqlNf/nUH8=;
-        b=BlkFHLT9V0fDRx/R/iZz/d6g+7odDf98ZDDen98Wl7bAbcR43xGC1mq42ckAuHdS1Y
-         3iPHxHLfID0hrlNBRU6cWa0C1FmQS/NeSJ/bPJLbW0IWTVOFnuTq+uUkqHjGN4QzJLBX
-         MCXP8C84RcAyISsoqGG7hEgkH3m5LYJmR+JowVELDjFonj+UCn4R/VMf+hSoQP6fda8M
-         4o+sN50rJkAtrJkA0HGcU2V3vgT4t0UBR6K8O7NnHSNTeSBlaLfSkGAWnPk4FFpE7i7I
-         Ow1BnOA8g7DSPNXjSgY5BqngL0UtzYR6r5V+WSeAhii+tVxEswCi9y48t+yBOdB51wKp
-         lKWg==
-X-Gm-Message-State: AOAM533lLWwdcm2IxkDVEBKspMTE4AntTuIrLWMvD+pj+zAY5bnwtND5
-        1GKMTW212qf/lYeW0/6YDfQf1A==
-X-Google-Smtp-Source: ABdhPJxnxRRaqIgt5xg8cni9ihAqx2cDTBPIAj5X4u4xfOHOP8908CujM5PSbYuZlFFDTshuaniztg==
-X-Received: by 2002:a17:902:c808:b029:e6:4204:f62f with SMTP id u8-20020a170902c808b02900e64204f62fmr6656703plx.0.1615442609512;
-        Wed, 10 Mar 2021 22:03:29 -0800 (PST)
-Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id b7sm1294397pgh.37.2021.03.10.22.03.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Mar 2021 22:03:29 -0800 (PST)
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        Shawn Guo <shawn.guo@linaro.org>
-Subject: [PATCH] usb: dwc3: qcom: skip interconnect init for ACPI probe
-Date:   Thu, 11 Mar 2021 14:03:18 +0800
-Message-Id: <20210311060318.25418-1-shawn.guo@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S229777AbhCKGFD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 01:05:03 -0500
+Received: from smtp.gentoo.org (smtp.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7987C061574
+        for <linux-usb@vger.kernel.org>; Wed, 10 Mar 2021 22:05:03 -0800 (PST)
+From:   Matthias Schwarzott <zzam@gentoo.org>
+Subject: Re: [usb-storage] Re: Amazon Kindle disconnect after Synchronize
+ Cache
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        hirofumi@mail.parknet.co.jp
+References: <9f57532f-1fb7-0fdd-b91c-2dfecef5aff3@gentoo.org>
+ <20210305191437.GC48113@rowland.harvard.edu>
+ <2a1f6636-6b57-ccc5-76b3-7eae5e80e7d3@gentoo.org>
+ <20210307155236.GB103559@rowland.harvard.edu>
+ <9c3121a9-3d0c-60b3-ef17-993b7d2e9149@gentoo.org>
+ <20210307165856.GA104554@rowland.harvard.edu>
+ <268e646f-d4ea-3190-f1b9-8e69bfc1b019@gentoo.org>
+ <20210309155046.GA176674@rowland.harvard.edu>
+ <dfd2b281-3beb-9869-37b6-8bd48a6cf40f@gentoo.org>
+ <20210310214648.GA236329@rowland.harvard.edu>
+Message-ID: <841a9a54-78ee-ffaa-fc3c-12defcf43b36@gentoo.org>
+Date:   Thu, 11 Mar 2021 07:05:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
+MIME-Version: 1.0
+In-Reply-To: <20210310214648.GA236329@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The ACPI probe starts failing since commit bea46b981515 ("usb: dwc3:
-qcom: Add interconnect support in dwc3 driver"), because there is no
-interconnect support for ACPI, and of_icc_get() call in
-dwc3_qcom_interconnect_init() will just return -EINVAL.
+Am 10.03.21 um 22:46 schrieb Alan Stern:
+> On Wed, Mar 10, 2021 at 09:56:04PM +0100, Matthias Schwarzott wrote:
+>>> What happens if you set the value to 1000 before running the test?
+>>>
+>> I tested different values. At 1000 it still disconnects. At lower values it
+>> no longer does this.
+>> I tested 200 up to 900. Even 900 ms is good enough to keep it connected.
+>>
+>> Btw. it is not a USB disconnect, but it just seems to plays medium ejected.
+>>
+>> Out of interest I called "sg_start -v -l /dev/sde" after one of the failing
+>> experiments. That made the Kindle go back to connected state.
+>>
+>> To me the above experiments show that enough TEST UNIT READY commands are
+>> needed in the 2 s after a SYNCHRONIZE CACHE.
+> 
+> So you have found the solution to your problem.  Congratulations!
+> 
+Thank you for your support.
 
-Fix the problem by skipping interconnect init for ACPI probe, and then
-the NULL icc_path_ddr will simply just scheild all ICC calls.
+For longterm I think it should work automatically.
+Some options I can think of (ordered by my preference):
 
-Fixes: bea46b981515 ("usb: dwc3: qcom: Add interconnect support in dwc3 driver")
-Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
----
- drivers/usb/dwc3/dwc3-qcom.c | 3 +++
- 1 file changed, 3 insertions(+)
+1. Kernel sends one or more TEST UNIT READY commands after every 
+SYNCHRONIZE CACHE to a Kindle device. Regardless of triggered by kernel 
+or by some user code via ioctl.
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 175a609cd0af..7dc74885a635 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -244,6 +244,9 @@ static int dwc3_qcom_interconnect_init(struct dwc3_qcom *qcom)
- 	struct device *dev = qcom->dev;
- 	int ret;
- 
-+	if (has_acpi_companion(dev))
-+		return 0;
-+
- 	qcom->icc_path_ddr = of_icc_get(dev, "usb-ddr");
- 	if (IS_ERR(qcom->icc_path_ddr)) {
- 		dev_err(dev, "failed to get usb-ddr path: %ld\n",
--- 
-2.17.1
+2. Kernel automatically chooses a low enough value for events_poll_msecs 
+if it detects kindle.
 
+3. udev rule is added that matches the Kindle and sets events_poll_msecs.
+   3a) SUBSYSTEM=="block", ACTION=="add", ENV{DEVTYPE}=="disk", 
+ATTRS{product}=="Amazon Kindle", ATTR{events_poll_msecs}="900"
+
+   3b) SUBSYSTEM=="block", ACTION=="add", ENV{DEVTYPE}=="disk", 
+ATTRS{idVendor}=="1949", ATTRS{idProduct}=="0004", 
+ATTR{events_poll_msecs}="900"
+
+4. Kernel sends one or more TEST UNIT READY commands after every 
+SYNCHRONIZE CACHE to a device (without matching).
+
+
+I guess options 1 and 2 require a new entry in unusual_devs together 
+with a (new?) quirk.
+Option 3 requires to get a new rule into udev.
+And option 4 is ugly as it changes behaviour for usb-storage or scsi 
+disk device.
+
+I would prefer option 1 or 2.
+
+Do you know how high the overhead of having more TEST UNIT READY 
+commands is? (=How much better option 1 is compared to option 2?)
+
+Matthias
