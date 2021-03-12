@@ -2,128 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5301338BEE
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 12:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33803338D85
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 13:51:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231772AbhCLLxn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Mar 2021 06:53:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbhCLLxj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 06:53:39 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970ACC061574
-        for <linux-usb@vger.kernel.org>; Fri, 12 Mar 2021 03:53:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=TcGONRPmElVmn+nKEitd4aH/duF2ZwstRExKwPJUL2o=; b=ETbv1QJmTN9B/8/lH7duYCbHMV
-        tulmk31VTbT3r/69cmXC4GsWB0ySDUF6RYtH2lUOWazE8qFWnZfW3zOqoVyQQoUfqZuZXhsXCMkiG
-        sdNr1PT+1LgAbUepTN/uKU6+vXiqO1FWe+rwAf63/UWLgymshN16aczw3HMAIG1IZgPGDACQ+55Zk
-        VsLyoUZCt49JB2VLJlRnBMx44WddY85kz9V/KPaRxmZj+2l20QlsnaWa6B5+O7jXu6VH4KBvfv49Q
-        u5cnm1ssLrWx0r4qGWqdxvpcH2PXXuCRbPtjxphxDZoKvd1WL/pNPh4NR84AkOiOITGQQO3hJQ4Hw
-        44o6dIUQ==;
-Received: from [2a01:799:95f:4600:cca0:57ac:c55d:a485] (port=63321)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1lKgMJ-0004yU-Jf; Fri, 12 Mar 2021 12:53:35 +0100
-Subject: Re: [PATCH v7 3/3] drm: Add GUD USB Display driver
-To:     Peter Stuge <peter@stuge.se>, Ilia Mirkin <imirkin@alum.mit.edu>
-Cc:     hudson@trmm.net, markus@raatikainen.cc,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-usb@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>, th020394@gmail.com,
-        lkundrak@v3.sk, pontus.fuchs@gmail.com,
-        Sam Ravnborg <sam@ravnborg.org>
-References: <20210310045544.28961.qmail@stuge.se>
- <1894f3f7-bd1d-493e-8d7f-8c10917da51b@tronnes.org>
- <20210311144839.29454.qmail@stuge.se>
- <04a86207-325c-8170-6692-a87ec3b0fe4c@tronnes.org>
- <20210311200226.1166.qmail@stuge.se>
- <CAKb7UvihLX0hgBOP3VBG7O+atwZcUVCPVuBdfmDMpg0NjXe-cQ@mail.gmail.com>
- <20210311225751.2721.qmail@stuge.se>
- <CAKb7UvgRLa=_4vzeFS-ws6T28S_j8yz8Jq_ONowPcBKaBHwYkw@mail.gmail.com>
- <20210312043236.5102.qmail@stuge.se>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-Message-ID: <b8a135eb-a6a9-b66a-012b-6ba833dfb074@tronnes.org>
-Date:   Fri, 12 Mar 2021 12:53:30 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S231555AbhCLMul (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Mar 2021 07:50:41 -0500
+Received: from honk.sigxcpu.org ([24.134.29.49]:33050 "EHLO honk.sigxcpu.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229866AbhCLMuj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 12 Mar 2021 07:50:39 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by honk.sigxcpu.org (Postfix) with ESMTP id EC153FB03;
+        Fri, 12 Mar 2021 13:50:36 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
+Received: from honk.sigxcpu.org ([127.0.0.1])
+        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id FiOlfnBrBDy9; Fri, 12 Mar 2021 13:50:35 +0100 (CET)
+Date:   Fri, 12 Mar 2021 13:50:34 +0100
+From:   Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>
+To:     Elias Rudberg <mail@eliasrudberg.se>
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: Remove vdo[3] part of
+ tps6598x_rx_identity_reg struct
+Message-ID: <YEtjmtFB7VxnuoFy@bogon.m.sigxcpu.org>
+References: <20210311124710.6563-1-mail@eliasrudberg.se>
 MIME-Version: 1.0
-In-Reply-To: <20210312043236.5102.qmail@stuge.se>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210311124710.6563-1-mail@eliasrudberg.se>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
+On Thu, Mar 11, 2021 at 01:47:10PM +0100, Elias Rudberg wrote:
+> Remove the unused "u32 vdo[3]" part in the tps6598x_rx_identity_reg
+> struct. This helps avoid "failed to register partner" errors which
+> happen when tps6598x_read_partner_identity() fails because the
+> amount of data read is 12 bytes smaller than the struct size.
+> Note that vdo[3] is already in usb_pd_identity and hence
+> shouldn't be added to tps6598x_rx_identity_reg as well.
+> 
+> Fixes: f6c56ca91b92 ("usb: typec: Add the Product Type VDOs to struct usb_pd_identity")
+> 
+> Signed-off-by: Elias Rudberg <mail@eliasrudberg.se>
+> ---
+>  drivers/usb/typec/tps6598x.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tps6598x.c b/drivers/usb/typec/tps6598x.c
+> index 6e6ef6317523..29bd1c5a283c 100644
+> --- a/drivers/usb/typec/tps6598x.c
+> +++ b/drivers/usb/typec/tps6598x.c
+> @@ -64,7 +64,6 @@ enum {
+>  struct tps6598x_rx_identity_reg {
+>  	u8 status;
+>  	struct usb_pd_identity identity;
+> -	u32 vdo[3];
+>  } __packed;
+>  
+>  /* Standard Task return codes */
 
+Reviewed-by: Guido Günther <agx@sigxcpu.org>
 
-Den 12.03.2021 05.32, skrev Peter Stuge:
-> Ilia Mirkin wrote:
->> XRGB8888 means that the memory layout should match a 32-bit integer,
->> stored as LE, with the low bits being B, next bits being G, etc. This
->> translates to byte 0 = B, byte 1 = G, etc. If you're on a BE system,
->> and you're handed a XRGB8888 buffer, it still expects that byte 0 = B,
->> etc (except as I outlined, some drivers which are from before these
->> formats were a thing, sort of do their own thing). Thankfully this is
->> equivalent to BGRX8888 (big-endian packing), so you can just munge the
->> format.
-> 
-> I understand! Thanks a lot for clarifying.
-> 
-> It makes much more sense to me that the format indeed describes
-> what is in memory rather than how pixels look to software.
-> 
-> 
->>>> I'm not sure why you guys were talking about BE in the first place,
->>>
->>> I was worried that the translation didn't consider endianess.
->>
->> The translation in gud_xrgb8888_to_color definitely seems suspect.
-> 
-> So to me this means that the gud_pipe translations from XRGB8888 to the
-> 1-bit formats *do* have to adjust for the reversed order on BE.
-> 
-> 
->> There's also a gud_is_big_endian, but I'm guessing this applies to the
->> downstream device rather than the host system.
-> 
-> gud_is_big_endian() is a static bool wrapper around defined(__BIG_ENDIAN)
-> so yes, it applies to the host.
-> 
-> With memory layout being constant I again think gud_xrgb8888_to_color()
-> needs to take further steps to work correctly also on BE hosts. (Maybe
-> that's le32_to_cpu(*pix32), maybe drm_fb_swab(), maybe something else?)
-> 
-> 
->> I didn't check if dev->mode_config.quirk_addfb_prefer_host_byte_order
->> is set
-> 
-> I can't tell if that's helpful, probably Noralf can.
-> 
+Cheers,
+ -- Guido
 
-I skimmed a discussion a while back around BE and all it's problems
-through the whole graphics stack and my take away was that I needed a BE
-machine so I could test the whole stack to make sure it works.
-Judging from what Ilia says I've been wrong in my assumptions so the
-driver is probably broken on BE (along with my SPI display drivers).
-I'm not going to try and fix this now, I need someone with a BE machine
-that can test the whole stack and make sure it actually works. Me doing
-more guesswork is not going to work out well I think :)
-
-I'll add a FIXME in gud_pipe.c that BE is probably broken and link to
-this discussion.
-
-It seems Gerd did some work to fix BE in the kernel:
-drm: byteorder fixes
-https://patchwork.freedesktop.org/series/49073/
-
-But that seems to deal with the format value itself and not the buffer
-contents.
-
-Noralf.
+> -- 
+> 2.25.1
+> 
