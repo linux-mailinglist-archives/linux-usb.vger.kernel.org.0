@@ -2,58 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26718338657
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 08:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE30333865A
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 08:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbhCLHFu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Mar 2021 02:05:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47866 "EHLO
+        id S231676AbhCLHH1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Mar 2021 02:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbhCLHF2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 02:05:28 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC318C061761
-        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 23:05:28 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id g7so1445896uab.12
-        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 23:05:28 -0800 (PST)
+        with ESMTP id S231361AbhCLHHA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 02:07:00 -0500
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA57C061574
+        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 23:07:00 -0800 (PST)
+Received: by mail-vk1-xa29.google.com with SMTP id k27so1035933vki.2
+        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 23:07:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yCWiCgZgy0rQubjdbPrqQeeH4Nm7CRjuGtpK8dVdbJE=;
-        b=bUPXRMgowlrM4ZzMctIpARCjLvHSazlKGgAYOdpoxsdda7CreRNXBaEeadTPxxAyMj
-         lMrMT2AQPDrEZWqfabrHsmfNXNErSDIBRqUK2XK31+p/2OExqJun5V7pWMq0Xs+xLlTz
-         N27SHrVoFEI4+mXwAFZxO6GUkuMjQ7YwtJIAsH2LyvUnjo/VK6JqzsELcCjViMKykrh6
-         3g9mR73rttRerVa4kSnw8Hor65Xhiw63EEROlPaKt4BCh7kcNRyBydd4DtATqGpJwOTP
-         yUiVEd7hhozbHat8hJGqYcL5qd5NUBrQQ8TkidGwKyb3+QHBVtj8TYSg/Crlvyr8wJuM
-         /qiQ==
+        bh=vlkgJ0e/mATMT1DjnyWZT9jNAGl5EV/7fKkGhZxsPIA=;
+        b=kTUcxycJPBqZPZ2dfvWmTTPpNjNojVdSaothU1jLeV5GkspuyxZ35wjnZaI8ijEutH
+         2XTazjjtLpippeDNa9tKAga1I830gS3Bed2ZZ14gfyIoR7Mc3MwAJQabMTNMPxLSgbBG
+         dC0tWApXA84jZE9y2y/0OWdnRQcblx+9RRYUDeUj3krQONqh1zV/SCnFrpGxuJC7s2e3
+         j3wNpm5AFRHejmo5Tld3mIMJP1AreHlb+Nfcd/XI+VprQAjnDm80dKs62zxLaMTKcdiY
+         azn9y5DaUZq7OWCzAHREXmQCEXMEEZmhs/gKmp6BbCuFw4O6SN75dmNI48FjTV5bCZ3E
+         9mug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yCWiCgZgy0rQubjdbPrqQeeH4Nm7CRjuGtpK8dVdbJE=;
-        b=Bneaw7f+XZs2V3VDc7ImvW3ElWG6L1E0sSlTIrEdmEOhn+rLyewx9rJQ0v3b8dLQxg
-         rhiqhscmaNjJC6P+2vnIZq0yQf1Gcv9pQOAsPPXqvxqerBy01leP5dGgJo/gU3mnhEuS
-         FSvPcfmLTXNGO2QlvcBzyaYZfAov18BbjFKp/C/3h1eIXBS+Xr8cS5PK6pY0p/AmQpoG
-         wdazxk1drdqJDsxRjjdfPhpQcRNZLodllE2KGe5DmETKOrtaGGaRzDWfEpGW5yoZ66lv
-         eAzOgoHpgRyC/bhHqZSBngR2E9605+2pLKmMif4rJ0oSwWunUUGnhJoR+B4BCn4keqZm
-         VLgQ==
-X-Gm-Message-State: AOAM531v85rhEDKYfnZQYlv02SxQN63Ho+nOKklOAGpluXV4lZ+7tW3e
-        oeE4SObBaXNqp1VDk5xPAhg/CgHF23IeuszDcYqllw==
-X-Google-Smtp-Source: ABdhPJzbI8eoQprNIlBFOmEK4fN/XYLPnSccl1qjGnbhAnOZVPy/uSzXgMUaAbesaSQpuulGcJW7ZGr8198Zyccb0Ks=
-X-Received: by 2002:ab0:6903:: with SMTP id b3mr7459633uas.65.1615532727640;
- Thu, 11 Mar 2021 23:05:27 -0800 (PST)
+        bh=vlkgJ0e/mATMT1DjnyWZT9jNAGl5EV/7fKkGhZxsPIA=;
+        b=QW2b9GS8LlsMEB8Cr26xzylnCRXyQqA2RRzykZ36LQyaQW2JZLcogrum+0flyZxulQ
+         IHvPzrOQBoC28N8WxpZPG9KmSdyb8R3Xa0CZgbVW/DVO5A+PpCnsdskQDk1cCj08eGs1
+         pW0/VFnwd59f7MG53eOVJW/5YDQhZ0M5gKguTCErOVuK5H2s+sNpEp7faE4l/PHQ6Ler
+         KJnVRDdODk19TTaLqK+uYYRtx05JW/+UozLmmwPz0OFUhVh04Ry1E1XWb6hMty8MiKFO
+         n9bLGknkgYUC5HUCXKUWnXN/RtGkspKdgb5YQ72WO0H33ap3/9bYh2Ga8dnPWvJx0m4J
+         Umzw==
+X-Gm-Message-State: AOAM530ffAPLbMlZopsGJ7RJ0nBltUCh3v7iWmzFKF1JxB3hBS+9g30r
+        jTuMUdFJH3HTgqRKGZpuqSY3mrr1CMdYWvmXRerGZQ==
+X-Google-Smtp-Source: ABdhPJwkZuh6HMgxlvtQV+BJGBqkN4cLWqD+uC35+gkLbrfifKfRtAjyQmT7E/Um3xWlN5Qc85W52joe9ofGBqVeJz4=
+X-Received: by 2002:a1f:5c88:: with SMTP id q130mr7170475vkb.14.1615532819455;
+ Thu, 11 Mar 2021 23:06:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20210312052443.3797674-1-badhri@google.com> <20210312052443.3797674-2-badhri@google.com>
- <dba54e90-17e7-ab42-bc82-4ca39ee5de30@roeck-us.net>
-In-Reply-To: <dba54e90-17e7-ab42-bc82-4ca39ee5de30@roeck-us.net>
+References: <20210312052443.3797674-1-badhri@google.com> <YEsLSevhzYja0fwk@kroah.com>
+ <YEsLgogC66Fzx7Vk@kroah.com>
+In-Reply-To: <YEsLgogC66Fzx7Vk@kroah.com>
 From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Thu, 11 Mar 2021 23:04:51 -0800
-Message-ID: <CAPTae5KdDh-+UTwxQ7v_g-vp0QPHcjC_myBnc+vsHCkkq+BCXA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] usb: typec: tcpci_maxim: configure charging & data paths
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Date:   Thu, 11 Mar 2021 23:06:23 -0800
+Message-ID: <CAPTae5L9GRGCXhM7jUtsiJKhpeuek5dp=_R7G2KVJu73p8XyQg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] usb: typec: tcpci: Add tcpc chip level callbacks
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         USB <linux-usb@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Kyle Tso <kyletso@google.com>
@@ -62,141 +62,30 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 11, 2021 at 10:39 PM Guenter Roeck <linux@roeck-us.net> wrote:
+On Thu, Mar 11, 2021 at 10:34 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On 3/11/21 9:24 PM, Badhri Jagan Sridharan wrote:
-> > The change exposes the data_role and the orientation as a extcon
-> > interface for configuring the USB data controller.
+> On Fri, Mar 12, 2021 at 07:33:45AM +0100, Greg Kroah-Hartman wrote:
+> > On Thu, Mar 11, 2021 at 09:24:42PM -0800, Badhri Jagan Sridharan wrote:
+> > > This change adds chip callbacks for the following operations:
+> > > 1. Notifying port role
+> > > 2. Notifying orientation
 > >
-> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > ---
-> > Changes since V1:
-> > - Dropped changes related to get_/set_current_limit and pd_capable
-> >   callback. Will send them in as separate patches.
-> > ---
-> >  drivers/usb/typec/tcpm/tcpci_maxim.c | 56 ++++++++++++++++++++++++++++
-> >  1 file changed, 56 insertions(+)
+> > This should be 2 different patches, one per callback, right?
 > >
-> > diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> > index 041a1c393594..1210445713ee 100644
-> > --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-> > +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> > @@ -7,6 +7,8 @@
-> >
-> >  #include <linux/interrupt.h>
-> >  #include <linux/i2c.h>
-> > +#include <linux/extcon.h>
-> > +#include <linux/extcon-provider.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/module.h>
-> >  #include <linux/regmap.h>
-> > @@ -46,6 +48,8 @@ struct max_tcpci_chip {
-> >       struct device *dev;
-> >       struct i2c_client *client;
-> >       struct tcpm_port *port;
-> > +     bool attached;
-> > +     struct extcon_dev *extcon;
-> >  };
-> >
-> >  static const struct regmap_range max_tcpci_tcpci_range[] = {
-> > @@ -439,6 +443,39 @@ static int tcpci_init(struct tcpci *tcpci, struct tcpci_data *data)
-> >       return -1;
-> >  }
-> >
-> > +static void max_tcpci_set_roles(struct tcpci *tcpci, struct tcpci_data *data, bool attached,
-> > +                             enum typec_role role, enum typec_data_role data_role)
-> > +{
-> > +     struct max_tcpci_chip *chip = tdata_to_max_tcpci(data);
-> > +
-> > +     chip->attached = attached;
-> > +
-> > +     if (!attached) {
-> > +             extcon_set_state_sync(chip->extcon, EXTCON_USB_HOST, 0);
-> > +             extcon_set_state_sync(chip->extcon, EXTCON_USB, 0);
-> > +             return;
-> > +     }
-> > +
-> > +     extcon_set_state_sync(chip->extcon, data_role == TYPEC_HOST ? EXTCON_USB_HOST : EXTCON_USB,
-> > +                           1);
-> > +}
-> > +
-> > +static void max_tcpci_set_cc_polarity(struct tcpci *tcpci, struct tcpci_data *data,
-> > +                                   enum typec_cc_polarity polarity)
-> > +{
-> > +     struct max_tcpci_chip *chip = tdata_to_max_tcpci(data);
-> > +
-> > +     extcon_set_property(chip->extcon, EXTCON_USB, EXTCON_PROP_USB_TYPEC_POLARITY,
-> > +                         (union extcon_property_value)(int)polarity);
-> > +     extcon_set_property(chip->extcon, EXTCON_USB_HOST, EXTCON_PROP_USB_TYPEC_POLARITY,
-> > +                         (union extcon_property_value)(int)polarity);
-> > +}
-> > +
-> > +static const unsigned int usbpd_extcon[] = {
-> > +     EXTCON_USB,
-> > +     EXTCON_USB_HOST,
-> > +};
-> > +
-> >  static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id *i2c_id)
-> >  {
-> >       int ret;
-> > @@ -472,6 +509,8 @@ static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id
-> >       chip->data.auto_discharge_disconnect = true;
-> >       chip->data.vbus_vsafe0v = true;
-> >       chip->data.set_partner_usb_comm_capable = max_tcpci_set_partner_usb_comm_capable;
-> > +     chip->data.set_roles = max_tcpci_set_roles;
-> > +     chip->data.set_cc_polarity = max_tcpci_set_cc_polarity;
-> >
-> >       max_tcpci_init_regs(chip);
-> >       chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
-> > @@ -484,6 +523,23 @@ static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id
-> >       if (ret < 0)
-> >               goto unreg_port;
-> >
-> > +     chip->extcon = devm_extcon_dev_allocate(&client->dev, usbpd_extcon);
-> > +     if (IS_ERR(chip->extcon)) {
-> > +             dev_err(&client->dev, "Error allocating extcon: %ld\n", PTR_ERR(chip->extcon));
-> > +             ret = PTR_ERR(chip->extcon);
-> > +             goto unreg_port;
-> > +     }
-> > +
-> > +     ret = devm_extcon_dev_register(&client->dev, chip->extcon);
-> > +     if (ret < 0) {
-> > +             dev_err(&client->dev, "failed to register extcon device");
-> > +             goto unreg_port;
-> > +     }
+> > And where is the code using these callbacks?  We can't add any hooks
+> > without in-tree users, as you know.
 >
-> Effectively this mandates extcon support to be able to use this driver/chip.
-> Does that make sense ? If this is indeed mandatory, how did it work so far ?
-Hi Guenter,
-
-We had this in our downstream branch but didnt get a chance to send it
-to linux upstream.
-I should wrap it in "if(IS_ENABLED(CONFIG_EXTCON))", the tcpc can work
-without the
-extcon.
-
+> Ah, your second patch added that, sorry, missed it.
 >
-> Also, what makes this code chip specific ?
+> This should be a 4 patch series, remember, only do one thing per patch.
 
-Extcon here as is not chip code specific, but, the driver which
-subscribes to the extcon interface is chip specific.
-I hope it's ok to still send this.
+Sure. Will do in the next version.
 
 Thanks,
 Badhri
 
-
 >
-> Thanks,
-> Guenter
+> thanks,
 >
-> > +
-> > +     extcon_set_property_capability(chip->extcon, EXTCON_USB, EXTCON_PROP_USB_TYPEC_POLARITY);
-> > +     extcon_set_property_capability(chip->extcon, EXTCON_USB_HOST,
-> > +                                    EXTCON_PROP_USB_TYPEC_POLARITY);
-> > +
-> >       device_init_wakeup(chip->dev, true);
-> >       return 0;
-> >
-> >
->
+> greg k-h
