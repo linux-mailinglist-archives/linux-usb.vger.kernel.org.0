@@ -2,112 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2035339890
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 21:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1369333995C
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 22:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234998AbhCLUmg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Mar 2021 15:42:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234978AbhCLUm2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 15:42:28 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C5AC061761
-        for <linux-usb@vger.kernel.org>; Fri, 12 Mar 2021 12:42:28 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id z13so27140625iox.8
-        for <linux-usb@vger.kernel.org>; Fri, 12 Mar 2021 12:42:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Ml55NsSS9dl1HuL/10fQC9QseWnc0sqmj8urOFv4Nf4=;
-        b=Mp2XAowatemJ6FkTTW+ZVICZSsIc0Z4YMEhy413HGK6oCi82HOpIEs5qLdXaoZK6CN
-         iDqrWFCPcwYBGCAFRLeUGC+FwpY0vvcVISew7uKj36eQ8636nrcd70pUFltMkqU6l2aK
-         k+7h01ZL+Hr3v7WzFTyrrk/HJr43wq8RxYB8Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Ml55NsSS9dl1HuL/10fQC9QseWnc0sqmj8urOFv4Nf4=;
-        b=MSiPCWliHfZE7y6cM/aJeuiPNlCN9y8A90N9u4kOJy8vZPJGO/hot04j8hFkZBfRoj
-         E6g+SeZcOpfGjvCikkIwR28uF+7jVW/Ri3pzjC7Jkf6LnDy05GPw+uZKJXJMVruXnPHT
-         Xn+B18f1layMdik3Sx5Jgz7PLp2MoSY2sb5llpSdBRQ7soWiX/ozpNN3wNmAYesZFe0S
-         Db1tt1AVD7QavlmZT8Y2NIBAkj65QaTgPZr4H0E3b8YwPVYhNqJARnIubr3k2TAjB1B1
-         ymWyJ5+QLhsQR8vdxKbhkmAA4vgzqIpL0X8bFWs7xRcFfxi7fLFS7aboPcLWH8tXrfDB
-         xA5g==
-X-Gm-Message-State: AOAM531nbQb5+uM+shDDGIpxQ+uWKz7C0yc6Mu9GLGxu5xoHKJddkYgq
-        ASKzGR39EHEksgjIlnQreLRNQHNCGghFzA==
-X-Google-Smtp-Source: ABdhPJxy67hR0FTymctXJo+DmAr+8PjbU2bbnFaDt+0mndydc6UHQZhDfuk/7iCdovRQORDmQ78Qig==
-X-Received: by 2002:a02:cc1b:: with SMTP id n27mr1034792jap.106.1615581748123;
-        Fri, 12 Mar 2021 12:42:28 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id k4sm3409426ion.29.2021.03.12.12.42.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Mar 2021 12:42:27 -0800 (PST)
-Subject: Re: [PATCH] usbip: fix vhci races in connection tear down
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        id S235400AbhCLV4w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Mar 2021 16:56:52 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:41447 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S235357AbhCLV4n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 16:56:43 -0500
+Received: (qmail 314502 invoked by uid 1000); 12 Mar 2021 16:56:42 -0500
+Date:   Fri, 12 Mar 2021 16:56:42 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Sedat Dilek <sedat.dilek@gmail.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        syzbot+a93fba6d384346a761e3@syzkaller.appspotmail.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210312022737.44122-1-skhan@linuxfoundation.org>
- <20210312070806.383-1-hdanton@sina.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <b0891cea-579f-2c29-4f3e-52713b836dce@linuxfoundation.org>
-Date:   Fri, 12 Mar 2021 13:42:26 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [xhci] usb 4-1: reset SuperSpeed Gen 1 USB device number 2 using
+ xhci_hcd
+Message-ID: <20210312215642.GA314300@rowland.harvard.edu>
+References: <CA+icZUXcYY53DxpMRQmveuwUv0QVV7rtRorbxWUaVujJZuCB-A@mail.gmail.com>
+ <CA+icZUUyNQN_CEwJcTY887GOeWknz4h29b+XdY0FqUKVJD7cfQ@mail.gmail.com>
+ <20210307154645.GA103559@rowland.harvard.edu>
+ <CA+icZUVLC7=-MsXeGQOrAe1emzGW2UwWYxh3EHGPhjR=chygoQ@mail.gmail.com>
+ <20210307170702.GB104554@rowland.harvard.edu>
+ <CA+icZUWaGt2k4kdV0JHqKUkB8DySqdeUgVNnVT1BUo8aveGZOw@mail.gmail.com>
+ <CA+icZUWb40r1MTFYk9S0h2XgGfqCQtxpm9yHKNr3PDnDbUNBKQ@mail.gmail.com>
+ <CA+icZUXkheVR-c9cdsJmeS9+FZj4Gswii+xBoAWK882QNdfcTg@mail.gmail.com>
+ <20210312180523.GB302347@rowland.harvard.edu>
+ <CA+icZUUysAE0fwDL2iDKsCgY=AfckOtAEi+86kkVEs0Lqc-Jkg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210312070806.383-1-hdanton@sina.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+icZUUysAE0fwDL2iDKsCgY=AfckOtAEi+86kkVEs0Lqc-Jkg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/12/21 12:08 AM, Hillf Danton wrote:
-> On Thu, 11 Mar 2021 19:27:37 -0700  Shuah Khan wrote:
->> vhci_shutdown_connection() references connection state (tcp_socket,
->> tcp_rx, tcp_tx, sockfd) saved in usbpip_device without holding the
->> lock.
->>
->> Current connection tear down sequence:
->> Step 1: shutdown the socket
->> Step 2: stop rx thread and reset tcp_rx pointer
->> Step 3: stop tx thread and reset tcp_tx pointer
->> Step 4: Reset tcp_socket and sockfd
->>
->> There are several race windows between these steps. In addition, device
->> reset routine (vhci_device_reset) resets tcp_socket and sockfd holding
->> the lock.
+On Fri, Mar 12, 2021 at 07:26:31PM +0100, Sedat Dilek wrote:
+> On Fri, Mar 12, 2021 at 7:05 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+
+> > Although it's not conclusive, this log seems to indicate that ata_id
+> > is the only program causing resets.  Have you tried preventing the
+> > ata_id program from running (for example, by renaming it)?
+> >
 > 
-> Can you specify the scenario where reset runs in race with teardown as
-> both are parts of usbip_work on a singlethread workqueue?
->>
+> This is /lib/udev/ata_id from Debian's udev package.
 
-Hmm. I can't think of one. I was concerned about any async paths that
-potentially interfere with shutdown. With vhci_shutdown_connection()
-being so relaxed with locking, this is a cautious approach on my part.
-I am also keeping in mind that this problem shows up in a limited
-scope fuzzing test that doesn't trigger any other normal paths that
-would be active if there is real device on the other side.
+That does not answer my question.
 
-As for the tcp_socket check in the reset routine, I am not positive
-what purpose it serves. I introduced the in_disconnect flag so
-shutdown and reset don't collide, in case I am missing some scenario
-in the normal path when we actually have a actual device attached.
+> > > Your diff now should say; s/SCSI ioctl error/SCSI ioctl info'.
+> >
+> > No, it shouldn't.  The log message itself is an info, but the event it
+> > reports is an error.
+> >
+> 
+> OK.
+> Some of these SCSI ioctl errors are not causing a xhci-reset.
 
-With the other locking and error path problems in addressed, both
-shutdown and reset could be made simpler.
+Yes, I noticed that.  In fact, the commands that cause a reset are all 
+A1 (and not all of them), never 85.
 
-In any case, I think in_disconnect might be too big a hammer. I will
-redo the patch without it and also remove tcp_socket handling from
-the reset routine. I don't see USBIP_EH_RESET getting set without
-USBIP_EH_SHUTDOWN.
+> > > Alan, so "t" flags should be added as a quirks to linux-kernel sources...
+> > >
+> > > t = NO_ATA_1X  (don't allow ATA(12) and ATA(16) commands, uas only);
+> > >
+> > > ...for my ASMedia USB-3.0 controller?
+> >
+> > That's not at all clear.  This is a very common and popular device,
+> > and nobody else has reported these problems.  It could be that
+> > something is odd about your particular drive or computer, not these
+> > drives in general.
+> >
+> 
+> So, the external USB-3.0 HDD is now in "UAS only" mode/status.
 
-thanks,
--- Shuah
+Why?  Did you change something?
 
+Alan Stern
+
+> Cannot judge if things got better or not.
+> 
+> - Sedat -
