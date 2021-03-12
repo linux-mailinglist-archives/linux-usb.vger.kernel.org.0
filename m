@@ -2,111 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F7AA338A9C
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 11:54:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5301338BEE
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 12:54:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233614AbhCLKxr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Mar 2021 05:53:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37172 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233641AbhCLKxl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 12 Mar 2021 05:53:41 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B6D56501B;
-        Fri, 12 Mar 2021 10:44:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615545895;
-        bh=UfOV09KQcKMeWL12uT+LRLZWIw6CpoAZkllye4DuvZ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cFRuOfo4hYjQH16EHW8ytC693/8mGqx8Eksw99CvF2BmY6ymqNr62HU+ozvYwth6v
-         FJgF2wabUH1Jxh0cOymAk70aFfT8hM3wNrqHzEOyzwRBPWHeqHpqt+7qnPzZnIcazq
-         ZqaS475OlHk6KfmkJoOnV1Kr4v6WBXb7Rdswd3ReyBRhnVx4Eyve6AzthZszMBQMgX
-         S6h7BpBUQDhtolWE6sDoHNCNCnkM0ocM684GenOxqAWa3ktEK6eikvK4FIdUp1B1W2
-         +71qIij1IjFFIbhtU2UaIAoR/QvrVjt9yuEKUHc84t5wbvjO9M19J0abZ9Ji2IDBd7
-         6P53bZiDVySWw==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lKfI0-0007H0-7k; Fri, 12 Mar 2021 11:45:04 +0100
-Date:   Fri, 12 Mar 2021 11:45:04 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+a93fba6d384346a761e3@syzkaller.appspotmail.com
-Subject: Re: [PATCH] usbip: fix vhci races in connection tear down
-Message-ID: <YEtGMMjOg3pHTSma@hovoldconsulting.com>
-References: <20210312022737.44122-1-skhan@linuxfoundation.org>
+        id S231772AbhCLLxn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Mar 2021 06:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231625AbhCLLxj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 06:53:39 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970ACC061574
+        for <linux-usb@vger.kernel.org>; Fri, 12 Mar 2021 03:53:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=TcGONRPmElVmn+nKEitd4aH/duF2ZwstRExKwPJUL2o=; b=ETbv1QJmTN9B/8/lH7duYCbHMV
+        tulmk31VTbT3r/69cmXC4GsWB0ySDUF6RYtH2lUOWazE8qFWnZfW3zOqoVyQQoUfqZuZXhsXCMkiG
+        sdNr1PT+1LgAbUepTN/uKU6+vXiqO1FWe+rwAf63/UWLgymshN16aczw3HMAIG1IZgPGDACQ+55Zk
+        VsLyoUZCt49JB2VLJlRnBMx44WddY85kz9V/KPaRxmZj+2l20QlsnaWa6B5+O7jXu6VH4KBvfv49Q
+        u5cnm1ssLrWx0r4qGWqdxvpcH2PXXuCRbPtjxphxDZoKvd1WL/pNPh4NR84AkOiOITGQQO3hJQ4Hw
+        44o6dIUQ==;
+Received: from [2a01:799:95f:4600:cca0:57ac:c55d:a485] (port=63321)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1lKgMJ-0004yU-Jf; Fri, 12 Mar 2021 12:53:35 +0100
+Subject: Re: [PATCH v7 3/3] drm: Add GUD USB Display driver
+To:     Peter Stuge <peter@stuge.se>, Ilia Mirkin <imirkin@alum.mit.edu>
+Cc:     hudson@trmm.net, markus@raatikainen.cc,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-usb@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>, th020394@gmail.com,
+        lkundrak@v3.sk, pontus.fuchs@gmail.com,
+        Sam Ravnborg <sam@ravnborg.org>
+References: <20210310045544.28961.qmail@stuge.se>
+ <1894f3f7-bd1d-493e-8d7f-8c10917da51b@tronnes.org>
+ <20210311144839.29454.qmail@stuge.se>
+ <04a86207-325c-8170-6692-a87ec3b0fe4c@tronnes.org>
+ <20210311200226.1166.qmail@stuge.se>
+ <CAKb7UvihLX0hgBOP3VBG7O+atwZcUVCPVuBdfmDMpg0NjXe-cQ@mail.gmail.com>
+ <20210311225751.2721.qmail@stuge.se>
+ <CAKb7UvgRLa=_4vzeFS-ws6T28S_j8yz8Jq_ONowPcBKaBHwYkw@mail.gmail.com>
+ <20210312043236.5102.qmail@stuge.se>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <b8a135eb-a6a9-b66a-012b-6ba833dfb074@tronnes.org>
+Date:   Fri, 12 Mar 2021 12:53:30 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210312022737.44122-1-skhan@linuxfoundation.org>
+In-Reply-To: <20210312043236.5102.qmail@stuge.se>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 11, 2021 at 07:27:37PM -0700, Shuah Khan wrote:
-> vhci_shutdown_connection() references connection state (tcp_socket,
-> tcp_rx, tcp_tx, sockfd) saved in usbpip_device without holding the
-> lock.
-> 
-> Current connection tear down sequence:
-> Step 1: shutdown the socket
-> Step 2: stop rx thread and reset tcp_rx pointer
-> Step 3: stop tx thread and reset tcp_tx pointer
-> Step 4: Reset tcp_socket and sockfd
-> 
-> There are several race windows between these steps. In addition, device
-> reset routine (vhci_device_reset) resets tcp_socket and sockfd holding
-> the lock.
-> 
-> Fix these races:
-> - Introduce in_disconnect flag to ensure vhci_shutdown_connection() runs
->   only once.
-> - Change attach_store() to initialize in_disconnect to false while
->   initializing connection status (tcp_socket, tcp_rx, tcp_tx, sockfd)
-> - Change vhci_shutdown_connection() to check in_disconnect and bail
->   out if disconnect is in progress.
-> - Change vhci_shutdown_connection() to
->   -- hold lock to save connection state pointers and unlock.
->   -- Shutdown the socket and stop threads.
->   -- Hold lock to clear connection status and in_disconnect flag.
-> - Change vhci_device_reset() to reset tcp_socket and sockfd.
->   if !in_disconnect
-> 
-> Tested syzbot and the reproducer did not trigger any issue.
-> 
-> Reported-and-tested-by: syzbot+a93fba6d384346a761e3@syzkaller.appspotmail.com
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
->  drivers/usb/usbip/usbip_common.h |  1 +
->  drivers/usb/usbip/vhci_hcd.c     | 55 +++++++++++++++++++++++---------
->  drivers/usb/usbip/vhci_sysfs.c   |  4 +++
->  3 files changed, 45 insertions(+), 15 deletions(-)
 
-> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-> index 3209b5ddd30c..c1917efe5737 100644
-> --- a/drivers/usb/usbip/vhci_hcd.c
-> +++ b/drivers/usb/usbip/vhci_hcd.c
-> @@ -1007,31 +1007,54 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
->  static void vhci_shutdown_connection(struct usbip_device *ud)
->  {
->  	struct vhci_device *vdev = container_of(ud, struct vhci_device, ud);
-> +	unsigned long flags;
-> +	struct socket *socket;
-> +	struct task_struct *tcp_rx = NULL;
-> +	struct task_struct *tcp_tx = NULL;
-> +	int sockfd = 0;
-> +
-> +	spin_lock_irqsave(&ud->lock, flags);
-> +	if (vdev->ud.in_disconnect) {
-> +		pr_info("%s: Disconnect in progress for sockfd %d\n",
-> +			__func__, ud->sockfd);
 
-Looks like you forgot to remove all you debug printks like this one
-before submitting.
+Den 12.03.2021 05.32, skrev Peter Stuge:
+> Ilia Mirkin wrote:
+>> XRGB8888 means that the memory layout should match a 32-bit integer,
+>> stored as LE, with the low bits being B, next bits being G, etc. This
+>> translates to byte 0 = B, byte 1 = G, etc. If you're on a BE system,
+>> and you're handed a XRGB8888 buffer, it still expects that byte 0 = B,
+>> etc (except as I outlined, some drivers which are from before these
+>> formats were a thing, sort of do their own thing). Thankfully this is
+>> equivalent to BGRX8888 (big-endian packing), so you can just munge the
+>> format.
+> 
+> I understand! Thanks a lot for clarifying.
+> 
+> It makes much more sense to me that the format indeed describes
+> what is in memory rather than how pixels look to software.
+> 
+> 
+>>>> I'm not sure why you guys were talking about BE in the first place,
+>>>
+>>> I was worried that the translation didn't consider endianess.
+>>
+>> The translation in gud_xrgb8888_to_color definitely seems suspect.
+> 
+> So to me this means that the gud_pipe translations from XRGB8888 to the
+> 1-bit formats *do* have to adjust for the reversed order on BE.
+> 
+> 
+>> There's also a gud_is_big_endian, but I'm guessing this applies to the
+>> downstream device rather than the host system.
+> 
+> gud_is_big_endian() is a static bool wrapper around defined(__BIG_ENDIAN)
+> so yes, it applies to the host.
+> 
+> With memory layout being constant I again think gud_xrgb8888_to_color()
+> needs to take further steps to work correctly also on BE hosts. (Maybe
+> that's le32_to_cpu(*pix32), maybe drm_fb_swab(), maybe something else?)
+> 
+> 
+>> I didn't check if dev->mode_config.quirk_addfb_prefer_host_byte_order
+>> is set
+> 
+> I can't tell if that's helpful, probably Noralf can.
+> 
 
-> +		spin_unlock_irqrestore(&ud->lock, flags);
-> +		return;
-> +	}
+I skimmed a discussion a while back around BE and all it's problems
+through the whole graphics stack and my take away was that I needed a BE
+machine so I could test the whole stack to make sure it works.
+Judging from what Ilia says I've been wrong in my assumptions so the
+driver is probably broken on BE (along with my SPI display drivers).
+I'm not going to try and fix this now, I need someone with a BE machine
+that can test the whole stack and make sure it actually works. Me doing
+more guesswork is not going to work out well I think :)
 
-Johan
+I'll add a FIXME in gud_pipe.c that BE is probably broken and link to
+this discussion.
+
+It seems Gerd did some work to fix BE in the kernel:
+drm: byteorder fixes
+https://patchwork.freedesktop.org/series/49073/
+
+But that seems to deal with the format value itself and not the buffer
+contents.
+
+Noralf.
