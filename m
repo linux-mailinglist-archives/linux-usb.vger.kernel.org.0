@@ -2,86 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7013384B0
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 05:33:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED15F3384E3
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 06:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232190AbhCLEcw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Mar 2021 23:32:52 -0500
-Received: from foo.stuge.se ([212.116.89.98]:41896 "EHLO foo.stuge.se"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231701AbhCLEck (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Mar 2021 23:32:40 -0500
-Received: (qmail 5103 invoked by uid 1000); 12 Mar 2021 04:32:36 -0000
-Message-ID: <20210312043236.5102.qmail@stuge.se>
-Date:   Fri, 12 Mar 2021 04:32:36 +0000
-From:   Peter Stuge <peter@stuge.se>
-To:     Ilia Mirkin <imirkin@alum.mit.edu>
-Cc:     hudson@trmm.net, markus@raatikainen.cc,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-usb@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>, th020394@gmail.com,
-        lkundrak@v3.sk, pontus.fuchs@gmail.com,
-        Sam Ravnborg <sam@ravnborg.org>
-Subject: Re: [PATCH v7 3/3] drm: Add GUD USB Display driver
-References: <20210310045544.28961.qmail@stuge.se>
- <1894f3f7-bd1d-493e-8d7f-8c10917da51b@tronnes.org>
- <20210311144839.29454.qmail@stuge.se>
- <04a86207-325c-8170-6692-a87ec3b0fe4c@tronnes.org>
- <20210311200226.1166.qmail@stuge.se>
- <CAKb7UvihLX0hgBOP3VBG7O+atwZcUVCPVuBdfmDMpg0NjXe-cQ@mail.gmail.com>
- <20210311225751.2721.qmail@stuge.se>
- <CAKb7UvgRLa=_4vzeFS-ws6T28S_j8yz8Jq_ONowPcBKaBHwYkw@mail.gmail.com>
+        id S230302AbhCLFJJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Mar 2021 00:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230136AbhCLFIl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 00:08:41 -0500
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A15BC061574
+        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 21:08:41 -0800 (PST)
+Received: by mail-ua1-x933.google.com with SMTP id x8so1362452ual.6
+        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 21:08:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uHOpvLhtcBHbawIEfPz5vAJeY+3oJDGose4sCS14ksM=;
+        b=ji/rHHnMPcSm4WLA9naLB2j+Vp4jtFUnVlqAWZEb7g4lwsK4w50Xo8CivItnD5kt37
+         c33wqWjZS8uyoKoAQGWSGJwnyF9wCNK20JXj/C8yBTDDYC8L9Nbypb8x5qt59fhwhQX7
+         yX7PvrP4JZCusZRmRYRXk8z8u9QIzHh+nQWzAwhgkpQeFcbwuwpp0VESgEfh2SyMmTZx
+         4JtQ/Hnq1MPahG1u+aqLi4vdRZM/E47Ihqq8NCHGLEj+jmIdhbSNrFDToO28vHWvaI3A
+         TSo4lpDddfbemVh1dSj+n29yNhnmeQlmw+A+lVnJOYGSyGBFAzGWATfuS4mYPFlJO8C8
+         ft2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uHOpvLhtcBHbawIEfPz5vAJeY+3oJDGose4sCS14ksM=;
+        b=Mj3Sc5DtjVPirslCE91Uu3gv57u+HaV5YM+8oIEHOew43FkaBl5yvT9Prh1Q3a9r/C
+         JY5/hZvMyflpRnokn6OdXft1wl35oyqZkxM3LlQJPMoWEDZZKngCHf68NSizg/tabf6U
+         7xBGDme1Sffm2F5tev8uf6S3p0/s79S6dO3f3D2uzxcnStHwwr0dfwtJAV+09g1/dV/B
+         /ck/3HEN+03Uh4R8Nz8uUUS5IQsu0oFg7NTS6Li7YWxUUiMyExRJxI71K1XoSEcQzRTd
+         LgbYzCOOAhYOt9+s5HvanjJOcpv2PZVssdpNHFXVfINokfySgtXvn+s2LnqOm/Ei740/
+         mUcA==
+X-Gm-Message-State: AOAM530ZiJFzQy/gJJZkeDLBC+fntauY+PTkCA7wEqxxbXiFmCeiMx5F
+        OJIyUtDIWJUMMCb9bmXB0G4QSWcIG7pPF0PHoVUEhw==
+X-Google-Smtp-Source: ABdhPJwihHID2NqIizK1UVSvkKIlg1hQtMOUGnX9QgjjQuWobQoLMA4beT9qvQURge0Xfa+UMUNJnIsYo+zLxN3ygF0=
+X-Received: by 2002:ab0:4d6a:: with SMTP id k42mr7030498uag.69.1615525720433;
+ Thu, 11 Mar 2021 21:08:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKb7UvgRLa=_4vzeFS-ws6T28S_j8yz8Jq_ONowPcBKaBHwYkw@mail.gmail.com>
+References: <20210311100313.3591254-1-badhri@google.com> <20210311100313.3591254-3-badhri@google.com>
+ <YEocMN1aSdDZ2dl/@kuha.fi.intel.com>
+In-Reply-To: <YEocMN1aSdDZ2dl/@kuha.fi.intel.com>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Thu, 11 Mar 2021 21:08:04 -0800
+Message-ID: <CAPTae5KNXK1M1L134RKj6QPr1NGv5uo-43NVZ+cM5otsxjvMOw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] usb: typec: tcpci_maxim: configure charging & data paths
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kyle Tso <kyletso@google.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Ilia Mirkin wrote:
-> XRGB8888 means that the memory layout should match a 32-bit integer,
-> stored as LE, with the low bits being B, next bits being G, etc. This
-> translates to byte 0 = B, byte 1 = G, etc. If you're on a BE system,
-> and you're handed a XRGB8888 buffer, it still expects that byte 0 = B,
-> etc (except as I outlined, some drivers which are from before these
-> formats were a thing, sort of do their own thing). Thankfully this is
-> equivalent to BGRX8888 (big-endian packing), so you can just munge the
-> format.
-
-I understand! Thanks a lot for clarifying.
-
-It makes much more sense to me that the format indeed describes
-what is in memory rather than how pixels look to software.
-
-
-> > > I'm not sure why you guys were talking about BE in the first place,
+On Thu, Mar 11, 2021 at 5:33 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Hi,
+>
+> On Thu, Mar 11, 2021 at 02:03:12AM -0800, Badhri Jagan Sridharan wrote:
+> > This change allows the driver to configure input current/voltage
+> > limit for the charging path. The driver sets current_max and voltage_max
+> > values of the power supply identified through chg-psy-name.
 > >
-> > I was worried that the translation didn't consider endianess.
-> 
-> The translation in gud_xrgb8888_to_color definitely seems suspect.
+> > The change also exposes the data_role and the orientation as a extcon
+> > interface for configuring the USB data controller.
+>
+> This looks wrong to me. Why wouldn't you just register your device as
+> a separate psy that supplies your charger (which is also a psy, right)?
 
-So to me this means that the gud_pipe translations from XRGB8888 to the
-1-bit formats *do* have to adjust for the reversed order on BE.
+Hi Heikki,
 
+Looks like that would pretty much make it reflect the same values as
+"tcpm-source-psy-" exposed
+by tcpm. So experimenting with making the charger power supply a supplicant.
+However, noticed that the "tcpm-source-psy-" does not have calls to
+power_supply_changed().
+So the notifiers are not getting invoked.
+Trying to fix that to see if just "tcpm-source-psy-" helps the case
+without me trying to create another
+one which almost would reflect the same values. Let me know if you
+think that might not work.
 
-> There's also a gud_is_big_endian, but I'm guessing this applies to the
-> downstream device rather than the host system.
+For now, refactored the patches to only include changes related to
+data path and sending
+them in. Will follow up with patches for the charger path once I am
+done with the above approach
+and some validation.
 
-gud_is_big_endian() is a static bool wrapper around defined(__BIG_ENDIAN)
-so yes, it applies to the host.
-
-With memory layout being constant I again think gud_xrgb8888_to_color()
-needs to take further steps to work correctly also on BE hosts. (Maybe
-that's le32_to_cpu(*pix32), maybe drm_fb_swab(), maybe something else?)
-
-
-> I didn't check if dev->mode_config.quirk_addfb_prefer_host_byte_order
-> is set
-
-I can't tell if that's helpful, probably Noralf can.
-
-
-Thanks a lot
-
-//Peter
+Thanks,
+Badhri
+>
+>
+> thanks,
+>
+> --
+> heikki
