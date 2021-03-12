@@ -2,86 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 222E633878A
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 09:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF613387C5
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 09:40:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbhCLIg4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Mar 2021 03:36:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37490 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232387AbhCLIgY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 12 Mar 2021 03:36:24 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4950F64FC1;
-        Fri, 12 Mar 2021 08:36:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615538184;
-        bh=L2hJBCU/7D+nSFex12m9kzLvCdK5v/H9qPPq41cS+5I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NxfvDSM2vJI3Xgwj37HBBm8JJTjfCleuXssxVa5iEMOnpLHp1eghXbp9l0ozmWsG+
-         wtdRpsLayuKvqIn3L64qQfmcnfYLVrOwWfskVfHtRfQbYXrKzc9ugOqCTLSvGdQDSN
-         VPQfOINk6X4P5d/52aZ4ACJrNIan9xaEAQCDzNqzXNdyawaEEGsiHZVn1distYhQfA
-         29AGLXQh5JCjwcyrSlOL9ZHGUNcKfLkCoaraFegNa/ON3VcMyNEveXDmvfC5xSMEao
-         jkwYSJao9K0kqC+61sAJlA0fsPHvIiPCIuAzooasJiuD+GGYr3NcPlq5psfAiq41Zs
-         8qwQ1Zm0SCk8A==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lKdHf-00027L-Su; Fri, 12 Mar 2021 09:36:36 +0100
-Date:   Fri, 12 Mar 2021 09:36:35 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Pho Tran <Pho.Tran@silabs.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Hung Nguyen <Hung.Nguyen@silabs.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v4] USB: serial: cp210x: Make the CP210x driver work with
- GPIOs  of CP2108
-Message-ID: <YEsoE+QXSq8LagWG@hovoldconsulting.com>
-References: <8B41D8A4-2CE0-4EA9-87A9-28A62905F9B1@silabs.com>
+        id S232564AbhCLIkM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Mar 2021 03:40:12 -0500
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:35863 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232417AbhCLIjt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 03:39:49 -0500
+X-UUID: 71576485641142e5aa9ab042a458adeb-20210312
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=ooolB54WEfgbIJQeSEoMg6RBJbHlc/MSHt7sIJf1I14=;
+        b=dtgSGVVf2N0DxciA1yLPF8jCfRPP1t8MKi1K4RMRuB1gHARw6Nx4baw4XlQhkEWqQhvL6SDIEHez8Ng3GO/hmnghHDSaXVKoyvVO1nWVOb0dqTxz8uhVDJkvBawdpkAIsbcQJxox1qtjsrp3TPjbhlcxSGhBp6Wa1bjStIVK9YE=;
+X-UUID: 71576485641142e5aa9ab042a458adeb-20210312
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1216615318; Fri, 12 Mar 2021 16:39:41 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS32N1.mediatek.inc
+ (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 12 Mar
+ 2021 16:39:39 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 12 Mar 2021 16:39:38 +0800
+Message-ID: <1615538378.26498.8.camel@mhfsdcap03>
+Subject: Re: [PATCH][next] usb: mtu3: Fix spelling mistake "disabed" ->
+ "disabled"
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Colin King <colin.king@canonical.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Date:   Fri, 12 Mar 2021 16:39:38 +0800
+In-Reply-To: <20210311092529.4898-1-colin.king@canonical.com>
+References: <20210311092529.4898-1-colin.king@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8B41D8A4-2CE0-4EA9-87A9-28A62905F9B1@silabs.com>
+X-TM-SNTS-SMTP: 487E2A8EC44F9185C890BAA7B2219ED185BF448F8161F73B2E49435334052B482000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 12, 2021 at 04:27:57AM +0000, Pho Tran wrote:
-> Similar to other CP210x devices, GPIO interfaces (gpiochip) should be
-> supported for CP2108.
-> 
-> CP2108 has 4 serial interfaces but only 1 set of GPIO pins are shared
-> to all of those interfaces. So, just need to initialize GPIOs of CP2108
-> with only one interface (I use interface 0). It means just only 1 gpiochip
-> device file will be created for CP2108.
-> 
-> CP2108 has 16 GPIOs, So data types of several variables need to be is u16
-> instead of u8(in struct cp210x_serial_private). This doesn't affect other
-> CP210x devices.
-> 
-> Because CP2108 has 16 GPIO pins, the parameter passed by cp210x functions
-> will be different from other CP210x devices. So need to check part number
-> of the device to use correct data format  before sending commands to
-> devices.
-> 
-> Like CP2104, CP2108 have GPIO pins with configurable options. Therefore,
-> should be mask all pins which are not in GPIO mode in cp2108_gpio_init()
-> function.
-> 
-> Signed-off-by: Pho Tran <pho.tran@silabs.com<mailto:pho.tran@silabs.com>>
-> —
-> 03/05/2021: Patch v3 modified format and contents of changelog follow feedback
-> from Jonhan Hovold <johan@kernel.org<mailto:johan@kernel.org>>.
-> 03/04/2021: Patch v2 modified format patch as comment from
-> Johan Hovold <johan@kernel.org<mailto:johan@kernel.org>>:
-> 1. Break commit message lines at 80 cols
-> 2. Use kernel u8 and u16 types instead of the c99 ones.
-> 03/01/2021: Initialed submission of patch “Make the CP210x driver work with
-> GPIOs of CP2108.”.
+T24gVGh1LCAyMDIxLTAzLTExIGF0IDA5OjI1ICswMDAwLCBDb2xpbiBLaW5nIHdyb3RlOg0KPiBG
+cm9tOiBDb2xpbiBJYW4gS2luZyA8Y29saW4ua2luZ0BjYW5vbmljYWwuY29tPg0KPiANCj4gVGhl
+IHZhcmlhYmxlIHUzX3BvcnRzX2Rpc2FiZWQgY29udGFpbnMgYSBzcGVsbGluZyBtaXN0YWtlLA0K
+PiByZW5hbWUgaXQgdG8gdTNfcG9ydHNfZGlzYWJsZWQuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBD
+b2xpbiBJYW4gS2luZyA8Y29saW4ua2luZ0BjYW5vbmljYWwuY29tPg0KPiAtLS0NCj4gIGRyaXZl
+cnMvdXNiL210dTMvbXR1M19ob3N0LmMgfCA4ICsrKystLS0tDQo+ICAxIGZpbGUgY2hhbmdlZCwg
+NCBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvdXNiL210dTMvbXR1M19ob3N0LmMgYi9kcml2ZXJzL3VzYi9tdHUzL210dTNfaG9zdC5jDQo+
+IGluZGV4IGM4NzFiOTRmM2U2Zi4uNDFhNTY3NWFjNWNhIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJz
+L3VzYi9tdHUzL210dTNfaG9zdC5jDQo+ICsrKyBiL2RyaXZlcnMvdXNiL210dTMvbXR1M19ob3N0
+LmMNCj4gQEAgLTEwOSw3ICsxMDksNyBAQCBpbnQgc3N1c2JfaG9zdF9lbmFibGUoc3RydWN0IHNz
+dXNiX210ayAqc3N1c2IpDQo+ICAJdm9pZCBfX2lvbWVtICppYmFzZSA9IHNzdXNiLT5pcHBjX2Jh
+c2U7DQo+ICAJaW50IG51bV91M3AgPSBzc3VzYi0+dTNfcG9ydHM7DQo+ICAJaW50IG51bV91MnAg
+PSBzc3VzYi0+dTJfcG9ydHM7DQo+IC0JaW50IHUzX3BvcnRzX2Rpc2FiZWQ7DQo+ICsJaW50IHUz
+X3BvcnRzX2Rpc2FibGVkOw0KPiAgCXUzMiBjaGVja19jbGs7DQo+ICAJdTMyIHZhbHVlOw0KPiAg
+CWludCBpOw0KPiBAQCAtMTE4LDEwICsxMTgsMTAgQEAgaW50IHNzdXNiX2hvc3RfZW5hYmxlKHN0
+cnVjdCBzc3VzYl9tdGsgKnNzdXNiKQ0KPiAgCW10dTNfY2xyYml0cyhpYmFzZSwgVTNEX1NTVVNC
+X0lQX1BXX0NUUkwxLCBTU1VTQl9JUF9IT1NUX1BETik7DQo+ICANCj4gIAkvKiBwb3dlciBvbiBh
+bmQgZW5hYmxlIHUzIHBvcnRzIGV4Y2VwdCBza2lwcGVkIG9uZXMgKi8NCj4gLQl1M19wb3J0c19k
+aXNhYmVkID0gMDsNCj4gKwl1M19wb3J0c19kaXNhYmxlZCA9IDA7DQo+ICAJZm9yIChpID0gMDsg
+aSA8IG51bV91M3A7IGkrKykgew0KPiAgCQlpZiAoKDB4MSA8PCBpKSAmIHNzdXNiLT51M3BfZGlz
+X21zaykgew0KPiAtCQkJdTNfcG9ydHNfZGlzYWJlZCsrOw0KPiArCQkJdTNfcG9ydHNfZGlzYWJs
+ZWQrKzsNCj4gIAkJCWNvbnRpbnVlOw0KPiAgCQl9DQo+ICANCj4gQEAgLTE0MCw3ICsxNDAsNyBA
+QCBpbnQgc3N1c2JfaG9zdF9lbmFibGUoc3RydWN0IHNzdXNiX210ayAqc3N1c2IpDQo+ICAJfQ0K
+PiAgDQo+ICAJY2hlY2tfY2xrID0gU1NVU0JfWEhDSV9SU1RfQl9TVFM7DQo+IC0JaWYgKG51bV91
+M3AgPiB1M19wb3J0c19kaXNhYmVkKQ0KPiArCWlmIChudW1fdTNwID4gdTNfcG9ydHNfZGlzYWJs
+ZWQpDQo+ICAJCWNoZWNrX2NsayA9IFNTVVNCX1UzX01BQ19SU1RfQl9TVFM7DQpSZXZpZXdlZC1i
+eTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVuZy55dW5AbWVkaWF0ZWsuY29tPg0KDQpUaGFua3MgYSBs
+b3QNCg0KDQo+ICANCj4gIAlyZXR1cm4gc3N1c2JfY2hlY2tfY2xvY2tzKHNzdXNiLCBjaGVja19j
+bGspOw0KDQo=
 
-Why are you resending the v4 that you submitted only four days ago? 
-
-Note that this version is again white space corrupted, and something
-happened to you SOB tag above.
-
-Johan
