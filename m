@@ -2,146 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9D53381FC
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 01:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E00233822B
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 01:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbhCKX7p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Mar 2021 18:59:45 -0500
-Received: from m42-2.mailgun.net ([69.72.42.2]:61212 "EHLO m42-2.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229606AbhCKX7V (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Mar 2021 18:59:21 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1615507161; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=KNh/PgYSoZKPjqJusJ9iEiMUTHAk/zatcqpES2T/4Rg=; b=Yp2bv8igfGUiWMd3g5R2ZicyIOrQXGYoXiqiP5wCGvIQEr2ECMRDYRoVT7yWpqEjIglHDgBR
- jcHq+Wu/Y4vZyzOMQyFlNZ7eqMm+CqvzinihILTLGehll7Vu/GEkycE6D1XCbz/o1IqXBHcM
- fjUerA5Ygogdw30CcAOSpIK2HTI=
-X-Mailgun-Sending-Ip: 69.72.42.2
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
- 604aaed24db3bb6801c55060 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 11 Mar 2021 23:59:14
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B6441C433ED; Thu, 11 Mar 2021 23:59:13 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id F0FF5C433CA;
-        Thu, 11 Mar 2021 23:59:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org F0FF5C433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH v3] usb: dwc3: gadget: Prevent EP queuing while stopping transfers
-Date:   Thu, 11 Mar 2021 15:59:02 -0800
-Message-Id: <1615507142-23097-1-git-send-email-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S229526AbhCLATe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Mar 2021 19:19:34 -0500
+Received: from mail-io1-f51.google.com ([209.85.166.51]:38622 "EHLO
+        mail-io1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229441AbhCLATU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 19:19:20 -0500
+Received: by mail-io1-f51.google.com with SMTP id k2so23944108ioh.5
+        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 16:19:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rT2mi0RKYY9eIELY8dDq2xYzkDbSu9DFCbXj3lrsyO8=;
+        b=fVAmT9Wd2TAvtch1W1Gie5wdLO8+/gMbfFBIwOaZdVTfcaJfTQIQs6xM767WUhqdv3
+         5RW4jknjJhf1//5cP9xgggN7lnt4F+etP/Rl2iFV75hXsp9NU2Uit7mVc1ykFE0cdK2U
+         734g4yvK1BIkhRYpMdabOjY33gzGbglFbUbS+78+qlUw4VdVezfv95UP9D9WoQ3Pv99c
+         WjdwUmLrjDaBz/Z5tM2gpSdgHVIkQZbMfTNBJN1uWCxH7yP1glIf3qF66BsUuERfBVN/
+         Q/zHCWJ7Sm/qpYl2pkN7m0shjylWIQY6k/WV0wGjcXLvvwLyAawNBRklQaL8HgBkioIC
+         KMgw==
+X-Gm-Message-State: AOAM532XsIqbNbyiNVtlDBeDYL1rJv/H9LbrrrOa0jAnJ2MrgAjuQL9+
+        D5F5P0wD+f/Kr1hnT5Mz6wkWUplgSb9rIPNKoyc=
+X-Google-Smtp-Source: ABdhPJxpA+rAOy8CGFGb0V7Q8yffnlhkpxscOQV5U71Ypt5nwje6CHV6BCtt99aN9HSK8O8Y0R9/0G9SpF89b8n8iSw=
+X-Received: by 2002:a6b:ec08:: with SMTP id c8mr7915047ioh.55.1615508359573;
+ Thu, 11 Mar 2021 16:19:19 -0800 (PST)
+MIME-Version: 1.0
+References: <20210310045544.28961.qmail@stuge.se> <1894f3f7-bd1d-493e-8d7f-8c10917da51b@tronnes.org>
+ <20210311144839.29454.qmail@stuge.se> <04a86207-325c-8170-6692-a87ec3b0fe4c@tronnes.org>
+ <20210311200226.1166.qmail@stuge.se> <CAKb7UvihLX0hgBOP3VBG7O+atwZcUVCPVuBdfmDMpg0NjXe-cQ@mail.gmail.com>
+ <20210311225751.2721.qmail@stuge.se>
+In-Reply-To: <20210311225751.2721.qmail@stuge.se>
+From:   Ilia Mirkin <imirkin@alum.mit.edu>
+Date:   Thu, 11 Mar 2021 19:19:08 -0500
+Message-ID: <CAKb7UvgRLa=_4vzeFS-ws6T28S_j8yz8Jq_ONowPcBKaBHwYkw@mail.gmail.com>
+Subject: Re: [PATCH v7 3/3] drm: Add GUD USB Display driver
+To:     Peter Stuge <peter@stuge.se>
+Cc:     hudson@trmm.net, markus@raatikainen.cc,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-usb@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>, th020394@gmail.com,
+        lkundrak@v3.sk, pontus.fuchs@gmail.com,
+        Sam Ravnborg <sam@ravnborg.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In the situations where the DWC3 gadget stops active transfers, once
-calling the dwc3_gadget_giveback(), there is a chance where a function
-driver can queue a new USB request in between the time where the dwc3
-lock has been released and re-aquired.  This occurs after we've already
-issued an ENDXFER command.  When the stop active transfers continues
-to remove USB requests from all dep lists, the newly added request will
-also be removed, while controller still has an active TRB for it.
-This can lead to the controller accessing an unmapped memory address.
+On Thu, Mar 11, 2021 at 5:58 PM Peter Stuge <peter@stuge.se> wrote:
+>
+> Ilia Mirkin wrote:
+> > > > #define DRM_FORMAT_XRGB8888   fourcc_code('X', 'R', '2', '4') /* [31:0]
+> > > > x:R:G:B 8:8:8:8 little endian */
+> > >
+> > > Okay, "[31:0] x:R:G:B 8:8:8:8" can certainly mean
+> > > [31:24]=x [23:16]=R [15:8]=G [7:0]=B, which when stored "little endian"
+> > > becomes B G R X in memory, for which your pix32 code is correct.
+> > >
+> > > That's the reverse *memory* layout of what the name says :)
+> >
+> > The definition of the formats is memory layout in little endian.
+>
+> To clarify, my new (hopefully correct?) understanding is this:
+>
+> XRGB8888 does *not* mean that address 0=X, 1=R, 2=G, 3=B, but that
+> the most significant byte in a packed XRGB8888 32-bit integer is X
+> and the least significant byte is B, and that this is the case both
+> on LE and BE machines.
 
-Fix this by ensuring parameters to prevent EP queuing are set before
-calling the stop active transfers API.
+Not quite.
 
-Fixes: ae7e86108b12 ("usb: dwc3: Stop active transfers before halting the controller")
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
----
-Changes since V2:
- - Removed duplicate dwc->connected = false setting in pullup routine
+XRGB8888 means that the memory layout should match a 32-bit integer,
+stored as LE, with the low bits being B, next bits being G, etc. This
+translates to byte 0 = B, byte 1 = G, etc. If you're on a BE system,
+and you're handed a XRGB8888 buffer, it still expects that byte 0 = B,
+etc (except as I outlined, some drivers which are from before these
+formats were a thing, sort of do their own thing). Thankfully this is
+equivalent to BGRX8888 (big-endian packing), so you can just munge the
+format. Not so with e.g. RGB565 though (since the components don't
+fall on byte boundaries).
 
-Changes since V1:
- - Added Fixes tag to point to the commit this is addressing
+> I previously thought that XRGB8888 indicated the memory byte order of
+> components being X R G B regardless of machine endianess, but now
+> understand XRGB to mean the MSB..LSB order of component bytes within
+> the 32-bit integer, as seen by software, not the order of bytes in memory.
 
- drivers/usb/dwc3/gadget.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+There are about 100 conventions, and they all manage to be different
+from each other. Packed vs array. BE vs LE. If you're *not* confused,
+that should be a red flag.
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 4780983..2c94cc9 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -783,8 +783,6 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
- 
- 	trace_dwc3_gadget_ep_disable(dep);
- 
--	dwc3_remove_requests(dwc, dep);
--
- 	/* make sure HW endpoint isn't stalled */
- 	if (dep->flags & DWC3_EP_STALL)
- 		__dwc3_gadget_ep_set_halt(dep, 0, false);
-@@ -803,6 +801,8 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
- 		dep->endpoint.desc = NULL;
- 	}
- 
-+	dwc3_remove_requests(dwc, dep);
-+
- 	return 0;
- }
- 
-@@ -1617,7 +1617,7 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
- {
- 	struct dwc3		*dwc = dep->dwc;
- 
--	if (!dep->endpoint.desc || !dwc->pullups_connected) {
-+	if (!dep->endpoint.desc || !dwc->pullups_connected || !dwc->connected) {
- 		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
- 				dep->name);
- 		return -ESHUTDOWN;
-@@ -2247,6 +2247,7 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- 	if (!is_on) {
- 		u32 count;
- 
-+		dwc->connected = false;
- 		/*
- 		 * In the Synopsis DesignWare Cores USB3 Databook Rev. 3.30a
- 		 * Section 4.1.8 Table 4-7, it states that for a device-initiated
-@@ -2271,7 +2272,6 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- 			dwc->ev_buf->lpos = (dwc->ev_buf->lpos + count) %
- 						dwc->ev_buf->length;
- 		}
--		dwc->connected = false;
- 	} else {
- 		__dwc3_gadget_start(dwc);
- 	}
-@@ -3329,8 +3329,6 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
- {
- 	u32			reg;
- 
--	dwc->connected = true;
--
- 	/*
- 	 * WORKAROUND: DWC3 revisions <1.88a have an issue which
- 	 * would cause a missing Disconnect Event if there's a
-@@ -3370,6 +3368,7 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
- 	 * transfers."
- 	 */
- 	dwc3_stop_active_transfers(dwc);
-+	dwc->connected = true;
- 
- 	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
- 	reg &= ~DWC3_DCTL_TSTCTRL_MASK;
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+[...]
 
+> > I'm not sure why you guys were talking about BE in the first place,
+>
+> I was worried that the translation didn't consider endianess.
+
+The translation in gud_xrgb8888_to_color definitely seems suspect.
+There's also a gud_is_big_endian, but I'm guessing this applies to the
+downstream device rather than the host system. I didn't check if
+dev->mode_config.quirk_addfb_prefer_host_byte_order is set -- that
+setting dictates whether these formats are in host-byte-order (and
+AddFB2 is disabled, so buffers can only be specified with depth/bpp
+and ambiguous component orders) or in LE byte order (and userspace can
+use AddFB2 which gives allows precise formats for these buffers). Not
+100% sure what something like Xorg's modesetting driver does, TBH.
+This is a very poorly-tested scenario.
+
+  -ilia
