@@ -2,101 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F450338F0D
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 14:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8843833900C
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 15:31:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbhCLNoL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Mar 2021 08:44:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51770 "EHLO mail.kernel.org"
+        id S231496AbhCLOar (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Mar 2021 09:30:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33606 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229567AbhCLNoL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 12 Mar 2021 08:44:11 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C34E164F77;
-        Fri, 12 Mar 2021 13:44:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615556650;
-        bh=mVvSkwEsOKN3rHPXEAFiEdEy6jIlgESBUsTEswU/k9U=;
+        id S229959AbhCLOak (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 12 Mar 2021 09:30:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 812F864FD6;
+        Fri, 12 Mar 2021 14:30:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1615559440;
+        bh=RLoJPBHkPRJOJbwxoSVQh2GJ5vCNj2ZFWVNZnj/3erY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZXxG9V+TvJJxCP+rNHDLoc+QSu4qLI10Jdm6tMvxo8a81Qcbf7wTs85Bipj6guvEF
-         gyszkF5TFQX9Elc5T/LDkHG98X9v3nJVQsGPte1D6vWGWdWYsAufHVo8vNKDemJsCo
-         sVtpt9cYtvxJqG5t1smPvPQXHtz/3nyOPLx+gFr/D4QlYbJRbYUV86GszY7JfMocCh
-         l1bom+rMo0/TsO7T4nsdL2e6OQpN2Doio1G5rVAf96DqJX/xuwg4wP+XItIXAk1sy7
-         UXPrITUzq0tw6SyrtOw0dTdVCRKO5hTHzFp2ndfd2rQcxv8g7Rw43Y3fF3x/Hv1QI+
-         mw1QYw5PZKT8Q==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lKi5X-000807-NM; Fri, 12 Mar 2021 14:44:23 +0100
-Date:   Fri, 12 Mar 2021 14:44:23 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     "Michael G. Katzmann" <michaelk@IEEE.org>
-Cc:     Charles Yeh <charlesyeh522@gmail.com>,
-        =?utf-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Joe Abbott <jabbott@rollanet.org>
-Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
-Message-ID: <YEtwNzhCmvyKhRto@hovoldconsulting.com>
-References: <YDUp0tIThOZSTHJt@hovoldconsulting.com>
- <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
- <YDUysZY90FfVhrHK@hovoldconsulting.com>
- <CAAZvQQ6F=cQ-EhC0kgeTVM3GrtBWR+HfM6UJWj2AEF1NYZ-vAQ@mail.gmail.com>
- <YDaGRRYrEO5BEJv0@hovoldconsulting.com>
- <CAAZvQQ7+b9=DKqPxgsXxS7Lhqj=QTzKHCMarSbsQkAnYqdO1GA@mail.gmail.com>
- <YEH7okblCx8+Odxn@hovoldconsulting.com>
- <ddc0e424-21c2-b8f4-1b00-f589267d2b51@IEEE.org>
- <YEpAaL9QtVMduEpi@hovoldconsulting.com>
- <9d02257d-cca1-116e-634a-6ac952362c5d@IEEE.org>
+        b=GXJlYP09bBg42nP8uZuWROFha3lSNtSAeLY5CtlrfB+pfG6VaAyjLXyfQWYS3m2br
+         7p4/Vu39DhOQ82QJfmTOkoumhIbGefrokCDw3ZXJZNuqCBgM9sfrbvzRpgsr8Q0vd1
+         GUQbTf8s0Tgq6hzzRO4aFrStUV1s849JE2uo6xXs=
+Date:   Fri, 12 Mar 2021 15:30:37 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb/usbtmc: Remove a redundant kref_put in
+ usbtmc_disconnect
+Message-ID: <YEt7DR4/7/ZLpUZA@kroah.com>
+References: <20210311150354.8723-1-lyl2019@mail.ustc.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9d02257d-cca1-116e-634a-6ac952362c5d@IEEE.org>
+In-Reply-To: <20210311150354.8723-1-lyl2019@mail.ustc.edu.cn>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 12, 2021 at 08:17:55AM -0500, Michael G. Katzmann wrote:
-> On 3/11/21 11:08 AM, Johan Hovold wrote:
-
-> >> static speed_t pl2303_encode_baud_rate_divisor( struct usb_serial_port *port,
-> >> 							unsigned char buf[4],
-> >> 								speed_t baud)
-> >> {
-> >> 	unsigned int baseline, mantissa, exponent;
-> >> 	struct usb_serial *serial = port->serial;
-> >> 	struct pl2303_serial_private *spriv = usb_get_serial_data(serial);
-> >>
-> >> 	/*
-> >> 	 * Apparently the formula is:
-> >> 	 * baudrate = 12M * 32 / (mantissa * 4^exponent)
-> >> 	 * where
-> >> 	 *   mantissa = buf[8:0]
-> >> 	 *   exponent = buf[11:9]
-> >> 	 *
-> >> 	 * TA version has more precision
-> >> 	 *      uses mantissa = buf[bits 10:0 ]
-> > So you discovered that there were even more bits here? Your first
-> > version used ten bits, I believe.
-> >
-> > I got an offline mail from a third person having problems with the TA
-> > and who had also verified eleven bits here.
+On Thu, Mar 11, 2021 at 07:03:54AM -0800, Lv Yunlong wrote:
+> In the implementation of usbtmc_free_int(), it already calls
+> kref_put() to free the data as shown below. So, in
+> usbtmc_disconnect, call an extra kref_put() is redundant.
 > 
-> I was basing this on Joe's discovery of the value used for 110 bd by
-> the windows driver (confirmed by Charles). The sequence 80 01 a6 a8
-> implies that the mantissa is 0x6a8 (i.e. 11 bits). The tests that I
-> did seemed to confirm this.
+> """
+> static void usbtmc_free_int(struct usbtmc_device_data *data)
+> {
+> 	if (!data->iin_ep_present || !data->iin_urb)
+> 		return;
+> 	usb_kill_urb(data->iin_urb);
+> 	kfree(data->iin_buffer);
+> 	data->iin_buffer = NULL;
+> 	usb_free_urb(data->iin_urb);
+> 	data->iin_urb = NULL;
+> 	kref_put(&data->kref, usbtmc_delete);
+> }
+> """
+> 
+> Signed-off-by: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+> ---
+>  drivers/usb/class/usbtmc.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
+> index 74d5a9c5238a..adcdd2df1949 100644
+> --- a/drivers/usb/class/usbtmc.c
+> +++ b/drivers/usb/class/usbtmc.c
+> @@ -2494,7 +2494,6 @@ static void usbtmc_disconnect(struct usb_interface *intf)
+>  	}
+>  	mutex_unlock(&data->io_mutex);
+>  	usbtmc_free_int(data);
+> -	kref_put(&data->kref, usbtmc_delete);
 
-Ah, of course.
+Did you test this change?
 
-> Pardon my ignorance of the process but where is the git repo for this
-> development branch?
+If not, please do so, I think the code is fine as-is.
 
-I'll wait for a few days before applying the series I posted yesterday
-to the usb-next (development) branch, but I've pushed a pl2303-wip
-branch for you that you can use use until then:
+thanks,
 
-	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/log/?h=pl2303-wip
-
-You can fetch from
-
-	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git
-
-Johan
+greg k-h
