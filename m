@@ -2,221 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF8F338390
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 03:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7013384B0
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 05:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231378AbhCLC2N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Mar 2021 21:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbhCLC1l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Mar 2021 21:27:41 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06E8C061760
-        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 18:27:41 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id z9so1271628iln.1
-        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 18:27:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pVKZJZEml+o0E/LOpnCX8ittkUy/sokAotEeA3aRVZo=;
-        b=M+yAYkCWTQMG+o+rxLxnSCx7JEAyasyQ0tAsmZzr2U/mAo7y5MbNvKi0gx5CbcXE00
-         yjJnj3mymjrkRj0ymBb6jIjCCMMPIFCySJX7sWUHpTR97EDjtlndjL2MKMoLRIcrTHfa
-         5EllKmlPfR//3wfMPlXiBXI3GiyXVE9RPzKdo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pVKZJZEml+o0E/LOpnCX8ittkUy/sokAotEeA3aRVZo=;
-        b=ryfcbOXGdtVgr+N0jIoX4VXDwy8lxnYVdjVd+MxdBKqlfBl7hDEBbYi6qE9j+LvTri
-         1No1J692htpJLZHNGV1UabZznutsZ6naXVnFi+WiWCGvRpI6D1tvRHFrBfwNC6QKCLyC
-         O3/UQ30ydc37S8r0w7QVSwh1mxFI6JmqYnL4gAdDJJrgNQRcruxXfiVuVWQF7UTOfe91
-         L+Js2CBbd3oMpW6GL/mCTszYYzMlKKmKztfZjmq8X8YXQzz1ZSEIe1gIrodISZy7+4Wm
-         V2+yQyUaksYH4cgE4GFfgGXo9heRcz+N2T26tuaNSDoDQO+GOlch9auNmh8DT5JQvGt/
-         JP4g==
-X-Gm-Message-State: AOAM533qe8wnN2cH8LuLUjATeo3Y4dyzbvvGudhZYfDR6Y+7+CWpaN14
-        Bvlwz/44ja2+WG8+EPdvst8+QQ==
-X-Google-Smtp-Source: ABdhPJyJkOC4OCQExHmboSfs8a84+HGznLOti2Z6YqiVSYpNwmRg+ixBL/aw4LWtxvE4kPA14r2hmg==
-X-Received: by 2002:a92:cda1:: with SMTP id g1mr1154050ild.267.1615516060527;
-        Thu, 11 Mar 2021 18:27:40 -0800 (PST)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id c5sm416269ioi.0.2021.03.11.18.27.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 18:27:40 -0800 (PST)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+a93fba6d384346a761e3@syzkaller.appspotmail.com
-Subject: [PATCH] usbip: fix vhci races in connection tear down
-Date:   Thu, 11 Mar 2021 19:27:37 -0700
-Message-Id: <20210312022737.44122-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.27.0
+        id S232190AbhCLEcw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Mar 2021 23:32:52 -0500
+Received: from foo.stuge.se ([212.116.89.98]:41896 "EHLO foo.stuge.se"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231701AbhCLEck (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 11 Mar 2021 23:32:40 -0500
+Received: (qmail 5103 invoked by uid 1000); 12 Mar 2021 04:32:36 -0000
+Message-ID: <20210312043236.5102.qmail@stuge.se>
+Date:   Fri, 12 Mar 2021 04:32:36 +0000
+From:   Peter Stuge <peter@stuge.se>
+To:     Ilia Mirkin <imirkin@alum.mit.edu>
+Cc:     hudson@trmm.net, markus@raatikainen.cc,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-usb@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>, th020394@gmail.com,
+        lkundrak@v3.sk, pontus.fuchs@gmail.com,
+        Sam Ravnborg <sam@ravnborg.org>
+Subject: Re: [PATCH v7 3/3] drm: Add GUD USB Display driver
+References: <20210310045544.28961.qmail@stuge.se>
+ <1894f3f7-bd1d-493e-8d7f-8c10917da51b@tronnes.org>
+ <20210311144839.29454.qmail@stuge.se>
+ <04a86207-325c-8170-6692-a87ec3b0fe4c@tronnes.org>
+ <20210311200226.1166.qmail@stuge.se>
+ <CAKb7UvihLX0hgBOP3VBG7O+atwZcUVCPVuBdfmDMpg0NjXe-cQ@mail.gmail.com>
+ <20210311225751.2721.qmail@stuge.se>
+ <CAKb7UvgRLa=_4vzeFS-ws6T28S_j8yz8Jq_ONowPcBKaBHwYkw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKb7UvgRLa=_4vzeFS-ws6T28S_j8yz8Jq_ONowPcBKaBHwYkw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-vhci_shutdown_connection() references connection state (tcp_socket,
-tcp_rx, tcp_tx, sockfd) saved in usbpip_device without holding the
-lock.
+Ilia Mirkin wrote:
+> XRGB8888 means that the memory layout should match a 32-bit integer,
+> stored as LE, with the low bits being B, next bits being G, etc. This
+> translates to byte 0 = B, byte 1 = G, etc. If you're on a BE system,
+> and you're handed a XRGB8888 buffer, it still expects that byte 0 = B,
+> etc (except as I outlined, some drivers which are from before these
+> formats were a thing, sort of do their own thing). Thankfully this is
+> equivalent to BGRX8888 (big-endian packing), so you can just munge the
+> format.
 
-Current connection tear down sequence:
-Step 1: shutdown the socket
-Step 2: stop rx thread and reset tcp_rx pointer
-Step 3: stop tx thread and reset tcp_tx pointer
-Step 4: Reset tcp_socket and sockfd
+I understand! Thanks a lot for clarifying.
 
-There are several race windows between these steps. In addition, device
-reset routine (vhci_device_reset) resets tcp_socket and sockfd holding
-the lock.
+It makes much more sense to me that the format indeed describes
+what is in memory rather than how pixels look to software.
 
-Fix these races:
-- Introduce in_disconnect flag to ensure vhci_shutdown_connection() runs
-  only once.
-- Change attach_store() to initialize in_disconnect to false while
-  initializing connection status (tcp_socket, tcp_rx, tcp_tx, sockfd)
-- Change vhci_shutdown_connection() to check in_disconnect and bail
-  out if disconnect is in progress.
-- Change vhci_shutdown_connection() to
-  -- hold lock to save connection state pointers and unlock.
-  -- Shutdown the socket and stop threads.
-  -- Hold lock to clear connection status and in_disconnect flag.
-- Change vhci_device_reset() to reset tcp_socket and sockfd.
-  if !in_disconnect
 
-Tested syzbot and the reproducer did not trigger any issue.
+> > > I'm not sure why you guys were talking about BE in the first place,
+> >
+> > I was worried that the translation didn't consider endianess.
+> 
+> The translation in gud_xrgb8888_to_color definitely seems suspect.
 
-Reported-and-tested-by: syzbot+a93fba6d384346a761e3@syzkaller.appspotmail.com
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- drivers/usb/usbip/usbip_common.h |  1 +
- drivers/usb/usbip/vhci_hcd.c     | 55 +++++++++++++++++++++++---------
- drivers/usb/usbip/vhci_sysfs.c   |  4 +++
- 3 files changed, 45 insertions(+), 15 deletions(-)
+So to me this means that the gud_pipe translations from XRGB8888 to the
+1-bit formats *do* have to adjust for the reversed order on BE.
 
-diff --git a/drivers/usb/usbip/usbip_common.h b/drivers/usb/usbip/usbip_common.h
-index d60ce17d3dd2..f6261c5a8c91 100644
---- a/drivers/usb/usbip/usbip_common.h
-+++ b/drivers/usb/usbip/usbip_common.h
-@@ -268,6 +268,7 @@ struct usbip_device {
- 
- 	struct task_struct *tcp_rx;
- 	struct task_struct *tcp_tx;
-+	bool in_disconnect; /* run device disconnect just once */
- 
- 	unsigned long event;
- 	wait_queue_head_t eh_waitq;
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index 3209b5ddd30c..c1917efe5737 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -1007,31 +1007,54 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
- static void vhci_shutdown_connection(struct usbip_device *ud)
- {
- 	struct vhci_device *vdev = container_of(ud, struct vhci_device, ud);
-+	unsigned long flags;
-+	struct socket *socket;
-+	struct task_struct *tcp_rx = NULL;
-+	struct task_struct *tcp_tx = NULL;
-+	int sockfd = 0;
-+
-+	spin_lock_irqsave(&ud->lock, flags);
-+	if (vdev->ud.in_disconnect) {
-+		pr_info("%s: Disconnect in progress for sockfd %d\n",
-+			__func__, ud->sockfd);
-+		spin_unlock_irqrestore(&ud->lock, flags);
-+		return;
-+	}
-+	vdev->ud.in_disconnect = true;
-+	socket = ud->tcp_socket;
-+	tcp_rx = vdev->ud.tcp_rx;
-+	tcp_tx = vdev->ud.tcp_tx;
-+	sockfd = ud->sockfd;
-+	spin_unlock_irqrestore(&ud->lock, flags);
- 
- 	/* need this? see stub_dev.c */
--	if (ud->tcp_socket) {
--		pr_debug("shutdown tcp_socket %d\n", ud->sockfd);
--		kernel_sock_shutdown(ud->tcp_socket, SHUT_RDWR);
-+	if (socket) {
-+		pr_info("%s: shutdown tcp_socket %d\n", __func__, sockfd);
-+		kernel_sock_shutdown(socket, SHUT_RDWR);
- 	}
- 
--	/* kill threads related to this sdev */
--	if (vdev->ud.tcp_rx) {
--		kthread_stop_put(vdev->ud.tcp_rx);
--		vdev->ud.tcp_rx = NULL;
-+	/* kill threads related to this vdev */
-+	if (tcp_rx) {
-+		pr_info("%s: stop rx thread\n", __func__);
-+		kthread_stop_put(tcp_rx);
- 	}
--	if (vdev->ud.tcp_tx) {
--		kthread_stop_put(vdev->ud.tcp_tx);
--		vdev->ud.tcp_tx = NULL;
-+	if (tcp_tx) {
-+		pr_info("%s: stop tx thread\n", __func__);
-+		kthread_stop_put(tcp_tx);
- 	}
--	pr_info("stop threads\n");
- 
-+	spin_lock_irqsave(&ud->lock, flags);
- 	/* active connection is closed */
--	if (vdev->ud.tcp_socket) {
-+	if (ud->tcp_socket) {
-+		vdev->ud.tcp_rx = NULL;
-+		vdev->ud.tcp_tx = NULL;
- 		sockfd_put(vdev->ud.tcp_socket);
- 		vdev->ud.tcp_socket = NULL;
- 		vdev->ud.sockfd = -1;
- 	}
--	pr_info("release socket\n");
-+	vdev->ud.in_disconnect = false;
-+	spin_unlock_irqrestore(&ud->lock, flags);
-+	pr_info("%s: release socket\n", __func__);
- 
- 	vhci_device_unlink_cleanup(vdev);
- 
-@@ -1057,7 +1080,7 @@ static void vhci_shutdown_connection(struct usbip_device *ud)
- 	 */
- 	rh_port_disconnect(vdev);
- 
--	pr_info("disconnect device\n");
-+	pr_info("%s: disconnect device\n", __func__);
- }
- 
- static void vhci_device_reset(struct usbip_device *ud)
-@@ -1073,7 +1096,9 @@ static void vhci_device_reset(struct usbip_device *ud)
- 	usb_put_dev(vdev->udev);
- 	vdev->udev = NULL;
- 
--	if (ud->tcp_socket) {
-+	if (!vdev->ud.in_disconnect && ud->tcp_socket) {
-+		pr_info("%s: release tcp_socket %d\n",
-+			__func__, ud->sockfd);
- 		sockfd_put(ud->tcp_socket);
- 		ud->tcp_socket = NULL;
- 		ud->sockfd = -1;
-diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
-index c4b4256e5dad..c4457026d5ad 100644
---- a/drivers/usb/usbip/vhci_sysfs.c
-+++ b/drivers/usb/usbip/vhci_sysfs.c
-@@ -412,6 +412,10 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
- 	vdev->ud.tcp_rx     = tcp_rx;
- 	vdev->ud.tcp_tx     = tcp_tx;
- 	vdev->ud.status     = VDEV_ST_NOTASSIGNED;
-+
-+	/* used to run socket shutdown just once */
-+	vdev->ud.in_disconnect = false;
-+
- 	usbip_kcov_handle_init(&vdev->ud);
- 
- 	spin_unlock(&vdev->ud.lock);
--- 
-2.27.0
 
+> There's also a gud_is_big_endian, but I'm guessing this applies to the
+> downstream device rather than the host system.
+
+gud_is_big_endian() is a static bool wrapper around defined(__BIG_ENDIAN)
+so yes, it applies to the host.
+
+With memory layout being constant I again think gud_xrgb8888_to_color()
+needs to take further steps to work correctly also on BE hosts. (Maybe
+that's le32_to_cpu(*pix32), maybe drm_fb_swab(), maybe something else?)
+
+
+> I didn't check if dev->mode_config.quirk_addfb_prefer_host_byte_order
+> is set
+
+I can't tell if that's helpful, probably Noralf can.
+
+
+Thanks a lot
+
+//Peter
