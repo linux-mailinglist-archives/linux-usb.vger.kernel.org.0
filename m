@@ -2,65 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C873389D8
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 11:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7AA338A9C
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 11:54:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233065AbhCLKRv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Mar 2021 05:17:51 -0500
-Received: from mga07.intel.com ([134.134.136.100]:2242 "EHLO mga07.intel.com"
+        id S233614AbhCLKxr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Mar 2021 05:53:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37172 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232861AbhCLKR1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 12 Mar 2021 05:17:27 -0500
-IronPort-SDR: LmtJrCf5OgU7pLpIWzaVDghvOVpZi+crqkvqls2N1E1+WhF0cbmMCQoOW+/1x7xfWYveizrYZd
- QASmF//xvBfA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9920"; a="252829475"
-X-IronPort-AV: E=Sophos;i="5.81,243,1610438400"; 
-   d="scan'208";a="252829475"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2021 02:17:21 -0800
-IronPort-SDR: +Q82eKw8SHQaIOg/zZaybiphgADxmIFjjC3PjZptbbhJQ9sDJuj7fcZJbTC3LzF5zXB+n0yzic
- jZfWXj4sygHA==
-X-IronPort-AV: E=Sophos;i="5.81,243,1610438400"; 
-   d="scan'208";a="448583393"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2021 02:17:18 -0800
-Received: by lahna (sSMTP sendmail emulation); Fri, 12 Mar 2021 12:17:15 +0200
-Date:   Fri, 12 Mar 2021 12:17:15 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Gil Fine <gil.fine@intel.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org, lukas@wunner.de
-Subject: Re: [PATCH] thunderbolt: debugfs: Show all accessible dwords
-Message-ID: <20210312101715.GX2542@lahna.fi.intel.com>
-References: <20210309092330.5813-1-gil.fine@intel.com>
+        id S233641AbhCLKxl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 12 Mar 2021 05:53:41 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B6D56501B;
+        Fri, 12 Mar 2021 10:44:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615545895;
+        bh=UfOV09KQcKMeWL12uT+LRLZWIw6CpoAZkllye4DuvZ8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cFRuOfo4hYjQH16EHW8ytC693/8mGqx8Eksw99CvF2BmY6ymqNr62HU+ozvYwth6v
+         FJgF2wabUH1Jxh0cOymAk70aFfT8hM3wNrqHzEOyzwRBPWHeqHpqt+7qnPzZnIcazq
+         ZqaS475OlHk6KfmkJoOnV1Kr4v6WBXb7Rdswd3ReyBRhnVx4Eyve6AzthZszMBQMgX
+         S6h7BpBUQDhtolWE6sDoHNCNCnkM0ocM684GenOxqAWa3ktEK6eikvK4FIdUp1B1W2
+         +71qIij1IjFFIbhtU2UaIAoR/QvrVjt9yuEKUHc84t5wbvjO9M19J0abZ9Ji2IDBd7
+         6P53bZiDVySWw==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lKfI0-0007H0-7k; Fri, 12 Mar 2021 11:45:04 +0100
+Date:   Fri, 12 Mar 2021 11:45:04 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     valentina.manea.m@gmail.com, shuah@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+a93fba6d384346a761e3@syzkaller.appspotmail.com
+Subject: Re: [PATCH] usbip: fix vhci races in connection tear down
+Message-ID: <YEtGMMjOg3pHTSma@hovoldconsulting.com>
+References: <20210312022737.44122-1-skhan@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210309092330.5813-1-gil.fine@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20210312022737.44122-1-skhan@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 09, 2021 at 11:23:30AM +0200, Gil Fine wrote:
-> Currently, when first failure occurs while reading of the block,
-> we stop reading the block and jump to the next capability.
-> This doesn't cover the case of block with "holes" of inaccessible
-> dwords, followed by accessible dwords.
-> This patch address this problem.
-> In case of failure while reading the complete block in one transaction,
-> (because of one or more dwords is inaccessible), we read the remaining
-> dwords of the block dword-by-dword, one dword per transaction,
-> till the end of the block.
-> By doing this, we handle the case of block with "holes" of inaccessible
-> dwords, followed by accessible dwords. The accessible dwords are shown
-> with the fields: <offset> <relative_offset> <cap_id> <vs_cap_id> <value>
-> E.g.:
-> 0x01eb  236 0x05 0x06 0x0000d166
-> While the inaccesible dwords are shown as: <offset> <not accessible>
-> E.g.:
-> 0x01ed <not accessible>
+On Thu, Mar 11, 2021 at 07:27:37PM -0700, Shuah Khan wrote:
+> vhci_shutdown_connection() references connection state (tcp_socket,
+> tcp_rx, tcp_tx, sockfd) saved in usbpip_device without holding the
+> lock.
 > 
-> Signed-off-by: Gil Fine <gil.fine@intel.com>
+> Current connection tear down sequence:
+> Step 1: shutdown the socket
+> Step 2: stop rx thread and reset tcp_rx pointer
+> Step 3: stop tx thread and reset tcp_tx pointer
+> Step 4: Reset tcp_socket and sockfd
+> 
+> There are several race windows between these steps. In addition, device
+> reset routine (vhci_device_reset) resets tcp_socket and sockfd holding
+> the lock.
+> 
+> Fix these races:
+> - Introduce in_disconnect flag to ensure vhci_shutdown_connection() runs
+>   only once.
+> - Change attach_store() to initialize in_disconnect to false while
+>   initializing connection status (tcp_socket, tcp_rx, tcp_tx, sockfd)
+> - Change vhci_shutdown_connection() to check in_disconnect and bail
+>   out if disconnect is in progress.
+> - Change vhci_shutdown_connection() to
+>   -- hold lock to save connection state pointers and unlock.
+>   -- Shutdown the socket and stop threads.
+>   -- Hold lock to clear connection status and in_disconnect flag.
+> - Change vhci_device_reset() to reset tcp_socket and sockfd.
+>   if !in_disconnect
+> 
+> Tested syzbot and the reproducer did not trigger any issue.
+> 
+> Reported-and-tested-by: syzbot+a93fba6d384346a761e3@syzkaller.appspotmail.com
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> ---
+>  drivers/usb/usbip/usbip_common.h |  1 +
+>  drivers/usb/usbip/vhci_hcd.c     | 55 +++++++++++++++++++++++---------
+>  drivers/usb/usbip/vhci_sysfs.c   |  4 +++
+>  3 files changed, 45 insertions(+), 15 deletions(-)
 
-Applied to thunderbolt.git/next, thanks!
+> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+> index 3209b5ddd30c..c1917efe5737 100644
+> --- a/drivers/usb/usbip/vhci_hcd.c
+> +++ b/drivers/usb/usbip/vhci_hcd.c
+> @@ -1007,31 +1007,54 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
+>  static void vhci_shutdown_connection(struct usbip_device *ud)
+>  {
+>  	struct vhci_device *vdev = container_of(ud, struct vhci_device, ud);
+> +	unsigned long flags;
+> +	struct socket *socket;
+> +	struct task_struct *tcp_rx = NULL;
+> +	struct task_struct *tcp_tx = NULL;
+> +	int sockfd = 0;
+> +
+> +	spin_lock_irqsave(&ud->lock, flags);
+> +	if (vdev->ud.in_disconnect) {
+> +		pr_info("%s: Disconnect in progress for sockfd %d\n",
+> +			__func__, ud->sockfd);
+
+Looks like you forgot to remove all you debug printks like this one
+before submitting.
+
+> +		spin_unlock_irqrestore(&ud->lock, flags);
+> +		return;
+> +	}
+
+Johan
