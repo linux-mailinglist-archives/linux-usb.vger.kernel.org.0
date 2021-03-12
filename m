@@ -2,174 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9042C338529
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 06:25:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA5F33857F
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 06:44:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbhCLFYw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Mar 2021 00:24:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbhCLFYu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 00:24:50 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A310C061761
-        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 21:24:50 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id l10so28621849ybt.6
-        for <linux-usb@vger.kernel.org>; Thu, 11 Mar 2021 21:24:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=2S11qT9RIwmKtMbHj/SRU+W48erwYAwCbBW3iK4A8WQ=;
-        b=aj4UIbgmGvYsEQWbjl9Vsd2HPvBeEwmASkBiqHcWT/rT89Zr6eUN1EjPTx0NtfJSli
-         zdgzENaiEQFVSHCRacIuwKDofT7lP3lPXTekCmhXsVhDAx0ieW3vWZuXFqu7tDELu+3V
-         2clHbPNLSJSJupHclZIQr3MhGiAWomG/1N3N872h5XutJC7Ed6AfoCOfjVtsNcsknwZ1
-         2iLE2vrB3oCcFv7tVt/bmliGt6pnE1FUBX9cfW55MbOMWvpoeGjz4XaXgvGYTVPx3T6V
-         aBxC9h9K+nskhpWdZHjiiAATgSuxdxQJHLygQYpsG1tNjuU6t+vnI7orOvn8hreCbBGA
-         5Rdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=2S11qT9RIwmKtMbHj/SRU+W48erwYAwCbBW3iK4A8WQ=;
-        b=b6N25FV1xqIutgXTOxUljYu5+YZ1fNvbxQcw5rM1nPiv3UiCfUBVbhl8bK6Sl3Qj4Y
-         VcBtKBOtnrrhNSps+9s/g6VbmBRtcfBhNuh/DoD9gJVXWqRzpoFFcxdZszmNJtd2GA+N
-         f+bFG+B7OxO96R9WYxYw0E6ZkOhe3NjKDdm9GsAP5i7P/pwQfQQfH4Cs3j7P9rokFgjF
-         GVyXYbYS3I/yImbiW6vvyvJZROh7vg67P4PSbi8TwgGMHz305HufLq62dJVik3kjMhpb
-         MFGb0BdYaO1cM6ga2Dv8feCX4EbqXqYP/janbOXJALx3jQXMwC7vRuSZEejBKwmunJeL
-         zjeg==
-X-Gm-Message-State: AOAM533IyGzIuka6i4Izvf+aL8ZUw5fHM7WCEavwCM2h6EedZu1zYb1+
-        5t1qAZdIUs05N6e+BLZe5lztUdvEHh0=
-X-Google-Smtp-Source: ABdhPJxWpuxqeI1jL5K9FwPmRrhsrAxOTQFEjo47De27XUVhg780+oU6yuN8CevAgt0j1+UM5fe8nws51yY=
-X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:39e6:8b30:8665:4bec])
- (user=badhri job=sendgmr) by 2002:a25:d3ca:: with SMTP id e193mr16651418ybf.379.1615526689690;
- Thu, 11 Mar 2021 21:24:49 -0800 (PST)
-Date:   Thu, 11 Mar 2021 21:24:43 -0800
-In-Reply-To: <20210312052443.3797674-1-badhri@google.com>
-Message-Id: <20210312052443.3797674-2-badhri@google.com>
-Mime-Version: 1.0
-References: <20210312052443.3797674-1-badhri@google.com>
-X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
-Subject: [PATCH v2 2/2] usb: typec: tcpci_maxim: configure charging & data paths
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>,
-        Badhri Jagan Sridharan <badhri@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S229900AbhCLFoW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Mar 2021 00:44:22 -0500
+Received: from www262.sakura.ne.jp ([202.181.97.72]:63749 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229756AbhCLFoQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 00:44:16 -0500
+Received: from fsav304.sakura.ne.jp (fsav304.sakura.ne.jp [153.120.85.135])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 12C5i6ZY032644;
+        Fri, 12 Mar 2021 14:44:07 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav304.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav304.sakura.ne.jp);
+ Fri, 12 Mar 2021 14:44:06 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav304.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 12C5i5DX032592
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 12 Mar 2021 14:44:06 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: [PATCH 0/6] usbip fixes to crashes found by syzbot
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+To:     Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org
+Cc:     valentina.manea.m@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
+References: <cover.1615171203.git.skhan@linuxfoundation.org>
+ <YEkQ4qS7tkwmjzDn@kroah.com>
+ <5baf6b94-72c4-6e69-65a5-35c5cfb8ca0e@i-love.sakura.ne.jp>
+ <YEoTw7CoK7Ob0YR+@kroah.com>
+ <8dc1e893-4338-90ff-ea61-de727cad1d11@i-love.sakura.ne.jp>
+Message-ID: <afd1341b-2ed1-f781-d6c8-6064fea3aeb8@i-love.sakura.ne.jp>
+Date:   Fri, 12 Mar 2021 14:44:05 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <8dc1e893-4338-90ff-ea61-de727cad1d11@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The change exposes the data_role and the orientation as a extcon
-interface for configuring the USB data controller.
+I cloned git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git as you are testing changes there.
 
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
-Changes since V1:
-- Dropped changes related to get_/set_current_limit and pd_capable
-  callback. Will send them in as separate patches.
----
- drivers/usb/typec/tcpm/tcpci_maxim.c | 56 ++++++++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+> commit 09e4522c87ff54c655c09f318a68b012eda8eb01 (HEAD -> usbip_test, origin/usbip_test)
+> Author: Shuah Khan <skhan@linuxfoundation.org>
+> Date:   Thu Mar 11 11:18:25 2021 -0700
+>
+>    usbip: fix vhci races in connection tear down
+>
+>    - Change vhci_device_reset() to reset tcp_socket and sockfd.
+>      if !in_disconnect
 
-diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-index 041a1c393594..1210445713ee 100644
---- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-+++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-@@ -7,6 +7,8 @@
- 
- #include <linux/interrupt.h>
- #include <linux/i2c.h>
-+#include <linux/extcon.h>
-+#include <linux/extcon-provider.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/regmap.h>
-@@ -46,6 +48,8 @@ struct max_tcpci_chip {
- 	struct device *dev;
- 	struct i2c_client *client;
- 	struct tcpm_port *port;
-+	bool attached;
-+	struct extcon_dev *extcon;
- };
- 
- static const struct regmap_range max_tcpci_tcpci_range[] = {
-@@ -439,6 +443,39 @@ static int tcpci_init(struct tcpci *tcpci, struct tcpci_data *data)
- 	return -1;
- }
- 
-+static void max_tcpci_set_roles(struct tcpci *tcpci, struct tcpci_data *data, bool attached,
-+				enum typec_role role, enum typec_data_role data_role)
-+{
-+	struct max_tcpci_chip *chip = tdata_to_max_tcpci(data);
-+
-+	chip->attached = attached;
-+
-+	if (!attached) {
-+		extcon_set_state_sync(chip->extcon, EXTCON_USB_HOST, 0);
-+		extcon_set_state_sync(chip->extcon, EXTCON_USB, 0);
-+		return;
-+	}
-+
-+	extcon_set_state_sync(chip->extcon, data_role == TYPEC_HOST ? EXTCON_USB_HOST : EXTCON_USB,
-+			      1);
-+}
-+
-+static void max_tcpci_set_cc_polarity(struct tcpci *tcpci, struct tcpci_data *data,
-+				      enum typec_cc_polarity polarity)
-+{
-+	struct max_tcpci_chip *chip = tdata_to_max_tcpci(data);
-+
-+	extcon_set_property(chip->extcon, EXTCON_USB, EXTCON_PROP_USB_TYPEC_POLARITY,
-+			    (union extcon_property_value)(int)polarity);
-+	extcon_set_property(chip->extcon, EXTCON_USB_HOST, EXTCON_PROP_USB_TYPEC_POLARITY,
-+			    (union extcon_property_value)(int)polarity);
-+}
-+
-+static const unsigned int usbpd_extcon[] = {
-+	EXTCON_USB,
-+	EXTCON_USB_HOST,
-+};
-+
- static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id *i2c_id)
- {
- 	int ret;
-@@ -472,6 +509,8 @@ static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id
- 	chip->data.auto_discharge_disconnect = true;
- 	chip->data.vbus_vsafe0v = true;
- 	chip->data.set_partner_usb_comm_capable = max_tcpci_set_partner_usb_comm_capable;
-+	chip->data.set_roles = max_tcpci_set_roles;
-+	chip->data.set_cc_polarity = max_tcpci_set_cc_polarity;
- 
- 	max_tcpci_init_regs(chip);
- 	chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
-@@ -484,6 +523,23 @@ static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id
- 	if (ret < 0)
- 		goto unreg_port;
- 
-+	chip->extcon = devm_extcon_dev_allocate(&client->dev, usbpd_extcon);
-+	if (IS_ERR(chip->extcon)) {
-+		dev_err(&client->dev, "Error allocating extcon: %ld\n", PTR_ERR(chip->extcon));
-+		ret = PTR_ERR(chip->extcon);
-+		goto unreg_port;
-+	}
-+
-+	ret = devm_extcon_dev_register(&client->dev, chip->extcon);
-+	if (ret < 0) {
-+		dev_err(&client->dev, "failed to register extcon device");
-+		goto unreg_port;
-+	}
-+
-+	extcon_set_property_capability(chip->extcon, EXTCON_USB, EXTCON_PROP_USB_TYPEC_POLARITY);
-+	extcon_set_property_capability(chip->extcon, EXTCON_USB_HOST,
-+				       EXTCON_PROP_USB_TYPEC_POLARITY);
-+
- 	device_init_wakeup(chip->dev, true);
- 	return 0;
- 
--- 
-2.31.0.rc2.261.g7f71774620-goog
+How it can happen? vhci_device_reset() can be called only after vhci_shutdown_connection()
+completed, and vhci_shutdown_connection() from subsequent requests cannot be called until
+vhci_device_reset() completes. I consider it as a dead code which should be removed by
+my "[PATCH v4 05/12] usb: usbip: don't reset tcp_socket at vhci_device_reset()".
+
+And what you are missing in your [PATCH 4,5,6/6] is
+
+  diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
+  index c4457026d5ad..3c64bd06ab53 100644
+  --- a/drivers/usb/usbip/vhci_sysfs.c
+  +++ b/drivers/usb/usbip/vhci_sysfs.c
+  @@ -423,6 +423,7 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
+          /* end the lock */
+  
+          wake_up_process(vdev->ud.tcp_rx);
+  +       schedule_timeout_uninterruptible(HZ); // Consider being preempted here.
+          wake_up_process(vdev->ud.tcp_tx);
+  
+          rh_port_connect(vdev, speed);
+
+. wake_up_process(tcp_tx) can call vhci_shutdown_connection() before wake_up_process(tcp_tx) is called.
+Since vhci_shutdown_connection() destroys tcp_tx thread and releases tcp_tx memory via kthread_stop_put(tcp_tx),
+wake_up_process(tcp_tx) will access already freed memory. Your patch converted "NULL pointer dereference caused by
+failing to call kthread_stop_put(tcp_tx)" into "use after free caused by succeeding to call kthread_stop_put(tcp_tx)".
 
