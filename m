@@ -2,179 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3CF338827
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 10:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C873389D8
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 11:18:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbhCLJBq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Mar 2021 04:01:46 -0500
-Received: from mga11.intel.com ([192.55.52.93]:29858 "EHLO mga11.intel.com"
+        id S233065AbhCLKRv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Mar 2021 05:17:51 -0500
+Received: from mga07.intel.com ([134.134.136.100]:2242 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232540AbhCLJBg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 12 Mar 2021 04:01:36 -0500
-IronPort-SDR: c87Vc3zRg0CP0jXoyELJet6Tj3uGVOmt39jF5pKgqdQW9vALN9FKYN4VWh5uLtK4z5TqzEkJmI
- nn3p6vQ7bQdw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9920"; a="185451234"
+        id S232861AbhCLKR1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 12 Mar 2021 05:17:27 -0500
+IronPort-SDR: LmtJrCf5OgU7pLpIWzaVDghvOVpZi+crqkvqls2N1E1+WhF0cbmMCQoOW+/1x7xfWYveizrYZd
+ QASmF//xvBfA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9920"; a="252829475"
 X-IronPort-AV: E=Sophos;i="5.81,243,1610438400"; 
-   d="scan'208";a="185451234"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2021 01:01:36 -0800
-IronPort-SDR: 71ORMrExkGQpw8AnNT3v33woVnAfuFuzzuoC8hT1hZg82U4aLcyJnDmQAUvIRdt5iyYEgv0bgP
- qCnDiCAhxfmw==
-X-ExtLoop1: 1
+   d="scan'208";a="252829475"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2021 02:17:21 -0800
+IronPort-SDR: +Q82eKw8SHQaIOg/zZaybiphgADxmIFjjC3PjZptbbhJQ9sDJuj7fcZJbTC3LzF5zXB+n0yzic
+ jZfWXj4sygHA==
 X-IronPort-AV: E=Sophos;i="5.81,243,1610438400"; 
-   d="scan'208";a="510277867"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 12 Mar 2021 01:01:32 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 12 Mar 2021 11:01:31 +0200
-Date:   Fri, 12 Mar 2021 11:01:31 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>
-Subject: Re: [PATCH v2 2/2] usb: typec: tcpci_maxim: configure charging &
- data paths
-Message-ID: <YEst66MdaYFzaIUT@kuha.fi.intel.com>
-References: <20210312052443.3797674-1-badhri@google.com>
- <20210312052443.3797674-2-badhri@google.com>
+   d="scan'208";a="448583393"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2021 02:17:18 -0800
+Received: by lahna (sSMTP sendmail emulation); Fri, 12 Mar 2021 12:17:15 +0200
+Date:   Fri, 12 Mar 2021 12:17:15 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Gil Fine <gil.fine@intel.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org, lukas@wunner.de
+Subject: Re: [PATCH] thunderbolt: debugfs: Show all accessible dwords
+Message-ID: <20210312101715.GX2542@lahna.fi.intel.com>
+References: <20210309092330.5813-1-gil.fine@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210312052443.3797674-2-badhri@google.com>
+In-Reply-To: <20210309092330.5813-1-gil.fine@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thu, Mar 11, 2021 at 09:24:43PM -0800, Badhri Jagan Sridharan kirjoitti:
-> The change exposes the data_role and the orientation as a extcon
-> interface for configuring the USB data controller.
+On Tue, Mar 09, 2021 at 11:23:30AM +0200, Gil Fine wrote:
+> Currently, when first failure occurs while reading of the block,
+> we stop reading the block and jump to the next capability.
+> This doesn't cover the case of block with "holes" of inaccessible
+> dwords, followed by accessible dwords.
+> This patch address this problem.
+> In case of failure while reading the complete block in one transaction,
+> (because of one or more dwords is inaccessible), we read the remaining
+> dwords of the block dword-by-dword, one dword per transaction,
+> till the end of the block.
+> By doing this, we handle the case of block with "holes" of inaccessible
+> dwords, followed by accessible dwords. The accessible dwords are shown
+> with the fields: <offset> <relative_offset> <cap_id> <vs_cap_id> <value>
+> E.g.:
+> 0x01eb  236 0x05 0x06 0x0000d166
+> While the inaccesible dwords are shown as: <offset> <not accessible>
+> E.g.:
+> 0x01ed <not accessible>
 > 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
-> Changes since V1:
-> - Dropped changes related to get_/set_current_limit and pd_capable
->   callback. Will send them in as separate patches.
-> ---
->  drivers/usb/typec/tcpm/tcpci_maxim.c | 56 ++++++++++++++++++++++++++++
->  1 file changed, 56 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> index 041a1c393594..1210445713ee 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> @@ -7,6 +7,8 @@
->  
->  #include <linux/interrupt.h>
->  #include <linux/i2c.h>
-> +#include <linux/extcon.h>
-> +#include <linux/extcon-provider.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/regmap.h>
-> @@ -46,6 +48,8 @@ struct max_tcpci_chip {
->  	struct device *dev;
->  	struct i2c_client *client;
->  	struct tcpm_port *port;
-> +	bool attached;
-> +	struct extcon_dev *extcon;
->  };
->  
->  static const struct regmap_range max_tcpci_tcpci_range[] = {
-> @@ -439,6 +443,39 @@ static int tcpci_init(struct tcpci *tcpci, struct tcpci_data *data)
->  	return -1;
->  }
->  
-> +static void max_tcpci_set_roles(struct tcpci *tcpci, struct tcpci_data *data, bool attached,
-> +				enum typec_role role, enum typec_data_role data_role)
-> +{
-> +	struct max_tcpci_chip *chip = tdata_to_max_tcpci(data);
-> +
-> +	chip->attached = attached;
-> +
-> +	if (!attached) {
-> +		extcon_set_state_sync(chip->extcon, EXTCON_USB_HOST, 0);
-> +		extcon_set_state_sync(chip->extcon, EXTCON_USB, 0);
-> +		return;
-> +	}
-> +
-> +	extcon_set_state_sync(chip->extcon, data_role == TYPEC_HOST ? EXTCON_USB_HOST : EXTCON_USB,
-> +			      1);
-> +}
-> +
-> +static void max_tcpci_set_cc_polarity(struct tcpci *tcpci, struct tcpci_data *data,
-> +				      enum typec_cc_polarity polarity)
-> +{
-> +	struct max_tcpci_chip *chip = tdata_to_max_tcpci(data);
-> +
-> +	extcon_set_property(chip->extcon, EXTCON_USB, EXTCON_PROP_USB_TYPEC_POLARITY,
-> +			    (union extcon_property_value)(int)polarity);
-> +	extcon_set_property(chip->extcon, EXTCON_USB_HOST, EXTCON_PROP_USB_TYPEC_POLARITY,
-> +			    (union extcon_property_value)(int)polarity);
-> +}
-> +
-> +static const unsigned int usbpd_extcon[] = {
-> +	EXTCON_USB,
-> +	EXTCON_USB_HOST,
-> +};
-> +
->  static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id *i2c_id)
->  {
->  	int ret;
-> @@ -472,6 +509,8 @@ static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id
->  	chip->data.auto_discharge_disconnect = true;
->  	chip->data.vbus_vsafe0v = true;
->  	chip->data.set_partner_usb_comm_capable = max_tcpci_set_partner_usb_comm_capable;
-> +	chip->data.set_roles = max_tcpci_set_roles;
-> +	chip->data.set_cc_polarity = max_tcpci_set_cc_polarity;
->  
->  	max_tcpci_init_regs(chip);
->  	chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
-> @@ -484,6 +523,23 @@ static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id
->  	if (ret < 0)
->  		goto unreg_port;
->  
-> +	chip->extcon = devm_extcon_dev_allocate(&client->dev, usbpd_extcon);
-> +	if (IS_ERR(chip->extcon)) {
-> +		dev_err(&client->dev, "Error allocating extcon: %ld\n", PTR_ERR(chip->extcon));
-> +		ret = PTR_ERR(chip->extcon);
-> +		goto unreg_port;
-> +	}
-> +
-> +	ret = devm_extcon_dev_register(&client->dev, chip->extcon);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "failed to register extcon device");
-> +		goto unreg_port;
-> +	}
+> Signed-off-by: Gil Fine <gil.fine@intel.com>
 
-Why do you need this? We have the dedicated USB role class because
-extcon could not handle every type of system. Things are simple enough
-when you have a single dual-role capable USB controller, but when you
-start having more bits and pieces like muxes in between, the
-consumer/supplier extcon roles get twisted.
-
-So in case you did not know this, our goal was originally to use
-extcon for handling the data role (and orientation too), but some of
-drivers were refused by the extcon maintainers because of the above
-reason.
-
-Most USB controller drivers for dual-role capable USB controllers
-already register a role switch, and tcpm.c always requests a handle to
-one that it uses to inform the current data role, so this part should
-not require any new code.
-
-
-> +	extcon_set_property_capability(chip->extcon, EXTCON_USB, EXTCON_PROP_USB_TYPEC_POLARITY);
-> +	extcon_set_property_capability(chip->extcon, EXTCON_USB_HOST,
-> +				       EXTCON_PROP_USB_TYPEC_POLARITY);
-> +
->  	device_init_wakeup(chip->dev, true);
->  	return 0;
->  
-> -- 
-> 2.31.0.rc2.261.g7f71774620-goog
-
-thanks,
-
--- 
-heikki
+Applied to thunderbolt.git/next, thanks!
