@@ -2,129 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76555339875
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 21:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2035339890
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 21:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234902AbhCLU3s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Mar 2021 15:29:48 -0500
-Received: from beige.elm.relay.mailchannels.net ([23.83.212.16]:38472 "EHLO
-        beige.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234772AbhCLU3T (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 15:29:19 -0500
-X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 9471A220BA;
-        Fri, 12 Mar 2021 20:29:13 +0000 (UTC)
-Received: from pdx1-sub0-mail-a6.g.dreamhost.com (100-96-17-75.trex.outbound.svc.cluster.local [100.96.17.75])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id CC07E21C8C;
-        Fri, 12 Mar 2021 20:29:12 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
-Received: from pdx1-sub0-mail-a6.g.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
-        by 100.96.17.75 (trex/6.1.1);
-        Fri, 12 Mar 2021 20:29:13 +0000
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|smtp@contentfirst.com
-X-MailChannels-Auth-Id: dreamhost
-X-Blushing-Relation: 38df238c301a2ebc_1615580953179_1329881627
-X-MC-Loop-Signature: 1615580953179:3019562172
-X-MC-Ingress-Time: 1615580953179
-Received: from pdx1-sub0-mail-a6.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a6.g.dreamhost.com (Postfix) with ESMTP id 93DDB88404;
-        Fri, 12 Mar 2021 12:29:12 -0800 (PST)
-Received: from industrynumbers.com (pool-100-15-209-187.washdc.fios.verizon.net [100.15.209.187])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: smtp@contentfirst.com)
-        by pdx1-sub0-mail-a6.g.dreamhost.com (Postfix) with ESMTPSA id CD41188393;
-        Fri, 12 Mar 2021 12:29:08 -0800 (PST)
-Received: from industrynumbers.com (localhost [127.0.0.1])
-        by industrynumbers.com (Postfix) with ESMTP id 87315282A07;
-        Fri, 12 Mar 2021 15:29:07 -0500 (EST)
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Charles Yeh <charlesyeh522@gmail.com>,
-        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Joe Abbott <jabbott@rollanet.org>
-References: <YDUp0tIThOZSTHJt@hovoldconsulting.com>
- <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
- <YDUysZY90FfVhrHK@hovoldconsulting.com>
- <CAAZvQQ6F=cQ-EhC0kgeTVM3GrtBWR+HfM6UJWj2AEF1NYZ-vAQ@mail.gmail.com>
- <YDaGRRYrEO5BEJv0@hovoldconsulting.com>
- <CAAZvQQ7+b9=DKqPxgsXxS7Lhqj=QTzKHCMarSbsQkAnYqdO1GA@mail.gmail.com>
- <YEH7okblCx8+Odxn@hovoldconsulting.com>
- <ddc0e424-21c2-b8f4-1b00-f589267d2b51@IEEE.org>
- <YEpAaL9QtVMduEpi@hovoldconsulting.com>
- <9d02257d-cca1-116e-634a-6ac952362c5d@IEEE.org>
- <YEtwNzhCmvyKhRto@hovoldconsulting.com>
-X-DH-BACKEND: pdx1-sub0-mail-a6
-From:   "Michael G. Katzmann" <michaelk@IEEE.org>
-Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
-Message-ID: <abd960f2-c084-12d6-cce6-0a5a59e74a3f@IEEE.org>
-Date:   Fri, 12 Mar 2021 15:29:07 -0500
+        id S234998AbhCLUmg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Mar 2021 15:42:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234978AbhCLUm2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 15:42:28 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C5AC061761
+        for <linux-usb@vger.kernel.org>; Fri, 12 Mar 2021 12:42:28 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id z13so27140625iox.8
+        for <linux-usb@vger.kernel.org>; Fri, 12 Mar 2021 12:42:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Ml55NsSS9dl1HuL/10fQC9QseWnc0sqmj8urOFv4Nf4=;
+        b=Mp2XAowatemJ6FkTTW+ZVICZSsIc0Z4YMEhy413HGK6oCi82HOpIEs5qLdXaoZK6CN
+         iDqrWFCPcwYBGCAFRLeUGC+FwpY0vvcVISew7uKj36eQ8636nrcd70pUFltMkqU6l2aK
+         k+7h01ZL+Hr3v7WzFTyrrk/HJr43wq8RxYB8Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Ml55NsSS9dl1HuL/10fQC9QseWnc0sqmj8urOFv4Nf4=;
+        b=MSiPCWliHfZE7y6cM/aJeuiPNlCN9y8A90N9u4kOJy8vZPJGO/hot04j8hFkZBfRoj
+         E6g+SeZcOpfGjvCikkIwR28uF+7jVW/Ri3pzjC7Jkf6LnDy05GPw+uZKJXJMVruXnPHT
+         Xn+B18f1layMdik3Sx5Jgz7PLp2MoSY2sb5llpSdBRQ7soWiX/ozpNN3wNmAYesZFe0S
+         Db1tt1AVD7QavlmZT8Y2NIBAkj65QaTgPZr4H0E3b8YwPVYhNqJARnIubr3k2TAjB1B1
+         ymWyJ5+QLhsQR8vdxKbhkmAA4vgzqIpL0X8bFWs7xRcFfxi7fLFS7aboPcLWH8tXrfDB
+         xA5g==
+X-Gm-Message-State: AOAM531nbQb5+uM+shDDGIpxQ+uWKz7C0yc6Mu9GLGxu5xoHKJddkYgq
+        ASKzGR39EHEksgjIlnQreLRNQHNCGghFzA==
+X-Google-Smtp-Source: ABdhPJxy67hR0FTymctXJo+DmAr+8PjbU2bbnFaDt+0mndydc6UHQZhDfuk/7iCdovRQORDmQ78Qig==
+X-Received: by 2002:a02:cc1b:: with SMTP id n27mr1034792jap.106.1615581748123;
+        Fri, 12 Mar 2021 12:42:28 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id k4sm3409426ion.29.2021.03.12.12.42.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Mar 2021 12:42:27 -0800 (PST)
+Subject: Re: [PATCH] usbip: fix vhci races in connection tear down
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     valentina.manea.m@gmail.com, shuah@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+a93fba6d384346a761e3@syzkaller.appspotmail.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210312022737.44122-1-skhan@linuxfoundation.org>
+ <20210312070806.383-1-hdanton@sina.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <b0891cea-579f-2c29-4f3e-52713b836dce@linuxfoundation.org>
+Date:   Fri, 12 Mar 2021 13:42:26 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <YEtwNzhCmvyKhRto@hovoldconsulting.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: base64
+In-Reply-To: <20210312070806.383-1-hdanton@sina.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gMy8xMi8yMSA4OjQ0IEFNLCBKb2hhbiBIb3ZvbGQgd3JvdGU6CgpTZWUgZGlmZiB0byB5
-b3VyIGJyYW5jaCBiZWxvdy4KClVubGVzcyB3ZSBkbyB3aGF0IEkgb3JpZ2luYWxseSBkaWQg
-YW5kIHBhc3MgJ3BvcnQnwqAgdG8gcGwyMzAzX2VuY29kZV9iYXVkX3JhdGVfZGl2aXNvciB3
-ZSBjYW5ub3QgdGVzdCBmb3IgJ2FsdF9kaXZpc29yIHRoZXJlLgoKSSBkaWQgdGhpcyB0ZXN0
-IGluIHBsMjMwM19lbmNvZGVfYmF1ZF9yYXRlIGluc3RlYWQgc28gaXQgbG9va3MgbGlrZSAu
-Li4KCsKgwqDCoMKgwqDCoMKgIGlmIChiYXVkID09IGJhdWRfc3VwKQrCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgYmF1ZCA9IHBsMjMwM19lbmNvZGVfYmF1ZF9yYXRlX2RpcmVj
-dChidWYsIGJhdWQpOwrCoMKgwqDCoMKgwqDCoCBlbHNlIGlmIChzcHJpdi0+dHlwZS0+YWx0
-X2Rpdmlzb3JzKQrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYmF1ZCA9IHBsMjMw
-M19lbmNvZGVfYmF1ZF9yYXRlX2Rpdmlzb3JfYWx0KGJ1ZiwgYmF1ZCk7CsKgwqDCoMKgwqDC
-oMKgIGVsc2UKwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJhdWQgPSBwbDIzMDNf
-ZW5jb2RlX2JhdWRfcmF0ZV9kaXZpc29yKGJ1ZiwgYmF1ZCk7CgoKTWljaGFlbAoKCjE5MWQx
-OTAKPCDCoMKgwqAgdW5zaWduZWQgaW50IGFsdF9kaXZpc29yczoxOwoyMjFkMjE5CjwgwqDC
-oMKgIMKgwqDCoCAuYWx0X2Rpdmlzb3JzwqDCoMKgIMKgwqDCoCA9IHRydWUsCjIyNmQyMjMK
-PCDCoMKgwqAgwqDCoMKgIC5hbHRfZGl2aXNvcnPCoMKgwqAgwqDCoMKgID0gdHJ1ZSwKNjI1
-LDY2NGQ2MjAKPCBzdGF0aWMgc3BlZWRfdCBwbDIzMDNfZW5jb2RlX2JhdWRfcmF0ZV9kaXZp
-c29yX2FsdCh1bnNpZ25lZCBjaGFyIGJ1Zls0XSwKPMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNw
-ZWVkX3QgYmF1ZCkKPCB7CjzCoMKgwqDCoMKgwqDCoMKgIHVuc2lnbmVkIGludCBiYXNlbGlu
-ZSwgbWFudGlzc2EsIGV4cG9uZW50Owo8CjzCoMKgwqDCoMKgwqDCoMKgIC8qCjzCoMKgwqDC
-oMKgwqDCoMKgwqAgKiBBcHBhcmVudGx5LCBmb3IgdGhlIFRBIHZlcnNpb24gdGhlIGZvcm11
-bGEgaXM6CjzCoMKgwqDCoMKgwqDCoMKgwqAgKsKgwqAgYmF1ZHJhdGUgPSAxMk0gKiAzMiAv
-IChtYW50aXNzYSAqIDJeZXhwb25lbnQpCjzCoMKgwqDCoMKgwqDCoMKgwqAgKiB3aGVyZQo8
-wqDCoMKgwqDCoMKgwqDCoMKgICrCoMKgIG1hbnRpc3NhID0gYnVmWzEwOjBdCjzCoMKgwqDC
-oMKgwqDCoMKgwqAgKsKgwqAgZXhwb25lbnQgPSBidWZbMTU6MTMgMTZdCjzCoMKgwqDCoMKg
-wqDCoMKgwqAgKi8KPMKgwqDCoMKgwqDCoMKgwqAgYmFzZWxpbmUgPSAxMjAwMDAwMCAqIDMy
-Owo8wqDCoMKgwqDCoMKgwqDCoCBtYW50aXNzYSA9IGJhc2VsaW5lIC8gYmF1ZDsKPMKgwqDC
-oMKgwqDCoMKgwqAgaWYgKG1hbnRpc3NhID09IDApCjzCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoCBtYW50aXNzYSA9IDE7wqDCoCAvKiBBdm9pZCBkaXZpZGluZyBieSB6ZXJv
-IGlmIGJhdWQgPiAzMioxMk0uICovCjzCoMKgwqDCoMKgwqDCoMKgIGV4cG9uZW50ID0gMDsK
-PMKgwqDCoMKgwqDCoMKgwqAgd2hpbGUgKG1hbnRpc3NhID49IDIwNDgpIHsKPMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChleHBvbmVudCA8IDE1KSB7CjzCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgbWFudGlzc2EgPj49
-IDE7IC8qIGRpdmlkZSBieSAyICovCjzCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgZXhwb25lbnQrKzsKPMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgIH0gZWxzZSB7CjzCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgLyogRXhwb25lbnQgaXMgbWF4ZWQuIFRyaW0gbWFudGlzc2EgYW5k
-IGxlYXZlLiAqLwo8wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIG1hbnRpc3NhID0gMjA0NzsKPMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIH0KPMKgwqDCoMKgwqDCoMKgwqAgfQo8CjzCoMKgwqDCoMKgwqDCoMKgIGJ1Zlsz
-XSA9IDB4ODA7CjzCoMKgwqDCoMKgwqDCoMKgIGJ1ZlsyXSA9IGV4cG9uZW50ICYgMHgwMTsg
-Ly8gTFMgYml0IG9mIGV4cG9uZW50CjzCoMKgwqDCoMKgwqDCoMKgIGJ1ZlsxXSA9IChleHBv
-bmVudCAmIH4weDAxKSA8PCA0IHwgbWFudGlzc2EgPj4gODsgLy8gMyBiaXRzIG9mIHRoZSBl
-eHBvbmVudCBhbmQgTVMgMyBiaXRzIG9mIHRoZSBtYW50aXNzYQo8wqDCoMKgwqDCoMKgwqDC
-oCBidWZbMF0gPSBtYW50aXNzYSAmIDB4ZmY7IC8vIExTIDggYml0cyBvZiB0aGUgbWFudGlz
-c2EKPAo8wqDCoMKgwqDCoMKgwqDCoCAvKiBDYWxjdWxhdGUgYW5kIHJldHVybiB0aGUgZXhh
-Y3QgYmF1ZCByYXRlLiAqLwo8wqDCoMKgwqDCoMKgwqDCoCBiYXVkID0gKGJhc2VsaW5lIC8g
-bWFudGlzc2EpID4+IGV4cG9uZW50Owo8CjzCoMKgwqDCoMKgwqDCoMKgIHJldHVybiBiYXVk
-Owo8IH0KPAo8CjY5Miw2OTNkNjQ3CjwgwqDCoMKgIGVsc2UgaWYgKHNwcml2LT50eXBlLT5h
-bHRfZGl2aXNvcnMpCjzCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBiYXVkID0g
-cGwyMzAzX2VuY29kZV9iYXVkX3JhdGVfZGl2aXNvcl9hbHQoYnVmLCBiYXVkKTsKCg==
+On 3/12/21 12:08 AM, Hillf Danton wrote:
+> On Thu, 11 Mar 2021 19:27:37 -0700  Shuah Khan wrote:
+>> vhci_shutdown_connection() references connection state (tcp_socket,
+>> tcp_rx, tcp_tx, sockfd) saved in usbpip_device without holding the
+>> lock.
+>>
+>> Current connection tear down sequence:
+>> Step 1: shutdown the socket
+>> Step 2: stop rx thread and reset tcp_rx pointer
+>> Step 3: stop tx thread and reset tcp_tx pointer
+>> Step 4: Reset tcp_socket and sockfd
+>>
+>> There are several race windows between these steps. In addition, device
+>> reset routine (vhci_device_reset) resets tcp_socket and sockfd holding
+>> the lock.
+> 
+> Can you specify the scenario where reset runs in race with teardown as
+> both are parts of usbip_work on a singlethread workqueue?
+>>
+
+Hmm. I can't think of one. I was concerned about any async paths that
+potentially interfere with shutdown. With vhci_shutdown_connection()
+being so relaxed with locking, this is a cautious approach on my part.
+I am also keeping in mind that this problem shows up in a limited
+scope fuzzing test that doesn't trigger any other normal paths that
+would be active if there is real device on the other side.
+
+As for the tcp_socket check in the reset routine, I am not positive
+what purpose it serves. I introduced the in_disconnect flag so
+shutdown and reset don't collide, in case I am missing some scenario
+in the normal path when we actually have a actual device attached.
+
+With the other locking and error path problems in addressed, both
+shutdown and reset could be made simpler.
+
+In any case, I think in_disconnect might be too big a hammer. I will
+redo the patch without it and also remove tcp_socket handling from
+the reset routine. I don't see USBIP_EH_RESET getting set without
+USBIP_EH_SHUTDOWN.
+
+thanks,
+-- Shuah
+
