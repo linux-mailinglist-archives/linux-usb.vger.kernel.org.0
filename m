@@ -2,254 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E03EF33966A
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 19:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E47FE3396D2
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 19:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbhCLS1d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Mar 2021 13:27:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
+        id S233828AbhCLSne (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Mar 2021 13:43:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233430AbhCLS1I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 13:27:08 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9780FC061574;
-        Fri, 12 Mar 2021 10:27:08 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id k2so26768120ioh.5;
-        Fri, 12 Mar 2021 10:27:08 -0800 (PST)
+        with ESMTP id S233708AbhCLSnE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 13:43:04 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFC8C061761
+        for <linux-usb@vger.kernel.org>; Fri, 12 Mar 2021 10:43:04 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id v14so3450524ilj.11
+        for <linux-usb@vger.kernel.org>; Fri, 12 Mar 2021 10:43:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=vHEf0wZ0jz5+lCXJ7lMvh0dC6aHiwnMz1z2L6kOepkQ=;
-        b=BQmtGDIdoNLOcCSF5FHxHKUSEclAV8bg79BaU7SknyTVqbUwUjVYxHh0HzRtZ0t1Cw
-         /2SYLjcaIDrBCCqLD/yFx6vI5S2ib95l6z6lSSORG2oJCmQRfSYJ0vU5C8LcNnr+nSen
-         xgYYkVNFuGpWmdMSc3VQmhTrmxUlrYkrnAqS7C2o+01pYSYvRiEZ4vMSOKRoKzx/ZECw
-         6eaWRATpOclsCRMIjgsv3oxmS8gzbN1sTNNqwjhUrGCWPT929L0KRuUlVlT+b4uiTOqW
-         kuYnI0MZLCjmoGeXVQ++WA7YGQDT98uzjEqts5YsuaNKNqIBRDOCQ9U2/1qj3P6IFe4m
-         LNJQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=RzyG8WNK+n+PA4HkSryeYxoXrjHZwQvUJZnWM65b7jk=;
+        b=PtL9UnVp5IewSgsRWwK17TxRaICLLCcod2mE0ZRlXvjqjEX/sRk1U00Ih2/yjJkzKD
+         ctzMhCeWjnCLaN8mr6rckXpJ/TlZhGuyYxJvPxXtO2hQJdeTI1hn5YDcXOvKebavCnXB
+         okN4tHz7kdTzMeYYpucHnv3yIZIVdpyuN9XY0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=vHEf0wZ0jz5+lCXJ7lMvh0dC6aHiwnMz1z2L6kOepkQ=;
-        b=Nivb+HimAdjcnLyVXttk3JHjIOmJdJwSI5ViYm+I41PcXjxYRsbGpuSzZzYIpQ8eoX
-         atEYANamIpR+GdG65JIZ9XbKsKY4awOrcECDB9FbXj0f7DXxW8SjjuN6NmhNqx2WEd2r
-         yxrJcCxNQEfMnQ4ArCblDqcH22doNgJ9NNIQFdNhzx3krZpeclh53X6XzjHHb4l22d+n
-         77EXaZKoQXwoV5mWnzRJk3Nso7Sf0panLFOZE0VYuTWgaz66SHJlCIASewZoBTC4QTzz
-         5IvhgtIKe72rs1PobTqs0bs5cNCn5KoOtNtoaJhvKIUWqOigK3vsmX/tIGFpEA3x4o7G
-         HIoA==
-X-Gm-Message-State: AOAM530GzRCUy9hr6Aln5OI8FTMrDasmjdAci61xXZEw1iKfclko0q6T
-        pw1/7P9XV+r6YBgdLQrgRXHrv3q8n9gnRvc06YE=
-X-Google-Smtp-Source: ABdhPJzkBZ2csNpTFtWY2Dsun4bUlsJllw9veIVysuvlW36bA0tbYjilQMN+zqpYJJjaUwWv0qvUNR3r0htCzA+DxSU=
-X-Received: by 2002:a02:9a0a:: with SMTP id b10mr553035jal.132.1615573627927;
- Fri, 12 Mar 2021 10:27:07 -0800 (PST)
-MIME-Version: 1.0
-References: <20210306165808.GD74411@rowland.harvard.edu> <CA+icZUWXBtOo+7TBGHFA=aKBs5o9hy3Po6NM0EPssu6y4SOZsQ@mail.gmail.com>
- <CA+icZUXcYY53DxpMRQmveuwUv0QVV7rtRorbxWUaVujJZuCB-A@mail.gmail.com>
- <CA+icZUUyNQN_CEwJcTY887GOeWknz4h29b+XdY0FqUKVJD7cfQ@mail.gmail.com>
- <20210307154645.GA103559@rowland.harvard.edu> <CA+icZUVLC7=-MsXeGQOrAe1emzGW2UwWYxh3EHGPhjR=chygoQ@mail.gmail.com>
- <20210307170702.GB104554@rowland.harvard.edu> <CA+icZUWaGt2k4kdV0JHqKUkB8DySqdeUgVNnVT1BUo8aveGZOw@mail.gmail.com>
- <CA+icZUWb40r1MTFYk9S0h2XgGfqCQtxpm9yHKNr3PDnDbUNBKQ@mail.gmail.com>
- <CA+icZUXkheVR-c9cdsJmeS9+FZj4Gswii+xBoAWK882QNdfcTg@mail.gmail.com> <20210312180523.GB302347@rowland.harvard.edu>
-In-Reply-To: <20210312180523.GB302347@rowland.harvard.edu>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 12 Mar 2021 19:26:31 +0100
-Message-ID: <CA+icZUUysAE0fwDL2iDKsCgY=AfckOtAEi+86kkVEs0Lqc-Jkg@mail.gmail.com>
-Subject: Re: [xhci] usb 4-1: reset SuperSpeed Gen 1 USB device number 2 using xhci_hcd
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=RzyG8WNK+n+PA4HkSryeYxoXrjHZwQvUJZnWM65b7jk=;
+        b=sowD7OlsfMj6jcIox6u5cBQPbZn7c/EoGBh42Heg8+RDkvqcRd9ce4zII4PvTgXkrB
+         aMc5m3wPM5USBiHcp1cBig+tK/Y2KQo0YKF08NWcSC5qgr5R+hKw17c4uTj5jmIl0PJO
+         Ts7QSq7b9dztDqBQKQOjTpSTKqxeR7V8Gwbo09jSRDg3oB2//6V54GljXQgV9m72PBGN
+         6qMXujbWELLu/AfILYihzdBm0FlAKVfw2l5V4Ze/qWg7q7+1R1V5c4hGidCl5oG2i4Mf
+         0ndOxgVN9uHJyi/TLdoeTd+nwZRw4fucaGFDXusrSO7QxaVIbvzPEflOC1UCKa8mHJlg
+         quBg==
+X-Gm-Message-State: AOAM5320HDLTorv0avzkKR5ukhA5p4MBCmdShWsxzilKRL/5SsjNLPXE
+        HgTPQ+3hl6F4aO9RYjsSPzjd8Q==
+X-Google-Smtp-Source: ABdhPJydvBD7fKk74/zHdNkNXjloYb88pr9lKSDcjI96Zxp9+Yx2N/b27QdDm73GjKJr+YXW/8LurQ==
+X-Received: by 2002:a05:6e02:92f:: with SMTP id o15mr3784956ilt.111.1615574583407;
+        Fri, 12 Mar 2021 10:43:03 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id s14sm3319816ilj.83.2021.03.12.10.43.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Mar 2021 10:43:03 -0800 (PST)
+Subject: Re: [PATCH] usbip: fix vhci races in connection tear down
+To:     Johan Hovold <johan@kernel.org>
+Cc:     valentina.manea.m@gmail.com, shuah@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        syzbot+a93fba6d384346a761e3@syzkaller.appspotmail.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210312022737.44122-1-skhan@linuxfoundation.org>
+ <YEtGMMjOg3pHTSma@hovoldconsulting.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <3d2c0b3b-07fb-8f59-d7b4-81d7d992636c@linuxfoundation.org>
+Date:   Fri, 12 Mar 2021 11:43:02 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
+MIME-Version: 1.0
+In-Reply-To: <YEtGMMjOg3pHTSma@hovoldconsulting.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 12, 2021 at 7:05 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Fri, Mar 12, 2021 at 06:41:58PM +0100, Sedat Dilek wrote:
-> > OK, now for the records:
-> >
-> > [ /etc/modprobe.d/usb-storage.conf  ]
-> >
-> > # Add quirks for USB Mass Storage devices
-> > #
-> > # Link: https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
-> > #
-> > # Option #1: Use Kernel command line parameter
-> > # [1] Usage: usb-storage.quirks=<VID:PID:Flags>
-> > # [2] VendorID (VID) and ProductID (PID):
-> > #     ASMedia M1042 USB-3.0 controller: VID: 174c PID: 55aa
-> > # [3] Flags:
-> > #     t = NO_ATA_1X  (don't allow ATA(12) and ATA(16) commands, uas only);
-> > #     u = IGNORE_UAS (don't bind to the uas driver);
-> > # [4] Example: usb-storage.quirks=174c:55aa:t
-> > #
-> > # Option #2: Set quirk via sysfs
-> > # DEBUG: echo '174c:55aa:t' > /sys/module/usb_storage/parameters/quirks
-> > #
-> > # Option #3: Pass options via /etc/modprobe.d/usb-storage.conf (this file here)
-> > # XXX: Do NOT forget to run `update-initramfs` command!
-> > options usb-storage quirks=174c:55aa:t
-> > - EOF -
-> >
-> > With generating a new /boot/initrd.img via `update-initramfs` this
-> > looks good to me:
-> >
-> > root# LC_ALL=C dmesg -T | egrep -i 'quirks|reset|SCSI ioctl error'
-> > [Fri Mar 12 18:25:56 2021] xhci_hcd 0000:03:00.0: hcc params
-> > 0x0200f180 hci version 0x96 quirks 0x0000000000080000
-> > [Fri Mar 12 18:25:57 2021] usb-storage 4-1:1.0: Quirks match for vid
-> > 174c pid 55aa: 2400000
-> > [Fri Mar 12 18:25:57 2021] SCSI ioctl error, cmd A1, prog ata_id
-> > [Fri Mar 12 18:25:57 2021] SCSI ioctl error, cmd A1, prog ata_id
-> > [Fri Mar 12 18:25:58 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:25:58 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:25:58 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:25:59 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:25:59 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:25:59 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:25:59 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:00 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:00 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:00 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:00 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:00 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:01 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:01 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:01 2021] SCSI ioctl error, cmd A1, prog ata_id
-> > [Fri Mar 12 18:26:01 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:01 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:01 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:02 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:02 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:02 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:02 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:03 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:03 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:03 2021] usb 4-1: reset SuperSpeed Gen 1 USB device
-> > number 2 using xhci_hcd
-> > [Fri Mar 12 18:26:24 2021] SCSI ioctl error, cmd A1, prog ata_id
-> > [Fri Mar 12 18:26:24 2021] SCSI ioctl error, cmd A1, prog ata_id
-> > [Fri Mar 12 18:26:29 2021] SCSI ioctl error, cmd 85, prog smartd
-> > [Fri Mar 12 18:26:30 2021] SCSI ioctl error, cmd 85, prog hdparm
-> > [Fri Mar 12 18:26:30 2021] SCSI ioctl error, cmd 85, prog hdparm
-> > [Fri Mar 12 18:26:30 2021] SCSI ioctl error, cmd 85, prog hdparm
-> > [Fri Mar 12 18:26:30 2021] SCSI ioctl error, cmd A1, prog ata_id
-> > [Fri Mar 12 18:26:30 2021] SCSI ioctl error, cmd 85, prog hdparm
-> > [Fri Mar 12 18:26:30 2021] SCSI ioctl error, cmd 85, prog hdparm
-> > [Fri Mar 12 18:26:30 2021] SCSI ioctl error, cmd 85, prog hdparm
-> > [Fri Mar 12 18:26:30 2021] SCSI ioctl error, cmd 85, prog smartd
-> > [Fri Mar 12 18:26:30 2021] SCSI ioctl error, cmd 85, prog smartd
-> > [Fri Mar 12 18:26:30 2021] SCSI ioctl error, cmd 85, prog smartd
-> > [Fri Mar 12 18:26:31 2021] SCSI ioctl error, cmd 85, prog smartd
-> > [Fri Mar 12 18:26:31 2021] SCSI ioctl error, cmd 85, prog smartd
-> > [Fri Mar 12 18:26:31 2021] SCSI ioctl error, cmd 85, prog smartd
-> > [Fri Mar 12 18:26:31 2021] SCSI ioctl error, cmd 85, prog smartd
-> > [Fri Mar 12 18:26:31 2021] SCSI ioctl error, cmd 85, prog smartd
-> > [Fri Mar 12 18:26:31 2021] SCSI ioctl error, cmd 85, prog smartd
-> > [Fri Mar 12 18:26:39 2021] SCSI ioctl error, cmd A1, prog ata_id
-> > [Fri Mar 12 18:26:39 2021] SCSI ioctl error, cmd A1, prog ata_id
-> > [Fri Mar 12 18:26:40 2021] SCSI ioctl error, cmd 85, prog hdparm
-> > [Fri Mar 12 18:26:40 2021] SCSI ioctl error, cmd 85, prog hdparm
-> > [Fri Mar 12 18:26:40 2021] SCSI ioctl error, cmd 85, prog hdparm
-> > [Fri Mar 12 18:26:40 2021] SCSI ioctl error, cmd A1, prog ata_id
-> > [Fri Mar 12 18:26:40 2021] SCSI ioctl error, cmd 85, prog hdparm
-> > [Fri Mar 12 18:26:40 2021] SCSI ioctl error, cmd 85, prog hdparm
-> > [Fri Mar 12 18:26:40 2021] SCSI ioctl error, cmd 85, prog hdparm
-> > [Fri Mar 12 18:26:43 2021] SCSI ioctl error, cmd 85, prog udisksd
-> > [Fri Mar 12 18:26:43 2021] SCSI ioctl error, cmd 85, prog udisksd
-> > [Fri Mar 12 18:26:44 2021] SCSI ioctl error, cmd 85, prog udisksd
-> > [Fri Mar 12 18:26:44 2021] SCSI ioctl error, cmd 85, prog udisksd
-> > [Fri Mar 12 18:26:44 2021] SCSI ioctl error, cmd 85, prog udisksd
-> > [Fri Mar 12 18:26:44 2021] SCSI ioctl error, cmd 85, prog udisksd
-> > [Fri Mar 12 18:26:44 2021] SCSI ioctl error, cmd 85, prog udisksd
-> > [Fri Mar 12 18:26:44 2021] SCSI ioctl error, cmd 85, prog udisksd
-> > [Fri Mar 12 18:26:44 2021] SCSI ioctl error, cmd 85, prog udisksd
-> > [Fri Mar 12 18:26:44 2021] SCSI ioctl error, cmd 85, prog udisksd
-> > [Fri Mar 12 18:26:49 2021] SCSI ioctl error, cmd 85, prog udisksd
-> > [Fri Mar 12 18:26:49 2021] SCSI ioctl error, cmd 85, prog udisksd
-> > [Fri Mar 12 18:26:49 2021] SCSI ioctl error, cmd 85, prog udisksd
-> > [Fri Mar 12 18:26:49 2021] SCSI ioctl error, cmd 85, prog udisksd
-> > [Fri Mar 12 18:26:50 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:26:50 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:26:50 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:26:50 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:26:50 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:26:50 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:26:50 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:26:50 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:26:50 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:26:50 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:28:09 2021] SCSI ioctl error, cmd 85, prog smartctl
-> > [Fri Mar 12 18:28:09 2021] SCSI ioctl error, cmd 85, prog smartctl
-> > [Fri Mar 12 18:28:10 2021] SCSI ioctl error, cmd 85, prog smartctl
-> > [Fri Mar 12 18:28:11 2021] SCSI ioctl error, cmd 85, prog smartctl
-> > [Fri Mar 12 18:36:49 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:36:49 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:36:49 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:36:49 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:36:49 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:36:50 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:36:50 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:36:50 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:36:50 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
-> > [Fri Mar 12 18:36:50 2021] SCSI ioctl error, cmd 85, prog pool-udisksd
->
-> Although it's not conclusive, this log seems to indicate that ata_id
-> is the only program causing resets.  Have you tried preventing the
-> ata_id program from running (for example, by renaming it)?
->
+On 3/12/21 3:45 AM, Johan Hovold wrote:
+> On Thu, Mar 11, 2021 at 07:27:37PM -0700, Shuah Khan wrote:
+>> vhci_shutdown_connection() references connection state (tcp_socket,
+>> tcp_rx, tcp_tx, sockfd) saved in usbpip_device without holding the
+>> lock.
+>>
+>> Current connection tear down sequence:
+>> Step 1: shutdown the socket
+>> Step 2: stop rx thread and reset tcp_rx pointer
+>> Step 3: stop tx thread and reset tcp_tx pointer
+>> Step 4: Reset tcp_socket and sockfd
+>>
+>> There are several race windows between these steps. In addition, device
+>> reset routine (vhci_device_reset) resets tcp_socket and sockfd holding
+>> the lock.
+>>
+>> Fix these races:
+>> - Introduce in_disconnect flag to ensure vhci_shutdown_connection() runs
+>>    only once.
+>> - Change attach_store() to initialize in_disconnect to false while
+>>    initializing connection status (tcp_socket, tcp_rx, tcp_tx, sockfd)
+>> - Change vhci_shutdown_connection() to check in_disconnect and bail
+>>    out if disconnect is in progress.
+>> - Change vhci_shutdown_connection() to
+>>    -- hold lock to save connection state pointers and unlock.
+>>    -- Shutdown the socket and stop threads.
+>>    -- Hold lock to clear connection status and in_disconnect flag.
+>> - Change vhci_device_reset() to reset tcp_socket and sockfd.
+>>    if !in_disconnect
+>>
+>> Tested syzbot and the reproducer did not trigger any issue.
+>>
+>> Reported-and-tested-by: syzbot+a93fba6d384346a761e3@syzkaller.appspotmail.com
+>> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+>> ---
+>>   drivers/usb/usbip/usbip_common.h |  1 +
+>>   drivers/usb/usbip/vhci_hcd.c     | 55 +++++++++++++++++++++++---------
+>>   drivers/usb/usbip/vhci_sysfs.c   |  4 +++
+>>   3 files changed, 45 insertions(+), 15 deletions(-)
+> 
+>> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+>> index 3209b5ddd30c..c1917efe5737 100644
+>> --- a/drivers/usb/usbip/vhci_hcd.c
+>> +++ b/drivers/usb/usbip/vhci_hcd.c
+>> @@ -1007,31 +1007,54 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
+>>   static void vhci_shutdown_connection(struct usbip_device *ud)
+>>   {
+>>   	struct vhci_device *vdev = container_of(ud, struct vhci_device, ud);
+>> +	unsigned long flags;
+>> +	struct socket *socket;
+>> +	struct task_struct *tcp_rx = NULL;
+>> +	struct task_struct *tcp_tx = NULL;
+>> +	int sockfd = 0;
+>> +
+>> +	spin_lock_irqsave(&ud->lock, flags);
+>> +	if (vdev->ud.in_disconnect) {
+>> +		pr_info("%s: Disconnect in progress for sockfd %d\n",
+>> +			__func__, ud->sockfd);
+> 
+> Looks like you forgot to remove all you debug printks like this one
+> before submitting.
+> 
 
-This is /lib/udev/ata_id from Debian's udev package.
+Some printks were already in there and helped with debug. Yes I added
+a few more when I submitted for syzbot testing.
 
-> > Your diff now should say; s/SCSI ioctl error/SCSI ioctl info'.
->
-> No, it shouldn't.  The log message itself is an info, but the event it
-> reports is an error.
->
+I will clean them up i v2.
 
-OK.
-Some of these SCSI ioctl errors are not causing a xhci-reset.
+thanks,
+-- Shuah
 
-> > Alan, so "t" flags should be added as a quirks to linux-kernel sources...
-> >
-> > t = NO_ATA_1X  (don't allow ATA(12) and ATA(16) commands, uas only);
-> >
-> > ...for my ASMedia USB-3.0 controller?
->
-> That's not at all clear.  This is a very common and popular device,
-> and nobody else has reported these problems.  It could be that
-> something is odd about your particular drive or computer, not these
-> drives in general.
->
-
-So, the external USB-3.0 HDD is now in "UAS only" mode/status.
-
-Cannot judge if things got better or not.
-
-- Sedat -
