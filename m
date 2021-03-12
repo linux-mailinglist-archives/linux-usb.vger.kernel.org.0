@@ -2,81 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF613387C5
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 09:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3CF338827
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Mar 2021 10:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232564AbhCLIkM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Mar 2021 03:40:12 -0500
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:35863 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232417AbhCLIjt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 03:39:49 -0500
-X-UUID: 71576485641142e5aa9ab042a458adeb-20210312
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=ooolB54WEfgbIJQeSEoMg6RBJbHlc/MSHt7sIJf1I14=;
-        b=dtgSGVVf2N0DxciA1yLPF8jCfRPP1t8MKi1K4RMRuB1gHARw6Nx4baw4XlQhkEWqQhvL6SDIEHez8Ng3GO/hmnghHDSaXVKoyvVO1nWVOb0dqTxz8uhVDJkvBawdpkAIsbcQJxox1qtjsrp3TPjbhlcxSGhBp6Wa1bjStIVK9YE=;
-X-UUID: 71576485641142e5aa9ab042a458adeb-20210312
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1216615318; Fri, 12 Mar 2021 16:39:41 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS32N1.mediatek.inc
- (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 12 Mar
- 2021 16:39:39 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 12 Mar 2021 16:39:38 +0800
-Message-ID: <1615538378.26498.8.camel@mhfsdcap03>
-Subject: Re: [PATCH][next] usb: mtu3: Fix spelling mistake "disabed" ->
- "disabled"
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Colin King <colin.king@canonical.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Date:   Fri, 12 Mar 2021 16:39:38 +0800
-In-Reply-To: <20210311092529.4898-1-colin.king@canonical.com>
-References: <20210311092529.4898-1-colin.king@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S232671AbhCLJBq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Mar 2021 04:01:46 -0500
+Received: from mga11.intel.com ([192.55.52.93]:29858 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232540AbhCLJBg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 12 Mar 2021 04:01:36 -0500
+IronPort-SDR: c87Vc3zRg0CP0jXoyELJet6Tj3uGVOmt39jF5pKgqdQW9vALN9FKYN4VWh5uLtK4z5TqzEkJmI
+ nn3p6vQ7bQdw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9920"; a="185451234"
+X-IronPort-AV: E=Sophos;i="5.81,243,1610438400"; 
+   d="scan'208";a="185451234"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2021 01:01:36 -0800
+IronPort-SDR: 71ORMrExkGQpw8AnNT3v33woVnAfuFuzzuoC8hT1hZg82U4aLcyJnDmQAUvIRdt5iyYEgv0bgP
+ qCnDiCAhxfmw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,243,1610438400"; 
+   d="scan'208";a="510277867"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 12 Mar 2021 01:01:32 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 12 Mar 2021 11:01:31 +0200
+Date:   Fri, 12 Mar 2021 11:01:31 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>
+Subject: Re: [PATCH v2 2/2] usb: typec: tcpci_maxim: configure charging &
+ data paths
+Message-ID: <YEst66MdaYFzaIUT@kuha.fi.intel.com>
+References: <20210312052443.3797674-1-badhri@google.com>
+ <20210312052443.3797674-2-badhri@google.com>
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 487E2A8EC44F9185C890BAA7B2219ED185BF448F8161F73B2E49435334052B482000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210312052443.3797674-2-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVGh1LCAyMDIxLTAzLTExIGF0IDA5OjI1ICswMDAwLCBDb2xpbiBLaW5nIHdyb3RlOg0KPiBG
-cm9tOiBDb2xpbiBJYW4gS2luZyA8Y29saW4ua2luZ0BjYW5vbmljYWwuY29tPg0KPiANCj4gVGhl
-IHZhcmlhYmxlIHUzX3BvcnRzX2Rpc2FiZWQgY29udGFpbnMgYSBzcGVsbGluZyBtaXN0YWtlLA0K
-PiByZW5hbWUgaXQgdG8gdTNfcG9ydHNfZGlzYWJsZWQuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBD
-b2xpbiBJYW4gS2luZyA8Y29saW4ua2luZ0BjYW5vbmljYWwuY29tPg0KPiAtLS0NCj4gIGRyaXZl
-cnMvdXNiL210dTMvbXR1M19ob3N0LmMgfCA4ICsrKystLS0tDQo+ICAxIGZpbGUgY2hhbmdlZCwg
-NCBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvdXNiL210dTMvbXR1M19ob3N0LmMgYi9kcml2ZXJzL3VzYi9tdHUzL210dTNfaG9zdC5jDQo+
-IGluZGV4IGM4NzFiOTRmM2U2Zi4uNDFhNTY3NWFjNWNhIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJz
-L3VzYi9tdHUzL210dTNfaG9zdC5jDQo+ICsrKyBiL2RyaXZlcnMvdXNiL210dTMvbXR1M19ob3N0
-LmMNCj4gQEAgLTEwOSw3ICsxMDksNyBAQCBpbnQgc3N1c2JfaG9zdF9lbmFibGUoc3RydWN0IHNz
-dXNiX210ayAqc3N1c2IpDQo+ICAJdm9pZCBfX2lvbWVtICppYmFzZSA9IHNzdXNiLT5pcHBjX2Jh
-c2U7DQo+ICAJaW50IG51bV91M3AgPSBzc3VzYi0+dTNfcG9ydHM7DQo+ICAJaW50IG51bV91MnAg
-PSBzc3VzYi0+dTJfcG9ydHM7DQo+IC0JaW50IHUzX3BvcnRzX2Rpc2FiZWQ7DQo+ICsJaW50IHUz
-X3BvcnRzX2Rpc2FibGVkOw0KPiAgCXUzMiBjaGVja19jbGs7DQo+ICAJdTMyIHZhbHVlOw0KPiAg
-CWludCBpOw0KPiBAQCAtMTE4LDEwICsxMTgsMTAgQEAgaW50IHNzdXNiX2hvc3RfZW5hYmxlKHN0
-cnVjdCBzc3VzYl9tdGsgKnNzdXNiKQ0KPiAgCW10dTNfY2xyYml0cyhpYmFzZSwgVTNEX1NTVVNC
-X0lQX1BXX0NUUkwxLCBTU1VTQl9JUF9IT1NUX1BETik7DQo+ICANCj4gIAkvKiBwb3dlciBvbiBh
-bmQgZW5hYmxlIHUzIHBvcnRzIGV4Y2VwdCBza2lwcGVkIG9uZXMgKi8NCj4gLQl1M19wb3J0c19k
-aXNhYmVkID0gMDsNCj4gKwl1M19wb3J0c19kaXNhYmxlZCA9IDA7DQo+ICAJZm9yIChpID0gMDsg
-aSA8IG51bV91M3A7IGkrKykgew0KPiAgCQlpZiAoKDB4MSA8PCBpKSAmIHNzdXNiLT51M3BfZGlz
-X21zaykgew0KPiAtCQkJdTNfcG9ydHNfZGlzYWJlZCsrOw0KPiArCQkJdTNfcG9ydHNfZGlzYWJs
-ZWQrKzsNCj4gIAkJCWNvbnRpbnVlOw0KPiAgCQl9DQo+ICANCj4gQEAgLTE0MCw3ICsxNDAsNyBA
-QCBpbnQgc3N1c2JfaG9zdF9lbmFibGUoc3RydWN0IHNzdXNiX210ayAqc3N1c2IpDQo+ICAJfQ0K
-PiAgDQo+ICAJY2hlY2tfY2xrID0gU1NVU0JfWEhDSV9SU1RfQl9TVFM7DQo+IC0JaWYgKG51bV91
-M3AgPiB1M19wb3J0c19kaXNhYmVkKQ0KPiArCWlmIChudW1fdTNwID4gdTNfcG9ydHNfZGlzYWJs
-ZWQpDQo+ICAJCWNoZWNrX2NsayA9IFNTVVNCX1UzX01BQ19SU1RfQl9TVFM7DQpSZXZpZXdlZC1i
-eTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVuZy55dW5AbWVkaWF0ZWsuY29tPg0KDQpUaGFua3MgYSBs
-b3QNCg0KDQo+ICANCj4gIAlyZXR1cm4gc3N1c2JfY2hlY2tfY2xvY2tzKHNzdXNiLCBjaGVja19j
-bGspOw0KDQo=
+Thu, Mar 11, 2021 at 09:24:43PM -0800, Badhri Jagan Sridharan kirjoitti:
+> The change exposes the data_role and the orientation as a extcon
+> interface for configuring the USB data controller.
+> 
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> ---
+> Changes since V1:
+> - Dropped changes related to get_/set_current_limit and pd_capable
+>   callback. Will send them in as separate patches.
+> ---
+>  drivers/usb/typec/tcpm/tcpci_maxim.c | 56 ++++++++++++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
+> index 041a1c393594..1210445713ee 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
+> @@ -7,6 +7,8 @@
+>  
+>  #include <linux/interrupt.h>
+>  #include <linux/i2c.h>
+> +#include <linux/extcon.h>
+> +#include <linux/extcon-provider.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/regmap.h>
+> @@ -46,6 +48,8 @@ struct max_tcpci_chip {
+>  	struct device *dev;
+>  	struct i2c_client *client;
+>  	struct tcpm_port *port;
+> +	bool attached;
+> +	struct extcon_dev *extcon;
+>  };
+>  
+>  static const struct regmap_range max_tcpci_tcpci_range[] = {
+> @@ -439,6 +443,39 @@ static int tcpci_init(struct tcpci *tcpci, struct tcpci_data *data)
+>  	return -1;
+>  }
+>  
+> +static void max_tcpci_set_roles(struct tcpci *tcpci, struct tcpci_data *data, bool attached,
+> +				enum typec_role role, enum typec_data_role data_role)
+> +{
+> +	struct max_tcpci_chip *chip = tdata_to_max_tcpci(data);
+> +
+> +	chip->attached = attached;
+> +
+> +	if (!attached) {
+> +		extcon_set_state_sync(chip->extcon, EXTCON_USB_HOST, 0);
+> +		extcon_set_state_sync(chip->extcon, EXTCON_USB, 0);
+> +		return;
+> +	}
+> +
+> +	extcon_set_state_sync(chip->extcon, data_role == TYPEC_HOST ? EXTCON_USB_HOST : EXTCON_USB,
+> +			      1);
+> +}
+> +
+> +static void max_tcpci_set_cc_polarity(struct tcpci *tcpci, struct tcpci_data *data,
+> +				      enum typec_cc_polarity polarity)
+> +{
+> +	struct max_tcpci_chip *chip = tdata_to_max_tcpci(data);
+> +
+> +	extcon_set_property(chip->extcon, EXTCON_USB, EXTCON_PROP_USB_TYPEC_POLARITY,
+> +			    (union extcon_property_value)(int)polarity);
+> +	extcon_set_property(chip->extcon, EXTCON_USB_HOST, EXTCON_PROP_USB_TYPEC_POLARITY,
+> +			    (union extcon_property_value)(int)polarity);
+> +}
+> +
+> +static const unsigned int usbpd_extcon[] = {
+> +	EXTCON_USB,
+> +	EXTCON_USB_HOST,
+> +};
+> +
+>  static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id *i2c_id)
+>  {
+>  	int ret;
+> @@ -472,6 +509,8 @@ static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id
+>  	chip->data.auto_discharge_disconnect = true;
+>  	chip->data.vbus_vsafe0v = true;
+>  	chip->data.set_partner_usb_comm_capable = max_tcpci_set_partner_usb_comm_capable;
+> +	chip->data.set_roles = max_tcpci_set_roles;
+> +	chip->data.set_cc_polarity = max_tcpci_set_cc_polarity;
+>  
+>  	max_tcpci_init_regs(chip);
+>  	chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
+> @@ -484,6 +523,23 @@ static int max_tcpci_probe(struct i2c_client *client, const struct i2c_device_id
+>  	if (ret < 0)
+>  		goto unreg_port;
+>  
+> +	chip->extcon = devm_extcon_dev_allocate(&client->dev, usbpd_extcon);
+> +	if (IS_ERR(chip->extcon)) {
+> +		dev_err(&client->dev, "Error allocating extcon: %ld\n", PTR_ERR(chip->extcon));
+> +		ret = PTR_ERR(chip->extcon);
+> +		goto unreg_port;
+> +	}
+> +
+> +	ret = devm_extcon_dev_register(&client->dev, chip->extcon);
+> +	if (ret < 0) {
+> +		dev_err(&client->dev, "failed to register extcon device");
+> +		goto unreg_port;
+> +	}
 
+Why do you need this? We have the dedicated USB role class because
+extcon could not handle every type of system. Things are simple enough
+when you have a single dual-role capable USB controller, but when you
+start having more bits and pieces like muxes in between, the
+consumer/supplier extcon roles get twisted.
+
+So in case you did not know this, our goal was originally to use
+extcon for handling the data role (and orientation too), but some of
+drivers were refused by the extcon maintainers because of the above
+reason.
+
+Most USB controller drivers for dual-role capable USB controllers
+already register a role switch, and tcpm.c always requests a handle to
+one that it uses to inform the current data role, so this part should
+not require any new code.
+
+
+> +	extcon_set_property_capability(chip->extcon, EXTCON_USB, EXTCON_PROP_USB_TYPEC_POLARITY);
+> +	extcon_set_property_capability(chip->extcon, EXTCON_USB_HOST,
+> +				       EXTCON_PROP_USB_TYPEC_POLARITY);
+> +
+>  	device_init_wakeup(chip->dev, true);
+>  	return 0;
+>  
+> -- 
+> 2.31.0.rc2.261.g7f71774620-goog
+
+thanks,
+
+-- 
+heikki
