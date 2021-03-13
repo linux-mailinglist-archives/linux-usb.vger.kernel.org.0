@@ -2,20 +2,20 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49150339DC8
+	by mail.lfdr.de (Postfix) with ESMTP id 957A7339DC9
 	for <lists+linux-usb@lfdr.de>; Sat, 13 Mar 2021 12:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233550AbhCML0N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S233507AbhCML0N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Sat, 13 Mar 2021 06:26:13 -0500
-Received: from asav21.altibox.net ([109.247.116.8]:54150 "EHLO
+Received: from asav21.altibox.net ([109.247.116.8]:54174 "EHLO
         asav21.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbhCML0G (ORCPT
+        with ESMTP id S233486AbhCML0G (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Sat, 13 Mar 2021 06:26:06 -0500
 Received: from localhost.localdomain (unknown [81.166.168.211])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: noralf.tronnes@ebnett.no)
-        by asav21.altibox.net (Postfix) with ESMTPSA id 4C6178003C;
+        by asav21.altibox.net (Postfix) with ESMTPSA id C246480052;
         Sat, 13 Mar 2021 12:25:58 +0100 (CET)
 From:   =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
 To:     dri-devel@lists.freedesktop.org
@@ -24,9 +24,9 @@ Cc:     linux-usb@vger.kernel.org, sam@ravnborg.org, peter@stuge.se,
         hudson@trmm.net, th020394@gmail.com,
         =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
         Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: [PATCH v8 1/3] drm/uapi: Add USB connector type
-Date:   Sat, 13 Mar 2021 12:25:43 +0100
-Message-Id: <20210313112545.37527-2-noralf@tronnes.org>
+Subject: [PATCH v8 2/3] drm/probe-helper: Check epoch counter in output_poll_execute()
+Date:   Sat, 13 Mar 2021 12:25:44 +0100
+Message-Id: <20210313112545.37527-3-noralf@tronnes.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20210313112545.37527-1-noralf@tronnes.org>
 References: <20210313112545.37527-1-noralf@tronnes.org>
@@ -37,53 +37,61 @@ X-CMAE-Score: 0
 X-CMAE-Analysis: v=2.3 cv=PJ4hB8iC c=1 sm=1 tr=0
         a=OYZzhG0JTxDrWp/F2OJbnw==:117 a=OYZzhG0JTxDrWp/F2OJbnw==:17
         a=IkcTkHD0fZMA:10 a=M51BFTxLslgA:10 a=SJz97ENfAAAA:8
-        a=sSyzFPz0vM96QvMiUssA:9 a=QEXdDO2ut3YA:10 a=vFet0B0WnEQeilDPIY6i:22
+        a=rnb-knuk5dQJkhbuddwA:9 a=QEXdDO2ut3YA:10 a=vFet0B0WnEQeilDPIY6i:22
+        a=pHzHmUro8NiASowvMSCR:22 a=Ew2E2A-JSTLzCXPT_086:22
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a connector type for USB connected display panels.
-
-Some examples of what current userspace will name the connector:
-- Weston: "UNNAMED-%d"
-- Mutter: "Unknown20-%d"
-- X: "Unknown20-%d"
+drm_helper_hpd_irq_event() checks the epoch counter to determine
+connector status change. This was introduced in
+commit 5186421cbfe2 ("drm: Introduce epoch counter to drm_connector").
+Do the same for output_poll_execute() so it can detect other changes
+beside connection status value changes.
 
 v2:
-- Update drm_connector_enum_list
-- Add examples to commit message
+- Add Fixes tag (Daniel)
 
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Fixes: 5186421cbfe2 ("drm: Introduce epoch counter to drm_connector")
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
 ---
- drivers/gpu/drm/drm_connector.c | 1 +
- include/uapi/drm/drm_mode.h     | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/gpu/drm/drm_probe_helper.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-index 717c4e7271b0..52712daed3bc 100644
---- a/drivers/gpu/drm/drm_connector.c
-+++ b/drivers/gpu/drm/drm_connector.c
-@@ -94,6 +94,7 @@ static struct drm_conn_prop_enum_list drm_connector_enum_list[] = {
- 	{ DRM_MODE_CONNECTOR_DPI, "DPI" },
- 	{ DRM_MODE_CONNECTOR_WRITEBACK, "Writeback" },
- 	{ DRM_MODE_CONNECTOR_SPI, "SPI" },
-+	{ DRM_MODE_CONNECTOR_USB, "USB" },
- };
+diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
+index d6017726cc2a..e5432dcf6999 100644
+--- a/drivers/gpu/drm/drm_probe_helper.c
++++ b/drivers/gpu/drm/drm_probe_helper.c
+@@ -623,6 +623,7 @@ static void output_poll_execute(struct work_struct *work)
+ 	struct drm_connector_list_iter conn_iter;
+ 	enum drm_connector_status old_status;
+ 	bool repoll = false, changed;
++	u64 old_epoch_counter;
  
- void drm_connector_ida_init(void)
-diff --git a/include/uapi/drm/drm_mode.h b/include/uapi/drm/drm_mode.h
-index fed66a03c7ae..33024cc5d26e 100644
---- a/include/uapi/drm/drm_mode.h
-+++ b/include/uapi/drm/drm_mode.h
-@@ -367,6 +367,7 @@ enum drm_mode_subconnector {
- #define DRM_MODE_CONNECTOR_DPI		17
- #define DRM_MODE_CONNECTOR_WRITEBACK	18
- #define DRM_MODE_CONNECTOR_SPI		19
-+#define DRM_MODE_CONNECTOR_USB		20
+ 	if (!dev->mode_config.poll_enabled)
+ 		return;
+@@ -659,8 +660,9 @@ static void output_poll_execute(struct work_struct *work)
  
- /**
-  * struct drm_mode_get_connector - Get connector metadata.
+ 		repoll = true;
+ 
++		old_epoch_counter = connector->epoch_counter;
+ 		connector->status = drm_helper_probe_detect(connector, NULL, false);
+-		if (old_status != connector->status) {
++		if (old_epoch_counter != connector->epoch_counter) {
+ 			const char *old, *new;
+ 
+ 			/*
+@@ -689,6 +691,9 @@ static void output_poll_execute(struct work_struct *work)
+ 				      connector->base.id,
+ 				      connector->name,
+ 				      old, new);
++			DRM_DEBUG_KMS("[CONNECTOR:%d:%s] epoch counter %llu -> %llu\n",
++				      connector->base.id, connector->name,
++				      old_epoch_counter, connector->epoch_counter);
+ 
+ 			changed = true;
+ 		}
 -- 
 2.23.0
 
