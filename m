@@ -2,69 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B73EB339D23
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Mar 2021 10:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA93339DC7
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Mar 2021 12:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbhCMJCP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 13 Mar 2021 04:02:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57382 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230309AbhCMJB4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 13 Mar 2021 04:01:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id A6C6F64F1D
-        for <linux-usb@vger.kernel.org>; Sat, 13 Mar 2021 09:01:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615626115;
-        bh=/gijRcWvx45dWpF+Ct4VLGmshc+3h6FvJcG/NDi28k0=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=ShKn8DOiNvTI20aqrbLu0x1QWLuAUhSX3MYKDuH19sLZ/6vxmB8TT9KNtTFHRIo14
-         /z1DufT1lAEuUs1PphfkLroOvT38k9uye63pefdcx8dtlv3Ob3Box91Z7l8nmAUhex
-         FCLGe9pn1NDCkl+ckXUi5jblq6v31Mo92gFcAOv1oKrX9V6Q+9m9YGEYkNP0CJlw01
-         4flIlK8dU76cFSfXfHQg2L48HrIA6NjNiC6ZOpLevX5pgLhiUhQZQT+n0QyJ5GeOVJ
-         WJG99gR/dp/Yn7yv0GDEkHYbQ2GrA56TdFEMa5pdgQeINAM+gx/MPGcNBJ9D97n3M8
-         AbHW9L/Hd4XlA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 9ADDA65202; Sat, 13 Mar 2021 09:01:55 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 212101] xhci_hcd cant setup
-Date:   Sat, 13 Mar 2021 09:01:55 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: hose@posteo.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-212101-208809-NtjEAq1aIp@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-212101-208809@https.bugzilla.kernel.org/>
-References: <bug-212101-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S233529AbhCML0M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 13 Mar 2021 06:26:12 -0500
+Received: from asav21.altibox.net ([109.247.116.8]:54130 "EHLO
+        asav21.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230349AbhCML0G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 13 Mar 2021 06:26:06 -0500
+Received: from localhost.localdomain (unknown [81.166.168.211])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: noralf.tronnes@ebnett.no)
+        by asav21.altibox.net (Postfix) with ESMTPSA id B13BE8003A;
+        Sat, 13 Mar 2021 12:25:57 +0100 (CET)
+From:   =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
+To:     dri-devel@lists.freedesktop.org
+Cc:     linux-usb@vger.kernel.org, sam@ravnborg.org, peter@stuge.se,
+        lkundrak@v3.sk, markus@raatikainen.cc, pontus.fuchs@gmail.com,
+        hudson@trmm.net, th020394@gmail.com,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
+Subject: [PATCH v8 0/3] GUD USB Display driver
+Date:   Sat, 13 Mar 2021 12:25:42 +0100
+Message-Id: <20210313112545.37527-1-noralf@tronnes.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=PJ4hB8iC c=1 sm=1 tr=0
+        a=OYZzhG0JTxDrWp/F2OJbnw==:117 a=OYZzhG0JTxDrWp/F2OJbnw==:17
+        a=IkcTkHD0fZMA:10 a=M51BFTxLslgA:10 a=gAmX6pxEAAAA:20 a=e5mUnYsNAAAA:8
+        a=YwjdnX4TFwikY6-GU-cA:9 a=QEXdDO2ut3YA:10 a=Vxmtnl_E_bksehYqCbjh:22
+        a=pHzHmUro8NiASowvMSCR:22 a=Ew2E2A-JSTLzCXPT_086:22
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D212101
+Hi,
 
---- Comment #1 from pik a-b (hose@posteo.net) ---
-Created attachment 295833
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D295833&action=3Dedit
-outputs for diagnosis
+A while back I had the idea to turn a Raspberry Pi Zero into a $5
+USB to HDMI/SDTV/DPI display adapter.
 
---=20
-You may reply to this email to add a comment.
+The protocol is open so people are free to make displays implementing it and
+use this driver, all that's needed is to add a USB vid:pid to the driver for
+the display.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+See the wiki[1] for more information and images for the Raspberry Pi Zero/4.
+
+Changes in this version:
+- Forgot to filter RGB111 from reaching userspace
+- Handle a device that only returns unknown device properties (Peter)
+- s/GUD_PIXEL_FORMAT_RGB111/GUD_PIXEL_FORMAT_XRGB1111/ (Peter)
+- Fix R1 and XRGB1111 format conversion
+- Add FIXME about Big Endian being broken (Peter, Ilia)
+
+I will apply the patches as soon as the dependency shows up in drm-misc-next.
+
+Dependency:
+drm: Use USB controller's DMA mask when importing dmabufs[2]
+(currently in drm-misc-fixes but not in drm-misc-next yet, also present in
+drm-tip and linux-next)
+
+Noralf.
+
+[1] https://github.com/notro/gud/wiki
+[2] https://patchwork.freedesktop.org/patch/msgid/20210303133229.3288-1-tzimmermann@suse.de
+
+
+Noralf Trønnes (3):
+  drm/uapi: Add USB connector type
+  drm/probe-helper: Check epoch counter in output_poll_execute()
+  drm: Add GUD USB Display driver
+
+ MAINTAINERS                         |   8 +
+ drivers/gpu/drm/Kconfig             |   2 +
+ drivers/gpu/drm/Makefile            |   1 +
+ drivers/gpu/drm/drm_connector.c     |   1 +
+ drivers/gpu/drm/drm_probe_helper.c  |   7 +-
+ drivers/gpu/drm/gud/Kconfig         |  14 +
+ drivers/gpu/drm/gud/Makefile        |   4 +
+ drivers/gpu/drm/gud/gud_connector.c | 729 ++++++++++++++++++++++++++++
+ drivers/gpu/drm/gud/gud_drv.c       | 661 +++++++++++++++++++++++++
+ drivers/gpu/drm/gud/gud_internal.h  | 154 ++++++
+ drivers/gpu/drm/gud/gud_pipe.c      | 552 +++++++++++++++++++++
+ include/drm/gud.h                   | 333 +++++++++++++
+ include/uapi/drm/drm_mode.h         |   1 +
+ 13 files changed, 2466 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/gpu/drm/gud/Kconfig
+ create mode 100644 drivers/gpu/drm/gud/Makefile
+ create mode 100644 drivers/gpu/drm/gud/gud_connector.c
+ create mode 100644 drivers/gpu/drm/gud/gud_drv.c
+ create mode 100644 drivers/gpu/drm/gud/gud_internal.h
+ create mode 100644 drivers/gpu/drm/gud/gud_pipe.c
+ create mode 100644 include/drm/gud.h
+
+-- 
+2.23.0
+
