@@ -2,128 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF65339A84
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Mar 2021 01:49:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1012339AD6
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Mar 2021 02:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231906AbhCMAtM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Mar 2021 19:49:12 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:62339 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbhCMAtA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 19:49:00 -0500
-Received: from fsav106.sakura.ne.jp (fsav106.sakura.ne.jp [27.133.134.233])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 12D0mr4I082103;
-        Sat, 13 Mar 2021 09:48:53 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav106.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav106.sakura.ne.jp);
- Sat, 13 Mar 2021 09:48:53 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav106.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 12D0mrIZ082098
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 13 Mar 2021 09:48:53 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [PATCH 0/6] usbip fixes to crashes found by syzbot
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-To:     Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org
-Cc:     valentina.manea.m@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
-References: <cover.1615171203.git.skhan@linuxfoundation.org>
- <YEkQ4qS7tkwmjzDn@kroah.com>
- <5baf6b94-72c4-6e69-65a5-35c5cfb8ca0e@i-love.sakura.ne.jp>
- <YEoTw7CoK7Ob0YR+@kroah.com>
- <8dc1e893-4338-90ff-ea61-de727cad1d11@i-love.sakura.ne.jp>
- <afd1341b-2ed1-f781-d6c8-6064fea3aeb8@i-love.sakura.ne.jp>
-Message-ID: <192bdb07-da84-ce96-2e25-7c0df749940a@i-love.sakura.ne.jp>
-Date:   Sat, 13 Mar 2021 09:48:52 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S231597AbhCMB2d convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 12 Mar 2021 20:28:33 -0500
+Received: from bee.birch.relay.mailchannels.net ([23.83.209.14]:50321 "EHLO
+        bee.birch.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229959AbhCMB2L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Mar 2021 20:28:11 -0500
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 17D1C702870;
+        Sat, 13 Mar 2021 01:28:10 +0000 (UTC)
+Received: from pdx1-sub0-mail-a11.g.dreamhost.com (100-101-162-6.trex.outbound.svc.cluster.local [100.101.162.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 9E2BC702986;
+        Sat, 13 Mar 2021 01:28:09 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from pdx1-sub0-mail-a11.g.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
+        by 100.101.162.6 (trex/6.1.1);
+        Sat, 13 Mar 2021 01:28:10 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|smtp@contentfirst.com
+X-MailChannels-Auth-Id: dreamhost
+X-Abortive-Lonely: 6e0e460a7ebd2ce6_1615598889926_1974979722
+X-MC-Loop-Signature: 1615598889926:1069352381
+X-MC-Ingress-Time: 1615598889926
+Received: from pdx1-sub0-mail-a11.g.dreamhost.com (localhost [127.0.0.1])
+        by pdx1-sub0-mail-a11.g.dreamhost.com (Postfix) with ESMTP id 5D31D7E582;
+        Fri, 12 Mar 2021 17:28:09 -0800 (PST)
+Received: from industrynumbers.com (pool-100-15-209-187.washdc.fios.verizon.net [100.15.209.187])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: smtp@contentfirst.com)
+        by pdx1-sub0-mail-a11.g.dreamhost.com (Postfix) with ESMTPSA id 9EE917E665;
+        Fri, 12 Mar 2021 17:28:05 -0800 (PST)
+Received: from industrynumbers.com (localhost [127.0.0.1])
+        by industrynumbers.com (Postfix) with ESMTP id 6ABA1282A07;
+        Fri, 12 Mar 2021 20:28:04 -0500 (EST)
+Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Charles Yeh <charlesyeh522@gmail.com>,
+        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Joe Abbott <jabbott@rollanet.org>
+References: <YDUp0tIThOZSTHJt@hovoldconsulting.com>
+ <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
+ <YDUysZY90FfVhrHK@hovoldconsulting.com>
+ <CAAZvQQ6F=cQ-EhC0kgeTVM3GrtBWR+HfM6UJWj2AEF1NYZ-vAQ@mail.gmail.com>
+ <YDaGRRYrEO5BEJv0@hovoldconsulting.com>
+ <CAAZvQQ7+b9=DKqPxgsXxS7Lhqj=QTzKHCMarSbsQkAnYqdO1GA@mail.gmail.com>
+ <YEH7okblCx8+Odxn@hovoldconsulting.com>
+ <ddc0e424-21c2-b8f4-1b00-f589267d2b51@IEEE.org>
+ <YEpAaL9QtVMduEpi@hovoldconsulting.com>
+ <9d02257d-cca1-116e-634a-6ac952362c5d@IEEE.org>
+ <YEtwNzhCmvyKhRto@hovoldconsulting.com>
+X-DH-BACKEND: pdx1-sub0-mail-a11
+From:   "Michael G. Katzmann" <michaelk@IEEE.org>
+Message-ID: <a475110e-2f44-eeca-3cd2-dd946e5abfe7@IEEE.org>
+Date:   Fri, 12 Mar 2021 20:28:04 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-In-Reply-To: <afd1341b-2ed1-f781-d6c8-6064fea3aeb8@i-love.sakura.ne.jp>
+In-Reply-To: <YEtwNzhCmvyKhRto@hovoldconsulting.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/03/12 14:44, Tetsuo Handa wrote:
-> And what you are missing in your [PATCH 4,5,6/6] is
-> 
->   diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
->   index c4457026d5ad..3c64bd06ab53 100644
->   --- a/drivers/usb/usbip/vhci_sysfs.c
->   +++ b/drivers/usb/usbip/vhci_sysfs.c
->   @@ -423,6 +423,7 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
->           /* end the lock */
->   
->           wake_up_process(vdev->ud.tcp_rx);
->   +       schedule_timeout_uninterruptible(HZ); // Consider being preempted here.
->           wake_up_process(vdev->ud.tcp_tx);
->   
->           rh_port_connect(vdev, speed);
-> 
-> . wake_up_process(tcp_tx) can call vhci_shutdown_connection() before wake_up_process(tcp_tx) is called.
+On 3/12/21 8:44 AM, Johan Hovold wrote:
 
-wake_up_process(tcp_rx) can call vhci_shutdown_connection() before wake_up_process(tcp_tx) is called.
 
-> Since vhci_shutdown_connection() destroys tcp_tx thread and releases tcp_tx memory via kthread_stop_put(tcp_tx),
-> wake_up_process(tcp_tx) will access already freed memory. Your patch converted "NULL pointer dereference caused by
-> failing to call kthread_stop_put(tcp_tx)" into "use after free caused by succeeding to call kthread_stop_put(tcp_tx)".
-> 
+Let me try that patch in the right format 8-)
 
-And note that
 
-  diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
-  index c4457026d5ad..0e1a81d4632c 100644
-  --- a/drivers/usb/usbip/vhci_sysfs.c
-  +++ b/drivers/usb/usbip/vhci_sysfs.c
-  @@ -422,11 +422,11 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
-          spin_unlock_irqrestore(&vhci->lock, flags);
-          /* end the lock */
-  
-  -       wake_up_process(vdev->ud.tcp_rx);
-  -       wake_up_process(vdev->ud.tcp_tx);
-  -
-          rh_port_connect(vdev, speed);
-  
-  +       wake_up_process(vdev->ud.tcp_tx);
-  +       wake_up_process(vdev->ud.tcp_rx);
-  +
-          return count;
-   }
-   static DEVICE_ATTR_WO(attach);
-
-is as well not sufficient, for you are still missing
-
-  diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
-  index c4457026d5ad..c958f89a9196 100644
-  --- a/drivers/usb/usbip/vhci_sysfs.c
-  +++ b/drivers/usb/usbip/vhci_sysfs.c
-  @@ -422,11 +422,13 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
-          spin_unlock_irqrestore(&vhci->lock, flags);
-          /* end the lock */
-  
-  -       wake_up_process(vdev->ud.tcp_rx);
-  -       wake_up_process(vdev->ud.tcp_tx);
-  +       schedule_timeout_uninterruptible(HZ); // Consider being preempted here.
-  
-          rh_port_connect(vdev, speed);
-  
-  +       wake_up_process(vdev->ud.tcp_tx);
-  +       wake_up_process(vdev->ud.tcp_rx);
-  +
-          return count;
-   }
-   static DEVICE_ATTR_WO(attach);
-
-because vhci_port_disconnect() from detach_store() can call usbip_event_add(&vdev->ud, VDEV_EVENT_DOWN)
-(same use after free bug regarding tcp_tx and tcp_rx) as soon as all shared states are set up and
-spinlocks are released.
-
-What you had better consider first is how to protect event_handler()/usbip_sockfd_store()/attach_store()/detach_store() functions
- from concurrent calls. Please respond to https://lkml.kernel.org/r/3dab66dc-2981-bc88-a370-4b3178dfd390@i-love.sakura.ne.jp
-before you try to make further changes.
+--- a/drivers/usb/serial/pl2303.c    2021-03-12 09:30:22.963992109 -0500
++++ b/drivers/usb/serial/pl2303.c    2021-03-12 20:00:20.003526891 -0500
+@@ -188,6 +188,7 @@
+     unsigned long quirks;
+     unsigned int no_autoxonxoff:1;
+     unsigned int no_divisors:1;
++    unsigned int alt_divisors:1;
+ };
+ 
+ struct pl2303_serial_private {
+@@ -217,10 +218,12 @@
+     [TYPE_TA] = {
+         .name            = "TA",
+         .max_baud_rate        = 6000000,
++        .alt_divisors        = true,
+     },
+     [TYPE_TB] = {
+         .name            = "TB",
+         .max_baud_rate        = 12000000,
++        .alt_divisors        = true,
+     },
+     [TYPE_HXD] = {
+         .name            = "HXD",
+@@ -618,6 +621,46 @@
+     return baud;
+ }
+ 
++static speed_t pl2303_encode_baud_rate_divisor_alt(unsigned char buf[4],
++                                                                speed_t baud)
++{
++        unsigned int baseline, mantissa, exponent;
++
++        /*
++         * Apparently, for the TA version the formula is:
++         *   baudrate = 12M * 32 / (mantissa * 2^exponent)
++         * where
++         *   mantissa = buf[10:0]
++         *   exponent = buf[15:13 16]
++         */
++        baseline = 12000000 * 32;
++        mantissa = baseline / baud;
++        if (mantissa == 0)
++                mantissa = 1;   /* Avoid dividing by zero if baud > 32*12M. */
++        exponent = 0;
++        while (mantissa >= 2048) {
++                if (exponent < 15) {
++                        mantissa >>= 1; /* divide by 2 */
++                        exponent++;
++                } else {
++                        /* Exponent is maxed. Trim mantissa and leave. */
++                        mantissa = 2047;
++                        break;
++                }
++        }
++
++        buf[3] = 0x80;
++        buf[2] = exponent & 0x01; // LS bit of exponent
++        buf[1] = (exponent & ~0x01) << 4 | mantissa >> 8; // 3 bits of the exponent and MS 3 bits of the mantissa
++        buf[0] = mantissa & 0xff; // LS 8 bits of the mantissa
++
++        /* Calculate and return the exact baud rate. */
++        baud = (baseline / mantissa) >> exponent;
++
++        return baud;
++}
++
++
+ static void pl2303_encode_baud_rate(struct tty_struct *tty,
+                     struct usb_serial_port *port,
+                     u8 buf[4])
+@@ -645,6 +688,8 @@
+ 
+     if (baud == baud_sup)
+         baud = pl2303_encode_baud_rate_direct(buf, baud);
++    else if (spriv->type->alt_divisors)
++                baud = pl2303_encode_baud_rate_divisor_alt(buf, baud);
+     else
+         baud = pl2303_encode_baud_rate_divisor(buf, baud);
 
