@@ -2,107 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74AAF33A259
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Mar 2021 03:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD7F33A262
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Mar 2021 03:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233726AbhCNCTg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 13 Mar 2021 21:19:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbhCNCTL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 13 Mar 2021 21:19:11 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063ACC061574;
-        Sat, 13 Mar 2021 18:19:11 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2390555C;
-        Sun, 14 Mar 2021 03:19:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1615688348;
-        bh=4I7l6MsBdcrlbIfCr+pyxXnIMce/5m/JVSnDkBpBzRA=;
+        id S233011AbhCNC3w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 13 Mar 2021 21:29:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56722 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231497AbhCNC3U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 13 Mar 2021 21:29:20 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5A28A64E62;
+        Sun, 14 Mar 2021 02:29:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615688960;
+        bh=mt760bIfNdFduP4gxeD2h1k3Vjred890jDgDdCPGWbU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m4IAs1sTM+B9tCbUOzd1PJ5NxfYmRBrTgA+ewOYiXBgLCA+HPG/E1Gc13DmPqUL3g
-         8LdNZ4gAsN82SLOtWXDAFaY5xWkJ3DtlJ2gAzNmb2DeU7oHYH3M2Hc/2SnxAboucTg
-         wU9zo73tPE1zVvgzQWmnJrA/kfdw/dEBkD3XvR0g=
-Date:   Sun, 14 Mar 2021 04:18:32 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+        b=eCyT1ewNJq3FoqH4CWB/FKvn0cDgTHXq9uoU8QZhJ0d1vBvvvHei6gcYpwYR4wDfp
+         eMsDtVerSGEseO7wQwXhrYZahe7SC83ved2Mi9vZ6k51/WLGptCaWVxS27qxrOFvBE
+         0O37DDYHhH8XwwjmGgKkWVXNX8b9We1i7fzNuqdxclHWSsIccn+MDdc4adMWoN/WWN
+         hCvD+6eKJpeLYQ0PRkMj8EP82SH7EHj8DxsFE9NKoShc1jzFw8H5Na5fA8y7l6fEP/
+         3zP6o39MOMPI7cJHPKJdV2ZSlUF+rxAQJqJz8Swbp2/vfAefjLob/9JmOeaWA7YJcj
+         YDnlxkhAfceCQ==
+Date:   Sun, 14 Mar 2021 10:29:14 +0800
+From:   Peter Chen <peter.chen@kernel.org>
 To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     Peter Chen <peter.chen@kernel.org>, balbi@kernel.org,
-        gregkh@linuxfoundation.org, linux-api@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kurahul@cadence.com
-Subject: Re: [PATCH 1/2] usb: gadget: uvc: Updating bcdUVC field to 0x0110
-Message-ID: <YE1yeEPwHoMgML0s@pendragon.ideasonboard.com>
-References: <20210308102735.9251-1-pawell@gli-login.cadence.com>
- <20210314015846.GB17526@b29397-desktop>
+Cc:     balbi@kernel.org, laurent.pinchart@ideasonboard.com,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kurahul@cadence.com
+Subject: Re: [PATCH v2] usb: gadget: uvc: add bInterval checking for HS mode
+Message-ID: <20210314022914.GC17526@b29397-desktop>
+References: <20210308125338.4824-1-pawell@gli-login.cadence.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20210314015846.GB17526@b29397-desktop>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210308125338.4824-1-pawell@gli-login.cadence.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Pawel,
-
-Thank you for the patch.
-
-On Sun, Mar 14, 2021 at 09:58:46AM +0800, Peter Chen wrote:
-> On 21-03-08 11:27:34, Pawel Laszczak wrote:
-> > From: Pawel Laszczak <pawell@cadence.com>
-> > 
-> > Command Verifier during UVC Descriptor Tests (Class Video Control
-> > Interface Descriptor Test Video) compleins about:
+On 21-03-08 13:53:38, Pawel Laszczak wrote:
+> From: Pawel Laszczak <pawell@cadence.com>
 > 
-> %s/compleins/complains
+> Patch adds extra checking for bInterval passed by configfs.
+> The 5.6.4 chapter of USB Specification (rev. 2.0) say:
+> "A high-bandwidth endpoint must specify a period of 1x125 µs
+> (i.e., a bInterval value of 1)."
 > 
-> > Video Control Interface Header bcdUVC is 0x0100. USB Video Class
-> > specification 1.0 has been replaced by 1.1 specification
-> > (UVC: 6.2.26) Class Video Control Interface Descriptor bcdUVC is not 1.1
+> The issue was observed during testing UVC class on CV.
+> I treat this change as improvement because we can control
+> bInterval by configfs.
 > 
-> What does this (UVC: 6.2.26) mean? There are only 4 chapters for this
-> spec, Am I something wrong?
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> 
+> ---
+> Changlog:
+> v2:
+> - removed duplicated assignment
+> 
+>  drivers/usb/gadget/function/f_uvc.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> index 44b4352a2676..ed77a126a74f 100644
+> --- a/drivers/usb/gadget/function/f_uvc.c
+> +++ b/drivers/usb/gadget/function/f_uvc.c
+> @@ -633,7 +633,12 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
+>  
+>  	uvc_hs_streaming_ep.wMaxPacketSize =
+>  		cpu_to_le16(max_packet_size | ((max_packet_mult - 1) << 11));
+> -	uvc_hs_streaming_ep.bInterval = opts->streaming_interval;
+> +
+> +	/* A high-bandwidth endpoint must specify a bInterval value of 1 */
+> +	if (max_packet_mult > 1)
+> +		uvc_hs_streaming_ep.bInterval = 1;
+> +	else
+> +		uvc_hs_streaming_ep.bInterval = opts->streaming_interval;
+>  
+>  	uvc_ss_streaming_ep.wMaxPacketSize = cpu_to_le16(max_packet_size);
+>  	uvc_ss_streaming_ep.bInterval = opts->streaming_interval;
+> -- 
+> 2.25.1
+> 
 
-I assume this is a reference to a test case in the test suite.
-
-> > Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> > ---
-> >  drivers/usb/gadget/function/uvc_configfs.c | 2 +-
-> >  drivers/usb/gadget/legacy/webcam.c         | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-> > index 00fb58e50a15..cd28dec837dd 100644
-> > --- a/drivers/usb/gadget/function/uvc_configfs.c
-> > +++ b/drivers/usb/gadget/function/uvc_configfs.c
-> > @@ -231,7 +231,7 @@ static struct config_item *uvcg_control_header_make(struct config_group *group,
-> >  	h->desc.bLength			= UVC_DT_HEADER_SIZE(1);
-> >  	h->desc.bDescriptorType		= USB_DT_CS_INTERFACE;
-> >  	h->desc.bDescriptorSubType	= UVC_VC_HEADER;
-> > -	h->desc.bcdUVC			= cpu_to_le16(0x0100);
-> > +	h->desc.bcdUVC			= cpu_to_le16(0x0110);
-> >  	h->desc.dwClockFrequency	= cpu_to_le32(48000000);
-> >  
-> >  	config_item_init_type_name(&h->item, name, &uvcg_control_header_type);
-> > diff --git a/drivers/usb/gadget/legacy/webcam.c b/drivers/usb/gadget/legacy/webcam.c
-> > index a9f8eb8e1c76..3a61de4bb2b1 100644
-> > --- a/drivers/usb/gadget/legacy/webcam.c
-> > +++ b/drivers/usb/gadget/legacy/webcam.c
-> > @@ -90,7 +90,7 @@ static const struct UVC_HEADER_DESCRIPTOR(1) uvc_control_header = {
-> >  	.bLength		= UVC_DT_HEADER_SIZE(1),
-> >  	.bDescriptorType	= USB_DT_CS_INTERFACE,
-> >  	.bDescriptorSubType	= UVC_VC_HEADER,
-> > -	.bcdUVC			= cpu_to_le16(0x0100),
-> > +	.bcdUVC			= cpu_to_le16(0x0110),
-> >  	.wTotalLength		= 0, /* dynamic */
-> >  	.dwClockFrequency	= cpu_to_le32(48000000),
-> >  	.bInCollection		= 0, /* dynamic */
-
-The change looks good to me. With the typo in the commit message fixed,
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
 
 -- 
-Regards,
 
-Laurent Pinchart
+Thanks,
+Peter Chen
+
