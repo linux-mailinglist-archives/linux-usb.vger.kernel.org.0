@@ -2,60 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD6B33A123
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Mar 2021 21:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D4033A23C
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Mar 2021 02:47:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234757AbhCMUqA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 13 Mar 2021 15:46:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38324 "EHLO mail.kernel.org"
+        id S234932AbhCNBrA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 13 Mar 2021 20:47:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51740 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234571AbhCMUpk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 13 Mar 2021 15:45:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 2E83E64ED7;
-        Sat, 13 Mar 2021 20:45:40 +0000 (UTC)
+        id S231329AbhCNBqg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 13 Mar 2021 20:46:36 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 69EF864EBA;
+        Sun, 14 Mar 2021 01:46:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615668340;
-        bh=qowODDckHu3luRXX8RMoBIG18gGFrKLnCMCMLnMuPew=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=OGnfdTU34zP9+rY+MPLELJbfbtjJuenOOA6/PtpTF6yYxQJVjptVgMde3u4qWz/p8
-         vqOcKKzw9TkRncVkxRMQiKsgNvk8MQ1Gzro53pihs6fb+u+RDCdt0Iae4ckLKHgD5T
-         Pwq2qio6ALInmbDa7DuHHqO5vVTY9YnSm4G0i0TK8UyZ1SgJAPAO8S+IOJPufUu8tb
-         dtPxoQMNoth9AEuWebsVcyJbsQVlv/k/W3MtEq91L3utgciwCcx9R406f2KBCtIPTb
-         VzBrIp7Q+JzEx/QdRp68iXHmECHMUv/ID5Mz1/poGNS2XZl6vluG/x1474A5bl1hSl
-         41g1FszE+9FEw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 2A95960A2D;
-        Sat, 13 Mar 2021 20:45:40 +0000 (UTC)
-Subject: Re: [GIT PULL] USB driver fixes for 5.12-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YEzT6kyiwo9T12Er@kroah.com>
-References: <YEzT6kyiwo9T12Er@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YEzT6kyiwo9T12Er@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.12-rc3
-X-PR-Tracked-Commit-Id: d26c00e7276fc92b18c253d69e872f6b03832bad
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5c7bdbf8827fa0a8ab13ebd78264f7f0c13cc281
-Message-Id: <161566834016.19597.14562059949098258808.pr-tracker-bot@kernel.org>
-Date:   Sat, 13 Mar 2021 20:45:40 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+        s=k20201202; t=1615686395;
+        bh=OzIper+pj1xZH9n9eLVpLqx5W00LXU5WB4+Tu9P1UbY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OoQSV6siFzoZXZowtmxqkxcoaXJb2Jg/vN/vQF3G9Gg6VFw1CvZmS8giq2/4ObT1X
+         bRRG4sMFQxTjr9tEogRqy6dV5Vb+3zYhHZKJbLqn36wNcSvVorDSAwCncSZUhBJ0b8
+         QVOYKZ6pxUsvX5U1l2s2E++zrDrSNF16IcJaFm3xtXGqPIJK9ODqM+o9QgWc4dnjf5
+         pbb0luyTfDHFXku8erOGAoD5yS40sDUjeMVyksceMqa0tPsHtnRthOmEMJB5VxHjJ1
+         yrYnapEyzdCZ+Vs2T4f7krzEDMYjbJ3xCL3qHd4U0q76tXGbRZtdl60TZ6vzhVSsvC
+         0/g0CA0GgyKMQ==
+Date:   Sun, 14 Mar 2021 09:46:29 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-api@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kurahul@cadence.com
+Subject: Re: [PATCH 2/2] usb: webcam: Invalid size of Processing Unit
+ Descriptor
+Message-ID: <20210314014629.GA17526@b29397-desktop>
+References: <20210308102735.9251-1-pawell@gli-login.cadence.com>
+ <20210308102735.9251-2-pawell@gli-login.cadence.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210308102735.9251-2-pawell@gli-login.cadence.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Sat, 13 Mar 2021 16:02:02 +0100:
+On 21-03-08 11:27:35, Pawel Laszczak wrote:
+> From: Pawel Laszczak <pawell@cadence.com>
+> 
+> According with USB Device Class Definition for Video Device the
+> Processing Unit Descriptor bLength should be 12 (10 + bmControlSize),
+> but it has 11.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.12-rc3
+Does the reason forget filling bmVideoStandards entry?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5c7bdbf8827fa0a8ab13ebd78264f7f0c13cc281
-
-Thank you!
+Peter
+> 
+> Invalid length caused that Processing Unit Descriptor Test Video form
+> CV tool failed. To fix this issue patch adds bmVideoStandards into
+> uvc_processing_unit_descriptor structure.
+> 
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+>  include/uapi/linux/usb/video.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/include/uapi/linux/usb/video.h b/include/uapi/linux/usb/video.h
+> index d854cb19c42c..2a54e8fdd341 100644
+> --- a/include/uapi/linux/usb/video.h
+> +++ b/include/uapi/linux/usb/video.h
+> @@ -302,6 +302,7 @@ struct uvc_processing_unit_descriptor {
+>  	__u8   bControlSize;
+>  	__u8   bmControls[2];
+>  	__u8   iProcessing;
+> +	__u8   bmVideoStandards;
+>  } __attribute__((__packed__));
+>  
+>  #define UVC_DT_PROCESSING_UNIT_SIZE(n)			(9+(n))
+> -- 
+> 2.25.1
+> 
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
+Thanks,
+Peter Chen
+
