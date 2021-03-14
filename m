@@ -2,151 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A878339EBF
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Mar 2021 16:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D498B33A001
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Mar 2021 19:36:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233635AbhCMPCq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 13 Mar 2021 10:02:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59522 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230441AbhCMPCF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 13 Mar 2021 10:02:05 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E227264F18;
-        Sat, 13 Mar 2021 15:02:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1615647725;
-        bh=eW7CiY2DtD1D1I3DtX1NBMSSBxgl/ITXMqCDwH72UHM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=H+J8WLmQfGXi2/qRsuXt4akLLAr7OPAk7PBmqZhA1GfDqJHbwT+si6zC291qRrgye
-         UHY7lz2V7qDcY6wlDhoFTQvCeyKQT+qxRCs4fzpzrF2V+A8oxOdAtei8YN822eQVvZ
-         8CxJhTnIXUf90cw5KQMPx92O71yNYSFgT0UltGKA=
-Date:   Sat, 13 Mar 2021 16:02:02 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 5.12-rc3
-Message-ID: <YEzT6kyiwo9T12Er@kroah.com>
+        id S234356AbhCMSgT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sat, 13 Mar 2021 13:36:19 -0500
+Received: from smtp.econet.co.zw ([77.246.51.158]:65277 "EHLO
+        ironportDMZ.econet.co.zw" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234286AbhCMSf6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 13 Mar 2021 13:35:58 -0500
+X-Greylist: delayed 472 seconds by postgrey-1.27 at vger.kernel.org; Sat, 13 Mar 2021 13:35:46 EST
+IronPort-SDR: 2VH7uDjPUxuRF84kGIuoHHaISSCuqZi+ufUVCFmh+/0u/DCFCtj5VFDT1b4h9dNnVvA6flspH+
+ 3h9rw6M4gXRTOO/x00E/RP0IaZ5bJ/VFJjak29BaaBMRsZ8SomhBLF6NshxP1CgwykLJQtbFhT
+ f57yb5yFlreJnhCu99okX5fHlhFOs37BIGqeR55agFxRF7WOiDsNKvGtFuzjle44yqE/60PUcB
+ eSRuIQK9gCbtZaBXI6W4OKIxrnCmM+n1gcMJCNZUjbl9kcbsSMLo+94gqXFyBTYwkpasFfSfmL
+ xM0=
+IronPort-HdrOrdr: A9a23:z3onBKxoaNoCa6u/wVCbKrPwgr1zdoIgy1knxilNYDZSddGVkN
+ 3roe8S0gX6hC1UdHYrn92BP6foewK+ybde544NMbC+GDT3oWfAFuFfxKbr3jGIIUPD38FH06
+ MIScRDIfnRKXQ/ssrg+gm/FL8boeWv1Kyzn+/RwzNMYGhRGsddxjx0AAqaDUF6LTMubfFSKL
+ Om6tNDt36cfx0sA/iTPXUZQ/PF4+TCiZOOW29/Ozcc9AKMgTm0gYSULzGk2H4lIkpy6IZn1V
+ Lgmwz9opy5s/ehygLNvlWjiqh+qZ/EwttHCNfksLlwFhzcziKpYIhGfpHqhkFTnMifrG8wkN
+ /WowoxVv4DiU/sQg==
+X-IronPort-AV: E=Sophos;i="5.81,245,1610402400"; 
+   d="scan'208";a="3444522"
+Received: from unknown (HELO WVALE-MB-SVR-05.econetzw.local) ([192.168.101.173])
+  by ironportLAN.econet.co.zw with ESMTP; 13 Mar 2021 20:27:52 +0200
+Received: from WVALE-CAS-SVR-9.econetzw.local (192.168.101.184) by
+ WVALE-MB-SVR-05.econetzw.local (192.168.101.173) with Microsoft SMTP Server
+ (TLS) id 15.0.1473.3; Sat, 13 Mar 2021 20:27:48 +0200
+Received: from User (165.231.148.189) by WVALE-CAS-SVR-9.econetzw.local
+ (10.10.11.230) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
+ Transport; Sat, 13 Mar 2021 20:27:59 +0200
+Reply-To: <r19772744@daum.net>
+From:   "Reem E. A" <chawora@econet.co.zw>
+Subject: Re:
+Date:   Sat, 13 Mar 2021 18:27:46 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 8BIT
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <96f8ff6fe77b4507830ab5cf78a93340@WVALE-CAS-SVR-9.econetzw.local>
+To:     Undisclosed recipients:;
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+Hello,
 
-  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (2) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home on their behalf and
+for our "Mutual Benefits".
 
-are available in the Git repository at:
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Turkish Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.12-rc3
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+reem.alhashimi@yandex.com
 
-for you to fetch changes up to d26c00e7276fc92b18c253d69e872f6b03832bad:
+Regards,
+Ms. Reem.
+This mail was sent through Econet Wireless, a Global telecoms leader.
 
-  xhci: Fix repeated xhci wake after suspend due to uncleared internal wake state (2021-03-11 13:03:06 +0100)
+DISCLAIMER
 
-----------------------------------------------------------------
-USB fixes for 5.12-rc3
+The information in this message is confidential and is legally privileged. It is intended solely for the addressee. Access to this message by anyone else is unauthorized. If received in error please accept our apologies and notify the sender immediately. You must also delete the original message from your machine. If you are not the intended recipient, any use, disclosure, copying, distribution or action taken in reliance of it, is prohibited and may be unlawful. The information, attachments, opinions or advice contained in this email are not the views or opinions of Econet Wireless, its subsidiaries or affiliates. Econet Wireless therefore accepts no liability for claims, losses, or damages arising from the inaccuracy, incorrectness, or lack of integrity of such information.
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/AgileBanner.png]
+WORK ISN'T A PLACE
+IT'S WHAT WE DO
+________________________________
 
-Here are a small number of USB fixes for 5.12-rc3 to resolve a bunch of
-reported issues:
-	- usbip fixups for issues found by syzbot
-	- xhci driver fixes and quirk additions
-	- gadget driver fixes
-	- dwc3 QCOM driver fix
-	- usb-serial new ids and fixes
-	- usblp fix for a long-time issue
-	- cdc-acm quirk addition
-	- other tiny fixes for reported problems
 
-All of these have been in linux-next for a while with no reported
-issues.
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-----------------------------------------------------------------
-Dan Carpenter (1):
-      USB: gadget: u_ether: Fix a configfs return code
 
-Forest Crossman (1):
-      usb: xhci: Fix ASMedia ASM1042A and ASM3242 DMA addressing
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/telephone.png]
 
-Greg Kroah-Hartman (1):
-      Merge tag 'usb-serial-5.12-rc3' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
 
-Johan Hovold (1):
-      USB: serial: xr: fix NULL-deref on disconnect
 
-Karan Singhal (1):
-      USB: serial: cp210x: add ID for Acuity Brands nLight Air Adapter
 
-Mathias Nyman (2):
-      xhci: Improve detection of device initiated wake signal.
-      xhci: Fix repeated xhci wake after suspend due to uncleared internal wake state
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/email.png]
 
-Matthias Kaehlcke (1):
-      usb: dwc3: qcom: Honor wakeup enabled/disabled state
+<mailto:>
 
-Niv Sardi (1):
-      USB: serial: ch341: add new Product ID
 
-Pavel Skripkin (1):
-      USB: serial: io_edgeport: fix memory leak in edge_startup
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/location.png]
 
-Pete Zaitcev (1):
-      USB: usblp: fix a hang in poll() if disconnected
 
-Ruslan Bilovol (2):
-      usb: gadget: f_uac2: always increase endpoint max_packet_size by one audio slot
-      usb: gadget: f_uac1: stop playback on function disable
 
-Sebastian Reichel (1):
-      USB: serial: cp210x: add some more GE USB IDs
 
-Serge Semin (1):
-      usb: dwc3: qcom: Add missing DWC3 OF node refcount decrement
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/website.png]
 
-Shawn Guo (1):
-      usb: dwc3: qcom: add ACPI device id for sc8180x
+www.econet.co.zw<https://www.econet.co.zw>
 
-Shuah Khan (6):
-      usbip: fix stub_dev to check for stream socket
-      usbip: fix vhci_hcd to check for stream socket
-      usbip: fix vudc to check for stream socket
-      usbip: fix stub_dev usbip_sockfd_store() races leading to gpf
-      usbip: fix vhci_hcd attach_store() races leading to gpf
-      usbip: fix vudc usbip_sockfd_store races leading to gpf
 
-Stanislaw Gruszka (1):
-      usb: xhci: do not perform Soft Retry for some xHCI hosts
-
-Wei Yongjun (1):
-      USB: gadget: udc: s3c2410_udc: fix return value check in s3c2410_udc_probe()
-
-Yorick de Wid (1):
-      Goodix Fingerprint device is not a modem
-
-Yoshihiro Shimoda (1):
-      usb: renesas_usbhs: Clear PIPECFG for re-enabling pipe with other EPNUM
-
- drivers/usb/class/cdc-acm.c                    |  5 ++
- drivers/usb/class/usblp.c                      | 16 ++++--
- drivers/usb/dwc3/dwc3-qcom.c                   | 18 ++++--
- drivers/usb/gadget/function/f_uac1.c           |  1 +
- drivers/usb/gadget/function/f_uac2.c           |  2 +-
- drivers/usb/gadget/function/u_ether_configfs.h |  5 +-
- drivers/usb/gadget/udc/s3c2410_udc.c           |  4 +-
- drivers/usb/host/xhci-pci.c                    | 13 ++++-
- drivers/usb/host/xhci-ring.c                   |  3 +-
- drivers/usb/host/xhci.c                        | 78 ++++++++++++++------------
- drivers/usb/host/xhci.h                        |  1 +
- drivers/usb/renesas_usbhs/pipe.c               |  2 +
- drivers/usb/serial/ch341.c                     |  1 +
- drivers/usb/serial/cp210x.c                    |  3 +
- drivers/usb/serial/io_edgeport.c               | 26 +++++----
- drivers/usb/serial/xr_serial.c                 | 25 ---------
- drivers/usb/usbip/stub_dev.c                   | 42 +++++++++++---
- drivers/usb/usbip/vhci_sysfs.c                 | 39 +++++++++++--
- drivers/usb/usbip/vudc_sysfs.c                 | 49 +++++++++++++---
- 19 files changed, 226 insertions(+), 107 deletions(-)
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/inspired.jpg]
