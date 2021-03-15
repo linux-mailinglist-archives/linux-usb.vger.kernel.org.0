@@ -2,76 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 589E433BB41
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Mar 2021 15:20:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A4033BC93
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Mar 2021 15:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbhCOOO2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Mar 2021 10:14:28 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:39671 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231390AbhCOONl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Mar 2021 10:13:41 -0400
-Received: (qmail 403655 invoked by uid 1000); 15 Mar 2021 10:13:35 -0400
-Date:   Mon, 15 Mar 2021 10:13:35 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     taehyun cho <taehyun.cho@samsung.com>
-Cc:     balbi@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: remove 'pm_runtime_set_active' in resume
- callback
-Message-ID: <20210315141335.GA402778@rowland.harvard.edu>
-References: <CGME20210315074223epcas2p11ddf190ec730f8629c1310117135f813@epcas2p1.samsung.com>
- <20210315074317.7736-1-taehyun.cho@samsung.com>
+        id S233077AbhCOO1C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Mar 2021 10:27:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51332 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231644AbhCOO0v (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Mar 2021 10:26:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 591B764FF9;
+        Mon, 15 Mar 2021 14:26:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1615818410;
+        bh=jAs0nXJym2Mi0R0qV76FK5EUuMU+K5jr65qJca1NBmk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=02fIKgYvHZsKRARQ/8yQhfyCndxzs8bQm1LFl0auRaeQ940jx6ISBz++DXEpzCnVG
+         yJlZ7+1Q8KxblN9HnRVTjLf92zUBXbNgi0zTVmSjk0lLr5ipNk+h3gCL8uEkxymx5R
+         zJ7wix8QioqS4WLLwa1bgil6gUs1vDqQoMjNFuuQ=
+Date:   Mon, 15 Mar 2021 15:26:48 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Hongren Zheng (Zenithal)" <i@zenithal.me>
+Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Antonio Borneo <borneo.antonio@gmail.com>,
+        matt mooney <mfm@muteddisk.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] usbip: tools: add options and examples in man
+ page related to device mode
+Message-ID: <YE9uqOqPf3SNsIgc@kroah.com>
+References: <YE9Vyrs+Z8MusjDM@Sun>
+ <YE9Wo8QZ/0XU8Mzq@Sun>
+ <YE9dbrWjL5DZ8Hm8@Sun>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210315074317.7736-1-taehyun.cho@samsung.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YE9dbrWjL5DZ8Hm8@Sun>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 15, 2021 at 04:43:17PM +0900, taehyun cho wrote:
-> 'pm_runtime_set_active' sets a flag to describe rumtime status.
-> This flag is automatically set in pm_runtime_get_sync/put_sync API.
-> 'pm_runtime_set_active' checks the runtime status of parent device.
-> As a result, the below error message is printed.
-> dwc3 11110000.dwc3: runtime PM trying to activate child device
-> 11110000.dwc3 but parent (11110000.usb) is not active.
-
-This is very suspicious.  That error message indicates a real error is 
-present; removing these pm_runtime_set_active calls won't fix the error.
-
-You need to determine why the parent platform device 11110000.usb isn't 
-active when the dwc3 probe and resume routines are called.  It seems 
-likely that there is a bug in the platform device's driver.
-
-Alan Stern
-
-> Signed-off-by: taehyun cho <taehyun.cho@samsung.com>
-> ---
->  drivers/usb/dwc3/core.c | 2 --
->  1 file changed, 2 deletions(-)
+On Mon, Mar 15, 2021 at 09:13:18PM +0800, Hongren Zheng (Zenithal) wrote:
+> The commit e0546fd8b748b19d8edd1550530da8ebad6e4b31 implemented device
+> mode for user space tools, however the corresponding options are not
+> documented in man page.
 > 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 94fdbe502ce9..e7c0e390f885 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1553,7 +1553,6 @@ static int dwc3_probe(struct platform_device *pdev)
->  
->  	spin_lock_init(&dwc->lock);
->  
-> -	pm_runtime_set_active(dev);
->  	pm_runtime_use_autosuspend(dev);
->  	pm_runtime_set_autosuspend_delay(dev, DWC3_DEFAULT_AUTOSUSPEND_DELAY);
->  	pm_runtime_enable(dev);
-> @@ -1920,7 +1919,6 @@ static int dwc3_resume(struct device *dev)
->  		return ret;
->  
->  	pm_runtime_disable(dev);
-> -	pm_runtime_set_active(dev);
->  	pm_runtime_enable(dev);
->  
->  	return 0;
-> -- 
-> 2.26.0
+> This commit documents the options and provides examples on device mode.
+> 
+> PATCH v2:
+> Add signed-off-by line
+
+This needs to go below the --- line, as the Documentation asks for.
+Please fix it up and try it again.
+
+> Signed-off-by: "Hongren Zheng (Zenithal)" <i@zenithal.me>
+
+Do you sign legal documents with "(Zenithal)"?
+
+thanks,
+
+greg k-h
