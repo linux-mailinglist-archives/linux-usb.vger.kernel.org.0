@@ -2,168 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3D733AE2E
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Mar 2021 10:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6D833AE92
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Mar 2021 10:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbhCOJHY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Mar 2021 05:07:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40808 "EHLO mail.kernel.org"
+        id S229526AbhCOJXM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Mar 2021 05:23:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48898 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229702AbhCOJHV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Mar 2021 05:07:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7858C64EB2;
-        Mon, 15 Mar 2021 09:07:20 +0000 (UTC)
+        id S229553AbhCOJXI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Mar 2021 05:23:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 76F1764E12;
+        Mon, 15 Mar 2021 09:23:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615799240;
-        bh=BzqmnZya8s8zP6U62RedLvc9G4QXu7PSsdi0djOTSyM=;
+        s=k20201202; t=1615800187;
+        bh=bUL5cVT+cHUm2Y+NIyWO3zYJIcv1PpTmq+IUYNKeq9E=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fHMfCZaZIoMv0wsaE1BAv5m8e4kzPMA2EUofx5DsqqCMCU29B+O8EszF+29EAz815
-         7FRP7Kx7ny5LcFqUjO2/RoMBQlS8Fvs5Z3PMghgeAqlJnaM/rIdKdGmvYCd2oE74RC
-         txivP0qcKAvSAWRlxIaDS6Ec2/Uc0qzlAY0CrbTR9AYr4kzQYTi/P7ArcyBuTPnw3S
-         qR8tSMWsrI9tazKxIZp8klb3YBYPBLMIYryw+LnFu+aEGK4mdV6/YBXmjcTt9rF7gw
-         gGnpfeXhKDR2uHxGOz0tN7hqAP3/C4TjpEW4dfDMuxBxCBs+GtFsR/Z/NsaDd6/chj
-         st4Sz7u9Bu++Q==
+        b=eZTV4HhIHsKa/BL6DqWmQlVak6/SFOMpVVAy7VAoBxmpygV4H0bZV7JucgMtIugct
+         BTfihc2nyuIDSH5IEDtq1oSZ11h3hIhigP6GWywxsawVYj9jGS/b0hDLzKY17DD/AO
+         NkQC0gEScGT/35Jr6k83DHuTDs1zAfx/D5MMIgsleNGjJmT1Eq+IsvWsUhyxnfvl3A
+         vaLpf12eGoj6jZcAj0aDGKop/JPPqeuKTZDW70JWwTjfj7rIG5ScDglv+syifCn8OD
+         egZukzB7cisANs0bFmEMgeiP383JZaQn0NNghYD27eg3mF9uTwMFp3N4Ap/rScWtrB
+         jzXf+mZfHdEkQ==
 Received: from johan by xi with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1lLjCH-0000yi-DL; Mon, 15 Mar 2021 10:07:34 +0100
-Date:   Mon, 15 Mar 2021 10:07:33 +0100
+        id 1lLjRY-00018c-Ff; Mon, 15 Mar 2021 10:23:21 +0100
+Date:   Mon, 15 Mar 2021 10:23:20 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     "Michael G. Katzmann" <michaelk@IEEE.org>
-Cc:     Charles Yeh <charlesyeh522@gmail.com>,
-        =?utf-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Joe Abbott <jabbott@rollanet.org>
-Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
-Message-ID: <YE8j1XdfQNDGLzZR@hovoldconsulting.com>
-References: <YDUysZY90FfVhrHK@hovoldconsulting.com>
- <CAAZvQQ6F=cQ-EhC0kgeTVM3GrtBWR+HfM6UJWj2AEF1NYZ-vAQ@mail.gmail.com>
- <YDaGRRYrEO5BEJv0@hovoldconsulting.com>
- <CAAZvQQ7+b9=DKqPxgsXxS7Lhqj=QTzKHCMarSbsQkAnYqdO1GA@mail.gmail.com>
- <YEH7okblCx8+Odxn@hovoldconsulting.com>
- <ddc0e424-21c2-b8f4-1b00-f589267d2b51@IEEE.org>
- <YEpAaL9QtVMduEpi@hovoldconsulting.com>
- <9d02257d-cca1-116e-634a-6ac952362c5d@IEEE.org>
- <YEtwNzhCmvyKhRto@hovoldconsulting.com>
- <a475110e-2f44-eeca-3cd2-dd946e5abfe7@IEEE.org>
+To:     Klemen =?utf-8?B?S2/FoWly?= <klemen.kosir@kream.io>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: cp210x: Improve wording in some comments
+Message-ID: <YE8niPXaics5r2Iv@hovoldconsulting.com>
+References: <20210311131435.293910-1-klemen.kosir@kream.io>
+ <YEpHiP3ASiojtBRR@hovoldconsulting.com>
+ <YEwgGwOP2NEd8zG8@kream.io>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a475110e-2f44-eeca-3cd2-dd946e5abfe7@IEEE.org>
+In-Reply-To: <YEwgGwOP2NEd8zG8@kream.io>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 12, 2021 at 08:28:04PM -0500, Michael G. Katzmann wrote:
-> On 3/12/21 8:44 AM, Johan Hovold wrote:
+On Sat, Mar 13, 2021 at 11:14:51AM +0900, Klemen Košir wrote:
+> On Thu, Mar 11, 2021 at 05:38:32PM +0100, Johan Hovold wrote:
+> > On Thu, Mar 11, 2021 at 10:14:35PM +0900, Klemen Košir wrote:
+> > > This patch fixes some spelling mistakes and improves wording in some
+> > > comments. It also renames one variable to unify naming with others.
+> >
+> > It sounds like you're trying to do too many things at once, and I'm not
+> > sure this kind of changes are worth it unless also doing some "real"
+> > changes to the code in question.
+
+> > If you want you can submit a v2 which fixes the two obvious
+> > spelling/grammar mistakes and the Hz capitalisation that you found.
+> >
+> > But I strongly recommend you stop submitting patches like this. We have
+> > a ton of real issues that needs tending too if you're looking for
+> > something to work on.
 > 
+> Thank you for the feedback. I wasn't aware of the meaning of "iff".
+> I thought this patch might have some value. I will put in more effort
+> in the future.
 > 
-> Let me try that patch in the right format 8-)
+> Apologies for the inconvenience.
 
-That's better, but we also need a commit message and and Signed-off-by
-line from you. Take a look at the general format of the patches I CCed
-you on and there's some more information under Documentation/:
+No worries. It's just that some types of clean up patches tend to mostly
+add noise and make things like git blame harder to use. The general rule
+is to not send pure cleanup patches for things outside of
+drivers/staging/ unless also doing other changes to the code in
+question.
 
-	Documentation/process/submitting-patches.rst
-
-The easiest is probably to use git-format-patch and git-send-email to
-prevent the patch from being corrupted (e.g. the tabs below have been
-replaced by spaces).
- 
-> --- a/drivers/usb/serial/pl2303.c    2021-03-12 09:30:22.963992109 -0500
-> +++ b/drivers/usb/serial/pl2303.c    2021-03-12 20:00:20.003526891 -0500
-> @@ -188,6 +188,7 @@
->      unsigned long quirks;
->      unsigned int no_autoxonxoff:1;
->      unsigned int no_divisors:1;
-> +    unsigned int alt_divisors:1;
->  };
->  
->  struct pl2303_serial_private {
-> @@ -217,10 +218,12 @@
->      [TYPE_TA] = {
->          .name            = "TA",
->          .max_baud_rate        = 6000000,
-> +        .alt_divisors        = true,
->      },
->      [TYPE_TB] = {
->          .name            = "TB",
->          .max_baud_rate        = 12000000,
-> +        .alt_divisors        = true,
-
-Are you sure that the TB uses the alternate encoding?
-
-Charles, could you help us out here? Which other device types use the
-alternate encoding (e.g. HX(A) or TB) if any?
-
->      },
->      [TYPE_HXD] = {
->          .name            = "HXD",
-> @@ -618,6 +621,46 @@
->      return baud;
->  }
->  
-> +static speed_t pl2303_encode_baud_rate_divisor_alt(unsigned char buf[4],
-> +                                                                speed_t baud)
-> +{
-> +        unsigned int baseline, mantissa, exponent;
-> +
-> +        /*
-> +         * Apparently, for the TA version the formula is:
-> +         *   baudrate = 12M * 32 / (mantissa * 2^exponent)
-> +         * where
-> +         *   mantissa = buf[10:0]
-> +         *   exponent = buf[15:13 16]
-> +         */
-> +        baseline = 12000000 * 32;
-> +        mantissa = baseline / baud;
-> +        if (mantissa == 0)
-> +                mantissa = 1;   /* Avoid dividing by zero if baud > 32*12M. */
-> +        exponent = 0;
-> +        while (mantissa >= 2048) {
-> +                if (exponent < 15) {
-> +                        mantissa >>= 1; /* divide by 2 */
-> +                        exponent++;
-> +                } else {
-> +                        /* Exponent is maxed. Trim mantissa and leave. */
-> +                        mantissa = 2047;
-> +                        break;
-> +                }
-> +        }
-> +
-> +        buf[3] = 0x80;
-> +        buf[2] = exponent & 0x01; // LS bit of exponent
-> +        buf[1] = (exponent & ~0x01) << 4 | mantissa >> 8; // 3 bits of the exponent and MS 3 bits of the mantissa
-> +        buf[0] = mantissa & 0xff; // LS 8 bits of the mantissa
-
-Please avoid c99-style comments, but perhaps the comment at the start of
-function is sufficient here.
-
-Looks great otherwise.
-
-> +
-> +        /* Calculate and return the exact baud rate. */
-> +        baud = (baseline / mantissa) >> exponent;
-> +
-> +        return baud;
-> +}
-> +
-> +
->  static void pl2303_encode_baud_rate(struct tty_struct *tty,
->                      struct usb_serial_port *port,
->                      u8 buf[4])
-> @@ -645,6 +688,8 @@
->  
->      if (baud == baud_sup)
->          baud = pl2303_encode_baud_rate_direct(buf, baud);
-> +    else if (spriv->type->alt_divisors)
-> +                baud = pl2303_encode_baud_rate_divisor_alt(buf, baud);
->      else
->          baud = pl2303_encode_baud_rate_divisor(buf, baud);
-
-This works too if you don't want to pass in the port to
-pl2303_encode_baud_rate_divisor() and hide the device-type differences
-there (e.g. to make the logic in pl2303_encode_baud_rate() easier to
-follow).
+Fixing spelling mistakes and grammar may be worth it in itself if it
+fixes ambiguity or improves readability generally. And then it's good to
+do as you did here and fix it all in one go (e.g. per driver). But
+otherwise comments (or style generally) don't have to be perfect.
 
 Johan
