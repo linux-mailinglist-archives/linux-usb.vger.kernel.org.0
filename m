@@ -2,100 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 943C433AC5E
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Mar 2021 08:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AB533AC69
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Mar 2021 08:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbhCOHgQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Mar 2021 03:36:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38232 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229828AbhCOHgN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Mar 2021 03:36:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C2D7264DAF;
-        Mon, 15 Mar 2021 07:36:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1615793773;
-        bh=D528rbfLh8zZTCX5u9fbw/DucSrt77tO+DqrXHDn2V0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dO1mcP97ftKFPgeb+DhHYDSMl3wP2m9IFi9wQaJY92FA8J6kLfRItewVib2a0LMLp
-         RXl+EWsucIUkZAa0s/bkOPJ8WbTPadWsSSv1a7c8d8TZYGLvdWGu48N7BoN2XWKKu1
-         DUQTzr9zXRGs28SRw6Pi8AHbjpytILixMDEkgji8=
-Date:   Mon, 15 Mar 2021 08:36:10 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Hongren Zheng (Zenithal)" <i@zenithal.me>
-Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Alexandre Demers <alexandre.f.demers@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        usbip-devel@lists.sourceforge.net
-Subject: Re: [PATCH v2] docs: usbip: Fix major fields and descriptions in
- protocol
-Message-ID: <YE8Oan2BmSuKR4/p@kroah.com>
-References: <YE6/HQoxkraowTI7@Sun>
- <YE78SRefRe1trldP@Sun>
+        id S230113AbhCOHnA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Mar 2021 03:43:00 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:54632 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230107AbhCOHm3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Mar 2021 03:42:29 -0400
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20210315074227epoutp03aa143b0f465c1e2eb36ed8aea2aeba31~sdDdh17830125701257epoutp03i
+        for <linux-usb@vger.kernel.org>; Mon, 15 Mar 2021 07:42:27 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20210315074227epoutp03aa143b0f465c1e2eb36ed8aea2aeba31~sdDdh17830125701257epoutp03i
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1615794147;
+        bh=rsNQQs3MRwg3UChH7DRBIUYI+oXh+lnseZp0hX9vEUs=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=HbzuodPOWKgqNKjXPEpDJQKuEQPenvzP57UCfrG4SGnfWM9sVWvxSiqY+tvKA7a/o
+         ci+a/i+Y5KUvlxEHkDbY/YE+BF2BsKky2dj3U077CHHDk56rESFw0ojLTqTCvRBEDu
+         TTFVZziZKR6DRpS3uXuzKvCXOubIEUVWnRZXwhcE=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20210315074227epcas2p1b5cff42b7a5b09f286274a059926ec93~sdDdJnVVb1372513725epcas2p1y;
+        Mon, 15 Mar 2021 07:42:27 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.40.182]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4DzT0J5Lzvz4x9Q6; Mon, 15 Mar
+        2021 07:42:24 +0000 (GMT)
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C3.A0.05262.0EF0F406; Mon, 15 Mar 2021 16:42:24 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+        20210315074223epcas2p11ddf190ec730f8629c1310117135f813~sdDaFA9A61372513725epcas2p1o;
+        Mon, 15 Mar 2021 07:42:23 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20210315074223epsmtrp14ba13fc601bf1ab78aa23acd243a3a42~sdDaETebZ1201312013epsmtrp1l;
+        Mon, 15 Mar 2021 07:42:23 +0000 (GMT)
+X-AuditID: b6c32a47-b81ff7000000148e-6f-604f0fe060f6
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        EE.B1.08745.FDF0F406; Mon, 15 Mar 2021 16:42:23 +0900 (KST)
+Received: from rack03.dsn.sec.samsung.com (unknown [12.36.155.109]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20210315074223epsmtip2022c10f8254c1bc16ca3c5c6cb32bf47~sdDZ4QgO90648506485epsmtip2h;
+        Mon, 15 Mar 2021 07:42:23 +0000 (GMT)
+From:   taehyun cho <taehyun.cho@samsung.com>
+To:     balbi@kernel.org
+Cc:     taehyun.cho@samsung.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc3: remove 'pm_runtime_set_active' in resume
+ callback
+Date:   Mon, 15 Mar 2021 16:43:17 +0900
+Message-Id: <20210315074317.7736-1-taehyun.cho@samsung.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YE78SRefRe1trldP@Sun>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrIKsWRmVeSWpSXmKPExsWy7bCmqe4Dfv8Eg/Mn+S2OtT1ht2hevJ7N
+        4vKuOWwWi5a1MltMOijqwOqxaVUnm8f+uWvYPfq2rGL0+LxJLoAlKscmIzUxJbVIITUvOT8l
+        My/dVsk7ON453tTMwFDX0NLCXEkhLzE31VbJxSdA1y0zB2itkkJZYk4pUCggsbhYSd/Opii/
+        tCRVISO/uMRWKbUgJafA0LBArzgxt7g0L10vOT/XytDAwMgUqDIhJ2NByzS2gv8cFVdX3WNv
+        YLzA3sXIySEhYCKx7ORJ5i5GLg4hgR2MEj1rFrFDOJ8YJY58n8EE4XxmlOib2wuU4QBr2fqy
+        HiK+i1Gi7fRkqPYfjBJvJ01nBpnLJqAtsb/5JiuILSIgItH2HGISs0Ano8SVx4+ZQBLCAv4S
+        u09fYAGxWQRUJW7PbwGL8wpYSzT9OMkMcaC8xKKG31BxQYmTM5+A1TMDxZu3zgbbLCGwi11i
+        x7LXUA0uEiendrBC2MISr45vgfpUSuJlfxs7REM7o8SvE2tYIZwpjBIf1p1ihKgylpj1rJ0R
+        5FFmAU2J9bv0IX5WljhyC2oxn0TH4b/QoOCV6GgTgmhUlWi/eJ8NwpaWuLT5JpTtIfHt8wpm
+        kHIhgViJZc8yJjDKz0LyzSwk38xCWLuAkXkVo1hqQXFuemqxUYExcqxuYgSnPS33HYwz3n7Q
+        O8TIxMF4iFGCg1lJhPezjm+CEG9KYmVValF+fFFpTmrxIUZTYPhOZJYSTc4HJt68knhDUyMz
+        MwNLUwtTMyMLJXHeYoMH8UIC6YklqdmpqQWpRTB9TBycUg1MId7HquYwsjbYRlxpjLrAzrJR
+        aq5B75JjZgXiL+6Gc6tqsUR7uu3+90/x/vqsh6nMXhwbp8zawf6RI/mSdsHf8xIT92Qvee9Y
+        lHXf+5oR73HXC/bsvMEOm+bW/hVeIhLj1X4kXKr5j+ohzZwkzs1brGtdbrjOPHzyo5/vsd6C
+        Jy0zJPlFb2d+bSyxaTJT/ZcjqXp0rhaX9YmfFkd+xdrtqKsW23rBeuu527I2qj8sb547++SL
+        pu/DJuYLwZ9uyM7c0PMnQ3aiXsPiVrHbf93/SNbYTqueZdSfdCrpLf8Kl5lLQk1XXUvp8X8e
+        bPSq6JKi/xsrpe/X/uSf47aPFHF5WHBO2nj1Fq3Pxa5WVkxKLMUZiYZazEXFiQDet2vBBAQA
+        AA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPLMWRmVeSWpSXmKPExsWy7bCSvO59fv8Eg1MrdS2OtT1ht2hevJ7N
+        4vKuOWwWi5a1MltMOijqwOqxaVUnm8f+uWvYPfq2rGL0+LxJLoAlissmJTUnsyy1SN8ugStj
+        Qcs0toL/HBVXV91jb2C8wN7FyMEhIWAisfVlfRcjF4eQwA5GiRNr3zF2MXICxaUlTj1ewAxh
+        C0vcbznCClH0jVFi+cKnbCAJNgFtif3NN1lBbBEBEYm25zOYQIqYBboZJfqeHmUCSQgL+Eoc
+        +bAJrIhFQFXi9vwWsDivgLVE04+TUBvkJRY1/IaKC0qcnPmEBcRmBoo3b53NPIGRbxaS1Cwk
+        qQWMTKsYJVMLinPTc4sNC4zyUsv1ihNzi0vz0vWS83M3MYLDUEtrB+OeVR/0DjEycTAeYpTg
+        YFYS4f2s45sgxJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQimCwTB6dU
+        A1M837On12xeZ12aP/0o+/ycks+5nZP59Lff0hOQFAp8oN9z+1ie955PsYcPcawRu2I468qs
+        u12eeUvYun8mXjbZzuwXEbhv5SlDG+/1ThPDrp7KzONqqD+8sXxibUi12/FPG/rXtvKpHs06
+        ffnZ9RUXciLTzmc3r9T+WC6qN89VJvVx5rLjsVL31JLXMK+T+nqqNDT22VZN1VVLRf+fyC1N
+        n5+fOMWiJ1T0QEMu89s4+4X6H28p9AQemXO2JNP4q6RHtVrYVJP784qyD2xY99349WLNkuof
+        H5Y/7TbXuMvj2n3w2lzNdSuzohtv8t1Z8Ig3It1oz9OUst6amW5eF9YeD7j08Hi34jopxRl1
+        v2cqsRRnJBpqMRcVJwIAOnbk37ICAAA=
+X-CMS-MailID: 20210315074223epcas2p11ddf190ec730f8629c1310117135f813
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210315074223epcas2p11ddf190ec730f8629c1310117135f813
+References: <CGME20210315074223epcas2p11ddf190ec730f8629c1310117135f813@epcas2p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 15, 2021 at 02:18:49PM +0800, Hongren Zheng (Zenithal) wrote:
-> The old document for usbip protocol is misleading and hard to read:
->   * Some fields in header are incorrect
->   * Explanation of some fields are unclear or even wrong
->   * Padding of header (namely all headers have the same length) is
->     not explicitly point out, which is crucial for stream protocol like
->     TCP
-> 
-> These fixes are made through reading usbip kernel drivers and userland
-> codes. Also I have implemented one usbip server.
-> 
-> Major changes:
->   * Document the correct field as described in the codebase.
->   * Document the padding in usbip headers. This is crucial for TCP
->     stream hence these padding should be explicitly point out.
->     In code these padding are implemented by a union of all headers.
->   * Fix two FIXME related to usbip unlink and Document the behavior
->     of unlink in different situation.
->   * Clarify some field with more accurate explanation, like those
->     fields associated with URB. Some constraints are extracted from
->     code.
->   * Delete specific transfer_flag doc in usbip as it should be
->     documented by the URB part.
->   * Add data captured from wire as example
-> 
-> Also some changes suggested by a previous patch in
-> https://lore.kernel.org/linux-usb/20180128071514.9107-1-alexandre.f.demers@gmail.com/
-> is adopted in this patch.
-> 
-> Co-developed-by: Alexandre Demers <alexandre.f.demers@gmail.com>
-> Signed-off-by: Hongren Zheng (Zenithal) <i@zenithal.me>
-> ---
->  Documentation/usb/usbip_protocol.rst | 290 +++++++++++++++------------
->  1 file changed, 159 insertions(+), 131 deletions(-)
+'pm_runtime_set_active' sets a flag to describe rumtime status.
+This flag is automatically set in pm_runtime_get_sync/put_sync API.
+'pm_runtime_set_active' checks the runtime status of parent device.
+As a result, the below error message is printed.
+dwc3 11110000.dwc3: runtime PM trying to activate child device
+11110000.dwc3 but parent (11110000.usb) is not active.
 
-What changed from v1?  Always list that here below the --- line.
+Signed-off-by: taehyun cho <taehyun.cho@samsung.com>
+---
+ drivers/usb/dwc3/core.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-> 
-> diff --git a/Documentation/usb/usbip_protocol.rst b/Documentation/usb/usbip_protocol.rst
-> index 988c832166cd..a15d9c1254e2 100644
-> --- a/Documentation/usb/usbip_protocol.rst
-> +++ b/Documentation/usb/usbip_protocol.rst
-> @@ -5,8 +5,14 @@ USB/IP protocol
->  PRELIMINARY DRAFT, MAY CONTAIN MISTAKES!
->  28 Jun 2011
->  
-> +Update: Fix major fields in protocol
-> +14 Mar 2021
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 94fdbe502ce9..e7c0e390f885 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1553,7 +1553,6 @@ static int dwc3_probe(struct platform_device *pdev)
+ 
+ 	spin_lock_init(&dwc->lock);
+ 
+-	pm_runtime_set_active(dev);
+ 	pm_runtime_use_autosuspend(dev);
+ 	pm_runtime_set_autosuspend_delay(dev, DWC3_DEFAULT_AUTOSUSPEND_DELAY);
+ 	pm_runtime_enable(dev);
+@@ -1920,7 +1919,6 @@ static int dwc3_resume(struct device *dev)
+ 		return ret;
+ 
+ 	pm_runtime_disable(dev);
+-	pm_runtime_set_active(dev);
+ 	pm_runtime_enable(dev);
+ 
+ 	return 0;
+-- 
+2.26.0
 
-This does not belong here, the git changelog shows this information.
-
-The original date above can be removed as well if you want.  And if the
-mistakes are all fixed now, that line can be dropped too :)
-
-thanks,
-
-greg k-h
