@@ -2,80 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B6D833AE92
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Mar 2021 10:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F3333AF95
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Mar 2021 11:08:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbhCOJXM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Mar 2021 05:23:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48898 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229553AbhCOJXI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Mar 2021 05:23:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 76F1764E12;
-        Mon, 15 Mar 2021 09:23:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615800187;
-        bh=bUL5cVT+cHUm2Y+NIyWO3zYJIcv1PpTmq+IUYNKeq9E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eZTV4HhIHsKa/BL6DqWmQlVak6/SFOMpVVAy7VAoBxmpygV4H0bZV7JucgMtIugct
-         BTfihc2nyuIDSH5IEDtq1oSZ11h3hIhigP6GWywxsawVYj9jGS/b0hDLzKY17DD/AO
-         NkQC0gEScGT/35Jr6k83DHuTDs1zAfx/D5MMIgsleNGjJmT1Eq+IsvWsUhyxnfvl3A
-         vaLpf12eGoj6jZcAj0aDGKop/JPPqeuKTZDW70JWwTjfj7rIG5ScDglv+syifCn8OD
-         egZukzB7cisANs0bFmEMgeiP383JZaQn0NNghYD27eg3mF9uTwMFp3N4Ap/rScWtrB
-         jzXf+mZfHdEkQ==
-Received: from johan by xi with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lLjRY-00018c-Ff; Mon, 15 Mar 2021 10:23:21 +0100
-Date:   Mon, 15 Mar 2021 10:23:20 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Klemen =?utf-8?B?S2/FoWly?= <klemen.kosir@kream.io>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: cp210x: Improve wording in some comments
-Message-ID: <YE8niPXaics5r2Iv@hovoldconsulting.com>
-References: <20210311131435.293910-1-klemen.kosir@kream.io>
- <YEpHiP3ASiojtBRR@hovoldconsulting.com>
- <YEwgGwOP2NEd8zG8@kream.io>
+        id S229714AbhCOKHf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Mar 2021 06:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229562AbhCOKHb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Mar 2021 06:07:31 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224F0C061574;
+        Mon, 15 Mar 2021 03:07:30 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id p10so8775936ils.9;
+        Mon, 15 Mar 2021 03:07:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r0yTkeRLYBbu9xWJ6lRGwyCy/WfW0M4jYX9LPXiwOrA=;
+        b=bJIX6IIOLOdCt836ruiJa6x/x6sR90zqyJC670tjI6WIJ2etWPjUfpX62prEI5IcVn
+         qW0d8+ktEiIaC0bnNLiBkwhMxQNvwulC3y27LtP81i2fpkbi5O5kB9SYIIQpnC6m6EhE
+         xgsx31C4UWBTD9dyQLKCklE1xC22qiJyQ/ONUVZymb1siswFsWB++FszBxJZy4bjWhdc
+         2Dt7vnIWIZ79g7TGp318kHCi0vFNgylMbi9fLAiWIyKLmw/u4SWNnkS/xGUQoGZP5yJO
+         Z6S0Aesj9PQhyYrmQxWShbxWxB33tDz9qjyX5/yU/+nhX0EFm6aOjL4cQ9hHDhD1lxla
+         R6bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r0yTkeRLYBbu9xWJ6lRGwyCy/WfW0M4jYX9LPXiwOrA=;
+        b=fy1EXoZFurToB4YvcqLFGeQHC4wJpPfzJuAX6mRsUqoOmJmSDPgjgwNltblaqoY5uE
+         QGvIQOrFqvNJ9qCt8xyxe5BOJ/jUjXgsvSRDShG/rBVsbW5klvI1DAmXY0g6OEIBzy4Y
+         VPPPZtjz2xb8f4RQVdLflbJG3ahdJhKxv5nPd7lH/3DoxG9Njxr2Gh2K2tpwGq3yb2Yn
+         k1LDyh43rVg/F7sTBeoF1ira1tRdXAECxHguhyQ+0w/KF84RSCUOZva9B7BNj1XeJEt+
+         LpZDhRkJuPNO5IQofy3M7MuqD1TAbogzTbfwYwzie2CEfQ/NE7Fl1vfLjBCCZpmURt/+
+         sMYA==
+X-Gm-Message-State: AOAM530Bg4Luv4/X7i+cZ5UXK83DKhfRQE24T2aDrN7FU5vY1aBN/M0K
+        5uzr3XqvpJmSVGpPypON/Xx9dITcDqI3kNa/T9gt/gqGT/AI2A==
+X-Google-Smtp-Source: ABdhPJy4dGzh2OSJWBIcX8iOWXn3InuSM5KT9ZOxj3AW5XqRxtL1C0ke6FUweZEot1PvneJqxjx3Wj0vAN4hrdP2zjo=
+X-Received: by 2002:a05:6e02:685:: with SMTP id o5mr10064959ils.39.1615802849575;
+ Mon, 15 Mar 2021 03:07:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YEwgGwOP2NEd8zG8@kream.io>
+References: <YDUysZY90FfVhrHK@hovoldconsulting.com> <CAAZvQQ6F=cQ-EhC0kgeTVM3GrtBWR+HfM6UJWj2AEF1NYZ-vAQ@mail.gmail.com>
+ <YDaGRRYrEO5BEJv0@hovoldconsulting.com> <CAAZvQQ7+b9=DKqPxgsXxS7Lhqj=QTzKHCMarSbsQkAnYqdO1GA@mail.gmail.com>
+ <YEH7okblCx8+Odxn@hovoldconsulting.com> <ddc0e424-21c2-b8f4-1b00-f589267d2b51@IEEE.org>
+ <YEpAaL9QtVMduEpi@hovoldconsulting.com> <9d02257d-cca1-116e-634a-6ac952362c5d@IEEE.org>
+ <YEtwNzhCmvyKhRto@hovoldconsulting.com> <a475110e-2f44-eeca-3cd2-dd946e5abfe7@IEEE.org>
+ <YE8j1XdfQNDGLzZR@hovoldconsulting.com>
+In-Reply-To: <YE8j1XdfQNDGLzZR@hovoldconsulting.com>
+From:   Charles Yeh <charlesyeh522@gmail.com>
+Date:   Mon, 15 Mar 2021 18:07:18 +0800
+Message-ID: <CAAZvQQ6NCocMXQXVcKGEi7ivbysyU8EJeeRUK5RPqAmEyqSXcA@mail.gmail.com>
+Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+To:     Johan Hovold <johan@kernel.org>
+Cc:     "Michael G. Katzmann" <michaelk@ieee.org>,
+        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Joe Abbott <jabbott@rollanet.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Mar 13, 2021 at 11:14:51AM +0900, Klemen Košir wrote:
-> On Thu, Mar 11, 2021 at 05:38:32PM +0100, Johan Hovold wrote:
-> > On Thu, Mar 11, 2021 at 10:14:35PM +0900, Klemen Košir wrote:
-> > > This patch fixes some spelling mistakes and improves wording in some
-> > > comments. It also renames one variable to unify naming with others.
-> >
-> > It sounds like you're trying to do too many things at once, and I'm not
-> > sure this kind of changes are worth it unless also doing some "real"
-> > changes to the code in question.
+> Charles, could you help us out here? Which other device types use the
+> alternate encoding (e.g. HX(A) or TB) if any?
 
-> > If you want you can submit a v2 which fixes the two obvious
-> > spelling/grammar mistakes and the Hz capitalisation that you found.
-> >
-> > But I strongly recommend you stop submitting patches like this. We have
-> > a ton of real issues that needs tending too if you're looking for
-> > something to work on.
-> 
-> Thank you for the feedback. I wasn't aware of the meaning of "iff".
-> I thought this patch might have some value. I will put in more effort
-> in the future.
-> 
-> Apologies for the inconvenience.
+TA and TB are the same hardware design: no need to design a new type
 
-No worries. It's just that some types of clean up patches tend to mostly
-add noise and make things like git blame harder to use. The general rule
-is to not send pure cleanup patches for things outside of
-drivers/staging/ unless also doing other changes to the code in
-question.
-
-Fixing spelling mistakes and grammar may be worth it in itself if it
-fixes ambiguity or improves readability generally. And then it's good to
-do as you did here and fix it all in one go (e.g. per driver). But
-otherwise comments (or style generally) don't have to be perfect.
-
-Johan
+Charles.
