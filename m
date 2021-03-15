@@ -2,43 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3732F33B365
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Mar 2021 14:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B41D933B3A5
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Mar 2021 14:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbhCONNs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Mar 2021 09:13:48 -0400
-Received: from mail-eopbgr1300102.outbound.protection.outlook.com ([40.107.130.102]:14944
-        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
+        id S230389AbhCONQb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Mar 2021 09:16:31 -0400
+Received: from mail-eopbgr1320107.outbound.protection.outlook.com ([40.107.132.107]:45806
+        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229506AbhCONNd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Mar 2021 09:13:33 -0400
+        id S231308AbhCONQO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Mar 2021 09:16:14 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ls4MMpPPUt4OHz9nO6GLJPfqHAS1PNjWeZgtIFJ4UNOzq87cVvKp8gBGOFIa5vglhqiiwX81DZIn07Jx8h6syfc3wa5iC0AHnBvrBMtwTcAm3EDkp/sag4ljJn4CU6A9IOv68fVvSNSThmyLlQFHWvdfEjpiKTZ/Yue2nQR/XSLrj7muZdm2oqjcUfB/uNdsZj2rQjXJ2+mdpEjGd8tLlcVBX8wGQgt8EQtk71dkWwOOqnTuxlSasruEOv3bHOizWXcx+GlE0igdr4+JmaH9EbEiy7aTbrgglngJ0nvtEMiLYl4xrauw9D4iUfNNWZN37O6I6u7PF9ILoeK3Xgz2wg==
+ b=eSDqiEVt8UwKHvzKCC9l+lE031lGhhUQpyKG0VgIMH2ZvewV0D/MPbBiwL5XQibJvi8Fogjcck8CIh4RHtaGh2pY+4xfAxiLcFWS5vO3OczYY4Ma2c5dkYSjXFcpGR8soH1OHN29CGkBfhBMJgP9jJ6wfFcxBJ4X345n2OQJv7NPJaB4ACvBCRhCgo+hG715AIrgYRSlq5eatYTRe/t7wEvvT14iV0R+TJTUH+HcH43/xwa02vXUZBm4GnSMveDdUfRgO/OutQmD05G3RRjrcD8PoBA/5y+nil4sPyqfVJoJNrphcfjMxg8evSeUatETKZRCRP0wyyZAJdhYS9xO6g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=klQ1NfsFX40ya5Aq4rdU9dFmKP9rpMMK74ls1bm/WqM=;
- b=dk6y+zeRHJNj0V7knoP8ZJidnOd2wVFNDudiUYlJ+kVBxMdUY5CGKaA0sBkt4F2G3IH0eE4kctXWS850TPiuDb+9rMui3F4ryx5g98aYgKDvZD5rS/O1FDA+gkWXoOU6TpAYQl9R3SwohRT4y/fS4zt6j6+bS1BIjWTLrawGhdbXaVAomtNgslS+B8Mc4B3B2lBdyUIsgjSiP4Dxl+sd4tR9VoRFHBRC6eaijzp/Q0ajy41xhEuQt7jYpVN3N9m+3HpFRFVffcV9vpmGqkf3QLaZAE9cI1xsR3gomKYQ0Zm9XONQIvdLEx0VlrUZHR0i9xGKGstDFP/GuZHoQSTy7A==
+ bh=1US6AxnB33GRpq/aZ09YGep9gsm+usomAEZJwfnVrDs=;
+ b=HBrz+zmitqBjI5EW2jAPILPvmgcjRvAhCIKKJA2iiZAARb5FJ1od1ZTkJdChgtJWrfDPf8+2li1RN86yTULi41stTPYeOqv+ir3/WwcX2+EtVKKidoDbiaKUUnmBdUd2T1E8w4ygxux/1ItPvneqApVyXjnaCSGiLvXcK9fBOJpvFe3kP52zpGZj1qqZLwjcFFfnvpZGqkvZM3e78UB7u2mzX69In1lpkvGg2FZFDx/uABgjHb8uqAPYuYKJ+YSchLVwkEnUX1rkYdVD5RqtvBrz/oibsOG36L0cbWQpToy1Xu3LiaHaP3LYL11v6r7f8U4+/2eXUo9io1ZtDuyoFw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=zenithal.me; dmarc=pass action=none header.from=zenithal.me;
  dkim=pass header.d=zenithal.me; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=tsinghuau.onmicrosoft.com; s=selector1-tsinghuau-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=klQ1NfsFX40ya5Aq4rdU9dFmKP9rpMMK74ls1bm/WqM=;
- b=nSL92wVNdjimsLDSAuLnPhoni4HFq8ySewApFSJO0d4UmnFEoCTftl/dO24G8R5h9Z9Wes47ZgioNz6sQcNlH4lib/Q+W/Oz4RMC8zxIAYFNbwhkTmCj7LAselWdGlQQvYnteC5es7aq9tbOECmPfdWG9wWJ3+MGsJSRxQhChMY=
+ bh=1US6AxnB33GRpq/aZ09YGep9gsm+usomAEZJwfnVrDs=;
+ b=bQoY0s1RmwU2aLgqRMrQAMLKSWXQXjyDvz8j9VLlze312iAUaPgS+gYrq8S/JW0ONh2g0e2Kh8moubzrl1vuNJdcSiMQxxAgMIHEEc0nIAylj3yiqfZ0/rlZKhBHXVj0XmPMArlAqSui0bmpexViZegYk/Kwcmwbhp3KP/DJE7o=
 Authentication-Results: gmail.com; dkim=none (message not signed)
  header.d=none;gmail.com; dmarc=none action=none header.from=zenithal.me;
 Received: from HK0PR03MB3795.apcprd03.prod.outlook.com (2603:1096:203:3c::10)
- by HK0PR03MB3156.apcprd03.prod.outlook.com (2603:1096:203:4b::10) with
+ by HK0PR03MB3795.apcprd03.prod.outlook.com (2603:1096:203:3c::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.13; Mon, 15 Mar
- 2021 13:13:30 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.11; Mon, 15 Mar
+ 2021 13:16:11 +0000
 Received: from HK0PR03MB3795.apcprd03.prod.outlook.com
  ([fe80::8492:e28e:e777:6d05]) by HK0PR03MB3795.apcprd03.prod.outlook.com
  ([fe80::8492:e28e:e777:6d05%6]) with mapi id 15.20.3955.011; Mon, 15 Mar 2021
- 13:13:30 +0000
-Date:   Mon, 15 Mar 2021 21:13:18 +0800
+ 13:16:11 +0000
+Date:   Mon, 15 Mar 2021 21:16:08 +0800
 From:   "Hongren Zheng (Zenithal)" <i@zenithal.me>
 To:     Valentina Manea <valentina.manea.m@gmail.com>,
         Shuah Khan <shuah@kernel.org>,
@@ -46,175 +46,96 @@ To:     Valentina Manea <valentina.manea.m@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         matt mooney <mfm@muteddisk.com>, linux-usb@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] usbip: tools: add options and examples in man page
- related to device mode
-Message-ID: <YE9dbrWjL5DZ8Hm8@Sun>
+Subject: [PATCH v2 2/2] usbip: tools: add usage of device mode in usbip_list.c
+Message-ID: <YE9eGOCU7vJJQ6D5@Sun>
 References: <YE9Vyrs+Z8MusjDM@Sun>
  <YE9Wo8QZ/0XU8Mzq@Sun>
+ <YE9dbrWjL5DZ8Hm8@Sun>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YE9Wo8QZ/0XU8Mzq@Sun>
+In-Reply-To: <YE9dbrWjL5DZ8Hm8@Sun>
 X-Operating-System: Linux Sun 5.10.19-1-lts
 X-Mailer: Mutt 2.0.5 (da5e3282) (2021-01-21)
 X-Originating-IP: [2402:f000:6:6009::11]
-X-ClientProxiedBy: BYAPR11CA0050.namprd11.prod.outlook.com
- (2603:10b6:a03:80::27) To HK0PR03MB3795.apcprd03.prod.outlook.com
+X-ClientProxiedBy: HK2PR02CA0139.apcprd02.prod.outlook.com
+ (2603:1096:202:16::23) To HK0PR03MB3795.apcprd03.prod.outlook.com
  (2603:1096:203:3c::10)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost (2402:f000:6:6009::11) by BYAPR11CA0050.namprd11.prod.outlook.com (2603:10b6:a03:80::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.31 via Frontend Transport; Mon, 15 Mar 2021 13:13:28 +0000
+Received: from localhost (2402:f000:6:6009::11) by HK2PR02CA0139.apcprd02.prod.outlook.com (2603:1096:202:16::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.31 via Frontend Transport; Mon, 15 Mar 2021 13:16:10 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d2740c7f-e1ba-44fb-2da7-08d8e7b4209b
-X-MS-TrafficTypeDiagnostic: HK0PR03MB3156:
+X-MS-Office365-Filtering-Correlation-Id: 490fd711-6e3c-4d29-84a0-08d8e7b48091
+X-MS-TrafficTypeDiagnostic: HK0PR03MB3795:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <HK0PR03MB3156F725B46FD1C9DFEC9E49BC6C9@HK0PR03MB3156.apcprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:513;
+X-Microsoft-Antispam-PRVS: <HK0PR03MB3795528CC136665A07C8F001BC6C9@HK0PR03MB3795.apcprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:901;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tFtodXED8GOBVfP2HvYYRpy0nzFpP+XknKH8WaIfbHkLMHSibdNj6WJvZpF1Xu7RK61IwvEKuFlLEay7Sg5bZPJpnX60D8STE2VsZ7b6VtGBqZzVDmsXrejI4zv650wvdcLgjkCE00VQGT/PuMPGuEp1wDp891tc1SkV2BKEzH++ikWBR1alQnE+Oim/cPzfDv0wJIsiGvzC20AKnTTLSUnksu7/51RiBPF+2PpKnwv3GVZgGrt2FpqrxnKCqtbaLQfjXKUzthRodCiOdg6F02yN3T7RzIV/GQ8QzXNaJChIL1lvyaoY1+EZx7z8yGbYkkG+8MdsQdpwRLi1E8smdzwfjNsk5zuBqyHTy9oH1FJv2Y7cLH2t3jvQRfb1reI+Z7mO6/JByZ54jTpeIG2T0S+JaPegUIq7dRFNO/qlAhv+oqXa8TIWS6VrENH8FXgZH3gcNcpL+KkN9CytgLLTJlX7AjuGnChlqk3Dtojo4V7Q4tpFxIldtbirw/dvJ5rm2QP/3V1kdDz0fLl4I/VdiJ4Pw0Hbp5uScTT3A7I+hR+T8+Trm+mb1VzNbysmmpkRCJ4UelWZwSAPQnDabS4S6qZ2b47ZQ+tEmAgzBFR+KSo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR03MB3795.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(396003)(366004)(346002)(376002)(39830400003)(136003)(316002)(66556008)(110136005)(4326008)(786003)(478600001)(52116002)(6496006)(2906002)(186003)(6666004)(66476007)(5660300002)(8936002)(66946007)(16526019)(8676002)(33716001)(9686003)(6486002)(86362001)(49092004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?pNDVJAHFvG2xcLXzakYNMK240kdw3GwIj/vvgEQMNkz1KZT7mXSe+1Vu7OY0?=
- =?us-ascii?Q?+WAQr0s1Vmguuj/y7EqAAkHEO3Kv9zcQdwXY9aMHXcIhKjcYwAUhtqWOY02I?=
- =?us-ascii?Q?e9D54VZr6yp3BfGhjP2walYyqRp5+XB1Aiadtc5lfpQe9UjJZGCKwwbQHks6?=
- =?us-ascii?Q?j3p+UkS8mlCn5mNgE/xQiLjNPeo5kYn0fAatbUcwojunxezBtGYC7yXlgCcW?=
- =?us-ascii?Q?rDc/n8w25vzxH8UIA+2FB7T0TcKmiErVHS1yeUaSIxIaIsRACtb/OGE3G+eQ?=
- =?us-ascii?Q?j+KNMVL3QAad8OcVpkQmoYLudkZnUFv9yylvCUOALdpdWqII/U+uYwjaWHIl?=
- =?us-ascii?Q?QE6pGITxyNnNnXPcjSCSPdTj82H9qU7dJ6F4AuxLr2TonZZxVSoKDl+jUYCJ?=
- =?us-ascii?Q?Nhp9HZbTz5exPpvdFSMbggcKCGv4ETZ8WGKOQQKjcNzxHMxQ+oPG6A1IEv5B?=
- =?us-ascii?Q?l2zlIjJJzoPR/ZyqGlWrJrxOb6AwW1bmKrvXIJcMdVy10OzfRQh3TKb5xB2T?=
- =?us-ascii?Q?43TXr7nADgWJCabvqL3B+upIHBFXWoGRfKbw8OWO9WqnM/V+ZxSHcEpoVKmg?=
- =?us-ascii?Q?O1L+onGzlUnfkFpNWg73qTy4xzsC0qlApvBVJCkOMqTqAgwUv1WFwjpQFx89?=
- =?us-ascii?Q?odGAbQwWtCDntZrs+xHEA2C4BsUo0ve07lLIJInAqK+qwxCrOoPAybhv2mVk?=
- =?us-ascii?Q?/CnwKzjpuFKkFOSRtuYNVfoAOqxvRj9sa+YZHOPCaXuIxDWGZ3hjMRoWpJAK?=
- =?us-ascii?Q?2eOL2qYfY9RqLaVDbQYa+AeEzyHv7L/0j1Ju3Cqy9jBwe2WLiRDtZ8jogm/a?=
- =?us-ascii?Q?VJQQygqqrwrZn9etpFutKuySjwN4IPhIhinWqPVLAEcJ/zc3aFwvi0ieyZRk?=
- =?us-ascii?Q?BWbSm/oudDTiWy58MbAxsUxff3gbh2olH5CeTHNyS6Z4JMob6EIpl2lPJa9Y?=
- =?us-ascii?Q?M4QU/Rz33dJTYEEAOSHX2kNhr6rWu4wFbZdGzDDUbVBxsQK6SlwUqPLzaxRP?=
- =?us-ascii?Q?+iPsZKQAHDjrk+ZAiJu4h+QMuKMMsjfDScGdoJfXQBNXG/jGwhvt7ahxZjy+?=
- =?us-ascii?Q?PDwsa/eNAg/BIy5x2JmzTg+2kvEg+xFhFa2w4W7T0WkGUlRQVVUjDzhkG1Tb?=
- =?us-ascii?Q?il9VbJhO6KDwZt3kbg1K85Mkv0hIsYd56wTVZ4O+ulK58+EQIu/OJOsyBK+B?=
- =?us-ascii?Q?StfneVt2G1vwmbPf2RBjkpAtUs39dXMneeZf4PJgXkmjEz8C2Og03h4anJny?=
- =?us-ascii?Q?ZbWCOezdxJzm3u7Weo9Se9YRoPld4Y4zimjlgwkL9qkZ8Fha4V82K9YrUYOB?=
- =?us-ascii?Q?O9PFgSHywWz5YYbWVdr/Wez6qGVQUIBTskY8VcMMgl0ouA=3D=3D?=
+X-Microsoft-Antispam-Message-Info: Wuv5d0FLNlnxxUhdWB9Hbebzj1NO2vrTEb8ID2r9GHGuIbibGvynXU5UjvEHC0kyUztWEuNy6+KdsQhFz1HdMxNjw7GQHnMul/XFWBLR5QWGkO0MkG6pkqr8sjBV0A2aol3B2TvJDgiyL2dcIMrLL93/WDdK2pbIhCnlfXxi2NCWoLuSYH93kkpSDWJZlgjfKMwkeFKLbIimkIhFKHtfPS/5ULM3SRPE/h7nbaf74/CZ4ROOjqho2HFBxAXIR6PXgu5pu5/9MhU+SS+vKq7YpUmjlwV9muxhSWoZf1g3g/+TrHvCQLeLgivUm60PcZyRA1Pdfi4k4ho9zdJZzvRhFSQjz830lseGsLfPn6cDXroiTogkhQuKWBzk8pneEwEJJeEQtbWw27aL3M1RBXdkJnQGUsA58uPBRhz0KdER9FvJDBLNu/CfEqvX0NeGHbMSfsd3w6gbUJeos4xQjwoMMVAV251/kHo5oP1OrPPcijcVkmFUlhHKZx/B+Tdl1iwal0MZ8s73eoJu11lMoaVX3XomBsryEtTw1fEwMxX8XJuktmaG93vUIi5jJFFDn8GPAkDS+dOwrqXzmwaOuI5uiGaMXXvPvufGUD6dl1yXNiI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR03MB3795.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(39830400003)(376002)(136003)(396003)(366004)(346002)(9686003)(6486002)(4744005)(186003)(4326008)(86362001)(5660300002)(2906002)(6496006)(52116002)(16526019)(8936002)(66946007)(83380400001)(478600001)(66556008)(8676002)(316002)(110136005)(33716001)(66476007)(786003)(49092004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?ew2OzLRV2Nj0gVXBR6zk+iAvGHc/X0yS7ZUkWSFz5yTgzHfQ/vS57KCo2Shr?=
+ =?us-ascii?Q?kGCiVH9z+UtcXxr0Rby6piZRbAp9OBCOSb5lbasSz1g5pFTfcOEd3G/fW7St?=
+ =?us-ascii?Q?mXWdoJbWGu3SVnPtFQLyBE2k2GN1nDwW/avsMUmtEOn34Twee4ZLsAYIz27v?=
+ =?us-ascii?Q?ZVw+YQPRAsuI3uUN1dIy+4b/hdBqvnCIOoiEqAkmmY5wUwNjHJk55e7he/n9?=
+ =?us-ascii?Q?/Yqqxv530okD83HbYG8psGiTxKkqTQ5x0qs2fHMns8qzF8k66+fy9j0lo6Oq?=
+ =?us-ascii?Q?+olQFAznBzGY3meIuZKiPONmpf/T42iNmUFbDcthCxUHURrSklMK9Cbg5yDl?=
+ =?us-ascii?Q?ue2xDEUb0BYLDpDhd178BDl5htKqomBzBbRaBaOUi981n02EbiASQOZgbGFW?=
+ =?us-ascii?Q?YslTSbyRz8CBJgaEd8n1xaeeph2e0TuUrlb/+IcsWb3j8MymLS/cHXXa+pXh?=
+ =?us-ascii?Q?o0xgLHrdy7+pA6rNw6ZVFAb9k9sLEBkKxLypgIU2HjnBlcFPrJnk3l5K4KdE?=
+ =?us-ascii?Q?FxAKjUGZ3t8FyRbd+44qbQ9XMllAN1rX9fogPRtnn9YBKQ3Ux7nYGr86/Zkd?=
+ =?us-ascii?Q?BToF+wgowxMDM3C7HSv4PPFBMS0HpwKFKuvLz60Y7XJwUhUGp5gLd/p0n5g7?=
+ =?us-ascii?Q?6/xnsMnDZaOc6jdsv+lvOG4dgH0eKo9C38wlb+pMVJxJSpG+MhVbgNBcu2lH?=
+ =?us-ascii?Q?zHxcWGIockswcRN/vDMYHS+XiEaRdBU6OXwHwQB8O/h4t8Xytw1gOKYH5qF6?=
+ =?us-ascii?Q?fWQNVczAnO1G8p/Xgki/MPhpyj8gB2BLKWj0M7TzbqblQZqxws1rMGw9uCHt?=
+ =?us-ascii?Q?U83hSEfbWEV1I7lP7BLEgZc948PPBLazzAcYET56cPlr4nwmokA4Bus4x2pv?=
+ =?us-ascii?Q?srKgRzplbESNvwLqAOe8S+0FnXusPrCchYkcsWgmDojCVj5cp6UCL1mQwzLp?=
+ =?us-ascii?Q?A6ObNIe8Dpewfz8K8IfdkR4fcPgosZ6+lNRi7p41Gum7qyzOZZg3flE1MBLy?=
+ =?us-ascii?Q?ATKiz5yJcEsvV+zdJfoW1b2Y5QNlKE6ianFUB+zZOUVxaXYAr6y1RzLvlVXg?=
+ =?us-ascii?Q?VAPEQ7QdlkECrMT5ovBkJdEn3j9uNCoqNAE1OPNLDdFZ4Q7+J643uOQYfDjB?=
+ =?us-ascii?Q?kLzuKe3Jq98lDfkWC4aNwzquQfPm+sesWZBmcmb4/DlxA82D0jHddswezHO1?=
+ =?us-ascii?Q?K49MY4JyD9HwPPkejU4fsw8aKOjEC+LQZ7bVwb/JqDKhyJxvm4AF3s3i+JZa?=
+ =?us-ascii?Q?Q25EzzDAv9we1W6xE7A1Cv8hqZwVDQca7C2aq7tdJVtvDi0p8PU6d2gr7QJ+?=
+ =?us-ascii?Q?HPDVb6aD6FeYx+YzUQ6I2DCzS580qQhvVrqeKCRLqZYpdw=3D=3D?=
 X-OriginatorOrg: zenithal.me
-X-MS-Exchange-CrossTenant-Network-Message-Id: d2740c7f-e1ba-44fb-2da7-08d8e7b4209b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 490fd711-6e3c-4d29-84a0-08d8e7b48091
 X-MS-Exchange-CrossTenant-AuthSource: HK0PR03MB3795.apcprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2021 13:13:30.3014
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2021 13:16:11.2954
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 436d481c-43b1-4418-8d7f-84c1e4887cf0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PC8OYDjzZjGNS0h7fCQuzOgznZIj40DT8C2XMSbRat6OluaXI1D/XVY9AAuU0srI
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR03MB3156
+X-MS-Exchange-CrossTenant-UserPrincipalName: zL4Jtn7L9wot2KgTh9fYgs0wcqtavhVRuiOQfP0QGpXPKtP2RZkoM5dV8DgcXzRH
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR03MB3795
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The commit e0546fd8b748b19d8edd1550530da8ebad6e4b31 implemented device
-mode for user space tools, however the corresponding options are not
-documented in man page.
-
-This commit documents the options and provides examples on device mode.
+The option '-d/--device' was implemented in 'usbip list' but not
+shown in usage. Hence this commit adds this option to usage.
 
 PATCH v2:
 Add signed-off-by line
 
 Signed-off-by: "Hongren Zheng (Zenithal)" <i@zenithal.me>
 ---
- tools/usb/usbip/doc/usbip.8  | 25 +++++++++++++++++++++++++
- tools/usb/usbip/doc/usbipd.8 | 22 ++++++++++++++++++++++
- 2 files changed, 47 insertions(+)
+ tools/usb/usbip/src/usbip_list.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/usb/usbip/doc/usbip.8 b/tools/usb/usbip/doc/usbip.8
-index a15d20063b98..385b0eda8746 100644
---- a/tools/usb/usbip/doc/usbip.8
-+++ b/tools/usb/usbip/doc/usbip.8
-@@ -49,6 +49,13 @@ then exit.
- Attach a remote USB device.
- .PP
+diff --git a/tools/usb/usbip/src/usbip_list.c b/tools/usb/usbip/src/usbip_list.c
+index 8625b0f514ee..3d810bcca02f 100644
+--- a/tools/usb/usbip/src/usbip_list.c
++++ b/tools/usb/usbip/src/usbip_list.c
+@@ -33,7 +33,8 @@ static const char usbip_list_usage_string[] =
+ 	"usbip list [-p|--parsable] <args>\n"
+ 	"    -p, --parsable         Parsable list format\n"
+ 	"    -r, --remote=<host>    List the exportable USB devices on <host>\n"
+-	"    -l, --local            List the local USB devices\n";
++	"    -l, --local            List the local USB devices\n"
++	"    -d, --device           List the local USB gadgets bound to usbip-vudc\n";
  
-+.HP
-+\fBattach\fR \-\-remote=<\fIhost\fR> \-\-device=<\fdev_id\fR>
-+.IP
-+Attach a remote USB gadget.
-+Only used when the remote usbipd is in device mode.
-+.PP
-+
- .HP
- \fBdetach\fR \-\-port=<\fIport\fR>
- .IP
-@@ -73,6 +80,14 @@ Stop exporting a device so it can be used by a local driver.
- List USB devices exported by a remote host.
- .PP
- 
-+.HP
-+\fBlist\fR \-\-device
-+.IP
-+List USB gadgets of local usbip-vudc.
-+Only used when the local usbipd is in device mode.
-+This can not list usbip-vudc USB gadgets of the remote device mode usbipd.
-+.PP
-+
- .HP
- \fBlist\fR \-\-local
- .IP
-@@ -93,5 +108,15 @@ List local USB devices.
-     client:# usbip detach --port=0
-         - Detach the usb device.
- 
-+The following example shows the use of device mode
-+
-+    server:# usbip list --device
-+        - Note this is the server side
-+
-+    client:# modprobe vhci-hcd
-+
-+    client:# usbip attach --remote=server --device=usbip-vudc.0
-+        - Connect the remote USB gadget
-+
- .SH "SEE ALSO"
- \fBusbipd\fP\fB(8)\fB\fP
-diff --git a/tools/usb/usbip/doc/usbipd.8 b/tools/usb/usbip/doc/usbipd.8
-index fb62a756893b..53c8d5792de6 100644
---- a/tools/usb/usbip/doc/usbipd.8
-+++ b/tools/usb/usbip/doc/usbipd.8
-@@ -29,6 +29,12 @@ Bind to IPv4. Default is both.
- Bind to IPv6. Default is both.
- .PP
- 
-+.HP
-+\fB\-e\fR, \fB\-\-device\fR
-+.IP
-+Run in device mode. Rather than drive an attached device, create a virtual UDC to bind gadgets to.
-+.PP
-+
- .HP
- \fB\-D\fR, \fB\-\-daemon\fR
- .IP
-@@ -86,6 +92,22 @@ USB/IP client can connect and use exported devices.
-         - A usb device 1-2 is now exportable to other hosts!
-         - Use 'usbip unbind --busid=1-2' when you want to shutdown exporting and use the device locally.
- 
-+The following example shows the use of device mode
-+
-+    server:# modprobe usbip-vudc
-+        - Use /sys/class/udc/ interface
-+        - usbip-host is independent of this module.
-+
-+    server:# usbipd -e -D
-+        - Start usbip daemon in device mode.
-+
-+    server:# modprobe g_mass_storage file=/tmp/tmp.img
-+        - Bind a gadget to usbip-vudc
-+        - in this example, a mass storage gadget is bound
-+
-+    server:# usbip list --device
-+        - Note this is the server side
-+
- .SH "SEE ALSO"
- \fBusbip\fP\fB(8)\fB\fP
- 
+ void usbip_list_usage(void)
+ {
 -- 
 2.30.1
 
