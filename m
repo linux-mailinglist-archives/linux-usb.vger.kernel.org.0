@@ -2,170 +2,218 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D115833C6EC
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Mar 2021 20:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD0333C7BF
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Mar 2021 21:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbhCOTiB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Mar 2021 15:38:01 -0400
-Received: from foo.stuge.se ([212.116.89.98]:45376 "EHLO foo.stuge.se"
+        id S231184AbhCOUb5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Mar 2021 16:31:57 -0400
+Received: from mga09.intel.com ([134.134.136.24]:18591 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232063AbhCOThi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Mar 2021 15:37:38 -0400
-Received: (qmail 10167 invoked by uid 1000); 15 Mar 2021 19:37:29 -0000
-Message-ID: <20210315193729.10166.qmail@stuge.se>
-Date:   Mon, 15 Mar 2021 19:37:29 +0000
-From:   Peter Stuge <peter@stuge.se>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     dri-devel@lists.freedesktop.org, hudson@trmm.net,
-        markus@raatikainen.cc, sam@ravnborg.org, linux-usb@vger.kernel.org,
-        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: Re: [PATCH v8 3/3] drm: Add GUD USB Display driver
-References: <20210313112545.37527-1-noralf@tronnes.org>
- <20210313112545.37527-4-noralf@tronnes.org>
+        id S229928AbhCOUbu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Mar 2021 16:31:50 -0400
+IronPort-SDR: TxBFIOyuAtqUgWYwI//2iNsP6D0JnXCkK6VbXbehBUdI8wfGSYQSLZFM7pQ9GqAZ64Q0ipe/iz
+ upB1YynWLsLw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9924"; a="189242441"
+X-IronPort-AV: E=Sophos;i="5.81,251,1610438400"; 
+   d="scan'208";a="189242441"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2021 13:31:49 -0700
+IronPort-SDR: RK0ahcX4DU7U3kWqT3qaCclHDpUhD7E3aMK+5Dqkjgamtow7lCueL1SE3mvNb97R6uPxe9Vh54
+ e+TdkJ/+/nwQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,251,1610438400"; 
+   d="scan'208";a="411968483"
+Received: from lkp-server02.sh.intel.com (HELO 1dc5e1a854f4) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 15 Mar 2021 13:31:48 -0700
+Received: from kbuild by 1dc5e1a854f4 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lLtsR-0000dp-Q6; Mon, 15 Mar 2021 20:31:47 +0000
+Date:   Tue, 16 Mar 2021 04:31:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ aa403f257e992eac33cd9afd1d87ce9299f6db7a
+Message-ID: <604fc40b.ng2TsVBvbX2qktXC%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210313112545.37527-4-noralf@tronnes.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Noralf,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: aa403f257e992eac33cd9afd1d87ce9299f6db7a  Merge 5.12-rc3 into usb-next
 
-super fair call with the BE testing, let's hope for some testing soonish.
+elapsed time: 722m
 
+configs tested: 156
+configs skipped: 2
 
-I was thinking about my device doing protocol STALL when I try to
-return 0 bytes, and while it *is* a bug in my device, from a standards
-point of view it's actually completely valid, if not expected:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
---8<-- usb_20.pdf 8.5.3.4 STALL Handshakes Returned by Control Pipes
-If the device is unable to complete a command, it returns a STALL in the
-Data and/or Status stages of the control transfer. Unlike the case of a
-functional stall, protocol stall does not indicate an error with the device.
--->8--
+gcc tested configs:
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+x86_64                           allyesconfig
+riscv                            allmodconfig
+mips                      malta_kvm_defconfig
+arm                          exynos_defconfig
+ia64                         bigsur_defconfig
+arm                            dove_defconfig
+sh                                  defconfig
+sh                               alldefconfig
+powerpc                     taishan_defconfig
+riscv             nommu_k210_sdcard_defconfig
+mips                      loongson3_defconfig
+nds32                            alldefconfig
+arc                      axs103_smp_defconfig
+arm                           u8500_defconfig
+powerpc                      ppc6xx_defconfig
+powerpc                mpc7448_hpc2_defconfig
+m68k                          hp300_defconfig
+mips                     cu1830-neo_defconfig
+mips                        jmr3927_defconfig
+arm                           h5000_defconfig
+m68k                       m5208evb_defconfig
+arm                           h3600_defconfig
+arc                 nsimosci_hs_smp_defconfig
+sparc                       sparc32_defconfig
+mips                   sb1250_swarm_defconfig
+arm                       mainstone_defconfig
+nios2                            allyesconfig
+arm                           omap1_defconfig
+arm                           spitz_defconfig
+mips                         rt305x_defconfig
+mips                           xway_defconfig
+powerpc                     tqm8555_defconfig
+arm                       omap2plus_defconfig
+powerpc                    socrates_defconfig
+powerpc                       ebony_defconfig
+sparc                       sparc64_defconfig
+arm                         vf610m4_defconfig
+m68k                        m5272c3_defconfig
+sh                          rsk7269_defconfig
+powerpc                      walnut_defconfig
+sh                             espt_defconfig
+powerpc                      cm5200_defconfig
+m68k                            mac_defconfig
+arc                    vdk_hs38_smp_defconfig
+sparc64                          alldefconfig
+alpha                               defconfig
+sh                           se7780_defconfig
+sh                          urquell_defconfig
+xtensa                           alldefconfig
+sh                        sh7757lcr_defconfig
+s390                                defconfig
+sh                           se7206_defconfig
+mips                         mpc30x_defconfig
+mips                  decstation_64_defconfig
+sh                            migor_defconfig
+microblaze                      mmu_defconfig
+xtensa                  cadence_csp_defconfig
+mips                            ar7_defconfig
+arc                        nsim_700_defconfig
+sh                             shx3_defconfig
+powerpc                     kmeter1_defconfig
+mips                        nlm_xlp_defconfig
+arm                         nhk8815_defconfig
+xtensa                generic_kc705_defconfig
+parisc                           alldefconfig
+sh                            titan_defconfig
+arm                         assabet_defconfig
+mips                           ip32_defconfig
+arm                        multi_v7_defconfig
+h8300                       h8s-sim_defconfig
+sh                          r7785rp_defconfig
+mips                        maltaup_defconfig
+sh                        apsh4ad0a_defconfig
+sh                           se7721_defconfig
+powerpc                 xes_mpc85xx_defconfig
+sh                        edosk7760_defconfig
+arm                         s3c2410_defconfig
+powerpc                     mpc5200_defconfig
+powerpc                      chrp32_defconfig
+powerpc                      ppc40x_defconfig
+sh                          lboxre2_defconfig
+powerpc                   motionpro_defconfig
+powerpc                 mpc8313_rdb_defconfig
+powerpc                          g5_defconfig
+arm                         orion5x_defconfig
+powerpc                 mpc837x_rdb_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20210315
+i386                 randconfig-a005-20210315
+i386                 randconfig-a003-20210315
+i386                 randconfig-a002-20210315
+i386                 randconfig-a004-20210315
+i386                 randconfig-a006-20210315
+i386                 randconfig-a013-20210315
+i386                 randconfig-a016-20210315
+i386                 randconfig-a011-20210315
+i386                 randconfig-a012-20210315
+i386                 randconfig-a014-20210315
+i386                 randconfig-a015-20210315
+x86_64               randconfig-a006-20210315
+x86_64               randconfig-a001-20210315
+x86_64               randconfig-a005-20210315
+x86_64               randconfig-a004-20210315
+x86_64               randconfig-a002-20210315
+x86_64               randconfig-a003-20210315
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-I think it's fair to say that a device can't complete the command
-when it has no data to return.
+clang tested configs:
+x86_64               randconfig-a011-20210315
+x86_64               randconfig-a016-20210315
+x86_64               randconfig-a013-20210315
+x86_64               randconfig-a015-20210315
+x86_64               randconfig-a014-20210315
+x86_64               randconfig-a012-20210315
 
-So how about allowing STALL for optional GUD_REQ_GET_:s to mean the same
-as a 0 byte response? Should I propose a separate patch for it later?
-
-
-Noralf Trønnes wrote:
-> +++ b/drivers/gpu/drm/gud/gud_connector.c
-..
-> +static int gud_connector_get_modes(struct drm_connector *connector)
-..
-> +	ret = gud_usb_get(gdrm, GUD_REQ_GET_CONNECTOR_EDID, connector->index,
-> +			  edid_ctx.buf, GUD_CONNECTOR_MAX_EDID_LEN);
-
-if (ret == -EPIPE)
-	ret = 0;
-
-> +	if (ret > 0 && ret % EDID_LENGTH) {
-> +		gud_conn_err(connector, "Invalid EDID size", ret);
-> +	} else if (ret > 0) {
-> +		edid_ctx.len = ret;
-> +		edid = drm_do_get_edid(connector, gud_connector_get_edid_block, &edid_ctx);
-> +	}
-
-
-> +static int gud_connector_add_properties(struct gud_device *gdrm, struct gud_connector *gconn)
-..
-> +	ret = gud_usb_get(gdrm, GUD_REQ_GET_CONNECTOR_PROPERTIES, connector->index,
-> +			  properties, GUD_CONNECTOR_PROPERTIES_MAX_NUM * sizeof(*properties));
-
-if (ret == -EPIPE)
-	ret = 0;
-
-> +	if (ret <= 0)
-> +		goto out;
-> +	if (ret % sizeof(*properties)) {
-> +		ret = -EIO;
-> +		goto out;
-> +	}
-
-
-> +++ b/drivers/gpu/drm/gud/gud_drv.c
-..
-..
-> +static int gud_get_properties(struct gud_device *gdrm)
-..
-> +	ret = gud_usb_get(gdrm, GUD_REQ_GET_PROPERTIES, 0,
-> +			  properties, GUD_PROPERTIES_MAX_NUM * sizeof(*properties));
-
-if (ret == -EPIPE)
-	ret = 0;
-
-> +	if (ret <= 0)
-> +		goto out;
-> +	if (ret % sizeof(*properties)) {
-> +		ret = -EIO;
-> +		goto out;
-> +	}
-
-
-Then I looked whether a device could cause trouble in the driver by
-returning complex/unexpected data, and found this:
-
-> +static int gud_probe(struct usb_interface *intf, const struct usb_device_id *id)
-..
-> +	/* Add room for emulated XRGB8888 */
-> +	formats = devm_kmalloc_array(dev, GUD_FORMATS_MAX_NUM + 1, sizeof(*formats), GFP_KERNEL);
-
-It looks like this +1 and the way xrgb8888_emulation_format works means
-that an interface will not always work correctly if multiple emulated
-formats (R1, XRGB1111, RGB565) are returned, because only one emulated
-mode is added after the loop, with struct drm_format_info for the last
-emulated format returned by the device. So userspace would only see the
-last emulated mode and the bulk output would only ever use that
-particular pixel format, any earlier ones would be unavailable?
-
-If this is EWONTFIX then how about adding an error message if multiple
-emulated modes are returned and ignore all but the first, rather than
-all but the last?
-
-
-Related: Can userspace find out which GUD_PIXEL_FORMAT_* is behind an
-emulated format? It's needed to decide how the emulated framebuffer
-should be used, in particular to not use G or B if GUD_PIXEL_FORMAT_R1.
-
-
-> +		switch (format) {
-> +		case GUD_DRM_FORMAT_R1:
-> +			fallthrough;
-> +		case GUD_DRM_FORMAT_XRGB1111:
-> +			if (!xrgb8888_emulation_format)
-> +				xrgb8888_emulation_format = info;
-> +			break;
-> +		case DRM_FORMAT_RGB565:
-> +			rgb565_supported = true;
-> +			if (!xrgb8888_emulation_format)
-> +				xrgb8888_emulation_format = info;
-> +			break;
-
-Could RGB565 go before XRGB111 (or R1) and also fallthrough; in this
-construct? Not terribly important, but the repetition caught my eye.
-
-
-Then, in gud_connector.c I saw this, which surprised me:
-
-+int gud_connector_fill_properties(struct drm_connector_state *connector_state,
-..
-+		if (prop == GUD_PROPERTY_BACKLIGHT_BRIGHTNESS) {
-+			val = connector_state->tv.brightness;
-+		} else {
-
-Why is this using tv.brightness rather than say gconn->initial_brightness?
-
-It looks like the end result might be the same because tv.brightness is
-set to gconn->initial_brightness in gud_connector_reset() but it's a
-little confusing to me, since a GUD backlight isn't a drm/TV thing?
-
-
-Thanks a lot
-
-//Peter
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
