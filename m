@@ -2,71 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4EFE33D066
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 10:19:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AE333D098
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 10:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232010AbhCPJTO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Mar 2021 05:19:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36592 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233947AbhCPJTB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 16 Mar 2021 05:19:01 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7140E64E21;
-        Tue, 16 Mar 2021 09:19:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615886341;
-        bh=qG0a9S9Neyaau30QzgyduQ9QTBFGiQMSS0wMTs6g5MA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pm1d20w6MtDVbF/OlbFBDtFn+m8R9d7bK2Vs7gi9HwPb+jl8LGb0B0TAPkUVIcV0a
-         SrmDCB1KrC70wHF90gGZTQtgylZXLMKsdalVR9zkkGBpX/Es66qJW7OQ/xlphnjq7q
-         4SiX3o/+PieBW3e03226zPXZIUNcLW1EhWbYRwh8RveJ9IzDipRFIWN5xuEl/lLRhb
-         XrDGPRAcuIttX1ZwI99RNZTmjH5eA2ueLyoMOU4rBteshUqFMDaQR6eIboR3X125l5
-         gOuutXYAd5uEiKWN8LmTw8z4dLHe+eHh0b8B0JlpmMbjZ60BBPWwx6Irp/K9Wa6P7w
-         /Pd74fFCHy/1Q==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lM5r7-0000P1-7Z; Tue, 16 Mar 2021 10:19:13 +0100
-Date:   Tue, 16 Mar 2021 10:19:13 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg KH <greg@kroah.com>
-Cc:     michaelk@ieee.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] USB: serial: pl2303: TA & TB alternate divider
-Message-ID: <YFB4Ecbvmk5urtjc@hovoldconsulting.com>
-References: <20210316014205.748441-1-michaelk@IEEE.org>
- <YFBcHRVzqvsK+rDa@kroah.com>
+        id S236075AbhCPJXG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Mar 2021 05:23:06 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:56908 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231919AbhCPJWj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Mar 2021 05:22:39 -0400
+X-UUID: a7510e3f4e3e45f1b3c582d99761aae4-20210316
+X-UUID: a7510e3f4e3e45f1b3c582d99761aae4-20210316
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 102479812; Tue, 16 Mar 2021 17:22:34 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs05n1.mediatek.inc (172.21.101.15) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 16 Mar 2021 17:22:33 +0800
+Received: from mtkslt301.mediatek.inc (10.21.14.114) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 16 Mar 2021 17:22:33 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jie Qiu <jie.qiu@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
+        Cawa Cheng <cawa.cheng@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Subject: [PATCH v5 01/13] dt-bindings: usb: fix yamllint check warning
+Date:   Tue, 16 Mar 2021 17:22:20 +0800
+Message-ID: <20210316092232.9806-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YFBcHRVzqvsK+rDa@kroah.com>
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 16, 2021 at 08:19:57AM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Mar 15, 2021 at 09:42:05PM -0400, michaelk@IEEE.org wrote:
-> > From: Michael Katzmann <michaelk@IEEE.org>
-> > 
-> > Use an alternate clock divider algorithm and bit ordering for the TA and
-> > TB versions of the pl2303. It was discovered that these variants do not
-> > produce the correct baud rates with the existing scheme.
-> > 
-> > see https://marc.info/?t=161392209800002&r=1&w=2
-> 
-> Can you point to a lore.kernel.org thread instead?  We (kernel developer
-> community) have control over lore, but not over marc.info or any other
-> archive, so we never know if it will be around or not over time :)
+Fix warning: "missing starting space in comment"
 
-I was gonna say that I could fix that up when applying, but turns out
-there are some formatting issues with the patch.
+Fixes: 23bf6fc7046c ("dt-bindings: usb: convert usb-device.txt to YAML schema")
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+v5: add Fixes tag suggested by Greg
+v2~v4: no changes
+---
+ Documentation/devicetree/bindings/usb/usb-device.yaml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Michael, it looks like you've used tabs instead of spaces for
-indentation in some places. Try running scripts/checkpatch.pl on the
-patch before submitting (which would have caught this).
+diff --git a/Documentation/devicetree/bindings/usb/usb-device.yaml b/Documentation/devicetree/bindings/usb/usb-device.yaml
+index d4c99809ee9a..b77960a7a37b 100644
+--- a/Documentation/devicetree/bindings/usb/usb-device.yaml
++++ b/Documentation/devicetree/bindings/usb/usb-device.yaml
+@@ -82,9 +82,9 @@ required:
+ additionalProperties: true
+ 
+ examples:
+-  #hub connected to port 1
+-  #device connected to port 2
+-  #device connected to port 3
++  # hub connected to port 1
++  # device connected to port 2
++  # device connected to port 3
+   #    interface 0 of configuration 1
+   #    interface 0 of configuration 2
+   - |
+-- 
+2.18.0
 
-Care to send a v2?
-
-And the lore link would be:
-
-	https://lore.kernel.org/r/3aee5708-7961-f464-8c5f-6685d96920d6@IEEE.org
-
-Johan
