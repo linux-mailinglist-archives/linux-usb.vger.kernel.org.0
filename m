@@ -2,158 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0A433DA7B
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 18:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4340533DBBD
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 18:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237954AbhCPRRk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Mar 2021 13:17:40 -0400
-Received: from beige.elm.relay.mailchannels.net ([23.83.212.16]:35316 "EHLO
-        beige.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237847AbhCPRR2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Mar 2021 13:17:28 -0400
-X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 67DA05438EA;
-        Tue, 16 Mar 2021 17:17:18 +0000 (UTC)
-Received: from pdx1-sub0-mail-a23.g.dreamhost.com (100-96-10-172.trex.outbound.svc.cluster.local [100.96.10.172])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id F1837543952;
-        Tue, 16 Mar 2021 17:17:14 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
-Received: from pdx1-sub0-mail-a23.g.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
-        by 100.96.10.172 (trex/6.1.1);
-        Tue, 16 Mar 2021 17:17:18 +0000
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|smtp@contentfirst.com
-X-MailChannels-Auth-Id: dreamhost
-X-Skirt-Language: 5c6ee18a6674b2c7_1615915038157_2820236299
-X-MC-Loop-Signature: 1615915038157:3249054849
-X-MC-Ingress-Time: 1615915038157
-Received: from pdx1-sub0-mail-a23.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a23.g.dreamhost.com (Postfix) with ESMTP id 96EF8801F5;
-        Tue, 16 Mar 2021 10:17:14 -0700 (PDT)
-Received: from industrynumbers.com (pool-100-15-209-187.washdc.fios.verizon.net [100.15.209.187])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: smtp@contentfirst.com)
-        by pdx1-sub0-mail-a23.g.dreamhost.com (Postfix) with ESMTPSA id 581A8866DA;
-        Tue, 16 Mar 2021 10:17:14 -0700 (PDT)
-Received: by industrynumbers.com (Postfix, from userid 1000)
-        id DE170282ABB; Tue, 16 Mar 2021 13:17:12 -0400 (EDT)
-X-DH-BACKEND: pdx1-sub0-mail-a23
-From:   michaelk@IEEE.org
-To:     michaelk@IEEE.org
-Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH V3 1/1] USB: serial: pl2303: TA & TB alternate divider with non-standard baud rates
-Date:   Tue, 16 Mar 2021 13:17:00 -0400
-Message-Id: <20210316171700.952705-1-michaelk@IEEE.org>
-X-Mailer: git-send-email 2.30.2
+        id S239471AbhCPR7F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Mar 2021 13:59:05 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:55420 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239444AbhCPR6s (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Mar 2021 13:58:48 -0400
+Received: from mail-ej1-f70.google.com ([209.85.218.70])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lMDxu-0003iS-25
+        for linux-usb@vger.kernel.org; Tue, 16 Mar 2021 17:58:46 +0000
+Received: by mail-ej1-f70.google.com with SMTP id h14so14020217ejg.7
+        for <linux-usb@vger.kernel.org>; Tue, 16 Mar 2021 10:58:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6yF86hItxVjdF00mkSd3V9reGH3tNOZvxmWSGP21D5c=;
+        b=oRaaP9DhCYb3PnbPZHjmQv/jM3/1xuOTKeGqxPbBBNmPt+JJIPwzo+IBgPZbt2L//w
+         TnBxY1pXTa7vB46iMbp9p1PqPs6LFBcwQ1K0uieFZupbOLMLhI1x5OHUo8LwWOy4kkty
+         YRQaY5kbJTHNb7CEz1qkYxQui6bvBm5CkM8gVxg1EDlq9V4MjpVCi/5owZ5QJ8xawEEb
+         UI0CCYeFYNDMc56oCPDXBXDw4tAuloeMqoyPjtxo1Wy+ABCYWBDODbT+VbgeIiQtjTgo
+         Rzux7iaWrt19FczWHEO9qZ+CJuzjl3Qo6KK+pXuhrdyRvKnuLvge3G7gsOb5lSQgYzFT
+         oR+w==
+X-Gm-Message-State: AOAM530iOHTHchUYx9d6jJjVPw7eB6jwcmrnd0krA75aQxNuU4Up/TTu
+        5hPswvLBfd/YXqDeRFIG4C37kb2Dwv91QrZAIw3KokxJaihrDhrvhJhJOY7eoHgWnU46GJc8NHu
+        MhhPrgPCgo3NUxj5bYsXNzSAx4KtYUioQzEbaKw==
+X-Received: by 2002:a05:6402:8d7:: with SMTP id d23mr38353362edz.256.1615917525835;
+        Tue, 16 Mar 2021 10:58:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxizmFWFc7QpRfLd8R4IVOXUZ7C6tYUXVLXOgwdmYrenYqYy0+6m8vxkgzfJFApBbM5vwKsHA==
+X-Received: by 2002:a05:6402:8d7:: with SMTP id d23mr38353340edz.256.1615917525678;
+        Tue, 16 Mar 2021 10:58:45 -0700 (PDT)
+Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.gmail.com with ESMTPSA id bm6sm9927848ejb.50.2021.03.16.10.58.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Mar 2021 10:58:45 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     thierry.reding@gmail.com, linux-tegra@vger.kernel.org,
+        balbi@kernel.org, linux-usb@vger.kernel.org, digetx@gmail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] MIPS: ralink: define stubs for clk_set_parent to fix compile testing
+Date:   Tue, 16 Mar 2021 18:57:25 +0100
+Message-Id: <20210316175725.79981-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Michael G. Katzmann <michaelk@IEEE.org>
+The Ralink MIPS platform does not use Common Clock Framework and does
+not define certain clock operations leading to compile test failures:
 
-Use an alternate clock divider algorithm and bit ordering for the TA and
-TB versions of the pl2303. It was discovered that these variants do not
-produce the correct baud rates with the existing scheme.
+    /usr/bin/mips-linux-gnu-ld: drivers/usb/phy/phy-tegra-usb.o: in function `tegra_usb_phy_init':
+    phy-tegra-usb.c:(.text+0x1dd4): undefined reference to `clk_get_parent'
 
-see https://lore.kernel.org/r/3aee5708-7961-f464-8c5f-6685d96920d6@IEEE.o=
-rg
-
-Signed-off-by: Michael G. Katzmann <michaelk@IEEE.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- drivers/usb/serial/pl2303.c | 45 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ arch/mips/ralink/clk.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
-index 7208966891d0..685d64f92c4e 100644
---- a/drivers/usb/serial/pl2303.c
-+++ b/drivers/usb/serial/pl2303.c
-@@ -188,6 +188,7 @@ struct pl2303_type_data {
- 	unsigned long quirks;
- 	unsigned int no_autoxonxoff:1;
- 	unsigned int no_divisors:1;
-+	unsigned int alt_divisors:1;
- };
-=20
- struct pl2303_serial_private {
-@@ -217,10 +218,12 @@ static const struct pl2303_type_data pl2303_type_da=
-ta[TYPE_COUNT] =3D {
- 	[TYPE_TA] =3D {
- 		.name			=3D "TA",
- 		.max_baud_rate		=3D 6000000,
-+		.alt_divisors		=3D true,
- 	},
- 	[TYPE_TB] =3D {
- 		.name			=3D "TB",
- 		.max_baud_rate		=3D 12000000,
-+		.alt_divisors		=3D true,
- 	},
- 	[TYPE_HXD] =3D {
- 		.name			=3D "HXD",
-@@ -618,6 +621,46 @@ static speed_t pl2303_encode_baud_rate_divisor(unsig=
-ned char buf[4],
- 	return baud;
+diff --git a/arch/mips/ralink/clk.c b/arch/mips/ralink/clk.c
+index 2f9d5acb38ea..8387177a47ef 100644
+--- a/arch/mips/ralink/clk.c
++++ b/arch/mips/ralink/clk.c
+@@ -70,6 +70,20 @@ long clk_round_rate(struct clk *clk, unsigned long rate)
  }
-=20
-+static speed_t pl2303_encode_baud_rate_divisor_alt(unsigned char buf[4],
-+								speed_t baud)
+ EXPORT_SYMBOL_GPL(clk_round_rate);
+ 
++int clk_set_parent(struct clk *clk, struct clk *parent)
 +{
-+	unsigned int baseline, mantissa, exponent;
-+
-+	/*
-+	 * Apparently, for the TA version the formula is:
-+	 *   baudrate =3D 12M * 32 / (mantissa * 2^exponent)
-+	 * where
-+	 *   mantissa =3D buf[10:0]
-+	 *   exponent =3D buf[15:13 16]
-+	 */
-+	baseline =3D 12000000 * 32;
-+	mantissa =3D baseline / baud;
-+	if (mantissa =3D=3D 0)
-+		mantissa =3D 1;   /* Avoid dividing by zero if baud > 32*12M. */
-+	exponent =3D 0;
-+	while (mantissa >=3D 2048) {
-+		if (exponent < 15) {
-+			mantissa >>=3D 1; /* divide by 2 */
-+			exponent++;
-+		} else {
-+			/* Exponent is maxed. Trim mantissa and leave. */
-+			mantissa =3D 2047;
-+			break;
-+		}
-+	}
-+
-+	buf[3] =3D 0x80;
-+	buf[2] =3D exponent & 0x01;
-+	buf[1] =3D (exponent & ~0x01) << 4 | mantissa >> 8;
-+	buf[0] =3D mantissa & 0xff;
-+
-+	/* Calculate and return the exact baud rate. */
-+	baud =3D (baseline / mantissa) >> exponent;
-+
-+	return baud;
++	WARN_ON(clk);
++	return -1;
 +}
++EXPORT_SYMBOL(clk_set_parent);
 +
++struct clk *clk_get_parent(struct clk *clk)
++{
++	WARN_ON(clk);
++	return NULL;
++}
++EXPORT_SYMBOL(clk_get_parent);
 +
- static void pl2303_encode_baud_rate(struct tty_struct *tty,
- 					struct usb_serial_port *port,
- 					u8 buf[4])
-@@ -645,6 +688,8 @@ static void pl2303_encode_baud_rate(struct tty_struct=
- *tty,
-=20
- 	if (baud =3D=3D baud_sup)
- 		baud =3D pl2303_encode_baud_rate_direct(buf, baud);
-+	else if (spriv->type->alt_divisors)
-+		baud =3D pl2303_encode_baud_rate_divisor_alt(buf, baud);
- 	else
- 		baud =3D pl2303_encode_baud_rate_divisor(buf, baud);
-=20
---=20
-2.30.2
+ void __init plat_time_init(void)
+ {
+ 	struct clk *clk;
+-- 
+2.25.1
 
