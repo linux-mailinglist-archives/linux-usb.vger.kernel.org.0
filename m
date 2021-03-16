@@ -2,372 +2,246 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 689C233DEB6
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 21:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E52833DEBE
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 21:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbhCPU1R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Mar 2021 16:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44748 "EHLO
+        id S229660AbhCPU3Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Mar 2021 16:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbhCPU0a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Mar 2021 16:26:30 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A524C0613D8
-        for <linux-usb@vger.kernel.org>; Tue, 16 Mar 2021 13:26:08 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id o11so38706254iob.1
-        for <linux-usb@vger.kernel.org>; Tue, 16 Mar 2021 13:26:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=bvkqNr1q78jgqt9ME2KjhcsSH1MGlZ3R4wsxExVXRtc=;
-        b=aQI+a21P3/jQfp2XBCLpKA2XaF4d5h3u1dOHvC7XfJmy4Pv2OZk9eXfxC3Ka9vZNLg
-         EO21aV6GaVbMhwaByQY77Pz3lOGWZjsBh3Dtk919+/lWVtXwxYwuLSv2mdgmQ6lqIupI
-         nBE5rQzNd5O5jMR29ufLhcU7SA4WqArxE/PD8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bvkqNr1q78jgqt9ME2KjhcsSH1MGlZ3R4wsxExVXRtc=;
-        b=pnlDx5drXgWSBIdSnZnswbdBQA21mHjPbkP9B7fSge/ngmFk+xpG8OfYSPheodU9c4
-         hezulWwddmoA9oCaw2qOruzV//6zM4YL5SDAryzcYJdwAKv+RublmoS+AbDWmo8bjQW/
-         PJOE7XAPPLPme6cwWb709MBxqii/8PcVRyg6xbGBbgSK6LrCmjBDltoYE8kb79Y8/cwb
-         6CPUjzaApaV3f/s2J0unKL0ulfa1d8Ao/8QQrMbTdL9AsEJlsDYxfkrxnlwncrevT+LL
-         +YgDkLMUNYgMmqVYyoRABsmyPEMvTND7p2iAu6dx9aQxAdrNiPDBfgqIflKb+ZlnEEyE
-         fFdg==
-X-Gm-Message-State: AOAM532Jzbzc0bCEe0aurZmupHk++0LT6yA5nl3i3RgTcbh4z857+oi6
-        B25mN3bZFKgRKV15oHytem/ZfnRChihs/fLO
-X-Google-Smtp-Source: ABdhPJzy4mGSz2YUBoXl8UAsu2NnVceuM4ynQkpHc0OrhVOY9bLUogPf0mJ7kYjy/ReSLuG6SxRI0Q==
-X-Received: by 2002:a05:6638:140e:: with SMTP id k14mr376382jad.31.1615926367038;
-        Tue, 16 Mar 2021 13:26:07 -0700 (PDT)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id v4sm9907370ilo.26.2021.03.16.13.26.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Mar 2021 13:26:06 -0700 (PDT)
-Subject: Re: [PATCH] dt-bindings: Drop type references on common properties
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mark Brown <broonie@kernel.org>,
-        Cheng-Yi Chiang <cychiang@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stefan Wahren <wahrenst@gmx.net>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Odelu Kukatla <okukatla@codeaurora.org>,
-        Alex Elder <elder@kernel.org>, Suman Anna <s-anna@ti.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-References: <20210316194858.3527845-1-robh@kernel.org>
-From:   Alex Elder <elder@ieee.org>
-Message-ID: <b7599ef5-899f-5c38-d3e4-8ac8cfe06c56@ieee.org>
-Date:   Tue, 16 Mar 2021 15:26:04 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        with ESMTP id S229994AbhCPU2s (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Mar 2021 16:28:48 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14814C06174A
+        for <linux-usb@vger.kernel.org>; Tue, 16 Mar 2021 13:28:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202012; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ewtQ6oEgdnQBPOpUDyoc21YP+uvolAB570CcsVJHI1Y=; b=AcldiIjK918qSLqKGa6Gx1PtJg
+        fg/9YrtfwthK5aPcSu65xh+DD4ySjElIHVSJfJK2rMQWbP9rk1yv2LA8ltPzmfX5tSuHB6wY6MIfw
+        /y9tqdtEIa4gpF6qYMNHxO4R1AFrp+MeSe0v1yT97b5MAKTBFzkis02UWr7+MmhQgmeLLdSjz2TEC
+        TdH2AYeu42lVgfGmAlWtKN/WCSng8otb0j26geyvxYLMJOYH8MvjQSFgALf/lkCjPB5JxzMbgr2Rb
+        xqJpE8ZjO2FNM1BBZqv29BXFz/qeVw0uTYBLMev0dFeGh/cQBQ0nnjoWMuLYjzdqpTexbcY8EULdb
+        EL+DH3DQ==;
+Received: from [2a01:799:95f:4600:cca0:57ac:c55d:a485] (port=62895)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1lMGJ0-0006nk-05; Tue, 16 Mar 2021 21:28:42 +0100
+Subject: Re: [PATCH v8 3/3] drm: Add GUD USB Display driver
+To:     Peter Stuge <peter@stuge.se>
+Cc:     dri-devel@lists.freedesktop.org, hudson@trmm.net,
+        markus@raatikainen.cc, sam@ravnborg.org, linux-usb@vger.kernel.org,
+        th020394@gmail.com, lkundrak@v3.sk, pontus.fuchs@gmail.com,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+References: <20210313112545.37527-1-noralf@tronnes.org>
+ <20210313112545.37527-4-noralf@tronnes.org>
+ <20210315193729.10166.qmail@stuge.se>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <e030be96-e484-daf3-f147-bc042c24457e@tronnes.org>
+Date:   Tue, 16 Mar 2021 21:28:37 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210316194858.3527845-1-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20210315193729.10166.qmail@stuge.se>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/16/21 2:48 PM, Rob Herring wrote:
-> Users of common properties shouldn't have a type definition as the
-> common schemas already have one. Drop all the unnecessary type
-> references in the tree.
-> 
-> A meta-schema update to catch these is pending.
 
-For net/qcom,ipa.yaml:
 
-Acked-by: Alex Elder <elder@linaro.org>
-
+Den 15.03.2021 20.37, skrev Peter Stuge:
+> Hi Noralf,
 > 
-> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Cc: Ohad Ben-Cohen <ohad@wizery.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Cheng-Yi Chiang <cychiang@chromium.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Stefan Wahren <wahrenst@gmx.net>
-> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Cc: Odelu Kukatla <okukatla@codeaurora.org>
-> Cc: Alex Elder <elder@kernel.org>
-> Cc: Suman Anna <s-anna@ti.com>
-> Cc: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-can@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->   .../bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml       | 5 +----
->   Documentation/devicetree/bindings/arm/cpus.yaml              | 2 --
->   .../bindings/display/allwinner,sun4i-a10-tcon.yaml           | 1 -
->   .../devicetree/bindings/gpio/socionext,uniphier-gpio.yaml    | 3 +--
->   .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 1 -
->   .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
->   .../bindings/memory-controllers/nvidia,tegra210-emc.yaml     | 2 +-
->   Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml   | 1 -
->   Documentation/devicetree/bindings/net/qcom,ipa.yaml          | 1 -
->   Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml  | 2 --
->   .../devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml   | 2 +-
->   Documentation/devicetree/bindings/sound/ak4642.yaml          | 2 --
->   .../devicetree/bindings/sound/google,cros-ec-codec.yaml      | 2 +-
->   Documentation/devicetree/bindings/sound/renesas,rsnd.yaml    | 1 -
->   .../devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml       | 1 -
->   Documentation/devicetree/bindings/usb/usb.yaml               | 1 -
->   16 files changed, 5 insertions(+), 23 deletions(-)
+> super fair call with the BE testing, let's hope for some testing soonish.
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-> index a2c63c8b1d10..c6144c8421fa 100644
-> --- a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-> +++ b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-> @@ -26,10 +26,7 @@ properties:
->         - const: simple-mfd
->   
->     mboxes:
-> -    $ref: '/schemas/types.yaml#/definitions/phandle'
-> -    description: |
-> -      Phandle to the firmware device's Mailbox.
-> -      (See: ../mailbox/mailbox.txt for more information)
-> +    maxItems: 1
->   
->     clocks:
->       type: object
-> diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-> index 26b886b20b27..6be4a8852ee5 100644
-> --- a/Documentation/devicetree/bindings/arm/cpus.yaml
-> +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-> @@ -256,13 +256,11 @@ properties:
->         where voltage is in V, frequency is in MHz.
->   
->     power-domains:
-> -    $ref: '/schemas/types.yaml#/definitions/phandle-array'
->       description:
->         List of phandles and PM domain specifiers, as defined by bindings of the
->         PM domain provider (see also ../power_domain.txt).
->   
->     power-domain-names:
-> -    $ref: '/schemas/types.yaml#/definitions/string-array'
->       description:
->         A list of power domain name strings sorted in the same order as the
->         power-domains property.
-> diff --git a/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml b/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
-> index c13faf3e6581..3a7d5d731712 100644
-> --- a/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
-> +++ b/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
-> @@ -73,7 +73,6 @@ properties:
->     clock-output-names:
->       description:
->         Name of the LCD pixel clock created.
-> -    $ref: /schemas/types.yaml#/definitions/string-array
->       maxItems: 1
->   
->     dmas:
-> diff --git a/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml b/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
-> index 1a54db04f29d..bcafa494ed7a 100644
-> --- a/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
-> @@ -43,8 +43,7 @@ properties:
->   
->     gpio-ranges: true
->   
-> -  gpio-ranges-group-names:
-> -    $ref: /schemas/types.yaml#/definitions/string-array
-> +  gpio-ranges-group-names: true
->   
->     socionext,interrupt-ranges:
->       description: |
-> diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
-> index 6f2398cdc82d..1e7894e524f9 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
-> @@ -102,7 +102,6 @@ patternProperties:
->   
->         st,adc-channel-names:
->           description: List of single-ended channel names.
-> -        $ref: /schemas/types.yaml#/definitions/string-array
->   
->         st,filter-order:
->           description: |
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> index 799e73cdb90b..13da7b29c707 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> @@ -82,7 +82,6 @@ properties:
->         this interconnect to send RPMh commands.
->   
->     qcom,bcm-voter-names:
-> -    $ref: /schemas/types.yaml#/definitions/string-array
->       description: |
->         Names for each of the qcom,bcm-voters specified.
->   
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml
-> index 49ab09252e52..bc8477e7ab19 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml
-> @@ -34,7 +34,7 @@ properties:
->         - description: EMC general interrupt
->   
->     memory-region:
-> -    $ref: /schemas/types.yaml#/definitions/phandle
-> +    maxItems: 1
->       description:
->         phandle to a reserved memory region describing the table of EMC
->         frequencies trained by the firmware
-> diff --git a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
-> index fe6a949a2eab..55bff1586b6f 100644
-> --- a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
-> @@ -57,7 +57,6 @@ properties:
->         - const: per
->   
->     clock-frequency:
-> -    $ref: /schemas/types.yaml#/definitions/uint32
->       description: |
->         The oscillator frequency driving the flexcan device, filled in by the
->         boot loader. This property should only be used the used operating system
-> diff --git a/Documentation/devicetree/bindings/net/qcom,ipa.yaml b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
-> index 8f86084bf12e..4e8dee4aa90d 100644
-> --- a/Documentation/devicetree/bindings/net/qcom,ipa.yaml
-> +++ b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
-> @@ -100,7 +100,6 @@ properties:
->         - description: Whether the IPA clock is enabled (if valid)
->   
->     qcom,smem-state-names:
-> -    $ref: /schemas/types.yaml#/definitions/string-array
->       description: The names of the state bits used for SMP2P output
->       items:
->         - const: ipa-clock-enabled-valid
-> diff --git a/Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml b/Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml
-> index d5d7f113bade..828e4a1ece41 100644
-> --- a/Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml
-> @@ -23,12 +23,10 @@ properties:
->         List of phandle to the nvmem data cells.
->   
->     nvmem-names:
-> -    $ref: /schemas/types.yaml#/definitions/string-array
->       description:
->         Names for the each nvmem provider.
->   
->     nvmem-cell-names:
-> -    $ref: /schemas/types.yaml#/definitions/string-array
->       description:
->         Names for each nvmem-cells specified.
->   
-> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
-> index 1a1159097a2a..73400bc6e91d 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
-> @@ -93,7 +93,7 @@ properties:
->   # The following are the optional properties:
->   
->     memory-region:
-> -    $ref: /schemas/types.yaml#/definitions/phandle
-> +    maxItems: 1
->       description: |
->         phandle to the reserved memory node to be associated
->         with the remoteproc device. The reserved memory node
-> diff --git a/Documentation/devicetree/bindings/sound/ak4642.yaml b/Documentation/devicetree/bindings/sound/ak4642.yaml
-> index 6cd213be2266..1e2caa29790e 100644
-> --- a/Documentation/devicetree/bindings/sound/ak4642.yaml
-> +++ b/Documentation/devicetree/bindings/sound/ak4642.yaml
-> @@ -29,11 +29,9 @@ properties:
->   
->     clock-frequency:
->       description: common clock binding; frequency of MCKO
-> -    $ref: /schemas/types.yaml#/definitions/uint32
->   
->     clock-output-names:
->       description: common clock name
-> -    $ref: /schemas/types.yaml#/definitions/string
->   
->   required:
->     - compatible
-> diff --git a/Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml b/Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
-> index acfb9db021dc..77adbebed824 100644
-> --- a/Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
-> +++ b/Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
-> @@ -32,7 +32,7 @@ properties:
->             The last one integer is the length of the shared memory.
->   
->     memory-region:
-> -    $ref: '/schemas/types.yaml#/definitions/phandle'
-> +    maxItems: 1
->       description: |
->         Shared memory region to EC.  A "shared-dma-pool".
->         See ../reserved-memory/reserved-memory.txt for details.
-> diff --git a/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml b/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
-> index 2e1046513603..e494a0416748 100644
-> --- a/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
-> +++ b/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
-> @@ -78,7 +78,6 @@ properties:
->   
->     clock-frequency:
->       description: for audio_clkout0/1/2/3
-> -    $ref: /schemas/types.yaml#/definitions/uint32-array
->   
->     clkout-lr-asynchronous:
->       description: audio_clkoutn is asynchronizes with lr-clock.
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-> index 95a728f4d333..3ea8c0c1f45f 100644
-> --- a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-> @@ -59,7 +59,6 @@ patternProperties:
->   
->       properties:
->         reg:
-> -        $ref: /schemas/types.yaml#/definitions/uint32
->           description: Specify the sensor channel. There are 8 channels in PMIC5's ADC TM
->           minimum: 0
->           maximum: 7
-> diff --git a/Documentation/devicetree/bindings/usb/usb.yaml b/Documentation/devicetree/bindings/usb/usb.yaml
-> index 78491e66ed24..939f217b8c7b 100644
-> --- a/Documentation/devicetree/bindings/usb/usb.yaml
-> +++ b/Documentation/devicetree/bindings/usb/usb.yaml
-> @@ -16,7 +16,6 @@ properties:
->       pattern: "^usb(@.*)?"
->   
->     phys:
-> -    $ref: /schemas/types.yaml#/definitions/phandle-array
->       description:
->         List of all the USB PHYs on this HCD
->   
+> 
+> I was thinking about my device doing protocol STALL when I try to
+> return 0 bytes, and while it *is* a bug in my device, from a standards
+> point of view it's actually completely valid, if not expected:
+> 
+> --8<-- usb_20.pdf 8.5.3.4 STALL Handshakes Returned by Control Pipes
+> If the device is unable to complete a command, it returns a STALL in the
+> Data and/or Status stages of the control transfer. Unlike the case of a
+> functional stall, protocol stall does not indicate an error with the device.
+> -->8--
+> 
+> I think it's fair to say that a device can't complete the command
+> when it has no data to return.
+> 
+> So how about allowing STALL for optional GUD_REQ_GET_:s to mean the same
+> as a 0 byte response? Should I propose a separate patch for it later?
 > 
 
+Yeah, that would be nice.
+
+We can't look for -EPIPE though, since GUD_REQ_GET_STATUS will ask for
+the actual error. We have these to choose from currently:
+
+  #define GUD_STATUS_OK				0x00
+  #define GUD_STATUS_BUSY			0x01
+  #define GUD_STATUS_REQUEST_NOT_SUPPORTED	0x02
+  #define GUD_STATUS_PROTOCOL_ERROR		0x03
+  #define GUD_STATUS_INVALID_PARAMETER		0x04
+  #define GUD_STATUS_ERROR			0x05
+
+Maybe REQUEST_NOT_SUPPORTED (-EOPNOTSUPP) or add a more fitting status
+value.
+
+If the driver sees -EPIPE this means that the device has failed to
+respond properly. See gud_usb_transfer().
+
+> 
+> Noralf Trønnes wrote:
+>> +++ b/drivers/gpu/drm/gud/gud_connector.c
+> ..
+>> +static int gud_connector_get_modes(struct drm_connector *connector)
+> ..
+>> +	ret = gud_usb_get(gdrm, GUD_REQ_GET_CONNECTOR_EDID, connector->index,
+>> +			  edid_ctx.buf, GUD_CONNECTOR_MAX_EDID_LEN);
+> 
+> if (ret == -EPIPE)
+> 	ret = 0;
+> 
+>> +	if (ret > 0 && ret % EDID_LENGTH) {
+>> +		gud_conn_err(connector, "Invalid EDID size", ret);
+>> +	} else if (ret > 0) {
+>> +		edid_ctx.len = ret;
+>> +		edid = drm_do_get_edid(connector, gud_connector_get_edid_block, &edid_ctx);
+>> +	}
+> 
+> 
+>> +static int gud_connector_add_properties(struct gud_device *gdrm, struct gud_connector *gconn)
+> ..
+>> +	ret = gud_usb_get(gdrm, GUD_REQ_GET_CONNECTOR_PROPERTIES, connector->index,
+>> +			  properties, GUD_CONNECTOR_PROPERTIES_MAX_NUM * sizeof(*properties));
+> 
+> if (ret == -EPIPE)
+> 	ret = 0;
+> 
+>> +	if (ret <= 0)
+>> +		goto out;
+>> +	if (ret % sizeof(*properties)) {
+>> +		ret = -EIO;
+>> +		goto out;
+>> +	}
+> 
+> 
+>> +++ b/drivers/gpu/drm/gud/gud_drv.c
+> ..
+> ..
+>> +static int gud_get_properties(struct gud_device *gdrm)
+> ..
+>> +	ret = gud_usb_get(gdrm, GUD_REQ_GET_PROPERTIES, 0,
+>> +			  properties, GUD_PROPERTIES_MAX_NUM * sizeof(*properties));
+> 
+> if (ret == -EPIPE)
+> 	ret = 0;
+> 
+>> +	if (ret <= 0)
+>> +		goto out;
+>> +	if (ret % sizeof(*properties)) {
+>> +		ret = -EIO;
+>> +		goto out;
+>> +	}
+> 
+> 
+> Then I looked whether a device could cause trouble in the driver by
+> returning complex/unexpected data, and found this:
+> 
+>> +static int gud_probe(struct usb_interface *intf, const struct usb_device_id *id)
+> ..
+>> +	/* Add room for emulated XRGB8888 */
+>> +	formats = devm_kmalloc_array(dev, GUD_FORMATS_MAX_NUM + 1, sizeof(*formats), GFP_KERNEL);
+> 
+> It looks like this +1 and the way xrgb8888_emulation_format works means
+> that an interface will not always work correctly if multiple emulated
+> formats (R1, XRGB1111, RGB565) are returned, because only one emulated
+> mode is added after the loop, with struct drm_format_info for the last
+> emulated format returned by the device. So userspace would only see the
+> last emulated mode and the bulk output would only ever use that
+> particular pixel format, any earlier ones would be unavailable?
+> 
+> If this is EWONTFIX then how about adding an error message if multiple
+> emulated modes are returned and ignore all but the first, rather than
+> all but the last?
+> 
+
+It does ignore all but the first... doesn't it?
+
+You could make a patch if you care about this:
+
+		case GUD_DRM_FORMAT_R1:
+			fallthrough;
+		case GUD_DRM_FORMAT_XRGB1111:
+			if (!xrgb8888_emulation_format)
+				xrgb8888_emulation_format = info;
++			else
++				dev_err(dev, "...");
+			break;
+
+It's only needed for the formats that are not exported to userspace.
+
+> 
+> Related: Can userspace find out which GUD_PIXEL_FORMAT_* is behind an
+> emulated format? It's needed to decide how the emulated framebuffer
+> should be used, in particular to not use G or B if GUD_PIXEL_FORMAT_R1.
+> 
+
+There's no way for userspace to know that. drm_fb_xrgb8888_to_gray8()
+uses ITU BT.601 rgb conversion so userspace doesn't have to know which
+colors to use, but ofc it will need to know there's a monochrome display
+for it to look good.
+
+XRGB8888 is the only format that is allowed to be emulated since some
+userspace only supports that one format. So we can't have a device that
+supports both R1 and XRGB1111.
+
+> 
+>> +		switch (format) {
+>> +		case GUD_DRM_FORMAT_R1:
+>> +			fallthrough;
+>> +		case GUD_DRM_FORMAT_XRGB1111:
+>> +			if (!xrgb8888_emulation_format)
+>> +				xrgb8888_emulation_format = info;
+>> +			break;
+>> +		case DRM_FORMAT_RGB565:
+>> +			rgb565_supported = true;
+>> +			if (!xrgb8888_emulation_format)
+>> +				xrgb8888_emulation_format = info;
+>> +			break;
+> 
+> Could RGB565 go before XRGB111 (or R1) and also fallthrough; in this
+> construct? Not terribly important, but the repetition caught my eye.
+> 
+
+It could but I'd like to keep the increasing bits-per-pixel order.
+
+> 
+> Then, in gud_connector.c I saw this, which surprised me:
+> 
+> +int gud_connector_fill_properties(struct drm_connector_state *connector_state,
+> ..
+> +		if (prop == GUD_PROPERTY_BACKLIGHT_BRIGHTNESS) {
+> +			val = connector_state->tv.brightness;
+> +		} else {
+> 
+> Why is this using tv.brightness rather than say gconn->initial_brightness?
+> 
+> It looks like the end result might be the same because tv.brightness is
+> set to gconn->initial_brightness in gud_connector_reset() but it's a
+> little confusing to me, since a GUD backlight isn't a drm/TV thing?
+> 
+
+I'm reusing the tv state property since that saves me from subclassing
+the connector state. I want to have the value in the state because that
+makes it less of a special case. Some time in the future DRM will have
+proper backlight support as a DRM property, but so far no one has been
+willing to invest the necessary time and effort to make it happen.
+
+Noralf.
