@@ -2,81 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B40033CA5D
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 01:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C2833CA63
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 01:36:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbhCPAeX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Mar 2021 20:34:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56558 "EHLO mail.kernel.org"
+        id S229729AbhCPAf7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Mar 2021 20:35:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56706 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230319AbhCPAeD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Mar 2021 20:34:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 25B3564EE2;
-        Tue, 16 Mar 2021 00:34:00 +0000 (UTC)
+        id S231482AbhCPAfv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Mar 2021 20:35:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D6DBF64EE2;
+        Tue, 16 Mar 2021 00:35:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615854842;
-        bh=DwO2abTrTPCBV+RWz5NIUo7YvPd35VK+3GPjS72Pk2c=;
+        s=k20201202; t=1615854950;
+        bh=OlgHNp9jm/EH6kf+3kGJKCQXgOVwBtcBmr5ej4m/h88=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GGGl+0vdncBll66DBxDxVWfhi8VZEKl2Hsx6U1GEcS/g+imWRE8u5iSCvACHvy8K3
-         +y4W/0cBVg8kM4IBqSvqtDYwTpwT9hMeFvWxRdod8HA0MwV93WoMWIDTeKlu5uc6jC
-         IpyqIwqfQT67QKOIe+Kb4bHcKYnI2WU1Y5yUWDMXazEBd2ctHQiNnjoSB5vxEg4ucU
-         13ece8s49dFXct+CynmfjXr/xJwCc1lrDzIzAsXMLNn9jeCcNGFJIFIjYY0nS7Gwya
-         a+4AoIPMv/GSTQ+4UwYMbaLqR5dF4ytYnIe4jVMbpIq/g1/SFC0FIBDXF1U/RJjwZ7
-         RN+U+EsMNNarg==
-Date:   Tue, 16 Mar 2021 08:33:57 +0800
+        b=lpbG3tXBmVG0SK4DzL14WLha/peGHTAGXryO9fzxzvMlibA0YcaLCZj0Aehdo2nva
+         tpQbqB9Zcns6CNX/l9qkHwntyoRpW9NuvCPjEvBRll2rTxU63YBJJhUkgPBCSjB28i
+         qg2Nuvl3XHItGjvDVPM/ZbMsfoywoTLX6PPYaQyJOWWkD3IZkrUsFKr5uRTW6F94aH
+         2gYtRm8MGmxBfBJBDl0a2eAI73humNHOK87EIcGuzsXhVyRpdG1GDrELypn7EKjv22
+         qRn0o4/uJZS7O7qB5a5Q28KX1OpZBbg2wYfftC3mhU6EtERmuWzeWhuEJMeFAgCOxP
+         UWKdGoVJYawlg==
+Date:   Tue, 16 Mar 2021 08:35:46 +0800
 From:   Peter Chen <peter.chen@kernel.org>
-To:     Sanket Parmar <sparmar@cadence.com>
-Cc:     Pawel Laszczak <pawell@cadence.com>,
-        "a-govindraju@ti.com" <a-govindraju@ti.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rahul Kumar <kurahul@cadence.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "kishon@ti.com" <kishon@ti.com>
-Subject: Re: [PATCH 2/2] usb: cdns3: Optimize DMA request buffer allocation
-Message-ID: <20210316003357.GC15335@b29397-desktop>
-References: <1615267180-9289-1-git-send-email-sparmar@cadence.com>
- <1615267180-9289-2-git-send-email-sparmar@cadence.com>
- <20210314051048.GA30122@b29397-desktop>
- <BY5PR07MB81194FB5A32CE9D6B793FF30B06C9@BY5PR07MB8119.namprd07.prod.outlook.com>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-api@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kurahul@cadence.com
+Subject: Re: [PATCH v2 1/2] usb: gadget: uvc: Updating bcdUVC field to 0x0110
+Message-ID: <20210316003545.GD15335@b29397-desktop>
+References: <20210315065926.30152-1-pawell@gli-login.cadence.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BY5PR07MB81194FB5A32CE9D6B793FF30B06C9@BY5PR07MB8119.namprd07.prod.outlook.com>
+In-Reply-To: <20210315065926.30152-1-pawell@gli-login.cadence.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-03-15 15:51:04, Sanket Parmar wrote:
-> > > +
-> > >  	priv_req->flags |= REQUEST_UNALIGNED;
-> > >  	trace_cdns3_prepare_aligned_request(priv_req);
-> > >
-> > > @@ -3088,11 +3113,11 @@ static void cdns3_gadget_exit(struct cdns
-> > *cdns)
-> > >  		struct cdns3_aligned_buf *buf;
-> > >
-> > >  		buf = cdns3_next_align_buf(&priv_dev->aligned_buf_list);
-> > > -		dma_free_coherent(priv_dev->sysdev, buf->size,
-> > > -				  buf->buf,
-> > > -				  buf->dma);
-> > > +		dma_unmap_single(priv_dev->sysdev, buf->dma, buf->size,
-> > > +			buf->dir);
-> > 
-> > It only needs to DMA unmap after DMA has completed, this buf will not be
-> > used, otherwise, the kfree below will cause issue.
+On 21-03-15 07:59:25, Pawel Laszczak wrote:
+> From: Pawel Laszczak <pawell@cadence.com>
 > 
-> This part is not clear.  Aligned DMA buffer is allocated and mapped in cdns3_prepare_aligned_request_buf()
-> and put into aligned_buf_list. While unloading the gadget, We need to undo the same if aligned_buf_list is not
-> empty.  Am I missing something here? 
+> Command Verifier during UVC Descriptor Tests (Class Video Control
+> Interface Descriptor Test Video) complains about:
+> 
+> Video Control Interface Header bcdUVC is 0x0100. USB Video Class
+> specification 1.0 has been replaced by 1.1 specification
+> (UVC: 6.2.26) Class Video Control Interface Descriptor bcdUVC is not 1.1
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 
-My point is this unmap operation is useless since there is no user for
-aligned buf, and it calls kfree afterwards. You could also keep it as it has
-no harm.
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
 
 > 
-> Also, I will post v2 of this patch which uses dma_*_noncoherent APIs suggested by Christoph Hellwig.
+> ---
+> Changlog:
+> v2:
+> - fixed typo in commit message
+> 
+>  drivers/usb/gadget/function/uvc_configfs.c | 2 +-
+>  drivers/usb/gadget/legacy/webcam.c         | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+> index 00fb58e50a15..cd28dec837dd 100644
+> --- a/drivers/usb/gadget/function/uvc_configfs.c
+> +++ b/drivers/usb/gadget/function/uvc_configfs.c
+> @@ -231,7 +231,7 @@ static struct config_item *uvcg_control_header_make(struct config_group *group,
+>  	h->desc.bLength			= UVC_DT_HEADER_SIZE(1);
+>  	h->desc.bDescriptorType		= USB_DT_CS_INTERFACE;
+>  	h->desc.bDescriptorSubType	= UVC_VC_HEADER;
+> -	h->desc.bcdUVC			= cpu_to_le16(0x0100);
+> +	h->desc.bcdUVC			= cpu_to_le16(0x0110);
+>  	h->desc.dwClockFrequency	= cpu_to_le32(48000000);
+>  
+>  	config_item_init_type_name(&h->item, name, &uvcg_control_header_type);
+> diff --git a/drivers/usb/gadget/legacy/webcam.c b/drivers/usb/gadget/legacy/webcam.c
+> index a9f8eb8e1c76..3a61de4bb2b1 100644
+> --- a/drivers/usb/gadget/legacy/webcam.c
+> +++ b/drivers/usb/gadget/legacy/webcam.c
+> @@ -90,7 +90,7 @@ static const struct UVC_HEADER_DESCRIPTOR(1) uvc_control_header = {
+>  	.bLength		= UVC_DT_HEADER_SIZE(1),
+>  	.bDescriptorType	= USB_DT_CS_INTERFACE,
+>  	.bDescriptorSubType	= UVC_VC_HEADER,
+> -	.bcdUVC			= cpu_to_le16(0x0100),
+> +	.bcdUVC			= cpu_to_le16(0x0110),
+>  	.wTotalLength		= 0, /* dynamic */
+>  	.dwClockFrequency	= cpu_to_le32(48000000),
+>  	.bInCollection		= 0, /* dynamic */
+> -- 
+> 2.25.1
+> 
 
 -- 
 
