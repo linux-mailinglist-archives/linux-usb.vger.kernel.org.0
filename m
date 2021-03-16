@@ -2,161 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BC633D387
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 13:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F02133D397
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 13:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237599AbhCPMHG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Mar 2021 08:07:06 -0400
-Received: from beige.elm.relay.mailchannels.net ([23.83.212.16]:62544 "EHLO
-        beige.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237610AbhCPMG5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Mar 2021 08:06:57 -0400
-X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id BCF9F1E269C;
-        Tue, 16 Mar 2021 12:06:51 +0000 (UTC)
-Received: from pdx1-sub0-mail-a96.g.dreamhost.com (100-96-27-131.trex.outbound.svc.cluster.local [100.96.27.131])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id E5EFF1E23FD;
-        Tue, 16 Mar 2021 12:06:50 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
-Received: from pdx1-sub0-mail-a96.g.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
-        by 100.96.27.131 (trex/6.1.1);
-        Tue, 16 Mar 2021 12:06:51 +0000
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|smtp@contentfirst.com
-X-MailChannels-Auth-Id: dreamhost
-X-Lyrical-Cold: 354702871536d84c_1615896411214_3961716016
-X-MC-Loop-Signature: 1615896411214:855673715
-X-MC-Ingress-Time: 1615896411213
-Received: from pdx1-sub0-mail-a96.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTP id 9A19E86C49;
-        Tue, 16 Mar 2021 05:06:50 -0700 (PDT)
-Received: from industrynumbers.com (pool-100-15-209-187.washdc.fios.verizon.net [100.15.209.187])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: smtp@contentfirst.com)
-        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTPSA id 58D107E391;
-        Tue, 16 Mar 2021 05:06:49 -0700 (PDT)
-Received: by industrynumbers.com (Postfix, from userid 1000)
-        id 8AA56282ABB; Tue, 16 Mar 2021 08:06:48 -0400 (EDT)
-X-DH-BACKEND: pdx1-sub0-mail-a96
-From:   michaelk@IEEE.org
-To:     michaelk@IEEE.org
-Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH 1/1] USB: serial: pl2303: TA & TB alternate divider
-Date:   Tue, 16 Mar 2021 08:06:20 -0400
-Message-Id: <20210316120620.888110-1-michaelk@IEEE.org>
-X-Mailer: git-send-email 2.30.2
+        id S229754AbhCPMQK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Mar 2021 08:16:10 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:15296 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229702AbhCPMP7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Mar 2021 08:15:59 -0400
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20210316121557epoutp030696f21702624f5f4f273f286a1e6a49~s0bipDkxF2372723727epoutp03K
+        for <linux-usb@vger.kernel.org>; Tue, 16 Mar 2021 12:15:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20210316121557epoutp030696f21702624f5f4f273f286a1e6a49~s0bipDkxF2372723727epoutp03K
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1615896957;
+        bh=Li37h5E+FYADkrX8n9IvGCQEPn2IijJDX2+GYSW7/Pk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=A3Lc6QQml77JTfgy8yDGIMK+WR5tm37Q+Ry6aRDTFuCc8UHwS4YDbX17G31d0Yu60
+         +8iSd0PpwIz+jWUi/96EaBe3QCw03OxihTOs5JlJ5s0JYNBEhzbLlPZZnxrvDmUx32
+         t6mGXz+SVxoWF2Ga6ZXBtxEc3js15E8+QC1C9uMY=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20210316121557epcas2p40e21bebd9a85e92abde2095ed9202205~s0biXxLBA1829418294epcas2p4u;
+        Tue, 16 Mar 2021 12:15:57 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.40.184]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4F0C1Q4z78z4x9Px; Tue, 16 Mar
+        2021 12:15:54 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E2.6F.10621.A71A0506; Tue, 16 Mar 2021 21:15:54 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20210316121554epcas2p2e5a4a929050aa245c29a0a28d23cb03b~s0bfrna6u2714327143epcas2p2r;
+        Tue, 16 Mar 2021 12:15:54 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20210316121554epsmtrp1d454a3488f3b827d9aefc826ce33509a~s0bfq7ko-1153611536epsmtrp1c;
+        Tue, 16 Mar 2021 12:15:54 +0000 (GMT)
+X-AuditID: b6c32a45-337ff7000001297d-15-6050a17a090e
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F0.7F.08745.A71A0506; Tue, 16 Mar 2021 21:15:54 +0900 (KST)
+Received: from rack03 (unknown [12.36.155.109]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20210316121553epsmtip2332bd2cdb1b6f635fc029dddac71b5de~s0bff3Nim2031020310epsmtip2Q;
+        Tue, 16 Mar 2021 12:15:53 +0000 (GMT)
+Date:   Tue, 16 Mar 2021 21:16:43 +0900
+From:   taehyun cho <taehyun.cho@samsung.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     balbi@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: remove 'pm_runtime_set_active' in resume
+ callback
+Message-ID: <20210316121643.GA138912@rack03>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210315141335.GA402778@rowland.harvard.edu>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupmk+LIzCtJLcpLzFFi42LZdljTTLdqYUCCwcRZShbH2p6wWzQvXs9m
+        cXnXHDaLRctamS0m/L7A5sDqsWlVJ5vH/rlr2D1m3/3B6PF5k1wAS1SOTUZqYkpqkUJqXnJ+
+        SmZeuq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QXiWFssScUqBQQGJxsZK+nU1R
+        fmlJqkJGfnGJrVJqQUpOgaFhgV5xYm5xaV66XnJ+rpWhgYGRKVBlQk7G1pUXmQpahSpu/vjL
+        3sD4jK+LkZNDQsBE4uaBT2xdjFwcQgI7GCWOb9wB5XxilGh98QXK+cwoMXNVNwtMy+Prqxkh
+        ErsYJRY2r4KqesIocej5V0aQKhYBVYl7976DdbAJaEvsb77JCmKLCGhJbG56yQzSwCzQwCgx
+        /2wTO0hCWCBYYt67DrAGXgEdiaZnU9ggbEGJkzOfgMU5BawkOv98Z+pi5OAQFVCReHWwHmSO
+        hMA9dombZ1axgMQlBFwkZsyCek5Y4tXxLewQtpTEy/42doj6dkaJXyfWsEI4UxglPqw7xQhR
+        ZSwx61k7mM0skCnxYMJSNoihyhJHbrFAhPkkOg7/ZYcI80p0tAlBdKpKtF+8zwZhS0tc2nwT
+        yvaQ+PZ5BTMkgPYzSuydu4ptAqP8LCSvzUKyDcLWkViw+xOQzQFkS0ss/8cBYWpKrN+lv4CR
+        dRWjWGpBcW56arFRgSFydG9iBKdKLdcdjJPfftA7xMjEwXiIUYKDWUmE1zQvIEGINyWxsiq1
+        KD++qDQntfgQoykwoiYyS4km5wOTdV5JvKGpkZmZgaWphamZkYWSOG+xwYN4IYH0xJLU7NTU
+        gtQimD4mDk6pBiaX7bsLGRQlQ34cXv7rjsXS2Mnx6Sc7XNYJFTrXXTAqTmf1yk/iWfLpt2Lk
+        rhrfrzrzc5iX7ikK5ZwUvFXgdcvMbt1tk2bN+DQj4ePiVRo3L9T6Gbybtn3KntzCrk+spm+Y
+        v52MvHSxa8rXR5JPOE02eYd2bUh+fYi1Jkvqv5CzXX5uXPYfB5Xc9tg73AHHjDLC588WD9xx
+        7/Z3pmdOds7GKvG9wiybT4TxGnF8sH/7t5FNRtEzKIPhM8cnrplePdr9HuYpKhcXnFa+Jl7n
+        +0hJnEf15iOjH8d1dC6fmtInfUDqydwGHytOI/uzFY4875Jm7pofYZ0geCXww+myxqfzm3dd
+        ndnr9abj4e/F1kosxRmJhlrMRcWJADhN0fMeBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDLMWRmVeSWpSXmKPExsWy7bCSvG7VwoAEg5ZGFotjbU/YLZoXr2ez
+        uLxrDpvFomWtzBYTfl9gc2D12LSqk81j/9w17B6z7/5g9Pi8SS6AJYrLJiU1J7MstUjfLoEr
+        43ffQpaCQ/wVj7oqGhj38HQxcnJICJhIPL6+mhHEFhLYwSjxvSMCIi4tcerxAmYIW1jifssR
+        VoiaR4wSS5cbgtgsAqoS9+59ZwGx2QS0JfY33wSrERHQktjc9BKol4uDWaCBUWL+2SZ2kISw
+        QLDEvHcdYA28AjoSTc+msIEUCQnsZ5RoP3cMKiEocXLmEzCbGWjSjX8vmboYOYBsaYnl/zhA
+        wpwCVhKdf76DhUUFVCReHayfwCg4C0nzLCTNsxCaFzAyr2KUTC0ozk3PLTYsMMpLLdcrTswt
+        Ls1L10vOz93ECA5wLa0djHtWfdA7xMjEwXiIUYKDWUmE1zQvIEGINyWxsiq1KD++qDQntfgQ
+        ozQHi5I474Wuk/FCAumJJanZqakFqUUwWSYOTqkGJv4FtTxers6c1+ZnTHfdaaNbK6VewGgw
+        4WPwx8P26odZf2bVhC+oyL8WdFDRo+b2dus7X3R/yV3gWTlbRujcV4nzJc6iRb8V01U21XIq
+        JEu8bc16Ye2xcT/Tb8PzL2ZaJt+ZdPXMlDe561YtCbhkcrfp/8M44y8fJXy82trO6S3KeVrC
+        eEMw4WnggYnqSutEDFh0TkkIe9+K8Fmyw9Gh6+62Sjef/qrs28l/DqaeOSz58feEcoY3wob/
+        T71MkKl79+Sd68bPK89OXvOcI7Uijc+zI3j/Bd2wnZvF1kY6Tkw5VjzF1nUNT0H180dnH0xb
+        9vVmg1fBdwuVL3mRnsUtWRF7Zpm90ytwX83UklzQocRSnJFoqMVcVJwIAB+iHabfAgAA
+X-CMS-MailID: 20210316121554epcas2p2e5a4a929050aa245c29a0a28d23cb03b
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----VQObM9Pl3j-Am1LaCn7xN8sri-O7OboG09SNkG7pZ6-k7KuL=_22549a_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210315074223epcas2p11ddf190ec730f8629c1310117135f813
+References: <CGME20210315074223epcas2p11ddf190ec730f8629c1310117135f813@epcas2p1.samsung.com>
+        <20210315074317.7736-1-taehyun.cho@samsung.com>
+        <20210315141335.GA402778@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Michael Katzmann <michaelk@IEEE.org>
+------VQObM9Pl3j-Am1LaCn7xN8sri-O7OboG09SNkG7pZ6-k7KuL=_22549a_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-Use an alternate clock divider algorithm and bit ordering for the TA and
-TB versions of the pl2303. It was discovered that these variants do not
-produce the correct baud rates with the existing scheme.
+On Mon, Mar 15, 2021 at 10:13:35AM -0400, Alan Stern wrote:
+> On Mon, Mar 15, 2021 at 04:43:17PM +0900, taehyun cho wrote:
+> > 'pm_runtime_set_active' sets a flag to describe rumtime status.
+> > This flag is automatically set in pm_runtime_get_sync/put_sync API.
+> > 'pm_runtime_set_active' checks the runtime status of parent device.
+> > As a result, the below error message is printed.
+> > dwc3 11110000.dwc3: runtime PM trying to activate child device
+> > 11110000.dwc3 but parent (11110000.usb) is not active.
+> 
+> This is very suspicious.  That error message indicates a real error is 
+> present; removing these pm_runtime_set_active calls won't fix the error.
+> 
+> You need to determine why the parent platform device 11110000.usb isn't 
+> active when the dwc3 probe and resume routines are called.  It seems 
+> likely that there is a bug in the platform device's driver.
+> 
+> Alan Stern
+>
 
-see https://lore.kernel.org/r/3aee5708-7961-f464-8c5f-6685d96920d6@IEEE.o=
-rg
+I thought the issue happened because 'pm_runtime_set_active' set a flag again.
+I will check again if there is a problem in our platform device driver and
+get back.
 
-Signed-off-by: Michael G. Katzmann <michaelk@IEEE.org>
----
- drivers/usb/serial/pl2303.c | 45 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+Taehyun Cho
 
-diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
-index 7208966891d0..bf5828579918 100644
---- a/drivers/usb/serial/pl2303.c
-+++ b/drivers/usb/serial/pl2303.c
-@@ -188,6 +188,7 @@ struct pl2303_type_data {
- 	unsigned long quirks;
- 	unsigned int no_autoxonxoff:1;
- 	unsigned int no_divisors:1;
-+	unsigned int alt_divisors:1;
- };
-=20
- struct pl2303_serial_private {
-@@ -217,10 +218,12 @@ static const struct pl2303_type_data pl2303_type_da=
-ta[TYPE_COUNT] =3D {
- 	[TYPE_TA] =3D {
- 		.name			=3D "TA",
- 		.max_baud_rate		=3D 6000000,
-+		.alt_divisors		=3D true,
- 	},
- 	[TYPE_TB] =3D {
- 		.name			=3D "TB",
- 		.max_baud_rate		=3D 12000000,
-+		.alt_divisors		=3D true,
- 	},
- 	[TYPE_HXD] =3D {
- 		.name			=3D "HXD",
-@@ -618,6 +621,46 @@ static speed_t pl2303_encode_baud_rate_divisor(unsig=
-ned char buf[4],
- 	return baud;
- }
-=20
-+static speed_t pl2303_encode_baud_rate_divisor_alt(unsigned char buf[4],
-+                                                                speed_t =
-baud)
-+{
-+        unsigned int baseline, mantissa, exponent;
-+
-+        /*
-+         * Apparently, for the TA version the formula is:
-+         *   baudrate =3D 12M * 32 / (mantissa * 2^exponent)
-+         * where
-+         *   mantissa =3D buf[10:0]
-+         *   exponent =3D buf[15:13 16]
-+         */
-+        baseline =3D 12000000 * 32;
-+        mantissa =3D baseline / baud;
-+        if (mantissa =3D=3D 0)
-+                mantissa =3D 1;   /* Avoid dividing by zero if baud > 32=
-*12M. */
-+        exponent =3D 0;
-+        while (mantissa >=3D 2048) {
-+                if (exponent < 15) {
-+                        mantissa >>=3D 1; /* divide by 2 */
-+                        exponent++;
-+                } else {
-+                        /* Exponent is maxed. Trim mantissa and leave. *=
-/
-+                        mantissa =3D 2047;
-+                        break;
-+                }
-+        }
-+
-+        buf[3] =3D 0x80;
-+        buf[2] =3D exponent & 0x01;
-+        buf[1] =3D (exponent & ~0x01) << 4 | mantissa >> 8;
-+        buf[0] =3D mantissa & 0xff;
-+
-+        /* Calculate and return the exact baud rate. */
-+        baud =3D (baseline / mantissa) >> exponent;
-+
-+        return baud;
-+}
-+
-+
- static void pl2303_encode_baud_rate(struct tty_struct *tty,
- 					struct usb_serial_port *port,
- 					u8 buf[4])
-@@ -645,6 +688,8 @@ static void pl2303_encode_baud_rate(struct tty_struct=
- *tty,
-=20
- 	if (baud =3D=3D baud_sup)
- 		baud =3D pl2303_encode_baud_rate_direct(buf, baud);
-+	else if (spriv->type->alt_divisors)=20
-+                baud =3D pl2303_encode_baud_rate_divisor_alt(buf, baud);
- 	else
- 		baud =3D pl2303_encode_baud_rate_divisor(buf, baud);
-=20
---=20
-2.30.2
+> > Signed-off-by: taehyun cho <taehyun.cho@samsung.com>
+> > ---
+> >  drivers/usb/dwc3/core.c | 2 --
+> >  1 file changed, 2 deletions(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 94fdbe502ce9..e7c0e390f885 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -1553,7 +1553,6 @@ static int dwc3_probe(struct platform_device *pdev)
+> >  
+> >  	spin_lock_init(&dwc->lock);
+> >  
+> > -	pm_runtime_set_active(dev);
+> >  	pm_runtime_use_autosuspend(dev);
+> >  	pm_runtime_set_autosuspend_delay(dev, DWC3_DEFAULT_AUTOSUSPEND_DELAY);
+> >  	pm_runtime_enable(dev);
+> > @@ -1920,7 +1919,6 @@ static int dwc3_resume(struct device *dev)
+> >  		return ret;
+> >  
+> >  	pm_runtime_disable(dev);
+> > -	pm_runtime_set_active(dev);
+> >  	pm_runtime_enable(dev);
+> >  
+> >  	return 0;
+> > -- 
+> > 2.26.0
+> 
 
+------VQObM9Pl3j-Am1LaCn7xN8sri-O7OboG09SNkG7pZ6-k7KuL=_22549a_
+Content-Type: text/plain; charset="utf-8"
+
+
+------VQObM9Pl3j-Am1LaCn7xN8sri-O7OboG09SNkG7pZ6-k7KuL=_22549a_--
