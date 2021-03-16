@@ -2,144 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E1C33D871
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 16:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D11333D8BD
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 17:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238238AbhCPP6C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Mar 2021 11:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238231AbhCPP5w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Mar 2021 11:57:52 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AEDC06174A
-        for <linux-usb@vger.kernel.org>; Tue, 16 Mar 2021 08:57:52 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id e45so8807954ote.9
-        for <linux-usb@vger.kernel.org>; Tue, 16 Mar 2021 08:57:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Is8isbpsE/m8+d7WMdJsZ3TemciY/YrT8YV5GXADmdc=;
-        b=aNqGI9luQP5M/DFQYTGEvuog7wwzyNzMdtPxupgu+D/16iJ9j6/gJ79o+NTPgWO/iv
-         IcXUKnUTtwpc2aXtsnnM0CVuvESkJWlZQB1wFrDGm3wwcj7biMHBCn9VlnqjqsMVfEe4
-         3+saCnKopPNUOw9a1pEnK/qv5ECw9b+mH2idE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Is8isbpsE/m8+d7WMdJsZ3TemciY/YrT8YV5GXADmdc=;
-        b=d4aGYHtSG0hZHjOMYoZFXiWUP02eV81GNT7yJ/WLXivTHFW/5JVLKRWpCJjeAqBjlH
-         w3pCvDFkzOUSZtzm/DTZzGWMm06hataCIDxaT5OMviIiSCLzPDROe31Iv9IUyybQ8+9s
-         PRzHBXK+S0iGsqkwQVIvw61LNReMr7s5yLQ1wtqyE+ihG/DTB1hbFP0hNFuVa0jJvnY4
-         DwpY3wi7tAOfbkmRwa0hqEhXnKLXEXRG1ujTxkPhFYt6MSmnj7yrpeRysOhZ6T5qzfm5
-         zNA901RFl3b+ObX0UJs85jjLK+0XY/Y401CA3Y+aoaw6S+KHSyUS+0y9ipFHY2VRrCmA
-         uvFA==
-X-Gm-Message-State: AOAM530Dcd6t1UJbw5mIMi0wrkEcG/CujT8A/f/5pLgjLgIOzI6G96GV
-        PDr1MAjxYuCS4uQCQgh99FDThw==
-X-Google-Smtp-Source: ABdhPJybBa3rPJHsrIp7FO1Wd7v0QUFiHxTfGM1YrFDqLkoWhaxGwI4KaKERIFSvAcVDGI1g2kEFkQ==
-X-Received: by 2002:a9d:6a91:: with SMTP id l17mr4161836otq.18.1615910271688;
-        Tue, 16 Mar 2021 08:57:51 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id u23sm6772587oof.17.2021.03.16.08.57.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Mar 2021 08:57:51 -0700 (PDT)
-Subject: Re: [PATCH v5] docs: usbip: Fix major fields and descriptions in
- protocol
-To:     "Hongren Zheng (Zenithal)" <i@zenithal.me>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?TcOhcnRvbiBOw6ltZXRo?= <nm127@freemail.hu>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     Alexandre Demers <alexandre.f.demers@gmail.com>,
-        linux-usb@vger.kernel.org, usbip-devel@lists.sourceforge.net,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <YFAXGBSxaZJ8Dy3/@Sun>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <98a9c2c3-c041-4823-f37e-cd9a214a34d0@linuxfoundation.org>
-Date:   Tue, 16 Mar 2021 09:57:49 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S238487AbhCPQI4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Mar 2021 12:08:56 -0400
+Received: from bee.birch.relay.mailchannels.net ([23.83.209.14]:46301 "EHLO
+        bee.birch.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238485AbhCPQIg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Mar 2021 12:08:36 -0400
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 15C0A540B08;
+        Tue, 16 Mar 2021 16:08:24 +0000 (UTC)
+Received: from pdx1-sub0-mail-a23.g.dreamhost.com (100-96-17-75.trex.outbound.svc.cluster.local [100.96.17.75])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 1A7A7541DF5;
+        Tue, 16 Mar 2021 16:08:23 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|smtp@contentfirst.com
+Received: from pdx1-sub0-mail-a23.g.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
+        by 100.96.17.75 (trex/6.1.1);
+        Tue, 16 Mar 2021 16:08:23 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|smtp@contentfirst.com
+X-MailChannels-Auth-Id: dreamhost
+X-Attack-Cooperative: 37225ae058bcc94d_1615910903762_2013249973
+X-MC-Loop-Signature: 1615910903762:1786135020
+X-MC-Ingress-Time: 1615910903762
+Received: from pdx1-sub0-mail-a23.g.dreamhost.com (localhost [127.0.0.1])
+        by pdx1-sub0-mail-a23.g.dreamhost.com (Postfix) with ESMTP id B1978801F9;
+        Tue, 16 Mar 2021 09:08:22 -0700 (PDT)
+Received: from industrynumbers.com (pool-100-15-209-187.washdc.fios.verizon.net [100.15.209.187])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: smtp@contentfirst.com)
+        by pdx1-sub0-mail-a23.g.dreamhost.com (Postfix) with ESMTPSA id 56A32866DA;
+        Tue, 16 Mar 2021 09:08:21 -0700 (PDT)
+Received: by industrynumbers.com (Postfix, from userid 1000)
+        id B2E1D282ABB; Tue, 16 Mar 2021 12:08:20 -0400 (EDT)
+X-DH-BACKEND: pdx1-sub0-mail-a23
+From:   michaelk@IEEE.org
+To:     michaelk@IEEE.org
+Cc:     linux-usb@vger.kernel.org
+Subject: [PATCH V2 1/1] USB: serial: pl2303: TA & TB alternate divider
+Date:   Tue, 16 Mar 2021 12:08:05 -0400
+Message-Id: <20210316160805.937953-1-michaelk@IEEE.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <YFAXGBSxaZJ8Dy3/@Sun>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/15/21 8:25 PM, Hongren Zheng (Zenithal) wrote:
-> The old document for usbip protocol is misleading and hard to read:
->    * Some fields in header are incorrect
->    * Explanation of some fields are unclear or even wrong
->    * Padding of header (namely all headers have the same length) is
->      not explicitly pointed out, which is crucial for stream protocol
->      like TCP
-> 
-> Major changes:
->    * Document the correct field as described in the codebase.
->    * Document the padding in usbip headers. This is crucial for TCP
->      stream hence these padding should be explicitly point out.
->      In code these padding are implemented by a union of all headers.
->    * Fix two FIXME related to usbip unlink and Document the behavior
->      of unlink in different situation.
->    * Clarify some field with more accurate explanation, like those
->      fields associated with URB. Some constraints are extracted from
->      code.
->    * Delete specific transfer_flag doc in usbip as it should be
->      documented by the URB part.
->    * Add data captured from wire as example
-> 
-> Co-developed-by: Alexandre Demers <alexandre.f.demers@gmail.com>
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Hongren Zheng <i@zenithal.me>
-> ---
->   Documentation/usb/usbip_protocol.rst | 320 ++++++++++++++-------------
->   1 file changed, 171 insertions(+), 149 deletions(-)
-> 
-> PATCH v2:
-> Some changes suggested by a previous patch in
-> https://lore.kernel.org/linux-usb
-> /20180128071514.9107-1-alexandre.f.demers@gmail.com/
-> is adopted in this patch.
->    * Fix Typo: duplicated 'the' in 'the following 4 field'
->    * Fix incorrect field: in OP_REQ_DEVLIST, the second dev starts with
->      field 'path', not 'busid'
-> 
-> PATCH v3:
-> Suggested by
-> https://lore.kernel.org/linux-doc/YE8Oan2BmSuKR4%2Fp@kroah.com/
->    * Remove date and changelog in doc as these are tracked in git history
->    * Remove 'mistake alert' as all data fields are documented properly
->      now. However, docs on possible values for some field shall be added
->      in the future
-> 
-> PATCH v4:
-> Suggested by https://lore.kernel.org/linux-doc
-> /40351ed6-2907-3966-e69a-a564173b3682@infradead.org/
->    * Add punctuations for readability
->    * Move patch changelog after the marker line
->    * Remove nickname in signed-off-by line
-> 
-> PATCH v5:
->    * Instead of co-developed-by, use reviewed-by
->      for Randy Dunlap
-> 
+From: Michael Katzmann <michaelk@IEEE.org>
 
-Hi Hongren Zheng,
+Use an alternate clock divider algorithm and bit ordering for the TA and
+TB versions of the pl2303. It was discovered that these variants do not
+produce the correct baud rates with the existing scheme.
 
-Thanks for the patch. The document updates are very much needed.
-I will review and give you comments.
+see https://lore.kernel.org/r/3aee5708-7961-f464-8c5f-6685d96920d6@IEEE.o=
+rg
 
-Please wait for a couple of days before sending another version.
-Makes it easier for you an your reviewers.
+Signed-off-by: Michael G. Katzmann <michaelk@IEEE.org>
+---
+ drivers/usb/serial/pl2303.c | 45 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-I started reviewing patch v3 and I will switch to v5 now
-and send you comments.
+diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+index 7208966891d0..bf5828579918 100644
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -188,6 +188,7 @@ struct pl2303_type_data {
+ 	unsigned long quirks;
+ 	unsigned int no_autoxonxoff:1;
+ 	unsigned int no_divisors:1;
++	unsigned int alt_divisors:1;
+ };
+=20
+ struct pl2303_serial_private {
+@@ -217,10 +218,12 @@ static const struct pl2303_type_data pl2303_type_da=
+ta[TYPE_COUNT] =3D {
+ 	[TYPE_TA] =3D {
+ 		.name			=3D "TA",
+ 		.max_baud_rate		=3D 6000000,
++		.alt_divisors		=3D true,
+ 	},
+ 	[TYPE_TB] =3D {
+ 		.name			=3D "TB",
+ 		.max_baud_rate		=3D 12000000,
++		.alt_divisors		=3D true,
+ 	},
+ 	[TYPE_HXD] =3D {
+ 		.name			=3D "HXD",
+@@ -618,6 +621,46 @@ static speed_t pl2303_encode_baud_rate_divisor(unsig=
+ned char buf[4],
+ 	return baud;
+ }
+=20
++static speed_t pl2303_encode_baud_rate_divisor_alt(unsigned char buf[4],
++                                                                speed_t =
+baud)
++{
++        unsigned int baseline, mantissa, exponent;
++
++        /*
++         * Apparently, for the TA version the formula is:
++         *   baudrate =3D 12M * 32 / (mantissa * 2^exponent)
++         * where
++         *   mantissa =3D buf[10:0]
++         *   exponent =3D buf[15:13 16]
++         */
++        baseline =3D 12000000 * 32;
++        mantissa =3D baseline / baud;
++        if (mantissa =3D=3D 0)
++                mantissa =3D 1;   /* Avoid dividing by zero if baud > 32=
+*12M. */
++        exponent =3D 0;
++        while (mantissa >=3D 2048) {
++                if (exponent < 15) {
++                        mantissa >>=3D 1; /* divide by 2 */
++                        exponent++;
++                } else {
++                        /* Exponent is maxed. Trim mantissa and leave. *=
+/
++                        mantissa =3D 2047;
++                        break;
++                }
++        }
++
++        buf[3] =3D 0x80;
++        buf[2] =3D exponent & 0x01;
++        buf[1] =3D (exponent & ~0x01) << 4 | mantissa >> 8;
++        buf[0] =3D mantissa & 0xff;
++
++        /* Calculate and return the exact baud rate. */
++        baud =3D (baseline / mantissa) >> exponent;
++
++        return baud;
++}
++
++
+ static void pl2303_encode_baud_rate(struct tty_struct *tty,
+ 					struct usb_serial_port *port,
+ 					u8 buf[4])
+@@ -645,6 +688,8 @@ static void pl2303_encode_baud_rate(struct tty_struct=
+ *tty,
+=20
+ 	if (baud =3D=3D baud_sup)
+ 		baud =3D pl2303_encode_baud_rate_direct(buf, baud);
++	else if (spriv->type->alt_divisors)=20
++                baud =3D pl2303_encode_baud_rate_divisor_alt(buf, baud);
+ 	else
+ 		baud =3D pl2303_encode_baud_rate_divisor(buf, baud);
+=20
+--=20
+2.30.2
 
-thanks,
--- Shuah
