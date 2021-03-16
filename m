@@ -2,86 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF19733CCC5
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 05:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D0F33CD10
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 06:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbhCPExl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Mar 2021 00:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40318 "EHLO
+        id S235390AbhCPFVL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Mar 2021 01:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbhCPExP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Mar 2021 00:53:15 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93105C06174A;
-        Mon, 15 Mar 2021 21:53:15 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id x9so10836749qto.8;
-        Mon, 15 Mar 2021 21:53:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tWCz78Br3XjDvSQE5SGwwRcGJZtd27Y7fPdYPkBcYmI=;
-        b=VJqhEBEm56scaLGC4aTRSGHZAQBrgYgfMwjkf52R6GnLyFfW6IbWKP6SGldIIY6bLM
-         tqlNYgDq/DcrD/5Hom3nZW+09i1Cxle6/za3JAExDKuQSW6SNvHRhOZD0dSn5SphVkWo
-         gpyPr+MrcDhNChSVa42Y2mz8VwckxmUhG2O+j9WVT5zLZqBMMisafynu3mDPW4v0yuxH
-         iw5Z6f6bdGw51D9KdvdSQmkUL9eOd3zYwsbsjNFCsfyEIxcIthcrJBxuchp597gCKS/D
-         iseHetTikGu19vLPn1nVNoLllAuhiyxMtSvzAteQseQndcT+2Fj21RT5S76AsMw7RuP6
-         iz2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tWCz78Br3XjDvSQE5SGwwRcGJZtd27Y7fPdYPkBcYmI=;
-        b=eOFqBPzpY5t6QJsnRGUlqItBkt7jlG7iEbWSXlPOokb1ZmdySeWA8gY/CSITS2YgDL
-         O+VNRXh/M4v66KxHk1X0nTpAREnUocEtC/cQHjXNdoC6t7q+SnTyoen8KAUTt7/njd/N
-         EDGw2ODqf/2Ou8peklt3KglzBhBleKjuh7ZL2jZY5uWk9GR1nWoaooQzXAnNBasQwtKJ
-         LebDRCcpydAgwvs7XkC60+3ufTurWZ3q8Nk+ssL/zbWci0bFYruMKJvFbSm1NQkRpYoe
-         mFxe99tuHIn8h+BoEmITGi9IZc6UMRqGlsEYNkLcJxwNyrZlLBz3UPkKwYc6i0i89jLo
-         86Qg==
-X-Gm-Message-State: AOAM533PpTej9IkrKU1DgvXXBvOvK2gZQ83E0RCZJFsdRa3pMAg0Injx
-        wnqtVZ6pPr4He2QrgK5ES18=
-X-Google-Smtp-Source: ABdhPJzOYIrw83wgON+3omliAZuPsyFLHJMtuRc2OQs2dO7K06VVYKk5Viv0/OvH2q9cPNBDLCSSxg==
-X-Received: by 2002:ac8:4412:: with SMTP id j18mr24255871qtn.387.1615870394914;
-        Mon, 15 Mar 2021 21:53:14 -0700 (PDT)
-Received: from localhost.localdomain ([156.146.58.45])
-        by smtp.gmail.com with ESMTPSA id t5sm10762104qkt.66.2021.03.15.21.53.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Mar 2021 21:53:14 -0700 (PDT)
-From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
-To:     gregkh@linuxfoundation.org, unixbhaskar@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     rdunlap@infradead.org
-Subject: [PATCH] usb: host: Mundane spello fix in the file sl811_cs.c
-Date:   Tue, 16 Mar 2021 10:22:43 +0530
-Message-Id: <20210316045243.3500228-1-unixbhaskar@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S235425AbhCPFUx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Mar 2021 01:20:53 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1234::107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38DBC06174A;
+        Mon, 15 Mar 2021 22:20:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=ghCVJsTrlHMG4p9O3S38i1mhCzDfxp7I2wI1zLBETBE=; b=3e9I+Fi2bKf/TEbU/PyNUfbYMl
+        Mjs7kqrgsJf77Tnfns1S00E02TdxV0FzcVpyXkVnF4sbImuTZ3bPnu4HkpS6/fLHst3MxrEZ9GxHv
+        uxI/F61REt2rFV4thEXq4hmkbInSHSpNW2cLgBX4ZbsWBao2/thP+rVwXitEvxPw6YQYPF4BSrnDz
+        K61CQFP3QU3zXy1teXUQwNYZ65QMm/RGlMtSI2XjdVdBI0S5PujkwI6EcbvzZuPc6qUp6ZDPZ4afm
+        ulZtou2eOC+g1P7qBnvnGnKLMz1NO+qw8DlKkz2faFWtNxg6d46HWfnK0JEz0VzXMaLbqWu9/EejB
+        mAUMG0IQ==;
+Received: from [2601:1c0:6280:3f0::9757]
+        by merlin.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lM28Q-001PSD-W0; Tue, 16 Mar 2021 05:20:51 +0000
+Subject: Re: [PATCH] usb: host: Mundane spello fix in the file sl811_cs.c
+To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210316045243.3500228-1-unixbhaskar@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <4913517e-5d69-0a78-4bb0-981362ffab1e@infradead.org>
+Date:   Mon, 15 Mar 2021 22:20:48 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210316045243.3500228-1-unixbhaskar@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 3/15/21 9:52 PM, Bhaskar Chowdhury wrote:
+> 
+> s/seting/setting/
+> 
+> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 
-s/seting/setting/
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
----
- drivers/usb/host/sl811_cs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> ---
+>  drivers/usb/host/sl811_cs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/sl811_cs.c b/drivers/usb/host/sl811_cs.c
+> index 72136373ffab..16d157013018 100644
+> --- a/drivers/usb/host/sl811_cs.c
+> +++ b/drivers/usb/host/sl811_cs.c
+> @@ -94,7 +94,7 @@ static int sl811_hc_init(struct device *parent, resource_size_t base_addr,
+>  		return -EBUSY;
+>  	platform_dev.dev.parent = parent;
+> 
+> -	/* finish seting up the platform device */
+> +	/* finish setting up the platform device */
+>  	resources[0].start = irq;
+> 
+>  	resources[1].start = base_addr;
+> --
 
-diff --git a/drivers/usb/host/sl811_cs.c b/drivers/usb/host/sl811_cs.c
-index 72136373ffab..16d157013018 100644
---- a/drivers/usb/host/sl811_cs.c
-+++ b/drivers/usb/host/sl811_cs.c
-@@ -94,7 +94,7 @@ static int sl811_hc_init(struct device *parent, resource_size_t base_addr,
- 		return -EBUSY;
- 	platform_dev.dev.parent = parent;
 
--	/* finish seting up the platform device */
-+	/* finish setting up the platform device */
- 	resources[0].start = irq;
-
- 	resources[1].start = base_addr;
---
-2.30.2
+-- 
+~Randy
 
