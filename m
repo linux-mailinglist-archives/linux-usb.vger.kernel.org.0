@@ -2,83 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37CA733DC08
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 19:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E505633DD8C
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 20:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbhCPSD1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Mar 2021 14:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbhCPSBy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Mar 2021 14:01:54 -0400
-Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A66C061756;
-        Tue, 16 Mar 2021 11:01:53 -0700 (PDT)
-Received: from [2a04:4540:1403:b600:2d8:61ff:fef0:a7c3]
-        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <john@phrozen.org>)
-        id 1lME0p-0003uU-O6; Tue, 16 Mar 2021 19:01:47 +0100
-Subject: Re: [PATCH] MIPS: ralink: define stubs for clk_set_parent to fix
- compile testing
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     thierry.reding@gmail.com, linux-tegra@vger.kernel.org,
-        balbi@kernel.org, linux-usb@vger.kernel.org, digetx@gmail.com,
-        kernel test robot <lkp@intel.com>
-References: <20210316175725.79981-1-krzysztof.kozlowski@canonical.com>
-From:   John Crispin <john@phrozen.org>
-Message-ID: <5f117b2f-90a9-4684-a453-0f7493d89c55@phrozen.org>
-Date:   Tue, 16 Mar 2021 19:01:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S236987AbhCPTaQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Mar 2021 15:30:16 -0400
+Received: from mga09.intel.com ([134.134.136.24]:36349 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240464AbhCPT3t (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 16 Mar 2021 15:29:49 -0400
+IronPort-SDR: 0CdHkTyzWkEIBuTA0mqrwp5H3jb5ykjBde9LzXknV8/Ow3OpEU3gpwdT267dXHdhtZpqjdmKpK
+ hVt2cu9USfwA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9925"; a="189416564"
+X-IronPort-AV: E=Sophos;i="5.81,254,1610438400"; 
+   d="scan'208";a="189416564"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 12:29:47 -0700
+IronPort-SDR: 8yPI7C0hQw+BS1DE1y+XmtvSWWbRda9Vi3Xq7dP/gq63NmuLLULOQGtpOBYVl5ye4Bz632Nu0R
+ 0EF4p4A4Qp+A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,254,1610438400"; 
+   d="scan'208";a="440184329"
+Received: from lkp-server02.sh.intel.com (HELO 1c294c63cb86) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Mar 2021 12:29:46 -0700
+Received: from kbuild by 1c294c63cb86 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lMFNx-0000H4-DJ; Tue, 16 Mar 2021 19:29:45 +0000
+Date:   Wed, 17 Mar 2021 03:29:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ eb9238e53717a46191db2d3bc5c18b13b6c8cb64
+Message-ID: <60510725.hvYJlcnaOZGh2Lb9%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20210316175725.79981-1-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: eb9238e53717a46191db2d3bc5c18b13b6c8cb64  Merge tag 'usb-v5.12-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb into usb-linus
 
-On 16.03.21 18:57, Krzysztof Kozlowski wrote:
-> The Ralink MIPS platform does not use Common Clock Framework and does
-> not define certain clock operations leading to compile test failures:
->
->      /usr/bin/mips-linux-gnu-ld: drivers/usb/phy/phy-tegra-usb.o: in function `tegra_usb_phy_init':
->      phy-tegra-usb.c:(.text+0x1dd4): undefined reference to `clk_get_parent'
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Acked-by John Crispin <john@phrozen.org>
-> ---
->   arch/mips/ralink/clk.c | 14 ++++++++++++++
->   1 file changed, 14 insertions(+)
->
-> diff --git a/arch/mips/ralink/clk.c b/arch/mips/ralink/clk.c
-> index 2f9d5acb38ea..8387177a47ef 100644
-> --- a/arch/mips/ralink/clk.c
-> +++ b/arch/mips/ralink/clk.c
-> @@ -70,6 +70,20 @@ long clk_round_rate(struct clk *clk, unsigned long rate)
->   }
->   EXPORT_SYMBOL_GPL(clk_round_rate);
->   
-> +int clk_set_parent(struct clk *clk, struct clk *parent)
-> +{
-> +	WARN_ON(clk);
-> +	return -1;
-> +}
-> +EXPORT_SYMBOL(clk_set_parent);
-> +
-> +struct clk *clk_get_parent(struct clk *clk)
-> +{
-> +	WARN_ON(clk);
-> +	return NULL;
-> +}
-> +EXPORT_SYMBOL(clk_get_parent);
-> +
->   void __init plat_time_init(void)
->   {
->   	struct clk *clk;
+elapsed time: 723m
+
+configs tested: 104
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+x86_64                           allyesconfig
+riscv                            allmodconfig
+i386                             allyesconfig
+riscv                            allyesconfig
+mips                           ip27_defconfig
+powerpc                      arches_defconfig
+sh                           se7343_defconfig
+arm                           sama5_defconfig
+s390                             alldefconfig
+powerpc                     skiroot_defconfig
+arm                         hackkit_defconfig
+powerpc                     tqm5200_defconfig
+powerpc                         wii_defconfig
+arm                        trizeps4_defconfig
+arm                          gemini_defconfig
+csky                             alldefconfig
+powerpc                  storcenter_defconfig
+powerpc                       ppc64_defconfig
+sh                          rsk7264_defconfig
+arm                        shmobile_defconfig
+powerpc64                           defconfig
+ia64                        generic_defconfig
+powerpc                   bluestone_defconfig
+mips                         tb0219_defconfig
+powerpc                      ppc6xx_defconfig
+arm                         assabet_defconfig
+mips                      pistachio_defconfig
+mips                  decstation_64_defconfig
+arm                            lart_defconfig
+arm                         nhk8815_defconfig
+mips                        workpad_defconfig
+powerpc                      pasemi_defconfig
+mips                      malta_kvm_defconfig
+powerpc                     kilauea_defconfig
+powerpc                     mpc5200_defconfig
+powerpc                 mpc8272_ads_defconfig
+powerpc                      obs600_defconfig
+xtensa                  audio_kc705_defconfig
+arm                          collie_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20210316
+i386                 randconfig-a005-20210316
+i386                 randconfig-a002-20210316
+i386                 randconfig-a003-20210316
+i386                 randconfig-a004-20210316
+i386                 randconfig-a006-20210316
+i386                 randconfig-a013-20210316
+i386                 randconfig-a016-20210316
+i386                 randconfig-a011-20210316
+i386                 randconfig-a012-20210316
+i386                 randconfig-a015-20210316
+i386                 randconfig-a014-20210316
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a006-20210316
+x86_64               randconfig-a001-20210316
+x86_64               randconfig-a005-20210316
+x86_64               randconfig-a004-20210316
+x86_64               randconfig-a003-20210316
+x86_64               randconfig-a002-20210316
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
