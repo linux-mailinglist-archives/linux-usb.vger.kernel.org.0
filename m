@@ -2,175 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC4F33EB5D
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Mar 2021 09:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 632E833EB89
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Mar 2021 09:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbhCQIYt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Mar 2021 04:24:49 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:55327 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbhCQIYZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Mar 2021 04:24:25 -0400
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20210317082423epoutp0360b91b4db096ea481c64f9a4308bd44c~tE6poKb_e0202702027epoutp03B
-        for <linux-usb@vger.kernel.org>; Wed, 17 Mar 2021 08:24:23 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20210317082423epoutp0360b91b4db096ea481c64f9a4308bd44c~tE6poKb_e0202702027epoutp03B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1615969463;
-        bh=/wFcLEJ4RhhU0ctmdSOlI+6C+UgAlyzjcZkKgXeK7Eg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gW9EORhELcrEbJArjB6T9e0E87EAXvkz8ZnKcVumoH3OSdDQP3It+u4/XJgElDSEQ
-         YXNSccEWWvtOk9JLWZaLMRXT7uxuzFW5rRzRtxV7L7IY7+EcUf+O82+NSabd2RT+iP
-         4lg8rPuyJETDu85JIPacBs6QgkL3meISAoa7j5go=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20210317082423epcas2p28b88950676c2e0406a9ba35459579cfa~tE6pUVVla1858218582epcas2p2L;
-        Wed, 17 Mar 2021 08:24:23 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.40.186]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4F0jqn2vrPz4x9Px; Wed, 17 Mar
-        2021 08:24:21 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        12.4B.05262.2BCB1506; Wed, 17 Mar 2021 17:24:18 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
-        20210317082418epcas2p1ab980cdce32e463c8613f26b88cb65e6~tE6kfIafM2216622166epcas2p1T;
-        Wed, 17 Mar 2021 08:24:18 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20210317082418epsmtrp2ebfbb5ea8fcbb7eb2b8294168d661a90~tE6keP-BA2950029500epsmtrp2H;
-        Wed, 17 Mar 2021 08:24:18 +0000 (GMT)
-X-AuditID: b6c32a47-b97ff7000000148e-2e-6051bcb2b471
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D9.79.08745.2BCB1506; Wed, 17 Mar 2021 17:24:18 +0900 (KST)
-Received: from rack03 (unknown [12.36.155.109]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20210317082418epsmtip1e2a0705ea86b56b0d03b2a8df7ab274b~tE6kU_dZC1899918999epsmtip1B;
-        Wed, 17 Mar 2021 08:24:18 +0000 (GMT)
-Date:   Wed, 17 Mar 2021 17:25:20 +0900
-From:   taehyun cho <taehyun.cho@samsung.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     balbi@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        taehyun.cho@samsung.com
-Subject: Re: [PATCH] usb: dwc3: remove 'pm_runtime_set_active' in resume
- callback
-Message-ID: <20210317082520.GB138912@rack03>
+        id S229613AbhCQIbR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Mar 2021 04:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229588AbhCQIbG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Mar 2021 04:31:06 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D81C06174A
+        for <linux-usb@vger.kernel.org>; Wed, 17 Mar 2021 01:31:05 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lMRZV-00016k-TZ; Wed, 17 Mar 2021 09:30:29 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:31e3:6e40:b1cd:40a8])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 582725F73BA;
+        Wed, 17 Mar 2021 08:30:22 +0000 (UTC)
+Date:   Wed, 17 Mar 2021 09:30:21 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mark Brown <broonie@kernel.org>,
+        Cheng-Yi Chiang <cychiang@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stefan Wahren <wahrenst@gmx.net>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        Alex Elder <elder@kernel.org>, Suman Anna <s-anna@ti.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Drop type references on common properties
+Message-ID: <20210317082003.rhm6sdrwxmt4elu2@pengutronix.de>
+References: <20210316194858.3527845-1-robh@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20210315141335.GA402778@rowland.harvard.edu>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprIJsWRmVeSWpSXmKPExsWy7bCmhe7mPYEJBpMELY61PWG3aF68ns3i
-        8q45bBaLlrUyW0z4fYHNYtJBUQc2j02rOtk89s9dw+4x++4PRo++LasYPT5vkgtgjcqxyUhN
-        TEktUkjNS85PycxLt1XyDo53jjc1MzDUNbS0MFdSyEvMTbVVcvEJ0HXLzAHar6RQlphTChQK
-        SCwuVtK3synKLy1JVcjILy6xVUotSMkpMDQs0CtOzC0uzUvXS87PtTI0MDAyBapMyMn4M2U/
-        Y8FpoYoXt1pYGxjn8ncxcnBICJhI7Fov1MXIxSEksINRYvKTd4wQzidGiVXrG1kgnM+MEt9a
-        ZjB3MXKCdfzZMpsZIrGLUeLQxF2sEM4TRomTi26yg1SxCKhK9D19ANbBJqAtsb/5JiuILSKg
-        JbG56SVYN7PAbEaJo7v3sIEkhAWCJea96wDax87BK6Aj8RksyisgKHFy5hMWEJtTwEqi8893
-        JpCzRQVUJF4drAeZIiHwlV3izel7LBDHuUhMWXgN6lBhiVfHt7BD2FISn9/tZYNoaGeU+HVi
-        DSuEM4VR4sO6U4wQVcYSs561g9nMApkS/Rd+MUECSVniyC0WiDCfRMfhv+wQYV6JjjYhiE5V
-        ifaL99kgbGmJS5tvQtkeEt8+r4AG1n5Gib1zV7FNYJSfheS3WUi2Qdg6Egt2f2KbBbSCGWjW
-        8n8cEKamxPpd+gsYWVcxiqUWFOempxYbFRgjR/YmRnDa1HLfwTjj7Qe9Q4xMHIyHGCU4mJVE
-        eE3zAhKEeFMSK6tSi/Lji0pzUosPMZoC42kis5Rocj4wceeVxBuaGpmZGViaWpiaGVkoifMW
-        GzyIFxJITyxJzU5NLUgtgulj4uCUamAKu5kYcPX1LHGOH09Vf7zhmaXQkFV8cOUfsVgFc09B
-        zmOFqyW4plyzueH3odNzBZv09WiJ6Ft5J26Gn46tc3vgM2Oj7CZJFdZc4SWbPiVGnRM4MkNb
-        zy/9zWfl6UzTBBllPGaeLNz9/cwh6b73mTr+Zjc/XEt+mmkWPZ1L7dOFtLKnJUd3TmO/vb1z
-        p+8C1YXTrzPlb8jPN33HKxr+5fHeTMnTjybd8znMHxRjlD9V89gk1bQyzqqaaWwGIue/Nl5T
-        bPcInGejd/THScMHPfv8C6LTjptkSdj/7Z9q95h1W/wTL/EDrPc3q3nyLZq3ZOu6F70/9149
-        sbpb8ojbft5571jytaPmR804YTHpzi8pJZbijERDLeai4kQAmB9UfyQEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrGLMWRmVeSWpSXmKPExsWy7bCSnO6mPYEJBqufCVkca3vCbtG8eD2b
-        xeVdc9gsFi1rZbaY8PsCm8Wkg6IObB6bVnWyeeyfu4bdY/bdH4wefVtWMXp83iQXwBrFZZOS
-        mpNZllqkb5fAlTHh9Uu2gg6BihtzH7A3MH7m6WLk5JAQMJH4s2U2cxcjF4eQwA5Gic4VzUwQ
-        CWmJU48XMEPYwhL3W46wQhQ9YpQ4e2A9O0iCRUBVou/pA7AiNgFtif3NN1lBbBEBLYnNTS/B
-        pjILzGaUOLp7DxtIQlggWGLeuw6WLkZ2Dl4BHYnPbBAz9zNKtJ87xgJSwisgKHFy5hMwmxlo
-        zo1/L4EO4gCypSWW/+MACXMKWEl0/vkOFhYVUJF4dbB+AqPgLCTNs5A0z0JoXsDIvIpRMrWg
-        ODc9t9iwwCgvtVyvODG3uDQvXS85P3cTIzjotbR2MO5Z9UHvECMTB+MhRgkOZiURXtO8gAQh
-        3pTEyqrUovz4otKc1OJDjNIcLErivBe6TsYLCaQnlqRmp6YWpBbBZJk4OKUamFo38Syzmvox
-        vSC47Lnxi/J/EotSuIwubD6UJ+OavGcaR8WPnQ6L5BzjTjDo1/Erry3geiC3jmfSOtV2w5jW
-        S5tSrPhnSHAzTnGO5eG19J3XHyLLZiWd7nxafpbEWq3Ta1lnL9Jo+9+R1WUbNvvJC6GtHpq5
-        h0wuH5bxlMqJ3ZbwK35VVdb/7o/fDqrGaPxSXv59x77NGU3ap5WeblSdXtCy10pr75UjK1WO
-        8AaYrpb0XXwqyX76OimWGi/rlof93sa7uAId9iTf2PaqjM+lduHc/mePVhoFWn977HZwSnxA
-        7umPd3WV539VaFqoy5f5JObqoRlfJr560pQqxzd7+Y2lH5XEau4uK/up9O3MRSWW4oxEQy3m
-        ouJEAP4ac3DpAgAA
-X-CMS-MailID: 20210317082418epcas2p1ab980cdce32e463c8613f26b88cb65e6
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----dZHoiG3rfwxb_Py8wGLYailixDOP787k4OKmtNPLilWg7srF=_2304d0_"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20210315074223epcas2p11ddf190ec730f8629c1310117135f813
-References: <CGME20210315074223epcas2p11ddf190ec730f8629c1310117135f813@epcas2p1.samsung.com>
-        <20210315074317.7736-1-taehyun.cho@samsung.com>
-        <20210315141335.GA402778@rowland.harvard.edu>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rrfkyphxuuq3viq3"
+Content-Disposition: inline
+In-Reply-To: <20210316194858.3527845-1-robh@kernel.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-------dZHoiG3rfwxb_Py8wGLYailixDOP787k4OKmtNPLilWg7srF=_2304d0_
-Content-Type: text/plain; charset="us-ascii"
+
+--rrfkyphxuuq3viq3
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 15, 2021 at 10:13:35AM -0400, Alan Stern wrote:
-> On Mon, Mar 15, 2021 at 04:43:17PM +0900, taehyun cho wrote:
-> > 'pm_runtime_set_active' sets a flag to describe rumtime status.
-> > This flag is automatically set in pm_runtime_get_sync/put_sync API.
-> > 'pm_runtime_set_active' checks the runtime status of parent device.
-> > As a result, the below error message is printed.
-> > dwc3 11110000.dwc3: runtime PM trying to activate child device
-> > 11110000.dwc3 but parent (11110000.usb) is not active.
-> 
-> This is very suspicious.  That error message indicates a real error is 
-> present; removing these pm_runtime_set_active calls won't fix the error.
-> 
-> You need to determine why the parent platform device 11110000.usb isn't 
-> active when the dwc3 probe and resume routines are called.  It seems 
-> likely that there is a bug in the platform device's driver.
-> 
-> Alan Stern
->
+On 16.03.2021 13:48:58, Rob Herring wrote:
+> Users of common properties shouldn't have a type definition as the
+> common schemas already have one. Drop all the unnecessary type
+> references in the tree.
+>=20
+> A meta-schema update to catch these is pending.
+>=20
+> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Krzysztof Kozlowski <krzk@kernel.org>
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Cheng-Yi Chiang <cychiang@chromium.org>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Stefan Wahren <wahrenst@gmx.net>
+> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+> Cc: Odelu Kukatla <okukatla@codeaurora.org>
+> Cc: Alex Elder <elder@kernel.org>
+> Cc: Suman Anna <s-anna@ti.com>
+> Cc: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-can@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml       | 5 +----
+>  Documentation/devicetree/bindings/arm/cpus.yaml              | 2 --
+>  .../bindings/display/allwinner,sun4i-a10-tcon.yaml           | 1 -
+>  .../devicetree/bindings/gpio/socionext,uniphier-gpio.yaml    | 3 +--
+>  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 1 -
+>  .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
+>  .../bindings/memory-controllers/nvidia,tegra210-emc.yaml     | 2 +-
+>  Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml   | 1 -
 
-Alan,
+For the flexcan:
 
-Thanks to your comments, I checked our platform device driver and found
-the problem. Our parent platform device didn't set active in resume
-callback. This made a problem. Thank you for the help and sorry for
-disturbing you.
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-Taehyun Cho
+regards,
+Marc
 
-> > Signed-off-by: taehyun cho <taehyun.cho@samsung.com>
-> > ---
-> >  drivers/usb/dwc3/core.c | 2 --
-> >  1 file changed, 2 deletions(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > index 94fdbe502ce9..e7c0e390f885 100644
-> > --- a/drivers/usb/dwc3/core.c
-> > +++ b/drivers/usb/dwc3/core.c
-> > @@ -1553,7 +1553,6 @@ static int dwc3_probe(struct platform_device *pdev)
-> >  
-> >  	spin_lock_init(&dwc->lock);
-> >  
-> > -	pm_runtime_set_active(dev);
-> >  	pm_runtime_use_autosuspend(dev);
-> >  	pm_runtime_set_autosuspend_delay(dev, DWC3_DEFAULT_AUTOSUSPEND_DELAY);
-> >  	pm_runtime_enable(dev);
-> > @@ -1920,7 +1919,6 @@ static int dwc3_resume(struct device *dev)
-> >  		return ret;
-> >  
-> >  	pm_runtime_disable(dev);
-> > -	pm_runtime_set_active(dev);
-> >  	pm_runtime_enable(dev);
-> >  
-> >  	return 0;
-> > -- 
-> > 2.26.0
-> 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-------dZHoiG3rfwxb_Py8wGLYailixDOP787k4OKmtNPLilWg7srF=_2304d0_
-Content-Type: text/plain; charset="utf-8"
+--rrfkyphxuuq3viq3
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-------dZHoiG3rfwxb_Py8wGLYailixDOP787k4OKmtNPLilWg7srF=_2304d0_--
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBRvhoACgkQqclaivrt
+76mnKAf+PxQ/8rd3QepXVtp0iP7BwfTPO2Vw0b0/dXzEt5pT/cygYEDP2YE6dumw
+9LbLd9JPDJJFhwXpMje5DOZW+Nfa93SRBq/MC1/XynoG8UAa7r2VuO7ZJscUNuI7
+nL04VVsP17gLMoR9ZGSvd+Vbau0uCw3APVawqN2d2nsi9eCCTykaIpQBrXGL+VHo
+h225JlHCOUVizUbAE8BFWxDXXff1mMEKHU46APvK+RXz1nExI23zmwJeIGA11RwP
+bjFMRZehLZesl/p6uDndUYNL4wTK7LXOf+u/A/wGDdQSuLOwoVbX9ACOLHsB0qfP
++1kjTYyaduEG1rpaYQ966dHZqjQEuQ==
+=4979
+-----END PGP SIGNATURE-----
+
+--rrfkyphxuuq3viq3--
