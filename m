@@ -2,110 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C0133F9A0
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Mar 2021 21:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05DD533F9B1
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Mar 2021 21:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233295AbhCQUAM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 17 Mar 2021 16:00:12 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:40999 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233332AbhCQUAA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Mar 2021 16:00:00 -0400
-Received: from mail-ej1-f71.google.com ([209.85.218.71])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lMcKl-0007dV-A9
-        for linux-usb@vger.kernel.org; Wed, 17 Mar 2021 19:59:59 +0000
-Received: by mail-ej1-f71.google.com with SMTP id e7so7796971ejx.5
-        for <linux-usb@vger.kernel.org>; Wed, 17 Mar 2021 12:59:59 -0700 (PDT)
+        id S233372AbhCQUED (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Mar 2021 16:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233295AbhCQUDp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Mar 2021 16:03:45 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6307CC06175F
+        for <linux-usb@vger.kernel.org>; Wed, 17 Mar 2021 13:03:45 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id o10so278754pgg.4
+        for <linux-usb@vger.kernel.org>; Wed, 17 Mar 2021 13:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PMZcSuGazFdtOb5qvPexbIVWGQzVKNMJ7ZZH0Yf8cCs=;
+        b=Da5G1yif8DdX+8w8KJ4dBsTTgesPOgdGFV0u/nK8pyzOMYg0odPKBeOlgKoMOsygW7
+         qVSetOn7sBkEyflrN/a9gL/N0QuUrqlTUCAp8EdYTeab0g8HXgQcb/S59tsABZn3zSkD
+         W9LwL8oqfKGiHN+4ts8NEL9k/OwvdJPSWioqA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=W0esqWHCzb193v8SoX3wXdHFUTCrLmnQ//TF0pO6cDw=;
-        b=sTpmtaw8UX0skK3F3AK0ucxCioLADW8eZjnq0LCyD7RJVBmu372azrdsEa8ACgf7oe
-         oLxeU9yHG4t6tSxewM1h/mQuqtK/rso94e6Qbv+oJ9KO1wU0Wf7c+P2U/VhOfsUpMYhD
-         y9cC8W4zmqZRruuGSIuz5LayoJaCB5MvNvDn3nU1A0E1VMsSZnmJcy1ov6xJeRu/mrbc
-         StCEvZiZ6m6I6LZpiG/4QgnzOP23AYZDEOLlFEvZma1utdAxeK57jSQdnxhA0HAN6n7n
-         1DOIViJPl2cwQax3jup6W7aJLGkLJi+MGotsOQFZWUtG3RIAYjDPmQMiEuroqjcbXqJz
-         CqFA==
-X-Gm-Message-State: AOAM532pv9ALwDfq5d04wjKfkN10hgfUkh1U4aEIQd4vuhjRtssgTxdz
-        uqGxqsRVIzOSTAhJ1rGK5OKVX6MgMw245q26ObqfRwlGdpLTHR5gmoKf9adAPHQDNd+K12c4DkH
-        DSIBD02mw7zqDVDTQ/5Vrn+CfeqwBoKcwZJ5kN2+K4YlR5ZYTuta5Ug==
-X-Received: by 2002:a17:906:3552:: with SMTP id s18mr37750183eja.497.1616011199080;
-        Wed, 17 Mar 2021 12:59:59 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyKpXA6eex5KBnMD0YRhdIc3IgyUiajyllnwZ+8QpwubjtA8e3lNRvcdiU21o5z7zP05vSTZtRGnwfwk8Fqg74=
-X-Received: by 2002:a17:906:3552:: with SMTP id s18mr37750164eja.497.1616011198940;
- Wed, 17 Mar 2021 12:59:58 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PMZcSuGazFdtOb5qvPexbIVWGQzVKNMJ7ZZH0Yf8cCs=;
+        b=H8tbINW+RN0g7wWZPku5ZZkQUD2CTb3Ft/2ZyB8EPOLH112gbFlQ+cuWg1lEeo4x/H
+         4/ib36YYqPRPvDQgoHbjsJhWj65WimgsHDgbTMZEqo8y5V7Z6ZgBHNHAPWr/XZE373Pb
+         4D9Vo6GSK0iitSPBjewGNa/lPR7ubv/rfrxeMDdG1LvVmaXoEK9qVG2qG/Dt8KcwHh6m
+         cDQ9ImS2vv99kdlrVKFdxDzAZ4Q3quo3aIspZfsYtuX6SiVXKcoHWBlv+4APnETKoqHI
+         DBQkIRMIaKOZKy6hDh0dDE/0f9x5Waz4LhCEq8c/jtY/Pex4qacGMPwdlb5m0/wkSJ4O
+         kl4A==
+X-Gm-Message-State: AOAM531CUWPC8A/H1txbBJCTlgRFCjzzT1P8zciv7I11D9rU4blCKpft
+        IZ07/hhzsbT/0VFXbe6DSI4KAQ==
+X-Google-Smtp-Source: ABdhPJxhKXf2juJqtE1bn8z/X2ECPS65c7/sTPzGQLSiMoHGnctCifHOfFffOrE0CYg/TSWJVVotJA==
+X-Received: by 2002:a63:4c4e:: with SMTP id m14mr4065710pgl.35.1616011424752;
+        Wed, 17 Mar 2021 13:03:44 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:3cf8:6a09:780b:f65d])
+        by smtp.gmail.com with UTF8SMTPSA id q15sm3870178pje.28.2021.03.17.13.03.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Mar 2021 13:03:44 -0700 (PDT)
+Date:   Wed, 17 Mar 2021 13:03:42 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>
+Subject: Re: [PATCH 2/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add
+ bindings for SC7280
+Message-ID: <YFJgnnoOxI7n0HPL@google.com>
+References: <1615978901-4202-1-git-send-email-sanm@codeaurora.org>
+ <1615978901-4202-3-git-send-email-sanm@codeaurora.org>
 MIME-Version: 1.0
-References: <20210316175725.79981-1-krzysztof.kozlowski@canonical.com>
- <880d5e61-fec5-e7d6-7403-b1823c77b3c1@gmail.com> <856fbd45-67ae-fed2-97c4-b555993d5ae9@canonical.com>
- <1cd074f0-3a58-d1bf-2a72-4fadd0d3b796@gmail.com>
-In-Reply-To: <1cd074f0-3a58-d1bf-2a72-4fadd0d3b796@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Date:   Wed, 17 Mar 2021 20:59:47 +0100
-Message-ID: <CA+Eumj6GDMTv8qyiPwvSjqbpvZcXTpa0SFeRONAq058gWY8GDg@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: ralink: define stubs for clk_set_parent to fix
- compile testing
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thierry.reding@gmail.com, linux-tegra@vger.kernel.org,
-        balbi@kernel.org, linux-usb@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1615978901-4202-3-git-send-email-sanm@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 17 Mar 2021 at 20:37, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 17.03.2021 12:56, Krzysztof Kozlowski пишет:
-> > On 17/03/2021 10:52, Sergei Shtylyov wrote:
-> >> Hello!
-> >>
-> >> On 16.03.2021 20:57, Krzysztof Kozlowski wrote:
-> >>
-> >>> The Ralink MIPS platform does not use Common Clock Framework and does
-> >>> not define certain clock operations leading to compile test failures:
-> >>>
-> >>>      /usr/bin/mips-linux-gnu-ld: drivers/usb/phy/phy-tegra-usb.o: in function `tegra_usb_phy_init':
-> >>>      phy-tegra-usb.c:(.text+0x1dd4): undefined reference to `clk_get_parent'
-> >>>
-> >>> Reported-by: kernel test robot <lkp@intel.com>
-> >>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> >>> ---
-> >>>   arch/mips/ralink/clk.c | 14 ++++++++++++++
-> >>>   1 file changed, 14 insertions(+)
-> >>>
-> >>> diff --git a/arch/mips/ralink/clk.c b/arch/mips/ralink/clk.c
-> >>> index 2f9d5acb38ea..8387177a47ef 100644
-> >>> --- a/arch/mips/ralink/clk.c
-> >>> +++ b/arch/mips/ralink/clk.c
-> >>> @@ -70,6 +70,20 @@ long clk_round_rate(struct clk *clk, unsigned long rate)
-> >>>   }
-> >>>   EXPORT_SYMBOL_GPL(clk_round_rate);
-> >>>
-> >>> +int clk_set_parent(struct clk *clk, struct clk *parent)
-> >>> +{
-> >>> +   WARN_ON(clk);
-> >>> +   return -1;
-> >>
-> >>     Shouldn't this be a proepr error code (-1 corresponds to -EPRERM)?
-> >
-> > Could be ENODEV or EINVAL but all other stubs here and in ar7/clock.c
-> > use -1. Do you prefer it then to have it inconsistent with others?
->
-> I don't see where -1 is used, ar7/clock.c returns 0. Other drivers
-> either return 0 or EINVAL.
->
-> Since linux/clk.h returns 0 in the stub, I think 0 is the correct variant.
+On Wed, Mar 17, 2021 at 04:31:40PM +0530, Sandeep Maheswaram wrote:
+> Add the compatible string for sc7280 SoC from Qualcomm
+> 
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> ---
+>  Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> index ee77c64..20203a8 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> @@ -16,6 +16,7 @@ properties:
+>    compatible:
+>      enum:
+>        - qcom,usb-snps-hs-7nm-phy
+> +      - qcom,sc7280-usb-hs-phy
+>        - qcom,sm8150-usb-hs-phy
+>        - qcom,sm8250-usb-hs-phy
+>        - qcom,sm8350-usb-hs-phy
 
-The ar7 returns 0 but the other stubs in ralink return -1.
-
-Best regards,
-Krzysztof
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
