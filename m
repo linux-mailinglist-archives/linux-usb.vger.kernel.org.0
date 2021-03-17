@@ -2,118 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EBD33FBA4
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 00:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CC533FBB3
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 00:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbhCQXEl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Mar 2021 19:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
+        id S229761AbhCQXKh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Mar 2021 19:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbhCQXEU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Mar 2021 19:04:20 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829AEC06174A;
-        Wed, 17 Mar 2021 16:04:20 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id l13so2724251qtu.9;
-        Wed, 17 Mar 2021 16:04:20 -0700 (PDT)
+        with ESMTP id S229658AbhCQXKS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Mar 2021 19:10:18 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084DAC06174A;
+        Wed, 17 Mar 2021 16:10:18 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id b10so329646iot.4;
+        Wed, 17 Mar 2021 16:10:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=k8yY4wMfz/LENmaebo7PkCgeIKOG+ARQM/9FSWSmfA4=;
-        b=lCW5nw1cmMmIh6FfwdC5xqsBppuivRiC14wNdawTFLZceT6j6sAGmhk5HkHgTyPY1g
-         QQZbj3Dg/V/9Pmxxw+JywsRRhpXBEfNabAufcfP57K6qOsljHD4vQaFkyjpyFCPRjb7l
-         snGtIn8Sm4MNFAmNY03esOJZkgdGG2QUKH3tuhQbLCF9pSEZdkQ4WusPaVYZmzy+FAwK
-         XjMWUTlNSAeTDEs2Yn6eL67xIq9noyW9HGHjsT+aBhOdzA+O9WNMb7mLv7R/UXrYblRM
-         llzQgboWvT+yXIVeio86kMI6xhhwOHp26yp44GB5HrQTs5lKyZY6P8vv7sUI6tDWD3xE
-         8ikw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LP5IWSMRP8RZgtYzJ/AWviI0W1pO/EoAwNzy2cazgHo=;
+        b=b048VUHARtXjGvQZgKMCLn9MNWtaGzfmG0RTBNDev4DFRX8hKCoUYAA8p/xRWgAYx3
+         LmdIgaS2dUeyFDqqmjSHKqZmCRXYparo6lai9bmonjiJx9zCCktypKELvN5gksMmEMD+
+         K8ybtIGWbyNCFawqz+4s4pLj+87+jtDZqTIGqUJqm5GXmXPituD5cmPJJS5Lm+n9ROYX
+         ACGZPdaLe9bCcudg/Chi1ocdXNYx070/7wRhGofWj8ahacpYT7dNBtO5PhuTkpxmU81L
+         xDhTAPKgrmrMJINUE9JKCSLsc9ylPFI/nbbsy4Vh9zWRGg2uGmyQRWcXHXzLkfHPtF1M
+         eonA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=k8yY4wMfz/LENmaebo7PkCgeIKOG+ARQM/9FSWSmfA4=;
-        b=Q0q6FSxKp13LGozab2FSPIL8dAEdzWuEV+rSHLoWxYuKeF81VRcqg93hfweYwef4PI
-         iSNA85n0as+xVLtj1iZrLhyjMYb7oiJ/bH9jVq+ihC/OxmDlC+2WYYw7nPqQ1wjGppd6
-         VpX3fQ6U3YmqEU7UyV9HrFId53Xgr2n+KbAd2RsWTkf4+0QVixNubJ0ABGR1EHLmOG2x
-         /9WzNyi3Edrbj5xUBHIQzKLgHd9b8cixQYigvza/sFMMVMK6SlcpwQMV4b3AmVxng+gv
-         +F0vI2p0jGPtM20Yb136Xw3xDMuZ5Ep0Ps5fWrK70FHUgv/hyBLhNaflXrK/p/fv88hH
-         sQyQ==
-X-Gm-Message-State: AOAM532wOIeI2xj5WQK1te4k0Nk9BEHHITlf6NHEbMfbQ2ZUEFd23czw
-        bxd5jNl8jla5Rka9kkQ2LvIEvVGDYnK4Sg==
-X-Google-Smtp-Source: ABdhPJwx+VpvXLgI7DOPECdygfB4vpMmus7519EOexFij5AvrJTWd5oTUKGfxGL85jol6pvaFkgZFw==
-X-Received: by 2002:ac8:550b:: with SMTP id j11mr1264432qtq.360.1616022257781;
-        Wed, 17 Mar 2021 16:04:17 -0700 (PDT)
-Received: from tong-desktop.local ([2601:5c0:c200:27c6:d4e9:423a:4aca:b208])
-        by smtp.googlemail.com with ESMTPSA id t24sm190192qto.23.2021.03.17.16.04.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 16:04:17 -0700 (PDT)
-From:   Tong Zhang <ztong0001@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Tong Zhang <ztong0001@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Raviteja Garimella <raviteja.garimella@broadcom.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] usb: gadget: udc: amd5536udc_pci fix null-ptr-dereference
-Date:   Wed, 17 Mar 2021 19:04:00 -0400
-Message-Id: <20210317230400.357756-1-ztong0001@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <YFJp+It0/f7O9YId@kroah.com>
-References: <YFJp+It0/f7O9YId@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LP5IWSMRP8RZgtYzJ/AWviI0W1pO/EoAwNzy2cazgHo=;
+        b=OpXZ1kHUN63CGqYTAs4Hn9+E8YTx+d70yEGJtcdVUj8JtPjm0CarlNA9E0XvgcMTam
+         nEuY7BPBAkt4Et8t8gpsHDQqNTWyUg5Kaw6saxa0jmEvctzXd+04wT6imuBFVxEAXyjp
+         5W1P7ONWAZYLjJDOMg5esNSendXj1TnzC5ayvOEpq590U/jfzZDswFvc4X6jZt9DKkrZ
+         jNq04S7KW3yb7vyBTSKZfKGZ9LJXqlLzwxJWOeoxt+cT1V5Xk8/D7DAD08GC9fhOooEO
+         ssxYh+/9IhfH9yWvP3qIGtuBgzcJOOv8n+CUkb8HpKOLRPeIDzU+XmjqcJoAc/Lp3GwT
+         xZiQ==
+X-Gm-Message-State: AOAM533X+xt4D96X2BeeEePdQb47kat7eWa99CbO3yVDzHPwATj83H5Y
+        XX70Op4fbFP1eeTKMHdpFwu46JKwfx9GjMdb0K1YF5umZRoyOw==
+X-Google-Smtp-Source: ABdhPJxwnPpwFM6till0nCzyyWds9TCykW07ptWvBOVrZExXHqb5U9gkWUESyORm3SAiluxesOy+SEnsZXyFPjO2STg=
+X-Received: by 2002:a5d:9e03:: with SMTP id h3mr8415319ioh.94.1616022617429;
+ Wed, 17 Mar 2021 16:10:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210313192033.2611349-1-ztong0001@gmail.com> <YFJp+It0/f7O9YId@kroah.com>
+In-Reply-To: <YFJp+It0/f7O9YId@kroah.com>
+From:   Tong Zhang <ztong0001@gmail.com>
+Date:   Wed, 17 Mar 2021 19:10:06 -0400
+Message-ID: <CAA5qM4DHbMv8LAN0EucFHokk5jjW2m6eKACTGTFbSMJ7zZ020A@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: udc: amd5536udc_pci fix crash if dma is used
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Felipe Balbi <balbi@kernel.org>, Lee Jones <lee.jones@linaro.org>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        linux-usb@vger.kernel.org, open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-init_dma_pools() calls dma_pool_create(...dev->dev) to create dma pool.
-however, dev->dev is actually set after calling init_dma_pools(), which
-effectively makes dma_pool_create(..NULL) and cause crash.
-To fix this issue, init dma only after dev->dev is set.
-
-[    1.317993] RIP: 0010:dma_pool_create+0x83/0x290
-[    1.323257] Call Trace:
-[    1.323390]  ? pci_write_config_word+0x27/0x30
-[    1.323626]  init_dma_pools+0x41/0x1a0 [snps_udc_core]
-[    1.323899]  udc_pci_probe+0x202/0x2b1 [amd5536udc_pci]
-
-Fixes: 7c51247a1f62 (usb: gadget: udc: Provide correct arguments for 'dma_pool_create')
-Signed-off-by: Tong Zhang <ztong0001@gmail.com>
----
-v2: add Fixes tag and revise subject
-
- drivers/usb/gadget/udc/amd5536udc_pci.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/amd5536udc_pci.c b/drivers/usb/gadget/udc/amd5536udc_pci.c
-index 8d387e0e4d91..c80f9bd51b75 100644
---- a/drivers/usb/gadget/udc/amd5536udc_pci.c
-+++ b/drivers/usb/gadget/udc/amd5536udc_pci.c
-@@ -153,6 +153,11 @@ static int udc_pci_probe(
- 	pci_set_master(pdev);
- 	pci_try_set_mwi(pdev);
- 
-+	dev->phys_addr = resource;
-+	dev->irq = pdev->irq;
-+	dev->pdev = pdev;
-+	dev->dev = &pdev->dev;
-+
- 	/* init dma pools */
- 	if (use_dma) {
- 		retval = init_dma_pools(dev);
-@@ -160,11 +165,6 @@ static int udc_pci_probe(
- 			goto err_dma;
- 	}
- 
--	dev->phys_addr = resource;
--	dev->irq = pdev->irq;
--	dev->pdev = pdev;
--	dev->dev = &pdev->dev;
--
- 	/* general probing */
- 	if (udc_probe(dev)) {
- 		retval = -ENODEV;
--- 
-2.25.1
-
+Hi Greg,
+Thanks for the comments.
+I tried to find the commit that introduced the use of dev->dev in
+init_dma_pools()
+and added that commit to the Fixes tag in v2 patch.
+Please see if this one works.
+Thanks,
+- Tong
