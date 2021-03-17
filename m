@@ -2,196 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2349433E1BD
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Mar 2021 23:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B0A33E286
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Mar 2021 01:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbhCPWxW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Mar 2021 18:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
+        id S229818AbhCQAKV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Mar 2021 20:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231684AbhCPWxL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Mar 2021 18:53:11 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B5BC06174A;
-        Tue, 16 Mar 2021 15:53:00 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id y19-20020a0568301d93b02901b9f88a238eso65053oti.11;
-        Tue, 16 Mar 2021 15:53:00 -0700 (PDT)
+        with ESMTP id S229588AbhCQAKH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Mar 2021 20:10:07 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC16AC06174A;
+        Tue, 16 Mar 2021 17:10:06 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id r20so1016984ljk.4;
+        Tue, 16 Mar 2021 17:10:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=b6yGdXTQOJ+IQCcOg8cyC5zJaqGMElqMG8kPZl5XdOc=;
-        b=BfUGhF0XH7lVfIt7VYLe4iuvEJ2WckTYwVK585r9iyZpafm0bZK4UOo6iiZWvHlTPx
-         dgTDOvWeeWIF562hU5yqciI8/6Qe0I/Vg/oLo9/hE3+jh1dCFmIEKi24aMaAobdsyYmi
-         1gBcvLj1L/2eXBLBIYzehzDOmiscnPQkI3+ttKQueXYFzV4KAomIZY/rhG5jx60kYV2W
-         LkQalVCso+NcSSWTmxjN/KaDvNymVDP6vHD/EO7YNDCNND/PpEyI7kGvbVdpo41x7AU8
-         lF1Qf6HTIsyYbO1Dg7UFIpCChx90OAwbKAI8OEQGB1KfHQx0zBuql3aglzoIFWgqR0Eh
-         YWTw==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=AL2V8ZWV46qlhc0ml5uYpEwu/MvbJHiNjsNGUT8atiA=;
+        b=Agdag1tBJMN2CcCDWRaycmcZsxlpQCsykGn/xj/L8ZF7pmtY1He3O4QBRdXKxYuAYn
+         /Quk8pRXS25wLV7qB1Rlf66XSgfBwkon1wvPb20rNMcz+P+OV1T0E290UqzyNGrBtq3A
+         fby84G56vIyDqKcjZ9kONJidstWPxVTknRhA2IGDm/gxgQtQrloh68PQdFNwGFcsGSJq
+         /t7wtpliOOyFRQkcN0RNQxI4DbBG5nzESRCAtb71IuXe3/oVM7b243DNlltQSZqgMyCc
+         LdxoMYo49u4Oaoqa05eMZjPyswO5BgwHMlluDYcnsu7ikc5lBXhK5LFID1gmvS37StZg
+         jtrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=b6yGdXTQOJ+IQCcOg8cyC5zJaqGMElqMG8kPZl5XdOc=;
-        b=tAb7WXQHvhlLjd1Xig9hs2GDW1lcqjbR4o85XaY+2oTApKUWYbYO6TDHTiSLTWhHdO
-         Itctp2FjQU8ps0nW1pMgtDMD1OPHQDSTNzDkT3hjUFX5zsptPcpFiYpDBQFacXjOgQD7
-         FKDm6+P3R9/pGhElAuygDWQ2Unb1f8qIcmjKCiDZDaxYQ7k71UYsqbPMENP70K2iK0zO
-         NeMixuuYinqspgn7taH8VezD9dKAX4Yy86kvKzczgRm7qOInfJC6es1iI5mSsEslU7+o
-         mHMKlgIvm/LDwmXJuBWwYb8Pb72aXZY0UnpjeqHlR8axNkLv/OIg6LHuW+MC/LSsvajO
-         AvgQ==
-X-Gm-Message-State: AOAM531f/ddWUQKa3W2AbY/ke1R0EMFBOgWX2T+8IMXS92H3Uj5p2MdZ
-        SnBk1u/C50e/eSq90grDhtNs695BCiI=
-X-Google-Smtp-Source: ABdhPJy4HKdbkHp9bXegheUel4ABCQH/maVwG82Qkq0qiSPuh0jrK4OAovAFbJSpcO3TunTSHzA1pw==
-X-Received: by 2002:a05:6830:140e:: with SMTP id v14mr883812otp.155.1615935179800;
-        Tue, 16 Mar 2021 15:52:59 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 24sm7279988oiq.11.2021.03.16.15.52.58
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=AL2V8ZWV46qlhc0ml5uYpEwu/MvbJHiNjsNGUT8atiA=;
+        b=TuQ8Ux1XTt51wJUVLu+dK3tMhxm561lBt1k8/bXlmuqmCzv/s1gLIAzcS3DmxfVEdY
+         gTQhByok5ewdbtjH453g/1jme8h9mVvpHo0KsiiGES1K21l3LUK80d+LPPjuBLOWpl2k
+         Js9EVmbfS9vazDGAhx6BLTZjCJNqQDW0DK7oCr4sOTNd+ciuQUNpuiOETJIVWiPrrQUU
+         zv4B8T0XXPUkgxNgEPIP7Ilgq9GqYHVvFsNaMAmWnHtAl2FhW89ncsVW97xMdyif/hHk
+         H2cUYKT5fA0jHJgj/ukn+qdWj5hiiHjuPo7pZ2qwGKLXtm8ApEjRoAvxzooEGh+6CO/r
+         /mXA==
+X-Gm-Message-State: AOAM532ZQLJYSMHTPZNMpcG/XlSevGUN5flWT0qeMnLGbTMUZ6aOSWBp
+        ED8WI0jvnww3KWQ96WerVwE=
+X-Google-Smtp-Source: ABdhPJwRzvkNlUJpiFNF69aoxvvhbSsqtWtPRIf5DO9f16I5A+wX666iLi+smMVA7+bdshV2OAnwFQ==
+X-Received: by 2002:a2e:9e8e:: with SMTP id f14mr783096ljk.140.1615939804827;
+        Tue, 16 Mar 2021 17:10:04 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
+        by smtp.googlemail.com with ESMTPSA id 194sm3228320lfd.116.2021.03.16.17.10.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Mar 2021 15:52:59 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v1] usb: typec: tcpci: Added few missing TCPCI register
- definitions
-To:     Badhri Jagan Sridharan <badhri@google.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210316221304.391206-1-badhri@google.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <4f077e6c-4e95-ab54-c549-e953bf3c00f3@roeck-us.net>
-Date:   Tue, 16 Mar 2021 15:52:58 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 16 Mar 2021 17:10:04 -0700 (PDT)
+Subject: Re: [PATCH] MIPS: ralink: define stubs for clk_set_parent to fix
+ compile testing
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     thierry.reding@gmail.com, linux-tegra@vger.kernel.org,
+        balbi@kernel.org, linux-usb@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+References: <20210316175725.79981-1-krzysztof.kozlowski@canonical.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <44ce8a32-91ff-bb6c-adba-f85c2edf3c18@gmail.com>
+Date:   Wed, 17 Mar 2021 03:10:03 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210316221304.391206-1-badhri@google.com>
+In-Reply-To: <20210316175725.79981-1-krzysztof.kozlowski@canonical.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/16/21 3:13 PM, Badhri Jagan Sridharan wrote:
-> This change adds some of the register bit definitions from the TCPCI spec:
-> https://www.usb.org/sites/default/files/documents/
-> usb-port_controller_specification_rev2.0_v1.0_0.pdf
+16.03.2021 20:57, Krzysztof Kozlowski пишет:
+> The Ralink MIPS platform does not use Common Clock Framework and does
+> not define certain clock operations leading to compile test failures:
 > 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-
-Are those going to be used ?
-
-Guenter
-
+>     /usr/bin/mips-linux-gnu-ld: drivers/usb/phy/phy-tegra-usb.o: in function `tegra_usb_phy_init':
+>     phy-tegra-usb.c:(.text+0x1dd4): undefined reference to `clk_get_parent'
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  drivers/usb/typec/tcpm/tcpci.h | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+>  arch/mips/ralink/clk.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
-> index 57b6e24e0a0c..2be7a77d400e 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.h
-> +++ b/drivers/usb/typec/tcpm/tcpci.h
-> @@ -47,7 +47,10 @@
+> diff --git a/arch/mips/ralink/clk.c b/arch/mips/ralink/clk.c
+> index 2f9d5acb38ea..8387177a47ef 100644
+> --- a/arch/mips/ralink/clk.c
+> +++ b/arch/mips/ralink/clk.c
+> @@ -70,6 +70,20 @@ long clk_round_rate(struct clk *clk, unsigned long rate)
+>  }
+>  EXPORT_SYMBOL_GPL(clk_round_rate);
 >  
->  #define TCPC_TCPC_CTRL			0x19
->  #define TCPC_TCPC_CTRL_ORIENTATION	BIT(0)
-> +#define PLUG_ORNT_CC1			0
-> +#define PLUG_ORNT_CC2			1
->  #define TCPC_TCPC_CTRL_BIST_TM		BIT(1)
-> +#define TCPC_TCPC_CTRL_EN_LK4CONN_ALRT	BIT(6)
->  
->  #define TCPC_EXTENDED_STATUS		0x20
->  #define TCPC_EXTENDED_STATUS_VSAFE0V	BIT(0)
-> @@ -74,21 +77,28 @@
->  #define TCPC_POWER_CTRL_VCONN_ENABLE	BIT(0)
->  #define TCPC_POWER_CTRL_BLEED_DISCHARGE	BIT(3)
->  #define TCPC_POWER_CTRL_AUTO_DISCHARGE	BIT(4)
-> +#define TCPC_DIS_VOLT_ALRM		BIT(5)
-> +#define TCPC_POWER_CTRL_VBUS_VOLT_MON	BIT(6)
->  #define TCPC_FAST_ROLE_SWAP_EN		BIT(7)
->  
->  #define TCPC_CC_STATUS			0x1d
->  #define TCPC_CC_STATUS_TOGGLING		BIT(5)
->  #define TCPC_CC_STATUS_TERM		BIT(4)
-> +#define TCPC_CC_STATUS_TERM_RP		0
-> +#define TCPC_CC_STATUS_TERM_RD		1
-> +#define TCPC_CC_STATE_SRC_OPEN		0
->  #define TCPC_CC_STATUS_CC2_SHIFT	2
->  #define TCPC_CC_STATUS_CC2_MASK		0x3
->  #define TCPC_CC_STATUS_CC1_SHIFT	0
->  #define TCPC_CC_STATUS_CC1_MASK		0x3
->  
->  #define TCPC_POWER_STATUS		0x1e
-> +#define TCPC_POWER_STATUS_DBG_ACC_CON	BIT(7)
->  #define TCPC_POWER_STATUS_UNINIT	BIT(6)
->  #define TCPC_POWER_STATUS_SOURCING_VBUS	BIT(4)
->  #define TCPC_POWER_STATUS_VBUS_DET	BIT(3)
->  #define TCPC_POWER_STATUS_VBUS_PRES	BIT(2)
-> +#define TCPC_POWER_STATUS_SINKING_VBUS	BIT(0)
->  
->  #define TCPC_FAULT_STATUS		0x1f
->  
-> @@ -121,6 +131,10 @@
->  #define TCPC_RX_DETECT			0x2f
->  #define TCPC_RX_DETECT_HARD_RESET	BIT(5)
->  #define TCPC_RX_DETECT_SOP		BIT(0)
-> +#define TCPC_RX_DETECT_SOP1		BIT(1)
-> +#define TCPC_RX_DETECT_SOP2		BIT(2)
-> +#define TCPC_RX_DETECT_DBG1		BIT(3)
-> +#define TCPC_RX_DETECT_DBG2		BIT(4)
->  
->  #define TCPC_RX_BYTE_CNT		0x30
->  #define TCPC_RX_BUF_FRAME_TYPE		0x31
-> @@ -139,6 +153,8 @@
->  #define TCPC_TX_DATA			0x54 /* through 0x6f */
->  
->  #define TCPC_VBUS_VOLTAGE			0x70
-> +#define TCPC_VBUS_VOLTAGE_MASK			0x3ff
-> +#define TCPC_VBUS_VOLTAGE_LSB_MV		25
->  #define TCPC_VBUS_SINK_DISCONNECT_THRESH	0x72
->  #define TCPC_VBUS_SINK_DISCONNECT_THRESH_LSB_MV	25
->  #define TCPC_VBUS_SINK_DISCONNECT_THRESH_MAX	0x3ff
-> 
+> +int clk_set_parent(struct clk *clk, struct clk *parent)
+> +{
+> +	WARN_ON(clk);
+> +	return -1;
+> +}
+> +EXPORT_SYMBOL(clk_set_parent);
+> +
+> +struct clk *clk_get_parent(struct clk *clk)
+> +{
+> +	WARN_ON(clk);
+> +	return NULL;
+> +}
+> +EXPORT_SYMBOL(clk_get_parent);
 
+I'm wondering whether symbols should be GPL or it doesn't matter in this
+case. Otherwise this looks good to me.
+
+Also, I guess it should be possible to create a generic clk stubs that
+will use weak functions, allowing platforms to override only the wanted
+stubs and then we won't need to worry about the missing stubs for each
+platform individually. But of course that will be a much bigger change.
+Just wanted to share my thoughts.
