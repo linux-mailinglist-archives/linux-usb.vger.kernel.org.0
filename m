@@ -2,249 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1925433F8F0
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Mar 2021 20:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B80AF33F906
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Mar 2021 20:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbhCQTPq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Mar 2021 15:15:46 -0400
-Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:43192 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233149AbhCQTPX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Mar 2021 15:15:23 -0400
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12HJCoXj011990;
-        Wed, 17 Mar 2021 12:15:07 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=proofpoint;
- bh=NtgydgGrHDL/aoYqRP2/phco5vpba8PzSFZowLnbWu8=;
- b=ochcDSJ4eu954zFicJz2QEWOAJ6+7loq55yBL6ZtSb6l5L7JQWoNnb+BkvQzeiBJMYff
- sGYtIZlBeuuOrruTm2Iu5KOvkWFjqyutY2R5t0+7yZ7P4AqVeLybsSR50Wgg3+Ao2fRe
- J+OSTkNZFRRPWd4d17+4ovZ6QQxJ1QzBpITicMJLwSmQ0MYt13lPCMR/FQvkH5wnRiWl
- JVmcI3vndtOZmBGoHfg7zKT6qMdmlFz3FaZ0p+xdaRLx00BFugnnHtNa+axOHQgldSh5
- jvtGEyFoEhFnXzGoZN/7nAgg6YueLkKO7omcIz/fbvWeiQfbLGg9c+vm7z47bqhydxAh Pw== 
-Received: from nam02-cy1-obe.outbound.protection.outlook.com (mail-cys01nam02lp2055.outbound.protection.outlook.com [104.47.37.55])
-        by mx0a-0014ca01.pphosted.com with ESMTP id 378tu26f92-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 Mar 2021 12:15:07 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fy5ZNwns4BQeodjLNKOOEkL9Cwdc1HpcPtYt93+OoLQO+i7z6WrwXUJ8plc09D7n2HBM/HWThZ/qUouUUlvwPfArkQ6heJBqVIdf+lWV8MIntWI5lZm1DRFOjND9aHkbBm1swUBYgs4HySVKD88wSasitGX0FQFTcdAPlZjArufAt+EevmdRasI68ejTVEMosNNx4wYc9wXaM/DpKyBfN8kvjXaCLGBFHg9puPFpDizgz51rwjOLgHRbD2mpqpPDiPAKLOn6qjaaDB2WexGmMJddsLxZvUCd5LXzuGGbKx7dVO/aFkr6WmsUxGKzltWD+aejK3yxztl48YjiRpwifQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NtgydgGrHDL/aoYqRP2/phco5vpba8PzSFZowLnbWu8=;
- b=ZOb1wJ3kfvQCRYbEWmfkI7MZ+DM9r/o1KQx7XQpnDkpo92W3oyexmxCckwLcq6cNxoh5tT4OGNmOuDtoHT5V33x+kE6KTgs+R+pX/lbtLLctZtu5OhTvZbbZY49AL+5oeLJrGwCpNVaIPz12haSWzBRhYm6sUmoA1AjHHI/wfuVHYRihQ+6Oo9C+bE1BtpUfeGriWBYQv3pGDVaRd1XpneZjrwffW9QCmytdu8rzGpECsjnviOygEah3wN7QntxzTblcGtkmRcpx+5uHzCf1f/N5AekSu5qCheQdgIVEhgm30cpFktzCispG6wnIbxxWLRkIFOAfd0aYHmRCSLfHnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 158.140.1.148) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NtgydgGrHDL/aoYqRP2/phco5vpba8PzSFZowLnbWu8=;
- b=3w5wzOeAqSp8QwhsI7GGd/EUZZl0dXeY257M+NZ6iyLa7dCV+Nk4bWuT8uNdRY2oHZjoJ8rsXQCLL3CxziKiNPOr0Ny502MIDQnNszFGZ7jmVZcBTcxKVL0vHhA/uOLgHEKV98BSvlfFY7hWRYWIf1apX3h87GmNgAOjlMIU/dE=
-Received: from DM5PR1101CA0020.namprd11.prod.outlook.com (2603:10b6:4:4c::30)
- by SJ0PR07MB8583.namprd07.prod.outlook.com (2603:10b6:a03:370::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.32; Wed, 17 Mar
- 2021 19:15:04 +0000
-Received: from DM6NAM12FT003.eop-nam12.prod.protection.outlook.com
- (2603:10b6:4:4c:cafe::e) by DM5PR1101CA0020.outlook.office365.com
- (2603:10b6:4:4c::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.18 via Frontend
- Transport; Wed, 17 Mar 2021 19:15:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.148)
- smtp.mailfrom=cadence.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=pass action=none
- header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 158.140.1.148 as permitted sender) receiver=protection.outlook.com;
- client-ip=158.140.1.148; helo=sjmaillnx2.cadence.com;
-Received: from sjmaillnx2.cadence.com (158.140.1.148) by
- DM6NAM12FT003.mail.protection.outlook.com (10.13.179.84) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3955.9 via Frontend Transport; Wed, 17 Mar 2021 19:15:03 +0000
-Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
-        by sjmaillnx2.cadence.com (8.14.4/8.14.4) with ESMTP id 12HJExpI019523
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 Mar 2021 12:15:01 -0700
-X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
-Received: from maileu3.global.cadence.com (10.160.88.99) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 17 Mar 2021 20:14:58 +0100
-Received: from vleu-orange.cadence.com (10.160.88.83) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Wed, 17 Mar 2021 20:14:58 +0100
-Received: from vleu-orange.cadence.com (localhost.localdomain [127.0.0.1])
-        by vleu-orange.cadence.com (8.14.4/8.14.4) with ESMTP id 12HJExJ9015846;
-        Wed, 17 Mar 2021 20:14:59 +0100
-Received: (from sparmar@localhost)
-        by vleu-orange.cadence.com (8.14.4/8.14.4/Submit) id 12HJEwsf015840;
-        Wed, 17 Mar 2021 20:14:58 +0100
-From:   Sanket Parmar <sparmar@cadence.com>
-To:     <peter.chen@kernel.org>
-CC:     <pawell@cadence.com>, <a-govindraju@ti.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kurahul@cadence.com>, <gregkh@linuxfoundation.org>,
-        <kishon@ti.com>, <hch@infradead.org>,
-        Sanket Parmar <sparmar@cadence.com>
-Subject: [PATCH v2] usb: cdns3: Optimize DMA request buffer allocation
-Date:   Wed, 17 Mar 2021 20:13:59 +0100
-Message-ID: <1616008439-15494-1-git-send-email-sparmar@cadence.com>
-X-Mailer: git-send-email 2.4.5
+        id S233212AbhCQTUj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Mar 2021 15:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233199AbhCQTUW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Mar 2021 15:20:22 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD1BC06174A;
+        Wed, 17 Mar 2021 12:20:22 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id u198so98126oia.4;
+        Wed, 17 Mar 2021 12:20:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6e6zQc/19HQ6BdWcR/vmHGAZli2nNFcvrmaXF8jJF10=;
+        b=cwfVirQEr9MRL+WyBIWLYoxUiRVJjIVIZDWMCYtfg9Gol0AH5HY3DtC2gUCaBN9vmO
+         yRVlXzxS/Q24aBKCMFCvI3tKhkdcanXvnDeuqtvmjvDwY4A0dVNHKUw1vcYy4vnK+CuV
+         zfz01dRY+0kW2EDYLYBn3vc3+pFUhy0Ns4SxQM4Z3rLcsPk5nc4FavnZEP+RsGgYSmn8
+         gqZoxqj4Fe+XuMEKK3sGEeKQQEWMt5A9er0HDkQlb5NWL8i1RJA7qgPKbvY/LtlVouBq
+         DOIWVKmb/RtCvNPtcdeeHpfptm6t49rq6ILghBm37ZpGb9GHG8lvTdjely3DY3UikWo4
+         6MtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=6e6zQc/19HQ6BdWcR/vmHGAZli2nNFcvrmaXF8jJF10=;
+        b=fMMN643du4gWUu6FX6pFXQlflsh4o7OH842Q8Lj2ot+9r91S2frLBlpkoWCnp2Mola
+         OymZPrLJtTPr4V+K5GtrAQdNLpb5Hi8uEVZhtd4fgCVC7I3ixLCff4+YLsP/OTeeDoJh
+         +cJyCsD6AhNe4hxaVL8Cy5z4HuDfqQ7cLnuKRuYRhn2FSvlG+z8Gp86hzPmQqTPi1EkZ
+         XsyZlxhT/oDVGyuFpILD50W7Dd/sZZPPJiL2TZ7JZn61j0F+DR+qOHQ0HLllH161814F
+         Lj2noXeJzn7yuUcxyj1niX5nqf0YoIbXT1ocbqNnQ15mHrIgay//2tG0PTzpo6Vscrna
+         0yBg==
+X-Gm-Message-State: AOAM533rqEIxy6wF4QEm+8oX/IFzKsLWmiCjoHzOvqvuZ81eFxI/VoZI
+        JRMfJnL38HHuMw2giW5CEQ8YatE30wY=
+X-Google-Smtp-Source: ABdhPJyzsIsAvuoUqiNYz4lEipMnUwycQhUu5z3yYyrX1My67JwGmEBwnxiLFYs6pLd+4q16MCp5ig==
+X-Received: by 2002:a05:6808:907:: with SMTP id w7mr265501oih.94.1616008821352;
+        Wed, 17 Mar 2021 12:20:21 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 64sm8869760otu.80.2021.03.17.12.20.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Mar 2021 12:20:20 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v1] usb: typec: tcpci: Added few missing TCPCI register
+ definitions
+To:     Badhri Jagan Sridharan <badhri@google.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210316221304.391206-1-badhri@google.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <584010c9-dcb0-853a-8f17-72b3ba3264a1@roeck-us.net>
+Date:   Wed, 17 Mar 2021 12:20:18 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-OrganizationHeadersPreserved: maileu3.global.cadence.com
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6931c712-c2e3-41e1-7440-08d8e978f7f2
-X-MS-TrafficTypeDiagnostic: SJ0PR07MB8583:
-X-Microsoft-Antispam-PRVS: <SJ0PR07MB8583FDE569AC767242FE917EB06A9@SJ0PR07MB8583.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:346;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6UmU8Wq5D+qJM2xM7AuB2jCiHOlfolcZrKQVbfCh5f77Xtv+JWdklq0ju1BQSqxMdfEV+R+4lCtI14yiRdPJm+y+7rHAqGTS9SdDlaptJta84KgsiCYZRCr+nHvLHOUOGAeQsMspNrVU4UXkdc4F8ewdmtQDkF6HDuaHT6QYo2uXHvrFIczQfGLOm1HOgLqYzPd/+0aE0QqjYmkgFdxlxWpP+/S4mUBVUIFXaDwfMDx8ZZCp93SEvwJ5NlP/MWcWwkXj0BVnOAM1oZ1rdQf00rXPlHfAG5B0Iuh+HclX6PdJrs1bVK8bo1ZHbJyBXcKnPQdb/2TpAnlamLxoOt37qJi0TodopNakBTTTlniCMWv5oa+HFuwnyjzrd8GBoS/sYbQb0SlpCleinesZRCineL9fGYvab6Sg11odFbtRzPoNJTnfubd+oagpeIbKXD9O9aOpAUJorQpZmxbR4om3lQ1mpJc+5lvE/5fosm459xYDjb9AQjTPN3KxbJhF4baufsQ9GI2WNaN9A/AzEHVRdm72N/fQcvCYUTqSFBZz/XxOrwH2Rbglk37m/VB5QdJXY0rTptm1QZBGthF4G2w4d8YE3DCD2io+UkYqmGHyYYjK0pLfvKrqFC3WotA1vS+hUCsq40btz902c9FypGLrvKaqmsrHvFyUUXnFVKTNs24B8Gnpi27Xb0NO1DwQzHqB
-X-Forefront-Antispam-Report: CIP:158.140.1.148;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx2.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(4636009)(136003)(396003)(376002)(39860400002)(346002)(36092001)(46966006)(36840700001)(82740400003)(5660300002)(336012)(4326008)(107886003)(26005)(36906005)(8936002)(7636003)(2906002)(316002)(2616005)(47076005)(42186006)(83380400001)(426003)(86362001)(356005)(70586007)(82310400003)(70206006)(36860700001)(186003)(478600001)(6916009)(36756003)(8676002)(54906003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2021 19:15:03.7074
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6931c712-c2e3-41e1-7440-08d8e978f7f2
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.148];Helo=[sjmaillnx2.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM12FT003.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR07MB8583
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-17_11:2021-03-17,2021-03-17 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 adultscore=0
- priorityscore=1501 bulkscore=0 phishscore=0 clxscore=1015
- lowpriorityscore=0 malwarescore=0 spamscore=0 suspectscore=0
- impostorscore=0 mlxscore=0 mlxlogscore=745 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2103170132
+In-Reply-To: <20210316221304.391206-1-badhri@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-dma_alloc_coherent() might fail on the platform with a small
-DMA region.
+On 3/16/21 3:13 PM, Badhri Jagan Sridharan wrote:
+> This change adds some of the register bit definitions from the TCPCI spec:
+> https://www.usb.org/sites/default/files/documents/
+> usb-port_controller_specification_rev2.0_v1.0_0.pdf
+> 
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
-To avoid such failure in cdns3_prepare_aligned_request_buf(),
-dma_alloc_coherent() is replaced with dma_alloc_noncoherent()
-to allocate aligned request buffer of dynamic length.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Reported-by: Aswath Govindraju <a-govindraju@ti.com>
-Signed-off-by: Sanket Parmar <sparmar@cadence.com>
----
-
-Changelog:
-v2:
-- used dma_*_noncoherent() APIs
-- changed the commit log
-
- drivers/usb/cdns3/cdns3-gadget.c | 30 ++++++++++++++++++++++++------
- drivers/usb/cdns3/cdns3-gadget.h |  2 ++
- 2 files changed, 26 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-index 0b892a2..126087b 100644
---- a/drivers/usb/cdns3/cdns3-gadget.c
-+++ b/drivers/usb/cdns3/cdns3-gadget.c
-@@ -819,9 +819,15 @@ void cdns3_gadget_giveback(struct cdns3_endpoint *priv_ep,
- 					priv_ep->dir);
- 
- 	if ((priv_req->flags & REQUEST_UNALIGNED) &&
--	    priv_ep->dir == USB_DIR_OUT && !request->status)
-+	    priv_ep->dir == USB_DIR_OUT && !request->status) {
-+		/* Make DMA buffer CPU accessible */
-+		dma_sync_single_for_cpu(priv_dev->sysdev,
-+			priv_req->aligned_buf->dma,
-+			priv_req->aligned_buf->size,
-+			priv_req->aligned_buf->dir);
- 		memcpy(request->buf, priv_req->aligned_buf->buf,
- 		       request->length);
-+	}
- 
- 	priv_req->flags &= ~(REQUEST_PENDING | REQUEST_UNALIGNED);
- 	/* All TRBs have finished, clear the counter */
-@@ -883,8 +889,8 @@ static void cdns3_free_aligned_request_buf(struct work_struct *work)
- 			 * interrupts.
- 			 */
- 			spin_unlock_irqrestore(&priv_dev->lock, flags);
--			dma_free_coherent(priv_dev->sysdev, buf->size,
--					  buf->buf, buf->dma);
-+			dma_free_noncoherent(priv_dev->sysdev, buf->size,
-+					  buf->buf, buf->dma, buf->dir);
- 			kfree(buf);
- 			spin_lock_irqsave(&priv_dev->lock, flags);
- 		}
-@@ -911,10 +917,13 @@ static int cdns3_prepare_aligned_request_buf(struct cdns3_request *priv_req)
- 			return -ENOMEM;
- 
- 		buf->size = priv_req->request.length;
-+		buf->dir = usb_endpoint_dir_in(priv_ep->endpoint.desc) ?
-+			DMA_TO_DEVICE : DMA_FROM_DEVICE;
- 
--		buf->buf = dma_alloc_coherent(priv_dev->sysdev,
-+		buf->buf = dma_alloc_noncoherent(priv_dev->sysdev,
- 					      buf->size,
- 					      &buf->dma,
-+					      buf->dir,
- 					      GFP_ATOMIC);
- 		if (!buf->buf) {
- 			kfree(buf);
-@@ -936,10 +945,18 @@ static int cdns3_prepare_aligned_request_buf(struct cdns3_request *priv_req)
- 	}
- 
- 	if (priv_ep->dir == USB_DIR_IN) {
-+		/* Make DMA buffer CPU accessible */
-+		dma_sync_single_for_cpu(priv_dev->sysdev,
-+			buf->dma, buf->size, buf->dir);
- 		memcpy(buf->buf, priv_req->request.buf,
- 		       priv_req->request.length);
- 	}
- 
-+	/* Transfer DMA buffer ownership back to device */
-+	dma_sync_single_for_device(priv_dev->sysdev,
-+			buf->dma, buf->size, buf->dir);
-+
-+
- 	priv_req->flags |= REQUEST_UNALIGNED;
- 	trace_cdns3_prepare_aligned_request(priv_req);
- 
-@@ -3088,9 +3105,10 @@ static void cdns3_gadget_exit(struct cdns *cdns)
- 		struct cdns3_aligned_buf *buf;
- 
- 		buf = cdns3_next_align_buf(&priv_dev->aligned_buf_list);
--		dma_free_coherent(priv_dev->sysdev, buf->size,
-+		dma_free_noncoherent(priv_dev->sysdev, buf->size,
- 				  buf->buf,
--				  buf->dma);
-+				  buf->dma,
-+				  buf->dir);
- 
- 		list_del(&buf->list);
- 		kfree(buf);
-diff --git a/drivers/usb/cdns3/cdns3-gadget.h b/drivers/usb/cdns3/cdns3-gadget.h
-index ecf9b91..c5660f2 100644
---- a/drivers/usb/cdns3/cdns3-gadget.h
-+++ b/drivers/usb/cdns3/cdns3-gadget.h
-@@ -12,6 +12,7 @@
- #ifndef __LINUX_CDNS3_GADGET
- #define __LINUX_CDNS3_GADGET
- #include <linux/usb/gadget.h>
-+#include <linux/dma-direction.h>
- 
- /*
-  * USBSS-DEV register interface.
-@@ -1205,6 +1206,7 @@ struct cdns3_aligned_buf {
- 	void			*buf;
- 	dma_addr_t		dma;
- 	u32			size;
-+	enum dma_data_direction dir;
- 	unsigned		in_use:1;
- 	struct list_head	list;
- };
--- 
-2.4.5
+> ---
+>  drivers/usb/typec/tcpm/tcpci.h | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
+> index 57b6e24e0a0c..2be7a77d400e 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.h
+> +++ b/drivers/usb/typec/tcpm/tcpci.h
+> @@ -47,7 +47,10 @@
+>  
+>  #define TCPC_TCPC_CTRL			0x19
+>  #define TCPC_TCPC_CTRL_ORIENTATION	BIT(0)
+> +#define PLUG_ORNT_CC1			0
+> +#define PLUG_ORNT_CC2			1
+>  #define TCPC_TCPC_CTRL_BIST_TM		BIT(1)
+> +#define TCPC_TCPC_CTRL_EN_LK4CONN_ALRT	BIT(6)
+>  
+>  #define TCPC_EXTENDED_STATUS		0x20
+>  #define TCPC_EXTENDED_STATUS_VSAFE0V	BIT(0)
+> @@ -74,21 +77,28 @@
+>  #define TCPC_POWER_CTRL_VCONN_ENABLE	BIT(0)
+>  #define TCPC_POWER_CTRL_BLEED_DISCHARGE	BIT(3)
+>  #define TCPC_POWER_CTRL_AUTO_DISCHARGE	BIT(4)
+> +#define TCPC_DIS_VOLT_ALRM		BIT(5)
+> +#define TCPC_POWER_CTRL_VBUS_VOLT_MON	BIT(6)
+>  #define TCPC_FAST_ROLE_SWAP_EN		BIT(7)
+>  
+>  #define TCPC_CC_STATUS			0x1d
+>  #define TCPC_CC_STATUS_TOGGLING		BIT(5)
+>  #define TCPC_CC_STATUS_TERM		BIT(4)
+> +#define TCPC_CC_STATUS_TERM_RP		0
+> +#define TCPC_CC_STATUS_TERM_RD		1
+> +#define TCPC_CC_STATE_SRC_OPEN		0
+>  #define TCPC_CC_STATUS_CC2_SHIFT	2
+>  #define TCPC_CC_STATUS_CC2_MASK		0x3
+>  #define TCPC_CC_STATUS_CC1_SHIFT	0
+>  #define TCPC_CC_STATUS_CC1_MASK		0x3
+>  
+>  #define TCPC_POWER_STATUS		0x1e
+> +#define TCPC_POWER_STATUS_DBG_ACC_CON	BIT(7)
+>  #define TCPC_POWER_STATUS_UNINIT	BIT(6)
+>  #define TCPC_POWER_STATUS_SOURCING_VBUS	BIT(4)
+>  #define TCPC_POWER_STATUS_VBUS_DET	BIT(3)
+>  #define TCPC_POWER_STATUS_VBUS_PRES	BIT(2)
+> +#define TCPC_POWER_STATUS_SINKING_VBUS	BIT(0)
+>  
+>  #define TCPC_FAULT_STATUS		0x1f
+>  
+> @@ -121,6 +131,10 @@
+>  #define TCPC_RX_DETECT			0x2f
+>  #define TCPC_RX_DETECT_HARD_RESET	BIT(5)
+>  #define TCPC_RX_DETECT_SOP		BIT(0)
+> +#define TCPC_RX_DETECT_SOP1		BIT(1)
+> +#define TCPC_RX_DETECT_SOP2		BIT(2)
+> +#define TCPC_RX_DETECT_DBG1		BIT(3)
+> +#define TCPC_RX_DETECT_DBG2		BIT(4)
+>  
+>  #define TCPC_RX_BYTE_CNT		0x30
+>  #define TCPC_RX_BUF_FRAME_TYPE		0x31
+> @@ -139,6 +153,8 @@
+>  #define TCPC_TX_DATA			0x54 /* through 0x6f */
+>  
+>  #define TCPC_VBUS_VOLTAGE			0x70
+> +#define TCPC_VBUS_VOLTAGE_MASK			0x3ff
+> +#define TCPC_VBUS_VOLTAGE_LSB_MV		25
+>  #define TCPC_VBUS_SINK_DISCONNECT_THRESH	0x72
+>  #define TCPC_VBUS_SINK_DISCONNECT_THRESH_LSB_MV	25
+>  #define TCPC_VBUS_SINK_DISCONNECT_THRESH_MAX	0x3ff
+> 
 
