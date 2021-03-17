@@ -2,95 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4982033F0B6
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Mar 2021 13:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F56D33F289
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Mar 2021 15:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbhCQMyY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Mar 2021 08:54:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33874 "EHLO mail.kernel.org"
+        id S231139AbhCQOZi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Mar 2021 10:25:38 -0400
+Received: from m12-17.163.com ([220.181.12.17]:49360 "EHLO m12-17.163.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229809AbhCQMyI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 17 Mar 2021 08:54:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7D29764F18;
-        Wed, 17 Mar 2021 12:53:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1615985636;
-        bh=CVep1gbTRjB+20m1ldxk7nAxwnahqYPj6MrXsgFKflU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c+Ia7ho3BJjFBeMI2Egh7Zx9fvN/L8WcXrUhW9ph740iN/61320WJXT/EFP7xg6Ng
-         j7QOl03dNCiTNjbmjzB3vmb8jrrNF4j4saNJkAsNz1i4r5GSZvBp78L4kNzDqudBdL
-         py49RkV9imRMSnaQtABut0pOlV2T60UlOf7BLyb4=
-Date:   Wed, 17 Mar 2021 13:53:53 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org, lkft-triage@lists.linaro.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Jason Yan <yanaijie@huawei.com>,
-        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
-        Oliver Neukum <oneukum@suse.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: BUG: KFENCE: memory corruption in usb_get_device_descriptor
-Message-ID: <YFH74Y6QfofcMOkv@kroah.com>
-References: <CA+G9fYsKBLOvvxOfB6AAzjarsABQiEUhGd4JB3FDq3q1OrFmOw@mail.gmail.com>
- <YFHUGG6AWGt/C8C+@kroah.com>
- <CA+G9fYv9kwQDYzzA1e=c8kg1wWQ1MwKtintBvyqMiKG5S+ggqA@mail.gmail.com>
+        id S231461AbhCQOZg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 17 Mar 2021 10:25:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=5396v
+        hsMEuggyxExI2EHyYdpDZ4CTtj5nrguIg8ySxM=; b=cHYBiLzLmotMxa0NdHDQ7
+        bemdoBeC3NS0NL/XoeVAAIvwf2gfZQ9nDJKogsySUovdY6LHwbFs65f0OP7VSaWy
+        L7jmIbl886+PxloyvttDcYj3YPkwSa1fjdM9rLctJRkD2ZsRIqWmS1mSheHkosI5
+        MLBJCjYFcZDuQe1bzicHtE=
+Received: from jiangzhipeng.ccdomain.com (unknown [218.94.48.178])
+        by smtp13 (Coremail) with SMTP id EcCowADn6JA+EVJgLOIHqg--.53612S2;
+        Wed, 17 Mar 2021 22:25:08 +0800 (CST)
+From:   jzp0409 <jzp0409@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, "edison.jiang" <jiangzhipeng@yulong.com>
+Subject: [PATCH] usb: acpi: Fix shifting 31 bits
+Date:   Wed, 17 Mar 2021 22:25:13 +0800
+Message-Id: <20210317142513.1340-1-jzp0409@163.com>
+X-Mailer: git-send-email 2.30.0.windows.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYv9kwQDYzzA1e=c8kg1wWQ1MwKtintBvyqMiKG5S+ggqA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EcCowADn6JA+EVJgLOIHqg--.53612S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7XFy5GrWfCw4UWr1UAF17GFg_yoWfArb_uF
+        1kur17Ww1xCFWfZr1Uu345Zry8t3W3ZrsxuFs8tF4akF15trs5Zr1DCrWrtrW7XrWj9F9x
+        WF10kr45uw4xKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU1LFx7UUUUU==
+X-Originating-IP: [218.94.48.178]
+X-CM-SenderInfo: hm2sikiqz6il2tof0z/1tbiUQRYhlWBSg97GQAAs4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 17, 2021 at 04:56:15PM +0530, Naresh Kamboju wrote:
-> On Wed, 17 Mar 2021 at 15:34, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Mar 17, 2021 at 02:28:40PM +0530, Naresh Kamboju wrote:
-> > > While booting Linux mainline master 5.12.0-rc2 and 5.12.0-rc3 on arm64
-> > > Hikey device the following KFENCE bug was found.
-> > >
-> > > Recently, we have enabled CONFIG_KFENCE=y and started seeing this crash.
-> > > kernel BUG log:
-> >
-> > What USB traffic are you having here?
-> 
-> This is  getting triggered while booting the device.
-> We are not running any traffic.
+From: "edison.jiang" <jiangzhipeng@yulong.com>
 
-Ah, so this is device probe time.
+Fix undefined behaviour in the usb apci driver by using 'BIT' marcro.
 
-> > And has this ever not triggered?
-> 
-> No.
-> It was not triggered before.
-> Since CONFIG_KFENCE=y is added to our builds recently we are able to
-> reproduce always on recent builds.
-> 
-> Steps to reproduce:
-> 1) Build arm64 kernel Image with this given config.
->       - tuxmake --runtime podman --target-arch arm64 --toolchain gcc-9
-> --kconfig defconfig --kconfig-add
-> https://builds.tuxbuild.com/1pfztfszUNcDwOAyMrw2wPMKNfc/config
-> 2) Boot arm64 hikey hi6220 device
-> 3) While booting the device you will get to see this kernel BUG:
-> 
-> [   18.243075] BUG: KFENCE: memory corruption in
-> usb_get_device_descriptor+0x80/0xb0
-> [   18.813861] BUG: KFENCE: memory corruption in
-> __usbnet_read_cmd.isra.0+0xd0/0x1a0
+Signed-off-by: edison.jiang <jiangzhipeng@yulong.com>
+---
+ drivers/usb/core/usb-acpi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-There was a warning before this, from the hub code, when reading from
-this device as well.  Perhaps this is just a side affect of the real
-memory corruption issue somewhere else?
+diff --git a/drivers/usb/core/usb-acpi.c b/drivers/usb/core/usb-acpi.c
+index 50b2fc7..3e467a8 100644
+--- a/drivers/usb/core/usb-acpi.c
++++ b/drivers/usb/core/usb-acpi.c
+@@ -122,7 +122,7 @@ static enum usb_port_connect_type usb_acpi_get_connect_type(acpi_handle handle,
+  * Private to usb-acpi, all the core needs to know is that
+  * port_dev->location is non-zero when it has been set by the firmware.
+  */
+-#define USB_ACPI_LOCATION_VALID (1 << 31)
++#define USB_ACPI_LOCATION_VALID BIT(31)
+ 
+ static struct acpi_device *usb_acpi_find_port(struct acpi_device *parent,
+ 					      int raw)
+-- 
+1.9.1
 
-Bisection would be nice, but I'm placing odds on this always being an
-issue here in this driver code...
 
-thanks for the report.
-
-greg k-h
