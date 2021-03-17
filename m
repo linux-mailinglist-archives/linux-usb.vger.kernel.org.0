@@ -2,15 +2,15 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C7A33F42F
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Mar 2021 16:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1420233F4D0
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Mar 2021 16:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbhCQPsJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Mar 2021 11:48:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34260 "EHLO mail.kernel.org"
+        id S232030AbhCQP6v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Mar 2021 11:58:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35874 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231842AbhCQOvF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 17 Mar 2021 10:51:05 -0400
+        id S231995AbhCQP6m (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 17 Mar 2021 11:58:42 -0400
 Received: by mail.kernel.org (Postfix) with ESMTPSA id 407A364EF9;
         Wed, 17 Mar 2021 14:51:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
