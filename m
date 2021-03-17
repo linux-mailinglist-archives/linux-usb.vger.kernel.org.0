@@ -2,136 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B82133EAE9
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Mar 2021 08:57:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CF8B33EB1B
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Mar 2021 09:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbhCQH4c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Mar 2021 03:56:32 -0400
-Received: from mga01.intel.com ([192.55.52.88]:4772 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230192AbhCQH4I (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 17 Mar 2021 03:56:08 -0400
-IronPort-SDR: hT06F8oU2iWsNNCMv+RXMkpMxu8TidJ7pPloKVOOKBhxYL5y0f1vwdBF1RhM81A6fjdj1vqfgB
- vFvcfHGgMTFA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9925"; a="209374137"
-X-IronPort-AV: E=Sophos;i="5.81,255,1610438400"; 
-   d="scan'208";a="209374137"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2021 00:56:07 -0700
-IronPort-SDR: mSgWDomlrrV6GH7Preaa18CmJgLxGH3sB+bdT41bhEXQhjAChRZWSnjyU3WV8wXBZbkbVvwfKv
- WoxYFtwPbg1g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,255,1610438400"; 
-   d="scan'208";a="511644820"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 17 Mar 2021 00:56:04 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 17 Mar 2021 09:56:03 +0200
-Date:   Wed, 17 Mar 2021 09:56:03 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-Subject: Re: [PATCH] usb: typec: tcpm: Invoke power_supply_changed for
- tcpm-source-psy-
-Message-ID: <YFG2E43hAW0q6CG1@kuha.fi.intel.com>
-References: <20210316215657.387357-1-badhri@google.com>
+        id S229564AbhCQIMw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Mar 2021 04:12:52 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:46782 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229490AbhCQIMX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Mar 2021 04:12:23 -0400
+Received: from mail-ej1-f69.google.com ([209.85.218.69])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lMRHx-0008Lv-TT
+        for linux-usb@vger.kernel.org; Wed, 17 Mar 2021 08:12:22 +0000
+Received: by mail-ej1-f69.google.com with SMTP id en21so14832534ejc.2
+        for <linux-usb@vger.kernel.org>; Wed, 17 Mar 2021 01:12:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1VvKlCveGwcZ25kRarfsxCT9mmwVZ4FTdcU1BjBinAw=;
+        b=rSZpVtCQdNWNMTsjX/KzXTzYhwtbyzXGJUcMOYmzPEwWxYN17jtt8Zww5SyjRMs+JV
+         cstGoljEeR3+9s7YUj4TuMPnEFAH9E6nfpBgtdUClnLE06vNJffa+fkSnY6A2LLfTG8H
+         8FEQt//Iio7jEzJOKx6Y8JCoHqLy5lOqqWaCPWW7+wnZjgHsr9Df/L/UnYC3MtizsqA8
+         4EUSHtZtorTYiGh6rxpoAyt31xgE8Zb352ATa0b/v6sb24TCIY6a7m0WvpBV8MoqgKpP
+         XOexhg/Wr7wIs84PYr7pjkVmGWzplMdmKRcZUWyRGJ/T0c/TIedVd3mwjUM1kG++j8iO
+         UEFg==
+X-Gm-Message-State: AOAM531EXDGyXRz0IfFJgGyYtxqwc6c+bEqWoiby72oydn32RMjmsJxU
+        s5UvAWGpkU/Z5+3e2qGQVvydOihHtbKXJmzw7mu7qi8rbPUuNrGrE2Iy8HqsjLERY55qIAp0xCP
+        hTHhnz1wmVlU2xK5wGvSP/j1fHCIAAyZFxtxukQ==
+X-Received: by 2002:a17:907:72d5:: with SMTP id du21mr34989275ejc.167.1615968741619;
+        Wed, 17 Mar 2021 01:12:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwfdK25HRyfJGFbH9Zn4GBP2a8sNgOSuRwM5ntCkc+NnnmuNWd0fYtbppm2eQgwuYdu3rmn+g==
+X-Received: by 2002:a17:907:72d5:: with SMTP id du21mr34989266ejc.167.1615968741491;
+        Wed, 17 Mar 2021 01:12:21 -0700 (PDT)
+Received: from [192.168.1.116] (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.gmail.com with ESMTPSA id u24sm7343334edt.85.2021.03.17.01.12.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Mar 2021 01:12:20 -0700 (PDT)
+Subject: Re: [PATCH] MIPS: ralink: define stubs for clk_set_parent to fix
+ compile testing
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     thierry.reding@gmail.com, linux-tegra@vger.kernel.org,
+        balbi@kernel.org, linux-usb@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+References: <20210316175725.79981-1-krzysztof.kozlowski@canonical.com>
+ <44ce8a32-91ff-bb6c-adba-f85c2edf3c18@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <ecbcbeae-1eb8-d20e-04b6-2c65f136799f@canonical.com>
+Date:   Wed, 17 Mar 2021 09:12:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210316215657.387357-1-badhri@google.com>
+In-Reply-To: <44ce8a32-91ff-bb6c-adba-f85c2edf3c18@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 16, 2021 at 02:56:57PM -0700, Badhri Jagan Sridharan wrote:
-> tcpm-source-psy- does not invoke power_supply_changed API when
-> one of the published power supply property is changed.
-> power_supply_changed needs to be called to notify
-> userspace clients(uevents) and kernel clients.
+On 17/03/2021 01:10, Dmitry Osipenko wrote:
+> 16.03.2021 20:57, Krzysztof Kozlowski пишет:
+>> The Ralink MIPS platform does not use Common Clock Framework and does
+>> not define certain clock operations leading to compile test failures:
+>>
+>>     /usr/bin/mips-linux-gnu-ld: drivers/usb/phy/phy-tegra-usb.o: in function `tegra_usb_phy_init':
+>>     phy-tegra-usb.c:(.text+0x1dd4): undefined reference to `clk_get_parent'
+>>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> ---
+>>  arch/mips/ralink/clk.c | 14 ++++++++++++++
+>>  1 file changed, 14 insertions(+)
+>>
+>> diff --git a/arch/mips/ralink/clk.c b/arch/mips/ralink/clk.c
+>> index 2f9d5acb38ea..8387177a47ef 100644
+>> --- a/arch/mips/ralink/clk.c
+>> +++ b/arch/mips/ralink/clk.c
+>> @@ -70,6 +70,20 @@ long clk_round_rate(struct clk *clk, unsigned long rate)
+>>  }
+>>  EXPORT_SYMBOL_GPL(clk_round_rate);
+>>  
+>> +int clk_set_parent(struct clk *clk, struct clk *parent)
+>> +{
+>> +	WARN_ON(clk);
+>> +	return -1;
+>> +}
+>> +EXPORT_SYMBOL(clk_set_parent);
+>> +
+>> +struct clk *clk_get_parent(struct clk *clk)
+>> +{
+>> +	WARN_ON(clk);
+>> +	return NULL;
+>> +}
+>> +EXPORT_SYMBOL(clk_get_parent);
 > 
-> Fixes: f2a8aa053c176("typec: tcpm: Represent source supply through
-> power_supply")
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> I'm wondering whether symbols should be GPL or it doesn't matter in this
+> case. Otherwise this looks good to me.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+The ones in arch/mips/ar7/clock.c were not GPL but other stubs already
+defined here are, so indeed I'll make them GPL for consistency.
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 11d0c40bc47d..e8936ea17f80 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -945,6 +945,7 @@ static int tcpm_set_current_limit(struct tcpm_port *port, u32 max_ma, u32 mv)
->  
->  	port->supply_voltage = mv;
->  	port->current_limit = max_ma;
-> +	power_supply_changed(port->psy);
->  
->  	if (port->tcpc->set_current_limit)
->  		ret = port->tcpc->set_current_limit(port->tcpc, max_ma, mv);
-> @@ -2931,6 +2932,7 @@ static int tcpm_pd_select_pdo(struct tcpm_port *port, int *sink_pdo,
->  
->  	port->pps_data.supported = false;
->  	port->usb_type = POWER_SUPPLY_USB_TYPE_PD;
-> +	power_supply_changed(port->psy);
->  
->  	/*
->  	 * Select the source PDO providing the most power which has a
-> @@ -2955,6 +2957,7 @@ static int tcpm_pd_select_pdo(struct tcpm_port *port, int *sink_pdo,
->  				port->pps_data.supported = true;
->  				port->usb_type =
->  					POWER_SUPPLY_USB_TYPE_PD_PPS;
-> +				power_supply_changed(port->psy);
->  			}
->  			continue;
->  		default:
-> @@ -3112,6 +3115,7 @@ static unsigned int tcpm_pd_select_pps_apdo(struct tcpm_port *port)
->  						  port->pps_data.out_volt));
->  		port->pps_data.op_curr = min(port->pps_data.max_curr,
->  					     port->pps_data.op_curr);
-> +		power_supply_changed(port->psy);
->  	}
->  
->  	return src_pdo;
-> @@ -3347,6 +3351,7 @@ static int tcpm_set_charge(struct tcpm_port *port, bool charge)
->  			return ret;
->  	}
->  	port->vbus_charge = charge;
-> +	power_supply_changed(port->psy);
->  	return 0;
->  }
->  
-> @@ -3530,6 +3535,7 @@ static void tcpm_reset_port(struct tcpm_port *port)
->  	port->try_src_count = 0;
->  	port->try_snk_count = 0;
->  	port->usb_type = POWER_SUPPLY_USB_TYPE_C;
-> +	power_supply_changed(port->psy);
->  	port->nr_sink_caps = 0;
->  	port->sink_cap_done = false;
->  	if (port->tcpc->enable_frs)
-> @@ -5957,7 +5963,7 @@ static int tcpm_psy_set_prop(struct power_supply *psy,
->  		ret = -EINVAL;
->  		break;
->  	}
-> -
-> +	power_supply_changed(port->psy);
->  	return ret;
->  }
->  
-> @@ -6110,6 +6116,7 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
->  	err = devm_tcpm_psy_register(port);
->  	if (err)
->  		goto out_role_sw_put;
-> +	power_supply_changed(port->psy);
->  
->  	port->typec_port = typec_register_port(port->dev, &port->typec_caps);
->  	if (IS_ERR(port->typec_port)) {
-> -- 
-> 2.31.0.rc2.261.g7f71774620-goog
+> Also, I guess it should be possible to create a generic clk stubs that
+> will use weak functions, allowing platforms to override only the wanted
+> stubs and then we won't need to worry about the missing stubs for each
+> platform individually. But of course that will be a much bigger change.
+> Just wanted to share my thoughts.
 
--- 
-heikki
+Yes, it would be a good idea but also a bigger task. I am not sure if
+these platforms are alive enough to get that attention.
+
+Best regards,
+Krzysztof
