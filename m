@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5231E33E389
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Mar 2021 01:57:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04CD333E3E8
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Mar 2021 01:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbhCQAz7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Mar 2021 20:55:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60882 "EHLO mail.kernel.org"
+        id S231777AbhCQA5w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Mar 2021 20:57:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34872 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229847AbhCQAzr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 16 Mar 2021 20:55:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5182964F9C;
-        Wed, 17 Mar 2021 00:55:46 +0000 (UTC)
+        id S231434AbhCQA5E (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 16 Mar 2021 20:57:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2344864FB4;
+        Wed, 17 Mar 2021 00:57:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615942547;
-        bh=j0VWpzhOAI8HqLLffwva5Dt5zc1p+P+m4FCZv+YU9c0=;
+        s=k20201202; t=1615942623;
+        bh=nWky4vFhQDdYKpN9K8dl5nP1GlaeP8D4IR9UQnpH4kk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r255aiGusOJwFChEMIVJzGoMSvZ4sGfssOSgWhDvuuSk565icNo4J1BxTUklsEXfW
-         L5ByC+k1+tfY9NSjSsGh6g5EZjRA3Cmw88j5k+X77NHun0P3oGhQ9YxheAleI5rCLM
-         X339cttRR7/6NLrIvMxgJ2/ftlrm1w1fPSthZyRTRSxrOubz2lW/WuJpC2heD5Q2IE
-         ya86UK+OhQt6ab1WD4XalNKZV1w8DjtEKouZ1AAo4JuOJ8h2OK5EUlPWvd0c5AMvbI
-         yRnYPgcCDviIshNkmmpnZh7lEf4FRZO3cS501YbnglMskZJ+8lqWchOP1EETCBnQ+d
-         3H5GjkC71vYWA==
+        b=gOAsSURciJCxiFER1/S4svNmt7yeXjfaEKxESfaRzKRE7+nZD4fCKAfMneLEj5Irt
+         edVAFt4Ezfa18NTBTsbgevs1kHaAfxqvJFv+sqx9MiSLFTsAGoNG+J/Gnk6gNz+4wT
+         X0xJ4cb+C0FogMG5vWTS8FyuGKcqHO47oHa7VIhVU45i2A8EzI7MOutLV8P5DTu/gT
+         8uUBogUmlLesSeYnt1eb6ENDedJ9PZ6f1zahjtJuhxWjRCBvNfM8cYfK8o0OILz7OK
+         DEF42/zOn471LWuQFVq65oXEBy24zuKP2JLlNuM58gw/tPEZw/YJ8YBgA3iL4eO6a5
+         2ZSDv4kbOjICA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Hayes Wang <hayeswang@realtek.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.11 08/61] Revert "r8152: adjust the settings about MAC clock speed down for RTL8153"
-Date:   Tue, 16 Mar 2021 20:54:42 -0400
-Message-Id: <20210317005536.724046-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 07/54] Revert "r8152: adjust the settings about MAC clock speed down for RTL8153"
+Date:   Tue, 16 Mar 2021 20:56:06 -0400
+Message-Id: <20210317005654.724862-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210317005536.724046-1-sashal@kernel.org>
-References: <20210317005536.724046-1-sashal@kernel.org>
+In-Reply-To: <20210317005654.724862-1-sashal@kernel.org>
+References: <20210317005654.724862-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -67,10 +67,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+), 29 deletions(-)
 
 diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 67cd6986634f..fd5ca11c4cbb 100644
+index 88f177aca342..d2862071b697 100644
 --- a/drivers/net/usb/r8152.c
 +++ b/drivers/net/usb/r8152.c
-@@ -3016,29 +3016,6 @@ static void __rtl_set_wol(struct r8152 *tp, u32 wolopts)
+@@ -3033,29 +3033,6 @@ static void __rtl_set_wol(struct r8152 *tp, u32 wolopts)
  		device_set_wakeup_enable(&tp->udev->dev, false);
  }
  
@@ -100,7 +100,7 @@ index 67cd6986634f..fd5ca11c4cbb 100644
  static void r8153_u1u2en(struct r8152 *tp, bool enable)
  {
  	u8 u1u2[8];
-@@ -3338,11 +3315,9 @@ static void rtl8153_runtime_enable(struct r8152 *tp, bool enable)
+@@ -3355,11 +3332,9 @@ static void rtl8153_runtime_enable(struct r8152 *tp, bool enable)
  	if (enable) {
  		r8153_u1u2en(tp, false);
  		r8153_u2p3en(tp, false);
@@ -112,7 +112,7 @@ index 67cd6986634f..fd5ca11c4cbb 100644
  
  		switch (tp->version) {
  		case RTL_VER_03:
-@@ -4678,7 +4653,6 @@ static void r8153_first_init(struct r8152 *tp)
+@@ -4695,7 +4670,6 @@ static void r8153_first_init(struct r8152 *tp)
  {
  	u32 ocp_data;
  
@@ -120,7 +120,7 @@ index 67cd6986634f..fd5ca11c4cbb 100644
  	rxdy_gated_en(tp, true);
  	r8153_teredo_off(tp);
  
-@@ -4729,8 +4703,6 @@ static void r8153_enter_oob(struct r8152 *tp)
+@@ -4746,8 +4720,6 @@ static void r8153_enter_oob(struct r8152 *tp)
  {
  	u32 ocp_data;
  
@@ -129,7 +129,7 @@ index 67cd6986634f..fd5ca11c4cbb 100644
  	ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL);
  	ocp_data &= ~NOW_IS_OOB;
  	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL, ocp_data);
-@@ -5456,10 +5428,15 @@ static void r8153_init(struct r8152 *tp)
+@@ -5473,10 +5445,15 @@ static void r8153_init(struct r8152 *tp)
  
  	ocp_write_word(tp, MCU_TYPE_USB, USB_CONNECT_TIMER, 0x0001);
  
