@@ -2,77 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5722734005F
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 08:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FB934006B
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 08:48:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbhCRHqr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Mar 2021 03:46:47 -0400
-Received: from mga02.intel.com ([134.134.136.20]:56852 "EHLO mga02.intel.com"
+        id S229752AbhCRHsZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Mar 2021 03:48:25 -0400
+Received: from mga17.intel.com ([192.55.52.151]:12929 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229559AbhCRHqq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 18 Mar 2021 03:46:46 -0400
-IronPort-SDR: hZSCAXDf4+xCl2M1dURLAuNY9zQ9fmTKxj3QX4oywcgvqOYZmkuppBMZ8RiL/xj70Boo4pVBPf
- OpToGRsMw+fA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9926"; a="176754624"
+        id S229708AbhCRHsI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 18 Mar 2021 03:48:08 -0400
+IronPort-SDR: KYaEThI1hpFF5N0OS5No2h36GGSk6/QDyCN+S1VGTtqpjl+P4RCLIn/SrrkMXZc6q/hWx7qPwZ
+ c59ZUehM+Q7Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9926"; a="169545502"
 X-IronPort-AV: E=Sophos;i="5.81,257,1610438400"; 
-   d="scan'208";a="176754624"
+   d="scan'208";a="169545502"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2021 00:46:45 -0700
-IronPort-SDR: bJY+i5jTopDL5s+varut7NkUmH/LGg42WFaFyk/Osa8R/Au8lCvllNkyG3XAcjl6OAjxf/rsAF
- Dtawzqnkt9tw==
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2021 00:48:08 -0700
+IronPort-SDR: 0DV7MTEJwdl7a16FZabxjpgqu8Guupv/VWk+KKLr4Y09jl3NNOF51fF/I9dWt41DCnnp/q8MdI
+ sBCifOOWK+7A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,257,1610438400"; 
-   d="scan'208";a="512018798"
+   d="scan'208";a="512019214"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 18 Mar 2021 00:46:42 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 18 Mar 2021 09:46:42 +0200
-Date:   Thu, 18 Mar 2021 09:46:42 +0200
+  by fmsmga001.fm.intel.com with SMTP; 18 Mar 2021 00:48:05 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 18 Mar 2021 09:48:05 +0200
+Date:   Thu, 18 Mar 2021 09:48:05 +0200
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Badhri Jagan Sridharan <badhri@google.com>
 Cc:     Guenter Roeck <linux@roeck-us.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v1] usb: typec: tcpm: Skip sink_cap query only when VDM
- sm is busy
-Message-ID: <YFMFYoWBpBSrr5xg@kuha.fi.intel.com>
-References: <20210318064805.3747831-1-badhri@google.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: tcpm: PD3.0 sinks can send Discover
+ Identity even in device mode
+Message-ID: <YFMFtScTKPS/9CO+@kuha.fi.intel.com>
+References: <20210318065604.3757307-1-badhri@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210318064805.3747831-1-badhri@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210318065604.3757307-1-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 17, 2021 at 11:48:05PM -0700, Badhri Jagan Sridharan wrote:
-> When port partner responds "Not supported" to the DiscIdentity command,
-> VDM state machine can remain in NVDM_STATE_ERR_TMOUT and this causes
-> querying sink cap to be skipped indefinitely. Hence check for
-> vdm_sm_running instead of checking for VDM_STATE_DONE.
+On Wed, Mar 17, 2021 at 11:56:04PM -0700, Badhri Jagan Sridharan wrote:
+> >From 6.4.4.2 Structured VDM:
+> • Either Port May be an Initiator of Structured VDMs except for the Enter
+> Mode and Exit Mode Commands which Shall only be initiated by the DFP."
 > 
-> Fixes: 8dc4bd073663f ("usb: typec: tcpm: Add support for Sink Fast Role SWAP(FRS)")
+> The above implies that when PD3.0 link is established PD3.0 sinks
+> can send out discover identity command/AMS once PD negotiation is done.
+> This allows discovering identity for PD3.0 UFP ports as well.
+> 
 > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
 Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/tcpm/tcpm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/usb/typec/tcpm/tcpm.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 11d0c40bc47d..39e068d60755 100644
+> index 11d0c40bc47d..410856ec1702 100644
 > --- a/drivers/usb/typec/tcpm/tcpm.c
 > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -5219,7 +5219,7 @@ static void tcpm_enable_frs_work(struct kthread_work *work)
->  		goto unlock;
+> @@ -3653,8 +3653,8 @@ static inline enum tcpm_state unattached_state(struct tcpm_port *port)
 >  
->  	/* Send when the state machine is idle */
-> -	if (port->state != SNK_READY || port->vdm_state != VDM_STATE_DONE || port->send_discover)
-> +	if (port->state != SNK_READY || port->vdm_sm_running || port->send_discover)
->  		goto resched;
->  
->  	port->upcoming_state = GET_SINK_CAP;
+>  static void tcpm_check_send_discover(struct tcpm_port *port)
+>  {
+> -	if (port->data_role == TYPEC_HOST && port->send_discover &&
+> -	    port->pd_capable)
+> +	if ((port->data_role == TYPEC_HOST || port->negotiated_rev > PD_REV20) &&
+> +	    port->send_discover && port->pd_capable)
+>  		tcpm_send_vdm(port, USB_SID_PD, CMD_DISCOVER_IDENT, NULL, 0);
+>  	port->send_discover = false;
+>  }
 > -- 
 > 2.31.0.rc2.261.g7f71774620-goog
 
