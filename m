@@ -2,133 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A5033FC63
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 01:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DE033FD1B
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 03:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbhCRAt4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Mar 2021 20:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbhCRAtq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Mar 2021 20:49:46 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC5BC06174A
-        for <linux-usb@vger.kernel.org>; Wed, 17 Mar 2021 17:49:45 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id n24so423928qkh.9
-        for <linux-usb@vger.kernel.org>; Wed, 17 Mar 2021 17:49:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aXM0IiiTSNMZGkSnAeNlpftODP3fIqcv04JhMr1w2rQ=;
-        b=nPmg+WVFOgKRvJg12jtbRro+o/QaM1AmuduJzNNd6jR0BaeRIPx2i4ROhDGfYESWMY
-         rPmiwwhD8GZ1F21CYeKkyk4yTA89Jq4kOsEsUU7+fNa8FBYuRIWg3xPSVACKirT4Q1km
-         inpJg4HhWddoTCWkO0m041U5ryHJouN5eKtbA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aXM0IiiTSNMZGkSnAeNlpftODP3fIqcv04JhMr1w2rQ=;
-        b=kSr5uI23XF6zjtDz613xizofr50zBQWoLJEAvts+n4L2874TC8+z64xfCkLdcpPzSp
-         29nhJzxcrbX/cpC/vIotaSMryFd8zJLKCSBiGnOjl1KMNZ8cokkuC9+xGKSL8GUsUKz5
-         D19f4zvWdwApvdLo5HM0lZ/HbQ6ufxdeG8P4IEVxy05r32gzeTEWCVvyuchVc/mf+5qE
-         wh8/XURlZwBhPDyJjs/QPDqm0zazvVtlKCdqrdniCwUx4oLPn8xa7J9hXLH51BQhfQr+
-         JCNIAowFzKNS4B5DuIdxwVrQP1KThn/5Y8b2fFuTk1yGTp/8yQ9f6t+aC2hnwnbAJonX
-         mn3g==
-X-Gm-Message-State: AOAM531dG8k9PqzzDijHttxX2sIzZ2on7GHYpogWebDKByDnHEjPa4wx
-        NSF+uumyiaw9vxCMXnIAqaNNBqYIzr+rVTiHyAF19Q==
-X-Google-Smtp-Source: ABdhPJyVbJD+5Ky8oxmXJB96otgzJjqRKKIkeML8Xt4XJkvVSFS+TzYye2P2AkfAZ2mzaJxuzzmx6vULlH4bxnvm2MQ=
-X-Received: by 2002:a37:9d57:: with SMTP id g84mr1906120qke.71.1616028584856;
- Wed, 17 Mar 2021 17:49:44 -0700 (PDT)
+        id S230020AbhCRCOi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Mar 2021 22:14:38 -0400
+Received: from m12-18.163.com ([220.181.12.18]:54118 "EHLO m12-18.163.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229934AbhCRCOY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 17 Mar 2021 22:14:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:Message-ID:MIME-Version; bh=fO2CC
+        29OQ2AzUbG/fhU4RDHggHeUsLS021mcRAJG7po=; b=El0s8TN4KA+eQpIjTRUeL
+        aNCfzcCUDTUD4F0FvfTsOZ1ozWBq8J342+bvcl2Dgm53Ygx5Nc4RP6zlRe+be2ZT
+        eXCarr9yyjNgmXxgkuPWaajPOOlEPI5ocbMt1hv3TQJpT6ntJDedsnegtviv8p9u
+        9/R2xGJREZz5AH5l/zb4HA=
+Received: from localhost (unknown [218.94.48.178])
+        by smtp14 (Coremail) with SMTP id EsCowABXUe95t1Jgb4qGZQ--.52911S2;
+        Thu, 18 Mar 2021 10:14:18 +0800 (CST)
+Date:   Thu, 18 Mar 2021 10:14:30 +0800
+From:   jiangzhipeng <jzp0409@163.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, "edison.jiang" <jiangzhipeng@yulong.com>
+Subject: Re: [PATCH] usb: acpi: Fix shifting 31 bits
+Message-ID: <20210318100635.000024c6@163.com>
+In-Reply-To: <YFIXVojHb3LmCOTb@kroah.com>
+References: <20210317142513.1340-1-jzp0409@163.com>
+ <YFIXVojHb3LmCOTb@kroah.com>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-References: <20210309092330.5813-1-gil.fine@intel.com>
-In-Reply-To: <20210309092330.5813-1-gil.fine@intel.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Wed, 17 Mar 2021 17:49:33 -0700
-Message-ID: <CACeCKadX+ugHZTup5O7YXCtYpALg7rn7gAqCe4SBLa_nyU3hLA@mail.gmail.com>
-Subject: Re: [PATCH] thunderbolt: debugfs: Show all accessible dwords
-To:     Gil Fine <gil.fine@intel.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
-        Lukas Wunner <lukas@wunner.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: EsCowABXUe95t1Jgb4qGZQ--.52911S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFyrJF4xtFW8JF45Xr48Xrb_yoW8Xr4UpF
+        ZrKFWjyFWDGFWxua47t3Z8WFy5W397ZFy09ryIq34DXFy7Xw10qFWUtr4rWan5Zr1rGayj
+        qF47Wa1rWFWrCrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UbL0OUUUUU=
+X-Originating-IP: [218.94.48.178]
+X-CM-SenderInfo: hm2sikiqz6il2tof0z/1tbiNxpZhlWBjx-e8AAAsY
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Gil,
+On Wed, 17 Mar 2021 15:51:02 +0100
+Greg KH <gregkh@linuxfoundation.org> wrote:
 
+> On Wed, Mar 17, 2021 at 10:25:13PM +0800, jzp0409 wrote:
+> > From: "edison.jiang" <jiangzhipeng@yulong.com>
+> > 
+> > Fix undefined behaviour in the usb apci driver by using 'BIT'
+> > marcro.  
+> 
+> What is undefined about it?
+> 
+> > 
+> > Signed-off-by: edison.jiang <jiangzhipeng@yulong.com>  
+> 
+> This name is not a valid signed-off-by name (I doubt you sign
+> documents with a ".", right?) and it does not match the "From:" name
+> either, so something needs to be fixed before this patch could be
+> accepted.
+> 
+> > ---
+> >  drivers/usb/core/usb-acpi.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/core/usb-acpi.c
+> > b/drivers/usb/core/usb-acpi.c index 50b2fc7..3e467a8 100644
+> > --- a/drivers/usb/core/usb-acpi.c
+> > +++ b/drivers/usb/core/usb-acpi.c
+> > @@ -122,7 +122,7 @@ static enum usb_port_connect_type
+> > usb_acpi_get_connect_type(acpi_handle handle,
+> >   * Private to usb-acpi, all the core needs to know is that
+> >   * port_dev->location is non-zero when it has been set by the
+> > firmware. */
+> > -#define USB_ACPI_LOCATION_VALID (1 << 31)
+> > +#define USB_ACPI_LOCATION_VALID BIT(31)  
+> 
+> I do not understand what this is trying to fix, please be more
+> specific.
+> 
+> thanks,
+> 
+> greg k-h
 
-On Tue, Mar 9, 2021 at 1:23 AM Gil Fine <gil.fine@intel.com> wrote:
->
-> Currently, when first failure occurs while reading of the block,
-> we stop reading the block and jump to the next capability.
-> This doesn't cover the case of block with "holes" of inaccessible
-> dwords, followed by accessible dwords.
-> This patch address this problem.
-> In case of failure while reading the complete block in one transaction,
-> (because of one or more dwords is inaccessible), we read the remaining
-> dwords of the block dword-by-dword, one dword per transaction,
-> till the end of the block.
-> By doing this, we handle the case of block with "holes" of inaccessible
-> dwords, followed by accessible dwords. The accessible dwords are shown
-> with the fields: <offset> <relative_offset> <cap_id> <vs_cap_id> <value>
-> E.g.:
-> 0x01eb  236 0x05 0x06 0x0000d166
-> While the inaccesible dwords are shown as: <offset> <not accessible>
-> E.g.:
-> 0x01ed <not accessible>
->
-> Signed-off-by: Gil Fine <gil.fine@intel.com>
-> ---
->  drivers/thunderbolt/debugfs.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/thunderbolt/debugfs.c b/drivers/thunderbolt/debugfs.c
-> index 201036507cb8..c850b0ac098c 100644
-> --- a/drivers/thunderbolt/debugfs.c
-> +++ b/drivers/thunderbolt/debugfs.c
-> @@ -265,10 +265,8 @@ static void cap_show_by_dw(struct seq_file *s, struct tb_switch *sw,
->                 else
->                         ret = tb_sw_read(sw, &data, TB_CFG_SWITCH, cap + offset + i, 1);
->                 if (ret) {
-> -                       seq_printf(s, "0x%04x <not accessible>\n", cap + offset);
-> -                       if (dwords - i > 1)
-> -                               seq_printf(s, "0x%04x ...\n", cap + offset + 1);
-> -                       return;
-> +                       seq_printf(s, "0x%04x <not accessible>\n", cap + offset + i);
-> +                       continue;
->                 }
->
->                 seq_printf(s, "0x%04x %4d 0x%02x 0x%02x 0x%08x\n", cap + offset + i,
-> @@ -292,7 +290,7 @@ static void cap_show(struct seq_file *s, struct tb_switch *sw,
->                 else
->                         ret = tb_sw_read(sw, data, TB_CFG_SWITCH, cap + offset, dwords);
->                 if (ret) {
-> -                       cap_show_by_dw(s, sw, port, cap, offset, cap_id, vsec_id, dwords);
+cppcheck error:
+linux/drivers/usb/core/usb-acpi.c:191]: (error) Shifting signed 32-bit
+value by 31 bits is undefined behaviour
 
-Sorry for being late here:
-Can we call cap_show_by_dw(..., dwords) directly here, instead of
-having the logic of doing the block read and then resorting to this if
-the block read fails?
-Since it's debugfs, I doubt efficiency gains are paramount here, and
-we have a simpler invocation at the callsite.
-
-> +                       cap_show_by_dw(s, sw, port, cap, offset, cap_id, vsec_id, length);
->                         return;
->                 }
->
-> --
-> 2.17.1
->
-> ---------------------------------------------------------------------
-> Intel Israel (74) Limited
->
-> This e-mail and any attachments may contain confidential material for
-> the sole use of the intended recipient(s). Any review or distribution
-> by others is strictly prohibited. If you are not the intended
-> recipient, please contact the sender and delete all copies.
->
