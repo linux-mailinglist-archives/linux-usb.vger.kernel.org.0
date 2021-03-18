@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E620340F8E
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 22:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCE7340F8C
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 22:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbhCRVIc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Mar 2021 17:08:32 -0400
-Received: from mga14.intel.com ([192.55.52.115]:50070 "EHLO mga14.intel.com"
+        id S231501AbhCRVIA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Mar 2021 17:08:00 -0400
+Received: from mga02.intel.com ([134.134.136.20]:59210 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230368AbhCRVIP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 18 Mar 2021 17:08:15 -0400
-IronPort-SDR: pC4VPeIieLbX7oq8TA0lQhOOO2NW9EBRpWvQbYUHoVc/S8OaJgPSrp38CpPgeEvSo1AKcebp21
- FaxiihtV8Tiw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9927"; a="189145945"
+        id S230139AbhCRVH4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 18 Mar 2021 17:07:56 -0400
+IronPort-SDR: dHKBdl9OPvSDtWbbmIDQHDV6Q920rLvuPeGloWZKeBDylIGDJS+0iV9OI+pN0NiiiTIohpeqjp
+ 9g71Sz//+iXg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9927"; a="176903923"
 X-IronPort-AV: E=Sophos;i="5.81,259,1610438400"; 
-   d="scan'208";a="189145945"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2021 14:07:55 -0700
-IronPort-SDR: BRiBvQxx9ubbglvsHi+L9xmUp6HHaJXJGhqiKy4OzznhzwHUowOBW+U0NzDL19g53JnSy6twDH
- +01fEkGvZUDw==
+   d="scan'208";a="176903923"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2021 14:07:55 -0700
+IronPort-SDR: hjFnbktOmqIYsFh7IwznBEZnv/0HjVdiKzbLrktXzay3R+8fYj/klWkjd7XfdAH702QNJQ7Mq+
+ mX0IoQJv0y4g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,259,1610438400"; 
-   d="scan'208";a="379903544"
+   d="scan'208";a="591621240"
 Received: from lkp-server02.sh.intel.com (HELO 1c294c63cb86) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 18 Mar 2021 14:07:54 -0700
+  by orsmga005.jf.intel.com with ESMTP; 18 Mar 2021 14:07:54 -0700
 Received: from kbuild by 1c294c63cb86 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1lMzs1-0001Ph-EO; Thu, 18 Mar 2021 21:07:53 +0000
-Date:   Fri, 19 Mar 2021 05:07:19 +0800
+        id 1lMzs1-0001Pj-Et; Thu, 18 Mar 2021 21:07:53 +0000
+Date:   Fri, 19 Mar 2021 05:07:21 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- 18106234c0e99f21bd50574d92dbd26d9b97d789
-Message-ID: <6053c107.LXgy4u+9GRBiLJs5%lkp@intel.com>
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 2b8c956ea6ba896ec18ae36c2684ecfa04c1f479
+Message-ID: <6053c109.sHeC9iui2NzkLZB9%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -43,12 +43,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: 18106234c0e99f21bd50574d92dbd26d9b97d789  usb: mtu3: Fix spelling mistake "disabed" -> "disabled"
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 2b8c956ea6ba896ec18ae36c2684ecfa04c1f479  usb: typec: tcpm: Skip sink_cap query only when VDM sm is busy
 
 elapsed time: 722m
 
-configs tested: 127
+configs tested: 136
 configs skipped: 2
 
 The following configs have been built successfully.
@@ -61,8 +61,9 @@ arm64                               defconfig
 arm                              allyesconfig
 arm                              allmodconfig
 x86_64                           allyesconfig
-i386                             allyesconfig
+riscv                            allmodconfig
 riscv                            allyesconfig
+i386                             allyesconfig
 arm                       omap2plus_defconfig
 powerpc                 mpc8560_ads_defconfig
 sh                        apsh4ad0a_defconfig
@@ -72,22 +73,30 @@ m68k                       m5475evb_defconfig
 sparc                            alldefconfig
 powerpc                        icon_defconfig
 xtensa                  nommu_kc705_defconfig
-mips                        workpad_defconfig
-arm                         hackkit_defconfig
-arm                         lpc18xx_defconfig
-powerpc                      pcm030_defconfig
-m68k                             allmodconfig
-powerpc                     taishan_defconfig
 powerpc                    socrates_defconfig
 arm                         assabet_defconfig
 h8300                    h8300h-sim_defconfig
 mips                  decstation_64_defconfig
 arm                         nhk8815_defconfig
+arm                       cns3420vb_defconfig
+powerpc                     sbc8548_defconfig
+arm                        magician_defconfig
+mips                         tb0226_defconfig
+mips                        jmr3927_defconfig
+arm                     davinci_all_defconfig
+sh                           se7750_defconfig
 mips                  maltasmvp_eva_defconfig
+mips                        qi_lb60_defconfig
+xtensa                           alldefconfig
 mips                     decstation_defconfig
 arm                          exynos_defconfig
 mips                            gpr_defconfig
 arm                       multi_v4t_defconfig
+arm                          moxart_defconfig
+powerpc                    klondike_defconfig
+sh                            migor_defconfig
+riscv                          rv32_defconfig
+sh                     magicpanelr2_defconfig
 powerpc                      chrp32_defconfig
 powerpc                   lite5200b_defconfig
 csky                             alldefconfig
@@ -99,6 +108,7 @@ powerpc                     tqm8560_defconfig
 arm                          pxa910_defconfig
 arm                          simpad_defconfig
 powerpc                  mpc866_ads_defconfig
+s390                             allyesconfig
 powerpc                      ppc40x_defconfig
 powerpc                     stx_gp3_defconfig
 arm                        multi_v7_defconfig
@@ -111,30 +121,31 @@ mips                        vocore2_defconfig
 mips                           ci20_defconfig
 sh                             sh03_defconfig
 sh                               j2_defconfig
-mips                        jmr3927_defconfig
 powerpc                      makalu_defconfig
-powerpc                    amigaone_defconfig
-powerpc                 xes_mpc85xx_defconfig
-nios2                            allyesconfig
-sh                           se7721_defconfig
+arm                          pxa3xx_defconfig
+sh                         ap325rxa_defconfig
+powerpc                      ppc64e_defconfig
+um                            kunit_defconfig
+sh                        edosk7705_defconfig
 ia64                             allmodconfig
 ia64                                defconfig
 ia64                             allyesconfig
+m68k                             allmodconfig
 m68k                                defconfig
 m68k                             allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
 nios2                               defconfig
 arc                              allyesconfig
 nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
 xtensa                           allyesconfig
 h8300                            allyesconfig
 arc                                 defconfig
 sh                               allmodconfig
 parisc                              defconfig
-s390                             allyesconfig
 s390                             allmodconfig
 parisc                           allyesconfig
 s390                                defconfig
@@ -169,8 +180,6 @@ riscv                    nommu_k210_defconfig
 riscv                    nommu_virt_defconfig
 riscv                             allnoconfig
 riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
 x86_64                    rhel-7.6-kselftests
 x86_64                              defconfig
 x86_64                               rhel-8.3
