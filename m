@@ -2,80 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2239034093E
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 16:52:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 809FB340953
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 16:55:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbhCRPwW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Mar 2021 11:52:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54666 "EHLO mail.kernel.org"
+        id S232017AbhCRPy2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Mar 2021 11:54:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55372 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231648AbhCRPwA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 18 Mar 2021 11:52:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 35DC564F40;
-        Thu, 18 Mar 2021 15:52:00 +0000 (UTC)
+        id S232006AbhCRPx7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 18 Mar 2021 11:53:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 39B3E64F18;
+        Thu, 18 Mar 2021 15:53:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616082720;
-        bh=M4E3BvFfJP/+cfDrdryeJREcm4+lpbukXe5ZikaLhv4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MfXzBnl9oEGLOV/1dzcu+MGzrB9X/2r3O509gkDf+QRs7uxLmY+iA7EAKpj/SCzy8
-         C5CEodM/Wo0LNkRthAMqTd0UbFLFq+1aE/F2Yhw4Vua4qLt/hpxsBXiHGhBFBa2Oqa
-         62tNuUSk1mEamqVZSUZwdiKdc1Bf7bOlZhX0mBQ25u9GRv1iLyaVptdfwxq7ZBvmXR
-         xGnpiISq4+/fjdgaPOaQwtT2Ey8j59hvWJnIB4XJ4zzcPnyiu6fxH6e8CxKK3huja2
-         clA1PDlioMmEz8dBpBKfeibUe6hGbx4QosVb0BmZvqx5FizY8uZ9hFDRoRI11ELjsr
-         vqltxk/tbaSkQ==
+        s=k20201202; t=1616082838;
+        bh=BBrcHhfGE3iBCVKNTfQNX2XldJgZEPsT9zYlvgZfU00=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iP/UVGFC73InLFx4efZkmlo12J8RlaVD48Fx5M8+2D46+2C2yNZBymLdMF7IwhbPN
+         bwZaSqbrY3NMVuZ7OSaQyPeyGMa3rVc74uLWpzmCyDfoxCFv4g5ax6Ps7xOpRFEJz3
+         H5j1zOJuwX0aYwRorauR6MNRM/O7yqw5nkOqA88biKUCYWHGTiI/ogws0WrTeh7GyF
+         oZEJS710wXtiPH696fkqmJD9uUC9LBoGBHygMdygMYI6kX1rEuAWUk5Zk8nAAiTCsy
+         1DQ3Sf32HH/LNVzxv9YV3pIgcH1MGXra6zU5dkXArnuWx4nAxH2RwBJsas6WrkCQbO
+         5ulGOj4X2cDMw==
 Received: from johan by xi.lan with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1lMuwc-0005ni-ID; Thu, 18 Mar 2021 16:52:18 +0100
+        id 1lMuyW-0005q3-Nw; Thu, 18 Mar 2021 16:54:16 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan@kernel.org>
-Subject: [PATCH 7/7] USB: cdc-acm: always claim data interface
-Date:   Thu, 18 Mar 2021 16:52:02 +0100
-Message-Id: <20210318155202.22230-8-johan@kernel.org>
+Subject: [PATCH 1/2] USB: core: drop outdated interface-binding comment
+Date:   Thu, 18 Mar 2021 16:54:05 +0100
+Message-Id: <20210318155406.22399-1-johan@kernel.org>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210318155202.22230-1-johan@kernel.org>
-References: <20210318155202.22230-1-johan@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Make sure to always claim the data interface and bail out if it's
-already bound to another driver or isn't authorised.
+It's been almost twenty years since USB drivers returned a data pointer
+from their probe routines in order to bind to an interface.
+
+Time to update the documentation for usb_driver_claim_interface().
 
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/usb/class/cdc-acm.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/usb/core/driver.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index 6991ffd66c5d..58c444f9db5e 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -1486,7 +1486,11 @@ static int acm_probe(struct usb_interface *intf,
- 	acm->line.bDataBits = 8;
- 	acm_set_line(acm, &acm->line);
- 
--	usb_driver_claim_interface(&acm_driver, data_interface, acm);
-+	if (!acm->combined_interfaces) {
-+		rv = usb_driver_claim_interface(&acm_driver, data_interface, acm);
-+		if (rv)
-+			goto err_remove_files;
-+	}
- 
- 	tty_dev = tty_port_register_device(&acm->port, acm_tty_driver, minor,
- 			&control_interface->dev);
-@@ -1508,6 +1512,7 @@ static int acm_probe(struct usb_interface *intf,
- 		usb_set_intfdata(data_interface, NULL);
- 		usb_driver_release_interface(&acm_driver, data_interface);
- 	}
-+err_remove_files:
- 	if (acm->country_codes) {
- 		device_remove_file(&acm->control->dev,
- 				&dev_attr_wCountryCodes);
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index 4dfa44d6cc3c..a1013d9da08d 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -526,10 +526,6 @@ static int usb_unbind_interface(struct device *dev)
+  * No device driver should directly modify internal usb_interface or
+  * usb_device structure members.
+  *
+- * Few drivers should need to use this routine, since the most natural
+- * way to bind to an interface is to return the private data from
+- * the driver's probe() method.
+- *
+  * Callers must own the device lock, so driver probe() entries don't need
+  * extra locking, but other call contexts may need to explicitly claim that
+  * lock.
 -- 
 2.26.2
 
