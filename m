@@ -2,91 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15DE033FD1B
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 03:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FCD33FD57
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 03:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbhCRCOi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Mar 2021 22:14:38 -0400
-Received: from m12-18.163.com ([220.181.12.18]:54118 "EHLO m12-18.163.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229934AbhCRCOY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 17 Mar 2021 22:14:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Message-ID:MIME-Version; bh=fO2CC
-        29OQ2AzUbG/fhU4RDHggHeUsLS021mcRAJG7po=; b=El0s8TN4KA+eQpIjTRUeL
-        aNCfzcCUDTUD4F0FvfTsOZ1ozWBq8J342+bvcl2Dgm53Ygx5Nc4RP6zlRe+be2ZT
-        eXCarr9yyjNgmXxgkuPWaajPOOlEPI5ocbMt1hv3TQJpT6ntJDedsnegtviv8p9u
-        9/R2xGJREZz5AH5l/zb4HA=
-Received: from localhost (unknown [218.94.48.178])
-        by smtp14 (Coremail) with SMTP id EsCowABXUe95t1Jgb4qGZQ--.52911S2;
-        Thu, 18 Mar 2021 10:14:18 +0800 (CST)
-Date:   Thu, 18 Mar 2021 10:14:30 +0800
-From:   jiangzhipeng <jzp0409@163.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, "edison.jiang" <jiangzhipeng@yulong.com>
-Subject: Re: [PATCH] usb: acpi: Fix shifting 31 bits
-Message-ID: <20210318100635.000024c6@163.com>
-In-Reply-To: <YFIXVojHb3LmCOTb@kroah.com>
-References: <20210317142513.1340-1-jzp0409@163.com>
- <YFIXVojHb3LmCOTb@kroah.com>
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
+        id S230391AbhCRCnh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Mar 2021 22:43:37 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:34549 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229702AbhCRCnM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Mar 2021 22:43:12 -0400
+X-UUID: e05bc8db7fb242bcaa4a1a3e348a9b96-20210318
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=fQv6Dgwb3ZUIHKCcqqmaWUSPNkvouPy+QtwObI48/bE=;
+        b=UV5+P3PHZPuPxUnxdD4aERMjnEYLanODjoEBKaoeXt6MHVdhdYJ2PvLQCeKRfz7ziFJGToeXW5GDE25UPxKL2ga424pOhtqgVa1sTVHRRjkO+RRkTqWr+7fkoH67ECEBmg6cXgQwb2cvtrWE4CWbqm5jUOXZEe/m8tRmu6hcJkc=;
+X-UUID: e05bc8db7fb242bcaa4a1a3e348a9b96-20210318
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1657917886; Thu, 18 Mar 2021 10:43:06 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by mtkmbs05n1.mediatek.inc
+ (172.21.101.15) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 18 Mar
+ 2021 10:43:04 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 18 Mar 2021 10:43:03 +0800
+Message-ID: <1616035383.25733.20.camel@mhfsdcap03>
+Subject: Re: [PATCH v5 02/13] dt-bindings: phy: mediatek: dsi-phy: modify
+ compatible dependence
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Vinod Koul <vkoul@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jie Qiu <jie.qiu@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
+        Cawa Cheng <cawa.cheng@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Date:   Thu, 18 Mar 2021 10:43:03 +0800
+In-Reply-To: <20210316092232.9806-2-chunfeng.yun@mediatek.com>
+References: <20210316092232.9806-1-chunfeng.yun@mediatek.com>
+         <20210316092232.9806-2-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: EsCowABXUe95t1Jgb4qGZQ--.52911S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFyrJF4xtFW8JF45Xr48Xrb_yoW8Xr4UpF
-        ZrKFWjyFWDGFWxua47t3Z8WFy5W397ZFy09ryIq34DXFy7Xw10qFWUtr4rWan5Zr1rGayj
-        qF47Wa1rWFWrCrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UbL0OUUUUU=
-X-Originating-IP: [218.94.48.178]
-X-CM-SenderInfo: hm2sikiqz6il2tof0z/1tbiNxpZhlWBjx-e8AAAsY
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 17 Mar 2021 15:51:02 +0100
-Greg KH <gregkh@linuxfoundation.org> wrote:
-
-> On Wed, Mar 17, 2021 at 10:25:13PM +0800, jzp0409 wrote:
-> > From: "edison.jiang" <jiangzhipeng@yulong.com>
-> > 
-> > Fix undefined behaviour in the usb apci driver by using 'BIT'
-> > marcro.  
-> 
-> What is undefined about it?
-> 
-> > 
-> > Signed-off-by: edison.jiang <jiangzhipeng@yulong.com>  
-> 
-> This name is not a valid signed-off-by name (I doubt you sign
-> documents with a ".", right?) and it does not match the "From:" name
-> either, so something needs to be fixed before this patch could be
-> accepted.
-> 
-> > ---
-> >  drivers/usb/core/usb-acpi.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/core/usb-acpi.c
-> > b/drivers/usb/core/usb-acpi.c index 50b2fc7..3e467a8 100644
-> > --- a/drivers/usb/core/usb-acpi.c
-> > +++ b/drivers/usb/core/usb-acpi.c
-> > @@ -122,7 +122,7 @@ static enum usb_port_connect_type
-> > usb_acpi_get_connect_type(acpi_handle handle,
-> >   * Private to usb-acpi, all the core needs to know is that
-> >   * port_dev->location is non-zero when it has been set by the
-> > firmware. */
-> > -#define USB_ACPI_LOCATION_VALID (1 << 31)
-> > +#define USB_ACPI_LOCATION_VALID BIT(31)  
-> 
-> I do not understand what this is trying to fix, please be more
-> specific.
-> 
-> thanks,
-> 
-> greg k-h
-
-cppcheck error:
-linux/drivers/usb/core/usb-acpi.c:191]: (error) Shifting signed 32-bit
-value by 31 bits is undefined behaviour
+SGkgVmlub2QsDQoNCiAgQ291bGQgeW91IHBsZWFzZSBoZWxwIHRvIGFwcGx5IHBhdGNoZXMgWzAy
+LzEzXSBbMDMvMTNdIFswNC8xM10gb2YgdGhlDQpzZXJpZXM/DQoNCiAgIFRoYW5rcyBhIGxvdA0K
+DQpPbiBUdWUsIDIwMjEtMDMtMTYgYXQgMTc6MjIgKzA4MDAsIENodW5mZW5nIFl1biB3cm90ZToN
+Cj4gbXQ3NjIzLW1pcGktdHggaXMgY29tcGF0aWJsZSB0byBtdDI3MDEtbWlwaS10eCwgYW5kIHVz
+ZQ0KPiAibWVkaWF0ZWssbXQyNzAxLW1pcGktdHgiIGluc3RlYWQgb24gTVQ3NjIzLCBzbyBtb2Rp
+ZnkNCj4gdGhlIGNvbXBhdGlibGUgaXRlbXMgdG8gbWFrZSBkZXBlbmRlbmNlIGNsZWFyLg0KPiAN
+Cj4gQ2M6IENodW4tS3VhbmcgSHUgPGNodW5rdWFuZy5odUBrZXJuZWwub3JnPg0KPiBDYzogUGhp
+bGlwcCBaYWJlbCA8cC56YWJlbEBwZW5ndXRyb25peC5kZT4NCj4gQWNrZWQtYnk6IENodW4tS3Vh
+bmcgSHUgPGNodW5rdWFuZy5odUBrZXJuZWwub3JnPg0KPiBSZXZpZXdlZC1ieTogUm9iIEhlcnJp
+bmcgPHJvYmhAa2VybmVsLm9yZz4NCj4gU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxjaHVu
+ZmVuZy55dW5AbWVkaWF0ZWsuY29tPg0KPiAtLS0NCj4gdjU6IG5vIGNoYW5nZXMNCj4gdjQ6IGFk
+ZCBhY2tlZC1ieSBDSywgYW5kIHJldmlld2VkLWJ5IFJvYg0KPiB2MzogbW9kaWZ5IGNvbW1pdCBt
+ZXNzYWdlIHN1Z2dlc3RlZCBieSBDSw0KPiB2Mjogc2VwYXJhdGUgdHdvIHBhdGNoZXMgc3VnZ2Vz
+dGVkIGJ5IENLDQo+IC0tLQ0KPiAgLi4uL2RldmljZXRyZWUvYmluZGluZ3MvcGh5L21lZGlhdGVr
+LGRzaS1waHkueWFtbCAgIHwgMTMgKysrKysrKystLS0tLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDgg
+aW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcGh5L21lZGlhdGVrLGRzaS1waHkueWFtbCBiL0Rv
+Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9waHkvbWVkaWF0ZWssZHNpLXBoeS55YW1s
+DQo+IGluZGV4IDcxZDRhY2VhMWY2Ni4uNmU0ZDc5NWY5YjAyIDEwMDY0NA0KPiAtLS0gYS9Eb2N1
+bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcGh5L21lZGlhdGVrLGRzaS1waHkueWFtbA0K
+PiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcGh5L21lZGlhdGVrLGRz
+aS1waHkueWFtbA0KPiBAQCAtMTksMTEgKzE5LDE0IEBAIHByb3BlcnRpZXM6DQo+ICAgICAgcGF0
+dGVybjogIl5kc2ktcGh5QFswLTlhLWZdKyQiDQo+ICANCj4gICAgY29tcGF0aWJsZToNCj4gLSAg
+ICBlbnVtOg0KPiAtICAgICAgLSBtZWRpYXRlayxtdDI3MDEtbWlwaS10eA0KPiAtICAgICAgLSBt
+ZWRpYXRlayxtdDc2MjMtbWlwaS10eA0KPiAtICAgICAgLSBtZWRpYXRlayxtdDgxNzMtbWlwaS10
+eA0KPiAtICAgICAgLSBtZWRpYXRlayxtdDgxODMtbWlwaS10eA0KPiArICAgIG9uZU9mOg0KPiAr
+ICAgICAgLSBpdGVtczoNCj4gKyAgICAgICAgICAtIGVudW06DQo+ICsgICAgICAgICAgICAgIC0g
+bWVkaWF0ZWssbXQ3NjIzLW1pcGktdHgNCj4gKyAgICAgICAgICAtIGNvbnN0OiBtZWRpYXRlayxt
+dDI3MDEtbWlwaS10eA0KPiArICAgICAgLSBjb25zdDogbWVkaWF0ZWssbXQyNzAxLW1pcGktdHgN
+Cj4gKyAgICAgIC0gY29uc3Q6IG1lZGlhdGVrLG10ODE3My1taXBpLXR4DQo+ICsgICAgICAtIGNv
+bnN0OiBtZWRpYXRlayxtdDgxODMtbWlwaS10eA0KPiAgDQo+ICAgIHJlZzoNCj4gICAgICBtYXhJ
+dGVtczogMQ0KDQo=
 
