@@ -2,70 +2,296 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1C2340983
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 17:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9A3340DC2
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 20:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231852AbhCRQCC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Mar 2021 12:02:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56880 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231648AbhCRQBf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 18 Mar 2021 12:01:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6047364E37;
-        Thu, 18 Mar 2021 16:01:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616083292;
-        bh=8ZlNeGVIC5iDIYpch4tok8Iud0RoY50Apo5qJ3GO4FA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=EWoXqqN2y8LjEXl/uKzGgC5baeknNblv0OkEGxd/iWoEXKwSxQaxZYvA+NjGCo8B5
-         az/COz72aWunC3ek8oGCbCI6pmhHdFC19WpLMKb4N13F28VT922Z5pWqn7IsJeLCXe
-         ZrhpoPIslpIcahgnpWn4BSq4+vT7t52jysS+79a05Ee8E+yAnYCgNgpbbcVN/xf66A
-         rQuA+vR494BDWTYuRQRHxo97hmFj+t0CLGYJ87gF7hpvqSazUS2IUOlJjN1hOr9C+d
-         angl5UOYZ6mZP2sSmQ+OrmgXkQFhC/+KIwrRevdyA8FS7QQY5NImmJjVM7N8iQT1gr
-         VgOO58Mw6qnlQ==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lMv5q-0008Hf-Hj; Thu, 18 Mar 2021 17:01:50 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: [PATCH net-next] net: cdc_ncm: drop redundant driver-data assignment
-Date:   Thu, 18 Mar 2021 17:01:42 +0100
-Message-Id: <20210318160142.31801-1-johan@kernel.org>
-X-Mailer: git-send-email 2.26.2
+        id S232849AbhCRTDl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Mar 2021 15:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58188 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232770AbhCRTDN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Mar 2021 15:03:13 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C6BC061760
+        for <linux-usb@vger.kernel.org>; Thu, 18 Mar 2021 12:03:13 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id t18so3413197pjs.3
+        for <linux-usb@vger.kernel.org>; Thu, 18 Mar 2021 12:03:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jzYmbJsYNi3i0nscDA/NehsT3XC8mxj376UPdeaOPtY=;
+        b=aEvhOtbfQ0P5O2qrvvhEcfrziJnhRlhVHVYHfVno1nnbxalGv4HrF3IHqtTXJWWF0m
+         RpDhKRf3W7h5RK70iH8wcJ//ecXPcaSMD63PcyJPoMdR8o5Qnfgm+7Kr3EM82gTV2vTV
+         /O81pZGTCZV+KqWxgT3qu+UVz5TR6Hdt6BnJ0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jzYmbJsYNi3i0nscDA/NehsT3XC8mxj376UPdeaOPtY=;
+        b=UpgcfKongIBIDKE/nFW/E1Oji/5rG/Xiu7LTnGkUqribc6xm9oW2cD/ARhq1uco+5S
+         RPm5H3FIPqd4NkX4JXP3ovXmEJK1977UmTlTkrCFcqz/Yo0A7D702OTWqXQETTWfG6bc
+         Bh7BIeVN7K+VdCAbRv6HOH3+WDmLraggpvKMogDBqD/0PnDQxYrchPXCDX7BWSJJeLig
+         M6yCbRIKN5xPHFkP1H2eiv07yCp8iC0Rl7oZr4n4XO8lovZ06kGuVgZwa4nWmd3RpeF5
+         PZH2isFZUKW3l1jPpAyaDRhaSAbsZ1+oOILly8XZebNCbIeq0Qfxy8pQ+pmHblln3lvD
+         HBSg==
+X-Gm-Message-State: AOAM533dR8tnklxGDtJb7Lq7ujGNAz+WLNQtgvgWAjKwy60FluJuBkdN
+        ADDhDh7CjDjy95+sXzInvM0vcw==
+X-Google-Smtp-Source: ABdhPJzvffbBNV9M06ao/xW4aOFm4nl9wv78KaCFqIhLgX17ravrDF6LjwDxIjhI+NmSSV01ZxEskw==
+X-Received: by 2002:a17:902:f28b:b029:e4:5039:9f03 with SMTP id k11-20020a170902f28bb02900e450399f03mr11355163plc.62.1616094192773;
+        Thu, 18 Mar 2021 12:03:12 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:3cf8:6a09:780b:f65d])
+        by smtp.gmail.com with UTF8SMTPSA id gm9sm2985867pjb.13.2021.03.18.12.03.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Mar 2021 12:03:12 -0700 (PDT)
+Date:   Thu, 18 Mar 2021 12:03:10 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sc7280: Add USB related nodes
+Message-ID: <YFOj7lrOHZE1q2If@google.com>
+References: <1615978901-4202-1-git-send-email-sanm@codeaurora.org>
+ <1615978901-4202-4-git-send-email-sanm@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1615978901-4202-4-git-send-email-sanm@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver data for the data interface has already been set by
-usb_driver_claim_interface() so drop the subsequent redundant
-assignment.
+On Wed, Mar 17, 2021 at 04:31:41PM +0530, Sandeep Maheswaram wrote:
+> Add nodes for DWC3 USB controller, QMP and HS USB PHYs.
+> 
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dts |  39 +++++++++
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi    | 149 ++++++++++++++++++++++++++++++++
+>  2 files changed, 188 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+> index 54d2cb3..251a5b5 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+> @@ -257,3 +257,42 @@
+>  		bias-pull-up;
+>  	};
+>  };
+> +
+> +&usb_1 {
+> +	status = "okay";
+> +};
+> +
+> +&usb_1_dwc3 {
+> +	dr_mode = "host";
+> +};
+> +
+> +&usb_1_hsphy {
+> +	status = "okay";
+> +
+> +	vdda-pll-supply = <&vreg_l10c_0p8>;
+> +	vdda33-supply = <&vreg_l2b_3p0>;
+> +	vdda18-supply = <&vreg_l1c_1p8>;
+> +};
+> +
+> +&usb_1_qmpphy {
+> +	status = "okay";
+> +
+> +	vdda-phy-supply = <&vreg_l6b_1p2>;
+> +	vdda-pll-supply = <&vreg_l1b_0p8>;
+> +};
+> +
+> +&usb_2 {
+> +	status = "okay";
+> +};
+> +
+> +&usb_2_dwc3 {
+> +	dr_mode = "peripheral";
+> +};
+> +
+> +&usb_2_hsphy {
+> +	status = "okay";
+> +
+> +	vdda-pll-supply = <&vreg_l10c_0p8>;
+> +	vdda33-supply = <&vreg_l2b_3p0>;
+> +	vdda18-supply = <&vreg_l1c_1p8>;
+> +};
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index 39cf0be..a785f65 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -305,6 +305,155 @@
+>  			};
+>  		};
+>  
+> +		usb_1_hsphy: phy@88e3000 {
+> +			compatible = "qcom,sc7280-usb-hs-phy",
+> +				     "qcom,usb-snps-hs-7nm-phy";
+> +			reg = <0 0x088e3000 0 0x400>;
+> +			status = "disabled";
+> +			#phy-cells = <0>;
+> +
+> +			clocks = <&rpmhcc RPMH_CXO_CLK>;
+> +			clock-names = "ref";
+> +
+> +			resets = <&gcc GCC_QUSB2PHY_PRIM_BCR>;
+> +		};
+> +
+> +		usb_2_hsphy: phy@88e4000 {
+> +			compatible = "qcom,sc7280-usb-hs-phy",
+> +				     "qcom,usb-snps-hs-7nm-phy";
+> +			reg = <0 0x088e4000 0 0x400>;
+> +			status = "disabled";
+> +			#phy-cells = <0>;
+> +
+> +			clocks = <&rpmhcc RPMH_CXO_CLK>;
+> +			clock-names = "ref";
+> +
+> +			resets = <&gcc GCC_QUSB2PHY_SEC_BCR>;
+> +		};
+> +
+> +		usb_1_qmpphy: phy@88e9000 {
+> +			compatible = "qcom,sm8250-qmp-usb3-phy";
+> +			reg = <0 0x088e9000 0 0x200>,
+> +			      <0 0x088e8000 0 0x20>;
+> +			reg-names = "reg-base", "dp_com";
+> +			status = "disabled";
+> +			#clock-cells = <1>;
 
-Note that this also avoids setting the driver data three times in case
-of a combined interface.
+IIUC this means that the PHY is a clock provider. Which clocks does it
+provide? How would a possible consumer specify the clock it wants to
+use? I couldn't find the corresponding definitions in the header of the
+binding
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/net/usb/cdc_ncm.c | 1 -
- 1 file changed, 1 deletion(-)
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +
+> +			clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
+> +				 <&rpmhcc RPMH_CXO_CLK>,
+> +				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>;
+> +			clock-names = "aux", "ref_clk_src", "com_aux";
+> +
+> +			resets = <&gcc GCC_USB3_DP_PHY_PRIM_BCR>,
+> +				 <&gcc GCC_USB3_PHY_PRIM_BCR>;
+> +			reset-names = "phy", "common";
+> +
+> +			usb_1_ssphy: lanes@88e9200 {
+> +				reg = <0 0x088e9200 0 0x200>,
+> +				      <0 0x088e9400 0 0x200>,
+> +				      <0 0x088e9c00 0 0x400>,
+> +				      <0 0x088e9600 0 0x200>,
+> +				      <0 0x088e9800 0 0x200>,
+> +				      <0 0x088e9a00 0 0x100>;
+> +				#phy-cells = <0>;
+> +				clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
+> +				clock-names = "pipe0";
+> +				clock-output-names = "usb3_phy_pipe_clk_src";
+> +			};
+> +		};
+> +
+> +		usb_2: usb@8cf8800 {
+> +			compatible = "qcom,sc7280-dwc3", "qcom,dwc3";
+> +			reg = <0 0x08cf8800 0 0x400>;
+> +			status = "disabled";
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +			dma-ranges;
+> +
+> +			clocks = <&gcc GCC_CFG_NOC_USB3_SEC_AXI_CLK>,
+> +				 <&gcc GCC_USB30_SEC_MASTER_CLK>,
+> +				 <&gcc GCC_AGGRE_USB3_SEC_AXI_CLK>,
+> +				 <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
+> +				 <&gcc GCC_USB30_SEC_SLEEP_CLK>;
+> +			clock-names = "cfg_noc", "core", "iface","mock_utmi",
+> +				      "sleep";
+> +
+> +			assigned-clocks = <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
+> +					  <&gcc GCC_USB30_SEC_MASTER_CLK>;
+> +			assigned-clock-rates = <19200000>, <200000000>;
+> +
+> +			interrupts-extended = <&intc GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <&pdc 13 IRQ_TYPE_EDGE_RISING>,
+> +				     <&pdc 12 IRQ_TYPE_EDGE_RISING>;
+> +			interrupt-names = "hs_phy_irq",
+> +					  "dm_hs_phy_irq", "dp_hs_phy_irq";
+> +
+> +			power-domains = <&gcc GCC_USB30_SEC_GDSC>;
+> +
+> +			resets = <&gcc GCC_USB30_SEC_BCR>;
+> +
+> +			usb_2_dwc3: dwc3@8c00000 {
+> +				compatible = "snps,dwc3";
+> +				reg = <0 0x08c00000 0 0xe000>;
+> +				interrupts = <GIC_SPI 242 IRQ_TYPE_LEVEL_HIGH>;
+> +				iommus = <&apps_smmu 0xa0 0x0>;
+> +				snps,dis_u2_susphy_quirk;
+> +				snps,dis_enblslpm_quirk;
+> +				phys = <&usb_2_hsphy>;
+> +				phy-names = "usb2-phy";
+> +				maximum-speed = "high-speed";
+> +			};
+> +		};
+> +
+> +		usb_1: usb@a6f8800 {
+> +			compatible = "qcom,sc7280-dwc3", "qcom,dwc3";
+> +			reg = <0 0x0a6f8800 0 0x400>;
+> +			status = "disabled";
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +			dma-ranges;
+> +
+> +			clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
+> +				 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
+> +				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
+> +				 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
+> +				 <&gcc GCC_USB30_PRIM_SLEEP_CLK>;
+> +
+> +			clock-names = "cfg_noc", "core", "iface", "mock_utmi",
+> +				      "sleep";
+> +
+> +			assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
+> +					  <&gcc GCC_USB30_PRIM_MASTER_CLK>;
+> +			assigned-clock-rates = <19200000>, <200000000>;
+> +
+> +			interrupts-extended = <&intc GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&pdc 14 IRQ_TYPE_EDGE_BOTH>,
+> +					      <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
+> +					      <&pdc 17 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
+> +					  "dm_hs_phy_irq", "ss_phy_irq";
+> +
+> +			power-domains = <&gcc GCC_USB30_PRIM_GDSC>;
+> +
+> +			resets = <&gcc GCC_USB30_PRIM_BCR>;
+> +
+> +			usb_1_dwc3: dwc3@a600000 {
+> +				compatible = "snps,dwc3";
+> +				reg = <0 0x0a600000 0 0xe000>;
+> +				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
+> +				iommus = <&apps_smmu 0xe0 0x0>;
+> +				snps,dis_u2_susphy_quirk;
+> +				snps,dis_enblslpm_quirk;
+> +				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
+> +				phy-names = "usb2-phy", "usb3-phy";
 
-diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-index 8acf30115428..8ae565a801b5 100644
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -920,7 +920,6 @@ int cdc_ncm_bind_common(struct usbnet *dev, struct usb_interface *intf, u8 data_
- 		goto error2;
- 	}
- 
--	usb_set_intfdata(ctx->data, dev);
- 	usb_set_intfdata(ctx->control, dev);
- 
- 	if (ctx->ether_desc) {
--- 
-2.26.2
+The 'maximum-speed' isn't specified in difference to the other controller.
+According to commit d3d245aee0b1 ("arm64: dts: qcom: sc7180: Add
+maximum speed property for DWC3 USB node") the max speed is used to
+configure the interconnect bandwidth. dwc3_qcom_interconnect_init() falls
+back to super speed if the max speed is unknown, so it should be fine to
+omit it, unless it is needed for something else.
 
