@@ -2,296 +2,191 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9A3340DC2
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 20:04:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F73340F46
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 21:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbhCRTDl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Mar 2021 15:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58188 "EHLO
+        id S230495AbhCRUlA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Mar 2021 16:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232770AbhCRTDN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Mar 2021 15:03:13 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C6BC061760
-        for <linux-usb@vger.kernel.org>; Thu, 18 Mar 2021 12:03:13 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id t18so3413197pjs.3
-        for <linux-usb@vger.kernel.org>; Thu, 18 Mar 2021 12:03:13 -0700 (PDT)
+        with ESMTP id S231137AbhCRUkp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Mar 2021 16:40:45 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9B6C06174A
+        for <linux-usb@vger.kernel.org>; Thu, 18 Mar 2021 13:40:44 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id k27so1627820vki.2
+        for <linux-usb@vger.kernel.org>; Thu, 18 Mar 2021 13:40:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jzYmbJsYNi3i0nscDA/NehsT3XC8mxj376UPdeaOPtY=;
-        b=aEvhOtbfQ0P5O2qrvvhEcfrziJnhRlhVHVYHfVno1nnbxalGv4HrF3IHqtTXJWWF0m
-         RpDhKRf3W7h5RK70iH8wcJ//ecXPcaSMD63PcyJPoMdR8o5Qnfgm+7Kr3EM82gTV2vTV
-         /O81pZGTCZV+KqWxgT3qu+UVz5TR6Hdt6BnJ0=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xol55/9H4SiYpqW9PDFqK2rSIMyEWIaJbvYIxkmuGOA=;
+        b=D1ja9+Cs7QVmfxGC2t4MBWS4rYjTTsocGFOGexTP0gi+5M1B8TFSVQYS/Mr+tWfIJ1
+         /qPtxE3EdhkgArFi8zW5u9kGkJijPDuS5AnlhlhkjXcr0YItpI5bX4jQ7gluT8JkiZsI
+         N9Tq9o5+Szipn+eGj7vv2Q4hbfzsP5AYjH0qBDOhPOsq5heHR6JGkHQxpT9PDfd6KcrW
+         z5mswn4Yc4rB/0i48ZdNeomjdXzBJ7C/xjxkj6R6EVs392CG5PB9E/I0F3ySq3ow8ikF
+         x0pn6B1ZQJnXWeRmm3V7Q47+XX2V1LK69/DSaSJstWTbsx7JkvpxggDC0GJQcedjnD2w
+         6DxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jzYmbJsYNi3i0nscDA/NehsT3XC8mxj376UPdeaOPtY=;
-        b=UpgcfKongIBIDKE/nFW/E1Oji/5rG/Xiu7LTnGkUqribc6xm9oW2cD/ARhq1uco+5S
-         RPm5H3FIPqd4NkX4JXP3ovXmEJK1977UmTlTkrCFcqz/Yo0A7D702OTWqXQETTWfG6bc
-         Bh7BIeVN7K+VdCAbRv6HOH3+WDmLraggpvKMogDBqD/0PnDQxYrchPXCDX7BWSJJeLig
-         M6yCbRIKN5xPHFkP1H2eiv07yCp8iC0Rl7oZr4n4XO8lovZ06kGuVgZwa4nWmd3RpeF5
-         PZH2isFZUKW3l1jPpAyaDRhaSAbsZ1+oOILly8XZebNCbIeq0Qfxy8pQ+pmHblln3lvD
-         HBSg==
-X-Gm-Message-State: AOAM533dR8tnklxGDtJb7Lq7ujGNAz+WLNQtgvgWAjKwy60FluJuBkdN
-        ADDhDh7CjDjy95+sXzInvM0vcw==
-X-Google-Smtp-Source: ABdhPJzvffbBNV9M06ao/xW4aOFm4nl9wv78KaCFqIhLgX17ravrDF6LjwDxIjhI+NmSSV01ZxEskw==
-X-Received: by 2002:a17:902:f28b:b029:e4:5039:9f03 with SMTP id k11-20020a170902f28bb02900e450399f03mr11355163plc.62.1616094192773;
-        Thu, 18 Mar 2021 12:03:12 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:3cf8:6a09:780b:f65d])
-        by smtp.gmail.com with UTF8SMTPSA id gm9sm2985867pjb.13.2021.03.18.12.03.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Mar 2021 12:03:12 -0700 (PDT)
-Date:   Thu, 18 Mar 2021 12:03:10 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sc7280: Add USB related nodes
-Message-ID: <YFOj7lrOHZE1q2If@google.com>
-References: <1615978901-4202-1-git-send-email-sanm@codeaurora.org>
- <1615978901-4202-4-git-send-email-sanm@codeaurora.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xol55/9H4SiYpqW9PDFqK2rSIMyEWIaJbvYIxkmuGOA=;
+        b=XkfovGZkfc2DyLsVPLTgPDxjckjmqW1zwrnubQWMwWvm8fxPvBzoJ7gq4prb3J0/J7
+         I6DSEilMLNiiVlAi350BoNe1UmJ7SJxo/ubQSI0I2Ipi21AqfC3g4KykXdLyX7QvN33O
+         AeY/KIZcjCJMBItFZSNaSGGJiDCN6rIYIT3M3ILkgdCTNNaenFb7QqhAT2RUPBNq7rR9
+         xE3gBR8NC0d9aICsgLf6GdD3t7JOKWZyiagws9t0lC13fGdpjqpIaggrstGpD6VZLECI
+         H0bDcdBdXPlmhJtIOoEEtXCZy7UwjRjIvIf+mJiiON1XQpeZw68l5vw31hfdNVgcfZDg
+         b5iw==
+X-Gm-Message-State: AOAM533PTf61KGqORtyTG6Qp7I3Z04N34iTVrVldZlXTJ5fSFvoah9FY
+        olnYTDUTiy7/UOvVLtSrnKUGrJO/xVrCTdw9phU6rqFwUbHYjQ==
+X-Google-Smtp-Source: ABdhPJza7/s835SEdRq/LrIOvtCqfvw6RkbFHI6+Rff1fy9HvfuZEf0HJuKK/0r6FgTZ34f9B4qTL3JMqPUUiJAUQIo=
+X-Received: by 2002:a1f:a5d7:: with SMTP id o206mr966897vke.22.1616100041505;
+ Thu, 18 Mar 2021 13:40:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1615978901-4202-4-git-send-email-sanm@codeaurora.org>
+References: <20210317181249.1062995-1-badhri@google.com> <PR3PR10MB41420951E2867C2E0E5272B980699@PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM>
+In-Reply-To: <PR3PR10MB41420951E2867C2E0E5272B980699@PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Thu, 18 Mar 2021 13:40:05 -0700
+Message-ID: <CAPTae5J_GdHsGQvNxgpffk5otyGhY8D48vddvin3A4fkz3KWUA@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: typec: tcpm: Invoke power_supply_changed for tcpm-source-psy-
+To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 17, 2021 at 04:31:41PM +0530, Sandeep Maheswaram wrote:
-> Add nodes for DWC3 USB controller, QMP and HS USB PHYs.
-> 
-> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> ---
->  arch/arm64/boot/dts/qcom/sc7280-idp.dts |  39 +++++++++
->  arch/arm64/boot/dts/qcom/sc7280.dtsi    | 149 ++++++++++++++++++++++++++++++++
->  2 files changed, 188 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-> index 54d2cb3..251a5b5 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-> @@ -257,3 +257,42 @@
->  		bias-pull-up;
->  	};
->  };
-> +
-> +&usb_1 {
-> +	status = "okay";
-> +};
-> +
-> +&usb_1_dwc3 {
-> +	dr_mode = "host";
-> +};
-> +
-> +&usb_1_hsphy {
-> +	status = "okay";
-> +
-> +	vdda-pll-supply = <&vreg_l10c_0p8>;
-> +	vdda33-supply = <&vreg_l2b_3p0>;
-> +	vdda18-supply = <&vreg_l1c_1p8>;
-> +};
-> +
-> +&usb_1_qmpphy {
-> +	status = "okay";
-> +
-> +	vdda-phy-supply = <&vreg_l6b_1p2>;
-> +	vdda-pll-supply = <&vreg_l1b_0p8>;
-> +};
-> +
-> +&usb_2 {
-> +	status = "okay";
-> +};
-> +
-> +&usb_2_dwc3 {
-> +	dr_mode = "peripheral";
-> +};
-> +
-> +&usb_2_hsphy {
-> +	status = "okay";
-> +
-> +	vdda-pll-supply = <&vreg_l10c_0p8>;
-> +	vdda33-supply = <&vreg_l2b_3p0>;
-> +	vdda18-supply = <&vreg_l1c_1p8>;
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 39cf0be..a785f65 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -305,6 +305,155 @@
->  			};
->  		};
->  
-> +		usb_1_hsphy: phy@88e3000 {
-> +			compatible = "qcom,sc7280-usb-hs-phy",
-> +				     "qcom,usb-snps-hs-7nm-phy";
-> +			reg = <0 0x088e3000 0 0x400>;
-> +			status = "disabled";
-> +			#phy-cells = <0>;
-> +
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>;
-> +			clock-names = "ref";
-> +
-> +			resets = <&gcc GCC_QUSB2PHY_PRIM_BCR>;
-> +		};
-> +
-> +		usb_2_hsphy: phy@88e4000 {
-> +			compatible = "qcom,sc7280-usb-hs-phy",
-> +				     "qcom,usb-snps-hs-7nm-phy";
-> +			reg = <0 0x088e4000 0 0x400>;
-> +			status = "disabled";
-> +			#phy-cells = <0>;
-> +
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>;
-> +			clock-names = "ref";
-> +
-> +			resets = <&gcc GCC_QUSB2PHY_SEC_BCR>;
-> +		};
-> +
-> +		usb_1_qmpphy: phy@88e9000 {
-> +			compatible = "qcom,sm8250-qmp-usb3-phy";
-> +			reg = <0 0x088e9000 0 0x200>,
-> +			      <0 0x088e8000 0 0x20>;
-> +			reg-names = "reg-base", "dp_com";
-> +			status = "disabled";
-> +			#clock-cells = <1>;
+On Thu, Mar 18, 2021 at 8:26 AM Adam Thomson
+<Adam.Thomson.Opensource@diasemi.com> wrote:
+>
+> On 17 March 2021 18:13, Badhri Jagan Sridharan wrote:
+>
+> > tcpm-source-psy- does not invoke power_supply_changed API when
+> > one of the published power supply properties is changed.
+> > power_supply_changed needs to be called to notify
+> > userspace clients(uevents) and kernel clients.
+> >
+> > Fixes: f2a8aa053c176("typec: tcpm: Represent source supply through
+> > power_supply")
+> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > ---
+> > Changes since V1:
+> > - Fixed commit message as per Guenter's suggestion
+> > - Added Reviewed-by tags
+> > - cc'ed stable
+> > ---
+> >  drivers/usb/typec/tcpm/tcpm.c | 9 ++++++++-
+> >  1 file changed, 8 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > index 11d0c40bc47d..e8936ea17f80 100644
+> > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > @@ -945,6 +945,7 @@ static int tcpm_set_current_limit(struct tcpm_port *port,
+> > u32 max_ma, u32 mv)
+> >
+> >       port->supply_voltage = mv;
+> >       port->current_limit = max_ma;
+> > +     power_supply_changed(port->psy);
+> >
+> >       if (port->tcpc->set_current_limit)
+> >               ret = port->tcpc->set_current_limit(port->tcpc, max_ma, mv);
+> > @@ -2931,6 +2932,7 @@ static int tcpm_pd_select_pdo(struct tcpm_port *port,
+> > int *sink_pdo,
+> >
+> >       port->pps_data.supported = false;
+> >       port->usb_type = POWER_SUPPLY_USB_TYPE_PD;
+> > +     power_supply_changed(port->psy);
+> >
+> >       /*
+> >        * Select the source PDO providing the most power which has a
+> > @@ -2955,6 +2957,7 @@ static int tcpm_pd_select_pdo(struct tcpm_port *port,
+> > int *sink_pdo,
+> >                               port->pps_data.supported = true;
+> >                               port->usb_type =
+> >                                       POWER_SUPPLY_USB_TYPE_PD_PPS;
+> > +                             power_supply_changed(port->psy);
+> >                       }
+> >                       continue;
+> >               default:
+> > @@ -3112,6 +3115,7 @@ static unsigned int tcpm_pd_select_pps_apdo(struct
+> > tcpm_port *port)
+> >                                                 port->pps_data.out_volt));
+> >               port->pps_data.op_curr = min(port->pps_data.max_curr,
+> >                                            port->pps_data.op_curr);
+> > +             power_supply_changed(port->psy);
+> >       }
+> >
+> >       return src_pdo;
+>
+> Regarding selecting PDOs or PPS APDOs, surely we should only notify of a change
+> when we reach SNK_READY which means a new contract has been established? Until
+> that point it's possible any requested change could be rejected so why inform
+> clients before we know the settings have taken effect? I could be missing
+> something here as it's been a little while since I delved into this, but this
+> doesn't seem to make sense to me.
 
-IIUC this means that the PHY is a clock provider. Which clocks does it
-provide? How would a possible consumer specify the clock it wants to
-use? I couldn't find the corresponding definitions in the header of the
-binding
+I was trying to keep the power_supply_changed call close to the
+variables which are used to infer the power supply property values.
+Since port->pps_data.max_curr is already updated here and that's used
+to infer the CURRENT_MAX a client could still read this before the
+request goes through right ?
+>
+> > @@ -3347,6 +3351,7 @@ static int tcpm_set_charge(struct tcpm_port *port, bool
+> > charge)
+> >                       return ret;
+> >       }
+> >       port->vbus_charge = charge;
+> > +     power_supply_changed(port->psy);
+> >       return 0;
+> >  }
+> >
+> > @@ -3530,6 +3535,7 @@ static void tcpm_reset_port(struct tcpm_port *port)
+> >       port->try_src_count = 0;
+> >       port->try_snk_count = 0;
+> >       port->usb_type = POWER_SUPPLY_USB_TYPE_C;
+> > +     power_supply_changed(port->psy);
+>
+> This is already taken care of at the end of this function, isn't it?
+I thought I deleted that. Looks like I didn't. Will send in a patch to
+remove that.
+Will wait for what we decide for the PPS case so that I can send in
+both in the same patch.
 
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
-> +				 <&rpmhcc RPMH_CXO_CLK>,
-> +				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>;
-> +			clock-names = "aux", "ref_clk_src", "com_aux";
-> +
-> +			resets = <&gcc GCC_USB3_DP_PHY_PRIM_BCR>,
-> +				 <&gcc GCC_USB3_PHY_PRIM_BCR>;
-> +			reset-names = "phy", "common";
-> +
-> +			usb_1_ssphy: lanes@88e9200 {
-> +				reg = <0 0x088e9200 0 0x200>,
-> +				      <0 0x088e9400 0 0x200>,
-> +				      <0 0x088e9c00 0 0x400>,
-> +				      <0 0x088e9600 0 0x200>,
-> +				      <0 0x088e9800 0 0x200>,
-> +				      <0 0x088e9a00 0 0x100>;
-> +				#phy-cells = <0>;
-> +				clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
-> +				clock-names = "pipe0";
-> +				clock-output-names = "usb3_phy_pipe_clk_src";
-> +			};
-> +		};
-> +
-> +		usb_2: usb@8cf8800 {
-> +			compatible = "qcom,sc7280-dwc3", "qcom,dwc3";
-> +			reg = <0 0x08cf8800 0 0x400>;
-> +			status = "disabled";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +			dma-ranges;
-> +
-> +			clocks = <&gcc GCC_CFG_NOC_USB3_SEC_AXI_CLK>,
-> +				 <&gcc GCC_USB30_SEC_MASTER_CLK>,
-> +				 <&gcc GCC_AGGRE_USB3_SEC_AXI_CLK>,
-> +				 <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
-> +				 <&gcc GCC_USB30_SEC_SLEEP_CLK>;
-> +			clock-names = "cfg_noc", "core", "iface","mock_utmi",
-> +				      "sleep";
-> +
-> +			assigned-clocks = <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
-> +					  <&gcc GCC_USB30_SEC_MASTER_CLK>;
-> +			assigned-clock-rates = <19200000>, <200000000>;
-> +
-> +			interrupts-extended = <&intc GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <&pdc 13 IRQ_TYPE_EDGE_RISING>,
-> +				     <&pdc 12 IRQ_TYPE_EDGE_RISING>;
-> +			interrupt-names = "hs_phy_irq",
-> +					  "dm_hs_phy_irq", "dp_hs_phy_irq";
-> +
-> +			power-domains = <&gcc GCC_USB30_SEC_GDSC>;
-> +
-> +			resets = <&gcc GCC_USB30_SEC_BCR>;
-> +
-> +			usb_2_dwc3: dwc3@8c00000 {
-> +				compatible = "snps,dwc3";
-> +				reg = <0 0x08c00000 0 0xe000>;
-> +				interrupts = <GIC_SPI 242 IRQ_TYPE_LEVEL_HIGH>;
-> +				iommus = <&apps_smmu 0xa0 0x0>;
-> +				snps,dis_u2_susphy_quirk;
-> +				snps,dis_enblslpm_quirk;
-> +				phys = <&usb_2_hsphy>;
-> +				phy-names = "usb2-phy";
-> +				maximum-speed = "high-speed";
-> +			};
-> +		};
-> +
-> +		usb_1: usb@a6f8800 {
-> +			compatible = "qcom,sc7280-dwc3", "qcom,dwc3";
-> +			reg = <0 0x0a6f8800 0 0x400>;
-> +			status = "disabled";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +			dma-ranges;
-> +
-> +			clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
-> +				 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
-> +				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
-> +				 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
-> +				 <&gcc GCC_USB30_PRIM_SLEEP_CLK>;
-> +
-> +			clock-names = "cfg_noc", "core", "iface", "mock_utmi",
-> +				      "sleep";
-> +
-> +			assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
-> +					  <&gcc GCC_USB30_PRIM_MASTER_CLK>;
-> +			assigned-clock-rates = <19200000>, <200000000>;
-> +
-> +			interrupts-extended = <&intc GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <&pdc 14 IRQ_TYPE_EDGE_BOTH>,
-> +					      <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
-> +					      <&pdc 17 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
-> +					  "dm_hs_phy_irq", "ss_phy_irq";
-> +
-> +			power-domains = <&gcc GCC_USB30_PRIM_GDSC>;
-> +
-> +			resets = <&gcc GCC_USB30_PRIM_BCR>;
-> +
-> +			usb_1_dwc3: dwc3@a600000 {
-> +				compatible = "snps,dwc3";
-> +				reg = <0 0x0a600000 0 0xe000>;
-> +				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-> +				iommus = <&apps_smmu 0xe0 0x0>;
-> +				snps,dis_u2_susphy_quirk;
-> +				snps,dis_enblslpm_quirk;
-> +				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
-> +				phy-names = "usb2-phy", "usb3-phy";
+Thanks,
+Badhri
 
-The 'maximum-speed' isn't specified in difference to the other controller.
-According to commit d3d245aee0b1 ("arm64: dts: qcom: sc7180: Add
-maximum speed property for DWC3 USB node") the max speed is used to
-configure the interconnect bandwidth. dwc3_qcom_interconnect_init() falls
-back to super speed if the max speed is unknown, so it should be fine to
-omit it, unless it is needed for something else.
-
+>
+> >       port->nr_sink_caps = 0;
+> >       port->sink_cap_done = false;
+> >       if (port->tcpc->enable_frs)
+> > @@ -5957,7 +5963,7 @@ static int tcpm_psy_set_prop(struct power_supply
+> > *psy,
+> >               ret = -EINVAL;
+> >               break;
+> >       }
+> > -
+> > +     power_supply_changed(port->psy);
+> >       return ret;
+> >  }
+> >
+> > @@ -6110,6 +6116,7 @@ struct tcpm_port *tcpm_register_port(struct device
+> > *dev, struct tcpc_dev *tcpc)
+> >       err = devm_tcpm_psy_register(port);
+> >       if (err)
+> >               goto out_role_sw_put;
+> > +     power_supply_changed(port->psy);
+> >
+> >       port->typec_port = typec_register_port(port->dev, &port->typec_caps);
+> >       if (IS_ERR(port->typec_port)) {
+> > --
+> > 2.31.0.rc2.261.g7f71774620-goog
+>
