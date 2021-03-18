@@ -2,62 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC19340832
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 15:55:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE1E340836
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 15:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbhCROyu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Mar 2021 10:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59982 "EHLO
+        id S231557AbhCROzW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Mar 2021 10:55:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbhCROye (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Mar 2021 10:54:34 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C88C06174A;
-        Thu, 18 Mar 2021 07:54:34 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id w21-20020a9d63950000b02901ce7b8c45b4so5436917otk.5;
-        Thu, 18 Mar 2021 07:54:34 -0700 (PDT)
+        with ESMTP id S231627AbhCROzU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Mar 2021 10:55:20 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8357C06174A;
+        Thu, 18 Mar 2021 07:55:20 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id k14-20020a9d7dce0000b02901b866632f29so5456247otn.1;
+        Thu, 18 Mar 2021 07:55:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Bp34zom1zCvJJrQquMcXUW0jeMnP2aq6CD78ogiP0Gg=;
-        b=N/hLIGGWKagKZiQNA6QggikiYl1d3csncrZHpWMWsoGJ40oMpSo+ZS1SYXRnGRtTJl
-         cT98pJswvaKyVrXdW8Z3Zbl3d0j2XmLkYUEOxA6HOwZpywNHOi0IaMmvlfF8KhobId1m
-         SIpRG8RnBYr8jdiJKRIzRvKAP/4U9cWCCRZVW1FkgH43URX1yrZmXtes2mIcTVJDXccp
-         BeSpJnXb6c4SAmLRvDzIxS4+YTHFEqKf8uRCHPmDC5xj+hZI27ybayUDbT34WL71XGLD
-         RXdKx5jNjiLoSWELtEaJKz0Z2hkK1dSUF072DVDlVTz5c9Mz92XIFZ3KusoBWnNurF5k
-         EBEw==
+        bh=dUT3HZrqRsv9CgEECG+Bbe9wAdt88hfxSecgS7Fm9sM=;
+        b=Z6EHfu88HcenUtv0kcLV1Lz1n1D/421zAOeVjdPeTajgfSLzPftAB6ne+yoLSfWBd+
+         I/VznjMtyef+KmkZzRcDqKMT5SaqTMBmOMMJasm0T1nL9gjYscj8d+bcfBW4yzr3uU6R
+         nld4aSGPQVCn2vsR8Axier6gBDpbcqgDzfa/ANjK14cNlIHbH1/jXlpE4pqhDM1J2Jv5
+         Lk8t/P+jXD5k71RCOMI6BJRpTWVWezr0x1sFojGuTaquK9kDcEThzJDE1Tli2hMmt/VI
+         r9Xn/+NAHPpMN1jVdlNP2JAEag7qtPth4khNRVSn8qN55d367QGV2MqudoGMJopkxiL1
+         hpKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=Bp34zom1zCvJJrQquMcXUW0jeMnP2aq6CD78ogiP0Gg=;
-        b=AZC9NIUPG5xwgTW4oplFa9iC7w3PfoV29Yvol68bjNUAp1uag1SLshxaqw99ftmZB1
-         86op5MJmmR8ThdU5qX0LWkBQdqN68TbDrcUm0tmfTxjH3dn5WkzR+9HemJDbf5YaD6df
-         j3jS70H0Q2AcNi5wcEThqBuC6gmigdBaT7LOuqYkwqxIsKZUv2qkdNGP2ilQL8UyqcLi
-         NWSod4yGB3nC7Bx7MUQhhvbc/svcnyo9MBQ/nSl1N96YCRsA9ppbfgJRiIvK4Ke/i1mW
-         pkkOXgP4IIP0yJBvAYRm4A/DDRP4KTRz6m2ZyDES7xwpU9ANYzBoxtEoeGJMhxJoAyZV
-         kJgw==
-X-Gm-Message-State: AOAM5320edAobAxEYQ1CfdyV9lEs6ZLOSIAmfi/JzdZGVfi3YhqkiTSW
-        Fh3TBYndmVWYWrmGs7urIGL4E7R/PyQ=
-X-Google-Smtp-Source: ABdhPJxjCIJZL4UJvbiTw2bq/H2XfxlAELvPLeryETt8w7pptwdwWI95fcm9k+XeNP3PqKu60BSRDQ==
-X-Received: by 2002:a9d:1ea2:: with SMTP id n31mr8101277otn.370.1616079273635;
-        Thu, 18 Mar 2021 07:54:33 -0700 (PDT)
+        bh=dUT3HZrqRsv9CgEECG+Bbe9wAdt88hfxSecgS7Fm9sM=;
+        b=etrdqQClfOB1ZcP15Ddy8Kxf0ZvrlkE2t0klAkg3m0H9OS2r1pjfiU1NJg4X8aHd8b
+         aTN4AFBp4X+NIqQAWpj3Le0Gveru6MGPM/k4MhonPFZR2jSFiJlFuHODawzj92lo1QbO
+         Bk5Yo9hu7+JrwMiR56+qbM1+YSM2n9EdiudkxTpqJNOUiyvBuEgJ93o+xogENcpB0yVt
+         pWh2FvfVj2QjorH0fKUMK2kxEEdHgpnVy0bI55u0/rXuQO9N80psp0kZTSg24kx7Ot/E
+         X1Fn5U6wrlxCWdfyWWw9N1Ogq8l9vG8bg8bg26yWCqzIiT2LkH6J4VETPDtufKJU1z+b
+         dbnw==
+X-Gm-Message-State: AOAM5310cwaFNqnXfDCC24WbEAGJXhy5Rcs/Tp1fJD2EWFqKxFjyeRWS
+        X3/PCVqYu8tiQ2TVZ7+1u0YgHCmchmc=
+X-Google-Smtp-Source: ABdhPJxJOjl/HcYtsUr3eyxVjfbmS2S4s+EaAIAA7yX3j7Ogt+PUzFvkhX7Y2bhYf20T69DXHWMXqQ==
+X-Received: by 2002:a05:6830:1bed:: with SMTP id k13mr7382800otb.265.1616079319854;
+        Thu, 18 Mar 2021 07:55:19 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k9sm510720ots.24.2021.03.18.07.54.31
+        by smtp.gmail.com with ESMTPSA id o204sm568146oig.14.2021.03.18.07.55.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Mar 2021 07:54:33 -0700 (PDT)
+        Thu, 18 Mar 2021 07:55:19 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v1] usb: typec: tcpm: Skip sink_cap query only when VDM sm
- is busy
+Subject: Re: [PATCH v1] usb: typec: tcpm: PD3.0 sinks can send Discover
+ Identity even in device mode
 To:     Badhri Jagan Sridharan <badhri@google.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20210318064805.3747831-1-badhri@google.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210318065604.3757307-1-badhri@google.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -102,46 +101,50 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <771d9847-6e0b-0aa1-e514-2558b4a59637@roeck-us.net>
-Date:   Thu, 18 Mar 2021 07:54:30 -0700
+Message-ID: <3dbda4c3-f623-e52f-eb95-e7c0cc5ac498@roeck-us.net>
+Date:   Thu, 18 Mar 2021 07:55:18 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210318064805.3747831-1-badhri@google.com>
+In-Reply-To: <20210318065604.3757307-1-badhri@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/17/21 11:48 PM, Badhri Jagan Sridharan wrote:
-> When port partner responds "Not supported" to the DiscIdentity command,
-> VDM state machine can remain in NVDM_STATE_ERR_TMOUT and this causes
-> querying sink cap to be skipped indefinitely. Hence check for
-> vdm_sm_running instead of checking for VDM_STATE_DONE.
+On 3/17/21 11:56 PM, Badhri Jagan Sridharan wrote:
+>>From 6.4.4.2 Structured VDM:
+> • Either Port May be an Initiator of Structured VDMs except for the Enter
+> Mode and Exit Mode Commands which Shall only be initiated by the DFP."
 > 
-> Fixes: 8dc4bd073663f ("usb: typec: tcpm: Add support for Sink Fast Role SWAP(FRS)")
+> The above implies that when PD3.0 link is established PD3.0 sinks
+> can send out discover identity command/AMS once PD negotiation is done.
+> This allows discovering identity for PD3.0 UFP ports as well.
+> 
 > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/usb/typec/tcpm/tcpm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/usb/typec/tcpm/tcpm.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 11d0c40bc47d..39e068d60755 100644
+> index 11d0c40bc47d..410856ec1702 100644
 > --- a/drivers/usb/typec/tcpm/tcpm.c
 > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -5219,7 +5219,7 @@ static void tcpm_enable_frs_work(struct kthread_work *work)
->  		goto unlock;
+> @@ -3653,8 +3653,8 @@ static inline enum tcpm_state unattached_state(struct tcpm_port *port)
 >  
->  	/* Send when the state machine is idle */
-> -	if (port->state != SNK_READY || port->vdm_state != VDM_STATE_DONE || port->send_discover)
-> +	if (port->state != SNK_READY || port->vdm_sm_running || port->send_discover)
->  		goto resched;
->  
->  	port->upcoming_state = GET_SINK_CAP;
+>  static void tcpm_check_send_discover(struct tcpm_port *port)
+>  {
+> -	if (port->data_role == TYPEC_HOST && port->send_discover &&
+> -	    port->pd_capable)
+> +	if ((port->data_role == TYPEC_HOST || port->negotiated_rev > PD_REV20) &&
+> +	    port->send_discover && port->pd_capable)
+>  		tcpm_send_vdm(port, USB_SID_PD, CMD_DISCOVER_IDENT, NULL, 0);
+>  	port->send_discover = false;
+>  }
 > 
 
