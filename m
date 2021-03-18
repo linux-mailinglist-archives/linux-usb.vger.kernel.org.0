@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E1D340F8D
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 22:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E620340F8E
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 22:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231402AbhCRVH7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Mar 2021 17:07:59 -0400
-Received: from mga09.intel.com ([134.134.136.24]:7431 "EHLO mga09.intel.com"
+        id S231696AbhCRVIc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Mar 2021 17:08:32 -0400
+Received: from mga14.intel.com ([192.55.52.115]:50070 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231137AbhCRVH4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 18 Mar 2021 17:07:56 -0400
-IronPort-SDR: jQXHeBoMF7ZX7ILGuONcK7W3SCTtr7JZdn0uRV7pFiXBS7ez/l1wO+3ceIZSlrfI7XghOY2Osq
- i0L5QiZjAPQw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9927"; a="189863801"
+        id S230368AbhCRVIP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 18 Mar 2021 17:08:15 -0400
+IronPort-SDR: pC4VPeIieLbX7oq8TA0lQhOOO2NW9EBRpWvQbYUHoVc/S8OaJgPSrp38CpPgeEvSo1AKcebp21
+ FaxiihtV8Tiw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9927"; a="189145945"
 X-IronPort-AV: E=Sophos;i="5.81,259,1610438400"; 
-   d="scan'208";a="189863801"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2021 14:07:55 -0700
-IronPort-SDR: Ye2htFmbaA6Kmp3Yu7PzhlWX0KN/K8qCytOFbK2b/hDFTFzBTyCm6dmijcv0DAkMgLyJ9KVq4h
- x+XvVW8ZAJ+g==
+   d="scan'208";a="189145945"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2021 14:07:55 -0700
+IronPort-SDR: BRiBvQxx9ubbglvsHi+L9xmUp6HHaJXJGhqiKy4OzznhzwHUowOBW+U0NzDL19g53JnSy6twDH
+ +01fEkGvZUDw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,259,1610438400"; 
-   d="scan'208";a="523401578"
+   d="scan'208";a="379903544"
 Received: from lkp-server02.sh.intel.com (HELO 1c294c63cb86) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 18 Mar 2021 14:07:54 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 18 Mar 2021 14:07:54 -0700
 Received: from kbuild by 1c294c63cb86 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1lMzs1-0001Pm-FJ; Thu, 18 Mar 2021 21:07:53 +0000
-Date:   Fri, 19 Mar 2021 05:07:17 +0800
+        id 1lMzs1-0001Ph-EO; Thu, 18 Mar 2021 21:07:53 +0000
+Date:   Fri, 19 Mar 2021 05:07:19 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- e00943e916782ae17ca05d654779a84f09481ab8
-Message-ID: <6053c105.IlZ4/UOv2KElCdRj%lkp@intel.com>
+Subject: [usb:usb-next] BUILD SUCCESS
+ 18106234c0e99f21bd50574d92dbd26d9b97d789
+Message-ID: <6053c107.LXgy4u+9GRBiLJs5%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -43,10 +43,10 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: e00943e916782ae17ca05d654779a84f09481ab8  usb: typec: tcpm: PD3.0 sinks can send Discover Identity even in device mode
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+branch HEAD: 18106234c0e99f21bd50574d92dbd26d9b97d789  usb: mtu3: Fix spelling mistake "disabed" -> "disabled"
 
-elapsed time: 721m
+elapsed time: 722m
 
 configs tested: 127
 configs skipped: 2
