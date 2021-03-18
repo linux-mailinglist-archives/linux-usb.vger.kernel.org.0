@@ -2,85 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FB934006B
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 08:48:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 459C9340112
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 09:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbhCRHsZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Mar 2021 03:48:25 -0400
-Received: from mga17.intel.com ([192.55.52.151]:12929 "EHLO mga17.intel.com"
+        id S229698AbhCRIei (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Mar 2021 04:34:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52266 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229708AbhCRHsI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 18 Mar 2021 03:48:08 -0400
-IronPort-SDR: KYaEThI1hpFF5N0OS5No2h36GGSk6/QDyCN+S1VGTtqpjl+P4RCLIn/SrrkMXZc6q/hWx7qPwZ
- c59ZUehM+Q7Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9926"; a="169545502"
-X-IronPort-AV: E=Sophos;i="5.81,257,1610438400"; 
-   d="scan'208";a="169545502"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2021 00:48:08 -0700
-IronPort-SDR: 0DV7MTEJwdl7a16FZabxjpgqu8Guupv/VWk+KKLr4Y09jl3NNOF51fF/I9dWt41DCnnp/q8MdI
- sBCifOOWK+7A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,257,1610438400"; 
-   d="scan'208";a="512019214"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 18 Mar 2021 00:48:05 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 18 Mar 2021 09:48:05 +0200
-Date:   Thu, 18 Mar 2021 09:48:05 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] usb: typec: tcpm: PD3.0 sinks can send Discover
- Identity even in device mode
-Message-ID: <YFMFtScTKPS/9CO+@kuha.fi.intel.com>
-References: <20210318065604.3757307-1-badhri@google.com>
+        id S229512AbhCRIeK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 18 Mar 2021 04:34:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CE47264E0C;
+        Thu, 18 Mar 2021 08:34:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1616056450;
+        bh=iYjlr808wwAeBllRfa8NhdqcGqRsqLViMayFYpq9858=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SVCfutdnYi0alPo3BWcal1TGqvMUZJPiEVkp1QsmBIDSlHrOOy5IgQ9V8Mfq/M7Gc
+         sPCwqp9Abygd+J4xMDUqHwRA7l1IJGkgOQFClj+yaOkPxkoyj3Mqu4RtHqZSQEQ4uY
+         j34RVUVNW5uQnweCtQAMMDFW2bCs1+cII1ujYZQ4=
+Date:   Thu, 18 Mar 2021 09:34:07 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     jiangzhipeng <jzp0409@163.com>
+Cc:     linux-usb@vger.kernel.org, "edison.jiang" <jiangzhipeng@yulong.com>
+Subject: Re: [PATCH] usb: acpi: Fix shifting 31 bits
+Message-ID: <YFMQfxVibUWl7P0L@kroah.com>
+References: <20210317142513.1340-1-jzp0409@163.com>
+ <YFIXVojHb3LmCOTb@kroah.com>
+ <20210318100635.000024c6@163.com>
+ <YFLkyTGi6PHc4XMd@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210318065604.3757307-1-badhri@google.com>
+In-Reply-To: <YFLkyTGi6PHc4XMd@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 17, 2021 at 11:56:04PM -0700, Badhri Jagan Sridharan wrote:
-> >From 6.4.4.2 Structured VDM:
-> • Either Port May be an Initiator of Structured VDMs except for the Enter
-> Mode and Exit Mode Commands which Shall only be initiated by the DFP."
+On Thu, Mar 18, 2021 at 06:27:37AM +0100, Greg KH wrote:
+> On Thu, Mar 18, 2021 at 10:14:30AM +0800, jiangzhipeng wrote:
+> > On Wed, 17 Mar 2021 15:51:02 +0100
+> > Greg KH <gregkh@linuxfoundation.org> wrote:
+> > 
+> > > On Wed, Mar 17, 2021 at 10:25:13PM +0800, jzp0409 wrote:
+> > > > From: "edison.jiang" <jiangzhipeng@yulong.com>
+> > > > 
+> > > > Fix undefined behaviour in the usb apci driver by using 'BIT'
+> > > > marcro.  
+> > > 
+> > > What is undefined about it?
+> > > 
+> > > > 
+> > > > Signed-off-by: edison.jiang <jiangzhipeng@yulong.com>  
+> > > 
+> > > This name is not a valid signed-off-by name (I doubt you sign
+> > > documents with a ".", right?) and it does not match the "From:" name
+> > > either, so something needs to be fixed before this patch could be
+> > > accepted.
+> > > 
+> > > > ---
+> > > >  drivers/usb/core/usb-acpi.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/usb/core/usb-acpi.c
+> > > > b/drivers/usb/core/usb-acpi.c index 50b2fc7..3e467a8 100644
+> > > > --- a/drivers/usb/core/usb-acpi.c
+> > > > +++ b/drivers/usb/core/usb-acpi.c
+> > > > @@ -122,7 +122,7 @@ static enum usb_port_connect_type
+> > > > usb_acpi_get_connect_type(acpi_handle handle,
+> > > >   * Private to usb-acpi, all the core needs to know is that
+> > > >   * port_dev->location is non-zero when it has been set by the
+> > > > firmware. */
+> > > > -#define USB_ACPI_LOCATION_VALID (1 << 31)
+> > > > +#define USB_ACPI_LOCATION_VALID BIT(31)  
+> > > 
+> > > I do not understand what this is trying to fix, please be more
+> > > specific.
+> > > 
+> > > thanks,
+> > > 
+> > > greg k-h
+> > 
+> > cppcheck error:
+> > linux/drivers/usb/core/usb-acpi.c:191]: (error) Shifting signed 32-bit
+> > value by 31 bits is undefined behaviour
+> > 
 > 
-> The above implies that when PD3.0 link is established PD3.0 sinks
-> can send out discover identity command/AMS once PD negotiation is done.
-> This allows discovering identity for PD3.0 UFP ports as well.
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> That does not explain anything, sorry.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+In other words, cppcheck is usually horrid and you need to do some real
+work to determine what it is trying to say, and to see if it just is
+wrong or not.  Please do that research and if there is a real issue,
+submit a patch to resolve it and put that information in the changelog
+text to explain what is happening.
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 11d0c40bc47d..410856ec1702 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -3653,8 +3653,8 @@ static inline enum tcpm_state unattached_state(struct tcpm_port *port)
->  
->  static void tcpm_check_send_discover(struct tcpm_port *port)
->  {
-> -	if (port->data_role == TYPEC_HOST && port->send_discover &&
-> -	    port->pd_capable)
-> +	if ((port->data_role == TYPEC_HOST || port->negotiated_rev > PD_REV20) &&
-> +	    port->send_discover && port->pd_capable)
->  		tcpm_send_vdm(port, USB_SID_PD, CMD_DISCOVER_IDENT, NULL, 0);
->  	port->send_discover = false;
->  }
-> -- 
-> 2.31.0.rc2.261.g7f71774620-goog
+As it is, this change doesn't seem to actually do anything except quiet
+a random tool.  And that tool is wrong here.
 
 thanks,
 
--- 
-heikki
+greg k-h
