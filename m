@@ -2,70 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7690C34180A
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Mar 2021 10:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 479F4341864
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Mar 2021 10:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbhCSJPv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Mar 2021 05:15:51 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:13207 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbhCSJPX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Mar 2021 05:15:23 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F1ypv5LVtzmYgk;
-        Fri, 19 Mar 2021 17:12:55 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS409-HUB.china.huawei.com (10.3.19.209) with Microsoft SMTP Server id
- 14.3.498.0; Fri, 19 Mar 2021 17:15:13 +0800
-From:   Jay Fang <f.fangjian@huawei.com>
-To:     <balbi@kernel.org>
-CC:     <linux-usb@vger.kernel.org>, <tangzihao1@hisilicon.com>,
-        <huangdaode@huawei.com>
-Subject: [PATCH] USB: gadget: f_fs: Use memdup_user() as a cleanup
-Date:   Fri, 19 Mar 2021 17:15:46 +0800
-Message-ID: <1616145346-1410-1-git-send-email-f.fangjian@huawei.com>
+        id S230022AbhCSJcF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Mar 2021 05:32:05 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:19278 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229973AbhCSJbw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Mar 2021 05:31:52 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1616146312; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=ICCo1NwFAZQWpVxqKXI+Vi5m//alNYpfO/J2NdJBdv8=; b=rKouhtcpNhBlsCe/myWYw2HtocQjMxmd3f0pv8tDKCk4AfrMUbN6y2jm11yESybxDia2kb8Y
+ zydk1RaRwdcSlNzir67OPmbnxTEZ4//evIi02RBH8oHWVqFxMg+KXb9D6o09wDwspBN5U8LI
+ jUKt59/kd6qW6++IX2L7zQVgAmQ=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 60546f754db3bb6801025bb0 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 19 Mar 2021 09:31:33
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id AAD94C4346B; Fri, 19 Mar 2021 09:31:32 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 71FCEC43464;
+        Fri, 19 Mar 2021 09:31:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 71FCEC43464
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH 0/2] Fix allowing of ep queuing while stopping transfers
+Date:   Fri, 19 Mar 2021 02:31:23 -0700
+Message-Id: <1616146285-19149-1-git-send-email-wcheng@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Zihao Tang <tangzihao1@hisilicon.com>
+commit f09ddcfcb8c5 ("usb: dwc3: gadget: Prevent EP queuing while stopping
+transfers") addressed an issue where the DWC3 gadget was still allowing EP
+queuing to occur while the pullup disable routine was executing.  This led to
+a situation where the controller prepares a TRB, which will be unmapped by the
+stop active transfer call.
 
-Fix coccicheck warning which recommends to use memdup_user():
+In addition to the above, there are a few other places in the DWC3 gadget where
+we need to block preparing of TRBs:
 
-drivers/usb/gadget/function/f_fs.c:3829:8-15: WARNING opportunity for memdup_user
+ 1. While the DWC3 gadget cleans up completed TRBs (during
+    dwc3_gadget_endpoint_trbs_complete()), DWC3 gadget giveback is utilized and
+    will release the dwc->lock.  If a pullup disable call occurs while the
+    cleanup is happening, then there is a chance dwc3_gadget_ep_should_continue
+    will prepare a TRB, which will later on be unmapped by the stop active
+    transfer in the pullup disable path.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Zihao Tang <tangzihao1@hisilicon.com>
-Signed-off-by: Jay Fang <f.fangjian@huawei.com>
----
- drivers/usb/gadget/function/f_fs.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ 2. If we are in the CONFIGURED state and the host issues a bus RESET.  In this
+    situation, the connected flag is still set to true while we stop active
+    transfers, which can lead to the same initial problem.  Ideally, function
+    drivers would stop any pending usb requests through dwc3_reset_gadget()
+    using the EP disable call, but for some function drivers, this does not
+    occur synchronously in their disable() callback.  These functions would rely
+    on the stop active transfers in the reset handler to issue the endxfer cmd.
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 801a8b6..2f904f0 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -3826,14 +3826,7 @@ static char *ffs_prepare_buffer(const char __user *buf, size_t len)
- 	if (!len)
- 		return NULL;
- 
--	data = kmalloc(len, GFP_KERNEL);
--	if (!data)
--		return ERR_PTR(-ENOMEM);
--
--	if (copy_from_user(data, buf, len)) {
--		kfree(data);
--		return ERR_PTR(-EFAULT);
--	}
-+	data = memdup_user(buf, len);
- 
- 	pr_vdebug("Buffer from user space:\n");
- 	ffs_dump_mem("", data, len);
+Wesley Cheng (2):
+  usb: dwc3: gadget: Avoid continuing preparing TRBs during teardown
+  usb: dwc3: gadget: Ignore EP queue requests during bus reset
+
+ drivers/usb/dwc3/gadget.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
 -- 
-2.7.4
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
