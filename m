@@ -2,80 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 762BF3416C7
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Mar 2021 08:39:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6ED534170B
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Mar 2021 09:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234198AbhCSHjD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Mar 2021 03:39:03 -0400
-Received: from rtits2.realtek.com ([211.75.126.72]:54443 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234158AbhCSHjB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Mar 2021 03:39:01 -0400
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 12J7cvltF005050, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexmbs04.realtek.com.tw[172.21.6.97])
-        by rtits2.realtek.com.tw (8.15.2/2.70/5.88) with ESMTPS id 12J7cvltF005050
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 19 Mar 2021 15:38:57 +0800
-Received: from fc32.localdomain (172.21.177.102) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Fri, 19 Mar
- 2021 15:38:57 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <netdev@vger.kernel.org>
-CC:     <nic_swsd@realtek.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, Hayes Wang <hayeswang@realtek.com>,
-        Robert Davies <robdavies1977@gmail.com>
-Subject: [PATCH net] r8152: limit the RX buffer size of RTL8153A for USB 2.0
-Date:   Fri, 19 Mar 2021 15:37:21 +0800
-Message-ID: <1394712342-15778-349-Taiwan-albertk@realtek.com>
-X-Mailer: Microsoft Office Outlook 11
+        id S234312AbhCSIBm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Mar 2021 04:01:42 -0400
+Received: from mga03.intel.com ([134.134.136.65]:12782 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234256AbhCSIBg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 19 Mar 2021 04:01:36 -0400
+IronPort-SDR: bApJviL0M4EmQepVFP9aTRZC6nZJexOIsATa66+pGRLKUBUIYBDbYET2Em7jtyOMU7np/iCiUl
+ dgQctxj3XdWg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9927"; a="189888469"
+X-IronPort-AV: E=Sophos;i="5.81,261,1610438400"; 
+   d="scan'208";a="189888469"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2021 01:01:36 -0700
+IronPort-SDR: rx+Eg+3X+Kd29cujeUDRssMTYoGpJzXWxW1XwpAFQv4YrPc+IXotg5beaYvphaClHW2KkKrOfN
+ +w/h1I2/GhNg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,261,1610438400"; 
+   d="scan'208";a="512411446"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 19 Mar 2021 01:01:34 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 19 Mar 2021 10:01:33 +0200
+Date:   Fri, 19 Mar 2021 10:01:33 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Phil Rasoa <philippe.rasoa@outlook.fr>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Enable USB-C port as Host on Ubuntu with DWC3 driver
+Message-ID: <YFRaXYct7+ysnL+A@kuha.fi.intel.com>
+References: <PR3P191MB12150E0D54799FE616B709E4F8699@PR3P191MB1215.EURP191.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.21.177.102]
-X-ClientProxiedBy: RTEXMBS01.realtek.com.tw (172.21.6.94) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PR3P191MB12150E0D54799FE616B709E4F8699@PR3P191MB1215.EURP191.PROD.OUTLOOK.COM>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the USB host controller is EHCI, the throughput is reduced from
-300Mb/s to 60Mb/s, when the rx buffer size is modified from 16K to
-32K.
+Hi Philippe,
 
-According to the EHCI spec, the maximum size of the qTD is 20K.
-Therefore, when the driver uses more than 20K buffer, the latency
-time of EHCI would be increased. And, it let the RTL8153A get worse
-throughput.
++linux-usb ml
 
-However, the driver uses alloc_pages() for rx buffer, so I limit
-the rx buffer to 16K rather than 20K.
+On Thu, Mar 18, 2021 at 02:08:17PM +0000, Phil Rasoa wrote:
+> I am currently working on a project that forces me to use a USB-C port on a
+> Ubuntu server "computer". Since I have 2 USB controllers (one using xhci_hdc
+> kernel dricer and the other dwc3-pci driver), I would like to know how to
+> enable this port as a USB host.
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=205923
-Fixes: ec5791c202ac ("r8152: separate the rx buffer size")
-Reported-by: Robert Davies <robdavies1977@gmail.com>
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
----
- drivers/net/usb/r8152.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+If your computer is Intel based, then the DWC3 controller is device
+only. Dual-role capability is achieved with a mux. So if you connect
+one of the connectors on your computer to another USB host with USB
+Type-C cable, that connector on your board is muxed to the DWC3
+controller, so it's in device role. If you connect an USB device to
+that same connector, the connector will be in host role and it'll be
+muxed to the xHCI. The muxing is handled in system firmware, and we
+have no direct control over it.
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 90f1c0200042..20fb5638ac65 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -6553,7 +6553,10 @@ static int rtl_ops_init(struct r8152 *tp)
- 		ops->in_nway		= rtl8153_in_nway;
- 		ops->hw_phy_cfg		= r8153_hw_phy_cfg;
- 		ops->autosuspend_en	= rtl8153_runtime_enable;
--		tp->rx_buf_sz		= 32 * 1024;
-+		if (tp->udev->speed < USB_SPEED_SUPER)
-+			tp->rx_buf_sz	= 16 * 1024;
-+		else
-+			tp->rx_buf_sz	= 32 * 1024;
- 		tp->eee_en		= true;
- 		tp->eee_adv		= MDIO_EEE_1000T | MDIO_EEE_100TX;
- 		break;
+However, you should be able to attempt role swap if you have connected
+the connector to another machine that is also USB dual-role capable
+with USB Type-C cable. You should have all the connectors on your
+board and the partners attached to them listed in sysfs (_should have_):
+
+        ls /sys/class/typec/
+        port0 port1 port1-partner ...
+
+So if let say you have connected port1 to another dual-role capable
+machine (you can see the port1-partner device appearing), you can
+attempt role swapping like this:
+
+        # Check the current role (device)
+        cat /sys/class/typec/port1/data_role
+        [device] host
+
+        # Swap to host role
+        echo host > /sys/class/typec/port1/data_role
+
+        # Check the current role again
+        cat /sys/class/typec/port1/data_role
+        device [host]
+
+Hope this helps. If you need more help then please share some more
+details about your system.
+
+Br,
+
 -- 
-2.26.2
-
+heikki
