@@ -2,198 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFCE7340F8C
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Mar 2021 22:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 736AD3412B3
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Mar 2021 03:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbhCRVIA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Mar 2021 17:08:00 -0400
-Received: from mga02.intel.com ([134.134.136.20]:59210 "EHLO mga02.intel.com"
+        id S231478AbhCSCUa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Mar 2021 22:20:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54124 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230139AbhCRVH4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 18 Mar 2021 17:07:56 -0400
-IronPort-SDR: dHKBdl9OPvSDtWbbmIDQHDV6Q920rLvuPeGloWZKeBDylIGDJS+0iV9OI+pN0NiiiTIohpeqjp
- 9g71Sz//+iXg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9927"; a="176903923"
-X-IronPort-AV: E=Sophos;i="5.81,259,1610438400"; 
-   d="scan'208";a="176903923"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2021 14:07:55 -0700
-IronPort-SDR: hjFnbktOmqIYsFh7IwznBEZnv/0HjVdiKzbLrktXzay3R+8fYj/klWkjd7XfdAH702QNJQ7Mq+
- mX0IoQJv0y4g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,259,1610438400"; 
-   d="scan'208";a="591621240"
-Received: from lkp-server02.sh.intel.com (HELO 1c294c63cb86) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 18 Mar 2021 14:07:54 -0700
-Received: from kbuild by 1c294c63cb86 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lMzs1-0001Pj-Et; Thu, 18 Mar 2021 21:07:53 +0000
-Date:   Fri, 19 Mar 2021 05:07:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 2b8c956ea6ba896ec18ae36c2684ecfa04c1f479
-Message-ID: <6053c109.sHeC9iui2NzkLZB9%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S230099AbhCSCUQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 18 Mar 2021 22:20:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 46CC464F1C;
+        Fri, 19 Mar 2021 02:20:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616120412;
+        bh=ZMo7kM2CIZZjW5NfsRZikroRoXbNCDmYsYbfm1OgKxo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CjX0XF+gL4g7L+8sZsJ6+MoDiIoWmdpSxHaxEa772T3SBcAEAneegzpi5KpFF3uby
+         6raA/AbbQbngeaiPNMVtZ2KlcFy8EIkGzB80M28UWsc4UAsynEpbp94NEyWpbLDcT7
+         U684o31TseYS5BCwBA+OsQyD7NqrszPr00kZtlIbuxOeHKrygxVzGQGiX+kHYgVGu+
+         iZp6eU9aylx0qLXZV7ougSYUNtY4in8YPKoc/pwakAd9YlIwz4tn5zxuyDxA5N7dDj
+         mSpkW8/FYTO97SvcVoGJcEoP5hHb4tIqntCZyVaTe31W18d4dO0WqO1WHApY6q5u3r
+         YxrYN6V+uQZ3A==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 3AC536098E;
+        Fri, 19 Mar 2021 02:20:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] net: cdc_ncm: drop redundant driver-data assignment
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161612041223.22955.5529701998148405700.git-patchwork-notify@kernel.org>
+Date:   Fri, 19 Mar 2021 02:20:12 +0000
+References: <20210318160142.31801-1-johan@kernel.org>
+In-Reply-To: <20210318160142.31801-1-johan@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     oneukum@suse.com, davem@davemloft.net, kuba@kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 2b8c956ea6ba896ec18ae36c2684ecfa04c1f479  usb: typec: tcpm: Skip sink_cap query only when VDM sm is busy
+Hello:
 
-elapsed time: 722m
+This patch was applied to netdev/net-next.git (refs/heads/master):
 
-configs tested: 136
-configs skipped: 2
+On Thu, 18 Mar 2021 17:01:42 +0100 you wrote:
+> The driver data for the data interface has already been set by
+> usb_driver_claim_interface() so drop the subsequent redundant
+> assignment.
+> 
+> Note that this also avoids setting the driver data three times in case
+> of a combined interface.
+> 
+> [...]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Here is the summary with links:
+  - [net-next] net: cdc_ncm: drop redundant driver-data assignment
+    https://git.kernel.org/netdev/net-next/c/269aa0301224
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-x86_64                           allyesconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-i386                             allyesconfig
-arm                       omap2plus_defconfig
-powerpc                 mpc8560_ads_defconfig
-sh                        apsh4ad0a_defconfig
-s390                             alldefconfig
-arm                        clps711x_defconfig
-m68k                       m5475evb_defconfig
-sparc                            alldefconfig
-powerpc                        icon_defconfig
-xtensa                  nommu_kc705_defconfig
-powerpc                    socrates_defconfig
-arm                         assabet_defconfig
-h8300                    h8300h-sim_defconfig
-mips                  decstation_64_defconfig
-arm                         nhk8815_defconfig
-arm                       cns3420vb_defconfig
-powerpc                     sbc8548_defconfig
-arm                        magician_defconfig
-mips                         tb0226_defconfig
-mips                        jmr3927_defconfig
-arm                     davinci_all_defconfig
-sh                           se7750_defconfig
-mips                  maltasmvp_eva_defconfig
-mips                        qi_lb60_defconfig
-xtensa                           alldefconfig
-mips                     decstation_defconfig
-arm                          exynos_defconfig
-mips                            gpr_defconfig
-arm                       multi_v4t_defconfig
-arm                          moxart_defconfig
-powerpc                    klondike_defconfig
-sh                            migor_defconfig
-riscv                          rv32_defconfig
-sh                     magicpanelr2_defconfig
-powerpc                      chrp32_defconfig
-powerpc                   lite5200b_defconfig
-csky                             alldefconfig
-powerpc                      acadia_defconfig
-sh                          rsk7269_defconfig
-mips                          rm200_defconfig
-mips                     cu1000-neo_defconfig
-powerpc                     tqm8560_defconfig
-arm                          pxa910_defconfig
-arm                          simpad_defconfig
-powerpc                  mpc866_ads_defconfig
-s390                             allyesconfig
-powerpc                      ppc40x_defconfig
-powerpc                     stx_gp3_defconfig
-arm                        multi_v7_defconfig
-sh                             espt_defconfig
-powerpc                      ppc44x_defconfig
-arm                            mmp2_defconfig
-arm                        mvebu_v7_defconfig
-sh                             shx3_defconfig
-mips                        vocore2_defconfig
-mips                           ci20_defconfig
-sh                             sh03_defconfig
-sh                               j2_defconfig
-powerpc                      makalu_defconfig
-arm                          pxa3xx_defconfig
-sh                         ap325rxa_defconfig
-powerpc                      ppc64e_defconfig
-um                            kunit_defconfig
-sh                        edosk7705_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20210318
-i386                 randconfig-a005-20210318
-i386                 randconfig-a003-20210318
-i386                 randconfig-a002-20210318
-i386                 randconfig-a006-20210318
-i386                 randconfig-a004-20210318
-x86_64               randconfig-a011-20210318
-x86_64               randconfig-a016-20210318
-x86_64               randconfig-a013-20210318
-x86_64               randconfig-a015-20210318
-x86_64               randconfig-a014-20210318
-x86_64               randconfig-a012-20210318
-i386                 randconfig-a013-20210318
-i386                 randconfig-a016-20210318
-i386                 randconfig-a011-20210318
-i386                 randconfig-a014-20210318
-i386                 randconfig-a015-20210318
-i386                 randconfig-a012-20210318
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-clang tested configs:
-x86_64               randconfig-a006-20210318
-x86_64               randconfig-a001-20210318
-x86_64               randconfig-a005-20210318
-x86_64               randconfig-a002-20210318
-x86_64               randconfig-a003-20210318
-x86_64               randconfig-a004-20210318
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
