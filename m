@@ -2,95 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2AB23429FE
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Mar 2021 03:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9B0342ADE
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Mar 2021 06:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbhCTCYz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Mar 2021 22:24:55 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:43981 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229756AbhCTCYp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Mar 2021 22:24:45 -0400
-Received: (qmail 592383 invoked by uid 1000); 19 Mar 2021 22:24:43 -0400
-Date:   Fri, 19 Mar 2021 22:24:43 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jay Fang <f.fangjian@huawei.com>
-Cc:     linux-usb@vger.kernel.org, tangzihao1@hisilicon.com,
-        dan.carpenter@oracle.com, huangdaode@huawei.com
-Subject: Re: [PATCH] usb: ohci: remove unreachable
- platform_driver_unregister() call
-Message-ID: <20210320022443.GA591964@rowland.harvard.edu>
-References: <1616203911-4207-1-git-send-email-f.fangjian@huawei.com>
+        id S229510AbhCTFay (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 20 Mar 2021 01:30:54 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:53757 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229445AbhCTFat (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 20 Mar 2021 01:30:49 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1616218249; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=tVFo5x+lxEseDgWsohpDyCKYL21MNOsMDKQ0tV9WPrU=; b=Tq3vOMYQt7tTUgXgmK/60kqZydiTahuFP/0FdU74g1mjMcDkKE/pzL9xtNa4174BRqobSebq
+ G0NuVQZbpQOJP4RIiXozHO5GKKuhpusDP3+nsp51sEGaguo0oE77BVZU0/Iq4LadaeK7ag/i
+ DquusY1JPTwAEgO/O5oJydbojAQ=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 6055887ee2200c0a0d48cfd1 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 20 Mar 2021 05:30:38
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id AE13DC433CA; Sat, 20 Mar 2021 05:30:38 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.110.100.126] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4156AC433C6;
+        Sat, 20 Mar 2021 05:30:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4156AC433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH 2/2] usb: dwc3: gadget: Ignore EP queue requests during
+ bus reset
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <1616146285-19149-1-git-send-email-wcheng@codeaurora.org>
+ <1616146285-19149-3-git-send-email-wcheng@codeaurora.org>
+ <eae3f779-acb0-c685-4323-d97c7c5c6296@synopsys.com>
+ <1886f649-3da2-de25-405c-69c66876b0fd@codeaurora.org>
+ <debcdb02-1164-df83-1174-440dbe31dcc3@synopsys.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <d77bbea0-04eb-9426-5b16-50e408b2e787@codeaurora.org>
+Date:   Fri, 19 Mar 2021 22:30:36 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1616203911-4207-1-git-send-email-f.fangjian@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <debcdb02-1164-df83-1174-440dbe31dcc3@synopsys.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Mar 20, 2021 at 09:31:51AM +0800, Jay Fang wrote:
-> From: Zihao Tang <tangzihao1@hisilicon.com>
+Hi Thinh,
+
+
+On 3/19/2021 7:01 PM, Thinh Nguyen wrote:
+> Wesley Cheng wrote:
+>>
+>>
+>> On 3/19/2021 5:40 PM, Thinh Nguyen wrote:
+>>> Hi,
+>>>
+>>> Wesley Cheng wrote:
+>>>> The current dwc3_gadget_reset_interrupt() will stop any active
+>>>> transfers, but only addresses blocking of EP queuing for while we are
+>>>> coming from a disconnected scenario, i.e. after receiving the disconnect
+>>>> event.  If the host decides to issue a bus reset on the device, the
+>>>> connected parameter will still be set to true, allowing for EP queuing
+>>>> to continue while we are disabling the functions.  To avoid this, set the
+>>>> connected flag to false until the stop active transfers is complete.
+>>>>
+>>>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>>>> ---
+>>>>  drivers/usb/dwc3/gadget.c | 9 +++++++++
+>>>>  1 file changed, 9 insertions(+)
+>>>>
+>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>> index 6e14fdc..d5ed0f69 100644
+>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>> @@ -3327,6 +3327,15 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
+>>>>  	u32			reg;
+>>>>  
+>>>>  	/*
+>>>> +	 * Ideally, dwc3_reset_gadget() would trigger the function
+>>>> +	 * drivers to stop any active transfers through ep disable.
+>>>> +	 * However, for functions which defer ep disable, such as mass
+>>>> +	 * storage, we will need to rely on the call to stop active
+>>>> +	 * transfers here, and avoid allowing of request queuing.
+>>>> +	 */
+>>>> +	dwc->connected = false;
+>>>> +
+>>>> +	/*
+>>>>  	 * WORKAROUND: DWC3 revisions <1.88a have an issue which
+>>>>  	 * would cause a missing Disconnect Event if there's a
+>>>>  	 * pending Setup Packet in the FIFO.
+>>>>
+>>>
+>>> This doesn't look right. Did you have rebase issue with your local
+>>> change again?
+>>>
+>>> BR,
+>>> Thinh
+>>>
+>> Hi Thinh,
+>>
+>> This was rebased on Greg's usb-linus branch, which has commit
+>> f09ddcfcb8c5 ("usb: dwc3: gadget: Prevent EP queuing while stopping
+>> transfers") merged.
 > 
-> Fix the following smatch warnings:
+> Ah I see.
 > 
-> drivers/usb/host/ohci-hcd.c:1318 ohci_hcd_mod_init() warn:
-> ignoring unreachable code.
+>>
+>> commit f09ddcfcb8c5  moved the dwc->connected = true to after we have
+>> finished stop active transfers.  However, this change will also ensure
+>> that the connected flag is set to false to ensure that when we call stop
+>> active transfers, nothing can prepare TRBs.  (previous commit only
+>> addresses the case where we get the reset interrupt when coming from a
+>> disconnected state)
+>>
 > 
-> platform_driver_register(&TMIO_OHCI_DRIVER) is the last
-> platform_driver_register() call in ohci_hcd_mod_init(), so if it
-> failed, there's no need to unregister it, but just goto error_tmio.
+> That still doesn't address this issue.
 > 
-> So remove the unreachable platform_driver_unregister(&TMIO_OHCI_DRIVER).
-> No functionality change.
+> Because:
+> 1) We're still protected by the spin_lock_irq*(), so this change doesn't
+> make any difference while handling an event.
 
-Doesn't the compiler realize that the call is unreachable, and 
-therefore avoid generating any object for it?
+Thank you for the feedback.  So it is true that we lock dwc->lock while
+handling EP/device events, but what these changes are trying to address
+is that during dwc3_stop_active_transfers() we will eventually call
+dwc3_gadget_giveback() to call the complete() functions registered by
+the function driver.  Before we call the complete() callbacks, we unlock
+dwc->lock, so we are no longer protected, and if there was a pending ep
+queue from a function driver, that would allow it to acquire the lock
+and continue preparing the TRBs.
 
-It's true that the function call is, strictly speaking, unnecessary.  
-However, it provides a pleasing symmetry and it acts as a guide in the 
-unlikely event that anyone wants to add another platform-specific 
-driver in the future.
-
-Also, consider what would happen if somebody ever removes the TMIO_OHCI 
-platform driver entirely.  They certainly would remove the corresponding
-#ifdef...#endif block.  But by your way of thinking, they should remove 
-as well the following platform_driver_unregister(&SM501_OHCI_DRIVER) 
-call -- something that is not immediately obvious and is likely to be 
-overlooked.
-
-On the whole, I prefer to keep the code as it is.  However, if you would 
-like to submit a different patch, adding a comment which explains that 
-the call is known to be unreachable but is retained nonetheless because 
-the maintainer is a crotchety old formalist, I would be willing to apply 
-that.
-
-Alan Stern
-
-PS: A #ifdef...#endif block containing nothing but a statement label 
-looks a little weird, don't you agree?
-
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Zihao Tang <tangzihao1@hisilicon.com>
-> Signed-off-by: Jay Fang <f.fangjian@huawei.com>
-> ---
->  drivers/usb/host/ohci-hcd.c | 1 -
->  1 file changed, 1 deletion(-)
+> 2) We don't enable the interrupt for END_TRANSFER command completion
+> when doing dwc3_stop_active_transfers(), the
+> DWC3_EP_END_TRANSFER_PENDING flag will not be set to prevent preparing
+> new requests.
 > 
-> diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
-> index 1f5e693..2d09ef2 100644
-> --- a/drivers/usb/host/ohci-hcd.c
-> +++ b/drivers/usb/host/ohci-hcd.c
-> @@ -1319,7 +1319,6 @@ static int __init ohci_hcd_mod_init(void)
->  
->  	/* Error path */
->  #ifdef TMIO_OHCI_DRIVER
-> -	platform_driver_unregister(&TMIO_OHCI_DRIVER);
->   error_tmio:
->  #endif
->  #ifdef SM501_OHCI_DRIVER
-> -- 
-> 2.7.4
+Agreed.  That is the reason for adding the check to dwc->connected in
+__dwc3_gadget_ep_queue()
+
+if (!dep->endpoint.desc || !dwc->pullups_connected || !dwc->connected) {
+ 		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
+ 				dep->name);
+ 		return -ESHUTDOWN;
+
+> We should do dwc->connected = true when we handle connection_done
+> interrupt instead. The END_TRANSFER command should complete before this.
 > 
+So how this change will address the issue is:
+
+1.  IRQ handler will acquire dwc->lock
+2.  dwc3_gadget_reset_handler() sets dwc->connected = false
+3.  Call to dwc3_stop_active_transfers()
+	---> dwc3_gadget_giveback() releases dwc->lock
+4.  If there was a pending ep queue (waiting for dwc->lock) it can
+continue here
+5.  __dwc3_gadget_ep_queue() exits early due to dwc->connected = false
+6.  dwc3_gadget_giveback() re-acquires dwc->lock and continues
+
+Thanks
+Wesley Cheng
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
