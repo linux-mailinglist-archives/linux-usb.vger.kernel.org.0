@@ -2,176 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58FCD342C87
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Mar 2021 12:54:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA3C342D93
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Mar 2021 16:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbhCTLx4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 20 Mar 2021 07:53:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34490 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230115AbhCTLxn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 20 Mar 2021 07:53:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C119861923;
-        Sat, 20 Mar 2021 09:09:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616231357;
-        bh=6lwMsLbAVQSafHY2R3faKJ0q8xXkIOaYQG7JHAFHknc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A5o+i6Thk8j+LuxOCALsgJA8pz7jP2BTTJWofJMegxkFYo2TZ1Md0Jj9ceN8P+ze/
-         bw+FsFbLz4lnKAbrJviA6P3RWo8VMqRSPDslBmvyQmd7DBlnU81GhMOyStqGTGf4PR
-         uBzAwIuUw9HK1z75gaonrLm+gku1llQY0JR+USsbhIHYFnS4yLiPyAxrOSn92Bdmkp
-         Zrao6lm3R9mg3MC20VR5LMU8PiyhMibuOG27bZrZsk3fADUsHN40dY60GNH7+s6KGz
-         MmRMsAnrJKVYPyktXyHEVEm23hDtOBsj0g8eHdtCqyAwip9DcQE2hlMNUhF+wQ51Z2
-         pu+pFGRg6afKA==
-Date:   Sat, 20 Mar 2021 17:08:59 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Sanket Parmar <sparmar@cadence.com>
-Cc:     pawell@cadence.com, a-govindraju@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kurahul@cadence.com,
-        gregkh@linuxfoundation.org, kishon@ti.com, hch@infradead.org
-Subject: Re: [PATCH v2] usb: cdns3: Optimize DMA request buffer allocation
-Message-ID: <20210320090858.GB28364@b29397-desktop>
-References: <1616008439-15494-1-git-send-email-sparmar@cadence.com>
+        id S229767AbhCTPTd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 20 Mar 2021 11:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229606AbhCTPTd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 Mar 2021 11:19:33 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4975C061574;
+        Sat, 20 Mar 2021 08:19:32 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id z8so15541979ljm.12;
+        Sat, 20 Mar 2021 08:19:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JgAOs5NJiBzLzOw6K7ViZofCJP2VNAXeFfUuuWC+yjo=;
+        b=FJA2mCAqsvG0PTcZmxpC4dMLCLFeW+5dZ6P4IdhjqGNegsZT/eXylQukluWKkPNFmW
+         3kxH/3jNFSrn73diMzxWbiPeTQ0fsa5JVH0gSwZD9yDjIFBO+pxRnytXJkGDIxGhjIHT
+         v8hldbsYuEkz0Q2kR/yUCLoAr/QmheCSJS5we3tbHocpsxqSDCGlObir50n47054vPze
+         Fr2VmhIehDmYVx/wVzyV9atnzkKTl9CDecaB9ZlBruWq9PKs6GKpzhad1r/a6IJOAO1p
+         LNfR5RgfbDgeLEPZHm9OZWzA1h7Xh9lorpCBqpez9T7QP4QMdlwcXEO71LwhworJzPJv
+         R7pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JgAOs5NJiBzLzOw6K7ViZofCJP2VNAXeFfUuuWC+yjo=;
+        b=kIxd6bznvOpTgRtYhhw1l37z+CibR7W7O5bLRSc2+PVi0pV3v0eetX9LRRKfNfL1Fv
+         uR6H7+r0IyAEWgbUQa4s38+vE400ny3V9khO+1Sqr8Ys3OR7oTwTZrsAfMf2cl7r65kQ
+         CZRb679Ut84Lvsj9BGpgygY+5WbQkkolkFxa9mUOVTtVaMysUH9h65QClCi8ApwgdWO3
+         Wa/l165EiqVGx3amtFKbXVf4xNM0paTWB2qUqBdAxT+YeAPwu4XirbUOspAKJRn4oiux
+         axEm5+outnN21p2G6d0VyxjPW6fXRbg9zfiOa6g5acXWJuO1ZWwmLOdlFewUzERVfGCY
+         QWKQ==
+X-Gm-Message-State: AOAM531leIfQ3gRbckhvUjT3EgPFbYQQbheQ1ukZedgq0cucQX7x7uUW
+        AY0GR5n7eYDfExhB6KjLNRY=
+X-Google-Smtp-Source: ABdhPJwJwKczHf7a8qHqvASusL+WQYIgEMXG3VrAZ+oNhdP6HwUw/NfEnVBx6dNL4Pib1cCJwgUcsg==
+X-Received: by 2002:a2e:6e1a:: with SMTP id j26mr4044038ljc.171.1616253569011;
+        Sat, 20 Mar 2021 08:19:29 -0700 (PDT)
+Received: from localhost.localdomain (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
+        by smtp.gmail.com with ESMTPSA id f8sm1162447ljn.1.2021.03.20.08.19.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Mar 2021 08:19:28 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Felipe Balbi <balbi@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/2] ARM: multi_v7_defconfig: Stop using deprecated USB_EHCI_TEGRA
+Date:   Sat, 20 Mar 2021 18:19:14 +0300
+Message-Id: <20210320151915.7566-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1616008439-15494-1-git-send-email-sparmar@cadence.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-03-17 20:13:59, Sanket Parmar wrote:
-> dma_alloc_coherent() might fail on the platform with a small
-> DMA region.
-> 
-> To avoid such failure in cdns3_prepare_aligned_request_buf(),
-> dma_alloc_coherent() is replaced with dma_alloc_noncoherent()
-> to allocate aligned request buffer of dynamic length.
-> 
-> Reported-by: Aswath Govindraju <a-govindraju@ti.com>
-> Signed-off-by: Sanket Parmar <sparmar@cadence.com>
-> ---
-> 
-> Changelog:
-> v2:
-> - used dma_*_noncoherent() APIs
-> - changed the commit log
-> 
->  drivers/usb/cdns3/cdns3-gadget.c | 30 ++++++++++++++++++++++++------
->  drivers/usb/cdns3/cdns3-gadget.h |  2 ++
->  2 files changed, 26 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> index 0b892a2..126087b 100644
-> --- a/drivers/usb/cdns3/cdns3-gadget.c
-> +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> @@ -819,9 +819,15 @@ void cdns3_gadget_giveback(struct cdns3_endpoint *priv_ep,
->  					priv_ep->dir);
->  
->  	if ((priv_req->flags & REQUEST_UNALIGNED) &&
-> -	    priv_ep->dir == USB_DIR_OUT && !request->status)
-> +	    priv_ep->dir == USB_DIR_OUT && !request->status) {
-> +		/* Make DMA buffer CPU accessible */
-> +		dma_sync_single_for_cpu(priv_dev->sysdev,
-> +			priv_req->aligned_buf->dma,
-> +			priv_req->aligned_buf->size,
-> +			priv_req->aligned_buf->dir);
->  		memcpy(request->buf, priv_req->aligned_buf->buf,
->  		       request->length);
-> +	}
->  
->  	priv_req->flags &= ~(REQUEST_PENDING | REQUEST_UNALIGNED);
->  	/* All TRBs have finished, clear the counter */
-> @@ -883,8 +889,8 @@ static void cdns3_free_aligned_request_buf(struct work_struct *work)
->  			 * interrupts.
->  			 */
->  			spin_unlock_irqrestore(&priv_dev->lock, flags);
-> -			dma_free_coherent(priv_dev->sysdev, buf->size,
-> -					  buf->buf, buf->dma);
-> +			dma_free_noncoherent(priv_dev->sysdev, buf->size,
-> +					  buf->buf, buf->dma, buf->dir);
->  			kfree(buf);
->  			spin_lock_irqsave(&priv_dev->lock, flags);
->  		}
-> @@ -911,10 +917,13 @@ static int cdns3_prepare_aligned_request_buf(struct cdns3_request *priv_req)
->  			return -ENOMEM;
->  
->  		buf->size = priv_req->request.length;
-> +		buf->dir = usb_endpoint_dir_in(priv_ep->endpoint.desc) ?
-> +			DMA_TO_DEVICE : DMA_FROM_DEVICE;
->  
-> -		buf->buf = dma_alloc_coherent(priv_dev->sysdev,
-> +		buf->buf = dma_alloc_noncoherent(priv_dev->sysdev,
->  					      buf->size,
->  					      &buf->dma,
-> +					      buf->dir,
->  					      GFP_ATOMIC);
->  		if (!buf->buf) {
->  			kfree(buf);
-> @@ -936,10 +945,18 @@ static int cdns3_prepare_aligned_request_buf(struct cdns3_request *priv_req)
->  	}
->  
->  	if (priv_ep->dir == USB_DIR_IN) {
-> +		/* Make DMA buffer CPU accessible */
-> +		dma_sync_single_for_cpu(priv_dev->sysdev,
-> +			buf->dma, buf->size, buf->dir);
->  		memcpy(buf->buf, priv_req->request.buf,
->  		       priv_req->request.length);
->  	}
->  
-> +	/* Transfer DMA buffer ownership back to device */
-> +	dma_sync_single_for_device(priv_dev->sysdev,
-> +			buf->dma, buf->size, buf->dir);
-> +
-> +
+The USB_EHCI_TEGRA option is deprecated now and replaced by
+USB_CHIPIDEA_TEGRA. Replace USB_EHCI_TEGRA with USB_CHIPIDEA_TEGRA
+in multi_v7_defconfig.
 
-One more blank line.
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ arch/arm/configs/multi_v7_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Otherwise, it seems OK for me.
-
->  	priv_req->flags |= REQUEST_UNALIGNED;
->  	trace_cdns3_prepare_aligned_request(priv_req);
->  
-> @@ -3088,9 +3105,10 @@ static void cdns3_gadget_exit(struct cdns *cdns)
->  		struct cdns3_aligned_buf *buf;
->  
->  		buf = cdns3_next_align_buf(&priv_dev->aligned_buf_list);
-> -		dma_free_coherent(priv_dev->sysdev, buf->size,
-> +		dma_free_noncoherent(priv_dev->sysdev, buf->size,
->  				  buf->buf,
-> -				  buf->dma);
-> +				  buf->dma,
-> +				  buf->dir);
->  
->  		list_del(&buf->list);
->  		kfree(buf);
-> diff --git a/drivers/usb/cdns3/cdns3-gadget.h b/drivers/usb/cdns3/cdns3-gadget.h
-> index ecf9b91..c5660f2 100644
-> --- a/drivers/usb/cdns3/cdns3-gadget.h
-> +++ b/drivers/usb/cdns3/cdns3-gadget.h
-> @@ -12,6 +12,7 @@
->  #ifndef __LINUX_CDNS3_GADGET
->  #define __LINUX_CDNS3_GADGET
->  #include <linux/usb/gadget.h>
-> +#include <linux/dma-direction.h>
->  
->  /*
->   * USBSS-DEV register interface.
-> @@ -1205,6 +1206,7 @@ struct cdns3_aligned_buf {
->  	void			*buf;
->  	dma_addr_t		dma;
->  	u32			size;
-> +	enum dma_data_direction dir;
->  	unsigned		in_use:1;
->  	struct list_head	list;
->  };
-> -- 
-> 2.4.5
-> 
-
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index 3823da605430..d3242264514e 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -791,7 +791,6 @@ CONFIG_USB_XHCI_MVEBU=y
+ CONFIG_USB_XHCI_TEGRA=m
+ CONFIG_USB_EHCI_HCD=y
+ CONFIG_USB_EHCI_HCD_STI=y
+-CONFIG_USB_EHCI_TEGRA=y
+ CONFIG_USB_EHCI_EXYNOS=m
+ CONFIG_USB_EHCI_MV=m
+ CONFIG_USB_OHCI_HCD=y
+@@ -817,6 +816,7 @@ CONFIG_USB_DWC2=y
+ CONFIG_USB_CHIPIDEA=y
+ CONFIG_USB_CHIPIDEA_UDC=y
+ CONFIG_USB_CHIPIDEA_HOST=y
++CONFIG_USB_CHIPIDEA_TEGRA=y
+ CONFIG_USB_ISP1760=y
+ CONFIG_USB_HSIC_USB3503=y
+ CONFIG_AB8500_USB=y
 -- 
-
-Thanks,
-Peter Chen
+2.30.2
 
