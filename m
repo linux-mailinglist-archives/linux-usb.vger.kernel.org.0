@@ -2,75 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1AB34331C
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Mar 2021 16:09:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7C6343442
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Mar 2021 20:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbhCUPIw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Mar 2021 11:08:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55614 "EHLO mail.kernel.org"
+        id S230114AbhCUTCk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Mar 2021 15:02:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49692 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229784AbhCUPI0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 21 Mar 2021 11:08:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 569746194C
-        for <linux-usb@vger.kernel.org>; Sun, 21 Mar 2021 15:08:26 +0000 (UTC)
+        id S230053AbhCUTCe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 21 Mar 2021 15:02:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id E3A076194C;
+        Sun, 21 Mar 2021 19:02:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616339306;
-        bh=B8yeW8BJEePeTemUR0TW0nwxcuVJFXWguE+W17rdzRw=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Q1m/6+v2IMnejsN+7LL1ctNyVrOLHSIUWSc25r3vfmGThGcy/mkFfQ/eWLfUuWxIh
-         yPCp2E9PRNIUcyYOhfFgNlTFuXav11oENSjhpzivsg8k5KXUrVDV/klYzBcyNTr7b4
-         NQW0MT75/QkibDDBnOt1i19XYdH6jcIzQSzb5QyIhIngMdFYZvMhRsX72L5x2KGijf
-         kLMAW1uMPJiFj1oECsKkPtr2Y+JVHCXKAr+9CEmP2nkdqYv9yIVzHo4KFK8uYuJUNL
-         o71Uh4Z8eSDKpLFhqoynGCxCfRDm8tmhZ9pdpYwzbh9J1Kc0wPYM1r2U8zb76Ro8c6
-         yu222OAWHEFKg==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 50E6962A3C; Sun, 21 Mar 2021 15:08:26 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 209469] [bisected] usb_modeswitch is broken on Linux 5.9, at
- least with Snapdragon X12 LTE modem
-Date:   Sun, 21 Mar 2021 15:08:25 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: rui.zhang@intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc component assigned_to product
-Message-ID: <bug-209469-208809-ps97WBwodY@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-209469-208809@https.bugzilla.kernel.org/>
-References: <bug-209469-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
+        s=k20201202; t=1616353353;
+        bh=pL793nQQVrSe2MJT+7pJdT2mjUCymNHKDh03hE9jzyo=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=VeDFI94QX4+Zu7tFe+J6wrY4Z7qBOJBeUbVWl5xxc1pfVEiHurg58qTanEk8tcijF
+         SFi9a2/VhNt77NYAALQ2jtHdIixKafgfjHiQVuoeUFbtUJQb4fMOWhgUCny13zrqQc
+         JwloJEoAYrFQvqwx0Q9XwSbp9ikfajxn0XaoSFMA7iPbLp5ELVFYn9811kokdEP638
+         YV4aja/fub/BT7hboK4ldRz3l+Qfknvm+fG3lj7CEH82hqk0mXDPQytFY96deG0w63
+         8kEBcocMJuVLMU+xaNa4N4MYwPmvxB26b1v+JV141QEb3lDP4oLY5l8H2an2wBhE6p
+         1dxmUwBTMXijg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C5FB560A0B;
+        Sun, 21 Mar 2021 19:02:33 +0000 (UTC)
+Subject: Re: [GIT PULL] USB/Thunderbolt driver fixes for 5.12-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YFc8ump8iC8fj2pa@kroah.com>
+References: <YFc8ump8iC8fj2pa@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YFc8ump8iC8fj2pa@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.12-rc4
+X-PR-Tracked-Commit-Id: 2b8c956ea6ba896ec18ae36c2684ecfa04c1f479
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3001c3554f1dfac3f2561a6b34c5d209e3592dc0
+Message-Id: <161635335374.3800.9735618412928238168.pr-tracker-bot@kernel.org>
+Date:   Sun, 21 Mar 2021 19:02:33 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D209469
+The pull request you sent on Sun, 21 Mar 2021 13:31:54 +0100:
 
-Zhang Rui (rui.zhang@intel.com) changed:
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.12-rc4
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |rui.zhang@intel.com
-          Component|Run-Time-PM                 |USB
-           Assignee|rjw@rjwysocki.net           |drivers_usb@kernel-bugs.ker
-                   |                            |nel.org
-            Product|Power Management            |Drivers
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3001c3554f1dfac3f2561a6b34c5d209e3592dc0
 
---=20
-You may reply to this email to add a comment.
+Thank you!
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
