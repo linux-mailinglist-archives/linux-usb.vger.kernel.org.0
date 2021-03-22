@@ -2,255 +2,201 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 995CB34506E
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Mar 2021 21:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7E03450BD
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Mar 2021 21:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbhCVUGj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Mar 2021 16:06:39 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:11653 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbhCVUGV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Mar 2021 16:06:21 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1616443579; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=vv0v6NJmTLIZNDt8MH4F4BHNlSRRS0JrKCQ7jSldjvk=; b=uUEpTp6LkFrphO5XRigNWY3c98ngTLV7XARKmQjFKlVhnOkHRfA62NL2XlK1htaWeTR5jUQ0
- 0sivqWKSNWFdoF2sy8ZLtThEHAFqwnGZYnHdVmddEwzGSnV39Q/Zrd+PB9db2R4rjkPd9hwH
- uOcIuB2VsIAAO2MtSkcK7JKgUi8=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 6058f8b96dc1045b7d05c44d (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 22 Mar 2021 20:06:16
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 2023EC43461; Mon, 22 Mar 2021 20:06:16 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.110.91.149] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 701ECC433C6;
-        Mon, 22 Mar 2021 20:06:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 701ECC433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v3] usb: dwc3: gadget: Prevent EP queuing while stopping
- transfers
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>
-References: <1615507142-23097-1-git-send-email-wcheng@codeaurora.org>
- <CAHp75VfUVCB4gzgOWf=bUpCjfyerQLPN_p-vOnVfxUKHi1WJkg@mail.gmail.com>
- <716dca12-2bfc-789f-ca74-5555852e4c8b@codeaurora.org>
- <CAHp75VeynZArUkrogdJdR9oh+6Ocuqz3ySeDoRBFWusm8F6NRQ@mail.gmail.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <39fdd3c8-9682-6109-f47d-7f7bffc4b85e@codeaurora.org>
-Date:   Mon, 22 Mar 2021 13:06:13 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S230235AbhCVU2G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Mar 2021 16:28:06 -0400
+Received: from mga01.intel.com ([192.55.52.88]:1506 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230223AbhCVU1q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 22 Mar 2021 16:27:46 -0400
+IronPort-SDR: RSg/yttisTiV/jR3L408t7Bg7jm9PIoA/o7zOHRpel0fs1KS8aMkPAYTQol4dvbVlb1sD9B3Qd
+ yvogXZtGfktg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="210416365"
+X-IronPort-AV: E=Sophos;i="5.81,269,1610438400"; 
+   d="scan'208";a="210416365"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 13:27:44 -0700
+IronPort-SDR: 0E0d5C8RCbnzteuOGfm9LM7KsGFhj+5hK7MU/clXKXOHGeH6sgt4AqJsPU8G5ZP3tguygAF8+w
+ ltdsTWRF8ZXQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,269,1610438400"; 
+   d="scan'208";a="414634783"
+Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 22 Mar 2021 13:27:43 -0700
+Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lOR9K-0000Eq-Ij; Mon, 22 Mar 2021 20:27:42 +0000
+Date:   Tue, 23 Mar 2021 04:27:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ f85142af36415cdd5be59eb4b00a231c8b6dcb49
+Message-ID: <6058fd9f.mhcLNv2XGZXsATcg%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <CAHp75VeynZArUkrogdJdR9oh+6Ocuqz3ySeDoRBFWusm8F6NRQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Andy,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: f85142af36415cdd5be59eb4b00a231c8b6dcb49  Merge 5.12-rc4 into usb-next
 
-On 3/22/2021 12:34 PM, Andy Shevchenko wrote:
-> On Mon, Mar 22, 2021 at 8:49 PM Wesley Cheng <wcheng@codeaurora.org> wrote:
->>
->> Hi Andy,
->>
->> On 3/22/2021 5:48 AM, Andy Shevchenko wrote:
->>> On Fri, Mar 12, 2021 at 2:01 AM Wesley Cheng <wcheng@codeaurora.org> wrote:
->>>>
->>>> In the situations where the DWC3 gadget stops active transfers, once
->>>> calling the dwc3_gadget_giveback(), there is a chance where a function
->>>> driver can queue a new USB request in between the time where the dwc3
->>>> lock has been released and re-aquired.  This occurs after we've already
->>>> issued an ENDXFER command.  When the stop active transfers continues
->>>> to remove USB requests from all dep lists, the newly added request will
->>>> also be removed, while controller still has an active TRB for it.
->>>> This can lead to the controller accessing an unmapped memory address.
->>>>
->>>> Fix this by ensuring parameters to prevent EP queuing are set before
->>>> calling the stop active transfers API.
->>>
->>>
->>> commit f09ddcfcb8c569675066337adac2ac205113471f
->>> Author: Wesley Cheng <wcheng@codeaurora.org>
->>> Date:   Thu Mar 11 15:59:02 2021 -0800
->>>
->>>    usb: dwc3: gadget: Prevent EP queuing while stopping transfers
->>>
->>> effectively broke my gadget setup.
->>>
->>> The output of the kernel (followed by non responsive state of USB controller):
->>>
->>> [  195.228586] using random self ethernet address
->>> [  195.233104] using random host ethernet address
->>> [  195.245306] usb0: HOST MAC aa:bb:cc:dd:ee:f2
->>> [  195.249732] usb0: MAC aa:bb:cc:dd:ee:f1
->>> # [  195.773594] IPv6: ADDRCONF(NETDEV_CHANGE): usb0: link becomes ready
->>> [  195.780585] ------------[ cut here ]------------
->>> [  195.785217] dwc3 dwc3.0.auto: No resource for ep2in
->>> [  195.790162] WARNING: CPU: 0 PID: 217 at
->>> drivers/usb/dwc3/gadget.c:360 dwc3_send_gadget_ep_cmd+0x4b9/0x670
->>> [  195.799760] Modules linked in: usb_f_eem u_ether libcomposite
->>> brcmfmac brcmutil mmc_block pwm_lpss_pci pwm_lps
->>> s snd_sof_pci_intel_tng snd_sof_pci snd_sof_acpi_intel_byt
->>> snd_sof_intel_ipc snd_sof_acpi snd_sof snd_sof_nocodec
->>> spi_pxa2xx_platform snd_sof_xtensa_dsp spi_pxa2xx_pci
->>> extcon_intel_mrfld intel_mrfld_adc sdhci_pci cqhci sdhci m
->>> mc_core intel_mrfld_pwrbtn intel_soc_pmic_mrfld hci_uart btbcm btintel
->>> [  195.835604] CPU: 0 PID: 217 Comm: irq/16-dwc3 Not tainted 5.12.0-rc4+ #60
->>> [  195.842403] Hardware name: Intel Corporation Merrifield/BODEGA BAY,
->>> BIOS 542 2015.01.21:18.19.48
->>> [  195.851191] RIP: 0010:dwc3_send_gadget_ep_cmd+0x4b9/0x670
->>> [  195.856608] Code: cd 00 00 00 44 89 44 24 20 48 89 4c 24 18 e8 ee
->>> f7 e4 ff 48 8b 4c 24 18 4c 89 f2 48 c7 c7 b9
->>> ed 4f a0 48 89 c6 e8 ef 24 43 00 <0f> 0b 41 be ea ff ff ff 44 8b 44 24
->>> 20 e9 80 fc ff ff 41 83 fe 92
->>> [  195.875381] RSP: 0000:ffffa53c00373ba8 EFLAGS: 00010086
->>> [  195.880617] RAX: 0000000000000000 RBX: 0000000000001387 RCX: 00000000ffffdfff
->>> [  195.887755] RDX: 00000000ffffdfff RSI: 00000000ffffffea RDI: 0000000000000000
->>> [  195.894893] RBP: ffff9ce8c8f2b028 R08: ffffffffa0732288 R09: 0000000000009ffb
->>> [  195.902034] R10: 00000000ffffe000 R11: 3fffffffffffffff R12: 0000000000041006
->>> [  195.909170] R13: ffffa53c00373c24 R14: ffff9ce8c11dadb0 R15: ffff9ce8c2861700
->>> [  195.916310] FS:  0000000000000000(0000) GS:ffff9ce8fe200000(0000)
->>> knlGS:0000000000000000
->>> [  195.924409] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>> [  195.930161] CR2: 00000000f7f694a0 CR3: 0000000038e0c000 CR4: 00000000001006f0
->>> [  195.937300] Call Trace:
->>> [  195.939755]  __dwc3_gadget_ep_enable+0x2d4/0x4e0
->>> [  195.944393]  ? dwc3_remove_requests.constprop.0+0x86/0x170
->>
->> Odd that this change would affect the USB enablment path, as they were
->> focused on the pullup disable path.  Would you happen to have any
->> downstream changes on top of v5.12-rc4 we could review to see if they
->> are still required? (ie where is the dwc3_remove_requests() coming from
->> during ep enable)
-> 
-> You may check my branch [1] on GH. Basically you may be interested in
-> the commit:
-> 0f86df1294ee7523060cc16eafaf4898c693eab0 REVERTME: usb: dwc3: gadget:
-> skip endpoints ep[18]{in,out}
-> Otherwise it's a clean v5.12-rc4 with a revert and another USB PHY
-> suspend fix (which also shouldn't affect this).
+elapsed time: 725m
 
-Can you link your GH reference?
+configs tested: 139
+configs skipped: 3
 
-> 
-> But I don't believe it should have affected this.
-> 
->>> [  195.949897]  dwc3_gadget_ep_enable+0x5d/0x120
->>> [  195.954274]  usb_ep_enable+0x27/0x80
->>> [  195.957869]  gether_connect+0x32/0x1f0 [u_ether]
->>> [  195.962512]  eem_set_alt+0x6d/0x140 [usb_f_eem]
->>> [  195.967061]  composite_setup+0x224/0x1ba0 [libcomposite]
->>> [  195.972405]  ? debug_dma_unmap_page+0x79/0x80
->>> [  195.976782]  ? configfs_composite_setup+0x6b/0x90 [libcomposite]
->>> [  195.982811]  configfs_composite_setup+0x6b/0x90 [libcomposite]
->>> [  195.988668]  dwc3_ep0_interrupt+0x459/0xa50
->>> [  195.992869]  dwc3_thread_interrupt+0x8e2/0xee0
->>> [  195.997327]  ? __schedule+0x237/0x6d0
->>> [  196.001005]  ? disable_irq_nosync+0x10/0x10
->>> [  196.005200]  irq_thread_fn+0x1b/0x60
->>> [  196.008789]  irq_thread+0xd6/0x170
->>> [  196.012202]  ? irq_thread_check_affinity+0x70/0x70
->>> [  196.017004]  ? irq_forced_thread_fn+0x70/0x70
->>> [  196.021373]  kthread+0x116/0x130
->>> [  196.024617]  ? kthread_create_worker_on_cpu+0x60/0x60
->>> [  196.029680]  ret_from_fork+0x22/0x30
->>> [  196.033272] ---[ end trace 8dd104a950d8d248 ]---
->>>
->>>
->> Also, as I mentioned above, the changes should affect the pullup disable
->> path, so when you 'echo "" > UDC' or something similar to that
->> operation, did you see any errors?
-> 
-> After your patch I see a warning as above. Before — no errors or warnings.
-> 
->> Can you provide a ftrace output w/
->> the DWC3 tracing enabled once removing the UDC?
-> 
-> Can you provide step-by-step instructions what should I do?
-> 
-Let me try with your kernel, and steps below first.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thanks
-Wesley Cheng
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+x86_64                           allyesconfig
+riscv                            allmodconfig
+i386                             allyesconfig
+riscv                            allyesconfig
+mips                     decstation_defconfig
+mips                         db1xxx_defconfig
+xtensa                  audio_kc705_defconfig
+arm                             ezx_defconfig
+powerpc                     ppa8548_defconfig
+sh                        edosk7705_defconfig
+m68k                       m5208evb_defconfig
+arc                         haps_hs_defconfig
+sh                   rts7751r2dplus_defconfig
+sh                                  defconfig
+sh                          urquell_defconfig
+xtensa                    xip_kc705_defconfig
+sh                        sh7757lcr_defconfig
+m68k                        m5407c3_defconfig
+sh                          polaris_defconfig
+powerpc                      mgcoge_defconfig
+mips                      pic32mzda_defconfig
+powerpc                      arches_defconfig
+arm                            mmp2_defconfig
+riscv                               defconfig
+nds32                            alldefconfig
+arm                          pcm027_defconfig
+powerpc                       ppc64_defconfig
+mips                       lemote2f_defconfig
+mips                           ip28_defconfig
+arm                             mxs_defconfig
+riscv                            alldefconfig
+powerpc                      katmai_defconfig
+arm                     eseries_pxa_defconfig
+arm                      tct_hammer_defconfig
+powerpc                      walnut_defconfig
+arm                      footbridge_defconfig
+mips                   sb1250_swarm_defconfig
+sh                               alldefconfig
+powerpc                 mpc832x_rdb_defconfig
+powerpc                     ep8248e_defconfig
+sh                     magicpanelr2_defconfig
+m68k                         apollo_defconfig
+powerpc                    klondike_defconfig
+sh                        dreamcast_defconfig
+powerpc                     kilauea_defconfig
+powerpc                    sam440ep_defconfig
+m68k                          hp300_defconfig
+powerpc                   bluestone_defconfig
+m68k                       m5275evb_defconfig
+i386                                defconfig
+sh                          rsk7201_defconfig
+powerpc                  iss476-smp_defconfig
+ia64                          tiger_defconfig
+arm                        vexpress_defconfig
+ia64                      gensparse_defconfig
+arm                       versatile_defconfig
+arm                            dove_defconfig
+mips                        vocore2_defconfig
+powerpc                 mpc837x_mds_defconfig
+arm                          simpad_defconfig
+powerpc                 mpc836x_rdk_defconfig
+openrisc                         alldefconfig
+m68k                       m5249evb_defconfig
+mips                        maltaup_defconfig
+arm                           omap1_defconfig
+powerpc                 mpc8272_ads_defconfig
+mips                            gpr_defconfig
+sh                           se7619_defconfig
+powerpc                      ppc44x_defconfig
+powerpc                 mpc8315_rdb_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a004-20210322
+i386                 randconfig-a003-20210322
+i386                 randconfig-a001-20210322
+i386                 randconfig-a002-20210322
+i386                 randconfig-a006-20210322
+i386                 randconfig-a005-20210322
+x86_64               randconfig-a012-20210322
+x86_64               randconfig-a015-20210322
+x86_64               randconfig-a013-20210322
+x86_64               randconfig-a014-20210322
+x86_64               randconfig-a016-20210322
+x86_64               randconfig-a011-20210322
+i386                 randconfig-a014-20210322
+i386                 randconfig-a011-20210322
+i386                 randconfig-a015-20210322
+i386                 randconfig-a016-20210322
+i386                 randconfig-a012-20210322
+i386                 randconfig-a013-20210322
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                          rv32_defconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
->>> Revert helps (I'm on v5.12-rc4 now with a revert).
->>>
->>> The script to enable gadget:
->>>
->>> #!/bin/sh -efu
->>>
->>> # Mounting CONFIGFS
->>> grep -q -w /sys/kernel/config /proc/mounts || mount -t configfs none
->>> /sys/kernel/config
->>>
->>> # Addresses and files
->>> readonly GADGET_BASE_DIR="/sys/kernel/config/usb_gadget/g1"
->>> readonly DEV_ETH_ADDR="aa:bb:cc:dd:ee:f1"
->>> readonly HOST_ETH_ADDR="aa:bb:cc:dd:ee:f2"
->>> readonly USBDISK="/usbdisk.img"
->>>
->>> # Insert modules
->>> modprobe libcomposite
->>>
->>> # Create directory structure
->>> mkdir "${GADGET_BASE_DIR}"
->>> cd "${GADGET_BASE_DIR}"
->>> mkdir -p configs/c.1/strings/0x409
->>> mkdir -p strings/0x409
->>>
->>> # Ethernet device
->>> mkdir functions/eem.usb0
->>> echo "${DEV_ETH_ADDR}" > functions/eem.usb0/dev_addr
->>> echo "${HOST_ETH_ADDR}" > functions/eem.usb0/host_addr
->>> ln -s functions/eem.usb0 configs/c.1/
->>>
->>> # Composite Gadget Setup
->>> echo 0x1d6b > idVendor          # Linux Foundation
->>> echo 0x0104 > idProduct         # Multifunction Composite Gadget
->>> echo 0x0100 > bcdDevice         # v1.0.0
->>> echo 0x0200 > bcdUSB            # USB2
->>> echo "0123456789abcdef" > strings/0x409/serialnumber
->>> echo "USBArmory"        > strings/0x409/manufacturer
->>> echo "USBArmory Gadget" > strings/0x409/product
->>> echo "Conf1"            > configs/c.1/strings/0x409/configuration
->>> echo 120                > configs/c.1/MaxPower
->>>
->>> # Activate gadgets
->>> echo dwc3.0.auto > UDC
->>>
->>> Please, tell me how to fix this, otherwise I will have to send a revert.
->>>
->> This also fixes a potential SMMU fault on targets with that enabled.  It
->> causes the controller to access a stale TRB DMA address after it has
->> already been unmapped.  I think we should figure out what is causing the
->> issue on your set up instead of reverting the entire change.
-> 
-> If we find a cause and have a fix during this week, otherwise it's
-> rc5:ish timing when we may not have more time to play.
-> 
+clang tested configs:
+x86_64               randconfig-a002-20210322
+x86_64               randconfig-a003-20210322
+x86_64               randconfig-a001-20210322
+x86_64               randconfig-a006-20210322
+x86_64               randconfig-a004-20210322
+x86_64               randconfig-a005-20210322
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
