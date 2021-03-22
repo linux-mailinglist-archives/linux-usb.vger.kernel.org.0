@@ -2,93 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C19344C01
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Mar 2021 17:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB27344C7F
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Mar 2021 18:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbhCVQoX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Mar 2021 12:44:23 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:52585 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229897AbhCVQoK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Mar 2021 12:44:10 -0400
-Received: (qmail 671734 invoked by uid 1000); 22 Mar 2021 12:44:09 -0400
-Date:   Mon, 22 Mar 2021 12:44:09 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Jay Fang <f.fangjian@huawei.com>, linux-usb@vger.kernel.org,
-        tangzihao1@hisilicon.com, huangdaode@huawei.com
-Subject: Re: [PATCH] usb: ohci: remove unreachable
- platform_driver_unregister() call
-Message-ID: <20210322164409.GC667925@rowland.harvard.edu>
-References: <1616203911-4207-1-git-send-email-f.fangjian@huawei.com>
- <20210320022443.GA591964@rowland.harvard.edu>
- <20210322045850.GA1667@kadam>
+        id S230039AbhCVQ7j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Mar 2021 12:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229746AbhCVQ7V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Mar 2021 12:59:21 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39AA6C061574;
+        Mon, 22 Mar 2021 09:59:21 -0700 (PDT)
+Date:   Mon, 22 Mar 2021 17:59:17 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1616432359;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DQVfYmOjNdPPfTYQ9DYdWbQlRVy8ECEn1P6lOCZxTYo=;
+        b=3BQH2Xlnq6MG2qFplKHQxUvgK39aFDz3Hru0oq8bZZ3qQQwM/72ZjC0mDS50mAIPXGPW1x
+        ws7MC5j73QM5N84MYgHcL/A3qcnzs2HKxP0dmFO0jzo01OhK6mvq9YKtSBixbIiK0OX667
+        IWhu2bF/FNwxiBC0TjoewSLDtUhMe+eMv57ikRal1yT9oNVZECCqjLI9zq9bx+42TLbesK
+        1Y5OyrsbRf0qezLg6BKmQZPJF853TaluEWHQxGnuOxZXm0ufQ+ngsSZDDrN8ooaYkIR62o
+        OfaZricXCezyJ/g9/Fw3j/SngzPiqdwFr8gg0xmFgWsMf1+sY110cipGDgbvig==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1616432359;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DQVfYmOjNdPPfTYQ9DYdWbQlRVy8ECEn1P6lOCZxTYo=;
+        b=NoqlvPKS1+sioBwkL1BS9TP7pzlYMyQa2gzuj8HSqqkOYRTMbwOkeF6IAZLaXyaf//qV1N
+        aXz1cVr1vseCvPBg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stanislaw Gruszka <sgruszka@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] USB: ehci: drop workaround for forced irq threading
+Message-ID: <20210322165917.it5d5f5kuvs7jah5@linutronix.de>
+References: <20210322111249.32141-1-johan@kernel.org>
+ <20210322164200.GB667925@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210322045850.GA1667@kadam>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210322164200.GB667925@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 22, 2021 at 07:58:50AM +0300, Dan Carpenter wrote:
-> On Fri, Mar 19, 2021 at 10:24:43PM -0400, Alan Stern wrote:
-> > On Sat, Mar 20, 2021 at 09:31:51AM +0800, Jay Fang wrote:
-> > > From: Zihao Tang <tangzihao1@hisilicon.com>
-> > > 
-> > > Fix the following smatch warnings:
-> > > 
-> > > drivers/usb/host/ohci-hcd.c:1318 ohci_hcd_mod_init() warn:
-> > > ignoring unreachable code.
-> > > 
-> > > platform_driver_register(&TMIO_OHCI_DRIVER) is the last
-> > > platform_driver_register() call in ohci_hcd_mod_init(), so if it
-> > > failed, there's no need to unregister it, but just goto error_tmio.
-> > > 
-> > > So remove the unreachable platform_driver_unregister(&TMIO_OHCI_DRIVER).
-> > > No functionality change.
-> > 
-> > Doesn't the compiler realize that the call is unreachable, and 
-> > therefore avoid generating any object for it?
-> >
-> 
-> This is a static checker warning.  For example, Heart Bleed bug was an
-> ignored unreachable code static checker warning.
-> 
-> > It's true that the function call is, strictly speaking, unnecessary.  
-> > However, it provides a pleasing symmetry and it acts as a guide in the 
-> > unlikely event that anyone wants to add another platform-specific 
-> > driver in the future.
-> 
-> Hopefully future programmers can figure out basic stuff like that.
-> 
-> This code doesn't trigger a Smatch warning on my .config because the
-> Smatch check doesn't warn if the previous line was an #endif.  On the
-> other hand, the ifdefs are also why I forwarded the email when I saw the
-> warning from kbuild.  Normally kbuild is better at picking the person
-> to blame but because this is a .config thing that confused it.  Anyway,
-> I glanced at the warning and thought it looked suspicious enough to
-> warrant a further look.
-> 
-> When I first wrote the Smatch unreachable code warning there were a
-> handful of places which used that style of code:
-> 
-> 	return 0;
-> 
-> 	unreachable_release();
-> err_release:
-> 	release_something();
-> 
-> I just left those as-is because it was obvious to me that it was done
-> intentionally.  However, it seems that other people have removed all of
-> those behind my back so I can't find an example of this now except for
-> in ohci_hcd_mod_init().
-> 
-> Anyway, I would have put a special case to silence these false positives
-> but it wasn't common practice in 2014 and no one does it these days.
+On 2021-03-22 12:42:00 [-0400], Alan Stern wrote:
+> What happens on RT systems?  Are they smart enough to avoid the whole=20
+> problem by enabling interrupts during _all_ callbacks?
 
-Well, I guess it would be okay to convert the code to a comment.  Just 
-so long as it isn't removed entirely.
+tl;dr: Yes.=20
 
-Alan Stern
+The referenced commit (id 81e2073c175b) disables interrupts only on !RT
+configs so for RT everything remains unchanged (the backports are
+already adjusted for the old stable trees to use the proper CONFIG_* for
+enabled RT).
+
+All hrtimer callbacks run as HRTIMER_MODE_SOFT by default. The
+HRTIMER_MODE_HARD ones (which expire in HARDIRQ context) were audited /
+explicitly enabled.
+The same goes irq_work.
+The printk code is different compared to mainline. A printk() on RT in
+HARDIRQ context is printed once the HARDIRQ context is left. So the
+serial/console/=E2=80=A6 driver never gets a chance to acquire its lock in
+hardirq context.
+
+An interrupt handler which is not forced-threaded must be marked as such
+and must not use any spinlock_t based locking. lockdep/might_sleep
+complain here already.
+
+> Alan Stern
+
+Sebastian
