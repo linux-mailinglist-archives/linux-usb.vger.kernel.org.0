@@ -2,85 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB27344C7F
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Mar 2021 18:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D128344D60
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Mar 2021 18:33:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbhCVQ7j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Mar 2021 12:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbhCVQ7V (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Mar 2021 12:59:21 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39AA6C061574;
-        Mon, 22 Mar 2021 09:59:21 -0700 (PDT)
-Date:   Mon, 22 Mar 2021 17:59:17 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1616432359;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DQVfYmOjNdPPfTYQ9DYdWbQlRVy8ECEn1P6lOCZxTYo=;
-        b=3BQH2Xlnq6MG2qFplKHQxUvgK39aFDz3Hru0oq8bZZ3qQQwM/72ZjC0mDS50mAIPXGPW1x
-        ws7MC5j73QM5N84MYgHcL/A3qcnzs2HKxP0dmFO0jzo01OhK6mvq9YKtSBixbIiK0OX667
-        IWhu2bF/FNwxiBC0TjoewSLDtUhMe+eMv57ikRal1yT9oNVZECCqjLI9zq9bx+42TLbesK
-        1Y5OyrsbRf0qezLg6BKmQZPJF853TaluEWHQxGnuOxZXm0ufQ+ngsSZDDrN8ooaYkIR62o
-        OfaZricXCezyJ/g9/Fw3j/SngzPiqdwFr8gg0xmFgWsMf1+sY110cipGDgbvig==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1616432359;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DQVfYmOjNdPPfTYQ9DYdWbQlRVy8ECEn1P6lOCZxTYo=;
-        b=NoqlvPKS1+sioBwkL1BS9TP7pzlYMyQa2gzuj8HSqqkOYRTMbwOkeF6IAZLaXyaf//qV1N
-        aXz1cVr1vseCvPBg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Johan Hovold <johan@kernel.org>,
+        id S230497AbhCVRco (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Mar 2021 13:32:44 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:21246 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230499AbhCVRcM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Mar 2021 13:32:12 -0400
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 22 Mar 2021 10:32:12 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 22 Mar 2021 10:32:10 -0700
+X-QCInternal: smtphost
+Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 22 Mar 2021 23:01:35 +0530
+Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
+        id BB67B2F8E; Mon, 22 Mar 2021 23:01:34 +0530 (IST)
+From:   Sandeep Maheswaram <sanm@codeaurora.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stanislaw Gruszka <sgruszka@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] USB: ehci: drop workaround for forced irq threading
-Message-ID: <20210322165917.it5d5f5kuvs7jah5@linutronix.de>
-References: <20210322111249.32141-1-johan@kernel.org>
- <20210322164200.GB667925@rowland.harvard.edu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20210322164200.GB667925@rowland.harvard.edu>
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: [PATCH v5 0/4] USB DWC3 host wake up support from system suspend
+Date:   Mon, 22 Mar 2021 23:01:16 +0530
+Message-Id: <1616434280-32635-1-git-send-email-sanm@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-03-22 12:42:00 [-0400], Alan Stern wrote:
-> What happens on RT systems?  Are they smart enough to avoid the whole=20
-> problem by enabling interrupts during _all_ callbacks?
+Avoiding phy powerdown in host mode when wakeup capable devices are 
+connected, so that it can be wake up by devices.
+Set GENPD_FLAG_ACTIVE_WAKEUP flag to keep usb30_prim gdsc active
+when wakeup capable devices are connected to the host.
 
-tl;dr: Yes.=20
+Changes in v5:
+Added phy_power_off flag to check presence of wakeup capable devices.
+Dropped patch[v4,4/5] as it is present linux-next.
+Addressed comments in host.c and dwc3-qcom.c.
 
-The referenced commit (id 81e2073c175b) disables interrupts only on !RT
-configs so for RT everything remains unchanged (the backports are
-already adjusted for the old stable trees to use the proper CONFIG_* for
-enabled RT).
+Changes in v4:
+Addressed Matthias comments raised in v3.
 
-All hrtimer callbacks run as HRTIMER_MODE_SOFT by default. The
-HRTIMER_MODE_HARD ones (which expire in HARDIRQ context) were audited /
-explicitly enabled.
-The same goes irq_work.
-The printk code is different compared to mainline. A printk() on RT in
-HARDIRQ context is printed once the HARDIRQ context is left. So the
-serial/console/=E2=80=A6 driver never gets a chance to acquire its lock in
-hardirq context.
+Changes in v3:
+Removed need_phy_for_wakeup flag and by default avoiding phy powerdown.
+Addressed Matthias comments and added entry for DEV_SUPERSPEED.
+Added suspend_quirk in dwc3 host and moved the dwc3_set_phy_speed_flags.
+Added wakeup-source dt entry and reading in dwc-qcom.c glue driver.
 
-An interrupt handler which is not forced-threaded must be marked as such
-and must not use any spinlock_t based locking. lockdep/might_sleep
-complain here already.
+Changes in v2:
+Dropped the patch in clock to set GENPD_FLAG_ACTIVE_WAKEUP flag and 
+setting in usb dwc3 driver.
+Separated the core patch and glue driver patch.
+Made need_phy_for_wakeup flag part of dwc structure and 
+hs_phy_flags as unsgined int.
+Adrressed the comment on device_init_wakeup call.
+Corrected offset for reading portsc register.
+Added pacth to support wakeup in xo shutdown case.
 
-> Alan Stern
+Sandeep Maheswaram (4):
+  usb: dwc3: core: Host wake up support from system suspend
+  usb: dwc3: host: Add suspend_quirk for dwc3 host
+  usb: dwc3: qcom: Configure wakeup interrupts and set genpd active
+    wakeup flag
+  arm64: dts: qcom: sc7180: Add wakeup-source property for USB node in
+    IDP and trogdor
 
-Sebastian
+ arch/arm64/boot/dts/qcom/sc7180-idp.dts      |  1 +
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi |  1 +
+ drivers/usb/dwc3/core.c                      |  8 ++-
+ drivers/usb/dwc3/core.h                      |  3 +
+ drivers/usb/dwc3/dwc3-qcom.c                 | 87 ++++++++++++++++++----------
+ drivers/usb/dwc3/host.c                      | 58 +++++++++++++++++++
+ 6 files changed, 124 insertions(+), 34 deletions(-)
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
+
