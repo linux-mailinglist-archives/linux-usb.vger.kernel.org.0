@@ -2,80 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 601CF3463A2
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 16:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DACB83464DE
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 17:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232858AbhCWPxf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Mar 2021 11:53:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59052 "EHLO mail.kernel.org"
+        id S233193AbhCWQVB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 12:21:01 -0400
+Received: from mga14.intel.com ([192.55.52.115]:58154 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232803AbhCWPxK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Mar 2021 11:53:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 31CDB619BD;
-        Tue, 23 Mar 2021 15:53:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1616514790;
-        bh=vhcfwWbrATj0juPqxDxNC4Fe5Lch/1ZvC6Vz/V+Snhc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gqvfe+uq6oewEcyDsGQ0hJACm2pqsCLtzNXxuJMiTI5lU2gu6z7ocRS3eaD1cReNy
-         gJfTYlt5Blp4Am0YvIUvf62LcYR9tQUvtlVsM6fWmZa2KxSnC8zj8KPeT0OtsrctUR
-         R4Jpxn73tvT3Kej6oQP/hYXWlOjVFdMoMhWjaBJY=
-Date:   Tue, 23 Mar 2021 16:53:01 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Allen Pais <allen.lkml@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Zeng Tao <prime.zeng@hisilicon.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Ahmed S. Darwish" <a.darwish@linutronix.de>
-Subject: Re: [PATCH v3 0/8] usb: Check for genXxY on host
-Message-ID: <YFoO3VZLt4GJPPcr@kroah.com>
-References: <cover.1615432770.git.Thinh.Nguyen@synopsys.com>
- <YFncvgvAjSNvmZk/@kroah.com>
- <9074de11-f1ad-50c3-6f4d-9da59fd8aa12@linux.intel.com>
+        id S233171AbhCWQU5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Mar 2021 12:20:57 -0400
+IronPort-SDR: K4fJMWjsxfTS0j9VFOOgf8NCRrAhbmVDK+MnUpWO1od/TVEFOKY2yiVS1hB+UxASXMJXqXGzcr
+ ub8xeBA6NBGw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9932"; a="189913025"
+X-IronPort-AV: E=Sophos;i="5.81,272,1610438400"; 
+   d="scan'208";a="189913025"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2021 09:20:57 -0700
+IronPort-SDR: GylakkK0CEToqI5SVYe9iTbn2d9JNyPMY2Vtk9YG/gPbIKwpaYQrHGO2kxkXxglV40cdXTa3Fz
+ GjoLdKYUnagA==
+X-IronPort-AV: E=Sophos;i="5.81,272,1610438400"; 
+   d="scan'208";a="513805837"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2021 09:20:54 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 23 Mar 2021 18:20:51 +0200
+Date:   Tue, 23 Mar 2021 18:20:51 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Christian Kellner <christian@kellner.me>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@google.com>,
+        Diego Rivas <diegorivas@google.com>
+Subject: Re: [PATCH v2 3/3] thunderbolt: Expose more details about USB 3.x
+ and DisplayPort tunnels
+Message-ID: <20210323162051.GA2542@lahna.fi.intel.com>
+References: <20210323145701.86161-1-mika.westerberg@linux.intel.com>
+ <20210323145701.86161-4-mika.westerberg@linux.intel.com>
+ <YFoIqi1hggi8xuYq@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9074de11-f1ad-50c3-6f4d-9da59fd8aa12@linux.intel.com>
+In-Reply-To: <YFoIqi1hggi8xuYq@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 23, 2021 at 04:36:24PM +0200, Mathias Nyman wrote:
-> On 23.3.2021 14.19, Greg Kroah-Hartman wrote:
-> > On Wed, Mar 10, 2021 at 07:42:35PM -0800, Thinh Nguyen wrote:
-> >> This series add some missing support for USB 3.2 SuperSpeed Plus detection on
-> >> the host side. A SuperSpeed Plus device can operate in gen2x2, gen2x1, or
-> >> gen1x2. The current implementation can't detect whether the device is in Gen 1
-> >> or Gen 2 speed. We can do this by matching for the lane speed exponent and
-> >> mantissa of the SSP sublink speed capability descriptor from the hub driver.
-> >>
-> >> Also, the current xHCI driver is missing some reports for the default SSP
-> >> Sublink Speed capability for USB 3.2 roothub. This series also add some support
-> >> for xHCI driver detecting various SuperSpeed Plus GenXxY.
-> > 
-> > I took the first 4 patches already and will wait for Mathias to review
-> > the rest.
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> > 
+On Tue, Mar 23, 2021 at 04:26:34PM +0100, Greg Kroah-Hartman wrote:
+> > +static ssize_t tunneling_details_show(struct device *dev,
+> > +				      struct device_attribute *attr, char *buf)
+> > +{
+> > +	const struct tb *tb = container_of(dev, struct tb, dev);
+> > +
+> > +	return sprintf(buf, "%d\n", !!(tb->cm_caps & TB_CAP_TUNNEL_DETAILS));
 > 
-> For patches 4 to 8
-> 
-> Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> sysfs_emit() please.
 
-Thanks, all queued up now!
+Oops, missed that. Will fix in v3.
 
-greg k-h
+Thanks!
