@@ -2,76 +2,197 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65757346D77
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 23:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0820F346DBE
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 00:13:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233738AbhCWWoS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Mar 2021 18:44:18 -0400
-Received: from mail-il1-f178.google.com ([209.85.166.178]:43579 "EHLO
-        mail-il1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234203AbhCWWoF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Mar 2021 18:44:05 -0400
-Received: by mail-il1-f178.google.com with SMTP id d2so19663016ilm.10;
-        Tue, 23 Mar 2021 15:44:05 -0700 (PDT)
+        id S234241AbhCWXMa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 19:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234249AbhCWXMD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Mar 2021 19:12:03 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D3EC061574
+        for <linux-usb@vger.kernel.org>; Tue, 23 Mar 2021 16:12:02 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id f19so19539379ion.3
+        for <linux-usb@vger.kernel.org>; Tue, 23 Mar 2021 16:12:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0CTkCP7eh5JThTr8jIH1qDmyEvNCPXGfv16BaMHqRms=;
+        b=G+HRAoEBftiZViB1W9yjFGzhCO8zCpuDbTwdqm/XGLcphKdTuhO8hpKuEGztPMNjH4
+         BK78t12o0bz41KzLUGsF1JKgf6FIBd52ul0eqkkWTCrn/L2EpLbi+i1+Bz3XCdJDfQ7y
+         tpFup7b1C+lZDCytyJMp9k7yDIH8uhiU213e0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=To9cZZSfsdpSpDQw0W+UmnGEzxUUpkZfOtO0q/U8W/s=;
-        b=GIyvNIiwTfwRmEeLlTzY4pPcvecm5nE/Ne3soULwTb/WUaneMSjnOF70nxneqU12Tc
-         LZisoHc68HomibfqP5FOrLXAZc2f0qVXnVhq2s6SKHnqBFYBwdF+f2v5uCakQ/+mCM9m
-         WWHsqemKMUwyfR49Y2gDDS9l1UUVGBcjYd6472vvkI2Ap1HSVdrssSe3Lok9r5g0NhaF
-         dqOGwN0TbmQ1bRJ11yd1daRTPXGNeIlChUGSEj0dMYxFq35LUJd8h+mcb9mbp4Rj6Wu4
-         Bq3M09Gbf07tDneF+/13CLao2ygj5+1W7BwaSigSJRI5p7CmyYB6hzuS+lJ6+Rf01556
-         +FKg==
-X-Gm-Message-State: AOAM531Y2/ozgo28lZr9XlvtFYKoMc0+dCGvOSWL6TXoYrO425zxsnGr
-        z0k1xMVPPtzzU76PxeET1sfZ/aVEMg==
-X-Google-Smtp-Source: ABdhPJxqGs67jhtTLty5OdHwPAGfKZPUCrN5SvDX5Ss4Kn3MzXOQEUOV8Zjk+93kV8LZiGFtHI0xuw==
-X-Received: by 2002:a92:874d:: with SMTP id d13mr372236ilm.214.1616539445175;
-        Tue, 23 Mar 2021 15:44:05 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id i3sm116018ilu.67.2021.03.23.15.44.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Mar 2021 15:44:04 -0700 (PDT)
-Received: (nullmailer pid 1485445 invoked by uid 1000);
-        Tue, 23 Mar 2021 22:44:02 -0000
-Date:   Tue, 23 Mar 2021 16:44:02 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     CK Hu <ck.hu@mediatek.com>, linux-usb@vger.kernel.org,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0CTkCP7eh5JThTr8jIH1qDmyEvNCPXGfv16BaMHqRms=;
+        b=Fs7ckRGjxm6uv5wDRddDh2uzfK5RCKQ6vMdiDWkvUKJMHoJ8wSgPcHRNLyTVTJIE90
+         hODOh0RWYmG2GTv6cvTzAud4ept/QJy0YK5Iz3tTaFhqdApFD5VG9kKgyggFbrsFyQSA
+         Fv3dm7i5oAvQSJ4gSGhmKYuMplJE4jiehj4QAdNuXfWKF1F39JIDLAKB6hpwH6W1dHf/
+         k5La0ixlpwDdvElr4yrx70AR+nmmNSpLTw6TQMufwtxMBdX3NfvbFWFSmkumOGfN9u7y
+         lUucT/4dMdkY/WtYzlYdyrF5BrmFcdA/B+mzjfQDRTh7dn5OKgBHMatgXhhj4AduLEie
+         hbtQ==
+X-Gm-Message-State: AOAM5300ej8kbD/8fFCa7dpf7RZTDsus+61Uj1oz7rhsDxCPB8jtRUDm
+        idU3bvmM2WbUH+KXc8kJrJr0jw==
+X-Google-Smtp-Source: ABdhPJz29DEstIzTa436eSM6a5JP0poV2ojeMgXtNVbPWeIgpc9a04FJlN+PpIQoOlkjEKxHHOFEVQ==
+X-Received: by 2002:a05:6638:144e:: with SMTP id l14mr343367jad.76.1616541122241;
+        Tue, 23 Mar 2021 16:12:02 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id r3sm151608ilq.42.2021.03.23.16.12.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Mar 2021 16:12:01 -0700 (PDT)
+Subject: Re: [PATCH v4 1/2] usbip: tools: add options and examples in man page
+ related to device mode
+To:     "Hongren Zheng (Zenithal)" <i@zenithal.me>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Antonio Borneo <borneo.antonio@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mediatek@lists.infradead.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jie Qiu <jie.qiu@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Cawa Cheng <cawa.cheng@mediatek.com>
-Subject: Re: [PATCH v5 01/13] dt-bindings: usb: fix yamllint check warning
-Message-ID: <20210323224402.GA1485389@robh.at.kernel.org>
-References: <20210316092232.9806-1-chunfeng.yun@mediatek.com>
+        matt mooney <mfm@muteddisk.com>, linux-usb@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org
+References: <YFnlUaF2njDjIhfM@Sun>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <1a2c79b7-1cc0-9ddd-f2ec-fa7b222113ec@linuxfoundation.org>
+Date:   Tue, 23 Mar 2021 17:12:00 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210316092232.9806-1-chunfeng.yun@mediatek.com>
+In-Reply-To: <YFnlUaF2njDjIhfM@Sun>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 16 Mar 2021 17:22:20 +0800, Chunfeng Yun wrote:
-> Fix warning: "missing starting space in comment"
+On 3/23/21 6:55 AM, Hongren Zheng (Zenithal) wrote:
+> The commit e0546fd8b748 ("usbip: tools: Start using VUDC backend in
+> usbip tools") implemented device mode for user space tools, however the
+> corresponding options are not documented in man page.
 > 
-> Fixes: 23bf6fc7046c ("dt-bindings: usb: convert usb-device.txt to YAML schema")
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> This commit documents the options and provides examples on device mode.
+> 
+> Signed-off-by: Hongren Zheng <i@zenithal.me>
 > ---
-> v5: add Fixes tag suggested by Greg
-> v2~v4: no changes
-> ---
->  Documentation/devicetree/bindings/usb/usb-device.yaml | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>   tools/usb/usbip/doc/usbip.8  | 25 +++++++++++++++++++++++++
+>   tools/usb/usbip/doc/usbipd.8 | 22 ++++++++++++++++++++++
+>   2 files changed, 47 insertions(+)
+> 
+> PATCH v2:
+>      Add signed-off-by line
+> 
+> PATCH v3:
+>      Move patch changelog after the marker line
+>      Remove nickname in signed-off-by line
+> 
+> PATCH v4:
+>      Use commit short hash and message instead of long hash only when
+>        referring to commit in the kernel
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thank you for the patch. Please see comments below:
+
+> diff --git a/tools/usb/usbip/doc/usbip.8 b/tools/usb/usbip/doc/usbip.8
+> index a15d20063b98..385b0eda8746 100644
+> --- a/tools/usb/usbip/doc/usbip.8
+> +++ b/tools/usb/usbip/doc/usbip.8
+> @@ -49,6 +49,13 @@ then exit.
+>   Attach a remote USB device.
+>   .PP
+>   
+> +.HP
+> +\fBattach\fR \-\-remote=<\fIhost\fR> \-\-device=<\fdev_id\fR>
+> +.IP
+> +Attach a remote USB gadget.
+> +Only used when the remote usbipd is in device mode.
+> +.PP
+> +
+>   .HP
+>   \fBdetach\fR \-\-port=<\fIport\fR>
+>   .IP
+
+This is a bit confusing. Please add a separate section for
+Attach a remote USB gadget complete with attach and detach
+instructions.
+
+> @@ -73,6 +80,14 @@ Stop exporting a device so it can be used by a local driver.
+>   List USB devices exported by a remote host.
+>   .PP
+>   
+> +.HP
+> +\fBlist\fR \-\-device
+> +.IP
+> +List USB gadgets of local usbip-vudc.
+> +Only used when the local usbipd is in device mode.
+> +This can not list usbip-vudc USB gadgets of the remote device mode usbipd.
+> +.PP
+> +
+>   .HP
+>   \fBlist\fR \-\-local
+>   .IP
+> @@ -93,5 +108,15 @@ List local USB devices.
+>       client:# usbip detach --port=0
+>           - Detach the usb device.
+>   
+> +The following example shows the use of device mode
+> +
+> +    server:# usbip list --device
+> +        - Note this is the server side
+> +
+> +    client:# modprobe vhci-hcd
+> +
+> +    client:# usbip attach --remote=server --device=usbip-vudc.0
+> +        - Connect the remote USB gadget
+> +
+>   .SH "SEE ALSO"
+>   \fBusbipd\fP\fB(8)\fB\fP
+> diff --git a/tools/usb/usbip/doc/usbipd.8 b/tools/usb/usbip/doc/usbipd.8
+> index fb62a756893b..53c8d5792de6 100644
+> --- a/tools/usb/usbip/doc/usbipd.8
+> +++ b/tools/usb/usbip/doc/usbipd.8
+> @@ -29,6 +29,12 @@ Bind to IPv4. Default is both.
+>   Bind to IPv6. Default is both.
+>   .PP
+>   
+> +.HP
+> +\fB\-e\fR, \fB\-\-device\fR
+> +.IP
+> +Run in device mode. Rather than drive an attached device, create a virtual UDC to bind gadgets to.
+> +.PP
+> +
+>   .HP
+>   \fB\-D\fR, \fB\-\-daemon\fR
+>   .IP
+> @@ -86,6 +92,22 @@ USB/IP client can connect and use exported devices.
+>           - A usb device 1-2 is now exportable to other hosts!
+>           - Use 'usbip unbind --busid=1-2' when you want to shutdown exporting and use the device locally.
+>   
+> +The following example shows the use of device mode
+> +
+> +    server:# modprobe usbip-vudc
+> +        - Use /sys/class/udc/ interface
+> +        - usbip-host is independent of this module.
+> +
+> +    server:# usbipd -e -D
+> +        - Start usbip daemon in device mode.
+> +
+> +    server:# modprobe g_mass_storage file=/tmp/tmp.img
+> +        - Bind a gadget to usbip-vudc
+> +        - in this example, a mass storage gadget is bound
+> +
+> +    server:# usbip list --device
+> +        - Note this is the server side
+> +
+>   .SH "SEE ALSO"
+>   \fBusbip\fP\fB(8)\fB\fP
+>   
+> 
+
+thanks,
+-- Shuah
+
