@@ -2,100 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCDDC345521
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 02:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD2934558F
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 03:39:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbhCWBvC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Mar 2021 21:51:02 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:49205 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbhCWBu3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Mar 2021 21:50:29 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1616464227; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=iqqyIy9tOoNipSpUDnFqIfdhP6wTcipwYtIVVT4KWEA=; b=sOORbp3YVx17EO0wUBA6pM0JIk+7i2fHRBoxhTwZ6Dt8OLirx2V0oKjpbQ/WaQ1btlvZ/57R
- BpVHJ+BJk3ZxpsAWsC8kciN6CfOwYqYVY53+NnoCz00m4fYdCb2qHXP1u/SQnHQyWl9PT1Yk
- Avbp+DTjFoZeky3wWuWCJAUvP74=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 60594962c32ceb3a9121de50 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 23 Mar 2021 01:50:26
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 481B5C43461; Tue, 23 Mar 2021 01:50:26 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2D3F5C433C6;
-        Tue, 23 Mar 2021 01:50:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2D3F5C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>,
-        Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH] usb: gadget: Stall OS descriptor request for unsupported functions
-Date:   Mon, 22 Mar 2021 18:50:17 -0700
-Message-Id: <1616464217-2650-1-git-send-email-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S229854AbhCWCjS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Mar 2021 22:39:18 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:36652 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229764AbhCWCjO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Mar 2021 22:39:14 -0400
+X-UUID: f7529942c90840d4b07a93ef76a036e4-20210323
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=ec0Xu7ws9yc4yFZEfVrLx9sGsUsQO2Y5F69pZNql94w=;
+        b=pXJbd067FziMQaTKbvYVerI+m05jIPvtm/33i4t9PnmrbZOdHWenwUvFnNr7fOtDUhZYDfyDhQ0otgPIePnHhaT73wQSxb3I+noyYVcOa4DdUBxypDTFAPVYL9OS+yFfeCaLS4jWF4fBM0Yhttjxe+oZ4NJrsS6XvqK57sS2OOQ=;
+X-UUID: f7529942c90840d4b07a93ef76a036e4-20210323
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1158060922; Tue, 23 Mar 2021 10:39:10 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by mtkmbs06n2.mediatek.inc
+ (172.21.101.130) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 23 Mar
+ 2021 10:39:08 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 23 Mar 2021 10:39:07 +0800
+Message-ID: <1616467147.11286.1.camel@mhfsdcap03>
+Subject: Re: [PATCH 06/13] usb: xhci-mtk: support ip-sleep wakeup for MT8183
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Nicolas Boichat <drinkcat@chromium.org>
+Date:   Tue, 23 Mar 2021 10:39:07 +0800
+In-Reply-To: <0e660a28-d66f-a23e-3fad-8fa37b6df1b1@gmail.com>
+References: <1616382832-28450-1-git-send-email-chunfeng.yun@mediatek.com>
+         <1616382832-28450-6-git-send-email-chunfeng.yun@mediatek.com>
+         <0e660a28-d66f-a23e-3fad-8fa37b6df1b1@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+X-TM-SNTS-SMTP: 1521B1B4E95B0792845FBE36193B2F66E31839D23892065DCC5F210519F582DC2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-
-Hosts which request "OS descriptors" from gadgets do so during
-the enumeration phase and before the configuration is set with
-SET_CONFIGURATION. Composite driver supports OS descriptor
-handling in composite_setup function. This requires to pass
-signature field, vendor code, compatibleID and subCompatibleID
-from user space.
-
-For USB compositions that contain functions which don't implement os
-descriptors, Windows is sending vendor specific requests for os
-descriptors and composite driver handling this request with invalid
-data. With this invalid info host resetting the bus and never
-selecting the configuration and leading enumeration issue.
-
-Fix this by bailing out from the OS descriptor setup request
-handling if the functions does not have OS descriptors compatibleID.
-
-Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
----
- drivers/usb/gadget/composite.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 72a9797..473edda6 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -1945,6 +1945,12 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
- 				buf[6] = w_index;
- 				/* Number of ext compat interfaces */
- 				count = count_ext_compat(os_desc_cfg);
-+				/*
-+				 * Bailout if device does not
-+				 * have ext_compat interfaces.
-+				 */
-+				if (count == 0)
-+					break;
- 				buf[8] = count;
- 				count *= 24; /* 24 B/ext compat desc */
- 				count += 16; /* header */
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+T24gTW9uLCAyMDIxLTAzLTIyIGF0IDExOjU0ICswMzAwLCBTZXJnZWkgU2h0eWx5b3Ygd3JvdGU6
+DQo+IEhlbGxvIQ0KPiANCj4gT24gMjIuMDMuMjAyMSA2OjEzLCBDaHVuZmVuZyBZdW4gd3JvdGU6
+DQo+IA0KPiA+IEFkZCBzdXBwb3J0IGlwLXNsZWVwIHdha2V1cCBmb3IgTVQ4MTgzLCBpdCdzIHNp
+bWlsYXIgdG8gTVQ4MTczLA0KPiAgICAgICAgICAgICAgIF4gZm9yDQo+IA0KPiA+IGFuZCBpdCdz
+IGFsc28gYSBzcGVjaWZpYyBvbmUsIGJ1dCBub3QgZm9sbG93IElQTSBydWxlLg0KPiANCj4gICAg
+IEZvbGxvd2luZz8NCkFjaw0KPiANCj4gPiBEdWUgdG8gdGhlIGluZGV4IDIgYWxyZWFkeSB1c2Vk
+IGJ5IG1hbnkgRFRTLCBpdCdzIGJldHRlciB0byBrZWVwDQo+ID4gaXQgdW5jaGFuZ2VkIGZvciBi
+YWNrd2FyZCBjb21wYXRpYmxlLCB0cmVhdCBzcGVjaWZpYyBvbmVzIHdpdGhvdXQNCj4gDQo+ICAg
+ICBDb21wYXRpYmlsaXR5Lg0KQWNrDQo+IA0KPiA+IGZvbGxvd2luZyBJUE0gcnVsZSBhcyByZXZp
+c2lvbiAxLngsIG1lYW53aGlsZSByZXNlcnZlIDN+MTAgZm9yDQo+ID4gbGF0ZXIgcmV2aXNpb24g
+dGhhdCBmb2xsb3dzIHRoZSBJUE0gcnVsZS4NCj4gPiANCj4gPiBTaWduZWQtb2ZmLWJ5OiBDaHVu
+ZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRlay5jb20+DQo+ID4gLS0tDQo+ID4gICBkcml2
+ZXJzL3VzYi9ob3N0L3hoY2ktbXRrLmMgfCAxMyArKysrKysrKysrKysrDQo+ID4gICAxIGZpbGUg
+Y2hhbmdlZCwgMTMgaW5zZXJ0aW9ucygrKQ0KPiA+IA0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJz
+L3VzYi9ob3N0L3hoY2ktbXRrLmMgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRrLmMNCj4gPiBp
+bmRleCAwOWYyZGRiZmU4YjkuLjhiYTFmOTE0Y2I3NSAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJz
+L3VzYi9ob3N0L3hoY2ktbXRrLmMNCj4gPiArKysgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRr
+LmMNCj4gPiBAQCAtNTcsMTIgKzU3LDE5IEBADQo+ID4gICAjZGVmaW5lIENUUkxfVTJfRk9SQ0Vf
+UExMX1NUQglCSVQoMjgpDQo+ID4gICANCj4gPiAgIC8qIHVzYiByZW1vdGUgd2FrZXVwIHJlZ2lz
+dGVycyBpbiBzeXNjb24gKi8NCj4gPiArDQo+ID4gICAvKiBtdDgxNzMgZXRjICovDQo+ID4gICAj
+ZGVmaW5lIFBFUklfV0tfQ1RSTDEJMHg0DQo+ID4gICAjZGVmaW5lIFdDMV9JU19DKHgpCSgoKHgp
+ICYgMHhmKSA8PCAyNikgIC8qIGN5Y2xlIGRlYm91bmNlICovDQo+ID4gICAjZGVmaW5lIFdDMV9J
+U19FTglCSVQoMjUpDQo+ID4gICAjZGVmaW5lIFdDMV9JU19QCUJJVCg2KSAgLyogcG9sYXJpdHkg
+Zm9yIGlwIHNsZWVwICovDQo+ID4gICANCj4gPiArLyogbXQ4MTgzICovDQo+ID4gKyNkZWZpbmUg
+UEVSSV9XS19DVFJMMAkweDANCj4gPiArI2RlZmluZSBXQzBfSVNfQyh4KQkoKCh4KSAmIDB4Zikg
+PDwgMjgpICAvKiBjeWNsZSBkZWJvdW5jZSAqLw0KPiA+ICsjZGVmaW5lIFdDMF9JU19QCUJJVCgx
+MikJLyogcG9sYXJpdHkgKi8NCj4gPiArI2RlZmluZSBXQzBfSVNfRU4JQklUKDYpDQo+ID4gKw0K
+PiA+ICAgLyogbXQyNzEyIGV0YyAqLw0KPiA+ICAgI2RlZmluZSBQRVJJX1NTVVNCX1NQTV9DVFJM
+CTB4MA0KPiA+ICAgI2RlZmluZSBTU0NfSVBfU0xFRVBfRU4JQklUKDQpDQo+ID4gQEAgLTcxLDYg
+Kzc4LDcgQEANCj4gPiAgIGVudW0gc3N1c2JfdXdrX3ZlcnMgew0KPiA+ICAgCVNTVVNCX1VXS19W
+MSA9IDEsDQo+ID4gICAJU1NVU0JfVVdLX1YyLA0KPiA+ICsJU1NVU0JfVVdLX1YxMSA9IDExLAkv
+KiBzcGVjaWZpYyByZXZpc2lvbiAxLjEgKi8NCj4gDQo+ICAgICBTU1VTQl9VV0tfVjFfMSwgbWF5
+YmU/DQpHb29kIHBvaW50LCB3aWxsIG1vZGlmeSBpdC4NCg0KVGhhbmtzIGEgbG90DQoNCj4gDQo+
+IFsuLi5dDQo+IA0KPiBNQlIsIFNlcmdlaQ0KDQo=
 
