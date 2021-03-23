@@ -2,53 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 747CC345CC5
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 12:27:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47918345CDA
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 12:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbhCWLZ7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Mar 2021 07:25:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49144 "EHLO mail.kernel.org"
+        id S230510AbhCWL3t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 07:29:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50402 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231137AbhCWLZr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Mar 2021 07:25:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4D24C61879;
-        Tue, 23 Mar 2021 11:25:46 +0000 (UTC)
+        id S230449AbhCWL3U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Mar 2021 07:29:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E9CA261993;
+        Tue, 23 Mar 2021 11:29:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1616498746;
-        bh=iOF6/QxVN6ra6df5o+JRIkeYQBV3jfQF0+QEuHFbuh4=;
+        s=korg; t=1616498959;
+        bh=JixGCqDQYwxzR2j2XzyMGinrYJ8Hxf5aDtbGYttIDO8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qtoTFcZ/YFueRFHQfu3WwmxiTFixWUv2uVSmJj+2VQf8RboubFHFe61i4SYmjmJjR
-         mGjXuQWLoRePNY+Yoq8sIHH5DqkA9a9awu+c4iKsFUcLIVdRV2JZ0j02XNdZonFT59
-         XlBjt4jU1ot0qxXRTo/UIub68mVNSbDpA5xeEMoU=
-Date:   Tue, 23 Mar 2021 12:25:44 +0100
+        b=fYiV8uKJZyr2mbagpDUn7pqR9onPm4gCK78zM/TquX4ZTi7FqwPzA+5+YWGH2bkon
+         z6BCaUl+alS9j3TtAAe2yEN38jIS149H+WEtR2E1cGMRS9677V/XOkkouGM0J3so8c
+         MVU+ypdlqmKQiflZ+U8gDjWje1CAUT4roWXkD+bM=
+Date:   Tue, 23 Mar 2021 12:29:17 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        linux-usb@vger.kernel.org, John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH 3/3] usb: dwc2: Prevent core suspend when port connection
- flag is 0
-Message-ID: <YFnQOLDtYISWq7Wb@kroah.com>
-References: <20210318061333.D6F9CA022F@mailhost.synopsys.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/3] usb: dwc3: qcom: Add missing DWC3 OF node
+ refcount decrement
+Message-ID: <YFnRDaSTKCw4aDuQ@kroah.com>
+References: <20210212205521.14280-1-Sergey.Semin@baikalelectronics.ru>
+ <20210218152904.75bg2v6uh5ool5h3@mobilestation>
+ <YC6IjYlDXWJMyZIP@kroah.com>
+ <20210218154051.hqhytxv6poizvfgm@mobilestation>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210318061333.D6F9CA022F@mailhost.synopsys.com>
+In-Reply-To: <20210218154051.hqhytxv6poizvfgm@mobilestation>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 18, 2021 at 10:13:32AM +0400, Artur Petrosyan wrote:
-> In host mode port connection status flag is "0" when loading
-> the driver. After loading the driver system asserts suspend
-> which is handled by "_dwc2_hcd_suspend()" function. Before
-> the system suspend the port connection status is "0". As
-> result need to check the "port_connect_status" if it is "0",
-> then skipping entering to suspend.
+On Thu, Feb 18, 2021 at 06:40:51PM +0300, Serge Semin wrote:
+> On Thu, Feb 18, 2021 at 04:32:29PM +0100, Greg Kroah-Hartman wrote:
+> > On Thu, Feb 18, 2021 at 06:29:04PM +0300, Serge Semin wrote:
+> > > Bjorn, Greg, Felippe, Andy,
+> > > Any comments on this series? Bjorn, Greg you asked me to resend the
+> > > patches related with the DW USB3 node name change. I did as you said,
+> > > but no news since then. I'd be glad to have this patch accepted in
+> > > some -next repo and forget about it.
+> > 
+> 
+> > Sorry, but it's the merge window right now and I can't add anything new
+> > until 5.12-rc1 is out.  So can you wait until then?
+> 
+> Well, I don't think there is another choice but to wait now.)
+> Hopefully the patchset won't be forgotten when the merge window closes
+> as that happened with the original series...
 
-
-As before, is this a bugfix and needs to go to stable kernels?  If so,
-what commit does this fix?
+Can you resend this if still needed?  I don't see them in my queue...
 
 thanks,
 
