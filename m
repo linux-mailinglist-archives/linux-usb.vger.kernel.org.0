@@ -2,129 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8D534597A
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 09:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF9C345A5D
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 10:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbhCWIQ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Mar 2021 04:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52770 "EHLO
+        id S229622AbhCWJHj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 05:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbhCWIQR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Mar 2021 04:16:17 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50205C061756
-        for <linux-usb@vger.kernel.org>; Tue, 23 Mar 2021 01:16:16 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id z1so22426151edb.8
-        for <linux-usb@vger.kernel.org>; Tue, 23 Mar 2021 01:16:16 -0700 (PDT)
+        with ESMTP id S229822AbhCWJH1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Mar 2021 05:07:27 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6F9C061574;
+        Tue, 23 Mar 2021 02:07:27 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id u10so24633098lju.7;
+        Tue, 23 Mar 2021 02:07:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=5Mwg0fvxCZ6L8/n+TBQfYlrjlN45t3QL8W8OHl2T3fU=;
-        b=XC+XohxwEQ4EC3iLfL4F72T66y6rkpnGP9Zx/3l5fRV3TA7xIp0/2hzUeFXzGeIbhC
-         Y0uw/VyzDMSXyWIyNEQW/IYmv6Vns7hDiX0r5gb6Q+M/8CBNZPKjkNQRNt9OF+BYTmoX
-         IIZSCOW8FQFRx8OnWhHiNLhkN9N+3ZejoG4n4=
+        bh=r5SAZtnTWXxLSfp5x9mNUDN04JTLz5IpjnjCJ8TVqCM=;
+        b=f7jt0gNGdizSy7AGbY2k+u1IwC505G9TcJFzN1tTZUMKMXLOTQYbac9XtjIkO2QYI8
+         lmtO1uRyQwnbY8NoZVFJ0+kAz8Ci3dyRHLhXF1yt6qL1n9jqqhDUSQ93oqNSKNCQj81J
+         491VFyZmtOTzNRDsjUAkTCG+0bQToZ4iYmPrcyQkwHkvWD/HUmEXpBVnMzCN33X3spO4
+         I9zubvfpLWhHk+9hyoPTisPIWBTGoKlLdWWEZo+Eig+rtlmgtXD6Tdbn7Rv23iiTxLD8
+         Hh4lNfnjQrx/4dCACveqq5BVnWbB0DcYWMPL8rZDheJuH1h0raS8zl8EulAySsyYYpY9
+         XdKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5Mwg0fvxCZ6L8/n+TBQfYlrjlN45t3QL8W8OHl2T3fU=;
-        b=VFUGetK6h3AX6QxfqR11ypIJCfcp0BrmvyiCxuYS+VwQ8/z6FvGxKEXispraGivYnV
-         0FtvyG1U84NKwpzmt9lHrLwfO7XXR4ZkgkOd66nQRhePqTa95JlL2VAYSQdCyLtKiRzX
-         HLbScTmEinGNI/NJHaLGtXmGuyqWOXtoi0LQ8PoPssq96CeLY3enk9BgB3PMXKR4B3V9
-         ynSyWcGrSJ2pTEDuy9Nwj4ck5VTl5vZSflZdI8f9ZzWPt9TNgFH5V864EhPkh8aYYSl3
-         16Xm9VH5qh02nO0xWhoTqBkuGlVbcIZQy/Q8b456kaUXTGteWaV+5rqbZQXPhs8i4ioC
-         eY9A==
-X-Gm-Message-State: AOAM530w1/ly7pRMq/lxxFQLYvvG/qHrF2qhiLXaKWiHNd8nQL0inoa2
-        FRV/QMEfGaC6SPUxgJGFfKlepA==
-X-Google-Smtp-Source: ABdhPJzj4nukCw/m5UDChgKepwKDsXuAgrKBXHbwX1GD8mOge80QaubQJr+/QjNUMcvZjZ2QRUvqTQ==
-X-Received: by 2002:a50:e80c:: with SMTP id e12mr3421590edn.229.1616487374899;
-        Tue, 23 Mar 2021 01:16:14 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([80.208.71.248])
-        by smtp.gmail.com with ESMTPSA id g11sm12523356edt.35.2021.03.23.01.16.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Mar 2021 01:16:14 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Chen Gang <gang.chen@asianux.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: gadget: legacy: remove left-over __ref annotations
-Date:   Tue, 23 Mar 2021 09:16:07 +0100
-Message-Id: <20210323081607.405904-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.29.2
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=r5SAZtnTWXxLSfp5x9mNUDN04JTLz5IpjnjCJ8TVqCM=;
+        b=GqoST2I0SzxzHe6+7jmN+kxFGRihsOIoZl5HK1aEM8uzWVrYpX+SDVPYSUDOOpnFKs
+         8eaBrpKdiZyfuaolZ9Z+w322k+EhAzblerlWAxF9z8aMBGR+geHxu4thWhJ2xFicxbeb
+         i1onCJ6NXeqw7fZkUPUjhbdi3ER480ItJkfhnSW6a2i4cfC19i1Eyp2Vp7EyQa41oLuJ
+         StAblGiBXMrkV4ZN1EE3ps45PSmBz3f3QqIbVnsTe49myJ5M8dmkrCuax7CqFVydzZrs
+         E0S5j+4C2PA8LNU2pUhFckU4023FAQbJ3vXcZ2S7HBCBbeFq+4qSWwQkfk3hbYXCvhDu
+         AB0Q==
+X-Gm-Message-State: AOAM530NWCy/ZRAfnZxOQg3XS1irDoMlm2ja0Y+6Q1kvCbKCuqYmMgy8
+        HwdWYd+tJ4HITI7sLaRo6aM=
+X-Google-Smtp-Source: ABdhPJywmUTFte0z9HFu9YRNCVTTVo/LOl4cWWDaRUxplW0BJuLorXxwUvKRfJ+EOuEmKfuUS07jMA==
+X-Received: by 2002:a2e:2d02:: with SMTP id t2mr2426043ljt.488.1616490445739;
+        Tue, 23 Mar 2021 02:07:25 -0700 (PDT)
+Received: from [192.168.1.100] ([31.173.87.52])
+        by smtp.gmail.com with ESMTPSA id w24sm2251214ljh.19.2021.03.23.02.07.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Mar 2021 02:07:25 -0700 (PDT)
+Subject: Re: [PATCH v2 01/13] dt-bindings: usb: mtk-xhci: support property
+ usb2-lpm-disable
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Eddie Hung <eddie.hung@mediatek.com>,
+        Nicolas Boichat <drinkcat@chromium.org>
+References: <1616482975-17841-1-git-send-email-chunfeng.yun@mediatek.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <32d4b418-a078-560a-2b65-4a80a2869aae@gmail.com>
+Date:   Tue, 23 Mar 2021 12:07:17 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1616482975-17841-1-git-send-email-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-These were added in commit 780cc0f370 ("usb: gadget: add '__ref' for
-rndis_config_register() and cdc_config_register()") to silence
-modpost, but they didn't fix the real problem - that was fixed later
-by removing wrong __init annotations in commit c94e289f195e ("usb:
-gadget: remove incorrect __init/__exit annotations").
+Hello!
 
-It really never makes sense for a function to be marked __ref unless
-it (1) has some conditional that chooses whether to call an __init
-function (or access __initdata) or not and (2) has a comment
-explaining why the __ref is there and why it is safe.
+On 23.03.2021 10:02, Chunfeng Yun wrote:
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- drivers/usb/gadget/legacy/multi.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+> Add support common property usb2-lpm-disable
+              ^ for
 
-diff --git a/drivers/usb/gadget/legacy/multi.c b/drivers/usb/gadget/legacy/multi.c
-index ec9749845660..f6d0782e6fc3 100644
---- a/drivers/usb/gadget/legacy/multi.c
-+++ b/drivers/usb/gadget/legacy/multi.c
-@@ -182,7 +182,7 @@ static int rndis_do_config(struct usb_configuration *c)
- 	return ret;
- }
- 
--static __ref int rndis_config_register(struct usb_composite_dev *cdev)
-+static int rndis_config_register(struct usb_composite_dev *cdev)
- {
- 	static struct usb_configuration config = {
- 		.bConfigurationValue	= MULTI_RNDIS_CONFIG_NUM,
-@@ -197,7 +197,7 @@ static __ref int rndis_config_register(struct usb_composite_dev *cdev)
- 
- #else
- 
--static __ref int rndis_config_register(struct usb_composite_dev *cdev)
-+static int rndis_config_register(struct usb_composite_dev *cdev)
- {
- 	return 0;
- }
-@@ -265,7 +265,7 @@ static int cdc_do_config(struct usb_configuration *c)
- 	return ret;
- }
- 
--static __ref int cdc_config_register(struct usb_composite_dev *cdev)
-+static int cdc_config_register(struct usb_composite_dev *cdev)
- {
- 	static struct usb_configuration config = {
- 		.bConfigurationValue	= MULTI_CDC_CONFIG_NUM,
-@@ -280,7 +280,7 @@ static __ref int cdc_config_register(struct usb_composite_dev *cdev)
- 
- #else
- 
--static __ref int cdc_config_register(struct usb_composite_dev *cdev)
-+static int cdc_config_register(struct usb_composite_dev *cdev)
- {
- 	return 0;
- }
-@@ -291,7 +291,7 @@ static __ref int cdc_config_register(struct usb_composite_dev *cdev)
- 
- /****************************** Gadget Bind ******************************/
- 
--static int __ref multi_bind(struct usb_composite_dev *cdev)
-+static int multi_bind(struct usb_composite_dev *cdev)
- {
- 	struct usb_gadget *gadget = cdev->gadget;
- #ifdef CONFIG_USB_G_MULTI_CDC
--- 
-2.29.2
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+[...]
 
+MBR, Sergei
