@@ -2,51 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C04D345D5C
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 12:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D242345D7B
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 12:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbhCWLwx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Mar 2021 07:52:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56102 "EHLO mail.kernel.org"
+        id S230173AbhCWL5N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 07:57:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56930 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229482AbhCWLwT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Mar 2021 07:52:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B04A261920;
-        Tue, 23 Mar 2021 11:52:18 +0000 (UTC)
+        id S229482AbhCWL4s (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Mar 2021 07:56:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6D48F6191F;
+        Tue, 23 Mar 2021 11:56:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1616500339;
-        bh=0OYHxTa5Y2TXmyi7zuGmZnKLO1+yL/4cS2olGQC/eo4=;
+        s=korg; t=1616500608;
+        bh=tq02Vd5NqpuFLSWzDRKQbq1PXhG1AGLHdMYDxgmkTaE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IIYHsu86V7jvpk0XMlB2YDQOtmRyeoLlJAaW1srVlUqahTBnpTVY1xMADWCMMB2e2
-         KlPO2nvNJs7Dp9ZuVCSpW2agDiBbKgzIL7QZipCeewht65tzdvXGiht4233bgLjkA9
-         IZ2E1GCN0vgmqKz1zR77jP6PiWrb0HguGWcK1wUs=
-Date:   Tue, 23 Mar 2021 12:52:16 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Li Jun <jun.li@nxp.com>
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: core: don't enable wakeup for runtime PM
-Message-ID: <YFnWcPqua4burARj@kroah.com>
-References: <1614767857-12723-1-git-send-email-jun.li@nxp.com>
+        b=1qz4yEgix7wGFQBvKOSXcCiEwQkrYLSh/VLIfLFo/8mItyPGjLztqoJ+LZTscswvN
+         wN6sQmwZ5GFskJ6DFIGKH9T7nwoHsCT+ALz1ksuTuWizxGo53z/mwopBFPDurjEcUp
+         a6BfPfxhu0mal6n7JsWQKsPAAVj3QL9/2wOx4AQk=
+Date:   Tue, 23 Mar 2021 12:56:45 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        gschmottlach@gmail.com, linux-usb@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/8] USB Audio Gadget part 2: Feedback endpoint,
+ Volume/Mute support
+Message-ID: <YFnXfUr21JrweUoU@kroah.com>
+References: <1614603943-11668-1-git-send-email-ruslan.bilovol@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1614767857-12723-1-git-send-email-jun.li@nxp.com>
+In-Reply-To: <1614603943-11668-1-git-send-email-ruslan.bilovol@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 03, 2021 at 06:37:37PM +0800, Li Jun wrote:
-> Don't enable dwc3 core to wakeup system by default if runtime suspended,
-> this will make the power domain of dwc3 core or its parent device can't be
-> off while system sleep even system wakeup by usb is not required.
+On Mon, Mar 01, 2021 at 03:05:35PM +0200, Ruslan Bilovol wrote:
+> This is extendend version of "UAC2 Feedback endpoint" patch set
+> I've sent back in 2020 [1]. It is extended with
+> bi-directional Volume/Mute controls support for both UAC1
+> and UAC2 gadgets.
 > 
-> Signed-off-by: Li Jun <jun.li@nxp.com>
-> ---
+> It fixes issues with enumeration in various operation systems
+> because of Feedback endpoint implementation, yet also adds
+> new Volume/Mute support which allows developers to control
+> UAC1/2 Gadget's Volume/Mute from the Host and in the same way
+> UAC1/2 Gadget can control Volume/Mute of the Host making it
+> closer to a real USB Audio card.
+> 
+> This patch set should be applied on top of USB Audio Gadget
+> part 1 fixes/improvements that I've sent previously to the
+> mailing list [2]
 
-What commit does this fix?  Does it need to go to stable kernels?  If
-so, how far back?
-
-Please add that information to the signed-off-by area when resending.
+This series did not apply to my tree (except for the first patch).  Can
+you rebase it on my usb-testing branch and resend?
 
 thanks,
 
