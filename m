@@ -2,80 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 288653457EF
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 07:45:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC9C345810
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 07:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbhCWGpJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Mar 2021 02:45:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59448 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230008AbhCWGor (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Mar 2021 02:44:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 73EE06198C
-        for <linux-usb@vger.kernel.org>; Tue, 23 Mar 2021 06:44:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616481887;
-        bh=thf9h52Bd0YsXsbcrtYjLGEdh0j2arNgUL4LzLS6JHI=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=UThZNIVyiL8Eg2ZgPYqduwEM5WAf9hkA6MgQZIKnQyRrfIeuKC8U0A0mEl7EHZdnU
-         NSuZ5il7y2WzvvETcMy/K+JC9OSCqivohpRvXDkGgJNm1YsH51CYsxlDLhQWUsujih
-         np6a6GOJsPN5LWktEcd7digFkquqAgL9a6o6RMrn4uSiFIIRB4iGnRaKTzdm5ZqSep
-         TYqbOcViYkNT25Z1ux33fCDY75aLgsoVMx2h3usLFUQvijshMuKDPRzudrvHTZM/8P
-         E92wjZj+4df6DZ/ideLg8/GYUZwt62i2fxgCxGZFblMYXVKoMutmj7oSZriY0C6OW3
-         aWc3xbE/i7c5Q==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 60F3962AB4; Tue, 23 Mar 2021 06:44:47 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 212101] xhci_hcd cant setup
-Date:   Tue, 23 Mar 2021 06:44:47 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: hose@posteo.net
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: INVALID
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-212101-208809-NfTv4YRrb1@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-212101-208809@https.bugzilla.kernel.org/>
-References: <bug-212101-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S229504AbhCWG6O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 02:58:14 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:63105 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229670AbhCWG5m (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Mar 2021 02:57:42 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1616482661; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=QnUCgCrhL886f7t95cngGpyvXjpcNMxnX81E/1wAPZ0=; b=Ck/xba8UfqFgAWh3qhAhcoj1KQ3/B10jFzibNRqwEaEVhS/q904BUT1pUtpBBYOJWai8uhDW
+ MxpIHADvGoCPWOrQHHD8haxmF+V2MCHAZ7vUwQV0q/ggFilNX50lECl8Hotb0zrSRcDrqJkg
+ PwvcmYU1vo9xYhbzljwAu5c11YA=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 605991606dc1045b7d64bdfb (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 23 Mar 2021 06:57:36
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 758C1C433ED; Tue, 23 Mar 2021 06:57:35 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [10.110.91.149] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0E16CC433CA;
+        Tue, 23 Mar 2021 06:57:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0E16CC433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH] usb: gadget: Stall OS descriptor request for unsupported
+ functions
+To:     Jack Pham <jackp@codeaurora.org>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+References: <1616464217-2650-1-git-send-email-wcheng@codeaurora.org>
+ <20210323062542.GA17922@jackp-linux.qualcomm.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <297cf185-70d6-5018-08ab-e069dc84d8e0@codeaurora.org>
+Date:   Mon, 22 Mar 2021 23:57:33 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <20210323062542.GA17922@jackp-linux.qualcomm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D212101
 
-pik a-b (hose@posteo.net) changed:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |INVALID
+On 3/22/2021 11:25 PM, Jack Pham wrote:
+> Hi Wesley,
+> 
+> On Mon, Mar 22, 2021 at 06:50:17PM -0700, Wesley Cheng wrote:
+>> From: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+>>
+>> Hosts which request "OS descriptors" from gadgets do so during
+>> the enumeration phase and before the configuration is set with
+>> SET_CONFIGURATION. Composite driver supports OS descriptor
+>> handling in composite_setup function. This requires to pass
+>> signature field, vendor code, compatibleID and subCompatibleID
+>> from user space.
+>>
+>> For USB compositions that contain functions which don't implement os
+>> descriptors, Windows is sending vendor specific requests for os
+>> descriptors and composite driver handling this request with invalid
+>> data. With this invalid info host resetting the bus and never
+>> selecting the configuration and leading enumeration issue.
+>>
+>> Fix this by bailing out from the OS descriptor setup request
+>> handling if the functions does not have OS descriptors compatibleID.
+>>
+>> Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>> ---
+>>  drivers/usb/gadget/composite.c | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+>> index 72a9797..473edda6 100644
+>> --- a/drivers/usb/gadget/composite.c
+>> +++ b/drivers/usb/gadget/composite.c
+>> @@ -1945,6 +1945,12 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+>>  				buf[6] = w_index;
+>>  				/* Number of ext compat interfaces */
+>>  				count = count_ext_compat(os_desc_cfg);
+>> +				/*
+>> +				 * Bailout if device does not
+>> +				 * have ext_compat interfaces.
+>> +				 */
+>> +				if (count == 0)
+>> +					break;
+>>  				buf[8] = count;
+>>  				count *= 24; /* 24 B/ext compat desc */
+>>  				count += 16; /* header */
+> 
+> Do we still need this fix? IIRC we had this change in our downstream
+> kernel to fix the case when dynamically re-configuring ConfigFS, i.e.
+> changing the composition of functions wherein none of the interfaces
+> support OS Descriptors, so this causes count_ext_compat() to return
+> 0 and results in the issue described in $SUBJECT.
+> 
+Hi Jack,
 
---- Comment #2 from pik a-b (hose@posteo.net) ---
-It seems now to me now that I mixed up to issues with tow different pieces =
-of
-hardware into one ticket. In general I am not sure how to gather the releva=
-nt
-information needed for further analysis. Therefore, I recall this ticket.
+You're correct.  We can address this as well in the userspace perspective.
 
-pikab
+> But I think this is more of a problem of an improperly configured
+> ConfigFS gadget. If userspace instead removes the config from the
+> gadget's os_desc subdirectory that should cause cdev->os_desc_config to
+> be set to NULL and hence composite_setup() should never enter this
+> handling at all, right?
 
---=20
-You may reply to this email to add a comment.
+Sure, I'll go with fixing it in the userspace, since the support to
+stall the OS desc is already present in the composite driver as you
+mentioned.  Thanks for the input.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Thanks
+Wesley Cheng
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
