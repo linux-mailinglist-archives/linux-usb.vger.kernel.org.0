@@ -2,97 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 618BF345616
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 04:16:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0057345670
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 04:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbhCWDPt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Mar 2021 23:15:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
+        id S229614AbhCWDs3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Mar 2021 23:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbhCWDPT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Mar 2021 23:15:19 -0400
+        with ESMTP id S229537AbhCWDsD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Mar 2021 23:48:03 -0400
 Received: from ustc.edu.cn (email6.ustc.edu.cn [IPv6:2001:da8:d800::8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB76FC061574;
-        Mon, 22 Mar 2021 20:15:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2FBDBC061574;
+        Mon, 22 Mar 2021 20:47:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=DyAETVd4CQ
-        zBRJvRBRGktAwsmZMdD9Pe0/YWVrKxwYE=; b=D8mOk9P+roI4mRWvZ/GfB/akkx
-        dlDc0kE89LXtaEkx2SApAz2zndLkZC176qoSvF3oW7vmHYmFKhE/KZmeIOBINGPf
-        ByKEZLspfs3Mg5ema9sEDkjYv8Fow1TamV3ZhOM8c68LeDel+m9RqCN4x2YWYPUs
-        4nrlIlcw85NK+o86g=
+        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=1GoWh5eS4L
+        y3A4l/bsaEFyKFS7162BJKVfkr1mQVN2s=; b=FIsQNV9hksoXuqYWMxy0FqR3Em
+        tFJj9b469QfN5LEuURJC5mqJCbdp6nQ5/+vCtU9btDnRDilyf7od5Nb2WnJC5sCp
+        9JC6wqD5NHhi7IAVZFrBGW0HsjFqUtInzbXcFD9J1G2eFa+YR6YhZcUbNSHeiR63
+        SYXIs+gMYONIHHYkM=
 Received: from ubuntu.localdomain (unknown [202.38.69.14])
-        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygAXHExDXVlgYLIZAA--.1020S4;
-        Tue, 23 Mar 2021 11:15:15 +0800 (CST)
+        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygCHj0PJZFlgc6waAA--.144S4;
+        Tue, 23 Mar 2021 11:47:21 +0800 (CST)
 From:   Lv Yunlong <lyl2019@mail.ustc.edu.cn>
-To:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lv Yunlong <lyl2019@mail.ustc.edu.cn>
-Subject: [PATCH] thunderbolt: Fix a double put in tb_cfg_read_raw
-Date:   Mon, 22 Mar 2021 20:15:12 -0700
-Message-Id: <20210323031512.12234-1-lyl2019@mail.ustc.edu.cn>
+To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+Subject: [PATCH] usb: Add data checks in usbtmc_disconnect
+Date:   Mon, 22 Mar 2021 20:47:17 -0700
+Message-Id: <20210323034717.12818-1-lyl2019@mail.ustc.edu.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LkAmygAXHExDXVlgYLIZAA--.1020S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Xw1kCw43CF4rJr1fWFWxWFg_yoW8Jr48p3
-        98WFWj9rZ8Xw4jya1DKa4UuF1rKw42ka43GFW8KayruFZ0grn5CFyDJFy2qr17ArWxJrW7
-        XrnYvrs8ua4avFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
-        rcIFxwCY02Avz4vE14v_Gr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-        73UjIFyTuYvjfUnF4EDUUUU
+X-CM-TRANSID: LkAmygCHj0PJZFlgc6waAA--.144S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7Wr48Zr15ur1fZr4UGr4fGrg_yoWkJrX_ua
+        1UWF1xtrW5CF9xC3W7tr1rZw1xt3W0qw48XFs0y343Za4jqw4kAr1Iqrs5J397WF4UtryD
+        Zrn2qryruayxujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbV8FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
+        YxC7MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
+        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
+        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JUza0QUUUUU=
 X-CM-SenderInfo: ho1ojiyrz6zt1loo32lwfovvfxof0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In tb_cfg_read_raw, req is allocated by tb_cfg_request_alloc()
-with an initial reference. Before calling tb_cfg_request_sync(),
-there is no refcount inc operation. tb_cfg_request_sync()
-calls tb_cfg_request(..,req,..) and if the callee failed,
-the initial reference of req is dropped and req is freed.
+In usbtmc_disconnect, data is got from intf with the
+initial reference. There is no refcount inc operation
+before usbmc_free_int(data). In usbmc_free_int(data),
+the data may be freed.
 
-Later in tb_cfg_read_raw before the err check,
-tb_cfg_request_put(req) is called again. It may cause error
-in race.
-
-My patch puts tb_cfg_request_put(req) after the err check
-finished to avoid unexpected result.
+But later in usbtmc_disconnect, there is another put
+function of data. I think it is better to add necessary
+checks to avoid the data being put twice. It could cause
+errors in race.
 
 Signed-off-by: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
 ---
- drivers/thunderbolt/ctl.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/class/usbtmc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thunderbolt/ctl.c b/drivers/thunderbolt/ctl.c
-index f1aeaff9f368..bb60269c89ab 100644
---- a/drivers/thunderbolt/ctl.c
-+++ b/drivers/thunderbolt/ctl.c
-@@ -890,11 +890,11 @@ struct tb_cfg_result tb_cfg_read_raw(struct tb_ctl *ctl, void *buffer,
- 
- 		res = tb_cfg_request_sync(ctl, req, timeout_msec);
- 
--		tb_cfg_request_put(req);
--
- 		if (res.err != -ETIMEDOUT)
- 			break;
- 
-+		tb_cfg_request_put(req);
-+
- 		/* Wait a bit (arbitrary time) until we send a retry */
- 		usleep_range(10, 100);
+diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
+index 74d5a9c5238a..e0438cb46386 100644
+--- a/drivers/usb/class/usbtmc.c
++++ b/drivers/usb/class/usbtmc.c
+@@ -2494,7 +2494,9 @@ static void usbtmc_disconnect(struct usb_interface *intf)
  	}
+ 	mutex_unlock(&data->io_mutex);
+ 	usbtmc_free_int(data);
+-	kref_put(&data->kref, usbtmc_delete);
++
++	if (data->iin_ep_present && data->iin_urb)
++		kref_put(&data->kref, usbtmc_delete);
+ }
+ 
+ static void usbtmc_draw_down(struct usbtmc_file_data *file_data)
 -- 
 2.25.1
 
