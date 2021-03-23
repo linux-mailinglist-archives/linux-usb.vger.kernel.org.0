@@ -2,123 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9F7345D9F
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 13:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9D5345DC5
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 13:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbhCWMGX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Mar 2021 08:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbhCWMGJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Mar 2021 08:06:09 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613B0C061574;
-        Tue, 23 Mar 2021 05:06:08 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id t5-20020a1c77050000b029010e62cea9deso10702852wmi.0;
-        Tue, 23 Mar 2021 05:06:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:date:from:user-agent:mime-version:to:cc:subject
-         :references:in-reply-to:content-transfer-encoding;
-        bh=5A3Ab9JEMCBsRsVxBrOyI0S/pK42lF/JqjHO5w3aGMA=;
-        b=mEmHuF/RZWbCfJmjbVmbCzY01R+08VE/tgHr7Dyq27bbbbB0r5YVPHDBUxqTAE2uIr
-         4oFMfxkaLmG5y/Oo/hks9aWr9YJ6kywfiHGVtAOLl8PeK5QhU/p8t6A+45K+kGdjSNyZ
-         nZWwSuxkacvG6k6k40SYzJBJjEefGT34keGKNWcNP7ou4PbbSkGIy/iatetXDHC9vydX
-         NhIgCMRgklOUsnJDe2TGqwwHBjXlhNlJ/HcusmzwQq03EBSmU5a4Iz9+x4XDXujSbh3g
-         nIkhDgp1p4BJ5NkkwrsTJ/NQW6lzkzWDcjA70ML+V9XkJ5cwc3naLsCBYlY8PjOFfSue
-         mY4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
-         :cc:subject:references:in-reply-to:content-transfer-encoding;
-        bh=5A3Ab9JEMCBsRsVxBrOyI0S/pK42lF/JqjHO5w3aGMA=;
-        b=MEXgbSd6S+gQE3BbX3tuVARFMQEVsXmHixWlUNh3hNt4/f0zoIQ81vwI5b4IpIWgOV
-         JtE0E98DoURSJUtPt+l13xgJBQN2vx5fGx3r8IEPJ2XvgMpibBZvQjyRME1Tb1aj7B+z
-         5hWK8FzophSBme6GF0YLYlMk82PD45clgIqFTTgXgYDLfm2qQ9nG34w+DR7A5NGVoIOm
-         V3IAgQtfa01rlBowTfgiJ04GITlX45VGX/Td0amKREhPCwFW0I7jYDxjjehCkE1MV2aE
-         nFC9+/cONan75Lkwe0aExupcKGsM8n3Hi5Dugz0kfsiSDlyN9yIa0GTu+0UXqcdXcDQm
-         csQA==
-X-Gm-Message-State: AOAM531umrQR/3QEiSJ8was5q/qhM09SCp21t08SSjStUIXaxRQj8hRG
-        2flhzvaaEj3vkOvJdW1D+FW1gHimnkrDEQ==
-X-Google-Smtp-Source: ABdhPJwTexvTC/0ftGktlFifpBfSPbyVrg40L1J1SkxHp/hIEMcszPKeXblNA/eb9Dwauj4YIcR12g==
-X-Received: by 2002:a7b:c316:: with SMTP id k22mr3013565wmj.176.1616501167141;
-        Tue, 23 Mar 2021 05:06:07 -0700 (PDT)
-Received: from [93.173.65.134] (93-173-65-134.bb.netvision.net.il. [93.173.65.134])
-        by smtp.gmail.com with ESMTPSA id u23sm2532725wmn.26.2021.03.23.05.06.05
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Tue, 23 Mar 2021 05:06:06 -0700 (PDT)
-Message-ID: <6059D983.5080306@gmail.com>
-Date:   Tue, 23 Mar 2021 14:05:23 +0200
-From:   Eli Billauer <eli.billauer@gmail.com>
-User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.12) Gecko/20100907 Fedora/3.0.7-1.fc12 Thunderbird/3.0.7
+        id S231271AbhCWMJh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 08:09:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59246 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230158AbhCWMJF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Mar 2021 08:09:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E39C261974;
+        Tue, 23 Mar 2021 12:09:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1616501344;
+        bh=Z0GUuCwYtJE2IfROw879wG5LQDJyC8bAIhRxjCk4ySE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yoZpw+w30p1X4TXfFM8HDAqFwNb92YcB6rOt45QPr70NWjCRkQ5qUahii0W9848Ja
+         wcNqOILUSmiU+F0XDrJOUfNh08d0RMu3O7RDI3m3NM0KwEbX9lD48YOeD7GN1veXZ5
+         p/a7WIhyG2ncQChCfs4D2Zotg6j37VtgaG3fpoUE=
+Date:   Tue, 23 Mar 2021 13:09:02 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>
+Subject: Re: [PATCH v5 2/4] usb: dwc3: host: Add suspend_quirk for dwc3 host
+Message-ID: <YFnaXj2DAbz4jWbQ@kroah.com>
+References: <1616434280-32635-1-git-send-email-sanm@codeaurora.org>
+ <1616434280-32635-3-git-send-email-sanm@codeaurora.org>
 MIME-Version: 1.0
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     devel@driverdev.osuosl.org, dan.carpenter@oracle.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arnd@arndb.de
-Subject: Re: [PATCH v4 1/2] char: xillybus: Move class-related functions to
- new xillybus_class.c
-References: <20210311095033.20956-1-eli.billauer@gmail.com> <20210311095033.20956-2-eli.billauer@gmail.com> <YFc65bvAN3/ZNsww@kroah.com> <6058792C.90801@gmail.com> <YFh7dlY9cntgoLXD@kroah.com>
-In-Reply-To: <YFh7dlY9cntgoLXD@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1616434280-32635-3-git-send-email-sanm@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22/03/21 13:11, Greg KH wrote:
->
->> XILLYBUS and XILLYBUS_PCIE are currently enabled as M in several Linux
->> distributions. Making them depend on, rather than select XILLYBUS_CLASS is
->> likely to disable the driver in those distributions.
->>      
-> That's not an issue here, depends-on will allow those distros to also
-> enable this option.
->
-> But wait, why is this a separate option at all?  Shouldn't the class
-> code just be part of the "core" XILLYBUS code anyway?
->
->    
-I'll try to explain the whole picture:
+On Mon, Mar 22, 2021 at 11:01:18PM +0530, Sandeep Maheswaram wrote:
+> Adding suspend quirk function for dwc3 host which will be called
+> during xhci suspend.
 
-            XILLYBUS_CLASS
-               /        \
-              |          |
-          XILLYBUS   XILLYUSB
-       /           \
-      |             |
-XILLYBUS_PCIE  XILLYBUS_OF
+What does xhci have to do with this?
 
-XILLYBUS_CLASS is new and common to all drivers in this group.
+And where is the user of this quirk function in this series?
 
-XILLYBUS is for drivers based upon memory registers + DMA-based 
-interfaces, and it's combined with XILLYBUS_PCIE and/or XILLYBUS_OF. 
-XILLYUSB is for the USB variant only.
+> Setting hs_phy_mode, ss_phy_mode , phy_power_off flags and phy mode
+> during host suspend.
+> 
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> ---
+>  drivers/usb/dwc3/core.h |  3 +++
+>  drivers/usb/dwc3/host.c | 58 +++++++++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 61 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index ce6bd84..f05546c 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -1113,6 +1113,9 @@ struct dwc3 {
+>  
+>  	bool			phys_ready;
+>  
+> +	unsigned int            hs_phy_mode;
+> +	bool			phy_power_off;
+> +
+>  	struct ulpi		*ulpi;
+>  	bool			ulpi_ready;
+>  
+> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> index f29a264..3db042c 100644
+> --- a/drivers/usb/dwc3/host.c
+> +++ b/drivers/usb/dwc3/host.c
+> @@ -11,6 +11,13 @@
+>  #include <linux/platform_device.h>
+>  
+>  #include "core.h"
+> +#include "../host/xhci.h"
+> +#include "../host/xhci-plat.h"
 
-Or a more detailed, bottom-up outline:
+Hah, really?
 
-* CONFIG_XILLYBUS_PCIE -> xillybus_pcie.c: Functions related to PCIe.
-* CONFIG_XILLYBUS_OF -> xillybus_of.c: Functions related to Xillybus as 
-a peripheral on an FPGA / Processor combo chip.
-* CONFIG_XILLYBUS -> xillybus_core.c: Functions that are common to the 
-two above, mainly access to the peripheral with memory-mapped registers 
-and DMA.
-* CONFIG_XILLYUSB -> xillyusb.c: The driver for the USB variant, 
-accesses the peripheral through the USB framework.
-* CONFIG_XILLYBUS_CLASS -> xillybus_class.c: The new module, which 
-contains the class and API parts that would otherwise appear both in 
-xillybus_core.c and xillyusb.c. Contains utility functions for the two 
-latter.
+> +int xhci_dwc3_suspend_quirk(struct usb_hcd *hcd);
 
-Because XILLYBUS_CLASS is new and "N" by default, making a "depends on" 
-relationship means that "make olddefconfig" silently turns off 
-CONFIG_XILLYBUS and CONFIG_XILLYBUS_PCIE. That's a bug: Adding a new 
-driver shouldn't change anything in the existing configuration.
+Didn't checkpatch complain about this?
 
-That's why I had the "select XILLYBUS_CLASS" to begin with: It ensures a 
-smooth transition on a kernel upgrade, by adding XILLYBUS_CLASS to 
-kernels that had CONFIG_XILLYBUS enabled. Is there another way to 
-prevent the said bug, without "select"?
+Put function prototypes in .h files please, this isn't the 1980's...
 
-Thanks and regards,
-    Eli
+thanks,
+
+greg k-h
