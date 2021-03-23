@@ -2,93 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E85345E50
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 13:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6E6345E4F
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 13:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbhCWMi1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Mar 2021 08:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
+        id S231131AbhCWMi0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 08:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbhCWMiY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Mar 2021 08:38:24 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B7AC061574;
-        Tue, 23 Mar 2021 05:38:23 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id v2so11550156pgk.11;
-        Tue, 23 Mar 2021 05:38:23 -0700 (PDT)
+        with ESMTP id S230236AbhCWMiL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Mar 2021 08:38:11 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF258C061574;
+        Tue, 23 Mar 2021 05:38:09 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id q5so14177806pfh.10;
+        Tue, 23 Mar 2021 05:38:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=1A1x6rnbVrqFAZgFlS5moMGgnUzPHz2Psn4t+8eo22E=;
-        b=ToSaHNA3NTnHzdwfC4D2/IRpHgKy3G/Yea1Zg11GFtQg6hKD/XI753YfjflN4hRfQa
-         +qsj+z53hdZ7PoGUrin1hxu9vZSJbcd/fJvR0Yc46Ztngo1ubYCZ4h5F7SEpFDbipUSV
-         lNaoucTboXuCboxC+44nj878gKFQ456Cu5ptmtSuVx/g0LXuF4zuPp7Q16ZS8M/x4+XR
-         wSeY9yYCnpInKtycZw1tPHGrSNrCKBFhM23e3XwYnFql/IjGkiNXYtfAMVZ+nRW8DPGP
-         Q4+8h8fltRfC8oYLB65O64pL8E3EShpOJL5h2ilepdHJvAmXYDmvXGf51nzNAGFZ/A5R
-         +9lg==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=CYO3jLLdqXeezxgml/hOLnYiONhTc329cwaZR8YnfiQ=;
+        b=k7Jr9GILdZSElGIi5VbITBzMKBzdNw7s2UrGa+8ukYKELiDWRgL7Y4gtDzz2Sp8eBw
+         6oQgOd+o9dlpbmKNcqvP+ZZvUwy4Y7F9sQMyft7Bd9P8+fibrSt9EfVJOcbNGZj7qEdT
+         D/l8oHa+TK5FxF5s4sxOyz3gvsRqRxWLTzu4kM+NAdWeYBIGE4IYz7Md1+MRd74GcijR
+         ozAEXjm/ZAJqvlDnUOtAtr5Vk78N6cNPokGXeNk5tGoSaMQ60CjM6gp2yunDnWCCWyY1
+         LYcYF+A09QLndK5W7TIuNtaSUVDWqH3UQHxP2/PwSWFMOVUYXKn3oDhDDQiRfQq52NFP
+         1KBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=1A1x6rnbVrqFAZgFlS5moMGgnUzPHz2Psn4t+8eo22E=;
-        b=ryUnA/PBQE32lQpNTJcmPTAq6FdaYvaIl7R4BgF0Mk27LJo1qUJ7WFDmeC0c9iNYKi
-         59w8lcB5UTrOpsmjE/4s3ruv3/L7IoyfgzsRGb9mEjSFq1oLAkq1KsDlsKLiBQX0T33R
-         8FKS4dJwj5BdmEvlE1bu56la/YSALnOLeL8nTpuPlj15e8tr9Ttq178UwDhUV8r4VQJy
-         0Sg1uB1311UKd602efuR/iiAP4HFIio32DNt9dvrSvpweh6ppyF18Ak5MJh/2jLr8FYa
-         qlXRZ4dxDj4jzZR0wokqJ4NlIFTZDHPk0Kh0NjOqDwo9olLYtgTQwOjbh+5e6LZpwAgK
-         L/uQ==
-X-Gm-Message-State: AOAM530KZ6sLt3fvqKMJ1OVKcNQhXJOo5inV04HYw/2563FVjsaiyVdW
-        GIU5tT9p2pi1MVKRv+BxsMY=
-X-Google-Smtp-Source: ABdhPJybH2X41CmpPj1jVAY5imx9xQTG0VEOCNZVnc6T6J6lFgYPian7xrOeFeU52lovwRpNIQ3Nmw==
-X-Received: by 2002:a63:5c1e:: with SMTP id q30mr3734328pgb.259.1616503103539;
-        Tue, 23 Mar 2021 05:38:23 -0700 (PDT)
-Received: from localhost.localdomain ([45.135.186.113])
-        by smtp.gmail.com with ESMTPSA id j35sm17087811pgj.45.2021.03.23.05.38.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Mar 2021 05:38:23 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=CYO3jLLdqXeezxgml/hOLnYiONhTc329cwaZR8YnfiQ=;
+        b=fouzPfwEc+88WqO6podomvzMq4ILrQJdeuuiEyhXOM3vT01qp0PcEKCl1kq/R0v6nt
+         nM8iF/0sdaUpNaAST1w4IuZ5XEUD1IVlahMyITH5oRsfR77s1ScF73Ut7wP6y5yH4oNW
+         J4MP178P6qWMppHmM7t3/pRgaeswAXX7t4yMEAWHgcLQTIKudAHEoVsTOvzK7myfA6dr
+         I+9GjyBdvdszRSNzTj9d+s2UOBA8/zJRxJfxuQLKXXCVEq2EwQzLjUbZxmSjU0f/1hTE
+         J1Eugg8lDBZ9wKdZ043hvS0aSsuX4+H0q1QLCxXNoXJAmttCJXSZsmqyNRNvAUt42SBC
+         QOIg==
+X-Gm-Message-State: AOAM531kwIW4TuU90ZdIyQ1w1vVdI5tv0/YM+yecJm05UI5nb0wR1DaT
+        MhmB9nioIBmpDCSXsdfHq0c/azuBAXOeYg==
+X-Google-Smtp-Source: ABdhPJzH5NeYjK6zrqjIYA/8z6ia3MihtWb4YPddf4jRgAbsteYuMy7sLDq4B4ucrSTu2T3N09erIg==
+X-Received: by 2002:a17:902:c808:b029:e6:4204:f62f with SMTP id u8-20020a170902c808b02900e64204f62fmr5612453plx.0.1616503089158;
+        Tue, 23 Mar 2021 05:38:09 -0700 (PDT)
+Received: from [10.75.0.42] ([45.135.186.113])
+        by smtp.gmail.com with ESMTPSA id q15sm3172835pje.28.2021.03.23.05.38.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Mar 2021 05:38:08 -0700 (PDT)
+Subject: Re: [PATCH] usb: gadget: legacy: fix error return code of msg_bind()
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, weiyongjun1@huawei.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210307084915.22022-1-baijiaju1990@gmail.com>
+ <YFnSe716okrldCHJ@kroah.com>
 From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        weiyongjun1@huawei.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [PATCH v2] usb: gadget: legacy: fix error return code of msg_bind()
-Date:   Tue, 23 Mar 2021 05:36:48 -0700
-Message-Id: <20210323123648.3997-1-baijiaju1990@gmail.com>
-X-Mailer: git-send-email 2.17.1
+Message-ID: <68012333-f9f6-74bb-1ff6-c1b77824ed7e@gmail.com>
+Date:   Tue, 23 Mar 2021 20:37:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <YFnSe716okrldCHJ@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When usb_otg_descriptor_alloc() returns NULL to usb_desc, no error
-return code of msg_bind() is assigned.
-To fix this bug, status is assigned with -ENOMEM in this case.
 
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
----
-v2:
-* Fix a mistake in the report.
-  Thank Greg for good advice.
 
----
- drivers/usb/gadget/legacy/mass_storage.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On 2021/3/23 19:35, Greg KH wrote:
+> On Sun, Mar 07, 2021 at 12:49:15AM -0800, Jia-Ju Bai wrote:
+>> When usb_otg_descriptor_alloc() returns NULL to usb_desc, no error
+>> return code of msg_bind() is assigned.
+>> To fix this bug, status is assigned with -ENOMEM in this case.
+>>
+>> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn
+>> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>>
+> These lines are not written correctly :(
+>
+> Please fix up and resend.
 
-diff --git a/drivers/usb/gadget/legacy/mass_storage.c b/drivers/usb/gadget/legacy/mass_storage.c
-index 9ed22c5fb7fe..ac1741126619 100644
---- a/drivers/usb/gadget/legacy/mass_storage.c
-+++ b/drivers/usb/gadget/legacy/mass_storage.c
-@@ -175,8 +175,10 @@ static int msg_bind(struct usb_composite_dev *cdev)
- 		struct usb_descriptor_header *usb_desc;
- 
- 		usb_desc = usb_otg_descriptor_alloc(cdev->gadget);
--		if (!usb_desc)
-+		if (!usb_desc) {
-+			status = -ENOMEM;
- 			goto fail_string_ids;
-+		}
- 		usb_otg_descriptor_init(cdev->gadget, usb_desc);
- 		otg_desc[0] = usb_desc;
- 		otg_desc[1] = NULL;
--- 
-2.17.1
+Sorry for the mistake.
+I will fix it and send a V2 patch.
 
+
+Best wishes,
+Jia-Ju Bai
