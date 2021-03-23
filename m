@@ -2,60 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D925345598
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 03:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 618BF345616
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 04:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbhCWCk4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Mar 2021 22:40:56 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:37132 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229665AbhCWCku (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Mar 2021 22:40:50 -0400
-X-UUID: 50913b347a2d41aea06632d42a7acc0c-20210323
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=DAu9+vkOf+gCUcKhPMtDjJ5ojxZRjj0OXppDvCNG5gM=;
-        b=ZJmEO6xI/GNbOHoXIIgtpjpVrrSTTc9GZ2XkVAqRBNu3kYICbJSBfvvwDR3QcV8sZuxsmLtXDKeXrknPwgqTgWG4B3+Xn/0WwiXkajRwBCZJvTio+5r6SD3MYr20+8TrcOKu5ek0RYqFoTQ++0/OjUwgKLdDTtHh1sHcIrLeVYU=;
-X-UUID: 50913b347a2d41aea06632d42a7acc0c-20210323
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1532448559; Tue, 23 Mar 2021 10:40:48 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by mtkmbs06n2.mediatek.inc
- (172.21.101.130) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 23 Mar
- 2021 10:40:46 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 23 Mar 2021 10:40:45 +0800
-Message-ID: <1616467245.11286.3.camel@mhfsdcap03>
-Subject: Re: [PATCH 10/13] usb: mtu3: support ip-sleep wakeup for MT8183
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Nicolas Boichat <drinkcat@chromium.org>
-Date:   Tue, 23 Mar 2021 10:40:45 +0800
-In-Reply-To: <47c8e339-114c-9693-222b-173e54bf298e@gmail.com>
-References: <1616382832-28450-1-git-send-email-chunfeng.yun@mediatek.com>
-         <1616382832-28450-10-git-send-email-chunfeng.yun@mediatek.com>
-         <47c8e339-114c-9693-222b-173e54bf298e@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S229622AbhCWDPt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Mar 2021 23:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229547AbhCWDPT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Mar 2021 23:15:19 -0400
+Received: from ustc.edu.cn (email6.ustc.edu.cn [IPv6:2001:da8:d800::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB76FC061574;
+        Mon, 22 Mar 2021 20:15:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=DyAETVd4CQ
+        zBRJvRBRGktAwsmZMdD9Pe0/YWVrKxwYE=; b=D8mOk9P+roI4mRWvZ/GfB/akkx
+        dlDc0kE89LXtaEkx2SApAz2zndLkZC176qoSvF3oW7vmHYmFKhE/KZmeIOBINGPf
+        ByKEZLspfs3Mg5ema9sEDkjYv8Fow1TamV3ZhOM8c68LeDel+m9RqCN4x2YWYPUs
+        4nrlIlcw85NK+o86g=
+Received: from ubuntu.localdomain (unknown [202.38.69.14])
+        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygAXHExDXVlgYLIZAA--.1020S4;
+        Tue, 23 Mar 2021 11:15:15 +0800 (CST)
+From:   Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+To:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+Subject: [PATCH] thunderbolt: Fix a double put in tb_cfg_read_raw
+Date:   Mon, 22 Mar 2021 20:15:12 -0700
+Message-Id: <20210323031512.12234-1-lyl2019@mail.ustc.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 98F5B813B71D1B91477EEA6AB7E05F98280E6CE8EF4B0335014B6F4348ABFFEC2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LkAmygAXHExDXVlgYLIZAA--.1020S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Xw1kCw43CF4rJr1fWFWxWFg_yoW8Jr48p3
+        98WFWj9rZ8Xw4jya1DKa4UuF1rKw42ka43GFW8KayruFZ0grn5CFyDJFy2qr17ArWxJrW7
+        XrnYvrs8ua4avFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
+        rcIFxwCY02Avz4vE14v_Gr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+        73UjIFyTuYvjfUnF4EDUUUU
+X-CM-SenderInfo: ho1ojiyrz6zt1loo32lwfovvfxof0/
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gTW9uLCAyMDIxLTAzLTIyIGF0IDExOjU3ICswMzAwLCBTZXJnZWkgU2h0eWx5b3Ygd3JvdGU6
-DQo+IFNhbWUgY29tbWVudHMgYXMgdG8gdGhlIHBhdGNoICM2Lg0KT2ssIHdpbGwgY2hlY2sgb3Ro
-ZXJzLCB0aGFua3MgYSBsb3QNCg0KPiANCj4gTUJSLCBTZXJnZWkNCg0K
+In tb_cfg_read_raw, req is allocated by tb_cfg_request_alloc()
+with an initial reference. Before calling tb_cfg_request_sync(),
+there is no refcount inc operation. tb_cfg_request_sync()
+calls tb_cfg_request(..,req,..) and if the callee failed,
+the initial reference of req is dropped and req is freed.
+
+Later in tb_cfg_read_raw before the err check,
+tb_cfg_request_put(req) is called again. It may cause error
+in race.
+
+My patch puts tb_cfg_request_put(req) after the err check
+finished to avoid unexpected result.
+
+Signed-off-by: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+---
+ drivers/thunderbolt/ctl.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/thunderbolt/ctl.c b/drivers/thunderbolt/ctl.c
+index f1aeaff9f368..bb60269c89ab 100644
+--- a/drivers/thunderbolt/ctl.c
++++ b/drivers/thunderbolt/ctl.c
+@@ -890,11 +890,11 @@ struct tb_cfg_result tb_cfg_read_raw(struct tb_ctl *ctl, void *buffer,
+ 
+ 		res = tb_cfg_request_sync(ctl, req, timeout_msec);
+ 
+-		tb_cfg_request_put(req);
+-
+ 		if (res.err != -ETIMEDOUT)
+ 			break;
+ 
++		tb_cfg_request_put(req);
++
+ 		/* Wait a bit (arbitrary time) until we send a retry */
+ 		usleep_range(10, 100);
+ 	}
+-- 
+2.25.1
+
 
