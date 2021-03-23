@@ -2,90 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0057345670
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 04:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8703457C1
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 07:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbhCWDs3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Mar 2021 23:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbhCWDsD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Mar 2021 23:48:03 -0400
-Received: from ustc.edu.cn (email6.ustc.edu.cn [IPv6:2001:da8:d800::8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2FBDBC061574;
-        Mon, 22 Mar 2021 20:47:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=1GoWh5eS4L
-        y3A4l/bsaEFyKFS7162BJKVfkr1mQVN2s=; b=FIsQNV9hksoXuqYWMxy0FqR3Em
-        tFJj9b469QfN5LEuURJC5mqJCbdp6nQ5/+vCtU9btDnRDilyf7od5Nb2WnJC5sCp
-        9JC6wqD5NHhi7IAVZFrBGW0HsjFqUtInzbXcFD9J1G2eFa+YR6YhZcUbNSHeiR63
-        SYXIs+gMYONIHHYkM=
-Received: from ubuntu.localdomain (unknown [202.38.69.14])
-        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygCHj0PJZFlgc6waAA--.144S4;
-        Tue, 23 Mar 2021 11:47:21 +0800 (CST)
-From:   Lv Yunlong <lyl2019@mail.ustc.edu.cn>
-To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Lv Yunlong <lyl2019@mail.ustc.edu.cn>
-Subject: [PATCH] usb: Add data checks in usbtmc_disconnect
-Date:   Mon, 22 Mar 2021 20:47:17 -0700
-Message-Id: <20210323034717.12818-1-lyl2019@mail.ustc.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        id S229933AbhCWGZ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 02:25:56 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:18207 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229904AbhCWGZu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Mar 2021 02:25:50 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1616480750; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=xAtJAW22wshljF0u7U/N/2tn/kZSmDX0sMzuBmxR0jk=; b=MY5JIz7EzpZeYqS6+nIKQQGFgKs1LOOBVOHAw0IMvLZYy5FiVc2bS/TE+m7EMWpg//EdyyJK
+ Vj0f3U95TZqJp+0B6BduBwURRdvXl2/1Ozdb+4L5hkp34gLU/JHDeCwZMuIDMVD2XBQYBig6
+ g1sU/XzecqRM9RF1EbP/tDmishk=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 605989ed5d70193f887c25d0 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 23 Mar 2021 06:25:49
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id D7A62C43461; Tue, 23 Mar 2021 06:25:48 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B0002C433CA;
+        Tue, 23 Mar 2021 06:25:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B0002C433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
+Date:   Mon, 22 Mar 2021 23:25:42 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Wesley Cheng <wcheng@codeaurora.org>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+Subject: Re: [PATCH] usb: gadget: Stall OS descriptor request for unsupported
+ functions
+Message-ID: <20210323062542.GA17922@jackp-linux.qualcomm.com>
+References: <1616464217-2650-1-git-send-email-wcheng@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LkAmygCHj0PJZFlgc6waAA--.144S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7Wr48Zr15ur1fZr4UGr4fGrg_yoWkJrX_ua
-        1UWF1xtrW5CF9xC3W7tr1rZw1xt3W0qw48XFs0y343Za4jqw4kAr1Iqrs5J397WF4UtryD
-        Zrn2qryruayxujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbV8FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
-        YxC7MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-        DU0xZFpf9x0JUza0QUUUUU=
-X-CM-SenderInfo: ho1ojiyrz6zt1loo32lwfovvfxof0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1616464217-2650-1-git-send-email-wcheng@codeaurora.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In usbtmc_disconnect, data is got from intf with the
-initial reference. There is no refcount inc operation
-before usbmc_free_int(data). In usbmc_free_int(data),
-the data may be freed.
+Hi Wesley,
 
-But later in usbtmc_disconnect, there is another put
-function of data. I think it is better to add necessary
-checks to avoid the data being put twice. It could cause
-errors in race.
+On Mon, Mar 22, 2021 at 06:50:17PM -0700, Wesley Cheng wrote:
+> From: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+> 
+> Hosts which request "OS descriptors" from gadgets do so during
+> the enumeration phase and before the configuration is set with
+> SET_CONFIGURATION. Composite driver supports OS descriptor
+> handling in composite_setup function. This requires to pass
+> signature field, vendor code, compatibleID and subCompatibleID
+> from user space.
+> 
+> For USB compositions that contain functions which don't implement os
+> descriptors, Windows is sending vendor specific requests for os
+> descriptors and composite driver handling this request with invalid
+> data. With this invalid info host resetting the bus and never
+> selecting the configuration and leading enumeration issue.
+> 
+> Fix this by bailing out from the OS descriptor setup request
+> handling if the functions does not have OS descriptors compatibleID.
+> 
+> Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> ---
+>  drivers/usb/gadget/composite.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+> index 72a9797..473edda6 100644
+> --- a/drivers/usb/gadget/composite.c
+> +++ b/drivers/usb/gadget/composite.c
+> @@ -1945,6 +1945,12 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+>  				buf[6] = w_index;
+>  				/* Number of ext compat interfaces */
+>  				count = count_ext_compat(os_desc_cfg);
+> +				/*
+> +				 * Bailout if device does not
+> +				 * have ext_compat interfaces.
+> +				 */
+> +				if (count == 0)
+> +					break;
+>  				buf[8] = count;
+>  				count *= 24; /* 24 B/ext compat desc */
+>  				count += 16; /* header */
 
-Signed-off-by: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
----
- drivers/usb/class/usbtmc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Do we still need this fix? IIRC we had this change in our downstream
+kernel to fix the case when dynamically re-configuring ConfigFS, i.e.
+changing the composition of functions wherein none of the interfaces
+support OS Descriptors, so this causes count_ext_compat() to return
+0 and results in the issue described in $SUBJECT.
 
-diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
-index 74d5a9c5238a..e0438cb46386 100644
---- a/drivers/usb/class/usbtmc.c
-+++ b/drivers/usb/class/usbtmc.c
-@@ -2494,7 +2494,9 @@ static void usbtmc_disconnect(struct usb_interface *intf)
- 	}
- 	mutex_unlock(&data->io_mutex);
- 	usbtmc_free_int(data);
--	kref_put(&data->kref, usbtmc_delete);
-+
-+	if (data->iin_ep_present && data->iin_urb)
-+		kref_put(&data->kref, usbtmc_delete);
- }
- 
- static void usbtmc_draw_down(struct usbtmc_file_data *file_data)
+But I think this is more of a problem of an improperly configured
+ConfigFS gadget. If userspace instead removes the config from the
+gadget's os_desc subdirectory that should cause cdev->os_desc_config to
+be set to NULL and hence composite_setup() should never enter this
+handling at all, right?
+
+Jack
 -- 
-2.25.1
-
-
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
