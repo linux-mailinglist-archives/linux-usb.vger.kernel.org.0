@@ -2,139 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC9C345810
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 07:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43755345824
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 08:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbhCWG6O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Mar 2021 02:58:14 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:63105 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbhCWG5m (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Mar 2021 02:57:42 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1616482661; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=QnUCgCrhL886f7t95cngGpyvXjpcNMxnX81E/1wAPZ0=; b=Ck/xba8UfqFgAWh3qhAhcoj1KQ3/B10jFzibNRqwEaEVhS/q904BUT1pUtpBBYOJWai8uhDW
- MxpIHADvGoCPWOrQHHD8haxmF+V2MCHAZ7vUwQV0q/ggFilNX50lECl8Hotb0zrSRcDrqJkg
- PwvcmYU1vo9xYhbzljwAu5c11YA=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 605991606dc1045b7d64bdfb (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 23 Mar 2021 06:57:36
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 758C1C433ED; Tue, 23 Mar 2021 06:57:35 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [10.110.91.149] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0E16CC433CA;
-        Tue, 23 Mar 2021 06:57:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0E16CC433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH] usb: gadget: Stall OS descriptor request for unsupported
- functions
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-References: <1616464217-2650-1-git-send-email-wcheng@codeaurora.org>
- <20210323062542.GA17922@jackp-linux.qualcomm.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <297cf185-70d6-5018-08ab-e069dc84d8e0@codeaurora.org>
-Date:   Mon, 22 Mar 2021 23:57:33 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S230104AbhCWHDr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 03:03:47 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:52446 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230045AbhCWHDO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Mar 2021 03:03:14 -0400
+X-UUID: 3f500fdb6c69468fa657cf43a21cb5fa-20210323
+X-UUID: 3f500fdb6c69468fa657cf43a21cb5fa-20210323
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1194524314; Tue, 23 Mar 2021 15:03:11 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs06n2.mediatek.inc (172.21.101.130) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 23 Mar 2021 15:03:09 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 23 Mar 2021 15:03:08 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Nicolas Boichat <drinkcat@chromium.org>
+Subject: [PATCH v2 01/13] dt-bindings: usb: mtk-xhci: support property usb2-lpm-disable
+Date:   Tue, 23 Mar 2021 15:02:43 +0800
+Message-ID: <1616482975-17841-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-In-Reply-To: <20210323062542.GA17922@jackp-linux.qualcomm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 6BAD75C4FD4F36F94A318E365A514E122BC97291D6295AB56703BF5B33020AF82000:8
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Add support common property usb2-lpm-disable
 
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+v2: no changes
+---
+ Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-On 3/22/2021 11:25 PM, Jack Pham wrote:
-> Hi Wesley,
-> 
-> On Mon, Mar 22, 2021 at 06:50:17PM -0700, Wesley Cheng wrote:
->> From: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
->>
->> Hosts which request "OS descriptors" from gadgets do so during
->> the enumeration phase and before the configuration is set with
->> SET_CONFIGURATION. Composite driver supports OS descriptor
->> handling in composite_setup function. This requires to pass
->> signature field, vendor code, compatibleID and subCompatibleID
->> from user space.
->>
->> For USB compositions that contain functions which don't implement os
->> descriptors, Windows is sending vendor specific requests for os
->> descriptors and composite driver handling this request with invalid
->> data. With this invalid info host resetting the bus and never
->> selecting the configuration and leading enumeration issue.
->>
->> Fix this by bailing out from the OS descriptor setup request
->> handling if the functions does not have OS descriptors compatibleID.
->>
->> Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
->> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->> ---
->>  drivers/usb/gadget/composite.c | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
->> index 72a9797..473edda6 100644
->> --- a/drivers/usb/gadget/composite.c
->> +++ b/drivers/usb/gadget/composite.c
->> @@ -1945,6 +1945,12 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
->>  				buf[6] = w_index;
->>  				/* Number of ext compat interfaces */
->>  				count = count_ext_compat(os_desc_cfg);
->> +				/*
->> +				 * Bailout if device does not
->> +				 * have ext_compat interfaces.
->> +				 */
->> +				if (count == 0)
->> +					break;
->>  				buf[8] = count;
->>  				count *= 24; /* 24 B/ext compat desc */
->>  				count += 16; /* header */
-> 
-> Do we still need this fix? IIRC we had this change in our downstream
-> kernel to fix the case when dynamically re-configuring ConfigFS, i.e.
-> changing the composition of functions wherein none of the interfaces
-> support OS Descriptors, so this causes count_ext_compat() to return
-> 0 and results in the issue described in $SUBJECT.
-> 
-Hi Jack,
-
-You're correct.  We can address this as well in the userspace perspective.
-
-> But I think this is more of a problem of an improperly configured
-> ConfigFS gadget. If userspace instead removes the config from the
-> gadget's os_desc subdirectory that should cause cdev->os_desc_config to
-> be set to NULL and hence composite_setup() should never enter this
-> handling at all, right?
-
-Sure, I'll go with fixing it in the userspace, since the support to
-stall the OS desc is already present in the composite driver as you
-mentioned.  Thanks for the input.
-
-Thanks
-Wesley Cheng
-
+diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+index 14f40efb3b22..2246d29a5e4e 100644
+--- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
++++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+@@ -103,6 +103,10 @@ properties:
+     description: supports USB3.0 LPM
+     type: boolean
+ 
++  usb2-lpm-disable:
++    description: disable USB2 HW LPM
++    type: boolean
++
+   imod-interval-ns:
+     description:
+       Interrupt moderation interval value, it is 8 times as much as that
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.18.0
+
