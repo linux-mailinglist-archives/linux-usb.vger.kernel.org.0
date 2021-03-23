@@ -2,86 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7219C3462E9
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 16:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3EE346303
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 16:37:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232848AbhCWPbj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Mar 2021 11:31:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48580 "EHLO mail.kernel.org"
+        id S232890AbhCWPga (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 11:36:30 -0400
+Received: from mga09.intel.com ([134.134.136.24]:22811 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232806AbhCWPbc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Mar 2021 11:31:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AB060619B2;
-        Tue, 23 Mar 2021 15:31:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1616513492;
-        bh=bJy+1pPqZ9b2Coh/IbNlRkCGydYdoUBWt094ZsN9XxQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AlLjj+UTm8ohjArHF3/kLE6NH9IKV1+f0uhOgM+uE+6EEfjFhMkoRpuylFIncP92V
-         vst7a9mUItBFvLggdjPLnwVDp061sfGmigo8KOUqA3SI/Oouxw73pAA/214cCUIXU7
-         cACTgBTQ9nNiPQpRNJiKZQD/v6KcjQ4ggri/K8n4=
-Date:   Tue, 23 Mar 2021 16:31:29 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     hminas@synopsys.com, paul@crapouillou.net,
-        linux-mips@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, sernia.zhou@foxmail.com,
-        Dragan =?utf-8?B?xIxlxI1hdmFj?= <dragancecavac@yahoo.com>
-Subject: Re: [PATCH] USB: DWC2: Add VBUS overcurrent detection control.
-Message-ID: <YFoJ0Z6K4B5smbQx@kroah.com>
-References: <1616513066-62025-1-git-send-email-zhouyanjie@wanyeetech.com>
+        id S232750AbhCWPgW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Mar 2021 11:36:22 -0400
+IronPort-SDR: ImP3kJgc77lQgQNQtJr4njwLeNidHxUxS+3VJ5tmJUBVMJg85WTk1ZEB8H8MT0zKxbnGNEFIyg
+ cKRR5HHXgTJw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="190600286"
+X-IronPort-AV: E=Sophos;i="5.81,272,1610438400"; 
+   d="scan'208";a="190600286"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2021 08:36:20 -0700
+IronPort-SDR: x8UiYs+BIN4IfLspyaq2Nw+3pI/f2U0E+AmqX+9S2d531wu7mffqzbzL7Fy6oAP497pm/W6jpH
+ swm1vhBcDtXQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,272,1610438400"; 
+   d="scan'208";a="593023168"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 23 Mar 2021 08:36:17 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 532D649E; Tue, 23 Mar 2021 17:36:31 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v2 1/7] usb: gadget: pch_udc: Replace cpu_to_le32() by lower_32_bits()
+Date:   Tue, 23 Mar 2021 17:36:20 +0200
+Message-Id: <20210323153626.54908-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1616513066-62025-1-git-send-email-zhouyanjie@wanyeetech.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 23, 2021 at 11:24:26PM +0800, 周琰杰 (Zhou Yanjie) wrote:
-> Introduce configurable option for enabling GOTGCTL register
-> bits VbvalidOvEn and VbvalidOvVal. Once selected it disables
-> VBUS overcurrent detection.
-> 
-> This patch is derived from Dragan Čečavac (in the kernel 3.18
-> tree of CI20). It is very useful for the MIPS Creator CI20(r1).
-> Without this patch, CI20's OTG port has a great probability to
-> face overcurrent warning, which breaks the OTG functionality.
-> 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> Signed-off-by: Dragan Čečavac <dragancecavac@yahoo.com>
-> ---
->  drivers/usb/dwc2/Kconfig | 6 ++++++
->  drivers/usb/dwc2/core.c  | 9 +++++++++
->  2 files changed, 15 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc2/Kconfig b/drivers/usb/dwc2/Kconfig
-> index c131719..e40d187 100644
-> --- a/drivers/usb/dwc2/Kconfig
-> +++ b/drivers/usb/dwc2/Kconfig
-> @@ -94,4 +94,10 @@ config USB_DWC2_DEBUG_PERIODIC
->  	  non-periodic transfers, but of course the debug logs will be
->  	  incomplete. Note that this also disables some debug messages
->  	  for which the transfer type cannot be deduced.
-> +
-> +config USB_DWC2_DISABLE_VOD
-> +	bool "Disable VBUS overcurrent detection"
-> +	help
-> +	  Say Y here to switch off VBUS overcurrent detection. It enables USB
-> +	  functionality blocked by overcurrent detection.
+Either way ~0 will be in the correct byte order, hence
+replace cpu_to_le32() by lower_32_bits(). Moreover,
+it makes sparse happy, otherwise it complains:
 
-Why would this be a configuration option?  Shouldn't this be dynamic and
-just work properly automatically?
+.../pch_udc.c:1813:27: warning: incorrect type in assignment (different base types)
+.../pch_udc.c:1813:27:    expected unsigned int [usertype] dataptr
+.../pch_udc.c:1813:27:    got restricted __le32 [usertype]
 
-You should not have to do this on a build-time basis, it should be able
-to be detected and handled properly at run-time for all devices.
+Fixes: f646cf94520e ("USB device driver of Topcliff PCH")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: fixed 64-bit build (Greg)
+ drivers/usb/gadget/udc/pch_udc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If you know this is needed for a specific type of device, detect it and
-make the change then, otherwise this could break working systems, right?
+diff --git a/drivers/usb/gadget/udc/pch_udc.c b/drivers/usb/gadget/udc/pch_udc.c
+index a3c1fc924268..c517186384bc 100644
+--- a/drivers/usb/gadget/udc/pch_udc.c
++++ b/drivers/usb/gadget/udc/pch_udc.c
+@@ -1756,7 +1756,7 @@ static struct usb_request *pch_udc_alloc_request(struct usb_ep *usbep,
+ 	}
+ 	/* prevent from using desc. - set HOST BUSY */
+ 	dma_desc->status |= PCH_UDC_BS_HST_BSY;
+-	dma_desc->dataptr = cpu_to_le32(DMA_ADDR_INVALID);
++	dma_desc->dataptr = lower_32_bits(DMA_ADDR_INVALID);
+ 	req->td_data = dma_desc;
+ 	req->td_data_last = dma_desc;
+ 	req->chain_len = 1;
+-- 
+2.30.2
 
-thanks,
-
-greg k-h
