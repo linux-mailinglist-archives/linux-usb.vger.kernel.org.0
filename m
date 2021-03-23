@@ -2,109 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C6F3461B4
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 15:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD17346215
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 15:57:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232223AbhCWOpO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Mar 2021 10:45:14 -0400
-Received: from mga02.intel.com ([134.134.136.20]:24410 "EHLO mga02.intel.com"
+        id S232536AbhCWO5O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 10:57:14 -0400
+Received: from mga07.intel.com ([134.134.136.100]:53406 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232272AbhCWOom (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Mar 2021 10:44:42 -0400
-IronPort-SDR: e7vIaYgQkYeu4XopdFj5IWReMoeLCzYWdX2+xNUt4qoEeEghJn+rr8OvZS3wQzfLRG6/4j8Z6r
- 4dfa8bAGQM/w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="177613466"
+        id S232477AbhCWO4x (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Mar 2021 10:56:53 -0400
+IronPort-SDR: SLnK8Vi75m6907Zxcw440LpKKOPBszgcCpSf0O9MBWVE4AfoQyoSquRcCLuo6bUJT11/vUQa8a
+ QFXmoozXJSEg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="254491755"
 X-IronPort-AV: E=Sophos;i="5.81,271,1610438400"; 
-   d="scan'208";a="177613466"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2021 07:44:34 -0700
-IronPort-SDR: Qbg4TbCdz3qTmD41A4pi6lDDlNVPckD8Tw3EY5/45peH8XlYeYaYR9diw+EC8JLOwhRmLTxrAz
- PiRBxjzbT5CA==
+   d="scan'208";a="254491755"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2021 07:56:53 -0700
+IronPort-SDR: P4io+lsDaU7HGP1rDCwsWTgD1+ovwSz9UtRnFi+NtC/xjlVHTBGj6wNphu22md9WfzBKtebp0Q
+ iBjOjhdRwk2w==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,271,1610438400"; 
-   d="scan'208";a="415017430"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2021 07:44:29 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 23 Mar 2021 16:44:26 +0200
-Date:   Tue, 23 Mar 2021 16:44:26 +0200
+   d="scan'208";a="452171643"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 23 Mar 2021 07:56:48 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 755914DB; Tue, 23 Mar 2021 16:57:01 +0200 (EET)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     lyl2019@mail.ustc.edu.cn
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH] thunderbolt: Fix a double put in tb_cfg_read_raw
-Message-ID: <20210323144426.GY2542@lahna.fi.intel.com>
-References: <20210323031512.12234-1-lyl2019@mail.ustc.edu.cn>
- <20210323140647.GV2542@lahna.fi.intel.com>
- <4ff4aeb5.e6c7.1785f7e4edc.Coremail.lyl2019@mail.ustc.edu.cn>
+To:     linux-usb@vger.kernel.org
+Cc:     Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Christian Kellner <christian@kellner.me>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@google.com>,
+        Diego Rivas <diegorivas@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v2 0/3] thunderbolt: Expose details about tunneling
+Date:   Tue, 23 Mar 2021 17:56:58 +0300
+Message-Id: <20210323145701.86161-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <4ff4aeb5.e6c7.1785f7e4edc.Coremail.lyl2019@mail.ustc.edu.cn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 23, 2021 at 10:30:16PM +0800, lyl2019@mail.ustc.edu.cn wrote:
-> 
-> 
-> 
-> > -----原始邮件-----
-> > 发件人: "Mika Westerberg" <mika.westerberg@linux.intel.com>
-> > 发送时间: 2021-03-23 22:06:47 (星期二)
-> > 收件人: "Lv Yunlong" <lyl2019@mail.ustc.edu.cn>
-> > 抄送: andreas.noever@gmail.com, michael.jamet@intel.com, YehezkelShB@gmail.com, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-> > 主题: Re: [PATCH] thunderbolt: Fix a double put in tb_cfg_read_raw
-> > 
-> > Hi,
-> > 
-> > On Mon, Mar 22, 2021 at 08:15:12PM -0700, Lv Yunlong wrote:
-> > > In tb_cfg_read_raw, req is allocated by tb_cfg_request_alloc()
-> > > with an initial reference. Before calling tb_cfg_request_sync(),
-> > > there is no refcount inc operation. tb_cfg_request_sync()
-> > > calls tb_cfg_request(..,req,..) and if the callee failed,
-> > > the initial reference of req is dropped and req is freed.
-> > > 
-> > > Later in tb_cfg_read_raw before the err check,
-> > > tb_cfg_request_put(req) is called again. It may cause error
-> > > in race.
-> > 
-> > Hmm, tb_cfg_request() does tb_cfg_request_get() too and in case of error
-> > it does tb_cfg_request_put(). So the refcount should be fine. What am I
-> > missing?
-> > 
-> > > 
-> > > My patch puts tb_cfg_request_put(req) after the err check
-> > > finished to avoid unexpected result.
-> > > 
-> > > Signed-off-by: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
-> > > ---
-> > >  drivers/thunderbolt/ctl.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/thunderbolt/ctl.c b/drivers/thunderbolt/ctl.c
-> > > index f1aeaff9f368..bb60269c89ab 100644
-> > > --- a/drivers/thunderbolt/ctl.c
-> > > +++ b/drivers/thunderbolt/ctl.c
-> > > @@ -890,11 +890,11 @@ struct tb_cfg_result tb_cfg_read_raw(struct tb_ctl *ctl, void *buffer,
-> > >  
-> > >  		res = tb_cfg_request_sync(ctl, req, timeout_msec);
-> > >  
-> > > -		tb_cfg_request_put(req);
-> > > -
-> > >  		if (res.err != -ETIMEDOUT)
-> > >  			break;
-> > >  
-> > > +		tb_cfg_request_put(req);
-> > > +
-> > >  		/* Wait a bit (arbitrary time) until we send a retry */
-> > >  		usleep_range(10, 100);
-> > >  	}
-> > > -- 
-> > > 2.25.1
-> > > 
-> 
-> I'm very sorry, i was ashamed that i had missed the tb_cfg_request_get() in tb_cfg_request().
+Hi,
 
-It happens, no worries :)
+There has been ask if we can expose more details about the connected
+devices and the tunneling to userspace, so it can then provide more
+detailed information to the user.
+
+First we add uevent details for each device (USB4 router) that adds
+USB4_TYPE=host|device|hub and USB4_VERSION=1.0 (if the device actually is
+USB4). The host|device|hub definitions follow the USB4 spec.
+
+Then for each device router we expose two new attributes: "usb3" and "dp"
+that if present mean that the device has corresponding adapter (USB 3.x
+upstream adapter and DP OUT adapter). The contents of the attributes then
+hold number of tunnels ending to this router. So if USB 3.x is tunneled
+"usb3" reads 1. Since there can be multiple DP OUT adaptes the "dp"
+attribute holds number of DP tunnels ending to this router. For PCIe
+tunneling the "authorized" attribute works the same way.
+
+Version 1 of the series can be found here:
+
+  https://lore.kernel.org/linux-usb/20210309134818.63118-1-mika.westerberg@linux.intel.com/
+
+Changes from version 1:
+
+  * Added Greg's Reviewed-by tags for patch 1 and 2
+  * Use sysfs_emit()
+  * Drop the locking in the new attributes
+  * Drop the kobject_uevent()
+
+Mika Westerberg (3):
+  thunderbolt: Add details to router uevent
+  thunderbolt: Hide authorized attribute if router does not support PCIe tunnels
+  thunderbolt: Expose more details about USB 3.x and DisplayPort tunnels
+
+ .../ABI/testing/sysfs-bus-thunderbolt         | 26 +++++++
+ drivers/thunderbolt/domain.c                  | 10 +++
+ drivers/thunderbolt/switch.c                  | 78 ++++++++++++++++++-
+ drivers/thunderbolt/tb.c                      | 44 ++++++++---
+ drivers/thunderbolt/tb.h                      |  4 +
+ include/linux/thunderbolt.h                   |  6 ++
+ 6 files changed, 156 insertions(+), 12 deletions(-)
+
+-- 
+2.30.2
+
