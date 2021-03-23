@@ -2,61 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D242345D7B
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 12:57:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7155345D83
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 12:59:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbhCWL5N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Mar 2021 07:57:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56930 "EHLO mail.kernel.org"
+        id S230039AbhCWL6u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 07:58:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57274 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229482AbhCWL4s (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Mar 2021 07:56:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6D48F6191F;
-        Tue, 23 Mar 2021 11:56:47 +0000 (UTC)
+        id S229866AbhCWL6r (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Mar 2021 07:58:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 07BE26191A;
+        Tue, 23 Mar 2021 11:58:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1616500608;
-        bh=tq02Vd5NqpuFLSWzDRKQbq1PXhG1AGLHdMYDxgmkTaE=;
+        s=korg; t=1616500726;
+        bh=Qx2dRVMJSoSWHEiu78M1VLfpaeZ8A6p8qVkoPZlsck8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1qz4yEgix7wGFQBvKOSXcCiEwQkrYLSh/VLIfLFo/8mItyPGjLztqoJ+LZTscswvN
-         wN6sQmwZ5GFskJ6DFIGKH9T7nwoHsCT+ALz1ksuTuWizxGo53z/mwopBFPDurjEcUp
-         a6BfPfxhu0mal6n7JsWQKsPAAVj3QL9/2wOx4AQk=
-Date:   Tue, 23 Mar 2021 12:56:45 +0100
+        b=qRJZeOYSCt3yRyYIRfcFxNFZTtD3wftIgc9qdVlffOAxpITLQEjsY8b2HeDQyhgyD
+         06ZS2LD8CbXiOrJGCnuckcKzTenE/AnHHyXcz5MTl/ERnNtuhqkw4DXwgISXk7rLNH
+         odaHihERo5ppZyL1xQIpk3Sbr4aMLkxUYXKMA++Q=
+Date:   Tue, 23 Mar 2021 12:58:44 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        gschmottlach@gmail.com, linux-usb@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/8] USB Audio Gadget part 2: Feedback endpoint,
- Volume/Mute support
-Message-ID: <YFnXfUr21JrweUoU@kroah.com>
-References: <1614603943-11668-1-git-send-email-ruslan.bilovol@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v1 1/6] usb: gadget: pch_udc: Drop unneeded cpu_to_le32()
+ call
+Message-ID: <YFnX9H+JeK1SVKuY@kroah.com>
+References: <20210322211149.6658-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1614603943-11668-1-git-send-email-ruslan.bilovol@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210322211149.6658-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 01, 2021 at 03:05:35PM +0200, Ruslan Bilovol wrote:
-> This is extendend version of "UAC2 Feedback endpoint" patch set
-> I've sent back in 2020 [1]. It is extended with
-> bi-directional Volume/Mute controls support for both UAC1
-> and UAC2 gadgets.
+On Mon, Mar 22, 2021 at 11:11:44PM +0200, Andy Shevchenko wrote:
+> Either way ~0 will be in the correct byte order,
+> hence drop unneeded cpu_to_le32() call. Moreover,
+> it makes sparse happy, otherwise it complains:
 > 
-> It fixes issues with enumeration in various operation systems
-> because of Feedback endpoint implementation, yet also adds
-> new Volume/Mute support which allows developers to control
-> UAC1/2 Gadget's Volume/Mute from the Host and in the same way
-> UAC1/2 Gadget can control Volume/Mute of the Host making it
-> closer to a real USB Audio card.
+> pch_udc.c:1813:27: warning: incorrect type in assignment (different base types)
+> pch_udc.c:1813:27:    expected unsigned int [usertype] dataptr
+> pch_udc.c:1813:27:    got restricted __le32 [usertype]
 > 
-> This patch set should be applied on top of USB Audio Gadget
-> part 1 fixes/improvements that I've sent previously to the
-> mailing list [2]
+> Fixes: f646cf94520e ("USB device driver of Topcliff PCH")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/usb/gadget/udc/pch_udc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/pch_udc.c b/drivers/usb/gadget/udc/pch_udc.c
+> index a3c1fc924268..2e2dca391007 100644
+> --- a/drivers/usb/gadget/udc/pch_udc.c
+> +++ b/drivers/usb/gadget/udc/pch_udc.c
+> @@ -1756,7 +1756,7 @@ static struct usb_request *pch_udc_alloc_request(struct usb_ep *usbep,
+>  	}
+>  	/* prevent from using desc. - set HOST BUSY */
+>  	dma_desc->status |= PCH_UDC_BS_HST_BSY;
+> -	dma_desc->dataptr = cpu_to_le32(DMA_ADDR_INVALID);
+> +	dma_desc->dataptr = DMA_ADDR_INVALID;
+>  	req->td_data = dma_desc;
+>  	req->td_data_last = dma_desc;
+>  	req->chain_len = 1;
 
-This series did not apply to my tree (except for the first patch).  Can
-you rebase it on my usb-testing branch and resend?
+With this series applied, I get the following build warning:
+
+drivers/usb/gadget/udc/pch_udc.c: In function ‘pch_udc_alloc_request’:
+drivers/usb/gadget/udc/pch_udc.c:208:26: warning: conversion from ‘long long unsigned int’ to ‘u32’ {aka ‘unsigned int’} changes value from ‘18446744073709551615’ to ‘4294967295’ [-Woverflow]
+  208 | #define DMA_ADDR_INVALID (~(dma_addr_t)0)
+      |                          ^
+drivers/usb/gadget/udc/pch_udc.c:1813:22: note: in expansion of macro ‘DMA_ADDR_INVALID’
+ 1813 |  dma_desc->dataptr = DMA_ADDR_INVALID;
+      |                      ^~~~~~~~~~~~~~~~
+
+
+Please fix up and resend a new version of this series.
 
 thanks,
 
