@@ -2,92 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0AE34617C
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 15:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 121AA346194
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Mar 2021 15:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbhCWOal (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Mar 2021 10:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231830AbhCWOai (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Mar 2021 10:30:38 -0400
-Received: from ustc.edu.cn (email6.ustc.edu.cn [IPv6:2001:da8:d800::8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21F63C061574;
-        Tue, 23 Mar 2021 07:30:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mail.ustc.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
-        In-Reply-To:References:Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-ID; bh=A52GuFfu0aRb7bwt2gs64lBUWIX8xQdUPz2j
-        3nqWAYU=; b=R8Rjf95iM2VRVbX9UjpXks/86lCwiY1LTlYCz9R1ogQMin6Cpfmq
-        DO+/X11HnJpvhnaBZNQTKa3MFpwDg0xsrLblXgBCRy/AH63zGDEhq0m5uJXUGSKB
-        MzgD4rXoQC0FHcWUUlP8bBGc+Z26LEOFuxoJJzZKttrP7j2NyYKoCHU=
-Received: by ajax-webmail-newmailweb.ustc.edu.cn (Coremail) ; Tue, 23 Mar
- 2021 22:30:16 +0800 (GMT+08:00)
-X-Originating-IP: [202.38.69.14]
-Date:   Tue, 23 Mar 2021 22:30:16 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   lyl2019@mail.ustc.edu.cn
-To:     "Mika Westerberg" <mika.westerberg@linux.intel.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH] thunderbolt: Fix a double put in tb_cfg_read_raw
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT3.0.8 dev build
- 20190610(cb3344cf) Copyright (c) 2002-2021 www.mailtech.cn ustc-xl
-In-Reply-To: <20210323140647.GV2542@lahna.fi.intel.com>
-References: <20210323031512.12234-1-lyl2019@mail.ustc.edu.cn>
- <20210323140647.GV2542@lahna.fi.intel.com>
-X-SendMailWithSms: false
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        id S232177AbhCWOfE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 10:35:04 -0400
+Received: from mga07.intel.com ([134.134.136.100]:51532 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232348AbhCWOem (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Mar 2021 10:34:42 -0400
+IronPort-SDR: NLCTPCGkAeOrAdFRk160Z/NiMHSPvRfPvC6JZOQhAlG4Y7u00psrN6yXDFnFjBJVkZkX4uoIdT
+ Hqp1oV5mmYHw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="254487316"
+X-IronPort-AV: E=Sophos;i="5.81,271,1610438400"; 
+   d="scan'208";a="254487316"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2021 07:34:41 -0700
+IronPort-SDR: 4ejezHWi44NcS4bJsMlVx8sy7KO8k7V1wZlrDkoTVGv5MVLcE+kwK1CLRsU+v7lDzArKlXvPuI
+ gGu+eRaHb83g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,271,1610438400"; 
+   d="scan'208";a="607746891"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga005.fm.intel.com with ESMTP; 23 Mar 2021 07:34:36 -0700
+Subject: Re: [PATCH v3 0/8] usb: Check for genXxY on host
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     linux-usb@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Allen Pais <allen.lkml@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Zeng Tao <prime.zeng@hisilicon.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>
+References: <cover.1615432770.git.Thinh.Nguyen@synopsys.com>
+ <YFncvgvAjSNvmZk/@kroah.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <9074de11-f1ad-50c3-6f4d-9da59fd8aa12@linux.intel.com>
+Date:   Tue, 23 Mar 2021 16:36:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Message-ID: <4ff4aeb5.e6c7.1785f7e4edc.Coremail.lyl2019@mail.ustc.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: LkAmygAHTZx4+1lgt0ElAA--.0W
-X-CM-SenderInfo: ho1ojiyrz6zt1loo32lwfovvfxof0/1tbiAQsJBlQhn5WXXgACsx
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
+In-Reply-To: <YFncvgvAjSNvmZk/@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCg0KPiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tDQo+IOWPkeS7tuS6ujogIk1pa2EgV2VzdGVy
-YmVyZyIgPG1pa2Eud2VzdGVyYmVyZ0BsaW51eC5pbnRlbC5jb20+DQo+IOWPkemAgeaXtumXtDog
-MjAyMS0wMy0yMyAyMjowNjo0NyAo5pif5pyf5LqMKQ0KPiDmlLbku7bkuro6ICJMdiBZdW5sb25n
-IiA8bHlsMjAxOUBtYWlsLnVzdGMuZWR1LmNuPg0KPiDmioTpgIE6IGFuZHJlYXMubm9ldmVyQGdt
-YWlsLmNvbSwgbWljaGFlbC5qYW1ldEBpbnRlbC5jb20sIFllaGV6a2VsU2hCQGdtYWlsLmNvbSwg
-bGludXgtdXNiQHZnZXIua2VybmVsLm9yZywgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0K
-PiDkuLvpopg6IFJlOiBbUEFUQ0hdIHRodW5kZXJib2x0OiBGaXggYSBkb3VibGUgcHV0IGluIHRi
-X2NmZ19yZWFkX3Jhdw0KPiANCj4gSGksDQo+IA0KPiBPbiBNb24sIE1hciAyMiwgMjAyMSBhdCAw
-ODoxNToxMlBNIC0wNzAwLCBMdiBZdW5sb25nIHdyb3RlOg0KPiA+IEluIHRiX2NmZ19yZWFkX3Jh
-dywgcmVxIGlzIGFsbG9jYXRlZCBieSB0Yl9jZmdfcmVxdWVzdF9hbGxvYygpDQo+ID4gd2l0aCBh
-biBpbml0aWFsIHJlZmVyZW5jZS4gQmVmb3JlIGNhbGxpbmcgdGJfY2ZnX3JlcXVlc3Rfc3luYygp
-LA0KPiA+IHRoZXJlIGlzIG5vIHJlZmNvdW50IGluYyBvcGVyYXRpb24uIHRiX2NmZ19yZXF1ZXN0
-X3N5bmMoKQ0KPiA+IGNhbGxzIHRiX2NmZ19yZXF1ZXN0KC4uLHJlcSwuLikgYW5kIGlmIHRoZSBj
-YWxsZWUgZmFpbGVkLA0KPiA+IHRoZSBpbml0aWFsIHJlZmVyZW5jZSBvZiByZXEgaXMgZHJvcHBl
-ZCBhbmQgcmVxIGlzIGZyZWVkLg0KPiA+IA0KPiA+IExhdGVyIGluIHRiX2NmZ19yZWFkX3JhdyBi
-ZWZvcmUgdGhlIGVyciBjaGVjaywNCj4gPiB0Yl9jZmdfcmVxdWVzdF9wdXQocmVxKSBpcyBjYWxs
-ZWQgYWdhaW4uIEl0IG1heSBjYXVzZSBlcnJvcg0KPiA+IGluIHJhY2UuDQo+IA0KPiBIbW0sIHRi
-X2NmZ19yZXF1ZXN0KCkgZG9lcyB0Yl9jZmdfcmVxdWVzdF9nZXQoKSB0b28gYW5kIGluIGNhc2Ug
-b2YgZXJyb3INCj4gaXQgZG9lcyB0Yl9jZmdfcmVxdWVzdF9wdXQoKS4gU28gdGhlIHJlZmNvdW50
-IHNob3VsZCBiZSBmaW5lLiBXaGF0IGFtIEkNCj4gbWlzc2luZz8NCj4gDQo+ID4gDQo+ID4gTXkg
-cGF0Y2ggcHV0cyB0Yl9jZmdfcmVxdWVzdF9wdXQocmVxKSBhZnRlciB0aGUgZXJyIGNoZWNrDQo+
-ID4gZmluaXNoZWQgdG8gYXZvaWQgdW5leHBlY3RlZCByZXN1bHQuDQo+ID4gDQo+ID4gU2lnbmVk
-LW9mZi1ieTogTHYgWXVubG9uZyA8bHlsMjAxOUBtYWlsLnVzdGMuZWR1LmNuPg0KPiA+IC0tLQ0K
-PiA+ICBkcml2ZXJzL3RodW5kZXJib2x0L2N0bC5jIHwgNCArKy0tDQo+ID4gIDEgZmlsZSBjaGFu
-Z2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+ID4gDQo+ID4gZGlmZiAtLWdp
-dCBhL2RyaXZlcnMvdGh1bmRlcmJvbHQvY3RsLmMgYi9kcml2ZXJzL3RodW5kZXJib2x0L2N0bC5j
-DQo+ID4gaW5kZXggZjFhZWFmZjlmMzY4Li5iYjYwMjY5Yzg5YWIgMTAwNjQ0DQo+ID4gLS0tIGEv
-ZHJpdmVycy90aHVuZGVyYm9sdC9jdGwuYw0KPiA+ICsrKyBiL2RyaXZlcnMvdGh1bmRlcmJvbHQv
-Y3RsLmMNCj4gPiBAQCAtODkwLDExICs4OTAsMTEgQEAgc3RydWN0IHRiX2NmZ19yZXN1bHQgdGJf
-Y2ZnX3JlYWRfcmF3KHN0cnVjdCB0Yl9jdGwgKmN0bCwgdm9pZCAqYnVmZmVyLA0KPiA+ICANCj4g
-PiAgCQlyZXMgPSB0Yl9jZmdfcmVxdWVzdF9zeW5jKGN0bCwgcmVxLCB0aW1lb3V0X21zZWMpOw0K
-PiA+ICANCj4gPiAtCQl0Yl9jZmdfcmVxdWVzdF9wdXQocmVxKTsNCj4gPiAtDQo+ID4gIAkJaWYg
-KHJlcy5lcnIgIT0gLUVUSU1FRE9VVCkNCj4gPiAgCQkJYnJlYWs7DQo+ID4gIA0KPiA+ICsJCXRi
-X2NmZ19yZXF1ZXN0X3B1dChyZXEpOw0KPiA+ICsNCj4gPiAgCQkvKiBXYWl0IGEgYml0IChhcmJp
-dHJhcnkgdGltZSkgdW50aWwgd2Ugc2VuZCBhIHJldHJ5ICovDQo+ID4gIAkJdXNsZWVwX3Jhbmdl
-KDEwLCAxMDApOw0KPiA+ICAJfQ0KPiA+IC0tIA0KPiA+IDIuMjUuMQ0KPiA+IA0KDQpJJ20gdmVy
-eSBzb3JyeSwgaSB3YXMgYXNoYW1lZCB0aGF0IGkgaGFkIG1pc3NlZCB0aGUgdGJfY2ZnX3JlcXVl
-c3RfZ2V0KCkgaW4gdGJfY2ZnX3JlcXVlc3QoKS4NCg0KVGhhbmtzLg0K
+On 23.3.2021 14.19, Greg Kroah-Hartman wrote:
+> On Wed, Mar 10, 2021 at 07:42:35PM -0800, Thinh Nguyen wrote:
+>> This series add some missing support for USB 3.2 SuperSpeed Plus detection on
+>> the host side. A SuperSpeed Plus device can operate in gen2x2, gen2x1, or
+>> gen1x2. The current implementation can't detect whether the device is in Gen 1
+>> or Gen 2 speed. We can do this by matching for the lane speed exponent and
+>> mantissa of the SSP sublink speed capability descriptor from the hub driver.
+>>
+>> Also, the current xHCI driver is missing some reports for the default SSP
+>> Sublink Speed capability for USB 3.2 roothub. This series also add some support
+>> for xHCI driver detecting various SuperSpeed Plus GenXxY.
+> 
+> I took the first 4 patches already and will wait for Mathias to review
+> the rest.
+> 
+> thanks,
+> 
+> greg k-h
+> 
+
+For patches 4 to 8
+
+Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
