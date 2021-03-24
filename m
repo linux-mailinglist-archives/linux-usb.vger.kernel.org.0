@@ -2,115 +2,236 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E2E346E40
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 01:29:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA84346E4C
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 01:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233645AbhCXA2c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Mar 2021 20:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234464AbhCXA2A (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Mar 2021 20:28:00 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24340C061765
-        for <linux-usb@vger.kernel.org>; Tue, 23 Mar 2021 17:28:00 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id x126so16075122pfc.13
-        for <linux-usb@vger.kernel.org>; Tue, 23 Mar 2021 17:28:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ArpAGDPO5Zy1J8ZuYbtiaQIyLb1VNF1C+x2MhSZdMr4=;
-        b=NSWaX3i9OKqQTUJpTPB+E9DCf9hW1pebAdgYQy3jt9zPaKJaPWFASPZofTINEVIvYW
-         6pyE9MQMHhc8oLRLUGIoj5ST15nG2oUDt1UCgrZ7p9yMGzEoKYVSGY2ZZyjTOXusFBeJ
-         OwCr61rXmKgl3CNqEngUZw+73q5ADUmlulo3Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ArpAGDPO5Zy1J8ZuYbtiaQIyLb1VNF1C+x2MhSZdMr4=;
-        b=otOKzxqbNzoWNpazIoH+YywmAJbuk5Gr0yLJcpA6ET30HGUi8yZYSgwxUh7Ys6ZpvE
-         bCGeq3cuKuA+9SO2mLBWdrOdArpXRzkjXJx51JleLQS0x5g6CY1gZ43W5hKSYsv7CRa0
-         tuXeDqakLoN6H90ZGoLmo+O7Ycr0qmb+IiG8EcKsjbFgGvnYfcm/kKPtUxm73KBeqh6Z
-         QU61X7WCP24MkJNdj6CNeQ7/z1ZigtVtJVTSeR+1Zc5Azg4Ui7FDLyMYZx9wP9MAddt2
-         z16+84PuDdyPeUZO/Xli855RRKudUXVJbvm6btM+l8NlyZUCWT2FYFA3sctSCL+RoaGu
-         hQeg==
-X-Gm-Message-State: AOAM530aw+AH8bgyZaK5DHnpf5tovu+dDo0Lgwo+KGDYMbPw5X+nEy7C
-        Ig2y669XSHZqVwhlQtthbivO2A==
-X-Google-Smtp-Source: ABdhPJxjsgxfWM1AN6PzKOVTywe9JPoDDNk0S5uHejboMITv1/9Wv/diAYCV0W0vMKldqz6Y0Res/g==
-X-Received: by 2002:a63:2349:: with SMTP id u9mr661932pgm.361.1616545678567;
-        Tue, 23 Mar 2021 17:27:58 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:40a3:9725:46c3:85f6])
-        by smtp.gmail.com with UTF8SMTPSA id q66sm295428pja.27.2021.03.23.17.27.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Mar 2021 17:27:57 -0700 (PDT)
-Date:   Tue, 23 Mar 2021 17:27:55 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>
-Subject: Re: [PATCH v5 1/4] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <YFqHi91eIcVx2ak1@google.com>
-References: <1616434280-32635-1-git-send-email-sanm@codeaurora.org>
- <1616434280-32635-2-git-send-email-sanm@codeaurora.org>
+        id S233799AbhCXAiA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 20:38:00 -0400
+Received: from mga05.intel.com ([192.55.52.43]:8715 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233822AbhCXAhs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Mar 2021 20:37:48 -0400
+IronPort-SDR: ZtcLHpsKXDVrwbBZj4Syp5HArj1Utocy4TaZA2oFixqpPpq8m62xLdKH7+uyO2O4MTfU8AsXAj
+ iEMnbWT3jJkA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9932"; a="275696533"
+X-IronPort-AV: E=Sophos;i="5.81,272,1610438400"; 
+   d="scan'208";a="275696533"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2021 17:37:47 -0700
+IronPort-SDR: e2TehhKXE6/aWTHHT8qqQY64IrfIK0SV5tJPPkZHePwnvOM+OnPo9VDRut1Qt72dNALSyCsbW4
+ 3sBuf/3J4zSw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,272,1610438400"; 
+   d="scan'208";a="452366088"
+Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 23 Mar 2021 17:37:45 -0700
+Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lOrWq-0000tE-Gl; Wed, 24 Mar 2021 00:37:44 +0000
+Date:   Wed, 24 Mar 2021 08:37:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 0bd860493f81eb2a46173f6f5e44cc38331c8dbd
+Message-ID: <605a89b9.IO64du8o7uJjOxnZ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1616434280-32635-2-git-send-email-sanm@codeaurora.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 22, 2021 at 11:01:17PM +0530, Sandeep Maheswaram wrote:
-> Avoiding phy powerdown when wakeup capable devices are connected.
-> 
-> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> ---
->  drivers/usb/dwc3/core.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 94fdbe5..9ecd7ac 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1702,7 +1702,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  		dwc3_core_exit(dwc);
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
-> -		if (!PMSG_IS_AUTO(msg)) {
-> +		if (!PMSG_IS_AUTO(msg) && dwc->phy_power_off) {
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 0bd860493f81eb2a46173f6f5e44cc38331c8dbd  USB: quirks: ignore remote wake-up on Fibocom L850-GL LTE modem
 
-This is the first patch of the series, but the 'phy_power_off' flag is
-only added by '[2/4] usb: dwc3: host: Add suspend_quirk for dwc3 host'.
-Patches should not rely on later patches in the series in order to build
-error/warning free. It seems you need to swap the order of patch 1 and 2.
+elapsed time: 726m
 
->  			dwc3_core_exit(dwc);
->  			break;
->  		}
-> @@ -1763,13 +1763,15 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
->  		spin_unlock_irqrestore(&dwc->lock, flags);
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
-> -		if (!PMSG_IS_AUTO(msg)) {
-> +		if (!PMSG_IS_AUTO(msg) && dwc->phy_power_off) {
->  			ret = dwc3_core_init_for_resume(dwc);
->  			if (ret)
->  				return ret;
->  			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
->  			break;
-> -		}
-> +		} else
-> +			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> +
+configs tested: 174
+configs skipped: 2
 
-nit: use curly braces since the 'if' block has them.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+x86_64                           allyesconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+i386                             allyesconfig
+mips                        workpad_defconfig
+powerpc                 mpc8313_rdb_defconfig
+mips                     cu1000-neo_defconfig
+arm                        mini2440_defconfig
+powerpc                     redwood_defconfig
+mips                            ar7_defconfig
+m68k                            mac_defconfig
+m68k                             allyesconfig
+arm                          imote2_defconfig
+mips                      bmips_stb_defconfig
+arm                   milbeaut_m10v_defconfig
+arm                         mv78xx0_defconfig
+arm                           h5000_defconfig
+arm                        spear3xx_defconfig
+powerpc                 mpc836x_rdk_defconfig
+arm                            lart_defconfig
+m68k                        m5307c3_defconfig
+h8300                    h8300h-sim_defconfig
+sh                   rts7751r2dplus_defconfig
+arm                           sunxi_defconfig
+sh                         ap325rxa_defconfig
+mips                         bigsur_defconfig
+m68k                        m5407c3_defconfig
+arm                            hisi_defconfig
+arm                        vexpress_defconfig
+sh                   sh7724_generic_defconfig
+powerpc                      walnut_defconfig
+powerpc                     sequoia_defconfig
+xtensa                  audio_kc705_defconfig
+arm                         s3c2410_defconfig
+arc                          axs103_defconfig
+m68k                       m5208evb_defconfig
+powerpc                     ksi8560_defconfig
+arm                            mps2_defconfig
+arm                         shannon_defconfig
+arm                       omap2plus_defconfig
+arm                      tct_hammer_defconfig
+powerpc                      cm5200_defconfig
+powerpc                  iss476-smp_defconfig
+arm                      pxa255-idp_defconfig
+arm                          exynos_defconfig
+powerpc                    adder875_defconfig
+arm                           omap1_defconfig
+powerpc                     tqm8560_defconfig
+arm                        trizeps4_defconfig
+xtensa                  cadence_csp_defconfig
+sh                     magicpanelr2_defconfig
+arc                        vdk_hs38_defconfig
+ia64                        generic_defconfig
+arc                        nsim_700_defconfig
+arm                          pxa910_defconfig
+xtensa                  nommu_kc705_defconfig
+powerpc                    socrates_defconfig
+nds32                             allnoconfig
+arm                       imx_v6_v7_defconfig
+arm                        neponset_defconfig
+sh                            hp6xx_defconfig
+arm                         orion5x_defconfig
+mips                         tb0219_defconfig
+mips                        jmr3927_defconfig
+ia64                      gensparse_defconfig
+microblaze                      mmu_defconfig
+arm                         nhk8815_defconfig
+mips                malta_qemu_32r6_defconfig
+mips                       capcella_defconfig
+arm                         lubbock_defconfig
+powerpc                   bluestone_defconfig
+arc                     haps_hs_smp_defconfig
+s390                             alldefconfig
+mips                            e55_defconfig
+sh                     sh7710voipgw_defconfig
+m68k                        stmark2_defconfig
+mips                           ip28_defconfig
+powerpc                      obs600_defconfig
+m68k                        mvme16x_defconfig
+powerpc                 mpc8272_ads_defconfig
+powerpc                 linkstation_defconfig
+powerpc                     rainier_defconfig
+mips                        maltaup_defconfig
+arm                          pxa168_defconfig
+arm                          collie_defconfig
+arm                         lpc18xx_defconfig
+sh                ecovec24-romimage_defconfig
+mips                           rs90_defconfig
+sh                        sh7785lcr_defconfig
+sh                           se7721_defconfig
+arm                     davinci_all_defconfig
+powerpc                      ppc6xx_defconfig
+powerpc                 mpc834x_mds_defconfig
+sh                          rsk7201_defconfig
+arm                             pxa_defconfig
+powerpc                     tqm8555_defconfig
+powerpc                       eiger_defconfig
+mips                     cu1830-neo_defconfig
+powerpc64                           defconfig
+mips                          ath25_defconfig
+mips                         tb0287_defconfig
+arm                         axm55xx_defconfig
+arc                 nsimosci_hs_smp_defconfig
+powerpc                     asp8347_defconfig
+arc                            hsdk_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a002-20210323
+x86_64               randconfig-a003-20210323
+x86_64               randconfig-a006-20210323
+x86_64               randconfig-a001-20210323
+x86_64               randconfig-a004-20210323
+x86_64               randconfig-a005-20210323
+i386                 randconfig-a003-20210323
+i386                 randconfig-a004-20210323
+i386                 randconfig-a001-20210323
+i386                 randconfig-a002-20210323
+i386                 randconfig-a006-20210323
+i386                 randconfig-a005-20210323
+i386                 randconfig-a014-20210323
+i386                 randconfig-a011-20210323
+i386                 randconfig-a015-20210323
+i386                 randconfig-a016-20210323
+i386                 randconfig-a012-20210323
+i386                 randconfig-a013-20210323
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a012-20210323
+x86_64               randconfig-a015-20210323
+x86_64               randconfig-a013-20210323
+x86_64               randconfig-a014-20210323
+x86_64               randconfig-a011-20210323
+x86_64               randconfig-a016-20210323
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
