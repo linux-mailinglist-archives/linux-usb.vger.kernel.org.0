@@ -2,175 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 084E534733E
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 09:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB5B34745E
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 10:18:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233286AbhCXIP6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Mar 2021 04:15:58 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:24833 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbhCXIP2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 04:15:28 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1616573728; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=Y5h9gceNYtNF2VMK8tg+/n2jNlHo9HgwZ5dGzFZ5Hp4=; b=m4SDzPx9NaUknee6AJc/XKfv9sK40BZ/+tpQFmNqpUuQeKCSwJOb38J1Z5RIqL5uqr/aQbx0
- 50MmH6dkZTAC2K5aAiG0T+AM1JytIM9TymbD17vXw55CZGGKIipHfuPh8jlZ6EAyEgCIcQRF
- bnID85FW9/C+p15oPlsztAELnr4=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 605af5065d70193f88e29c30 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 24 Mar 2021 08:15:02
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 4E236C43463; Wed, 24 Mar 2021 08:15:02 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5EBF8C433CA;
-        Wed, 24 Mar 2021 08:15:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 5EBF8C433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-Date:   Wed, 24 Mar 2021 01:14:57 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Kathiravan T <kathirav@codeaurora.org>
-Cc:     Baruch Siach <baruch@tkos.co.il>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Balaji Prakash J <bjagadee@codeaurora.org>,
-        kathirav=codeaurora.org@codeaurora.org
-Subject: Re: [PATCH] usb: dwc3: reference clock configuration
-Message-ID: <20210324081457.GB17922@jackp-linux.qualcomm.com>
-References: <8fc38cb73afd31269f1ea0c28e73604c53cebb17.1612764006.git.baruch@tkos.co.il>
- <YCGCRQpqVNI2KZyi@builder.lan>
- <87sg64wj01.fsf@tarshish>
- <e1a05b5c6bf70e62b526a7a7d70b1a12@codeaurora.org>
- <e460e5afb0661b5867ee089b3efb0bc5@codeaurora.org>
+        id S231661AbhCXJRx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Mar 2021 05:17:53 -0400
+Received: from mga01.intel.com ([192.55.52.88]:36267 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231781AbhCXJRf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 24 Mar 2021 05:17:35 -0400
+IronPort-SDR: 5FHTzyN3wd2VBxYb9ApD1NM7YyoxJA/Ek/SuUV7OtQsYPcw5lBzgY5qSYgNvhE472C3gJCMRPF
+ fmVbxTag+obg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9932"; a="210767532"
+X-IronPort-AV: E=Sophos;i="5.81,274,1610438400"; 
+   d="scan'208";a="210767532"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2021 02:17:34 -0700
+IronPort-SDR: rgkkpogi6O4X6zsxcekCIIXoijHXVkvV7NExVJnZkQPvtZmDKtw/061aglYKffygCHZ/j70SGE
+ nFtnn9lnJTdA==
+X-IronPort-AV: E=Sophos;i="5.81,274,1610438400"; 
+   d="scan'208";a="452518273"
+Received: from shao2-debian.sh.intel.com (HELO [10.239.13.11]) ([10.239.13.11])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2021 02:17:31 -0700
+Subject: Re: [PATCH v4 2/2] usb: dwc3: Add driver for Xilinx platforms
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        kernel test robot <lkp@intel.com>
+Cc:     Manish Narani <manish.narani@xilinx.com>, robh+dt@kernel.org,
+        michal.simek@xilinx.com, balbi@kernel.org, p.zabel@pengutronix.de,
+        kbuild-all@lists.01.org, git@xilinx.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <1615963949-75320-3-git-send-email-manish.narani@xilinx.com>
+ <202103171704.VHPs8XOA-lkp@intel.com> <YFnVZEFr3xBsRdiX@kroah.com>
+From:   Rong Chen <rong.a.chen@intel.com>
+Message-ID: <8fdd5b27-fb70-df01-62a2-474df5301485@intel.com>
+Date:   Wed, 24 Mar 2021 17:16:43 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e460e5afb0661b5867ee089b3efb0bc5@codeaurora.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <YFnVZEFr3xBsRdiX@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Kathiravan, Baruch,
 
-On Thu, Feb 25, 2021 at 10:17:49PM +0530, Kathiravan T wrote:
-> On 2021-02-15 22:28, Kathiravan T wrote:
-> > On 2021-02-10 11:40, Baruch Siach wrote:
-> > > Hi Bjorn,
-> > > 
-> > > Thanks for your review comments.
-> > > 
-> > > On Mon, Feb 08 2021, Bjorn Andersson wrote:
-> > > > On Mon 08 Feb 00:00 CST 2021, Baruch Siach wrote:
-> > > > > From: Balaji Prakash J <bjagadee@codeaurora.org>
-> > > > > 
-> > > > > DWC_USB3_GFLADJ and DWC_USB3_GUCTL registers contain options
-> > > > > to control the behavior of controller with respect to SOF and ITP.
-> > > > > The reset values of these registers are aligned for 19.2 MHz
-> > > > > reference clock source. This change will add option to override
-> > > > > these settings for reference clock other than 19.2 MHz
-> > > > > 
-> > > > > Tested on IPQ6018 SoC based CP01 board with 24MHz reference clock.
-> > > > > 
-> > > > > Signed-off-by: Balaji Prakash J <bjagadee@codeaurora.org>
-> > > > > [ baruch: mention tested hardware ]
-> > > > > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > > > > ---
-> > > > >  .../devicetree/bindings/usb/dwc3.txt          |  5 ++
-> > > > >  drivers/usb/dwc3/core.c                       | 52
-> > > > > +++++++++++++++++++
-> > > > >  drivers/usb/dwc3/core.h                       | 12 +++++
-> > > > >  3 files changed, 69 insertions(+)
-> > > > > 
-> > > > > diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt
-> > > > > b/Documentation/devicetree/bindings/usb/dwc3.txt
-> > > > > index 1aae2b6160c1..4ffa87b697dc 100644
-> > > > > --- a/Documentation/devicetree/bindings/usb/dwc3.txt
-> > > > > +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
-> > > > > @@ -89,6 +89,11 @@ Optional properties:
-> > > > >   - snps,quirk-frame-length-adjustment: Value for
-> > > > > GFLADJ_30MHZ field of GFLADJ
-> > > > >  	register for post-silicon frame length adjustment when the
-> > > > >  	fladj_30mhz_sdbnd signal is invalid or incorrect.
-> > > > > + - snps,quirk-ref-clock-adjustment: Value for
-> > > > > GFLADJ_REFCLK_* fields of GFLADJ
-> > > > > +	register for reference clock other than 19.2 MHz is used.
-> > > > 
-> > > > What are typical values for this property? What unit does it
-> > > > have? How
-> > > > does it actually relate to the frequency of the reference clock?
-> > > 
-> > > Downstream codeaurora kernel (fig branch) sets 0xA87F0 for IPQ6018
-> > > (24MHz reference clock), and 0x49459 for IPQ5018 (60MHz). So this
-> > > value
-> > > appears to correlates with clock rate. I have no access to DWC3
-> > > documentation. I only tested IPQ6018 hardware.
-> > > 
-> > 
-> > It will be written as (0xA87F0 << 7) retaining the 0-7 LSB value.
-> > I could see, BIT(23) of GFLADJ register enables the functionality of
-> > running SOF/ITP counters based on the reference clock. Since this bit
-> > is set, we need to
-> > compute the other fields as well i.e., from 8th bit to 31st bit.
-> > Finally it is derived to
-> > 0xA87F0 for IPQ6018.
-> > 
-> 
-> Bjorn / All,
-> 
-> Any comments on this? Please do suggest if this can be handled in a better
-> way.
-> 
-> 
-> > 
-> > > > > + - snps,quirk-ref-clock-period: Value for REFCLKPER filed
-> > > > > of GUCTL. This field
-> > > > > +	indicates in terms of nano seconds the period of ref_clk.
-> > > > > To calculate the
-> > > > > +	ideal value, REFCLKPER = (1/ref_clk in Hz)*10^9.
-> > > > 
-> > > > Can't we make the dwc3 reference this clock and use
-> > > > clk_get_rate() and
-> > > > then do this math in the driver?
-> > > 
-> > > This is doable, I believe. Though current code does not identify
-> > > specific clocks, as far as I can see.
 
-I agree it should be doable. Looks like prior to 0d3a97083e0c ("usb:
-dwc3: Rework clock initialization to be more flexible") the core did
-support specific clocks ("ref", "bus_early", "suspend"), but was
-changed to use a simpler devm_clk_bulk_get_all() call.
+On 3/23/21 7:47 PM, Greg KH wrote:
+> On Wed, Mar 17, 2021 at 05:50:22PM +0800, kernel test robot wrote:
+>> Hi Manish,
+>>
+>> Thank you for the patch! Perhaps something to improve:
+>>
+>> [auto build test WARNING on usb/usb-testing]
+>> [also build test WARNING on robh/for-next v5.12-rc3 next-20210316]
+>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>> And when submitting patch, we suggest to use '--base' as documented in
+>> https://git-scm.com/docs/git-format-patch]
+>>
+>> url:    https://github.com/0day-ci/linux/commits/Manish-Narani/Add-a-separate-DWC3-OF-driver-for-Xilinx-platforms/20210317-145425
+>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+>> config: arm64-allyesconfig (attached as .config)
+>> compiler: aarch64-linux-gcc (GCC) 9.3.0
+>> reproduce (this is a W=1 build):
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # https://github.com/0day-ci/linux/commit/def409fdf931cd77f4a88812570ea6f38f4053d8
+>>          git remote add linux-review https://github.com/0day-ci/linux
+>>          git fetch --no-tags linux-review Manish-Narani/Add-a-separate-DWC3-OF-driver-for-Xilinx-platforms/20210317-145425
+>>          git checkout def409fdf931cd77f4a88812570ea6f38f4053d8
+>>          # save the attached .config to linux build tree
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=arm64
+>>
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> All warnings (new ones prefixed by >>):
+>>
+>>>> drivers/usb/dwc3/dwc3-xilinx.c:27: warning: expecting prototype for dwc3(). Prototype was for XLNX_USB_PHY_RST_EN() instead
+>>
+>> vim +27 drivers/usb/dwc3/dwc3-xilinx.c
+>>
+>>      25	
+>>      26	/* USB phy reset mask register */
+>>    > 27	#define XLNX_USB_PHY_RST_EN			0x001C
+>>      28	#define XLNX_PHY_RST_MASK			0x1
+>>      29	
+> I do not understand this warning message.  What is it trying to say?
 
-> > We can mention one more clock(ref) in the USB device node and do the
-> > math (NSEC_PER_SEC / clk_get_rate()) in dwc3 driver.
+Hi Greg,
 
-Yea, just need to make sure "ref" clk is specified in the DT node. Then
-in the driver you can just iterate through dwc->clks and try to find one
-with .id=="ref". If clk_get_rate() succeeds then you can use the value
-to calculate the GUCTL.REFCLKPER and GFLADJ register fields.
+It's a kernel-doc warning:
 
-Or perhaps even use a lookup table, since according to the DWC3
-programming guide only 6 refclk frequencies (16, 17, 19.2, 20, 24, 39.7
-MHz) are supported so that might be simpler than a few integer divide
-operations that would otherwise be required.
+$ ./scripts/kernel-doc -none drivers/usb/dwc3/dwc3-xilinx.c
+drivers/usb/dwc3/dwc3-xilinx.c:27: warning: expecting prototype for 
+dwc3(). Prototype was for XLNX_USB_PHY_RST_EN() instead
 
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+the root cause is that there's a redundant symbol ( * ) at the beginning:
+
+diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
+index a59e1494b1a0..f42f4cbffab0 100644
+--- a/drivers/usb/dwc3/dwc3-xilinx.c
++++ b/drivers/usb/dwc3/dwc3-xilinx.c
+@@ -1,5 +1,5 @@
+  // SPDX-License-Identifier: GPL-2.0
+-/**
++/*
+   * dwc3-xilinx.c - Xilinx DWC3 controller specific glue driver
+   *
+   * Authors: Manish Narani <manish.narani@xilinx.com>
+
+Best Regards,
+Rong Chen
+
+>
+> confused,
+>
+> greg k-h
+>
+
