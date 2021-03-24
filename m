@@ -2,77 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3519348320
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 21:52:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C85F6348361
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 22:06:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238181AbhCXUvq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Mar 2021 16:51:46 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:37606 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238224AbhCXUve (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 16:51:34 -0400
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Alexey Brodkin <abrodkin@synopsys.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v7 6/7] usb: dwc3: qcom: Detect DWC3 DT-nodes using compatible string
-Date:   Wed, 24 Mar 2021 23:48:35 +0300
-Message-ID: <20210324204836.29668-7-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20210324204836.29668-1-Sergey.Semin@baikalelectronics.ru>
-References: <20210324204836.29668-1-Sergey.Semin@baikalelectronics.ru>
+        id S238199AbhCXVFW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Mar 2021 17:05:22 -0400
+Received: from mail-il1-f197.google.com ([209.85.166.197]:36754 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238179AbhCXVFE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 17:05:04 -0400
+Received: by mail-il1-f197.google.com with SMTP id s13so2645337ilp.3
+        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 14:05:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=mROZGZumZQMQOnoXlCDQGKmXabY17Zv1cEv6eXCZ7B0=;
+        b=R668Zz9vYeTJiS0o9YYbOEmotGSnCxCwu/PpMJRBRXY6PHlbkG47hEmFG5CSJjIR20
+         a8glCoCWVkAJCMTQ+9nzPmiVFfFqF41EGuFKS219A2Ib+y42TcDNcGUyEC6kGkqOJNjB
+         Q+21oBpdVn1VCDFjm4Yg3OlNR40/WIv7sOaT/VUhTH24NRbFxmD9P/0SdXbp8ekLmk/5
+         WKrAYHcErMep8mTD6o62WeG/La154dbuqMgdQpyIM6ggl4/XtRNxnX+7F5WVXSY5zOt3
+         hf7sLD9h+AgIt4MZr35eGATay8VRGhXw4HNDUgKb5gTozooneUx0yVC6qlD8QYSAZfze
+         Ba6A==
+X-Gm-Message-State: AOAM530dWCyd8UuV3Sl/7MYn5rhnX0olG2xkDMwvRRdWIqlhizaVpeoe
+        E/Xd6bprif6oAB1j3yeDhPtjYfn3mTAYdog9M0WVQUrFMvEZ
+X-Google-Smtp-Source: ABdhPJxSQCYWCzJpObAUcnvHHXPhUoZV/3wVmPom/l/7dIKev7tSKi/BGuOV4CxSH82tmIoAzqZDTyCoOH8IYSWW3GGqEgqhMaRl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Received: by 2002:a05:6638:218f:: with SMTP id s15mr4724845jaj.58.1616619904161;
+ Wed, 24 Mar 2021 14:05:04 -0700 (PDT)
+Date:   Wed, 24 Mar 2021 14:05:04 -0700
+In-Reply-To: <34e31fabb228da3cca292e6496dfa8a79c25c7d8.camel@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001fdd8305be4ea7a9@google.com>
+Subject: Re: [syzbot] UBSAN: shift-out-of-bounds in vhci_hub_control (2)
+From:   syzbot <syzbot+3dea30b047f41084de66@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, musamaanjum@gmail.com, shuah@kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
+        valentina.manea.m@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In accordance with the USB HCD/DRD schema all the USB controllers are
-supposed to have DT-nodes named with prefix "^usb(@.*)?". Since the
-existing DT-nodes will be renamed in a subsequent patch let's fix the DWC3
-Qcom-specific code to detect the DWC3 sub-node just by checking its
-compatible string to match the "snps,dwc3". The semantic of the code
-won't change seeing all the DWC USB3 nodes are supposed to have the
-compatible property with any of those strings set.
+Hello,
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
----
+Reported-and-tested-by: syzbot+3dea30b047f41084de66@syzkaller.appspotmail.com
 
-Changelog v7:
-- Replace "of_get_child_by_name(np, "usb") ?: of_get_child_by_name(np, "dwc3");"
-  pattern with using of_get_compatible_child() method.
-- Discard Bjorn Andersson Reviewed-by tag since the patch content
-  has been changed.
----
- drivers/usb/dwc3/dwc3-qcom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Tested on:
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index fcaf04483ad0..617a1be88371 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -644,7 +644,7 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
- 	struct device		*dev = &pdev->dev;
- 	int			ret;
- 
--	dwc3_np = of_get_child_by_name(np, "dwc3");
-+	dwc3_np = of_get_compatible_child(np, "snps,dwc3");
- 	if (!dwc3_np) {
- 		dev_err(dev, "failed to find dwc3 core child\n");
- 		return -ENODEV;
--- 
-2.30.1
+commit:         84196390 Merge tag 'selinux-pr-20210322' of git://git.kern..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4b6433fa3370faed
+dashboard link: https://syzkaller.appspot.com/bug?extid=3dea30b047f41084de66
+compiler:       
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1702d621d00000
 
+Note: testing is done by a robot and is best-effort only.
