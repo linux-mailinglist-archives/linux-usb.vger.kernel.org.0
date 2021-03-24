@@ -2,62 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C4C348556
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 00:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE8134858D
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 00:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235215AbhCXXcU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Mar 2021 19:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
+        id S235101AbhCXXuo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Mar 2021 19:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238675AbhCXXcL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 19:32:11 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1ECAC06175F
-        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 16:32:10 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id w21-20020a9d63950000b02901ce7b8c45b4so233051otk.5
-        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 16:32:10 -0700 (PDT)
+        with ESMTP id S235035AbhCXXuQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 19:50:16 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E51C06174A
+        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 16:50:14 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id x16so142346iob.1
+        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 16:50:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VDfCQ7mDypdFgGP02/nPELkWSb7fPDTztukepFJIbL4=;
-        b=R5R6IU6+nf9PEwIxttXJNeB5ZogHzhLJHJrml1vx4ANHnSTbJr5si8JL2GS5gXC9zz
-         BoXA1OBshfj+mFu8DeqHG6xH2Rx9ast2qbJHxh7lo1WE71fIXVAFberGCjKcQt7nK2Bj
-         EWVESIQwh4APGF8BCbhVdysdv0xPZBe29wNt8=
+        bh=tWobKMGywN9lDYnqfuiTkENNe/3dGwwygiSKXOJYwE4=;
+        b=GsyGv4HFZeZhqfrxRLrVpErgSqZY8dpEvKhLp8XmfIzVf+d6wk24feKlpRNRdF8LM1
+         njfdG81yjyK2ZVgmmjqVef4oYbxaBRfte1v3fMLJ3b4N5HCjLQCPyB3T/eNef2vgJeXV
+         5rgimpDED7MXA27rUONVrs1rwX/O1M+fOI7Bg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=VDfCQ7mDypdFgGP02/nPELkWSb7fPDTztukepFJIbL4=;
-        b=qbhrGJ/XRU5RitPZeZMPXgCb/p0IDLz5DMky84F0f78HbufVVTI2u8+vxDNJ2mXyUj
-         NJMhxVYmSCoeN3kL8x6NNO9DAXwwyibLHNnUbbei7ABquS0T6rxC6jOjU7p1nxe+GBZL
-         IigiGfy/Kei+4NwnT1KGqu2OwOIlMdnA6E+2fB5u3zyw+UNaflX2lK2EMSHo727qNXTC
-         18/u5MNr7iR9kWa++7GO7CcnM1cxC5JJM3eN6MoLxe2hE3poNXgo9Wqd0Jgkpuzxs10p
-         Awqm7FS/wYAGq0SwVih7WQJYi7qwLhYdhuM1V0E02K1H/gZCp4G6nd29KNYEqlqK0VQX
-         We5A==
-X-Gm-Message-State: AOAM5322LWooFUk/qCxHrKFc4wXzmM9a2+tMJ2+YjbIK0SQ17+WDhYCy
-        nyf84us3c/pX5HVjIYycEg4wKA==
-X-Google-Smtp-Source: ABdhPJxjgjkcJJR2C6hsgUV8ZIiDU3Y1ioDMXbixrlz+0Mex/FrHQE2WAD6nRDh7anrod1IfmzoKEg==
-X-Received: by 2002:a05:6830:2472:: with SMTP id x50mr4972223otr.69.1616628730037;
-        Wed, 24 Mar 2021 16:32:10 -0700 (PDT)
+        bh=tWobKMGywN9lDYnqfuiTkENNe/3dGwwygiSKXOJYwE4=;
+        b=uIlhls0f8WjaID6SBYb5XXPV3KjiOGb5aZRd5fx3BeXWs3w7t8Rog3NfXLXQ7TdK/5
+         ihbAo7z6DsyAK1h2duLBOkaWRrW635sqkbzceDydqAEg5EHxl5CkIcQP12ZpRvcLkQ1F
+         LWd3p6BMPFmnpK7eGCCraF9sCUG95wFBTOcnSDv56uhogzo/MojLUxRaZM6X4kTY7Aks
+         hIBJ2451D32jsuOIWdgPkM4dLiv5WR7xillEL58gFecY2c/J5CC3gPJAWmP9xwbwZCi8
+         TxEj9BSZ4acOifbnGtGg4zo83Qfn3nqPdFVFbwx6Yku29ya+ZuAO3l3Y421NLRn2zHzn
+         wqqg==
+X-Gm-Message-State: AOAM530XEq4iIX72sD0D/aOit4ZTwmKN75S6Wx+hfYkaDYinfsV6jPGR
+        3QG5v8CwzOi9gnS+WYD+XjiKdzeLGpG3NA==
+X-Google-Smtp-Source: ABdhPJxqNLQeDkhxT42wTCPy1WEM8ZlhY3+7fg5XgBECeWHnTQGPwmWrwA+WcJAmAcdAQ3rE3wUegw==
+X-Received: by 2002:a05:6638:685:: with SMTP id i5mr5277100jab.109.1616629813977;
+        Wed, 24 Mar 2021 16:50:13 -0700 (PDT)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id v65sm732795oib.42.2021.03.24.16.32.09
+        by smtp.gmail.com with ESMTPSA id n11sm1740515ioa.34.2021.03.24.16.50.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Mar 2021 16:32:09 -0700 (PDT)
-Subject: Re: [PATCH] tools: usbip: list.h: fix kernel-doc for list_del()
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
+        Wed, 24 Mar 2021 16:50:13 -0700 (PDT)
+Subject: Re: [PATCH v5 1/2] usbip: tools: add options and examples in man page
+ related to device mode
+To:     "Hongren Zheng (Zenithal)" <i@zenithal.me>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Antonio Borneo <borneo.antonio@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        matt mooney <mfm@muteddisk.com>, linux-usb@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20210324000223.22043-1-rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org
+References: <YFrdyKKx1nx8bktm@Sun>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <0af7bfad-fff7-84be-8e7c-2ad3e93fb785@linuxfoundation.org>
-Date:   Wed, 24 Mar 2021 17:32:08 -0600
+Message-ID: <e2af75d1-8102-b0d9-3eab-0124f6b4dbe2@linuxfoundation.org>
+Date:   Wed, 24 Mar 2021 17:50:12 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <20210324000223.22043-1-rdunlap@infradead.org>
+In-Reply-To: <YFrdyKKx1nx8bktm@Sun>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -65,51 +70,162 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/23/21 6:02 PM, Randy Dunlap wrote:
-> In list.h, the kernel-doc for list_del() should be immediately
-> preceding the implementation and not separated from it by
-> another function implementation.
+On 3/24/21 12:35 AM, Hongren Zheng (Zenithal) wrote:
+> The commit e0546fd8b748 ("usbip: tools: Start using VUDC backend in
+> usbip tools") implemented device mode for user space tools, however the
+> corresponding options are not documented in man page.
 > 
-> Eliminates this kernel-doc error:
-> list.h:1: warning: 'list_del' not found
+> This commit documents the options and provides examples on device mode.
+> Also the command `usbip port` is documented.
 > 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Valentina Manea <valentina.manea.m@gmail.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Shuah Khan <skhan@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Hongren Zheng <i@zenithal.me>
 > ---
->   tools/usb/usbip/libsrc/list.h |   10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
+>   tools/usb/usbip/doc/usbip.8  | 42 +++++++++++++++++++++++++++++++++++-
+>   tools/usb/usbip/doc/usbipd.8 | 26 ++++++++++++++++++++++
+>   2 files changed, 67 insertions(+), 1 deletion(-)
 > 
-> --- linux-next-20210323.orig/tools/usb/usbip/libsrc/list.h
-> +++ linux-next-20210323/tools/usb/usbip/libsrc/list.h
-> @@ -77,17 +77,17 @@ static inline void __list_del(struct lis
->   #define LIST_POISON1  ((void *) 0x00100100 + POISON_POINTER_DELTA)
->   #define LIST_POISON2  ((void *) 0x00200200 + POISON_POINTER_DELTA)
+> PATCH v2:
+>       Add signed-off-by line
+> 
+> PATCH v3:
+>       Move patch changelog after the marker line
+>       Remove nickname in signed-off-by line
+> 
+> PATCH v4:
+>       Use commit short hash and message instead of long hash only when
+>         referring to commit in the kernel
+> 
+> PATCH v5:
+>      Add documentation of `usbip port` and its usage in examples
+>      Add flow of detaching in examples
+>      Rephrase some description and add punctuations
+>      Fix typo of `usbip attach --ev-id` to `--dev-id`
+> 
+> diff --git a/tools/usb/usbip/doc/usbip.8 b/tools/usb/usbip/doc/usbip.8
+> index a15d20063b98..1f26e4a00638 100644
+> --- a/tools/usb/usbip/doc/usbip.8
+> +++ b/tools/usb/usbip/doc/usbip.8
+> @@ -49,10 +49,17 @@ then exit.
+>   Attach a remote USB device.
+>   .PP
 >   
-> +static inline void __list_del_entry(struct list_head *entry)
-> +{
-> +	__list_del(entry->prev, entry->next);
-> +}
+> +.HP
+> +\fBattach\fR \-\-remote=<\fIhost\fR> \-\-device=<\fIdev_id\fR>
+> +.IP
+> +Attach a remote USB gadget.
+> +Only used when the remote usbipd is in device mode.
+> +.PP
 > +
->   /**
->    * list_del - deletes entry from list.
->    * @entry: the element to delete from the list.
->    * Note: list_empty() on entry does not return true after this, the entry is
->    * in an undefined state.
->    */
-> -static inline void __list_del_entry(struct list_head *entry)
-> -{
-> -	__list_del(entry->prev, entry->next);
-> -}
-> -
->   static inline void list_del(struct list_head *entry)
->   {
->   	__list_del(entry->prev, entry->next);
+>   .HP
+>   \fBdetach\fR \-\-port=<\fIport\fR>
+>   .IP
+> -Detach an imported USB device.
+> +Detach an imported USB device/gadget.
+>   .PP
+>   
+>   .HP
+> @@ -73,12 +80,26 @@ Stop exporting a device so it can be used by a local driver.
+>   List USB devices exported by a remote host.
+>   .PP
+>   
+> +.HP
+> +\fBlist\fR \-\-device
+> +.IP
+> +List USB gadgets of local usbip-vudc.
+> +Only used when the local usbipd is in device mode.
+> +Note that this can not list usbip-vudc USB gadgets of the remote device mode usbipd.
+> +.PP
+> +
+>   .HP
+>   \fBlist\fR \-\-local
+>   .IP
+>   List local USB devices.
+>   .PP
+>   
+> +.HP
+> +\fBport\fR
+> +.IP
+> +List imported devices/gadgets.
+> +.PP
+> +
+>   
+>   .SH EXAMPLES
+>   
+> @@ -90,8 +111,27 @@ List local USB devices.
+>       client:# usbip attach --remote=server --busid=1-2
+>           - Connect the remote USB device.
+>   
+> +    client:# usbip port
+> +        - List imported devices/gadgets.
+> +
+>       client:# usbip detach --port=0
+>           - Detach the usb device.
+>   
+> +The following example shows the usage of device mode
+> +
+> +    server:# usbip list --device
+> +        - List gadgets exported by local usbipd server.
+> +
+> +    client:# modprobe vhci-hcd
+> +
+> +    client:# usbip attach --remote=server --device=usbip-vudc.0
+> +        - Connect the remote USB gadget.
+> +
+> +    client:# usbip port
+> +        - List imported devices/gadgets.
+> +
+> +    client:# usbip detach --port=0
+> +        - Detach the usb gadget.
+> +
+>   .SH "SEE ALSO"
+>   \fBusbipd\fP\fB(8)\fB\fP
+> diff --git a/tools/usb/usbip/doc/usbipd.8 b/tools/usb/usbip/doc/usbipd.8
+> index fb62a756893b..d974394f86a1 100644
+> --- a/tools/usb/usbip/doc/usbipd.8
+> +++ b/tools/usb/usbip/doc/usbipd.8
+> @@ -29,6 +29,12 @@ Bind to IPv4. Default is both.
+>   Bind to IPv6. Default is both.
+>   .PP
+>   
+> +.HP
+> +\fB\-e\fR, \fB\-\-device\fR
+> +.IP
+> +Run in device mode. Rather than drive an attached device, create a virtual UDC to bind gadgets to.
+> +.PP
+> +
+>   .HP
+>   \fB\-D\fR, \fB\-\-daemon\fR
+>   .IP
+> @@ -86,6 +92,26 @@ USB/IP client can connect and use exported devices.
+>           - A usb device 1-2 is now exportable to other hosts!
+>           - Use 'usbip unbind --busid=1-2' when you want to shutdown exporting and use the device locally.
+>   
+> +The following example shows the usage of device mode
+> +
+> +    server:# modprobe usbip-vudc
+> +        - Use /sys/class/udc/ interface.
+> +        - usbip-host is independent of this module.
+> +
+> +    server:# usbipd -e -D
+> +        - Start usbip daemon in device mode.
+> +
+> +    server:# modprobe g_mass_storage file=/tmp/tmp.img
+> +        - Bind a gadget to usbip-vudc.
+> +        - in this example, a mass storage gadget is bound.
+> +
+> +    server:# usbip list --device
+> +        - List gadgets exported by local usbipd server.
+> +
+> +    server:# modprobe -r g_mass_storage
+> +        - Unbind a gadget from usbip-vudc.
+> +        - in this example, the previous mass storage gadget is unbound.
+> +
+>   .SH "SEE ALSO"
+>   \fBusbip\fP\fB(8)\fB\fP
+>   
 > 
 
-Thank you for fixing this.
+Thank you. Looks good.
 
 Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
