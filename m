@@ -2,111 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 624A2347F70
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 18:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA56347F98
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 18:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237233AbhCXRej (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Mar 2021 13:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237245AbhCXReS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 13:34:18 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87930C0613E2
-        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 10:34:17 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id bx7so28565049edb.12
-        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 10:34:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=E7/N3FVykAR22YhzUhZ15csg3vPH/3PyPAZDl2mJTyE=;
-        b=VxIkrCxesyL14UeRs78vWlRa0oQXxXoxEI3HDGKMmeRkyUyy62wrRUC0w+4rynV6NY
-         Ll5Rif5st8hCJyM8cC5Uk2fs4HmA72rZFok6HzR70YSH2FDLHt+9VQ2xQh/Nys9MlSxC
-         P+PkpKSImwmZzOg3gBSgTPm8tYQidd6bJoT35BpgZHxu1t89/h/jNmRuH8LGfqALRXNj
-         GuXNxRk90IrloCGke9ercsKjjKupoV7R3RawwgaIqClYUTfdx3wdABc4Zi84J1zQ6ErP
-         QsDWP1QchO8lm4ioxgoQdnPwCcYH+TXz+vrXYv8VDQtcFiTAUShLkUZ8cg1+EXS+5uj2
-         Lhbg==
+        id S237075AbhCXRgp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Mar 2021 13:36:45 -0400
+Received: from mail-io1-f72.google.com ([209.85.166.72]:46659 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237184AbhCXRgP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 13:36:15 -0400
+Received: by mail-io1-f72.google.com with SMTP id w8so1928116iox.13
+        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 10:36:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=E7/N3FVykAR22YhzUhZ15csg3vPH/3PyPAZDl2mJTyE=;
-        b=DYsu9mbBzNMtbv+8rkgotwIL8S/csFf9sfl95Tt2YG7iEModu0mZRIgXasvYYixZZs
-         MSUVIio+vEeREwsaa6mVbxP2zhXTjxNsg8Orx4/NaOb1+Horcj3SCwAb2/lLEp8rLG/j
-         oUDL7rpN7bBvFihpRSstB9OLqiSgpMsI7oIqw8goOu5I6v1qGGeuWsfatzjwVFSWKGg7
-         Vwl6MaaKoIZt1rb8k2R3x82GX3zVvRA+PxxvXpeJRpRYbr63zZ9CcIu9yXbBx4+/CcRM
-         0i3pwD+h9qQmHDb5vktMs+sohYP3AI/0zcw6n6Xyaw0FlesfSh/Vl9qaTZM2W8SkbJfa
-         Dpow==
-X-Gm-Message-State: AOAM532HzSwGHofUfcDqSg19vcjog4OQSvnl4H9TatFPEfb7X8GWo0TY
-        eJ0O7ZdccDBRWENvafvfZ+n2Ag==
-X-Google-Smtp-Source: ABdhPJylv30JqRZMzBDUUnpDl1vh1UfuC6zxexY7SFcPJS3j7MrLyWiG3W7ZVfKXIThRWIH3JDu2mA==
-X-Received: by 2002:a50:fc94:: with SMTP id f20mr4711938edq.370.1616607256236;
-        Wed, 24 Mar 2021 10:34:16 -0700 (PDT)
-Received: from dell.default ([91.110.221.180])
-        by smtp.gmail.com with ESMTPSA id p19sm1466367edr.57.2021.03.24.10.34.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Mar 2021 10:34:15 -0700 (PDT)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Anssi Hannula <anssi.hannula@gmail.com>,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [PATCH 08/25] HID: usbhid: hid-pidff: Demote a couple kernel-doc abuses
-Date:   Wed, 24 Mar 2021 17:33:47 +0000
-Message-Id: <20210324173404.66340-9-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210324173404.66340-1-lee.jones@linaro.org>
-References: <20210324173404.66340-1-lee.jones@linaro.org>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=d3+3d6jtDAfbf+GrVq1Qg39NvVvFXf+9538V36yRUSU=;
+        b=nl1zW2HFg59ttS1t09C942T8svnqsDByTw70Hy9nK49tjPiqrr529qK5su9S9yHIkD
+         w505AJ9LvAIow/9zjyUCLkfktBsk2TlyHCOQSWvb2UpMQUGawAkv/zsVv+eEd0I0w40P
+         Hz9Y7IkfujQSvgWbv+E4p/efc7o36Han6L97pfscscYv2ApHQR90yyyQWnbZpNzRiUAZ
+         pzspLPHbcCWyA9Eq8XMzMasJoBYcnjAXrKsSq0DMZ75Wy+V8sIhNMcaLj54RCuHQzsd+
+         bu7DipPZvBpnQFpdrMQWv6hdbVk28zc+OuaZoN5u6Rkne8p9OMBljAMs5gFIQm+rCcoi
+         oH/g==
+X-Gm-Message-State: AOAM530xRoPKWqmvELfDz0G3wP4cyc0pcJoyDeCDjBuEHYlVpiMrKH0a
+        86OXSBNlS+xKdq2BrLwEcAxhF6P+yldRe7gT14fQUkmakbRv
+X-Google-Smtp-Source: ABdhPJxsi/nKXBOjK9tKvCSkjNR1gE52sVVkbu7LTJLTQBAOqNn/1bIURKBzhOmyPltX4xwB0IKh/VWOKGvqjov4yWz8/ppbJf8I
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a5e:dd0c:: with SMTP id t12mr3281038iop.50.1616607374591;
+ Wed, 24 Mar 2021 10:36:14 -0700 (PDT)
+Date:   Wed, 24 Mar 2021 10:36:14 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004dcb8c05be4bbcf8@google.com>
+Subject: [syzbot] UBSAN: shift-out-of-bounds in vhci_hub_control (2)
+From:   syzbot <syzbot+3dea30b047f41084de66@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, shuah@kernel.org,
+        syzkaller-bugs@googlegroups.com, valentina.manea.m@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+Hello,
 
- drivers/hid/usbhid/hid-pidff.c:512: warning: Function parameter or member 'dev' not described in 'pidff_playback'
- drivers/hid/usbhid/hid-pidff.c:512: warning: Function parameter or member 'effect_id' not described in 'pidff_playback'
- drivers/hid/usbhid/hid-pidff.c:512: warning: Function parameter or member 'value' not described in 'pidff_playback'
- drivers/hid/usbhid/hid-pidff.c:512: warning: expecting prototype for value times(). Prototype was for pidff_playback() instead
- drivers/hid/usbhid/hid-pidff.c:1005: warning: Function parameter or member 'pidff' not described in 'pidff_find_effects'
- drivers/hid/usbhid/hid-pidff.c:1005: warning: Function parameter or member 'dev' not described in 'pidff_find_effects'
- drivers/hid/usbhid/hid-pidff.c:1005: warning: expecting prototype for Find the implemented effect types(). Prototype was for pidff_find_effects() instead
+syzbot found the following issue on:
 
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: Anssi Hannula <anssi.hannula@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Cc: linux-input@vger.kernel.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
+HEAD commit:    84196390 Merge tag 'selinux-pr-20210322' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12ea778ad00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5adab0bdee099d7a
+dashboard link: https://syzkaller.appspot.com/bug?extid=3dea30b047f41084de66
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15449662d00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14f81026d00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3dea30b047f41084de66@syzkaller.appspotmail.com
+
+================================================================================
+UBSAN: shift-out-of-bounds in drivers/usb/usbip/vhci_hcd.c:605:42
+shift exponent 768 is too large for 32-bit type 'int'
+CPU: 0 PID: 8421 Comm: syz-executor852 Not tainted 5.12.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:79 [inline]
+ dump_stack+0x141/0x1d7 lib/dump_stack.c:120
+ ubsan_epilogue+0xb/0x5a lib/ubsan.c:148
+ __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x181 lib/ubsan.c:327
+ vhci_hub_control.cold+0x20b/0x5f0 drivers/usb/usbip/vhci_hcd.c:605
+ rh_call_control drivers/usb/core/hcd.c:683 [inline]
+ rh_urb_enqueue drivers/usb/core/hcd.c:841 [inline]
+ usb_hcd_submit_urb+0xcaf/0x22d0 drivers/usb/core/hcd.c:1544
+ usb_submit_urb+0x6e4/0x1540 drivers/usb/core/urb.c:585
+ usb_start_wait_urb+0x101/0x4c0 drivers/usb/core/message.c:58
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
+ do_proc_control+0x4af/0x980 drivers/usb/core/devio.c:1165
+ proc_control drivers/usb/core/devio.c:1191 [inline]
+ usbdev_do_ioctl drivers/usb/core/devio.c:2535 [inline]
+ usbdev_ioctl+0x10e2/0x36c0 drivers/usb/core/devio.c:2708
+ vfs_ioctl fs/ioctl.c:48 [inline]
+ __do_sys_ioctl fs/ioctl.c:753 [inline]
+ __se_sys_ioctl fs/ioctl.c:739 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:739
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x443499
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd96535f58 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00000000004004a0 RCX: 0000000000443499
+RDX: 0000000020000000 RSI: 00000000c0185500 RDI: 0000000000000003
+RBP: 0000000000403040 R08: 0000000000000000 R09: 00000000004004a0
+R10: 000000000000000f R11: 0000000000000246 R12: 00000000004030d0
+R13: 0000000000000000 R14: 00000000004b1018 R15: 00000000004004a0
+================================================================================
+
+
 ---
- drivers/hid/usbhid/hid-pidff.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/hid/usbhid/hid-pidff.c b/drivers/hid/usbhid/hid-pidff.c
-index fddac7c72f645..ea126c50acc3b 100644
---- a/drivers/hid/usbhid/hid-pidff.c
-+++ b/drivers/hid/usbhid/hid-pidff.c
-@@ -505,7 +505,7 @@ static void pidff_playback_pid(struct pidff_device *pidff, int pid_id, int n)
- 			HID_REQ_SET_REPORT);
- }
- 
--/**
-+/*
-  * Play the effect with effect id @effect_id for @value times
-  */
- static int pidff_playback(struct input_dev *dev, int effect_id, int value)
-@@ -997,7 +997,7 @@ static int pidff_find_special_fields(struct pidff_device *pidff)
- 	return 0;
- }
- 
--/**
-+/*
-  * Find the implemented effect types
-  */
- static int pidff_find_effects(struct pidff_device *pidff,
--- 
-2.27.0
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
