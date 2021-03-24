@@ -2,98 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 882CB346E64
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 01:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54EE4347025
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 04:32:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbhCXA5G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Mar 2021 20:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
+        id S232788AbhCXDbr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 23:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233537AbhCXA4m (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Mar 2021 20:56:42 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472A4C0613D8
-        for <linux-usb@vger.kernel.org>; Tue, 23 Mar 2021 17:56:42 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id v186so13496397pgv.7
-        for <linux-usb@vger.kernel.org>; Tue, 23 Mar 2021 17:56:42 -0700 (PDT)
+        with ESMTP id S235069AbhCXDbo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Mar 2021 23:31:44 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17535C061765
+        for <linux-usb@vger.kernel.org>; Tue, 23 Mar 2021 20:31:42 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id g10so7198205plt.8
+        for <linux-usb@vger.kernel.org>; Tue, 23 Mar 2021 20:31:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=h2JtxWq5KlA+aTENrci0BbTIjTR5pL1ehPUfioP17ww=;
-        b=mdylSgtzUAZCVGwTE47jvcDg5m6W4yNItz32xBuv2n0FJcK5bOI46eXiRKAVhmX5gN
-         v69Nc0v05jAQnjH1z50jxw9BfEssWsZemkNU4hdTyWudysyU8wYf6eOMsvynYbEKRHMI
-         OwFtpSlbp1dZzAcCPai22SxLKgViyL6wyOqr4=
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=C84S7+LeWJ9xyhWyOk0XcFmsrxo1Jkj1r7I1oCRR3t4=;
+        b=UgNThMGDEHS9FSm7fmzf2h+HDTFcEGc0iAWcC0JmzXz/+RSYAJUfrMOrGdIun0RA+Q
+         KCDlmT7cbWBwk914l0JohFInaANEZ2OAdB4Xt+9i0sN3X94uQ9JnkoKHXx3gPpvN5UY8
+         /a4ctmfEoTYg63xXI8o3iz2YmIBZoNf/Jq8cw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=h2JtxWq5KlA+aTENrci0BbTIjTR5pL1ehPUfioP17ww=;
-        b=e1CAzRY4ngwazURZFqfwLeA0hHlZKobqXC0/bWM1K9lMC/zztVI+6lAfhixvp6EvBa
-         aLkRJaEd29ITBr07uvqrjxrI2FbAqMXXE9rzAFAf4nWw+1vzvbA2RPYbEnA3/f91nRz+
-         84c8wFfJNvqEDz2p7/6UX0BZddmeOh3D6mYzeDDyvYRaPTqnLkuwph4ZmbhmyrwB65ss
-         HXW7HDRjykjnWQoOjZzBA+ViosFAQcO61sToWtgsokU3kDz8b5kWRsUwLh3KNvpQ2CJo
-         6s1my6wIfhIskzIc9C438MFI8ObcneJqZ4jbCSdSmvEK9uy0AURwarjLuO2gYXEnIazn
-         9hfA==
-X-Gm-Message-State: AOAM530aKqX4QEPZKG2Q6qfrbEFeTOn+pVIHWDSPB8iEJxH+HhoQJ0tz
-        HuvaGt5hJODS4sEi5QQBTwkwQg==
-X-Google-Smtp-Source: ABdhPJziJ3JXAD6m13EcNQP6pdLqzU32BKmPDBLBzBkozEcZ6Z2/VNUa4r5mBZE4Sm0f/1kY6upfBQ==
-X-Received: by 2002:a62:1997:0:b029:1ed:5de5:5f1c with SMTP id 145-20020a6219970000b02901ed5de55f1cmr527401pfz.14.1616547401706;
-        Tue, 23 Mar 2021 17:56:41 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:40a3:9725:46c3:85f6])
-        by smtp.gmail.com with UTF8SMTPSA id 186sm356171pfb.143.2021.03.23.17.56.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Mar 2021 17:56:41 -0700 (PDT)
-Date:   Tue, 23 Mar 2021 17:56:39 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Sandeep Maheswaram <sanm@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>
-Subject: Re: [PATCH v5 3/4] usb: dwc3: qcom: Configure wakeup interrupts and
- set genpd active wakeup flag
-Message-ID: <YFqORzIw5WOLyDwm@google.com>
-References: <1616434280-32635-1-git-send-email-sanm@codeaurora.org>
- <1616434280-32635-4-git-send-email-sanm@codeaurora.org>
- <YFna5mxrJAzR2s0g@kroah.com>
- <YFqMivRlDllNuqu/@google.com>
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=C84S7+LeWJ9xyhWyOk0XcFmsrxo1Jkj1r7I1oCRR3t4=;
+        b=my/c0jixp/ZqRDB4OEK2oehNg1ucRFjC0LILh7KdctAOYRYPsGeI8iESmZv9SWT6iR
+         AsFNG+yrXLSM3p82A7j58XfeAvkLght7X8v4HGEwLxe7kwIBWzJ0YbDSR+3k4cWh0235
+         UGO+LOxIJI90k0eVWTIkaJ7+Osp4pNfu6s/3ozTQyzp93+5/KQWDxiBs9O3PQaFCeT6y
+         02b4XcOytRHrlSSnlF9a4QCGh1uU+n3hhnd5wFO53VZJ+rkdHth51FwJiHYvobdQbXqJ
+         fps5NrZFzC4wevHQ7ZNymgjg/R/pcObP84EZbBAAseOgmyl+KCx+pVlepCiL4gKo/KRZ
+         wxng==
+X-Gm-Message-State: AOAM531vZUlui1TsbIbQmzwQCNRknfhy76BO3ZhOEVUFf1D/PQO4KQEH
+        /32u3hedYHfxiVLsLIDi4OtBXQ==
+X-Google-Smtp-Source: ABdhPJzRT9DYneyQ4OeeffBeF24YG4qG51zLM8rgHilzNNPAFkERpiLs4MyC9U5bUdcNRfRyd6yjiQ==
+X-Received: by 2002:a17:902:70c5:b029:e6:cba1:5d94 with SMTP id l5-20020a17090270c5b02900e6cba15d94mr1604726plt.84.1616556701548;
+        Tue, 23 Mar 2021 20:31:41 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:201:84ac:62f7:16a8:ccc7])
+        by smtp.gmail.com with ESMTPSA id w17sm542950pgg.41.2021.03.23.20.31.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Mar 2021 20:31:41 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YFqMivRlDllNuqu/@google.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1616527652-7937-1-git-send-email-sanm@codeaurora.org>
+References: <1616527652-7937-1-git-send-email-sanm@codeaurora.org>
+Subject: Re: [PATCH v1] usb: dwc3: core: Add shutdown callback for dwc3
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+To:     Doug Anderson <dianders@chromium.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Date:   Tue, 23 Mar 2021 20:31:38 -0700
+Message-ID: <161655669850.3012082.11672497224863339022@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 23, 2021 at 05:49:14PM -0700, Matthias Kaehlcke wrote:
-> On Tue, Mar 23, 2021 at 01:11:18PM +0100, Greg Kroah-Hartman wrote:
-> > On Mon, Mar 22, 2021 at 11:01:19PM +0530, Sandeep Maheswaram wrote:
-> > > Configure interrupts based on hs_phy_mode to avoid triggering of
-> > > interrupts during system suspend and suspends successfully.
-> > > Set genpd active wakeup flag for usb gdsc if wakeup capable devices
-> > > are connected so that wake up happens without reenumeration.
-> > > Add helper functions to enable,disable wake irqs.
-> > 
-> > That feels like a lot of different things all in one patch.
-> 
-> Sandeep: one thing you could do to reduce the churn is to add
-> dwc3_qcom_enable/disable_wakeup_irq() in a separate patch, without
-> any functional changes. Then this patch would only add the different
-> branches based on the PHY mode.
-> 
-> The handling of the power domain could probably also be done in a
-> separate patch, if I recall correctly it is only an optimization.
+Quoting Sandeep Maheswaram (2021-03-23 12:27:32)
+> This patch adds a shutdown callback to USB DWC core driver to ensure that
+> it is properly shutdown in reboot/shutdown path. This is required
+> where SMMU address translation is enabled like on SC7180
+> SoC and few others. If the hardware is still accessing memory after
+> SMMU translation is disabled as part of SMMU shutdown callback in
+> system reboot or shutdown path, then IOVAs(I/O virtual address)
+> which it was using will go on the bus as the physical addresses which
+> might result in unknown crashes (NoC/interconnect errors).
+>=20
+> Previously this was added in dwc3 qcom glue driver.
+> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=3D382449
+> But observed kernel panic as glue driver shutdown getting called after
+> iommu shutdown. As we are adding iommu nodes in dwc core node
+> in device tree adding shutdown callback in core driver seems correct.
+>=20
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> ---
+>  drivers/usb/dwc3/core.c | 26 +++++++++++++++++++-------
+>  1 file changed, 19 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 94fdbe5..777b2b5 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1634,11 +1634,9 @@ static int dwc3_probe(struct platform_device *pdev)
+>         return ret;
+>  }
+> =20
+> -static int dwc3_remove(struct platform_device *pdev)
+> +static void __dwc3_teardown(struct dwc3 *dwc)
+>  {
+> -       struct dwc3     *dwc =3D platform_get_drvdata(pdev);
+> -
+> -       pm_runtime_get_sync(&pdev->dev);
+> +       pm_runtime_get_sync(dwc->dev);
+> =20
+>         dwc3_debugfs_exit(dwc);
+>         dwc3_core_exit_mode(dwc);
+> @@ -1646,19 +1644,32 @@ static int dwc3_remove(struct platform_device *pd=
+ev)
+>         dwc3_core_exit(dwc);
+>         dwc3_ulpi_exit(dwc);
+> =20
+> -       pm_runtime_disable(&pdev->dev);
+> -       pm_runtime_put_noidle(&pdev->dev);
+> -       pm_runtime_set_suspended(&pdev->dev);
+> +       pm_runtime_disable(dwc->dev);
+> +       pm_runtime_put_noidle(dwc->dev);
+> +       pm_runtime_set_suspended(dwc->dev);
+> =20
+>         dwc3_free_event_buffers(dwc);
+>         dwc3_free_scratch_buffers(dwc);
+> =20
+>         if (dwc->usb_psy)
+>                 power_supply_put(dwc->usb_psy);
+> +}
+> +
+> +static int dwc3_remove(struct platform_device *pdev)
+> +{
+> +       struct dwc3     *dwc =3D platform_get_drvdata(pdev);
+> +
+> +       __dwc3_teardown(dwc);
+> =20
+>         return 0;
+>  }
+> =20
+> +static void dwc3_shutdown(struct platform_device *pdev)
+> +{
+> +       struct dwc3     *dwc =3D platform_get_drvdata(pdev);
+> +
+> +       __dwc3_teardown(dwc);
+> +}
 
-Actually another thing that could be in a separate patch is enabling
-wakeup support based on 'wakeup-source'. That's not even directly
-related with this series.
+Can't this be
 
-With all that you'd have fairly atomic patches and it should be easy to
-write meaningful commit messages.
+	static void dwc3_shutdown(struct platform_device *pdev)
+	{
+	       dwc3_remove(pdev);
+	}
+
+and then there's nothing else to change? Basically ignore return value
+of dwc3_remove() to make shutdown and remove harmonize. I also wonder if
+this is more common than we think and a struct driver flag could be set
+to say "call remove for shutdown" and then have driver core swizzle on
+that and save some duplicate functions.
+
+>  #ifdef CONFIG_PM
+>  static int dwc3_core_init_for_resume(struct dwc3 *dwc)
+>  {
+> @@ -1976,6 +1987,7 @@ MODULE_DEVICE_TABLE(acpi, dwc3_acpi_match);
+>  static struct platform_driver dwc3_driver =3D {
+>         .probe          =3D dwc3_probe,
+>         .remove         =3D dwc3_remove,
+> +       .shutdown   =3D dwc3_shutdown,
