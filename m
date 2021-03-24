@@ -2,236 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA84346E4C
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 01:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD88C346E4F
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 01:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233799AbhCXAiA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Mar 2021 20:38:00 -0400
-Received: from mga05.intel.com ([192.55.52.43]:8715 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233822AbhCXAhs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Mar 2021 20:37:48 -0400
-IronPort-SDR: ZtcLHpsKXDVrwbBZj4Syp5HArj1Utocy4TaZA2oFixqpPpq8m62xLdKH7+uyO2O4MTfU8AsXAj
- iEMnbWT3jJkA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9932"; a="275696533"
-X-IronPort-AV: E=Sophos;i="5.81,272,1610438400"; 
-   d="scan'208";a="275696533"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2021 17:37:47 -0700
-IronPort-SDR: e2TehhKXE6/aWTHHT8qqQY64IrfIK0SV5tJPPkZHePwnvOM+OnPo9VDRut1Qt72dNALSyCsbW4
- 3sBuf/3J4zSw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,272,1610438400"; 
-   d="scan'208";a="452366088"
-Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 23 Mar 2021 17:37:45 -0700
-Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lOrWq-0000tE-Gl; Wed, 24 Mar 2021 00:37:44 +0000
-Date:   Wed, 24 Mar 2021 08:37:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 0bd860493f81eb2a46173f6f5e44cc38331c8dbd
-Message-ID: <605a89b9.IO64du8o7uJjOxnZ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S233864AbhCXAig (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Mar 2021 20:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39624 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233822AbhCXAiD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Mar 2021 20:38:03 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E1AC0613D9
+        for <linux-usb@vger.kernel.org>; Tue, 23 Mar 2021 17:38:03 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id il9-20020a17090b1649b0290114bcb0d6c2so257261pjb.0
+        for <linux-usb@vger.kernel.org>; Tue, 23 Mar 2021 17:38:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pPlIrrXflt8RSnipMg07xZQ+rTbq5XKn0Tjy7Ot7/1M=;
+        b=LaUeWaLc2Gkl/HXwkVwIpesHnN6jyLWGxSB57EnR1oo05e56FF9akaxxbx31UDFYWD
+         a9siLX/X03G30bnlPJ8qqUAtO9dXE9FNYaKzcc2Zg3RcgirtGG0JifYFlSKomHaP1ulF
+         lxy84KVhxL3N0oKi4nCJwEV7aVMwyaCS3X5xI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pPlIrrXflt8RSnipMg07xZQ+rTbq5XKn0Tjy7Ot7/1M=;
+        b=auB6T4D47S8IquGz8QcT/Bo6L6vxsk1rTa7Dc5BQz0eEwOErwENgESsVMm4jaHIPY8
+         7eRMW8IUBG4ItBDfP5kNuMHiFkCmAWE9Bo2Dhdmnm+XSI7B+3IRvTn+tmudXLsniZGzs
+         /LJg8HsNRgpYiLmI2sNCekQEsoAUuwmaMQrozcnHzh39/0R4eGUqoxEp621PQEgNP02Q
+         BgzDGv8oMmax0rauUDSCadVhGO9GglCjiLKJrO1E9x+cpMoCwjcCxISwSo0riD1PLaUA
+         YlgeEeyVIa70gC4v8lEFcC+h7m/SConi3PLNGcsoT4/FKVngaSH4ePVOMgyy5Se38Hoy
+         idOg==
+X-Gm-Message-State: AOAM532ahBP/V+23cBNwvGkqxHb/mw/eoMLrrpGPp09yO6VMoO4KSmQp
+        MoLwu7S/q945989nuxXLh/iEmw==
+X-Google-Smtp-Source: ABdhPJz9oyfMCYlP8x3ieh7MnofBo34nULsK4kbKiNcr0RlZ2x3yRwTVeckXoKmXU5lD5QW/MgqAzg==
+X-Received: by 2002:a17:902:c1c4:b029:e6:7bc9:71fd with SMTP id c4-20020a170902c1c4b02900e67bc971fdmr939065plc.5.1616546282478;
+        Tue, 23 Mar 2021 17:38:02 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:40a3:9725:46c3:85f6])
+        by smtp.gmail.com with UTF8SMTPSA id m21sm338568pff.61.2021.03.23.17.38.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Mar 2021 17:38:01 -0700 (PDT)
+Date:   Tue, 23 Mar 2021 17:38:00 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>
+Subject: Re: [PATCH v5 2/4] usb: dwc3: host: Add suspend_quirk for dwc3 host
+Message-ID: <YFqJ6MfQOrt5CRp2@google.com>
+References: <1616434280-32635-1-git-send-email-sanm@codeaurora.org>
+ <1616434280-32635-3-git-send-email-sanm@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1616434280-32635-3-git-send-email-sanm@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 0bd860493f81eb2a46173f6f5e44cc38331c8dbd  USB: quirks: ignore remote wake-up on Fibocom L850-GL LTE modem
+On Mon, Mar 22, 2021 at 11:01:18PM +0530, Sandeep Maheswaram wrote:
+> Adding suspend quirk function for dwc3 host which will be called
+> during xhci suspend.
+> Setting hs_phy_mode, ss_phy_mode , phy_power_off flags and phy mode
+> during host suspend.
+> 
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> ---
+>  drivers/usb/dwc3/core.h |  3 +++
+>  drivers/usb/dwc3/host.c | 58 +++++++++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 61 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index ce6bd84..f05546c 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -1113,6 +1113,9 @@ struct dwc3 {
+>  
+>  	bool			phys_ready;
+>  
+> +	unsigned int            hs_phy_mode;
+> +	bool			phy_power_off;
+> +
+>  	struct ulpi		*ulpi;
+>  	bool			ulpi_ready;
+>  
+> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> index f29a264..3db042c 100644
+> --- a/drivers/usb/dwc3/host.c
+> +++ b/drivers/usb/dwc3/host.c
+> @@ -11,6 +11,13 @@
+>  #include <linux/platform_device.h>
+>  
+>  #include "core.h"
+> +#include "../host/xhci.h"
+> +#include "../host/xhci-plat.h"
+> +int xhci_dwc3_suspend_quirk(struct usb_hcd *hcd);
+> +
+> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
+> +	.suspend_quirk = xhci_dwc3_suspend_quirk,
+> +};
+>  
+>  static int dwc3_host_get_irq(struct dwc3 *dwc)
+>  {
+> @@ -115,6 +122,13 @@ int dwc3_host_init(struct dwc3 *dwc)
+>  		}
+>  	}
+>  
+> +	ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
+> +			sizeof(struct xhci_plat_priv));
+> +	if (ret) {
+> +		dev_err(dwc->dev, "failed to add data to xHCI\n");
+> +		goto err;
+> +	}
+> +
+>  	ret = platform_device_add(xhci);
+>  	if (ret) {
+>  		dev_err(dwc->dev, "failed to register xHCI device\n");
+> @@ -127,6 +141,50 @@ int dwc3_host_init(struct dwc3 *dwc)
+>  	return ret;
+>  }
+>  
+> +static void dwc3_set_phy_mode(struct usb_hcd *hcd)
+> +{
+> +
+> +	int i, num_ports;
+> +	u32 reg;
+> +	unsigned int ss_phy_mode = 0;
+> +	struct dwc3 *dwc = dev_get_drvdata(hcd->self.controller->parent);
+> +	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
+> +
+> +	dwc->hs_phy_mode = 0;
+> +
+> +	reg = readl(&xhci_hcd->cap_regs->hcs_params1);
+> +
+> +	num_ports = HCS_MAX_PORTS(reg);
 
-elapsed time: 726m
+nit: remove empty line between the two lines above. 'reg' is read to
+determine the number of ports and discarded afterwards, so it makes
+sense to establish that relationship visually. You could (optionally)
+add an empty line after assigning 'num_ports'.
 
-configs tested: 174
-configs skipped: 2
+> +	for (i = 0; i < num_ports; i++) {
+> +		reg = readl(&xhci_hcd->op_regs->port_status_base + i * 0x04);
+> +		if (reg & PORT_PE) {
+> +			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
+> +				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_HS;
+> +			else if (DEV_LOWSPEED(reg))
+> +				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_LS;
+> +
+> +			if (DEV_SUPERSPEED(reg))
+> +				ss_phy_mode |= PHY_MODE_USB_HOST_SS;
+> +		}
+> +	}
+> +	phy_set_mode(dwc->usb2_generic_phy, dwc->hs_phy_mode);
+> +	phy_set_mode(dwc->usb3_generic_phy, ss_phy_mode);
+> +}
+> +
+> +int xhci_dwc3_suspend_quirk(struct usb_hcd *hcd)
+> +{
+> +	struct dwc3 *dwc = dev_get_drvdata(hcd->self.controller->parent);
+> +
+> +	dwc3_set_phy_mode(hcd);
+> +
+> +	dwc->phy_power_off = true;
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+it seems silly to assign this field only to overwrite it two lines later
+if wakeup capable descendants are connected. Making the assignment in an
+'else' branch would be clearer IMO.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-x86_64                           allyesconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-i386                             allyesconfig
-mips                        workpad_defconfig
-powerpc                 mpc8313_rdb_defconfig
-mips                     cu1000-neo_defconfig
-arm                        mini2440_defconfig
-powerpc                     redwood_defconfig
-mips                            ar7_defconfig
-m68k                            mac_defconfig
-m68k                             allyesconfig
-arm                          imote2_defconfig
-mips                      bmips_stb_defconfig
-arm                   milbeaut_m10v_defconfig
-arm                         mv78xx0_defconfig
-arm                           h5000_defconfig
-arm                        spear3xx_defconfig
-powerpc                 mpc836x_rdk_defconfig
-arm                            lart_defconfig
-m68k                        m5307c3_defconfig
-h8300                    h8300h-sim_defconfig
-sh                   rts7751r2dplus_defconfig
-arm                           sunxi_defconfig
-sh                         ap325rxa_defconfig
-mips                         bigsur_defconfig
-m68k                        m5407c3_defconfig
-arm                            hisi_defconfig
-arm                        vexpress_defconfig
-sh                   sh7724_generic_defconfig
-powerpc                      walnut_defconfig
-powerpc                     sequoia_defconfig
-xtensa                  audio_kc705_defconfig
-arm                         s3c2410_defconfig
-arc                          axs103_defconfig
-m68k                       m5208evb_defconfig
-powerpc                     ksi8560_defconfig
-arm                            mps2_defconfig
-arm                         shannon_defconfig
-arm                       omap2plus_defconfig
-arm                      tct_hammer_defconfig
-powerpc                      cm5200_defconfig
-powerpc                  iss476-smp_defconfig
-arm                      pxa255-idp_defconfig
-arm                          exynos_defconfig
-powerpc                    adder875_defconfig
-arm                           omap1_defconfig
-powerpc                     tqm8560_defconfig
-arm                        trizeps4_defconfig
-xtensa                  cadence_csp_defconfig
-sh                     magicpanelr2_defconfig
-arc                        vdk_hs38_defconfig
-ia64                        generic_defconfig
-arc                        nsim_700_defconfig
-arm                          pxa910_defconfig
-xtensa                  nommu_kc705_defconfig
-powerpc                    socrates_defconfig
-nds32                             allnoconfig
-arm                       imx_v6_v7_defconfig
-arm                        neponset_defconfig
-sh                            hp6xx_defconfig
-arm                         orion5x_defconfig
-mips                         tb0219_defconfig
-mips                        jmr3927_defconfig
-ia64                      gensparse_defconfig
-microblaze                      mmu_defconfig
-arm                         nhk8815_defconfig
-mips                malta_qemu_32r6_defconfig
-mips                       capcella_defconfig
-arm                         lubbock_defconfig
-powerpc                   bluestone_defconfig
-arc                     haps_hs_smp_defconfig
-s390                             alldefconfig
-mips                            e55_defconfig
-sh                     sh7710voipgw_defconfig
-m68k                        stmark2_defconfig
-mips                           ip28_defconfig
-powerpc                      obs600_defconfig
-m68k                        mvme16x_defconfig
-powerpc                 mpc8272_ads_defconfig
-powerpc                 linkstation_defconfig
-powerpc                     rainier_defconfig
-mips                        maltaup_defconfig
-arm                          pxa168_defconfig
-arm                          collie_defconfig
-arm                         lpc18xx_defconfig
-sh                ecovec24-romimage_defconfig
-mips                           rs90_defconfig
-sh                        sh7785lcr_defconfig
-sh                           se7721_defconfig
-arm                     davinci_all_defconfig
-powerpc                      ppc6xx_defconfig
-powerpc                 mpc834x_mds_defconfig
-sh                          rsk7201_defconfig
-arm                             pxa_defconfig
-powerpc                     tqm8555_defconfig
-powerpc                       eiger_defconfig
-mips                     cu1830-neo_defconfig
-powerpc64                           defconfig
-mips                          ath25_defconfig
-mips                         tb0287_defconfig
-arm                         axm55xx_defconfig
-arc                 nsimosci_hs_smp_defconfig
-powerpc                     asp8347_defconfig
-arc                            hsdk_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20210323
-x86_64               randconfig-a003-20210323
-x86_64               randconfig-a006-20210323
-x86_64               randconfig-a001-20210323
-x86_64               randconfig-a004-20210323
-x86_64               randconfig-a005-20210323
-i386                 randconfig-a003-20210323
-i386                 randconfig-a004-20210323
-i386                 randconfig-a001-20210323
-i386                 randconfig-a002-20210323
-i386                 randconfig-a006-20210323
-i386                 randconfig-a005-20210323
-i386                 randconfig-a014-20210323
-i386                 randconfig-a011-20210323
-i386                 randconfig-a015-20210323
-i386                 randconfig-a016-20210323
-i386                 randconfig-a012-20210323
-i386                 randconfig-a013-20210323
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a012-20210323
-x86_64               randconfig-a015-20210323
-x86_64               randconfig-a013-20210323
-x86_64               randconfig-a014-20210323
-x86_64               randconfig-a011-20210323
-x86_64               randconfig-a016-20210323
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +
+> +	if (usb_wakeup_enabled_descendants(hcd->self.root_hub))
+> +		dwc->phy_power_off = false;
+> +
+> +	return 0;
+> +}
+> +
+>  void dwc3_host_exit(struct dwc3 *dwc)
+>  {
+>  	platform_device_unregister(dwc->xhci);
