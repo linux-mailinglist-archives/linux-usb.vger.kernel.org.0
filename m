@@ -2,107 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA56347F98
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 18:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB8F348087
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 19:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237075AbhCXRgp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Mar 2021 13:36:45 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:46659 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237184AbhCXRgP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 13:36:15 -0400
-Received: by mail-io1-f72.google.com with SMTP id w8so1928116iox.13
-        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 10:36:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=d3+3d6jtDAfbf+GrVq1Qg39NvVvFXf+9538V36yRUSU=;
-        b=nl1zW2HFg59ttS1t09C942T8svnqsDByTw70Hy9nK49tjPiqrr529qK5su9S9yHIkD
-         w505AJ9LvAIow/9zjyUCLkfktBsk2TlyHCOQSWvb2UpMQUGawAkv/zsVv+eEd0I0w40P
-         Hz9Y7IkfujQSvgWbv+E4p/efc7o36Han6L97pfscscYv2ApHQR90yyyQWnbZpNzRiUAZ
-         pzspLPHbcCWyA9Eq8XMzMasJoBYcnjAXrKsSq0DMZ75Wy+V8sIhNMcaLj54RCuHQzsd+
-         bu7DipPZvBpnQFpdrMQWv6hdbVk28zc+OuaZoN5u6Rkne8p9OMBljAMs5gFIQm+rCcoi
-         oH/g==
-X-Gm-Message-State: AOAM530xRoPKWqmvELfDz0G3wP4cyc0pcJoyDeCDjBuEHYlVpiMrKH0a
-        86OXSBNlS+xKdq2BrLwEcAxhF6P+yldRe7gT14fQUkmakbRv
-X-Google-Smtp-Source: ABdhPJxsi/nKXBOjK9tKvCSkjNR1gE52sVVkbu7LTJLTQBAOqNn/1bIURKBzhOmyPltX4xwB0IKh/VWOKGvqjov4yWz8/ppbJf8I
-MIME-Version: 1.0
-X-Received: by 2002:a5e:dd0c:: with SMTP id t12mr3281038iop.50.1616607374591;
- Wed, 24 Mar 2021 10:36:14 -0700 (PDT)
-Date:   Wed, 24 Mar 2021 10:36:14 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004dcb8c05be4bbcf8@google.com>
-Subject: [syzbot] UBSAN: shift-out-of-bounds in vhci_hub_control (2)
-From:   syzbot <syzbot+3dea30b047f41084de66@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, shuah@kernel.org,
-        syzkaller-bugs@googlegroups.com, valentina.manea.m@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+        id S237474AbhCXSbW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Mar 2021 14:31:22 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:25034 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237525AbhCXSbN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 14:31:13 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1616610673; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=Xldk2NaEZrFyK7TzKhPvrgf0bwOwJIDcRrPX/EK8W+s=; b=MjbbwMK/vmaL5CdiO0bre2yh25L11rg/JzPIUvFtJ+WXwkXGJ/ATJHa9dE6QBR426/Nl0Joy
+ dYTZAvxhvhNI1rquVi7IoHI+mezSEVtX7liQ0jh81ousw18zZPeMnXSmZWbspQbJIvL/KBq/
+ 4Rno6Gf6XXLgCRSiwkgS1A1V1ls=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 605b856dc32ceb3a91356bec (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 24 Mar 2021 18:31:09
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 77DCBC433C6; Wed, 24 Mar 2021 18:31:09 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 38AAFC433ED;
+        Wed, 24 Mar 2021 18:31:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 38AAFC433ED
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH] usb: dwc3: gadget: Clear DEP flags after stop transfers in ep disable
+Date:   Wed, 24 Mar 2021 11:31:04 -0700
+Message-Id: <1616610664-16495-1-git-send-email-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Ensure that dep->flags are cleared until after stop active transfers
+is completed.  Otherwise, the ENDXFER command will not be executed
+during ep disable.
 
-syzbot found the following issue on:
-
-HEAD commit:    84196390 Merge tag 'selinux-pr-20210322' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12ea778ad00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5adab0bdee099d7a
-dashboard link: https://syzkaller.appspot.com/bug?extid=3dea30b047f41084de66
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15449662d00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14f81026d00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3dea30b047f41084de66@syzkaller.appspotmail.com
-
-================================================================================
-UBSAN: shift-out-of-bounds in drivers/usb/usbip/vhci_hcd.c:605:42
-shift exponent 768 is too large for 32-bit type 'int'
-CPU: 0 PID: 8421 Comm: syz-executor852 Not tainted 5.12.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:79 [inline]
- dump_stack+0x141/0x1d7 lib/dump_stack.c:120
- ubsan_epilogue+0xb/0x5a lib/ubsan.c:148
- __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x181 lib/ubsan.c:327
- vhci_hub_control.cold+0x20b/0x5f0 drivers/usb/usbip/vhci_hcd.c:605
- rh_call_control drivers/usb/core/hcd.c:683 [inline]
- rh_urb_enqueue drivers/usb/core/hcd.c:841 [inline]
- usb_hcd_submit_urb+0xcaf/0x22d0 drivers/usb/core/hcd.c:1544
- usb_submit_urb+0x6e4/0x1540 drivers/usb/core/urb.c:585
- usb_start_wait_urb+0x101/0x4c0 drivers/usb/core/message.c:58
- usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
- usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
- do_proc_control+0x4af/0x980 drivers/usb/core/devio.c:1165
- proc_control drivers/usb/core/devio.c:1191 [inline]
- usbdev_do_ioctl drivers/usb/core/devio.c:2535 [inline]
- usbdev_ioctl+0x10e2/0x36c0 drivers/usb/core/devio.c:2708
- vfs_ioctl fs/ioctl.c:48 [inline]
- __do_sys_ioctl fs/ioctl.c:753 [inline]
- __se_sys_ioctl fs/ioctl.c:739 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:739
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x443499
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd96535f58 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00000000004004a0 RCX: 0000000000443499
-RDX: 0000000020000000 RSI: 00000000c0185500 RDI: 0000000000000003
-RBP: 0000000000403040 R08: 0000000000000000 R09: 00000000004004a0
-R10: 000000000000000f R11: 0000000000000246 R12: 00000000004030d0
-R13: 0000000000000000 R14: 00000000004b1018 R15: 00000000004004a0
-================================================================================
-
-
+Fixes: f09ddcfcb8c5 ("usb: dwc3: gadget: Prevent EP queuing while stopping transfers")
+Reported-and-tested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/usb/dwc3/gadget.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index e1442fc..2c4d201 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -791,10 +791,6 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
+ 	reg &= ~DWC3_DALEPENA_EP(dep->number);
+ 	dwc3_writel(dwc->regs, DWC3_DALEPENA, reg);
+ 
+-	dep->stream_capable = false;
+-	dep->type = 0;
+-	dep->flags = 0;
+-
+ 	/* Clear out the ep descriptors for non-ep0 */
+ 	if (dep->number > 1) {
+ 		dep->endpoint.comp_desc = NULL;
+@@ -803,6 +799,10 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
+ 
+ 	dwc3_remove_requests(dwc, dep);
+ 
++	dep->stream_capable = false;
++	dep->type = 0;
++	dep->flags = 0;
++
+ 	return 0;
+ }
+ 
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
