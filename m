@@ -2,124 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB5B34745E
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 10:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 408523474CA
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 10:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbhCXJRx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Mar 2021 05:17:53 -0400
-Received: from mga01.intel.com ([192.55.52.88]:36267 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231781AbhCXJRf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 24 Mar 2021 05:17:35 -0400
-IronPort-SDR: 5FHTzyN3wd2VBxYb9ApD1NM7YyoxJA/Ek/SuUV7OtQsYPcw5lBzgY5qSYgNvhE472C3gJCMRPF
- fmVbxTag+obg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9932"; a="210767532"
-X-IronPort-AV: E=Sophos;i="5.81,274,1610438400"; 
-   d="scan'208";a="210767532"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2021 02:17:34 -0700
-IronPort-SDR: rgkkpogi6O4X6zsxcekCIIXoijHXVkvV7NExVJnZkQPvtZmDKtw/061aglYKffygCHZ/j70SGE
- nFtnn9lnJTdA==
-X-IronPort-AV: E=Sophos;i="5.81,274,1610438400"; 
-   d="scan'208";a="452518273"
-Received: from shao2-debian.sh.intel.com (HELO [10.239.13.11]) ([10.239.13.11])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2021 02:17:31 -0700
-Subject: Re: [PATCH v4 2/2] usb: dwc3: Add driver for Xilinx platforms
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        kernel test robot <lkp@intel.com>
-Cc:     Manish Narani <manish.narani@xilinx.com>, robh+dt@kernel.org,
-        michal.simek@xilinx.com, balbi@kernel.org, p.zabel@pengutronix.de,
-        kbuild-all@lists.01.org, git@xilinx.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <1615963949-75320-3-git-send-email-manish.narani@xilinx.com>
- <202103171704.VHPs8XOA-lkp@intel.com> <YFnVZEFr3xBsRdiX@kroah.com>
-From:   Rong Chen <rong.a.chen@intel.com>
-Message-ID: <8fdd5b27-fb70-df01-62a2-474df5301485@intel.com>
-Date:   Wed, 24 Mar 2021 17:16:43 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S235103AbhCXJjd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Mar 2021 05:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236161AbhCXJjM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 05:39:12 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB63BC061763;
+        Wed, 24 Mar 2021 02:39:11 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id w37so30919893lfu.13;
+        Wed, 24 Mar 2021 02:39:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vuuMNZyMbynJyv9nWBiTXWKNpHBcQegClLmvv2elQDQ=;
+        b=rHg+uMJ/Jmtntx9B0U8Lky7O9aZtQ+iuLA8ivN7aEyeScg/4yXP5Wtuy35tQS975Kl
+         e4QA48kuyFs87+fN/6eVB8bz6plXXKglIAN7P1v1bg5i+NhiB6QJ4/h/eIgUea7Z49MG
+         DAnghQvlVU6shUkVPlNw043EDWj/Rw7uuE/nmD+/ReRBFEZG0BLTCa3F9ilHVJCnr9l9
+         S5SsXiidRXXXb1DA9IP4JFv3gPynTgZ47DcfcpBuxYbr61cfwaC7SFvHjfV1PHBncml0
+         Bg60W8KE+tmthQviV1B1quPNgJRkRAc6kjl4Le+oE1fhKAZQlfaKATKHMxVe4dT+epgu
+         gTFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=vuuMNZyMbynJyv9nWBiTXWKNpHBcQegClLmvv2elQDQ=;
+        b=iQK6fMFbuJiT1OIWzsznMTqAXdLTC6I4Ln1XpGa6rQ4UwMcld2wMUVTdqu1ecW5yjK
+         gc0nWRP9cisiU8hOkN4CHfTk1slkRaE62+/hprw1omVB5gwcfbR+yfbxEBfasynt4uuK
+         8xVmANE0tHQiCp5g6VoGfmoHjpnZctF1Kmy63QXFVN98PX72Zm95wPoHCDDKEC6y0VMy
+         lCJTuEz95JoFqv6HezxJMG6FL97RjhXjGR6XDBXYSgdTakUPsr5G8yIjRURbVU6rDByv
+         OhhGWV5cw95zDxdZaT/K6v9cHsS/IicOm1JbyVxC7LzfYihM+UTL8iqDus5htR3RC7X0
+         rVCA==
+X-Gm-Message-State: AOAM531ipqhI6mFNsYYTIH6/QEK75pcWn5Qxx3yN8RwpsRgEtgOXzSiv
+        nKtLQLCrFnXEO99CWbn1IRDM0rnVd7GLXA==
+X-Google-Smtp-Source: ABdhPJzGvZagKE62pBEOULPsNjpaf3bp1+vG+Uhs99091wPRLfeHlXZmpdTHu/ZZPBto2cnTQhK8fw==
+X-Received: by 2002:a19:c7d7:: with SMTP id x206mr1488565lff.403.1616578750194;
+        Wed, 24 Mar 2021 02:39:10 -0700 (PDT)
+Received: from [192.168.1.100] ([178.176.78.13])
+        by smtp.gmail.com with ESMTPSA id c27sm177829lfh.146.2021.03.24.02.39.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Mar 2021 02:39:09 -0700 (PDT)
+Subject: Re: [PATCH v1] usb: dwc3: core: Add shutdown callback for dwc3
+To:     Sandeep Maheswaram <sanm@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>
+References: <1616527652-7937-1-git-send-email-sanm@codeaurora.org>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <e6157db7-426b-04a8-3261-58b8674c9cda@gmail.com>
+Date:   Wed, 24 Mar 2021 12:39:00 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <YFnVZEFr3xBsRdiX@kroah.com>
+In-Reply-To: <1616527652-7937-1-git-send-email-sanm@codeaurora.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello!
 
+On 23.03.2021 22:27, Sandeep Maheswaram wrote:
 
-On 3/23/21 7:47 PM, Greg KH wrote:
-> On Wed, Mar 17, 2021 at 05:50:22PM +0800, kernel test robot wrote:
->> Hi Manish,
->>
->> Thank you for the patch! Perhaps something to improve:
->>
->> [auto build test WARNING on usb/usb-testing]
->> [also build test WARNING on robh/for-next v5.12-rc3 next-20210316]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch]
->>
->> url:    https://github.com/0day-ci/linux/commits/Manish-Narani/Add-a-separate-DWC3-OF-driver-for-Xilinx-platforms/20210317-145425
->> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
->> config: arm64-allyesconfig (attached as .config)
->> compiler: aarch64-linux-gcc (GCC) 9.3.0
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # https://github.com/0day-ci/linux/commit/def409fdf931cd77f4a88812570ea6f38f4053d8
->>          git remote add linux-review https://github.com/0day-ci/linux
->>          git fetch --no-tags linux-review Manish-Narani/Add-a-separate-DWC3-OF-driver-for-Xilinx-platforms/20210317-145425
->>          git checkout def409fdf931cd77f4a88812570ea6f38f4053d8
->>          # save the attached .config to linux build tree
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=arm64
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All warnings (new ones prefixed by >>):
->>
->>>> drivers/usb/dwc3/dwc3-xilinx.c:27: warning: expecting prototype for dwc3(). Prototype was for XLNX_USB_PHY_RST_EN() instead
->>
->> vim +27 drivers/usb/dwc3/dwc3-xilinx.c
->>
->>      25	
->>      26	/* USB phy reset mask register */
->>    > 27	#define XLNX_USB_PHY_RST_EN			0x001C
->>      28	#define XLNX_PHY_RST_MASK			0x1
->>      29	
-> I do not understand this warning message.  What is it trying to say?
+> This patch adds a shutdown callback to USB DWC core driver to ensure that
+> it is properly shutdown in reboot/shutdown path. This is required
+> where SMMU address translation is enabled like on SC7180
+> SoC and few others. If the hardware is still accessing memory after
+> SMMU translation is disabled as part of SMMU shutdown callback in
+> system reboot or shutdown path, then IOVAs(I/O virtual address)
 
-Hi Greg,
+   Space before (, please.
 
-It's a kernel-doc warning:
+> which it was using will go on the bus as the physical addresses which
+> might result in unknown crashes (NoC/interconnect errors).
+> 
+> Previously this was added in dwc3 qcom glue driver.
+> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=382449
+> But observed kernel panic as glue driver shutdown getting called after
+> iommu shutdown. As we are adding iommu nodes in dwc core node
+> in device tree adding shutdown callback in core driver seems correct.
+> 
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> ---
+>   drivers/usb/dwc3/core.c | 26 +++++++++++++++++++-------
+>   1 file changed, 19 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 94fdbe5..777b2b5 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+[...]
+> @@ -1976,6 +1987,7 @@ MODULE_DEVICE_TABLE(acpi, dwc3_acpi_match);
+>   static struct platform_driver dwc3_driver = {
+>   	.probe		= dwc3_probe,
+>   	.remove		= dwc3_remove,
+> +	.shutdown   = dwc3_shutdown,
 
-$ ./scripts/kernel-doc -none drivers/usb/dwc3/dwc3-xilinx.c
-drivers/usb/dwc3/dwc3-xilinx.c:27: warning: expecting prototype for 
-dwc3(). Prototype was for XLNX_USB_PHY_RST_EN() instead
+    Please indent = with tabs as above and below.
 
-the root cause is that there's a redundant symbol ( * ) at the beginning:
+>   	.driver		= {
+>   		.name	= "dwc3",
+>   		.of_match_table	= of_match_ptr(of_dwc3_match),
 
-diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
-index a59e1494b1a0..f42f4cbffab0 100644
---- a/drivers/usb/dwc3/dwc3-xilinx.c
-+++ b/drivers/usb/dwc3/dwc3-xilinx.c
-@@ -1,5 +1,5 @@
-  // SPDX-License-Identifier: GPL-2.0
--/**
-+/*
-   * dwc3-xilinx.c - Xilinx DWC3 controller specific glue driver
-   *
-   * Authors: Manish Narani <manish.narani@xilinx.com>
-
-Best Regards,
-Rong Chen
-
->
-> confused,
->
-> greg k-h
->
-
+MBR, Sergei
