@@ -2,72 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E823A347A58
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 15:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E475E347A51
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 15:12:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236097AbhCXOLw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Mar 2021 10:11:52 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:56925 "EHLO
+        id S236090AbhCXOLv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Mar 2021 10:11:51 -0400
+Received: from mout.kundenserver.de ([212.227.17.13]:42163 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236067AbhCXOLf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 10:11:35 -0400
+        with ESMTP id S236071AbhCXOLg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 10:11:36 -0400
 Received: from rpi3.fritz.box ([46.90.46.54]) by mrelayeu.kundenserver.de
  (mreue109 [213.165.67.113]) with ESMTPA (Nemesis) id
- 1MN5W7-1l8EKr3zQT-00J2SH; Wed, 24 Mar 2021 15:11:29 +0100
+ 1M7auJ-1lJJ4G1LFl-00859F; Wed, 24 Mar 2021 15:11:29 +0100
 From:   Fabian Vogt <fabian@ritter-vogt.de>
 To:     Felipe Balbi <balbi@kernel.org>
 Cc:     Fabian Vogt <fabian@ritter-vogt.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Yuan-Hsin Chen <yhchen@faraday-tech.com>,
         linux-usb@vger.kernel.org
-Subject: [PATCH 3/7] fotg210-udc: Remove a dubious condition leading to fotg210_done
-Date:   Wed, 24 Mar 2021 15:11:11 +0100
-Message-Id: <20210324141115.9384-4-fabian@ritter-vogt.de>
+Subject: [PATCH 4/7] fotg210-udc: Mask GRP2 interrupts we don't handle
+Date:   Wed, 24 Mar 2021 15:11:12 +0100
+Message-Id: <20210324141115.9384-5-fabian@ritter-vogt.de>
 X-Mailer: git-send-email 2.10.0
 In-Reply-To: <20210324141115.9384-1-fabian@ritter-vogt.de>
 References: <20210324141115.9384-1-fabian@ritter-vogt.de>
-X-Provags-ID: V03:K1:o7rQAzrbX+MaovA9pnERyxbwGl7qxIhi0dSc2LU6eF0WfIJzhfI
- fwrsTsUInjVHM3lQIaI3+tRqXnIA7YBHLC3qAYPHEU0QzbFxt8LuWhDfAGYOu/z82+Fyd8C
- e2AlePrPpOCnoP0KRdO24NNHXHClQU+l10mXffNTuc8BGBbkp8edXloS/XGRwh15yZQaif/
- PJi1vzO/7FOK70mGf8ifQ==
+X-Provags-ID: V03:K1:At2rKk6Qhs3J9dB/i0kLA9Eh+Ogt4LQPaIQHzrLM1U02LgENaf1
+ c75ikwG+p+6E4D+h9trPHgJpG1dR+9R0UqV6tV8E4CIzaw4GcgGE3bQ3m/fUiW4QbYQ9D1w
+ /JFZZI5ekRg/dBYHWqbQH9oGA2+MRr21ULgzOM0hYcYCRoAuFKLFJn+FbcJUaWcrREMDBSr
+ I5G6IDk4R+epJqfjuoK+w==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:F3+MT+cQBzs=:qFacNbuliAPNGL+Xcnf6IG
- aCtdU2tzGoJBlVqAt6kkfwUMkC9Kfw2Ka/DaVjpNz2ckxZgSaUrQId296lUU8qIXXpPFBOWtk
- qdwzTpsvVaQ8gtjnjDM96h/Paj6IpzRj2BAcjzXmC9VPHHigF3xv+OqjUvVhHZ7TFxx07xu6w
- qgZp0dHNwR9z5ifKlVY46pXxkpruknGvGWRKOp8GesJn79liTpitZXmxAbUcC3Yj3+cImsLHu
- Y33RUXOtBoUkI1TSgrqygqjn+K6eHyOCjWgZmc72Kk+lDdAcdPaX1Bc9rEQA2CH2Ogn2ktHNl
- byGkoToNugREHRyXd76RFxDbjTS1OYGVZXrwyNauDzgZJ6TVx3ncOR5y7fd9oQIIEH+1F7bt4
- YTNU8y/tRGOO9K4F9YWeKC0UK5tFrLGCLSyMGUw3YwFjG7zbgTZsH88/R73anXnmFSO2dfsqs
- oFB/8LnDPw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:rsCL3QtHaWA=:r9CvhJJy+2xMWYS4G7o/yc
+ OUhaEent2Fu6K/SuUAvY6WOAHgrsr5k+iKuB4W8G80WsL866pS8CrA7c9I7uvLhrt5zbBNsLY
+ N0HOUSlZZBhgbfjpJW2pKk6rdCvqhm8DtPKbYNc5mv+O3+qNeRO+/6q9xZIdW0CrtPX7fBb4s
+ kta96nD8siofeBRh0ZQoJ3H1w0cPN+sZ67YQX+D6kAemxrBv2OlVNzuTW0H8tkI4G45cDrSqj
+ hKGxFvUIQrHzNvmHhWK1sjUkHta5ww/9RcoAY7ktInko0SUAPbxHXoB3mlfx6jD5MyT4LuXtO
+ wHEzuBCciFHyw5Qc75V6XcnLOBmdlsOI0mKMRXAgX3vZlMwCFjYIYgNWgro6+oBehAAgLOy+l
+ tRWp2AERaJZNY2PWnZi/pUgBS9uVtsKw7CClZYhUW2Ai1sC7sm+s+rj2xg1B+nzdB9Pp1ceZR
+ o48JebJhSQ==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When the EP0 IN request was not completed but less than a packet sent,
-it would complete the request successfully. That doesn't make sense
-and can't really happen as fotg210_start_dma always sends
-min(length, maxpkt) bytes.
+Currently it leaves unhandled interrupts unmasked, but those are never
+acked. In the case of a "device idle" interrupt, this leads to an
+effectively frozen system until plugging it in.
 
 Fixes: b84a8dee23fd ("usb: gadget: add Faraday fotg210_udc driver")
 Signed-off-by: Fabian Vogt <fabian@ritter-vogt.de>
 ---
- drivers/usb/gadget/udc/fotg210-udc.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/usb/gadget/udc/fotg210-udc.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/drivers/usb/gadget/udc/fotg210-udc.c b/drivers/usb/gadget/udc/fotg210-udc.c
-index 539808f62e2e..911f1a5cd1f4 100644
+index 911f1a5cd1f4..d7693b8d7c54 100644
 --- a/drivers/usb/gadget/udc/fotg210-udc.c
 +++ b/drivers/usb/gadget/udc/fotg210-udc.c
-@@ -379,8 +379,7 @@ static void fotg210_ep0_queue(struct fotg210_ep *ep,
- 	}
- 	if (ep->dir_in) { /* if IN */
- 		fotg210_start_dma(ep, req);
--		if ((req->req.length == req->req.actual) ||
--		    (req->req.actual < ep->ep.maxpacket))
-+		if (req->req.length == req->req.actual)
- 			fotg210_done(ep, req, 0);
- 	} else { /* OUT */
- 		u32 value = ioread32(ep->fotg210->reg + FOTG210_DMISGR0);
+@@ -1040,6 +1040,12 @@ static void fotg210_init(struct fotg210_udc *fotg210)
+ 	value &= ~DMCR_GLINT_EN;
+ 	iowrite32(value, fotg210->reg + FOTG210_DMCR);
+ 
++	/* enable only grp2 irqs we handle */
++	iowrite32(~(DISGR2_DMA_ERROR | DISGR2_RX0BYTE_INT | DISGR2_TX0BYTE_INT
++		    | DISGR2_ISO_SEQ_ABORT_INT | DISGR2_ISO_SEQ_ERR_INT
++		    | DISGR2_RESM_INT | DISGR2_SUSP_INT | DISGR2_USBRST_INT),
++		  fotg210->reg + FOTG210_DMISGR2);
++
+ 	/* disable all fifo interrupt */
+ 	iowrite32(~(u32)0, fotg210->reg + FOTG210_DMISGR1);
+ 
 -- 
 2.25.1
 
