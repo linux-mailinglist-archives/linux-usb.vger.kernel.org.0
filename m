@@ -2,138 +2,265 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6331347147
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 06:55:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDF43471AC
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 07:36:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233199AbhCXFyp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Mar 2021 01:54:45 -0400
-Received: from mail-eopbgr60082.outbound.protection.outlook.com ([40.107.6.82]:8838
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        id S229822AbhCXGgS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Mar 2021 02:36:18 -0400
+Received: from mail-eopbgr1320093.outbound.protection.outlook.com ([40.107.132.93]:42752
+        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233049AbhCXFyU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 24 Mar 2021 01:54:20 -0400
+        id S229548AbhCXGgJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 24 Mar 2021 02:36:09 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T2oNHPda8C9rqEIai63lscnDlfTJ4c7K1V6VEB53Z3UO5FMaET1KE+3cyoA3sVx5Au1JmqUHspr5SbdJG5F9LRadl2rFGy2l1MNRn9NSppg8xCMH0js63/cw6R2h7oyy8/3pAgxBcZ5bAptGx6qciIvaAKD2THYq5YybBKFfa/jDTLzQR2FhNSJw2TdKKJdjywtpMm3pKx+q7+aa0iFDlA3ajc4d85FsBmrmWdSX0uHzZZPC7aXRNDnecrFDw3RH/qCpKH5ZdSO+cMwzPwVBH3/MEmxbsuXUNojD+R1kkYZx++7+uZT5q9O0NnklLki7WiU5r91yPGRoQc7TdxtN5w==
+ b=H21ymyoqibJwsHJWnQ4v6fct6zQs/55HMquyHtGA/SM0Zivx4PTnygZCpyXr/cGRgI0FyWyROQqblhBNbDd1jJSnGqRLCkFiOEvPTtuwWZj+FTLv6S4hmnT+qZ4RxSZX7uu9W3Ci0DzmWDsfR3ItavfnmvBHCfXKldCFIxAT86i8DxPAGjseRYDTwyK4MoIhmYTQxUR1+GB1C4rsYJyLR6VefOnNjHRfShFvv1+BSY+2qKEv1+VG5Z7/uJCgHQ4W0LE83tJ9BVTzsD3SqVbbo2J1jGigYX7Qmail0xdT7l0Ha8wpW1rQO+CLx7BHxa3ZcR7TlpORNpDz6Q5C5oglTw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ruwZbPuNnSBUoCUqTVKpRFtwArJ6GyZJ1+vBW+LjkzA=;
- b=gd5+A/WwUSFTbiOM2o0fprPrVGYtMVyNAJU0fUlDzvSrcFeWvuxr3ZZg0QSQ04pA1wK86YINELuxODBI/v/kEJUO5dblmSW/ofOwESkUBAv9RXMmOmwTBeHwri+Ve1W6kP6oHKC2BBoCn5q7dySea/iv1MBQSay0/vAo8pU/MjckN8bxZ59A4TeW6RgqMKGTs3JaQzPrxi3SzIT+t+h/3sbA326gMrRIN7dSAeEFu0Ho3Vw2WeHockYESqgcBObeI4Oqn6wVNjX2CRFC4geGj012um/73w626kV++/LKwe/CE0Nv/4j16WyVaTY890lc//SKEwFnEmQlbfNAS4+VGw==
+ bh=tcvk6kwtyus4t9MsVWrtIbXn+BjZvBcf1TlRlM9T5JA=;
+ b=l8EPffmmCq8miY9QuNmx0c/s052VBvAFnFX09RtM/kJUjLlM8oIRg19Z1f7pLV1h8oTr6BL6V5DelzFm+JK7NfSvjXP1WJOktW4m0e6pBInacNCiyPpghs2RkKuSbKXjcI/elvXHEayiHb5lWqm4J0OwkZOAPmx9kkMI8p3iPyeE2yKSoyHQXpJahbmu8BxqKXmPFmN9Ok9Ei7VdCBU0y0S2Spm1n0x6eKmMPCrX0IovKne7m3v9YEmGZaICR5/aUIs4MJpipBvTycEIA7NSrFknStWvGSw57aIJKDrgkd+Ww0HD1A6epFIqiNbLuvY1lsF77NK+aMJlDFVhyEMLsQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=zenithal.me; dmarc=pass action=none header.from=zenithal.me;
+ dkim=pass header.d=zenithal.me; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zenithal.me;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ruwZbPuNnSBUoCUqTVKpRFtwArJ6GyZJ1+vBW+LjkzA=;
- b=LhDmwj4nt/VkmpomgITQpJNP4dqWrthGjY7N78+IEBhp6YmE2mk65TIuwM0BA8O5wbestZCXK0VVY9MVNW02KYTYMVVYRdvk8IV9Ex334RAGJ0xAvqigAvUVwghBwOelRtltPwh4GPm/sRSI075Du8eV5C5vwBoqxLkToDaoDhI=
-Received: from VI1PR04MB5935.eurprd04.prod.outlook.com (2603:10a6:803:e9::17)
- by VI1PR04MB4271.eurprd04.prod.outlook.com (2603:10a6:803:3f::22) with
+ bh=tcvk6kwtyus4t9MsVWrtIbXn+BjZvBcf1TlRlM9T5JA=;
+ b=Qa0OG22Jg6eU2IxjYc9esoY8N9ldjch9Jk3dA3IDJbqbrToxCkM7foTpOfIXYj5NXHptT1T3zWmkgiCjV8O61htgUIKXMrxgEJ1OJCZO6iy5bp+wc55IHsq5Xy44BRQbmZ4Uhv15v0MeI132CxtnuW3UkjmF6/q+/ggQqG0eCvk=
+Authentication-Results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=zenithal.me;
+Received: from HK0PR03MB3795.apcprd03.prod.outlook.com (2603:1096:203:3c::10)
+ by HK2PR03MB4546.apcprd03.prod.outlook.com (2603:1096:202:26::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.24; Wed, 24 Mar
- 2021 05:54:18 +0000
-Received: from VI1PR04MB5935.eurprd04.prod.outlook.com
- ([fe80::801f:563a:65e:8d12]) by VI1PR04MB5935.eurprd04.prod.outlook.com
- ([fe80::801f:563a:65e:8d12%6]) with mapi id 15.20.3955.027; Wed, 24 Mar 2021
- 05:54:18 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH] usb: dwc3: core: don't enable wakeup for runtime PM
-Thread-Topic: [PATCH] usb: dwc3: core: don't enable wakeup for runtime PM
-Thread-Index: AQHXEBr8VcibFbAdG0iVJpCdA7ezA6qRlboAgAEuI1A=
-Date:   Wed, 24 Mar 2021 05:54:17 +0000
-Message-ID: <VI1PR04MB5935FB5B13B55A0B4498634689639@VI1PR04MB5935.eurprd04.prod.outlook.com>
-References: <1614767857-12723-1-git-send-email-jun.li@nxp.com>
- <YFnWcPqua4burARj@kroah.com>
-In-Reply-To: <YFnWcPqua4burARj@kroah.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=nxp.com;
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: d4a3ba80-a19b-4bd6-cc18-08d8ee89436c
-x-ms-traffictypediagnostic: VI1PR04MB4271:
-x-microsoft-antispam-prvs: <VI1PR04MB4271D123248D04CFC9C39D2E89639@VI1PR04MB4271.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1002;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: g16IAjdHrc/AU23DwOGyhOnu38Vkpk58Jy3JzmBvP/uLxca8DqZd/Qu43nnOHHlLGPPLF6tFQ7D+gtQAvsfKFXJddKP1R276KwMe6xDBzBQPWgR2LvkEuT+idVLce7zEtImiGNxANiLZJk0FEECAG3CuUHhpV7Y0reySUwgN+ryDCknpjTk3v1j+2bdFPZN7Qui37BximIzbUoILSJUD74aChPA9M/KtIdcjoUzJL2a37EJxMpoQUsiSegodEqSdlr3jM3N6mgkFlDi7b1YNc7eMBg0zmMAGb4XCn7FnvEqp2M3X9cHRDDIW0R+IDit/ftU2PBBc4MwmLfcVY5wfs6Ionn8DaHG6zG4YT47kVPoNbZUjfXZEC7X8fGSeclOn1sf8CZIW4tMmsPyQeIwxXi5MxgsdRdqtovd4Pw0M9jGIsKw0DYsvxaG3lu78YoDzC/E4THa94TBLGLjWrO/9zFY2qDFgex+94U0rqCP6pELVtwZaWSM9JZsUvcwYJhiWGjnFnOjolOafNnT5YHf0ka//DjbcEYJ7LBWr4Gj7beTSs2q9A4On0msMdmXtOYSDZVE9zy9p7z1xP7lpAkXgD0oub20ThDMb7gR0+iL1mECHxIBES5PS6vhAxKmsJ5iaQD7EcmOt6MiZAoJC73pnuqxn+KFP0O+7sYmHozemIWo=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5935.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(366004)(136003)(376002)(346002)(39860400002)(7696005)(71200400001)(6506007)(66446008)(8676002)(6916009)(4326008)(8936002)(38100700001)(64756008)(53546011)(86362001)(478600001)(52536014)(44832011)(5660300002)(55016002)(26005)(9686003)(83380400001)(33656002)(66476007)(66946007)(4744005)(2906002)(54906003)(186003)(316002)(66556008)(76116006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?24Ro+M/l87E4JaLl9zH16s5ZUKrLoLR/29+CluN3MWklYYHRSQo5PQE7R648?=
- =?us-ascii?Q?5mSm1Ubu/kKrx36kDOi5Lzsvsxql4XUUrP1qaUnIa67x4WE/TUr0FIoyRJ49?=
- =?us-ascii?Q?TrM1188Q4CivoOm1oeBt+5oszovXhA8cWxt3GLyzex7PTJ8f1OiKPz+qlowY?=
- =?us-ascii?Q?XdXLC360/8ZL3wVy5xjOMi/cPcOnlzVPaacLDzm9aetkmmHBGBilmghYJ9nS?=
- =?us-ascii?Q?86+rfAOFRnE7wWE+gs+Sdm3c8fESSe4wO2DggsaX0RhyOdSqyAstg2T/TAKp?=
- =?us-ascii?Q?SKs/OWhPecbTryTuGqcHOgYGjNiklEvaWrpxPznDFT998rwi8W8t0+jntQlG?=
- =?us-ascii?Q?z64wpD+gLMBYoKQlWFZPRKHHyMEQXM7VPHvIW/ze92xeXLLIQoJaarQqgXlA?=
- =?us-ascii?Q?z0MGPb2pCpwKFWSgB0FzgoeXsVkHWzaOJD/pChLCPhwBTZu8nhS/GoXruhDu?=
- =?us-ascii?Q?PRlFrieSBpD/GhQaiLJGS7fWFCEkKHE8UcF2SnwY6tYAElW3zGOnoyxtUqJl?=
- =?us-ascii?Q?Gpa0m5305wSDca4xFhNA6IJLz8dkN6mj65bXa9qtyuY41emL533JkGSruJEO?=
- =?us-ascii?Q?VIoBtPdiMDtOV2s/fzyIVELzUYMzB23caEW/e+85mlwtmxNWsxDPfyHyOwif?=
- =?us-ascii?Q?TMNj0GlB74/wj7KdAW1Q/WbHoQANOxvO637QshBCjAMIlZ3jSDOEcGvx6TYw?=
- =?us-ascii?Q?PO8apk1ODomsdtbkD02qPJLJ+jmt0d3H8JL/4UKwS39wQPOYNIHxbt/WL3XF?=
- =?us-ascii?Q?OKkICEVwwo1SSedg+3WT5X+PWiLm+BurL74Df9x0PdKMOYu5wNmJpvJ2o+lt?=
- =?us-ascii?Q?WlqdVQBNOCsCYTDRLevbzRjrpcFMuda3aeEqDaXIqk+iG42/mRsFMXEd4FIa?=
- =?us-ascii?Q?Mu54sBTGIm0LlwCg4GK+4Vie7YQY/l4QydtZPGthUN1Ru3RUWxGC40wbqd+m?=
- =?us-ascii?Q?l508hrljdtkFlccG7JPWMS9Pr+7tKY9KDF+t3xLLn5qLjmCOBW8Z+r3xjuaL?=
- =?us-ascii?Q?DDtF8YphG9TQvdXcNYA5hHYp5r+7xhT+YtgKwXPJkjYHA7mQ8ZwMAR9YLA7E?=
- =?us-ascii?Q?OxNxlkUlVjVxAjOm/05BU5fZ/VQbOeKarX4VQxNnFBL9ZQzePIzbu0liqGR4?=
- =?us-ascii?Q?DJNwXj+2WGMqz+yOsdR224i12j4BiPgEGQ1P5O+I7EN5D4/c8GOmXwZmaOb9?=
- =?us-ascii?Q?3sFE+H2BLK956iQSX8xHISE53Ra2Z+v8BDiHuBjRex2h++pvSU1c0z9orzie?=
- =?us-ascii?Q?ym033fvHcE5j7MyUDCdEHp8RO1kJAnkfVExtvn6as/HVGO4FwigUNcZIivdS?=
- =?us-ascii?Q?mdrDb0y2Pnqho3FbA/Kk9j/6?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3977.9; Wed, 24 Mar
+ 2021 06:36:05 +0000
+Received: from HK0PR03MB3795.apcprd03.prod.outlook.com
+ ([fe80::8492:e28e:e777:6d05]) by HK0PR03MB3795.apcprd03.prod.outlook.com
+ ([fe80::8492:e28e:e777:6d05%6]) with mapi id 15.20.3977.025; Wed, 24 Mar 2021
+ 06:36:04 +0000
+Date:   Wed, 24 Mar 2021 14:35:52 +0800
+From:   "Hongren Zheng (Zenithal)" <i@zenithal.me>
+To:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Antonio Borneo <borneo.antonio@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        matt mooney <mfm@muteddisk.com>, linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v5 1/2] usbip: tools: add options and examples in man page
+ related to device mode
+Message-ID: <YFrdyKKx1nx8bktm@Sun>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YFrBz6dvTip9+wm7@Sun>
+X-Operating-System: Linux Sun 5.10.19-1-lts
+X-Mailer: Mutt 2.0.5 (da5e3282) (2021-01-21)
+X-Originating-IP: [2402:f000:6:6009::11]
+X-ClientProxiedBy: BYAPR04CA0002.namprd04.prod.outlook.com
+ (2603:10b6:a03:40::15) To HK0PR03MB3795.apcprd03.prod.outlook.com
+ (2603:1096:203:3c::10)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost (2402:f000:6:6009::11) by BYAPR04CA0002.namprd04.prod.outlook.com (2603:10b6:a03:40::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3977.24 via Frontend Transport; Wed, 24 Mar 2021 06:36:01 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a633e9e8-5245-4ca9-7cd3-08d8ee8f17e9
+X-MS-TrafficTypeDiagnostic: HK2PR03MB4546:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <HK2PR03MB4546BF475D4C24F95DE18BF8BC639@HK2PR03MB4546.apcprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:813;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tV9QfIbrN1JY/zCumW/Gs3ytypS1lzTzRv2b6yQIrVnSwNKbtBWZiWI8SNjmoHr5L2WtGfgAHwLfJ6eRQloOxFL6ZA9Zot/LnwiPsJWpDwnE4S4x97oq4WKKh2dPKzqkkIRjVVfIKGxLWl9fPTEOo+VI3zOCuT+q1ll7HPl54sAMJ7Ujd5BiC/+YeRFolRV17al7OaAQaTqacIyClIxkY4McaB9PCSEcHVfdgHP9DRUukdpH9cHCeDwzZklBPqlAbmQbNRy73uR/k1n9/8jrwMc6tww8c1uzBD9LoX57U8XoMcuqJ2dqnp7j16P8l0SzAA4ANxBFtm2uXSV7tYlWI7QLe1aqlPV3UgGEHV9+HhRadErNjW7ypG28a0qZ7XcfzZnPU175XCtKCSz5aDf8hhYTNfs9gC5zaU+BDV2nPUbD6MUywCU+QsrBHqxnhZikdw4y/bZNI/Dv2fYEEPz7lkjaaBKdAG/viiSfGv6SbzErVs5tinuKOygMfOT9NBBSOdQvWHUS6KCVxjJAgzP/08p7UQVQSKpOL3yLsTyW8DPUoirOPrQ7iy/FHiwerRfXPEOILIoiM5IxRdCKKzGSzsZv671iofWIU/SmLpsZmz76mXK5MPIw7g0VcHIdmlvnf+kaLgX2b75A62jKqUtDw/fP44dAR4rAOGkZ/XlvC3ZdWcQlFqLI0G+c79hv0gIG
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR03MB3795.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(396003)(376002)(346002)(366004)(39830400003)(136003)(83380400001)(6496006)(86362001)(8676002)(2906002)(5660300002)(9686003)(33716001)(6486002)(16526019)(66556008)(52116002)(478600001)(66476007)(186003)(66946007)(316002)(8936002)(6666004)(786003)(38100700001)(4326008)(110136005)(49092004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?PVh0gXhqqgFPV0YT9Uxf8yN2KEfS27+MDxRbJAfYnWbtb4mgzKWnGdPUzxVh?=
+ =?us-ascii?Q?SWmgglbXMY9vtTSl2uHG79/WUOMWa5NqBG/9Rw9nmxPx3jhtQVJUIgX8A1Dl?=
+ =?us-ascii?Q?bhQgj2bP/2Sx++52WQgQRXXbU8Y1KrxAvCKppskfzayhVCVXkF0DyJGt7s9b?=
+ =?us-ascii?Q?uoCMHrLqOzVnvIXNuJ50jIbI43ayrUDvN8toVSfEfQ7V29GfL9p999qy3kfe?=
+ =?us-ascii?Q?D36NAhpr1+mCIwDOOYVZVmLEDalF28jlhw83YFaUfJ/p3Sm4h3HXDns5POqc?=
+ =?us-ascii?Q?ybyoABderfOmftGGltm7LkGzjF3estY85cjr+JYG8q57li8ZkAyPKb9Sppnm?=
+ =?us-ascii?Q?qJ5ZARjZpWSii3EFgkkZz/AHcxoT+JAR1JcBwYqDXz0hqCLt4QAmUQ7yp2xU?=
+ =?us-ascii?Q?/wrbeWPFxwc99pNxOB6YU4hF1oUyDjzxB/FdUlCke+YnP3fGICpY2YWzD2Zk?=
+ =?us-ascii?Q?3Ip8DURWqPxqGwvBG4s3p2HH032txyIxtgFpKkCaiJd5un9JpUqp1WIeFBDP?=
+ =?us-ascii?Q?0I8tNe1C/d3+yu0/74czOpXUgiPtju4h2dIveLhzTpE172I2xaIEh1JbspXF?=
+ =?us-ascii?Q?UvvOWJnuf1tqOFcxnCsOpdnYbtAbXkurgVt6PRQuEizv9RNy8DA8ePIWGvtj?=
+ =?us-ascii?Q?iDYdzG7+9f2r2LtFv0BOWwGiyHfL2f6/ohW4Ur121SYBLCqj/RFxBPt/D62G?=
+ =?us-ascii?Q?t4bpVqWc2goce2sCzWmvbtpkUuREhUkoUI2atM+ikxfPTW1DI9afhEXqBVl2?=
+ =?us-ascii?Q?Ad3IZxp0ZHH2NG/gm7TV42qUV8x7fhGqZo+RM76YUXacfKnql5URalG2gPJa?=
+ =?us-ascii?Q?Q4RlvKJnNWvJKdo1yHKyERmJaz31r+a7C1TbmnI3/22eVRXbxY9qnQ7wtC93?=
+ =?us-ascii?Q?LASxrA2687Q4s1DcGM9d11YlSv/xZqOmS5qOXqB0zZjeEfIeujZebzLIts/L?=
+ =?us-ascii?Q?dO+djcGSXuMdfoWPhMQ3Y1gcAlTQnNeU9qYiqo5HTHwWBM+qYIBSYlEF6g5i?=
+ =?us-ascii?Q?Mxu/YLFHBA0KIpuRr1agDTL+zihqtcbgjXEYeK9RKjmVNc2njTJM4nuHb6aY?=
+ =?us-ascii?Q?+Wb0a6P2tnXfPLMDC1LHjZL4D4D6IFvw1ysidoW/n5zfvxztRVd/vdQakdKY?=
+ =?us-ascii?Q?ATNu38z6mr5ri7o0puLNmOnl5Jxv+Ifq2l+fE7CHqYpvZHTi6Cpl+z9aCLnI?=
+ =?us-ascii?Q?L33vdYE4xdgjTaZ4B12+t+MCsnnod2yT4w7a4jsUGfmTCGGB9AvkmkWACDQQ?=
+ =?us-ascii?Q?ioK4Ko8Xo+vO1ibVMrSt5nRH5HZxC2RUK7TeyLsDzFqtm4UTbsCYhvEc44bQ?=
+ =?us-ascii?Q?i4jXFwErlvsa1aCMlEniRxu+jPxQNr0J5Er73sOZ+fUZOg=3D=3D?=
+X-OriginatorOrg: zenithal.me
+X-MS-Exchange-CrossTenant-Network-Message-Id: a633e9e8-5245-4ca9-7cd3-08d8ee8f17e9
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR03MB3795.apcprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5935.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4a3ba80-a19b-4bd6-cc18-08d8ee89436c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Mar 2021 05:54:18.0509
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2021 06:36:04.8451
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WcJjbMapAJ1/vQ3IBl3SxhkrSqq6ft/tyIb05Q5ZYR/XdkOlriEUC8tQGuaJtIoQ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4271
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 436d481c-43b1-4418-8d7f-84c1e4887cf0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lNDz6ghySqlKSCzrhxnf6SrT3mj6zz0Y5BUysiw3nYjPi/WNRsVvwd+OWwLrTL/4
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK2PR03MB4546
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The commit e0546fd8b748 ("usbip: tools: Start using VUDC backend in
+usbip tools") implemented device mode for user space tools, however the
+corresponding options are not documented in man page.
 
-> -----Original Message-----
-> From: Greg KH <gregkh@linuxfoundation.org>
-> Sent: Tuesday, March 23, 2021 7:52 PM
-> To: Jun Li <jun.li@nxp.com>
-> Cc: balbi@kernel.org; linux-usb@vger.kernel.org
-> Subject: Re: [PATCH] usb: dwc3: core: don't enable wakeup for runtime PM
->=20
-> On Wed, Mar 03, 2021 at 06:37:37PM +0800, Li Jun wrote:
-> > Don't enable dwc3 core to wakeup system by default if runtime
-> > suspended, this will make the power domain of dwc3 core or its parent
-> > device can't be off while system sleep even system wakeup by usb is not
-> required.
-> >
-> > Signed-off-by: Li Jun <jun.li@nxp.com>
-> > ---
->=20
-> What commit does this fix?  Does it need to go to stable kernels?  If so,
-> how far back?
->=20
-> Please add that information to the signed-off-by area when resending.
+This commit documents the options and provides examples on device mode.
+Also the command `usbip port` is documented.
 
-Just sent out v2 with fix tag and cc to stable kernel.
+Signed-off-by: Hongren Zheng <i@zenithal.me>
+---
+ tools/usb/usbip/doc/usbip.8  | 42 +++++++++++++++++++++++++++++++++++-
+ tools/usb/usbip/doc/usbipd.8 | 26 ++++++++++++++++++++++
+ 2 files changed, 67 insertions(+), 1 deletion(-)
 
-Thanks
-Li Jun
->=20
-> thanks,
->=20
-> greg k-h
+PATCH v2:
+     Add signed-off-by line
+
+PATCH v3:
+     Move patch changelog after the marker line
+     Remove nickname in signed-off-by line
+
+PATCH v4:
+     Use commit short hash and message instead of long hash only when
+       referring to commit in the kernel
+
+PATCH v5:
+    Add documentation of `usbip port` and its usage in examples
+    Add flow of detaching in examples
+    Rephrase some description and add punctuations
+    Fix typo of `usbip attach --ev-id` to `--dev-id`
+
+diff --git a/tools/usb/usbip/doc/usbip.8 b/tools/usb/usbip/doc/usbip.8
+index a15d20063b98..1f26e4a00638 100644
+--- a/tools/usb/usbip/doc/usbip.8
++++ b/tools/usb/usbip/doc/usbip.8
+@@ -49,10 +49,17 @@ then exit.
+ Attach a remote USB device.
+ .PP
+ 
++.HP
++\fBattach\fR \-\-remote=<\fIhost\fR> \-\-device=<\fIdev_id\fR>
++.IP
++Attach a remote USB gadget.
++Only used when the remote usbipd is in device mode.
++.PP
++
+ .HP
+ \fBdetach\fR \-\-port=<\fIport\fR>
+ .IP
+-Detach an imported USB device.
++Detach an imported USB device/gadget.
+ .PP
+ 
+ .HP
+@@ -73,12 +80,26 @@ Stop exporting a device so it can be used by a local driver.
+ List USB devices exported by a remote host.
+ .PP
+ 
++.HP
++\fBlist\fR \-\-device
++.IP
++List USB gadgets of local usbip-vudc.
++Only used when the local usbipd is in device mode.
++Note that this can not list usbip-vudc USB gadgets of the remote device mode usbipd.
++.PP
++
+ .HP
+ \fBlist\fR \-\-local
+ .IP
+ List local USB devices.
+ .PP
+ 
++.HP
++\fBport\fR
++.IP
++List imported devices/gadgets.
++.PP
++
+ 
+ .SH EXAMPLES
+ 
+@@ -90,8 +111,27 @@ List local USB devices.
+     client:# usbip attach --remote=server --busid=1-2
+         - Connect the remote USB device.
+ 
++    client:# usbip port
++        - List imported devices/gadgets.
++
+     client:# usbip detach --port=0
+         - Detach the usb device.
+ 
++The following example shows the usage of device mode
++
++    server:# usbip list --device
++        - List gadgets exported by local usbipd server.
++
++    client:# modprobe vhci-hcd
++
++    client:# usbip attach --remote=server --device=usbip-vudc.0
++        - Connect the remote USB gadget.
++
++    client:# usbip port
++        - List imported devices/gadgets.
++
++    client:# usbip detach --port=0
++        - Detach the usb gadget.
++
+ .SH "SEE ALSO"
+ \fBusbipd\fP\fB(8)\fB\fP
+diff --git a/tools/usb/usbip/doc/usbipd.8 b/tools/usb/usbip/doc/usbipd.8
+index fb62a756893b..d974394f86a1 100644
+--- a/tools/usb/usbip/doc/usbipd.8
++++ b/tools/usb/usbip/doc/usbipd.8
+@@ -29,6 +29,12 @@ Bind to IPv4. Default is both.
+ Bind to IPv6. Default is both.
+ .PP
+ 
++.HP
++\fB\-e\fR, \fB\-\-device\fR
++.IP
++Run in device mode. Rather than drive an attached device, create a virtual UDC to bind gadgets to.
++.PP
++
+ .HP
+ \fB\-D\fR, \fB\-\-daemon\fR
+ .IP
+@@ -86,6 +92,26 @@ USB/IP client can connect and use exported devices.
+         - A usb device 1-2 is now exportable to other hosts!
+         - Use 'usbip unbind --busid=1-2' when you want to shutdown exporting and use the device locally.
+ 
++The following example shows the usage of device mode
++
++    server:# modprobe usbip-vudc
++        - Use /sys/class/udc/ interface.
++        - usbip-host is independent of this module.
++
++    server:# usbipd -e -D
++        - Start usbip daemon in device mode.
++
++    server:# modprobe g_mass_storage file=/tmp/tmp.img
++        - Bind a gadget to usbip-vudc.
++        - in this example, a mass storage gadget is bound.
++
++    server:# usbip list --device
++        - List gadgets exported by local usbipd server.
++
++    server:# modprobe -r g_mass_storage
++        - Unbind a gadget from usbip-vudc.
++        - in this example, the previous mass storage gadget is unbound.
++
+ .SH "SEE ALSO"
+ \fBusbip\fP\fB(8)\fB\fP
+ 
+-- 
+2.30.1
+
