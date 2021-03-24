@@ -2,90 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4440234850A
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 00:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C4C348556
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 00:32:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbhCXXHA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Mar 2021 19:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49596 "EHLO
+        id S235215AbhCXXcU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Mar 2021 19:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238941AbhCXXG7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 19:06:59 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38AAC061763
-        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 16:06:58 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id j26so6173iog.13
-        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 16:06:58 -0700 (PDT)
+        with ESMTP id S238675AbhCXXcL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 19:32:11 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1ECAC06175F
+        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 16:32:10 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id w21-20020a9d63950000b02901ce7b8c45b4so233051otk.5
+        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 16:32:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=h4nsP5iuSvLRUSUoVyhkKNOJvSrZQbNgl007uSGB9Jk=;
-        b=Nm1q6owNG5rx+/fwQyP3HWBenPMSaXplLjhEAlA3MxdK0J/q3Q5IKEUOeu9EbPftDx
-         qwADRNgOrFS/7Jey+oH6I2UMDtxfytpDtXH/RepLF78ZfL378dyChrXQpViPlstLQFve
-         ukdj4wEbMxN9my+RyGreh1NL6r2cuymInq9kU=
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=VDfCQ7mDypdFgGP02/nPELkWSb7fPDTztukepFJIbL4=;
+        b=R5R6IU6+nf9PEwIxttXJNeB5ZogHzhLJHJrml1vx4ANHnSTbJr5si8JL2GS5gXC9zz
+         BoXA1OBshfj+mFu8DeqHG6xH2Rx9ast2qbJHxh7lo1WE71fIXVAFberGCjKcQt7nK2Bj
+         EWVESIQwh4APGF8BCbhVdysdv0xPZBe29wNt8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=h4nsP5iuSvLRUSUoVyhkKNOJvSrZQbNgl007uSGB9Jk=;
-        b=bBEj9GnKbmKxmr1O3v2I+awDT7WCGR/d2b1yROIH1ChAVezzR0/J/OOznnClUOakFV
-         eZNg8xgZkCfKtbJzJ6Jgdqsn0GjEEp++z7P6MEF/UySM6WkDT6Yk8UwA8RioQfVJnZwM
-         ZmYKgffBKYCamW2nMvPX3JAT2Es5UCWkJ6PAUCiPhhotcPuoth5gRFNrZUyBTs4FP+8L
-         H7WBxN/9BKqtkY+KCx10govxv9OdhGfcx37V8Im5GmNkll/jqW2dSkSxriPooE8WGoGa
-         nkh4VSTR3aDP2+Y+5zbuX4OlRkGFvZZWG5ZORUP8EeFQSPJLSeMAH3bBo/MiGx7+28NH
-         mafg==
-X-Gm-Message-State: AOAM5339FN1nczo9ewXe5SBbEU2MrR8ZLd6P62de8hr+uaih8rUkmE9i
-        xPYmryiZfr31J2KeiccPLRnNvg==
-X-Google-Smtp-Source: ABdhPJyS+92HCc3ZBxTa2EOIEXTFs5p8NK2Hu4c2/ZOCCFrNy5I2JuIXSsPRUWGuP6UZtTqU2ZvIQg==
-X-Received: by 2002:a6b:650f:: with SMTP id z15mr4183159iob.128.1616627218256;
-        Wed, 24 Mar 2021 16:06:58 -0700 (PDT)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id t8sm1638249ioc.12.2021.03.24.16.06.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Mar 2021 16:06:57 -0700 (PDT)
+        bh=VDfCQ7mDypdFgGP02/nPELkWSb7fPDTztukepFJIbL4=;
+        b=qbhrGJ/XRU5RitPZeZMPXgCb/p0IDLz5DMky84F0f78HbufVVTI2u8+vxDNJ2mXyUj
+         NJMhxVYmSCoeN3kL8x6NNO9DAXwwyibLHNnUbbei7ABquS0T6rxC6jOjU7p1nxe+GBZL
+         IigiGfy/Kei+4NwnT1KGqu2OwOIlMdnA6E+2fB5u3zyw+UNaflX2lK2EMSHo727qNXTC
+         18/u5MNr7iR9kWa++7GO7CcnM1cxC5JJM3eN6MoLxe2hE3poNXgo9Wqd0Jgkpuzxs10p
+         Awqm7FS/wYAGq0SwVih7WQJYi7qwLhYdhuM1V0E02K1H/gZCp4G6nd29KNYEqlqK0VQX
+         We5A==
+X-Gm-Message-State: AOAM5322LWooFUk/qCxHrKFc4wXzmM9a2+tMJ2+YjbIK0SQ17+WDhYCy
+        nyf84us3c/pX5HVjIYycEg4wKA==
+X-Google-Smtp-Source: ABdhPJxjgjkcJJR2C6hsgUV8ZIiDU3Y1ioDMXbixrlz+0Mex/FrHQE2WAD6nRDh7anrod1IfmzoKEg==
+X-Received: by 2002:a05:6830:2472:: with SMTP id x50mr4972223otr.69.1616628730037;
+        Wed, 24 Mar 2021 16:32:10 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id v65sm732795oib.42.2021.03.24.16.32.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Mar 2021 16:32:09 -0700 (PDT)
+Subject: Re: [PATCH] tools: usbip: list.h: fix kernel-doc for list_del()
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210324000223.22043-1-rdunlap@infradead.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+3dea30b047f41084de66@syzkaller.appspotmail.com,
-        stable@vger.kernel.org
-Subject: [PATCH] usbip: vhci_hcd fix shift out-of-bounds in vhci_hub_control()
-Date:   Wed, 24 Mar 2021 17:06:54 -0600
-Message-Id: <20210324230654.34798-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.27.0
+Message-ID: <0af7bfad-fff7-84be-8e7c-2ad3e93fb785@linuxfoundation.org>
+Date:   Wed, 24 Mar 2021 17:32:08 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210324000223.22043-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix shift out-of-bounds in vhci_hub_control() SetPortFeature handling.
+On 3/23/21 6:02 PM, Randy Dunlap wrote:
+> In list.h, the kernel-doc for list_del() should be immediately
+> preceding the implementation and not separated from it by
+> another function implementation.
+> 
+> Eliminates this kernel-doc error:
+> list.h:1: warning: 'list_del' not found
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Valentina Manea <valentina.manea.m@gmail.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Shuah Khan <skhan@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> ---
+>   tools/usb/usbip/libsrc/list.h |   10 +++++-----
+>   1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> --- linux-next-20210323.orig/tools/usb/usbip/libsrc/list.h
+> +++ linux-next-20210323/tools/usb/usbip/libsrc/list.h
+> @@ -77,17 +77,17 @@ static inline void __list_del(struct lis
+>   #define LIST_POISON1  ((void *) 0x00100100 + POISON_POINTER_DELTA)
+>   #define LIST_POISON2  ((void *) 0x00200200 + POISON_POINTER_DELTA)
+>   
+> +static inline void __list_del_entry(struct list_head *entry)
+> +{
+> +	__list_del(entry->prev, entry->next);
+> +}
+> +
+>   /**
+>    * list_del - deletes entry from list.
+>    * @entry: the element to delete from the list.
+>    * Note: list_empty() on entry does not return true after this, the entry is
+>    * in an undefined state.
+>    */
+> -static inline void __list_del_entry(struct list_head *entry)
+> -{
+> -	__list_del(entry->prev, entry->next);
+> -}
+> -
+>   static inline void list_del(struct list_head *entry)
+>   {
+>   	__list_del(entry->prev, entry->next);
+> 
 
-UBSAN: shift-out-of-bounds in drivers/usb/usbip/vhci_hcd.c:605:42
-shift exponent 768 is too large for 32-bit type 'int'
+Thank you for fixing this.
 
-Reported-by: syzbot+3dea30b047f41084de66@syzkaller.appspotmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- drivers/usb/usbip/vhci_hcd.c | 2 ++
- 1 file changed, 2 insertions(+)
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index 3209b5ddd30c..a20a8380ca0c 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -594,6 +594,8 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 				pr_err("invalid port number %d\n", wIndex);
- 				goto error;
- 			}
-+			if (wValue >= 32)
-+				goto error;
- 			if (hcd->speed == HCD_USB3) {
- 				if ((vhci_hcd->port_status[rhport] &
- 				     USB_SS_PORT_STAT_POWER) != 0) {
--- 
-2.27.0
-
+thanks,
+-- Shuah
