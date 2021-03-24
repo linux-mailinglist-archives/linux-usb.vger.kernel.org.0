@@ -2,145 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C467347F34
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 18:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E19D347F6C
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 18:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237098AbhCXRVb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Mar 2021 13:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
+        id S237178AbhCXRei (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Mar 2021 13:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237073AbhCXRV0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 13:21:26 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2100EC061763;
-        Wed, 24 Mar 2021 10:21:26 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id kt15so24715242ejb.12;
-        Wed, 24 Mar 2021 10:21:26 -0700 (PDT)
+        with ESMTP id S237199AbhCXReK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 13:34:10 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1042C0613DE
+        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 10:34:09 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id u9so34235247ejj.7
+        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 10:34:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ROVD6p8uWXCEzUfy6fJv/Vx954JFE0p8W73iVJQaYSI=;
-        b=ccRE/yRezGAfcVnuNAQV8LBeXvGefdRC+zrTt4K87lxDa3E/cMLXKP38ThihsYN3+u
-         1O+pWkGWKMokC+ym3AdANZrogKxGBXQLxxFqxJ5xac5R5KmNAKwUIjHZwuv9pHgCQMr7
-         6eyHO6/6HQYossBzEEtfGg1KnLBMEQDUK8lO9AQeV3x1nCqPDv/X80ACGW2LX5NjcLqU
-         1rys515irZv5F+38Sl/3T7s/ETabI2lD79sc78+zRMAiEZatopH2G+ouKDqcDjPJoSlX
-         xbcAheWhx6kv9ZygaCwdgQ7pIkh1k92vCQjkMKn8dGPkoHuTKHHRZniEzTonhx4paYc/
-         tG3g==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VoFNqvJqV3TdL84vFoklC/P+s5SxY+mp4X8TTiNgMtE=;
+        b=p5GUKS/uwIXlF0KDHuVWCTKOILfvq6pgQeedSTtsSMFwzeuZp8AKlKbhStPy4SRDFk
+         HRqJKvh8toc4XC2CDpMwgejowYDSgwwsD1NNm/IZLadO+9aHWEJEa7SnZn+Fzie+/tpY
+         cHhRabnd8kARi5Sxtf813O8WVqAJ4I6376ff+ZdtFwIXyxn2TFZwAcHQP8iPkpz2DhES
+         sPWg2kI28DA6L8flcNKaK7fCrqsKbgjkmeINLGfWN8W8iv4Lz10+IASi3UZhscm0Vp5a
+         4LfKAQOpAmDlZWEXD41zDbsvBBjj9lvzYhyZx+Ckfdf3hiQ9fnRbMmWjK4JD9JZdNjZV
+         soZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ROVD6p8uWXCEzUfy6fJv/Vx954JFE0p8W73iVJQaYSI=;
-        b=Aaq+Wr2RlBLU7ELuVbE07gMUczCDVZiGHNQ30urxLw8Cu22+bcApmdYkZ18+kxnmx7
-         E5o/I4QdMsZZ7nIBB17QyU++dy/OV53U3GjsOLVMVFJB2+LHkjaoGr2VgooX8yOAu+IK
-         lI81qMB8j+C4nrxaIMNntqFz6x4GeGkb3OFokM8iijv6Ft2bdza2CcycS9qU60BvJU+q
-         0u0wMxQs6MsN/dARAUXKg6XWRaSFRijyxoEWhgB7EtLo9phszRVyjSyru1Y4rXpIt2MP
-         WEYEM+YleI/vZDxOgBHXQdWDitk1F6dLh+duUAlF/uAYlZdyKYksRdtwO8WuTIx/dCML
-         HnSQ==
-X-Gm-Message-State: AOAM5314uareFNzG893qcwN/eZ9LGGLMvSTQ5XF4crKUCSNsAPrOb+zv
-        1I8D4us467Rl8eef6eT7xguToqxIt4zU1w==
-X-Google-Smtp-Source: ABdhPJxXPXyXb5CpO8/df0wLucEXxyD42Eyw+KiYYQEpFqg0f1nkj759Nev3X7z9xcQeMhl8TZohCQ==
-X-Received: by 2002:a17:906:c9c2:: with SMTP id hk2mr4928118ejb.244.1616606484688;
-        Wed, 24 Mar 2021 10:21:24 -0700 (PDT)
-Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id w6sm1205140eje.107.2021.03.24.10.21.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Mar 2021 10:21:24 -0700 (PDT)
-Subject: Re: [PATCH v5 2/8] usb: dwc3: of-simple: bail probe if no dwc3 child
- node
-To:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        gregkh@linuxfoundation.org, balbi@kernel.org
-Cc:     robh+dt@kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20210209192350.7130-1-jbx6244@gmail.com>
- <20210209192350.7130-2-jbx6244@gmail.com> <1861638.PYKUYFuaPT@diego>
-From:   Johan Jonker <jbx6244@gmail.com>
-Message-ID: <919d24be-69e5-72be-8627-8ebabd1d693d@gmail.com>
-Date:   Wed, 24 Mar 2021 18:21:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        bh=VoFNqvJqV3TdL84vFoklC/P+s5SxY+mp4X8TTiNgMtE=;
+        b=VH2GLyn3kxcl1ASmjWRgOYVSihgIb9EY0QK9F0CvSeBtzzdIgkS4F6YFJwo9TNmjcL
+         OW1atlJ6fNlDbIpxc38fUvJ+ZpiSWQ+0mxoOQmrcPaqOV5EBzryYoYaQZFspdgC+qVx5
+         f9LKaITkgjLmjn6LBCWlF+ln123kgCJdImBLAa1UYwh5FzRLWUp+phsrpNb2uzdJ8eVG
+         81nM15bGjhEwGOSwiuQ2xLxL7LcjAjQxN3eyoq06qrKtPj3XJW0VQlXz+hrcIYX0vDSR
+         YhgcbqzV9IF4z8hvNgFn0Lnnkr+qglwTxdfSz9WuamneyoY3RMnw6zQRo+1bZH+oQIox
+         zftQ==
+X-Gm-Message-State: AOAM533zA9Vg8xt8PHk7RtYlwGzCkybZOH4YIw7MnnOq5W0FvNEro3FJ
+        BUy490Ze/Yj17alozTWTMHwxhw==
+X-Google-Smtp-Source: ABdhPJzwCa1MrVqILnw5ineqDKoBXsRVPYAznXPlfLrlyyVo9HL2XAvV+eancRBLlKNZ4hQlmcJ62g==
+X-Received: by 2002:a17:906:7946:: with SMTP id l6mr4857686ejo.500.1616607247797;
+        Wed, 24 Mar 2021 10:34:07 -0700 (PDT)
+Received: from dell.default ([91.110.221.180])
+        by smtp.gmail.com with ESMTPSA id p19sm1466367edr.57.2021.03.24.10.34.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Mar 2021 10:34:07 -0700 (PDT)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Anssi Hannula <anssi.hannula@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        =?UTF-8?q?Bruno=20Pr=C3=A9mont?= <bonbons@linux-vserver.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Daniel Drubin <daniel.drubin@intel.com>,
+        Dario Pagani <dario.pagani.146+linuxk@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Kim Kuparinen <kimi.h.kuparinen@gmail.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        linaro-mm-sig@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, Lopez Casado <nlopezcasad@logitech.com>,
+        "L. Vinyard, Jr" <rvinyard@cs.nmsu.edu>,
+        Masaki Ota <masaki.ota@jp.alps.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        message to <vojtech@ucw.cz>,
+        Michael Haboustak <mike-@cinci.rr.com>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Vojtech Pavlik <vojtech@suse.cz>,
+        Zhang Lixu <lixu.zhang@intel.com>
+Subject: [PATCH 00/25] Rid W=1 warnings from HID
+Date:   Wed, 24 Mar 2021 17:33:39 +0000
+Message-Id: <20210324173404.66340-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <1861638.PYKUYFuaPT@diego>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/24/21 5:41 PM, Heiko Stübner wrote:
-> Hi Greg, Felipe,
-> 
-> Am Dienstag, 9. Februar 2021, 20:23:44 CET schrieb Johan Jonker:
->> For some of the dwc3-of-simple compatible SoCs we
->> don't want to bind this driver to a dwc3 node,
->> but bind that node to the 'snps,dwc3' driver instead.
->> The kernel has no logic to decide which driver to bind
->> to if there are 2 matching drivers, so bail probe if no
->> dwc3 child node.
->>
->> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> 
-> It looks like this patch fell through the cracks?
-> 
-> I.e. I can see patches 1+6 adding the devicetree bindings
-> in 5.12-rc but haven't found this patch there.
-> 
-> And looking at
-> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/log/drivers/usb/dwc3/dwc3-of-simple.c?h=usb-next
-> I also didn't find it.
-> 
-> From what I gathered that was somehow mandated from the Devicetree side
-> as the dwc3-subnode system merely is some Linux-specific thingy
-> and should not be enforced if not explicitly needed.
-> 
+This set is part of a larger effort attempting to clean-up W=1
+kernel builds, which are currently overwhelmingly riddled with
+niggly little warnings.
 
-> I guess Johan can provide pointers to the previous discussion.
+Lee Jones (25):
+  HID: intel-ish-hid: Remove unused variable 'err'
+  HID: ishtp-hid-client: Move variable to where it's actually used
+  HID: intel-ish-hid: pci-ish: Remove unused variable 'ret'
+  HID: intel-ish: Supply some missing param descriptions
+  HID: intel-ish: Fix a naming disparity and a formatting error
+  HID: usbhid: Repair a formatting issue in a struct description
+  HID: intel-ish-hid: Fix a little doc-rot
+  HID: usbhid: hid-pidff: Demote a couple kernel-doc abuses
+  HID: hid-alps: Correct struct misnaming
+  HID: intel-ish-hid: Fix potential copy/paste error
+  HID: hid-core: Fix incorrect function name in header
+  HID: intel-ish-hid: ipc: Correct fw_reset_work_fn() function name in
+    header
+  HID: ishtp-hid-client: Fix incorrect function name report_bad_packet()
+  HID: hid-kye: Fix incorrect function name for kye_tablet_enable()
+  HID: hid-picolcd_core: Remove unused variable 'ret'
+  HID: hid-logitech-hidpp: Fix conformant kernel-doc header and demote
+    abuses
+  HID: hid-uclogic-rdesc: Kernel-doc is for functions and structs
+  HID: hid-thrustmaster: Demote a bunch of kernel-doc abuses
+  HID: hid-uclogic-params: Ensure function names are present and correct
+    in kernel-doc headers
+  HID: hid-sensor-custom: Remove unused variable 'ret'
+  HID: wacom_sys: Demote kernel-doc abuse
+  HID: hid-sensor-hub: Remove unused struct member 'quirks'
+  HID: hid-sensor-hub: Move 'hsdev' description to correct struct
+    definition
+  HID: intel-ish-hid: ishtp-fw-loader: Fix a bunch of formatting issues
+  HID: ishtp-hid-client: Fix 'suggest-attribute=format' compiler warning
 
-Comment by Rob in version 3:
-Presumably you are getting lucky here (with link order). The kernel
-has no logic to decide which driver to bind to if there are 2 matching
-drivers. If we did, it would probably be the opposite of what you want
-here as we'd pick the most specific match. This driver should probably
-bail probe if no dwc3 child node.
+ drivers/hid/hid-alps.c                       |  2 +-
+ drivers/hid/hid-core.c                       |  2 +-
+ drivers/hid/hid-kye.c                        |  2 +-
+ drivers/hid/hid-logitech-hidpp.c             |  7 +--
+ drivers/hid/hid-picolcd_core.c               |  5 +--
+ drivers/hid/hid-sensor-custom.c              |  5 +--
+ drivers/hid/hid-sensor-hub.c                 |  4 +-
+ drivers/hid/hid-thrustmaster.c               | 24 +++++------
+ drivers/hid/hid-uclogic-params.c             |  8 ++--
+ drivers/hid/hid-uclogic-rdesc.c              |  2 +-
+ drivers/hid/intel-ish-hid/ipc/ipc.c          |  2 +-
+ drivers/hid/intel-ish-hid/ipc/pci-ish.c      |  3 +-
+ drivers/hid/intel-ish-hid/ishtp-fw-loader.c  | 45 ++++++++++----------
+ drivers/hid/intel-ish-hid/ishtp-hid-client.c | 11 +++--
+ drivers/hid/intel-ish-hid/ishtp-hid.c        |  2 +-
+ drivers/hid/intel-ish-hid/ishtp-hid.h        |  9 +---
+ drivers/hid/intel-ish-hid/ishtp/bus.c        |  9 +++-
+ drivers/hid/intel-ish-hid/ishtp/client.c     |  5 +--
+ drivers/hid/intel-ish-hid/ishtp/hbm.c        |  4 +-
+ drivers/hid/intel-ish-hid/ishtp/ishtp-dev.h  |  4 +-
+ drivers/hid/usbhid/hid-pidff.c               |  4 +-
+ drivers/hid/usbhid/usbkbd.c                  |  2 +-
+ drivers/hid/wacom_sys.c                      |  2 +-
+ include/linux/intel-ish-client-if.h          |  8 +++-
+ 24 files changed, 90 insertions(+), 81 deletions(-)
 
-https://lore.kernel.org/linux-rockchip/20210205114011.10381-6-jbx6244@gmail.com/
-
-https://lore.kernel.org/linux-rockchip/CAL_JsqJwNdUfoYM8SZmOgMG9iAyZkJ4-kzjjiDDm_mdmghTEOA@mail.gmail.com/
-
-> 
-> So could you look at applying this patch to some usb-tree?
-> 
-> 
-> Thanks
-> Heiko
-> 
-> 
->> ---
->>  drivers/usb/dwc3/dwc3-of-simple.c | 4 ++++
->>  1 file changed, 4 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
->> index e62ecd22b..347b4d384 100644
->> --- a/drivers/usb/dwc3/dwc3-of-simple.c
->> +++ b/drivers/usb/dwc3/dwc3-of-simple.c
->> @@ -38,6 +38,10 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
->>  
->>  	int			ret;
->>  
->> +	/* Bail probe if no dwc3 child node. */
->> +	if (!of_get_compatible_child(dev->of_node, "snps,dwc3"))
->> +		return -ENODEV;
->> +
->>  	simple = devm_kzalloc(dev, sizeof(*simple), GFP_KERNEL);
->>  	if (!simple)
->>  		return -ENOMEM;
->>
-> 
-> 
-> 
-> 
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Anssi Hannula <anssi.hannula@gmail.com>
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: "Bruno Prémont" <bonbons@linux-vserver.org>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: Daniel Drubin <daniel.drubin@intel.com>
+Cc: Dario Pagani <dario.pagani.146+linuxk@gmail.com>
+Cc: dri-devel@lists.freedesktop.org
+Cc: Henrik Rydberg <rydberg@bitmath.org>
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Jonathan Cameron <jic23@kernel.org>
+Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc: Kim Kuparinen <kimi.h.kuparinen@gmail.com>
+Cc: "Krzysztof Wilczyński" <kw@linux.com>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: linaro-mm-sig@lists.linaro.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-iio@vger.kernel.org
+Cc: linux-input@vger.kernel.org
+Cc: linux-media@vger.kernel.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: linux-usb@vger.kernel.org
+Cc: Lopez Casado <nlopezcasad@logitech.com>
+Cc: "L. Vinyard, Jr" <rvinyard@cs.nmsu.edu>
+Cc: Masaki Ota <masaki.ota@jp.alps.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: message to <vojtech@ucw.cz>
+Cc: Michael Haboustak <mike-@cinci.rr.com>
+Cc: Rushikesh S Kadam <rushikesh.s.kadam@intel.com>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: "Uwe Kleine-König" <uwe@kleine-koenig.org>
+Cc: Vojtech Pavlik <vojtech@suse.cz>
+Cc: Zhang Lixu <lixu.zhang@intel.com>
+-- 
+2.27.0
 
