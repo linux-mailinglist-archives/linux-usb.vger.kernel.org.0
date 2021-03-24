@@ -2,179 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AFA434839E
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 22:28:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4440234850A
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 00:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233717AbhCXV2P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Mar 2021 17:28:15 -0400
-Received: from mga06.intel.com ([134.134.136.31]:35577 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233849AbhCXV2E (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 24 Mar 2021 17:28:04 -0400
-IronPort-SDR: AIynuTeax0lSDR4QNNDrAwjv5zKQly0i/YD/y0BUrNCul06y1zxVSONEJ2DYy4nAgY8oUOJjJV
- biZiQbh9rRyw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9933"; a="252146191"
-X-IronPort-AV: E=Sophos;i="5.81,275,1610438400"; 
-   d="scan'208";a="252146191"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2021 14:28:01 -0700
-IronPort-SDR: WfPWxzgv6hRguRTx0Lc0se0H/IbC6vbec18pdDFxd4+6q0LrD3loM5RVaRgzQbGak0sV9tw53y
- 2EfXrYrBhmaA==
-X-IronPort-AV: E=Sophos;i="5.81,275,1610438400"; 
-   d="scan'208";a="442424773"
-Received: from aksagira-mobl2.amr.corp.intel.com ([10.209.125.174])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2021 14:27:54 -0700
-Message-ID: <c0121400eea96626cdd212ad95f296a024356289.camel@linux.intel.com>
-Subject: Re: [PATCH 00/25] Rid W=1 warnings from HID
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Anssi Hannula <anssi.hannula@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Bruno =?ISO-8859-1?Q?Pr=E9mont?= <bonbons@linux-vserver.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Daniel Drubin <daniel.drubin@intel.com>,
-        Dario Pagani <dario.pagani.146+linuxk@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Kim Kuparinen <kimi.h.kuparinen@gmail.com>,
-        Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linaro-mm-sig@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, Lopez Casado <nlopezcasad@logitech.com>,
-        "L. Vinyard, Jr" <rvinyard@cs.nmsu.edu>,
-        Masaki Ota <masaki.ota@jp.alps.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        message to <vojtech@ucw.cz>,
-        Michael Haboustak <mike-@cinci.rr.com>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
-        Vojtech Pavlik <vojtech@suse.cz>,
-        Zhang Lixu <lixu.zhang@intel.com>
-Date:   Wed, 24 Mar 2021 14:27:54 -0700
-In-Reply-To: <20210324173404.66340-1-lee.jones@linaro.org>
-References: <20210324173404.66340-1-lee.jones@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        id S231784AbhCXXHA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Mar 2021 19:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238941AbhCXXG7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 19:06:59 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38AAC061763
+        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 16:06:58 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id j26so6173iog.13
+        for <linux-usb@vger.kernel.org>; Wed, 24 Mar 2021 16:06:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h4nsP5iuSvLRUSUoVyhkKNOJvSrZQbNgl007uSGB9Jk=;
+        b=Nm1q6owNG5rx+/fwQyP3HWBenPMSaXplLjhEAlA3MxdK0J/q3Q5IKEUOeu9EbPftDx
+         qwADRNgOrFS/7Jey+oH6I2UMDtxfytpDtXH/RepLF78ZfL378dyChrXQpViPlstLQFve
+         ukdj4wEbMxN9my+RyGreh1NL6r2cuymInq9kU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h4nsP5iuSvLRUSUoVyhkKNOJvSrZQbNgl007uSGB9Jk=;
+        b=bBEj9GnKbmKxmr1O3v2I+awDT7WCGR/d2b1yROIH1ChAVezzR0/J/OOznnClUOakFV
+         eZNg8xgZkCfKtbJzJ6Jgdqsn0GjEEp++z7P6MEF/UySM6WkDT6Yk8UwA8RioQfVJnZwM
+         ZmYKgffBKYCamW2nMvPX3JAT2Es5UCWkJ6PAUCiPhhotcPuoth5gRFNrZUyBTs4FP+8L
+         H7WBxN/9BKqtkY+KCx10govxv9OdhGfcx37V8Im5GmNkll/jqW2dSkSxriPooE8WGoGa
+         nkh4VSTR3aDP2+Y+5zbuX4OlRkGFvZZWG5ZORUP8EeFQSPJLSeMAH3bBo/MiGx7+28NH
+         mafg==
+X-Gm-Message-State: AOAM5339FN1nczo9ewXe5SBbEU2MrR8ZLd6P62de8hr+uaih8rUkmE9i
+        xPYmryiZfr31J2KeiccPLRnNvg==
+X-Google-Smtp-Source: ABdhPJyS+92HCc3ZBxTa2EOIEXTFs5p8NK2Hu4c2/ZOCCFrNy5I2JuIXSsPRUWGuP6UZtTqU2ZvIQg==
+X-Received: by 2002:a6b:650f:: with SMTP id z15mr4183159iob.128.1616627218256;
+        Wed, 24 Mar 2021 16:06:58 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id t8sm1638249ioc.12.2021.03.24.16.06.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Mar 2021 16:06:57 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     valentina.manea.m@gmail.com, shuah@kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+3dea30b047f41084de66@syzkaller.appspotmail.com,
+        stable@vger.kernel.org
+Subject: [PATCH] usbip: vhci_hcd fix shift out-of-bounds in vhci_hub_control()
+Date:   Wed, 24 Mar 2021 17:06:54 -0600
+Message-Id: <20210324230654.34798-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2021-03-24 at 17:33 +0000, Lee Jones wrote:
-> This set is part of a larger effort attempting to clean-up W=1
-> kernel builds, which are currently overwhelmingly riddled with
-> niggly little warnings.
-> 
+Fix shift out-of-bounds in vhci_hub_control() SetPortFeature handling.
 
-For changes in  drivers/hid/intel-ish-hid folder
+UBSAN: shift-out-of-bounds in drivers/usb/usbip/vhci_hcd.c:605:42
+shift exponent 768 is too large for 32-bit type 'int'
 
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Reported-by: syzbot+3dea30b047f41084de66@syzkaller.appspotmail.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ drivers/usb/usbip/vhci_hcd.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Lee Jones (25):
->   HID: intel-ish-hid: Remove unused variable 'err'
->   HID: ishtp-hid-client: Move variable to where it's actually used
->   HID: intel-ish-hid: pci-ish: Remove unused variable 'ret'
->   HID: intel-ish: Supply some missing param descriptions
->   HID: intel-ish: Fix a naming disparity and a formatting error
->   HID: usbhid: Repair a formatting issue in a struct description
->   HID: intel-ish-hid: Fix a little doc-rot
->   HID: usbhid: hid-pidff: Demote a couple kernel-doc abuses
->   HID: hid-alps: Correct struct misnaming
->   HID: intel-ish-hid: Fix potential copy/paste error
->   HID: hid-core: Fix incorrect function name in header
->   HID: intel-ish-hid: ipc: Correct fw_reset_work_fn() function name
-> in
->     header
->   HID: ishtp-hid-client: Fix incorrect function name
-> report_bad_packet()
->   HID: hid-kye: Fix incorrect function name for kye_tablet_enable()
->   HID: hid-picolcd_core: Remove unused variable 'ret'
->   HID: hid-logitech-hidpp: Fix conformant kernel-doc header and
-> demote
->     abuses
->   HID: hid-uclogic-rdesc: Kernel-doc is for functions and structs
->   HID: hid-thrustmaster: Demote a bunch of kernel-doc abuses
->   HID: hid-uclogic-params: Ensure function names are present and
-> correct
->     in kernel-doc headers
->   HID: hid-sensor-custom: Remove unused variable 'ret'
->   HID: wacom_sys: Demote kernel-doc abuse
->   HID: hid-sensor-hub: Remove unused struct member 'quirks'
->   HID: hid-sensor-hub: Move 'hsdev' description to correct struct
->     definition
->   HID: intel-ish-hid: ishtp-fw-loader: Fix a bunch of formatting
-> issues
->   HID: ishtp-hid-client: Fix 'suggest-attribute=format' compiler
-> warning
-> 
->  drivers/hid/hid-alps.c                       |  2 +-
->  drivers/hid/hid-core.c                       |  2 +-
->  drivers/hid/hid-kye.c                        |  2 +-
->  drivers/hid/hid-logitech-hidpp.c             |  7 +--
->  drivers/hid/hid-picolcd_core.c               |  5 +--
->  drivers/hid/hid-sensor-custom.c              |  5 +--
->  drivers/hid/hid-sensor-hub.c                 |  4 +-
->  drivers/hid/hid-thrustmaster.c               | 24 +++++------
->  drivers/hid/hid-uclogic-params.c             |  8 ++--
->  drivers/hid/hid-uclogic-rdesc.c              |  2 +-
->  drivers/hid/intel-ish-hid/ipc/ipc.c          |  2 +-
->  drivers/hid/intel-ish-hid/ipc/pci-ish.c      |  3 +-
->  drivers/hid/intel-ish-hid/ishtp-fw-loader.c  | 45 ++++++++++------
-> ----
->  drivers/hid/intel-ish-hid/ishtp-hid-client.c | 11 +++--
->  drivers/hid/intel-ish-hid/ishtp-hid.c        |  2 +-
->  drivers/hid/intel-ish-hid/ishtp-hid.h        |  9 +---
->  drivers/hid/intel-ish-hid/ishtp/bus.c        |  9 +++-
->  drivers/hid/intel-ish-hid/ishtp/client.c     |  5 +--
->  drivers/hid/intel-ish-hid/ishtp/hbm.c        |  4 +-
->  drivers/hid/intel-ish-hid/ishtp/ishtp-dev.h  |  4 +-
->  drivers/hid/usbhid/hid-pidff.c               |  4 +-
->  drivers/hid/usbhid/usbkbd.c                  |  2 +-
->  drivers/hid/wacom_sys.c                      |  2 +-
->  include/linux/intel-ish-client-if.h          |  8 +++-
->  24 files changed, 90 insertions(+), 81 deletions(-)
-> 
-> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> Cc: Anssi Hannula <anssi.hannula@gmail.com>
-> Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> Cc: "Bruno Prémont" <bonbons@linux-vserver.org>
-> Cc: "Christian König" <christian.koenig@amd.com>
-> Cc: Daniel Drubin <daniel.drubin@intel.com>
-> Cc: Dario Pagani <dario.pagani.146+linuxk@gmail.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: Henrik Rydberg <rydberg@bitmath.org>
-> Cc: Jiri Kosina <jikos@kernel.org>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> Cc: Kim Kuparinen <kimi.h.kuparinen@gmail.com>
-> Cc: "Krzysztof Wilczyński" <kw@linux.com>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: linaro-mm-sig@lists.linaro.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-iio@vger.kernel.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: linux-stm32@st-md-mailman.stormreply.com
-> Cc: linux-usb@vger.kernel.org
-> Cc: Lopez Casado <nlopezcasad@logitech.com>
-> Cc: "L. Vinyard, Jr" <rvinyard@cs.nmsu.edu>
-> Cc: Masaki Ota <masaki.ota@jp.alps.com>
-> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> Cc: message to <vojtech@ucw.cz>
-> Cc: Michael Haboustak <mike-@cinci.rr.com>
-> Cc: Rushikesh S Kadam <rushikesh.s.kadam@intel.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> Cc: "Uwe Kleine-König" <uwe@kleine-koenig.org>
-> Cc: Vojtech Pavlik <vojtech@suse.cz>
-> Cc: Zhang Lixu <lixu.zhang@intel.com>
+diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+index 3209b5ddd30c..a20a8380ca0c 100644
+--- a/drivers/usb/usbip/vhci_hcd.c
++++ b/drivers/usb/usbip/vhci_hcd.c
+@@ -594,6 +594,8 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 				pr_err("invalid port number %d\n", wIndex);
+ 				goto error;
+ 			}
++			if (wValue >= 32)
++				goto error;
+ 			if (hcd->speed == HCD_USB3) {
+ 				if ((vhci_hcd->port_status[rhport] &
+ 				     USB_SS_PORT_STAT_POWER) != 0) {
+-- 
+2.27.0
 
