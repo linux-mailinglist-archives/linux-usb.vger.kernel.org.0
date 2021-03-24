@@ -2,76 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F57734721F
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 08:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 464A33472C6
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Mar 2021 08:37:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235743AbhCXHMH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Mar 2021 03:12:07 -0400
-Received: from muru.com ([72.249.23.125]:46272 "EHLO muru.com"
+        id S233612AbhCXHhY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Mar 2021 03:37:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57486 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235727AbhCXHLt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 24 Mar 2021 03:11:49 -0400
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id 6196B8057;
-        Wed, 24 Mar 2021 07:12:44 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        Bhushan Shah <bshah@kde.org>
-Subject: [PATCH RESEND] usb: musb: Fix suspend with devices connected for a64
-Date:   Wed, 24 Mar 2021 09:11:41 +0200
-Message-Id: <20210324071142.42264-1-tony@atomide.com>
-X-Mailer: git-send-email 2.31.0
+        id S235597AbhCXHhQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 24 Mar 2021 03:37:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 280E7619FD;
+        Wed, 24 Mar 2021 07:37:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1616571435;
+        bh=+QcyXUUw3ewbAm4VgTuP5nM5CtDca5a/kAdAaPSavyQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S1UNJzFaoitef7YqDdJPlHo8pSQSnPhKeqkZRCMjP3JoTtnn7dCm9xiPHW4lJ4hjZ
+         kgtejDBHlyzbqBc85eBlAiFXRhBOiix3Lv/q4GrXdGWXCOO/co1TsJUlfVeN2wVO+T
+         omkbPkxaoyUKxlx0eT4T6rabZ5oAARI2fjOl8MNY=
+Date:   Wed, 24 Mar 2021 08:37:13 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Hongren Zheng (Zenithal)" <i@zenithal.me>
+Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Antonio Borneo <borneo.antonio@gmail.com>,
+        matt mooney <mfm@muteddisk.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] usbip: tools: add options and examples in man
+ page related to device mode
+Message-ID: <YFrsKfRV5441TsSl@kroah.com>
+References: <YFrBz6dvTip9+wm7@Sun>
+ <YFrdyKKx1nx8bktm@Sun>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YFrdyKKx1nx8bktm@Sun>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Pinephone running on Allwinner A64 fails to suspend with USB devices
-connected as reported by Bhushan Shah <bshah@kde.org>. Reverting
-commit 5fbf7a253470 ("usb: musb: fix idling for suspend after
-disconnect interrupt") fixes the issue.
+On Wed, Mar 24, 2021 at 02:35:52PM +0800, Hongren Zheng (Zenithal) wrote:
+> The commit e0546fd8b748 ("usbip: tools: Start using VUDC backend in
+> usbip tools") implemented device mode for user space tools, however the
+> corresponding options are not documented in man page.
+> 
+> This commit documents the options and provides examples on device mode.
+> Also the command `usbip port` is documented.
+> 
+> Signed-off-by: Hongren Zheng <i@zenithal.me>
+> ---
+>  tools/usb/usbip/doc/usbip.8  | 42 +++++++++++++++++++++++++++++++++++-
+>  tools/usb/usbip/doc/usbipd.8 | 26 ++++++++++++++++++++++
+>  2 files changed, 67 insertions(+), 1 deletion(-)
+> 
 
-Let's add suspend checks also for suspend after disconnect interrupt
-quirk handling like we already do elsewhere.
+Always resend the whole series, not just individual patches of the
+series.  When you send individual updates, it's almost impossible to
+figure out what patch is what to review and apply properly.
 
-Fixes: 5fbf7a253470 ("usb: musb: fix idling for suspend after disconnect interrupt")
-Reported-by: Bhushan Shah <bshah@kde.org>
-Tested-by: Bhushan Shah <bshah@kde.org>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
+There's no "waste" by resending the whole series, it makes it obvious
+what is going on and what needs to be reviewed.
 
----
+thanks,
 
-Looks like this fix is still pending, can you guys please apply? This is also
-needed on am335x to suspend with devices connected in addition to a64
-
----
- drivers/usb/musb/musb_core.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
---- a/drivers/usb/musb/musb_core.c
-+++ b/drivers/usb/musb/musb_core.c
-@@ -2004,10 +2004,14 @@ static void musb_pm_runtime_check_session(struct musb *musb)
- 		MUSB_DEVCTL_HR;
- 	switch (devctl & ~s) {
- 	case MUSB_QUIRK_B_DISCONNECT_99:
--		musb_dbg(musb, "Poll devctl in case of suspend after disconnect\n");
--		schedule_delayed_work(&musb->irq_work,
--				      msecs_to_jiffies(1000));
--		break;
-+		if (musb->quirk_retries && !musb->flush_irq_work) {
-+			musb_dbg(musb, "Poll devctl in case of suspend after disconnect\n");
-+			schedule_delayed_work(&musb->irq_work,
-+					      msecs_to_jiffies(1000));
-+			musb->quirk_retries--;
-+			break;
-+		}
-+		fallthrough;
- 	case MUSB_QUIRK_B_INVALID_VBUS_91:
- 		if (musb->quirk_retries && !musb->flush_irq_work) {
- 			musb_dbg(musb,
--- 
-2.31.0
+greg k-h
