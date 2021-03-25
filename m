@@ -2,54 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5F3348CA8
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 10:21:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC6B348CB5
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 10:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbhCYJU5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 05:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40344 "EHLO
+        id S229888AbhCYJXj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 05:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbhCYJUd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 05:20:33 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48975C06174A
-        for <linux-usb@vger.kernel.org>; Thu, 25 Mar 2021 02:20:32 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id z8so2161120ljm.12
-        for <linux-usb@vger.kernel.org>; Thu, 25 Mar 2021 02:20:32 -0700 (PDT)
+        with ESMTP id S229898AbhCYJXZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 05:23:25 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3F4C06175F
+        for <linux-usb@vger.kernel.org>; Thu, 25 Mar 2021 02:23:21 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id g8so1448355lfv.12
+        for <linux-usb@vger.kernel.org>; Thu, 25 Mar 2021 02:23:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=cbPaGAG5CAB0O4WGdpPnr+Sds1cjZTPECOXQC9BbXNk=;
-        b=pYLbaOfTMQbkVSB6G6vGj9z8hc/1FIha2+mYDWVgN1lUtBBPkh3B91pPPnBZxGsM3V
-         a3G3UL/93yayuuxVsqJZ6VbMzCAY6QeV+5AtYzQh0EQAsdWl5WKLe2FNfpewa3lp/pFH
-         Z4YKHNPSZqmo86VhSNxkt41SJAzldNXoTqzfsLQ6r/t+8WBQZ5E/oTeEAOxfo4bSYMPN
-         /mw/+lDIpn0YyWcQdBKO+XfWyGyN3dcpWnK8LiC63JitC79Rtds6d/ZzbSM84vbd7RKS
-         rFysDCHPZhVydoK6HadZt2Dr/5PvtKsSks3mSFAwxv3xtsaaBDZCkCZThp3vvieW7l0+
-         4jTA==
+        bh=5tvrHzTq0gWQPCywVaxzy6v7kow1O87LeytCB1bodgo=;
+        b=MhuB3SGDVQsjhET84L/1KRiomBF9a3KFIb9j4QcSXe84rt6vYQxQM2JztojeCFrrZb
+         UbRU5kqkkkm+M2wKA2l6ha4Su6XNphRWO15O8wdYL1B5OugaXK71kTkTO45qIjS4CZ5F
+         vrAIecz7SBCbLrInmd8qex7TU2WdOqcYo2UCPV9Ti56O0gzSiN4TvKNywMThXCW8m7lc
+         58zXYjS3v5MjF8Iwi0CP9ZlJDYxCxPOk8u37pslrBPpCfbA/AC2gkIuojPJhdvdmuoRX
+         kBuKPr8T6zCs9195GUMZ1iYBj7x9ZTf7Z/q7tJQkFlMsbfAubCnJ5e8n65t6Z+4Dr320
+         j9EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=cbPaGAG5CAB0O4WGdpPnr+Sds1cjZTPECOXQC9BbXNk=;
-        b=MVbyYdTwE5voH5NMxdN/oQz7Zt8w8Fmfsjg2ijJLwhWyoDalAgodP76RP2maEL2lic
-         omeHgMVxqZPVOmzFlkKGfLl9g6kPj5zbCG3e2oQt+fya4b5ogyT45wumyESRY3dhjfzJ
-         tWAEVdgXPAbJBwyCB5JdbclfQCfmgDabtvO5JttOgbtvJaDZVpAN7JMhI5wi/eXnJnh8
-         B1vsferAWpjibUMA01gxHPX5CEhcBwz2CdN3H0v8b6EbahmuJn0QTvhs0+z7HXoU/+v7
-         MzLAm+KCBlDZUN4JCeEsGh7qOUwOuc7LjbubDN7+pdulDY6+pCQqcSCBk3SidH1EMfRq
-         9ItA==
-X-Gm-Message-State: AOAM531HYCK8RMQdRm7xtUefXuL7H8+eb3LgXkDi9GTN9cXpWKL4PCv4
-        y6fgUikR48WPXLFv9Ze8iaTaGbCFIv6iubGGGIUD/Q==
-X-Google-Smtp-Source: ABdhPJybjsVb89v9uAJdjlwZfTJw+gqm3MOeXLPzPvLtf9sa/2OdqT/k6EbskWPpzRq2RgOkMBrUlwRqgv9PGwua6f0=
-X-Received: by 2002:a2e:9cb:: with SMTP id 194mr4923513ljj.438.1616664030854;
- Thu, 25 Mar 2021 02:20:30 -0700 (PDT)
+        bh=5tvrHzTq0gWQPCywVaxzy6v7kow1O87LeytCB1bodgo=;
+        b=d3fR98QyI0mo6SHfuq8cAgW5D00Ch3mqg+pyYeLJlBhsjRgdGa2/XwfKeim4XgX8Tg
+         SBeG82lxo7ruQ/jKXzAIugT+8amgem8NrqCDQWNQTGJa+zg+rD7uKbUEgc0qmYm7+SRQ
+         9OqCwGT772v9PGovvHIzZP9y83eOCtgY6y8dVxA9sxWk0fDJ0n6Gyeoq0fovkyfPxn49
+         bg/9IEdch9+0UV+PuSYEpaGQGxDhEhhgC/j6TqZq3WSsrC0IqQ42+FhYWPMzG0m8/U0h
+         vT/ncVwjakuCO2FjoA6eG/NFg3X57Ri5mLOiYCcD9gB19sbpdOAbMT5nxGeVvvfanpso
+         jsWg==
+X-Gm-Message-State: AOAM5312kAVejF8lexw/P+kNR/skjK3EcmTn1jwev9xcoeO1DNcWykJ2
+        ZjDebFjtLHy7jODzgVq5TxCaTw9rEtvhoVzJLtRpgA==
+X-Google-Smtp-Source: ABdhPJxZ9tJzr5Ma99P00E4TPr2rgQatQ4a9hwr5E8JzXVY8NxG2acO+Rt8Upz77y2AfiiaXQ3/mGz5FXGWZKXowQ2o=
+X-Received: by 2002:a05:6512:243:: with SMTP id b3mr4569222lfo.529.1616664199644;
+ Thu, 25 Mar 2021 02:23:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210323153626.54908-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20210323153626.54908-1-andriy.shevchenko@linux.intel.com>
+References: <20210323153626.54908-1-andriy.shevchenko@linux.intel.com> <20210323153626.54908-6-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20210323153626.54908-6-andriy.shevchenko@linux.intel.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 25 Mar 2021 10:20:19 +0100
-Message-ID: <CACRpkdb4BoOdVPao3_GbDdpD0b6p_P1_8_L6bUeSMt_Ez296zA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] usb: gadget: pch_udc: Replace cpu_to_le32() by lower_32_bits()
+Date:   Thu, 25 Mar 2021 10:23:08 +0100
+Message-ID: <CACRpkdYVOgurDD3pQCAYzNoHgSAibVcoEWphJu9T152eLo=uiQ@mail.gmail.com>
+Subject: Re: [PATCH v2 6/7] usb: gadget: pch_udc: Initialize device pointer
+ before use
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-usb <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -63,18 +64,15 @@ X-Mailing-List: linux-usb@vger.kernel.org
 On Tue, Mar 23, 2021 at 4:36 PM Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
 
-> Either way ~0 will be in the correct byte order, hence
-> replace cpu_to_le32() by lower_32_bits(). Moreover,
-> it makes sparse happy, otherwise it complains:
+> During conversion to use GPIO descriptors the device pointer,
+> which is applied to devm_gpiod_get(), is not yet initialized.
 >
-> .../pch_udc.c:1813:27: warning: incorrect type in assignment (different base types)
-> .../pch_udc.c:1813:27:    expected unsigned int [usertype] dataptr
-> .../pch_udc.c:1813:27:    got restricted __le32 [usertype]
+> Move initialization in the ->probe() in order to have it set before use.
 >
-> Fixes: f646cf94520e ("USB device driver of Topcliff PCH")
+> Fixes: e20849a8c883 ("usb: gadget: pch_udc: Convert to use GPIO descriptors")
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Nice fix! Also easier to understand.
+Ooops sorry.
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
