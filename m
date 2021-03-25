@@ -2,104 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6577C34976E
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 17:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD3E3496FB
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 17:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbhCYQ5G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 12:57:06 -0400
-Received: from lan.nucleusys.com ([92.247.61.126]:34580 "EHLO
-        mail.nucleusys.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbhCYQ5E (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 12:57:04 -0400
-X-Greylist: delayed 2647 seconds by postgrey-1.27 at vger.kernel.org; Thu, 25 Mar 2021 12:57:03 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=nucleusys.com; s=x; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9+BEITjcOB4Up5oAxEJfwAcVar0gxPpkiEJ8nLYig+I=; b=ieNXDU27KppfuW3RtKoBNCYKVC
-        LR9/fGV4FP9oyvzSatYPjlPGlSUzEBge5avHw+Rk/GwNEZkNNCotCIy85XtZQa4iOj6Rae0h0fYh2
-        GD/H4SIRJM2/dPOgibRkskhAvF8EJrcELdcbVv3r/g2/q2ghxXKP9BRpgm4eXb6JzRAs=;
-Received: from [151.251.251.23] (helo=carbon)
-        by mail.nucleusys.com with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <petkan@nucleusys.com>)
-        id 1lPSbG-0008Dw-5U; Thu, 25 Mar 2021 18:12:47 +0200
-Date:   Thu, 25 Mar 2021 18:12:46 +0200
-From:   Petko Manolov <petkan@nucleusys.com>
-To:     'Qiheng Lin <linqiheng@huawei.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Hulk Robot <hulkci@huawei.com>
-Subject: Re: [PATCH net-next] net: usb: pegasus: Remove duplicated include
- from pegasus.c
-Message-ID: <YFy2fnV7GQLOKkRy@carbon>
-Mail-Followup-To: 'Qiheng Lin <linqiheng@huawei.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Hulk Robot <hulkci@huawei.com>
-References: <20210325145652.13469-1-linqiheng@huawei.com>
+        id S229629AbhCYQku (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 12:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229508AbhCYQkq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 12:40:46 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4237C06174A;
+        Thu, 25 Mar 2021 09:40:45 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id j7so2981865wrd.1;
+        Thu, 25 Mar 2021 09:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YFSqMATttwvnEjox5mDDMXVQmf/3aquCS0HIVj6Hd8M=;
+        b=YJYg7GzEy6eYG0tQt7jGwsFchmsnf+97rlxrBtGJo/3ExZbGd93Qn6m6O4xAQvLpX3
+         RJ/ug1TZL1JKn800jH8/OEwrJY1MaFG5AeduhnhIX7cpdM6fXqKvuB/QEDuWn0bO8Emj
+         uqMBThTbqNaTkIdeEVrl8MFgvA29dFGTvwhDexbS3ySlA3Ws3a54Oq7Wmz51kPPcLpZ3
+         NstEO4Ke3y4i+Hdzjh5whcWiGVb7nLnPzeLm8fXhqI2cIBiMUjfGZK/mJN4bDFrScO+H
+         +kYEX53eTiF3Ir3t60zj1vDsMJhUXDVmzhbs4BCBwlO/XWRgJ7Ua3m1k1JvZ4XXkPfFG
+         1PVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YFSqMATttwvnEjox5mDDMXVQmf/3aquCS0HIVj6Hd8M=;
+        b=rtw0S6Ku3aNKwybNXn4pfLOMPDpPDmVJgKZ5dbYaSkQgZg3eywGqVszcfdL/mZDJsR
+         u9lH+zQFFvtn9qwcn8RBcZdnbx5o79+tm3P3i31PIUQCfpAHSUm8m3L6Z40078wnaO9w
+         VUJdzp4RsMzj5IYuUqy0Wf8PO76/0PU79uG6vNcZzxraZKwL1wPhm71VgquFXQ67TcTG
+         TwvfqRpGIDCCX/JvvQrJh0nbdXxXLNRtWjhum8KDKmhizJYbZqtJIZeZDEEjjLScy7WQ
+         GoDEUswTPKKdvAlLTMjPWiqxnLgPW+s0CGPw2khKgSiq+qYwh6H0YWtLdGilJnwSxbZL
+         odAw==
+X-Gm-Message-State: AOAM530TK0HS9i0AOztncIPGmJBfAsYrmvKTfKfF1tDEx9+F0uQeb2bX
+        8ubj/2alA17G7xIRslTo5g0=
+X-Google-Smtp-Source: ABdhPJzbSHaK3fx6FuRZT8GUnvbbhA34wtR5k7r/LDHoXqVWAj0QJPFzW+EAA/qkswAowOlV2ORN1Q==
+X-Received: by 2002:adf:d1cd:: with SMTP id b13mr9944791wrd.47.1616690444397;
+        Thu, 25 Mar 2021 09:40:44 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id 91sm8415188wrl.20.2021.03.25.09.40.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Mar 2021 09:40:43 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        JC Kuo <jckuo@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
+        linux-tegra@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v8 00/13] Tegra XHCI controller ELPG support
+Date:   Thu, 25 Mar 2021 17:40:44 +0100
+Message-Id: <20210325164057.793954-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210325145652.13469-1-linqiheng@huawei.com>
-X-Spam-Score: -1.0 (-)
-X-Spam-Report: Spam detection software, running on the system "zztop",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- Content preview:  On 21-03-25 22:56:52, 'Qiheng Lin wrote: > From: Qiheng Lin
-    <linqiheng@huawei.com> > > Remove duplicated include. It is not duplicated
-    so do not remove it. Go ahead and look carefully at the code, please. 
- Content analysis details:   (-1.0 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-03-25 22:56:52, 'Qiheng Lin wrote:
-> From: Qiheng Lin <linqiheng@huawei.com>
-> 
-> Remove duplicated include.
+From: Thierry Reding <treding@nvidia.com>
 
-It is not duplicated so do not remove it.  Go ahead and look carefully at the
-code, please.
+Tegra XHCI controler can be placed in ELPG (Engine Level PowerGated)
+state for power saving when all of the connected USB devices are in
+suspended state. This patch series includes clk, phy and pmc changes
+that are required for properly place controller in ELPG and bring
+controller out of ELPG.
 
+I've rebased this on v5.12-rc2 and fixed two minor issues that
+checkpatch had pointed out. One of the patches compared to v7 was
+already merged into v5.12, so that rebased out.
 
-		Petko
+Greg, you had previously indicated[0] that you'd be willing for me to
+take the USB patches through the Tegra tree to resolve the complicated
+dependencies within this series, but I don't think you ever gave a
+formal Acked-by. Should I take your comments to be equivalent and just
+add them to the USB patches?
 
+Vinod, as discussed earlier, please take a look and provide an Acked-by
+if you're okay with me taking this through the Tegra tree for v5.13.
 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
-> ---
->  drivers/net/usb/pegasus.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
-> index 9a907182569c..e0ee5c096396 100644
-> --- a/drivers/net/usb/pegasus.c
-> +++ b/drivers/net/usb/pegasus.c
-> @@ -65,7 +65,6 @@ static struct usb_eth_dev usb_dev_id[] = {
->  	{.name = pn, .vendor = vid, .device = pid, .private = flags},
->  #define PEGASUS_DEV_CLASS(pn, vid, pid, dclass, flags) \
->  	PEGASUS_DEV(pn, vid, pid, flags)
-> -#include "pegasus.h"
->  #undef	PEGASUS_DEV
->  #undef	PEGASUS_DEV_CLASS
->  	{NULL, 0, 0, 0},
-> @@ -84,7 +83,6 @@ static struct usb_device_id pegasus_ids[] = {
->  #define PEGASUS_DEV_CLASS(pn, vid, pid, dclass, flags) \
->  	{.match_flags = (USB_DEVICE_ID_MATCH_DEVICE | USB_DEVICE_ID_MATCH_DEV_CLASS), \
->  	.idVendor = vid, .idProduct = pid, .bDeviceClass = dclass},
-> -#include "pegasus.h"
->  #undef	PEGASUS_DEV
->  #undef	PEGASUS_DEV_CLASS
->  	{},
-> 
-> 
+Thanks,
+Thierry
+
+[0]: https://lore.kernel.org/linux-tegra/YB1wxazg%2FQpRSJz6@kroah.com/
+
+JC Kuo (13):
+  clk: tegra: Add PLLE HW power sequencer control
+  clk: tegra: Don't enable PLLE HW sequencer at init
+  phy: tegra: xusb: Move usb3 port init for Tegra210
+  phy: tegra: xusb: Rearrange UPHY init on Tegra210
+  phy: tegra: xusb: Add Tegra210 lane_iddq operation
+  phy: tegra: xusb: Add sleepwalk and suspend/resume
+  soc/tegra: pmc: Provide USB sleepwalk register map
+  dt-bindings: phy: tegra-xusb: Add nvidia,pmc prop
+  phy: tegra: xusb: Add wake/sleepwalk for Tegra210
+  phy: tegra: xusb: Tegra210 host mode VBUS control
+  phy: tegra: xusb: Add wake/sleepwalk for Tegra186
+  usb: host: xhci-tegra: Unlink power domain devices
+  xhci: tegra: Enable ELPG for runtime/system PM
+
+ .../phy/nvidia,tegra124-xusb-padctl.txt       |    1 +
+ drivers/clk/tegra/clk-pll.c                   |   12 -
+ drivers/clk/tegra/clk-tegra210.c              |   53 +-
+ drivers/phy/tegra/xusb-tegra186.c             |  558 +++++-
+ drivers/phy/tegra/xusb-tegra210.c             | 1553 ++++++++++++++---
+ drivers/phy/tegra/xusb.c                      |   92 +-
+ drivers/phy/tegra/xusb.h                      |   22 +-
+ drivers/soc/tegra/pmc.c                       |   94 +
+ drivers/usb/host/xhci-tegra.c                 |  613 +++++--
+ include/linux/clk/tegra.h                     |    4 +-
+ include/linux/phy/tegra/xusb.h                |   10 +-
+ 11 files changed, 2615 insertions(+), 397 deletions(-)
+
+-- 
+2.30.2
+
