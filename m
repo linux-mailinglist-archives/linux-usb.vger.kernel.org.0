@@ -2,58 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 090C3348A05
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 08:21:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941EC348A0B
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 08:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbhCYHUg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 03:20:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35440 "EHLO mail.kernel.org"
+        id S229519AbhCYHXQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 03:23:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35944 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229653AbhCYHUT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Mar 2021 03:20:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4478061A1E;
-        Thu, 25 Mar 2021 07:20:18 +0000 (UTC)
+        id S229574AbhCYHW4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Mar 2021 03:22:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0D2FE61A1A;
+        Thu, 25 Mar 2021 07:22:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616656819;
-        bh=apXDG/9jYfIBFrCfWedmF8k03GKxmM8e1bEmTBDzhMA=;
+        s=k20201202; t=1616656975;
+        bh=nK8MnAmL5EIPeEqp4C8KpZ4a4cMEn3TYA9VUz9Xei64=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YiDtu63mMVWwzbw+IO5YbcSvTfT276ecd8++ADpbG+YRw8V0tMTr7bRT49tJb8PhS
-         +FuyCTESxPzQrQpS8m3zsk0XIdxAwPfXQF0ABheLSC5qHjym7axk8L6xIz1BA1Jvwo
-         ha3S7W4lz3I/6aSKjeU2YfNrE61VMr/9UYWokqBzvDVXpai210o47qZfUh+Oa4Cdv5
-         IBYRIT7VcNFUqAEXD6gLrdqoASttXKJmOtnoANYwKe/vnrINuua+Gbuw/vPcPdZ1R0
-         jgHCamwIGTVxd7+0Fp1LSwYDgqdRJdjkrC2ZmyGeo1nn6cajURlFbrgKnQAiZvMgs3
-         HMkyOp1hp9YzA==
-Date:   Thu, 25 Mar 2021 12:50:15 +0530
+        b=ZsQoWg1WHzr5qSK/PSwwC8eqs3qSIDvZwAqShqcm7ZEtpZh6P+iQ31onAk/FQ2QRi
+         Sb0SFEw/lH4KunxoMFo/bC2z75oAUGcKZO2bRTFk2yT2XAiQ95BAbnvahSF6Zz7mQA
+         CzO/6SjioExJ9799Gdfi4LH/PqsQWx24OAuhZC7NCuST/JAbXsBeCaepE83fh9lNo1
+         ki7cCnMRZ49Q3a4pAjQbHZ5TZFWTOh5eUOzoNKC49GOpHIb2X4Hnb/4hpFL+FrQW5V
+         hvFkdWaxyHeA9MwkXLzD+foOzsdXNTcHA9byd1ICeqrhUfEBPhcv/gxwP8GoE3dODW
+         dLJWZLh4TAR8Q==
+Date:   Thu, 25 Mar 2021 12:52:52 +0530
 From:   Vinod Koul <vkoul@kernel.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jie Qiu <jie.qiu@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
-        Cawa Cheng <cawa.cheng@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5 04/13] dt-bindings: phy: mediatek: tphy: change
- patternProperties
-Message-ID: <YFw5rx7KLDU2bVu5@vkoul-mobl.Dlink>
-References: <20210316092232.9806-1-chunfeng.yun@mediatek.com>
- <20210316092232.9806-4-chunfeng.yun@mediatek.com>
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>
+Subject: Re: [PATCH 2/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add
+ bindings for SC7280
+Message-ID: <YFw6TK+o0r3XdNcj@vkoul-mobl.Dlink>
+References: <1615978901-4202-1-git-send-email-sanm@codeaurora.org>
+ <1615978901-4202-3-git-send-email-sanm@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210316092232.9806-4-chunfeng.yun@mediatek.com>
+In-Reply-To: <1615978901-4202-3-git-send-email-sanm@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 16-03-21, 17:22, Chunfeng Yun wrote:
-> The phy may be named as pcie-phy when the T-PHY only supports
-> PCIe mode, it's also the similar case for SATA, named as
-> sata-phy.
+On 17-03-21, 16:31, Sandeep Maheswaram wrote:
+> Add the compatible string for sc7280 SoC from Qualcomm
 
 Applied, thanks
 
