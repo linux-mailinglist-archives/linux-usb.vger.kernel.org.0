@@ -2,40 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 598113486B4
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 02:54:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3283486B6
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 02:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236106AbhCYBx2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Mar 2021 21:53:28 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:42658 "EHLO
+        id S236032AbhCYBx7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Mar 2021 21:53:59 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:42664 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239827AbhCYBxW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 21:53:22 -0400
-Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
+        by vger.kernel.org with ESMTP id S239808AbhCYBx3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 21:53:29 -0400
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id E8678C00CA;
-        Thu, 25 Mar 2021 01:53:21 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id BC66FC00CA;
+        Thu, 25 Mar 2021 01:53:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1616637201; bh=KQeDhrHUhAFtHI2576ffKDubs0BKqK8t2eAtZWr5hXI=;
+        t=1616637208; bh=oHO16XXDZKRsF5chZAYj+JouyekvmIjuuKxBdxkQs4U=;
         h=Date:From:Subject:To:Cc:From;
-        b=DOYfV1mu/oNxz2zHc10f0Jn6cytUmT2ocScaZok2H4s2q7nkW9R71ShgsWODpE+RG
-         bPFg014iZxVG/1dKSo7dpF9FdhXKCJEl0w91uq4FIJTfOmNkFcPzINiNJ2hE4Is6nS
-         Ivu+A9ho+zqxWGsSox3bHO+0YLT3tg6swIAsr4VGrMWgloMtxjPffjao7/LVRhmrDq
-         wfTFv7d7R65Fb8KuRzzI8u8Wcch6svWx9IqPnSZunVSuTlaOLcquOvoCeXaGl+/eEY
-         i0C5t82PuZaUOP7Q1+PZBZBW/jSpPYdI3epzjvuv1C168SVp61RJDC1y2mrZgZzdET
-         reewnCx3SEVrw==
+        b=HcCjne20LwS5t6xj2YOno+4NaOMNcdS49fhWVMU48oAhOa9bg7mdZCpRg7uvjyWVU
+         mR0WoI6rPgEbdzdUex6Z0LwfwCWhuLFRmxHMeCfZOYehCTDBrY+2GTollECxKmT66m
+         lvVQmoxVjM6zIHVI7Ujmhr5+roQkpFKlvddbRr3bKMljflVu0d5jyvbef2EPlYzWxO
+         KSPIksVF0vf4Jrw5ebA9NdNM5QaQUNsBerviHbKLmjuvJOQjCbCcP0xBDou6ezARt8
+         Wr0sO++WmnD4d9DwfBjQe6WmYN2ErXMmvgtoO9xlgcbNfWQ8AVyLgUSqfB73z05o8R
+         BU2vDnh+nWfDw==
 Received: from lab-vbox (unknown [10.205.139.29])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 5899EA0096;
-        Thu, 25 Mar 2021 01:53:20 +0000 (UTC)
-Received: by lab-vbox (sSMTP sendmail emulation); Wed, 24 Mar 2021 18:53:19 -0700
-Date:   Wed, 24 Mar 2021 18:53:19 -0700
-Message-Id: <f6c3bf1ec9d6e36a36ed84534988014f2dd70035.1616636455.git.Thinh.Nguyen@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 57FDDA00A4;
+        Thu, 25 Mar 2021 01:53:27 +0000 (UTC)
+Received: by lab-vbox (sSMTP sendmail emulation); Wed, 24 Mar 2021 18:53:26 -0700
+Date:   Wed, 24 Mar 2021 18:53:26 -0700
+Message-Id: <cb38aa7dec109a8965691b53039a8b317d026189.1616636706.git.Thinh.Nguyen@synopsys.com>
 X-SNPS-Relay: synopsys.com
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH] usb: dwc3: Create helper function getting MDWIDTH
+Subject: [PATCH] usb: dwc3: trace: Print register read and write offset
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
@@ -44,141 +44,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Different controller IPs check different HW parameters for MDWIDTH.
-To help with maintainability, create a helper function to consolidate
-the logic in a single place.
+Currently dwc3 only prints the virtual address of a register when doing
+register read/write. However, these hashed addresses are difficult to read.
+Also, since we use %p, we may get some useless (___ptrval___) prints if the
+address is not randomized enough. Let's include the register offset to help
+read the register read and write tracepoints.
 
 Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 ---
- drivers/usb/dwc3/core.h    | 19 +++++++++++++++++--
- drivers/usb/dwc3/debugfs.c | 12 ++++--------
- drivers/usb/dwc3/gadget.c  | 16 +++++-----------
- 3 files changed, 26 insertions(+), 21 deletions(-)
+ drivers/usb/dwc3/trace.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 4ca4b4be85e4..265190b7074a 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -860,8 +860,6 @@ struct dwc3_hwparams {
- /* HWPARAMS0 */
- #define DWC3_MODE(n)		((n) & 0x7)
+diff --git a/drivers/usb/dwc3/trace.h b/drivers/usb/dwc3/trace.h
+index 97f4f1125a41..3cbeb9854532 100644
+--- a/drivers/usb/dwc3/trace.h
++++ b/drivers/usb/dwc3/trace.h
+@@ -32,8 +32,10 @@ DECLARE_EVENT_CLASS(dwc3_log_io,
+ 		__entry->offset = offset;
+ 		__entry->value = value;
+ 	),
+-	TP_printk("addr %p value %08x", __entry->base + __entry->offset,
+-			__entry->value)
++	TP_printk("addr %p offset %04x value %08x",
++		__entry->base + __entry->offset,
++		__entry->offset,
++		__entry->value)
+ );
  
--#define DWC3_MDWIDTH(n)		(((n) & 0xff00) >> 8)
--
- /* HWPARAMS1 */
- #define DWC3_NUM_INT(n)		(((n) & (0x3f << 15)) >> 15)
- 
-@@ -1458,6 +1456,23 @@ u32 dwc3_core_fifo_space(struct dwc3_ep *dep, u8 type);
- 	 (!(_ip##_VERSIONTYPE_##_to) ||					\
- 	  dwc->version_type <= _ip##_VERSIONTYPE_##_to))
- 
-+/**
-+ * dwc3_mdwidth - get MDWIDTH value in bits
-+ * @dwc: pointer to our context structure
-+ *
-+ * Return MDWIDTH configuration value in bits.
-+ */
-+static inline u32 dwc3_mdwidth(struct dwc3 *dwc)
-+{
-+	u32 mdwidth;
-+
-+	mdwidth = DWC3_GHWPARAMS0_MDWIDTH(dwc->hwparams.hwparams0);
-+	if (DWC3_IP_IS(DWC32))
-+		mdwidth += DWC3_GHWPARAMS6_MDWIDTH(dwc->hwparams.hwparams6);
-+
-+	return mdwidth;
-+}
-+
- bool dwc3_has_imod(struct dwc3 *dwc);
- 
- int dwc3_event_buffers_setup(struct dwc3 *dwc);
-diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
-index 5da4f6082d93..c85852d98b4b 100644
---- a/drivers/usb/dwc3/debugfs.c
-+++ b/drivers/usb/dwc3/debugfs.c
-@@ -638,16 +638,14 @@ static int dwc3_tx_fifo_size_show(struct seq_file *s, void *unused)
- 	struct dwc3_ep		*dep = s->private;
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
--	int			mdwidth;
-+	u32			mdwidth;
- 	u32			val;
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_TXFIFO);
- 
- 	/* Convert to bytes */
--	mdwidth = DWC3_MDWIDTH(dwc->hwparams.hwparams0);
--	if (DWC3_IP_IS(DWC32))
--		mdwidth += DWC3_GHWPARAMS6_MDWIDTH(dwc->hwparams.hwparams6);
-+	mdwidth = dwc3_mdwidth(dwc);
- 
- 	val *= mdwidth;
- 	val >>= 3;
-@@ -662,16 +660,14 @@ static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
- 	struct dwc3_ep		*dep = s->private;
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
--	int			mdwidth;
-+	u32			mdwidth;
- 	u32			val;
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_RXFIFO);
- 
- 	/* Convert to bytes */
--	mdwidth = DWC3_MDWIDTH(dwc->hwparams.hwparams0);
--	if (DWC3_IP_IS(DWC32))
--		mdwidth += DWC3_GHWPARAMS6_MDWIDTH(dwc->hwparams.hwparams6);
-+	mdwidth = dwc3_mdwidth(dwc);
- 
- 	val *= mdwidth;
- 	val >>= 3;
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index e1442fc763e1..a9540cc1a1eb 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2337,9 +2337,7 @@ static void dwc3_gadget_setup_nump(struct dwc3 *dwc)
- 	u32 reg;
- 
- 	ram2_depth = DWC3_GHWPARAMS7_RAM2_DEPTH(dwc->hwparams.hwparams7);
--	mdwidth = DWC3_GHWPARAMS0_MDWIDTH(dwc->hwparams.hwparams0);
--	if (DWC3_IP_IS(DWC32))
--		mdwidth += DWC3_GHWPARAMS6_MDWIDTH(dwc->hwparams.hwparams6);
-+	mdwidth = dwc3_mdwidth(dwc);
- 
- 	nump = ((ram2_depth * mdwidth / 8) - 24 - 16) / 1024;
- 	nump = min_t(u32, nump, 16);
-@@ -2575,12 +2573,10 @@ static int dwc3_gadget_init_control_endpoint(struct dwc3_ep *dep)
- static int dwc3_gadget_init_in_endpoint(struct dwc3_ep *dep)
- {
- 	struct dwc3 *dwc = dep->dwc;
--	int mdwidth;
-+	u32 mdwidth;
- 	int size;
- 
--	mdwidth = DWC3_MDWIDTH(dwc->hwparams.hwparams0);
--	if (DWC3_IP_IS(DWC32))
--		mdwidth += DWC3_GHWPARAMS6_MDWIDTH(dwc->hwparams.hwparams6);
-+	mdwidth = dwc3_mdwidth(dwc);
- 
- 	/* MDWIDTH is represented in bits, we need it in bytes */
- 	mdwidth /= 8;
-@@ -2622,12 +2618,10 @@ static int dwc3_gadget_init_in_endpoint(struct dwc3_ep *dep)
- static int dwc3_gadget_init_out_endpoint(struct dwc3_ep *dep)
- {
- 	struct dwc3 *dwc = dep->dwc;
--	int mdwidth;
-+	u32 mdwidth;
- 	int size;
- 
--	mdwidth = DWC3_MDWIDTH(dwc->hwparams.hwparams0);
--	if (DWC3_IP_IS(DWC32))
--		mdwidth += DWC3_GHWPARAMS6_MDWIDTH(dwc->hwparams.hwparams6);
-+	mdwidth = dwc3_mdwidth(dwc);
- 
- 	/* MDWIDTH is represented in bits, convert to bytes */
- 	mdwidth /= 8;
+ DEFINE_EVENT(dwc3_log_io, dwc3_readl,
 
 base-commit: 049d3db625a652e23488db88b6104de4d5b62f16
 -- 
