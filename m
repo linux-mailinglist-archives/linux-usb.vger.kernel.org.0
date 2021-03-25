@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C907349705
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 17:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6567D349708
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 17:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbhCYQlY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S229781AbhCYQlY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Thu, 25 Mar 2021 12:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbhCYQlF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 12:41:05 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B23AC06174A;
-        Thu, 25 Mar 2021 09:41:04 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id o16so3011323wrn.0;
-        Thu, 25 Mar 2021 09:41:04 -0700 (PDT)
+        with ESMTP id S229666AbhCYQlM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 12:41:12 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E500BC06174A;
+        Thu, 25 Mar 2021 09:41:11 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id g20so1537965wmk.3;
+        Thu, 25 Mar 2021 09:41:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=THw8zcgbqLcO16dUqauFb0z8OAhU7380cxSadcHRy9U=;
-        b=IloW8Z33ZDvYuKx2XBziTeFxCxMoDYKa2NhSguqvWJsy76doeS3uEx7rrkXSy+VKzz
-         BWbxBOAjRnb89Bd5P5tQlGnn+/JgzAFTlXVlJL9Z1SUC0lv4+8R3ueo/oPDFUyy8fGHn
-         1wPjz4s88BAIv0gJFqEeTMCQOJXDx/WPNl2LM4q9EMJCn9306irOl1jnHcWDHgdXQxYd
-         YKUNXJOloW5VBG4dIDj2cdClJzXgFkXshnWRJJjrXkN4pncRX+eseRdyd3xLFQrmDY+V
-         kaM2Hkc3gFw/dYDyePPYYSL30Q99s/fQU00yUbo4RueJl9EiTrlR1i3++nqhkuwaaGft
-         m1TQ==
+        bh=tl+/f6WBFGlmAJ8aIGRC63W4tU1XCz5OC6vf2oAyFwc=;
+        b=KclB8RfUv1B0+s/Aq9d6LDmYLJQ+g7chyt+f1uNO4St/2aDKsnSVqKTRICaSRxBOlp
+         LkJHl2Ewy1p+NGPNAe0MpXwjytRJaE7VNtOYZiQvsi17zWehd5gqh7kBHeqZaTxMKnY0
+         UdYqVVFY6HKsjWVAWfh8dbdtgjTjOP8tHBbF3d7G1RHMZEIoGaMscO61Au2HtM7OwwlH
+         zag/2zuctEP9sTWHz7JBw0GyoCpV0XGzj1X50kvROIsp7cqK4vBTAVpYpjk+CoTOEW96
+         G7h48vrCxgurglrI4kgnA7RVxn4cdp9tx21ayA4tKH4d7irjJqd02mVKJ/uBFnYD5FTt
+         zZOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=THw8zcgbqLcO16dUqauFb0z8OAhU7380cxSadcHRy9U=;
-        b=gTgX/56ta4LH6fuaKx0j8kv24d6vraV/T38kC2y6nuQIoZbyD5X6oidP3CjrhgjloJ
-         GskhbNAX+n+v+gMXN2U2N5BKks/FdxdKnSCvcOW7vztrtl2Mvp6deF68Pj8nMflhtuWi
-         2zy4QrPIsyPfAVEJdD84/RW9Qt9PhCctOYXG0Z5fLhMDVzMTImb0FDtjbKyXm3bmeMfo
-         ay81KLscAlQXOrrSVdi46rt5hQZ2VL3g/mug8H8umrfpLUaxwCx0OPh7NED8ltT6Lau0
-         mfx+Tg8U82L5yTKMP/QWQ72nhLj/NsRx/SdtFy7YQmC7MT+DyZbagHNJqJsQSfU3PcHN
-         x2sQ==
-X-Gm-Message-State: AOAM531dzFtAgo8WZ4zIu5obI+kwiwtwj18CLmVMV4QjTnH2aVjypdt5
-        vronRixc4SGBGN1TTkw4CXU=
-X-Google-Smtp-Source: ABdhPJwS8D3jR/+zm9zeYJjDu4IIIl3Zh0tcS8mq+uGfbnHw8pab8S329eTtv5epyq7ZB+aN8xZozQ==
-X-Received: by 2002:adf:d236:: with SMTP id k22mr9959080wrh.144.1616690463074;
-        Thu, 25 Mar 2021 09:41:03 -0700 (PDT)
+        bh=tl+/f6WBFGlmAJ8aIGRC63W4tU1XCz5OC6vf2oAyFwc=;
+        b=WeWP5lX0d6q69Oa0JC3228QIsiAOmpf7K35+mVrnDhQ/kDasbd/CgZMLL3uQOAUDTW
+         7YNmFNHEMN6VOMc80qv/BGwJ5Fzyz8bIrmBYpB4nyzKrmx9lMyCYQm/PlZfiE3WAWy9l
+         4cZDztTtx74EXzGwehikn+bn+oOuL+lU9h0t78Q9KBQRGv8IiJ8JMlcZWiK5i54k21ab
+         jDjjwNBLpilVWAmLtHwP+HSeMWntn4w8Ua4l1tRNCWAcmxEnQH2675NnuR/Ie3tWilWR
+         2yzqtviHXd1eTcZ3ne2KoEKC4VchMLYImtXRq/YhQ5NwFwzKkX7LcdeurZHSdXJVObgz
+         +iWQ==
+X-Gm-Message-State: AOAM532aHCu8AHZ0WN5CFBLF0M/bwaUqL999hVGIYpERiF24lVyDv9uB
+        JNyO0w+c4zM46X547jKVw+BUz8i7NSM=
+X-Google-Smtp-Source: ABdhPJy0KdWUyF30nlp+OU7CCK8byVoUZ8t70G/6DvaXQXbqGc9ubh+0Kntdvs/tqca5cRqFQnnVTQ==
+X-Received: by 2002:a1c:4e07:: with SMTP id g7mr9031309wmh.29.1616690470611;
+        Thu, 25 Mar 2021 09:41:10 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id k11sm7115040wmj.1.2021.03.25.09.40.59
+        by smtp.gmail.com with ESMTPSA id s83sm7497577wms.16.2021.03.25.09.41.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Mar 2021 09:40:59 -0700 (PDT)
+        Thu, 25 Mar 2021 09:41:04 -0700 (PDT)
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Vinod Koul <vkoul@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -55,9 +55,9 @@ Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
         JC Kuo <jckuo@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
         linux-tegra@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-usb@vger.kernel.org
-Subject: [PATCH v8 06/13] phy: tegra: xusb: Add sleepwalk and suspend/resume
-Date:   Thu, 25 Mar 2021 17:40:50 +0100
-Message-Id: <20210325164057.793954-7-thierry.reding@gmail.com>
+Subject: [PATCH v8 07/13] soc/tegra: pmc: Provide USB sleepwalk register map
+Date:   Thu, 25 Mar 2021 17:40:51 +0100
+Message-Id: <20210325164057.793954-8-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210325164057.793954-1-thierry.reding@gmail.com>
 References: <20210325164057.793954-1-thierry.reding@gmail.com>
@@ -69,209 +69,215 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: JC Kuo <jckuo@nvidia.com>
 
-This commit adds sleepwalk/wake and suspend/resume interfaces
-to Tegra XUSB PHY driver.
-
-Tegra XUSB host controller driver makes use of sleepwalk functions
-to enable/disable sleepwalk circuit which is in always-on partition
-and can respond to USB resume signals when controller is not powered.
-Sleepwalk can be enabled/disabled for any USB UPHY individually.
-
-  - tegra_xusb_padctl_enable_phy_sleepwalk()
-  - tegra_xusb_padctl_disable_phy_sleepwalk()
-
-Tegra XUSB host controller driver makes use of wake functions to
-enable/disable/query wake circuit which is in always-on partition
-can wake system up when USB resume happens.
-Wake circuit can be enabled/disabled for any USB PHY individually.
-
-  - tegra_xusb_padctl_enable_phy_wake()
-  - tegra_xusb_padctl_disable_phy_wake()
-  - tegra_xusb_padctl_remote_wake_detected()
-
-This commit also adds two system suspend stubs that can be used to
-save and restore XUSB PADCTL context during system suspend and
-resume.
-  - tegra_xusb_padctl_suspend_noirq()
-  - tegra_xusb_padctl_resume_noirq()
+This commit implements a register map which grants USB (UTMI and HSIC)
+sleepwalk registers access to USB PHY drivers. The USB sleepwalk logic
+is in PMC hardware block but USB PHY drivers have the best knowledge
+of proper programming sequence.
 
 Signed-off-by: JC Kuo <jckuo@nvidia.com>
 Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
- drivers/phy/tegra/xusb.c       | 82 ++++++++++++++++++++++++++++++++++
- drivers/phy/tegra/xusb.h       |  8 ++++
- include/linux/phy/tegra/xusb.h | 10 ++++-
- 3 files changed, 99 insertions(+), 1 deletion(-)
+ drivers/soc/tegra/pmc.c | 94 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 94 insertions(+)
 
-diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
-index a34d304677bb..0aadac678191 100644
---- a/drivers/phy/tegra/xusb.c
-+++ b/drivers/phy/tegra/xusb.c
-@@ -1273,10 +1273,36 @@ static int tegra_xusb_padctl_remove(struct platform_device *pdev)
- 	return err;
- }
+diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
+index df9a5ca8c99c..a619a23f9592 100644
+--- a/drivers/soc/tegra/pmc.c
++++ b/drivers/soc/tegra/pmc.c
+@@ -43,6 +43,7 @@
+ #include <linux/seq_file.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
++#include <linux/regmap.h>
  
-+static int tegra_xusb_padctl_suspend_noirq(struct device *dev)
-+{
-+	struct tegra_xusb_padctl *padctl = dev_get_drvdata(dev);
-+
-+	if (padctl->soc && padctl->soc->ops && padctl->soc->ops->suspend_noirq)
-+		return padctl->soc->ops->suspend_noirq(padctl);
-+
-+	return 0;
-+}
-+
-+static int tegra_xusb_padctl_resume_noirq(struct device *dev)
-+{
-+	struct tegra_xusb_padctl *padctl = dev_get_drvdata(dev);
-+
-+	if (padctl->soc && padctl->soc->ops && padctl->soc->ops->resume_noirq)
-+		return padctl->soc->ops->resume_noirq(padctl);
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops tegra_xusb_padctl_pm_ops = {
-+	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(tegra_xusb_padctl_suspend_noirq,
-+				      tegra_xusb_padctl_resume_noirq)
-+};
-+
- static struct platform_driver tegra_xusb_padctl_driver = {
- 	.driver = {
- 		.name = "tegra-xusb-padctl",
- 		.of_match_table = tegra_xusb_padctl_of_match,
-+		.pm = &tegra_xusb_padctl_pm_ops,
- 	},
- 	.probe = tegra_xusb_padctl_probe,
- 	.remove = tegra_xusb_padctl_remove,
-@@ -1343,6 +1369,62 @@ int tegra_xusb_padctl_hsic_set_idle(struct tegra_xusb_padctl *padctl,
- }
- EXPORT_SYMBOL_GPL(tegra_xusb_padctl_hsic_set_idle);
+ #include <soc/tegra/common.h>
+ #include <soc/tegra/fuse.h>
+@@ -102,6 +103,9 @@
  
-+int tegra_xusb_padctl_enable_phy_sleepwalk(struct tegra_xusb_padctl *padctl, struct phy *phy,
-+					   enum usb_device_speed speed)
-+{
-+	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
-+
-+	if (lane->pad->ops->enable_phy_sleepwalk)
-+		return lane->pad->ops->enable_phy_sleepwalk(lane, speed);
-+
-+	return -EOPNOTSUPP;
-+}
-+EXPORT_SYMBOL_GPL(tegra_xusb_padctl_enable_phy_sleepwalk);
-+
-+int tegra_xusb_padctl_disable_phy_sleepwalk(struct tegra_xusb_padctl *padctl, struct phy *phy)
-+{
-+	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
-+
-+	if (lane->pad->ops->disable_phy_sleepwalk)
-+		return lane->pad->ops->disable_phy_sleepwalk(lane);
-+
-+	return -EOPNOTSUPP;
-+}
-+EXPORT_SYMBOL_GPL(tegra_xusb_padctl_disable_phy_sleepwalk);
-+
-+int tegra_xusb_padctl_enable_phy_wake(struct tegra_xusb_padctl *padctl, struct phy *phy)
-+{
-+	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
-+
-+	if (lane->pad->ops->enable_phy_wake)
-+		return lane->pad->ops->enable_phy_wake(lane);
-+
-+	return -EOPNOTSUPP;
-+}
-+EXPORT_SYMBOL_GPL(tegra_xusb_padctl_enable_phy_wake);
-+
-+int tegra_xusb_padctl_disable_phy_wake(struct tegra_xusb_padctl *padctl, struct phy *phy)
-+{
-+	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
-+
-+	if (lane->pad->ops->disable_phy_wake)
-+		return lane->pad->ops->disable_phy_wake(lane);
-+
-+	return -EOPNOTSUPP;
-+}
-+EXPORT_SYMBOL_GPL(tegra_xusb_padctl_disable_phy_wake);
-+
-+bool tegra_xusb_padctl_remote_wake_detected(struct tegra_xusb_padctl *padctl, struct phy *phy)
-+{
-+	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
-+
-+	if (lane->pad->ops->remote_wake_detected)
-+		return lane->pad->ops->remote_wake_detected(lane);
-+
-+	return false;
-+}
-+EXPORT_SYMBOL_GPL(tegra_xusb_padctl_remote_wake_detected);
-+
- int tegra_xusb_padctl_usb3_set_lfps_detect(struct tegra_xusb_padctl *padctl,
- 					   unsigned int port, bool enable)
- {
-diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
-index e789d5ff4eb8..034f7a2c28d6 100644
---- a/drivers/phy/tegra/xusb.h
-+++ b/drivers/phy/tegra/xusb.h
-@@ -11,6 +11,7 @@
- #include <linux/mutex.h>
- #include <linux/workqueue.h>
+ #define PMC_PWR_DET_VALUE		0xe4
  
-+#include <linux/usb/ch9.h>
- #include <linux/usb/otg.h>
- #include <linux/usb/role.h>
++#define PMC_USB_DEBOUNCE_DEL		0xec
++#define PMC_USB_AO			0xf0
++
+ #define PMC_SCRATCH41			0x140
  
-@@ -132,6 +133,11 @@ struct tegra_xusb_lane_ops {
- 	void (*remove)(struct tegra_xusb_lane *lane);
- 	void (*iddq_enable)(struct tegra_xusb_lane *lane);
- 	void (*iddq_disable)(struct tegra_xusb_lane *lane);
-+	int (*enable_phy_sleepwalk)(struct tegra_xusb_lane *lane, enum usb_device_speed speed);
-+	int (*disable_phy_sleepwalk)(struct tegra_xusb_lane *lane);
-+	int (*enable_phy_wake)(struct tegra_xusb_lane *lane);
-+	int (*disable_phy_wake)(struct tegra_xusb_lane *lane);
-+	bool (*remote_wake_detected)(struct tegra_xusb_lane *lane);
+ #define PMC_WAKE2_MASK			0x160
+@@ -133,6 +137,13 @@
+ #define IO_DPD2_STATUS			0x1c4
+ #define SEL_DPD_TIM			0x1c8
+ 
++#define PMC_UTMIP_UHSIC_TRIGGERS	0x1ec
++#define PMC_UTMIP_UHSIC_SAVED_STATE	0x1f0
++
++#define PMC_UTMIP_TERM_PAD_CFG		0x1f8
++#define PMC_UTMIP_UHSIC_SLEEP_CFG	0x1fc
++#define PMC_UTMIP_UHSIC_FAKE		0x218
++
+ #define PMC_SCRATCH54			0x258
+ #define  PMC_SCRATCH54_DATA_SHIFT	8
+ #define  PMC_SCRATCH54_ADDR_SHIFT	0
+@@ -145,8 +156,18 @@
+ #define  PMC_SCRATCH55_CHECKSUM_SHIFT	16
+ #define  PMC_SCRATCH55_I2CSLV1_SHIFT	0
+ 
++#define  PMC_UTMIP_UHSIC_LINE_WAKEUP	0x26c
++
++#define PMC_UTMIP_BIAS_MASTER_CNTRL	0x270
++#define PMC_UTMIP_MASTER_CONFIG		0x274
++#define PMC_UTMIP_UHSIC2_TRIGGERS	0x27c
++#define PMC_UTMIP_MASTER2_CONFIG	0x29c
++
+ #define GPU_RG_CNTRL			0x2d4
+ 
++#define PMC_UTMIP_PAD_CFG0		0x4c0
++#define PMC_UTMIP_UHSIC_SLEEP_CFG1	0x4d0
++#define PMC_UTMIP_SLEEPWALK_P3		0x4e0
+ /* Tegra186 and later */
+ #define WAKE_AOWAKE_CNTRL(x) (0x000 + ((x) << 2))
+ #define WAKE_AOWAKE_CNTRL_LEVEL (1 << 3)
+@@ -334,6 +355,7 @@ struct tegra_pmc_soc {
+ 	const struct pmc_clk_init_data *pmc_clks_data;
+ 	unsigned int num_pmc_clks;
+ 	bool has_blink_output;
++	bool has_usb_sleepwalk;
  };
  
- bool tegra_xusb_lane_check(struct tegra_xusb_lane *lane, const char *function);
-@@ -396,6 +402,8 @@ struct tegra_xusb_padctl_ops {
- 			 const struct tegra_xusb_padctl_soc *soc);
- 	void (*remove)(struct tegra_xusb_padctl *padctl);
+ /**
+@@ -2443,6 +2465,67 @@ static void tegra_pmc_clock_register(struct tegra_pmc *pmc,
+ 			 err);
+ }
  
-+	int (*suspend_noirq)(struct tegra_xusb_padctl *padctl);
-+	int (*resume_noirq)(struct tegra_xusb_padctl *padctl);
- 	int (*usb3_save_context)(struct tegra_xusb_padctl *padctl,
- 				 unsigned int index);
- 	int (*hsic_set_idle)(struct tegra_xusb_padctl *padctl,
-diff --git a/include/linux/phy/tegra/xusb.h b/include/linux/phy/tegra/xusb.h
-index 71d956935405..3a35e74cdc61 100644
---- a/include/linux/phy/tegra/xusb.h
-+++ b/include/linux/phy/tegra/xusb.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * Copyright (c) 2016, NVIDIA CORPORATION.  All rights reserved.
-+ * Copyright (c) 2016-2020, NVIDIA CORPORATION.  All rights reserved.
-  */
- 
- #ifndef PHY_TEGRA_XUSB_H
-@@ -8,6 +8,7 @@
- 
- struct tegra_xusb_padctl;
- struct device;
-+enum usb_device_speed;
- 
- struct tegra_xusb_padctl *tegra_xusb_padctl_get(struct device *dev);
- void tegra_xusb_padctl_put(struct tegra_xusb_padctl *padctl);
-@@ -23,4 +24,11 @@ int tegra_xusb_padctl_set_vbus_override(struct tegra_xusb_padctl *padctl,
- int tegra_phy_xusb_utmi_port_reset(struct phy *phy);
- int tegra_xusb_padctl_get_usb3_companion(struct tegra_xusb_padctl *padctl,
- 					 unsigned int port);
-+int tegra_xusb_padctl_enable_phy_sleepwalk(struct tegra_xusb_padctl *padctl, struct phy *phy,
-+					   enum usb_device_speed speed);
-+int tegra_xusb_padctl_disable_phy_sleepwalk(struct tegra_xusb_padctl *padctl, struct phy *phy);
-+int tegra_xusb_padctl_enable_phy_wake(struct tegra_xusb_padctl *padctl, struct phy *phy);
-+int tegra_xusb_padctl_disable_phy_wake(struct tegra_xusb_padctl *padctl, struct phy *phy);
-+bool tegra_xusb_padctl_remote_wake_detected(struct tegra_xusb_padctl *padctl, struct phy *phy);
++static const struct regmap_range pmc_usb_sleepwalk_ranges[] = {
++	regmap_reg_range(PMC_USB_DEBOUNCE_DEL, PMC_USB_AO),
++	regmap_reg_range(PMC_UTMIP_UHSIC_TRIGGERS, PMC_UTMIP_UHSIC_SAVED_STATE),
++	regmap_reg_range(PMC_UTMIP_TERM_PAD_CFG, PMC_UTMIP_UHSIC_FAKE),
++	regmap_reg_range(PMC_UTMIP_UHSIC_LINE_WAKEUP, PMC_UTMIP_UHSIC_LINE_WAKEUP),
++	regmap_reg_range(PMC_UTMIP_BIAS_MASTER_CNTRL, PMC_UTMIP_MASTER_CONFIG),
++	regmap_reg_range(PMC_UTMIP_UHSIC2_TRIGGERS, PMC_UTMIP_MASTER2_CONFIG),
++	regmap_reg_range(PMC_UTMIP_PAD_CFG0, PMC_UTMIP_UHSIC_SLEEP_CFG1),
++	regmap_reg_range(PMC_UTMIP_SLEEPWALK_P3, PMC_UTMIP_SLEEPWALK_P3),
++};
 +
- #endif /* PHY_TEGRA_XUSB_H */
++static const struct regmap_access_table pmc_usb_sleepwalk_table = {
++	.yes_ranges = pmc_usb_sleepwalk_ranges,
++	.n_yes_ranges = ARRAY_SIZE(pmc_usb_sleepwalk_ranges),
++};
++
++static int tegra_pmc_regmap_readl(void *context, unsigned int offset, unsigned int *value)
++{
++	struct tegra_pmc *pmc = context;
++
++	*value = tegra_pmc_readl(pmc, offset);
++	return 0;
++}
++
++static int tegra_pmc_regmap_writel(void *context, unsigned int offset, unsigned int value)
++{
++	struct tegra_pmc *pmc = context;
++
++	tegra_pmc_writel(pmc, value, offset);
++	return 0;
++}
++
++static const struct regmap_config usb_sleepwalk_regmap_config = {
++	.name = "usb_sleepwalk",
++	.reg_bits = 32,
++	.val_bits = 32,
++	.reg_stride = 4,
++	.fast_io = true,
++	.rd_table = &pmc_usb_sleepwalk_table,
++	.wr_table = &pmc_usb_sleepwalk_table,
++	.reg_read = tegra_pmc_regmap_readl,
++	.reg_write = tegra_pmc_regmap_writel,
++};
++
++static int tegra_pmc_regmap_init(struct tegra_pmc *pmc)
++{
++	struct regmap *regmap;
++	int err;
++
++	if (pmc->soc->has_usb_sleepwalk) {
++		regmap = devm_regmap_init(pmc->dev, NULL, pmc, &usb_sleepwalk_regmap_config);
++		if (IS_ERR(regmap)) {
++			err = PTR_ERR(regmap);
++			dev_err(pmc->dev, "failed to allocate register map (%d)\n", err);
++			return err;
++		}
++	}
++
++	return 0;
++}
++
+ static int tegra_pmc_probe(struct platform_device *pdev)
+ {
+ 	void __iomem *base;
+@@ -2548,6 +2631,10 @@ static int tegra_pmc_probe(struct platform_device *pdev)
+ 	if (err)
+ 		goto cleanup_restart_handler;
+ 
++	err = tegra_pmc_regmap_init(pmc);
++	if (err < 0)
++		goto cleanup_restart_handler;
++
+ 	err = tegra_powergate_init(pmc, pdev->dev.of_node);
+ 	if (err < 0)
+ 		goto cleanup_powergates;
+@@ -2706,6 +2793,7 @@ static const struct tegra_pmc_soc tegra20_pmc_soc = {
+ 	.pmc_clks_data = NULL,
+ 	.num_pmc_clks = 0,
+ 	.has_blink_output = true,
++	.has_usb_sleepwalk = false,
+ };
+ 
+ static const char * const tegra30_powergates[] = {
+@@ -2764,6 +2852,7 @@ static const struct tegra_pmc_soc tegra30_pmc_soc = {
+ 	.pmc_clks_data = tegra_pmc_clks_data,
+ 	.num_pmc_clks = ARRAY_SIZE(tegra_pmc_clks_data),
+ 	.has_blink_output = true,
++	.has_usb_sleepwalk = false,
+ };
+ 
+ static const char * const tegra114_powergates[] = {
+@@ -2818,6 +2907,7 @@ static const struct tegra_pmc_soc tegra114_pmc_soc = {
+ 	.pmc_clks_data = tegra_pmc_clks_data,
+ 	.num_pmc_clks = ARRAY_SIZE(tegra_pmc_clks_data),
+ 	.has_blink_output = true,
++	.has_usb_sleepwalk = false,
+ };
+ 
+ static const char * const tegra124_powergates[] = {
+@@ -2932,6 +3022,7 @@ static const struct tegra_pmc_soc tegra124_pmc_soc = {
+ 	.pmc_clks_data = tegra_pmc_clks_data,
+ 	.num_pmc_clks = ARRAY_SIZE(tegra_pmc_clks_data),
+ 	.has_blink_output = true,
++	.has_usb_sleepwalk = true,
+ };
+ 
+ static const char * const tegra210_powergates[] = {
+@@ -3059,6 +3150,7 @@ static const struct tegra_pmc_soc tegra210_pmc_soc = {
+ 	.pmc_clks_data = tegra_pmc_clks_data,
+ 	.num_pmc_clks = ARRAY_SIZE(tegra_pmc_clks_data),
+ 	.has_blink_output = true,
++	.has_usb_sleepwalk = true,
+ };
+ 
+ #define TEGRA186_IO_PAD_TABLE(_pad)                                          \
+@@ -3214,6 +3306,7 @@ static const struct tegra_pmc_soc tegra186_pmc_soc = {
+ 	.pmc_clks_data = NULL,
+ 	.num_pmc_clks = 0,
+ 	.has_blink_output = false,
++	.has_usb_sleepwalk = false,
+ };
+ 
+ #define TEGRA194_IO_PAD_TABLE(_pad)                                              \
+@@ -3347,6 +3440,7 @@ static const struct tegra_pmc_soc tegra194_pmc_soc = {
+ 	.pmc_clks_data = NULL,
+ 	.num_pmc_clks = 0,
+ 	.has_blink_output = false,
++	.has_usb_sleepwalk = false,
+ };
+ 
+ static const struct tegra_pmc_regs tegra234_pmc_regs = {
 -- 
 2.30.2
 
