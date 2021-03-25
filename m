@@ -2,91 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C58A0349892
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 18:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66EBB349999
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 19:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbhCYRsS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 13:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbhCYRrt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 13:47:49 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A576C06174A;
-        Thu, 25 Mar 2021 10:47:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=u/bexe4Djp4doWgJwtQivZm3RyzQYaYzdeQh59a8McU=; b=PllTquKaOuR/IHe2MwmUbZMvd2
-        ymlM5JPIfHRVFwmeG5MNRKciFMnbbvoYdLU0JngJefz8LDPsiE98kBNd4uCtAZSbbo8Q0HF/Ba5BQ
-        3jnQTq0Vys8Mxk9RXbxM9KeBsCdmlNVCrECjZVWPGvJFoIe4SswKMSdi/eeRTpu36AD2fG5ErFeAA
-        wf4AG9Kd0x4W+U0wk083iBXrfM2K77TU+x8dqqTxUru+BhdfvShtl6DcUm9Oa5thzXbcJ2RAIuffJ
-        spNOS/FnK6g/UdjzvyHJcXbKVfPli3qbIKU1l6B2njDYn0rf8VIMQtPXlqT+TGR1FqCPgUyysx1gk
-        i/wP8Zfg==;
-Received: from [2601:1c0:6280:3f0::3ba4] (helo=smtpauth.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lPU4v-00DS2h-LQ; Thu, 25 Mar 2021 17:47:35 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v2] tools: usbip: list.h: fix kernel-doc for list_del()
-Date:   Thu, 25 Mar 2021 10:47:24 -0700
-Message-Id: <20210325174724.14447-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.26.2
+        id S229669AbhCYSjH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 14:39:07 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:45151 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S229576AbhCYSi5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 14:38:57 -0400
+Received: (qmail 800380 invoked by uid 1000); 25 Mar 2021 14:38:56 -0400
+Date:   Thu, 25 Mar 2021 14:38:56 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [RFC]extension of the anchor API
+Message-ID: <20210325183856.GA799855@rowland.harvard.edu>
+References: <5b3c30d268ea2d13d303759ef3dfee8d72830084.camel@suse.com>
+ <20210325150657.GC785961@rowland.harvard.edu>
+ <5d3852dca69ff194017c806078e996c50ee621be.camel@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5d3852dca69ff194017c806078e996c50ee621be.camel@suse.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In list.h, the kernel-doc for list_del() should be immediately
-preceding the implementation and not separated from it by
-another function implementation.
+On Thu, Mar 25, 2021 at 05:04:25PM +0100, Oliver Neukum wrote:
+> Am Donnerstag, den 25.03.2021, 11:06 -0400 schrieb Alan Stern:
 
-Eliminates this kernel-doc error:
-list.h:1: warning: 'list_del' not found
+> > > +:c:func:`usb_submit_anchored_urbs`
+> > > +---------------------------------
+> > > +
+> > > +The URBs contained in anchor are chronologically submitted until
+> > 
+> > "chronologically" is the wrong word.  They are submitted in the order
+> > of the anchor's list, which is the same as the order that an iterator
+> > would use.
+> 
+> OK. "In the same sequence as they were anchored" ?
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Valentina Manea <valentina.manea.m@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
----
-v2: add Acked-by Shuah; send to Greg for merging.
+Hmmm.  What happens if you submit an anchor's worth of URBs, but then 
+you kill them in the reverse order (which is how you would normally want 
+to cancel a bunch of URBs)?  Since each URB gets moved to the end of the 
+anchor's list when it completes, after they are all killed the list will 
+be reversed.  So the next time you submit the anchor, the order of URBs 
+will be backward.  If some of the URBs completed before they were 
+killed, the order will be mixed up.
 
- tools/usb/usbip/libsrc/list.h |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Of course, if you never use the URBs on an anchor after killing it, this 
+doesn't matter.
 
---- linux-next-20210323.orig/tools/usb/usbip/libsrc/list.h
-+++ linux-next-20210323/tools/usb/usbip/libsrc/list.h
-@@ -77,17 +77,17 @@ static inline void __list_del(struct lis
- #define LIST_POISON1  ((void *) 0x00100100 + POISON_POINTER_DELTA)
- #define LIST_POISON2  ((void *) 0x00200200 + POISON_POINTER_DELTA)
- 
-+static inline void __list_del_entry(struct list_head *entry)
-+{
-+	__list_del(entry->prev, entry->next);
-+}
-+
- /**
-  * list_del - deletes entry from list.
-  * @entry: the element to delete from the list.
-  * Note: list_empty() on entry does not return true after this, the entry is
-  * in an undefined state.
-  */
--static inline void __list_del_entry(struct list_head *entry)
--{
--	__list_del(entry->prev, entry->next);
--}
--
- static inline void list_del(struct list_head *entry)
- {
- 	__list_del(entry->prev, entry->next);
+Alan Stern
