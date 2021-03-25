@@ -2,78 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC6B348CB5
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 10:24:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93775348CC9
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 10:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbhCYJXj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 05:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbhCYJXZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 05:23:25 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3F4C06175F
-        for <linux-usb@vger.kernel.org>; Thu, 25 Mar 2021 02:23:21 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id g8so1448355lfv.12
-        for <linux-usb@vger.kernel.org>; Thu, 25 Mar 2021 02:23:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5tvrHzTq0gWQPCywVaxzy6v7kow1O87LeytCB1bodgo=;
-        b=MhuB3SGDVQsjhET84L/1KRiomBF9a3KFIb9j4QcSXe84rt6vYQxQM2JztojeCFrrZb
-         UbRU5kqkkkm+M2wKA2l6ha4Su6XNphRWO15O8wdYL1B5OugaXK71kTkTO45qIjS4CZ5F
-         vrAIecz7SBCbLrInmd8qex7TU2WdOqcYo2UCPV9Ti56O0gzSiN4TvKNywMThXCW8m7lc
-         58zXYjS3v5MjF8Iwi0CP9ZlJDYxCxPOk8u37pslrBPpCfbA/AC2gkIuojPJhdvdmuoRX
-         kBuKPr8T6zCs9195GUMZ1iYBj7x9ZTf7Z/q7tJQkFlMsbfAubCnJ5e8n65t6Z+4Dr320
-         j9EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5tvrHzTq0gWQPCywVaxzy6v7kow1O87LeytCB1bodgo=;
-        b=d3fR98QyI0mo6SHfuq8cAgW5D00Ch3mqg+pyYeLJlBhsjRgdGa2/XwfKeim4XgX8Tg
-         SBeG82lxo7ruQ/jKXzAIugT+8amgem8NrqCDQWNQTGJa+zg+rD7uKbUEgc0qmYm7+SRQ
-         9OqCwGT772v9PGovvHIzZP9y83eOCtgY6y8dVxA9sxWk0fDJ0n6Gyeoq0fovkyfPxn49
-         bg/9IEdch9+0UV+PuSYEpaGQGxDhEhhgC/j6TqZq3WSsrC0IqQ42+FhYWPMzG0m8/U0h
-         vT/ncVwjakuCO2FjoA6eG/NFg3X57Ri5mLOiYCcD9gB19sbpdOAbMT5nxGeVvvfanpso
-         jsWg==
-X-Gm-Message-State: AOAM5312kAVejF8lexw/P+kNR/skjK3EcmTn1jwev9xcoeO1DNcWykJ2
-        ZjDebFjtLHy7jODzgVq5TxCaTw9rEtvhoVzJLtRpgA==
-X-Google-Smtp-Source: ABdhPJxZ9tJzr5Ma99P00E4TPr2rgQatQ4a9hwr5E8JzXVY8NxG2acO+Rt8Upz77y2AfiiaXQ3/mGz5FXGWZKXowQ2o=
-X-Received: by 2002:a05:6512:243:: with SMTP id b3mr4569222lfo.529.1616664199644;
- Thu, 25 Mar 2021 02:23:19 -0700 (PDT)
+        id S229904AbhCYJ16 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 05:27:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36854 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229782AbhCYJ1x (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Mar 2021 05:27:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AADA6619DC;
+        Thu, 25 Mar 2021 09:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616664468;
+        bh=HuoMuF8A1sneti8s9tErHxcPxOFCwX7WOppBA3+SoOE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=HlimVlgPYKhl4oG0502jiGnXXvty46va3OBMzG9wI7I8E9z+oEj9QLAkmiDWWtQAl
+         nQocJo6IC7aPnmDOKUbADwel/wIKoh+arhR4GZSeQ7pXAvFW/mffyu4uqSvmkQrGOl
+         d1yga9QX9dMhgeX81aIx5HYocuJ8qaLNuxgRQYaU/RRqhk0nP//Rdvgo3JGuTCXi9Y
+         s1PlmXXbJ3WCjwdaPuFC/apZ2DSmEAHLdot1fT4h3w7sRIhZIV/WTZ8+/pKE4HcN73
+         Sr9vnI5Sju7c6hVqC11wawa8SOQLqfBSiL5EApeMLrnCI/avDM6oga/1RyBAiVWvcD
+         FGLQoBAm53yew==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH] usb: dwc3: trace: Print register read and write offset
+In-Reply-To: <cb38aa7dec109a8965691b53039a8b317d026189.1616636706.git.Thinh.Nguyen@synopsys.com>
+References: <cb38aa7dec109a8965691b53039a8b317d026189.1616636706.git.Thinh.Nguyen@synopsys.com>
+Date:   Thu, 25 Mar 2021 11:27:41 +0200
+Message-ID: <874kgzlh0y.fsf@kernel.org>
 MIME-Version: 1.0
-References: <20210323153626.54908-1-andriy.shevchenko@linux.intel.com> <20210323153626.54908-6-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20210323153626.54908-6-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 25 Mar 2021 10:23:08 +0100
-Message-ID: <CACRpkdYVOgurDD3pQCAYzNoHgSAibVcoEWphJu9T152eLo=uiQ@mail.gmail.com>
-Subject: Re: [PATCH v2 6/7] usb: gadget: pch_udc: Initialize device pointer
- before use
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-usb <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 23, 2021 at 4:36 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-> During conversion to use GPIO descriptors the device pointer,
-> which is applied to devm_gpiod_get(), is not yet initialized.
+
+Hi,
+
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+> Currently dwc3 only prints the virtual address of a register when doing
+> register read/write. However, these hashed addresses are difficult to rea=
+d.
+> Also, since we use %p, we may get some useless (___ptrval___) prints if t=
+he
+> address is not randomized enough. Let's include the register offset to he=
+lp
+> read the register read and write tracepoints.
 >
-> Move initialization in the ->probe() in order to have it set before use.
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+>  drivers/usb/dwc3/trace.h | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 >
-> Fixes: e20849a8c883 ("usb: gadget: pch_udc: Convert to use GPIO descriptors")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> diff --git a/drivers/usb/dwc3/trace.h b/drivers/usb/dwc3/trace.h
+> index 97f4f1125a41..3cbeb9854532 100644
+> --- a/drivers/usb/dwc3/trace.h
+> +++ b/drivers/usb/dwc3/trace.h
+> @@ -32,8 +32,10 @@ DECLARE_EVENT_CLASS(dwc3_log_io,
+>  		__entry->offset =3D offset;
+>  		__entry->value =3D value;
+>  	),
+> -	TP_printk("addr %p value %08x", __entry->base + __entry->offset,
+> -			__entry->value)
+> +	TP_printk("addr %p offset %04x value %08x",
+> +		__entry->base + __entry->offset,
+> +		__entry->offset,
 
-Ooops sorry.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+might be better, then, to print base and offset separately. Other than
+that:
 
-Yours,
-Linus Walleij
+Acked-by: Felipe Balbi <balbi@kernel.org>
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmBcV40RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQYewQ/+PnWOAWDudBIKnRpM1LVRPgJs3eNvfhu/
+LXaalTVcLe85jZ9nkeXKPMzI/Hmt0Kl7NTMgcQK3A6KIjJR552hKyR/K84PFt1GC
+WE/Z31sDAlDHqB94jeiQr4Keiz55VLhRNH7XkQf+oSBcwbhdtjGdW+f9XpClJxic
+oTK0HQt/ezcx69aBAyNoUKnjkhKyUwbhXQBcfADgVG0J7bNEGMK03Qchwr16kw6r
+2NbpMnXg57AWN6r8xZk/4X1ot9edYtHA7MJxlMhnErKAR6OO1XsFj1bp5+l0iiEW
+bhfpjtzNb5u2IXOR/uGiV/pJQguQZvYFhTCKpzsTPc6Nj6CwkQ8/cPmmKT6ei8iE
+sfnYVz+BM8MXCK0mfRza3GWmzb7W61YMGwQooLl04v5vb5XOVobQKvHlyKout4Ha
+Am0gyTZKSpZ8VAiq8cH8mWmr1zwscTVrxSIGM0wA+FfkUk17oCBzbvxzNL+i1o/S
+5EXaf1GDFsP2dbUhSgq6bySA+MlrmHwgYwHoz68lm62DrEaKl6QGJCFsVNaYkRB9
+AjJzr10KVouiLgUOrfqSTHkyO0/Dv+KLjX2sViEDQPCyK5udWdTri8u/S1tqXArB
+AydUVn4OgV9JQZMhYxXCEYRMBKqWMlyIi90MxB9AAuPBQBvwPlKGhsN/Fy5PV4Dm
+vi0nOEzb/5k=
+=1teC
+-----END PGP SIGNATURE-----
+--=-=-=--
