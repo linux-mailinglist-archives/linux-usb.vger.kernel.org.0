@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 380C3349713
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 17:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1DD349712
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 17:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbhCYQl7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S229915AbhCYQl7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Thu, 25 Mar 2021 12:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbhCYQlb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 12:41:31 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7049C06174A;
-        Thu, 25 Mar 2021 09:41:30 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 12so1535222wmf.5;
-        Thu, 25 Mar 2021 09:41:30 -0700 (PDT)
+        with ESMTP id S229771AbhCYQlf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 12:41:35 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010B7C06174A;
+        Thu, 25 Mar 2021 09:41:35 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id m20-20020a7bcb940000b029010cab7e5a9fso3466779wmi.3;
+        Thu, 25 Mar 2021 09:41:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FzV3zBMv51XDLkh/8s4gze+scJ88wDHClM0XU2WDdxM=;
-        b=d511zFVk8j3ZPT2YMgzSDlAgxvt+KdY70K4GnhOKZF4x8z4a7gEPFPnrMmQ8lqmeRT
-         +/ZR0kohLKObwcN3azYl4nl7NdFuKCnriGiZz6OlzKAcHKZb0yM+mFeXbYuYam3ZdfGx
-         mzV4hcOS7YV0sNGiTrg561mmEObKO7cyCTjkXCLBcBwjtcLMu4z58eDykALWtSvKof3u
-         zIgt7SlYYRHzYqBmRqzs0/Fom8//9OYH3OjCyAN3MqYTqqszfhs2ECLJPZR7DpDKHwRW
-         gpVbtX66LcNrkHowPRuGvnRbiShGWsnVTgAixvZ0YBJ0NBIwR7DdOVqnVVN+xmvCwAiZ
-         7znw==
+        bh=M7/JLbQJjUSymQX4uhScOBeXFiJb3pKiltILERb+d5I=;
+        b=M9HnA5WWjzJNuB/7uB5CtL4EUy7cJyJNnYQjmW5dRwzoXBsbP5CP6uoymTGta3ZNzB
+         MRN9pYs17bo81ZqAq15s04ecIIQsQcngvtv9xyOqleoLLcv0kCEW+c1EI6gZdi2qwLGh
+         FioDUR9SkFyk7MPNTKd5sqZLX3WvTZzHqRCIgRcA0jGvp2zGxnCnc6BAbmNsz2CU199L
+         an/ae2YrfJRcXIfqs68iUkA4WRHr1+5ZIxUSHW5bj3aRarW7yzt4cdC+xkI4q5QA0uq+
+         ra3KLXgLHl8wt7loNiBmjZa7KBQAo8k0xqlvg0SvEkSYUaacr7zIANsuuzQkPgHawfdQ
+         cy2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FzV3zBMv51XDLkh/8s4gze+scJ88wDHClM0XU2WDdxM=;
-        b=b9lfc/mEmtcf+vgbkChx8NFFvFLSZ5eZNZ6nQ+WYc0Q3gRA8NCqmMOCVpz1212BkDC
-         i9JGA8OVD81vfqMXHZVrpBr4ZaAOlwgaBWY2XoK6GIWvX7C7Q7MLDYe1KwNWVwQGwPPs
-         3+0avEsqVQqhLtLTfGGJ5ns7DZD29dW0duJMJuFIu+/UcMaIrCbuFM/7H+y35nD1LsI6
-         l1bsOguAbq4Z9QWLPxmhM1wwc5wwDpHBVA51oCcFVz7MTNW9WTpiMmiy7vseCly3qoC/
-         ogyyMelrw0TZl7K4DuiDBDl9bifk224B/fIAPI3gdJ4hyJ9HbYqB5T4jj43fkZjWhCBY
-         KJNw==
-X-Gm-Message-State: AOAM533cc7g72m3wCXcM+PoWjfr52EqQp4L6DfIp2x5FZtmXJbQpJ+Xo
-        YY5fwPrwpEGFrvQpFHYDnDo=
-X-Google-Smtp-Source: ABdhPJwygLbH8aj/ylrr7WQLf44ym9QnSIYD9c2QPr6eXWsjvTXLkOMfG2zx+3SC47GQTEl5kTtDpQ==
-X-Received: by 2002:a1c:9a09:: with SMTP id c9mr8655136wme.172.1616690489315;
-        Thu, 25 Mar 2021 09:41:29 -0700 (PDT)
+        bh=M7/JLbQJjUSymQX4uhScOBeXFiJb3pKiltILERb+d5I=;
+        b=MZJSmAtrPR2J77KzMaQu1CqHlRQOio16xZ4ssLmZqSChfcON0RkZeBRHCC3oC30JIh
+         yFa+iTIE//648K80qu/lU9fX6EJHIn7hSZIqNziN3xRoq3P1kf27VPtxE5WLUJ4EnJpl
+         jK1sLh2f6mqmseJKf70VIXqOPzGlawG7sp4mYyP1nXGcSDYKKdlWgwYSDYdOe0HlvTA1
+         +H6yxIYp7O3HZsD371tpODu2pszp60vOumh2he/BZ9XkiPrfpWHOZDr2oRv/l0YmKWLx
+         V8Db6a0L38Jq2sJJGdqkqowhej6bv8+Ud+r+uR60t6FBnap96CorQAfDJxQuUfnjwPih
+         lDiQ==
+X-Gm-Message-State: AOAM531Yaa82fOSV6VN7Af2Kgo53JtpaumpXsBzB51308dGyji0VEYyy
+        086UxZE4v0/67nqyZhHHpno=
+X-Google-Smtp-Source: ABdhPJx8N3Yxnfw/JNUeLdh2tYls8aL3hFOM4UkxY2TDsbWWQblrIYTMQLBAsBfHyNicg6gChAeVyA==
+X-Received: by 2002:a05:600c:364c:: with SMTP id y12mr8971267wmq.96.1616690493669;
+        Thu, 25 Mar 2021 09:41:33 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id c2sm7213995wmr.22.2021.03.25.09.41.25
+        by smtp.gmail.com with ESMTPSA id p16sm9055793wrt.54.2021.03.25.09.41.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Mar 2021 09:41:26 -0700 (PDT)
+        Thu, 25 Mar 2021 09:41:30 -0700 (PDT)
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Vinod Koul <vkoul@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -55,9 +55,9 @@ Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
         JC Kuo <jckuo@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
         linux-tegra@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-usb@vger.kernel.org
-Subject: [PATCH v8 11/13] phy: tegra: xusb: Add wake/sleepwalk for Tegra186
-Date:   Thu, 25 Mar 2021 17:40:55 +0100
-Message-Id: <20210325164057.793954-12-thierry.reding@gmail.com>
+Subject: [PATCH v8 12/13] usb: host: xhci-tegra: Unlink power domain devices
+Date:   Thu, 25 Mar 2021 17:40:56 +0100
+Message-Id: <20210325164057.793954-13-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210325164057.793954-1-thierry.reding@gmail.com>
 References: <20210325164057.793954-1-thierry.reding@gmail.com>
@@ -69,657 +69,352 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: JC Kuo <jckuo@nvidia.com>
 
-This commit implements Tegra186/Tegra194 XUSB PADCTL/AO wake and
-sleepwalk operations.
+This commit unlinks xhci-tegra platform device with SS/host power
+domain devices. Reasons for this change is - at ELPG entry, PHY
+sleepwalk and wake configuration need to be done before powering
+down SS/host partitions, and PHY need be powered off after powering
+down SS/host partitions. Sequence looks like roughly below:
+
+  tegra_xusb_enter_elpg() -> xhci_suspend()
+                          -> enable PHY sleepwalk and wake if needed
+                          -> power down SS/host partitions
+                          -> power down PHY
+
+If SS/host power domains are linked to xhci-tegra platform device, we
+are not able to perform the sequence like above.
+
+This commit introduces:
+  1. tegra_xusb_unpowergate_partitions() to power up SS and host
+     partitions together. If SS/host power domain devices are
+     available, it invokes pm_runtime_get_sync() to request power
+     driver to power up partitions; If power domain devices are not
+     available, tegra_powergate_sequence_power_up() will be used to
+     power up partitions.
+
+  2. tegra_xusb_powergate_partitions() to power down SS and host
+     partitions together. If SS/host power domain devices are
+     available, it invokes pm_runtime_put_sync() to request power
+     driver to power down partitions; If power domain devices are not
+     available, tegra_powergate_power_off() will be used to power down
+     partitions.
 
 Signed-off-by: JC Kuo <jckuo@nvidia.com>
 Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
- drivers/phy/tegra/xusb-tegra186.c | 558 +++++++++++++++++++++++++++++-
- 1 file changed, 557 insertions(+), 1 deletion(-)
+ drivers/usb/host/xhci-tegra.c | 206 ++++++++++++++++++----------------
+ 1 file changed, 112 insertions(+), 94 deletions(-)
 
-diff --git a/drivers/phy/tegra/xusb-tegra186.c b/drivers/phy/tegra/xusb-tegra186.c
-index 5d64f69b39a9..6378bf722745 100644
---- a/drivers/phy/tegra/xusb-tegra186.c
-+++ b/drivers/phy/tegra/xusb-tegra186.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index 50bb91b6a4b8..5b39a739f8f0 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -2,7 +2,7 @@
  /*
-- * Copyright (c) 2016-2019, NVIDIA CORPORATION.  All rights reserved.
-+ * Copyright (c) 2016-2020, NVIDIA CORPORATION.  All rights reserved.
+  * NVIDIA Tegra xHCI host controller driver
+  *
+- * Copyright (C) 2014 NVIDIA Corporation
++ * Copyright (c) 2014-2020, NVIDIA CORPORATION. All rights reserved.
+  * Copyright (C) 2014 Google, Inc.
   */
  
- #include <linux/delay.h>
-@@ -113,6 +113,117 @@
- #define  ID_OVERRIDE_FLOATING			ID_OVERRIDE(8)
- #define  ID_OVERRIDE_GROUNDED			ID_OVERRIDE(0)
+@@ -249,8 +249,7 @@ struct tegra_xusb {
  
-+/* XUSB AO registers */
-+#define XUSB_AO_USB_DEBOUNCE_DEL		(0x4)
-+#define   UHSIC_LINE_DEB_CNT(x)			(((x) & 0xf) << 4)
-+#define   UTMIP_LINE_DEB_CNT(x)			((x) & 0xf)
-+
-+#define XUSB_AO_UTMIP_TRIGGERS(x)		(0x40 + (x) * 4)
-+#define   CLR_WALK_PTR				(1 << 0)
-+#define   CAP_CFG				(1 << 1)
-+#define   CLR_WAKE_ALARM			(1 << 3)
-+
-+#define XUSB_AO_UHSIC_TRIGGERS(x)		(0x60 + (x) * 4)
-+#define   HSIC_CLR_WALK_PTR			(1 << 0)
-+#define   HSIC_CLR_WAKE_ALARM			(1 << 3)
-+#define   HSIC_CAP_CFG				(1 << 4)
-+
-+#define XUSB_AO_UTMIP_SAVED_STATE(x)		(0x70 + (x) * 4)
-+#define   SPEED(x)				((x) & 0x3)
-+#define     UTMI_HS				SPEED(0)
-+#define     UTMI_FS				SPEED(1)
-+#define     UTMI_LS				SPEED(2)
-+#define     UTMI_RST				SPEED(3)
-+
-+#define XUSB_AO_UHSIC_SAVED_STATE(x)		(0x90 + (x) * 4)
-+#define   MODE(x)				((x) & 0x1)
-+#define   MODE_HS				MODE(0)
-+#define   MODE_RST				MODE(1)
-+
-+#define XUSB_AO_UTMIP_SLEEPWALK_CFG(x)		(0xd0 + (x) * 4)
-+#define XUSB_AO_UHSIC_SLEEPWALK_CFG(x)		(0xf0 + (x) * 4)
-+#define   FAKE_USBOP_VAL			(1 << 0)
-+#define   FAKE_USBON_VAL			(1 << 1)
-+#define   FAKE_USBOP_EN				(1 << 2)
-+#define   FAKE_USBON_EN				(1 << 3)
-+#define   FAKE_STROBE_VAL			(1 << 0)
-+#define   FAKE_DATA_VAL				(1 << 1)
-+#define   FAKE_STROBE_EN			(1 << 2)
-+#define   FAKE_DATA_EN				(1 << 3)
-+#define   WAKE_WALK_EN				(1 << 14)
-+#define   MASTER_ENABLE				(1 << 15)
-+#define   LINEVAL_WALK_EN			(1 << 16)
-+#define   WAKE_VAL(x)				(((x) & 0xf) << 17)
-+#define     WAKE_VAL_NONE			WAKE_VAL(12)
-+#define     WAKE_VAL_ANY			WAKE_VAL(15)
-+#define     WAKE_VAL_DS10			WAKE_VAL(2)
-+#define   LINE_WAKEUP_EN			(1 << 21)
-+#define   MASTER_CFG_SEL			(1 << 22)
-+
-+#define XUSB_AO_UTMIP_SLEEPWALK(x)		(0x100 + (x) * 4)
-+/* phase A */
-+#define   USBOP_RPD_A				(1 << 0)
-+#define   USBON_RPD_A				(1 << 1)
-+#define   AP_A					(1 << 4)
-+#define   AN_A					(1 << 5)
-+#define   HIGHZ_A				(1 << 6)
-+/* phase B */
-+#define   USBOP_RPD_B				(1 << 8)
-+#define   USBON_RPD_B				(1 << 9)
-+#define   AP_B					(1 << 12)
-+#define   AN_B					(1 << 13)
-+#define   HIGHZ_B				(1 << 14)
-+/* phase C */
-+#define   USBOP_RPD_C				(1 << 16)
-+#define   USBON_RPD_C				(1 << 17)
-+#define   AP_C					(1 << 20)
-+#define   AN_C					(1 << 21)
-+#define   HIGHZ_C				(1 << 22)
-+/* phase D */
-+#define   USBOP_RPD_D				(1 << 24)
-+#define   USBON_RPD_D				(1 << 25)
-+#define   AP_D					(1 << 28)
-+#define   AN_D					(1 << 29)
-+#define   HIGHZ_D				(1 << 30)
-+
-+#define XUSB_AO_UHSIC_SLEEPWALK(x)		(0x120 + (x) * 4)
-+/* phase A */
-+#define   RPD_STROBE_A				(1 << 0)
-+#define   RPD_DATA0_A				(1 << 1)
-+#define   RPU_STROBE_A				(1 << 2)
-+#define   RPU_DATA0_A				(1 << 3)
-+/* phase B */
-+#define   RPD_STROBE_B				(1 << 8)
-+#define   RPD_DATA0_B				(1 << 9)
-+#define   RPU_STROBE_B				(1 << 10)
-+#define   RPU_DATA0_B				(1 << 11)
-+/* phase C */
-+#define   RPD_STROBE_C				(1 << 16)
-+#define   RPD_DATA0_C				(1 << 17)
-+#define   RPU_STROBE_C				(1 << 18)
-+#define   RPU_DATA0_C				(1 << 19)
-+/* phase D */
-+#define   RPD_STROBE_D				(1 << 24)
-+#define   RPD_DATA0_D				(1 << 25)
-+#define   RPU_STROBE_D				(1 << 26)
-+#define   RPU_DATA0_D				(1 << 27)
-+
-+#define XUSB_AO_UTMIP_PAD_CFG(x)		(0x130 + (x) * 4)
-+#define   FSLS_USE_XUSB_AO			(1 << 3)
-+#define   TRK_CTRL_USE_XUSB_AO			(1 << 4)
-+#define   RPD_CTRL_USE_XUSB_AO			(1 << 5)
-+#define   RPU_USE_XUSB_AO			(1 << 6)
-+#define   VREG_USE_XUSB_AO			(1 << 7)
-+#define   USBOP_VAL_PD				(1 << 8)
-+#define   USBON_VAL_PD				(1 << 9)
-+#define   E_DPD_OVRD_EN				(1 << 10)
-+#define   E_DPD_OVRD_VAL			(1 << 11)
-+
-+#define XUSB_AO_UHSIC_PAD_CFG(x)		(0x150 + (x) * 4)
-+#define   STROBE_VAL_PD				(1 << 0)
-+#define   DATA0_VAL_PD				(1 << 1)
-+#define   USE_XUSB_AO				(1 << 4)
-+
- #define TEGRA186_LANE(_name, _offset, _shift, _mask, _type)		\
- 	{								\
- 		.name = _name,						\
-@@ -130,16 +241,41 @@ struct tegra_xusb_fuse_calibration {
- 	u32 rpd_ctrl;
- };
+ 	struct device *genpd_dev_host;
+ 	struct device *genpd_dev_ss;
+-	struct device_link *genpd_dl_host;
+-	struct device_link *genpd_dl_ss;
++	bool use_genpd;
  
-+struct tegra186_xusb_padctl_context {
-+	u32 vbus_id;
-+	u32 usb2_pad_mux;
-+	u32 usb2_port_cap;
-+	u32 ss_port_cap;
-+};
-+
- struct tegra186_xusb_padctl {
- 	struct tegra_xusb_padctl base;
-+	void __iomem *ao_regs;
+ 	struct phy **phys;
+ 	unsigned int num_phys;
+@@ -821,36 +820,12 @@ static void tegra_xusb_phy_disable(struct tegra_xusb *tegra)
  
- 	struct tegra_xusb_fuse_calibration calib;
- 
- 	/* UTMI bias and tracking */
- 	struct clk *usb2_trk_clk;
- 	unsigned int bias_pad_enable;
-+
-+	/* padctl context */
-+	struct tegra186_xusb_padctl_context context;
- };
- 
-+static inline void ao_writel(struct tegra186_xusb_padctl *priv, u32 value, unsigned int offset)
-+{
-+	dev_dbg(priv->base.dev, "ao %08x < %08x\n", offset, value);
-+	writel(value, priv->ao_regs + offset);
-+}
-+
-+static inline u32 ao_readl(struct tegra186_xusb_padctl *priv, unsigned int offset)
-+{
-+	u32 value = readl(priv->ao_regs + offset);
-+
-+	dev_dbg(priv->base.dev, "ao %08x > %08x\n", offset, value);
-+	return value;
-+}
-+
- static inline struct tegra186_xusb_padctl *
- to_tegra186_xusb_padctl(struct tegra_xusb_padctl *padctl)
+ static int tegra_xusb_runtime_suspend(struct device *dev)
  {
-@@ -180,9 +316,256 @@ static void tegra186_usb2_lane_remove(struct tegra_xusb_lane *lane)
- 	kfree(usb2);
- }
- 
-+static int tegra186_utmi_enable_phy_sleepwalk(struct tegra_xusb_lane *lane,
-+					      enum usb_device_speed speed)
-+{
-+	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-+	struct tegra186_xusb_padctl *priv = to_tegra186_xusb_padctl(padctl);
-+	unsigned int index = lane->index;
-+	struct device *dev = padctl->dev;
-+	u32 value;
-+
-+	dev_dbg(dev, "phy enable sleepwalk UTMI %d speed %d\n", index, speed);
-+
-+	mutex_lock(&padctl->lock);
-+
-+	/* ensure sleepwalk logic is disabled */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+	value &= ~MASTER_ENABLE;
-+	ao_writel(priv, value, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+
-+	/* ensure sleepwalk logics are in low power mode */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+	value |= MASTER_CFG_SEL;
-+	ao_writel(priv, value, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+
-+	/* set debounce time */
-+	value = ao_readl(priv, XUSB_AO_USB_DEBOUNCE_DEL);
-+	value &= ~UTMIP_LINE_DEB_CNT(~0);
-+	value |= UTMIP_LINE_DEB_CNT(1);
-+	ao_writel(priv, value, XUSB_AO_USB_DEBOUNCE_DEL);
-+
-+	/* ensure fake events of sleepwalk logic are desiabled */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+	value &= ~(FAKE_USBOP_VAL | FAKE_USBON_VAL |
-+		FAKE_USBOP_EN | FAKE_USBON_EN);
-+	ao_writel(priv, value, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+
-+	/* ensure wake events of sleepwalk logic are not latched */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+	value &= ~LINE_WAKEUP_EN;
-+	ao_writel(priv, value, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+
-+	/* disable wake event triggers of sleepwalk logic */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+	value &= ~WAKE_VAL(~0);
-+	value |= WAKE_VAL_NONE;
-+	ao_writel(priv, value, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+
-+	/* power down the line state detectors of the pad */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_PAD_CFG(index));
-+	value |= (USBOP_VAL_PD | USBON_VAL_PD);
-+	ao_writel(priv, value, XUSB_AO_UTMIP_PAD_CFG(index));
-+
-+	/* save state per speed */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_SAVED_STATE(index));
-+	value &= ~SPEED(~0);
-+	if (speed == USB_SPEED_HIGH)
-+		value |= UTMI_HS;
-+	else if (speed == USB_SPEED_FULL)
-+		value |= UTMI_FS;
-+	else if (speed == USB_SPEED_LOW)
-+		value |= UTMI_LS;
-+	else
-+		value |= UTMI_RST;
-+	ao_writel(priv, value, XUSB_AO_UTMIP_SAVED_STATE(index));
-+
-+	/* enable the trigger of the sleepwalk logic */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+	value |= LINEVAL_WALK_EN;
-+	value &= ~WAKE_WALK_EN;
-+	ao_writel(priv, value, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+
-+	/* reset the walk pointer and clear the alarm of the sleepwalk logic,
-+	 * as well as capture the configuration of the USB2.0 pad
-+	 */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_TRIGGERS(index));
-+	value |= (CLR_WALK_PTR | CLR_WAKE_ALARM | CAP_CFG);
-+	ao_writel(priv, value, XUSB_AO_UTMIP_TRIGGERS(index));
-+
-+	/* setup the pull-ups and pull-downs of the signals during the four
-+	 * stages of sleepwalk.
-+	 * if device is connected, program sleepwalk logic to maintain a J and
-+	 * keep driving K upon seeing remote wake.
-+	 */
-+	value = (USBOP_RPD_A | USBOP_RPD_B | USBOP_RPD_C | USBOP_RPD_D);
-+	value |= (USBON_RPD_A | USBON_RPD_B | USBON_RPD_C | USBON_RPD_D);
-+	if (speed == USB_SPEED_UNKNOWN) {
-+		value |= (HIGHZ_A | HIGHZ_B | HIGHZ_C | HIGHZ_D);
-+	} else if ((speed == USB_SPEED_HIGH) || (speed == USB_SPEED_FULL)) {
-+		/* J state: D+/D- = high/low, K state: D+/D- = low/high */
-+		value |= HIGHZ_A;
-+		value |= (AP_A);
-+		value |= (AN_B | AN_C | AN_D);
-+	} else if (speed == USB_SPEED_LOW) {
-+		/* J state: D+/D- = low/high, K state: D+/D- = high/low */
-+		value |= HIGHZ_A;
-+		value |= AN_A;
-+		value |= (AP_B | AP_C | AP_D);
-+	}
-+	ao_writel(priv, value, XUSB_AO_UTMIP_SLEEPWALK(index));
-+
-+	/* power up the line state detectors of the pad */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_PAD_CFG(index));
-+	value &= ~(USBOP_VAL_PD | USBON_VAL_PD);
-+	ao_writel(priv, value, XUSB_AO_UTMIP_PAD_CFG(index));
-+
-+	usleep_range(150, 200);
-+
-+	/* switch the electric control of the USB2.0 pad to XUSB_AO */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_PAD_CFG(index));
-+	value |= (FSLS_USE_XUSB_AO | TRK_CTRL_USE_XUSB_AO |
-+		RPD_CTRL_USE_XUSB_AO | RPU_USE_XUSB_AO | VREG_USE_XUSB_AO);
-+	ao_writel(priv, value, XUSB_AO_UTMIP_PAD_CFG(index));
-+
-+	/* set the wake signaling trigger events */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+	value &= ~WAKE_VAL(~0);
-+	value |= WAKE_VAL_ANY;
-+	ao_writel(priv, value, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+
-+	/* enable the wake detection */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+	value |= (MASTER_ENABLE | LINE_WAKEUP_EN);
-+	ao_writel(priv, value, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+
-+	mutex_unlock(&padctl->lock);
-+
-+	return 0;
-+}
-+
-+static int tegra186_utmi_disable_phy_sleepwalk(struct tegra_xusb_lane *lane)
-+{
-+	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-+	struct tegra186_xusb_padctl *priv = to_tegra186_xusb_padctl(padctl);
-+	unsigned int index = lane->index;
-+	struct device *dev = padctl->dev;
-+	u32 value;
-+
-+	dev_dbg(dev, "phy disable sleepwalk UTMI %d\n", index);
-+
-+	mutex_lock(&padctl->lock);
-+
-+	/* disable the wake detection */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+	value &= ~(MASTER_ENABLE | LINE_WAKEUP_EN);
-+	ao_writel(priv, value, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+
-+	/* switch the electric control of the USB2.0 pad to XUSB vcore logic */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_PAD_CFG(index));
-+	value &= ~(FSLS_USE_XUSB_AO | TRK_CTRL_USE_XUSB_AO |
-+		RPD_CTRL_USE_XUSB_AO | RPU_USE_XUSB_AO | VREG_USE_XUSB_AO);
-+	ao_writel(priv, value, XUSB_AO_UTMIP_PAD_CFG(index));
-+
-+	/* disable wake event triggers of sleepwalk logic */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+	value &= ~WAKE_VAL(~0);
-+	value |= WAKE_VAL_NONE;
-+	ao_writel(priv, value, XUSB_AO_UTMIP_SLEEPWALK_CFG(index));
-+
-+	/* power down the line state detectors of the port */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_PAD_CFG(index));
-+	value |= (USBOP_VAL_PD | USBON_VAL_PD);
-+	ao_writel(priv, value, XUSB_AO_UTMIP_PAD_CFG(index));
-+
-+	/* clear alarm of the sleepwalk logic */
-+	value = ao_readl(priv, XUSB_AO_UTMIP_TRIGGERS(index));
-+	value |= CLR_WAKE_ALARM;
-+	ao_writel(priv, value, XUSB_AO_UTMIP_TRIGGERS(index));
-+
-+	mutex_unlock(&padctl->lock);
-+
-+	return 0;
-+}
-+
-+static int tegra186_utmi_enable_phy_wake(struct tegra_xusb_lane *lane)
-+{
-+	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-+	unsigned int index = lane->index;
-+	struct device *dev = padctl->dev;
-+	u32 value;
-+
-+	dev_dbg(dev, "phy enable wake UTMI %d\n", index);
-+
-+	mutex_lock(&padctl->lock);
-+
-+	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM);
-+	value &= ~ALL_WAKE_EVENTS;
-+	value |= USB2_PORT_WAKEUP_EVENT(index);
-+	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM);
-+
-+	usleep_range(10, 20);
-+
-+	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM);
-+	value &= ~ALL_WAKE_EVENTS;
-+	value |= USB2_PORT_WAKE_INTERRUPT_ENABLE(index);
-+	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM);
-+
-+	mutex_unlock(&padctl->lock);
-+
-+	return 0;
-+}
-+
-+static int tegra186_utmi_disable_phy_wake(struct tegra_xusb_lane *lane)
-+{
-+	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-+	unsigned int index = lane->index;
-+	struct device *dev = padctl->dev;
-+	u32 value;
-+
-+	dev_dbg(dev, "phy disable wake UTMI %d\n", index);
-+
-+	mutex_lock(&padctl->lock);
-+
-+	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM);
-+	value &= ~ALL_WAKE_EVENTS;
-+	value &= ~USB2_PORT_WAKE_INTERRUPT_ENABLE(index);
-+	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM);
-+
-+	usleep_range(10, 20);
-+
-+	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM);
-+	value &= ~ALL_WAKE_EVENTS;
-+	value |= USB2_PORT_WAKEUP_EVENT(index);
-+	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM);
-+
-+	mutex_unlock(&padctl->lock);
-+
-+	return 0;
-+}
-+
-+static bool tegra186_utmi_phy_remote_wake_detected(struct tegra_xusb_lane *lane)
-+{
-+	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-+	unsigned int index = lane->index;
-+	u32 value;
-+
-+	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM);
-+	if ((value & USB2_PORT_WAKE_INTERRUPT_ENABLE(index)) &&
-+			(value & USB2_PORT_WAKEUP_EVENT(index)))
-+		return true;
-+
-+	return false;
-+}
-+
- static const struct tegra_xusb_lane_ops tegra186_usb2_lane_ops = {
- 	.probe = tegra186_usb2_lane_probe,
- 	.remove = tegra186_usb2_lane_remove,
-+	.enable_phy_sleepwalk = tegra186_utmi_enable_phy_sleepwalk,
-+	.disable_phy_sleepwalk = tegra186_utmi_disable_phy_sleepwalk,
-+	.enable_phy_wake = tegra186_utmi_enable_phy_wake,
-+	.disable_phy_wake = tegra186_utmi_disable_phy_wake,
-+	.remote_wake_detected = tegra186_utmi_phy_remote_wake_detected,
- };
- 
- static void tegra186_utmi_bias_pad_power_on(struct tegra_xusb_padctl *padctl)
-@@ -656,10 +1039,140 @@ static void tegra186_usb3_lane_remove(struct tegra_xusb_lane *lane)
- 	kfree(usb3);
- }
- 
-+static int tegra186_usb3_enable_phy_sleepwalk(struct tegra_xusb_lane *lane,
-+					      enum usb_device_speed speed)
-+{
-+	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-+	unsigned int index = lane->index;
-+	struct device *dev = padctl->dev;
-+	u32 value;
-+
-+	dev_dbg(dev, "phy enable sleepwalk USB3 %d\n", index);
-+
-+	mutex_lock(&padctl->lock);
-+
-+	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM_1);
-+	value |= SSPX_ELPG_CLAMP_EN_EARLY(index);
-+	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM_1);
-+
-+	usleep_range(100, 200);
-+
-+	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM_1);
-+	value |= SSPX_ELPG_CLAMP_EN(index);
-+	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM_1);
-+
-+	usleep_range(250, 350);
-+
-+	mutex_unlock(&padctl->lock);
-+
-+	return 0;
-+}
-+
-+static int tegra186_usb3_disable_phy_sleepwalk(struct tegra_xusb_lane *lane)
-+{
-+	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-+	unsigned int index = lane->index;
-+	struct device *dev = padctl->dev;
-+	u32 value;
-+
-+	dev_dbg(dev, "phy disable sleepwalk USB3 %d\n", index);
-+
-+	mutex_lock(&padctl->lock);
-+
-+	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM_1);
-+	value &= ~SSPX_ELPG_CLAMP_EN_EARLY(index);
-+	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM_1);
-+
-+	usleep_range(100, 200);
-+
-+	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM_1);
-+	value &= ~SSPX_ELPG_CLAMP_EN(index);
-+	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM_1);
-+
-+	mutex_unlock(&padctl->lock);
-+
-+	return 0;
-+}
-+
-+static int tegra186_usb3_enable_phy_wake(struct tegra_xusb_lane *lane)
-+{
-+	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-+	unsigned int index = lane->index;
-+	struct device *dev = padctl->dev;
-+	u32 value;
-+
-+	dev_dbg(dev, "phy enable wake USB3 %d\n", index);
-+
-+	mutex_lock(&padctl->lock);
-+
-+	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM);
-+	value &= ~ALL_WAKE_EVENTS;
-+	value |= SS_PORT_WAKEUP_EVENT(index);
-+	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM);
-+
-+	usleep_range(10, 20);
-+
-+	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM);
-+	value &= ~ALL_WAKE_EVENTS;
-+	value |= SS_PORT_WAKE_INTERRUPT_ENABLE(index);
-+	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM);
-+
-+	mutex_unlock(&padctl->lock);
-+
-+	return 0;
-+}
-+
-+static int tegra186_usb3_disable_phy_wake(struct tegra_xusb_lane *lane)
-+{
-+	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-+	unsigned int index = lane->index;
-+	struct device *dev = padctl->dev;
-+	u32 value;
-+
-+	dev_dbg(dev, "phy disable wake USB3 %d\n", index);
-+
-+	mutex_lock(&padctl->lock);
-+
-+	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM);
-+	value &= ~ALL_WAKE_EVENTS;
-+	value &= ~SS_PORT_WAKE_INTERRUPT_ENABLE(index);
-+	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM);
-+
-+	usleep_range(10, 20);
-+
-+	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM);
-+	value &= ~ALL_WAKE_EVENTS;
-+	value |= SS_PORT_WAKEUP_EVENT(index);
-+	padctl_writel(padctl, value, XUSB_PADCTL_ELPG_PROGRAM);
-+
-+	mutex_unlock(&padctl->lock);
-+
-+	return 0;
-+}
-+
-+static bool tegra186_usb3_phy_remote_wake_detected(struct tegra_xusb_lane *lane)
-+{
-+	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
-+	unsigned int index = lane->index;
-+	u32 value;
-+
-+	value = padctl_readl(padctl, XUSB_PADCTL_ELPG_PROGRAM);
-+	if ((value & SS_PORT_WAKE_INTERRUPT_ENABLE(index)) && (value & SS_PORT_WAKEUP_EVENT(index)))
-+		return true;
-+
-+	return false;
-+}
-+
- static const struct tegra_xusb_lane_ops tegra186_usb3_lane_ops = {
- 	.probe = tegra186_usb3_lane_probe,
- 	.remove = tegra186_usb3_lane_remove,
-+	.enable_phy_sleepwalk = tegra186_usb3_enable_phy_sleepwalk,
-+	.disable_phy_sleepwalk = tegra186_usb3_disable_phy_sleepwalk,
-+	.enable_phy_wake = tegra186_usb3_enable_phy_wake,
-+	.disable_phy_wake = tegra186_usb3_disable_phy_wake,
-+	.remote_wake_detected = tegra186_usb3_phy_remote_wake_detected,
- };
-+
- static int tegra186_usb3_port_enable(struct tegra_xusb_port *port)
- {
+-	struct tegra_xusb *tegra = dev_get_drvdata(dev);
+-
+-	regulator_bulk_disable(tegra->soc->num_supplies, tegra->supplies);
+-	tegra_xusb_clk_disable(tegra);
+-
  	return 0;
-@@ -913,7 +1426,9 @@ static struct tegra_xusb_padctl *
- tegra186_xusb_padctl_probe(struct device *dev,
- 			   const struct tegra_xusb_padctl_soc *soc)
- {
-+	struct platform_device *pdev = to_platform_device(dev);
- 	struct tegra186_xusb_padctl *priv;
-+	struct resource *res;
- 	int err;
- 
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-@@ -923,6 +1438,11 @@ tegra186_xusb_padctl_probe(struct device *dev,
- 	priv->base.dev = dev;
- 	priv->base.soc = soc;
- 
-+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ao");
-+	priv->ao_regs = devm_ioremap_resource(dev, res);
-+	if (IS_ERR(priv->ao_regs))
-+		return priv->ao_regs;
-+
- 	err = tegra186_xusb_read_fuse_calibration(priv);
- 	if (err < 0)
- 		return ERR_PTR(err);
-@@ -930,6 +1450,40 @@ tegra186_xusb_padctl_probe(struct device *dev,
- 	return &priv->base;
  }
  
-+static void tegra186_xusb_padctl_save(struct tegra_xusb_padctl *padctl)
-+{
-+	struct tegra186_xusb_padctl *priv = to_tegra186_xusb_padctl(padctl);
+ static int tegra_xusb_runtime_resume(struct device *dev)
+ {
+-	struct tegra_xusb *tegra = dev_get_drvdata(dev);
+-	int err;
+-
+-	err = tegra_xusb_clk_enable(tegra);
+-	if (err) {
+-		dev_err(dev, "failed to enable clocks: %d\n", err);
+-		return err;
+-	}
+-
+-	err = regulator_bulk_enable(tegra->soc->num_supplies, tegra->supplies);
+-	if (err) {
+-		dev_err(dev, "failed to enable regulators: %d\n", err);
+-		goto disable_clk;
+-	}
+-
+ 	return 0;
+-
+-disable_clk:
+-	tegra_xusb_clk_disable(tegra);
+-	return err;
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
+@@ -1026,10 +1001,9 @@ static int tegra_xusb_load_firmware(struct tegra_xusb *tegra)
+ static void tegra_xusb_powerdomain_remove(struct device *dev,
+ 					  struct tegra_xusb *tegra)
+ {
+-	if (tegra->genpd_dl_ss)
+-		device_link_del(tegra->genpd_dl_ss);
+-	if (tegra->genpd_dl_host)
+-		device_link_del(tegra->genpd_dl_host);
++	if (!tegra->use_genpd)
++		return;
 +
-+	priv->context.vbus_id = padctl_readl(padctl, USB2_VBUS_ID);
-+	priv->context.usb2_pad_mux = padctl_readl(padctl, XUSB_PADCTL_USB2_PAD_MUX);
-+	priv->context.usb2_port_cap = padctl_readl(padctl, XUSB_PADCTL_USB2_PORT_CAP);
-+	priv->context.ss_port_cap = padctl_readl(padctl, XUSB_PADCTL_SS_PORT_CAP);
-+}
-+
-+static void tegra186_xusb_padctl_restore(struct tegra_xusb_padctl *padctl)
-+{
-+	struct tegra186_xusb_padctl *priv = to_tegra186_xusb_padctl(padctl);
-+
-+	padctl_writel(padctl, priv->context.usb2_pad_mux, XUSB_PADCTL_USB2_PAD_MUX);
-+	padctl_writel(padctl, priv->context.usb2_port_cap, XUSB_PADCTL_USB2_PORT_CAP);
-+	padctl_writel(padctl, priv->context.ss_port_cap, XUSB_PADCTL_SS_PORT_CAP);
-+	padctl_writel(padctl, priv->context.vbus_id, USB2_VBUS_ID);
-+}
-+
-+static int tegra186_xusb_padctl_suspend_noirq(struct tegra_xusb_padctl *padctl)
-+{
-+	tegra186_xusb_padctl_save(padctl);
+ 	if (!IS_ERR_OR_NULL(tegra->genpd_dev_ss))
+ 		dev_pm_domain_detach(tegra->genpd_dev_ss, true);
+ 	if (!IS_ERR_OR_NULL(tegra->genpd_dev_host))
+@@ -1055,20 +1029,84 @@ static int tegra_xusb_powerdomain_init(struct device *dev,
+ 		return err;
+ 	}
+ 
+-	tegra->genpd_dl_host = device_link_add(dev, tegra->genpd_dev_host,
+-					       DL_FLAG_PM_RUNTIME |
+-					       DL_FLAG_STATELESS);
+-	if (!tegra->genpd_dl_host) {
+-		dev_err(dev, "adding host device link failed!\n");
+-		return -ENODEV;
++	tegra->use_genpd = true;
 +
 +	return 0;
 +}
 +
-+static int tegra186_xusb_padctl_resume_noirq(struct tegra_xusb_padctl *padctl)
++static int tegra_xusb_unpowergate_partitions(struct tegra_xusb *tegra)
 +{
-+	tegra186_xusb_padctl_restore(padctl);
++	struct device *dev = tegra->dev;
++	int rc;
 +
++	if (tegra->use_genpd) {
++		rc = pm_runtime_get_sync(tegra->genpd_dev_ss);
++		if (rc < 0) {
++			dev_err(dev, "failed to enable XUSB SS partition\n");
++			return rc;
++		}
++
++		rc = pm_runtime_get_sync(tegra->genpd_dev_host);
++		if (rc < 0) {
++			dev_err(dev, "failed to enable XUSB Host partition\n");
++			pm_runtime_put_sync(tegra->genpd_dev_ss);
++			return rc;
++		}
++	} else {
++		rc = tegra_powergate_sequence_power_up(TEGRA_POWERGATE_XUSBA,
++							tegra->ss_clk,
++							tegra->ss_rst);
++		if (rc < 0) {
++			dev_err(dev, "failed to enable XUSB SS partition\n");
++			return rc;
++		}
++
++		rc = tegra_powergate_sequence_power_up(TEGRA_POWERGATE_XUSBC,
++							tegra->host_clk,
++							tegra->host_rst);
++		if (rc < 0) {
++			dev_err(dev, "failed to enable XUSB Host partition\n");
++			tegra_powergate_power_off(TEGRA_POWERGATE_XUSBA);
++			return rc;
++		}
+ 	}
+ 
+-	tegra->genpd_dl_ss = device_link_add(dev, tegra->genpd_dev_ss,
+-					     DL_FLAG_PM_RUNTIME |
+-					     DL_FLAG_STATELESS);
+-	if (!tegra->genpd_dl_ss) {
+-		dev_err(dev, "adding superspeed device link failed!\n");
+-		return -ENODEV;
 +	return 0;
 +}
 +
- static void tegra186_xusb_padctl_remove(struct tegra_xusb_padctl *padctl)
- {
- }
-@@ -937,6 +1491,8 @@ static void tegra186_xusb_padctl_remove(struct tegra_xusb_padctl *padctl)
- static const struct tegra_xusb_padctl_ops tegra186_xusb_padctl_ops = {
- 	.probe = tegra186_xusb_padctl_probe,
- 	.remove = tegra186_xusb_padctl_remove,
-+	.suspend_noirq = tegra186_xusb_padctl_suspend_noirq,
-+	.resume_noirq = tegra186_xusb_padctl_resume_noirq,
- 	.vbus_override = tegra186_xusb_padctl_vbus_override,
- };
++static int tegra_xusb_powergate_partitions(struct tegra_xusb *tegra)
++{
++	struct device *dev = tegra->dev;
++	int rc;
++
++	if (tegra->use_genpd) {
++		rc = pm_runtime_put_sync(tegra->genpd_dev_host);
++		if (rc < 0) {
++			dev_err(dev, "failed to disable XUSB Host partition\n");
++			return rc;
++		}
++
++		rc = pm_runtime_put_sync(tegra->genpd_dev_ss);
++		if (rc < 0) {
++			dev_err(dev, "failed to disable XUSB SS partition\n");
++			pm_runtime_get_sync(tegra->genpd_dev_host);
++			return rc;
++		}
++	} else {
++		rc = tegra_powergate_power_off(TEGRA_POWERGATE_XUSBC);
++		if (rc < 0) {
++			dev_err(dev, "failed to disable XUSB Host partition\n");
++			return rc;
++		}
++
++		rc = tegra_powergate_power_off(TEGRA_POWERGATE_XUSBA);
++		if (rc < 0) {
++			dev_err(dev, "failed to disable XUSB SS partition\n");
++			tegra_powergate_sequence_power_up(TEGRA_POWERGATE_XUSBC,
++							  tegra->host_clk,
++							  tegra->host_rst);
++			return rc;
++		}
+ 	}
  
+ 	return 0;
+@@ -1432,25 +1470,6 @@ static int tegra_xusb_probe(struct platform_device *pdev)
+ 				err);
+ 			goto put_padctl;
+ 		}
+-
+-		err = tegra_powergate_sequence_power_up(TEGRA_POWERGATE_XUSBA,
+-							tegra->ss_clk,
+-							tegra->ss_rst);
+-		if (err) {
+-			dev_err(&pdev->dev,
+-				"failed to enable XUSBA domain: %d\n", err);
+-			goto put_padctl;
+-		}
+-
+-		err = tegra_powergate_sequence_power_up(TEGRA_POWERGATE_XUSBC,
+-							tegra->host_clk,
+-							tegra->host_rst);
+-		if (err) {
+-			tegra_powergate_power_off(TEGRA_POWERGATE_XUSBA);
+-			dev_err(&pdev->dev,
+-				"failed to enable XUSBC domain: %d\n", err);
+-			goto put_padctl;
+-		}
+ 	} else {
+ 		err = tegra_xusb_powerdomain_init(&pdev->dev, tegra);
+ 		if (err)
+@@ -1525,10 +1544,22 @@ static int tegra_xusb_probe(struct platform_device *pdev)
+ 	 */
+ 	platform_set_drvdata(pdev, tegra);
+ 
++	err = tegra_xusb_clk_enable(tegra);
++	if (err) {
++		dev_err(tegra->dev, "failed to enable clocks: %d\n", err);
++		goto put_hcd;
++	}
++
++	err = regulator_bulk_enable(tegra->soc->num_supplies, tegra->supplies);
++	if (err) {
++		dev_err(tegra->dev, "failed to enable regulators: %d\n", err);
++		goto disable_clk;
++	}
++
+ 	err = tegra_xusb_phy_enable(tegra);
+ 	if (err < 0) {
+ 		dev_err(&pdev->dev, "failed to enable PHYs: %d\n", err);
+-		goto put_hcd;
++		goto disable_regulator;
+ 	}
+ 
+ 	/*
+@@ -1547,30 +1578,22 @@ static int tegra_xusb_probe(struct platform_device *pdev)
+ 		goto disable_phy;
+ 	}
+ 
+-	pm_runtime_enable(&pdev->dev);
+-
+-	if (!pm_runtime_enabled(&pdev->dev))
+-		err = tegra_xusb_runtime_resume(&pdev->dev);
+-	else
+-		err = pm_runtime_get_sync(&pdev->dev);
+-
+-	if (err < 0) {
+-		dev_err(&pdev->dev, "failed to enable device: %d\n", err);
++	err = tegra_xusb_unpowergate_partitions(tegra);
++	if (err)
+ 		goto free_firmware;
+-	}
+ 
+ 	tegra_xusb_config(tegra);
+ 
+ 	err = tegra_xusb_load_firmware(tegra);
+ 	if (err < 0) {
+ 		dev_err(&pdev->dev, "failed to load firmware: %d\n", err);
+-		goto put_rpm;
++		goto powergate;
+ 	}
+ 
+ 	err = usb_add_hcd(tegra->hcd, tegra->xhci_irq, IRQF_SHARED);
+ 	if (err < 0) {
+ 		dev_err(&pdev->dev, "failed to add USB HCD: %d\n", err);
+-		goto put_rpm;
++		goto powergate;
+ 	}
+ 
+ 	device_wakeup_enable(tegra->hcd->self.controller);
+@@ -1622,24 +1645,21 @@ static int tegra_xusb_probe(struct platform_device *pdev)
+ 	usb_put_hcd(xhci->shared_hcd);
+ remove_usb2:
+ 	usb_remove_hcd(tegra->hcd);
+-put_rpm:
+-	if (!pm_runtime_status_suspended(&pdev->dev))
+-		tegra_xusb_runtime_suspend(&pdev->dev);
+-put_hcd:
+-	usb_put_hcd(tegra->hcd);
++powergate:
++	tegra_xusb_powergate_partitions(tegra);
+ free_firmware:
+ 	dma_free_coherent(&pdev->dev, tegra->fw.size, tegra->fw.virt,
+ 			  tegra->fw.phys);
+ disable_phy:
+ 	tegra_xusb_phy_disable(tegra);
+-	pm_runtime_disable(&pdev->dev);
++disable_regulator:
++	regulator_bulk_disable(tegra->soc->num_supplies, tegra->supplies);
++disable_clk:
++	tegra_xusb_clk_disable(tegra);
++put_hcd:
++	usb_put_hcd(tegra->hcd);
+ put_powerdomains:
+-	if (!of_property_read_bool(pdev->dev.of_node, "power-domains")) {
+-		tegra_powergate_power_off(TEGRA_POWERGATE_XUSBC);
+-		tegra_powergate_power_off(TEGRA_POWERGATE_XUSBA);
+-	} else {
+-		tegra_xusb_powerdomain_remove(&pdev->dev, tegra);
+-	}
++	tegra_xusb_powerdomain_remove(&pdev->dev, tegra);
+ put_padctl:
+ 	tegra_xusb_padctl_put(tegra->padctl);
+ 	return err;
+@@ -1664,15 +1684,13 @@ static int tegra_xusb_remove(struct platform_device *pdev)
+ 	pm_runtime_put_sync(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+ 
+-	if (!of_property_read_bool(pdev->dev.of_node, "power-domains")) {
+-		tegra_powergate_power_off(TEGRA_POWERGATE_XUSBC);
+-		tegra_powergate_power_off(TEGRA_POWERGATE_XUSBA);
+-	} else {
+-		tegra_xusb_powerdomain_remove(&pdev->dev, tegra);
+-	}
++	tegra_xusb_powergate_partitions(tegra);
+ 
+-	tegra_xusb_phy_disable(tegra);
++	tegra_xusb_powerdomain_remove(&pdev->dev, tegra);
+ 
++	tegra_xusb_phy_disable(tegra);
++	tegra_xusb_clk_disable(tegra);
++	regulator_bulk_disable(tegra->soc->num_supplies, tegra->supplies);
+ 	tegra_xusb_padctl_put(tegra->padctl);
+ 
+ 	return 0;
 -- 
 2.30.2
 
