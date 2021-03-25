@@ -2,120 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3BC349506
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 16:12:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6DC349520
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 16:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbhCYPMH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 11:12:07 -0400
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:39917 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229524AbhCYPL6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 11:11:58 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 95FE15C00F8;
-        Thu, 25 Mar 2021 11:11:57 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 25 Mar 2021 11:11:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=m+TI7fDtbMIQ2ZxuOSUCfSosKVq
-        BDKs4AB5sOk9PJHA=; b=btgCKPlDhMRjiKADJniFtQ1r16V73Oxu1K46DypnEfu
-        xFovDcyXM+Akxhhl0zDE1a1U0OUu+xBjq/bzguNuFFWTn2LvUHTfuonnREmq66O4
-        NROUC9NHy9v3kk99qHrYQbmj9lDYWipQTmA/uIr60mA6QIHdYPtWREw7h2c1DAic
-        4yo7O1c7xWkUXnXopxA7ke0j2gOSRy49GMEfmQsg3RqLTYNiWYNlbKIhs5ie57qH
-        AavNM4DMsFkpJ4R6Xf/OzI3UR9+IeG6HdUAjr5zWVFu4LwdWpWgs4MgGZlQjpDi2
-        hwqueOYa+8RJjN3Y5YZTtOEwCpE8H4Uq6e0PWsNKl7g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=m+TI7f
-        DtbMIQ2ZxuOSUCfSosKVqBDKs4AB5sOk9PJHA=; b=esiyhBWOIbKD6f/rCpwOqf
-        cPzBPo5sGy4tztOT9atbNkhdwFy51z9zycztXLVXkmOP+tGmVHq/6e6o0WBojP1i
-        w1h+/LQBqbzVq9hX5OvT1pIGEe31q5wapmEMyAVeCcOqnGrYzu2ayFEPRL/IZCYp
-        rIJssJcmdXcO4sUbcAu9jCu0LDRw2S0iGo2EydIKhfkoXQopsgcCfzGmJfwEn2he
-        /2zAbRyhEc/LrEAKCqWazveAkpVcy5XyP7kAL6khXq07vFVbCwx3Q4u/ewdRVIfC
-        //CLvrnkw/fU/eYI6O4gWlyqCfebTGS/YM7p9zdir6YLDyErqOP6mL7ONNitnIug
-        ==
-X-ME-Sender: <xms:O6hcYMrYKs7pBw9avRSUb_AjegUEaO8vlKP28n_D8fvEkgPk_cw7jw>
-    <xme:O6hcYCrmMZX7AMbe87Oy5ui3M9XU7b3OZnO11JdL-gCzQNWCme06Hbe0h8EdVVGMv
-    PmGxjMcDvUJGQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudehtddgjeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucfkphepkeef
-    rdekiedrjeegrdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:PKhcYBMUIe2USobE9cLS6QcOM5HIQpyjtaqvd1Hl7TwwpV6MXROzMA>
-    <xmx:PKhcYD4Khu-5f_7RTYc6mToQbsWmzqnJz0KInF9V-BEw9pTQ0ibJgQ>
-    <xmx:PKhcYL7Usdpw6SxFdCcT39CgflXrt7hfswlxXJSktGvrmt7ZCWp7CQ>
-    <xmx:PahcYBTHIYjXboTvyOjzIxd207GaSoBjgQFYILXerhbTBXwGM-bbDA>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 8FAB51080057;
-        Thu, 25 Mar 2021 11:11:55 -0400 (EDT)
-Date:   Thu, 25 Mar 2021 16:11:53 +0100
-From:   Greg KH <greg@kroah.com>
-To:     'Qiheng Lin <linqiheng@huawei.com>
-Cc:     Petko Manolov <petkan@nucleusys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Hulk Robot <hulkci@huawei.com>
-Subject: Re: [PATCH net-next] net: usb: pegasus: Remove duplicated include
- from pegasus.c
-Message-ID: <YFyoOX/BULRzvrrI@kroah.com>
-References: <20210325145652.13469-1-linqiheng@huawei.com>
+        id S231273AbhCYPOu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 11:14:50 -0400
+Received: from mga03.intel.com ([134.134.136.65]:13685 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230228AbhCYPOr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Mar 2021 11:14:47 -0400
+IronPort-SDR: i12DxxhFiulNY1iTLgEep5JOaQKOWaoaajaXpmjfWrDdNWhcD23Oscmu8flz7sZBdnaGrFgshh
+ Q07ls9dLFtVg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9934"; a="190980311"
+X-IronPort-AV: E=Sophos;i="5.81,277,1610438400"; 
+   d="scan'208";a="190980311"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2021 08:14:46 -0700
+IronPort-SDR: Fl8C4t/1qRdCaqrCapvO4wN/tDVXCMZMIEecbtX8pcjgHkY8Kb8/Q3hDvMidrnQqsrC+k7U+Vh
+ PQ1cTbtp+mCQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,277,1610438400"; 
+   d="scan'208";a="514675412"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 25 Mar 2021 08:14:42 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 25 Mar 2021 17:14:42 +0200
+Date:   Thu, 25 Mar 2021 17:14:42 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] usb: Iterator for ports
+Message-ID: <YFyo4vM91xdtzacE@kuha.fi.intel.com>
+References: <20210325122926.58392-1-heikki.krogerus@linux.intel.com>
+ <20210325122926.58392-2-heikki.krogerus@linux.intel.com>
+ <20210325144109.GB785961@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210325145652.13469-1-linqiheng@huawei.com>
+In-Reply-To: <20210325144109.GB785961@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 25, 2021 at 10:56:52PM +0800, 'Qiheng Lin wrote:
-> From: Qiheng Lin <linqiheng@huawei.com>
+On Thu, Mar 25, 2021 at 10:41:09AM -0400, Alan Stern wrote:
+> On Thu, Mar 25, 2021 at 03:29:21PM +0300, Heikki Krogerus wrote:
+> > Introducing usb_for_each_port(). It works the same way as
+> > usb_for_each_dev(), but instead of going through every USB
+> > device in the system, it walks through the USB ports in the
+> > system.
+> > 
+> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 > 
-> Remove duplicated include.
+> This has a couple of nasty errors.
 > 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
-> ---
->  drivers/net/usb/pegasus.c | 2 --
->  1 file changed, 2 deletions(-)
+> > ---
+> >  drivers/usb/core/usb.c | 43 ++++++++++++++++++++++++++++++++++++++++++
+> >  include/linux/usb.h    |  1 +
+> >  2 files changed, 44 insertions(+)
+> > 
+> > diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+> > index 2ce3667ec6fae..6d49db9a1b208 100644
+> > --- a/drivers/usb/core/usb.c
+> > +++ b/drivers/usb/core/usb.c
+> > @@ -398,6 +398,49 @@ int usb_for_each_dev(void *data, int (*fn)(struct usb_device *, void *))
+> >  }
+> >  EXPORT_SYMBOL_GPL(usb_for_each_dev);
+> >  
+> > +struct each_hub_arg {
+> > +	void *data;
+> > +	int (*fn)(struct device *, void *);
+> > +};
+> > +
+> > +static int __each_hub(struct device *dev, void *data)
+> > +{
+> > +	struct each_hub_arg *arg = (struct each_hub_arg *)data;
+> > +	struct usb_device *hdev = to_usb_device(dev);
 > 
-> diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
-> index 9a907182569c..e0ee5c096396 100644
-> --- a/drivers/net/usb/pegasus.c
-> +++ b/drivers/net/usb/pegasus.c
-> @@ -65,7 +65,6 @@ static struct usb_eth_dev usb_dev_id[] = {
->  	{.name = pn, .vendor = vid, .device = pid, .private = flags},
->  #define PEGASUS_DEV_CLASS(pn, vid, pid, dclass, flags) \
->  	PEGASUS_DEV(pn, vid, pid, flags)
-> -#include "pegasus.h"
->  #undef	PEGASUS_DEV
->  #undef	PEGASUS_DEV_CLASS
->  	{NULL, 0, 0, 0},
-> @@ -84,7 +83,6 @@ static struct usb_device_id pegasus_ids[] = {
->  #define PEGASUS_DEV_CLASS(pn, vid, pid, dclass, flags) \
->  	{.match_flags = (USB_DEVICE_ID_MATCH_DEVICE | USB_DEVICE_ID_MATCH_DEV_CLASS), \
->  	.idVendor = vid, .idProduct = pid, .bDeviceClass = dclass},
-> -#include "pegasus.h"
->  #undef	PEGASUS_DEV
->  #undef	PEGASUS_DEV_CLASS
->  	{},
+> to_usb_device() won't work properly if the struct device isn't embedded 
+> in an actual usb_device structure.  And that will happen, since the USB 
+> bus type holds usb_interface structures as well as usb_devices.
+
+OK, so I need to filter them out.
+
+> In fact, you should use usb_for_each_dev here; it already does what you 
+> want.
+
+Unfortunately I can't use usb_for_each_dev here, because it deals with
+struct usb_device while I need to deal with struct device in the
+callback.
+
+> > +	struct usb_hub *hub;
+> > +	int ret;
+> > +	int i;
+> > +
+> > +	hub = usb_hub_to_struct_hub(hdev);
+> > +	if (!hub)
+> > +		return 0;
+> > +
+> > +	for (i = 0; i < hdev->maxchild; i++) {
+> > +		ret = arg->fn(&hub->ports[i]->dev, arg->data);
+> > +		if (ret)
+> > +			return ret;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
 > 
+> Don't you need some sort of locking or refcounting here?  What would 
+> happen if this hub got removed while the routine was running?
 
-Did you build and test this code now with this change?
-
-I think you broke this driver badly now :(
-
-Please think about _why_ the code would have been written this way in
-the first place, it is a bit odd, right?
-
-netdev maintainers, consider this a NAK.
+I'll use a lock then.
 
 thanks,
 
-greg k-h
+-- 
+heikki
