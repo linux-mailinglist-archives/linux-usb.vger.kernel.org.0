@@ -2,139 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 949CA3488D9
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 07:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4BE5348943
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 07:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbhCYGPc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 02:15:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53184 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229448AbhCYGPV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Mar 2021 02:15:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 79C5661A1D;
-        Thu, 25 Mar 2021 06:15:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616652920;
-        bh=KTR7jpTJM0bZVP+ZEpXFNwt30YVH1j8hXCimA4mZGbU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SXWp3BOQjFtaC3rSq2fpxliRjXxBUgfPggz868iwwrW0ZVE+CzENNQh5BtZkAtIXA
-         KUXa780J5cKHgodS5Phtev6ZghqsMGCBkQBxf+cQXareObX2+gDRXML510gZ0zQXTc
-         rsokJX8dJBO/dwoh/A5yIqw0zyauca39hoUZQ8+uf/OrcsyuPssjuwV4YFAfyrM5CF
-         eRN99v/nFZzUCnw1+3zfVgL+KYLhbSYNkq71/xJ9d9TDOJDNB5tHmRFN6fe4Pxx8dp
-         CYXOOGQNcNQmrHiCkeREeNHmyGzzmDtiKm86dVaW19viA/Pgw+u/fhnxClU2o4uZQ/
-         0BXfWyYEhjGYw==
-Date:   Thu, 25 Mar 2021 11:45:16 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg KH <gregkh@linuxfoundation.org>, mturquette@baylibre.com,
-        sboyd@kernel.org, JC Kuo <jckuo@nvidia.com>, robh@kernel.org,
-        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, nkristam@nvidia.com,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v7 00/14] Tegra XHCI controller ELPG support
-Message-ID: <YFwqdNkkcrTRxSkP@vkoul-mobl.Dlink>
-References: <20210120073414.69208-1-jckuo@nvidia.com>
- <YB1vGTt0ufzsYBgo@ulmo>
- <YB1wxazg/QpRSJz6@kroah.com>
- <YFszBH1JJmjJmjn2@orome.fritz.box>
- <YFs/VBZvZo6mBJqz@orome.fritz.box>
+        id S229730AbhCYGk6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 02:40:58 -0400
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:41195 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229448AbhCYGk2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 02:40:28 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 6E8D25C00E7;
+        Thu, 25 Mar 2021 02:40:27 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Thu, 25 Mar 2021 02:40:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:content-transfer-encoding:in-reply-to; s=fm3; bh=U
+        Gj6fMfmoDQ79UlYMp/FzxqG8a8b8C6sD9XhFEAo/G0=; b=a0lT9smorCJ9hbEmx
+        7Yuo+h27vb38r4oPRAMxYW8KXEzhrt/XaYBN60j8twhAmskXiyi4sTkB63yKrhwa
+        N1l5n8DKk2YI+W+mmU3EYz8HXHTOap2a1fDkIDHnGkBjNZW4Qbx7P0d9WzIntRjT
+        Zx1vH9FGClGjKtkzUiL0t9alDJYS6l6zJSitAYlEfNp2ZUJny6qRrU/b7PyoA/31
+        EhjGuRT92dKjYNZo373i3SUo/nvUpI01qwf/dLtaWtaCAVainQJRcfUgSZ6xiPzS
+        CvJzpH4HppO9U9cPR0d6rV+FsJypB0Ytb2ejJiiSv1LJlCBGspzd3FCblffY1gaW
+        GxIfA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=UGj6fMfmoDQ79UlYMp/FzxqG8a8b8C6sD9XhFEAo/
+        G0=; b=lG16pcmRyZkAzf4aRCZGYMFu1N4BtPXidxAi4V+mSPautkFUK4b+0dqsO
+        agjW5Ep33P37n+7k9rVgS8l4t7BYsoxhmZTXBjjMUzftQoLOLaS4tc9KEr2i/OSi
+        FTNMqxrqdLW/vSkQZog6TOu7jq1khu4yxLWXKfdB3oA16ntxglcEfTVXm8g3Hu5H
+        kRJTRS2AffhqEDlyCIzhivAmQdxI67xxZM/a414zQdHzyE9jvRPT2jOra76IFI9x
+        GTG0v9bNFgOM9JiKhRW28cjjyiC2xuPw0oK6elEYUY4m9v7ntd+r7Yxn3CILh7me
+        B4l1qAkcuuvlt9pOZ/XYug/fztb2w==
+X-ME-Sender: <xms:WjBcYAulgjNDAb7n1cxVJBUT5alJW8td8TZJqXd_Gkh8WLbJpuUlRg>
+    <xme:WjBcYNdDAkdaG_8SKGaYD_Xhg9_Gcp4lUZquIQ5AOIFGslyrRXkJrzp-tt7RkD3hx
+    bDdv9QZuZlumA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudegledgleeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepvedtie
+    elueetgeeggfeufefhvefgtdetgfetgfdtvdegjeehieduvddtkeffheffnecukfhppeek
+    fedrkeeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:WjBcYLxkfjiwnJZwAgKt-Lbk6VzfhDli6YGTNZRlR_1HzR1MQNcpyw>
+    <xmx:WjBcYDM4hcagwU0OivCtf8NNoEfJPqrDjCZ50PPjr0lvsOCk5Evi3Q>
+    <xmx:WjBcYA-EfnymtPNt8ALMTeNRb_oxk3xOrGJdpd0h7BiteFIcCian_w>
+    <xmx:WzBcYPY3-kOLwK6HdYVrPfr3tUsnI3QzQyxlnyVJdISmpnJibQDjfg>
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 6FA5524005A;
+        Thu, 25 Mar 2021 02:40:26 -0400 (EDT)
+Date:   Thu, 25 Mar 2021 07:40:24 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] tools: usbip: list.h: fix kernel-doc for list_del()
+Message-ID: <YFwwWCC8+cMnt/M/@kroah.com>
+References: <20210324000223.22043-1-rdunlap@infradead.org>
+ <0af7bfad-fff7-84be-8e7c-2ad3e93fb785@linuxfoundation.org>
+ <0064f460-de49-98c8-1448-3489aa036384@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YFs/VBZvZo6mBJqz@orome.fritz.box>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0064f460-de49-98c8-1448-3489aa036384@infradead.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24-03-21, 14:32, Thierry Reding wrote:
-> On Wed, Mar 24, 2021 at 01:39:32PM +0100, Thierry Reding wrote:
-> > On Fri, Feb 05, 2021 at 05:22:29PM +0100, Greg KH wrote:
-> > > On Fri, Feb 05, 2021 at 05:15:21PM +0100, Thierry Reding wrote:
-> > > > On Wed, Jan 20, 2021 at 03:34:00PM +0800, JC Kuo wrote:
-> > > > > Tegra XHCI controler can be placed in ELPG (Engine Level PowerGated)
-> > > > > state for power saving when all of the connected USB devices are in
-> > > > > suspended state. This patch series includes clk, phy and pmc changes
-> > > > > that are required for properly place controller in ELPG and bring
-> > > > > controller out of ELPG.
-> > > > > 
-> > > > > JC Kuo (14):
-> > > > >   clk: tegra: Add PLLE HW power sequencer control
-> > > > >   clk: tegra: Don't enable PLLE HW sequencer at init
-> > > > >   phy: tegra: xusb: Move usb3 port init for Tegra210
-> > > > >   phy: tegra: xusb: Rearrange UPHY init on Tegra210
-> > > > >   phy: tegra: xusb: Add Tegra210 lane_iddq operation
-> > > > >   phy: tegra: xusb: Add sleepwalk and suspend/resume
-> > > > >   soc/tegra: pmc: Provide USB sleepwalk register map
-> > > > >   arm64: tegra210: XUSB PADCTL add "nvidia,pmc" prop
-> > > > >   dt-bindings: phy: tegra-xusb: Add nvidia,pmc prop
-> > > > >   phy: tegra: xusb: Add wake/sleepwalk for Tegra210
-> > > > >   phy: tegra: xusb: Tegra210 host mode VBUS control
-> > > > >   phy: tegra: xusb: Add wake/sleepwalk for Tegra186
-> > > > >   usb: host: xhci-tegra: Unlink power domain devices
-> > > > >   xhci: tegra: Enable ELPG for runtime/system PM
-> > > > > 
-> > > > >  .../phy/nvidia,tegra124-xusb-padctl.txt       |    1 +
-> > > > >  arch/arm64/boot/dts/nvidia/tegra210.dtsi      |    1 +
-> > > > >  drivers/clk/tegra/clk-pll.c                   |   12 -
-> > > > >  drivers/clk/tegra/clk-tegra210.c              |   53 +-
-> > > > >  drivers/phy/tegra/xusb-tegra186.c             |  558 ++++-
-> > > > >  drivers/phy/tegra/xusb-tegra210.c             | 1889 +++++++++++++----
-> > > > >  drivers/phy/tegra/xusb.c                      |   92 +-
-> > > > >  drivers/phy/tegra/xusb.h                      |   22 +-
-> > > > >  drivers/soc/tegra/pmc.c                       |   94 +
-> > > > >  drivers/usb/host/xhci-tegra.c                 |  613 ++++--
-> > > > >  include/linux/clk/tegra.h                     |    4 +-
-> > > > >  include/linux/phy/tegra/xusb.h                |   10 +-
-> > > > >  12 files changed, 2784 insertions(+), 565 deletions(-)
-> > > > > 
-> > > > > v5 "phy: tegra: xusb: tegra210: Do not reset UPHY PLL" is moved
-> > > > > into v6 "phy: tegra: xusb: Rearrange UPHY init on Tegra210"
-> > > > 
-> > > > Mike, Stephen,
-> > > > 
-> > > > could you guys take a look at the two clk patches here and give an
-> > > > Acked-by? There's build-time dependencies throughout the series, so it'd
-> > > > be good if they can all go through either the PHY or USB trees.
-> > > > 
-> > > > Kishon, Greg,
-> > > > 
-> > > > any comments on these patches? Unfortunately, the USB patches in this
-> > > > series have a build-time dependency on the PHY patches, so this should
-> > > > all go through one tree. Since this all culminates in the XHCI driver,
-> > > > merging this through the USB tree might be best, provided that Kishon
-> > > > provides his Acked-by on the PHY patches.
-> > > > 
-> > > > Alternatively, I can create a set of branches with the correct
-> > > > dependencies and send out pull requests for the three subsystems if
-> > > > that's preferrable.
-> > > 
-> > > I have no objection for the usb patches to go through your tree as they
-> > > are hardware-specific.
+On Wed, Mar 24, 2021 at 06:35:01PM -0700, Randy Dunlap wrote:
+> On 3/24/21 4:32 PM, Shuah Khan wrote:
+> > On 3/23/21 6:02 PM, Randy Dunlap wrote:
+> >> In list.h, the kernel-doc for list_del() should be immediately
+> >> preceding the implementation and not separated from it by
+> >> another function implementation.
+> >>
+> >> Eliminates this kernel-doc error:
+> >> list.h:1: warning: 'list_del' not found
+> >>
+> >> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> >> Cc: Valentina Manea <valentina.manea.m@gmail.com>
+> >> Cc: Shuah Khan <shuah@kernel.org>
+> >> Cc: Shuah Khan <skhan@linuxfoundation.org>
+> >> Cc: linux-usb@vger.kernel.org
+> >> ---
+> >>   tools/usb/usbip/libsrc/list.h |   10 +++++-----
+> >>   1 file changed, 5 insertions(+), 5 deletions(-)
+> >>
+> >> --- linux-next-20210323.orig/tools/usb/usbip/libsrc/list.h
+> >> +++ linux-next-20210323/tools/usb/usbip/libsrc/list.h
+> >> @@ -77,17 +77,17 @@ static inline void __list_del(struct lis
+> >>   #define LIST_POISON1  ((void *) 0x00100100 + POISON_POINTER_DELTA)
+> >>   #define LIST_POISON2  ((void *) 0x00200200 + POISON_POINTER_DELTA)
+> >>   +static inline void __list_del_entry(struct list_head *entry)
+> >> +{
+> >> +    __list_del(entry->prev, entry->next);
+> >> +}
+> >> +
+> >>   /**
+> >>    * list_del - deletes entry from list.
+> >>    * @entry: the element to delete from the list.
+> >>    * Note: list_empty() on entry does not return true after this, the entry is
+> >>    * in an undefined state.
+> >>    */
+> >> -static inline void __list_del_entry(struct list_head *entry)
+> >> -{
+> >> -    __list_del(entry->prev, entry->next);
+> >> -}
+> >> -
+> >>   static inline void list_del(struct list_head *entry)
+> >>   {
+> >>       __list_del(entry->prev, entry->next);
+> >>
 > > 
-> > Kishon,
+> > Thank you for fixing this.
 > > 
-> > I haven't heard back from you on this yet. We missed v5.12 but I'd like
-> > to get this into v5.13 since it's the last missing piece to get suspend
-> > and resume working properly on a number of boards.
-> > 
-> > Are you okay if I take this through the Tegra tree to satisfy the
-> > interdependencies between clk, PHY and USB patches? I've already got
-> > Acked-by's from the clock and USB maintainers.
-> > 
-> > I want to tentatively take this into linux-next to give it a bit of soak
-> > time before the ARM SoC -rc6 cut-off. Please let me know if you'd prefer
-> > to apply these to your tree so I can back them out of the Tegra tree
-> > again.
+> > Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 > 
-> Also adding Vinod for visibility and in case Kishon's too busy.
+> 
+> Thanks. Who do you think should merge this patch?
 
-Yes please CC me on all things phy (MAINTAINERS should have told you so)
-
-If you can resend me and cc linux-phy@lists.infradead.org, I would take
-a look. FWIW since this goes thru Greg, the window closes earlier than
-merge window
-
--- 
-~Vinod
+I can :)
