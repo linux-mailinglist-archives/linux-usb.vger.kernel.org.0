@@ -2,75 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2DB93493A0
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 15:05:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E9B349417
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 15:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbhCYOFR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 10:05:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36128 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230413AbhCYOFI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Mar 2021 10:05:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9AFD361962;
-        Thu, 25 Mar 2021 14:05:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616681108;
-        bh=XeshBZAcsFeiOAUYe2PtNKj43OZu8tobuQFdAHD8T2Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FdyoKZOrObeOYsZuhGSLJ7RN/lbZsDVzpcwSRCGvjOCONiMrcy45OyMLVyp6Bu9cH
-         vkCiJSiQ5+bpHAJkCPUYIeMPIeQ8M8giHyEtVmIxIv9VLbjh+GQGCJZTFJHn0fadwn
-         3IA/spbQh8v5n4kFjaszYXpT6Cks5UPv4udVt8HSvZKy4XWQGfPmVaWxGceYECkFBJ
-         qOB6gL2VTP0ySefer9Znxt+08zWEKiwGM9z50/Cx5pWvAhevBjH/50F1up4DHaQZDK
-         YeE8oj2XiCfXdSIGSERRsKvUbMsLdzD7nbr+NpaKvD6fM0Sh/lMqRHM6Ws6zg+hZuN
-         KahTZ+DIi75+w==
-Date:   Thu, 25 Mar 2021 19:35:04 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     JC Kuo <jckuo@nvidia.com>, Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg KH <gregkh@linuxfoundation.org>, mturquette@baylibre.com,
-        sboyd@kernel.org, robh@kernel.org, jonathanh@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        nkristam@nvidia.com, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v7 00/14] Tegra XHCI controller ELPG support
-Message-ID: <YFyYkAMkWysF0JE5@vkoul-mobl.Dlink>
-References: <20210120073414.69208-1-jckuo@nvidia.com>
- <YB1vGTt0ufzsYBgo@ulmo>
- <YB1wxazg/QpRSJz6@kroah.com>
- <YFszBH1JJmjJmjn2@orome.fritz.box>
- <YFs/VBZvZo6mBJqz@orome.fritz.box>
- <YFwqdNkkcrTRxSkP@vkoul-mobl.Dlink>
- <YFyXbNXSVSBGqp9i@orome.fritz.box>
+        id S231208AbhCYObT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 10:31:19 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:46117 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S231435AbhCYObG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 10:31:06 -0400
+Received: (qmail 788278 invoked by uid 1000); 25 Mar 2021 10:31:04 -0400
+Date:   Thu, 25 Mar 2021 10:31:04 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     liulongfang <liulongfang@huawei.com>, mathias.nyman@intel.com,
+        linux-usb@vger.kernel.org, yisen.zhuang@huawei.com,
+        tanxiaofei@huawei.com, liudongdong3@huawei.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] USB:XHCI:Adjust the log level of hub
+Message-ID: <20210325143104.GA785961@rowland.harvard.edu>
+References: <1616666652-37920-1-git-send-email-liulongfang@huawei.com>
+ <YFxmaEtKclXXpBfy@kroah.com>
+ <d2fc6d09-c8e7-436f-3e0d-b2cfa9c75b9f@huawei.com>
+ <YFyXJ1Zq5yP7vRWn@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YFyXbNXSVSBGqp9i@orome.fritz.box>
+In-Reply-To: <YFyXJ1Zq5yP7vRWn@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 25-03-21, 15:00, Thierry Reding wrote:
-> On Thu, Mar 25, 2021 at 11:45:16AM +0530, Vinod Koul wrote:
-> > On 24-03-21, 14:32, Thierry Reding wrote:
-
-> > > Also adding Vinod for visibility and in case Kishon's too busy.
-> > 
-> > Yes please CC me on all things phy (MAINTAINERS should have told you so)
-> > 
-> > If you can resend me and cc linux-phy@lists.infradead.org, I would take
-> > a look. FWIW since this goes thru Greg, the window closes earlier than
-> > merge window
+On Thu, Mar 25, 2021 at 02:59:03PM +0100, Greg KH wrote:
+> On Thu, Mar 25, 2021 at 09:33:53PM +0800, liulongfang wrote:
+> > On 2021/3/25 18:31, Greg KH wrote:
+> > > On Thu, Mar 25, 2021 at 06:04:12PM +0800, Longfang Liu wrote:
+> > >> When the number of ports of the hub is not between 1 and Maxports,
+> > >> it will only exit the registration of the hub on the current controller,
+> > >> but it will not affect the function of the controller itself. Its other
+> > >> hubs can operate normally, so the log level here can be changed from
+> > >> error to information.
+> > >>
+> > >> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+> > >> ---
+> > >>  drivers/usb/core/hub.c | 10 ++++------
+> > >>  1 file changed, 4 insertions(+), 6 deletions(-)
+> > >>
+> > >> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > >> index b1e14be..70294ad 100644
+> > >> --- a/drivers/usb/core/hub.c
+> > >> +++ b/drivers/usb/core/hub.c
+> > >> @@ -1409,13 +1409,11 @@ static int hub_configure(struct usb_hub *hub,
+> > >>  		maxchild = min_t(unsigned, maxchild, USB_SS_MAXPORTS);
+> > >>  
+> > >>  	if (hub->descriptor->bNbrPorts > maxchild) {
+> > >> -		message = "hub has too many ports!";
+> > >> -		ret = -ENODEV;
+> > >> -		goto fail;
+> > >> +		dev_info(hub_dev, "hub has too many ports!\n");
+> > > 
+> > > Is this an error?  If so, report it as such, not as "information".
+> > > 
+> > >> +		return -ENODEV;
+> > >>  	} else if (hub->descriptor->bNbrPorts == 0) {
+> > >> -		message = "hub doesn't have any ports!";
+> > >> -		ret = -ENODEV;
+> > >> -		goto fail;
+> > >> +		dev_info(hub_dev, "hub doesn't have any ports!\n");
+> > > 
+> > > Same here.
+> > > 
+> > > What problem are you trying to solve here?
+> > > 
+> > > What hub do you have that has no ports, or too many, that you think
+> > > should still be able to work properly?
+> > > 
+> > > thanks,
+> > > 
+> > > greg k-h
+> > > .
+> > On our test platform, the xhci usb3 hub has no port.
 > 
-> Greg already agreed that it might be best to take this through the Tegra
-> tree because there's a bunch of dependencies. For Tegra the patches go
-> through ARM SoC and that usually means I have to send pull requests by
-> -rc6.
+> Sounds like a broken device, why not fix that?
 
-Ok, i dont mind ack'ing in that case once they hit my inbox
+If this device is used only for testing and not for production, who 
+cares how severe the log message is?
 
-> JC, do you have time to resend this batch this week? If not I can do it,
-> too.
+> > when initializing the usb3 hub, an error will be reported
+> > because the port is 0, but in fact it will not affect
+> > the use of usb2, and the usb2 hub is working normally.
+> 
+> But you can not have a USB3 hub with no ports, isn't that against
+> against the USB spec?  How does this device pass the USB-IF
+> certification?
+> 
+> > thanks, therefore, in order to reduce the severity of the log,
+> > we hope to lower the level of this log.
+> 
+> You did not reduce the severity at all, everyone can still see it.
+> 
+> Please try fixing your hardware :
 
-Thanks
--- 
-~Vinod
+Alternatively, you could change the xhci-hcd driver.  Make it skip 
+registering the USB-3 root hub if that hub has no ports.
+
+But don't change these log messages.  They describe real errors, so they 
+should be actual error messages.
+
+Alan Stern
