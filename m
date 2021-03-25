@@ -2,59 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 941EC348A0B
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 08:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F36348A39
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 08:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbhCYHXQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 03:23:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35944 "EHLO mail.kernel.org"
+        id S229622AbhCYHhT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 03:37:19 -0400
+Received: from mga18.intel.com ([134.134.136.126]:32318 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229574AbhCYHW4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Mar 2021 03:22:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0D2FE61A1A;
-        Thu, 25 Mar 2021 07:22:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616656975;
-        bh=nK8MnAmL5EIPeEqp4C8KpZ4a4cMEn3TYA9VUz9Xei64=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZsQoWg1WHzr5qSK/PSwwC8eqs3qSIDvZwAqShqcm7ZEtpZh6P+iQ31onAk/FQ2QRi
-         Sb0SFEw/lH4KunxoMFo/bC2z75oAUGcKZO2bRTFk2yT2XAiQ95BAbnvahSF6Zz7mQA
-         CzO/6SjioExJ9799Gdfi4LH/PqsQWx24OAuhZC7NCuST/JAbXsBeCaepE83fh9lNo1
-         ki7cCnMRZ49Q3a4pAjQbHZ5TZFWTOh5eUOzoNKC49GOpHIb2X4Hnb/4hpFL+FrQW5V
-         hvFkdWaxyHeA9MwkXLzD+foOzsdXNTcHA9byd1ICeqrhUfEBPhcv/gxwP8GoE3dODW
-         dLJWZLh4TAR8Q==
-Date:   Thu, 25 Mar 2021 12:52:52 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>
-Subject: Re: [PATCH 2/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add
- bindings for SC7280
-Message-ID: <YFw6TK+o0r3XdNcj@vkoul-mobl.Dlink>
-References: <1615978901-4202-1-git-send-email-sanm@codeaurora.org>
- <1615978901-4202-3-git-send-email-sanm@codeaurora.org>
+        id S229448AbhCYHgv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Mar 2021 03:36:51 -0400
+IronPort-SDR: +A3+G+DSwIU5W6oGuktVUqrBrEpx3/fkcCRspa1/5JCFAX1vTtkhiJAW8fxlC7hks8Ne2vqWKv
+ qp0bQ62CFpeg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9933"; a="178425104"
+X-IronPort-AV: E=Sophos;i="5.81,277,1610438400"; 
+   d="scan'208";a="178425104"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2021 00:36:50 -0700
+IronPort-SDR: S4G0ESSJgR/vuPB2QVHJaZPvvX6xc8TMapTg62ndJBKFdo28iQFjiwhsK9n/mVZ4iiXxlBz6j8
+ leuZYuIcC7lg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,277,1610438400"; 
+   d="scan'208";a="514504416"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 25 Mar 2021 00:36:45 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 25 Mar 2021 09:36:44 +0200
+Date:   Thu, 25 Mar 2021 09:36:44 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     'Qinglang Miao <miaoqinglang@huawei.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH -next] usb: typec: tipd: Remove duplicated include from
+ core.c
+Message-ID: <YFw9jIk/QLBAHpXo@kuha.fi.intel.com>
+References: <20210325031255.120479-1-miaoqinglang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1615978901-4202-3-git-send-email-sanm@codeaurora.org>
+In-Reply-To: <20210325031255.120479-1-miaoqinglang@huawei.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 17-03-21, 16:31, Sandeep Maheswaram wrote:
-> Add the compatible string for sc7280 SoC from Qualcomm
+On Thu, Mar 25, 2021 at 11:12:55AM +0800, 'Qinglang Miao wrote:
+> From: Qinglang Miao <miaoqinglang@huawei.com>
+> 
+> Remove duplicated include.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
 
-Applied, thanks
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  drivers/usb/typec/tipd/core.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index d8212b15f6f9..938219bc1b4b 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -6,8 +6,6 @@
+>   * Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>   */
+>  
+> -#include "tps6598x.h"
+> -
+>  #include <linux/i2c.h>
+>  #include <linux/acpi.h>
+>  #include <linux/module.h>
+
+thanks,
 
 -- 
-~Vinod
+heikki
