@@ -2,136 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97687349362
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 14:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78EB34937D
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 14:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbhCYNzK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 09:55:10 -0400
-Received: from mga04.intel.com ([192.55.52.120]:9881 "EHLO mga04.intel.com"
+        id S230266AbhCYN7Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 09:59:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33608 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230292AbhCYNzD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Mar 2021 09:55:03 -0400
-IronPort-SDR: FRxF1kP2vDmJQEhXxu4FU1pwfmmLeIJnaSoi826tUStS87/xFipzY044rw3muXmeJNRkgvs+WB
- Yc3yIyCHvUgw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9933"; a="188633475"
-X-IronPort-AV: E=Sophos;i="5.81,277,1610438400"; 
-   d="scan'208";a="188633475"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2021 06:55:03 -0700
-IronPort-SDR: W2IUB7LGdO/QRiRGhY1w+xl1iIj2KbSlskWwq1ZhicVdUfAqwD3iWScNRmKTH4O9lXAmlG1xDm
- q5HENV1eUiCA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,277,1610438400"; 
-   d="scan'208";a="414169304"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 25 Mar 2021 06:55:01 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D5E6E195; Thu, 25 Mar 2021 15:55:15 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v1 4/4] usb: gadget: pch_udc: Convert Intel Quark quirk to use driver data
-Date:   Thu, 25 Mar 2021 15:55:08 +0200
-Message-Id: <20210325135508.70350-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210325135508.70350-1-andriy.shevchenko@linux.intel.com>
-References: <20210325135508.70350-1-andriy.shevchenko@linux.intel.com>
+        id S230078AbhCYN7G (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Mar 2021 09:59:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BD7B61864;
+        Thu, 25 Mar 2021 13:59:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1616680746;
+        bh=Ri1S2/i6bHycwLtGjzdDIgYWmQoORdy/z6eA+QQ2RUA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X9VZlOe47APUGkYj8l4F0hnjoCwWa5cr7Xhh54/2W5Pn5TnGYK3w8rYYAavRmvriH
+         X/eBb+h+8tLm0vEziaPC+UzWADkuwND3ZixtMFaBJ7vmyZRm4MT0Xd3JAN8rdrRNgH
+         V5oD5Up9XVAslhhIU/SqvlSJJf/EwyRv8foelI5g=
+Date:   Thu, 25 Mar 2021 14:59:03 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     liulongfang <liulongfang@huawei.com>
+Cc:     mathias.nyman@intel.com, stern@rowland.harvard.edu,
+        linux-usb@vger.kernel.org, yisen.zhuang@huawei.com,
+        tanxiaofei@huawei.com, liudongdong3@huawei.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] USB:XHCI:Adjust the log level of hub
+Message-ID: <YFyXJ1Zq5yP7vRWn@kroah.com>
+References: <1616666652-37920-1-git-send-email-liulongfang@huawei.com>
+ <YFxmaEtKclXXpBfy@kroah.com>
+ <d2fc6d09-c8e7-436f-3e0d-b2cfa9c75b9f@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d2fc6d09-c8e7-436f-3e0d-b2cfa9c75b9f@huawei.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Unify quirks, in particular one for Intel Quark, to use driver data
-and accompanying infrastructure.
+On Thu, Mar 25, 2021 at 09:33:53PM +0800, liulongfang wrote:
+> On 2021/3/25 18:31, Greg KH wrote:
+> > On Thu, Mar 25, 2021 at 06:04:12PM +0800, Longfang Liu wrote:
+> >> When the number of ports of the hub is not between 1 and Maxports,
+> >> it will only exit the registration of the hub on the current controller,
+> >> but it will not affect the function of the controller itself. Its other
+> >> hubs can operate normally, so the log level here can be changed from
+> >> error to information.
+> >>
+> >> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+> >> ---
+> >>  drivers/usb/core/hub.c | 10 ++++------
+> >>  1 file changed, 4 insertions(+), 6 deletions(-)
+> >>
+> >> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> >> index b1e14be..70294ad 100644
+> >> --- a/drivers/usb/core/hub.c
+> >> +++ b/drivers/usb/core/hub.c
+> >> @@ -1409,13 +1409,11 @@ static int hub_configure(struct usb_hub *hub,
+> >>  		maxchild = min_t(unsigned, maxchild, USB_SS_MAXPORTS);
+> >>  
+> >>  	if (hub->descriptor->bNbrPorts > maxchild) {
+> >> -		message = "hub has too many ports!";
+> >> -		ret = -ENODEV;
+> >> -		goto fail;
+> >> +		dev_info(hub_dev, "hub has too many ports!\n");
+> > 
+> > Is this an error?  If so, report it as such, not as "information".
+> > 
+> >> +		return -ENODEV;
+> >>  	} else if (hub->descriptor->bNbrPorts == 0) {
+> >> -		message = "hub doesn't have any ports!";
+> >> -		ret = -ENODEV;
+> >> -		goto fail;
+> >> +		dev_info(hub_dev, "hub doesn't have any ports!\n");
+> > 
+> > Same here.
+> > 
+> > What problem are you trying to solve here?
+> > 
+> > What hub do you have that has no ports, or too many, that you think
+> > should still be able to work properly?
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> > .
+> On our test platform, the xhci usb3 hub has no port.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/usb/gadget/udc/pch_udc.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+Sounds like a broken device, why not fix that?
 
-diff --git a/drivers/usb/gadget/udc/pch_udc.c b/drivers/usb/gadget/udc/pch_udc.c
-index db6b63f060f3..9bb7a9d7a2fb 100644
---- a/drivers/usb/gadget/udc/pch_udc.c
-+++ b/drivers/usb/gadget/udc/pch_udc.c
-@@ -332,6 +332,7 @@ struct pch_vbus_gpio_data {
-  * @dma_addr:		DMA pool for received
-  * @setup_data:		Received setup data
-  * @base_addr:		for mapped device memory
-+ * @bar:		PCI BAR used for mapped device memory
-  * @cfg_data:		current cfg, intf, and alt in use
-  * @vbus_gpio:		GPIO informaton for detecting VBUS
-  */
-@@ -354,6 +355,7 @@ struct pch_udc_dev {
- 	dma_addr_t			dma_addr;
- 	struct usb_ctrlrequest		setup_data;
- 	void __iomem			*base_addr;
-+	unsigned short			bar;
- 	struct pch_udc_cfg_data		cfg_data;
- 	struct pch_vbus_gpio_data	vbus_gpio;
- };
-@@ -2960,6 +2962,14 @@ static int pch_udc_minnow_platform_init(struct device *d)
- 	return pch_vbus_gpio_add_table(d, &pch_udc_minnow_vbus_gpio_table);
- }
- 
-+static int pch_udc_quark_platform_init(struct device *d)
-+{
-+	struct pch_udc_dev *dev = dev_get_drvdata(d);
-+
-+	dev->bar = PCH_UDC_PCI_BAR_QUARK_X1000;
-+	return 0;
-+}
-+
- static void pch_udc_shutdown(struct pci_dev *pdev)
- {
- 	struct pch_udc_dev *dev = pci_get_drvdata(pdev);
-@@ -3030,7 +3040,6 @@ typedef int (*platform_init_fn)(struct device *);
- static int pch_udc_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- {
- 	platform_init_fn platform_init = (platform_init_fn)id->driver_data;
--	int			bar;
- 	int			retval;
- 	struct pch_udc_dev	*dev;
- 
-@@ -3044,6 +3053,7 @@ static int pch_udc_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	if (retval)
- 		return retval;
- 
-+	dev->bar = PCH_UDC_PCI_BAR;
- 	dev->pdev = pdev;
- 	pci_set_drvdata(pdev, dev);
- 
-@@ -3054,18 +3064,12 @@ static int pch_udc_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 			return retval;
- 	}
- 
--	/* Determine BAR based on PCI ID */
--	if (id->device == PCI_DEVICE_ID_INTEL_QUARK_X1000_UDC)
--		bar = PCH_UDC_PCI_BAR_QUARK_X1000;
--	else
--		bar = PCH_UDC_PCI_BAR;
--
- 	/* PCI resource allocation */
--	retval = pcim_iomap_regions(pdev, 1 << bar, pci_name(pdev));
-+	retval = pcim_iomap_regions(pdev, BIT(dev->bar), pci_name(pdev));
- 	if (retval)
- 		return retval;
- 
--	dev->base_addr = pcim_iomap_table(pdev)[bar];
-+	dev->base_addr = pcim_iomap_table(pdev)[dev->bar];
- 
- 	/* initialize the hardware */
- 	retval = pch_udc_pcd_init(dev);
-@@ -3113,6 +3117,7 @@ static const struct pci_device_id pch_udc_pcidev_id[] = {
- 		PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_QUARK_X1000_UDC),
- 		.class = PCI_CLASS_SERIAL_USB_DEVICE,
- 		.class_mask = 0xffffffff,
-+		.driver_data = (kernel_ulong_t)&pch_udc_quark_platform_init,
- 	},
- 	{
- 		PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_EG20T_UDC,
--- 
-2.30.2
+> when initializing the usb3 hub, an error will be reported
+> because the port is 0, but in fact it will not affect
+> the use of usb2, and the usb2 hub is working normally.
 
+But you can not have a USB3 hub with no ports, isn't that against
+against the USB spec?  How does this device pass the USB-IF
+certification?
+
+> thanks, therefore, in order to reduce the severity of the log,
+> we hope to lower the level of this log.
+
+You did not reduce the severity at all, everyone can still see it.
+
+Please try fixing your hardware :)
+
+thanks,
+
+greg k-h
