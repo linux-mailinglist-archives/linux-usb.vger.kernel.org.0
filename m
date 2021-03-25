@@ -2,95 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F98C34945C
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 15:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF213494BD
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 15:58:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbhCYOl3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 10:41:29 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:41449 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231267AbhCYOlK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 10:41:10 -0400
-Received: (qmail 788698 invoked by uid 1000); 25 Mar 2021 10:41:09 -0400
-Date:   Thu, 25 Mar 2021 10:41:09 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/6] usb: Iterator for ports
-Message-ID: <20210325144109.GB785961@rowland.harvard.edu>
-References: <20210325122926.58392-1-heikki.krogerus@linux.intel.com>
- <20210325122926.58392-2-heikki.krogerus@linux.intel.com>
+        id S231153AbhCYO5b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 10:57:31 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:14546 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230248AbhCYO5F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 10:57:05 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F5p6G0hD8zPlHS;
+        Thu, 25 Mar 2021 22:54:30 +0800 (CST)
+Received: from DESKTOP-EFRLNPK.china.huawei.com (10.174.177.129) by
+ DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
+ 14.3.498.0; Thu, 25 Mar 2021 22:56:52 +0800
+From:   'Qiheng Lin <linqiheng@huawei.com>
+To:     <linqiheng@huawei.com>, Petko Manolov <petkan@nucleusys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH net-next] net: usb: pegasus: Remove duplicated include from pegasus.c
+Date:   Thu, 25 Mar 2021 22:56:52 +0800
+Message-ID: <20210325145652.13469-1-linqiheng@huawei.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210325122926.58392-2-heikki.krogerus@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Originating-IP: [10.174.177.129]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 25, 2021 at 03:29:21PM +0300, Heikki Krogerus wrote:
-> Introducing usb_for_each_port(). It works the same way as
-> usb_for_each_dev(), but instead of going through every USB
-> device in the system, it walks through the USB ports in the
-> system.
-> 
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+From: Qiheng Lin <linqiheng@huawei.com>
 
-This has a couple of nasty errors.
+Remove duplicated include.
 
-> ---
->  drivers/usb/core/usb.c | 43 ++++++++++++++++++++++++++++++++++++++++++
->  include/linux/usb.h    |  1 +
->  2 files changed, 44 insertions(+)
-> 
-> diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-> index 2ce3667ec6fae..6d49db9a1b208 100644
-> --- a/drivers/usb/core/usb.c
-> +++ b/drivers/usb/core/usb.c
-> @@ -398,6 +398,49 @@ int usb_for_each_dev(void *data, int (*fn)(struct usb_device *, void *))
->  }
->  EXPORT_SYMBOL_GPL(usb_for_each_dev);
->  
-> +struct each_hub_arg {
-> +	void *data;
-> +	int (*fn)(struct device *, void *);
-> +};
-> +
-> +static int __each_hub(struct device *dev, void *data)
-> +{
-> +	struct each_hub_arg *arg = (struct each_hub_arg *)data;
-> +	struct usb_device *hdev = to_usb_device(dev);
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
+---
+ drivers/net/usb/pegasus.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-to_usb_device() won't work properly if the struct device isn't embedded 
-in an actual usb_device structure.  And that will happen, since the USB 
-bus type holds usb_interface structures as well as usb_devices.
+diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
+index 9a907182569c..e0ee5c096396 100644
+--- a/drivers/net/usb/pegasus.c
++++ b/drivers/net/usb/pegasus.c
+@@ -65,7 +65,6 @@ static struct usb_eth_dev usb_dev_id[] = {
+ 	{.name = pn, .vendor = vid, .device = pid, .private = flags},
+ #define PEGASUS_DEV_CLASS(pn, vid, pid, dclass, flags) \
+ 	PEGASUS_DEV(pn, vid, pid, flags)
+-#include "pegasus.h"
+ #undef	PEGASUS_DEV
+ #undef	PEGASUS_DEV_CLASS
+ 	{NULL, 0, 0, 0},
+@@ -84,7 +83,6 @@ static struct usb_device_id pegasus_ids[] = {
+ #define PEGASUS_DEV_CLASS(pn, vid, pid, dclass, flags) \
+ 	{.match_flags = (USB_DEVICE_ID_MATCH_DEVICE | USB_DEVICE_ID_MATCH_DEV_CLASS), \
+ 	.idVendor = vid, .idProduct = pid, .bDeviceClass = dclass},
+-#include "pegasus.h"
+ #undef	PEGASUS_DEV
+ #undef	PEGASUS_DEV_CLASS
+ 	{},
 
-In fact, you should use usb_for_each_dev here; it already does what you 
-want.
-
-> +	struct usb_hub *hub;
-> +	int ret;
-> +	int i;
-> +
-> +	hub = usb_hub_to_struct_hub(hdev);
-> +	if (!hub)
-> +		return 0;
-> +
-> +	for (i = 0; i < hdev->maxchild; i++) {
-> +		ret = arg->fn(&hub->ports[i]->dev, arg->data);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-
-Don't you need some sort of locking or refcounting here?  What would 
-happen if this hub got removed while the routine was running?
-
-Alan Stern
