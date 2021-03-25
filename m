@@ -2,65 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4754B348770
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 04:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EA834879D
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 04:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbhCYDS3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Mar 2021 23:18:29 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:14529 "EHLO
+        id S229617AbhCYDsT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Mar 2021 23:48:19 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:14467 "EHLO
         szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbhCYDRz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 23:17:55 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F5VbW4j4WzNqW9;
-        Thu, 25 Mar 2021 11:15:19 +0800 (CST)
-Received: from localhost.localdomain (10.175.113.32) by
- DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 25 Mar 2021 11:17:43 +0800
-From:   'Qinglang Miao <miaoqinglang@huawei.com>
-To:     <miaoqinglang@huawei.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Wei Yongjun <weiyongjun1@huawei.com>
-CC:     <linux-usb@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH -next] usb: typec: tipd: Remove duplicated include from core.c
-Date:   Thu, 25 Mar 2021 11:48:08 +0800
-Message-ID: <20210325034808.463042-1-miaoqinglang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229448AbhCYDsI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 23:48:08 -0400
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F5WGt2dTVzwQMT;
+        Thu, 25 Mar 2021 11:45:58 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
+ 14.3.498.0; Thu, 25 Mar 2021 11:47:51 +0800
+From:   Jay Fang <f.fangjian@huawei.com>
+To:     <balbi@kernel.org>, <greg@kroah.com>
+CC:     <linux-usb@vger.kernel.org>, <tangzihao1@hisilicon.com>,
+        <huangdaode@huawei.com>
+Subject: [PATCH V2] USB: gadget: f_fs: Use memdup_user() as a cleanup
+Date:   Thu, 25 Mar 2021 11:48:20 +0800
+Message-ID: <1616644100-8214-1-git-send-email-f.fangjian@huawei.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Originating-IP: [10.175.113.32]
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Qinglang Miao <miaoqinglang@huawei.com>
+From: Zihao Tang <tangzihao1@hisilicon.com>
 
-Remove duplicated include.
+Fix coccicheck warning which recommends to use memdup_user():
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
+drivers/usb/gadget/function/f_fs.c:3829:8-15: WARNING opportunity for memdup_user
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Zihao Tang <tangzihao1@hisilicon.com>
+Signed-off-by: Jay Fang <f.fangjian@huawei.com>
 ---
- drivers/usb/typec/tipd/core.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/usb/gadget/function/f_fs.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index d8212b15f6f9..938219bc1b4b 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -6,8 +6,6 @@
-  * Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-  */
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 801a8b6..90a24d4 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -3826,14 +3826,9 @@ static char *ffs_prepare_buffer(const char __user *buf, size_t len)
+ 	if (!len)
+ 		return NULL;
  
--#include "tps6598x.h"
+-	data = kmalloc(len, GFP_KERNEL);
+-	if (!data)
+-		return ERR_PTR(-ENOMEM);
 -
- #include <linux/i2c.h>
- #include <linux/acpi.h>
- #include <linux/module.h>
+-	if (copy_from_user(data, buf, len)) {
+-		kfree(data);
+-		return ERR_PTR(-EFAULT);
+-	}
++	data = memdup_user(buf, len);
++	if (IS_ERR(data))
++		return data;
+ 
+ 	pr_vdebug("Buffer from user space:\n");
+ 	ffs_dump_mem("", data, len);
+-- 
+2.7.4
 
