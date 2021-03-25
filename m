@@ -2,90 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9322B3491D6
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 13:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A59E3491F2
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 13:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbhCYM0W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 08:26:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38566 "EHLO mail.kernel.org"
+        id S230259AbhCYM3e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 08:29:34 -0400
+Received: from mga17.intel.com ([192.55.52.151]:31183 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229617AbhCYMZw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Mar 2021 08:25:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C4B461A02;
-        Thu, 25 Mar 2021 12:25:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616675152;
-        bh=+s4xM0Lyz3jyD1nMjPUWpzDFZqWRYVY9+ICqQhQ1i/g=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=XDYkAB6hdGdlqyl1jGYORZsDc8NO6yWXuKM8ENB31agKA4iivkfDkcfsKgFq+55Gw
-         AFPlCreyFLWB4WUqVIbNyVGJBQWjAis4Q1lMIga7acjFvv6gtyYZwm3znr1F603pW4
-         pjpRGvBRtXJmtOrHC+MxW5JZtU0lBuUjCuiPFsbED2KEVt6q+0JYCHZVTqsrbzP6rB
-         g8BiU0hS0XEFzarEs7ti5gef9mHbfnbySBvfyNif/5eKya3XzN06zcr6xdstcix5Yv
-         lOocgfGrg0rQP79JwJJR7n3SV4e5c7hCNhytiNQqJ5B3c5D0rMtG/hqgD3qt6YfBoO
-         +GFNN08Dok6Ag==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Ray Chi <raychi@google.com>, gregkh@linuxfoundation.org,
-        Thinh.Nguyen@synopsys.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        albertccwang@google.com, Ray Chi <raychi@google.com>
-Subject: Re: [PATCH] usb: dwc3: add cancelled reason for dwc3 requests
-In-Reply-To: <20210325115436.861299-1-raychi@google.com>
-References: <20210325115436.861299-1-raychi@google.com>
-Date:   Thu, 25 Mar 2021 14:25:44 +0200
-Message-ID: <87y2ebju7r.fsf@kernel.org>
+        id S229995AbhCYM3P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Mar 2021 08:29:15 -0400
+IronPort-SDR: qEKyoLQF4hmYBIJbzIK688Xna97Vdmmig7z3KrxErBim9s/d4RcavhhHYhtHL/Dmkrl4gFgH49
+ ZTG+aHGmrKKw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9933"; a="170895468"
+X-IronPort-AV: E=Sophos;i="5.81,277,1610438400"; 
+   d="scan'208";a="170895468"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2021 05:29:14 -0700
+IronPort-SDR: e33qbh8QHajFNMSwD+bDkSzV/Gg+xqfWHcjUY4UtyimbrQPGTXdM2m/vTDM3k946wgGx28qUDk
+ tiRS/B9Ybf9A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,277,1610438400"; 
+   d="scan'208";a="514623120"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Mar 2021 05:29:12 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] usb: Linking ports to their Type-C connectors
+Date:   Thu, 25 Mar 2021 15:29:20 +0300
+Message-Id: <20210325122926.58392-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-
 Hi,
 
-Ray Chi <raychi@google.com> writes:
-> diff --git a/drivers/usb/dwc3/gadget.h b/drivers/usb/dwc3/gadget.h
-> index 0cd281949970..a23e85bd3933 100644
-> --- a/drivers/usb/dwc3/gadget.h
-> +++ b/drivers/usb/dwc3/gadget.h
-> @@ -56,6 +56,12 @@ struct dwc3;
->=20=20
->  /* Frame/Microframe Number Mask */
->  #define DWC3_FRNUMBER_MASK		0x3fff
-> +
-> +/* Cancel reason for dwc3 request */
-> +#define DWC3_REQUEST_DEQUEUED		-ECONNRESET  /* Request get dequeued */
-> +#define DWC3_REQUEST_DISCONNECTED	-ESHUTDOWN   /* Device is disconnected=
-/disabled */
-> +#define DWC3_REQUEST_STALL		-EPIPE       /* Bus or protocol error */
+Adding a simple function typec_link_port() that can be used to create
+a symlink "connector" that points to the USB Type-C connector of a
+port. It is used with USB ports initially, but hopefully later also
+with other things like DisplayPorts.
 
-this is just obfuscation, pass the errors directly. Also, make sure
-these are documented in the API.
+Being able to see which connector is connected to a port is important
+in general, but it is really important when for example the data or
+power role of a device needs to swapped. The user probable wants to
+know which USB device is disconnected if role swap on a USB Type-C
+connector is executed.
 
-=2D-=20
-balbi
+Hope these are OK.
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+thanks,
 
------BEGIN PGP SIGNATURE-----
+Heikki Krogerus (6):
+  usb: Iterator for ports
+  usb: typec: Organize the private headers properly
+  usb: typec: Declare the typec_class static
+  usb: typec: Port mapping utility
+  usb: Link the ports to the connectors they are attached to
+  usb: typec: Link all ports during connector registration
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmBcgUgRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQbkIBAAo0rcWRTbI1kOE56uyHRCFxKcIhRb6hr1
-WG2Md+N3TXpnwEEAVp04kp+MSBFBBzLKZHGaR4vhxM3wWVoG/QLzCz8VI6Q7/IMT
-Jrh3rm7mCO0Jsd4JGn5R4dXDzFgOdP8F3+T6izh/XiJt5maOsaOOjLy3S2PbQnCh
-KvsvyZJ8Apcw7fquObgURibkwP5W/AZl1hTT9LNxsg+umXgNu2jNg7PHqK9+Wtq9
-oz8PkumUqhZ4yDkYSUmKYwdoCQYgQIdmq2OMA/sKjD6L5ogGXZJ7qLqcGLgKJFC3
-X1X3HF2gjzScmKttP4XIPn35xtY3HSPyGs5/e88ohqrMBFAzf9nNasJpy6oSV6/Z
-0baVSjcLjAPTWjse5UgTOIZdeQ1DaJRuBUTyRR3mTqCv60vQmYWd2WfJA34jMqo7
-0xqfyr/Xyr0UcSbZBxPa0VaIz6FVqhrg8ZAr3gviD7ARdoKl0eGOlEzLtTpKhLAj
-NfU1n0gP/Id6tF11oxxnydqrBn50St7fEuHtxFiZCB+EhExrUJH0GLlguD8W5GaO
-JtrXSoYC5GwO21yBvVztmfbrwHX3n/+NLsudyUXEVqzfv0PtAqYEtX9jnMcSA+w1
-CG3DvbDDKe1Pb+UZBWBF6rpebdJ6DtaE1O2PTo/LLaLNBgm5b++pd7LHnvkDWSZl
-336XHQjpjnc=
-=FB4s
------END PGP SIGNATURE-----
---=-=-=--
+ Documentation/ABI/testing/sysfs-bus-usb |   9 +
+ drivers/usb/core/port.c                 |   3 +
+ drivers/usb/core/usb.c                  |  43 ++++
+ drivers/usb/typec/Makefile              |   1 +
+ drivers/usb/typec/bus.c                 |   2 +
+ drivers/usb/typec/bus.h                 |  19 +-
+ drivers/usb/typec/class.c               | 101 +++------
+ drivers/usb/typec/class.h               |  94 ++++++++
+ drivers/usb/typec/mux.c                 |   4 +-
+ drivers/usb/typec/mux.h                 |  21 ++
+ drivers/usb/typec/port-mapper.c         | 283 ++++++++++++++++++++++++
+ include/linux/usb.h                     |   1 +
+ include/linux/usb/typec.h               |  13 ++
+ 13 files changed, 499 insertions(+), 95 deletions(-)
+ create mode 100644 drivers/usb/typec/class.h
+ create mode 100644 drivers/usb/typec/mux.h
+ create mode 100644 drivers/usb/typec/port-mapper.c
+
+-- 
+2.30.2
+
