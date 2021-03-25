@@ -2,21 +2,21 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8655934876D
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 04:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4754B348770
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 04:19:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbhCYDQV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Mar 2021 23:16:21 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:14890 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbhCYDQO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 23:16:14 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4F5VZg1V5VzkfWs;
-        Thu, 25 Mar 2021 11:14:35 +0800 (CST)
+        id S230105AbhCYDS3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Mar 2021 23:18:29 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:14529 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229500AbhCYDRz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 23:17:55 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F5VbW4j4WzNqW9;
+        Thu, 25 Mar 2021 11:15:19 +0800 (CST)
 Received: from localhost.localdomain (10.175.113.32) by
- DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 25 Mar 2021 11:16:02 +0800
+ DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
+ 14.3.498.0; Thu, 25 Mar 2021 11:17:43 +0800
 From:   'Qinglang Miao <miaoqinglang@huawei.com>
 To:     <miaoqinglang@huawei.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -28,8 +28,8 @@ To:     <miaoqinglang@huawei.com>,
 CC:     <linux-usb@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
         Hulk Robot <hulkci@huawei.com>
 Subject: [PATCH -next] usb: typec: tipd: Remove duplicated include from core.c
-Date:   Thu, 25 Mar 2021 11:46:27 +0800
-Message-ID: <20210325034627.353171-1-miaoqinglang@huawei.com>
+Date:   Thu, 25 Mar 2021 11:48:08 +0800
+Message-ID: <20210325034808.463042-1-miaoqinglang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Type:   text/plain; charset=US-ASCII
