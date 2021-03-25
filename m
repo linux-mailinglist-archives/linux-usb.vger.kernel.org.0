@@ -2,156 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B60234950A
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 16:12:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3BC349506
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 16:12:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbhCYPMI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 11:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbhCYPMB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 11:12:01 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C672CC06174A
-        for <linux-usb@vger.kernel.org>; Thu, 25 Mar 2021 08:12:00 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id dm8so2831506edb.2
-        for <linux-usb@vger.kernel.org>; Thu, 25 Mar 2021 08:12:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KgiQlHjqO1eZIs8RJx5tZLbRT7qttv9rUI4xuUbkmf0=;
-        b=SBMe/4BueMgUfn1TWeZYXylvCxwjQoGEzyM5ZPNd3ob1cx4tK7tdQ9bCTcSj6X8DdL
-         29I8Yui1NTK4kbdAwX4UY9rFFS5Ul2fqMKjYhaacto7PNjDNG34k29uRMRlefvM57Kiy
-         rYPZ5QEO6zhY7x3cX+EQNzxYnEMUafVNBoQ+EVnNwT3gyE5yGsFBSatG8bK+wXvBgfj1
-         WlAVsOjNF8bhRd7UN7B7HetaSozvQGPNKUnkGETnTMFqxDcr/gNfRcHqX5ypGSaPG5F+
-         Mc2t1++RcNRfZR9QWX87MQu+Wqj55jo1TpMtpqRvj1uOMpBE9szr5ftlXFAJzAAxr0Mb
-         HUPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KgiQlHjqO1eZIs8RJx5tZLbRT7qttv9rUI4xuUbkmf0=;
-        b=S9oZ9Gn5kJcF4/zVTJJZeq+VEzmuEA9aUu+2x2JdSRzk0u72FzpW2s7HDaPPntmZjq
-         dBtklzPsNyXz0+ChNEGpL/3gVOYaijPyR3k/dwUbbZVOoyasiIeNmIM9ZFAUiyIyKNCV
-         b2++jglfPJM3wBVcjngRgY4toErA7g8F9yhORJASz/CQek/Cnp8uN1mthgrzE9c/HM99
-         lD4yMacaAjB0A3f+a5uMl4xA8gRZBVcB/UryGYKYbsc/UK9iOgu5gOzTHU/SUlbDPqUz
-         TS++4mesMZ9hpfyxstxEHy7ZdDzV/0ZHilAAUUWA4SzkDlOE/fI7U0XTJZYbIb+aDOBM
-         2lBQ==
-X-Gm-Message-State: AOAM531ZMRfWPXSp9NhZVk2ZNESfQmydwuAsD0+eqK7y15+GfuJZRhug
-        tEZZWArU0LYgveHder9QuWO/y4MS5lNK081WQD8HBjtMba4=
-X-Google-Smtp-Source: ABdhPJxyISwib+S7uN6Ljhh2kYZoGeUhiW5tCLHnH21XLaNu/m7nJOU27aeI9IYp02WKpBL5oAY8ZOpURl7hS04KJLo=
-X-Received: by 2002:aa7:cb90:: with SMTP id r16mr9837234edt.139.1616685119131;
- Thu, 25 Mar 2021 08:11:59 -0700 (PDT)
+        id S230242AbhCYPMH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 11:12:07 -0400
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:39917 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229524AbhCYPL6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 11:11:58 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 95FE15C00F8;
+        Thu, 25 Mar 2021 11:11:57 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Thu, 25 Mar 2021 11:11:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=m+TI7fDtbMIQ2ZxuOSUCfSosKVq
+        BDKs4AB5sOk9PJHA=; b=btgCKPlDhMRjiKADJniFtQ1r16V73Oxu1K46DypnEfu
+        xFovDcyXM+Akxhhl0zDE1a1U0OUu+xBjq/bzguNuFFWTn2LvUHTfuonnREmq66O4
+        NROUC9NHy9v3kk99qHrYQbmj9lDYWipQTmA/uIr60mA6QIHdYPtWREw7h2c1DAic
+        4yo7O1c7xWkUXnXopxA7ke0j2gOSRy49GMEfmQsg3RqLTYNiWYNlbKIhs5ie57qH
+        AavNM4DMsFkpJ4R6Xf/OzI3UR9+IeG6HdUAjr5zWVFu4LwdWpWgs4MgGZlQjpDi2
+        hwqueOYa+8RJjN3Y5YZTtOEwCpE8H4Uq6e0PWsNKl7g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=m+TI7f
+        DtbMIQ2ZxuOSUCfSosKVqBDKs4AB5sOk9PJHA=; b=esiyhBWOIbKD6f/rCpwOqf
+        cPzBPo5sGy4tztOT9atbNkhdwFy51z9zycztXLVXkmOP+tGmVHq/6e6o0WBojP1i
+        w1h+/LQBqbzVq9hX5OvT1pIGEe31q5wapmEMyAVeCcOqnGrYzu2ayFEPRL/IZCYp
+        rIJssJcmdXcO4sUbcAu9jCu0LDRw2S0iGo2EydIKhfkoXQopsgcCfzGmJfwEn2he
+        /2zAbRyhEc/LrEAKCqWazveAkpVcy5XyP7kAL6khXq07vFVbCwx3Q4u/ewdRVIfC
+        //CLvrnkw/fU/eYI6O4gWlyqCfebTGS/YM7p9zdir6YLDyErqOP6mL7ONNitnIug
+        ==
+X-ME-Sender: <xms:O6hcYMrYKs7pBw9avRSUb_AjegUEaO8vlKP28n_D8fvEkgPk_cw7jw>
+    <xme:O6hcYCrmMZX7AMbe87Oy5ui3M9XU7b3OZnO11JdL-gCzQNWCme06Hbe0h8EdVVGMv
+    PmGxjMcDvUJGQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudehtddgjeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucfkphepkeef
+    rdekiedrjeegrdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:PKhcYBMUIe2USobE9cLS6QcOM5HIQpyjtaqvd1Hl7TwwpV6MXROzMA>
+    <xmx:PKhcYD4Khu-5f_7RTYc6mToQbsWmzqnJz0KInF9V-BEw9pTQ0ibJgQ>
+    <xmx:PKhcYL7Usdpw6SxFdCcT39CgflXrt7hfswlxXJSktGvrmt7ZCWp7CQ>
+    <xmx:PahcYBTHIYjXboTvyOjzIxd207GaSoBjgQFYILXerhbTBXwGM-bbDA>
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 8FAB51080057;
+        Thu, 25 Mar 2021 11:11:55 -0400 (EDT)
+Date:   Thu, 25 Mar 2021 16:11:53 +0100
+From:   Greg KH <greg@kroah.com>
+To:     'Qiheng Lin <linqiheng@huawei.com>
+Cc:     Petko Manolov <petkan@nucleusys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH net-next] net: usb: pegasus: Remove duplicated include
+ from pegasus.c
+Message-ID: <YFyoOX/BULRzvrrI@kroah.com>
+References: <20210325145652.13469-1-linqiheng@huawei.com>
 MIME-Version: 1.0
-References: <CAM5KnfNdqVASvsDccHk0-rFD9w266LTwLTQfhy2GZF-qu+KA-w@mail.gmail.com>
-In-Reply-To: <CAM5KnfNdqVASvsDccHk0-rFD9w266LTwLTQfhy2GZF-qu+KA-w@mail.gmail.com>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Thu, 25 Mar 2021 08:11:47 -0700
-Message-ID: <CABXOdTeS-nSqfB_BAex=0OZcdGWjjGJmKy9J3Eh5aL7cuornEA@mail.gmail.com>
-Subject: Re: drivers: typec: tcpm: USB type C PD state machine behavior
-To:     Bogdan Togorean <bogdan.togorean@gmail.com>
-Cc:     Guenter Roeck <groeck@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210325145652.13469-1-linqiheng@huawei.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 25, 2021 at 7:49 AM Bogdan Togorean
-<bogdan.togorean@gmail.com> wrote:
->
-> Hi Guenter,
->
-> I'm bringing up a custom board based on NXPs I.MX8 processor that is
-> powered on only by a USB type C. No battery is included.
-> The PD interface chip is a PTN5110 from NXP.
-> The problem I'm seeing is that when I power up the board through a
-> Type C to Type C USB cable the board has the VBUS cut off in the early
-> steps of the tcpm driver init.
->
-> Now my question is, can the state machine modified and can we start
-> from CONNECTED or TOGGLING state to jump over the first PORT_OFF state
-> or there are any other implications and this is not possible?
->
+On Thu, Mar 25, 2021 at 10:56:52PM +0800, 'Qiheng Lin wrote:
+> From: Qiheng Lin <linqiheng@huawei.com>
+> 
+> Remove duplicated include.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
+> ---
+>  drivers/net/usb/pegasus.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
+> index 9a907182569c..e0ee5c096396 100644
+> --- a/drivers/net/usb/pegasus.c
+> +++ b/drivers/net/usb/pegasus.c
+> @@ -65,7 +65,6 @@ static struct usb_eth_dev usb_dev_id[] = {
+>  	{.name = pn, .vendor = vid, .device = pid, .private = flags},
+>  #define PEGASUS_DEV_CLASS(pn, vid, pid, dclass, flags) \
+>  	PEGASUS_DEV(pn, vid, pid, flags)
+> -#include "pegasus.h"
+>  #undef	PEGASUS_DEV
+>  #undef	PEGASUS_DEV_CLASS
+>  	{NULL, 0, 0, 0},
+> @@ -84,7 +83,6 @@ static struct usb_device_id pegasus_ids[] = {
+>  #define PEGASUS_DEV_CLASS(pn, vid, pid, dclass, flags) \
+>  	{.match_flags = (USB_DEVICE_ID_MATCH_DEVICE | USB_DEVICE_ID_MATCH_DEV_CLASS), \
+>  	.idVendor = vid, .idProduct = pid, .bDeviceClass = dclass},
+> -#include "pegasus.h"
+>  #undef	PEGASUS_DEV
+>  #undef	PEGASUS_DEV_CLASS
+>  	{},
+> 
 
-Problem is that the state machines on both ends get confused if they
-are not both in the same state. Since we don't know the initial remote
-state, we have to start from a well known state. The only reliable
-state I could find when I wrote the code was unattached, and I had to
-initiate a port reset sequence to ensure state machine
-synchronization. Maybe that can be changed, but it would have to be
-based on some configuration data, and we would have to be very careful
-to avoid impact on other systems.
+Did you build and test this code now with this change?
 
-Guenter
+I think you broke this driver badly now :(
 
-> Please find bello the log from debugfs obtained if I supply externally
-> VBUS to keep it alive while the bus is reset by the source.
->
-> [    2.660229] Setting voltage/current limit 0 mV 0 mA
-> [    2.660233] polarity 0
-> [    2.661720] Requesting mux state 0, usb-role 0, orientation 0
-> [    2.662788] state change INVALID_STATE -> SNK_UNATTACHED
-> [    2.663385] CC1: 0 -> 0, CC2: 0 -> 0 [state SNK_UNATTACHED,
-> polarity 0, disconnected]
-> [    2.663394] 2-0050: registered
-> [    2.731746] Setting voltage/current limit 0 mV 0 mA
-> [    2.731751] polarity 0
-> [    2.733689] Requesting mux state 0, usb-role 0, orientation 0
-> [    2.734173] cc:=0
-> [    2.734648] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms
-> [    2.735247] CC1: 0 -> 0, CC2: 0 -> 0 [state PORT_RESET, polarity 0,
-> disconnected]
-> [    2.737602] CC1: 0 -> 0, CC2: 0 -> 0 [state PORT_RESET, polarity 0,
-> disconnected]
-> [    2.837352] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
-> [    2.837358] pending state change PORT_RESET_WAIT_OFF ->
-> SNK_UNATTACHED @ 920 ms
-> [    3.776941] state change PORT_RESET_WAIT_OFF -> SNK_UNATTACHED
-> [delayed 920 ms]
-> [    3.776948] Start toggling
-> [    3.779848] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
-> [    3.779854] state change TOGGLING -> SNK_ATTACH_WAIT
-> [    3.779862] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 200 ms
-> [    3.781714] CC1: 0 -> 0, CC2: 5 -> 5 [state SNK_ATTACH_WAIT,
-> polarity 0, connected]
-> [    3.985026] CC1: 0 -> 0, CC2: 5 -> 5 [state SNK_ATTACH_WAIT,
-> polarity 0, connected]
-> [    3.986785] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 200 ms]
-> [    3.986790] state change SNK_DEBOUNCED -> SNK_ATTACHED
-> [    3.986793] cc:=2
-> [    3.987530] polarity 1
-> [    3.990380] Requesting mux state 1, usb-role 2, orientation 2
-> [    3.990869] state change SNK_ATTACHED -> SNK_STARTUP
-> [    3.990914] state change SNK_STARTUP -> SNK_DISCOVERY
-> [    3.990918] Setting voltage/current limit 5000 mV 3000 mA
-> [    3.990921] vbus=0 charge:=1
-> [    3.991877] state change SNK_DISCOVERY -> SNK_WAIT_CAPABILITIES
-> [    3.992351] pending state change SNK_WAIT_CAPABILITIES ->
-> SOFT_RESET_SEND @ 240 ms
-> [    3.992970] CC1: 0 -> 0, CC2: 5 -> 5 [state SNK_WAIT_CAPABILITIES,
-> polarity 1, connected]
-> [    3.997181] PD RX, header: 0x1161 [1]
-> [    3.997188]  PDO 0: type 0, 5000 mV, 3000 mA [SHU]
-> [    3.997191] state change SNK_WAIT_CAPABILITIES -> SNK_NEGOTIATE_CAPABILITIES
-> [    3.997200] cc=2 cc1=0 cc2=5 vbus=0 vconn=sink polarity=1
-> [    3.997203] Requesting PDO 0: 5000 mV, 3000 mA
-> [    3.997206] PD TX, header: 0x1042
-> [    4.004004] PD TX complete, status: 0
-> [    4.004017] pending state change SNK_NEGOTIATE_CAPABILITIES ->
-> HARD_RESET_SEND @ 60 ms
-> [    4.009962] PD RX, header: 0x363 [1]
-> [    4.009968] state change SNK_NEGOTIATE_CAPABILITIES -> SNK_TRANSITION_SINK
-> [    4.009980] pending state change SNK_TRANSITION_SINK ->
-> HARD_RESET_SEND @ 500 ms
-> [    4.038937] PD RX, header: 0x566 [1]
-> [    4.038943] Setting voltage/current limit 5000 mV 3000 mA
-> [    4.038946] state change SNK_TRANSITION_SINK -> SNK_READY
-> [    4.057287] PD RX, header: 0x176f [1]
-> [    4.057293] Rx VDM cmd 0xff008001 type 0 cmd 1 len 1
-> [    4.057305] PD TX, header: 0x124f
-> [    4.062033] PD TX complete, status: 0
->
-> Thank you and sorry for contacting you directly,
-> Bogdan
+Please think about _why_ the code would have been written this way in
+the first place, it is a bit odd, right?
+
+netdev maintainers, consider this a NAK.
+
+thanks,
+
+greg k-h
