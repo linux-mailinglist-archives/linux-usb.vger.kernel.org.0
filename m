@@ -2,95 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C86349324
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 14:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FFB534935E
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 14:55:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbhCYNef (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 09:34:35 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:14876 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbhCYNeL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 09:34:11 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4F5mH66m12z9t1D;
-        Thu, 25 Mar 2021 21:32:02 +0800 (CST)
-Received: from [10.67.102.118] (10.67.102.118) by
- DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 25 Mar 2021 21:33:53 +0800
-Subject: Re: [RFC PATCH] USB:XHCI:Adjust the log level of hub
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <mathias.nyman@intel.com>, <stern@rowland.harvard.edu>,
-        <linux-usb@vger.kernel.org>, <yisen.zhuang@huawei.com>,
-        <tanxiaofei@huawei.com>, <liudongdong3@huawei.com>,
-        <linux-kernel@vger.kernel.org>
-References: <1616666652-37920-1-git-send-email-liulongfang@huawei.com>
- <YFxmaEtKclXXpBfy@kroah.com>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <d2fc6d09-c8e7-436f-3e0d-b2cfa9c75b9f@huawei.com>
-Date:   Thu, 25 Mar 2021 21:33:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S230494AbhCYNzH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 09:55:07 -0400
+Received: from mga12.intel.com ([192.55.52.136]:57257 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230140AbhCYNy7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Mar 2021 09:54:59 -0400
+IronPort-SDR: 3gJmhW46VE0/d7taVIVCxCksrcC+wKsAWxh1L2oxZpk/oZphJR7Q/+mMAewP6/tyj103WjvRMq
+ vptGTxQdyZgQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9933"; a="170283047"
+X-IronPort-AV: E=Sophos;i="5.81,277,1610438400"; 
+   d="scan'208";a="170283047"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2021 06:54:59 -0700
+IronPort-SDR: /eB4PJQA4glh94MsZ2AaMlTxxZBxQRy1dUR2xvh363LEQ+P/7oO4iokCVZCest2mLGjjX0wSaa
+ GzBubCd0GG7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,277,1610438400"; 
+   d="scan'208";a="409375487"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 25 Mar 2021 06:54:58 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 7A6AFE7; Thu, 25 Mar 2021 15:55:11 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v1 1/4] usb: gadget: pch_udc: switch over to usb_gadget_map/unmap_request()
+Date:   Thu, 25 Mar 2021 15:55:05 +0200
+Message-Id: <20210325135508.70350-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <YFxmaEtKclXXpBfy@kroah.com>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.118]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/3/25 18:31, Greg KH wrote:
-> On Thu, Mar 25, 2021 at 06:04:12PM +0800, Longfang Liu wrote:
->> When the number of ports of the hub is not between 1 and Maxports,
->> it will only exit the registration of the hub on the current controller,
->> but it will not affect the function of the controller itself. Its other
->> hubs can operate normally, so the log level here can be changed from
->> error to information.
->>
->> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
->> ---
->>  drivers/usb/core/hub.c | 10 ++++------
->>  1 file changed, 4 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
->> index b1e14be..70294ad 100644
->> --- a/drivers/usb/core/hub.c
->> +++ b/drivers/usb/core/hub.c
->> @@ -1409,13 +1409,11 @@ static int hub_configure(struct usb_hub *hub,
->>  		maxchild = min_t(unsigned, maxchild, USB_SS_MAXPORTS);
->>  
->>  	if (hub->descriptor->bNbrPorts > maxchild) {
->> -		message = "hub has too many ports!";
->> -		ret = -ENODEV;
->> -		goto fail;
->> +		dev_info(hub_dev, "hub has too many ports!\n");
-> 
-> Is this an error?  If so, report it as such, not as "information".
-> 
->> +		return -ENODEV;
->>  	} else if (hub->descriptor->bNbrPorts == 0) {
->> -		message = "hub doesn't have any ports!";
->> -		ret = -ENODEV;
->> -		goto fail;
->> +		dev_info(hub_dev, "hub doesn't have any ports!\n");
-> 
-> Same here.
-> 
-> What problem are you trying to solve here?
-> 
-> What hub do you have that has no ports, or too many, that you think
-> should still be able to work properly?
-> 
-> thanks,
-> 
-> greg k-h
-> .
->On our test platform, the xhci usb3 hub has no port.
-when initializing the usb3 hub, an error will be reported
-because the port is 0, but in fact it will not affect
-the use of usb2, and the usb2 hub is working normally.
-thanks, therefore, in order to reduce the severity of the log,
-we hope to lower the level of this log.
-Longfang
-thanks.
+We have generic implementations for a reason, let's use them.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/usb/gadget/udc/pch_udc.c | 78 +++-----------------------------
+ 1 file changed, 6 insertions(+), 72 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/pch_udc.c b/drivers/usb/gadget/udc/pch_udc.c
+index 070f43fd5bb6..6a96d4a3df2d 100644
+--- a/drivers/usb/gadget/udc/pch_udc.c
++++ b/drivers/usb/gadget/udc/pch_udc.c
+@@ -383,11 +383,8 @@ MODULE_PARM_DESC(speed_fs, "true for Full speed operation");
+  * @td_data_last:	last dma desc. of chain
+  * @queue:		associated queue
+  * @dma_going:		DMA in progress for request
+- * @dma_mapped:		DMA memory mapped for request
+  * @dma_done:		DMA completed for request
+  * @chain_len:		chain length
+- * @buf:		Buffer memory for align adjustment
+- * @dma:		DMA memory for align adjustment
+  */
+ struct pch_udc_request {
+ 	struct usb_request		req;
+@@ -396,11 +393,8 @@ struct pch_udc_request {
+ 	struct pch_udc_data_dma_desc	*td_data_last;
+ 	struct list_head		queue;
+ 	unsigned			dma_going:1,
+-					dma_mapped:1,
+ 					dma_done:1;
+ 	unsigned			chain_len;
+-	void				*buf;
+-	dma_addr_t			dma;
+ };
+ 
+ static inline u32 pch_udc_readl(struct pch_udc_dev *dev, unsigned long reg)
+@@ -1482,33 +1476,7 @@ static void complete_req(struct pch_udc_ep *ep, struct pch_udc_request *req,
+ 		status = req->req.status;
+ 
+ 	dev = ep->dev;
+-	if (req->dma_mapped) {
+-		if (req->dma == DMA_ADDR_INVALID) {
+-			if (ep->in)
+-				dma_unmap_single(&dev->pdev->dev, req->req.dma,
+-						 req->req.length,
+-						 DMA_TO_DEVICE);
+-			else
+-				dma_unmap_single(&dev->pdev->dev, req->req.dma,
+-						 req->req.length,
+-						 DMA_FROM_DEVICE);
+-			req->req.dma = DMA_ADDR_INVALID;
+-		} else {
+-			if (ep->in)
+-				dma_unmap_single(&dev->pdev->dev, req->dma,
+-						 req->req.length,
+-						 DMA_TO_DEVICE);
+-			else {
+-				dma_unmap_single(&dev->pdev->dev, req->dma,
+-						 req->req.length,
+-						 DMA_FROM_DEVICE);
+-				memcpy(req->req.buf, req->buf, req->req.length);
+-			}
+-			kfree(req->buf);
+-			req->dma = DMA_ADDR_INVALID;
+-		}
+-		req->dma_mapped = 0;
+-	}
++	usb_gadget_unmap_request(&dev->gadget, &req->req, ep->in);
+ 	ep->halted = 1;
+ 	spin_unlock(&dev->lock);
+ 	if (!ep->in)
+@@ -1586,12 +1554,9 @@ static int pch_udc_create_dma_chain(struct pch_udc_ep *ep,
+ 	if (req->chain_len > 1)
+ 		pch_udc_free_dma_chain(ep->dev, req);
+ 
+-	if (req->dma == DMA_ADDR_INVALID)
+-		td->dataptr = req->req.dma;
+-	else
+-		td->dataptr = req->dma;
+-
++	td->dataptr = req->req.dma;
+ 	td->status = PCH_UDC_BS_HST_BSY;
++
+ 	for (; ; bytes -= buf_len, ++len) {
+ 		td->status = PCH_UDC_BS_HST_BSY | min(buf_len, bytes);
+ 		if (bytes <= buf_len)
+@@ -1797,7 +1762,6 @@ static struct usb_request *pch_udc_alloc_request(struct usb_ep *usbep,
+ 	if (!req)
+ 		return NULL;
+ 	req->req.dma = DMA_ADDR_INVALID;
+-	req->dma = DMA_ADDR_INVALID;
+ 	INIT_LIST_HEAD(&req->queue);
+ 	if (!ep->dev->dma_addr)
+ 		return &req->req;
+@@ -1880,39 +1844,9 @@ static int pch_udc_pcd_queue(struct usb_ep *usbep, struct usb_request *usbreq,
+ 		return -ESHUTDOWN;
+ 	spin_lock_irqsave(&dev->lock, iflags);
+ 	/* map the buffer for dma */
+-	if (usbreq->length &&
+-	    ((usbreq->dma == DMA_ADDR_INVALID) || !usbreq->dma)) {
+-		if (!((unsigned long)(usbreq->buf) & 0x03)) {
+-			if (ep->in)
+-				usbreq->dma = dma_map_single(&dev->pdev->dev,
+-							     usbreq->buf,
+-							     usbreq->length,
+-							     DMA_TO_DEVICE);
+-			else
+-				usbreq->dma = dma_map_single(&dev->pdev->dev,
+-							     usbreq->buf,
+-							     usbreq->length,
+-							     DMA_FROM_DEVICE);
+-		} else {
+-			req->buf = kzalloc(usbreq->length, GFP_ATOMIC);
+-			if (!req->buf) {
+-				retval = -ENOMEM;
+-				goto probe_end;
+-			}
+-			if (ep->in) {
+-				memcpy(req->buf, usbreq->buf, usbreq->length);
+-				req->dma = dma_map_single(&dev->pdev->dev,
+-							  req->buf,
+-							  usbreq->length,
+-							  DMA_TO_DEVICE);
+-			} else
+-				req->dma = dma_map_single(&dev->pdev->dev,
+-							  req->buf,
+-							  usbreq->length,
+-							  DMA_FROM_DEVICE);
+-		}
+-		req->dma_mapped = 1;
+-	}
++	retval = usb_gadget_map_request(&dev->gadget, usbreq, ep->in);
++	if (retval)
++		goto probe_end;
+ 	if (usbreq->length > 0) {
+ 		retval = prepare_dma(ep, req, GFP_ATOMIC);
+ 		if (retval)
+-- 
+2.30.2
+
