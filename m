@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C583496F9
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 17:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8692349700
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 17:41:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbhCYQku (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 12:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
+        id S229676AbhCYQlV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 12:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbhCYQkt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 12:40:49 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020ECC06174A;
-        Thu, 25 Mar 2021 09:40:49 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id c8so2928590wrq.11;
-        Thu, 25 Mar 2021 09:40:48 -0700 (PDT)
+        with ESMTP id S229614AbhCYQkv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 12:40:51 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD71C06174A;
+        Thu, 25 Mar 2021 09:40:51 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id d8-20020a1c1d080000b029010f15546281so3459620wmd.4;
+        Thu, 25 Mar 2021 09:40:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BIOzYjpuWV2ikVARWL5rnMXlYplC4fVIyiluPMIE1oE=;
-        b=T+5lmaYU0760xN0cgcjj5c8+SDzlH7A/atUQUf4fLVOx2WE54T7z8ZItEJZl86LVVR
-         o0FPEerykYnJ0HBljGhYcwKI4YJepfTiet/oep+mOhuOJOvgJyonZP+cHnoTSfmLfYWV
-         lRPTLweJBT7lz99SB3JACg4kCo0ZbWBiI2jLX8C6u9fzHoCJy4GGRANnNF+O3SvYEXDB
-         UYAzmpR8wcGZc4F+05TL3vSTLf+98outM3Z9NS+G69NKHOAEx158eCryef57QwYZiKpz
-         5/PU5edUocmXm1scX0khV7VMSg2OVn7VZPp69hyzYYEEZAF5mdyx36Lx04en2FUyCY5r
-         U6YQ==
+        bh=7xHWkhn/z0JEymImWDnOlsM+EPtRLYWHNs/Xv1gr+uM=;
+        b=Q+0cCvOricq0GsG0pDLQC5rPnSBWSZv1Cw7sGhPN6hgzMXFSUCBwTYYT4gWsaqpp+C
+         iZzZRyZ8TTz8Wh/EhBTG29RNDoKhmSfBVG+OnZi6KYwqWRvtOBgFSa1q/slLfTTi7qpv
+         juF/luqVjJ83YlDfU/C95TbD0Hn/Ll+X4R6qSxHVguAYHBJVInoTV+aOCvqWVEmB1EK7
+         OY5BoJikPRpy+vvbOiw3tHa0sncm/xvjyIcza/aCG3s7KMr8P6DCMHXOf9sARVLzldjF
+         PiUHdz+wLNw/npyPjwqeCIEERXsyojS7UAy8yYPT5QGayaVdJmJ3HAAEij5wmjJVkCi6
+         w67g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BIOzYjpuWV2ikVARWL5rnMXlYplC4fVIyiluPMIE1oE=;
-        b=K+Z/31YAA5ls/sasobFPBq7Hh4F3hbhTlBTIDovMt54ebsMPjBePti1xycS9GjrKYW
-         BXnE1S6iuh5uOMyNoV254EpSbWdjjjl8BcoQD1KWt8JEcWgqxpNmjZnknJQXTtOIH0Dz
-         slh066BwveNLJykjyRWaqnmpnG9A1GM1AdSuJNHFc8u3Jxw7fg36IIr1qWccRnw/Nc8s
-         1zWGmBegzRSAmHnazHbxJv3eLu3rjd2PeIO3RsTvxEUjzIL2UZ6g238WOkcsk+Zn/cF8
-         o8R6Ql83JbP4+vHfl76R9QC4wngz3B/HCQWVQPoHPS17EMTibdPD/fVSevHgzgZEfu2V
-         SKug==
-X-Gm-Message-State: AOAM533gTf/iP0YI+6gWXTGu6HvL/UjO0J1twSGCjmNKjCFkyfNuxXRu
-        +R8atmB2EJrgrP8gZG0T61g=
-X-Google-Smtp-Source: ABdhPJyZAKo+sD+iopvWd3BFRQ8xlnIOc5+qTBvaeiQHoQwgOF2llYd0lTLSDaZWT58a8VW8MaFZOw==
-X-Received: by 2002:adf:9261:: with SMTP id 88mr9676623wrj.270.1616690447651;
-        Thu, 25 Mar 2021 09:40:47 -0700 (PDT)
+        bh=7xHWkhn/z0JEymImWDnOlsM+EPtRLYWHNs/Xv1gr+uM=;
+        b=kpXAOtOpCXPDMFJGLDokc/VDsOh4syriZdzJg0bk8o8bghv7uRv4Ah5EUYgYSYM8fv
+         LO/D2URe83t58F3ttcr8ddsUoLcml+MivJW6Nf+73qRhxnEehbfB2aX2Wve6YJKEo/zw
+         xNmjGLYWhDnjaLdC4tSmf+qRJbz25ufgpXws7i5zgMo2o4qpb6vqELZQEQ0Y8t0kDdNg
+         sq6l3R2DlWpNuD0RuhLJUQ1AibbJ7yIEpiqUqEkwXTVFutGB9ORWa0CfsKYTbSR6dzoQ
+         p14IZeR4pee+H+vaWF292klKPSCk/tc69YK4g49iWPPyu116vhadTEz+OHo6vCFrW5qJ
+         2/uA==
+X-Gm-Message-State: AOAM532nCSgtOW9mJLay+OZysRrj/bQwgsOYEQz3hRsBa0SrEyZPBdkK
+        XWPEie5tLSyT+Je+su+t/yw=
+X-Google-Smtp-Source: ABdhPJxqtyCkFdufHDekeuhCqWrE08Px7391PietRFnTEt4dlFECQEGki4iWZXp1/0HZZUGVbBPkmg==
+X-Received: by 2002:a05:600c:19cf:: with SMTP id u15mr8645258wmq.7.1616690449958;
+        Thu, 25 Mar 2021 09:40:49 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id j16sm11847179wmi.2.2021.03.25.09.40.45
+        by smtp.gmail.com with ESMTPSA id m17sm8496286wrx.92.2021.03.25.09.40.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Mar 2021 09:40:45 -0700 (PDT)
+        Thu, 25 Mar 2021 09:40:48 -0700 (PDT)
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Vinod Koul <vkoul@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -55,9 +55,9 @@ Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
         JC Kuo <jckuo@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
         linux-tegra@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-usb@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH v8 01/13] clk: tegra: Add PLLE HW power sequencer control
-Date:   Thu, 25 Mar 2021 17:40:45 +0100
-Message-Id: <20210325164057.793954-2-thierry.reding@gmail.com>
+Subject: [PATCH v8 02/13] clk: tegra: Don't enable PLLE HW sequencer at init
+Date:   Thu, 25 Mar 2021 17:40:46 +0100
+Message-Id: <20210325164057.793954-3-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210325164057.793954-1-thierry.reding@gmail.com>
 References: <20210325164057.793954-1-thierry.reding@gmail.com>
@@ -69,137 +69,41 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: JC Kuo <jckuo@nvidia.com>
 
-PLLE has a hardware power sequencer logic which is a state machine
-that can power on/off PLLE without any software intervention. The
-sequencer has two inputs, one from XUSB UPHY PLL and the other from
-SATA UPHY PLL. PLLE provides reference clock to XUSB and SATA UPHY
-PLLs. When both of the downstream PLLs are powered-off, PLLE hardware
-power sequencer will automatically power off PLLE for power saving.
-
-XUSB and SATA UPHY PLLs also have their own hardware power sequencer
-logic. XUSB UPHY PLL is shared between XUSB SuperSpeed ports and PCIE
-controllers. The XUSB UPHY PLL hardware power sequencer has inputs
-from XUSB and PCIE. When all of the XUSB SuperSpeed ports and PCIE
-controllers are in low power state, XUSB UPHY PLL hardware power
-sequencer automatically power off PLL and flags idle to PLLE hardware
-power sequencer. Similar applies to SATA UPHY PLL.
-
-PLLE hardware power sequencer has to be enabled after both downstream
-sequencers are enabled.
-
-This commit adds two helper functions:
-1. tegra210_plle_hw_sequence_start() for XUSB PADCTL driver to enable
-   PLLE hardware sequencer at proper time.
-
-2. tegra210_plle_hw_sequence_is_enabled() for XUSB PADCTL driver to
-   check whether PLLE hardware sequencer has been enabled or not.
+PLLE hardware power sequencer references PEX/SATA UPHY PLL hardware
+power sequencers' output to enable/disable PLLE. PLLE hardware power
+sequencer has to be enabled only after PEX/SATA UPHY PLL's sequencers
+are enabled.
 
 Signed-off-by: JC Kuo <jckuo@nvidia.com>
 Acked-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
- drivers/clk/tegra/clk-tegra210.c | 53 +++++++++++++++++++++++++++++++-
- include/linux/clk/tegra.h        |  4 ++-
- 2 files changed, 55 insertions(+), 2 deletions(-)
+ drivers/clk/tegra/clk-pll.c | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-diff --git a/drivers/clk/tegra/clk-tegra210.c b/drivers/clk/tegra/clk-tegra210.c
-index 68cbb98af567..b9099012dc7b 100644
---- a/drivers/clk/tegra/clk-tegra210.c
-+++ b/drivers/clk/tegra/clk-tegra210.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (c) 2012-2014 NVIDIA CORPORATION.  All rights reserved.
-+ * Copyright (c) 2012-2020 NVIDIA CORPORATION.  All rights reserved.
-  */
+diff --git a/drivers/clk/tegra/clk-pll.c b/drivers/clk/tegra/clk-pll.c
+index c5cc0a2dac6f..0193cebe8c5a 100644
+--- a/drivers/clk/tegra/clk-pll.c
++++ b/drivers/clk/tegra/clk-pll.c
+@@ -2515,18 +2515,6 @@ static int clk_plle_tegra210_enable(struct clk_hw *hw)
+ 	pll_writel(val, PLLE_SS_CTRL, pll);
+ 	udelay(1);
  
- #include <linux/io.h>
-@@ -403,6 +403,14 @@ static unsigned long tegra210_input_freq[] = {
- #define PLLRE_BASE_DEFAULT_MASK		0x1c000000
- #define PLLRE_MISC0_WRITE_MASK		0x67ffffff
- 
-+/* PLLE */
-+#define PLLE_MISC_IDDQ_SW_CTRL		(1 << 14)
-+#define PLLE_AUX_USE_LOCKDET		(1 << 3)
-+#define PLLE_AUX_SS_SEQ_INCLUDE		(1 << 31)
-+#define PLLE_AUX_ENABLE_SWCTL		(1 << 4)
-+#define PLLE_AUX_SS_SWCTL		(1 << 6)
-+#define PLLE_AUX_SEQ_ENABLE		(1 << 24)
-+
- /* PLLX */
- #define PLLX_USE_DYN_RAMP		1
- #define PLLX_BASE_LOCK			(1 << 27)
-@@ -489,6 +497,49 @@ static unsigned long tegra210_input_freq[] = {
- #define PLLU_MISC0_WRITE_MASK		0xbfffffff
- #define PLLU_MISC1_WRITE_MASK		0x00000007
- 
-+bool tegra210_plle_hw_sequence_is_enabled(void)
-+{
-+	u32 value;
-+
-+	value = readl_relaxed(clk_base + PLLE_AUX);
-+	if (value & PLLE_AUX_SEQ_ENABLE)
-+		return true;
-+
-+	return false;
-+}
-+EXPORT_SYMBOL_GPL(tegra210_plle_hw_sequence_is_enabled);
-+
-+int tegra210_plle_hw_sequence_start(void)
-+{
-+	u32 value;
-+
-+	if (tegra210_plle_hw_sequence_is_enabled())
-+		return 0;
-+
-+	/* skip if PLLE is not enabled yet */
-+	value = readl_relaxed(clk_base + PLLE_MISC0);
-+	if (!(value & PLLE_MISC_LOCK))
-+		return -EIO;
-+
-+	value &= ~PLLE_MISC_IDDQ_SW_CTRL;
-+	writel_relaxed(value, clk_base + PLLE_MISC0);
-+
-+	value = readl_relaxed(clk_base + PLLE_AUX);
-+	value |= (PLLE_AUX_USE_LOCKDET | PLLE_AUX_SS_SEQ_INCLUDE);
-+	value &= ~(PLLE_AUX_ENABLE_SWCTL | PLLE_AUX_SS_SWCTL);
-+	writel_relaxed(value, clk_base + PLLE_AUX);
-+
-+	fence_udelay(1, clk_base);
-+
-+	value |= PLLE_AUX_SEQ_ENABLE;
-+	writel_relaxed(value, clk_base + PLLE_AUX);
-+
-+	fence_udelay(1, clk_base);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(tegra210_plle_hw_sequence_start);
-+
- void tegra210_xusb_pll_hw_control_enable(void)
- {
- 	u32 val;
-diff --git a/include/linux/clk/tegra.h b/include/linux/clk/tegra.h
-index eb016fc9cc0b..f7ff722a03dd 100644
---- a/include/linux/clk/tegra.h
-+++ b/include/linux/clk/tegra.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * Copyright (c) 2012, NVIDIA CORPORATION.  All rights reserved.
-+ * Copyright (c) 2012-2020, NVIDIA CORPORATION.  All rights reserved.
-  */
- 
- #ifndef __LINUX_CLK_TEGRA_H_
-@@ -123,6 +123,8 @@ static inline void tegra_cpu_clock_resume(void)
- }
- #endif
- 
-+extern int tegra210_plle_hw_sequence_start(void);
-+extern bool tegra210_plle_hw_sequence_is_enabled(void);
- extern void tegra210_xusb_pll_hw_control_enable(void);
- extern void tegra210_xusb_pll_hw_sequence_start(void);
- extern void tegra210_sata_pll_hw_control_enable(void);
+-	val = pll_readl_misc(pll);
+-	val &= ~PLLE_MISC_IDDQ_SW_CTRL;
+-	pll_writel_misc(val, pll);
+-
+-	val = pll_readl(pll->params->aux_reg, pll);
+-	val |= (PLLE_AUX_USE_LOCKDET | PLLE_AUX_SS_SEQ_INCLUDE);
+-	val &= ~(PLLE_AUX_ENABLE_SWCTL | PLLE_AUX_SS_SWCTL);
+-	pll_writel(val, pll->params->aux_reg, pll);
+-	udelay(1);
+-	val |= PLLE_AUX_SEQ_ENABLE;
+-	pll_writel(val, pll->params->aux_reg, pll);
+-
+ out:
+ 	if (pll->lock)
+ 		spin_unlock_irqrestore(pll->lock, flags);
 -- 
 2.30.2
 
