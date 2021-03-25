@@ -2,202 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1355E3491FA
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 13:30:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C86349324
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 14:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbhCYM3h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 08:29:37 -0400
-Received: from mga17.intel.com ([192.55.52.151]:31183 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230213AbhCYM32 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Mar 2021 08:29:28 -0400
-IronPort-SDR: mGUyrANwIYx0u4uUyOoIOcpkIChKaJqkuUDj31us4nGZplBmCkkO/us7YChAa0IyIEzzH9NxVX
- vvGItqVURi9w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9933"; a="170895511"
-X-IronPort-AV: E=Sophos;i="5.81,277,1610438400"; 
-   d="scan'208";a="170895511"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2021 05:29:27 -0700
-IronPort-SDR: igIWPX6LCoRbFVbYHkZCQ8yO0PWkGFkDliaNjRwuL9vRKdAb6oWPIWeqzm3cS8hYfepsAcMFUe
- qO9X4Esc6G3w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,277,1610438400"; 
-   d="scan'208";a="514623178"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Mar 2021 05:29:26 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] usb: typec: Link all ports during connector registration
-Date:   Thu, 25 Mar 2021 15:29:26 +0300
-Message-Id: <20210325122926.58392-7-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210325122926.58392-1-heikki.krogerus@linux.intel.com>
-References: <20210325122926.58392-1-heikki.krogerus@linux.intel.com>
+        id S230140AbhCYNef (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 09:34:35 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:14876 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230101AbhCYNeL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 09:34:11 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4F5mH66m12z9t1D;
+        Thu, 25 Mar 2021 21:32:02 +0800 (CST)
+Received: from [10.67.102.118] (10.67.102.118) by
+ DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
+ 14.3.498.0; Thu, 25 Mar 2021 21:33:53 +0800
+Subject: Re: [RFC PATCH] USB:XHCI:Adjust the log level of hub
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <mathias.nyman@intel.com>, <stern@rowland.harvard.edu>,
+        <linux-usb@vger.kernel.org>, <yisen.zhuang@huawei.com>,
+        <tanxiaofei@huawei.com>, <liudongdong3@huawei.com>,
+        <linux-kernel@vger.kernel.org>
+References: <1616666652-37920-1-git-send-email-liulongfang@huawei.com>
+ <YFxmaEtKclXXpBfy@kroah.com>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <d2fc6d09-c8e7-436f-3e0d-b2cfa9c75b9f@huawei.com>
+Date:   Thu, 25 Mar 2021 21:33:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YFxmaEtKclXXpBfy@kroah.com>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.118]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The connectors may be registered after the ports, so the
-"connector" links need to be created for the ports also when
-ever a new connector gets registered.
-
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/class.c       |  9 +++--
- drivers/usb/typec/class.h       | 10 +++---
- drivers/usb/typec/port-mapper.c | 62 +++++++++++++++++++++++++++++++--
- 3 files changed, 71 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index ff199e2d26c7b..f1c2d823c6509 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -1601,7 +1601,6 @@ static void typec_release(struct device *dev)
- 	ida_destroy(&port->mode_ids);
- 	typec_switch_put(port->sw);
- 	typec_mux_put(port->mux);
--	free_pld(port->pld);
- 	kfree(port->cap);
- 	kfree(port);
- }
-@@ -2027,7 +2026,9 @@ struct typec_port *typec_register_port(struct device *parent,
- 		return ERR_PTR(ret);
- 	}
- 
--	port->pld = get_pld(&port->dev);
-+	ret = typec_link_ports(port);
-+	if (ret)
-+		dev_warn(&port->dev, "failed to create symlinks (%d)\n", ret);
- 
- 	return port;
- }
-@@ -2041,8 +2042,10 @@ EXPORT_SYMBOL_GPL(typec_register_port);
-  */
- void typec_unregister_port(struct typec_port *port)
- {
--	if (!IS_ERR_OR_NULL(port))
-+	if (!IS_ERR_OR_NULL(port)) {
-+		typec_unlink_ports(port);
- 		device_unregister(&port->dev);
-+	}
- }
- EXPORT_SYMBOL_GPL(typec_unregister_port);
- 
-diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
-index f3bc4d175d79c..a6a034f49c228 100644
---- a/drivers/usb/typec/class.h
-+++ b/drivers/usb/typec/class.h
-@@ -80,15 +80,15 @@ extern struct class typec_mux_class;
- extern struct class typec_class;
- 
- #ifdef CONFIG_ACPI
--void *get_pld(struct device *dev);
--void free_pld(void *pld);
-+int typec_link_ports(struct typec_port *connector);
-+void typec_unlink_ports(struct typec_port *connector);
- #else
--static inline void *get_pld(struct device *dev)
-+static inline int typec_link_ports(struct typec_port *connector)
- {
--	return NULL;
-+	return 0;
- }
- 
--static inline void free_pld(void *pld) { }
-+static inline void typec_unlink_ports(struct typec_port *connector) { }
- #endif
- 
- #endif /* __USB_TYPEC_CLASS__ */
-diff --git a/drivers/usb/typec/port-mapper.c b/drivers/usb/typec/port-mapper.c
-index 97264a4f11967..98eda37d99117 100644
---- a/drivers/usb/typec/port-mapper.c
-+++ b/drivers/usb/typec/port-mapper.c
-@@ -34,7 +34,7 @@ static int acpi_pld_match(const struct acpi_pld_info *pld1,
- 	return 0;
- }
- 
--void *get_pld(struct device *dev)
-+static void *get_pld(struct device *dev)
- {
- 	struct acpi_pld_info *pld;
- 	acpi_status status;
-@@ -49,7 +49,7 @@ void *get_pld(struct device *dev)
- 	return pld;
- }
- 
--void free_pld(void *pld)
-+static void free_pld(void *pld)
- {
- 	ACPI_FREE(pld);
- }
-@@ -223,3 +223,61 @@ void typec_unlink_port(struct device *port)
- 	put_device(data.connector);
- }
- EXPORT_SYMBOL_GPL(typec_unlink_port);
-+
-+static int connector_match(struct device *port, void *connector)
-+{
-+	struct port_node *node;
-+	int ret;
-+
-+	node = create_port_node(port);
-+	if (IS_ERR(node))
-+		return PTR_ERR(node);
-+
-+	if (!node->pld || !connector_pld_match(connector, node->pld)) {
-+		remove_port_node(node);
-+		return 0;
-+	}
-+
-+	ret = link_port(to_typec_port(connector), node);
-+	if (ret) {
-+		remove_port_node(node->pld);
-+		return ret;
-+	}
-+
-+	get_device(connector);
-+
-+	return 0;
-+}
-+
-+int typec_link_ports(struct typec_port *con)
-+{
-+	int ret;
-+
-+	con->pld = get_pld(&con->dev);
-+	if (!con->pld)
-+		return 0;
-+
-+	ret = usb_for_each_port(&con->dev, connector_match);
-+	if (ret)
-+		typec_unlink_ports(con);
-+
-+	return ret;
-+}
-+
-+void typec_unlink_ports(struct typec_port *con)
-+{
-+	struct port_node *node;
-+	struct port_node *tmp;
-+
-+	mutex_lock(&con->port_list_lock);
-+
-+	list_for_each_entry_safe(node, tmp, &con->port_list, list) {
-+		__unlink_port(con, node);
-+		remove_port_node(node);
-+		put_device(&con->dev);
-+	}
-+
-+	mutex_unlock(&con->port_list_lock);
-+
-+	free_pld(con->pld);
-+}
--- 
-2.30.2
-
+On 2021/3/25 18:31, Greg KH wrote:
+> On Thu, Mar 25, 2021 at 06:04:12PM +0800, Longfang Liu wrote:
+>> When the number of ports of the hub is not between 1 and Maxports,
+>> it will only exit the registration of the hub on the current controller,
+>> but it will not affect the function of the controller itself. Its other
+>> hubs can operate normally, so the log level here can be changed from
+>> error to information.
+>>
+>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+>> ---
+>>  drivers/usb/core/hub.c | 10 ++++------
+>>  1 file changed, 4 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+>> index b1e14be..70294ad 100644
+>> --- a/drivers/usb/core/hub.c
+>> +++ b/drivers/usb/core/hub.c
+>> @@ -1409,13 +1409,11 @@ static int hub_configure(struct usb_hub *hub,
+>>  		maxchild = min_t(unsigned, maxchild, USB_SS_MAXPORTS);
+>>  
+>>  	if (hub->descriptor->bNbrPorts > maxchild) {
+>> -		message = "hub has too many ports!";
+>> -		ret = -ENODEV;
+>> -		goto fail;
+>> +		dev_info(hub_dev, "hub has too many ports!\n");
+> 
+> Is this an error?  If so, report it as such, not as "information".
+> 
+>> +		return -ENODEV;
+>>  	} else if (hub->descriptor->bNbrPorts == 0) {
+>> -		message = "hub doesn't have any ports!";
+>> -		ret = -ENODEV;
+>> -		goto fail;
+>> +		dev_info(hub_dev, "hub doesn't have any ports!\n");
+> 
+> Same here.
+> 
+> What problem are you trying to solve here?
+> 
+> What hub do you have that has no ports, or too many, that you think
+> should still be able to work properly?
+> 
+> thanks,
+> 
+> greg k-h
+> .
+>On our test platform, the xhci usb3 hub has no port.
+when initializing the usb3 hub, an error will be reported
+because the port is 0, but in fact it will not affect
+the use of usb2, and the usb2 hub is working normally.
+thanks, therefore, in order to reduce the severity of the log,
+we hope to lower the level of this log.
+Longfang
+thanks.
