@@ -2,61 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD19348611
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 01:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74684348671
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 02:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239379AbhCYAvE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Mar 2021 20:51:04 -0400
-Received: from gloria.sntech.de ([185.11.138.130]:37614 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232429AbhCYAu7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 24 Mar 2021 20:50:59 -0400
-Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1lPEDC-0003K7-5V; Thu, 25 Mar 2021 01:50:58 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, gregkh@linuxfoundation.org,
-        balbi@kernel.org, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: (subset) [PATCH v5 1/8] dt-bindings: usb: convert rockchip,dwc3.txt to yaml
-Date:   Thu, 25 Mar 2021 01:50:55 +0100
-Message-Id: <161663335606.1190848.13995758068048147033.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210209192350.7130-1-jbx6244@gmail.com>
-References: <20210209192350.7130-1-jbx6244@gmail.com>
+        id S231964AbhCYBfk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Mar 2021 21:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53322 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231557AbhCYBfK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Mar 2021 21:35:10 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8DEC06174A;
+        Wed, 24 Mar 2021 18:35:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=AGo/RMTNezhheUtkI8URNy+6PhuTvYtFQE2ScXnP62Q=; b=KaDrh4nqakuEYlQCesxZ5Mf9qa
+        Fc3RM5WaCkUuxuIb+Sxr3EZOoYSNDUF0XJfYnjadh0R48lli0Xj/710Yp9jk+ATLMkhcv1meMRCjP
+        B1H7b+/y8OOJnzQxz65o690jtrG8ZZjgx9xQfWOqhuCEPV00bWACoh42RLkR8hK9aAQnjoGrBiD6X
+        DM5zoDSSj2KwtvRR9vFptuGMNqnTaH80S5J5TtreXGIMW1+S1Pwr0bYL0tHd0zVnT2kbgUDZM6iF1
+        /ljKRAKqL248tUaJwk4n96pqrmMzGni9jIKmLUOOnSjQrSTSic/1UD/BWbhJUYD4oI3BOUnlbqFlB
+        D2S4Yjkg==;
+Received: from [2601:1c0:6280:3f0::3ba4]
+        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lPEtt-000RQk-Tx; Thu, 25 Mar 2021 01:35:07 +0000
+Subject: Re: [PATCH] tools: usbip: list.h: fix kernel-doc for list_del()
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org
+References: <20210324000223.22043-1-rdunlap@infradead.org>
+ <0af7bfad-fff7-84be-8e7c-2ad3e93fb785@linuxfoundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <0064f460-de49-98c8-1448-3489aa036384@infradead.org>
+Date:   Wed, 24 Mar 2021 18:35:01 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <0af7bfad-fff7-84be-8e7c-2ad3e93fb785@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 9 Feb 2021 20:23:43 +0100, Johan Jonker wrote:
-> In the past Rockchip dwc3 usb nodes were manually checked.
-> With the conversion of snps,dwc3.yaml as common document
-> we now can convert rockchip,dwc3.txt to yaml as well.
-> Remove node wrapper.
+On 3/24/21 4:32 PM, Shuah Khan wrote:
+> On 3/23/21 6:02 PM, Randy Dunlap wrote:
+>> In list.h, the kernel-doc for list_del() should be immediately
+>> preceding the implementation and not separated from it by
+>> another function implementation.
+>>
+>> Eliminates this kernel-doc error:
+>> list.h:1: warning: 'list_del' not found
+>>
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: Valentina Manea <valentina.manea.m@gmail.com>
+>> Cc: Shuah Khan <shuah@kernel.org>
+>> Cc: Shuah Khan <skhan@linuxfoundation.org>
+>> Cc: linux-usb@vger.kernel.org
+>> ---
+>>   tools/usb/usbip/libsrc/list.h |   10 +++++-----
+>>   1 file changed, 5 insertions(+), 5 deletions(-)
+>>
+>> --- linux-next-20210323.orig/tools/usb/usbip/libsrc/list.h
+>> +++ linux-next-20210323/tools/usb/usbip/libsrc/list.h
+>> @@ -77,17 +77,17 @@ static inline void __list_del(struct lis
+>>   #define LIST_POISON1  ((void *) 0x00100100 + POISON_POINTER_DELTA)
+>>   #define LIST_POISON2  ((void *) 0x00200200 + POISON_POINTER_DELTA)
+>>   +static inline void __list_del_entry(struct list_head *entry)
+>> +{
+>> +    __list_del(entry->prev, entry->next);
+>> +}
+>> +
+>>   /**
+>>    * list_del - deletes entry from list.
+>>    * @entry: the element to delete from the list.
+>>    * Note: list_empty() on entry does not return true after this, the entry is
+>>    * in an undefined state.
+>>    */
+>> -static inline void __list_del_entry(struct list_head *entry)
+>> -{
+>> -    __list_del(entry->prev, entry->next);
+>> -}
+>> -
+>>   static inline void list_del(struct list_head *entry)
+>>   {
+>>       __list_del(entry->prev, entry->next);
+>>
 > 
-> Added properties for rk3399 are:
->   power-domains
->   resets
->   reset-names
+> Thank you for fixing this.
+> 
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Applied, thanks!
 
-[7/8] arm64: dts: rockchip: add rk3328 dwc3 usb controller node
-      commit: 44dd5e2106dc2fd01697b539085818d1d1c58df0
-[8/8] dts64: rockchip: enable dwc3 usb for A95X Z2
-      commit: f227197bdf91a58903753ff18f5d0ad8f170e4b5
+Thanks. Who do you think should merge this patch?
 
-Changed the title of the last patch to the more appropriate
-      arm64: dts: rockchip: enable dwc3 usb for A95X Z2
-
-Best regards,
 -- 
-Heiko Stuebner <heiko@sntech.de>
+~Randy
+
