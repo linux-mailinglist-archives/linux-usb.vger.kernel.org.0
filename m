@@ -2,112 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E9B349417
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 15:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F98C34945C
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Mar 2021 15:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbhCYObT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 10:31:19 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:46117 "HELO
+        id S230512AbhCYOl3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 10:41:29 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:41449 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231435AbhCYObG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 10:31:06 -0400
-Received: (qmail 788278 invoked by uid 1000); 25 Mar 2021 10:31:04 -0400
-Date:   Thu, 25 Mar 2021 10:31:04 -0400
+        with SMTP id S231267AbhCYOlK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 10:41:10 -0400
+Received: (qmail 788698 invoked by uid 1000); 25 Mar 2021 10:41:09 -0400
+Date:   Thu, 25 Mar 2021 10:41:09 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     liulongfang <liulongfang@huawei.com>, mathias.nyman@intel.com,
-        linux-usb@vger.kernel.org, yisen.zhuang@huawei.com,
-        tanxiaofei@huawei.com, liudongdong3@huawei.com,
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] USB:XHCI:Adjust the log level of hub
-Message-ID: <20210325143104.GA785961@rowland.harvard.edu>
-References: <1616666652-37920-1-git-send-email-liulongfang@huawei.com>
- <YFxmaEtKclXXpBfy@kroah.com>
- <d2fc6d09-c8e7-436f-3e0d-b2cfa9c75b9f@huawei.com>
- <YFyXJ1Zq5yP7vRWn@kroah.com>
+Subject: Re: [PATCH 1/6] usb: Iterator for ports
+Message-ID: <20210325144109.GB785961@rowland.harvard.edu>
+References: <20210325122926.58392-1-heikki.krogerus@linux.intel.com>
+ <20210325122926.58392-2-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YFyXJ1Zq5yP7vRWn@kroah.com>
+In-Reply-To: <20210325122926.58392-2-heikki.krogerus@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 25, 2021 at 02:59:03PM +0100, Greg KH wrote:
-> On Thu, Mar 25, 2021 at 09:33:53PM +0800, liulongfang wrote:
-> > On 2021/3/25 18:31, Greg KH wrote:
-> > > On Thu, Mar 25, 2021 at 06:04:12PM +0800, Longfang Liu wrote:
-> > >> When the number of ports of the hub is not between 1 and Maxports,
-> > >> it will only exit the registration of the hub on the current controller,
-> > >> but it will not affect the function of the controller itself. Its other
-> > >> hubs can operate normally, so the log level here can be changed from
-> > >> error to information.
-> > >>
-> > >> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
-> > >> ---
-> > >>  drivers/usb/core/hub.c | 10 ++++------
-> > >>  1 file changed, 4 insertions(+), 6 deletions(-)
-> > >>
-> > >> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> > >> index b1e14be..70294ad 100644
-> > >> --- a/drivers/usb/core/hub.c
-> > >> +++ b/drivers/usb/core/hub.c
-> > >> @@ -1409,13 +1409,11 @@ static int hub_configure(struct usb_hub *hub,
-> > >>  		maxchild = min_t(unsigned, maxchild, USB_SS_MAXPORTS);
-> > >>  
-> > >>  	if (hub->descriptor->bNbrPorts > maxchild) {
-> > >> -		message = "hub has too many ports!";
-> > >> -		ret = -ENODEV;
-> > >> -		goto fail;
-> > >> +		dev_info(hub_dev, "hub has too many ports!\n");
-> > > 
-> > > Is this an error?  If so, report it as such, not as "information".
-> > > 
-> > >> +		return -ENODEV;
-> > >>  	} else if (hub->descriptor->bNbrPorts == 0) {
-> > >> -		message = "hub doesn't have any ports!";
-> > >> -		ret = -ENODEV;
-> > >> -		goto fail;
-> > >> +		dev_info(hub_dev, "hub doesn't have any ports!\n");
-> > > 
-> > > Same here.
-> > > 
-> > > What problem are you trying to solve here?
-> > > 
-> > > What hub do you have that has no ports, or too many, that you think
-> > > should still be able to work properly?
-> > > 
-> > > thanks,
-> > > 
-> > > greg k-h
-> > > .
-> > On our test platform, the xhci usb3 hub has no port.
+On Thu, Mar 25, 2021 at 03:29:21PM +0300, Heikki Krogerus wrote:
+> Introducing usb_for_each_port(). It works the same way as
+> usb_for_each_dev(), but instead of going through every USB
+> device in the system, it walks through the USB ports in the
+> system.
 > 
-> Sounds like a broken device, why not fix that?
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-If this device is used only for testing and not for production, who 
-cares how severe the log message is?
+This has a couple of nasty errors.
 
-> > when initializing the usb3 hub, an error will be reported
-> > because the port is 0, but in fact it will not affect
-> > the use of usb2, and the usb2 hub is working normally.
+> ---
+>  drivers/usb/core/usb.c | 43 ++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/usb.h    |  1 +
+>  2 files changed, 44 insertions(+)
 > 
-> But you can not have a USB3 hub with no ports, isn't that against
-> against the USB spec?  How does this device pass the USB-IF
-> certification?
-> 
-> > thanks, therefore, in order to reduce the severity of the log,
-> > we hope to lower the level of this log.
-> 
-> You did not reduce the severity at all, everyone can still see it.
-> 
-> Please try fixing your hardware :
+> diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+> index 2ce3667ec6fae..6d49db9a1b208 100644
+> --- a/drivers/usb/core/usb.c
+> +++ b/drivers/usb/core/usb.c
+> @@ -398,6 +398,49 @@ int usb_for_each_dev(void *data, int (*fn)(struct usb_device *, void *))
+>  }
+>  EXPORT_SYMBOL_GPL(usb_for_each_dev);
+>  
+> +struct each_hub_arg {
+> +	void *data;
+> +	int (*fn)(struct device *, void *);
+> +};
+> +
+> +static int __each_hub(struct device *dev, void *data)
+> +{
+> +	struct each_hub_arg *arg = (struct each_hub_arg *)data;
+> +	struct usb_device *hdev = to_usb_device(dev);
 
-Alternatively, you could change the xhci-hcd driver.  Make it skip 
-registering the USB-3 root hub if that hub has no ports.
+to_usb_device() won't work properly if the struct device isn't embedded 
+in an actual usb_device structure.  And that will happen, since the USB 
+bus type holds usb_interface structures as well as usb_devices.
 
-But don't change these log messages.  They describe real errors, so they 
-should be actual error messages.
+In fact, you should use usb_for_each_dev here; it already does what you 
+want.
+
+> +	struct usb_hub *hub;
+> +	int ret;
+> +	int i;
+> +
+> +	hub = usb_hub_to_struct_hub(hdev);
+> +	if (!hub)
+> +		return 0;
+> +
+> +	for (i = 0; i < hdev->maxchild; i++) {
+> +		ret = arg->fn(&hub->ports[i]->dev, arg->data);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+
+Don't you need some sort of locking or refcounting here?  What would 
+happen if this hub got removed while the routine was running?
 
 Alan Stern
