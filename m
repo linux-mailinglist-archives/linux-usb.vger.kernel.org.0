@@ -2,93 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A908234A951
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 15:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E35CF34A98D
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 15:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbhCZOLJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Mar 2021 10:11:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44696 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230044AbhCZOKh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Mar 2021 10:10:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E98BF619BF;
-        Fri, 26 Mar 2021 14:10:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1616767832;
-        bh=tg6wqpUQLTq0MVUDEswX9U7R74oCgx7H2mv1qSOusbk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=svD1ak7iD7YvJ7T2ll8CXZkE1vdrnBje0/WGabaR9Y/OWFRp5odPvbwFTlzqr0o9s
-         kr99FSf/b/Gb1wPwKtYC0cCYMfcfo4EDlXKCWA8SpIKOmHprD47myu8fF0jowEp7Il
-         En3CVjzYODoiFTWZHJfWghyjspuop4CDXItkx6IU=
-Date:   Fri, 26 Mar 2021 15:10:30 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        John Youn <John.Youn@synopsys.com>,
-        Paul Zimmerman <paulz@synopsys.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "#@synopsys.com" <#@synopsys.com>,
-        "4.18@synopsys.com" <4.18@synopsys.com>,
-        "5.2@synopsys.com" <5.2@synopsys.com>, Felipe Balbi <balbi@ti.com>,
-        Kever Yang <kever.yang@rock-chips.com>
-Subject: Re: [PATCH 0/3] usb: dwc2: Fix power saving general issues.
-Message-ID: <YF3rVonRVVRs7NQN@kroah.com>
-References: <20210326102400.359EFA005C@mailhost.synopsys.com>
- <YF3ihMf3cHESK0cq@kroah.com>
- <d8f33c04-8632-ee13-a056-5f7b706fdcd3@synopsys.com>
+        id S230229AbhCZOUy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Mar 2021 10:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230230AbhCZOUs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Mar 2021 10:20:48 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94461C0613B2
+        for <linux-usb@vger.kernel.org>; Fri, 26 Mar 2021 07:20:47 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id y124-20020a1c32820000b029010c93864955so4992726wmy.5
+        for <linux-usb@vger.kernel.org>; Fri, 26 Mar 2021 07:20:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=6xcgNGeiKXVzTZo3oILiZykt3w8GnNqVy7yzUHjFBQQ=;
+        b=XeWeBn8WX5c+uJ8CnM+CQZtmzh/4bB4qoMOD512ejsGsAJhBMpIRE45WmKhdf2TLqx
+         MiQ6KDk6/7dK5bC7/+YYWLHrtI06Ylrvmd6twooQS+XegMtZPl4Yf+uUHzXSdofzs0cp
+         bvHUTHcKSdaDDHV+Y53fP3oLBS8LcoFCOQn4l1FbEJucpwut9t3dciREPiwQSF0ZQKKQ
+         Ee1jr+vVwrB3+iekJsvmKwpu8RuaJaotHb+gkCtGTJOoxCEV/+4RHUazLmcluVA1pSht
+         YojJg8tbVnIbRSxGQoaeSJBznKPSXq3Clwm4mlT+W4SXXom4TtpEkaUJ2pRM4TzCKw5Z
+         FVdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=6xcgNGeiKXVzTZo3oILiZykt3w8GnNqVy7yzUHjFBQQ=;
+        b=JM7HLHbQTDQpXhiJg0xmVZb3sN8mV7wmmgM/BWIqVOGxLAJoktZSNbdJq4CyWYR6iQ
+         OeeH5UpELfhuUr9G6GQ/ONnb37KT+9Ck7G6zFuq0Iay3ZMPdsdb8SVRk/6k3ELWyHQ4e
+         GXye7fD4D6RQGOOzoFsiDWaH5mXrNvzMZjHDT5gOFbB4kNk18vPagsrVcybD14WoBTOB
+         4aixtUdAowReqNR6ljZ4T/xrh7BfTyXQoSQ1m2BoiAedKlAfN08T5V/m3AgerF+kqBcJ
+         8SVXX5i2nx0KrH62YzekgtIyEin5azflsVM+xwn7OMEUKZl+WXkJ4HUrgzm2sbDpEd2q
+         qCqQ==
+X-Gm-Message-State: AOAM532L1BrpzRikCL6a6UE4bj1oiQuIHRnUvYCym90Oci9tHEV2KKbH
+        iRgFvnWwmzoUS5HFj6Cc4Hxsjw==
+X-Google-Smtp-Source: ABdhPJzCoDvRJ0yro1yeYdy8gIdvQTImgu841Bp+OkX3kL6D2LJpK0xk7inIx+W3Fy7Q3UcDJTIu1w==
+X-Received: by 2002:a05:600c:378c:: with SMTP id o12mr13377556wmr.69.1616768446113;
+        Fri, 26 Mar 2021 07:20:46 -0700 (PDT)
+Received: from dell ([91.110.221.194])
+        by smtp.gmail.com with ESMTPSA id e8sm11125675wme.14.2021.03.26.07.20.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Mar 2021 07:20:45 -0700 (PDT)
+Date:   Fri, 26 Mar 2021 14:20:41 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Anssi Hannula <anssi.hannula@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Bruno =?iso-8859-1?Q?Pr=E9mont?= <bonbons@linux-vserver.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Daniel Drubin <daniel.drubin@intel.com>,
+        Dario Pagani <dario.pagani.146+linuxk@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Kim Kuparinen <kimi.h.kuparinen@gmail.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linaro-mm-sig@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, Lopez Casado <nlopezcasad@logitech.com>,
+        "L. Vinyard, Jr" <rvinyard@cs.nmsu.edu>,
+        Masaki Ota <masaki.ota@jp.alps.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        message to <vojtech@ucw.cz>,
+        Michael Haboustak <mike-@cinci.rr.com>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
+        Vojtech Pavlik <vojtech@suse.cz>,
+        Zhang Lixu <lixu.zhang@intel.com>
+Subject: Re: [PATCH 00/25] Rid W=1 warnings from HID
+Message-ID: <20210326142041.GZ2916463@dell>
+References: <20210324173404.66340-1-lee.jones@linaro.org>
+ <20210326114202.3862b8c5@jic23-huawei>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d8f33c04-8632-ee13-a056-5f7b706fdcd3@synopsys.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210326114202.3862b8c5@jic23-huawei>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 26, 2021 at 01:45:40PM +0000, Artur Petrosyan wrote:
-> Hi Greg,
+On Fri, 26 Mar 2021, Jonathan Cameron wrote:
+
+> On Wed, 24 Mar 2021 17:33:39 +0000
+> Lee Jones <lee.jones@linaro.org> wrote:
 > 
-> On 3/26/2021 17:32, Greg Kroah-Hartman wrote:
-> > On Fri, Mar 26, 2021 at 02:23:58PM +0400, Artur Petrosyan wrote:
-> >> This patch set is part of multiple series and is
-> >> continuation of the "usb: dwc2: Fix and improve
-> >> power saving modes" patch set.
-> >> (Patch set link: https://urldefense.com/v3/__https://marc.info/?l=linux-usb&m=160379622403975&w=2__;!!A4F2R9G_pg!Icyuillfz_Iy_FrHe2RmVP0zFNTYupWQYmma2AX71Jsqg4cwSaw4hKokDSvIBxrAdsRmUD4$ ).
-> >>
-> >> The patches that were included in the "usb: dwc2:
-> >> Fix and improve power saving modes" which was submitted
-> >> earlier was too large and needed to be split up into
-> >> smaller patch sets. So this is the first series in the
-> >> whole power saving mode fixes.
-> >>
-> >> Each remaining patch set have dependency on previous set
-> >> and will be submitted after each of them are integrated.
-> >>
-> >> The series includes the following patch sets with multiple patches
-> >> by below order.
-> >>   1. usb: dwc2: Fix power saving general issues.
-> >>   2. usb: dwc2: Fix Partial Power down issues.
-> >>   3. usb: dwc2: Add clock gating support.
-> >>   4. usb: dwc2: Fix Hibernation issues
-> > 
-> > You only sent 3 patches, not 4.
-> > 
-> > So this makes no sense to me, what am I supposed to do?
-> The 4 items that are listed are patch sets. The first patch set that I 
-> have sent is "usb: dwc2: Fix power saving general issues.", which 
-> includes the 3 patches that have been sent.
+> > This set is part of a larger effort attempting to clean-up W=1
+> > kernel builds, which are currently overwhelmingly riddled with
+> > niggly little warnings.
 > 
-> I wrote the other 3 patch set names in the list to indicate that I will 
-> send them after this "usb: dwc2: Fix power saving general issues." patch 
-> set is integrated to mainline.
+> Lee, it's a bit novel to cc linux-iio on the cover letter but
+> none of the actual patches..  Or least none of them reached
+> me or lore.kernel.org
 
-I'm not taking this first patch as-is, sorry, see my comments on it
-already.
+Looks like only 18 of the 25 actually made it onto the list.
 
-I took patch 2 and 3 though.
+How odd!
 
-thanks,
+Hold on, I'll submit a [RESEND].
 
-greg k-h
+> I'm sure they are great :)
+
+Naturally!
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
