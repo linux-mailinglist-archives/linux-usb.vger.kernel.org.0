@@ -2,98 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D48AF34A378
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 09:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E38934A4FC
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 10:54:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbhCZI6K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Mar 2021 04:58:10 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:14490 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229474AbhCZI5p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Mar 2021 04:57:45 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F6G5c3HSJzrbDW;
-        Fri, 26 Mar 2021 16:55:32 +0800 (CST)
-Received: from huawei.com (10.67.165.24) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.498.0; Fri, 26 Mar 2021
- 16:57:22 +0800
-From:   Longfang Liu <liulongfang@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
-        <stern@rowland.harvard.edu>
-CC:     <linux-usb@vger.kernel.org>, <yisen.zhuang@huawei.com>,
-        <tanxiaofei@huawei.com>, <liudongdong3@huawei.com>,
-        <liulongfang@huawei.com>, <linux-kernel@vger.kernel.org>
-Subject: [RFC PATCH] USB:ohci:fix ohci interruption problem
-Date:   Fri, 26 Mar 2021 16:54:56 +0800
-Message-ID: <1616748896-9415-1-git-send-email-liulongfang@huawei.com>
-X-Mailer: git-send-email 2.8.1
+        id S230041AbhCZJyB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Mar 2021 05:54:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44394 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229963AbhCZJxr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Mar 2021 05:53:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 940D561A38;
+        Fri, 26 Mar 2021 09:53:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1616752422;
+        bh=IKZ5BfMHd4HiNc1iLAvvrRwBaniQr78lswNaxM5Y50E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VpZBvu1vgHK3HDqQyMnim3GZqUEDvmEsX+vNRN6HuVrXCnAJBdb+yD/vym1wPOCfm
+         jGd8BP+TeBWRW9K4YH+XGnIeQCXeaC3kCUQy6q7Bx7HVJkVqBu3bZTy3YMLk3nal+W
+         kHMGEmbYbqM1AKBPu6P2/ebfATdKAfoIvwMT316E=
+Date:   Fri, 26 Mar 2021 10:53:39 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Harald Dunkel <harri@afaics.de>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: 5.11.10: sync gets stuck after writing ubuntu live iso to usb
+ stick
+Message-ID: <YF2vI8C2LT+xjjxq@kroah.com>
+References: <1fd4daa4-ad11-51b2-6fc5-22d6213d551b@afaics.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.165.24]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1fd4daa4-ad11-51b2-6fc5-22d6213d551b@afaics.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When OHCI enters the S4 sleep state, the USB sleep process will call
-check_root_hub_suspend() and ohci_bus_suspend() instead of
-ohci_suspend() and ohci_bus_suspend(), this causes the OHCI interrupt
-to not be closed.
+On Fri, Mar 26, 2021 at 07:57:52AM +0100, Harald Dunkel wrote:
+> Hi folks,
+> 
+> using
+> 
+> 	dd if=ubuntu-20.10-desktop-amd64.iso bs=64k of=/dev/sdx
+> 
+> on 5.11.10 to write a live iso to USB stick dd never returns.
+> 
+> lsof shows that the file handles for source and destination
+> have been closed, but dd doesn't exit. It cannot be interrupted
+> or killed, either. If I run "sync" in another terminal, then this
+> gets stuck as well.
+> 
+> I could reproduce this problem using Debian's 5.10.13-1 and
+> 5.11.{9,10} built from the sources in git, on Debian 10 and
+> Unstable. I tried to copy the ubuntu live iso and the RHEL 8.3
+> installer iso. 3 different USB sticks.
+> 
+> There is no such problem using Debian's 4.19.0-16-amd64 kernel
+> on Debian 10.
 
-At this time, if just one device interrupt is reported. Since rh_state
-has been changed to OHCI_RH_SUSPENDED after ohci_bus_suspend(), the
-driver will not process and close this device interrupt. It will cause
-the entire system to be stuck during sleep, causing the device to
-fail to respond.
+Any chance you can see if you can bisect this down to an offending
+commit?  The jump from 4.19 to 5.11 is quite big (2 years).
 
-When the abnormal interruption reaches 100,000 times, the system will
-forcibly close the interruption and make the device unusable.
+But no, this works for me, just did it yesterday and I run some builds
+off of usb storage devices.
 
-Since the problem is that the interrupt is not closed, we copied the
-interrupt shutdown operation of ohci_suspend() into ohci_bus_suspend()
-during the S4 sleep period. We found that this method can solve this
-problem.
+thanks,
 
-At present, we hope to be able to call ohci_suspend() directly during
-the sleep process of S4. Do you have any suggestions for this
-modification?
-
-Signed-off-by: Longfang Liu <liulongfang@huawei.com>
----
- drivers/usb/host/ohci-hub.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/ohci-hub.c b/drivers/usb/host/ohci-hub.c
-index 634f3c7..d468cef 100644
---- a/drivers/usb/host/ohci-hub.c
-+++ b/drivers/usb/host/ohci-hub.c
-@@ -315,6 +315,14 @@ static int ohci_bus_suspend (struct usb_hcd *hcd)
- 		del_timer_sync(&ohci->io_watchdog);
- 		ohci->prev_frame_no = IO_WATCHDOG_OFF;
- 	}
-+
-+	spin_lock_irqsave(&ohci->lock, flags);
-+	ohci_writel(ohci, OHCI_INTR_MIE, &ohci->regs->intrdisable);
-+	(void)ohci_readl(ohci, &ohci->regs->intrdisable);
-+
-+	clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
-+	spin_unlock_irqrestore(&ohci->lock, flags);
-+
- 	return rc;
- }
- 
-@@ -326,7 +334,10 @@ static int ohci_bus_resume (struct usb_hcd *hcd)
- 	if (time_before (jiffies, ohci->next_statechange))
- 		msleep(5);
- 
--	spin_lock_irq (&ohci->lock);
-+	spin_lock_irq(&ohci->lock);
-+	set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
-+	ohci_writel(ohci, OHCI_INTR_MIE, &ohci->regs->intrenable);
-+	ohci_readl(ohci, &ohci->regs->intrenable);
- 
- 	if (unlikely(!HCD_HW_ACCESSIBLE(hcd)))
- 		rc = -ESHUTDOWN;
--- 
-2.8.1
-
+greg k-h
