@@ -2,82 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2459C34A824
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 14:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD0234A827
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 14:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbhCZNcq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Mar 2021 09:32:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35634 "EHLO mail.kernel.org"
+        id S230104AbhCZNdT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Mar 2021 09:33:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35744 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229930AbhCZNc2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Mar 2021 09:32:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D2F4A61A13;
-        Fri, 26 Mar 2021 13:32:27 +0000 (UTC)
+        id S230041AbhCZNc4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Mar 2021 09:32:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F01FA619C2;
+        Fri, 26 Mar 2021 13:32:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1616765548;
-        bh=zDg5cvz1boAlimnBE/K7mw2FFrFPKqLbJa1FYux51Fc=;
+        s=korg; t=1616765576;
+        bh=PAGq1kALaiGusgwXGDowM22BOWQx/23/PDLw7wmwLkE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0OKEhUNy0HqEaJM8jisfBFM+SaxFXIN/Yad4ZWyCxowQx3TiYIl9a3QfFdGN1oKfB
-         MI5oEmWLfjZ7O8hUeT1jVnjwALt3H8iPpRs45aoG2dZOiw3kMnss8j2AFOSlqui+DB
-         ZSxOb9KIm/bNJNfS/KkSTZ7E6A55sA5NQA00A47c=
-Date:   Fri, 26 Mar 2021 14:32:25 +0100
+        b=WdnZSM6m2go6T/RSqFvWA+wYCVSljgmdsa+st73E+v9oTml1PBtxQAKaUvmgkbSNe
+         yB3eKzAd84UPTgP9XQpLu26UQcYCBfzFx6rSJHd9VJeXwcbmmFTyU2cjwh0pnt+VtT
+         CWZ0k6G2JYBEZsIDnJuVVTmlukgtLjdvQoC1rJ1U=
+Date:   Fri, 26 Mar 2021 14:32:52 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
 Cc:     Felipe Balbi <balbi@kernel.org>,
         Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        linux-usb@vger.kernel.org, John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH 1/3] usb: dwc2: Add default param to control power
- optimization.
-Message-ID: <YF3iaZT47tT11xFP@kroah.com>
-References: <20210326102424.7AE5BA005D@mailhost.synopsys.com>
+        linux-usb@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        John Youn <John.Youn@synopsys.com>,
+        Paul Zimmerman <paulz@synopsys.com>, stable@vger.kernel.org,
+        #@synopsys.com, 4.18@synopsys.com, 5.2@synopsys.com,
+        Felipe Balbi <balbi@ti.com>,
+        Kever Yang <kever.yang@rock-chips.com>
+Subject: Re: [PATCH 0/3] usb: dwc2: Fix power saving general issues.
+Message-ID: <YF3ihMf3cHESK0cq@kroah.com>
+References: <20210326102400.359EFA005C@mailhost.synopsys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210326102424.7AE5BA005D@mailhost.synopsys.com>
+In-Reply-To: <20210326102400.359EFA005C@mailhost.synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 26, 2021 at 02:24:23PM +0400, Artur Petrosyan wrote:
-> There are 3 power saving options supported in dwc2 core
-> 1. Hibernation
-> 2. Partial Power Down
-> 3. Clock gating
+On Fri, Mar 26, 2021 at 02:23:58PM +0400, Artur Petrosyan wrote:
+> This patch set is part of multiple series and is
+> continuation of the "usb: dwc2: Fix and improve
+> power saving modes" patch set.
+> (Patch set link: https://marc.info/?l=linux-usb&m=160379622403975&w=2).
 > 
-> To enable or disable the power saving features earlier users
-> had to set "power_down" param to "0". However, "power_down"
-> parameter is meant to and used for distinguishing between the
-> power saving options.
+> The patches that were included in the "usb: dwc2:
+> Fix and improve power saving modes" which was submitted
+> earlier was too large and needed to be split up into
+> smaller patch sets. So this is the first series in the
+> whole power saving mode fixes.
 > 
-> So, if Hibernation is enabled then
-> "power_down = 2"
-> if Partial Power Down is enabled then
-> "power_down = 1"
-> if not Hibernation nor Partial Power Down are enabled then
-> "power_down = 0".
+> Each remaining patch set have dependency on previous set
+> and will be submitted after each of them are integrated.
 > 
-> Setting the "power_down" to "0" for disabling power saving
-> options is not right because it is used to differentiate
-> power saving options.
-> 
-> Therefor added a new parameter named "power_saving" which will
-> be used only for enabling or disabling power saving modes.
-> 
-> NOTE: If Hibernation or Partial Power Down modes are disabled
-> then by default Clock gating mode is used.
-> 
-> - Added a default param "power_saving" to enable or
->   disable hibernation or partial power down features.
+> The series includes the following patch sets with multiple patches
+> by below order.
+>  1. usb: dwc2: Fix power saving general issues.
+>  2. usb: dwc2: Fix Partial Power down issues.
+>  3. usb: dwc2: Add clock gating support.
+>  4. usb: dwc2: Fix Hibernation issues
 
-But nothing changes this option?  So why does it matter?
+You only sent 3 patches, not 4.
 
-> 
-> - Printed hibernation param in hw_params_show and
->   power_saving param in params_show.
+So this makes no sense to me, what am I supposed to do?
 
-Please make this a separate patch for the hibernation option, as it has
-nothing to do with this patch at all.
-
-thanks,
+confused,
 
 greg k-h
