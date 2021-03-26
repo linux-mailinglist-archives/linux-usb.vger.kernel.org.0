@@ -2,111 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE5F34A9ED
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 15:37:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B4934AB7B
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 16:29:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbhCZOfr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Mar 2021 10:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbhCZOfO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Mar 2021 10:35:14 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6396AC0613B1
-        for <linux-usb@vger.kernel.org>; Fri, 26 Mar 2021 07:35:11 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id j7so5895772wrd.1
-        for <linux-usb@vger.kernel.org>; Fri, 26 Mar 2021 07:35:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=E7/N3FVykAR22YhzUhZ15csg3vPH/3PyPAZDl2mJTyE=;
-        b=FQWiQy0EIE+653fmzj9XU1SF5NMeZNCgs/VV4mo5PT9LyRG571UmXuJauUJ0aL1lsQ
-         31HG7A3ja6wq0s6hA1qzpq9p/RAo62r0dAKvoUHFRvBJyr4R4GZ46OnKPqEbtmWzAcKa
-         634knbEo7HgrGK+FcjSGYELCBL1XnOzC+eiEoCU/gWLWFRISxi7wr6FrfE8yCPZPJaQu
-         pSvz3r5gB73TV5rLg+heSe/IcHsdsj8ItZktZAI5J5mW3RX0vDxiVu+22B34cQIJfrk9
-         odZrgDQ8EtlwoHtFND6OdBiltcah311hZtwgV1F3y0Z2qFULwLJAOvY5jUAnZ35QhkWs
-         zbfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=E7/N3FVykAR22YhzUhZ15csg3vPH/3PyPAZDl2mJTyE=;
-        b=arh+MPACTj28XuS/JFmn7fOINCbAd9kQ6nfowgqr/m2KsXtjVfL51xAHRGXLQcji6L
-         LtgxMn9YDYvYLmgscHwmKj/v3iktp6Dg+aIVe2p0i56y4ML4Gk1jHktfEVZL7CAGHexa
-         vxQDzMhhHViZHCplUP4ynLzS8dGaDQylFTavAVQWONneXgyIJQlxZA1DKEMdZCN+VR4T
-         pCZ604f3q72pvB0zE08Kk6e78FVY3SKfLQ/UGVs349ef++uMOutFxVOzD3jX6tKtBJI6
-         Wya0pwM3H7iaKcpQV1EgNWYOCwQTgRI7HyAKCNUwcCibMRvxJ/Ws5VaddtI6wpH4WK1+
-         VStQ==
-X-Gm-Message-State: AOAM531n1TuvUtz8NPzjJLNX7ZBWnmTHJJwLhWOCrBmVZ8cHMNeNuINe
-        nqzkDfHM8BYjVtYIPzayKRdakw==
-X-Google-Smtp-Source: ABdhPJxFiTlqN3F0RkSV5mVncLvGDUsps6SqQ0/eWlY0L1Lcp/6xy75ULVxXD1xv8pgKWF11ZcnP9g==
-X-Received: by 2002:a5d:6307:: with SMTP id i7mr15081102wru.305.1616769310126;
-        Fri, 26 Mar 2021 07:35:10 -0700 (PDT)
-Received: from dell.default ([91.110.221.194])
-        by smtp.gmail.com with ESMTPSA id j26sm12878225wrh.57.2021.03.26.07.35.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Mar 2021 07:35:09 -0700 (PDT)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Anssi Hannula <anssi.hannula@gmail.com>,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [PATCH 08/25] HID: usbhid: hid-pidff: Demote a couple kernel-doc abuses
-Date:   Fri, 26 Mar 2021 14:34:41 +0000
-Message-Id: <20210326143458.508959-10-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210326143458.508959-1-lee.jones@linaro.org>
-References: <20210326143458.508959-1-lee.jones@linaro.org>
+        id S230298AbhCZP2r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Mar 2021 11:28:47 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:55547 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S230253AbhCZP2X (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Mar 2021 11:28:23 -0400
+Received: (qmail 833569 invoked by uid 1000); 26 Mar 2021 11:28:21 -0400
+Date:   Fri, 26 Mar 2021 11:28:21 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Longfang Liu <liulongfang@huawei.com>
+Cc:     gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        linux-usb@vger.kernel.org, yisen.zhuang@huawei.com,
+        tanxiaofei@huawei.com, liudongdong3@huawei.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] USB:ohci:fix ohci interruption problem
+Message-ID: <20210326152821.GA832251@rowland.harvard.edu>
+References: <1616748896-9415-1-git-send-email-liulongfang@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1616748896-9415-1-git-send-email-liulongfang@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+On Fri, Mar 26, 2021 at 04:54:56PM +0800, Longfang Liu wrote:
+> When OHCI enters the S4 sleep state, the USB sleep process will call
+> check_root_hub_suspend() and ohci_bus_suspend() instead of
+> ohci_suspend() and ohci_bus_suspend(), this causes the OHCI interrupt
+> to not be closed.
 
- drivers/hid/usbhid/hid-pidff.c:512: warning: Function parameter or member 'dev' not described in 'pidff_playback'
- drivers/hid/usbhid/hid-pidff.c:512: warning: Function parameter or member 'effect_id' not described in 'pidff_playback'
- drivers/hid/usbhid/hid-pidff.c:512: warning: Function parameter or member 'value' not described in 'pidff_playback'
- drivers/hid/usbhid/hid-pidff.c:512: warning: expecting prototype for value times(). Prototype was for pidff_playback() instead
- drivers/hid/usbhid/hid-pidff.c:1005: warning: Function parameter or member 'pidff' not described in 'pidff_find_effects'
- drivers/hid/usbhid/hid-pidff.c:1005: warning: Function parameter or member 'dev' not described in 'pidff_find_effects'
- drivers/hid/usbhid/hid-pidff.c:1005: warning: expecting prototype for Find the implemented effect types(). Prototype was for pidff_find_effects() instead
+What on earth are you talking about?  This isn't true at all.
 
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: Anssi Hannula <anssi.hannula@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Cc: linux-input@vger.kernel.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/hid/usbhid/hid-pidff.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Can you provide more information about your system?  Are you using a 
+PCI-based OHCI controller or a platform device (and if so, which one)?  
+Can you post system logs to back up your statements?
 
-diff --git a/drivers/hid/usbhid/hid-pidff.c b/drivers/hid/usbhid/hid-pidff.c
-index fddac7c72f645..ea126c50acc3b 100644
---- a/drivers/hid/usbhid/hid-pidff.c
-+++ b/drivers/hid/usbhid/hid-pidff.c
-@@ -505,7 +505,7 @@ static void pidff_playback_pid(struct pidff_device *pidff, int pid_id, int n)
- 			HID_REQ_SET_REPORT);
- }
- 
--/**
-+/*
-  * Play the effect with effect id @effect_id for @value times
-  */
- static int pidff_playback(struct input_dev *dev, int effect_id, int value)
-@@ -997,7 +997,7 @@ static int pidff_find_special_fields(struct pidff_device *pidff)
- 	return 0;
- }
- 
--/**
-+/*
-  * Find the implemented effect types
-  */
- static int pidff_find_effects(struct pidff_device *pidff,
--- 
-2.27.0
+The proper order of calls is ohci_bus_suspend, then 
+check_root_hub_suspended, then ohci_suspend.  Often the first one is 
+called some time before the other two.
 
+> At this time, if just one device interrupt is reported. Since rh_state
+> has been changed to OHCI_RH_SUSPENDED after ohci_bus_suspend(), the
+> driver will not process and close this device interrupt. It will cause
+> the entire system to be stuck during sleep, causing the device to
+> fail to respond.
+> 
+> When the abnormal interruption reaches 100,000 times, the system will
+> forcibly close the interruption and make the device unusable.
+> 
+> Since the problem is that the interrupt is not closed, we copied the
+> interrupt shutdown operation of ohci_suspend() into ohci_bus_suspend()
+> during the S4 sleep period. We found that this method can solve this
+> problem.
+> 
+> At present, we hope to be able to call ohci_suspend() directly during
+> the sleep process of S4. Do you have any suggestions for this
+> modification?
+> 
+> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+> ---
+>  drivers/usb/host/ohci-hub.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/ohci-hub.c b/drivers/usb/host/ohci-hub.c
+> index 634f3c7..d468cef 100644
+> --- a/drivers/usb/host/ohci-hub.c
+> +++ b/drivers/usb/host/ohci-hub.c
+> @@ -315,6 +315,14 @@ static int ohci_bus_suspend (struct usb_hcd *hcd)
+>  		del_timer_sync(&ohci->io_watchdog);
+>  		ohci->prev_frame_no = IO_WATCHDOG_OFF;
+>  	}
+> +
+> +	spin_lock_irqsave(&ohci->lock, flags);
+> +	ohci_writel(ohci, OHCI_INTR_MIE, &ohci->regs->intrdisable);
+> +	(void)ohci_readl(ohci, &ohci->regs->intrdisable);
+> +
+> +	clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
+> +	spin_unlock_irqrestore(&ohci->lock, flags);
+
+This is completely wrong.  The hardware certainly remains accessible 
+when the root hub stops running.  The HW_ACCESSIBLE flag should not be 
+cleared here.
+
+And if the Master Interrupt Enable bit is cleared, how will the driver 
+ever learn if a remote wakeup request (such as a plug or unplug event) 
+occurs?
+
+Alan Stern
+
+> +
+>  	return rc;
+>  }
+>  
+> @@ -326,7 +334,10 @@ static int ohci_bus_resume (struct usb_hcd *hcd)
+>  	if (time_before (jiffies, ohci->next_statechange))
+>  		msleep(5);
+>  
+> -	spin_lock_irq (&ohci->lock);
+> +	spin_lock_irq(&ohci->lock);
+> +	set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
+> +	ohci_writel(ohci, OHCI_INTR_MIE, &ohci->regs->intrenable);
+> +	ohci_readl(ohci, &ohci->regs->intrenable);
+>  
+>  	if (unlikely(!HCD_HW_ACCESSIBLE(hcd)))
+>  		rc = -ESHUTDOWN;
+> -- 
+> 2.8.1
+> 
