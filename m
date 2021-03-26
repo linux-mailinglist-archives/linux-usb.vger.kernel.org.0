@@ -2,70 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F5A349D1C
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 01:01:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44EBC349DBA
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 01:23:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbhCZAAn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Mar 2021 20:00:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59218 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229524AbhCZAAK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 25 Mar 2021 20:00:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 5685E619FE;
-        Fri, 26 Mar 2021 00:00:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616716809;
-        bh=746+1DwfvkmFmn0pmpXn9wAUMizJDVWfr1+nje1i2i0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=bDl/o5xnWHPKH4YgvmB/O19Kr5q3mG6K+MctdU8CQ4q8ln9Gl3ngZeIGpmqYLJZJb
-         XfBaHQZo+sS+2x372zRQIUU9qQePMdi4RnSsNw2BkmE0T+UM9PZ/qVf2RaC9S4sOBv
-         rg+qjUeTDgS1Delp4pdTJzWA2iLO/t5hiPtNSz/36Vuw17OXnYcpvD+YnrDyvnRO5T
-         CNclHTHEwZkehr7YRktRXfNn3Q6BahvUoIfMQPY4AwWwWHFJOpYcq336rCTddnmILr
-         NPr8isGKPel7CjJ1ftcf4D6hxT1hdrK6xv+Dy1Bw20waxQ9XBSK93A0fd5SradpETs
-         mom+vlKh+OJpw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4731B6008E;
-        Fri, 26 Mar 2021 00:00:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S230186AbhCZAWp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Mar 2021 20:22:45 -0400
+Received: from mail-io1-f48.google.com ([209.85.166.48]:40613 "EHLO
+        mail-io1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230210AbhCZAWo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Mar 2021 20:22:44 -0400
+Received: by mail-io1-f48.google.com with SMTP id n21so3733643ioa.7;
+        Thu, 25 Mar 2021 17:22:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/Z9y5tszJooFvK4t9UwKKq6ZF4ZawJui8BA9xur9v4E=;
+        b=iiXBVDQ5rY8FS/6T28VAfgM+ati+YN/042uXUpkrqcGnwo38zBoxmL6iivDqhrS0hX
+         ffGXkrD2gHDOVmSn0d3Q+7owfWm5GHR7WlP4lzODQ78b37LVSv8dp3s7XIMS9/QeE6GG
+         XNLL67kLROinVVF8yvWRcQ7zH6exFU03C3VV+w3BegYiKeUL4DjjlaQBNKhKes1DeWp8
+         15YUtMBjn/ZWvHRPD1oF8lSD4WIHCcLF6JV2cl7xfSQNdjdQclkOvkar2tbW8rKmIRzM
+         U6GamoVEE4bNSWhVQgnIRAO+fHw1QpU1+6ZCM053PAtCxRN86LBJ0hnrxi6/j/XPRLbq
+         yHKg==
+X-Gm-Message-State: AOAM533Jx12+laAKhj899FfoJLIZ8PTbXB+AktUnJNukUauNk+pSXrO1
+        f2io+bt1JQFscZDUR5mo/g==
+X-Google-Smtp-Source: ABdhPJwRixmNeNMk7cA7qKskUIITWXFr7CSBWCfKbeLHiTAOe7TUsklFN00KHczAUOfF6FEA3Aq7rg==
+X-Received: by 2002:a5e:c908:: with SMTP id z8mr8427719iol.136.1616718163509;
+        Thu, 25 Mar 2021 17:22:43 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id o23sm3470287ioo.24.2021.03.25.17.22.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Mar 2021 17:22:42 -0700 (PDT)
+Received: (nullmailer pid 2023409 invoked by uid 1000);
+        Fri, 26 Mar 2021 00:22:39 -0000
+Date:   Thu, 25 Mar 2021 18:22:39 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     linux-phy@lists.infradead.org, Stephen Boyd <swboyd@chromium.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-usb@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 1/3] dt-bindings: usb: qcom,dwc3: Add bindings for SC7280
+Message-ID: <20210326002239.GA2022866@robh.at.kernel.org>
+References: <1615978901-4202-1-git-send-email-sanm@codeaurora.org>
+ <1615978901-4202-2-git-send-email-sanm@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: usb: lan78xx: remove unused including
- <linux/version.h>
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161671680928.21425.1138306429204242003.git-patchwork-notify@kernel.org>
-Date:   Fri, 26 Mar 2021 00:00:09 +0000
-References: <20210325025108.1286677-1-zhengyongjun3@huawei.com>
-In-Reply-To: <20210325025108.1286677-1-zhengyongjun3@huawei.com>
-To:     'Zheng Yongjun <zhengyongjun3@huawei.com>
-Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        hulkci@huawei.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1615978901-4202-2-git-send-email-sanm@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (refs/heads/master):
-
-On Thu, 25 Mar 2021 10:51:08 +0800 you wrote:
-> From: Zheng Yongjun <zhengyongjun3@huawei.com>
+On Wed, 17 Mar 2021 16:31:39 +0530, Sandeep Maheswaram wrote:
+> Add the compatible string for sc7280 SoC from Qualcomm.
 > 
-> Remove including <linux/version.h> that don't need it.
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> ---
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
-> 
-> [...]
 
-Here is the summary with links:
-  - [net-next] net: usb: lan78xx: remove unused including <linux/version.h>
-    https://git.kernel.org/netdev/net-next/c/a9bada338b68
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Acked-by: Rob Herring <robh@kernel.org>
