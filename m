@@ -2,140 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C6434A781
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 13:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 412DA34A81F
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 14:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbhCZMoU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Mar 2021 08:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbhCZMoC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Mar 2021 08:44:02 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0118CC0613AA;
-        Fri, 26 Mar 2021 05:44:02 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id u9so8194313ejj.7;
-        Fri, 26 Mar 2021 05:44:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zHs2rz0P64Y16pZ4KFsK15GuVu5q4UHDRiwzGtDX5Xk=;
-        b=KEQHQzWz9TsC0TbmvPwkTSOndS4w/COOp9yZlcU36HPaJG6Ki6q4WIaH4qDYd/Mmf2
-         xK2wT4QwPluTs+YCrvQlTEmuH4g2363RiJ6g8SQGu/t7d+lbcXbDHD0zDVWRoKdgueOb
-         Iz2rF7NCdreolUAmmhX/AK2JU/HtM5suN5mG7cJHSlp4DjvfGGy0xqPoHa3oAXvEsodV
-         K0A6hg37Y47Ir1A6kaYH7aTnSB06SaXc4A1v8ii4OE+MOZVM0jJ1x1fqURQA5vQ4RzUa
-         Z7N7URJLvDENDNFDjOyS9AqpUepCj1AZgDg68R4u8paXTH0x0O130dfYVPt/fR90/KH1
-         5V3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zHs2rz0P64Y16pZ4KFsK15GuVu5q4UHDRiwzGtDX5Xk=;
-        b=PB1BffyK4P7NZezb5zcKCkG4t3WFjGMxc+NtpVu7l02qzxV1FUGFUNj1dj52BEEzTV
-         T/SmyeIZmeFcb9GD5yQYjN6nDRm6Kc+VCQ30VZB/MuXbZ3kkdnWi+CPS0NsScDD1M8oJ
-         Yz87O6dcgpTk5Mp+JefMTD8rWPhvWKaHF1tSgXc7lfmPaVER5AkHLrrn0N+7GeqSORhm
-         8IYuw8eZSm2KmVq0DX6nflrET5R3FsYaVKL01KKOmRvBFdPEm5Q2FqwUb22kbiycuYtl
-         bkAWvh16KdjZeKzu7Dhtt02O1bGAb1A/HBtKOvqf5bez/sioFp4s5NL1oxTAAahN1h2m
-         ZhbQ==
-X-Gm-Message-State: AOAM530izpB9x3IrlHIO/1hjRtQFMeTabYvhSoKIVgWLNEOs93tw8C80
-        xRZFyI0QQFHte427r63qTz8=
-X-Google-Smtp-Source: ABdhPJwEO9FcXpyM3blf4SD+DstxaqueR87M3PPzgmo5NhiszndF0ytGwkHBhmXsdrYBwNpI/sO7Sg==
-X-Received: by 2002:a17:906:4055:: with SMTP id y21mr14904860ejj.507.1616762640686;
-        Fri, 26 Mar 2021 05:44:00 -0700 (PDT)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id gj26sm3752684ejb.67.2021.03.26.05.43.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Mar 2021 05:43:59 -0700 (PDT)
-Date:   Fri, 26 Mar 2021 13:44:21 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        JC Kuo <jckuo@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
-        linux-tegra@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: Re: [PATCH v8 09/13] phy: tegra: xusb: Add wake/sleepwalk for
- Tegra210
-Message-ID: <YF3XJVD5PfGKxfxn@orome.fritz.box>
-References: <20210325164057.793954-1-thierry.reding@gmail.com>
- <20210325164057.793954-10-thierry.reding@gmail.com>
- <20210325202616.xgjkdg7zev6apofe@archlinux-ax161>
+        id S229908AbhCZNbJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Mar 2021 09:31:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35478 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229995AbhCZNap (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Mar 2021 09:30:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6A8DA619C2;
+        Fri, 26 Mar 2021 13:30:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1616765443;
+        bh=yR51c7u7Bdi2DPsBDHt0VWZxo5dQ1YG6a+mnQkNfG/Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hMS8Resn8vCC0PF++Z9OcbH8/PgPgG0+egjDD80EzGvQtJ2oh9NurGIEtKTaGCpEk
+         TuzWy4fBe/8J0UtuzZ8ihw7f9/Fl5mOCDCJsWZrmaDdb3tj0xZUX6qFwCuSlwQeC0c
+         kJL4yj9rYieUOrcRWCwKQKBfy7GnAjyqWB9sk7CM=
+Date:   Fri, 26 Mar 2021 14:30:40 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH 1/3] usb: dwc2: Add default param to control power
+ optimization.
+Message-ID: <YF3iAGC5NjMxtwOP@kroah.com>
+References: <20210318061247.B2EACA005D@mailhost.synopsys.com>
+ <YFnP4EFrmwuc6Scn@kroah.com>
+ <ce789dca-82ae-0800-7577-2ea0d4c33955@synopsys.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="HPPmyzACOAwF/C+y"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210325202616.xgjkdg7zev6apofe@archlinux-ax161>
-User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
+In-Reply-To: <ce789dca-82ae-0800-7577-2ea0d4c33955@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, Mar 24, 2021 at 04:44:31PM +0000, Artur Petrosyan wrote:
+> Hi Greg,
+> 
+> On 3/23/2021 15:24, Greg Kroah-Hartman wrote:
+> > On Thu, Mar 18, 2021 at 10:12:46AM +0400, Artur Petrosyan wrote:
+> >> - Added a default param "power_saving" to enable or
+> >>    disable hibernation or partial power down features.
+> >>
+> >> - Printed hibernation param in hw_params_show and
+> >>    power_saving param in params_show.
+> > 
+> > This says what you are doing, but not _why_ you are doing this.  Why is
+> > this needed at all?
+> > 
+> > Please read the documentation for how to write a good changelog text for
+> > when you resubmit this series.
+> 
+> Thank you for your reply. I have corrected changelog of the patch 
+> according the documentation. Will submit in series.
+> 
+> > 
+> > Also note that the emails were not "threaded", was that on purpose?
+> Yes, the patches that were included in the "usb: dwc2: Fix and improve 
+> power saving modes" which was submitted earlier were too large and 
+> needed to be split up into smaller patches.
+> We had a discussion about that with Felipe Balbi earlier. Here is the 
+> link to the discussion thread 
+> (https://marc.info/?l=linux-usb&m=160379651904064&w=2)
+> So I did the split and obviously the cover letter and the subject were 
+> changed therefor I have submitted the updates with this thread and 
+> mentioned in the cover letter that these are continuation of the 
+> previous patch set that was too large.
 
---HPPmyzACOAwF/C+y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+No, I mean you are not "threading" your emails so that they show up as
+one after another all in the same email "thread".  Please use
+git-send-email to do this, or some other tool.
 
-On Thu, Mar 25, 2021 at 01:26:16PM -0700, Nathan Chancellor wrote:
-> On Thu, Mar 25, 2021 at 05:40:53PM +0100, Thierry Reding wrote:
-[...]
-> > @@ -2306,6 +3150,26 @@ tegra210_xusb_padctl_probe(struct device *dev,
-> >  	if (err < 0)
-> >  		return ERR_PTR(err);
-> > =20
-> > +	np =3D of_parse_phandle(dev->of_node, "nvidia,pmc", 0);
-> > +	if (!np) {
-> > +		dev_warn(dev, "nvidia,pmc property is missing\n");
-> > +		goto out;
-> > +	}
-> > +
-> > +	pdev =3D of_find_device_by_node(np);
-> > +	if (!pdev) {
-> > +		dev_warn(dev, "PMC device is not available\n");
-> > +		goto out;
-> > +	}
-> > +
-> > +	if (!device_is_bound(&pdev->dev))
->=20
-> This breaks arm64 allmodconfig:
->=20
-> ERROR: modpost: "device_is_bound" [drivers/phy/tegra/phy-tegra-xusb.ko] u=
-ndefined!
->=20
-> https://github.com/ClangBuiltLinux/continuous-integration2/runs/219610189=
-2?check_suite_focus=3Dtrue
+thanks,
 
-Good catch. I replaced this with:
-
-	if (!platform_get_drvdata(pdev))
-
-which will work fine and is equivalent, at least in this particular
-case.
-
-Thanks,
-Thierry
-
---HPPmyzACOAwF/C+y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmBd1yUACgkQ3SOs138+
-s6HLmhAAg6VGGfAUPFpswBOLFB6vY4Imt5wexLqOOm2CVgQjoVAt25YGeBNljtdZ
-bSduOlYIT+QG9IrKj4zSCjE6RI3y3i/SggxS4Xob7ecbHh3ZRpDeGIcrJY6+XHqd
-Eh2yu3NElQWSI6e6yADhr5wjrma6bB7jA9OfXU5VdUZn/OvQnia3Z0d1CWh5eOKj
-XhtJzeuVELoTwi/Z1STdTjXT9Rcw7ttaYCyI/Pu4rrE7u3Vcwmu/N2pDf+CjRlkP
-WcZwEFg3WnqpG+zxBYgPsDvEcicJcmkre4ssDGhIztMcIyVmUpGHUlV5pgknskBQ
-u1Mmbu7zdYJsyFdQ3PnoOInpjn0adIp/kMrpToVDULHD8UbploTho/qa2J7XaCoz
-EFkXiTJnzNWLNkWBsD+SwqJ2joLLvbopTh5vfW7mWaDxGN/gwLVNNR/ueSuuWUeI
-wDmwygansqDJ5A7z1eaHi9MHrBTxxwWR4HpCzEd/nH0v/twBVj+Uyhfvm2ZCvzT9
-rWwrAg7bS6d5yQCQPEqVaS23PS4AVP0ddaXf489KdNYwMcCrWEQPlcByEg84APhY
-OtzEb6pxI25jpm7XWZPVAOp8XpBT4Xl8iPx0DGSWv1YZXXm+riSa+RVMsJp8KsAU
-mGsd/PLWctV+cZjMO8BBZx+kCjTZA2vqZEQva8h2O0vERObkYUE=
-=zpPK
------END PGP SIGNATURE-----
-
---HPPmyzACOAwF/C+y--
+greg k-h
