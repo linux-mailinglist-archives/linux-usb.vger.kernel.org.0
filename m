@@ -2,47 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC30034A25B
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 08:09:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D48AF34A378
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 09:58:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbhCZHJM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 26 Mar 2021 03:09:12 -0400
-Received: from [103.51.153.218] ([103.51.153.218]:15669 "EHLO sac.com.tw"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230098AbhCZHIl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Mar 2021 03:08:41 -0400
-X-Greylist: delayed 61778 seconds by postgrey-1.27 at vger.kernel.org; Fri, 26 Mar 2021 03:08:40 EDT
-From:   "Nick" <didio@sac.com.tw>
-To:     linux-usb@vger.kernel.org
-Subject: High-quality Original IELTS certificate
-Date:   26 Mar 2021 12:38:29 +0530
-Message-ID: <20210326123828.80F65B159EB88F99@sac.com.tw>
+        id S229768AbhCZI6K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Mar 2021 04:58:10 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:14490 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229474AbhCZI5p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Mar 2021 04:57:45 -0400
+Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F6G5c3HSJzrbDW;
+        Fri, 26 Mar 2021 16:55:32 +0800 (CST)
+Received: from huawei.com (10.67.165.24) by DGGEMS409-HUB.china.huawei.com
+ (10.3.19.209) with Microsoft SMTP Server id 14.3.498.0; Fri, 26 Mar 2021
+ 16:57:22 +0800
+From:   Longfang Liu <liulongfang@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <stern@rowland.harvard.edu>
+CC:     <linux-usb@vger.kernel.org>, <yisen.zhuang@huawei.com>,
+        <tanxiaofei@huawei.com>, <liudongdong3@huawei.com>,
+        <liulongfang@huawei.com>, <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH] USB:ohci:fix ohci interruption problem
+Date:   Fri, 26 Mar 2021 16:54:56 +0800
+Message-ID: <1616748896-9415-1-git-send-email-liulongfang@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain
+X-Originating-IP: [10.67.165.24]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greetings,
+When OHCI enters the S4 sleep state, the USB sleep process will call
+check_root_hub_suspend() and ohci_bus_suspend() instead of
+ohci_suspend() and ohci_bus_suspend(), this causes the OHCI interrupt
+to not be closed.
+
+At this time, if just one device interrupt is reported. Since rh_state
+has been changed to OHCI_RH_SUSPENDED after ohci_bus_suspend(), the
+driver will not process and close this device interrupt. It will cause
+the entire system to be stuck during sleep, causing the device to
+fail to respond.
+
+When the abnormal interruption reaches 100,000 times, the system will
+forcibly close the interruption and make the device unusable.
+
+Since the problem is that the interrupt is not closed, we copied the
+interrupt shutdown operation of ohci_suspend() into ohci_bus_suspend()
+during the S4 sleep period. We found that this method can solve this
+problem.
+
+At present, we hope to be able to call ohci_suspend() directly during
+the sleep process of S4. Do you have any suggestions for this
+modification?
+
+Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+---
+ drivers/usb/host/ohci-hub.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/ohci-hub.c b/drivers/usb/host/ohci-hub.c
+index 634f3c7..d468cef 100644
+--- a/drivers/usb/host/ohci-hub.c
++++ b/drivers/usb/host/ohci-hub.c
+@@ -315,6 +315,14 @@ static int ohci_bus_suspend (struct usb_hcd *hcd)
+ 		del_timer_sync(&ohci->io_watchdog);
+ 		ohci->prev_frame_no = IO_WATCHDOG_OFF;
+ 	}
++
++	spin_lock_irqsave(&ohci->lock, flags);
++	ohci_writel(ohci, OHCI_INTR_MIE, &ohci->regs->intrdisable);
++	(void)ohci_readl(ohci, &ohci->regs->intrdisable);
++
++	clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
++	spin_unlock_irqrestore(&ohci->lock, flags);
++
+ 	return rc;
+ }
  
-We are the leading provider of IELTS CERTIFICATE ONLINE. You
-don’t have to worry if you can’t pass in the IELTS exam, for we
-are here to issue you this certificate without constrain. We make
-it possible for you to get the IELTS certificate even without
-appearing for the exam or even if you have failed to pass in the
-exam with us you can obtain a genuine IELTS certificate. All our
-IELTS certificate for sale are verified. Don’t believe us?
-Contact us and see for yourself. You will receive a test report
-card once we issue your certificate, in which there will be all
-your candidate details.
+@@ -326,7 +334,10 @@ static int ohci_bus_resume (struct usb_hcd *hcd)
+ 	if (time_before (jiffies, ohci->next_statechange))
+ 		msleep(5);
+ 
+-	spin_lock_irq (&ohci->lock);
++	spin_lock_irq(&ohci->lock);
++	set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
++	ohci_writel(ohci, OHCI_INTR_MIE, &ohci->regs->intrenable);
++	ohci_readl(ohci, &ohci->regs->intrenable);
+ 
+ 	if (unlikely(!HCD_HW_ACCESSIBLE(hcd)))
+ 		rc = -ESHUTDOWN;
+-- 
+2.8.1
 
-If you want to buy registered IELTS certificate online, we are
-the first name that comes to mind. We let you buy real British
-Council certificates. All our certificates are registered at the
-British Council database system and we make sure that you can
-verify your IELTS certificate online on the official website of
-the British Council or IDP. Isn’t it what you were looking for?
-
-Contact us: ujam1955@gmail.com
