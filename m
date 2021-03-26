@@ -2,60 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E9734A902
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 14:52:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A908234A951
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 15:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbhCZNvi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Mar 2021 09:51:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41114 "EHLO mail.kernel.org"
+        id S229986AbhCZOLJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Mar 2021 10:11:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44696 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230203AbhCZNvR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Mar 2021 09:51:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0AE1E61971;
-        Fri, 26 Mar 2021 13:51:15 +0000 (UTC)
+        id S230044AbhCZOKh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Mar 2021 10:10:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E98BF619BF;
+        Fri, 26 Mar 2021 14:10:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1616766676;
-        bh=3yxu25BCyXJuNRSnfqli1QuGuzszCOUzkRm5a7AUprg=;
+        s=korg; t=1616767832;
+        bh=tg6wqpUQLTq0MVUDEswX9U7R74oCgx7H2mv1qSOusbk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pLD8TjjGbcl1RYgn2bQ81BR4ivofFupKbksBNMoMTvZbkKJzgJMng9etNxZ9RYaeS
-         rcWEc1LSn6aYeDUod3OqbxbWGPSWE1nb2Sj2+VNJNOLSgjIC1mPVKWdh9c73bSmopN
-         lbps7/eiVuEhVFpFW+QoIMzFEBPY9z3lKP5G1SzU=
-Date:   Fri, 26 Mar 2021 14:51:14 +0100
+        b=svD1ak7iD7YvJ7T2ll8CXZkE1vdrnBje0/WGabaR9Y/OWFRp5odPvbwFTlzqr0o9s
+         kr99FSf/b/Gb1wPwKtYC0cCYMfcfo4EDlXKCWA8SpIKOmHprD47myu8fF0jowEp7Il
+         En3CVjzYODoiFTWZHJfWghyjspuop4CDXItkx6IU=
+Date:   Fri, 26 Mar 2021 15:10:30 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Bin Liu <b-liu@ti.com>, linux-usb@vger.kernel.org,
-        linux-omap@vger.kernel.org, Bhushan Shah <bshah@kde.org>
-Subject: Re: [PATCH RESEND] usb: musb: Fix suspend with devices connected for
- a64
-Message-ID: <YF3m0jAOfIT/ounG@kroah.com>
-References: <20210324071142.42264-1-tony@atomide.com>
+To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        John Youn <John.Youn@synopsys.com>,
+        Paul Zimmerman <paulz@synopsys.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "#@synopsys.com" <#@synopsys.com>,
+        "4.18@synopsys.com" <4.18@synopsys.com>,
+        "5.2@synopsys.com" <5.2@synopsys.com>, Felipe Balbi <balbi@ti.com>,
+        Kever Yang <kever.yang@rock-chips.com>
+Subject: Re: [PATCH 0/3] usb: dwc2: Fix power saving general issues.
+Message-ID: <YF3rVonRVVRs7NQN@kroah.com>
+References: <20210326102400.359EFA005C@mailhost.synopsys.com>
+ <YF3ihMf3cHESK0cq@kroah.com>
+ <d8f33c04-8632-ee13-a056-5f7b706fdcd3@synopsys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210324071142.42264-1-tony@atomide.com>
+In-Reply-To: <d8f33c04-8632-ee13-a056-5f7b706fdcd3@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 24, 2021 at 09:11:41AM +0200, Tony Lindgren wrote:
-> Pinephone running on Allwinner A64 fails to suspend with USB devices
-> connected as reported by Bhushan Shah <bshah@kde.org>. Reverting
-> commit 5fbf7a253470 ("usb: musb: fix idling for suspend after
-> disconnect interrupt") fixes the issue.
+On Fri, Mar 26, 2021 at 01:45:40PM +0000, Artur Petrosyan wrote:
+> Hi Greg,
 > 
-> Let's add suspend checks also for suspend after disconnect interrupt
-> quirk handling like we already do elsewhere.
+> On 3/26/2021 17:32, Greg Kroah-Hartman wrote:
+> > On Fri, Mar 26, 2021 at 02:23:58PM +0400, Artur Petrosyan wrote:
+> >> This patch set is part of multiple series and is
+> >> continuation of the "usb: dwc2: Fix and improve
+> >> power saving modes" patch set.
+> >> (Patch set link: https://urldefense.com/v3/__https://marc.info/?l=linux-usb&m=160379622403975&w=2__;!!A4F2R9G_pg!Icyuillfz_Iy_FrHe2RmVP0zFNTYupWQYmma2AX71Jsqg4cwSaw4hKokDSvIBxrAdsRmUD4$ ).
+> >>
+> >> The patches that were included in the "usb: dwc2:
+> >> Fix and improve power saving modes" which was submitted
+> >> earlier was too large and needed to be split up into
+> >> smaller patch sets. So this is the first series in the
+> >> whole power saving mode fixes.
+> >>
+> >> Each remaining patch set have dependency on previous set
+> >> and will be submitted after each of them are integrated.
+> >>
+> >> The series includes the following patch sets with multiple patches
+> >> by below order.
+> >>   1. usb: dwc2: Fix power saving general issues.
+> >>   2. usb: dwc2: Fix Partial Power down issues.
+> >>   3. usb: dwc2: Add clock gating support.
+> >>   4. usb: dwc2: Fix Hibernation issues
+> > 
+> > You only sent 3 patches, not 4.
+> > 
+> > So this makes no sense to me, what am I supposed to do?
+> The 4 items that are listed are patch sets. The first patch set that I 
+> have sent is "usb: dwc2: Fix power saving general issues.", which 
+> includes the 3 patches that have been sent.
 > 
-> Fixes: 5fbf7a253470 ("usb: musb: fix idling for suspend after disconnect interrupt")
-> Reported-by: Bhushan Shah <bshah@kde.org>
-> Tested-by: Bhushan Shah <bshah@kde.org>
-> Signed-off-by: Tony Lindgren <tony@atomide.com>
-> 
-> ---
-> 
-> Looks like this fix is still pending, can you guys please apply? This is also
-> needed on am335x to suspend with devices connected in addition to a64
+> I wrote the other 3 patch set names in the list to indicate that I will 
+> send them after this "usb: dwc2: Fix power saving general issues." patch 
+> set is integrated to mainline.
 
-Now queued up, thanks.
+I'm not taking this first patch as-is, sorry, see my comments on it
+already.
+
+I took patch 2 and 3 though.
+
+thanks,
 
 greg k-h
