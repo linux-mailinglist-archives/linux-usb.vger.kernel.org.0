@@ -2,99 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 521A734B8E4
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Mar 2021 19:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F106634B910
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Mar 2021 20:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbhC0S3J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 27 Mar 2021 14:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbhC0S22 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 27 Mar 2021 14:28:28 -0400
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABD6C0613B2
-        for <linux-usb@vger.kernel.org>; Sat, 27 Mar 2021 11:28:28 -0700 (PDT)
-Received: by mail-qk1-x749.google.com with SMTP id c1so8832507qke.8
-        for <linux-usb@vger.kernel.org>; Sat, 27 Mar 2021 11:28:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=X45eDZbZ1G5E6KWs205oaawTbgGY1el7OrtpH5YicfE=;
-        b=ugBxdy+F95hbZdPyYjmqGeP8SzM+DpBjPRJZcPWXytAsY1k+nz3/8EKi34dAH9WOBg
-         23hoCetgwrEkMDIboJ+4+Z4mrYhyyYZxlXvpgKT54j1EKY1sDk9/smndOFswRCIFpTY+
-         SZ6ct7ocSEBXCaOmqM/wxEgSvOliAgLLwVdQK+qBOlQSdnyD6ibZc/1S4RuhA8cc5bMV
-         vLh+a1vqhaDn+kpaEJ6Zyr/ewdJtTfy4Rq2wvX7CS9kkek4x7jv/NWYNWB0XLm/cQkeW
-         G2jQYOOV4sirkaBvtBstS9mrZXpBteQV9Xlra+qmxPsUOIBbuc8ImsV/YTIYhQ1/ZgC9
-         czlQ==
+        id S230363AbhC0TPY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 27 Mar 2021 15:15:24 -0400
+Received: from mail-oo1-f50.google.com ([209.85.161.50]:33636 "EHLO
+        mail-oo1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230002AbhC0TOy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 27 Mar 2021 15:14:54 -0400
+Received: by mail-oo1-f50.google.com with SMTP id i25-20020a4aa1190000b02901bbd9429832so2090077ool.0;
+        Sat, 27 Mar 2021 12:14:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=X45eDZbZ1G5E6KWs205oaawTbgGY1el7OrtpH5YicfE=;
-        b=J7GjArNi5vDtjOKDdjBBQDcIVGn72aYZHwmiRLJOANS1oZ+xDEPK0fdkt9CFrcCcTk
-         wc9N0DtUZPdZhE6taqVTqQ0lxiPngf4xOyITb0tjxWEQOFJf7uIUIU37nXWT47bfZR7z
-         8x01jLIMKKjhZx1y4pKodi9oHOKNnEklhHFDPrtj3cu33Msj83kTn+bJZUuDm8FJ7zCF
-         KpiWb+w+tDVzCfnK3QFhG5/AkSS4rxLHFDHBAK1Y/OUXKxJcpEjv0P4EyJpeVe5WLTuH
-         S27n0vmcxcWFmN5eAVR6MMGj8x/14/paAEt2fhZvU4SQ3PQK1sd8JiMVYCt+Yy/8wnHQ
-         RXwA==
-X-Gm-Message-State: AOAM533k21EUJJFotV3wRweuKs0mgR8TaijB76+AAt8eU2zygnZ5EWqu
-        MQg8vcuo9/EH9HWy4+nKpAG0AlnF6Ew=
-X-Google-Smtp-Source: ABdhPJzFbYU/AO5bbpshyBr3fNe2qpIRy0A3unQtF6tfkrKAfdwwJE+s0kUa34JdIl7oU+m1+xqLYG86Ams=
-X-Received: from raychi.tao.corp.google.com ([2401:fa00:fc:202:493c:e5b:69c:54cb])
- (user=raychi job=sendgmr) by 2002:a05:6214:18d2:: with SMTP id
- cy18mr18945606qvb.50.1616869707507; Sat, 27 Mar 2021 11:28:27 -0700 (PDT)
-Date:   Sun, 28 Mar 2021 02:28:09 +0800
-In-Reply-To: <20210327182809.1814480-1-raychi@google.com>
-Message-Id: <20210327182809.1814480-3-raychi@google.com>
-Mime-Version: 1.0
-References: <20210327182809.1814480-1-raychi@google.com>
-X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
-Subject: [PATCH 2/2] power: supply: Fix build error when CONFIG_POWER_SUPPLY
- is not enabled.
-From:   Ray Chi <raychi@google.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org, sre@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kyletso@google.com, badhri@google.com, Ray Chi <raychi@google.com>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RJM2bVHCK7BxNIGpfIcjAjD1sJBOUOHW5fDFqBo6mGU=;
+        b=FCfr5AYSKqT5b/nQLNHPIWPJHSU5+fQBrKdSqNiWhWjj6yX9bel2lNrjhbquBgyFs9
+         rmIsmN4j0L/dADQTe+opXP46cF/X/oZi4UhwtTvbVrwwa+FGcwF0bFEpEZrNIhw3SUej
+         XbodHKyPraOm8tInBy4t5gVhBUdMXvaP3lpJ1oPt6Sh9QrNdkpz794/j4KCIrADGiwxy
+         7OPfsz5qjQmrxKev1qyzXbTtN7toi2y4b2nsmJSXU/4sX+sCARQgsocOxqrnBfGReCHd
+         oRYH94Iiym4/A5JLCsbXFtg5mVqFAv9TrlOBK4NaISnl3vnM9VQ+oLZtDajW/WwapT43
+         xMJQ==
+X-Gm-Message-State: AOAM532HFLELFECQH8sclAmVP33GpjxXnC16RcCxq5BgC/gWXf4iN4Hw
+        JK13bIX1uGt12Fun6ujtvw==
+X-Google-Smtp-Source: ABdhPJxuVYP4PMMJrWg+7NZfyL/wCninyJW1DtmR9kRPcqdJGU+7CoadsQWAkRt9wBjvtuHifV5EaQ==
+X-Received: by 2002:a4a:d513:: with SMTP id m19mr339295oos.92.1616872493395;
+        Sat, 27 Mar 2021 12:14:53 -0700 (PDT)
+Received: from localhost.localdomain ([172.58.99.41])
+        by smtp.googlemail.com with ESMTPSA id k9sm3072686ots.24.2021.03.27.12.14.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Mar 2021 12:14:52 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] dt-bindings: usb: mediatek,mtu3: Use graph schema
+Date:   Sat, 27 Mar 2021 14:14:48 -0500
+Message-Id: <20210327191448.410795-1-robh@kernel.org>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The build error happens when CONFIG_POWER_SUPPLY is not enabled.
+Users of the DT graph binding now should reference it for their 'port'
+schemas, so add it for Mediatek MTU3 binding.
 
-h8300-linux-ld: drivers/usb/dwc3/gadget.o: in function `.L59':
->> gadget.c:(.text+0x655): undefined reference to `power_supply_set_property'
-
-Fixes: 99288de36020 ("usb: dwc3: add an alternate path in vbus_draw callback")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Ray Chi <raychi@google.com>
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- include/linux/power_supply.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+ Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 81a55e974feb..b495b4374cd0 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -426,9 +426,16 @@ static inline int power_supply_is_system_supplied(void) { return -ENOSYS; }
- extern int power_supply_get_property(struct power_supply *psy,
- 			    enum power_supply_property psp,
- 			    union power_supply_propval *val);
-+#if IS_ENABLED(CONFIG_POWER_SUPPLY)
- extern int power_supply_set_property(struct power_supply *psy,
- 			    enum power_supply_property psp,
- 			    const union power_supply_propval *val);
-+#else
-+static inline int power_supply_set_property(struct power_supply *psy,
-+			    enum power_supply_property psp,
-+			    const union power_supply_propval *val)
-+{ return 0; }
-+#endif
- extern int power_supply_property_is_writeable(struct power_supply *psy,
- 					enum power_supply_property psp);
- extern void power_supply_external_power_changed(struct power_supply *psy);
+diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+index f5c04b9d2de9..ca11a70ece7f 100644
+--- a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
++++ b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+@@ -126,7 +126,7 @@ properties:
+       Any connector to the data bus of this controller should be modelled
+       using the OF graph bindings specified, if the "usb-role-switch"
+       property is used. See graph.txt
+-    type: object
++    $ref: /schemas/graph.yaml#/properties/port
+ 
+   enable-manual-drd:
+     $ref: /schemas/types.yaml#/definitions/flag
 -- 
-2.31.0.291.g576ba9dcdaf-goog
+2.27.0
 
