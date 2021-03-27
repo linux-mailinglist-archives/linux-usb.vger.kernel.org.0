@@ -2,58 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99DC334B447
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Mar 2021 05:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 366CA34B50D
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Mar 2021 08:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbhC0Eu7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 27 Mar 2021 00:50:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36600 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229436AbhC0EuZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 27 Mar 2021 00:50:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 46B92619E4;
-        Sat, 27 Mar 2021 04:50:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616820624;
-        bh=Z0tIGB2gR7iDVQpCU37gBJN0QgIrfaYJ/ZrhmVD8cig=;
-        h=Date:From:To:Cc:Subject:From;
-        b=OQGqM6eYLmHBEaCcvytWwaDcihGCee1Wo6z02LCGf7PKstKQub4Rez35nfO8VW7i3
-         vUC9ad5U3fVy0GYvHZq/JkAA+EWdPDoGgr0nPltgIxP25Udq/jUUPObmMBglJYiL6t
-         1BYbvo9gtlvEFrz75cWhIb3sHW1T0ERAROUsybiu4bx35CQY4C5a6mEnOyWZRO3kMv
-         p6KiE/jrwhbkt8opD2a9thhhWh4myXcsrgmzhC5CzD/plfV4vveDkJzhRYYtWYodoB
-         U+8IQusBNWpWHukylyN/U6oUvgb4y2d5e6dn6W+PRXqI7YRB+ChQOv3Yd9yDPDLD05
-         Vu8ZduwfKJRlg==
-Date:   Sat, 27 Mar 2021 12:50:16 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: About use case of cdns3-pci-wrap.c
-Message-ID: <20210327045016.GD28870@b29397-desktop>
+        id S231338AbhC0Hh0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 27 Mar 2021 03:37:26 -0400
+Received: from smtp06.smtpout.orange.fr ([80.12.242.128]:33972 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230203AbhC0Hg6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 27 Mar 2021 03:36:58 -0400
+Received: from localhost.localdomain ([90.126.11.170])
+        by mwinf5d29 with ME
+        id lKcs2400F3g7mfN03Kcs99; Sat, 27 Mar 2021 08:36:56 +0100
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 27 Mar 2021 08:36:56 +0100
+X-ME-IP: 90.126.11.170
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        krzysztof.kozlowski@canonical.com, nathan@kernel.org,
+        arnd@arndb.de, gustavoars@kernel.org, weiyongjun1@huawei.com
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH v3 1/2] usb: gadget: s3c: Fix incorrect resources releasing
+Date:   Sat, 27 Mar 2021 08:36:50 +0100
+Message-Id: <b317638464f188159bd8eea44427dd359e480625.1616830026.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Pawel,
+Since commit 188db4435ac6 ("usb: gadget: s3c: use platform resources"),
+'request_mem_region()' and 'ioremap()' are no more used, so they don't need
+to be undone in the error handling path of the probe and in the remove
+function.
 
-From the code of this file, it seems the controller driver is running at
-PC side, but the hardware controller is at verification board, the two sides
-are connected by PCIe. Am I right?
+Remove these calls and the unneeded 'rsrc_start' and 'rsrc_len' global
+variables.
 
-If I am right, the memory (eg, the TRB ring address and data buffer) the hardware
-try to visit is at PC side, but how controller visits PC memory since the TRB ring
-address is allocated dynamically by controller device driver running at
-PC? How the local bus arbiter knows it is PCIe address at verification board?
-Besides, could the upstream code run this IP verification solution through PCIe
-without changing any code?
+Fixes: 188db4435ac6 ("usb: gadget: s3c: use platform resources")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+the 'err' label is used only to reduce the diff size of this patch. It is
+removed in the following patch.
 
-Thanks.
+v2: Fix a stupid error in the hash in Fixes:
+v3: s/removre/remove/
+    Add Reviewed-by:
+---
+ drivers/usb/gadget/udc/s3c2410_udc.c | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
+diff --git a/drivers/usb/gadget/udc/s3c2410_udc.c b/drivers/usb/gadget/udc/s3c2410_udc.c
+index 1d3ebb07ccd4..b81979b3bdb6 100644
+--- a/drivers/usb/gadget/udc/s3c2410_udc.c
++++ b/drivers/usb/gadget/udc/s3c2410_udc.c
+@@ -54,8 +54,6 @@ static struct clk		*udc_clock;
+ static struct clk		*usb_bus_clock;
+ static void __iomem		*base_addr;
+ static int			irq_usbd;
+-static u64			rsrc_start;
+-static u64			rsrc_len;
+ static struct dentry		*s3c2410_udc_debugfs_root;
+ 
+ static inline u32 udc_read(u32 reg)
+@@ -1775,7 +1773,7 @@ static int s3c2410_udc_probe(struct platform_device *pdev)
+ 	base_addr = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(base_addr)) {
+ 		retval = PTR_ERR(base_addr);
+-		goto err_mem;
++		goto err;
+ 	}
+ 
+ 	the_controller = udc;
+@@ -1793,7 +1791,7 @@ static int s3c2410_udc_probe(struct platform_device *pdev)
+ 	if (retval != 0) {
+ 		dev_err(dev, "cannot get irq %i, err %d\n", irq_usbd, retval);
+ 		retval = -EBUSY;
+-		goto err_map;
++		goto err;
+ 	}
+ 
+ 	dev_dbg(dev, "got irq %i\n", irq_usbd);
+@@ -1864,10 +1862,7 @@ static int s3c2410_udc_probe(struct platform_device *pdev)
+ 		gpio_free(udc_info->vbus_pin);
+ err_int:
+ 	free_irq(irq_usbd, udc);
+-err_map:
+-	iounmap(base_addr);
+-err_mem:
+-	release_mem_region(rsrc_start, rsrc_len);
++err:
+ 
+ 	return retval;
+ }
+@@ -1899,9 +1894,6 @@ static int s3c2410_udc_remove(struct platform_device *pdev)
+ 
+ 	free_irq(irq_usbd, udc);
+ 
+-	iounmap(base_addr);
+-	release_mem_region(rsrc_start, rsrc_len);
+-
+ 	if (!IS_ERR(udc_clock) && udc_clock != NULL) {
+ 		clk_disable_unprepare(udc_clock);
+ 		clk_put(udc_clock);
 -- 
-
-Thanks,
-Peter Chen
+2.27.0
 
