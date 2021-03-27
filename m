@@ -2,182 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B2434B94E
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Mar 2021 21:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 615C434B9C8
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Mar 2021 23:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbhC0U2v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 27 Mar 2021 16:28:51 -0400
-Received: from mail-oo1-f46.google.com ([209.85.161.46]:46803 "EHLO
-        mail-oo1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbhC0U2X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 27 Mar 2021 16:28:23 -0400
-Received: by mail-oo1-f46.google.com with SMTP id 125-20020a4a1a830000b02901b6a144a417so2094935oof.13;
-        Sat, 27 Mar 2021 13:28:22 -0700 (PDT)
+        id S231138AbhC0WSd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 27 Mar 2021 18:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230521AbhC0WSI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 27 Mar 2021 18:18:08 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CEDC0613B1;
+        Sat, 27 Mar 2021 15:18:08 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id w8so4227549pjf.4;
+        Sat, 27 Mar 2021 15:18:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TfAEx42ev3o6ArqZhaNIyJVqiP9OCV2R4A7TGL7rtCQ=;
+        b=hEIX0oPfFAcrO/k2kHkBhcRtyqj0FD8mWIVQTlxw0OI+uaj1TI1YX6ADQim1U0iOZW
+         GuL0cAthlpIezO6y+IRAKjh6xXQTNQKBxgHSTmG4tnmf78nGsxPtZ3dC2UDFWBAt3eEG
+         rl0eyQgCNjLI9L76/2PPYxRLs9DJkSmB4HB1bjINsGI/kKTUm/NrrypRdfdN7BFwYzF+
+         jewrygWiUtD/GptSIm9w+FsGIsNA3FMxcua0D1JMHJU+va2wrmTH6l2P8YsydoAkAgmE
+         q4NTr0kcCPcJVnRsSNN+hrlpRL8/QluboOjTnotPEFTSygMmBHUZyPvikhMck07XnRuU
+         doug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XNZ+EBfgEMxRAYAYmvTpo4CEdtKjfZhi1SZZY27qM3s=;
-        b=AKp7L+9zfL9pYjqMX2MmZTVuEQ+Ltl0dai3IB+tstJ9xy5HmlFoaUpSNLWcpwYqyig
-         UdK424ak7c3ft95+ihXzti8GiPVqZ9p0CtlvnHhG6ErdWLQ0ghYkyPb1Lbnhchw+yglU
-         CJt/8i9Y+55Qq9SjFt9Jy4AO8VZr4D7kgeo3sDhFRm+UiWlCq7yLPR89h+/f+YpoX067
-         CBYn6WFhseP1ggbNv4wRhvJlsrL3C6ymyPbqS+YbWyt5C5llQjciPL3+FmVOYeExQCYL
-         Fvz1HktSO1fic1blrjwYrfxaIyVBQhtPXqcc/2TSub3UjEhNm6yEAMWnMLdBGdklL+QE
-         6yqQ==
-X-Gm-Message-State: AOAM530VwpL7iEOonX7osDlvbxJqt8ZUEw+nkZGqQYoQ9tAPU75qFJ9v
-        NUGX0Vbqhq2fpfJbx4rwVYuGuLrnKA==
-X-Google-Smtp-Source: ABdhPJyjnLnM810IvrzTRnhmp/iGLuoOmVrLr0coFaIMeYBRZJYgtkA8ZNolpD8nyGJ7T8AdW6pCKA==
-X-Received: by 2002:a4a:4843:: with SMTP id p64mr16168509ooa.9.1616876902271;
-        Sat, 27 Mar 2021 13:28:22 -0700 (PDT)
-Received: from localhost.localdomain ([172.58.99.41])
-        by smtp.googlemail.com with ESMTPSA id f2sm2788994oos.16.2021.03.27.13.28.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Mar 2021 13:28:21 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] dt-bindings: usb: usb-nop-xceiv: Convert to DT schema
-Date:   Sat, 27 Mar 2021 15:28:16 -0500
-Message-Id: <20210327202816.545282-1-robh@kernel.org>
-X-Mailer: git-send-email 2.27.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TfAEx42ev3o6ArqZhaNIyJVqiP9OCV2R4A7TGL7rtCQ=;
+        b=aqJI+dSAePfxGXKR3YsMtJ0lM/bpDPRgUrl7CSd8HaA71T6jR5v4o4sFJ/NeWVqAi6
+         ADdDEejgCAUbe9R+TvVkanPk5idFlY/MNUSMj1nVG6gTu1YiMfXFM/Yz+VzySDivwNeP
+         gk9A0XQlj8+N02cv9O1lVdCQ3qO2KBA9Xdtl9l0QQUOIoBw0aXaurYu2FXCRftEeBCKh
+         2qpSahq4hLZykgZTMgJMnOc9CUgz340URttFDaIftMT5Q9CXsTRKQMKlhvoYx8jYF9v4
+         PtXLSK25QFANEOeHTNrlR2E80EP8JxeLJ1WHa01Lg55HLff/VL3N+KNdQf4KmAGM6OWM
+         tv3w==
+X-Gm-Message-State: AOAM530BqUbIxQzX5Yi3L87/3XDgZoVL+gb0b87kPgCVtk8I5wyXXDg8
+        iVfozL4Fbw5kxq4guqci7DE=
+X-Google-Smtp-Source: ABdhPJzeFGmdx4jE/ciUSpsHKE6xAr8FYqvdR4DTlTaf3eq386gCWxZiN00dRBITxd0uK38fOjOKcQ==
+X-Received: by 2002:a17:902:ce8d:b029:e4:bc38:c4 with SMTP id f13-20020a170902ce8db02900e4bc3800c4mr21203549plg.48.1616883487619;
+        Sat, 27 Mar 2021 15:18:07 -0700 (PDT)
+Received: from taoren-ubuntu-R90MNF91 (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
+        by smtp.gmail.com with ESMTPSA id b10sm12555994pgm.76.2021.03.27.15.18.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 27 Mar 2021 15:18:07 -0700 (PDT)
+Date:   Sat, 27 Mar 2021 15:17:59 -0700
+From:   Tao Ren <rentao.bupt@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        kernel test robot <lkp@intel.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Ryan Chen <ryan_chen@aspeedtech.com>,
+        Thomas Tai <thomas.tai@oracle.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, Tao Ren <taoren@fb.com>
+Subject: Re: [PATCH] usb: gadget: aspeed: set port_dev dma mask
+Message-ID: <20210327221759.GA2997@taoren-ubuntu-R90MNF91>
+References: <20210326070214.6719-1-rentao.bupt@gmail.com>
+ <10920f34-289c-feac-79b6-71bff2aea67d@arm.com>
+ <20210326120526.GA14169@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210326120526.GA14169@lst.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Convert the usb-nop-xceiv binding to DT schema.
+On Fri, Mar 26, 2021 at 01:05:26PM +0100, Christoph Hellwig wrote:
+> On Fri, Mar 26, 2021 at 12:03:03PM +0000, Robin Murphy wrote:
+> > This might happen to work out, but is far from correct. Just wait until you 
+> > try it on a platform where the USB controller is behind an IOMMU...
+> >
+> > It looks like something is more fundamentally wrong here - the device 
+> > passed to DMA API calls must be the actual hardware device performing the 
+> > DMA, which in USB-land I believe means the controller's sysdev.
+> 
+> The shiny new usb_intf_get_dma_device API provides the device to use.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/usb/usb-nop-xceiv.txt | 43 -------------
- .../bindings/usb/usb-nop-xceiv.yaml           | 64 +++++++++++++++++++
- 2 files changed, 64 insertions(+), 43 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt
- create mode 100644 Documentation/devicetree/bindings/usb/usb-nop-xceiv.yaml
+Thanks Robin and Christoph for the feedback.
 
-diff --git a/Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt b/Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt
-deleted file mode 100644
-index 4dc6a8ee3071..000000000000
---- a/Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt
-+++ /dev/null
-@@ -1,43 +0,0 @@
--USB NOP PHY
--
--Required properties:
--- compatible: should be usb-nop-xceiv
--- #phy-cells: Must be 0
--
--Optional properties:
--- clocks: phandle to the PHY clock. Use as per Documentation/devicetree
--  /bindings/clock/clock-bindings.txt
--  This property is required if clock-frequency is specified.
--
--- clock-names: Should be "main_clk"
--
--- clock-frequency: the clock frequency (in Hz) that the PHY clock must
--  be configured to.
--
--- vcc-supply: phandle to the regulator that provides power to the PHY.
--
--- reset-gpios: Should specify the GPIO for reset.
--
--- vbus-detect-gpio: should specify the GPIO detecting a VBus insertion
--                    (see Documentation/devicetree/bindings/gpio/gpio.txt)
--- vbus-regulator : should specifiy the regulator supplying current drawn from
--  the VBus line (see Documentation/devicetree/bindings/regulator/regulator.txt).
--
--Example:
--
--	hsusb1_phy {
--		compatible = "usb-nop-xceiv";
--		clock-frequency = <19200000>;
--		clocks = <&osc 0>;
--		clock-names = "main_clk";
--		vcc-supply = <&hsusb1_vcc_regulator>;
--		reset-gpios = <&gpio1 7 GPIO_ACTIVE_LOW>;
--		vbus-detect-gpio = <&gpio2 13 GPIO_ACTIVE_HIGH>;
--		vbus-regulator = <&vbus_regulator>;
--		#phy-cells = <0>;
--	};
--
--hsusb1_phy is a NOP USB PHY device that gets its clock from an oscillator
--and expects that clock to be configured to 19.2MHz by the NOP PHY driver.
--hsusb1_vcc_regulator provides power to the PHY and GPIO 7 controls RESET.
--GPIO 13 detects VBus insertion, and accordingly notifies the vbus-regulator.
-diff --git a/Documentation/devicetree/bindings/usb/usb-nop-xceiv.yaml b/Documentation/devicetree/bindings/usb/usb-nop-xceiv.yaml
-new file mode 100644
-index 000000000000..2824c17285ee
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/usb-nop-xceiv.yaml
-@@ -0,0 +1,64 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/usb-nop-xceiv.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: USB NOP PHY
-+
-+maintainers:
-+  - Rob Herring <robh@kernel.org>
-+
-+properties:
-+  compatible:
-+    const: usb-nop-xceiv
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: main_clk
-+
-+  clock-frequency: true
-+
-+  '#phy-cells':
-+    const: 0
-+
-+  vcc-supply:
-+    description: phandle to the regulator that provides power to the PHY.
-+
-+  reset-gpios:
-+    maxItems: 1
-+
-+  vbus-detect-gpio:
-+    description: Should specify the GPIO detecting a VBus insertion
-+    maxItems: 1
-+
-+  vbus-regulator:
-+    description: Should specifiy the regulator supplying current drawn from
-+      the VBus line.
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+required:
-+  - compatible
-+  - '#phy-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    hsusb1_phy {
-+        compatible = "usb-nop-xceiv";
-+        clock-frequency = <19200000>;
-+        clocks = <&osc 0>;
-+        clock-names = "main_clk";
-+        vcc-supply = <&hsusb1_vcc_regulator>;
-+        reset-gpios = <&gpio1 7 GPIO_ACTIVE_LOW>;
-+        vbus-detect-gpio = <&gpio2 13 GPIO_ACTIVE_HIGH>;
-+        vbus-regulator = <&vbus_regulator>;
-+        #phy-cells = <0>;
-+    };
-+
-+...
--- 
-2.27.0
+If I understand correctly, usb_intf_get_dma_device API is mainly for usb
+host drivers? I just found usb_gadget_map_request_by_dev API: does it
+make sense to replace usb_gadget_map_request with
+usb_gadget_map_request_by_dev so we can pass the actual DMA-capable
+hardware device (aspeed-vhub platform device) to the API?
 
+
+Cheers,
+
+Tao
