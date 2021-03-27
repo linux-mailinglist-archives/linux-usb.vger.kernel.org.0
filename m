@@ -2,64 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13ABF34B764
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Mar 2021 14:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 318B134B81B
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Mar 2021 17:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbhC0NgE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 27 Mar 2021 09:36:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37858 "EHLO mail.kernel.org"
+        id S230086AbhC0QOf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 27 Mar 2021 12:14:35 -0400
+Received: from vps-vb.mhejs.net ([37.28.154.113]:37562 "EHLO vps-vb.mhejs.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229582AbhC0Nfb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 27 Mar 2021 09:35:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3BF4E619B4;
-        Sat, 27 Mar 2021 13:35:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1616852130;
-        bh=Nupl1h4L3SrvV6jeooPg4igwqzoBR9zVxBIfDnVt+Ws=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ITLqQbDcNg1pWJF9wcg8RmMX/7LtRW/YIho350gj34w4jlAhVkVBf2JdhrKrW+cw0
-         vg6RY0hxOogsN3GUC1pWxVCWE9uukKh7tvcNE2o4MYKpGgsKdMjmAnHocvACG/CuP9
-         r771hR11e5tzq4Ua/7p75ofXEgFdv7GswvPp0bxQ=
-Date:   Sat, 27 Mar 2021 14:35:27 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ray Chi <raychi@google.com>
-Cc:     balbi@kernel.org, Thinh.Nguyen@synopsys.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        albertccwang@google.com
-Subject: Re: [Patch v3] usb: dwc3: add cancelled reasons for dwc3 requests
-Message-ID: <YF80n+iN9zYYooOB@kroah.com>
-References: <20210327132202.1759953-1-raychi@google.com>
+        id S229582AbhC0QO2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 27 Mar 2021 12:14:28 -0400
+X-Greylist: delayed 1135 seconds by postgrey-1.27 at vger.kernel.org; Sat, 27 Mar 2021 12:14:27 EDT
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps (TLS1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.93.0.4)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1lQBHa-0006Gy-JO; Sat, 27 Mar 2021 16:55:26 +0100
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: >20 KB URBs + EHCI = bad performance due to stalls
+Message-ID: <6f5be7a5-bf82-e857-5c81-322f2886099a@maciej.szmigiero.name>
+Date:   Sat, 27 Mar 2021 16:55:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210327132202.1759953-1-raychi@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Mar 27, 2021 at 09:22:02PM +0800, Ray Chi wrote:
-> Currently, when dwc3 handles request cancelled, dwc3 just returns
-> -ECONNRESET for all requests. It will cause USB function drivers
-> can't know if the requests are cancelled by other reasons.
-> 
-> This patch will replace DWC3_REQUEST_STATUS_CANCELLED with the
-> reasons below.
->   - DWC3_REQUEST_STATUS_DISCONNECTED
->   - DWC3_REQUEST_STATUS_DEQUEUED
->   - DWC3_REQUEST_STATUS_STALLED
-> 
-> Signed-off-by: Ray Chi <raychi@google.com>
-> ---
->  drivers/usb/dwc3/core.h   | 12 +++++++-----
->  drivers/usb/dwc3/gadget.c | 24 ++++++++++++++++++++----
->  drivers/usb/dwc3/gadget.h |  6 ++++--
->  3 files changed, 31 insertions(+), 11 deletions(-)
+Hi,
 
-What changed from the previous versions?  that should always go below
-the --- line as documented.
+Is there any specific reason that URBs without URB_SHORT_NOT_OK flag that
+span multiple EHCI qTDs have Alternate Next qTD pointer set to the dummy
+qTD in their every qTD besides the last one (instead of to the first qTD
+of the next URB to that endpoint)?
 
-Please fix up and submit a v4 with that information.
+This causes that endpoint queue to stall in case of a short read that
+does not reach the last qTD (I guess this condition persists until an
+URB is (re)submitted to that endpoint, but I am not sure here).
 
-thanks,
+One of affected drivers here is drivers/net/usb/r8152.c.
 
-greg k-h
+If I simply reduce its per-URB transfer buffer to 20 KB (the maximum
+that fits in a well-aligned qTD) the RX rate increases from around
+100 Mbps to 200+ Mbps (on an ICH8M controller):
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -6554,6 +6556,9 @@
+                 break;
+         }
+  
++       if (tp->udev->speed == USB_SPEED_HIGH)
++               tp->rx_buf_sz = min(tp->rx_buf_sz, (u32)20 * 1024);
++
+         return ret;
+  }
+
+The driver default is to use 32 KB buffers (which span two qTDs),
+but the device rarely fully fills the first qTD resulting in
+repetitive stalls and more than halving the performance.
+
+As far as I can see, the relevant code in
+drivers/usb/host/ehci-q.c::qh_urb_transaction() predates the git era.
+The comment in that function before setting the Alternate Next qTD
+pointer:
+> /*
+>  * short reads advance to a "magic" dummy instead of the next
+>  * qtd ... that forces the queue to stop, for manual cleanup.
+>  * (this will usually be overridden later.)
+>  */
+
+...suggests the idea was to override that pointer when
+URB_SHORT_NOT_OK is not set, but this is actually done only for
+the last qTD from the URB (also, that's the only one that ends
+with interrupt flag set).
+
+Looking at OHCI and UHCI host controller drivers the equivalent
+limits seem to be different there (8 KB and 2 KB), while I don't
+see any specific limit in the XHCI case.
+
+Because of that variance in the URB buffer limit it seems strange
+to me that this should be managed by a particular USB device driver
+rather than by the host controller driver, because this would mean
+every such driver would need to either use the lowest common
+denominator for the URB buffer size (which is very small) or
+hardcode the limit for every host controller that the device can
+be connected to, which seems a bit inefficient.
+
+Thanks,
+Maciej
