@@ -2,180 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E473534B235
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Mar 2021 23:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CE234B368
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Mar 2021 01:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbhCZWej (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Mar 2021 18:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbhCZWeW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Mar 2021 18:34:22 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0ACFC0613AA;
-        Fri, 26 Mar 2021 15:34:21 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id l3so5807841pfc.7;
-        Fri, 26 Mar 2021 15:34:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xCrxf8KWANSammOalLt55qLDasqp/niYHetjHjkFBW4=;
-        b=u6rPQ8cWE6iXSS/N5BfOKlQINGp/6uc0gEhAvj3MoHYQMHul9zEiswrLtNYmxiR7+T
-         5qFhnXRu/m9i4ELAQ5/7sjfddibZBLWJFfx/5gyOWjm9iSZjnMrEnT7edUMEi32VKRgq
-         tC+b4eZ31Lfkp+++loPuaqulh6wTtfge6k9c4US3FRlT0HUIPpfQ9WrRIxk4spgC43kx
-         CuWuXaXCE0bhDJHg0Eqp2RUEbsNGDB7krBg9t1zsxfTbwipVBrmlZ2rfxdjN0rkpgwYe
-         uCNQlfr6FRT89Avb4iKqGyjSHINO0nwXlJOiBtKS82oldlKNojmhMgwN/LbF8YnW/BPc
-         LLIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xCrxf8KWANSammOalLt55qLDasqp/niYHetjHjkFBW4=;
-        b=KAnC/BNiHHx0aU5Tbk+2A1ybapPxveFzNO/8E+crPOgISGtAayAYdhdLONVI3upsBl
-         jGvHTmJCq5wy2M+l2bN6vH+pHKE+EfW/QBudgGYwm4gognr0R64qD3PpijmFitMJs8oV
-         omIGnMtIWfkYQ/Ftx3hSWSGGj1mYTl2MX4BSqdmjJ/kvGgDYRPKxvHtZv7ubp3962clo
-         lCGrY5DdRpmNUaonjdFTAafSEuMb4Tja5wULqV9ec4TNo5G0jqpxPGbvMYkljIKkvfHv
-         mbxt/cZGMV9VMDSZpc4WQxp/qeCpIVQy1fZpjUjju/7NaqtgRc9EjJL0ECdX3GLBZsNl
-         b73Q==
-X-Gm-Message-State: AOAM532xVfX9uLqsZU6yzykBJNxVS4MLMnbkVp7/MgRk5NJp20Av1RLP
-        cfh10kuIsuV5daVRWE/GspJlyiaMxznSdVTx
-X-Google-Smtp-Source: ABdhPJx/5aCUoYhYa0UNfaYmhUWFs40K6W2OYDecB+Bac/QPiC/wQ2a5zBfX84D+xIKZp5vgSmWnlQ==
-X-Received: by 2002:a63:3752:: with SMTP id g18mr13229702pgn.388.1616798061112;
-        Fri, 26 Mar 2021 15:34:21 -0700 (PDT)
-Received: from localhost.localdomain ([49.207.194.205])
-        by smtp.gmail.com with ESMTPSA id c193sm10136262pfc.180.2021.03.26.15.34.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Mar 2021 15:34:20 -0700 (PDT)
-From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/3] usb: misc: usbsevseg: update to use usb_control_msg_send()
-Date:   Sat, 27 Mar 2021 04:02:51 +0530
-Message-Id: <20210326223251.753952-4-anant.thazhemadam@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210326223251.753952-1-anant.thazhemadam@gmail.com>
-References: <20210326223251.753952-1-anant.thazhemadam@gmail.com>
+        id S230152AbhC0AsS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Mar 2021 20:48:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33976 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230114AbhC0Ar7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Mar 2021 20:47:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E1D03619F2;
+        Sat, 27 Mar 2021 00:47:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616806079;
+        bh=8ooecOatcSAJ+gzaT/9xOpTGALqDjn2dglYYs0Fm+aY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NMc/1weQ0un9Dec888CHQzkWIDeKSZIWFUyITh+MjnLnrnvUfJ38Vv2ZT1bJ98vyh
+         o+ZkgAPlkRJCdribUQyrF4SR24tmYE615kPvySqbLqj+yjUk/awmKjtqAQdvdWUmlq
+         TI3BOwIDqDmeFkJeggtpvUtHfWcdYLOUtNm+0QInNu0lIyPd662GVVxEW88iciY5t0
+         p/mZmhVUdqozv7w7HLhJwUKb6jU/1fjrhbSzH0cz6mj6hg/hM/u4wrpVXr6kL157h0
+         1fm4mirAb+ViIompSOz22BO0+zztgyqNL/vWvrf9X3hJ6TDpU/GVrvBl6OM7Y/BbPI
+         y00orFODGKn5w==
+Date:   Sat, 27 Mar 2021 08:47:55 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kurahul@cadence.com,
+        sfr@canb.auug.org.au
+Subject: Re: [PATCH v2] usb: cdnsp: Fixes issue with dequeuing requests after
+ disabling endpoint
+Message-ID: <20210327004754.GA28870@b29397-desktop>
+References: <20210322054714.47151-1-pawell@gli-login.cadence.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210322054714.47151-1-pawell@gli-login.cadence.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The newer usb_control_msg_{send|recv}() API ensures that a short read is 
-treated as an error, data can be used off the stack, and raw usb pipes 
-need not be created in the calling functions.
-For this reason, instances of usb_control_msg() have been replaced with
-usb_control_msg_send() appropriately.
+On 21-03-22 06:47:14, Pawel Laszczak wrote:
+> From: Pawel Laszczak <pawell@cadence.com>
+> 
+> Patch fixes the bug:
+> BUG: kernel NULL pointer dereference, address: 0000000000000050
+> PGD 0 P4D 0
+> Oops: 0002 [#1] SMP PTI
+> CPU: 0 PID: 4137 Comm: uvc-gadget Tainted: G           OE     5.10.0-next-20201214+ #3
+> Hardware name: ASUS All Series/Q87T, BIOS 0908 07/22/2014
+> RIP: 0010:cdnsp_remove_request+0xe9/0x530 [cdnsp_udc_pci]
+> Code: 01 00 00 31 f6 48 89 df e8 64 d4 ff ff 48 8b 43 08 48 8b 13 45 31 f6 48 89 42 08 48 89 10 b8 98 ff ff ff 48 89 1b 48 89 5b 08 <41> 83 6d 50 01 41 83 af d0 00 00 00 01 41 f6 84 24 78 20 00 00 08
+> RSP: 0018:ffffb68d00d07b60 EFLAGS: 00010046
+> RAX: 00000000ffffff98 RBX: ffff9d29c57fbf00 RCX: 0000000000001400
+> RDX: ffff9d29c57fbf00 RSI: 0000000000000000 RDI: ffff9d29c57fbf00
+> RBP: ffffb68d00d07bb0 R08: ffff9d2ad9510a00 R09: ffff9d2ac011c000
+> R10: ffff9d2a12b6e760 R11: 0000000000000000 R12: ffff9d29d3fb8000
+> R13: 0000000000000000 R14: 0000000000000000 R15: ffff9d29d3fb88c0
+> FS:  0000000000000000(0000) GS:ffff9d2adba00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000000000050 CR3: 0000000102164005 CR4: 00000000001706f0
+> Call Trace:
+>  cdnsp_ep_dequeue+0x3c/0x90 [cdnsp_udc_pci]
+>  cdnsp_gadget_ep_dequeue+0x3f/0x80 [cdnsp_udc_pci]
+>  usb_ep_dequeue+0x21/0x70 [udc_core]
+>  uvcg_video_enable+0x19d/0x220 [usb_f_uvc]
+>  uvc_v4l2_release+0x49/0x90 [usb_f_uvc]
+>  v4l2_release+0xa5/0x100 [videodev]
+>  __fput+0x99/0x250
+>  ____fput+0xe/0x10
+>  task_work_run+0x75/0xb0
+>  do_exit+0x370/0xb80
+>  do_group_exit+0x43/0xa0
+>  get_signal+0x12d/0x820
+>  arch_do_signal_or_restart+0xb2/0x870
+>  ? __switch_to_asm+0x36/0x70
+>  ? kern_select+0xc6/0x100
+>  exit_to_user_mode_prepare+0xfc/0x170
+>  syscall_exit_to_user_mode+0x2a/0x40
+>  do_syscall_64+0x43/0x80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> RIP: 0033:0x7fe969cf5dd7
+> Code: Unable to access opcode bytes at RIP 0x7fe969cf5dad.
+> 
+> Problem occurs for UVC class. During disconnecting the UVC class disable
+> endpoints and then start dequeuing all requests. This leads to situation
+> where requests are removed twice. The first one in
+> cdnsp_gadget_ep_disable and the second in cdnsp_gadget_ep_dequeue
+> function.
+> Patch adds condition in cdnsp_gadget_ep_dequeue function which allows
+> dequeue requests only from enabled endpoint.
+> 
+> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> 
+> ---
+> Changelog:
+> v2:
+> - removed unexpected 'commit' word from fixes tag
 
-Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
----
- drivers/usb/misc/usbsevseg.c | 60 ++++++++++--------------------------
- 1 file changed, 17 insertions(+), 43 deletions(-)
+Acked-by: Peter Chen <peter.chen@kernel.org>
 
-diff --git a/drivers/usb/misc/usbsevseg.c b/drivers/usb/misc/usbsevseg.c
-index 551074f5b7ad..4bc816bb09bb 100644
---- a/drivers/usb/misc/usbsevseg.c
-+++ b/drivers/usb/misc/usbsevseg.c
-@@ -74,15 +74,10 @@ static void update_display_powered(struct usb_sevsegdev *mydev)
- 	if (mydev->shadow_power != 1)
- 		return;
- 
--	rc = usb_control_msg(mydev->udev,
--			usb_sndctrlpipe(mydev->udev, 0),
--			0x12,
--			0x48,
--			(80 * 0x100) + 10, /*  (power mode) */
--			(0x00 * 0x100) + (mydev->powered ? 1 : 0),
--			NULL,
--			0,
--			2000);
-+	rc = usb_control_msg_send(mydev->udev, 0, 0x12, 0x48,
-+				  (80 * 0x100) + 10, /*  (power mode) */
-+				  (0x00 * 0x100) + (mydev->powered ? 1 : 0),
-+				  NULL, 0, 2000, GFP_KERNEL);
- 	if (rc < 0)
- 		dev_dbg(&mydev->udev->dev, "power retval = %d\n", rc);
- 
-@@ -99,15 +94,10 @@ static void update_display_mode(struct usb_sevsegdev *mydev)
- 	if(mydev->shadow_power != 1)
- 		return;
- 
--	rc = usb_control_msg(mydev->udev,
--			usb_sndctrlpipe(mydev->udev, 0),
--			0x12,
--			0x48,
--			(82 * 0x100) + 10, /* (set mode) */
--			(mydev->mode_msb * 0x100) + mydev->mode_lsb,
--			NULL,
--			0,
--			2000);
-+	rc = usb_control_msg_send(mydev->udev, 0, 0x12, 0x48,
-+				  (82 * 0x100) + 10, /* (set mode) */
-+				  (mydev->mode_msb * 0x100) + mydev->mode_lsb,
-+				  NULL, 0, 2000, GFP_NOIO);
- 
- 	if (rc < 0)
- 		dev_dbg(&mydev->udev->dev, "mode retval = %d\n", rc);
-@@ -117,48 +107,32 @@ static void update_display_visual(struct usb_sevsegdev *mydev, gfp_t mf)
- {
- 	int rc;
- 	int i;
--	unsigned char *buffer;
-+	unsigned char buffer[MAXLEN] = {0};
- 	u8 decimals = 0;
- 
- 	if(mydev->shadow_power != 1)
- 		return;
- 
--	buffer = kzalloc(MAXLEN, mf);
--	if (!buffer)
--		return;
--
- 	/* The device is right to left, where as you write left to right */
- 	for (i = 0; i < mydev->textlength; i++)
- 		buffer[i] = mydev->text[mydev->textlength-1-i];
- 
--	rc = usb_control_msg(mydev->udev,
--			usb_sndctrlpipe(mydev->udev, 0),
--			0x12,
--			0x48,
--			(85 * 0x100) + 10, /* (write text) */
--			(0 * 0x100) + mydev->textmode, /* mode  */
--			buffer,
--			mydev->textlength,
--			2000);
-+	rc = usb_control_msg_send(mydev->udev, 0, 0x12, 0x48,
-+				  (85 * 0x100) + 10, /* (write text) */
-+				  (0 * 0x100) + mydev->textmode, /* mode  */
-+				  &buffer, mydev->textlength, 2000, mf);
- 
- 	if (rc < 0)
- 		dev_dbg(&mydev->udev->dev, "write retval = %d\n", rc);
- 
--	kfree(buffer);
--
- 	/* The device is right to left, where as you write left to right */
- 	for (i = 0; i < sizeof(mydev->decimals); i++)
- 		decimals |= mydev->decimals[i] << i;
- 
--	rc = usb_control_msg(mydev->udev,
--			usb_sndctrlpipe(mydev->udev, 0),
--			0x12,
--			0x48,
--			(86 * 0x100) + 10, /* (set decimal) */
--			(0 * 0x100) + decimals, /* decimals */
--			NULL,
--			0,
--			2000);
-+	rc = usb_control_msg_send(mydev->udev, 0, 0x12, 0x48,
-+				  (86 * 0x100) + 10, /* (set decimal) */
-+				  (0 * 0x100) + decimals, /* decimals */
-+				  NULL, 0, 2000, mf);
- 
- 	if (rc < 0)
- 		dev_dbg(&mydev->udev->dev, "decimal retval = %d\n", rc);
+Greg, would you help queue it to your usb-linus branch?
+
+> 
+>  drivers/usb/cdns3/cdnsp-gadget.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+> index f2ebbacd932e..d7d4bdd57f46 100644
+> --- a/drivers/usb/cdns3/cdnsp-gadget.c
+> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
+> @@ -1128,6 +1128,10 @@ static int cdnsp_gadget_ep_dequeue(struct usb_ep *ep,
+>  		return -ESHUTDOWN;
+>  	}
+>  
+> +	/* Requests has been dequeued during disabling endpoint. */
+> +	if (!(pep->ep_state & EP_ENABLED))
+> +		return 0;
+> +
+>  	spin_lock_irqsave(&pdev->lock, flags);
+>  	ret = cdnsp_ep_dequeue(pep, to_cdnsp_request(request));
+>  	spin_unlock_irqrestore(&pdev->lock, flags);
+> -- 
+> 2.25.1
+> 
+
 -- 
-2.25.1
+
+Thanks,
+Peter Chen
 
