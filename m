@@ -2,128 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3CE234B368
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Mar 2021 01:48:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC3434B36C
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Mar 2021 01:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbhC0AsS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Mar 2021 20:48:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33976 "EHLO mail.kernel.org"
+        id S230226AbhC0Ay5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Mar 2021 20:54:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35672 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230114AbhC0Ar7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Mar 2021 20:47:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E1D03619F2;
-        Sat, 27 Mar 2021 00:47:57 +0000 (UTC)
+        id S229969AbhC0AyZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Mar 2021 20:54:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 09962619F2;
+        Sat, 27 Mar 2021 00:54:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616806079;
-        bh=8ooecOatcSAJ+gzaT/9xOpTGALqDjn2dglYYs0Fm+aY=;
+        s=k20201202; t=1616806465;
+        bh=4do6G+gJZlBTQPYH4m2JO5OQCmo46Wr09haIuKn0Gms=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NMc/1weQ0un9Dec888CHQzkWIDeKSZIWFUyITh+MjnLnrnvUfJ38Vv2ZT1bJ98vyh
-         o+ZkgAPlkRJCdribUQyrF4SR24tmYE615kPvySqbLqj+yjUk/awmKjtqAQdvdWUmlq
-         TI3BOwIDqDmeFkJeggtpvUtHfWcdYLOUtNm+0QInNu0lIyPd662GVVxEW88iciY5t0
-         p/mZmhVUdqozv7w7HLhJwUKb6jU/1fjrhbSzH0cz6mj6hg/hM/u4wrpVXr6kL157h0
-         1fm4mirAb+ViIompSOz22BO0+zztgyqNL/vWvrf9X3hJ6TDpU/GVrvBl6OM7Y/BbPI
-         y00orFODGKn5w==
-Date:   Sat, 27 Mar 2021 08:47:55 +0800
+        b=UMWb9lpTF8ZgKeel11M524/WLq3cEWqo3Vf2AuLF+QnypPuOZvL5fbbrUMcSWP/NH
+         1MVL7ewFDzP36cAXI60UfHb9rwtuq9gOLFxnYVOHd9pWZK2S5fJSaKxGfcfCXf8Dgd
+         T6ALmk3RI3BPE+I5Wij3ETpQqzksnh6cve/NUp3S91OnqnKh/AExkXIo+mlDD0rWoM
+         RaDLXWkX9wUBXQZYww5x/rmOs0rdRdgPBojlrlsuEpDAbaSUdJ9CP43/9Iwdg4+9xq
+         oYr5MBTgULbv8qZ6jXxIC44QS4yr+rgXjM8d3KIxa8Cn6lVXm3U4Q+3hREOawtRXuR
+         6EaVZpAYGbqYg==
+Date:   Sat, 27 Mar 2021 08:54:17 +0800
 From:   Peter Chen <peter.chen@kernel.org>
 To:     Pawel Laszczak <pawell@cadence.com>
 Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kurahul@cadence.com,
-        sfr@canb.auug.org.au
-Subject: Re: [PATCH v2] usb: cdnsp: Fixes issue with dequeuing requests after
- disabling endpoint
-Message-ID: <20210327004754.GA28870@b29397-desktop>
-References: <20210322054714.47151-1-pawell@gli-login.cadence.com>
+        linux-kernel@vger.kernel.org, kurahul@cadence.com
+Subject: Re: [PATCH] usb: cdnsp: Fixes issue with Configure Endpoint command
+Message-ID: <20210327005417.GB28870@b29397-desktop>
+References: <20210322060902.11197-1-pawell@gli-login.cadence.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210322054714.47151-1-pawell@gli-login.cadence.com>
+In-Reply-To: <20210322060902.11197-1-pawell@gli-login.cadence.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-03-22 06:47:14, Pawel Laszczak wrote:
+On 21-03-22 07:09:02, Pawel Laszczak wrote:
 > From: Pawel Laszczak <pawell@cadence.com>
 > 
-> Patch fixes the bug:
-> BUG: kernel NULL pointer dereference, address: 0000000000000050
-> PGD 0 P4D 0
-> Oops: 0002 [#1] SMP PTI
-> CPU: 0 PID: 4137 Comm: uvc-gadget Tainted: G           OE     5.10.0-next-20201214+ #3
-> Hardware name: ASUS All Series/Q87T, BIOS 0908 07/22/2014
-> RIP: 0010:cdnsp_remove_request+0xe9/0x530 [cdnsp_udc_pci]
-> Code: 01 00 00 31 f6 48 89 df e8 64 d4 ff ff 48 8b 43 08 48 8b 13 45 31 f6 48 89 42 08 48 89 10 b8 98 ff ff ff 48 89 1b 48 89 5b 08 <41> 83 6d 50 01 41 83 af d0 00 00 00 01 41 f6 84 24 78 20 00 00 08
-> RSP: 0018:ffffb68d00d07b60 EFLAGS: 00010046
-> RAX: 00000000ffffff98 RBX: ffff9d29c57fbf00 RCX: 0000000000001400
-> RDX: ffff9d29c57fbf00 RSI: 0000000000000000 RDI: ffff9d29c57fbf00
-> RBP: ffffb68d00d07bb0 R08: ffff9d2ad9510a00 R09: ffff9d2ac011c000
-> R10: ffff9d2a12b6e760 R11: 0000000000000000 R12: ffff9d29d3fb8000
-> R13: 0000000000000000 R14: 0000000000000000 R15: ffff9d29d3fb88c0
-> FS:  0000000000000000(0000) GS:ffff9d2adba00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000050 CR3: 0000000102164005 CR4: 00000000001706f0
-> Call Trace:
->  cdnsp_ep_dequeue+0x3c/0x90 [cdnsp_udc_pci]
->  cdnsp_gadget_ep_dequeue+0x3f/0x80 [cdnsp_udc_pci]
->  usb_ep_dequeue+0x21/0x70 [udc_core]
->  uvcg_video_enable+0x19d/0x220 [usb_f_uvc]
->  uvc_v4l2_release+0x49/0x90 [usb_f_uvc]
->  v4l2_release+0xa5/0x100 [videodev]
->  __fput+0x99/0x250
->  ____fput+0xe/0x10
->  task_work_run+0x75/0xb0
->  do_exit+0x370/0xb80
->  do_group_exit+0x43/0xa0
->  get_signal+0x12d/0x820
->  arch_do_signal_or_restart+0xb2/0x870
->  ? __switch_to_asm+0x36/0x70
->  ? kern_select+0xc6/0x100
->  exit_to_user_mode_prepare+0xfc/0x170
->  syscall_exit_to_user_mode+0x2a/0x40
->  do_syscall_64+0x43/0x80
->  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> RIP: 0033:0x7fe969cf5dd7
-> Code: Unable to access opcode bytes at RIP 0x7fe969cf5dad.
-> 
-> Problem occurs for UVC class. During disconnecting the UVC class disable
-> endpoints and then start dequeuing all requests. This leads to situation
-> where requests are removed twice. The first one in
-> cdnsp_gadget_ep_disable and the second in cdnsp_gadget_ep_dequeue
-> function.
-> Patch adds condition in cdnsp_gadget_ep_dequeue function which allows
-> dequeue requests only from enabled endpoint.
+> Patch adds flag EP_UNCONFIGURED to detect whether endpoint was
+> unconfigured. This flag is set in cdnsp_reset_device after Reset Device
+> command. Among others this command disables all non control endpoints.
+> Flag is used in cdnsp_gadget_ep_disable to protect controller against
+> invoking Configure Endpoint command on disabled endpoint. Lack of this
+> protection in some cases caused that Configure Endpoint command completed
+> with Context State Error code completion.
 > 
 > Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
 > Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> 
 > ---
-> Changelog:
-> v2:
-> - removed unexpected 'commit' word from fixes tag
-
-Acked-by: Peter Chen <peter.chen@kernel.org>
-
-Greg, would you help queue it to your usb-linus branch?
-
-> 
->  drivers/usb/cdns3/cdnsp-gadget.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>  drivers/usb/cdns3/cdnsp-gadget.c | 18 +++++++++++++-----
+>  drivers/usb/cdns3/cdnsp-gadget.h | 11 ++++++-----
+>  2 files changed, 19 insertions(+), 10 deletions(-)
 > 
 > diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
-> index f2ebbacd932e..d7d4bdd57f46 100644
+> index d7d4bdd57f46..de17cc4ad91a 100644
 > --- a/drivers/usb/cdns3/cdnsp-gadget.c
 > +++ b/drivers/usb/cdns3/cdnsp-gadget.c
-> @@ -1128,6 +1128,10 @@ static int cdnsp_gadget_ep_dequeue(struct usb_ep *ep,
->  		return -ESHUTDOWN;
+> @@ -727,7 +727,7 @@ int cdnsp_reset_device(struct cdnsp_device *pdev)
+>  	 * are in Disabled state.
+>  	 */
+>  	for (i = 1; i < CDNSP_ENDPOINTS_NUM; ++i)
+> -		pdev->eps[i].ep_state |= EP_STOPPED;
+> +		pdev->eps[i].ep_state |= EP_STOPPED | EP_UNCONFIGURED;
+>  
+>  	trace_cdnsp_handle_cmd_reset_dev(slot_ctx);
+>  
+> @@ -942,6 +942,7 @@ static int cdnsp_gadget_ep_enable(struct usb_ep *ep,
+>  
+>  	pep = to_cdnsp_ep(ep);
+>  	pdev = pep->pdev;
+> +	pep->ep_state &= ~EP_UNCONFIGURED;
+>  
+>  	if (dev_WARN_ONCE(pdev->dev, pep->ep_state & EP_ENABLED,
+>  			  "%s is already enabled\n", pep->name))
+> @@ -1023,9 +1024,13 @@ static int cdnsp_gadget_ep_disable(struct usb_ep *ep)
+>  		goto finish;
 >  	}
 >  
-> +	/* Requests has been dequeued during disabling endpoint. */
-> +	if (!(pep->ep_state & EP_ENABLED))
-> +		return 0;
+> -	cdnsp_cmd_stop_ep(pdev, pep);
+>  	pep->ep_state |= EP_DIS_IN_RROGRESS;
+> -	cdnsp_cmd_flush_ep(pdev, pep);
 > +
->  	spin_lock_irqsave(&pdev->lock, flags);
->  	ret = cdnsp_ep_dequeue(pep, to_cdnsp_request(request));
->  	spin_unlock_irqrestore(&pdev->lock, flags);
+> +	/* Endpoint was unconfigured by Reset Device command. */
+> +	if (!(pep->ep_state & EP_UNCONFIGURED)) {
+> +		cdnsp_cmd_stop_ep(pdev, pep);
+> +		cdnsp_cmd_flush_ep(pdev, pep);
+> +	}
+>  
+>  	/* Remove all queued USB requests. */
+>  	while (!list_empty(&pep->pending_list)) {
+> @@ -1036,6 +1041,7 @@ static int cdnsp_gadget_ep_disable(struct usb_ep *ep)
+>  	cdnsp_invalidate_ep_events(pdev, pep);
+>  
+>  	pep->ep_state &= ~EP_DIS_IN_RROGRESS;
+> +
+
+Useless blank line
+
+>  	drop_flag = cdnsp_get_endpoint_flag(pep->endpoint.desc);
+>  	ctrl_ctx = cdnsp_get_input_control_ctx(&pdev->in_ctx);
+>  	ctrl_ctx->drop_flags = cpu_to_le32(drop_flag);
+> @@ -1043,10 +1049,12 @@ static int cdnsp_gadget_ep_disable(struct usb_ep *ep)
+>  
+>  	cdnsp_endpoint_zero(pdev, pep);
+>  
+> -	ret = cdnsp_update_eps_configuration(pdev, pep);
+> +	if (!(pep->ep_state & EP_UNCONFIGURED))
+> +		ret = cdnsp_update_eps_configuration(pdev, pep);
+> +
+>  	cdnsp_free_endpoint_rings(pdev, pep);
+>  
+> -	pep->ep_state &= ~EP_ENABLED;
+> +	pep->ep_state &= ~(EP_ENABLED | EP_UNCONFIGURED);
+>  	pep->ep_state |= EP_STOPPED;
+>  
+>  finish:
+> diff --git a/drivers/usb/cdns3/cdnsp-gadget.h b/drivers/usb/cdns3/cdnsp-gadget.h
+> index 6bbb26548c04..e628bd539e23 100644
+> --- a/drivers/usb/cdns3/cdnsp-gadget.h
+> +++ b/drivers/usb/cdns3/cdnsp-gadget.h
+> @@ -830,11 +830,12 @@ struct cdnsp_ep {
+>  	unsigned int ep_state;
+>  #define EP_ENABLED		BIT(0)
+>  #define EP_DIS_IN_RROGRESS	BIT(1)
+> -#define EP_HALTED		BIT(2)
+> -#define EP_STOPPED		BIT(3)
+> -#define EP_WEDGE		BIT(4)
+> -#define EP0_HALTED_STATUS	BIT(5)
+> -#define EP_HAS_STREAMS		BIT(6)
+> +#define EP_UNCONFIGURED		BIT(2)
+
+Why add new flag as BIT(2), it causes many changes in this patch?
+
+> +#define EP_HALTED		BIT(3)
+> +#define EP_STOPPED		BIT(4)
+> +#define EP_WEDGE		BIT(5)
+> +#define EP0_HALTED_STATUS	BIT(6)
+> +#define EP_HAS_STREAMS		BIT(7)
+>  
+>  	bool skip;
+>  };
 > -- 
 > 2.25.1
 > 
