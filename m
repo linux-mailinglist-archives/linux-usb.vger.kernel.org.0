@@ -2,31 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA2034C520
+	by mail.lfdr.de (Postfix) with ESMTP id C93FF34C521
 	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 09:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231295AbhC2Hlq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Mar 2021 03:41:46 -0400
-Received: from mga12.intel.com ([192.55.52.136]:44482 "EHLO mga12.intel.com"
+        id S231167AbhC2Hlp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Mar 2021 03:41:45 -0400
+Received: from mga11.intel.com ([192.55.52.93]:58297 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229762AbhC2Hlk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S230395AbhC2Hlk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Mon, 29 Mar 2021 03:41:40 -0400
-IronPort-SDR: EGKy8C6l8X/iwP1Ofcf58XNJwdnp37/BaLS1TWdVrvFkiVpH59aUmYg5fF4rs0mx/so5m3B0BA
- mw3+sT3uk3eQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9937"; a="170900052"
+IronPort-SDR: hBwFzo5fg4pmn2ozvbLF9aXF/WCsh4V929b+BoV26kB06WLFcNOt+Vlt2f7xQQgMFMNthW6m7b
+ YQH7tQkSmJ8g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9937"; a="188231495"
 X-IronPort-AV: E=Sophos;i="5.81,287,1610438400"; 
-   d="scan'208";a="170900052"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 00:41:39 -0700
-IronPort-SDR: HV01pF80dYUD6ipCgv7FHSfctVCYEUWny+vFXXl1X+EIf9ceLZwUmUdolqSk+W6+BD+pw6wO2S
- rX6Sw5P6Hj7w==
+   d="scan'208";a="188231495"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 00:41:40 -0700
+IronPort-SDR: swz4OqF+StbePIuElUpAR6IR7u/qcoA8UV6w3YLFymh1k9oRvA7d32gVhQe9hmTd8mgq03KZCC
+ NusOD1uEx8EQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,287,1610438400"; 
-   d="scan'208";a="417547999"
+   d="scan'208";a="383471237"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 29 Mar 2021 00:41:36 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 29 Mar 2021 00:41:36 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 8AC12A1; Mon, 29 Mar 2021 10:41:50 +0300 (EEST)
+        id 9568E93; Mon, 29 Mar 2021 10:41:50 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Michael Jamet <michael.jamet@intel.com>,
@@ -40,63 +40,86 @@ Cc:     Michael Jamet <michael.jamet@intel.com>,
         Diego Rivas <diegorivas@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v3 0/3] thunderbolt: Expose details about tunneling
-Date:   Mon, 29 Mar 2021 10:41:47 +0300
-Message-Id: <20210329074150.62622-1-mika.westerberg@linux.intel.com>
+Subject: [PATCH v3 1/3] thunderbolt: Add details to router uevent
+Date:   Mon, 29 Mar 2021 10:41:48 +0300
+Message-Id: <20210329074150.62622-2-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210329074150.62622-1-mika.westerberg@linux.intel.com>
+References: <20210329074150.62622-1-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello there,
+Expose two environment variables for routers as part of the initial
+uevent:
 
-There has been ask if we can expose more details about the connected
-devices and the tunneling to userspace, so it can then provide more
-detailed information to the user.
+  USB4_VERSION=1.0
+  USB4_TYPE=host|device|hub
 
-First we add uevent details for each device (USB4 router) that adds
-USB4_TYPE=host|device|hub and USB4_VERSION=1.0 (if the device actually is
-USB4). The host|device|hub definitions follow the USB4 spec.
+Userspace can use this information to expose more details about each
+connected device. Only USB4 devices have USB4_VERSION but all devices
+have USB4_TYPE.
 
-Then for each device router we expose two new attributes: "usb3" and "dp"
-that if present mean that the device has corresponding adapter (USB 3.x
-upstream adapter and DP OUT adapter). The contents of the attributes then
-hold number of tunnels ending to this router. So if USB 3.x is tunneled
-"usb3" reads 1. Since there can be multiple DP OUT adaptes the "dp"
-attribute holds number of DP tunnels ending to this router. For PCIe
-tunneling the "authorized" attribute works the same way.
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/thunderbolt/switch.c | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-Previous versions can be found:
-
-  v2: https://lore.kernel.org/linux-usb/20210323145701.86161-1-mika.westerberg@linux.intel.com/
-  v1: https://lore.kernel.org/linux-usb/20210309134818.63118-1-mika.westerberg@linux.intel.com/
-
-Changes from v2:
-
-  * Added missing sysfs_emit()
-
-Changes from v1:
-
-  * Added Greg's Reviewed-by tags for patch 1 and 2
-  * Use sysfs_emit()
-  * Drop the locking in the new attributes
-  * Drop the kobject_uevent()
-
-Mika Westerberg (3):
-  thunderbolt: Add details to router uevent
-  thunderbolt: Hide authorized attribute if router does not support PCIe tunnels
-  thunderbolt: Expose more details about USB 3.x and DisplayPort tunnels
-
- .../ABI/testing/sysfs-bus-thunderbolt         | 26 +++++++
- drivers/thunderbolt/domain.c                  | 10 +++
- drivers/thunderbolt/switch.c                  | 78 ++++++++++++++++++-
- drivers/thunderbolt/tb.c                      | 44 ++++++++---
- drivers/thunderbolt/tb.h                      |  4 +
- include/linux/thunderbolt.h                   |  6 ++
- 6 files changed, 156 insertions(+), 12 deletions(-)
-
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index 321a5bcfce65..a1b4a695080e 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -1835,6 +1835,39 @@ static void tb_switch_release(struct device *dev)
+ 	kfree(sw);
+ }
+ 
++static int tb_switch_uevent(struct device *dev, struct kobj_uevent_env *env)
++{
++	struct tb_switch *sw = tb_to_switch(dev);
++	const char *type;
++
++	if (sw->config.thunderbolt_version == USB4_VERSION_1_0) {
++		if (add_uevent_var(env, "USB4_VERSION=1.0"))
++			return -ENOMEM;
++	}
++
++	if (!tb_route(sw)) {
++		type = "host";
++	} else {
++		const struct tb_port *port;
++		bool hub = false;
++
++		/* Device is hub if it has any downstream ports */
++		tb_switch_for_each_port(sw, port) {
++			if (!port->disabled && !tb_is_upstream_port(port) &&
++			     tb_port_is_null(port)) {
++				hub = true;
++				break;
++			}
++		}
++
++		type = hub ? "hub" : "device";
++	}
++
++	if (add_uevent_var(env, "USB4_TYPE=%s", type))
++		return -ENOMEM;
++	return 0;
++}
++
+ /*
+  * Currently only need to provide the callbacks. Everything else is handled
+  * in the connection manager.
+@@ -1868,6 +1901,7 @@ static const struct dev_pm_ops tb_switch_pm_ops = {
+ struct device_type tb_switch_type = {
+ 	.name = "thunderbolt_device",
+ 	.release = tb_switch_release,
++	.uevent = tb_switch_uevent,
+ 	.pm = &tb_switch_pm_ops,
+ };
+ 
 -- 
 2.30.2
 
