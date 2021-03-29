@@ -2,59 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 828CD34D1D5
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 15:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BB734D211
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 16:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbhC2Nv3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Mar 2021 09:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37220 "EHLO
+        id S230266AbhC2OEN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Mar 2021 10:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231734AbhC2NvV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Mar 2021 09:51:21 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA0FC061574;
-        Mon, 29 Mar 2021 06:51:20 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id e14so4421775plj.2;
-        Mon, 29 Mar 2021 06:51:20 -0700 (PDT)
+        with ESMTP id S230220AbhC2ODm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Mar 2021 10:03:42 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E98CC061574;
+        Mon, 29 Mar 2021 07:03:42 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id x21-20020a17090a5315b029012c4a622e4aso5216903pjh.2;
+        Mon, 29 Mar 2021 07:03:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=g6MGypQezVtHLiXCLKeIkg+BTfToRXpmNx+Fhvih524=;
-        b=RmZVrOs/Xv6ZMvjON31XrBzpiNonLabyrdWo/pSVmegntHjtDII1lrl3jhlny0jSfe
-         Yw7ih/0CCagLRHylRs4mEsI2QDpW68bDZXQ75S4u2VzCdI+hzkamqFcvcMj5B5otf8YI
-         MmRTxtANSQoN+iy0EUJqvCAQjHFgiLyXtOCQgtSHH0jZxfZ6WZLz2brskEo3vZrm12yZ
-         d0ANtskJRkXCR/GL1QI/zUup/m/0//seluOxapFIVFqCmNcwcdo0jzO9+atMN1t/QTnP
-         LMCrxHAeGZLib9SjD9IVj1W+GN3ulHLiD0qBp/0Hits1Hl3ZrO4UuYWJpAlpf9w9S5y8
-         KkhA==
+        bh=Cf0NNvh47dChgP3j4zNoZHInMqCN/9vYPVY+E6bHrQs=;
+        b=Z2gYkc3U5Zhl7zDWCo6YlOy71NL1T7SEzccpf2919AIxGGmOB/RZQiK5ax4eJPTNIw
+         +KH7pH0Nzs7QUo+SS1CDL5dcIkqTiM9L8TJ7u8iljZUNvNWV24N9rlUG6rmTNy5A+n4I
+         qyzzhjK8iFJi3m4OAMWiHPc0sKnRhryYAL/jtJWorT7a/emlOMD1QTTFnHUct9O75KDs
+         cs7ylXR1BFuPLi/IgYqetg2dm3V0rwnfgpASlw0gJziDeITl5MiVosHF26mL0H+oJejM
+         1+5dWuig2yUvjofe2MzyIE+UlVd8O6Jco2u3CSLE4FXrYZbso0dG/PP7EZ64uBRtcRq9
+         7mmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=g6MGypQezVtHLiXCLKeIkg+BTfToRXpmNx+Fhvih524=;
-        b=CRuAB41SWTDJI25XxR5Agnbm2VJBCMVghpjKC3LrGIbclsqqVdEUCbLq1828chC7+o
-         4WbtdbUlEV7thltjBzyHWX+1TVqsmaHmpYtomtytWtLOKwXepNDe6dZ1pRkl9xOsSXdD
-         L6GBBz9Df0Aene6iZV6roJt3JleN11suBUynVcIhHilQR4KU64ZeZJVtB4mRZjP16T65
-         QiqdiML62XHTMeCBKvt1IOjdadbf1GXrr/gxBRcLONp3o12ybuqcFqtLxjZzA4xp/fMf
-         tEXwOjPScPveGCjhVYM6SIgTTtcOS3ajP/ckUyHQTLT7Cl5B7qs1IvFU5ELtAmx6XeWN
-         iFog==
-X-Gm-Message-State: AOAM532ubgFdKiCh3hR1A9aNKUvCeeZPv0kwASLzvYrcQzBboQWuL/fN
-        ULJNbNG+A7axNxKok9udF9CXT8MjhnAyQl00
-X-Google-Smtp-Source: ABdhPJwOf99fPjyShSZ07RL9cICcdUqyhTG71ttWjJnb7jcJExZZeM7z9zMCbhmt2Dw5Q2iN/dvltg==
-X-Received: by 2002:a17:902:d202:b029:e4:55cd:dde8 with SMTP id t2-20020a170902d202b02900e455cddde8mr28519192ply.51.1617025880092;
-        Mon, 29 Mar 2021 06:51:20 -0700 (PDT)
+        bh=Cf0NNvh47dChgP3j4zNoZHInMqCN/9vYPVY+E6bHrQs=;
+        b=UaNuIDwdlwglBziVb2VZ61z2Ei3JTVPiZkXPZB3dX8qQ9Iv0bDyTJpWXyqgsghnvBP
+         QOsdoRji2+bkQ/LkZzIGuQl6N0J4w1bEh/qOWr/CA8naf9q80vUIXHr6IJicnIifTyYj
+         DDUiW7041gPa/2fnUuSrLkCLVzRUKNWWVXcF0il6XLfYgPlOeU2UeW75xzro3gCDZRVC
+         MdOn1dNvQqavSFJFtBBXR4REZbuIeM0BHZ9g3CtpUZj382c9SCJ/OhXucBwjog5c3j4S
+         cRgtO9Uloj3ixA6GKXoX6vgjRHLoPhov/WuTUYXuGYbD9jtogdh8xZ/QhgrCBNhvAzlp
+         +wNQ==
+X-Gm-Message-State: AOAM532EP2zDwpTfvo+SjRC9hhBD4Ng3XOJDjR8aLv3P95Iar8YZmzYz
+        QYiyrUWT1Qx/5MANLFIfWQ4=
+X-Google-Smtp-Source: ABdhPJzbGV11FRlYScAIalAmnglofusziOLm209WvMmkMR6J84X/EyLxqq6fcnKU6jcLENB95q7C7Q==
+X-Received: by 2002:a17:90a:5b11:: with SMTP id o17mr27793616pji.32.1617026621403;
+        Mon, 29 Mar 2021 07:03:41 -0700 (PDT)
 Received: from localhost.localdomain ([2405:201:600d:a089:4ed:8f53:adc7:b574])
-        by smtp.googlemail.com with ESMTPSA id w84sm17429226pfc.142.2021.03.29.06.51.15
+        by smtp.googlemail.com with ESMTPSA id i10sm204271pjm.1.2021.03.29.07.03.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Mar 2021 06:51:19 -0700 (PDT)
+        Mon, 29 Mar 2021 07:03:40 -0700 (PDT)
 From:   Aditya Srivastava <yashsri421@gmail.com>
 To:     balbi@kernel.org
 Cc:     yashsri421@gmail.com, lukas.bulwahn@gmail.com,
-        gregkh@linuxfoundation.org, rdunlap@infradead.org,
+        gregkh@linuxfoundation.org, krzysztof.kozlowski@canonical.com,
+        rdunlap@infradead.org,
         linux-kernel-mentees@lists.linuxfoundation.org,
         linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: dwc3: fix incorrect kernel-doc comment syntax in files
-Date:   Mon, 29 Mar 2021 19:21:08 +0530
-Message-Id: <20210329135108.27128-1-yashsri421@gmail.com>
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc3: exynos: fix incorrect kernel-doc comment syntax
+Date:   Mon, 29 Mar 2021 19:33:18 +0530
+Message-Id: <20210329140318.27742-1-yashsri421@gmail.com>
 X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -62,111 +64,35 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 The opening comment mark '/**' is used for highlighting the beginning of
 kernel-doc comments.
-There are certain files in drivers/usb/dwc3, which follow this syntax,
-but the content inside does not comply with kernel-doc.
-Such lines were probably not meant for kernel-doc parsing, but are parsed
+The header for drivers/usb/dwc3/dwc3-exynos.c follows this syntax, but the
+content inside does not comply with kernel-doc.
+
+This line was probably not meant for kernel-doc parsing, but is parsed
 due to the presence of kernel-doc like comment syntax(i.e, '/**'), which
-causes unexpected warnings from kernel-doc.
+causes unexpected warning from kernel-doc:
+"warning: expecting prototype for dwc3(). Prototype was for DWC3_EXYNOS_MAX_CLOCKS() instead"
 
-E.g., presence of kernel-doc like comment in drivers/usb/dwc3/io.h at
-header causes this warnings by kernel-doc:
-"warning: expecting prototype for h(). Prototype was for __DRIVERS_USB_DWC3_IO_H() instead"
-
-Similarly for other files too.
-
-Provide a simple fix by replacing such occurrences with general comment
+Provide a simple fix by replacing this occurrence with general comment
 format, i.e. '/*', to prevent kernel-doc from parsing it.
 
 Signed-off-by: Aditya Srivastava <yashsri421@gmail.com>
 ---
 * Applies perfectly on next-20210326
 
- drivers/usb/dwc3/debug.h         | 2 +-
- drivers/usb/dwc3/debugfs.c       | 2 +-
- drivers/usb/dwc3/dwc3-keystone.c | 2 +-
- drivers/usb/dwc3/dwc3-pci.c      | 2 +-
- drivers/usb/dwc3/io.h            | 2 +-
- drivers/usb/dwc3/trace.c         | 2 +-
- drivers/usb/dwc3/trace.h         | 2 +-
- 7 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/usb/dwc3/dwc3-exynos.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc3/debug.h b/drivers/usb/dwc3/debug.h
-index 8ab394942360..db231de46bb3 100644
---- a/drivers/usb/dwc3/debug.h
-+++ b/drivers/usb/dwc3/debug.h
-@@ -1,5 +1,5 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--/**
-+/*
-  * debug.h - DesignWare USB3 DRD Controller Debug Header
-  *
-  * Copyright (C) 2010-2011 Texas Instruments Incorporated - https://www.ti.com
-diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
-index 5da4f6082d93..b0e3f434d219 100644
---- a/drivers/usb/dwc3/debugfs.c
-+++ b/drivers/usb/dwc3/debugfs.c
+diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
+index 90bb022737da..0ecf20eeceee 100644
+--- a/drivers/usb/dwc3/dwc3-exynos.c
++++ b/drivers/usb/dwc3/dwc3-exynos.c
 @@ -1,5 +1,5 @@
  // SPDX-License-Identifier: GPL-2.0
 -/**
 +/*
-  * debugfs.c - DesignWare USB3 DRD Controller DebugFS file
+  * dwc3-exynos.c - Samsung Exynos DWC3 Specific Glue layer
   *
-  * Copyright (C) 2010-2011 Texas Instruments Incorporated - https://www.ti.com
-diff --git a/drivers/usb/dwc3/dwc3-keystone.c b/drivers/usb/dwc3/dwc3-keystone.c
-index 057056c0975e..1317959294e6 100644
---- a/drivers/usb/dwc3/dwc3-keystone.c
-+++ b/drivers/usb/dwc3/dwc3-keystone.c
-@@ -1,5 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
--/**
-+/*
-  * dwc3-keystone.c - Keystone Specific Glue layer
-  *
-  * Copyright (C) 2010-2013 Texas Instruments Incorporated - https://www.ti.com
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 4c5c6972124a..4698c43af5ae 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -1,5 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
--/**
-+/*
-  * dwc3-pci.c - PCI Specific glue layer
-  *
-  * Copyright (C) 2010-2011 Texas Instruments Incorporated - https://www.ti.com
-diff --git a/drivers/usb/dwc3/io.h b/drivers/usb/dwc3/io.h
-index 76b73b116862..1e96ea339d48 100644
---- a/drivers/usb/dwc3/io.h
-+++ b/drivers/usb/dwc3/io.h
-@@ -1,5 +1,5 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--/**
-+/*
-  * io.h - DesignWare USB3 DRD IO Header
-  *
-  * Copyright (C) 2010-2011 Texas Instruments Incorporated - https://www.ti.com
-diff --git a/drivers/usb/dwc3/trace.c b/drivers/usb/dwc3/trace.c
-index 1b45a9723eeb..088995885678 100644
---- a/drivers/usb/dwc3/trace.c
-+++ b/drivers/usb/dwc3/trace.c
-@@ -1,5 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
--/**
-+/*
-  * trace.c - DesignWare USB3 DRD Controller Trace Support
-  *
-  * Copyright (C) 2014 Texas Instruments Incorporated - https://www.ti.com
-diff --git a/drivers/usb/dwc3/trace.h b/drivers/usb/dwc3/trace.h
-index 97f4f1125a41..60883268adfc 100644
---- a/drivers/usb/dwc3/trace.h
-+++ b/drivers/usb/dwc3/trace.h
-@@ -1,5 +1,5 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--/**
-+/*
-  * trace.h - DesignWare USB3 DRD Controller Trace Support
-  *
-  * Copyright (C) 2014 Texas Instruments Incorporated - https://www.ti.com
+  * Copyright (c) 2012 Samsung Electronics Co., Ltd.
 -- 
 2.17.1
 
