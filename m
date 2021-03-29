@@ -2,169 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F22E634D6DC
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 20:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2AA34D794
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 20:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbhC2SS5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Mar 2021 14:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231485AbhC2SS0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Mar 2021 14:18:26 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E85C061574;
-        Mon, 29 Mar 2021 11:18:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=bTIHTMUAkJkw0BJyN9SHCb13mzroPXcLVQ85NS5ula4=; b=bO5TdfffNiMSNU4XY+uWavCEd1
-        dFMbjtbNrX4HPrtHEXZuCwYePrOgtIdoWMIKkPRcRjI0zrQSO86okD1lxk4kkTTS9+Gi3izDJ4dcZ
-        tNF16E8wFeMXr0JoA5got9rnHnoILH5uYcP6rGB6HBAcR1blrTBS42biYs4qMGqz0isBdOlQkXVYJ
-        ysG3sReuQtlfukiUYAFsk9i4VwmexIPej9d7BUdDNaqC1Ts+Ax7gLgqRbM64Iayb3XzNNAZ/BM8gc
-        ZYDE4KV8BVY4wIHCAXv/UGP+0rslnjJTJi2tPHF6Z0/XDv3URbzPYmuzu0rKug/EmUan/SWeRco0q
-        vvXNgu2g==;
-Received: from [2601:1c0:6280:3f0::4557]
-        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lQwT0-0011Gm-8P; Mon, 29 Mar 2021 18:18:23 +0000
-Subject: Re: [PATCH] usb: dwc3: fix incorrect kernel-doc comment syntax in
- files
-To:     Aditya Srivastava <yashsri421@gmail.com>, balbi@kernel.org
-Cc:     lukas.bulwahn@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
+        id S231146AbhC2SuD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Mar 2021 14:50:03 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:46363 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S230122AbhC2Str (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Mar 2021 14:49:47 -0400
+Received: (qmail 945935 invoked by uid 1000); 29 Mar 2021 14:49:46 -0400
+Date:   Mon, 29 Mar 2021 14:49:46 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20210329135108.27128-1-yashsri421@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <15c0a26f-851b-862c-a3ca-52989d428c89@infradead.org>
-Date:   Mon, 29 Mar 2021 11:18:19 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+Subject: Re: [PATCH v2 5/6] usb: Iterator for ports
+Message-ID: <20210329184946.GA944482@rowland.harvard.edu>
+References: <20210329084426.78138-1-heikki.krogerus@linux.intel.com>
+ <20210329084426.78138-6-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210329135108.27128-1-yashsri421@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210329084426.78138-6-heikki.krogerus@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/29/21 6:51 AM, Aditya Srivastava wrote:
-> The opening comment mark '/**' is used for highlighting the beginning of
-> kernel-doc comments.
-> There are certain files in drivers/usb/dwc3, which follow this syntax,
-> but the content inside does not comply with kernel-doc.
-> Such lines were probably not meant for kernel-doc parsing, but are parsed
-> due to the presence of kernel-doc like comment syntax(i.e, '/**'), which
-> causes unexpected warnings from kernel-doc.
+On Mon, Mar 29, 2021 at 11:44:25AM +0300, Heikki Krogerus wrote:
+> Introducing usb_for_each_port(). It works the same way as
+> usb_for_each_dev(), but instead of going through every USB
+> device in the system, it walks through the USB ports in the
+> system.
 > 
-> E.g., presence of kernel-doc like comment in drivers/usb/dwc3/io.h at
-> header causes this warnings by kernel-doc:
-> "warning: expecting prototype for h(). Prototype was for __DRIVERS_USB_DWC3_IO_H() instead"
-> 
-> Similarly for other files too.
-> 
-> Provide a simple fix by replacing such occurrences with general comment
-> format, i.e. '/*', to prevent kernel-doc from parsing it.
-> 
-> Signed-off-by: Aditya Srivastava <yashsri421@gmail.com>
-
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 > ---
-> * Applies perfectly on next-20210326
+>  drivers/usb/core/usb.c | 46 ++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/usb.h    |  1 +
+>  2 files changed, 47 insertions(+)
 > 
->  drivers/usb/dwc3/debug.h         | 2 +-
->  drivers/usb/dwc3/debugfs.c       | 2 +-
->  drivers/usb/dwc3/dwc3-keystone.c | 2 +-
->  drivers/usb/dwc3/dwc3-pci.c      | 2 +-
->  drivers/usb/dwc3/io.h            | 2 +-
->  drivers/usb/dwc3/trace.c         | 2 +-
->  drivers/usb/dwc3/trace.h         | 2 +-
->  7 files changed, 7 insertions(+), 7 deletions(-)
+> diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+> index 2ce3667ec6fae..62368c4ed37af 100644
+> --- a/drivers/usb/core/usb.c
+> +++ b/drivers/usb/core/usb.c
+> @@ -398,6 +398,52 @@ int usb_for_each_dev(void *data, int (*fn)(struct usb_device *, void *))
+>  }
+>  EXPORT_SYMBOL_GPL(usb_for_each_dev);
+>  
+> +struct each_hub_arg {
+> +	void *data;
+> +	int (*fn)(struct device *, void *);
+> +};
+> +
+> +static int __each_hub(struct usb_device *hdev, void *data)
+> +{
+> +	struct each_hub_arg *arg = (struct each_hub_arg *)data;
+> +	struct usb_hub *hub;
+> +	int ret = 0;
+> +	int i;
+> +
+> +	hub = usb_hub_to_struct_hub(hdev);
+> +	if (!hub)
+> +		return 0;
+
+What happens if the hub is removed exactly now?  Although hdev is 
+reference-counted (and the loop iterator does take a reference to it), 
+usb_hub_to_struct_hub doesn't take a reference to hub.  And hub->ports 
+isn't refcounted at all.
+
+> +
+> +	mutex_lock(&usb_port_peer_mutex);
+> +
+> +	for (i = 0; i < hdev->maxchild; i++) {
+> +		ret = arg->fn(&hub->ports[i]->dev, arg->data);
+> +		if (ret)
+> +			break;
+> +	}
+> +
+> +	mutex_unlock(&usb_port_peer_mutex);
+
+I have a feeling that it would be better to take and release this mutex 
+in usb_for_each_port (or its caller), so that it is held over the whole 
+loop.
+
+Alan Stern
+
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * usb_for_each_port - interate over all USB ports in the system
+> + * @data: data pointer that will be handed to the callback function
+> + * @fn: callback function to be called for each USB port
+> + *
+> + * Iterate over all USB ports and call @fn for each, passing it @data. If it
+> + * returns anything other than 0, we break the iteration prematurely and return
+> + * that value.
+> + */
+> +int usb_for_each_port(void *data, int (*fn)(struct device *, void *))
+> +{
+> +	struct each_hub_arg arg = {data, fn};
+> +
+> +	return usb_for_each_dev(&arg, __each_hub);
+> +}
+> +EXPORT_SYMBOL_GPL(usb_for_each_port);
+> +
+>  /**
+>   * usb_release_dev - free a usb device structure when all users of it are finished.
+>   * @dev: device that's been disconnected
+> diff --git a/include/linux/usb.h b/include/linux/usb.h
+> index ddd2f5b2a2827..e4d2eb703cf89 100644
+> --- a/include/linux/usb.h
+> +++ b/include/linux/usb.h
+> @@ -871,6 +871,7 @@ extern int usb_match_one_id(struct usb_interface *interface,
+>  			    const struct usb_device_id *id);
+>  
+>  extern int usb_for_each_dev(void *data, int (*fn)(struct usb_device *, void *));
+> +int usb_for_each_port(void *data, int (*fn)(struct device *, void *));
+>  extern struct usb_interface *usb_find_interface(struct usb_driver *drv,
+>  		int minor);
+>  extern struct usb_interface *usb_ifnum_to_if(const struct usb_device *dev,
+> -- 
+> 2.30.2
 > 
-> diff --git a/drivers/usb/dwc3/debug.h b/drivers/usb/dwc3/debug.h
-> index 8ab394942360..db231de46bb3 100644
-> --- a/drivers/usb/dwc3/debug.h
-> +++ b/drivers/usb/dwc3/debug.h
-> @@ -1,5 +1,5 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
-> -/**
-> +/*
->   * debug.h - DesignWare USB3 DRD Controller Debug Header
->   *
->   * Copyright (C) 2010-2011 Texas Instruments Incorporated - https://www.ti.com
-> diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
-> index 5da4f6082d93..b0e3f434d219 100644
-> --- a/drivers/usb/dwc3/debugfs.c
-> +++ b/drivers/usb/dwc3/debugfs.c
-> @@ -1,5 +1,5 @@
->  // SPDX-License-Identifier: GPL-2.0
-> -/**
-> +/*
->   * debugfs.c - DesignWare USB3 DRD Controller DebugFS file
->   *
->   * Copyright (C) 2010-2011 Texas Instruments Incorporated - https://www.ti.com
-> diff --git a/drivers/usb/dwc3/dwc3-keystone.c b/drivers/usb/dwc3/dwc3-keystone.c
-> index 057056c0975e..1317959294e6 100644
-> --- a/drivers/usb/dwc3/dwc3-keystone.c
-> +++ b/drivers/usb/dwc3/dwc3-keystone.c
-> @@ -1,5 +1,5 @@
->  // SPDX-License-Identifier: GPL-2.0
-> -/**
-> +/*
->   * dwc3-keystone.c - Keystone Specific Glue layer
->   *
->   * Copyright (C) 2010-2013 Texas Instruments Incorporated - https://www.ti.com
-> diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-> index 4c5c6972124a..4698c43af5ae 100644
-> --- a/drivers/usb/dwc3/dwc3-pci.c
-> +++ b/drivers/usb/dwc3/dwc3-pci.c
-> @@ -1,5 +1,5 @@
->  // SPDX-License-Identifier: GPL-2.0
-> -/**
-> +/*
->   * dwc3-pci.c - PCI Specific glue layer
->   *
->   * Copyright (C) 2010-2011 Texas Instruments Incorporated - https://www.ti.com
-> diff --git a/drivers/usb/dwc3/io.h b/drivers/usb/dwc3/io.h
-> index 76b73b116862..1e96ea339d48 100644
-> --- a/drivers/usb/dwc3/io.h
-> +++ b/drivers/usb/dwc3/io.h
-> @@ -1,5 +1,5 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
-> -/**
-> +/*
->   * io.h - DesignWare USB3 DRD IO Header
->   *
->   * Copyright (C) 2010-2011 Texas Instruments Incorporated - https://www.ti.com
-> diff --git a/drivers/usb/dwc3/trace.c b/drivers/usb/dwc3/trace.c
-> index 1b45a9723eeb..088995885678 100644
-> --- a/drivers/usb/dwc3/trace.c
-> +++ b/drivers/usb/dwc3/trace.c
-> @@ -1,5 +1,5 @@
->  // SPDX-License-Identifier: GPL-2.0
-> -/**
-> +/*
->   * trace.c - DesignWare USB3 DRD Controller Trace Support
->   *
->   * Copyright (C) 2014 Texas Instruments Incorporated - https://www.ti.com
-> diff --git a/drivers/usb/dwc3/trace.h b/drivers/usb/dwc3/trace.h
-> index 97f4f1125a41..60883268adfc 100644
-> --- a/drivers/usb/dwc3/trace.h
-> +++ b/drivers/usb/dwc3/trace.h
-> @@ -1,5 +1,5 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
-> -/**
-> +/*
->   * trace.h - DesignWare USB3 DRD Controller Trace Support
->   *
->   * Copyright (C) 2014 Texas Instruments Incorporated - https://www.ti.com
-> 
-
-
--- 
-~Randy
-
