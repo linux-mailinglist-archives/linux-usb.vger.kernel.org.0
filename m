@@ -2,91 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E1E34D554
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 18:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA78C34D5A4
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 19:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbhC2QoP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Mar 2021 12:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
+        id S231268AbhC2RCg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Mar 2021 13:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbhC2Qn6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Mar 2021 12:43:58 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2D2C061574;
-        Mon, 29 Mar 2021 09:43:58 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id o16so2642469ljp.3;
-        Mon, 29 Mar 2021 09:43:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EJA04ZTI6BF3T7RTrxt/PRfIkpOFj2/PcmhPczxlcIE=;
-        b=THtoF59AVOFrR2jstQBNOoDcCB3dQWh93fHaqXEcvO6bOXhPRvN/8TTsypthmcU/UM
-         7owCSX8NkHl8e8J+iFGtj+lVPrVQnLR8m9FfUaHm2usLQF3/Ihx9eug/2HcW6JcqmMWl
-         e1dSxyzypN/4jCg4LVG1Mi4NjAQCkdAeAMupYwoMRAmdRzvfbSutokQwCvgD71J9KIRc
-         ioKEB6E5pMQ9ODdDJg49OAZPraUF1oMBiKUKb6VxvUQtncu5rNH1r/20pJLezAxSuChl
-         wnwTupu+GYlnlJB90p5n1z7OfAxBC4ffWz0Fe7ambJ9mbYDgBBWCP3J2ve8YMcp+/Ahx
-         TziA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EJA04ZTI6BF3T7RTrxt/PRfIkpOFj2/PcmhPczxlcIE=;
-        b=CEuCs57A8k8rsiXT3e55r+NC0U+dGGTs69buvpaco1A2IrhxTqHa+qbVfZFvf1m3mq
-         yRdyDHdGKwXHiXNJHbdwkxxwGMSFa8MPjdJLHCZcfETabb7RTf3nSi1g1/n3/p/gIxio
-         NaMOBsDnpzQHfQjJrS9g7CS1avWXdCmfEOmmTixxQuyMmHVfMO3khXjwrwMUP9sNiinu
-         ARW4j0+2jBzsK3AsPndPkYHWudwwmRjRz4tC5U4N5IDMIFZuLsiDu3lT5AzQB1Z6QrX2
-         65+PWiLE9avFXDjpkFf4SYJPa0Q78FbxIqNL2V4Fj2SHoaLaMVt33cjbPDPOValgIV23
-         L/OQ==
-X-Gm-Message-State: AOAM530i+QE0ORin1l5Alli5AYaZZqNeqA9YmZl0elPUdn7BVEvUeeXp
-        UZHCL2aHGMrpd975UASF1fBiPknYBWV/D2SribI=
-X-Google-Smtp-Source: ABdhPJzS8PQfFWyMazbBa7Hc/f4knOhxnZndQbdzqKAFN6z6q+U1344mkldKZH8fX2YKnlVG0Nr19E2tf6O0Uy6Gu1s=
-X-Received: by 2002:a2e:9a4e:: with SMTP id k14mr18376958ljj.116.1617036236649;
- Mon, 29 Mar 2021 09:43:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210329142604.28737-1-yashsri421@gmail.com>
-In-Reply-To: <20210329142604.28737-1-yashsri421@gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Mon, 29 Mar 2021 13:43:44 -0300
-Message-ID: <CAOMZO5DLaw7uCBX03YgpY7ZvcjNW6gdsbOx9et+pgEGjRMm=dw@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: imx8mp: fix incorrect kernel-doc comment syntax
-To:     Aditya Srivastava <yashsri421@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, lukas.bulwahn@gmail.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
+        with ESMTP id S230509AbhC2RCg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Mar 2021 13:02:36 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B832CC061574;
+        Mon, 29 Mar 2021 10:02:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=RZZt36Qkr4ZGYVn/npKXJ9AEqctFyxdqSfZnmEm2DlQ=; b=e8xb70gPBqR62UWA7TtilQ6Jdx
+        srXvv+EqQ/OCuTXKz/hckUsYJCkPTjS2DVedY/bAVrJVYo8zVcu6k2DJWQJA2+tRFZwAnc8ZZJ2dG
+        ooTKP6HGOQVp5lnPWk/KS4+4Oy5BlMMCRKkTrCg34IF3NtL+FWg6J4wGXhpToSCRmiRaI2dkNjg3W
+        K+rcAqLjxr8TM1bXhSAha11hbVaQvBtqAIperKhH71Rh+KshDKhyaQMbgEvpNNGfOXQ9TvAY0K1OQ
+        lEBNZWnQ19ycxqa1pHLc+10zxHgTBkDb8m0iQurWmqjQ+/JC6QuqBdTjBT4SLWyrTfSAV0W5YpgQs
+        vwkxLsCA==;
+Received: from [2601:1c0:6280:3f0::4557]
+        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lQvHY-000pWI-SZ; Mon, 29 Mar 2021 17:02:32 +0000
+Subject: Re: [PATCH] usb: dwc3: imx8mp: fix incorrect kernel-doc comment
+ syntax
+To:     Aditya Srivastava <yashsri421@gmail.com>, balbi@kernel.org
+Cc:     lukas.bulwahn@gmail.com, gregkh@linuxfoundation.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
         linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-doc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20210329142604.28737-1-yashsri421@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <2c4c916c-6395-9df2-7e57-40af4d5faa3b@infradead.org>
+Date:   Mon, 29 Mar 2021 10:02:22 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
+MIME-Version: 1.0
+In-Reply-To: <20210329142604.28737-1-yashsri421@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Aditya,
-
-On Mon, Mar 29, 2021 at 11:26 AM Aditya Srivastava <yashsri421@gmail.com> wrote:
->
+On 3/29/21 7:26 AM, Aditya Srivastava wrote:
 > The opening comment mark '/**' is used for highlighting the beginning of
 > kernel-doc comments.
 > The header for drivers/usb/dwc3/dwc3-imx8mp.c follows this syntax, but the
 > content inside does not comply with kernel-doc.
->
+> 
 > This line was probably not meant for kernel-doc parsing, but is parsed
 > due to the presence of kernel-doc like comment syntax(i.e, '/**'), which
 > causes unexpected warning from kernel-doc:
 > "warning: expecting prototype for dwc3(). Prototype was for USB_WAKEUP_CTRL() instead"
->
+> 
 > Provide a simple fix by replacing this occurrence with general comment
 > format, i.e. '/*', to prevent kernel-doc from parsing it.
->
+> 
 > Signed-off-by: Aditya Srivastava <yashsri421@gmail.com>
 
-It looks good, thanks:
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Thanks.
+
+> ---
+> * Applies perfectly on next-20210326
+> 
+>  drivers/usb/dwc3/dwc3-imx8mp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-imx8mp.c b/drivers/usb/dwc3/dwc3-imx8mp.c
+> index 75f0042b998b..b13cfab89d53 100644
+> --- a/drivers/usb/dwc3/dwc3-imx8mp.c
+> +++ b/drivers/usb/dwc3/dwc3-imx8mp.c
+> @@ -1,5 +1,5 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> -/**
+> +/*
+>   * dwc3-imx8mp.c - NXP imx8mp Specific Glue layer
+>   *
+>   * Copyright (c) 2020 NXP.
+> 
+
+
+-- 
+~Randy
+
