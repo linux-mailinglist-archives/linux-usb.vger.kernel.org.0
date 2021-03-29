@@ -2,97 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F44334D255
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 16:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC8C34D29F
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 16:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbhC2O0w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Mar 2021 10:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbhC2O0S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Mar 2021 10:26:18 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11625C061574;
-        Mon, 29 Mar 2021 07:26:18 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id h20so4475349plr.4;
-        Mon, 29 Mar 2021 07:26:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=m9ZlEf9Kme4mbiO6IFR/gcxIg4Oa3HNlqB5nKLE2L8M=;
-        b=dXh0pE9ejqskpD303Y1mDRnLk7vI6Qrmn8vnLQmo3iktYK//4gKuXsu519xhB6vrt+
-         FcldxO2/JmAFjmEvO6BHDEMnsMPfGuqx3TULWCWkZeNirZOFgq0ycvJOX3vFfetdnK+G
-         AmM25a4jqMhNOlYySGUkKfN0P5Ua0JBhlizTjgd801Ca92jjxj1MRlEDy/2gTzM1rzcv
-         IPNJ83xVdf2Ae3e6cIRn80CaQsKjqGbS022Ve0T2wvkZJXds4hL7dsUob+0yx2nbK8b6
-         rTDt+XKSdvkfuzohF9vioVpZQkH+CK+zyh0rreTGX4ExWjwIXYQLSmCiaYjRRwMgu6XF
-         dBpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=m9ZlEf9Kme4mbiO6IFR/gcxIg4Oa3HNlqB5nKLE2L8M=;
-        b=qAy8ThzjM+0KQYa7IjvE50VzTw/U/BDkDh8hQUZTmRKONK04oTZaSiwAqutDDeYL5X
-         83Susx585u+r3Qflff/W+E9qZza82mHINNjLOIRo5AQSk5tgMlsS4H8VbbSH0Gcjb9Ld
-         tVnxVlRzJ6ImF9619creLLC8odbCTE8pNY0UzQZJAGTcdfmSGvAY/6F4and88aoOgOb2
-         MAyl03/GUQ9NdjDGDElyzj15bbKpSU+EDeYbyKZ0B2Qk8SJuoZh53pYDkJy1VcJN3H8V
-         Xgrx+L4J+ybv3Dpqagmw3vp7ckIlB9RWOu/RE1MxDzZGk4h3TW7a2mP6ZJGjLXLii+Hp
-         dpLA==
-X-Gm-Message-State: AOAM530R5RWQO9gdEAx6db9XE63BmZd2dUbgugdqKycoxVxNJzgN3Nv+
-        P1DAXHhihecG6hUxJ27Q1qQ=
-X-Google-Smtp-Source: ABdhPJxiyW8fdmbzHiJw0DVGGzwsumamMCVvqh9OAV5jj6j1DU2bfOuMpz8NnNKqu111rrzl/ViQiQ==
-X-Received: by 2002:a17:903:228d:b029:e7:1f01:bab0 with SMTP id b13-20020a170903228db02900e71f01bab0mr16660231plh.80.1617027977531;
-        Mon, 29 Mar 2021 07:26:17 -0700 (PDT)
-Received: from localhost.localdomain ([2405:201:600d:a089:4ed:8f53:adc7:b574])
-        by smtp.googlemail.com with ESMTPSA id f65sm9641341pgc.19.2021.03.29.07.26.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Mar 2021 07:26:17 -0700 (PDT)
-From:   Aditya Srivastava <yashsri421@gmail.com>
-To:     balbi@kernel.org
-Cc:     yashsri421@gmail.com, lukas.bulwahn@gmail.com,
-        gregkh@linuxfoundation.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, rdunlap@infradead.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: dwc3: imx8mp: fix incorrect kernel-doc comment syntax
-Date:   Mon, 29 Mar 2021 19:56:04 +0530
-Message-Id: <20210329142604.28737-1-yashsri421@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S230415AbhC2On5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Mar 2021 10:43:57 -0400
+Received: from mga05.intel.com ([192.55.52.43]:60768 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230502AbhC2Ona (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 29 Mar 2021 10:43:30 -0400
+IronPort-SDR: KcD8Msw3GBeBqLU5g5r9yH3OJ1mdmfd9uMOx7+7Tf/IOvp2EB4dImGlF4xI5hWzqJGdmKf5b0s
+ MCRsUceKsCnQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9938"; a="276724965"
+X-IronPort-AV: E=Sophos;i="5.81,288,1610438400"; 
+   d="scan'208";a="276724965"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 07:43:29 -0700
+IronPort-SDR: +PId8aDUZNp8xopfL7BA0bUBq7fEZjfUW7Ng/zhdueK+OC2cESX5k+9Ez3HpY3ap/9W5YClMsI
+ AyvF8W74OMsg==
+X-IronPort-AV: E=Sophos;i="5.81,288,1610438400"; 
+   d="scan'208";a="417696964"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 07:43:25 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 29 Mar 2021 17:43:23 +0300
+Date:   Mon, 29 Mar 2021 17:43:23 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Kranthi Kuntala <kranthi.kuntala@intel.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH 1/2] thunderbolt: Fix a leak in tb_retimer_add()
+Message-ID: <20210329144323.GI2542@lahna.fi.intel.com>
+References: <YGFulvAa5Kz6HTsd@mwanda>
+ <20210329130220.GY2356281@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210329130220.GY2356281@nvidia.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The opening comment mark '/**' is used for highlighting the beginning of
-kernel-doc comments.
-The header for drivers/usb/dwc3/dwc3-imx8mp.c follows this syntax, but the
-content inside does not comply with kernel-doc.
+Hi,
 
-This line was probably not meant for kernel-doc parsing, but is parsed
-due to the presence of kernel-doc like comment syntax(i.e, '/**'), which
-causes unexpected warning from kernel-doc:
-"warning: expecting prototype for dwc3(). Prototype was for USB_WAKEUP_CTRL() instead"
+On Mon, Mar 29, 2021 at 10:02:20AM -0300, Jason Gunthorpe wrote:
+> On Mon, Mar 29, 2021 at 09:07:18AM +0300, Dan Carpenter wrote:
+> > After the device_register() succeeds, then the correct way to clean up
+> > is to call device_unregister().  The unregister calls both device_del()
+> > and device_put().  Since this code was only device_del() it results in
+> > a memory leak.
+> > 
+> > Fixes: dacb12877d92 ("thunderbolt: Add support for on-board retimers")
+> > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > ---
+> > This is from a new static checker warning.  Not tested.  With new
+> > warnings it's also possible that I have misunderstood something
+> > fundamental so review carefully etc.
+> 
+> It looks OK to me
 
-Provide a simple fix by replacing this occurrence with general comment
-format, i.e. '/*', to prevent kernel-doc from parsing it.
+I agree too.
 
-Signed-off-by: Aditya Srivastava <yashsri421@gmail.com>
----
-* Applies perfectly on next-20210326
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
- drivers/usb/dwc3/dwc3-imx8mp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for the review!
 
-diff --git a/drivers/usb/dwc3/dwc3-imx8mp.c b/drivers/usb/dwc3/dwc3-imx8mp.c
-index 75f0042b998b..b13cfab89d53 100644
---- a/drivers/usb/dwc3/dwc3-imx8mp.c
-+++ b/drivers/usb/dwc3/dwc3-imx8mp.c
-@@ -1,5 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
--/**
-+/*
-  * dwc3-imx8mp.c - NXP imx8mp Specific Glue layer
-  *
-  * Copyright (c) 2020 NXP.
--- 
-2.17.1
+> This also highlights the code has an ordering issue too, it calls
+> device_register() then goes to do tb_retimer_nvm_add() however
+> device_register() makes sysfs attributes visible before the rt->nvm is
+> initialized and this:
+> 
+> static ssize_t nvm_authenticate_store(struct device *dev,
+> 	struct device_attribute *attr, const char *buf, size_t count)
+> {
+> 	if (!rt->nvm) {
+> 
+> Isn't strong enough to close the potential racing. The nvm should be
+> setup before device_register and all the above tests in the sysfs
+> deleted so we can rely on the CPU barriers built into
+> device_register() for correctness.
+> 
+> [which is a general tip, be very suspicious if device_register() is
+> being error unwound]
 
+The nvm is a separate (physical Linux) device that gets added under this
+one. It cannot be added before AFAICT.
+
+The code you refer actually looks like this:
+
+static ssize_t nvm_authenticate_store(struct device *dev,
+ 	struct device_attribute *attr, const char *buf, size_t count)
+{
+	...
+        if (!mutex_trylock(&rt->tb->lock)) {
+                ret = restart_syscall();
+                goto exit_rpm;
+        }
+
+        if (!rt->nvm) {
+                ret = -EAGAIN;
+                goto exit_unlock;
+        }
+
+
+Idea here is that if the NVMem (nvm) is not yet registered the attribute is
+there but we return -EAGAIN to the userspace.
