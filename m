@@ -2,148 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8124034BEA9
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Mar 2021 21:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F29734C099
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 02:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231380AbhC1T7U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 28 Mar 2021 15:59:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55570 "EHLO mail.kernel.org"
+        id S229822AbhC2Ajx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 28 Mar 2021 20:39:53 -0400
+Received: from mga02.intel.com ([134.134.136.20]:19435 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229595AbhC1T6y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 28 Mar 2021 15:58:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 459A261477;
-        Sun, 28 Mar 2021 19:58:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616961533;
-        bh=4NUAVBaMypj7d1A+DL+VHh2KO4VM/TobWc73V8gAcSg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=pEjHvaLYV61mFlV5diapBBYlnnZ1YxWskcYw2tYybAhxDeeCATqyeZfCURSvAd+gy
-         UY0gAwrh/ceGYWYOd4NzBVAiHVGkFcfrNaih0xurxpMchH1AkM4QR+vr1tdB8gb/xq
-         6z0r6oLNxL9PjNXRXnJH8TjdrGsNy7bXlmm0N/tzpK2dLxPpz229SBOwfku8oox1kZ
-         C+gMpNFdbb8+XpW6MkeiwNOTisDHaHjARTLiF3+OCugesT/JETxukfUxbM7uXNTFX5
-         wkpSBIb4EqOsjSZ7Km0SCkUg9ZtLuFr4N16AEXxczc7vUY2qazphpTOc9iX1Kl5ndH
-         CDnEfywdSJR0A==
-Date:   Sun, 28 Mar 2021 14:58:52 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ion Badulescu <ionut@badula.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Adam Radford <aradford@gmail.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-ide@vger.kernel.org, dmaengine@vger.kernel.org,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        linux-parisc@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        linux-serial@vger.kernel.org,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] PCI: Remove pci_try_set_mwi
-Message-ID: <20210328195852.GA1088869@bjorn-Precision-5520>
+        id S231258AbhC2Ajs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 28 Mar 2021 20:39:48 -0400
+IronPort-SDR: U1EGleUhedIw7vVcHC5Zg4RBC7vljxrZgwnks6dXCNijrVPxxFBQHqijNhSmBrRWAgtnHq8Ckk
+ Nl4VNuwLkv6A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9937"; a="178585280"
+X-IronPort-AV: E=Sophos;i="5.81,285,1610438400"; 
+   d="scan'208";a="178585280"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2021 17:39:48 -0700
+IronPort-SDR: 3E89x1jBbX/QbjVJ60YDfjAcEQnWLWxTDL1lol1+JavgWGYe/JkePuJu47AVrreayOwauSAnW1
+ fNslRRt6B7Hw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,285,1610438400"; 
+   d="scan'208";a="444327098"
+Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 28 Mar 2021 17:39:46 -0700
+Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lQfwY-0004Fn-AI; Mon, 29 Mar 2021 00:39:46 +0000
+Date:   Mon, 29 Mar 2021 08:39:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ e5242861ec6a0bce25b4cd10af0fc8a508fd067d
+Message-ID: <606121b1.okQhCWWyRfaqSTlE%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5b59c7b3-6e41-b7cf-b77d-274a88f2c5e1@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Mar 28, 2021 at 12:04:35AM +0100, Heiner Kallweit wrote:
-> On 26.03.2021 22:26, Bjorn Helgaas wrote:
-> > [+cc Randy, Andrew (though I'm sure you have zero interest in this
-> > ancient question :))]
-> > 
-> > On Wed, Dec 09, 2020 at 09:31:21AM +0100, Heiner Kallweit wrote:
-> >> pci_set_mwi() and pci_try_set_mwi() do exactly the same, just that the
-> >> former one is declared as __must_check. However also some callers of
-> >> pci_set_mwi() have a comment that it's an optional feature. I don't
-> >> think there's much sense in this separation and the use of
-> >> __must_check. Therefore remove pci_try_set_mwi() and remove the
-> >> __must_check attribute from pci_set_mwi().
-> >> I don't expect either function to be used in new code anyway.
-> > 
-> > There's not much I like better than removing things.  But some
-> > significant thought went into adding pci_try_set_mwi() in the first
-> > place, so I need a little more convincing about why it's safe to
-> > remove it.
-> > 
-> 
-> Thanks for the link to the 13 yrs old discussion. Unfortunately it
-> doesn't mention any real argument for the __must_check, just:
-> 
-> "And one of the reasons for adding the __must_check annotation is to
-> weed out design errors."
-> And the very next response in the discussion calls this a "non-argument".
-> Plus not mentioning what the other reasons could be.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: e5242861ec6a0bce25b4cd10af0fc8a508fd067d  usb: gadget: s3c: Fix the error handling path in 's3c2410_udc_probe()'
 
-I think you're referring to Alan's response [1]:
+elapsed time: 722m
 
-  akpm> And we *need* to be excessively anal in the PCI setup code.
-  akpm> We have metric shitloads of bugs due to problems in that area,
-  akpm> and the more formality and error handling and error reporting
-  akpm> we can get in there the better off we will be.
+configs tested: 107
+configs skipped: 2
 
-  ac> No argument there
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-So Alan is actually *agreeing* that "we need to be excessively anal in
-the PCI setup code,"  not saying that "weeding out design errors is
-not an argument for __must_check."
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+x86_64                           allyesconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+arm                       aspeed_g4_defconfig
+arm                             pxa_defconfig
+sparc                       sparc32_defconfig
+ia64                             alldefconfig
+powerpc                        icon_defconfig
+arc                        nsimosci_defconfig
+arm                         at91_dt_defconfig
+parisc                generic-64bit_defconfig
+powerpc                  storcenter_defconfig
+arm                          ep93xx_defconfig
+powerpc                 mpc837x_rdb_defconfig
+sh                          rsk7203_defconfig
+mips                     decstation_defconfig
+powerpc                mpc7448_hpc2_defconfig
+arm                  colibri_pxa270_defconfig
+powerpc                 xes_mpc85xx_defconfig
+xtensa                    xip_kc705_defconfig
+mips                          ath25_defconfig
+mips                       lemote2f_defconfig
+arm                        spear3xx_defconfig
+arm                         axm55xx_defconfig
+arm                      integrator_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a004-20210328
+i386                 randconfig-a003-20210328
+i386                 randconfig-a001-20210328
+i386                 randconfig-a002-20210328
+i386                 randconfig-a006-20210328
+i386                 randconfig-a005-20210328
+x86_64               randconfig-a015-20210328
+x86_64               randconfig-a012-20210328
+x86_64               randconfig-a013-20210328
+x86_64               randconfig-a014-20210328
+x86_64               randconfig-a016-20210328
+x86_64               randconfig-a011-20210328
+i386                 randconfig-a014-20210328
+i386                 randconfig-a011-20210328
+i386                 randconfig-a015-20210328
+i386                 randconfig-a016-20210328
+i386                 randconfig-a013-20210328
+i386                 randconfig-a012-20210328
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-> Currently we have three ancient drivers that bail out if the call fails.
-> Most callers of pci_set_mwi() use the return code only to emit an
-> error message, but they proceed normally. Majority of users calls
-> pci_try_set_mwi(). And as stated in the commit message I don't expect
-> any new usage of pci_set_mwi().
+clang tested configs:
+x86_64               randconfig-a015-20210329
+x86_64               randconfig-a012-20210329
+x86_64               randconfig-a013-20210329
+x86_64               randconfig-a014-20210329
+x86_64               randconfig-a011-20210329
+x86_64               randconfig-a016-20210329
+x86_64               randconfig-a002-20210328
+x86_64               randconfig-a003-20210328
+x86_64               randconfig-a001-20210328
+x86_64               randconfig-a006-20210328
+x86_64               randconfig-a005-20210328
+x86_64               randconfig-a004-20210328
 
-I would love to merge this patch.  We just need to clarify the commit
-log.  Right now the only justification is "I don't think there's much
-sense in the __must_check annotation," which may well be true but
-could use some support.
-
-If MWI is purely an optimization and there's never a functional
-problem if pci_set_mwi() fails, we should say that (and maybe
-update any drivers that bail out on failure).
-
-Andrew and Alan both seem to agree that MSI *is* purely advisory:
-
-  akpm> pci_set_mwi() is an advisory thing, and on certain platforms
-  akpm> it might fail to set the cacheline size to the desired number.
-  akpm> This is not a fatal error and the driver can successfully run
-  akpm> at a lesser performance level.
-
-  ac> Correct.
-
-But even after that, Andrew proposed adding pci_try_set_mwi().  So it
-makes sense to really understand what was going on there so we don't
-break something in the name of cleaning it up.
-
-[1] https://lore.kernel.org/linux-ide/20070405211609.5263d627@the-village.bc.nu/
-
-> > The argument should cite the discussion about adding it.  I think one
-> > of the earliest conversations is here:
-> > https://lore.kernel.org/linux-ide/20070404213704.224128ec.randy.dunlap@oracle.com/
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
