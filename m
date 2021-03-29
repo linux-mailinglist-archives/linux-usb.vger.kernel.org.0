@@ -2,422 +2,247 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D046A34C51F
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 09:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F88334CA90
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 10:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231311AbhC2Hlq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Mar 2021 03:41:46 -0400
-Received: from mga04.intel.com ([192.55.52.120]:64121 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229711AbhC2Hlk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Mar 2021 03:41:40 -0400
-IronPort-SDR: 5I6/uCSkyc5l1nOlTKt6K0d+NzUgaJZ2dcDlf1SK4RNx2mdSdxesfztkzktezGszYoGtoe2T2O
- d6drMufki6bg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9937"; a="189244510"
-X-IronPort-AV: E=Sophos;i="5.81,287,1610438400"; 
-   d="scan'208";a="189244510"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 00:41:39 -0700
-IronPort-SDR: VdfxcL1Q/UGPO/+KI6jMH1v/+q68V6GCOHAsmemwZgbyo02Jj1gRQiHfWCkhBsTtKoc66tfv0u
- Yb4qZ8dOnuxg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,287,1610438400"; 
-   d="scan'208";a="526855153"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 29 Mar 2021 00:41:36 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id A7419FF; Mon, 29 Mar 2021 10:41:50 +0300 (EEST)
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Christian Kellner <christian@kellner.me>,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@google.com>,
-        Diego Rivas <diegorivas@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v3 3/3] thunderbolt: Expose more details about USB 3.x and DisplayPort tunnels
-Date:   Mon, 29 Mar 2021 10:41:50 +0300
-Message-Id: <20210329074150.62622-4-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210329074150.62622-1-mika.westerberg@linux.intel.com>
-References: <20210329074150.62622-1-mika.westerberg@linux.intel.com>
+        id S234215AbhC2IjC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Mar 2021 04:39:02 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:14177 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235200AbhC2IiW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Mar 2021 04:38:22 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F85WM5YzzzmbFw;
+        Mon, 29 Mar 2021 16:35:43 +0800 (CST)
+Received: from [10.67.102.118] (10.67.102.118) by
+ DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
+ 14.3.498.0; Mon, 29 Mar 2021 16:38:11 +0800
+Subject: Re: [RFC PATCH] USB:ohci:fix ohci interruption problem
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <yisen.zhuang@huawei.com>,
+        <tanxiaofei@huawei.com>, <liudongdong3@huawei.com>,
+        <linux-kernel@vger.kernel.org>
+References: <1616748896-9415-1-git-send-email-liulongfang@huawei.com>
+ <20210326152821.GA832251@rowland.harvard.edu>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <e8d6fb1c-5a9b-426a-4844-add67aac768f@huawei.com>
+Date:   Mon, 29 Mar 2021 16:38:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210326152821.GA832251@rowland.harvard.edu>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.118]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This exposes two new attributes under each device router: usb3 and dp
-that hold number of tunnels ending to this switch. These attributes are
-only available if the connection manager supports it (tunneling_details
-attribute reads 1). Currently only the software connection manager
-supports this.
+On 2021/3/26 23:28, Alan Stern wrote:
+> On Fri, Mar 26, 2021 at 04:54:56PM +0800, Longfang Liu wrote:
+>> When OHCI enters the S4 sleep state, the USB sleep process will call
+>> check_root_hub_suspend() and ohci_bus_suspend() instead of
+>> ohci_suspend() and ohci_bus_suspend(), this causes the OHCI interrupt
+>> to not be closed.
+> 
+> What on earth are you talking about?  This isn't true at all.
+> 
+> Can you provide more information about your system?  Are you using a 
+> PCI-based OHCI controller or a platform device (and if so, which one)?  
+> Can you post system logs to back up your statements?
+> The system is UOS, the kernel version is kernel4.19, and the driver
+used is ohci-pci.c based on PCI.
 
-Based on these userspace can show the user more detailed information
-what is going on.
+By adding the log in ohci_suspend, and then viewing the dmesg after sleep,
+I can confirm that the system does not call ohci_suspend in S4 sleep mode.
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- .../ABI/testing/sysfs-bus-thunderbolt         | 26 +++++++++++
- drivers/thunderbolt/domain.c                  | 10 +++++
- drivers/thunderbolt/switch.c                  | 29 ++++++++++++
- drivers/thunderbolt/tb.c                      | 44 ++++++++++++++-----
- drivers/thunderbolt/tb.h                      |  4 ++
- include/linux/thunderbolt.h                   |  6 +++
- 6 files changed, 108 insertions(+), 11 deletions(-)
+The operating method of the system entering S4 sleep mode:
+echo disk > /sys/power/state
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-thunderbolt b/Documentation/ABI/testing/sysfs-bus-thunderbolt
-index c41c68f64693..1569be391ca6 100644
---- a/Documentation/ABI/testing/sysfs-bus-thunderbolt
-+++ b/Documentation/ABI/testing/sysfs-bus-thunderbolt
-@@ -61,6 +61,14 @@ Description:	This attribute holds current Thunderbolt security level
- 			 the BIOS.
- 		=======  ==================================================
- 
-+What: /sys/bus/thunderbolt/devices/.../domainX/tunneling_details
-+Date:		July 2021
-+KernelVersion:	5.13
-+Contact:	Mika Westerberg <mika.westerberg@linux.intel.com>
-+Description:	The connection manager implementation may expose
-+		additional details about tunneling. If it supports this
-+		the attribute reads 1.
-+
- What: /sys/bus/thunderbolt/devices/.../authorized
- Date:		Sep 2017
- KernelVersion:	4.13
-@@ -102,6 +110,15 @@ Contact:	thunderbolt-software@lists.01.org
- Description:	This attribute contains 1 if Thunderbolt device was already
- 		authorized on boot and 0 otherwise.
- 
-+What: /sys/bus/thunderbolt/devices/.../dp
-+Date:		Jul 2021
-+KernelVersion:	5.13
-+Contact:	Mika Westerberg <mika.westerberg@linux.intel.com>
-+Description:	Only available if the domain tunneling_details attribute
-+		reads 1. If present means that the device router has
-+		DisplayPort sink. Contents will be number how many
-+		active DisplayPort tunnels end up to this router.
-+
- What: /sys/bus/thunderbolt/devices/.../generation
- Date:		Jan 2020
- KernelVersion:	5.5
-@@ -169,6 +186,15 @@ Contact:	Mika Westerberg <mika.westerberg@linux.intel.com>
- Description:	This attribute reports number of TX lanes the device is
- 		using simultaneusly through its upstream port.
- 
-+What: /sys/bus/thunderbolt/devices/.../usb3
-+Date:		Jul 2021
-+KernelVersion:	5.13
-+Contact:	Mika Westerberg <mika.westerberg@linux.intel.com>
-+Description:	Only available if the domain tunneling_details attribute
-+		reads 1. If present means that the device router has
-+		USB 3.x upstream adapter. Reads 1 if there is an active
-+		USB 3.x tunnel to this router.
-+
- What:		/sys/bus/thunderbolt/devices/.../vendor
- Date:		Sep 2017
- KernelVersion:	4.13
-diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
-index 98f4056f89ff..e2787444abb0 100644
---- a/drivers/thunderbolt/domain.c
-+++ b/drivers/thunderbolt/domain.c
-@@ -282,11 +282,21 @@ static ssize_t security_show(struct device *dev, struct device_attribute *attr,
- }
- static DEVICE_ATTR_RO(security);
- 
-+static ssize_t tunneling_details_show(struct device *dev,
-+				      struct device_attribute *attr, char *buf)
-+{
-+	const struct tb *tb = container_of(dev, struct tb, dev);
-+
-+	return sysfs_emit(buf, "%d\n", !!(tb->cm_caps & TB_CAP_TUNNEL_DETAILS));
-+}
-+static DEVICE_ATTR_RO(tunneling_details);
-+
- static struct attribute *domain_attrs[] = {
- 	&dev_attr_boot_acl.attr,
- 	&dev_attr_deauthorization.attr,
- 	&dev_attr_iommu_dma_protection.attr,
- 	&dev_attr_security.attr,
-+	&dev_attr_tunneling_details.attr,
- 	NULL,
- };
- 
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index fbcc920e327c..b2c0cfec03d5 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -1493,6 +1493,15 @@ device_name_show(struct device *dev, struct device_attribute *attr, char *buf)
- }
- static DEVICE_ATTR_RO(device_name);
- 
-+static ssize_t dp_show(struct device *dev, struct device_attribute *attr,
-+		       char *buf)
-+{
-+	struct tb_switch *sw = tb_to_switch(dev);
-+
-+	return sysfs_emit(buf, "%u\n", sw->dp);
-+}
-+static DEVICE_ATTR_RO(dp);
-+
- static ssize_t
- generation_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
-@@ -1699,6 +1708,15 @@ static ssize_t nvm_version_show(struct device *dev,
- }
- static DEVICE_ATTR_RO(nvm_version);
- 
-+static ssize_t usb3_show(struct device *dev, struct device_attribute *attr,
-+			 char *buf)
-+{
-+	struct tb_switch *sw = tb_to_switch(dev);
-+
-+	return sysfs_emit(buf, "%u\n", sw->usb3);
-+}
-+static DEVICE_ATTR_RO(usb3);
-+
- static ssize_t vendor_show(struct device *dev, struct device_attribute *attr,
- 			   char *buf)
- {
-@@ -1731,6 +1749,7 @@ static struct attribute *switch_attrs[] = {
- 	&dev_attr_boot.attr,
- 	&dev_attr_device.attr,
- 	&dev_attr_device_name.attr,
-+	&dev_attr_dp.attr,
- 	&dev_attr_generation.attr,
- 	&dev_attr_key.attr,
- 	&dev_attr_nvm_authenticate.attr,
-@@ -1740,6 +1759,7 @@ static struct attribute *switch_attrs[] = {
- 	&dev_attr_rx_lanes.attr,
- 	&dev_attr_tx_speed.attr,
- 	&dev_attr_tx_lanes.attr,
-+	&dev_attr_usb3.attr,
- 	&dev_attr_vendor.attr,
- 	&dev_attr_vendor_name.attr,
- 	&dev_attr_unique_id.attr,
-@@ -1763,6 +1783,7 @@ static umode_t switch_attr_is_visible(struct kobject *kobj,
- {
- 	struct device *dev = kobj_to_dev(kobj);
- 	struct tb_switch *sw = tb_to_switch(dev);
-+	const struct tb *tb = sw->tb;
- 
- 	if (attr == &dev_attr_authorized.attr) {
- 		if (sw->tb->security_level == TB_SECURITY_NOPCIE ||
-@@ -1775,6 +1796,10 @@ static umode_t switch_attr_is_visible(struct kobject *kobj,
- 	} else if (attr == &dev_attr_device_name.attr) {
- 		if (!sw->device_name)
- 			return 0;
-+	} else if (attr == &dev_attr_dp.attr) {
-+		if (!(tb->cm_caps & TB_CAP_TUNNEL_DETAILS) ||
-+		    !has_port(sw, TB_TYPE_DP_HDMI_OUT))
-+			return 0;
- 	} else if (attr == &dev_attr_vendor.attr)  {
- 		if (!sw->vendor)
- 			return 0;
-@@ -1794,6 +1819,10 @@ static umode_t switch_attr_is_visible(struct kobject *kobj,
- 		if (tb_route(sw))
- 			return attr->mode;
- 		return 0;
-+	} else if (attr == &dev_attr_usb3.attr) {
-+		if (!(tb->cm_caps & TB_CAP_TUNNEL_DETAILS) ||
-+		    !has_port(sw, TB_TYPE_USB3_UP))
-+			return 0;
- 	} else if (attr == &dev_attr_nvm_authenticate.attr) {
- 		if (nvm_upgradeable(sw))
- 			return attr->mode;
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index eb15022e4e3e..5295930917ab 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -104,10 +104,34 @@ static void tb_remove_dp_resources(struct tb_switch *sw)
- 	}
- }
- 
-+static void tb_add_tunnel(struct tb *tb, struct tb_tunnel *tunnel)
-+{
-+	struct tb_switch *sw = tunnel->dst_port->sw;
-+	struct tb_cm *tcm = tb_priv(tb);
-+
-+	if (tb_tunnel_is_usb3(tunnel))
-+		sw->usb3++;
-+	else if (tb_tunnel_is_dp(tunnel))
-+		sw->dp++;
-+
-+	list_add_tail(&tunnel->list, &tcm->tunnel_list);
-+}
-+
-+static void tb_remove_tunnel(struct tb_tunnel *tunnel)
-+{
-+	struct tb_switch *sw = tunnel->dst_port->sw;
-+
-+	if (tb_tunnel_is_usb3(tunnel) && sw->usb3)
-+		sw->usb3--;
-+	else if (tb_tunnel_is_dp(tunnel) && sw->dp)
-+		sw->dp--;
-+
-+	list_del(&tunnel->list);
-+}
-+
- static void tb_discover_tunnels(struct tb_switch *sw)
- {
- 	struct tb *tb = sw->tb;
--	struct tb_cm *tcm = tb_priv(tb);
- 	struct tb_port *port;
- 
- 	tb_switch_for_each_port(sw, port) {
-@@ -142,7 +166,7 @@ static void tb_discover_tunnels(struct tb_switch *sw)
- 			}
- 		}
- 
--		list_add_tail(&tunnel->list, &tcm->tunnel_list);
-+		tb_add_tunnel(tb, tunnel);
- 	}
- 
- 	tb_switch_for_each_port(sw, port) {
-@@ -436,7 +460,6 @@ static int tb_tunnel_usb3(struct tb *tb, struct tb_switch *sw)
- 	struct tb_switch *parent = tb_switch_parent(sw);
- 	int ret, available_up, available_down;
- 	struct tb_port *up, *down, *port;
--	struct tb_cm *tcm = tb_priv(tb);
- 	struct tb_tunnel *tunnel;
- 
- 	if (!tb_acpi_may_tunnel_usb3()) {
-@@ -499,7 +522,7 @@ static int tb_tunnel_usb3(struct tb *tb, struct tb_switch *sw)
- 		goto err_free;
- 	}
- 
--	list_add_tail(&tunnel->list, &tcm->tunnel_list);
-+	tb_add_tunnel(tb, tunnel);
- 	if (tb_route(parent))
- 		tb_reclaim_usb3_bandwidth(tb, down, up);
- 
-@@ -682,7 +705,7 @@ static void tb_deactivate_and_free_tunnel(struct tb_tunnel *tunnel)
- 		return;
- 
- 	tb_tunnel_deactivate(tunnel);
--	list_del(&tunnel->list);
-+	tb_remove_tunnel(tunnel);
- 
- 	tb = tunnel->tb;
- 	src_port = tunnel->src_port;
-@@ -933,7 +956,7 @@ static void tb_tunnel_dp(struct tb *tb)
- 		goto err_free;
- 	}
- 
--	list_add_tail(&tunnel->list, &tcm->tunnel_list);
-+	tb_add_tunnel(tb, tunnel);
- 	tb_reclaim_usb3_bandwidth(tb, in, out);
- 	return;
- 
-@@ -1034,7 +1057,7 @@ static int tb_disconnect_pci(struct tb *tb, struct tb_switch *sw)
- 		return -ENODEV;
- 
- 	tb_tunnel_deactivate(tunnel);
--	list_del(&tunnel->list);
-+	tb_remove_tunnel(tunnel);
- 	tb_tunnel_free(tunnel);
- 	return 0;
- }
-@@ -1042,7 +1065,6 @@ static int tb_disconnect_pci(struct tb *tb, struct tb_switch *sw)
- static int tb_tunnel_pci(struct tb *tb, struct tb_switch *sw)
- {
- 	struct tb_port *up, *down, *port;
--	struct tb_cm *tcm = tb_priv(tb);
- 	struct tb_switch *parent_sw;
- 	struct tb_tunnel *tunnel;
- 
-@@ -1071,7 +1093,7 @@ static int tb_tunnel_pci(struct tb *tb, struct tb_switch *sw)
- 		return -EIO;
- 	}
- 
--	list_add_tail(&tunnel->list, &tcm->tunnel_list);
-+	tb_add_tunnel(tb, tunnel);
- 	return 0;
- }
- 
-@@ -1079,7 +1101,6 @@ static int tb_approve_xdomain_paths(struct tb *tb, struct tb_xdomain *xd,
- 				    int transmit_path, int transmit_ring,
- 				    int receive_path, int receive_ring)
- {
--	struct tb_cm *tcm = tb_priv(tb);
- 	struct tb_port *nhi_port, *dst_port;
- 	struct tb_tunnel *tunnel;
- 	struct tb_switch *sw;
-@@ -1104,7 +1125,7 @@ static int tb_approve_xdomain_paths(struct tb *tb, struct tb_xdomain *xd,
- 		return -EIO;
- 	}
- 
--	list_add_tail(&tunnel->list, &tcm->tunnel_list);
-+	tb_add_tunnel(tb, tunnel);
- 	mutex_unlock(&tb->lock);
- 	return 0;
- }
-@@ -1582,6 +1603,7 @@ struct tb *tb_probe(struct tb_nhi *nhi)
- 		tb->security_level = TB_SECURITY_NOPCIE;
- 
- 	tb->cm_ops = &tb_cm_ops;
-+	tb->cm_caps |= TB_CAP_TUNNEL_DETAILS;
- 
- 	tcm = tb_priv(tb);
- 	INIT_LIST_HEAD(&tcm->tunnel_list);
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index 9790e9f13d2b..eb93c41a0881 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -123,6 +123,8 @@ struct tb_switch_tmu {
-  * @safe_mode: The switch is in safe-mode
-  * @boot: Whether the switch was already authorized on boot or not
-  * @rpm: The switch supports runtime PM
-+ * @usb3: Number of USB 3.x tunnels to this switch (0 or 1)
-+ * @dp: Number of DisplayPort tunnels ending to this switch
-  * @authorized: Whether the switch is authorized by user or policy
-  * @security_level: Switch supported security level
-  * @debugfs_dir: Pointer to the debugfs structure
-@@ -167,6 +169,8 @@ struct tb_switch {
- 	bool safe_mode;
- 	bool boot;
- 	bool rpm;
-+	unsigned int usb3;
-+	unsigned int dp;
- 	unsigned int authorized;
- 	enum tb_security_level security_level;
- 	struct dentry *debugfs_dir;
-diff --git a/include/linux/thunderbolt.h b/include/linux/thunderbolt.h
-index e7c96c37174f..dc6cfb4237d1 100644
---- a/include/linux/thunderbolt.h
-+++ b/include/linux/thunderbolt.h
-@@ -57,6 +57,9 @@ enum tb_security_level {
- 	TB_SECURITY_NOPCIE,
- };
- 
-+/* Connection manager exposes details about tunneling */
-+#define TB_CAP_TUNNEL_DETAILS	BIT(0)
-+
- /**
-  * struct tb - main thunderbolt bus structure
-  * @dev: Domain device
-@@ -67,6 +70,8 @@ enum tb_security_level {
-  * @wq: Ordered workqueue for all domain specific work
-  * @root_switch: Root switch of this domain
-  * @cm_ops: Connection manager specific operations vector
-+ * @cm_caps: Extra capabilities supported by the connection manager
-+ *	     implementation
-  * @index: Linux assigned domain number
-  * @security_level: Current security level
-  * @nboot_acl: Number of boot ACLs the domain supports
-@@ -80,6 +85,7 @@ struct tb {
- 	struct workqueue_struct *wq;
- 	struct tb_switch *root_switch;
- 	const struct tb_cm_ops *cm_ops;
-+	unsigned int cm_caps;
- 	int index;
- 	enum tb_security_level security_level;
- 	size_t nboot_acl;
--- 
-2.30.2
+The operating method of the system entering S3 sleep mode:
+echo mem > /sys/power/state
 
+> The proper order of calls is ohci_bus_suspend, then 
+> check_root_hub_suspended, then ohci_suspend.  Often the first one is 
+> called some time before the other two.
+> 
+In order to eliminate the impact of the kernel version difference, I tested
+the S4 sleep mode and S3 sleep mode again on CentorOS + kernel 5.10,
+and the log is as follows, from the comparison of the two logs below,
+ohci_suspend is called in S3 sleep mode, but it is not called in S4 sleep mode.
+
+The log of the process that the system enters the S4 sleep state and then wakes up:
+[root@localhost power]# echo disk > state
+[  830.420877] PM: hibernation: hibernation entry
+[  830.432867] Filesystems sync: 0.002 seconds
+[  830.437069] Freezing user space processes ... (elapsed 0.004 seconds) done.
+[  830.448224] OOM killer disabled.
+[  830.478507] PM: hibernation: Preallocating image memory
+[  846.853709] PM: hibernation: Allocated 3393843 pages for snapshot
+[  846.859795] PM: hibernation: Allocated 13575372 kbytes in 16.36 seconds (829.79 MB/s)
+[  846.867600] Freezing remaining freezable tasks ... (elapsed 0.106 seconds) done.
+[  846.983667] printk: Suspending console(s) (use no_console_suspend to debug)
+...
+[  852.972918] PM: hibernation: debug: Waiting for 5 seconds.
+[  870.518511] ohci-pci 0000:7a:00.0: [LLF] ohci_resume enter OK!
+[  870.518520] usb usb3: root hub lost power or was reset
+[  870.518532] CPU: 7 PID: 22239 Comm: kworker/u257:14 Kdump: loaded Tainted: G           O      5.10.0-rc4+ #3
+[  870.518539] usb usb4: root hub lost power or was reset
+[  870.518571] Workqueue: events_unbound async_run_entry_fn
+[  870.518583] Call trace:
+[  870.518593]  dump_backtrace+0x0/0x1e0
+[  870.518602]  show_stack+0x2c/0x48
+[  870.518616]  dump_stack+0xcc/0x104
+[  870.518628]  ohci_resume+0x50/0x1a0
+[  870.518641]  resume_common+0xa0/0x120
+[  870.518653]  hcd_pci_restore+0x24/0x30
+[  870.518661] usb usb1: root hub lost power or was reset
+[  870.518672]  pci_pm_restore+0x64/0xb0
+[  870.518686]  dpm_run_callback+0x4c/0x230
+[  870.518696]  device_resume+0xdc/0x1c8
+[  870.518707]  async_resume+0x30/0x60
+[  870.518714]  async_run_entry_fn+0x4c/0x118
+[  870.518722]  process_one_work+0x1f0/0x4a0
+[  870.518730]  worker_thread+0x48/0x460
+[  870.518739]  kthread+0x160/0x168
+[  870.518747]  ret_from_fork+0x10/0x18
+...
+[  873.544050] OOM killer enabled.
+[  873.547190] Restarting tasks ... done.
+[  873.557365] PM: hibernation: hibernation exit
+
+The log of the process that the system enters the S3 sleep state and then wakes up
+[root@localhost power]# echo mem > state
+[ 1217.524876] PM: suspend entry (deep)
+[ 1217.529798] Filesystems sync: 0.001 seconds
+[ 1217.538676] Freezing user space processes ... (elapsed 0.004 seconds) done.
+[ 1217.550158] OOM killer disabled.
+[ 1217.553401] Freezing remaining freezable tasks ... (elapsed 0.069 seconds) done.
+[ 1217.630565] printk: Suspending console(s) (use no_console_suspend to debug)
+...
+[ 1217.728377] ohci-pci 0000:7a:00.0: [LLF] ohci_suspend enter OK!
+[ 1217.728384] CPU: 17 PID: 22400 Comm: kworker/u257:21 Kdump: loaded Tainted: G           O      5.10.0-rc4+ #3
+[ 1217.728399] Workqueue: events_unbound async_run_entry_fn
+[ 1217.728403] Call trace:
+[ 1217.728407]  dump_backtrace+0x0/0x1e0
+[ 1217.728409]  show_stack+0x2c/0x48
+[ 1217.728416]  dump_stack+0xcc/0x104
+[ 1217.728422]  ohci_suspend+0x38/0xd8
+[ 1217.728429]  suspend_common+0xe0/0x160
+[ 1217.728431]  hcd_pci_suspend+0x38/0x48
+[ 1217.728435]  pci_pm_suspend+0x98/0x1d0
+[ 1217.728445]  dpm_run_callback+0x4c/0x230
+[ 1217.728447]  __device_suspend+0x108/0x4d8
+[ 1217.728448]  async_suspend+0x34/0xb8
+[ 1217.728450]  async_run_entry_fn+0x4c/0x118
+[ 1217.728452]  process_one_work+0x1f0/0x4a0
+[ 1217.728453]  worker_thread+0x48/0x460
+[ 1217.728458]  kthread+0x160/0x168
+[ 1217.728463]  ret_from_fork+0x10/0x18
+...
+[ 1223.696839] PM: suspend debug: Waiting for 5 second(s).
+[ 1228.748466] ohci-pci 0000:7a:00.0: [LLF] ohci_resume enter OK!
+[ 1228.748469] CPU: 17 PID: 22400 Comm: kworker/u257:21 Kdump: loaded Tainted: G           O      5.10.0-rc4+ #3
+[ 1228.748474] Workqueue: events_unbound async_run_entry_fn
+[ 1228.748475] Call trace:
+[ 1228.748477]  dump_backtrace+0x0/0x1e0
+[ 1228.748478]  show_stack+0x2c/0x48
+[ 1228.748481]  dump_stack+0xcc/0x104
+[ 1228.748483]  ohci_resume+0x50/0x1a0
+[ 1228.748486]  resume_common+0xa0/0x120
+[ 1228.748488]  hcd_pci_resume+0x24/0x30
+[ 1228.748491]  pci_pm_resume+0x64/0xb0
+[ 1228.748493]  dpm_run_callback+0x4c/0x230
+[ 1228.748496] hns3 0000:7d:00.2: Start to resume
+[ 1228.748498]  device_resume+0xdc/0x1c8
+[ 1228.748501]  async_resume+0x30/0x60
+[ 1228.748503] hns3 0000:7d:00.3: Start to resume
+[ 1228.748505] hns3 0000:7d:00.2: In reset process RoCE client uninit.
+[ 1228.748506]  async_run_entry_fn+0x4c/0x118
+[ 1228.748508]  process_one_work+0x1f0/0x4a0
+[ 1228.748509]  worker_thread+0x48/0x460
+[ 1228.748511]  kthread+0x160/0x168
+[ 1228.748513]  ret_from_fork+0x10/0x18
+...
+[ 1231.823014] OOM killer enabled.
+[ 1231.826156] Restarting tasks ... done.
+[ 1231.836001] PM: suspend exit
+
+
+>> At this time, if just one device interrupt is reported. Since rh_state
+>> has been changed to OHCI_RH_SUSPENDED after ohci_bus_suspend(), the
+>> driver will not process and close this device interrupt. It will cause
+>> the entire system to be stuck during sleep, causing the device to
+>> fail to respond.
+>>
+>> When the abnormal interruption reaches 100,000 times, the system will
+>> forcibly close the interruption and make the device unusable.
+>>
+>> Since the problem is that the interrupt is not closed, we copied the
+>> interrupt shutdown operation of ohci_suspend() into ohci_bus_suspend()
+>> during the S4 sleep period. We found that this method can solve this
+>> problem.
+>>
+>> At present, we hope to be able to call ohci_suspend() directly during
+>> the sleep process of S4. Do you have any suggestions for this
+>> modification?
+>>
+>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+>> ---
+>>  drivers/usb/host/ohci-hub.c | 13 ++++++++++++-
+>>  1 file changed, 12 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/host/ohci-hub.c b/drivers/usb/host/ohci-hub.c
+>> index 634f3c7..d468cef 100644
+>> --- a/drivers/usb/host/ohci-hub.c
+>> +++ b/drivers/usb/host/ohci-hub.c
+>> @@ -315,6 +315,14 @@ static int ohci_bus_suspend (struct usb_hcd *hcd)
+>>  		del_timer_sync(&ohci->io_watchdog);
+>>  		ohci->prev_frame_no = IO_WATCHDOG_OFF;
+>>  	}
+>> +
+>> +	spin_lock_irqsave(&ohci->lock, flags);
+>> +	ohci_writel(ohci, OHCI_INTR_MIE, &ohci->regs->intrdisable);
+>> +	(void)ohci_readl(ohci, &ohci->regs->intrdisable);
+>> +
+>> +	clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
+>> +	spin_unlock_irqrestore(&ohci->lock, flags);
+> 
+> This is completely wrong.  The hardware certainly remains accessible 
+> when the root hub stops running.  The HW_ACCESSIBLE flag should not be 
+> cleared here.
+> 
+> And if the Master Interrupt Enable bit is cleared, how will the driver 
+> ever learn if a remote wakeup request (such as a plug or unplug event) 
+> occurs?
+> 
+> Alan Stern
+> 
+This modification method is only a temporary verification method.
+The normal modification method we hope is to enable ohci_suspend()
+in the sleep process of S4 mode.
+Thanks,
+Longfang.
+>> +
+>>  	return rc;
+>>  }
+>>  
+>> @@ -326,7 +334,10 @@ static int ohci_bus_resume (struct usb_hcd *hcd)
+>>  	if (time_before (jiffies, ohci->next_statechange))
+>>  		msleep(5);
+>>  
+>> -	spin_lock_irq (&ohci->lock);
+>> +	spin_lock_irq(&ohci->lock);
+>> +	set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
+>> +	ohci_writel(ohci, OHCI_INTR_MIE, &ohci->regs->intrenable);
+>> +	ohci_readl(ohci, &ohci->regs->intrenable);
+>>  
+>>  	if (unlikely(!HCD_HW_ACCESSIBLE(hcd)))
+>>  		rc = -ESHUTDOWN;
+>> -- 
+>> 2.8.1
+>>
+> .
+> 
