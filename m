@@ -2,118 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C2134CEC8
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 13:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE49234CED2
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 13:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbhC2LXW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Mar 2021 07:23:22 -0400
-Received: from mx2.suse.de ([195.135.220.15]:43474 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232454AbhC2LXG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Mar 2021 07:23:06 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id C079AB46F;
-        Mon, 29 Mar 2021 11:23:04 +0000 (UTC)
-Date:   Mon, 29 Mar 2021 13:23:04 +0200
-Message-ID: <s5hzgymi4pz.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Ikjoon Jang <ikjn@chromium.org>
-Cc:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>,
-        Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org,
-        Takashi Iwai <tiwai@suse.com>,
-        Gregor Pintar <grpintar@gmail.com>, linux-usb@vger.kernel.org,
+        id S232587AbhC2LY7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Mar 2021 07:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231911AbhC2LYZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Mar 2021 07:24:25 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FAFC061574;
+        Mon, 29 Mar 2021 04:24:24 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id p19so6434441wmq.1;
+        Mon, 29 Mar 2021 04:24:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=e1a+kwffYzcMpQSHQ60B4gj/nqd34pu7XrkW9Q/Wixk=;
+        b=JMaGuu1/1AzbM8khYOCfsDA83fsN5lLMMQFTORmksRJjFb3rHTdeYvFJlZQUUbKzZ0
+         9We3OPZGsM2B6oIDjrodT/7NDDBtos84rwVAXbbeCCoWPVcQeAo07JzZCnOuKrlrk51Y
+         Had8K4Zw2SfS6OQ4nh8t4o14ILF14kr1oowJlxzldlNGqpC3fI3UniJBXwCz7YZr2hFk
+         +7c5jUfZ1OPfFAPZ8NW2m2NMnBoVrep5HBCeqX5WGgpiCixDDobOlUCL0/BK3xJOt9+V
+         cantxZWUwthSRe1tW7x0e7kJHLqWOsv5u/Qt37HKR02juAAzdUycyVAwfbtmBcb48hdO
+         EGWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=e1a+kwffYzcMpQSHQ60B4gj/nqd34pu7XrkW9Q/Wixk=;
+        b=EmAKrxMdgu/F19mAbzsjP6h4CawX/mZeRPLR2B1823aH9e3/uytygt/eJeBxM5VNcl
+         K4ynPgGGmueON+DDequple8/rx6noXDMughL2Q7aQnG69y02AT7DPOd+aTxjvOfPAiop
+         KaMMeVw3cRko2gThzxlKy5Z/xNc61SlWOjlBi5XJPHKAksEjvGiD620SbozyVttVUZ8/
+         uq2nqb7zyZ0RezLD0rdxW1nOtUGNtTbU2ZHCc0gvI3LCOoGTt4ase9N23jFY1SB4kVIj
+         eQdzITUxySwbteIaHdYSyDNRefCjl863plIGWVeyFmXqRhYaVayp20REoSnJ+vrWnSp/
+         jS3w==
+X-Gm-Message-State: AOAM531QqDmz2FkNLF/00afYo8dS+5PCa/bQY/Rl16upvnBTm9nw2Fwu
+        t11RGwwVeyZh43iaFNFSe4inrwvOEh/zmQ==
+X-Google-Smtp-Source: ABdhPJxO5uaGZe0cOQbx0p1x8BvQjis31yBV3+DstmIQFPcMrOOWCSYX7J5Kah/aMmyTwI9nQ1zaQw==
+X-Received: by 2002:a05:600c:3790:: with SMTP id o16mr24435924wmr.110.1617017063717;
+        Mon, 29 Mar 2021 04:24:23 -0700 (PDT)
+Received: from ziggy.stardust (80.174.240.175.dyn.user.ono.com. [80.174.240.175])
+        by smtp.gmail.com with ESMTPSA id b65sm24516037wmh.4.2021.03.29.04.24.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Mar 2021 04:24:23 -0700 (PDT)
+Subject: Re: [PATCH v2 13/13] arm64: dts: mt8183: update wakeup register
+ offset
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dylan Robinson <dylan_robinson@motu.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Olivia Mackintosh <livvy@base.nu>,
-        Alexander Tsoy <alexander@tsoy.me>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ALSA: usb-audio: Apply sample rate quirk to Logitech Connect
-In-Reply-To: <CAATdQgAYrq7sHJQN=_5ipH0N_kbixjac=BLFCYv5jTScH_c+Lw@mail.gmail.com>
-References: <20210324105153.2322881-1-ikjn@chromium.org>
-        <c21de867cf4ccbfcc8cf555c78dc70dd3a47dfe8.camel@infinera.com>
-        <CAATdQgDrri-tMtu3AOFRcbGHfL6hONDfdMdZh45BusbdAoWfdw@mail.gmail.com>
-        <s5ho8f8ogx8.wl-tiwai@suse.de>
-        <CAATdQgAYrq7sHJQN=_5ipH0N_kbixjac=BLFCYv5jTScH_c+Lw@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
- FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
- (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
-Content-Type: text/plain; charset=US-ASCII
+        Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Nicolas Boichat <drinkcat@chromium.org>
+References: <1616482975-17841-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1616482975-17841-13-git-send-email-chunfeng.yun@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Message-ID: <a11c871f-4bfc-c069-b413-7fb6cd203b6f@gmail.com>
+Date:   Mon, 29 Mar 2021 13:24:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <1616482975-17841-13-git-send-email-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 29 Mar 2021 08:23:52 +0200,
-Ikjoon Jang wrote:
-> 
-> On Wed, Mar 24, 2021 at 8:49 PM Takashi Iwai <tiwai@suse.de> wrote:
-> >
-> > On Wed, 24 Mar 2021 13:03:14 +0100,
-> > Ikjoon Jang wrote:
-> > >
-> > > On Wed, Mar 24, 2021, 7:16 PM Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
-> > > wrote:
-> > >
-> > >     On Wed, 2021-03-24 at 18:51 +0800, Ikjoon Jang wrote:
-> > >     > Logitech ConferenceCam Connect is a compound USB device with UVC and
-> > >     > UAC. Not 100% reproducible but sometimes it keeps responding STALL to
-> > >     > every control transfer once it receives get_freq request.
-> > >     >
-> > >     > This patch adds 046d:0x084c to a snd_usb_get_sample_rate_quirk list.
-> > >     >
-> > >     > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=203419
-> > >     > Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
-> > >
-> > >     Most Logitech USB headset I got needs a delay in snd_usb_ctl_msg_quirk()
-> > >     Have you tried to add say 20 ms delay in there?
-> > >
-> > > I didn't try that. But it sounds reasonable to me.
-> > >
-> > > let me try that quirk here. If that is the case, HID might need that delay
-> > > also. Logitech Group webcam had a similar problem on control xfer of
-> > > get_report from an another interface for HID.
-> >
-> > The Logitech devices with 046d:* should be covered generally in
-> > snd_usb_ctl_msg_quirk(), so I guess it's a different problem.
-> > But please check it first.
-> >
-> > > And 20ms can be too long if it's applied to every control transfer. I will
-> > > test the device with shorter delay if you didn't try it before.
-> >
-> > Actually the delay applied to Logitech devices is from 1 to 2ms, not
-> > 20ms.  The 20ms delay is applied for some other devices.  But if
-> > extending the delay fixes the problem, we need to reconsider the delay
-> > length.
-> 
-> I tested this Logitech device with various delays 2..20ms
-> in snd_usb_ctl_msg_quirk() but it didn't help.
-> 
-> Disregarding the delay between control transfers,
-> This device is always stuck at get_cur, responding STALL to all
-> control transfers.
-> 
-> [   24.045618] usb 1-1.2.1.1: 1:1: cannot get freq at ep 0x82
-> [   24.167475] usb 1-1.2.1.1: 2:0: cannot get min/max values for
-> control 2 (id 2)
-> [   24.287393] usb 1-1.2.1.1: 6:0: cannot get min/max values for
-> control 2 (id 6)
-> [   24.289854] usbcore: registered new interface driver snd-usb-audio
-> [   24.877073] usb 1-1.2.1.1: 2:1: usb_set_interface failed (-32)
-> 
-> And I've also found that in some other platforms (with the same kernel),
-> this device fails at get_freq - timeout with NYETs or NAKs (instead of STALL),
-> and succeeded in following set_interface even without any delays
-> I've tried but couldn't find any differences between the two. ;-(
-> 
-> So until now, I think this approach of skipping get_rate is the only
-> one possible
-> workaround for Logitech Connect.
-
-OK, that makes sense, then.  I applied your patch now.
-
-Thanks!
 
 
-Takashi
+On 23/03/2021 08:02, Chunfeng Yun wrote:
+> Use wakeup control register offset exactly, and update revision
+> number
+> 
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v2: modify revision format
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index 80519a145f13..9ea84d636556 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -874,7 +874,7 @@
+>  			clocks = <&infracfg CLK_INFRA_UNIPRO_SCK>,
+>  				 <&infracfg CLK_INFRA_USB>;
+>  			clock-names = "sys_ck", "ref_ck";
+> -			mediatek,syscon-wakeup = <&pericfg 0x400 0>;
+> +			mediatek,syscon-wakeup = <&pericfg 0x420 101>;
+
+applied to v5.12-next/dts64
+
+Thanks
+
+>  			#address-cells = <2>;
+>  			#size-cells = <2>;
+>  			ranges;
+> 
