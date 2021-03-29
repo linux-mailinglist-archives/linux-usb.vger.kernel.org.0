@@ -2,153 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5A534D1C6
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 15:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828CD34D1D5
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 15:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbhC2NsN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Mar 2021 09:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
+        id S231368AbhC2Nv3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Mar 2021 09:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231952AbhC2Nrn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Mar 2021 09:47:43 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B32CC061574;
-        Mon, 29 Mar 2021 06:47:43 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id v4so12899193wrp.13;
-        Mon, 29 Mar 2021 06:47:43 -0700 (PDT)
+        with ESMTP id S231734AbhC2NvV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Mar 2021 09:51:21 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA0FC061574;
+        Mon, 29 Mar 2021 06:51:20 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id e14so4421775plj.2;
+        Mon, 29 Mar 2021 06:51:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LDEzUvKkjAIAvpEGtHLesvgMticNcLTXLAP3FMyOp20=;
-        b=QgMv/ynDdRRfWLLD1H+6oPildJRa0NtXPSoikSLeCdIBE9YYdG9IhWa3D0NHkYueHe
-         8chQPBQz5nGPtY9fgNvn9APGFCv6tmTskaHuxDYLAJmQQ9a8TDj+H/Mds222JcgNMPdn
-         UH2Jvu2nq9lc8DlHoRfJveHMdC8kgU/2tB7M65tY41CEth45jvkrap7CtyHshYRJ3VBx
-         aDhyqbRUyg7O/cZBPJsVP7uLx3UMHWekrJOYgJhUIk93zpV+YhvS3Ky0ydwFcirY0E6p
-         Zf7IN+mNu9Sf9MUFmyPW/CWXNWJWotMApizLID1AuUkyC5hb4QK1H++JUgU1QdLJKel2
-         rFIw==
+        h=from:to:cc:subject:date:message-id;
+        bh=g6MGypQezVtHLiXCLKeIkg+BTfToRXpmNx+Fhvih524=;
+        b=RmZVrOs/Xv6ZMvjON31XrBzpiNonLabyrdWo/pSVmegntHjtDII1lrl3jhlny0jSfe
+         Yw7ih/0CCagLRHylRs4mEsI2QDpW68bDZXQ75S4u2VzCdI+hzkamqFcvcMj5B5otf8YI
+         MmRTxtANSQoN+iy0EUJqvCAQjHFgiLyXtOCQgtSHH0jZxfZ6WZLz2brskEo3vZrm12yZ
+         d0ANtskJRkXCR/GL1QI/zUup/m/0//seluOxapFIVFqCmNcwcdo0jzO9+atMN1t/QTnP
+         LMCrxHAeGZLib9SjD9IVj1W+GN3ulHLiD0qBp/0Hits1Hl3ZrO4UuYWJpAlpf9w9S5y8
+         KkhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=LDEzUvKkjAIAvpEGtHLesvgMticNcLTXLAP3FMyOp20=;
-        b=Gw7agG7ejgAYb4JEpUGJlIA7SFmfvPPhfTiUTW6eHkhpCHKyEZ03Y294/WtclBmR65
-         3PjjSHhc0jAkznw+LerjMUvYtTru1msGTqaEH9MyPfNzn/PCON4zxP+OaeEdLrFKPynQ
-         vVqE+nS+cWIUfoWbxg4ISSdgvGcIn79XZPNvccVIMxk4iHc55RQjTA3Rc5idZ72asnJp
-         M2HkFCL7ZxQ0KvUECDs079jzkSHKj1DsS2NYOJQitzu3UTo3JI07Zrh1djyLpDuSnsGz
-         lIB7ZFq7VKPRWKE0iQX5sD+Qx9u9FOv6KG3VTUVU4IdNQ/ZRSt2NsrTcHjAxBAmizb7k
-         ijbQ==
-X-Gm-Message-State: AOAM531GhMOMRBkm1G7/i6hAmTtjMgxnqGIWX14Hun7YNbOXbwDxADex
-        bUVuIQeqZBwiF2qCK0fY1uMmDzSdWa/YcQ==
-X-Google-Smtp-Source: ABdhPJyzByzyqLM6tlsL+vq+denDIyXkVf9F+7u6Otbf7WudUQp4OKErhkmujtGBPS5iAhA+nISOvg==
-X-Received: by 2002:adf:fd48:: with SMTP id h8mr29064992wrs.229.1617025662200;
-        Mon, 29 Mar 2021 06:47:42 -0700 (PDT)
-Received: from ziggy.stardust (80.174.240.175.dyn.user.ono.com. [80.174.240.175])
-        by smtp.gmail.com with ESMTPSA id y205sm30561793wmc.18.2021.03.29.06.47.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Mar 2021 06:47:41 -0700 (PDT)
-Subject: Re: [PATCH v5 13/13] arm: dts: mt2701: harmonize node names and
- compatibles
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jie Qiu <jie.qiu@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
-        Cawa Cheng <cawa.cheng@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20210316092232.9806-1-chunfeng.yun@mediatek.com>
- <20210316092232.9806-13-chunfeng.yun@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <b6e523bb-8991-b5e8-576d-55190e7fc49f@gmail.com>
-Date:   Mon, 29 Mar 2021 15:47:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20210316092232.9806-13-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=g6MGypQezVtHLiXCLKeIkg+BTfToRXpmNx+Fhvih524=;
+        b=CRuAB41SWTDJI25XxR5Agnbm2VJBCMVghpjKC3LrGIbclsqqVdEUCbLq1828chC7+o
+         4WbtdbUlEV7thltjBzyHWX+1TVqsmaHmpYtomtytWtLOKwXepNDe6dZ1pRkl9xOsSXdD
+         L6GBBz9Df0Aene6iZV6roJt3JleN11suBUynVcIhHilQR4KU64ZeZJVtB4mRZjP16T65
+         QiqdiML62XHTMeCBKvt1IOjdadbf1GXrr/gxBRcLONp3o12ybuqcFqtLxjZzA4xp/fMf
+         tEXwOjPScPveGCjhVYM6SIgTTtcOS3ajP/ckUyHQTLT7Cl5B7qs1IvFU5ELtAmx6XeWN
+         iFog==
+X-Gm-Message-State: AOAM532ubgFdKiCh3hR1A9aNKUvCeeZPv0kwASLzvYrcQzBboQWuL/fN
+        ULJNbNG+A7axNxKok9udF9CXT8MjhnAyQl00
+X-Google-Smtp-Source: ABdhPJwOf99fPjyShSZ07RL9cICcdUqyhTG71ttWjJnb7jcJExZZeM7z9zMCbhmt2Dw5Q2iN/dvltg==
+X-Received: by 2002:a17:902:d202:b029:e4:55cd:dde8 with SMTP id t2-20020a170902d202b02900e455cddde8mr28519192ply.51.1617025880092;
+        Mon, 29 Mar 2021 06:51:20 -0700 (PDT)
+Received: from localhost.localdomain ([2405:201:600d:a089:4ed:8f53:adc7:b574])
+        by smtp.googlemail.com with ESMTPSA id w84sm17429226pfc.142.2021.03.29.06.51.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Mar 2021 06:51:19 -0700 (PDT)
+From:   Aditya Srivastava <yashsri421@gmail.com>
+To:     balbi@kernel.org
+Cc:     yashsri421@gmail.com, lukas.bulwahn@gmail.com,
+        gregkh@linuxfoundation.org, rdunlap@infradead.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc3: fix incorrect kernel-doc comment syntax in files
+Date:   Mon, 29 Mar 2021 19:21:08 +0530
+Message-Id: <20210329135108.27128-1-yashsri421@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The opening comment mark '/**' is used for highlighting the beginning of
+kernel-doc comments.
+There are certain files in drivers/usb/dwc3, which follow this syntax,
+but the content inside does not comply with kernel-doc.
+Such lines were probably not meant for kernel-doc parsing, but are parsed
+due to the presence of kernel-doc like comment syntax(i.e, '/**'), which
+causes unexpected warnings from kernel-doc.
 
+E.g., presence of kernel-doc like comment in drivers/usb/dwc3/io.h at
+header causes this warnings by kernel-doc:
+"warning: expecting prototype for h(). Prototype was for __DRIVERS_USB_DWC3_IO_H() instead"
 
-On 16/03/2021 10:22, Chunfeng Yun wrote:
-> This is used to fix dtbs_check warning
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Similarly for other files too.
 
+Provide a simple fix by replacing such occurrences with general comment
+format, i.e. '/*', to prevent kernel-doc from parsing it.
 
-Applied now to v5.12-next/dts32
+Signed-off-by: Aditya Srivastava <yashsri421@gmail.com>
+---
+* Applies perfectly on next-20210326
 
-> ---
-> v2~v5: no changes
-> ---
->  arch/arm/boot/dts/mt2701.dtsi | 19 +++++++++++--------
->  1 file changed, 11 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/mt2701.dtsi b/arch/arm/boot/dts/mt2701.dtsi
-> index fade14284017..4776f85d6d5b 100644
-> --- a/arch/arm/boot/dts/mt2701.dtsi
-> +++ b/arch/arm/boot/dts/mt2701.dtsi
-> @@ -607,7 +607,7 @@
->  	};
->  
->  	usb0: usb@1a1c0000 {
-> -		compatible = "mediatek,mt8173-xhci";
-> +		compatible = "mediatek,mt2701-xhci", "mediatek,mtk-xhci";
->  		reg = <0 0x1a1c0000 0 0x1000>,
->  		      <0 0x1a1c4700 0 0x0100>;
->  		reg-names = "mac", "ippc";
-> @@ -620,8 +620,9 @@
->  		status = "disabled";
->  	};
->  
-> -	u3phy0: usb-phy@1a1c4000 {
-> -		compatible = "mediatek,mt2701-u3phy";
-> +	u3phy0: t-phy@1a1c4000 {
-> +		compatible = "mediatek,mt2701-tphy",
-> +			     "mediatek,generic-tphy-v1";
->  		reg = <0 0x1a1c4000 0 0x0700>;
->  		#address-cells = <2>;
->  		#size-cells = <2>;
-> @@ -646,7 +647,7 @@
->  	};
->  
->  	usb1: usb@1a240000 {
-> -		compatible = "mediatek,mt8173-xhci";
-> +		compatible = "mediatek,mt2701-xhci", "mediatek,mtk-xhci";
->  		reg = <0 0x1a240000 0 0x1000>,
->  		      <0 0x1a244700 0 0x0100>;
->  		reg-names = "mac", "ippc";
-> @@ -659,8 +660,9 @@
->  		status = "disabled";
->  	};
->  
-> -	u3phy1: usb-phy@1a244000 {
-> -		compatible = "mediatek,mt2701-u3phy";
-> +	u3phy1: t-phy@1a244000 {
-> +		compatible = "mediatek,mt2701-tphy",
-> +			     "mediatek,generic-tphy-v1";
->  		reg = <0 0x1a244000 0 0x0700>;
->  		#address-cells = <2>;
->  		#size-cells = <2>;
-> @@ -700,8 +702,9 @@
->  		status = "disabled";
->  	};
->  
-> -	u2phy0: usb-phy@11210000 {
-> -		compatible = "mediatek,generic-tphy-v1";
-> +	u2phy0: t-phy@11210000 {
-> +		compatible = "mediatek,mt2701-tphy",
-> +			     "mediatek,generic-tphy-v1";
->  		reg = <0 0x11210000 0 0x0800>;
->  		#address-cells = <2>;
->  		#size-cells = <2>;
-> 
+ drivers/usb/dwc3/debug.h         | 2 +-
+ drivers/usb/dwc3/debugfs.c       | 2 +-
+ drivers/usb/dwc3/dwc3-keystone.c | 2 +-
+ drivers/usb/dwc3/dwc3-pci.c      | 2 +-
+ drivers/usb/dwc3/io.h            | 2 +-
+ drivers/usb/dwc3/trace.c         | 2 +-
+ drivers/usb/dwc3/trace.h         | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/usb/dwc3/debug.h b/drivers/usb/dwc3/debug.h
+index 8ab394942360..db231de46bb3 100644
+--- a/drivers/usb/dwc3/debug.h
++++ b/drivers/usb/dwc3/debug.h
+@@ -1,5 +1,5 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-/**
++/*
+  * debug.h - DesignWare USB3 DRD Controller Debug Header
+  *
+  * Copyright (C) 2010-2011 Texas Instruments Incorporated - https://www.ti.com
+diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
+index 5da4f6082d93..b0e3f434d219 100644
+--- a/drivers/usb/dwc3/debugfs.c
++++ b/drivers/usb/dwc3/debugfs.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+-/**
++/*
+  * debugfs.c - DesignWare USB3 DRD Controller DebugFS file
+  *
+  * Copyright (C) 2010-2011 Texas Instruments Incorporated - https://www.ti.com
+diff --git a/drivers/usb/dwc3/dwc3-keystone.c b/drivers/usb/dwc3/dwc3-keystone.c
+index 057056c0975e..1317959294e6 100644
+--- a/drivers/usb/dwc3/dwc3-keystone.c
++++ b/drivers/usb/dwc3/dwc3-keystone.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+-/**
++/*
+  * dwc3-keystone.c - Keystone Specific Glue layer
+  *
+  * Copyright (C) 2010-2013 Texas Instruments Incorporated - https://www.ti.com
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index 4c5c6972124a..4698c43af5ae 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+-/**
++/*
+  * dwc3-pci.c - PCI Specific glue layer
+  *
+  * Copyright (C) 2010-2011 Texas Instruments Incorporated - https://www.ti.com
+diff --git a/drivers/usb/dwc3/io.h b/drivers/usb/dwc3/io.h
+index 76b73b116862..1e96ea339d48 100644
+--- a/drivers/usb/dwc3/io.h
++++ b/drivers/usb/dwc3/io.h
+@@ -1,5 +1,5 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-/**
++/*
+  * io.h - DesignWare USB3 DRD IO Header
+  *
+  * Copyright (C) 2010-2011 Texas Instruments Incorporated - https://www.ti.com
+diff --git a/drivers/usb/dwc3/trace.c b/drivers/usb/dwc3/trace.c
+index 1b45a9723eeb..088995885678 100644
+--- a/drivers/usb/dwc3/trace.c
++++ b/drivers/usb/dwc3/trace.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+-/**
++/*
+  * trace.c - DesignWare USB3 DRD Controller Trace Support
+  *
+  * Copyright (C) 2014 Texas Instruments Incorporated - https://www.ti.com
+diff --git a/drivers/usb/dwc3/trace.h b/drivers/usb/dwc3/trace.h
+index 97f4f1125a41..60883268adfc 100644
+--- a/drivers/usb/dwc3/trace.h
++++ b/drivers/usb/dwc3/trace.h
+@@ -1,5 +1,5 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-/**
++/*
+  * trace.h - DesignWare USB3 DRD Controller Trace Support
+  *
+  * Copyright (C) 2014 Texas Instruments Incorporated - https://www.ti.com
+-- 
+2.17.1
+
