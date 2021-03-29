@@ -2,716 +2,255 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B6534D9A0
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 23:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC0834D9FE
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 00:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231674AbhC2Vem (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Mar 2021 17:34:42 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:46767 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbhC2Ve1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Mar 2021 17:34:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1617053667; x=1648589667;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ouuKmK1tT5f/XSKQEwLkolpYHk5kYVEvIHKQrcf4+0A=;
-  b=JnzzrWdA0TvXDp/gRBT75oA9NH+aDVVdP/WyWZ5FtGUdczalgpLlNq4I
-   RsmNd9nSg44tSFuBLCjo4RboZ1YHZ1ujY3wuBdY7oFf7V6UJDFw9o+y3a
-   5j7rkZzHFtchCjbqeo64s2d69Ovb8YqDgvCaUTGk0kgfiX+1nVhPZBrar
-   sAYHD1n5BwjOMHOdm+wGWApu+nHTYbqhWFPhANb0RCIwOx2Z8K4o0OTAU
-   B7Yit3i2kNb8dY12s6qmfvB/oO4F/bkOhkG5k03eCZxPXIdYCLnp6sw+T
-   /fmy1C6BUsgq0KzaDXgM8EMe3BCmhVdXhUHck85noolabLeQJE9wic5ig
-   g==;
-IronPort-SDR: Ky5ev9pBVpZ7doQ26qCNJpFy4+cwfihrRABWK8vltLeI9PtbD6rbo8YTHskiYAn8AgMsYzuoTy
- vvzEkBWZ13VgaHc1pCpErqJ0iLCGjk0BzC/nnfX8GfUvHA3Y25JBFOePfqu8tu8pMlW8znX9At
- Z5XYJ2AUZ7wOs92sAps0UT++AXrVyz9yM7xF3r+yFGNjcbwVTMcsQiw/ecqov8gfpCtxyptGsJ
- 1gcS8qDGrRbMAZHCGE/nZZmIUXdU0BHQdWYVhpzEaiod7h/wrmxElxqXTe2wPbbroWR0pWtYJu
- wTs=
-X-IronPort-AV: E=Sophos;i="5.81,288,1610434800"; 
-   d="scan'208";a="120956204"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Mar 2021 14:34:27 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 29 Mar 2021 14:34:26 -0700
-Received: from cristi-P53.amer.actel.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Mon, 29 Mar 2021 14:34:24 -0700
-From:   <cristian.birsan@microchip.com>
-To:     <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
-        <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>,
-        Cristian Birsan <cristian.birsan@microchip.com>
-Subject: [RFC PATCH 2/2] usb: typec: sama7g5_tcpc: add driver for Microchip sama7g5 tcpc
-Date:   Tue, 30 Mar 2021 00:33:57 +0300
-Message-ID: <20210329213357.431083-3-cristian.birsan@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210329213357.431083-1-cristian.birsan@microchip.com>
-References: <20210329213357.431083-1-cristian.birsan@microchip.com>
+        id S231401AbhC2WPQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Mar 2021 18:15:16 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:50057 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231750AbhC2WOv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 29 Mar 2021 18:14:51 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1617056091; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=hibZXyHjual3YOnIg1gGgphNnhTXGq5FpZD3vLTTGzo=; b=PYC6M6iiF7iJUKk8G6Q4gJnAyxfVd6JV3JtzB2nOFs/KRAXFYacIuMy6oo9KfIu6VbU8uYVH
+ SWr02xYhU9VoMtP10ewUuP4BkLIRd7UJuhJZvCQE6+/zCgJQLcu0GfuW1VpCYeJArD6MVRD3
+ DAiXX/wTo9ZTLxCJJJuAxkSTCsI=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 60625159a2ab6642dbcdb219 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 29 Mar 2021 22:14:49
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id E747AC43461; Mon, 29 Mar 2021 22:14:49 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [10.110.60.140] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id CD4CDC43461;
+        Mon, 29 Mar 2021 22:14:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CD4CDC43461
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH v3 1/2] usb: dwc3: Trigger a GCTL soft reset when
+ switching modes in DRD
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
+        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        Yang Fei <fei.yang@intel.com>,
+        YongQin Liu <yongqin.liu@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Roger Quadros <rogerq@ti.com>
+References: <20210108015115.27920-1-john.stultz@linaro.org>
+ <87bldzwr6x.fsf@kernel.org>
+ <CALAqxLWdWj9=a-7NGDzJyrfyRABwKnJM7EQo3Zm+k9JqAhPz+g@mail.gmail.com>
+ <d95d0971-624e-a0e6-ac72-6ee3b1fb1106@synopsys.com>
+ <06a44245-4f2f-69ba-fe46-b88a19f585c2@codeaurora.org>
+ <a33f7c33-f95d-60c3-70f2-4b37fcf8bac5@synopsys.com>
+ <fa5cc67e-3873-e6d9-8727-d160740b027e@codeaurora.org>
+ <3db531c4-7058-68ec-8d4b-ff122c307697@synopsys.com>
+ <8b5f7348-66d7-4902-eac8-593ab503db96@codeaurora.org>
+ <ee47c2c6-f931-6229-13cd-d41a28b3b9c7@codeaurora.org>
+ <28bc3ce1-7ace-be25-7d7d-ca8ab1b0f0e9@synopsys.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <62c7ee3a-21c4-009d-bfc0-ce9d3a84fefe@codeaurora.org>
+Date:   Mon, 29 Mar 2021 15:14:45 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+In-Reply-To: <28bc3ce1-7ace-be25-7d7d-ca8ab1b0f0e9@synopsys.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Cristian Birsan <cristian.birsan@microchip.com>
 
-This patch adds initial driver support for the new Microchip USB
-Type-C Port Controller (TCPC) embedded in sama7g5 SoC.
 
-Signed-off-by: Cristian Birsan <cristian.birsan@microchip.com>
----
- drivers/usb/typec/tcpm/Kconfig        |   8 +
- drivers/usb/typec/tcpm/Makefile       |   1 +
- drivers/usb/typec/tcpm/sama7g5_tcpc.c | 602 ++++++++++++++++++++++++++
- 3 files changed, 611 insertions(+)
- create mode 100644 drivers/usb/typec/tcpm/sama7g5_tcpc.c
+On 3/19/2021 4:09 PM, Thinh Nguyen wrote:
+> Wesley Cheng wrote:
+>>
+>>
+>> On 3/8/2021 10:33 PM, Wesley Cheng wrote:
+>>>
+>>>
+>>> On 3/8/2021 7:05 PM, Thinh Nguyen wrote:
+>>>> Wesley Cheng wrote:
+>>>>>
+>>>>> On 3/6/2021 3:41 PM, Thinh Nguyen wrote:
+>>>>>> Wesley Cheng wrote:
+>>>>>>> On 1/8/2021 4:44 PM, Thinh Nguyen wrote:
+>>>>>>>> Hi,
+>>>>>>>>
+>>>>>>>> John Stultz wrote:
+>>>>>>>>> On Fri, Jan 8, 2021 at 4:26 AM Felipe Balbi <balbi@kernel.org> wrote:
+>>>>>>>>>> Hi,
+>>>>>>>>>>
+>>>>>>>>>> John Stultz <john.stultz@linaro.org> writes:
+>>>>>>>>>>> From: Yu Chen <chenyu56@huawei.com>
+>>>>>>>>>>>
+>>>>>>>>>>> Just resending this, as discussion died out a bit and I'm not
+>>>>>>>>>>> sure how to make further progress. See here for debug data that
+>>>>>>>>>>> was requested last time around:
+>>>>>>>>>>>   https://urldefense.com/v3/__https://lore.kernel.org/lkml/CALAqxLXdnaUfJKx0aN9xWwtfWVjMWigPpy2aqsNj56yvnbU80g@mail.gmail.com/__;!!A4F2R9G_pg!LNzuprAeg-O80SgolYkIkW4-ne-M-yLWCDUY9MygAIrQC398Z6gRJ9wnsnlqd3w$ 
+>>>>>>>>>>>
+>>>>>>>>>>> With the current dwc3 code on the HiKey960 we often see the
+>>>>>>>>>>> COREIDLE flag get stuck off in __dwc3_gadget_start(), which
+>>>>>>>>>>> seems to prevent the reset irq and causes the USB gadget to
+>>>>>>>>>>> fail to initialize.
+>>>>>>>>>>>
+>>>>>>>>>>> We had seen occasional initialization failures with older
+>>>>>>>>>>> kernels but with recent 5.x era kernels it seemed to be becoming
+>>>>>>>>>>> much more common, so I dug back through some older trees and
+>>>>>>>>>>> realized I dropped this quirk from Yu Chen during upstreaming
+>>>>>>>>>>> as I couldn't provide a proper rational for it and it didn't
+>>>>>>>>>>> seem to be necessary. I now realize I was wrong.
+>>>>>>>>>>>
+>>>>>>>>>>> After resubmitting the quirk, Thinh Nguyen pointed out that it
+>>>>>>>>>>> shouldn't be a quirk at all and it is actually mentioned in the
+>>>>>>>>>>> programming guide that it should be done when switching modes
+>>>>>>>>>>> in DRD.
+>>>>>>>>>>>
+>>>>>>>>>>> So, to avoid these !COREIDLE lockups seen on HiKey960, this
+>>>>>>>>>>> patch issues GCTL soft reset when switching modes if the
+>>>>>>>>>>> controller is in DRD mode.
+>>>>>>>>>>>
+>>>>>>>>>>> Cc: Felipe Balbi <balbi@kernel.org>
+>>>>>>>>>>> Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
+>>>>>>>>>>> Cc: Yang Fei <fei.yang@intel.com>
+>>>>>>>>>>> Cc: YongQin Liu <yongqin.liu@linaro.org>
+>>>>>>>>>>> Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+>>>>>>>>>>> Cc: Thinh Nguyen <thinhn@synopsys.com>
+>>>>>>>>>>> Cc: Jun Li <lijun.kernel@gmail.com>
+>>>>>>>>>>> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+>>>>>>>>>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>>>>>>>>>> Cc: linux-usb@vger.kernel.org
+>>>>>>>>>>> Signed-off-by: Yu Chen <chenyu56@huawei.com>
+>>>>>>>>>>> Signed-off-by: John Stultz <john.stultz@linaro.org>
+>>>>>>>>>>> ---
+>>>>>>>>>>> v2:
+>>>>>>>>>>> * Rework to always call the GCTL soft reset in DRD mode,
+>>>>>>>>>>>   rather then using a quirk as suggested by Thinh Nguyen
+>>>>>>>>>>>
+>>>>>>>>>>> v3:
+>>>>>>>>>>> * Move GCTL soft reset under the spinlock as suggested by
+>>>>>>>>>>>   Thinh Nguyen
+>>>>>>>>>> Because this is such an invasive change, I would prefer that we get
+>>>>>>>>>> Tested-By tags from a good fraction of the users before applying these
+>>>>>>>>>> two changes.
+>>>>>>>>> I'm happy to reach out to folks to try to get that. Though I'm
+>>>>>>>>> wondering if it would be better to put it behind a dts quirk flag, as
+>>>>>>>>> originally proposed?
+>>>>>>>>>    https://urldefense.com/v3/__https://lore.kernel.org/lkml/20201021181803.79650-1-john.stultz@linaro.org/__;!!A4F2R9G_pg!LNzuprAeg-O80SgolYkIkW4-ne-M-yLWCDUY9MygAIrQC398Z6gRJ9wnRWITZfc$ 
+>>>>>>>>>
+>>>>>>>>> That way folks can enable it for devices as they need?
+>>>>>>>>>
+>>>>>>>>> Again, I'm not trying to force this in as-is, just mostly sending it
+>>>>>>>>> out again for discussion to understand what other approach might work.
+>>>>>>>>>
+>>>>>>>>> thanks
+>>>>>>>>> -john
+>>>>>>>> A quirk would imply something is broken/diverged from the design right?
+>>>>>>>> But it's not the case here, and at least this is needed for HiKey960.
+>>>>>>>> Also, I think Rob will be ok with not adding 1 more quirk to the dwc3
+>>>>>>>> devicetree. :)
+>>>>>>>>
+>>>>>>>> BR,
+>>>>>>>> Thinh
+>>>>>>>>
+>>>>>>> Hi All,
+>>>>>>>
+>>>>>>> Sorry for jumping in, but I checked the SNPS v1.90a databook, and that
+>>>>>>> seemed to remove the requirement for the GCTL.softreset before writing
+>>>>>>> to PRTCAPDIR.  Should we consider adding a controller version/IP check?
+>>>>>>>
+>>>>>> Hi Wesley,
+>>>>>>
+>>>>>> From what I see in the v1.90a databook and others, the flow remains the
+>>>>>> same. I need to check internally, but I'm not aware of the change.
+>>>>>>
+>>>>> Hi Thinh,
+>>>>>
+>>>>> Hmmm, can you help check the register description for the PRTCAPDIR on
+>>>>> your v1.90a databook?  (Table 1-19 Fields for Register: GCTL (Continued)
+>>>>> Pg73)  When we compared the sequence in the description there to the
+>>>>> previous versions it removed the GCTL.softreset.  If it still shows up
+>>>>> on yours, then maybe my v1.90a isn't the final version?
+>>>>>
+>>>>> Thanks
+>>>>> Wesley Cheng
+>>>>>
+>>>>
+>>>> Hi Wesley,
+>>>>
+>>>> Actually your IP version type may use the newer flow. Can you print your
+>>>> DWC3_VER_TYPE? I still need to verify internally to know which versions
+>>>> need the update if any.
+>>>>
+>>>> Thanks,
+>>>> Thinh
+>>>>
+>>> Hi Thinh,
+>>>
+>>> Sure, my DWC3_VER_TYPE output = 0x67612A2A
+>>>
+>>> Thanks
+>>> Wesley Cheng
+>>>
+>> Hi Thinh,
+>>
+>> Would you happen to have an update on the required sequence on the
+>> version shared?  Sorry for pushing, but we just wanted to finalize on
+>> it, since it does cause some functional issues w/o the soft reset in
+>> place, and causes a crash if we have the GCTL.softreset.
+>>
+>> Thanks
+>> Wesley Cheng
+>>
+> 
+> Hi Wesley,
+> 
+> I'm still trying to get that info for you. The versions without
+> GCTL.softreset should be very new. The flow with GCTL.softreset should
+> work for all versions and should not cause functional impact. We can
+> create a change to optimize and remove GCTL.softreset for the newer
+> controller versions at a later time.
+> 
+> Since you and John Stultz have the setup that can be verified in the
+> real world. It would be great if John or you provide a tested patch(es)
+> to resolve this issue.
+> 
+> Thanks,
+> Thinh
+> 
+Hi Thinh,
 
-diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-index 557f392fe24d..8ba0fd85741f 100644
---- a/drivers/usb/typec/tcpm/Kconfig
-+++ b/drivers/usb/typec/tcpm/Kconfig
-@@ -52,6 +52,14 @@ config TYPEC_FUSB302
- 	  Type-C Port Controller Manager to provide USB PD and USB
- 	  Type-C functionalities.
- 
-+config TYPEC_SAMA7G5
-+	tristate "Microchip SAMA7G5 Type-C Port Controller driver"
-+	select REGMAP_MMIO
-+	help
-+	  Say Y or M here if your system has SAMA7G5 TCPC controller.
-+	  It works with Type-C Port Controller Manager to provide USB
-+	  Type-C functionalities.
-+
- config TYPEC_WCOVE
- 	tristate "Intel WhiskeyCove PMIC USB Type-C PHY driver"
- 	depends on ACPI
-diff --git a/drivers/usb/typec/tcpm/Makefile b/drivers/usb/typec/tcpm/Makefile
-index 7d499f3569fd..9abe8a7ae1cc 100644
---- a/drivers/usb/typec/tcpm/Makefile
-+++ b/drivers/usb/typec/tcpm/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_TYPEC_TCPM)		+= tcpm.o
- obj-$(CONFIG_TYPEC_FUSB302)		+= fusb302.o
-+obj-$(CONFIG_TYPEC_SAMA7G5)		+= sama7g5_tcpc.o
- obj-$(CONFIG_TYPEC_WCOVE)		+= typec_wcove.o
- typec_wcove-y				:= wcove.o
- obj-$(CONFIG_TYPEC_TCPCI)		+= tcpci.o
-diff --git a/drivers/usb/typec/tcpm/sama7g5_tcpc.c b/drivers/usb/typec/tcpm/sama7g5_tcpc.c
-new file mode 100644
-index 000000000000..d1a912976418
---- /dev/null
-+++ b/drivers/usb/typec/tcpm/sama7g5_tcpc.c
-@@ -0,0 +1,602 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Microchip SAMA7G5 Type-C Port Controller Driver
-+ *
-+ * Copyright (C) 2021 Microchip Technology, Inc. and its subsidiaries
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_gpio.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/usb/pd.h>
-+#include <linux/usb/tcpm.h>
-+#include <linux/usb/typec.h>
-+
-+#define SAMA7G5_TCPC_GCLK				32000
-+
-+/* TCPC registers offsets */
-+#define TCPC_CR			0x80		/* TCPC Control Register */
-+#define TCPC_UPC		0xA0		/* TCPC PHY Control Register */
-+#define TCPC_UPS		0xA4		/* TCPC PHY Status Register */
-+
-+#define TCPC_CR_RESET		0x54434301	/* Magic value */
-+
-+/* TCPC PHY Control Register */
-+#define TCPC_UPC_BCDETE		BIT(29)
-+#define TCPC_UPC_BCVSRCE	BIT(28)
-+#define	TCPC_UPC_BCDETSEL	BIT(27)
-+#define	TCPC_UPC_BCIDPSRCE	BIT(26)
-+#define TCPC_UPC_DMPDFE		BIT(25)
-+#define TCPC_UPC_DMPDFD		BIT(24)
-+#define TCPC_UPC_IP_OFF		(0 << 12)
-+#define TCPC_UPC_IP_0P5		(1 << 12)
-+#define TCPC_UPC_IP_1P5		(2 << 12)
-+#define TCPC_UPC_IP_3P0		(3 << 12)
-+#define TCPC_UPC_THRESHOLD0	(0 << 8)
-+#define TCPC_UPC_THRESHOLD2	(2 << 8)
-+#define TCPC_UPC_THRESHOLD4	(4 << 8)
-+#define TCPC_UPC_THRESHOLD6	(6 << 8)
-+
-+/* TCPC PHY  Status Register */
-+#define TCPC_UPS_CC2RDT		BIT(4)
-+#define TCPC_UPS_CC1ID		BIT(3)
-+#define TCPC_UPS_CC_MASK	GENMASK(4, 3)
-+#define TCPC_UPS_CHGDCP		BIT(2)
-+#define TCPC_UPS_DM		BIT(1)
-+#define TCPC_UPS_DP		BIT(0)
-+
-+#define TCPC_VERSION		0xFC
-+
-+/* USB Type-C measurement timings */
-+#define T_CC_MEASURE		100 /* 100 ms */
-+
-+#define SAMA7G5_TCPC_VBUS_IRQFLAGS (IRQF_ONESHOT \
-+			   | IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING)
-+
-+struct sama7g5_tcpc {
-+	struct device *dev;
-+
-+	struct workqueue_struct *wq;
-+	struct delayed_work measure_work;
-+
-+	struct regmap *regmap;
-+	void __iomem *base;
-+
-+	struct clk *pclk;
-+	struct clk *gclk;
-+
-+	struct gpio_desc *vbus_pin;
-+	struct regulator *vbus;
-+
-+	/* lock for sharing states */
-+	struct mutex lock;
-+
-+	/* port status */
-+	enum typec_cc_polarity cc_polarity;
-+	enum typec_cc_status cc1_status;
-+	enum typec_cc_status cc2_status;
-+	enum typec_cc_status cc1_status_prev;
-+	enum typec_cc_status cc2_status_prev;
-+
-+	/* mutex used for VBUS detection */
-+	struct mutex vbus_mutex;
-+	int vbus_present;
-+	int vbus_present_prev;
-+
-+	unsigned int phy_status;
-+	unsigned int phy_status_old;
-+
-+	struct tcpc_dev tcpc;
-+	struct tcpm_port *tcpm;
-+};
-+
-+#define tcpc_to_sama7g5_tcpc(_tcpc_) \
-+		container_of(_tcpc_, struct sama7g5_tcpc, tcpc)
-+
-+static bool sama7g5_tcpc_readable_reg(struct device *dev, unsigned int reg)
-+{
-+	switch (reg) {
-+	case TCPC_CR:
-+	case TCPC_UPC:
-+	case TCPC_UPS:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static bool sama7g5_tcpc_writeable_reg(struct device *dev, unsigned int reg)
-+{
-+	switch (reg) {
-+	case TCPC_CR:
-+	case TCPC_UPC:
-+	case TCPC_UPS:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static const struct regmap_config sama7g5_tcpc_regmap_config = {
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+	.max_register = TCPC_VERSION,
-+	.readable_reg = sama7g5_tcpc_readable_reg,
-+	.writeable_reg = sama7g5_tcpc_writeable_reg,
-+};
-+
-+static int sama7g5_tcpc_get_vbus(struct tcpc_dev *tcpc)
-+{
-+	struct sama7g5_tcpc *sama7g5_tcpc = tcpc_to_sama7g5_tcpc(tcpc);
-+	int ret;
-+
-+	mutex_lock(&sama7g5_tcpc->vbus_mutex);
-+	ret = sama7g5_tcpc->vbus_present ? 1 : 0;
-+	mutex_unlock(&sama7g5_tcpc->vbus_mutex);
-+
-+	return ret;
-+}
-+
-+static int sama7g5_tcpc_set_vbus(struct tcpc_dev *tcpc, bool on, bool sink)
-+{
-+	struct sama7g5_tcpc *sama7g5_tcpc = tcpc_to_sama7g5_tcpc(tcpc);
-+	int ret;
-+
-+	mutex_lock(&sama7g5_tcpc->vbus_mutex);
-+	if (on)
-+		ret = regulator_enable(sama7g5_tcpc->vbus);
-+	else
-+		ret = regulator_disable(sama7g5_tcpc->vbus);
-+	mutex_unlock(&sama7g5_tcpc->vbus_mutex);
-+
-+	return ret;
-+}
-+
-+static int sama7g5_tcpc_set_vconn(struct tcpc_dev *tcpc, bool on)
-+{
-+	/* VCONN is not supported */
-+	return -EPERM;
-+}
-+
-+static int sama7g5_tcpc_get_cc(struct tcpc_dev *tcpc, enum typec_cc_status *cc1,
-+			       enum typec_cc_status *cc2)
-+{
-+	struct sama7g5_tcpc *sama7g5_tcpc = tcpc_to_sama7g5_tcpc(tcpc);
-+
-+	mutex_lock(&sama7g5_tcpc->lock);
-+	*cc1 = sama7g5_tcpc->cc1_status;
-+	*cc2 = sama7g5_tcpc->cc2_status;
-+	mutex_unlock(&sama7g5_tcpc->lock);
-+
-+	return 0;
-+}
-+
-+static int sama7g5_tcpc_set_cc(struct tcpc_dev *tcpc, enum typec_cc_status cc)
-+{
-+	struct sama7g5_tcpc *sama7g5_tcpc = tcpc_to_sama7g5_tcpc(tcpc);
-+	unsigned int ctrl;
-+	int ret = 0;
-+
-+	mutex_lock(&sama7g5_tcpc->lock);
-+	switch (cc) {
-+	case TYPEC_CC_RD:
-+		ctrl = TCPC_UPC_IP_OFF;
-+		break;
-+	case TYPEC_CC_RP_DEF:
-+		ctrl = TCPC_UPC_IP_0P5;
-+		break;
-+	default:
-+		ret =  -EINVAL;
-+		goto done;
-+	}
-+	ret = regmap_write(sama7g5_tcpc->regmap, TCPC_UPC, ctrl);
-+done:
-+	mutex_unlock(&sama7g5_tcpc->lock);
-+	return ret;
-+}
-+
-+static int sama7g5_tcpc_set_polarity(struct tcpc_dev *tcpc,
-+				     enum typec_cc_polarity pol)
-+{
-+	return 0;
-+}
-+
-+static int sama7g5_tcpc_set_roles(struct tcpc_dev *tcpc, bool attached,
-+			   enum typec_role role, enum typec_data_role data)
-+{
-+	return 0;
-+}
-+
-+static int sama7g5_tcpc_set_pd_rx(struct tcpc_dev *tcpc, bool on)
-+{
-+	return -EPERM;
-+}
-+
-+static int sama7g5_tcpc_pd_transmit(struct tcpc_dev *tcpc,
-+				    enum tcpm_transmit_type type,
-+				    const struct pd_message *msg)
-+{
-+	return -EPERM;
-+}
-+
-+static int sama7g5_tcpc_start_toggling(struct tcpc_dev *tcpc,
-+				       enum typec_port_type port_type,
-+				       enum typec_cc_status cc)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static void _sama7g5_tcpc_measure_snk(struct sama7g5_tcpc *sama7g5_tcpc)
-+{
-+	int ret;
-+
-+	/* Save previous CC1/CC2 state */
-+	sama7g5_tcpc->cc1_status_prev = sama7g5_tcpc->cc1_status;
-+	sama7g5_tcpc->cc2_status_prev = sama7g5_tcpc->cc2_status;
-+
-+	/* Comparator Threshold 2 */
-+	ret = regmap_write(sama7g5_tcpc->regmap, TCPC_UPC, TCPC_UPC_IP_OFF |
-+			   TCPC_UPC_THRESHOLD2);
-+	if (ret)
-+		dev_err(sama7g5_tcpc->dev, "failed to wite register: %d\n",
-+			ret);
-+
-+	usleep_range(560, 1000);
-+
-+	ret = regmap_read(sama7g5_tcpc->regmap, TCPC_UPS,
-+			  &sama7g5_tcpc->phy_status);
-+	if (ret)
-+		dev_err(sama7g5_tcpc->dev, "failed to read register: %d\n",
-+			ret);
-+
-+	if (!(sama7g5_tcpc->phy_status & TCPC_UPS_CC_MASK)) {
-+		/* VRa*/
-+		sama7g5_tcpc->cc1_status = TYPEC_CC_OPEN;
-+		sama7g5_tcpc->cc2_status = TYPEC_CC_OPEN;
-+		return;
-+	}
-+
-+	/* CC1 or CC2 is connected wait for PD messages to end ~ 30ms */
-+	usleep_range(30000, 35000);
-+
-+	/* Comparator Threshold 4 */
-+	sama7g5_tcpc->phy_status_old = sama7g5_tcpc->phy_status;
-+
-+	ret = regmap_write(sama7g5_tcpc->regmap, TCPC_UPC, TCPC_UPC_IP_OFF |
-+			   TCPC_UPC_THRESHOLD4);
-+	if (ret)
-+		dev_err(sama7g5_tcpc->dev, "failed to wite register: %d\n",
-+			ret);
-+
-+	usleep_range(560, 1000);
-+	ret = regmap_read(sama7g5_tcpc->regmap, TCPC_UPS,
-+			  &sama7g5_tcpc->phy_status);
-+	if (ret)
-+		dev_err(sama7g5_tcpc->dev, "failed to read register: %d\n",
-+			ret);
-+
-+	if ((sama7g5_tcpc->phy_status_old & TCPC_UPS_CC1ID) &&
-+	    (!(sama7g5_tcpc->phy_status & TCPC_UPS_CC1ID))) {
-+		sama7g5_tcpc->cc1_status = TYPEC_CC_RP_DEF;
-+		sama7g5_tcpc->cc2_status = TYPEC_CC_OPEN;
-+		return;
-+	}
-+
-+	if ((sama7g5_tcpc->phy_status_old & TCPC_UPS_CC2RDT) &&
-+	    (!(sama7g5_tcpc->phy_status & TCPC_UPS_CC2RDT))) {
-+		sama7g5_tcpc->cc1_status = TYPEC_CC_OPEN;
-+		sama7g5_tcpc->cc2_status = TYPEC_CC_RP_DEF;
-+		return;
-+	}
-+
-+	/* Comparator Threshold 6 */
-+	sama7g5_tcpc->phy_status_old = sama7g5_tcpc->phy_status;
-+
-+	ret = regmap_write(sama7g5_tcpc->regmap, TCPC_UPC, TCPC_UPC_IP_OFF |
-+			   TCPC_UPC_THRESHOLD6);
-+	if (ret)
-+		dev_err(sama7g5_tcpc->dev, "failed to wite register: %d\n",
-+			ret);
-+
-+	usleep_range(560, 1000);
-+	ret = regmap_read(sama7g5_tcpc->regmap, TCPC_UPS,
-+			  &sama7g5_tcpc->phy_status);
-+	if (ret)
-+		dev_err(sama7g5_tcpc->dev, "failed to read register: %d\n",
-+			ret);
-+
-+	if ((sama7g5_tcpc->phy_status_old & TCPC_UPS_CC1ID) &&
-+	    (!(sama7g5_tcpc->phy_status & TCPC_UPS_CC1ID))) {
-+		sama7g5_tcpc->cc1_status = TYPEC_CC_RP_1_5;
-+		sama7g5_tcpc->cc2_status = TYPEC_CC_OPEN;
-+		return;
-+	}
-+
-+	if ((sama7g5_tcpc->phy_status_old & TCPC_UPS_CC1ID) &&
-+	    ((sama7g5_tcpc->phy_status & TCPC_UPS_CC1ID))) {
-+		sama7g5_tcpc->cc1_status = TYPEC_CC_RP_3_0;
-+		sama7g5_tcpc->cc2_status = TYPEC_CC_OPEN;
-+		return;
-+	}
-+
-+	if ((sama7g5_tcpc->phy_status_old & TCPC_UPS_CC2RDT) &&
-+	    (!(sama7g5_tcpc->phy_status & TCPC_UPS_CC2RDT))) {
-+		sama7g5_tcpc->cc1_status = TYPEC_CC_OPEN;
-+		sama7g5_tcpc->cc2_status = TYPEC_CC_RP_1_5;
-+		return;
-+	}
-+
-+	if ((sama7g5_tcpc->phy_status_old & TCPC_UPS_CC2RDT) &&
-+	    ((sama7g5_tcpc->phy_status & TCPC_UPS_CC2RDT))) {
-+		sama7g5_tcpc->cc1_status = TYPEC_CC_OPEN;
-+		sama7g5_tcpc->cc2_status = TYPEC_CC_RP_3_0;
-+		return;
-+	}
-+}
-+
-+static void sama7g5_tcpc_measure_work(struct work_struct *work)
-+{
-+	struct sama7g5_tcpc *port = container_of(work, struct sama7g5_tcpc,
-+						 measure_work.work);
-+
-+	mutex_lock(&port->lock);
-+
-+	_sama7g5_tcpc_measure_snk(port);
-+
-+	/* Check if the state has changed and notify TCPM */
-+	if (port->cc1_status != port->cc1_status_prev ||
-+	    port->cc2_status != port->cc2_status_prev)
-+		tcpm_cc_change(port->tcpm);
-+
-+	mod_delayed_work(port->wq, &port->measure_work,
-+			 msecs_to_jiffies(T_CC_MEASURE));
-+
-+	mutex_unlock(&port->lock);
-+}
-+
-+static int sama7g5_tcpc_init(struct tcpc_dev *tcpc)
-+{
-+	struct sama7g5_tcpc *sama7g5_tcpc = tcpc_to_sama7g5_tcpc(tcpc);
-+	int ret;
-+
-+	ret = regmap_write(sama7g5_tcpc->regmap, TCPC_CR, TCPC_CR_RESET);
-+	if (ret)
-+		return ret;
-+
-+	sama7g5_tcpc->wq =
-+		create_singlethread_workqueue(dev_name(sama7g5_tcpc->dev));
-+	if (!sama7g5_tcpc->wq)
-+		return -ENOMEM;
-+
-+	INIT_DELAYED_WORK(&sama7g5_tcpc->measure_work,
-+			  sama7g5_tcpc_measure_work);
-+
-+	sama7g5_tcpc->cc1_status = TYPEC_CC_OPEN;
-+	sama7g5_tcpc->cc2_status = TYPEC_CC_OPEN;
-+	sama7g5_tcpc->cc1_status_prev = TYPEC_CC_OPEN;
-+	sama7g5_tcpc->cc2_status_prev = TYPEC_CC_OPEN;
-+	sama7g5_tcpc->cc_polarity = TYPEC_POLARITY_CC1;
-+
-+	/* We do not have an interrupt so polling only */
-+	mod_delayed_work(sama7g5_tcpc->wq, &sama7g5_tcpc->measure_work,
-+			 msecs_to_jiffies(T_CC_MEASURE));
-+
-+	/* Enable VBUS detection */
-+	if (sama7g5_tcpc->vbus_pin)
-+		enable_irq(gpiod_to_irq(sama7g5_tcpc->vbus_pin));
-+
-+	return 0;
-+}
-+
-+static int vbus_is_present(struct sama7g5_tcpc *sama7g5_tcpc)
-+{
-+	if (sama7g5_tcpc->vbus_pin)
-+		return gpiod_get_value(sama7g5_tcpc->vbus_pin);
-+
-+	/* No Vbus detection: Assume always present */
-+	return 1;
-+}
-+
-+static irqreturn_t sama7g5_vbus_irq_thread(int irq, void *devid)
-+{
-+	struct sama7g5_tcpc *sama7g5_tcpc = devid;
-+
-+	/* debounce */
-+	udelay(10);
-+
-+	mutex_lock(&sama7g5_tcpc->vbus_mutex);
-+
-+	sama7g5_tcpc->vbus_present = vbus_is_present(sama7g5_tcpc);
-+	if (sama7g5_tcpc->vbus_present != sama7g5_tcpc->vbus_present_prev) {
-+		/* VBUS changed, notify TCPM */
-+		tcpm_vbus_change(sama7g5_tcpc->tcpm);
-+		sama7g5_tcpc->vbus_present_prev = sama7g5_tcpc->vbus_present;
-+	}
-+
-+	mutex_unlock(&sama7g5_tcpc->vbus_mutex);
-+	return IRQ_HANDLED;
-+}
-+
-+static int sama7g5_tcpc_probe(struct platform_device *pdev)
-+{
-+	int ret;
-+	struct sama7g5_tcpc *sama7g5_tcpc;
-+
-+	struct resource *mem;
-+	void __iomem *base;
-+
-+	sama7g5_tcpc = devm_kzalloc(&pdev->dev, sizeof(*sama7g5_tcpc),
-+				    GFP_KERNEL);
-+	if (!sama7g5_tcpc)
-+		return -ENOMEM;
-+
-+	mem =  platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	base = devm_ioremap_resource(&pdev->dev, mem);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
-+	sama7g5_tcpc->base = base;
-+
-+	sama7g5_tcpc->regmap =  devm_regmap_init_mmio(&pdev->dev, base,
-+						&sama7g5_tcpc_regmap_config);
-+	if (IS_ERR(sama7g5_tcpc->regmap)) {
-+		dev_err(&pdev->dev, "Regmap init failed\n");
-+		return PTR_ERR(sama7g5_tcpc->regmap);
-+	}
-+
-+	/* Get the peripheral clock */
-+	sama7g5_tcpc->pclk = devm_clk_get(&pdev->dev, "pclk");
-+	if (IS_ERR(sama7g5_tcpc->pclk)) {
-+		ret = PTR_ERR(sama7g5_tcpc->pclk);
-+		dev_err(&pdev->dev,
-+			"failed to get the peripheral clock: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = clk_prepare_enable(sama7g5_tcpc->pclk);
-+	if (ret) {
-+		dev_err(&pdev->dev,
-+			"failed to enable the peripheral clock: %d\n", ret);
-+		return ret;
-+	}
-+
-+	/* Get the generic clock */
-+	sama7g5_tcpc->gclk = devm_clk_get(&pdev->dev, "gclk");
-+	if (IS_ERR(sama7g5_tcpc->gclk)) {
-+		ret = PTR_ERR(sama7g5_tcpc->gclk);
-+		dev_err(&pdev->dev,
-+			"failed to get the PMC generic clock: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = clk_set_rate(sama7g5_tcpc->gclk, SAMA7G5_TCPC_GCLK);
-+	if (ret) {
-+		dev_err(&pdev->dev,
-+			"unable to change gclk rate to: %u\n",
-+			SAMA7G5_TCPC_GCLK);
-+		return ret;
-+	}
-+
-+	ret = clk_prepare_enable(sama7g5_tcpc->gclk);
-+	if (ret) {
-+		dev_err(&pdev->dev,
-+			"failed to enable the generic clock: %d\n", ret);
-+		return ret;
-+	}
-+
-+	mutex_init(&sama7g5_tcpc->lock);
-+	mutex_init(&sama7g5_tcpc->vbus_mutex);
-+
-+	sama7g5_tcpc->vbus_pin = devm_gpiod_get_optional(&pdev->dev,
-+				"microchip,vbus", GPIOD_IN);
-+
-+	if (IS_ERR(sama7g5_tcpc->vbus_pin)) {
-+		ret = PTR_ERR(sama7g5_tcpc->vbus_pin);
-+		dev_err(&pdev->dev, "unable to claim vbus-gpio: %d\n", ret);
-+	}
-+
-+	sama7g5_tcpc->vbus = devm_regulator_get_optional(&pdev->dev, "vbus");
-+
-+	if (IS_ERR(sama7g5_tcpc->vbus)) {
-+		ret = PTR_ERR(sama7g5_tcpc->vbus);
-+		dev_err(&pdev->dev, "unable to claim vbus-supply: %d\n", ret);
-+	}
-+
-+	if (sama7g5_tcpc->vbus_pin) {
-+		irq_set_status_flags(gpiod_to_irq(sama7g5_tcpc->vbus_pin),
-+				     IRQ_NOAUTOEN);
-+		ret = devm_request_threaded_irq(&pdev->dev,
-+				gpiod_to_irq(sama7g5_tcpc->vbus_pin), NULL,
-+				sama7g5_vbus_irq_thread,
-+				SAMA7G5_TCPC_VBUS_IRQFLAGS,
-+				"sama7g5_tcpc", sama7g5_tcpc);
-+		if (ret) {
-+			sama7g5_tcpc->vbus_pin = NULL;
-+			dev_warn(&pdev->dev,
-+				 "failed to request vbus irq; "
-+				 "assuming always on\n");
-+		}
-+	}
-+
-+	sama7g5_tcpc->dev = &pdev->dev;
-+	platform_set_drvdata(pdev, sama7g5_tcpc);
-+
-+	sama7g5_tcpc->tcpc.init = sama7g5_tcpc_init;
-+	sama7g5_tcpc->tcpc.get_vbus = sama7g5_tcpc_get_vbus;
-+	sama7g5_tcpc->tcpc.set_vbus = sama7g5_tcpc_set_vbus;
-+	sama7g5_tcpc->tcpc.set_cc = sama7g5_tcpc_set_cc;
-+	sama7g5_tcpc->tcpc.get_cc = sama7g5_tcpc_get_cc;
-+	sama7g5_tcpc->tcpc.set_polarity = sama7g5_tcpc_set_polarity;
-+	sama7g5_tcpc->tcpc.set_vconn = sama7g5_tcpc_set_vconn;
-+	sama7g5_tcpc->tcpc.start_toggling = sama7g5_tcpc_start_toggling;
-+	sama7g5_tcpc->tcpc.set_pd_rx = sama7g5_tcpc_set_pd_rx;
-+	sama7g5_tcpc->tcpc.set_roles = sama7g5_tcpc_set_roles;
-+	sama7g5_tcpc->tcpc.pd_transmit = sama7g5_tcpc_pd_transmit;
-+
-+	sama7g5_tcpc->tcpc.fwnode = device_get_named_child_node(&pdev->dev,
-+								"connector");
-+	if (!sama7g5_tcpc->tcpc.fwnode) {
-+		dev_err(&pdev->dev, "Can't find connector node.\n");
-+		return -EINVAL;
-+	}
-+
-+	sama7g5_tcpc->tcpm = tcpm_register_port(sama7g5_tcpc->dev,
-+						&sama7g5_tcpc->tcpc);
-+	if (IS_ERR(sama7g5_tcpc->tcpm)) {
-+		fwnode_remove_software_node(sama7g5_tcpc->tcpc.fwnode);
-+		return PTR_ERR(sama7g5_tcpc->tcpm);
-+	}
-+
-+	return 0;
-+}
-+
-+static int sama7g5_tcpc_remove(struct platform_device *pdev)
-+{
-+	struct sama7g5_tcpc *sama7g5_tcpc;
-+
-+	sama7g5_tcpc = platform_get_drvdata(pdev);
-+
-+	/* Mask everything */
-+	if (sama7g5_tcpc->vbus_pin)
-+		disable_irq(gpiod_to_irq(sama7g5_tcpc->vbus_pin));
-+
-+
-+	if (!IS_ERR_OR_NULL(sama7g5_tcpc->tcpm))
-+		tcpm_unregister_port(sama7g5_tcpc->tcpm);
-+
-+	destroy_workqueue(sama7g5_tcpc->wq);
-+
-+	clk_disable_unprepare(sama7g5_tcpc->gclk);
-+	clk_disable_unprepare(sama7g5_tcpc->pclk);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id sama7g5_tcpc_dt_ids[] = {
-+	{
-+		.compatible = "microchip,sama7g5-tcpc",
-+	},
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, sama7g5_tcpc_dt_ids);
-+
-+static struct platform_driver sama7g5_tcpc_driver = {
-+	.probe	= sama7g5_tcpc_probe,
-+	.remove = sama7g5_tcpc_remove,
-+	.driver = {
-+		.name	= "microchip,sama7g5-tcpc",
-+		.of_match_table	= sama7g5_tcpc_dt_ids,
-+	},
-+};
-+module_platform_driver(sama7g5_tcpc_driver);
-+
-+MODULE_AUTHOR("Cristian Birsan <cristian.birsan@microchip.com>");
-+MODULE_DESCRIPTION("Microchip SAMA7G5 Type-C Port Controller Driver");
-+MODULE_LICENSE("GPL");
+Thanks for the input as always.  I tested the GCTL.softreset change just
+now, and it is working fine at least on my set up.
+
+Not sure if we'd need input from other vendors as well to get this
+change merged.
+
+Thanks
+Wesley Cheng
 -- 
-2.25.1
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
