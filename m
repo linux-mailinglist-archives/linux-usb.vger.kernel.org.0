@@ -2,80 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8D334C4E8
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 09:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA2034C520
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Mar 2021 09:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbhC2H2p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Mar 2021 03:28:45 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:15379 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbhC2H2c (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Mar 2021 03:28:32 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4F83zs1ByVzkgXK;
-        Mon, 29 Mar 2021 15:26:49 +0800 (CST)
-Received: from thunder-town.china.huawei.com (10.174.179.202) by
- DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
- 14.3.498.0; Mon, 29 Mar 2021 15:28:21 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 2/2] arm64: dts: imx8mp: Use the correct name for child node "snps,dwc3"
-Date:   Mon, 29 Mar 2021 15:27:14 +0800
-Message-ID: <20210329072714.2135-3-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-In-Reply-To: <20210329072714.2135-1-thunder.leizhen@huawei.com>
-References: <20210329072714.2135-1-thunder.leizhen@huawei.com>
+        id S231295AbhC2Hlq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Mar 2021 03:41:46 -0400
+Received: from mga12.intel.com ([192.55.52.136]:44482 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229762AbhC2Hlk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 29 Mar 2021 03:41:40 -0400
+IronPort-SDR: EGKy8C6l8X/iwP1Ofcf58XNJwdnp37/BaLS1TWdVrvFkiVpH59aUmYg5fF4rs0mx/so5m3B0BA
+ mw3+sT3uk3eQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9937"; a="170900052"
+X-IronPort-AV: E=Sophos;i="5.81,287,1610438400"; 
+   d="scan'208";a="170900052"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 00:41:39 -0700
+IronPort-SDR: HV01pF80dYUD6ipCgv7FHSfctVCYEUWny+vFXXl1X+EIf9ceLZwUmUdolqSk+W6+BD+pw6wO2S
+ rX6Sw5P6Hj7w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,287,1610438400"; 
+   d="scan'208";a="417547999"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 29 Mar 2021 00:41:36 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 8AC12A1; Mon, 29 Mar 2021 10:41:50 +0300 (EEST)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Christian Kellner <christian@kellner.me>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@google.com>,
+        Diego Rivas <diegorivas@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v3 0/3] thunderbolt: Expose details about tunneling
+Date:   Mon, 29 Mar 2021 10:41:47 +0300
+Message-Id: <20210329074150.62622-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.179.202]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-After the node name of "snps,dwc3" has been corrected to start with "usb"
-in fsl,imx8mp-dwc3.yaml. Its name in dts should be modified accordingly.
+Hello there,
 
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- arch/arm64/boot/dts/freescale/imx8mp.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+There has been ask if we can expose more details about the connected
+devices and the tunneling to userspace, so it can then provide more
+detailed information to the user.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-index c7523fd4eae9b53..4967d72f41f613f 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-@@ -828,7 +828,7 @@
- 			ranges;
- 			status = "disabled";
- 
--			usb_dwc3_0: dwc3@38100000 {
-+			usb_dwc3_0: usb@38100000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x38100000 0x10000>;
- 				clocks = <&clk IMX8MP_CLK_HSIO_AXI>,
-@@ -869,7 +869,7 @@
- 			ranges;
- 			status = "disabled";
- 
--			usb_dwc3_1: dwc3@38200000 {
-+			usb_dwc3_1: usb@38200000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x38200000 0x10000>;
- 				clocks = <&clk IMX8MP_CLK_HSIO_AXI>,
+First we add uevent details for each device (USB4 router) that adds
+USB4_TYPE=host|device|hub and USB4_VERSION=1.0 (if the device actually is
+USB4). The host|device|hub definitions follow the USB4 spec.
+
+Then for each device router we expose two new attributes: "usb3" and "dp"
+that if present mean that the device has corresponding adapter (USB 3.x
+upstream adapter and DP OUT adapter). The contents of the attributes then
+hold number of tunnels ending to this router. So if USB 3.x is tunneled
+"usb3" reads 1. Since there can be multiple DP OUT adaptes the "dp"
+attribute holds number of DP tunnels ending to this router. For PCIe
+tunneling the "authorized" attribute works the same way.
+
+Previous versions can be found:
+
+  v2: https://lore.kernel.org/linux-usb/20210323145701.86161-1-mika.westerberg@linux.intel.com/
+  v1: https://lore.kernel.org/linux-usb/20210309134818.63118-1-mika.westerberg@linux.intel.com/
+
+Changes from v2:
+
+  * Added missing sysfs_emit()
+
+Changes from v1:
+
+  * Added Greg's Reviewed-by tags for patch 1 and 2
+  * Use sysfs_emit()
+  * Drop the locking in the new attributes
+  * Drop the kobject_uevent()
+
+Mika Westerberg (3):
+  thunderbolt: Add details to router uevent
+  thunderbolt: Hide authorized attribute if router does not support PCIe tunnels
+  thunderbolt: Expose more details about USB 3.x and DisplayPort tunnels
+
+ .../ABI/testing/sysfs-bus-thunderbolt         | 26 +++++++
+ drivers/thunderbolt/domain.c                  | 10 +++
+ drivers/thunderbolt/switch.c                  | 78 ++++++++++++++++++-
+ drivers/thunderbolt/tb.c                      | 44 ++++++++---
+ drivers/thunderbolt/tb.h                      |  4 +
+ include/linux/thunderbolt.h                   |  6 ++
+ 6 files changed, 156 insertions(+), 12 deletions(-)
+
 -- 
-1.8.3
-
+2.30.2
 
