@@ -2,73 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD2034EC14
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 17:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B534A34ECDF
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 17:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231967AbhC3PWC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Mar 2021 11:22:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34734 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231808AbhC3PVs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Mar 2021 11:21:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 175F36195C;
-        Tue, 30 Mar 2021 15:21:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617117708;
-        bh=uGwUP3LzjKRd9E1KoxeHAndEnuORzm0H6YS3esSamOk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i5PF2w81bVXHY5TwySMtGBo2nNi4PqgeFA/qVDFG/2rM3QM9K/7S7YEUIKXO3HBne
-         1M3QsIheQ4jK+ZIEY62C/lfH8sJX1rXfqK7ndOiv9+G5vIC0+ZzHH+Ujyj2ms/oZZi
-         TZSsMkAX8ZN3CL4lQEBDoiG2G8bUwsZFS1IkwQTHhfD08H8CdKS3daBbvKqOJP/IJq
-         Re96AJv434bJ362Rwqfyb2xxnYRB62v+lP3xQElI++Gml8ko5h277pNBnddX3F87Q5
-         KzUD+4HQakv6avPe4N8zYdFiJOUtePIerogCzdcK5AoyrX6PtoEFobedlvsGIJLX8b
-         TWU0RlBtTdHLA==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lRGC1-0002Y3-Sc; Tue, 30 Mar 2021 17:22:09 +0200
-Date:   Tue, 30 Mar 2021 17:22:09 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] USB: serial: add support for multi-interface
- functions
-Message-ID: <YGNCIT1ocatZ3V3/@hovoldconsulting.com>
-References: <20210330143820.9103-1-johan@kernel.org>
- <20210330143820.9103-4-johan@kernel.org>
- <e0b2984e7de0287c5811a10faaac4d5d6d7d91ef.camel@suse.com>
+        id S231797AbhC3Ptg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Mar 2021 11:49:36 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:58853 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S230243AbhC3PtW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Mar 2021 11:49:22 -0400
+Received: (qmail 980943 invoked by uid 1000); 30 Mar 2021 11:49:21 -0400
+Date:   Tue, 30 Mar 2021 11:49:21 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 5/6] usb: Iterator for ports
+Message-ID: <20210330154921.GC980260@rowland.harvard.edu>
+References: <20210329084426.78138-1-heikki.krogerus@linux.intel.com>
+ <20210329084426.78138-6-heikki.krogerus@linux.intel.com>
+ <20210329184946.GA944482@rowland.harvard.edu>
+ <YGLqV4nB/lPS1AOF@kuha.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e0b2984e7de0287c5811a10faaac4d5d6d7d91ef.camel@suse.com>
+In-Reply-To: <YGLqV4nB/lPS1AOF@kuha.fi.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 30, 2021 at 04:44:32PM +0200, Oliver Neukum wrote:
-> Am Dienstag, den 30.03.2021, 16:38 +0200 schrieb Johan Hovold:
-> > @@ -1115,6 +1161,8 @@ static void usb_serial_disconnect(struct usb_interface *interface)
-> >         if (serial->type->disconnect)
-> >                 serial->type->disconnect(serial);
-> >  
-> > +       release_sibling(serial, interface);
-> > +
-> >         /* let the last holder of this object cause it to be cleaned up */
-> >         usb_serial_put(serial);
-> >         dev_info(dev, "device disconnected\n");
+On Tue, Mar 30, 2021 at 12:07:35PM +0300, Heikki Krogerus wrote:
+> On Mon, Mar 29, 2021 at 02:49:46PM -0400, Alan Stern wrote:
+> > On Mon, Mar 29, 2021 at 11:44:25AM +0300, Heikki Krogerus wrote:
+> > > Introducing usb_for_each_port(). It works the same way as
+> > > usb_for_each_dev(), but instead of going through every USB
+> > > device in the system, it walks through the USB ports in the
+> > > system.
+> > > 
+> > > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > ---
+> > >  drivers/usb/core/usb.c | 46 ++++++++++++++++++++++++++++++++++++++++++
+> > >  include/linux/usb.h    |  1 +
+> > >  2 files changed, 47 insertions(+)
+> > > 
+> > > diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+> > > index 2ce3667ec6fae..62368c4ed37af 100644
+> > > --- a/drivers/usb/core/usb.c
+> > > +++ b/drivers/usb/core/usb.c
+> > > @@ -398,6 +398,52 @@ int usb_for_each_dev(void *data, int (*fn)(struct usb_device *, void *))
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(usb_for_each_dev);
+> > >  
+> > > +struct each_hub_arg {
+> > > +	void *data;
+> > > +	int (*fn)(struct device *, void *);
+> > > +};
+> > > +
+> > > +static int __each_hub(struct usb_device *hdev, void *data)
+> > > +{
+> > > +	struct each_hub_arg *arg = (struct each_hub_arg *)data;
+> > > +	struct usb_hub *hub;
+> > > +	int ret = 0;
+> > > +	int i;
+> > > +
+> > > +	hub = usb_hub_to_struct_hub(hdev);
+> > > +	if (!hub)
+> > > +		return 0;
+> > 
+> > What happens if the hub is removed exactly now?  Although hdev is 
+> > reference-counted (and the loop iterator does take a reference to it), 
+> > usb_hub_to_struct_hub doesn't take a reference to hub.  And hub->ports 
+> > isn't refcounted at all.
 > 
-> Hi,
+> If the hub is removed right now, and if hub_disconnect() also manages
+> to remove the ports before we have time to take the lock below, then
+> hdev->maxchild will be 0 by the time we can take the lock. In that
+> case nothing happens here.
+
+Okay, good.
+
+> If on the other hand we manage to acquire the usb_port_peer_mutex
+> before hub_disconnect(), then hub_disconnect() will simply have to
+> wait until we are done, and only after that remove the ports.
 > 
-> does this assume you are called for the original interface first?
+> > > +	mutex_lock(&usb_port_peer_mutex);
+> > > +
+> > > +	for (i = 0; i < hdev->maxchild; i++) {
+> > > +		ret = arg->fn(&hub->ports[i]->dev, arg->data);
+> > > +		if (ret)
+> > > +			break;
+> > > +	}
+> > > +
+> > > +	mutex_unlock(&usb_port_peer_mutex);
+> > 
+> > I have a feeling that it would be better to take and release this mutex 
+> > in usb_for_each_port (or its caller), so that it is held over the whole 
+> > loop.
+> 
+> I disagree. The lock is for the ports, not the hubs. We should take
+> the lock when we are going through the ports of a hub, but release it
+> between the hubs. Otherwise we will be only keeping things on hold for
+> a long period of time for no good reason (I for example have to
+> evaluate the _PLD of every single port which takes a lot of time). We
+> don't need to prevent other things from happening to the hubs at the
+> same time.
 
-No, I handle either interface being unbound first (e.g. see
-release_sibling()).
+All right, you convinced me.
 
-> I am afraid that is an assumption you cannot make. In fact, if somebody
-> is doing odd things with sysfs you cannot even assume both will see a
-> disconnect()
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Right, but disconnect() will still be called also for the sibling
-interface as part of release_sibling() above.
-
-Johan
+Alan Stern
