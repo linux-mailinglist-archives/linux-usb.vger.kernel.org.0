@@ -2,140 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D5C34F21B
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 22:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D863734F290
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 22:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbhC3U02 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Mar 2021 16:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbhC3U0M (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Mar 2021 16:26:12 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDBDC061574
-        for <linux-usb@vger.kernel.org>; Tue, 30 Mar 2021 13:26:12 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id u9so26706394ejj.7
-        for <linux-usb@vger.kernel.org>; Tue, 30 Mar 2021 13:26:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=xS7/7ZQdyrLKvxLKppBZmy7OhXhB13Qpvah0Cs+pCn0=;
-        b=DZVJjT+p52Xo+0+h0JprqLTiUMq6xtUtmxwm1DMx2T3FodNsZ8Bf/DXPLvjb5tp0ib
-         wIrVmpFCPmEYSYnMU9OxoQFFrFIWPGHpJWOr2DlOO+H6pMJAXuV0cQHAwTAoGsGujmN4
-         M96vj71lFeqcmPXsCEn15fSXmm7QTuWbBgkDsr+UxO8yYnBCwmg05dAQj+lfOrRSud84
-         dSazpFIdFfv0uGkdg5NUpMD2Wl/QKNAg6puU4RxfzA60hopx/n1wvCpkR/6KHiFShGUU
-         ec86lNNfppbE9ZnLplKWda0wO/45Up9+KIi3ISpAnwa7v/4mql/24VdrTsTOYW+0QZ4o
-         MZKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=xS7/7ZQdyrLKvxLKppBZmy7OhXhB13Qpvah0Cs+pCn0=;
-        b=BL6fD0x8t/fe3mWNQqgop+RqZwrNNhv1/PCi5F5gYkqwXUQtPra2/eECxblIVONn4T
-         iZcryRaDR1GSPyCrE+O63xn55vJ0K+XwqX4LbyqDvnNbA84DXW33zBOxvvB0EkM7u5D0
-         08TyU1nTmkgmz/XIFPuaEHRcjb7LBkaKzTxK63oXfKWW6iwYPNUcJSir+h5I/KufjkX9
-         vPbWiVZYcPrOs4rVv3brldIXLKz5NqgIVvJVviHR9u6TxzB9D1BKrbhyOBqtTC+bLN5B
-         XGCaoYtW3Si9ik/6sj2rI2VgFMtVzGlcJiv8WkNEbZ2EHa7BR7b1B0O+lTzY4z5WZLvP
-         65jw==
-X-Gm-Message-State: AOAM530cvaGRpp9ItJBOvViXnb+2oN9+uE+KzpRJ2cMar0cfLcQk+goU
-        0xPye4cG/NckgPofdoafeSQ3pASs9aRD2Q==
-X-Google-Smtp-Source: ABdhPJypIEHhpSc5w2bzOpP0gxFsEpafgFcsngn5Hp0utd/gmD43/Afk1gtTU57jSqhOj43O0nhIjw==
-X-Received: by 2002:a17:906:3388:: with SMTP id v8mr35644913eja.278.1617135970867;
-        Tue, 30 Mar 2021 13:26:10 -0700 (PDT)
-Received: from ?IPv6:2001:981:6fec:1:d92a:1507:d2ab:1417? ([2001:981:6fec:1:d92a:1507:d2ab:1417])
-        by smtp.gmail.com with ESMTPSA id c17sm83980edw.32.2021.03.30.13.26.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Mar 2021 13:26:10 -0700 (PDT)
-Subject: Re: USB network gadget / DWC3 issue
-To:     Felipe Balbi <balbi@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        USB <linux-usb@vger.kernel.org>
-References: <CAHp75VeERhaPGAZc0HVs4fcDKXs+THc=_LFq_iEhWAR8vvURjw@mail.gmail.com>
- <87pmzgk44r.fsf@kernel.org>
-From:   Ferry Toth <fntoth@gmail.com>
-Message-ID: <b4763ebe-c0ff-2d24-5385-1a1587603280@gmail.com>
-Date:   Tue, 30 Mar 2021 22:26:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S232329AbhC3UzR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Mar 2021 16:55:17 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:40359 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232394AbhC3Uyy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Mar 2021 16:54:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1617137694; x=1648673694;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WDeyWZ+/Bo0B6egkKV7o1Q2mWeGTUV4+RWIdJ6r1dLA=;
+  b=T2iy1pEzToXjSQ0zMAZs9lRWjy0fVypOeEF6US8XN/mRmxDj4wdCfnDs
+   6cFxtPH9Gg8rac5nqWs7WoXgUZneFqX9bE3Wu5UARL/ZcBfFuOXcao6oC
+   mMoWGel0jvlZqaKu4Gj73avPdzDWfe8R40klxDRq9entkv0CQSdBHJ+v5
+   hNxI3Hyy17+UX66XbIt3HPVCFUUXrCIeI4P5lguTpHXCQuMadFBnHWmol
+   RKMIT4npLLKcRt5Q5DxhMq3yJ5FFVubEB/WWgQmscLZslI0jPw/YxAW1Q
+   axaOvx19m5Vj0MRl1j0L7oCGI/LnziJPdpWjkcVxHpDQH5bw+/OZ78WIt
+   A==;
+IronPort-SDR: ypNLkrgT2JTu/IBzsBFFkMdwgCybxrjMyyAV4nfPua5ujpGX/zMc9ZEqzP0rtpJJABKvvqplN9
+ DK9NwZNfcar4hhyQpcWWqkWuHMHyU/XmZDvRwVSuvQ7jfKQi1Mjoe7fGJeMUYqfqiNRbvEZXvk
+ EqvfsX8Q8dlWLa8/v+ORt6usUxrWZWV+uW5/KdDeNPQq8Fu0UbTPB0xNqiw7mgnWwg+mL6yJqQ
+ PimcXxMBVUDZfWX3TKyMZB2PAJn3MM/qt2HaON+3HareYzAenII+Nl55TkS/xreAwPaBL/ufWZ
+ Y/I=
+X-IronPort-AV: E=Sophos;i="5.81,291,1610434800"; 
+   d="scan'208";a="111925320"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Mar 2021 13:54:53 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 30 Mar 2021 13:54:52 -0700
+Received: from cristi-P53.amer.actel.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Tue, 30 Mar 2021 13:54:50 -0700
+From:   <cristian.birsan@microchip.com>
+To:     <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
+        <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        Cristian Birsan <cristian.birsan@microchip.com>
+Subject: [RFC PATCH v2 0/2] usb: typec: Add driver for Microchip sama7g5 tcpc
+Date:   Tue, 30 Mar 2021 23:54:40 +0300
+Message-ID: <20210330205442.981649-1-cristian.birsan@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <87pmzgk44r.fsf@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+From: Cristian Birsan <cristian.birsan@microchip.com>
 
-Op 30-03-2021 om 18:17 schreef Felipe Balbi:
-> Hi,
->
-> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
->> Hi!
->>
->> I have a platform with DWC3 in Dual Role mode. Currently I'm
->> experimenting on v5.12-rc5 with a few patches (mostly configuration)
->> applied [1]. I'm using Debian Unstable on the host machine and
->> BuildRoot with the above mentioned kernel on the target.
->>
->> **So, scenario 0:
->> 1. Run iperf3 -s on target
->> 2. Run iperf3 -c ... -t 0 on the host
->> 3.  0.00-10.36  sec   237 MBytes   192 Mbits/sec                  receiver
->>
->> **Scenario 1:
->> 1. Now, detach USB cable, wait for several seconds, attach it back,
->> repeat above:
->> 0.00-9.94   sec   209 MBytes   176 Mbits/sec                  receiver
->>
->> Note the bandwidth drop (177 vs. 192).
->>
->> (Repeating scenario 1 will give now the same result)
->>
->> **Scenario 2.
->> 1. Detach USB cable, attach a device, for example USB stick,
->> 2. See it being enumerated and detach it.
->> 3. Attach cable from host
->> 4 .   0.00-19.36  sec   315 MBytes   136 Mbits/sec                  receiver
->>
->> Note even more bandwidth drop!
->>
->> (Repeating scenario 1 keeps the same lower bandwidth)
->>
->> NOTE, sometimes on this scenario after several seconds the target
->> simply reboots (w/o any logs [from kernel] printed)!
->>
->> So, any pointers on how to debug and what can be a smoking gun here?
->>
->> Ferry reported this in [2]. There are different kernel versions and
->> tools to establish the connection (like connman vs. none in my case).
->>
->> [1]: https://github.com/andy-shev/linux/
->> [2]: https://github.com/andy-shev/linux/issues/31
-> dwc3 tracepoints should give some initial hints. Look at packets sizes
-> and period of transmission. From dwc3 side, I can't think of anything we
-> would do to throttle the transmission, but tracepoints should tell a
-> clearer story.
->
-My testing (but yes, with difference kernel and network managed by 
-connman) shows:
+This patch set adds initial driver support for Microchip USB Type-C Port
+Controller (TCPC) embedded in sama7g5 SoC.
 
-1) on cold boot eem network gadget works fine
+The controller does not implement power delivery and the driver uses dummy
+functions to register the port with TCPM. The current silicon version is
+not able to trigger interrupts so the driver will poll for changes on
+CC1/CC2 lines.
 
-2) after unplug or warm reboot (which is also an unplug) it's broken, 
-speed is lost (|12.0 Mbits/sec from 200Mb/s normally)|, packets lost, no 
-configuration received from dhcp, occasional reboot, only way to fix is 
-cold boot
+Support for sink is implemented and tested with an USB device. The plan is
+to extend the driver and add source support.
 
-3) if before unplug `connmanctl disable gadget`, on replugging and 
-enabling it works fine
+Changes in v2:
+- fix DT bindings yamllint warnings/errors
+- fix compilation error reported by: kernel test robot <lkp@intel.com>
 
-My theory is that some HW register is disturbed on a surprise unplug, 
-but not reset on plug or warm boot. But on cold boot is cleared. Maybe 
-that can help to narrow down tracepoints?
+Cristian Birsan (2):
+  dt-bindings: usb: Add DT bindings for Microchip sama7g5 tcpc
+  usb: typec: sama7g5_tcpc: add driver for Microchip sama7g5 tcpc
+
+ .../bindings/usb/microchip,sama7g5-tcpc.yaml  |  90 +++
+ drivers/usb/typec/tcpm/Kconfig                |   8 +
+ drivers/usb/typec/tcpm/Makefile               |   1 +
+ drivers/usb/typec/tcpm/sama7g5_tcpc.c         | 610 ++++++++++++++++++
+ 4 files changed, 709 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/microchip,sama7g5-tcpc.yaml
+ create mode 100644 drivers/usb/typec/tcpm/sama7g5_tcpc.c
+
+-- 
+2.25.1
 
