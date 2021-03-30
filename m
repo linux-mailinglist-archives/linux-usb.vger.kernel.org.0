@@ -2,62 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF08434E829
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 15:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 474DB34E87B
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 15:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231966AbhC3M7w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Mar 2021 08:59:52 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:14637 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbhC3M7X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Mar 2021 08:59:23 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F8qFx03Vfzmbqt;
-        Tue, 30 Mar 2021 20:56:37 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by DGGEMS404-HUB.china.huawei.com
- (10.3.19.204) with Microsoft SMTP Server id 14.3.498.0; Tue, 30 Mar 2021
- 20:59:12 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <balbi@kernel.org>
-Subject: [PATCH -next] USB: gadget: udc: fix wrong pointer passed to IS_ERR() and PTR_ERR()
-Date:   Tue, 30 Mar 2021 21:01:59 +0800
-Message-ID: <20210330130159.1051979-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-CFilter-Loop: Reflected
+        id S232174AbhC3NJA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Mar 2021 09:09:00 -0400
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:45867 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232148AbhC3NIw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Mar 2021 09:08:52 -0400
+Received: by mail-ot1-f44.google.com with SMTP id 91-20020a9d08640000b0290237d9c40382so15477042oty.12;
+        Tue, 30 Mar 2021 06:08:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=OHtm7+pyHj4oSPzbkg2pVPKvuBPEByRYF/PMRPFvQcY=;
+        b=p0iUXdBjx5CWWBF0ivRmeuVsoGRHEJKUwilJyF/wF+RBw/SVZ+yLfXueUFvK/cjKG5
+         /54zKhsb1gGPh/mD94ZSn1Ja0egyYNl+8jOucP3Rg6kMFgkg4PmnsO0Nie/4kYqBpZ0t
+         q0MJlvxpWrMK0FaKlXwQ5vG62jlQ7dTe0ugI7izMIFIAk3aaoVXFhfD6N/aDDm9skDjw
+         IBodqywKLxoEzi3pS978uC5FZ7eL3HCYuDKkQpCa+BLGuWbScwgHH0nPVOtTRiD5q3Vy
+         ILlWtH3HdKmEvJh6ra0Rayr+t2nckDYftabopGCUb3eCUmM7jdH+dYqTh4+AH5CUinnw
+         CizQ==
+X-Gm-Message-State: AOAM532+fJS79qJ46e55rtb9l6Xhd1OTLXCssRKuSQMMdULV/jVhwA1x
+        zRnmWgThwb2TAgoKCcfyIA==
+X-Google-Smtp-Source: ABdhPJyqrRcbqlskI2V3Xoi3zuER0rxOBkXIZwyBVfvjsdaD5kz6eFMj05kXN75bGJwSLt7W6ZNRGw==
+X-Received: by 2002:a05:6830:1c26:: with SMTP id f6mr27152881ote.53.1617109732172;
+        Tue, 30 Mar 2021 06:08:52 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id u23sm4333697oof.17.2021.03.30.06.08.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Mar 2021 06:08:51 -0700 (PDT)
+Received: (nullmailer pid 173735 invoked by uid 1000);
+        Tue, 30 Mar 2021 13:08:43 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     cristian.birsan@microchip.com
+Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        heikki.krogerus@linux.intel.com, linux-kernel@vger.kernel.org
+In-Reply-To: <20210329213357.431083-2-cristian.birsan@microchip.com>
+References: <20210329213357.431083-1-cristian.birsan@microchip.com> <20210329213357.431083-2-cristian.birsan@microchip.com>
+Subject: Re: [RFC PATCH 1/2] dt-bindings: usb: Add DT bindings for Microchip sama7g5 tcpc
+Date:   Tue, 30 Mar 2021 08:08:43 -0500
+Message-Id: <1617109723.715948.173734.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-IS_ERR() and PTR_ERR() use wrong pointer, it should be
-udc->virt_addr, fix it.
+On Tue, 30 Mar 2021 00:33:56 +0300, cristian.birsan@microchip.com wrote:
+> From: Cristian Birsan <cristian.birsan@microchip.com>
+> 
+> This patch adds DT bindings for the new Microchip USB Type-C Port
+> Controller (TCPC) embedded in sama7g5 SoC.
+> 
+> Signed-off-by: Cristian Birsan <cristian.birsan@microchip.com>
+> ---
+>  .../bindings/usb/microchip,sama7g5-tcpc.yaml  | 80 +++++++++++++++++++
+>  1 file changed, 80 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/microchip,sama7g5-tcpc.yaml
+> 
 
-Fixes: 1b9f35adb0ff ("usb: gadget: udc: Add Synopsys UDC Platform driver")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/usb/gadget/udc/snps_udc_plat.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+My bot found errors running 'make dt_binding_check' on your patch:
 
-diff --git a/drivers/usb/gadget/udc/snps_udc_plat.c b/drivers/usb/gadget/udc/snps_udc_plat.c
-index 32f1d3e90c26..99805d60a7ab 100644
---- a/drivers/usb/gadget/udc/snps_udc_plat.c
-+++ b/drivers/usb/gadget/udc/snps_udc_plat.c
-@@ -114,8 +114,8 @@ static int udc_plat_probe(struct platform_device *pdev)
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	udc->virt_addr = devm_ioremap_resource(dev, res);
--	if (IS_ERR(udc->regs))
--		return PTR_ERR(udc->regs);
-+	if (IS_ERR(udc->virt_addr))
-+		return PTR_ERR(udc->virt_addr);
- 
- 	/* udc csr registers base */
- 	udc->csr = udc->virt_addr + UDC_CSR_ADDR;
--- 
-2.25.1
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/usb/microchip,sama7g5-tcpc.example.dt.yaml:0:0: /example-0/tcpcb@e0844000: failed to match any schema with compatible: ['microchip,sama7g5-typec']
+
+See https://patchwork.ozlabs.org/patch/1459823
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
