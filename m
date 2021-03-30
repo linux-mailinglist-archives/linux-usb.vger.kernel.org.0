@@ -2,99 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5614534E366
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 10:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A92E34E383
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 10:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbhC3Imv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Mar 2021 04:42:51 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:10890 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231678AbhC3Imi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Mar 2021 04:42:38 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1617093758; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=6ZBUFntkKzGQ6dG5LrEqdA+1MgShIPk4qTagF0K+hzk=; b=uTxldaFsiMsGWKv0NjZ9DlCUmz8/+a3WSwfHZiiC8FqNVK0u186V+wZtO91CVcFXjcZyCymC
- nkMT7a9QEmWBQYk6REUfrQC92wnEcJuhw7sycQXwebXT1z/GqNRy3FsjbMLDUQumbYwBNQqm
- 8MFfvCKw5NECNf8XX9zV0JaaPGo=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 6062e465c39407c327260d26 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 30 Mar 2021 08:42:13
- GMT
-Sender: sanm=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 566FFC433CA; Tue, 30 Mar 2021 08:42:12 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [10.252.226.205] (unknown [202.46.23.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sanm)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id EDD28C433C6;
-        Tue, 30 Mar 2021 08:42:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org EDD28C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=sanm@codeaurora.org
-Subject: Re: [PATCH v1] usb: dwc3: core: Add shutdown callback for dwc3
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>
-References: <1616527652-7937-1-git-send-email-sanm@codeaurora.org>
- <YF3jfshT3OSolcws@kroah.com>
-From:   Sandeep Maheswaram <sanm@codeaurora.org>
-Message-ID: <e1afc071-57a6-5d7f-b467-92b618419b76@codeaurora.org>
-Date:   Tue, 30 Mar 2021 14:12:04 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S231561AbhC3Ivg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Mar 2021 04:51:36 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:37071 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231569AbhC3IvS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Mar 2021 04:51:18 -0400
+Received: from mail-wm1-f70.google.com ([209.85.128.70])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lRA5l-0004u1-6U
+        for linux-usb@vger.kernel.org; Tue, 30 Mar 2021 08:51:17 +0000
+Received: by mail-wm1-f70.google.com with SMTP id k132so420149wma.1
+        for <linux-usb@vger.kernel.org>; Tue, 30 Mar 2021 01:51:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=djVlT/RAmq6AwtihToV3c2qx0PjKLnFe2UuBJ80EzkM=;
+        b=bWcYEfgKYhtV3bNNMZdvClmnCxCk9CMHzzUawlDourAbJF+aIyIO2y/0IU9e9Y8/bj
+         8XV0k+24nKza07r7qXjHB0oFb8i2rc0y0BW8noKXJH6+EtpYhgwv9m0usj6uAvmbFjLj
+         Qr68NML0/W2Awno6dKvW1ZKqfaKAKVMlXREaBhW0g5mx7ALXODoITdKRMmaSN/X4cb/q
+         fBDzKPzemPtde7pV/xyFS2SnM6IiXOjGUvGYa4vZXOL1HfIM+Dy6AL60KJK15/qrcfJm
+         I4bWuMIC8Mk9QJp0NHglFDmSdDVUUAc4YPT64ATPiBcS+17aaXxgygkmrMK0wzIMlaO/
+         uX4g==
+X-Gm-Message-State: AOAM530e8MhhQpBM1r9UQbelwqWTt155eSTmIMdLk8vBkwRhowgIBhQv
+        +WkMrJ0Z3ovKcy/tw2FRN/k8W98cBqSdjboM1fPOTNqAPz4I7ffGENYTEWNSljSK5iH4yXLXWGJ
+        INGWkzLkF3uXFZHpsOh6g54Lp4VYhgvLpG5pVrQ==
+X-Received: by 2002:a1c:7515:: with SMTP id o21mr2898599wmc.90.1617094276515;
+        Tue, 30 Mar 2021 01:51:16 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyMM+kQaqpCWb0b7OW+orw77+hmaUElyaV7pasIVj3HsWg6jELlm0lBduYBq4l8/WLCYe23Ww==
+X-Received: by 2002:a1c:7515:: with SMTP id o21mr2898587wmc.90.1617094276417;
+        Tue, 30 Mar 2021 01:51:16 -0700 (PDT)
+Received: from [192.168.1.116] (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.gmail.com with ESMTPSA id l6sm34969120wrn.3.2021.03.30.01.51.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Mar 2021 01:51:16 -0700 (PDT)
+Subject: Re: [PATCH] usb: dwc3: exynos: fix incorrect kernel-doc comment
+ syntax
+To:     Aditya Srivastava <yashsri421@gmail.com>, balbi@kernel.org
+Cc:     lukas.bulwahn@gmail.com, gregkh@linuxfoundation.org,
+        rdunlap@infradead.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210329140318.27742-1-yashsri421@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <b341b0a5-4f78-d986-d038-8e067bf5d34e@canonical.com>
+Date:   Tue, 30 Mar 2021 10:51:15 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <YF3jfshT3OSolcws@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20210329140318.27742-1-yashsri421@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 29/03/2021 16:03, Aditya Srivastava wrote:
+> The opening comment mark '/**' is used for highlighting the beginning of
+> kernel-doc comments.
+> The header for drivers/usb/dwc3/dwc3-exynos.c follows this syntax, but the
+> content inside does not comply with kernel-doc.
+> 
+> This line was probably not meant for kernel-doc parsing, but is parsed
+> due to the presence of kernel-doc like comment syntax(i.e, '/**'), which
+> causes unexpected warning from kernel-doc:
+> "warning: expecting prototype for dwc3(). Prototype was for DWC3_EXYNOS_MAX_CLOCKS() instead"
+> 
+> Provide a simple fix by replacing this occurrence with general comment
+> format, i.e. '/*', to prevent kernel-doc from parsing it.
 
-On 3/26/2021 7:07 PM, Greg Kroah-Hartman wrote:
-> On Wed, Mar 24, 2021 at 12:57:32AM +0530, Sandeep Maheswaram wrote:
->> This patch adds a shutdown callback to USB DWC core driver to ensure that
->> it is properly shutdown in reboot/shutdown path. This is required
->> where SMMU address translation is enabled like on SC7180
->> SoC and few others. If the hardware is still accessing memory after
->> SMMU translation is disabled as part of SMMU shutdown callback in
->> system reboot or shutdown path, then IOVAs(I/O virtual address)
->> which it was using will go on the bus as the physical addresses which
->> might result in unknown crashes (NoC/interconnect errors).
->>
->> Previously this was added in dwc3 qcom glue driver.
->> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=382449
->> But observed kernel panic as glue driver shutdown getting called after
->> iommu shutdown. As we are adding iommu nodes in dwc core node
->> in device tree adding shutdown callback in core driver seems correct.
-> So shouldn't you also remove this from the qcom glue driver at the same
-> time?  Please submit both as a patch series.
->
-> thanks,
->
-> greg k-h
+One sentence with error log would be enough for such trivial change. Anyway:
 
-Hi Greg,
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-The qcom glue driver patch is not merged yet. I have just mentioned for it for reference.
-
-Regards
-Sandeep
-
-
+Best regards,
+Krzysztof
