@@ -2,117 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B534A34ECDF
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 17:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E499734ED4F
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 18:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbhC3Ptg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Mar 2021 11:49:36 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:58853 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230243AbhC3PtW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Mar 2021 11:49:22 -0400
-Received: (qmail 980943 invoked by uid 1000); 30 Mar 2021 11:49:21 -0400
-Date:   Tue, 30 Mar 2021 11:49:21 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/6] usb: Iterator for ports
-Message-ID: <20210330154921.GC980260@rowland.harvard.edu>
-References: <20210329084426.78138-1-heikki.krogerus@linux.intel.com>
- <20210329084426.78138-6-heikki.krogerus@linux.intel.com>
- <20210329184946.GA944482@rowland.harvard.edu>
- <YGLqV4nB/lPS1AOF@kuha.fi.intel.com>
+        id S231627AbhC3QRf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Mar 2021 12:17:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52176 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231952AbhC3QR2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Mar 2021 12:17:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DAC14619C5;
+        Tue, 30 Mar 2021 16:17:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617121048;
+        bh=5BJd+4MeSZ5QSIWOQOtGLkYc3jqEpTRsXBBy4gIgKw4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=nJSAjqszx3Nplnuqay436n8SxICpF6FA6BT0rFZraK7xdW43I8k3FImVvT/qAH26M
+         lfaZTwt/f1+e8ewUFSYYkWNJGr7Hwkiaf9eajjRwNi+RXHfeoD4TLUpduBo8o8nFI4
+         h7++qeo/OHMRDRQ0AbwjE7T0FoY0znLrVhmB/vLjhWSQ6hUrMZ1qZqHGQ+cDI4v2Vs
+         kOEh1VzHyeQoKv9NZj+KfTphLztvCuxUPP5nJuMhCq2lr95fdXwEWFGac4FgPaUApD
+         NsWSPgQp04wbQgLOm82diMTlyJnEEq/FzTVhGZN3QzT3Rwlb2adSDjD30K5dskkv/U
+         9qNt6ySh5wlvA==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        USB <linux-usb@vger.kernel.org>, Ferry Toth <fntoth@gmail.com>
+Subject: Re: USB network gadget / DWC3 issue
+In-Reply-To: <CAHp75VeERhaPGAZc0HVs4fcDKXs+THc=_LFq_iEhWAR8vvURjw@mail.gmail.com>
+References: <CAHp75VeERhaPGAZc0HVs4fcDKXs+THc=_LFq_iEhWAR8vvURjw@mail.gmail.com>
+Date:   Tue, 30 Mar 2021 19:17:24 +0300
+Message-ID: <87pmzgk44r.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YGLqV4nB/lPS1AOF@kuha.fi.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 30, 2021 at 12:07:35PM +0300, Heikki Krogerus wrote:
-> On Mon, Mar 29, 2021 at 02:49:46PM -0400, Alan Stern wrote:
-> > On Mon, Mar 29, 2021 at 11:44:25AM +0300, Heikki Krogerus wrote:
-> > > Introducing usb_for_each_port(). It works the same way as
-> > > usb_for_each_dev(), but instead of going through every USB
-> > > device in the system, it walks through the USB ports in the
-> > > system.
-> > > 
-> > > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > ---
-> > >  drivers/usb/core/usb.c | 46 ++++++++++++++++++++++++++++++++++++++++++
-> > >  include/linux/usb.h    |  1 +
-> > >  2 files changed, 47 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-> > > index 2ce3667ec6fae..62368c4ed37af 100644
-> > > --- a/drivers/usb/core/usb.c
-> > > +++ b/drivers/usb/core/usb.c
-> > > @@ -398,6 +398,52 @@ int usb_for_each_dev(void *data, int (*fn)(struct usb_device *, void *))
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(usb_for_each_dev);
-> > >  
-> > > +struct each_hub_arg {
-> > > +	void *data;
-> > > +	int (*fn)(struct device *, void *);
-> > > +};
-> > > +
-> > > +static int __each_hub(struct usb_device *hdev, void *data)
-> > > +{
-> > > +	struct each_hub_arg *arg = (struct each_hub_arg *)data;
-> > > +	struct usb_hub *hub;
-> > > +	int ret = 0;
-> > > +	int i;
-> > > +
-> > > +	hub = usb_hub_to_struct_hub(hdev);
-> > > +	if (!hub)
-> > > +		return 0;
-> > 
-> > What happens if the hub is removed exactly now?  Although hdev is 
-> > reference-counted (and the loop iterator does take a reference to it), 
-> > usb_hub_to_struct_hub doesn't take a reference to hub.  And hub->ports 
-> > isn't refcounted at all.
-> 
-> If the hub is removed right now, and if hub_disconnect() also manages
-> to remove the ports before we have time to take the lock below, then
-> hdev->maxchild will be 0 by the time we can take the lock. In that
-> case nothing happens here.
 
-Okay, good.
+Hi,
 
-> If on the other hand we manage to acquire the usb_port_peer_mutex
-> before hub_disconnect(), then hub_disconnect() will simply have to
-> wait until we are done, and only after that remove the ports.
-> 
-> > > +	mutex_lock(&usb_port_peer_mutex);
-> > > +
-> > > +	for (i = 0; i < hdev->maxchild; i++) {
-> > > +		ret = arg->fn(&hub->ports[i]->dev, arg->data);
-> > > +		if (ret)
-> > > +			break;
-> > > +	}
-> > > +
-> > > +	mutex_unlock(&usb_port_peer_mutex);
-> > 
-> > I have a feeling that it would be better to take and release this mutex 
-> > in usb_for_each_port (or its caller), so that it is held over the whole 
-> > loop.
-> 
-> I disagree. The lock is for the ports, not the hubs. We should take
-> the lock when we are going through the ports of a hub, but release it
-> between the hubs. Otherwise we will be only keeping things on hold for
-> a long period of time for no good reason (I for example have to
-> evaluate the _PLD of every single port which takes a lot of time). We
-> don't need to prevent other things from happening to the hubs at the
-> same time.
+Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+> Hi!
+>
+> I have a platform with DWC3 in Dual Role mode. Currently I'm
+> experimenting on v5.12-rc5 with a few patches (mostly configuration)
+> applied [1]. I'm using Debian Unstable on the host machine and
+> BuildRoot with the above mentioned kernel on the target.
+>
+> **So, scenario 0:
+> 1. Run iperf3 -s on target
+> 2. Run iperf3 -c ... -t 0 on the host
+> 3.  0.00-10.36  sec   237 MBytes   192 Mbits/sec                  receiver
+>
+> **Scenario 1:
+> 1. Now, detach USB cable, wait for several seconds, attach it back,
+> repeat above:
+> 0.00-9.94   sec   209 MBytes   176 Mbits/sec                  receiver
+>
+> Note the bandwidth drop (177 vs. 192).
+>
+> (Repeating scenario 1 will give now the same result)
+>
+> **Scenario 2.
+> 1. Detach USB cable, attach a device, for example USB stick,
+> 2. See it being enumerated and detach it.
+> 3. Attach cable from host
+> 4 .   0.00-19.36  sec   315 MBytes   136 Mbits/sec                  receiver
+>
+> Note even more bandwidth drop!
+>
+> (Repeating scenario 1 keeps the same lower bandwidth)
+>
+> NOTE, sometimes on this scenario after several seconds the target
+> simply reboots (w/o any logs [from kernel] printed)!
+>
+> So, any pointers on how to debug and what can be a smoking gun here?
+>
+> Ferry reported this in [2]. There are different kernel versions and
+> tools to establish the connection (like connman vs. none in my case).
+>
+> [1]: https://github.com/andy-shev/linux/
+> [2]: https://github.com/andy-shev/linux/issues/31
 
-All right, you convinced me.
+dwc3 tracepoints should give some initial hints. Look at packets sizes
+and period of transmission. From dwc3 side, I can't think of anything we
+would do to throttle the transmission, but tracepoints should tell a
+clearer story.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
-Alan Stern
+-- 
+balbi
