@@ -2,75 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E4434F3E0
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Mar 2021 00:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0A834F3E9
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Mar 2021 00:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232533AbhC3V75 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Mar 2021 17:59:57 -0400
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:38717 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232821AbhC3V7k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Mar 2021 17:59:40 -0400
-Received: by mail-ot1-f49.google.com with SMTP id w21-20020a9d63950000b02901ce7b8c45b4so17019344otk.5;
-        Tue, 30 Mar 2021 14:59:39 -0700 (PDT)
+        id S232827AbhC3WDJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Mar 2021 18:03:09 -0400
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:38509 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232307AbhC3WDE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Mar 2021 18:03:04 -0400
+Received: by mail-ot1-f45.google.com with SMTP id w21-20020a9d63950000b02901ce7b8c45b4so17028654otk.5;
+        Tue, 30 Mar 2021 15:03:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Ct7bQjqlmuzUZdOiA5dbz3QfeJ0p9yFzsZbuoy4bHrU=;
-        b=OaSndu1DGZzBBdg/O9TnauELRH+0sk9j0oBcplULXB4Q76WVI6dPDz9uoGd6IfYgwN
-         4DA1hgkZHkVtlV4V42RTDe26EBmM9zbY4PQf1TMs/JFet9+HxC+P4F4PirpEqSMXV25m
-         S4+JGgsHW5tkFyZoO+ae1aKu2MXHczod29vAElrYmz8qKeKwumYSn1ypBk7VmQMT2xCj
-         Fvfe3TLxPRbfJCuJ2gdiqK5aO0IpT/Pu9ZFXithRXkpCYN27POdM1vIKPNoFeniFdrEV
-         UgGKRlhruWuS+rg1Zsxw5e3RHCpPprpDnoFP6KZuIR1HUkM77NQTy7nurCmvcakZQfkM
-         JQeg==
-X-Gm-Message-State: AOAM530KZMJcl4ghNb+kAKl3e6RPoYRhezO5uqklwsRZTEAEUBK2sqVt
-        nq9vP7kzMORpHS8bCLrGhA==
-X-Google-Smtp-Source: ABdhPJxtjGfrnIV6FqaxZx99Gyr7rWag7GQjzOLgtAbpPj6cRxrK/b0wK/km+25shVcpcrVsP8FQ3A==
-X-Received: by 2002:a9d:550b:: with SMTP id l11mr46907oth.218.1617141579649;
-        Tue, 30 Mar 2021 14:59:39 -0700 (PDT)
+        bh=yJpdze/YBc9sInrzv3wWDWKmQfQKODZsyxGBfKEmBhg=;
+        b=OLiExuCUToCOn7wTnvEpL7dE4ZCCaWIErQXCx/Ps6YzHYNTamvsutibkZzU89FgOSY
+         C97Q1BAZkESuZLt+D5yPqvCiXjF5V5CSr7hSQeMIOrd/yPFA4ARCcQWOSDHMn8YX4aCN
+         Qnu0T/Xcww5Ag6+z6K0np/LpFeLmK88sXWUsDfzbpPNdHgStAsdj6baml03AVxSjrtz+
+         KfxK3YDpAVXR5X72toIMaekrgYQk5vmJ7vxBJIGfBIe/oqzDWioS4CRQQatdOHHvTGeQ
+         ER1Uifoo1SPu5Ob0dGTyYZ5FijAcTxO0uQ4mDwN21ERDb6t/VVsZzrxHp31iXH0yQJjb
+         xlew==
+X-Gm-Message-State: AOAM530NpuY4h5AhZZEsHnjVsSxNnYaeMzESsNhOzK5AC4eCCQEVhfpH
+        uvfM3/EUQojgl8B7IGpo6w==
+X-Google-Smtp-Source: ABdhPJyG0w+WJQJfpVr6Rdgy+U2B7ANI7OefcZrkENG6O0W6w8R85knK4/AD9sg4ymn6in2J//sG8g==
+X-Received: by 2002:a9d:3a4a:: with SMTP id j68mr72619otc.4.1617141784250;
+        Tue, 30 Mar 2021 15:03:04 -0700 (PDT)
 Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id x18sm20207otr.73.2021.03.30.14.59.38
+        by smtp.gmail.com with ESMTPSA id i25sm31395otf.37.2021.03.30.15.03.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Mar 2021 14:59:39 -0700 (PDT)
-Received: (nullmailer pid 788808 invoked by uid 1000);
-        Tue, 30 Mar 2021 21:59:38 -0000
-Date:   Tue, 30 Mar 2021 16:59:38 -0500
+        Tue, 30 Mar 2021 15:03:03 -0700 (PDT)
+Received: (nullmailer pid 793329 invoked by uid 1000);
+        Tue, 30 Mar 2021 22:03:02 -0000
+Date:   Tue, 30 Mar 2021 17:03:02 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Fabio Estevam <festevam@gmail.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: Re: [PATCH v3 2/4] dt-bindings: usb: mtk-xhci: remove redefinitions
- of usb3-lpm-capable
-Message-ID: <20210330215938.GA788756@robh.at.kernel.org>
-References: <1617002411-9015-1-git-send-email-chunfeng.yun@mediatek.com>
- <1617002411-9015-2-git-send-email-chunfeng.yun@mediatek.com>
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3-imx8mp: Use the correct name
+ for child node "snps, dwc3"
+Message-ID: <20210330220302.GA793280@robh.at.kernel.org>
+References: <20210329072714.2135-1-thunder.leizhen@huawei.com>
+ <20210329072714.2135-2-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1617002411-9015-2-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <20210329072714.2135-2-thunder.leizhen@huawei.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 29 Mar 2021 15:20:09 +0800, Chunfeng Yun wrote:
-> The property usb3-lpm-capable is defined in usb-xhci.yaml which is
-> already referenced in this file, so no need 'description' and 'type'
-> anymore.
+On Mon, 29 Mar 2021 15:27:13 +0800, Zhen Lei wrote:
+> File snps,dwc3.yaml describes the schema of Synopsys DesignWare USB3
+> Controller, it directly or indirectly contains "$ref: usb.yaml". So the
+> node name of "snps,dwc3" must start with "usb". Otherwise, the following
+> warning will be displayed:
 > 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.example.dt.yaml: \
+> dwc3@38100000: $nodename:0: 'dwc3@38100000' does not match '^usb(@.*)?'
+>         From schema: Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> 
+> In addition, replace "type: object" with "$ref: snps,dwc3.yaml#". Ensure
+> that all properties of the child node comply with snps,dwc3.yaml.
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 > ---
-> v3: new patch
-> ---
->  Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
