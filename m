@@ -2,220 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 378A234F207
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 22:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D5C34F21B
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 22:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232118AbhC3URo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Mar 2021 16:17:44 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:50117 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbhC3UR1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Mar 2021 16:17:27 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1617135447; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=aWJsC1i+UKFWbYGcd9fzYV+DRXIrKcOkq5eXKkiAk0M=; b=OG1wEnDgzFaRG+df3KP2QzNiUZx/yI1Fr8VT7fPTDiNZxhS/OjM79tcTonq2cpFMVQV7aYn0
- fZVo5SQOu5iTVtm1RNjnNTmJGeO7SAY7tcogx/5nauNP0/gfN9UlnYGVnhLH1mShlbfeiY1j
- q7s3Im/xISOZ4lmHuLrIPMMV3Cc=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 60638743197975f05e04ea2c (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 30 Mar 2021 20:17:07
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 9C4C7C433C6; Tue, 30 Mar 2021 20:17:06 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.110.60.140] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 6DCACC433CA;
-        Tue, 30 Mar 2021 20:17:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 6DCACC433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v3 2/2] usb: dwc3: Fix DRD mode change sequence following
- programming guide
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        Yang Fei <fei.yang@intel.com>,
-        YongQin Liu <yongqin.liu@linaro.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <20210108015115.27920-1-john.stultz@linaro.org>
- <20210108015115.27920-2-john.stultz@linaro.org>
- <eb4b8540-a57c-53cc-a371-cf68178bec15@codeaurora.org>
- <e696b018-b310-5811-5c80-3c50dde297e7@synopsys.com>
- <b08386c0-503d-a333-46be-9df77122ec4e@codeaurora.org>
- <9af42bff-b083-18f0-1ea8-dca00af583af@synopsys.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <b402b040-f9f6-46b3-b7d5-da0ab85678b9@codeaurora.org>
-Date:   Tue, 30 Mar 2021 13:17:03 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S229734AbhC3U02 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Mar 2021 16:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229940AbhC3U0M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Mar 2021 16:26:12 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDBDC061574
+        for <linux-usb@vger.kernel.org>; Tue, 30 Mar 2021 13:26:12 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id u9so26706394ejj.7
+        for <linux-usb@vger.kernel.org>; Tue, 30 Mar 2021 13:26:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=xS7/7ZQdyrLKvxLKppBZmy7OhXhB13Qpvah0Cs+pCn0=;
+        b=DZVJjT+p52Xo+0+h0JprqLTiUMq6xtUtmxwm1DMx2T3FodNsZ8Bf/DXPLvjb5tp0ib
+         wIrVmpFCPmEYSYnMU9OxoQFFrFIWPGHpJWOr2DlOO+H6pMJAXuV0cQHAwTAoGsGujmN4
+         M96vj71lFeqcmPXsCEn15fSXmm7QTuWbBgkDsr+UxO8yYnBCwmg05dAQj+lfOrRSud84
+         dSazpFIdFfv0uGkdg5NUpMD2Wl/QKNAg6puU4RxfzA60hopx/n1wvCpkR/6KHiFShGUU
+         ec86lNNfppbE9ZnLplKWda0wO/45Up9+KIi3ISpAnwa7v/4mql/24VdrTsTOYW+0QZ4o
+         MZKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=xS7/7ZQdyrLKvxLKppBZmy7OhXhB13Qpvah0Cs+pCn0=;
+        b=BL6fD0x8t/fe3mWNQqgop+RqZwrNNhv1/PCi5F5gYkqwXUQtPra2/eECxblIVONn4T
+         iZcryRaDR1GSPyCrE+O63xn55vJ0K+XwqX4LbyqDvnNbA84DXW33zBOxvvB0EkM7u5D0
+         08TyU1nTmkgmz/XIFPuaEHRcjb7LBkaKzTxK63oXfKWW6iwYPNUcJSir+h5I/KufjkX9
+         vPbWiVZYcPrOs4rVv3brldIXLKz5NqgIVvJVviHR9u6TxzB9D1BKrbhyOBqtTC+bLN5B
+         XGCaoYtW3Si9ik/6sj2rI2VgFMtVzGlcJiv8WkNEbZ2EHa7BR7b1B0O+lTzY4z5WZLvP
+         65jw==
+X-Gm-Message-State: AOAM530cvaGRpp9ItJBOvViXnb+2oN9+uE+KzpRJ2cMar0cfLcQk+goU
+        0xPye4cG/NckgPofdoafeSQ3pASs9aRD2Q==
+X-Google-Smtp-Source: ABdhPJypIEHhpSc5w2bzOpP0gxFsEpafgFcsngn5Hp0utd/gmD43/Afk1gtTU57jSqhOj43O0nhIjw==
+X-Received: by 2002:a17:906:3388:: with SMTP id v8mr35644913eja.278.1617135970867;
+        Tue, 30 Mar 2021 13:26:10 -0700 (PDT)
+Received: from ?IPv6:2001:981:6fec:1:d92a:1507:d2ab:1417? ([2001:981:6fec:1:d92a:1507:d2ab:1417])
+        by smtp.gmail.com with ESMTPSA id c17sm83980edw.32.2021.03.30.13.26.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Mar 2021 13:26:10 -0700 (PDT)
+Subject: Re: USB network gadget / DWC3 issue
+To:     Felipe Balbi <balbi@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        USB <linux-usb@vger.kernel.org>
+References: <CAHp75VeERhaPGAZc0HVs4fcDKXs+THc=_LFq_iEhWAR8vvURjw@mail.gmail.com>
+ <87pmzgk44r.fsf@kernel.org>
+From:   Ferry Toth <fntoth@gmail.com>
+Message-ID: <b4763ebe-c0ff-2d24-5385-1a1587603280@gmail.com>
+Date:   Tue, 30 Mar 2021 22:26:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <9af42bff-b083-18f0-1ea8-dca00af583af@synopsys.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <87pmzgk44r.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
-
-On 3/29/2021 6:19 PM, Thinh Nguyen wrote:
-> Wesley Cheng wrote:
->>
->>
->> On 3/6/2021 3:39 PM, Thinh Nguyen wrote:
->>> Wesley Cheng wrote:
->>>>
->>>> On 1/7/2021 5:51 PM, John Stultz wrote:
->>>>> In reviewing the previous patch, Thinh Nguyen pointed out that
->>>>> the DRD mode change sequence should be like the following when
->>>>> switching from host -> device according to the programming guide
->>>>> (for all DRD IPs):
->>>>> 1. Reset controller with GCTL.CoreSoftReset
->>>>> 2. Set GCTL.PrtCapDir(device)
->>>>> 3. Soft reset with DCTL.CSftRst
->>>>> 4. Then follow up with the initializing registers sequence
->>>>>
->>>>> The current code does:
->>>>> a. Soft reset with DCTL.CSftRst on driver probe
->>>>> b. Reset controller with GCTL.CoreSoftReset (added in previous
->>>>>    patch)
->>>>> c. Set GCTL.PrtCapDir(device)
->>>>> d. < missing DCTL.CSftRst >
->>>>> e. Then follow up with initializing registers sequence
->>>>>
->>>>> So this patch adds the DCTL.CSftRst soft reset that was currently
->>>>> missing from the dwc3 mode switching.
->>>>>
->>>>> Cc: Felipe Balbi <balbi@kernel.org>
->>>>> Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
->>>>> Cc: Yang Fei <fei.yang@intel.com>
->>>>> Cc: YongQin Liu <yongqin.liu@linaro.org>
->>>>> Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
->>>>> Cc: Thinh Nguyen <thinhn@synopsys.com>
->>>>> Cc: Jun Li <lijun.kernel@gmail.com>
->>>>> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
->>>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>>>> Cc: linux-usb@vger.kernel.org
->>>>> Signed-off-by: John Stultz <john.stultz@linaro.org>
->>>>> ---
->>>>> Feedback would be appreciated. I'm a little worried I should be
->>>>> conditionalizing the DCTL.CSftRst on DRD mode controllers, but
->>>>> I'm really not sure what the right thing to do is for non-DRD
->>>>> mode controllers.
->>>>> ---
->>>>>  drivers/usb/dwc3/core.c | 3 +++
->>>>>  1 file changed, 3 insertions(+)
->>>>>
->>>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>>>> index b6a6b90eb2d5..71f8b07ecb99 100644
->>>>> --- a/drivers/usb/dwc3/core.c
->>>>> +++ b/drivers/usb/dwc3/core.c
->>>>> @@ -40,6 +40,8 @@
->>>>>  
->>>>>  #define DWC3_DEFAULT_AUTOSUSPEND_DELAY	5000 /* ms */
->>>>>  
->>>>> +static int dwc3_core_soft_reset(struct dwc3 *dwc);
->>>>> +
->>>>>  /**
->>>>>   * dwc3_get_dr_mode - Validates and sets dr_mode
->>>>>   * @dwc: pointer to our context structure
->>>>> @@ -177,6 +179,7 @@ static void __dwc3_set_mode(struct work_struct *work)
->>>>>  
->>>>>  	dwc3_set_prtcap(dwc, dwc->desired_dr_role);
->>>>>  
->>>>> +	dwc3_core_soft_reset(dwc);
->>>> Hi John/Thinh/Felipe,
->>>>
->>>> I actually added this change into my local branch, because we were
->>>> seeing an issue when switching from host mode --> peripheral mode.  What
->>>> was happening was that the RXFIFO register did not update back to the
->>>> expected value for peripheral mode by the time
->>>> dwc3_gadget_init_out_endpoint() was executed.  With the logic to
->>>> calculate the EP max packet limit based on RXFIFO reg, this caused all
->>>> EPs to be set with an EP max limit of 0.
->>>>
->>>> With this change, it seemed to help with the above issue.  However, can
->>>> we consider moving the core soft reset outside the spinlock?  At least
->>>> with our PHY init routines, we have some msleep() calls for waiting for
->>>> the PHYs to be ready, which will end up as a sleeping while atomic bug.
->>>> (not sure if PHY init is required to be called in atomic context)
->>>>
->>>> Thanks
->>>> Wesley Cheng
->>>
->>> Hi Wesley,
->>>
->>> Thanks for letting us know the issue you're having also.
->>>
->>> Yes, you need to wait a certain amount of time to synchronize with the
->>> PHY (at least 50ms for dwc_usb32 and dwc_usb31 v1.80a and above, and
->>> less for older versions). When removing the spinlock to use msleep(),
->>> just make sure that there's no race issue. BTW, how long does your setup
->>> need to msleep()?
->>>
->> Hi Thinh,
->>
->> Sorry for the late response.  My mistake, its actually just a usleep()
->> for a less than 100uS (polling for a status bit change, so it will exit
->> early if possible).  For this change, can we just move the
->> dwc3_core_soft_reset() outside of the spinlock?
->>
->> Thanks
->> Wesley Cheng
->>
-> 
-> 
-> Hi Wesley,
-> 
-> dwc3 can get notified at any time to queue a work to switch mode. So you
-> need protect it from a potential race. I think you can use a mutex for this.
-> 
-Hi Thinh,
-
-OK let me take a look a bit more.
-
-> Also, what status are you polling? Note that there's no status bit for
-> GCTL.coresoftreset. For DCTL.CSFTRST, different controller versions
-> behave differently. Use dwc3_core_soft_reset() for DCTL.CSFTRST to get
-> the logic from there.
+Op 30-03-2021 om 18:17 schreef Felipe Balbi:
+> Hi,
 >
-During dwc3_core_soft_reset() we're also calling the PHY init for both
-HS and SS PHYs.  Within our PHY init sequence, we have a status bit
-check to make sure our PHY has initialized correctly.  There was no
-issue using the usleep() yet, as dwc3_core_soft_reset() is also used
-during dwc3_core_init() w/o any locking.
+> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+>> Hi!
+>>
+>> I have a platform with DWC3 in Dual Role mode. Currently I'm
+>> experimenting on v5.12-rc5 with a few patches (mostly configuration)
+>> applied [1]. I'm using Debian Unstable on the host machine and
+>> BuildRoot with the above mentioned kernel on the target.
+>>
+>> **So, scenario 0:
+>> 1. Run iperf3 -s on target
+>> 2. Run iperf3 -c ... -t 0 on the host
+>> 3.  0.00-10.36  sec   237 MBytes   192 Mbits/sec                  receiver
+>>
+>> **Scenario 1:
+>> 1. Now, detach USB cable, wait for several seconds, attach it back,
+>> repeat above:
+>> 0.00-9.94   sec   209 MBytes   176 Mbits/sec                  receiver
+>>
+>> Note the bandwidth drop (177 vs. 192).
+>>
+>> (Repeating scenario 1 will give now the same result)
+>>
+>> **Scenario 2.
+>> 1. Detach USB cable, attach a device, for example USB stick,
+>> 2. See it being enumerated and detach it.
+>> 3. Attach cable from host
+>> 4 .   0.00-19.36  sec   315 MBytes   136 Mbits/sec                  receiver
+>>
+>> Note even more bandwidth drop!
+>>
+>> (Repeating scenario 1 keeps the same lower bandwidth)
+>>
+>> NOTE, sometimes on this scenario after several seconds the target
+>> simply reboots (w/o any logs [from kernel] printed)!
+>>
+>> So, any pointers on how to debug and what can be a smoking gun here?
+>>
+>> Ferry reported this in [2]. There are different kernel versions and
+>> tools to establish the connection (like connman vs. none in my case).
+>>
+>> [1]: https://github.com/andy-shev/linux/
+>> [2]: https://github.com/andy-shev/linux/issues/31
+> dwc3 tracepoints should give some initial hints. Look at packets sizes
+> and period of transmission. From dwc3 side, I can't think of anything we
+> would do to throttle the transmission, but tracepoints should tell a
+> clearer story.
+>
+My testing (but yes, with difference kernel and network managed by 
+connman) shows:
 
-Thanks
-Wesley Cheng
+1) on cold boot eem network gadget works fine
 
-> 1 more thing, make sure that this flow only applies for DRD mode
-> controller and not OTG from older DWC_usb3 IP.
-> 
-> Thanks,
-> Thinh
-> 
+2) after unplug or warm reboot (which is also an unplug) it's broken, 
+speed is lost (|12.0 Mbits/sec from 200Mb/s normally)|, packets lost, no 
+configuration received from dhcp, occasional reboot, only way to fix is 
+cold boot
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+3) if before unplug `connmanctl disable gadget`, on replugging and 
+enabling it works fine
+
+My theory is that some HW register is disturbed on a surprise unplug, 
+but not reset on plug or warm boot. But on cold boot is cleared. Maybe 
+that can help to narrow down tracepoints?
+
