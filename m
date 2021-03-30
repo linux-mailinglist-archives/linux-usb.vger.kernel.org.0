@@ -2,79 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F5834EA58
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 16:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A26B34EA7A
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 16:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbhC3OYJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Mar 2021 10:24:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48270 "EHLO mail.kernel.org"
+        id S232098AbhC3Ofd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Mar 2021 10:35:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50032 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231623AbhC3OXh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Mar 2021 10:23:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 23933619C8;
-        Tue, 30 Mar 2021 14:23:35 +0000 (UTC)
+        id S231979AbhC3OfC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Mar 2021 10:35:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AA4DE619BD;
+        Tue, 30 Mar 2021 14:35:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617114217;
-        bh=5M2yquBBhiLOCTGF5f2g2d6BfrScvdQstqJq4iBUW4k=;
+        s=k20201202; t=1617114901;
+        bh=y9vTpArr668coIo/fWm0yFXeT29uVy1Ruq0ivcNKoYI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SlmOX/BM7xUXgpNG4rww+7aN+rGDiGfKqmW77POT8KkwCl8Ed0VgKMjbJN9R/R6WU
-         O2IdwUQv359wKtHBCbibVKep0hhbo8BQmWA0k0FT2o3GJCPXdxFKzEhP/1Ya8KjsVH
-         hp1rQJTnVneQiCGsdOztaNgsmHDXUTmIc4SGRKEGlRT8QPE4xLyjR/vCdp3Mgcx0wB
-         tGP2D+KjRdClVoPj7owA9ni94LwLNRG1otLVWflae8UrpAkcVWB/moIYQUpKNhgJnH
-         DpMa76lfSpqOBcSqLVyfq4kzm71bje1RcRJioH4t5fo459FAtilVx5Yax3jOcmICGP
-         e6Ut/cmcWb62g==
-Date:   Tue, 30 Mar 2021 19:53:32 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
+        b=iTAnTiIH0M0HEBYsX/OzXjnWeRPCkofl/3M5ntHXGvO5a1GwHhsTRe+YAyGO8Vb2d
+         86brPS8MjL7IhpXh/uf08AepqoKLz6Lg/N7mJn9ozh/98g1swRpPNoNCY6PMCXiISm
+         VNaLSeVdUekbdf+CzM9wCIVwOZlZoNWFkzusvW8ygso1EVvsR0o7WEcCxXTgirIPOb
+         5xnWY8mFBePyDWbf4vY30atrYFg9yvZ4pezTzlY6I84yNNf568qQcaabSsZkZSGNOw
+         DEkhoZjUHrqiSD2x7IrfgbeqnD8WYChihQUYJzKAnEMXYdM5OtPL1cALJgvH0x+Q9J
+         p1hIxGFM4N5bw==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lRFSk-0002Je-Ua; Tue, 30 Mar 2021 16:35:23 +0200
+Date:   Tue, 30 Mar 2021 16:35:22 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        JC Kuo <jckuo@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
-        linux-tegra@vger.kernel.org, linux-phy@lists.infradead.org,
+        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 06/13] phy: tegra: xusb: Add sleepwalk and
- suspend/resume
-Message-ID: <YGM0ZOroZolJ9zEC@vkoul-mobl.Dlink>
-References: <20210325164057.793954-1-thierry.reding@gmail.com>
- <20210325164057.793954-7-thierry.reding@gmail.com>
+Subject: Re: [PATCH v2 0/7] Add support for the other MaxLinear/Exar UARTs
+Message-ID: <YGM3KqV7t6wblXYM@hovoldconsulting.com>
+References: <cover.1616571453.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210325164057.793954-7-thierry.reding@gmail.com>
+In-Reply-To: <cover.1616571453.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 25-03-21, 17:40, Thierry Reding wrote:
-> From: JC Kuo <jckuo@nvidia.com>
-> 
-> This commit adds sleepwalk/wake and suspend/resume interfaces
-> to Tegra XUSB PHY driver.
-> 
-> Tegra XUSB host controller driver makes use of sleepwalk functions
-> to enable/disable sleepwalk circuit which is in always-on partition
-> and can respond to USB resume signals when controller is not powered.
-> Sleepwalk can be enabled/disabled for any USB UPHY individually.
-> 
->   - tegra_xusb_padctl_enable_phy_sleepwalk()
->   - tegra_xusb_padctl_disable_phy_sleepwalk()
-> 
-> Tegra XUSB host controller driver makes use of wake functions to
-> enable/disable/query wake circuit which is in always-on partition
-> can wake system up when USB resume happens.
-> Wake circuit can be enabled/disabled for any USB PHY individually.
-> 
->   - tegra_xusb_padctl_enable_phy_wake()
->   - tegra_xusb_padctl_disable_phy_wake()
->   - tegra_xusb_padctl_remote_wake_detected()
-> 
-> This commit also adds two system suspend stubs that can be used to
-> save and restore XUSB PADCTL context during system suspend and
-> resume.
->   - tegra_xusb_padctl_suspend_noirq()
->   - tegra_xusb_padctl_resume_noirq()
+On Wed, Mar 24, 2021 at 08:41:04AM +0100, Mauro Carvalho Chehab wrote:
+> The current version of the xr_serial driver handles one one of the several
+> MaxLinear/Exar UARTs and UART bridges. There are currently 12 such
+> models. Only one is currently supported.
 
-Acked-By: Vinod Koul <vkoul@kernel.org>
+As I mentioned earlier, proper handling of the CDC devices requires
+support in USB serial core, which I've now implemented.
 
--- 
-~Vinod
+With that and by parsing the Union descriptor to determine the interface
+layout, probing can also be cleaned up quite a bit.
+
+Looking at this series I found a few things that have been overlooked,
+such as the device types having different register widths (and one even
+differing register address widths), the custom driver flag not being set
+and a memory leak. I'll comment on some of these separately.
+
+It also seems the type abstraction can be handled better by using a
+more structured approach, which also allows getting rid of some of the
+type conditionals spread throughout the code.
+
+Another key observation here is that it's the currently supported type
+which is the one that stands out from the rest. And while all four types
+supports CDC requests, it's only the SET_LINE_CODING one which is
+actually required to be used (by the three new types). This also allows
+for a cleaner implementation.
+
+I ended up implementing support myself in order to make sense of all the
+ways these device types differ while digging through the datasheets and
+thinking about how best to implement this.
+
+I'll be posting a fix and two series while keeping you on CC. Would you
+mind giving it a spin with your XR21B142X?
+
+Johan
