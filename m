@@ -2,88 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A92E34E383
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 10:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D3734E403
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Mar 2021 11:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbhC3Ivg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Mar 2021 04:51:36 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:37071 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbhC3IvS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Mar 2021 04:51:18 -0400
-Received: from mail-wm1-f70.google.com ([209.85.128.70])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lRA5l-0004u1-6U
-        for linux-usb@vger.kernel.org; Tue, 30 Mar 2021 08:51:17 +0000
-Received: by mail-wm1-f70.google.com with SMTP id k132so420149wma.1
-        for <linux-usb@vger.kernel.org>; Tue, 30 Mar 2021 01:51:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=djVlT/RAmq6AwtihToV3c2qx0PjKLnFe2UuBJ80EzkM=;
-        b=bWcYEfgKYhtV3bNNMZdvClmnCxCk9CMHzzUawlDourAbJF+aIyIO2y/0IU9e9Y8/bj
-         8XV0k+24nKza07r7qXjHB0oFb8i2rc0y0BW8noKXJH6+EtpYhgwv9m0usj6uAvmbFjLj
-         Qr68NML0/W2Awno6dKvW1ZKqfaKAKVMlXREaBhW0g5mx7ALXODoITdKRMmaSN/X4cb/q
-         fBDzKPzemPtde7pV/xyFS2SnM6IiXOjGUvGYa4vZXOL1HfIM+Dy6AL60KJK15/qrcfJm
-         I4bWuMIC8Mk9QJp0NHglFDmSdDVUUAc4YPT64ATPiBcS+17aaXxgygkmrMK0wzIMlaO/
-         uX4g==
-X-Gm-Message-State: AOAM530e8MhhQpBM1r9UQbelwqWTt155eSTmIMdLk8vBkwRhowgIBhQv
-        +WkMrJ0Z3ovKcy/tw2FRN/k8W98cBqSdjboM1fPOTNqAPz4I7ffGENYTEWNSljSK5iH4yXLXWGJ
-        INGWkzLkF3uXFZHpsOh6g54Lp4VYhgvLpG5pVrQ==
-X-Received: by 2002:a1c:7515:: with SMTP id o21mr2898599wmc.90.1617094276515;
-        Tue, 30 Mar 2021 01:51:16 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyMM+kQaqpCWb0b7OW+orw77+hmaUElyaV7pasIVj3HsWg6jELlm0lBduYBq4l8/WLCYe23Ww==
-X-Received: by 2002:a1c:7515:: with SMTP id o21mr2898587wmc.90.1617094276417;
-        Tue, 30 Mar 2021 01:51:16 -0700 (PDT)
-Received: from [192.168.1.116] (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.gmail.com with ESMTPSA id l6sm34969120wrn.3.2021.03.30.01.51.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Mar 2021 01:51:16 -0700 (PDT)
-Subject: Re: [PATCH] usb: dwc3: exynos: fix incorrect kernel-doc comment
- syntax
-To:     Aditya Srivastava <yashsri421@gmail.com>, balbi@kernel.org
-Cc:     lukas.bulwahn@gmail.com, gregkh@linuxfoundation.org,
-        rdunlap@infradead.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210329140318.27742-1-yashsri421@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <b341b0a5-4f78-d986-d038-8e067bf5d34e@canonical.com>
-Date:   Tue, 30 Mar 2021 10:51:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S231313AbhC3JHo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Mar 2021 05:07:44 -0400
+Received: from mga11.intel.com ([192.55.52.93]:20670 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231858AbhC3JHj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Mar 2021 05:07:39 -0400
+IronPort-SDR: 9sp2oeizy7PepEhxo6Juqo8GPlLVd6ht/nHNAEwOwD/FIja3xBEXLEIEjZjnQl9gQTnRCj2DAc
+ frLps7u6FSuQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9938"; a="188460374"
+X-IronPort-AV: E=Sophos;i="5.81,290,1610438400"; 
+   d="scan'208";a="188460374"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2021 02:07:38 -0700
+IronPort-SDR: ib6G/Hb2XuCfEYn7nbnGgRtKMarSnykGETsH96NU6JvA5eq9UZ6aTK7o5ZtrX5aX1cel3ADC1N
+ FSl+iar7UiUw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,290,1610438400"; 
+   d="scan'208";a="516360032"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 30 Mar 2021 02:07:35 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 30 Mar 2021 12:07:35 +0300
+Date:   Tue, 30 Mar 2021 12:07:35 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 5/6] usb: Iterator for ports
+Message-ID: <YGLqV4nB/lPS1AOF@kuha.fi.intel.com>
+References: <20210329084426.78138-1-heikki.krogerus@linux.intel.com>
+ <20210329084426.78138-6-heikki.krogerus@linux.intel.com>
+ <20210329184946.GA944482@rowland.harvard.edu>
 MIME-Version: 1.0
-In-Reply-To: <20210329140318.27742-1-yashsri421@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210329184946.GA944482@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 29/03/2021 16:03, Aditya Srivastava wrote:
-> The opening comment mark '/**' is used for highlighting the beginning of
-> kernel-doc comments.
-> The header for drivers/usb/dwc3/dwc3-exynos.c follows this syntax, but the
-> content inside does not comply with kernel-doc.
+On Mon, Mar 29, 2021 at 02:49:46PM -0400, Alan Stern wrote:
+> On Mon, Mar 29, 2021 at 11:44:25AM +0300, Heikki Krogerus wrote:
+> > Introducing usb_for_each_port(). It works the same way as
+> > usb_for_each_dev(), but instead of going through every USB
+> > device in the system, it walks through the USB ports in the
+> > system.
+> > 
+> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > ---
+> >  drivers/usb/core/usb.c | 46 ++++++++++++++++++++++++++++++++++++++++++
+> >  include/linux/usb.h    |  1 +
+> >  2 files changed, 47 insertions(+)
+> > 
+> > diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+> > index 2ce3667ec6fae..62368c4ed37af 100644
+> > --- a/drivers/usb/core/usb.c
+> > +++ b/drivers/usb/core/usb.c
+> > @@ -398,6 +398,52 @@ int usb_for_each_dev(void *data, int (*fn)(struct usb_device *, void *))
+> >  }
+> >  EXPORT_SYMBOL_GPL(usb_for_each_dev);
+> >  
+> > +struct each_hub_arg {
+> > +	void *data;
+> > +	int (*fn)(struct device *, void *);
+> > +};
+> > +
+> > +static int __each_hub(struct usb_device *hdev, void *data)
+> > +{
+> > +	struct each_hub_arg *arg = (struct each_hub_arg *)data;
+> > +	struct usb_hub *hub;
+> > +	int ret = 0;
+> > +	int i;
+> > +
+> > +	hub = usb_hub_to_struct_hub(hdev);
+> > +	if (!hub)
+> > +		return 0;
 > 
-> This line was probably not meant for kernel-doc parsing, but is parsed
-> due to the presence of kernel-doc like comment syntax(i.e, '/**'), which
-> causes unexpected warning from kernel-doc:
-> "warning: expecting prototype for dwc3(). Prototype was for DWC3_EXYNOS_MAX_CLOCKS() instead"
+> What happens if the hub is removed exactly now?  Although hdev is 
+> reference-counted (and the loop iterator does take a reference to it), 
+> usb_hub_to_struct_hub doesn't take a reference to hub.  And hub->ports 
+> isn't refcounted at all.
+
+If the hub is removed right now, and if hub_disconnect() also manages
+to remove the ports before we have time to take the lock below, then
+hdev->maxchild will be 0 by the time we can take the lock. In that
+case nothing happens here.
+
+If on the other hand we manage to acquire the usb_port_peer_mutex
+before hub_disconnect(), then hub_disconnect() will simply have to
+wait until we are done, and only after that remove the ports.
+
+> > +	mutex_lock(&usb_port_peer_mutex);
+> > +
+> > +	for (i = 0; i < hdev->maxchild; i++) {
+> > +		ret = arg->fn(&hub->ports[i]->dev, arg->data);
+> > +		if (ret)
+> > +			break;
+> > +	}
+> > +
+> > +	mutex_unlock(&usb_port_peer_mutex);
 > 
-> Provide a simple fix by replacing this occurrence with general comment
-> format, i.e. '/*', to prevent kernel-doc from parsing it.
+> I have a feeling that it would be better to take and release this mutex 
+> in usb_for_each_port (or its caller), so that it is held over the whole 
+> loop.
 
-One sentence with error log would be enough for such trivial change. Anyway:
+I disagree. The lock is for the ports, not the hubs. We should take
+the lock when we are going through the ports of a hub, but release it
+between the hubs. Otherwise we will be only keeping things on hold for
+a long period of time for no good reason (I for example have to
+evaluate the _PLD of every single port which takes a lot of time). We
+don't need to prevent other things from happening to the hubs at the
+same time.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-Best regards,
-Krzysztof
+thanks,
+
+-- 
+heikki
