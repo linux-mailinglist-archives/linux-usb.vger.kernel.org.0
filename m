@@ -2,210 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1FD3504DB
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Mar 2021 18:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB393504E8
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Mar 2021 18:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234222AbhCaQmC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Mar 2021 12:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
+        id S233891AbhCaQpO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Mar 2021 12:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233950AbhCaQl0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Mar 2021 12:41:26 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F1FC061574;
-        Wed, 31 Mar 2021 09:41:25 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id n140so20587136oig.9;
-        Wed, 31 Mar 2021 09:41:25 -0700 (PDT)
+        with ESMTP id S229968AbhCaQpB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Mar 2021 12:45:01 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2564C061574;
+        Wed, 31 Mar 2021 09:45:00 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id ce10so31066899ejb.6;
+        Wed, 31 Mar 2021 09:45:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=mVhSVBF1vh56E8yvJoKpeQSChQSpdEi9lBFjUoFTP/0=;
-        b=FNQOePFFHxbO2gMENUR/9GpA44eRlFZxqrBemMiUar88kRFWzME41+Q2SuBoDGUDw+
-         LujxUcl+LlNk8JNWqiSMGzXPqDtHB5KeBwthW1uzQbZncQ2QGFSFOHNSzuE9F0oaSWQa
-         /7l3i/b6Vizq9k65v1AMtuPzPq6IS1LcxSdGZmm4aZul8LxfpHaDfaOzagzPhOLUHsgI
-         vkj2iLvO+wkrG9HcTa4bZ/wsWWHkWYWjVvJJQ2mdZsdye8Qq7xn3KnQfrNUU5y7/2MyE
-         +2L/qebMwy9IaiZEmAahtOBLEzxCjqcDTuz0rwa+tMiZcwk0ZONquOHYHRzI3g+9QK+l
-         Aw0A==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=otH4FKql+m9GEJITFfDeO134ix6C/z4KiXTf8Ah/jNA=;
+        b=JZSrb/oAf2nPpFbAYhXKRSVcaZTb2TYA5PQ6pavenYdSJZVAkww9G+N3CLHaLfpXfi
+         WNEAVlovDZq146ZCK8EbeehX4NIY8b/5h8C9q/egWHoTJsGDf1DnhBXueuu8FBx82LgE
+         /5iVwdvCcGfRDIvFETbzNbVkXNT0m/PDUB8y5yghr28S7nPUmPnerRRcm9KAIlixhcw4
+         phLMqLgLnGQT6CjN0dpAGK5HZ7luboWciskoEb2CcjJRQTmjJNIejqd8k6QVTkT//+mn
+         ++fq9rUhekuXRrhwnIBs3dwQVR/RF+0Bxr4RRp9/KeUYb3mwD0JBVs0idulTJV7tNeva
+         Lpow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=mVhSVBF1vh56E8yvJoKpeQSChQSpdEi9lBFjUoFTP/0=;
-        b=DwuJyrjurNzRrJbz1GfVIOzeN4juOMAhP2GnB4nwUZJlHWOd2Ag3TZ+QtTS08o89Ik
-         r8gSbKazTnEgZuUK3sNa49qcK1kRkOLXYbOcW7jHEA4ZX1oaL348QJGAB0eETR6PBteO
-         k28jLavnvVeCb4rlAh8JK6oP1l35zn7zb0LkVS2hJWdtDb1WO0VG8/pkLf2qZDaz+jp6
-         npHucJh9JAe+BvOTvnF08zKItlCKrbqz6rgw0UbtwJRd8xck5rQaq6nhV+hmnHHLJs/x
-         Yg1B8QhjswYbIHJXNiJ94C75Ei9AsibAvsfZoQErHqJQEADcHyZKI1ygY7Lg4VWAv//n
-         KwgA==
-X-Gm-Message-State: AOAM532pfYllq3zimpx2lttiMjfWepySr9VlGHVM9QJ6ntCmTVNX6apa
-        Lq1d/OOkofiZ22D3RmBgAEegwdcZJj0=
-X-Google-Smtp-Source: ABdhPJwhkM74SWt3zdy9/D/XrKxNBOmUfXw8KazT8tIsweIsf5E/Yl2aLsI0D+K0/VnrdFxBbhArfw==
-X-Received: by 2002:a54:488a:: with SMTP id r10mr2920360oic.23.1617208884686;
-        Wed, 31 Mar 2021 09:41:24 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v30sm580362otb.23.2021.03.31.09.41.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Mar 2021 09:41:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v3 5/6] usb: Iterator for ports
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210331105908.67066-1-heikki.krogerus@linux.intel.com>
- <20210331105908.67066-6-heikki.krogerus@linux.intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <7cf8093e-20ab-ab88-5ba1-c2e6128c0480@roeck-us.net>
-Date:   Wed, 31 Mar 2021 09:41:22 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=otH4FKql+m9GEJITFfDeO134ix6C/z4KiXTf8Ah/jNA=;
+        b=RdgsW058l3WbwxGX175GN0swPUvUKiIbbbXJPBkUCwA6DEMtv7Mwxak9HMtcm4bOvO
+         t/WUN5fslHEI2hiJ6ruaT1YmmNAhTqBqaeolUT/8YIm4Wk1+yJPCXjS3arGFDdk1xaQz
+         rxfhiz5nmpfOJPM3mc/tX53RZeyvqaQiPgMvELYTFTvjsaxDazqQawBH2tTxq+rc+vx+
+         p5Kb7SnFyqoTs3EpwhvdIu0hdMGKk9sNVq3qT7fD+MsawswYTZI+iBhIudQTmX75fxWP
+         iE4OXmQgcAtgsdYKbTbmlLTax8cpafKPM8cRnAocsXN5hme69DxhOE+HNIct15EtG4D5
+         5HFw==
+X-Gm-Message-State: AOAM5324vqyOdk+zSE/YrRUtoln32znM5Cil0GS9xSyrqenKnrG7+PR6
+        S/1P2v1UILy5uk4Ndz8zW3o=
+X-Google-Smtp-Source: ABdhPJxGsxhKrvY7nrHqgYzGz4G0qJtfRp58mNJSWiX+iCCLm9nqUTGrJ+GtWn5M+S1J5Tz9A+GO2g==
+X-Received: by 2002:a17:906:2cd1:: with SMTP id r17mr4461369ejr.429.1617209099758;
+        Wed, 31 Mar 2021 09:44:59 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id h24sm1515349ejl.9.2021.03.31.09.44.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Mar 2021 09:44:58 -0700 (PDT)
+Date:   Wed, 31 Mar 2021 18:45:25 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        JC Kuo <jckuo@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
+        linux-tegra@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 06/13] phy: tegra: xusb: Add sleepwalk and
+ suspend/resume
+Message-ID: <YGSnJRlY4+RzjR7b@orome.fritz.box>
+References: <20210325164057.793954-1-thierry.reding@gmail.com>
+ <20210325164057.793954-7-thierry.reding@gmail.com>
+ <YGM0ZOroZolJ9zEC@vkoul-mobl.Dlink>
+ <YGSlj85/3kkfoDiH@orome.fritz.box>
 MIME-Version: 1.0
-In-Reply-To: <20210331105908.67066-6-heikki.krogerus@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="6tyHdok+qz2c/VGy"
+Content-Disposition: inline
+In-Reply-To: <YGSlj85/3kkfoDiH@orome.fritz.box>
+User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/31/21 3:59 AM, Heikki Krogerus wrote:
-> Introducing usb_for_each_port(). It works the same way as
-> usb_for_each_dev(), but instead of going through every USB
-> device in the system, it walks through the USB ports in the
-> system.
-> 
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> ---
->  drivers/usb/core/usb.c | 46 ++++++++++++++++++++++++++++++++++++++++++
->  include/linux/usb.h    |  9 +++++++++
->  2 files changed, 55 insertions(+)
-> 
-> diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-> index 2ce3667ec6fae..62368c4ed37af 100644
-> --- a/drivers/usb/core/usb.c
-> +++ b/drivers/usb/core/usb.c
-> @@ -398,6 +398,52 @@ int usb_for_each_dev(void *data, int (*fn)(struct usb_device *, void *))
->  }
->  EXPORT_SYMBOL_GPL(usb_for_each_dev);
->  
-> +struct each_hub_arg {
-> +	void *data;
-> +	int (*fn)(struct device *, void *);
-> +};
-> +
-> +static int __each_hub(struct usb_device *hdev, void *data)
-> +{
-> +	struct each_hub_arg *arg = (struct each_hub_arg *)data;
-> +	struct usb_hub *hub;
-> +	int ret = 0;
-> +	int i;
-> +
-> +	hub = usb_hub_to_struct_hub(hdev);
-> +	if (!hub)
-> +		return 0;
-> +
-> +	mutex_lock(&usb_port_peer_mutex);
-> +
-> +	for (i = 0; i < hdev->maxchild; i++) {
-> +		ret = arg->fn(&hub->ports[i]->dev, arg->data);
-> +		if (ret)
-> +			break;
-> +	}
-> +
-> +	mutex_unlock(&usb_port_peer_mutex);
-> +
-> +	return ret;
-> +}
-> +
-> +/**
-> + * usb_for_each_port - interate over all USB ports in the system
-> + * @data: data pointer that will be handed to the callback function
-> + * @fn: callback function to be called for each USB port
-> + *
-> + * Iterate over all USB ports and call @fn for each, passing it @data. If it
-> + * returns anything other than 0, we break the iteration prematurely and return
-> + * that value.
-> + */
-> +int usb_for_each_port(void *data, int (*fn)(struct device *, void *))
-> +{
-> +	struct each_hub_arg arg = {data, fn};
-> +
-> +	return usb_for_each_dev(&arg, __each_hub);
-> +}
-> +EXPORT_SYMBOL_GPL(usb_for_each_port);
-> +
->  /**
->   * usb_release_dev - free a usb device structure when all users of it are finished.
->   * @dev: device that's been disconnected
-> diff --git a/include/linux/usb.h b/include/linux/usb.h
-> index ddd2f5b2a2827..ebcd03d835d04 100644
-> --- a/include/linux/usb.h
-> +++ b/include/linux/usb.h
-> @@ -882,6 +882,15 @@ extern struct usb_host_interface *usb_find_alt_setting(
->  		unsigned int iface_num,
->  		unsigned int alt_num);
->  
-> +#ifdef CONFIG_USB
 
-#if IS_ENABLED(CONFIG_USB)
+--6tyHdok+qz2c/VGy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +int usb_for_each_port(void *data, int (*fn)(struct device *, void *));
-> +#else
-> +static inline int usb_for_each_port(void *data, int (*fn)(struct device *, void *))
-> +{
-> +	return 0;
-> +}
-> +#endif
-> +
->  /* port claiming functions */
->  int usb_hub_claim_port(struct usb_device *hdev, unsigned port1,
->  		struct usb_dev_state *owner);
-> 
+On Wed, Mar 31, 2021 at 06:38:39PM +0200, Thierry Reding wrote:
+> On Tue, Mar 30, 2021 at 07:53:32PM +0530, Vinod Koul wrote:
+> > On 25-03-21, 17:40, Thierry Reding wrote:
+> > > From: JC Kuo <jckuo@nvidia.com>
+> > >=20
+> > > This commit adds sleepwalk/wake and suspend/resume interfaces
+> > > to Tegra XUSB PHY driver.
+> > >=20
+> > > Tegra XUSB host controller driver makes use of sleepwalk functions
+> > > to enable/disable sleepwalk circuit which is in always-on partition
+> > > and can respond to USB resume signals when controller is not powered.
+> > > Sleepwalk can be enabled/disabled for any USB UPHY individually.
+> > >=20
+> > >   - tegra_xusb_padctl_enable_phy_sleepwalk()
+> > >   - tegra_xusb_padctl_disable_phy_sleepwalk()
+> > >=20
+> > > Tegra XUSB host controller driver makes use of wake functions to
+> > > enable/disable/query wake circuit which is in always-on partition
+> > > can wake system up when USB resume happens.
+> > > Wake circuit can be enabled/disabled for any USB PHY individually.
+> > >=20
+> > >   - tegra_xusb_padctl_enable_phy_wake()
+> > >   - tegra_xusb_padctl_disable_phy_wake()
+> > >   - tegra_xusb_padctl_remote_wake_detected()
+> > >=20
+> > > This commit also adds two system suspend stubs that can be used to
+> > > save and restore XUSB PADCTL context during system suspend and
+> > > resume.
+> > >   - tegra_xusb_padctl_suspend_noirq()
+> > >   - tegra_xusb_padctl_resume_noirq()
+> >=20
+> > Acked-By: Vinod Koul <vkoul@kernel.org>
+>=20
+> Thanks. I didn't see an Acked-by on patches 7-9. Did I miss them or did
+> you not get around to that yet?
 
+Patch 10 is also missing an Acked-by, I think.
+
+Thierry
+
+--6tyHdok+qz2c/VGy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmBkpyUACgkQ3SOs138+
+s6HFsg//UwDKgGejSxpnuBJxnouNV+6Q2F9C8O2joVdF5OEZvENOqMZJaGiMl2R3
+aVcYGSFIDeOdNNBeP2naSOkbkhB9sYOHGcqVEm9BKNpc71qGlJ/lrPTlE0G/HzBy
+KeLKglSAhxYwY4dZZ6ut6kNgnCEqhfJQXzR7NM5VHn7YcxlyRgDkXMLiL2IeZnPa
+CaNLMBX79Wdq4/d6m62FR15CqSyT4J0L7aw/7dkiK+fj7elu4zvLc29Zoub12XLt
+Sttoyb1+k25VVQLJWZBcc4LAA2iBq7S17jOcG1it2e6WHyBvaNUle618A/oZnaNb
+oavb6C+/sWZmtZ4Uxyu48ZWQodl+gPu7RsebslMqLTBbfqF1/LYfOb4FshUKEXMw
+tbZGYDCXuOrszoJBCChlZpaRmwnpGN9iHN1WY2oR6j7X229ilSSUJIKsinI0nrqg
+0Hb40/Gjig3FiQNfARLf4VFpOCpnmNDYTErAoF6IvjVBPcNJrHvENHBCiyLqos+K
+VlZdUTOhtX1aBx8qwzl8XwRloJt45p750pcLgbdu4oouZVB7VQ2/eoFasjW9Zqtu
+KVXG2OfOVkoeSJb0hYF6w9zmxxMwXNs/Ecc8bXgC91TYwIIee9H8QJDXQh96Bce0
+OaWSE9N0EobZE6zYUPGZ6PJjPuuUDzEXRqHIpYkBvNdwdVJfsZM=
+=QenT
+-----END PGP SIGNATURE-----
+
+--6tyHdok+qz2c/VGy--
