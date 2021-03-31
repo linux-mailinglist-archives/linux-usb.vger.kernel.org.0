@@ -2,79 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C02C534F972
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Mar 2021 09:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 096F134F9DA
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Mar 2021 09:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233954AbhCaHIc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Mar 2021 03:08:32 -0400
-Received: from mx2.suse.de ([195.135.220.15]:59092 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233940AbhCaHIU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 31 Mar 2021 03:08:20 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1617174499; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=a1hXApR+/n3Tm8UPNKP9JBk/yexpBOlO3b/93PdVzrQ=;
-        b=i+P4oz+Ia5QucybiB2GYs8tsmxkTSxDmmsms11xvTktT+qr8dzRE4MIXQv3uD5cTY2iy3X
-        qAMS3iIbY34387FOEX6LyzKNvtlF5PY6UWU/BQO8mbEZcgvGDbpQz4V2L2XJzeOEOZhbpE
-        JirNZbJLQGt/DXIgkx9XMGTmY0NNML0=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 50EACAD80;
-        Wed, 31 Mar 2021 07:08:19 +0000 (UTC)
-Message-ID: <e4d3d21cdfe94068c76ceb4ba38630d76fa9418c.camel@suse.com>
-Subject: Re: [PATCH 3/4] USB: serial: add support for multi-interface
- functions
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 31 Mar 2021 09:08:07 +0200
-In-Reply-To: <YGNCIT1ocatZ3V3/@hovoldconsulting.com>
-References: <20210330143820.9103-1-johan@kernel.org>
-         <20210330143820.9103-4-johan@kernel.org>
-         <e0b2984e7de0287c5811a10faaac4d5d6d7d91ef.camel@suse.com>
-         <YGNCIT1ocatZ3V3/@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S234093AbhCaHaK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 31 Mar 2021 03:30:10 -0400
+Received: from bizcloud-power.sawafuji.co.jp ([128.199.220.203]:47845 "EHLO
+        mta0.sawafuji.co.jp" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233999AbhCaH3x (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Mar 2021 03:29:53 -0400
+X-Greylist: delayed 643 seconds by postgrey-1.27 at vger.kernel.org; Wed, 31 Mar 2021 03:29:53 EDT
+From:   Albert Bourla <info@universalautomation.com.pk>
+To:     linux-usb@vger.kernel.org
+Subject: Bidding invitation
+Date:   31 Mar 2021 09:09:24 +0200
+Message-ID: <20210331090924.E907D58711684F60@universalautomation.com.pk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 30.03.2021, 17:22 +0200 schrieb Johan Hovold:
-> On Tue, Mar 30, 2021 at 04:44:32PM +0200, Oliver Neukum wrote:
-> > Am Dienstag, den 30.03.2021, 16:38 +0200 schrieb Johan Hovold:
-> > > @@ -1115,6 +1161,8 @@ static void usb_serial_disconnect(struct usb_interface *interface)
-> > >         if (serial->type->disconnect)
-> > >                 serial->type->disconnect(serial);
-> > >  
-> > > +       release_sibling(serial, interface);
-> > > +
-> > >         /* let the last holder of this object cause it to be cleaned up */
-> > >         usb_serial_put(serial);
-> > >         dev_info(dev, "device disconnected\n");
-> > 
-> > Hi,
-> > 
-> > does this assume you are called for the original interface first?
-> 
-> No, I handle either interface being unbound first (e.g. see
-> release_sibling()).
-> 
-> > I am afraid that is an assumption you cannot make. In fact, if somebody
-> > is doing odd things with sysfs you cannot even assume both will see a
-> > disconnect()
-> 
-> Right, but disconnect() will still be called also for the sibling
-> interface as part of release_sibling() above.
+Good Day Sir/Ms,
 
-OK, sorry I overlooked that.
-
-	Regards
-		Oliver
+We are please to invite you or your company to quote the 
+following item listed below:
+ 
+Product/Model No: A702TH FYNE PRESSURE REGULATOR
+Model Number: A702TH
+Qty. 30 units
 
 
+Compulsory,Kindly send your quotation to: 
+quotation@pfizerbvsupply.com 
+for immediate approval.
+
+Kind Regards,
+Albert Bourla
+PFIZER B.V Supply Chain Manager
+Tel: +31(0)208080 880
+ADDRESS: Rivium Westlaan 142, 2909 LD
+Capelle aan den IJssel, Netherlands
