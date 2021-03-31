@@ -2,188 +2,220 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A409C350790
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Mar 2021 21:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 717A43507AD
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Mar 2021 21:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236273AbhCaTlw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Mar 2021 15:41:52 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:15533 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236294AbhCaTlT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Mar 2021 15:41:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1617219679; x=1648755679;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=9bd2R2SSm1hcptPDwabchIHhSMUNsobJtRpS7y6D02M=;
-  b=RTSfu01iz1ei/6r0FAvf9nEl4l9I4fJrxYWUbhlA5sVeCkwfa3ZLeLNZ
-   Xp4gRXdRQVbkZdw8dgw5YcaND0jRS/LPbWj8cCWpkDioLawxYuyIpKyOG
-   caSgD40Y9UXcplRUkLyKZTuWkJcJSKUqRJQ4COypRGz66fGiAIhoSxOCR
-   hEdBDlQdv+76Wt65v9/7MBXbV9dDOccAxrR38WgCmESkjrlZb0glv7sXP
-   E6qddPQmm1tytAIfaFAjFntzUbxBhOj6BPjs7uLQGSWY5Axw3ys9hj/m+
-   VeHJKMMbhHjh8Vye6LHjrVR3IWJpxMOnW5lZjTDKUj8cF1bn2ths4iW+l
-   g==;
-IronPort-SDR: hAOlkm2MazdspDraw1B7DTLl4GdQjU7wDB0O0mavUdKTAUTUg8bKWZfnnVnGOsyZCWM7hc6ogo
- R9NFiJ7xbUF9JXtb0J89UZ7weNpggM8e0mAKJmnpkZVk0vBmnQQuN9RlnfItYHIi0Va5C2xRLz
- kwbH0TfrtRs7qnuNTCffpdsDSTDHa67dCJF3rXP7R4BqS4gOW+BGh49rTrBvysli4HaKKm7fV8
- V77Ngz7jcVd5DUFRcFZ2HpXgEVQjDwXY3GIizvqKTOc7hqOnbphxymKF6QHeTCSRpEVOwTcN15
- Sng=
-X-IronPort-AV: E=Sophos;i="5.81,293,1610434800"; 
-   d="scan'208";a="49593739"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Mar 2021 12:41:18 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 31 Mar 2021 12:41:17 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2
- via Frontend Transport; Wed, 31 Mar 2021 12:41:17 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iE4QEUxOe7Dq/jFBF28si6x+sqj9Qtu/1NKCK39CSRU94NWtjLaE7QQkuXhKBLmyanpZhINLnZezb76tiF8obOMtD3SFtQiCdUg1c/7L7A75DqBuhDY5bXo6T5pwpDmf1qlu93KZBAxncso5x9hX0WoK64eZOr8fgHav3XS4kGPo4eEH7VM6EC1Gitgp1cbQIWJMyeuIJywGBF+wLhFVjxVkE3Txgbe4WpqGgzCqtYE5TqoJl8TE/zKqgfYNlAFg8z1/WW+XgmflhfDvshdBhsGpwQT4TdqPY1lfZMzy8Rz5sRwhnFMNHQTO/Rv0TSPQR5A0SuSpF6TghTGiPYeQqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9bd2R2SSm1hcptPDwabchIHhSMUNsobJtRpS7y6D02M=;
- b=L8pfWCB+hE2BkZ2W9pO5sb870JVzoRnoq2W46s1hp0ctlc9nTwgyiwPPggQVtTZ4hMSxZPasq4CI2V7FIGmDF4N0VLWEgEeZHk9KAAfHP2aQg8M38lhHeob1dWfxPO6+oTgp8Xiwx6zR/TejFlvDgYd9g0sLGdb+fbqD8tONNezTS7HHgGljyztn9pDocgdkdcD4LKZ25JbqwjRFPpnU9iBHI8rQT7OUH7Uk3D0o2p+tPi2wq52PP0C937y4HCfB9/g9HlXU/7vDjdtfEYQ1w4gJrPPwnFZZgLWEXw9W7V4O46pxuw91KhB+hZLjV18l/XVnlVFGNW8dUv8+sKguUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9bd2R2SSm1hcptPDwabchIHhSMUNsobJtRpS7y6D02M=;
- b=SznRzRgdkYEtU0lK0675V3ZC1QACNsQrmHNGiZbVAqAUBvOiSesW0ugeitm9VdKYKrzNdo1vUfys62xeLoVjl0Hun+4j1JiNL1WgcPp+ikeJdZX4fnx5/uR5/YTxqyyOto3ffTZdNe2WSyaRH1rUpF7iaEq7cFezUizfYdxjiSU=
-Received: from MWHPR1101MB2288.namprd11.prod.outlook.com
- (2603:10b6:301:53::11) by MWHPR11MB1645.namprd11.prod.outlook.com
- (2603:10b6:301:b::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3977.25; Wed, 31 Mar
- 2021 19:41:16 +0000
-Received: from MWHPR1101MB2288.namprd11.prod.outlook.com
- ([fe80::f1c8:bb6e:79a2:1e65]) by MWHPR1101MB2288.namprd11.prod.outlook.com
- ([fe80::f1c8:bb6e:79a2:1e65%12]) with mapi id 15.20.3977.033; Wed, 31 Mar
- 2021 19:41:15 +0000
-From:   <Cristian.Birsan@microchip.com>
-To:     <gregkh@linuxfoundation.org>
-CC:     <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
-        <robh+dt@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 0/2] usb: typec: Add driver for Microchip sama7g5
- tcpc
-Thread-Topic: [RFC PATCH v2 0/2] usb: typec: Add driver for Microchip sama7g5
- tcpc
-Thread-Index: AQHXJabxGHnGM9FAeUOvdjG3n6OHl6qdoPIAgADfX4A=
-Date:   Wed, 31 Mar 2021 19:41:15 +0000
-Message-ID: <b42ddee2-1006-7e46-2df8-156c14c3a2e0@microchip.com>
-References: <20210330205442.981649-1-cristian.birsan@microchip.com>
- <YGQU+g8J6gZhn13X@kroah.com>
-In-Reply-To: <YGQU+g8J6gZhn13X@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=microchip.com;
-x-originating-ip: [2a02:2f01:5318:7c00::92e]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 99e9435a-ab97-491d-ff78-08d8f47cf2b8
-x-ms-traffictypediagnostic: MWHPR11MB1645:
-x-microsoft-antispam-prvs: <MWHPR11MB16458ED330A2E5D80228E647EF7C9@MWHPR11MB1645.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: M1v6dLaLfXw9iKWF74EoAEMSYpPx/7puB5YrL+qAKK0aA/PojGLogqAKLYpYqry4EbUe/KXf650P1NoIYnGs9uBL3Cu6uoAv/2066myRoFSwPVaz76P2LHVPRO5+0wP/c8T3JbErWXLkhUftOm6QLAvKTpN6/qoaJQRPXbcrQyF7ASoXbJ2j4ovVRyfl3CGdbTseftDWugG4qSUUoFABrk+xXLdY4sQ2dfkL9n3gLC0BqYILGLjmNfA/lqI0qGjFI/093N43JIPRM4wDX6sCCNgtX9d8LLhMbfJ7/iH1IW7a5U+4bcQSOdLLxIPJnkBL7ED6g1WASGT1CP6SEhxQsk3CRKTZaaYb+q8SvO+q1ZLSIRDnUNrT7u29ELXDI4A2FPi4Ob0rhKkdpLu6KldumcTvs1BweY5/e7/wIAlBWax7y7PaFhEbRIiPrkOBFhaEbMmhHKb2SuNP34pyERqdM96QGPjYPRy8coMHIMqZzyJzAr38KQsJkvozyKhLT0vl9RpXsIn22i8f+5IT2zk30FPnTaXdIX46+ZcIXQJY4jXZ7AajEtXOevYZsTDsaGVDmS2J4tfIJgBWUIS7ES1trWtGfYpk/i4jkH6/vr4Mik1qSwfkb40S+q5oRE55QlYJXlX06u2ecXyh+ilrpBFuWVkFbrRvKOuIy8xQjCxOPPukcfLrYxpuiQwtX4w45zlG16ov1uW5dkA3v0+NG5k+BBiyPoiRXrtOnlFBHIiRBYw=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2288.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(376002)(346002)(396003)(366004)(136003)(64756008)(8676002)(66556008)(31696002)(66446008)(76116006)(66946007)(186003)(36756003)(6506007)(66476007)(31686004)(2616005)(6512007)(6916009)(478600001)(316002)(4326008)(54906003)(6486002)(83380400001)(86362001)(2906002)(53546011)(71200400001)(91956017)(5660300002)(38100700001)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?SWJvNlVWS0JPVDdqL3dYQXJ4NGxSeFh4TzRRaWg4ZW9BbTJWbXBDeEJHZXY4?=
- =?utf-8?B?emhnZTV3NVBzMDk2NHltazJYcjFWaGZYS1RMMXl5M2M4RHdwN1RXS0w4ZUY0?=
- =?utf-8?B?Y01uMi9uU2xwcms3OEhiL3lvYkgzZi9WZ3VTRUlIWEZHYmh3L1R4eGhyM3ds?=
- =?utf-8?B?YjZESXVYWmxhVS9LbDA3Z3lUZ0dBZmRJQk50aDlhamFXaUh6N2ppMUNkUHFl?=
- =?utf-8?B?bE9WandtZk1xRU0rZkpLRUd3WUpNRlBMaW1wMTcwOG9vekN6WHZNYTZJdE4r?=
- =?utf-8?B?V3RGY1lXL2pSK2hjb1U0eXFyd3FHWllqOXdPQlkwSlg2MVl4Rkh6Yk5zb1o0?=
- =?utf-8?B?N0liUGpld1ZZSXoraDkwOEF5QnNndmRDK1ZYdlA4eklFb3RQSjVmZStTbzFT?=
- =?utf-8?B?UEw1ZkpnQytiSjhLaVV6QVkxVmFBYUlJZjFIVEZkbzdLNzdPQytUVGFVRlNR?=
- =?utf-8?B?RXNDOTJaSE9xU0w1NlBQQXVxcTQ2a0YwSFVqeGE1MFZucFg0bnFoMDhTbWR1?=
- =?utf-8?B?Z3FJWkNGRHEvcng5MStPakh2OEFKSkxLNzFIQUJlMmwyVVZhR1NpeEtkYnBV?=
- =?utf-8?B?UjV0eUJSMncvdE9xQ05ZVWZ6Z2FNWmhXano0VUtNL2h2T0RmQnVVQXczUVly?=
- =?utf-8?B?dFZPWXZwSXh5cU1KUlUxVmF5akVPcDYxN0xtSHE5dWpKZ0l5ZTFqR0NVY0Vy?=
- =?utf-8?B?ZmMydENoY01WRlVQUzJoczRrTTFNSVVqZml4V0hQV1ZrbVpnZWE1ZHpDYWl6?=
- =?utf-8?B?ejJTMStkVHU5Y2loSVdJL04xVVA3anVMaGVXRUtTdm1vekxoV3V1OUpWeUt0?=
- =?utf-8?B?cXViNjVZVERLV2J0WllhVE5QSWRXTVNyK3R1SjNoNkluWk1sV3k1TnlhcU5K?=
- =?utf-8?B?cUx0cVJvL0k0czl1cm1Tdis0QTl6bzBSb3RZNHlzY3RqMUVqTDNrQjFMWTBX?=
- =?utf-8?B?amJ3OVM4bnZSaXBWZHdSTFQxczJkYm5lY3U0aUYxdlVRWGdTZEJmVjZzWk9X?=
- =?utf-8?B?N09sK015R244THRENFUwRkdTYVhDZEtQNHAzMlBTVm1SaFdGME0wMERSRHFt?=
- =?utf-8?B?WklRdmNJOHFNMEFOSWdMaFh3UHdjYnlYeitYL3RsY0ZBSyt0ZUNzVG1ndXN6?=
- =?utf-8?B?Zk5VaTFQWjMyZTFhcEZDWFpybWx3bHFGTlNRTW9HV1hqYWJDMjU0SURsdy90?=
- =?utf-8?B?WlhyRjFmQ0swb09iWEpXUFlpdzFrbkNoUG45dkcybDRaNERBMk4rUkIyTE82?=
- =?utf-8?B?RUM5VHVkMXJQWjhPb0FiYmFTQWtiTE1vRnVHS09NWjFta2t3K1UzUlQ5SjRC?=
- =?utf-8?B?aGVFUlpqMjdIM3N1Rk9TVFRtb1ZUTmo3S21sZFdJNVg4TUJueER0RXZPWUVO?=
- =?utf-8?B?dW5GYzB5SUw2NGVCOHk1azNqVmZtUnJEaHE5a0tBbDVHK1F3ZVZIUWs4UUMx?=
- =?utf-8?B?aWdJS0NrNktLR1I5WEhxaGVXeWhGaDB6YUtraDI3MVNJVmN2bWZiQjlDWW5P?=
- =?utf-8?B?R2Z3UDI4WEh2bnJmallMc3l5cTQ5bWhZRXA0MjhhL1dlLzdEV1hMTXNJOElH?=
- =?utf-8?B?SGNKNXVCcm5hN1UrTG5qN0tpdlhFd1B1Q1ZrYldDZ2FudXhFU0E1YmZZMk9Y?=
- =?utf-8?B?SG4rNmtaaFhEbWhOKzNKYUlwajAyZEdRZ0h2UGRDRDNVSG90eXp6T1R1SzFX?=
- =?utf-8?B?MzBKSTVyayswQmNaWE9DSUlWTTd2SVhxZG5HVlM2WHBGT0FoQ3B3eDNnemJR?=
- =?utf-8?B?bzhTQ1drb0NzS1V3Zm1lWDhBYWRMMUZuRmFxdU1odkJCdkF3dm15bC8wZzdC?=
- =?utf-8?B?aGt2UmNHVnBFcUlsL1dkQT09?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <FF899984CF71524AAE6A59FD98B5F07F@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S236238AbhCaT4G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Mar 2021 15:56:06 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:35749 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S236325AbhCaTzl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Mar 2021 15:55:41 -0400
+Received: (qmail 1028965 invoked by uid 1000); 31 Mar 2021 15:55:39 -0400
+Date:   Wed, 31 Mar 2021 15:55:39 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     linux-usb@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: >20 KB URBs + EHCI = bad performance due to stalls
+Message-ID: <20210331195539.GA1027699@rowland.harvard.edu>
+References: <6f5be7a5-bf82-e857-5c81-322f2886099a@maciej.szmigiero.name>
+ <20210329152201.GA933773@rowland.harvard.edu>
+ <2c99b46a-3643-c22a-9aae-024565222794@maciej.szmigiero.name>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2288.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99e9435a-ab97-491d-ff78-08d8f47cf2b8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Mar 2021 19:41:15.7128
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gYc0mudstwLRfTAwsugzdm2RlFWiIijOvTKbtqb5ogCm/4vCS/xYFe3+0+iWQ46XtgXCr+CepKbF2s4s8dEZh+2vhR7XG5hu6Gbx1/wEaQo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1645
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2c99b46a-3643-c22a-9aae-024565222794@maciej.szmigiero.name>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCk9uIDMvMzEvMjEgOToyMSBBTSwgR3JlZyBLSCB3cm90ZToNCj4gDQo+IE9uIFR1ZSwgTWFy
-IDMwLCAyMDIxIGF0IDExOjU0OjQwUE0gKzAzMDAsIGNyaXN0aWFuLmJpcnNhbkBtaWNyb2NoaXAu
-Y29tIHdyb3RlOg0KPj4gRnJvbTogQ3Jpc3RpYW4gQmlyc2FuIDxjcmlzdGlhbi5iaXJzYW5AbWlj
-cm9jaGlwLmNvbT4NCj4+DQo+PiBUaGlzIHBhdGNoIHNldCBhZGRzIGluaXRpYWwgZHJpdmVyIHN1
-cHBvcnQgZm9yIE1pY3JvY2hpcCBVU0IgVHlwZS1DIFBvcnQNCj4+IENvbnRyb2xsZXIgKFRDUEMp
-IGVtYmVkZGVkIGluIHNhbWE3ZzUgU29DLg0KPj4NCj4+IFRoZSBjb250cm9sbGVyIGRvZXMgbm90
-IGltcGxlbWVudCBwb3dlciBkZWxpdmVyeSBhbmQgdGhlIGRyaXZlciB1c2VzIGR1bW15DQo+PiBm
-dW5jdGlvbnMgdG8gcmVnaXN0ZXIgdGhlIHBvcnQgd2l0aCBUQ1BNLiBUaGUgY3VycmVudCBzaWxp
-Y29uIHZlcnNpb24gaXMNCj4+IG5vdCBhYmxlIHRvIHRyaWdnZXIgaW50ZXJydXB0cyBzbyB0aGUg
-ZHJpdmVyIHdpbGwgcG9sbCBmb3IgY2hhbmdlcyBvbg0KPj4gQ0MxL0NDMiBsaW5lcy4NCj4+DQo+
-PiBTdXBwb3J0IGZvciBzaW5rIGlzIGltcGxlbWVudGVkIGFuZCB0ZXN0ZWQgd2l0aCBhbiBVU0Ig
-ZGV2aWNlLiBUaGUgcGxhbiBpcw0KPj4gdG8gZXh0ZW5kIHRoZSBkcml2ZXIgYW5kIGFkZCBzb3Vy
-Y2Ugc3VwcG9ydC4NCj4gDQo+IFdoeSBhcmUgdGhlc2UgbWFya2VkICJSRkMiPw0KDQpJIHNlbnQg
-dGhlIHBhdGNoIGFzIFJGQyBiZWNhdXNlIEkgd2FudGVkIHRvIGdhdGhlciBmZWVkYmFjayBvbiBp
-dCBhbmQgb24gaG93DQppdCBmaXRzIHVuZGVyIFR5cGUtQy9UQ1BNIHN1YnN5c3RlbS4NCg0KPiAN
-Cj4gRG8geW91IHJlYWxseSBub3QgdGhpbmsgdGhleSBzaG91bGQgYmUgYWNjZXB0ZWQ/ICBXaHkg
-bm90LCB3aGF0IGlzIGxlZnQNCj4gdG8gZG8gd2l0aCB0aGVtPw0KPiANCg0KSSB0aGluayB0aGUg
-ZHJpdmVyIGNhbiBiZSBtZXJnZWQgYWZ0ZXIgSSBhZGRyZXNzIHRoZSByZXZpZXcgcmVjZWl2ZWQg
-b24gdGhlDQptYWlsaW5nIGxpc3QuIEF0IHRoZSBzYW1lIHRpbWUsIEkgcGxhbiB0byBlbmhhbmNl
-IGl0IHdpdGggdGhlIGZvbGxvd2luZzoNCg0KLSBhZGQgc2luayBkZXRlY3Rpb24gYXQgcG93ZXIg
-c291cmNlIGFuZCBjaGVjayBpdCB3aXRoIFVTQiBIb3N0Lg0KDQotIGFkZCBhIHdheSB0byBub3Rp
-ZnkgVkJVUyBwcmVzZW5jZSBiYWNrIHRvIFVTQiBnYWRnZXQuICBBcyBUQ1BDIG5lZWRzIHRvDQpk
-ZXRlY3QgVkJVUyBhbmQgcmVwb3J0IGl0IHRvIFRDUE0sIEkgbW92ZWQgdGhlIFZCVVMgZGV0ZWN0
-aW9uIGdwaW8gZnJvbSB0aGUNClVTQiBnYWRnZXQgZGV2aWNlIHRyZWUgbm9kZSB0byBUQ1BDLiBG
-b3Igbm93LCB0aGUgZ2FkZ2V0IGFsd2F5cyBhc3N1bWVzIHRoYXQNClZCVVMgaXMgb24uIEkgc2F3
-IHRoYXQgc29tZSBVU0IgUEhZIGRyaXZlcnMgdXNlIGEgbm90aWZpZXIgY2hhaW4uIEkgY2FuDQpp
-bXBsZW1lbnQgc29tZXRoaW5nIHNpbWlsYXIuDQogIA0KPiBJIGRvIG5vdCBub3JtYWxseSByZXZp
-ZXcgIlJGQyIgcGF0Y2hlcyBhcyB0aGUgYXV0aG9ycyBkbyBub3QgdGhpbmsgdGhleQ0KPiBzaG91
-bGQgYmUgbWVyZ2VkLCBhbmQgd2UgaGF2ZSBwbGVudHkgb2YgcGF0Y2hlcyB0aGF0IGFyZSBiZWlu
-ZyBhc2tlZCB0bw0KPiBiZSBtZXJnZWQgYWxyZWFkeSA6KQ0KDQpVbnRpbCBub3cgSSByZWNlaXZl
-ZCBhIHJldmlldyBmcm9tIEhlaWtraSBLcm9nZXJ1cy4gSSB3aWxsIGxldCB0aGlzIHZlcnNpb24N
-Cm9mIHRoZSBwYXRjaCBvbiB0aGUgbWFpbGluZyBsaXN0IGZvciBzb21lIHRpbWUgaW4gY2FzZSB0
-aGVyZSBpcyBhZGRpdGlvbmFsDQpmZWVkYmFjay4NCg0KPiANCj4gdGhhbmtzLA0KPiANCj4gZ3Jl
-ZyBrLWgNCj4gDQoNClJlZ2FyZHMsDQpDcmlzdGlhbg0K
+On Wed, Mar 31, 2021 at 08:20:56PM +0200, Maciej S. Szmigiero wrote:
+> On 29.03.2021 17:22, Alan Stern wrote:
+> > On Sat, Mar 27, 2021 at 04:55:20PM +0100, Maciej S. Szmigiero wrote:
+> > > Hi,
+> > > 
+> > > Is there any specific reason that URBs without URB_SHORT_NOT_OK flag that
+> > > span multiple EHCI qTDs have Alternate Next qTD pointer set to the dummy
+> > > qTD in their every qTD besides the last one (instead of to the first qTD
+> > > of the next URB to that endpoint)?
+> > 
+> > Quick answer: I don't know.  I can't think of any good reason.  This
+> > code was all written a long time ago.  Maybe the issue was overlooked
+> > or the details were misunderstood.
+> 
+> I've dug out the original EHCI driver, that landed in 2.5.2:
+> https://marc.info/?l=linux-usb-devel&m=100875066109269&w=2
+> https://marc.info/?l=linux-usb-devel&m=100982880716373&w=2
+> 
+> It already had the following qTD setup code, roughly similar to what
+> the current one does:
+> > /* previous urb allows short rx? maybe optimize. */
+> > if (!(last_qtd->urb->transfer_flags & USB_DISABLE_SPD)
+> > 		&& (epnum & 0x10)) {
+> > 	// only the last QTD for now
+> > 	last_qtd->hw_alt_next = hw_next;
+> 
+> The "for now" language seems to suggest that ultimately other-than-last
+> qTDs were supposed to be set not to stall the queue, too.
+> Just the code to handle this case was never written.
+
+Probably it just slipped out of the developer's mind.
+
+> It seems to me though, this should be possible with relatively few
+> changes to the code:
+> qh_append_tds() will need to patch these other-than-last qTDs
+> hw_alt_next pointer to point to the (new) dummy qTD (instead of just
+> pointing the last submitted qTD hw_next to it and adding the remaining
+> qTDs verbatim to the qH qTD list).
+
+Right.
+
+> Then qh_completions() will need few changes:
+> *
+> >  } else if (IS_SHORT_READ (token)
+> > 	      && !(qtd->hw_alt_next
+> >           	   & EHCI_LIST_END(ehci))) {
+> This branch will need to be modified not to mark the queue as stopped
+> and request its unlinking when such type of short qTD was processed.
+
+This would be a good place to introduce a macro.  For example:
+
+	} else if (IS_SHORT_READ(token) && 
+			EHCI_PTR_IS_SET(qtd->hw_alt_next)) {
+
+or something similar.
+
+> * The ACTIVE bit should be treated as unset on any qTD following the
+> one that hits the above condition until a qTD for a different URB is
+> encountered.
+> Otherwise the unprocessed remaining qTDs from that short URB will be
+> considered pending active qTDs and the code will wait forever for their
+> processing,
+
+The treatment shouldn't be exactly the same as if ACTIVE is clear.  The 
+following qTDs can be removed from the list and deallocated immediately, 
+since the hardware won't look at them.  And they shouldn't affect the 
+URB's status.
+
+> * The code that patches the previous qTD hw_next pointer when removing a
+> qTD that isn't currently at the qH will need changing to also patch
+> hw_alt_next pointers of the qTDs belonging to the previous URB in case
+> the previous URB was one of these short-read-ok ones.
+
+Yes.  Awkward but necessary.
+
+Although I know nothing at all about the USB API in Windows, I suspect 
+that it manages to avoid this awkwardness entirely by not allowing URBs 
+in the middle of the queue to be unlinked.  Or perhaps allowing it only 
+for endpoint 0.  I've often wished Linux's API had been written that 
+way.
+
+> That's was my quick assessment what is required to handle these
+> transactions effectively in the EHCI driver.
+> 
+> I suspect, however, there may be some corner cases involving
+> non-ordinary qTD unlinking which might need fixing, too (like caused
+> by usb_unlink_urb(), system suspend or HC removal).
+> But I am not sure about this since I don't know this code well.
+
+Those shouldn't present any difficulty.  There are inherently easier to 
+handle because the QH won't be actively running when they occur.
+
+> > > This causes that endpoint queue to stall in case of a short read that
+> > > does not reach the last qTD (I guess this condition persists until an
+> > > URB is (re)submitted to that endpoint, but I am not sure here).
+> > 
+> > It persists until the driver cleans up the queue.
+> 
+> I guess by "the driver" you mean the host controller driver, not the USB
+> device driver.
+
+Yes, I meant ehci-hcd.
+
+> > > Looking at OHCI and UHCI host controller drivers the equivalent
+> > > limits seem to be different there (8 KB and 2 KB), while I don't
+> > > see any specific limit in the XHCI case.
+> > 
+> > I'd have to review the details of ohci-hcd and uhci-hcd to make
+> > sure.  In principle, the queue isn't supposed to stop merely because
+> > of a short transfer unless URB_SHORT_NOT_OK is set.  However, the UHCI
+> > hardware in particular may offer no other way to handle a short transfer.
+> 
+> Here I think it is lesser of an issue due to sheer slowness of these
+> devices.
+> 
+> So even if an URB needs some extra processing time the device should
+> still be able to maintain that 12 Mbps.
+> But I might be wrong here for USB devices with super-small on-chip
+> FIFOs.
+> 
+> > > Because of that variance in the URB buffer limit it seems strange
+> > > to me that this should be managed by a particular USB device driver
+> > > rather than by the host controller driver, because this would mean
+> > > every such driver would need to either use the lowest common
+> > > denominator for the URB buffer size (which is very small) or
+> > > hardcode the limit for every host controller that the device can
+> > > be connected to, which seems a bit inefficient.
+> > 
+> > I don't understand what you're saying in this paragraph.  What do you
+> > think USB device drivers are supposed to be managing?  The URB buffer
+> > size?
+> 
+> Yes, I've meant the URB "transfer_buffer_length".
+> 
+> > They should set that field without regard to the type of host
+> > controller in use.
+> 
+> That's what I had on mind by saying that it seems strange to me that
+> the URB buffer size should be managed by a particular USB device driver
+> depending on the host controller in use.
+> 
+> > In short, the behavior you observed is a bug, resulting in a loss of
+> > throughput (though not in any loss of data).  It needs to be fixed.
+> > 
+> > If you would like to write and submit a patch, that would be great.
+> > Otherwise, I'll try to find time to work on it.
+> 
+> Unfortunately, I doubt I will be able to work on this in coming weeks
+> due to time constraints, I'm sorry :(
+
+All right, then I'll work on it when time permits.
+
+> > I would appreciate any effort you could make toward checking the code
+> > in qh_completions(); I suspect that the checks it does involving
+> > EHCI_LIST_END may not be right.  At the very least, they should be
+> > encapsulated in a macro so that they are easier to understand.
+> 
+> I've went through the (short) URB linking and unlinking code
+> (including qh_completions()) and I haven't found anything suspicious
+> there, besides one thing that's actually on the URB *linking* path:
+> in qh_append_tds() the dummy qTD that is the last qTD in that
+> endpoint queue is being overwritten using an assignment operator.
+> 
+> While both this dummy qTD and the source qTD that overwrites it have
+> the HALT bit set it looks a bit uncomfortable to me to see a qTD that
+> the HC might just be fetching (while trying to advance the queue) being
+> overwritten.
+
+I agree.  But there's no way around it; if you're going to change the 
+contents of the qTD queue while the QH is running, at some point you 
+have to overwrite something that the controller might be accessing 
+concurrently.
+
+> Like, is C standard giving guarantees that no intermediate values are
+> being written to a struct when that struct is a target of an assignment
+> operator?
+
+THe C standard doesn't say anything like that, but the kernel does 
+generally rely on such behavior.  However, it wouldn't hurt to mark this 
+special case by using WRITE_ONCE.
+
+> But apparently this doesn't cause trouble, so I guess in practice
+> this works okay.
+
+Yes, it does.
+
+Alan Stern
