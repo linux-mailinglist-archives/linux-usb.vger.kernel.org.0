@@ -2,169 +2,761 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D9134FBAD
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Mar 2021 10:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D7E34FBD7
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Mar 2021 10:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234329AbhCaIcP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Mar 2021 04:32:15 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:19024 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234332AbhCaIcD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Mar 2021 04:32:03 -0400
-X-UUID: 082ebe03721b44b59dfb447bb2d61442-20210331
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=Z8cKO/WcF7PLYhFwwPNdw2kPZV45yctXzOoScFXE6PY=;
-        b=jZnG5EefVonyfdNq4bjrH6Vnc7mZgliJcBlBSDIvtTXLAo4CeFRwgMvGrMOyymF2AdQcCUKwyIZSOs0UG3XZ2A5ulkuNqFurqzTCryngh2eylisLPXdW+7sKA6TK2bPWZws1nlTikaKWelDIbqqBuyK2sNAC6088rfoZWvclcY8=;
-X-UUID: 082ebe03721b44b59dfb447bb2d61442-20210331
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 517248462; Wed, 31 Mar 2021 16:31:58 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
- (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 31 Mar
- 2021 16:31:53 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 31 Mar 2021 16:31:52 +0800
-Message-ID: <1617179512.2752.2.camel@mhfsdcap03>
-Subject: Re: [PATCH 2/2] usb: xhci-mtk: relax periodic TT bandwidth checking
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Ikjoon Jang <ikjn@chromium.org>, Yaqii Wu <Yaqii.Wu@mediatek.com>
-CC:     <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Wed, 31 Mar 2021 16:31:52 +0800
-In-Reply-To: <20210330160508.2.I75d28cfec05010524ccef5132c8e39adb1bf6651@changeid>
-References: <20210330080617.3746932-1-ikjn@chromium.org>
-         <20210330160508.2.I75d28cfec05010524ccef5132c8e39adb1bf6651@changeid>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S234197AbhCaIpl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Mar 2021 04:45:41 -0400
+Received: from mga06.intel.com ([134.134.136.31]:7606 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232310AbhCaIpX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 31 Mar 2021 04:45:23 -0400
+IronPort-SDR: Z6FYpesUmLsBcBlFulcixTZX2EzLEfECmUj8CwH7Bt/d3tcDGLikkrEGMuwg5pwQ87vJvV4yU9
+ N4aYELJlkhaQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9939"; a="253285794"
+X-IronPort-AV: E=Sophos;i="5.81,293,1610438400"; 
+   d="scan'208";a="253285794"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2021 01:45:23 -0700
+IronPort-SDR: 0MNtYsv/j/cbz/rskN3dS8GOG5SeWmvh+AVKjyB7ioHIF55QhF30VOZ2nsHnu3G1ms+jBPPDqY
+ FsNCEgQ0hEog==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,293,1610438400"; 
+   d="scan'208";a="516791164"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 31 Mar 2021 01:45:19 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 31 Mar 2021 11:45:19 +0300
+Date:   Wed, 31 Mar 2021 11:45:19 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     cristian.birsan@microchip.com
+Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [RFC PATCH v2 2/2] usb: typec: sama7g5_tcpc: add driver for
+ Microchip sama7g5 tcpc
+Message-ID: <YGQ2n17aAQ0Q6zNx@kuha.fi.intel.com>
+References: <20210330205442.981649-1-cristian.birsan@microchip.com>
+ <20210330205442.981649-3-cristian.birsan@microchip.com>
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 87C59DA44ED50161B151CDE95BC281B41E769E971899507DEA0DC20294A75A162000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210330205442.981649-3-cristian.birsan@microchip.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVHVlLCAyMDIxLTAzLTMwIGF0IDE2OjA2ICswODAwLCBJa2pvb24gSmFuZyB3cm90ZToNCj4g
-U29mdHdhcmUgYmFuZHdpZHRoIGNoZWNraW5nIGxvZ2ljcyB1c2VkIGJ5IHhoY2ktbXRrIHB1dHMN
-Cj4gYSBxdWl0ZSBoZWF2eSBjb25zdHJhaW50cyB0byBUVCBwZXJpb2RpYyBlbmRwb2ludCBhbGxv
-Y2F0aW9ucy4NCj4gDQo+IFRoaXMgcGF0Y2ggcHJvdmlkZXMgYSByZWxheGVkIGJhbmR3aWR0aCBj
-YWxjdWxhdGlvbiBieQ0KPiAtIEFsbG93aW5nIG11bHRpcGxlIHBlcmlvZGljIHRyYW5zYWN0aW9u
-cyBpbiBhIHNhbWUgbWljcm9mcmFtZQ0KPiAgIGZvciBhIGRldmljZSB3aXRoIG11bHRpcGxlIGlu
-dGVycnVwdCBlbmRwb2ludHMuDQo+IC0gVXNpbmcgYmVzdCBjYXNlIGJ1ZGdldCBpbnN0ZWFkIG9m
-IG1heGltdW0gbnVtYmVyIG9mDQo+ICAgY29tcGxldGUtc3BsaXQgd2hlbiBjYWxjdWxhdGluZyBi
-eXRlIGJ1ZGdldHMgb24gbG93ZXIgc3BlZWQgYnVzDQo+IA0KPiBXaXRob3V0IHRoaXMgcGF0Y2gs
-IGEgdHlwaWNhbCBmdWxsIHNwZWVkIGF1ZGlvIGhlYWRzZXQgd2l0aA0KPiAzIHBlcmlvZGljIGVu
-ZHBvaW50cyAoYXVkaW8gaXNvYy1pbi9vdXQsIGlucHV0IGludC1pbikgY2Fubm90IGJlDQo+IGNv
-bmZpZ3VyZWQgd2l0aCB4aGNpLW10ay4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IElram9vbiBKYW5n
-IDxpa2puQGNocm9taXVtLm9yZz4NCj4gLS0tDQpjYyBZYXFpaSBXdSA8WWFxaWkuV3VAbWVkaWF0
-ZWsuY29tPg0KDQpJJ2xsIHRlc3QgaXQsIHRoYW5rcw0KDQo+IA0KPiAgZHJpdmVycy91c2IvaG9z
-dC94aGNpLW10ay1zY2guYyB8IDY4ICsrKysrKysrKystLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0K
-PiAgZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay5oICAgICB8ICAyIC0NCj4gIDIgZmlsZXMgY2hh
-bmdlZCwgMjAgaW5zZXJ0aW9ucygrKSwgNTAgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0
-IGEvZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay1zY2guYyBiL2RyaXZlcnMvdXNiL2hvc3QveGhj
-aS1tdGstc2NoLmMNCj4gaW5kZXggMGNiNDEwMDdlYzY1Li43NjgyN2U0ODA0OWEgMTAwNjQ0DQo+
-IC0tLSBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGstc2NoLmMNCj4gKysrIGIvZHJpdmVycy91
-c2IvaG9zdC94aGNpLW10ay1zY2guYw0KPiBAQCAtMzg4LDEzICszODgsMTcgQEAgc3RhdGljIHZv
-aWQgc2V0dXBfc2NoX2luZm8oc3RydWN0IHhoY2lfZXBfY3R4ICplcF9jdHgsDQo+ICAJCX0gZWxz
-ZSB7IC8qIElOVF9JTl9FUCBvciBJU09DX0lOX0VQICovDQo+ICAJCQlid2JfdGFibGVbMF0gPSAw
-OyAvKiBzdGFydCBzcGxpdCAqLw0KPiAgCQkJYndiX3RhYmxlWzFdID0gMDsgLyogaWRsZSAqLw0K
-PiArDQo+ICsJCQlzY2hfZXAtPm51bV9idWRnZXRfbWljcm9mcmFtZXMgKz0gMjsNCj4gKwkJCWlm
-IChzY2hfZXAtPm51bV9idWRnZXRfbWljcm9mcmFtZXMgPiBzY2hfZXAtPmVzaXQpDQo+ICsJCQkJ
-c2NoX2VwLT5udW1fYnVkZ2V0X21pY3JvZnJhbWVzID0gc2NoX2VwLT5lc2l0Ow0KPiAgCQkJLyoN
-Cj4gIAkJCSAqIGR1ZSB0byBjc19jb3VudCB3aWxsIGJlIHVwZGF0ZWQgYWNjb3JkaW5nIHRvIGNz
-DQo+ICAJCQkgKiBwb3NpdGlvbiwgYXNzaWduIGFsbCByZW1haW5kZXIgYnVkZ2V0IGFycmF5DQo+
-ICAJCQkgKiBlbGVtZW50cyBhcyBAYndfY29zdF9wZXJfbWljcm9mcmFtZSwgYnV0IG9ubHkgZmly
-c3QNCj4gIAkJCSAqIEBudW1fYnVkZ2V0X21pY3JvZnJhbWVzIGVsZW1lbnRzIHdpbGwgYmUgdXNl
-ZCBsYXRlcg0KPiAgCQkJICovDQo+IC0JCQlmb3IgKGkgPSAyOyBpIDwgVFRfTUlDUk9GUkFNRVNf
-TUFYOyBpKyspDQo+ICsJCQlmb3IgKGkgPSAyOyBpIDwgc2NoX2VwLT5udW1fYnVkZ2V0X21pY3Jv
-ZnJhbWVzOyBpKyspDQo+ICAJCQkJYndiX3RhYmxlW2ldID0Jc2NoX2VwLT5id19jb3N0X3Blcl9t
-aWNyb2ZyYW1lOw0KPiAgCQl9DQo+ICAJfQ0KPiBAQCAtNDQ5LDIwICs0NTMsMTcgQEAgc3RhdGlj
-IHZvaWQgdXBkYXRlX2J1c19idyhzdHJ1Y3QgbXUzaF9zY2hfYndfaW5mbyAqc2NoX2J3LA0KPiAg
-c3RhdGljIGludCBjaGVja19mc19idXNfYncoc3RydWN0IG11M2hfc2NoX2VwX2luZm8gKnNjaF9l
-cCwgaW50IG9mZnNldCkNCj4gIHsNCj4gIAlzdHJ1Y3QgbXUzaF9zY2hfdHQgKnR0ID0gc2NoX2Vw
-LT5zY2hfdHQ7DQo+IC0JdTMyIG51bV9lc2l0LCB0bXA7DQo+IC0JaW50IGJhc2U7DQo+ICAJaW50
-IGksIGo7DQo+ICsJY29uc3QgaW50IG5yX2xvd2VyX3VmcmFtZXMgPQ0KPiArCQlESVZfUk9VTkRf
-VVAoc2NoX2VwLT5tYXhwa3QsIEZTX1BBWUxPQURfTUFYKTsNCj4gIA0KPiAtCW51bV9lc2l0ID0g
-WEhDSV9NVEtfTUFYX0VTSVQgLyBzY2hfZXAtPmVzaXQ7DQo+IC0JZm9yIChpID0gMDsgaSA8IG51
-bV9lc2l0OyBpKyspIHsNCj4gLQkJYmFzZSA9IG9mZnNldCArIGkgKiBzY2hfZXAtPmVzaXQ7DQo+
-IC0NCj4gKwlmb3IgKGkgPSBvZmZzZXQ7IGkgPCBYSENJX01US19NQVhfRVNJVDsgaSArPSBzY2hf
-ZXAtPmVzaXQpIHsNCj4gIAkJLyoNCj4gIAkJICogQ29tcGFyZWQgd2l0aCBocyBidXMsIG5vIG1h
-dHRlciB3aGF0IGVwIHR5cGUsDQo+ICAJCSAqIHRoZSBodWIgd2lsbCBhbHdheXMgZGVsYXkgb25l
-IHVmcmFtZSB0byBzZW5kIGRhdGENCj4gIAkJICovDQo+IC0JCWZvciAoaiA9IDA7IGogPCBzY2hf
-ZXAtPmNzX2NvdW50OyBqKyspIHsNCj4gLQkJCXRtcCA9IHR0LT5mc19idXNfYndbYmFzZSArIGpd
-ICsgc2NoX2VwLT5id19jb3N0X3Blcl9taWNyb2ZyYW1lOw0KPiArCQlmb3IgKGogPSAwOyBqIDwg
-bnJfbG93ZXJfdWZyYW1lczsgaisrKSB7DQo+ICsJCQl1MzIgdG1wID0gdHQtPmZzX2J1c19id1tp
-ICsgaiArIDFdICsgc2NoX2VwLT5id19jb3N0X3Blcl9taWNyb2ZyYW1lOw0KPiAgCQkJaWYgKHRt
-cCA+IEZTX1BBWUxPQURfTUFYKQ0KPiAgCQkJCXJldHVybiAtRVNDSF9CV19PVkVSRkxPVzsNCj4g
-IAkJfQ0KPiBAQCAtNDczLDExICs0NzQsOSBAQCBzdGF0aWMgaW50IGNoZWNrX2ZzX2J1c19idyhz
-dHJ1Y3QgbXUzaF9zY2hfZXBfaW5mbyAqc2NoX2VwLCBpbnQgb2Zmc2V0KQ0KPiAgDQo+ICBzdGF0
-aWMgaW50IGNoZWNrX3NjaF90dChzdHJ1Y3QgbXUzaF9zY2hfZXBfaW5mbyAqc2NoX2VwLCB1MzIg
-b2Zmc2V0KQ0KPiAgew0KPiAtCXN0cnVjdCBtdTNoX3NjaF90dCAqdHQgPSBzY2hfZXAtPnNjaF90
-dDsNCj4gIAl1MzIgZXh0cmFfY3NfY291bnQ7DQo+ICAJdTMyIHN0YXJ0X3NzLCBsYXN0X3NzOw0K
-PiAgCXUzMiBzdGFydF9jcywgbGFzdF9jczsNCj4gLQlpbnQgaTsNCj4gIA0KPiAgCWlmICghc2No
-X2VwLT5zY2hfdHQpDQo+ICAJCXJldHVybiAwOw0KPiBAQCAtNDk0LDEwICs0OTMsNiBAQCBzdGF0
-aWMgaW50IGNoZWNrX3NjaF90dChzdHJ1Y3QgbXUzaF9zY2hfZXBfaW5mbyAqc2NoX2VwLCB1MzIg
-b2Zmc2V0KQ0KPiAgCQlpZiAoIShzdGFydF9zcyA9PSA3IHx8IGxhc3Rfc3MgPCA2KSkNCj4gIAkJ
-CXJldHVybiAtRVNDSF9TU19ZNjsNCj4gIA0KPiAtCQlmb3IgKGkgPSAwOyBpIDwgc2NoX2VwLT5j
-c19jb3VudDsgaSsrKQ0KPiAtCQkJaWYgKHRlc3RfYml0KG9mZnNldCArIGksIHR0LT5zc19iaXRf
-bWFwKSkNCj4gLQkJCQlyZXR1cm4gLUVTQ0hfU1NfT1ZFUkxBUDsNCj4gLQ0KPiAgCX0gZWxzZSB7
-DQo+ICAJCXUzMiBjc19jb3VudCA9IERJVl9ST1VORF9VUChzY2hfZXAtPm1heHBrdCwgRlNfUEFZ
-TE9BRF9NQVgpOw0KPiAgDQo+IEBAIC01MjQsMTkgKzUxOSw3IEBAIHN0YXRpYyBpbnQgY2hlY2tf
-c2NoX3R0KHN0cnVjdCBtdTNoX3NjaF9lcF9pbmZvICpzY2hfZXAsIHUzMiBvZmZzZXQpDQo+ICAJ
-CWlmIChjc19jb3VudCA+IDcpDQo+ICAJCQljc19jb3VudCA9IDc7IC8qIEhXIGxpbWl0ICovDQo+
-ICANCj4gLQkJaWYgKHRlc3RfYml0KG9mZnNldCwgdHQtPnNzX2JpdF9tYXApKQ0KPiAtCQkJcmV0
-dXJuIC1FU0NIX1NTX09WRVJMQVA7DQo+IC0NCj4gIAkJc2NoX2VwLT5jc19jb3VudCA9IGNzX2Nv
-dW50Ow0KPiAtCQkvKiBvbmUgZm9yIHNzLCB0aGUgb3RoZXIgZm9yIGlkbGUgKi8NCj4gLQkJc2No
-X2VwLT5udW1fYnVkZ2V0X21pY3JvZnJhbWVzID0gY3NfY291bnQgKyAyOw0KPiAtDQo+IC0JCS8q
-DQo+IC0JCSAqIGlmIGludGVydmFsPTEsIG1heHAgPjc1MiwgbnVtX2J1ZGdlX21pY29mcmFtZSBp
-cyBsYXJnZXINCj4gLQkJICogdGhhbiBzY2hfZXAtPmVzaXQsIHdpbGwgb3ZlcnN0ZXAgYm91bmRh
-cnkNCj4gLQkJICovDQo+IC0JCWlmIChzY2hfZXAtPm51bV9idWRnZXRfbWljcm9mcmFtZXMgPiBz
-Y2hfZXAtPmVzaXQpDQo+IC0JCQlzY2hfZXAtPm51bV9idWRnZXRfbWljcm9mcmFtZXMgPSBzY2hf
-ZXAtPmVzaXQ7DQo+ICAJfQ0KPiAgDQo+ICAJcmV0dXJuIGNoZWNrX2ZzX2J1c19idyhzY2hfZXAs
-IG9mZnNldCk7DQo+IEBAIC01NDUsMzEgKzUyOCwxOCBAQCBzdGF0aWMgaW50IGNoZWNrX3NjaF90
-dChzdHJ1Y3QgbXUzaF9zY2hfZXBfaW5mbyAqc2NoX2VwLCB1MzIgb2Zmc2V0KQ0KPiAgc3RhdGlj
-IHZvaWQgdXBkYXRlX3NjaF90dChzdHJ1Y3QgbXUzaF9zY2hfZXBfaW5mbyAqc2NoX2VwLCBib29s
-IHVzZWQpDQo+ICB7DQo+ICAJc3RydWN0IG11M2hfc2NoX3R0ICp0dCA9IHNjaF9lcC0+c2NoX3R0
-Ow0KPiAtCXUzMiBiYXNlLCBudW1fZXNpdDsNCj4gLQlpbnQgYndfdXBkYXRlZDsNCj4gLQlpbnQg
-Yml0czsNCj4gLQlpbnQgaSwgajsNCj4gLQ0KPiAtCW51bV9lc2l0ID0gWEhDSV9NVEtfTUFYX0VT
-SVQgLyBzY2hfZXAtPmVzaXQ7DQo+IC0JYml0cyA9IChzY2hfZXAtPmVwX3R5cGUgPT0gSVNPQ19P
-VVRfRVApID8gc2NoX2VwLT5jc19jb3VudCA6IDE7DQo+ICsJaW50IGksIGosIGJ3X3VwZGF0ZWQ7
-DQo+ICsJY29uc3QgaW50IG5yX2xvd2VyX3VmcmFtZXMgPQ0KPiArCQlESVZfUk9VTkRfVVAoc2No
-X2VwLT5tYXhwa3QsIEZTX1BBWUxPQURfTUFYKTsNCj4gIA0KPiAgCWlmICh1c2VkKQ0KPiAgCQli
-d191cGRhdGVkID0gc2NoX2VwLT5id19jb3N0X3Blcl9taWNyb2ZyYW1lOw0KPiAgCWVsc2UNCj4g
-IAkJYndfdXBkYXRlZCA9IC1zY2hfZXAtPmJ3X2Nvc3RfcGVyX21pY3JvZnJhbWU7DQo+ICANCj4g
-LQlmb3IgKGkgPSAwOyBpIDwgbnVtX2VzaXQ7IGkrKykgew0KPiAtCQliYXNlID0gc2NoX2VwLT5v
-ZmZzZXQgKyBpICogc2NoX2VwLT5lc2l0Ow0KPiAtDQo+IC0JCWZvciAoaiA9IDA7IGogPCBiaXRz
-OyBqKyspIHsNCj4gLQkJCWlmICh1c2VkKQ0KPiAtCQkJCXNldF9iaXQoYmFzZSArIGosIHR0LT5z
-c19iaXRfbWFwKTsNCj4gLQkJCWVsc2UNCj4gLQkJCQljbGVhcl9iaXQoYmFzZSArIGosIHR0LT5z
-c19iaXRfbWFwKTsNCj4gLQkJfQ0KPiAtDQo+IC0JCWZvciAoaiA9IDA7IGogPCBzY2hfZXAtPmNz
-X2NvdW50OyBqKyspDQo+IC0JCQl0dC0+ZnNfYnVzX2J3W2Jhc2UgKyBqXSArPSBid191cGRhdGVk
-Ow0KPiArCWZvciAoaSA9IHNjaF9lcC0+b2Zmc2V0OyBpIDwgWEhDSV9NVEtfTUFYX0VTSVQ7IGkg
-Kz0gc2NoX2VwLT5lc2l0KSB7DQo+ICsJCWZvciAoaiA9IDA7IGogPCBucl9sb3dlcl91ZnJhbWVz
-OyBqKyspDQo+ICsJCQl0dC0+ZnNfYnVzX2J3W2krIGogKyAxXSArPSBid191cGRhdGVkOw0KPiAg
-CX0NCj4gIA0KPiAgCWlmICh1c2VkKQ0KPiBAQCAtNjM0LDkgKzYwNCwxMSBAQCBzdGF0aWMgaW50
-IGNoZWNrX3NjaF9idyhzdHJ1Y3QgbXUzaF9zY2hfYndfaW5mbyAqc2NoX2J3LA0KPiAgCQlpZiAo
-bWluX2J3ID4gd29yc3RfYncpIHsNCj4gIAkJCW1pbl9idyA9IHdvcnN0X2J3Ow0KPiAgCQkJZm91
-bmQgPSBpOw0KPiArCQkJLyogZmFzdHBhdGg6IGJhbmR3aWR0aCBjb250cmlidXRpb25zIHRvIGhv
-c3QgaXMgbG93DQo+ICsJCQkgKiB3aGVuIGl0J3MgZnMvbHMgKi8NCj4gKwkJCWlmIChzY2hfZXAt
-PnNjaF90dCB8fCBtaW5fYncgPT0gMCkNCj4gKwkJCQlicmVhazsNCj4gIAkJfQ0KPiAtCQlpZiAo
-bWluX2J3ID09IDApDQo+IC0JCQlicmVhazsNCj4gIAl9DQo+ICANCj4gIAkvKiBjaGVjayBiYW5k
-d2lkdGggKi8NCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGsuaCBiL2Ry
-aXZlcnMvdXNiL2hvc3QveGhjaS1tdGsuaA0KPiBpbmRleCA2MjFlYzFhODUwMDkuLjhhODc5Zjk5
-YWUxYyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay5oDQo+ICsrKyBi
-L2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGsuaA0KPiBAQCAtMjAsMTIgKzIwLDEwIEBADQo+ICAj
-ZGVmaW5lIFhIQ0lfTVRLX01BWF9FU0lUCTY0DQo+ICANCj4gIC8qKg0KPiAtICogQHNzX2JpdF9t
-YXA6IHVzZWQgdG8gYXZvaWQgc3RhcnQgc3BsaXQgbWljcm9mcmFtZXMgb3ZlcmxheQ0KPiAgICog
-QGZzX2J1c19idzogYXJyYXkgdG8ga2VlcCB0cmFjayBvZiBiYW5kd2lkdGggYWxyZWFkeSB1c2Vk
-IGZvciBGUw0KPiAgICogQGVwX2xpc3Q6IEVuZHBvaW50cyB1c2luZyB0aGlzIFRUDQo+ICAgKi8N
-Cj4gIHN0cnVjdCBtdTNoX3NjaF90dCB7DQo+IC0JREVDTEFSRV9CSVRNQVAoc3NfYml0X21hcCwg
-WEhDSV9NVEtfTUFYX0VTSVQpOw0KPiAgCXUzMiBmc19idXNfYndbWEhDSV9NVEtfTUFYX0VTSVRd
-Ow0KPiAgCXN0cnVjdCBsaXN0X2hlYWQgZXBfbGlzdDsNCj4gIH07DQoNCg==
+Hi Cristian,
 
+On Tue, Mar 30, 2021 at 11:54:42PM +0300, cristian.birsan@microchip.com wrote:
+> From: Cristian Birsan <cristian.birsan@microchip.com>
+> 
+> This patch adds initial driver support for the new Microchip USB
+> Type-C Port Controller (TCPC) embedded in sama7g5 SoC.
+> 
+> Signed-off-by: Cristian Birsan <cristian.birsan@microchip.com>
+> ---
+>  drivers/usb/typec/tcpm/Kconfig        |   8 +
+>  drivers/usb/typec/tcpm/Makefile       |   1 +
+>  drivers/usb/typec/tcpm/sama7g5_tcpc.c | 610 ++++++++++++++++++++++++++
+>  3 files changed, 619 insertions(+)
+>  create mode 100644 drivers/usb/typec/tcpm/sama7g5_tcpc.c
+> 
+> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
+> index 557f392fe24d..8ba0fd85741f 100644
+> --- a/drivers/usb/typec/tcpm/Kconfig
+> +++ b/drivers/usb/typec/tcpm/Kconfig
+> @@ -52,6 +52,14 @@ config TYPEC_FUSB302
+>  	  Type-C Port Controller Manager to provide USB PD and USB
+>  	  Type-C functionalities.
+>  
+> +config TYPEC_SAMA7G5
+> +	tristate "Microchip SAMA7G5 Type-C Port Controller driver"
+> +	select REGMAP_MMIO
+> +	help
+> +	  Say Y or M here if your system has SAMA7G5 TCPC controller.
+> +	  It works with Type-C Port Controller Manager to provide USB
+> +	  Type-C functionalities.
+> +
+>  config TYPEC_WCOVE
+>  	tristate "Intel WhiskeyCove PMIC USB Type-C PHY driver"
+>  	depends on ACPI
+> diff --git a/drivers/usb/typec/tcpm/Makefile b/drivers/usb/typec/tcpm/Makefile
+> index 7d499f3569fd..9abe8a7ae1cc 100644
+> --- a/drivers/usb/typec/tcpm/Makefile
+> +++ b/drivers/usb/typec/tcpm/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-$(CONFIG_TYPEC_TCPM)		+= tcpm.o
+>  obj-$(CONFIG_TYPEC_FUSB302)		+= fusb302.o
+> +obj-$(CONFIG_TYPEC_SAMA7G5)		+= sama7g5_tcpc.o
+>  obj-$(CONFIG_TYPEC_WCOVE)		+= typec_wcove.o
+>  typec_wcove-y				:= wcove.o
+>  obj-$(CONFIG_TYPEC_TCPCI)		+= tcpci.o
+> diff --git a/drivers/usb/typec/tcpm/sama7g5_tcpc.c b/drivers/usb/typec/tcpm/sama7g5_tcpc.c
+> new file mode 100644
+> index 000000000000..2986c0fcc8a3
+> --- /dev/null
+> +++ b/drivers/usb/typec/tcpm/sama7g5_tcpc.c
+> @@ -0,0 +1,610 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Microchip SAMA7G5 Type-C Port Controller Driver
+> + *
+> + * Copyright (C) 2021 Microchip Technology, Inc. and its subsidiaries
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/gpio.h>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_gpio.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/usb/pd.h>
+> +#include <linux/usb/tcpm.h>
+> +#include <linux/usb/typec.h>
+> +
+> +#define SAMA7G5_TCPC_GCLK				32000
+> +
+> +/* TCPC registers offsets */
+> +#define TCPC_CR			0x80		/* TCPC Control Register */
+> +#define TCPC_UPC		0xA0		/* TCPC PHY Control Register */
+> +#define TCPC_UPS		0xA4		/* TCPC PHY Status Register */
+> +
+> +#define TCPC_CR_RESET		0x54434301	/* Magic value */
+> +
+> +/* TCPC PHY Control Register */
+> +#define TCPC_UPC_BCDETE		BIT(29)
+> +#define TCPC_UPC_BCVSRCE	BIT(28)
+> +#define	TCPC_UPC_BCDETSEL	BIT(27)
+
+Why do you have a tab right after "#define" above?
+
+> +#define	TCPC_UPC_BCIDPSRCE	BIT(26)
+
+And here?
+
+> +#define TCPC_UPC_DMPDFE		BIT(25)
+> +#define TCPC_UPC_DMPDFD		BIT(24)
+> +#define TCPC_UPC_IP_OFF		(0 << 12)
+> +#define TCPC_UPC_IP_0P5		(1 << 12)
+> +#define TCPC_UPC_IP_1P5		(2 << 12)
+> +#define TCPC_UPC_IP_3P0		(3 << 12)
+> +#define TCPC_UPC_THRESHOLD0	(0 << 8)
+> +#define TCPC_UPC_THRESHOLD2	(2 << 8)
+> +#define TCPC_UPC_THRESHOLD4	(4 << 8)
+> +#define TCPC_UPC_THRESHOLD6	(6 << 8)
+> +
+> +/* TCPC PHY  Status Register */
+> +#define TCPC_UPS_CC2RDT		BIT(4)
+> +#define TCPC_UPS_CC1ID		BIT(3)
+> +#define TCPC_UPS_CC_MASK	GENMASK(4, 3)
+> +#define TCPC_UPS_CHGDCP		BIT(2)
+> +#define TCPC_UPS_DM		BIT(1)
+> +#define TCPC_UPS_DP		BIT(0)
+> +
+> +#define TCPC_VERSION		0xFC
+> +
+> +/* USB Type-C measurement timings */
+> +#define T_CC_MEASURE		100 /* 100 ms */
+> +
+> +#define SAMA7G5_TCPC_VBUS_IRQFLAGS (IRQF_ONESHOT \
+> +			   | IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING)
+> +
+> +struct sama7g5_tcpc {
+> +	struct device *dev;
+> +
+> +	struct workqueue_struct *wq;
+> +	struct delayed_work measure_work;
+> +
+> +	struct regmap *regmap;
+> +	void __iomem *base;
+> +
+> +	struct clk *pclk;
+> +	struct clk *gclk;
+> +
+> +	struct gpio_desc *vbus_pin;
+> +	struct regulator *vbus;
+> +
+> +	/* lock for sharing states */
+> +	struct mutex lock;
+> +
+> +	/* port status */
+> +	enum typec_cc_polarity cc_polarity;
+> +	enum typec_cc_status cc1_status;
+> +	enum typec_cc_status cc2_status;
+> +	enum typec_cc_status cc1_status_prev;
+> +	enum typec_cc_status cc2_status_prev;
+> +
+> +	/* mutex used for VBUS detection */
+> +	struct mutex vbus_mutex;
+> +	int vbus_present;
+> +	int vbus_present_prev;
+> +
+> +	unsigned int phy_status;
+> +	unsigned int phy_status_old;
+> +
+> +	struct tcpc_dev tcpc;
+> +	struct tcpm_port *tcpm;
+> +};
+> +
+> +#define tcpc_to_sama7g5_tcpc(_tcpc_) \
+> +		container_of(_tcpc_, struct sama7g5_tcpc, tcpc)
+> +
+> +static bool sama7g5_tcpc_readable_reg(struct device *dev, unsigned int reg)
+> +{
+> +	switch (reg) {
+> +	case TCPC_CR:
+> +	case TCPC_UPC:
+> +	case TCPC_UPS:
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+> +static bool sama7g5_tcpc_writeable_reg(struct device *dev, unsigned int reg)
+> +{
+> +	switch (reg) {
+> +	case TCPC_CR:
+> +	case TCPC_UPC:
+> +	case TCPC_UPS:
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+> +static const struct regmap_config sama7g5_tcpc_regmap_config = {
+> +	.reg_bits = 32,
+> +	.reg_stride = 4,
+> +	.val_bits = 32,
+> +	.max_register = TCPC_VERSION,
+> +	.readable_reg = sama7g5_tcpc_readable_reg,
+> +	.writeable_reg = sama7g5_tcpc_writeable_reg,
+> +};
+> +
+> +static int sama7g5_tcpc_get_vbus(struct tcpc_dev *tcpc)
+> +{
+> +	struct sama7g5_tcpc *sama7g5_tcpc = tcpc_to_sama7g5_tcpc(tcpc);
+> +	int ret;
+> +
+> +	mutex_lock(&sama7g5_tcpc->vbus_mutex);
+> +	ret = sama7g5_tcpc->vbus_present ? 1 : 0;
+> +	mutex_unlock(&sama7g5_tcpc->vbus_mutex);
+> +
+> +	return ret;
+> +}
+> +
+> +static int sama7g5_tcpc_set_vbus(struct tcpc_dev *tcpc, bool on, bool sink)
+> +{
+> +	struct sama7g5_tcpc *sama7g5_tcpc = tcpc_to_sama7g5_tcpc(tcpc);
+> +	int ret;
+> +
+> +	mutex_lock(&sama7g5_tcpc->vbus_mutex);
+> +	if (on)
+> +		ret = regulator_enable(sama7g5_tcpc->vbus);
+> +	else
+> +		ret = regulator_disable(sama7g5_tcpc->vbus);
+> +	mutex_unlock(&sama7g5_tcpc->vbus_mutex);
+> +
+> +	return ret;
+> +}
+> +
+> +static int sama7g5_tcpc_set_vconn(struct tcpc_dev *tcpc, bool on)
+> +{
+> +	/* VCONN is not supported */
+> +	return -EPERM;
+> +}
+> +
+> +static int sama7g5_tcpc_get_cc(struct tcpc_dev *tcpc, enum typec_cc_status *cc1,
+> +			       enum typec_cc_status *cc2)
+> +{
+> +	struct sama7g5_tcpc *sama7g5_tcpc = tcpc_to_sama7g5_tcpc(tcpc);
+> +
+> +	mutex_lock(&sama7g5_tcpc->lock);
+> +	*cc1 = sama7g5_tcpc->cc1_status;
+> +	*cc2 = sama7g5_tcpc->cc2_status;
+> +	mutex_unlock(&sama7g5_tcpc->lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sama7g5_tcpc_set_cc(struct tcpc_dev *tcpc, enum typec_cc_status cc)
+> +{
+> +	struct sama7g5_tcpc *sama7g5_tcpc = tcpc_to_sama7g5_tcpc(tcpc);
+> +	unsigned int ctrl;
+> +	int ret = 0;
+> +
+> +	mutex_lock(&sama7g5_tcpc->lock);
+> +	switch (cc) {
+> +	case TYPEC_CC_RD:
+> +		ctrl = TCPC_UPC_IP_OFF;
+> +		break;
+> +	case TYPEC_CC_RP_DEF:
+> +		ctrl = TCPC_UPC_IP_0P5;
+> +		break;
+> +	default:
+> +		ret =  -EINVAL;
+> +		goto done;
+> +	}
+> +	ret = regmap_write(sama7g5_tcpc->regmap, TCPC_UPC, ctrl);
+> +done:
+> +	mutex_unlock(&sama7g5_tcpc->lock);
+> +	return ret;
+> +}
+> +
+> +static int sama7g5_tcpc_set_polarity(struct tcpc_dev *tcpc,
+> +				     enum typec_cc_polarity pol)
+> +{
+> +	return 0;
+> +}
+> +
+> +static int sama7g5_tcpc_set_roles(struct tcpc_dev *tcpc, bool attached,
+> +			   enum typec_role role, enum typec_data_role data)
+> +{
+> +	return 0;
+> +}
+> +
+> +static int sama7g5_tcpc_set_pd_rx(struct tcpc_dev *tcpc, bool on)
+> +{
+> +	return -EPERM;
+> +}
+> +
+> +static int sama7g5_tcpc_pd_transmit(struct tcpc_dev *tcpc,
+> +				    enum tcpm_transmit_type type,
+> +				    const struct pd_message *msg,
+> +				    unsigned int negotiated_rev)
+> +{
+> +	return -EPERM;
+> +}
+> +
+> +static int sama7g5_tcpc_start_toggling(struct tcpc_dev *tcpc,
+> +				       enum typec_port_type port_type,
+> +				       enum typec_cc_status cc)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static void _sama7g5_tcpc_measure_snk(struct sama7g5_tcpc *sama7g5_tcpc)
+> +{
+> +	struct device *dev = sama7g5_tcpc->dev;
+> +	int ret;
+> +
+> +	/* Save previous CC1/CC2 state */
+> +	sama7g5_tcpc->cc1_status_prev = sama7g5_tcpc->cc1_status;
+> +	sama7g5_tcpc->cc2_status_prev = sama7g5_tcpc->cc2_status;
+> +
+> +	/* Comparator Threshold 2 */
+> +	ret = regmap_write(sama7g5_tcpc->regmap, TCPC_UPC, TCPC_UPC_IP_OFF |
+> +			   TCPC_UPC_THRESHOLD2);
+
+How about:
+
+	ret = regmap_write(sama7g5_tcpc->regmap, TCPC_UPC,
+                           TCPC_UPC_IP_OFF | TCPC_UPC_THRESHOLD2);
+
+just to make it a bit easier to read?
+
+> +	if (ret) {
+> +		dev_err(dev, "failed to wite register: %d\n", ret);
+> +		return;
+> +	}
+> +
+> +	usleep_range(560, 1000);
+> +
+> +	ret = regmap_read(sama7g5_tcpc->regmap, TCPC_UPS,
+> +			  &sama7g5_tcpc->phy_status);
+> +	if (ret) {
+> +		dev_err(dev, "failed to read register: %d\n", ret);
+> +		return;
+> +	}
+> +
+> +	if (!(sama7g5_tcpc->phy_status & TCPC_UPS_CC_MASK)) {
+> +		/* VRa*/
+> +		sama7g5_tcpc->cc1_status = TYPEC_CC_OPEN;
+> +		sama7g5_tcpc->cc2_status = TYPEC_CC_OPEN;
+> +		return;
+> +	}
+> +
+> +	/* CC1 or CC2 is connected wait for PD messages to end ~ 30ms */
+> +	usleep_range(30000, 35000);
+> +
+> +	/* Comparator Threshold 4 */
+> +	sama7g5_tcpc->phy_status_old = sama7g5_tcpc->phy_status;
+> +
+> +	ret = regmap_write(sama7g5_tcpc->regmap, TCPC_UPC, TCPC_UPC_IP_OFF |
+> +			   TCPC_UPC_THRESHOLD4);
+
+And here:
+
+	ret = regmap_write(sama7g5_tcpc->regmap, TCPC_UPC,
+                           TCPC_UPC_IP_OFF | TCPC_UPC_THRESHOLD4);
+
+> +	if (ret) {
+> +		dev_err(dev, "failed to wite register: %d\n", ret);
+> +		return;
+> +	}
+> +
+> +	usleep_range(560, 1000);
+> +	ret = regmap_read(sama7g5_tcpc->regmap, TCPC_UPS,
+> +			  &sama7g5_tcpc->phy_status);
+> +	if (ret) {
+> +		dev_err(dev, "failed to read register: %d\n", ret);
+> +		return;
+> +	}
+> +
+> +	if ((sama7g5_tcpc->phy_status_old & TCPC_UPS_CC1ID) &&
+> +	    (!(sama7g5_tcpc->phy_status & TCPC_UPS_CC1ID))) {
+> +		sama7g5_tcpc->cc1_status = TYPEC_CC_RP_DEF;
+> +		sama7g5_tcpc->cc2_status = TYPEC_CC_OPEN;
+> +		return;
+> +	}
+> +
+> +	if ((sama7g5_tcpc->phy_status_old & TCPC_UPS_CC2RDT) &&
+> +	    (!(sama7g5_tcpc->phy_status & TCPC_UPS_CC2RDT))) {
+> +		sama7g5_tcpc->cc1_status = TYPEC_CC_OPEN;
+> +		sama7g5_tcpc->cc2_status = TYPEC_CC_RP_DEF;
+> +		return;
+> +	}
+> +
+> +	/* Comparator Threshold 6 */
+> +	sama7g5_tcpc->phy_status_old = sama7g5_tcpc->phy_status;
+> +
+> +	ret = regmap_write(sama7g5_tcpc->regmap, TCPC_UPC, TCPC_UPC_IP_OFF |
+> +			   TCPC_UPC_THRESHOLD6);
+
+Ditto?
+
+> +	if (ret) {
+> +		dev_err(dev, "failed to wite register: %d\n", ret);
+> +		return;
+> +	}
+> +
+> +	usleep_range(560, 1000);
+> +	ret = regmap_read(sama7g5_tcpc->regmap, TCPC_UPS,
+> +			  &sama7g5_tcpc->phy_status);
+> +	if (ret) {
+> +		dev_err(dev, "failed to read register: %d\n", ret);
+> +		return;
+> +	}
+> +
+> +	if ((sama7g5_tcpc->phy_status_old & TCPC_UPS_CC1ID) &&
+> +	    (!(sama7g5_tcpc->phy_status & TCPC_UPS_CC1ID))) {
+> +		sama7g5_tcpc->cc1_status = TYPEC_CC_RP_1_5;
+> +		sama7g5_tcpc->cc2_status = TYPEC_CC_OPEN;
+> +		return;
+> +	}
+> +
+> +	if ((sama7g5_tcpc->phy_status_old & TCPC_UPS_CC1ID) &&
+> +	    ((sama7g5_tcpc->phy_status & TCPC_UPS_CC1ID))) {
+> +		sama7g5_tcpc->cc1_status = TYPEC_CC_RP_3_0;
+> +		sama7g5_tcpc->cc2_status = TYPEC_CC_OPEN;
+> +		return;
+> +	}
+> +
+> +	if ((sama7g5_tcpc->phy_status_old & TCPC_UPS_CC2RDT) &&
+> +	    (!(sama7g5_tcpc->phy_status & TCPC_UPS_CC2RDT))) {
+> +		sama7g5_tcpc->cc1_status = TYPEC_CC_OPEN;
+> +		sama7g5_tcpc->cc2_status = TYPEC_CC_RP_1_5;
+> +		return;
+> +	}
+> +
+> +	if ((sama7g5_tcpc->phy_status_old & TCPC_UPS_CC2RDT) &&
+> +	    ((sama7g5_tcpc->phy_status & TCPC_UPS_CC2RDT))) {
+> +		sama7g5_tcpc->cc1_status = TYPEC_CC_OPEN;
+> +		sama7g5_tcpc->cc2_status = TYPEC_CC_RP_3_0;
+> +		return;
+> +	}
+
+It looks like you only use that phy_status_old member in this
+function, so you could make it a local variable, no?
+
+> +}
+> +
+> +static void sama7g5_tcpc_measure_work(struct work_struct *work)
+> +{
+> +	struct sama7g5_tcpc *port = container_of(work, struct sama7g5_tcpc,
+> +						 measure_work.work);
+> +
+> +	mutex_lock(&port->lock);
+> +
+> +	_sama7g5_tcpc_measure_snk(port);
+> +
+> +	/* Check if the state has changed and notify TCPM */
+> +	if (port->cc1_status != port->cc1_status_prev ||
+> +	    port->cc2_status != port->cc2_status_prev)
+> +		tcpm_cc_change(port->tcpm);
+
+And those ccx_status_prev you are only using here, so you probable
+don't need those members either.
+
+> +	mod_delayed_work(port->wq, &port->measure_work,
+> +			 msecs_to_jiffies(T_CC_MEASURE));
+> +
+> +	mutex_unlock(&port->lock);
+> +}
+> +
+> +static int sama7g5_tcpc_init(struct tcpc_dev *tcpc)
+> +{
+> +	struct sama7g5_tcpc *sama7g5_tcpc = tcpc_to_sama7g5_tcpc(tcpc);
+> +	int ret;
+> +
+> +	ret = regmap_write(sama7g5_tcpc->regmap, TCPC_CR, TCPC_CR_RESET);
+> +	if (ret)
+> +		return ret;
+> +
+> +	sama7g5_tcpc->wq =
+> +		create_singlethread_workqueue(dev_name(sama7g5_tcpc->dev));
+
+One line is enough for the above.
+
+> +	if (!sama7g5_tcpc->wq)
+> +		return -ENOMEM;
+> +
+> +	INIT_DELAYED_WORK(&sama7g5_tcpc->measure_work,
+> +			  sama7g5_tcpc_measure_work);
+> +
+> +	sama7g5_tcpc->cc1_status = TYPEC_CC_OPEN;
+> +	sama7g5_tcpc->cc2_status = TYPEC_CC_OPEN;
+> +	sama7g5_tcpc->cc1_status_prev = TYPEC_CC_OPEN;
+> +	sama7g5_tcpc->cc2_status_prev = TYPEC_CC_OPEN;
+> +	sama7g5_tcpc->cc_polarity = TYPEC_POLARITY_CC1;
+> +
+> +	/* We do not have an interrupt so polling only */
+> +	mod_delayed_work(sama7g5_tcpc->wq, &sama7g5_tcpc->measure_work,
+> +			 msecs_to_jiffies(T_CC_MEASURE));
+> +
+> +	/* Enable VBUS detection */
+> +	if (sama7g5_tcpc->vbus_pin)
+> +		enable_irq(gpiod_to_irq(sama7g5_tcpc->vbus_pin));
+> +
+> +	return 0;
+> +}
+> +
+> +static int vbus_is_present(struct sama7g5_tcpc *sama7g5_tcpc)
+> +{
+> +	if (sama7g5_tcpc->vbus_pin)
+> +		return gpiod_get_value(sama7g5_tcpc->vbus_pin);
+> +
+> +	/* No Vbus detection: Assume always present */
+> +	return 1;
+> +}
+> +
+> +static irqreturn_t sama7g5_vbus_irq_thread(int irq, void *devid)
+> +{
+> +	struct sama7g5_tcpc *sama7g5_tcpc = devid;
+> +
+> +	/* debounce */
+> +	udelay(10);
+> +
+> +	mutex_lock(&sama7g5_tcpc->vbus_mutex);
+> +
+> +	sama7g5_tcpc->vbus_present = vbus_is_present(sama7g5_tcpc);
+> +	if (sama7g5_tcpc->vbus_present != sama7g5_tcpc->vbus_present_prev) {
+> +		/* VBUS changed, notify TCPM */
+> +		tcpm_vbus_change(sama7g5_tcpc->tcpm);
+> +		sama7g5_tcpc->vbus_present_prev = sama7g5_tcpc->vbus_present;
+> +	}
+
+The vbus_present_prev looks like it could also be a local variable.
+
+> +	mutex_unlock(&sama7g5_tcpc->vbus_mutex);
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int sama7g5_tcpc_probe(struct platform_device *pdev)
+> +{
+> +	int ret;
+> +	struct sama7g5_tcpc *sama7g5_tcpc;
+> +
+> +	struct resource *mem;
+> +	void __iomem *base;
+> +
+> +	sama7g5_tcpc = devm_kzalloc(&pdev->dev, sizeof(*sama7g5_tcpc),
+> +				    GFP_KERNEL);
+> +	if (!sama7g5_tcpc)
+> +		return -ENOMEM;
+> +
+> +	mem =  platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	base = devm_ioremap_resource(&pdev->dev, mem);
+> +	if (IS_ERR(base))
+> +		return PTR_ERR(base);
+> +	sama7g5_tcpc->base = base;
+
+        sama7g5_tcpc->base = devm_platform_ioremap_resourse(pdev, 0);
+        if (IS_ERR(sama7g5_tcpc->base))
+                return PTR_ERR(sama7g5_tcpc->base);
+
+> +	sama7g5_tcpc->regmap =  devm_regmap_init_mmio(&pdev->dev, base,
+> +						&sama7g5_tcpc_regmap_config);
+
+You can align that properly too:
+
+	sama7g5_tcpc->regmap =  devm_regmap_init_mmio(&pdev->dev, sama7g5_tcpc->base,
+                                                      &sama7g5_tcpc_regmap_config);
+
+> +	if (IS_ERR(sama7g5_tcpc->regmap)) {
+> +		dev_err(&pdev->dev, "Regmap init failed\n");
+> +		return PTR_ERR(sama7g5_tcpc->regmap);
+> +	}
+> +
+> +	/* Get the peripheral clock */
+> +	sama7g5_tcpc->pclk = devm_clk_get(&pdev->dev, "pclk");
+> +	if (IS_ERR(sama7g5_tcpc->pclk)) {
+> +		ret = PTR_ERR(sama7g5_tcpc->pclk);
+> +		dev_err(&pdev->dev,
+> +			"failed to get the peripheral clock: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = clk_prepare_enable(sama7g5_tcpc->pclk);
+> +	if (ret) {
+> +		dev_err(&pdev->dev,
+> +			"failed to enable the peripheral clock: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/* Get the generic clock */
+> +	sama7g5_tcpc->gclk = devm_clk_get(&pdev->dev, "gclk");
+> +	if (IS_ERR(sama7g5_tcpc->gclk)) {
+> +		ret = PTR_ERR(sama7g5_tcpc->gclk);
+> +		dev_err(&pdev->dev,
+> +			"failed to get the PMC generic clock: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = clk_set_rate(sama7g5_tcpc->gclk, SAMA7G5_TCPC_GCLK);
+> +	if (ret) {
+> +		dev_err(&pdev->dev,
+> +			"unable to change gclk rate to: %u\n",
+> +			SAMA7G5_TCPC_GCLK);
+> +		return ret;
+> +	}
+> +
+> +	ret = clk_prepare_enable(sama7g5_tcpc->gclk);
+> +	if (ret) {
+> +		dev_err(&pdev->dev,
+> +			"failed to enable the generic clock: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	mutex_init(&sama7g5_tcpc->lock);
+> +	mutex_init(&sama7g5_tcpc->vbus_mutex);
+> +
+> +	sama7g5_tcpc->vbus_pin = devm_gpiod_get_optional(&pdev->dev,
+> +				"microchip,vbus", GPIOD_IN);
+
+You can align that properly.
+
+> +	if (IS_ERR(sama7g5_tcpc->vbus_pin)) {
+> +		ret = PTR_ERR(sama7g5_tcpc->vbus_pin);
+> +		dev_err(&pdev->dev, "unable to claim vbus-gpio: %d\n", ret);
+> +	}
+> +
+> +	sama7g5_tcpc->vbus = devm_regulator_get_optional(&pdev->dev, "vbus");
+> +
+> +	if (IS_ERR(sama7g5_tcpc->vbus)) {
+> +		ret = PTR_ERR(sama7g5_tcpc->vbus);
+> +		dev_err(&pdev->dev, "unable to claim vbus-supply: %d\n", ret);
+> +	}
+> +
+> +	if (sama7g5_tcpc->vbus_pin) {
+> +		irq_set_status_flags(gpiod_to_irq(sama7g5_tcpc->vbus_pin),
+> +				     IRQ_NOAUTOEN);
+> +		ret = devm_request_threaded_irq(&pdev->dev,
+> +				gpiod_to_irq(sama7g5_tcpc->vbus_pin), NULL,
+> +				sama7g5_vbus_irq_thread,
+> +				SAMA7G5_TCPC_VBUS_IRQFLAGS,
+> +				"sama7g5_tcpc", sama7g5_tcpc);
+> +		if (ret) {
+> +			sama7g5_tcpc->vbus_pin = NULL;
+> +			dev_warn(&pdev->dev,
+> +				 "failed to request vbus irq; "
+> +				 "assuming always on\n");
+> +		}
+> +	}
+> +
+> +	sama7g5_tcpc->dev = &pdev->dev;
+> +	platform_set_drvdata(pdev, sama7g5_tcpc);
+> +
+> +	sama7g5_tcpc->tcpc.init = sama7g5_tcpc_init;
+> +	sama7g5_tcpc->tcpc.get_vbus = sama7g5_tcpc_get_vbus;
+> +	sama7g5_tcpc->tcpc.set_vbus = sama7g5_tcpc_set_vbus;
+> +	sama7g5_tcpc->tcpc.set_cc = sama7g5_tcpc_set_cc;
+> +	sama7g5_tcpc->tcpc.get_cc = sama7g5_tcpc_get_cc;
+> +	sama7g5_tcpc->tcpc.set_polarity = sama7g5_tcpc_set_polarity;
+> +	sama7g5_tcpc->tcpc.set_vconn = sama7g5_tcpc_set_vconn;
+> +	sama7g5_tcpc->tcpc.start_toggling = sama7g5_tcpc_start_toggling;
+> +	sama7g5_tcpc->tcpc.set_pd_rx = sama7g5_tcpc_set_pd_rx;
+> +	sama7g5_tcpc->tcpc.set_roles = sama7g5_tcpc_set_roles;
+> +	sama7g5_tcpc->tcpc.pd_transmit = sama7g5_tcpc_pd_transmit;
+> +
+> +	sama7g5_tcpc->tcpc.fwnode = device_get_named_child_node(&pdev->dev,
+> +								"connector");
+> +	if (!sama7g5_tcpc->tcpc.fwnode) {
+> +		dev_err(&pdev->dev, "Can't find connector node.\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	sama7g5_tcpc->tcpm = tcpm_register_port(sama7g5_tcpc->dev,
+> +						&sama7g5_tcpc->tcpc);
+> +	if (IS_ERR(sama7g5_tcpc->tcpm)) {
+> +		fwnode_remove_software_node(sama7g5_tcpc->tcpc.fwnode);
+> +		return PTR_ERR(sama7g5_tcpc->tcpm);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int sama7g5_tcpc_remove(struct platform_device *pdev)
+> +{
+> +	struct sama7g5_tcpc *sama7g5_tcpc;
+> +
+> +	sama7g5_tcpc = platform_get_drvdata(pdev);
+> +
+> +	/* Mask everything */
+> +	if (sama7g5_tcpc->vbus_pin)
+> +		disable_irq(gpiod_to_irq(sama7g5_tcpc->vbus_pin));
+> +
+> +
+> +	if (!IS_ERR_OR_NULL(sama7g5_tcpc->tcpm))
+> +		tcpm_unregister_port(sama7g5_tcpc->tcpm);
+> +
+> +	destroy_workqueue(sama7g5_tcpc->wq);
+> +
+> +	clk_disable_unprepare(sama7g5_tcpc->gclk);
+> +	clk_disable_unprepare(sama7g5_tcpc->pclk);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id sama7g5_tcpc_dt_ids[] = {
+> +	{
+> +		.compatible = "microchip,sama7g5-tcpc",
+> +	},
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, sama7g5_tcpc_dt_ids);
+> +
+> +static struct platform_driver sama7g5_tcpc_driver = {
+> +	.probe	= sama7g5_tcpc_probe,
+> +	.remove = sama7g5_tcpc_remove,
+> +	.driver = {
+> +		.name	= "microchip,sama7g5-tcpc",
+> +		.of_match_table	= sama7g5_tcpc_dt_ids,
+> +	},
+> +};
+> +module_platform_driver(sama7g5_tcpc_driver);
+> +
+> +MODULE_AUTHOR("Cristian Birsan <cristian.birsan@microchip.com>");
+> +MODULE_DESCRIPTION("Microchip SAMA7G5 Type-C Port Controller Driver");
+> +MODULE_LICENSE("GPL");
+
+thanks,
+
+-- 
+heikki
