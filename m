@@ -2,114 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F2534F79E
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Mar 2021 05:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E462C34F830
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Mar 2021 06:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233470AbhCaDrQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Mar 2021 23:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
+        id S229959AbhCaE65 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Mar 2021 00:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbhCaDrN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Mar 2021 23:47:13 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEF5C061574;
-        Tue, 30 Mar 2021 20:47:10 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id f3so4006088pgv.0;
-        Tue, 30 Mar 2021 20:47:10 -0700 (PDT)
+        with ESMTP id S233478AbhCaE6q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Mar 2021 00:58:46 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C6DC061574;
+        Tue, 30 Mar 2021 21:58:46 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id ha17so8892159pjb.2;
+        Tue, 30 Mar 2021 21:58:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=U0ybPJ4IUj7A9WiPX6++C9vlgGXr5Xx8nEXJ1UKkhm8=;
-        b=Ovm3ccj1Gkreg3858fKpv3NAk23NEwwFzrJg8scUGuiVgd/lWz9MV0+716OM+d2wFf
-         gtcf02bbchFFt2TP6DA8kMYhX7viY9Wew0V1iC3mcNZRAsp513LCmXMy4CZpIzn0KkE1
-         qbNcE8wQd5P7SSBE1YJfEaMYr0t5Hxlrj4wFiH4lpRQgLugscp24O73O7B5pWaqjbUfi
-         XRYzC5hNE/RECINx2jT9IsZ4mb5J9PkMW5QUXqwUj2d++OodhwmXi4501PPLOUokfDua
-         c1CMXcXooDtcBxA8ELHbVp4w1hQfej39OQU9Zi7FgudIQSmHLNFBdGKBVycCiXOWx/s3
-         GRkQ==
+        h=from:to:cc:subject:date:message-id;
+        bh=M9IEZCF3Kb5rzDpus85iH1dAL2w2ZrIdfYygwHVDvMs=;
+        b=QOx+xP0OZ9SwBGZAcMXCuioMLzdjTff51PtRLVQmxuiKezcDEiMqpJNi0HnkZQmHNx
+         4CX6FTDHqn0bNK3YpNvch7/LCc5iekuFtAiyJ1ZCDw29+RCFssk777mEBiO7JKMSTqe7
+         FWmZfiLQC1Tb/Fk03vbxBZeUOmV6PwErF//XkcSl/RTjdjN7d2JWXP3F/xZBakHuvir+
+         2HfVjTCQVYGFTCZIdG+s+0kBGsY6BLTwjmV1RTciFZSNbSq1k6u5I0Eqy3pIU2lj/aK1
+         +j1GEYDcGl1oqj26f/FcqQv/1SwPJYKQhLmWdJS33+5pLbf3SRSlXRWCtoBPBNQjWsX/
+         VWnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=U0ybPJ4IUj7A9WiPX6++C9vlgGXr5Xx8nEXJ1UKkhm8=;
-        b=pfD2cWo3crhoZJGy4+P+C6TAk1r+0dgpJrC1WdypWRAgao/zZHGLlKZer4uhdDLvhu
-         bXxHoH/miXMZmWPttX1xWJIwVwiIA/29PbhiDUtrx+XtnhXjyAcMOQxswx5CAZ0HKNIm
-         nc4ocCtUl08oKQofHjOl1o8ZFg4FICspEOsWyUNHPbKDyfZAuQmjiH1NwSOWovklSO//
-         DhbgQO00PWlSalYINgJULatm9BcAUGHVtYlQGaGJ1RcHe2H5fQmVSgBU7orerjaNw8iS
-         XbVoq0mSKBVqhsm1ZJDldNT2S67/cSo34KXdk8PrD7sd85i7FKNuMTEsAsRX5eALRTXf
-         BzLQ==
-X-Gm-Message-State: AOAM531ZY/+CIuDgV/h9xAs66bWzITXtGOvt1tVZEzPegjf9s920ILk2
-        nz0KMJPMidZQ4mX8YtIQdek=
-X-Google-Smtp-Source: ABdhPJyauHHwpjyiuukvlQwcFr75L5EGfWTiT3+42JyY+XkZ0d42RuforqZEr35yuq0JFRrmYydfXQ==
-X-Received: by 2002:a65:53c8:: with SMTP id z8mr1284073pgr.340.1617162429825;
-        Tue, 30 Mar 2021 20:47:09 -0700 (PDT)
-Received: from taoren-ubuntu-R90MNF91 (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
-        by smtp.gmail.com with ESMTPSA id j3sm407019pfc.49.2021.03.30.20.47.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 30 Mar 2021 20:47:09 -0700 (PDT)
-Date:   Tue, 30 Mar 2021 20:47:02 -0700
-From:   Tao Ren <rentao.bupt@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=M9IEZCF3Kb5rzDpus85iH1dAL2w2ZrIdfYygwHVDvMs=;
+        b=R034iGVx+eUEqFXpvUbsrz4YFUS+AsgdgNdCeiKeeByxDz+F3kuZzx/eKXbEixeuRp
+         xoPBTs+YX1p/jh427QAoLuYaWAgtOZrvJByqMHPyqDugLB6Zcslu8SqO4/Y7dd9i2956
+         squfW8Hhk36m9GSisAi7UBbK3PaeHwVpwyhntrx95c+h93RMTiY45BElZhEhNZ4HGOGH
+         rT1F4efpNvfrfZNNSb1q5cv+C8aW+MkTotPNckRKjVCNy9xDFvtmmOsdLLG/9BiS7VPg
+         Qc0yRpNXzsTdg3Jxe4czllPcF6zEeWgbZi28hZz5Ih/NU3nqIBi68HW0+IwrzZW0MQrf
+         OZvg==
+X-Gm-Message-State: AOAM532SyFN59V4Gep6LGlPB4Hgwk6rq7s+Zqhj4TOMsJJXkIXcfq7FI
+        nZssmewADDLM+akj08ju3s0=
+X-Google-Smtp-Source: ABdhPJxCQskMGUM7pUf8tLPCPJKZG1Bkr8uITpKSbc8zP5PBHshTADmqpzQJd1Y+m/V/iFE4MN9CAw==
+X-Received: by 2002:a17:90a:db51:: with SMTP id u17mr1695746pjx.194.1617166725244;
+        Tue, 30 Mar 2021 21:58:45 -0700 (PDT)
+Received: from taoren-ubuntu-R90MNF91.thefacebook.com (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
+        by smtp.gmail.com with ESMTPSA id a70sm587054pfa.202.2021.03.30.21.58.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Mar 2021 21:58:44 -0700 (PDT)
+From:   rentao.bupt@gmail.com
+To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Joel Stanley <joel@jms.id.au>,
         Andrew Jeffery <andrew@aj.id.au>,
         kernel test robot <lkp@intel.com>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Sasha Levin <sashal@kernel.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
         Ryan Chen <ryan_chen@aspeedtech.com>,
         Thomas Tai <thomas.tai@oracle.com>,
         Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Robin Murphy <robin.murphy@arm.com>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
         linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         openbmc@lists.ozlabs.org, Tao Ren <taoren@fb.com>
-Subject: Re: [PATCH] usb: gadget: aspeed: set port_dev dma mask
-Message-ID: <20210331034701.GA3185@taoren-ubuntu-R90MNF91>
-References: <20210326070214.6719-1-rentao.bupt@gmail.com>
- <10920f34-289c-feac-79b6-71bff2aea67d@arm.com>
- <20210326120526.GA14169@lst.de>
- <20210327221759.GA2997@taoren-ubuntu-R90MNF91>
- <20210329061735.GA27510@lst.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210329061735.GA27510@lst.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Cc:     Tao Ren <rentao.bupt@gmail.com>
+Subject: [PATCH] usb: gadget: aspeed: fix dma map failure
+Date:   Tue, 30 Mar 2021 21:58:31 -0700
+Message-Id: <20210331045831.28700-1-rentao.bupt@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 08:17:35AM +0200, Christoph Hellwig wrote:
-> On Sat, Mar 27, 2021 at 03:17:59PM -0700, Tao Ren wrote:
-> > On Fri, Mar 26, 2021 at 01:05:26PM +0100, Christoph Hellwig wrote:
-> > > On Fri, Mar 26, 2021 at 12:03:03PM +0000, Robin Murphy wrote:
-> > > > This might happen to work out, but is far from correct. Just wait until you 
-> > > > try it on a platform where the USB controller is behind an IOMMU...
-> > > >
-> > > > It looks like something is more fundamentally wrong here - the device 
-> > > > passed to DMA API calls must be the actual hardware device performing the 
-> > > > DMA, which in USB-land I believe means the controller's sysdev.
-> > > 
-> > > The shiny new usb_intf_get_dma_device API provides the device to use.
-> > 
-> > Thanks Robin and Christoph for the feedback.
-> > 
-> > If I understand correctly, usb_intf_get_dma_device API is mainly for usb
-> > host drivers? I just found usb_gadget_map_request_by_dev API: does it
-> > make sense to replace usb_gadget_map_request with
-> > usb_gadget_map_request_by_dev so we can pass the actual DMA-capable
-> > hardware device (aspeed-vhub platform device) to the API?
-> 
-> Oh, right you're dealing with a gadget side driver.  Not sure about
-> the API there, I'll let the relevant maintainers chime in.
+From: Tao Ren <rentao.bupt@gmail.com>
 
-Given this is not the right path, I will drop the patch and work out a
-new fix soon (by calling usb_gadget_map_request_by_dev, and with
-modified subject).
+Currently the virtual port_dev device is passed to DMA API, and this is
+wrong because the device passed to DMA API calls must be the actual
+hardware device performing the DMA.
 
+The patch replaces usb_gadget_map_request/usb_gadget_unmap_request APIs
+with usb_gadget_map_request_by_dev/usb_gadget_unmap_request_by_dev APIs
+so the DMA capable platform device can be passed to the DMA APIs.
 
-Cheers,
+The patch fixes below backtrace detected on Facebook AST2500 OpenBMC
+platforms:
 
-Tao
+[<80106550>] show_stack+0x20/0x24
+[<80106868>] dump_stack+0x28/0x30
+[<80823540>] __warn+0xfc/0x110
+[<8011ac30>] warn_slowpath_fmt+0xb0/0xc0
+[<8011ad44>] dma_map_page_attrs+0x24c/0x314
+[<8016a27c>] usb_gadget_map_request_by_dev+0x100/0x1e4
+[<805cedd8>] usb_gadget_map_request+0x1c/0x20
+[<805cefbc>] ast_vhub_epn_queue+0xa0/0x1d8
+[<7f02f710>] usb_ep_queue+0x48/0xc4
+[<805cd3e8>] ecm_do_notify+0xf8/0x248
+[<7f145920>] ecm_set_alt+0xc8/0x1d0
+[<7f145c34>] composite_setup+0x680/0x1d30
+[<7f00deb8>] ast_vhub_ep0_handle_setup+0xa4/0x1bc
+[<7f02ee94>] ast_vhub_dev_irq+0x58/0x84
+[<7f0309e0>] ast_vhub_irq+0xb0/0x1c8
+[<7f02e118>] __handle_irq_event_percpu+0x50/0x19c
+[<8015e5bc>] handle_irq_event_percpu+0x38/0x8c
+[<8015e758>] handle_irq_event+0x38/0x4c
+
+Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+---
+ drivers/usb/gadget/udc/aspeed-vhub/core.c | 3 ++-
+ drivers/usb/gadget/udc/aspeed-vhub/epn.c  | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+index be7bb64e3594..d11d3d14313f 100644
+--- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
++++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+@@ -36,6 +36,7 @@ void ast_vhub_done(struct ast_vhub_ep *ep, struct ast_vhub_req *req,
+ 		   int status)
+ {
+ 	bool internal = req->internal;
++	struct ast_vhub *vhub = ep->vhub;
+ 
+ 	EPVDBG(ep, "completing request @%p, status %d\n", req, status);
+ 
+@@ -46,7 +47,7 @@ void ast_vhub_done(struct ast_vhub_ep *ep, struct ast_vhub_req *req,
+ 
+ 	if (req->req.dma) {
+ 		if (!WARN_ON(!ep->dev))
+-			usb_gadget_unmap_request(&ep->dev->gadget,
++			usb_gadget_unmap_request_by_dev(&vhub->pdev->dev,
+ 						 &req->req, ep->epn.is_in);
+ 		req->req.dma = 0;
+ 	}
+diff --git a/drivers/usb/gadget/udc/aspeed-vhub/epn.c b/drivers/usb/gadget/udc/aspeed-vhub/epn.c
+index 02d8bfae58fb..cb164c615e6f 100644
+--- a/drivers/usb/gadget/udc/aspeed-vhub/epn.c
++++ b/drivers/usb/gadget/udc/aspeed-vhub/epn.c
+@@ -376,7 +376,7 @@ static int ast_vhub_epn_queue(struct usb_ep* u_ep, struct usb_request *u_req,
+ 	if (ep->epn.desc_mode ||
+ 	    ((((unsigned long)u_req->buf & 7) == 0) &&
+ 	     (ep->epn.is_in || !(u_req->length & (u_ep->maxpacket - 1))))) {
+-		rc = usb_gadget_map_request(&ep->dev->gadget, u_req,
++		rc = usb_gadget_map_request_by_dev(&vhub->pdev->dev, u_req,
+ 					    ep->epn.is_in);
+ 		if (rc) {
+ 			dev_warn(&vhub->pdev->dev,
+-- 
+2.17.1
+
