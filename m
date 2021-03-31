@@ -2,46 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBC435054D
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Mar 2021 19:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 356C335062F
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Mar 2021 20:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233945AbhCaRQx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Mar 2021 13:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbhCaRQs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Mar 2021 13:16:48 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08473C061574;
-        Wed, 31 Mar 2021 10:16:46 -0700 (PDT)
-Received: from [IPv6:2a02:810a:880:f54:d880:b6f8:f93d:245e] (unknown [IPv6:2a02:810a:880:f54:d880:b6f8:f93d:245e])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 220C01F45FA4;
-        Wed, 31 Mar 2021 18:16:44 +0100 (BST)
-Subject: Re: [PATCH v5 1/2] dt-bindings: usb: add analogix,anx7688.yaml
-To:     =?UTF-8?Q?Ond=c5=99ej_Jirman?= <megous@megous.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, a.hajda@samsung.com,
-        narmstrong@baylibre.com, jonas@kwiboo.se, jernej.skrabec@siol.net,
-        airlied@linux.ie, daniel@ffwll.ch, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, enric.balletbo@collabora.com,
-        drinkcat@chromium.org, hsinyi@chromium.org, kernel@collabora.com,
-        dafna3@gmail.com, robh+dt@kernel.org
-References: <20210305124351.15079-1-dafna.hirschfeld@collabora.com>
- <20210305124351.15079-2-dafna.hirschfeld@collabora.com>
- <YEJBgEPO4J5+/HhD@pendragon.ideasonboard.com>
- <35f505ee-d939-4b42-490b-321b961bdec3@collabora.com>
- <20210305172437.meu45ol7d4c3w2lr@core.my.home>
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Message-ID: <f90401b1-471b-c936-6661-d3d9c52abb2e@collabora.com>
-Date:   Wed, 31 Mar 2021 19:16:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S234446AbhCaSVr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Mar 2021 14:21:47 -0400
+Received: from vps-vb.mhejs.net ([37.28.154.113]:46310 "EHLO vps-vb.mhejs.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234442AbhCaSVK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 31 Mar 2021 14:21:10 -0400
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps (TLS1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.93.0.4)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1lRfSg-0005s2-49; Wed, 31 Mar 2021 20:21:02 +0200
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <6f5be7a5-bf82-e857-5c81-322f2886099a@maciej.szmigiero.name>
+ <20210329152201.GA933773@rowland.harvard.edu>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Re: >20 KB URBs + EHCI = bad performance due to stalls
+Message-ID: <2c99b46a-3643-c22a-9aae-024565222794@maciej.szmigiero.name>
+Date:   Wed, 31 Mar 2021 20:20:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-In-Reply-To: <20210305172437.meu45ol7d4c3w2lr@core.my.home>
+In-Reply-To: <20210329152201.GA933773@rowland.harvard.edu>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -49,228 +37,214 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 05.03.21 18:24, Ondřej Jirman wrote:
-> Hello Dafna,
-> 
-> On Fri, Mar 05, 2021 at 04:14:03PM +0100, Dafna Hirschfeld wrote:
->> Hi
+On 29.03.2021 17:22, Alan Stern wrote:
+> On Sat, Mar 27, 2021 at 04:55:20PM +0100, Maciej S. Szmigiero wrote:
+>> Hi,
 >>
->> On 05.03.21 15:34, Laurent Pinchart wrote:
->>> Hi Dafna,
->>>
->>> Thank you for the patch.
->>>
->>> On Fri, Mar 05, 2021 at 01:43:50PM +0100, Dafna Hirschfeld wrote:
->>>> ANX7688 is a USB Type-C port controller with a MUX. It converts HDMI 2.0 to
->>>> DisplayPort 1.3 Ultra-HDi (4096x2160p60).
->>>> The integrated crosspoint switch (the MUX) supports USB 3.1 data transfer
->>>> along with the DisplayPort Alternate Mode signaling over USB Type-C.
->>>> Additionally, an on-chip microcontroller (OCM) is available to manage the
->>>> signal switching, Channel Configuration (CC) detection, USB Power
->>>> Delivery (USB-PD), Vendor Defined Message (VDM) protocol support and other
->>>> functions as defined in the USB TypeC and USB Power Delivery
->>>> specifications.
->>>>
->>>> ANX7688 is found on Acer Chromebook R13 (elm) and on
->>>> Pine64 PinePhone.
+>> Is there any specific reason that URBs without URB_SHORT_NOT_OK flag that
+>> span multiple EHCI qTDs have Alternate Next qTD pointer set to the dummy
+>> qTD in their every qTD besides the last one (instead of to the first qTD
+>> of the next URB to that endpoint)?
 > 
-> Thanks for your work on the bindings. :) It would be great to find something
-> acceptable for mainlining.
-> 
-> A few comments based on my experience implementing the USB-PD part for PinePhone
-> are bellow.
-> 
->>>> +properties:
->>>> +  compatible:
->>>> +    const: analogix,anx7688
->>>> +
->>>> +  reg:
->>>> +    maxItems: 1
->>>> +
->>>> +  avdd33-supply:
->>>> +    description: 3.3V Analog core supply voltage.
->>>> +
->>>> +  dvdd18-supply:
->>>> +    description: 1.8V Digital I/O supply voltage.
->>>> +
->>>> +  avdd18-supply:
->>>> +    description: 1.8V Analog core power supply voltage.
->>>> +
->>>> +  avdd10-supply:
->>>> +    description: 1.0V Analog core power supply voltage.
->>>> +
->>>> +  dvdd10-supply:
->>>> +    description: 1.0V Digital core supply voltage.
->>>> +
->>>
->>> That's lots of supplies. If there's a reasonable chance that some of
->>> them will always be driven by the same regulator (especially if the
->>> ANX7688 documentation requires that), then they could be grouped. For
->>> instance dvdd18-supply and avdd18-supply could be grouped into
->>> vdd18-supply. It would still allow us to extend the bindings in a
->>> backward compatible way later if a system uses different regulators. You
->>> have more information about the hardware than I do, so it's your call.
-> 
-> On PinePhone, AVDD and DVDD for 1.0V are just separately fitlered outputs
-> from the same regulator. So it would work there to just use vdd18 and
-> vdd10. The same is true for reference design, so it's probably safe
-> to assume this can be simplified.
-> 
->>>> +  hdmi5v-supply:
->>>> +    description: 5V power supply for the HDMI.
->>>> +
->>>> +  hdmi_vt-supply:
->>>> +    description: Termination voltage for HDMI input.
->>>
->>> Maybe hdmi-vt-supply ?
->>>
->>>> +
->>>> +  clocks:
->>>> +    description: The input clock specifier.
->>>> +    maxItems: 1
->>>
->>> How about
->>>
->>>       items:
->>>         - description: The input clock specifier.
->>>
->>>> +
->>>> +  clock-names:
->>>> +    items:
->>>> +      - const: xtal
->>>> +
->>>> +  hpd-gpios:
->>>> +    description: |
->>>> +      In USB Type-C applications, DP_HPD has no use. In standard DisplayPort
->>>> +      applications, DP_HPD is used as DP hot-plug.
->>>> +    maxItems: 1
-> 
-> On PinePhone this is wired to a HDMI port on the SoC, and HPD is handled by the
-> sun4i HDMI DRM driver. Seems like HPD will be handled by HDMI controller on
-> many/all? other platforms too. Why have it here?
+> Quick answer: I don't know.  I can't think of any good reason.  This
+> code was all written a long time ago.  Maybe the issue was overlooked
+> or the details were misunderstood.
 
-Right, I didn't have the full picture when listing all the pins of the anx7688.
-I was not sure what should be listed.
-I will remove that.
+I've dug out the original EHCI driver, that landed in 2.5.2:
+https://marc.info/?l=linux-usb-devel&m=100875066109269&w=2
+https://marc.info/?l=linux-usb-devel&m=100982880716373&w=2
+
+It already had the following qTD setup code, roughly similar to what
+the current one does:
+> /* previous urb allows short rx? maybe optimize. */
+> if (!(last_qtd->urb->transfer_flags & USB_DISABLE_SPD)
+> 		&& (epnum & 0x10)) {
+>	// only the last QTD for now
+>	last_qtd->hw_alt_next = hw_next;
+
+The "for now" language seems to suggest that ultimately other-than-last
+qTDs were supposed to be set not to stall the queue, too.
+Just the code to handle this case was never written.
+
+It seems to me though, this should be possible with relatively few
+changes to the code:
+qh_append_tds() will need to patch these other-than-last qTDs
+hw_alt_next pointer to point to the (new) dummy qTD (instead of just
+pointing the last submitted qTD hw_next to it and adding the remaining
+qTDs verbatim to the qH qTD list).
+
+Then qh_completions() will need few changes:
+*
+>  } else if (IS_SHORT_READ (token)
+>	      && !(qtd->hw_alt_next
+>           	   & EHCI_LIST_END(ehci))) {
+This branch will need to be modified not to mark the queue as stopped
+and request its unlinking when such type of short qTD was processed.
+
+* The ACTIVE bit should be treated as unset on any qTD following the
+one that hits the above condition until a qTD for a different URB is
+encountered.
+Otherwise the unprocessed remaining qTDs from that short URB will be
+considered pending active qTDs and the code will wait forever for their
+processing,
+
+* The code that patches the previous qTD hw_next pointer when removing a
+qTD that isn't currently at the qH will need changing to also patch
+hw_alt_next pointers of the qTDs belonging to the previous URB in case
+the previous URB was one of these short-read-ok ones.
+
+That's was my quick assessment what is required to handle these
+transactions effectively in the EHCI driver.
+
+I suspect, however, there may be some corner cases involving
+non-ordinary qTD unlinking which might need fixing, too (like caused
+by usb_unlink_urb(), system suspend or HC removal).
+But I am not sure about this since I don't know this code well.
 
 > 
->>>> +  enable-gpios:
->>>> +    description: Chip power down control. No internal pull-down or pull-up resistor.
->>>> +    maxItems: 1
->>>> +
->>>> +  reset-gpios:
->>>> +    description: Reset input signal. Active low.
->>>> +    maxItems: 1
->>>> +
->>>> +  vbus-det-gpios:
->>>> +    description: |
->>>> +      An input gpio for VBUS detection and high voltage detection,
->>>> +      external resistance divide VBUS voltage to 1/8.
->>>> +    maxItems: 1
+>> This causes that endpoint queue to stall in case of a short read that
+>> does not reach the last qTD (I guess this condition persists until an
+>> URB is (re)submitted to that endpoint, but I am not sure here).
 > 
-> Why have this in the bindings? It seems that this is handled internally by the
-> ANX7688 via OCM firmware. And it's not really gpio either, it's an analog input
-> with AD converter hooked to it internally.
+> It persists until the driver cleans up the queue.
 
-I will remove that.
+I guess by "the driver" you mean the host controller driver, not the USB
+device driver.
 
-> 
->>>> +  interrupts:
->>>> +    description: |
->>>> +      The interrupt notifies 4 possible events - TCPC ALERT int, PD int, DP int, HDMI int.
->>>> +    maxItems: 1
->>>> +
->>>> +  cabledet-gpios:
->>>> +    description: An output gpio, indicates by the device that a cable is plugged.
->>>> +    maxItems: 1
->>>> +
->>>> +  vbus-ctrl-gpios:
->>>> +    description:
->>>> +      External VBUS power path. Enable VBUS source and disable VBUS sink or vice versa.
->>>> +    maxItems: 1
-> 
-> VBUS control seems to be already modelled by the usb-connector bindings. Why
-> have this here?
+As far as I can see from the code in case of a short read the whole qH
+for that endpoint is going to be unlinked.
 
-dito
-> 
->>>> +  vconn-en1-gpios:
->>>> +    description: Controls the VCONN switch on the CC1 pin.
->>>> +    maxItems: 1
->>>> +
->>>> +  vconn-en2-gpios:
->>>> +    description: Controls the VCONN switch on the CC2 pin.
->>>> +    maxItems: 1
-> 
-> VCONN is a voltage regulator that can be enabled either on CC1 or CC2
-> pin, or disabled completely. This control is *partially* performed in reference
-> design directly by the OCM. OCM only decides which CC pin to switch
-> the VCONN regulator to, and informs the SoC when the base VCONN regulator
-> for the switches needs to be enabled.
-> 
-> So vconn-en1/2 gpios are irrelevant to the driver, but the driver needs
-> to control VCONN power supply somehow and defer control over it to the OCM.
-> 
-> I don't know how to express it in the bindings. Maybe a vconn-supply here
-> on the anx7688 node?
-> 
-> It may also be part of the usb-connector binding, but this is really when it
-> comes to anx7688 a parent regulator for the switches, and switches are not
-> controlled by this driver, just their parent regulator is.
-> 
-> Any ideas?
+Which in turn requires observing two Async Advance interrupts.
+EHCI spec says that in the worst case each such interrupt will be
+generated after two async list traversals.
 
-Looking at the diagram in the schematics, I see that both vbus-supply and vconn-supply
-come directly from the PMIC so similarly to the vbus-supply, the vconn-supply
-can be part of the usb-connector. Then a driver can access the vconn-supply from the remote usb
-connector. Is there a problem with that?
+Only then the qH is going to be re-linked with the remaining URBs (qTDs).
 
-Thanks a lot for the review, I am not very familiar with usb and type-c, so your review helps a lot.
-I will send v6 soon.
+Although it does not seem like this all would take a lot of time when
+the bus is otherwise idle the delays are actually enough to cause a drop
+of 100+ Mbps in throughput for me.
+
+If one assumes that the device has a 32 KB on-chip buffer (don't know
+that for sure, but I assume that the maximum URB size the driver used
+was based on that size) then a drop of 100+ Mbps would mean a delay
+on the order of 2 msecs in servicing that endpoint.
+
+By the way, it seems that others were getting even worse throughput
+from a r8152 device.
+People at https://bugzilla.kernel.org/show_bug.cgi?id=205923 report
+getting only around 60 Mbps.
+
+It looks like that the URB buffer size in the r8152 driver was now
+reduced to 16 KB to work around this issue.
+
+>> One of affected drivers here is drivers/net/usb/r8152.c.
+>>
+>> If I simply reduce its per-URB transfer buffer to 20 KB (the maximum
+>> that fits in a well-aligned qTD) the RX rate increases from around
+>> 100 Mbps to 200+ Mbps (on an ICH8M controller):
+> 
+>> The driver default is to use 32 KB buffers (which span two qTDs),
+>> but the device rarely fully fills the first qTD resulting in
+>> repetitive stalls and more than halving the performance.
+>>
+>> As far as I can see, the relevant code in
+>> drivers/usb/host/ehci-q.c::qh_urb_transaction() predates the git era.
+> 
+> Like I said, a long time ago.
+> 
+>> The comment in that function before setting the Alternate Next qTD
+>> pointer:
+>>> /*
+>>>   * short reads advance to a "magic" dummy instead of the next
+>>>   * qtd ... that forces the queue to stop, for manual cleanup.
+>>>   * (this will usually be overridden later.)
+>>>   */
+>>
+>> ...suggests the idea was to override that pointer when
+>> URB_SHORT_NOT_OK is not set, but this is actually done only for
+>> the last qTD from the URB (also, that's the only one that ends
+>> with interrupt flag set).
+> 
+> The hw_alt_next field should be updated for all the qTDs in the URB.
+> Failure to this was probably an oversight.  Or maybe the omission was
+> to simplify the procedure for cleaning up the queue after a short
+> transfer.
+
+Might be, as I have said above, the cleanup procedure will also need
+changes to handle these short qTDs.
+
+>> Looking at OHCI and UHCI host controller drivers the equivalent
+>> limits seem to be different there (8 KB and 2 KB), while I don't
+>> see any specific limit in the XHCI case.
+> 
+> I'd have to review the details of ohci-hcd and uhci-hcd to make
+> sure.  In principle, the queue isn't supposed to stop merely because
+> of a short transfer unless URB_SHORT_NOT_OK is set.  However, the UHCI
+> hardware in particular may offer no other way to handle a short transfer.
+
+Here I think it is lesser of an issue due to sheer slowness of these
+devices.
+
+So even if an URB needs some extra processing time the device should
+still be able to maintain that 12 Mbps.
+But I might be wrong here for USB devices with super-small on-chip
+FIFOs.
+
+>> Because of that variance in the URB buffer limit it seems strange
+>> to me that this should be managed by a particular USB device driver
+>> rather than by the host controller driver, because this would mean
+>> every such driver would need to either use the lowest common
+>> denominator for the URB buffer size (which is very small) or
+>> hardcode the limit for every host controller that the device can
+>> be connected to, which seems a bit inefficient.
+> 
+> I don't understand what you're saying in this paragraph.  What do you
+> think USB device drivers are supposed to be managing?  The URB buffer
+> size?  
+
+Yes, I've meant the URB "transfer_buffer_length".
+
+> They should set that field without regard to the type of host
+> controller in use.
+
+That's what I had on mind by saying that it seems strange to me that
+the URB buffer size should be managed by a particular USB device driver
+depending on the host controller in use.
+
+> In short, the behavior you observed is a bug, resulting in a loss of
+> throughput (though not in any loss of data).  It needs to be fixed.
+> 
+> If you would like to write and submit a patch, that would be great.
+> Otherwise, I'll try to find time to work on it.
+
+Unfortunately, I doubt I will be able to work on this in coming weeks
+due to time constraints, I'm sorry :(
+
+> I would appreciate any effort you could make toward checking the code
+> in qh_completions(); I suspect that the checks it does involving
+> EHCI_LIST_END may not be right.  At the very least, they should be
+> encapsulated in a macro so that they are easier to understand.
+
+I've went through the (short) URB linking and unlinking code
+(including qh_completions()) and I haven't found anything suspicious
+there, besides one thing that's actually on the URB *linking* path:
+in qh_append_tds() the dummy qTD that is the last qTD in that
+endpoint queue is being overwritten using an assignment operator.
+
+While both this dummy qTD and the source qTD that overwrites it have
+the HALT bit set it looks a bit uncomfortable to me to see a qTD that
+the HC might just be fetching (while trying to advance the queue) being
+overwritten.
+
+Like, is C standard giving guarantees that no intermediate values are
+being written to a struct when that struct is a target of an assignment
+operator?
+
+But apparently this doesn't cause trouble, so I guess in practice
+this works okay.
+
+> Alan Stern
+> 
 
 Thanks,
-Dafna
-
-> 
-> kind regards,
-> 	o.
-> 
->>>> +  ports:
->>>> +    $ref: /schemas/graph.yaml#/properties/ports
->>>> +
->>>> +    properties:
->>>> +      port@0:
->>>> +        $ref: /schemas/graph.yaml#/properties/port
->>>> +        description: Video port for HDMI input.
->>>> +
->>>> +      port@1:
->>>> +        $ref: /schemas/graph.yaml#/properties/port
->>>> +        description: USB port for the USB3 input.
->>>> +
->>>> +      port@2:
->>>> +        $ref: /schemas/graph.yaml#/properties/port
->>>> +        description: USB Type-c connector, see connector/usb-connector.yaml.
->>>> +
->>>> +    required:
->>>> +      - port@0
->>>
->>> As all the ports exist at the hardware level, should they always be
->>> present ? The endpoints are optional of course, in case a port isn't
->>> connected on a particular system.
->>>
->>>> +
->>>> +required:
->>>> +  - compatible
->>>> +  - reg
->>>
->>> Shouldn't clocks and regulators be also required ?
->>
->> hmm, theoretically yes. Practically, in the case of Acer R13 (mediatek elm) device,
->> the ANX7688 is powered up and controlled by the Embedded Controller. The kernel only
->> needs to read few registers from that device for the drm bridge driver.
->> (also mentioned that in the cover letter).
->>
->> Thanks,
->> Dafna
+Maciej
