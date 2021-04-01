@@ -2,134 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 832D83522BE
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Apr 2021 00:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84093522D2
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Apr 2021 00:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234682AbhDAWZD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Apr 2021 18:25:03 -0400
-Received: from sibelius.xs4all.nl ([83.163.83.176]:55617 "EHLO
-        sibelius.xs4all.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233789AbhDAWZD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Apr 2021 18:25:03 -0400
-X-Greylist: delayed 399 seconds by postgrey-1.27 at vger.kernel.org; Thu, 01 Apr 2021 18:25:02 EDT
-Received: from localhost (bloch.sibelius.xs4all.nl [local])
-        by bloch.sibelius.xs4all.nl (OpenSMTPD) with ESMTPA id 1523916e;
-        Fri, 2 Apr 2021 00:18:21 +0200 (CEST)
-Date:   Fri, 2 Apr 2021 00:18:21 +0200 (CEST)
-From:   Mark Kettenis <mark.kettenis@xs4all.nl>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     heiko@sntech.de, robh+dt@kernel.org, gregkh@linuxfoundation.org,
-        balbi@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-In-Reply-To: <20210401213652.14676-1-jbx6244@gmail.com> (message from Johan
-        Jonker on Thu, 1 Apr 2021 23:36:48 +0200)
-Subject: Re: [PATCH v6 0/4] convert rockchip,dwc3.txt to yaml
-References: <20210401213652.14676-1-jbx6244@gmail.com>
-Message-ID: <c1bced42d7388f34@bloch.sibelius.xs4all.nl>
+        id S234936AbhDAWgM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Apr 2021 18:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234723AbhDAWgM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Apr 2021 18:36:12 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF200C061788
+        for <linux-usb@vger.kernel.org>; Thu,  1 Apr 2021 15:36:11 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id j9so3194632wrx.12
+        for <linux-usb@vger.kernel.org>; Thu, 01 Apr 2021 15:36:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=philpotter-co-uk.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4U2nL9QjvKiGF6omVp4A37Sds4R82N2PeBqJStbYldc=;
+        b=Uza0EMA2Glg7QYmWPwKr7bEtGQEB6QPQZZwhdeOydUy3/GCSlCQTvJLQF0AH2BEuD9
+         g1jPinOr9hTWuw9Qlc8Z+BpzITlNrihd/bWxfxvV2/QG4mSwf66ST66XJ5g+SjtZtawa
+         ugTZJWrMu5nWGwanayECiamibYZRHBiyGQ9FCFcg3N/LdOePpVxmQ8UQ897jZbtxiX5W
+         o7Tb3tbl2khyXvZK5N/Gw4c0Vkaz95iX8DN6D9L8pwcwF76MCDV0sq7eZbYEjP5ge3ht
+         JsMCGMESqo/tXV9o12jWzQ6iC9oRkUZClIKRb13jiaRlZkY8mYSeT8q6kId0rAhVD/Gi
+         xu5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4U2nL9QjvKiGF6omVp4A37Sds4R82N2PeBqJStbYldc=;
+        b=uL1hgstrR4mqvGKpta1AVZ9FSO0MV42ogqlUdF66lFF+UVbHgBd8vlFwlqs0PuIqfV
+         h5yiXKf9FTUwi9YGNmj7kZRk1D3L5pxCDTDAkN/0OJxmtafu/2tTaH8ikcjYsgbedsYw
+         ir4KfbtqtiNAxynlHLdv+tv5gz4UgCAy2ePCKMS2uP2CXo+YxYBUjecE5a9aS6YNgxIS
+         ILb+BoRGsODJMF3QeVYX7WZLMcJHUXR0Ouhn87zVTi2V42r4dtsDbH+8DfIfXTBZ7zPj
+         kK2K3sBBGX+/9NyRyzH/NfT79aAoXfBr4wppKvr9EYBTfNz1JXbFbbcfyrpAnpEgVi6s
+         fWxQ==
+X-Gm-Message-State: AOAM5311amcBpXe+Xmt5CwNDuvE0GUtGJ1TbwLgbZXHIL24mNatj5HKX
+        kf4KsUkr3YPAn0c9BjvNOxGiBjTG4kFrvTYg
+X-Google-Smtp-Source: ABdhPJw/C3ZrBCftCrOvZjL+ApQqQgKzWAVLMVHrv1u37S8D1wDTQsU2Mj8Wo5y1baoHQwAc7C+E9Q==
+X-Received: by 2002:adf:e3c9:: with SMTP id k9mr12580365wrm.308.1617316570460;
+        Thu, 01 Apr 2021 15:36:10 -0700 (PDT)
+Received: from localhost.localdomain (2.0.5.1.1.6.3.8.5.c.c.3.f.b.d.3.0.0.0.0.6.1.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:df16:0:3dbf:3cc5:8361:1502])
+        by smtp.gmail.com with ESMTPSA id j26sm12380395wrh.57.2021.04.01.15.36.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Apr 2021 15:36:09 -0700 (PDT)
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     davem@davemloft.net
+Cc:     kuba@kernel.org, wilken.gottwalt@mailbox.org,
+        colin.king@canonical.com, bjorn@mork.no, jk@ozlabs.org,
+        hkallweit1@gmail.com, bjorn.andersson@linaro.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net: usb: ax88179_178a: initialize local variables before use
+Date:   Thu,  1 Apr 2021 23:36:07 +0100
+Message-Id: <20210401223607.3846-1-phil@philpotter.co.uk>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> From: Johan Jonker <jbx6244@gmail.com>
-> Date: Thu,  1 Apr 2021 23:36:48 +0200
-> 
-> The conversion of rockchip,dwc3.txt to yaml was added to linux-next,
-> but the necessary changes for rk3399 are still pending.
-> 
-> For rk3399 dwc3 usb the wrapper node for only clocks makes no sense,
-> so that was removed in the YAML example.
-> 
-> Now dtbs_check still generates notifications for the compatibility string in
-> the dts files that doesn't match, because it changed from
-> "rockchip,rk3399-dwc3" to "rockchip,rk3399-dwc3", "snps,dwc3".
-> 
-> The problem is to keep compatible with old device trees.
-> I.e. a device running an older device tree should still work with newer
-> kernels.
-> 
-> Comment by Rob in version 3:
-> Presumably you are getting lucky here (with link order). The kernel
-> has no logic to decide which driver to bind to if there are 2 matching
-> drivers. If we did, it would probably be the opposite of what you want
-> here as we'd pick the most specific match. This driver should probably
-> bail probe if no dwc3 child node.
-> 
-> Please advise how to move forward with this serie.
+Use memset to initialize local array in drivers/net/usb/ax88179_178a.c, and
+also set a local u16 and u32 variable to 0. Fixes a KMSAN found uninit-value bug
+reported by syzbot at:
+https://syzkaller.appspot.com/bug?id=00371c73c72f72487c1d0bfe0cc9d00de339d5aa
 
-As I tried to point out earlier, this kind of binding change is
-unhelpful.  Yes, you now have extra code in future Linux kernels that
-works around the problem.  But other consumers of device trees
-(U-Boot, other OSes) will have to add similar code or keep using older
-device trees.  And even then it will still cause frustration for users
-that want to run older kernels.
+Reported-by: syzbot+4993e4a0e237f1b53747@syzkaller.appspotmail.com
+Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+---
+ drivers/net/usb/ax88179_178a.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-I do understand that it is sometimes necessary to change device tree
-bindings.  But changes like this one just cause a lot of pain without
-a significant technical benefit.
+diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+index d650b39b6e5d..c1316718304d 100644
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -296,12 +296,12 @@ static int ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+ 	int ret;
+ 
+ 	if (2 == size) {
+-		u16 buf;
++		u16 buf = 0;
+ 		ret = __ax88179_read_cmd(dev, cmd, value, index, size, &buf, 0);
+ 		le16_to_cpus(&buf);
+ 		*((u16 *)data) = buf;
+ 	} else if (4 == size) {
+-		u32 buf;
++		u32 buf = 0;
+ 		ret = __ax88179_read_cmd(dev, cmd, value, index, size, &buf, 0);
+ 		le32_to_cpus(&buf);
+ 		*((u32 *)data) = buf;
+@@ -1296,6 +1296,8 @@ static void ax88179_get_mac_addr(struct usbnet *dev)
+ {
+ 	u8 mac[ETH_ALEN];
+ 
++	memset(mac, 0, sizeof(mac));
++
+ 	/* Maybe the boot loader passed the MAC address via device tree */
+ 	if (!eth_platform_get_mac_address(&dev->udev->dev, mac)) {
+ 		netif_dbg(dev, ifup, dev->net,
+-- 
+2.30.2
 
-Cheers,
-
-Mark
-
-
-> Changed V6:
->   rebase
->   remove accepted patches from serie
-> 
-> Changed V5:
->   add select
-> 
-> Changed V4:
->   removed patch "of-simple: add compatible for rk3328"
->   add patch "of-simple: bail probe if no dwc3 child node"
-> 
-> Changed V3:
->   remove aclk_usb3_rksoc_axi_perf
->   remove aclk_usb3
-> 
-> Changed V2:
->   remove node wrapper
-> 
-> Johan Jonker (3):
->   usb: dwc3: of-simple: bail probe if no dwc3 child node
->   arm64: dts: rockchip: restyle rk3399 usbdrd3_0 node
->   arm64: dts: rockchip: restyle rk3399 usbdrd3_1 node
-> 
-> Wu Liang feng (1):
->   arm64: dts: rockchip: optimize clks for rk3399 dwc3
-> 
->  arch/arm64/boot/dts/rockchip/rk3399-ficus.dts      |  4 +-
->  arch/arm64/boot/dts/rockchip/rk3399-firefly.dts    | 12 +--
->  .../boot/dts/rockchip/rk3399-gru-chromebook.dtsi   |  6 +-
->  arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi       |  6 +-
->  arch/arm64/boot/dts/rockchip/rk3399-hugsun-x99.dts | 12 +--
->  .../boot/dts/rockchip/rk3399-khadas-edge.dtsi      | 12 +--
->  arch/arm64/boot/dts/rockchip/rk3399-leez-p710.dts  | 12 +--
->  arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dts |  2 +-
->  arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi   |  8 --
->  arch/arm64/boot/dts/rockchip/rk3399-orangepi.dts   | 12 +--
->  .../boot/dts/rockchip/rk3399-pinebook-pro.dts      |  8 --
->  .../arm64/boot/dts/rockchip/rk3399-puma-haikou.dts |  4 -
->  arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi      |  6 +-
->  arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi    | 10 +--
->  arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi | 12 +--
->  arch/arm64/boot/dts/rockchip/rk3399-rock960.dts    |  4 +-
->  arch/arm64/boot/dts/rockchip/rk3399-rock960.dtsi   |  8 --
->  arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi | 12 +--
->  arch/arm64/boot/dts/rockchip/rk3399-sapphire.dtsi  | 12 +--
->  arch/arm64/boot/dts/rockchip/rk3399.dtsi           | 86 ++++++++--------------
->  .../boot/dts/rockchip/rk3399pro-vmarc-som.dtsi     |  4 -
->  drivers/usb/dwc3/dwc3-of-simple.c                  |  4 +
->  22 files changed, 59 insertions(+), 197 deletions(-)
-> 
-> -- 
-> 2.11.0
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
