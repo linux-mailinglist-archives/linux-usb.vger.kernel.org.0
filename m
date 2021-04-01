@@ -2,270 +2,379 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A11A351C97
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Apr 2021 20:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84AC352018
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Apr 2021 21:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237176AbhDASSv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Apr 2021 14:18:51 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:10118 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238686AbhDASJy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 1 Apr 2021 14:09:54 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1617300595; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=hR9ogHnCd5qp12/F2KywGdEQuoeR/c0x+sNDRQgqoC8=; b=lhGQzJIrZ/f640KCNrZ6P9uyzTBOiHWCVa0MCIlPTw12x75/YUMJWrEHFd00NRgu18tVS7nV
- rs/PfgEPKn5YVuLzww1s+jmF3L1Iojjz8VcO9mg4X7d7TigL3Xclt1mIrEFHvTvtEU8yqWyA
- U45C6YYMM7jqZ+VtSNXtCGNCmIM=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
- 60660c6ff34440a9d444b3e2 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 01 Apr 2021 18:09:51
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 62DE5C43461; Thu,  1 Apr 2021 18:09:51 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.110.73.67] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E2EE2C433ED;
-        Thu,  1 Apr 2021 18:09:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E2EE2C433ED
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH] Revert "usb: dwc3: gadget: Prevent EP queuing while
- stopping transfers"
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
-        gregkh@linuxfoundation.org, balbi@kernel.org
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        id S235277AbhDATrc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Apr 2021 15:47:32 -0400
+Received: from salscheider.org ([94.16.116.164]:54146 "EHLO
+        mail.salscheider.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235232AbhDATra (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Apr 2021 15:47:30 -0400
+X-Greylist: delayed 352 seconds by postgrey-1.27 at vger.kernel.org; Thu, 01 Apr 2021 15:47:30 EDT
+Received: from [IPv6:2001:16b8:229c:f00:6256:e3d6:b60e:cd1c] (200116b8229c0f006256e3d6b60ecd1c.dip.versatel-1u1.de [IPv6:2001:16b8:229c:f00:6256:e3d6:b60e:cd1c])
+        by mail.salscheider.org (Postfix) with ESMTPSA id E8E0A201303;
+        Thu,  1 Apr 2021 21:41:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salscheider.org;
+        s=dkim; t=1617306094;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ddBbekogY5XB2xYH1DCT0tRnEPxxQSOxcGHXbcDo550=;
+        b=P6L0meOdpekdQEU0BvP1N/HX+oM8G27NhdUvRg9wvw1c8+dudN4mkQUC+alb536VoETsyU
+        4KDnwQXAHRAqtXeGY/fKmOsWvTegGMjxWsF1t3zN5Sp+AK4Ywvje/GYzmYETEVixNT7W9T
+        0idPbyhFNw28kJYzKFoTk+1uZ4A1mbE=
+Subject: Re: ASM2142: Transfer event TRB DMA ptr not part of current TD
+ ep_index 6 comp_code 13
+From:   Ole Salscheider <ole@salscheider.org>
+To:     linux-kernel <linux-kernel@vger.kernel.org>,
         linux-usb@vger.kernel.org
-References: <20210322121932.478878424@linuxfoundation.org>
- <20210401115558.2041768-1-martin.kepplinger@puri.sm>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <57733e4d-7aad-4564-9ebf-8293a9a4d4e4@codeaurora.org>
-Date:   Thu, 1 Apr 2021 11:09:49 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+References: <04cfcd19-5bd8-2ec1-4840-3865dfec398e@salscheider.org>
+Message-ID: <df84d903-1107-8f53-2389-8a4f5af32783@salscheider.org>
+Date:   Thu, 1 Apr 2021 21:41:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210401115558.2041768-1-martin.kepplinger@puri.sm>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <04cfcd19-5bd8-2ec1-4840-3865dfec398e@salscheider.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCk9uIDQvMS8yMDIxIDQ6NTUgQU0sIE1hcnRpbiBLZXBwbGluZ2VyIHdyb3RlOg0KPiBU
-aGlzIHJldmVydHMgY29tbWl0IDlkZTQ5OTk5N2MzNzM3ZTBjMDIwN2JlYjAzNjE1YjMyMGNh
-YmU0OTUuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBNYXJ0aW4gS2VwcGxpbmdlciA8bWFydGlu
-LmtlcHBsaW5nZXJAcHVyaS5zbT4NCj4gLS0tDQo+IA0KPiBJIG1vcmUgb3IgbGVzcyBibGlu
-ZGx5IHJlcG9ydDoNCj4gY29tbWl0IDlkZTQ5OTk5N2MgKCJ1c2I6IGR3YzM6IGdhZGdldDog
-UHJldmVudCBFUCBxdWV1aW5nIHdoaWxlIHN0b3BwaW5nDQo+IHRyYW5zZmVycyIpIHJlc3Vs
-dHMgaW4gdGhlIGJlbG93IGVycm9yIGV2ZXJ5IHRpbWUgSSBjb25uZWN0IHRoZSB0eXBlLWMN
-Cj4gY29ubmVjdG9yIHRvIHRoZSBkd2MzLCBjb25maWd1cmVkIHdpdGggc2VyaWFsIGFuZCBl
-dGhlcm5ldCBnYWRnZXRzLg0KPiANCj4gZnlpLCBJIGFwcGx5IHRoZSBmb2xsb3dpbmcgdG8g
-ZHdjMyBvbiB0aGlzIHBvcnQ6DQo+IGRyX21vZGUgPSAib3RnIjsgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA0KPiBzbnBzLGRpc191
-M19zdXNwaHlfcXVpcms7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICANCj4gaG5wLWRpc2FibGU7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgDQo+IHNycC1kaXNhYmxlOyAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA0K
-PiBhZHAtZGlzYWJsZTsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICANCj4gdXNiLXJvbGUtc3dpdGNoOw0KPiANCj4gdjUuMTIt
-cmM1IGRvZXMgbm90IGhhdmUgdGhpcyBlcnJvciBzbyBJJ20gbm90IHN1cmUgd2hldGhlciBp
-dCdzDQo+IG1vcmUgYXBwcm9wcmlhdGUgdG8gYWRkIHNvbWV0aGluZyB0byBkd2MzIHRoYW4g
-cmV2ZXJ0aW5nLiBJIGhvcGUgdXNiDQo+IHBlb3BsZSB0byBrbm93IGJldHRlciBhbmQgbWF5
-YmUgZXZlbiBzZWUgdGhlIHByb2JsZW0uDQo+IA0KPiB0aGFua3MsDQo+ICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBtYXJ0aW4NCj4gDQpIaSBNYXJ0aW4sDQoNClRoaXMgaGFz
-IGJlZW4gZml4ZWQgd2l0aCB0aGUgYmVsb3c6DQpodHRwczovL2dpdC5rZXJuZWwub3JnL3B1
-Yi9zY20vbGludXgva2VybmVsL2dpdC9ncmVna2gvdXNiLmdpdC9jb21taXQvP2g9dXNiLWxp
-bnVzJmlkPTVhZWY2Mjk3MDRhZDRkOTgzZWNmNWM4YTI1ODQwZjE2ZTQ1YjZkNTkNCg0KQ2Fu
-IHlvdSBwdWxsIHRoYXQgaW4gYW5kIGdpdmUgaXQgYSB0cnk/DQoNClRoYW5rcw0KV2VzbGV5
-IENoZW5nDQoNCj4gDQo+IA0KPiANCj4gWyAgIDUxLjE0ODIyMF0gLS0tLS0tLS0tLS0tWyBj
-dXQgaGVyZSBdLS0tLS0tLS0tLS0tDQo+IFsgICA1MS4xNDgyNDFdIGR3YzMgMzgxMDAwMDAu
-dXNiOiBObyByZXNvdXJjZSBmb3IgZXAyaW4NCj4gWyAgIDUxLjE0ODM3Nl0gV0FSTklORzog
-Q1BVOiAwIFBJRDogMjk5IGF0IGRyaXZlcnMvdXNiL2R3YzMvZ2FkZ2V0LmM6MzYwIGR3YzNf
-c2VuZF9nYWRnZXRfZXBfY21kKzB4NTcwLzB4NzQwIFtkd2MzXQ0KPiBbICAgNTEuMTQ4NDMx
-XSBNb2R1bGVzIGxpbmtlZCBpbjogYWVzX2NlX2NjbSByZmNvbW0gYWxnaWZfaGFzaCBhbGdp
-Zl9za2NpcGhlciBhZl9hbGcgYm5lcCBxbWlfd3dhbiBjZGNfd2RtIHVzYm5ldCBtaWkgb3B0
-aW9uIHVzYl93d2FuIHVzYnNlcmlhbCBjYWFtX2pyIGNhYW1oYXNoX2Rlc2MgY2FhbWFsZ19k
-ZXNjIGNyeXB0b19lbmdpbmUgbW91c2VkZXYgcmVkcGluZV9zZGlvIHJlZHBpbmVfOTF4IGJs
-dWV0b290aCB1YXMgdXNiX3N0b3JhZ2UgbWFjODAyMTEgc3RfbHNtNmRzeF9zcGkgYWVzX2Nl
-X2JsayBjcnlwdG9fc2ltZCBjcmN0MTBkaWZfY2UgY2ZnODAyMTEgZ2hhc2hfY2Ugc2hhMl9j
-ZSBzaGExX2NlIGJxMjU4OTBfY2hhcmdlciBzNWszbDZ4eCBzbmRfc29jX3dtODk2MiBoaTg0
-NiB2Y25sNDAwMCBsZWRzX2xtMzU2MCBlZHRfZnQ1eDA2IG9mcGFydCBpbmR1c3RyaWFsaW9f
-dHJpZ2dlcmVkX2J1ZmZlciB0cHM2NTk4eCBzdF9sc202ZHN4X2kyYyBzdF9sc202ZHN4IGtm
-aWZvX2J1ZiBnbnNzX210ayB0eXBlYyBteGNfbWlwaV9jc2kyX3lhdiBnbnNzX3NlcmlhbCBt
-eDZzX2NhcHR1cmUgZ25zcyB2aWRlb2J1ZjJfZG1hX2NvbnRpZyB2aWRlb2J1ZjJfbWVtb3Bz
-IHNwaV9ub3IgdjRsMl9md25vZGUgdmlkZW9idWYyX3Y0bDIgdmlkZW9idWYyX2NvbW1vbiBz
-bmRfc29jX2d0bTYwMSBzbmRfc29jX3NpbXBsZV9jYXJkIHZpZGVvZGV2IG10ZCBzbmRfc29j
-X3NpbXBsZV9jYXJkX3V0aWxzIG1jIHNuZF9zb2NfZnNsX3NhaSBpbXhfcGNtX2RtYSBjYWFt
-IGVycm9yIHNudnNfcHdya2V5IGlteF9zZG1hIHZpcnRfZG1hIHNuZF9zb2NfY29yZSBpbXgy
-X3dkdCBzbmRfcGNtX2RtYWVuZ2luZSBzbmRfcGNtIHdhdGNoZG9nIHNuZF90aW1lciBzbmQg
-c291bmRjb3JlIHB3bV92aWJyYSByZmtpbGxfaGtzIHJma2lsbCBsZWR0cmlnX3RpbWVyIHVz
-Yl9mX2FjbSB1X3NlcmlhbCB1c2JfZl9ybmRpcyBnX211bHRpIHVzYl9mX21hc3Nfc3RvcmFn
-ZSB1X2V0aGVyDQo+IFsgICA1MS4xNDg3NTldICBsaWJjb21wb3NpdGUgbGVkdHJpZ19wYXR0
-ZXJuIGZ1c2UgaXBfdGFibGVzIHhfdGFibGVzIGlwdjYgeGhjaV9wbGF0X2hjZCB4aGNpX2hj
-ZCB1c2Jjb3JlIGR3YzMgY2Ruc19taGRwX2lteCB1bHBpIGNkbnNfbWhkcF9kcm1jb3JlIHVk
-Y19jb3JlIGlteF9kY3NzIHJvbGVzIHVzYl9jb21tb24gcGh5X2ZzbF9pbXg4bXFfdXNiIGNs
-a19iZDcxOHg3DQo+IFsgICA1MS4xNDg4MzddIENQVTogMCBQSUQ6IDI5OSBDb21tOiBpcnEv
-NjQtZHdjMyBOb3QgdGFpbnRlZCA1LjExLjExLWxpYnJlbTUtMDAzMzQtZ2U0YzRmZjM2MjRl
-OSAjMjE4DQo+IFsgICA1MS4xNDg4NDhdIEhhcmR3YXJlIG5hbWU6IFB1cmlzbSBMaWJyZW0g
-NXI0IChEVCkNCj4gWyAgIDUxLjE0ODg1NF0gcHN0YXRlOiA2MDAwMDA4NSAoblpDdiBkYUlm
-IC1QQU4gLVVBTyAtVENPIEJUWVBFPS0tKQ0KPiBbICAgNTEuMTQ4ODYzXSBwYyA6IGR3YzNf
-c2VuZF9nYWRnZXRfZXBfY21kKzB4NTcwLzB4NzQwIFtkd2MzXQ0KPiBbICAgNTEuMTQ4ODk0
-XSBsciA6IGR3YzNfc2VuZF9nYWRnZXRfZXBfY21kKzB4NTcwLzB4NzQwIFtkd2MzXQ0KPiBb
-ICAgNTEuMTQ4OTI0XSBzcCA6IGZmZmY4MDAwMTFjYjNhYzANCj4gWyAgIDUxLjE0ODkyOV0g
-eDI5OiBmZmZmODAwMDExY2IzYWMwIHgyODogZmZmZjAwMDAwMzJhN2IwMCANCj4gWyAgIDUx
-LjE0ODk0Ml0geDI3OiBmZmZmMDAwMDAzMjdkYTAwIHgyNjogMDAwMDAwMDAwMDAwMDAwMCAN
-Cj4gWyAgIDUxLjE0ODk1NF0geDI1OiAwMDAwMDAwMGZmZmZmZmVhIHgyNDogMDAwMDAwMDAw
-MDAwMDAwNiANCj4gWyAgIDUxLjE0ODk2N10geDIzOiBmZmZmMDAwMGJlZTFjMDgwIHgyMjog
-ZmZmZjgwMDAxMWNiM2I3YyANCj4gWyAgIDUxLjE0ODk3OV0geDIxOiAwMDAwMDAwMDAwMDAw
-NDA2IHgyMDogZmZmZjAwMDBiZjE3MDAwMCANCj4gWyAgIDUxLjE0ODk5Ml0geDE5OiAwMDAw
-MDAwMDAwMDAwMDAxIHgxODogMDAwMDAwMDAwMDAwMDAwMCANCj4gWyAgIDUxLjE0OTAwNF0g
-eDE3OiAwMDAwMDAwMDAwMDAwMDAwIHgxNjogMDAwMDAwMDAwMDAwMDAwMCANCj4gWyAgIDUx
-LjE0OTAxNl0geDE1OiAwMDAwMDAwMDAwMDAwMDAwIHgxNDogZmZmZjgwMDAxMTQ1MTJjMCAN
-Cj4gWyAgIDUxLjE0OTAyOF0geDEzOiAwMDAwMDAwMDAwMDAxNjk4IHgxMjogMDAwMDAwMDAw
-MDAwMDA0MCANCj4gWyAgIDUxLjE0OTA0MF0geDExOiBmZmZmODAwMDExNTFhNmY4IHgxMDog
-MDAwMDAwMDBmZmZmZTAwMCANCj4gWyAgIDUxLjE0OTA1Ml0geDkgOiBmZmZmODAwMDEwMGIy
-YjdjIHg4IDogZmZmZjgwMDAxMTQ2YTZmOCANCj4gWyAgIDUxLjE0OTA2NV0geDcgOiBmZmZm
-ODAwMDExNTFhNmY4IHg2IDogMDAwMDAwMDAwMDAwMDAwMCANCj4gWyAgIDUxLjE0OTA3N10g
-eDUgOiBmZmZmMDAwMGJmOTM5OTQ4IHg0IDogMDAwMDAwMDAwMDAwMDAwMCANCj4gWyAgIDUx
-LjE0OTA4OV0geDMgOiAwMDAwMDAwMDAwMDAwMDI3IHgyIDogMDAwMDAwMDAwMDAwMDAwMCAN
-Cj4gWyAgIDUxLjE0OTEwMV0geDEgOiAwMDAwMDAwMDAwMDAwMDAwIHgwIDogZmZmZjAwMDAw
-NDlhZTA0MCANCj4gWyAgIDUxLjE0OTExNF0gQ2FsbCB0cmFjZToNCj4gWyAgIDUxLjE0OTEy
-MF0gIGR3YzNfc2VuZF9nYWRnZXRfZXBfY21kKzB4NTcwLzB4NzQwIFtkd2MzXQ0KPiBbICAg
-NTEuMTQ5MTUwXSAgX19kd2MzX2dhZGdldF9lcF9lbmFibGUrMHgyODgvMHg0ZmMgW2R3YzNd
-DQo+IFsgICA1MS4xNDkxNzldICBkd2MzX2dhZGdldF9lcF9lbmFibGUrMHg2Yy8weDE1YyBb
-ZHdjM10NCj4gWyAgIDUxLjE0OTIwOV0gIHVzYl9lcF9lbmFibGUrMHg0OC8weDExMCBbdWRj
-X2NvcmVdDQo+IFsgICA1MS4xNDkyNTFdICBybmRpc19zZXRfYWx0KzB4MTM4LzB4MWMwIFt1
-c2JfZl9ybmRpc10NCj4gWyAgIDUxLjE0OTI3Nl0gIGNvbXBvc2l0ZV9zZXR1cCsweDY3NC8w
-eDE5NGMgW2xpYmNvbXBvc2l0ZV0NCj4gWyAgIDUxLjE0OTMxNF0gIGR3YzNfZXAwX2ludGVy
-cnVwdCsweDljNC8weGI5YyBbZHdjM10NCj4gWyAgIDUxLjE0OTM0NF0gIGR3YzNfdGhyZWFk
-X2ludGVycnVwdCsweDhiYy8weGU3NCBbZHdjM10NCj4gWyAgIDUxLjE0OTM3NF0gIGlycV90
-aHJlYWRfZm4rMHgzOC8weGIwDQo+IFsgICA1MS4xNDkzODhdICBpcnFfdGhyZWFkKzB4MTcw
-LzB4Mjk0DQo+IFsgICA1MS4xNDkzOTddICBrdGhyZWFkKzB4MTY0LzB4MTZjDQo+IFsgICA1
-MS4xNDk0MDddICByZXRfZnJvbV9mb3JrKzB4MTAvMHgzNA0KPiBbICAgNTEuMTQ5NDE5XSAt
-LS1bIGVuZCB0cmFjZSA2MmM2Y2MyZWJmYjE4MDQ3IF0tLS0NCj4gWyAgIDUxLjE0OTQzNl0g
-LS0tLS0tLS0tLS0tWyBjdXQgaGVyZSBdLS0tLS0tLS0tLS0tDQo+IFsgICA1MS4xNDk0NDBd
-IGR3YzMgMzgxMDAwMDAudXNiOiBObyByZXNvdXJjZSBmb3IgZXAxaW4NCj4gWyAgIDUxLjE0
-OTUwN10gV0FSTklORzogQ1BVOiAwIFBJRDogMjk5IGF0IGRyaXZlcnMvdXNiL2R3YzMvZ2Fk
-Z2V0LmM6MzYwIGR3YzNfc2VuZF9nYWRnZXRfZXBfY21kKzB4NTcwLzB4NzQwIFtkd2MzXQ0K
-PiBbICAgNTEuMTQ5NTQzXSBNb2R1bGVzIGxpbmtlZCBpbjogYWVzX2NlX2NjbSByZmNvbW0g
-YWxnaWZfaGFzaCBhbGdpZl9za2NpcGhlciBhZl9hbGcgYm5lcCBxbWlfd3dhbiBjZGNfd2Rt
-IHVzYm5ldCBtaWkgb3B0aW9uIHVzYl93d2FuIHVzYnNlcmlhbCBjYWFtX2pyIGNhYW1oYXNo
-X2Rlc2MgY2FhbWFsZ19kZXNjIGNyeXB0b19lbmdpbmUgbW91c2VkZXYgcmVkcGluZV9zZGlv
-IHJlZHBpbmVfOTF4IGJsdWV0b290aCB1YXMgdXNiX3N0b3JhZ2UgbWFjODAyMTEgc3RfbHNt
-NmRzeF9zcGkgYWVzX2NlX2JsayBjcnlwdG9fc2ltZCBjcmN0MTBkaWZfY2UgY2ZnODAyMTEg
-Z2hhc2hfY2Ugc2hhMl9jZSBzaGExX2NlIGJxMjU4OTBfY2hhcmdlciBzNWszbDZ4eCBzbmRf
-c29jX3dtODk2MiBoaTg0NiB2Y25sNDAwMCBsZWRzX2xtMzU2MCBlZHRfZnQ1eDA2IG9mcGFy
-dCBpbmR1c3RyaWFsaW9fdHJpZ2dlcmVkX2J1ZmZlciB0cHM2NTk4eCBzdF9sc202ZHN4X2ky
-YyBzdF9sc202ZHN4IGtmaWZvX2J1ZiBnbnNzX210ayB0eXBlYyBteGNfbWlwaV9jc2kyX3lh
-diBnbnNzX3NlcmlhbCBteDZzX2NhcHR1cmUgZ25zcyB2aWRlb2J1ZjJfZG1hX2NvbnRpZyB2
-aWRlb2J1ZjJfbWVtb3BzIHNwaV9ub3IgdjRsMl9md25vZGUgdmlkZW9idWYyX3Y0bDIgdmlk
-ZW9idWYyX2NvbW1vbiBzbmRfc29jX2d0bTYwMSBzbmRfc29jX3NpbXBsZV9jYXJkIHZpZGVv
-ZGV2IG10ZCBzbmRfc29jX3NpbXBsZV9jYXJkX3V0aWxzIG1jIHNuZF9zb2NfZnNsX3NhaSBp
-bXhfcGNtX2RtYSBjYWFtIGVycm9yIHNudnNfcHdya2V5IGlteF9zZG1hIHZpcnRfZG1hIHNu
-ZF9zb2NfY29yZSBpbXgyX3dkdCBzbmRfcGNtX2RtYWVuZ2luZSBzbmRfcGNtIHdhdGNoZG9n
-IHNuZF90aW1lciBzbmQgc291bmRjb3JlIHB3bV92aWJyYSByZmtpbGxfaGtzIHJma2lsbCBs
-ZWR0cmlnX3RpbWVyIHVzYl9mX2FjbSB1X3NlcmlhbCB1c2JfZl9ybmRpcyBnX211bHRpIHVz
-Yl9mX21hc3Nfc3RvcmFnZSB1X2V0aGVyDQo+IFsgICA1MS4xNDk4NTJdICBsaWJjb21wb3Np
-dGUgbGVkdHJpZ19wYXR0ZXJuIGZ1c2UgaXBfdGFibGVzIHhfdGFibGVzIGlwdjYgeGhjaV9w
-bGF0X2hjZCB4aGNpX2hjZCB1c2Jjb3JlIGR3YzMgY2Ruc19taGRwX2lteCB1bHBpIGNkbnNf
-bWhkcF9kcm1jb3JlIHVkY19jb3JlIGlteF9kY3NzIHJvbGVzIHVzYl9jb21tb24gcGh5X2Zz
-bF9pbXg4bXFfdXNiIGNsa19iZDcxOHg3DQo+IFsgICA1MS4xNDk5MjNdIENQVTogMCBQSUQ6
-IDI5OSBDb21tOiBpcnEvNjQtZHdjMyBUYWludGVkOiBHICAgICAgICBXICAgICAgICAgNS4x
-MS4xMS1saWJyZW01LTAwMzM0LWdlNGM0ZmYzNjI0ZTkgIzIxOA0KPiBbICAgNTEuMTQ5OTMz
-XSBIYXJkd2FyZSBuYW1lOiBQdXJpc20gTGlicmVtIDVyNCAoRFQpDQo+IFsgICA1MS4xNDk5
-MzddIHBzdGF0ZTogNjAwMDAwODUgKG5aQ3YgZGFJZiAtUEFOIC1VQU8gLVRDTyBCVFlQRT0t
-LSkNCj4gWyAgIDUxLjE0OTk0Nl0gcGMgOiBkd2MzX3NlbmRfZ2FkZ2V0X2VwX2NtZCsweDU3
-MC8weDc0MCBbZHdjM10NCj4gWyAgIDUxLjE0OTk3N10gbHIgOiBkd2MzX3NlbmRfZ2FkZ2V0
-X2VwX2NtZCsweDU3MC8weDc0MCBbZHdjM10NCj4gWyAgIDUxLjE1MDAwN10gc3AgOiBmZmZm
-ODAwMDExY2IzYTgwDQo+IFsgICA1MS4xNTAwMTFdIHgyOTogZmZmZjgwMDAxMWNiM2E4MCB4
-Mjg6IGZmZmYwMDAwMDMyYTdiMDAgDQo+IFsgICA1MS4xNTAwMjRdIHgyNzogZmZmZjAwMDAw
-MzI3ZGEwMCB4MjY6IDAwMDAwMDAwMDAwMDAwMDAgDQo+IFsgICA1MS4xNTAwMzddIHgyNTog
-MDAwMDAwMDBmZmZmZmZlYSB4MjQ6IDAwMDAwMDAwMDAwMDAwMDYgDQo+IFsgICA1MS4xNTAw
-NDldIHgyMzogZmZmZjAwMDBiZWUxYzA4MCB4MjI6IGZmZmY4MDAwMTFjYjNiM2MgDQo+IFsg
-ICA1MS4xNTAwNjJdIHgyMTogMDAwMDAwMDAwMDAwMDQwNiB4MjA6IGZmZmYwMDAwYmYwMzNm
-MDAgDQo+IFsgICA1MS4xNTAwNzRdIHgxOTogMDAwMDAwMDAwMDAwMDAwMSB4MTg6IDAwMDAw
-MDAwMDAwMDAwMDAgDQo+IFsgICA1MS4xNTAwODZdIHgxNzogMDAwMDAwMDAwMDAwMDAwMCB4
-MTY6IDAwMDAwMDAwMDAwMDAwMDAgDQo+IFsgICA1MS4xNTAwOThdIHgxNTogMDAwMDAwMDAw
-MDAwMDAwMCB4MTQ6IGZmZmY4MDAwMTE0NTEyYzAgDQo+IFsgICA1MS4xNTAxMTFdIHgxMzog
-MDAwMDAwMDAwMDAwMTY5OCB4MTI6IDAwMDAwMDAwMDAwMDAwNDAgDQo+IFsgICA1MS4xNTAx
-MjNdIHgxMTogZmZmZjgwMDAxMTUxYTZmOCB4MTA6IDAwMDAwMDAwZmZmZmUwMDAgDQo+IFsg
-ICA1MS4xNTAxMzVdIHg5IDogZmZmZjgwMDAxMDBiMmI3YyB4OCA6IGZmZmY4MDAwMTE0NmE2
-ZjggDQo+IFsgICA1MS4xNTAxNDddIHg3IDogZmZmZjgwMDAxMTUxYTZmOCB4NiA6IDAwMDAw
-MDAwMDAwMDAwMDAgDQo+IFsgICA1MS4xNTAxNTldIHg1IDogZmZmZjAwMDBiZjkzOTk0OCB4
-NCA6IDAwMDAwMDAwMDAwMDAwMDAgDQo+IFsgICA1MS4xNTAxNzJdIHgzIDogMDAwMDAwMDAw
-MDAwMDAyNyB4MiA6IDAwMDAwMDAwMDAwMDAwMDAgDQo+IFsgICA1MS4xNTAxODNdIHgxIDog
-MDAwMDAwMDAwMDAwMDAwMCB4MCA6IGZmZmYwMDAwMDQ5YWUwNDAgDQo+IFsgICA1MS4xNTAx
-OTZdIENhbGwgdHJhY2U6DQo+IFsgICA1MS4xNTAyMDBdICBkd2MzX3NlbmRfZ2FkZ2V0X2Vw
-X2NtZCsweDU3MC8weDc0MCBbZHdjM10NCj4gWyAgIDUxLjE1MDIzMV0gIF9fZHdjM19nYWRn
-ZXRfZXBfZW5hYmxlKzB4Mjg4LzB4NGZjIFtkd2MzXQ0KPiBbICAgNTEuMTUwMjYwXSAgZHdj
-M19nYWRnZXRfZXBfZW5hYmxlKzB4NmMvMHgxNWMgW2R3YzNdDQo+IFsgICA1MS4xNTAyODld
-ICB1c2JfZXBfZW5hYmxlKzB4NDgvMHgxMTAgW3VkY19jb3JlXQ0KPiBbICAgNTEuMTUwMzIy
-XSAgZ2V0aGVyX2Nvbm5lY3QrMHgzYy8weDFmNCBbdV9ldGhlcl0NCj4gWyAgIDUxLjE1MDM0
-MF0gIHJuZGlzX3NldF9hbHQrMHg3NC8weDFjMCBbdXNiX2Zfcm5kaXNdDQo+IFsgICA1MS4x
-NTAzNjFdICBjb21wb3NpdGVfc2V0dXArMHg2NzQvMHgxOTRjIFtsaWJjb21wb3NpdGVdDQo+
-IFsgICA1MS4xNTAzOTJdICBkd2MzX2VwMF9pbnRlcnJ1cHQrMHg5YzQvMHhiOWMgW2R3YzNd
-DQo+IFsgICA1MS4xNTA0MjNdICBkd2MzX3RocmVhZF9pbnRlcnJ1cHQrMHg4YmMvMHhlNzQg
-W2R3YzNdDQo+IFsgICA1MS4xNTA0NTJdICBpcnFfdGhyZWFkX2ZuKzB4MzgvMHhiMA0KPiBb
-ICAgNTEuMTUwNDYxXSAgaXJxX3RocmVhZCsweDE3MC8weDI5NA0KPiBbICAgNTEuMTUwNDY5
-XSAga3RocmVhZCsweDE2NC8weDE2Yw0KPiBbICAgNTEuMTUwNDc4XSAgcmV0X2Zyb21fZm9y
-aysweDEwLzB4MzQNCj4gWyAgIDUxLjE1MDQ4N10gLS0tWyBlbmQgdHJhY2UgNjJjNmNjMmVi
-ZmIxODA0OCBdLS0tDQo+IA0KPiANCj4gIGRyaXZlcnMvdXNiL2R3YzMvZ2FkZ2V0LmMgfCAx
-MSArKysrKystLS0tLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKSwgNSBk
-ZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9kd2MzL2dhZGdl
-dC5jIGIvZHJpdmVycy91c2IvZHdjMy9nYWRnZXQuYw0KPiBpbmRleCAyYTg2YWQ0YjEyYjMu
-LmVmOGVjYWY4NjU1YSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy91c2IvZHdjMy9nYWRnZXQu
-Yw0KPiArKysgYi9kcml2ZXJzL3VzYi9kd2MzL2dhZGdldC5jDQo+IEBAIC03ODMsNiArNzgz
-LDggQEAgc3RhdGljIGludCBfX2R3YzNfZ2FkZ2V0X2VwX2Rpc2FibGUoc3RydWN0IGR3YzNf
-ZXAgKmRlcCkNCj4gIA0KPiAgCXRyYWNlX2R3YzNfZ2FkZ2V0X2VwX2Rpc2FibGUoZGVwKTsN
-Cj4gIA0KPiArCWR3YzNfcmVtb3ZlX3JlcXVlc3RzKGR3YywgZGVwKTsNCj4gKw0KPiAgCS8q
-IG1ha2Ugc3VyZSBIVyBlbmRwb2ludCBpc24ndCBzdGFsbGVkICovDQo+ICAJaWYgKGRlcC0+
-ZmxhZ3MgJiBEV0MzX0VQX1NUQUxMKQ0KPiAgCQlfX2R3YzNfZ2FkZ2V0X2VwX3NldF9oYWx0
-KGRlcCwgMCwgZmFsc2UpOw0KPiBAQCAtODAxLDggKzgwMyw2IEBAIHN0YXRpYyBpbnQgX19k
-d2MzX2dhZGdldF9lcF9kaXNhYmxlKHN0cnVjdCBkd2MzX2VwICpkZXApDQo+ICAJCWRlcC0+
-ZW5kcG9pbnQuZGVzYyA9IE5VTEw7DQo+ICAJfQ0KPiAgDQo+IC0JZHdjM19yZW1vdmVfcmVx
-dWVzdHMoZHdjLCBkZXApOw0KPiAtDQo+ICAJcmV0dXJuIDA7DQo+ICB9DQo+ICANCj4gQEAg
-LTE2MTcsNyArMTYxNyw3IEBAIHN0YXRpYyBpbnQgX19kd2MzX2dhZGdldF9lcF9xdWV1ZShz
-dHJ1Y3QgZHdjM19lcCAqZGVwLCBzdHJ1Y3QgZHdjM19yZXF1ZXN0ICpyZXEpDQo+ICB7DQo+
-ICAJc3RydWN0IGR3YzMJCSpkd2MgPSBkZXAtPmR3YzsNCj4gIA0KPiAtCWlmICghZGVwLT5l
-bmRwb2ludC5kZXNjIHx8ICFkd2MtPnB1bGx1cHNfY29ubmVjdGVkIHx8ICFkd2MtPmNvbm5l
-Y3RlZCkgew0KPiArCWlmICghZGVwLT5lbmRwb2ludC5kZXNjIHx8ICFkd2MtPnB1bGx1cHNf
-Y29ubmVjdGVkKSB7DQo+ICAJCWRldl9lcnIoZHdjLT5kZXYsICIlczogY2FuJ3QgcXVldWUg
-dG8gZGlzYWJsZWQgZW5kcG9pbnRcbiIsDQo+ICAJCQkJZGVwLT5uYW1lKTsNCj4gIAkJcmV0
-dXJuIC1FU0hVVERPV047DQo+IEBAIC0yMTUwLDcgKzIxNTAsNiBAQCBzdGF0aWMgaW50IGR3
-YzNfZ2FkZ2V0X3B1bGx1cChzdHJ1Y3QgdXNiX2dhZGdldCAqZywgaW50IGlzX29uKQ0KPiAg
-CWlmICghaXNfb24pIHsNCj4gIAkJdTMyIGNvdW50Ow0KPiAgDQo+IC0JCWR3Yy0+Y29ubmVj
-dGVkID0gZmFsc2U7DQo+ICAJCS8qDQo+ICAJCSAqIEluIHRoZSBTeW5vcHNpcyBEZXNpZ25X
-YXJlIENvcmVzIFVTQjMgRGF0YWJvb2sgUmV2LiAzLjMwYQ0KPiAgCQkgKiBTZWN0aW9uIDQu
-MS44IFRhYmxlIDQtNywgaXQgc3RhdGVzIHRoYXQgZm9yIGEgZGV2aWNlLWluaXRpYXRlZA0K
-PiBAQCAtMjE3NSw2ICsyMTc0LDcgQEAgc3RhdGljIGludCBkd2MzX2dhZGdldF9wdWxsdXAo
-c3RydWN0IHVzYl9nYWRnZXQgKmcsIGludCBpc19vbikNCj4gIAkJCWR3Yy0+ZXZfYnVmLT5s
-cG9zID0gKGR3Yy0+ZXZfYnVmLT5scG9zICsgY291bnQpICUNCj4gIAkJCQkJCWR3Yy0+ZXZf
-YnVmLT5sZW5ndGg7DQo+ICAJCX0NCj4gKwkJZHdjLT5jb25uZWN0ZWQgPSBmYWxzZTsNCj4g
-IAl9IGVsc2Ugew0KPiAgCQlfX2R3YzNfZ2FkZ2V0X3N0YXJ0KGR3Yyk7DQo+ICAJfQ0KPiBA
-QCAtMzI2Nyw2ICszMjY3LDggQEAgc3RhdGljIHZvaWQgZHdjM19nYWRnZXRfcmVzZXRfaW50
-ZXJydXB0KHN0cnVjdCBkd2MzICpkd2MpDQo+ICB7DQo+ICAJdTMyCQkJcmVnOw0KPiAgDQo+
-ICsJZHdjLT5jb25uZWN0ZWQgPSB0cnVlOw0KPiArDQo+ICAJLyoNCj4gIAkgKiBXT1JLQVJP
-VU5EOiBEV0MzIHJldmlzaW9ucyA8MS44OGEgaGF2ZSBhbiBpc3N1ZSB3aGljaA0KPiAgCSAq
-IHdvdWxkIGNhdXNlIGEgbWlzc2luZyBEaXNjb25uZWN0IEV2ZW50IGlmIHRoZXJlJ3MgYQ0K
-PiBAQCAtMzMwNiw3ICszMzA4LDYgQEAgc3RhdGljIHZvaWQgZHdjM19nYWRnZXRfcmVzZXRf
-aW50ZXJydXB0KHN0cnVjdCBkd2MzICpkd2MpDQo+ICAJICogdHJhbnNmZXJzLiINCj4gIAkg
-Ki8NCj4gIAlkd2MzX3N0b3BfYWN0aXZlX3RyYW5zZmVycyhkd2MpOw0KPiAtCWR3Yy0+Y29u
-bmVjdGVkID0gdHJ1ZTsNCj4gIA0KPiAgCXJlZyA9IGR3YzNfcmVhZGwoZHdjLT5yZWdzLCBE
-V0MzX0RDVEwpOw0KPiAgCXJlZyAmPSB+RFdDM19EQ1RMX1RTVENUUkxfTUFTSzsNCj4gDQoN
-Ci0tIA0KVGhlIFF1YWxjb21tIElubm92YXRpb24gQ2VudGVyLCBJbmMuIGlzIGEgbWVtYmVy
-IG9mIHRoZSBDb2RlIEF1cm9yYSBGb3J1bSwNCmEgTGludXggRm91bmRhdGlvbiBDb2xsYWJv
-cmF0aXZlIFByb2plY3QNCg==
+Hello,
+
+I tried to debug this a bit.
+
+It seems that the XHCI ring has two segments. For me, the first has DMA 
+address 0x00000000fffb9000 and the second has 00000000fffb8000.
+The TRBs on the first segment are used successfully up to address 
+00000000fffb9fd0 (which seems to be 253 TRBs?).
+After that, the DMA address in "handle_tx_event" in "xhci-ring.c" points 
+to the first TRB in the second segment, but "deq_seg" of the ring still 
+points to the first segment. This obviously will cause the error I see.
+
+Now the real question is why it still points to the old segment. I guess 
+this should be handeled by a link TRB? Then it seems that it is either 
+missing or handeled wrongly?
+I'm still a bit confused about if this is a host controller or driver 
+problem.
+
+Thank you in advance and best regards,
+Ole
+
+
+On 31.03.21 11:46, Ole Salscheider wrote:
+> Hello,
+> 
+> I have a PCIe card with ASM2142 USB Host Controllers on them. I have 
+> attached a SuperSpeed UVC camera to it. This camera works on other host 
+> controllers, but with the ASM2142 the transfer stops after a frame or 
+> so. Dmesg shows me the following error:
+> 
+>  > Transfer event TRB DMA ptr not part of current TD ep_index 6 
+> comp_code 13
+> 
+> I have tried different XHCI quirks but did not have success with any.
+> The full log with xhci_hcd debugging enabled is as follows:
+> 
+> [   30.458244] xhci_hcd 0000:60:00.0: Get port status 10-1 read: 0x2a0, 
+> return 0x2a0
+> [   30.458254] xhci_hcd 0000:60:00.0: Get port status 10-2 read: 0x1263, 
+> return 0x263
+> [   30.458264] xhci_hcd 0000:60:00.0: Get port status 10-2 read: 0x1263, 
+> return 0x263
+> [   30.458271] xhci_hcd 0000:60:00.0: Set port 10-2 link state, portsc: 
+> 0x1263, write 0x11201
+> [   30.458749] xhci_hcd 0000:60:00.0: Port change event, 10-2, id 2, 
+> portsc: 0x401203
+> [   30.458757] xhci_hcd 0000:60:00.0: resume SS port 2 finished
+> [   30.458762] xhci_hcd 0000:60:00.0: handle_port_status: starting port 
+> polling.
+> [   30.503906] xhci_hcd 0000:60:00.0: Get port status 10-2 read: 
+> 0x401203, return 0x400203
+> [   30.523908] xhci_hcd 0000:60:00.0: clear port2 link state change, 
+> portsc: 0x1203
+> [   30.524884] xhci_hcd 0000:60:00.0: Get port status 10-2 read: 0x1203, 
+> return 0x203
+> [   30.553470] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.553860] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.554278] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.554667] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.555067] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.555454] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.555848] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.556160] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 30388 bytes untransferred
+> [   30.559697] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.560083] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.560484] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.560904] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.561290] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.561693] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.562079] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.562515] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.562876] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.563278] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.563678] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.564072] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.564466] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.564860] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.565263] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.565666] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.566067] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.566455] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.566847] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.567251] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.567652] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.568055] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.568447] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.568847] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.569229] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.569640] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.570040] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.570443] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.570834] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.571217] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.571615] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.572028] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.572428] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.572831] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.573205] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.573611] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.574028] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.574416] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.574817] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.575204] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.575599] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.576015] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.576402] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.576804] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.577204] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.577583] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.577983] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.578402] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.578776] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.579191] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.579578] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.579980] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.580387] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.580777] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.581177] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.581584] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.581967] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.582361] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.582762] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.583165] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.583552] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.583946] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.584351] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.584764] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.585150] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.585540] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.585946] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.586338] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.586736] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.587138] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.587538] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.587941] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.588323] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.588723] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.589114] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.589527] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.589927] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.590334] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.590708] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.591022] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 30468 bytes untransferred
+> [   30.594565] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.594947] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.595346] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.595750] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.596152] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.596553] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.596940] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.597333] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.597735] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.598138] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.598538] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.598941] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.599327] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.599731] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.600112] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.600526] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.600927] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.601330] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.601720] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.602099] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.602512] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.602915] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.603302] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.603704] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.604096] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.604513] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.604913] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.605303] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.605695] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.606082] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.606482] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.606901] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.607288] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.607691] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.608070] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.608480] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.608869] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.609276] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.609690] xhci_hcd 0000:60:00.0: ep 0x83 - asked for 32768 bytes, 
+> 16388 bytes untransferred
+> [   30.610065] xhci_hcd 0000:60:00.0: ERROR Transfer event TRB DMA ptr 
+> not part of current TD ep_index 6 comp_code 13
+> [   30.610071] xhci_hcd 0000:60:00.0: Looking for event-dma 
+> 00000000fffb8010 trb-start 00000000fffb9fe0 trb-end 00000000fffb9fe0 
+> seg-start 00000000fffb9000 seg-end 00000000fffb9ff0
+> [   30.610433] xhci_hcd 0000:60:00.0: ERROR Transfer event TRB DMA ptr 
+> not part of current TD ep_index 6 comp_code 1
+> [   30.610437] xhci_hcd 0000:60:00.0: Looking for event-dma 
+> 00000000fffb8020 trb-start 00000000fffb9fe0 trb-end 00000000fffb9fe0 
+> seg-start 00000000fffb9000 seg-end 00000000fffb9ff0
+> [   30.610469] xhci_hcd 0000:60:00.0: ERROR Transfer event TRB DMA ptr 
+> not part of current TD ep_index 6 comp_code 13
+> [   30.610473] xhci_hcd 0000:60:00.0: Looking for event-dma 
+> 00000000fffb8030 trb-start 00000000fffb9fe0 trb-end 00000000fffb9fe0 
+> seg-start 00000000fffb9000 seg-end 00000000fffb9ff0
+> [   30.767918] xhci_hcd 0000:60:00.0: xhci_hub_status_data: stopping 
+> port polling.
+> 
+> Do you have any idea what might cause this, or any suggestions how I can 
+> debug this further?
+> 
+> Thank you in advance!
+> 
+> Best regards,
+> Ole
