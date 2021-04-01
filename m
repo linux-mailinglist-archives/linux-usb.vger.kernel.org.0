@@ -2,190 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7CF35140D
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Apr 2021 12:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC1835141C
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Apr 2021 13:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234250AbhDAK6y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Apr 2021 06:58:54 -0400
-Received: from mga12.intel.com ([192.55.52.136]:51275 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234180AbhDAK6q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 1 Apr 2021 06:58:46 -0400
-IronPort-SDR: 9pH2wJ2wAdIcWAmjbx3ralV2I4mbbelXmLwlnY8G96d5n1ZaGTRth2QpRS7Y3AV975FwhW80js
- weGgPXFUIu/g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9940"; a="171637258"
-X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
-   d="scan'208";a="171637258"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 03:58:45 -0700
-IronPort-SDR: XlkPXf031J4nk3AOwBiZ6fAWtlmU7XGJbjgTyfwrcMeuuRbQEYdC6AK6zIOMCtdzLPxdcTxp6B
- FyeXFRsgs+Pg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
-   d="scan'208";a="517295805"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Apr 2021 03:58:44 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 6/6] usb: typec: Link all ports during connector registration
-Date:   Thu,  1 Apr 2021 13:58:47 +0300
-Message-Id: <20210401105847.13026-7-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210401105847.13026-1-heikki.krogerus@linux.intel.com>
-References: <20210401105847.13026-1-heikki.krogerus@linux.intel.com>
+        id S233710AbhDALAY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Apr 2021 07:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234035AbhDAK74 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Apr 2021 06:59:56 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953C6C0613E6;
+        Thu,  1 Apr 2021 03:59:55 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id hq27so2217615ejc.9;
+        Thu, 01 Apr 2021 03:59:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=HQT+MfXSbU3OrSCCpbcdilBmnY1F0nrfdGq3rre+Jq8=;
+        b=sFdAa+KJ/72QxV7NWhfK6r4ms6/34selgLvWkNEGEPm4Q42S6Pc5jt5i7K1iyP7Nzx
+         lYYaR1y+DcPvsqXaO3evhm93l1p3KJXlYvXpjuwGoADenT/cOZ/ZllNb4PKHTTf6fGXA
+         sRR87zOBDkUnvSuzSEhIJXT3I6vtm2qbFsjrFQWUhsGxGDu/HSmP7Wl7C+5EboaMXMQx
+         TS0Of0dwpicC3laUDxrPIhJRjLjqw8uj2m7SayqIRhzKaUBAdFXizwyP1lGUQ1NraFsw
+         2rQ9MlQncIR+P8mK7iKeqJCMx4wAVMCrR95I9LRFwAnaLpgne4In3P+YyFv/SQIVRRUG
+         9qhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HQT+MfXSbU3OrSCCpbcdilBmnY1F0nrfdGq3rre+Jq8=;
+        b=XwPTDPO4i5M2T5xDehXdhOCiLlpx8sMQJFGHrWajw5R5nuw+pjuzsqpiqU9U1uOFcP
+         LKoXkpix+akVoyG2IoSe2MtBahry8xicRGrU6Yd+7e3FCRck4MKT9X7cFMpat7NLGu2p
+         07Eo32vUKakE3rnihRVOvGfJ+tszuEfExo/q3QQj8sMD+FFT9683KtdlA1iDkU7N5Kg5
+         pb9P5wXHZvKjFqR84uNgLWCi/fULBi5kVBtoUU89uiNAvpDrhfnFyqX3r0o7QS2VCBiY
+         UmDAtZhXCZNvwi+McZhL7S2pR+w6jTNmWcl9MRAiQa3xdp16ZOvdtPp7hlo45HxLutsi
+         cv6g==
+X-Gm-Message-State: AOAM531tW06BnKBvwlksk87QnFo0egfUKo8IBJUHAPIDX0HQFUZ6+Otd
+        6fQILR+rt7QI5pSNqAVnFSQXG2mp0Ks=
+X-Google-Smtp-Source: ABdhPJwif69oPS/oE0DnF294MN6X53YGdyUxADFwKndhXaPMFcJS6q3Z9IqzRYL8CHmdmuLaZzoYwA==
+X-Received: by 2002:a17:906:2612:: with SMTP id h18mr8341376ejc.309.1617274794368;
+        Thu, 01 Apr 2021 03:59:54 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id ci22sm2597916ejc.54.2021.04.01.03.59.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Apr 2021 03:59:51 -0700 (PDT)
+Date:   Thu, 1 Apr 2021 13:00:18 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        JC Kuo <jckuo@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
+        linux-tegra@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 11/13] phy: tegra: xusb: Add wake/sleepwalk for
+ Tegra186
+Message-ID: <YGWnwhhiEZ596ct4@orome.fritz.box>
+References: <20210325164057.793954-1-thierry.reding@gmail.com>
+ <20210325164057.793954-12-thierry.reding@gmail.com>
+ <YGVs5/57Z+6zKuQa@vkoul-mobl.Dlink>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="BQy/s5Q8W1hUIwRV"
+Content-Disposition: inline
+In-Reply-To: <YGVs5/57Z+6zKuQa@vkoul-mobl.Dlink>
+User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The connectors may be registered after the ports, so the
-"connector" links need to be created for the ports also when
-ever a new connector gets registered.
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/class.c       |  9 +++--
- drivers/usb/typec/class.h       |  4 +--
- drivers/usb/typec/port-mapper.c | 62 +++++++++++++++++++++++++++++++--
- 3 files changed, 68 insertions(+), 7 deletions(-)
+--BQy/s5Q8W1hUIwRV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index ff199e2d26c7b..f1c2d823c6509 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -1601,7 +1601,6 @@ static void typec_release(struct device *dev)
- 	ida_destroy(&port->mode_ids);
- 	typec_switch_put(port->sw);
- 	typec_mux_put(port->mux);
--	free_pld(port->pld);
- 	kfree(port->cap);
- 	kfree(port);
- }
-@@ -2027,7 +2026,9 @@ struct typec_port *typec_register_port(struct device *parent,
- 		return ERR_PTR(ret);
- 	}
- 
--	port->pld = get_pld(&port->dev);
-+	ret = typec_link_ports(port);
-+	if (ret)
-+		dev_warn(&port->dev, "failed to create symlinks (%d)\n", ret);
- 
- 	return port;
- }
-@@ -2041,8 +2042,10 @@ EXPORT_SYMBOL_GPL(typec_register_port);
-  */
- void typec_unregister_port(struct typec_port *port)
- {
--	if (!IS_ERR_OR_NULL(port))
-+	if (!IS_ERR_OR_NULL(port)) {
-+		typec_unlink_ports(port);
- 		device_unregister(&port->dev);
-+	}
- }
- EXPORT_SYMBOL_GPL(typec_unregister_port);
- 
-diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
-index 52294f7020a8b..aef03eb7e1523 100644
---- a/drivers/usb/typec/class.h
-+++ b/drivers/usb/typec/class.h
-@@ -79,7 +79,7 @@ extern const struct device_type typec_port_dev_type;
- extern struct class typec_mux_class;
- extern struct class typec_class;
- 
--void *get_pld(struct device *dev);
--void free_pld(void *pld);
-+int typec_link_ports(struct typec_port *connector);
-+void typec_unlink_ports(struct typec_port *connector);
- 
- #endif /* __USB_TYPEC_CLASS__ */
-diff --git a/drivers/usb/typec/port-mapper.c b/drivers/usb/typec/port-mapper.c
-index 5bee7a97242fe..fae736eb0601e 100644
---- a/drivers/usb/typec/port-mapper.c
-+++ b/drivers/usb/typec/port-mapper.c
-@@ -34,7 +34,7 @@ static int acpi_pld_match(const struct acpi_pld_info *pld1,
- 	return 0;
- }
- 
--void *get_pld(struct device *dev)
-+static void *get_pld(struct device *dev)
- {
- #ifdef CONFIG_ACPI
- 	struct acpi_pld_info *pld;
-@@ -53,7 +53,7 @@ void *get_pld(struct device *dev)
- #endif
- }
- 
--void free_pld(void *pld)
-+static void free_pld(void *pld)
- {
- #ifdef CONFIG_ACPI
- 	ACPI_FREE(pld);
-@@ -217,3 +217,61 @@ void typec_unlink_port(struct device *port)
- 	class_for_each_device(&typec_class, NULL, port, port_match_and_unlink);
- }
- EXPORT_SYMBOL_GPL(typec_unlink_port);
-+
-+static int each_port(struct device *port, void *connector)
-+{
-+	struct port_node *node;
-+	int ret;
-+
-+	node = create_port_node(port);
-+	if (IS_ERR(node))
-+		return PTR_ERR(node);
-+
-+	if (!connector_match(connector, node)) {
-+		remove_port_node(node);
-+		return 0;
-+	}
-+
-+	ret = link_port(to_typec_port(connector), node);
-+	if (ret) {
-+		remove_port_node(node->pld);
-+		return ret;
-+	}
-+
-+	get_device(connector);
-+
-+	return 0;
-+}
-+
-+int typec_link_ports(struct typec_port *con)
-+{
-+	int ret = 0;
-+
-+	con->pld = get_pld(&con->dev);
-+	if (!con->pld)
-+		return 0;
-+
-+	ret = usb_for_each_port(&con->dev, each_port);
-+	if (ret)
-+		typec_unlink_ports(con);
-+
-+	return ret;
-+}
-+
-+void typec_unlink_ports(struct typec_port *con)
-+{
-+	struct port_node *node;
-+	struct port_node *tmp;
-+
-+	mutex_lock(&con->port_list_lock);
-+
-+	list_for_each_entry_safe(node, tmp, &con->port_list, list) {
-+		__unlink_port(con, node);
-+		remove_port_node(node);
-+		put_device(&con->dev);
-+	}
-+
-+	mutex_unlock(&con->port_list_lock);
-+
-+	free_pld(con->pld);
-+}
--- 
-2.30.2
+On Thu, Apr 01, 2021 at 12:19:11PM +0530, Vinod Koul wrote:
+> On 25-03-21, 17:40, Thierry Reding wrote:
+> > From: JC Kuo <jckuo@nvidia.com>
+> >=20
+> > This commit implements Tegra186/Tegra194 XUSB PADCTL/AO wake and
+> > sleepwalk operations.
+> >=20
+> > Signed-off-by: JC Kuo <jckuo@nvidia.com>
+> > Signed-off-by: Thierry Reding <treding@nvidia.com>
+> > ---
+> >  drivers/phy/tegra/xusb-tegra186.c | 558 +++++++++++++++++++++++++++++-
+> >  1 file changed, 557 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/phy/tegra/xusb-tegra186.c b/drivers/phy/tegra/xusb=
+-tegra186.c
+> > index 5d64f69b39a9..6378bf722745 100644
+> > --- a/drivers/phy/tegra/xusb-tegra186.c
+> > +++ b/drivers/phy/tegra/xusb-tegra186.c
+> > @@ -1,6 +1,6 @@
+> >  // SPDX-License-Identifier: GPL-2.0
+> >  /*
+> > - * Copyright (c) 2016-2019, NVIDIA CORPORATION.  All rights reserved.
+> > + * Copyright (c) 2016-2020, NVIDIA CORPORATION.  All rights reserved.
+> >   */
+> > =20
+> >  #include <linux/delay.h>
+> > @@ -113,6 +113,117 @@
+> >  #define  ID_OVERRIDE_FLOATING			ID_OVERRIDE(8)
+> >  #define  ID_OVERRIDE_GROUNDED			ID_OVERRIDE(0)
+> > =20
+> > +/* XUSB AO registers */
+> > +#define XUSB_AO_USB_DEBOUNCE_DEL		(0x4)
+> > +#define   UHSIC_LINE_DEB_CNT(x)			(((x) & 0xf) << 4)
+> > +#define   UTMIP_LINE_DEB_CNT(x)			((x) & 0xf)
+> > +
+> > +#define XUSB_AO_UTMIP_TRIGGERS(x)		(0x40 + (x) * 4)
+> > +#define   CLR_WALK_PTR				(1 << 0)
+> > +#define   CAP_CFG				(1 << 1)
+> > +#define   CLR_WAKE_ALARM			(1 << 3)
+> > +
+> > +#define XUSB_AO_UHSIC_TRIGGERS(x)		(0x60 + (x) * 4)
+> > +#define   HSIC_CLR_WALK_PTR			(1 << 0)
+> > +#define   HSIC_CLR_WAKE_ALARM			(1 << 3)
+> > +#define   HSIC_CAP_CFG				(1 << 4)
+> > +
+> > +#define XUSB_AO_UTMIP_SAVED_STATE(x)		(0x70 + (x) * 4)
+> > +#define   SPEED(x)				((x) & 0x3)
+> > +#define     UTMI_HS				SPEED(0)
+> > +#define     UTMI_FS				SPEED(1)
+> > +#define     UTMI_LS				SPEED(2)
+> > +#define     UTMI_RST				SPEED(3)
+> > +
+> > +#define XUSB_AO_UHSIC_SAVED_STATE(x)		(0x90 + (x) * 4)
+> > +#define   MODE(x)				((x) & 0x1)
+> > +#define   MODE_HS				MODE(0)
+> > +#define   MODE_RST				MODE(1)
+> > +
+> > +#define XUSB_AO_UTMIP_SLEEPWALK_CFG(x)		(0xd0 + (x) * 4)
+> > +#define XUSB_AO_UHSIC_SLEEPWALK_CFG(x)		(0xf0 + (x) * 4)
+> > +#define   FAKE_USBOP_VAL			(1 << 0)
+> > +#define   FAKE_USBON_VAL			(1 << 1)
+> > +#define   FAKE_USBOP_EN				(1 << 2)
+> > +#define   FAKE_USBON_EN				(1 << 3)
+> > +#define   FAKE_STROBE_VAL			(1 << 0)
+> > +#define   FAKE_DATA_VAL				(1 << 1)
+> > +#define   FAKE_STROBE_EN			(1 << 2)
+> > +#define   FAKE_DATA_EN				(1 << 3)
+> > +#define   WAKE_WALK_EN				(1 << 14)
+> > +#define   MASTER_ENABLE				(1 << 15)
+> > +#define   LINEVAL_WALK_EN			(1 << 16)
+>=20
+> BIT() or GENMASK() please
+>=20
+> > +static inline void ao_writel(struct tegra186_xusb_padctl *priv, u32 va=
+lue, unsigned int offset)
+> > +{
+> > +	dev_dbg(priv->base.dev, "ao %08x < %08x\n", offset, value);
+>=20
+> Too many debug prints in this patch as well...
+>=20
+> With the nits fixed:
+>=20
+> Acked-By: Vinod Koul <vkoul@kernel.org>
 
+Done, thanks.
+
+Thierry
+
+--BQy/s5Q8W1hUIwRV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmBlp8AACgkQ3SOs138+
+s6FNYQ//ZCu0RiXY4bKYD0YkdSBK952Z/KYrEDrhuDPEBc3i9RA8TE6l/IJqgA6l
+gvczZki7xJf5xxfPYVQz47kCpP6aVYTQhx2tkqIopBvjf6pIxTpxvSZYQak7bg9h
+x63nuX/TsJg1pZhInBMmN1pex1a6W1HeDthgOvMjInP08qJiRcHuePWNOfMVYMxR
+m1EmYOD3SvSnMU6OchsmZ//pRn8E32JGZmJbxHotF/JTvPvoyb/vhOESBFDkaw/X
+L0qHzDJf7Bq94qrJkB7/L09qCfnXT85eg6UvIPSeKY2oCRAZejRcOoLDEzWkpgWi
+MSrU2k/ltVbdZQuaGEw3zJxBsALkBXKLqZMFQBZ5jAVF+pYtCYY65uThu+Xl5OKh
+pTkQNRJiL4vFG6NSuTUgGrddTi2BXrD9OC+N0OJhLp7gK2wzjRUO4g0OMHYlnsE4
+6ukP6vQ7/y5w1R89pKPabN1Hua9/ealW6FQtOq3IP+LgKp655AC36POOS5GdPJAT
+J+4I89T1STHN4ebmiQHjMDm4rKZYZIuWRaTduMgaXthxYXMt7vUZI5MTDlsBawWz
+4MuVs6bDQa3vV3ivwNn8ILyDFEdzQivGg6T8Ad3J5UgqyrR6LtWi4v7a64zgHYel
+6Rg+Xj78dfixdNoG73VW2kUHCnr9/kBXx7eqYQGOk627xjctIno=
+=5jX+
+-----END PGP SIGNATURE-----
+
+--BQy/s5Q8W1hUIwRV--
