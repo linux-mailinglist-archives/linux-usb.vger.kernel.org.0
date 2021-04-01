@@ -2,129 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23012350F56
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Apr 2021 08:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FD5350F7F
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Apr 2021 08:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbhDAGt2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Apr 2021 02:49:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36262 "EHLO mail.kernel.org"
+        id S233570AbhDAGxz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Apr 2021 02:53:55 -0400
+Received: from mga11.intel.com ([192.55.52.93]:28103 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232565AbhDAGtQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 1 Apr 2021 02:49:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2006A610A5;
-        Thu,  1 Apr 2021 06:49:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617259756;
-        bh=Hhp02BDYFoPZ7/j9E5Md/2IuILswyJ5r7RdCPV+U47w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=onj8inPvOhaCKXVInG9Tn/7/DE5X3bUbeScYXRgfk3lF/pDtQnEIugcfOi6x0TDrA
-         +UC7Cg79GFTvv/mKxkzFUaE44kvxbtoMUpSapqUSlbFGp0IszWZeJ7z5nkK6WXy8p/
-         hCrbH+08vhBaLl/j2P0lijOntLuGhEdTRVG/ionIY94gUUAt0b9sYkzo004xf3HzJX
-         ABxKy+TQpYLP/O3HsUKW9jJyLZM4bxmwlMCdXQ+7q0bCtnBCJCGYErzKgeAjzggZ7q
-         YKT4Tuk8zY1xH9FOiChKIDkNRGH2vh3AvswjJA1xumrH1/6ioTyXBKY0Os9gI7s0/L
-         r1dd803h8S4WQ==
-Date:   Thu, 1 Apr 2021 12:19:11 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        JC Kuo <jckuo@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
-        linux-tegra@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 11/13] phy: tegra: xusb: Add wake/sleepwalk for
- Tegra186
-Message-ID: <YGVs5/57Z+6zKuQa@vkoul-mobl.Dlink>
-References: <20210325164057.793954-1-thierry.reding@gmail.com>
- <20210325164057.793954-12-thierry.reding@gmail.com>
+        id S233529AbhDAGxi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 1 Apr 2021 02:53:38 -0400
+IronPort-SDR: /nb/5bbz0c6QlxMiUHlMWVZM4RSvik5m7WmV3nUQnZURG9ltsoLTJa89WR2DGfyYqpqgz4t1x3
+ y/DfQiS+U9QA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9940"; a="188910796"
+X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
+   d="scan'208";a="188910796"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2021 23:53:36 -0700
+IronPort-SDR: H59GP3uF/nZKnEabO8XNUEbku0n/0vmihKP4sT+hfSrhI3Snm0pHxQv9xmy5vADhii+S+ypEq1
+ inMWLdp6VYqA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
+   d="scan'208";a="517218625"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 31 Mar 2021 23:53:32 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/6] usb: Linking ports to their Type-C connectors
+Date:   Thu,  1 Apr 2021 09:53:41 +0300
+Message-Id: <20210401065347.4010-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210325164057.793954-12-thierry.reding@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 25-03-21, 17:40, Thierry Reding wrote:
-> From: JC Kuo <jckuo@nvidia.com>
-> 
-> This commit implements Tegra186/Tegra194 XUSB PADCTL/AO wake and
-> sleepwalk operations.
-> 
-> Signed-off-by: JC Kuo <jckuo@nvidia.com>
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> ---
->  drivers/phy/tegra/xusb-tegra186.c | 558 +++++++++++++++++++++++++++++-
->  1 file changed, 557 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/phy/tegra/xusb-tegra186.c b/drivers/phy/tegra/xusb-tegra186.c
-> index 5d64f69b39a9..6378bf722745 100644
-> --- a/drivers/phy/tegra/xusb-tegra186.c
-> +++ b/drivers/phy/tegra/xusb-tegra186.c
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*
-> - * Copyright (c) 2016-2019, NVIDIA CORPORATION.  All rights reserved.
-> + * Copyright (c) 2016-2020, NVIDIA CORPORATION.  All rights reserved.
->   */
->  
->  #include <linux/delay.h>
-> @@ -113,6 +113,117 @@
->  #define  ID_OVERRIDE_FLOATING			ID_OVERRIDE(8)
->  #define  ID_OVERRIDE_GROUNDED			ID_OVERRIDE(0)
->  
-> +/* XUSB AO registers */
-> +#define XUSB_AO_USB_DEBOUNCE_DEL		(0x4)
-> +#define   UHSIC_LINE_DEB_CNT(x)			(((x) & 0xf) << 4)
-> +#define   UTMIP_LINE_DEB_CNT(x)			((x) & 0xf)
-> +
-> +#define XUSB_AO_UTMIP_TRIGGERS(x)		(0x40 + (x) * 4)
-> +#define   CLR_WALK_PTR				(1 << 0)
-> +#define   CAP_CFG				(1 << 1)
-> +#define   CLR_WAKE_ALARM			(1 << 3)
-> +
-> +#define XUSB_AO_UHSIC_TRIGGERS(x)		(0x60 + (x) * 4)
-> +#define   HSIC_CLR_WALK_PTR			(1 << 0)
-> +#define   HSIC_CLR_WAKE_ALARM			(1 << 3)
-> +#define   HSIC_CAP_CFG				(1 << 4)
-> +
-> +#define XUSB_AO_UTMIP_SAVED_STATE(x)		(0x70 + (x) * 4)
-> +#define   SPEED(x)				((x) & 0x3)
-> +#define     UTMI_HS				SPEED(0)
-> +#define     UTMI_FS				SPEED(1)
-> +#define     UTMI_LS				SPEED(2)
-> +#define     UTMI_RST				SPEED(3)
-> +
-> +#define XUSB_AO_UHSIC_SAVED_STATE(x)		(0x90 + (x) * 4)
-> +#define   MODE(x)				((x) & 0x1)
-> +#define   MODE_HS				MODE(0)
-> +#define   MODE_RST				MODE(1)
-> +
-> +#define XUSB_AO_UTMIP_SLEEPWALK_CFG(x)		(0xd0 + (x) * 4)
-> +#define XUSB_AO_UHSIC_SLEEPWALK_CFG(x)		(0xf0 + (x) * 4)
-> +#define   FAKE_USBOP_VAL			(1 << 0)
-> +#define   FAKE_USBON_VAL			(1 << 1)
-> +#define   FAKE_USBOP_EN				(1 << 2)
-> +#define   FAKE_USBON_EN				(1 << 3)
-> +#define   FAKE_STROBE_VAL			(1 << 0)
-> +#define   FAKE_DATA_VAL				(1 << 1)
-> +#define   FAKE_STROBE_EN			(1 << 2)
-> +#define   FAKE_DATA_EN				(1 << 3)
-> +#define   WAKE_WALK_EN				(1 << 14)
-> +#define   MASTER_ENABLE				(1 << 15)
-> +#define   LINEVAL_WALK_EN			(1 << 16)
+Hi,
 
-BIT() or GENMASK() please
+One more version. I used #ifdef when I should have used #if
+IS_DEFINED(). Thanks Guenter for pointing that out.
 
-> +static inline void ao_writel(struct tegra186_xusb_padctl *priv, u32 value, unsigned int offset)
-> +{
-> +	dev_dbg(priv->base.dev, "ao %08x < %08x\n", offset, value);
+I'm sending this version right away because of the holidays. I'm not
+changing anything else except that one fix.
 
-Too many debug prints in this patch as well...
 
-With the nits fixed:
+v3: cover letter:
 
-Acked-By: Vinod Koul <vkoul@kernel.org>
+Third version: ifdefs now in the header files as they should be.
+
+
+v2 cover letter:
+
+This is the second version of this series. The "Iterator for ports"
+patch is now moved to the end of the series (5/6).
+
+I'm now using usb_for_each_dev() in usb_for_each_port like Alan
+suggested, and I'm now using usb_port_peer_mutex to lock the ports
+while we're dealing with them in __each_hub().
+
+
+The original cover letter:
+
+Adding a simple function typec_link_port() that can be used to create
+a symlink "connector" that points to the USB Type-C connector of a
+port. It is used with USB ports initially, but hopefully later also
+with other things like DisplayPorts.
+
+Being able to see which connector is connected to a port is important
+in general, but it is really important when for example the data or
+power role of a device needs to swapped. The user probable wants to
+know which USB device is disconnected if role swap on a USB Type-C
+connector is executed.
+
+Hope these are OK.
+
+thanks,
+
+Heikki Krogerus (6):
+  usb: typec: Organize the private headers properly
+  usb: typec: Declare the typec_class static
+  usb: typec: Port mapping utility
+  usb: Link the ports to the connectors they are attached to
+  usb: Iterator for ports
+  usb: typec: Link all ports during connector registration
+
+ Documentation/ABI/testing/sysfs-bus-usb |   9 +
+ drivers/usb/core/port.c                 |   3 +
+ drivers/usb/core/usb.c                  |  46 ++++
+ drivers/usb/typec/Makefile              |   2 +-
+ drivers/usb/typec/bus.c                 |   2 +
+ drivers/usb/typec/bus.h                 |  19 +-
+ drivers/usb/typec/class.c               | 101 +++------
+ drivers/usb/typec/class.h               |  85 ++++++++
+ drivers/usb/typec/mux.c                 |   4 +-
+ drivers/usb/typec/mux.h                 |  21 ++
+ drivers/usb/typec/port-mapper.c         | 277 ++++++++++++++++++++++++
+ include/linux/usb.h                     |   9 +
+ include/linux/usb/typec.h               |  13 ++
+ 13 files changed, 495 insertions(+), 96 deletions(-)
+ create mode 100644 drivers/usb/typec/class.h
+ create mode 100644 drivers/usb/typec/mux.h
+ create mode 100644 drivers/usb/typec/port-mapper.c
 
 -- 
-~Vinod
+2.30.2
+
