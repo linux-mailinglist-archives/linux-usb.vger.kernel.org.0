@@ -2,65 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C5235109A
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Apr 2021 10:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F003510CB
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Apr 2021 10:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233450AbhDAIJS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Apr 2021 04:09:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47464 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233024AbhDAIJG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 1 Apr 2021 04:09:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0F3AE610A0;
-        Thu,  1 Apr 2021 08:09:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617264546;
-        bh=NMCFXNkyTxe7jYe9LKLuBpM2TEuj+8MCi3QE7ObNobw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c/y958x25Stwq+Kf2GG7zgwzRQ7MGaKmWLelvLbQS8rcwRlrwmJAqGwxLFzShvSD3
-         +i5D70caX6+gAcCszTMJLKsPqecIolsQUv8AAxbr4L1wW/FUKxvIDVQJoeNNxAdw8C
-         sY1+WOpPV6243ICYXcXX/kPh7SSzDlJ3cx9ZIjRoCiKtf0IwOVrE6AbKEXu8VeDvcO
-         k1L1QGH0oqDYziJtu6CRKUql0vLhAfM+xd4TfL9UU+sMxyRDns9Qtgd8VIC9tpjnJv
-         /AD/Jrn9NOBUHV0NkFIpFjD+dvoo/Dyac4ckudyXnooZEQR/BhsAPzm2niucJ0qb6l
-         N1/wG1zsviY4A==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lRsNy-0005Vw-Qc; Thu, 01 Apr 2021 10:09:03 +0200
-Date:   Thu, 1 Apr 2021 10:09:02 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] USB: serial: add support for multi-interface
- functions
-Message-ID: <YGV/nr4hl/qpPw76@hovoldconsulting.com>
-References: <20210330143820.9103-1-johan@kernel.org>
- <YGM6mhvDrFkqHe70@kroah.com>
+        id S233504AbhDAIXV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Apr 2021 04:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233383AbhDAIW6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Apr 2021 04:22:58 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B5EC0613E6
+        for <linux-usb@vger.kernel.org>; Thu,  1 Apr 2021 01:22:58 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id l76so1092194pga.6
+        for <linux-usb@vger.kernel.org>; Thu, 01 Apr 2021 01:22:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=eKr2jAvb2NwRGf9H6XHeAPDkW4uI/xecMICTZFKisf8=;
+        b=WJfVu0sTYANnbMFeqlDYFqvrnCXaMVKWzH2/3FBjq+oFehAdFm1tp8dsEtbPczTM/Q
+         VnVFJbpjwgYWf3PyAvMF9GvzxzBdhnVMNt0j1i1bE0Fj5BI7DF2NQo2pfId9inyUh7Wg
+         +Nv2xbl0Ohg/PurQgZh9gJP5AJxDzOYKxmZsehFJghzkhnLKQzFZpDubUKOPCBbgs92i
+         fHamB9f/l3R3EpacfzAbLctYSnI4BvqMSkZjhLaivouZlbTTcNIVewQtO2QfQHRAbf4p
+         0JZRm1oLjILOhGwnQGY0fumpL30uzEPcsl8UM9tpRjHHXeWLSjeHA+1RuVuM/xltoC2b
+         wAmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=eKr2jAvb2NwRGf9H6XHeAPDkW4uI/xecMICTZFKisf8=;
+        b=oInTEU+vOdSkS70hJ8T2jJ1zT+i9zwHj2nuUfsUzXEx7CmHZsQ0UyEJOEqTPpOk09S
+         i+L3yScywkswgWacfaqHLiTRvQMlrAnvJryPcU6hMyezwaHYqNLOrGPiPCVdSkzzMKNZ
+         ZN20cTM/v3xXbAaYwVzkK37Bl2CeS6QL13XUU0WbUYDmcrSLpq5BURdzLuyKFAXS0A8W
+         sXe/fKLIDEIP1cbfCcGHlpHyLpBfbsGJltyqp7YsZkiNJ1pX2OqFiQxFqBCQlsgk+Ui/
+         8urnFT9fd7yZl7UvAqGNCS4z1zaGHwStEoyLjUAoaMpz6yxAuEt2/k47EhXlCinpEdwi
+         eZRg==
+X-Gm-Message-State: AOAM5306H+aW1Fha+AXqCQVISvs6g9li8xBnEZR8XPd5m33f+Vd0QbVN
+        BwNSztiZgF2EX7UPcdEE18GdF3kh/d7F6WOL8B8=
+X-Google-Smtp-Source: ABdhPJzZNh2ssymMsDnXsSKzF6rTIFIgOxrkKkeA2ezkF1pv8dRqQIA9D2st/AnGVACGSskyZwsJYQmnnUJKd0u3Y24=
+X-Received: by 2002:a62:dd58:0:b029:22b:8556:8df4 with SMTP id
+ w85-20020a62dd580000b029022b85568df4mr6379194pff.24.1617265377304; Thu, 01
+ Apr 2021 01:22:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YGM6mhvDrFkqHe70@kroah.com>
+Received: by 2002:a17:90b:100f:0:0:0:0 with HTTP; Thu, 1 Apr 2021 01:22:56
+ -0700 (PDT)
+Reply-To: drjohninfo342234@gmail.com
+From:   DR JOHN OBU <revjohnobi30@gmail.com>
+Date:   Thu, 1 Apr 2021 01:22:56 -0700
+Message-ID: <CANCQOCXd9LRC2s0BKdwCmJi+cX0BR_5P2rp540AvTCPRO9_C8Q@mail.gmail.com>
+Subject: An Update on Your Card Delivery
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 30, 2021 at 04:50:02PM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Mar 30, 2021 at 04:38:16PM +0200, Johan Hovold wrote:
-> > A single USB function can be implemented using a group of interfaces and
-> > this is for example commonly used for Communication Class devices.
-> >     
-> > This series adds support for multi-interface functions to USB serial
-> > core and exports an interface that allows drivers to claim a second
-> > sibling interface. The interface could easily be extended to allow
-> > claiming further interfaces if ever needed.
-> > 
-> > The final patch uses the new interface to properly claim both the
-> > control and data interface of Maxlinear/Exar devices.
-> 
-> Looks good, thanks for adding this:
-> 
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Hello,
 
-Thanks for reviewing. Now applied.
+This is to officially inform you that (ATM Card number:5199 1107 2037
+2066) has been accredited in your favor. Your Personal Identification
+Number is 5199. The ATM Card Value is US$10,000,000.00.You are advised
+to contact me with the following information: Name, Address,Mobile No,
+Age and Occupation Thank You. Send all information directly to my
+Private E-mail: drjohninfo342234@gmail.com
+Thank you God Blessed,
 
-Johan
+DR JOHN OBU
+CHAIRMAN PAYMENT APPROVAL
+FROM OFFICE OF THE PRESIDENT
+AND INTERNATIONAL REMITTANCE DEPARTMENT
