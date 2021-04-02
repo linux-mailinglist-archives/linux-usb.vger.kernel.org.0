@@ -2,62 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D15AA3529F9
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Apr 2021 12:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 475AD352AF4
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Apr 2021 15:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235127AbhDBKzF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Apr 2021 06:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235043AbhDBKzE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Apr 2021 06:55:04 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3050CC0613E6
-        for <linux-usb@vger.kernel.org>; Fri,  2 Apr 2021 03:55:03 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id r12so2607863vsj.5
-        for <linux-usb@vger.kernel.org>; Fri, 02 Apr 2021 03:55:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=T5c1YvZMKhTRqlRd01EvDR/SF6pAN0u2w59WgPujjHw=;
-        b=qLd5CMxWfhrlZkt4/hYEnNBBm1Xbskw+6Iadk51Jc9dOWYxrMna/3HhnfIlO5hA3Of
-         Py/Kvb3hXGIOXIJxikKTDOd+Rme2H+R4WhlbO0mLOyrdkKhLvB4C/PTWEeVnxEpvftWO
-         EsO5WOAEvBwk4sz0VcBYHHvKnArGSPfa00xj3CSkk9Y+X1bq50SMOF0JlsFSz/SxxBuq
-         w2ZbcM7rxxdXTx1YHU+vG/3lmbqXnYCLN6iNkohy/mm0FlDy+rSl4LZWisc1fpuOw22o
-         R8DY0L2SU/FaxucHwiYJj4KEF/+8ZmlGgR7nuQyDhThUI383aS+b9NBDWXhTHDJlePD9
-         GUpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=T5c1YvZMKhTRqlRd01EvDR/SF6pAN0u2w59WgPujjHw=;
-        b=AROJpBOyjxjfpA786idudaFzMz2V/mlMqZ1VqdJ1MZC0NBs/YvQcxGKooEK9iCgHoj
-         YY6AkfCFMTtkzf7AgLB5SPM9yd/C2LX74vbSWtZKVI5onFO7MZySXY1F+lFx4prW/Pte
-         j2ADWh8O0OGQ72YAH/pXxS0S+05Ih46FWowCT0xkKNhBpxOK7PABHGfo/5EvqwmkKTr8
-         MvWlUzOgrKhSoq/863C7gXW5/bbmzCcT7axVFm8wN/WnSUsBVZSJfeD8gb86zHObVBVF
-         qyjH9aa8BcWn4mkKsnJgPjq6P3HjkkJlOMff1q9ms3ZAXIio3jdgYkSpXIZ9DtFB43q0
-         SHrA==
-X-Gm-Message-State: AOAM531bhr2Ds/dF9bfyUDMrxX1SLH99G2l+5Am3koEI3+UJ23DxMtGQ
-        RMpCGuLfauwetiOCdvQ0WT0ptmGEcBSiV+cuBrM=
-X-Google-Smtp-Source: ABdhPJztYKspCMu1ALB8ZPy0ToMwxIpSEbxK2kcKudx7d4yJB2L/U9JY8uUAOSfjyQezLUZJgYErjrUwa2zaW27yM4U=
-X-Received: by 2002:a67:f8d3:: with SMTP id c19mr8370045vsp.10.1617360902512;
- Fri, 02 Apr 2021 03:55:02 -0700 (PDT)
+        id S234628AbhDBNQy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Apr 2021 09:16:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33954 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229599AbhDBNQy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 2 Apr 2021 09:16:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C0285610F7;
+        Fri,  2 Apr 2021 13:16:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1617369413;
+        bh=/BQ5h0ZVqbqSFxqV9m02WcLc6Z8/u/Dvvd8g8cm6jrk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AZ1HioHCyhOvKy6l8tgnDAaxxkekkKPJ2t4X9sKEgqFiVyqGfLgx2YTHHFg1Ljg1r
+         UQtlNoH0hVgOd53joPR1v12rGxKuMjW2bzyU+ibaA1toVJUF+BlzT73Fmq4z4nJgUy
+         +n6jDk4kP/xECaDRf5rcxJYgSjkgC50QwxdhRJXs=
+Date:   Fri, 2 Apr 2021 15:16:50 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Longfang Liu <liulongfang@huawei.com>
+Cc:     mathias.nyman@intel.com, stern@rowland.harvard.edu,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kong.kongxinwei@hisilicon.com, yisen.zhuang@huawei.com
+Subject: Re: [PATCH] USB:ohci:fix ohci interruption problem
+Message-ID: <YGcZQiBx3mCzqkPd@kroah.com>
+References: <1617355679-9417-1-git-send-email-liulongfang@huawei.com>
 MIME-Version: 1.0
-Received: by 2002:a67:5e82:0:0:0:0:0 with HTTP; Fri, 2 Apr 2021 03:55:02 -0700 (PDT)
-Reply-To: atmcarddelivery001@post.com
-From:   wisdom jude <wisdomjude391@gmail.com>
-Date:   Fri, 2 Apr 2021 10:55:02 +0000
-Message-ID: <CA+ehYhqf-8YS+_UN4=ujmS68yuNKAs4dBu2jvk9N80eGvfGi5Q@mail.gmail.com>
-Subject: OK
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1617355679-9417-1-git-send-email-liulongfang@huawei.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Ol=C3=A1, querida, voc=C3=AA recebeu o e-mail que enviei da =C3=BAltima vez=
-.
+On Fri, Apr 02, 2021 at 05:27:59PM +0800, Longfang Liu wrote:
+> The operating method of the system entering S4 sleep mode:
+> echo disk > /sys/power/state
+> 
+> When OHCI enters the S4 sleep state, the USB sleep process will call
+> check_root_hub_suspend() and ohci_bus_suspend() instead of
+> ohci_suspend() and ohci_bus_suspend(), this causes the OHCI interrupt
+> to not be closed.
+> 
+> At this time, if just one device interrupt is reported. Since rh_state
+> has been changed to OHCI_RH_SUSPENDED after ohci_bus_suspend(), the
+> driver will not process and close this device interrupt. It will cause
+> the entire system to be stuck during sleep, causing the device to
+> fail to respond.
+> 
+> When the abnormal interruption reaches 100,000 times, the system will
+> forcibly close the interruption and make the device unusable.
+> 
+> Because the root cause of the problem is that ohci_suspend is not
+> called to perform normal interrupt shutdown operations when the system
+> enters S4 sleep mode.
+> 
+> Therefore, our solution is to specify freeze interface in this mode to
+> perform normal suspend_common() operations, and call ohci_suspend()
+> after check_root_hub_suspend() is executed through the suspend_common()
+> operation.
+> After using this solution, it is verified by the stress test of sleep
+> wake up in S4 mode for a long time that this problem no longer occurs.
+> 
+> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+> ---
+>  drivers/usb/core/hcd-pci.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 
-hello dear, did you get the mail i sent you the previous time.
+What changed from the previous version sent for this patch?  Always
+properly describe the changes below the --- line, and also version your
+subject line as documented.
+
+Please fix up and resend.
+
+thanks,
+
+greg k-h
