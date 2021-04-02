@@ -2,71 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A7335235B
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Apr 2021 01:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78510352852
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Apr 2021 11:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236008AbhDAXUR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Apr 2021 19:20:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38870 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235847AbhDAXUK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 1 Apr 2021 19:20:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id C512E6113E;
-        Thu,  1 Apr 2021 23:20:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617319209;
-        bh=cjJrWfRHOBQrYVkTwYmSrSVz/yjKS7XXMmNqWmTF6yQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=UsqkX2/dVl0DuRNVhm7mYNVl3J+X33qhpnggWH9QJUXFHpRGwlwymGSKjNAHMckAU
-         gyxHtJMDTJu3Oklh8uy8sOrfUG/vGAUVlleQ0npv2Nfn2UMU11jK9jZzxOqg9w6LDO
-         ZKh/5iPOhsdVz5zQx5Tl79F/sJWnzoHJvHKv3Iy6wF5M36SSURk4W6fBWJl/hFxVRs
-         pa+jKG3sYbHFw5Obzu7lEujH7HbcsZTFq5Mf7JheyCwwE2LSE9S0mT4mzsDoprAHw6
-         b9lI4gkIXtW4v+COy855vLiBugu1KtQkNkF7MzPPCW3VL4rUy6KN28udfgIiwWT22Z
-         Ab3VtF/bSOrHg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id B8897608FE;
-        Thu,  1 Apr 2021 23:20:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S234588AbhDBJNi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Apr 2021 05:13:38 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:15468 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234563AbhDBJNi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Apr 2021 05:13:38 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FBZ6n5wwXzyNNs;
+        Fri,  2 Apr 2021 17:11:29 +0800 (CST)
+Received: from huawei.com (10.67.165.24) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.498.0; Fri, 2 Apr 2021
+ 17:13:30 +0800
+From:   Longfang Liu <liulongfang@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <stern@rowland.harvard.edu>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <liulongfang@huawei.com>, <kong.kongxinwei@hisilicon.com>,
+        <yisen.zhuang@huawei.com>
+Subject: [PATCH] USB:ohci:fix ohci interruption problem
+Date:   Fri, 2 Apr 2021 17:11:00 +0800
+Message-ID: <1617354660-43964-1-git-send-email-liulongfang@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: usb: ax88179_178a: initialize local variables before use
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161731920975.16404.14594136802102080377.git-patchwork-notify@kernel.org>
-Date:   Thu, 01 Apr 2021 23:20:09 +0000
-References: <20210401223607.3846-1-phil@philpotter.co.uk>
-In-Reply-To: <20210401223607.3846-1-phil@philpotter.co.uk>
-To:     Phillip Potter <phil@philpotter.co.uk>
-Cc:     davem@davemloft.net, kuba@kernel.org, wilken.gottwalt@mailbox.org,
-        colin.king@canonical.com, bjorn@mork.no, jk@ozlabs.org,
-        hkallweit1@gmail.com, bjorn.andersson@linaro.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Content-Type: text/plain
+X-Originating-IP: [10.67.165.24]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
+The operating method of the system entering S4 sleep mode:
+echo disk > /sys/power/state
 
-This patch was applied to netdev/net-next.git (refs/heads/master):
+When OHCI enters the S4 sleep state, the USB sleep process will call
+check_root_hub_suspend() and ohci_bus_suspend() instead of
+ohci_suspend() and ohci_bus_suspend(), this causes the OHCI interrupt
+to not be closed.
 
-On Thu,  1 Apr 2021 23:36:07 +0100 you wrote:
-> Use memset to initialize local array in drivers/net/usb/ax88179_178a.c, and
-> also set a local u16 and u32 variable to 0. Fixes a KMSAN found uninit-value bug
-> reported by syzbot at:
-> https://syzkaller.appspot.com/bug?id=00371c73c72f72487c1d0bfe0cc9d00de339d5aa
-> 
-> Reported-by: syzbot+4993e4a0e237f1b53747@syzkaller.appspotmail.com
-> Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
-> 
-> [...]
+At this time, if just one device interrupt is reported. Since rh_state
+has been changed to OHCI_RH_SUSPENDED after ohci_bus_suspend(), the
+driver will not process and close this device interrupt. It will cause
+the entire system to be stuck during sleep, causing the device to
+fail to respond.
 
-Here is the summary with links:
-  - net: usb: ax88179_178a: initialize local variables before use
-    https://git.kernel.org/netdev/net-next/c/bd78980be1a6
+When the abnormal interruption reaches 100,000 times, the system will
+forcibly close the interruption and make the device unusable.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Because the root cause of the problem is that ohci_suspend is not
+called to perform normal interrupt shutdown operations when the system
+enters S4 sleep mode.
 
+Therefore, our solution is to specify freeze interface in this mode to
+perform normal suspend_common() operations, and call ohci_suspend()
+after check_root_hub_suspend() is executed through the suspend_common()
+operation.
+After using this solution, it is verified by the stress test of sleep
+wake up in S4 mode for a long time that this problem no longer occurs.
+
+Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+---
+ drivers/usb/core/hcd-pci.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+index 1547aa6..78a56cd 100644
+--- a/drivers/usb/core/hcd-pci.c
++++ b/drivers/usb/core/hcd-pci.c
+@@ -509,6 +509,11 @@ static int resume_common(struct device *dev, int event)
+ 
+ #ifdef	CONFIG_PM_SLEEP
+ 
++static int hcd_pci_freeze(struct device *dev)
++{
++	return suspend_common(dev, device_may_wakeup(dev));
++}
++
+ static int hcd_pci_suspend(struct device *dev)
+ {
+ 	return suspend_common(dev, device_may_wakeup(dev));
+@@ -605,8 +610,8 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
+ 	.suspend_noirq	= hcd_pci_suspend_noirq,
+ 	.resume_noirq	= hcd_pci_resume_noirq,
+ 	.resume		= hcd_pci_resume,
+-	.freeze		= check_root_hub_suspended,
+-	.freeze_noirq	= check_root_hub_suspended,
++	.freeze		= hcd_pci_freeze,
++	.freeze_noirq	= hcd_pci_freeze,
+ 	.thaw_noirq	= NULL,
+ 	.thaw		= NULL,
+ 	.poweroff	= hcd_pci_suspend,
+-- 
+2.8.1
 
