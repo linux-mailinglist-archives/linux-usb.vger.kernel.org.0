@@ -2,297 +2,319 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3533135358E
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Apr 2021 23:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A4335379A
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Apr 2021 11:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236761AbhDCVQF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 3 Apr 2021 17:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46700 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236649AbhDCVQF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Apr 2021 17:16:05 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE3AC0613E6
-        for <linux-usb@vger.kernel.org>; Sat,  3 Apr 2021 14:16:01 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id l18so8775358edc.9
-        for <linux-usb@vger.kernel.org>; Sat, 03 Apr 2021 14:16:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+Er8NhAFBXN15o0E05X/V+2cd1oBuGJDcjNRAYo6VOk=;
-        b=cm/FhVDQaeFhyipSyUnRBNrzV30x0e0BCO96xiNnjdlL5T/Nuftpbek5befq2OhUqR
-         L9PLlnW7j/W+ZzXcVPghMWtnzCWkGCXNe2zLD8x5Xx0thS98QoMODeahR5jxnwH25fvM
-         mh+7KILNyKulgDGxed3CeTSYzMVWpvxs64lLVB8QvQyAsttBLnLDzkTyryBtWLLxHcV9
-         0e4k29veA6GZTq6s4JJJv6VFdPChG9J7lixwKCB/8PYnzGT8AMqmBL0cprJPETU50NB6
-         icyr48SX89ML+a+flt9+46s0n3MltzFLlJOAo4Ck1XyEPdmfPtI+Kk+c73G8QSq6Pr9e
-         hHZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+Er8NhAFBXN15o0E05X/V+2cd1oBuGJDcjNRAYo6VOk=;
-        b=Ai/oGkkIZRanqYTmZ+1a4PnHL3IgyMxDQsgIkwFd54T8cdyh31SWxQEmTQs0EV6xi+
-         UgwLf38nMg3hB+JBRrkhuyvHNBCVQa9akrCaA0r6F+x8C5LGE82y/UgVq0sf9ddBtmx1
-         Kj9TLfgYlCG7dgLYjTdxjU7pJa4CbRHGEWtEPXu7dEklW8O0go1EBJiXaL2EegzB1GHY
-         94lEGLePc7O4i8WtbO2BocOLYFzMHYlWb6/TfkogDwpJORt+GOpJiF+aCOeH2vSaXj/A
-         nxf35+4yUbP5MKjKPxJCREZNlf4hF1nsVP/vcutIkwBmlw6iYzsapdwvjxeEu0zPPrwL
-         JyBA==
-X-Gm-Message-State: AOAM532z0RGfGLj1opN5Io+ZZLltmyPIrDvNSzojiC3USrC7xCBtQLlw
-        6TiMYeI6aSjd3fETVp9lTiho/Fgmicn7/g==
-X-Google-Smtp-Source: ABdhPJy9mqCppT2oghq9ZScR6E6HYdVvnsHIUknwEo5ETX3Y3toBHZF2Hn+4z3BN9ixdtI5jsxKVDA==
-X-Received: by 2002:a05:6402:6c1:: with SMTP id n1mr9704691edy.158.1617484560243;
-        Sat, 03 Apr 2021 14:16:00 -0700 (PDT)
-Received: from ?IPv6:2001:981:6fec:1:b075:3ef5:1c00:a7a2? ([2001:981:6fec:1:b075:3ef5:1c00:a7a2])
-        by smtp.gmail.com with ESMTPSA id x24sm2499113edr.36.2021.04.03.14.15.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Apr 2021 14:15:59 -0700 (PDT)
-Subject: Re: USB network gadget / DWC3 issue
-From:   Ferry Toth <fntoth@gmail.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        USB <linux-usb@vger.kernel.org>
-References: <CAHp75VeERhaPGAZc0HVs4fcDKXs+THc=_LFq_iEhWAR8vvURjw@mail.gmail.com>
- <87pmzgk44r.fsf@kernel.org> <b4763ebe-c0ff-2d24-5385-1a1587603280@gmail.com>
- <1f8ed83c-b2e5-327c-30da-56865e2b956b@gmail.com>
- <fd8d9a8a-8f57-6559-2053-4607b9da13ab@gmail.com>
- <797f97b8-6558-35c4-2dc5-9deacdf0ba4d@synopsys.com>
- <ff57b956-a777-3dd6-80ca-4e9afd33ab96@gmail.com>
- <6b3a28eb-7809-d319-d58d-520c1c7fa5d2@synopsys.com>
- <4a0869c9-6b71-5acd-e670-e4c06b44d62d@gmail.com>
-Message-ID: <5d8459ae-4a4c-7371-6b0a-ed817e898168@gmail.com>
-Date:   Sat, 3 Apr 2021 23:15:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
-MIME-Version: 1.0
-In-Reply-To: <4a0869c9-6b71-5acd-e670-e4c06b44d62d@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S230226AbhDDJ3Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Apr 2021 05:29:25 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:10556 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229530AbhDDJ3Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Apr 2021 05:29:24 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1617528542; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=R+DEFoVN2DioITMF1H0Iq67bopqJaJkABqvzHmJuw9epQ5+y1rzxHLhULZPlbnYtl6
+    sQ9wd0v8ye0CgVR4h3290BMBcjZFt8Vp+VkorMAKVEgnAlpMS45xdABuc9WdtsO3pN+P
+    55SOKErhX2vO9NfJSgcQJcJ1KNYqnx/HulwfsARGo4Vpv8N06U8axtGEX5aQ975xQkWB
+    ufzaTNUEW7arawcGqW4E6aYgnMA52BxaZVqB7fWP0z94MK7pBveyU6PlQnmos33FLFng
+    5nUKusbWIz3q+UWQgQT2DGB+mwo9+TXJlLTzlEn1isO1oulIuuHR1RO6ZxlcfR0DIUQh
+    oezQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1617528542;
+    s=strato-dkim-0002; d=strato.com;
+    h=To:Message-Id:Cc:Date:From:Subject:Cc:Date:From:Subject:Sender;
+    bh=vheUZJVF0feN1TKEn+8lH0fQzPyppUUJbX3XenMUmNE=;
+    b=UerUIEyPBftgHynxcmjLLhnjpg21RoaszuIWfo+EyA1I/rYe0bv/5AFvMaSYoK4gz+
+    dA0U/7ghWsnOzhmbG7YW6HgKCT/Y/wlVpC/5FamWpVkXdPGjzcIrtROw1JD1ZVi3UuXB
+    u+07ypxh4CI8Xel/AcxWgiC40pCjOrSslTPBYK7vi/d9d5citg/gxABUVhK3zUE8ml5b
+    wOih9dNANXbtWo32BmU+1Z4P8E9cnxiJZIzcqNtrzcbsHsQr2ZKp8WU1kBuatukHPhUi
+    2nsUUGVfgfhS762C82fkTLSZ1ax6oCAQpQmhKM4RVSRYZ7O7crPkV/EXDhC+JPYkwWK5
+    TsfQ==
+ARC-Authentication-Results: i=1; strato.com;
+    dkim=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1617528542;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:Message-Id:Cc:Date:From:Subject:Cc:Date:From:Subject:Sender;
+    bh=vheUZJVF0feN1TKEn+8lH0fQzPyppUUJbX3XenMUmNE=;
+    b=s+pBYSHocm+Ao5xKS9fb3J+AIe7pz7tkWYOiBCBearUgjorU9MlT9bIglPRHZPhaky
+    odXkzZLy4v6tN6y8xoVSIbGQV2f2DKoXpVMq3RpkpglHSYWRDSF12hPM2w+t0kRS67sZ
+    0TGs30x1xF0w+YdQSKJRg3rsh6L38qIhyARaAHED3NyOSdykN57fuNJuujMpFQzLrEi+
+    lq/2iF3pIfuIhp6z38ZMmBjbcam+xb6XGEXwDJCrv4Rwdz21O51h/cF+uLqHITkuR8Xs
+    fuPJWWFwKjXv11PE7NCnfJow+QP/bsbZjc54feAtVe4ryvM02EKQ37fKUB58+n8A/ZMB
+    XF+A==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NMGH/zuwDOioLY="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.23.1 DYNA|AUTH)
+    with ESMTPSA id h03350x349T1bgH
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Sun, 4 Apr 2021 11:29:01 +0200 (CEST)
+Content-Type: text/plain; charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Subject: [BUG]: usb: dwc3: gadget: Prevent EP queuing while stopping transfers
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+Date:   Sun, 4 Apr 2021 11:29:00 +0200
+Cc:     stable@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        kernel@pyra-handheld.com,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>, linux-usb@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <DF98BCBA-E13B-4E33-98AD-216816625F3B@goldelico.com>
+To:     Wesley Cheng <wcheng@codeaurora.org>,
+        Felipe Balbi <balbi@kernel.org>, gregkh@linuxfoundation.org
+X-Mailer: Apple Mail (2.3124)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+it seems as if the patch
 
-Op 03-04-2021 om 13:25 schreef Ferry Toth:
-> Hi,
-> 
-> Op 03-04-2021 om 04:02 schreef Thinh Nguyen:
->> Ferry Toth wrote:
->>> Hi,
->>>
->>> Op 02-04-2021 om 22:16 schreef Thinh Nguyen:
->>>> Ferry Toth wrote:
->>>>> Hi
->>>>>
->>>>> Op 30-03-2021 om 23:57 schreef Ferry Toth:
->>>>>> Hi
->>>>>>
->>>>>> Op 30-03-2021 om 22:26 schreef Ferry Toth:
->>>>>>> Hi,
->>>>>>>
->>>>>>> Op 30-03-2021 om 18:17 schreef Felipe Balbi:
->>>>>>>> Hi,
->>>>>>>>
->>>>>>>> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
->>>>>>>>> Hi!
->>>>>>>>>
->>>>>>>>> I have a platform with DWC3 in Dual Role mode. Currently I'm
->>>>>>>>> experimenting on v5.12-rc5 with a few patches (mostly 
->>>>>>>>> configuration)
->>>>>>>>> applied [1]. I'm using Debian Unstable on the host machine and
->>>>>>>>> BuildRoot with the above mentioned kernel on the target.
->>>>>>>>>
->>>>>>>>> **So, scenario 0:
->>>>>>>>> 1. Run iperf3 -s on target
->>>>>>>>> 2. Run iperf3 -c ... -t 0 on the host
->>>>>>>>> 3.  0.00-10.36  sec   237 MBytes   192 Mbits/sec
->>>>>>>>> receiver
->>>>>>>>>
->>>>>>>>> **Scenario 1:
->>>>>>>>> 1. Now, detach USB cable, wait for several seconds, attach it 
->>>>>>>>> back,
->>>>>>>>> repeat above:
->>>>>>>>> 0.00-9.94   sec   209 MBytes   176 Mbits/sec receiver
->>>>>>>>>
->>>>>>>>> Note the bandwidth drop (177 vs. 192).
->>>>>>>>>
->>>>>>>>> (Repeating scenario 1 will give now the same result)
->>>>>>>>>
->>>>>>>>> **Scenario 2.
->>>>>>>>> 1. Detach USB cable, attach a device, for example USB stick,
->>>>>>>>> 2. See it being enumerated and detach it.
->>>>>>>>> 3. Attach cable from host
->>>>>>>>> 4 .   0.00-19.36  sec   315 MBytes   136 Mbits/sec
->>>>>>>>> receiver
->>>>>>>>>
->>>>>>>>> Note even more bandwidth drop!
->>>>>>>>>
->>>>>>>>> (Repeating scenario 1 keeps the same lower bandwidth)
->>>>>>>>>
->>>>>>>>> NOTE, sometimes on this scenario after several seconds the target
->>>>>>>>> simply reboots (w/o any logs [from kernel] printed)!
->>>>>>>>>
->>>>>>>>> So, any pointers on how to debug and what can be a smoking gun 
->>>>>>>>> here?
->>>>>>>>>
->>>>>>>>> Ferry reported this in [2]. There are different kernel versions 
->>>>>>>>> and
->>>>>>>>> tools to establish the connection (like connman vs. none in my
->>>>>>>>> case).
->>>>>>>>>
->>>>>>>>> [1]:
->>>>>>>>> https://urldefense.com/v3/__https://github.com/andy-shev/linux/__;!!A4F2R9G_pg!KpQnudHIK6XgK6HbPaqtbVgipDmkNBWewo-euAIuBlGdtSiaQiJ8jLn9OoMEppG6qq-d$ 
->>>>>>>>>
->>>>>>>>>
->>>>>>>>> [2]:
->>>>>>>>> https://urldefense.com/v3/__https://github.com/andy-shev/linux/issues/31__;!!A4F2R9G_pg!KpQnudHIK6XgK6HbPaqtbVgipDmkNBWewo-euAIuBlGdtSiaQiJ8jLn9OoMEptMCrp-F$ 
->>>>>>>>>
->>>>>>>>>
->>>>>>>> dwc3 tracepoints should give some initial hints. Look at packets
->>>>>>>> sizes
->>>>>>>> and period of transmission. From dwc3 side, I can't think of
->>>>>>>> anything we
->>>>>>>> would do to throttle the transmission, but tracepoints should 
->>>>>>>> tell a
->>>>>>>> clearer story.
->>>>>>>>
->>>>>>> My testing (but yes, with difference kernel and network managed by
->>>>>>> connman) shows:
->>>>>>>
->>>>>>> 1) on cold boot eem network gadget works fine
->>>>>>>
->>>>>>> 2) after unplug or warm reboot (which is also an unplug) it's 
->>>>>>> broken,
->>>>>>> speed is lost (|12.0 Mbits/sec from 200Mb/s normally)|, packets 
->>>>>>> lost,
->>>>>>> no configuration received from dhcp, occasional reboot, only way to
->>>>>>> fix is cold boot
->>>>>>>
->>>>>>> 3) if before unplug `connmanctl disable gadget`, on replugging and
->>>>>>> enabling it works fine
->>>>>>>
->>>>>>> My theory is that some HW register is disturbed on a surprise 
->>>>>>> unplug,
->>>>>>> but not reset on plug or warm boot. But on cold boot is cleared.
->>>>>>> Maybe that can help to narrow down tracepoints?
->>>>>>>
->>>>>> I captured a plug after warm and after cold boot. This includes
->>>>>> network setup (dhcp). You can find it in [2] or directly link here:
->>>>>> https://urldefense.com/v3/__https://github.com/andy-shev/linux/files/6232410/boot.zip 
->>>>>>
->>>>>>
->>>>>
->>>>> While the above traces in boot.zip allow compare which regs not
->>>>> correctly initialized on warm boot, I have now captured traces of
->>>>> unplug/plug.
->>>>>
->>>>> Here kernel is 5.10.27 (LTS), cold booted with USB cable plugged 
->>>>> and the
->>>>> eem gadget network setup (dhcp). Then trace unplug. Then trace plug.
->>>>>
->>>>> After plug the eem connection is again broken.
->>>>>
->>>>> This might allow figuring out what goes wrong on unplug. Traces here:
->>>>> https://urldefense.com/v3/__https://github.com/andy-shev/linux/files/6250924/plug-unplug.zip 
->>>>>
->>>>>
->>>>> **
->>>>>
->>>> Hi,
->>>>
->>>> Were you able to narrow down the issue to only DWC3 device? (i.e. you
->>>> tested with different hosts and different device controllers to confirm
->>>> this)
->>> I haven't tried with other devices. I have been forced to replace my
->>> host mobo and nothing changed. But I didn't pay attention to the
->>> particular host controller.
->>>
->> It'd be better if we can narrow down the culprit as this seems to me
->> like a synchronization issue at the upper layer between the host and 
->> device.
->>
->>>> Did you see this issue previously? If not, is it possible to do git
->>>> bisection?
->>> This is with Intel Edison where main line usb gadget support appeared
->>> around 4.19 iirc. I believed the problem appeared between 5.4 and 5.7
->>> and tried to bisect but failed.
->>>
->>> I realize only now that I failed because:
->>> 1) 5.4 already has this issue as I recently retested
->> I'm confused, why do you believe the problem is between 5.4 and 5.7 if
->> 5.4 already has this issue? So when did you start seeing this problem?
-> 
-> Because at the time of 5.4 I didn't notice the issue as I normally did 
-> cold boots due to other problems on warm boot (i.e. sdhc inaccessible).
-> 
-> I never new that on a cold boot it works. Even during bisecting I didn't 
-> know until the end, and then I found 5.4 has the same problem as all the 
-> later kernels (tested up to 5.11)
-> 
->> Also, these kernel versions are really old, there's been a lot of
->> updates/fixes to dwc3 since then. Can we run tests on the latest kernel?
-> 
-> I have tested 5.10.27, 5.11.0 and 5.11.4-rt11.
-> 
-> But of course I am completely prepared to run Andy's latest (v5.12-rc5) 
-> on the device.
-> 
->>> 2) I didn't use a reproducible criterion. After warm reboot the eem
->>> gadget fails, but you can flip the host/gadget switch back and forth and
->>> have the illusion that the connection restored.
->>>
->>> The scenario described here is reproducible: leaving the switch in
->>> gadget mode eem works after cold boot only. And it likely breaks on 
->>> unplug.
->>>
->>> A 2nd hint is that disabling gadget (I used `connmanctl disable gadget`
->>> but I believe that has the same effect as `iw link set dev usb0 down`)
->>> before unplug prevents messing up the driver, so you can replug and
->>> enable again.
->> These data points are good. However, we'd need to know where to look
->> first. The issue isn't obvious from the DWC3 controller or the DWC3 
->> driver.
->>
->> Can you check a few things:
->> 1) Any error/timeout messages from the host's dmesg? Or device side?
-> 
-> I'll add log from the host side.
-> 
-> For now I only see (on a warm plug):
-> 
-> kernel: usb 1-11: can't set config #1, error -110
-> 
->> 2) What kernel version is your host using? Can you use the latest for
->> both host and device?
-> 
-> The host is ubuntu's amd64 5.8.0-48-generic.
-> 
-> I will test with v5.12-rc5  from ubuntu kernel ppa on the host. And 
-> Andy's latest (v5.12-rc5) on the device.
+	9de499997c37 ("usb: dwc3: gadget: Prevent EP queuing while =
+stopping transfers") in v5.11.y
+	f09ddcfcb8c5 ("usb: dwc3: gadget: Prevent EP queuing while =
+stopping transfers") in v5.12-rc5
 
-I upgraded host kernel, but not yet device and captured relevant host 
-journal messages and device traces. Something did change: after cold 
-boot I don't a eem until after I unplug/replug. I then traced a iperf 
-transfer. Then after again unplug/replug I get the throttled connection, 
-which I also traced.
+reproducible breaks dwc3 RNDIS gadget, at least on the Pyra Handheld =
+(OMAP5).
 
-See https://github.com/andy-shev/linux/files/6253414/transfer.zip
+The symptom of having this patch in tree (v5.11.10 or v5.12) is that
+rndis/gadget initially works after boot.
 
+But after unplugging the cable, a replug gives warnings like the =
+following
+and RNDIS isn't up and running any more:
 
-> I am expecting results this evening.
-> 
->> 3) Snapshot of dwc3 tracepoints of active transfers between the normal
->> vs throttled of the latest kernel
-> 
-> I don't know if the problem I see is really throttling.
-> 
-> I can trace an active transfer, but that does actually throttle from 
-> 200Mb/s down to 139MB/s and produces a trace of 53MB. (2x1sec of iperf3).
-> 
->> BR,
->> Thinh
+[   72.009811] ------------[ cut here ]------------
+[   72.014768] WARNING: CPU: 0 PID: 2499 at =
+drivers/usb/dwc3/gadget.c:361 dwc3_send_gadget_ep_cmd+0x1f8/0x330 [dwc3]
+[   72.025846] dwc3 4a030000.usb: No resource for ep2in
+[   72.031125] Modules linked in: bnep usb_f_ecm g_ether usb_f_rndis =
+u_ether libcomposite configfs ipv6 snd_soc_omap_hdmi wl18xx wlcore =
+panel_boe_btl507212_w677l mac80211 snd_soc_spdif_tx snd_soc_dmic dwc3 =
+roles cfg80211 libarc4 snd_soc_omap_abe_twl6040 snd_soc_simple_card =
+omapdrm pvrsrvkm_omap5_sgx544_116 snd_soc_omap_mcpdm =
+snd_soc_simple_card_utils etnaviv wwan_on_off snd_soc_twl6040 leds_gpio =
+snd_soc_gtm601 drm_kms_helper pwm_bl pwm_omap_dmtimer ti_tpd12s015 =
+display_connector generic_adc_battery snd_soc_w2cbw003_bt gpu_sched =
+syscopyarea sysfillrect sysimgblt fb_sys_fops cec drm =
+drm_panel_orientation_quirks omap_sham omap_aes_driver crypto_engine =
+omap_crypto ehci_omap dwc3_omap wlcore_sdio snd_soc_ts3a227e ina2xx_adc =
+leds_is31fl319x tsc2007 bq2429x_charger bq27xxx_battery_i2c =
+bq27xxx_battery ina2xx as5013 tca8418_keypad twl6040_vibra bmp280_spi =
+clk_twl6040 gpio_twl6040 hci_uart btbcm palmas_pwrbutton palmas_gpadc =
+usb3503 bluetooth bmc150_accel_i2c bmc150_magn_i2c bmp280_i2c bmg160_
+i2c
+[   72.032887]  bmc150_accel_core bmc150_magn bmg160_core bmp280 =
+ecdh_generic bno055 industrialio_triggered_buffer ecc kfifo_buf =
+industrialio snd_soc_omap_aess snd_soc_omap_mcbsp snd_soc_ti_sdma
+[   72.143285] CPU: 0 PID: 2499 Comm: irq/200-dwc3 Not tainted =
+5.12.0-rc5-letux-lpae+ #5479
+[   72.151914] Hardware name: Generic OMAP5 (Flattened Device Tree)
+[   72.158300] [<c020ec60>] (unwind_backtrace) from [<c020a1d0>] =
+(show_stack+0x10/0x14)
+[   72.166595] [<c020a1d0>] (show_stack) from [<c096aa34>] =
+(dump_stack+0x8c/0xac)
+[   72.174325] [<c096aa34>] (dump_stack) from [<c022ba94>] =
+(__warn+0xcc/0xf4)
+[   72.181668] [<c022ba94>] (__warn) from [<c022bb2c>] =
+(warn_slowpath_fmt+0x70/0x9c)
+[   72.189664] [<c022bb2c>] (warn_slowpath_fmt) from [<bf41ef44>] =
+(dwc3_send_gadget_ep_cmd+0x1f8/0x330 [dwc3])
+[   72.200223] [<bf41ef44>] (dwc3_send_gadget_ep_cmd [dwc3]) from =
+[<bf41f55c>] (__dwc3_gadget_ep_enable+0x344/0x420 [dwc3])
+[   72.212003] [<bf41f55c>] (__dwc3_gadget_ep_enable [dwc3]) from =
+[<bf41f6f0>] (dwc3_gadget_ep_enable+0xb8/0xe8 [dwc3])
+[   72.223420] [<bf41f6f0>] (dwc3_gadget_ep_enable [dwc3]) from =
+[<c078eef8>] (usb_ep_enable+0x3c/0xd4)
+[   72.233182] [<c078eef8>] (usb_ep_enable) from [<bf57497c>] =
+(ecm_set_alt+0x48/0x13c [usb_f_ecm])
+[   72.242490] [<bf57497c>] (ecm_set_alt [usb_f_ecm]) from [<bf5450b4>] =
+(composite_setup+0xa88/0x152c [libcomposite])
+
+[   72.253629] [<bf5450b4>] (composite_setup [libcomposite]) from =
+[<bf421edc>] (dwc3_ep0_delegate_req+0x2c/0x40 [dwc3])
+[   72.264981] [<bf421edc>] (dwc3_ep0_delegate_req [dwc3]) from =
+[<bf422d9c>] (dwc3_ep0_interrupt+0x31c/0x824 [dwc3])
+[   72.276122] [<bf422d9c>] (dwc3_ep0_interrupt [dwc3]) from =
+[<bf420698>] (dwc3_process_event_buf+0x11c/0xa50 [dwc3])
+
+[   72.287357] [<bf420698>] (dwc3_process_event_buf [dwc3]) from =
+[<bf420ff0>] (dwc3_thread_interrupt+0x24/0x3c [dwc3])
+[   72.298679] [<bf420ff0>] (dwc3_thread_interrupt [dwc3]) from =
+[<c027972c>] (irq_thread_fn+0x1c/0x5c)
+[   72.308440] [<c027972c>] (irq_thread_fn) from [<c0279a54>] =
+(irq_thread+0x158/0x1e8)
+[   72.316617] [<c0279a54>] (irq_thread) from [<c02492d8>] =
+(kthread+0x138/0x148)
+[   72.324254] [<c02492d8>] (kthread) from [<c0200140>] =
+(ret_from_fork+0x14/0x34)
+[   72.331968] Exception stack(0xc2e99fb0 to 0xc2e99ff8)
+[   72.337339] 9fa0:                                     00000000 =
+00000000 00000000 00000000
+[   72.346022] 9fc0: 00000000 00000000 00000000 00000000 00000000 =
+00000000 00000000 00000000
+[   72.354716] 9fe0: 00000000 00000000 00000000 00000000 00000013 =
+00000000
+[   72.361753] ---[ end trace d949466d43afc2cb ]---
+[   72.366675] ------------[ cut here ]------------
+[   72.371579] WARNING: CPU: 0 PID: 2499 at =
+drivers/usb/gadget/udc/core.c:278 usb_ep_queue+0xe8/0x108
+[   72.381131] Modules linked in: bnep usb_f_ecm g_ether usb_f_rndis =
+u_ether libcomposite configfs ipv6 snd_soc_omap_hdmi wl18xx wlcore =
+panel_boe_btl507212_w677l mac80211 snd_soc_spdif_tx snd_soc_dmic dwc3 =
+roles cfg80211 libarc4 snd_soc_omap_abe_twl6040 snd_soc_simple_card =
+omapdrm pvrsrvkm_omap5_sgx544_116 snd_soc_omap_mcpdm =
+snd_soc_simple_card_utils etnaviv wwan_on_off snd_soc_twl6040 leds_gpio =
+snd_soc_gtm601 drm_kms_helper pwm_bl pwm_omap_dmtimer ti_tpd12s015 =
+display_connector generic_adc_battery snd_soc_w2cbw003_bt gpu_sched =
+syscopyarea sysfillrect sysimgblt fb_sys_fops cec drm =
+drm_panel_orientation_quirks omap_sham omap_aes_driver crypto_engine =
+omap_crypto ehci_omap dwc3_omap wlcore_sdio snd_soc_ts3a227e ina2xx_adc =
+leds_is31fl319x tsc2007 bq2429x_charger bq27xxx_battery_i2c =
+bq27xxx_battery ina2xx as5013 tca8418_keypad twl6040_vibra bmp280_spi =
+clk_twl6040 gpio_twl6040 hci_uart btbcm palmas_pwrbutton palmas_gpadc =
+usb3503 bluetooth bmc150_accel_i2c bmc150_magn_i2c bmp280_i2c bmg160_
+i2c
+[   72.382817]  bmc150_accel_core bmc150_magn bmg160_core bmp280 =
+ecdh_generic bno055 industrialio_triggered_buffer ecc kfifo_buf =
+industrialio snd_soc_omap_aess snd_soc_omap_mcbsp snd_soc_ti_sdma
+[   72.493132] CPU: 0 PID: 2499 Comm: irq/200-dwc3 Tainted: G        W   =
+      5.12.0-rc5-letux-lpae+ #5479
+[   72.503202] Hardware name: Generic OMAP5 (Flattened Device Tree)
+[   72.509581] [<c020ec60>] (unwind_backtrace) from [<c020a1d0>] =
+(show_stack+0x10/0x14)
+[   72.517852] [<c020a1d0>] (show_stack) from [<c096aa34>] =
+(dump_stack+0x8c/0xac)
+[   72.525571] [<c096aa34>] (dump_stack) from [<c022ba94>] =
+(__warn+0xcc/0xf4)
+[   72.532926] [<c022ba94>] (__warn) from [<c022bb2c>] =
+(warn_slowpath_fmt+0x70/0x9c)
+[   72.540921] [<c022bb2c>] (warn_slowpath_fmt) from [<c078ee9c>] =
+(usb_ep_queue+0xe8/0x108)
+[   72.549558] [<c078ee9c>] (usb_ep_queue) from [<bf574914>] =
+(ecm_do_notify+0x138/0x158 [usb_f_ecm])
+[   72.559049] [<bf574914>] (ecm_do_notify [usb_f_ecm]) from =
+[<bf574a68>] (ecm_set_alt+0x134/0x13c [usb_f_ecm])
+[   72.569524] [<bf574a68>] (ecm_set_alt [usb_f_ecm]) from [<bf5450b4>] =
+(composite_setup+0xa88/0x152c [libcomposite])
+
+[   72.580626] [<bf5450b4>] (composite_setup [libcomposite]) from =
+[<bf421edc>] (dwc3_ep0_delegate_req+0x2c/0x40 [dwc3])
+[   72.592038] [<bf421edc>] (dwc3_ep0_delegate_req [dwc3]) from =
+[<bf422d9c>] (dwc3_ep0_interrupt+0x31c/0x824 [dwc3])
+[   72.603209] [<bf422d9c>] (dwc3_ep0_interrupt [dwc3]) from =
+[<bf420698>] (dwc3_process_event_buf+0x11c/0xa50 [dwc3])
+
+[   72.614469] [<bf420698>] (dwc3_process_event_buf [dwc3]) from =
+[<bf420ff0>] (dwc3_thread_interrupt+0x24/0x3c [dwc3])
+[   72.625793] [<bf420ff0>] (dwc3_thread_interrupt [dwc3]) from =
+[<c027972c>] (irq_thread_fn+0x1c/0x5c)
+[   72.635556] [<c027972c>] (irq_thread_fn) from [<c0279a54>] =
+(irq_thread+0x158/0x1e8)
+[   72.643705] [<c0279a54>] (irq_thread) from [<c02492d8>] =
+(kthread+0x138/0x148)
+[   72.651334] [<c02492d8>] (kthread) from [<c0200140>] =
+(ret_from_fork+0x14/0x34)
+[   72.659055] Exception stack(0xc2e99fb0 to 0xc2e99ff8)
+[   72.664437] 9fa0:                                     00000000 =
+00000000 00000000 00000000
+[   72.673123] 9fc0: 00000000 00000000 00000000 00000000 00000000 =
+00000000 00000000 00000000
+[   72.681821] 9fe0: 00000000 00000000 00000000 00000000 00000013 =
+00000000
+[   72.688840] ---[ end trace d949466d43afc2cc ]---
+[   72.708346] bq2429x_charger 1-006b: bq2429x_usb_detect: state =
+changed: state->[ HOST FCHG INDPM PWRGOOD] fault->[]
+
+[   72.719587] bq2429x_charger 1-006b: bq2429x: VBUS became available
+[   72.920591] ------------[ cut here ]------------
+[   72.925514] WARNING: CPU: 0 PID: 2499 at =
+drivers/usb/dwc3/gadget.c:361 dwc3_send_gadget_ep_cmd+0x1f8/0x330 [dwc3]
+[   72.936612] dwc3 4a030000.usb: No resource for ep1in
+[   72.941892] Modules linked in: bnep usb_f_ecm g_ether usb_f_rndis =
+u_ether libcomposite configfs ipv6 snd_soc_omap_hdmi wl18xx wlcore =
+panel_boe_btl507212_w677l mac80211 snd_soc_spdif_tx snd_soc_dmic dwc3 =
+roles cfg80211 libarc4 snd_soc_omap_abe_twl6040 snd_soc_simple_card =
+omapdrm pvrsrvkm_omap5_sgx544_116 snd_soc_omap_mcpdm =
+snd_soc_simple_card_utils etnaviv wwan_on_off snd_soc_twl6040 leds_gpio =
+snd_soc_gtm601 drm_kms_helper pwm_bl pwm_omap_dmtimer ti_tpd12s015 =
+display_connector generic_adc_battery snd_soc_w2cbw003_bt gpu_sched =
+syscopyarea sysfillrect sysimgblt fb_sys_fops cec drm =
+drm_panel_orientation_quirks omap_sham omap_aes_driver crypto_engine =
+omap_crypto ehci_omap dwc3_omap wlcore_sdio snd_soc_ts3a227e ina2xx_adc =
+leds_is31fl319x tsc2007 bq2429x_charger bq27xxx_battery_i2c =
+bq27xxx_battery ina2xx as5013 tca8418_keypad twl6040_vibra bmp280_spi =
+clk_twl6040 gpio_twl6040 hci_uart btbcm palmas_pwrbutton palmas_gpadc =
+usb3503 bluetooth bmc150_accel_i2c bmc150_magn_i2c bmp280_i2c bmg160_
+i2c
+[   72.943662]  bmc150_accel_core bmc150_magn bmg160_core bmp280 =
+ecdh_generic bno055 industrialio_triggered_buffer ecc kfifo_buf =
+industrialio snd_soc_omap_aess snd_soc_omap_mcbsp snd_soc_ti_sdma
+[   73.054078] CPU: 0 PID: 2499 Comm: irq/200-dwc3 Tainted: G        W   =
+      5.12.0-rc5-letux-lpae+ #5479
+[   73.064176] Hardware name: Generic OMAP5 (Flattened Device Tree)
+[   73.070582] [<c020ec60>] (unwind_backtrace) from [<c020a1d0>] =
+(show_stack+0x10/0x14)
+[   73.078867] [<c020a1d0>] (show_stack) from [<c096aa34>] =
+(dump_stack+0x8c/0xac)
+[   73.086585] [<c096aa34>] (dump_stack) from [<c022ba94>] =
+(__warn+0xcc/0xf4)
+[   73.093930] [<c022ba94>] (__warn) from [<c022bb2c>] =
+(warn_slowpath_fmt+0x70/0x9c)
+[   73.101926] [<c022bb2c>] (warn_slowpath_fmt) from [<bf41ef44>] =
+(dwc3_send_gadget_ep_cmd+0x1f8/0x330 [dwc3])
+[   73.112425] [<bf41ef44>] (dwc3_send_gadget_ep_cmd [dwc3]) from =
+[<bf41f55c>] (__dwc3_gadget_ep_enable+0x344/0x420 [dwc3])
+[   73.124234] [<bf41f55c>] (__dwc3_gadget_ep_enable [dwc3]) from =
+[<bf41f6f0>] (dwc3_gadget_ep_enable+0xb8/0xe8 [dwc3])
+[   73.135678] [<bf41f6f0>] (dwc3_gadget_ep_enable [dwc3]) from =
+[<c078eef8>] (usb_ep_enable+0x3c/0xd4)
+[   73.145444] [<c078eef8>] (usb_ep_enable) from [<bf558f40>] =
+(gether_connect+0x24/0x19c [u_ether])
+[   73.154873] [<bf558f40>] (gether_connect [u_ether]) from [<bf574a50>] =
+(ecm_set_alt+0x11c/0x13c [usb_f_ecm])
+[   73.165258] [<bf574a50>] (ecm_set_alt [usb_f_ecm]) from [<bf5451d4>] =
+(composite_setup+0xba8/0x152c [libcomposite])
+
+[   73.176368] [<bf5451d4>] (composite_setup [libcomposite]) from =
+[<bf421edc>] (dwc3_ep0_delegate_req+0x2c/0x40 [dwc3])
+[   73.187772] [<bf421edc>] (dwc3_ep0_delegate_req [dwc3]) from =
+[<bf422eb0>] (dwc3_ep0_interrupt+0x430/0x824 [dwc3])
+[   73.198919] [<bf422eb0>] (dwc3_ep0_interrupt [dwc3]) from =
+[<bf420698>] (dwc3_process_event_buf+0x11c/0xa50 [dwc3])
+
+[   73.210172] [<bf420698>] (dwc3_process_event_buf [dwc3]) from =
+[<bf420ff0>] (dwc3_thread_interrupt+0x24/0x3c [dwc3])
+[   73.221494] [<bf420ff0>] (dwc3_thread_interrupt [dwc3]) from =
+[<c027972c>] (irq_thread_fn+0x1c/0x5c)
+[   73.231260] [<c027972c>] (irq_thread_fn) from [<c0279a54>] =
+(irq_thread+0x158/0x1e8)
+[   73.239411] [<c0279a54>] (irq_thread) from [<c02492d8>] =
+(kthread+0x138/0x148)
+[   73.247041] [<c02492d8>] (kthread) from [<c0200140>] =
+(ret_from_fork+0x14/0x34)
+[   73.254758] Exception stack(0xc2e99fb0 to 0xc2e99ff8)
+[   73.260135] 9fa0:                                     00000000 =
+00000000 00000000 00000000
+[   73.268815] 9fc0: 00000000 00000000 00000000 00000000 00000000 =
+00000000 00000000 00000000
+[   73.277476] 9fe0: 00000000 00000000 00000000 00000000 00000013 =
+00000000
+[   73.284490] ---[ end trace d949466d43afc2cd ]---
+
+Even once I was able to trigger a kernel panic just by =
+unplugging/replugging
+the cable.
+
+Reverting this patch makes DWC3 work again after cable unplug/replug.
+On both, v5.11.10 and 5.12-rc5.
+
+Please suggest a fix for testing.
+
+BR and thanks,
+Nikolaus Schaller
+
