@@ -2,69 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DFF354100
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Apr 2021 12:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B448B3541EF
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Apr 2021 14:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238038AbhDEKAn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Apr 2021 06:00:43 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:15481 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232063AbhDEKAn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Apr 2021 06:00:43 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FDR1Y1wKMzwQMJ;
-        Mon,  5 Apr 2021 17:58:25 +0800 (CST)
-Received: from localhost.localdomain (10.175.104.82) by
- DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.498.0; Mon, 5 Apr 2021 18:00:24 +0800
-From:   Zheng Yongjun <zhengyongjun3@huawei.com>
-To:     <zhengyongjun3@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
-        Tom Rix <trix@redhat.com>
-CC:     <linux-usb@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH -next] usb: host: u132-hcd: use DEFINE_MUTEX() for mutex lock
-Date:   Mon, 5 Apr 2021 18:14:34 +0800
-Message-ID: <20210405101434.14878-1-zhengyongjun3@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S239828AbhDEMHz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Apr 2021 08:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234148AbhDEMHy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Apr 2021 08:07:54 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9899BC061756;
+        Mon,  5 Apr 2021 05:06:13 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id hq27so16453276ejc.9;
+        Mon, 05 Apr 2021 05:06:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4rSfRvLWrKrxqOWFWFbi1dZLa9tAVnjrn923CZO/U4g=;
+        b=Ma/2dT10LaCxunfVJKFCuXhGAXK8K97CAw0pfQ1qHNkE4Ul9XOGU3qS+cKtNWFWOCv
+         s7wmsUZXtu0U73/t1YOdIVJKMh890U2UQOckB8H6GsfeC/lIX525nESn4F/tu25R2DU5
+         XJ+RTS6iKZOwj6wHFfKDQ88+qjACpwYjvGxTWNjDep2MrnNZrVrf5EZ6TpYk1SUIuFJv
+         USQI+ad3RLfBQV4edo/hSV2qHzP+5DlY4FJxZv2cMrqBHWZy+q9I5sGCVnsjPdWo1kpT
+         Rb50TsVdQPJsQ2E7UpCURBJHUqQ0cbAHRGAbXgkQCJU9c4V4ePmkOf2MXCxOpgxxdaJo
+         4rLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4rSfRvLWrKrxqOWFWFbi1dZLa9tAVnjrn923CZO/U4g=;
+        b=lq0wCyLwADkOdCJz4Q9iup9exl4gikQIF2lobDtFJsWPas8X9LjJsKSdt7J2at/iCo
+         n1Y8+0Qd1fEhPTA7oEE8Z+bANiJaT4EoLQPda2jrBQ1N3cKDrJs9bBtYbDEpFKvzWKha
+         wXi069ui9BGBEcmKWeV7SAJt8H7q6lHQcoYpCwva6Zi/vAYycSM9iMzfjgf7o0pyq0Kl
+         RTCTuOksEgkk4EBz6qVZ7lXp297ObC+/c6EvK+twJdbmX9vKm/LPCAfS8JihpNzTSew/
+         k8oxDp/YadZQyq8Q0ZTO3xzlLtEO6jhblEYxoWZL9LkNZ99Ms9+hj3QvvJH3WcXIcIn2
+         PNgA==
+X-Gm-Message-State: AOAM532dAujeyBTOeNcPgxV0SQ0HQSVXFxYUmAqZBHqjmo4LoOpU/fv6
+        ztr8JFHN3LMDvNWeOZZkSH/LUMqZLpnFGA==
+X-Google-Smtp-Source: ABdhPJyHCrBP9yUQFBO7FgOBG7YXEFb6sEQFEXhIIiXi/+6S+EKx9/fBFD7RGOaVQLDPa6CdqSG2sg==
+X-Received: by 2002:a17:906:2704:: with SMTP id z4mr10264061ejc.137.1617624372271;
+        Mon, 05 Apr 2021 05:06:12 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id d19sm10914090edr.45.2021.04.05.05.06.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Apr 2021 05:06:11 -0700 (PDT)
+Subject: Re: [PATCH v6 1/4] usb: dwc3: of-simple: bail probe if no dwc3 child
+ node
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     heiko@sntech.de, robh+dt@kernel.org, balbi@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20210401213652.14676-1-jbx6244@gmail.com>
+ <20210401213652.14676-2-jbx6244@gmail.com> <YGq2IaygRQaAcLli@kroah.com>
+From:   Johan Jonker <jbx6244@gmail.com>
+Message-ID: <abd513bc-dee9-d87b-6841-338bfb2f30d0@gmail.com>
+Date:   Mon, 5 Apr 2021 14:06:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Originating-IP: [10.175.104.82]
-X-CFilter-Loop: Reflected
+In-Reply-To: <YGq2IaygRQaAcLli@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-mutex lock can be initialized automatically with DEFINE_MUTEX()
-rather than explicitly calling mutex_init().
+On 4/5/21 9:02 AM, Greg KH wrote:
+> On Thu, Apr 01, 2021 at 11:36:49PM +0200, Johan Jonker wrote:
+>> For some of the dwc3-of-simple compatible SoCs we
+>> don't want to bind this driver to a dwc3 node,
+>> but bind that node to the 'snps,dwc3' driver instead.
+>> The kernel has no logic to decide which driver to bind
+>> to if there are 2 matching drivers, so bail probe if no
+>> dwc3 child node.
+>>
+>> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+>> ---
+>>  drivers/usb/dwc3/dwc3-of-simple.c | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
+>> index 71fd620c5..8d3baa5df 100644
+>> --- a/drivers/usb/dwc3/dwc3-of-simple.c
+>> +++ b/drivers/usb/dwc3/dwc3-of-simple.c
+>> @@ -38,6 +38,10 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
+>>  
+>>  	int			ret;
+>>  
+>> +	/* Bail probe if no dwc3 child node. */
+>> +	if (!of_get_compatible_child(dev->of_node, "snps,dwc3"))
+>> +		return -ENODEV;
+> 
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
----
- drivers/usb/host/u132-hcd.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+> Why is this part of the "convert to yaml" patch series?  Shouldn't this
+> be a separate, independant patch?
+independent
 
-diff --git a/drivers/usb/host/u132-hcd.c b/drivers/usb/host/u132-hcd.c
-index eb96e1e15b71..5a783c423d8e 100644
---- a/drivers/usb/host/u132-hcd.c
-+++ b/drivers/usb/host/u132-hcd.c
-@@ -78,7 +78,7 @@ static DECLARE_WAIT_QUEUE_HEAD(u132_hcd_wait);
- * u132_module_lock exists to protect access to global variables
- *
- */
--static struct mutex u132_module_lock;
-+static DEFINE_MUTEX(u132_module_lock);
- static int u132_exiting;
- static int u132_instances;
- /*
-@@ -3190,7 +3190,6 @@ static int __init u132_hcd_init(void)
- 	int retval;
- 	u132_instances = 0;
- 	u132_exiting = 0;
--	mutex_init(&u132_module_lock);
- 	if (usb_disabled())
- 		return -ENODEV;
- 	printk(KERN_INFO "driver %s\n", hcd_name);
+
+Hi Greg,
+
+As pointed out by Rob in the v3 review process the YAML conversion has
+some side effects for new dt files. A good habit is to fix things before
+they become in effect. That's why this patch is placed before the dtsi
+changes and why Heiko asked to have a look at it.
+
+For the sake of completeness there are other less optimal options:
+- remove rk3399 support from dwc3-of-simple.c
+- unselect CONFIG_USB_DWC3_OF_SIMPLE for new rk3399 device trees
+
+In that case at least have it on record why USB maintainers didn't apply
+it in case someone else start to complain about it later when Heiko goes
+ahead with it.
+
+Johan Jonker
+
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
