@@ -2,48 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B163C353C27
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Apr 2021 09:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09241353C29
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Apr 2021 09:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232326AbhDEHFd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Apr 2021 03:05:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42266 "EHLO mail.kernel.org"
+        id S232342AbhDEHJL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Apr 2021 03:09:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42440 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232312AbhDEHFc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 5 Apr 2021 03:05:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 49E806128D;
-        Mon,  5 Apr 2021 07:05:25 +0000 (UTC)
+        id S229717AbhDEHJJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 5 Apr 2021 03:09:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6D7596128D;
+        Mon,  5 Apr 2021 07:09:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1617606325;
-        bh=lwd5XnAmGnjwFIkx3oJSTwfqz42F3rs0ozEPA5qWYBg=;
+        s=korg; t=1617606543;
+        bh=0vOsiS2+FvDB4jwvzUEAMlbD9TogvJQMNXK2vrcBsuo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p3EEUR4Bu9RmR27EjZ4317qi+XAszNHv+1M2zjO+1+ktIAPUzU1P5tzmb6G+vAKFg
-         7M5Oaeb3z81pnPaVZtBbyZA0gEL5mKy9Q44vrbfG4BnhUkZk7kn51b+vgLQIQIzsvu
-         Uza8HaIPr8cUDi5KsaecnQ2Lm7BP6+W+G+Cuoa0Y=
-Date:   Mon, 5 Apr 2021 09:05:23 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] usb: fixes for v5.12
-Message-ID: <YGq2syUhFKBTkY65@kroah.com>
-References: <20210403001012.GB18389@b29397-desktop>
+        b=qQZUbNBBBa0c02FCP+V7GwjUCXsKE5kdooD/VPgUNPGlOofPjVvq64nsRATmRpmNi
+         TWlkXiqabLWjspV+ggFjHUcTcqBI2xwK5IKKYLN/GK/SgqvvVsM1RXSlotWgUU8JEj
+         h9ERttW364BeKdyynA7LwQHy+tNcMG6vyXV9QO/0=
+Date:   Mon, 5 Apr 2021 09:09:00 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/6] usb: typec: Port mapping utility
+Message-ID: <YGq3jBGj3Yv3/ZiB@kroah.com>
+References: <20210401105847.13026-1-heikki.krogerus@linux.intel.com>
+ <20210401105847.13026-4-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210403001012.GB18389@b29397-desktop>
+In-Reply-To: <20210401105847.13026-4-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Apr 03, 2021 at 08:10:12AM +0800, Peter Chen wrote:
-> The following changes since commit cf97d7af246831ea23c216f17205f91319afc85f:
+On Thu, Apr 01, 2021 at 01:58:44PM +0300, Heikki Krogerus wrote:
+> Adding functions that can be used to link/unlink ports -
+> USB ports, TBT3/USB4 ports, DisplayPorts and so on - to
+> the USB Type-C connectors they are attached to inside a
+> system. The symlink that is created for the port device is
+> named "connector".
 > 
->   usb: cdnsp: Fixes issue with dequeuing requests after disabling endpoint (2021-03-27 08:59:46 +0800)
+> Initially only ACPI is supported. ACPI port object shares
+> the _PLD (Physical Location of Device) with the USB Type-C
+> connector that it's attached to.
 > 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git/ tags/v5.12-rc5
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+>  drivers/usb/typec/Makefile      |   2 +-
+>  drivers/usb/typec/class.c       |   7 +-
+>  drivers/usb/typec/class.h       |   9 ++
+>  drivers/usb/typec/port-mapper.c | 219 ++++++++++++++++++++++++++++++++
+>  include/linux/usb/typec.h       |  13 ++
+>  5 files changed, 248 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/usb/typec/port-mapper.c
 
-Pulled and pushed out, thanks.
+This patch failed to apply to my usb-next branch, so I stopped applying
+the patches here.  Can you rebase the rest when you resend?
+
+thanks,
 
 greg k-h
