@@ -2,51 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A67C1354A23
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Apr 2021 03:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD60354A25
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Apr 2021 03:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243142AbhDFBg6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Apr 2021 21:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
+        id S243132AbhDFBhA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Apr 2021 21:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243135AbhDFBg5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Apr 2021 21:36:57 -0400
-Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178FAC06174A
-        for <linux-usb@vger.kernel.org>; Mon,  5 Apr 2021 18:36:49 -0700 (PDT)
-Received: by mail-qv1-xf4a.google.com with SMTP id fb10so9465717qvb.20
-        for <linux-usb@vger.kernel.org>; Mon, 05 Apr 2021 18:36:49 -0700 (PDT)
+        with ESMTP id S243149AbhDFBg7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Apr 2021 21:36:59 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E79CC061756
+        for <linux-usb@vger.kernel.org>; Mon,  5 Apr 2021 18:36:51 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id p133so11574477qka.17
+        for <linux-usb@vger.kernel.org>; Mon, 05 Apr 2021 18:36:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=F6RFq19GrARDqIU8oQ/2cAl1QQQCKUpg/f4wX1jMwdc=;
-        b=qYvFm8EDAPU9Wmq0N07jK0WWJqxF5h5F6BbmsYZkG/CiVvl56NscvHZl2bkeUk7vTO
-         HIbjLhQ7NxGUmp/Dqmgv9NZpgx7djcHUI2252v/ow9SxAfOJSm53NRbU7NzB6akDfw+9
-         QGRshzesgFjYYYiQijUrK7YvyL/y5OjwOfPk2m4epxmhJuJKuINT7w1T4Ewih2vJU38D
-         o1fWwP4/v6Tmazfk49foULmAQT7nh+FMpmk+8W4/ReRGBy5/fzvNE5SXaUXJWRVCthNr
-         /qr7S+46ly1HpYIyuvHIiN12RqrloykxiOzg4ZEDkJROkOuB57azIvqIr3DEGC+gAqGw
-         XFsg==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=dbfWdEk71d05wtMOYO5VWpygVVGycsBdaqIVkRurjJc=;
+        b=BAR7OUZd+mvxcCgi62qFqE3hsFcuoajIGcUCbtLVdtm0ia9XwnG2iSJ4mqSzP2imNB
+         KxS2ecs1JFxg4JpD7enCGtfQcIkuLy11rPzZdtqUB78s/m8qTWZKN0KbZJZJduGzu8f3
+         YMxspCQKPFtKuzyKAlplz8nUzlhPCQnmc9/Ca5+MKFJiYniKqT4FpMNqD5bEawHw6tgd
+         DE/R3snltXNS+pLo0v4ckbpSnSToyYrTT6jIl23Zplo8mt/ko6LG8PPsqFkcr6X0trP9
+         ZVJV/oHLlzp76934NbnUcns9UQBlRn31cvUk7Kg6ly8vJbBrSpu7iZjT8dKuD/EP27Pu
+         kMRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=F6RFq19GrARDqIU8oQ/2cAl1QQQCKUpg/f4wX1jMwdc=;
-        b=NlMz/Vjv7MPw5PAyglgYb4nBllNU7bEE2C1b5CxrY0EZZCTdOgJ+/xN+FdF7PyY5+t
-         rWQg7s/KPVxaP4VFZS2+QeobEybfsPBglTh+YzgopEIpMlhruOyrBE3+VLOizqxUQ/5b
-         0UGCwBC5j8D0KQxuToFcbhnpW7BhTgQESIbI07ReVlykO4rTzQ48yYYLABwOvdJ8Fklh
-         KitEsskO6MsGJgFUZlegVLHu+4RwjW+ZS9ybEGAEgbxGdhF9vgs/GqTvSVKGpdIrO7Zx
-         23+Mx2JAvpIY+gVqMxz4LRf+dmfnn68TV/HEM7dnujZExc3sZTuQKTLPbwjIywFZ4Y6Q
-         pRcA==
-X-Gm-Message-State: AOAM530NdwkepbSMpBMBst38i34Fj1VKVL/0dyUd4XP/sLkgpObrb2+1
-        BRahqnSHRDFZlnd5kyylZp3439USw1E=
-X-Google-Smtp-Source: ABdhPJx6btg2lOSc7ssHQc7YXYjwqYiOPESoGRwvRIVGgWT1FcfPoQNzNSJqMgYsJFdD3SC0hGyGyurOE5Y=
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=dbfWdEk71d05wtMOYO5VWpygVVGycsBdaqIVkRurjJc=;
+        b=AbpyiGSzIOvId7HHvB4+50/p6p3Sf7NUS9DZP/LJlc0E3QIj6/fnfr8eO/lxjUVhm8
+         4rX5szPk3JrZbOWuRz/ffBdjFiDvn5iP29OfX11AESNCnw/uceRIp7+vvRnpH9r0rzFJ
+         g2dAMNpWPsMsIlBrjBaMdfe8cVBGuIc81W3hFwN7ZbcTIMeO7XmQVlJ9AUdvbmdZASlk
+         wR4v+qHRRymCR9gpe5giaO9xdGg8sNJH7M2TT5wyt/PfpxO6UqYMx4tSWGEk2uJoTjqJ
+         c+xA5HLjjP0uhcw7s2xHewtWdsMtOl5YTqALYup2HYoi8Ahel6bEkpuF1Ge4X+6woBvn
+         MXYQ==
+X-Gm-Message-State: AOAM531wq6Bpl8G2BcI7XYLWHSGFlQwv8nKXhvlefgAq1fQw3xHFF1DI
+        xiZjYhzMMdcybZNH2Am58yUsXK7D6qE=
+X-Google-Smtp-Source: ABdhPJwidgs6gNWKYh3z73bewgYbt8o1NELjeHncKpV3YbEPHhJiHtXI8JM7mjC3RNplE0UQ9gK0zGFbRgA=
 X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:7080:32f9:cd15:6178])
- (user=badhri job=sendgmr) by 2002:ad4:58a1:: with SMTP id ea1mr624318qvb.11.1617673008244;
- Mon, 05 Apr 2021 18:36:48 -0700 (PDT)
-Date:   Mon,  5 Apr 2021 18:36:37 -0700
-Message-Id: <20210406013643.3280369-1-badhri@google.com>
+ (user=badhri job=sendgmr) by 2002:a05:6214:2b0d:: with SMTP id
+ jx13mr15014039qvb.25.1617673010339; Mon, 05 Apr 2021 18:36:50 -0700 (PDT)
+Date:   Mon,  5 Apr 2021 18:36:38 -0700
+In-Reply-To: <20210406013643.3280369-1-badhri@google.com>
+Message-Id: <20210406013643.3280369-2-badhri@google.com>
 Mime-Version: 1.0
+References: <20210406013643.3280369-1-badhri@google.com>
 X-Mailer: git-send-email 2.31.0.208.g409f899ff0-goog
-Subject: [PATCH v1 0/6] Fixes for tcpm-source-psy- and pSnkStby
+Subject: [PATCH v1 1/6] usb: typec: tcpm: Address incorrect values of tcpm psy
+ for fixed supply
 From:   Badhri Jagan Sridharan <badhri@google.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -61,36 +66,69 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+tcpm_pd_build_request overwrites current_limit and supply_voltage
+even before port partner accepts the requests. This leaves stale
+values in current_limit and supply_voltage that get exported by
+"tcpm-source-psy-". Solving this problem by caching the request
+values of current limit/supply voltage in req_current_limit
+and req_supply_voltage. current_limit/supply_voltage gets updated
+once the port partner accepts the request.
 
-(1) and (2) in the series addresses the problem that Adam Thomson
-had pointed out in:
-https://lore.kernel.org/linux-usb/PR3PR10MB4142450638A8E07A33E475B080689@PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM/
+Fixes: f2a8aa053c176 ("typec: tcpm: Represent source supply through power_supply")
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-(3) updates the power_supply_changed based on changes
-made through (1) and (2)
-
-(4) (5) (6) makes TCPM comply pSnkStby requirement for both fast
-and slow charging loops. This was also previously sent as part
-of https://lore.kernel.org/patchwork/patch/1283928/
-
-Since the patches were dependent on each other sending them this
-way.
-
-Badhri Jagan Sridharan (6):
-  usb: typec: tcpm: Address incorrect values of tcpm psy for fixed
-    supply
-  usb: typec: tcpm: Address incorrect values of tcpm psy for pps supply
-  usb: typec: tcpm: update power supply once partner accepts
-  usb: typec: tcpm: Honour pSnkStdby requirement during negotiation
-  usb: typec: tcpm: Allow slow charging loops to comply to pSnkStby
-  Documentation: connector: Add slow-charger-loop definition
-
- .../bindings/connector/usb-connector.yaml     |   7 +
- drivers/usb/typec/tcpm/tcpm.c                 | 136 ++++++++++++------
- include/linux/usb/pd.h                        |   2 +
- 3 files changed, 99 insertions(+), 46 deletions(-)
-
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index ca1fc77697fc..03eca5061132 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -389,7 +389,10 @@ struct tcpm_port {
+ 	unsigned int operating_snk_mw;
+ 	bool update_sink_caps;
+ 
+-	/* Requested current / voltage */
++	/* Requested current / voltage to the port partner */
++	u32 req_current_limit;
++	u32 req_supply_voltage;
++	/* Acutal current / voltage limit of the local port */
+ 	u32 current_limit;
+ 	u32 supply_voltage;
+ 
+@@ -2435,8 +2438,8 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+ 		case SNK_TRANSITION_SINK:
+ 			if (port->vbus_present) {
+ 				tcpm_set_current_limit(port,
+-						       port->current_limit,
+-						       port->supply_voltage);
++						       port->req_current_limit,
++						       port->req_supply_voltage);
+ 				port->explicit_contract = true;
+ 				tcpm_set_auto_vbus_discharge_threshold(port,
+ 								       TYPEC_PWR_MODE_PD,
+@@ -2545,8 +2548,8 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+ 			break;
+ 		case SNK_NEGOTIATE_PPS_CAPABILITIES:
+ 			port->pps_data.active = true;
+-			port->supply_voltage = port->pps_data.out_volt;
+-			port->current_limit = port->pps_data.op_curr;
++			port->req_supply_voltage = port->pps_data.out_volt;
++			port->req_current_limit = port->pps_data.op_curr;
+ 			tcpm_set_state(port, SNK_TRANSITION_SINK, 0);
+ 			break;
+ 		case SOFT_RESET_SEND:
+@@ -3195,8 +3198,8 @@ static int tcpm_pd_build_request(struct tcpm_port *port, u32 *rdo)
+ 			 flags & RDO_CAP_MISMATCH ? " [mismatch]" : "");
+ 	}
+ 
+-	port->current_limit = ma;
+-	port->supply_voltage = mv;
++	port->req_current_limit = ma;
++	port->req_supply_voltage = mv;
+ 
+ 	return 0;
+ }
 -- 
 2.31.0.208.g409f899ff0-goog
 
