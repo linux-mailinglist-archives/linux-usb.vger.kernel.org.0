@@ -2,142 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53528354F20
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Apr 2021 10:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC2C354F99
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Apr 2021 11:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233711AbhDFI4S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Apr 2021 04:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54566 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233394AbhDFI4S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Apr 2021 04:56:18 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D485C06175F
-        for <linux-usb@vger.kernel.org>; Tue,  6 Apr 2021 01:56:09 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id q26so7622711wrz.9
-        for <linux-usb@vger.kernel.org>; Tue, 06 Apr 2021 01:56:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=k0R/CpFQIO0LutUTt6whAWYDSEEYWanyJgecDTp2qS4=;
-        b=OUtsvTywwF0/bDjP4cBmo4dT9qHLCQLOTKohdrUdMDdMtVgNZ88XIn0SLwDK4A4/qG
-         EwEU/kFbpjoldb1LlsU7Sqe+FySEhPAaMbHfWEcGqojHKt4e7wg+lkYfX7k+1mdJfOVx
-         AjbNMxpoKsRjSZwo0SNnNf4pUy1J3mi5/xwF4b9nJ8LW3P74wuWx4TkCXBTstUnV4lA7
-         s0BPsgsPGkujSf2teVKDJ6yAKtQsmGArOMiabQxqM/i+PjKovEJjU6RlXGqdh4zTEWgS
-         VM+UO6/Fxg6nQHnz7gGc/T35KZHHmhVOm5MYpNnNbtSejPeRXePMPVHTzDl4t2JCGmVy
-         HLwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=k0R/CpFQIO0LutUTt6whAWYDSEEYWanyJgecDTp2qS4=;
-        b=K+KnDtiB2apq9CMfrTHXU2J2tWLQrl2qBUOjEQCGLZin/7vWaw8V9B3Tyg8HYenqAu
-         O/CX4o9r5e2bdlrRMAZJxBvRlX+tRBccq/xIS9CcUIa/FM6CL0V66Wc57ZjEKJF2esqi
-         joER/hvx65DVpMsmEIiN9Kbo/M6kD/9T0p4bO1h7ow029V3EQza/WBJ3dpg1sC/j6/pX
-         O/g87jT/QPWEkjiwvj2ddudNhqHYsr6AFzss7w129vzL7DHIbEdF0Bl4M+5mvulOtDPW
-         unKDc9FcdQuUOjNRqoFVtuajoymcJRr8cvnmGzbhKGyK4aoTkPA9BL/TC0eD2IY0/fqD
-         YYJA==
-X-Gm-Message-State: AOAM53324j7T4Sbn4yKwrM4alPOLYdsks7HrnsuYU+G0TCqVlv7yUPc5
-        wPaCtNOhi3ZG0oaRQRtF6piv/w==
-X-Google-Smtp-Source: ABdhPJy5liwwM3Ot+2W70tIkjSPkDW++gyVE8uJhSgWpBItS06FaUlff1OXTLSFd9M921fWjlzp4KQ==
-X-Received: by 2002:a5d:6b89:: with SMTP id n9mr33668042wrx.236.1617699367868;
-        Tue, 06 Apr 2021 01:56:07 -0700 (PDT)
-Received: from dell ([91.110.221.193])
-        by smtp.gmail.com with ESMTPSA id u12sm5987318wro.51.2021.04.06.01.56.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Apr 2021 01:56:07 -0700 (PDT)
-Date:   Tue, 6 Apr 2021 09:56:05 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     linux-kernel@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Anssi Hannula <anssi.hannula@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Bruno =?iso-8859-1?Q?Pr=E9mont?= <bonbons@linux-vserver.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Daniel Drubin <daniel.drubin@intel.com>,
-        Dario Pagani <dario.pagani.146+linuxk@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Kim Kuparinen <kimi.h.kuparinen@gmail.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linaro-mm-sig@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, Lopez Casado <nlopezcasad@logitech.com>,
-        "L. Vinyard, Jr" <rvinyard@cs.nmsu.edu>,
-        Masaki Ota <masaki.ota@jp.alps.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        message to <vojtech@ucw.cz>,
-        Michael Haboustak <mike-@cinci.rr.com>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
-        Vojtech Pavlik <vojtech@suse.cz>,
-        Zhang Lixu <lixu.zhang@intel.com>
-Subject: Re: [RESEND 00/25] Rid W=1 warnings from HID
-Message-ID: <20210406085605.GS2916463@dell>
-References: <20210326143458.508959-1-lee.jones@linaro.org>
+        id S229459AbhDFJLf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Apr 2021 05:11:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50708 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240720AbhDFJLb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 6 Apr 2021 05:11:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 211B6613C2;
+        Tue,  6 Apr 2021 09:11:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1617700282;
+        bh=7bwSyCq3xl3rvTLlAlTsTLbegvrd4q2jdmctViiGkxo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TGjX9UmtWnR5X2jA6bAERPpUywrKMTC18dx1213xx1NuaxAsfhuIxz7lIrsToL2bM
+         402d//e4qvH6jYtdlRvIvO0A0TikvvhARcdeV9u4W/ehH7WUDqPNc5A59g1jh8fc3K
+         xCpGonV7AUKNFaCCcjuRKmKJPOCP2YgtxErfPtFs=
+Date:   Tue, 6 Apr 2021 11:11:17 +0200
+From:   'Greg KH' <gregkh@linuxfoundation.org>
+To:     Pho Tran <Pho.Tran@silabs.com>
+Cc:     'Pho Tran' <photranvan0712@gmail.com>,
+        "'johan@kernel.org'" <johan@kernel.org>,
+        "'linux-usb@vger.kernel.org'" <linux-usb@vger.kernel.org>,
+        "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
+        Hung Nguyen <Hung.Nguyen@silabs.com>,
+        Tung Pham <Tung.Pham@silabs.com>,
+        'Kernel test robot' <lkp@intel.com>
+Subject: Re: [PATCH v7] USB: serial: cp210x: Add support for GPIOs on CP2108
+Message-ID: <YGwltSD+iEPmRblS@kroah.com>
+References: <20210406040238.1850-1-photranvan0712@gmail.com>
+ <YGvuQlxyorJt+ErG@kroah.com>
+ <DM6PR11MB44414602F10C6C991A65D48CE3769@DM6PR11MB4441.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210326143458.508959-1-lee.jones@linaro.org>
+In-Reply-To: <DM6PR11MB44414602F10C6C991A65D48CE3769@DM6PR11MB4441.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 26 Mar 2021, Lee Jones wrote:
+A: http://en.wikipedia.org/wiki/Top_post
+Q: Were do I find info about this thing called top-posting?
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
 
-> This set is part of a larger effort attempting to clean-up W=1
-> kernel builds, which are currently overwhelmingly riddled with
-> niggly little warnings.
-> 
-> Lee Jones (25):
->   HID: intel-ish-hid: Remove unused variable 'err'
->   HID: ishtp-hid-client: Move variable to where it's actually used
->   HID: intel-ish-hid: pci-ish: Remove unused variable 'ret'
->   HID: intel-ish: Supply some missing param descriptions
->   HID: intel-ish: Fix a naming disparity and a formatting error
->   HID: usbhid: Repair a formatting issue in a struct description
->   HID: intel-ish-hid: Fix a little doc-rot
->   HID: usbhid: hid-pidff: Demote a couple kernel-doc abuses
->   HID: hid-alps: Correct struct misnaming
->   HID: intel-ish-hid: Fix potential copy/paste error
->   HID: hid-core: Fix incorrect function name in header
->   HID: intel-ish-hid: ipc: Correct fw_reset_work_fn() function name in
->     header
->   HID: ishtp-hid-client: Fix incorrect function name report_bad_packet()
->   HID: hid-kye: Fix incorrect function name for kye_tablet_enable()
->   HID: hid-picolcd_core: Remove unused variable 'ret'
->   HID: hid-logitech-hidpp: Fix conformant kernel-doc header and demote
->     abuses
->   HID: hid-uclogic-rdesc: Kernel-doc is for functions and structs
->   HID: hid-thrustmaster: Demote a bunch of kernel-doc abuses
->   HID: hid-uclogic-params: Ensure function names are present and correct
->     in kernel-doc headers
->   HID: hid-sensor-custom: Remove unused variable 'ret'
->   HID: wacom_sys: Demote kernel-doc abuse
->   HID: hid-sensor-hub: Remove unused struct member 'quirks'
->   HID: hid-sensor-hub: Move 'hsdev' description to correct struct
->     definition
->   HID: intel-ish-hid: ishtp-fw-loader: Fix a bunch of formatting issues
->   HID: ishtp-hid-client: Fix 'suggest-attribute=format' compiler warning
+On Tue, Apr 06, 2021 at 08:17:42AM +0000, Pho Tran wrote:
+> Hi Greg!
+> I am grateful for your promptly reply!
+>  Yesterday, I got the response from the kernel test robot with this message: 
+> " If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>". 
+> It's a reason why I added "Reported-by: kernel test robot <lkp@intel.com>" 
+> to my new Patch.
+> Could you tell me what I need to do in the next step to submit this patch to the kernel mainline?
+> Once again, Thank you a lot!
 
-These have been on the list for a couple of weeks now.
+If you fixed this as an add-on patch, yes it would belong in the
+reported-by:  But as you are just fixing this up to a patch that has not
+been accepted yet, all you need to do is write it in the "what changed
+from the previous version" section of the changelog, below the --- line.
 
-Is there anything I can do to help expedite their merge?
+thanks,
 
-I'm concerned since -rc6 has just been released.
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+greg k-h
