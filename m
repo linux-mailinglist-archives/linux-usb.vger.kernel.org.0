@@ -2,63 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 018F8354AD1
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Apr 2021 04:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 921E3354B72
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Apr 2021 06:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239477AbhDFCSo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Apr 2021 22:18:44 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:46834 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S238828AbhDFCSn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Apr 2021 22:18:43 -0400
-X-UUID: 70bab1c63fc84f59839b9713d3bc079d-20210406
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=Gum8DmPKyJ1oZDVQaFVj6BihhQF1RHFD6805mHWOT9s=;
-        b=rlcrzLAJBK/n9wRRHdh9o93Z8ea1czFDyxkhqyEvkZRCov2RH1EGc/r58AliqoRvsrFEB+Npv0CR70ZjC1Uq4rEM+2qwXB1kZA1IYeOK3RiA7TCKdSn1aSyB2nNfji3jzxagZQ18npiaLuSGNGYCqWoAEV0lPv4fSzWuEqJegaw=;
-X-UUID: 70bab1c63fc84f59839b9713d3bc079d-20210406
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 483669413; Tue, 06 Apr 2021 10:18:18 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 6 Apr
- 2021 10:18:12 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 6 Apr 2021 10:18:12 +0800
-Message-ID: <1617675492.22435.4.camel@mhfsdcap03>
-Subject: Re: [PATCH 1/2] usb: xhci-mtk: remove unnecessary assignments in
- periodic TT scheduler
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Ikjoon Jang <ikjn@chromium.org>, Yaqii Wu <Yaqii.Wu@mediatek.com>,
-        <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Tue, 6 Apr 2021 10:18:12 +0800
-In-Reply-To: <YGq2YfURFApdJLxb@kroah.com>
-References: <20210330080617.3746932-1-ikjn@chromium.org>
-         <20210330160508.1.I797d214790033d0402d19ff6b47a34aff60d3062@changeid>
-         <1617179455.2752.1.camel@mhfsdcap03> <YGq2YfURFApdJLxb@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
-MIME-Version: 1.0
-X-TM-SNTS-SMTP: 79BB5D152F61C279504AE40E61C8FA02534BFF7A22CD66A437832A019CFDCF482000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+        id S229637AbhDFEAW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Apr 2021 00:00:22 -0400
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:50405 "EHLO
+        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229469AbhDFEAV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Apr 2021 00:00:21 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0UUevcY0_1617681606;
+Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0UUevcY0_1617681606)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 06 Apr 2021 12:00:11 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, joel@jms.id.au, andrew@aj.id.au,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH] usb: gadget: aspeed: Remove unnecessary version.h includes
+Date:   Tue,  6 Apr 2021 11:59:58 +0800
+Message-Id: <1617681598-28165-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gTW9uLCAyMDIxLTA0LTA1IGF0IDA5OjA0ICswMjAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3Jv
-dGU6DQo+IE9uIFdlZCwgTWFyIDMxLCAyMDIxIGF0IDA0OjMwOjU1UE0gKzA4MDAsIENodW5mZW5n
-IFl1biB3cm90ZToNCj4gPiBjYyBZYXFpaSBXdSA8WWFxaWkuV3VAbWVkaWF0ZWsuY29tPg0KPiA+
-IA0KPiA+IEknbGwgdGVzdCBpdCAsIHRoYW5rcw0KPiANCj4gRGlkIHlvdSB0ZXN0IHRoaXMgc2Vy
-aWVzIGFuZCBmaW5kIGFueSBwcm9ibGVtcz8gIElmIG5vdCwgSSdsbCBnbyBxdWV1ZQ0KPiB0aGVz
-ZSB1cC4uLg0KWWVzLCBmb3VuZCBhbiBpc3N1ZSBvbiB0aGUgc3RhcnQtc3BsaXQgdHJhbnNhY3Rp
-b24sIGJ1dCBub3QgZm91bmQgdGhlDQpyb290IGNhdXNlIHlldCA6KA0KDQo+IA0KPiB0aGFua3Ms
-DQo+IA0KPiBncmVnIGstaA0KDQo=
+"make versioncheck" shows:
+
+./drivers/usb/gadget/udc/aspeed-vhub/hub.c: 33 linux/version.h not
+needed.
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/usb/gadget/udc/aspeed-vhub/hub.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/udc/aspeed-vhub/hub.c b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+index 5c7dea5..e5bbc0c 100644
+--- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
++++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+@@ -30,7 +30,6 @@
+ #include <linux/regmap.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/bcd.h>
+-#include <linux/version.h>
+ #include <linux/usb.h>
+ #include <linux/usb/hcd.h>
+ 
+-- 
+1.8.3.1
 
