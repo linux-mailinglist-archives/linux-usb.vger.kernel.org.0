@@ -2,105 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 071AC3556E0
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Apr 2021 16:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E850E355934
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Apr 2021 18:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345278AbhDFOnO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Apr 2021 10:43:14 -0400
-Received: from vps.xff.cz ([195.181.215.36]:47206 "EHLO vps.xff.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345263AbhDFOnO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Apr 2021 10:43:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1617720185; bh=yfn/2Ls2uZcier/kQtma6DwvPfmcADTWwB6MXMslfV8=;
-        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-        b=mVp0tVUUyb64KaQajTBwe8gR/Fkxq1TKrg5TXyaXPVxRpMInsYEeoS/orGGE7utkh
-         Zz4WmqjDNDzSv2XGqzRTZbf0ohqSKODpJwhsd7xhYeHY/q6JPu5Cv4gGgfL2nfrUbJ
-         FwmQDMj6wTQMPLrA9YVmfb0Jc6oWA99Rp8eNLryI=
-Date:   Tue, 6 Apr 2021 16:43:04 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, a.hajda@samsung.com,
-        narmstrong@baylibre.com, jonas@kwiboo.se, jernej.skrabec@siol.net,
-        airlied@linux.ie, daniel@ffwll.ch, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, enric.balletbo@collabora.com,
-        drinkcat@chromium.org, hsinyi@chromium.org, kernel@collabora.com,
-        dafna3@gmail.com, robh+dt@kernel.org
-Subject: Re: [PATCH v5 1/2] dt-bindings: usb: add analogix,anx7688.yaml
-Message-ID: <20210406144304.u2flatne2bxn5t3g@core>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20210305124351.15079-1-dafna.hirschfeld@collabora.com>
- <20210305124351.15079-2-dafna.hirschfeld@collabora.com>
- <YEJBgEPO4J5+/HhD@pendragon.ideasonboard.com>
- <35f505ee-d939-4b42-490b-321b961bdec3@collabora.com>
- <20210305172437.meu45ol7d4c3w2lr@core.my.home>
- <f90401b1-471b-c936-6661-d3d9c52abb2e@collabora.com>
+        id S1346438AbhDFQaN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Apr 2021 12:30:13 -0400
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:47068 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346426AbhDFQaM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Apr 2021 12:30:12 -0400
+Received: by mail-oi1-f175.google.com with SMTP id m13so15695159oiw.13;
+        Tue, 06 Apr 2021 09:30:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=D2hEsi6JFE07gneiywvOCYJVqCpw+M6VpQTy6q9ipN0=;
+        b=pfF6wwi++bpGU4/DTo8YmFud1p7chLLQD9G4LYZSe1yZDoyShAlKaQCsLjIwtn60OW
+         /irH9Lyvf69EZCV62kk3zk0NuyA7e27Yy37qrFB04W4GZT/+6jESKbYoLDW9gI6ZAPew
+         +v1B+tt4nr06fkuRVKrf7SaP1ycVJAf1sOYspPtd9qlUa7VUoMbaWURNkHdIAs4n7bKV
+         31b/SOF61ZjQkCqnwMY7q9UhI8LhevSZ/Bk+kVNQA+/yDbVED8RzjvkpjJqBnYDa9XNW
+         qh3hxDaluKbpe9Vvm2abCSEPnCVyuWl0yKbVujIUbkmR1XuG3QIUQhICykvqxWEKmfJb
+         7/2Q==
+X-Gm-Message-State: AOAM5325fZpbrvLr/5Y8CFq4SwGLoGEMNYiIJnHyB9omf6ZtXco9IgsY
+        +GbCSAFab7B9+5VUBRr5yQ==
+X-Google-Smtp-Source: ABdhPJzEkdAGtjLvNovj6nI0aO1oe6vveWO5yByt0P7mzz4mUHa6gSdQLq68mZ6NfcxanOtirCgnoQ==
+X-Received: by 2002:aca:b6d7:: with SMTP id g206mr3897766oif.53.1617726603711;
+        Tue, 06 Apr 2021 09:30:03 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id d2sm4849681otl.48.2021.04.06.09.30.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Apr 2021 09:30:02 -0700 (PDT)
+Received: (nullmailer pid 1916137 invoked by uid 1000);
+        Tue, 06 Apr 2021 16:30:01 -0000
+Date:   Tue, 6 Apr 2021 11:30:01 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-usb@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Bastien Nocera <hadess@hadess.net>, devicetree@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>
+Subject: Re: [PATCH v6 1/5] dt-bindings: usb: Add binding for Realtek RTS5411
+ hub controller
+Message-ID: <20210406163001.GA1910748@robh.at.kernel.org>
+References: <20210405201817.3977893-1-mka@chromium.org>
+ <20210405124900.v6.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f90401b1-471b-c936-6661-d3d9c52abb2e@collabora.com>
+In-Reply-To: <20210405124900.v6.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 31, 2021 at 07:16:40PM +0200, Dafna Hirschfeld wrote:
-> Hi,
+On Mon, Apr 05, 2021 at 01:18:13PM -0700, Matthias Kaehlcke wrote:
+> The Realtek RTS5411 is a USB 3.0 hub controller with 4 ports.
 > 
-> On 05.03.21 18:24, Ondřej Jirman wrote:
-> > Hello Dafna,
-> > 
-
-[...]
-
-> > > > > +  vconn-en1-gpios:
-> > > > > +    description: Controls the VCONN switch on the CC1 pin.
-> > > > > +    maxItems: 1
-> > > > > +
-> > > > > +  vconn-en2-gpios:
-> > > > > +    description: Controls the VCONN switch on the CC2 pin.
-> > > > > +    maxItems: 1
-> > 
-> > VCONN is a voltage regulator that can be enabled either on CC1 or CC2
-> > pin, or disabled completely. This control is *partially* performed in reference
-> > design directly by the OCM. OCM only decides which CC pin to switch
-> > the VCONN regulator to, and informs the SoC when the base VCONN regulator
-> > for the switches needs to be enabled.
-> > 
-> > So vconn-en1/2 gpios are irrelevant to the driver, but the driver needs
-> > to control VCONN power supply somehow and defer control over it to the OCM.
-> > 
-> > I don't know how to express it in the bindings. Maybe a vconn-supply here
-> > on the anx7688 node?
-> > 
-> > It may also be part of the usb-connector binding, but this is really when it
-> > comes to anx7688 a parent regulator for the switches, and switches are not
-> > controlled by this driver, just their parent regulator is.
-> > 
-> > Any ideas?
+> This initial version of the binding only describes USB related
+> aspects of the RTS5411, it does not cover the option of
+> connecting the controller as an i2c slave.
 > 
-> Looking at the diagram in the schematics, I see that both vbus-supply and vconn-supply
-> come directly from the PMIC so similarly to the vbus-supply, the vconn-supply
-> can be part of the usb-connector. Then a driver can access the vconn-supply from the remote usb
-> connector. Is there a problem with that?
-
-No problem with that. usb-c-connector binding would just have to be extended.
-
-I just don't see any need for these `vconn-en*-gpios`, because the control
-is performed directly by the OCM firmware via GPIOs in the ANX7688 chip,
-outside of the control of the Linux driver, and the driver doesn't even care
-about the status of these pins. And if it will ever care, the status can be
-read via I2C from the ANX7688 chip directly.
-
-kind regards,
-	o.
-
-> Thanks a lot for the review, I am not very familiar with usb and type-c, so your review helps a lot.
-> I will send v6 soon.
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
 > 
-> Thanks,
-> Dafna
+> Changes in v7:
+> - added type ref for 'companion-hub' property
+> 
+> Changes in v6:
+> - Realtek binding instead of generic onboard_usb_hub
+> - added 'companion-hub' property
+> - added reference to 'usb-device.yaml'
+> - 'fixed' indentation of compatible entries to keep yamllint happy
+> - added 'additionalProperties' entry
+> - updated commit message
+> 
+> Changes in v5:
+> - updated 'title'
+> - only use standard USB compatible strings
+> - deleted 'usb_hub' node
+> - renamed 'usb_controller' node to 'usb-controller'
+> - removed labels from USB nodes
+> - added 'vdd-supply' to USB nodes
+> 
+> Changes in v4:
+> - none
+> 
+> Changes in v3:
+> - updated commit message
+> - removed recursive reference to $self
+> - adjusted 'compatible' definition to support multiple entries
+> - changed USB controller phandle to be a node
+> 
+> Changes in v2:
+> - removed 'wakeup-source' and 'power-off-in-suspend' properties
+> - consistently use spaces for indentation in example
+> 
+>  .../bindings/usb/realtek,rts5411.yaml         | 59 +++++++++++++++++++
+>  1 file changed, 59 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/realtek,rts5411.yaml b/Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
+> new file mode 100644
+> index 000000000000..b59001972749
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
+> @@ -0,0 +1,59 @@
+> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/realtek,rts5411.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Binding for the Realtek RTS5411 USB 3.0 hub controller
+> +
+> +maintainers:
+> +  - Matthias Kaehlcke <mka@chromium.org>
+> +
+> +allOf:
+> +  - $ref: usb-device.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - usbbda,5411
+> +          - usbbda,411
+> +
 
+reg: true
+
+to fix the error.
+
+> +  vdd-supply:
+> +    description:
+> +      phandle to the regulator that provides power to the hub.
+> +
+> +  companion-hub:
+> +    $ref: '/schemas/types.yaml#/definitions/phandle'
+> +    description:
+> +      phandle to the companion hub on the controller.
+
+This should be required I think. I suppose you could only hook up 2.0 
+ports, but why. And 3.0 only wouldn't be USB compliant, would it?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    usb-controller {
+
+'usb' is the standard name.
+
+> +        dr_mode = "host";
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        /* 2.0 hub on port 1 */
+> +        hub_2_0: hub@1 {
+> +            compatible = "usbbda,5411";
+> +            reg = <1>;
+> +            vdd-supply = <&pp3300_hub>;
+> +            companion-hub = <&hub_3_0>;
+> +        };
+> +
+> +        /* 3.0 hub on port 2 */
+> +        hub_3_0: hub@2 {
+> +            compatible = "usbbda,411";
+> +            reg = <2>;
+> +            vdd-supply = <&pp3300_hub>;
+> +            companion-hub = <&hub_2_0>;
+> +        };
+> +    };
+> -- 
+> 2.31.0.208.g409f899ff0-goog
+> 
