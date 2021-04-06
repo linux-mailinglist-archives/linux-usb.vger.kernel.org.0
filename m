@@ -2,78 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B22B355F83
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 01:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E4D355F8B
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 01:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242890AbhDFXeK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Apr 2021 19:34:10 -0400
-Received: from mga07.intel.com ([134.134.136.100]:26459 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242772AbhDFXeI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Apr 2021 19:34:08 -0400
-IronPort-SDR: 64fO8ytzpSSGaVqbH1j7ZxWNqdgLkjoK3JHnBTf4BoKEg9j2XKhpV7VjwcEj8UjEvuQzpWu5vu
- Y4PHO6gAUx8Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9946"; a="257165710"
-X-IronPort-AV: E=Sophos;i="5.82,201,1613462400"; 
-   d="scan'208";a="257165710"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2021 16:33:58 -0700
-IronPort-SDR: LXdnP9Ad+a9N8igloQZedJYsH3ZPLwv7yTfnojdMgV5ldRDhgH8X63cgB/mx8fF/3cy0wja1tW
- ahLt7Z+m4t6w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,201,1613462400"; 
-   d="scan'208";a="598129921"
-Received: from otc-chromeosbuild-1.jf.intel.com ([10.54.30.83])
-  by orsmga005.jf.intel.com with ESMTP; 06 Apr 2021 16:33:58 -0700
-From:   Azhar Shaikh <azhar.shaikh@intel.com>
-To:     mathias.nyman@linux.intel.com, gregkh@linuxfoundation.org,
-        p.zabel@pengutronix.de, linux-usb@vger.kernel.org
-Cc:     mika.westerberg@linux.intel.com, abhijeet.rao@intel.com,
-        nikunj.dadhania@intel.com, linux-kernel@vger.kernel.org,
-        azhar.shaikh@intel.com
-Subject: [PATCH] xhci-pci: Allow host runtime PM as default for Intel Alder Lake xHCI
-Date:   Tue,  6 Apr 2021 16:35:29 -0700
-Message-Id: <20210406233529.19543-1-azhar.shaikh@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S235939AbhDFXjn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Apr 2021 19:39:43 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:36436 "EHLO
+        mail.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233184AbhDFXjn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Apr 2021 19:39:43 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        by mail.monkeyblade.net (Postfix) with ESMTPSA id 98B924D2493A4;
+        Tue,  6 Apr 2021 16:39:26 -0700 (PDT)
+Date:   Tue, 06 Apr 2021 16:39:21 -0700 (PDT)
+Message-Id: <20210406.163921.1678926610292877597.davem@davemloft.net>
+To:     mail@anirudhrb.com
+Cc:     kuba@kernel.org, oneukum@suse.com, kernel@esmil.dk,
+        geert@linux-m68k.org, zhengyongjun3@huawei.com, rkovhaev@gmail.com,
+        gregkh@linuxfoundation.org,
+        syzbot+c49fe6089f295a05e6f8@syzkaller.appspotmail.com,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: hso: fix null-ptr-deref during tty device
+ unregistration
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20210406124402.20930-1-mail@anirudhrb.com>
+References: <20210406124402.20930-1-mail@anirudhrb.com>
+X-Mailer: Mew version 6.8 on Emacs 27.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=iso-8859-7
+Content-Transfer-Encoding: base64
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail.monkeyblade.net [0.0.0.0]); Tue, 06 Apr 2021 16:39:27 -0700 (PDT)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Abhijeet Rao <abhijeet.rao@intel.com>
-
-In the same way as Intel Tiger Lake TCSS (Type-C Subsystem) the Alder Lake
-TCSS xHCI needs to be runtime suspended whenever possible to allow the
-TCSS hardware block to enter D3cold and thus save energy.
-
-Signed-off-by: Abhijeet Rao <abhijeet.rao@intel.com>
-Signed-off-by: Nikunj A. Dadhania <nikunj.dadhania@intel.com>
-Signed-off-by: Azhar Shaikh <azhar.shaikh@intel.com>
----
- drivers/usb/host/xhci-pci.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 5bbccc9a0179..a858add8436c 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -57,6 +57,7 @@
- #define PCI_DEVICE_ID_INTEL_CML_XHCI			0xa3af
- #define PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI		0x9a13
- #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
-+#define PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI		0x461e
- 
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
-@@ -243,7 +244,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI ||
--	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI))
-+	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI))
- 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
--- 
-2.17.1
-
+RnJvbTogQW5pcnVkaCBSYXlhYmhhcmFtIDxtYWlsQGFuaXJ1ZGhyYi5jb20+DQpEYXRlOiBUdWUs
+ICA2IEFwciAyMDIxIDE4OjEzOjU5ICswNTMwDQoNCj4gTXVsdGlwbGUgdHR5cyB0cnkgdG8gY2xh
+aW0gdGhlIHNhbWUgdGhlIG1pbm9yIG51bWJlciBjYXVzaW5nIGEgZG91YmxlDQo+IHVucmVnaXN0
+cmF0aW9uIG9mIHRoZSBzYW1lIGRldmljZS4gVGhlIGZpcnN0IHVucmVnaXN0cmF0aW9uIHN1Y2Nl
+ZWRzDQo+IGJ1dCB0aGUgbmV4dCBvbmUgcmVzdWx0cyBpbiBhIG51bGwtcHRyLWRlcmVmLg0KPiAN
+Cj4gVGhlIGdldF9mcmVlX3NlcmlhbF9pbmRleCgpIGZ1bmN0aW9uIHJldHVybnMgYW4gYXZhaWxh
+YmxlIG1pbm9yIG51bWJlcg0KPiBidXQgZG9lc24ndCBhc3NpZ24gaXQgaW1tZWRpYXRlbHkuIFRo
+ZSBhc3NpZ25tZW50IGlzIGRvbmUgYnkgdGhlIGNhbGxlcg0KPiBsYXRlci4gQnV0IGJlZm9yZSB0
+aGlzIGFzc2lnbm1lbnQsIGNhbGxzIHRvIGdldF9mcmVlX3NlcmlhbF9pbmRleCgpDQo+IHdvdWxk
+IHJldHVybiB0aGUgc2FtZSBtaW5vciBudW1iZXIuDQo+IA0KPiBGaXggdGhpcyBieSBtb2RpZnlp
+bmcgZ2V0X2ZyZWVfc2VyaWFsX2luZGV4IHRvIGFzc2lnbiB0aGUgbWlub3IgbnVtYmVyDQo+IGlt
+bWVkaWF0ZWx5IGFmdGVyIG9uZSBpcyBmb3VuZCB0byBiZSBhbmQgcmVuYW1lIGl0IHRvIG9idGFp
+bl9taW5vcigpDQo+IHRvIGJldHRlciByZWZsZWN0IHdoYXQgaXQgZG9lcy4gU2ltaWxhcnksIHJl
+bmFtZSBzZXRfc2VyaWFsX2J5X2luZGV4KCkNCj4gdG8gcmVsZWFzZV9taW5vcigpIGFuZCBtb2Rp
+ZnkgaXQgdG8gZnJlZSB1cCB0aGUgbWlub3IgbnVtYmVyIG9mIHRoZQ0KPiBnaXZlbiBoc29fc2Vy
+aWFsLiBFdmVyeSBvYnRhaW5fbWlub3IoKSBzaG91bGQgaGF2ZSBjb3JyZXNwb25kaW5nDQo+IHJl
+bGVhc2VfbWlub3IoKSBjYWxsLg0KPiANCj4gUmVwb3J0ZWQtYnk6IHN5emJvdCtjNDlmZTYwODlm
+Mjk1YTA1ZTZmOEBzeXprYWxsZXIuYXBwc3BvdG1haWwuY29tDQo+IFRlc3RlZC1ieTogc3l6Ym90
+K2M0OWZlNjA4OWYyOTVhMDVlNmY4QHN5emthbGxlci5hcHBzcG90bWFpbC5jb20NCj4gDQo+IFNp
+Z25lZC1vZmYtYnk6IEFuaXJ1ZGggUmF5YWJoYXJhbSA8bWFpbEBhbmlydWRocmIuY29tPg0KDQpU
+aGlzIGFkZHMgYSBuZXcgYnVpbGQgd2FybmluZzoNCg0KICBDQyBbTV0gIGRyaXZlcnMvbmV0L3Vz
+Yi9oc28ubw0KZHJpdmVycy9uZXQvdXNiL2hzby5jOiBJbiBmdW5jdGlvbiChaHNvX3NlcmlhbF9j
+b21tb25fY3JlYXRlojoNCmRyaXZlcnMvbmV0L3VzYi9oc28uYzoyMjU2OjY6IHdhcm5pbmc6IHVu
+dXNlZCB2YXJpYWJsZSChbWlub3KiIFstV3VudXNlZC12YXJpYWJsZV0NCg0KUGxlYXNlIGZpeCB0
+aGlzIGFuZCBhZGQgYW4gYXBwcm9wcmlhdGUgRml4ZXM6IHRhZywgdGhhbmsgeW91Lg0K
