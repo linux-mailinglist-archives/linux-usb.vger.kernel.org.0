@@ -2,102 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E90AA355608
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Apr 2021 16:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F41FF355637
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Apr 2021 16:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232983AbhDFOGJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Apr 2021 10:06:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38894 "EHLO mail.kernel.org"
+        id S1344956AbhDFOPC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Apr 2021 10:15:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41074 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233554AbhDFOGI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 6 Apr 2021 10:06:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 746B06139C;
-        Tue,  6 Apr 2021 14:05:59 +0000 (UTC)
+        id S244364AbhDFOO5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 6 Apr 2021 10:14:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0E84A61382;
+        Tue,  6 Apr 2021 14:14:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1617717960;
-        bh=qEX/6JcIH0tvPPBJ0/FFoBpj98iXPxdaCuo5ByOWTbU=;
+        s=korg; t=1617718489;
+        bh=INz753g/rP6LpFipcHZBYmnDy3NFV9T5EzJWjxWQUkc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gFYaUKc25ivU3lsCHPxdml6UB6rqURBPXl6bgdwev7/XrzmsZy8h9j5ShkstUVbJa
-         D65PWwl9DRiPj+PKOuzh8MVRdM9tdp45wcd58nFmMM3N3rykhFqQH/SA5Q8Wwyyicp
-         fF5PANEvHR7hLtadRncftDmPghckev8aXyFIDbjs=
-Date:   Tue, 6 Apr 2021 16:05:57 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Anirudh Rayabharam <mail@anirudhrb.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Rustam Kovhaev <rkovhaev@gmail.com>,
-        syzbot+c49fe6089f295a05e6f8@syzkaller.appspotmail.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: hso: fix null-ptr-deref during tty device
- unregistration
-Message-ID: <YGxqxddOyyDM9ueu@kroah.com>
-References: <20210406124402.20930-1-mail@anirudhrb.com>
+        b=ruMciBRyJxZwyxh8uc/3tSywGv/2V4c4b2rk1kxagDSHiad5LFNGJ9oqoS4jqlqZy
+         TJSSLH1dob+YrSSlkITZk/sdzQDNYEBvmQi9aCE96Ee1HxJ0asYeOe2IBAcJkEsyvv
+         TXVknqxlmYX51sx4I9EKshKoj93eShjsPV1l/dtk=
+Date:   Tue, 6 Apr 2021 16:14:42 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Kyle Tso <kyletso@google.com>
+Subject: Re: [PATCH v1 2/6] usb: typec: tcpm: Address incorrect values of
+ tcpm psy for pps supply
+Message-ID: <YGxs0uSQe46c7/mD@kroah.com>
+References: <20210406013643.3280369-1-badhri@google.com>
+ <20210406013643.3280369-3-badhri@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210406124402.20930-1-mail@anirudhrb.com>
+In-Reply-To: <20210406013643.3280369-3-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 06, 2021 at 06:13:59PM +0530, Anirudh Rayabharam wrote:
-> Multiple ttys try to claim the same the minor number causing a double
-> unregistration of the same device. The first unregistration succeeds
-> but the next one results in a null-ptr-deref.
+On Mon, Apr 05, 2021 at 06:36:39PM -0700, Badhri Jagan Sridharan wrote:
+> tcpm_pd_select_pps_apdo overwrites port->pps_data.min_volt,
+> port->pps_data.max_volt, port->pps_data.max_curr even before
+> port partner accepts the requests. This leaves incorrect values
+> in current_limit and supply_voltage that get exported by
+> "tcpm-source-psy-". Solving this problem by caching the request
+> values in req_min_volt, req_max_volt, req_max_curr, req_out_volt,
+> req_op_curr. min_volt, max_volt, max_curr gets updated once the
+> partner accepts the request. current_limit, supply_voltage gets updated
+> once local port's tcpm enters SNK_TRANSITION_SINK when the accepted
+> current_limit and supply_voltage is enforced.
 > 
-> The get_free_serial_index() function returns an available minor number
-> but doesn't assign it immediately. The assignment is done by the caller
-> later. But before this assignment, calls to get_free_serial_index()
-> would return the same minor number.
-> 
-> Fix this by modifying get_free_serial_index to assign the minor number
-> immediately after one is found to be and rename it to obtain_minor()
-> to better reflect what it does. Similary, rename set_serial_by_index()
-> to release_minor() and modify it to free up the minor number of the
-> given hso_serial. Every obtain_minor() should have corresponding
-> release_minor() call.
-> 
-> Reported-by: syzbot+c49fe6089f295a05e6f8@syzkaller.appspotmail.com
-> Tested-by: syzbot+c49fe6089f295a05e6f8@syzkaller.appspotmail.com
-> 
-> Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
+> Fixes: f2a8aa053c176 ("typec: tcpm: Represent source supply through power_supply")
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 > ---
->  drivers/net/usb/hso.c | 32 ++++++++++++--------------------
->  1 file changed, 12 insertions(+), 20 deletions(-)
+>  drivers/usb/typec/tcpm/tcpm.c | 84 ++++++++++++++++++++---------------
+>  1 file changed, 49 insertions(+), 35 deletions(-)
 > 
-> diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
-> index 31d51346786a..295ca330e70c 100644
-> --- a/drivers/net/usb/hso.c
-> +++ b/drivers/net/usb/hso.c
-> @@ -611,7 +611,7 @@ static struct hso_serial *get_serial_by_index(unsigned index)
->  	return serial;
->  }
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 03eca5061132..d43774cc2ccf 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -269,11 +269,22 @@ struct pd_mode_data {
+>  };
 >  
-> -static int get_free_serial_index(void)
-> +static int obtain_minor(struct hso_serial *serial)
->  {
->  	int index;
->  	unsigned long flags;
-> @@ -619,8 +619,10 @@ static int get_free_serial_index(void)
->  	spin_lock_irqsave(&serial_table_lock, flags);
->  	for (index = 0; index < HSO_SERIAL_TTY_MINORS; index++) {
->  		if (serial_table[index] == NULL) {
-> +			serial_table[index] = serial->parent;
-> +			serial->minor = index;
->  			spin_unlock_irqrestore(&serial_table_lock, flags);
-> -			return index;
-> +			return 0;
+>  struct pd_pps_data {
+> +	/* Actual min voltage at the local port */
+>  	u32 min_volt;
+> +	/* Requested min voltage to the port partner */
+> +	u32 req_min_volt;
+> +	/* Actual max voltage at the local port */
+>  	u32 max_volt;
+> +	/* Requested max voltage to the port partner */
+> +	u32 req_max_volt;
+> +	/* Actual max current at the local port */
+>  	u32 max_curr;
+> -	u32 out_volt;
+> -	u32 op_curr;
+> +	/* Requested max current of the port partner */
+> +	u32 req_max_curr;
+> +	/* Requested output voltage to the port partner */
+> +	u32 req_out_volt;
+> +	/* Requested operating current to the port partner */
+> +	u32 req_op_curr;
 
-Minor note, you might want to convert this to use an idr structure in
-the future, this "loop and find a free minor" isn't really needed now
-that we have a data structure that does this all for us :)
-
-But that's not going to fix this issue, that's for future changes.
+Shouldn't you just document this all properly in a kerneldoc header
+right above the structure?
 
 thanks,
 
