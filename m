@@ -2,99 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BAF354A33
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Apr 2021 03:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 924BC354A47
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Apr 2021 03:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243163AbhDFBhP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Apr 2021 21:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S239587AbhDFBop (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Apr 2021 21:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243186AbhDFBhJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Apr 2021 21:37:09 -0400
-Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AA9C061788
-        for <linux-usb@vger.kernel.org>; Mon,  5 Apr 2021 18:37:01 -0700 (PDT)
-Received: by mail-qt1-x849.google.com with SMTP id l13so9489196qtu.6
-        for <linux-usb@vger.kernel.org>; Mon, 05 Apr 2021 18:37:01 -0700 (PDT)
+        with ESMTP id S239293AbhDFBol (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Apr 2021 21:44:41 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D9DC061756
+        for <linux-usb@vger.kernel.org>; Mon,  5 Apr 2021 18:44:33 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id s136so2857157vks.4
+        for <linux-usb@vger.kernel.org>; Mon, 05 Apr 2021 18:44:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=MAtT5IENk0bC9gBQziGXRz4UgkBtlGCp0/LaMeeOCJs=;
-        b=Ivh9XNG4Qutnb7/BovIsn7HjCHYJZgmeVhN28v2wxyya/IxwWx2RpOfZ/6k0qGfXGs
-         TAaJ+ow+qxl47MKsWRTXkmIAv47ed07eRTnGHMfq68OPpY/iB7XRh/fQ6hzGIhAIHbWn
-         vrBxvqcP8sbf395/YbRIhVNTMcJdqcpCRo33r4yObDiY4EfPMuEDlISWvKgPhdK7dPVi
-         i+phbqB6tCQryjF7C/a+6MvgKzmlXJ66/IYUtxKLD13sJqfdgCCSWSYpl+qbLo8JWur1
-         Y7KKacZQWu4iQqtb90V2aylEfD3NAzXT7xng/WkHU/9Ro3ULhLRjkeY++Re9WZFAmlcP
-         f9qA==
+        bh=rgcv33+UDp0u2Q6Hp6HLXP+tMsI0iE4Muyp0O3zsJ1g=;
+        b=WzH5CDdhkWte9pD3FsLaA3CmZCzZc5M20EXUZpl76FPfYEjuvw0/C9BLjx/lD5j1t8
+         Y0yty4ko3PvYyX5R+HIaMWTcZdvFuViNeJsWBaGPyTgMG5dRriFFozSLjtyJWFU9iIR0
+         GSOcpLzDmS4irrU+X2/mKsvFbP85MqM12sXEUYWzeAV80/7eTRujLI0EAmmCbGsqnFDT
+         v1wMVN51xmSYQvew8zt5seaPcRPwQFFK0tqk5nBKRky54c6EHba+1Tjn+iQnSo+gwfeN
+         TkOQ2L+EbKzqjfFhYFizh3KdG/+u0bxnmBx8HTZ4Fnd+DT3k4ZylhGWh9ffoaa5V1sUI
+         Pffw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=MAtT5IENk0bC9gBQziGXRz4UgkBtlGCp0/LaMeeOCJs=;
-        b=tjhe9b3yyVp88RlT5obFuF5iMgYuUJ4B8O2adn9Wcv7RV5m92sr/rjYYkKBN/DHV0k
-         /TzGbWIgT/lVkeenv2EpLosoFJmPbPaW0AVis1BhRnuZ2JSTJVnh0OGhlLBTA4bNYl66
-         RuHoKoWuKNvYGmlrHsrHoA20x8xxTWBWkC8AaqRQfAvOAI7lWIgwEHI1BwMl6T8tYAY3
-         pZsVvi1yBHtCH5lF6svGvCoJZdVpCRxSc/Qshk/aXprNQUpTqBiXlOMKmpGaaagVtArK
-         qTGDQhW7NXantewSego5qNJl1GxH1eeZPIWOkCa0vrxKZgpCtzjci7t2gqtQO1WEdWnu
-         wDkw==
-X-Gm-Message-State: AOAM530mzFMwj6KHSqF9gwIbK1SqWfMguqzaTe2JhQAq8/Ym2Jj9c3WO
-        ihrnQzIIsXBv3WiItsMRpcDcyPH9nvU=
-X-Google-Smtp-Source: ABdhPJxT7352JEwDxFYK/J/zwCsJcnIjSh6UXFP7OtRK7cfzmpG8gZNmd/0bEbVsT/QhZ8oSUN1oPKEs4xI=
-X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:7080:32f9:cd15:6178])
- (user=badhri job=sendgmr) by 2002:a0c:fcc6:: with SMTP id i6mr3362208qvq.18.1617673020739;
- Mon, 05 Apr 2021 18:37:00 -0700 (PDT)
-Date:   Mon,  5 Apr 2021 18:36:43 -0700
-In-Reply-To: <20210406013643.3280369-1-badhri@google.com>
-Message-Id: <20210406013643.3280369-7-badhri@google.com>
-Mime-Version: 1.0
-References: <20210406013643.3280369-1-badhri@google.com>
-X-Mailer: git-send-email 2.31.0.208.g409f899ff0-goog
-Subject: [PATCH v1 6/6] Documentation: connector: Add slow-charger-loop definition
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rgcv33+UDp0u2Q6Hp6HLXP+tMsI0iE4Muyp0O3zsJ1g=;
+        b=GyVEHoel0LSdPDljvieYeyAzLlR5t04/RpbEOe4UsoBOU5tMOlAWUu+jnqrKgPu5FC
+         b1/hB8tpjVeqFQWHumtzQwb1tf31pBxIPkrfTaqijmLmEKmKFy/1nQmzLAUdAZrQdrYM
+         PkmUoEMyhWlq2xrkOBeu9HbNLKX3Sh74c3OHYvkxykSXnhWHP1uKz/1inbWrqrbAloCK
+         mGtRSEPtSKp4MIkTpt3IUSZ02fGAjcm+Q5I6rlPZieTI8M96So4I8cI86cwoEFwB0zz9
+         FwGWCd+70B66GfJwzeHTMXEciurgIQNZaKJgpT5Wn1XSZcJ6ByXXHEs/0JjQzwJkU6CC
+         Uo8Q==
+X-Gm-Message-State: AOAM531zLoIiAD5Ecx9cRNLYOBRCmA2LoVQR2kJpq0YRsB7BJ1IjA8MG
+        hJ7H2kJzj+Z8CTjRLtlH7exfmEo/2eIFDXR030QT5g==
+X-Google-Smtp-Source: ABdhPJwoiGVXpHBLM23cBZSzDFyy3ZGjwlTn1/bLwQvwXQlIjTQ+7AywBtLtfqOspBEyHY9gjakZq6kR3W6b+0tLYXA=
+X-Received: by 2002:a05:6122:11a6:: with SMTP id y6mr16290548vkn.6.1617673472563;
+ Mon, 05 Apr 2021 18:44:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210317181249.1062995-1-badhri@google.com> <PR3PR10MB41420951E2867C2E0E5272B980699@PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM>
+ <CAPTae5J_GdHsGQvNxgpffk5otyGhY8D48vddvin3A4fkz3KWUA@mail.gmail.com>
+ <PR3PR10MB4142450638A8E07A33E475B080689@PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM>
+ <CAPTae5KX_+_4TN3DAptP-ra=Lzxnf7LgBDwxsv5JWxg4y4hQqQ@mail.gmail.com>
+In-Reply-To: <CAPTae5KX_+_4TN3DAptP-ra=Lzxnf7LgBDwxsv5JWxg4y4hQqQ@mail.gmail.com>
 From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
+Date:   Mon, 5 Apr 2021 18:43:58 -0700
+Message-ID: <CAPTae5+kTcDE_gqr_Jy1VO-vfKED4vtc0yL6jjYSC0LZMwzc9g@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: typec: tcpm: Invoke power_supply_changed for tcpm-source-psy-
+To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Kyle Tso <kyletso@google.com>,
-        Badhri Jagan Sridharan <badhri@google.com>
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-To allow slow charger loops to comply to pSnkStby requirement,
-this patch introduces slow-charger-loop which when set makes
-the port request PD_P_SNK_STDBY_MW upon entering SNK_DISCOVERY
-(instead of 3A or the 1.5A during SNK_DISCOVERY) and the actual
-currrent limit after RX of PD_CTRL_PSRDY for PD link or during
-SNK_READY for non-pd link.
+Hi Adam,
 
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
- .../devicetree/bindings/connector/usb-connector.yaml       | 7 +++++++
- 1 file changed, 7 insertions(+)
+Just sent out a patch stack
+https://patchwork.kernel.org/project/linux-usb/list/?series=461087
+to address the issue that you mentioned here.
 
-diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-index b6daedd62516..09ad3ad983a6 100644
---- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-+++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-@@ -197,6 +197,13 @@ properties:
-     $ref: /schemas/types.yaml#/definitions/uint32
-     enum: [1, 2, 3]
- 
-+  slow-charger-loop:
-+    description: Allows slow charging loops to comply to pSnkStby. When set makes
-+      the port request pSnkStby(2.5W - 5V@500mA) upon entering SNK_DISCOVERY(instead
-+      of 3A or the 1.5A during SNK_DISCOVERY) and the actual currrent limit after
-+      reception of PS_Ready for PD link or during SNK_READY for non-pd link.
-+    type: boolean
-+
- required:
-   - compatible
- 
--- 
-2.31.0.208.g409f899ff0-goog
+Thanks,
+Badhri
 
+
+On Mon, Apr 5, 2021 at 6:43 PM Badhri Jagan Sridharan <badhri@google.com> wrote:
+>
+> Hi Adam,
+>
+> Just sent out a patch stack https://patchwork.kernel.org/project/linux-usb/list/?series=461087
+> to address the issue that you mentioned here.
+>
+> Thanks,
+> Badhri
+>
+> On Fri, Mar 19, 2021 at 9:32 AM Adam Thomson <Adam.Thomson.Opensource@diasemi.com> wrote:
+>>
+>> On 18 March 2021 20:40, Badhri Jagan Sridharan wrote:
+>>
+>> > > Regarding selecting PDOs or PPS APDOs, surely we should only notify of a
+>> > change
+>> > > when we reach SNK_READY which means a new contract has been established?
+>> > Until
+>> > > that point it's possible any requested change could be rejected so why inform
+>> > > clients before we know the settings have taken effect? I could be missing
+>> > > something here as it's been a little while since I delved into this, but this
+>> > > doesn't seem to make sense to me.
+>> >
+>> > I was trying to keep the power_supply_changed call close to the
+>> > variables which are used to infer the power supply property values.
+>> > Since port->pps_data.max_curr is already updated here and that's used
+>> > to infer the CURRENT_MAX a client could still read this before the
+>> > request goes through right ?
+>>
+>> Actually that's fair but I think the problem here relates to 'max_curr' not
+>> being reset if the SRC rejects our request when we're swapping between one PPS
+>> APDO and another PPS APDO. I think the 'max_curr' value should be reverted back
+>> to the value for the existing PPS APDO we were already using. I suspect the same
+>> might be true of 'min_volt' and 'max_volt' as well, now I look at it. It might
+>> actually be prudent to have pending PPS data based on a request, which is only
+>> committed as active once ACCEPT has been received.
+>>
+>> Regarding power_supply_changed() though, I still think we should only notify of
+>> a change when the requested change has been accepted by the source, in relation
+>> to these values as they should reflect the real, in-use voltage and current
+>> values.
+>>
