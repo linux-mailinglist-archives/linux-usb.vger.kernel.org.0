@@ -2,66 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F593567F6
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 11:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED23F35689A
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 12:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234834AbhDGJ0W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Apr 2021 05:26:22 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:15941 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbhDGJ0V (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Apr 2021 05:26:21 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FFf8w31tyzyNbZ;
-        Wed,  7 Apr 2021 17:24:00 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by DGGEMS406-HUB.china.huawei.com
- (10.3.19.206) with Microsoft SMTP Server id 14.3.498.0; Wed, 7 Apr 2021
- 17:26:08 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
-Subject: [PATCH -next] usb: gadget: tegra-xudc: Fix possible use-after-free in tegra_xudc_remove()
-Date:   Wed, 7 Apr 2021 17:29:47 +0800
-Message-ID: <20210407092947.3271507-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-CFilter-Loop: Reflected
+        id S1350450AbhDGKAd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Apr 2021 06:00:33 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:39484 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230220AbhDGKAc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Apr 2021 06:00:32 -0400
+Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 5676F404A0;
+        Wed,  7 Apr 2021 10:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1617789623; bh=5j9+LN48/eUhsAf/2HaDqriIe19NdgXnp/wRV+fh3Gw=;
+        h=Date:From:Subject:To:Cc:From;
+        b=YHbwi9Qp0mX9OTmwC77DbcxOU3ruwdLD91CD9DI35TxoGdNOYhOlT6BCmHdEVIryo
+         QH+9Zd1UBg6qShrnjZ86r8ZYqo0RhYhNdO1uDvCcPgi/s4YKtVFA2nJE2uuyEE6LUe
+         +kt1OyITs/NXvTjpcTAiiZljTSnR4ID/82YcaB9ggw4JlNlW5LyRsQzg6+QzI7Wh0p
+         wIP2FabU0CYaeoffGMbQX6F/fNJvXiY/8MlLvcragOoYziBghmp5hxbei5y7QR5PJl
+         YjsiMTllwtt8Lir84Mg8bJM5E+/lQoLOZgkk96zhmTuMk9uu0IkE9EqDPAT7nyeREO
+         Yj9nPJcdYIuMw==
+Received: from razpc-HP (razpc-hp.internal.synopsys.com [10.116.126.207])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 4441BA0094;
+        Wed,  7 Apr 2021 10:00:17 +0000 (UTC)
+Received: by razpc-HP (sSMTP sendmail emulation); Wed, 07 Apr 2021 14:00:15 +0400
+Date:   Wed, 07 Apr 2021 14:00:15 +0400
+Message-Id: <cover.1617782102.git.Arthur.Petrosyan@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+Subject: [PATCH 00/14] usb: dwc2: Fix Partial Power down issues.
+To:     John Youn <John.Youn@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mian Yousaf Kaukab <yousaf.kaukab@intel.com>,
+        Gregory Herrero <gregory.herrero@intel.com>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Paul Zimmerman <paulz@synopsys.com>, <stable@vger.kernel.org>,
+        Robert Baldyga <r.baldyga@samsung.com>,
+        Kever Yang <kever.yang@rock-chips.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This driver's remove path calls cancel_delayed_work(). However, that
-function does not wait until the work function finishes. This means
-that the callback function may still be running after the driver's
-remove function has finished, which would result in a use-after-free.
+This patch set fixes and improves the Partial Power Down mode for
+dwc2 core.
+It adds support for the following cases
+    1. Entering and exiting partial power down when a port is
+       suspended, resumed, port reset is asserted.
+    2. Exiting the partial power down mode before removing driver.
+    3. Exiting partial power down in wakeup detected interrupt handler.
+    4. Exiting from partial power down mode when connector ID.
+       status changes to "connId B
 
-Fix by calling cancel_delayed_work_sync(), which ensures that
-the work is properly cancelled, no longer running, and unable
-to re-schedule itself.
+It updates and fixes the implementation of dwc2 entering and
+exiting partial power down mode when the system (PC) is suspended.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/usb/gadget/udc/tegra-xudc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The patch set also improves the implementation of function handlers
+for entering and exiting host or device partial power down.
 
-diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
-index 580bef8eb4cb..2319c9737c2b 100644
---- a/drivers/usb/gadget/udc/tegra-xudc.c
-+++ b/drivers/usb/gadget/udc/tegra-xudc.c
-@@ -3883,7 +3883,7 @@ static int tegra_xudc_remove(struct platform_device *pdev)
- 
- 	pm_runtime_get_sync(xudc->dev);
- 
--	cancel_delayed_work(&xudc->plc_reset_work);
-+	cancel_delayed_work_sync(&xudc->plc_reset_work);
- 	cancel_work_sync(&xudc->usb_role_sw_work);
- 
- 	usb_del_gadget_udc(&xudc->gadget);
+NOTE: This is the second patch set in the power saving mode fixes
+series.
+This patch set is part of multiple series and is continuation
+of the "usb: dwc2: Fix and improve power saving modes" patch set.
+(Patch set link: https://marc.info/?l=linux-usb&m=160379622403975&w=2).
+The patches that were included in the "usb: dwc2:
+Fix and improve power saving modes" which was submitted
+earlier was too large and needed to be split up into
+smaller patch sets. 
+
+
+Artur Petrosyan (14):
+  usb: dwc2: Add device partial power down functions
+  usb: dwc2: Add host partial power down functions
+  usb: dwc2: Update enter and exit partial power down functions
+  usb: dwc2: Add partial power down exit flow in wakeup intr.
+  usb: dwc2: Update port suspend/resume function definitions.
+  usb: dwc2: Add enter partial power down when port is suspended
+  usb: dwc2: Add exit partial power down when port is resumed
+  usb: dwc2: Add exit partial power down when port reset is asserted
+  usb: dwc2: Add part. power down exit from
+    dwc2_conn_id_status_change().
+  usb: dwc2: Allow exit partial power down in urb enqueue
+  usb: dwc2: Fix session request interrupt handler
+  usb: dwc2: Update partial power down entering by system suspend
+  usb: dwc2: Fix partial power down exiting by system resume
+  usb: dwc2: Add exit partial power down before removing driver
+
+ drivers/usb/dwc2/core.c      | 113 ++-------
+ drivers/usb/dwc2/core.h      |  27 ++-
+ drivers/usb/dwc2/core_intr.c |  46 ++--
+ drivers/usb/dwc2/gadget.c    | 148 ++++++++++-
+ drivers/usb/dwc2/hcd.c       | 458 +++++++++++++++++++++++++----------
+ drivers/usb/dwc2/hw.h        |   1 +
+ drivers/usb/dwc2/platform.c  |  11 +-
+ 7 files changed, 558 insertions(+), 246 deletions(-)
+
+
+base-commit: e9fcb07704fcef6fa6d0333fd2b3a62442eaf45b
 -- 
 2.25.1
 
