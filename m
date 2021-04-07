@@ -2,129 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C09356B97
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 13:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39E9F356C46
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 14:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbhDGL4r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Apr 2021 07:56:47 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:58550 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238913AbhDGL4q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 7 Apr 2021 07:56:46 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1617796597; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=HH+jlV8cWpLIyhC3IJoj/4gWZj94WvZRBdnU6G5qdno=;
- b=wOCESvX7hDSjBbFEbV6SQiHIVnkEE2duoRaO6MLq/OIAOIybD8NxryDAHqv4TDNSZUpVdPrl
- vB+n2lztHpU4CI6P7qjE0Wieqh+7QTmWAGMnFuDH45+1lhVGjPI2jXYe3rddm7tZ/ncu5SPq
- 3eJxesKeRPajVkdv1vlh2WVTr+8=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
- 606d9dee03cfff3452fa179e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 07 Apr 2021 11:56:30
- GMT
-Sender: kathirav=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 22AC0C43462; Wed,  7 Apr 2021 11:56:30 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: kathirav)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E38BBC433CA;
-        Wed,  7 Apr 2021 11:56:28 +0000 (UTC)
+        id S1352286AbhDGMij (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Apr 2021 08:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51568 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352257AbhDGMig (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Apr 2021 08:38:36 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E20C06175F;
+        Wed,  7 Apr 2021 05:38:25 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id kk2-20020a17090b4a02b02900c777aa746fso1237562pjb.3;
+        Wed, 07 Apr 2021 05:38:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=PUjKE8eTPy2MYu9gM8lGkbrGpIC4uZ+AdNBDhybjmeg=;
+        b=RlMafCS8G388rdM86H2WtpX/m/6ZhmIBq4/TXUAsrL1YPDEI+Nw8HplZTtYLjMJDQI
+         gzlORPniQvhEEZCl3KV54wQuxFzPZQAxCRgoos/BSUWvBGssYj95bxTcRkp5O9waxihm
+         n63JlirHQfoIUNpjGRD1P9RkOHR1aOUiE9UxAe1LZ7Nkf1j0Eid88i0Hi3PMRrNkDbn7
+         zNlCRBE15Ike3ntcxAmRR10R1eZCyO1Mxdt1HJnATpraO3npFqAa/it6dom2qEYKEXik
+         rIRs0TbC+ar1TwwHdMdR734kGB26U4vxm84JvKIEyFtMLAjWVvY4jgaXmtXfc57Rq2nY
+         UY8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PUjKE8eTPy2MYu9gM8lGkbrGpIC4uZ+AdNBDhybjmeg=;
+        b=Ck0M05XAm7iCUpirhPwQBpsOw+l9lN6mWegZb+xobQfOALLD0ThKyua1xg6s8ziCAT
+         eW2xqRbznvvWfNiaw3yjh9t2MGb15kCcCusM13x2oZbTnSQw4zwvBBsNPNCMBx/xTvs2
+         THRuyyQydeh7J92a/PFdNX57pOSf97FNU8ZQqTbaEu5EVVa2gZ0LhA/A2nVyklu9CO4Q
+         zh1r2aD1i5lH+Sz5/QpRr4Gd9K/R+bYy+8WBQWgrc5Z6iKVejUn3+78i7UmYruZCxjhZ
+         YySFl8z4akUNWXZb0AgKFVwj9lTw1TGw3ZyRFo/OmoRQdyDCZVVDScsbUMYNZWC9QAjZ
+         Szhw==
+X-Gm-Message-State: AOAM533jSBSwy3caDRHTfDLY8/gaIY9rIl/4aOym5FbbHrdQ5k5qQR4d
+        4oh9XQYf/sv2Nlgpyxq3hZlTOdje/JX5tPDYQpA=
+X-Google-Smtp-Source: ABdhPJytzqkPuM1b25yKVRQlYpNqFqoTfLBVXWPZOOTrwFuS7Oa+x9hJIfuvJNHOWfmXrRulQZ0UXrafXXsC30A0zAE=
+X-Received: by 2002:a17:90a:5407:: with SMTP id z7mr3180483pjh.228.1617799105256;
+ Wed, 07 Apr 2021 05:38:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 07 Apr 2021 17:26:28 +0530
-From:   Kathiravan T <kathirav@codeaurora.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Baruch Siach <baruch@tkos.co.il>, Felipe Balbi <balbi@kernel.org>,
-        linux-usb@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Balaji Prakash J <bjagadee@codeaurora.org>
-Subject: Re: [PATCH] usb: dwc3: reference clock configuration
-In-Reply-To: <f3042097-8569-5882-06db-ae56e05cac59@synopsys.com>
-References: <8fc38cb73afd31269f1ea0c28e73604c53cebb17.1612764006.git.baruch@tkos.co.il>
- <f3042097-8569-5882-06db-ae56e05cac59@synopsys.com>
-Message-ID: <8cc9617dc62be17ac3a9420e7750b0ee@codeaurora.org>
-X-Sender: kathirav@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+References: <20210406101850.3111-1-photranvan0712@gmail.com>
+ <CAHp75Vf8jwhLkaHL2D6FvRJpmbBqpTzePpNqVAFVt8EhSCgxnw@mail.gmail.com> <CAG-T6mP98t6JuQ68bi0aD9PDEpLbkAVwrf-Gp7H7GLQV5rW_GQ@mail.gmail.com>
+In-Reply-To: <CAG-T6mP98t6JuQ68bi0aD9PDEpLbkAVwrf-Gp7H7GLQV5rW_GQ@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 7 Apr 2021 15:38:09 +0300
+Message-ID: <CAHp75VdMLtFe6uEQiBg=9TSR1OVEvAZwpB7keTKFH5UWSa9tKw@mail.gmail.com>
+Subject: Re: [PATCH v8] USB: serial: cp210x: Add support for GPIOs on CP2108
+To:     Tran Van Pho <photranvan0712@gmail.com>
+Cc:     "johan@kernel.org" <johan@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hung.Nguyen@silabs.com" <Hung.Nguyen@silabs.com>,
+        "Tung.Pham@silabs.com" <Tung.Pham@silabs.com>,
+        Pho Tran <pho.tran@silabs.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-03-31 06:47, Thinh Nguyen wrote:
-> Baruch Siach wrote:
->> From: Balaji Prakash J <bjagadee@codeaurora.org>
->> 
->> DWC_USB3_GFLADJ and DWC_USB3_GUCTL registers contain options
->> to control the behavior of controller with respect to SOF and ITP.
->> The reset values of these registers are aligned for 19.2 MHz
->> reference clock source. This change will add option to override
->> these settings for reference clock other than 19.2 MHz
->> 
->> Tested on IPQ6018 SoC based CP01 board with 24MHz reference clock.
->> 
->> Signed-off-by: Balaji Prakash J <bjagadee@codeaurora.org>
->> [ baruch: mention tested hardware ]
->> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->> ---
->>  .../devicetree/bindings/usb/dwc3.txt          |  5 ++
->>  drivers/usb/dwc3/core.c                       | 52 
->> +++++++++++++++++++
->>  drivers/usb/dwc3/core.h                       | 12 +++++
->>  3 files changed, 69 insertions(+)
->> 
->> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt 
->> b/Documentation/devicetree/bindings/usb/dwc3.txt
->> index 1aae2b6160c1..4ffa87b697dc 100644
->> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
->> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
->> @@ -89,6 +89,11 @@ Optional properties:
->>   - snps,quirk-frame-length-adjustment: Value for GFLADJ_30MHZ field 
->> of GFLADJ
->>  	register for post-silicon frame length adjustment when the
->>  	fladj_30mhz_sdbnd signal is invalid or incorrect.
->> + - snps,quirk-ref-clock-adjustment: Value for GFLADJ_REFCLK_* fields 
->> of GFLADJ
->> +	register for reference clock other than 19.2 MHz is used.
->> + - snps,quirk-ref-clock-period: Value for REFCLKPER filed of GUCTL. 
->> This field
->> +	indicates in terms of nano seconds the period of ref_clk. To 
->> calculate the
->> +	ideal value, REFCLKPER = (1/ref_clk in Hz)*10^9.
-> 
-> Why is this a quirk? It's not a quirk. The user can inform the ref_clk
-> period to the controller here.
-> 
-> The default value from GUCTL.REFCLKPER is a value from coreConsultant
-> setting. The designer knows what period it should be and should 
-> properly
-> set it if the default is not correctly set.
+On Wed, Apr 7, 2021 at 6:21 AM Tran Van Pho <photranvan0712@gmail.com> wrot=
+e:
+> On Wed, Apr 7, 2021 at 5:25 AM Andy Shevchenko <andy.shevchenko@gmail.com=
+> wrote:
+>> On Tuesday, April 6, 2021, Pho Tran <photranvan0712@gmail.com> wrote:
 
-Thanks Thinh for your inputs. Can we have the DT property for both the 
-GUCTL.REFCLKPER and GFLADJ.REFCLK* fields?
-Since GFLADJ.REFCLK* field values derived based on the GUCTL.REFCLKPER. 
-In other words, are you fine with the
-approach followed here? If so, we can work on the nitpicks and send the 
-V2.
+...
 
-Please let us know your thoughts on this.
+>>> CP2108 has 16 GPIOs, So data types of several variables need to be is u=
+16
+>>> instead of u8(in struct cp210x_serial_private). This doesn't affect oth=
+er
+>>> CP210x devices.
+>>
+>> Here I am wondering if you should use 4 pins per interface. Is any point=
+er to data sheet?
 
-> BR,
-> Thinh
+> In datasheet, Using 4 pins per interface isn't specified. And when settin=
+g or getting Latch
+> of GPIO, all of 16 gpios will be done on the same command. So there no di=
+fference between
+> 4 interfaces of CP2108 in terms of GPIOs.
 
+Okay, so we may have different configurations:
+ 1 interface + 1 GPIO (N or M pins)
+ 4 interfaces + 1 GPIO (N or M pins)
 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
-member of Code Aurora Forum, hosted by The Linux Foundation
+...
+
+>>> Because CP2108 has 16 GPIO pins, the parameter passed by cp210x functio=
+ns
+>>> will be different from other CP210x devices. So need to check part numb=
+er
+>>> of the device to use correct data format  before sending commands to
+>>> devices.
+>>>
+>>> Like CP2104, CP2108 have GPIO pins with configurable options. Therefore=
+,
+>>> should be mask all pins which are not in GPIO mode in cp2108_gpio_init(=
+)
+>>> function.
+>>
+>> This I didn=E2=80=99t get. If you are talking about usage pin as GPIO, p=
+erhaps you should use valid_mask in GPIO chip structure. Otherwise you prob=
+ably need to implement a proper pinmux ops for this (and register a pin con=
+troller which the code below also suggests).
+>
+>
+> This message means 16 pins on  CP2108 can have many options like GPIO, TX=
+ toggle, RX toggle, clock output for example.
+> If there are any pins set in the mode that aren't GPIO mode, we should ma=
+sk these pins at gpio_altfunc in struct cp210x_serial_private.
+
+Can those functions be changed at run time? Or is it simply one time settin=
+g?
+
+> I am not clear  with what you said about pinmux, But I think "gpio_altfun=
+c in struct cp210x_serial_private" has the same meaning as your idea.
+
+Yeah, but it's custom grown (I believe due to historical reasons, i.e.
+there was no pin controller framework at that time) approach.
+If pin functions may be changed at run time, it's better to have them
+described as pinmux.
+
+...
+
+>>> +       __le16 gpio_lowpower_PB0;
+>>> +       __le16 gpio_lowpower_PB1;
+>>> +       __le16 gpio_lowpower_PB2;
+>>> +       __le16 gpio_lowpower_PB3;
+>>> +       __le16 gpio_lowpower_PB4;
+>>> +
+>>> +       __le16 gpio_latch_PB0;
+>>> +       __le16 gpio_latch_PB1;
+>>> +       __le16 gpio_latch_PB2;
+>>> +       __le16 gpio_latch_PB3;
+>>> +       __le16 gpio_latch_PB4;
+>>
+>>
+>> Sounds to me like pin controller functions rather than GPIO.
+>
+> Oh yes, This is related to the functions of pins. But we need to define i=
+t to get the state of the pins to
+> check whether It's  GPIO mode or other function.
+
+Yep, and this is pinmux functionality, no?
+
+> It's also included in vendor specified USB packet structure.
+> You can refer to https://www.silabs.com/documents/public/application-note=
+s/an978-cp210x-usb-to-uart-api-specification.pdf
+> at page34 to see struct _QUAD_PORT_CONFIG.
+>
+> I have  a question, Should I need to resolve the build warning on i386 re=
+ported by the kernel test robot?
+
+If you get a warning, yes, it's better to resolve it.
+
+>>> +       struct cp210x_quad_port_state reset_state;
+>>> +       struct cp210x_quad_port_state suspend_state;
+>>> +       u8 ipdelay_IFC[4];
+>>> +       u8 enhancedfxn_IFC[4];
+>>> +       u8 enhancedfxn_device;
+>>> +       u8 extclkfreq[4];
+>>> +} __packed;
+
+--=20
+With Best Regards,
+Andy Shevchenko
