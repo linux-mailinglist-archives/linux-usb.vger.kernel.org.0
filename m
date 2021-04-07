@@ -2,144 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B467356A3E
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 12:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20734356A59
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 12:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351489AbhDGKro (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Apr 2021 06:47:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52804 "EHLO mail.kernel.org"
+        id S1351575AbhDGKww (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Apr 2021 06:52:52 -0400
+Received: from mga11.intel.com ([192.55.52.93]:22191 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351492AbhDGKrA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 7 Apr 2021 06:47:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 666606139C;
-        Wed,  7 Apr 2021 10:46:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617792402;
-        bh=Ltl/zxImFodnKg1Zy5Gf9VrHlde8OKGhBySHeRkZ3y4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=qcOURa7fer3rNME1HItD8XRNoe/rPvTFEjMs5bWvHlT4j+VrOHvMso5QmFT7vFcgP
-         NPRVWyKsUB5rLIBdofVgBCuOBOoemHRXQTecS8Y7wbMkfvNfbu0nbLiFwmFqwhUTFV
-         FG3forAIfH73Aim263jrLPqAuPw6m8zYNfhT86c+gOTLSuEjY4k8u+RxAki5bWRstF
-         hi1xuz1/eaXIOceMfC2ED4WbyU4+T1EvssEvCTVhSZErn+L3wpVeCy4hdf/9k6AF4b
-         WWldrArjBHgTZNoxFf7G8QNnmTg8B7YjR9DdoajQbiCKZ/jAgRTl/IBgyCglD1yTag
-         oP/o21vGDO18w==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lU5hj-0000KI-0S; Wed, 07 Apr 2021 12:46:35 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH] USB: serial: io_edgeport: drop unused definitions
-Date:   Wed,  7 Apr 2021 12:46:29 +0200
-Message-Id: <20210407104629.1212-1-johan@kernel.org>
-X-Mailer: git-send-email 2.26.3
+        id S244909AbhDGKwv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 7 Apr 2021 06:52:51 -0400
+IronPort-SDR: PBAgMjOQ5t/qOsliN7Lz5vHDc1JrJUZtHsoIpRiTahPZdZ88oA731heVaEEgO35oPnJCz6ZvEh
+ LWoUBIO1rNeg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9946"; a="190078178"
+X-IronPort-AV: E=Sophos;i="5.82,203,1613462400"; 
+   d="scan'208";a="190078178"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2021 03:52:41 -0700
+IronPort-SDR: cjg41b+IlLllrlat51JVBZ8ls6d2u+AErdtnfiI5+PjTRxvxuVrKBansRYLlDwbwiVu0L4Ih3n
+ 8xoqr5xdokXw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,203,1613462400"; 
+   d="scan'208";a="612891970"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga005.fm.intel.com with ESMTP; 07 Apr 2021 03:52:39 -0700
+Subject: Re: [PATCH] xhci-pci: Allow host runtime PM as default for Intel
+ Alder Lake xHCI
+To:     Azhar Shaikh <azhar.shaikh@intel.com>, gregkh@linuxfoundation.org,
+        p.zabel@pengutronix.de, linux-usb@vger.kernel.org
+Cc:     mika.westerberg@linux.intel.com, abhijeet.rao@intel.com,
+        nikunj.dadhania@intel.com, linux-kernel@vger.kernel.org
+References: <20210406233529.19543-1-azhar.shaikh@intel.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <48e32c92-e3e8-3935-3b9a-84fbcf79a9e3@linux.intel.com>
+Date:   Wed, 7 Apr 2021 13:54:32 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210406233529.19543-1-azhar.shaikh@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Drop unused definitions relating to a never mainlined custom
-proc-interface and some likewise unused string descriptor definitions.
+On 7.4.2021 2.35, Azhar Shaikh wrote:
+> From: Abhijeet Rao <abhijeet.rao@intel.com>
+> 
+> In the same way as Intel Tiger Lake TCSS (Type-C Subsystem) the Alder Lake
+> TCSS xHCI needs to be runtime suspended whenever possible to allow the
+> TCSS hardware block to enter D3cold and thus save energy.
+> 
+> Signed-off-by: Abhijeet Rao <abhijeet.rao@intel.com>
+> Signed-off-by: Nikunj A. Dadhania <nikunj.dadhania@intel.com>
+> Signed-off-by: Azhar Shaikh <azhar.shaikh@intel.com>
+> ---
+>  drivers/usb/host/xhci-pci.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/io_edgeport.h | 68 --------------------------------
- 1 file changed, 68 deletions(-)
+Thanks, Added to queue
 
-diff --git a/drivers/usb/serial/io_edgeport.h b/drivers/usb/serial/io_edgeport.h
-index 43ba53a3a6fa..7c9f62af5ed6 100644
---- a/drivers/usb/serial/io_edgeport.h
-+++ b/drivers/usb/serial/io_edgeport.h
-@@ -10,7 +10,6 @@
- #if !defined(_IO_EDGEPORT_H_)
- #define	_IO_EDGEPORT_H_
- 
--
- #define MAX_RS232_PORTS		8	/* Max # of RS-232 ports per device */
- 
- /* typedefs that the insideout headers need */
-@@ -21,57 +20,8 @@
- 	#define HIGH8(a)	((unsigned char)((a & 0xff00) >> 8))
- #endif
- 
--#ifndef __KERNEL__
--#define __KERNEL__
--#endif
--
- #include "io_usbvend.h"
- 
--
--
--/* The following table is used to map the USBx port number to
-- * the device serial number (or physical USB path), */
--#define MAX_EDGEPORTS	64
--
--struct comMapper {
--	char	SerialNumber[MAX_SERIALNUMBER_LEN+1];	/* Serial number/usb path */
--	int	numPorts;				/* Number of ports */
--	int	Original[MAX_RS232_PORTS];		/* Port numbers set by IOCTL */
--	int	Port[MAX_RS232_PORTS];			/* Actual used port numbers */
--};
--
--
--#define EDGEPORT_CONFIG_DEVICE "/proc/edgeport"
--
--/* /proc/edgeport Interface
-- * This interface uses read/write/lseek interface to talk to the edgeport driver
-- * the following read functions are supported: */
--#define PROC_GET_MAPPING_TO_PATH	1
--#define PROC_GET_COM_ENTRY		2
--#define PROC_GET_EDGE_MANUF_DESCRIPTOR	3
--#define PROC_GET_BOOT_DESCRIPTOR	4
--#define PROC_GET_PRODUCT_INFO		5
--#define PROC_GET_STRINGS		6
--#define PROC_GET_CURRENT_COM_MAPPING	7
--
--/* The parameters to the lseek() for the read is: */
--#define PROC_READ_SETUP(Command, Argument)	((Command) + ((Argument)<<8))
--
--
--/* the following write functions are supported: */
--#define PROC_SET_COM_MAPPING		1
--#define PROC_SET_COM_ENTRY		2
--
--
--/* The following structure is passed to the write */
--struct procWrite {
--	int	Command;
--	union {
--		struct comMapper	Entry;
--		int			ComMappingBasedOnUSBPort;	/* Boolean value */
--	} u;
--};
--
- /*
-  *	Product information read from the Edgeport
-  */
-@@ -108,22 +58,4 @@ struct edgeport_product_info {
- 	struct edge_compatibility_bits Epic;
- };
- 
--/*
-- *	Edgeport Stringblock String locations
-- */
--#define EDGESTRING_MANUFNAME		1	/* Manufacture Name */
--#define EDGESTRING_PRODNAME		2	/* Product Name */
--#define EDGESTRING_SERIALNUM		3	/* Serial Number */
--#define EDGESTRING_ASSEMNUM		4	/* Assembly Number */
--#define EDGESTRING_OEMASSEMNUM		5	/* OEM Assembly Number */
--#define EDGESTRING_MANUFDATE		6	/* Manufacture Date */
--#define EDGESTRING_ORIGSERIALNUM	7	/* Serial Number */
--
--struct string_block {
--	__u16	NumStrings;			/* Number of strings in block */
--	__u16	Strings[1];			/* Start of string block */
--};
--
--
--
- #endif
--- 
-2.26.3
-
+-Mathias
