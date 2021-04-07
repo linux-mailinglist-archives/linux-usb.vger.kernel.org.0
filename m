@@ -2,190 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68608356499
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 08:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D36E3567CD
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 11:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349271AbhDGG4A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Apr 2021 02:56:00 -0400
-Received: from mga02.intel.com ([134.134.136.20]:62003 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349235AbhDGGz6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 7 Apr 2021 02:55:58 -0400
-IronPort-SDR: H5TtZ0hRCx2aklzeZ83miQR2vXuTqAAVGQdOOYPeQrjgmQuI3ou1A0+bJq1srLxPTgMo+5uiAQ
- ZMonmdvkejfg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9946"; a="180372050"
-X-IronPort-AV: E=Sophos;i="5.82,201,1613462400"; 
-   d="scan'208";a="180372050"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2021 23:55:49 -0700
-IronPort-SDR: Lb4njW5mZfdxwJqJITaT9NBKECGI458dmiuiFOOpMzdGnUcknGJQ+1zh5PZ9J6+8OUqdZ5tIZn
- 73cXyW92vr2A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,201,1613462400"; 
-   d="scan'208";a="519326286"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Apr 2021 23:55:47 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v6 4/4] usb: typec: Link all ports during connector registration
-Date:   Wed,  7 Apr 2021 09:55:55 +0300
-Message-Id: <20210407065555.88110-5-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210407065555.88110-1-heikki.krogerus@linux.intel.com>
-References: <20210407065555.88110-1-heikki.krogerus@linux.intel.com>
+        id S1345811AbhDGJQk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Apr 2021 05:16:40 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:16008 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231878AbhDGJQk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Apr 2021 05:16:40 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FFdx310tBzPnwC;
+        Wed,  7 Apr 2021 17:13:43 +0800 (CST)
+Received: from thunder-town.china.huawei.com (10.174.179.202) by
+ DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
+ 14.3.498.0; Wed, 7 Apr 2021 17:16:18 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH 1/1] usb: typec: tcpm: remove unused static variable 'tcpm_altmode_ops'
+Date:   Wed, 7 Apr 2021 17:15:40 +0800
+Message-ID: <20210407091540.2815-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.202]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The connectors may be registered after the ports, so the
-"connector" links need to be created for the ports also when
-ever a new connector gets registered.
+Fixes the following W=1 kernel build warning:
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+drivers/usb/typec/tcpm/tcpm.c:2107:39: warning: ‘tcpm_altmode_ops’ defined but not used [-Wunused-const-variable=]
+
+The reference to the variable 'tcpm_altmode_ops' is deleted by the
+commit a079973f462a ("usb: typec: tcpm: Remove tcpc_config configuration
+mechanism").
+
+By the way, the static functions referenced only by the variable
+'tcpm_altmode_ops' are deleted accordingly.
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- drivers/usb/typec/class.c       |  9 +++--
- drivers/usb/typec/class.h       |  4 +--
- drivers/usb/typec/port-mapper.c | 62 +++++++++++++++++++++++++++++++--
- 3 files changed, 68 insertions(+), 7 deletions(-)
+ drivers/usb/typec/tcpm/tcpm.c | 60 -------------------------------------------
+ 1 file changed, 60 deletions(-)
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index ff199e2d26c7b..f1c2d823c6509 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -1601,7 +1601,6 @@ static void typec_release(struct device *dev)
- 	ida_destroy(&port->mode_ids);
- 	typec_switch_put(port->sw);
- 	typec_mux_put(port->mux);
--	free_pld(port->pld);
- 	kfree(port->cap);
- 	kfree(port);
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index ce7af398c7c1c1f..2f89bae29c0c297 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -1365,14 +1365,6 @@ static void tcpm_queue_vdm(struct tcpm_port *port, const u32 header,
+ 	mod_vdm_delayed_work(port, 0);
  }
-@@ -2027,7 +2026,9 @@ struct typec_port *typec_register_port(struct device *parent,
- 		return ERR_PTR(ret);
- 	}
  
--	port->pld = get_pld(&port->dev);
-+	ret = typec_link_ports(port);
-+	if (ret)
-+		dev_warn(&port->dev, "failed to create symlinks (%d)\n", ret);
- 
- 	return port;
- }
-@@ -2041,8 +2042,10 @@ EXPORT_SYMBOL_GPL(typec_register_port);
-  */
- void typec_unregister_port(struct typec_port *port)
+-static void tcpm_queue_vdm_unlocked(struct tcpm_port *port, const u32 header,
+-				    const u32 *data, int cnt)
+-{
+-	mutex_lock(&port->lock);
+-	tcpm_queue_vdm(port, header, data, cnt);
+-	mutex_unlock(&port->lock);
+-}
+-
+ static void svdm_consume_identity(struct tcpm_port *port, const u32 *p, int cnt)
  {
--	if (!IS_ERR_OR_NULL(port))
-+	if (!IS_ERR_OR_NULL(port)) {
-+		typec_unlink_ports(port);
- 		device_unregister(&port->dev);
-+	}
- }
- EXPORT_SYMBOL_GPL(typec_unregister_port);
- 
-diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
-index 52294f7020a8b..aef03eb7e1523 100644
---- a/drivers/usb/typec/class.h
-+++ b/drivers/usb/typec/class.h
-@@ -79,7 +79,7 @@ extern const struct device_type typec_port_dev_type;
- extern struct class typec_mux_class;
- extern struct class typec_class;
- 
--void *get_pld(struct device *dev);
--void free_pld(void *pld);
-+int typec_link_ports(struct typec_port *connector);
-+void typec_unlink_ports(struct typec_port *connector);
- 
- #endif /* __USB_TYPEC_CLASS__ */
-diff --git a/drivers/usb/typec/port-mapper.c b/drivers/usb/typec/port-mapper.c
-index 5bee7a97242fe..fae736eb0601e 100644
---- a/drivers/usb/typec/port-mapper.c
-+++ b/drivers/usb/typec/port-mapper.c
-@@ -34,7 +34,7 @@ static int acpi_pld_match(const struct acpi_pld_info *pld1,
+ 	u32 vdo = p[VDO_INDEX_IDH];
+@@ -1705,8 +1697,6 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
+ 	 *
+ 	 * And we also have this ordering:
+ 	 * 1. alt-mode driver takes the alt-mode's lock
+-	 * 2. alt-mode driver calls tcpm_altmode_enter which takes the
+-	 *    tcpm port lock
+ 	 *
+ 	 * Dropping our lock here avoids this.
+ 	 */
+@@ -2060,56 +2050,6 @@ static int tcpm_validate_caps(struct tcpm_port *port, const u32 *pdo,
  	return 0;
  }
  
--void *get_pld(struct device *dev)
-+static void *get_pld(struct device *dev)
- {
- #ifdef CONFIG_ACPI
- 	struct acpi_pld_info *pld;
-@@ -53,7 +53,7 @@ void *get_pld(struct device *dev)
- #endif
- }
- 
--void free_pld(void *pld)
-+static void free_pld(void *pld)
- {
- #ifdef CONFIG_ACPI
- 	ACPI_FREE(pld);
-@@ -217,3 +217,61 @@ void typec_unlink_port(struct device *port)
- 	class_for_each_device(&typec_class, NULL, port, port_match_and_unlink);
- }
- EXPORT_SYMBOL_GPL(typec_unlink_port);
-+
-+static int each_port(struct device *port, void *connector)
-+{
-+	struct port_node *node;
-+	int ret;
-+
-+	node = create_port_node(port);
-+	if (IS_ERR(node))
-+		return PTR_ERR(node);
-+
-+	if (!connector_match(connector, node)) {
-+		remove_port_node(node);
-+		return 0;
-+	}
-+
-+	ret = link_port(to_typec_port(connector), node);
-+	if (ret) {
-+		remove_port_node(node->pld);
-+		return ret;
-+	}
-+
-+	get_device(connector);
-+
-+	return 0;
-+}
-+
-+int typec_link_ports(struct typec_port *con)
-+{
-+	int ret = 0;
-+
-+	con->pld = get_pld(&con->dev);
-+	if (!con->pld)
-+		return 0;
-+
-+	ret = usb_for_each_port(&con->dev, each_port);
-+	if (ret)
-+		typec_unlink_ports(con);
-+
-+	return ret;
-+}
-+
-+void typec_unlink_ports(struct typec_port *con)
-+{
-+	struct port_node *node;
-+	struct port_node *tmp;
-+
-+	mutex_lock(&con->port_list_lock);
-+
-+	list_for_each_entry_safe(node, tmp, &con->port_list, list) {
-+		__unlink_port(con, node);
-+		remove_port_node(node);
-+		put_device(&con->dev);
-+	}
-+
-+	mutex_unlock(&con->port_list_lock);
-+
-+	free_pld(con->pld);
-+}
+-static int tcpm_altmode_enter(struct typec_altmode *altmode, u32 *vdo)
+-{
+-	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
+-	int svdm_version;
+-	u32 header;
+-
+-	svdm_version = typec_get_negotiated_svdm_version(port->typec_port);
+-	if (svdm_version < 0)
+-		return svdm_version;
+-
+-	header = VDO(altmode->svid, vdo ? 2 : 1, svdm_version, CMD_ENTER_MODE);
+-	header |= VDO_OPOS(altmode->mode);
+-
+-	tcpm_queue_vdm_unlocked(port, header, vdo, vdo ? 1 : 0);
+-	return 0;
+-}
+-
+-static int tcpm_altmode_exit(struct typec_altmode *altmode)
+-{
+-	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
+-	int svdm_version;
+-	u32 header;
+-
+-	svdm_version = typec_get_negotiated_svdm_version(port->typec_port);
+-	if (svdm_version < 0)
+-		return svdm_version;
+-
+-	header = VDO(altmode->svid, 1, svdm_version, CMD_EXIT_MODE);
+-	header |= VDO_OPOS(altmode->mode);
+-
+-	tcpm_queue_vdm_unlocked(port, header, NULL, 0);
+-	return 0;
+-}
+-
+-static int tcpm_altmode_vdm(struct typec_altmode *altmode,
+-			    u32 header, const u32 *data, int count)
+-{
+-	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
+-
+-	tcpm_queue_vdm_unlocked(port, header, data, count - 1);
+-
+-	return 0;
+-}
+-
+-static const struct typec_altmode_ops tcpm_altmode_ops = {
+-	.enter = tcpm_altmode_enter,
+-	.exit = tcpm_altmode_exit,
+-	.vdm = tcpm_altmode_vdm,
+-};
+-
+ /*
+  * PD (data, control) command handling functions
+  */
 -- 
-2.30.2
+1.8.3
+
 
