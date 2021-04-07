@@ -2,174 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E9F356C46
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 14:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50AB4356D5F
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 15:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352286AbhDGMij (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Apr 2021 08:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51568 "EHLO
+        id S1344428AbhDGNfW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Apr 2021 09:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352257AbhDGMig (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Apr 2021 08:38:36 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E20C06175F;
-        Wed,  7 Apr 2021 05:38:25 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id kk2-20020a17090b4a02b02900c777aa746fso1237562pjb.3;
-        Wed, 07 Apr 2021 05:38:25 -0700 (PDT)
+        with ESMTP id S1344363AbhDGNfS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Apr 2021 09:35:18 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA17BC061756
+        for <linux-usb@vger.kernel.org>; Wed,  7 Apr 2021 06:35:07 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id e10so4984923pls.6
+        for <linux-usb@vger.kernel.org>; Wed, 07 Apr 2021 06:35:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PUjKE8eTPy2MYu9gM8lGkbrGpIC4uZ+AdNBDhybjmeg=;
-        b=RlMafCS8G388rdM86H2WtpX/m/6ZhmIBq4/TXUAsrL1YPDEI+Nw8HplZTtYLjMJDQI
-         gzlORPniQvhEEZCl3KV54wQuxFzPZQAxCRgoos/BSUWvBGssYj95bxTcRkp5O9waxihm
-         n63JlirHQfoIUNpjGRD1P9RkOHR1aOUiE9UxAe1LZ7Nkf1j0Eid88i0Hi3PMRrNkDbn7
-         zNlCRBE15Ike3ntcxAmRR10R1eZCyO1Mxdt1HJnATpraO3npFqAa/it6dom2qEYKEXik
-         rIRs0TbC+ar1TwwHdMdR734kGB26U4vxm84JvKIEyFtMLAjWVvY4jgaXmtXfc57Rq2nY
-         UY8g==
+         :cc;
+        bh=zeTxAmjoTv+uSNmE4X15tF/iEdtYFSOYC5w2e5Y7C9w=;
+        b=C4RpqTUZ5qteGvs3HzzxHI7dZ37a9IdKw61pYUC1LaSywSSyzvgPtrJMlKgNHGJJBj
+         A8P+3RWk8edS3heMtwBH8ezLYLNuf6ERWPVNScSnOD5IKcTxocbWphuoVJhIJ85VvwMi
+         T90DGbp6PQHlc3lp5g2pE/XlR4yRdeLuqmqx6kNEj3knICt3xxec6qDj7JmPVJogwgKx
+         oV4h5injoUD8jct2tPvXJrztsiyH1PDV0LO5XP1rxTvOGuzmKR7TZ0UilAPmMM7/jahq
+         /sFjU/mNGX+QzNzZAcv5A1EH1Hk+w+Ad1F7lj6qub1X3NXio+cevnd7wmzghFMc+tCpr
+         Ubwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PUjKE8eTPy2MYu9gM8lGkbrGpIC4uZ+AdNBDhybjmeg=;
-        b=Ck0M05XAm7iCUpirhPwQBpsOw+l9lN6mWegZb+xobQfOALLD0ThKyua1xg6s8ziCAT
-         eW2xqRbznvvWfNiaw3yjh9t2MGb15kCcCusM13x2oZbTnSQw4zwvBBsNPNCMBx/xTvs2
-         THRuyyQydeh7J92a/PFdNX57pOSf97FNU8ZQqTbaEu5EVVa2gZ0LhA/A2nVyklu9CO4Q
-         zh1r2aD1i5lH+Sz5/QpRr4Gd9K/R+bYy+8WBQWgrc5Z6iKVejUn3+78i7UmYruZCxjhZ
-         YySFl8z4akUNWXZb0AgKFVwj9lTw1TGw3ZyRFo/OmoRQdyDCZVVDScsbUMYNZWC9QAjZ
-         Szhw==
-X-Gm-Message-State: AOAM533jSBSwy3caDRHTfDLY8/gaIY9rIl/4aOym5FbbHrdQ5k5qQR4d
-        4oh9XQYf/sv2Nlgpyxq3hZlTOdje/JX5tPDYQpA=
-X-Google-Smtp-Source: ABdhPJytzqkPuM1b25yKVRQlYpNqFqoTfLBVXWPZOOTrwFuS7Oa+x9hJIfuvJNHOWfmXrRulQZ0UXrafXXsC30A0zAE=
-X-Received: by 2002:a17:90a:5407:: with SMTP id z7mr3180483pjh.228.1617799105256;
- Wed, 07 Apr 2021 05:38:25 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=zeTxAmjoTv+uSNmE4X15tF/iEdtYFSOYC5w2e5Y7C9w=;
+        b=C3kKHciXjI22ispdqtum+As7fKNPPiUl4hu92tIFSBdqr4EegsZfolI2BarAJo2EWa
+         RmAWP/XTMjb5GA47HsqjEI4FSDBNYwMv0xAa61B8faH+2ntc3Q/aRptnl1pfPEgWP5DQ
+         3kHtOgZbnc2QGdXrlC9alzTRo4EzFcb3+Bo0cTpO5lgjAsGUhCjXCyqxzm+eALcdLN5c
+         DrwHoPOd/YEffLdsx94KmRFjcmlgxNwuhcbk3CXXlUwnbQCFHj3MekuFwIwTm4f/mtfV
+         4IzQbzaT/z/wpKFi3m0xwk0ISA/ePqcWUEdJOUSmGFZRCsg0hNB3ElUXGtl74Gl5DBN1
+         Q4lw==
+X-Gm-Message-State: AOAM530eHaAtZWLhLL2D4DsTHw6nkyphU1jjrsEdm6wk5WXprB12XZ0q
+        qCNOjXwtXgGtbdqr/tb646m4ItnXinrcrnaGtao=
+X-Google-Smtp-Source: ABdhPJysGJIIo+nEB0h+p5XeTbFsiXZJf6VAe/cVnuleqT9xuN7Zrn8x0mdrsh/WgUr8EZ9G+KCRIVtiaBJo2DWYpuY=
+X-Received: by 2002:a17:90b:1e0a:: with SMTP id pg10mr2758386pjb.129.1617802507149;
+ Wed, 07 Apr 2021 06:35:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210406101850.3111-1-photranvan0712@gmail.com>
- <CAHp75Vf8jwhLkaHL2D6FvRJpmbBqpTzePpNqVAFVt8EhSCgxnw@mail.gmail.com> <CAG-T6mP98t6JuQ68bi0aD9PDEpLbkAVwrf-Gp7H7GLQV5rW_GQ@mail.gmail.com>
-In-Reply-To: <CAG-T6mP98t6JuQ68bi0aD9PDEpLbkAVwrf-Gp7H7GLQV5rW_GQ@mail.gmail.com>
+References: <CAHp75VeERhaPGAZc0HVs4fcDKXs+THc=_LFq_iEhWAR8vvURjw@mail.gmail.com>
+ <87pmzgk44r.fsf@kernel.org> <b4763ebe-c0ff-2d24-5385-1a1587603280@gmail.com>
+ <1f8ed83c-b2e5-327c-30da-56865e2b956b@gmail.com> <fd8d9a8a-8f57-6559-2053-4607b9da13ab@gmail.com>
+ <797f97b8-6558-35c4-2dc5-9deacdf0ba4d@synopsys.com> <ff57b956-a777-3dd6-80ca-4e9afd33ab96@gmail.com>
+ <6b3a28eb-7809-d319-d58d-520c1c7fa5d2@synopsys.com> <4a0869c9-6b71-5acd-e670-e4c06b44d62d@gmail.com>
+ <5d8459ae-4a4c-7371-6b0a-ed817e898168@gmail.com> <7963d464-44c1-f580-398c-775c694664cb@gmail.com>
+ <f24b6e66-1fdc-06f0-97b4-f2a9be3eef6b@synopsys.com> <e50114a1-f7d3-ad62-fe6d-6b8bb2b1203f@synopsys.com>
+In-Reply-To: <e50114a1-f7d3-ad62-fe6d-6b8bb2b1203f@synopsys.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 7 Apr 2021 15:38:09 +0300
-Message-ID: <CAHp75VdMLtFe6uEQiBg=9TSR1OVEvAZwpB7keTKFH5UWSa9tKw@mail.gmail.com>
-Subject: Re: [PATCH v8] USB: serial: cp210x: Add support for GPIOs on CP2108
-To:     Tran Van Pho <photranvan0712@gmail.com>
-Cc:     "johan@kernel.org" <johan@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hung.Nguyen@silabs.com" <Hung.Nguyen@silabs.com>,
-        "Tung.Pham@silabs.com" <Tung.Pham@silabs.com>,
-        Pho Tran <pho.tran@silabs.com>
+Date:   Wed, 7 Apr 2021 16:34:50 +0300
+Message-ID: <CAHp75Vf+3aeq8kb2oOO-qjC5jOE7ZWUgs2=MOa4mseOG08c+vA@mail.gmail.com>
+Subject: Re: USB network gadget / DWC3 issue
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Ferry Toth <fntoth@gmail.com>, Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        USB <linux-usb@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 7, 2021 at 6:21 AM Tran Van Pho <photranvan0712@gmail.com> wrot=
-e:
-> On Wed, Apr 7, 2021 at 5:25 AM Andy Shevchenko <andy.shevchenko@gmail.com=
-> wrote:
->> On Tuesday, April 6, 2021, Pho Tran <photranvan0712@gmail.com> wrote:
+On Wed, Apr 7, 2021 at 3:24 AM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+> Thinh Nguyen wrote:
 
 ...
 
->>> CP2108 has 16 GPIOs, So data types of several variables need to be is u=
-16
->>> instead of u8(in struct cp210x_serial_private). This doesn't affect oth=
-er
->>> CP210x devices.
->>
->> Here I am wondering if you should use 4 pins per interface. Is any point=
-er to data sheet?
-
-> In datasheet, Using 4 pins per interface isn't specified. And when settin=
-g or getting Latch
-> of GPIO, all of 16 gpios will be done on the same command. So there no di=
-fference between
-> 4 interfaces of CP2108 in terms of GPIOs.
-
-Okay, so we may have different configurations:
- 1 interface + 1 GPIO (N or M pins)
- 4 interfaces + 1 GPIO (N or M pins)
-
-...
-
->>> Because CP2108 has 16 GPIO pins, the parameter passed by cp210x functio=
-ns
->>> will be different from other CP210x devices. So need to check part numb=
-er
->>> of the device to use correct data format  before sending commands to
->>> devices.
->>>
->>> Like CP2104, CP2108 have GPIO pins with configurable options. Therefore=
-,
->>> should be mask all pins which are not in GPIO mode in cp2108_gpio_init(=
-)
->>> function.
->>
->> This I didn=E2=80=99t get. If you are talking about usage pin as GPIO, p=
-erhaps you should use valid_mask in GPIO chip structure. Otherwise you prob=
-ably need to implement a proper pinmux ops for this (and register a pin con=
-troller which the code below also suggests).
+> > I took a look at the "bad" and "normal" tracepoints. There are a few
+> > 1-second delays where the host tried to bring the device back and
+> > resume from low power:
+> >
+> >      ksoftirqd/0-10      [000] d.s.   231.501808: dwc3_gadget_ep_cmd: ep3in: cmd 'Update Transfer' [60007] params 00000000 00000000 00000000 --> status: Successful
+> >      ksoftirqd/0-10      [000] d.s.   231.501809: dwc3_readl: addr 00000000d68ecd36 value 0000a610
+> >      ksoftirqd/0-10      [000] d.s.   231.501810: dwc3_writel: addr 00000000d68ecd36 value 0000a710
+> >           <idle>-0       [000] d.h.   232.499418: dwc3_readl: addr 00000000a15e0e35 value 00000034
+> >           <idle>-0       [000] d.h.   232.499423: dwc3_readl: addr 00000000bb67b585 value 00001000
+> >           <idle>-0       [000] d.h.   232.499425: dwc3_writel: addr 00000000bb67b585 value 80001000
+> >           <idle>-0       [000] d.h.   232.499427: dwc3_writel: addr 00000000a15e0e35 value 00000034
+> >      irq/15-dwc3-476     [000] d...   232.499480: dwc3_event: event (00000401): WakeUp [U0]
+> >      irq/15-dwc3-476     [000] d...   232.499492: dwc3_event: event (00000401): WakeUp [U0]
+> >      irq/15-dwc3-476     [000] d...   232.499496: dwc3_event: event (00006088): ep2out: Transfer In Progress [0] (SIm)
+> >      irq/15-dwc3-476     [000] d...   232.499501: dwc3_complete_trb: ep2out: trb 00000000c7ce524e (E179:D170) buf 0000000008273540 size 1463 ctrl 00000818 (hlcS:sC:normal)
+> >      irq/15-dwc3-476     [000] d...   232.499518: dwc3_gadget_giveback: ep2out: req 0000000012e296cf length 73/1536 zsI ==> 0
+> >      irq/15-dwc3-476     [000] d...   232.499562: dwc3_ep_queue: ep2out: req 0000000012e296cf length 0/1536 zsI ==> -115
+> >      irq/15-dwc3-476     [000] d...   232.499601: dwc3_prepare_trb: ep2out: trb 000000008c083777 (E180:D170) buf 0000000002a7e9c0 size 1536 ctrl 00000819 (HlcS:sC:normal)
+> >
+> >
+> > Your device is operating in highspeed right? Try to turn off LPM from
+> > host and see if that helps with the speed throttling issue. (If you're
+> > using xHCI host, then set XHCI_HW_LPM_DISABLE). It may also help with
+> > the connection issue you saw.
+> >
+> > It seems to be an issue from host, but I can't tell for sure unless we
+> > have some USB traffic analyzer that shows what's going on. Have you
+> > tried different hosts?
+> >
 >
->
-> This message means 16 pins on  CP2108 can have many options like GPIO, TX=
- toggle, RX toggle, clock output for example.
-> If there are any pins set in the mode that aren't GPIO mode, we should ma=
-sk these pins at gpio_altfunc in struct cp210x_serial_private.
+> You can also disable LPM from the gadget side by setting
+> dwc->dis_enblslpm_quirk.
 
-Can those functions be changed at run time? Or is it simply one time settin=
-g?
+Ferry, it can be done by adding a corresponding property to the
+dwc3-pci.c for Intel Merrifield platform. I'll check also for my case
+and perhaps I can collect some traces in my case later on when I have
+more time for that.
 
-> I am not clear  with what you said about pinmux, But I think "gpio_altfun=
-c in struct cp210x_serial_private" has the same meaning as your idea.
 
-Yeah, but it's custom grown (I believe due to historical reasons, i.e.
-there was no pin controller framework at that time) approach.
-If pin functions may be changed at run time, it's better to have them
-described as pinmux.
-
-...
-
->>> +       __le16 gpio_lowpower_PB0;
->>> +       __le16 gpio_lowpower_PB1;
->>> +       __le16 gpio_lowpower_PB2;
->>> +       __le16 gpio_lowpower_PB3;
->>> +       __le16 gpio_lowpower_PB4;
->>> +
->>> +       __le16 gpio_latch_PB0;
->>> +       __le16 gpio_latch_PB1;
->>> +       __le16 gpio_latch_PB2;
->>> +       __le16 gpio_latch_PB3;
->>> +       __le16 gpio_latch_PB4;
->>
->>
->> Sounds to me like pin controller functions rather than GPIO.
->
-> Oh yes, This is related to the functions of pins. But we need to define i=
-t to get the state of the pins to
-> check whether It's  GPIO mode or other function.
-
-Yep, and this is pinmux functionality, no?
-
-> It's also included in vendor specified USB packet structure.
-> You can refer to https://www.silabs.com/documents/public/application-note=
-s/an978-cp210x-usb-to-uart-api-specification.pdf
-> at page34 to see struct _QUAD_PORT_CONFIG.
->
-> I have  a question, Should I need to resolve the build warning on i386 re=
-ported by the kernel test robot?
-
-If you get a warning, yes, it's better to resolve it.
-
->>> +       struct cp210x_quad_port_state reset_state;
->>> +       struct cp210x_quad_port_state suspend_state;
->>> +       u8 ipdelay_IFC[4];
->>> +       u8 enhancedfxn_IFC[4];
->>> +       u8 enhancedfxn_device;
->>> +       u8 extclkfreq[4];
->>> +} __packed;
-
---=20
+-- 
 With Best Regards,
 Andy Shevchenko
