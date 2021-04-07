@@ -2,55 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 530AE35757A
+	by mail.lfdr.de (Postfix) with ESMTP id E548F35757C
 	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 22:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355948AbhDGUHv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Apr 2021 16:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37878 "EHLO
+        id S1355926AbhDGUHw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Apr 2021 16:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355921AbhDGUHq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Apr 2021 16:07:46 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4277FC061764
-        for <linux-usb@vger.kernel.org>; Wed,  7 Apr 2021 13:07:33 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id x22so25010556ybi.1
-        for <linux-usb@vger.kernel.org>; Wed, 07 Apr 2021 13:07:33 -0700 (PDT)
+        with ESMTP id S1355911AbhDGUHt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Apr 2021 16:07:49 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A20C0613D9
+        for <linux-usb@vger.kernel.org>; Wed,  7 Apr 2021 13:07:35 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id d1so24963060ybj.15
+        for <linux-usb@vger.kernel.org>; Wed, 07 Apr 2021 13:07:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=F5lSKpfqBw4113tpCYKNPPPxEqSl+K7hf9S8zFY8ZXs=;
-        b=lCW701kZ+JEJ/QW2JJ7dmnwWvYHYvYq3p293fsSpznlbDFxn+g9T42AqV5Uc52RFq7
-         eoc096c1LrCMubBKdjr1HdE0QtPRZ0bDBqekh0sguvcOfi+ZQlrQ/dv1vpJyx87ePSYa
-         HrdO8MhB6zvfbVvFOMzRf1bp7qsEIiXwah6TdtyMiy2N/eJQYzqS6waLSp9Xd+0wEzpV
-         8FCEAdf6S2av/x7/CiekNRmGMMXpjO3lYYxUXb1Q2IciwIqT4bWFymH1XjrxpEf/XdI2
-         6H6HezOZzaa6vvDTAAQ0kCgo+pod4+tPC73kaadi3qbS8TDLgsGHNq7y/EZThjQPk+Rn
-         uNuQ==
+        bh=gni+OuRztGG9vq8fyGub8QeENwXoTEQ8rz4IMi+bKtk=;
+        b=abqPz3iC0Y6rDJvYZsAExnpkiIDKRrjm0+5nGUT9yhzRp9RfNV/jYl8B1nitNgMzqS
+         2ojpx0ugRHKAa9LhyqZOMHQYP9volsOw6i3w1ZDzrbXF8DR+kU0wpfRAwcPTZ66kP5cq
+         BptQtIDLbdeflTyXLSzUbycHzfjgpjRLN8LYNDgC8e2AgElqPIdKQsLk9thqdQnssaa+
+         2W6T/AoW7w3GqcW33ldQoSvUT+CRExK09TNbl1DfAY01/J4SE9DSG4XH/Hq1Ve9Njl0j
+         lQ9PMcWh4JRRQDXKB8uByXI4h54UanF17V+kF6vEpA+RMLNvfp+f+4BGFYuLO3Zk/ojB
+         u7uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=F5lSKpfqBw4113tpCYKNPPPxEqSl+K7hf9S8zFY8ZXs=;
-        b=OHnQo1zoJmrz237sAyN033BaZlmsnhD3MkIiufZoC5L5z1J1DAzE+fbFQB3ZSMt/1z
-         kpUht8Y5bBh+cNMCbl7841eFM882SK+pjvRSVZgjqJaJkUzeg6KXBoFpvtWRuPecIspw
-         UKgDAWrW2QXvLEfTR2Ry0Nod5OqCCz2zco4pYFaqHyRXlXa+KufWigAH4eK2VEerDPId
-         lvBtl7RUZWJfkSemZnBVjho5VQ/kErX3W/G9RGXZ2ybTj1O7rASYLgdxtHteZZA+dtaG
-         F7hGlvk4Am9wiudxYORRjggf8aTeTDEj3w0h33jykzM5cYnkzyq26N2sMADS3h94eM54
-         qVvg==
-X-Gm-Message-State: AOAM530D738TRYZnKwOZfhxxkCoNeLOrzPBQ9oRq4BYk2V8HbY6n1lQE
-        VJWRE3FC8iaylsbfoCIV/ZCfi8WA/ek=
-X-Google-Smtp-Source: ABdhPJw7Z+2udZLoChZX3ovPF/SW6IygaBHAVtC5C86xTQc7ltYKC3rUFS9ATxJNIKreRNpTo3CdgqPi9d8=
+        bh=gni+OuRztGG9vq8fyGub8QeENwXoTEQ8rz4IMi+bKtk=;
+        b=jOeN4J/VwoD+e54oaQ9xenQflBFRe9J+WtcU9HU+yuDWBQ/da2Vfs9VQyGO4NBfyVE
+         nrRRn7ExQ2g23o1+QvY9adjLrqmf+ik39XEi7eOfwnlT+IOy971lo/duGS2Bt9wtmFGq
+         N4rQfov2DKC126VJkmYFE5BYHlpyII/OymZwOoOEMhQBe+GV4a0wmC7zeFnvXAx6MsHI
+         QYdHpgjNz2es2FsSAVTIJGZsHTVJGYwEi1bIAtVmJi5p4JnPbFJ0Wk/213yb1U9oBGgg
+         jO3Z6yh09XzbFCiTH/HUONxZna+25vmGyFKr9TSRLbEhKgL/bYKTW2z6xPJ75onPtH1O
+         vMgA==
+X-Gm-Message-State: AOAM530IxflTdw2/XcS1jjBWUvP4vE+3PkbJLORYrJnsTgn1zN9tIwob
+        rlw+PPuIIDtbBXNAwVviwV50Jd/7RQ4=
+X-Google-Smtp-Source: ABdhPJykren/to6+VFAK9GoVBCT+QUQhMl3sOKzPJvq9xqM77MRf7+ZLoMPrGHCn+gHxaMhr6J/5+T8Xytw=
 X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:991:6d08:9e6d:683d])
- (user=badhri job=sendgmr) by 2002:a25:cad6:: with SMTP id a205mr3383973ybg.373.1617826053217;
- Wed, 07 Apr 2021 13:07:33 -0700 (PDT)
-Date:   Wed,  7 Apr 2021 13:07:21 -0700
+ (user=badhri job=sendgmr) by 2002:a25:d07:: with SMTP id 7mr6804424ybn.135.1617826055040;
+ Wed, 07 Apr 2021 13:07:35 -0700 (PDT)
+Date:   Wed,  7 Apr 2021 13:07:22 -0700
 In-Reply-To: <20210407200723.1914388-1-badhri@google.com>
-Message-Id: <20210407200723.1914388-4-badhri@google.com>
+Message-Id: <20210407200723.1914388-5-badhri@google.com>
 Mime-Version: 1.0
 References: <20210407200723.1914388-1-badhri@google.com>
 X-Mailer: git-send-email 2.31.1.295.g9ea45b61b8-goog
-Subject: [PATCH v2 4/6] usb: typec: tcpm: Honour pSnkStdby requirement during negotiation
+Subject: [PATCH v2 5/6] usb: typec: tcpm: Allow slow charging loops to comply
+ to pSnkStby
 From:   Badhri Jagan Sridharan <badhri@google.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -65,147 +66,75 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From PD Spec:
-The Sink Shall transition to Sink Standby before a positive or
-negative voltage transition of VBUS. During Sink Standby
-the Sink Shall reduce its power draw to pSnkStdby. This allows
-the Source to manage the voltage transition as well as
-supply sufficient operating current to the Sink to maintain PD
-operation during the transition. The Sink Shall
-complete this transition to Sink Standby within tSnkStdby
-after evaluating the Accept Message from the Source. The
-transition when returning to Sink operation from Sink Standby
-Shall be completed within tSnkNewPower. The
-pSnkStdby requirement Shall only apply if the Sink power draw
-is higher than this level.
+When a PD charger advertising Rp-3.0 is connected to a sink port, the
+sink port current limit would 3A, during SNK_DISCOVERY, till power
+negotiation starts. Once the negotiation starts the power limit needs
+to drop down to pSnkStby(500mA @ 5V) and to negotiated current limit
+once the explicit contract is in place. Not all charging loops can ramp
+up to 3A and drop down to 500mA within tSnkStdby which is 15ms. The port
+partner might hard reset if tSnkStdby is not met.
 
-The above requirement needs to be met to prevent hard resets
-from port partner.
+To solve this problem, this patch introduces slow-charger-loop which
+when set makes the port request PD_P_SNK_STDBY_MW upon entering
+SNK_DISCOVERY(instead of 3A or the 1.5A during SNK_DISCOVERY) and the
+actual currrent limit after RX of PD_CTRL_PSRDY for PD link or during
+SNK_READY for non-pd link.
 
-Without the patch: (5V/3A during SNK_DISCOVERY all the way through
-explicit contract)
-[   95.711984] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
-[   95.712007] state change TOGGLING -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
-[   95.712017] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
-[   95.837190] VBUS on
-[   95.882075] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
-[   95.882082] state change SNK_DEBOUNCED -> SNK_ATTACHED [rev3 NONE_AMS]
-[   95.882086] polarity 1
-[   95.883151] set_auto_vbus_discharge_threshold mode:0 pps_active:n vbus:5000 ret:0
-[   95.883441] enable vbus discharge ret:0
-[   95.883445] Requesting mux state 1, usb-role 2, orientation 2
-[   95.883776] state change SNK_ATTACHED -> SNK_STARTUP [rev3 NONE_AMS]
-[   95.883879] pending state change SNK_STARTUP -> SNK_DISCOVERY @ 500 ms [rev3 NONE_AMS]
-[   96.038960] VBUS on
-[   96.383939] state change SNK_STARTUP -> SNK_DISCOVERY [delayed 500 ms]
-[   96.383946] Setting voltage/current limit 5000 mV 3000 mA
-[   96.383961] vbus=0 charge:=1
-[   96.386044] state change SNK_DISCOVERY -> SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
-[   96.386309] pending state change SNK_WAIT_CAPABILITIES -> HARD_RESET_SEND @ 450 ms [rev3 NONE_AMS]
-[   96.394404] PD RX, header: 0x2161 [1]
-[   96.394408]  PDO 0: type 0, 5000 mV, 3000 mA [E]
-[   96.394410]  PDO 1: type 0, 9000 mV, 2000 mA []
-[   96.394412] state change SNK_WAIT_CAPABILITIES -> SNK_NEGOTIATE_CAPABILITIES [rev2 POWER_NEGOTIATION]
-[   96.394416] Setting usb_comm capable false
-[   96.395083] cc=0 cc1=0 cc2=5 vbus=0 vconn=sink polarity=1
-[   96.395089] Requesting PDO 1: 9000 mV, 2000 mA
-[   96.395093] PD TX, header: 0x1042
-[   96.397404] PD TX complete, status: 0
-[   96.397424] pending state change SNK_NEGOTIATE_CAPABILITIES -> HARD_RESET_SEND @ 60 ms [rev2 POWER_NEGOTIATION]
-[   96.400826] PD RX, header: 0x363 [1]
-[   96.400829] state change SNK_NEGOTIATE_CAPABILITIES -> SNK_TRANSITION_SINK [rev2 POWER_NEGOTIATION]
-[   96.400832] pending state change SNK_TRANSITION_SINK -> HARD_RESET_SEND @ 500 ms [rev2 POWER_NEGOTIATION]
-[   96.577315] PD RX, header: 0x566 [1]
-[   96.577321] Setting voltage/current limit 9000 mV 2000 mA
-[   96.578363] set_auto_vbus_discharge_threshold mode:3 pps_active:n vbus:9000 ret:0
-[   96.578370] state change SNK_TRANSITION_SINK -> SNK_READY [rev2 POWER_NEGOTIATION]
-
-With the patch:
-[  168.398573] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
-[  168.398605] state change TOGGLING -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
-[  168.398619] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
-[  168.522348] VBUS on
-[  168.568676] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
-[  168.568684] state change SNK_DEBOUNCED -> SNK_ATTACHED [rev3 NONE_AMS]
-[  168.568688] polarity 1
-[  168.569867] set_auto_vbus_discharge_threshold mode:0 pps_active:n vbus:5000 ret:0
-[  168.570158] enable vbus discharge ret:0
-[  168.570161] Requesting mux state 1, usb-role 2, orientation 2
-[  168.570504] state change SNK_ATTACHED -> SNK_STARTUP [rev3 NONE_AMS]
-[  168.570634] pending state change SNK_STARTUP -> SNK_DISCOVERY @ 500 ms [rev3 NONE_AMS]
-[  169.070689] state change SNK_STARTUP -> SNK_DISCOVERY [delayed 500 ms]
-[  169.070695] Setting voltage/current limit 5000 mV 3000 mA
-[  169.070702] vbus=0 charge:=1
-[  169.072719] state change SNK_DISCOVERY -> SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
-[  169.073145] pending state change SNK_WAIT_CAPABILITIES -> HARD_RESET_SEND @ 450 ms [rev3 NONE_AMS]
-[  169.077162] PD RX, header: 0x2161 [1]
-[  169.077172]  PDO 0: type 0, 5000 mV, 3000 mA [E]
-[  169.077178]  PDO 1: type 0, 9000 mV, 2000 mA []
-[  169.077183] state change SNK_WAIT_CAPABILITIES -> SNK_NEGOTIATE_CAPABILITIES [rev2 POWER_NEGOTIATION]
-[  169.077191] Setting usb_comm capable false
-[  169.077753] cc=0 cc1=0 cc2=5 vbus=0 vconn=sink polarity=1
-[  169.077759] Requesting PDO 1: 9000 mV, 2000 mA
-[  169.077762] PD TX, header: 0x1042
-[  169.079990] PD TX complete, status: 0
-[  169.080013] pending state change SNK_NEGOTIATE_CAPABILITIES -> HARD_RESET_SEND @ 60 ms [rev2 POWER_NEGOTIATION]
-[  169.083183] VBUS on
-[  169.084195] PD RX, header: 0x363 [1]
-[  169.084200] state change SNK_NEGOTIATE_CAPABILITIES -> SNK_TRANSITION_SINK [rev2 POWER_NEGOTIATION]
-[  169.084206] Setting standby current 5000 mV @ 500 mA
-[  169.084209] Setting voltage/current limit 5000 mV 500 mA
-[  169.084220] pending state change SNK_TRANSITION_SINK -> HARD_RESET_SEND @ 500 ms [rev2 POWER_NEGOTIATION]
-[  169.260222] PD RX, header: 0x566 [1]
-[  169.260227] Setting voltage/current limit 9000 mV 2000 mA
-[  169.261315] set_auto_vbus_discharge_threshold mode:3 pps_active:n vbus:9000 ret:0
-[  169.261321] state change SNK_TRANSITION_SINK -> SNK_READY [rev2 POWER_NEGOTIATION]
-[  169.261570] AMS POWER_NEGOTIATION finished
-
-Fixes: f0690a25a140b ("staging: typec: USB Type-C Port Manager (tcpm)")
 Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 ---
- drivers/usb/typec/tcpm/tcpm.c | 17 +++++++++++++++++
- include/linux/usb/pd.h        |  2 ++
- 2 files changed, 19 insertions(+)
+ drivers/usb/typec/tcpm/tcpm.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index d1d03ee90d8f..770b2edd9a04 100644
+index 770b2edd9a04..b5bed6866a2b 100644
 --- a/drivers/usb/typec/tcpm/tcpm.c
 +++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -4131,6 +4131,23 @@ static void run_state_machine(struct tcpm_port *port)
- 		}
- 		break;
- 	case SNK_TRANSITION_SINK:
-+		/* From the USB PD spec:
-+		 * "The Sink Shall transition to Sink Standby before a positive or
-+		 * negative voltage transition of VBUS. During Sink Standby
-+		 * the Sink Shall reduce its power draw to pSnkStdby."
-+		 *
-+		 * This is not applicable to PPS though as the port can continue
-+		 * to draw negotiated power without switching to standby.
-+		 */
-+		if (port->supply_voltage != port->req_supply_voltage && !port->pps_data.active &&
-+		    port->current_limit * port->supply_voltage / 1000 > PD_P_SNK_STDBY_MW) {
-+			u32 stdby_ma = port->supply_voltage ? PD_P_SNK_STDBY_MW * 1000 /
-+				port->supply_voltage : 0;
-+			tcpm_log(port, "Setting standby current %u mV @ %u mA",
-+				 port->supply_voltage, stdby_ma);
-+			tcpm_set_current_limit(port, stdby_ma, port->supply_voltage);
-+		}
-+		fallthrough;
- 	case SNK_TRANSITION_SINK_VBUS:
- 		tcpm_set_state(port, hard_reset_state(port),
- 			       PD_T_PS_TRANSITION);
-diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
-index 70d681918d01..bf00259493e0 100644
---- a/include/linux/usb/pd.h
-+++ b/include/linux/usb/pd.h
-@@ -493,4 +493,6 @@ static inline unsigned int rdo_max_power(u32 rdo)
- #define PD_N_CAPS_COUNT		(PD_T_NO_RESPONSE / PD_T_SEND_SOURCE_CAP)
- #define PD_N_HARD_RESET_COUNT	2
+@@ -459,6 +459,12 @@ struct tcpm_port {
+ 	/* Auto vbus discharge status */
+ 	bool auto_vbus_discharge_enabled;
  
-+#define PD_P_SNK_STDBY_MW	2500	/* 2500 mW */
-+
- #endif /* __LINUX_USB_PD_H */
++	/*
++	 * When set, port requests PD_P_SNK_STDBY_MW upon entering SNK_DISCOVERY and
++	 * the actual currrent limit after RX of PD_CTRL_PSRDY for PD link,
++	 * SNK_READY for non-pd link.
++	 */
++	bool slow_charger_loop;
+ #ifdef CONFIG_DEBUG_FS
+ 	struct dentry *dentry;
+ 	struct mutex logbuffer_lock;	/* log buffer access lock */
+@@ -4047,9 +4053,12 @@ static void run_state_machine(struct tcpm_port *port)
+ 		break;
+ 	case SNK_DISCOVERY:
+ 		if (port->vbus_present) {
+-			tcpm_set_current_limit(port,
+-					       tcpm_get_current_limit(port),
+-					       5000);
++			u32 current_lim = (!port->slow_charger_loop ||
++					   (tcpm_get_current_limit(port) <=
++					    PD_P_SNK_STDBY_MW / 5)) ?
++				tcpm_get_current_limit(port) :
++				PD_P_SNK_STDBY_MW / 5;
++			tcpm_set_current_limit(port, current_lim, 5000);
+ 			tcpm_set_charge(port, true);
+ 			tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
+ 			break;
+@@ -4161,6 +4170,8 @@ static void run_state_machine(struct tcpm_port *port)
+ 			port->pwr_opmode = TYPEC_PWR_MODE_PD;
+ 		}
+ 
++		if (!port->pd_capable && port->slow_charger_loop)
++			tcpm_set_current_limit(port, tcpm_get_current_limit(port), 5000);
+ 		tcpm_swap_complete(port, 0);
+ 		tcpm_typec_connect(port);
+ 		mod_enable_frs_delayed_work(port, 0);
+@@ -5763,6 +5774,7 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+ 	port->typec_caps.type = ret;
+ 	port->port_type = port->typec_caps.type;
+ 
++	port->slow_charger_loop = fwnode_property_read_bool(fwnode, "slow-charger-loop");
+ 	if (port->port_type == TYPEC_PORT_SNK)
+ 		goto sink;
+ 
 -- 
 2.31.1.295.g9ea45b61b8-goog
 
