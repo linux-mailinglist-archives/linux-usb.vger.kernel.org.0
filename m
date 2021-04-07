@@ -2,73 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B69C356B22
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 13:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C09356B97
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 13:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245708AbhDGL0F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Apr 2021 07:26:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38018 "EHLO mail.kernel.org"
+        id S230280AbhDGL4r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Apr 2021 07:56:47 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:58550 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245698AbhDGL0E (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 7 Apr 2021 07:26:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D30DE6102A;
-        Wed,  7 Apr 2021 11:25:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617794753;
-        bh=fp9e7C8temPHioHnfMeuShTqKsHUij0RHUo6TqZrCNs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ckP6pwJ+dw5GZcDOONZJTO3eldsrYzYtzmpJWlUFJYYiPkWVV5P3gltO1FyyMr4Ha
-         mCUF4kKyPhoRYLKfhzNwA3T4TFSKmJK5IWx13/OcXybWG1/pREvOYr1xoQRsktUZml
-         z4wlxd5MfDC+nFo3f5vOdQX6k19Q5W0yZtECoV/VmdyT21cBR26bWkUU83PsQhr5FX
-         newpyk6G3e39jleTDs2NzyOwRPtiJ9MjJP/kQewANJxZWkhHnRdJspyDoVHVR2TYBS
-         zvAsV9tWufIh0ikwGEl1u6yN0VZO7pqcIOgICoEFYr67fHhGIBGe3gYtDgpGXGQwZy
-         JhbbphEYNBDUw==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lU6Jd-0000Sv-Dv; Wed, 07 Apr 2021 13:25:45 +0200
-Date:   Wed, 7 Apr 2021 13:25:45 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Anthony Mallet <anthony.mallet@laas.fr>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/3] Revert "USB: cdc-acm: fix rounding error in
- TIOCSSERIAL"
-Message-ID: <YG2WuTPjPhLPR/v7@hovoldconsulting.com>
-References: <20210407102845.32720-1-johan@kernel.org>
- <20210407102845.32720-2-johan@kernel.org>
- <24685.37311.759816.776098@gargle.gargle.HOWL>
+        id S238913AbhDGL4q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 7 Apr 2021 07:56:46 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1617796597; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=HH+jlV8cWpLIyhC3IJoj/4gWZj94WvZRBdnU6G5qdno=;
+ b=wOCESvX7hDSjBbFEbV6SQiHIVnkEE2duoRaO6MLq/OIAOIybD8NxryDAHqv4TDNSZUpVdPrl
+ vB+n2lztHpU4CI6P7qjE0Wieqh+7QTmWAGMnFuDH45+1lhVGjPI2jXYe3rddm7tZ/ncu5SPq
+ 3eJxesKeRPajVkdv1vlh2WVTr+8=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 606d9dee03cfff3452fa179e (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 07 Apr 2021 11:56:30
+ GMT
+Sender: kathirav=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 22AC0C43462; Wed,  7 Apr 2021 11:56:30 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: kathirav)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E38BBC433CA;
+        Wed,  7 Apr 2021 11:56:28 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24685.37311.759816.776098@gargle.gargle.HOWL>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 07 Apr 2021 17:26:28 +0530
+From:   Kathiravan T <kathirav@codeaurora.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Baruch Siach <baruch@tkos.co.il>, Felipe Balbi <balbi@kernel.org>,
+        linux-usb@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Balaji Prakash J <bjagadee@codeaurora.org>
+Subject: Re: [PATCH] usb: dwc3: reference clock configuration
+In-Reply-To: <f3042097-8569-5882-06db-ae56e05cac59@synopsys.com>
+References: <8fc38cb73afd31269f1ea0c28e73604c53cebb17.1612764006.git.baruch@tkos.co.il>
+ <f3042097-8569-5882-06db-ae56e05cac59@synopsys.com>
+Message-ID: <8cc9617dc62be17ac3a9420e7750b0ee@codeaurora.org>
+X-Sender: kathirav@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 07, 2021 at 01:04:31PM +0200, Anthony Mallet wrote:
-> On Wednesday  7 Apr 2021, at 12:28, Johan Hovold wrote:
-> > With HZ=250, the default 0.5 second value of close_delay is converted to
-> > 125 jiffies when set and is converted back to 50 centiseconds by
-> > TIOCGSERIAL as expected (not 12 cs as was claimed).
+On 2021-03-31 06:47, Thinh Nguyen wrote:
+> Baruch Siach wrote:
+>> From: Balaji Prakash J <bjagadee@codeaurora.org>
+>> 
+>> DWC_USB3_GFLADJ and DWC_USB3_GUCTL registers contain options
+>> to control the behavior of controller with respect to SOF and ITP.
+>> The reset values of these registers are aligned for 19.2 MHz
+>> reference clock source. This change will add option to override
+>> these settings for reference clock other than 19.2 MHz
+>> 
+>> Tested on IPQ6018 SoC based CP01 board with 24MHz reference clock.
+>> 
+>> Signed-off-by: Balaji Prakash J <bjagadee@codeaurora.org>
+>> [ baruch: mention tested hardware ]
+>> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>> ---
+>>  .../devicetree/bindings/usb/dwc3.txt          |  5 ++
+>>  drivers/usb/dwc3/core.c                       | 52 
+>> +++++++++++++++++++
+>>  drivers/usb/dwc3/core.h                       | 12 +++++
+>>  3 files changed, 69 insertions(+)
+>> 
+>> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt 
+>> b/Documentation/devicetree/bindings/usb/dwc3.txt
+>> index 1aae2b6160c1..4ffa87b697dc 100644
+>> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
+>> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+>> @@ -89,6 +89,11 @@ Optional properties:
+>>   - snps,quirk-frame-length-adjustment: Value for GFLADJ_30MHZ field 
+>> of GFLADJ
+>>  	register for post-silicon frame length adjustment when the
+>>  	fladj_30mhz_sdbnd signal is invalid or incorrect.
+>> + - snps,quirk-ref-clock-adjustment: Value for GFLADJ_REFCLK_* fields 
+>> of GFLADJ
+>> +	register for reference clock other than 19.2 MHz is used.
+>> + - snps,quirk-ref-clock-period: Value for REFCLKPER filed of GUCTL. 
+>> This field
+>> +	indicates in terms of nano seconds the period of ref_clk. To 
+>> calculate the
+>> +	ideal value, REFCLKPER = (1/ref_clk in Hz)*10^9.
 > 
-> It was "12" (instead of 50) because the conversion gor TIOCGSERIAL was
-> initially broken, and that was fixed in the previous commit
-> 633e2b2ded739a34bd0fb1d8b5b871f7e489ea29
-
-Right, so this patch is still just broken. The missing jiffies
-conversion had already been added.
-
-> > For completeness: With different default values for these parameters or
-> > with a HZ value not divisible by two, the lack of rounding when setting
-> > the default values in tty_port_init() could result in an -EPERM being
-> > returned, but this is hardly something we need to worry about.
+> Why is this a quirk? It's not a quirk. The user can inform the ref_clk
+> period to the controller here.
 > 
-> The -EPERM is harmful when a regular user wants to update other
-> members of serial_struct without changing the close delays,
-> e.g. ASYNC_LOW_LATENCY, which is granted to regular users.
+> The default value from GUCTL.REFCLKPER is a value from coreConsultant
+> setting. The designer knows what period it should be and should 
+> properly
+> set it if the default is not correctly set.
 
-You're missing the point; -EPERM will *not* be returned -- and this
-patch was never needed.
+Thanks Thinh for your inputs. Can we have the DT property for both the 
+GUCTL.REFCLKPER and GFLADJ.REFCLK* fields?
+Since GFLADJ.REFCLK* field values derived based on the GUCTL.REFCLKPER. 
+In other words, are you fine with the
+approach followed here? If so, we can work on the nitpicks and send the 
+V2.
 
-Johan
+Please let us know your thoughts on this.
+
+> BR,
+> Thinh
+
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
+member of Code Aurora Forum, hosted by The Linux Foundation
