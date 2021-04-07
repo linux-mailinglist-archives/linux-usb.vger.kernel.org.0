@@ -2,131 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 709DF3571D1
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 18:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E013571CD
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Apr 2021 18:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234841AbhDGQJz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Apr 2021 12:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236541AbhDGQJA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Apr 2021 12:09:00 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4B7C06175F
-        for <linux-usb@vger.kernel.org>; Wed,  7 Apr 2021 09:08:20 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id qo10so18196775ejb.6
-        for <linux-usb@vger.kernel.org>; Wed, 07 Apr 2021 09:08:20 -0700 (PDT)
+        id S234929AbhDGQJy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Apr 2021 12:09:54 -0400
+Received: from mail-eopbgr20047.outbound.protection.outlook.com ([40.107.2.47]:51486
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236439AbhDGQI4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 7 Apr 2021 12:08:56 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n5UkW2DrdyQMfuEpP+DOlth31juhqdqM31cFXsHWJQpbzS3ch+E+RUBk5rOEVSuSRe0EdVxhxYGGYsD3E3DJYLcgRoKF2L9YmoyEcPB1E1uR0b/nxCTEp9Zaeu8alS12SSd1Ct7+bwm2lyM47f5Oh4fnaP0bdhf+PW7u0nVHneety4JD853+/KnJwCYtD5qlq1C78BbFTe/BgWuVtjLvHlSl4CojZ97mmAZUVvrUpyaTKQ9Ld/O2MAEyQU6ukqql8o/gg0RR2R0qgCqulBchdGHqNF3ZB8lbjX/MJUCz2n8mxxRbOeMQDZ1n9Gvq3sxwGJqGNc5XwsUJBoVhdhbcPg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3bXXnAXOGfYO8jHtVzAsYOOifV5I7cV+pKXVb1ROw5s=;
+ b=n6PEnd9BQgW37swWkK1xzsezCKKSnmg972szlwqtbPU+tsHsrPUt4BRgNu9ezHF4RRLT2SQBPuWzAvCMJ+L7SPTYIN6v6oXed+c4SMmpp4tTQpPgf03t9Th7Wz9inv7uX3NFkL+K4aZ9nqNdVMqZjN6BIqzMTxAoO+A28+qBRgYHT7oZeZVFgJuIoVAf1HqT9RT72eaZd6bNitPxli0OioYIcKoK9awSIGi2m3ht8kD3u2cZDmkD5OlLM7W21f5Ll//IzazdjpoRP9IJoYiJuGzPSy/YkkjOOflkPiG623DLRXmGfKU10kAqbYjqIEkKG0Y3xoaHZedp3PV9aDkfMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
+ dkim=pass header.d=diasemi.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=hrg41gQkrUgfP3PYFdvbHCDr3ftIh62DD1TSpXqszXg=;
-        b=C03pPUaQIHl4xQmQXzQbsln/659VCLrMjQb42DmSu5MqoopADXOIxrycsb2F0ol1eq
-         X5clORo99GUNGwAybryEFN085tlF9XyPLzc/bBBIJmEwNR1kW4L3rV3UzOEM12Zk86RL
-         7mLwPxc/zVQuorWG+SzfdKxGJcQEQwnJbYQCyJz9AxGJE7TQaFcZzF6cj2/iVodPTtXz
-         XdjbdKT92Z9EgyYDDDgCWbHun47Wvhuxgul/OE6m2hayNQrwcIYjvcuES5zRTheNzAi6
-         LuJhbqetXfCCXdFzHvOvbaL3K8+bJ6Avn0w+zy40X08AazOwNqGm+lF8AQg4LJZA2Yf3
-         eUow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=hrg41gQkrUgfP3PYFdvbHCDr3ftIh62DD1TSpXqszXg=;
-        b=ksD96qwD+QCBvJFv4lPxX2y4zHZSJF0RTZUT1X/ZryhmI34RxrUbJFw7Q+dg1yzBue
-         wu3Mo6lyVJ9VKjOm6jugA7shI4KvMrpBbGqJMOKqbiYbhBDM/hEdmjNUqhdtRTL6qlSF
-         6ear8lseSxXvaN1PUv7xhNAtbbMa6y3rwKvUjCWs0W7II9pQFdGq//h5V/0U4gBVYWGS
-         oI2tlFKYHLPAqUJ61HFHXTyzwHOlGIPBw8QgQQWH5FYAT+i536OoAzwc2flUBDuJd2RC
-         4pJDoZoJMlcs4jHJG5KHhaR6UUK+mqOamBrOFLrBRti7xrfk8w2VVrTcd1YuAAqG3ru5
-         NahQ==
-X-Gm-Message-State: AOAM5307VIeZZ9thao0Sa2xlzM53uempP0rP8/QbNH7VrUT3ge8hgYzp
-        ELgLyL56fRYCy6FAkwrQEYCYw6koBtWcfg==
-X-Google-Smtp-Source: ABdhPJxSYwyGpJ4HMF65aM+IrgLibtT1D1uiYBY9arWEcG+rF7IPsygxbMN5TMAzke7IFHm106WqzA==
-X-Received: by 2002:a17:906:a51:: with SMTP id x17mr4609469ejf.25.1617811698842;
-        Wed, 07 Apr 2021 09:08:18 -0700 (PDT)
-Received: from ?IPv6:2001:981:6fec:1:221b:f673:e91:2500? ([2001:981:6fec:1:221b:f673:e91:2500])
-        by smtp.gmail.com with ESMTPSA id o6sm15500177edw.24.2021.04.07.09.08.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Apr 2021 09:08:18 -0700 (PDT)
-Subject: Re: USB network gadget / DWC3 issue
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        USB <linux-usb@vger.kernel.org>
-References: <CAHp75VeERhaPGAZc0HVs4fcDKXs+THc=_LFq_iEhWAR8vvURjw@mail.gmail.com>
- <87pmzgk44r.fsf@kernel.org> <b4763ebe-c0ff-2d24-5385-1a1587603280@gmail.com>
- <1f8ed83c-b2e5-327c-30da-56865e2b956b@gmail.com>
- <fd8d9a8a-8f57-6559-2053-4607b9da13ab@gmail.com>
- <797f97b8-6558-35c4-2dc5-9deacdf0ba4d@synopsys.com>
- <ff57b956-a777-3dd6-80ca-4e9afd33ab96@gmail.com>
- <6b3a28eb-7809-d319-d58d-520c1c7fa5d2@synopsys.com>
- <4a0869c9-6b71-5acd-e670-e4c06b44d62d@gmail.com>
- <5d8459ae-4a4c-7371-6b0a-ed817e898168@gmail.com>
- <7963d464-44c1-f580-398c-775c694664cb@gmail.com>
- <f24b6e66-1fdc-06f0-97b4-f2a9be3eef6b@synopsys.com>
- <e50114a1-f7d3-ad62-fe6d-6b8bb2b1203f@synopsys.com>
- <CAHp75Vf+3aeq8kb2oOO-qjC5jOE7ZWUgs2=MOa4mseOG08c+vA@mail.gmail.com>
-From:   Ferry Toth <fntoth@gmail.com>
-Message-ID: <8eac7e37-d0ab-010b-7a2f-6c3c67083f79@gmail.com>
-Date:   Wed, 7 Apr 2021 18:08:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
-MIME-Version: 1.0
-In-Reply-To: <CAHp75Vf+3aeq8kb2oOO-qjC5jOE7ZWUgs2=MOa4mseOG08c+vA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ d=dialogsemiconductor.onmicrosoft.com;
+ s=selector1-dialogsemiconductor-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3bXXnAXOGfYO8jHtVzAsYOOifV5I7cV+pKXVb1ROw5s=;
+ b=UEqYDZInEjSey7vYzE7e2K9z+4McGQ/acV9Yx0wgQRB7GsD64Goz4FcwD0UWtWbmU9Pk8Pcb77524Na42OTUE3rN2XtmYsTt9f4oSpsWFDaS7hjRPAcn/3vWbAk0ZG2nXXKDCEZksnFBtdmejXKcUouUgXDQFt6p+RKcOJgu0Dw=
+Received: from AM9PR10MB4134.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:1fe::17)
+ by AM0PR10MB3028.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:15b::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3999.26; Wed, 7 Apr
+ 2021 16:08:44 +0000
+Received: from AM9PR10MB4134.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::a0bc:c738:6a49:c60]) by AM9PR10MB4134.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::a0bc:c738:6a49:c60%4]) with mapi id 15.20.3999.032; Wed, 7 Apr 2021
+ 16:08:43 +0000
+From:   Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Kyle Tso <kyletso@google.com>
+Subject: RE: [PATCH v1 3/6] usb: typec: tcpm: update power supply once partner
+ accepts
+Thread-Topic: [PATCH v1 3/6] usb: typec: tcpm: update power supply once
+ partner accepts
+Thread-Index: AQHXKoVUQFsHLYQoSUClgf4trRM3oaqpOx+A
+Date:   Wed, 7 Apr 2021 16:08:43 +0000
+Message-ID: <AM9PR10MB4134EC102F0017423E6822B480759@AM9PR10MB4134.EURPRD10.PROD.OUTLOOK.COM>
+References: <20210406013643.3280369-1-badhri@google.com>
+ <20210406013643.3280369-4-badhri@google.com>
+In-Reply-To: <20210406013643.3280369-4-badhri@google.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: google.com; dkim=none (message not signed)
+ header.d=none;google.com; dmarc=none action=none header.from=diasemi.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [147.161.166.124]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a8dfcb39-0e8b-4d0d-4c07-08d8f9df6aee
+x-ms-traffictypediagnostic: AM0PR10MB3028:
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR10MB30287B897680179BC6D6590CA7759@AM0PR10MB3028.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:551;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Tx/69RQ/m3LJ6+y9K6RbXRmuaADBHDglcCaxGV6QpQMXJzJIDkcF/9Y/AU8wWE1wWFZ1NxJL0kaBbw3BPxCUlOohGtMLKo+2hlfyc7wSNi6y/y94yvyYnOXo4zfI73SlHlu3RrBtwKos6NYygJ6vWoHkEU9PvpzM/4BQHFOE0HXj5eFGOzM4XJy2AyyYBqwbrm1xwkrkc4KrhTz82YSJBVfp7ROKj3BU1ENwFbVFuAamddu57ESnb3fVxLby9T7RYcENjId+k3F6Ov0MM6radH6a3w40hyYKBKbqopfajg9EBCputGSG4A8j+M/B/VPyHsn/K17zDLVkAXTJ88LPsCXDuJL7UolPOj/pQTrf6Ly/9ujpTOETUjptFzf9BHbsuw8LOjPqwE+oNieyTh0Srn4HnVMZjH0QW2hfsZMsd0833In+d/1y6n1thTAAocWFghECQEDVKNOtLsnlNYfriav8chjvrtL3fVPPor1k5Z1xAC3SfpGAVBkP9ia2MAE36ApR9sfbdJuGRQkddoS+1VG00ZhpQJAkyVhY/AiqcQG4T41nkONVtvhnQdNUcy70UAF2TAyrTQFN9Uw0V7TGJZjUOeL6RATCKuNOR6ivM5O6ykbetsNfNIV+rb0wpvGM3E8IL4aeINU2OQr+z2SqhXb7X5SgsBv8bZi7c7aLbd8=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR10MB4134.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(136003)(366004)(39850400004)(396003)(8936002)(83380400001)(33656002)(26005)(9686003)(478600001)(110136005)(4326008)(7696005)(66476007)(66556008)(52536014)(54906003)(76116006)(2906002)(66946007)(66446008)(64756008)(55016002)(186003)(38100700001)(6506007)(5660300002)(316002)(71200400001)(8676002)(53546011)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?SVZENFdTY1hUT2FwdGhJVXJaNzY3RWQxeERob3V2NE9Bdkx0dnJET0dDN3Bz?=
+ =?utf-8?B?elZBL1MvYWdRdHRFZ1FPK05OTlRadUxlRUJTNUlsZHllUnhYbkRHK243azJE?=
+ =?utf-8?B?ZkhTcWMzTjZUMkJOelk0S1V4ZitxTjVnUytTWUxjRFozSFA5eUZkdmVCWDV4?=
+ =?utf-8?B?MWRKQVZoTldIbE0zb2hQdGNaRXdKRnRhM0hRcVcvcTVPV0xGaFFIS0xUQ0hO?=
+ =?utf-8?B?MjNjY2VqK3NEbE0zdElNbGZ3Ujh4OC8rMnQ5RXh0S3hHTUpWSC8ybVFKTEZm?=
+ =?utf-8?B?bzNZTHAzeW1nOTAvbjJ6NjRnRHkwajRsVDlSekJBQkFOYkd2NXJWZkRjRjlF?=
+ =?utf-8?B?Znpjczk5NGc1U0hwZ1VweVN3RnBRR3R0UHkwK2hDdE9GTlRYMGpRcU9aK1px?=
+ =?utf-8?B?ZjdtbVUzUHM2c2x0R1k4c3plTmtkcGs1WjFubFEwWE5UcnpLYlNBOXNva2xz?=
+ =?utf-8?B?WjBEQStTU0V3ME4vUWdkcSs2bW1Eb2tUZjRqbUJiSzFzN2ZzN2lWQTdYS0lW?=
+ =?utf-8?B?ZDBraFBtSjZ1OFRiOThmdGN3SjVoTVNEcWUydEpZUUkyb1I0Y1NZVjAwOFY1?=
+ =?utf-8?B?Y2hqUmVkQWxya3NGdWRJTk10T2dFWmdyRnQwbW0rN2hmRE1ZR2pPQzlKT01U?=
+ =?utf-8?B?UU51R1dKaHE0cFlZWHphU0xUYUkwR1ZySW1vVTlYaHpmNGZKZXlISWxYSXlJ?=
+ =?utf-8?B?UkxUYmQ3dlkveTZ6SndQSzMvdDR1d1FLaHhRZCtYVzNBN1FIRDlTVUZGMXVE?=
+ =?utf-8?B?RWlTTU5keVJJbHp2bVNUNGFjWlhuVnQreGJBdnNpWDdMZVlON0Q5SUk3aDVk?=
+ =?utf-8?B?Um1VYkdMOWJMdEp4LytnUzBYNXl5TjFzUG5ocG1vWmJneEFqeXVHZGNnbEYy?=
+ =?utf-8?B?V05jQ3RhRWVWNlVveTVBU09ETWJEVEF1anhUNGFXNE9ETVRXbG9DaDB1NTFn?=
+ =?utf-8?B?Y2VaNFZ1OFBRNlUxOVpTM3hFdW1sTXlFcUhFYUtyUHhlQnJkM0lUOWlkczdY?=
+ =?utf-8?B?c0Y4QVRpUnNMTFMyRzI3QnlPaERKSzBBcUFOWkhQeFZlUm1SQlZrV25vWjFN?=
+ =?utf-8?B?Z1dIdTFKSUp2T3I0anVtSTdQZ1BNRHFaMWVxdlllbXh5WXRJNGVmSldFRWd5?=
+ =?utf-8?B?dlc4RDZHbTNnREYvSVZtdERrUzRmMnhxV0pYcEJ5OVpLN0JXT0V0MVVZZndM?=
+ =?utf-8?B?RzFrNFBhMDc5RkJwQUJmczRCUVVxSS9NNkhkUW95TUs1a3F4Zk41L05rT1Jy?=
+ =?utf-8?B?Snk1Y2hmWlVpdSsvNUxXTEZmSXEwVTk1clZqdzdIaFVWWkxpNmVtc0RYQ2dF?=
+ =?utf-8?B?eXV6R2dSdTJtUG8ydjFvRml3eHVHbHVpQURXVkZyV295RlIvbkVldWtKYXlw?=
+ =?utf-8?B?d0E4ek4rQ2ZyZ2xETTF1d2loaklGV2F6aE1pZGdrclJsdUtnK2NRdTg5OEhR?=
+ =?utf-8?B?dTRTYzRkUUpUa0xnLzl2ZHMvVW9qdDNOTzNZaW5BLy94SmFjaHlEUzllL2Zk?=
+ =?utf-8?B?aHFnQzJ3TnZEQyszMWJ3dnRLRVlMY1dWd3Q3K2kxaE9GSEJERVE3TzM1UGFS?=
+ =?utf-8?B?eCt4OHVmbEp5dXRRTEhaaFUrSFo3cDZlclU3dTFoUWx4S0dYb3ZTS2dBVVBF?=
+ =?utf-8?B?dzUwQkFVUi9SRzY5Ukt5b1VjT3FVSEVjUmhkNnZOSkVRelJiM2VLUnZTcmpG?=
+ =?utf-8?B?TGl4dWN4L0lrZWhpOGIyRXRvMHJuSXVXbDZYeHM3OUJoMExhY2wweFczUDZX?=
+ =?utf-8?Q?NkH92cwPX9Xjfl48mcICHU/4QwmJOM11uUQQUt9?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: diasemi.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR10MB4134.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8dfcb39-0e8b-4d0d-4c07-08d8f9df6aee
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Apr 2021 16:08:43.9273
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Z8O2Vs4fLwSLh/L9jDYQ1QPEVx/CXKHuHpShZwECKjHDWfg7R9jZL17/OgpOBvehJowV4aBcha63RYYcoFDYgi15FCD0fsNMM+n2C84cne4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB3028
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-Op 07-04-2021 om 15:34 schreef Andy Shevchenko:
-> On Wed, Apr 7, 2021 at 3:24 AM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
->> Thinh Nguyen wrote:
-> ...
->
->>> I took a look at the "bad" and "normal" tracepoints. There are a few
->>> 1-second delays where the host tried to bring the device back and
->>> resume from low power:
->>>
->>>       ksoftirqd/0-10      [000] d.s.   231.501808: dwc3_gadget_ep_cmd: ep3in: cmd 'Update Transfer' [60007] params 00000000 00000000 00000000 --> status: Successful
->>>       ksoftirqd/0-10      [000] d.s.   231.501809: dwc3_readl: addr 00000000d68ecd36 value 0000a610
->>>       ksoftirqd/0-10      [000] d.s.   231.501810: dwc3_writel: addr 00000000d68ecd36 value 0000a710
->>>            <idle>-0       [000] d.h.   232.499418: dwc3_readl: addr 00000000a15e0e35 value 00000034
->>>            <idle>-0       [000] d.h.   232.499423: dwc3_readl: addr 00000000bb67b585 value 00001000
->>>            <idle>-0       [000] d.h.   232.499425: dwc3_writel: addr 00000000bb67b585 value 80001000
->>>            <idle>-0       [000] d.h.   232.499427: dwc3_writel: addr 00000000a15e0e35 value 00000034
->>>       irq/15-dwc3-476     [000] d...   232.499480: dwc3_event: event (00000401): WakeUp [U0]
->>>       irq/15-dwc3-476     [000] d...   232.499492: dwc3_event: event (00000401): WakeUp [U0]
->>>       irq/15-dwc3-476     [000] d...   232.499496: dwc3_event: event (00006088): ep2out: Transfer In Progress [0] (SIm)
->>>       irq/15-dwc3-476     [000] d...   232.499501: dwc3_complete_trb: ep2out: trb 00000000c7ce524e (E179:D170) buf 0000000008273540 size 1463 ctrl 00000818 (hlcS:sC:normal)
->>>       irq/15-dwc3-476     [000] d...   232.499518: dwc3_gadget_giveback: ep2out: req 0000000012e296cf length 73/1536 zsI ==> 0
->>>       irq/15-dwc3-476     [000] d...   232.499562: dwc3_ep_queue: ep2out: req 0000000012e296cf length 0/1536 zsI ==> -115
->>>       irq/15-dwc3-476     [000] d...   232.499601: dwc3_prepare_trb: ep2out: trb 000000008c083777 (E180:D170) buf 0000000002a7e9c0 size 1536 ctrl 00000819 (HlcS:sC:normal)
->>>
->>>
->>> Your device is operating in highspeed right? Try to turn off LPM from
->>> host and see if that helps with the speed throttling issue. (If you're
->>> using xHCI host, then set XHCI_HW_LPM_DISABLE). It may also help with
->>> the connection issue you saw.
->>>
->>> It seems to be an issue from host, but I can't tell for sure unless we
->>> have some USB traffic analyzer that shows what's going on. Have you
->>> tried different hosts?
->>>
->> You can also disable LPM from the gadget side by setting
->> dwc->dis_enblslpm_quirk.
-> Ferry, it can be done by adding a corresponding property to the
-> dwc3-pci.c for Intel Merrifield platform. I'll check also for my case
-> and perhaps I can collect some traces in my case later on when I have
-> more time for that.
->
-Thanks guys. Indeed is xHCI on the host side. I'll try also from another 
-machine later.
-
-I'll try adding a property and report back (but not today, is my wedding 
-day :-) )
-
+T24gMDYgQXByaWwgMjAyMSAwMjozNywgQmFkaHJpIEphZ2FuIFNyaWRoYXJhbiB3cm90ZToNCg0K
+PiBwb3dlcl9zdXBwbHlfY2hhbmdlZCBuZWVkcyB0byBiZSBjYWxsZWQgdG8gbm90aWZ5IGNsaWVu
+dHMNCj4gYWZ0ZXIgdGhlIHBhcnRuZXIgYWNjZXB0cyB0aGUgcmVxdWVzdGVkIHZhbHVlcyBmb3Ig
+dGhlIHBwcw0KPiBjYXNlLg0KPiANCj4gRml4ZXM6IGYyYThhYTA1M2MxNzYgKCJ0eXBlYzogdGNw
+bTogUmVwcmVzZW50IHNvdXJjZSBzdXBwbHkgdGhyb3VnaA0KPiBwb3dlcl9zdXBwbHkiKQ0KPiBT
+aWduZWQtb2ZmLWJ5OiBCYWRocmkgSmFnYW4gU3JpZGhhcmFuIDxiYWRocmlAZ29vZ2xlLmNvbT4N
+Cj4gLS0tDQoNCk1pc3NpbmcgY29tbWl0IGluZm9ybWF0aW9uIGFzaWRlOg0KDQpSZXZpZXdlZC1i
+eTogQWRhbSBUaG9tc29uIDxBZGFtLlRob21zb24uT3BlbnNvdXJjZUBkaWFzZW1pLmNvbT4NCg0K
+PiAgZHJpdmVycy91c2IvdHlwZWMvdGNwbS90Y3BtLmMgfCA0ICstLS0NCj4gIDEgZmlsZSBjaGFu
+Z2VkLCAxIGluc2VydGlvbigrKSwgMyBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9k
+cml2ZXJzL3VzYi90eXBlYy90Y3BtL3RjcG0uYyBiL2RyaXZlcnMvdXNiL3R5cGVjL3RjcG0vdGNw
+bS5jDQo+IGluZGV4IGQ0Mzc3NGNjMmNjZi4uNzcwOGIwMTAwOWNiIDEwMDY0NA0KPiAtLS0gYS9k
+cml2ZXJzL3VzYi90eXBlYy90Y3BtL3RjcG0uYw0KPiArKysgYi9kcml2ZXJzL3VzYi90eXBlYy90
+Y3BtL3RjcG0uYw0KPiBAQCAtMjU2NCw2ICsyNTY0LDcgQEAgc3RhdGljIHZvaWQgdGNwbV9wZF9j
+dHJsX3JlcXVlc3Qoc3RydWN0IHRjcG1fcG9ydA0KPiAqcG9ydCwNCj4gIAkJCXBvcnQtPnBwc19k
+YXRhLm1heF9jdXJyID0gcG9ydC0NCj4gPnBwc19kYXRhLnJlcV9tYXhfY3VycjsNCj4gIAkJCXBv
+cnQtPnJlcV9zdXBwbHlfdm9sdGFnZSA9IHBvcnQtDQo+ID5wcHNfZGF0YS5yZXFfb3V0X3ZvbHQ7
+DQo+ICAJCQlwb3J0LT5yZXFfY3VycmVudF9saW1pdCA9IHBvcnQtPnBwc19kYXRhLnJlcV9vcF9j
+dXJyOw0KPiArCQkJcG93ZXJfc3VwcGx5X2NoYW5nZWQocG9ydC0+cHN5KTsNCj4gIAkJCXRjcG1f
+c2V0X3N0YXRlKHBvcnQsIFNOS19UUkFOU0lUSU9OX1NJTkssIDApOw0KPiAgCQkJYnJlYWs7DQo+
+ICAJCWNhc2UgU09GVF9SRVNFVF9TRU5EOg0KPiBAQCAtMzEzMiw3ICszMTMzLDYgQEAgc3RhdGlj
+IHVuc2lnbmVkIGludCB0Y3BtX3BkX3NlbGVjdF9wcHNfYXBkbyhzdHJ1Y3QNCj4gdGNwbV9wb3J0
+ICpwb3J0KQ0KPiAgCQkJCQkJICAgICAgcG9ydC0NCj4gPnBwc19kYXRhLnJlcV9vdXRfdm9sdCkp
+Ow0KPiAgCQlwb3J0LT5wcHNfZGF0YS5yZXFfb3BfY3VyciA9IG1pbihwb3J0LT5wcHNfZGF0YS5t
+YXhfY3VyciwNCj4gIAkJCQkJCSBwb3J0LT5wcHNfZGF0YS5yZXFfb3BfY3Vycik7DQo+IC0JCXBv
+d2VyX3N1cHBseV9jaGFuZ2VkKHBvcnQtPnBzeSk7DQo+ICAJfQ0KPiANCj4gIAlyZXR1cm4gc3Jj
+X3BkbzsNCj4gQEAgLTM1NTcsOCArMzU1Nyw2IEBAIHN0YXRpYyB2b2lkIHRjcG1fcmVzZXRfcG9y
+dChzdHJ1Y3QgdGNwbV9wb3J0ICpwb3J0KQ0KPiAgCXBvcnQtPnNpbmtfY2FwX2RvbmUgPSBmYWxz
+ZTsNCj4gIAlpZiAocG9ydC0+dGNwYy0+ZW5hYmxlX2ZycykNCj4gIAkJcG9ydC0+dGNwYy0+ZW5h
+YmxlX2Zycyhwb3J0LT50Y3BjLCBmYWxzZSk7DQo+IC0NCj4gLQlwb3dlcl9zdXBwbHlfY2hhbmdl
+ZChwb3J0LT5wc3kpOw0KPiAgfQ0KPiANCj4gIHN0YXRpYyB2b2lkIHRjcG1fZGV0YWNoKHN0cnVj
+dCB0Y3BtX3BvcnQgKnBvcnQpDQo+IC0tDQo+IDIuMzEuMC4yMDguZzQwOWY4OTlmZjAtZ29vZw0K
+DQo=
