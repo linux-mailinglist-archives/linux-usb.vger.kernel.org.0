@@ -2,271 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB93C3587E2
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 17:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BCF3587FC
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 17:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbhDHPJj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 11:09:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43340 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231863AbhDHPJi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Apr 2021 11:09:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C676610F9;
-        Thu,  8 Apr 2021 15:09:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617894567;
-        bh=Q1tb7NsUPYnKrwr/XvbzX2fwGPuRF4h+16uhX9RhtsM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=AiOiWukeoQy1QPe9ohrxnpP8WVxClmjNuvVddbsGgp/dlFIMLD85C3r9gkbkPrrRT
-         KpicuGzzZAXT3xOtCFHBP4w4kreKt8k9L5iigFSMF188t1qdEovrBGQbvCJTSnG39J
-         Ic9RjfhoMM6mZbZ61FQXWoZHZHzkojHSDEC9oKNbH8O8+Vd4Dvrakh5BrzKKM19UO+
-         SPR0jBXkHqsY6b6nbyAlj1geq0HPNGIYsYvAOaDqiX6pxh0HmZn2xTw8qZoYRyjQMN
-         REVT/gHc6LEf28Reg63Vm1Kywir68QkU5GikmuQhQwZNj9/XteI0mlwvYMlapL51rP
-         jX9Ux9DoNefRg==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lUWHb-0004Oq-6e; Thu, 08 Apr 2021 17:09:23 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: serial: do not use tty class device for debugging
-Date:   Thu,  8 Apr 2021 17:08:59 +0200
-Message-Id: <20210408150859.16868-1-johan@kernel.org>
-X-Mailer: git-send-email 2.26.3
+        id S232144AbhDHPPW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 11:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231843AbhDHPPM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 11:15:12 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D086C061762
+        for <linux-usb@vger.kernel.org>; Thu,  8 Apr 2021 08:15:01 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id c15so2101818ilj.1
+        for <linux-usb@vger.kernel.org>; Thu, 08 Apr 2021 08:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=85kkfIswLuoyUKdChOk6bwmW6em+yMiFLM6GSD1Vz+w=;
+        b=UxR8guO2+QBmjvBXTHfU3TrnjTLXGB/rpN4yGxgMKaCnZlErxegdiuCocndr1XwZJE
+         Z03P9f+y8KRjRhEkURkpiqAmwMsH7jKqFWMWmZXv6CfJM1rJsisARVXNKS8xVykGd223
+         RzxGRkO9zQLdLg/2I7lR0zgQZ27SLyYpmu9CE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=85kkfIswLuoyUKdChOk6bwmW6em+yMiFLM6GSD1Vz+w=;
+        b=YgGLd76TJsnUny9xrVURLic5s56bastxmuokOSqsbjykStCuMGn6dQej6lp0NCEDNi
+         4dIXcoP1ewIU/0c+E2ef8wjn/sNSDVIdTLjKeU+SNoXaC3/R05lxhxWvMDCf2XJn7sYx
+         mEXKqPXEs+/z363TUFEmWEza1t5YIKp2HgGQ102UCGPc/2VVmei6gp5YoxNl0Q22tyAt
+         wpeEPWauCpSTlHIorcLkHDjI1UoIF7P6OVeRrJ6lIU9czwUagC0ThTtGpYOMQhse8Fz2
+         6kzBNJW33K6MzvsURv2nkrTHY1ZnLIdhRD7bbducEG8cUhOTJ+A23F8g4Z8tUrEMzLvV
+         pn9g==
+X-Gm-Message-State: AOAM533Fbs+6hhaOj/blg55Q+IjzesV8zfW1bB1/LzYZdFlNtS19aCNs
+        fnjawclmAphwT+T22QNhcMCFoA==
+X-Google-Smtp-Source: ABdhPJxT/m27imyzig9yj82cGktoO9X19cPVaCJyT7gU/zz+xQ6gKHUzQqpYgW9AjM/rlrnCWujPZw==
+X-Received: by 2002:a05:6e02:1989:: with SMTP id g9mr7297653ilf.40.1617894900846;
+        Thu, 08 Apr 2021 08:15:00 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id i13sm15843090ilm.86.2021.04.08.08.14.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Apr 2021 08:15:00 -0700 (PDT)
+Subject: Re: [PATCH -next v2] usbip: vudc: fix missing unlock on error in
+ usbip_sockfd_store()
+To:     Ye Bin <yebin10@huawei.com>, valentina.manea.m@gmail.com,
+        shuah@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        hulkci@huawei.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20210408112305.1022247-1-yebin10@huawei.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <9f8939f4-5292-fc0f-7a09-ee3f6de4a132@linuxfoundation.org>
+Date:   Thu, 8 Apr 2021 09:14:59 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210408112305.1022247-1-yebin10@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use the port struct device rather than tty class device for debugging.
+On 4/8/21 5:23 AM, Ye Bin wrote:
+> Add the missing unlock before return from function usbip_sockfd_store()
+> in the error handling case.
+> 
+> Fixes: bd8b82042269 ("usbip: vudc synchronize sysfs code paths")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> ---
+>   drivers/usb/usbip/vudc_sysfs.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/usbip/vudc_sysfs.c b/drivers/usb/usbip/vudc_sysfs.c
+> index f7633ee655a1..d1cf6b51bf85 100644
+> --- a/drivers/usb/usbip/vudc_sysfs.c
+> +++ b/drivers/usb/usbip/vudc_sysfs.c
+> @@ -156,12 +156,14 @@ static ssize_t usbip_sockfd_store(struct device *dev,
+>   		tcp_rx = kthread_create(&v_rx_loop, &udc->ud, "vudc_rx");
+>   		if (IS_ERR(tcp_rx)) {
+>   			sockfd_put(socket);
+> +			mutex_unlock(&udc->ud.sysfs_lock);
+>   			return -EINVAL;
+>   		}
+>   		tcp_tx = kthread_create(&v_tx_loop, &udc->ud, "vudc_tx");
+>   		if (IS_ERR(tcp_tx)) {
+>   			kthread_stop(tcp_rx);
+>   			sockfd_put(socket);
+> +			mutex_unlock(&udc->ud.sysfs_lock);
+>   			return -EINVAL;
+>   		}
+>   
+> 
 
-Note that while USB serial doesn't support serdev yet (due to serdev not
-handling hotplugging), serdev ttys do not have a corresponding class
-device and would have been logged using a "(NULL device *):" prefix.
+Thank you for finding and fixing this.
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/metro-usb.c  |  4 ++--
- drivers/usb/serial/upd78f0730.c |  7 +++----
- drivers/usb/serial/usb-serial.c | 32 ++++++++++++++++----------------
- 3 files changed, 21 insertions(+), 22 deletions(-)
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-diff --git a/drivers/usb/serial/metro-usb.c b/drivers/usb/serial/metro-usb.c
-index 0bfe4459c37f..f9ce9e7b9b80 100644
---- a/drivers/usb/serial/metro-usb.c
-+++ b/drivers/usb/serial/metro-usb.c
-@@ -299,7 +299,7 @@ static int metrousb_tiocmset(struct tty_struct *tty,
- 	unsigned long flags = 0;
- 	unsigned long control_state = 0;
- 
--	dev_dbg(tty->dev, "%s - set=%d, clear=%d\n", __func__, set, clear);
-+	dev_dbg(&port->dev, "%s - set=%d, clear=%d\n", __func__, set, clear);
- 
- 	spin_lock_irqsave(&metro_priv->lock, flags);
- 	control_state = metro_priv->control_state;
-@@ -334,7 +334,7 @@ static void metrousb_unthrottle(struct tty_struct *tty)
- 	/* Submit the urb to read from the port. */
- 	result = usb_submit_urb(port->interrupt_in_urb, GFP_ATOMIC);
- 	if (result)
--		dev_err(tty->dev,
-+		dev_err(&port->dev,
- 			"failed submitting interrupt in urb error code=%d\n",
- 			result);
- }
-diff --git a/drivers/usb/serial/upd78f0730.c b/drivers/usb/serial/upd78f0730.c
-index 26d7b003b7e3..63d4a784ae45 100644
---- a/drivers/usb/serial/upd78f0730.c
-+++ b/drivers/usb/serial/upd78f0730.c
-@@ -182,7 +182,6 @@ static void upd78f0730_port_remove(struct usb_serial_port *port)
- 
- static int upd78f0730_tiocmget(struct tty_struct *tty)
- {
--	struct device *dev = tty->dev;
- 	struct upd78f0730_port_private *private;
- 	struct usb_serial_port *port = tty->driver_data;
- 	int signals;
-@@ -197,7 +196,7 @@ static int upd78f0730_tiocmget(struct tty_struct *tty)
- 	res = ((signals & UPD78F0730_DTR) ? TIOCM_DTR : 0) |
- 		((signals & UPD78F0730_RTS) ? TIOCM_RTS : 0);
- 
--	dev_dbg(dev, "%s - res = %x\n", __func__, res);
-+	dev_dbg(&port->dev, "%s - res = %x\n", __func__, res);
- 
- 	return res;
- }
-@@ -205,10 +204,10 @@ static int upd78f0730_tiocmget(struct tty_struct *tty)
- static int upd78f0730_tiocmset(struct tty_struct *tty,
- 			unsigned int set, unsigned int clear)
- {
--	struct device *dev = tty->dev;
- 	struct usb_serial_port *port = tty->driver_data;
- 	struct upd78f0730_port_private *private;
- 	struct upd78f0730_set_dtr_rts request;
-+	struct device *dev = &port->dev;
- 	int res;
- 
- 	private = usb_get_serial_port_data(port);
-@@ -241,10 +240,10 @@ static int upd78f0730_tiocmset(struct tty_struct *tty,
- 
- static void upd78f0730_break_ctl(struct tty_struct *tty, int break_state)
- {
--	struct device *dev = tty->dev;
- 	struct upd78f0730_port_private *private;
- 	struct usb_serial_port *port = tty->driver_data;
- 	struct upd78f0730_set_dtr_rts request;
-+	struct device *dev = &port->dev;
- 
- 	private = usb_get_serial_port_data(port);
- 
-diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
-index 255f562ef1a0..98b33b1b5357 100644
---- a/drivers/usb/serial/usb-serial.c
-+++ b/drivers/usb/serial/usb-serial.c
-@@ -281,7 +281,7 @@ static int serial_open(struct tty_struct *tty, struct file *filp)
- {
- 	struct usb_serial_port *port = tty->driver_data;
- 
--	dev_dbg(tty->dev, "%s\n", __func__);
-+	dev_dbg(&port->dev, "%s\n", __func__);
- 
- 	return tty_port_open(&port->port, tty, filp);
- }
-@@ -310,7 +310,7 @@ static void serial_hangup(struct tty_struct *tty)
- {
- 	struct usb_serial_port *port = tty->driver_data;
- 
--	dev_dbg(tty->dev, "%s\n", __func__);
-+	dev_dbg(&port->dev, "%s\n", __func__);
- 
- 	tty_port_hangup(&port->port);
- }
-@@ -319,7 +319,7 @@ static void serial_close(struct tty_struct *tty, struct file *filp)
- {
- 	struct usb_serial_port *port = tty->driver_data;
- 
--	dev_dbg(tty->dev, "%s\n", __func__);
-+	dev_dbg(&port->dev, "%s\n", __func__);
- 
- 	tty_port_close(&port->port, tty, filp);
- }
-@@ -339,7 +339,7 @@ static void serial_cleanup(struct tty_struct *tty)
- 	struct usb_serial *serial;
- 	struct module *owner;
- 
--	dev_dbg(tty->dev, "%s\n", __func__);
-+	dev_dbg(&port->dev, "%s\n", __func__);
- 
- 	/* The console is magical.  Do not hang up the console hardware
- 	 * or there will be tears.
-@@ -367,7 +367,7 @@ static int serial_write(struct tty_struct *tty, const unsigned char *buf,
- 	if (port->serial->dev->state == USB_STATE_NOTATTACHED)
- 		goto exit;
- 
--	dev_dbg(tty->dev, "%s - %d byte(s)\n", __func__, count);
-+	dev_dbg(&port->dev, "%s - %d byte(s)\n", __func__, count);
- 
- 	retval = port->serial->type->write(tty, port, buf, count);
- 	if (retval < 0)
-@@ -380,7 +380,7 @@ static int serial_write_room(struct tty_struct *tty)
- {
- 	struct usb_serial_port *port = tty->driver_data;
- 
--	dev_dbg(tty->dev, "%s\n", __func__);
-+	dev_dbg(&port->dev, "%s\n", __func__);
- 
- 	return port->serial->type->write_room(tty);
- }
-@@ -390,7 +390,7 @@ static int serial_chars_in_buffer(struct tty_struct *tty)
- 	struct usb_serial_port *port = tty->driver_data;
- 	struct usb_serial *serial = port->serial;
- 
--	dev_dbg(tty->dev, "%s\n", __func__);
-+	dev_dbg(&port->dev, "%s\n", __func__);
- 
- 	if (serial->disconnected)
- 		return 0;
-@@ -403,7 +403,7 @@ static void serial_wait_until_sent(struct tty_struct *tty, int timeout)
- 	struct usb_serial_port *port = tty->driver_data;
- 	struct usb_serial *serial = port->serial;
- 
--	dev_dbg(tty->dev, "%s\n", __func__);
-+	dev_dbg(&port->dev, "%s\n", __func__);
- 
- 	if (!port->serial->type->wait_until_sent)
- 		return;
-@@ -418,7 +418,7 @@ static void serial_throttle(struct tty_struct *tty)
- {
- 	struct usb_serial_port *port = tty->driver_data;
- 
--	dev_dbg(tty->dev, "%s\n", __func__);
-+	dev_dbg(&port->dev, "%s\n", __func__);
- 
- 	if (port->serial->type->throttle)
- 		port->serial->type->throttle(tty);
-@@ -428,7 +428,7 @@ static void serial_unthrottle(struct tty_struct *tty)
- {
- 	struct usb_serial_port *port = tty->driver_data;
- 
--	dev_dbg(tty->dev, "%s\n", __func__);
-+	dev_dbg(&port->dev, "%s\n", __func__);
- 
- 	if (port->serial->type->unthrottle)
- 		port->serial->type->unthrottle(tty);
-@@ -501,7 +501,7 @@ static int serial_ioctl(struct tty_struct *tty,
- 	struct usb_serial_port *port = tty->driver_data;
- 	int retval = -ENOIOCTLCMD;
- 
--	dev_dbg(tty->dev, "%s - cmd 0x%04x\n", __func__, cmd);
-+	dev_dbg(&port->dev, "%s - cmd 0x%04x\n", __func__, cmd);
- 
- 	switch (cmd) {
- 	case TIOCMIWAIT:
-@@ -520,7 +520,7 @@ static void serial_set_termios(struct tty_struct *tty, struct ktermios *old)
- {
- 	struct usb_serial_port *port = tty->driver_data;
- 
--	dev_dbg(tty->dev, "%s\n", __func__);
-+	dev_dbg(&port->dev, "%s\n", __func__);
- 
- 	if (port->serial->type->set_termios)
- 		port->serial->type->set_termios(tty, port, old);
-@@ -532,7 +532,7 @@ static int serial_break(struct tty_struct *tty, int break_state)
- {
- 	struct usb_serial_port *port = tty->driver_data;
- 
--	dev_dbg(tty->dev, "%s\n", __func__);
-+	dev_dbg(&port->dev, "%s\n", __func__);
- 
- 	if (port->serial->type->break_ctl)
- 		port->serial->type->break_ctl(tty, break_state);
-@@ -579,7 +579,7 @@ static int serial_tiocmget(struct tty_struct *tty)
- {
- 	struct usb_serial_port *port = tty->driver_data;
- 
--	dev_dbg(tty->dev, "%s\n", __func__);
-+	dev_dbg(&port->dev, "%s\n", __func__);
- 
- 	if (port->serial->type->tiocmget)
- 		return port->serial->type->tiocmget(tty);
-@@ -591,7 +591,7 @@ static int serial_tiocmset(struct tty_struct *tty,
- {
- 	struct usb_serial_port *port = tty->driver_data;
- 
--	dev_dbg(tty->dev, "%s\n", __func__);
-+	dev_dbg(&port->dev, "%s\n", __func__);
- 
- 	if (port->serial->type->tiocmset)
- 		return port->serial->type->tiocmset(tty, set, clear);
-@@ -603,7 +603,7 @@ static int serial_get_icount(struct tty_struct *tty,
- {
- 	struct usb_serial_port *port = tty->driver_data;
- 
--	dev_dbg(tty->dev, "%s\n", __func__);
-+	dev_dbg(&port->dev, "%s\n", __func__);
- 
- 	if (port->serial->type->get_icount)
- 		return port->serial->type->get_icount(tty, icount);
--- 
-2.26.3
-
+thanks,
+-- Shuah
