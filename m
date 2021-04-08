@@ -2,36 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD4735836B
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 14:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D71358419
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 15:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbhDHMjc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 8 Apr 2021 08:39:32 -0400
-Received: from customer.clientshostname.com ([185.180.198.188]:35156 "EHLO
-        DS7920844.clientshostname.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231493AbhDHMjc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 08:39:32 -0400
-X-Greylist: delayed 24142 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Apr 2021 08:39:32 EDT
-Received: from IP-130-181.dataclub.eu (localhost [IPv6:::1])
-        by DS7920844.clientshostname.com (Postfix) with ESMTP id 4B96B4293
-        for <linux-usb@vger.kernel.org>; Thu,  8 Apr 2021 01:42:51 -0400 (EDT)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S231221AbhDHNE4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 09:04:56 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:16412 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229741AbhDHNEy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 09:04:54 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FGLz11g8yzkjgH;
+        Thu,  8 Apr 2021 21:02:53 +0800 (CST)
+Received: from [10.67.102.118] (10.67.102.118) by
+ DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
+ 14.3.498.0; Thu, 8 Apr 2021 21:04:18 +0800
+Subject: Re: [PATCH 1/2] USB:ehci:Add a whitelist for EHCI controllers
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <mathias.nyman@intel.com>, <stern@rowland.harvard.edu>,
+        <liudongdong3@huawei.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kong.kongxinwei@hisilicon.com>,
+        <yisen.zhuang@huawei.com>
+References: <1617873073-37371-1-git-send-email-liulongfang@huawei.com>
+ <1617873073-37371-2-git-send-email-liulongfang@huawei.com>
+ <YG7LO2DJMThbeJ5W@kroah.com>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <13446834-afc5-e713-d232-36c771059712@huawei.com>
+Date:   Thu, 8 Apr 2021 21:04:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Loan Proposal
-To:     linux-usb@vger.kernel.org
-From:   " Amir Saeed" <amirsaeed1015@gmail.com>
-Date:   Thu, 08 Apr 2021 08:42:50 +0300
-Reply-To: amirsaeed1015@gmail.com
-Message-Id: <20210408054252.4B96B4293@DS7920844.clientshostname.com>
+In-Reply-To: <YG7LO2DJMThbeJ5W@kroah.com>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.118]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greetings,
+On 2021/4/8 17:22, Greg KH Wrote:
+> On Thu, Apr 08, 2021 at 05:11:12PM +0800, Longfang Liu wrote:
+>> Some types of EHCI controllers do not have SBRN registers.
+>> By comparing the white list, the operation of reading the SBRN
+>> registers is skipped.
+>>
+>> Subsequent EHCI controller types without SBRN registers can be
+>> directly added to the white list.
+>>
+>> The current patch does not affect the drive function.
+>>
+>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+>> ---
+>>  drivers/usb/host/ehci-pci.c | 27 +++++++++++++++++++++++----
+>>  1 file changed, 23 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+>> index 3c3820a..6a30afa 100644
+>> --- a/drivers/usb/host/ehci-pci.c
+>> +++ b/drivers/usb/host/ehci-pci.c
+>> @@ -47,6 +47,28 @@ static inline bool is_bypassed_id(struct pci_dev *pdev)
+>>  	return !!pci_match_id(bypass_pci_id_table, pdev);
+>>  }
+>>  
+>> +static const struct usb_nosbrn_whitelist_entry {
+>> +	unsigned short vendor;
+>> +	unsigned short device;
+> 
+> u16 here please.
+> 
+>> +} usb_nosbrn_whitelist[] = {
+>> +	/* STMICRO ConneXT has no sbrn register */
+>> +	{PCI_VENDOR_ID_STMICRO, PCI_DEVICE_ID_STMICRO_USB_HOST},
+>> +	{}
+> 
+> trailing , please.
+> 
 
-I am the investment officer of a UAE based investment company who are ready to fund projects outside UAE, in the form of debt finance. We grant loans to both Corporate and private entities at a low interest rate of 3% ROI per annum.
+Is it necessary to add "," at the end here?
 
+>> +};
+>> +
+>> +static bool usb_nosbrn_whitelist_check(struct pci_dev *pdev)
+>> +{
+>> +	const struct usb_nosbrn_whitelist_entry *entry;
+>> +
+>> +	for (entry = usb_nosbrn_whitelist; entry->vendor; entry++) {
+>> +		if (pdev->vendor == entry->vendor &&
+>> +		    pdev->device == entry->device)
+>> +			return true;
+>> +	}
+>> +
+>> +	return false;
+>> +}
+>> +
+>>  /*
+>>   * 0x84 is the offset of in/out threshold register,
+>>   * and it is the same offset as the register of 'hostpc'.
+>> @@ -288,10 +310,7 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
+>>  	}
+>>  
+>>  	/* Serial Bus Release Number is at PCI 0x60 offset */
+>> -	if (pdev->vendor == PCI_VENDOR_ID_STMICRO
+>> -	    && pdev->device == PCI_DEVICE_ID_STMICRO_USB_HOST)
+>> -		;	/* ConneXT has no sbrn register */
+>> -	else
+>> +	if (!usb_nosbrn_whitelist_check(pdev))
+> 
+> Doing this as a "negative" is hard to understand.  Should this just be:
+> 	forbid_sbrn_read()
+> or something like that?
+> 
+> The term "whitelist" is not a good thing to use as it does not really
+> explain anything here.
+> 
+> thanks,
+> 
+> greg k-h
+> .
+> 
 Thanks
-investment officer
+Longfang.
