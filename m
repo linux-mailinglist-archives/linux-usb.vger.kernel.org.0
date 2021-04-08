@@ -2,80 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0A22357DFA
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 10:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B484357E07
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 10:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbhDHIW6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 04:22:58 -0400
-Received: from mga18.intel.com ([134.134.136.126]:61098 "EHLO mga18.intel.com"
+        id S229720AbhDHI2Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 04:28:24 -0400
+Received: from mga04.intel.com ([192.55.52.120]:55274 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229554AbhDHIW6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Apr 2021 04:22:58 -0400
-IronPort-SDR: t682/d3xdaMAImFzw2DgTKBdYw0vSXTJiYRdoxVg1smzs1/JLClNx8IWHOOeCGomNlPxGaMUog
- k+zoKpN4tfvA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9947"; a="181028767"
+        id S229539AbhDHI2X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Apr 2021 04:28:23 -0400
+IronPort-SDR: +tgpD1L8WZdhec3W44xIKeMcix3GvUvbyTkY/R+L98xJnP9KxiGD73VmZn9yExNhCoga68iU2b
+ GgVigh/gH0Vw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9947"; a="191332665"
 X-IronPort-AV: E=Sophos;i="5.82,205,1613462400"; 
-   d="scan'208";a="181028767"
+   d="scan'208";a="191332665"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2021 01:22:46 -0700
-IronPort-SDR: z1/1PwhVcmfxJEbrVgjWsE8eSNzW+CTsJBrNvarhwgRIKhK/XLZleD8F9MXZcW6mYVxq88hJ66
- XJlCTD45AGbA==
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2021 01:28:12 -0700
+IronPort-SDR: GlAvcAPZuSIMQFgeRhWj7Qtb64brTKGxSvkBexW2plL6uEXg5UVBfWA08kDWZK+rpsPp9N+/t5
+ aMfR0cR21EUw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,205,1613462400"; 
-   d="scan'208";a="519764987"
+   d="scan'208";a="519766809"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 08 Apr 2021 01:22:40 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 08 Apr 2021 11:22:40 +0300
-Date:   Thu, 8 Apr 2021 11:22:40 +0300
+  by fmsmga001.fm.intel.com with SMTP; 08 Apr 2021 01:28:09 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 08 Apr 2021 11:28:09 +0300
+Date:   Thu, 8 Apr 2021 11:28:09 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
 Cc:     Guenter Roeck <linux@roeck-us.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Kyle Tso <kyletso@google.com>
-Subject: Re: [PATCH v2 5/6] usb: typec: tcpm: Allow slow charging loops to
- comply to pSnkStby
-Message-ID: <YG69UKTSgyHQHeFd@kuha.fi.intel.com>
-References: <20210407200723.1914388-1-badhri@google.com>
- <20210407200723.1914388-5-badhri@google.com>
- <YG67d/YOuoBwK+bF@kuha.fi.intel.com>
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH 1/1] usb: typec: tcpm: remove unused static variable
+ 'tcpm_altmode_ops'
+Message-ID: <YG6+mfqIc15rc9H1@kuha.fi.intel.com>
+References: <20210407091540.2815-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YG67d/YOuoBwK+bF@kuha.fi.intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210407091540.2815-1-thunder.leizhen@huawei.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> > @@ -4047,9 +4053,12 @@ static void run_state_machine(struct tcpm_port *port)
-> >  		break;
-> >  	case SNK_DISCOVERY:
-> >  		if (port->vbus_present) {
-> > -			tcpm_set_current_limit(port,
-> > -					       tcpm_get_current_limit(port),
-> > -					       5000);
-> > +			u32 current_lim = (!port->slow_charger_loop ||
-> > +					   (tcpm_get_current_limit(port) <=
-> > +					    PD_P_SNK_STDBY_MW / 5)) ?
-> > +				tcpm_get_current_limit(port) :
-> > +				PD_P_SNK_STDBY_MW / 5;
+On Wed, Apr 07, 2021 at 05:15:40PM +0800, Zhen Lei wrote:
+> Fixes the following W=1 kernel build warning:
 > 
-> Here the use of the ternary operator is not appropriate. Please try to
-> clean that up somehow. Maybe something like this would be better?
+> drivers/usb/typec/tcpm/tcpm.c:2107:39: warning: ‘tcpm_altmode_ops’ defined but not used [-Wunused-const-variable=]
 > 
->                         u32 current_lim = tcpm_get_current_limit(port);
+> The reference to the variable 'tcpm_altmode_ops' is deleted by the
+> commit a079973f462a ("usb: typec: tcpm: Remove tcpc_config configuration
+> mechanism").
 > 
-> 			if (port->slow_charger_loop || (current_lim < PD_P_SNK_STDBY_MW / 5))
-> 				current_lim = PD_P_SNK_STDBY_MW / 5;
+> By the way, the static functions referenced only by the variable
+> 'tcpm_altmode_ops' are deleted accordingly.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 
-Sorry, I mean:
+Oh, I thought this was already fixed. Should this go into the stable
+trees as well?
 
-			if (port->slow_charger_loop || (current_lim > PD_P_SNK_STDBY_MW / 5))
-				current_lim = PD_P_SNK_STDBY_MW / 5;
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-thanks,
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 60 -------------------------------------------
+>  1 file changed, 60 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index ce7af398c7c1c1f..2f89bae29c0c297 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -1365,14 +1365,6 @@ static void tcpm_queue_vdm(struct tcpm_port *port, const u32 header,
+>  	mod_vdm_delayed_work(port, 0);
+>  }
+>  
+> -static void tcpm_queue_vdm_unlocked(struct tcpm_port *port, const u32 header,
+> -				    const u32 *data, int cnt)
+> -{
+> -	mutex_lock(&port->lock);
+> -	tcpm_queue_vdm(port, header, data, cnt);
+> -	mutex_unlock(&port->lock);
+> -}
+> -
+>  static void svdm_consume_identity(struct tcpm_port *port, const u32 *p, int cnt)
+>  {
+>  	u32 vdo = p[VDO_INDEX_IDH];
+> @@ -1705,8 +1697,6 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
+>  	 *
+>  	 * And we also have this ordering:
+>  	 * 1. alt-mode driver takes the alt-mode's lock
+> -	 * 2. alt-mode driver calls tcpm_altmode_enter which takes the
+> -	 *    tcpm port lock
+>  	 *
+>  	 * Dropping our lock here avoids this.
+>  	 */
+> @@ -2060,56 +2050,6 @@ static int tcpm_validate_caps(struct tcpm_port *port, const u32 *pdo,
+>  	return 0;
+>  }
+>  
+> -static int tcpm_altmode_enter(struct typec_altmode *altmode, u32 *vdo)
+> -{
+> -	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
+> -	int svdm_version;
+> -	u32 header;
+> -
+> -	svdm_version = typec_get_negotiated_svdm_version(port->typec_port);
+> -	if (svdm_version < 0)
+> -		return svdm_version;
+> -
+> -	header = VDO(altmode->svid, vdo ? 2 : 1, svdm_version, CMD_ENTER_MODE);
+> -	header |= VDO_OPOS(altmode->mode);
+> -
+> -	tcpm_queue_vdm_unlocked(port, header, vdo, vdo ? 1 : 0);
+> -	return 0;
+> -}
+> -
+> -static int tcpm_altmode_exit(struct typec_altmode *altmode)
+> -{
+> -	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
+> -	int svdm_version;
+> -	u32 header;
+> -
+> -	svdm_version = typec_get_negotiated_svdm_version(port->typec_port);
+> -	if (svdm_version < 0)
+> -		return svdm_version;
+> -
+> -	header = VDO(altmode->svid, 1, svdm_version, CMD_EXIT_MODE);
+> -	header |= VDO_OPOS(altmode->mode);
+> -
+> -	tcpm_queue_vdm_unlocked(port, header, NULL, 0);
+> -	return 0;
+> -}
+> -
+> -static int tcpm_altmode_vdm(struct typec_altmode *altmode,
+> -			    u32 header, const u32 *data, int count)
+> -{
+> -	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
+> -
+> -	tcpm_queue_vdm_unlocked(port, header, data, count - 1);
+> -
+> -	return 0;
+> -}
+> -
+> -static const struct typec_altmode_ops tcpm_altmode_ops = {
+> -	.enter = tcpm_altmode_enter,
+> -	.exit = tcpm_altmode_exit,
+> -	.vdm = tcpm_altmode_vdm,
+> -};
+> -
+>  /*
+>   * PD (data, control) command handling functions
+>   */
+> -- 
+> 1.8.3
+> 
 
 -- 
 heikki
