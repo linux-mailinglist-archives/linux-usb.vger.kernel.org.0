@@ -2,69 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06908357EAB
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 11:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B14A9357ED3
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 11:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbhDHJFD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 05:05:03 -0400
-Received: from mx2.suse.de ([195.135.220.15]:40234 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229600AbhDHJFC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Apr 2021 05:05:02 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1617872690; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iltK01d5af+cgrFEZUWX6FRdwy+PU/iuoHEp7kNrWqY=;
-        b=vGH05aUHS9p50eqCjbT5JaY1Yvw3q0NrAY2X7kbk5W330yke4rShHaqeDBV1StzMZcSOTB
-        XRstldq8Dsc0Trhe3CspZLxobWLPD5yoKd6SWdQuxQ1nb5Djga5RO3WDM5uRk7oobPbM0t
-        Xqu9j9SkcLnNrrtgWyOiUjt2/Bh8onQ=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 2E29FAFF6;
-        Thu,  8 Apr 2021 09:04:50 +0000 (UTC)
-Message-ID: <8918b0b50068705a865ffc22fe9745dacf0c21e8.camel@suse.com>
-Subject: Re: [PATCH 2/3] USB: cdc-acm: fix unprivileged TIOCCSERIAL
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 08 Apr 2021 09:48:38 +0200
-In-Reply-To: <20210407102845.32720-3-johan@kernel.org>
-References: <20210407102845.32720-1-johan@kernel.org>
-         <20210407102845.32720-3-johan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S230376AbhDHJMo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 05:12:44 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:16082 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229672AbhDHJMl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 05:12:41 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FGFpc5rmbz1BFlC;
+        Thu,  8 Apr 2021 17:10:16 +0800 (CST)
+Received: from huawei.com (10.67.165.24) by DGGEMS406-HUB.china.huawei.com
+ (10.3.19.206) with Microsoft SMTP Server id 14.3.498.0; Thu, 8 Apr 2021
+ 17:12:20 +0800
+From:   Longfang Liu <liulongfang@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <stern@rowland.harvard.edu>, <liudongdong3@huawei.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <liulongfang@huawei.com>, <kong.kongxinwei@hisilicon.com>,
+        <yisen.zhuang@huawei.com>
+Subject: [PATCH 0/2] USB:ehci:fix the no SRBN register problem
+Date:   Thu, 8 Apr 2021 17:09:42 +0800
+Message-ID: <1617872985-42735-1-git-send-email-liulongfang@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.67.165.24]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Mittwoch, den 07.04.2021, 12:28 +0200 schrieb Johan Hovold:
-> TIOCSSERIAL is a horrid, underspecified, legacy interface which for most
-> serial devices is only useful for setting the close_delay and
-> closing_wait parameters.
-> 
-> A non-privileged user has only ever been able to set the since long
-> deprecated ASYNC_SPD flags and trying to change any other *supported*
-> feature should result in -EPERM being returned. Setting the current
-> values for any supported features should return success.
-> 
-> Fix the cdc-acm implementation which instead indicated that the
-> TIOCSSERIAL ioctl was not even implemented when a non-privileged user
-> set the current values.
+(1) Add a whitelist for EHCI devices without SBRN registers.
+(2) Add Kunpeng920's EHCI device to the whitelist.
 
-Hi,
+Longfang Liu (2):
+  USB:ehci:Add a whitelist for EHCI controllers
+  USB:ehci:fix Kunpeng920 ehci hardware problem
 
-the idea here was that you are setting something else, if you are
-not changing a parameter that can be changed. That conclusion is
-dubious, but at the same time, this implementation can change
-only these two parameters. So can the test really be dropped
-as opposed to be modified?
+ drivers/usb/host/ehci-pci.c | 29 +++++++++++++++++++++++++----
+ 1 file changed, 25 insertions(+), 4 deletions(-)
 
-	Regards
-		Oliver
-
+-- 
+2.8.1
 
