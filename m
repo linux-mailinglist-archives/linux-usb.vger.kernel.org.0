@@ -2,134 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC00357C31
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 08:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8546D357CC6
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 08:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbhDHGNb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 02:13:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33694 "EHLO mail.kernel.org"
+        id S229640AbhDHGvm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 02:51:42 -0400
+Received: from mga02.intel.com ([134.134.136.20]:4329 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229691AbhDHGNa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Apr 2021 02:13:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4E337610A2;
-        Thu,  8 Apr 2021 06:13:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1617862400;
-        bh=idCIivqrohs+8XI7ShOK104EL8SmXh5vn2poLxMFrcI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q8H36JkMAoIsA3GGZmzDcC8UV8kiitjCODQfDEhCJCVRCYaLH2zaV9NgHAY6zJqVS
-         rM+Wo7wDVIdVuXHEUPLSdyfjimfu+m3fyK1+vlQUO28BWF8eGWIwp2vog5eXQwiA1z
-         9yBuP/SnuAthHLUGcWW218KIyjEU9CulxHq9l4GY=
-Date:   Thu, 8 Apr 2021 08:09:24 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mian Yousaf Kaukab <yousaf.kaukab@intel.com>,
-        Gregory Herrero <gregory.herrero@intel.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Paul Zimmerman <paulz@synopsys.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Robert Baldyga <r.baldyga@samsung.com>,
-        Kever Yang <kever.yang@rock-chips.com>
-Subject: Re: [PATCH 00/14] usb: dwc2: Fix Partial Power down issues.
-Message-ID: <YG6eFEv8JfE3qSdV@kroah.com>
-References: <cover.1617782102.git.Arthur.Petrosyan@synopsys.com>
- <60f356b2-e465-48e7-ad37-f1021e3581ff@synopsys.com>
+        id S229579AbhDHGvl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Apr 2021 02:51:41 -0400
+IronPort-SDR: KoJLlFAqIeCqG6ghoBvA10NO5I2AnHj1RbRVgt/lfLX8i3s7G+uNPdqTI7O6IIkgadCru5SZ58
+ kMTFYOKXBFog==
+X-IronPort-AV: E=McAfee;i="6000,8403,9947"; a="180605786"
+X-IronPort-AV: E=Sophos;i="5.82,205,1613462400"; 
+   d="scan'208";a="180605786"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2021 23:51:29 -0700
+IronPort-SDR: MPX+KG9ocuizqBb9kk6LoMkdVNUmagVkqZcgVhaDx030blGTtOTzddVSPfS+ITaenqDe4jErXE
+ f8nqV9iovL9Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,205,1613462400"; 
+   d="scan'208";a="519733880"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 07 Apr 2021 23:51:26 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 08 Apr 2021 09:51:25 +0300
+Date:   Thu, 8 Apr 2021 09:51:25 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Kyle Tso <kyletso@google.com>
+Subject: Re: [PATCH v2 1/6] usb: typec: tcpm: Address incorrect values of
+ tcpm psy for fixed supply
+Message-ID: <YG6n7c2XpypLseWw@kuha.fi.intel.com>
+References: <20210407200723.1914388-1-badhri@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <60f356b2-e465-48e7-ad37-f1021e3581ff@synopsys.com>
+In-Reply-To: <20210407200723.1914388-1-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 08, 2021 at 05:57:57AM +0000, Artur Petrosyan wrote:
-> Hi Greg,
+On Wed, Apr 07, 2021 at 01:07:18PM -0700, Badhri Jagan Sridharan wrote:
+> tcpm_pd_build_request overwrites current_limit and supply_voltage
+> even before port partner accepts the requests. This leaves stale
+> values in current_limit and supply_voltage that get exported by
+> "tcpm-source-psy-". Solving this problem by caching the request
+> values of current limit/supply voltage in req_current_limit
+> and req_supply_voltage. current_limit/supply_voltage gets updated
+> once the port partner accepts the request.
 > 
-> On 4/7/2021 14:00, Artur Petrosyan wrote:
-> > This patch set fixes and improves the Partial Power Down mode for
-> > dwc2 core.
-> > It adds support for the following cases
-> >      1. Entering and exiting partial power down when a port is
-> >         suspended, resumed, port reset is asserted.
-> >      2. Exiting the partial power down mode before removing driver.
-> >      3. Exiting partial power down in wakeup detected interrupt handler.
-> >      4. Exiting from partial power down mode when connector ID.
-> >         status changes to "connId B
-> > 
-> > It updates and fixes the implementation of dwc2 entering and
-> > exiting partial power down mode when the system (PC) is suspended.
-> > 
-> > The patch set also improves the implementation of function handlers
-> > for entering and exiting host or device partial power down.
-> > 
-> > NOTE: This is the second patch set in the power saving mode fixes
-> > series.
-> > This patch set is part of multiple series and is continuation
-> > of the "usb: dwc2: Fix and improve power saving modes" patch set.
-> > (Patch set link: https://marc.info/?l=linux-usb&m=160379622403975&w=2).
-> > The patches that were included in the "usb: dwc2:
-> > Fix and improve power saving modes" which was submitted
-> > earlier was too large and needed to be split up into
-> > smaller patch sets.
-> > 
-> > 
-> > Artur Petrosyan (14):
-> >    usb: dwc2: Add device partial power down functions
-> >    usb: dwc2: Add host partial power down functions
-> >    usb: dwc2: Update enter and exit partial power down functions
-> >    usb: dwc2: Add partial power down exit flow in wakeup intr.
-> >    usb: dwc2: Update port suspend/resume function definitions.
-> >    usb: dwc2: Add enter partial power down when port is suspended
-> >    usb: dwc2: Add exit partial power down when port is resumed
-> >    usb: dwc2: Add exit partial power down when port reset is asserted
-> >    usb: dwc2: Add part. power down exit from
-> >      dwc2_conn_id_status_change().
-> >    usb: dwc2: Allow exit partial power down in urb enqueue
-> >    usb: dwc2: Fix session request interrupt handler
-> >    usb: dwc2: Update partial power down entering by system suspend
-> >    usb: dwc2: Fix partial power down exiting by system resume
-> >    usb: dwc2: Add exit partial power down before removing driver
-> > 
-> >   drivers/usb/dwc2/core.c      | 113 ++-------
-> >   drivers/usb/dwc2/core.h      |  27 ++-
-> >   drivers/usb/dwc2/core_intr.c |  46 ++--
-> >   drivers/usb/dwc2/gadget.c    | 148 ++++++++++-
-> >   drivers/usb/dwc2/hcd.c       | 458 +++++++++++++++++++++++++----------
-> >   drivers/usb/dwc2/hw.h        |   1 +
-> >   drivers/usb/dwc2/platform.c  |  11 +-
-> >   7 files changed, 558 insertions(+), 246 deletions(-)
-> > 
-> > 
-> > base-commit: e9fcb07704fcef6fa6d0333fd2b3a62442eaf45b
-> > 
-> I have submitted this patch set yesterday. It contains 14 patches. But 
-> only 2 of those patches were received by LKML only the cover letter and 
-> the 13th patch. 
-> (https://lore.kernel.org/linux-usb/cover.1617782102.git.Arthur.Petrosyan@synopsys.com/T/#t)
-> 
-> I checked here at Synopsys, Minas did receive all the patches as his 
-> email is in To list. Could this be an issue of vger.kernel.org mailing 
-> server?
-> 
-> Because I checked every local possibility that could result to such 
-> behavior. The patch 13 which was received by LKML has the similar 
-> content as the other patches.
-> 
-> The mailing tool that was used is ssmtp, checked all the configurations 
-> everything is fine.
-> 
-> Could you please suggest what should I do in this situation?
+> Fixes: f2a8aa053c176 ("typec: tcpm: Represent source supply through power_supply")
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
 
-Odd, I got them here, but lore seems to not have them :(
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Can you just resend them as a "v2" series so we know which to review and
-let's see if that works better...
+> ---
+> Changes since V1:
+> * Fixed typo as suggested by Guenter Roeck.
+> * Added Reviewed-by tags.
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 17 ++++++++++-------
+>  1 file changed, 10 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index ca1fc77697fc..4ea4b30ae885 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -389,7 +389,10 @@ struct tcpm_port {
+>  	unsigned int operating_snk_mw;
+>  	bool update_sink_caps;
+>  
+> -	/* Requested current / voltage */
+> +	/* Requested current / voltage to the port partner */
+> +	u32 req_current_limit;
+> +	u32 req_supply_voltage;
+> +	/* Actual current / voltage limit of the local port */
+>  	u32 current_limit;
+>  	u32 supply_voltage;
+>  
+> @@ -2435,8 +2438,8 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+>  		case SNK_TRANSITION_SINK:
+>  			if (port->vbus_present) {
+>  				tcpm_set_current_limit(port,
+> -						       port->current_limit,
+> -						       port->supply_voltage);
+> +						       port->req_current_limit,
+> +						       port->req_supply_voltage);
+>  				port->explicit_contract = true;
+>  				tcpm_set_auto_vbus_discharge_threshold(port,
+>  								       TYPEC_PWR_MODE_PD,
+> @@ -2545,8 +2548,8 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+>  			break;
+>  		case SNK_NEGOTIATE_PPS_CAPABILITIES:
+>  			port->pps_data.active = true;
+> -			port->supply_voltage = port->pps_data.out_volt;
+> -			port->current_limit = port->pps_data.op_curr;
+> +			port->req_supply_voltage = port->pps_data.out_volt;
+> +			port->req_current_limit = port->pps_data.op_curr;
+>  			tcpm_set_state(port, SNK_TRANSITION_SINK, 0);
+>  			break;
+>  		case SOFT_RESET_SEND:
+> @@ -3195,8 +3198,8 @@ static int tcpm_pd_build_request(struct tcpm_port *port, u32 *rdo)
+>  			 flags & RDO_CAP_MISMATCH ? " [mismatch]" : "");
+>  	}
+>  
+> -	port->current_limit = ma;
+> -	port->supply_voltage = mv;
+> +	port->req_current_limit = ma;
+> +	port->req_supply_voltage = mv;
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.31.1.295.g9ea45b61b8-goog
 
-thanks,
-
-greg k-h
+-- 
+heikki
