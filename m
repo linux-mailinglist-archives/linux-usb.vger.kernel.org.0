@@ -2,160 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 286AF358260
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 13:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D638D358287
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 13:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231474AbhDHLoa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 07:44:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:48959 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231499AbhDHLo1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 07:44:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617882256;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ojI36GqCcSZZKDE7ZJzPVmk370WGjalSRm35dXXJjG4=;
-        b=Pqq6oBVtRps9LxP1kUyxz7z+HtwiijqR4gjR8sKvI9lRErdbKpIJvqlqEKS9tGSmsud0kG
-        LSTkESewUws1UBgxwkrkgf5wX2KGO/rIsMzRmEKJYMknk4MQVcaW5t776bnWhHirxRLVk5
-        QXaWlZKTF5spqK4Kb7fP8DoFMMCokbo=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-401-xdcEap95PaCahXmYMZXpxA-1; Thu, 08 Apr 2021 07:44:04 -0400
-X-MC-Unique: xdcEap95PaCahXmYMZXpxA-1
-Received: by mail-pg1-f200.google.com with SMTP id i1so1207003pgg.20
-        for <linux-usb@vger.kernel.org>; Thu, 08 Apr 2021 04:44:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ojI36GqCcSZZKDE7ZJzPVmk370WGjalSRm35dXXJjG4=;
-        b=m9zQXXGpx1ZAFJzJ/GojVA+QD2Zfhe47nYEq9L9qFqi5j8T9w33BFJnSs01hPkjRHe
-         iH8z5pA9VFIdpMyIAi2mNZhTaFT5/rVXgZzyjwmEULnDABh2deZ7AGpzioPW+PU3/y3q
-         HeFO+NIf+ntStyjMgqw58yht8YHtXocps6t8KHOrN0MvYJVoNjvEAHHgzqylhYtxv7ck
-         Yy8T2WqmOYqKTLrtg2ljeYJ9fdS1+0O4WzjLr7wLY8BEuuoh9eEkNsjf8olw/eiY4cBD
-         GNVuqb0v+G01Y8lvsL7jWmpJSQFZIH8NbK9YXQNVF7cL3C6EQncLIQnRwMLR99Mc1uog
-         usqQ==
-X-Gm-Message-State: AOAM533Av0GeCspnDuoIxCb/JjWTxXckNhhqAsfXlElmzV8izI8dJQLR
-        84USjsA6xtoJScdYXdxx30pbTh1ZfJJwvD0II0N+vnfbVQyHOjE3pG1t9jt4x/PgNVfXyxBANIB
-        o8nVK64b+yaegX3YFgKirZ2XQtRDZYtgU8h8H
-X-Received: by 2002:a17:90a:bb0c:: with SMTP id u12mr8097141pjr.234.1617882243166;
-        Thu, 08 Apr 2021 04:44:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxXWoD4uZFLjX3W//O+WsdPii+AkkUpUkXJnA0RNfYAyKcsVoeyvydz2BlU3advUFqA9gChFbY15nQwPpfmGv8=
-X-Received: by 2002:a17:90a:bb0c:: with SMTP id u12mr8097093pjr.234.1617882242926;
- Thu, 08 Apr 2021 04:44:02 -0700 (PDT)
+        id S230434AbhDHLzN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 07:55:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43794 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229741AbhDHLzN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Apr 2021 07:55:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5598061074;
+        Thu,  8 Apr 2021 11:55:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617882902;
+        bh=iQk6+bM0UOUsorND9uQvTGZPvJSGKBUdzwIBG7StOd0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nIgHbqkFvfRyFgeEuKMH+0cJfL44FIcLDdjmWuwU4hewQwZEjpnXfeslfh0TQd6cL
+         UzKJfMfmz94+vOh14zO7Izv3do+DUfT4HCkOJjeTjdHCQuV6mQdKXJzySLfCbnC8ku
+         1vEs1S2zX5ULnO3VOuVdPUXTnihgRds0yVEmLzC1Nf1oxQ3+WGLEVq8EX79WgSWhIj
+         TkHRE642ciIgvftXHGeP+LoT70gEkMbM69lGkGLBtDjvL3Uk/3oXNUC8LrIhav8B1p
+         msVEiRFsNuSbfkJnqciZ/l5oLPjWvZwIJUCcjUtyrd+zRlcs076ptSuEI48uCcEnKv
+         jFZPd6YFNlPIA==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lUTFR-0003Pz-NF; Thu, 08 Apr 2021 13:54:57 +0200
+Date:   Thu, 8 Apr 2021 13:54:57 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] USB: cdc-acm: fix TIOCGSERIAL implementation
+Message-ID: <YG7vEQa53AhN+piv@hovoldconsulting.com>
+References: <20210407102845.32720-1-johan@kernel.org>
+ <20210407102845.32720-4-johan@kernel.org>
+ <a1a94db2d373c4c7b8841908d8e6133ab022232e.camel@suse.com>
+ <YG7RiLoscS6VXG7n@hovoldconsulting.com>
+ <0049152ce9da85c50fda91c1b77ca233ba0fef3d.camel@suse.com>
 MIME-Version: 1.0
-References: <20210326143458.508959-1-lee.jones@linaro.org> <20210406085605.GS2916463@dell>
- <CAO-hwJ+5Vd6jC2+0pfHLOw3opdXzKoc9pUWzxmBVhSvQvNWMsQ@mail.gmail.com> <20210408070605.GC2961413@dell>
-In-Reply-To: <20210408070605.GC2961413@dell>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Thu, 8 Apr 2021 13:43:52 +0200
-Message-ID: <CAO-hwJJrn4mzPwzYvusGNa6KhLZ+kCn=svzgGJD=6q+Urz=YsA@mail.gmail.com>
-Subject: Re: [RESEND 00/25] Rid W=1 warnings from HID
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Anssi Hannula <anssi.hannula@gmail.com>,
-        =?UTF-8?Q?Bruno_Pr=C3=A9mont?= <bonbons@linux-vserver.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Drubin <daniel.drubin@intel.com>,
-        Dario Pagani <dario.pagani.146+linuxk@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Kim Kuparinen <kimi.h.kuparinen@gmail.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        linaro-mm-sig@lists.linaro.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        linux-media@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        Lopez Casado <nlopezcasad@logitech.com>,
-        "L. Vinyard, Jr" <rvinyard@cs.nmsu.edu>,
-        Masaki Ota <masaki.ota@jp.alps.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        message to <vojtech@ucw.cz>,
-        Michael Haboustak <mike-@cinci.rr.com>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Vojtech Pavlik <vojtech@suse.cz>,
-        Zhang Lixu <lixu.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0049152ce9da85c50fda91c1b77ca233ba0fef3d.camel@suse.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 8, 2021 at 9:06 AM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Wed, 07 Apr 2021, Benjamin Tissoires wrote:
->
-> > On Tue, Apr 6, 2021 at 10:56 AM Lee Jones <lee.jones@linaro.org> wrote:
-> > >
-> > > On Fri, 26 Mar 2021, Lee Jones wrote:
-> > >
-> > > > This set is part of a larger effort attempting to clean-up W=1
-> > > > kernel builds, which are currently overwhelmingly riddled with
-> > > > niggly little warnings.
-> > > >
-> > > > Lee Jones (25):
-> > > >   HID: intel-ish-hid: Remove unused variable 'err'
-> > > >   HID: ishtp-hid-client: Move variable to where it's actually used
-> > > >   HID: intel-ish-hid: pci-ish: Remove unused variable 'ret'
-> > > >   HID: intel-ish: Supply some missing param descriptions
-> > > >   HID: intel-ish: Fix a naming disparity and a formatting error
-> > > >   HID: usbhid: Repair a formatting issue in a struct description
-> > > >   HID: intel-ish-hid: Fix a little doc-rot
-> > > >   HID: usbhid: hid-pidff: Demote a couple kernel-doc abuses
-> > > >   HID: hid-alps: Correct struct misnaming
-> > > >   HID: intel-ish-hid: Fix potential copy/paste error
-> > > >   HID: hid-core: Fix incorrect function name in header
-> > > >   HID: intel-ish-hid: ipc: Correct fw_reset_work_fn() function name in
-> > > >     header
-> > > >   HID: ishtp-hid-client: Fix incorrect function name report_bad_packet()
-> > > >   HID: hid-kye: Fix incorrect function name for kye_tablet_enable()
-> > > >   HID: hid-picolcd_core: Remove unused variable 'ret'
-> > > >   HID: hid-logitech-hidpp: Fix conformant kernel-doc header and demote
-> > > >     abuses
-> > > >   HID: hid-uclogic-rdesc: Kernel-doc is for functions and structs
-> > > >   HID: hid-thrustmaster: Demote a bunch of kernel-doc abuses
-> > > >   HID: hid-uclogic-params: Ensure function names are present and correct
-> > > >     in kernel-doc headers
-> > > >   HID: hid-sensor-custom: Remove unused variable 'ret'
-> > > >   HID: wacom_sys: Demote kernel-doc abuse
-> > > >   HID: hid-sensor-hub: Remove unused struct member 'quirks'
-> > > >   HID: hid-sensor-hub: Move 'hsdev' description to correct struct
-> > > >     definition
-> > > >   HID: intel-ish-hid: ishtp-fw-loader: Fix a bunch of formatting issues
-> > > >   HID: ishtp-hid-client: Fix 'suggest-attribute=format' compiler warning
-> > >
-> > > These have been on the list for a couple of weeks now.
-> > >
-> > > Is there anything I can do to help expedite their merge?
-> > >
-> > > I'm concerned since -rc6 has just been released.
-> >
-> > Sorry for the delay.
-> >
-> > I am currently queuing them locally and running a few tests on them. I
-> > don't expect anything to happen, but better be safe than anything.
-> >
-> > FWIW, I am splitting the series in 3:
-> > - 11 patches for intel ish are going to be queued in for-5.13/intel-ish
-> > - the thrustmaster one in for-5.13/thrustmaster
-> > - the rest (13 patches) will be sent in for-5.13/warnings.
->
-> Sounds good to me.  Thanks Benjamin.
->
-After a few attempts at fixing my CI, I have now pushed this series as
-mentioned previously.
+On Thu, Apr 08, 2021 at 01:34:12PM +0200, Oliver Neukum wrote:
+> Am Donnerstag, den 08.04.2021, 11:48 +0200 schrieb Johan Hovold:
+> > On Thu, Apr 08, 2021 at 10:36:46AM +0200, Oliver Neukum wrote:
+> > > Am Mittwoch, den 07.04.2021, 12:28 +0200 schrieb Johan Hovold:
+> 
+> > > Well, the devices report it. It is part of the standard.
+> > 
+> > No, the standard doesn't include anything about a baud-base clock
+> > AFAICT.
+> 
+> Unfortunately it does.
+> dwDTERate - chapter 6.3.11 - table 17
 
-Cheers,
-Benjamin
+That's not the base clock rate, that's just the currently configured
+line speed which you can read from termios.
+ 
+> If we does this wrongly, we should certainly fix it, but just removing
+> the reporting doesn't look right to me.
 
+The driver got its interpretation of baud_base wrong, and CDC doesn't
+even have a concept of base clock rate so removing it is the right thing
+to do.
+
+Again, baud_base is really only relevant with legacy UARTs and when
+using the deprecated ASYNC_SPD_CUST.
+
+And if the user wants to knows the current line speed we have a
+different interface for that.
+
+Johan
