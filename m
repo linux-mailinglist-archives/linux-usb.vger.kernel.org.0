@@ -2,124 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D71358419
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 15:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BED6358437
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 15:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbhDHNE4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 09:04:56 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:16412 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbhDHNEy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 09:04:54 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FGLz11g8yzkjgH;
-        Thu,  8 Apr 2021 21:02:53 +0800 (CST)
-Received: from [10.67.102.118] (10.67.102.118) by
- DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 8 Apr 2021 21:04:18 +0800
-Subject: Re: [PATCH 1/2] USB:ehci:Add a whitelist for EHCI controllers
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <mathias.nyman@intel.com>, <stern@rowland.harvard.edu>,
-        <liudongdong3@huawei.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kong.kongxinwei@hisilicon.com>,
-        <yisen.zhuang@huawei.com>
-References: <1617873073-37371-1-git-send-email-liulongfang@huawei.com>
- <1617873073-37371-2-git-send-email-liulongfang@huawei.com>
- <YG7LO2DJMThbeJ5W@kroah.com>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <13446834-afc5-e713-d232-36c771059712@huawei.com>
-Date:   Thu, 8 Apr 2021 21:04:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S231672AbhDHNJh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 09:09:37 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:16845 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231557AbhDHNJg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 09:09:36 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4FGM3y23VCz9vww;
+        Thu,  8 Apr 2021 21:07:10 +0800 (CST)
+Received: from huawei.com (10.174.28.241) by DGGEMS413-HUB.china.huawei.com
+ (10.3.19.213) with Microsoft SMTP Server id 14.3.498.0; Thu, 8 Apr 2021
+ 21:09:15 +0800
+From:   Bixuan Cui <cuibixuan@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <john.wanghui@huawei.com>, <linux-usb@vger.kernel.org>,
+        <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
+        <gustavoars@kernel.org>, <oneukum@suse.com>,
+        <erosca@de.adit-jv.com>, "Bixuan Cui" <cuibixuan@huawei.com>
+Subject: [PATCH] usb: core: hub: Fix PM reference leak in usb_port_resume()
+Date:   Thu, 8 Apr 2021 21:08:31 +0800
+Message-ID: <20210408130831.56239-1-cuibixuan@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <YG7LO2DJMThbeJ5W@kroah.com>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.118]
+Content-Type: text/plain
+X-Originating-IP: [10.174.28.241]
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/4/8 17:22, Greg KH Wrote:
-> On Thu, Apr 08, 2021 at 05:11:12PM +0800, Longfang Liu wrote:
->> Some types of EHCI controllers do not have SBRN registers.
->> By comparing the white list, the operation of reading the SBRN
->> registers is skipped.
->>
->> Subsequent EHCI controller types without SBRN registers can be
->> directly added to the white list.
->>
->> The current patch does not affect the drive function.
->>
->> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
->> ---
->>  drivers/usb/host/ehci-pci.c | 27 +++++++++++++++++++++++----
->>  1 file changed, 23 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
->> index 3c3820a..6a30afa 100644
->> --- a/drivers/usb/host/ehci-pci.c
->> +++ b/drivers/usb/host/ehci-pci.c
->> @@ -47,6 +47,28 @@ static inline bool is_bypassed_id(struct pci_dev *pdev)
->>  	return !!pci_match_id(bypass_pci_id_table, pdev);
->>  }
->>  
->> +static const struct usb_nosbrn_whitelist_entry {
->> +	unsigned short vendor;
->> +	unsigned short device;
-> 
-> u16 here please.
-> 
->> +} usb_nosbrn_whitelist[] = {
->> +	/* STMICRO ConneXT has no sbrn register */
->> +	{PCI_VENDOR_ID_STMICRO, PCI_DEVICE_ID_STMICRO_USB_HOST},
->> +	{}
-> 
-> trailing , please.
-> 
+pm_runtime_get_sync will increment pm usage counter even it failed.
+thus a pairing decrement is needed.
+Fix it by replacing it with pm_runtime_resume_and_get to keep usage
+counter balanced.
 
-Is it necessary to add "," at the end here?
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
+---
+ drivers/usb/core/hub.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->> +};
->> +
->> +static bool usb_nosbrn_whitelist_check(struct pci_dev *pdev)
->> +{
->> +	const struct usb_nosbrn_whitelist_entry *entry;
->> +
->> +	for (entry = usb_nosbrn_whitelist; entry->vendor; entry++) {
->> +		if (pdev->vendor == entry->vendor &&
->> +		    pdev->device == entry->device)
->> +			return true;
->> +	}
->> +
->> +	return false;
->> +}
->> +
->>  /*
->>   * 0x84 is the offset of in/out threshold register,
->>   * and it is the same offset as the register of 'hostpc'.
->> @@ -288,10 +310,7 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
->>  	}
->>  
->>  	/* Serial Bus Release Number is at PCI 0x60 offset */
->> -	if (pdev->vendor == PCI_VENDOR_ID_STMICRO
->> -	    && pdev->device == PCI_DEVICE_ID_STMICRO_USB_HOST)
->> -		;	/* ConneXT has no sbrn register */
->> -	else
->> +	if (!usb_nosbrn_whitelist_check(pdev))
-> 
-> Doing this as a "negative" is hard to understand.  Should this just be:
-> 	forbid_sbrn_read()
-> or something like that?
-> 
-> The term "whitelist" is not a good thing to use as it does not really
-> explain anything here.
-> 
-> thanks,
-> 
-> greg k-h
-> .
-> 
-Thanks
-Longfang.
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 9a83390072da..b2bc4b7c4289 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -3605,7 +3605,7 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
+ 	u16		portchange, portstatus;
+ 
+ 	if (!test_and_set_bit(port1, hub->child_usage_bits)) {
+-		status = pm_runtime_get_sync(&port_dev->dev);
++		status = pm_runtime_resume_and_get(&port_dev->dev);
+ 		if (status < 0) {
+ 			dev_dbg(&udev->dev, "can't resume usb port, status %d\n",
+ 					status);
+-- 
+2.17.1
+
