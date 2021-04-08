@@ -2,91 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB09357E7B
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 10:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC1F357E41
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 10:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbhDHIxy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 04:53:54 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54056 "EHLO mx2.suse.de"
+        id S229831AbhDHIi3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 04:38:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43504 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229588AbhDHIxy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Apr 2021 04:53:54 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1617872022; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zj0nUFHGIlAwQGqC4lttL4D1UrKTgkmzkgf8ADN5sIo=;
-        b=L16osLsS4gpWWvY8e5uuy5JRXAwkE50Z/OySzPNGJqvMxljK4q7AFC99NKAHhrfipj+d2O
-        t7k8k/jU24MI9wM9xyiuw2KfPGBrnhzOrXPS/Penqa3nrJ+FiQI1BLXRiIAAowb9uoC4NI
-        bvKPiHxZ1u3EX99xC1dErbGMiySwPkU=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 11851B0E6;
-        Thu,  8 Apr 2021 08:53:42 +0000 (UTC)
-Message-ID: <a1a94db2d373c4c7b8841908d8e6133ab022232e.camel@suse.com>
-Subject: Re: [PATCH 3/3] USB: cdc-acm: fix TIOCGSERIAL implementation
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 08 Apr 2021 10:36:46 +0200
-In-Reply-To: <20210407102845.32720-4-johan@kernel.org>
-References: <20210407102845.32720-1-johan@kernel.org>
-         <20210407102845.32720-4-johan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S229539AbhDHIi2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Apr 2021 04:38:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2325E61164;
+        Thu,  8 Apr 2021 08:38:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1617871097;
+        bh=EKla77SyEE6T1IP9Pxi4AGFbASgxAkPmq1KCXqQuZno=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=goWJm9RhgyKuNh03lo5q4cSfTABSVGna27lFbZWGokfszw7t0e5WeAEFWQK/imU8e
+         v0wxWyEpSXKOlEGZUV1GfkPNkg30uBwtt3UTxEq5WDSsFtUNQcPzC1evE08JVnkI5O
+         /hp0t2+PxYRrDBA8F+sS8crSgm6LQO3/YHELIcQE=
+Date:   Thu, 8 Apr 2021 10:38:15 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH 1/1] usb: typec: tcpm: remove unused static variable
+ 'tcpm_altmode_ops'
+Message-ID: <YG7A94eekRgvskUg@kroah.com>
+References: <20210407091540.2815-1-thunder.leizhen@huawei.com>
+ <YG6+mfqIc15rc9H1@kuha.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YG6+mfqIc15rc9H1@kuha.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Mittwoch, den 07.04.2021, 12:28 +0200 schrieb Johan Hovold:
-> TIOCSSERIAL is a horrid, underspecified, legacy interface which for most
-> serial devices is only useful for setting the close_delay and
-> closing_wait parameters.
+On Thu, Apr 08, 2021 at 11:28:09AM +0300, Heikki Krogerus wrote:
+> On Wed, Apr 07, 2021 at 05:15:40PM +0800, Zhen Lei wrote:
+> > Fixes the following W=1 kernel build warning:
+> > 
+> > drivers/usb/typec/tcpm/tcpm.c:2107:39: warning: ‘tcpm_altmode_ops’ defined but not used [-Wunused-const-variable=]
+> > 
+> > The reference to the variable 'tcpm_altmode_ops' is deleted by the
+> > commit a079973f462a ("usb: typec: tcpm: Remove tcpc_config configuration
+> > mechanism").
+> > 
+> > By the way, the static functions referenced only by the variable
+> > 'tcpm_altmode_ops' are deleted accordingly.
+> > 
+> > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 > 
-> The xmit_fifo_size parameter could be used to set the hardware transmit
-> fifo size of a legacy UART when it could not be detected, but the
-> interface is limited to eight bits and should be left unset when it is
-> not used.
+> Oh, I thought this was already fixed. Should this go into the stable
+> trees as well?
 
-OK.
+We do not build kernels by default with "W=1" yet, so it's not needed
+in stable kernels.
 
-> Similarly, baud_base could be used to set the uart base clock when it
-> could not be detected, but might as well be left unset when it is not
-> known.
+thanks,
 
-Well, the devices report it. It is part of the standard.
-
-> Fix the cdc-acm TIOCGSERIAL implementation by dropping its custom
-> interpretation of the unused xmit_fifo_size and baud_base fields, which
-> overflowed the former with the URB buffer size and set the latter to the
-> current line speed. Also return the port line number, which is the only
-> other value used besides the close parameters.
-> 
-> Fixes: 18c75720e667 ("USB: allow users to run setserial with cdc-acm")
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
->  drivers/usb/class/cdc-acm.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> index 43e31dad4831..b74713518b3a 100644
-> --- a/drivers/usb/class/cdc-acm.c
-> +++ b/drivers/usb/class/cdc-acm.c
-> @@ -929,8 +929,7 @@ static int get_serial_info(struct tty_struct *tty, struct serial_struct *ss)
->  {
->  	struct acm *acm = tty->driver_data;
->  
-> -	ss->xmit_fifo_size = acm->writesize;
-> -	ss->baud_base = le32_to_cpu(acm->line.dwDTERate);
-
-If we do this, we have a value that can be set, but is not reported.
-That looks a bit strange to me.
-
-	Regards
-		Oliver
-
-
+greg k-h
