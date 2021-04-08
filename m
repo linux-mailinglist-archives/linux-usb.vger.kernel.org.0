@@ -2,37 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B289B358E74
+	by mail.lfdr.de (Postfix) with ESMTP id 408D3358E73
 	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 22:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbhDHUb7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S232005AbhDHUb7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Thu, 8 Apr 2021 16:31:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:23714 "EHLO
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:58967 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232091AbhDHUb6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 16:31:58 -0400
+        by vger.kernel.org with ESMTP id S231940AbhDHUb5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 16:31:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1617913906;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8HsHyrYvNsJ2EBquF9BD7h4e+bgseUlInL7EhF5TJOE=;
-        b=IdQog+oaPBYPcc0nkk2yhtFv8FcgbURwhzwfEXtCa0mOLTzh9+CRrIboQccU1blZTWPfhA
-        DULK6UdfUSy3Pf7OhFYtWLBUcrIfJuprgYmXMZ8d37S0DlaftNjVx7psBYBs7n66a8r6A/
-        PJFWrPmB0Y0Dhoj5L+NmmYXubyAC2AQ=
+        bh=I8lNmTWeFJeCRoNCPnN3eakh8e2Qo1egO6nCTM4vpAc=;
+        b=OOs/XDm0CeQRTMFcb6+5ENtePK46tCaOpCAmGwzyhJ0hQv+cHXxxUN9jyccKJN+Wkn9J4V
+        OvuIreoz1V9P5vKmC/eKej67p0ZJGV+Pigulb4ODNJR+R+9sFSaYC+zj0e5fCZjBndFL2T
+        FlW/6S1FJQN7BkRL/SLQKLrKFHfIoBQ=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-541-YMAkX9LEM_6CBOMNHuqoHw-1; Thu, 08 Apr 2021 16:31:42 -0400
-X-MC-Unique: YMAkX9LEM_6CBOMNHuqoHw-1
+ us-mta-486-onQYqOPpNqKP7hLcsn9DuA-1; Thu, 08 Apr 2021 16:31:44 -0400
+X-MC-Unique: onQYqOPpNqKP7hLcsn9DuA-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 57FAA19DB061;
-        Thu,  8 Apr 2021 20:31:41 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F392A19DB062;
+        Thu,  8 Apr 2021 20:31:42 +0000 (UTC)
 Received: from x1.localdomain (ovpn-112-60.ams2.redhat.com [10.36.112.60])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F0CFB6A045;
-        Thu,  8 Apr 2021 20:31:39 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9C37F6A045;
+        Thu,  8 Apr 2021 20:31:41 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -41,9 +41,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
         Zhen Lei <thunder.leizhen@huawei.com>,
         linux-usb@vger.kernel.org
-Subject: [PATCH v2 2/3] usb: typec: tcpm: Add support for altmodes
-Date:   Thu,  8 Apr 2021 22:31:28 +0200
-Message-Id: <20210408203129.526604-3-hdegoede@redhat.com>
+Subject: [PATCH v2 3/3] platform/x86/intel_cht_int33fe: Add displayport altmode fwnode to the connector fwnode
+Date:   Thu,  8 Apr 2021 22:31:29 +0200
+Message-Id: <20210408203129.526604-4-hdegoede@redhat.com>
 In-Reply-To: <20210408203129.526604-1-hdegoede@redhat.com>
 References: <20210408203129.526604-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -53,31 +53,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add support for altmodes described in the usb-connector fwnode
-associated with the Type-C controller by calling the new
-typec_port_register_altmodes_from_fwnode() helper for this.
+Add a displayport altmode fwnode to the usb-connector fwnode,
+devices which use this driver support display-port altmode through
+the PI3USB30532 USB switch, this enables support for this.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/usb/typec/tcpm/tcpm.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../platform/x86/intel_cht_int33fe_typec.c    | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index ce7af398c7c1..4aec8441772c 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -6072,6 +6072,11 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
- 		goto out_role_sw_put;
- 	}
+diff --git a/drivers/platform/x86/intel_cht_int33fe_typec.c b/drivers/platform/x86/intel_cht_int33fe_typec.c
+index 48638d1c56e5..b61bad9cc8d2 100644
+--- a/drivers/platform/x86/intel_cht_int33fe_typec.c
++++ b/drivers/platform/x86/intel_cht_int33fe_typec.c
+@@ -124,12 +124,31 @@ static const struct software_node usb_connector_node = {
+ 	.properties = usb_connector_properties,
+ };
  
-+	typec_port_register_altmodes_from_fwnode(port->typec_port,
-+						 &tcpm_altmode_ops, port,
-+						 port->port_altmode,
-+						 ALTMODE_DISCOVERY_MAX);
++static const struct software_node altmodes_node = {
++	.name = "altmodes",
++	.parent = &usb_connector_node,
++};
 +
- 	mutex_lock(&port->lock);
- 	tcpm_init(port);
- 	mutex_unlock(&port->lock);
++static const struct property_entry dp_altmode_properties[] = {
++	PROPERTY_ENTRY_U32("svid", 0xff01),
++	PROPERTY_ENTRY_U32("vdo", 0x0c0086),
++	{ }
++};
++
++static const struct software_node dp_altmode_node = {
++	.name = "displayport-altmode",
++	.parent = &altmodes_node,
++	.properties = dp_altmode_properties,
++};
++
+ static const struct software_node *node_group[] = {
+ 	&fusb302_node,
+ 	&max17047_node,
+ 	&pi3usb30532_node,
+ 	&displayport_node,
+ 	&usb_connector_node,
++	&altmodes_node,
++	&dp_altmode_node,
+ 	NULL
+ };
+ 
 -- 
 2.30.2
 
