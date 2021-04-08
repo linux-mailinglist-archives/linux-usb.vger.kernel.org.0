@@ -2,63 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BED6358437
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 15:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6B5358467
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 15:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231672AbhDHNJh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 09:09:37 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:16845 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbhDHNJg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 09:09:36 -0400
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4FGM3y23VCz9vww;
-        Thu,  8 Apr 2021 21:07:10 +0800 (CST)
-Received: from huawei.com (10.174.28.241) by DGGEMS413-HUB.china.huawei.com
- (10.3.19.213) with Microsoft SMTP Server id 14.3.498.0; Thu, 8 Apr 2021
- 21:09:15 +0800
-From:   Bixuan Cui <cuibixuan@huawei.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <john.wanghui@huawei.com>, <linux-usb@vger.kernel.org>,
-        <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
-        <gustavoars@kernel.org>, <oneukum@suse.com>,
-        <erosca@de.adit-jv.com>, "Bixuan Cui" <cuibixuan@huawei.com>
-Subject: [PATCH] usb: core: hub: Fix PM reference leak in usb_port_resume()
-Date:   Thu, 8 Apr 2021 21:08:31 +0800
-Message-ID: <20210408130831.56239-1-cuibixuan@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        id S231645AbhDHNQc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 09:16:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36552 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231527AbhDHNQ2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Apr 2021 09:16:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B296C61154;
+        Thu,  8 Apr 2021 13:16:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617887776;
+        bh=omPlu73KopU66ypRAh20u3JyYJa9RKvVBgANzppAeZQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fkLLl+czLc9LUX+d2br1Tl6Z67vByBL3CcPBBSmr2iip0IOqPTgyPA1iZuRWnEv4q
+         ev8SGQOp+r8fs9ZnAgHoxw21ynUiDj+lYpAjimM3OmXTrNLti+e38oJiqpXWy19RgZ
+         QRIrYorMvqF4BnRmD8Xnhv2uwkARWNRdOcIi3gMaPXI+AzAmdrNHD0YB9oDfpVK307
+         CqcHEi2s1LhEIQmrWljh1iE72V24WYilQ1sGkf29KuqkX/ai3QHE0of18zLdEZWU7b
+         Iu8Cl001yjoSRqKmWiOPAaSE13vOH8OUmx/0BWTtbIII3/0fKcV3kX/En4YaSnps5I
+         QRwoEzZz1HG7Q==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lUUW3-0007Hg-LV; Thu, 08 Apr 2021 15:16:12 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Anthony Mallet <anthony.mallet@laas.fr>
+Subject: [PATCH v2 0/3] TIOCSSERIAL fixes
+Date:   Thu,  8 Apr 2021 15:15:59 +0200
+Message-Id: <20210408131602.27956-1-johan@kernel.org>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.28.241]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-pm_runtime_get_sync will increment pm usage counter even it failed.
-thus a pairing decrement is needed.
-Fix it by replacing it with pm_runtime_resume_and_get to keep usage
-counter balanced.
+This series fixes up a few issues with cdc-acm TIOCSSERIAL
+implementation.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
----
- drivers/usb/core/hub.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Johan
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 9a83390072da..b2bc4b7c4289 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -3605,7 +3605,7 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
- 	u16		portchange, portstatus;
- 
- 	if (!test_and_set_bit(port1, hub->child_usage_bits)) {
--		status = pm_runtime_get_sync(&port_dev->dev);
-+		status = pm_runtime_resume_and_get(&port_dev->dev);
- 		if (status < 0) {
- 			dev_dbg(&udev->dev, "can't resume usb port, status %d\n",
- 					status);
+Changes in v2
+ - amend commit message to clarify that the 12 cs close_delay bug had
+   already been fixed by an earlier patch (1/3)
+
+ - amend commit message to clarify that the base clock rate isn't known
+   for CDC and that the current line speed can still be retrieved
+   through the standard termios interfaces (3/3)
+
+Johan Hovold (3):
+  Revert "USB: cdc-acm: fix rounding error in TIOCSSERIAL"
+  USB: cdc-acm: fix unprivileged TIOCCSERIAL
+  USB: cdc-acm: fix TIOCGSERIAL implementation
+
+ drivers/usb/class/cdc-acm.c | 16 +++-------------
+ 1 file changed, 3 insertions(+), 13 deletions(-)
+
 -- 
-2.17.1
+2.26.3
 
