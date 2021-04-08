@@ -2,100 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76023357FDB
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 11:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26295357FE6
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 11:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbhDHJtN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 05:49:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43172 "EHLO mail.kernel.org"
+        id S230397AbhDHJur (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 05:50:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46674 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230424AbhDHJtN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Apr 2021 05:49:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B97A361154;
-        Thu,  8 Apr 2021 09:49:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617875341;
-        bh=75PIUiG/5SWSv418e48iO3sSOjLXnI3KSH2VixtNNN8=;
+        id S229686AbhDHJur (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Apr 2021 05:50:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B105D61158;
+        Thu,  8 Apr 2021 09:50:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1617875436;
+        bh=e/FRnjd/5ClrN1r/m4tdfdOQvWHKIl6nbZTzS6xIaA8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IOcWN5CcJwRrhcrPo35iZTRFodkPiz95adnn36GxcCf7iTeY4FEttFXvtdFP6Bu+4
-         hwT/EZZUOy4202beJ2MoQfOPDYGWMOZvsSyYRymvvQbc297CF+VNwQnp4q3kwgiYRI
-         dUP5SK4ylCPmpFQfUVuwd9k1RHb5hvoYDk8SO9efON4sy5zbPLGPhOH18NHyxb3Van
-         kHz+odK3R3YzyFZkTi12DiWA0vnd+3/WhgzI/AJJ0AajGoX0x7tSilQJ4T99ZAwl63
-         Ogg5IGs89AmLO/lHdeFp2GVeAjlJCPhsejQ7kk4JxheGdgdrJVcWdrtj3U7H+Hm3wm
-         ysoZ+mopHAAJQ==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lURHU-00031q-6N; Thu, 08 Apr 2021 11:48:56 +0200
-Date:   Thu, 8 Apr 2021 11:48:56 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] USB: cdc-acm: fix TIOCGSERIAL implementation
-Message-ID: <YG7RiLoscS6VXG7n@hovoldconsulting.com>
-References: <20210407102845.32720-1-johan@kernel.org>
- <20210407102845.32720-4-johan@kernel.org>
- <a1a94db2d373c4c7b8841908d8e6133ab022232e.camel@suse.com>
+        b=caIfGSnYU0Qn5RQoPIfxPVthHEnEQqUT5fak37ibpizmpWuiBHKYByJ5eo916rp2W
+         fSVr1kzXpbz78ea3YsVTHKA4GgRRf/EkU8Ci+z0HGRHtqlhiY9l5B/3+KQT3iYzoZ8
+         Wvkw0sIU+X+0eVfdOribzbBfsyWqyvNqn9A5QnoU=
+Date:   Thu, 8 Apr 2021 11:50:33 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] Thunderbolt/USB4 fixes for v5.12-rc7
+Message-ID: <YG7R6bBDY3V69DXu@kroah.com>
+References: <20210408090021.GX2542@lahna.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a1a94db2d373c4c7b8841908d8e6133ab022232e.camel@suse.com>
+In-Reply-To: <20210408090021.GX2542@lahna.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 08, 2021 at 10:36:46AM +0200, Oliver Neukum wrote:
-> Am Mittwoch, den 07.04.2021, 12:28 +0200 schrieb Johan Hovold:
-> > TIOCSSERIAL is a horrid, underspecified, legacy interface which for most
-> > serial devices is only useful for setting the close_delay and
-> > closing_wait parameters.
-> > 
-> > The xmit_fifo_size parameter could be used to set the hardware transmit
-> > fifo size of a legacy UART when it could not be detected, but the
-> > interface is limited to eight bits and should be left unset when it is
-> > not used.
+On Thu, Apr 08, 2021 at 12:00:21PM +0300, Mika Westerberg wrote:
+> Hi Greg,
 > 
-> OK.
+> The following changes since commit a5e13c6df0e41702d2b2c77c8ad41677ebb065b3:
 > 
-> > Similarly, baud_base could be used to set the uart base clock when it
-> > could not be detected, but might as well be left unset when it is not
-> > known.
+>   Linux 5.12-rc5 (2021-03-28 15:48:16 -0700)
 > 
-> Well, the devices report it. It is part of the standard.
-
-No, the standard doesn't include anything about a baud-base clock
-AFAICT.
-
-> > Fix the cdc-acm TIOCGSERIAL implementation by dropping its custom
-> > interpretation of the unused xmit_fifo_size and baud_base fields, which
-> > overflowed the former with the URB buffer size and set the latter to the
-> > current line speed. Also return the port line number, which is the only
-> > other value used besides the close parameters.
-> > 
-> > Fixes: 18c75720e667 ("USB: allow users to run setserial with cdc-acm")
-> > Signed-off-by: Johan Hovold <johan@kernel.org>
-> > ---
-> >  drivers/usb/class/cdc-acm.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> > index 43e31dad4831..b74713518b3a 100644
-> > --- a/drivers/usb/class/cdc-acm.c
-> > +++ b/drivers/usb/class/cdc-acm.c
-> > @@ -929,8 +929,7 @@ static int get_serial_info(struct tty_struct *tty, struct serial_struct *ss)
-> >  {
-> >  	struct acm *acm = tty->driver_data;
-> >  
-> > -	ss->xmit_fifo_size = acm->writesize;
-> > -	ss->baud_base = le32_to_cpu(acm->line.dwDTERate);
+> are available in the Git repository at:
 > 
-> If we do this, we have a value that can be set, but is not reported.
-> That looks a bit strange to me.
+>   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.12-rc7
 
-Again, no, the baud_base cannot be set and it is unknown and unused.
+Pulled and pushed out, thanks.
 
-The only reason to report back baud_base is to support the deprecated
-ASYNC_SPD_CUST interface used to set a custom divisor. cdc-acm has never
-supported that for obvious reasons.
-
-Johan
+greg k-h
