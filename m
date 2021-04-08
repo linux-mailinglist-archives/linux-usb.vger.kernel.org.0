@@ -2,84 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0094B35878A
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 16:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8766D3587D5
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 17:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231934AbhDHOxx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 10:53:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40334 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231892AbhDHOxw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Apr 2021 10:53:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2F26460C3D;
-        Thu,  8 Apr 2021 14:53:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1617893620;
-        bh=nW2krWtHpkH/S3XIOU+fa0NbL43wi1gA8FHgLCxc8E8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rShlUtv3O87kuYTXexcR9miWFcQCYNsisI+GId/PjnJYp2QhgV0ykD2rz39e724uO
-         kLFgz2CXV5xSIYi1U6CbcDxCoqKpH1BNwBygEBJAlNSjaIYq/alPDIceO8s6kNPZWo
-         +xSPxMsiCmrFk9aGCwh5PH2lCLrcn9UOrr6C2ZuI=
-Date:   Thu, 8 Apr 2021 16:53:38 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     liulongfang <liulongfang@huawei.com>
-Cc:     mathias.nyman@intel.com, stern@rowland.harvard.edu,
-        liudongdong3@huawei.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kong.kongxinwei@hisilicon.com,
-        yisen.zhuang@huawei.com
-Subject: Re: [PATCH 1/2] USB:ehci:Add a whitelist for EHCI controllers
-Message-ID: <YG8Y8viSvTpcOkJr@kroah.com>
-References: <1617873073-37371-1-git-send-email-liulongfang@huawei.com>
- <1617873073-37371-2-git-send-email-liulongfang@huawei.com>
- <YG7LO2DJMThbeJ5W@kroah.com>
- <13446834-afc5-e713-d232-36c771059712@huawei.com>
+        id S232083AbhDHPHo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 11:07:44 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:48053 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S231995AbhDHPHk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 11:07:40 -0400
+Received: (qmail 1299096 invoked by uid 1000); 8 Apr 2021 11:07:25 -0400
+Date:   Thu, 8 Apr 2021 11:07:25 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [RFC]extension of the anchor API
+Message-ID: <20210408150725.GC1296449@rowland.harvard.edu>
+References: <5b3c30d268ea2d13d303759ef3dfee8d72830084.camel@suse.com>
+ <20210325150657.GC785961@rowland.harvard.edu>
+ <5d3852dca69ff194017c806078e996c50ee621be.camel@suse.com>
+ <20210325183856.GA799855@rowland.harvard.edu>
+ <cc44e358406f48175fad9e956369d0f5a07efbe9.camel@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <13446834-afc5-e713-d232-36c771059712@huawei.com>
+In-Reply-To: <cc44e358406f48175fad9e956369d0f5a07efbe9.camel@suse.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 08, 2021 at 09:04:17PM +0800, liulongfang wrote:
-> On 2021/4/8 17:22, Greg KH Wrote:
-> > On Thu, Apr 08, 2021 at 05:11:12PM +0800, Longfang Liu wrote:
-> >> Some types of EHCI controllers do not have SBRN registers.
-> >> By comparing the white list, the operation of reading the SBRN
-> >> registers is skipped.
-> >>
-> >> Subsequent EHCI controller types without SBRN registers can be
-> >> directly added to the white list.
-> >>
-> >> The current patch does not affect the drive function.
-> >>
-> >> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
-> >> ---
-> >>  drivers/usb/host/ehci-pci.c | 27 +++++++++++++++++++++++----
-> >>  1 file changed, 23 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
-> >> index 3c3820a..6a30afa 100644
-> >> --- a/drivers/usb/host/ehci-pci.c
-> >> +++ b/drivers/usb/host/ehci-pci.c
-> >> @@ -47,6 +47,28 @@ static inline bool is_bypassed_id(struct pci_dev *pdev)
-> >>  	return !!pci_match_id(bypass_pci_id_table, pdev);
-> >>  }
-> >>  
-> >> +static const struct usb_nosbrn_whitelist_entry {
-> >> +	unsigned short vendor;
-> >> +	unsigned short device;
+On Thu, Apr 08, 2021 at 11:23:05AM +0200, Oliver Neukum wrote:
+> Am Donnerstag, den 25.03.2021, 14:38 -0400 schrieb Alan Stern:
+> > On Thu, Mar 25, 2021 at 05:04:25PM +0100, Oliver Neukum wrote:
+> > > Am Donnerstag, den 25.03.2021, 11:06 -0400 schrieb Alan Stern:
+> > > > > +:c:func:`usb_submit_anchored_urbs`
+> > > > > +---------------------------------
+> > > > > +
+> > > > > +The URBs contained in anchor are chronologically submitted until
+> > > > 
+> > > > "chronologically" is the wrong word.  They are submitted in the order
+> > > > of the anchor's list, which is the same as the order that an iterator
+> > > > would use.
+> > > 
+> > > OK. "In the same sequence as they were anchored" ?
 > > 
-> > u16 here please.
-> > 
-> >> +} usb_nosbrn_whitelist[] = {
-> >> +	/* STMICRO ConneXT has no sbrn register */
-> >> +	{PCI_VENDOR_ID_STMICRO, PCI_DEVICE_ID_STMICRO_USB_HOST},
-> >> +	{}
-> > 
-> > trailing , please.
-> > 
+> > Hmmm.  What happens if you submit an anchor's worth of URBs, but then 
+> > you kill them in the reverse order (which is how you would normally want 
+> > to cancel a bunch of URBs)?  Since each URB gets moved to the end of the 
+> > anchor's list when it completes, after they are all killed the list will 
+> > be reversed.  So the next time you submit the anchor, the order of URBs 
+> > will be backward.  If some of the URBs completed before they were 
+> > killed, the order will be mixed up.
 > 
-> Is it necessary to add "," at the end here?
+> Yes. If the URBs themselves, as opposed to their payloads, are
+> different, this will happen. Yet I am afraid we are looking at a
+> necessary race condition here. If you cancel a non-atomic operation,
+> you will need to deal with all possible intermediate stages of
+> completion.
 
-Yes please.
+That's not the point.  The point is that the description you wrote is 
+incorrect.
+
+I can imagine someone who doesn't understand the details of the 
+anchor/mooring API creating an array of pointers to URBs, then filling 
+in those URBs in the array's order.  That would mess things up if a 
+previous kill caused the order of the anchor list to be different from 
+the array order.
+
+How about instead of moving URBs to the end of the list when they 
+complete, you have the anchor maintain a pointer to the most recently 
+submitted URB?
+
+Alan Stern
+
+> > Of course, if you never use the URBs on an anchor after killing it, this 
+> > doesn't matter.
+> 
+> Yes, to partially solve this issue I wrote
+> usb_transfer_anchors()
+> which allows you to separate those URBs you kill (or submit)
+> by shifting them to another anchor. This is incomplete,
+> as obviously something you kill may do a transfer.
+> 
+> 	Regards
+> 		Oliver
