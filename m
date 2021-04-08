@@ -2,106 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AA9357D04
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 09:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C28B357D39
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 09:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbhDHHKM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 03:10:12 -0400
-Received: from mga11.intel.com ([192.55.52.93]:53177 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229819AbhDHHKK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Apr 2021 03:10:10 -0400
-IronPort-SDR: /TuYMs7M8N6vpQOPqY4fuFWWEDLLexc19rC1JaD5paiYA69P6/TRe2Nr1U8McPvGmZqHWTQBp7
- D1ECadlVS6EA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9947"; a="190271869"
-X-IronPort-AV: E=Sophos;i="5.82,205,1613462400"; 
-   d="scan'208";a="190271869"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2021 00:10:00 -0700
-IronPort-SDR: tOzBnoNL/0LBoJOg9L8l6xsFJKJqpnYabAsM///bAwpBQJ1gsLBVeT6wVPNgstK84sSswIJaIr
- WxJFFSnEVT5g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,205,1613462400"; 
-   d="scan'208";a="519741633"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 08 Apr 2021 00:09:57 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 08 Apr 2021 10:09:56 +0300
-Date:   Thu, 8 Apr 2021 10:09:56 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Kyle Tso <kyletso@google.com>
-Subject: Re: [PATCH v2 3/6] usb: typec: tcpm: update power supply once
- partner accepts
-Message-ID: <YG6sRLrseX7r930k@kuha.fi.intel.com>
-References: <20210407200723.1914388-1-badhri@google.com>
- <20210407200723.1914388-3-badhri@google.com>
+        id S230420AbhDHHUZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 03:20:25 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:15177 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230402AbhDHHUX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 03:20:23 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FGCJN74QYzpVX5;
+        Thu,  8 Apr 2021 15:17:24 +0800 (CST)
+Received: from [10.67.102.118] (10.67.102.118) by
+ DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
+ 14.3.498.0; Thu, 8 Apr 2021 15:20:06 +0800
+Subject: Re: [PATCH] USB:ehci:fix ehci hardware problem
+To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <stern@rowland.harvard.edu>, <liudongdong3@huawei.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kong.kongxinwei@hisilicon.com>, <yisen.zhuang@huawei.com>
+References: <1617865425-28782-1-git-send-email-liulongfang@huawei.com>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <177a1fbd-b6f0-2e67-2e5a-5b05d2015b3a@huawei.com>
+Date:   Thu, 8 Apr 2021 15:19:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210407200723.1914388-3-badhri@google.com>
+In-Reply-To: <1617865425-28782-1-git-send-email-liulongfang@huawei.com>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.118]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 07, 2021 at 01:07:20PM -0700, Badhri Jagan Sridharan wrote:
-> power_supply_changed needs to be called to notify clients
-> after the partner accepts the requested values for the pps
-> case.
+On 2021/4/8 15:03, Longfang Liu wrote:
+> When rebooting the EHCI driver, ehci_shutdown() will be called.
+> if the sbrn flag is 0, ehci_shutdown() will return directly.
 > 
-> Also, remove the redundant power_supply_changed at the end
-> of the tcpm_reset_port as power_supply_changed is already
-> called right after usb_type is changed.
+> Our EHCI hardware does not define the SBRN register, which cause
+> its value to default to 0. The sbrn flag being 0 will cause the
+> EHCI interrupt signal to not be turned off after reboot. An interrupt
+> that is not closed will cause an exception to the device sharing
+> the interrupt.
 > 
-> Fixes: f2a8aa053c176 ("typec: tcpm: Represent source supply through power_supply")
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+> Currently, our hardware has this problem. We hope to solve this
+> problem by skipping reading the sbrn register value. On the next
+> generation of hardware, we will define this SBRN register in accordance
+> with the controller standard.
+> 
+> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
 > ---
-> Changes since V1:
-> * Updated commit description to clarify Guenter Roeck's concern.
-> * Added Reviewed-by tags
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  drivers/usb/host/ehci-pci.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index b4a40099d7e9..d1d03ee90d8f 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -2568,6 +2568,7 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
->  			port->pps_data.max_curr = port->pps_data.req_max_curr;
->  			port->req_supply_voltage = port->pps_data.req_out_volt;
->  			port->req_current_limit = port->pps_data.req_op_curr;
-> +			power_supply_changed(port->psy);
->  			tcpm_set_state(port, SNK_TRANSITION_SINK, 0);
->  			break;
->  		case SOFT_RESET_SEND:
-> @@ -3136,7 +3137,6 @@ static unsigned int tcpm_pd_select_pps_apdo(struct tcpm_port *port)
->  						      port->pps_data.req_out_volt));
->  		port->pps_data.req_op_curr = min(port->pps_data.max_curr,
->  						 port->pps_data.req_op_curr);
-> -		power_supply_changed(port->psy);
->  	}
+> diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+> index 3c3820a..5dc6821 100644
+> --- a/drivers/usb/host/ehci-pci.c
+> +++ b/drivers/usb/host/ehci-pci.c
+> @@ -291,6 +291,8 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
+>  	if (pdev->vendor == PCI_VENDOR_ID_STMICRO
+>  	    && pdev->device == PCI_DEVICE_ID_STMICRO_USB_HOST)
+>  		;	/* ConneXT has no sbrn register */
+> +	else if (pdev->vendor == PCI_VENDOR_ID_HUAWEI)
+> +		;	/* sbrn register is undefined */
+>  	else
+>  		pci_read_config_byte(pdev, 0x60, &ehci->sbrn);
 >  
->  	return src_pdo;
-> @@ -3561,8 +3561,6 @@ static void tcpm_reset_port(struct tcpm_port *port)
->  	port->sink_cap_done = false;
->  	if (port->tcpc->enable_frs)
->  		port->tcpc->enable_frs(port->tcpc, false);
-> -
-> -	power_supply_changed(port->psy);
->  }
->  
->  static void tcpm_detach(struct tcpm_port *port)
-> -- 
-> 2.31.1.295.g9ea45b61b8-goog
-
--- 
-heikki
+> 
+Sorry, please ignore this patch, I will resend it.
+Thanks.
+Longfang.
