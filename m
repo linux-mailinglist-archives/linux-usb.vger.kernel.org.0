@@ -2,85 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99760357F0E
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 11:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB86357F14
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 11:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbhDHJX3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 05:23:29 -0400
-Received: from mx2.suse.de ([195.135.220.15]:56982 "EHLO mx2.suse.de"
+        id S230410AbhDHJ0C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 05:26:02 -0400
+Received: from mga05.intel.com ([192.55.52.43]:59134 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231140AbhDHJX2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Apr 2021 05:23:28 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1617873797; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SDy3Hgx4YK2iaQCTk3BRIHBMt+mFmuLK2rtuCM3mVBo=;
-        b=LMDj3SvJm3hFXfcjBY1qWofp3Nbgh3t0Z9dru2J76Zz2t2Z2m6PC88X59MjRua8+1FIU8c
-        E7ZccwpQ5dJhqlsUleNOH9jkLgO5Cb0tWu2UB4lQrb+Ql+uhqp9Ns39e8dZt83X+uyC04c
-        L4NcCfTF7wB0MuhShZ3ZmWcwsHdHMqQ=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 1CC4EAF23;
-        Thu,  8 Apr 2021 09:23:17 +0000 (UTC)
-Message-ID: <cc44e358406f48175fad9e956369d0f5a07efbe9.camel@suse.com>
-Subject: Re: [RFC]extension of the anchor API
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org
-Date:   Thu, 08 Apr 2021 11:23:05 +0200
-In-Reply-To: <20210325183856.GA799855@rowland.harvard.edu>
-References: <5b3c30d268ea2d13d303759ef3dfee8d72830084.camel@suse.com>
-         <20210325150657.GC785961@rowland.harvard.edu>
-         <5d3852dca69ff194017c806078e996c50ee621be.camel@suse.com>
-         <20210325183856.GA799855@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S229618AbhDHJ0B (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Apr 2021 05:26:01 -0400
+IronPort-SDR: 2FmBwaNonASUGSPlk5c1LrldDNcbqEVebWZyR/VdIg8PgEBcaQr0zblgHqOztxrtTvKqyGMjlR
+ P3ip/ekOUd6A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9947"; a="278769636"
+X-IronPort-AV: E=Sophos;i="5.82,205,1613462400"; 
+   d="scan'208";a="278769636"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2021 02:25:50 -0700
+IronPort-SDR: tDJZXqF5IHHMgCoJtA0Qj7X1TGJqBh7/6uaeZNO//dZgoWRkOHvuYtWkeITznzI/TyQaKeWlhO
+ Ub8stqs13zAQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,205,1613462400"; 
+   d="scan'208";a="519781454"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 08 Apr 2021 02:25:48 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 08 Apr 2021 12:25:47 +0300
+Date:   Thu, 8 Apr 2021 12:25:47 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] usb: typec: tcpm: remove unused static variable
+ 'tcpm_altmode_ops'
+Message-ID: <YG7MG2yZbRlSJg9E@kuha.fi.intel.com>
+References: <20210407091540.2815-1-thunder.leizhen@huawei.com>
+ <7e2797f7-0ba7-0362-ae34-a1d4fb265cd7@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7e2797f7-0ba7-0362-ae34-a1d4fb265cd7@redhat.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Donnerstag, den 25.03.2021, 14:38 -0400 schrieb Alan Stern:
-> On Thu, Mar 25, 2021 at 05:04:25PM +0100, Oliver Neukum wrote:
-> > Am Donnerstag, den 25.03.2021, 11:06 -0400 schrieb Alan Stern:
-> > > > +:c:func:`usb_submit_anchored_urbs`
-> > > > +---------------------------------
-> > > > +
-> > > > +The URBs contained in anchor are chronologically submitted until
-> > > 
-> > > "chronologically" is the wrong word.  They are submitted in the order
-> > > of the anchor's list, which is the same as the order that an iterator
-> > > would use.
-> > 
-> > OK. "In the same sequence as they were anchored" ?
+On Thu, Apr 08, 2021 at 11:10:38AM +0200, Hans de Goede wrote:
+> Hi,
 > 
-> Hmmm.  What happens if you submit an anchor's worth of URBs, but then 
-> you kill them in the reverse order (which is how you would normally want 
-> to cancel a bunch of URBs)?  Since each URB gets moved to the end of the 
-> anchor's list when it completes, after they are all killed the list will 
-> be reversed.  So the next time you submit the anchor, the order of URBs 
-> will be backward.  If some of the URBs completed before they were 
-> killed, the order will be mixed up.
+> On 4/7/21 11:15 AM, Zhen Lei wrote:
+> > Fixes the following W=1 kernel build warning:
+> > 
+> > drivers/usb/typec/tcpm/tcpm.c:2107:39: warning: ‘tcpm_altmode_ops’ defined but not used [-Wunused-const-variable=]
+> > 
+> > The reference to the variable 'tcpm_altmode_ops' is deleted by the
+> > commit a079973f462a ("usb: typec: tcpm: Remove tcpc_config configuration
+> > mechanism").
+> > 
+> > By the way, the static functions referenced only by the variable
+> > 'tcpm_altmode_ops' are deleted accordingly.
+> > 
+> > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> 
+> I have a patch pending:
+> 
+> https://www.spinics.net/lists/linux-usb/msg197684.html
+> 
+> Which actually uses this. I really need to (and plan to) brush the dust of
+> this one soon and submit a new version.
+> 
+> As such I would prefer for these ops to not get removed. But I guess I
+> can always include a patch in my series reverting the removal...
 
-Yes. If the URBs themselves, as opposed to their payloads, are
-different, this will happen. Yet I am afraid we are looking at a
-necessary race condition here. If you cancel a non-atomic operation,
-you will need to deal with all possible intermediate stages of
-completion.
+Well, can we then just leave the ops there? If we're going to
+re-introduce them back soon in any case, then why drop them in the
+first place.
 
-> Of course, if you never use the URBs on an anchor after killing it, this 
-> doesn't matter.
+thanks,
 
-Yes, to partially solve this issue I wrote
-usb_transfer_anchors()
-which allows you to separate those URBs you kill (or submit)
-by shifting them to another anchor. This is incomplete,
-as obviously something you kill may do a transfer.
-
-	Regards
-		Oliver
-
-
+-- 
+heikki
