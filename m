@@ -2,211 +2,195 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF25358F9E
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 00:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D39358FFD
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 00:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232376AbhDHWIW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 18:08:22 -0400
-Received: from mga03.intel.com ([134.134.136.65]:27203 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232265AbhDHWIV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Apr 2021 18:08:21 -0400
-IronPort-SDR: OIN1biqmk7E/T0KMShva8tKw+mx+bOLORg+WHhTJZLaFRDKPZRDFevX6MF2oXJXpxWYeSKIIfp
- 36VM/PtrHqtg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9948"; a="193681244"
-X-IronPort-AV: E=Sophos;i="5.82,207,1613462400"; 
-   d="scan'208";a="193681244"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2021 15:08:09 -0700
-IronPort-SDR: FBqVohRg1TmHMDlD4t6LvjFuySLMM1Dws+Aj0O6cb74kvuYkv45VirxSGGVZMQ6qXJlrLnM6S8
- zXDYbyLptDdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,207,1613462400"; 
-   d="scan'208";a="610253316"
-Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Apr 2021 15:08:08 -0700
-Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lUcop-000FjW-I3; Thu, 08 Apr 2021 22:08:07 +0000
-Date:   Fri, 09 Apr 2021 06:07:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- bc2f3e4c662841dc19f7e7efae87782b9f3c0831
-Message-ID: <606f7ebb.5K3pHN+lN2oTOK/+%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S232804AbhDHWti (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 18:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232643AbhDHWth (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 18:49:37 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65B1C061760
+        for <linux-usb@vger.kernel.org>; Thu,  8 Apr 2021 15:49:23 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id s11so2942342pfm.1
+        for <linux-usb@vger.kernel.org>; Thu, 08 Apr 2021 15:49:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OA781OccRNwXE7rt2K4lFZ5YBX2tVVTL8OP2VVE7W5k=;
+        b=WV51htl117L8zuAaqHXXoY7ed5xTWBqk5ntWuoyogOc/YvHhI2fi3POHYHV+gyiI+h
+         7jwQJ5n3UeNi0UQ+xcGrHwjZQTU4J95PvkA1frsL8un4AnJ2cNbmyci9oGBSQX11Nx04
+         lLiHi1bh92wdh08yNIMHySzMNYC96WXXNunv8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OA781OccRNwXE7rt2K4lFZ5YBX2tVVTL8OP2VVE7W5k=;
+        b=d2FtPm71duYsuzm+x8rQ2Fsk1zQGDoNOosNG0UGMKMFtjKeqCMAVBpUI4zg1ep1g7X
+         QBrXDV3prDcO1KfbANJurc5OVa7GeepJlVKoDwgLtuhwawEzPrIDNgRPzjPRHqGEn0IN
+         Q6JC65sCBj+7w7vsH3X3jTY7dXyW8RCILBP0jTU4MhfqFbH7vxuxW1KUSmkYN02Rh75C
+         LmgQ2ihglFM0Urz5LhibBs9EBNS/ED2L9r/t1W8AGN+oYuZQicKwv8S2PiPZFDY8kvvA
+         0f9thvLnGfY9KsklVv39fdE6EKJVOph8HA7SapFsQ9YyoVH7ANPjCsKr54Vghcj/a/gj
+         zBPQ==
+X-Gm-Message-State: AOAM531YJL86oHQ7eYQf0YeaCd1NV5zM84qj6QRW2YeTlQgACoZuyD78
+        9299+cK/N4YrwS30yr+WjfHr7g==
+X-Google-Smtp-Source: ABdhPJzBrRR/poki5sG+OHaXYR11z6gwhKEfjfuEHH4IEwICWTvaml5hGOyodyjI9brEWQS0oONOvQ==
+X-Received: by 2002:a05:6a00:2389:b029:21a:d3b4:e5 with SMTP id f9-20020a056a002389b029021ad3b400e5mr9858217pfc.39.1617922163264;
+        Thu, 08 Apr 2021 15:49:23 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:d013:d350:4066:89b8])
+        by smtp.gmail.com with UTF8SMTPSA id d26sm417094pfo.162.2021.04.08.15.49.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Apr 2021 15:49:22 -0700 (PDT)
+Date:   Thu, 8 Apr 2021 15:49:21 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-usb@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Bastien Nocera <hadess@hadess.net>, devicetree@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>
+Subject: Re: [PATCH v6 1/5] dt-bindings: usb: Add binding for Realtek RTS5411
+ hub controller
+Message-ID: <YG+IcUvJPAa3NieK@google.com>
+References: <20210405201817.3977893-1-mka@chromium.org>
+ <20210405124900.v6.1.I248292623d3d0f6a4f0c5bc58478ca3c0062b49a@changeid>
+ <20210406163001.GA1910748@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210406163001.GA1910748@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: bc2f3e4c662841dc19f7e7efae87782b9f3c0831  Merge tag 'thunderbolt-for-v5.12-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
+On Tue, Apr 06, 2021 at 11:30:01AM -0500, Rob Herring wrote:
+> On Mon, Apr 05, 2021 at 01:18:13PM -0700, Matthias Kaehlcke wrote:
+> > The Realtek RTS5411 is a USB 3.0 hub controller with 4 ports.
+> > 
+> > This initial version of the binding only describes USB related
+> > aspects of the RTS5411, it does not cover the option of
+> > connecting the controller as an i2c slave.
+> > 
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
+> > 
+> > Changes in v7:
+> > - added type ref for 'companion-hub' property
+> > 
+> > Changes in v6:
+> > - Realtek binding instead of generic onboard_usb_hub
+> > - added 'companion-hub' property
+> > - added reference to 'usb-device.yaml'
+> > - 'fixed' indentation of compatible entries to keep yamllint happy
+> > - added 'additionalProperties' entry
+> > - updated commit message
+> > 
+> > Changes in v5:
+> > - updated 'title'
+> > - only use standard USB compatible strings
+> > - deleted 'usb_hub' node
+> > - renamed 'usb_controller' node to 'usb-controller'
+> > - removed labels from USB nodes
+> > - added 'vdd-supply' to USB nodes
+> > 
+> > Changes in v4:
+> > - none
+> > 
+> > Changes in v3:
+> > - updated commit message
+> > - removed recursive reference to $self
+> > - adjusted 'compatible' definition to support multiple entries
+> > - changed USB controller phandle to be a node
+> > 
+> > Changes in v2:
+> > - removed 'wakeup-source' and 'power-off-in-suspend' properties
+> > - consistently use spaces for indentation in example
+> > 
+> >  .../bindings/usb/realtek,rts5411.yaml         | 59 +++++++++++++++++++
+> >  1 file changed, 59 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/usb/realtek,rts5411.yaml b/Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
+> > new file mode 100644
+> > index 000000000000..b59001972749
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
+> > @@ -0,0 +1,59 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/usb/realtek,rts5411.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Binding for the Realtek RTS5411 USB 3.0 hub controller
+> > +
+> > +maintainers:
+> > +  - Matthias Kaehlcke <mka@chromium.org>
+> > +
+> > +allOf:
+> > +  - $ref: usb-device.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - enum:
+> > +          - usbbda,5411
+> > +          - usbbda,411
+> > +
+> 
+> reg: true
+> 
+> to fix the error.
 
-elapsed time: 727m
+Will fix in v8 (this is v7, even though the subject says otherwise,
+I forgot to increment the version number when sending).
 
-configs tested: 149
-configs skipped: 3
+> > +  vdd-supply:
+> > +    description:
+> > +      phandle to the regulator that provides power to the hub.
+> > +
+> > +  companion-hub:
+> > +    $ref: '/schemas/types.yaml#/definitions/phandle'
+> > +    description:
+> > +      phandle to the companion hub on the controller.
+> 
+> This should be required I think. I suppose you could only hook up 2.0
+> ports, but why. And 3.0 only wouldn't be USB compliant, would it?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Agreed, that makes sense now that this is a specific binding for the
+RTS5411. It seems unlikely that a system would use a USB 3.0 capable
+hub on a USB 2.0 controller, and as you said 3.0 only wouldn't be USB
+compliant.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-x86_64                           allyesconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-i386                             allyesconfig
-arm                          gemini_defconfig
-mips                           mtx1_defconfig
-arm                      pxa255-idp_defconfig
-alpha                               defconfig
-m68k                        stmark2_defconfig
-mips                      maltaaprp_defconfig
-powerpc                    ge_imp3a_defconfig
-sh                           se7724_defconfig
-mips                      loongson3_defconfig
-mips                        bcm63xx_defconfig
-arm                        clps711x_defconfig
-openrisc                  or1klitex_defconfig
-powerpc                    amigaone_defconfig
-sh                ecovec24-romimage_defconfig
-mips                         cobalt_defconfig
-mips                  cavium_octeon_defconfig
-ia64                        generic_defconfig
-mips                        maltaup_defconfig
-arm                           tegra_defconfig
-powerpc                     stx_gp3_defconfig
-powerpc                    socrates_defconfig
-sh                            shmin_defconfig
-h8300                            alldefconfig
-powerpc                      pmac32_defconfig
-m68k                             alldefconfig
-arm                         lubbock_defconfig
-arc                           tb10x_defconfig
-mips                            gpr_defconfig
-powerpc                       maple_defconfig
-powerpc64                           defconfig
-mips                     cu1000-neo_defconfig
-sh                   secureedge5410_defconfig
-arm                         nhk8815_defconfig
-sh                          landisk_defconfig
-powerpc                      arches_defconfig
-mips                          rb532_defconfig
-riscv                               defconfig
-openrisc                         alldefconfig
-mips                           ip27_defconfig
-arm                         s3c6400_defconfig
-mips                          malta_defconfig
-arm                         orion5x_defconfig
-mips                           ip28_defconfig
-sh                   sh7724_generic_defconfig
-sh                          rsk7269_defconfig
-powerpc                mpc7448_hpc2_defconfig
-s390                             allmodconfig
-mips                        bcm47xx_defconfig
-arm                            zeus_defconfig
-arm                      footbridge_defconfig
-powerpc                        warp_defconfig
-mips                           ip22_defconfig
-m68k                          multi_defconfig
-sh                          lboxre2_defconfig
-arm                     eseries_pxa_defconfig
-arm                            lart_defconfig
-arm64                            alldefconfig
-um                               allmodconfig
-powerpc                      pasemi_defconfig
-powerpc                 mpc832x_rdb_defconfig
-powerpc               mpc834x_itxgp_defconfig
-arm                          ep93xx_defconfig
-xtensa                         virt_defconfig
-xtensa                    xip_kc705_defconfig
-m68k                        mvme16x_defconfig
-csky                                defconfig
-powerpc                     kilauea_defconfig
-arm                          pxa3xx_defconfig
-arc                    vdk_hs38_smp_defconfig
-mips                           ip32_defconfig
-arc                     nsimosci_hs_defconfig
-arm                        realview_defconfig
-x86_64                           alldefconfig
-arm                        mvebu_v7_defconfig
-sh                  sh7785lcr_32bit_defconfig
-arm                          collie_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20210408
-x86_64               randconfig-a005-20210408
-x86_64               randconfig-a003-20210408
-x86_64               randconfig-a001-20210408
-x86_64               randconfig-a002-20210408
-x86_64               randconfig-a006-20210408
-i386                 randconfig-a006-20210408
-i386                 randconfig-a003-20210408
-i386                 randconfig-a001-20210408
-i386                 randconfig-a004-20210408
-i386                 randconfig-a005-20210408
-i386                 randconfig-a002-20210408
-i386                 randconfig-a014-20210408
-i386                 randconfig-a016-20210408
-i386                 randconfig-a011-20210408
-i386                 randconfig-a012-20210408
-i386                 randconfig-a013-20210408
-i386                 randconfig-a015-20210408
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                          rv32_defconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+I made the attribute initially optional because the binding was
+intended to be generic (bad idea), and for certain hubs a required
+'companion-hub' wouldn't make sense (e.g. USB 2.0 only).
 
-clang tested configs:
-x86_64               randconfig-a014-20210408
-x86_64               randconfig-a015-20210408
-x86_64               randconfig-a012-20210408
-x86_64               randconfig-a011-20210408
-x86_64               randconfig-a013-20210408
-x86_64               randconfig-a016-20210408
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    usb-controller {
+> 
+> 'usb' is the standard name.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ack
+
+Thanks for your comments!
+
+m.
