@@ -2,203 +2,206 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E36357D62
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 09:30:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B4B357D8C
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 09:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbhDHHab (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 03:30:31 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:60094 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230342AbhDHHa0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 03:30:26 -0400
-Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id EE05240788;
-        Thu,  8 Apr 2021 07:30:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1617867016; bh=h0c3Ab83WtpD8J1J8C8z3WJ3MO7dMp3GAkYTqraf9Vc=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=hGIaa/EpXp+V22hvNBBeiXM17BgQRP5bYEiBzNlBAMVluuyy+BTo4ZDYjVKU+GHXn
-         pv3Y/NTLxtO5ucaCtNxYiH6G7YXcMRY4VVQZWrZnBFMS25TNLCLZ/akz1so60kudPG
-         IBzPb5f7CNfb1FpA8K5086yXNFJdHxfbP0qkwKXZXluXiPxk/MyfP9D5Krr7dkm7r8
-         iwv8+Gwq7V6iGpLdVGhsW5v/RbJzoElKDIOsKUIoZbsIhi1W2sK97JtOaSplSwxOi8
-         tViNPq6b18IF7ZoV+uliALIAtZjxc2jbjvXaY6Nxid5jt4jEBEAmufPANpNqBfnPUg
-         WbSQP/INwRoLw==
-Received: from razpc-HP (razpc-hp.internal.synopsys.com [10.116.126.207])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 5BF7FA0094;
-        Thu,  8 Apr 2021 07:30:12 +0000 (UTC)
-Received: by razpc-HP (sSMTP sendmail emulation); Thu, 08 Apr 2021 11:30:11 +0400
-Date:   Thu, 08 Apr 2021 11:30:11 +0400
-In-Reply-To: <cover.1617782102.git.Arthur.Petrosyan@synopsys.com>
-References: <cover.1617782102.git.Arthur.Petrosyan@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-Subject: [PATCH v2 13/14] usb: dwc2: Fix partial power down exiting by system resume
-To:     Felipe Balbi <balbi@kernel.org>,
+        id S229925AbhDHHsO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 03:48:14 -0400
+Received: from mga18.intel.com ([134.134.136.126]:58374 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229877AbhDHHsN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Apr 2021 03:48:13 -0400
+IronPort-SDR: w0y3ZGF7ReJxreheXv5kpoGQxW/98lpFvhCSyVf4SGm1zOPFdZlDUvFd+OJ6y4vyBtQ8z1Ycjm
+ UVVHk3WfM9ZQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9947"; a="181022681"
+X-IronPort-AV: E=Sophos;i="5.82,205,1613462400"; 
+   d="scan'208";a="181022681"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2021 00:48:01 -0700
+IronPort-SDR: ngAq7GwVlfR1eDxlNW4Yf+7JCpl/7XeCeQAPKAoRtKpdwofPtelinvWnll+1DMH0edoX16DpVS
+ hLhC48Yzpfbw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,205,1613462400"; 
+   d="scan'208";a="519752773"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 08 Apr 2021 00:47:56 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 08 Apr 2021 10:47:55 +0300
+Date:   Thu, 8 Apr 2021 10:47:55 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-        Paul Zimmerman <paulz@synopsys.com>, <stable@vger.kernel.org>,
-        Kever Yang <kever.yang@rock-chips.com>
-Message-Id: <20210408073012.5BF7FA0094@mailhost.synopsys.com>
+        devicetree@vger.kernel.org, Kyle Tso <kyletso@google.com>
+Subject: Re: [PATCH v2 4/6] usb: typec: tcpm: Honour pSnkStdby requirement
+ during negotiation
+Message-ID: <YG61KxWrwaOe0ddL@kuha.fi.intel.com>
+References: <20210407200723.1914388-1-badhri@google.com>
+ <20210407200723.1914388-4-badhri@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210407200723.1914388-4-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fixes the implementation of exiting from partial power down
-power saving mode when PC is resumed.
+On Wed, Apr 07, 2021 at 01:07:21PM -0700, Badhri Jagan Sridharan wrote:
+> >From PD Spec:
+> The Sink Shall transition to Sink Standby before a positive or
+> negative voltage transition of VBUS. During Sink Standby
+> the Sink Shall reduce its power draw to pSnkStdby. This allows
+> the Source to manage the voltage transition as well as
+> supply sufficient operating current to the Sink to maintain PD
+> operation during the transition. The Sink Shall
+> complete this transition to Sink Standby within tSnkStdby
+> after evaluating the Accept Message from the Source. The
+> transition when returning to Sink operation from Sink Standby
+> Shall be completed within tSnkNewPower. The
+> pSnkStdby requirement Shall only apply if the Sink power draw
+> is higher than this level.
+> 
+> The above requirement needs to be met to prevent hard resets
+> from port partner.
+> 
+> Without the patch: (5V/3A during SNK_DISCOVERY all the way through
+> explicit contract)
+> [   95.711984] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+> [   95.712007] state change TOGGLING -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
+> [   95.712017] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
+> [   95.837190] VBUS on
+> [   95.882075] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
+> [   95.882082] state change SNK_DEBOUNCED -> SNK_ATTACHED [rev3 NONE_AMS]
+> [   95.882086] polarity 1
+> [   95.883151] set_auto_vbus_discharge_threshold mode:0 pps_active:n vbus:5000 ret:0
+> [   95.883441] enable vbus discharge ret:0
+> [   95.883445] Requesting mux state 1, usb-role 2, orientation 2
+> [   95.883776] state change SNK_ATTACHED -> SNK_STARTUP [rev3 NONE_AMS]
+> [   95.883879] pending state change SNK_STARTUP -> SNK_DISCOVERY @ 500 ms [rev3 NONE_AMS]
+> [   96.038960] VBUS on
+> [   96.383939] state change SNK_STARTUP -> SNK_DISCOVERY [delayed 500 ms]
+> [   96.383946] Setting voltage/current limit 5000 mV 3000 mA
+> [   96.383961] vbus=0 charge:=1
+> [   96.386044] state change SNK_DISCOVERY -> SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
+> [   96.386309] pending state change SNK_WAIT_CAPABILITIES -> HARD_RESET_SEND @ 450 ms [rev3 NONE_AMS]
+> [   96.394404] PD RX, header: 0x2161 [1]
+> [   96.394408]  PDO 0: type 0, 5000 mV, 3000 mA [E]
+> [   96.394410]  PDO 1: type 0, 9000 mV, 2000 mA []
+> [   96.394412] state change SNK_WAIT_CAPABILITIES -> SNK_NEGOTIATE_CAPABILITIES [rev2 POWER_NEGOTIATION]
+> [   96.394416] Setting usb_comm capable false
+> [   96.395083] cc=0 cc1=0 cc2=5 vbus=0 vconn=sink polarity=1
+> [   96.395089] Requesting PDO 1: 9000 mV, 2000 mA
+> [   96.395093] PD TX, header: 0x1042
+> [   96.397404] PD TX complete, status: 0
+> [   96.397424] pending state change SNK_NEGOTIATE_CAPABILITIES -> HARD_RESET_SEND @ 60 ms [rev2 POWER_NEGOTIATION]
+> [   96.400826] PD RX, header: 0x363 [1]
+> [   96.400829] state change SNK_NEGOTIATE_CAPABILITIES -> SNK_TRANSITION_SINK [rev2 POWER_NEGOTIATION]
+> [   96.400832] pending state change SNK_TRANSITION_SINK -> HARD_RESET_SEND @ 500 ms [rev2 POWER_NEGOTIATION]
+> [   96.577315] PD RX, header: 0x566 [1]
+> [   96.577321] Setting voltage/current limit 9000 mV 2000 mA
+> [   96.578363] set_auto_vbus_discharge_threshold mode:3 pps_active:n vbus:9000 ret:0
+> [   96.578370] state change SNK_TRANSITION_SINK -> SNK_READY [rev2 POWER_NEGOTIATION]
+> 
+> With the patch:
+> [  168.398573] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+> [  168.398605] state change TOGGLING -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
+> [  168.398619] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
+> [  168.522348] VBUS on
+> [  168.568676] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
+> [  168.568684] state change SNK_DEBOUNCED -> SNK_ATTACHED [rev3 NONE_AMS]
+> [  168.568688] polarity 1
+> [  168.569867] set_auto_vbus_discharge_threshold mode:0 pps_active:n vbus:5000 ret:0
+> [  168.570158] enable vbus discharge ret:0
+> [  168.570161] Requesting mux state 1, usb-role 2, orientation 2
+> [  168.570504] state change SNK_ATTACHED -> SNK_STARTUP [rev3 NONE_AMS]
+> [  168.570634] pending state change SNK_STARTUP -> SNK_DISCOVERY @ 500 ms [rev3 NONE_AMS]
+> [  169.070689] state change SNK_STARTUP -> SNK_DISCOVERY [delayed 500 ms]
+> [  169.070695] Setting voltage/current limit 5000 mV 3000 mA
+> [  169.070702] vbus=0 charge:=1
+> [  169.072719] state change SNK_DISCOVERY -> SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
+> [  169.073145] pending state change SNK_WAIT_CAPABILITIES -> HARD_RESET_SEND @ 450 ms [rev3 NONE_AMS]
+> [  169.077162] PD RX, header: 0x2161 [1]
+> [  169.077172]  PDO 0: type 0, 5000 mV, 3000 mA [E]
+> [  169.077178]  PDO 1: type 0, 9000 mV, 2000 mA []
+> [  169.077183] state change SNK_WAIT_CAPABILITIES -> SNK_NEGOTIATE_CAPABILITIES [rev2 POWER_NEGOTIATION]
+> [  169.077191] Setting usb_comm capable false
+> [  169.077753] cc=0 cc1=0 cc2=5 vbus=0 vconn=sink polarity=1
+> [  169.077759] Requesting PDO 1: 9000 mV, 2000 mA
+> [  169.077762] PD TX, header: 0x1042
+> [  169.079990] PD TX complete, status: 0
+> [  169.080013] pending state change SNK_NEGOTIATE_CAPABILITIES -> HARD_RESET_SEND @ 60 ms [rev2 POWER_NEGOTIATION]
+> [  169.083183] VBUS on
+> [  169.084195] PD RX, header: 0x363 [1]
+> [  169.084200] state change SNK_NEGOTIATE_CAPABILITIES -> SNK_TRANSITION_SINK [rev2 POWER_NEGOTIATION]
+> [  169.084206] Setting standby current 5000 mV @ 500 mA
+> [  169.084209] Setting voltage/current limit 5000 mV 500 mA
+> [  169.084220] pending state change SNK_TRANSITION_SINK -> HARD_RESET_SEND @ 500 ms [rev2 POWER_NEGOTIATION]
+> [  169.260222] PD RX, header: 0x566 [1]
+> [  169.260227] Setting voltage/current limit 9000 mV 2000 mA
+> [  169.261315] set_auto_vbus_discharge_threshold mode:3 pps_active:n vbus:9000 ret:0
+> [  169.261321] state change SNK_TRANSITION_SINK -> SNK_READY [rev2 POWER_NEGOTIATION]
+> [  169.261570] AMS POWER_NEGOTIATION finished
+> 
+> Fixes: f0690a25a140b ("staging: typec: USB Type-C Port Manager (tcpm)")
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 17 +++++++++++++++++
+>  include/linux/usb/pd.h        |  2 ++
+>  2 files changed, 19 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index d1d03ee90d8f..770b2edd9a04 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4131,6 +4131,23 @@ static void run_state_machine(struct tcpm_port *port)
+>  		}
+>  		break;
+>  	case SNK_TRANSITION_SINK:
+> +		/* From the USB PD spec:
+> +		 * "The Sink Shall transition to Sink Standby before a positive or
+> +		 * negative voltage transition of VBUS. During Sink Standby
+> +		 * the Sink Shall reduce its power draw to pSnkStdby."
+> +		 *
+> +		 * This is not applicable to PPS though as the port can continue
+> +		 * to draw negotiated power without switching to standby.
+> +		 */
+> +		if (port->supply_voltage != port->req_supply_voltage && !port->pps_data.active &&
+> +		    port->current_limit * port->supply_voltage / 1000 > PD_P_SNK_STDBY_MW) {
+> +			u32 stdby_ma = port->supply_voltage ? PD_P_SNK_STDBY_MW * 1000 /
+> +				port->supply_voltage : 0;
 
-Added port connection status checking which prevents exiting from
-Partial Power Down mode from _dwc2_hcd_resume() if not in Partial
-Power Down mode.
+Looks like unnecessary condition to me. The first condition can not be
+true if port->supply_voltage == 0. So I think that should be just:
 
-Rearranged the implementation to get rid of many "if"
-statements.
+                        u32 stdby_ma = PD_P_SNK_STDBY_MW * 1000 / port->supply_voltage;
 
-NOTE: Switch case statement is used for hibernation partial
-power down and clock gating mode determination. In this patch
-only Partial Power Down is implemented the Hibernation and
-clock gating implementations are planned to be added.
+Or did I miss something?
 
-Cc: <stable@vger.kernel.org>
-Fixes: 6f6d70597c15 ("usb: dwc2: bus suspend/resume for hosts with DWC2_POWER_DOWN_PARAM_NONE")
-Signed-off-by: Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
----
- Changes in v2:
- - None
+> +			tcpm_log(port, "Setting standby current %u mV @ %u mA",
+> +				 port->supply_voltage, stdby_ma);
+> +			tcpm_set_current_limit(port, stdby_ma, port->supply_voltage);
+> +		}
+> +		fallthrough;
+>  	case SNK_TRANSITION_SINK_VBUS:
+>  		tcpm_set_state(port, hard_reset_state(port),
+>  			       PD_T_PS_TRANSITION);
+> diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
+> index 70d681918d01..bf00259493e0 100644
+> --- a/include/linux/usb/pd.h
+> +++ b/include/linux/usb/pd.h
+> @@ -493,4 +493,6 @@ static inline unsigned int rdo_max_power(u32 rdo)
+>  #define PD_N_CAPS_COUNT		(PD_T_NO_RESPONSE / PD_T_SEND_SOURCE_CAP)
+>  #define PD_N_HARD_RESET_COUNT	2
+>  
+> +#define PD_P_SNK_STDBY_MW	2500	/* 2500 mW */
+> +
+>  #endif /* __LINUX_USB_PD_H */
+> -- 
+> 2.31.1.295.g9ea45b61b8-goog
 
- drivers/usb/dwc2/hcd.c | 90 +++++++++++++++++++++---------------------
- 1 file changed, 46 insertions(+), 44 deletions(-)
+thanks,
 
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index 34030bafdff4..f096006df96f 100644
---- a/drivers/usb/dwc2/hcd.c
-+++ b/drivers/usb/dwc2/hcd.c
-@@ -4427,7 +4427,7 @@ static int _dwc2_hcd_resume(struct usb_hcd *hcd)
- {
- 	struct dwc2_hsotg *hsotg = dwc2_hcd_to_hsotg(hcd);
- 	unsigned long flags;
--	u32 pcgctl;
-+	u32 hprt0;
- 	int ret = 0;
- 
- 	spin_lock_irqsave(&hsotg->lock, flags);
-@@ -4438,11 +4438,40 @@ static int _dwc2_hcd_resume(struct usb_hcd *hcd)
- 	if (hsotg->lx_state != DWC2_L2)
- 		goto unlock;
- 
--	if (hsotg->params.power_down > DWC2_POWER_DOWN_PARAM_PARTIAL) {
-+	hprt0 = dwc2_read_hprt0(hsotg);
-+
-+	/*
-+	 * Added port connection status checking which prevents exiting from
-+	 * Partial Power Down mode from _dwc2_hcd_resume() if not in Partial
-+	 * Power Down mode.
-+	 */
-+	if (hprt0 & HPRT0_CONNSTS) {
-+		hsotg->lx_state = DWC2_L0;
-+		goto unlock;
-+	}
-+
-+	switch (hsotg->params.power_down) {
-+	case DWC2_POWER_DOWN_PARAM_PARTIAL:
-+		ret = dwc2_exit_partial_power_down(hsotg, 0, true);
-+		if (ret)
-+			dev_err(hsotg->dev,
-+				"exit partial_power_down failed\n");
-+		/*
-+		 * Set HW accessible bit before powering on the controller
-+		 * since an interrupt may rise.
-+		 */
-+		set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
-+		break;
-+	case DWC2_POWER_DOWN_PARAM_HIBERNATION:
-+	case DWC2_POWER_DOWN_PARAM_NONE:
-+	default:
- 		hsotg->lx_state = DWC2_L0;
- 		goto unlock;
- 	}
- 
-+	/* Change Root port status, as port status change occurred after resume.*/
-+	hsotg->flags.b.port_suspend_change = 1;
-+
- 	/*
- 	 * Enable power if not already done.
- 	 * This must not be spinlocked since duration
-@@ -4454,52 +4483,25 @@ static int _dwc2_hcd_resume(struct usb_hcd *hcd)
- 		spin_lock_irqsave(&hsotg->lock, flags);
- 	}
- 
--	if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_PARTIAL) {
--		/*
--		 * Set HW accessible bit before powering on the controller
--		 * since an interrupt may rise.
--		 */
--		set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
--
--
--		/* Exit partial_power_down */
--		ret = dwc2_exit_partial_power_down(hsotg, 0, true);
--		if (ret && (ret != -ENOTSUPP))
--			dev_err(hsotg->dev, "exit partial_power_down failed\n");
--	} else {
--		pcgctl = readl(hsotg->regs + PCGCTL);
--		pcgctl &= ~PCGCTL_STOPPCLK;
--		writel(pcgctl, hsotg->regs + PCGCTL);
--	}
--
--	hsotg->lx_state = DWC2_L0;
--
-+	/* Enable external vbus supply after resuming the port. */
- 	spin_unlock_irqrestore(&hsotg->lock, flags);
-+	dwc2_vbus_supply_init(hsotg);
- 
--	if (hsotg->bus_suspended) {
--		spin_lock_irqsave(&hsotg->lock, flags);
--		hsotg->flags.b.port_suspend_change = 1;
--		spin_unlock_irqrestore(&hsotg->lock, flags);
--		dwc2_port_resume(hsotg);
--	} else {
--		if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_PARTIAL) {
--			dwc2_vbus_supply_init(hsotg);
--
--			/* Wait for controller to correctly update D+/D- level */
--			usleep_range(3000, 5000);
--		}
-+	/* Wait for controller to correctly update D+/D- level */
-+	usleep_range(3000, 5000);
-+	spin_lock_irqsave(&hsotg->lock, flags);
- 
--		/*
--		 * Clear Port Enable and Port Status changes.
--		 * Enable Port Power.
--		 */
--		dwc2_writel(hsotg, HPRT0_PWR | HPRT0_CONNDET |
--				HPRT0_ENACHG, HPRT0);
--		/* Wait for controller to detect Port Connect */
--		usleep_range(5000, 7000);
--	}
-+	/*
-+	 * Clear Port Enable and Port Status changes.
-+	 * Enable Port Power.
-+	 */
-+	dwc2_writel(hsotg, HPRT0_PWR | HPRT0_CONNDET |
-+			HPRT0_ENACHG, HPRT0);
- 
--	return ret;
-+	/* Wait for controller to detect Port Connect */
-+	spin_unlock_irqrestore(&hsotg->lock, flags);
-+	usleep_range(5000, 7000);
-+	spin_lock_irqsave(&hsotg->lock, flags);
- unlock:
- 	spin_unlock_irqrestore(&hsotg->lock, flags);
- 
 -- 
-2.25.1
-
+heikki
