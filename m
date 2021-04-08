@@ -2,114 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AEDE357F06
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 11:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99760357F0E
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 11:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbhDHJWR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 05:22:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38344 "EHLO mail.kernel.org"
+        id S230506AbhDHJX3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 05:23:29 -0400
+Received: from mx2.suse.de ([195.135.220.15]:56982 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229600AbhDHJWR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Apr 2021 05:22:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AACB361166;
-        Thu,  8 Apr 2021 09:22:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1617873726;
-        bh=Ldyy5p8qNIJW45yhEXFnxF+Ibo1nV8mgcf3vOVeJ8Io=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UZ+wDG5V1dUmoTX/eISyd+EqMNqmrYpq+lxlFTWpFMZYS6s1Zds0c8Oj81iIqC7ML
-         cjF+Ya2xo6Pd0/74cXzJZRgosuB5ToTtGerN9Ik1tvXeH7VFBnYV8OHnnm/cnvCqMJ
-         AzKjVAR8wqd1urDCnR1BB4x+62iIDE84bBVU1tbI=
-Date:   Thu, 8 Apr 2021 11:22:03 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Longfang Liu <liulongfang@huawei.com>
-Cc:     mathias.nyman@intel.com, stern@rowland.harvard.edu,
-        liudongdong3@huawei.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kong.kongxinwei@hisilicon.com,
-        yisen.zhuang@huawei.com
-Subject: Re: [PATCH 1/2] USB:ehci:Add a whitelist for EHCI controllers
-Message-ID: <YG7LO2DJMThbeJ5W@kroah.com>
-References: <1617873073-37371-1-git-send-email-liulongfang@huawei.com>
- <1617873073-37371-2-git-send-email-liulongfang@huawei.com>
+        id S231140AbhDHJX2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Apr 2021 05:23:28 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1617873797; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SDy3Hgx4YK2iaQCTk3BRIHBMt+mFmuLK2rtuCM3mVBo=;
+        b=LMDj3SvJm3hFXfcjBY1qWofp3Nbgh3t0Z9dru2J76Zz2t2Z2m6PC88X59MjRua8+1FIU8c
+        E7ZccwpQ5dJhqlsUleNOH9jkLgO5Cb0tWu2UB4lQrb+Ql+uhqp9Ns39e8dZt83X+uyC04c
+        L4NcCfTF7wB0MuhShZ3ZmWcwsHdHMqQ=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 1CC4EAF23;
+        Thu,  8 Apr 2021 09:23:17 +0000 (UTC)
+Message-ID: <cc44e358406f48175fad9e956369d0f5a07efbe9.camel@suse.com>
+Subject: Re: [RFC]extension of the anchor API
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org
+Date:   Thu, 08 Apr 2021 11:23:05 +0200
+In-Reply-To: <20210325183856.GA799855@rowland.harvard.edu>
+References: <5b3c30d268ea2d13d303759ef3dfee8d72830084.camel@suse.com>
+         <20210325150657.GC785961@rowland.harvard.edu>
+         <5d3852dca69ff194017c806078e996c50ee621be.camel@suse.com>
+         <20210325183856.GA799855@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1617873073-37371-2-git-send-email-liulongfang@huawei.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 08, 2021 at 05:11:12PM +0800, Longfang Liu wrote:
-> Some types of EHCI controllers do not have SBRN registers.
-> By comparing the white list, the operation of reading the SBRN
-> registers is skipped.
+Am Donnerstag, den 25.03.2021, 14:38 -0400 schrieb Alan Stern:
+> On Thu, Mar 25, 2021 at 05:04:25PM +0100, Oliver Neukum wrote:
+> > Am Donnerstag, den 25.03.2021, 11:06 -0400 schrieb Alan Stern:
+> > > > +:c:func:`usb_submit_anchored_urbs`
+> > > > +---------------------------------
+> > > > +
+> > > > +The URBs contained in anchor are chronologically submitted until
+> > > 
+> > > "chronologically" is the wrong word.  They are submitted in the order
+> > > of the anchor's list, which is the same as the order that an iterator
+> > > would use.
+> > 
+> > OK. "In the same sequence as they were anchored" ?
 > 
-> Subsequent EHCI controller types without SBRN registers can be
-> directly added to the white list.
-> 
-> The current patch does not affect the drive function.
-> 
-> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
-> ---
->  drivers/usb/host/ehci-pci.c | 27 +++++++++++++++++++++++----
->  1 file changed, 23 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
-> index 3c3820a..6a30afa 100644
-> --- a/drivers/usb/host/ehci-pci.c
-> +++ b/drivers/usb/host/ehci-pci.c
-> @@ -47,6 +47,28 @@ static inline bool is_bypassed_id(struct pci_dev *pdev)
->  	return !!pci_match_id(bypass_pci_id_table, pdev);
->  }
->  
-> +static const struct usb_nosbrn_whitelist_entry {
-> +	unsigned short vendor;
-> +	unsigned short device;
+> Hmmm.  What happens if you submit an anchor's worth of URBs, but then 
+> you kill them in the reverse order (which is how you would normally want 
+> to cancel a bunch of URBs)?  Since each URB gets moved to the end of the 
+> anchor's list when it completes, after they are all killed the list will 
+> be reversed.  So the next time you submit the anchor, the order of URBs 
+> will be backward.  If some of the URBs completed before they were 
+> killed, the order will be mixed up.
 
-u16 here please.
+Yes. If the URBs themselves, as opposed to their payloads, are
+different, this will happen. Yet I am afraid we are looking at a
+necessary race condition here. If you cancel a non-atomic operation,
+you will need to deal with all possible intermediate stages of
+completion.
 
-> +} usb_nosbrn_whitelist[] = {
-> +	/* STMICRO ConneXT has no sbrn register */
-> +	{PCI_VENDOR_ID_STMICRO, PCI_DEVICE_ID_STMICRO_USB_HOST},
-> +	{}
+> Of course, if you never use the URBs on an anchor after killing it, this 
+> doesn't matter.
 
-trailing , please.
+Yes, to partially solve this issue I wrote
+usb_transfer_anchors()
+which allows you to separate those URBs you kill (or submit)
+by shifting them to another anchor. This is incomplete,
+as obviously something you kill may do a transfer.
 
-> +};
-> +
-> +static bool usb_nosbrn_whitelist_check(struct pci_dev *pdev)
-> +{
-> +	const struct usb_nosbrn_whitelist_entry *entry;
-> +
-> +	for (entry = usb_nosbrn_whitelist; entry->vendor; entry++) {
-> +		if (pdev->vendor == entry->vendor &&
-> +		    pdev->device == entry->device)
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
->  /*
->   * 0x84 is the offset of in/out threshold register,
->   * and it is the same offset as the register of 'hostpc'.
-> @@ -288,10 +310,7 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
->  	}
->  
->  	/* Serial Bus Release Number is at PCI 0x60 offset */
-> -	if (pdev->vendor == PCI_VENDOR_ID_STMICRO
-> -	    && pdev->device == PCI_DEVICE_ID_STMICRO_USB_HOST)
-> -		;	/* ConneXT has no sbrn register */
-> -	else
-> +	if (!usb_nosbrn_whitelist_check(pdev))
+	Regards
+		Oliver
 
-Doing this as a "negative" is hard to understand.  Should this just be:
-	forbid_sbrn_read()
-or something like that?
 
-The term "whitelist" is not a good thing to use as it does not really
-explain anything here.
-
-thanks,
-
-greg k-h
