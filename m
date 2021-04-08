@@ -2,138 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C3935881C
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 17:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B931E35889C
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 17:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231955AbhDHPV0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 11:21:26 -0400
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:46719 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbhDHPVZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 11:21:25 -0400
-Received: by mail-ot1-f53.google.com with SMTP id d3-20020a9d29030000b029027e8019067fso725599otb.13;
-        Thu, 08 Apr 2021 08:21:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6KZFzK+nzEQ00+8KcSgL3f5DvNG68xJ2rg8Oh+jD2PI=;
-        b=Nt1EqAU4hIt0eQnsQGyENwmZvZCK54MSaNjunRxLJtzHATn9YiVCOkwRLNKaidxu8e
-         np75hrqwYb4WcF7GpizF7Xib5w+U/cFmaiWSxzJ+RgxKUcOsKyhm4s4t7t1F9fh/Ts78
-         LtYQSkihdNsebXAZ7RCfDCi/6IVy5v/DNJRQiOCSXVpWGtcynlkn+Fnjvpflv9316sQf
-         sk8MTTKzS1hVYsxwo1/4HLd/SoCXtdUClxpdTJaCyMIz3XKQ/DEDn2mPwGQA1qUstBNG
-         G9Lq4BaobCybwvImJzxVBHXK/C5y73kONkFmcbq339bY147QhHVg2Pl2ZwwO88YJ1GPB
-         4Lmw==
-X-Gm-Message-State: AOAM53093E4mvjuHLYd1sjwBYmAWcBIevzF65BAEKZU4szDNJ7qCeWpi
-        PObYp/e9Z9/1RSS6yrsaEw==
-X-Google-Smtp-Source: ABdhPJz9PartmCiNrmBrMQc5KCgZmaZf7Btn88a34YZU/sCcvkFscfqZv9VYHP7BRhcvMv0yW2J5pQ==
-X-Received: by 2002:a9d:5a8d:: with SMTP id w13mr8142482oth.145.1617895274012;
-        Thu, 08 Apr 2021 08:21:14 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 68sm212184otc.54.2021.04.08.08.21.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Apr 2021 08:21:13 -0700 (PDT)
-Received: (nullmailer pid 1506966 invoked by uid 1000);
-        Thu, 08 Apr 2021 15:21:12 -0000
-Date:   Thu, 8 Apr 2021 10:21:12 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Peter Chen <peter.chen@nxp.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-usb@vger.kernel.org,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Bastien Nocera <hadess@hadess.net>, devicetree@vger.kernel.org,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: Re: [PATCH v6 3/5] of/platform: Add stubs for
- of_platform_device_create/destroy()
-Message-ID: <20210408152112.GA1493009@robh.at.kernel.org>
-References: <20210405201817.3977893-1-mka@chromium.org>
- <20210405124900.v6.3.I08fd2e1c775af04f663730e9fb4d00e6bbb38541@changeid>
+        id S231712AbhDHPfn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 11:35:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49474 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231480AbhDHPfm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Apr 2021 11:35:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 10D11610A3;
+        Thu,  8 Apr 2021 15:35:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617896131;
+        bh=Lzr9PbMX2sOWLz1c3qQAnuCyMDmH57bdFvXG7zYRQ30=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AbI5TeXhSQ/1NitsWMx0gSMQhyWT2+PFJ2EKvJLdXCEkK3l9j34/lXhmWT+Z8HMfX
+         zZUXpz0vRVWlO4+B3hMM7l1JGXmw5AeOR8sicmPwOTAm+nv9bhEDlcCjYEckkA5UQk
+         0Gin7hmtpaxx5SKFh521P+kvCS02oEFX2klRb1FbGrf/CHsQS776VTWucRyocLZ1iy
+         OCKcwrseApj2SgkRUVBqWRD4Yjq5KxSehIUzs5WEaJ5Y0IbfcEOwtlIpwksIkUfnmq
+         pzgcCEYpObUgGX1dxcWCEENEaOekEAko2wfMkpy4Akj2Jfow6YBd4EpqYlXqmuzTPZ
+         9YGS6JFX4bjUA==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lUWgo-0004aK-5t; Thu, 08 Apr 2021 17:35:26 +0200
+Date:   Thu, 8 Apr 2021 17:35:26 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     "Michael G. Katzmann" <michaelk@IEEE.org>
+Cc:     charles-yeh@prolific.com.tw, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>,
+        Joe Abbott <jabbott@rollanet.org>
+Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
+Message-ID: <YG8ivp+UtMU2NLwa@hovoldconsulting.com>
+References: <780b9aa6-890d-47fd-d6b2-cd9a39f7634a@IEEE.org>
+ <YDUiuLtwRkZ0D0Mi@hovoldconsulting.com>
+ <f63df659-6cdf-bba6-f892-1012b98f82e2@IEEE.org>
+ <YDUp0tIThOZSTHJt@hovoldconsulting.com>
+ <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
+ <YDUysZY90FfVhrHK@hovoldconsulting.com>
+ <4edfb35f-ed81-bade-daee-38a1d7a60a7d@IEEE.org>
+ <YDaHEtQCGkiM/pad@hovoldconsulting.com>
+ <2162ce18-32e9-e54c-f266-47febdea11f1@IEEE.org>
+ <YDdi7NcnzgQDMzZH@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210405124900.v6.3.I08fd2e1c775af04f663730e9fb4d00e6bbb38541@changeid>
+In-Reply-To: <YDdi7NcnzgQDMzZH@hovoldconsulting.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 05, 2021 at 01:18:15PM -0700, Matthias Kaehlcke wrote:
-> Code for platform_device_create() and of_platform_device_create() is
+Hi Michael,
 
-platform_device_create()?
+On Thu, Feb 25, 2021 at 09:42:20AM +0100, Johan Hovold wrote:
+> On Wed, Feb 24, 2021 at 01:13:39PM -0500, Michael G. Katzmann wrote:
+> > On 2/24/21 12:04 PM, Johan Hovold wrote:
+> > > Perhaps you can even figure out how to poll for an empty TX FIFO from
+> > > it, unless Charles is able to provide some details on that separate
+> > > matter?
+> > 
+> > I presume from the code below, that when the device is closed, all
+> > data waiting to send is clobbered (if so, so the problem is the driver
+> > and not the device)
+> > 
+> > I would have thought that the driver should drain the buffers. I can
+> > see that this might be a problem if there is flow control (it may
+> > never drain) but the current method seems pretty brutal.
+> 
+> We do; the code below isn't called until after we've waited for the
+> buffers to drain (driver buffers + device FIFO).
+> 
+> I'll provide a patch so that you can extend the timeout for draining the
+> driver buffers (defaults to 30 s), but the main problem is that we don't
+> know how to query the PL2303 FIFO fill level.
 
-> only generated if CONFIG_OF_ADDRESS=y. Add stubs to avoid unresolved
-> symbols when CONFIG_OF_ADDRESS is not set.
-> 
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
-> 
-> Changes in v7:
-> - none
-> 
-> Changes in v6:
-> - patch added to the series
-> 
->  include/linux/of_platform.h | 22 ++++++++++++++++++----
->  1 file changed, 18 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/of_platform.h b/include/linux/of_platform.h
-> index 84a966623e78..d15b6cd5e1c3 100644
-> --- a/include/linux/of_platform.h
-> +++ b/include/linux/of_platform.h
-> @@ -61,16 +61,18 @@ static inline struct platform_device *of_find_device_by_node(struct device_node
->  }
->  #endif
->  
-> +extern int of_platform_bus_probe(struct device_node *root,
-> +				 const struct of_device_id *matches,
-> +				 struct device *parent);
+I've added generic support to USB serial for setting the closing_wait
+parameter through TIOCSSERIAL (e.g. setserial) so that you can change
+the default 30 second timeout also with pl2303:
 
-This is also only built for CONFIG_OF_ADDRESS. But there's no need for 
-an empty function as it is powerpc only and should never have a new 
-user.
+	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-next&id=01fd45f676f1b3785b7cdd5d815f9c31ddcd9dd1
 
-> +
-> +#ifdef CONFIG_OF_ADDRESS
->  /* Platform devices and busses creation */
->  extern struct platform_device *of_platform_device_create(struct device_node *np,
->  						   const char *bus_id,
->  						   struct device *parent);
->  
->  extern int of_platform_device_destroy(struct device *dev, void *data);
-> -extern int of_platform_bus_probe(struct device_node *root,
-> -				 const struct of_device_id *matches,
-> -				 struct device *parent);
-> -#ifdef CONFIG_OF_ADDRESS
-> +
->  extern int of_platform_populate(struct device_node *root,
->  				const struct of_device_id *matches,
->  				const struct of_dev_auxdata *lookup,
-> @@ -84,6 +86,18 @@ extern int devm_of_platform_populate(struct device *dev);
->  
->  extern void devm_of_platform_depopulate(struct device *dev);
->  #else
-> +/* Platform devices and busses creation */
-> +static inline struct platform_device *of_platform_device_create(struct device_node *np,
-> +								const char *bus_id,
-> +								struct device *parent)
-> +{
-> +	return NULL;
-> +}
-> +static inline int of_platform_device_destroy(struct device *dev, void *data)
-> +{
-> +	return -ENODEV;
-> +}
-> +
->  static inline int of_platform_populate(struct device_node *root,
->  					const struct of_device_id *matches,
->  					const struct of_dev_auxdata *lookup,
-> -- 
-> 2.31.0.208.g409f899ff0-goog
-> 
+With the 4k driver buffer and two bulk-out URBs with 256 bytes of data
+each you need to set the timeout to something like 420 seconds at 110
+bps to allow those buffers to drain (when not using flow control).
+
+On top of that there's the 256 byte device FIFO, which we not yet know
+how to query. At 110 bps that one takes about 23 seconds to drain, but
+as I mentioned elsewhere we cap the time-based delay at 2 seconds
+currently.
+
+Charles, is there a way to check if the device transmit FIFO has
+emptied?
+
+Johan
