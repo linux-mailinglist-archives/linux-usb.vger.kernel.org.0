@@ -2,163 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B484357E07
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 10:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB71357E12
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 10:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbhDHI2Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 04:28:24 -0400
-Received: from mga04.intel.com ([192.55.52.120]:55274 "EHLO mga04.intel.com"
+        id S229807AbhDHIbp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 04:31:45 -0400
+Received: from mga04.intel.com ([192.55.52.120]:55530 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229539AbhDHI2X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Apr 2021 04:28:23 -0400
-IronPort-SDR: +tgpD1L8WZdhec3W44xIKeMcix3GvUvbyTkY/R+L98xJnP9KxiGD73VmZn9yExNhCoga68iU2b
- GgVigh/gH0Vw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9947"; a="191332665"
+        id S229554AbhDHIbk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Apr 2021 04:31:40 -0400
+IronPort-SDR: z3W1hmNVasopQiENwElJapKhyARicgvpZ8TsezWcEWGP9NLG1i/YzLtICmHDwXblxE+CfyCup7
+ oryvg2G0QsSQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9947"; a="191333097"
 X-IronPort-AV: E=Sophos;i="5.82,205,1613462400"; 
-   d="scan'208";a="191332665"
+   d="scan'208";a="191333097"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2021 01:28:12 -0700
-IronPort-SDR: GlAvcAPZuSIMQFgeRhWj7Qtb64brTKGxSvkBexW2plL6uEXg5UVBfWA08kDWZK+rpsPp9N+/t5
- aMfR0cR21EUw==
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2021 01:31:29 -0700
+IronPort-SDR: WWU9AKY8NzDwksFU68+R3bgy/nFgDNnazOC2Tb3wS9dc0UZ+1NykzOgaGRb9M+ZDdDjVb7tCiJ
+ 8d0SXJefquQA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,205,1613462400"; 
-   d="scan'208";a="519766809"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 08 Apr 2021 01:28:09 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 08 Apr 2021 11:28:09 +0300
-Date:   Thu, 8 Apr 2021 11:28:09 +0300
+   d="scan'208";a="519767925"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Apr 2021 01:31:28 -0700
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH 1/1] usb: typec: tcpm: remove unused static variable
- 'tcpm_altmode_ops'
-Message-ID: <YG6+mfqIc15rc9H1@kuha.fi.intel.com>
-References: <20210407091540.2815-1-thunder.leizhen@huawei.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [PATCH] usb: dwc3: pci: add support for the Intel Alder Lake-M
+Date:   Thu,  8 Apr 2021 11:31:44 +0300
+Message-Id: <20210408083144.69350-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210407091540.2815-1-thunder.leizhen@huawei.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 07, 2021 at 05:15:40PM +0800, Zhen Lei wrote:
-> Fixes the following W=1 kernel build warning:
-> 
-> drivers/usb/typec/tcpm/tcpm.c:2107:39: warning: ‘tcpm_altmode_ops’ defined but not used [-Wunused-const-variable=]
-> 
-> The reference to the variable 'tcpm_altmode_ops' is deleted by the
-> commit a079973f462a ("usb: typec: tcpm: Remove tcpc_config configuration
-> mechanism").
-> 
-> By the way, the static functions referenced only by the variable
-> 'tcpm_altmode_ops' are deleted accordingly.
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+This patch adds the necessary PCI ID for Intel Alder Lake-M
+devices.
 
-Oh, I thought this was already fixed. Should this go into the stable
-trees as well?
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/dwc3/dwc3-pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 60 -------------------------------------------
->  1 file changed, 60 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index ce7af398c7c1c1f..2f89bae29c0c297 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1365,14 +1365,6 @@ static void tcpm_queue_vdm(struct tcpm_port *port, const u32 header,
->  	mod_vdm_delayed_work(port, 0);
->  }
->  
-> -static void tcpm_queue_vdm_unlocked(struct tcpm_port *port, const u32 header,
-> -				    const u32 *data, int cnt)
-> -{
-> -	mutex_lock(&port->lock);
-> -	tcpm_queue_vdm(port, header, data, cnt);
-> -	mutex_unlock(&port->lock);
-> -}
-> -
->  static void svdm_consume_identity(struct tcpm_port *port, const u32 *p, int cnt)
->  {
->  	u32 vdo = p[VDO_INDEX_IDH];
-> @@ -1705,8 +1697,6 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
->  	 *
->  	 * And we also have this ordering:
->  	 * 1. alt-mode driver takes the alt-mode's lock
-> -	 * 2. alt-mode driver calls tcpm_altmode_enter which takes the
-> -	 *    tcpm port lock
->  	 *
->  	 * Dropping our lock here avoids this.
->  	 */
-> @@ -2060,56 +2050,6 @@ static int tcpm_validate_caps(struct tcpm_port *port, const u32 *pdo,
->  	return 0;
->  }
->  
-> -static int tcpm_altmode_enter(struct typec_altmode *altmode, u32 *vdo)
-> -{
-> -	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
-> -	int svdm_version;
-> -	u32 header;
-> -
-> -	svdm_version = typec_get_negotiated_svdm_version(port->typec_port);
-> -	if (svdm_version < 0)
-> -		return svdm_version;
-> -
-> -	header = VDO(altmode->svid, vdo ? 2 : 1, svdm_version, CMD_ENTER_MODE);
-> -	header |= VDO_OPOS(altmode->mode);
-> -
-> -	tcpm_queue_vdm_unlocked(port, header, vdo, vdo ? 1 : 0);
-> -	return 0;
-> -}
-> -
-> -static int tcpm_altmode_exit(struct typec_altmode *altmode)
-> -{
-> -	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
-> -	int svdm_version;
-> -	u32 header;
-> -
-> -	svdm_version = typec_get_negotiated_svdm_version(port->typec_port);
-> -	if (svdm_version < 0)
-> -		return svdm_version;
-> -
-> -	header = VDO(altmode->svid, 1, svdm_version, CMD_EXIT_MODE);
-> -	header |= VDO_OPOS(altmode->mode);
-> -
-> -	tcpm_queue_vdm_unlocked(port, header, NULL, 0);
-> -	return 0;
-> -}
-> -
-> -static int tcpm_altmode_vdm(struct typec_altmode *altmode,
-> -			    u32 header, const u32 *data, int count)
-> -{
-> -	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
-> -
-> -	tcpm_queue_vdm_unlocked(port, header, data, count - 1);
-> -
-> -	return 0;
-> -}
-> -
-> -static const struct typec_altmode_ops tcpm_altmode_ops = {
-> -	.enter = tcpm_altmode_enter,
-> -	.exit = tcpm_altmode_exit,
-> -	.vdm = tcpm_altmode_vdm,
-> -};
-> -
->  /*
->   * PD (data, control) command handling functions
->   */
-> -- 
-> 1.8.3
-> 
-
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index 4c5c6972124a4..95f954a1d7be9 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -41,6 +41,7 @@
+ #define PCI_DEVICE_ID_INTEL_TGPH		0x43ee
+ #define PCI_DEVICE_ID_INTEL_JSP			0x4dee
+ #define PCI_DEVICE_ID_INTEL_ADLP		0x51ee
++#define PCI_DEVICE_ID_INTEL_ADLM		0x54ee
+ #define PCI_DEVICE_ID_INTEL_ADLS		0x7ae1
+ #define PCI_DEVICE_ID_INTEL_TGL			0x9a15
+ 
+@@ -388,6 +389,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADLP),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
+ 
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADLM),
++	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
++
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADLS),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
+ 
 -- 
-heikki
+2.30.2
+
