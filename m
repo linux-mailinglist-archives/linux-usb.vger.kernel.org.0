@@ -2,125 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 487E3358B8F
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 19:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16067358BBC
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 19:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232474AbhDHRlf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 13:41:35 -0400
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:38693 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232267AbhDHRld (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 13:41:33 -0400
-Received: by mail-oi1-f181.google.com with SMTP id 25so1533671oiy.5;
-        Thu, 08 Apr 2021 10:41:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MxPv9rGDLS4kNaUwF1zjTD50xd/6Z8XGBbW4dmhPKD8=;
-        b=A2lp3oM0ItWq0xqfVnnJ3qVaiuOO3KsJ94X+E1AqzUrxBH2KeRrfGIxLILWRiuXIJv
-         ZjNkaAtXAnZ31OcKco2QcSOMQ57i87H0SlKSeVPyMRKdvkGfyQ9Av/vc57KHDHfIUvaZ
-         sKh0tG7XXhSdtAe5CEl3fj/jkgyOTz5XaX1QuOaWljBtXt/TDCH8gSDW6zVkiNOHY52a
-         cvW/Jg4xTcREQcda3OuZlTzOekZTMk3n7LLJnVEzIlJNSRE1dAdMYPn/w4syyK3DrtZ/
-         t+M218Ihp4d6s/pnuU/UuXJLtUhsK2dpD3Smv65BYbTmSXTUk4Pf6p+SW6CtZcmqkML+
-         qU6g==
-X-Gm-Message-State: AOAM5313SyItVaHcVZmvPqqnJoNik09lQ95dqpaVLoTurNQCm0Drw/Pg
-        pU6RHC/mwiNFTdFYm1FrfhEaDQYjpWt3wRdbvhs=
-X-Google-Smtp-Source: ABdhPJzwd+elJ0tSpUAZ/bAgTRpxq7RiABgs8Q08DleA2nKQdp22al42iOL7Z8aA5oAFMXMC6gZjSOTm29nDYVKPpLc=
-X-Received: by 2002:aca:5fc3:: with SMTP id t186mr6817482oib.69.1617903681158;
- Thu, 08 Apr 2021 10:41:21 -0700 (PDT)
+        id S232383AbhDHRyt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 13:54:49 -0400
+Received: from mail-bn8nam08on2066.outbound.protection.outlook.com ([40.107.100.66]:22593
+        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231676AbhDHRys (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Apr 2021 13:54:48 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iryiYxn4OkoSnPggA1NGxEq5RmyVxna6FFYsPGPBhvRKz0rv3ScDL+bVAT/Cnf/2lMhJ8rkbPLf6k+SCI6ruGB+k7iF9kcGFHKFJs1eem9Ggn+z4L4pBQUUK07eiRzfGsPFbTrlrmGD3cejw/jnRYmvTYlN9lgwtccrqR772cVbj8ARU/vS5aiRHqTP2EGsUDqHe/Rcwu9j6sHErfBkPbG0kXsPMwEzkm2PmeJhbNHZDxc0GJTKbc4FaQGZy6+aIKheGV90W7td6zVRuywQjplBVTAqGdHnODi+TXrlaIwEFXZ7qclS59uuN1MytGC96+VAKsUd/U4Vj5nrChisE6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qPJp6GUubDeERgE19mcNEqhQxJdEc7ZqzdOQ3bvCYwo=;
+ b=V3xDFsy41ppaKeIqMGunrBp/g73c2Unvv7A7gQm7TLS/sXQftsTWPFKismn46gw21NYIWVNbSAlkM/ZhIQeBbXjF4Nho//KFt5OjMdySmKPDl05yoMK1wf0OPOGKzH62Q8IWem0iv3Y1JdNCSPvo3coNxMeDNj/uWvnOABkBKttson4deTm9R19aqbTt4YQWhuoKGjGUB/g8Y+sszqeKbE4CbVKIqsh5+VfIL1lE7038OG4Aqg6JMZpLhBJAKCTMfSQGxIjh278autwwaXrq4sbeiGX0vM7g68pmJe3cRj92h3WgM9VhofXJ5la4siavpp3aZ7ovJ9+FQSbxQGCXUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qPJp6GUubDeERgE19mcNEqhQxJdEc7ZqzdOQ3bvCYwo=;
+ b=VypG/MtEgmtqr0lsVjXEZ0ChwcRB3mhmKvu8juvedOUZDV02vhiKakhO+y7G+61Pa+RZVKwyT5rAFk7R51w+M2PeKy9aRX+8dOXBXz2r2Y69gP7PkhvHxAZH3ayGXOezBUQLoG5FW4QSi4dXu54Q2tHq75/0+6CW8MNKXOdJHL4=
+Received: from BLAPR03CA0007.namprd03.prod.outlook.com (2603:10b6:208:32b::12)
+ by BN6PR02MB3284.namprd02.prod.outlook.com (2603:10b6:405:61::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.18; Thu, 8 Apr
+ 2021 17:54:35 +0000
+Received: from BL2NAM02FT018.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:208:32b:cafe::eb) by BLAPR03CA0007.outlook.office365.com
+ (2603:10b6:208:32b::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.19 via Frontend
+ Transport; Thu, 8 Apr 2021 17:54:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BL2NAM02FT018.mail.protection.outlook.com (10.152.77.170) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4020.17 via Frontend Transport; Thu, 8 Apr 2021 17:54:35 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Thu, 8 Apr 2021 10:54:21 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2106.2 via Frontend Transport; Thu, 8 Apr 2021 10:54:21 -0700
+Envelope-to: git@xilinx.com,
+ balbi@kernel.org,
+ gregkh@linuxfoundation.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org
+Received: from [172.23.64.106] (port=38708 helo=xhdvnc125.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <manish.narani@xilinx.com>)
+        id 1lUYrE-0002hA-IW; Thu, 08 Apr 2021 10:54:20 -0700
+Received: by xhdvnc125.xilinx.com (Postfix, from userid 16987)
+        id BD91112123D; Thu,  8 Apr 2021 23:24:19 +0530 (IST)
+From:   Manish Narani <manish.narani@xilinx.com>
+To:     <gregkh@linuxfoundation.org>, <michal.simek@xilinx.com>,
+        <balbi@kernel.org>
+CC:     <git@xilinx.com>, <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>
+Subject: [PATCH 0/2] Fix for a bug and a kernel-doc warning in Xilinx DWC3
+Date:   Thu, 8 Apr 2021 23:24:06 +0530
+Message-ID: <1617904448-74611-1-git-send-email-manish.narani@xilinx.com>
+X-Mailer: git-send-email 2.1.1
 MIME-Version: 1.0
-References: <1617874514-12282-1-git-send-email-chunfeng.yun@mediatek.com>
-In-Reply-To: <1617874514-12282-1-git-send-email-chunfeng.yun@mediatek.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 8 Apr 2021 19:41:10 +0200
-Message-ID: <CAJZ5v0gGntbfnvAP5A491_hUh-JUuqZjZRdPPLwWJjnZRtemcQ@mail.gmail.com>
-Subject: Re: [PATCH 1/6] PM: runtime: enable wake irq after runtime_suspend
- hook called
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Nicolas Boichat <drinkcat@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ef437e48-2ebb-4c9a-a23b-08d8fab75f5a
+X-MS-TrafficTypeDiagnostic: BN6PR02MB3284:
+X-Microsoft-Antispam-PRVS: <BN6PR02MB3284E0535FCC6DF4D9AD0704C1749@BN6PR02MB3284.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:446;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: D8v1VAVdFZ+RXsKdnUTZxtbfLA0CVKVHkI8RvI6wt6awoooMAXGZ8hHK4RHZnIfD0XAcDmC5kTFYOkYkHB9E2lVkCpiiOpyU96SAGeWCzhkMedVDR5tf7gNvBg3uStYteGpI9Xy5qGryLPhU+wy7pMSAedJIk25DHdGiqSQh/w7xwsBMQWwNH3a26FZsDwacH6xYn85BLN2OhN9hrxsYo/vbbPY21rl+ONidKjexWVtpwq8GgOs5YI+zxDsJB6FfeI2JgAjwRQNqmJLlJxKgUV3DFtYBlQceDkKM8l9NCKED2fPYva4VgmHm56nXfH6st09Hg4vcWsWGINroZcYkloTXIrbkBS123zBph5yY8HDn/5IuYFB8DsNWgz/DcjdFP4EDrs83nnuTApwretiUpyZ4EVErglAFbPMlETk6zjV7zsNpmv2m6/MbNIbKUAGHioiRlxDnIYm1laPM0hlmWpfrn2K9nLs73C134/ofDjtda92GtqXK7hYySYhLzzAo0JESLOgevCqmoZNjJGHImw4DQCYCa2rPL0b5Kxur8d0HBjZ3fcj0BkMKzMR+9Z1YHc2rsjorHMArCjzTmouN02A21nAWnQQx8raI0CFk/2HSnQi29CYQNQKpmZqwuq12jwHkENp/9um/DpeVjz2tTh/LirnkmXaOiZto4k7dCM+HekJ4AdOVBZgefbKVPzc/tyeDhqppmZSqtih3VtKuebI3i/EvE/mcOFEIUOOsxPthrJ5nTdPjlwWKEVqweYKxnYTrMlMiNKp/W9pfbip5fQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(396003)(376002)(39860400002)(346002)(136003)(46966006)(36840700001)(6266002)(186003)(83380400001)(107886003)(36756003)(26005)(42186006)(110136005)(82740400003)(5660300002)(4326008)(2906002)(70206006)(316002)(54906003)(36906005)(7636003)(4744005)(70586007)(82310400003)(966005)(2616005)(6666004)(336012)(44832011)(8676002)(36860700001)(8936002)(426003)(47076005)(356005)(478600001)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2021 17:54:35.7260
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef437e48-2ebb-4c9a-a23b-08d8fab75f5a
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT018.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB3284
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 8, 2021 at 11:35 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
->
-> When the dedicated wake irq is level trigger, enable it before
-> calling runtime_suspend, will trigger an interrupt.
->
-> e.g.
-> for a low level trigger type, it's low level at running time (0),
-> and becomes high level when enters suspend (runtime_suspend (1) is
-> called), a wakeup signal at (2) make it become low level, wake irq
-> will be triggered.
->
->                 ------------------
->                |           ^     ^|
-> ----------------           |     | --------------
->  |<---(0)--->|<--(1)--|   (3)   (2)    (4)
->
-> if we enable the wake irq before calling runtime_suspend during (0),
-> an interrupt will arise, it causes resume immediately;
+This patch series resolves a kernel-doc warning and a clk freeing bug
+that was causing a crash.
 
-But that's necessary to avoid missing a wakeup interrupt, isn't it?
+This patch series is on top of:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/usb/dwc3?id=84770f028fabab4cb66188d583ed12652f30576b
 
-> enable wake irq after calling runtime_suspend, e.g. at (3) or (4),
-> will works.
->
-> This patch seems no side effect on edge trigger wake irq.
->
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
->  drivers/base/power/runtime.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index a46a7e30881b..796739a015a5 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -619,12 +619,12 @@ static int rpm_suspend(struct device *dev, int rpmflags)
->         __update_runtime_status(dev, RPM_SUSPENDING);
->
->         callback = RPM_GET_CALLBACK(dev, runtime_suspend);
-> -
-> -       dev_pm_enable_wake_irq_check(dev, true);
->         retval = rpm_callback(callback, dev);
->         if (retval)
->                 goto fail;
->
-> +       dev_pm_enable_wake_irq_check(dev, true);
-> +
->   no_callback:
->         __update_runtime_status(dev, RPM_SUSPENDED);
->         pm_runtime_deactivate_timer(dev);
-> @@ -659,7 +659,6 @@ static int rpm_suspend(struct device *dev, int rpmflags)
->         return retval;
->
->   fail:
-> -       dev_pm_disable_wake_irq_check(dev);
->         __update_runtime_status(dev, RPM_ACTIVE);
->         dev->power.deferred_resume = false;
->         wake_up_all(&dev->power.wait_queue);
-> --
-> 2.18.0
->
+Manish Narani (2):
+  usb: dwc3: Resolve kernel-doc warning for Xilinx DWC3 driver
+  usb: dwc3: xilinx: Remove the extra freeing of clocks
+
+ drivers/usb/dwc3/dwc3-xilinx.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+-- 
+2.1.1
+
