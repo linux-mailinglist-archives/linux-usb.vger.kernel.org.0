@@ -2,38 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C8D3584C4
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 15:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 870473584CA
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 15:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbhDHNcv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 09:32:51 -0400
-Received: from mx2.suse.de ([195.135.220.15]:48412 "EHLO mx2.suse.de"
+        id S231663AbhDHNd3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 09:33:29 -0400
+Received: from mx2.suse.de ([195.135.220.15]:48796 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231543AbhDHNcv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Apr 2021 09:32:51 -0400
+        id S231641AbhDHNd2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Apr 2021 09:33:28 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1617888759; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1617888796; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EuUsYOew2YF7y5GkbUWoKJyXhvK946o4aH2gFBQmJnE=;
-        b=bcUCz7Eab1xa4w0STfioDYNAi/xtSuQudWOI9Rq1/64iOi9Pdarosmvi4CPPBUdhIGGTU9
-        ybSFOd13IUGF9/zg0s8I0OiBzcS/VC8N+f0v7EkJmVefCFa+Dwbz7o7TCMXaKTSc4WnEPT
-        gyyTYaVVWtWE+L3+2eJ8XuHPsSz6Mc4=
+        bh=oZCAAR5PzGD8iNhpsXMNf9MkZCpNGlBNFs3tk/riVX8=;
+        b=bGysl1+D8zmpjXP6dw65BiFbX710NADXn+3OsqfjJSvPFm1b2IXCVmz7P8Rm+fHii6qyRn
+        OvjXvFjfFyuE3c3tQmt8L7hleIWbHNwb6mp1FMxbH559fPzPoDinMJGYN9in3hTkJtHjW9
+        62/JV4KF2A7hVdm2+YhOqArEwj31+Lw=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 01AF5B00E;
-        Thu,  8 Apr 2021 13:32:39 +0000 (UTC)
-Message-ID: <76912aea8616d98a257b33875020138015c06fae.camel@suse.com>
-Subject: Re: [PATCH v2 2/3] USB: cdc-acm: fix unprivileged TIOCCSERIAL
+        by mx2.suse.de (Postfix) with ESMTP id 678B0B10B;
+        Thu,  8 Apr 2021 13:33:16 +0000 (UTC)
+Message-ID: <9e770cd03b69e06349f1b606317335cf49fe8fd6.camel@suse.com>
+Subject: Re: [PATCH v2 3/3] USB: cdc-acm: fix TIOCGSERIAL implementation
 From:   Oliver Neukum <oneukum@suse.com>
 To:     Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 08 Apr 2021 15:32:26 +0200
-In-Reply-To: <20210408131602.27956-3-johan@kernel.org>
+Date:   Thu, 08 Apr 2021 15:33:04 +0200
+In-Reply-To: <20210408131602.27956-4-johan@kernel.org>
 References: <20210408131602.27956-1-johan@kernel.org>
-         <20210408131602.27956-3-johan@kernel.org>
+         <20210408131602.27956-4-johan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
@@ -47,16 +47,25 @@ Am Donnerstag, den 08.04.2021, 15:16 +0200 schrieb Johan Hovold:
 > serial devices is only useful for setting the close_delay and
 > closing_wait parameters.
 > 
-> A non-privileged user has only ever been able to set the since long
-> deprecated ASYNC_SPD flags and trying to change any other *supported*
-> feature should result in -EPERM being returned. Setting the current
-> values for any supported features should return success.
+> The xmit_fifo_size parameter could be used to set the hardware transmit
+> fifo size of a legacy UART when it could not be detected, but the
+> interface is limited to eight bits and should be left unset when it is
+> not used.
 > 
-> Fix the cdc-acm implementation which instead indicated that the
-> TIOCSSERIAL ioctl was not even implemented when a non-privileged user
-> set the current values.
+> Similarly, baud_base could be used to set the UART base clock when it
+> could not be detected, but might as well be left unset when it is not
+> known (which is the case for CDC).
 > 
-> Fixes: ba2d8ce9db0a ("cdc-acm: implement TIOCSSERIAL to avoid blocking close(2)")
+> Fix the cdc-acm TIOCGSERIAL implementation by dropping its custom
+> interpretation of the unused xmit_fifo_size and baud_base fields, which
+> overflowed the former with the URB buffer size and set the latter to the
+> current line speed. Also return the port line number, which is the only
+> other value used besides the close parameters.
+> 
+> Note that the current line speed can still be retrieved through the
+> standard termios interfaces.
+> 
+> Fixes: 18c75720e667 ("USB: allow users to run setserial with cdc-acm")
 > Signed-off-by: Johan Hovold <johan@kernel.org>
 Acked-by: Oliver Neukum <oneukum@suse.com>
 
