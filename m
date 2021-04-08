@@ -2,57 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 531E9357F7C
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 11:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B58357F83
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 11:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbhDHJj3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 05:39:29 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:15181 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbhDHJj3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 05:39:29 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FGGNt258JzpWFW;
-        Thu,  8 Apr 2021 17:36:30 +0800 (CST)
-Received: from [10.174.179.96] (10.174.179.96) by
- DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 8 Apr 2021 17:39:06 +0800
-Subject: Re: [PATCH -next] usbip: vudc: fix missing unlock on error in
- usbip_sockfd_store()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Ye Bin <yebin10@huawei.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, <linux-usb@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
-References: <20210408085033.909377-1-yebin10@huawei.com>
- <bf976317-2bf5-d019-bf7b-4a4ead0b1c94@huawei.com>
- <YG7KhTDZyR8U0yNY@kroah.com>
-From:   YueHaibing <yuehaibing@huawei.com>
-Message-ID: <d555fd00-9c4f-1ddb-4fb7-b4d015b6fe3a@huawei.com>
-Date:   Thu, 8 Apr 2021 17:39:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S229687AbhDHJm3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 05:42:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55796 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230506AbhDHJmY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Apr 2021 05:42:24 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A105961041;
+        Thu,  8 Apr 2021 09:42:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617874933;
+        bh=e9G96CJPvnxdDJgzAUdCgD5peO0SNEQpP7/Ue+6c7mA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f3VlkD566WrjD+rFz1GITHTVmNlkYycIX2zyJgvokiriP+WcAuQbo0T7CnhwIVOm2
+         zl0QlFuwLc6QBM9Qrf8x9d+6KWmRHI/M/LFtPAmzIqjwGiHIdutgdAVzs1ahQQqVUg
+         gtM5lyCkrzLh1raXWRUqMxkfP9MgBDoivP87qod+5TibKcmFnps/m4CawMFpnQHegy
+         0VHStS4W3b1iUPZ9mJNTqFo0tWtPw7QE5LgacOHZwOaOdz5nYjNi2ocjiFdW0jqQ8p
+         8ePC69qptdk1ywfTCknS63hN0MXhWortM2EpBUO8Y1Cv3NvbkhzgJ0ZDGo66Gr0nQH
+         2haVjc/5HJKQg==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lURAu-0002zo-D1; Thu, 08 Apr 2021 11:42:08 +0200
+Date:   Thu, 8 Apr 2021 11:42:08 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] USB: cdc-acm: fix unprivileged TIOCCSERIAL
+Message-ID: <YG7P8EJ1obdM01J8@hovoldconsulting.com>
+References: <20210407102845.32720-1-johan@kernel.org>
+ <20210407102845.32720-3-johan@kernel.org>
+ <8918b0b50068705a865ffc22fe9745dacf0c21e8.camel@suse.com>
 MIME-Version: 1.0
-In-Reply-To: <YG7KhTDZyR8U0yNY@kroah.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.96]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8918b0b50068705a865ffc22fe9745dacf0c21e8.camel@suse.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/4/8 17:19, Greg Kroah-Hartman wrote:
-> On Thu, Apr 08, 2021 at 04:57:11PM +0800, YueHaibing wrote:
->>
->> 这种bugfix最好加下Fixes tag
+On Thu, Apr 08, 2021 at 09:48:38AM +0200, Oliver Neukum wrote:
+> Am Mittwoch, den 07.04.2021, 12:28 +0200 schrieb Johan Hovold:
+> > TIOCSSERIAL is a horrid, underspecified, legacy interface which for most
+> > serial devices is only useful for setting the close_delay and
+> > closing_wait parameters.
+> > 
+> > A non-privileged user has only ever been able to set the since long
+> > deprecated ASYNC_SPD flags and trying to change any other *supported*
+> > feature should result in -EPERM being returned. Setting the current
+> > values for any supported features should return success.
+> > 
+> > Fix the cdc-acm implementation which instead indicated that the
+> > TIOCSSERIAL ioctl was not even implemented when a non-privileged user
+> > set the current values.
 > 
-> I am sorry but I can not parse that :(
-
-Sorry, I just suggest to add this Fixes tag
-
-Fixes: bd8b82042269 ("usbip: vudc synchronize sysfs code paths")
-
-> .
+> Hi,
 > 
+> the idea here was that you are setting something else, if you are
+> not changing a parameter that can be changed. That conclusion is
+> dubious, but at the same time, this implementation can change
+> only these two parameters. So can the test really be dropped
+> as opposed to be modified?
+
+The de-facto standard for how to handle change requests for
+non-supported features (e.g. changing the I/O port or IRQ) is to simply
+ignore them and return 0.
+
+For most (non-legacy) serial devices the only relevant parameters are
+close_delay and closing_wait. And as we need to return -EPERM when a
+non-privileged user tries to change these, we cannot drop the test.
+
+(And returning -EOPNOTSUPP was never correct as the ioctl is indeed
+supported.)
+
+Johan
