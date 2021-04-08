@@ -2,80 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B58357F83
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 11:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E18357F8D
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 11:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbhDHJm3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 05:42:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55796 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230506AbhDHJmY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Apr 2021 05:42:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A105961041;
-        Thu,  8 Apr 2021 09:42:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617874933;
-        bh=e9G96CJPvnxdDJgzAUdCgD5peO0SNEQpP7/Ue+6c7mA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f3VlkD566WrjD+rFz1GITHTVmNlkYycIX2zyJgvokiriP+WcAuQbo0T7CnhwIVOm2
-         zl0QlFuwLc6QBM9Qrf8x9d+6KWmRHI/M/LFtPAmzIqjwGiHIdutgdAVzs1ahQQqVUg
-         gtM5lyCkrzLh1raXWRUqMxkfP9MgBDoivP87qod+5TibKcmFnps/m4CawMFpnQHegy
-         0VHStS4W3b1iUPZ9mJNTqFo0tWtPw7QE5LgacOHZwOaOdz5nYjNi2ocjiFdW0jqQ8p
-         8ePC69qptdk1ywfTCknS63hN0MXhWortM2EpBUO8Y1Cv3NvbkhzgJ0ZDGo66Gr0nQH
-         2haVjc/5HJKQg==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lURAu-0002zo-D1; Thu, 08 Apr 2021 11:42:08 +0200
-Date:   Thu, 8 Apr 2021 11:42:08 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] USB: cdc-acm: fix unprivileged TIOCCSERIAL
-Message-ID: <YG7P8EJ1obdM01J8@hovoldconsulting.com>
-References: <20210407102845.32720-1-johan@kernel.org>
- <20210407102845.32720-3-johan@kernel.org>
- <8918b0b50068705a865ffc22fe9745dacf0c21e8.camel@suse.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8918b0b50068705a865ffc22fe9745dacf0c21e8.camel@suse.com>
+        id S230470AbhDHJoh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 05:44:37 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:37512 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229751AbhDHJog (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 05:44:36 -0400
+Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 4EE47407FC;
+        Thu,  8 Apr 2021 09:44:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1617875066; bh=pafKOMK9KDsNSpcVsj8JwbjjuWIZ6Jo5sqLwThZrBFw=;
+        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
+        b=R9LdVgLZE11zkB5ok08ADOF0dCgHmqzULIujY8Pls+OXdxmPVvsklk7uiBmLyZsyM
+         c64GcxxMecmgiGH3d4EBTYvIBE9rvOlLBUk5YmQsoVqBnZNSQFOurZB/Ij33LniFUq
+         elavIKNdMpssL6s4QRp5GqsFB7zGfqbt4cZ/+I+wddI3CGDOd+2nBZKyaIC3yUG3dC
+         jvVT5KdiJgLGvrMNNgiwN2ENBBJ3an6svSUJzkC7ozTBcH9z2R4VuSwMAcZkgonzC1
+         h/IOKytHDEQyRmWGki0VSZx2QjeQhUxVOfNY4bIuPU7d9QG1EuIS4UU8gWgTlEPlGJ
+         0NMQF5adzdn6g==
+Received: from razpc-HP (razpc-hp.internal.synopsys.com [10.116.126.207])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id BE89DA022E;
+        Thu,  8 Apr 2021 09:44:20 +0000 (UTC)
+Received: by razpc-HP (sSMTP sendmail emulation); Thu, 08 Apr 2021 13:44:19 +0400
+Date:   Thu, 08 Apr 2021 13:44:19 +0400
+In-Reply-To: <cover.1617782102.git.Arthur.Petrosyan@synopsys.com>
+References: <cover.1617782102.git.Arthur.Petrosyan@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+Subject: [PATCH v3 00/14] usb: dwc2: Fix Partial Power down issues.
+To:     John Youn <John.Youn@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mian Yousaf Kaukab <yousaf.kaukab@intel.com>,
+        Gregory Herrero <gregory.herrero@intel.com>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Paul Zimmerman <paulz@synopsys.com>, <stable@vger.kernel.org>,
+        Robert Baldyga <r.baldyga@samsung.com>,
+        Kever Yang <kever.yang@rock-chips.com>
+Message-Id: <20210408094420.BE89DA022E@mailhost.synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 08, 2021 at 09:48:38AM +0200, Oliver Neukum wrote:
-> Am Mittwoch, den 07.04.2021, 12:28 +0200 schrieb Johan Hovold:
-> > TIOCSSERIAL is a horrid, underspecified, legacy interface which for most
-> > serial devices is only useful for setting the close_delay and
-> > closing_wait parameters.
-> > 
-> > A non-privileged user has only ever been able to set the since long
-> > deprecated ASYNC_SPD flags and trying to change any other *supported*
-> > feature should result in -EPERM being returned. Setting the current
-> > values for any supported features should return success.
-> > 
-> > Fix the cdc-acm implementation which instead indicated that the
-> > TIOCSSERIAL ioctl was not even implemented when a non-privileged user
-> > set the current values.
-> 
-> Hi,
-> 
-> the idea here was that you are setting something else, if you are
-> not changing a parameter that can be changed. That conclusion is
-> dubious, but at the same time, this implementation can change
-> only these two parameters. So can the test really be dropped
-> as opposed to be modified?
+This patch set fixes and improves the Partial Power Down mode for
+dwc2 core.
+It adds support for the following cases
+    1. Entering and exiting partial power down when a port is
+       suspended, resumed, port reset is asserted.
+    2. Exiting the partial power down mode before removing driver.
+    3. Exiting partial power down in wakeup detected interrupt handler.
+    4. Exiting from partial power down mode when connector ID.
+       status changes to "connId B
 
-The de-facto standard for how to handle change requests for
-non-supported features (e.g. changing the I/O port or IRQ) is to simply
-ignore them and return 0.
+It updates and fixes the implementation of dwc2 entering and
+exiting partial power down mode when the system (PC) is suspended.
 
-For most (non-legacy) serial devices the only relevant parameters are
-close_delay and closing_wait. And as we need to return -EPERM when a
-non-privileged user tries to change these, we cannot drop the test.
+The patch set also improves the implementation of function handlers
+for entering and exiting host or device partial power down.
 
-(And returning -EOPNOTSUPP was never correct as the ioctl is indeed
-supported.)
+NOTE: This is the second patch set in the power saving mode fixes
+series.
+This patch set is part of multiple series and is continuation
+of the "usb: dwc2: Fix and improve power saving modes" patch set.
+(Patch set link: https://marc.info/?l=linux-usb&m=160379622403975&w=2).
+The patches that were included in the "usb: dwc2:
+Fix and improve power saving modes" which was submitted
+earlier was too large and needed to be split up into
+smaller patch sets.
 
-Johan
+Changes since V2:
+No changes in the patches or the source code.
+Assuming that the issue due to which the patches are not reaching to
+vger.kernel.org is a comma in the end of To: or Cc: lists removed
+commas in the end of those lists in each email of patches.
+
+
+Artur Petrosyan (14):
+  usb: dwc2: Add device partial power down functions
+  usb: dwc2: Add host partial power down functions
+  usb: dwc2: Update enter and exit partial power down functions
+  usb: dwc2: Add partial power down exit flow in wakeup intr.
+  usb: dwc2: Update port suspend/resume function definitions.
+  usb: dwc2: Add enter partial power down when port is suspended
+  usb: dwc2: Add exit partial power down when port is resumed
+  usb: dwc2: Add exit partial power down when port reset is asserted
+  usb: dwc2: Add part. power down exit from
+    dwc2_conn_id_status_change().
+  usb: dwc2: Allow exit partial power down in urb enqueue
+  usb: dwc2: Fix session request interrupt handler
+  usb: dwc2: Update partial power down entering by system suspend
+  usb: dwc2: Fix partial power down exiting by system resume
+  usb: dwc2: Add exit partial power down before removing driver
+
+ drivers/usb/dwc2/core.c      | 113 ++-------
+ drivers/usb/dwc2/core.h      |  27 ++-
+ drivers/usb/dwc2/core_intr.c |  46 ++--
+ drivers/usb/dwc2/gadget.c    | 148 ++++++++++-
+ drivers/usb/dwc2/hcd.c       | 458 +++++++++++++++++++++++++----------
+ drivers/usb/dwc2/hw.h        |   1 +
+ drivers/usb/dwc2/platform.c  |  11 +-
+ 7 files changed, 558 insertions(+), 246 deletions(-)
+
+
+base-commit: e9fcb07704fcef6fa6d0333fd2b3a62442eaf45b
+-- 
+2.25.1
+
