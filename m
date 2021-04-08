@@ -2,79 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BCBD357E56
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 10:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53524357E51
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Apr 2021 10:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbhDHIoh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 04:44:37 -0400
-Received: from mga11.intel.com ([192.55.52.93]:60631 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229805AbhDHIog (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 8 Apr 2021 04:44:36 -0400
-IronPort-SDR: RLfh5bQt9xTmoriDiyddDW5YsEEEYqAxQI+Ui0CykapmmqnZISlyl2iK0JDGJeyO2pqpAW6RQ5
- CFQsC1tqSWPw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9947"; a="190287212"
-X-IronPort-AV: E=Sophos;i="5.82,205,1613462400"; 
-   d="scan'208";a="190287212"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2021 01:44:26 -0700
-IronPort-SDR: vpbYYD3lKX7CgebOOV39Ht9OtFP8ZLa2kIO3zOr5n3Wd669bETZ23V5F4ETxQgUiDvTW1WaUl0
- aDlnbgxEwVHg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,205,1613462400"; 
-   d="scan'208";a="519771993"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 08 Apr 2021 01:44:23 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 08 Apr 2021 11:44:22 +0300
-Date:   Thu, 8 Apr 2021 11:44:22 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH 1/1] usb: typec: tcpm: remove unused static variable
- 'tcpm_altmode_ops'
-Message-ID: <YG7CZoTqB1P7VbY3@kuha.fi.intel.com>
-References: <20210407091540.2815-1-thunder.leizhen@huawei.com>
- <YG6+mfqIc15rc9H1@kuha.fi.intel.com>
- <YG7A94eekRgvskUg@kroah.com>
+        id S229603AbhDHImg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 04:42:36 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:16403 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229539AbhDHImg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 04:42:36 -0400
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FGF8G5Tr8zkjVQ;
+        Thu,  8 Apr 2021 16:40:30 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by DGGEMS412-HUB.china.huawei.com
+ (10.3.19.212) with Microsoft SMTP Server id 14.3.498.0; Thu, 8 Apr 2021
+ 16:42:07 +0800
+From:   Ye Bin <yebin10@huawei.com>
+To:     <yebin10@huawei.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        "Shuah Khan" <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH -next] usbip: vudc: fix missing unlock on error in usbip_sockfd_store()
+Date:   Thu, 8 Apr 2021 16:50:33 +0800
+Message-ID: <20210408085033.909377-1-yebin10@huawei.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YG7A94eekRgvskUg@kroah.com>
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Originating-IP: [10.175.127.227]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 08, 2021 at 10:38:15AM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Apr 08, 2021 at 11:28:09AM +0300, Heikki Krogerus wrote:
-> > On Wed, Apr 07, 2021 at 05:15:40PM +0800, Zhen Lei wrote:
-> > > Fixes the following W=1 kernel build warning:
-> > > 
-> > > drivers/usb/typec/tcpm/tcpm.c:2107:39: warning: ‘tcpm_altmode_ops’ defined but not used [-Wunused-const-variable=]
-> > > 
-> > > The reference to the variable 'tcpm_altmode_ops' is deleted by the
-> > > commit a079973f462a ("usb: typec: tcpm: Remove tcpc_config configuration
-> > > mechanism").
-> > > 
-> > > By the way, the static functions referenced only by the variable
-> > > 'tcpm_altmode_ops' are deleted accordingly.
-> > > 
-> > > Reported-by: Hulk Robot <hulkci@huawei.com>
-> > > Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> > 
-> > Oh, I thought this was already fixed. Should this go into the stable
-> > trees as well?
-> 
-> We do not build kernels by default with "W=1" yet, so it's not needed
-> in stable kernels.
+Add the missing unlock before return from function usbip_sockfd_store()
+in the error handling case.
 
-Okay, got it.
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ drivers/usb/usbip/vudc_sysfs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-thanks,
+diff --git a/drivers/usb/usbip/vudc_sysfs.c b/drivers/usb/usbip/vudc_sysfs.c
+index f7633ee655a1..d1cf6b51bf85 100644
+--- a/drivers/usb/usbip/vudc_sysfs.c
++++ b/drivers/usb/usbip/vudc_sysfs.c
+@@ -156,12 +156,14 @@ static ssize_t usbip_sockfd_store(struct device *dev,
+ 		tcp_rx = kthread_create(&v_rx_loop, &udc->ud, "vudc_rx");
+ 		if (IS_ERR(tcp_rx)) {
+ 			sockfd_put(socket);
++			mutex_unlock(&udc->ud.sysfs_lock);
+ 			return -EINVAL;
+ 		}
+ 		tcp_tx = kthread_create(&v_tx_loop, &udc->ud, "vudc_tx");
+ 		if (IS_ERR(tcp_tx)) {
+ 			kthread_stop(tcp_rx);
+ 			sockfd_put(socket);
++			mutex_unlock(&udc->ud.sysfs_lock);
+ 			return -EINVAL;
+ 		}
+ 
 
--- 
-heikki
