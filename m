@@ -2,92 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC43F3595DD
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 08:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3930A3596B9
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 09:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233369AbhDIGxV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Apr 2021 02:53:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39786 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231540AbhDIGxU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Apr 2021 02:53:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DC2DD610FC;
-        Fri,  9 Apr 2021 06:53:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1617951188;
-        bh=CWgnKo2R1JWhhcL6cLGMIUWSmwSI6u78i8ozgB5S9Ng=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kUDVgY+OG6iylqZzjMNVmdhtjYL2teOLmGpbRmk30RfYKlHj8uxg1QCGe+g1a2NgX
-         lNRpicpV0o1c1PNMcDdqwy/eJR9vB2HI7nT078VJKwBFhY3yR/PXTp3G/b9mx6/6ye
-         ajQ6sHRljcXMVS4x4A28v79wAJGpRA4pioV8uhZw=
-Date:   Fri, 9 Apr 2021 08:53:06 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH 6/6] usb: dwc3: host: Set quirks base on version
-Message-ID: <YG/50kPULbzZRlFj@kroah.com>
-References: <cover.1617929509.git.Thinh.Nguyen@synopsys.com>
- <a792b1ea6b7083d400b3a6b38dcca70588fc5587.1617929509.git.Thinh.Nguyen@synopsys.com>
+        id S231280AbhDIHuD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Apr 2021 03:50:03 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:15644 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229545AbhDIHuD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Apr 2021 03:50:03 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FGqw31WDqzpW8c;
+        Fri,  9 Apr 2021 15:46:59 +0800 (CST)
+Received: from huawei.com (10.67.165.24) by DGGEMS411-HUB.china.huawei.com
+ (10.3.19.211) with Microsoft SMTP Server id 14.3.498.0; Fri, 9 Apr 2021
+ 15:49:36 +0800
+From:   Longfang Liu <liulongfang@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <stern@rowland.harvard.edu>, <liudongdong3@huawei.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <liulongfang@huawei.com>, <kong.kongxinwei@hisilicon.com>,
+        <yisen.zhuang@huawei.com>
+Subject: [PATCH v2] USB:ohci:fix ohci interruption problem
+Date:   Fri, 9 Apr 2021 15:47:02 +0800
+Message-ID: <1617954422-36617-1-git-send-email-liulongfang@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a792b1ea6b7083d400b3a6b38dcca70588fc5587.1617929509.git.Thinh.Nguyen@synopsys.com>
+Content-Type: text/plain
+X-Originating-IP: [10.67.165.24]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 08, 2021 at 06:42:32PM -0700, Thinh Nguyen wrote:
-> We can check for host quirks at runtime base on the controller IP and
-> version check. Set the following quirks for the DWC_usb31 IP host mode
-> before creating a platform device for the xHCI driver:
-> 
->  * XHCI_ISOC_BLOCKED_DISCONNECT
->  * XHCI_LIMIT_FS_BI_INTR_EP
->  * XHCI_LOST_DISCONNECT_QUIRK
-> 
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> ---
->  drivers/usb/dwc3/host.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index f29a264635aa..a486d7fbb163 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -9,6 +9,7 @@
->  
->  #include <linux/acpi.h>
->  #include <linux/platform_device.h>
-> +#include <linux/usb/xhci-quirks.h>
->  
->  #include "core.h"
->  
-> @@ -42,6 +43,17 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
->  	return irq;
->  }
->  
-> +static void dwc3_host_init_quirks(struct dwc3 *dwc, struct xhci_plat_priv *priv)
-> +{
-> +	memset(priv, 0, sizeof(*priv));
-> +
-> +	if (DWC3_VER_IS_WITHIN(DWC31, ANY, 190A)) {
-> +		priv->quirks |= XHCI_ISOC_BLOCKED_DISCONNECT;
-> +		priv->quirks |= XHCI_LIMIT_FS_BI_INTR_EP;
-> +		priv->quirks |= XHCI_LOST_DISCONNECT_QUIRK;
-> +	}
-> +}
-> +
->  int dwc3_host_init(struct dwc3 *dwc)
->  {
->  	struct property_entry	props[4];
-> @@ -49,6 +61,7 @@ int dwc3_host_init(struct dwc3 *dwc)
->  	int			ret, irq;
->  	struct resource		*res;
->  	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
-> +	struct xhci_plat_priv	dwc3_priv;
+The operating method of the system entering S4 sleep mode:
+echo reboot > /sys/power/disk
+echo disk > /sys/power/state
 
-Tying the dwc3 code to the xhci code like this feels really wrong to me,
-are you sure this is the correct resolution?
+When OHCI enters the S4 sleep state, check the log and find that
+the USB sleep process will call check_root_hub_suspend() and
+ohci_bus_suspend() instead ohci_suspend() and ohci_bus_suspend(),
+which will cause the OHCI interrupt to not be closed.
 
-greg k-h
+At this time, if just one device interrupt is reported. the
+driver will not process and close this device interrupt. It will cause
+the entire system to be stuck during sleep, causing the device to
+fail to respond.
+
+When the abnormal interruption reaches 100,000 times, the system will
+forcibly close the interruption and make the device unusable.
+
+Because the root cause of the problem is that ohci_suspend is not
+called to perform normal interrupt shutdown operations when the system
+enters S4 sleep mode.
+
+Therefore, our solution is to specify freeze interface in this mode to
+perform normal suspend_common() operations, and call ohci_suspend()
+after check_root_hub_suspend() is executed through the suspend_common()
+operation.
+
+Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+---
+
+Changes in V2:
+	- Modify comment and patch version information.
+
+Changes in V1:
+	- Call suspend_common by adding the hcd_pci_freeze function turn off
+	the interrupt instead of adding a shutdown operation in ohci_bus_suspend
+	to turn off the interrupt.
+
+ drivers/usb/core/hcd-pci.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+index 1547aa6..c5844a3 100644
+--- a/drivers/usb/core/hcd-pci.c
++++ b/drivers/usb/core/hcd-pci.c
+@@ -509,6 +509,11 @@ static int resume_common(struct device *dev, int event)
+ 
+ #ifdef	CONFIG_PM_SLEEP
+ 
++static int hcd_pci_freeze(struct device *dev)
++{
++	return suspend_common(dev, device_may_wakeup(dev));
++}
++
+ static int hcd_pci_suspend(struct device *dev)
+ {
+ 	return suspend_common(dev, device_may_wakeup(dev));
+@@ -605,7 +610,7 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
+ 	.suspend_noirq	= hcd_pci_suspend_noirq,
+ 	.resume_noirq	= hcd_pci_resume_noirq,
+ 	.resume		= hcd_pci_resume,
+-	.freeze		= check_root_hub_suspended,
++	.freeze		= hcd_pci_freeze,
+ 	.freeze_noirq	= check_root_hub_suspended,
+ 	.thaw_noirq	= NULL,
+ 	.thaw		= NULL,
+-- 
+2.8.1
+
