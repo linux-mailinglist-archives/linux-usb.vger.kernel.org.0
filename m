@@ -2,206 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E4B359C65
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 12:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9C8359CEB
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 13:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233607AbhDIKyu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Apr 2021 06:54:50 -0400
-Received: from mga18.intel.com ([134.134.136.126]:54721 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232087AbhDIKyu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Apr 2021 06:54:50 -0400
-IronPort-SDR: i9vlkaxJMkIVyNjySXSkjETY3JN+DEa9FctoXfxLrYR3K1C25+mh/0lWYmSdLZVFl4S2WqRb7h
- xHfpAMtlUFFQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9948"; a="181270602"
-X-IronPort-AV: E=Sophos;i="5.82,209,1613462400"; 
-   d="scan'208";a="181270602"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 03:54:37 -0700
-IronPort-SDR: u3ADHNdgCl4yLcIkTjna6rfeNS7/Whh8yO7GoaFCrRs8dz7uXCPK5oI8eNoHUqZocy4rfQJCQn
- rOfQGFRYT7Cw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,209,1613462400"; 
-   d="scan'208";a="520240872"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 09 Apr 2021 03:54:34 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 09 Apr 2021 13:54:34 +0300
-Date:   Fri, 9 Apr 2021 13:54:34 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] usb: typec: Add
- typec_port_register_altmodes_from_fwnode()
-Message-ID: <YHAyah2n+yKnAT7d@kuha.fi.intel.com>
-References: <20210408203129.526604-1-hdegoede@redhat.com>
- <20210408203129.526604-2-hdegoede@redhat.com>
+        id S233998AbhDILPG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Apr 2021 07:15:06 -0400
+Received: from mail-oi1-f173.google.com ([209.85.167.173]:39707 "EHLO
+        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233995AbhDILPF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Apr 2021 07:15:05 -0400
+Received: by mail-oi1-f173.google.com with SMTP id i81so5384636oif.6;
+        Fri, 09 Apr 2021 04:14:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Rxjs0bOzud5jPgrtCrFonjn8TrOn+6BSTDUNWNa5VkA=;
+        b=XeF9AXNlN/rmxxhZVdABNMCYq13Y2K8LaepjVmT0/dzS+ckWkUZZPeYlO+KpSK87uA
+         yW7uWVnJxOGAaPu4JZpBF7tPYEALKyzLOIVjW7Dtk6aCcy+AqHfTKCriG0wUoteS3OqW
+         ws/yyVXuwrTUsrvTutwu5x9qYxa0UUJP+HdQ7h/VuhRLOxTlKeRsSwq8noF+AysM9jI4
+         csswg75J51YUijgFeZqvCARUHqLP8gXMJgeP76WxbJL43utgxjV0466kxIUZ570aakRi
+         L7FXcJnkbwIrOjToAf39q6Y2rvNMTLdZem2SO+n4vZdVUhFSrtNIgorEmBig1XKDYvFu
+         WZcw==
+X-Gm-Message-State: AOAM531f67wHBDbcDgsGY+sj3/PKGVvFE2+8Ve4q19njXS3MYnJUThV/
+        Z1lQC8kc3smMupehTD/dkTB4Z/Zlemvuy3THo64=
+X-Google-Smtp-Source: ABdhPJzqQwV2RLtxpvy3bdjEZbTiGwM6R2VqAkJLIvDpOTRgfz1/jDCWilo+43fl261e+3ylK2QTCgBnzn1M84H/KAA=
+X-Received: by 2002:aca:5fc3:: with SMTP id t186mr9286785oib.69.1617966892336;
+ Fri, 09 Apr 2021 04:14:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210408203129.526604-2-hdegoede@redhat.com>
+References: <1617874514-12282-1-git-send-email-chunfeng.yun@mediatek.com>
+ <CAJZ5v0gGntbfnvAP5A491_hUh-JUuqZjZRdPPLwWJjnZRtemcQ@mail.gmail.com>
+ <1617933211.12105.22.camel@mhfsdcap03> <YG/ohhh3Tyet6InQ@atomide.com> <1617957362.12105.27.camel@mhfsdcap03>
+In-Reply-To: <1617957362.12105.27.camel@mhfsdcap03>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 9 Apr 2021 13:14:40 +0200
+Message-ID: <CAJZ5v0ioobLt5aEm8TAcPKgJiL13OJ7KqTeJmcQCuVp8ALxBmw@mail.gmail.com>
+Subject: Re: [PATCH 1/6] PM: runtime: enable wake irq after runtime_suspend
+ hook called
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Ikjoon Jang <ikjn@chromium.org>,
+        Nicolas Boichat <drinkcat@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Hans,
+On Fri, Apr 9, 2021 at 10:36 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+>
+> On Fri, 2021-04-09 at 08:39 +0300, Tony Lindgren wrote:
+> > * Chunfeng Yun <chunfeng.yun@mediatek.com> [210409 01:54]:
+> > > On Thu, 2021-04-08 at 19:41 +0200, Rafael J. Wysocki wrote:
+> > > > On Thu, Apr 8, 2021 at 11:35 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+> > > > >
+> > > > > When the dedicated wake irq is level trigger, enable it before
+> > > > > calling runtime_suspend, will trigger an interrupt.
+> > > > >
+> > > > > e.g.
+> > > > > for a low level trigger type, it's low level at running time (0),
+> > > > > and becomes high level when enters suspend (runtime_suspend (1) is
+> > > > > called), a wakeup signal at (2) make it become low level, wake irq
+> > > > > will be triggered.
+> > > > >
+> > > > >                 ------------------
+> > > > >                |           ^     ^|
+> > > > > ----------------           |     | --------------
+> > > > >  |<---(0)--->|<--(1)--|   (3)   (2)    (4)
+> > > > >
+> > > > > if we enable the wake irq before calling runtime_suspend during (0),
+> > > > > an interrupt will arise, it causes resume immediately;
+> > > >
+> > > > But that's necessary to avoid missing a wakeup interrupt, isn't it?
+> > > That's also what I worry about.
+> >
+> > Yeah sounds like this patch will lead into missed wakeirqs.
+> If miss level trigger wakeirqs, that means HW doesn't latch it? is it HW
+> limitation?
 
-On Thu, Apr 08, 2021 at 10:31:27PM +0200, Hans de Goede wrote:
-> This can be used by Type-C controller drivers which use a standard
-> usb-connector fwnode, with altmodes sub-node, to describe the available
-> altmodes.
-> 
-> Note there are is no devicetree bindings documentation for the altmodes
-> node, this is deliberate. ATM the fwnodes used to register the altmodes
-> are only used internally to pass platform info from a drivers/platform/x86
-> driver to the type-c subsystem.
-> 
-> When a devicetree user of this functionally comes up and the dt-bindings
-> have been hashed out the internal use can be adjusted to match the
-> dt-bindings.
-> 
-> Currently the typec_port_register_altmodes_from_fwnode() function expects
-> an "altmodes" child fwnode on port->dev with this "altmodes" fwnode having
-> child fwnodes itself with each child containing 2 integer properties:
-> 
-> 1. A "svid" property, which sets the id of the altmode, e.g. displayport
-> altmode has a svid of 0xff01.
-> 
-> 2. A "vdo" property, typically used as a bitmask describing the
-> capabilities of the altmode, the bits in the vdo are specified in the
-> specification of the altmode.
-> 
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
-> Changes in v2:
-> - Drop the unnecessary fwnode parameter from
->   typec_port_register_altmodes_from_fwnode()
-> - Document the expected "altmodes" fwnode in the commit message for now
->   as v2 of the patch-set drops the dt-bindings since there are not DT
->   users for this yet
-> ---
->  drivers/usb/typec/class.c | 55 +++++++++++++++++++++++++++++++++++++++
->  include/linux/usb/typec.h |  6 +++++
->  2 files changed, 61 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 45f0bf65e9ab..a82344fe1650 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -1978,6 +1978,61 @@ typec_port_register_altmode(struct typec_port *port,
->  }
->  EXPORT_SYMBOL_GPL(typec_port_register_altmode);
->  
-> +void typec_port_register_altmodes_from_fwnode(struct typec_port *port,
-> +	const struct typec_altmode_ops *ops, void *drvdata,
-> +	struct typec_altmode **altmodes, size_t n)
+If it's level-triggered, it won't be missed, but then it is just
+pointless to suspend the device when wakeup is being signaled in the
+first place.
 
-Couldn't we just call this typec_port_register_altmodes()?
-
-> +{
-> +	struct fwnode_handle *altmodes_node, *child;
-> +	struct typec_altmode_desc desc;
-> +	struct typec_altmode *alt;
-> +	size_t index = 0;
-> +	u32 svid, vdo;
-> +	int ret;
-> +
-> +	altmodes_node = device_get_named_child_node(&port->dev, "altmodes");
-> +	if (!altmodes_node)
-> +		return; /* No altmodes specified */
-> +
-> +	child = NULL;
-> +	while ((child = fwnode_get_next_child_node(altmodes_node, child))) {
-
-fwnode_for_each_child_node()?
-
-> +		ret = fwnode_property_read_u32(child, "svid", &svid);
-> +		if (ret) {
-> +			dev_err(&port->dev, "Error reading svid for altmode %s\n",
-> +				fwnode_get_name(child));
-> +			continue;
-> +		}
-> +
-> +		ret = fwnode_property_read_u32(child, "vdo", &vdo);
-> +		if (ret) {
-> +			dev_err(&port->dev, "Error reading vdo for altmode %s\n",
-> +				fwnode_get_name(child));
-> +			continue;
-> +		}
-> +
-> +		if (index >= n) {
-> +			dev_err(&port->dev, "Error not enough space for altmode %s\n",
-> +				fwnode_get_name(child));
-> +			continue;
-> +		}
-> +
-> +		desc.svid = svid;
-> +		desc.vdo = vdo;
-> +		desc.mode = index + 1;
-> +		alt = typec_port_register_altmode(port, &desc);
-> +		if (IS_ERR(alt)) {
-> +			dev_err(&port->dev, "Error registering altmode %s\n",
-> +				fwnode_get_name(child));
-> +			continue;
-> +		}
-> +
-> +		alt->ops = ops;
-> +		typec_altmode_set_drvdata(alt, drvdata);
-> +		altmodes[index] = alt;
-> +		index++;
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(typec_port_register_altmodes_from_fwnode);
-
-This is OK by me, but I've been wondering if it would be more clear to
-just have a function fwnode_for_each_altmode() (I don't know if the
-name is good enough).
-
-int fwnode_for_each_altmode(struct fwnode_handle *fwnode,
-                            int (*fn)(struct typec_altmode_desc *, void *),
-                            void *data)
-{
-        struct fwnode_handle *altmodes_node, *child;
-        struct typec_altmode_desc desc;
-	u32 svid, vdo;
-	int ret;
-
-	altmodes_node = fwnode_get_named_child_node(fwnode, "altmodes");
-	if (!altmodes_node)
-		return 0; /* No altmodes specified */
-
-        fwnode_for_each_child_node(altmodes_node, child) {
-                ...
-                /* read the properties */
-                ...
-
-		desc.svid = svid;
-		desc.vdo = vdo;
-		desc.mode = index + 1;
-
-                /* We need to add this member to struct typec_altmode_desc! */
-                desc.fwnode = client;
-
-                ret = fn(&desc, data);
-                if (ret)
-                        return ret;
-        }
-
-        return 0;
-}
-
-Something like that. It would leave the registration of the alternate
-modes to the drivers, which I think would actually be better.
-
-If there ever is need, this can be also used for other things besides
-mode registration.
-
-What do you think?
-
-Br,
-
--- 
-heikki
+I'm not sure if I understand the underlying problem correctly.  Is it
+about addressing spurious wakeups?
