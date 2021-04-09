@@ -2,116 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF102359193
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 03:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C96043591B4
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 03:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233158AbhDIBmr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Apr 2021 21:42:47 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:47602 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232426AbhDIBmq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 21:42:46 -0400
-Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 21C6AC00CA;
-        Fri,  9 Apr 2021 01:42:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1617932554; bh=DIMCHZSRXXjfYtacNGDpPEqi4k9O2sDIegxiRCrb64I=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=jCWuVXOWuFYuqxdeVkmb6XgzPM+32qbhBwmOe/+CDcPKqn50c/9X72hD+A0HVNx79
-         QWHBxUc6QvwwLY/tW1BEEVtaX8UHPE8zSQLZKJAjk8MRUIU3MS6RJykFrbu5ikHKp7
-         lR+/bitT9XxScBWDMh6iVcdUOTbV/v6AYChANUdStDGpGVXnYGccckCx06ibIUK2kk
-         QmyTQj2gUIJtyLV/S+rb1YNLh7cQK4FSPrKTZJH+LjvuvHrfvk1gdujCN3l7OT9qUp
-         aBNl1D10e8JiLfccEwx9o64FwxHXK6qzeISHvq3kl9TRxplxYRERif+c1B+6mY1rKK
-         pXBOhqDwOB5SA==
-Received: from lab-vbox (unknown [10.205.144.97])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id D340CA006A;
-        Fri,  9 Apr 2021 01:42:32 +0000 (UTC)
-Received: by lab-vbox (sSMTP sendmail emulation); Thu, 08 Apr 2021 18:42:32 -0700
-Date:   Thu, 08 Apr 2021 18:42:32 -0700
-Message-Id: <a792b1ea6b7083d400b3a6b38dcca70588fc5587.1617929509.git.Thinh.Nguyen@synopsys.com>
-In-Reply-To: <cover.1617929509.git.Thinh.Nguyen@synopsys.com>
-References: <cover.1617929509.git.Thinh.Nguyen@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH 6/6] usb: dwc3: host: Set quirks base on version
-To:     Felipe Balbi <balbi@kernel.org>,
+        id S233006AbhDIBx6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Apr 2021 21:53:58 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:2182 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232426AbhDIBx5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Apr 2021 21:53:57 -0400
+X-UUID: a4f0787ea6d44ab690a1f2a4e8825695-20210409
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=WCCGjD2i/tFPN4rjc7RFbfR3PPHyPKT9cvYT4d2kpJs=;
+        b=tuI4zZqT96VcPhiXPyxpRwg/PKm6gMb2+d/cWppfm/0268DTaBaGKrg7Tum/uNhDyQzaDKS/aKb6G1Lif/2A6qhcgS23+qX2v/nb1DUY2Rb2QMKxlvK6gUVLYUytjptKATClxDhZSPjKqNB2WwcJo3IP+qPzM/eK6enqCzuiLho=;
+X-UUID: a4f0787ea6d44ab690a1f2a4e8825695-20210409
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 346375158; Fri, 09 Apr 2021 09:53:40 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
+ (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 9 Apr
+ 2021 09:53:32 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 9 Apr 2021 09:53:31 +0800
+Message-ID: <1617933211.12105.22.camel@mhfsdcap03>
+Subject: Re: [PATCH 1/6] PM: runtime: enable wake irq after runtime_suspend
+ hook called
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        "Ikjoon Jang" <ikjn@chromium.org>,
+        Nicolas Boichat <drinkcat@chromium.org>
+Date:   Fri, 9 Apr 2021 09:53:31 +0800
+In-Reply-To: <CAJZ5v0gGntbfnvAP5A491_hUh-JUuqZjZRdPPLwWJjnZRtemcQ@mail.gmail.com>
+References: <1617874514-12282-1-git-send-email-chunfeng.yun@mediatek.com>
+         <CAJZ5v0gGntbfnvAP5A491_hUh-JUuqZjZRdPPLwWJjnZRtemcQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+X-TM-SNTS-SMTP: ACE7095BD198D82D0CD3C193451A34F2488D21E8BCBB24999214E20CCB4948BB2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We can check for host quirks at runtime base on the controller IP and
-version check. Set the following quirks for the DWC_usb31 IP host mode
-before creating a platform device for the xHCI driver:
-
- * XHCI_ISOC_BLOCKED_DISCONNECT
- * XHCI_LIMIT_FS_BI_INTR_EP
- * XHCI_LOST_DISCONNECT_QUIRK
-
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
- drivers/usb/dwc3/host.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
-
-diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index f29a264635aa..a486d7fbb163 100644
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -9,6 +9,7 @@
- 
- #include <linux/acpi.h>
- #include <linux/platform_device.h>
-+#include <linux/usb/xhci-quirks.h>
- 
- #include "core.h"
- 
-@@ -42,6 +43,17 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
- 	return irq;
- }
- 
-+static void dwc3_host_init_quirks(struct dwc3 *dwc, struct xhci_plat_priv *priv)
-+{
-+	memset(priv, 0, sizeof(*priv));
-+
-+	if (DWC3_VER_IS_WITHIN(DWC31, ANY, 190A)) {
-+		priv->quirks |= XHCI_ISOC_BLOCKED_DISCONNECT;
-+		priv->quirks |= XHCI_LIMIT_FS_BI_INTR_EP;
-+		priv->quirks |= XHCI_LOST_DISCONNECT_QUIRK;
-+	}
-+}
-+
- int dwc3_host_init(struct dwc3 *dwc)
- {
- 	struct property_entry	props[4];
-@@ -49,6 +61,7 @@ int dwc3_host_init(struct dwc3 *dwc)
- 	int			ret, irq;
- 	struct resource		*res;
- 	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
-+	struct xhci_plat_priv	dwc3_priv;
- 	int			prop_idx = 0;
- 
- 	irq = dwc3_host_get_irq(dwc);
-@@ -87,6 +100,14 @@ int dwc3_host_init(struct dwc3 *dwc)
- 		goto err;
- 	}
- 
-+	dwc3_host_init_quirks(dwc, &dwc3_priv);
-+
-+	ret = platform_device_add_data(xhci, &dwc3_priv, sizeof(dwc3_priv));
-+	if (ret) {
-+		dev_err(dwc->dev, "couldn't add platform data to xHCI device\n");
-+		goto err;
-+	}
-+
- 	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
- 
- 	if (dwc->usb3_lpm_capable)
--- 
-2.28.0
+T24gVGh1LCAyMDIxLTA0LTA4IGF0IDE5OjQxICswMjAwLCBSYWZhZWwgSi4gV3lzb2NraSB3cm90
+ZToNCj4gT24gVGh1LCBBcHIgOCwgMjAyMSBhdCAxMTozNSBBTSBDaHVuZmVuZyBZdW4gPGNodW5m
+ZW5nLnl1bkBtZWRpYXRlay5jb20+IHdyb3RlOg0KPiA+DQo+ID4gV2hlbiB0aGUgZGVkaWNhdGVk
+IHdha2UgaXJxIGlzIGxldmVsIHRyaWdnZXIsIGVuYWJsZSBpdCBiZWZvcmUNCj4gPiBjYWxsaW5n
+IHJ1bnRpbWVfc3VzcGVuZCwgd2lsbCB0cmlnZ2VyIGFuIGludGVycnVwdC4NCj4gPg0KPiA+IGUu
+Zy4NCj4gPiBmb3IgYSBsb3cgbGV2ZWwgdHJpZ2dlciB0eXBlLCBpdCdzIGxvdyBsZXZlbCBhdCBy
+dW5uaW5nIHRpbWUgKDApLA0KPiA+IGFuZCBiZWNvbWVzIGhpZ2ggbGV2ZWwgd2hlbiBlbnRlcnMg
+c3VzcGVuZCAocnVudGltZV9zdXNwZW5kICgxKSBpcw0KPiA+IGNhbGxlZCksIGEgd2FrZXVwIHNp
+Z25hbCBhdCAoMikgbWFrZSBpdCBiZWNvbWUgbG93IGxldmVsLCB3YWtlIGlycQ0KPiA+IHdpbGwg
+YmUgdHJpZ2dlcmVkLg0KPiA+DQo+ID4gICAgICAgICAgICAgICAgIC0tLS0tLS0tLS0tLS0tLS0t
+LQ0KPiA+ICAgICAgICAgICAgICAgIHwgICAgICAgICAgIF4gICAgIF58DQo+ID4gLS0tLS0tLS0t
+LS0tLS0tLSAgICAgICAgICAgfCAgICAgfCAtLS0tLS0tLS0tLS0tLQ0KPiA+ICB8PC0tLSgwKS0t
+LT58PC0tKDEpLS18ICAgKDMpICAgKDIpICAgICg0KQ0KPiA+DQo+ID4gaWYgd2UgZW5hYmxlIHRo
+ZSB3YWtlIGlycSBiZWZvcmUgY2FsbGluZyBydW50aW1lX3N1c3BlbmQgZHVyaW5nICgwKSwNCj4g
+PiBhbiBpbnRlcnJ1cHQgd2lsbCBhcmlzZSwgaXQgY2F1c2VzIHJlc3VtZSBpbW1lZGlhdGVseTsN
+Cj4gDQo+IEJ1dCB0aGF0J3MgbmVjZXNzYXJ5IHRvIGF2b2lkIG1pc3NpbmcgYSB3YWtldXAgaW50
+ZXJydXB0LCBpc24ndCBpdD8NClRoYXQncyBhbHNvIHdoYXQgSSB3b3JyeSBhYm91dC4NCkl0IG1h
+eSBoYXBwZW4gaWYgdGhlIHRyaWdnZXIgbGV2ZWwgb25seSBrZWVwcyBhIHZlcnkgc2hvcnQgdGlt
+ZSwgYW5kIHRoZQ0KaW50ZXJydXB0IGNvbnRyb2xsZXIgY2FuJ3QgcHJvY2VzcyBpdCB0aW1lbHks
+IGJ1dCBJIGRvbid0IHRoaW5rIGl0DQpmb2xsb3cgdGhlIGxldmVsIHRyaWdnZXIgbWVjaGFuaXNt
+LCB0aGUgSFcgc2hvdWxkIGxhdGNoIGl0IHVudGlsIHRoZSBJU1INCmlzIGNhbGxlZC4gcmlnaHQ/
+DQoNCj4gDQo+ID4gZW5hYmxlIHdha2UgaXJxIGFmdGVyIGNhbGxpbmcgcnVudGltZV9zdXNwZW5k
+LCBlLmcuIGF0ICgzKSBvciAoNCksDQo+ID4gd2lsbCB3b3Jrcy4NCj4gPg0KPiA+IFRoaXMgcGF0
+Y2ggc2VlbXMgbm8gc2lkZSBlZmZlY3Qgb24gZWRnZSB0cmlnZ2VyIHdha2UgaXJxLg0KPiA+DQo+
+ID4gU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVuZy55dW5AbWVkaWF0ZWsuY29t
+Pg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL2Jhc2UvcG93ZXIvcnVudGltZS5jIHwgNSArKy0tLQ0K
+PiA+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KPiA+
+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvYmFzZS9wb3dlci9ydW50aW1lLmMgYi9kcml2ZXJz
+L2Jhc2UvcG93ZXIvcnVudGltZS5jDQo+ID4gaW5kZXggYTQ2YTdlMzA4ODFiLi43OTY3MzlhMDE1
+YTUgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9iYXNlL3Bvd2VyL3J1bnRpbWUuYw0KPiA+ICsr
+KyBiL2RyaXZlcnMvYmFzZS9wb3dlci9ydW50aW1lLmMNCj4gPiBAQCAtNjE5LDEyICs2MTksMTIg
+QEAgc3RhdGljIGludCBycG1fc3VzcGVuZChzdHJ1Y3QgZGV2aWNlICpkZXYsIGludCBycG1mbGFn
+cykNCj4gPiAgICAgICAgIF9fdXBkYXRlX3J1bnRpbWVfc3RhdHVzKGRldiwgUlBNX1NVU1BFTkRJ
+TkcpOw0KPiA+DQo+ID4gICAgICAgICBjYWxsYmFjayA9IFJQTV9HRVRfQ0FMTEJBQ0soZGV2LCBy
+dW50aW1lX3N1c3BlbmQpOw0KPiA+IC0NCj4gPiAtICAgICAgIGRldl9wbV9lbmFibGVfd2FrZV9p
+cnFfY2hlY2soZGV2LCB0cnVlKTsNCj4gPiAgICAgICAgIHJldHZhbCA9IHJwbV9jYWxsYmFjayhj
+YWxsYmFjaywgZGV2KTsNCj4gPiAgICAgICAgIGlmIChyZXR2YWwpDQo+ID4gICAgICAgICAgICAg
+ICAgIGdvdG8gZmFpbDsNCj4gPg0KPiA+ICsgICAgICAgZGV2X3BtX2VuYWJsZV93YWtlX2lycV9j
+aGVjayhkZXYsIHRydWUpOw0KPiA+ICsNCj4gPiAgIG5vX2NhbGxiYWNrOg0KPiA+ICAgICAgICAg
+X191cGRhdGVfcnVudGltZV9zdGF0dXMoZGV2LCBSUE1fU1VTUEVOREVEKTsNCj4gPiAgICAgICAg
+IHBtX3J1bnRpbWVfZGVhY3RpdmF0ZV90aW1lcihkZXYpOw0KPiA+IEBAIC02NTksNyArNjU5LDYg
+QEAgc3RhdGljIGludCBycG1fc3VzcGVuZChzdHJ1Y3QgZGV2aWNlICpkZXYsIGludCBycG1mbGFn
+cykNCj4gPiAgICAgICAgIHJldHVybiByZXR2YWw7DQo+ID4NCj4gPiAgIGZhaWw6DQo+ID4gLSAg
+ICAgICBkZXZfcG1fZGlzYWJsZV93YWtlX2lycV9jaGVjayhkZXYpOw0KPiA+ICAgICAgICAgX191
+cGRhdGVfcnVudGltZV9zdGF0dXMoZGV2LCBSUE1fQUNUSVZFKTsNCj4gPiAgICAgICAgIGRldi0+
+cG93ZXIuZGVmZXJyZWRfcmVzdW1lID0gZmFsc2U7DQo+ID4gICAgICAgICB3YWtlX3VwX2FsbCgm
+ZGV2LT5wb3dlci53YWl0X3F1ZXVlKTsNCj4gPiAtLQ0KPiA+IDIuMTguMA0KPiA+DQoNCg==
 
