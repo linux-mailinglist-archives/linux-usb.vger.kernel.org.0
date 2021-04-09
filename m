@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F0735A2F4
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 18:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5666F35A308
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 18:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234022AbhDIQW7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Apr 2021 12:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
+        id S234154AbhDIQXv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Apr 2021 12:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234008AbhDIQW5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Apr 2021 12:22:57 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908EDC061760;
-        Fri,  9 Apr 2021 09:22:43 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id f2-20020a17090a4a82b02900c67bf8dc69so5242471pjh.1;
-        Fri, 09 Apr 2021 09:22:43 -0700 (PDT)
+        with ESMTP id S232796AbhDIQXt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Apr 2021 12:23:49 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6432AC061760;
+        Fri,  9 Apr 2021 09:23:28 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id t22so4325008pgu.0;
+        Fri, 09 Apr 2021 09:23:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Q7xFBcWlzYhkzF0WJIFSviLducCgzZ0CokBZ31tudr8=;
-        b=QBGtFUpxtyST88wpT2VS1e6bxUVNLEU3isT8LbSz2sjUN67usjspo0zLuXLHg5ftPr
-         BxtX+hEvwiHAksy4TUZNqb/fOESLtTU7O3x9lCAQBxsUMepp8icZmyIrQYj7yUGMVRRQ
-         9bi6caEfDqwrp96z94DwqYDPHhfsu41Dv25sa3n8FpWKGaxqIVbHt8NDj64T0b5LAw49
-         GPXGLFw17N5Gu/b9Oh/hz9Dr1VpocZNDK3SScYjFEzqKhdlNrOeXrILfA1ZcgZxt4pHU
-         IFePyE7Wf0wA/SnOn8ngEBVSAeHW0aboJDYud4jOpq0ozjGNp54uJFE3MTvTqrQUbSTC
-         9aFg==
+        bh=nDusQ2OuAkZSg4NVX/t5wwyf/vXXXB7lfR1OxJXRB3s=;
+        b=WU/t+K7gJF1eKmth+Fx8Km+m0zRCt40wXeHPJ+ncI4YKlr24IOVGAREsDJZ0ex+uwf
+         14mRXDVbiWwylGSwCgFMXFomPLW6VeUisk4BsjOAPrUUsbhFx1BKmgwxlF0v5vwiUg/d
+         u2SfhHFD23syf4FuFsKqyYoRrj94ysVAvtOVlfIYGOvLFAx9+mfY05k8HBwbORjzn2YH
+         CgVP1jh7Q6N/8Y6BxnLbttOPKXOyXMdblAeThxbXiQUUg1LDdymLezykkJUz5kc9WSmS
+         ZT/qBtcESMiHHUzJQQzQhluY0c7HFLv427B++neqy7OwhhKoP7AJY3/FHcGcTJ5cCgvb
+         bgiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Q7xFBcWlzYhkzF0WJIFSviLducCgzZ0CokBZ31tudr8=;
-        b=ZmcafCvko2hgRqz80myii74H0GZnIT9B9YcmhoNEfUoByQkOrJos5arqh0o6yxpOzW
-         gxBZj+FvTN9f1/UVD7ZGb54Q71tLdlWDkgGTKjRf+nguuAHZxJ7+5spVOAPz+a8hMOPh
-         AFt31QaYwNKBm63+j8/YL3Yi++CW2pJzVPkEjPcf1rdQTqWPdV0ID+Uaf9h9m38hCIZe
-         iBCnK8OPYm1Szsi0trjpo9GwlgEDdU6JYbQpsX8rjQYFsj5FbOxnKySFTnfvu8Bpgr5R
-         QjOy141BeAc/JvRPJjFtRVlHepvXUvZ8oTcXJjW/aezAxUqH0FvU7PurufDoc1G3lWRt
-         hy7A==
-X-Gm-Message-State: AOAM532oyhYm9GBQOKUz/mSVEXj/RJ1q/SotMGPNaiuftRpuXgqd9Icm
-        VevWDuGruUT3MZJDzf7TSrFc0i3qsUnZqTsR8hs=
-X-Google-Smtp-Source: ABdhPJzHulcDtkpv4/jVHu4ZJ3AL1cpR1QPajGhCJtU749k98+sXH4kPAbU0LNRTIISGw79xEitiTU7U/Qor3y/kjxs=
-X-Received: by 2002:a17:90b:1e0a:: with SMTP id pg10mr14589038pjb.129.1617985363066;
- Fri, 09 Apr 2021 09:22:43 -0700 (PDT)
+        bh=nDusQ2OuAkZSg4NVX/t5wwyf/vXXXB7lfR1OxJXRB3s=;
+        b=cWPuoDCKU3givSP0KaxCy+3ecQ3m3C+2NJjdFhBG9oDLtVhp0VlG7FPz8/idWuaUH2
+         qC0muCOCS8Yxe3Xh+J/HOX8ZTu21U6W3pSquQnklTPjb5+2BDgiziVF47vER1oj+/FNf
+         +Cikm03PQ/UIa51O/fLv0RKmmPs0i8K9UspJ7aPKGxroq6WNO1RPEWNbVxZxHv6rSvag
+         vwxah4xJZDuzKghquD3UNvzKWa/XO5HdeAXFPgh3R0T6QoyBT+n1QR0hZRNXUMOkrVJZ
+         i9G8lj95dyVyI1IAZoLufjqHP2C7ZNHSC8N3yRe0iegneOARC6BTQW3Eg0nb3Fjq9CLo
+         2+IA==
+X-Gm-Message-State: AOAM533i6gfaySBZSO6Ao4O7rvggM4NpXsuegbesiw5IN75jxdRAzSsJ
+        iV0J4dBu8ncUjCkkZkNq3CN5gNEP95JtmnBnVfQ=
+X-Google-Smtp-Source: ABdhPJwLYPqG7zCqxZIsi/geZhQoa08NeY7Kg13aATTx89RIAVutBerolpUW4gNQU2b0iPy8nazkY8b3QcebcgDP3hw=
+X-Received: by 2002:aa7:8593:0:b029:246:c18b:ff16 with SMTP id
+ w19-20020aa785930000b0290246c18bff16mr3915775pfn.40.1617985407948; Fri, 09
+ Apr 2021 09:23:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210409155216.31867-1-johan@kernel.org> <20210409155216.31867-3-johan@kernel.org>
-In-Reply-To: <20210409155216.31867-3-johan@kernel.org>
+References: <20210409155216.31867-1-johan@kernel.org>
+In-Reply-To: <20210409155216.31867-1-johan@kernel.org>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 9 Apr 2021 19:22:26 +0300
-Message-ID: <CAHp75VdEgDuwrRPFm1BXQXQFSNZzC2qQnBG-DJt+GqLzJ+HwuA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] USB: serial: cp210x: add gpio-configuration debug printk
-To:     Johan Hovold <johan@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Fri, 9 Apr 2021 19:23:11 +0300
+Message-ID: <CAHp75Vds=yXk3yYMh1yyDb0o_YyVTh3-6iKh8rYKwYHORebdkQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] USB: serial: cp210x: provide gpio valid mask
+To:     Johan Hovold <johan@kernel.org>
 Cc:     Pho Tran <photranvan0712@gmail.com>, Hung.Nguyen@silabs.com,
         Tung.Pham@silabs.com, USB <linux-usb@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
@@ -62,43 +62,26 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 On Fri, Apr 9, 2021 at 6:52 PM Johan Hovold <johan@kernel.org> wrote:
 >
-> Add a debug printk to dump the GPIO configuration stored in EEPROM
-> during probe.
+> Use the new GPIO valid-mask feature to inform gpiolib which pins are
+> available for use instead of handling that in a request callback.
 >
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
->  drivers/usb/serial/cp210x.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+> This also allows user space to figure out which pins are available
+> through the chardev interface without having to request each pin in
+> turn.
+
+Thanks! I like the series.
+Independently on reaction on my comments:
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+> Johan
 >
-> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-> index ceb3a656a075..ee595d1bea0a 100644
-> --- a/drivers/usb/serial/cp210x.c
-> +++ b/drivers/usb/serial/cp210x.c
-> @@ -1543,10 +1543,16 @@ static int cp210x_gpio_init_valid_mask(struct gpio_chip *gc,
->  {
->         struct usb_serial *serial = gpiochip_get_data(gc);
->         struct cp210x_serial_private *priv = usb_get_serial_data(serial);
-> +       struct device *dev = &serial->interface->dev;
->         unsigned long altfunc_mask = priv->gpio_altfunc;
 >
->         bitmap_complement(valid_mask, &altfunc_mask, ngpios);
+> Johan Hovold (2):
+>   USB: serial: cp210x: provide gpio valid mask
+>   USB: serial: cp210x: add gpio-configuration debug printk
 >
-> +       if (bitmap_empty(valid_mask, ngpios))
-> +               dev_dbg(dev, "no pin configured for GPIO\n");
-
-Shouldn't we drop the GPIO device completely in such a case?
-Bart, wouldn't it be a good idea for GPIO library to do something like
-this on driver's behalf?
-
-> +       else
-> +               dev_dbg(dev, "GPIO.%*pbl configured for GPIO\n", ngpios,
-> +                               valid_mask);
-
-A nit-pick:
-I would change GPIO -> pin in the second message in the first occurrence.
-
->         return 0;
->  }
+>  drivers/usb/serial/cp210x.c | 31 +++++++++++++++++++------------
+>  1 file changed, 19 insertions(+), 12 deletions(-)
 >
 > --
 > 2.26.3
