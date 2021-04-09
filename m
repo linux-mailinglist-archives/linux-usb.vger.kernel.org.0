@@ -2,271 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C460935A228
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 17:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1C635A249
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 17:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233744AbhDIPkI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Apr 2021 11:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233712AbhDIPkH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Apr 2021 11:40:07 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563E3C061762
-        for <linux-usb@vger.kernel.org>; Fri,  9 Apr 2021 08:39:54 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id v24-20020a9d69d80000b02901b9aec33371so6099959oto.2
-        for <linux-usb@vger.kernel.org>; Fri, 09 Apr 2021 08:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wBXCbSaC1Hxateqn/Ch5WAilYWAoC2JMMq7UEAHR1do=;
-        b=y/XdHrgvkAtzZG4AEcQgWJ2CwiXYpD1fnlwtOQEyXqzYlSYIKrCJIeG80oC52ceTuo
-         GpKSfBehqO9Ca7EDiS0O8CtX8s7xVc8OFZ03vEPINOBcZXGnsMAjuXg5i3EUfpbcHTh8
-         WjEUBL/LpwQpBEPtUHss4TwrxwLjzYqEUn5MNg4p7+l3zGmSiFLHDHcO99yZofocZy3k
-         0K1i8EQ29byWJ885cgVddwi5H/epqwQLwISzLoft7HYuMzTVBZSrM+K6UPKnKWgOsi5e
-         1z4NW9Ly2Lfm9xmlqAEgjtHvhSqTUiUZZM+ndDY1j7/88xQf5FiVBTOi6blV4wDzxLch
-         /nIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wBXCbSaC1Hxateqn/Ch5WAilYWAoC2JMMq7UEAHR1do=;
-        b=ahCl75Cu6nykseWMISOf/rqKKVCQMuMeFdhgM0nI6F4rcRUnu0+0NJ6tbApJWEkc7u
-         C6JAWqerCQPZN7hOqsQLcSG1yYLJkrUwqbb+a0FRSuR4/bYflnrn20F7aZHyaKRJgK+Q
-         1ADhkJwPGhnCDpcnKUUIZMyfZbIo0yppuIFFxZNaIgYVgUXtUJ0cDfWbM1POv68c1GSN
-         +BKNnu3nQbWgdp2UkEtfwmqQ8+BNeOpl9MAbEi/dXFzXs8e+/ty3CxqUQ2qrMMowZWq1
-         GZWPrHGUgb/AY9aKHhFK/UKgVyo1d1/MQbG1pmvtBC9avrLVK6I6i3/0yvCSdRf+Okol
-         39vQ==
-X-Gm-Message-State: AOAM532+JF8Z38QiiQlxfKGT+MReS7E13uWfh5X18CBREk8/k9UxtVnb
-        qFR0E3ApkM8CS376jV+L44rAbw==
-X-Google-Smtp-Source: ABdhPJxW16/9QODLB8PSfvdHzKuZFOygXqK3suhuuOHQu2vj0b4/CucGEoBVjs8lW6qQh/bZy+rYEQ==
-X-Received: by 2002:a9d:4808:: with SMTP id c8mr12915189otf.181.1617982793540;
-        Fri, 09 Apr 2021 08:39:53 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id v1sm653560otk.67.2021.04.09.08.39.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Apr 2021 08:39:53 -0700 (PDT)
-Date:   Fri, 9 Apr 2021 10:39:51 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Andy Gross <agross@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Alexey Brodkin <abrodkin@synopsys.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org, Serge Semin <fancer.lancer@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v8 7/7] arm64: dts: qcom: Harmonize DWC USB3 DT
- nodes name
-Message-ID: <YHB1RxbkXYeLDiz5@builder.lan>
-References: <20210409113029.7144-1-Sergey.Semin@baikalelectronics.ru>
- <20210409113029.7144-8-Sergey.Semin@baikalelectronics.ru>
+        id S229665AbhDIPu1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Apr 2021 11:50:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43648 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231402AbhDIPu0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 9 Apr 2021 11:50:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 72AD761042;
+        Fri,  9 Apr 2021 15:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617983413;
+        bh=F6dOTV7avDP3ofhEidxw/zMb+uU/iXMccst0qahQ63I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Woj62dkcUIP3wY+pIKcBe1uBGMLn0sIwgolXQGxIUbaGctU2xtQ5PwZTIlJb/BhxZ
+         Xx/z5cVb8CMDt4E4PZNBKeGefVfpB4VETWkD9aAq6JBlS26ZIwYYjWvcajHNgIFuf7
+         y7owg/9f+Pr2ee/Wigw//NRldqPwu7OdVZg/YgZcuW350p7iAtzYbEL2SDLscNuOzm
+         JKgUBjG3dCSVA+8PkDhGkyaBHak8dgEX2hlu9dhjhxro6Y0j/sT/PXav/MXRtVPQ1W
+         TAg4n/cPUu5K/MNjznFD+2RbS6r1LJ+JR7rFZ4rEzZObYZR39f3V1koABucCz6v/2I
+         0AwX6kZzD2t0A==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lUtOc-0008Gq-3j; Fri, 09 Apr 2021 17:50:10 +0200
+Date:   Fri, 9 Apr 2021 17:50:10 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Pho Tran <photranvan0712@gmail.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hung.Nguyen@silabs.com" <Hung.Nguyen@silabs.com>,
+        "Tung.Pham@silabs.com" <Tung.Pham@silabs.com>,
+        Pho Tran <pho.tran@silabs.com>
+Subject: Re: [PATCH v8] USB: serial: cp210x: Add support for GPIOs on CP2108
+Message-ID: <YHB3sma1onbZboGv@hovoldconsulting.com>
+References: <20210406101850.3111-1-photranvan0712@gmail.com>
+ <CAHp75Vf8jwhLkaHL2D6FvRJpmbBqpTzePpNqVAFVt8EhSCgxnw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210409113029.7144-8-Sergey.Semin@baikalelectronics.ru>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75Vf8jwhLkaHL2D6FvRJpmbBqpTzePpNqVAFVt8EhSCgxnw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri 09 Apr 06:30 CDT 2021, Serge Semin wrote:
+On Wed, Apr 07, 2021 at 01:25:00AM +0300, Andy Shevchenko wrote:
+> On Tuesday, April 6, 2021, Pho Tran <photranvan0712@gmail.com> wrote:
 
-> In accordance with the DWC USB3 bindings the corresponding node
-> name is suppose to comply with the Generic USB HCD DT schema, which
-> requires the USB nodes to have the name acceptable by the regexp:
-> "^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
-> named.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > Because CP2108 has 16 GPIO pins, the parameter passed by cp210x functions
+> > will be different from other CP210x devices. So need to check part number
+> > of the device to use correct data format  before sending commands to
+> > devices.
+> >
+> > Like CP2104, CP2108 have GPIO pins with configurable options. Therefore,
+> > should be mask all pins which are not in GPIO mode in cp2108_gpio_init()
+> > function.
 
-As mentioned previously, I would like to merge this through the qcom soc
-tree to avoid conflicts with other activities, but need the driver code
-(patch 6) to land first.
+> This I didn’t get. If you are talking about usage pin as GPIO, perhaps you
+> should use valid_mask in GPIO chip structure. Otherwise you probably need
+> to implement a proper pinmux ops for this (and register a pin controller
+> which the code below also suggests).
 
-Regards,
-Bjorn
+Neither is needed here.
 
-> ---
->  arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi | 4 ++--
->  arch/arm64/boot/dts/qcom/ipq8074.dtsi        | 4 ++--
->  arch/arm64/boot/dts/qcom/msm8996.dtsi        | 4 ++--
->  arch/arm64/boot/dts/qcom/msm8998.dtsi        | 2 +-
->  arch/arm64/boot/dts/qcom/qcs404-evb.dtsi     | 2 +-
->  arch/arm64/boot/dts/qcom/qcs404.dtsi         | 4 ++--
->  arch/arm64/boot/dts/qcom/sc7180.dtsi         | 2 +-
->  arch/arm64/boot/dts/qcom/sdm845.dtsi         | 4 ++--
->  arch/arm64/boot/dts/qcom/sm8150.dtsi         | 2 +-
->  9 files changed, 14 insertions(+), 14 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi b/arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi
-> index defcbd15edf9..34e97da98270 100644
-> --- a/arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi
-> @@ -1064,7 +1064,7 @@ &usb2 {
->  	status = "okay";
->  	extcon = <&usb2_id>;
->  
-> -	dwc3@7600000 {
-> +	usb@7600000 {
->  		extcon = <&usb2_id>;
->  		dr_mode = "otg";
->  		maximum-speed = "high-speed";
-> @@ -1075,7 +1075,7 @@ &usb3 {
->  	status = "okay";
->  	extcon = <&usb3_id>;
->  
-> -	dwc3@6a00000 {
-> +	usb@6a00000 {
->  		extcon = <&usb3_id>;
->  		dr_mode = "otg";
->  	};
-> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> index a32e5e79ab0b..7df4eb710aae 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> @@ -427,7 +427,7 @@ usb_0: usb@8af8800 {
->  			resets = <&gcc GCC_USB0_BCR>;
->  			status = "disabled";
->  
-> -			dwc_0: dwc3@8a00000 {
-> +			dwc_0: usb@8a00000 {
->  				compatible = "snps,dwc3";
->  				reg = <0x8a00000 0xcd00>;
->  				interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-> @@ -468,7 +468,7 @@ usb_1: usb@8cf8800 {
->  			resets = <&gcc GCC_USB1_BCR>;
->  			status = "disabled";
->  
-> -			dwc_1: dwc3@8c00000 {
-> +			dwc_1: usb@8c00000 {
->  				compatible = "snps,dwc3";
->  				reg = <0x8c00000 0xcd00>;
->  				interrupts = <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>;
-> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> index ce430ba9c118..9eb31b3e6ee7 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> @@ -1772,7 +1772,7 @@ usb3: usb@6af8800 {
->  			power-domains = <&gcc USB30_GDSC>;
->  			status = "disabled";
->  
-> -			dwc3@6a00000 {
-> +			usb@6a00000 {
->  				compatible = "snps,dwc3";
->  				reg = <0x06a00000 0xcc00>;
->  				interrupts = <0 131 IRQ_TYPE_LEVEL_HIGH>;
-> @@ -1983,7 +1983,7 @@ usb2: usb@76f8800 {
->  			power-domains = <&gcc USB30_GDSC>;
->  			status = "disabled";
->  
-> -			dwc3@7600000 {
-> +			usb@7600000 {
->  				compatible = "snps,dwc3";
->  				reg = <0x07600000 0xcc00>;
->  				interrupts = <0 138 IRQ_TYPE_LEVEL_HIGH>;
-> diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> index 1f2e93aa6553..9141c5d09b59 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> @@ -1962,7 +1962,7 @@ usb3: usb@a8f8800 {
->  
->  			resets = <&gcc GCC_USB_30_BCR>;
->  
-> -			usb3_dwc3: dwc3@a800000 {
-> +			usb3_dwc3: usb@a800000 {
->  				compatible = "snps,dwc3";
->  				reg = <0x0a800000 0xcd00>;
->  				interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>;
-> diff --git a/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi b/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-> index a80c578484ba..f8a55307b855 100644
-> --- a/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-> @@ -337,7 +337,7 @@ &usb2_phy_sec {
->  &usb3 {
->  	status = "okay";
->  
-> -	dwc3@7580000 {
-> +	usb@7580000 {
->  		dr_mode = "host";
->  	};
->  };
-> diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-> index 339790ba585d..9c4be020d568 100644
-> --- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-> @@ -544,7 +544,7 @@ usb3: usb@7678800 {
->  			assigned-clock-rates = <19200000>, <200000000>;
->  			status = "disabled";
->  
-> -			dwc3@7580000 {
-> +			usb@7580000 {
->  				compatible = "snps,dwc3";
->  				reg = <0x07580000 0xcd00>;
->  				interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-> @@ -573,7 +573,7 @@ usb2: usb@79b8800 {
->  			assigned-clock-rates = <19200000>, <133333333>;
->  			status = "disabled";
->  
-> -			dwc3@78c0000 {
-> +			usb@78c0000 {
->  				compatible = "snps,dwc3";
->  				reg = <0x078c0000 0xcc00>;
->  				interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> index 1ea3344ab62c..8b83ffbb5b2a 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> @@ -2869,7 +2869,7 @@ usb_1: usb@a6f8800 {
->  					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3 0>;
->  			interconnect-names = "usb-ddr", "apps-usb";
->  
-> -			usb_1_dwc3: dwc3@a600000 {
-> +			usb_1_dwc3: usb@a600000 {
->  				compatible = "snps,dwc3";
->  				reg = <0 0x0a600000 0 0xe000>;
->  				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index 454f794af547..809be2c67d7a 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -3769,7 +3769,7 @@ usb_1: usb@a6f8800 {
->  					<&gladiator_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_0 0>;
->  			interconnect-names = "usb-ddr", "apps-usb";
->  
-> -			usb_1_dwc3: dwc3@a600000 {
-> +			usb_1_dwc3: usb@a600000 {
->  				compatible = "snps,dwc3";
->  				reg = <0 0x0a600000 0 0xcd00>;
->  				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-> @@ -3817,7 +3817,7 @@ usb_2: usb@a8f8800 {
->  					<&gladiator_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_1 0>;
->  			interconnect-names = "usb-ddr", "apps-usb";
->  
-> -			usb_2_dwc3: dwc3@a800000 {
-> +			usb_2_dwc3: usb@a800000 {
->  				compatible = "snps,dwc3";
->  				reg = <0 0x0a800000 0 0xcd00>;
->  				interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
-> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> index e5bb17bc2f46..e4c3edc13676 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> @@ -1719,7 +1719,7 @@ usb_1: usb@a6f8800 {
->  
->  			resets = <&gcc GCC_USB30_PRIM_BCR>;
->  
-> -			usb_1_dwc3: dwc3@a600000 {
-> +			usb_1_dwc3: usb@a600000 {
->  				compatible = "snps,dwc3";
->  				reg = <0 0x0a600000 0 0xcd00>;
->  				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-> -- 
-> 2.30.1
-> 
+Using a valid mask is a new feature and isn't a prerequisite for adding
+support for the GPIOs on cp2108. I've been meaning to implement that
+since we started using it for ftdi_sio, and I'll be posting that
+shortly.
+
+The cp2108 pin configuration can't be changed at runtime, but even if it
+was it's not clear what the pinctrl subsystem would buy us for a
+hotpluggable USB device currently (even if devicetree could be used for
+static topologies).
+
+I'll look at the rest of this thread and the latest version of this
+patch next week.
+
+Johan
