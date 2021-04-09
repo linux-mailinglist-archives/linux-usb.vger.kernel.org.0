@@ -2,93 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FEEE359945
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 11:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED0335994C
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 11:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbhDIJd4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Apr 2021 05:33:56 -0400
-Received: from mga14.intel.com ([192.55.52.115]:35022 "EHLO mga14.intel.com"
+        id S231599AbhDIJfW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Apr 2021 05:35:22 -0400
+Received: from mga18.intel.com ([134.134.136.126]:48868 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230181AbhDIJdz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Apr 2021 05:33:55 -0400
-IronPort-SDR: WXywM2oe2wXHdYU5zp5LShBeLPIxEpxzFay14LDnKbSBYhmjSyjO/ebFdqtwbs465hCS+VRehJ
- 4GGVti9Xk/gw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9948"; a="193275960"
+        id S231127AbhDIJfW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 9 Apr 2021 05:35:22 -0400
+IronPort-SDR: 5HJNt/p6ERzA1nXiZEH5FEsm/t0s7RUYW9TfE4EINLuEYZP6Jys9/4uQXD+lP2w8Gs2CrLFe/f
+ P82uhbO2evEg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9948"; a="181261032"
 X-IronPort-AV: E=Sophos;i="5.82,209,1613462400"; 
-   d="scan'208";a="193275960"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 02:33:42 -0700
-IronPort-SDR: dYc3YdhqPPVN9UNd/ED6G6EefHle5UX7sXVTk1T/MevybQOBlkA3Up/QlXPoxYTwv3hZWeoQfa
- 5MsDJ5FV2oig==
+   d="scan'208";a="181261032"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 02:35:09 -0700
+IronPort-SDR: Fw42pGcnaUcO+mqRGnPxwsl+pILV7+edI7hDYr2eg1Iyt+tjJ8waOtSH9+zYjMne7kG13BrW43
+ uKzK6PSAzvbg==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,209,1613462400"; 
-   d="scan'208";a="530930898"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 02:33:38 -0700
-Received: by lahna (sSMTP sendmail emulation); Fri, 09 Apr 2021 12:33:36 +0300
-Date:   Fri, 9 Apr 2021 12:33:35 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Christian Kellner <christian@kellner.me>,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@google.com>,
-        Diego Rivas <diegorivas@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v3 0/3] thunderbolt: Expose details about tunneling
-Message-ID: <20210409093335.GO2542@lahna.fi.intel.com>
-References: <20210329074150.62622-1-mika.westerberg@linux.intel.com>
+   d="scan'208";a="520224195"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 09 Apr 2021 02:35:07 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 09 Apr 2021 12:35:06 +0300
+Date:   Fri, 9 Apr 2021 12:35:06 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: tcpm: remove useless variable
+Message-ID: <YHAfyg8SVB9KPXwB@kuha.fi.intel.com>
+References: <1617960136-95131-1-git-send-email-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210329074150.62622-1-mika.westerberg@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1617960136-95131-1-git-send-email-jiapeng.chong@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 10:41:47AM +0300, Mika Westerberg wrote:
-> Hello there,
+On Fri, Apr 09, 2021 at 05:22:16PM +0800, Jiapeng Chong wrote:
+> Fix the following gcc warning:
 > 
-> There has been ask if we can expose more details about the connected
-> devices and the tunneling to userspace, so it can then provide more
-> detailed information to the user.
+> drivers/usb/typec/tcpm/tcpm.c:2107:39: warning: ‘tcpm_altmode_ops’
+> defined but not used [-Wunused-const-variable=].
 > 
-> First we add uevent details for each device (USB4 router) that adds
-> USB4_TYPE=host|device|hub and USB4_VERSION=1.0 (if the device actually is
-> USB4). The host|device|hub definitions follow the USB4 spec.
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 6 ------
+>  1 file changed, 6 deletions(-)
 > 
-> Then for each device router we expose two new attributes: "usb3" and "dp"
-> that if present mean that the device has corresponding adapter (USB 3.x
-> upstream adapter and DP OUT adapter). The contents of the attributes then
-> hold number of tunnels ending to this router. So if USB 3.x is tunneled
-> "usb3" reads 1. Since there can be multiple DP OUT adaptes the "dp"
-> attribute holds number of DP tunnels ending to this router. For PCIe
-> tunneling the "authorized" attribute works the same way.
-> 
-> Previous versions can be found:
-> 
->   v2: https://lore.kernel.org/linux-usb/20210323145701.86161-1-mika.westerberg@linux.intel.com/
->   v1: https://lore.kernel.org/linux-usb/20210309134818.63118-1-mika.westerberg@linux.intel.com/
-> 
-> Changes from v2:
-> 
->   * Added missing sysfs_emit()
-> 
-> Changes from v1:
-> 
->   * Added Greg's Reviewed-by tags for patch 1 and 2
->   * Use sysfs_emit()
->   * Drop the locking in the new attributes
->   * Drop the kobject_uevent()
-> 
-> Mika Westerberg (3):
->   thunderbolt: Add details to router uevent
->   thunderbolt: Hide authorized attribute if router does not support PCIe tunnels
->   thunderbolt: Expose more details about USB 3.x and DisplayPort tunnels
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index ce7af39..4585785 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -2104,12 +2104,6 @@ static int tcpm_altmode_vdm(struct typec_altmode *altmode,
+>  	return 0;
+>  }
+>  
+> -static const struct typec_altmode_ops tcpm_altmode_ops = {
+> -	.enter = tcpm_altmode_enter,
+> -	.exit = tcpm_altmode_exit,
+> -	.vdm = tcpm_altmode_vdm,
+> -};
 
-Applied the first two patches to thunderbolt.git/next. I'm dropping the
-last one for now. We can revisit it later if really needed.
+You remove that but leave the functions. That should create even more
+warnings for you, because now there are no users for those functions.
+
+There is another, more complete patch for this, but I don't think we
+should take either of these now. We about to get a user for
+tcpm_altmode_ops.
+
+Br,
+
+-- 
+heikki
