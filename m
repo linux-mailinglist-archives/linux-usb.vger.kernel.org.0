@@ -2,51 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C952C35A0A7
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 16:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5276635A19A
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 16:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233794AbhDIOGW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Apr 2021 10:06:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51980 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232855AbhDIOGV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Apr 2021 10:06:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7A7CA61165;
-        Fri,  9 Apr 2021 14:06:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1617977167;
-        bh=A++tGxLLYu0bdoyDhMCSlTwTXMIaIFQOaEUZQ9jm4xA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SsNv9s1aWpH8thPfA1YDD3gsORQfeZgYgVxvcrDY0T2SZITORc11DmHRaXyeuaTP7
-         fxuUmaIZvo14vSk54bxgj5BLdxU7ZLA/w/dysll00dN/Ar7JJgmTSwgC64eOJxDAUn
-         pdFt0j/Daktr54mwgRROzYPwgdKjUvPGSfPp588Q=
-Date:   Fri, 9 Apr 2021 16:06:04 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: do not use tty class device for debugging
-Message-ID: <YHBfTIJ3uh7SK0Hm@kroah.com>
-References: <20210408150859.16868-1-johan@kernel.org>
+        id S234017AbhDIO75 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Apr 2021 10:59:57 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:42841 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S233541AbhDIO7z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Apr 2021 10:59:55 -0400
+Received: (qmail 1333912 invoked by uid 1000); 9 Apr 2021 10:59:41 -0400
+Date:   Fri, 9 Apr 2021 10:59:41 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Longfang Liu <liulongfang@huawei.com>
+Cc:     gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        liudongdong3@huawei.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kong.kongxinwei@hisilicon.com,
+        yisen.zhuang@huawei.com
+Subject: Re: [PATCH v4] USB:ehci:fix Kunpeng920 ehci hardware problem
+Message-ID: <20210409145941.GA1333284@rowland.harvard.edu>
+References: <1617958081-17999-1-git-send-email-liulongfang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210408150859.16868-1-johan@kernel.org>
+In-Reply-To: <1617958081-17999-1-git-send-email-liulongfang@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 08, 2021 at 05:08:59PM +0200, Johan Hovold wrote:
-> Use the port struct device rather than tty class device for debugging.
+On Fri, Apr 09, 2021 at 04:48:01PM +0800, Longfang Liu wrote:
+> Kunpeng920's EHCI controller does not have SBRN register.
+> Reading the SBRN register when the controller driver is
+> initialized will get 0.
 > 
-> Note that while USB serial doesn't support serdev yet (due to serdev not
-> handling hotplugging), serdev ttys do not have a corresponding class
-> device and would have been logged using a "(NULL device *):" prefix.
+> When rebooting the EHCI driver, ehci_shutdown() will be called.
+> if the sbrn flag is 0, ehci_shutdown() will return directly.
+> The sbrn flag being 0 will cause the EHCI interrupt signal to
+> not be turned off after reboot. this interrupt that is not closed
+> will cause an exception to the device sharing the interrupt.
 > 
-> Signed-off-by: Johan Hovold <johan@kernel.org>
+> Therefore, the EHCI controller of Kunpeng920 needs to skip
+> the read operation of the SBRN register.
+> 
+> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
 > ---
->  drivers/usb/serial/metro-usb.c  |  4 ++--
->  drivers/usb/serial/upd78f0730.c |  7 +++----
->  drivers/usb/serial/usb-serial.c | 32 ++++++++++++++++----------------
->  3 files changed, 21 insertions(+), 22 deletions(-)
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+> Changes in v4:
+> 	- Modify the code implementation.
+> 
+> Changes in v3:
+> 	- Fix some code style issues.
+> 	- Update struct name.
+> 
+> Changes in v2:
+> 	- Fix some code style issues.
+> 	- Update function name.
+> 
+>  drivers/usb/host/ehci-pci.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+> index 3c3820a..237a346 100644
+> --- a/drivers/usb/host/ehci-pci.c
+> +++ b/drivers/usb/host/ehci-pci.c
+> @@ -291,6 +291,9 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
+>  	if (pdev->vendor == PCI_VENDOR_ID_STMICRO
+>  	    && pdev->device == PCI_DEVICE_ID_STMICRO_USB_HOST)
+>  		;	/* ConneXT has no sbrn register */
+> +	else if (pdev->vendor == PCI_VENDOR_ID_HUAWEI
+> +			 && pdev->device == 0xa239)
+> +		;	/* HUAWEI Kunpeng920 USB EHCI has no sbrn register */
+>  	else
+>  		pci_read_config_byte(pdev, 0x60, &ehci->sbrn);
+>  
+> -- 
+> 2.8.1
+> 
