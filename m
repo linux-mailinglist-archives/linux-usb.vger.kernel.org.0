@@ -2,87 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC6C35993E
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 11:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEEE359945
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 11:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232704AbhDIJbR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Apr 2021 05:31:17 -0400
-Received: from mga12.intel.com ([192.55.52.136]:52437 "EHLO mga12.intel.com"
+        id S231599AbhDIJd4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Apr 2021 05:33:56 -0400
+Received: from mga14.intel.com ([192.55.52.115]:35022 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232642AbhDIJbQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Apr 2021 05:31:16 -0400
-IronPort-SDR: X+ZHPU3x9cwiEr3R7gGAWNyUro+BpXqcVOyU7vTU9XxyUfwW6SaAXee/3bcvgPGuHP9LsatrUp
- g0SvC1738DQg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9948"; a="173205307"
+        id S230181AbhDIJdz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 9 Apr 2021 05:33:55 -0400
+IronPort-SDR: WXywM2oe2wXHdYU5zp5LShBeLPIxEpxzFay14LDnKbSBYhmjSyjO/ebFdqtwbs465hCS+VRehJ
+ 4GGVti9Xk/gw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9948"; a="193275960"
 X-IronPort-AV: E=Sophos;i="5.82,209,1613462400"; 
-   d="scan'208";a="173205307"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 02:30:58 -0700
-IronPort-SDR: cgLm0iM2X5Xcy0AJKgEbAcnGD6G67/VLa4/Xi1xcVQP5sx+NgFSXEeTnY/q+ys+zFdcGE7LS+x
- EMJMDFVkUgBQ==
-X-ExtLoop1: 1
+   d="scan'208";a="193275960"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 02:33:42 -0700
+IronPort-SDR: dYc3YdhqPPVN9UNd/ED6G6EefHle5UX7sXVTk1T/MevybQOBlkA3Up/QlXPoxYTwv3hZWeoQfa
+ 5MsDJ5FV2oig==
 X-IronPort-AV: E=Sophos;i="5.82,209,1613462400"; 
-   d="scan'208";a="520223208"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 09 Apr 2021 02:30:56 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 09 Apr 2021 12:30:55 +0300
-Date:   Fri, 9 Apr 2021 12:30:55 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: roles: Cakk try_module_get() from
- usb_role_switch_find_by_fwnode()
-Message-ID: <YHAez16ixJitMVtN@kuha.fi.intel.com>
-References: <20210408203611.544005-1-hdegoede@redhat.com>
- <20210408230904.GA87058@roeck-us.net>
+   d="scan'208";a="530930898"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 02:33:38 -0700
+Received: by lahna (sSMTP sendmail emulation); Fri, 09 Apr 2021 12:33:36 +0300
+Date:   Fri, 9 Apr 2021 12:33:35 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Christian Kellner <christian@kellner.me>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@google.com>,
+        Diego Rivas <diegorivas@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v3 0/3] thunderbolt: Expose details about tunneling
+Message-ID: <20210409093335.GO2542@lahna.fi.intel.com>
+References: <20210329074150.62622-1-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210408230904.GA87058@roeck-us.net>
+In-Reply-To: <20210329074150.62622-1-mika.westerberg@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 08, 2021 at 04:09:04PM -0700, Guenter Roeck wrote:
-> On Thu, Apr 08, 2021 at 10:36:11PM +0200, Hans de Goede wrote:
-> > usb_role_switch_find_by_fwnode() returns a reference to the role-switch
-> > which must be put by calling usb_role_switch_put().
-> > 
-> > usb_role_switch_put() calls module_put(sw->dev.parent->driver->owner),
-> > add a matching try_module_get() to usb_role_switch_find_by_fwnode(),
-> > making it behave the same as the other usb_role_switch functions
-> > which return a reference.
-> > 
-> > This avoids a WARN_ON being hit at kernel/module.c:1158 due to the
-> > module-refcount going below 0.
-> > 
+On Mon, Mar 29, 2021 at 10:41:47AM +0300, Mika Westerberg wrote:
+> Hello there,
 > 
-> Took me a while to figure out what the subject line is supposed
-> to mean.
+> There has been ask if we can expose more details about the connected
+> devices and the tunneling to userspace, so it can then provide more
+> detailed information to the user.
 > 
-> s/Cakk/Call/
+> First we add uevent details for each device (USB4 router) that adds
+> USB4_TYPE=host|device|hub and USB4_VERSION=1.0 (if the device actually is
+> USB4). The host|device|hub definitions follow the USB4 spec.
 > 
-> Otherwise
+> Then for each device router we expose two new attributes: "usb3" and "dp"
+> that if present mean that the device has corresponding adapter (USB 3.x
+> upstream adapter and DP OUT adapter). The contents of the attributes then
+> hold number of tunnels ending to this router. So if USB 3.x is tunneled
+> "usb3" reads 1. Since there can be multiple DP OUT adaptes the "dp"
+> attribute holds number of DP tunnels ending to this router. For PCIe
+> tunneling the "authorized" attribute works the same way.
 > 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Previous versions can be found:
 > 
-> It might be useful though to explain the difference between
-> fwnode_usb_role_switch_get() and usb_role_switch_find_by_fwnode(),
-> and why two different functions are needed, both passing fwnode
-> as parameter and returning a pointer to usb_role_switch.
+>   v2: https://lore.kernel.org/linux-usb/20210323145701.86161-1-mika.westerberg@linux.intel.com/
+>   v1: https://lore.kernel.org/linux-usb/20210309134818.63118-1-mika.westerberg@linux.intel.com/
+> 
+> Changes from v2:
+> 
+>   * Added missing sysfs_emit()
+> 
+> Changes from v1:
+> 
+>   * Added Greg's Reviewed-by tags for patch 1 and 2
+>   * Use sysfs_emit()
+>   * Drop the locking in the new attributes
+>   * Drop the kobject_uevent()
+> 
+> Mika Westerberg (3):
+>   thunderbolt: Add details to router uevent
+>   thunderbolt: Hide authorized attribute if router does not support PCIe tunnels
+>   thunderbolt: Expose more details about USB 3.x and DisplayPort tunnels
 
-Yes, the function names are confusing indeed. My proposal is to rename
-usb_role_switch_find_by_fwnode() to fwnode_to_usb_role_switch().
-
-I can prepare a patch for that if you guys are OK with it, or Hans,
-would you prefer to send that together with this one?
-
-Actually, shouldn't this be marked as a fix?
-
-
-thanks,
-
--- 
-heikki
+Applied the first two patches to thunderbolt.git/next. I'm dropping the
+last one for now. We can revisit it later if really needed.
