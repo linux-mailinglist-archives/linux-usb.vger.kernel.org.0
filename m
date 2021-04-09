@@ -2,101 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8AD35A03E
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 15:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E697435A0A0
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Apr 2021 16:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232642AbhDINrA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Apr 2021 09:47:00 -0400
-Received: from mga04.intel.com ([192.55.52.120]:50225 "EHLO mga04.intel.com"
+        id S232796AbhDIOEy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Apr 2021 10:04:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51202 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231946AbhDINq5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Apr 2021 09:46:57 -0400
-IronPort-SDR: Zt96R8I7XwazC4ODghaHcUbyndCNmLciKwZaE1UmGwWB7fLXWYt26O7daH9IoMCvhSTLnVNB66
- S20lkcMW+NOQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9949"; a="191614902"
-X-IronPort-AV: E=Sophos;i="5.82,209,1613462400"; 
-   d="scan'208";a="191614902"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2021 06:46:43 -0700
-IronPort-SDR: TeSjZVDC2XR6n2xYd7Ltpou7u/bRcBEozYrck3Z+8S9e3cg6LPTAKFUAyLZXQt62QJOsu/t3yx
- D6vcYG+g8Z4g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,209,1613462400"; 
-   d="scan'208";a="520287340"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 09 Apr 2021 06:46:41 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 09 Apr 2021 16:46:40 +0300
-Date:   Fri, 9 Apr 2021 16:46:40 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] platform/x86/intel_cht_int33fe: Add displayport
- altmode fwnode to the connector fwnode
-Message-ID: <YHBawH0/de540J4A@kuha.fi.intel.com>
-References: <20210409134033.105834-1-hdegoede@redhat.com>
- <20210409134033.105834-4-hdegoede@redhat.com>
+        id S231127AbhDIOEx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 9 Apr 2021 10:04:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 67DC661108;
+        Fri,  9 Apr 2021 14:04:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1617977080;
+        bh=yKWsA1tj25u0+0VAe93DnnuhYoM2MG0/uON9oz+d1ek=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KJC0AMqmdA9HJIMDjdweckcbxRNXsKOo1LMcc/zJ301JLyy0ZwL94YLCW5r9CIfcG
+         Ek1Tmb/1FiIRyx58I0cl7gzOfvxUyDHe3lm1tsOJNDQy5bsQoyjkR2zIQEu+ka/Pl0
+         NpRja8RagTBx8oEJDw6a8hnvABP7jKWPV0eTCQm4=
+Date:   Fri, 9 Apr 2021 16:04:38 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     valentina.manea.m@gmail.com, shuah@kernel.org,
+        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        hulkci@huawei.com
+Subject: Re: [PATCH -next v2] usbip: vudc: fix missing unlock on error in
+ usbip_sockfd_store()
+Message-ID: <YHBe9m7wGqlZ2cp+@kroah.com>
+References: <20210408112305.1022247-1-yebin10@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210409134033.105834-4-hdegoede@redhat.com>
+In-Reply-To: <20210408112305.1022247-1-yebin10@huawei.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 09, 2021 at 03:40:33PM +0200, Hans de Goede wrote:
-> Add a displayport altmode fwnode to the usb-connector fwnode,
-> devices which use this driver support display-port altmode through
-> the PI3USB30532 USB switch, this enables support for this.
+On Thu, Apr 08, 2021 at 07:23:05PM +0800, Ye Bin wrote:
+> Add the missing unlock before return from function usbip_sockfd_store()
+> in the error handling case.
 > 
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+> Fixes: bd8b82042269 ("usbip: vudc synchronize sysfs code paths")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 > ---
->  .../platform/x86/intel_cht_int33fe_typec.c    | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
+>  drivers/usb/usbip/vudc_sysfs.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/platform/x86/intel_cht_int33fe_typec.c b/drivers/platform/x86/intel_cht_int33fe_typec.c
-> index 48638d1c56e5..b61bad9cc8d2 100644
-> --- a/drivers/platform/x86/intel_cht_int33fe_typec.c
-> +++ b/drivers/platform/x86/intel_cht_int33fe_typec.c
-> @@ -124,12 +124,31 @@ static const struct software_node usb_connector_node = {
->  	.properties = usb_connector_properties,
->  };
+> diff --git a/drivers/usb/usbip/vudc_sysfs.c b/drivers/usb/usbip/vudc_sysfs.c
+> index f7633ee655a1..d1cf6b51bf85 100644
+> --- a/drivers/usb/usbip/vudc_sysfs.c
+> +++ b/drivers/usb/usbip/vudc_sysfs.c
+> @@ -156,12 +156,14 @@ static ssize_t usbip_sockfd_store(struct device *dev,
+>  		tcp_rx = kthread_create(&v_rx_loop, &udc->ud, "vudc_rx");
+>  		if (IS_ERR(tcp_rx)) {
+>  			sockfd_put(socket);
+> +			mutex_unlock(&udc->ud.sysfs_lock);
+>  			return -EINVAL;
+>  		}
+>  		tcp_tx = kthread_create(&v_tx_loop, &udc->ud, "vudc_tx");
+>  		if (IS_ERR(tcp_tx)) {
+>  			kthread_stop(tcp_rx);
+>  			sockfd_put(socket);
+> +			mutex_unlock(&udc->ud.sysfs_lock);
+>  			return -EINVAL;
+>  		}
 >  
-> +static const struct software_node altmodes_node = {
-> +	.name = "altmodes",
-> +	.parent = &usb_connector_node,
-> +};
-> +
-> +static const struct property_entry dp_altmode_properties[] = {
-> +	PROPERTY_ENTRY_U32("svid", 0xff01),
-> +	PROPERTY_ENTRY_U32("vdo", 0x0c0086),
-> +	{ }
-> +};
-> +
-> +static const struct software_node dp_altmode_node = {
-> +	.name = "displayport-altmode",
-> +	.parent = &altmodes_node,
-> +	.properties = dp_altmode_properties,
-> +};
-> +
->  static const struct software_node *node_group[] = {
->  	&fusb302_node,
->  	&max17047_node,
->  	&pi3usb30532_node,
->  	&displayport_node,
->  	&usb_connector_node,
-> +	&altmodes_node,
-> +	&dp_altmode_node,
->  	NULL
->  };
+> -- 
+> 2.25.4
+> 
 
-thanks,
+This breaks the build, are you sure you tested it???
 
--- 
-heikki
