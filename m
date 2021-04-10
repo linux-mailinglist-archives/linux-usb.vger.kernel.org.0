@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A560635AA3F
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Apr 2021 04:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2746335AA41
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Apr 2021 04:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233332AbhDJCMk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Apr 2021 22:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
+        id S234045AbhDJCNB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Apr 2021 22:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbhDJCMj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Apr 2021 22:12:39 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95C6C061762
-        for <linux-usb@vger.kernel.org>; Fri,  9 Apr 2021 19:12:25 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id 25so6242641oiy.5
-        for <linux-usb@vger.kernel.org>; Fri, 09 Apr 2021 19:12:25 -0700 (PDT)
+        with ESMTP id S229665AbhDJCNB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Apr 2021 22:13:01 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751C5C061762
+        for <linux-usb@vger.kernel.org>; Fri,  9 Apr 2021 19:12:47 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id d12so7683165oiw.12
+        for <linux-usb@vger.kernel.org>; Fri, 09 Apr 2021 19:12:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=RysMo0l7WPoFvlhCsWYaw6uHiJCcSPuiX9YAISHSmKQ=;
-        b=ClA5j0gja2sAf4+dcK8o1eP0ui2BV6zcA2a2Gcs544fgkBDvORmLvHiJwOsYBapfsP
-         YDauSPzPUzhP0o4KWiK7IUY62wINeKKuls/+u7Di/nJvUYHlPJsOQJcix8zr0Hs578Gy
-         wU4GrQ+GHU7qDpMV6OW0nBoUyNGc+h+z4QN4ctX64kFsdvUEXkAFUYak5M8Y3qQUm2Ru
-         YyuKOCWNfzUq+XMWLPJqBBKkXAS27AF5hPuD3Ldy9/CLlIqaTiT4EbdtvuKmZEnVN6Kb
-         qBAlNyMAL3ceYHBuRKwmnG/5Ux2I1xA3Yz64RdgvKRnbYxEXA2Mbva+mT7xETq2784oH
-         LjWQ==
+        bh=jPmvWqss7fdPb9tIjCUG8ISj0c5pHWDwoGUZqE8zyxE=;
+        b=k78qJms92rqjMSnoYxoehLU2mCFWn6RovI389JEUHaSqCldeSzFzULbHiNUI0ucxtE
+         IrfWCDA2N9zQQyicpMJnhos2An7APnS9GIRgoKf+GlqIO+FxpMvZ3Pp8V1NkJWEYJ1+2
+         KXCS+uACMNfHiQMxUUzkCe7g+jl9R91bCGft3Oaxa3pH2/uncm9MvAfFrLYld3zOhW1s
+         9YbAAf/Uf7Vwb0z3b0nXNIv6OQpFBNRhATu68BHwW42/E7QS/5a9/tM1aTdYhdAyQyJt
+         AiCJNEgcJufrZr/3tpcdCMk7jksVf1K8MhDNknZENkRW08bySHTC0vLZisSrRvTXDbxL
+         FEGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=RysMo0l7WPoFvlhCsWYaw6uHiJCcSPuiX9YAISHSmKQ=;
-        b=DCEdVz7RLCpI7WEODA6W67T8hiv2V2NslFPZoW8jXosuoCsgH1Pw1KaJu3MC/StHjs
-         7O6xKTirkvzsm9prHZvpVSLSohppencC/3NoMthE4w+JlMuj0j5zVuCOyzJ4Cvz176j+
-         6574W67f6WOc6BIezSh32UaAHWdWSMFJq8VoarPm2M6g6n79zEJzl4erBzIYmDyJ894e
-         ldiELcDIGBP/NDBfitnfKvwJn4ZW2HtSnBsdSqbHhlCo4nnJ6ulDMN8hj+KZ0hQdF/9R
-         KRJqwPmiFSsHdac8FRGAj+LvqW3oFGVUxZQkwXLclb+O/wT8bLfh1YKxiME1XEfCVNAc
-         pV8A==
-X-Gm-Message-State: AOAM5324FWku/ejyUkbEJoAPMUB4p6GByX5s85Kfum+tDkpt82cZLBHE
-        dVGsmno85rPy5hYMumk1wec0135CQa0=
-X-Google-Smtp-Source: ABdhPJyapjy4svkjALzG9UP1yYa12JvKko1uaH84AQ2UslO24evmq/WzQ1JZUYZse4/EMfx4nt/Qfw==
-X-Received: by 2002:aca:3788:: with SMTP id e130mr11687783oia.45.1618020744890;
-        Fri, 09 Apr 2021 19:12:24 -0700 (PDT)
+        bh=jPmvWqss7fdPb9tIjCUG8ISj0c5pHWDwoGUZqE8zyxE=;
+        b=ZcEoWyzI1ELaFf9MoFnwLi1y6qBJp7uEYFHseDWPCqFr5f97aJy7XrFXhePZcznGQ6
+         LGe3CTTa5gImfy2/Wy9AMWx5lJGjAoyd/Jhtk1ItLLtISb1xVh4N8R5uLMUszLVj4OD3
+         YB85E3F/cUckXflX/qwELrcdSNgExkd8dMCq+wIOGZY3vzPppQPrtpWDWxWHsmdy5tiK
+         mGKeQ28KYx/TIDMU/15KrrOI2BEviZ1gPIYc5DekX4dRiHZcTtHpD8Mdib/B8TA/gMaY
+         eX9xALvFKD1O0rOh7bxRa36j3BrjZI5NW0J1zGCS6Dwq79YPZt80QeVdwhbfsMSKZ6cp
+         p0LQ==
+X-Gm-Message-State: AOAM533eod/ynrrXRi7/dCFuRk5aaSrW14zAgBwBYQ3vGaaoSHjazXHp
+        5l9MbMe9RfdbxqaOnP6uql8R9Z3Dn0s=
+X-Google-Smtp-Source: ABdhPJwKSl7m05RNqAsqetnqIsTdCSYgnc1DQh/w38R0aK8lPhzVSiFYhuycwc4PPFTaef3MRIBsqQ==
+X-Received: by 2002:a05:6808:3d3:: with SMTP id o19mr2515025oie.4.1618020766665;
+        Fri, 09 Apr 2021 19:12:46 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u126sm412169oig.4.2021.04.09.19.12.23
+        by smtp.gmail.com with ESMTPSA id z3sm877837oop.41.2021.04.09.19.12.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Apr 2021 19:12:24 -0700 (PDT)
+        Fri, 09 Apr 2021 19:12:46 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2 1/3] usb: typec: Add typec_port_register_altmodes()
+Subject: Re: [PATCH v2 2/3] usb: typec: tcpm: Add support for altmodes
 To:     Hans de Goede <hdegoede@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>
@@ -58,7 +58,7 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Zhen Lei <thunder.leizhen@huawei.com>,
         linux-usb@vger.kernel.org
 References: <20210409134033.105834-1-hdegoede@redhat.com>
- <20210409134033.105834-2-hdegoede@redhat.com>
+ <20210409134033.105834-3-hdegoede@redhat.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -103,12 +103,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <39a2076c-2df0-658b-26eb-78d763140140@roeck-us.net>
-Date:   Fri, 9 Apr 2021 19:12:22 -0700
+Message-ID: <1ade6ac0-d72c-c10c-3d39-d5f44e7dfeaf@roeck-us.net>
+Date:   Fri, 9 Apr 2021 19:12:44 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210409134033.105834-2-hdegoede@redhat.com>
+In-Reply-To: <20210409134033.105834-3-hdegoede@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -117,140 +117,32 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On 4/9/21 6:40 AM, Hans de Goede wrote:
-> This can be used by Type-C controller drivers which use a standard
-> usb-connector fwnode, with altmodes sub-node, to describe the available
-> altmodes.
+> Add support for altmodes described in the usb-connector fwnode
+> associated with the Type-C controller by calling the new
+> typec_port_register_altmodes_from_fwnode() helper for this.
 > 
-> Note there are is no devicetree bindings documentation for the altmodes
-> node, this is deliberate. ATM the fwnodes used to register the altmodes
-> are only used internally to pass platform info from a drivers/platform/x86
-> driver to the type-c subsystem.
-> 
-> When a devicetree user of this functionally comes up and the dt-bindings
-> have been hashed out the internal use can be adjusted to match the
-> dt-bindings.
-> 
-> Currently the typec_port_register_altmodes() function expects
-> an "altmodes" child fwnode on port->dev with this "altmodes" fwnode having
-> child fwnodes itself with each child containing 2 integer properties:
-> 
-> 1. A "svid" property, which sets the id of the altmode, e.g. displayport
-> altmode has a svid of 0xff01.
-> 
-> 2. A "vdo" property, typically used as a bitmask describing the
-> capabilities of the altmode, the bits in the vdo are specified in the
-> specification of the altmode.
-> 
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 > Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
-> Changes in v3:
-> - Rename typec_port_register_altmodes_from_fwnode() to
->   typec_port_register_altmodes()
-> - Use fwnode_for_each_child_node()
+>  drivers/usb/typec/tcpm/tcpm.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> Changes in v2:
-> - Drop the unnecessary fwnode parameter from
->   typec_port_register_altmodes_from_fwnode()
-> - Document the expected "altmodes" fwnode in the commit message for now
->   as v2 of the patch-set drops the dt-bindings since there are not DT
->   users for this yet
-> ---
->  drivers/usb/typec/class.c | 54 +++++++++++++++++++++++++++++++++++++++
->  include/linux/usb/typec.h |  6 +++++
->  2 files changed, 60 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 45f0bf65e9ab..af4b5d91a7c7 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -1978,6 +1978,60 @@ typec_port_register_altmode(struct typec_port *port,
->  }
->  EXPORT_SYMBOL_GPL(typec_port_register_altmode);
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index ce7af398c7c1..70a5d6ca0053 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -6072,6 +6072,10 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+>  		goto out_role_sw_put;
+>  	}
 >  
-> +void typec_port_register_altmodes(struct typec_port *port,
-> +	const struct typec_altmode_ops *ops, void *drvdata,
-> +	struct typec_altmode **altmodes, size_t n)
-> +{
-> +	struct fwnode_handle *altmodes_node, *child;
-> +	struct typec_altmode_desc desc;
-> +	struct typec_altmode *alt;
-> +	size_t index = 0;
-> +	u32 svid, vdo;
-> +	int ret;
+> +	typec_port_register_altmodes(port->typec_port,
+> +				     &tcpm_altmode_ops, port,
+> +				     port->port_altmode, ALTMODE_DISCOVERY_MAX);
 > +
-> +	altmodes_node = device_get_named_child_node(&port->dev, "altmodes");
-> +	if (!altmodes_node)
-> +		return; /* No altmodes specified */
-> +
-> +	fwnode_for_each_child_node(altmodes_node, child) {
-> +		ret = fwnode_property_read_u32(child, "svid", &svid);
-> +		if (ret) {
-> +			dev_err(&port->dev, "Error reading svid for altmode %s\n",
-> +				fwnode_get_name(child));
-> +			continue;
-> +		}
-> +
-> +		ret = fwnode_property_read_u32(child, "vdo", &vdo);
-> +		if (ret) {
-> +			dev_err(&port->dev, "Error reading vdo for altmode %s\n",
-> +				fwnode_get_name(child));
-> +			continue;
-> +		}
-> +
-> +		if (index >= n) {
-> +			dev_err(&port->dev, "Error not enough space for altmode %s\n",
-> +				fwnode_get_name(child));
-> +			continue;
-> +		}
-> +
-> +		desc.svid = svid;
-> +		desc.vdo = vdo;
-> +		desc.mode = index + 1;
-> +		alt = typec_port_register_altmode(port, &desc);
-> +		if (IS_ERR(alt)) {
-> +			dev_err(&port->dev, "Error registering altmode %s\n",
-> +				fwnode_get_name(child));
-> +			continue;
-> +		}
-> +
-> +		alt->ops = ops;
-> +		typec_altmode_set_drvdata(alt, drvdata);
-> +		altmodes[index] = alt;
-> +		index++;
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(typec_port_register_altmodes);
-> +
->  /**
->   * typec_register_port - Register a USB Type-C Port
->   * @parent: Parent device
-> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> index 91b4303ca305..71b4dd6e63f1 100644
-> --- a/include/linux/usb/typec.h
-> +++ b/include/linux/usb/typec.h
-> @@ -17,6 +17,7 @@ struct typec_partner;
->  struct typec_cable;
->  struct typec_plug;
->  struct typec_port;
-> +struct typec_altmode_ops;
->  
->  struct fwnode_handle;
->  struct device;
-> @@ -138,6 +139,11 @@ struct typec_altmode
->  struct typec_altmode
->  *typec_port_register_altmode(struct typec_port *port,
->  			     const struct typec_altmode_desc *desc);
-> +
-> +void typec_port_register_altmodes(struct typec_port *port,
-> +	const struct typec_altmode_ops *ops, void *drvdata,
-> +	struct typec_altmode **altmodes, size_t n);
-> +
->  void typec_unregister_altmode(struct typec_altmode *altmode);
->  
->  struct typec_port *typec_altmode2port(struct typec_altmode *alt);
+>  	mutex_lock(&port->lock);
+>  	tcpm_init(port);
+>  	mutex_unlock(&port->lock);
 > 
 
