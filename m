@@ -2,79 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5580E35AB3B
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Apr 2021 07:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B60A35AD6A
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Apr 2021 15:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbhDJF5d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 10 Apr 2021 01:57:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44224 "EHLO mail.kernel.org"
+        id S234705AbhDJNGW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 10 Apr 2021 09:06:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33942 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229464AbhDJF5c (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 10 Apr 2021 01:57:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 729EB61182;
-        Sat, 10 Apr 2021 05:57:17 +0000 (UTC)
+        id S234091AbhDJNGW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 10 Apr 2021 09:06:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 235CF610E7;
+        Sat, 10 Apr 2021 13:06:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1618034238;
-        bh=dcPFxMPX4tfyyZmiflVgnpEGjviTQ9XhYMbVmHnLDeI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Js6X6uMJtdNw+tXyjGsbXy6ZgWxU87cRKvsTvKNYSQh6dqm1NB1Tp5talqzzDm8hX
-         vdPWfHM2jQIDntSbI0yQsbOFaJWwlfBI9OuYTZ+10jXj2jaGa0q+r1BVKTQ+N+x8sK
-         tZjF9cHELKO4jkZ16toJfsXh1wD3HVO1RgDNycUQ=
-Date:   Sat, 10 Apr 2021 07:57:15 +0200
+        s=korg; t=1618059967;
+        bh=Nx+Az8uucARo5rt3kk1DkG1a9AVj6LLG/pm3AuITkTc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=B+Tz28WLLVVeR5HeyWbUyAr2DuCGJ7pQAj7EWMfIIhmXAtQvt6osvT31cSwkMCaDL
+         EYbb18WrUlC1ts6QCYLxh3+GmfzhTqUXdRt4NisPGE1OonIm4c/nnAQxN8kDPdfH5R
+         g+gqyS3eBOeMYx80WsCeouQKTfutoosdALoUcuy4=
+Date:   Sat, 10 Apr 2021 15:06:04 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jeremy Linton <jeremy.linton@arm.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hminas@synopsys.com
-Subject: Re: [PATCH v2] usb: dwc2: Enable RPi in ACPI mode
-Message-ID: <YHE+OyonLsCCMh7A@kroah.com>
-References: <20210409203809.21940-1-jeremy.linton@arm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB/Thunderbolt driver fixes for 5.12-rc7
+Message-ID: <YHGivAMSbiL2Y7je@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210409203809.21940-1-jeremy.linton@arm.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 09, 2021 at 03:38:09PM -0500, Jeremy Linton wrote:
-> The dwc2 driver has everything we need to run
-> in ACPI mode except for the ACPI module device table
-> boilerplate. With that added and identified as "BCM2848",
-> an id in use by other OSs for this device, the dw2
-> controller on the BCM2711 will work.
-> 
-> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
-> ---
->  drivers/usb/dwc2/core.h     |  2 ++
->  drivers/usb/dwc2/params.c   | 18 +++++++++++++++++-
->  drivers/usb/dwc2/platform.c |  1 +
->  3 files changed, 20 insertions(+), 1 deletion(-)
+The following changes since commit e49d033bddf5b565044e2abe4241353959bc9120:
 
+  Linux 5.12-rc6 (2021-04-04 14:15:36 -0700)
 
-Hi,
+are available in the Git repository at:
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.12-rc7
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+for you to fetch changes up to bc2f3e4c662841dc19f7e7efae87782b9f3c0831:
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
+  Merge tag 'thunderbolt-for-v5.12-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus (2021-04-08 11:48:48 +0200)
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+----------------------------------------------------------------
+USB/Thunderbolt fixes for 5.12-rc7
 
-thanks,
+Here are a few small USB and Thunderbolt driver fixes for 5.12-rc7 for
+reported issues:
+	- thunderbolt leaks and off-by-one fix
+	- cdnsp deque fix
+	- usbip fixes for syzbot-reported issues.
 
-greg k-h's patch email bot
+all have been in linux-next with no reported problems.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Dan Carpenter (2):
+      thunderbolt: Fix a leak in tb_retimer_add()
+      thunderbolt: Fix off by one in tb_port_find_retimer()
+
+Greg Kroah-Hartman (2):
+      Merge tag 'v5.12-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb into usb-linus
+      Merge tag 'thunderbolt-for-v5.12-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
+
+Pawel Laszczak (1):
+      usb: cdnsp: Fixes issue with dequeuing requests after disabling endpoint
+
+Shuah Khan (4):
+      usbip: add sysfs_lock to synchronize sysfs code paths
+      usbip: stub-dev synchronize sysfs code paths
+      usbip: vudc synchronize sysfs code paths
+      usbip: synchronize event handler with sysfs code paths
+
+ drivers/thunderbolt/retimer.c    |  4 ++--
+ drivers/usb/cdns3/cdnsp-gadget.c |  4 ++++
+ drivers/usb/usbip/stub_dev.c     | 11 +++++++++--
+ drivers/usb/usbip/usbip_common.h |  3 +++
+ drivers/usb/usbip/usbip_event.c  |  2 ++
+ drivers/usb/usbip/vhci_hcd.c     |  1 +
+ drivers/usb/usbip/vhci_sysfs.c   | 30 +++++++++++++++++++++++++-----
+ drivers/usb/usbip/vudc_dev.c     |  1 +
+ drivers/usb/usbip/vudc_sysfs.c   |  5 +++++
+ 9 files changed, 52 insertions(+), 9 deletions(-)
