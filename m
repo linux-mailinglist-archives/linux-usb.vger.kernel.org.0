@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9202035A9AD
+	by mail.lfdr.de (Postfix) with ESMTP id DDE8535A9AE
 	for <lists+linux-usb@lfdr.de>; Sat, 10 Apr 2021 02:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235319AbhDJArX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Apr 2021 20:47:23 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:39328 "EHLO
+        id S235320AbhDJAr3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Apr 2021 20:47:29 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:46954 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235312AbhDJArW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Apr 2021 20:47:22 -0400
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
+        by vger.kernel.org with ESMTP id S235312AbhDJAr3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Apr 2021 20:47:29 -0400
+Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 02EA3401F1;
-        Sat, 10 Apr 2021 00:47:09 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 6FCB7C00CB;
+        Sat, 10 Apr 2021 00:47:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1618015629; bh=boOwoNo4+Zfzi026H2CCOo49+BR7HecMuFsdKCIS/WI=;
+        t=1618015635; bh=tq4xc0d56NxO2c7Uf5zSd9LFdpKIsj/l+9sUWMT8oQo=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=b1gr4tGTZjvX6QsbhcAjZUZ6hGowogUl593zw5fSk5Y1JLmd3eDfyN9RJGKsMwv6D
-         CEPbMu1zAjW3klBER8GGoaioRI83R/Fi+0aKxDLXLQ7n2QrFE5OH7JIgtpcgq0VLhX
-         A7GXdyvh8cr4HT2WK3JxYn5i4letqMLBreG/BuR451NExkginAOCHIkT7PcfiMPRwn
-         k1IZdkZgVFhySbpg7k8luCHd8Lm3NSH4VSW086Y3Kau+DTNjEpoXbNWXC4abtpY7+i
-         bWHV6pfVARPRlsJYv/cSu/f3EUhG9w3DxZmRTjE+HKqqkHIcViPyL3UQpkEPJ/9kp5
-         oD3SvxsX2ZL9Q==
+        b=FakvpRznVPk/1C6MxflGzCCtByGhsQLuQZqFTuR5b31zUARDt1nZjF+1S3HXi1A5i
+         QGOKKXVCeTHg/i/Gy31VFdGVxCix3ZeJ4g7lNlX+KV9VaYu6XeFEBHl4h/GRcfS/dS
+         7yYgUKkpF37oFQVmGu4LYPv2ddvXLiR4MLoa+UmWxpCB8jDuCu2Qx2ZRIOS35xMC42
+         9V3E/RPxb1AZEzQkhHhWjbQPQAH9d40uC3ii56Os3MGrLT4S3w1oHS5nC2Ol+GSb9b
+         TYiSUJ2qGvVPAhiEBw1jXtb+do2aG0SkhMk3qfh5Il+Y9mqsDrdMCfsr97IM15j9RF
+         kEnA5RNJG06wQ==
 Received: from lab-vbox (unknown [10.205.130.7])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id CD5C9A0096;
-        Sat, 10 Apr 2021 00:47:07 +0000 (UTC)
-Received: by lab-vbox (sSMTP sendmail emulation); Fri, 09 Apr 2021 17:47:07 -0700
-Date:   Fri, 09 Apr 2021 17:47:07 -0700
-Message-Id: <ed5ddb78abd157ef2bb9317545b9fec63c6a5b66.1618014279.git.Thinh.Nguyen@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 2BBF6A007C;
+        Sat, 10 Apr 2021 00:47:14 +0000 (UTC)
+Received: by lab-vbox (sSMTP sendmail emulation); Fri, 09 Apr 2021 17:47:14 -0700
+Date:   Fri, 09 Apr 2021 17:47:14 -0700
+Message-Id: <11cd7b9c481ca0be1a3a33a8c94443fd49a59b22.1618014279.git.Thinh.Nguyen@synopsys.com>
 In-Reply-To: <cover.1618014279.git.Thinh.Nguyen@synopsys.com>
 References: <cover.1618014279.git.Thinh.Nguyen@synopsys.com>
 X-SNPS-Relay: synopsys.com
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v2 4/7] usb: xhci: Workaround undercalculated BW for fullspeed BI
+Subject: [PATCH v2 5/7] usb: xhci: Rename Compliance mode timer quirk
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
@@ -47,84 +47,177 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DWC_usb31 host version 1.90a and prior undercalculates the bandwidth
-available for interrupt endpoints. The controller will return bandwidth
-error on config endpoint commands if there are already 6 or more
-fullspeed interrupt endpoints with bInterval of 4 (or 4ms) associated
-with a single fullspeed bus instance (BI).
-
-To workaround this, configure and use the endpoint at a shorter
-interrupt interval. Lower the ep_ctx interval from 5 to 4 (or 2ms)
-for interrupt endpoints of the fullspeed BI. Note: we have not observed
-functional impact to the fullspeed devices by lowering the interrupt
-service interval (at least for a few devices that we tested).
-
-To simplify the workaround, let's just check and apply the workaround if
-the endpoint is a fullspeed interrupt endpoint with interval of 4ms and
-if the top parent device is also operating in fullspeed (i.e. associated
-with fullspeed BI).
+In preparation for a workaround that needs to poll for the port status,
+rename the timer for XHCI_COMP_MODE_QUIRK to be more generic as it can
+be used for the new workaround. No funtional change here.
 
 Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 ---
-Changes in v2:
-- None
+ Changes in v2:
+ - None
 
-Note:
-Checkpatch will give a warning below for getting top_dev:
-	WARNING: suspect code indent for conditional statements
+ drivers/usb/host/xhci-hub.c |  2 +-
+ drivers/usb/host/xhci.c     | 41 +++++++++++++++++--------------------
+ drivers/usb/host/xhci.h     |  8 ++++----
+ 3 files changed, 24 insertions(+), 27 deletions(-)
 
-Since this logic is done everywhere else in the driver, I'm keeping it
-consistent here.
-
- drivers/usb/host/xhci-mem.c     | 23 +++++++++++++++++++++++
- include/linux/usb/xhci-quirks.h |  1 +
- 2 files changed, 24 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 1053b43008e4..e01d0ddb012a 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -1463,6 +1463,29 @@ int xhci_endpoint_init(struct xhci_hcd *xhci,
- 		}
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index e9b18fc17617..8bfafbd680ab 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -893,7 +893,7 @@ static void xhci_del_comp_mod_timer(struct xhci_hcd *xhci, u32 status,
+ 	if ((xhci->port_status_u0 != all_ports_seen_u0) && port_in_u0) {
+ 		xhci->port_status_u0 |= 1 << wIndex;
+ 		if (xhci->port_status_u0 == all_ports_seen_u0) {
+-			del_timer_sync(&xhci->comp_mode_recovery_timer);
++			del_timer_sync(&xhci->port_check_timer);
+ 			xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
+ 				"All USB3 ports have entered U0 already!");
+ 			xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index e1136a6b9372..e1b3d1063f6b 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -475,7 +475,7 @@ static inline void xhci_msix_sync_irqs(struct xhci_hcd *xhci)
+ 
+ #endif
+ 
+-static void compliance_mode_recovery(struct timer_list *t)
++static void port_check(struct timer_list *t)
+ {
+ 	struct xhci_hcd *xhci;
+ 	struct usb_hcd *hcd;
+@@ -483,7 +483,7 @@ static void compliance_mode_recovery(struct timer_list *t)
+ 	u32 temp;
+ 	int i;
+ 
+-	xhci = from_timer(xhci, t, comp_mode_recovery_timer);
++	xhci = from_timer(xhci, t, port_check_timer);
+ 	rhub = &xhci->usb3_rhub;
+ 
+ 	for (i = 0; i < rhub->num_ports; i++) {
+@@ -508,8 +508,8 @@ static void compliance_mode_recovery(struct timer_list *t)
  	}
  
-+	/*
-+	 * Check for undercalculated bandwidth quirk for interrupt endpoints
-+	 * associated with fullspeed BI.
-+	 */
-+	if ((xhci->quirks & XHCI_LIMIT_FS_BI_INTR_EP) &&
-+	    usb_endpoint_xfer_int(&ep->desc) &&
-+	    udev->speed == USB_SPEED_FULL &&
-+	    interval == 5) {
-+		struct usb_device *top_dev;
-+
-+		for (top_dev = udev;
-+		     top_dev->parent && top_dev->parent->parent;
-+		     top_dev = top_dev->parent)
-+			/* Found device below root hub */;
-+
-+		/*
-+		 * If the top device is operating at fullspeed, then the
-+		 * controller is using fullspeed BI for this device.
-+		 */
-+		if (top_dev->speed == USB_SPEED_FULL)
-+			interval = 4;
-+	}
-+
- 	mult = xhci_get_endpoint_mult(udev, ep);
- 	max_packet = usb_endpoint_maxp(&ep->desc);
- 	max_burst = xhci_get_endpoint_max_burst(udev, ep);
-diff --git a/include/linux/usb/xhci-quirks.h b/include/linux/usb/xhci-quirks.h
-index 65bb62d3d31d..5bedf5a25f7a 100644
---- a/include/linux/usb/xhci-quirks.h
-+++ b/include/linux/usb/xhci-quirks.h
-@@ -59,5 +59,6 @@
- #define XHCI_SG_TRB_CACHE_SIZE_QUIRK	BIT_ULL(39)
- #define XHCI_NO_SOFT_RETRY		BIT_ULL(40)
- #define XHCI_ISOC_BLOCKED_DISCONNECT	BIT_ULL(41)
-+#define XHCI_LIMIT_FS_BI_INTR_EP	BIT_ULL(42)
+ 	if (xhci->port_status_u0 != ((1 << rhub->num_ports) - 1))
+-		mod_timer(&xhci->comp_mode_recovery_timer,
+-			jiffies + msecs_to_jiffies(COMP_MODE_RCVRY_MSECS));
++		mod_timer(&xhci->port_check_timer,
++			jiffies + msecs_to_jiffies(PORT_CHECK_MSECS));
+ }
  
- #endif /* __LINUX_USB_XHCI_QUIRKS_H */
+ /*
+@@ -522,15 +522,14 @@ static void compliance_mode_recovery(struct timer_list *t)
+  * status event is generated when entering compliance mode (per xhci spec),
+  * this quirk is needed on systems that have the failing hardware installed.
+  */
+-static void compliance_mode_recovery_timer_init(struct xhci_hcd *xhci)
++static void port_check_timer_init(struct xhci_hcd *xhci)
+ {
+ 	xhci->port_status_u0 = 0;
+-	timer_setup(&xhci->comp_mode_recovery_timer, compliance_mode_recovery,
+-		    0);
+-	xhci->comp_mode_recovery_timer.expires = jiffies +
+-			msecs_to_jiffies(COMP_MODE_RCVRY_MSECS);
++	timer_setup(&xhci->port_check_timer, port_check, 0);
++	xhci->port_check_timer.expires = jiffies +
++			msecs_to_jiffies(PORT_CHECK_MSECS);
+ 
+-	add_timer(&xhci->comp_mode_recovery_timer);
++	add_timer(&xhci->port_check_timer);
+ 	xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
+ 			"Compliance mode recovery timer initialized");
+ }
+@@ -596,7 +595,7 @@ static int xhci_init(struct usb_hcd *hcd)
+ 	/* Initializing Compliance Mode Recovery Data If Needed */
+ 	if (xhci_compliance_mode_recovery_timer_quirk_check()) {
+ 		xhci->quirks |= XHCI_COMP_MODE_QUIRK;
+-		compliance_mode_recovery_timer_init(xhci);
++		port_check_timer_init(xhci);
+ 	}
+ 
+ 	return retval;
+@@ -739,10 +738,9 @@ static void xhci_stop(struct usb_hcd *hcd)
+ 	/* Deleting Compliance Mode Recovery Timer */
+ 	if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+ 			(!(xhci_all_ports_seen_u0(xhci)))) {
+-		del_timer_sync(&xhci->comp_mode_recovery_timer);
++		del_timer_sync(&xhci->port_check_timer);
+ 		xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
+-				"%s: compliance mode recovery timer deleted",
+-				__func__);
++				"%s: port check timer deleted", __func__);
+ 	}
+ 
+ 	if (xhci->quirks & XHCI_AMD_PLL_FIX)
+@@ -1057,15 +1055,14 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
+ 	spin_unlock_irq(&xhci->lock);
+ 
+ 	/*
+-	 * Deleting Compliance Mode Recovery Timer because the xHCI Host
++	 * Deleting Port Check Timer because the xHCI Host
+ 	 * is about to be suspended.
+ 	 */
+ 	if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+ 			(!(xhci_all_ports_seen_u0(xhci)))) {
+-		del_timer_sync(&xhci->comp_mode_recovery_timer);
++		del_timer_sync(&xhci->port_check_timer);
+ 		xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
+-				"%s: compliance mode recovery timer deleted",
+-				__func__);
++				"%s: port check timer deleted", __func__);
+ 	}
+ 
+ 	/* step 5: remove core well power */
+@@ -1150,9 +1147,9 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+ 
+ 		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+ 				!(xhci_all_ports_seen_u0(xhci))) {
+-			del_timer_sync(&xhci->comp_mode_recovery_timer);
++			del_timer_sync(&xhci->port_check_timer);
+ 			xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
+-				"Compliance Mode Recovery Timer deleted!");
++				"Port Check Timer deleted!");
+ 		}
+ 
+ 		/* Let the USB core know _both_ roothubs lost power. */
+@@ -1245,13 +1242,13 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+ 		}
+ 	}
+ 	/*
+-	 * If system is subject to the Quirk, Compliance Mode Timer needs to
++	 * If system is subject to the Quirk, Port Check Timer needs to
+ 	 * be re-initialized Always after a system resume. Ports are subject
+ 	 * to suffer the Compliance Mode issue again. It doesn't matter if
+ 	 * ports have entered previously to U0 before system's suspension.
+ 	 */
+ 	if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) && !comp_timer_running)
+-		compliance_mode_recovery_timer_init(xhci);
++		port_check_timer_init(xhci);
+ 
+ 	if (xhci->quirks & XHCI_ASMEDIA_MODIFY_FLOWCONTROL)
+ 		usb_asmedia_modifyflowcontrol(to_pci_dev(hcd->self.controller));
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 27d2c1176dd1..b52b7dcb5bb9 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1862,12 +1862,12 @@ struct xhci_hcd {
+ 	/* cached extended protocol port capabilities */
+ 	struct xhci_port_cap	*port_caps;
+ 	unsigned int		num_port_caps;
+-	/* Compliance Mode Recovery Data */
+-	struct timer_list	comp_mode_recovery_timer;
++	/* For quirks that require to poll for port status */
++	struct timer_list	port_check_timer;
+ 	u32			port_status_u0;
+ 	u16			test_mode;
+-/* Compliance Mode Timer Triggered every 2 seconds */
+-#define COMP_MODE_RCVRY_MSECS 2000
++/* Port polling frequency */
++#define PORT_CHECK_MSECS 2000
+ 
+ 	/* Track max eSS interval for XHCI_ISOC_BLOCKED_DISCONNECT */
+ 	unsigned int		max_ess_interval;
 -- 
 2.28.0
 
