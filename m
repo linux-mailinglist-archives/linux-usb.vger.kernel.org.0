@@ -2,81 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3AF35AAFC
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Apr 2021 07:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5580E35AB3B
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Apr 2021 07:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbhDJFKj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 10 Apr 2021 01:10:39 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:34962 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229472AbhDJFKj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Apr 2021 01:10:39 -0400
-X-UUID: 544246bfbeb94aa3950f88bc817ddb09-20210410
-X-UUID: 544246bfbeb94aa3950f88bc817ddb09-20210410
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1562490372; Sat, 10 Apr 2021 13:10:23 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 10 Apr 2021 13:10:21 +0800
-Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 10 Apr 2021 13:10:20 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Nicolas Boichat <drinkcat@chromium.org>
-Subject: [PATCH v2 5/5] usb: xhci-mtk: remove unused members
-Date:   Sat, 10 Apr 2021 13:10:06 +0800
-Message-ID: <1618031406-15347-5-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1618031406-15347-1-git-send-email-chunfeng.yun@mediatek.com>
-References: <1618031406-15347-1-git-send-email-chunfeng.yun@mediatek.com>
+        id S230190AbhDJF5d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 10 Apr 2021 01:57:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44224 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229464AbhDJF5c (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 10 Apr 2021 01:57:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 729EB61182;
+        Sat, 10 Apr 2021 05:57:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1618034238;
+        bh=dcPFxMPX4tfyyZmiflVgnpEGjviTQ9XhYMbVmHnLDeI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Js6X6uMJtdNw+tXyjGsbXy6ZgWxU87cRKvsTvKNYSQh6dqm1NB1Tp5talqzzDm8hX
+         vdPWfHM2jQIDntSbI0yQsbOFaJWwlfBI9OuYTZ+10jXj2jaGa0q+r1BVKTQ+N+x8sK
+         tZjF9cHELKO4jkZ16toJfsXh1wD3HVO1RgDNycUQ=
+Date:   Sat, 10 Apr 2021 07:57:15 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hminas@synopsys.com
+Subject: Re: [PATCH v2] usb: dwc2: Enable RPi in ACPI mode
+Message-ID: <YHE+OyonLsCCMh7A@kroah.com>
+References: <20210409203809.21940-1-jeremy.linton@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210409203809.21940-1-jeremy.linton@arm.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Now some members about phys and wakeup are not used anymore,
-remove them.
+On Fri, Apr 09, 2021 at 03:38:09PM -0500, Jeremy Linton wrote:
+> The dwc2 driver has everything we need to run
+> in ACPI mode except for the ACPI module device table
+> boilerplate. With that added and identified as "BCM2848",
+> an id in use by other OSs for this device, the dw2
+> controller on the BCM2711 will work.
+> 
+> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+> ---
+>  drivers/usb/dwc2/core.h     |  2 ++
+>  drivers/usb/dwc2/params.c   | 18 +++++++++++++++++-
+>  drivers/usb/dwc2/platform.c |  1 +
+>  3 files changed, 20 insertions(+), 1 deletion(-)
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v2: no changes
----
- drivers/usb/host/xhci-mtk.h | 3 ---
- 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
-index 11996edc1967..7940593a3445 100644
---- a/drivers/usb/host/xhci-mtk.h
-+++ b/drivers/usb/host/xhci-mtk.h
-@@ -145,9 +145,6 @@ struct xhci_hcd_mtk {
- 	struct regulator *vusb33;
- 	struct regulator *vbus;
- 	struct clk_bulk_data clks[BULK_CLKS_NUM];
--	struct regmap *pericfg;
--	struct phy **phys;
--	int num_phys;
- 	bool lpm_support;
- 	/* usb remote wakeup */
- 	bool uwk_en;
--- 
-2.18.0
+Hi,
 
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
