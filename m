@@ -2,55 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2746335AA41
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Apr 2021 04:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B724635AA46
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Apr 2021 04:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234045AbhDJCNB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Apr 2021 22:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
+        id S234157AbhDJCNu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Apr 2021 22:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbhDJCNB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Apr 2021 22:13:01 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751C5C061762
-        for <linux-usb@vger.kernel.org>; Fri,  9 Apr 2021 19:12:47 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id d12so7683165oiw.12
-        for <linux-usb@vger.kernel.org>; Fri, 09 Apr 2021 19:12:47 -0700 (PDT)
+        with ESMTP id S232796AbhDJCNt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Apr 2021 22:13:49 -0400
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DCAC061762
+        for <linux-usb@vger.kernel.org>; Fri,  9 Apr 2021 19:13:36 -0700 (PDT)
+Received: by mail-oo1-xc2b.google.com with SMTP id h3-20020a4ae8c30000b02901b68b39e2d3so1773143ooe.9
+        for <linux-usb@vger.kernel.org>; Fri, 09 Apr 2021 19:13:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=jPmvWqss7fdPb9tIjCUG8ISj0c5pHWDwoGUZqE8zyxE=;
-        b=k78qJms92rqjMSnoYxoehLU2mCFWn6RovI389JEUHaSqCldeSzFzULbHiNUI0ucxtE
-         IrfWCDA2N9zQQyicpMJnhos2An7APnS9GIRgoKf+GlqIO+FxpMvZ3Pp8V1NkJWEYJ1+2
-         KXCS+uACMNfHiQMxUUzkCe7g+jl9R91bCGft3Oaxa3pH2/uncm9MvAfFrLYld3zOhW1s
-         9YbAAf/Uf7Vwb0z3b0nXNIv6OQpFBNRhATu68BHwW42/E7QS/5a9/tM1aTdYhdAyQyJt
-         AiCJNEgcJufrZr/3tpcdCMk7jksVf1K8MhDNknZENkRW08bySHTC0vLZisSrRvTXDbxL
-         FEGw==
+        bh=3v0n6iWIoq76pdhDLY7+wnk0FIJ8yGMwK6yquXGLGkA=;
+        b=KiKOtnJt6QLBFDEUiRANT2rAbxliXz1FLzqAIIAyaq8kB0lfQqq0Sj5JSYJDI7hJw5
+         6C0XRLszVpJiKSGU1p0cmF8SP0z0QRrkbFgnbKVCqVuPyVZfff05gToS8lBpUxRejvUv
+         rQDYi/2Sy5zt8Wi/bQhHiE5XRDj+HZKe5PdTrvdHX1xgDuDluS1DjuLAChsx3y739V3Q
+         BHOGzWsymtD+LbwIbdEGGx1bBa64KMIzrzAhjNoMkSQ5NuA38aqoKHB6k1Ft+VetiFvD
+         GoIkXSVWHZGKYCy682alFdRaekdCqgmTKj8LkOK/6yl5+RAlrnquVUiZWtfw7qRxXqRt
+         9xJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=jPmvWqss7fdPb9tIjCUG8ISj0c5pHWDwoGUZqE8zyxE=;
-        b=ZcEoWyzI1ELaFf9MoFnwLi1y6qBJp7uEYFHseDWPCqFr5f97aJy7XrFXhePZcznGQ6
-         LGe3CTTa5gImfy2/Wy9AMWx5lJGjAoyd/Jhtk1ItLLtISb1xVh4N8R5uLMUszLVj4OD3
-         YB85E3F/cUckXflX/qwELrcdSNgExkd8dMCq+wIOGZY3vzPppQPrtpWDWxWHsmdy5tiK
-         mGKeQ28KYx/TIDMU/15KrrOI2BEviZ1gPIYc5DekX4dRiHZcTtHpD8Mdib/B8TA/gMaY
-         eX9xALvFKD1O0rOh7bxRa36j3BrjZI5NW0J1zGCS6Dwq79YPZt80QeVdwhbfsMSKZ6cp
-         p0LQ==
-X-Gm-Message-State: AOAM533eod/ynrrXRi7/dCFuRk5aaSrW14zAgBwBYQ3vGaaoSHjazXHp
-        5l9MbMe9RfdbxqaOnP6uql8R9Z3Dn0s=
-X-Google-Smtp-Source: ABdhPJwKSl7m05RNqAsqetnqIsTdCSYgnc1DQh/w38R0aK8lPhzVSiFYhuycwc4PPFTaef3MRIBsqQ==
-X-Received: by 2002:a05:6808:3d3:: with SMTP id o19mr2515025oie.4.1618020766665;
-        Fri, 09 Apr 2021 19:12:46 -0700 (PDT)
+        bh=3v0n6iWIoq76pdhDLY7+wnk0FIJ8yGMwK6yquXGLGkA=;
+        b=qR+9qGuzr1VJqQSLzBx2fJKS84+J696ZCfpXyfMqI+oHoT3X3aM/05m16b4L7XDwce
+         pMD20z/GYMlXg1Q1ICV33+/pHJnu+B7Q4clujWp+ahW5dbwEeS4cuznSUQllco3md51t
+         tBtrsKfi86ug/qvXS8L5KgKb4sME7dqUoF2ePIPY9JJtUXrNW4pKsUm1Mh5hlNuUi6hR
+         gdr1lo5h7RD2NTD9Mc07cDkSh6UzfRMkeNIosjt+nIkEvSG0IEQ3KcJX7cksHwel8OJf
+         LzovkXETcdYx9XyMA0oQ4AgFtuaUBvAwU7wdmZT1mXKL4z441WUblsRvCwrbf5Q+aVYL
+         RsQQ==
+X-Gm-Message-State: AOAM530WQczuIohe+hYynMQ8mqCYlcauZY+Tw6t2aqSkQbCP3agus1d+
+        3jYAtK6Hu1hiGztybKcRVl2je8/ppMw=
+X-Google-Smtp-Source: ABdhPJyEijf9yXivvJqsCAA+Y5N4NIW7lOKyrCRky41gDejRW3M1fr+goSMAQGhzaqXXVTj7mYNIZg==
+X-Received: by 2002:a4a:e643:: with SMTP id q3mr14405342oot.46.1618020815477;
+        Fri, 09 Apr 2021 19:13:35 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z3sm877837oop.41.2021.04.09.19.12.45
+        by smtp.gmail.com with ESMTPSA id o64sm872977oif.50.2021.04.09.19.13.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Apr 2021 19:12:46 -0700 (PDT)
+        Fri, 09 Apr 2021 19:13:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2 2/3] usb: typec: tcpm: Add support for altmodes
+Subject: Re: [PATCH v2 3/3] platform/x86/intel_cht_int33fe: Add displayport
+ altmode fwnode to the connector fwnode
 To:     Hans de Goede <hdegoede@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>
@@ -58,7 +59,7 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Zhen Lei <thunder.leizhen@huawei.com>,
         linux-usb@vger.kernel.org
 References: <20210409134033.105834-1-hdegoede@redhat.com>
- <20210409134033.105834-3-hdegoede@redhat.com>
+ <20210409134033.105834-4-hdegoede@redhat.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -103,12 +104,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <1ade6ac0-d72c-c10c-3d39-d5f44e7dfeaf@roeck-us.net>
-Date:   Fri, 9 Apr 2021 19:12:44 -0700
+Message-ID: <d9768c3e-2d44-9aca-3050-8080dcd99f7c@roeck-us.net>
+Date:   Fri, 9 Apr 2021 19:13:32 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210409134033.105834-3-hdegoede@redhat.com>
+In-Reply-To: <20210409134033.105834-4-hdegoede@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -117,32 +118,53 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On 4/9/21 6:40 AM, Hans de Goede wrote:
-> Add support for altmodes described in the usb-connector fwnode
-> associated with the Type-C controller by calling the new
-> typec_port_register_altmodes_from_fwnode() helper for this.
+> Add a displayport altmode fwnode to the usb-connector fwnode,
+> devices which use this driver support display-port altmode through
+> the PI3USB30532 USB switch, this enables support for this.
 > 
 > Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/usb/typec/tcpm/tcpm.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>  .../platform/x86/intel_cht_int33fe_typec.c    | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index ce7af398c7c1..70a5d6ca0053 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -6072,6 +6072,10 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
->  		goto out_role_sw_put;
->  	}
+> diff --git a/drivers/platform/x86/intel_cht_int33fe_typec.c b/drivers/platform/x86/intel_cht_int33fe_typec.c
+> index 48638d1c56e5..b61bad9cc8d2 100644
+> --- a/drivers/platform/x86/intel_cht_int33fe_typec.c
+> +++ b/drivers/platform/x86/intel_cht_int33fe_typec.c
+> @@ -124,12 +124,31 @@ static const struct software_node usb_connector_node = {
+>  	.properties = usb_connector_properties,
+>  };
 >  
-> +	typec_port_register_altmodes(port->typec_port,
-> +				     &tcpm_altmode_ops, port,
-> +				     port->port_altmode, ALTMODE_DISCOVERY_MAX);
+> +static const struct software_node altmodes_node = {
+> +	.name = "altmodes",
+> +	.parent = &usb_connector_node,
+> +};
 > +
->  	mutex_lock(&port->lock);
->  	tcpm_init(port);
->  	mutex_unlock(&port->lock);
+> +static const struct property_entry dp_altmode_properties[] = {
+> +	PROPERTY_ENTRY_U32("svid", 0xff01),
+> +	PROPERTY_ENTRY_U32("vdo", 0x0c0086),
+> +	{ }
+> +};
+> +
+> +static const struct software_node dp_altmode_node = {
+> +	.name = "displayport-altmode",
+> +	.parent = &altmodes_node,
+> +	.properties = dp_altmode_properties,
+> +};
+> +
+>  static const struct software_node *node_group[] = {
+>  	&fusb302_node,
+>  	&max17047_node,
+>  	&pi3usb30532_node,
+>  	&displayport_node,
+>  	&usb_connector_node,
+> +	&altmodes_node,
+> +	&dp_altmode_node,
+>  	NULL
+>  };
+>  
 > 
 
