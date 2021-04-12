@@ -2,64 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C013135B9DB
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Apr 2021 07:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D533D35B9EE
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Apr 2021 07:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbhDLFfi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Apr 2021 01:35:38 -0400
-Received: from spam.zju.edu.cn ([61.164.42.155]:35246 "EHLO zju.edu.cn"
+        id S230064AbhDLFtn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Apr 2021 01:49:43 -0400
+Received: from mail.zju.edu.cn ([61.164.42.155]:38050 "EHLO zju.edu.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229448AbhDLFfi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 12 Apr 2021 01:35:38 -0400
-Received: by ajax-webmail-mail-app2 (Coremail) ; Mon, 12 Apr 2021 13:35:11
- +0800 (GMT+08:00)
-X-Originating-IP: [10.192.139.175]
-Date:   Mon, 12 Apr 2021 13:35:11 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   dinghao.liu@zju.edu.cn
-To:     "Peter Chen" <peter.chen@kernel.org>
-Cc:     kjlu@umn.edu, "Pawel Laszczak" <pawell@cadence.com>,
-        "Roger Quadros" <rogerq@kernel.org>,
-        "Aswath Govindraju" <a-govindraju@ti.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        id S229482AbhDLFtn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 12 Apr 2021 01:49:43 -0400
+Received: from localhost.localdomain (unknown [10.192.139.175])
+        by mail-app4 (Coremail) with SMTP id cS_KCgDHiAxU33NgrAm2AA--.58807S4;
+        Mon, 12 Apr 2021 13:49:17 +0800 (CST)
+From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
+To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
+Cc:     Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH] usb: cdns3: Fix rumtime PM imbalance on error
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2021 www.mailtech.cn zju.edu.cn
-In-Reply-To: <20210410010631.GA3862@b29397-desktop>
-References: <20210407052226.1056-1-dinghao.liu@zju.edu.cn>
- <20210410010631.GA3862@b29397-desktop>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
-MIME-Version: 1.0
-Message-ID: <58e92f05.49985.178c4939c14.Coremail.dinghao.liu@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: by_KCgAnf20P3HNgdNYBAQ--.33789W
-X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgUKBlZdtTUxDAASsv
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
+Subject: [PATCH] [v2] usb: cdns3: Fix runtime PM imbalance on error
+Date:   Mon, 12 Apr 2021 13:49:07 +0800
+Message-Id: <20210412054908.7975-1-dinghao.liu@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgDHiAxU33NgrAm2AA--.58807S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7GrWfKF4rur4DtFWxCFy3Jwb_yoWfGwc_Ww
+        4Dur1jkF13Wa4DXw17Gw15uryFqrnxXw1kXan7tw13uFWYkFykCry8XrWkCr17Zw47Grn8
+        Aw18tFs3CFZ7CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbc8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWU
+        XwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv
+        6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUF9a9DUUUU
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgUKBlZdtTUxDAATsu
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PiBPbiAyMS0wNC0wNyAxMzoyMjoyNiwgRGluZ2hhbyBMaXUgd3JvdGU6Cj4gPiBXaGVuIGNkbnMz
-X2dhZGdldF9zdGFydCgpIGZhaWxzLCBhIHBhaXJpbmcgUE0gdXNhZ2UgY291bnRlcgo+ID4gZGVj
-cmVtZW50IGlzIG5lZWRlZCB0byBrZWVwIHRoZSBjb3VudGVyIGJhbGFuY2VkLgo+ID4gCj4gPiBT
-aWduZWQtb2ZmLWJ5OiBEaW5naGFvIExpdSA8ZGluZ2hhby5saXVAemp1LmVkdS5jbj4KPiA+IC0t
-LQo+ID4gIGRyaXZlcnMvdXNiL2NkbnMzL2NkbnMzLWdhZGdldC5jIHwgNSArKysrLQo+ID4gIDEg
-ZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiA+IAo+ID4gZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2NkbnMzL2NkbnMzLWdhZGdldC5jIGIvZHJpdmVycy91c2Iv
-Y2RuczMvY2RuczMtZ2FkZ2V0LmMKPiA+IGluZGV4IDU4MmJmZWNlZWRiNC4uYWQ4OTFhMTA4YWVk
-IDEwMDY0NAo+ID4gLS0tIGEvZHJpdmVycy91c2IvY2RuczMvY2RuczMtZ2FkZ2V0LmMKPiA+ICsr
-KyBiL2RyaXZlcnMvdXNiL2NkbnMzL2NkbnMzLWdhZGdldC5jCj4gPiBAQCAtMzI1NSw4ICszMjU1
-LDExIEBAIHN0YXRpYyBpbnQgX19jZG5zM19nYWRnZXRfaW5pdChzdHJ1Y3QgY2RucyAqY2RucykK
-PiA+ICAJcG1fcnVudGltZV9nZXRfc3luYyhjZG5zLT5kZXYpOwo+ID4gIAo+ID4gIAlyZXQgPSBj
-ZG5zM19nYWRnZXRfc3RhcnQoY2Rucyk7Cj4gPiAtCWlmIChyZXQpCj4gPiArCWlmIChyZXQpIHsK
-PiA+ICsJCXBtX3J1bnRpbWVfbWFya19sYXN0X2J1c3koY2Rucy0+ZGV2KTsKPiA+ICsJCXBtX3J1
-bnRpbWVfcHV0X2F1dG9zdXNwZW5kKGNkbnMtPmRldik7Cj4gPiAgCQlyZXR1cm4gcmV0Owo+IAo+
-IEl0IGRvZXNuJ3QgbmVlZCB0byBkZWxheSBlbnRlcmluZyBydW50aW1lIHN1c3BlbmQsIEkgcHJl
-ZmVyIHVzaW5nIHBtX3J1bnRpbWVfcHV0X3N5bmMgZGlyZWN0bHkuCj4gCgpTb3VuZHMgcmVhc29u
-YWJsZSwgdGhhbmtzISBJIHdpbGwgc2VuZCBhIG5ldyBwYXRjaCBzb29uLgoKUmVnYXJkcywKRGlu
-Z2hhbw==
+When cdns3_gadget_start() fails, a pairing PM usage counter
+decrement is needed to keep the counter balanced.
+
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+---
+
+Changelog:
+
+v2: - Use pm_runtime_put_sync() to decrease refcount.
+---
+ drivers/usb/cdns3/cdns3-gadget.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+index 582bfeceedb4..a49fc68ec2ef 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.c
++++ b/drivers/usb/cdns3/cdns3-gadget.c
+@@ -3255,8 +3255,10 @@ static int __cdns3_gadget_init(struct cdns *cdns)
+ 	pm_runtime_get_sync(cdns->dev);
+ 
+ 	ret = cdns3_gadget_start(cdns);
+-	if (ret)
++	if (ret) {
++		pm_runtime_put_sync(cdns->dev);
+ 		return ret;
++	}
+ 
+ 	/*
+ 	 * Because interrupt line can be shared with other components in
+-- 
+2.17.1
+
