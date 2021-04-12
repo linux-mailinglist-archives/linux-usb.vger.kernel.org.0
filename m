@@ -2,162 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7826935D037
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Apr 2021 20:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E71635D03C
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Apr 2021 20:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236562AbhDLSXA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Apr 2021 14:23:00 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:49491 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbhDLSXA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Apr 2021 14:23:00 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1618251762; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=f/o4ov2Jql6eVLjbIpnOsJ8HOvc1P4ttTTS/pqsiqqA=; b=NQwmes9A4YbaeeD0n0m/qxlikgUG/6B+2dSEXEFdPUM0KtasguWNI7TE5hRcYhGfCDn1weYY
- LV6848to+NrxzW5QI8t2L3Ot0FY4sdxCCKMIddADDV8O1710iCsYgwDo/tmOrV86u+Jm0C3K
- 8VF4QU06JlmzLiO5iQGX7x4pElc=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
- 60748fdcf34440a9d4cbdfc6 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 12 Apr 2021 18:22:20
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id DFDEFC433C6; Mon, 12 Apr 2021 18:22:20 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 57C13C433C6;
-        Mon, 12 Apr 2021 18:22:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 57C13C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-Date:   Mon, 12 Apr 2021 11:22:16 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Li Jun <jun.li@nxp.com>, peter.chen@kernel.org
-Cc:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-imx@nxp.com
-Subject: Re: [PATCH 1/2] usb: host: move EH SINGLE_STEP_SET_FEATURE
- implementation to core
-Message-ID: <20210412182215.GC17922@jackp-linux.qualcomm.com>
-References: <1618212134-20416-1-git-send-email-jun.li@nxp.com>
+        id S236715AbhDLSYY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Apr 2021 14:24:24 -0400
+Received: from mail-oi1-f169.google.com ([209.85.167.169]:44872 "EHLO
+        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229666AbhDLSYY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Apr 2021 14:24:24 -0400
+Received: by mail-oi1-f169.google.com with SMTP id j24so3510722oii.11;
+        Mon, 12 Apr 2021 11:24:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=I5HbeKDhcmeEzkTpL+s857z6JwOx8CcHKVixcQWeMqg=;
+        b=qVGzCNOkMvM5kU6p5P8u+A85JnN+fSrvNmKu3K0GmNj1gW34KZEs05r/hXtsd9/+lj
+         pNR+pPdLGZDN6YRKvz/Gv1kapGWpcl+gkK1899qwgfulG4QGvrGOo/VSQh0iKi4x0aj2
+         DG96PAsx+X3sk08ql7op1kTM3pZ8XSNuzPv4/g/N3VWg5z4UcaIHAWClRPvtikcloiOp
+         ONVsRNZ6ig3jtbmR5OCy41Kd9yoi6OAVUHdVvrapqVX27JKydsDDG1WziHzAI5fhLd9B
+         u6N5P0HnQVwv9V/DXdGYHmYZ57Sr4SIKE9TrrYBX1QkOnQrIkPfkw4KMfjLGTRfvUOZm
+         +PcA==
+X-Gm-Message-State: AOAM531Pyku6u/89HvRzupwVb59yltja/lVP2at/oRQ8no0gaQgzx1QA
+        QdlZBeQ8prpUHZ9/Wm9rOA==
+X-Google-Smtp-Source: ABdhPJzVKlY/PDIKP5bFbIi5/h2pnazHJhpoBIZhzlLLlOribqb0QB7d3q70bueIT0GW3jShnMgK7g==
+X-Received: by 2002:a05:6808:b3b:: with SMTP id t27mr337538oij.131.1618251845638;
+        Mon, 12 Apr 2021 11:24:05 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id x2sm2886622ote.47.2021.04.12.11.24.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Apr 2021 11:24:04 -0700 (PDT)
+Received: (nullmailer pid 4153852 invoked by uid 1000);
+        Mon, 12 Apr 2021 18:24:03 -0000
+Date:   Mon, 12 Apr 2021 13:24:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Cc:     narmstrong@baylibre.com, Laurent.pinchart@ideasonboard.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        hsinyi@chromium.org, robh+dt@kernel.org, dafna3@gmail.com,
+        megous@megous.com, a.hajda@samsung.com, jernej.skrabec@siol.net,
+        airlied@linux.ie, enric.balletbo@collabora.com,
+        dri-devel@lists.freedesktop.org, drinkcat@chromium.org,
+        chunkuang.hu@kernel.org, jonas@kwiboo.se, kernel@collabora.com
+Subject: Re: [PATCH v6 1/2] dt-bindings: display: add
+ google,cros-ec-anx7688.yaml
+Message-ID: <20210412182403.GA4153823@robh.at.kernel.org>
+References: <20210409161951.12365-1-dafna.hirschfeld@collabora.com>
+ <20210409161951.12365-2-dafna.hirschfeld@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1618212134-20416-1-git-send-email-jun.li@nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210409161951.12365-2-dafna.hirschfeld@collabora.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jun & Peter,
-
-On Mon, Apr 12, 2021 at 03:22:13PM +0800, Li Jun wrote:
-> From: Peter Chen <peter.chen@nxp.com>
+On Fri, 09 Apr 2021 18:19:50 +0200, Dafna Hirschfeld wrote:
+> ChromeOS EC ANX7688 is a display bridge that converts HDMI 2.0 to
+> DisplayPort 1.3 Ultra-HDi (4096x2160p60). It is an Analogix ANX7688 chip
+> which is connected to and operated by the ChromeOS Embedded Controller
+> (See google,cros-ec.yaml). It is accessed using I2C tunneling through
+> the EC and therefore its node should be a child of an EC I2C tunnel node
+> (See google,cros-ec-i2c-tunnel.yaml).
 > 
-> It is needed at USB Certification test for Embedded Host 2.0, and
-> the detail is at CH6.4.1.1 of On-The-Go and Embedded Host Supplement
-> to the USB Revision 2.0 Specification. Since other USB 2.0 capable
-> host like XHCI also need it, so move it to HCD core.
+> ChromOS EC ANX7688 is found on Acer Chromebook R13 (elm)
 > 
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> Signed-off-by: Jun Li <jun.li@nxp.com>
+> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 > ---
->  drivers/usb/core/hcd.c      | 134 ++++++++++++++++++++++++++++++++++
->  drivers/usb/host/ehci-hcd.c |   4 ++
->  drivers/usb/host/ehci-hub.c | 139 ------------------------------------
->  drivers/usb/host/ehci-q.c   |   2 +-
->  include/linux/usb/hcd.h     |  13 +++-
->  5 files changed, 151 insertions(+), 141 deletions(-)
+>  .../bridge/google,cros-ec-anx7688.yaml        | 82 +++++++++++++++++++
+>  1 file changed, 82 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
 > 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index 6119fb41d736..d7eb9f179ca6 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -2110,6 +2110,140 @@ int usb_hcd_get_frame_number (struct usb_device *udev)
->  	return hcd->driver->get_frame_number (hcd);
->  }
->  
-> +/*-------------------------------------------------------------------------*/
-> +#ifdef CONFIG_USB_HCD_TEST_MODE
-> +
-> +static void usb_ehset_completion(struct urb *urb)
-> +{
-> +	struct completion  *done = urb->context;
-> +
-> +	complete(done);
-> +}
-> +/*
-> + * Allocate and initialize a control URB. This request will be used by the
-> + * EHSET SINGLE_STEP_SET_FEATURE test in which the DATA and STATUS stages
-> + * of the GetDescriptor request are sent 15 seconds after the SETUP stage.
-> + * Return NULL if failed.
-> + */
-> +static struct urb *request_single_step_set_feature_urb(
-> +	struct usb_device	*udev,
-> +	void			*dr,
-> +	void			*buf,
-> +	struct completion	*done)
-> +{
-> +	struct urb *urb;
-> +	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
-> +	struct usb_host_endpoint *ep;
-> +
-> +	urb = usb_alloc_urb(0, GFP_KERNEL);
-> +	if (!urb)
-> +		return NULL;
-> +
-> +	urb->pipe = usb_rcvctrlpipe(udev, 0);
-> +	ep = (usb_pipein(urb->pipe) ? udev->ep_in : udev->ep_out)
-> +				[usb_pipeendpoint(urb->pipe)];
-> +	if (!ep) {
-> +		usb_free_urb(urb);
-> +		return NULL;
-> +	}
-> +
-> +	urb->ep = ep;
-> +	urb->dev = udev;
-> +	urb->setup_packet = (void *)dr;
-> +	urb->transfer_buffer = buf;
-> +	urb->transfer_buffer_length = USB_DT_DEVICE_SIZE;
-> +	urb->complete = usb_ehset_completion;
-> +	urb->status = -EINPROGRESS;
-> +	urb->actual_length = 0;
-> +	urb->transfer_flags = URB_DIR_IN;
-> +	usb_get_urb(urb);
-> +	atomic_inc(&urb->use_count);
-> +	atomic_inc(&urb->dev->urbnum);
-> +	urb->setup_dma = dma_map_single(
-> +			hcd->self.sysdev,
-> +			urb->setup_packet,
-> +			sizeof(struct usb_ctrlrequest),
-> +			DMA_TO_DEVICE);
-> +	urb->transfer_dma = dma_map_single(
-> +			hcd->self.sysdev,
-> +			urb->transfer_buffer,
-> +			urb->transfer_buffer_length,
-> +			DMA_FROM_DEVICE);
 
-Maybe better to replace both of these dma_map_single() calls with
-one call to usb_hcd_map_urb_for_dma(hcd, urb, GFP_KERNEL)? 
-
-> +	urb->context = done;
-> +	return urb;
-> +}
-
-Thanks,
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Reviewed-by: Rob Herring <robh@kernel.org>
