@@ -2,99 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4999835C331
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Apr 2021 12:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 637F335C3F3
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Apr 2021 12:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238862AbhDLJ6T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Apr 2021 05:58:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38570 "EHLO mail.kernel.org"
+        id S239086AbhDLK2T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Apr 2021 06:28:19 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53344 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244819AbhDLJ4n (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 12 Apr 2021 05:56:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 022E661367;
-        Mon, 12 Apr 2021 09:56:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618221379;
-        bh=quKD0m9fXHZbBoOyEC6sAtv2Nx7CdwbfN9wIuomHiHg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kdnob56X0uGEG/Fi/aOv0sPtqc9rYi652HJz8wwyM2+9m2RR9BjbnigBEjZI6iIA5
-         k5AYxmmvRv7v4fKqFC6bQ3pSl1Wi1v8fZTIEWIJ4COwvGLBDG5PuLyTqWKPVQDqso4
-         1E2jJwoeCHUVTOkHaV5wl7yHQqXz+k8vbloBeiAjHfCnEtN4Y8612rCruXgOxnk9A7
-         5e+413xfjqXPfsAzXSpbJAjwkLC6AKEbeLRJ8wpsXRbW5Cs7y2/ObXBsGW4lksmQ1M
-         CpWpJl78eAfu+CBuzQbdd2FfwezDGbxyjp/rrRrC5Vls0Pf5q1PadDDmKtWc7LmmNa
-         OwELyC4JEGcFw==
-Received: from johan by xi with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lVtIj-0000L6-HU; Mon, 12 Apr 2021 11:56:13 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH 12/12] USB: cdc-acm: add more Maxlinear/Exar models to ignore list
-Date:   Mon, 12 Apr 2021 11:55:57 +0200
-Message-Id: <20210412095557.1213-13-johan@kernel.org>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20210412095557.1213-1-johan@kernel.org>
-References: <20210412095557.1213-1-johan@kernel.org>
+        id S239060AbhDLK2S (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 12 Apr 2021 06:28:18 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1618223280; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eKg+1LrX5Aumc0+m5G5bwbHrEC5fce1TswA3SrN/ZeA=;
+        b=RREUAqwPfuniQvCVLmyEjeXZKaUvvShdXR8K1xeJa6Lc5CsII5Hga07HJXcigN25u2IqYf
+        i93xD/UtfypeXSbWLItVoyIMa+1ovBE7yc6rG7t/aGvrWlXa+6NwuODfBoxCJfIetVdZxf
+        sNg0+uX2VVO3SBQt63sS+6ARg9OpJto=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 2C93DAF17;
+        Mon, 12 Apr 2021 10:28:00 +0000 (UTC)
+Message-ID: <8c11f03b08a0bdfd2761a74f5a7964067dc4b98b.camel@suse.com>
+Subject: Re: [RFC]extension of the anchor API
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org
+Date:   Mon, 12 Apr 2021 11:58:16 +0200
+In-Reply-To: <20210408150725.GC1296449@rowland.harvard.edu>
+References: <5b3c30d268ea2d13d303759ef3dfee8d72830084.camel@suse.com>
+         <20210325150657.GC785961@rowland.harvard.edu>
+         <5d3852dca69ff194017c806078e996c50ee621be.camel@suse.com>
+         <20210325183856.GA799855@rowland.harvard.edu>
+         <cc44e358406f48175fad9e956369d0f5a07efbe9.camel@suse.com>
+         <20210408150725.GC1296449@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Am Donnerstag, den 08.04.2021, 11:07 -0400 schrieb Alan Stern:
+> On Thu, Apr 08, 2021 at 11:23:05AM +0200, Oliver Neukum wrote:
+> > Am Donnerstag, den 25.03.2021, 14:38 -0400 schrieb Alan Stern:
 
-Now that the xr_serial got support for other models, add their USB IDs
-as well.
+> > Yes. If the URBs themselves, as opposed to their payloads, are
+> > different, this will happen. Yet I am afraid we are looking at a
+> > necessary race condition here. If you cancel a non-atomic operation,
+> > you will need to deal with all possible intermediate stages of
+> > completion.
+> 
+> That's not the point.  The point is that the description you wrote is 
+> incorrect.
+> 
+> I can imagine someone who doesn't understand the details of the 
+> anchor/mooring API creating an array of pointers to URBs, then filling 
+> in those URBs in the array's order.  That would mess things up if a 
+> previous kill caused the order of the anchor list to be different from 
+> the array order.
 
-The Maxlinear/Exar USB UARTs can be used in either ACM mode using the
-cdc-acm driver or in "custom driver" mode in which further features such
-as hardware and software flow control, GPIO control and in-band
-line-status reporting are available.
+OK, I will fix the description.
 
-In ACM mode the device always enables RTS/CTS flow control, something
-which could prevent transmission in case the CTS input isn't wired up
-correctly.
+> How about instead of moving URBs to the end of the list when they 
+> complete, you have the anchor maintain a pointer to the most recently 
+> submitted URB?
 
-Ensure that cdc_acm will not bind to these devices if the custom
-USB-serial driver is enabled.
+That presumes that the URBs will finish in order. I don't think such
+an assumption can be made.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Link: https://lore.kernel.org/r/5155887a764cbc11f8da0217fe08a24a77d120b4.1616571453.git.mchehab+huawei@kernel.org
-[ johan: rewrite commit message, clean up entries ]
-Cc: Oliver Neukum <oneukum@suse.com>
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/class/cdc-acm.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+	Regards
+		Oliver
 
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index 337ffced9c40..434539b13a70 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -1903,9 +1903,17 @@ static const struct usb_device_id acm_ids[] = {
- #endif
- 
- #if IS_ENABLED(CONFIG_USB_SERIAL_XR)
--	{ USB_DEVICE(0x04e2, 0x1410),   /* Ignore XR21V141X USB to Serial converter */
--	.driver_info = IGNORE_DEVICE,
--	},
-+	{ USB_DEVICE(0x04e2, 0x1400), .driver_info = IGNORE_DEVICE },
-+	{ USB_DEVICE(0x04e2, 0x1401), .driver_info = IGNORE_DEVICE },
-+	{ USB_DEVICE(0x04e2, 0x1402), .driver_info = IGNORE_DEVICE },
-+	{ USB_DEVICE(0x04e2, 0x1403), .driver_info = IGNORE_DEVICE },
-+	{ USB_DEVICE(0x04e2, 0x1410), .driver_info = IGNORE_DEVICE },
-+	{ USB_DEVICE(0x04e2, 0x1411), .driver_info = IGNORE_DEVICE },
-+	{ USB_DEVICE(0x04e2, 0x1412), .driver_info = IGNORE_DEVICE },
-+	{ USB_DEVICE(0x04e2, 0x1414), .driver_info = IGNORE_DEVICE },
-+	{ USB_DEVICE(0x04e2, 0x1420), .driver_info = IGNORE_DEVICE },
-+	{ USB_DEVICE(0x04e2, 0x1422), .driver_info = IGNORE_DEVICE },
-+	{ USB_DEVICE(0x04e2, 0x1424), .driver_info = IGNORE_DEVICE },
- #endif
- 
- 	/*Samsung phone in firmware update mode */
--- 
-2.26.3
 
