@@ -2,78 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 637F335C3F3
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Apr 2021 12:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0383735C34C
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Apr 2021 12:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239086AbhDLK2T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Apr 2021 06:28:19 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53344 "EHLO mx2.suse.de"
+        id S239220AbhDLKDk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Apr 2021 06:03:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39916 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239060AbhDLK2S (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 12 Apr 2021 06:28:18 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1618223280; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eKg+1LrX5Aumc0+m5G5bwbHrEC5fce1TswA3SrN/ZeA=;
-        b=RREUAqwPfuniQvCVLmyEjeXZKaUvvShdXR8K1xeJa6Lc5CsII5Hga07HJXcigN25u2IqYf
-        i93xD/UtfypeXSbWLItVoyIMa+1ovBE7yc6rG7t/aGvrWlXa+6NwuODfBoxCJfIetVdZxf
-        sNg0+uX2VVO3SBQt63sS+6ARg9OpJto=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 2C93DAF17;
-        Mon, 12 Apr 2021 10:28:00 +0000 (UTC)
-Message-ID: <8c11f03b08a0bdfd2761a74f5a7964067dc4b98b.camel@suse.com>
-Subject: Re: [RFC]extension of the anchor API
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org
-Date:   Mon, 12 Apr 2021 11:58:16 +0200
-In-Reply-To: <20210408150725.GC1296449@rowland.harvard.edu>
-References: <5b3c30d268ea2d13d303759ef3dfee8d72830084.camel@suse.com>
-         <20210325150657.GC785961@rowland.harvard.edu>
-         <5d3852dca69ff194017c806078e996c50ee621be.camel@suse.com>
-         <20210325183856.GA799855@rowland.harvard.edu>
-         <cc44e358406f48175fad9e956369d0f5a07efbe9.camel@suse.com>
-         <20210408150725.GC1296449@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S244866AbhDLKBA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 12 Apr 2021 06:01:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F1BC0611AD;
+        Mon, 12 Apr 2021 10:00:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618221643;
+        bh=oEF9mbnEEuaF1uVd7dfYALcUg0tUYr9MY7WTmXTncQs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tcvZauxF0ZP353i48NdHx0ILLHsMjn1VJwBLaFNTc58okTQurhNa/tvYLAzqV1HUn
+         himXZ/LYjimxCbBaEHYvuXad5TSrRYnrb7SF0amZcxOSBI46bR21whPHkyFPOIFFQp
+         mUrJyiYmKqG46t/L7pwQZF+cLfARH7ElKBcMrfkI0ClVQ4x84noVgKl08dFSBtmabn
+         282w2FMbc1as+Q0gCPYRqkyiQf8/XFNvbVNKZ+ni+b8gYyVtvm8CVCn1AWHlwuVVoZ
+         hLZWOzyDANpt9NbwmRQvk9MUNXkTW1AerCWCiNlf4cjmTsKYo4v8eS6ugu3iBRMljc
+         OnsOGlc3NrULA==
+Received: from johan by xi with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lVtMz-0001NY-3n; Mon, 12 Apr 2021 12:00:37 +0200
+Date:   Mon, 12 Apr 2021 12:00:37 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Pho Tran <photranvan0712@gmail.com>, Hung.Nguyen@silabs.com,
+        Tung.Pham@silabs.com, USB <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/2] USB: serial: cp210x: provide gpio valid mask
+Message-ID: <YHQaRb7bOYc+H8Fh@hovoldconsulting.com>
+References: <20210409155216.31867-1-johan@kernel.org>
+ <CAHp75Vds=yXk3yYMh1yyDb0o_YyVTh3-6iKh8rYKwYHORebdkQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vds=yXk3yYMh1yyDb0o_YyVTh3-6iKh8rYKwYHORebdkQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Donnerstag, den 08.04.2021, 11:07 -0400 schrieb Alan Stern:
-> On Thu, Apr 08, 2021 at 11:23:05AM +0200, Oliver Neukum wrote:
-> > Am Donnerstag, den 25.03.2021, 14:38 -0400 schrieb Alan Stern:
-
-> > Yes. If the URBs themselves, as opposed to their payloads, are
-> > different, this will happen. Yet I am afraid we are looking at a
-> > necessary race condition here. If you cancel a non-atomic operation,
-> > you will need to deal with all possible intermediate stages of
-> > completion.
+On Fri, Apr 09, 2021 at 07:23:11PM +0300, Andy Shevchenko wrote:
+> On Fri, Apr 9, 2021 at 6:52 PM Johan Hovold <johan@kernel.org> wrote:
+> >
+> > Use the new GPIO valid-mask feature to inform gpiolib which pins are
+> > available for use instead of handling that in a request callback.
+> >
+> > This also allows user space to figure out which pins are available
+> > through the chardev interface without having to request each pin in
+> > turn.
 > 
-> That's not the point.  The point is that the description you wrote is 
-> incorrect.
-> 
-> I can imagine someone who doesn't understand the details of the 
-> anchor/mooring API creating an array of pointers to URBs, then filling 
-> in those URBs in the array's order.  That would mess things up if a 
-> previous kill caused the order of the anchor list to be different from 
-> the array order.
+> Thanks! I like the series.
+> Independently on reaction on my comments:
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-OK, I will fix the description.
+Thanks for reviewing. Now applied.
 
-> How about instead of moving URBs to the end of the list when they 
-> complete, you have the anchor maintain a pointer to the most recently 
-> submitted URB?
-
-That presumes that the URBs will finish in order. I don't think such
-an assumption can be made.
-
-	Regards
-		Oliver
-
-
+Johan
