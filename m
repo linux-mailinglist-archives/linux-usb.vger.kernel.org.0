@@ -2,77 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E71635D03C
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Apr 2021 20:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E1835D0AE
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Apr 2021 20:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236715AbhDLSYY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Apr 2021 14:24:24 -0400
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:44872 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbhDLSYY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Apr 2021 14:24:24 -0400
-Received: by mail-oi1-f169.google.com with SMTP id j24so3510722oii.11;
-        Mon, 12 Apr 2021 11:24:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=I5HbeKDhcmeEzkTpL+s857z6JwOx8CcHKVixcQWeMqg=;
-        b=qVGzCNOkMvM5kU6p5P8u+A85JnN+fSrvNmKu3K0GmNj1gW34KZEs05r/hXtsd9/+lj
-         pNR+pPdLGZDN6YRKvz/Gv1kapGWpcl+gkK1899qwgfulG4QGvrGOo/VSQh0iKi4x0aj2
-         DG96PAsx+X3sk08ql7op1kTM3pZ8XSNuzPv4/g/N3VWg5z4UcaIHAWClRPvtikcloiOp
-         ONVsRNZ6ig3jtbmR5OCy41Kd9yoi6OAVUHdVvrapqVX27JKydsDDG1WziHzAI5fhLd9B
-         u6N5P0HnQVwv9V/DXdGYHmYZ57Sr4SIKE9TrrYBX1QkOnQrIkPfkw4KMfjLGTRfvUOZm
-         +PcA==
-X-Gm-Message-State: AOAM531Pyku6u/89HvRzupwVb59yltja/lVP2at/oRQ8no0gaQgzx1QA
-        QdlZBeQ8prpUHZ9/Wm9rOA==
-X-Google-Smtp-Source: ABdhPJzVKlY/PDIKP5bFbIi5/h2pnazHJhpoBIZhzlLLlOribqb0QB7d3q70bueIT0GW3jShnMgK7g==
-X-Received: by 2002:a05:6808:b3b:: with SMTP id t27mr337538oij.131.1618251845638;
-        Mon, 12 Apr 2021 11:24:05 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id x2sm2886622ote.47.2021.04.12.11.24.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Apr 2021 11:24:04 -0700 (PDT)
-Received: (nullmailer pid 4153852 invoked by uid 1000);
-        Mon, 12 Apr 2021 18:24:03 -0000
-Date:   Mon, 12 Apr 2021 13:24:03 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Cc:     narmstrong@baylibre.com, Laurent.pinchart@ideasonboard.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        hsinyi@chromium.org, robh+dt@kernel.org, dafna3@gmail.com,
-        megous@megous.com, a.hajda@samsung.com, jernej.skrabec@siol.net,
-        airlied@linux.ie, enric.balletbo@collabora.com,
-        dri-devel@lists.freedesktop.org, drinkcat@chromium.org,
-        chunkuang.hu@kernel.org, jonas@kwiboo.se, kernel@collabora.com
-Subject: Re: [PATCH v6 1/2] dt-bindings: display: add
- google,cros-ec-anx7688.yaml
-Message-ID: <20210412182403.GA4153823@robh.at.kernel.org>
-References: <20210409161951.12365-1-dafna.hirschfeld@collabora.com>
- <20210409161951.12365-2-dafna.hirschfeld@collabora.com>
+        id S236754AbhDLTAE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Apr 2021 15:00:04 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:54592 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236569AbhDLTAE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Apr 2021 15:00:04 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1618253986; h=Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Date: Message-ID: Subject: From: To: Sender;
+ bh=nqpaAFI8Q+bA3N0RI+EwsScWjn59R+Tw9dWhiU41Nww=; b=HgBk976XIQXfOfDD/DN4k8RQsJ1GlsMJKCTYRSZTagIap6cuyW65oGrgdrvdC8avU1MHy4ZQ
+ bhaQlGerEEjwKcdZb0nenUgcmqbFJNIdeHpuF9xPVJppou/zTNfkZlTITYaGQk8RuCIPxCD0
+ 1fwI9lZI36aKtHV5fIBVdeS0uwk=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 6074989cfebcffa80fbf76b9 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 12 Apr 2021 18:59:40
+ GMT
+Sender: prathampratap=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 7FBF1C433ED; Mon, 12 Apr 2021 18:59:39 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from [172.20.10.6] (unknown [106.207.75.110])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: prathampratap)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 73735C433C6
+        for <linux-usb@vger.kernel.org>; Mon, 12 Apr 2021 18:59:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 73735C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=prathampratap@codeaurora.org
+To:     linux-usb@vger.kernel.org
+From:   Pratham Pratap <prathampratap@codeaurora.org>
+Subject: USB port resume can take 60 seconds in worst case scenario
+Message-ID: <075be7a2-eb78-f6b0-6051-a83bc70955db@codeaurora.org>
+Date:   Tue, 13 Apr 2021 00:29:35 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210409161951.12365-2-dafna.hirschfeld@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 09 Apr 2021 18:19:50 +0200, Dafna Hirschfeld wrote:
-> ChromeOS EC ANX7688 is a display bridge that converts HDMI 2.0 to
-> DisplayPort 1.3 Ultra-HDi (4096x2160p60). It is an Analogix ANX7688 chip
-> which is connected to and operated by the ChromeOS Embedded Controller
-> (See google,cros-ec.yaml). It is accessed using I2C tunneling through
-> the EC and therefore its node should be a child of an EC I2C tunnel node
-> (See google,cros-ec-i2c-tunnel.yaml).
-> 
-> ChromOS EC ANX7688 is found on Acer Chromebook R13 (elm)
-> 
-> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-> ---
->  .../bridge/google,cros-ec-anx7688.yaml        | 82 +++++++++++++++++++
->  1 file changed, 82 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
-> 
+Hi,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+The current implementation of usb_port_resume 
+(usb_reset_and_verify_device()) can take up-to 60 secs in worst-case 
+scenario if the device (let's say the device went bad and is 
+unresponsive to any setup packets) connected went into runtime suspend 
+and resumed back. Is it fine to have a configurable upper bound? Since 
+it can induce delay in the overall system resume if the host is waking 
+up from PM suspend.
+
+[USB port resume in worst case ]
+
+usb_port_resume()
+finish_port_resume()
+usb_get_std_status()
+usb_get_status()
+USB_CTRL_GET_TIMEOUT : 5 sec
+
+
+usb_reset_and_verify_device()
+SET_CONFIG_TRIES 3 (use_new_scheme: 2 /old scheme: 1)
+hub_port_init()
+GET_DESCRIPTOR_TRIES 2
+operations < 3
+
+     2*2*3 (12) * 5(USB_CTRL_GET_TIMEOUT) = 60 sec
+
+
+Thanks,
+
+Pratham
+
