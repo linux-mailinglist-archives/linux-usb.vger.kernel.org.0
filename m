@@ -2,256 +2,352 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBA035B8EE
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Apr 2021 05:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F8A35B9C2
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Apr 2021 07:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235420AbhDLDak (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Apr 2021 23:30:40 -0400
-Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:6634 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235234AbhDLDaj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Apr 2021 23:30:39 -0400
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13C3APig030903;
-        Sun, 11 Apr 2021 20:30:20 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint;
- bh=f2ux9IVY4sLPpUovBz65KKOt4uZdoA61h61C8QTTFI4=;
- b=fhrM4E/BtnmLBae2CbgH/7v81vC2w1nEpFhZSmmK83zgjh6k0SksvaWqEiCm030zd3p1
- Nz4RC/q5qNeLwky6rIRSdaZI0CXSuPIYBcQC1vfRbUzEZSfYc31IcMfjA1rEZcgMmmgI
- yYtc75rUzLRSn2Irpn6/tVRT0QmW8WLPUy2nygpQFa6FAvf8EKnTeOAKeGle24348KjJ
- FCaYcaSsqivmU1+OMjXcSiomJTjJzAD2ad0aOsrDtJ6g4oI+f/pbbeVMfmckVUwa5lsC
- lx5wu+HZg/iwatwWF9W3yfGXziS7CYvcRauTFDXH6t7a5kD1BR+F7xsoqaokVjxC7fWT 8Q== 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
-        by mx0b-0014ca01.pphosted.com with ESMTP id 37u7m0m074-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 11 Apr 2021 20:30:20 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i9WpOACIO4Jntt7ltAeYWFixd2Iim5/AFlLZcxmDHwvuW0K0tLZ6DIseWuUeZqokYXq6dbaiCOj0jF9hC3KeHqoUyE90jR6sMRQRMUje7pgXRwWpSDWgeW0/KEaFimH1kK4x0gKRs6U6ihcTZAC0iC7S1UzNku3j8UkakY87R7Y83Ly8kAskegHuwiSA+7mqwSQAROWXEie57S0IszZFBHGNwykOByW3l38wDWpJoVHgQLsTLN3qKL5LpPt1xS+/8cpsHwUAlHKeCJoZ2JjRGO9Ehqmw66HpWMWMQMGeNrCMxvYjah+heuLjGhkP6DgY8mSlhlrjhDkgQd3vTAXJIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f2ux9IVY4sLPpUovBz65KKOt4uZdoA61h61C8QTTFI4=;
- b=ni8W4EC/kFbnwkfekZLEuEodfh+Zzj9vgxRhVR3d3CLZBSlgFOSYN0NiVuHU/8depLNUCxy2ZucGchDkmQrlKIckN/di5MorcKQuMYg1VVHCTeDX8IDv24ZaFTpLaVsJVncM8cm2qkKbSbbQbrMdTxliVL1Of9nVN65psd0u9u1KBv+7elAMuNJzZlHa9rGENsn6VWekhQqad585pwNv/KLSeQCmfV/qWC+CV6JuOnpMrX666nXRWiZtoLAS8Q69ogAVq/O7cgs/nBaf2uyWKhTCtOIwple2eNKb9GZMtcSBPAzByRM9f8K+B1H69XCuLCkBD2Wfu4Bf4XPCEhTMFA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f2ux9IVY4sLPpUovBz65KKOt4uZdoA61h61C8QTTFI4=;
- b=dGeSPIvnXyzNbBuTHV5q6sh6PCU6N1HMmKrweKQDQXYA9cqLGXP6kVDuvadT7uJOJUvCKvfteeYKbWHpVAw57KHCJI/nJ9hf2tf5wEJXpHCoVcitYxU53YWP2sUFeW+XRKEIh0fTOFy8JaXLJLxT6R5wVW/9/fFkyu3rBnX3ieM=
-Received: from BYAPR07MB5381.namprd07.prod.outlook.com (2603:10b6:a03:6d::24)
- by BYAPR07MB4328.namprd07.prod.outlook.com (2603:10b6:a02:bf::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.22; Mon, 12 Apr
- 2021 03:30:17 +0000
-Received: from BYAPR07MB5381.namprd07.prod.outlook.com
- ([fe80::5a:c16d:31b1:bcd0]) by BYAPR07MB5381.namprd07.prod.outlook.com
- ([fe80::5a:c16d:31b1:bcd0%7]) with mapi id 15.20.4020.022; Mon, 12 Apr 2021
- 03:30:17 +0000
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     Peter Chen <peter.chen@kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rahul Kumar <kurahul@cadence.com>
-Subject: RE: [PATCH v2] usb: cdnsp: Fixes issue with Configure Endpoint
- command
-Thread-Topic: [PATCH v2] usb: cdnsp: Fixes issue with Configure Endpoint
- command
-Thread-Index: AQHXK3hy7gOZ6buWoUCjwtaNarDR9Kqs+OcAgANHeNA=
-Date:   Mon, 12 Apr 2021 03:30:17 +0000
-Message-ID: <BYAPR07MB5381A83C23875BBBE77CF277DD709@BYAPR07MB5381.namprd07.prod.outlook.com>
-References: <20210407063629.43685-1-pawell@gli-login.cadence.com>
- <20210410012208.GA28768@b29397-desktop>
-In-Reply-To: <20210410012208.GA28768@b29397-desktop>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctNjQwYTczZmQtOWIzZi0xMWViLTg3ODctMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XDY0MGE3M2ZmLTliM2YtMTFlYi04Nzg3LTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iMzY0OCIgdD0iMTMyNjI2NzE4MTM4NzUzMjExIiBoPSI1RXZ0MU1YQi9VQXA4aE10QXB5K1lDVno5S009IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
-x-dg-rorf: true
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=cadence.com;
-x-originating-ip: [185.217.253.59]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3ce7e749-1920-4142-a0df-08d8fd634af7
-x-ms-traffictypediagnostic: BYAPR07MB4328:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BYAPR07MB432899CA9FA0CD3931351F6ADD709@BYAPR07MB4328.namprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YkIFjrAgLWkDvOx03msb8PhgMU1FfkgKUdbZ8YMzMcWhVV+Kfu8HheS8UN3Bgyd6ylAIyoxGVtYYF3junUH1Pl3TlAmohgjLIOgvzrr+o6J9sIP72I1fUnuU2WtfOSwDLcWfDQdJ1+tDwmuvbM/ByEDydCQGv3ioOEBaouzAbxCxrRl4x/Odd1f5sSrQZ1Bj8VEnfuaDcDFrOEh/4A4TnmzfLlImWzVG4QnfYHbXWUIH1U57rlmvUIZuzcQuUAk3s1v/jOy3HDN5gHeqxjXEmB+wsDcOxGhd3vl5RMzpF3LAKsYrrVW/cU9nKPI4b7ZLtFEa/qrzzK8qV/vNWHMsVjrdvSlzhJNOUhHX+Tybx2bMasLIPfe8RhJMt0pJ1tR+6T3IOMHZgO2SqV6G7f3i9so2IsLWh7YpuVOBSVGspdyaRlDj8Z9+UCwR3PphhFJEBBvGQMR9eiea+MabqtuHzAEiVXG5EQ6LeAtBeXJMa4NYPNBn9rk2r0cWTDbu4b1SpUVVKW5sxZS/mGniMy56gDwJNMsZGCjRRQua3orA3fPzZmKXkzEucqdxWe4bSYDX8hGa4OcwMxGp/JnGivnsyl0OOjJgQnvw8pkpH/kazd8GukNWCCEdhsrZpTN69054/TH8Za/UJUpz5F9NyZpHgA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR07MB5381.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(366004)(396003)(346002)(376002)(39860400002)(36092001)(66446008)(186003)(66556008)(5660300002)(55016002)(66476007)(71200400001)(9686003)(107886003)(86362001)(6916009)(2906002)(4326008)(64756008)(478600001)(52536014)(8676002)(33656002)(66946007)(8936002)(83380400001)(316002)(54906003)(76116006)(38100700002)(26005)(7696005)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?HxsgTsdbcBiUed91PjX93FrthDiijk99EPABMYqv718JoOvZCTXRA3g4BXeJ?=
- =?us-ascii?Q?C5Ge37uYLnC1ejsq88FRBCrA74yK1Hp82ldvcoZiGXlgRqA5qqEazym/CrBr?=
- =?us-ascii?Q?pELKr4lcgkw6nzMz6cpQ0cOyfPmb9+fq6f8oc3WIjAKMjN3vKJjr1sDH5rsg?=
- =?us-ascii?Q?Im0oGyEmLeNfM8tWERomNUngWni1In0ViSK5uo+31W5ACk1oJeNshUvtyJ9S?=
- =?us-ascii?Q?Hn/X3qtbtPQD/fDve3Pk0ZIfbmQZPth63hAruL3mVvdFu2cPugWHVk8ONkeF?=
- =?us-ascii?Q?50RvU46Q9iRi/I/pk0vvupxtxTDSIZdwu8O2K1rgZYtGLXSsZOsVibwTI0gI?=
- =?us-ascii?Q?gXM+vokuZxnMd9pMpHWh8Xm1k4YJAjBjnDnH7/BMI/UeDGKCSUAI3qhSNWJF?=
- =?us-ascii?Q?+MW43VwHvB9SGYWBoQuK7q8p4d3j9jroVVBxec3cCAI035ipWno2NNws/JXD?=
- =?us-ascii?Q?OHh/MDvbZTTVFQYWib2jwLO+Q85853iSTv0dpfdiPGV1GvZgwtWPxBD9cwl5?=
- =?us-ascii?Q?6XLmdTT0jZlCnvf9fZqcYetclj78FdWARe7mG97t6h5G7XzHqyOKiCAH23h1?=
- =?us-ascii?Q?MjBWrvKo+uaa57lgwIWfpcHiRf5N3qyENr0NRxr9+eN1H6OmfwUpZ1A9QE0M?=
- =?us-ascii?Q?UU6/eHjq0DvZsQ2CxorNqVDqBbPkCKZDlXV3Z29oogUseA/V4klSAohBLQ6C?=
- =?us-ascii?Q?ZhocesRDBdwnmCYCSbdqSDE7HEe2aZaVAHpS5D32JDhtYa/06KtsA5nkl8pt?=
- =?us-ascii?Q?SjMih0PpDv+csA432q5WTU/VhdxWEVusrkFzz2grGOwPP1bdh5+nSBkbwCGT?=
- =?us-ascii?Q?Fyg9QkSmGKRBDsOSEVeXee8elH2Lm9ZdvWSo8XP6rZik9utvgGDx6keUawcB?=
- =?us-ascii?Q?yZb5YO7HpcyfKCoR6wHgGWJcFMA9VemKjo4GKpe01G8KXISenzPQrS/bub0D?=
- =?us-ascii?Q?HxBXJKKqi2NlhARTYqz9aBy5X8ufJhzsBDUd6inelqXdn/f4mMqtB7l/EB8Q?=
- =?us-ascii?Q?bELSh85K1CYIfHfl0PAbSdyrJJN08ak43FqHJ1CTayMvOsJgri/dd8FjSHqZ?=
- =?us-ascii?Q?fU1O09VwaQ85AoaQuoOq7opVY9C9e4P3b0im2+2P7SgsVCEYKzbB05KLo9uq?=
- =?us-ascii?Q?0FVt7EgHV0IDo1P2xcqgFRybraKCXZZ3wGdg5kyyZF5k8fBA+uYwnqDwBT9t?=
- =?us-ascii?Q?pInx4iA/p2OKu4kg4rYEPt8qzNQ6v4XyS73TsmNO5DtSV+6DB9Oj+L8HJBhK?=
- =?us-ascii?Q?j154LhJLYBXwiWjnyhnDYe9WaZhiiFxbC8DNW38BB5ZRYHGp13zVVgNkIpvy?=
- =?us-ascii?Q?8Ng=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S230158AbhDLFOh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Apr 2021 01:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229581AbhDLFOh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Apr 2021 01:14:37 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB7AC06138C
+        for <linux-usb@vger.kernel.org>; Sun, 11 Apr 2021 22:14:19 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id em21-20020a17090b0155b029014e204a81e6so1358180pjb.1
+        for <linux-usb@vger.kernel.org>; Sun, 11 Apr 2021 22:14:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QShRKzsEMp6U8GpuK5A8DEeE3/Uf7j3/vVAxV0LlqQc=;
+        b=AIiw6hUM7qMzpIYYYhYaG+qhav+fbxWTnxxgdFbFOjCbtoFg1oVT8kC6jRXF5sTGG8
+         OPedReYxorhiKILob9A256qYhQSr0Eonok0fGQTB1nvGMc/dzLnSXALXQ/XN7tH6n4vY
+         3KKyoqnRbv1Av+paR2BV5f8gTACO88Qt5VhiA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QShRKzsEMp6U8GpuK5A8DEeE3/Uf7j3/vVAxV0LlqQc=;
+        b=WnJ2mpTPsw1ToJhtj2aesHoxblJmgpoC0QyUigP9S+bou7tQdShl1sFY8NEpccV5Rw
+         ZbEk+xj0ZprberliMiUXhR0wQxTQM/o4TexKscVRlwt9qb9+Om3LdQnmtCe1gMQ2Zeih
+         Qypc1me+c9bPypLfB8ILAEGwgABDjqg3wm5Q9AhtrtBnpBrAAo0xmACAO3CLqSBXDxNG
+         TqhsUgw9XRCqkBBOFcL/r+XKRBqUDfS6K2vL7El/tyZebSWW2GR4s+iS2IkpXfQxlWgk
+         8ohr7FCMj95jpJvimuMZR8ZoxVw0L9vYqKHxPo1derlwfVLD2L2XvQCNVyCun8Vg7lMR
+         Y/+Q==
+X-Gm-Message-State: AOAM531K3UObCicpWpgNQfJZTj+HMjJsi8rEgs0AAQnhVp1Ru/tX6acN
+        9ynEQcn9sPVqa/E1QRa6dHyOX3L5+lKcKQ35IoOgIw==
+X-Google-Smtp-Source: ABdhPJyDO64UupsvHzKZ+uXicHV9pojGVjsnKvKeIpeBF5UnTZUYcv5/4kikw6z/aLV0TJ+GOWF+/7loV4mBXH53cLE=
+X-Received: by 2002:a17:90b:349:: with SMTP id fh9mr4936936pjb.126.1618204459324;
+ Sun, 11 Apr 2021 22:14:19 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR07MB5381.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ce7e749-1920-4142-a0df-08d8fd634af7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2021 03:30:17.2648
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xmBdTgkcG5nogEpcuNLrgH5fSHNl53cblFju4CitkdqZjIJ1u5YStWSU6G98fNt2on/oZckl58yC1b5fI1Tmw70Woxi1iwk4mVbfT+WE1iA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB4328
-X-Proofpoint-ORIG-GUID: JqFrxKfUQRxCyC25T9KJ5RppvcTLcSiJ
-X-Proofpoint-GUID: JqFrxKfUQRxCyC25T9KJ5RppvcTLcSiJ
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-12_02:2021-04-09,2021-04-12 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 mlxscore=0
- lowpriorityscore=0 phishscore=0 adultscore=0 suspectscore=0 spamscore=0
- impostorscore=0 mlxlogscore=757 malwarescore=0 priorityscore=1501
- clxscore=1015 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104120021
+References: <1617874514-12282-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1617874514-12282-4-git-send-email-chunfeng.yun@mediatek.com>
+ <CAATdQgArnkdmbZefF4h7xp6=j-wHLgdQs1K0cDv06sP4eVdHmw@mail.gmail.com> <1617958441.12105.39.camel@mhfsdcap03>
+In-Reply-To: <1617958441.12105.39.camel@mhfsdcap03>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Mon, 12 Apr 2021 13:14:09 +0800
+Message-ID: <CAATdQgCjNbUKsJYZjr5wHbXV5y-7ZZrN=URKccCv1d+S4zFiDA@mail.gmail.com>
+Subject: Re: [PATCH 4/6] usb: xhci-mtk: add support runtime PM
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-usb@vger.kernel.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Nicolas Boichat <drinkcat@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, Apr 9, 2021 at 4:54 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
 >
->On 21-04-07 08:36:29, Pawel Laszczak wrote:
->> From: Pawel Laszczak <pawell@cadence.com>
->>
->> Patch adds flag EP_UNCONFIGURED to detect whether endpoint was
->> unconfigured. This flag is set in cdnsp_reset_device after Reset Device
->> command. Among others this command disables all non control endpoints.
->> Flag is used in cdnsp_gadget_ep_disable to protect controller against
->> invoking Configure Endpoint command on disabled endpoint. Lack of this
->> protection in some cases caused that Configure Endpoint command complete=
-d
->> with Context State Error code completion.
->>
->> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP =
-DRD Driver")
->> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> On Fri, 2021-04-09 at 13:45 +0800, Ikjoon Jang wrote:
+> > On Thu, Apr 8, 2021 at 5:35 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+> > >
+> > > A dedicated wakeup irq will be used to handle runtime suspend/resume,
+> > > we use dev_pm_set_dedicated_wake_irq API to take care of requesting
+> > > and attaching wakeup irq, then the suspend/resume framework will help
+> > > to enable/disable wakeup irq.
+> > >
+> > > The runtime PM is default off since some platforms may not support it.
+> > > users can enable it via power/control (set "auto") in sysfs.
+> > >
+> > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > > ---
+> > >  drivers/usb/host/xhci-mtk.c | 140 +++++++++++++++++++++++++++++++-----
+> > >  1 file changed, 124 insertions(+), 16 deletions(-)
+> > >
+> > > diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+> > > index a74764ab914a..30927f4064d4 100644
+> > > --- a/drivers/usb/host/xhci-mtk.c
+> > > +++ b/drivers/usb/host/xhci-mtk.c
+> > > @@ -16,6 +16,7 @@
+> > >  #include <linux/of.h>
+> > >  #include <linux/platform_device.h>
+> > >  #include <linux/pm_runtime.h>
+> > > +#include <linux/pm_wakeirq.h>
+> > >  #include <linux/regmap.h>
+> > >  #include <linux/regulator/consumer.h>
+> > >
+> > > @@ -358,7 +359,6 @@ static int usb_wakeup_of_property_parse(struct xhci_hcd_mtk *mtk,
+> > >                         mtk->uwk_reg_base, mtk->uwk_vers);
+> > >
+> > >         return PTR_ERR_OR_ZERO(mtk->uwk);
+> > > -
+> > >  }
+> > >
+> > >  static void usb_wakeup_set(struct xhci_hcd_mtk *mtk, bool enable)
+> > > @@ -458,6 +458,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+> > >         struct resource *res;
+> > >         struct usb_hcd *hcd;
+> > >         int ret = -ENODEV;
+> > > +       int wakeup_irq;
+> > >         int irq;
+> > >
+> > >         if (usb_disabled())
+> > > @@ -485,6 +486,21 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+> > >         if (ret)
+> > >                 return ret;
+> > >
+> > > +       irq = platform_get_irq_byname_optional(pdev, "host");
+> > > +       if (irq < 0) {
+> > > +               if (irq == -EPROBE_DEFER)
+> > > +                       return irq;
+> > > +
+> > > +               /* for backward compatibility */
+> > > +               irq = platform_get_irq(pdev, 0);
+> > > +               if (irq < 0)
+> > > +                       return irq;
+> > > +       }
+> > > +
+> > > +       wakeup_irq = platform_get_irq_byname_optional(pdev, "wakeup");
+> > > +       if (wakeup_irq == -EPROBE_DEFER)
+> > > +               return wakeup_irq;
+> > > +
+> > >         mtk->lpm_support = of_property_read_bool(node, "usb3-lpm-capable");
+> > >         /* optional property, ignore the error if it does not exist */
+> > >         of_property_read_u32(node, "mediatek,u3p-dis-msk",
+> > > @@ -496,9 +512,11 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+> > >                 return ret;
+> > >         }
+> > >
+> > > +       pm_runtime_set_active(dev);
+> > > +       pm_runtime_use_autosuspend(dev);
+> > > +       pm_runtime_set_autosuspend_delay(dev, 4000);
+> > >         pm_runtime_enable(dev);
+> > >         pm_runtime_get_sync(dev);
+> > > -       device_enable_async_suspend(dev);
+> > >
+> > >         ret = xhci_mtk_ldos_enable(mtk);
+> > >         if (ret)
+> > > @@ -508,12 +526,6 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+> > >         if (ret)
+> > >                 goto disable_ldos;
+> > >
+> > > -       irq = platform_get_irq(pdev, 0);
+> > > -       if (irq < 0) {
+> > > -               ret = irq;
+> > > -               goto disable_clk;
+> > > -       }
+> > > -
+> > >         hcd = usb_create_hcd(driver, dev, dev_name(dev));
+> > >         if (!hcd) {
+> > >                 ret = -ENOMEM;
+> > > @@ -579,8 +591,26 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+> > >         if (ret)
+> > >                 goto dealloc_usb2_hcd;
+> > >
+> > > +       if (wakeup_irq > 0) {
+> > > +               ret = dev_pm_set_dedicated_wake_irq(dev, wakeup_irq);
+> > > +               if (ret) {
+> > > +                       dev_err(dev, "set wakeup irq %d failed\n", wakeup_irq);
+> > > +                       goto dealloc_usb3_hcd;
+> > > +               }
+> > > +               dev_info(dev, "wakeup irq %d\n", wakeup_irq);
+> > > +       }
+> > > +
+> > > +       device_enable_async_suspend(dev);
+> > > +       pm_runtime_mark_last_busy(dev);
+> > > +       pm_runtime_put_autosuspend(dev);
+> > > +       pm_runtime_forbid(dev);
+> > > +
+> > >         return 0;
+> > >
+> > > +dealloc_usb3_hcd:
+> > > +       usb_remove_hcd(xhci->shared_hcd);
+> > > +       xhci->shared_hcd = NULL;
+> > > +
+> > >  dealloc_usb2_hcd:
+> > >         usb_remove_hcd(hcd);
+> > >
+> > > @@ -601,25 +631,26 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+> > >         xhci_mtk_ldos_disable(mtk);
+> > >
+> > >  disable_pm:
+> > > -       pm_runtime_put_sync(dev);
+> > > +       pm_runtime_put_sync_autosuspend(dev);
+> > >         pm_runtime_disable(dev);
+> > >         return ret;
+> > >  }
+> > >
+> > > -static int xhci_mtk_remove(struct platform_device *dev)
+> > > +static int xhci_mtk_remove(struct platform_device *pdev)
+> > >  {
+> > > -       struct xhci_hcd_mtk *mtk = platform_get_drvdata(dev);
+> > > +       struct xhci_hcd_mtk *mtk = platform_get_drvdata(pdev);
+> > >         struct usb_hcd  *hcd = mtk->hcd;
+> > >         struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+> > >         struct usb_hcd  *shared_hcd = xhci->shared_hcd;
+> > > +       struct device *dev = &pdev->dev;
+> > >
+> > > -       pm_runtime_put_noidle(&dev->dev);
+> > > -       pm_runtime_disable(&dev->dev);
+> > > +       pm_runtime_get_sync(dev);
+> > > +       xhci->xhc_state |= XHCI_STATE_REMOVING;
+> > > +       dev_pm_clear_wake_irq(dev);
+> > > +       device_init_wakeup(dev, false);
+> > >
+> > >         usb_remove_hcd(shared_hcd);
+> > >         xhci->shared_hcd = NULL;
+> > > -       device_init_wakeup(&dev->dev, false);
+> > > -
+> > >         usb_remove_hcd(hcd);
+> > >         usb_put_hcd(shared_hcd);
+> > >         usb_put_hcd(hcd);
+> > > @@ -627,6 +658,10 @@ static int xhci_mtk_remove(struct platform_device *dev)
+> > >         xhci_mtk_clks_disable(mtk);
+> > >         xhci_mtk_ldos_disable(mtk);
+> > >
+> > > +       pm_runtime_disable(dev);
+> > > +       pm_runtime_put_noidle(dev);
+> > > +       pm_runtime_set_suspended(dev);
+> > > +
+> > >         return 0;
+> > >  }
+> > >
+> > > @@ -690,10 +725,83 @@ static int __maybe_unused xhci_mtk_resume(struct device *dev)
+> > >         return ret;
+> > >  }
+> > >
+> > > +static int check_rhub_status(struct xhci_hcd *xhci, struct xhci_hub *rhub)
+> > > +{
+> > > +       u32 suspended_ports;
+> > > +       u32 status;
+> > > +       int num_ports;
+> > > +       int i;
+> > > +
+> > > +       num_ports = rhub->num_ports;
+> > > +       suspended_ports = rhub->bus_state.suspended_ports;
+> > > +       for (i = 0; i < num_ports; i++) {
+> > > +               if (!(suspended_ports & BIT(i))) {
+> > > +                       status = readl(rhub->ports[i]->addr);
+> > > +                       if (status & PORT_CONNECT)
+> >
+> > So this pm_runtime support is activated only when there's no devices
+> > connected at all?
+> No, if the connected devices also support runtime suspend, it will enter
+> suspend mode when no data transfer, then the controller can enter
+> suspend too
+> > I think this will always return -EBUSY with my board having an on-board hub
+> > connected to both rhubs.
+> the on-board hub supports runtime suspend by default, so if no devices
+> connected, it will enter suspend
+
+Sorry, you're correct. I was confused that the condition was
+(suspended && connect)
+My on-board hub connected to rhub is always in a suspended state
+whenever it's called.
+
+However, I don't think this could return -EBUSY
+rpm_suspend() only be called when all the descendants are in sleep already.
+Did you see any cases of this function returning -EBUSY or any concerns on here?
+
+
 >
->Pawel, it is a little late for v5.12, I apply it to v5.13-rc1 if you
->don't mind.
+> >
+> > > +                               return -EBUSY;
+> > > +               }
+> > > +       }
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +
+> > > +/*
+> > > + * check the bus whether it could suspend or not
+> > > + * the bus will suspend if the downstream ports are already suspended,
+> > > + * or no devices connected.
+> > > + */
+> > > +static int check_bus_status(struct xhci_hcd *xhci)
+> > > +{
+> > > +       int ret;
+> > > +
+> > > +       ret = check_rhub_status(xhci, &xhci->usb3_rhub);
+> > > +       if (ret)
+> > > +               return ret;
+> > > +
+> > > +       return check_rhub_status(xhci, &xhci->usb2_rhub);
+> > > +}
+> > > +
+> > > +static int __maybe_unused xhci_mtk_runtime_suspend(struct device *dev)
+> > > +{
+> > > +       struct xhci_hcd_mtk  *mtk = dev_get_drvdata(dev);
+> > > +       struct xhci_hcd *xhci = hcd_to_xhci(mtk->hcd);
+> > > +       int ret = 0;
+> > > +
+> > > +       if (xhci->xhc_state)
+> > > +               return -ESHUTDOWN;
+> > > +
+> > > +       if (device_may_wakeup(dev)) {
+> > > +               ret = check_bus_status(xhci);
+> > > +               if (!ret)
+> > > +                       ret = xhci_mtk_suspend(dev);
+> > > +       }
+> > > +
+> > > +       /* -EBUSY: let PM automatically reschedule another autosuspend */
+> > > +       return ret ? -EBUSY : 0;
+> > > +}
+> > > +
+> > > +static int __maybe_unused xhci_mtk_runtime_resume(struct device *dev)
+> > > +{
+> > > +       struct xhci_hcd_mtk  *mtk = dev_get_drvdata(dev);
+> > > +       struct xhci_hcd *xhci = hcd_to_xhci(mtk->hcd);
+> > > +       int ret = 0;
+> > > +
+> > > +       if (xhci->xhc_state)
+> > > +               return -ESHUTDOWN;
+> > > +
+> > > +       if (device_may_wakeup(dev))
+> > > +               ret = xhci_mtk_resume(dev);
+> > > +
+> > > +       return ret;
+> > > +}
+> > > +
+> > >  static const struct dev_pm_ops xhci_mtk_pm_ops = {
+> > >         SET_SYSTEM_SLEEP_PM_OPS(xhci_mtk_suspend, xhci_mtk_resume)
+> > > +       SET_RUNTIME_PM_OPS(xhci_mtk_runtime_suspend,
+> > > +                          xhci_mtk_runtime_resume, NULL)
+> > >  };
+> > > -#define DEV_PM_OPS IS_ENABLED(CONFIG_PM) ? &xhci_mtk_pm_ops : NULL
+> > > +
+> > > +#define DEV_PM_OPS (IS_ENABLED(CONFIG_PM) ? &xhci_mtk_pm_ops : NULL)
+> > >
+> > >  static const struct of_device_id mtk_xhci_of_match[] = {
+> > >         { .compatible = "mediatek,mt8173-xhci"},
+> > > --
+> > > 2.18.0
+> > >
 >
->Peter
-
-Yes, you can apply it to v5.13-rc1.
-
-Thanks.
-
-r
->>
->> ---
->> Changelog:
->> v2:
->> - removed useless blank line
->> - changed the EP_UNCONFIGURED to limit changes in patch
->>
->>  drivers/usb/cdns3/cdnsp-gadget.c | 17 ++++++++++++-----
->>  drivers/usb/cdns3/cdnsp-gadget.h |  1 +
->>  2 files changed, 13 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-=
-gadget.c
->> index d7d4bdd57f46..56707b6b0f57 100644
->> --- a/drivers/usb/cdns3/cdnsp-gadget.c
->> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
->> @@ -727,7 +727,7 @@ int cdnsp_reset_device(struct cdnsp_device *pdev)
->>  	 * are in Disabled state.
->>  	 */
->>  	for (i =3D 1; i < CDNSP_ENDPOINTS_NUM; ++i)
->> -		pdev->eps[i].ep_state |=3D EP_STOPPED;
->> +		pdev->eps[i].ep_state |=3D EP_STOPPED | EP_UNCONFIGURED;
->>
->>  	trace_cdnsp_handle_cmd_reset_dev(slot_ctx);
->>
->> @@ -942,6 +942,7 @@ static int cdnsp_gadget_ep_enable(struct usb_ep *ep,
->>
->>  	pep =3D to_cdnsp_ep(ep);
->>  	pdev =3D pep->pdev;
->> +	pep->ep_state &=3D ~EP_UNCONFIGURED;
->>
->>  	if (dev_WARN_ONCE(pdev->dev, pep->ep_state & EP_ENABLED,
->>  			  "%s is already enabled\n", pep->name))
->> @@ -1023,9 +1024,13 @@ static int cdnsp_gadget_ep_disable(struct usb_ep =
-*ep)
->>  		goto finish;
->>  	}
->>
->> -	cdnsp_cmd_stop_ep(pdev, pep);
->>  	pep->ep_state |=3D EP_DIS_IN_RROGRESS;
->> -	cdnsp_cmd_flush_ep(pdev, pep);
->> +
->> +	/* Endpoint was unconfigured by Reset Device command. */
->> +	if (!(pep->ep_state & EP_UNCONFIGURED)) {
->> +		cdnsp_cmd_stop_ep(pdev, pep);
->> +		cdnsp_cmd_flush_ep(pdev, pep);
->> +	}
->>
->>  	/* Remove all queued USB requests. */
->>  	while (!list_empty(&pep->pending_list)) {
->> @@ -1043,10 +1048,12 @@ static int cdnsp_gadget_ep_disable(struct usb_ep=
- *ep)
->>
->>  	cdnsp_endpoint_zero(pdev, pep);
->>
->> -	ret =3D cdnsp_update_eps_configuration(pdev, pep);
->> +	if (!(pep->ep_state & EP_UNCONFIGURED))
->> +		ret =3D cdnsp_update_eps_configuration(pdev, pep);
->> +
->>  	cdnsp_free_endpoint_rings(pdev, pep);
->>
->> -	pep->ep_state &=3D ~EP_ENABLED;
->> +	pep->ep_state &=3D ~(EP_ENABLED | EP_UNCONFIGURED);
->>  	pep->ep_state |=3D EP_STOPPED;
->>
->>  finish:
->> diff --git a/drivers/usb/cdns3/cdnsp-gadget.h b/drivers/usb/cdns3/cdnsp-=
-gadget.h
->> index 6bbb26548c04..783ca8ffde00 100644
->> --- a/drivers/usb/cdns3/cdnsp-gadget.h
->> +++ b/drivers/usb/cdns3/cdnsp-gadget.h
->> @@ -835,6 +835,7 @@ struct cdnsp_ep {
->>  #define EP_WEDGE		BIT(4)
->>  #define EP0_HALTED_STATUS	BIT(5)
->>  #define EP_HAS_STREAMS		BIT(6)
->> +#define EP_UNCONFIGURED		BIT(7)
->>
->>  	bool skip;
->>  };
->> --
->> 2.25.1
->>
->
->--
->
->Thanks,
->Peter Chen
-
---
-
-Regards,
-Pawel Laszczak
