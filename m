@@ -2,103 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D1F35B73D
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Apr 2021 00:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7C435B7F5
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Apr 2021 03:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235744AbhDKWgJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Apr 2021 18:36:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37434 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235229AbhDKWgI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 11 Apr 2021 18:36:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A3DE3611C9;
-        Sun, 11 Apr 2021 22:35:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618180551;
-        bh=x8mqF0WInvK9OfwQO1hcFmDU9JRYJGc/cWWpiaVohCA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nbpiOb+KW6T8Yu6cc003grDvaAVARJCsHQlIZ1Z2jglvU+g5bGCj+ZjtFNDxSrJPz
-         Kb4EPbq6cR6qviN4N5nXIol9fgqh5YPgo9PIG5d+eIf9bzpwKN4I02ZikS7VwBDgZb
-         jK3R3DqzuzCskYiJNfPqeFyASQkXephq/EKDApXKvzxiSOVmIDj3BYp/4CElVn3uQ6
-         5vTXt5se2uf6uwMvKcDRnsFa6uDnRvdzNwLbZqDO7QT8Apr0qdIN4ddkVpwofCUgWe
-         fJSogBfscHALhWgBN4OtbkPeyP7jNEHNOK6ilDsIL/uBLUYAA3sYzDJcXeyeg3J1rx
-         cE5oLQt/UYBAg==
-Date:   Mon, 12 Apr 2021 06:35:43 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [GIT PULL] usb: changes for v5.13-rc1
-Message-ID: <20210411223542.GA26127@b29397-desktop>
+        id S236386AbhDLBPR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 11 Apr 2021 21:15:17 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:15661 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235835AbhDLBPR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Apr 2021 21:15:17 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FJW135L2yzpXH7;
+        Mon, 12 Apr 2021 09:12:07 +0800 (CST)
+Received: from [10.67.102.118] (10.67.102.118) by
+ DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
+ 14.3.498.0; Mon, 12 Apr 2021 09:14:52 +0800
+Subject: Re: [PATCH v2] USB:ohci:fix ohci interruption problem
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <liudongdong3@huawei.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kong.kongxinwei@hisilicon.com>,
+        <yisen.zhuang@huawei.com>
+References: <1617954422-36617-1-git-send-email-liulongfang@huawei.com>
+ <20210409150744.GB1333284@rowland.harvard.edu>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <ced54f8a-bc17-c3a6-80b8-1664647527e7@huawei.com>
+Date:   Mon, 12 Apr 2021 09:14:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210409150744.GB1333284@rowland.harvard.edu>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.118]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 5e17812c22bcd65fa9202595eef4bbf8fa814144:
+On 2021/4/9 23:07, Alan Stern wrote:
+> On Fri, Apr 09, 2021 at 03:47:02PM +0800, Longfang Liu wrote:
+>> The operating method of the system entering S4 sleep mode:
+>> echo reboot > /sys/power/disk
+>> echo disk > /sys/power/state
+>>
+>> When OHCI enters the S4 sleep state, check the log and find that
+>> the USB sleep process will call check_root_hub_suspend() and
+>> ohci_bus_suspend() instead ohci_suspend() and ohci_bus_suspend(),
+>> which will cause the OHCI interrupt to not be closed.
+>>
+>> At this time, if just one device interrupt is reported. the
+>> driver will not process and close this device interrupt. It will cause
+>> the entire system to be stuck during sleep, causing the device to
+>> fail to respond.
+>>
+>> When the abnormal interruption reaches 100,000 times, the system will
+>> forcibly close the interruption and make the device unusable.
+>>
+>> Because the root cause of the problem is that ohci_suspend is not
+>> called to perform normal interrupt shutdown operations when the system
+>> enters S4 sleep mode.
+>>
+>> Therefore, our solution is to specify freeze interface in this mode to
+>> perform normal suspend_common() operations, and call ohci_suspend()
+>> after check_root_hub_suspend() is executed through the suspend_common()
+>> operation.
+>>
+>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+>> ---
+>>
+>> Changes in V2:
+>> 	- Modify comment and patch version information.
+> 
+> Please, instead of sending the same incorrect patch over and over again, 
+> spend some time figuring out what is really going wrong.  I have already 
+> explained why this patch is not the right thing to do.
+> 
+> You have to determine why the poweroff callback in hcd-pci.c (which 
+> points to hcd_pci_suspend) isn't getting called.  That's the real 
+> explanation for your problem.
+> 
+> Alan Stern
+> 
 
-  usb: dwc3: document usb_psy in struct dwc3 (2021-03-03 11:09:29 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git/ tags/usb-v5.13-rc1
-
-for you to fetch changes up to 6ef82c8acf5ca40d8912947696e9d52956a03cec:
-
-  usb: cdnsp: Fixes issue with Configure Endpoint command (2021-04-10 09:10:44 +0800)
-
-----------------------------------------------------------------
-Several Cadence3 improvements are introduced in v5.13-rc1:
-- Add recovery during resume if the controller was lost power at system suspend
-- Reduce DMA memory footprint
-- Other small improvements
-
-----------------------------------------------------------------
-Colin Ian King (1):
-      usb: cdnsp: remove redundant initialization of variable ret
-
-Dmitry Osipenko (1):
-      usb: chipidea: tegra: Silence deferred probe error
-
-Frank Li (3):
-      usb: cdns3: add power lost support for system resume
-      usb: cdns3: imx: add power lost support for system resume
-      usb: cdns3: fix static checker warning.
-
-Pawel Laszczak (1):
-      usb: cdnsp: Fixes issue with Configure Endpoint command
-
-Peter Chen (1):
-      usb: cdns3: trace: delete the trace parameter for request->trb
-
-Sanket Parmar (2):
-      usb: cdns3: Use dma_pool_* api to alloc trb pool
-      usb: cdns3: Optimize DMA request buffer allocation
-
-Wang Qing (1):
-      usb: cdns3: delete repeated clear operations
-
-Wei Yongjun (1):
-      usb: cdns3: imx: mark cdns_imx_system_resume as __maybe_unused
-
- drivers/usb/cdns3/cdns3-gadget.c     | 73 ++++++++++++++++++++++--------------
- drivers/usb/cdns3/cdns3-gadget.h     |  3 ++
- drivers/usb/cdns3/cdns3-imx.c        | 34 +++++++++++++++++
- drivers/usb/cdns3/cdns3-plat.c       | 23 +++++++++++-
- drivers/usb/cdns3/cdns3-trace.h      |  5 +--
- drivers/usb/cdns3/cdnsp-gadget.c     | 17 ++++++---
- drivers/usb/cdns3/cdnsp-gadget.h     |  1 +
- drivers/usb/cdns3/cdnsp-mem.c        |  3 +-
- drivers/usb/cdns3/core.c             | 29 +++++++++++++-
- drivers/usb/cdns3/drd.c              | 15 ++++++++
- drivers/usb/cdns3/drd.h              |  2 +-
- drivers/usb/chipidea/ci_hdrc_tegra.c |  8 ++--
- 12 files changed, 165 insertions(+), 48 deletions(-)
-
--- 
-
+Ok! I need to analyze the PCI device sleep and wake process to see
+why it will not be called.
 Thanks,
-Peter Chen
-
+Longfang.
+>> Changes in V1:
+>> 	- Call suspend_common by adding the hcd_pci_freeze function turn off
+>> 	the interrupt instead of adding a shutdown operation in ohci_bus_suspend
+>> 	to turn off the interrupt.
+>>
+>>  drivers/usb/core/hcd-pci.c | 7 ++++++-
+>>  1 file changed, 6 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+>> index 1547aa6..c5844a3 100644
+>> --- a/drivers/usb/core/hcd-pci.c
+>> +++ b/drivers/usb/core/hcd-pci.c
+>> @@ -509,6 +509,11 @@ static int resume_common(struct device *dev, int event)
+>>  
+>>  #ifdef	CONFIG_PM_SLEEP
+>>  
+>> +static int hcd_pci_freeze(struct device *dev)
+>> +{
+>> +	return suspend_common(dev, device_may_wakeup(dev));
+>> +}
+>> +
+>>  static int hcd_pci_suspend(struct device *dev)
+>>  {
+>>  	return suspend_common(dev, device_may_wakeup(dev));
+>> @@ -605,7 +610,7 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
+>>  	.suspend_noirq	= hcd_pci_suspend_noirq,
+>>  	.resume_noirq	= hcd_pci_resume_noirq,
+>>  	.resume		= hcd_pci_resume,
+>> -	.freeze		= check_root_hub_suspended,
+>> +	.freeze		= hcd_pci_freeze,
+>>  	.freeze_noirq	= check_root_hub_suspended,
+>>  	.thaw_noirq	= NULL,
+>>  	.thaw		= NULL,
+>> -- 
+>> 2.8.1
+>>
+> .
+> 
