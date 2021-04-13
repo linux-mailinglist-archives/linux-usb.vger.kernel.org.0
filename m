@@ -2,110 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7302035DB29
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Apr 2021 11:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F9835DC3A
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Apr 2021 12:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240752AbhDMJbS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Apr 2021 05:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240515AbhDMJbR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Apr 2021 05:31:17 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96739C061574;
-        Tue, 13 Apr 2021 02:30:57 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id x13so16140325lfr.2;
-        Tue, 13 Apr 2021 02:30:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=s7QZvPTeYxY+yj8nBXFERhvOKZl4KW+WbFKRapSB+Gk=;
-        b=KUGgQjqN6OqzSybB2EqFkEX52UuMFW3WngbAnP7wv9ejk064nD1ccqX4tMz2jJzKjU
-         rpU9+inYXIj+kkrspDy55Sh9ZU0DwbfFE3dSZkm8YCLRkM24S60KiBeIbdZpdHwqvVAf
-         MlLAAPfxVQzaDJPVXYBWHK0CDaUiJEdcr7UwTZ7wtEE+J8GSUZLrAorbOrJ/MBaZuJZN
-         l+k6PwGQ2gvpkuCYMI0sj748QoYmnuHvcOWsVfnilb5eZHeVFGAghmD5hwp4n7hC6Tm+
-         cvss4G1HIDL8HCUGIbpFEHKjA+8KCTMopRybzuWjx7Tsc9RQpo6BJGakTJoZErXfqoS7
-         +J3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=s7QZvPTeYxY+yj8nBXFERhvOKZl4KW+WbFKRapSB+Gk=;
-        b=kv2KXGRinbCLTqzdEOWE/TtomBNTJC8uodXPtp4zPgcejvZ6jQqzVuN8vUzP5k+BGa
-         Ts7izE2arjzaE7/pIogj9WoWpObxlDZ4WpEtww9IvQzxVHMc1v4Sj7SDBAENGlVeOMYc
-         05yNqTcYNTipWv5ivIN0lL6gQdmQGVpL7/gT44mJymci+5SpNNWp/f05GvXjeJSedNoD
-         aGE9RSW9JBUKjjfk6z9+PwxvUVxiqHx0dQmWL95va5m3Z8XPWYr2aQkXi9Jd4pYPXsUx
-         Hpflv7LQvzwNWyGiTTp1vbxQkaK5PZqVZD2xfdOkUdPr1VaGbkuOwR/A5jvQIeFRNIkd
-         GdXw==
-X-Gm-Message-State: AOAM532jpzmNg50CdYia9Pni92auQb3q1Or0rOlCJL0O2HqXd/cArMKo
-        srAhacHKFxOCDBUGll6oOBY=
-X-Google-Smtp-Source: ABdhPJz5SANHlCPPwZiXcvRHqQe7w8fxkTpOZfO2ibmZFca7MVnO2o4zMf3rTDtqpyTfRURy9IjM8Q==
-X-Received: by 2002:a19:7d02:: with SMTP id y2mr23649086lfc.187.1618306254698;
-        Tue, 13 Apr 2021 02:30:54 -0700 (PDT)
-Received: from [192.168.1.100] ([178.176.76.152])
-        by smtp.gmail.com with ESMTPSA id z22sm2474030lfu.112.2021.04.13.02.30.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Apr 2021 02:30:54 -0700 (PDT)
-Subject: Re: [PATCH v2 11/12] usb: dwc2: Add clock gating exiting flow by
- system resume
-To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
-References: <cover.1618297800.git.Arthur.Petrosyan@synopsys.com>
- <20210413073723.BA0FEA022E@mailhost.synopsys.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-Message-ID: <2062887e-f1c6-a79c-8af1-31852a7f877f@gmail.com>
-Date:   Tue, 13 Apr 2021 12:30:49 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        id S229773AbhDMKLD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Apr 2021 06:11:03 -0400
+Received: from mga01.intel.com ([192.55.52.88]:59719 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229683AbhDMKLC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 13 Apr 2021 06:11:02 -0400
+IronPort-SDR: 1tqe/SUPVgjHjyWd94glvPqmP7xKm/e7PzrlivvgMDqGhgdhiHlzlC1SEgC3EfwpWetOlwAkP8
+ F5GRaD6wKYvQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9952"; a="214858415"
+X-IronPort-AV: E=Sophos;i="5.82,219,1613462400"; 
+   d="scan'208";a="214858415"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2021 03:10:41 -0700
+IronPort-SDR: hxizsNiTsndwYkY0Z/W3J7a9nfsQeBE+lKQMF/mqY9Nc+RRQmQ3kAS0YU/Y41vh9CJKdU/AEQ2
+ 0sXkN7gPT7IA==
+X-IronPort-AV: E=Sophos;i="5.82,219,1613462400"; 
+   d="scan'208";a="424186857"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2021 03:10:36 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 13 Apr 2021 13:10:34 +0300
+Date:   Tue, 13 Apr 2021 13:10:34 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: [GIT PULL] Thunderbolt/USB4 changes for v5.13 merge window
+Message-ID: <20210413101034.GA3253676@lahna.fi.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210413073723.BA0FEA022E@mailhost.synopsys.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 13.04.2021 10:37, Artur Petrosyan wrote:
+Hi Greg,
 
-> If not hibernation nor partial power down are supported,
+The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
 
-    s/not/neither/?
+  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
 
-> port resume is done using the clock gating programming flow.
-> 
-> Adds a new flow of exiting clock gating when PC is
-> resumed.
-> 
-> Signed-off-by: Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-> ---
->   Changes in v2:
->   - None
-> 
->   drivers/usb/dwc2/hcd.c | 22 ++++++++++++++++++++++
->   1 file changed, 22 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-> index 09dcd37b9ef8..04a1b53d65af 100644
-> --- a/drivers/usb/dwc2/hcd.c
-> +++ b/drivers/usb/dwc2/hcd.c
-> @@ -4445,6 +4445,28 @@ static int _dwc2_hcd_resume(struct usb_hcd *hcd)
->   		break;
->   	case DWC2_POWER_DOWN_PARAM_HIBERNATION:
->   	case DWC2_POWER_DOWN_PARAM_NONE:
-> +		/*
-> +		 * If not hibernation nor partial power down are supported,
+are available in the Git repository at:
 
-    s/not/neither/?
+  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.13-rc1
 
-[...]
+for you to fetch changes up to 6f3badead6a078cf3c71f381f9d84ac922984a00:
 
-MBR, Sergei
+  thunderbolt: Hide authorized attribute if router does not support PCIe tunnels (2021-04-09 12:26:24 +0300)
+
+----------------------------------------------------------------
+thunderbolt: Changes for v5.13 merge window
+
+This includes following Thunderbolt/USB4 changes for v5.13 merge window:
+
+  * Debugfs improvements
+
+  * Align the inter-domain (peer-to-peer) support with the USB4
+    inter-domain spec for better interoperability
+
+  * Add support for USB4 DROM and the new product descriptor
+
+  * More KUnit tests
+
+  * Detailed uevent for routers
+
+  * Few miscellaneous improvements
+
+All these have been in linux-next without reported issues.
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      thunderbolt: Unlock on error path in tb_domain_add()
+
+Gil Fine (3):
+      thunderbolt: debugfs: Handle fail reading block
+      thunderbolt: Drop unused functions tb_switch_is_[ice|tiger]_lake()
+      thunderbolt: debugfs: Show all accessible dwords
+
+Mika Westerberg (20):
+      thunderbolt: Disable retry logic for intra-domain control packets
+      thunderbolt: Do not pass timeout for tb_cfg_reset()
+      thunderbolt: Decrease control channel timeout for software connection manager
+      Documentation / thunderbolt: Drop speed/lanes entries for XDomain
+      thunderbolt: Add more logging to XDomain connections
+      thunderbolt: Do not re-establish XDomain DMA paths automatically
+      thunderbolt: Use pseudo-random number as initial property block generation
+      thunderbolt: Align XDomain protocol timeouts with the spec
+      thunderbolt: Add tb_property_copy_dir()
+      thunderbolt: Add support for maxhopid XDomain property
+      thunderbolt: Use dedicated flow control for DMA tunnels
+      thunderbolt: Drop unused tb_port_set_initial_credits()
+      thunderbolt: Allow multiple DMA tunnels over a single XDomain connection
+      net: thunderbolt: Align the driver to the USB4 networking spec
+      thunderbolt: Add KUnit tests for XDomain properties
+      thunderbolt: Add KUnit tests for DMA tunnels
+      thunderbolt: Check quirks in tb_switch_add()
+      thunderbolt: Add support for USB4 DROM
+      thunderbolt: Add details to router uevent
+      thunderbolt: Hide authorized attribute if router does not support PCIe tunnels
+
+ Documentation/ABI/testing/sysfs-bus-thunderbolt |  35 +-
+ drivers/net/thunderbolt.c                       |  56 ++-
+ drivers/thunderbolt/ctl.c                       |  21 +-
+ drivers/thunderbolt/ctl.h                       |   8 +-
+ drivers/thunderbolt/debugfs.c                   |  37 +-
+ drivers/thunderbolt/dma_test.c                  |  35 +-
+ drivers/thunderbolt/domain.c                    |  89 +++--
+ drivers/thunderbolt/eeprom.c                    | 105 +++--
+ drivers/thunderbolt/icm.c                       |  34 +-
+ drivers/thunderbolt/property.c                  |  71 ++++
+ drivers/thunderbolt/switch.c                    |  75 ++--
+ drivers/thunderbolt/tb.c                        |  52 ++-
+ drivers/thunderbolt/tb.h                        |  45 +--
+ drivers/thunderbolt/test.c                      | 492 ++++++++++++++++++++++++
+ drivers/thunderbolt/tunnel.c                    | 102 +++--
+ drivers/thunderbolt/tunnel.h                    |   8 +-
+ drivers/thunderbolt/xdomain.c                   | 416 ++++++++++++--------
+ include/linux/thunderbolt.h                     |  54 ++-
+ 18 files changed, 1292 insertions(+), 443 deletions(-)
