@@ -2,168 +2,390 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F2235D9B7
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Apr 2021 10:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6A235DA42
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Apr 2021 10:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240470AbhDMIMj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Apr 2021 04:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbhDMIMj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Apr 2021 04:12:39 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1038C061574
-        for <linux-usb@vger.kernel.org>; Tue, 13 Apr 2021 01:12:17 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id t11so3500763qtr.8
-        for <linux-usb@vger.kernel.org>; Tue, 13 Apr 2021 01:12:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=d12Y9lIvm9byUn0SmfXOlS4sJonP+P/fuF6Juefsf6E=;
-        b=dx59nD8YvzUjRAKMmEe8ZjDN6wLp/6yBkKTw03FUf7tcIeXd3nXwEWgjF9i+PW2LTJ
-         Njt3BpleKBhacmw70gkuWOl/yOl8qFhdQJ5jl8B0aiVTJt0GLNkqLX37kBR5yaWc2IdK
-         IQwiKLr9//ZaVQvzFNZMuOScdp9sBFAc0z7v6co2tPH1CR0mO3ktZ9vbPfsouUZstbZO
-         HM8dAlKPhlNOYVkG5O5eMrOpPK417AL6h9oqXaGQjiwdYa6dHfPbvFA3vQqRtdCXe/PI
-         NRWCfoDAqvNwVwupMHE9Z3XZ/lgDhqx659VqmsdUr0C8qlx+vxPtnyfX89uYW07FP6nD
-         Pdbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=d12Y9lIvm9byUn0SmfXOlS4sJonP+P/fuF6Juefsf6E=;
-        b=cV63Ruqcc0tCDrzPeDGhnUVKZrpIsF4467HJM3PnYih6Poh+owIZ0xhfqsLHV0spKa
-         bbqvqmFStl383ja6VZSx2PEvEZKJYfwh2ZADuG2h9mzBKFWDjofGfVPUF9TUUvC4Vhg7
-         XpO90PEcq5CKMZIplNAGnMIYorXFFsu4hCXr8504as95MjsqyoPK4CG7hRA/7wom+/mj
-         2SAIKLyPr0YeEJoygN9dj3JInj3qmYTMvRg6jScTTzDGBrA2b6ia7Z2Kf29yUj6zN9VW
-         OJDa+kNSJOOX06sBmPxT7w4mKf3Gj2caXntIwNOaCP9WIC89rVwoQ6nbbmNj8uHDOcEC
-         IT0Q==
-X-Gm-Message-State: AOAM532nPYIAFRGK2kjjvBlo0mmMPDb7oulbt8xI9/ArXqtY4uUeYU/u
-        fnj2XdIq+e8BUSlnDD42mJrWhVBBPjlh3BQznVs7Tw==
-X-Google-Smtp-Source: ABdhPJzsnUzLNTX+i5G5H/gHEPyYzJhNPKRvbEFWIG2MZ4p0lw0eyprjt/BHtYOoRI3BTl4TsaLYGoJHy+HbbSSW4JU=
-X-Received: by 2002:a05:622a:c3:: with SMTP id p3mr28974716qtw.43.1618301536606;
- Tue, 13 Apr 2021 01:12:16 -0700 (PDT)
+        id S243266AbhDMIpt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Apr 2021 04:45:49 -0400
+Received: from smtp.radex.nl ([178.250.146.7]:60624 "EHLO radex-web.radex.nl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229996AbhDMIpt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 13 Apr 2021 04:45:49 -0400
+Received: from [192.168.1.158] (cust-178-250-146-69.breedbanddelft.nl [178.250.146.69])
+        by radex-web.radex.nl (Postfix) with ESMTPS id 24A4824071;
+        Tue, 13 Apr 2021 10:45:28 +0200 (CEST)
+From:   Ferry Toth <fntoth@gmail.com>
+Subject: Re: USB network gadget / DWC3 issue
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        USB <linux-usb@vger.kernel.org>
+References: <CAHp75VeERhaPGAZc0HVs4fcDKXs+THc=_LFq_iEhWAR8vvURjw@mail.gmail.com>
+ <797f97b8-6558-35c4-2dc5-9deacdf0ba4d@synopsys.com>
+ <ff57b956-a777-3dd6-80ca-4e9afd33ab96@gmail.com>
+ <6b3a28eb-7809-d319-d58d-520c1c7fa5d2@synopsys.com>
+ <4a0869c9-6b71-5acd-e670-e4c06b44d62d@gmail.com>
+ <5d8459ae-4a4c-7371-6b0a-ed817e898168@gmail.com>
+ <7963d464-44c1-f580-398c-775c694664cb@gmail.com>
+ <f24b6e66-1fdc-06f0-97b4-f2a9be3eef6b@synopsys.com>
+ <e50114a1-f7d3-ad62-fe6d-6b8bb2b1203f@synopsys.com>
+ <CAHp75Vf+3aeq8kb2oOO-qjC5jOE7ZWUgs2=MOa4mseOG08c+vA@mail.gmail.com>
+ <bdc5093b-0673-ff3b-fef9-4577aa3549a9@gmail.com>
+ <32951a5f-062b-abc9-43a4-0245175423c9@synopsys.com>
+ <be6ada9f-bc0a-b367-b69f-c5df3771e879@gmail.com>
+ <2c5bf7f3-14b6-797f-ab5d-039081906815@gmail.com>
+ <0ba7a6ba-e6a7-9cd4-0695-64fc927e01f1@gmail.com>
+ <9bff5c8d-4dd1-22e2-ddc1-a0a1032d4c13@synopsys.com>
+ <f5311742-2d05-7f73-f5f2-4373eb3763a0@gmail.com>
+ <d6759862-c5f8-58b7-e9d4-a0261de51fad@synopsys.com>
+Message-ID: <f26c8db0-1232-c383-009d-fb89381e8e6a@gmail.com>
+Date:   Tue, 13 Apr 2021 10:45:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-References: <00000000000075c58405bfd6228c@google.com>
-In-Reply-To: <00000000000075c58405bfd6228c@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 13 Apr 2021 10:12:05 +0200
-Message-ID: <CACT4Y+bTjQz=RBXVNrVMQ9xPz5CzGNBE854fsb0ukS-2_wdi3Q@mail.gmail.com>
-Subject: Re: [syzbot] general protection fault in gadget_setup
-To:     syzbot <syzbot+eb4674092e6cc8d9e0bd@syzkaller.appspotmail.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <d6759862-c5f8-58b7-e9d4-a0261de51fad@synopsys.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 10:08 AM syzbot
-<syzbot+eb4674092e6cc8d9e0bd@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    0f4498ce Merge tag 'for-5.12/dm-fixes-2' of git://git.kern..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=124adbf6d00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=daeff30c2474a60f
-> dashboard link: https://syzkaller.appspot.com/bug?extid=eb4674092e6cc8d9e0bd
-> userspace arch: i386
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+eb4674092e6cc8d9e0bd@syzkaller.appspotmail.com
+Hi
 
-I suspect that the raw gadget_unbind() can be called while the timer
-is still active. gadget_unbind() sets gadget data to NULL.
-But I am not sure which unbind call this is:
-usb_gadget_remove_driver() or right in udc_bind_to_driver() due to a
-start error.
+Op 13-04-2021 om 04:17 schreef Thinh Nguyen:
+> Ferry Toth wrote:
+>> Op 11-04-2021 om 02:04 schreef Thinh Nguyen:
+>>> Ferry Toth wrote:
+>>>> Hi, some corrections below.
+>>>>
+>>>> Op 10-04-2021 om 15:29 schreef Ferry Toth:
+>>>>> Op 09-04-2021 om 15:26 schreef Ferry Toth:
+>>>>>> Hi,
+>>>>>>
+>>>>>> Op 08-04-2021 om 23:12 schreef Thinh Nguyen:
+>>>>>>> Ferry Toth wrote:
+>>>>>>>> Op 07-04-2021 om 15:34 schreef Andy Shevchenko:
+>>>>>>>>> On Wed, Apr 7, 2021 at 3:24 AM Thinh Nguyen
+>>>>>>>>> <Thinh.Nguyen@synopsys.com>  wrote:
+>>>>>>>>>> Thinh Nguyen wrote:
+>>>>>>>>> ...
+>>>>>>>>>
+>>>>>>>>>>> I took a look at the "bad" and "normal" tracepoints. There are a
+>>>>>>>>>>> few
+>>>>>>>>>>> 1-second delays where the host tried to bring the device back and
+>>>>>>>>>>> resume from low power:
+>>>>>>>>>>>
+>>>>>>>>>>>          ksoftirqd/0-10      [000] d.s.   231.501808:
+>>>>>>>>>>> dwc3_gadget_ep_cmd: ep3in: cmd 'Update Transfer' [60007] params
+>>>>>>>>>>> 00000000 00000000 00000000 --> status: Successful
+>>>>>>>>>>>          ksoftirqd/0-10      [000] d.s.   231.501809: dwc3_readl:
+>>>>>>>>>>> addr
+>>>>>>>>>>> 00000000d68ecd36 value 0000a610
+>>>>>>>>>>>          ksoftirqd/0-10      [000] d.s.   231.501810: dwc3_writel:
+>>>>>>>>>>> addr
+>>>>>>>>>>> 00000000d68ecd36 value 0000a710
+>>>>>>>>>>>               <idle>-0       [000] d.h. 232.499418: dwc3_readl:
+>>>>>>>>>>> addr
+>>>>>>>>>>> 00000000a15e0e35 value 00000034
+>>>>>>>>>>>               <idle>-0       [000] d.h. 232.499423: dwc3_readl:
+>>>>>>>>>>> addr
+>>>>>>>>>>> 00000000bb67b585 value 00001000
+>>>>>>>>>>>               <idle>-0       [000] d.h. 232.499425:
+>>>>>>>>>>> dwc3_writel: addr
+>>>>>>>>>>> 00000000bb67b585 value 80001000
+>>>>>>>>>>>               <idle>-0       [000] d.h. 232.499427:
+>>>>>>>>>>> dwc3_writel: addr
+>>>>>>>>>>> 00000000a15e0e35 value 00000034
+>>>>>>>>>>>          irq/15-dwc3-476     [000] d...   232.499480: dwc3_event:
+>>>>>>>>>>> event
+>>>>>>>>>>> (00000401): WakeUp [U0]
+>>>>>>>>>>>          irq/15-dwc3-476     [000] d...   232.499492: dwc3_event:
+>>>>>>>>>>> event
+>>>>>>>>>>> (00000401): WakeUp [U0]
+>>>>>>>>>>>          irq/15-dwc3-476     [000] d...   232.499496: dwc3_event:
+>>>>>>>>>>> event
+>>>>>>>>>>> (00006088): ep2out: Transfer In Progress [0] (SIm)
+>>>>>>>>>>>          irq/15-dwc3-476     [000] d...   232.499501:
+>>>>>>>>>>> dwc3_complete_trb: ep2out: trb 00000000c7ce524e (E179:D170) buf
+>>>>>>>>>>> 0000000008273540 size 1463 ctrl 00000818 (hlcS:sC:normal)
+>>>>>>>>>>>          irq/15-dwc3-476     [000] d...   232.499518:
+>>>>>>>>>>> dwc3_gadget_giveback: ep2out: req 0000000012e296cf length 73/1536
+>>>>>>>>>>> zsI ==> 0
+>>>>>>>>>>>          irq/15-dwc3-476     [000] d...   232.499562:
+>>>>>>>>>>> dwc3_ep_queue:
+>>>>>>>>>>> ep2out: req 0000000012e296cf length 0/1536 zsI ==> -115
+>>>>>>>>>>>          irq/15-dwc3-476     [000] d...   232.499601:
+>>>>>>>>>>> dwc3_prepare_trb:
+>>>>>>>>>>> ep2out: trb 000000008c083777 (E180:D170) buf 0000000002a7e9c0
+>>>>>>>>>>> size
+>>>>>>>>>>> 1536 ctrl 00000819 (HlcS:sC:normal)
+>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> Your device is operating in highspeed right? Try to turn off LPM
+>>>>>>>>>>> from
+>>>>>>>>>>> host and see if that helps with the speed throttling issue. (If
+>>>>>>>>>>> you're
+>>>>>>>>>>> using xHCI host, then set XHCI_HW_LPM_DISABLE). It may also help
+>>>>>>>>>>> with
+>>>>>>>>>>> the connection issue you saw.
+>>>>>>>>>>>
+>>>>>>>>>>> It seems to be an issue from host, but I can't tell for sure
+>>>>>>>>>>> unless we
+>>>>>>>>>>> have some USB traffic analyzer that shows what's going on.
+>>>>>>>>>>> Have you
+>>>>>>>>>>> tried different hosts?
+>>>>>>>>>>>
+>>>>>>>>>> You can also disable LPM from the gadget side by setting
+>>>>>>>>>> dwc->dis_enblslpm_quirk.
+>>>>>>>>> Ferry, it can be done by adding a corresponding property to the
+>>>>>>>>> dwc3-pci.c for Intel Merrifield platform. I'll check also for my
+>>>>>>>>> case
+>>>>>>>>> and perhaps I can collect some traces in my case later on when I
+>>>>>>>>> have
+>>>>>>>>> more time for that.
+>>>>>>>>>
+>>>>>>>> Ok thanks all. Here is what I tried:
+>>>>>>>>
+>>>>>>>> Another computer (Acer 720P brainwashed chromebook), I tried both
+>>>>>>>> full
+>>>>>>>> speed and high speed. Still throttling but less bad.
+>>>>>>>>
+>>>>>>>> Then on desktop, with Edison kernel 5.12-rc5 as above + this patch:
+>>>>>>>>
+>>>>>>>> diff --git a/drivers/usb/dwc3/dwc3-pci.c
+>>>>>>>> b/drivers/usb/dwc3/dwc3-pci.c
+>>>>>>>>
+>>>>>>>> index 4c5c6972124a..a9268c085840 100644
+>>>>>>>>
+>>>>>>>> --- a/drivers/usb/dwc3/dwc3-pci.c
+>>>>>>>>
+>>>>>>>> +++ b/drivers/usb/dwc3/dwc3-pci.c
+>>>>>>>>
+>>>>>>>> @@ -122,6 +122,7 @@ static const struct property_entry
+>>>>>>>> dwc3_pci_mrfld_properties[] = {
+>>>>>>>>
+>>>>>>>> PROPERTY_ENTRY_STRING("linux,extcon-name", "mrfld_bcove_pwrsrc"),
+>>>>>>>>
+>>>>>>>> PROPERTY_ENTRY_BOOL("snps,dis_u3_susphy_quirk"),
+>>>>>>>>
+>>>>>>>> PROPERTY_ENTRY_BOOL("snps,dis_u2_susphy_quirk"),
+>>>>>>>>
+>>>>>>>> + PROPERTY_ENTRY_BOOL("snps,dis_enblslpm_quirk"),
+>>>>>>>>
+>>>>>>>> PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
+>>>>>>>>
+>>>>>>>> {}
+>>>>>>>>
+>>>>>>>> };
+>>>>>>>>
+>>>>>>>> This fixes the throttling but reveals I had actually at least 2
+>>>>>>>> bugs:
+>>>>>>>>
+>>>>>>>> 1) throttling due to LPM, this seems solved now, thanks to much!
+>>>>>>> Now that we can confirm the speed throttling is related to LPM. We
+>>>>>>> can
+>>>>>>> try to experiment further. (IMO, LPM is an important feature and
+>>>>>>> totally disabling LPM seems like using a sledgehammer to crack a nut)
+>>>>>>>
+>>>>>>> I suspect that your phy/HW has a higher low power exit latency. I
+>>>>>>> don't
+>>>>>>> think you provided any HIRD threshold property in your setup
+>>>>>>> right? So
+>>>>>>> by default, dwc3 sets the base line BESL value to 1 (or 150us).
+>>>>>>> Unless
+>>>>>>> you know what your phy/HW is capable of, try to test and increase the
+>>>>>>> recommended BESL value. The range can be from 0 to 15 where 0 is
+>>>>>>> 150us
+>>>>>>> and 15 is 10ms. Maybe try 6 (i.e. 1ms).
+>>>>>>>
+>>>>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>>>>> index 60e850a395a2..423533df8927 100644
+>>>>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>>>>> @@ -2895,7 +2895,7 @@ static void dwc3_gadget_config_params(struct
+>>>>>>> usb_gadget *g,
+>>>>>>>                     * recommended BESL baseline to 1 and clamp the
+>>>>>>> BESL deep to be
+>>>>>>>                     * within 2 to 15.
+>>>>>>>                     */
+>>>>>>> -               params->besl_baseline = 1;
+>>>>>>> +               params->besl_baseline = 6;
+>>>>>>>                    if (dwc->is_utmi_l1_suspend)
+>>>>>>>                           params->besl_deep =
+>>>>>>>                                    clamp_t(u8, dwc->hird_threshold, 2,
+>>>>>>> 15);
+>>>>>>>
+>>>>>> I will try and report back, hopefully this evening.
+>>>>> I tried this and it seems to have the same effect as dis_enblslpm_quirk
+>>>>>>>> 2) a problem with usb plug detection
+>>>>>>>>
+>>>>>>>> When I unplug/replug the gadget cable I need to do that at least
+>>>>>>>> another
+>>>>>>>> time before gadget is detected. So unplug/replug/unplug/replug
+>>>>>>>> seems to
+>>>>>>>> work.
+>>>>>>>>
+>>>>>>>> Also this platform has a HW switch to select host/device mode, with
+>>>>>>>> separate connectors for host and device.
+>>>>>>>>
+>>>>>>>> When I flip the switch to host it immediately changes to host.
+>>>>>>>>
+>>>>>>>> Flipping to device leaves the LEDs on my connected usb hub on, so
+>>>>>>>> it's
+>>>>>>>> still powered (but not operational).
+>>>>>>>>
+>>>>>>>> Flipping fast host/device (within 1/2 sec) hub LEDs turns off. But I
+>>>>>>>> still need to additionally unplug/replug the gadget cable to get
+>>>>>>>> that to
+>>>>>>>> work.
+>>>>>>>>
+>>>>>>> The connection issue can come from different things. Please narrow
+>>>>>>> it down
+>>>>>>> and make sure that you don't use any defective cable or bad hub.
+>>>>>>> Even then,
+>>>>>>> it's difficult to determine whose fault it is from just the dmesg
+>>>>>>> and driver
+>>>>>>> logs alone without looking at the USB traffic at the packet level.
+>>>>>>>
+>>>>>>> Btw, is your setup DRD? If you're switching mode, then I know that
+>>>>>>> dwc3 right
+>>>>>>> now doesn't implement mode switching correctly.
+>>>>>> Yes, we use Extcon driver to support DRD.
+>>>>>>> You can see the discussion we have here:
+>>>>>>> https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/20210108015115.27920-1-john.stultz@linaro.org/T/*t__;Iw!!A4F2R9G_pg!MXee1rloMlVeQuXlR60t94lr_6imLoVLTEFXzYWhS27dZFAFtH5AWssCZxlDLGcaKy2f$
+>>>>>>>
+>>>>>>>
+>>>>>> I see, that might indeed be related. I will try the patches to see if
+>>>>>> that works and report back.
+>>>>> I applied both patches:
+>>>>>
+>>>>> usb: dwc3: Trigger a GCTL soft reset when switching modes in DRD
+>>>>>
+>>>>> usb: dwc3: Fix DRD mode change sequence following programming guide
+>>>>>
+>>>>> It doesn't have an effect on the need to unplug/replug neither on the
+>>>>> problems switch from host/device mode.
+>>>> When I test the correct kernel it does have an effect :-)
+>>>>
+>>>> In most cases the need to unplug/replug is removed, but not always. In
+>>>> the cases when I need to retry the host journal shows "can't set config
+>>>> #1, error -110"
+>>> It's most likely because the driver didn't provide time for the clocks
+>>> synchronization before clearing the GCTL soft reset. I noted that issue
+>>> in the patch in the discussion thread. I can send out a patch next week.
+>>>
+>>>> The switch from host->device and device->host mode seems to be resolved.
+>>>>
+>>>> Strangely, iperf3 now reports 130 Mbits/sec (down from 200 Mbits/sec).
+>>>>
+>>> Did this happen with disabling LPM or with increasing BESL baseline?
+>>> Note that increasing the recommended BESL is not the same as disabling
+>>> LPM. With the recommended BESL provided, the host can decide when it
+>>> should put the device in low power so that the device has enough time to
+>>> wake up. With LPM enabled, there maybe some minor speed degradation but
+>>> not that much. Anyway, you can experiment with the BESL value to have
+>>> the acceptable speed while still have power saving capability (or
+>>> completely disable LPM if power saving is not an issue for you).
+>> I tried both, the result was exactly the same.
+> That's strange... Also, enabling LPM should not impact the performance that
+> much at all. What's changed to your setup?
 
-Also looking at the code, gadget_bind() resets data to NULL on this error path:
-https://elixir.bootlin.com/linux/v5.12-rc7/source/drivers/usb/gadget/legacy/raw_gadget.c#L283
-but not on this error path:
-https://elixir.bootlin.com/linux/v5.12-rc7/source/drivers/usb/gadget/legacy/raw_gadget.c#L306
-Should the second one also reset data to NULL?
+Strange indeed. Only the combination of both patches had that effect.
 
+And stranger, I backported everything to 5.10.27 and that effect is not 
+present. But then I still need to plug/replug the cable 2x.
 
-> general protection fault, probably for non-canonical address 0xdffffc0000000004: 0000 [#1] PREEMPT SMP KASAN
-> KASAN: null-ptr-deref in range [0x0000000000000020-0x0000000000000027]
-> CPU: 1 PID: 5016 Comm: systemd-udevd Not tainted 5.12.0-rc4-syzkaller #0
-> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-> RIP: 0010:__lock_acquire+0xcfe/0x54c0 kernel/locking/lockdep.c:4770
-> Code: 09 0e 41 bf 01 00 00 00 0f 86 8c 00 00 00 89 05 48 69 09 0e e9 81 00 00 00 48 b8 00 00 00 00 00 fc ff df 4c 89 f2 48 c1 ea 03 <80> 3c 02 00 0f 85 5b 31 00 00 49 81 3e c0 13 38 8f 0f 84 d0 f3 ff
-> RSP: 0000:ffffc90000ce77d8 EFLAGS: 00010002
-> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: 0000000000000004 RSI: 1ffff9200019cf0c RDI: 0000000000000020
-> RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
-> R10: 0000000000000001 R11: 0000000000000006 R12: ffff88801295b880
-> R13: 0000000000000000 R14: 0000000000000020 R15: 0000000000000000
-> FS:  00007fcd745f98c0(0000) GS:ffff88802cb00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007ffe279f7d87 CR3: 000000001c7d4000 CR4: 0000000000150ee0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  lock_acquire kernel/locking/lockdep.c:5510 [inline]
->  lock_acquire+0x1ab/0x740 kernel/locking/lockdep.c:5475
->  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
->  _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:159
->  gadget_setup+0x4e/0x510 drivers/usb/gadget/legacy/raw_gadget.c:327
->  dummy_timer+0x1615/0x32a0 drivers/usb/gadget/udc/dummy_hcd.c:1903
->  call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1431
->  expire_timers kernel/time/timer.c:1476 [inline]
->  __run_timers.part.0+0x67c/0xa50 kernel/time/timer.c:1745
->  __run_timers kernel/time/timer.c:1726 [inline]
->  run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1758
->  __do_softirq+0x29b/0x9f6 kernel/softirq.c:345
->  invoke_softirq kernel/softirq.c:221 [inline]
->  __irq_exit_rcu kernel/softirq.c:422 [inline]
->  irq_exit_rcu+0x134/0x200 kernel/softirq.c:434
->  sysvec_apic_timer_interrupt+0x45/0xc0 arch/x86/kernel/apic/apic.c:1100
->  asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:632
-> RIP: 0033:0x560cfc4a02ed
-> Code: 4c 39 c1 48 89 42 18 4c 89 52 08 4c 89 5a 10 48 89 1a 0f 87 7b ff ff ff 48 89 f8 48 f7 d0 48 01 c8 48 83 e0 f8 48 8d 7c 07 08 <48> 8d 0d 34 d9 02 00 48 63 04 b1 48 01 c8 ff e0 0f 1f 00 48 8d 0d
-> RSP: 002b:00007ffe279f9dd0 EFLAGS: 00000246
-> RAX: 0000000000000000 RBX: 0000560cfcd88e40 RCX: 0000560cfcd72af0
-> RDX: 00007ffe279f9de0 RSI: 0000000000000007 RDI: 0000560cfcd72af0
-> RBP: 00007ffe279f9e70 R08: 0000000000000000 R09: 0000000000000020
-> R10: 0000560cfcd72af7 R11: 0000560cfcd73530 R12: 0000560cfcd72af0
-> R13: 0000000000000000 R14: 0000560cfcd72b10 R15: 0000000000000001
-> Modules linked in:
-> ---[ end trace ab0f6632fdd289cf ]---
-> RIP: 0010:__lock_acquire+0xcfe/0x54c0 kernel/locking/lockdep.c:4770
-> Code: 09 0e 41 bf 01 00 00 00 0f 86 8c 00 00 00 89 05 48 69 09 0e e9 81 00 00 00 48 b8 00 00 00 00 00 fc ff df 4c 89 f2 48 c1 ea 03 <80> 3c 02 00 0f 85 5b 31 00 00 49 81 3e c0 13 38 8f 0f 84 d0 f3 ff
-> RSP: 0000:ffffc90000ce77d8 EFLAGS: 00010002
-> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: 0000000000000004 RSI: 1ffff9200019cf0c RDI: 0000000000000020
-> RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
-> R10: 0000000000000001 R11: 0000000000000006 R12: ffff88801295b880
-> R13: 0000000000000000 R14: 0000000000000020 R15: 0000000000000000
-> FS:  00007fcd745f98c0(0000) GS:ffff88802cb00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007ffe279f7d87 CR3: 000000001c7d4000 CR4: 0000000000150ee0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Anyway, can you try this patch instead of John Stult's. There are a couple
+> of issues from his patches.
 >
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 05e2e54cbbdc..675e861fda1a 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -14,6 +14,7 @@
+>   #include <linux/kernel.h>
+>   #include <linux/slab.h>
+>   #include <linux/spinlock.h>
+> +#include <linux/mutex.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/pm_runtime.h>
+>   #include <linux/interrupt.h>
+> @@ -40,6 +41,8 @@
+>   
+>   #define DWC3_DEFAULT_AUTOSUSPEND_DELAY 5000 /* ms */
+>   
+> +static DEFINE_MUTEX(mode_switch_lock);
+> +
+>   /**
+>    * dwc3_get_dr_mode - Validates and sets dr_mode
+>    * @dwc: pointer to our context structure
+> @@ -114,13 +117,20 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
+>          dwc->current_dr_role = mode;
+>   }
+>   
+> +static int dwc3_core_soft_reset(struct dwc3 *dwc);
+> +
+>   static void __dwc3_set_mode(struct work_struct *work)
+>   {
+>          struct dwc3 *dwc = work_to_dwc(work);
+>          unsigned long flags;
+> +       unsigned int hw_mode;
+>          int ret;
+>          u32 reg;
+>   
+> +       mutex_lock(&mode_switch_lock);
+> +
+> +       hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+> +
+>          pm_runtime_get_sync(dwc->dev);
+>   
+>          if (dwc->current_dr_role == DWC3_GCTL_PRTCAP_OTG)
+> @@ -154,6 +164,24 @@ static void __dwc3_set_mode(struct work_struct *work)
+>                  break;
+>          }
+>   
+> +       if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD) {
+> +               reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+> +               reg |= DWC3_GCTL_CORESOFTRESET;
+> +               dwc3_writel(dwc->regs, DWC3_GCTL, reg);
+> +
+> +               /*
+> +                * Wait for internal clocks to synchronized. DWC_usb31 and
+> +                * DWC_usb32 may need at least 50ms (less for DWC_usb3). To
+> +                * keep it consistent across different IPs, let's wait up to
+> +                * 100ms before clearing GCTL.CORESOFTRESET.
+> +                */
+> +               msleep(100);
+> +
+> +               reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+> +               reg &= ~DWC3_GCTL_CORESOFTRESET;
+> +               dwc3_writel(dwc->regs, DWC3_GCTL, reg);
+> +       }
+> +
+>          spin_lock_irqsave(&dwc->lock, flags);
+>   
+>          dwc3_set_prtcap(dwc, dwc->desired_dr_role);
+> @@ -178,6 +206,9 @@ static void __dwc3_set_mode(struct work_struct *work)
+>                  }
+>                  break;
+>          case DWC3_GCTL_PRTCAP_DEVICE:
+> +               if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD)
+> +                       dwc3_core_soft_reset(dwc);
+> +
+>                  dwc3_event_buffers_setup(dwc);
+>   
+>                  if (dwc->usb2_phy)
+> @@ -200,6 +231,7 @@ static void __dwc3_set_mode(struct work_struct *work)
+>   out:
+>          pm_runtime_mark_last_busy(dwc->dev);
+>          pm_runtime_put_autosuspend(dwc->dev);
+> +       mutex_unlock(&mode_switch_lock);
+>   }
+>   
+>   void dwc3_set_mode(struct dwc3 *dwc, u32 mode)
 >
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/00000000000075c58405bfd6228c%40google.com.
+I will try this.
+> Thanks,
+> Thinh
