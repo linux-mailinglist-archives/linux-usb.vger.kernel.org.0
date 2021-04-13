@@ -2,99 +2,261 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A3235D367
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Apr 2021 00:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4214135D499
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Apr 2021 02:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343864AbhDLWpq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Apr 2021 18:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343843AbhDLWpo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Apr 2021 18:45:44 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97874C06138F
-        for <linux-usb@vger.kernel.org>; Mon, 12 Apr 2021 15:45:25 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id w21-20020a9d63950000b02901ce7b8c45b4so14360271otk.5
-        for <linux-usb@vger.kernel.org>; Mon, 12 Apr 2021 15:45:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=saYSSeNUB6f68qHbPtH0lWIscbgYxiJh/N21MR4VVmM=;
-        b=plFvgQqlpcEZlby5QGnwVmREibuowaQLgHzWBNoa/mTnoRU67HMFunVGQFFEhnLMKz
-         NZ6WyPOUM+oi3vGnS4FXCTkj610vgq30Yj39v+Q0JP50Yqfu0ZNGO2XrIk/3vOjSDpt9
-         kXEbIeDIAUX00IVZQEfISNrhd6OFoMhP+oD+Gx2li1w0iX7pmM2R8N5wGtiNc/8jEFrd
-         tGO//Bu4OTfw+W8oBf+LPYL2Vx5f8yZhRCqIs3HH+6HLAyX7SsWd8jY+97DsanA2pK+w
-         7Cwglg8h7wtKoF49dd0za6rbt7H7OWybqtfAJFhSibWg8eoG4bpGwMfk1IX/iL2Q5xMv
-         9lIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=saYSSeNUB6f68qHbPtH0lWIscbgYxiJh/N21MR4VVmM=;
-        b=lUVGxwHlGTGVs6dxaZpwJ0zL55vcJPF/6ZsZH2ewZ5cvn9xPMNqsNNj/luxpC2XwgH
-         wuZW8R6jLsBH4HL0FNtmEXpwldXkdmeBczqCH6Aej5R7IAF2N+CQSHaIBgpy4G3QGQrh
-         wp4U5dhyePWfd1OiK4wuUZMnfxD+2uZmDyD1eUwzljRXtqbpmYyyGEV4hFPNUc8jq1bK
-         r34ar4bop9wz95L56ODrJfGfbdZeex38Bb6RQBZ8aouskeArJSdBa8k78EupfC2Doa4W
-         kL1fjZFh1GrIOhQEu/vaRSrpy+DMDH5m/Ct7gm5pwPKVw0st4YvLAMBILaIfyT+4Ix7h
-         +yMg==
-X-Gm-Message-State: AOAM533hwYTbT5MdlZutbkD6NJGD2My/8aXHkkzL2qP0Mze5JfR1DwkZ
-        tem2Gxy67Nb8xLxdTCVfs4fv9A==
-X-Google-Smtp-Source: ABdhPJwSrXb3rCW0eBQ/8ooZbCrX0MY2r8U7shLWpwEX/QnDafcbmvQ1e6C+mwZA1aTioz5PkSkJKg==
-X-Received: by 2002:a05:6830:109:: with SMTP id i9mr25724854otp.47.1618267525004;
-        Mon, 12 Apr 2021 15:45:25 -0700 (PDT)
-Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id s84sm2539988oie.39.2021.04.12.15.45.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Apr 2021 15:45:24 -0700 (PDT)
-Date:   Mon, 12 Apr 2021 17:45:22 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bixuan Cui <cuibixuan@huawei.com>
-Cc:     Andy Gross <agross@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH -next] usb: dwc3: qcom: Remove redundant dev_err call in
- dwc3_qcom_probe()
-Message-ID: <20210412224522.GD1538589@yoga>
-References: <20210410024818.65659-1-cuibixuan@huawei.com>
+        id S238407AbhDMA7Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Apr 2021 20:59:24 -0400
+Received: from mga17.intel.com ([192.55.52.151]:54513 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237775AbhDMA7Y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 12 Apr 2021 20:59:24 -0400
+IronPort-SDR: +jiZv5kNZ10f4pcmh5jOyZEhaPunyVoImz/dxZuOEDGdatReooplhZ805h1G8xM79y6rf3j//o
+ UCJihrh5LAYA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9952"; a="174408794"
+X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
+   d="scan'208";a="174408794"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 17:59:04 -0700
+IronPort-SDR: IuKVexypUynDJLZ4nDbE5K2c7syS41C2D+F91sdeH5gBlNTaTq9nqIIEsdmROz15dbEMbrQ51m
+ JeJy8EUZW4Sg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
+   d="scan'208";a="460387836"
+Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 12 Apr 2021 17:59:02 -0700
+Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lW7OQ-0000j1-0X; Tue, 13 Apr 2021 00:59:02 +0000
+Date:   Tue, 13 Apr 2021 08:58:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-next] BUILD SUCCESS
+ 5bdb080f9603c5db51597ee7bda457a153106a9a
+Message-ID: <6074ecaf.v2hRqW8cfQtJiA/U%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210410024818.65659-1-cuibixuan@huawei.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri 09 Apr 21:48 CDT 2021, Bixuan Cui wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+branch HEAD: 5bdb080f9603c5db51597ee7bda457a153106a9a  Revert "usb: Link the ports to the connectors they are attached to"
 
-> There is a error message within devm_ioremap_resource
-> already, so remove the dev_err call to avoid redundant
-> error message.
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
+elapsed time: 728m
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+configs tested: 199
+configs skipped: 2
 
-Regards,
-Bjorn
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index e37cc58dfa55..726d5048d87c 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -774,7 +774,6 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  
->  	qcom->qscratch_base = devm_ioremap_resource(dev, parent_res);
->  	if (IS_ERR(qcom->qscratch_base)) {
-> -		dev_err(dev, "failed to map qscratch, err=%d\n", ret);
->  		ret = PTR_ERR(qcom->qscratch_base);
->  		goto clk_disable;
->  	}
-> 
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+riscv                            allmodconfig
+x86_64                           allyesconfig
+riscv                            allyesconfig
+i386                             allyesconfig
+powerpc                        fsp2_defconfig
+i386                                defconfig
+sh                  sh7785lcr_32bit_defconfig
+powerpc                 mpc836x_mds_defconfig
+m68k                                defconfig
+nds32                            alldefconfig
+powerpc                 mpc834x_itx_defconfig
+arc                                 defconfig
+sh                         apsh4a3a_defconfig
+arm                   milbeaut_m10v_defconfig
+arm                         nhk8815_defconfig
+mips                         tb0219_defconfig
+mips                           mtx1_defconfig
+m68k                       m5249evb_defconfig
+mips                          malta_defconfig
+arm                          pxa168_defconfig
+arc                          axs103_defconfig
+arc                          axs101_defconfig
+arc                         haps_hs_defconfig
+arm                           stm32_defconfig
+mips                             allmodconfig
+mips                           ci20_defconfig
+sh                        sh7757lcr_defconfig
+sh                             espt_defconfig
+sparc                       sparc32_defconfig
+arm                          simpad_defconfig
+powerpc                        icon_defconfig
+openrisc                         alldefconfig
+mips                          rm200_defconfig
+powerpc                     skiroot_defconfig
+arm                            mps2_defconfig
+powerpc                      pcm030_defconfig
+arm                         mv78xx0_defconfig
+arm                          exynos_defconfig
+arm                       multi_v4t_defconfig
+mips                           ip22_defconfig
+arm                         s3c6400_defconfig
+arm                            mmp2_defconfig
+m68k                       m5275evb_defconfig
+powerpc                     mpc512x_defconfig
+arm                           sunxi_defconfig
+ia64                          tiger_defconfig
+powerpc                     tqm8555_defconfig
+arm                             pxa_defconfig
+xtensa                generic_kc705_defconfig
+arm                       imx_v6_v7_defconfig
+xtensa                    smp_lx200_defconfig
+sparc64                          alldefconfig
+arm                        spear3xx_defconfig
+arm                  colibri_pxa300_defconfig
+powerpc                    ge_imp3a_defconfig
+arm                        trizeps4_defconfig
+sh                          urquell_defconfig
+powerpc                 linkstation_defconfig
+mips                      malta_kvm_defconfig
+arm                             rpc_defconfig
+powerpc                      ppc64e_defconfig
+arm                        oxnas_v6_defconfig
+arm                           sama5_defconfig
+sh                        edosk7760_defconfig
+sparc64                             defconfig
+powerpc                     tqm8548_defconfig
+powerpc                        cell_defconfig
+sh                          rsk7201_defconfig
+sh                   sh7724_generic_defconfig
+sh                             sh03_defconfig
+arm                         s5pv210_defconfig
+powerpc                     tqm8540_defconfig
+sh                   rts7751r2dplus_defconfig
+mips                      maltaaprp_defconfig
+arc                      axs103_smp_defconfig
+mips                         db1xxx_defconfig
+arm                         s3c2410_defconfig
+mips                      loongson3_defconfig
+mips                           jazz_defconfig
+powerpc                     powernv_defconfig
+sh                          r7785rp_defconfig
+powerpc                      arches_defconfig
+powerpc                      makalu_defconfig
+mips                         rt305x_defconfig
+arm                        vexpress_defconfig
+arm                         orion5x_defconfig
+sh                          landisk_defconfig
+powerpc                      bamboo_defconfig
+xtensa                              defconfig
+mips                 decstation_r4k_defconfig
+arc                     haps_hs_smp_defconfig
+sh                           se7712_defconfig
+powerpc                     tqm8541_defconfig
+xtensa                         virt_defconfig
+arm                      pxa255-idp_defconfig
+arm                         assabet_defconfig
+sh                                  defconfig
+sparc                       sparc64_defconfig
+arm                        magician_defconfig
+arc                              alldefconfig
+powerpc                mpc7448_hpc2_defconfig
+powerpc                      obs600_defconfig
+mips                      bmips_stb_defconfig
+sh                           sh2007_defconfig
+sh                           se7619_defconfig
+arm                          pxa910_defconfig
+powerpc                       maple_defconfig
+um                                allnoconfig
+m68k                         apollo_defconfig
+arm                        multi_v5_defconfig
+nios2                            alldefconfig
+arm                            qcom_defconfig
+mips                        bcm63xx_defconfig
+arm                          imote2_defconfig
+m68k                        m5307c3_defconfig
+powerpc               mpc834x_itxgp_defconfig
+arm                       cns3420vb_defconfig
+arm                            dove_defconfig
+mips                            e55_defconfig
+powerpc                     pq2fads_defconfig
+sh                           se7751_defconfig
+m68k                          amiga_defconfig
+arm                         vf610m4_defconfig
+arm                         lpc32xx_defconfig
+h8300                            alldefconfig
+mips                           ip27_defconfig
+mips                     loongson1c_defconfig
+arm                          iop32x_defconfig
+sh                           se7343_defconfig
+powerpc                  iss476-smp_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+mips                             allyesconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a003-20210412
+i386                 randconfig-a001-20210412
+i386                 randconfig-a006-20210412
+i386                 randconfig-a005-20210412
+i386                 randconfig-a004-20210412
+i386                 randconfig-a002-20210412
+x86_64               randconfig-a014-20210412
+x86_64               randconfig-a015-20210412
+x86_64               randconfig-a011-20210412
+x86_64               randconfig-a013-20210412
+x86_64               randconfig-a012-20210412
+x86_64               randconfig-a016-20210412
+i386                 randconfig-a015-20210412
+i386                 randconfig-a014-20210412
+i386                 randconfig-a013-20210412
+i386                 randconfig-a012-20210412
+i386                 randconfig-a016-20210412
+i386                 randconfig-a011-20210412
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+um                               allmodconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                    rhel-8.3-kselftests
+x86_64                      rhel-8.3-kbuiltin
+
+clang tested configs:
+x86_64               randconfig-a003-20210412
+x86_64               randconfig-a002-20210412
+x86_64               randconfig-a001-20210412
+x86_64               randconfig-a005-20210412
+x86_64               randconfig-a006-20210412
+x86_64               randconfig-a004-20210412
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
