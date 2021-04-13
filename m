@@ -2,96 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D76835E1C4
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Apr 2021 16:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F9B35E38B
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Apr 2021 18:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbhDMOoi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Apr 2021 10:44:38 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:51587 "HELO
+        id S231137AbhDMQNd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Apr 2021 12:13:33 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:53239 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1345252AbhDMOoh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Apr 2021 10:44:37 -0400
-Received: (qmail 1456110 invoked by uid 1000); 13 Apr 2021 10:44:16 -0400
-Date:   Tue, 13 Apr 2021 10:44:16 -0400
+        with SMTP id S230053AbhDMQNc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Apr 2021 12:13:32 -0400
+Received: (qmail 1460435 invoked by uid 1000); 13 Apr 2021 12:13:11 -0400
+Date:   Tue, 13 Apr 2021 12:13:11 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Chris Chiu <chris.chiu@canonical.com>
-Cc:     gregkh@linuxfoundation.org, m.v.b@runbox.com, hadess@hadess.net,
-        linux-usb@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] USB: Don't set USB_PORT_FEAT_SUSPEND on WD19's Realtek
- Hub
-Message-ID: <20210413144416.GB1454681@rowland.harvard.edu>
-References: <20210412150006.53909-1-chris.chiu@canonical.com>
- <20210412151205.GB1420451@rowland.harvard.edu>
- <CABTNMG1fvbOMrP+FmH0X5Yh04gf6vvhqhXfRrmpJ=f-fPBx4xw@mail.gmail.com>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     syzbot <syzbot+eb4674092e6cc8d9e0bd@syzkaller.appspotmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: [syzbot] general protection fault in gadget_setup
+Message-ID: <20210413161311.GC1454681@rowland.harvard.edu>
+References: <00000000000075c58405bfd6228c@google.com>
+ <CACT4Y+bTjQz=RBXVNrVMQ9xPz5CzGNBE854fsb0ukS-2_wdi3Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABTNMG1fvbOMrP+FmH0X5Yh04gf6vvhqhXfRrmpJ=f-fPBx4xw@mail.gmail.com>
+In-Reply-To: <CACT4Y+bTjQz=RBXVNrVMQ9xPz5CzGNBE854fsb0ukS-2_wdi3Q@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 03:52:14PM +0800, Chris Chiu wrote:
-> On Mon, Apr 12, 2021 at 11:12 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+On Tue, Apr 13, 2021 at 10:12:05AM +0200, Dmitry Vyukov wrote:
+> On Tue, Apr 13, 2021 at 10:08 AM syzbot
+> <syzbot+eb4674092e6cc8d9e0bd@syzkaller.appspotmail.com> wrote:
 > >
-> > On Mon, Apr 12, 2021 at 11:00:06PM +0800, chris.chiu@canonical.com wrote:
-> > > The USB_PORT_FEAT_SUSPEND is not really necessary due to the
-> > > "global suspend" in USB 2.0 spec. It's only for many hub devices
-> > > which don't relay wakeup requests from the devices connected to
-> > > downstream ports. For this realtek hub, there's no problem waking
-> > > up the system from connected keyboard.
+> > Hello,
 > >
-> > What about runtime suspend?  That _does_ require USB_PORT_FEAT_SUSPEND.
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    0f4498ce Merge tag 'for-5.12/dm-fixes-2' of git://git.kern..
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=124adbf6d00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=daeff30c2474a60f
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=eb4674092e6cc8d9e0bd
+> > userspace arch: i386
+> >
+> > Unfortunately, I don't have any reproducer for this issue yet.
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+eb4674092e6cc8d9e0bd@syzkaller.appspotmail.com
 > 
-> It's hard to reproduce the same thing with runtime PM. I also don't
-> know the aggressive
-> way to trigger runtime suspend. So I'm assuming the same thing will happen in
-> runtime PM case because they both go the same usb_port_resume path. Could
-> you please suggest a better way to verify this for runtime PM?
+> I suspect that the raw gadget_unbind() can be called while the timer
+> is still active. gadget_unbind() sets gadget data to NULL.
+> But I am not sure which unbind call this is:
+> usb_gadget_remove_driver() or right in udc_bind_to_driver() due to a
+> start error.
 
-To put a USB device into runtime suspend, do this:
+This certainly looks like a race between gadget_unbind and gadget_setup 
+in raw_gadget.
 
-	echo 0 >/sys/bus/usb/devices/.../bConfigurationValue
-	echo auto >/sys/bus/usb/devices/.../power/control
+In theory, this race shouldn't matter.  The gadget core is supposed to 
+guarantee that there won't be any more callbacks to the gadget driver 
+once the driver's unbind routine is called.  That guarantee is enforced 
+in usb_gadget_remove_driver as follows:
 
-where ... is the pathname for the device you want to suspend.  (Note 
-that this will unbind the device from its driver, so make sure there's 
-no possibility of data loss before you do it.)
+	usb_gadget_disconnect(udc->gadget);
+	if (udc->gadget->irq)
+		synchronize_irq(udc->gadget->irq);
+	udc->driver->unbind(udc->gadget);
+	usb_gadget_udc_stop(udc);
 
-To resume the device, write "on" to the power/control file.  You can 
-verify the runtime-PM status by reading the files in the power/ 
-subdirectory.
+usb_gadget_disconnect turns off the pullup resistor, telling the host 
+that the gadget is no longer connected and preventing the transmission 
+of any more USB packets.  Any packets that have already been received 
+are sure to processed by the UDC driver's interrupt handler by the time 
+synchronize_irq returns.
 
-> > > This commit bypasses the USB_PORT_FEAT_SUSPEND for the quirky hub.
-> > >
-> > > Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
-> > > ---
-> >
-> >
-> > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> > > index 7f71218cc1e5..8478d49bba77 100644
-> > > --- a/drivers/usb/core/hub.c
-> > > +++ b/drivers/usb/core/hub.c
-> > > @@ -3329,8 +3329,11 @@ int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
-> > >        * descendants is enabled for remote wakeup.
-> > >        */
-> > >       else if (PMSG_IS_AUTO(msg) || usb_wakeup_enabled_descendants(udev) > 0)
-> > > -             status = set_port_feature(hub->hdev, port1,
-> > > -                             USB_PORT_FEAT_SUSPEND);
-> > > +             if (udev->quirks & USB_QUIRK_NO_SET_FEAT_SUSPEND)
-> >
-> > You should test hub->hdev->quirks, here, not udev->quirks.  The quirk
-> > belongs to the Realtek hub, not to the device that's plugged into the
-> > hub.
-> >
-> 
-> Thanks for pointing that out. I'll verify again and propose a V2 after
-> it's done.
+But this doesn't work with dummy_hcd, because dummy_hcd doesn't use 
+interrupts; it uses a timer instead.  It does have code to emulate the 
+effect of synchronize_irq, but that code doesn't get invoked at the 
+right time -- it currently runs in usb_gadget_udc_stop, after the unbind 
+callback instead of before.  Indeed, there's no way for 
+usb_gadget_remove_driver to invoke this code before the unbind 
+callback,.
 
-Another thing to consider: You shouldn't return 0 from usb_port_suspend 
-if the port wasn't actually suspended.  We don't want to kernel to have 
-a false idea of the hardware's current state.
+I thought the synchronize_irq emulation problem had been completely 
+solved, but evidently it hasn't.  It looks like the best solution is to 
+add a call of the synchronize_irq emulation code in dummy_pullup.
+
+Maybe we can test this reasoning by putting a delay just before the call 
+to dum->driver->setup.  That runs in the timer handler, so it's not a 
+good place to delay, but it may be okay just for testing purposes.
+
+Hopefully this patch will make the race a lot more likely to occur.  Is 
+there any way to tell syzkaller to test it, despite the fact that 
+syzkaller doesn't think it has a reproducer for this issue?
 
 Alan Stern
+
+
+Index: usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/udc/dummy_hcd.c
++++ usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -1900,6 +1900,7 @@ restart:
+ 			if (value > 0) {
+ 				++dum->callback_usage;
+ 				spin_unlock(&dum->lock);
++				mdelay(5);
+ 				value = dum->driver->setup(&dum->gadget,
+ 						&setup);
+ 				spin_lock(&dum->lock);
