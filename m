@@ -2,118 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F9B35E38B
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Apr 2021 18:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B787D35E3FC
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Apr 2021 18:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbhDMQNd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Apr 2021 12:13:33 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:53239 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230053AbhDMQNc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Apr 2021 12:13:32 -0400
-Received: (qmail 1460435 invoked by uid 1000); 13 Apr 2021 12:13:11 -0400
-Date:   Tue, 13 Apr 2021 12:13:11 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzbot <syzbot+eb4674092e6cc8d9e0bd@syzkaller.appspotmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: [syzbot] general protection fault in gadget_setup
-Message-ID: <20210413161311.GC1454681@rowland.harvard.edu>
-References: <00000000000075c58405bfd6228c@google.com>
- <CACT4Y+bTjQz=RBXVNrVMQ9xPz5CzGNBE854fsb0ukS-2_wdi3Q@mail.gmail.com>
+        id S243980AbhDMQb6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Apr 2021 12:31:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49640 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242063AbhDMQby (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 13 Apr 2021 12:31:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E9D1160720;
+        Tue, 13 Apr 2021 16:31:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618331494;
+        bh=zJhxcN/RJxOOssx/cavt+PFsmMdQWb27PjnSMts/9VQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hxLnzxBXxXdRIbI2Mx8egmkuPIGDE4dJBVdkrCZRFTvbv5gfqm7Yk/tBQE9hqt/xc
+         1rIXR/a3jefJycO2EAgxqqylaT51j3HwxjM0M9G3KwjShYTWcB55w6EilsP2NGpHTQ
+         uowDTArvLEF8hmEgHVu7oJp+FoEnJaJkvsp1uXdOlt/+l7nlazhZlP1IgixHgewUgM
+         PuQEiovR3QKl9itpIYazJWZjE7eGYPo7/vx12D4NkgmTrZYnC84A54+XVfNY//rzAp
+         a/+jvFgu5zz5k6c9LBLrtRMn1BVw35XAW/uTsmvVw3qCrKfw3VuxW5QgKjEtH5jseG
+         eMFrfoUQhVqJw==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lWLwp-0008IB-VU; Tue, 13 Apr 2021 18:31:32 +0200
+Date:   Tue, 13 Apr 2021 18:31:31 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH 00/10] USB: serial: clean up the ti drivers
+Message-ID: <YHXHY5+55rrMzn/j@hovoldconsulting.com>
+References: <20210412094738.944-1-johan@kernel.org>
+ <YHQoHCp6/BUoyxDh@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACT4Y+bTjQz=RBXVNrVMQ9xPz5CzGNBE854fsb0ukS-2_wdi3Q@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YHQoHCp6/BUoyxDh@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 10:12:05AM +0200, Dmitry Vyukov wrote:
-> On Tue, Apr 13, 2021 at 10:08 AM syzbot
-> <syzbot+eb4674092e6cc8d9e0bd@syzkaller.appspotmail.com> wrote:
-> >
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    0f4498ce Merge tag 'for-5.12/dm-fixes-2' of git://git.kern..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=124adbf6d00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=daeff30c2474a60f
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=eb4674092e6cc8d9e0bd
-> > userspace arch: i386
-> >
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+eb4674092e6cc8d9e0bd@syzkaller.appspotmail.com
+On Mon, Apr 12, 2021 at 12:59:40PM +0200, Greg Kroah-Hartman wrote:
+> On Mon, Apr 12, 2021 at 11:47:28AM +0200, Johan Hovold wrote:
+> > The io_ti and ti_usb_3410_5052 drivers are drivers for devices based on
+> > the same TI chips and one appears to have been based on the other
+> > judging from the code similarities.
 > 
-> I suspect that the raw gadget_unbind() can be called while the timer
-> is still active. gadget_unbind() sets gadget data to NULL.
-> But I am not sure which unbind call this is:
-> usb_gadget_remove_driver() or right in udc_bind_to_driver() due to a
-> start error.
+> All I had to work off of was a vendor-driver for the ti_usb_3410_5052
+> codebase and trying to figure out what was common and what wasn't was
+> pretty hard at the time.  Thanks for working on this cleanup now.
 
-This certainly looks like a race between gadget_unbind and gadget_setup 
-in raw_gadget.
+Ah, thanks. That explains the similarities.
 
-In theory, this race shouldn't matter.  The gadget core is supposed to 
-guarantee that there won't be any more callbacks to the gadget driver 
-once the driver's unbind routine is called.  That guarantee is enforced 
-in usb_gadget_remove_driver as follows:
+> > This series clean up their implementations a bit by introducing
+> > port-command helpers and fixing up some related style inconsistencies.
+> > 
+> > This is based on top of the recently posted closing-wait series.
+> 
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-	usb_gadget_disconnect(udc->gadget);
-	if (udc->gadget->irq)
-		synchronize_irq(udc->gadget->irq);
-	udc->driver->unbind(udc->gadget);
-	usb_gadget_udc_stop(udc);
+And thanks for reviewing both of these sets. Now applied.
 
-usb_gadget_disconnect turns off the pullup resistor, telling the host 
-that the gadget is no longer connected and preventing the transmission 
-of any more USB packets.  Any packets that have already been received 
-are sure to processed by the UDC driver's interrupt handler by the time 
-synchronize_irq returns.
-
-But this doesn't work with dummy_hcd, because dummy_hcd doesn't use 
-interrupts; it uses a timer instead.  It does have code to emulate the 
-effect of synchronize_irq, but that code doesn't get invoked at the 
-right time -- it currently runs in usb_gadget_udc_stop, after the unbind 
-callback instead of before.  Indeed, there's no way for 
-usb_gadget_remove_driver to invoke this code before the unbind 
-callback,.
-
-I thought the synchronize_irq emulation problem had been completely 
-solved, but evidently it hasn't.  It looks like the best solution is to 
-add a call of the synchronize_irq emulation code in dummy_pullup.
-
-Maybe we can test this reasoning by putting a delay just before the call 
-to dum->driver->setup.  That runs in the timer handler, so it's not a 
-good place to delay, but it may be okay just for testing purposes.
-
-Hopefully this patch will make the race a lot more likely to occur.  Is 
-there any way to tell syzkaller to test it, despite the fact that 
-syzkaller doesn't think it has a reproducer for this issue?
-
-Alan Stern
-
-
-Index: usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/udc/dummy_hcd.c
-+++ usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
-@@ -1900,6 +1900,7 @@ restart:
- 			if (value > 0) {
- 				++dum->callback_usage;
- 				spin_unlock(&dum->lock);
-+				mdelay(5);
- 				value = dum->driver->setup(&dum->gadget,
- 						&setup);
- 				spin_lock(&dum->lock);
+Johan
