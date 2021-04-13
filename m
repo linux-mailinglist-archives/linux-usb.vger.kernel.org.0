@@ -2,95 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DCED35E4BA
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Apr 2021 19:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE4435E6BA
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Apr 2021 20:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbhDMRLr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Apr 2021 13:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231735AbhDMRLq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Apr 2021 13:11:46 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410A2C061574
-        for <linux-usb@vger.kernel.org>; Tue, 13 Apr 2021 10:11:24 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id y12so13289463qtx.11
-        for <linux-usb@vger.kernel.org>; Tue, 13 Apr 2021 10:11:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PHNYLL/AP+nvXt8y93Dpx6n3WojKntO9M4nJQwVI9ko=;
-        b=MFe8FAZa7F8uS3oz4b8eTkn3d5Z24Q7Nwtt6zblSCGquDnOpo5YuHBapOf2paZJNEr
-         g2l8g2+FYCAy+AOe2GDCLOer5VKn8tPzf297omQkwO2OJBrBszcWjDCfy/XuDpHy7Sef
-         8r1Ext8tYoFb1v51zGOljsQ2fRQvGRGQMPsUtd4MQ/bJIeN+GD/+4SIdu2Cc09KTpcwP
-         +c3k/kEcwlDPcxs5gea1qiJmDsB3GQv1+iZPxdr9mO948jMyRGOuZ91MBUIvlILhRjkp
-         7SMF1WMgAgylPG8lnFdEtuc36Fmruf4ckmjzPnT9tjDFn4eiv2WcsySE5NXe7Bn8OIl2
-         sG+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PHNYLL/AP+nvXt8y93Dpx6n3WojKntO9M4nJQwVI9ko=;
-        b=IvYZbe69UDyZTfp8TAIP4TkFuuPC8WtdiO3usibc/9dw9lYhc+u3ZvyYHOOZwdI2jP
-         w9sfghdX5iNTwKAWKbnZbfUP6wiapQtHQpVYNX2cJ0rAojoXGmL9miIez17o2aNaOjqX
-         RqxXc1FZqRxs1X++x/IJxjETeFaUg//PVVoTMl4tVGfYNQvKnS854wdDUUFmMyLfXBaO
-         aPuB0UXS5ErZGlcWWOuGijI/coxCQBQtQYo4cZ7WTrDH4KWXh6V47zO/SgG0k1PskJ/S
-         2Hl1CmX8mk60t3/Jq745hunB7GE8bgOtxG0M7eETjvxSr+aqfEkFvnuTYbvL9audxswu
-         2tSg==
-X-Gm-Message-State: AOAM532/QvOmjd1OljXu5u552bRcXlI6iX6cFwTdmPy2XjiSSiogly91
-        V2k6ZGjYSVwL8GhOIF9Vq/JTI8dXQYANl/0cFtDsOg==
-X-Google-Smtp-Source: ABdhPJwARlvDp0sQgoLf8NIWF3sgdl5kkgdDWdHOSjVTgnyvOWxFG26fGmWEoYwpbcifdV7j0tyoxLgN9kfoDr45n4Q=
-X-Received: by 2002:ac8:768c:: with SMTP id g12mr15974368qtr.67.1618333882981;
- Tue, 13 Apr 2021 10:11:22 -0700 (PDT)
+        id S245591AbhDMS6I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Apr 2021 14:58:08 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:42982 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233027AbhDMS6H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Apr 2021 14:58:07 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13DIu89n023490;
+        Tue, 13 Apr 2021 18:57:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=5rAWI33pbhctfGJrm6FjwmYdUL2fpowiUzMCHv8Asnc=;
+ b=w8LG6ZFZxGoO59rxpbPICGuL42CT0iMRgrn7GJTT7bDrJQsPTPULnQLi2TULcP2rxjlM
+ 9+1Nr0/d4Y9YlFRahde0i+KXL9R/ELhe3UQ4vXX1qD72hFNeEOdqZJBYnYIAWoblgwF0
+ ULLghkbM9OsKqvJ0VJx+PtIp85f84WZC0cTuOq16vOoCPI3uOJcOAMtF6wBJly6AaKwc
+ xLWvB1tAztrHUwdKkp/82rxKx9HdXKm6X8Qzd80ZZVhY2Aq/XiflK6SkRjJsHE2bL7Zq
+ ISNyc5P+LBK2+GoL8OXELVWfBL55Zv/+o8IZU1ciTrmi1aYlGeaPfL5FXzC8XYJoQs+a Ew== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2130.oracle.com with ESMTP id 37u1hbg8ww-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Apr 2021 18:57:46 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13DIuTaX016983;
+        Tue, 13 Apr 2021 18:57:44 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 37unkpwybs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Apr 2021 18:57:44 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 13DIvgCU019804;
+        Tue, 13 Apr 2021 18:57:43 GMT
+Received: from mwanda (/10.175.166.128)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 13 Apr 2021 11:57:42 -0700
+Date:   Tue, 13 Apr 2021 21:57:37 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     heikki.krogerus@linux.intel.com
+Cc:     linux-usb@vger.kernel.org
+Subject: [bug report] usb: typec: Port mapping utility
+Message-ID: <YHXpocjNVY7MyXzJ@mwanda>
 MIME-Version: 1.0
-References: <00000000000075c58405bfd6228c@google.com> <CACT4Y+bTjQz=RBXVNrVMQ9xPz5CzGNBE854fsb0ukS-2_wdi3Q@mail.gmail.com>
- <20210413161311.GC1454681@rowland.harvard.edu> <CACT4Y+YEw4iJPxY4b6LPXrU91TODfu09dG=53exvQkwjPBg23w@mail.gmail.com>
- <20210413165724.GD1454681@rowland.harvard.edu>
-In-Reply-To: <20210413165724.GD1454681@rowland.harvard.edu>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 13 Apr 2021 19:11:11 +0200
-Message-ID: <CACT4Y+aX-cMJxMYmWms3MG-4=Rb9eG_N+pOjorRHoV1MGQXtkA@mail.gmail.com>
-Subject: Re: [syzbot] general protection fault in gadget_setup
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+eb4674092e6cc8d9e0bd@syzkaller.appspotmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzkaller <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Proofpoint-IMR: 1
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9953 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
+ adultscore=0 phishscore=0 malwarescore=0 mlxscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104130126
+X-Proofpoint-GUID: oGWGxVNRvcuA-oRs29eKSzGlxMcQTxJW
+X-Proofpoint-ORIG-GUID: oGWGxVNRvcuA-oRs29eKSzGlxMcQTxJW
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9953 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 priorityscore=1501
+ clxscore=1011 adultscore=0 mlxlogscore=999 impostorscore=0 malwarescore=0
+ lowpriorityscore=0 spamscore=0 phishscore=0 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
+ definitions=main-2104130126
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 6:57 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Tue, Apr 13, 2021 at 06:47:47PM +0200, Dmitry Vyukov wrote:
-> > On Tue, Apr 13, 2021 at 6:13 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > Hopefully this patch will make the race a lot more likely to occur.  Is
-> > > there any way to tell syzkaller to test it, despite the fact that
-> > > syzkaller doesn't think it has a reproducer for this issue?
-> >
-> > If there is no reproducer the only way syzbot can test it is if it's
-> > in linux-next under CONFIG_DEBUG_AID_FOR_SYZBOT:
-> > http://bit.do/syzbot#no-custom-patches
->
-> There _is_ a theoretical reproducer: the test that provoked syzkaller's
-> original bug report.  But syzkaller doesn't realize that it is (or may
-> be) a reproducer.
->
-> It ought to be possible to ask syzkaller to run a particular test that
-> it has done before, with a patch applied -- and without having to add
-> anything to linux-next.
+Hello Heikki Krogerus,
 
-Yes, this is possible:
-http://bit.do/syzbot#syzkaller-reproducers
+The patch ae196ddb0d31: "usb: typec: Port mapping utility" from Apr
+7, 2021, leads to the following static checker warning:
 
-The log of tests executed before the crash is available under the
-"console output" link:
-console output: https://syzkaller.appspot.com/x/log.txt?x=124adbf6d00000
-And this log can be replayed using syz-execprog utility.
+	drivers/usb/typec/port-mapper.c:168 typec_link_port()
+	warn: missing error code 'ret'
+
+drivers/usb/typec/port-mapper.c
+   156  int typec_link_port(struct device *port)
+   157  {
+   158          struct device *connector;
+   159          struct port_node *node;
+   160          int ret = 0;
+   161  
+   162          node = create_port_node(port);
+   163          if (IS_ERR(node))
+   164                  return PTR_ERR(node);
+   165  
+   166          connector = find_connector(node);
+   167          if (!connector)
+   168                  goto remove_node;
+
+Set error code?
+
+   169  
+   170          ret = link_port(to_typec_port(connector), node);
+   171          if (ret)
+   172                  goto put_connector;
+   173  
+   174          return 0;
+   175  
+   176  put_connector:
+   177          put_device(connector);
+   178  remove_node:
+   179          remove_port_node(node);
+   180  
+   181          return ret;
+   182  }
+
+regards,
+dan carpenter
