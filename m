@@ -2,114 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6821735F628
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 16:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D063235F63B
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 16:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349545AbhDNO1d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Apr 2021 10:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349526AbhDNO12 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Apr 2021 10:27:28 -0400
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05075C061574
-        for <linux-usb@vger.kernel.org>; Wed, 14 Apr 2021 07:27:05 -0700 (PDT)
-Received: by mail-qt1-x84a.google.com with SMTP id l7-20020ac80c470000b029019ad46696f7so2018365qti.0
-        for <linux-usb@vger.kernel.org>; Wed, 14 Apr 2021 07:27:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=aTQH+8QFadrYoaEx7teEfO6F+xF81qJm/gbu7SJfp4M=;
-        b=p+Dy4+wR6puYM9D4rzYQ0dFlGkQtuZiNm05XebXvDRpCrpegQGd4o/KJUwQLnWcb+C
-         BV+LYnY3Brvs4c6UXyblt4WVNqxO4TnsC4IpYTF7PpzIggBhhOwe7tmrYcufexaCx+YE
-         N9q1DjDTTz4DcN1KjkqXsFpCOYmLmQ7SWSQ/dK0gkFiqTyPXUUoTdzVgQCQglg7oJ53T
-         FOTIlNNL7kIlRJWd9uc6aWVy08NIjrTCIdTIuoDvkBqjpQX0iJzTe4mL1IA9gLGWO59Q
-         rgkG4E/DctjmZDiNfn5U+wwVZWp5+SMTQ8uI+WWzVNJvyzXf61gEUNgXk119i9QWHce9
-         J+4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=aTQH+8QFadrYoaEx7teEfO6F+xF81qJm/gbu7SJfp4M=;
-        b=q2Tz1CUiQPgOzff0ys6DrGtGFHJdMA0Bol1YX4FSYHlUA+PRxbKQvdiQrKtLxxg6yl
-         hmjSLJCQU5/akUbVKP4ygdFOAVwCrT8sa9YQfXNsvQDc+bwDHFlXqoLZCkvpxyRG9go7
-         zPnFAyBAWwcgocDlVtBUQqiedgwzeGYCOwYwR5j+OiVBt/dWTu/oMIo6iNDsUzzXmc+4
-         alFAnFiHwI5j5wBsSIcQJgYVV97MU6RKUkK/Tax5qEzp2ZoG+6BtFiH++lUrXw8VpR5x
-         pYntUnTinxSmmBjL8PoyIkMs26YFANq5gjW3H18aESj4efGgfccKcG7QOIGZ/TjfObuT
-         OpyQ==
-X-Gm-Message-State: AOAM531GiKJSXJYeImkA1xqRQexcURGW8jWrGgc78tVXMhvfFiPAinS0
-        bXN9DcW4O31p9lr63l5Wgkryw1bEnO4=
-X-Google-Smtp-Source: ABdhPJy6NCAvWnn2HR6o730wtjP3t0Cu4NnswFnFKu09GrC3WOAoD7SpzOiFFKNOgxoH+d7GVf3p6tR16eY=
-X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:91dd:58ac:7590:aa21])
- (user=badhri job=sendgmr) by 2002:a0c:ff02:: with SMTP id w2mr38604856qvt.23.1618410424116;
- Wed, 14 Apr 2021 07:27:04 -0700 (PDT)
-Date:   Wed, 14 Apr 2021 07:26:56 -0700
-In-Reply-To: <20210414142656.63749-1-badhri@google.com>
-Message-Id: <20210414142656.63749-3-badhri@google.com>
-Mime-Version: 1.0
-References: <20210414142656.63749-1-badhri@google.com>
-X-Mailer: git-send-email 2.31.1.295.g9ea45b61b8-goog
-Subject: [PATCH v4 3/3] dt-bindings: connector: Add slow-charger-loop definition
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Kyle Tso <kyletso@google.com>,
-        Badhri Jagan Sridharan <badhri@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1348589AbhDNOc3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Apr 2021 10:32:29 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:59277 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S231630AbhDNOc2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Apr 2021 10:32:28 -0400
+Received: (qmail 1494041 invoked by uid 1000); 14 Apr 2021 10:32:06 -0400
+Date:   Wed, 14 Apr 2021 10:32:06 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Chris Chiu <chris.chiu@canonical.com>
+Cc:     gregkh@linuxfoundation.org, m.v.b@runbox.com, hadess@hadess.net,
+        linux-usb@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] USB: Don't set USB_PORT_FEAT_SUSPEND on WD19's Realtek
+ Hub
+Message-ID: <20210414143206.GA1493067@rowland.harvard.edu>
+References: <20210412150006.53909-1-chris.chiu@canonical.com>
+ <20210412151205.GB1420451@rowland.harvard.edu>
+ <CABTNMG1fvbOMrP+FmH0X5Yh04gf6vvhqhXfRrmpJ=f-fPBx4xw@mail.gmail.com>
+ <20210413144416.GB1454681@rowland.harvard.edu>
+ <CABTNMG21xp6TA8SGJhamfM9D6JGvQHwg8AMySSCh09-DnAZ5qQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABTNMG21xp6TA8SGJhamfM9D6JGvQHwg8AMySSCh09-DnAZ5qQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Allows PMIC charger loops which are slow(i.e. cannot meet the
-15ms deadline) to still comply to pSnkStby i.e Maximum power
-that can be consumed by sink while in Sink Standby state as defined
-in 7.4.2 Sink Electrical Parameters of USB Power Delivery Specification
-Revision 3.0, Version 1.2.
+On Wed, Apr 14, 2021 at 01:07:43PM +0800, Chris Chiu wrote:
+> Thanks for the instructions. I can hit the same timeout problem with
+> runtime PM. The
+> fail rate seems the same as normal PM. (around 1/4 ~ 1/7)
+> root@:/sys/bus/usb/devices/3-4.3# echo auto > power/control
+> root@:/sys/bus/usb/devices/3-4.3# echo on > power/control
+> root@:/sys/bus/usb/devices/3-4.3# dmesg -c
+> [ 2789.679807] usb 3-4: kworker/7:0 timed out on ep0out len=0/0
+> [ 2789.679812] usb 3-4-port3: can't suspend, status -110
+> [ 2789.680078] usb 3-4.3: Failed to suspend device, error -110
 
-This patch introduces slow-charger-loop which when set makes
-the port request PD_P_SNK_STDBY_MW(2.5W i.e 500mA@5V) upon entering
-SNK_DISCOVERY (instead of 3A or the 1.5A during SNK_DISCOVERY) and the
-actual currrent limit after RX of PD_CTRL_PSRDY for PD link or during
-SNK_READY for non-pd link.
+Since these are random failures, occurring at a low rate, maybe it would 
+help simply to retry the transfer that timed out.  Have you tested this?
 
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
-Changes since v3:
-* Removed additional semi-colon in the subject line
-Changes since V2:
-To address Rob's comments
-* Updated commit and the binding description.
-* Updated subject as well.
----
- .../devicetree/bindings/connector/usb-connector.yaml   | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+> > > > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > > > > index 7f71218cc1e5..8478d49bba77 100644
+> > > > > --- a/drivers/usb/core/hub.c
+> > > > > +++ b/drivers/usb/core/hub.c
+> > > > > @@ -3329,8 +3329,11 @@ int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
+> > > > >        * descendants is enabled for remote wakeup.
+> > > > >        */
+> > > > >       else if (PMSG_IS_AUTO(msg) || usb_wakeup_enabled_descendants(udev) > 0)
+> > > > > -             status = set_port_feature(hub->hdev, port1,
+> > > > > -                             USB_PORT_FEAT_SUSPEND);
+> > > > > +             if (udev->quirks & USB_QUIRK_NO_SET_FEAT_SUSPEND)
+> > > >
+> > > > You should test hub->hdev->quirks, here, not udev->quirks.  The quirk
+> > > > belongs to the Realtek hub, not to the device that's plugged into the
+> > > > hub.
+> > > >
+> > >
+> > > Thanks for pointing that out. I'll verify again and propose a V2 after
+> > > it's done.
+> >
+> > Another thing to consider: You shouldn't return 0 from usb_port_suspend
+> > if the port wasn't actually suspended.  We don't want to kernel to have
+> > a false idea of the hardware's current state.
+> >
+> So we still need the "really_suspend=false". What if I replace it with
+> the following?
+> It's a little verbose but expressive enough. Any suggestions?
+> 
+> +       else if (!(hub->hdev->quirks & USB_QUIRK_NO_SET_FEAT_SUSPEND) &&
+> +               (PMSG_IS_AUTO(msg) || usb_wakeup_enabled_descendants(udev) > 0))
+> +               status = set_port_feature(hub->hdev, port1,
+> +                               USB_PORT_FEAT_SUSPEND);
+>         else {
+>                 really_suspend = false;
+>                 status = 0;
 
-diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-index b6daedd62516..32509b98142e 100644
---- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-+++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-@@ -197,6 +197,16 @@ properties:
-     $ref: /schemas/types.yaml#/definitions/uint32
-     enum: [1, 2, 3]
- 
-+  slow-charger-loop:
-+    description: Allows PMIC charger loops which are slow(i.e. cannot meet the 15ms deadline) to
-+      still comply to pSnkStby i.e Maximum power that can be consumed by sink while in Sink Standby
-+      state as defined in 7.4.2 Sink Electrical Parameters of USB Power Delivery Specification
-+      Revision 3.0, Version 1.2. When the property is set, the port requests pSnkStby(2.5W -
-+      5V@500mA) upon entering SNK_DISCOVERY(instead of 3A or the 1.5A, Rp current advertised, during
-+      SNK_DISCOVERY) and the actual currrent limit after reception of PS_Ready for PD link or during
-+      SNK_READY for non-pd link.
-+    type: boolean
-+
- required:
-   - compatible
- 
--- 
-2.31.1.295.g9ea45b61b8-goog
+You should do something more like this:
 
+-	else if (PMSG_IS_AUTO(msg) || usb_wakeup_enabled_descendants(udev) > 0)
+-		status = set_port_feature(hub->hdev, port1,
+-				USB_PORT_FEAT_SUSPEND);
+-	else {
++	else if (PMSG_IS_AUTO(msg) || usb_wakeup_enabled_descendants(udev) > 0) {
++		if (hub->hdev->quirks & USB_QUIRK_NO_SUSPEND)
++			status = -EIO;
++		else
++			status = set_port_feature(hub->hdev, port1,
++					USB_PORT_FEAT_SUSPEND);
++	} else {
+		really_suspend = false;
+		status = 0;
+	}
+
+But I would prefer to find a way to make port suspend actually work, 
+instead of giving up on it.
+
+Alan Stern
