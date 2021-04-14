@@ -2,37 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4326335F0E1
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 11:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E1835F0E9
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 11:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbhDNJgk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Apr 2021 05:36:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36452 "EHLO mail.kernel.org"
+        id S232197AbhDNJiC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Apr 2021 05:38:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36696 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229914AbhDNJgj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 14 Apr 2021 05:36:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5D4F961220;
-        Wed, 14 Apr 2021 09:36:17 +0000 (UTC)
+        id S232167AbhDNJhy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 14 Apr 2021 05:37:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 73DD461222;
+        Wed, 14 Apr 2021 09:37:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618392978;
-        bh=9CvBDOOp/snU5Np8LPno4R60T5G3WD+g+xXvtSMaGbw=;
+        s=k20201202; t=1618393052;
+        bh=m7UsdohOxMhdYV2aQLc7XVkhAtilyU9UIq/rXCROxhI=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=NOeRRVInED1c72oGIdzg4fPwaFIC/a515LieF2NTL7HMaiKTzYeyiIWLGJV3Q6f9t
-         p8A2VplimRD8EzInzm31OVizITpzrm0PkqTnho6pW+i1plqWXJ7pkZLkiRkBTrnWHk
-         BiR4rhmbna0VxQuj4pEQu03BnVWJf7CkFkc+kpcpy+onRKOSMjm2+F4Iv79g0I8vkD
-         XFcoQ7+NGwVssOTcYxWifsV56smmjG/1xFTygyPpoN6fvtn1yP24/kRvt6/NBOQpga
-         WkMe0YPMTQXu+78/KWfQJVTWcAR99Jh/jmU77uNmVfU36G2sTZ2BH0WceTfx2/NJmQ
-         42e0t8DEELSgA==
+        b=In2BH8aU6YuNzrqXs1rZsZzlUGgvtAl3qUwph701avNABKLe62gsovB6+tmtTE8jD
+         BgHDkQUNq6j6PjyL1SkxhZabDlSsV7PNYIkz63cR536mKCztsgopwBDt/k+cTDajun
+         HDKwdS7bSAdZFzOUenBgNPIWD9K57/7VCcNDV2Q0AGWfh9bQ96VmYJ8JTVx+hG9rQq
+         gcqeHXLE0rTnIzZTsFlb7o00Er5+bG/xLU0T/ad/WZUrFN17VHTP44WmMYuPJEAIBN
+         WooEvAJL8OTnhKbaPuuhcdk2TCu9TFFlErPsbNeTJ7wqmoZCZdnZq+YAOlTePc36sa
+         7My3SbkVFHQhQ==
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
+        Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org
 Cc:     John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH] usb: dwc3: gadget: Check for disabled LPM quirk
-In-Reply-To: <1b784826dfee46adaa65c42d33934339d0c1f2a7.1618364095.git.Thinh.Nguyen@synopsys.com>
-References: <1b784826dfee46adaa65c42d33934339d0c1f2a7.1618364095.git.Thinh.Nguyen@synopsys.com>
-Date:   Wed, 14 Apr 2021 12:36:11 +0300
-Message-ID: <871rbdp5ro.fsf@kernel.org>
+Subject: Re: [PATCH v2 2/2] usb: dwc3: gadget: Check for disabled LPM quirk
+In-Reply-To: <9e68527ff932b1646f92a7593d4092a903754666.1618366071.git.Thinh.Nguyen@synopsys.com>
+References: <cover.1618366071.git.Thinh.Nguyen@synopsys.com>
+ <9e68527ff932b1646f92a7593d4092a903754666.1618366071.git.Thinh.Nguyen@synopsys.com>
+Date:   Wed, 14 Apr 2021 12:37:25 +0300
+Message-ID: <87y2dlnr56.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -51,6 +52,8 @@ Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
 >
 > Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
+Sorry, acked the wrong version :-)
+
 Acked-by: Felipe Balbi <balbi@kernel.org>
 
 =2D-=20
@@ -61,19 +64,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmB2t4sRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQYTTw/9Fjo88hmenPtOgaoCxVQ6AAxgbwO/POv3
-rIw39lzC3WC95FEYaRiaoMYDPWMNg2pFUgu0r8DeDwQUKoiYInrOfC4UfIeqa2x3
-MNvzNudULf6ire0Own/cxH4aBKRJBh1kPGLaeXbVAtjbwCqIqjgq6sGGcW9eSWyo
-5GlXRlayErS6iJAxBDnLemGF43aILoF2gQPXeDpkQKgFfRvEcqEwr6hry6mg2eeM
-ZtYvY7Yf2/rvP393UHTKl3xSYLyfK/Jck4/n1IQpWVi3i+gk0kLGvB0Y2oCRJibc
-XbRkcOgY3+O2VJ0f/Q/x11tXPlXM9hPsO0CSRah0f73MrDNeJ5Os+d588iElzOVM
-4suE9IZU+3aL/0VBZ7T5Oo4tLcdZjVW3JJuHBYA4+Yf8+xZWZzfVBZzv7/L9AWW6
-oVUPxMMwOncGZ1eW6aesVQaaxn3/kZsDBrLY1uke1yPWt1dMaCGhzyd1IEdIxxbY
-tU4rspQN/e66UKInpJZXW3NBAvborKvaeM10sbtukubTZeZ02V61a2XSmT6YzaNa
-aALVZDmAOVNjEd+f3kr0/GwZcS6f2ExgyCsgD4QAzR62zAn0+eEOcCTTU0Sa4crh
-Ue8ghLqjkwG2SjWjmuVji5VAxVxkZM8jWqKQvDKCcp7BxckWYtLc0iMBqv1zAI4K
-/qKwe5KJStw=
-=2Ozp
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmB2t9URHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQbkCRAA0N/dyAbb8QbCQ9mYNPRp2yLWkh8lkvhM
+4xTFW86zhF3vUn7Mmk19lT/H0IW+VQqWsvjwsZuOmSErTqJEsx7XPWWDc0QVgIB+
+hYt/AIKqSMPMD1xZkGcxXS7Imp/gNLVkk4Rv/cqohmpIxvjpcH+TDpeJp8jre3aZ
+KYm7jLja4B2CPwp1qOtiicYj5w8mO8C6I3UEwKaRuc72Pzqtemt6a/SbFHJeeD/a
+xOU2I+LdxF+KsweSEa30m74hUl+JWSpdM6J6gEHkUkTjZLsZpm2enfpvHgBq/CgO
+19d9wkQtHwA33uw29ISxlsgEbuhyFltLMrFAu4A/wyq0TRRQvMKxSdbryS4QH5vA
+9RIBZBhiFo5HgbcANG3MZBgW2D93ADMSNmlGiwZtxadxH0PtDW7csxrqQtYxzfBe
+L1h8fbRv87ryli1E2OOqFjGXOMAdb9If4ygTcQqdzTHKEg8RP+J5hRc7IVeDdavg
+aYThGMqtV/gIQtptiGvBpxKAvRigFIbCG0JG5S0mC6wUFvz9lNgyCsGpxd91a4uR
+gCXkxWK/Jl/NnH8bI1XY1aBQ7h4EwlBpdUSftNh0qwt42DJdduEIyRnsIIe9FGJM
+ZpWv6KQe7joV+lX/BKRlfwlW5A6Wur8E93oFQVIfP4f0Vt6izEeWeHoJ8Q8g7rpP
+nLvM1zBJGto=
+=PryP
 -----END PGP SIGNATURE-----
 --=-=-=--
