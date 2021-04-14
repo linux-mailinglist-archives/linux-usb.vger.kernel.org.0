@@ -2,107 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D063235F63B
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 16:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFBF35F71B
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 17:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348589AbhDNOc3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Apr 2021 10:32:29 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:59277 "HELO
+        id S232267AbhDNO4c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Apr 2021 10:56:32 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:48513 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231630AbhDNOc2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Apr 2021 10:32:28 -0400
-Received: (qmail 1494041 invoked by uid 1000); 14 Apr 2021 10:32:06 -0400
-Date:   Wed, 14 Apr 2021 10:32:06 -0400
+        with SMTP id S231304AbhDNO4b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Apr 2021 10:56:31 -0400
+Received: (qmail 1494791 invoked by uid 1000); 14 Apr 2021 10:56:08 -0400
+Date:   Wed, 14 Apr 2021 10:56:08 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Chris Chiu <chris.chiu@canonical.com>
-Cc:     gregkh@linuxfoundation.org, m.v.b@runbox.com, hadess@hadess.net,
-        linux-usb@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] USB: Don't set USB_PORT_FEAT_SUSPEND on WD19's Realtek
- Hub
-Message-ID: <20210414143206.GA1493067@rowland.harvard.edu>
-References: <20210412150006.53909-1-chris.chiu@canonical.com>
- <20210412151205.GB1420451@rowland.harvard.edu>
- <CABTNMG1fvbOMrP+FmH0X5Yh04gf6vvhqhXfRrmpJ=f-fPBx4xw@mail.gmail.com>
- <20210413144416.GB1454681@rowland.harvard.edu>
- <CABTNMG21xp6TA8SGJhamfM9D6JGvQHwg8AMySSCh09-DnAZ5qQ@mail.gmail.com>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [RFC]extension of the anchor API
+Message-ID: <20210414145608.GB1493067@rowland.harvard.edu>
+References: <5b3c30d268ea2d13d303759ef3dfee8d72830084.camel@suse.com>
+ <20210325150657.GC785961@rowland.harvard.edu>
+ <5d3852dca69ff194017c806078e996c50ee621be.camel@suse.com>
+ <20210325183856.GA799855@rowland.harvard.edu>
+ <cc44e358406f48175fad9e956369d0f5a07efbe9.camel@suse.com>
+ <20210408150725.GC1296449@rowland.harvard.edu>
+ <8c11f03b08a0bdfd2761a74f5a7964067dc4b98b.camel@suse.com>
+ <20210412150628.GA1420451@rowland.harvard.edu>
+ <30abed362c4b2e6af33078505ac9985389ad39bb.camel@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABTNMG21xp6TA8SGJhamfM9D6JGvQHwg8AMySSCh09-DnAZ5qQ@mail.gmail.com>
+In-Reply-To: <30abed362c4b2e6af33078505ac9985389ad39bb.camel@suse.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 14, 2021 at 01:07:43PM +0800, Chris Chiu wrote:
-> Thanks for the instructions. I can hit the same timeout problem with
-> runtime PM. The
-> fail rate seems the same as normal PM. (around 1/4 ~ 1/7)
-> root@:/sys/bus/usb/devices/3-4.3# echo auto > power/control
-> root@:/sys/bus/usb/devices/3-4.3# echo on > power/control
-> root@:/sys/bus/usb/devices/3-4.3# dmesg -c
-> [ 2789.679807] usb 3-4: kworker/7:0 timed out on ep0out len=0/0
-> [ 2789.679812] usb 3-4-port3: can't suspend, status -110
-> [ 2789.680078] usb 3-4.3: Failed to suspend device, error -110
-
-Since these are random failures, occurring at a low rate, maybe it would 
-help simply to retry the transfer that timed out.  Have you tested this?
-
-> > > > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> > > > > index 7f71218cc1e5..8478d49bba77 100644
-> > > > > --- a/drivers/usb/core/hub.c
-> > > > > +++ b/drivers/usb/core/hub.c
-> > > > > @@ -3329,8 +3329,11 @@ int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
-> > > > >        * descendants is enabled for remote wakeup.
-> > > > >        */
-> > > > >       else if (PMSG_IS_AUTO(msg) || usb_wakeup_enabled_descendants(udev) > 0)
-> > > > > -             status = set_port_feature(hub->hdev, port1,
-> > > > > -                             USB_PORT_FEAT_SUSPEND);
-> > > > > +             if (udev->quirks & USB_QUIRK_NO_SET_FEAT_SUSPEND)
-> > > >
-> > > > You should test hub->hdev->quirks, here, not udev->quirks.  The quirk
-> > > > belongs to the Realtek hub, not to the device that's plugged into the
-> > > > hub.
-> > > >
-> > >
-> > > Thanks for pointing that out. I'll verify again and propose a V2 after
-> > > it's done.
-> >
-> > Another thing to consider: You shouldn't return 0 from usb_port_suspend
-> > if the port wasn't actually suspended.  We don't want to kernel to have
-> > a false idea of the hardware's current state.
-> >
-> So we still need the "really_suspend=false". What if I replace it with
-> the following?
-> It's a little verbose but expressive enough. Any suggestions?
+On Wed, Apr 14, 2021 at 10:12:01AM +0200, Oliver Neukum wrote:
+> Am Montag, den 12.04.2021, 11:06 -0400 schrieb Alan Stern:
+> > On Mon, Apr 12, 2021 at 11:58:16AM +0200, Oliver Neukum wrote:
 > 
-> +       else if (!(hub->hdev->quirks & USB_QUIRK_NO_SET_FEAT_SUSPEND) &&
-> +               (PMSG_IS_AUTO(msg) || usb_wakeup_enabled_descendants(udev) > 0))
-> +               status = set_port_feature(hub->hdev, port1,
-> +                               USB_PORT_FEAT_SUSPEND);
->         else {
->                 really_suspend = false;
->                 status = 0;
+> > > That presumes that the URBs will finish in order. I don't think such
+> > > an assumption can be made.
+> > 
+> > I don't understand -- I can't detect any such presumption.
+> 
+> OK, this shows that I am bad at explaining.
+> > 
+> > As far as I can tell, the only reason for maintaining the URBs in any 
+> > particular order on the anchor list is so that usb_kill_anchored_urbs 
+> > and usb_poison_anchored_urbs can kill them in reverse order of 
+> > submission.  THat's why the current code moves completed URBs to the end 
+> > of the list.
+> 
+> No longer strictly true, as the API has a call to submit everything
+> on an anchor, but I think it boils down to the same thing.
+> 
+> > If you keep a pointer to the most recently submitted URB, killing them 
+> > easy enough to do.  Start with that URB, then go backward through the 
+> > list (wrapping to the end when you reach the beginning of the list).
+> 
+> Yes, but that supposes that the next on the list has not been
+> resubmitted _before_ the one after it.
+> 
+> If you do not keep the list ordered, but in the initial order,
+> we can have the situation that A (happens most recently submitted)
+> is followed by B and C, but C was submitted before B.
 
-You should do something more like this:
+I think the only reasonable alternative is to move an URB to the end of 
+the list when it is submitted, rather than when it completes.  Have you 
+considered doing it that way?
 
--	else if (PMSG_IS_AUTO(msg) || usb_wakeup_enabled_descendants(udev) > 0)
--		status = set_port_feature(hub->hdev, port1,
--				USB_PORT_FEAT_SUSPEND);
--	else {
-+	else if (PMSG_IS_AUTO(msg) || usb_wakeup_enabled_descendants(udev) > 0) {
-+		if (hub->hdev->quirks & USB_QUIRK_NO_SUSPEND)
-+			status = -EIO;
-+		else
-+			status = set_port_feature(hub->hdev, port1,
-+					USB_PORT_FEAT_SUSPEND);
-+	} else {
-		really_suspend = false;
-		status = 0;
-	}
+The real problem with usb_submit_anchored_urbs is that the core can't 
+know in what order the caller wants the URBs to be submitted.  If the 
+URBs are all more or less identical (for example, all reading the same 
+amount of data from the same endpoint) then this doesn't matter.  But if 
+they aren't (for example, if they write different buffers or use 
+different endpoints) it does matter.
 
-But I would prefer to find a way to make port suspend actually work, 
-instead of giving up on it.
+In the kerneldoc you can explain that if the anchor has not been used 
+since its URBs were added then the URBs will be submitted in the order 
+they were added to the anchor, but otherwise they will be submitted in 
+an unspecified order, which may not be suitable.
+
+> > The order in which the URBs complete doesn't matter, because trying to 
+> > unlink a completed URB won't cause any harm.
+> 
+> As long as it stays completed.
+
+Rather, as long as they complete in order of submission.
+
+> >   The only assumption here 
+> > is that URBs get submitted in the list's order (possibly circularly) -- 
+> > this should always be true.
+> 
+> I am afraid we cannot guarantee that. It might intuitively seem so,
+> but nothing guarantees that all URBs are going to the same endpoint.
+
+I hadn't thought of that.  Do anchors get used that way anywhere?
 
 Alan Stern
